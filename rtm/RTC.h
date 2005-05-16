@@ -2,7 +2,7 @@
 /*!
  * @file RTC.h
  * @brief RTComponent header
- * @date $Date: 2005-05-12 09:06:18 $
+ * @date $Date: 2005-05-16 05:49:10 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
  * Copyright (C) 2003-2005
@@ -12,12 +12,15 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: RTC.h,v 1.1.1.1 2005-05-12 09:06:18 n-ando Exp $
+ * $Id: RTC.h,v 1.2 2005-05-16 05:49:10 n-ando Exp $
  *
  */
 
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.1.1.1  2005/05/12 09:06:18  n-ando
+ * Public release.
+ *
  *
  */
 
@@ -44,5 +47,26 @@
 
 #include <ace/Thread_Manager.h>
 #include <boost/lexical_cast.hpp>
+
+
+// for windows DLL
+#ifdef WIN32
+
+#ifdef DLLEXT
+#define EXPORTS __declspec(dllexport)
+#else  // DLLEXT
+#define EXPORTS __declspec(dllimport)
+#endif // DLLEXT
+
+#define LINE_MAX 256
+BOOL WINAPI DllMain (HINSTANCE hinstDll, DWORD fdwReason, LPVOID lpvReserved);
+
+#else  // WIN32
+
+#define EXPORTS
+#define WINAPI
+
+#endif // WIN32
+
 
 #endif // RTC_h
