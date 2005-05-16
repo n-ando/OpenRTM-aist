@@ -3,7 +3,7 @@
 #
 #  @file RtmDialog.py
 #  @brief rtc-link dialog class
-#  @date $Date: 2005-05-12 09:06:19 $
+#  @date $Date: 2005-05-16 10:11:01 $
 #  @author Tsuyoshi Tanabe, Noriaki Ando <n-ando@aist.go.jp>
 # 
 #  Copyright (C) 2004-2005
@@ -13,11 +13,14 @@
 #          Advanced Industrial Science and Technology (AIST), Japan
 #      All rights reserved.
 # 
-#  $Id: RtmDialog.py,v 1.1.1.1 2005-05-12 09:06:19 n-ando Exp $
+#  $Id: RtmDialog.py,v 1.2 2005-05-16 10:11:01 n-ando Exp $
 #
 
 #
 #  $Log: not supported by cvs2svn $
+#  Revision 1.1.1.1  2005/05/12 09:06:19  n-ando
+#  Public release.
+#
 #
 
 # RtmDialog.py               Created on: 2005/01/20
@@ -105,4 +108,3 @@ def except_mess(mess):
     print "traceback code:",sys.exc_traceback.tb_frame.f_code
     print "except line:",sys.exc_traceback.tb_lineno
     print mess, sys.exc_type, sys.exc_value
- 

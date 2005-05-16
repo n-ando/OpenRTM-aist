@@ -3,7 +3,7 @@
 #
 #  @file RtmFrame.py
 #  @brief rtc-link main frame class
-#  @date $Date: 2005-05-12 09:06:19 $
+#  @date $Date: 2005-05-16 10:11:01 $
 #  @author Noriaki Ando <n-ando@aist.go.jp>
 # 
 #  Copyright (C) 2003-2005
@@ -13,11 +13,14 @@
 #          Advanced Industrial Science and Technology (AIST), Japan
 #      All rights reserved.
 # 
-#  $Id: RtmFrame.py,v 1.1.1.1 2005-05-12 09:06:19 n-ando Exp $
+#  $Id: RtmFrame.py,v 1.2 2005-05-16 10:11:01 n-ando Exp $
 # 
 
 #
 #  $Log: not supported by cvs2svn $
+#  Revision 1.1.1.1  2005/05/12 09:06:19  n-ando
+#  Public release.
+#
 #
 
 import sys, os, time
@@ -518,13 +521,13 @@ class RtdFrame(wxMDIParentFrame):
 		id = menuBar.FindMenuItem("Edit","Paste")
 		menuBar.FindItemById(id).Enable(false)
 
-# assembly disable
-		id = menuBar.FindMenuItem("File","Open System")
-		menuBar.FindItemById(id).Enable(false)
-		id = menuBar.FindMenuItem("File","Save System")
-		menuBar.FindItemById(id).Enable(false)
-		id = menuBar.FindMenuItem("File","Save System as")
-		menuBar.FindItemById(id).Enable(false)
+# assembly enable
+#		id = menuBar.FindMenuItem("File","Open System")
+#		menuBar.FindItemById(id).Enable(false)
+#		id = menuBar.FindMenuItem("File","Save System")
+#		menuBar.FindItemById(id).Enable(false)
+#		id = menuBar.FindMenuItem("File","Save System as")
+#		menuBar.FindItemById(id).Enable(false)
 #
 		id = menuBar.FindMenuItem("File","Import Component")
 		menuBar.FindItemById(id).Enable(false)
