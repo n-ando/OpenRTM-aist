@@ -2,7 +2,7 @@
 /*!
  * @file RtcManager.cpp
  * @brief RT component manager class
- * @date $Date: 2005-05-12 09:06:18 $
+ * @date $Date: 2005-05-16 06:18:38 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
  * Copyright (C) 2003-2005
@@ -12,14 +12,21 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: RtcManager.cpp,v 1.1.1.1 2005-05-12 09:06:18 n-ando Exp $
+ * $Id: RtcManager.cpp,v 1.2 2005-05-16 06:18:38 n-ando Exp $
  *
  */
 
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.1.1.1  2005/05/12 09:06:18  n-ando
+ * Public release.
+ *
  *
  */
+
+#ifdef WIN32
+#define ACE_HAS_WINSOCK2 0
+#endif //WIN32
 
 #include <iostream>
 #include <stdlib.h>
@@ -332,15 +339,15 @@ namespace RTM
 		it = arglist.begin();
 		it_end = arglist.end();
 #ifndef NO_LOGGING
-		rtcout.level(RtcLogStream::DEBUG) << "Command: " << command_name;
-		rtcout.level(RtcLogStream::DEBUG) << "Args: ";
+		rtcout.level(RtcLogStream::RTL_DEBUG) << "Command: " << command_name;
+		rtcout.level(RtcLogStream::RTL_DEBUG) << "Args: ";
+
+		while (it != it_end)
+		  {
+			rtcout.level(RtcLogStream::RTL_DEBUG) << *it << endl;
+			++it;
+		  }
 #endif
-		while (it != it_end) {
-#ifndef NO_LOGGING
-		  rtcout.level(RtcLogStream::DEBUG) << *it << endl;
-#endif
-		  ++it;
-		}
 		
 		//! Command invokation
 		if (m_CmdMap.find(command_name) != m_CmdMap.end()) {
@@ -402,12 +409,20 @@ namespace RTM
 		RTC_ERROR(("Invalid ORB pointer."));
 		exit(1);
 	  }
-	//	m_pORB->run();
+
+	//	ORB main loop
+	ACE_Time_Value tv(0, 1000); // (s, us)
 	while (g_mgrActive)
 	  {
-		if (m_pORB->work_pending()){
-		  m_pORB->perform_work();
-		}
+		if (m_pORB->work_pending())
+		  {
+			m_pORB->perform_work();
+		  }
+		else
+		  {
+			// ORB main loop needs some sleep.
+			ACE_OS::sleep(tv);
+		  }
 	  }
 	shutdown();
 
@@ -463,7 +478,10 @@ namespace RTM
 		return false;
 	  }
 
-    retval = m_apNaming->bindManager(m_ManagerName, this->_this());
+    m_pPOA->activate_object(this);
+	CORBA::Object_var obj = m_pPOA->servant_to_reference(this);
+    retval = m_apNaming->bindManager(m_ManagerName, obj);
+
     if (retval == false)
 	  {
 		RTC_ERROR(("Could not bind manager object to the Naming server: %s",
@@ -818,8 +836,6 @@ namespace RTM
 	    RTC_ERROR(("Two or more components found ( %s ).",comp_name_out.c_str()));
 	  }
     
-    InPort_ptr inpt;
-    OutPort_ptr outpt;
     std::string ret;
     ret = bindInOut(incomps[0], inp_name, outcomps[0], outp_name, sub_type);
     return ret;
@@ -1150,14 +1166,16 @@ namespace RTM
     if (pos == string::npos)
       {
 		initfunc_name = libname + "Init";
+		return true;
       }
+	return false;
   }
 
 
   void RtcManager::shutdownAllComponents()
   {
 	RTC_TRACE(("RtcManager::shutdownAllComponents()"));
-
+	ACE_Time_Value tv(0, 1000); // (s, us)
 	m_Components._mutex.acquire();
 
 	std::map<std::string,std::map<std::string, RtcBase*> >::iterator it_cat;
@@ -1181,7 +1199,7 @@ namespace RTM
 
 			// Mutex is released for RtcManager::cleanupComponet()
 			m_Components._mutex.release();
-			usleep(1000);
+			ACE_OS::sleep(tv); // sleep 1ms
 			// After here "comp" is invalid pointer to RtcBase.
 			m_Components._mutex.acquire();
 		  }
