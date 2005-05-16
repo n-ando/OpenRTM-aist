@@ -2,7 +2,7 @@
 /*!
  * @file RtcInPortBase.h
  * @brief InPort base class
- * @date $Date: 2005-05-12 09:06:18 $
+ * @date $Date: 2005-05-16 06:12:57 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
  * Copyright (C) 2003-2005
@@ -12,12 +12,15 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: RtcInPortBase.h,v 1.1.1.1 2005-05-12 09:06:18 n-ando Exp $
+ * $Id: RtcInPortBase.h,v 1.2 2005-05-16 06:12:57 n-ando Exp $
  *
  */
 
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.1.1.1  2005/05/12 09:06:18  n-ando
+ * Public release.
+ *
  *
  */
 
@@ -54,7 +57,7 @@ namespace RTM
    *
    * @endif
    */
-  class InPortBase :
+  class EXPORTS InPortBase :
 	public POA_RTM::InPort,
 					public PortableServer::RefCountServantBase
   {
@@ -76,6 +79,7 @@ namespace RTM
 	InPortBase()
 	{
 	  ACE_TRACE("InPortBase::InPortBase(int)");
+	  m_Profile.name = _CORBA_String_helper::empty_string;
 	};
 	
 	/*!
