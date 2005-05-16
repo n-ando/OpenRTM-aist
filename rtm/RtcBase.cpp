@@ -2,7 +2,7 @@
 /*!
  * @file RtcBase.cpp
  * @brief RT component base class
- * @date $Date: 2005-05-12 09:06:18 $
+ * @date $Date: 2005-05-16 05:50:33 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
  * Copyright (C) 2003-2005
@@ -12,12 +12,15 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: RtcBase.cpp,v 1.1.1.1 2005-05-12 09:06:18 n-ando Exp $
+ * $Id: RtcBase.cpp,v 1.2 2005-05-16 05:50:33 n-ando Exp $
  *
  */
 
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.1.1.1  2005/05/12 09:06:18  n-ando
+ * Public release.
+ *
  *
  */
 
@@ -736,12 +739,12 @@ namespace RTM {
   int RtcBase::svc(void)
   {
 	RTC_TRACE(("RtcBase::svc()"));
-
+	ACE_Time_Value tv(0, 1000); // (s, us)
 	while (m_ThreadState.m_Flag == RUNNING ||
 		   m_ThreadState.m_Flag == SUSPEND)
 	  {
 		rtc_worker();
-		while (m_ThreadState.m_Flag == SUSPEND) sleep(1);
+		while (m_ThreadState.m_Flag == SUSPEND) ACE_OS::sleep(tv);
 	  }
 	forceExit();
 	finalize();
@@ -1121,7 +1124,7 @@ namespace RTM {
   bool RtcBase::isLongNameEnable()
   {
 	RTC_TRACE(("RtcBase::isLongNameEnable()"));
-	if (m_NamingPolicy & LONGNAME_ENABLE != 0)
+	if ((m_NamingPolicy & LONGNAME_ENABLE) != 0)
 	  {
 		return true;
 	  }
@@ -1132,7 +1135,7 @@ namespace RTM {
   bool RtcBase::isAliasEnable()
   {
 	RTC_TRACE(("RtcBase::isAliasEnable()"));
-	if (m_NamingPolicy & ALIAS_ENABLE != 0)
+	if ((m_NamingPolicy & ALIAS_ENABLE) != 0)
 	  {
 		return true;
 	  }
@@ -1298,3 +1301,10 @@ namespace RTM {
 
   
 }; // end of namespace RTM
+
+#ifdef WIN32
+BOOL WINAPI DllMain (HINSTANCE hinstDll, DWORD fdwReason, LPVOID lpvReserved)
+{
+	return TRUE;
+}
+#endif //WIN32
