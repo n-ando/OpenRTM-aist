@@ -2,7 +2,7 @@
 /*!
  * @file RtcBase.h
  * @brief RT component base class
- * @date $Date: 2005-05-12 09:06:18 $
+ * @date $Date: 2005-05-16 06:02:49 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
  * Copyright (C) 2003-2005
@@ -12,12 +12,15 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: RtcBase.h,v 1.1.1.1 2005-05-12 09:06:18 n-ando Exp $
+ * $Id: RtcBase.h,v 1.2 2005-05-16 06:02:49 n-ando Exp $
  *
  */
 
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.1.1.1  2005/05/12 09:06:18  n-ando
+ * Public release.
+ *
  *
  */
 
@@ -43,8 +46,11 @@
 #include "rtm/RtcModuleProfile.h"
 #include "rtm/RtcSystemLogger.h"
 
-
-#define USLEEP(x) usleep(x);
+#define USLEEP(x) \
+{ \
+  ACE_Time_Value tv(0, x);\
+  ACE_OS::sleep(tv);\
+}
 
 namespace RTM {
   // namespace
@@ -80,18 +86,17 @@ namespace RTM {
    */
   typedef RTM::RTComponent::ComponentState ComponentState;
   
-  const ComponentState RTC_UNKNOWN      = RTM::RTComponent::RTC_UNKNOWN;
-  const ComponentState RTC_BORN         = RTM::RTComponent::RTC_BORN;
-  const ComponentState RTC_INITIALIZING = RTM::RTComponent::RTC_INITIALIZING;
-  const ComponentState RTC_READY        = RTM::RTComponent::RTC_READY;
-  const ComponentState RTC_STARTING     = RTM::RTComponent::RTC_STARTING;
-  const ComponentState RTC_ACTIVE       = RTM::RTComponent::RTC_ACTIVE;
-  const ComponentState RTC_STOPPING     = RTM::RTComponent::RTC_STOPPING;
-  const ComponentState RTC_ABORTING     = RTM::RTComponent::RTC_ABORTING;
-  const ComponentState RTC_ERROR        = RTM::RTComponent::RTC_ERROR;
-  const ComponentState RTC_FATAL_ERROR  = RTM::RTComponent::RTC_FATAL_ERROR;
-  const ComponentState RTC_EXITING      = RTM::RTComponent::RTC_EXITING;
-  
+  const ComponentState RTC_UNKNOWN      = 0; //RTM::RTComponent::RTC_UNKNOWN;
+  const ComponentState RTC_BORN         = 1; //RTM::RTComponent::RTC_BORN;
+  const ComponentState RTC_INITIALIZING = 2; //RTM::RTComponent::RTC_INITIALIZING;
+  const ComponentState RTC_READY        = 3; //RTM::RTComponent::RTC_READY;
+  const ComponentState RTC_STARTING     = 4; //RTM::RTComponent::RTC_STARTING;
+  const ComponentState RTC_ACTIVE       = 5; //RTM::RTComponent::RTC_ACTIVE;
+  const ComponentState RTC_STOPPING     = 6; //RTM::RTComponent::RTC_STOPPING;
+  const ComponentState RTC_ABORTING     = 7; //RTM::RTComponent::RTC_ABORTING;
+  const ComponentState RTC_ERROR        = 8; //RTM::RTComponent::RTC_ERROR;
+  const ComponentState RTC_FATAL_ERROR  = 9; //RTM::RTComponent::RTC_FATAL_ERROR;
+  const ComponentState RTC_EXITING      = 10;//RTM::RTComponent::RTC_EXITING;
 
   typedef enum NamingPolicy {
 	UNKNOWN = 0,
@@ -146,7 +151,7 @@ namespace RTM {
    *
    * @endif
    */
-  class RtcBase  
+  class EXPORTS RtcBase  
 	: public virtual POA_RTM::RTCBase, 
       public virtual PortableServer::RefCountServantBase,
       public ACE_Task<ACE_MT_SYNCH>
@@ -2302,7 +2307,7 @@ namespace RTM {
   // RTComponent factory function type
   //------------------------------------------------------------
 
-  class RtcManager;
+  class EXPORTS RtcManager;
 	/*!
 	 * @if jp
 	 * @brief コンポーネントオブジェクトファクトリ関数宣言
