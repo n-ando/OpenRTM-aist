@@ -2,7 +2,7 @@
 /*!
  * @file RtcSubscriber.h
  * @brief Subscriber active object class runs on Output port
- * @date $Date: 2005-05-12 09:06:18 $
+ * @date $Date: 2005-05-16 06:39:02 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
  * Copyright (C) 2003-2005
@@ -12,12 +12,15 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: RtcSubscriber.h,v 1.1.1.1 2005-05-12 09:06:18 n-ando Exp $
+ * $Id: RtcSubscriber.h,v 1.2 2005-05-16 06:39:02 n-ando Exp $
  *
  */
 
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.1.1.1  2005/05/12 09:06:18  n-ando
+ * Public release.
+ *
  *
  */
 
@@ -61,7 +64,7 @@ namespace RTM {
    *
    * @endif
    */
-  class SubscriberBase
+  class EXPORTS SubscriberBase
 	: public ACE_Task<ACE_MT_SYNCH>
   {
   public:
@@ -226,7 +229,7 @@ namespace RTM {
    * @brief Subscriber active object who get data once.
    *
    */
-  class SubscriberOnce
+  class EXPORTS SubscriberOnce
 	: public SubscriberBase 
   {
   public:
@@ -244,7 +247,7 @@ namespace RTM {
    * @brief Subscriber active object handle subscriber periodic data acquisition
    *
    */
-  class SubscriberPeriodic
+  class EXPORTS SubscriberPeriodic
 	: public SubscriberBase
   {
   public:
@@ -262,7 +265,7 @@ namespace RTM {
    * @brief Subscriber active object pushes when new data arrived from activity
    *
    */
-  class SubscriberNew
+  class EXPORTS SubscriberNew
 	: public SubscriberBase
   {
   public:
@@ -280,14 +283,14 @@ namespace RTM {
    * @brief 
    *
    */
-  class SubscriberTriggerd
+  class EXPORTS SubscriberTriggerd
 	: public SubscriberBase
   {
   public:
 	SubscriberTriggerd(OutPortBase* parent, InPort_ptr inport,
 					   const SubscriptionID id, SubscriberProfile profile);
-	virtual bool update(){};
-	virtual int svc (void){};
+	virtual bool update(){return true;};
+	virtual int svc (void){return 0;};
   };
 
 
@@ -298,14 +301,14 @@ namespace RTM {
    * @brief 
    *
    */
-  class SubscriberPeriodicNew
+  class EXPORTS SubscriberPeriodicNew
 	: public SubscriberBase
   {
   public:
 	SubscriberPeriodicNew(OutPortBase* parent, InPort_ptr inport,
 						  const SubscriptionID id, SubscriberProfile profile);
-	virtual bool update(){};
-	virtual int svc (void){};
+	virtual bool update(){return true;};
+	virtual int svc (void){return 0;};
   };
 
 
@@ -316,14 +319,14 @@ namespace RTM {
    * @brief 
    *
    */
-  class SubscriberNewPeriodic
+  class EXPORTS SubscriberNewPeriodic
 	: public SubscriberBase
   {
   public:
 	SubscriberNewPeriodic(OutPortBase* parent, InPort_ptr inport,
 						  const SubscriptionID id, SubscriberProfile profile);
-	virtual bool update(){};
-	virtual int svc (void){};
+	virtual bool update(){return true;};
+	virtual int svc (void){return 0;};
   };
 
 
@@ -335,14 +338,14 @@ namespace RTM {
    * @brief 
    *
    */
-  class SubscriberPeriodicTriggerd
+  class EXPORTS SubscriberPeriodicTriggerd
 	: public SubscriberBase
   {
   public:
 	SubscriberPeriodicTriggerd(OutPortBase* parent, InPort_ptr inport,
 							   const SubscriptionID id, SubscriberProfile profile);
-	virtual bool update(){};
-	virtual int svc (void){};
+	virtual bool update(){return true;};
+	virtual int svc (void){return 0;};
   };
 
 
@@ -354,14 +357,14 @@ namespace RTM {
    * @brief 
    *
    */
-  class SubscriberTriggerdPeriodic
+  class EXPORTS SubscriberTriggerdPeriodic
 	: public SubscriberBase
   {
   public:
 	SubscriberTriggerdPeriodic(OutPortBase* parent, InPort_ptr inport,
 							   const SubscriptionID id, SubscriberProfile profile);
-	virtual bool update(){};
-	virtual int svc (void){};
+	virtual bool update(){return true;};
+	virtual int svc (void){return 0;};
   };
 
 
