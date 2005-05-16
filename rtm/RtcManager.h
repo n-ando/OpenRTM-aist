@@ -2,7 +2,7 @@
 /*!
  * @file RtcManager.h
  * @brief RTComponent manager class
- * @date $Date: 2005-05-12 09:06:18 $
+ * @date $Date: 2005-05-16 06:19:56 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
  * Copyright (C) 2003-2005
@@ -12,12 +12,15 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: RtcManager.h,v 1.1.1.1 2005-05-12 09:06:18 n-ando Exp $
+ * $Id: RtcManager.h,v 1.2 2005-05-16 06:19:56 n-ando Exp $
  *
  */
 
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.1.1.1  2005/05/12 09:06:18  n-ando
+ * Public release.
+ *
  *
  */
 
@@ -92,7 +95,7 @@ namespace RTM
    *
    * @endif
    */
-  class RtcManager :
+  class EXPORTS RtcManager :
     public virtual POA_RTM::RTCManager, 
 							public virtual PortableServer::RefCountServantBase,
 														   public ACE_Task<ACE_MT_SYNCH>
@@ -740,6 +743,7 @@ namespace RTM
 	  {
 		m_Var.data = CORBA::string_dup(s);
 		m_OutPort.write();
+		return true;
 	  }
 	protected:
 	  OutPortAny<TimedString>& m_OutPort;
