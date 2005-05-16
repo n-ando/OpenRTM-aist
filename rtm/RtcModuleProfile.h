@@ -2,7 +2,7 @@
 /*!
  * @file RtcModuleProfile.h
  * @brief RT component module's profile class
- * @date $Date: 2005-05-12 09:06:18 $
+ * @date $Date: 2005-05-16 06:26:39 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
  * Copyright (C) 2003-2005
@@ -12,12 +12,15 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: RtcModuleProfile.h,v 1.1.1.1 2005-05-12 09:06:18 n-ando Exp $
+ * $Id: RtcModuleProfile.h,v 1.2 2005-05-16 06:26:39 n-ando Exp $
  *
  */
 
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.1.1.1  2005/05/12 09:06:18  n-ando
+ * Public release.
+ *
  *
  */
 
@@ -67,10 +70,10 @@ namespace RTM {
    *
    * Type definition of RtcModuleProfile initialize table.
    *------------------------------------------------------------*/
-  typedef struct RtcModuleProfSpec {
+  typedef struct RtcModuleProfSpec_t {
 	RtcModuleProfileType type;
 	char* value;
-  };
+  } RtcModuleProfSpec;
 
 
   typedef map<string, int>::value_type TypeMapValue;
@@ -108,7 +111,7 @@ namespace RTM {
    *
    * @brief Profile class of RTComponent Module
    *------------------------------------------------------------*/
-  class RtcModuleProfile
+  class EXPORTS RtcModuleProfile
   {
   public:
 
