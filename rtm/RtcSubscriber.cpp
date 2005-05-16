@@ -2,7 +2,7 @@
 /*!
  * @file RtcSubscriber.cpp
  * @brief Subscriber active object class runs on Output port
- * @date $Date: 2005-05-12 09:06:18 $
+ * @date $Date: 2005-05-16 06:38:00 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
  * Copyright (C) 2003-2005
@@ -12,12 +12,15 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: RtcSubscriber.cpp,v 1.1.1.1 2005-05-12 09:06:18 n-ando Exp $
+ * $Id: RtcSubscriber.cpp,v 1.2 2005-05-16 06:38:00 n-ando Exp $
  *
  */
 
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.1.1.1  2005/05/12 09:06:18  n-ando
+ * Public release.
+ *
  *
  */
 
@@ -155,6 +158,8 @@ namespace RTM
 	  }
 	
 	m_NewData.m_Mutex.release();
+
+	return 0;
   }
   
 
@@ -191,7 +196,7 @@ namespace RTM
 #endif // ARTLinux
 	while (m_Running)
 	  {
-		sleep(1);
+		// sleep(1);
 		//		m_pParent->push(m_InPort, m_Id);
 		
 		// sleep() is needed
@@ -202,6 +207,7 @@ namespace RTM
 #endif //ARTLinux
 		
 	  }
+	return 0;
   }
 
 
