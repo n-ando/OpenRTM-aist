@@ -3,7 +3,7 @@
 #
 #  @file RtmSystemDraw.py
 #  @brief rtc-link component block diagram system draw management class
-#  @date $Date: 2005-05-16 10:11:01 $
+#  @date $Date: 2005-05-16 10:14:19 $
 #  @author Tsuyoshi Tanabe, Noriaki Ando <n-ando@aist.go.jp>
 # 
 #  Copyright (C) 2004-2005
@@ -13,10 +13,16 @@
 #          Advanced Industrial Science and Technology (AIST), Japan
 #      All rights reserved.
 # 
-#  $Id: RtmSystemDraw.py,v 1.2 2005-05-16 10:11:01 n-ando Exp $
+#  $Id: RtmSystemDraw.py,v 1.3 2005-05-16 10:14:19 n-ando Exp $
 # 
 # RtmSystemDraw.py           Created on: 2004/09/13
 #                            Author    : Tsuyoshi Tanabe
+
+#
+#  $Log: not supported by cvs2svn $
+#
+#
+
 """
     wxPython, OGL を用いたコンポーネント図形表示画面
 """
