@@ -2,7 +2,7 @@
 /*!
  * @file RtcNameComponent.h
  * @brief Name component helper class
- * @date $Date: 2005-05-12 09:06:18 $
+ * @date $Date: 2005-05-16 06:27:46 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
  * Copyright (C) 2003-2005
@@ -12,12 +12,15 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: RtcNameComponent.h,v 1.1.1.1 2005-05-12 09:06:18 n-ando Exp $
+ * $Id: RtcNameComponent.h,v 1.2 2005-05-16 06:27:46 n-ando Exp $
  *
  */
 
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.1.1.1  2005/05/12 09:06:18  n-ando
+ * Public release.
+ *
  *
  */
 
@@ -25,6 +28,7 @@
 #define RtcNameComponent_h
 
 // CORBA header include
+#include "rtm/RTC.h"
 #include "rtm/idl/RTMBaseStub.h"
 #include "rtm/idl/RTMBaseSkel.h"
 
@@ -50,7 +54,7 @@ namespace RTM
    *
    * @endif
    */
-  class RtcNameComponent
+  class EXPORTS RtcNameComponent
   {
   public:
 	/*!
