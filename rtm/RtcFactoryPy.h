@@ -2,7 +2,7 @@
 /*!
  * @file RtcFactoryPy.h
  * @brief RTComponent factory class for Python
- * @date $Date: 2005-05-12 09:06:18 $
+ * @date $Date: 2005-05-16 06:06:56 $
  * Copyright (C) 2003-2005
  *     Task-intelligence Research Group,
  *     Intelligent Systems Research Institute,
@@ -10,12 +10,15 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: RtcFactoryPy.h,v 1.1.1.1 2005-05-12 09:06:18 n-ando Exp $
+ * $Id: RtcFactoryPy.h,v 1.2 2005-05-16 06:06:56 n-ando Exp $
  *
  */
 
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.1.1.1  2005/05/12 09:06:18  n-ando
+ * Public release.
+ *
  *
  */
 
@@ -47,7 +50,7 @@ namespace RTM
    *
    * @endif
    */
-  class RtcFactoryPy
+  class EXPORTS RtcFactoryPy
     : public RtcFactoryBase
   {
   public:
