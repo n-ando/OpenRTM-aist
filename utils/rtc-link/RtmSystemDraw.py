@@ -3,7 +3,7 @@
 #
 #  @file RtmSystemDraw.py
 #  @brief rtc-link component block diagram system draw management class
-#  @date $Date: 2005-05-12 09:06:19 $
+#  @date $Date: 2005-05-16 10:11:01 $
 #  @author Tsuyoshi Tanabe, Noriaki Ando <n-ando@aist.go.jp>
 # 
 #  Copyright (C) 2004-2005
@@ -13,7 +13,7 @@
 #          Advanced Industrial Science and Technology (AIST), Japan
 #      All rights reserved.
 # 
-#  $Id: RtmSystemDraw.py,v 1.1.1.1 2005-05-12 09:06:19 n-ando Exp $
+#  $Id: RtmSystemDraw.py,v 1.2 2005-05-16 10:11:01 n-ando Exp $
 # 
 # RtmSystemDraw.py           Created on: 2004/09/13
 #                            Author    : Tsuyoshi Tanabe
@@ -1482,6 +1482,9 @@ class GRtcOut(ogl.Shape):
 
 
         connect_check = self.checkConnect(inp_ref, inp_ref_list)
+#assembly dummy
+#        connect_check = False
+#assembly dummy
 
         rslt = 0
         if canvas.viewMode == False and connect_check == False:
@@ -1531,6 +1534,9 @@ class GRtcOut(ogl.Shape):
                 inp_ref_list = ref._get_inports()
                 inp_obj = canvas.line[line_idx].g_inp.inport['ref']
                 connect_check = self.checkConnect(inp_obj, inp_ref_list)
+#assembly dummy
+#                connect_check = True
+#assembly dummy
                 break
             except:
                 err_mess =  'outport obj-ref failure:'
@@ -1569,7 +1575,7 @@ class GRtcOut(ogl.Shape):
         void
         """
 # assembly dummy process
-        return
+#        return
 # assembly dummy process
 
         canvas = self.body.GetCanvas()
@@ -1747,6 +1753,10 @@ class GRtcOut(ogl.Shape):
         [Ã·§Í√Õ]
         void
         """
+#assembly dummy
+#        return
+#assembly dummy
+
         canvas = self.body.GetCanvas()
         ref = self.outport['ref']
         try:
@@ -1867,7 +1877,7 @@ class GRtc(ogl.Shape):
 
     def remakeLines(self):
 # assembly dummy process
-        return
+#        return
 # assembly dummy process
         for outp in self.out_list :
             if outp['name'] in self.out_dict.keys():
@@ -3714,14 +3724,14 @@ class RtdSystemDraw(ogl.ShapeCanvas):
         void
         """
 # assembly dummy process
-        return
+#        return
 # assembly dummy process
         for rtc_name in self.rtc_list:
             self.rtc_dict[rtc_name].reConnectLine()
 
     def remakeLines(self):
 # assembly dummy process
-        return
+#        return
 # assembly dummy process
         for rtc_name in self.rtc_list:
             self.rtc_dict[rtc_name].remakeLines()
@@ -4235,7 +4245,7 @@ class RtdSystemDraw(ogl.ShapeCanvas):
         void
         """
 # assembly dummy
-        return wx.ID_OK
+#        return wx.ID_OK
 # assembly dummy
         # yes/no dialog
         val = wx.ID_OK
@@ -4356,11 +4366,11 @@ class RtdSystemDraw(ogl.ShapeCanvas):
         menu.Append(self.popupIDc, strOPEN) 
         menu.Append(self.popupIDd, strSAVE) 
         menu.Append(self.popupIDe, strSAVE_AS) 
-# assembly disable
-        menu.FindItemById(self.popupIDc).Enable(False)
-        menu.FindItemById(self.popupIDd).Enable(False)
-        menu.FindItemById(self.popupIDe).Enable(False)
-# assembly disable
+# assembly emable
+#        menu.FindItemById(self.popupIDc).Enable(False)
+#        menu.FindItemById(self.popupIDd).Enable(False)
+#        menu.FindItemById(self.popupIDe).Enable(False)
+# assembly emable
 
 
         self.PopupMenu(menu, evt.GetPosition())

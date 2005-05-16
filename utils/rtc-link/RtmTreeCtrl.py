@@ -3,7 +3,7 @@
 #
 #  @file RtmTreeCtrl.py
 #  @brief rtc-link name tree management class
-#  @date $Date: 2005-05-12 09:06:19 $
+#  @date $Date: 2005-05-16 10:11:01 $
 #  @author Tsuyoshi Tanabe, Noriaki Ando <n-ando@aist.go.jp>
 # 
 #  Copyright (C) 2004-2005
@@ -13,11 +13,14 @@
 #          Advanced Industrial Science and Technology (AIST), Japan
 #      All rights reserved.
 # 
-#  $Id: RtmTreeCtrl.py,v 1.1.1.1 2005-05-12 09:06:19 n-ando Exp $
+#  $Id: RtmTreeCtrl.py,v 1.2 2005-05-16 10:11:01 n-ando Exp $
 # 
 
 #
 #  $Log: not supported by cvs2svn $
+#  Revision 1.1.1.1  2005/05/12 09:06:19  n-ando
+#  Public release.
+#
 #
 
 # Basic modules
@@ -98,6 +101,10 @@ class RtmPopup:
 		test_id = self.parent.tree.GetItemText(self.item)
 		fullpath = self.parent.makeFullPath(self.item)
 		mod_name = self.parent.myDict.GetCompName(fullpath)
+		cate_name = self.parent.myDict.GetCateName(fullpath)
+		if cate_name == '':
+			print 'cate_cxt search error!!'
+			return
 		mgrpath = self.parent.searchManagerPath(self.item)
 		if mgrpath == None:
 			print 'RTCManager object-ref search error!!'
@@ -107,7 +114,7 @@ class RtmPopup:
 		try:
 			objref._narrow(RTM.RTCManager)
 
-			(ret,ret_str) = objref.create_component(mod_name)
+			(ret,ret_str) = objref.create_component(mod_name, cate_name)
 		except:
 			except_mess("create_component error!:")
 
@@ -287,7 +294,6 @@ class RtmManagerPopup(RtmPopup):
 	def SetSubMenu(self):
 		print "SetSubMenu"
 		tmp_id = self.menu.FindItem("Create")
-		print "menu:",tmp_id
 
 		item_list = self.menu.GetMenuItems()
 		sub_menu = None
@@ -297,7 +303,6 @@ class RtmManagerPopup(RtmPopup):
 				break
 
 		child_items = sub_menu.GetMenuItems()
-		print "test1:",child_items
 		for item in child_items:
 			id = item.GetId()
 			sub_menu.Remove(id)
@@ -312,8 +317,9 @@ class RtmManagerPopup(RtmPopup):
 		try:
 			objref._narrow(RTM.RTCManager)
 
-			fact_list = ["Test","test2","test3"]
+			fact_list = []
 #			fact_list = objref.component_factory_list()
+			fact_list = objref.factory_list()
 		except:
 			except_mess("component_factory_list error!:")
 
@@ -1034,8 +1040,8 @@ class RtmTreeCtrlPanel(wx.Panel):
 
 		while (rootitem_id != cur_id):
 			tmp_id = self.tree.GetItemParent(cur_id)
-			if tmp_id == rootitem_id:
-				break
+#			if tmp_id == rootitem_id:
+#				break
 			name = self.tree.GetItemText(tmp_id)
 			ret = name + '/' + ret
 			cur_id = tmp_id
