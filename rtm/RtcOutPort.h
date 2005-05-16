@@ -2,7 +2,7 @@
 /*!
  * @file RtcOutPort.h
  * @brief OutPort template class
- * @date $Date: 2005-05-12 09:06:18 $
+ * @date $Date: 2005-05-16 06:32:42 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
  * Copyright (C) 2003-2005
@@ -12,12 +12,15 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: RtcOutPort.h,v 1.1.1.1 2005-05-12 09:06:18 n-ando Exp $
+ * $Id: RtcOutPort.h,v 1.2 2005-05-16 06:32:42 n-ando Exp $
  *
  */
 
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.1.1.1  2005/05/12 09:06:18  n-ando
+ * Public release.
+ *
  *
  */
 
@@ -33,6 +36,9 @@
 #include <iostream>
 
 #define DEFAULT_BUFFER_SIZE 64
+#ifdef WIN32
+#include <atltime.h>
+#endif //WIN32
 
 namespace RTM {
   /*!
@@ -218,18 +224,18 @@ namespace RTM {
 			  inport->put(val);
 			}
 		}
-	  catch(CORBA::SystemException& e)
+	  catch(CORBA::SystemException& se)
 		{
-		  //		  cout << "push(): CORBA System Exception." << endl;
-
+		  // std::cout << "push(): CORBA System Exception." << e << endl;
+		  se;
 		  // Subscribers already locked
 		  unsubscribeNoLocked(subsid.c_str());
 		  return RTM_ERR;
 		}
-	  catch(RTM::InPort::Disconnected& e)
+	  catch(RTM::InPort::Disconnected& dce)
 		{
 		  //		  ACE_DEBUG((LM_DEBUG, "Disconnected."));
-
+		  dce;
 		  // Subscribers already locked
 		  unsubscribeNoLocked(subsid.c_str());
 		  return RTM_ERR;
@@ -260,7 +266,45 @@ namespace RTM {
 		}
 	}
 	
-	
+
+#ifdef WIN32
+	void getFileTime(struct timespec &ts) {
+	  ULARGE_INTEGER tmpbuf;
+	  CFileTime  myFT;
+	  ULONGLONG  s1;
+	  ULONGLONG  s2;
+	  ULONGLONG  s3;
+	  SYSTEMTIME time1970;
+	  FILETIME   file1970;
+	  
+	  time1970.wYear = 1970;
+	  time1970.wMonth = 1;
+	  time1970.wDayOfWeek = 0;
+	  time1970.wDay = 1;
+	  time1970.wHour = 0;
+	  time1970.wMinute = 0;
+	  time1970.wSecond = 0;
+	  time1970.wMilliseconds = 0;
+	  SystemTimeToFileTime(&time1970,&file1970);
+	  CFileTime  oldFT(file1970);
+	  
+	  myFT = CFileTime::GetCurrentTime();
+	  tmpbuf.LowPart = myFT.dwLowDateTime;
+	  tmpbuf.HighPart = myFT.dwHighDateTime;
+	  s1 = s2 = tmpbuf.QuadPart;
+	  tmpbuf.LowPart = oldFT.dwLowDateTime;
+	  tmpbuf.HighPart = oldFT.dwHighDateTime;
+	  s3 = tmpbuf.QuadPart;
+	  s1 = s2 = s1 - s3;
+	  s1 = (s1 / CFileTime::Second )*CFileTime::Second;
+	  s2 = (s2 - s1)*100;
+	  s1 = (s1 / CFileTime::Second);
+	  
+	  ts.tv_sec = (long) s1;
+	  ts.tv_nsec = (long) s2;
+	};
+#endif
+
 	/*!
 	 * @if jp
 	 *
@@ -278,7 +322,11 @@ namespace RTM {
 	virtual void write()
 	{
 	  struct timespec ts;
+#ifdef WIN32
+	  getFileTime(ts);
+#else // WIN32
 	  ACE_OS::clock_gettime(CLOCK_REALTIME, &ts);
+#endif // WIN32
 	  m_Value.tm.sec = ts.tv_sec;
 	  m_Value.tm.nsec = ts.tv_nsec;
 	  m_Buffer.put(m_Value);
@@ -330,7 +378,11 @@ namespace RTM {
 	virtual void write(T value)
 	{
 	  struct timespec ts;
+#ifdef WIN32
+	  getFileTime(ts);
+#else // WIN32
 	  ACE_OS::clock_gettime(CLOCK_REALTIME, &ts);
+#endif // WIN32
 	  value.tm.sec = ts.tv_sec;
 	  value.tm.nsec = ts.tv_nsec;
 	  m_Buffer.put(value);
@@ -360,7 +412,11 @@ namespace RTM {
 	virtual void operator<<(T& value)
 	{
 	  struct timespec ts;
+#ifdef WIN32
+	  getFileTime(ts);
+#else // WIN32
 	  ACE_OS::clock_gettime(CLOCK_REALTIME, &ts);
+#endif // WIN32
 	  value.tm.sec = ts.tv_sec;
 	  value.tm.nsec = ts.tv_nsec;
 	  m_Buffer.put(value);
