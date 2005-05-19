@@ -2,9 +2,12 @@
 ##---------------------------------------------------------------------------
 ## Makefile.am for swig
 ##
-## $Id: Makefile.am,v 1.1.1.1 2005-05-12 09:06:19 n-ando Exp $
+## $Id: Makefile.am,v 1.2 2005-05-19 09:29:05 n-ando Exp $
 ##
 ## $Log: not supported by cvs2svn $
+## Revision 1.1.1.1  2005/05/12 09:06:19  n-ando
+## Public release.
+##
 ##---------------------------------------------------------------------------
 
 AUTOMAKE_OPTIONS = 1.4
@@ -25,12 +28,14 @@ SWIG_FLAGS=-python -Wall -shadow -proxy -c++ -I../.. -I..
 SWIGISOURCES = \
 	_defs.i \
 	typemaps_py.i \
+	RtcDataType.i \
 	RTM.i \
 	RtcBase.i \
 	RtcManager.i \
 	RtcInPort.i \
 	RtcOutPort.i \
 	RtcModuleProfile.i \
+	RTCBase.i \
 	RTComponent.i \
 	RTCInPort.i \
 	RTCOutPort.i \
