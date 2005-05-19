@@ -2,7 +2,7 @@
 /*!
  * @file ConnectorComp.cpp
  * @brief connector application
- * @date $Date: 2005-05-12 09:06:20 $
+ * @date $Date: 2005-05-19 16:40:37 $
  *
  * Copyright (c) 2003 Noriaki Ando <n-ando@aist.go.jp>
  *          Task-intelligence Research Group,
@@ -10,7 +10,7 @@
  *          National Institute of Industrial Science (AIST), Japan
  *          All rights reserved.
  *
- * $Id: ConnectorComp.cpp,v 1.1.1.1 2005-05-12 09:06:20 n-ando Exp $
+ * $Id: ConnectorComp.cpp,v 1.2 2005-05-19 16:40:37 n-ando Exp $
  */
 
 #include <iostream>
@@ -103,17 +103,17 @@ int main (int argc, char** argv)
 	}
   
   // Subscription
-  RTM::SubscriberProfile sub_prof;
+  RTM::SubscriptionProfile sub_prof;
   sub_prof.subscription_type = RTM::OPS_NEW;
+  sub_prof.in_port = inp_obj;
+  sub_prof.out_port = outp_obj;
   cout << "Connect OutPort and InPort...";
   char* uuid;
-  if (outp_obj->subscribe(inp_obj,
-						  uuid,
-						  sub_prof) == RTM::RTM_OK)
+  if (outp_obj->subscribe(sub_prof) == RTM::RTM_OK)
 	{
 	  cout << "succeed." << endl;
-	  cout << "Subscription ID is " << uuid << endl;
-	  CORBA::string_free(uuid);
+	  cout << "Subscription ID is " << sub_prof.id << endl;
+	  CORBA::string_free(sub_prof.id);
 	}
   else
 	{ 
