@@ -2,9 +2,12 @@
 ##---------------------------------------------------------------------------
 ## Makefile.am for rtc-link
 ##
-## $Id: Makefile.am,v 1.1.1.1 2005-05-12 09:06:19 n-ando Exp $
+## $Id: Makefile.am,v 1.2 2005-05-23 07:13:43 n-ando Exp $
 ##
 ## $Log: not supported by cvs2svn $
+## Revision 1.1.1.1  2005/05/12 09:06:19  n-ando
+## Public release.
+##
 ##---------------------------------------------------------------------------
 
 AUTOMAKE_OPTIONS = 1.4
@@ -54,18 +57,18 @@ RTCLINK_SOURCES = \
 # rule for installing RTM RTM__POA directories
 install-stubs:
 	if test -d RTM; then \
-	  $(mkinstalldirs) $(pymoduledir)/RTM; \
+	  $(mkinstalldirs) $(DESTDIR)$(pymoduledir)/RTM; \
 	  for x in RTM/*; do \
 	    if test -f $$x; then \
-	      $(INSTALL_DATA) $$x $(pymoduledir)/RTM/ ;\
+	      $(INSTALL_DATA) $$x $(DESTDIR)$(pymoduledir)/RTM/ ;\
 	    fi \
 	  done \
 	fi
 	if test -d RTM__POA; then \
-	  $(mkinstalldirs) $(pymoduledir)/RTM__POA; \
+	  $(mkinstalldirs) $(DESTDIR)$(pymoduledir)/RTM__POA; \
 	  for x in RTM__POA/*; do \
 	    if test -f $$x; then \
-	      $(INSTALL_DATA) $$x $(pymoduledir)/RTM__POA/ ;\
+	      $(INSTALL_DATA) $$x $(DESTDIR)$(pymoduledir)/RTM__POA/ ;\
 	    fi \
 	  done \
 	fi
