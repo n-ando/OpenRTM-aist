@@ -2,7 +2,7 @@
 /*!
  * @file RtcManager.cpp
  * @brief RT component manager class
- * @date $Date: 2005-05-16 06:18:38 $
+ * @date $Date: 2005-05-27 07:33:20 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
  * Copyright (C) 2003-2005
@@ -12,12 +12,20 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: RtcManager.cpp,v 1.2 2005-05-16 06:18:38 n-ando Exp $
+ * $Id: RtcManager.cpp,v 1.3 2005-05-27 07:33:20 n-ando Exp $
  *
  */
 
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.2  2005/05/16 06:18:38  n-ando
+ * - Define ACE_HAS_WINSOCK2 for Windows.
+ * - Some sleep was added in RtcManager::runManager() main loop.
+ *   The ORB's "perform_work" main loop needs a few us sleep.
+ * - RtcManager's activation method was changed from "this->_this()" to
+ *   "m_pPOA->activate_object(this)".
+ *   Implicit object activation by using _this() is not recommended.
+ *
  * Revision 1.1.1.1  2005/05/12 09:06:18  n-ando
  * Public release.
  *
@@ -784,18 +792,18 @@ namespace RTM
 	if (CORBA::is_nil(outpt)) return std::string("");
 
 	char* uuid;
-	RTM::SubscriberProfile sub_prof;
+	RTM::SubscriptionProfile sub_prof;
 	sub_prof.subscription_type = sub_type;
 
-	if (outpt->subscribe(inpt, uuid, sub_prof) != RTM::RTM_OK)
+	if (outpt->subscribe(sub_prof) != RTM::RTM_OK)
 	  {
 		RTC_ERROR(("Subscription error."));
 		return std::string("");
 	  }
 	
-	RTC_DEBUG(("Subscription uuid: %s", uuid));
+	RTC_DEBUG(("Subscription uuid: %s", std::string(sub_prof.id)));
 
-	return std::string(uuid);
+	return std::string(sub_prof.id);
   }
  
   std::string RtcManager::bindInOutByName(const std::string& comp_name_in,
@@ -1070,9 +1078,9 @@ namespace RTM
 
 	InPort_var in_port = m_pMasterLogger->get_inport("logger_in");
 	char* uuid;
-	RTM::SubscriberProfile sub_prof;
+	RTM::SubscriptionProfile sub_prof;
 	sub_prof.subscription_type = RTM::OPS_NEW;
-	RtmRes res = m_pLoggerOutPort->subscribe(in_port, uuid, sub_prof);
+	RtmRes res = m_pLoggerOutPort->subscribe(sub_prof);
 
 	if (res == RTM_ERR)
 	  {
