@@ -2,9 +2,12 @@
 ##---------------------------------------------------------------------------
 ## Makefile.am for rtc-link
 ##
-## $Id: Makefile.am,v 1.2 2005-05-23 07:13:43 n-ando Exp $
+## $Id: Makefile.am,v 1.3 2005-05-27 10:08:19 n-ando Exp $
 ##
 ## $Log: not supported by cvs2svn $
+## Revision 1.2  2005/05/23 07:13:43  n-ando
+## - Now, DESTDIR is supported for rtc-link python modules.
+##
 ## Revision 1.1.1.1  2005/05/12 09:06:19  n-ando
 ## Public release.
 ##
@@ -89,12 +92,15 @@ install-data-local: install-stubs
 IDL_SOURCES =       \
 	RTMBase.idl     \
 	RTCDataType.idl \
+	RTCSubscription.idl	\
+	RTCPortBase.idl	\
 	RTCInPort.idl   \
 	RTCOutPort.idl  \
 	RTComponent.idl \
 	RTCProfile.idl  \
 	RTCBase.idl     \
 	RTCManager.idl
+
 #
 # RTM idl stubs for python
 PY_STUBS = $(IDL_SOURCES:.idl=_idl.py)

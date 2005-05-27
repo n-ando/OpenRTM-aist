@@ -3,7 +3,7 @@
 #
 #  @file RtmTreeCtrl.py
 #  @brief rtc-link name tree management class
-#  @date $Date: 2005-05-16 10:11:01 $
+#  @date $Date: 2005-05-27 10:08:19 $
 #  @author Tsuyoshi Tanabe, Noriaki Ando <n-ando@aist.go.jp>
 # 
 #  Copyright (C) 2004-2005
@@ -13,11 +13,14 @@
 #          Advanced Industrial Science and Technology (AIST), Japan
 #      All rights reserved.
 # 
-#  $Id: RtmTreeCtrl.py,v 1.2 2005-05-16 10:11:01 n-ando Exp $
+#  $Id: RtmTreeCtrl.py,v 1.3 2005-05-27 10:08:19 n-ando Exp $
 # 
 
 #
 #  $Log: not supported by cvs2svn $
+#  Revision 1.2  2005/05/16 10:11:01  n-ando
+#  - Assembly XML data saving/loading function is now enabled. (Experimental)
+#
 #  Revision 1.1.1.1  2005/05/12 09:06:19  n-ando
 #  Public release.
 #
@@ -318,7 +321,6 @@ class RtmManagerPopup(RtmPopup):
 			objref._narrow(RTM.RTCManager)
 
 			fact_list = []
-#			fact_list = objref.component_factory_list()
 			fact_list = objref.factory_list()
 		except:
 			except_mess("component_factory_list error!:")
@@ -336,6 +338,10 @@ class RtmManagerPopup(RtmPopup):
 		if mgrpath == None:
 			print 'RTCManager object-ref search error!!'
 			return
+		cate_name = self.parent.searchCategoryName(self.item)
+		if cate_name == '':
+			print 'cate_cxt search error!!'
+			return
 
 		objref = self.parent.myDict.GetObjRefToFullpath(mgrpath)
 		try:
@@ -345,7 +351,7 @@ class RtmManagerPopup(RtmPopup):
 			item_name = self.menu.GetLabel(item_id)
 			print "item_name:",item_name
 
-#			(ret,ret_str) = objref.create_component(item_name)
+			(ret,ret_str) = objref.create_component(item_name, cate_name)
 		except:
 			except_mess("create_component error!:")
 
@@ -985,6 +991,42 @@ class RtmTreeCtrlPanel(wx.Panel):
 			ret = name + '/' + ret
 			cur_id = tmp_id
 		return str(ret)
+
+	def searchCategoryName(self, item):
+		"""現在のItemIdからCategoryの名称を検索
+		manager にぶら下がっているcategory名を検索
+
+		[引数]
+		cur_id -- 現在のItemID
+
+		[戻り値]
+		ret -- ツリーのFull Path
+		"""	
+		cur_id = item
+		ret = ''
+		cur_name = ''
+		kind = ''
+		items = []
+		parent_id = item
+		if self.ItemHasChildren(parent_id):
+			cur_id, cookie = self.GetFirstChild(parent_id)
+
+			for i in range(self.GetChildrenCount(parent_id, False) - 1):
+				cur_name = self.tree.GetItemText(cur_id)
+				num = cur_name.find('|')
+				if num != -1:
+					kind = cur_name[num+1:]
+				else:
+	#				print 'nothing kind!!! error!?'
+					kind = ''
+					break
+				if kind == 'cate_cxt':
+					ret = cur_name[0:num-1]
+					break
+				cur_id, cookie = self.GetNextChild(cur_id, cookie)
+
+		return ret
+
 
 	def searchManagerPath(self, item):
 		"""現在のItemIdからManagerのFullPathを作成

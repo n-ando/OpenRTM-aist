@@ -1,9 +1,9 @@
 #!/usr/bin/env python
-# -*- coding: utf-8 -*-
+# -*- coding: utf-8 -*- 
 #
 #  @file RtmSystemDraw.py
 #  @brief rtc-link component block diagram system draw management class
-#  @date $Date: 2005-05-16 10:16:18 $
+#  @date $Date: 2005-05-27 10:08:19 $
 #  @author Tsuyoshi Tanabe, Noriaki Ando <n-ando@aist.go.jp>
 # 
 #  Copyright (C) 2004-2005
@@ -13,13 +13,16 @@
 #          Advanced Industrial Science and Technology (AIST), Japan
 #      All rights reserved.
 # 
-#  $Id: RtmSystemDraw.py,v 1.4 2005-05-16 10:16:18 n-ando Exp $
-# 
-# RtmSystemDraw.py           Created on: 2004/09/13
+#  $Id: RtmSystemDraw.py,v 1.5 2005-05-27 10:08:19 n-ando Exp $
+#
+# RtmSystemDraw.py                    Created on: 2004/09/13
 #                            Author    : Tsuyoshi Tanabe
 
 #
 #  $Log: not supported by cvs2svn $
+#  Revision 1.4  2005/05/16 10:16:18  n-ando
+#  - CVS Log comment was enabled.
+#
 #  Revision 1.3  2005/05/16 10:14:19  n-ando
 #  - CVS Log comment was enabled.
 #
@@ -81,6 +84,7 @@ strREFRESH    = "Refresh"
 strOPEN       = "Open System"
 strSAVE       = "Save System"
 strSAVE_AS    = "Save System As"
+strDEL_SYS    = "Current System is Deleted when OPEN.\nDelete It?"
 
 # コンポーネント上でのコンテキストメニュー用文字列
 strSTART   = "Start"
@@ -1195,7 +1199,6 @@ class GRtcOut(ogl.Shape):
         self.tag = 'out'
         self.uuid = {}
         self.subscription_type = RTM.OPS_NEW
-#        self.profile = RTM.SubscriberProfile(self.subscription_type,False,[])
         self.createWidget()
 
     def refresh(self):
@@ -1419,16 +1422,18 @@ class GRtcOut(ogl.Shape):
         成否フラグ -- 0:エラー(オブジェクトリファレンス無し,subscribe失敗） / 1:成功
         """
         canvas = self.body.GetCanvas()
+
+        # get outport-object-ref
         ref = self.outport['ref']
         if ref == None :
             return 0  
         try:
             ref = ref._narrow(RTM.OutPort)
-            inp_ref_list = ref._get_inports()
         except:
             except_mess('outport obj-ref failure:')
             return 0
 
+        # get inport-object-ref
         inp_ref = canvas.line[line_idx].g_inp.inport['ref']
         try:
             inp_ref = inp_ref._narrow(RTM.InPort)
@@ -1436,24 +1441,39 @@ class GRtcOut(ogl.Shape):
             except_mess('inport obj-ref failure:')
             return 0
 
+        # get subscription-list
+        subscription_list = []
+        try:
+            subscription_list = ref._get_subscriptions()
+            if subscription_list == None:
+                print "get subscriptions failure: return value is None."
+                return 0
+        except:
+            except_mess('get subscriptions failure:')
+            return 0
 
-        connect_check = self.checkConnect(inp_ref, inp_ref_list)
+        connect_num = self.checkConnect(inp_ref, subscription_list)
 
-        if canvas.viewMode == False and connect_check == False:
-            try:
-                rslt, self.uuid[line_idx] = ref.subscribe(inp_ref, canvas.line[line_idx].profile)
-                if rslt != 0:
-                    print "subscribe failure!"
-            except:
-                except_mess('subscribe failure:')
-            print "subscribe :",self.uuid[line_idx]
-        else:
-            rslt = 0
-            # get uuid
-            uuid = 0
-            # get uuid
-            self.uuid[line_idx] = uuid
-        return rslt
+        if canvas.viewMode == False:
+            if connect_num == -1:
+                try:
+                    canvas.line[line_idx].subscription_type = subscription_type
+                    canvas.line[line_idx].profile = RTM.SubscriptionProfile(subscription_type,"",None,None,False,[])
+                    canvas.line[line_idx].profile.out_port = ref
+                    canvas.line[line_idx].profile.in_port = inp_ref
+                    rslt, canvas.line[line_idx].profile = ref.subscribe(canvas.line[line_idx].profile)
+                    self.uuid[line_idx] = canvas.line[line_idx].profile.id
+
+                    if rslt != 0:
+                        print "subscribe failure!"
+                except:
+                    except_mess('subscribe failure:')
+                print "connect2 subscribe :",self.uuid[line_idx]
+            else:
+                rslt = 0
+                # get uuid
+                self.uuid[line_idx] = subscription_list[connect_num].id
+        return 1
 
     def connect(self, line_idx, subscription_type):
         """コネクト処理(線のインデックスを格納、subscribeを発行）
@@ -1467,14 +1487,12 @@ class GRtcOut(ogl.Shape):
         """
         canvas = self.body.GetCanvas()
         n = 0
-        inp_ref_list = []
         for n in range(2):    # for retry
             try:
                 ref = self.outport['ref']
                 if ref == None :
                     return 0  
                 ref = ref._narrow(RTM.OutPort)
-                inp_ref_list = ref._get_inports()
                 break
             except:
                 except_mess('outport obj-ref failure:')
@@ -1491,31 +1509,44 @@ class GRtcOut(ogl.Shape):
             except_mess('inport obj-ref failure:')
             return 0
 
+        # get subscription-list
+        subscription_list = []
+        try:
+            subscription_list = ref._get_subscriptions()
+            if subscription_list == None:
+                print "get subscriptions failure: return value is None."
+                return 0
+        except:
+            except_mess('get subscriptions failure:')
+            return 0
+
         canvas.line[line_idx].subscription_type = subscription_type
-        canvas.line[line_idx].profile = RTM.SubscriberProfile(subscription_type,False,[])
+        canvas.line[line_idx].profile = RTM.SubscriptionProfile(subscription_type,"",None,None,False,[])
 
 
-        connect_check = self.checkConnect(inp_ref, inp_ref_list)
+        connect_num = self.checkConnect(inp_ref, subscription_list)
 #assembly dummy
-#        connect_check = False
+#        connect_num = -1
 #assembly dummy
 
         rslt = 0
-        if canvas.viewMode == False and connect_check == False:
-            try:
-                rslt, self.uuid[line_idx] = ref.subscribe(inp_ref, canvas.line[line_idx].profile)
-                if rslt != 0:
-                    print "subscribe failuer! :rslt=",rslt
-                print "subscribe :",self.uuid[line_idx]
-            except:
-                err_mess =  'subscribe failure! :%s\n' % self.uuid[line_idx]
-                except_mess(err_mess)
-        elif canvas.viewMode == False and connect_check == True:
-            rslt = 0
-            # get uuid
-            uuid = 0
-            # get uuid
-            self.uuid[line_idx] = uuid
+        if canvas.viewMode == False:
+            if connect_num == -1:
+                try:
+                    canvas.line[line_idx].profile.out_port = ref
+                    canvas.line[line_idx].profile.in_port = inp_ref
+                    (rslt, canvas.line[line_idx].profile) = ref.subscribe(canvas.line[line_idx].profile)
+                    if rslt != 0:
+                        print "subscribe failuer! :rslt=",rslt
+                    self.uuid[line_idx] = canvas.line[line_idx].profile.id
+                    print "connect subscribe :",self.uuid[line_idx]
+                except:
+                    err_mess =  'subscribe failure! :'
+                    except_mess(err_mess)
+            else:
+                rslt = 0
+                # get uuid
+                self.uuid[line_idx] = subscription_list[connect_num].id
 
         if rslt :
             print "subsrcibe-rslt:",rslt
@@ -1545,22 +1576,30 @@ class GRtcOut(ogl.Shape):
             try:
                 ref = ref._narrow(RTM.OutPort)
 
-                inp_ref_list = ref._get_inports()
                 inp_obj = canvas.line[line_idx].g_inp.inport['ref']
-                connect_check = self.checkConnect(inp_obj, inp_ref_list)
+
+                # get subscription-list
+                subscription_list = []
+                subscription_list = ref._get_subscriptions()
+                if subscription_list == None:
+                    print "get subscriptions failure: return value is None."
+                    return 0
+
+                connect_num = self.checkConnect(inp_obj, subscription_list)
 #assembly dummy
-#                connect_check = True
+#                connect_num = 0
 #assembly dummy
                 break
             except:
-                err_mess =  'outport obj-ref failure:'
+                err_mess =  'outport disconnect failure:'
                 except_mess(err_mess)
-                connect_check = False
+                connect_num = -1
                 self.parent.refresh()
-        if n == 2:
+
+        if n == 2: # bad connect
             return 0
 
-        if ref != None and canvas.viewMode == False and connect_check == True:
+        if ref != None and canvas.viewMode == False and connect_num != -1:
             try :
                 print "unsubscribe :",self.uuid[line_idx]
                 rslt = ref.unsubscribe(self.uuid[line_idx])
@@ -1596,26 +1635,39 @@ class GRtcOut(ogl.Shape):
         dc = wx.ClientDC(canvas)
         canvas.PrepareDC(dc)
 
-        inp_ref_list = []
         ref = self.outport['ref']
         try:
             ref = ref._narrow(RTM.OutPort)
-            inp_ref_list = ref._get_inports()
         except:
             err_mess =  'outport obj-ref failure:'
             except_mess(err_mess)
             return
 
+        # get subscription-list
+        subscription_list = []
+        subscr_list_tmp = []
+        try:
+            subscription_list = ref._get_subscriptions()
+            subscr_list_tmp = copy.deepcopy(subscription_list)
+            if subscription_list == None:
+                print "get subscriptions failure: return value is None."
+                return
+        except:
+            except_mess('get subscriptions failure:')
+            return
+
         for line_idx in self.line_idx:
             line = canvas.line[line_idx]
-            (ret2,inp_ref_list) = self.checkConnect2(line,inp_ref_list)
+            (ret2,subscr_list_tmp) = self.checkConnect2(line,subscr_list_tmp)
 
         rtc_list = self.parent.parent.rtc_list
         rtc_dict = self.parent.parent.rtc_dict
         ret_name = []
         ret_obj = []
+        ret_ref = []
 
-        for inp_ref in inp_ref_list:
+        for subscr in subscr_list_tmp:
+            inp_ref = subscr.in_port
             for fullname in rtc_list:
                 in_list = rtc_dict[fullname].in_list
                 in_dict = rtc_dict[fullname].in_dict
@@ -1627,6 +1679,7 @@ class GRtcOut(ogl.Shape):
                             print "_is_equivalent is OK!!!"
                             ret_name.append( inp['name'] )
                             ret_obj.append( in_dict[inp['name']] )
+                            ret_ref.append(inp_ref)
 
         for num in range(len(ret_name)):
             canvas.lineFrom = self.body
@@ -1636,10 +1689,9 @@ class GRtcOut(ogl.Shape):
 
             self.line_idx.append(line.idx)
             self.isInactive = self.isInactive + 1
-# get uuid
-            uuid = 0 # It's dummy!
-# get uuid
-            self.uuid[line.idx] = uuid
+            connect_num = self.checkConnect(ret_ref[num], subscription_list)
+            # get uuid
+            self.uuid[line.idx] = subscription_list[connect_num].id
 
         canvas.lineFrom = None
         canvas.lineTo = None
@@ -1661,21 +1713,30 @@ class GRtcOut(ogl.Shape):
         ref = self.outport['ref']
         try:
             ref = ref._narrow(RTM.OutPort)
-            inp_list = ref._get_inports()
         except:
             err_mess = 'outport obj-ref failure:'
             except_mess(err_mess)
-            inp_list = []
+            return ret
+
+        # get subscription-list
+        subscription_list = []
+        try:
+            subscription_list = ref._get_subscriptions()
+            if subscription_list == None:
+                print "get subscriptions failure: return value is None."
+                return ret
+        except:
+            except_mess('get subscriptions failure:')
             return ret
 
         for line_idx in self.line_idx:
             line = canvas.line[line_idx]
-            (ret2,inp_list) = self.checkConnect2(line,inp_list)
-        if len(inp_list) > 0:
+            (ret2,subscription_list) = self.checkConnect2(line,subscription_list)
+        if len(subscription_list) > 0:
             ret = True
         return ret
 
-    def checkConnect(self, inp_obj, ref_list):
+    def checkConnect(self, inp_obj, subscr_list):
         """接続チェック
         指定した接続先（inport）のリファレンスがあるかチェックする
 
@@ -1684,17 +1745,22 @@ class GRtcOut(ogl.Shape):
         ref_list ---  インポートのリファレンス・リスト
 
         [戻り値]
-        ret  ---  True:ある / False:ない
+        ret_num --- subScription_list の添え字/ない場合は-1
         """
         ret = False
-        for ref_inp in ref_list:
+        ret_num = 0
+        for subscr in subscr_list:
+            ref_inp = subscr.in_port
             if ref_inp._is_equivalent(inp_obj):
                 print "checkConnect: _is_equivalent is OK!!!"
                 ret = True
                 break
-        return ret
+            ret_num = ret_num + 1
+        if ret == False:
+            ret_num = -1
+        return ret_num
 
-    def checkConnect2(self, line, ref_list):
+    def checkConnect2(self, line, subscr_list):
         """接続チェック
         チェック対象の接続があった場合は、リスト上から削除して返却する
         古い情報があるか調べる為に呼ばれる
@@ -1711,41 +1777,42 @@ class GRtcOut(ogl.Shape):
 
         cnt = 0
         ret = 0
-        for ref_inp in ref_list:
+        for subscr in subscr_list:
+            ref_inp = subscr.in_port
             if ref_inp._is_equivalent(inp_obj):
 #                print "checkConnect2: _is_equivalent is OK!!!"
                 ret = 1
                 break
             cnt = cnt + 1
         if ret == 1:
-            del ref_list[cnt]
+            del subscr_list[cnt]
 
-        return (ret, ref_list)
+        return (ret, subscr_list)
 
-    def disconnectToObjref(self,inp_list):
+    def disconnectToObjref(self,subscr_list):
         """コンポーネント上の接続情報（subscribe）を削除する
 
         [引数]
-        inp_list  ---  接続先（inport）のリスト
+        inp_list  ---  接続先（subscriptionProfile）のリスト
 
         [戻り値]
         void
         """
-        print "disconnectToObjref : it's dummy for debug!"
-#tana: for debug:
-        return      # for debug
+#assembly: for debug:
+#        print "disconnectToObjref : it's dummy for debug!"
+#        return      # for debug
 #for debug:
 
         canvas = self.body.GetCanvas()
         ref = self.outport['ref']
         ref = ref._narrow(RTM.OutPort)
 
-        for inp in inp_list:
+        for subscr in subscr_list:
+            inp = subscr.in_port
 #            print "test:",dir(inp)
-# tana test:
             #get uuid
-            uuid = 0
-            #get uuid
+            connect_num = self.checkConnect(inp, subscr_list)
+            uuid = subscr_list[connect_num].id
 
             if ref != None and canvas.viewMode == False:
                 try :
@@ -1775,27 +1842,36 @@ class GRtcOut(ogl.Shape):
         ref = self.outport['ref']
         try:
             ref = ref._narrow(RTM.OutPort)
-            inp_list = ref._get_inports()
         except:
             err_mess = 'outport obj-ref failure:'
             except_mess(err_mess)
             return
 
+        # get subscription-list
+        subscription_list = []
+        subscr_list_tmp = []
+        try:
+            subscription_list = ref._get_subscriptions()
+            subscr_list_tmp = copy.deepcopy(subscription_list)
+            if subscription_list == None:
+                print "get subscriptions failure: return value is None."
+                return
+        except:
+            except_mess('get subscriptions failure:')
+            return
+
         for line_idx in self.line_idx:
             line = canvas.line[line_idx]
-            (ret,inp_list) = self.checkConnect2(line,inp_list)
+            (ret,subscr_list_tmp) = self.checkConnect2(line,subscr_list_tmp)
             if ret == 0:
                 self.connect2(line_idx,line.subscription_type)
             else:
                 # get uuid
-                uuid = 0
-                if self.uuid.has_key(line_idx) and self.uuid[line_idx] != 0:
-                    uuid = self.uuid[line_idx]
-                # get uuid
-                self.uuid[line_idx] = uuid
-                print "set uuid!!!"
-        if len(inp_list) > 0:
-            self.disconnectToObjref(inp_list)
+                inp_ref = canvas.line[line_idx].g_inp.inport['ref']
+                connect_num = self.checkConnect(inp_ref, subscription_list)
+                self.uuid[line_idx] = subscription_list[connect_num].id
+#        if len(subscr_list_tmp) > 0:
+#            self.disconnectToObjref(subscr_list_tmp)
 
 
     def dcoords(self):
@@ -2280,7 +2356,7 @@ class GRtc(ogl.Shape):
         cnt = len(self.name)
         charW = dc.GetCharWidth()
         charH = dc.GetCharHeight()
-        tmpW = charW * cnt
+        tmpW = charW * (cnt*1.2)
         tmpH = charH * 1.4
         self.text_x = pos_x + (self.x_size/2)
         self.text_y = self.y + self.y_size + POLYGON_SIZE
@@ -3610,6 +3686,11 @@ class RtdSystemDraw(ogl.ShapeCanvas):
         return openFileName
 
     def loadXML(self):
+        if len(self.rtc_dict) > 0:
+            ret = self.askDialog(strDEL_SYS)
+            if ret != wx.ID_OK:
+                return
+
         openFileName = self.openFileDialog()
         print "open file is :",openFileName
         if openFileName == None:
@@ -3617,7 +3698,6 @@ class RtdSystemDraw(ogl.ShapeCanvas):
 
         # delete
         self.deleteAllShape()
-
 
         rtxml = RtmParser.RtmParser()
         dict = rtxml.readXML(openFileName)
@@ -3763,16 +3843,19 @@ class RtdSystemDraw(ogl.ShapeCanvas):
         dc = wx.ClientDC(canvas)
         canvas.PrepareDC(dc)
 
-        self.rtc_list = dict['rtc'].keys()
+        rtc_list = dict['rtc'].keys()
         self.rtc_dict = {}
         new_list = []
         pos_x = 0
         pos_y = 0
-        for rtc_name in self.rtc_list:
+        for rtc_name in rtc_list:
 
             # obj-ref error check
             try:
                 ref = self.frame.myDict.GetObjRefToFullpath(rtc_name)
+                if ref == None:
+                    print 'Component Create error!: %s'%rtc_name
+                    continue
                 ref = ref._narrow(RTM.RTCBase)
                 tmp = self.frame.myDict.GetCompState(rtc_name)
 #                if tmp >= RTM.RTComponent.RTC_ABORTING or tmp == 0:
@@ -3788,6 +3871,7 @@ class RtdSystemDraw(ogl.ShapeCanvas):
             pos_y = dict['rtc'][rtc_name]['y']
             comp = GRtc(self, rtc_name, pos_x, pos_y)
             self.rtc_dict[rtc_name] = comp
+            self.rtc_dict[rtc_name].changeBodyColor('virtual')
 
             if dict['rtc'][rtc_name]['rot'] == 'Left':
                 comp.reversesBody()
@@ -3799,6 +3883,9 @@ class RtdSystemDraw(ogl.ShapeCanvas):
 
             comp.refresh()
 
+        if len(new_list) == 0:
+            canvas.viewMode = False
+            return
 
         self.rtc_list = new_list
 
@@ -3844,6 +3931,7 @@ class RtdSystemDraw(ogl.ShapeCanvas):
 
             canvas.lineFrom = None
             canvas.lineTo = None
+        canvas.Redraw(dc)
 
     def MyAddBmp(self, shape, x, y, pen):
         """ビットマップ図形の登録
@@ -4230,7 +4318,7 @@ class RtdSystemDraw(ogl.ShapeCanvas):
         """
         canvas = self.diagram.GetCanvas()
         # yes/no dialog
-        val = self.askDialog()
+        val = self.DelOldConnectAskDialog()
         if val != wx.ID_OK:
             return
 
@@ -4245,7 +4333,28 @@ class RtdSystemDraw(ogl.ShapeCanvas):
                 break
         return ret
 
-    def askDialog(self):
+    def askDialog(self, str):
+        """ダイアログの表示機能
+        ok/cancel ダイアログを表示する
+
+        [引数]
+        str  ---  ダイアログに表示するメッセージ
+
+        [戻り値]
+        val  ---  ダイアログの戻り値(wx.ID_OK/wx.ID_CANCEL)
+        void
+        """
+
+        # yes/no dialog
+        val = wx.ID_OK
+        dlg = RtmDialog(self, -1, str)
+        dlg.CenterOnParent()
+        val = dlg.ShowModal()
+        dlg.Destroy()
+
+        return val
+
+    def DelOldConnectAskDialog(self):
         """ダイアログの表示機能
         古い接続(コンポーネント上にsubscribe情報があり画面上には線が表示されていない)があれば、
         ok/cancel ダイアログを表示する
@@ -4265,10 +4374,7 @@ class RtdSystemDraw(ogl.ShapeCanvas):
         val = wx.ID_OK
         connect_flag = self.checkOtherConnect()
         if connect_flag == True:
-            dlg = RtmDialog(self, -1, strASKMESSAGE)
-            dlg.CenterOnParent()
-            val = dlg.ShowModal()
-            dlg.Destroy()
+            val = askDialog(strASKMESSAGE)
         return val
 
     def OnPopupConnectView(self, evt):
@@ -4283,7 +4389,7 @@ class RtdSystemDraw(ogl.ShapeCanvas):
         """
         canvas = self.diagram.GetCanvas()
         # yes/no dialog
-        val = self.askDialog()
+        val = self.DelOldConnectAskDialog()
         if val != wx.ID_OK:
             return
 
@@ -4380,11 +4486,11 @@ class RtdSystemDraw(ogl.ShapeCanvas):
         menu.Append(self.popupIDc, strOPEN) 
         menu.Append(self.popupIDd, strSAVE) 
         menu.Append(self.popupIDe, strSAVE_AS) 
-# assembly emable
+# assembly disable
 #        menu.FindItemById(self.popupIDc).Enable(False)
 #        menu.FindItemById(self.popupIDd).Enable(False)
 #        menu.FindItemById(self.popupIDe).Enable(False)
-# assembly emable
+# assembly disable
 
 
         self.PopupMenu(menu, evt.GetPosition())
