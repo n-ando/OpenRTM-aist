@@ -3,7 +3,7 @@
 #
 #  @file RtmTreeCtrl.py
 #  @brief rtc-link name tree management class
-#  @date $Date: 2005-05-27 10:08:19 $
+#  @date $Date: 2005-05-27 15:51:31 $
 #  @author Tsuyoshi Tanabe, Noriaki Ando <n-ando@aist.go.jp>
 # 
 #  Copyright (C) 2004-2005
@@ -13,11 +13,15 @@
 #          Advanced Industrial Science and Technology (AIST), Japan
 #      All rights reserved.
 # 
-#  $Id: RtmTreeCtrl.py,v 1.3 2005-05-27 10:08:19 n-ando Exp $
+#  $Id: RtmTreeCtrl.py,v 1.4 2005-05-27 15:51:31 n-ando Exp $
 # 
 
 #
 #  $Log: not supported by cvs2svn $
+#  Revision 1.3  2005/05/27 10:08:19  n-ando
+#  - InPort/OutPort interface was changed.
+#    rtc-link assembly function is enabled now.
+#
 #  Revision 1.2  2005/05/16 10:11:01  n-ando
 #  - Assembly XML data saving/loading function is now enabled. (Experimental)
 #
@@ -295,7 +299,6 @@ class RtmManagerPopup(RtmPopup):
 		return RtmPopup.__init__(self, parent, menulist)
 
 	def SetSubMenu(self):
-		print "SetSubMenu"
 		tmp_id = self.menu.FindItem("Create")
 
 		item_list = self.menu.GetMenuItems()
@@ -320,17 +323,36 @@ class RtmManagerPopup(RtmPopup):
 		try:
 			objref._narrow(RTM.RTCManager)
 
-			fact_list = []
 			fact_list = objref.factory_list()
 		except:
 			except_mess("component_factory_list error!:")
 
-		for item_name in fact_list:
+		for item_struct in fact_list:
+			name = item_struct.name
+			cate = item_struct.category
+			item_name = cate + '/' + name
 			new_id = wx.NewId()
-			print "new_id:",new_id
 			item = wx.MenuItem(sub_menu, new_id, item_name)
 			sub_menu.AppendItem(item)
-			self.parent.Bind(wx.EVT_MENU, self.OnCreate, id=new_id)
+			self.parent.Bind(wx.EVT_MENU, self.OnCreateSub, id=new_id)
+
+	def OnCreateSub(self, event):
+		item_id= event.GetId()
+		item_name = self.menu.GetLabel(item_id)
+		num = item_name.find('/')
+		cate = str(item_name[0:num])
+		name = str(item_name[num+1:])
+		mgrpath = self.parent.searchManagerPath(self.item)
+		if mgrpath == None:
+			print 'RTCManager object-ref search error!!'
+			return
+		objref = self.parent.myDict.GetObjRefToFullpath(mgrpath)
+		try:
+			objref._narrow(RTM.RTCManager)
+
+			(ret,ret_str) = objref.create_component(name, cate)
+		except:
+			except_mess("create_component error!:")
 
 	def OnCreate(self, event):
 		print "OnCreate"
@@ -355,9 +377,6 @@ class RtmManagerPopup(RtmPopup):
 		except:
 			except_mess("create_component error!:")
 
-	
-	def OnLoad(self, event):
-		print "OnLoad"
 	
 	def OnLoad(self, event):
 		print "OnLoad"
@@ -845,7 +864,8 @@ class RtmTreeCtrlPanel(wx.Panel):
 		self.makeDict()
 
 	def OnRightClick(self, event):
-		print "OnRightClick"
+#		print "OnRightClick"
+		pass
 #		pt = event.GetPosition();
 #		item, flags = self.tree.HitTest(pt)
 #		self.tree.SelectItem(item)
@@ -1183,7 +1203,7 @@ class RtmTreeCtrlPanel(wx.Panel):
 		item = event.GetItem()
 		name = self.tree.GetItemText(item)
 		if name == '':
-			print "OnSelChanged name is Non!"
+#			print "OnSelChanged name is Non!"
 			return
 		fullpath = self.makeFullPath(item)
 		kind = self.myDict.GetKindToFullpath(fullpath)

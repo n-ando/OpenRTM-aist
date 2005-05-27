@@ -3,7 +3,7 @@
 #
 #  @file RtmSystemDraw.py
 #  @brief rtc-link component block diagram system draw management class
-#  @date $Date: 2005-05-27 10:08:19 $
+#  @date $Date: 2005-05-27 15:51:31 $
 #  @author Tsuyoshi Tanabe, Noriaki Ando <n-ando@aist.go.jp>
 # 
 #  Copyright (C) 2004-2005
@@ -13,13 +13,17 @@
 #          Advanced Industrial Science and Technology (AIST), Japan
 #      All rights reserved.
 # 
-#  $Id: RtmSystemDraw.py,v 1.5 2005-05-27 10:08:19 n-ando Exp $
+#  $Id: RtmSystemDraw.py,v 1.6 2005-05-27 15:51:31 n-ando Exp $
 #
 # RtmSystemDraw.py                    Created on: 2004/09/13
 #                            Author    : Tsuyoshi Tanabe
 
 #
 #  $Log: not supported by cvs2svn $
+#  Revision 1.5  2005/05/27 10:08:19  n-ando
+#  - InPort/OutPort interface was changed.
+#    rtc-link assembly function is enabled now.
+#
 #  Revision 1.4  2005/05/16 10:16:18  n-ando
 #  - CVS Log comment was enabled.
 #
@@ -1870,9 +1874,16 @@ class GRtcOut(ogl.Shape):
                 inp_ref = canvas.line[line_idx].g_inp.inport['ref']
                 connect_num = self.checkConnect(inp_ref, subscription_list)
                 self.uuid[line_idx] = subscription_list[connect_num].id
-#        if len(subscr_list_tmp) > 0:
-#            self.disconnectToObjref(subscr_list_tmp)
 
+		# 再接続処理から漏れたsubscribeの検出：大抵はnaming-service上のゴミ？
+        for line_idx in self.line_idx:
+            line = canvas.line[line_idx]
+            (ret,subscr_list_tmp) = self.checkConnect2(line,subscr_list_tmp)
+            if ret == 0:
+                self.connect2(line_idx,line.subscription_type)
+        if len(subscr_list_tmp) > 0:
+#            print "reconnect "
+            self.disconnectToObjref(subscr_list_tmp)
 
     def dcoords(self):
         """アウトポート図形の座標設定
@@ -2183,13 +2194,14 @@ class GRtc(ogl.Shape):
         elif state == 'error' :
             self.state = 'error'
             self.color = ERROR_COLOR
-        canvas = self.body.GetCanvas()
+#        canvas = self.body.GetCanvas()
+        canvas = self.parent.diagram.GetCanvas()
+        dc = wx.ClientDC(canvas)
+        canvas.PrepareDC(dc)
         if canvas.viewMode == True and self.state != 'unloaded':
             self.state = 'virtual'
             self.color = VIRTUAL_COLOR
         setBodyColor(self.baseBox, self.state)
-        dc = wx.ClientDC(canvas)
-        canvas.PrepareDC(dc)
         self.portToFlash()
         canvas.Redraw(dc)
 
@@ -3870,8 +3882,8 @@ class RtdSystemDraw(ogl.ShapeCanvas):
             pos_x = dict['rtc'][rtc_name]['x']
             pos_y = dict['rtc'][rtc_name]['y']
             comp = GRtc(self, rtc_name, pos_x, pos_y)
+            comp.changeBodyColor('virtual')
             self.rtc_dict[rtc_name] = comp
-            self.rtc_dict[rtc_name].changeBodyColor('virtual')
 
             if dict['rtc'][rtc_name]['rot'] == 'Left':
                 comp.reversesBody()
