@@ -2,7 +2,7 @@
 /*!
  * @file RTCOutPort.i
  * @brief swig interface file for RTCOutPort
- * @date $Date: 2005-05-12 09:06:19 $
+ * @date $Date: 2005-05-27 15:49:29 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
  * Copyright (C) 2003-2005
@@ -12,12 +12,15 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: RTCOutPort.i,v 1.1.1.1 2005-05-12 09:06:19 n-ando Exp $
+ * $Id: RTCOutPort.i,v 1.2 2005-05-27 15:49:29 n-ando Exp $
  *
  */
 
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.1.1.1  2005/05/12 09:06:19  n-ando
+ * Public release.
+ *
  *
  */
 
@@ -39,7 +42,6 @@ namespace RTM
 	//	RTM::RtmRes subscribe(RTM::InPort_ptr in_port, RTM::SubscriptionID_out id,
 	//						  const RTM::SubscriberProfile& profile );
     RTM::RtmRes unsubscribe(const char* id);
-    RTM::InPortList* inports();
     RTM::PortProfile* profile();
     
   protected:
