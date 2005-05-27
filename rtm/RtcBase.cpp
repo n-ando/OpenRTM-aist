@@ -2,7 +2,7 @@
 /*!
  * @file RtcBase.cpp
  * @brief RT component base class
- * @date $Date: 2005-05-16 05:50:33 $
+ * @date $Date: 2005-05-27 07:26:36 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
  * Copyright (C) 2003-2005
@@ -12,12 +12,15 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: RtcBase.cpp,v 1.2 2005-05-16 05:50:33 n-ando Exp $
+ * $Id: RtcBase.cpp,v 1.3 2005-05-27 07:26:36 n-ando Exp $
  *
  */
 
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.2  2005/05/16 05:50:33  n-ando
+ * A DllMain function was added for for Windows ports.
+ *
  * Revision 1.1.1.1  2005/05/12 09:06:18  n-ando
  * Public release.
  *
@@ -850,7 +853,7 @@ namespace RTM {
 
 	// Activate Input Port servant
 	m_pPOA->activate_object(&inport);
-	
+	inport.setObjRef(InPort::_narrow(m_pPOA->servant_to_reference(&inport)));
 	return true;
   }
   
@@ -978,7 +981,7 @@ namespace RTM {
 
 	// Activate Output Port servant
 	m_pPOA->activate_object(&outport);
-
+	outport.setObjRef(OutPort::_narrow(m_pPOA->servant_to_reference(&outport)));
 	return true;
   }
   
