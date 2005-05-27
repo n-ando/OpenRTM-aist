@@ -2,7 +2,7 @@
 /*!
  * @file RTCInPort.idl
  * @brief InPort interface
- * @date $Date: 2005-05-12 09:06:18 $
+ * @date $Date: 2005-05-27 07:40:46 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *         Olivier Lemaire
  *
@@ -20,12 +20,15 @@
  *
  *     All rights reserved.
  *
- * $Id: RTCInPort.idl,v 1.1.1.1 2005-05-12 09:06:18 n-ando Exp $
+ * $Id: RTCInPort.idl,v 1.2 2005-05-27 07:40:46 n-ando Exp $
  *
  */
 
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.1.1.1  2005/05/12 09:06:18  n-ando
+ * Public release.
+ *
  *
  */
 
@@ -34,72 +37,10 @@
 
 
 #include "RTMBase.idl"
+#include "RTCPortBase.idl"
 
 module RTM {
-  /*!
-   * @if jp
-   *
-   * @brief Subscription ID
-   *
-   * サブスクライブに対してユニークなID。通常はUUIDを用いる。
-   *
-   * @else
-   *
-   * @brief Subscription ID
-   *
-   * Unique ID for subscription. Usually UUID is used.
-   *
-   * @endif
-   */
-  typedef string SubscriptionID;
-  
-  
-  /*!
-   * @if jp
-   * @brief InPort/OutPort のプロファイル構造体
-   * @else
-   * @brief A structure of InPort/OutPort profile
-   * @endif
-   */
-  struct PortProfile
-  {
-	/*!
-	 * @if jp
-	 * @brief InPort/OutPort の名前
-	 * @else
-	 * @brief Name of InPort/OutPort
-	 * @endif
-	 */
-    string name;
-	
-	/*!
-	 * @if jp
-	 *
-	 * @brief InPort/OutPort のデータ型
-	 * 
-	 * InPort/OutPort のデータ型の CORBA TypeCode を格納する。
-	 *
-	 * @else
-	 *
-	 * @brief DataType of InPort/OutPort
-	 *
-	 * CORBA TypeCode of the data type is stored.
-	 *
-	 * @endif
-	 */
-    CORBA::TypeCode port_type;
-	
-	/*!
-	 * @if jp
-	 * @brief InPort/OutPort のプロパティリスト
-	 * @else
-	 * @brief Property list of InPort/OutPort
-	 * @endif
-	 */
-	NVList properties;
-  };
-  
-  
+ 
   /*!
    * @if jp
    *
@@ -119,48 +60,16 @@ module RTM {
    * @endif
    */
   interface InPort
+	: PortBase
   {
 	/*!
 	 * @if jp
-	 * @brief 切断例外
-	 *
-	 * すでに切断しているポートから入力を受け付けたとき発生
-	 *
-	 * @else
-	 *
-	 * @brief Disconnected exception
-	 *
-	 * If the OutPort is already disconnected, this exception will raise.
-	 *
-	 * @endif
-	 */
-	exception Disconnected{};
-	
-	/*!
-	 * @if jp
-	 * 
 	 * @brief InPort に値を渡す
-	 *
 	 * @else
-	 *
 	 * @brief Put data on InPort
-	 * 
 	 * @endif
 	 */
     void put(in any data) raises(Disconnected);
-	
-	// Disconnect 
-	//	void disconnect(in SubscriptionID ID);
-	
-	/*!
-	 * @if jp
-	 * @brief InPort のプロファイル
-	 * @else
-	 * @brief InPort profile
-	 * @endif
-	 */
-	readonly attribute PortProfile profile;
-	
   };
   
   /*!
@@ -171,15 +80,6 @@ module RTM {
    * @endif
    */
   typedef sequence<InPort> InPortList;
-  
-  /*!
-   * @if jp
-   * @brief InPort/OutPort のプロファイルのリスト
-   * @else
-   * @brief InPort/OutPort profile list
-   * @endif
-   */
-  typedef sequence<PortProfile> PortProfileList;
   
 }; // end of module RTM
 
