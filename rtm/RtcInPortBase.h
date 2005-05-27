@@ -2,7 +2,7 @@
 /*!
  * @file RtcInPortBase.h
  * @brief InPort base class
- * @date $Date: 2005-05-16 06:12:57 $
+ * @date $Date: 2005-05-27 07:32:32 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
  * Copyright (C) 2003-2005
@@ -12,12 +12,15 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: RtcInPortBase.h,v 1.2 2005-05-16 06:12:57 n-ando Exp $
+ * $Id: RtcInPortBase.h,v 1.3 2005-05-27 07:32:32 n-ando Exp $
  *
  */
 
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.2  2005/05/16 06:12:57  n-ando
+ * - RtcInPortBase class was DLL exported for Windows port.
+ *
  * Revision 1.1.1.1  2005/05/12 09:06:18  n-ando
  * Public release.
  *
@@ -32,6 +35,7 @@
 #include "rtm/idl/RTCDataTypeSkel.h"
 #include "rtm/idl/RTCInPortSkel.h"
 #include "rtm/RtcRingBuffer.h"
+#include "rtm/RtcSubscriber.h"
 
 namespace RTM
 {
@@ -116,7 +120,7 @@ namespace RTM
 	 * @endif
 	 */
 	virtual void put(const CORBA::Any& value)
-	  throw (CORBA::SystemException, RTM::InPort::Disconnected) = 0;
+	  throw (CORBA::SystemException, RTM::PortBase::Disconnected) = 0;
 	//	throw (RTM::InPort::Disconnected, CORBA::SystemException);
 	
 	/*!
@@ -132,6 +136,23 @@ namespace RTM
 	 */
 	virtual PortProfile* profile() throw (CORBA::SystemException);
 	
+    virtual RtmRes subscribe(SubscriptionProfile& subs)
+	  throw (CORBA::SystemException, RTM::PortBase::InvalidSubscription);
+    virtual RtmRes notify_subscribe(SubscriptionProfile& subs)
+	  throw (CORBA::SystemException, RTM::PortBase::InvalidSubscription);
+    virtual RtmRes unsubscribe(const char* id)
+	  throw (CORBA::SystemException, RTM::PortBase::NoSubscription);
+    virtual RtmRes notify_unsubscribe(const char* id)
+	  throw (CORBA::SystemException, RTM::PortBase::NoSubscription);
+    virtual SubscriptionList* subscriptions();
+
+
+
+
+
+
+
+
 	//------------------------------------------------------------
 	// << Local interfaces >>
 	//------------------------------------------------------------
@@ -167,7 +188,9 @@ namespace RTM
 	 */
 	virtual void read_pm() = 0;
 
-	
+	virtual InPort_ptr getObjRef();
+	virtual void setObjRef(InPort_ptr objref);
+
   protected:
 	/*!
 	 * @if jp
@@ -177,6 +200,41 @@ namespace RTM
 	 * @endif
 	 */
 	PortProfile m_Profile;
+
+	/*!
+	 * @if jp
+	 * @brief サブスクライバのリスト
+	 * @else
+	 * @brief Subscriber list
+	 * @endif
+	 */
+
+	typedef std::list<SubsProfileBase*>::iterator Subs_it;	
+	struct Subscribers
+	{
+	  ACE_Thread_Mutex m_Mutex;
+	  std::list<SubsProfileBase*> m_List;
+	  
+	  class eq_id
+	  {
+	  public:
+		const std::string m_id;
+		eq_id(const char* id) : m_id(id){};
+		bool operator()(SubsProfileBase* subs);
+	  };
+	  Subs_it findById(const char* id);
+	  Subs_it eraseById(const char* id);
+	};
+	Subscribers m_Subscribers;
+
+	/*!
+	 * @if jp
+	 * @brief OutPort 自身のオブジェクトリファレンス
+	 * @else
+	 * @brief object reference of OutPort itself
+	 * @endif
+	 */
+	InPort_var m_thisObjRef;
 	
   };
   

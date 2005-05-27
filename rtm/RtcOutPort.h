@@ -2,7 +2,7 @@
 /*!
  * @file RtcOutPort.h
  * @brief OutPort template class
- * @date $Date: 2005-05-16 06:32:42 $
+ * @date $Date: 2005-05-27 07:34:21 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
  * Copyright (C) 2003-2005
@@ -12,12 +12,18 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: RtcOutPort.h,v 1.2 2005-05-16 06:32:42 n-ando Exp $
+ * $Id: RtcOutPort.h,v 1.3 2005-05-27 07:34:21 n-ando Exp $
  *
  */
 
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.2  2005/05/16 06:32:42  n-ando
+ * - ACE_OS::clock_gettime() was replaced with getFileTime() function.
+ *   High resolution ACE_OS::clock_gettime() function is not implemented
+ *   in Windows. By using file time access functions, high resolution time
+ *   can be obtained.
+ *
  * Revision 1.1.1.1  2005/05/12 09:06:18  n-ando
  * Public release.
  *
@@ -204,7 +210,7 @@ namespace RTM {
 	 * @endif
 	 */
 	//	RtmRes push(const InPort_ptr& inport, SubscriptionID subsid)
-	RtmRes push(const InPort_ptr& inport, std::string& subsid)
+	RtmRes push(InPort_ptr inport, std::string subsid)
 	{
 	  ACE_TRACE("OutPortBase::push()");
 	  
@@ -232,7 +238,7 @@ namespace RTM {
 		  unsubscribeNoLocked(subsid.c_str());
 		  return RTM_ERR;
 		}
-	  catch(RTM::InPort::Disconnected& dce)
+	  catch(RTM::PortBase::Disconnected& dce)
 		{
 		  //		  ACE_DEBUG((LM_DEBUG, "Disconnected."));
 		  dce;
