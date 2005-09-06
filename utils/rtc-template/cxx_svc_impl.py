@@ -1,10 +1,9 @@
 #!/usr/bin/env python
 # -*- python -*-
-# -*- coding: utf-8 -*-
 #
-#  @file cxx_impl.py
+#  @file cxx_svc_impl.py
 #  @brief rtc-template C++ service source code generator class
-#  @date $Date: 2005-08-29 17:50:57 $
+#  @date $Date: 2005-09-06 14:37:18 $
 #  @author Noriaki Ando <n-ando@aist.go.jp>
 # 
 #  Copyright (C) 2005
@@ -14,11 +13,14 @@
 #          Advanced Industrial Science and Technology (AIST), Japan
 #      All rights reserved.
 # 
-#  $Id: cxx_svc_impl.py,v 1.1 2005-08-29 17:50:57 n-ando Exp $
+#  $Id: cxx_svc_impl.py,v 1.2 2005-09-06 14:37:18 n-ando Exp $
 # 
 
 #
 # $Log: not supported by cvs2svn $
+# Revision 1.1  2005/08/29 17:50:57  n-ando
+# The first version.
+#
 #
 
 import string
@@ -30,8 +32,8 @@ from omniidl import idlast, idlvisitor
 from omniidl_be.cxx import ast, util, id, types, output
 
 # import myself
-import cxx_impl
-self = cxx_impl
+import cxx_svc_impl
+self = cxx_svc_impl
 
 
 #------------------------------------------------------------
@@ -42,9 +44,9 @@ interface_def = """\
  * Example class implementing IDL interface @fq_name@
  */
 class @impl_fqname@
- : public RTM::RtcServiceBase,
-   public @fq_POA_name@,
-   public PortableServer::RefCountServantBase
+ : public virtual RTM::RtcServiceBase,
+   public virtual @fq_POA_name@,
+   public virtual PortableServer::RefCountServantBase
 {
  private:
    // Make sure all instances are built on the heap by making the
@@ -90,13 +92,14 @@ class_h = """\
 /*!
  * @atmark@file  @impl_h@
  * @atmark@brief Service implementation header of @file@
- * @atmark@date  $Date: 2005-08-29 17:50:57 $
+ * @atmark@date  $Date: 2005-09-06 14:37:18 $
  *
- * $Id: cxx_svc_impl.py,v 1.1 2005-08-29 17:50:57 n-ando Exp $
+ * $Id: cxx_svc_impl.py,v 1.2 2005-09-06 14:37:18 n-ando Exp $
  */
 
-#include <@skel_h@>
 #include <rtm/RtcServiceBase.h>
+#include "@skel_h@"
+
 
 #ifndef @include_guard@
 #define @include_guard@
@@ -112,36 +115,43 @@ class_cpp = """\
 /*!
  * @atmark@file  @impl_cpp@
  * @atmark@brief Service implementation code of @file@
- * @atmark@date  $Date: 2005-08-29 17:50:57 $
+ * @atmark@date  $Date: 2005-09-06 14:37:18 $
  *
- * $Id: cxx_svc_impl.py,v 1.1 2005-08-29 17:50:57 n-ando Exp $
+ * $Id: cxx_svc_impl.py,v 1.2 2005-09-06 14:37:18 n-ando Exp $
  */
 
-#include <@impl_h@>
+#include "@impl_h@"
 
 @interfaces@
 """
 
-def generate(idl_file, suffix):
+def generate(idl_file, preproc_args, impl_suffix, skel_suffix = "Skel", fd_h=None, fd_cpp=None):
 	basename = idl_file.replace(".idl","")
 	preprocessor_cmd = "omnicpp"
+	preprocessor_opt = "-I" + string.join(preproc_args, " -I")
 
-	preproc_cmd = '%s %s "%s"' % (preprocessor_cmd,	' ', idl_file)
+	preproc_cmd = '%s %s %s' % (preprocessor_cmd,\
+				  preprocessor_opt, idl_file)
+
 	file = os.popen(preproc_cmd, "r")
 
-	skel_filename = basename + ".h"
+	skel_filename = basename + skel_suffix + ".h"
 	idl_filename = idl_file
+
+	# ignore the following operations
 	ignore_operations = ["profile"]
 	
 	tree = _omniidl.compile(file)
 	ast.__init__(tree)
 
-	cxx_impl.__init__(idl_filename, \
+	cxx_svc_impl.__init__(idl_filename, \
 					  basename, \
 					  skel_filename, \
-					  suffix, \
-					  ignore_operations)
-	ifs = cxx_impl.run(tree)
+					  impl_suffix, \
+					  ignore_operations, \
+					  fd_h, \
+					  fd_cpp)
+	ifs = cxx_svc_impl.run(tree)
 	file.close()
 	_omniidl.clear()
 	return ifs
@@ -150,7 +160,8 @@ def generate(idl_file, suffix):
 #============================================================
 # This module's __init__()
 #============================================================
-def __init__(idl_filename, impl_basename, skel_filename, suffix = "_impl", ignore_op = []):
+def __init__(idl_filename, impl_basename, skel_filename, \
+		suffix = "_impl", ignore_op = [], fd_h = None, fd_cpp = None):
 	self.idl_filename = idl_filename
 	self.suffix = suffix
 	self.impl_h_filename = impl_basename + self.suffix + ".h"
@@ -160,9 +171,18 @@ def __init__(idl_filename, impl_basename, skel_filename, suffix = "_impl", ignor
 
 	self.include_guard = self.impl_h_filename.upper().replace(".","_")
 
-	self.stream_h = output.Stream(output.createFile(self.impl_h_filename), 2)
-	self.stream_cpp = \
-					output.Stream(output.createFile(self.impl_cpp_filename), 2)
+	if fd_h == None:
+		self.stream_h = \
+					  output.Stream(output.createFile(self.impl_h_filename), 2)
+	else:
+		self.stream_h = output.Stream(fd_h, 2)
+		
+	if fd_cpp == None:
+		self.stream_cpp = \
+						output.Stream(output.createFile(self.impl_cpp_filename), 2)
+	else:
+		self.stream_cpp = output.Stream(fd_cpp, 2)
+		
 	
 
 # Given an IDL name convert it into the fully qualified name of the
@@ -351,7 +371,7 @@ class BuildInterfaceImplementations(idlvisitor.AstVisitor):
 
 
 if __name__ == "__main__":
-	import cxx_impl
+	import cxx_svc_impl
 	import sys
 	print "Interfaces:"
-	print cxx_impl.generate(sys.argv[1], "SVC_impl")
+	print cxx_svc_impl.generate(sys.argv[1], "SVC_impl")
