@@ -2,7 +2,7 @@ dnl -*- autoconf -*-
 dnl
 dnl @file configure.ac
 dnl @brief Input file for autoconf
-dnl @date $Date: 2005-05-12 09:06:18 $
+dnl @date $Date: 2005-09-06 14:50:05 $
 dnl @author Noriaki Ando <n-ando@aist.go.jp>
 dnl
 dnl This file is an input file used by the GNU "autoconf" program to
@@ -10,11 +10,14 @@ dnl generate the file "configure", which tries to guess your system
 dnl configuration
 dnl
 dnl
-dnl $Id: configure.ac,v 1.1.1.1 2005-05-12 09:06:18 n-ando Exp $
+dnl $Id: configure.ac,v 1.2 2005-09-06 14:50:05 n-ando Exp $
 dnl
 
 dnl
 dnl $Log: not supported by cvs2svn $
+dnl Revision 1.1.1.1  2005/05/12 09:06:18  n-ando
+dnl Public release.
+dnl
 dnl 
 
 dnl ------------------------------------------------------------
@@ -22,7 +25,7 @@ dnl  Autoconf initial macros
 dnl ------------------------------------------------------------
 dnl  Process this file with autoconf to produce a configure script.
 AC_INIT(rtm/RtcBase.cpp)
-AM_INIT_AUTOMAKE(OpenRTM, aist-0.2.0, n-ando@aist.go.jp)
+AM_INIT_AUTOMAKE(OpenRTM-aist, 0.3.0, n-ando@aist.go.jp)
 AM_CONFIG_HEADER([rtm/config_rtc.h])
 
 
@@ -1225,6 +1228,7 @@ AC_OUTPUT([Makefile
 	 examples/SeqIO/Makefile
 	 examples/StringIO/Makefile
 	 examples/Slider_and_Motor/Makefile
+	 examples/SimpleService/Makefile
 	 utils/Makefile
 	 utils/rtm-config/Makefile
 	 utils/rtm-naming/Makefile
@@ -1232,6 +1236,7 @@ AC_OUTPUT([Makefile
 	 utils/rtcd/Makefile
 	 utils/rtcsh/Makefile
 	 utils/rtc-link/Makefile
+	 utils/rtm-skelwrapper/Makefile
 	 swig/Makefile
 	 swig/python/Makefile
 	 etc/Makefile
