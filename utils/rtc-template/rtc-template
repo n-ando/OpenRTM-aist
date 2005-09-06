@@ -1,10 +1,9 @@
 #!/usr/bin/env python
 # -*- python -*-
-# -*- coding: utf-8 -*-
 #
 #  @file rtc-template
 #  @brief rtc-template RTComponent source code generator tool
-#  @date $Date: 2005-08-26 11:32:26 $
+#  @date $Date: 2005-09-06 14:37:40 $
 #  @author Noriaki Ando <n-ando@aist.go.jp>
 # 
 #  Copyright (C) 2004-2005
@@ -14,11 +13,22 @@
 #          Advanced Industrial Science and Technology (AIST), Japan
 #      All rights reserved.
 # 
-#  $Id: rtc-template,v 1.2 2005-08-26 11:32:26 n-ando Exp $
+#  $Id: rtc-template,v 1.3 2005-09-06 14:37:40 n-ando Exp $
 #
 
 #
 #  $Log: not supported by cvs2svn $
+#  Revision 1.2  2005/08/26 11:32:26  n-ando
+#  "rtc-template" was completely rewritten to use ezt (Easy Template) module.
+#  "ezt" module is originally included in "Subversion".
+#
+#  Now template code generator modules, which are named xxx_gen.py, are
+#  automatically imported from rtc-template, and command options and help
+#  menu are automatically generated.
+#
+#  New template code generator has to inherit base_gen class in
+#  "base_gen.py" module to utilize this framework.
+#
 #  Revision 1.1.1.1  2005/05/12 09:06:18  n-ando
 #  Public release.
 #
@@ -46,6 +56,12 @@ opt_args_fmt = ["help",
 				"module-lang=",
 				"inport=",
 				"outport=",
+				"svc-idl=",
+				"svc-idl-include=",
+				"svc-name=",
+				"svc-impl-suffix=",
+				"svc-skel-suffix=",
+				"svc-stub-suffix=",
 				"backend="]
 
 
@@ -73,6 +89,11 @@ Options:
     [--module-lang[=language]]            Language.
     [--inport[=PortName:Type]]            InPort's name and tyoe.
     [--outport[=PortName:Type]]           OutPort's name and type
+    [--svc-idl[=IDL_file]]                IDL file name
+    [--svc-name[=if_name:name:type]]      Mapping: IF name, name and type
+    [--svc-impl-suffix[=suffix]]          Suffix of implementation class
+    [--svc-skel-suffix[=suffix]]          Suffix of server skeleton files
+    [--svc-stub-suffix[=suffix]]          Suffix of client stub files
 """
 def usage_long():
 	"""
@@ -127,6 +148,27 @@ def usage_long():
         Timed[ Short | Long | UShort | ULong | Float | Double | Char | Boolean
         | Octet | String ] and its sequence types.
 		
+    --svc-idl=[IDL filename]:
+        Specify IDL file of RTCService.
+        RTComponent service interface definition should include RTCService.idl
+        and inherit RTCService interface.
+        For simplicity, please define one interface in one IDL file, although
+        this IDL file can include two or more interface definition,
+		
+    --svc-name=[Interface name:Service name: Service type]:
+        Specify RTComponent's service name and service type with the
+        corresponding interface name.
+
+    --svc-impl-suffix=[Suffix]:
+        Specify the suffix for implementation class name. This suffix is also
+        used for implementation class header file and code file.
+	
+    --svc-skel-suffix=[Suffix]:
+        Specify the suffix for server skeleton files.
+	
+    --svc-stub-suffix=[Suffix]:
+        Specify the suffix for client stub files.
+	
 
 Example:
     rtc-template --bcxx --module-name=Sample --module-desc='Sample component' \\
@@ -134,7 +176,8 @@ Example:
     --module-comp-type=COMMUTATIVE --module-act-type=SPORADIC \\
     --module-max-inst=10  \\
     --inport=Ref:TimedFloat --inport=Sens:TimedFloat \\
-    --outport=Ctrl:TimedDouble --outport=Monitor:TimedShort
+    --outport=Ctrl:TimedDouble --outport=Monitor:TimedShort \\
+	--svc-idl=MyService.idl --svc-name=MyService:MySVC:MySVC
 
 """
 	return
@@ -239,13 +282,85 @@ class PortProfile:
 		if hasattr(self, member):
 			setattr(self, member, value)
 		return
+
+
+class ServiceProfile:
+	"""
+	ServiceProfile class
+
+	Create ServiceProfile object for ezt
+	members
+	  ifname:      Service interface name
+	  name:        Service name
+	  type:        Service type
+	  impl_suffix: Suffix of implementation class
+	  skel_suffix: Suffix of skeleton class file
+	  stub_suffix: Suffix of stub class file
+	  class_impl : Class name of implementation class
+	  profile:     Service profile object name
+	"""
+	def __init__(self, ifname = "", name= "", type= "",
+				 impl_suffix = "", skel_suffix = "Skel", stub_suffix = "Stub"):
+		self.ifname = ifname
+		self.name = name
+		self.type = type
+		self.impl_suffix = impl_suffix
+		self.skel_suffix = skel_suffix
+		self.stub_suffix = stub_suffix
+		self.class_impl = self.ifname + self.impl_suffix
+		self.profile = self.ifname + "Profile"
+		return
+	
+	def setValue(self, member, value):
+		member = member.replace("-", "_")
+		if hasattr(self, member):
+			setattr(self, member, value)
+		return
 		
+class ServiceIDL:
+	"""
+	ServiceIDL class
+
+	Create ServiceIDL object for ezt
+	members
+	  idl_fname: IDL filename
+	  idl_basename: Basename of IDL file
+	  impl_basename: Basename of implementation class file
+	  impl_h: Implementation header file name
+	  impl_cpp: Implementation code file name
+	  impl_suffix: Suffix of implementation class
+	  skel_suffix: Suffix of skeleton class file
+	  skel_basename: Basename of skeleton class file
+	  stub_suffix: Suffix of stub class file
+	  stub_basename: Basename of stub class file
+	"""
+	def __init__(self, idl_fname = "", impl_suffix = "_impl",
+				 skel_suffix = "Skel", stub_suffix = "Stub"):
+		self.idl_fname = idl_fname
+		self.idl_basename, dummy = idl_fname.split(".")
+		self.impl_basename = self.idl_basename + impl_suffix
+		self.impl_h = self.impl_basename + ".h"
+		self.impl_cpp = self.impl_basename + ".cpp"
+		self.impl_suffix = impl_suffix
+		self.skel_suffix = skel_suffix
+		self.skel_basename = self.idl_basename + skel_suffix
+		self.stub_suffix = stub_suffix
+		self.stub_basename = self.idl_basename + stub_suffix
+		return
+	
+	def setValue(self, member, value):
+		member = member.replace("-", "_")
+		if hasattr(self, member):
+			setattr(self, member, value)
+		return
+		
+
 
 def MakeModuleProfile(opts):
 	"""
 	MakeModuleProfile
 
-	This function creates ModuleProfile from command options
+	Create ModuleProfile list from command options
 	"""
 	prof = ModuleProfile()
 	for opt, arg in opts:
@@ -259,7 +374,7 @@ def MakePortProfile(opts, port_type):
 	"""
 	MakePortProfile
 
-	This function creates PortProfile from command options
+	Create PortProfile list from command options
 	"""
 	prof_list = []
 	cnt = 0
@@ -274,6 +389,77 @@ def MakePortProfile(opts, port_type):
 			cnt += 1
 	return prof_list
 
+def MakeServiceProfile(opts):
+	"""
+	MakeServiceProfile
+
+	Create ServiceProfile list from command options
+	"""
+	svc_list = []
+	impl_suffix = "SVC_impl"
+	skel_suffix = "Skel"
+	stub_suffix = "Stub"
+
+	for opt, arg in opts:
+		if opt.find("--svc-impl-suffix") == 0:
+			impl_suffix = arg
+		if opt.find("--svc-skel-suffix") == 0:
+			skel_suffix = arg
+		if opt.find("--svc-stub-suffix") == 0:
+			stub_suffix = arg
+
+	for opt, arg in opts:
+		if opt.find("--svc-name") == 0:
+			ifname, name, type = arg.split(":")
+			svc_prof = ServiceProfile(ifname, name, type, impl_suffix)
+			svc_list.append(svc_prof)
+
+	return svc_list
+
+
+def MakeServiceIDL(opts):
+	"""
+	MakeServiceIDL
+
+	Create ServiceIDL list from command options
+	"""
+	idl_list = []
+	# Default suffixes
+	impl_suffix = "SVC_impl"
+	skel_suffix = "Skel"
+	stub_suffix = "Stub"
+
+	for opt, arg in opts:
+		if opt.find("--svc-impl-suffix") == 0:
+			impl_suffix = arg
+		if opt.find("--svc-skel-suffix") == 0:
+			skel_suffix = arg
+		if opt.find("--svc-stub-suffix") == 0:
+			stub_suffix = arg
+
+	for opt, arg in opts:
+		if opt.find("--svc-idl") == 0:
+			svc_idl = ServiceIDL(arg, impl_suffix, skel_suffix, stub_suffix)
+			idl_list.append(svc_idl)
+	return idl_list
+
+
+def find_opt(opts, value, default):
+	for opt, arg in opts:
+		if opt.find(value) == 0:
+			return arg
+
+	return default
+
+
+def find_opt_list(opts, value, default):
+	list = []
+	if len(default) > 0:
+		list += default
+	for opt, arg in opts:
+		if opt.find(value) == 0:
+			list.append(arg)
+	return list
 
 
 class Backend:
@@ -281,7 +467,6 @@ class Backend:
 		self.mod = mod
 		self.obj = getattr(mod, mod_name)
 		self.mod_name = mod_name
-
 
 
 class BackendLoader:
@@ -293,7 +478,7 @@ class BackendLoader:
 		
 
 	def available(self):
-		path_list = [pyhelper_path, "."]
+		path_list = ["."] #[pyhelper_path, "."]
 		for path in path_list:
 			for f in os.listdir(path):
 				if re.compile("_gen.py$").search(f):
@@ -363,6 +548,19 @@ Backend [xxx] specific help can be available by the following options.
 		return
 		
 
+def fmtd_args(width, args):
+	arg_fmt = [""]
+	w = 0
+	line = 0
+	for a in args:
+		w += len(a) + 1
+		if w > width:
+			w = len(a) + 1
+			line += 1
+			arg_fmt.append("")
+		arg_fmt[line] += a + " "
+	return arg_fmt
+
 
 
 def main():
@@ -375,6 +573,7 @@ def main():
 	try:
 		opts, args = getopt.getopt(sys.argv[1:], "b:ho:v", opt_args_fmt)
 	except getopt.GetoptError:
+		print "Error: Invalid option.", getopt.GetoptError
 		usage_short()
 		backends.usage_available()
 		sys.exit(-1)
@@ -406,12 +605,26 @@ def main():
 			output = a
 			# ...
 
+	prefix, dummy = os.popen("rtm-config --prefix", "r").read().split("\n")
+	idl_inc = []
+	idl_inc.append(prefix + "/include/rtm/idl")
+	idl_inc.append(prefix + "/include/rtm")
+	idl_inc.append(".")
+
 	# Create dictionary for ezt
 	data = {
-		'module': MakeModuleProfile(opts),
-		'inport': MakePortProfile(opts, "inport"),
-		'outport':MakePortProfile(opts, "outport"),
-		'fname': output
+		'module':      MakeModuleProfile(opts),
+		'inport':      MakePortProfile(opts, "inport"),
+		'outport':     MakePortProfile(opts, "outport"),
+		'service':     MakeServiceProfile(opts),
+		'service_idl': MakeServiceIDL(opts),
+		'idl_include': find_opt_list(opts, "--svc-idl-include", idl_inc),
+		'impl_suffix': find_opt(opts, "--svc-impl-suffix", "SVC_impl"),
+		'skel_suffix': find_opt(opts, "--svc-skel-suffix", "Skel"),
+		'stub_suffix': find_opt(opts, "--svc-stub-suffix", "Stub"),
+		'fname':       output,
+		'args':        sys.argv,
+		'fmtd_args':   fmtd_args(70, sys.argv)
 		}
 
 	if data['fname'] == None:
