@@ -2,7 +2,7 @@
 /*!
  * @file RtcOutPort.h
  * @brief OutPort template class
- * @date $Date: 2005-05-27 07:34:21 $
+ * @date $Date: 2005-09-07 05:12:46 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
  * Copyright (C) 2003-2005
@@ -12,12 +12,16 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: RtcOutPort.h,v 1.3 2005-05-27 07:34:21 n-ando Exp $
+ * $Id: RtcOutPort.h,v 1.4 2005-09-07 05:12:46 n-ando Exp $
  *
  */
 
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.3  2005/05/27 07:34:21  n-ando
+ * - InPort/OutPort interface was changed.
+ *   subscribe/unsubscribe were completely changed.
+ *
  * Revision 1.2  2005/05/16 06:32:42  n-ando
  * - ACE_OS::clock_gettime() was replaced with getFileTime() function.
  *   High resolution ACE_OS::clock_gettime() function is not implemented
@@ -335,6 +339,14 @@ namespace RTM {
 #endif // WIN32
 	  m_Value.tm.sec = ts.tv_sec;
 	  m_Value.tm.nsec = ts.tv_nsec;
+	  m_Buffer.put(m_Value);
+	  updateall();
+	};
+
+	virtual void write(long sec, long nsec)
+	{
+	  m_Value.tm.sec = sec;
+	  m_Value.tm.nsec = nsec;
 	  m_Buffer.put(m_Value);
 	  updateall();
 	};
