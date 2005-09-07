@@ -2,9 +2,12 @@
 ##------------------------------------------------------------
 ## Makefile.am for libRTC
 ##
-## $Id: Makefile.am,v 1.1.1.1 2005-05-12 09:06:18 n-ando Exp $
+## $Id: Makefile.am,v 1.2 2005-09-07 04:58:22 n-ando Exp $
 ##
 ## $Log: not supported by cvs2svn $
+## Revision 1.1.1.1  2005/05/12 09:06:18  n-ando
+## Public release.
+##
 ##------------------------------------------------------------
 
 AUTOMAKE_OPTIONS = 1.4
@@ -25,6 +28,7 @@ RTC_SRC = \
 	RtcSubscriber.cpp \
 	RtcInPortBase.cpp \
 	RtcOutPortBase.cpp \
+	RtcServiceBase.cpp \
 	RtcModuleProfile.cpp \
 	RtcBase.cpp \
 	RtcFactory.cpp \
@@ -42,6 +46,7 @@ libRTC_la_SOURCES = \
 	RtcSubscriber.cpp \
 	RtcInPortBase.cpp \
 	RtcOutPortBase.cpp \
+	RtcServiceBase.cpp \
 	RtcModuleProfile.cpp \
 	RtcBase.cpp \
 	RtcFactory.cpp \
@@ -64,6 +69,7 @@ rtmheader_HEADERS = \
 	RtcRingBuffer.h \
 	RtcInPort.h \
 	RtcOutPort.h \
+	RtcServiceBase.h \
 	RtcFactoryPy.h \
 	RtcSystemLogger.h \
 	config_rtc.h
