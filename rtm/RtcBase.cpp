@@ -2,7 +2,7 @@
 /*!
  * @file RtcBase.cpp
  * @brief RT component base class
- * @date $Date: 2005-05-27 07:26:36 $
+ * @date $Date: 2005-09-07 05:00:16 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
  * Copyright (C) 2003-2005
@@ -12,12 +12,16 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: RtcBase.cpp,v 1.3 2005-05-27 07:26:36 n-ando Exp $
+ * $Id: RtcBase.cpp,v 1.4 2005-09-07 05:00:16 n-ando Exp $
  *
  */
 
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.3  2005/05/27 07:26:36  n-ando
+ * - InPort/OutPort interface was changed. InPort and OutPort store its object
+ *   reference in inside.
+ *
  * Revision 1.2  2005/05/16 05:50:33  n-ando
  * A DllMain function was added for for Windows ports.
  *
@@ -39,7 +43,8 @@ namespace RTM {
   RtcBase::RtcBase()
   	: m_StatePort("status", m_TimedState),
 	  m_NamingPolicy((NamingPolicy)(LONGNAME_ENABLE | ALIAS_ENABLE)),
-	  m_MedLogbuf(), rtcout(m_MedLogbuf)
+	  m_MedLogbuf(), rtcout(m_MedLogbuf),
+	  m_ServiceAdmin(m_pORB, m_pPOA)
   {
 	RTC_TRACE(("RtcBase::RtcBase()"));
 
@@ -52,7 +57,8 @@ namespace RTM {
 	  m_NamingPolicy((NamingPolicy)(LONGNAME_ENABLE | ALIAS_ENABLE)),
 	  m_pORB(orb), m_pPOA(poa),
 	  m_pManager(NULL),
-	  m_MedLogbuf(), rtcout(m_MedLogbuf)
+	  m_MedLogbuf(), rtcout(m_MedLogbuf),
+	  m_ServiceAdmin(m_pORB, m_pPOA)
   {
 	RTC_TRACE(("RtcBase::RtcBase(CORBA::ORB_var, PortableServer::POA_var)"));
 
@@ -66,7 +72,8 @@ namespace RTM {
 	  m_NamingPolicy((NamingPolicy)(LONGNAME_ENABLE | ALIAS_ENABLE)),
 	  m_pORB(manager->getORB()), m_pPOA(manager->getPOA()),
 	  m_pManager(manager),
-	  m_MedLogbuf(manager->getLogbuf()), rtcout(m_MedLogbuf)
+	  m_MedLogbuf(manager->getLogbuf()), rtcout(m_MedLogbuf),
+	  m_ServiceAdmin(m_pORB, m_pPOA)
   {
 	m_MedLogbuf.setDateFmt(manager->getConfig().getLogTimeFormat());
 	rtcout.setLogLevel(manager->getConfig().getLogLevel());
@@ -81,6 +88,7 @@ namespace RTM {
   RtcBase::~RtcBase()
   {
 	RTC_TRACE(("RtcBase::~RtcBase()"));
+
 	//	finalizeOutPorts();
 	//	finalizeInPorts();
 	/*
@@ -606,6 +614,24 @@ namespace RTM {
   }
   
   
+  RTCServiceProfileList* RtcBase::get_service_profiles()
+  {
+	return m_ServiceAdmin.getServiceProfileList();
+  }
+
+
+  RTCServiceProfile* RtcBase::get_service_profile(const char* name)
+  {
+	return m_ServiceAdmin.getServiceProfile(name);
+  }
+
+
+  RTCService_ptr RtcBase::get_service(const char* name)
+  {
+	return m_ServiceAdmin.getService(name);
+  }
+
+
   char* RtcBase::instance_id()
   {
 	RTC_TRACE(("RtcBase::instance_id() -> %s", m_Profile.getInstanceId()));
@@ -1157,7 +1183,7 @@ namespace RTM {
 
 	finalizeOutPorts();
 	finalizeInPorts();
-
+	m_ServiceAdmin.deactivateServices();
 	try
 	  {
 		PortableServer::ObjectId_var id;
@@ -1301,6 +1327,23 @@ namespace RTM {
 
 	m_NextState._state = RTC_INITIALIZING;
   }
+
+
+
+  bool RtcBase::registerService(RtcServiceBase& service,
+								RtcServiceProfile& profile)
+  {
+	m_ServiceAdmin.registerService(service, profile);
+
+	return true;
+  }
+
+
+
+
+
+
+
 
   
 }; // end of namespace RTM

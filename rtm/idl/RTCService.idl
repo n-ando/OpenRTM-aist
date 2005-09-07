@@ -1,0 +1,144 @@
+// -*- IDL -*-
+/*!
+ * @file RTCService.idl
+ * @brief RTComponent サービスインターフェース
+ * @date $Date: 2005-09-07 05:06:13 $
+ * @author Noriaki Ando <n-ando@aist.go.jp>
+ *
+ * Copyright (C) 2005
+ *     Task-intelligence Research Group,
+ *     Intelligent Systems Research Institute,
+ *     National Institute of
+ *         Advanced Industrial Science and Technology (AIST), Japan
+ *
+ *     All rights reserved.
+ *
+ * $Id: RTCService.idl,v 1.1 2005-09-07 05:06:13 n-ando Exp $
+ *
+ */
+
+/*
+ * $Log: not supported by cvs2svn $
+ */
+
+#ifndef __RTCService_idl__
+#define __RTCService_idl__
+
+#include "RTMBase.idl"
+
+module RTM {
+  // Exceptions
+  exception NotAvailable {}; //exception_body;
+  exception InterfaceNotImplemented {}; //exception_body;
+  exception InvalidParameter {}; //exception_body;
+  exception InvalidReturnValue {}; //exception_body;
+  exception NotFound {string name;}; //exception_body;
+
+  interface RTCService;
+	/*!
+	 * @if jp
+	 * @brief OutPort の取得
+	 *
+	 * OutPort のオブジェクトリファレンスを取得する。
+	 *
+	 * @param name OutPort 名
+	 *
+	 * @else
+	 *
+	 * @brief Return output port object reference
+	 *
+	 * @param name OutPort name
+	 *
+	 * @endif
+	 */
+  struct RTCServiceProfile
+  {
+	/*!
+	 * @if jp
+	 * @brief RTCService名
+	 * @else
+	 * @brief Name of RTCService
+	 * @endif
+	 */
+	string name;
+
+	/*!
+	 * @if jp
+	 * @brief RTCService インターフェースタイプ
+	 * @else
+	 * @brief Type of RTCService
+	 * @endif
+	 */
+	string interfaceType;
+
+	/*!
+	 * @if jp
+	 * @brief RTCService idl 定義
+	 * @else
+	 * @brief IDL definition of RTCService
+	 * @endif
+	 */
+	string idlDefinition;
+
+	/*!
+	 * @if jp
+	 * @brief RTCService プロパティリスト
+	 * @else
+	 * @brief Property list of RTCService
+	 * @endif
+	 */
+	NVList properties;
+
+	/*!
+	 * @if jp
+	 * @brief RTCService オブジェクトリファレンス
+	 * @else
+	 * @brief Object reference of RTCService
+	 * @endif
+	 */
+	RTCService serviceRef;
+  };
+
+	/*!
+	 * @if jp
+	 * @brief RTCService プロファイルリスト
+	 * @else
+	 * @brief Profile list of RTCService
+	 * @endif
+	 */
+  typedef sequence<RTCServiceProfile> RTCServiceProfileList;
+
+	/*!
+	 * @if jp
+	 * 
+	 * @class RTCService インターフェース
+	 *
+	 * @brief RTComponent service インターフェース
+	 *
+	 * RTComponentが提供するサービスの基底クラス
+	 *
+	 * @else
+	 *
+	 * @class RTCService interface
+	 *
+	 * @brief RTComponent service interface
+	 *
+	 * Service interface which is provided by RTComponent
+	 *
+	 * @endif
+	 */
+  interface RTCService
+  {
+	/*!
+	 * @if jp
+	 * @brief RTCService プロファイル
+	 * @else
+	 * @brief Profile of RTCService
+	 * @endif
+	 */
+	readonly attribute RTCServiceProfile profile;
+  };
+
+};  // end of module RTM
+
+#endif // __RTCService_idl__
