@@ -2,7 +2,7 @@
 /*!
  * @file RtcManager.cpp
  * @brief RT component manager class
- * @date $Date: 2005-05-27 07:33:20 $
+ * @date $Date: 2005-09-07 05:13:34 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
  * Copyright (C) 2003-2005
@@ -12,12 +12,16 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: RtcManager.cpp,v 1.3 2005-05-27 07:33:20 n-ando Exp $
+ * $Id: RtcManager.cpp,v 1.4 2005-09-07 05:13:34 n-ando Exp $
  *
  */
 
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.3  2005/05/27 07:33:20  n-ando
+ * - InPort/OutPort interface was changed.
+ *   subscribe/unsubscribe were completely changed.
+ *
  * Revision 1.2  2005/05/16 06:18:38  n-ando
  * - Define ACE_HAS_WINSOCK2 for Windows.
  * - Some sleep was added in RtcManager::runManager() main loop.
@@ -299,7 +303,48 @@ namespace RTM
   {
 	RTC_TRACE(("RtcManager::factory_list()()"));
 
-    return NULL;
+	ACE_Guard<ACE_Thread_Mutex> guard(m_FactoryMap._mutex);
+	
+	std::map<std::string, std::map<std::string, RtcFactoryBase*> >::iterator cat_it, cat_it_end;
+	std::map<std::string, RtcFactoryBase*>::iterator comp_it, comp_it_end;
+
+	cat_it     = m_FactoryMap._map.begin();
+	cat_it_end = m_FactoryMap._map.end();
+	int cnt(0);
+	while (cat_it != cat_it_end)
+	  {
+		comp_it = (cat_it->second).begin();
+		comp_it_end = (cat_it->second).end();
+
+		while (comp_it != comp_it_end)
+		  {
+			++cnt;
+			++comp_it;
+		  }
+		++cat_it;
+	  }
+	RTCFactoryList_var factory_list = new RTCFactoryList();
+	factory_list->length(cnt);
+
+	cnt = 0;
+	cat_it     = m_FactoryMap._map.begin();
+	while (cat_it != cat_it_end)
+	  {
+		comp_it = (cat_it->second).begin();
+		comp_it_end = (cat_it->second).end();
+
+		while (comp_it != comp_it_end)
+		  {
+			factory_list[cnt].name = CORBA::string_dup(comp_it->first.c_str());
+			factory_list[cnt].category
+			  = CORBA::string_dup(cat_it->first.c_str());
+			++cnt;
+			++comp_it;
+		  }
+		++cat_it;
+	  }
+
+    return factory_list._retn();
   }
   
   
@@ -309,8 +354,48 @@ namespace RTM
   RTCBaseList* RtcManager::component_list()
   {
 	RTC_TRACE(("RtcManager::component_list()()"));
+	std::map<std::string,std::map<std::string, RtcBase*> >::iterator it_cat;
+	std::map<std::string,std::map<std::string, RtcBase*> >::iterator it_cat_end;
+	it_cat     = m_Components._map.begin();
+	it_cat_end = m_Components._map.end();
 
-    return NULL;
+	int cnt(0);
+	while (it_cat != it_cat_end)
+	  {
+		map<string, RtcBase*>::iterator it_cmp;
+		map<string, RtcBase*>::iterator it_cmp_end;
+		it_cmp     = (it_cat->second).begin();
+		it_cmp_end = (it_cat->second).end();
+
+		while (it_cmp != it_cmp_end)
+		  {
+			++it_cmp;
+			++cnt;
+		  }
+		++it_cat;
+	  }
+
+	RTCBaseList_var comp_list = new RTCBaseList();
+	comp_list->length(cnt);
+
+	cnt = 0;
+	while (it_cat != it_cat_end)
+	  {
+		map<string, RtcBase*>::iterator it_cmp;
+		map<string, RtcBase*>::iterator it_cmp_end;
+		it_cmp     = (it_cat->second).begin();
+		it_cmp_end = (it_cat->second).end();
+
+		while (it_cmp != it_cmp_end)
+		  {
+			comp_list[cnt] = RTCBase::_narrow(getPOA()->servant_to_reference(it_cmp->second));
+			++it_cmp;
+			++cnt;
+		  }
+		++it_cat;
+	  }
+
+    return comp_list._retn();
   }
   
   
@@ -801,7 +886,7 @@ namespace RTM
 		return std::string("");
 	  }
 	
-	RTC_DEBUG(("Subscription uuid: %s", std::string(sub_prof.id)));
+	RTC_DEBUG(("Subscription uuid: %s", CORBA::string_dup(sub_prof.id)));
 
 	return std::string(sub_prof.id);
   }
