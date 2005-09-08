@@ -3,7 +3,7 @@
 #
 #  @file gen_base.py
 #  @brief rtc-template source code generator base class
-#  @date $Date: 2005-09-06 14:37:29 $
+#  @date $Date: 2005-09-08 09:24:06 $
 #  @author Noriaki Ando <n-ando@aist.go.jp>
 # 
 #  Copyright (C) 2005
@@ -13,16 +13,25 @@
 #          Advanced Industrial Science and Technology (AIST), Japan
 #      All rights reserved.
 # 
-#  $Id: gen_base.py,v 1.2 2005-09-06 14:37:29 n-ando Exp $
+#  $Id: gen_base.py,v 1.3 2005-09-08 09:24:06 n-ando Exp $
 # 
 
 #
 #  $Log: not supported by cvs2svn $
+#  Revision 1.2  2005/09/06 14:37:29  n-ando
+#  rtc-template's command options and data structure for ezt (Easy Template)
+#  are changed for RTComponent's service features.
+#  Now rtc-template can generate services' skeletons, stubs and
+#  implementation files.
+#  The implementation code generation uses omniidl's IDL parser.
+#
 #
 
 import os
 import re
 import time
+import ezt
+import StringIO
 
 class gen_base:
 	
@@ -37,7 +46,9 @@ class gen_base:
 				return file(fname, "w"), None
 			elif (ans == "m" or ans == "M"):
 				f = file(fname, "r")
-				lines = f.readlines()
+				lines = []
+				for l in f.readlines():
+					lines.append(l.rstrip())
 				f.close()
 				oldfname = fname + ".old." + time.strftime("%y%m%d%H%M%S")
 				os.rename(fname, oldfname)
@@ -56,23 +67,56 @@ class gen_base:
 		for l in lines:
 			m = re.search("<rtc-template block=\"(.*?)\">", l)
 			if m:
-				inside_tag = True
+				in_tag = True
 				tag_name   = m.group(1)
 				ret_lines += l + "\n"
 				continue
 
 			m = re.search("</rtc-template>", l)
 			if m:
-				inside_tag = False
+				in_tag = False
 				if data.has_key(tag_name):
 					ret_lines += data[tag_name] + "\n"
 				ret_lines += l + "\n"
 				tag_name = ""
 				continue
 
-			ret_lines += l + "\n"
+			if in_tag != True:
+				ret_lines += l + "\n"
 
 		return ret_lines
+
+
+	def gen_tags(self, tags):
+		for key in tags.keys():
+			s = StringIO.StringIO()
+			t = ezt.Template(compress_whitespace = 0)
+			t.parse(tags[key])
+			t.generate(s, self.data)
+			tags[key] = s.getvalue()
+		return
+
+	def gen(self, fname, temp_txt, data, tags):
+		f, lines = self.check_overwrite(fname)
+		if not f:      # overwrite: No
+			return
+
+		if not lines:  # overwrite: Yes
+			s = StringIO.StringIO()
+			t = ezt.Template(compress_whitespace = 0)
+			t.parse(temp_txt)
+			t.generate(s, data)
+			taged_txt = s.getvalue().splitlines()
+		else:          # overwrite: Merge mode
+			taged_txt = lines
+
+		# replace tags
+		gen_txt = self.replace_tags(taged_txt, tags)
+		f.write(gen_txt)
+		f.close()
+		print "\"", fname, "\"" " was generated."
+		return
+		
 
 
 if __name__ == "__main__":

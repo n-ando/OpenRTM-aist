@@ -3,7 +3,7 @@
 #
 #  @file cxx_gen.py
 #  @brief rtc-template C++ source code generator class
-#  @date $Date: 2005-09-06 14:37:03 $
+#  @date $Date: 2005-09-08 09:23:55 $
 #  @author Noriaki Ando <n-ando@aist.go.jp>
 # 
 #  Copyright (C) 2004-2005
@@ -13,11 +13,18 @@
 #          Advanced Industrial Science and Technology (AIST), Japan
 #      All rights reserved.
 # 
-#  $Id: cxx_gen.py,v 1.2 2005-09-06 14:37:03 n-ando Exp $
+#  $Id: cxx_gen.py,v 1.3 2005-09-08 09:23:55 n-ando Exp $
 # 
 
 #
 #  $Log: not supported by cvs2svn $
+#  Revision 1.2  2005/09/06 14:37:03  n-ando
+#  rtc-template's command options and data structure for ezt (Easy Template)
+#  are changed for RTComponent's service features.
+#  Now rtc-template can generate services' skeletons, stubs and
+#  implementation files.
+#  The implementation code generation uses omniidl's IDL parser.
+#
 #  Revision 1.1  2005/08/26 12:02:14  n-ando
 #  This code generator module uses ezt (Easy Template).
 #
@@ -29,6 +36,7 @@
 import re
 import os
 import sys
+import StringIO
 import ezt
 import gen_base
 import cxx_svc_impl
@@ -299,7 +307,7 @@ SHFLAGS  = -shared
 
 IDLC     = `rtm-config --idlc`
 IDLFLAGS = `rtm-config --idlflags` -I`rtm-config --prefix`/include/rtm/idl
-WRAPPER  = ./rtm-skelwrapper
+WRAPPER  = rtm-skelwrapper
 WRAPPER_FLAGS = --include-dir="" --skel-suffix=Skel --stub-suffix=Stub
 
 SKEL_OBJ = [for service_idl][service_idl.skel_basename].o[end]
@@ -418,6 +426,7 @@ class cxx_gen(gen_base.gen_base):
 	"""
 	C++ component source code generator
 	"""
+	_fname_space = 16
 	def __init__(self, data, opts):
 		self.data = data.copy()
 		self.data["rcs_date"] = "$" + "Date" + "$"
@@ -458,6 +467,8 @@ class cxx_gen(gen_base.gen_base):
 		self.tags["service_declar"] = service_declar
 		self.tags["initializer"]    = initializer
 		self.tags["registration"]   = registration
+
+		self.gen_tags(self.tags)
 		return
 
 
@@ -465,22 +476,7 @@ class cxx_gen(gen_base.gen_base):
 		"""
 		Generate component class header
 		"""
-		f, lines = self.check_overwrite(self.data["fname_h"])
-		if not f:  # overwrite: No
-			return
-
-		if not lines:  # overwrite: Yes
-			temp_txt = comp_header.splitlines()
-		else:      # overwrite: Merge mode
-			temp_txt = lines
-
-		# replace tags
-		temp_txt = self.replace_tags(temp_txt, self.tags)			
-
-		t = ezt.Template(compress_whitespace = 0)
-		t.parse(temp_txt)
-		t.generate(f, self.data)
-		print self.data["fname_h"], " was generated."
+		self.gen(self.data["fname_h"], comp_header, self.data, self.tags)
 		return
 
 
@@ -488,22 +484,7 @@ class cxx_gen(gen_base.gen_base):
 		"""
 		Generate component class source code
 		"""
-		f, lines = self.check_overwrite(self.data["fname_cpp"])
-		if not f:  # overwrite: No
-			return
-
-		if not lines:  # overwrite: Yes
-			temp_txt = comp_soruce.splitlines()
-		else:      # overwrite: Merge mode
-			temp_txt = lines
-
-		# replace tags
-		temp_txt = self.replace_tags(temp_txt, self.tags)
-		
-		t = ezt.Template(compress_whitespace = 0)
-		t.parse(temp_txt)
-		t.generate(f, self.data)
-		print self.data["fname_cpp"], " was generated."
+		self.gen(self.data["fname_cpp"], comp_soruce, self.data, self.tags)
 		return
 
 
@@ -511,22 +492,7 @@ class cxx_gen(gen_base.gen_base):
 		"""
 		Generate component source code
 		"""
-		f, lines = self.check_overwrite(self.data["fname_comp"])
-		if not f:  # overwrite: No
-			return
-
-		if not lines:  # overwrite: Yes
-			temp_txt = comp_compsrc.splitlines()
-		else:      # overwrite: Merge mode
-			temp_txt = lines
-
-		# replace tags
-		temp_txt = self.replace_tags(temp_txt, self.tags)
-
-		t = ezt.Template(compress_whitespace = 0)
-		t.parse(temp_txt)
-		t.generate(f, self.data)
-		print self.data["fname_comp"], " was generated."
+		self.gen(self.data["fname_comp"], comp_compsrc, self.data, self.tags)
 		return
 
 
@@ -534,23 +500,8 @@ class cxx_gen(gen_base.gen_base):
 		"""
 		Generate Makefile
 		"""
-		f,line = self.check_overwrite(self.data["makefile"])
-		if not f:  # overwrite: No
-			return
+		self.gen(self.data["makefile"], makefile, self.data, self.tags)
 
-		if not line:  # overwrite: Yes
-			temp_txt = makefile.splitlines()
-		else:     # overwrite: Merge mode
-			temp_txt = lines
-
-		# replace tags
-		temp_txt = self.replace_tags(temp_txt, self.tags)
-		
-		t = ezt.Template(compress_whitespace = 0)
-		t.parse(temp_txt)
-		t.generate(f, self.data)
-		print self.data["makefile"], " was generated."
-		return
 
 	def print_impl(self):
 		for svc_idl in self.data["service_idl"]:
@@ -574,8 +525,8 @@ class cxx_gen(gen_base.gen_base):
 											svc_idl.impl_suffix,
 											svc_idl.skel_suffix,
 											fd_h, fd_cpp)
-				print svc_idl.impl_h, " was generated."
-				print svc_idl.impl_cpp, " was generated."
+				print "\"", svc_idl.impl_h, "\" was generated."
+				print "\"", svc_idl.impl_cpp, "\" was generated."
 			except:
 				sys.stderr.write("Error: " \
 								 + svc_idl.impl_h + svc_idl.impl_cpp + "\n")
