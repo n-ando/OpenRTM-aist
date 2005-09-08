@@ -2,9 +2,12 @@
 ##---------------------------------------------------------------------------
 ## Makefile.am for ConsoleIn/ConsoleOut components
 ##
-## $Id: Makefile.am,v 1.1 2005-09-08 13:03:31 n-ando Exp $
+## $Id: Makefile.am,v 1.2 2005-09-08 14:00:18 n-ando Exp $
 ##
 ## $Log: not supported by cvs2svn $
+## Revision 1.1  2005/09/08 13:03:31  n-ando
+## - SimpleService example for RTComponent's service.
+##
 ## Revision 1.1.1.1  2005/05/12 09:06:20  n-ando
 ## Public release.
 ##
@@ -19,7 +22,7 @@ LIBS = @LIBS@
 AM_CPPFLAGS=-I$(top_srcdir) -I$(top_srcdir)/rtm/idl
 AM_LDFLAGS=-L$(top_builddir) -L$(top_builddir)/rtm -L$(top_builddir)/rtm/idl
 
-SUFFIXES = .so
+SUFFIXES = .o .so
 
 SHFLAGS  = -shared
 WRAPPER  = $(top_builddir)/utils/rtm-skelwrapper/rtm-skelwrapper
@@ -63,3 +66,12 @@ MyServiceStub.cpp : MyService.idl
 MyServiceStub.h : MyService.idl
 	$(IDLC) $(IDLFLAGS) MyService.idl
 	$(WRAPPER) $(WRAPPER_FLAGS) --idl-file=MyService.idl
+
+SimpleService.so: $(OBJS)
+SimpleService.o: MyServiceSkel.h MyServiceSVC_impl.h
+SimpleServiceComp.o: SimpleServiceComp.cpp SimpleService.cpp SimpleService.h MyServiceSkel.h MyServiceSVC_impl.h
+
+
+MyServiceSVC_impl.o: MyServiceSVC_impl.cpp MyServiceSVC_impl.h MyServiceSkel.h MyServiceStub.h
+MyServiceSkel.o: MyServiceSkel.cpp MyServiceSkel.h MyServiceStub.h
+MyServiceStub.o: MyServiceStub.cpp MyServiceStub.h
