@@ -2,9 +2,13 @@
 ##---------------------------------------------------------------------------
 ## Makefile.am for rtc-link
 ##
-## $Id: Makefile.am,v 1.3 2005-05-27 10:08:19 n-ando Exp $
+## $Id: Makefile.am,v 1.4 2005-09-08 12:52:03 n-ando Exp $
 ##
 ## $Log: not supported by cvs2svn $
+## Revision 1.3  2005/05/27 10:08:19  n-ando
+## - InPort/OutPort interface was changed.
+##   rtc-link assembly function is enabled now.
+##
 ## Revision 1.2  2005/05/23 07:13:43  n-ando
 ## - Now, DESTDIR is supported for rtc-link python modules.
 ##
@@ -80,15 +84,6 @@ install-stubs:
 install-data-local: install-stubs
 
 
-#IDL_SOURCES =       \
-#	$(IDLDIR)RTMBase.idl     \
-#	$(IDLDIR)RTCDataType.idl \
-#	$(IDLDIR)RTCInPort.idl   \
-#	$(IDLDIR)RTCOutPort.idl  \
-#	$(IDLDIR)RTComponent.idl \
-#	$(IDLDIR)RTCProfile.idl  \
-#	$(IDLDIR)RTCBase.idl     \
-#	$(IDLDIR)RTCManager.idl
 IDL_SOURCES =       \
 	RTMBase.idl     \
 	RTCDataType.idl \
@@ -96,6 +91,7 @@ IDL_SOURCES =       \
 	RTCPortBase.idl	\
 	RTCInPort.idl   \
 	RTCOutPort.idl  \
+	RTCService.idl  \
 	RTComponent.idl \
 	RTCProfile.idl  \
 	RTCBase.idl     \
@@ -105,16 +101,7 @@ IDL_SOURCES =       \
 # RTM idl stubs for python
 PY_STUBS = $(IDL_SOURCES:.idl=_idl.py)
 
-#	RTMBase_idl.py     \
-#	RTCDataType_idl.py \
-#	RTCInPort_idl.py   \
-#	RTCOutPort_idl.py  \
-#	RTComponent_idl.py \
-#	RTCProfile_idl.py  \
-#	RTCBase_idl.py     \
-#	RTCManager_idl.py
-
-RTMBase_idl.py: RTMBase.idl
+#RTMBase_idl.py: RTMBase.idl
 
 py_stub: $(PY_STUBS)
 
