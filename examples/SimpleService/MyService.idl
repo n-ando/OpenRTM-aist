@@ -1,0 +1,9 @@
+#include <RTCService.idl>
+
+interface MyService
+  : RTM::RTCService
+{
+  void setGain(in float gain);
+  float getGain();
+};
+
