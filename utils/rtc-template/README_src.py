@@ -2,8 +2,8 @@
 # -*- python -*-
 #
 #  @file README_src.py
-#  @brief rtc-template RTComponent's README & specification file generator class
-#  @date $Date: 2005-09-06 14:36:53 $
+#  @brief rtc-template RTComponent's README file generator class
+#  @date $Date: 2005-09-08 09:23:36 $
 #  @author Noriaki Ando <n-ando@aist.go.jp>
 # 
 #  Copyright (C) 2004-2005
@@ -13,11 +13,18 @@
 #          Advanced Industrial Science and Technology (AIST), Japan
 #      All rights reserved.
 # 
-#  $Id: README_src.py,v 1.3 2005-09-06 14:36:53 n-ando Exp $
+#  $Id: README_src.py,v 1.4 2005-09-08 09:23:36 n-ando Exp $
 #
 
 #
 #  $Log: not supported by cvs2svn $
+#  Revision 1.3  2005/09/06 14:36:53  n-ando
+#  rtc-template's command options and data structure for ezt (Easy Template)
+#  are changed for RTComponent's service features.
+#  Now rtc-template can generate services' skeletons, stubs and
+#  implementation files.
+#  The implementation code generation uses omniidl's IDL parser.
+#
 #  Revision 1.2  2005/08/26 12:01:15  n-ando
 #  Now rtc-template uses ezt (Easy Template).
 #
@@ -173,26 +180,12 @@ class README_src(gen_base.gen_base):
 		self.tags["inport"] = inport
 		self.tags["outport"] = outport
 		self.tags["service"] = service
-		
+
+		self.gen_tags(self.tags)
 		return
 
 	def print_readme(self):
-		f, lines = self.check_overwrite(self.data["fname"])
-		if not f:
-			return
-
-		if not lines: # overwrite: Yes
-			temp_txt = readme.splitlines()
-		else:
-			temp_txt = lines
-
-		# replace tags
-		temp_txt = self.replace_tags(temp_txt, self.tags)
-		
-		t = ezt.Template(compress_whitespace = 0)
-		t.parse(temp_txt)
-		t.generate(f, self.data)
-		print self.data["fname"], " was generated."
+		self.gen(self.data["fname"], readme, self.data, self.tags)
 
 	def print_all(self):
 		self.print_readme()
