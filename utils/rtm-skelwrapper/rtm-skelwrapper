@@ -4,7 +4,7 @@
 #
 #  @file rtm-skelwrapper
 #  @brief CORBA skelton/stub wrapper generator
-#  @date $Date: 2005-09-06 14:47:44 $
+#  @date $Date: 2005-09-09 09:30:21 $
 #  @author Noriaki Ando <n-ando@aist.go.jp>
 # 
 #  Copyright (C) 2004-2005
@@ -14,14 +14,16 @@
 #          Advanced Industrial Science and Technology (AIST), Japan
 #      All rights reserved.
 # 
-#  $Id: rtm-skelwrapper,v 1.1 2005-09-06 14:47:44 n-ando Exp $
+#  $Id: rtm-skelwrapper,v 1.2 2005-09-09 09:30:21 n-ando Exp $
 # 
 
 #
 #  $Log: not supported by cvs2svn $
+#  Revision 1.1  2005/09/06 14:47:44  n-ando
+#  The first version of rtm-skelwrapper.
+#
 #
 
-import skel_wrapper
 import os
 import sys
 import getopt
@@ -30,6 +32,7 @@ libdir_path = os.popen("rtm-config --libdir", "r").read().split("\n")
 pyhelper_path = libdir_path[0] + "/py_helper"
 sys.path.append(pyhelper_path)
 
+import skel_wrapper
 
 opt_args_fmt = ["help",
 				"idl-file=",
