@@ -2,9 +2,12 @@
 ##---------------------------------------------------------------------------
 ## Makefile.am for ConsoleIn/ConsoleOut components
 ##
-## $Id: Makefile.am,v 1.2 2005-09-08 14:00:18 n-ando Exp $
+## $Id: Makefile.am,v 1.3 2005-09-09 09:44:57 n-ando Exp $
 ##
 ## $Log: not supported by cvs2svn $
+## Revision 1.2  2005/09/08 14:00:18  n-ando
+## - A little bug fix.
+##
 ## Revision 1.1  2005/09/08 13:03:31  n-ando
 ## - SimpleService example for RTComponent's service.
 ##
@@ -75,3 +78,13 @@ SimpleServiceComp.o: SimpleServiceComp.cpp SimpleService.cpp SimpleService.h MyS
 MyServiceSVC_impl.o: MyServiceSVC_impl.cpp MyServiceSVC_impl.h MyServiceSkel.h MyServiceStub.h
 MyServiceSkel.o: MyServiceSkel.cpp MyServiceSkel.h MyServiceStub.h
 MyServiceStub.o: MyServiceStub.cpp MyServiceStub.h
+
+
+EXTRA_DIST = \
+	Makefile.SimpleService \
+	MyService.idl \
+	MyServiceSVC_impl.cpp \
+	MyServiceSVC_impl.h \
+	README.SimpleService \
+	SimpleService.cpp \
+	SimpleService.h

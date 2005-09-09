@@ -1,5 +1,5 @@
 
-all: DevelopersGuide.dvi DevelopersGuideNoClassRef.dvi
+all: DevelopersGuide.dvi DevelopersGuideNoClassRef.dvi DevelopersGuide.ps DevelopersGuide.pdf
 
 DevelopersGuide.ps: DevelopersGuide.dvi
 	dvips DevelopersGuide.dvi > DevelopersGuide.ps
