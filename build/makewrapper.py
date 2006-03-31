@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 #
 # @brief CORBA stub and skelton wrapper generator
-# @date $Date: 2005-05-12 09:06:18 $
+# @date $Date: 2006-03-31 05:26:34 $
 # @author Norkai Ando <n-ando@aist.go.jp>
 #
 # Copyright (C) 2005
@@ -11,241 +11,207 @@
 #         Advanced Industrial Science and Technology (AIST), Japan
 #     All rights reserved.
 #
-# $Id: makewrapper.py,v 1.1.1.1 2005-05-12 09:06:18 n-ando Exp $
+# $Id: makewrapper.py,v 1.2 2006-03-31 05:26:34 n-ando Exp $
 #
 
 # $Log: not supported by cvs2svn $
+# Revision 1.1.1.1  2005/05/12 09:06:18  n-ando
+# Public release.
 #
 #
-
-import time
+#
 import sys
 import re
+import time
+import ezt
 
-class MakeWrapper:
-	def __init__(self, basename):
-		self.basename = basename
-		self.date = time.asctime()
-		self.skel_dir = "rtm/idl/";
-		self.rtc_dir = "rtm/";
+skel_cpp_temp = """// -*- C++ -*-
+/*!
+ *
+ * THIS FILE IS GENERATED AUTOMATICALLY!! DO NOT EDIT!!
+ *
+ * @file  [skel_cpp]
+ * @brief [basename] server skeleton wrapper code
+ * @date  [date]
+ *
+ */
+
+#include "[skel_dir]/[basename]Skel.h"
+
+#if   defined ORB_IS_TAO
+#include "[skel_dir]/[basename]S.cpp"
+#elif defined ORB_IS_OMNIORB
+#include "[skel_dir]/[basename]SK.cc"
+#include "[skel_dir]/[basename]DynSK.cc"
+#elif defined ORB_IS_MICO
+#include "[skel_dir]/[basename]_skel.cc"
+#elif defined ORB_IS_ORBIT2
+#include "[skel_dir]/[basename]-cpp-skels.cc"
+#else
+#error "NO ORB defined"
+#endif
+"""
+
+skel_h_temp = """// -*- C++ -*-
+/*!
+ *
+ * THIS FILE IS GENERATED AUTOMATICALLY!! DO NOT EDIT!!
+ *
+ * @file  [skel_h]
+ * @brief [basename] server skeleton wrapper code
+ * @date  [date]
+ *
+ */
+
+#ifndef __[BASENAME]SKEL_H__
+#define __[BASENAME]SKEL_H__
+
+#include <rtm/config_rtc.h>
+#undef PACKAGE_BUGREPORT
+#undef PACKAGE_NAME
+#undef PACKAGE_STRING
+#undef PACKAGE_TARNAME
+#undef PACKAGE_VERSION
+
+#if   defined ORB_IS_TAO
+#include "[skel_dir]/[basename]S.h"
+#elif defined ORB_IS_OMNIORB
+#include "[skel_dir]/[basename].hh"
+#elif defined ORB_IS_MICO
+#include "[skel_dir]/[basename].h"
+#elif defined ORB_IS_ORBIT2
+#include "[skel_dir]/[basename]-cpp-skels.h"
+#else
+#error "NO ORB defined"
+#endif
+
+#endif // end of __[BASENAME]SKEL_H__
+"""
+
+stub_cpp_temp = """// -*- C++ -*-
+/*!
+ *
+ * THIS FILE IS GENERATED AUTOMATICALLY!! DO NOT EDIT!!
+ *
+ * @file  [stub_cpp]
+ * @brief [basename] server skeleton wrapper code
+ * @date  [date]
+ *
+ */
+
+#include "[skel_dir]/[basename]Stub.h"
+
+#if   defined ORB_IS_TAO
+#include "[skel_dir]/[basename]C.cpp"
+#elif defined ORB_IS_OMNIORB
+#include "[skel_dir]/[basename]SK.cc"
+#include "[skel_dir]/[basename]DynSK.cc"
+#elif defined ORB_IS_MICO
+#include "[skel_dir]/[basename].cc"
+#elif defined ORB_IS_ORBIT2
+#include "[skel_dir]/[basename]-cpp-stubs.cc"
+#else
+#error "NO ORB defined"
+#endif
+"""
+
+stub_h_temp = """// -*- C++ -*-
+/*!
+ *
+ * THIS FILE IS GENERATED AUTOMATICALLY!! DO NOT EDIT!!
+ *
+ * @file  [stub_h]
+ * @brief [basename] server skeleton wrapper code
+ * @date  [date]
+ *
+ */
+
+#ifndef __[BASENAME]STUB_H__
+#define __[BASENAME]STUB_H__
+
+#include <rtm/config_rtc.h>
+#undef PACKAGE_BUGREPORT
+#undef PACKAGE_NAME
+#undef PACKAGE_STRING
+#undef PACKAGE_TARNAME
+#undef PACKAGE_VERSION
+
+#if   defined ORB_IS_TAO
+#include "[skel_dir]/[basename]C.h"
+#elif defined ORB_IS_OMNIORB
+#include "[skel_dir]/[basename].hh"
+#elif defined ORB_IS_MICO
+#include "[skel_dir]/[basename].h"
+#elif defined ORB_IS_ORBIT2
+#include "[skel_dir]/[basename]-cpp-stubs.h"
+#else
+#error "NO ORB defined"
+#endif
+
+#endif // end of __[BASENAME]STUB_H__
+"""
+
+class wrapper_data:
+	def __init__(self, basename, dir_name):
+		self.data = {}
+		self.data["basename"] = basename
+		self.data["BASENAME"] = basename.upper()
+		self.data["idl_name"] = basename + ".idl"
+		self.data["skel_dir"] = dir_name
+		self.data["date"]     = time.ctime()
+		self.data["skel_cpp"] = basename + "Skel.cpp"
+		self.data["skel_h"]   = basename + "Skel.h"
+		self.data["stub_cpp"] = basename + "Stub.cpp"
+		self.data["stub_h"]   = basename + "Stub.h"
+
+	def get_dict(self):
+		return self.data
+		
+
+class wrapper_gen:
+	def __init__(self, data):
+		self.data = data
+
+	def gen(self, fname, temp_txt, data):
+		f = file(fname, "w")
+		#		s = StringIO.StringIO()
+		t = ezt.Template(compress_whitespace = 0)
+		t.parse(temp_txt)
+		t.generate(f, data)
+		#		gen_txt = s.getvalue().splitlines()
+		#		f.write(gen_txt)
+		f.close()
+		print "\"", fname, "\"" " was generated."
+		return
+
+	def gen_all(self):
+		self.write_skel()
+		self.write_skelh()
+		self.write_stub()
+		self.write_stubh()
+		return
 
 	def write_skel(self):
-		"""
-		write_skel()
-		
-		Writing server skeleton wrapper code
-		"""
-	
-		skel_cpp_name = self.basename + "Skel.cpp"
-		skel_cpp = file(skel_cpp_name, "w")
-		
-		# Skelton
-		print >> skel_cpp, """// -*- C++ -*-
-/*!
- *
- * THIS FILE IS GENERATED AUTOMATICALLY!! DO NOT EDIT!!
- *
- * @file %s
- * @brief %s server skeleton wrapper code
- * @date %s
- *
- */
-
-#include "%s%sSkel.h"
-""" % (skel_cpp_name,
-	   self.basename,
-	   self.date,
-	   self.skel_dir,
-	   self.basename)
-
-		print >> skel_cpp, """#if   defined ORB_IS_TAO
-#include "%s%sS.cpp"
-#elif defined ORB_IS_OMNIORB
-#include "%s%sSK.cc"
-#include "%s%sDynSK.cc"
-#elif defined ORB_IS_MICO
-#include "%s%s_skel.cc"
-#else
-#error "NO ORB defined"
-#endif
-""" % (self.skel_dir, self.basename,
-	   self.skel_dir, self.basename,
-	   self.skel_dir, self.basename,
-	   self.skel_dir, self.basename)
-
-		skel_cpp.close()
-
-		print skel_cpp_name + " generated"
-
+		self.gen(self.data["skel_cpp"], skel_cpp_temp, self.data)
 
 	def write_skelh(self):
-		"""------------------------------------------------------------
-		write_skelh()
-		
-		Writing server skeleton header wrapper code
-		------------------------------------------------------------"""
-		skel_h_name = self.basename + "Skel.h"
-		hdefine  = self.basename.upper()
+		self.gen(self.data["skel_h"], skel_h_temp, self.data)
+		return
 
-		skel_h = file(skel_h_name, "w")
-
-		# Header
-		print >> skel_h, """// -*- C++ -*-
-/*!
- *
- * THIS FILE IS GENERATED AUTOMATICALLY!! DO NOT EDIT!!
- *
- * @file %s
- * @brief %s server skeleton header wrapper code
- * @date %s
- *
- */
-
-#ifndef __%sSKEL_H__
-#define __%sSKEL_H__
-
-#include <%sconfig_rtc.h>
-#undef PACKAGE_BUGREPORT
-#undef PACKAGE_NAME
-#undef PACKAGE_STRING
-#undef PACKAGE_TARNAME
-#undef PACKAGE_VERSION
-""" % (skel_h_name,
-	   self.basename,
-	   self.date,
-	   hdefine,
-	   hdefine,
-	   self.rtc_dir)
-
-		print >> skel_h, """#if   defined ORB_IS_TAO
-#include "%s%sS.h"
-#elif defined ORB_IS_OMNIORB
-#include "%s%s.hh"
-#elif defined ORB_IS_MICO
-#include "%s%s.h"
-#else
-#error "NO ORB defined"
-#endif
-
-#endif // end of __%sSKEL_H__
-""" % (self.skel_dir, self.basename,
-	   self.skel_dir, self.basename,
-	   self.skel_dir, self.basename,
-	   hdefine)
-
-		skel_h.close()
-		print skel_h_name + " generated"
-
-		
 	def write_stub(self):
-		"""
-		write_stub()
-		
-		Writing stub wrapper code
-		"""
-		stub_cpp_name = self.basename + "Stub.cpp"
-		stub_cpp = file(stub_cpp_name, "w")
-
-		print >> stub_cpp, """// -*- C++ -*-
-/*!
- *
- * THIS FILE IS GENERATED AUTOMATICALLY!! DO NOT EDIT!!
- *
- * @file %s
- * @brief %s client stub wrapper code
- * @date %s
- *
- */
-
-#include "%s%sStub.h"
-""" % (stub_cpp_name,
-	   self.basename,
-	   self.date,
-	   self.skel_dir,
-	   self.basename)
-
-		print >> stub_cpp, """#if   defined ORB_IS_TAO
-#include "%s%sC.cpp"
-#elif defined ORB_IS_OMNIORB
-#include "%s%sSK.cc"
-#include "%s%sSynSK.cc"
-#elif defined ORB_IS_MICO
-#include "%s%s.cc"
-#else
-#error "NO ORB defined"
-#endif
-""" % (self.skel_dir, self.basename,
-	   self.skel_dir, self.basename,
-	   self.skel_dir, self.basename,
-	   self.skel_dir, self.basename)
-
-		stub_cpp.close()
-		print stub_cpp_name + " generated"
-
+		self.gen(self.data["stub_cpp"], stub_cpp_temp, self.data)
+		return
 
 	def write_stubh(self):
-		stub_h_name = self.basename + "Stub.h"
-		hdefine  = self.basename.upper()
-
-		stub_h = file(stub_h_name, "w")
-
-		# Header
-		print >> stub_h, """// -*- C++ -*-
-/*!
- *
- * THIS FILE IS GENERATED AUTOMATICALLY!! DO NOT EDIT!!
- *
- * @file %s
- * @brief %s client stub header wrapper code
- * @date %s
- *
- */
-
-#ifndef __%sSTUB_H__
-#define __%sSTUB_H__
-
-#include <%sconfig_rtc.h>
-#undef PACKAGE_BUGREPORT
-#undef PACKAGE_NAME
-#undef PACKAGE_STRING
-#undef PACKAGE_TARNAME
-#undef PACKAGE_VERSION
-""" % (stub_h_name,
-	   self.basename,
-	   self.date,
-	   hdefine,
-	   hdefine,
-	   self.rtc_dir)
-
-		# Body
-		print >> stub_h, """#if   defined ORB_IS_TAO
-#include "%s%sC.h"
-#elif defined ORB_IS_OMNIORB
-#include "%s%s.hh"
-#elif defined ORB_IS_MICO
-#include "%s%s.h"
-#else
-#error "NO ORB defined"
-#endif
-
-#endif // end of __%sSTUB_H__
-""" % (self.skel_dir, self.basename,
-	   self.skel_dir, self.basename,
-	   self.skel_dir, self.basename,
-	   hdefine)
-
-		stub_h.close()
-		print stub_h_name + " generated"
+		self.gen(self.data["stub_h"], stub_h_temp, self.data)
+		return
 
 
 idl_file = sys.argv[1]
-idl_name = re.sub(".idl", "", idl_file);
+basename = re.sub(".idl", "", idl_file);
 
-mkw = MakeWrapper(idl_name)
-mkw.write_skel()
-mkw.write_stub()
-mkw.write_skelh()
-mkw.write_stubh()
-
+data = wrapper_data(basename, "rtm/idl")
+gen  = wrapper_gen(data.get_dict())
+gen.gen_all()
 
 
