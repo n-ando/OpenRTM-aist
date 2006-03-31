@@ -1,9 +1,19 @@
 #!/bin/sh
 
-cp /usr/local/share/aclocal/libtool.m4 acinclude.m4
-libtoolize --force --copy \
-&& aclocal \
-&& autoheader \
-&& automake -a -c --gnu --add-missing --force-missing \
-&& autoconf \
-&& automake
+am_ver="19"
+ac_ver="259"
+lt_ver="15"
+cp /usr/local/share/aclocal/libtool${lt_ver}.m4 acinclude.m4
+#mv acinclude.m4 acinclude.m4.org
+#sed -e 's/m4_patsubst/m4_bpatsubst/g' aclocal.m4.org > aclocal.m4
+libtoolize${lt_ver} --force --copy \
+&& aclocal$am_ver \
+&& autoheader$ac_ver \
+&& automake$am_ver -a -c --gnu --add-missing --force-missing \
+&& autoconf$ac_ver \
+&& automake$am_ver
+
+#&& mv aclocal.m4 aclocal.m4.1 \
+#&& sed -e 's/m4_patsubst/m4_bpatsubst/g' aclocal.m4.1 > aclocal.m4.2 \
+#&& sed -e 's/m4_regexp/m4_bregexp/g' aclocal.m4.2 > aclocal.m4 \
+#&& rm aclocal.m4.[0-9] \
