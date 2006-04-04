@@ -2,9 +2,12 @@
 ##------------------------------------------------------------
 ## Makefile.am for libRTCSkel
 ##
-## $Id: Makefile.am,v 1.3 2005-09-07 05:11:45 n-ando Exp $
+## $Id: Makefile.am,v 1.4 2006-04-04 06:13:11 n-ando Exp $
 ##
 ## $Log: not supported by cvs2svn $
+## Revision 1.3  2005/09/07 05:11:45  n-ando
+## RTCService.idl was added for RTComponent's service feature.
+##
 ## Revision 1.2  2005/05/27 07:40:46  n-ando
 ## - InPort/OutPort interface was changed.
 ##   InPort/OutPort share SubscriptionProfile structure.
@@ -27,17 +30,11 @@ SUFFIXES = .idl Skel.cpp Stub.cpp Stub.o Skel.o
 
 # RTM idl sources
 IDL_SOURCES =       	\
-	RTMBase.idl     	\
-	RTCDataType.idl 	\
-	RTCSubscription.idl \
-	RTCPortBase.idl   	\
-	RTCInPort.idl   	\
-	RTCOutPort.idl  	\
-	RTCService.idl      \
-	RTComponent.idl 	\
-	RTCProfile.idl  	\
-	RTCBase.idl     	\
-	RTCManager.idl
+	SDOPackage.idl		\
+	RTCPackage.idl
+#	RTCDataType.idl 	\
+#	RTCBase.idl     	\
+#	RTCManager.idl
 
 if ORB_IS_TAO
 SKEL_SOURCES = $(TAO_SOURCES)
@@ -59,11 +56,27 @@ if ORB_IS_ORBACUS
 SKEL_SOURCES = $(ORBACUS_SOURCES)
 endif
 
+if ORB_IS_ORBIT2
+SKEL_SOURCES = $(ORBIT2_SOURCES)
+OIDLC = $(IDLC) -DORBIT2_IDL
+else
+OIDLC = echo
+endif
+
+
 TAO_SOURCES = \
 	$(IDL_SOURCES:.idl=S.h) \
 	$(IDL_SOURCES:.idl=S.cpp) \
+	$(IDL_SOURCES:.idl=S.inl) \
+	$(IDL_SOURCES:.idl=S_T.cpp) \
+	$(IDL_SOURCES:.idl=S_T.h) \
+	$(IDL_SOURCES:.idl=S_T.inl) \
 	$(IDL_SOURCES:.idl=C.h) \
-	$(IDL_SOURCES:.idl=S.cpp)
+	$(IDL_SOURCES:.idl=C.cpp) \
+	$(IDL_SOURCES:.idl=C.inl) \
+	$(IDL_SOURCES:.idl=C_T.cpp) \
+	$(IDL_SOURCES:.idl=C_T.h) \
+	$(IDL_SOURCES:.idl=C_T.inl)
 
 OMNIORB_SOURCES = \
 	$(IDL_SOURCES:.idl=.hh) \
@@ -85,6 +98,18 @@ ORBACUS_SOURCES = \
 	$(IDL_SOURCES:.idl=.cpp) \
 	$(IDL_SOURCES:.idl=_skel.h) \
 	$(IDL_SOURCES:.idl=_skel.cpp)
+
+ORBIT2_SOURCES = \
+	$(IDL_SOURCES:.idl=.h) \
+	$(IDL_SOURCES:.idl=-common.c) \
+	$(IDL_SOURCES:.idl=-cpp-common.cc) \
+	$(IDL_SOURCES:.idl=-cpp-common.h) \
+	$(IDL_SOURCES:.idl=-cpp-skels.cc) \
+	$(IDL_SOURCES:.idl=-cpp-skels.h) \
+	$(IDL_SOURCES:.idl=-cpp-stubs.cc) \
+	$(IDL_SOURCES:.idl=-cpp-stubs.h) \
+	$(IDL_SOURCES:.idl=-cpp.cc) \
+	$(IDL_SOURCES:.idl=-cpp.h)
 
 #SKEL_SOURCES = $(TAO_SOURCES) $(OMNIORB_SOURCES) $(MICO_SOURCES) $(ORBIX_SOURCES) $(ORBACUS_SOURCES)
 
@@ -116,6 +141,7 @@ libRTCSkel_la_LIBADD = $(LIBS)
 
 .idlSkel.cpp:
 	$(top_srcdir)/build/makewrapper.py $<
+	$(OIDLC) $<
 	$(IDLC) $(IDLFLAGS) $<
 #------------------------------------------------------------
 
@@ -139,4 +165,5 @@ clean-local:
 	*.h \
 	*.hh \
 	*.i \
-	*.a
+	*.a \
+	*.c
