@@ -1,9 +1,19 @@
 #!/bin/sh
+#
+# @file autogen
+# @brief script for setingup build environment
+# @author Noriaki Ando <n-ando@aist.go.jp>
+#
+# $Id: autogen,v 1.4 2006-04-04 02:20:38 n-ando Exp $
+#
+# $Log: not supported by cvs2svn $
+#
+#
 
 am_ver="19"
 ac_ver="259"
 lt_ver="15"
-cp /usr/local/share/aclocal/libtool${lt_ver}.m4 acinclude.m4
+cp -f /usr/local/share/aclocal/libtool${lt_ver}.m4 acinclude.m4
 libtoolize${lt_ver} --force --copy \
 && aclocal$am_ver \
 && autoheader$ac_ver \
