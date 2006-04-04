@@ -2,7 +2,7 @@ dnl -*- autoconf -*-
 dnl
 dnl @file configure.ac
 dnl @brief Input file for autoconf
-dnl @date $Date: 2006-03-31 05:31:17 $
+dnl @date $Date: 2006-04-04 02:17:34 $
 dnl @author Noriaki Ando <n-ando@aist.go.jp>
 dnl
 dnl This file is an input file used by the GNU "autoconf" program to
@@ -10,11 +10,14 @@ dnl generate the file "configure", which tries to guess your system
 dnl configuration
 dnl
 dnl
-dnl $Id: configure.ac,v 1.3 2006-03-31 05:31:17 n-ando Exp $
+dnl $Id: configure.ac,v 1.4 2006-04-04 02:17:34 n-ando Exp $
 dnl
 
 dnl
 dnl $Log: not supported by cvs2svn $
+dnl Revision 1.3  2006/03/31 05:31:17  n-ando
+dnl - Dist version is now 0.3.0.
+dnl
 dnl Revision 1.2  2005/09/06 14:50:05  n-ando
 dnl rtm-skelwrapper added.
 dnl
@@ -93,7 +96,7 @@ AC_ARG_ENABLE(artlinux,       [  --with-rdtsc                    With Read Time 
 dnl ------------------------------------------------------------
 dnl proc to look for a file in a number of places
 dnl ------------------------------------------------------------
-AC_DEFUN(FP_FIND_FILE, [
+AC_DEFUN([FP_FIND_FILE], [
     if test "x$4" = "x" ; then
 	ff_name=[`echo $1 | sed 's/[-.*/ ]/_/g'`]
     else
