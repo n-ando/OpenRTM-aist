@@ -2,7 +2,7 @@ dnl -*- autoconf -*-
 dnl
 dnl @file configure.ac
 dnl @brief Input file for autoconf
-dnl @date $Date: 2006-04-04 02:17:34 $
+dnl @date $Date: 2006-04-04 05:57:41 $
 dnl @author Noriaki Ando <n-ando@aist.go.jp>
 dnl
 dnl This file is an input file used by the GNU "autoconf" program to
@@ -10,11 +10,14 @@ dnl generate the file "configure", which tries to guess your system
 dnl configuration
 dnl
 dnl
-dnl $Id: configure.ac,v 1.4 2006-04-04 02:17:34 n-ando Exp $
+dnl $Id: configure.ac,v 1.5 2006-04-04 05:57:41 n-ando Exp $
 dnl
 
 dnl
 dnl $Log: not supported by cvs2svn $
+dnl Revision 1.4  2006/04/04 02:17:34  n-ando
+dnl - FP_FIND_FILE macro was quoted to prevent warning.
+dnl
 dnl Revision 1.3  2006/03/31 05:31:17  n-ando
 dnl - Dist version is now 0.3.0.
 dnl
@@ -31,7 +34,7 @@ dnl  Autoconf initial macros
 dnl ------------------------------------------------------------
 dnl  Process this file with autoconf to produce a configure script.
 AC_INIT(rtm/RtcBase.cpp)
-AM_INIT_AUTOMAKE(OpenRTM-aist, 0.3.0, n-ando@aist.go.jp)
+AM_INIT_AUTOMAKE(OpenRTM-aist, 0.4.0, n-ando@aist.go.jp)
 AM_CONFIG_HEADER([rtm/config_rtc.h])
 
 
@@ -60,8 +63,8 @@ dnl  configure arguments definition
 dnl ------------------------------------------------------------
 
 dnl  ACE directory
-AC_ARG_WITH(ace-includes,     [  --with-ace-includes=dir         Find ACE include files installation below dir])
-AC_ARG_WITH(ace-lib,          [  --with-ace-lib=dir              Find ACE lib files installation below dir])
+AC_ARG_WITH(ace-includes,     [  --with-ace-includes=dir         Find ACE include files installation below dir(without "include")])
+AC_ARG_WITH(ace-lib,          [  --with-ace-lib=dir              Find ACE lib files installation below dir(without "lib"])
 
 dnl  boost directory
 AC_ARG_WITH(boost-includes,   [  --with-boost-includes=dir       Find boost include files installation below dir])
@@ -73,6 +76,7 @@ AC_ARG_WITH(orbix,            [  --with-orbix=dir                Find Orbix inst
 AC_ARG_WITH(orbacus,          [  --with-orbacus=dir              Find ORBacus installation below dir])
 AC_ARG_WITH(tao,              [  --with-tao=dir                  Find TAO installation below dir])
 AC_ARG_WITH(omniorb,          [  --with-omniorb=dir              Find omniORB installation below dir])
+AC_ARG_WITH(omniorb,          [  --with-orbit2=dir               Find ORBit2 installation below dir])
 AC_ARG_WITH(generic-orb,      [  --with-generic-orb              Use other CORBA 2.3 ORB])
 AC_ARG_WITH(generic-orb-lib,  [  --with-generic-orb-lib	=libs    ORB libraries (-l...)])
 
@@ -93,9 +97,27 @@ AC_ARG_ENABLE(artlinux,       [  --with-artlinux                 With ART-Linux]
 AC_ARG_ENABLE(artlinux,       [  --with-rdtsc                    With Read Time Stamp Counter])
 
 
-dnl ------------------------------------------------------------
+dnl ----------------------------------------------------------------------
 dnl proc to look for a file in a number of places
-dnl ------------------------------------------------------------
+dnl
+dnl FP_FIND_FILE[file_to_find, path_prefix, path_subdir, (fp_path_var)]
+dnl
+dnl This macro searches a file in given paths which are the
+dnl combination of each path_prefix/path_subdir.
+dnl The Found path of the file and the directory name are stored
+dnl to the variable named "fp_path_var" and "fp_path_var_dir"
+dnl If "fp_path_var" (4th var) is abbreviated, underscored
+dnl "file_to_find" variable name is used.
+dnl
+dnl Example:
+dnl FP_FIND_FILE[omniORB4/CORBA.h, /usr /usr/local /opt, include cpp/include]
+dnl
+dnl search path: /usr/include, /usr/cpp/include
+dnl              /usr/local/include, /usr/local/cpp/include
+dnl              /opt/include, /opt/cpp/include
+dnl file path var: $omniORB4_CORBA_h
+dnl dir  path var: $omniORB4_CORBA_h_dir
+dnl ----------------------------------------------------------------------
 AC_DEFUN([FP_FIND_FILE], [
     if test "x$4" = "x" ; then
 	ff_name=[`echo $1 | sed 's/[-.*/ ]/_/g'`]
@@ -198,7 +220,6 @@ fi
 dnl ------------------------------------------------------------
 dnl  Prepare for setup
 dnl ------------------------------------------------------------
-
 orb_to_use=
 more_incs="`echo $with_includes | sed 's/:/ /g'`"
 more_libs="`echo $with_libs     | sed 's/:/ /g'`"
@@ -211,15 +232,13 @@ base_dirs="$prefix `echo $PATH | sed 's/:/\/.. /g'`"
 dnl ------------------------------------------------------------
 dnl  Use with_includes and with_libs
 dnl ------------------------------------------------------------
-
-
 for ipath in $more_incs ; do
-        CPPFLAGS="$CPPFLAGS -I$ipath"
-        CXXFLAGS="$CXXFLAGS -I$ipath"
+	CPPFLAGS="$CPPFLAGS -I$ipath"
+	CXXFLAGS="$CXXFLAGS -I$ipath"
 done
 
 for lpath in $more_libs ; do
-        LDFLAGS="$LDFLAGS -L$lpath"
+	LDFLAGS="$LDFLAGS -L$lpath"
 done
 
 
@@ -258,40 +277,49 @@ dnl AC_FUNC_ERROR_AT_LINE
 
 
 
-dnl ------------------------------------------------------------
+dnl ============================================================
 dnl Check ACE setup
 dnl
 dnl 1. check ace/ACE.h for ACE
 dnl 2. check libACE.so
 dnl 3. check ACE version from ace/Version.h
+dnl ============================================================
+dnl ------------------------------------------------------------
+dnl  Find ace/ACE.h
 dnl ------------------------------------------------------------
 AC_MSG_CHECKING(for ace/ACE.h)
 FP_FIND_FILE(ace/ACE.h,
-	$with_ace_includes $more_incs $base_incs $base_dirs /usr/local/ACE_wrappers /usr/local/src/ACE_wrappers /usr/ACE_wrappers /usr/src/ACE_wrappers ,
-	include cxx/include)
+	$with_ace_includes $more_incs $base_incs $base_dirs,
+	ACE_wrappers include cxx/include)
 if test "x$ace_ACE_h_dir" = "x" ; then
 	AC_MSG_RESULT(ACE (ace/ACE.h) not found)
-	AC_MSG_ERROR(use --with-ace-includes to locate ACE.h)
+	AC_MSG_ERROR(
+	use --with-ace-includes=<dir> to locate ace/ACE.h
+hint: <dir>/( ACE_wrappers | include | cxx/include ) will be searched.)
+	# Error exit!!
 else
 	AC_MSG_RESULT(found in $ace_ACE_h_dir)
 	have_ace=yes
 fi
 
-
+dnl ------------------------------------------------------------
+dnl  Find libACE.so / Checking ACE version
+dnl ------------------------------------------------------------
 if test "x$have_ace" = "xyes" ; then
-	# Checking libACE.so
 	AC_MSG_CHECKING(for libACE.so)
 	FP_FIND_FILE(libACE.so,
-		$with_ace_lib $more_libs $base_libs $base_dirs /usr/local/ACE_wrappers/ace /usr/local/src/ACE_wrappers/ace /usr/ACE_wrappers/ace /usr/src/ACE_wrappers/ace,
-		lib cxx/lib)
+		$with_ace_lib $more_libs $base_libs $base_dirs,
+		ACE_wrappers/ace/lib lib cxx/lib)
 	if test "x$libACE_so_dir" = "x" ; then
 		AC_MSG_RESULT(not found)
-		AC_MSG_ERROR(use --with-ace-lib to locate libACE.so)
+		AC_MSG_ERROR(
+	use --with-ace-lib=<dir> to locate libACE.so.
+hint: <dir>/( ACE_wrappers/ace/lib lib cxx/lib ) will be searched.)
+		# Error exit!!
 	else
 		AC_MSG_RESULT(found in $libACE_so_dir)
 	fi
 
-	# Checking ACE version
 	AC_MSG_CHECKING(ACE version)
 	ace_version=[`grep ACE_VERSION $ace_ACE_h_dir/ace/Version.h | cut -d " " -f 3 | sed 's/[\"]//g'`]
 
@@ -316,12 +344,15 @@ if test "x$have_ace" = "xyes" ; then
 fi
 
 
-dnl ------------------------------------------------------------
+dnl ============================================================
 dnl Check boost setup
 dnl
 dnl 1. check boost/version.hpp for Boost
 dnl 2. check Boost version from boost/version.hpp
 dnl 3. check libboost_regex.so
+dnl ============================================================
+dnl ------------------------------------------------------------
+dnl  Find boost/version.hpp
 dnl ------------------------------------------------------------
 AC_MSG_CHECKING(for boost/version.hpp)
 FP_FIND_FILE(boost/version.hpp,
@@ -329,15 +360,19 @@ FP_FIND_FILE(boost/version.hpp,
 	include cxx/include)
 if test "x$boost_version_hpp_dir" = "x" ; then
 	AC_MSG_RESULT(Boost (boost/version.hpp) not found)
-	AC_MSG_ERROR(use --with-boost-includes to locate Boost's headers)
+	AC_MSG_ERROR(
+use --with-boost-includes=<dir> to locate Boost's headers.
+hint: <dir>/( include cxx/include ) will be searched.)
+	# Error exit!!
 else
 	AC_MSG_RESULT(found in $boost_version_hpp_dir)
 	have_boost=yes
 fi
 
-
+dnl ------------------------------------------------------------
+dnl  Check boost version/Find libboost_regex.so
+dnl ------------------------------------------------------------
 if test "x$have_boost" = "xyes" ; then
-	# Checking Boost version
 	AC_MSG_CHECKING(Boost version)
 	boost_version=[`grep ' BOOST_VERSION ' $boost_version_hpp_dir/boost/version.hpp | grep '#define' | cut -d  ' ' -f 3`]
 
@@ -356,7 +391,10 @@ if test "x$have_boost" = "xyes" ; then
 		lib cxx/lib)
 	if test "x$libboost_regex_so_dir" = "x" ; then
 		AC_MSG_RESULT(not found)
-		AC_MSG_ERROR(use --with-boost-lib to locate libboost_regex.so)
+		AC_MSG_ERROR(
+	use --with-boost-lib=<dir> to locate libboost_regex.so
+hint: <dir>/( lib cxx/lib ) will be searched.)
+		# Error exit!!
 	else
 		AC_MSG_RESULT(found in $libboost_regex_so_dir)
 	fi
@@ -375,11 +413,10 @@ fi
 
 
 
-dnl ------------------------------------------------------------
+dnl ============================================================
 dnl ORB configuration
 dnl
-dnl ------------------------------------------------------------
-
+dnl ============================================================
 if test "x$with_mico" != "x" ; then
 	orb_to_use=MICO
 fi
@@ -395,6 +432,9 @@ fi
 if test "x$with_tao" != "x" ; then
 	orb_to_use=TAO
 fi
+if test "x$with_orbit2" != "x" ; then
+	orb_to_use=ORBit2
+fi
 if test "x$orb_to_use" = "x" ; then
 	AC_MSG_ERROR(Specify ORB to use: check ./configure --help)
 fi
@@ -403,42 +443,53 @@ echo 'ORB: '$orb_to_use
 echo 'RTMiddleware will be compiled with '$orb_to_use
 
 
-dnl ------------------------------------------------------------
+dnl ============================================================
 dnl Check Mico setup
 dnl
 dnl 1. check mico-setup.sh getting MICO setup information
 dnl 2. obtain some VARIABLES from mico-setup.sh 
 dnl 3. set IDL compile options, CPPFLAGS, LDFLAGS, LIBS etc...
-dnl ------------------------------------------------------------
+dnl ============================================================
 have_mico=no
 
 if test "x$orb_to_use" = "xMICO" ; then
+	dnl ------------------------------------------------------------
+	dnl  Find mico-setup.sh
+	dnl ------------------------------------------------------------
 	AC_MSG_CHECKING(for mico-setup.sh)
-		if test "x$MICOVERSION" != "x" && test "x$MICODIR" != "x" ; then
-			AC_MSG_RESULT(already loaded)
-				have_mico=yes
+	if test "x$MICOVERSION" != "x" && test "x$MICODIR" != "x" ; then
+		AC_MSG_RESULT(already loaded)
+		have_mico=yes
+	else
+		FP_FIND_FILE(mico-setup.sh,
+			$with_mico $more_libs $base_libs $base_dirs,
+			lib)
+		if test "x$mico_setup_sh" = "x" ; then
+			AC_MSG_RESULT(not found)
+			AC_MSG_ERROR(
+	use --with-mico=<dir> to locate MICO setup directories.
+hint: <dir>/lib will be searched.)
+			# Error exit!!
 		else
-				FP_FIND_FILE(mico-setup.sh,$with_mico $more_libs $base_libs $base_dirs,lib)
-				if test "x$mico_setup_sh" = "x" ; then
-						AC_MSG_RESULT(not found)
-				else
-						AC_MSG_RESULT($mico_setup_sh)
-						AC_MSG_CHECKING(contents of MICO config)
-						#
-						# mico_config unsets prefix and exec_prefix
-						#
-						save_prefix="$prefix"
-						save_exec_prefix="$exec_prefix"
-						. $mico_setup_sh
-						prefix="$save_prefix"
-						exec_prefix="$save_exec_prefix"
-						AC_MSG_RESULT(done)
-						have_mico=yes
-				fi
+			AC_MSG_RESULT($mico_setup_sh)
+			AC_MSG_CHECKING(contents of MICO config)
+			#
+			# mico_config unsets prefix and exec_prefix
+			#
+			save_prefix="$prefix"
+			save_exec_prefix="$exec_prefix"
+			. $mico_setup_sh
+			prefix="$save_prefix"
+			exec_prefix="$save_exec_prefix"
+			AC_MSG_RESULT(done)
+			have_mico=yes
 		fi
+	fi
 fi
 
-
+dnl ------------------------------------------------------------
+dnl  Check mico version
+dnl ------------------------------------------------------------
 if test "x$have_mico" = "xyes" ; then
 	AC_MSG_CHECKING(MICO version)
 	AC_MSG_RESULT($MICOVERSION)
@@ -456,50 +507,51 @@ if test "x$have_mico" = "xyes" ; then
 		;;
 	esac
 fi
-
+dnl ------------------------------------------------------------
+dnl  Check CORBA.h path, libmico.so
+dnl ------------------------------------------------------------
 if test "x$have_mico" = "xyes" ; then
 	AC_MSG_CHECKING(for CORBA.h)
-	FP_FIND_FILE(CORBA.h,$MICODIR $MICOSHARED $with_mico $more_incs $base_incs $base_dirs, include)
+	FP_FIND_FILE(CORBA.h,
+		$MICODIR $MICOSHARED $with_mico $more_incs $base_incs $base_dirs,
+		include cxx/include)
 	if test "x$CORBA_h_dir" = "x" ; then
 		AC_MSG_RESULT(not found)
-		AC_MSG_ERROR(use --with-mico to locate CORBA.h)
+		AC_MSG_ERROR(
+use --with-mico=<dir> to locate mico's CORBA.h
+hint: <dir>/( include cxx/include ) will be searched.)
+		# Error exit!!
 	else
 		AC_MSG_RESULT(found in $CORBA_h_dir)
 	fi
 
+	dnl ------------------------------------------------------------
+	dnl  Check libmico.so
+	dnl ------------------------------------------------------------
 	AC_MSG_CHECKING(for libmico${MICOVERSION}${SHLIB_SUFFIX})
-	FP_FIND_FILE(libmico${MICOVERSION}${SHLIB_SUFFIX},$MICODIR $MICOSHAREDDIR $with_mico $more_libs $base_libs $base_dirs,lib,mico_lib)
+	FP_FIND_FILE(libmico${MICOVERSION}${SHLIB_SUFFIX},
+		$MICODIR $MICOSHAREDDIR $with_mico $more_libs $base_libs $base_dirs,
+		lib, mico_lib)
 	if test "x$mico_lib_dir" = "x" ; then
 		AC_MSG_RESULT(not found)
 		AC_MSG_CHECKING(for libmico${MICOVERSION}.a)
-		FP_FIND_FILE(libmico${MICOVERSION}.a,$MICODIR MICOSHAREDDIR $with_mico $more_libs $base_libs $base_dirs,lib,mico_lib)
+		FP_FIND_FILE(libmico${MICOVERSION}.a,
+			$MICODIR MICOSHAREDDIR $with_mico $more_libs $base_libs $base_dirs,
+			lib, mico_lib)
 	fi
 	if test "x$mico_lib_dir" = "x" ; then
 		AC_MSG_RESULT(not found)		
-		AC_MSG_ERROR(use --with-mico to locate libmico${MICOVERSION}.so or libmico${MICOVERSION}.a)
+		AC_MSG_ERROR(
+use --with-mico=<dir> to locate libmico${MICOVERSION}.so or libmico${MICOVERSION}.a
+hint: <dir>/lib will be searched.)
+		# Error exit!!
 	else
 		AC_MSG_RESULT(found in $mico_lib_dir)
 	fi
 
-	case $MICOVERSION in
-	[2.3.[45])]
-		;;
-	*)
-		AC_MSG_CHECKING(for libmicoir${MICOVERSION}${SHLIB_SUFFIX})
-		FP_FIND_FILE(libmicoir${MICOVERSION}${SHLIB_SUFFIX},$mico_lib_dir,lib,micoir_lib)
-		if test "x$micoir_lib_dir" = "x" ; then
-			AC_MSG_RESULT(not found)
-			AC_MSG_CHECKING(for libmicoir${MICOVERSION}.a)
-			FP_FIND_FILE(libmicoir${MICOVERSION}.a,$mico_lib_dir,lib,micoir_lib)
-		fi
-		if test "x$micoir_lib_dir" = "x" ; then
-			AC_MSG_RESULT(not found)		
-		else
-			AC_MSG_RESULT(found in $mico_lib_dir)
-		fi
-		;;
-	esac
-
+	dnl ------------------------------------------------------------
+	dnl  Check whether we must use MiniSTL
+	dnl ------------------------------------------------------------
 	AC_MSG_CHECKING(whether we must use MiniSTL)
 	cat > conftest.c <<EOF
 #include <CORBA.h>
@@ -518,14 +570,27 @@ EOF
 	if test "x$have_mini_stl" = "xyes" ; then
 		CPPFLAGS="$CPPFLAGS -I$CORBA_h_dir/ministl"
 	fi
+
+	dnl ------------------------------------------------------------
+	dnl  Check mico-ld
+	dnl ------------------------------------------------------------
 	AC_MSG_CHECKING(for mico-ld)
-	FP_FIND_FILE(mico-ld,$MICODIR $MICOSHAREDDIR $with_mico $base_bins $base_dirs,bin)
+	FP_FIND_FILE(mico-ld,
+		$MICODIR $MICOSHAREDDIR $with_mico $base_bins $base_dirs,
+		bin)
 	if test "x$mico_ld" = "x" ; then
 		AC_MSG_RESULT(not found)
-		AC_MSG_ERROR(use --with-mico to locate mico-ld)
+		AC_MSG_ERROR(
+use --with-mico=<dir> to locate mico-ld.
+hint: <dir>/bin will be searched.)
+		# Error exit!!
 	else
 		AC_MSG_RESULT($mico_ld)
 	fi
+
+	dnl ------------------------------------------------------------
+	dnl  Check MICO dependencies
+	dnl ------------------------------------------------------------
 	AC_MSG_CHECKING(MICO dependencies)
 	micodeps=
 	for item in `grep -- -l $mico_ld | tr '"' ' '` ; do # "
@@ -535,37 +600,28 @@ EOF
 	done
 	AC_MSG_RESULT($micodeps)
 
+	dnl ------------------------------------------------------------
+	dnl  Check MICO idl
+	dnl ------------------------------------------------------------
 	AC_MSG_CHECKING(for idl)
-	FP_FIND_FILE(idl,$MICODIR $MICOSHAREDDIR $with_mico $base_bins $base_dirs,bin)
+	FP_FIND_FILE(idl,
+		$MICODIR $MICOSHAREDDIR $with_mico $base_bins $base_dirs,
+		bin)
 	if test "x$idl" = "x" ; then
 		AC_MSG_RESULT(not found)
-		AC_MSG_ERROR(use --with-mico to locate idl)
+		AC_MSG_ERROR(
+use --with-mico=<dir> to locate idl.
+hint: <dir>/bin will be searched.)
+		# Error exit!!
 	else
 		AC_MSG_RESULT($idl)
-
-	fi
-
-	AC_MSG_CHECKING(for ird)
-	FP_FIND_FILE(ird,$MICODIR $MICOSHAREDDIR $with_mico $base_bins $base_dirs,bin)
-	if test "x$ird" = "x" ; then
-		AC_MSG_RESULT(not found)
-		AC_MSG_ERROR(use --with-mico to locate ird)
-	else
-		AC_MSG_RESULT($ird)
 	fi
 
 	dnl ------------------------------------------------------------
 	dnl  Mico setup complete
 	dnl ------------------------------------------------------------
-	if test "x$GXX" = "xyes" ; then
-		CXXFLAGS="-ftemplate-depth-42 $CXXFLAGS"
-	fi
 	IDLC=$idl
 	IDL_FLAGS="--c++-skel --poa --no-boa"
-	IFRFEED="$idl --no-codegen-c++ --feed-ir --feed-included-defs"
-	IFRSERVER="$ird"
-	# Compiler/Linker options
-	# CPPFLAGS="$CPPFLAGS -I$CORBA_h_dir"
 	CXXFLAGS="$CXXFLAGS -I$CORBA_h_dir"
 	LDFLAGS="$LDFLAGS -L$mico_lib_dir"
 	LIBS="$LIBS -lmico$MICOVERSION $micodeps"
@@ -586,7 +642,7 @@ dnl end of mico test
 dnl ------------------------------------------------------------
 
 
-dnl ------------------------------------------------------------
+dnl ============================================================
 dnl Check ORBacus setup
 dnl
 dnl 1. check OB/CORBA.h for ORBacus
@@ -595,7 +651,7 @@ dnl 3. check ORBacus library "libOB.so, libJTC.so"
 dnl 4. check ORBacus idl compiler
 dnl 5. check ORBacus irserv
 dnl 4. set IDL compile options, CPPFLAGS, LDFLAGS, LIBS etc...
-dnl ------------------------------------------------------------
+dnl ============================================================
 have_orbacus=no
 
 if test "x$orb_to_use" = "xORBacus" ; then
@@ -815,7 +871,7 @@ if test "x$orb_to_use" = "x" && test "x$have_orbix" = "xyes" ; then
 fi
 
 
-dnl ------------------------------------------------------------
+dnl ============================================================
 dnl TAO setup
 dnl
 dnl 1. check tao/corba.h for TAO
@@ -823,7 +879,7 @@ dnl 2. check TAO library "libTAO.so"
 dnl 3. check TAO idl compiler "tao_idl"
 dnl 4. check TAO version using tao_idl
 dnl 5. set IDL compile options, CPPFLAGS, LDFLAGS, LIBS etc...
-dnl ------------------------------------------------------------
+dnl ============================================================
 have_tao=no
 
 if test "x$orb_to_use" = "xTAO" ; then
@@ -900,11 +956,10 @@ if test "x$have_tao" = "xyes" ; then
 	dnl  TAO setup complete
 	dnl ------------------------------------------------------------
 	IDLC=$tao_idl
-	IDL_FLAGS="-DTAO_IDL -Ge 1 -I/usr/local/include -I/usr/local/include/tao $tao_include"
+	IDL_FLAGS="-DTAO_IDL -Ge 1 $tao_include"
 	COSNAMES=$Naming_Service
-	dnl  Compiler/Linker options
-	dnl  CPPFLAGS="$CPPFLAGS -I$tao_corba_hh_dir"
-	CXXFLAGS="$CXXFLAGS -I$tao_corba_hh_dir"
+	CPPFLAGS="$CPPFLAGS $tao_include"
+	CXXFLAGS="$CXXFLAGS $tao_include"
 	LDFLAGS="$LDFLAGS -L$libTAO_so_dir"
 	LIBS="$LIBS -lTAO -lTAO_CosNaming -lTAO_DynamicAny -lTAO_DynamicInterface"
 	LDSOLIBS="$LDSOLIBS -lTAO -lTAO_CosNaming -lTAO_DynamicAny -lTAO_DynamicInterface"
@@ -919,7 +974,7 @@ dnl end of TAO setup
 dnl ------------------------------------------------------------
 
 
-dnl ------------------------------------------------------------
+dnl ============================================================
 dnl omniORB setup
 dnl
 dnl 1. check omniORB4/CORBA.h for omniORB
@@ -927,7 +982,7 @@ dnl 2. check omniORB library "libomniORB4.so"
 dnl 3. check omniORB idl compiler "omniidl"
 dnl 4. check omniORB version using libomniORB4.so
 dnl 5. set IDL compile options, CPPFLAGS, LDFLAGS, LIBS etc...
-dnl ------------------------------------------------------------
+dnl ============================================================
 have_omniorb=no
 
 if test "x$orb_to_use" = "xomniORB" ; then
@@ -1003,11 +1058,11 @@ if test "x$have_omniorb" = "xyes" ; then
 	dnl  omniORB setup complete
 	dnl ------------------------------------------------------------
 	IDLC=$omniidl	
-	IDL_FLAGS="-bcxx -Wba -nf"
+	IDL_FLAGS="-bcxx -Wba -nf -I/usr/local/share/omniORB/idl/ -I/usr/local/share/omniORB/idl/COS"
 	COSNAMES=$omniNames
 	dnl  Compiler/Linker options
-	CPPFLAGS="$CPPFLAGS -I$omniORB4_CORBA_h_dir"
-	CXXFLAGS="$CXXFLAGS -I$omniORB4_CORBA_h_dir"
+	CPPFLAGS="$CPPFLAGS -I$omniORB4_CORBA_h_dir -I/usr/local/include/COS/"
+	CXXFLAGS="$CXXFLAGS -I$omniORB4_CORBA_h_dir -I/usr/local/include/COS/"
 	LDFLAGS="$LDFLAGS -L$libomniORB4_so_dir"
 	LIBS="$LIBS -lomniORB4 -lomnithread -lomniDynamic4"
 	LDSOLIBS="$LDSOLIBS -lomniORB4 -lomnithread -lomniDynamic4"
@@ -1020,6 +1075,85 @@ if test "x$orb_to_use" = "x" && test "x$have_omniorb" = "xyes" ; then
 fi
 
 dnl end of omniORB setup
+dnl------------------------------------------------------------
+
+dnl ============================================================
+dnl ORBit2 setup
+dnl
+dnl 1. check omniORB4/CORBA.h for omniORB
+dnl 2. check omniORB library "libomniORB4.so"
+dnl 3. check omniORB idl compiler "omniidl"
+dnl 4. check omniORB version using libomniORB4.so
+dnl 5. set IDL compile options, CPPFLAGS, LDFLAGS, LIBS etc...
+dnl ============================================================
+have_orbit2=no
+
+if test "x$orb_to_use" = "xORBit2" ; then
+	dnl ------------------------------------------------------------
+	dnl  find ORBit2's orbit2-config script and check version
+	dnl ------------------------------------------------------------
+	AC_MSG_CHECKING(for orbit2-config)
+	orbit2_version=`orbit2-config --version | sed -e 's/ORBit2 //g'`
+	if test "x$orbit2_version" = "x" ; then
+		AC_MSG_RESULT(not found)
+	else
+		AC_MSG_RESULT(found. ORBit2 version $orbit2_version.)
+		have_orbit2=yes
+		orbit2_prefix=`orbit2-config --prefix`
+		orbit2_exec_prefix=`orbit2-config --exec-prefix`
+		orbit2_libs=`orbit2-config --libs --use-service=name`
+		orbit2_cflags=`orbit2-config --cflags --use-service=name`
+	fi
+fi
+	
+
+if test "x$have_orbit2" = "xyes" ; then
+	dnl ------------------------------------------------------------
+	dnl  Find libORBit-2-cpp.so
+	dnl ------------------------------------------------------------
+	AC_MSG_CHECKING(for libORBit-2-cpp.so)
+	dnl  libORBit-2-cpp.so -> $libORBit_2_so $libORBit_2_cpp_so_dir
+	FP_FIND_FILE(libORBit-2-cpp.so,$with_orbit2 $orbit2_prefix $more_libs $base_libs $base_dirs,lib cxx/lib)
+	if test "x$libORBit_2_cpp_so_dir" = "x" ; then
+		AC_MSG_RESULT(not found)
+		AC_MSG_ERROR(use --with-orbit2=dir to locate <dir>/lib/libORBit-2-cpp.so)
+	else
+		AC_MSG_RESULT(found in $libORBit_2_cpp_so_dir)
+	fi
+
+	dnl ------------------------------------------------------------
+	dnl  Find orbit-idl-2
+	dnl ------------------------------------------------------------
+	AC_MSG_CHECKING(for orbit-idl-2)
+	dnl  orbit-id_2 -> $orbit_idl_2 $orbit_idl_2_dir
+	FP_FIND_FILE(orbit-idl-2,$with_orbit2 $orbit2_exec_prefix $more_libs $base_dirs,bin)
+	if test "x$orbit_idl_2" = "x" ; then
+		AC_MSG_RESULT(not found)
+		AC_MSG_ERROR(use --with-orbit2=dir to locate bin prefix. ex. <dir>/bin/orbit-idl-2)
+	else
+		AC_MSG_RESULT(found. $orbit_idl_2)
+	fi
+
+	dnl ------------------------------------------------------------
+	dnl  omniORB setup complete
+	dnl ------------------------------------------------------------
+	IDLC=$orbit_idl_2	
+	IDL_FLAGS="--lang cpp -DORBIT2_IDL"
+	COSNAMES=
+	dnl  Compiler/Linker options
+	CPPFLAGS="$CPPFLAGS $orbit2_cflags -I$orbit2_prefix/include/orbitcpp-2.0"
+	CXXFLAGS="$CXXFLAGS $orbit2_cflags -I$orbit2_prefix/include/orbitcpp-2.0"
+	LDFLAGS="$LDFLAGS $orbit2_libs"
+	LIBS="$LIBS $orbit2_libs -lORBit-2-cpp -lORBitCosNaming-2-cpp"
+	LDSOLIBS="$LDSOLIBS $orbit2_libs -lORBit-2-cpp -lORBitCosNaming-2-cpp"
+	AC_DEFINE([ORB_IS_ORBIT2], [TRUE], [ORB is ORBit2])
+fi
+
+if test "x$orb_to_use" = "x" && test "x$have_orbit2" = "xyes" ; then
+	orb_to_use=ORBit2
+fi
+
+dnl end of ORBit2 setup
 dnl------------------------------------------------------------
 
 
@@ -1043,6 +1177,9 @@ TAO)
 omniORB)
         AC_MSG_RESULT([omniORB, version $omniorb_version])
         ;;
+ORBit2)
+        AC_MSG_RESULT([ORBit2, version $orbit2_version])
+        ;;
 generic)
         AC_MSG_RESULT([generic ORB, unknown version])
         ORB_SOURCES="event-corba.cc"
@@ -1062,6 +1199,7 @@ AM_CONDITIONAL(ORB_IS_ORBIX, test x$orb_to_use = xOrbix)
 AM_CONDITIONAL(ORB_IS_ORBACUS, test x$orb_to_use = xORBacus)
 AM_CONDITIONAL(ORB_IS_OMNIORB, test x$orb_to_use = xomniORB)
 AM_CONDITIONAL(ORB_IS_MICO, test x$orb_to_use = xMICO)
+AM_CONDITIONAL(ORB_IS_ORBIT2, test x$orb_to_use = xORBit2)
 
 
 dnl ------------------------------------------------------------
