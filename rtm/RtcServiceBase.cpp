@@ -2,7 +2,7 @@
 /*!
  * @file RtcServiceBase.cpp
  * @brief RT component service classes
- * @date $Date: 2005-09-07 05:05:14 $
+ * @date $Date: 2006-07-18 03:01:22 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
  * Copyright (C) 2005
@@ -12,12 +12,15 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: RtcServiceBase.cpp,v 1.1 2005-09-07 05:05:14 n-ando Exp $
+ * $Id: RtcServiceBase.cpp,v 1.2 2006-07-18 03:01:22 n-ando Exp $
  *
  */
 
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.1  2005/09/07 05:05:14  n-ando
+ * RTComponent's service management feature was added.
+ *
  *
  */
 
@@ -141,7 +144,7 @@ namespace RTM {
   void RtcServiceAdmin::registerService(RtcServiceBase& service,
 										RtcServiceProfile& profile)
   {
-	ACE_Guard<ACE_Thread_Mutex> guard(m_Mutex);
+	//	ACE_Guard<ACE_Thread_Mutex> guard(m_Mutex);
 	
 	if (isRegistered(profile.getName()))
 	  {
@@ -170,7 +173,7 @@ namespace RTM {
    */
   void RtcServiceAdmin::deactivateService(const char* name)
   {
-	ACE_Guard<ACE_Thread_Mutex> guard(m_Mutex);
+	//	ACE_Guard<ACE_Thread_Mutex> guard(m_Mutex);
 
 	Services_it it;
 	
@@ -199,7 +202,7 @@ namespace RTM {
   void RtcServiceAdmin::deactivateServices()
   {
 
-	ACE_Guard<ACE_Thread_Mutex> guard(m_Mutex);
+	//	ACE_Guard<ACE_Thread_Mutex> guard(m_Mutex);
 	if (m_Services.empty()) return;
 
 	Services_it it(m_Services.begin());
@@ -222,7 +225,7 @@ namespace RTM {
    */
   bool RtcServiceAdmin::isRegistered(const char* name)
   {
-	ACE_Guard<ACE_Thread_Mutex> guard(m_Mutex);
+	//	ACE_Guard<ACE_Thread_Mutex> guard(m_Mutex);
 
 	Services_it it;
 	
@@ -246,7 +249,7 @@ namespace RTM {
    */
   RTCService_ptr RtcServiceAdmin::getService(const char* name)
   {
-	ACE_Guard<ACE_Thread_Mutex> guard(m_Mutex);
+	//	ACE_Guard<ACE_Thread_Mutex> guard(m_Mutex);
 
 	Services_it it;
 
@@ -270,7 +273,7 @@ namespace RTM {
    */
   RTCServiceProfile* RtcServiceAdmin::getServiceProfile(const char* name)
   {
-	ACE_Guard<ACE_Thread_Mutex> guard(m_Mutex);
+	//	ACE_Guard<ACE_Thread_Mutex> guard(m_Mutex);
 
 	Services_it it;
 	
@@ -295,7 +298,7 @@ namespace RTM {
    */
   RTCServiceProfileList* RtcServiceAdmin::getServiceProfileList()
   {
-	ACE_Guard<ACE_Thread_Mutex> guard(m_Mutex);
+	//	ACE_Guard<ACE_Thread_Mutex> guard(m_Mutex);
 
 	RTM::RTCServiceProfileList_var list(new RTM::RTCServiceProfileList());
 	list->length(m_Services.size());
