@@ -2,7 +2,7 @@
 /*!
  * @file RtcConfig.cpp
  * @brief RT component configuration handle class
- * @date $Date: 2005-05-12 09:06:18 $
+ * @date $Date: 2005-05-16 06:04:49 $
  *
  * Copyright (C) 2003-2005
  *     Task-intelligence Research Group,
@@ -11,27 +11,32 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: RtcConfig.cpp,v 1.1.1.1 2005-05-12 09:06:18 n-ando Exp $
+ * $Id: RtcConfig.cpp,v 1.2 2005-05-16 06:04:49 n-ando Exp $
  *
  */
 
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.1.1.1  2005/05/12 09:06:18  n-ando
+ * Public release.
+ *
  *
  */
 
-// for getpid()
-#include <sys/utsname.h>
-#include <sys/types.h>
-// for uname()
-#include <unistd.h>
+// standard lib
 #include <fstream>
 #include <iostream>
 #include <algorithm>
-#include <boost/regex.hpp>
-#include "rtm/RtcConfig.h"
+
+// ACE/boost. The order is important!!
 #include <ace/Get_Opt.h>
+#include <boost/regex.hpp>
+#include <ace/OS.h>
+
+// RTM
+#include "rtm/RtcConfig.h"
 #include "rtm/RtcSystemLogger.h"
+
 
 namespace RTM 
 {
@@ -226,10 +231,10 @@ bool RtcConfig::parseConfigFile()
 bool RtcConfig::collectSysInfo()
 { 
   //
-  // ACE_OS::uname 使える？
+  // Get system information by using ACE_OS::uname (UNIX/Windows)
   // 
-  struct utsname sysinfo;
-  if (uname(&sysinfo) != 0) {
+  ACE_utsname  sysinfo;
+  if (ACE_OS::uname(&sysinfo) != 0) {
 	return false;
   }
   m_OSname    = string(sysinfo.sysname);
@@ -238,8 +243,10 @@ bool RtcConfig::collectSysInfo()
   m_OSversion = string(sysinfo.version);
   m_Arch      = string(sysinfo.machine);
 
-  // Getting current proccess pid
-  pid_t pid = getpid();
+  //
+  // Getting current proccess pid by using ACE_OS::getpid() (UNIX/Windows)
+  //
+  pid_t pid = ACE_OS::getpid();
   
   char pidc[8];
   sprintf(pidc, "%d", pid);

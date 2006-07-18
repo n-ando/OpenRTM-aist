@@ -2,9 +2,16 @@
 ##------------------------------------------------------------
 ## Makefile.am for libRTCSkel
 ##
-## $Id: Makefile.am,v 1.1.1.1 2005-05-12 09:06:18 n-ando Exp $
+## $Id: Makefile.am,v 1.3 2005-09-07 05:11:45 n-ando Exp $
 ##
 ## $Log: not supported by cvs2svn $
+## Revision 1.2  2005/05/27 07:40:46  n-ando
+## - InPort/OutPort interface was changed.
+##   InPort/OutPort share SubscriptionProfile structure.
+##
+## Revision 1.1.1.1  2005/05/12 09:06:18  n-ando
+## Public release.
+##
 ##------------------------------------------------------------
 
 AUTOMAKE_OPTIONS = 1.4
@@ -19,14 +26,17 @@ AM_LDFLAGS=-L$(top_builddir) -L$(top_builddir)/rtm -L$(top_builddir)/rtm/idl
 SUFFIXES = .idl Skel.cpp Stub.cpp Stub.o Skel.o
 
 # RTM idl sources
-IDL_SOURCES =       \
-	RTMBase.idl     \
-	RTCDataType.idl \
-	RTCInPort.idl   \
-	RTCOutPort.idl  \
-	RTComponent.idl \
-	RTCProfile.idl  \
-	RTCBase.idl     \
+IDL_SOURCES =       	\
+	RTMBase.idl     	\
+	RTCDataType.idl 	\
+	RTCSubscription.idl \
+	RTCPortBase.idl   	\
+	RTCInPort.idl   	\
+	RTCOutPort.idl  	\
+	RTCService.idl      \
+	RTComponent.idl 	\
+	RTCProfile.idl  	\
+	RTCBase.idl     	\
 	RTCManager.idl
 
 if ORB_IS_TAO

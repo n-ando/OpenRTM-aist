@@ -2,7 +2,7 @@
 /*!
  * @file RtcNaming.cpp
  * @brief RT component naming class
- * @date $Date: 2005-05-12 09:06:18 $
+ * @date $Date: 2005-05-16 06:28:35 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
  * Copyright (C) 2003-2005
@@ -12,14 +12,21 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: RtcNaming.cpp,v 1.1.1.1 2005-05-12 09:06:18 n-ando Exp $
+ * $Id: RtcNaming.cpp,v 1.2 2005-05-16 06:28:35 n-ando Exp $
  *
  */
 
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.1.1.1  2005/05/12 09:06:18  n-ando
+ * Public release.
+ *
  *
  */
+
+#ifdef WIN32
+#define ACE_HAS_WINSOCK2 0
+#endif //WIN32
 
 #include <iostream>
 #include <boost/regex.hpp>
@@ -59,6 +66,7 @@ namespace RTM
       }
     catch(CORBA::ORB::InvalidName& ex) 
       {
+		ex;
 		// This should not happen!
 		cerr << "Service required is invalid [does not exist]." << endl;
 		return false;
@@ -87,10 +95,10 @@ namespace RTM
     // Create naming context
     CosNaming::Name contextName;
     contextName.length(1);
-	//    contextName[0].id   = CORBA::string_dup(id.c_str());
-	//    contextName[0].kind = CORBA::string_dup(kind.c_str());
-    contextName[0].id   = id.c_str();
-    contextName[0].kind = kind.c_str();
+	contextName[0].id   = CORBA::string_dup(id.c_str());
+	contextName[0].kind = CORBA::string_dup(kind.c_str());
+	//    contextName[0].id   = id.c_str();
+	//    contextName[0].kind = kind.c_str();
 	
     CosNaming::NamingContextExt_var testContext;
 	CORBA::Object_var obj;
@@ -110,6 +118,7 @@ namespace RTM
       }
     catch (CosNaming::NamingContext::AlreadyBound& ex)
       {
+		ex;
 		// If the context already exists, this exception will be raised.
 		// In this case, just resolve the name and assign testContext
 		// to the object returned:
@@ -544,7 +553,7 @@ namespace RTM
     CosNaming::BindingIterator_var bi;
     context->list(m_bindListNum, bl, bi);
 	
-    for (int i = 0; i < bl->length(); i++)
+    for (unsigned int i = 0; i < bl->length(); i++)
       {
 		// Binding name (id, kind)
 		std::string pId   = (const char*) bl[i].binding_name[0].id;
@@ -575,17 +584,20 @@ namespace RTM
 			  }
 			catch (CosNaming::NamingContext::NotFound e)
 			  {
+				e;
 				cerr << "Exception cought. Unbinding Naming Context. ";
 				cerr << "Not Found: " << bl[i].binding_name[0].id;
 				cerr << "|" << bl[i].binding_name[0].kind << endl;
 			  }
 			catch (CosNaming::NamingContext::CannotProceed e)
 			  {
+				e;
 				cerr << "Exception cought. Unbinding Naming Context. ";
 				cerr << "Cannot Proceed." << endl;
 			  }
 			catch (CosNaming::NamingContext::InvalidName e)
 			  {
+				e;
 				cerr << "Exception cought. Unbinding Naming Context. ";
 				cerr << "Invalid Name: " << bl[i].binding_name[0].id;
 				cerr << "|" << bl[i].binding_name[0].kind << endl;
@@ -769,6 +781,7 @@ namespace RTM
 		  }
 		catch (const CosNaming::NamingContext::AlreadyBound& e)
 		  {
+			e;
 			CORBA::Object_var obj = context->resolve(name);
 			next_cxt = CosNaming::NamingContextExt::_narrow(obj);
 			if (CORBA::is_nil(next_cxt)) 
@@ -882,7 +895,7 @@ namespace RTM
 		node = path.substr(0, pos);
 		remain = path.substr(pos + 1);
       }
-
+	return true;
   }
   
   

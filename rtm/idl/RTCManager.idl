@@ -2,7 +2,7 @@
 /*!
  * @file RTCManager.idl
  * @brief RTCManager interface
- * @date $Date: 2005-05-12 09:06:18 $
+ * @date $Date: 2005-09-07 05:10:56 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
  * Copyright (C) 2003-2005
@@ -12,11 +12,14 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: RTCManager.idl,v 1.1.1.1 2005-05-12 09:06:18 n-ando Exp $
+ * $Id: RTCManager.idl,v 1.2 2005-09-07 05:10:56 n-ando Exp $
  */
 
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.1.1.1  2005/05/12 09:06:18  n-ando
+ * Public release.
+ *
  *
  */
 
@@ -31,8 +34,6 @@
 
 module RTM
 {
-  typedef sequence<string> ComponentFactoryList;
-
   struct RTCFactory
   {
 	string name;

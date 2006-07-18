@@ -2,7 +2,7 @@
 /*!
  * @file RtcSubscriber.cpp
  * @brief Subscriber active object class runs on Output port
- * @date $Date: 2005-05-12 09:06:18 $
+ * @date $Date: 2005-05-27 07:36:44 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
  * Copyright (C) 2003-2005
@@ -12,40 +12,143 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: RtcSubscriber.cpp,v 1.1.1.1 2005-05-12 09:06:18 n-ando Exp $
+ * $Id: RtcSubscriber.cpp,v 1.3 2005-05-27 07:36:44 n-ando Exp $
  *
  */
 
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.2  2005/05/16 06:38:00  n-ando
+ * - Some bugs were fixed.
+ *
+ * Revision 1.1.1.1  2005/05/12 09:06:18  n-ando
+ * Public release.
+ *
  *
  */
 
 #include <ace/ACE.h>
-#include "RtcSubscriber.h"
+#include "rtm/RtcSubscriber.h"
+#include "rtm/RtcOutPortBase.h"
 
 namespace RTM
 {
 
   using namespace std;
 
-  //------------------------------------------------------------
-  // SubscriberBase
-  //------------------------------------------------------------
-  SubscriberBase::SubscriberBase(OutPortBase* parent, InPort_ptr inport,
-				   const SubscriptionID id, SubscriberProfile profile)
-	: m_pParent(parent), m_pInPort(InPort::_duplicate(inport)),
-	  m_Id(id), m_Profile(profile)
-	  {
-		ACE_TRACE("SubscriberBase::SubscriberBase()");
-		open(0);
-	  };
 
+  //============================================================
+  // SubsProfileBase
+  //============================================================
+  SubsProfileBase::SubsProfileBase(SubscriptionProfile& subs)
+	: m_Profile(subs)
+  {
+  }
+  
+  SubscriptionProfile SubsProfileBase::getSubsProfile()
+  {
+	return m_Profile;
+  }
+  
+  void SubsProfileBase::setSubsProfile(SubscriptionProfile& subs)
+  {
+	m_Profile = subs;
+  }
+  
+  SubscriptionType SubsProfileBase::getType()
+  {
+	return m_Profile.subscription_type;
+  }
+
+  bool SubsProfileBase::setType(SubscriptionType type)
+  {
+	if (type < OPS_ONCE || type > OPS_TRIGGERRED_PERIODIC)
+	  {
+		return false;
+	  }
+	m_Profile.subscription_type = type;
+	return true;
+  }
+  
+  SubscriptionID SubsProfileBase::getId()
+  {
+	return m_Profile.id;
+  }
+
+  bool SubsProfileBase::setId(const char* id)
+  {
+	m_Profile.id = CORBA::string_dup(id);
+	return true;
+  }
+
+  bool SubsProfileBase::setId(std::string id)
+  {
+	m_Profile.id = CORBA::string_dup(id.c_str());
+	return true;
+  }
+  
+  InPort_ptr SubsProfileBase::getInPort()
+  {
+	return m_Profile.in_port;
+  }
+
+  bool SubsProfileBase::setInPort(InPort_ptr in_port)
+  {
+	if (CORBA::is_nil(in_port))
+	  {
+		return false;
+	  }
+	m_Profile.in_port = InPort::_duplicate(in_port);
+	return true;
+  }
+  
+  OutPort_ptr SubsProfileBase::getOutPort()
+  {
+	return m_Profile.out_port;
+  }
+
+  bool SubsProfileBase::setOutPort(OutPort_ptr out_port)
+  {
+	if (CORBA::is_nil(out_port))
+	  {
+		return false;
+	  }
+	m_Profile.out_port = OutPort::_duplicate(out_port);
+	return true;
+  }
+  
+  bool SubsProfileBase::getEventBase()
+  {
+	return m_Profile.event_base;
+  }
+
+  bool SubsProfileBase::setEventBase(bool event_base)
+  {
+	m_Profile.event_base = event_base;
+	return true;
+  }
+  
+
+
+
+  //============================================================
+  // SubscriberBase
+  //============================================================
+  SubscriberBase::SubscriberBase(OutPortBase* parent, 
+								 SubscriptionProfile& profile)
+	: m_pParent(parent), SubsProfileBase(profile) 
+  {
+	ACE_TRACE("SubscriberBase::SubscriberBase()");
+	//	open(0);
+  };
+  
   SubscriberBase::~SubscriberBase()
   {
 	ACE_TRACE("SubscriberBase::~SubscriberBase()");
-
-	this->release();
+	if (is_running())
+	  {
+		this->stop_thread();
+	  }
   }
 
   int SubscriberBase::open(void *args)
@@ -59,7 +162,6 @@ namespace RTM
 
   int SubscriberBase::close(unsigned long flags)
   {
-	CORBA::release(m_pInPort);
 	delete this;
 	return 0;
   }
@@ -74,7 +176,7 @@ namespace RTM
 		this->stop_thread();
 	  }
   }
-
+  /*
   SubscriberProfile SubscriberBase::get_profile()
   {
 	ACE_TRACE("SubscriberBase::get_profile()");
@@ -93,7 +195,7 @@ namespace RTM
 	ACE_TRACE("SubscriberBase::get_id()");
 	return m_Id;
   }
-  
+  */
   bool SubscriberBase::is_running()
   {
 	ACE_TRACE("SubscriberBase::is_running()");
@@ -112,10 +214,9 @@ namespace RTM
   //------------------------------------------------------------
   // SubscriberOnce
   //------------------------------------------------------------
-  SubscriberOnce::SubscriberOnce(OutPortBase* parent, InPort_ptr inport,
-								 const SubscriptionID id,
-								 SubscriberProfile profile)
-	: SubscriberBase(parent, inport, id, profile)
+  SubscriberOnce::SubscriberOnce(RTM::OutPortBase* parent,
+								 SubscriptionProfile& profile)
+	: SubscriberBase(parent, profile)
   {
 	ACE_TRACE("SubscriberOnce::SubscriberOnce()");
   }
@@ -155,6 +256,8 @@ namespace RTM
 	  }
 	
 	m_NewData.m_Mutex.release();
+
+	return 0;
   }
   
 
@@ -162,11 +265,9 @@ namespace RTM
   //------------------------------------------------------------
   // SubscriberPeriodic
   //------------------------------------------------------------
-  SubscriberPeriodic::SubscriberPeriodic(OutPortBase* parent,
-										 InPort_ptr inport,
-										 const SubscriptionID id,
-										 SubscriberProfile profile)
-	: SubscriberBase(parent, inport, id, profile)
+  SubscriberPeriodic::SubscriberPeriodic(RTM::OutPortBase* parent,
+										 SubscriptionProfile& profile)
+	: SubscriberBase(parent, profile)
   {
 	ACE_TRACE("SubscriberPeriodic::SubscriberPeriodic()");
   }
@@ -191,7 +292,7 @@ namespace RTM
 #endif // ARTLinux
 	while (m_Running)
 	  {
-		sleep(1);
+		// sleep(1);
 		//		m_pParent->push(m_InPort, m_Id);
 		
 		// sleep() is needed
@@ -202,16 +303,16 @@ namespace RTM
 #endif //ARTLinux
 		
 	  }
+	return 0;
   }
 
 
   //------------------------------------------------------------
   // SubscriberNew
   //------------------------------------------------------------
-  SubscriberNew::SubscriberNew(OutPortBase* parent, InPort_ptr inport,
-								const SubscriptionID id,
-							   SubscriberProfile profile)
-	: SubscriberBase(parent, inport, id, profile)
+  SubscriberNew::SubscriberNew(RTM::OutPortBase* parent,
+							   SubscriptionProfile& profile)
+	: SubscriberBase(parent, profile)
   {
 	ACE_TRACE("SubscriberNew::SubscriberNew()");
   }
@@ -252,7 +353,8 @@ namespace RTM
 		
 		if (m_NewData.m_Updated)
 		  {
-			if (m_pParent->push(m_pInPort, m_Id) != RTM_OK) 
+			if (m_pParent->push(getInPort(),
+								std::string(getId())) != RTM_OK) 
 			  {
 				;
 			  }
@@ -272,11 +374,9 @@ namespace RTM
   //------------------------------------------------------------
   // SubscriberTriggerd
   //------------------------------------------------------------
-  SubscriberTriggerd::SubscriberTriggerd(OutPortBase* parent,
-										 InPort_ptr inport,
-										 const SubscriptionID id,
-										 SubscriberProfile profile)
-	: SubscriberBase(parent, inport, id, profile)
+  SubscriberTriggerd::SubscriberTriggerd(RTM::OutPortBase* parent,
+										 SubscriptionProfile& profile)
+	: SubscriberBase(parent, profile)
   {
 	ACE_TRACE("SubscriberTriggerd::SubscriberTriggerd()");
 
@@ -286,11 +386,9 @@ namespace RTM
   //------------------------------------------------------------
   // SubscriberNewPeriodic
   //------------------------------------------------------------
-  SubscriberNewPeriodic::SubscriberNewPeriodic(OutPortBase* parent,
-											   InPort_ptr inport,
-											   const SubscriptionID id,
-											   SubscriberProfile profile)
-	: SubscriberBase(parent, inport, id, profile)
+  SubscriberNewPeriodic::SubscriberNewPeriodic(RTM::OutPortBase* parent,
+											   SubscriptionProfile& profile)
+	: SubscriberBase(parent, profile)
   {
 	ACE_TRACE("SubscriberNewPeriodic::SubscriberNewPeriodic()");
   }
@@ -299,11 +397,9 @@ namespace RTM
   //------------------------------------------------------------
   // SubscriberPeriodicNew
   //------------------------------------------------------------
-  SubscriberPeriodicNew::SubscriberPeriodicNew(OutPortBase* parent,
-											   InPort_ptr inport,
-											   const SubscriptionID id,
-											   SubscriberProfile profile)
-	: SubscriberBase(parent, inport, id, profile)
+  SubscriberPeriodicNew::SubscriberPeriodicNew(RTM::OutPortBase* parent,
+											   SubscriptionProfile& profile)
+	: SubscriberBase(parent, profile)
   {
 	ACE_TRACE("SubscriberPeriodicNew::SubscriberPeriodicNew()");
 
@@ -315,11 +411,9 @@ namespace RTM
   // SubscriberPeriodicTriggerd
   //------------------------------------------------------------
   SubscriberPeriodicTriggerd::
-  SubscriberPeriodicTriggerd(OutPortBase* parent,
-							 InPort_ptr inport,
-							 const SubscriptionID id,
-							 SubscriberProfile profile)
-	: SubscriberBase(parent, inport, id, profile)
+  SubscriberPeriodicTriggerd(RTM::OutPortBase* parent,
+							 SubscriptionProfile& profile)
+	: SubscriberBase(parent, profile)
   {
 	ACE_TRACE("SubscriberPeriodicTriggerd::SubscriberPeriodicTriggerd()");
 
@@ -332,11 +426,9 @@ namespace RTM
   //------------------------------------------------------------
 
   SubscriberTriggerdPeriodic::
-  SubscriberTriggerdPeriodic(OutPortBase* parent,
-							 InPort_ptr inport,
-							 const SubscriptionID id,
-							 SubscriberProfile profile)
-	:SubscriberBase(parent, inport, id, profile)
+  SubscriberTriggerdPeriodic(RTM::OutPortBase* parent,
+							 SubscriptionProfile& profile)
+	: SubscriberBase(parent, profile)
   {
 	ACE_TRACE("SubscriberTriggerdPeriodic::SubscriberTriggerdPeriodic()");
   }

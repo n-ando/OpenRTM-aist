@@ -2,7 +2,7 @@
 /*!
  * @file RtcSystemLogger.h
  * @brief RT component logger class
- * @date $Date: 2005-05-12 09:06:18 $
+ * @date $Date: 2005-05-16 06:40:19 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
  * Copyright (C) 2003-2005
@@ -12,12 +12,15 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: RtcSystemLogger.h,v 1.1.1.1 2005-05-12 09:06:18 n-ando Exp $
+ * $Id: RtcSystemLogger.h,v 1.2 2005-05-16 06:40:19 n-ando Exp $
  *
  */
 
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.1.1.1  2005/05/12 09:06:18  n-ando
+ * Public release.
+ *
  *
  */
 
@@ -41,12 +44,17 @@
 #define NO_LOGGING
 #endif
 
+#ifdef WIN32
+// It's dummy
+#define __restrict
+#endif
+
 namespace RTM
 {
 
 #ifndef NO_LOGGING 
   template <typename _CharT, typename _Traits=std::char_traits<_CharT> >
-  class sync_callback
+  class EXPORTS sync_callback
   {
   public:
 	virtual int operator()(const _CharT* s) = 0;
@@ -72,13 +80,13 @@ namespace RTM
    * @endif
    */
   template <typename _CharT, typename _Traits=std::char_traits<_CharT> >
-  class basic_logbuf
+  class EXPORTS basic_logbuf
 	: public std::basic_filebuf<_CharT, _Traits>
   {
   public:
 	// Types:
-	typedef _CharT                                    std::char_type;
-	typedef _Traits                                   std::traits_type;
+	typedef _CharT                                     char_type;
+	typedef _Traits                                    traits_type;
 	typedef std::basic_filebuf<char_type, traits_type> __filebuf_type;
 
 	/*!
@@ -217,13 +225,13 @@ namespace RTM
    * @endif
    */
   template <typename _CharT, typename _Traits=std::char_traits<_CharT> >
-  class basic_medlogbuf
+  class EXPORTS basic_medlogbuf
 	: public std::basic_streambuf<_CharT, _Traits>
   {
   public:
 	// Types:
-	typedef _CharT                                    std::char_type;
-	typedef _Traits                                   std::traits_type;
+	typedef _CharT                                       char_type;
+	typedef _Traits                                      traits_type;
 	typedef std::basic_streambuf<char_type, traits_type> __streambuf_type;
 	typedef std::basic_filebuf<char_type, traits_type>   __filebuf_type;
 
@@ -358,7 +366,7 @@ namespace RTM
 	 */
 	std::string getFmtDate()
 	{
-	  int maxsize(256);
+	  const int maxsize(256);
 	  char buf[maxsize];
      
 	  /*
@@ -502,13 +510,13 @@ namespace RTM
    * @endif
    */
   template <typename _CharT, typename _Traits=std::char_traits<_CharT> >
-  class basic_dummybuf
+  class EXPORTS basic_dummybuf
 	: public std::basic_streambuf<_CharT, _Traits>
   {
   public:
 	// Types:
-	typedef _CharT                                    std::char_type;
-	typedef _Traits                                   std::traits_type;
+	typedef _CharT                               char_type;
+	typedef _Traits                              traits_type;
 	typedef typename traits_type::int_type       int_type;
 	typedef typename traits_type::pos_type       pos_type;
 	typedef typename traits_type::off_type       off_type;
@@ -560,54 +568,54 @@ namespace RTM
    * @endif
    */
   template <typename _CharT, typename _Traits=std::char_traits<_CharT> >
-  class basic_logstream
+  class EXPORTS basic_logstream
 	: public std::basic_ostream<_CharT, _Traits>
   {
   public:
 	// Loglevel
 	enum
 	  {          // No: Write out messages include the following.
-		SILENT,  // 0: ()
-		ERROR,   // 1: (ERROR)
-		WARN,    // 2: (ERROR, WARN)
-		INFO,    // 3: (ERROR, WARN, INFO)
-		NORMAL,  // 4: (ERROR, WARN, INFO, NORMAL)
-		DEBUG,   // 5: (ERROR, WARN, INFO, NORMAL, DEBUG)
-		TRACE,   // 6: (ERROR, WARN, INFO, NORMAL, DEBUG, TRACE)
-		VERBOSE, // 7: (ERROR, WARN, INFO, NORMAL, DEBUG, TRACE, VERBOSE)
-		PARANOID,// 8: (ERROR, WARN, INFO, NORMAL, DEBUG, TRACE, VERBOSE, PARA)
-		MANDATORY// This level is used for only LogLockLevel
+		RTL_SILENT,  // 0: ()
+		RTL_ERROR,   // 1: (ERROR)
+		RTL_WARN,    // 2: (ERROR, WARN)
+		RTL_INFO,    // 3: (ERROR, WARN, INFO)
+		RTL_NORMAL,  // 4: (ERROR, WARN, INFO, NORMAL)
+		RTL_DEBUG,   // 5: (ERROR, WARN, INFO, NORMAL, DEBUG)
+		RTL_TRACE,   // 6: (ERROR, WARN, INFO, NORMAL, DEBUG, TRACE)
+		RTL_VERBOSE, // 7: (ERROR, WARN, INFO, NORMAL, DEBUG, TRACE, VERBOSE)
+		RTL_PARANOID,// 8: (ERROR, WARN, INFO, NORMAL, DEBUG, TRACE, VERBOSE, PARA)
+		RTL_MANDATORY// This level is used for only LogLockLevel
 	  };
 
 	static int strToLogLevel(std::string lv)
 	{
 	  if (lv == "SILENT")
-		return basic_logstream::SILENT;
+		return basic_logstream::RTL_SILENT;
 	  else if (lv == "ERROR")
-		  return basic_logstream::ERROR;
+		  return basic_logstream::RTL_ERROR;
 	  else if (lv == "WARN")
-		  return basic_logstream::WARN;
+		  return basic_logstream::RTL_WARN;
 	  else if (lv == "INFO")
-		  return basic_logstream::INFO;
+		  return basic_logstream::RTL_INFO;
 	  else if (lv == "NORNAL")
-		  return basic_logstream::NORMAL;
+		  return basic_logstream::RTL_NORMAL;
 	  else if (lv == "DEBUG")
-		  return basic_logstream::DEBUG;
+		  return basic_logstream::RTL_DEBUG;
 	  else if (lv == "TRACE")
-		  return basic_logstream::TRACE;
+		  return basic_logstream::RTL_TRACE;
 	  else if (lv == "VERBOSE")
-		  return basic_logstream::VERBOSE;
+		  return basic_logstream::RTL_VERBOSE;
 	  else if (lv == "PARANOID")
-		  return basic_logstream::PARANOID;
+		  return basic_logstream::RTL_PARANOID;
 	  else if (lv == "MANDATORY")
-		  return basic_logstream::MANDATORY;
+		  return basic_logstream::RTL_MANDATORY;
 	  else
-		return basic_logstream::NORMAL;
+		return basic_logstream::RTL_NORMAL;
 	}
 	
 	// Types:
-	typedef _CharT                                    std::char_type;
-	typedef _Traits                                   std::traits_type;
+	typedef _CharT                                       char_type;
+	typedef _Traits                                      traits_type;
 	typedef basic_logbuf<char_type, traits_type>         __logbuf_type;
 	typedef basic_dummybuf<char_type, traits_type>       __dummybuf_type;
 	typedef basic_logstream<char_type, traits_type>      __logstream_type;
@@ -632,7 +640,7 @@ namespace RTM
 	basic_logstream(__streambuf_type& streambuf)
 	  : __ostream_type(&streambuf),
 		m_DummyStream(new __dummybuf_type()),
-		m_LogLevel(NORMAL), m_LogLock(false)
+		m_LogLevel(RTL_NORMAL), m_LogLock(false)
 	{
 	  this->init(&streambuf);
 	}
@@ -691,7 +699,11 @@ namespace RTM
 	  va_list ap;
 
 	  va_start(ap, fmt);
+#ifdef WIN32
+	  int ret = _vsnprintf(str, LINE_MAX - 1, fmt, ap);
+#else
 	  int ret = vsnprintf(str, LINE_MAX - 1, fmt, ap);
+#endif
 	  va_end(ap);
 	  std::string s(str);
 
@@ -765,14 +777,14 @@ namespace RTM
 
 #else //// NO_LOGGING  
 
-  class RtcSyncCallback
+  class EXPORTS RtcSyncCallback
   {
   public:
 	RtcSyncCallback() {;};
 	virtual int operator()(const char* s) {;};
   };
 
-  class RtcLogbuf
+  class EXPORTS RtcLogbuf
   {
   public:
 	RtcLogbuf() {;};
@@ -781,7 +793,7 @@ namespace RTM
 	void setSyncCallBack(RtcSyncCallback& cb) {;};
   };
 
-  class RtcMedLogbuf
+  class EXPORTS RtcMedLogbuf
   {
   public:
 	RtcMedLogbuf() {;};
@@ -792,7 +804,7 @@ namespace RTM
 	void setSuffix(std::string suffix) {;};
   };
 
-  class RtcLogStream
+  class EXPORTS RtcLogStream
 	: public ostream
   {
   public:
@@ -815,16 +827,24 @@ namespace RTM
 
   // __VA_ARGS__ cannot be used in VC	
 #if 0
-#define RTC_LOG(LV, fmt, ...)										\
+#define RTC_LOG(LV, fmt, ...) \
   rtcout.level(LV) << rtcout.printf(fmt, __VA_ARGS__) << std::endl;
-#define RTC_ERROR(fmt, ...)    RTC_LOG(RtcLogStream::ERROR, fmt, __VA_ARGS__)
-#define RTC_WARN(fmt, ...)     RTC_LOG(RtcLogStream::WARN, fmt, __VA_ARGS__)
-#define RTC_NORMAL(fmt, ...)   RTC_LOG(RtcLogStream::NORMAL, fmt, __VA_ARGS__)
-#define RTC_INFO(fmt, ...)     RTC_LOG(RtcLogStream::INFO, fmt, __VA_ARGS__)
-#define RTC_DEBUG(fmt, ...)    RTC_LOG(RtcLogStream::DEBUG, fmt, __VA_ARGS__)
-#define RTC_TRACE(fmt, ...)    RTC_LOG(RtcLogStream::TRACE, fmt, __VA_ARGS__)
-#define RTC_VERBOSE(fmt, ...)  RTC_LOG(RtcLogStream::VERBOSE, fmt, __VA_ARGS__)
-#define RTC_PARANOID(fmt, ...) RTC_LOG(RtcLogStream::PARANOID, fmt, __VA_ARGS__)
+#define RTC_ERROR(fmt, ...) \
+  RTC_LOG(RtcLogStream::RTL_ERROR, fmt, __VA_ARGS__)
+#define RTC_WARN(fmt, ...) \
+  RTC_LOG(RtcLogStream::RTL_WARN, fmt, __VA_ARGS__)
+#define RTC_NORMAL(fmt, ...) \
+  RTC_LOG(RtcLogStream::RTL_NORMAL, fmt, __VA_ARGS__)
+#define RTC_INFO(fmt, ...) \
+  RTC_LOG(RtcLogStream::RTL_INFO, fmt, __VA_ARGS__)
+#define RTC_DEBUG(fmt, ...) \
+  RTC_LOG(RtcLogStream::RTL_DEBUG, fmt, __VA_ARGS__)
+#define RTC_TRACE(fmt, ...) \
+  RTC_LOG(RtcLogStream::RTL_TRACE, fmt, __VA_ARGS__)
+#define RTC_VERBOSE(fmt, ...) \
+  RTC_LOG(RtcLogStream::RTL_VERBOSE, fmt, __VA_ARGS__)
+#define RTC_PARANOID(fmt, ...) \
+  RTC_LOG(RtcLogStream::RTL_PARANOID, fmt, __VA_ARGS__)
 #endif
 
 #ifndef NO_LOGGING
@@ -844,8 +864,8 @@ namespace RTM
    */
 #define RTC_LOG(LV, fmt)												\
   rtcout.acquire();														\
-	rtcout.level(LV) << rtcout.printf fmt << std::endl;					\
-	rtcout.release()
+  rtcout.level(LV) << rtcout.printf fmt << std::endl;					\
+  rtcout.release()
 
   /*!
    * @if jp
@@ -864,8 +884,8 @@ namespace RTM
    */
 #define RTC_ERROR(fmt)													\
   rtcout.acquire();														\
-	rtcout.level(RtcLogStream::ERROR)    << rtcout.printf fmt << std::endl;	\
-	rtcout.release()
+  rtcout.level(RtcLogStream::RTL_ERROR)  << rtcout.printf fmt << std::endl; \
+  rtcout.release()
 
   /*!
    * @if jp
@@ -888,8 +908,8 @@ namespace RTM
    */
 #define RTC_WARN(fmt)													\
   rtcout.acquire();														\
-	rtcout.level(RtcLogStream::WARN)     << rtcout.printf fmt << std::endl;	\
-	rtcout.release()
+  rtcout.level(RtcLogStream::RTL_WARN) << rtcout.printf fmt << std::endl;	\
+  rtcout.release()
 
   /*!
    * @if jp
@@ -912,8 +932,8 @@ namespace RTM
    */
 #define RTC_INFO(fmt)													\
   rtcout.acquire();														\
-	rtcout.level(RtcLogStream::INFO)     << rtcout.printf fmt << std::endl;	\
-	rtcout.release()
+  rtcout.level(RtcLogStream::RTL_INFO) << rtcout.printf fmt << std::endl;	\
+  rtcout.release()
 
   /*!
    * @if jp
@@ -936,8 +956,8 @@ namespace RTM
    */
 #define RTC_NORMAL(fmt)													\
   rtcout.acquire();														\
-	rtcout.level(RtcLogStream::NORMAL)   << rtcout.printf fmt << std::endl;	\
-	rtcout.release()
+  rtcout.level(RtcLogStream::RTL_NORMAL) << rtcout.printf fmt << std::endl;	\
+  rtcout.release()
 
   /*!
    * @if jp
@@ -960,8 +980,8 @@ namespace RTM
    */
 #define RTC_DEBUG(fmt)													\
   rtcout.acquire();														\
-	rtcout.level(RtcLogStream::DEBUG)    << rtcout.printf fmt << std::endl;	\
-	rtcout.release()
+  rtcout.level(RtcLogStream::RTL_DEBUG) << rtcout.printf fmt << std::endl;	\
+  rtcout.release()
 
   /*!
    * @if jp
@@ -984,8 +1004,8 @@ namespace RTM
    */
 #define RTC_TRACE(fmt)													\
   rtcout.acquire();														\
-	rtcout.level(RtcLogStream::TRACE)    << rtcout.printf fmt << std::endl;	\
-	rtcout.release()
+  rtcout.level(RtcLogStream::RTL_TRACE) << rtcout.printf fmt << std::endl;	\
+  rtcout.release()
 
   /*!
    * @if jp
@@ -1008,8 +1028,8 @@ namespace RTM
    */
 #define RTC_VERBOSE(fmt)												\
   rtcout.acquire();														\
-	rtcout.level(RtcLogStream::VERBOSE)  << rtcout.printf fmt << std::endl;	\
-	rtcout.release()
+  rtcout.level(RtcLogStream::RTL_VERBOSE) << rtcout.printf fmt << std::endl;\
+  rtcout.release()
 
   /*!
    * @if jp
@@ -1032,8 +1052,8 @@ namespace RTM
    */
 #define RTC_PARANOID(fmt)												\
   rtcout.acquire();														\
-	rtcout.level(RtcLogStream::PARANOID) << rtcout.printf fmt << std::endl;	\
-	rtcout.release()
+  rtcout.level(RtcLogStream::RTL_PARANOID) << rtcout.printf fmt << std::endl;	\
+  rtcout.release()
 
 #else
 #define RTC_ERROR(fmt)

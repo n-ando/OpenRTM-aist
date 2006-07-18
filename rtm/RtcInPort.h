@@ -2,7 +2,7 @@
 /*!
  * @file RtcInPort.h
  * @brief InPort template class
- * @date $Date: 2005-05-12 09:06:18 $
+ * @date $Date: 2005-05-27 07:29:32 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
  * Copyright (C) 2003-2005
@@ -12,12 +12,18 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: RtcInPort.h,v 1.1.1.1 2005-05-12 09:06:18 n-ando Exp $
+ * $Id: RtcInPort.h,v 1.3 2005-05-27 07:29:32 n-ando Exp $
  *
  */
 
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.2  2005/05/16 06:12:15  n-ando
+ * - Time variables of "m_Value" were initialized in constructors.
+ *
+ * Revision 1.1.1.1  2005/05/12 09:06:18  n-ando
+ * Public release.
+ *
  *
  */
 
@@ -99,6 +105,10 @@ namespace RTM
 	  CORBA::Any var;
 	  var <<= m_Value;
 	  m_Profile.port_type = var.type();
+
+	  // Init time of data variable
+	  m_Value.tm.sec = 0;
+	  m_Value.tm.nsec = 0;
 	  
 	  // Initializing ring buffer
 	  for (int i = 0 ; i <= m_Buffer.buff_length(); i++)
@@ -138,7 +148,11 @@ namespace RTM
 	  CORBA::Any var;
 	  var <<= m_Value;
 	  m_Profile.port_type = var.type();
-	  
+
+	  // Init time of data variable
+	  m_Value.tm.sec = 0;
+	  m_Value.tm.nsec = 0;
+
 	  // Initializing ring buffer
 	  for (int i = 0 ; i <= m_Buffer.buff_length(); i++)
 		{
@@ -176,7 +190,7 @@ namespace RTM
 	 * @endif
 	 */
 	virtual void put(const CORBA::Any& value)
-	  throw (RTM::InPort::Disconnected, CORBA::SystemException)
+	  throw (RTM::PortBase::Disconnected, CORBA::SystemException)
 	{
 	  T* tmp;
 

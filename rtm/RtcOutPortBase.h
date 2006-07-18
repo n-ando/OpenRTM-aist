@@ -2,7 +2,7 @@
 /*!
  * @file RtcOutPortBase.h
  * @brief InPortBase base class
- * @date $Date: 2005-05-12 09:06:18 $
+ * @date $Date: 2005-05-27 07:34:21 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
  * Copyright (C) 2003-2005
@@ -12,12 +12,19 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: RtcOutPortBase.h,v 1.1.1.1 2005-05-12 09:06:18 n-ando Exp $
+ * $Id: RtcOutPortBase.h,v 1.3 2005-05-27 07:34:21 n-ando Exp $
  *
  */
 
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.2  2005/05/16 06:37:11  n-ando
+ * - OutPortBase class was DLL exported for Windows port.
+ * - m_Profile.name should be initialized with empty string.
+ *
+ * Revision 1.1.1.1  2005/05/12 09:06:18  n-ando
+ * Public release.
+ *
  *
  */
 
@@ -33,11 +40,11 @@
 #include "rtm/idl/RTCOutPortStub.h"
 #include "rtm/RtcInPortBase.h"
 #include "rtm/RtcRingBuffer.h"
+#include "rtm/RtcSubscriber.h"
 
 
 namespace RTM {
   class SubscriberBase;
-  using namespace std;
 
   /*!
    * @if jp
@@ -60,7 +67,7 @@ namespace RTM {
    *
    * @endif
    */
-  class OutPortBase :
+  class EXPORTS OutPortBase :
 	public POA_RTM::OutPort,
 	public PortableServer::RefCountServantBase
   {
@@ -79,7 +86,10 @@ namespace RTM {
 	 *
 	 * @endif
 	 */
-	OutPortBase(){};
+	OutPortBase()
+	{
+	  m_Profile.name = _CORBA_String_helper::empty_string;
+	};
 
 	/*!
 	 * @if jp
@@ -116,6 +126,9 @@ namespace RTM {
 	//! CORBA interface Return type code of port value.
 	//	virtual CORBA::TypeCode_ptr port_type();
 
+	//------------------------------------------------------------
+	// RTCPortBase interfaces
+	//------------------------------------------------------------
 	/*!
 	 * @if jp
 	 * 
@@ -127,9 +140,22 @@ namespace RTM {
 	 * 
 	 * @endif
 	 */
-	virtual RtmRes subscribe(InPort_ptr in_port, SubscriptionID_out id,
-							 const SubscriberProfile &profile)
-	  throw (CORBA::SystemException);
+	virtual RtmRes subscribe(SubscriptionProfile &subs)
+	  throw (CORBA::SystemException, RTM::PortBase::InvalidSubscription);
+
+	/*!
+	 * @if jp
+	 * 
+	 * @brief OutPort をサブスクライブする
+	 *
+	 * @else
+	 *
+	 * @brief Subscribe this OutPort
+	 * 
+	 * @endif
+	 */
+	virtual RtmRes notify_subscribe(SubscriptionProfile &subs)
+	  throw (CORBA::SystemException, RTM::PortBase::InvalidSubscription);
 
 	/*!
 	 * @if jp
@@ -142,7 +168,22 @@ namespace RTM {
 	 * 
 	 * @endif
 	 */
-	virtual RtmRes unsubscribe(const char* id) throw (CORBA::SystemException);
+	virtual RtmRes unsubscribe(const char* id)
+	  throw (CORBA::SystemException, RTM::PortBase::NoSubscription);
+
+	/*!
+	 * @if jp
+	 * 
+	 * @brief OutPort のサブスクライブを解除する
+	 *
+	 * @else
+	 *
+	 * @brief Unsubscribe this OutPort
+	 * 
+	 * @endif
+	 */
+	virtual RtmRes notify_unsubscribe(const char* id)
+	  throw (CORBA::SystemException, RTM::PortBase::NoSubscription);
 
 	/*!
 	 * @if jp
@@ -155,7 +196,7 @@ namespace RTM {
 	 * 
 	 * @endif
 	 */
-	virtual InPortList* inports() throw (CORBA::SystemException);
+	//	virtual InPortList* inports() throw (CORBA::SystemException);
 
 	/*!
 	 * @if jp
@@ -170,9 +211,24 @@ namespace RTM {
 	 */
 	virtual PortProfile* profile() throw (CORBA::SystemException);
 
+	/*!
+	 * @if jp
+	 * 
+	 * @brief [CORBA interface] Subscription のリストを取得する
+	 *
+	 * @else
+	 *
+	 * @brief [CORBA interface] Get Subscription list
+	 * 
+	 * @endif
+	 */
+	virtual SubscriptionList* subscriptions();
+
+
+
 	// End of CORBA interfaces
 	//============================================================
-
+	bool createSubscriber(SubscriptionProfile& subscription);
 	/*!
 	 * @if jp
 	 * 
@@ -184,8 +240,8 @@ namespace RTM {
 	 * 
 	 * @endif
 	 */
-	//	virtual RtmRes push(const InPort_ptr& inport, SubscriptionID subsid) = 0;
-	virtual RtmRes push(const InPort_ptr& inport, std::string& subsid) = 0;
+	//	virtual RtmRes push(const InPort_ptr& inport, std::string& subsid) = 0;
+	virtual RtmRes push(InPort_ptr inport, std::string subsid) = 0;
 
 	/*!
 	 * @if jp
@@ -244,9 +300,13 @@ namespace RTM {
 	 */
 	virtual void write_pm() = 0;
 
+	virtual OutPort_ptr getObjRef();
+	virtual void setObjRef(OutPort_ptr objref);
+
 
   protected:
-	virtual RtmRes unsubscribeNoLocked(const char* id);
+	virtual RtmRes unsubscribeNoLocked(const char* id)
+	  throw (CORBA::SystemException, RTM::PortBase::NoSubscription);
 
 	/*!
 	 * @if jp
@@ -255,14 +315,25 @@ namespace RTM {
 	 * @brief Subscriber list
 	 * @endif
 	 */
-	//	list<SubscriberBase*> m_Subscribers;
+
+	typedef std::list<SubscriberBase*>::iterator Subs_it;	
 	struct Subscribers
 	{
 	  ACE_Thread_Mutex m_Mutex;
-	  list<SubscriberBase*> m_List;
+	  std::list<SubscriberBase*> m_List;
+	  
+	  class eq_id
+	  {
+	  public:
+		const std::string m_id;
+		eq_id(const char* id) : m_id(id){};
+		bool operator()(SubscriberBase* subs);
+	  };
+	  Subs_it findById(const char* id);
+	  Subs_it eraseById(const char* id);
 	};
 	Subscribers m_Subscribers;
-	  
+
 
 	/*!
 	 * @if jp
@@ -272,6 +343,17 @@ namespace RTM {
 	 * @endif
 	 */
 	PortProfile m_Profile;
+
+	/*!
+	 * @if jp
+	 * @brief OutPort 自身のオブジェクトリファレンス
+	 * @else
+	 * @brief object reference of OutPort itself
+	 * @endif
+	 */
+	OutPort_var m_thisObjRef;
+
+
 
   };
 

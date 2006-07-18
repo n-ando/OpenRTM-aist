@@ -2,7 +2,7 @@
 /*!
  * @file RtcFactory.h
  * @brief RTComponent factory class
- * @date $Date: 2005-05-12 09:06:18 $
+ * @date $Date: 2005-05-16 06:06:30 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
  * Copyright (C) 2003-2005
@@ -12,12 +12,15 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: RtcFactory.h,v 1.1.1.1 2005-05-12 09:06:18 n-ando Exp $
+ * $Id: RtcFactory.h,v 1.2 2005-05-16 06:06:30 n-ando Exp $
  *
  */
 
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.1.1.1  2005/05/12 09:06:18  n-ando
+ * Public release.
+ *
  *
  */
 
@@ -50,7 +53,7 @@ namespace RTM
    *
    * @endif
    */
-  class RtcFactoryBase
+  class EXPORTS RtcFactoryBase
   {
   public:
 	/*!
@@ -195,7 +198,7 @@ namespace RTM
    *
    * @endif
    */
-  class RtcFactoryCXX
+  class EXPORTS RtcFactoryCXX
     : public RtcFactoryBase
   {
   public:

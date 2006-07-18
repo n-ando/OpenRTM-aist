@@ -3,7 +3,7 @@
 #
 #  @file RtmCompData.py
 #  @brief rtc-link component dict manager class
-#  @date $Date: 2005-05-12 09:06:19 $
+#  @date $Date: 2005-05-16 10:11:01 $
 #  @author Tsuyoshi Tanabe, Noriaki Ando <n-ando@aist.go.jp>
 # 
 #  Copyright (C) 2004-2005
@@ -13,11 +13,14 @@
 #          Advanced Industrial Science and Technology (AIST), Japan
 #      All rights reserved.
 # 
-#  $Id: RtmCompData.py,v 1.1.1.1 2005-05-12 09:06:19 n-ando Exp $
+#  $Id: RtmCompData.py,v 1.2 2005-05-16 10:11:01 n-ando Exp $
 # 
 
 #
 #  $Log: not supported by cvs2svn $
+#  Revision 1.1.1.1  2005/05/12 09:06:19  n-ando
+#  Public release.
+#
 #
 
 #
@@ -380,6 +383,23 @@ class RtmCompData(RtmDictCore):
 
     def GetCompName(self,fullpath):
         self.Mutex.lock(self.GetCompNameCallback,fullpath)
+        self.Mutex.unlock()
+        return self.ret2
+
+    def GetCateNameCallback(self,fullpath):
+        self.ret2 = ''
+        key_list = self.SplitTokenToFullpath(fullpath)
+        num = len(key_list)
+
+        for cate_str in key_list:
+            num = cate_str.find('|')
+            if num > 0:
+                if str(cate_str[num+1:]) == 'cate_cxt':
+                    self.ret2 = str(cate_str[0:num])
+        return self.ret2
+
+    def GetCateName(self,fullpath):
+        self.Mutex.lock(self.GetCateNameCallback,fullpath)
         self.Mutex.unlock()
         return self.ret2
 

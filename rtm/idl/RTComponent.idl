@@ -2,7 +2,7 @@
 /*!
  * @file RTComponent.idl
  * @brief RTComponent インターフェース
- * @date $Date: 2005-05-12 09:06:18 $
+ * @date $Date: 2005-09-07 05:09:05 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *         Olivier Lemaire
  *
@@ -20,12 +20,15 @@
  *
  *     All rights reserved.
  *
- * $Id: RTComponent.idl,v 1.1.1.1 2005-05-12 09:06:18 n-ando Exp $
+ * $Id: RTComponent.idl,v 1.2 2005-09-07 05:09:05 n-ando Exp $
  *
  */
 
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.1.1.1  2005/05/12 09:06:18  n-ando
+ * Public release.
+ *
  *
  */
 
@@ -35,10 +38,11 @@
 #include "RTMBase.idl"
 #include "RTCInPort.idl"
 #include "RTCOutPort.idl"
+#include "RTCService.idl"
 
 
 module RTM {
-  
+
   /*!
    * @if jp
    *
@@ -374,7 +378,12 @@ module RTM {
 	//	readonly attribute ConnectorList connectors;
 	//	OutPort get_connector(in string name) raises (NoSuchName);
 	
-	
+	RTCServiceProfileList get_service_profiles ()
+	  raises (NotAvailable);
+	RTCServiceProfile get_service_profile (in string id)
+	  raises (InvalidParameter, InvalidReturnValue, NotAvailable);
+	RTCService get_service (in string id)
+	  raises (InvalidParameter, InvalidReturnValue, NotAvailable);
 	//============================================================
 	// Component profile and configuration
 	//============================================================

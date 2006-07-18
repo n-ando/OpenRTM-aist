@@ -2,7 +2,7 @@
 /*!
  * @file RtcBase.h
  * @brief RT component base class
- * @date $Date: 2005-05-12 09:06:18 $
+ * @date $Date: 2005-09-07 05:00:30 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
  * Copyright (C) 2003-2005
@@ -12,12 +12,22 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: RtcBase.h,v 1.1.1.1 2005-05-12 09:06:18 n-ando Exp $
+ * $Id: RtcBase.h,v 1.3 2005-09-07 05:00:30 n-ando Exp $
  *
  */
 
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.2  2005/05/16 06:02:49  n-ando
+ * - Some classes were DLL exported for Windows port.
+ * - The local ComponentState definition (RTC_ACTIVE, RTC_READY etc...) was
+ *   modified for Windows (VC++7) compilation errors.
+ *   Constant integer is not allowed to be initialized by int variable.
+ * - USLEEP macro was rewrote by using ACE_OS:sleep(tv).
+ *
+ * Revision 1.1.1.1  2005/05/12 09:06:18  n-ando
+ * Public release.
+ *
  *
  */
 
@@ -42,9 +52,13 @@
 #include "rtm/RtcOutPort.h"
 #include "rtm/RtcModuleProfile.h"
 #include "rtm/RtcSystemLogger.h"
+#include "rtm/RtcServiceBase.h"
 
-
-#define USLEEP(x) usleep(x);
+#define USLEEP(x) \
+{ \
+  ACE_Time_Value tv(0, x);\
+  ACE_OS::sleep(tv);\
+}
 
 namespace RTM {
   // namespace
@@ -80,18 +94,17 @@ namespace RTM {
    */
   typedef RTM::RTComponent::ComponentState ComponentState;
   
-  const ComponentState RTC_UNKNOWN      = RTM::RTComponent::RTC_UNKNOWN;
-  const ComponentState RTC_BORN         = RTM::RTComponent::RTC_BORN;
-  const ComponentState RTC_INITIALIZING = RTM::RTComponent::RTC_INITIALIZING;
-  const ComponentState RTC_READY        = RTM::RTComponent::RTC_READY;
-  const ComponentState RTC_STARTING     = RTM::RTComponent::RTC_STARTING;
-  const ComponentState RTC_ACTIVE       = RTM::RTComponent::RTC_ACTIVE;
-  const ComponentState RTC_STOPPING     = RTM::RTComponent::RTC_STOPPING;
-  const ComponentState RTC_ABORTING     = RTM::RTComponent::RTC_ABORTING;
-  const ComponentState RTC_ERROR        = RTM::RTComponent::RTC_ERROR;
-  const ComponentState RTC_FATAL_ERROR  = RTM::RTComponent::RTC_FATAL_ERROR;
-  const ComponentState RTC_EXITING      = RTM::RTComponent::RTC_EXITING;
-  
+  const ComponentState RTC_UNKNOWN      = 0; //RTM::RTComponent::RTC_UNKNOWN;
+  const ComponentState RTC_BORN         = 1; //RTM::RTComponent::RTC_BORN;
+  const ComponentState RTC_INITIALIZING = 2; //RTM::RTComponent::RTC_INITIALIZING;
+  const ComponentState RTC_READY        = 3; //RTM::RTComponent::RTC_READY;
+  const ComponentState RTC_STARTING     = 4; //RTM::RTComponent::RTC_STARTING;
+  const ComponentState RTC_ACTIVE       = 5; //RTM::RTComponent::RTC_ACTIVE;
+  const ComponentState RTC_STOPPING     = 6; //RTM::RTComponent::RTC_STOPPING;
+  const ComponentState RTC_ABORTING     = 7; //RTM::RTComponent::RTC_ABORTING;
+  const ComponentState RTC_ERROR        = 8; //RTM::RTComponent::RTC_ERROR;
+  const ComponentState RTC_FATAL_ERROR  = 9; //RTM::RTComponent::RTC_FATAL_ERROR;
+  const ComponentState RTC_EXITING      = 10;//RTM::RTComponent::RTC_EXITING;
 
   typedef enum NamingPolicy {
 	UNKNOWN = 0,
@@ -146,7 +159,7 @@ namespace RTM {
    *
    * @endif
    */
-  class RtcBase  
+  class EXPORTS RtcBase  
 	: public virtual POA_RTM::RTCBase, 
       public virtual PortableServer::RefCountServantBase,
       public ACE_Task<ACE_MT_SYNCH>
@@ -799,6 +812,50 @@ namespace RTM {
 	virtual OutPort_ptr get_outport(const char* name)
 	  throw (CORBA::SystemException, RTM::RTComponent::NoSuchName);
 	
+
+	/*!
+	 * @if jp
+	 * @brief [CORBA interface] service profile list の取得
+	 *
+	 * コンポーネントのサービスプロファイルリストを取得する。
+	 *
+	 * @else
+	 *
+	 * @brief [CORBA interface] get service profile list
+	 *
+	 * @endif
+	 */
+    virtual RTCServiceProfileList* get_service_profiles();
+
+	/*!
+	 * @if jp
+	 * @brief [CORBA interface] service profile の取得
+	 *
+	 * コンポーネントのサービスプロファイルを取得する。
+	 *
+	 * @else
+	 *
+	 * @brief [CORBA interface] get service profile
+	 *
+	 * @endif
+	 */
+    virtual RTCServiceProfile* get_service_profile(const char* name);
+
+	/*!
+	 * @if jp
+	 * @brief [CORBA interface] service の取得
+	 *
+	 * コンポーネントのサービスを取得する。
+	 *
+	 * @else
+	 *
+	 * @brief [CORBA interface] get service
+	 *
+	 * @endif
+	 */
+    virtual RTCService_ptr get_service(const char* name);
+
+
 	//------------------------------------------------------------
 	// [CORBA interface] Getting component property
 	//------------------------------------------------------------
@@ -905,6 +962,8 @@ namespace RTM {
 	 */
 	virtual RTCProfile* profile() ;
 	//	virtual RTCConfiguration* configuration() ;
+
+
 
 	
 	
@@ -1701,6 +1760,12 @@ namespace RTM {
 	 */	
 	void finalizeOutPorts();
 
+
+	bool registerService(RtcServiceBase& service,
+						 RtcServiceProfile& profile);
+	
+
+
 	
 	/*!
 	 * @if jp
@@ -1808,8 +1873,6 @@ namespace RTM {
 	bool isThreadRunning();
 	
 	
-
-	
   protected:
 	/*!
 	 * @if jp
@@ -1846,6 +1909,15 @@ namespace RTM {
 	 * @endif
 	 */
 	RTCBase_var m_Parent;
+
+	/*!
+	 * @if jp
+	 * @brief 自分自身のオブジェクトリファレンス
+	 * @else
+	 * @brief object reference to parent component
+	 * @endif
+	 */
+	RTCBase_var m_MyObjRef;
 
 	/*!
 	 * @if jp
@@ -2202,7 +2274,7 @@ namespace RTM {
 	 */
 	struct InPorts
 	{
-	  list<InPortBase*> m_List;
+	  std::list<InPortBase*> m_List;
 	  ACE_Thread_Mutex m_Mutex;
 	};
 	/*!
@@ -2223,7 +2295,7 @@ namespace RTM {
 	 */
 	struct OutPorts
 	{
-	  list<OutPortBase*> m_List;
+	  std::list<OutPortBase*> m_List;
 	  ACE_Thread_Mutex m_Mutex;
 	};
 	/*!
@@ -2235,9 +2307,7 @@ namespace RTM {
 	 */
 	OutPorts m_OutPorts;
 	
-	//! Input port flag list
-	//  list<const bool*> m_InFlags;
-	
+
 	/*!
 	 * @if jp
 	 * @brief アクティビティ状態変数
@@ -2276,6 +2346,16 @@ namespace RTM {
 	 */
 	std::list<string> m_Alias;
 
+	/*!
+	 * @if jp
+	 * @brief サービスリスト
+	 * @else
+	 * @brief Component service list
+	 * @endif
+	 */
+	RtcServiceAdmin m_ServiceAdmin;
+
+
 	NamingPolicy m_NamingPolicy;
 
  	/*!
@@ -2302,7 +2382,7 @@ namespace RTM {
   // RTComponent factory function type
   //------------------------------------------------------------
 
-  class RtcManager;
+  class EXPORTS RtcManager;
 	/*!
 	 * @if jp
 	 * @brief コンポーネントオブジェクトファクトリ関数宣言

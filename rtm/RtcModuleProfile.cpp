@@ -2,7 +2,7 @@
 /*!
  * @file RtcModuleProfile.cpp
  * @brief RTComponent profile class
- * @date $Date: 2005-05-12 09:06:18 $
+ * @date $Date: 2005-05-16 06:26:07 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
  * Copyright (C) 2003-2005
@@ -12,12 +12,15 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: RtcModuleProfile.cpp,v 1.1.1.1 2005-05-12 09:06:18 n-ando Exp $
+ * $Id: RtcModuleProfile.cpp,v 1.2 2005-05-16 06:26:07 n-ando Exp $
  *
  */
 
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.1.1.1  2005/05/12 09:06:18  n-ando
+ * Public release.
+ *
  *
  */
 
@@ -33,7 +36,16 @@ namespace RTM {
 	: m_CompTypeSize(sizeof CompTypes / sizeof *CompTypes),
 	  m_ActTypeSize(sizeof ActTypes / sizeof *ActTypes),
 	  m_LangTypeSize(sizeof LangTypes / sizeof *LangTypes)
-  {	
+  {
+	m_Profile.name                =  _CORBA_String_helper::empty_string;
+	m_Profile.instance_id         =  _CORBA_String_helper::empty_string;
+	m_Profile.implementation_id   =  _CORBA_String_helper::empty_string;
+	m_Profile.description         =  _CORBA_String_helper::empty_string;
+	m_Profile.version             =  _CORBA_String_helper::empty_string;
+	m_Profile.maker               =  _CORBA_String_helper::empty_string;
+	m_Profile.language            =  _CORBA_String_helper::empty_string;
+	m_Profile.module_profile_file =  _CORBA_String_helper::empty_string;
+
 	m_CompTypeMap = map<string, int>(CompTypes, CompTypes + m_CompTypeSize);
 	m_ActTypeMap  = map<string, int>(ActTypes, ActTypes + m_ActTypeSize);
 	m_LangTypeMap = map<string, int>(LangTypes, LangTypes + m_LangTypeSize);
@@ -46,6 +58,15 @@ namespace RTM {
 	  m_ActTypeSize(sizeof ActTypes / sizeof *ActTypes),
 	  m_LangTypeSize(sizeof LangTypes / sizeof *LangTypes)
   {
+	m_Profile.name                =  _CORBA_String_helper::empty_string;
+	m_Profile.instance_id         =  _CORBA_String_helper::empty_string;
+	m_Profile.implementation_id   =  _CORBA_String_helper::empty_string;
+	m_Profile.description         =  _CORBA_String_helper::empty_string;
+	m_Profile.version             =  _CORBA_String_helper::empty_string;
+	m_Profile.maker               =  _CORBA_String_helper::empty_string;
+	m_Profile.language            =  _CORBA_String_helper::empty_string;
+	m_Profile.module_profile_file =  _CORBA_String_helper::empty_string;
+
 	m_CompTypeMap = map<string, int>(CompTypes, CompTypes + m_CompTypeSize);
 	m_ActTypeMap  = map<string, int>(ActTypes, ActTypes + m_ActTypeSize);
 	m_LangTypeMap = map<string, int>(LangTypes, LangTypes + m_LangTypeSize);
@@ -275,12 +296,13 @@ namespace RTM {
 	m_Profile.inport_profile_list.length(len + 1);
 	// Append PortProfile as last item
 	m_Profile.inport_profile_list[len] = port_profile;
+	return true;
   }
 
   PortProfile RtcModuleProfile::getInPortProfile(const char* name)
   {
 	PortProfileList& profile_list = m_Profile.inport_profile_list;
-	int len = profile_list.length();
+	unsigned int len = profile_list.length();
 
 	for (CORBA::ULong i = 0; i < len; i++)
 	  {
@@ -305,12 +327,13 @@ namespace RTM {
 	m_Profile.outport_profile_list.length(len + 1);
 	// Append PortProfile as last item
 	m_Profile.outport_profile_list[len] = port_profile;
+	return true;
   }
 
   PortProfile RtcModuleProfile::getOutPortProfile(const char* name)
   {
 	PortProfileList& profile_list = m_Profile.outport_profile_list;
-	int len = profile_list.length();
+	unsigned int len = profile_list.length();
 
 	for (CORBA::ULong i = 0; i < len; i++)
 	  {

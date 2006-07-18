@@ -2,7 +2,7 @@
 /*!
  * @file RtcManager.cpp
  * @brief RT component manager class
- * @date $Date: 2005-05-12 09:06:18 $
+ * @date $Date: 2005-09-07 05:13:34 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
  * Copyright (C) 2003-2005
@@ -12,14 +12,33 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: RtcManager.cpp,v 1.1.1.1 2005-05-12 09:06:18 n-ando Exp $
+ * $Id: RtcManager.cpp,v 1.4 2005-09-07 05:13:34 n-ando Exp $
  *
  */
 
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.3  2005/05/27 07:33:20  n-ando
+ * - InPort/OutPort interface was changed.
+ *   subscribe/unsubscribe were completely changed.
+ *
+ * Revision 1.2  2005/05/16 06:18:38  n-ando
+ * - Define ACE_HAS_WINSOCK2 for Windows.
+ * - Some sleep was added in RtcManager::runManager() main loop.
+ *   The ORB's "perform_work" main loop needs a few us sleep.
+ * - RtcManager's activation method was changed from "this->_this()" to
+ *   "m_pPOA->activate_object(this)".
+ *   Implicit object activation by using _this() is not recommended.
+ *
+ * Revision 1.1.1.1  2005/05/12 09:06:18  n-ando
+ * Public release.
+ *
  *
  */
+
+#ifdef WIN32
+#define ACE_HAS_WINSOCK2 0
+#endif //WIN32
 
 #include <iostream>
 #include <stdlib.h>
@@ -284,7 +303,48 @@ namespace RTM
   {
 	RTC_TRACE(("RtcManager::factory_list()()"));
 
-    return NULL;
+	ACE_Guard<ACE_Thread_Mutex> guard(m_FactoryMap._mutex);
+	
+	std::map<std::string, std::map<std::string, RtcFactoryBase*> >::iterator cat_it, cat_it_end;
+	std::map<std::string, RtcFactoryBase*>::iterator comp_it, comp_it_end;
+
+	cat_it     = m_FactoryMap._map.begin();
+	cat_it_end = m_FactoryMap._map.end();
+	int cnt(0);
+	while (cat_it != cat_it_end)
+	  {
+		comp_it = (cat_it->second).begin();
+		comp_it_end = (cat_it->second).end();
+
+		while (comp_it != comp_it_end)
+		  {
+			++cnt;
+			++comp_it;
+		  }
+		++cat_it;
+	  }
+	RTCFactoryList_var factory_list = new RTCFactoryList();
+	factory_list->length(cnt);
+
+	cnt = 0;
+	cat_it     = m_FactoryMap._map.begin();
+	while (cat_it != cat_it_end)
+	  {
+		comp_it = (cat_it->second).begin();
+		comp_it_end = (cat_it->second).end();
+
+		while (comp_it != comp_it_end)
+		  {
+			factory_list[cnt].name = CORBA::string_dup(comp_it->first.c_str());
+			factory_list[cnt].category
+			  = CORBA::string_dup(cat_it->first.c_str());
+			++cnt;
+			++comp_it;
+		  }
+		++cat_it;
+	  }
+
+    return factory_list._retn();
   }
   
   
@@ -294,8 +354,48 @@ namespace RTM
   RTCBaseList* RtcManager::component_list()
   {
 	RTC_TRACE(("RtcManager::component_list()()"));
+	std::map<std::string,std::map<std::string, RtcBase*> >::iterator it_cat;
+	std::map<std::string,std::map<std::string, RtcBase*> >::iterator it_cat_end;
+	it_cat     = m_Components._map.begin();
+	it_cat_end = m_Components._map.end();
 
-    return NULL;
+	int cnt(0);
+	while (it_cat != it_cat_end)
+	  {
+		map<string, RtcBase*>::iterator it_cmp;
+		map<string, RtcBase*>::iterator it_cmp_end;
+		it_cmp     = (it_cat->second).begin();
+		it_cmp_end = (it_cat->second).end();
+
+		while (it_cmp != it_cmp_end)
+		  {
+			++it_cmp;
+			++cnt;
+		  }
+		++it_cat;
+	  }
+
+	RTCBaseList_var comp_list = new RTCBaseList();
+	comp_list->length(cnt);
+
+	cnt = 0;
+	while (it_cat != it_cat_end)
+	  {
+		map<string, RtcBase*>::iterator it_cmp;
+		map<string, RtcBase*>::iterator it_cmp_end;
+		it_cmp     = (it_cat->second).begin();
+		it_cmp_end = (it_cat->second).end();
+
+		while (it_cmp != it_cmp_end)
+		  {
+			comp_list[cnt] = RTCBase::_narrow(getPOA()->servant_to_reference(it_cmp->second));
+			++it_cmp;
+			++cnt;
+		  }
+		++it_cat;
+	  }
+
+    return comp_list._retn();
   }
   
   
@@ -332,15 +432,15 @@ namespace RTM
 		it = arglist.begin();
 		it_end = arglist.end();
 #ifndef NO_LOGGING
-		rtcout.level(RtcLogStream::DEBUG) << "Command: " << command_name;
-		rtcout.level(RtcLogStream::DEBUG) << "Args: ";
+		rtcout.level(RtcLogStream::RTL_DEBUG) << "Command: " << command_name;
+		rtcout.level(RtcLogStream::RTL_DEBUG) << "Args: ";
+
+		while (it != it_end)
+		  {
+			rtcout.level(RtcLogStream::RTL_DEBUG) << *it << endl;
+			++it;
+		  }
 #endif
-		while (it != it_end) {
-#ifndef NO_LOGGING
-		  rtcout.level(RtcLogStream::DEBUG) << *it << endl;
-#endif
-		  ++it;
-		}
 		
 		//! Command invokation
 		if (m_CmdMap.find(command_name) != m_CmdMap.end()) {
@@ -402,12 +502,20 @@ namespace RTM
 		RTC_ERROR(("Invalid ORB pointer."));
 		exit(1);
 	  }
-	//	m_pORB->run();
+
+	//	ORB main loop
+	ACE_Time_Value tv(0, 1000); // (s, us)
 	while (g_mgrActive)
 	  {
-		if (m_pORB->work_pending()){
-		  m_pORB->perform_work();
-		}
+		if (m_pORB->work_pending())
+		  {
+			m_pORB->perform_work();
+		  }
+		else
+		  {
+			// ORB main loop needs some sleep.
+			ACE_OS::sleep(tv);
+		  }
 	  }
 	shutdown();
 
@@ -463,7 +571,10 @@ namespace RTM
 		return false;
 	  }
 
-    retval = m_apNaming->bindManager(m_ManagerName, this->_this());
+    m_pPOA->activate_object(this);
+	CORBA::Object_var obj = m_pPOA->servant_to_reference(this);
+    retval = m_apNaming->bindManager(m_ManagerName, obj);
+
     if (retval == false)
 	  {
 		RTC_ERROR(("Could not bind manager object to the Naming server: %s",
@@ -766,18 +877,18 @@ namespace RTM
 	if (CORBA::is_nil(outpt)) return std::string("");
 
 	char* uuid;
-	RTM::SubscriberProfile sub_prof;
+	RTM::SubscriptionProfile sub_prof;
 	sub_prof.subscription_type = sub_type;
 
-	if (outpt->subscribe(inpt, uuid, sub_prof) != RTM::RTM_OK)
+	if (outpt->subscribe(sub_prof) != RTM::RTM_OK)
 	  {
 		RTC_ERROR(("Subscription error."));
 		return std::string("");
 	  }
 	
-	RTC_DEBUG(("Subscription uuid: %s", uuid));
+	RTC_DEBUG(("Subscription uuid: %s", CORBA::string_dup(sub_prof.id)));
 
-	return std::string(uuid);
+	return std::string(sub_prof.id);
   }
  
   std::string RtcManager::bindInOutByName(const std::string& comp_name_in,
@@ -818,8 +929,6 @@ namespace RTM
 	    RTC_ERROR(("Two or more components found ( %s ).",comp_name_out.c_str()));
 	  }
     
-    InPort_ptr inpt;
-    OutPort_ptr outpt;
     std::string ret;
     ret = bindInOut(incomps[0], inp_name, outcomps[0], outp_name, sub_type);
     return ret;
@@ -1054,9 +1163,9 @@ namespace RTM
 
 	InPort_var in_port = m_pMasterLogger->get_inport("logger_in");
 	char* uuid;
-	RTM::SubscriberProfile sub_prof;
+	RTM::SubscriptionProfile sub_prof;
 	sub_prof.subscription_type = RTM::OPS_NEW;
-	RtmRes res = m_pLoggerOutPort->subscribe(in_port, uuid, sub_prof);
+	RtmRes res = m_pLoggerOutPort->subscribe(sub_prof);
 
 	if (res == RTM_ERR)
 	  {
@@ -1150,14 +1259,16 @@ namespace RTM
     if (pos == string::npos)
       {
 		initfunc_name = libname + "Init";
+		return true;
       }
+	return false;
   }
 
 
   void RtcManager::shutdownAllComponents()
   {
 	RTC_TRACE(("RtcManager::shutdownAllComponents()"));
-
+	ACE_Time_Value tv(0, 1000); // (s, us)
 	m_Components._mutex.acquire();
 
 	std::map<std::string,std::map<std::string, RtcBase*> >::iterator it_cat;
@@ -1181,7 +1292,7 @@ namespace RTM
 
 			// Mutex is released for RtcManager::cleanupComponet()
 			m_Components._mutex.release();
-			usleep(1000);
+			ACE_OS::sleep(tv); // sleep 1ms
 			// After here "comp" is invalid pointer to RtcBase.
 			m_Components._mutex.acquire();
 		  }

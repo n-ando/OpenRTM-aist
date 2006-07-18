@@ -2,7 +2,7 @@
 /*!
  * @file RtcSubscriber.h
  * @brief Subscriber active object class runs on Output port
- * @date $Date: 2005-05-12 09:06:18 $
+ * @date $Date: 2005-05-27 07:36:44 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
  * Copyright (C) 2003-2005
@@ -12,25 +12,66 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: RtcSubscriber.h,v 1.1.1.1 2005-05-12 09:06:18 n-ando Exp $
+ * $Id: RtcSubscriber.h,v 1.3 2005-05-27 07:36:44 n-ando Exp $
  *
  */
 
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.2  2005/05/16 06:39:02  n-ando
+ * - Subscriber* classes were DLL exported for Windows port.
+ *
+ * Revision 1.1.1.1  2005/05/12 09:06:18  n-ando
+ * Public release.
+ *
  *
  */
 
 #ifndef RtcSubscriber_h
 #define RtcSubscriber_h
 
+#include <string>
+#include <list>
 #include <ace/Task.h>
 #include <ace/Thread.h>
 #include <ace/Synch.h>
-#include "rtm/RtcOutPortBase.h"
-#include "rtm/RtcInPortBase.h"
+
+#include "rtm/RTC.h"
+#include "rtm/idl/RTCSubscriptionSkel.h"
 
 namespace RTM {
+  class OutPortBase;
+  
+  class EXPORTS SubsProfileBase
+  {
+  public:
+	SubsProfileBase(SubscriptionProfile& subs);
+	virtual ~SubsProfileBase(){};
+
+	virtual SubscriptionProfile getSubsProfile();
+	virtual void setSubsProfile(SubscriptionProfile& subs);
+
+	virtual SubscriptionType getType();
+	virtual bool setType(SubscriptionType type);
+
+	virtual SubscriptionID getId();
+	virtual bool setId(const char* id);
+	virtual bool setId(std::string id);
+
+	virtual InPort_ptr getInPort();
+	virtual bool setInPort(InPort_ptr in_port);
+
+	virtual OutPort_ptr getOutPort();
+	virtual bool setOutPort(OutPort_ptr out_port);
+
+	virtual bool getEventBase();
+	virtual bool setEventBase(bool event_base);
+
+  protected:
+	SubscriptionProfile m_Profile;
+  };
+
+
   //============================================================
   /*!
    * @class SubscriberBase
@@ -62,7 +103,7 @@ namespace RTM {
    * @endif
    */
   class SubscriberBase
-	: public ACE_Task<ACE_MT_SYNCH>
+	: public SubsProfileBase, public ACE_Task<ACE_MT_SYNCH>
   {
   public:
 	/*!
@@ -84,8 +125,8 @@ namespace RTM {
 	 *
 	 * @endif
 	 */
-	SubscriberBase(OutPortBase* parent, InPort_ptr inport,
-				   const SubscriptionID id, SubscriberProfile profile);
+
+	SubscriberBase(RTM::OutPortBase* parent, SubscriptionProfile& profile);
 
 	/*!
 	 * @if jp
@@ -148,7 +189,7 @@ namespace RTM {
 	 * @brief Get SubscriberProfile.
 	 * @endif
 	 */
-	virtual SubscriberProfile get_profile();
+	//virtual SubscriberProfile get_profile();
 
 	/*!
 	 * @if jp
@@ -157,7 +198,7 @@ namespace RTM {
 	 * @brief Get InPort's object reference which subscribe this OutPort.
 	 * @endif
 	 */
-	virtual InPort_ptr get_inport();
+	//virtual InPort_ptr get_inport();
 
 	/*!
 	 * @if jp
@@ -166,7 +207,7 @@ namespace RTM {
 	 * @brief Get InPort's object reference which subscribe this OutPort.
 	 * @endif
 	 */
-	virtual std::string get_id();
+	//virtual std::string get_id();
 
 	/*!
 	 * @if jp
@@ -190,17 +231,17 @@ namespace RTM {
 
   protected:
 	//! Request type. once or periodic.
-	SubscriberProfile m_Profile;
+	//	SubscriberProfile m_Profile;
 	
 	//! Input port object reference.
-	InPort_ptr m_pInPort;
+	//	InPort_ptr m_pInPort;
 	
 	//! Parent outport object reference
-	OutPortBase* m_pParent;
+	RTM::OutPortBase* m_pParent;
 	
 	//! Subscription ID
 	//const SubscriptionID m_Id;
-	std::string m_Id;
+	//	std::string m_Id;
 
 	//! Thread activity flag (true=running, false=stop)
 	bool m_Running;
@@ -226,12 +267,12 @@ namespace RTM {
    * @brief Subscriber active object who get data once.
    *
    */
-  class SubscriberOnce
-	: public SubscriberBase 
+  class EXPORTS SubscriberOnce
+	: public SubscriberBase
   {
   public:
-	SubscriberOnce(OutPortBase* parent, InPort_ptr inport,
-				   const SubscriptionID id, SubscriberProfile profile);
+	SubscriberOnce(RTM::OutPortBase* parent,
+				   SubscriptionProfile& profile);
 	virtual bool update();
 	virtual int svc(void);
 
@@ -244,12 +285,12 @@ namespace RTM {
    * @brief Subscriber active object handle subscriber periodic data acquisition
    *
    */
-  class SubscriberPeriodic
+  class EXPORTS SubscriberPeriodic
 	: public SubscriberBase
   {
   public:
-	SubscriberPeriodic(OutPortBase* parent, InPort_ptr inport,
-					   const SubscriptionID id, SubscriberProfile profile);
+	SubscriberPeriodic(RTM::OutPortBase* parent,
+					   SubscriptionProfile& profile);
 	virtual bool update();
 	virtual int svc(void);
   };
@@ -262,12 +303,12 @@ namespace RTM {
    * @brief Subscriber active object pushes when new data arrived from activity
    *
    */
-  class SubscriberNew
+  class EXPORTS SubscriberNew
 	: public SubscriberBase
   {
   public:
-	SubscriberNew(OutPortBase* parent, InPort_ptr inport,
-				  const SubscriptionID id, SubscriberProfile profile);
+	SubscriberNew(RTM::OutPortBase* parent,
+				  SubscriptionProfile& profile);
 	virtual bool update();
 	virtual int svc(void);
   };
@@ -280,14 +321,14 @@ namespace RTM {
    * @brief 
    *
    */
-  class SubscriberTriggerd
+  class EXPORTS SubscriberTriggerd
 	: public SubscriberBase
   {
   public:
-	SubscriberTriggerd(OutPortBase* parent, InPort_ptr inport,
-					   const SubscriptionID id, SubscriberProfile profile);
-	virtual bool update(){};
-	virtual int svc (void){};
+	SubscriberTriggerd(RTM::OutPortBase* parent,
+					   SubscriptionProfile& profile);
+	virtual bool update(){return true;};
+	virtual int svc (void){return 0;};
   };
 
 
@@ -298,14 +339,14 @@ namespace RTM {
    * @brief 
    *
    */
-  class SubscriberPeriodicNew
+  class EXPORTS SubscriberPeriodicNew
 	: public SubscriberBase
   {
   public:
-	SubscriberPeriodicNew(OutPortBase* parent, InPort_ptr inport,
-						  const SubscriptionID id, SubscriberProfile profile);
-	virtual bool update(){};
-	virtual int svc (void){};
+	SubscriberPeriodicNew(RTM::OutPortBase* parent,
+						  SubscriptionProfile& profile);
+	virtual bool update(){return true;};
+	virtual int svc (void){return 0;};
   };
 
 
@@ -316,14 +357,14 @@ namespace RTM {
    * @brief 
    *
    */
-  class SubscriberNewPeriodic
+  class EXPORTS SubscriberNewPeriodic
 	: public SubscriberBase
   {
   public:
-	SubscriberNewPeriodic(OutPortBase* parent, InPort_ptr inport,
-						  const SubscriptionID id, SubscriberProfile profile);
-	virtual bool update(){};
-	virtual int svc (void){};
+	SubscriberNewPeriodic(RTM::OutPortBase* parent,
+						  SubscriptionProfile& profile);
+	virtual bool update(){return true;};
+	virtual int svc (void){return 0;};
   };
 
 
@@ -335,14 +376,14 @@ namespace RTM {
    * @brief 
    *
    */
-  class SubscriberPeriodicTriggerd
+  class EXPORTS SubscriberPeriodicTriggerd
 	: public SubscriberBase
   {
   public:
-	SubscriberPeriodicTriggerd(OutPortBase* parent, InPort_ptr inport,
-							   const SubscriptionID id, SubscriberProfile profile);
-	virtual bool update(){};
-	virtual int svc (void){};
+	SubscriberPeriodicTriggerd(RTM::OutPortBase* parent,
+							   SubscriptionProfile& profile);
+	virtual bool update(){return true;};
+	virtual int svc (void){return 0;};
   };
 
 
@@ -354,14 +395,14 @@ namespace RTM {
    * @brief 
    *
    */
-  class SubscriberTriggerdPeriodic
+  class EXPORTS SubscriberTriggerdPeriodic
 	: public SubscriberBase
   {
   public:
-	SubscriberTriggerdPeriodic(OutPortBase* parent, InPort_ptr inport,
-							   const SubscriptionID id, SubscriberProfile profile);
-	virtual bool update(){};
-	virtual int svc (void){};
+	SubscriberTriggerdPeriodic(RTM::OutPortBase* parent,
+							   SubscriptionProfile& profile);
+	virtual bool update(){return true;};
+	virtual int svc (void){return 0;};
   };
 
 
