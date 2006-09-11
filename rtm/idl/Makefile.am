@@ -2,9 +2,13 @@
 ##------------------------------------------------------------
 ## Makefile.am for libRTCSkel
 ##
-## $Id: Makefile.am,v 1.4 2006-04-04 06:13:11 n-ando Exp $
+## $Id: Makefile.am,v 1.5 2006-09-11 19:08:18 n-ando Exp $
 ##
 ## $Log: not supported by cvs2svn $
+## Revision 1.4  2006/04/04 06:13:11  n-ando
+## - New idl (RTCPackage, SDOPackage) was added for OMG's RTC based
+##   OpenRTM-aist, which verifies consistency of AIST's RTC PIM and PSM.
+##
 ## Revision 1.3  2005/09/07 05:11:45  n-ando
 ## RTCService.idl was added for RTComponent's service feature.
 ##
@@ -31,7 +35,7 @@ SUFFIXES = .idl Skel.cpp Stub.cpp Stub.o Skel.o
 # RTM idl sources
 IDL_SOURCES =       	\
 	SDOPackage.idl		\
-	RTCPackage.idl
+	RTC.idl
 #	RTCDataType.idl 	\
 #	RTCBase.idl     	\
 #	RTCManager.idl
