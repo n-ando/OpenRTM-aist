@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 #
 # @brief CORBA stub and skelton wrapper generator
-# @date $Date: 2006-03-31 05:26:34 $
+# @date $Date: 2006-09-11 18:33:14 $
 # @author Norkai Ando <n-ando@aist.go.jp>
 #
 # Copyright (C) 2005
@@ -11,10 +11,14 @@
 #         Advanced Industrial Science and Technology (AIST), Japan
 #     All rights reserved.
 #
-# $Id: makewrapper.py,v 1.2 2006-03-31 05:26:34 n-ando Exp $
+# $Id: makewrapper.py,v 1.3 2006-09-11 18:33:14 n-ando Exp $
 #
 
 # $Log: not supported by cvs2svn $
+# Revision 1.2  2006/03/31 05:26:34  n-ando
+# - Almost all functions are rewritten to use ezt.py (Easy Template module).
+# - Now makewrapper.py uses ezt.py (Easy Template module).
+#
 # Revision 1.1.1.1  2005/05/12 09:06:18  n-ando
 # Public release.
 #
@@ -208,9 +212,14 @@ class wrapper_gen:
 
 
 idl_file = sys.argv[1]
+if len(sys.argv) > 2:
+	skel_dir = sys.argv[2]
+else:
+	skel_dir = "rtm/idl"
+
 basename = re.sub(".idl", "", idl_file);
 
-data = wrapper_data(basename, "rtm/idl")
+data = wrapper_data(basename, skel_dir)
 gen  = wrapper_gen(data.get_dict())
 gen.gen_all()
 
