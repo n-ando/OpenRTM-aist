@@ -2,7 +2,7 @@
 /*!
  * @file RtcNaming.cpp
  * @brief RT component naming class
- * @date $Date: 2005-05-16 06:28:35 $
+ * @date $Date: 2006-09-11 18:26:08 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
  * Copyright (C) 2003-2005
@@ -12,12 +12,15 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: RtcNaming.cpp,v 1.2 2005-05-16 06:28:35 n-ando Exp $
+ * $Id: RtcNaming.cpp,v 1.3 2006-09-11 18:26:08 n-ando Exp $
  *
  */
 
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.2  2005/05/16 06:28:35  n-ando
+ * - ACE_HAS_WINSOCK2 was defined for Windows port.
+ *
  * Revision 1.1.1.1  2005/05/12 09:06:18  n-ando
  * Public release.
  *
@@ -32,908 +35,867 @@
 #include <boost/regex.hpp>
 
 #include "rtm/RtcNaming.h"
-#include "rtm/RtcNameComponent.h"
+//#include "rtm/RtcNameComponent.h"
 
 
 namespace RTM
 {
-  using namespace std;
-  
-  RtcNaming::~RtcNaming()
+  RtcCorbaNaming::RtcCorbaNaming(CORBA::ORB_ptr orb,
+				 const char* name_server)
+    : m_varORB(orb), m_nameServer(name_server),
+      m_rootContext(CosNaming::NamingContextExt::_nil()),
+      m_blLength(100)
   {
-	ACE_TRACE("RtcNaming::~RtcNaming()");
-
-	destroyHostContext();	
-  }
-
-
-  bool RtcNaming::initNaming(const CORBA::ORB_ptr orb)
-  {
-	ACE_TRACE("RtcNaming::initNaming()");
-
-    // ¥Í¡¼¥ß¥ó¥°¥µ¡¼¥Ó¥¹¤Î¥ë¡¼¥È¥³¥ó¥Æ¥­¥¹¥È¤ò¼èÆÀ
-    try
-      {	
-		CORBA::Object_var obj;
-		obj = orb->resolve_initial_references("NameService");
-		m_rootContext = CosNaming::NamingContextExt::_duplicate(CosNaming::NamingContextExt::_narrow(obj));
-		
-		if( CORBA::is_nil(m_rootContext) )
-		  {
-			cerr << "RtcNaming::initNaming: Failed to narrow the root naming context." << endl;
-			return false;
-		  }
-      }
-    catch(CORBA::ORB::InvalidName& ex) 
-      {
-		ex;
-		// This should not happen!
-		cerr << "Service required is invalid [does not exist]." << endl;
-		return false;
-      }
-	catch(...)
-	  {
-		cerr << "Unknown exception." << endl;
-		return false;
-	  }
-    return true;
+    CORBA::Object_var obj;
+    obj = orb->string_to_object(m_nameServer.c_str());
+    m_rootContext = CosNaming::NamingContextExt::_narrow(obj);
+    if (CORBA::is_nil(m_rootContext)) throw std::bad_alloc();
   }
   
   
-  
-  //============================================================
-  // << Create Methods >>
-  //============================================================
-  
-  
-  CosNaming::NamingContextExt_var
-  RtcNaming::createContext(CosNaming::NamingContextExt_var context,
-						   const std::string& id, const std::string& kind)
+  /*!
+   * @if jp
+   * @brief Object $B$r(B bind $B$9$k(B
+   * @else
+   * @brief Bind object on specified name component position
+   * @endif
+   */
+  void RtcCorbaNaming::bind(const CosNaming::Name& name, CORBA::Object_ptr obj,
+			    const bool force)
+    throw(NotFound, CannotProceed, InvalidName, AlreadyBound)
   {
-	ACE_TRACE("RtcNaming::createContext()");
-
-    // Create naming context
-    CosNaming::Name contextName;
-    contextName.length(1);
-	contextName[0].id   = CORBA::string_dup(id.c_str());
-	contextName[0].kind = CORBA::string_dup(kind.c_str());
-	//    contextName[0].id   = id.c_str();
-	//    contextName[0].kind = kind.c_str();
-	
-    CosNaming::NamingContextExt_var testContext;
-	CORBA::Object_var obj;
-	
-    // Bind the context to specified context.
     try
       {
-		obj = context->bind_new_context(contextName);
-		testContext = CosNaming::NamingContextExt::_narrow(obj);
-		
-		if( CORBA::is_nil(testContext) )
-		  {
-			cerr << "Failed to narrow naming context." << endl;
-			return NULL;
-		  }
-		return testContext;
+	m_rootContext->bind(name, obj);
       }
-    catch (CosNaming::NamingContext::AlreadyBound& ex)
+    catch (NotFound& e)
       {
-		ex;
-		// If the context already exists, this exception will be raised.
-		// In this case, just resolve the name and assign testContext
-		// to the object returned:
-		obj = context->resolve(contextName);
-		testContext = CosNaming::NamingContextExt::_narrow(obj);
-		
-		if( CORBA::is_nil(testContext) )
-		  {
-			cerr << "Failed to narrow naming context." << endl;
-			return NULL;
-		  }
-		return testContext;
+	force ? bindRecursive(m_rootContext, name, obj) : throw e;
       }
-	catch (...)
-	  {
-		cerr << "createContext(): Unknown error" << endl;
-	  }
-    return NULL;
+    catch (CannotProceed& e)
+      {
+	force ? bindRecursive(e.cxt, e.rest_of_name, obj) : throw e;
+      }
   }
   
   
-  bool RtcNaming::createHostContext(const std::string& id)
+  /*!
+   * @if jp
+   * @brief Object $B$r(B bind $B$9$k(B
+   * @else
+   * @brief Bind object on specified string name position
+   * @endif
+   */
+  void RtcCorbaNaming::bindByString(const char* string_name, CORBA::Object_ptr obj,
+			    const bool force)
+    throw(NotFound, CannotProceed, InvalidName, AlreadyBound)
   {
-	ACE_TRACE("RtcNaming::createHostContext()");
-
-    if (CORBA::is_nil(m_rootContext))
-      {
-		return false;
-      }
-	m_hostName = id;
-    m_hostContext = createContext(m_rootContext, id, "host_cxt");
-    if (CORBA::is_nil(m_hostContext))
-      {
-		return false;
-      }
-	
-    return true;
+    this->bind(toName(string_name), obj, force);
   }
   
   
-  bool RtcNaming::createManagerContext(const std::string& id)
+  /*!
+   * @if jp
+   * @brief $BESCf$N%3%s%F%-%9%H$r:F5"E*$K(B bind $B$7$J$,$i(B Object $B$r(B bind $B$9$k(B
+   * @else
+   * @brief Bind intermediate context recursively and bind object
+   * @endif
+   */
+  void RtcCorbaNaming::bindRecursive(CosNaming::NamingContext_ptr context,
+				     const CosNaming::Name& name,
+				     CORBA::Object_ptr obj)
+    throw(CannotProceed, InvalidName, AlreadyBound)
   {
-    if (CORBA::is_nil(m_hostContext))
-      {
-		return false;
-      }
-	m_mngrName = id;
-    m_mngrContext = createContext(m_hostContext, id, "mgr_cxt");
-    if (CORBA::is_nil(m_mngrContext))
-      {
-		return false;
-      }
-	
-    return true;
-  }
-  
-  
-  bool RtcNaming::createCategoryContext(const std::string& category)
-  {
-	ACE_TRACE("RtcNaming::createCategoryContext()");
-
-    if (CORBA::is_nil(m_mngrContext))
-      {
-		return false;
-      }
-	
-    //! Create naming context of "Category" on the name server.
-    if (m_cateContext.find(category) == m_cateContext.end())
-      {
-		CosNaming::NamingContextExt_var tmpContext;
-		tmpContext = createContext(m_mngrContext, category, "cate_cxt");
-		if (CORBA::is_nil(tmpContext))
-		  {
-			return false;
-		  }
-		m_cateContext[category] = tmpContext;
-      }
-    else 
-      {
-		return false;
-      }
-	
-    return true;
-  }
-  
-  
-  bool RtcNaming::createModuleContext(const std::string& module,
-									  const std::string& category)
-  {
-	ACE_TRACE("RtcNaming::createModuleContext()");
-
-	// If "category" context is not created, create it.
-    if (m_cateContext.find(category) == m_cateContext.end())
-      {
-		bool retval;
-		retval = createCategoryContext(category);
-		if (retval == false)
-		  {
-			return false;
-		  }
-	  }
-
-	// create "module" context under "category" context
-	CosNaming::NamingContextExt_var tmpContext;
-	tmpContext = createContext(m_cateContext[category], module, "mod_cxt");
-		
-	if (CORBA::is_nil(tmpContext))
-	  {
-		return false;
-	  }
-	m_compContext[category][module] = tmpContext;
-
-    return true;
-  }
-  
+    CORBA::ULong len(name.length());
+    CosNaming::NamingContext_var cxt;
+    cxt = CosNaming::NamingContext::_duplicate(context);
     
-  bool RtcNaming::bindObject(CosNaming::NamingContextExt_var context,
-							 const std::string& id, const std::string& kind,
-							 CORBA::Object_ptr obj)
-  {
-	ACE_TRACE("RtcNaming::bindObject()");
-
-    CosNaming::Name objectName;
-    objectName.length(1);
-    objectName[0].id   = CORBA::string_dup(id.c_str());
-    objectName[0].kind = CORBA::string_dup(kind.c_str());
-	
-    try
-      { // Bind the context to specified context.
-		context->bind(objectName, obj);
-      }
-    catch (...)
+    for (CORBA::ULong i = 0; i < len; ++i)
       {
-		cerr << "bindObject(): Unknown error" << endl;
-		return false;
-      }
-	
-    return true;
-  }
-  
-
-  bool RtcNaming::bindObjectByFullPath(const std::string& full_path,
-									   CORBA::Object_ptr obj)
-  {
-	ACE_TRACE("RtcNaming::bindObjectByFullPath()");
-
-	// "path"  should not be started with "/"
-	std::string path = full_path;
-
-	if (path.find_first_of("/") == (std::string::size_type) 0)
-      {
-		path.erase(path.begin());
-      }
-	bindObjectRecursive(m_rootContext, path, obj);
-
-    return true;
-  }
-  
-  
-  bool RtcNaming::bindComponent(const std::string& component, 
-								const std::string& module,
-								const std::string& category,
-								CORBA::Object_ptr obj)
-  {
-	ACE_TRACE("RtcNaming::bindComponent()");
-
-	if (!createModuleContext(module, category))
-	  {
-		return false;
+	if (i == (len - 1))
+	  { // this operation may throw AlreadyBound, 
+	    cxt->bind(subName(name, i, i), obj);
+	    return;
 	  }
-
-	return bindObject(m_compContext[category][module], component, "rtc", obj);
-  }
-  
-  
-  bool RtcNaming::bindManager(const std::string& id, CORBA::Object_ptr obj)
-  {
-	ACE_TRACE("RtcNaming::bindManager()");
-
-    if (CORBA::is_nil(m_mngrContext))
-      {
-		if (!createManagerContext(id))
-		  {
-			return false;
-		  }
+	else
+	  { // If the context is not a NamingContext, CannotProceed is thrown
+	    if (isNamingContext(cxt))
+	      cxt = bindOrResolveContext(cxt, subName(name, i, i));
+	    else
+	      throw CannotProceed(cxt, subName(name, i));
+	  }
       }
-	
-    return bindObject(m_mngrContext, id, "mgr", obj);
+    return;
   }
   
   
-  
-  //============================================================
-  // << Destroy and Unbind methods >>
-  //============================================================
-  
-  
-  bool RtcNaming::destroyHostContext()
+  /*!
+   * @if jp
+   * @brief Object $B$r(B rebind $B$9$k(B
+   * @else
+   * @brief Rebind object
+   * @endif
+   */
+  void RtcCorbaNaming::rebind(const CosNaming::Name& name,
+			      CORBA::Object_ptr obj,
+			      const bool force)
+    throw(NotFound, CannotProceed, InvalidName)
   {
-	ACE_TRACE("RtcNaming::destroyHostContext()");
-	bool ret = destroyRecursive(m_hostContext);
-	CosNaming::Name hostName;
-    hostName.length(1);
-    hostName[0].id   = CORBA::string_dup(m_hostName.c_str());
-    hostName[0].kind = CORBA::string_dup("host_cxt");
-	m_rootContext->unbind(hostName);
-    return ret;
-  }
-  
-  
-  bool RtcNaming::destroyManagerContext()
-  {
-	ACE_TRACE("RtcNaming::destroyManagerContext()");
-	bool ret = destroyRecursive(m_mngrContext);
-
-	CosNaming::Name mngrName;
-    mngrName.length(1);
-    mngrName[0].id   = CORBA::string_dup(m_mngrName.c_str());
-    mngrName[0].kind = CORBA::string_dup("mgr_cxt");
-
-	m_hostContext->unbind(mngrName);
-    return ret;
-  }
-  
-  
-  bool RtcNaming::destroyCategoryContext(const std::string& id)
-  {
-	ACE_TRACE("RtcNaming::destroyCategoryContext()");
-
-    return destroyRecursive(m_cateContext[id]);
-  }
-  
-  
-  bool RtcNaming::destroyModuleContext(const std::string& module,
-									   const std::string& category)
-  {
-	ACE_TRACE("RtcNaming::destroyModuleContext()");
-
-    return destroyRecursive(m_compContext[category][module]);
-  }
-  
-  
-  bool RtcNaming::unbindObject(CosNaming::NamingContextExt_var context,
-							   const std::string& id, const std::string& kind)
-  {
-	ACE_TRACE("RtcNaming::unbindObject()");
-
-    CosNaming::Name objectName;
-    objectName.length(1);
-    objectName[0].id   = CORBA::string_dup(id.c_str());
-    objectName[0].kind = CORBA::string_dup(kind.c_str());
     try
       {
-		context->unbind(objectName);
+	m_rootContext->rebind(name, obj);
       }
-    catch (...)
+    catch (NotFound& e)
       {
-		cerr << "" << std::endl;
-		cerr << id << " " << kind << std::endl;
-		cerr << "unbindObject(): Unknown error" << id << " " << kind << endl;
-		return false;
+	force ? rebindRecursive(m_rootContext, name, obj) : throw e;
       }
-	
-    return true;
+    catch (CannotProceed& e)
+      {
+	force ? rebindRecursive(e.cxt, e.rest_of_name, obj) : throw e;
+      }
   }
   
-
-  bool RtcNaming::unbindObjectByFullPath(const std::string& full_path)
+  
+  /*!
+   * @if jp
+   * @brief Object $B$r(B rebind $B$9$k(B
+   * @else
+   * @brief Rebind object
+   * @endif
+   */
+  void RtcCorbaNaming::rebindByString(const char* string_name,
+				      CORBA::Object_ptr obj,
+				      const bool force)
+    throw(NotFound, CannotProceed, InvalidName)
   {
-	ACE_TRACE("RtcNaming::unbindObjectByFullPath()");
-
-	RtcNameComponent name(full_path);
-	int length = name.length();
-
-	CosNaming::Name tmp;
-	try
-	  {
-		for (int i = 0; i < length; i++)
-		  {
-			CORBA::Object_var obj = m_rootContext->resolve(name.get());
-			CosNaming::NamingContextExt_var context;
-			try
-			  {
-				context = CosNaming::NamingContextExt::_narrow(obj);
-
-				// ¥«¥ì¥ó¥È¥³¥ó¥Æ¥­¥¹¥È¤«¤é¥Ð¥¤¥ó¥Ç¥£¥ó¥°¥ê¥¹¥È¼èÆÀ
-				CosNaming::BindingList_var bl;
-				CosNaming::BindingIterator_var bi;
-				context->list(m_bindListNum, bl, bi);
-				if (bl->length() == 0)
-				  {
-					context->destroy();
-					m_rootContext->unbind(name.get());
-				  }
-				else
-				  {
-					return false;
-				  }
-				
-			  }
-			catch (...)
-			  {
-				if (CORBA::is_nil(context))
-				  {
-					m_rootContext->unbind(name.get());
-				  }
-			  }					
-			tmp = name.pop();
-		  }
-	  }
-	catch (...)
-	  {
-		std::cout << "Unbind exception" << std::endl;
-		return false;
-	  }
-	return true;
+    rebind(toName(string_name), obj, force);
   }
-
-
-  bool RtcNaming::unbindLocalComponent(const std::string category,
-									   const std::string module,
-									   const std::string instance)
+  
+  
+  /*!
+   * @if jp
+   * @brief Object $B$r(B rebind $B$9$k(B
+   * @else
+   * @brief Rebind object
+   * @endif
+   */
+  void RtcCorbaNaming::rebindRecursive(CosNaming::NamingContext_ptr context,
+				       const CosNaming::Name& name,
+				       CORBA::Object_ptr obj)
+    throw(CannotProceed, InvalidName)
   {
-	std::string id, kind;
-	nodeToIdKind(instance, id, kind);
-	kind = "rtc";
-
-	if (m_compContext.count(category) > 0 &&
-		m_compContext[category].count(module) > 0)
+    CORBA::ULong len(name.length());
+    CosNaming::NamingContext_var cxt;
+    cxt = CosNaming::NamingContext::_duplicate(context);
+    
+    for (CORBA::ULong i = 0; i < len; ++i)
+      {
+	if (i == (len - 1))
 	  {
-		unbindObject(m_compContext[category][module], id, kind);
+	    cxt->rebind(subName(name, i, i), obj);
+	    return;
+	  }
+	else
+	  { // If the context is not a NamingContext, CannotProceed is thrown
+	    if (isNamingContext(cxt))
+	      cxt = cxt->bind_new_context(subName(name, i, i));
+	    else
+	      throw CannotProceed(cxt, subName(name, i));
+	  }
+      }
+    return;
+  }
+  
+  
+  /*!
+   * @if jp
+   * @brief NamingContext $B$r(B bind $B$9$k(B
+   * @else
+   * @brief Bind NamingContext
+   * @endif
+   */
+  void RtcCorbaNaming::bindContext(const CosNaming::Name& name,
+				   CosNaming::NamingContext_ptr name_cxt,
+				   const bool force)
+    throw(NotFound, CannotProceed, InvalidName, AlreadyBound)
+  {
+    bind(name, name_cxt, force);
+  }
+  
+  
+  /*!
+   * @if jp
+   * @brief NamingContext $B$r(B bind $B$9$k(B
+   * @else
+   * @brief Bind NamingContext
+   * @endif
+   */
+  void RtcCorbaNaming::bindContext(const char* string_name,
+				   CosNaming::NamingContext_ptr name_cxt,
+				   const bool force)
+    throw(NotFound, CannotProceed, InvalidName, AlreadyBound)
+  {
+    bindContext(toName(string_name), name_cxt, force);
+  }
+  
+  
+  /*!
+   * @if jp
+   * @brief $BESCf$N%3%s%F%-%9%H$r:F5"E*$K(B bind $B$7(B NamingContext $B$r(B bind $B$9$k(B
+   * @else
+   * @brief Rebind object
+   * @endif
+   */
+  void
+  RtcCorbaNaming::bindContextRecursive(CosNaming::NamingContext_ptr context,
+				       const CosNaming::Name& name,
+				       CosNaming::NamingContext_ptr name_cxt)
+  {
+    bindRecursive(context, name, name_cxt);
+    return;
+  }
+  
+  
+  /*!
+   * @if jp
+   * @brief NamingContext $B$r(B rebind $B$9$k(B
+   * @else
+   * @brief Rebind NamingContext
+   * @endif
+   */
+  void RtcCorbaNaming::rebindContext(const CosNaming::Name& name,
+				     CosNaming::NamingContext_ptr name_cxt,
+				     const bool force)
+    throw(NotFound, CannotProceed, InvalidName)
+  {
+    rebind(name, name_cxt, force);
+    return;
+  }
+  
+  
+  /*!
+   * @if jp
+   * @brief NamingContext $B$r(B rebind $B$9$k(B
+   * @else
+   * @brief Rebind NamingContext
+   * @endif
+   */
+  void RtcCorbaNaming::rebindContext(const char* string_name,
+				     CosNaming::NamingContext_ptr name_cxt,
+				     const bool force)
+    throw(NotFound, CannotProceed, InvalidName)
+  {
+    rebindContext(toName(string_name), name_cxt, force);
+  }
+  
+  
+  /*!
+   * @if jp
+   * @brief $BESCf$N%3%s%F%-%9%H$r:F5"E*$K(B rebind $B$7(B NamingContext $B$r(B rebind $B$9$k(B
+   * @else
+   * @brief Create or resolve intermediate context and rebind NamingContext 
+   * @endif
+   */
+  void
+  RtcCorbaNaming::rebindContextRecursive(CosNaming::NamingContext_ptr context,
+					 const CosNaming::Name& name,
+					 CosNaming::NamingContext_ptr name_cxt)
+  {
+    rebindRecursive(context, name, name_cxt);
+    return;
+  }
+  
+  
+  /*!
+   * @if jp
+   * @brief $BM?$($i$l$?(B NameComponent $B$K%P%$%s%I$5$l$F$$$k(B Object $B$rJV$9(B
+   * @else
+   * @brief Return object bound on the specified NameComponent
+   * @endif
+   */
+  CORBA::Object_ptr RtcCorbaNaming::resolve(const CosNaming::Name& name)
+    throw(NotFound, CannotProceed, InvalidName)
+  { 
+    return m_rootContext->resolve(name);
+  }
+  
+  
+  /*!
+   * @if jp
+   * @brief $BM?$($i$l$?(B NameComponent $B$K%P%$%s%I$5$l$F$$$k(B Object $B$rJV$9(B
+   * @else
+   * @brief Return object bound on the specified NameComponent
+   * @endif
+   */
+  CORBA::Object_ptr RtcCorbaNaming::resolve(const char* string_name)
+    throw(NotFound, CannotProceed, InvalidName)
+  { 
+    return resolve(toName(string_name));
+  }
+  
+  
+  /*!
+   * @if jp
+   * @brief $BM?$($i$l$?(B NameComponent $B$N%P%$%s%G%#%s%0$r:o=|$9$k(B
+   * @else
+   * @brief Unbind a binding specified by NameComponent
+   * @endif
+   */   
+  void RtcCorbaNaming::unbind(const CosNaming::Name& name)
+    throw(NotFound, CannotProceed, InvalidName)
+  {
+    m_rootContext->unbind(name);
+  }
+  
+  
+  /*!
+   * @if jp
+   * @brief $BM?$($i$l$?(B NameComponent $B$N%P%$%s%G%#%s%0$r:o=|$9$k(B
+   * @else
+   * @brief Unbind a binding specified by NameComponent
+   * @endif
+   */
+  void RtcCorbaNaming::unbind(const char* string_name)
+    throw(NotFound, CannotProceed, InvalidName)
+  {
+    unbind(toName(string_name));
+  }
+  
+  
+  /*!
+   * @if jp
+   * @brief $B?7$7$$%3%s%F%-%9%H$r@8@.$9$k(B
+   * @else
+   * @brief Create new NamingContext
+   * @endif
+   */
+  CosNaming::NamingContext_ptr RtcCorbaNaming::newContext()
+  {
+    return m_rootContext->new_context();
+  }
+  
+  
+  /*!
+   * @if jp
+   * @brief $B?7$7$$%3%s%F%-%9%H$r(B bind $B$9$k(B
+   * @else
+   * pbrief Bind new namingContext
+   * @endif
+   */
+  CosNaming::NamingContext_ptr
+  RtcCorbaNaming::bindNewContext(const CosNaming::Name& name, bool force)
+    throw(NotFound, CannotProceed, InvalidName, AlreadyBound)
+  {
+    try
+      {
+	return m_rootContext->bind_new_context(name);
+      }
+    catch (NotFound& e)
+      {
+	force ? bindRecursive(m_rootContext, name, newContext()) : throw e;
+      }
+    catch (CannotProceed& e)
+      {
+	force ? bindRecursive(e.cxt, e.rest_of_name, newContext()) : throw e;
+      }
+    return CosNaming::NamingContext::_nil();
+  }
+  
+  
+  /*!
+   * @if jp
+   * @brief $B?7$7$$%3%s%F%-%9%H$r(B bind $B$9$k(B
+   * @else
+   * pbrief Bind new namingContext
+   * @endif
+   */
+  CosNaming::NamingContext_ptr
+  RtcCorbaNaming::bindNewContext(const char* string_name, bool force)
+    throw(NotFound, CannotProceed, InvalidName, AlreadyBound)
+  {
+    return bindNewContext(toName(string_name));
+  }
+  
+  
+  /*!
+   * @if jp
+   * @brief NamingContext $B$rHs%"%/%F%#%V2=$9$k(B
+   * @else
+   * @brief Destroy the naming context
+   * @endif
+   */
+  void RtcCorbaNaming::destroy(CosNaming::NamingContext_ptr context)
+    throw(NotEmpty)
+  {
+    context->destroy();
+  }
+  
+  
+  /*!
+   * @if jp
+   * @brief NamingContext $B$r:F5"E*$K2<$C$FHs%"%/%F%#%V2=$9$k(B
+   * @else
+   * @brief Destroy the naming context recursively
+   * @endif
+   */
+  void RtcCorbaNaming::destroyRecursive(CosNaming::NamingContext_ptr context)
+    throw(NotEmpty, NotFound, CannotProceed, InvalidName)
+  {
+    CosNaming::BindingList_var     bl;
+    CosNaming::BindingIterator_var bi;
+    CORBA::Boolean cont(true);
+    
+    context->list(m_blLength, bl, bi);
+    
+    while (cont)
+      {
+	CORBA::ULong len(bl->length());
+	
+	for (CORBA::ULong i = 0; i < len; ++i)
+	  {
+	    if (bl[i].binding_type == CosNaming::ncontext)
+	      {	// If Object is context, destroy recursive.
+		CosNaming::NamingContext_var next_context;
+		next_context = CosNaming::NamingContext::
+		  _narrow(context->resolve(bl[i].binding_name));
+		
+		// Recursive function call
+		destroyRecursive(next_context); // +++ Recursive call +++
+		context->unbind(bl[i].binding_name);
+		next_context->destroy();
+	      }
+	    else if (bl[i].binding_type == CosNaming::nobject)
+	      {	// If Object is object, unbind it.
+		context->unbind(bl[i].binding_name);
+	      }
+	    else assert(0); // never comes here
+	  }
+	
+	// no more binding -> do-while loop will be finished
+	if (CORBA::is_nil(bi)) cont = false;
+	else bi->next_n(m_blLength, bl);
+      }
+    
+    if (!CORBA::is_nil(bi)) bi->destroy();
+    return;
+  }
+  
+  
+  /*!
+   * @if jp
+   * @brief $B$9$Y$F$N(B Binding $B$r:o=|$9$k(B
+   * @else
+   * @brief Destroy all binding
+   * @endif
+   */
+  void RtcCorbaNaming::clearAll()
+  {
+    destroyRecursive(m_rootContext);
+  }
+  
+  
+  /*!
+   * @if jp
+   * @brief $BM?$($i$l$?(B NamingContext $B$N(B Binding $B$r<hF@$9$k(B
+   * @else
+   * @brief Get Binding on the NamingContextDestroy all binding
+   * @endif
+   */
+  void RtcCorbaNaming::list(CosNaming::NamingContext_ptr name_cxt,
+			    unsigned long how_many,
+			    CosNaming::BindingList_var& bl,
+			    CosNaming::BindingIterator_var& bi)
+  {
+    name_cxt->list(how_many, bl, bi);
+  }
+  
+  
+  /*!
+   * @if jp
+   * @brief $BM?$($i$l$?(B NameComponent $B$NJ8;zNsI=8=$rJV$9(B
+   * @else
+   * @brief Get string representation of given NameComponent
+   * @endif
+   */
+  char* RtcCorbaNaming::toString(const CosNaming::Name& name)
+    throw(InvalidName)
+  {
+    if (name.length() == 0)
+      throw InvalidName();
+    
+    CORBA::ULong slen = 0;
+    slen = getNameLength(name);
+    
+    char* string_name = CORBA::string_alloc(slen);
+    nameToString(name, string_name, slen);
+    
+    return string_name;
+  }
+  
+  
+  /*!
+   * @if jp
+   * @brief $BM?$($i$l$?J8;zNsI=8=$r(B NameComponent $B$KJ,2r$9$k(B
+   * @else
+   * @brief Get NameComponent from gien string name representation
+   * @endif
+   */
+  CosNaming::Name RtcCorbaNaming::toName(const char* sname)
+    throw(InvalidName)
+  {
+    if (!sname)         throw InvalidName();
+    if (*sname == '\0') throw InvalidName();
+    
+    std::string string_name(sname);
+    std::vector<std::string> name_comps;
+    
+    // String name should include 1 or more names
+    CORBA::ULong nc_length = 0;
+    nc_length = split(string_name, std::string("/"), name_comps);
+    if (!(nc_length > 0)) throw InvalidName();
+    
+    // Name components are allocated
+    CosNaming::Name*    namep = new CosNaming::Name;
+    CosNaming::Name_var name(namep);
+    name->length(nc_length);
+    
+    // Insert id and kind to name components
+    for (CORBA::ULong i = 0; i < nc_length; ++i)
+      {
+	std::vector<std::string> id_kind;
+	split(name_comps[i], std::string("."), id_kind);
+	
+	if (id_kind.size() == 2)
+	  {
+	    name[i].id   = CORBA::string_dup(id_kind[0].c_str());
+	    name[i].kind = id_kind[1].c_str();
+	  }
+	else if (id_kind.size() == 1)
+	  {
+	    name[i].id   = id_kind[0].c_str();
+	    name[i].kind = "";
 	  }
 	else
 	  {
-		return false;
+	    throw InvalidName();
 	  }
-	return true;
-  }
-
-
-  
-  //============================================================
-  // << Find methods >>
-  //============================================================
-  
-  bool RtcNaming::findHostContext(const std::string& id_seq,
-								  ContextList& context)
-  {
-	ACE_TRACE("RtcNaming::findHostContext()");
-
-    const std::string path(makeFullPath(id_seq, HOST_CTXT_LEVEL));
-    findContextRecursive(m_rootContext,
-						 path,
-						 context);
-    return true;
-  }
-  
-  
-  bool RtcNaming::findCategoryContext(const std::string& id_seq, 
-									  ContextList& context)
-  {
-	ACE_TRACE("RtcNaming::findCategoryContext()");
-
-    const std::string path(makeFullPath(id_seq, CATEGORY_CTXT_LEVEL));
-    findContextRecursive(m_rootContext,
-						 path,
-						 context);
-    return true;
-  }
-  
-  
-  bool RtcNaming::findModuleContext(const std::string& id_seq,
-									   ContextList& context)
-  {
-	ACE_TRACE("RtcNaming::findModuleContext()");
-
-    const std::string path(makeFullPath(id_seq, MODULE_CTXT_LEVEL));
-    findContextRecursive(m_rootContext,
-						 path,
-						 context);
-    return true;
-  }
-  
-  
-  bool RtcNaming::findManagerContext(const std::string& id_seq,
-									 ContextList& context)
-  {
-	ACE_TRACE("RtcNaming::findManagerContext()");
-
-    const std::string path(makeFullPath(id_seq, MANAGER_CTXT_LEVEL));
-    findContextRecursive(m_rootContext,
-						 path,
-						 context);
-    return true;
-  }
-  
-  
-  bool RtcNaming::findManager(std::string& id_seq,
-							  ObjectList& objects)
-  {
-	ACE_TRACE("RtcNaming::findManager()");
-
-    const std::string path(makeFullPath(id_seq, MANAGER_LEVEL));
-    findObjectsRecursive(m_rootContext,
-						 path,
-						 objects);
-    return true;
-  }
-  
-  
-  bool RtcNaming::findComponents(const std::string& id_seq,
-								 ObjectList& objects)
-  {
-	ACE_TRACE("RtcNaming::findComponents()");
-    const std::string path(makeFullPath(id_seq, COMPONENT_LEVEL));
-    findObjectsRecursive(m_rootContext,
-						 path,
-						 objects);
-    return true;
-  }
-  
-  
-  //============================================================
-  // << Protected members >>
-  //============================================================
-  
-  bool RtcNaming::destroyRecursive(CosNaming::NamingContextExt_var context)
-  {
-	ACE_TRACE("RtcNaming::destroyRecursive()");
-
-    CosNaming::BindingList_var bl;
-    CosNaming::BindingIterator_var bi;
-    context->list(m_bindListNum, bl, bi);
-	
-    for (unsigned int i = 0; i < bl->length(); i++)
-      {
-		// Binding name (id, kind)
-		std::string pId   = (const char*) bl[i].binding_name[0].id;
-		std::string pKind = (const char*) bl[i].binding_name[0].kind;
-
-		if (bl[i].binding_type == CosNaming::nobject)
-		  { // If Object is object, unbind it.
-			try
-			  {
-				context->unbind(bl[i].binding_name);
-			  }
-			catch (...)
-			  {
-				cerr << "Hoge? excaption was cought: unbind()." << endl;
-			  }
-		  }
-		else if (bl[i].binding_type == CosNaming::ncontext)
-		  { // If Object is context, destroy recursive.
-			CORBA::Object_ptr obj = context->resolve(bl[i].binding_name);
-			CosNaming::NamingContextExt_var testContext;
-			testContext = CosNaming::NamingContextExt::_narrow(obj);
-			// Recursive function call
-			destroyRecursive(testContext);
-			try
-			  {
-				context->unbind(bl[i].binding_name);
-				testContext->destroy();
-			  }
-			catch (CosNaming::NamingContext::NotFound e)
-			  {
-				e;
-				cerr << "Exception cought. Unbinding Naming Context. ";
-				cerr << "Not Found: " << bl[i].binding_name[0].id;
-				cerr << "|" << bl[i].binding_name[0].kind << endl;
-			  }
-			catch (CosNaming::NamingContext::CannotProceed e)
-			  {
-				e;
-				cerr << "Exception cought. Unbinding Naming Context. ";
-				cerr << "Cannot Proceed." << endl;
-			  }
-			catch (CosNaming::NamingContext::InvalidName e)
-			  {
-				e;
-				cerr << "Exception cought. Unbinding Naming Context. ";
-				cerr << "Invalid Name: " << bl[i].binding_name[0].id;
-				cerr << "|" << bl[i].binding_name[0].kind << endl;
-			  }
-			catch (...)
-			  {
-				;
-			  }
-		  }
-		else
-		  {
-			cerr << "Invalid Name binding type: " << pId << endl;
-		  }
       }
-
-	//	context->destroy();
-	return true;
-  }
-  
-
-  
-  void RtcNaming::findObjectsRecursive(CosNaming::NamingContextExt_ptr context,
-									   const std::string& path,
-									   ObjectList& obj_list)
-  {
-	ACE_TRACE("RtcNaming::findObjectsRecursive()");
-    std::string node;
-    std::string remain;
-    pickupNode(path, node, remain);
-
-    std::string kind;
-    std::string id;
-    nodeToIdKindAny(node, id, kind);
-	
-    // regex ¥Ñ¥¿¡¼¥ó¤òÀ¸À®
-    boost::regex id_regex(id), kind_regex(kind);
-    boost::smatch id_results, kind_results;
-	
-    // ¥«¥ì¥ó¥È¥³¥ó¥Æ¥­¥¹¥È¤«¤é¥Ð¥¤¥ó¥Ç¥£¥ó¥°¥ê¥¹¥È¼èÆÀ
-    CosNaming::BindingList_var bl;
-    CosNaming::BindingIterator_var bi;
-    if (CORBA::is_nil(context))
-	  {
-		return;
-	  }
-	context->list(m_bindListNum, bl, bi);
-	
-    for (unsigned int i = 0; i < bl->length(); i++)
-      {
-		// ¥Ð¥¤¥ó¥Ç¥£¥ó¥°Ì¾ (id, kind)
-		std::string pId   = (const char*)(bl[i].binding_name[0]).id;
-		std::string pKind = (const char*)(bl[i].binding_name[0]).kind;
-
-		if (regex_match(pId,   id_results,   id_regex) && 
-			regex_match(pKind, kind_results, kind_regex))
-		  { // id ¤È kind ¤¬¥Þ¥Ã¥Á
-			CORBA::Object_ptr obj = context->resolve(bl[i].binding_name);
-			
-			// If Object is object, store the object to object list
-			if (bl[i].binding_type == CosNaming::nobject)
-			  {
-				if (remain.size() == 0)
-				  {
-					obj_list.push_back(obj);
-				  }
-
-			  }
-			// if Object is naming context, find recursively.
-			else if (bl[i].binding_type == CosNaming::ncontext)
-			  {
-				// Recursive function call
-				CosNaming::NamingContextExt_var next_context;
-				next_context = CosNaming::NamingContextExt::_narrow(obj);
-				
-				if (!CORBA::is_nil(next_context))
-				  {
-					findObjectsRecursive(next_context, remain, obj_list);
-				  }
-			  }
-			
-		  }
-      }
-    return;
+    return name;
   }
   
   
-  void RtcNaming::findContextRecursive(CosNaming::NamingContextExt_var context,
-									   const std::string& path,
-									   ContextList& context_list)
+  /*!
+   * @if jp
+   * @brief $BM?$($i$l$?(B addre $B$H(B string_name $B$+$i(B URL$BI=8=$r<hF@$9$k(B
+   * @else
+   * @brief Get URL representation from given addr and string_name
+   * @endif
+   */
+  char* RtcCorbaNaming::toUrl(char* addr, char* string_name)
+    throw(InvalidAddress, InvalidName)
   {
-	ACE_TRACE("RtcNaming::findContextRecursive()");
-
-    std::string node;
-    std::string remain;
-    pickupNode(path, node, remain);
-	
-    std::string kind;
-    std::string id;
-    nodeToIdKindAny(node, id, kind);
-	
-    // regex ¥Ñ¥¿¡¼¥ó¤òÀ¸À®
-    boost::regex id_regex(id), kind_regex(kind);
-    boost::smatch id_results, kind_results;
-	
-    // ¥«¥ì¥ó¥È¥³¥ó¥Æ¥­¥¹¥È¤«¤é¥Ð¥¤¥ó¥Ç¥£¥ó¥°¥ê¥¹¥È¼èÆÀ
-    CosNaming::BindingList_var bl;
-    CosNaming::BindingIterator_var bi;
-    context->list(m_bindListNum, bl, bi);
-	
-    for (unsigned int i = 0; i < bl->length(); i++)
-      {
-		// ¥Ð¥¤¥ó¥Ç¥£¥ó¥°Ì¾ (id, kind)
-		std::string pId   = (const char*)(bl[i].binding_name[0]).id;
-		std::string pKind = (const char*)(bl[i].binding_name[0]).kind;
-
-		if (regex_match(pId,   id_results,   id_regex) && 
-			regex_match(pKind, kind_results, kind_regex))
-		  { // id ¤È kind ¤¬¥Þ¥Ã¥Á
-			
-			CORBA::Object_ptr Object = context->resolve(bl[i].binding_name);
-			
-			if (bl[i].binding_type == CosNaming::ncontext)
-			  {
-				// Recursive function call
-				CosNaming::NamingContextExt_var next_context;
-				next_context = CosNaming::NamingContextExt::_narrow(Object);
-				
-				if (!CORBA::is_nil(next_context) && remain.size() == 0)
-				  {
-					context_list.push_back(next_context);
-				  } 
-				else if (!CORBA::is_nil(next_context) && remain.size() > 0)
-				  {
-					findContextRecursive(next_context, remain, context_list);
-				  }
-			  }
-			
-		  }
-      }
-    return;
+    return m_rootContext->to_url(addr, string_name);
   }
   
-  void RtcNaming::bindObjectRecursive(CosNaming::NamingContextExt_var context,
-									  const std::string& path,
-									  CORBA::Object_ptr obj)
+  
+  /*!
+   * @if jp
+   * @brief $BM?$($i$l$?J8;zNsI=8=$r(B resolve $B$7%*%V%8%'%/%H$rJV$9(B
+   * @else
+   * @brief Resolve from name of string representation and get object 
+   * @endif
+   */
+  CORBA::Object_ptr RtcCorbaNaming::resolveStr(const char* string_name)
+    throw(NotFound, CannotProceed, InvalidName, AlreadyBound)
   {
-	ACE_TRACE("RtcNaming::findContextRecursive()");
-
-    std::string node;
-    std::string remain;
-    pickupNode(path, node, remain);
-    std::string kind;
-    std::string id;
-    nodeToIdKind(node, id, kind);
-
-	CosNaming::Name_var name = new CosNaming::Name(1);
-	name->length(1);
-	name[0].id   = CORBA::string_dup(id.c_str());
-	name[0].kind = CORBA::string_dup(kind.c_str());
-	
-	if (remain.size() == 0)
-	  {
-		try
-		  {
-			context->rebind(name, obj);
-			return;
-		  }
-		catch (...)
-		  {
-			//cerr << "RtcNaming::bindObjectRecursive: Exception" << endl;
-		  }
-	  }
-	else
-	  {
-		CosNaming::NamingContextExt_var next_cxt;
-		CosNaming::NamingContext_var cxt;
-		try
-		  {
-			cxt = context->bind_new_context(name);
-			next_cxt = CosNaming::NamingContextExt::_narrow(cxt);
-		  }
-		catch (const CosNaming::NamingContext::AlreadyBound& e)
-		  {
-			e;
-			CORBA::Object_var obj = context->resolve(name);
-			next_cxt = CosNaming::NamingContextExt::_narrow(obj);
-			if (CORBA::is_nil(next_cxt)) 
-			  {
-				cerr << "bindObjectRecursive(): next_cxt is nil!!" << endl;
-				return;
-			  }
-		  }
-		bindObjectRecursive(next_cxt, remain, obj);
-	  }
-    return;
+    return resolve(string_name);
   }
   
   
   
-  //============================================================
-  // << Private members >>
-  //============================================================
-  
-  
-  /*------------------------------------------------------------
-   * Split string with a delimiter
-   *------------------------------------------------------------*/
-  int RtcNaming::split(const std::string& input, const std::string& delimiter,
-					   std::vector<std::string>& results)
+  //======================================================================
+  // Util functions
+  //======================================================================
+  /*!
+   * @if jp
+   * @brief 
+   * @else
+   * @brief 
+   * @endif
+   */
+  CORBA::Object_ptr
+  RtcCorbaNaming::bindOrResolve(CosNaming::NamingContext_ptr context,
+				const CosNaming::Name& name,
+				CORBA::Object_ptr obj)
   {
-    std::string::size_type input_size = input.size();
-    std::string::size_type delim_size = delimiter.size();
-    std::string::size_type new_pos = 0;
-    std::string::size_type pre_pos = 0;
-    std::string::size_type sub_size = 0;
-    int ret_value = -1;
-    bool search = true;
-	
-    while (search)
+    try
       {
-		new_pos = input.find(delimiter, pre_pos);
-		if (new_pos == std::string::npos)
-		  {
-			search = false;
-			sub_size = input_size - pre_pos;
-		  }
-		else
-		  {
-			sub_size = new_pos - pre_pos;
-		  }
-		if (sub_size > 0)
-		  {
-			results.push_back(input.substr(pre_pos, sub_size));
-			ret_value = results.size();
-		  }
-		pre_pos = new_pos + delim_size;
+	context->bind(name, obj);
+	return obj;
       }
-    return ret_value;
+    catch (AlreadyBound& e)
+      {
+	return context->resolve(name);
+      }
+    return CORBA::Object::_nil();
   }
   
   
-  /*------------------------------------------------------------
-   * Convert the given path to full path
-   *
-   * @param path path which have to converted to full path
-   * @param level compensation level
-   *
-   * If given path is "hoge/munya" and level is 5,
-   * it is converted to "*./*./*./hoge/munya".
-   *------------------------------------------------------------*/
-  std::string RtcNaming::makeFullPath(std::string path, int level)
+  /*!
+   * @if jp
+   * @brief 
+   * @else
+   * @brief 
+   * @endif
+   */
+  CosNaming::NamingContext_ptr
+  RtcCorbaNaming::bindOrResolveContext(CosNaming::NamingContext_ptr context,
+				       const CosNaming::Name& name,
+				       CosNaming::NamingContext_ptr new_context)
   {
-    std::string::size_type pos(0);
-    std::string::size_type pos_end(path.size());
-	
-    // If first character is "/", path is fully qualified.
-    // Then erase root "/" and return path immediately.
-    if (path.find_first_of("/") == (std::string::size_type) 0)
-      {
-		path.erase(path.begin());
-		return path;
-      }
-	
-    int num(0);
-    std::string comp_path(".*/");
-	
-    while (pos < pos_end)
-      {
-		pos = path.find_first_of("/", pos);
-		if (pos == std::string::npos) break;
-		++pos;
-		++num;
-      }
-	
-    --level;
-    for (int i = 0; i < level - num; ++i)
-      {
-		path.insert(0, comp_path);
-      }
-    return path;
+    return CosNaming::NamingContext::_narrow(bindOrResolve(context, name, new_context));
   }
   
   
-  bool RtcNaming::pickupNode(const std::string& path, std::string& node, std::string& remain)
+  /*!
+   * @if jp
+   * @brief 
+   * @else
+   * @brief 
+   * @endif
+   */
+  CosNaming::NamingContext_ptr
+  RtcCorbaNaming::bindOrResolveContext(CosNaming::NamingContext_ptr context,
+				       const CosNaming::Name& name)
   {
-    // path ¤ÎÀèÆ¬¤È»Ä¤ê¤ò¼è¤ê½Ð¤¹¡£
-    std::string::size_type pos = path.find_first_of("/");
-    if (pos == std::string::npos)
-      { // this is leaf node
-		node = path;
-		remain = "";
+    return bindOrResolveContext(context, name, newContext());
+  }
+  
+  
+  
+  /*!
+   * @if jp
+   * @brief 
+   * @else
+   * @brief 
+   * @endif
+   */
+  const char* RtcCorbaNaming::getNameServer()
+  {
+    return m_nameServer.c_str();
+  }
+  
+  
+  /*!
+   * @if jp
+   * @brief 
+   * @else
+   * @brief 
+   * @endif
+   */
+  CosNaming::NamingContext_ptr RtcCorbaNaming::getRootContext()
+  {
+    return m_rootContext;
+  }
+  
+  
+  /*!
+   * @if jp
+   * @brief 
+   * @else
+   * @brief 
+   * @endif
+   */
+  bool RtcCorbaNaming::isNamingContext(CORBA::Object_ptr obj)
+  {
+    CosNaming::NamingContext_var nc;
+    nc = CosNaming::NamingContext::_narrow(obj);
+    return CORBA::is_nil(nc) ? false : true;
+  }
+  
+  
+  /*!
+   * @if jp
+   * @brief 
+   * @else
+   * @brief 
+   * @endif
+   */
+  bool RtcCorbaNaming::isNamingContext(const CosNaming::Name& name)
+  {
+    return isNamingContext(resolve(name));
+  }
+  
+  
+  /*!
+   * @if jp
+   * @brief 
+   * @else
+   * @brief 
+   * @endif
+   */
+  bool RtcCorbaNaming::isNamingContext(const char* string_name)
+  {
+    return isNamingContext(resolve(string_name));
+  }
+  
+  
+  /*!
+   * @if jp
+   * @brief 
+   * @else
+   * @brief 
+   * @endif
+   */
+  CosNaming::Name RtcCorbaNaming::subName(const CosNaming::Name& name,
+					  long begin,
+					  long end)
+  {
+    if (end < 0) end = name.length() - 1;
+    
+    CosNaming::Name sub_name;
+    CORBA::ULong sub_len(end - (begin - 1));
+    if (sub_len > 0)
+      {
+	sub_name.length(sub_len);
       }
     else
       {
-		node = path.substr(0, pos);
-		remain = path.substr(pos + 1);
+	sub_name.length(0);
+	return sub_name;
       }
-	return true;
+    
+    for (CORBA::ULong i = 0; i < sub_len; ++i)
+      {
+	sub_name[i] = name[begin + i];
+      }
+    return sub_name;
   }
   
   
   
-  void RtcNaming::nodeToIdKindAny(const std::string& node, std::string& id,
-							   std::string& kind)
+  //------------------------------------------------------------
+  // Protected member functions
+  //------------------------------------------------------------
+  /*!
+   * @if jp
+   * @brief 
+   * @else
+   * @brief 
+   * @endif
+   */
+  void RtcCorbaNaming::nameToString(const CosNaming::Name& name,
+				    char* string_name,
+				    unsigned long slen)
   {
-    std::string::size_type pos;
-    pos = node.find_first_of("|");
-	
-    if (pos == std::string::npos)
+    char* s = string_name;
+    for (CORBA::ULong i = 0; i < name.length(); ++i)
       {
-		id = node;
-		kind = ".*"; // kind ¤¬¤Ê¤±¤ì¤ÐÇ¤°Õ¤Îkind¤Ë¥Þ¥Ã¥Á
+	// Copy id to string_name
+	for (const char* id = name[i].id; *id != '\0'; ++id)
+	  {
+	    if (*id == '/' || *id == '.' || *id == '\\') *s++ = '\\';
+	    *s++ = *id;
+	  }
+	// '.' if there is a kind, or no id
+	if (((const char*)(name[i].id  ))[0] == '\0' || 
+	    ((const char*)(name[i].kind))[0] != '\0')
+	  *s++ = '.';
+	// Copy kind to string_name
+	for (const char* kind = name[i].kind; *kind != '\0'; ++kind)
+	  {
+	    if (*kind == '/' || *kind == '.' || *kind == '\\')
+	      *s++ = '\\';
+	    *s++ = *kind;
+	  }
+	// The end of string_name will be overwritten by '\0'
+	*s++ = '/';
       }
-    else 
-      {
-		id = node.substr(0, pos);
-		kind = node.substr(pos + 1);
-      }
+    string_name[slen-1] = '\0';
   }
   
-  void RtcNaming::nodeToIdKind(const std::string& node, std::string& id,
-							   std::string& kind)
+  
+  /*!
+   * @if jp
+   * @brief 
+   * @else
+   * @brief 
+   * @endif
+   */
+  CORBA::ULong RtcCorbaNaming::getNameLength(const CosNaming::Name& name)
   {
-    std::string::size_type pos;
-    pos = node.find_first_of("|");
-	
-    if (pos == std::string::npos)
+    CORBA::ULong slen = 0;
+    
+    for (CORBA::ULong i = 0; i < name.length(); ++i)
       {
-		id = node;
+	// Count string length of id(s)
+	for (const char* id = name[i].id; *id; ++id)
+	  {
+	    // Escape character '/', '.', '\' will convert to "\/", "\.", "\\".
+	    if (*id == '/' || *id == '.' || *id == '\\') slen++;
+	    slen++;
+	  }
+	// If kind exists, space for '.' is counted
+	if (((const char*)(name[i].id  ))[0] == '\0' || 
+	    ((const char*)(name[i].kind))[0] != '\0')
+	  {
+	    slen++;
+	  }
+	// Count string length of kind(s)
+	for (const char* kind = name[i].kind; *kind; kind++)
+	  {
+	    if (*kind == '/' || *kind == '.' || *kind == '\\') slen++;
+	    slen++;
+	  }
+	// Space for '/' or '\0'
+	slen++;
       }
-    else 
-      {
-		id = node.substr(0, pos);
-		kind = node.substr(pos + 1);
-      }
+    return slen;
   }
   
   
-}; // end of namespace RTM
+  /*!
+   * @if jp
+   * @brief 
+   * @else
+   * @brief 
+   * @endif
+   */
+  unsigned int RtcCorbaNaming::split(const std::string& input,
+				     const std::string& delimiter,
+				     std::vector<std::string>& results)
+  {
+    typedef std::string::size_type size;
+    size delim_size = delimiter.size();
+    size found_pos(0), begin_pos(0), pre_pos(0), substr_size(0);
+    
+    if (input.substr(0, delim_size) == delimiter)
+      begin_pos = pre_pos = delim_size;
+    
+    while (1)
+      {
+      REFIND:
+	found_pos = input.find(delimiter, begin_pos);
+	if (found_pos == std::string::npos) 
+	  {
+	    results.push_back(input.substr(pre_pos));
+	    break;
+	  }
+	if ('\\' == input.at(found_pos - 1))
+	  {
+	    begin_pos = found_pos + delim_size;
+	    goto REFIND;
+	  }
+	
+	substr_size = found_pos - pre_pos;
+	
+	if (substr_size > 0)
+	  {
+	    results.push_back(input.substr(pre_pos, substr_size));
+	  }
+	begin_pos = found_pos + delim_size;
+	pre_pos   = found_pos + delim_size;
+      }
+    return results.size();
+  }
+}; //
