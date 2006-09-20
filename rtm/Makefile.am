@@ -2,9 +2,12 @@
 ##------------------------------------------------------------
 ## Makefile.am for libRTC
 ##
-## $Id: Makefile.am,v 1.3 2006-09-11 18:44:23 n-ando Exp $
+## $Id: Makefile.am,v 1.4 2006-09-20 08:52:50 n-ando Exp $
 ##
 ## $Log: not supported by cvs2svn $
+## Revision 1.3  2006/09/11 18:44:23  n-ando
+## SDO and Properties classes are added.
+##
 ## Revision 1.2  2005/09/07 04:58:22  n-ando
 ## RTComponent's service management feature was added.
 ##
@@ -26,6 +29,7 @@ lib_LTLIBRARIES = libRTC.la
 # sources of libShared.la
 RTC_SRC = \
 	Properties.cpp \
+	Modulemanager.cpp \
 	RtcNaming.cpp \
 	RtcNameComponent.cpp \
 	RtcConfig.cpp \
@@ -52,6 +56,7 @@ RTC_SRC = \
 
 libRTC_la_SOURCES = \
 	Properties.cpp \
+	ModuleManager.cpp \
 	RtcNaming.cpp \
 	RtcNameComponent.cpp \
 	RtcConfig.cpp \
