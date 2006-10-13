@@ -2,7 +2,7 @@
 /*!
  * @file StringUtil.h
  * @brief String operation utility
- * @date $Date: 2006-09-20 08:49:08 $
+ * @date $Date: 2006-10-13 03:51:37 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
  * Copyright (C) 2003-2005
@@ -12,12 +12,15 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: StringUtil.h,v 1.1 2006-09-20 08:49:08 n-ando Exp $
+ * $Id: StringUtil.h,v 1.2 2006-10-13 03:51:37 n-ando Exp $
  *
  */
 
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.1  2006/09/20 08:49:08  n-ando
+ * The first commit.
+ *
  *
  */
 
@@ -28,18 +31,155 @@
 #include <algorithm>
 #include <vector>
 
+
+/*!
+ * @if jp
+ * @brief
+ * @else
+ * @brief
+ * @endif
+ */
+bool isEscaped(const std::string& str, std::string::size_type pos)
+{
+  --pos;
+  unsigned int i;
+  for (i = 0; (pos >= 0) && str[pos] == '\\'; --pos, ++i) ;
+  // If the number of \ is odd, delimiter is escaped.
+  return (i % 2) == 1;
+}
+
+
+/*!
+ * @if jp
+ * @brief
+ * @else
+ * @brief
+ * @endif
+ */
+struct escape_functor
+{
+  escape_functor() {};
+  void operator()(const char c)
+  {
+    if      (c == '\t')  str += "\\t";
+    else if (c == '\n')  str += "\\n";
+    else if (c == '\f')  str += "\\f";
+    else if (c == '\r')  str += "\\r";
+    else if (c == '\"')  str += "\\\"";
+    else if (c == '\'')  str += "\\\'";
+    else str.push_back(c);
+  }
+  std::string str;
+};
+
+
+/*!
+ * @if jp
+ * @brief
+ * @else
+ * @brief
+ * @endif
+ */
+std::string escape(const std::string str)
+{
+  return for_each(str.begin(), str.end(), escape_functor()).str;
+}
+
+
+/*!
+ * @if jp
+ * @brief
+ * @else
+ * @brief
+ * @endif
+ */
+struct unescape_functor
+{
+  unescape_functor() : count(0) {};
+  void operator()(char c)
+  {
+    if (c == '\\')
+      {
+	++count;
+	if (!(count % 2))
+	  {
+	    str.push_back(c);
+	  }
+      }
+    else
+      {
+	if (count > 0 && (count % 2))
+	  {
+	    count = 0;
+	    if      (c == 't')  str.push_back('\t');
+	    else if (c == 'n')  str.push_back('\n');
+	    else if (c == 'f')  str.push_back('\f');
+	    else if (c == 'r')  str.push_back('\r');
+	    else if (c == '\"') str.push_back('\"');
+	    else if (c == '\'') str.push_back('\'');
+	    else str.push_back(c);
+	  }
+	else
+	  {
+	    count = 0;
+	    str.push_back(c);
+	  }
+      }
+  } 
+  std::string str;
+  int count;
+};
+
+
+/*!
+ * @if jp
+ * @brief
+ * @else
+ * @brief
+ * @endif
+ */
+std::string unescape(const std::string str)
+{
+  return for_each(str.begin(), str.end(), unescape_functor()).str;
+
+}
+
+
+/*!
+ * @if jp
+ * @brief
+ * @else
+ * @brief
+ * @endif
+ */
 void eraseHeadBlank(std::string& str)
 {
   while (str[0] == ' ' || str[0] == '\t') str.erase(0, 1);
 }
 
 
+/*!
+ * @if jp
+ * @brief
+ * @else
+ * @brief
+ * @endif
+ */
 void eraseTailBlank(std::string& str)
 {
-  while (str[str.size() - 1] == ' ' || str[str.size() - 1] == '\t')
+  while ((str[str.size() - 1] == ' ' || str[str.size() - 1] == '\t') &&
+	 !isEscaped(str, str.size() - 1))
     str.erase(str.size() - 1, 1);
 }
 
+
+/*!
+ * @if jp
+ * @brief
+ * @else
+ * @brief
+ * @endif
+ */
 std::vector<std::string> split(const std::string& input,
 			       const std::string& delimiter)
 {
@@ -81,6 +221,13 @@ std::vector<std::string> split(const std::string& input,
 }
 
 
+/*!
+ * @if jp
+ * @brief
+ * @else
+ * @brief
+ * @endif
+ */
 struct Toupper
 {
   void operator()(char &c)
@@ -88,6 +235,7 @@ struct Toupper
     c = toupper(c);
   }
 };
+
 
 bool toBool(std::string str, std::string yes, std::string no, 
 	    bool default_value = true)
@@ -108,6 +256,13 @@ bool toBool(std::string str, std::string yes, std::string no,
 
 
 
+/*!
+ * @if jp
+ * @brief
+ * @else
+ * @brief
+ * @endif
+ */
 bool isAbsolutePath(const std::string& str)
 {
   // UNIX absolute path is begun from '/'
@@ -121,6 +276,13 @@ bool isAbsolutePath(const std::string& str)
 }
 
 
+/*!
+ * @if jp
+ * @brief
+ * @else
+ * @brief
+ * @endif
+ */
 bool isURL(const std::string& str)
 {
   typedef std::string::size_type size;
