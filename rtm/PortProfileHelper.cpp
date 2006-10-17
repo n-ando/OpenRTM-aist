@@ -1,8 +1,8 @@
 // -*- C++ -*-
 /*!
- * @file PortProfileHelper.h
+ * @file PortProfileHelper.cpp
  * @brief RTC's PortProfile helper class
- * @date $Date: 2006-10-17 10:22:52 $
+ * @date $Date: 2006-10-17 19:04:59 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
  * Copyright (C) 2006
@@ -12,12 +12,15 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: PortProfileHelper.cpp,v 1.1 2006-10-17 10:22:52 n-ando Exp $
+ * $Id: PortProfileHelper.cpp,v 1.2 2006-10-17 19:04:59 n-ando Exp $
  *
  */
 
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.1  2006/10/17 10:22:52  n-ando
+ * The first commitment.
+ *
  */
 
 #include "rtm/PortProfileHelper.h"
@@ -70,12 +73,13 @@ namespace RTC
     Guard guard(m_mutex);
 
     PortProfile_var profile(new PortProfile());
-    profile->name = CORBA::string_dup(m_name.c_str());
-    profile->interfaces = m_ifProfiles;
-    profile->port_ref = m_portRef;
+    profile->name               = CORBA::string_dup(m_name.c_str());
+    profile->interfaces         = m_ifProfiles;
+    profile->port_ref           = m_portRef;
     profile->connector_profiles = m_connProfiles;
-    profile->owner = m_owner;
-    profile->properties = m_properties;
+    profile->owner              = m_owner;
+    profile->properties         = m_properties;
+
     return profile._retn();
   }
 
