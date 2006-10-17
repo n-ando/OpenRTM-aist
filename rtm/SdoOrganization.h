@@ -2,7 +2,7 @@
 /*!
  * @file SdoOrganization.h
  * @brief SDO Organization implementation class
- * @date $Date: 2006-09-11 18:14:20 $
+ * @date $Date: 2006-10-17 10:12:57 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
  * Copyright (C) 2006
@@ -12,12 +12,15 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: SdoOrganization.h,v 1.1 2006-09-11 18:14:20 n-ando Exp $
+ * $Id: SdoOrganization.h,v 1.2 2006-10-17 10:12:57 n-ando Exp $
  *
  */
 
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.1  2006/09/11 18:14:20  n-ando
+ * The first commit.
+ *
  *
  */
 
@@ -45,14 +48,14 @@ namespace SDOPackage
     /*!
      * @if jp
      * 
-     * @brief [CORBA interface] Organization ID $B$r<hF@$9$k(B
+     * @brief [CORBA interface] Organization ID ¤ò¼èÆÀ¤¹¤ë
      *
-     * Organization $B$N(B ID $B$rJV$9%*%Z%l!<%7%g%s!#(B
+     * Organization ¤Î ID ¤òÊÖ¤¹¥ª¥Ú¥ì¡¼¥·¥ç¥ó¡£
      *
-     * @return Resource Data Model $B$GDj5A$5$l$?(B Organization ID$B!#(B
-     * @exception SDONotExists $B%?!<%2%C%H$N(BSDO$B$,B8:_$7$J$$!#(B
-     * @exception NotAvailable SDO$B$OB8:_$9$k$,1~Ez$,$J$$!#(B
-     * @exception InternalError $BFbItE*%(%i!<$,H/@8$7$?!#(B
+     * @return Resource Data Model ¤ÇÄêµÁ¤µ¤ì¤¿ Organization ID¡£
+     * @exception SDONotExists ¥¿¡¼¥²¥Ã¥È¤ÎSDO¤¬Â¸ºß¤·¤Ê¤¤¡£
+     * @exception NotAvailable SDO¤ÏÂ¸ºß¤¹¤ë¤¬±þÅú¤¬¤Ê¤¤¡£
+     * @exception InternalError ÆâÉôÅª¥¨¥é¡¼¤¬È¯À¸¤·¤¿¡£
      * @else
      *
      * @brief [CORBA interface] Get Organization Id
@@ -72,15 +75,15 @@ namespace SDOPackage
     /*!
      * @if jp
      * 
-     * @brief [CORBA interface] OrganizationProperty $B$N<hF@(B
+     * @brief [CORBA interface] OrganizationProperty ¤Î¼èÆÀ
      *
-     * Organization $B$,=jM-$9$k(B OrganizationProperty $B$rJV$9%*%Z%l!<%7%g%s!#(B
-     * Organization $B$,%W%m%Q%F%#$r;}$?$J$1$l$P6u$N%j%9%H$rJV$9!#(B
+     * Organization ¤¬½êÍ­¤¹¤ë OrganizationProperty ¤òÊÖ¤¹¥ª¥Ú¥ì¡¼¥·¥ç¥ó¡£
+     * Organization ¤¬¥×¥í¥Ñ¥Æ¥£¤ò»ý¤¿¤Ê¤±¤ì¤Ð¶õ¤Î¥ê¥¹¥È¤òÊÖ¤¹¡£
      *
-     * @return Organization $B$N%W%m%Q%F%#$N%j%9%H!#(B
-     * @exception SDONotExists $B%?!<%2%C%H$N(BSDO$B$,B8:_$7$J$$!#(B
-     * @exception NotAvailable SDO$B$OB8:_$9$k$,1~Ez$,$J$$!#(B
-     * @exception InternalError $BFbItE*%(%i!<$,H/@8$7$?!#(B
+     * @return Organization ¤Î¥×¥í¥Ñ¥Æ¥£¤Î¥ê¥¹¥È¡£
+     * @exception SDONotExists ¥¿¡¼¥²¥Ã¥È¤ÎSDO¤¬Â¸ºß¤·¤Ê¤¤¡£
+     * @exception NotAvailable SDO¤ÏÂ¸ºß¤¹¤ë¤¬±þÅú¤¬¤Ê¤¤¡£
+     * @exception InternalError ÆâÉôÅª¥¨¥é¡¼¤¬È¯À¸¤·¤¿¡£
      * @else
      *
      * @brief [CORBA interface] Get OrganizationProperty
@@ -102,18 +105,18 @@ namespace SDOPackage
     /*!
      * @if jp
      * 
-     * @brief [CORBA interface] OrganizationProperty $B$NFCDj$NCM$N<hF@(B
+     * @brief [CORBA interface] OrganizationProperty ¤ÎÆÃÄê¤ÎÃÍ¤Î¼èÆÀ
      *
-     * OrganizationProperty $B$N;XDj$5$l$?CM$rJV$9%*%Z%l!<%7%g%s!#(B
-     * $B0z?t(B "name" $B$G;XDj$5$l$?%W%m%Q%F%#$NCM$rJV$9!#(B
+     * OrganizationProperty ¤Î»ØÄê¤µ¤ì¤¿ÃÍ¤òÊÖ¤¹¥ª¥Ú¥ì¡¼¥·¥ç¥ó¡£
+     * °ú¿ô "name" ¤Ç»ØÄê¤µ¤ì¤¿¥×¥í¥Ñ¥Æ¥£¤ÎÃÍ¤òÊÖ¤¹¡£
      *
-     * @param name $BCM$rJV$9%W%m%Q%F%#$NL>A0!#(B
-     * @return $B0z?t(B "name" $B$G;XDj$5$l$?%W%m%Q%F%#$NCM!#(B
-     * @exception SDONotExists $B%?!<%2%C%H$N(BSDO$B$,B8:_$7$J$$!#(B
-     * @exception InvalidParameter $B0z?t(B "namne" $B$G;XDj$5$l$?%W%m%Q%F%#$,(B
-     *            $BB8:_$7$J$$!#(B
-     * @exception NotAvailable SDO$B$OB8:_$9$k$,1~Ez$,$J$$!#(B
-     * @exception InternalError $BFbItE*%(%i!<$,H/@8$7$?!#(B
+     * @param name ÃÍ¤òÊÖ¤¹¥×¥í¥Ñ¥Æ¥£¤ÎÌ¾Á°¡£
+     * @return °ú¿ô "name" ¤Ç»ØÄê¤µ¤ì¤¿¥×¥í¥Ñ¥Æ¥£¤ÎÃÍ¡£
+     * @exception SDONotExists ¥¿¡¼¥²¥Ã¥È¤ÎSDO¤¬Â¸ºß¤·¤Ê¤¤¡£
+     * @exception InvalidParameter °ú¿ô "namne" ¤Ç»ØÄê¤µ¤ì¤¿¥×¥í¥Ñ¥Æ¥£¤¬
+     *            Â¸ºß¤·¤Ê¤¤¡£
+     * @exception NotAvailable SDO¤ÏÂ¸ºß¤¹¤ë¤¬±þÅú¤¬¤Ê¤¤¡£
+     * @exception InternalError ÆâÉôÅª¥¨¥é¡¼¤¬È¯À¸¤·¤¿¡£
      * @else
      *
      * @brief [CORBA interface] Get specified value of OrganizationProperty
@@ -135,25 +138,25 @@ namespace SDOPackage
     /*!
      * @if jp
      * 
-     * @brief [CORBA interface] OrganizationProperty $B$N%;%C%H(B
+     * @brief [CORBA interface] OrganizationProperty ¤Î¥»¥Ã¥È
      *
-     * $B"((B SDO Specification $B$N(B PIM $B5-=R$H%*%Z%l!<%7%g%sL>$,0[$J$k!#(B
-     * $B"((B addOrganizationProperty $B$KBP1~$+!)(B
-     * OrganizationProperty $B$r(B Organization $B$KDI2C$9$k%*%Z%l!<%7%g%s!#(B
-     * OrganizationProperty $B$O(B Organization $B$N%W%m%Q%F%#5-=R$G$"$k!#(B
+     * ¢¨ SDO Specification ¤Î PIM µ­½Ò¤È¥ª¥Ú¥ì¡¼¥·¥ç¥óÌ¾¤¬°Û¤Ê¤ë¡£
+     * ¢¨ addOrganizationProperty ¤ËÂÐ±þ¤«¡©
+     * OrganizationProperty ¤ò Organization ¤ËÄÉ²Ã¤¹¤ë¥ª¥Ú¥ì¡¼¥·¥ç¥ó¡£
+     * OrganizationProperty ¤Ï Organization ¤Î¥×¥í¥Ñ¥Æ¥£µ­½Ò¤Ç¤¢¤ë¡£
      *
-     * @param org_property $B%;%C%H$9$k(B OrganizationProperty
-     * @return $B%*%Z%l!<%7%g%s$,@.8y$7$?$+$I$&$+$rJV$9!#(B
-     * @exception SDONotExists $B%?!<%2%C%H$N(BSDO$B$,B8:_$7$J$$!#(B
-     * @exception InvalidParameter "org_property" $B$,(B null$B!#(B
-     * @exception NotAvailable SDO$B$OB8:_$9$k$,1~Ez$,$J$$!#(B
-     * @exception InternalError $BFbItE*%(%i!<$,H/@8$7$?!#(B
+     * @param org_property ¥»¥Ã¥È¤¹¤ë OrganizationProperty
+     * @return ¥ª¥Ú¥ì¡¼¥·¥ç¥ó¤¬À®¸ù¤·¤¿¤«¤É¤¦¤«¤òÊÖ¤¹¡£
+     * @exception SDONotExists ¥¿¡¼¥²¥Ã¥È¤ÎSDO¤¬Â¸ºß¤·¤Ê¤¤¡£
+     * @exception InvalidParameter "org_property" ¤¬ null¡£
+     * @exception NotAvailable SDO¤ÏÂ¸ºß¤¹¤ë¤¬±þÅú¤¬¤Ê¤¤¡£
+     * @exception InternalError ÆâÉôÅª¥¨¥é¡¼¤¬È¯À¸¤·¤¿¡£
      * @else
      *
      * @brief [CORBA interface] Set OrganizationProperty
      *
-     * $B"((B SDO Specification $B$N(B PIM $B5-=R$H%*%Z%l!<%7%g%sL>$,0[$J$k!#(B
-     * $B"((B addOrganizationProperty $B$KBP1~$+!)(B
+     * ¢¨ SDO Specification ¤Î PIM µ­½Ò¤È¥ª¥Ú¥ì¡¼¥·¥ç¥óÌ¾¤¬°Û¤Ê¤ë¡£
+     * ¢¨ addOrganizationProperty ¤ËÂÐ±þ¤«¡©
      * This operation adds the OrganizationProperty to an Organization. The
      * OrganizationProperty is the property description of an Organization.
      *
@@ -173,20 +176,20 @@ namespace SDOPackage
     /*!
      * @if jp
      * 
-     * @brief [CORBA interface] OrganizationProperty $B$NCM$N%;%C%H(B
+     * @brief [CORBA interface] OrganizationProperty ¤ÎÃÍ¤Î¥»¥Ã¥È
      *
-     * OrganizationProperty $B$N(B NVList $B$K(B name $B$H(B value $B$N%;%C%H$rDI2C$b$7$/$O(B
-     * $B99?7$9$k%*%Z%l!<%7%g%s!#(Bname $B$H(B value $B$O0z?t(B "name" $B$H(B "value" $B$K$h$j(B
-     * $B;XDj$9$k!#(B
+     * OrganizationProperty ¤Î NVList ¤Ë name ¤È value ¤Î¥»¥Ã¥È¤òÄÉ²Ã¤â¤·¤¯¤Ï
+     * ¹¹¿·¤¹¤ë¥ª¥Ú¥ì¡¼¥·¥ç¥ó¡£name ¤È value ¤Ï°ú¿ô "name" ¤È "value" ¤Ë¤è¤ê
+     * »ØÄê¤¹¤ë¡£
      *
-     * @param name $BDI2C!&99?7$5$l$k%W%m%Q%F%#$NL>A0!#(B
-     * @param value $BDI2C!&99?7$5$l$k%W%m%Q%F%#$NCM!#(B
-     * @return $B%*%Z%l!<%7%g%s$,@.8y$7$?$+$I$&$+$rJV$9!#(B
-     * @exception SDONotExists $B%?!<%2%C%H$N(BSDO$B$,B8:_$7$J$$!#(B
-     * @exception InvalidParameter $B0z?t(B "name" $B$G;XDj$5$l$?%W%m%Q%F%#$O(B
-     *            $BB8:_$7$J$$!#(B
-     * @exception NotAvailable SDO$B$OB8:_$9$k$,1~Ez$,$J$$!#(B
-     * @exception InternalError $BFbItE*%(%i!<$,H/@8$7$?!#(B
+     * @param name ÄÉ²Ã¡¦¹¹¿·¤µ¤ì¤ë¥×¥í¥Ñ¥Æ¥£¤ÎÌ¾Á°¡£
+     * @param value ÄÉ²Ã¡¦¹¹¿·¤µ¤ì¤ë¥×¥í¥Ñ¥Æ¥£¤ÎÃÍ¡£
+     * @return ¥ª¥Ú¥ì¡¼¥·¥ç¥ó¤¬À®¸ù¤·¤¿¤«¤É¤¦¤«¤òÊÖ¤¹¡£
+     * @exception SDONotExists ¥¿¡¼¥²¥Ã¥È¤ÎSDO¤¬Â¸ºß¤·¤Ê¤¤¡£
+     * @exception InvalidParameter °ú¿ô "name" ¤Ç»ØÄê¤µ¤ì¤¿¥×¥í¥Ñ¥Æ¥£¤Ï
+     *            Â¸ºß¤·¤Ê¤¤¡£
+     * @exception NotAvailable SDO¤ÏÂ¸ºß¤¹¤ë¤¬±þÅú¤¬¤Ê¤¤¡£
+     * @exception InternalError ÆâÉôÅª¥¨¥é¡¼¤¬È¯À¸¤·¤¿¡£
      * @else
      *
      * @brief [CORBA interface] Set specified value of OrganizationProperty
@@ -214,18 +217,18 @@ namespace SDOPackage
     /*!
      * @if jp
      * 
-     * @brief [CORBA interface] OrganizationProperty $B$N:o=|(B
+     * @brief [CORBA interface] OrganizationProperty ¤Îºï½ü
      *
-     * OrganizationProperty $B$N(B NVList $B$+$iFCDj$N%W%m%Q%F%#$r:o=|$9$k!#(B
-     * $B:o=|$5$l$k%W%m%Q%F%#$NL>A0$O0z?t(B "name" $B$K$h$j;XDj$5$l$k!#(B
+     * OrganizationProperty ¤Î NVList ¤«¤éÆÃÄê¤Î¥×¥í¥Ñ¥Æ¥£¤òºï½ü¤¹¤ë¡£
+     * ºï½ü¤µ¤ì¤ë¥×¥í¥Ñ¥Æ¥£¤ÎÌ¾Á°¤Ï°ú¿ô "name" ¤Ë¤è¤ê»ØÄê¤µ¤ì¤ë¡£
      *
-     * @param name $B:o=|$9$k%W%m%Q%F%#$NL>A0!#(B
-     * @return $B%*%Z%l!<%7%g%s$,@.8y$7$?$+$I$&$+$rJV$9!#(B
-     * @exception SDONotExists $B%?!<%2%C%H$N(BSDO$B$,B8:_$7$J$$!#(B
-     * @exception InvalidParameter $B0z?t(B "name" $B$G;XDj$5$l$?%W%m%Q%F%#$O(B
-     *            $BB8:_$7$J$$!#(B
-     * @exception NotAvailable SDO$B$OB8:_$9$k$,1~Ez$,$J$$!#(B
-     * @exception InternalError $BFbItE*%(%i!<$,H/@8$7$?!#(B
+     * @param name ºï½ü¤¹¤ë¥×¥í¥Ñ¥Æ¥£¤ÎÌ¾Á°¡£
+     * @return ¥ª¥Ú¥ì¡¼¥·¥ç¥ó¤¬À®¸ù¤·¤¿¤«¤É¤¦¤«¤òÊÖ¤¹¡£
+     * @exception SDONotExists ¥¿¡¼¥²¥Ã¥È¤ÎSDO¤¬Â¸ºß¤·¤Ê¤¤¡£
+     * @exception InvalidParameter °ú¿ô "name" ¤Ç»ØÄê¤µ¤ì¤¿¥×¥í¥Ñ¥Æ¥£¤Ï
+     *            Â¸ºß¤·¤Ê¤¤¡£
+     * @exception NotAvailable SDO¤ÏÂ¸ºß¤¹¤ë¤¬±þÅú¤¬¤Ê¤¤¡£
+     * @exception InternalError ÆâÉôÅª¥¨¥é¡¼¤¬È¯À¸¤·¤¿¡£
      * @else
      *
      * @brief [CORBA interface] Remove specified OrganizationProperty
@@ -250,14 +253,14 @@ namespace SDOPackage
     /*!
      * @if jp
      * 
-     * @brief [CORBA interface] SDO $B$N(B ServiceProfile $B$N%;%C%H(B
+     * @brief [CORBA interface] SDO ¤Î ServiceProfile ¤Î¥»¥Ã¥È
      *
-     * $B$3$N(B Organization $B$N%*!<%J!<$X$N;2>H$rJV$9!#(B
+     * ¤³¤Î Organization ¤Î¥ª¡¼¥Ê¡¼¤Ø¤Î»²¾È¤òÊÖ¤¹¡£
      *
-     * @return $B%*!<%J!<%*%V%8%'%/%H$X$N;2>H!#(B
-     * @exception SDONotExists $B%?!<%2%C%H$N(BSDO$B$,B8:_$7$J$$!#(B
-     * @exception NotAvailable SDO$B$OB8:_$9$k$,1~Ez$,$J$$!#(B
-     * @exception InternalError $BFbItE*%(%i!<$,H/@8$7$?!#(B
+     * @return ¥ª¡¼¥Ê¡¼¥ª¥Ö¥¸¥§¥¯¥È¤Ø¤Î»²¾È¡£
+     * @exception SDONotExists ¥¿¡¼¥²¥Ã¥È¤ÎSDO¤¬Â¸ºß¤·¤Ê¤¤¡£
+     * @exception NotAvailable SDO¤ÏÂ¸ºß¤¹¤ë¤¬±þÅú¤¬¤Ê¤¤¡£
+     * @exception InternalError ÆâÉôÅª¥¨¥é¡¼¤¬È¯À¸¤·¤¿¡£
      * @else
      *
      * @brief [CORBA interface] Set SDO's ServiceProfile
@@ -278,18 +281,18 @@ namespace SDOPackage
     /*!
      * @if jp
      * 
-     * @brief [CORBA interface] Organization $B$K%*!<%J!<$r%;%C%H$9$k(B
+     * @brief [CORBA interface] Organization ¤Ë¥ª¡¼¥Ê¡¼¤ò¥»¥Ã¥È¤¹¤ë
      *
-     * Organization $B$KBP$7$F(B SDOSystemElement $B$r%*!<%J!<$H$7$F%;%C%H$9$k!#(B
-     * $B0z?t(B "sdo" $B$K%;%C%H$9$k(B SDOSystemElement $B$r;XDj$9$k!#(B
+     * Organization ¤ËÂÐ¤·¤Æ SDOSystemElement ¤ò¥ª¡¼¥Ê¡¼¤È¤·¤Æ¥»¥Ã¥È¤¹¤ë¡£
+     * °ú¿ô "sdo" ¤Ë¥»¥Ã¥È¤¹¤ë SDOSystemElement ¤ò»ØÄê¤¹¤ë¡£
      *
-     * @param sdo $B%*!<%J!<%*%V%8%'%/%H$N;2>H!#(B
-     * @return $B%*%Z%l!<%7%g%s$,@.8y$7$?$+$I$&$+$rJV$9!#(B
-     * @exception SDONotExists $B%?!<%2%C%H$N(BSDO$B$,B8:_$7$J$$!#(B
-     * @exception InvalidParameter $B0z?t(B "sdo" $B$,(B null$B$G$"$k!"$b$7$/$O!"(B
-     *                             "sdo" $B$,B8:_$7$J$$!#(B
-     * @exception NotAvailable SDO$B$OB8:_$9$k$,1~Ez$,$J$$!#(B
-     * @exception InternalError $BFbItE*%(%i!<$,H/@8$7$?!#(B
+     * @param sdo ¥ª¡¼¥Ê¡¼¥ª¥Ö¥¸¥§¥¯¥È¤Î»²¾È¡£
+     * @return ¥ª¥Ú¥ì¡¼¥·¥ç¥ó¤¬À®¸ù¤·¤¿¤«¤É¤¦¤«¤òÊÖ¤¹¡£
+     * @exception SDONotExists ¥¿¡¼¥²¥Ã¥È¤ÎSDO¤¬Â¸ºß¤·¤Ê¤¤¡£
+     * @exception InvalidParameter °ú¿ô "sdo" ¤¬ null¤Ç¤¢¤ë¡¢¤â¤·¤¯¤Ï¡¢
+     *                             "sdo" ¤¬Â¸ºß¤·¤Ê¤¤¡£
+     * @exception NotAvailable SDO¤ÏÂ¸ºß¤¹¤ë¤¬±þÅú¤¬¤Ê¤¤¡£
+     * @exception InternalError ÆâÉôÅª¥¨¥é¡¼¤¬È¯À¸¤·¤¿¡£
      * @else
      *
      * @brief [CORBA interface] Set the orner of the Organization
@@ -314,15 +317,15 @@ namespace SDOPackage
     /*!
      * @if jp
      * 
-     * @brief [CORBA interface] Organization $B$N%a%s%P!<$r<hF@$9$k(B
+     * @brief [CORBA interface] Organization ¤Î¥á¥ó¥Ð¡¼¤ò¼èÆÀ¤¹¤ë
      *
-     * Organization $B$N%a%s%P!<$N(B SDO $B$N%j%9%H$rJV$9!#(B
-     * $B%a%s%P!<$,B8:_$7$J$1$l$P6u$N%j%9%H$rJV$9!#(B
+     * Organization ¤Î¥á¥ó¥Ð¡¼¤Î SDO ¤Î¥ê¥¹¥È¤òÊÖ¤¹¡£
+     * ¥á¥ó¥Ð¡¼¤¬Â¸ºß¤·¤Ê¤±¤ì¤Ð¶õ¤Î¥ê¥¹¥È¤òÊÖ¤¹¡£
      *
-     * @return Organization $B$K4^$^$l$k%a%s%P!<(B SDO $B$N%j%9%H!#(B
-     * @exception SDONotExists $B%?!<%2%C%H$N(BSDO$B$,B8:_$7$J$$!#(B
-     * @exception NotAvailable SDO$B$OB8:_$9$k$,1~Ez$,$J$$!#(B
-     * @exception InternalError $BFbItE*%(%i!<$,H/@8$7$?!#(B
+     * @return Organization ¤Ë´Þ¤Þ¤ì¤ë¥á¥ó¥Ð¡¼ SDO ¤Î¥ê¥¹¥È¡£
+     * @exception SDONotExists ¥¿¡¼¥²¥Ã¥È¤ÎSDO¤¬Â¸ºß¤·¤Ê¤¤¡£
+     * @exception NotAvailable SDO¤ÏÂ¸ºß¤¹¤ë¤¬±þÅú¤¬¤Ê¤¤¡£
+     * @exception InternalError ÆâÉôÅª¥¨¥é¡¼¤¬È¯À¸¤·¤¿¡£
      * @else
      *
      * @brief [CORBA interface] Get a menber list of the Organization
@@ -344,19 +347,19 @@ namespace SDOPackage
     /*!
      * @if jp
      * 
-     * @brief [CORBA interface] SDO $B$N(B ServiceProfile $B$N%;%C%H(B
+     * @brief [CORBA interface] SDO ¤Î ServiceProfile ¤Î¥»¥Ã¥È
      *
-     * SDO $B$N%j%9%H$r(B Organization $B$N%a%s%P!<$H$7$F%;%C%H$9$k!#(B
-     * Organization $B$,$9$G$K%a%s%P!<$N(B SDO $B$r4IM}$7$F$$$k>l9g$O!"(B
-     * $BM?$($i$l$?(B SDO $B$N%j%9%H$KCV$-49$($k!#(B
+     * SDO ¤Î¥ê¥¹¥È¤ò Organization ¤Î¥á¥ó¥Ð¡¼¤È¤·¤Æ¥»¥Ã¥È¤¹¤ë¡£
+     * Organization ¤¬¤¹¤Ç¤Ë¥á¥ó¥Ð¡¼¤Î SDO ¤ò´ÉÍý¤·¤Æ¤¤¤ë¾ì¹ç¤Ï¡¢
+     * Í¿¤¨¤é¤ì¤¿ SDO ¤Î¥ê¥¹¥È¤ËÃÖ¤­´¹¤¨¤ë¡£
      *
-     * @param sdos $B%a%s%P!<$N(B SDO$B!#(B
-     * @return $B%*%Z%l!<%7%g%s$,@.8y$7$?$+$I$&$+$rJV$9!#(B
-     * @exception SDONotExists $B%?!<%2%C%H$N(BSDO$B$,B8:_$7$J$$!#(B
-     * @exception InvalidParameter $B0z?t(B "SDOList" $B$,(B null$B$G$"$k!"$b$7$/$O(B
-     *            $B0z?t$K;XDj$5$l$?(B "SDOList" $B$,B8:_$7$J$$!#(B
-     * @exception NotAvailable SDO$B$OB8:_$9$k$,1~Ez$,$J$$!#(B
-     * @exception InternalError $BFbItE*%(%i!<$,H/@8$7$?!#(B
+     * @param sdos ¥á¥ó¥Ð¡¼¤Î SDO¡£
+     * @return ¥ª¥Ú¥ì¡¼¥·¥ç¥ó¤¬À®¸ù¤·¤¿¤«¤É¤¦¤«¤òÊÖ¤¹¡£
+     * @exception SDONotExists ¥¿¡¼¥²¥Ã¥È¤ÎSDO¤¬Â¸ºß¤·¤Ê¤¤¡£
+     * @exception InvalidParameter °ú¿ô "SDOList" ¤¬ null¤Ç¤¢¤ë¡¢¤â¤·¤¯¤Ï
+     *            °ú¿ô¤Ë»ØÄê¤µ¤ì¤¿ "SDOList" ¤¬Â¸ºß¤·¤Ê¤¤¡£
+     * @exception NotAvailable SDO¤ÏÂ¸ºß¤¹¤ë¤¬±þÅú¤¬¤Ê¤¤¡£
+     * @exception InternalError ÆâÉôÅª¥¨¥é¡¼¤¬È¯À¸¤·¤¿¡£
      * @else
      *
      * @brief [CORBA interface] Set SDO's ServiceProfile
@@ -383,17 +386,17 @@ namespace SDOPackage
     /*!
      * @if jp
      * 
-     * @brief [CORBA interface] SDO $B%a%s%P!<$NDI2C(B
+     * @brief [CORBA interface] SDO ¥á¥ó¥Ð¡¼¤ÎÄÉ²Ã
      *
-     * Organization $B$K%a%s%P!<$H$7$F(B SDO $B$rDI2C$9$k!#(B
-     * $B0z?t(B "sdo" $B$KDI2C$9$k%a%s%P!<(B SDO $B$r;XDj$9$k!#(B
+     * Organization ¤Ë¥á¥ó¥Ð¡¼¤È¤·¤Æ SDO ¤òÄÉ²Ã¤¹¤ë¡£
+     * °ú¿ô "sdo" ¤ËÄÉ²Ã¤¹¤ë¥á¥ó¥Ð¡¼ SDO ¤ò»ØÄê¤¹¤ë¡£
      *
-     * @param sdo Organization $B$KDI2C$5$l$k(B SDO $B$N%j%9%H!#(B
-     * @return $B%*%Z%l!<%7%g%s$,@.8y$7$?$+$I$&$+$rJV$9!#(B
-     * @exception SDONotExists $B%?!<%2%C%H$N(BSDO$B$,B8:_$7$J$$!#(B
-     * @exception InvalidParameter $B0z?t(B "sdo" $B$,(B null$B$G$"$k!#(B
-     * @exception NotAvailable SDO$B$OB8:_$9$k$,1~Ez$,$J$$!#(B
-     * @exception InternalError $BFbItE*%(%i!<$,H/@8$7$?!#(B
+     * @param sdo Organization ¤ËÄÉ²Ã¤µ¤ì¤ë SDO ¤Î¥ê¥¹¥È¡£
+     * @return ¥ª¥Ú¥ì¡¼¥·¥ç¥ó¤¬À®¸ù¤·¤¿¤«¤É¤¦¤«¤òÊÖ¤¹¡£
+     * @exception SDONotExists ¥¿¡¼¥²¥Ã¥È¤ÎSDO¤¬Â¸ºß¤·¤Ê¤¤¡£
+     * @exception InvalidParameter °ú¿ô "sdo" ¤¬ null¤Ç¤¢¤ë¡£
+     * @exception NotAvailable SDO¤ÏÂ¸ºß¤¹¤ë¤¬±þÅú¤¬¤Ê¤¤¡£
+     * @exception InternalError ÆâÉôÅª¥¨¥é¡¼¤¬È¯À¸¤·¤¿¡£
      * @else
      *
      * @brief [CORBA interface] Add the menebr SDOs
@@ -416,16 +419,16 @@ namespace SDOPackage
     /*!
      * @if jp
      * 
-     * @brief [CORBA interface] SDO $B%a%s%P!<$N:o=|(B
+     * @brief [CORBA interface] SDO ¥á¥ó¥Ð¡¼¤Îºï½ü
      *
-     * Organization $B$+$i0z?t$G;XDj$5$l$?(B "id" $B$N(B SDO $B$r:o=|$9$k!#(B
+     * Organization ¤«¤é°ú¿ô¤Ç»ØÄê¤µ¤ì¤¿ "id" ¤Î SDO ¤òºï½ü¤¹¤ë¡£
      *
-     * @param id $B:o=|$9$k(B SDO $B$N(B id$B!#(B
-     * @return $B%*%Z%l!<%7%g%s$,@.8y$7$?$+$I$&$+$rJV$9!#(B
-     * @exception SDONotExists $B%?!<%2%C%H$N(BSDO$B$,B8:_$7$J$$!#(B
-     * @exception InvalidParameter $B0z?t(B "id" $B$,(B null $B$b$7$/$OB8:_$7$J$$!#(B
-     * @exception NotAvailable SDO$B$OB8:_$9$k$,1~Ez$,$J$$!#(B
-     * @exception InternalError $BFbItE*%(%i!<$,H/@8$7$?!#(B
+     * @param id ºï½ü¤¹¤ë SDO ¤Î id¡£
+     * @return ¥ª¥Ú¥ì¡¼¥·¥ç¥ó¤¬À®¸ù¤·¤¿¤«¤É¤¦¤«¤òÊÖ¤¹¡£
+     * @exception SDONotExists ¥¿¡¼¥²¥Ã¥È¤ÎSDO¤¬Â¸ºß¤·¤Ê¤¤¡£
+     * @exception InvalidParameter °ú¿ô "id" ¤¬ null ¤â¤·¤¯¤ÏÂ¸ºß¤·¤Ê¤¤¡£
+     * @exception NotAvailable SDO¤ÏÂ¸ºß¤¹¤ë¤¬±þÅú¤¬¤Ê¤¤¡£
+     * @exception InternalError ÆâÉôÅª¥¨¥é¡¼¤¬È¯À¸¤·¤¿¡£
      * @else
      *
      * @brief [CORBA interface] Remove menber SDO from Organization
@@ -448,16 +451,16 @@ namespace SDOPackage
     /*!
      * @if jp
      * 
-     * @brief [CORBA interface] Organization $B$N(B DependencyType $B$r<hF@(B
+     * @brief [CORBA interface] Organization ¤Î DependencyType ¤ò¼èÆÀ
      *
-     * Organization $B$N4X78$rI=$9(B "DependencyType" $B$rJV$9!#(B
+     * Organization ¤Î´Ø·¸¤òÉ½¤¹ "DependencyType" ¤òÊÖ¤¹¡£
      *
-     * @return Organizaton $B$N0MB84X78(B DependencyType $B$rJV$9!#(B
-     *         DependencyType $B$O(B OMG SDO $B;EMM$N(B Section 2.2.2 2-3 $B%Z!<%8$N(B
-     *         "Data Structures Used by Resource Data Model" $B$r;2>H!#(B
-     * @exception SDONotExists $B%?!<%2%C%H$N(BSDO$B$,B8:_$7$J$$!#(B
-     * @exception NotAvailable SDO$B$OB8:_$9$k$,1~Ez$,$J$$!#(B
-     * @exception InternalError $BFbItE*%(%i!<$,H/@8$7$?!#(B
+     * @return Organizaton ¤Î°ÍÂ¸´Ø·¸ DependencyType ¤òÊÖ¤¹¡£
+     *         DependencyType ¤Ï OMG SDO »ÅÍÍ¤Î Section 2.2.2 2-3 ¥Ú¡¼¥¸¤Î
+     *         "Data Structures Used by Resource Data Model" ¤ò»²¾È¡£
+     * @exception SDONotExists ¥¿¡¼¥²¥Ã¥È¤ÎSDO¤¬Â¸ºß¤·¤Ê¤¤¡£
+     * @exception NotAvailable SDO¤ÏÂ¸ºß¤¹¤ë¤¬±þÅú¤¬¤Ê¤¤¡£
+     * @exception InternalError ÆâÉôÅª¥¨¥é¡¼¤¬È¯À¸¤·¤¿¡£
      * @else
      *
      * @brief [CORBA interface] Get the DependencyType of the Organization
@@ -481,19 +484,19 @@ namespace SDOPackage
     /*!
      * @if jp
      * 
-     * @brief [CORBA interface] Organization $B$N(B DependencyType $B$r%;%C%H$9$k(B
+     * @brief [CORBA interface] Organization ¤Î DependencyType ¤ò¥»¥Ã¥È¤¹¤ë
      *
-     * Organization $B$N0MB84X78(B "DependencyType" $B$r%;%C%H$9$k!#(B
-     * $B0z?t(B "dependencty" $B$K$h$j0MB84X78$rM?$($k!#(B
+     * Organization ¤Î°ÍÂ¸´Ø·¸ "DependencyType" ¤ò¥»¥Ã¥È¤¹¤ë¡£
+     * °ú¿ô "dependencty" ¤Ë¤è¤ê°ÍÂ¸´Ø·¸¤òÍ¿¤¨¤ë¡£
      *
-     * @param dependency Organization $B$N0MB84X78$rI=$9(B DependencyType$B!#(B
-     *        DependencyType $B$O(B OMG SDO $B;EMM$N(B Section 2.2.2$B!"(B2-3 $B%Z!<%8$N(B
-     *        "Data Structures Used by Resource Data Model" $B$r;2>H!#(B
-     * @return $B%*%Z%l!<%7%g%s$,@.8y$7$?$+$I$&$+$rJV$9!#(B
-     * @exception SDONotExists $B%?!<%2%C%H$N(BSDO$B$,B8:_$7$J$$!#(B
-     * @exception InvalidParameter $B0z?t(B "sProfile" $B$,(B null$B$G$"$k!#(B
-     * @exception NotAvailable SDO$B$OB8:_$9$k$,1~Ez$,$J$$!#(B
-     * @exception InternalError $BFbItE*%(%i!<$,H/@8$7$?!#(B
+     * @param dependency Organization ¤Î°ÍÂ¸´Ø·¸¤òÉ½¤¹ DependencyType¡£
+     *        DependencyType ¤Ï OMG SDO »ÅÍÍ¤Î Section 2.2.2¡¢2-3 ¥Ú¡¼¥¸¤Î
+     *        "Data Structures Used by Resource Data Model" ¤ò»²¾È¡£
+     * @return ¥ª¥Ú¥ì¡¼¥·¥ç¥ó¤¬À®¸ù¤·¤¿¤«¤É¤¦¤«¤òÊÖ¤¹¡£
+     * @exception SDONotExists ¥¿¡¼¥²¥Ã¥È¤ÎSDO¤¬Â¸ºß¤·¤Ê¤¤¡£
+     * @exception InvalidParameter °ú¿ô "sProfile" ¤¬ null¤Ç¤¢¤ë¡£
+     * @exception NotAvailable SDO¤ÏÂ¸ºß¤¹¤ë¤¬±þÅú¤¬¤Ê¤¤¡£
+     * @exception InternalError ÆâÉôÅª¥¨¥é¡¼¤¬È¯À¸¤·¤¿¡£
      * @else
      *
      * @brief [CORBA interface] Set the DependencyType of the Organization
@@ -525,7 +528,7 @@ namespace SDOPackage
     /*!
      * @if jp
      *
-     * @brief Organization $B$N<1JL;R(B
+     * @brief Organization ¤Î¼±ÊÌ»Ò
      *
      * @else
      *
@@ -538,7 +541,7 @@ namespace SDOPackage
     /*!
      * @if jp
      *
-     * @brief Organization $B$K4XO"IU$1$i$l$?(B SDO $B%a%s%P$N%j%9%H(B
+     * @brief Organization ¤Ë´ØÏ¢ÉÕ¤±¤é¤ì¤¿ SDO ¥á¥ó¥Ð¤Î¥ê¥¹¥È
      *
      * @else
      *
@@ -552,7 +555,7 @@ namespace SDOPackage
     /*!
      * @if jp
      *
-     * @brief Organization $B$N(B owner
+     * @brief Organization ¤Î owner
      *
      * @else
      *
@@ -565,36 +568,36 @@ namespace SDOPackage
     /*!
      * @if jp
      * 
-     * @brief $B0MB84X78$N%?%$%W(B
+     * @brief °ÍÂ¸´Ø·¸¤Î¥¿¥¤¥×
      *
-     * Owner $B$H(B member $B$N0MB84X78$r;XDj$9$kB0@-!#(B
-     * Organization $B$O0J2<$N%H%]%m%8%Q%?!<%s$rI=8=$9$k$3$H$,$G$-$k!#(B
+     * Owner ¤È member ¤Î°ÍÂ¸´Ø·¸¤ò»ØÄê¤¹¤ëÂ°À­¡£
+     * Organization ¤Ï°Ê²¼¤Î¥È¥Ý¥í¥¸¥Ñ¥¿¡¼¥ó¤òÉ½¸½¤¹¤ë¤³¤È¤¬¤Ç¤­¤ë¡£
      *
-     * 1. owenr $B$,(B member $B$r4IM}$9$k3,AXE*9=B$!#$3$N>l9g(B DependencyType $B$O(B OWN
-     *    $B$H$$$&CM$r;}$D!#(B
-     * 2. members $B$,(B owner $B$r4IM}$9$k5U8~$-$N3,AXE*9=B$!#$3$N>l9g$O(B
-     *    DependencyType $B$O(B OWNER $B$H$$$&CM$r;}$D!#(B
-     * 3. owner $B$H(B member $B$K0MB84X78$,$J$$%U%i%C%H$J9=B$!#$3$N>l9g$O(B
-     *    DependencyType $B$O(B NO_DEPENDENCY $B$H$$$&CM$r;}$D!#(B
+     * 1. owenr ¤¬ member ¤ò´ÉÍý¤¹¤ë³¬ÁØÅª¹½Â¤¡£¤³¤Î¾ì¹ç DependencyType ¤Ï OWN
+     *    ¤È¤¤¤¦ÃÍ¤ò»ý¤Ä¡£
+     * 2. members ¤¬ owner ¤ò´ÉÍý¤¹¤ëµÕ¸þ¤­¤Î³¬ÁØÅª¹½Â¤¡£¤³¤Î¾ì¹ç¤Ï
+     *    DependencyType ¤Ï OWNER ¤È¤¤¤¦ÃÍ¤ò»ý¤Ä¡£
+     * 3. owner ¤È member ¤Ë°ÍÂ¸´Ø·¸¤¬¤Ê¤¤¥Õ¥é¥Ã¥È¤Ê¹½Â¤¡£¤³¤Î¾ì¹ç¤Ï
+     *    DependencyType ¤Ï NO_DEPENDENCY ¤È¤¤¤¦ÃÍ¤ò»ý¤Ä¡£
      * 
-     * SDO $B$*$h$S(B SDOSystemElement $B$N%5%V%/%i%9$O(B Organization $B$N(B owner $B$H$7$F(B
-     * $B?6Iq$&$3$H$,=PMh$k!#(BSDO $B$,(B owner $B$N>l9g$K$O(BOrganization $B$O>e5-$N(B
-     * $B$$$:$l$+$N%H%]%m%8!<%Q%?!<%s$r$H$k!#(B
+     * SDO ¤ª¤è¤Ó SDOSystemElement ¤Î¥µ¥Ö¥¯¥é¥¹¤Ï Organization ¤Î owner ¤È¤·¤Æ
+     * ¿¶Éñ¤¦¤³¤È¤¬½ÐÍè¤ë¡£SDO ¤¬ owner ¤Î¾ì¹ç¤Ë¤ÏOrganization ¤Ï¾åµ­¤Î
+     * ¤¤¤º¤ì¤«¤Î¥È¥Ý¥í¥¸¡¼¥Ñ¥¿¡¼¥ó¤ò¤È¤ë¡£
      *
-     * - Organization $B$,(B 1. $B$N%H%]%m%8!<%Q%?!<%s$r;}$D>l9g!"M#0l$D$N(B owner SDO
-     *   $B$O(B member SDO $B$r@)8f$9$k!#$?$H$($P!"%(%"%3%s(B(owner)$B$O!"(B
-     *   $B29EY%;%s%5(B(member)$B!"<>EY%;%s%5(B(member)$B!"IwNL@)8f4o(B(member)$B$r@)8f$9$k!#(B
-     * - Organization $B$,(B 2. $B$N%H%]%m%8$r;}$D>l9g$O!"J#?t$N(B SDO member $B$,M#0l$N(B
-     *   SDO owner $B$r6&M-$9$k!#$?$H$($P!"%"%s%W(B(owner)$B$O$$$/$D$+$N(BAV
-     *   $B%3%s%]!<%M%s%H(B(member)$B$+$i6&M-$5$l$k!#(B
-     * - SDO $B$G$O$J$$(B SDOSystemElement $B$N%5%V%/%i%9$,(B owner $B$N>l9g!"(B
-     *   $B0J2<$N$h$&$J%H%]%m%8!<Nc$,9M$($i$l$k!#(B
-     * -- User(owner)-SDO(member): $B%f!<%6(B(owner) $B$O0l$D0J>e$N(B SDO(member)$B$r(B
-     *   $B4IM}$9$k!#$3$l$O>e5-%H%]%m%8%Q%?%s(B1.$B$K$"$?$k!#(B
-     * -- Location(owner)-SDO(members): $B0l$D0J>e$N(B SDO(member) $B$,FCDj$N>l=j(B
-     *   = location(owner) $B$GF0:n$7$F$$$k>l9g!"(BOrganization $B$N%H%]%m%8%Q%?!<%s(B
-     *   $B$O(B 3. $B$N>l9g$K$J$k!#$?$H$($P!"J#?t$N(B PDA $B$,$"$kIt20$K$"$j!"8_$$$KF1Ey(B
-     *   $B$J4X78$G$"$jAj8_$KDL?.2DG=$J>l9g$O$3$l$K$"$?$k!#(B
+     * - Organization ¤¬ 1. ¤Î¥È¥Ý¥í¥¸¡¼¥Ñ¥¿¡¼¥ó¤ò»ý¤Ä¾ì¹ç¡¢Í£°ì¤Ä¤Î owner SDO
+     *   ¤Ï member SDO ¤òÀ©¸æ¤¹¤ë¡£¤¿¤È¤¨¤Ð¡¢¥¨¥¢¥³¥ó(owner)¤Ï¡¢
+     *   ²¹ÅÙ¥»¥ó¥µ(member)¡¢¼¾ÅÙ¥»¥ó¥µ(member)¡¢É÷ÎÌÀ©¸æ´ï(member)¤òÀ©¸æ¤¹¤ë¡£
+     * - Organization ¤¬ 2. ¤Î¥È¥Ý¥í¥¸¤ò»ý¤Ä¾ì¹ç¤Ï¡¢Ê£¿ô¤Î SDO member ¤¬Í£°ì¤Î
+     *   SDO owner ¤ò¶¦Í­¤¹¤ë¡£¤¿¤È¤¨¤Ð¡¢¥¢¥ó¥×(owner)¤Ï¤¤¤¯¤Ä¤«¤ÎAV
+     *   ¥³¥ó¥Ý¡¼¥Í¥ó¥È(member)¤«¤é¶¦Í­¤µ¤ì¤ë¡£
+     * - SDO ¤Ç¤Ï¤Ê¤¤ SDOSystemElement ¤Î¥µ¥Ö¥¯¥é¥¹¤¬ owner ¤Î¾ì¹ç¡¢
+     *   °Ê²¼¤Î¤è¤¦¤Ê¥È¥Ý¥í¥¸¡¼Îã¤¬¹Í¤¨¤é¤ì¤ë¡£
+     * -- User(owner)-SDO(member): ¥æ¡¼¥¶(owner) ¤Ï°ì¤Ä°Ê¾å¤Î SDO(member)¤ò
+     *   ´ÉÍý¤¹¤ë¡£¤³¤ì¤Ï¾åµ­¥È¥Ý¥í¥¸¥Ñ¥¿¥ó1.¤Ë¤¢¤¿¤ë¡£
+     * -- Location(owner)-SDO(members): °ì¤Ä°Ê¾å¤Î SDO(member) ¤¬ÆÃÄê¤Î¾ì½ê
+     *   = location(owner) ¤ÇÆ°ºî¤·¤Æ¤¤¤ë¾ì¹ç¡¢Organization ¤Î¥È¥Ý¥í¥¸¥Ñ¥¿¡¼¥ó
+     *   ¤Ï 3. ¤Î¾ì¹ç¤Ë¤Ê¤ë¡£¤¿¤È¤¨¤Ð¡¢Ê£¿ô¤Î PDA ¤¬¤¢¤ëÉô²°¤Ë¤¢¤ê¡¢¸ß¤¤¤ËÆ±Åù
+     *   ¤Ê´Ø·¸¤Ç¤¢¤êÁê¸ß¤ËÄÌ¿®²ÄÇ½¤Ê¾ì¹ç¤Ï¤³¤ì¤Ë¤¢¤¿¤ë¡£
      *
      * @else
      *
@@ -641,10 +644,10 @@ namespace SDOPackage
     /*!
      * @if jp
      *
-     * @brief Organization $B%W%m%Q%F%#(B
+     * @brief Organization ¥×¥í¥Ñ¥Æ¥£
      *
-     * OrganizationProperty $B$O(B Organization $B$N%W%m%Q%F%#>pJs$rJ];}$9$k!#(B
-     * $B0l$D$N(B Organization $B$O(B0$B8D$b$7$/$O(B1$B8D$N(B OrganizationProperty $B$r$b$D!#(B
+     * OrganizationProperty ¤Ï Organization ¤Î¥×¥í¥Ñ¥Æ¥£¾ðÊó¤òÊÝ»ý¤¹¤ë¡£
+     * °ì¤Ä¤Î Organization ¤Ï0¸Ä¤â¤·¤¯¤Ï1¸Ä¤Î OrganizationProperty ¤ò¤â¤Ä¡£
      *
      * @member property NVList
      *

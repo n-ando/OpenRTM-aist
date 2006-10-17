@@ -2,7 +2,7 @@
 /*!
  * @file SdoConfiguration.cpp
  * @brief SDO's Configuration implementation class
- * @date $Date: 2006-09-11 18:13:49 $
+ * @date $Date: 2006-10-17 10:13:23 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
  * Copyright (C) 2006
@@ -12,12 +12,15 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: SdoConfiguration.cpp,v 1.1 2006-09-11 18:13:49 n-ando Exp $
+ * $Id: SdoConfiguration.cpp,v 1.2 2006-10-17 10:13:23 n-ando Exp $
  *
  */
 
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.1  2006/09/11 18:13:49  n-ando
+ * The first commit.
+ *
  *
  */
 
@@ -32,9 +35,10 @@ namespace SDOPackage
     : m_varORB(orb), m_varPOA(poa)
   {
   }
+
   
   /* @if jp
-   * @brief [CORBA interface] SDO $B$N(B DeviceProfile $B$r%;%C%H$9$k(B
+   * @brief [CORBA interface] SDO ¤Î DeviceProfile ¤ò¥»¥Ã¥È¤¹¤ë
    * @else
    * @brief [CORBA interface] Set DeviceProfile of SDO
    * @endif
@@ -56,10 +60,11 @@ namespace SDOPackage
       }
     return true;
   }
+
   
   /*!
    * @if jp
-   * @brief [CORBA interface] SDO $B$N(B ServiceProfile $B$N%;%C%H(B
+   * @brief [CORBA interface] SDO ¤Î ServiceProfile ¤Î¥»¥Ã¥È
    * @else
    * @brief [CORBA interface] Set SDO's ServiceProfile
    * @endif
@@ -81,9 +86,10 @@ namespace SDOPackage
     return true;
   }
   
+
   /*!
    * @if jp
-   * @brief [CORBA interface] Organization $B$NDI2C(B
+   * @brief [CORBA interface] Organization ¤ÎÄÉ²Ã
    * @else
    * @brief [CORBA interface] Add Organization
    * @endif
@@ -106,9 +112,10 @@ namespace SDOPackage
     return true;
   }
   
+
   /*!
    * @if jp
-   * @brief [CORBA interface] ServiceProfile $B$N:o=|(B
+   * @brief [CORBA interface] ServiceProfile ¤Îºï½ü
    * @else
    * @brief [CORBA interface] Getting Organizations
    * @endif
@@ -130,9 +137,10 @@ namespace SDOPackage
     return true;
   }
   
+
   /*!
    * @if jp
-   * @brief [CORBA interface] Organization $B$N;2>H$N:o=|(B
+   * @brief [CORBA interface] Organization ¤Î»²¾È¤Îºï½ü
    * @else
    * @brief [CORBA interface] Remove the reference of Organization 
    * @endif
@@ -153,10 +161,11 @@ namespace SDOPackage
       }
     return true;
   }
+
   
   /*!
    * @if jp
-   * @brief [CORBA interface] $B@_Dj%Q%i%a!<%?$N%j%9%H$N<hF@(B
+   * @brief [CORBA interface] ÀßÄê¥Ñ¥é¥á¡¼¥¿¤Î¥ê¥¹¥È¤Î¼èÆÀ
    * @else
    * @brief [CORBA interface] Getting a list of configuration parameter
    * @endif
@@ -179,10 +188,11 @@ namespace SDOPackage
     // never reach here
     return new ParameterList(0);
   }
+
   
   /*!
    * @if jp
-   * @brief [CORBA interface] Configuration parameter $B$NCM$N%j%9%H$N<hF@(B
+   * @brief [CORBA interface] Configuration parameter ¤ÎÃÍ¤Î¥ê¥¹¥È¤Î¼èÆÀ
    * @else
    * @brief [CORBA interface] Getting value list of configuration parameter
    * @endif
@@ -193,10 +203,11 @@ namespace SDOPackage
   {
     return new NVList(0);
   }
+
   
   /*!
    * @if jp
-   * @brief [CORBA interface] Configuration parameter $B$NCM$N<hF@(B
+   * @brief [CORBA interface] Configuration parameter ¤ÎÃÍ¤Î¼èÆÀ
    * @else
    * @brief [CORBA interface] Getting value of configuration parameter
    * @endif
@@ -208,9 +219,10 @@ namespace SDOPackage
     return new CORBA::Any();
   }
   
+
   /*!
    * @if jp
-   * @brief [CORBA interface] Configuration $B%Q%i%a!<%?$NJQ99(B
+   * @brief [CORBA interface] Configuration ¥Ñ¥é¥á¡¼¥¿¤ÎÊÑ¹¹
    * @else
    * @brief [CORBA interface] Modify the parameter value
    * @endif
@@ -223,9 +235,10 @@ namespace SDOPackage
     return true;
   }
   
+
   /*!
    * @if jp
-   * @brief [CORBA interface] ConfigurationSet $B%j%9%H$N<hF@(B 
+   * @brief [CORBA interface] ConfigurationSet ¥ê¥¹¥È¤Î¼èÆÀ 
    * @else
    * @brief [CORBA interface] Getting list of ConfigurationSet
    * @endif
@@ -248,9 +261,10 @@ namespace SDOPackage
     return new ConfigurationSetList(0);
   }
   
+
   /*!
    * @if jp
-   * @brief [CORBA interface] ConfigurationSet $B$N<hF@(B
+   * @brief [CORBA interface] ConfigurationSet ¤Î¼èÆÀ
    * @else
    * @brief [CORBA interface] Getting a ConfigurationSet
    * @endif
@@ -274,9 +288,10 @@ namespace SDOPackage
     return new ConfigurationSet();
   }
   
+
   /*!
    * @if jp
-   * @brief [CORBA interface] ConfigurationSet $B$r%;%C%H$9$k(B
+   * @brief [CORBA interface] ConfigurationSet ¤ò¥»¥Ã¥È¤¹¤ë
    * @else
    * @brief [CORBA interface] Set ConfigurationSet
    * @endif
@@ -302,9 +317,10 @@ namespace SDOPackage
     return true;
   }
   
+
   /*!
    * @if jp
-   * @brief [CORBA interface] $B%"%/%F%#%V$J(B ConfigurationSet $B$r<hF@$9$k(B
+   * @brief [CORBA interface] ¥¢¥¯¥Æ¥£¥Ö¤Ê ConfigurationSet ¤ò¼èÆÀ¤¹¤ë
    * @else
    * @brief [CORBA interface] Get active ConfigurationSet
    * @endif
@@ -330,9 +346,10 @@ namespace SDOPackage
     return new ConfigurationSet();
   }
   
+
   /*!
    * @if jp
-   * @brief [CORBA interface] ConfigurationSet $B$rDI2C$9$k(B
+   * @brief [CORBA interface] ConfigurationSet ¤òÄÉ²Ã¤¹¤ë
    * @else
    * @brief [CORBA interface] Add ConfigurationSet
    * @endif
@@ -357,7 +374,7 @@ namespace SDOPackage
   
   /*!
    * @if jp
-   * @brief [CORBA interface] ConfigurationSet $B$r:o=|$9$k(B
+   * @brief [CORBA interface] ConfigurationSet ¤òºï½ü¤¹¤ë
    * @else
    * @brief [CORBA interface] Remove ConfigurationSet
    * @endif
@@ -378,9 +395,10 @@ namespace SDOPackage
     return true;
   }
   
+
   /*!
    * @if jp
-   * @brief [CORBA interface] ConfigurationSet $B$N%"%/%F%#%V2=(B
+   * @brief [CORBA interface] ConfigurationSet ¤Î¥¢¥¯¥Æ¥£¥Ö²½
    * @else
    * @brief [CORBA interface] Activate ConfigurationSet
    * @endif
