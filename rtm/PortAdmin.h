@@ -2,7 +2,7 @@
 /*!
  * @file PortAdmin.h
  * @brief RTC's Port administration class
- * @date $Date: 2006-10-17 10:22:01 $
+ * @date $Date: 2006-10-17 19:16:40 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
  * Copyright (C) 2006
@@ -12,29 +12,19 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: PortAdmin.h,v 1.1 2006-10-17 10:22:01 n-ando Exp $
+ * $Id: PortAdmin.h,v 1.2 2006-10-17 19:16:40 n-ando Exp $
  *
  */
 
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.1  2006/10/17 10:22:01  n-ando
+ * The first commitment.
+ *
  */
 
 #ifndef PortAdmin_h
 #define PortAdmin_h
-/*
-
-        interface Port : Service {
-                PortProfile get_port_profile();
-                ConnectorProfileList get_connector_profiles();
-                ConnectorProfile get_connector_profile(
-                        in UniqueIdentifier connector_id);
-                ReturnCode_t connect(
-                        in ConnectorProfile connector_profile);
-                ReturnCode_t disconnect(in UniqueIdentifier connector_id);
-                ReturnCode_t disconnect_all();
-        };
-*/
 
 #include <rtm/idl/RTCSkel.h>
 #include <Util.h>
@@ -260,10 +250,10 @@ namespace RTC
     PortableServer::POA_var m_pPOA;
 
     // Portのオブジェクトリファレンスのリスト. PortListを継承
-    SeqEx<PortList, Port_ptr> m_portServants;
+    SeqEx<PortList, Port_ptr> m_portRefs;
 
     // サーバントを直接格納するオブジェクトマネージャ
-    ObjectManager<std::string, PortBase, Comp<PortBase> > m_portObjects;
+    ObjectManager<std::string, PortBase, Comp<PortBase> > m_portServants;
 
     class del_port
     {
