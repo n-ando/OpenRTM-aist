@@ -2,7 +2,7 @@
 /*!
  * @file StringUtil.h
  * @brief String operation utility
- * @date $Date: 2006-10-13 03:51:37 $
+ * @date $Date: 2006-10-17 10:11:09 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
  * Copyright (C) 2003-2005
@@ -12,12 +12,15 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: StringUtil.h,v 1.2 2006-10-13 03:51:37 n-ando Exp $
+ * $Id: StringUtil.h,v 1.3 2006-10-17 10:11:09 n-ando Exp $
  *
  */
 
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.2  2006/10/13 03:51:37  n-ando
+ * The "escape" and "unescape" functions were added.
+ *
  * Revision 1.1  2006/09/20 08:49:08  n-ando
  * The first commit.
  *
@@ -65,8 +68,8 @@ struct escape_functor
     else if (c == '\n')  str += "\\n";
     else if (c == '\f')  str += "\\f";
     else if (c == '\r')  str += "\\r";
-    else if (c == '\"')  str += "\\\"";
-    else if (c == '\'')  str += "\\\'";
+    //    else if (c == '\"')  str += "\\\"";
+    //    else if (c == '\'')  str += "\\\'";
     else str.push_back(c);
   }
   std::string str;
