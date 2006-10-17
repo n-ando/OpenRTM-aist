@@ -6,8 +6,8 @@
 
 module RTC {
 	typedef SDOPackage::UniqueIdentifier	UniqueIdentifier;
-	typedef SDOPackage::NVList		NVList;
-	typedef SDOPackage::SDO			DistributedObject;
+	typedef SDOPackage::NVList				NVList;
+	typedef SDOPackage::SDO				DistributedObject;
 	typedef SDOPackage::SDOService		Service;
 
 	enum ReturnCode_t {
@@ -35,7 +35,7 @@ module RTC {
 		ReturnCode_t exit();
 	};
 
-	interface ExecutionContext;
+    interface ExecutionContext;
 
 	interface ComponentAction {
 		ReturnCode_t on_initialize();
@@ -92,7 +92,7 @@ module RTC {
 			in ExecutionContext exec_context);
 	};
 
-	interface DataFlowParticipant :	DataFlowComponentAction {
+	interface DataFlowParticipant : DataFlowComponentAction {
 	};
 
 
@@ -134,7 +134,7 @@ module RTC {
 	};
 
 	interface MultiModeObject :	ModeCapable,
-					MultiModeComponentAction {
+								MultiModeComponentAction {
 	};
 
 
@@ -208,7 +208,7 @@ module RTC {
 		ConnectorProfile get_connector_profile(
 			in UniqueIdentifier connector_id);
 		ReturnCode_t connect(
-			in ConnectorProfile connector_profile);
+			inout ConnectorProfile connector_profile);
 		ReturnCode_t disconnect(in UniqueIdentifier connector_id);
 		ReturnCode_t disconnect_all();
 	};
