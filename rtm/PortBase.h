@@ -2,7 +2,7 @@
 /*!
  * @file PortBase.h
  * @brief RTC's Port base class
- * @date $Date: 2006-10-17 10:22:24 $
+ * @date $Date: 2006-10-17 19:06:45 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
  * Copyright (C) 2006
@@ -12,12 +12,15 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: PortBase.h,v 1.1 2006-10-17 10:22:24 n-ando Exp $
+ * $Id: PortBase.h,v 1.2 2006-10-17 19:06:45 n-ando Exp $
  *
  */
 
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.1  2006/10/17 10:22:24  n-ando
+ * The first commitment.
+ *
  */
 
 #ifndef PortBase_h
@@ -144,7 +147,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual ReturnCode_t connect(const ConnectorProfile& connector_profile);
+    virtual ReturnCode_t connect(ConnectorProfile& connector_profile);
 
 
     /*!
@@ -220,7 +223,8 @@ namespace RTC
      *
      * @endif
      */
-    PortProfile& getProfile() const;
+    const PortProfile& getProfile() const;
+    PortProfileHelper& getProfileHelper();
 
     /*!
      * @if jp
@@ -243,6 +247,7 @@ namespace RTC
      */
     void setProfile(const PortProfile& profile);
 
+    const std::string getUUID() const;
     
   protected:
     /*
@@ -257,6 +262,73 @@ namespace RTC
     */
 
     PortProfileHelper m_profile;
+
+    struct connect_func
+    {
+      Port_var port_ref;
+      ConnectorProfile connector_profile;
+      ReturnCode_t return_code;
+
+      connect_func() {};
+      connect_func(Port_ptr p, ConnectorProfile& prof)
+	: port_ref(p), connector_profile(prof) {};
+      void operator()(Port_ptr p)
+      {
+	if (!port_ref->_is_equivalent(p))
+	  {
+	    ReturnCode_t retval;
+	    retval = p->connect(connector_profile);
+	    if (retval != RTC::OK)
+	      {
+		return_code = retval;
+	      }
+	  }
+      }
+    };
+
+    struct disconnect_func
+    {
+      Port_var port_ref;
+      ConnectorProfile connector_profile;
+      ReturnCode_t return_code;
+
+      disconnect_func() {};
+      disconnect_func(Port_ptr p, ConnectorProfile& prof)
+	: port_ref(p), connector_profile(prof) {};
+      void operator()(Port_ptr p)
+      {
+	if (!port_ref->_is_equivalent(p))
+	  {
+	    ReturnCode_t retval;
+	    retval = p->disconnect(connector_profile.connector_id);
+	    if (retval != RTC::OK)
+	      {
+		return_code = retval;
+	      }
+	  }
+      }
+    };
+
+    struct disconnect_all_func
+    {
+      ReturnCode_t return_code;
+      PortBase* port;
+
+      disconnect_all_func() {};
+      disconnect_all_func(PortBase* p) 
+	: return_code(RTC::OK), port(p) {};
+      void operator()(ConnectorProfile& p)
+      {
+	ReturnCode_t retval;
+	retval = port->disconnect(p.connector_id);
+	port->m_profile.eraseConnectorProfileById(p.connector_id);
+	if (retval != RTC::OK)
+	  {
+	    return_code = retval;
+	  }
+      }
+    };
+    friend class disconnect_all_func;
 
   };
 };
