@@ -2,9 +2,12 @@
 ##------------------------------------------------------------
 ## Makefile.am for libRTC
 ##
-## $Id: Makefile.am,v 1.4 2006-09-20 08:52:50 n-ando Exp $
+## $Id: Makefile.am,v 1.5 2006-10-17 10:00:36 n-ando Exp $
 ##
 ## $Log: not supported by cvs2svn $
+## Revision 1.4  2006/09/20 08:52:50  n-ando
+## ModuleManager class added.
+##
 ## Revision 1.3  2006/09/11 18:44:23  n-ando
 ## SDO and Properties classes are added.
 ##
@@ -28,8 +31,12 @@ lib_LTLIBRARIES = libRTC.la
 
 # sources of libShared.la
 RTC_SRC = \
+	PortAdmin.cpp \
+	PortProfileHelper.cpp \
+	PortBase.cpp \
 	Properties.cpp \
-	Modulemanager.cpp \
+	ModuleManager.cpp \
+	ManagerConfig.cpp \
 	RtcNaming.cpp \
 	RtcNameComponent.cpp \
 	RtcConfig.cpp \
@@ -40,7 +47,7 @@ RTC_SRC = \
 	RtcModuleProfile.cpp \
 	RtcBase.cpp \
 	RtcFactory.cpp \
-	RtcManager.cpp \
+	Manager.cpp \
 	RtcLifeCycle.cpp \
 	RtcComponentAction.cpp \
 	RTObject.cpp \
@@ -57,6 +64,7 @@ RTC_SRC = \
 libRTC_la_SOURCES = \
 	Properties.cpp \
 	ModuleManager.cpp \
+	ManagerConfig.cpp \
 	RtcNaming.cpp \
 	RtcNameComponent.cpp \
 	RtcConfig.cpp \
@@ -67,7 +75,7 @@ libRTC_la_SOURCES = \
 	RtcModuleProfile.cpp \
 	RtcBase.cpp \
 	RtcFactory.cpp \
-	RtcManager.cpp
+	Manager.cpp
 
 #	RtcConfiguration.cpp \
 #	RtcProfile.cpp \
