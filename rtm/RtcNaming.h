@@ -2,7 +2,7 @@
 /*!
  * @file RtcNaming.h
  * @brief naming Service helper class
- * @date $Date: 2006-09-11 18:26:20 $
+ * @date $Date: 2006-10-17 10:14:52 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
  * Copyright (C) 2003-2005
@@ -12,12 +12,20 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: RtcNaming.h,v 1.3 2006-09-11 18:26:20 n-ando Exp $
+ * $Id: RtcNaming.h,v 1.4 2006-10-17 10:14:52 n-ando Exp $
  *
  */
 
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.3  2006/09/11 18:26:20  n-ando
+ * RtcNaming class was completely rewritten.
+ * - Now RtcCorbaNaming is a wrapper of CosNaming::NamingContext
+ *   and CosNaming::NamingContextExt with fixed root context.
+ * - find() method is separated from this class.
+ * - This class constructor connects to the NameServer without using
+ *   resolve_initial_reference().
+ *
  * Revision 1.2  2005/05/16 06:29:05  n-ando
  * - RtcNaming class was DLL exported for Windows port.
  *
@@ -71,41 +79,41 @@ namespace RTM
     /*!
      * @if jp
      *
-     * @brief Object $B$r(B bind $B$9$k(B
+     * @brief Object ¤ò bind ¤¹¤ë
      *
-     * CosNaming::bind() $B$H$[$\F1Ey$NF/$-$r$9$k$,!">o$KM?$($i$l$?%M!<%`%5!<%P$N(B
-     * $B%k!<%H%3%s%F%-%9%H$KBP$7$F(Bbind()$B$,8F$S=P$5$l$kE@$,0[$J$k!#(B
+     * CosNaming::bind() ¤È¤Û¤ÜÆ±Åù¤ÎÆ¯¤­¤ò¤¹¤ë¤¬¡¢¾ï¤ËÍ¿¤¨¤é¤ì¤¿¥Í¡¼¥à¥µ¡¼¥Ð¤Î
+     * ¥ë¡¼¥È¥³¥ó¥Æ¥­¥¹¥È¤ËÂÐ¤·¤Æbind()¤¬¸Æ¤Ó½Ð¤µ¤ì¤ëÅÀ¤¬°Û¤Ê¤ë¡£
      *
-     * Name <name> $B$H(B Object <obj> $B$rEv3:(B NamingContext $B>e$K%P%$%s%I$9$k!#(B
-     * c_n $B$,(B n $BHVL\$N(B NameComponent $B$r$"$i$o$9$H$9$k$H!"(B
-     * name $B$,(B n $B8D$N(B NameComponent $B$+$i@.$k$H$-!"0J2<$N$h$&$K07$o$l$k!#(B
+     * Name <name> ¤È Object <obj> ¤òÅö³º NamingContext ¾å¤Ë¥Ð¥¤¥ó¥É¤¹¤ë¡£
+     * c_n ¤¬ n ÈÖÌÜ¤Î NameComponent ¤ò¤¢¤é¤ï¤¹¤È¤¹¤ë¤È¡¢
+     * name ¤¬ n ¸Ä¤Î NameComponent ¤«¤éÀ®¤ë¤È¤­¡¢°Ê²¼¤Î¤è¤¦¤Ë°·¤ï¤ì¤ë¡£
      *
-     * cxt->bind(<c_1, c_2, ... c_n>, obj) $B$O0J2<$NA`:n$HF1Ey$G$"$k!#(B
+     * cxt->bind(<c_1, c_2, ... c_n>, obj) ¤Ï°Ê²¼¤ÎÁàºî¤ÈÆ±Åù¤Ç¤¢¤ë¡£
      * cxt->resolve(<c_1, ... c_(n-1)>)->bind(<c_n>, obj)
      *
-     * $B$9$J$o$A!"(B1$BHVL\$+$i(Bn-1$BHVL\$N%3%s%F%-%9%H$r2r7h$7!"(Bn-1$BHVL\$N%3%s%F%-%9%H(B
-     * $B>e$K(B name <n> $B$H$7$F!!(Bobj $B$r(B bind $B$9$k!#(B
-     * $BL>A02r7h$K;22C$9$k(B <c_1, ... c_(n-1)> $B$N(B NemingContext $B$O!"(B
-     * bindContext() $B$d(B rebindContext() $B$G4{$K%P%$%s%I:Q$_$G$J$1$l$P$J$i$J$$!#(B
-     * $B$b$7(B <c_1, ... c_(n-1)> $B$N(B NamingContext $B$,B8:_$7$J$$>l9g$K$O!"(B
-     * NotFound $BNc30$,H/@8$9$k!#(B
+     * ¤¹¤Ê¤ï¤Á¡¢1ÈÖÌÜ¤«¤én-1ÈÖÌÜ¤Î¥³¥ó¥Æ¥­¥¹¥È¤ò²ò·è¤·¡¢n-1ÈÖÌÜ¤Î¥³¥ó¥Æ¥­¥¹¥È
+     * ¾å¤Ë name <n> ¤È¤·¤Æ¡¡obj ¤ò bind ¤¹¤ë¡£
+     * Ì¾Á°²ò·è¤Ë»²²Ã¤¹¤ë <c_1, ... c_(n-1)> ¤Î NemingContext ¤Ï¡¢
+     * bindContext() ¤ä rebindContext() ¤Ç´û¤Ë¥Ð¥¤¥ó¥ÉºÑ¤ß¤Ç¤Ê¤±¤ì¤Ð¤Ê¤é¤Ê¤¤¡£
+     * ¤â¤· <c_1, ... c_(n-1)> ¤Î NamingContext ¤¬Â¸ºß¤·¤Ê¤¤¾ì¹ç¤Ë¤Ï¡¢
+     * NotFound Îã³°¤¬È¯À¸¤¹¤ë¡£
      *
-     * $B$?$@$7!"6/@)%P%$%s%I%U%i%0(B force $B$,(B true $B$N;~$O!"(B<c_1, ... c_(n-1)>
-     * $B$,B8:_$7$J$$>l9g$K$b!":F5"E*$K%3%s%F%-%9%H$r%P%$%s%I$7$J$,$i!"(B
-     * $B:G=*E*$K(B obj $B$rL>A0(B name <c_n> $B$K%P%$%s%I$9$k!#(B
+     * ¤¿¤À¤·¡¢¶¯À©¥Ð¥¤¥ó¥É¥Õ¥é¥° force ¤¬ true ¤Î»þ¤Ï¡¢<c_1, ... c_(n-1)>
+     * ¤¬Â¸ºß¤·¤Ê¤¤¾ì¹ç¤Ë¤â¡¢ºÆµ¢Åª¤Ë¥³¥ó¥Æ¥­¥¹¥È¤ò¥Ð¥¤¥ó¥É¤·¤Ê¤¬¤é¡¢
+     * ºÇ½ªÅª¤Ë obj ¤òÌ¾Á° name <c_n> ¤Ë¥Ð¥¤¥ó¥É¤¹¤ë¡£
      *
-     * $B$$$:$l$N>l9g$G$b!"(Bn-1$BHVL\$N%3%s%F%-%9%H>e$K(B name<n> $B$N%*%V%8%'%/%H(B
-     * (Object $B$"$k$$$O(B $B%3%s%F%-%9%H(B) $B$,%P%$%s%I$5$l$F$$$l$P(B
-     * AlreadyBound $BNc30$,H/@8$9$k!#(B
+     * ¤¤¤º¤ì¤Î¾ì¹ç¤Ç¤â¡¢n-1ÈÖÌÜ¤Î¥³¥ó¥Æ¥­¥¹¥È¾å¤Ë name<n> ¤Î¥ª¥Ö¥¸¥§¥¯¥È
+     * (Object ¤¢¤ë¤¤¤Ï ¥³¥ó¥Æ¥­¥¹¥È) ¤¬¥Ð¥¤¥ó¥É¤µ¤ì¤Æ¤¤¤ì¤Ð
+     * AlreadyBound Îã³°¤¬È¯À¸¤¹¤ë¡£
      *
-     * @param name $B%*%V%8%'%/%H$KIU$1$kL>A0$N(B NameComponent
-     * @param obj $B4XO"IU$1$i$l$k(B Object
-     * @param force true$B$N>l9g!"ESCf$N%3%s%F%-%9%H$r6/@)E*$K%P%$%s%I$9$k(B
+     * @param name ¥ª¥Ö¥¸¥§¥¯¥È¤ËÉÕ¤±¤ëÌ¾Á°¤Î NameComponent
+     * @param obj ´ØÏ¢ÉÕ¤±¤é¤ì¤ë Object
+     * @param force true¤Î¾ì¹ç¡¢ÅÓÃæ¤Î¥³¥ó¥Æ¥­¥¹¥È¤ò¶¯À©Åª¤Ë¥Ð¥¤¥ó¥É¤¹¤ë
      *
-     * @exception NotFound $BESCf$N(B <c_1, c_2, ..., c_(n-1)> $B$,B8:_$7$J$$!#(B
-     * @exception CannotProceed $B2?$i$+$NM}M3$G=hM}$r7QB3$G$-$J$$!#(B
-     * @exception InvalidName $B0z?t(B name $B$NL>A0$,IT@5!#(B
-     * @exception AlreadyBound name <c_n> $B$N(B Object $B$,$9$G$K%P%$%s%I$5$l$F$$$k!#(B
+     * @exception NotFound ÅÓÃæ¤Î <c_1, c_2, ..., c_(n-1)> ¤¬Â¸ºß¤·¤Ê¤¤¡£
+     * @exception CannotProceed ²¿¤é¤«¤ÎÍýÍ³¤Ç½èÍý¤ò·ÑÂ³¤Ç¤­¤Ê¤¤¡£
+     * @exception InvalidName °ú¿ô name ¤ÎÌ¾Á°¤¬ÉÔÀµ¡£
+     * @exception AlreadyBound name <c_n> ¤Î Object ¤¬¤¹¤Ç¤Ë¥Ð¥¤¥ó¥É¤µ¤ì¤Æ¤¤¤ë¡£
      *
      * @else
      *
@@ -121,19 +129,19 @@ namespace RTM
     /*!
      * @if jp
      *
-     * @brief Object $B$r(B bind $B$9$k(B
+     * @brief Object ¤ò bind ¤¹¤ë
      *
-     * Object $B$r(B bind $B$9$k:]$KM?$($kL>A0$,J8;zNsI=8=$G$"$k$3$H0J30$O!"(Bbind()
-     * $B$HF1$8$G$"$k!#(Bbind(toName(string_name), obj) $B$HEy2A!#(B
+     * Object ¤ò bind ¤¹¤ëºÝ¤ËÍ¿¤¨¤ëÌ¾Á°¤¬Ê¸»úÎóÉ½¸½¤Ç¤¢¤ë¤³¤È°Ê³°¤Ï¡¢bind()
+     * ¤ÈÆ±¤¸¤Ç¤¢¤ë¡£bind(toName(string_name), obj) ¤ÈÅù²Á¡£
      *
-     * @param string_name $B%*%V%8%'%/%H$KIU$1$kL>A0$NJ8;zNsI=8=(B
-     * @param obj $B4XO"IU$1$i$l$k%*%V%8%'%/%H(B
-     * @param force true$B$N>l9g!"ESCf$N%3%s%F%-%9%H$r6/@)E*$K%P%$%s%I$9$k(B
+     * @param string_name ¥ª¥Ö¥¸¥§¥¯¥È¤ËÉÕ¤±¤ëÌ¾Á°¤ÎÊ¸»úÎóÉ½¸½
+     * @param obj ´ØÏ¢ÉÕ¤±¤é¤ì¤ë¥ª¥Ö¥¸¥§¥¯¥È
+     * @param force true¤Î¾ì¹ç¡¢ÅÓÃæ¤Î¥³¥ó¥Æ¥­¥¹¥È¤ò¶¯À©Åª¤Ë¥Ð¥¤¥ó¥É¤¹¤ë
      *
-     * @exception NotFound $BESCf$N(B <c_1, c_2, ..., c_(n-1)> $B$,B8:_$7$J$$!#(B
-     * @exception CannotProceed $B2?$i$+$NM}M3$G=hM}$r7QB3$G$-$J$$!#(B
-     * @exception InvalidName $B0z?t(B name $B$NL>A0$,IT@5!#(B
-     * @exception AlreadyBound name <n> $B$N(B Object $B$,$9$G$K%P%$%s%I$5$l$F$$$k!#(B
+     * @exception NotFound ÅÓÃæ¤Î <c_1, c_2, ..., c_(n-1)> ¤¬Â¸ºß¤·¤Ê¤¤¡£
+     * @exception CannotProceed ²¿¤é¤«¤ÎÍýÍ³¤Ç½èÍý¤ò·ÑÂ³¤Ç¤­¤Ê¤¤¡£
+     * @exception InvalidName °ú¿ô name ¤ÎÌ¾Á°¤¬ÉÔÀµ¡£
+     * @exception AlreadyBound name <n> ¤Î Object ¤¬¤¹¤Ç¤Ë¥Ð¥¤¥ó¥É¤µ¤ì¤Æ¤¤¤ë¡£
      *
      * @else
      *
@@ -148,32 +156,32 @@ namespace RTM
     /*!
      * @if jp
      *
-     * @brief $BESCf$N%3%s%F%-%9%H$r(B bind $B$7$J$,$i(B Object $B$r(B bind $B$9$k(B
+     * @brief ÅÓÃæ¤Î¥³¥ó¥Æ¥­¥¹¥È¤ò bind ¤·¤Ê¤¬¤é Object ¤ò bind ¤¹¤ë
      *
-     * context $B$GM?$($i$l$?(B NamingContext $B$KBP$7$F!"(Bname $B$G;XDj$5$l$?(B
-     * $B%M!<%`%3%s%]!<%M%s%H(B <c_1, ... c_(n-1)> $B$r(B NamingContext $B$H$7$F(B
-     * $B2r7h$7$J$,$i!"L>A0(B <c_n> $B$KBP$7$F(B obj $B$r(B bind $B$9$k!#(B
-     * $B$b$7!"(B<c_1, ... c_(n-1)> $B$KBP1~$9$k(B NamingContext $B$,$J$$>l9g$K$O(B
-     * $B?7$?$J(B NamingContext $B$r%P%$%s%I$9$k!#(B
+     * context ¤ÇÍ¿¤¨¤é¤ì¤¿ NamingContext ¤ËÂÐ¤·¤Æ¡¢name ¤Ç»ØÄê¤µ¤ì¤¿
+     * ¥Í¡¼¥à¥³¥ó¥Ý¡¼¥Í¥ó¥È <c_1, ... c_(n-1)> ¤ò NamingContext ¤È¤·¤Æ
+     * ²ò·è¤·¤Ê¤¬¤é¡¢Ì¾Á° <c_n> ¤ËÂÐ¤·¤Æ obj ¤ò bind ¤¹¤ë¡£
+     * ¤â¤·¡¢<c_1, ... c_(n-1)> ¤ËÂÐ±þ¤¹¤ë NamingContext ¤¬¤Ê¤¤¾ì¹ç¤Ë¤Ï
+     * ¿·¤¿¤Ê NamingContext ¤ò¥Ð¥¤¥ó¥É¤¹¤ë¡£
      *
-     * $B:G=*E*$K(B <c_1, c_2, ..., c_(n-1)> $B$KBP1~$9$k(B NamingContext $B$,@8@.(B
-     * $B$^$?$O2r7h$5$l$?>e$G!"(BCosNaming::bind(<c_n>, object) $B$,8F$S=P$5$l$k!#(B
-     * $B$3$N$H$-!"$9$G$K%P%$%s%G%#%s%0$,B8:_$9$l$P(B AlreadyBound$BNc30$,H/@8$9$k!#(B
+     * ºÇ½ªÅª¤Ë <c_1, c_2, ..., c_(n-1)> ¤ËÂÐ±þ¤¹¤ë NamingContext ¤¬À¸À®
+     * ¤Þ¤¿¤Ï²ò·è¤µ¤ì¤¿¾å¤Ç¡¢CosNaming::bind(<c_n>, object) ¤¬¸Æ¤Ó½Ð¤µ¤ì¤ë¡£
+     * ¤³¤Î¤È¤­¡¢¤¹¤Ç¤Ë¥Ð¥¤¥ó¥Ç¥£¥ó¥°¤¬Â¸ºß¤¹¤ì¤Ð AlreadyBoundÎã³°¤¬È¯À¸¤¹¤ë¡£
      *
-     * $BESCf$N%3%s%F%-%9%H$r2r7h$9$k2aDx$G!"2r7h$7$h$&$H$9$k%3%s%F%-%9%H$H(B
-     * $BF1$8L>A0$N(B NamingContext $B$G$O$J$$(B Binding $B$,B8:_$9$k>l9g!"(B
-     * CannotProceed $BNc30$,H/@8$7=hM}$rCf;_$9$k!#(B
+     * ÅÓÃæ¤Î¥³¥ó¥Æ¥­¥¹¥È¤ò²ò·è¤¹¤ë²áÄø¤Ç¡¢²ò·è¤·¤è¤¦¤È¤¹¤ë¥³¥ó¥Æ¥­¥¹¥È¤È
+     * Æ±¤¸Ì¾Á°¤Î NamingContext ¤Ç¤Ï¤Ê¤¤ Binding ¤¬Â¸ºß¤¹¤ë¾ì¹ç¡¢
+     * CannotProceed Îã³°¤¬È¯À¸¤·½èÍý¤òÃæ»ß¤¹¤ë¡£
      *
-     * @param context bind $B$r3+;O$9$k!!(BNamingContext
-     * @param name $B%*%V%8%'%/%H$KIU$1$kL>A0$N%M!<%`%3%s%]!<%M%s%H(B
-     * @param obj $B4XO"IU$1$i$l$k%*%V%8%'%/%H(B
+     * @param context bind ¤ò³«»Ï¤¹¤ë¡¡NamingContext
+     * @param name ¥ª¥Ö¥¸¥§¥¯¥È¤ËÉÕ¤±¤ëÌ¾Á°¤Î¥Í¡¼¥à¥³¥ó¥Ý¡¼¥Í¥ó¥È
+     * @param obj ´ØÏ¢ÉÕ¤±¤é¤ì¤ë¥ª¥Ö¥¸¥§¥¯¥È
      *
-     * @exception CannotProceed <c_1, ..., c_(n-1)> $B$KBP1~$9$k(B NamingContext 
-     *            $B$N$&$A$R$H$D$,!"$9$G$K(B NamingContext $B0J30$N(B object $B$K%P%$%s%I(B
-     *            $B$5$l$F$*$j!"=hM}$r7QB3$G$-$J$$!#(B
-     * @exception InvalidName $BL>A0(B name $B$,IT@5(B
-     * @exception AlreadyBound name <c_n> $B$K$9$G$K2?$i$+$N(B object $B$,%P%$%s%I(B
-     *            $B$5$l$F$$$k!#(B
+     * @exception CannotProceed <c_1, ..., c_(n-1)> ¤ËÂÐ±þ¤¹¤ë NamingContext 
+     *            ¤Î¤¦¤Á¤Ò¤È¤Ä¤¬¡¢¤¹¤Ç¤Ë NamingContext °Ê³°¤Î object ¤Ë¥Ð¥¤¥ó¥É
+     *            ¤µ¤ì¤Æ¤ª¤ê¡¢½èÍý¤ò·ÑÂ³¤Ç¤­¤Ê¤¤¡£
+     * @exception InvalidName Ì¾Á° name ¤¬ÉÔÀµ
+     * @exception AlreadyBound name <c_n> ¤Ë¤¹¤Ç¤Ë²¿¤é¤«¤Î object ¤¬¥Ð¥¤¥ó¥É
+     *            ¤µ¤ì¤Æ¤¤¤ë¡£
      * @else
      *
      * @brief
@@ -190,15 +198,15 @@ namespace RTM
     /*!
      * @if jp
      *
-     * @brief Object $B$r(B rebind $B$9$k(B
+     * @brief Object ¤ò rebind ¤¹¤ë
      *
-     * name $B$G;XDj$5$l$?(B Binding $B$,$9$G$KB8:_$9$k>l9g$r=|$$$F(B bind() $B$HF1$8(B
-     * $B$G$"$k!#%P%$%s%G%#%s%0$,$9$G$KB8:_$9$k>l9g$K$O!"?7$7$$%P%$%s%G%#%s%0$K(B
-     * $BCV$-49$($i$l$k!#(B
+     * name ¤Ç»ØÄê¤µ¤ì¤¿ Binding ¤¬¤¹¤Ç¤ËÂ¸ºß¤¹¤ë¾ì¹ç¤ò½ü¤¤¤Æ bind() ¤ÈÆ±¤¸
+     * ¤Ç¤¢¤ë¡£¥Ð¥¤¥ó¥Ç¥£¥ó¥°¤¬¤¹¤Ç¤ËÂ¸ºß¤¹¤ë¾ì¹ç¤Ë¤Ï¡¢¿·¤·¤¤¥Ð¥¤¥ó¥Ç¥£¥ó¥°¤Ë
+     * ÃÖ¤­´¹¤¨¤é¤ì¤ë¡£
      *
-     * @param name $B%*%V%8%'%/%H$KIU$1$kL>A0$N(B NameComponent
-     * @param obj $B4XO"IU$1$i$l$k%*%V%8%'%/%H(B
-     * @param force true$B$N>l9g!"ESCf$N%3%s%F%-%9%H$r6/@)E*$K%P%$%s%I$9$k(B
+     * @param name ¥ª¥Ö¥¸¥§¥¯¥È¤ËÉÕ¤±¤ëÌ¾Á°¤Î NameComponent
+     * @param obj ´ØÏ¢ÉÕ¤±¤é¤ì¤ë¥ª¥Ö¥¸¥§¥¯¥È
+     * @param force true¤Î¾ì¹ç¡¢ÅÓÃæ¤Î¥³¥ó¥Æ¥­¥¹¥È¤ò¶¯À©Åª¤Ë¥Ð¥¤¥ó¥É¤¹¤ë
      *
      * @else
      *
@@ -214,18 +222,18 @@ namespace RTM
     /*!
      * @if jp
      *
-     * @brief Object $B$r(B rebind $B$9$k(B
+     * @brief Object ¤ò rebind ¤¹¤ë
      *
-     * Object $B$r(B rebind $B$9$k:]$KM?$($kL>A0$,J8;zNsI=8=$G$"$k$3$H0J30$O(B rebind()
-     * $B$HF1$8$G$"$k!#(Brebind(toName(string_name), obj) $B$HEy2A!#(B
+     * Object ¤ò rebind ¤¹¤ëºÝ¤ËÍ¿¤¨¤ëÌ¾Á°¤¬Ê¸»úÎóÉ½¸½¤Ç¤¢¤ë¤³¤È°Ê³°¤Ï rebind()
+     * ¤ÈÆ±¤¸¤Ç¤¢¤ë¡£rebind(toName(string_name), obj) ¤ÈÅù²Á¡£
      *
-     * @param string_name $B%*%V%8%'%/%H$KIU$1$kL>A0$NJ8;zNsI=8=(B
-     * @param obj $B4XO"IU$1$i$l$k%*%V%8%'%/%H(B
-     * @param force true$B$N>l9g!"ESCf$N%3%s%F%-%9%H$r6/@)E*$K%P%$%s%I$9$k(B
+     * @param string_name ¥ª¥Ö¥¸¥§¥¯¥È¤ËÉÕ¤±¤ëÌ¾Á°¤ÎÊ¸»úÎóÉ½¸½
+     * @param obj ´ØÏ¢ÉÕ¤±¤é¤ì¤ë¥ª¥Ö¥¸¥§¥¯¥È
+     * @param force true¤Î¾ì¹ç¡¢ÅÓÃæ¤Î¥³¥ó¥Æ¥­¥¹¥È¤ò¶¯À©Åª¤Ë¥Ð¥¤¥ó¥É¤¹¤ë
      *
-     * @exception NotFound $BESCf$N(B <c_1, c_2, ..., c_(n-1)> $B$,B8:_$7$J$$!#(B
-     * @exception CannotProceed $B2?$i$+$NM}M3$G=hM}$r7QB3$G$-$J$$!#(B
-     * @exception InvalidName $B0z?t(B name $B$NL>A0$,IT@5!#(B
+     * @exception NotFound ÅÓÃæ¤Î <c_1, c_2, ..., c_(n-1)> ¤¬Â¸ºß¤·¤Ê¤¤¡£
+     * @exception CannotProceed ²¿¤é¤«¤ÎÍýÍ³¤Ç½èÍý¤ò·ÑÂ³¤Ç¤­¤Ê¤¤¡£
+     * @exception InvalidName °ú¿ô name ¤ÎÌ¾Á°¤¬ÉÔÀµ¡£
      *
      * @else
      *
@@ -241,20 +249,20 @@ namespace RTM
     /*!
      * @if jp
      *
-     * @brief $BESCf$N%3%s%F%-%9%H$r(B bind $B$7$J$,$i(B Object $B$r(B rebind $B$9$k(B
+     * @brief ÅÓÃæ¤Î¥³¥ó¥Æ¥­¥¹¥È¤ò bind ¤·¤Ê¤¬¤é Object ¤ò rebind ¤¹¤ë
      *
-     * name <c_n> $B$G;XDj$5$l$?(B NamingContext $B$b$7$/$O(B Object $B$,$9$G$KB8:_$9$k(B
-     * $B>l9g$r=|$$$F(B bindRecursive() $B$HF1$8$G$"$k!#(B
+     * name <c_n> ¤Ç»ØÄê¤µ¤ì¤¿ NamingContext ¤â¤·¤¯¤Ï Object ¤¬¤¹¤Ç¤ËÂ¸ºß¤¹¤ë
+     * ¾ì¹ç¤ò½ü¤¤¤Æ bindRecursive() ¤ÈÆ±¤¸¤Ç¤¢¤ë¡£
      *
-     * name <c_n> $B$G;XDj$5$l$?%P%$%s%G%#%s%0$,$9$G$KB8:_$9$k>l9g$K$O!"(B
-     * $B?7$7$$%P%$%s%G%#%s%0$KCV$-49$($i$l$k!#(B
+     * name <c_n> ¤Ç»ØÄê¤µ¤ì¤¿¥Ð¥¤¥ó¥Ç¥£¥ó¥°¤¬¤¹¤Ç¤ËÂ¸ºß¤¹¤ë¾ì¹ç¤Ë¤Ï¡¢
+     * ¿·¤·¤¤¥Ð¥¤¥ó¥Ç¥£¥ó¥°¤ËÃÖ¤­´¹¤¨¤é¤ì¤ë¡£
      *
-     * @param name $B%*%V%8%'%/%H$KIU$1$kL>A0$NJ8;zNsI=8=(B
-     * @param obj $B4XO"IU$1$i$l$k%*%V%8%'%/%H(B
-     * @param force true$B$N>l9g!"ESCf$N%3%s%F%-%9%H$r6/@)E*$K%P%$%s%I$9$k(B
+     * @param name ¥ª¥Ö¥¸¥§¥¯¥È¤ËÉÕ¤±¤ëÌ¾Á°¤ÎÊ¸»úÎóÉ½¸½
+     * @param obj ´ØÏ¢ÉÕ¤±¤é¤ì¤ë¥ª¥Ö¥¸¥§¥¯¥È
+     * @param force true¤Î¾ì¹ç¡¢ÅÓÃæ¤Î¥³¥ó¥Æ¥­¥¹¥È¤ò¶¯À©Åª¤Ë¥Ð¥¤¥ó¥É¤¹¤ë
      *
-     * @exception CannotProceed $BESCf$N%3%s%F%-%9%H$,2r7h$G$-$J$$!#(B
-     * @exception InvalidName $BM?$($i$l$?(B name $B$,IT@5!#(B
+     * @exception CannotProceed ÅÓÃæ¤Î¥³¥ó¥Æ¥­¥¹¥È¤¬²ò·è¤Ç¤­¤Ê¤¤¡£
+     * @exception InvalidName Í¿¤¨¤é¤ì¤¿ name ¤¬ÉÔÀµ¡£
      *
      * @else
      *
@@ -270,14 +278,14 @@ namespace RTM
     /*!
      * @if jp
      *
-     * @brief NamingContext $B$r(B bind $B$9$k(B
+     * @brief NamingContext ¤ò bind ¤¹¤ë
      *
-     * bind $B$5$l$k%*%V%8%'%/%H$,(B NamingContext $B$G$"$k$3$H$r=|$$$F(B bind() 
-     * $B$HF1$8$G$"$k!#(B
+     * bind ¤µ¤ì¤ë¥ª¥Ö¥¸¥§¥¯¥È¤¬ NamingContext ¤Ç¤¢¤ë¤³¤È¤ò½ü¤¤¤Æ bind() 
+     * ¤ÈÆ±¤¸¤Ç¤¢¤ë¡£
      *
-     * @param name $B%*%V%8%'%/%H$KIU$1$kL>A0$N%M!<%`%3%s%]!<%M%s%H(B
-     * @param name_cxt $B4XO"IU$1$i$l$k(B NamingContext
-     * @param force true$B$N>l9g!"ESCf$N%3%s%F%-%9%H$r6/@)E*$K%P%$%s%I$9$k(B
+     * @param name ¥ª¥Ö¥¸¥§¥¯¥È¤ËÉÕ¤±¤ëÌ¾Á°¤Î¥Í¡¼¥à¥³¥ó¥Ý¡¼¥Í¥ó¥È
+     * @param name_cxt ´ØÏ¢ÉÕ¤±¤é¤ì¤ë NamingContext
+     * @param force true¤Î¾ì¹ç¡¢ÅÓÃæ¤Î¥³¥ó¥Æ¥­¥¹¥È¤ò¶¯À©Åª¤Ë¥Ð¥¤¥ó¥É¤¹¤ë
      *
      * @else
      *
@@ -293,14 +301,14 @@ namespace RTM
     /*!
      * @if jp
      *
-     * @brief NamingContext $B$r(B bind $B$9$k(B
+     * @brief NamingContext ¤ò bind ¤¹¤ë
      *
-     * bind $B$5$l$k%*%V%8%'%/%H$,(B NamingContext $B$G$"$k$3$H$r=|$$$F(B bind() 
-     * $B$HF1$8$G$"$k!#(B
+     * bind ¤µ¤ì¤ë¥ª¥Ö¥¸¥§¥¯¥È¤¬ NamingContext ¤Ç¤¢¤ë¤³¤È¤ò½ü¤¤¤Æ bind() 
+     * ¤ÈÆ±¤¸¤Ç¤¢¤ë¡£
      *
-     * @param name $B%*%V%8%'%/%H$KIU$1$kL>A0$NJ8;zNsI=8=(B
-     * @param name_cxt $B4XO"IU$1$i$l$k(B NamingContext
-     * @param force true$B$N>l9g!"ESCf$N%3%s%F%-%9%H$r6/@)E*$K%P%$%s%I$9$k(B
+     * @param name ¥ª¥Ö¥¸¥§¥¯¥È¤ËÉÕ¤±¤ëÌ¾Á°¤ÎÊ¸»úÎóÉ½¸½
+     * @param name_cxt ´ØÏ¢ÉÕ¤±¤é¤ì¤ë NamingContext
+     * @param force true¤Î¾ì¹ç¡¢ÅÓÃæ¤Î¥³¥ó¥Æ¥­¥¹¥È¤ò¶¯À©Åª¤Ë¥Ð¥¤¥ó¥É¤¹¤ë
      *
      * @else
      *
@@ -316,15 +324,15 @@ namespace RTM
     /*!
      * @if jp
      *
-     * @brief NamingContext $B$r(B bind $B$9$k(B
+     * @brief NamingContext ¤ò bind ¤¹¤ë
      *
-     * bind $B$5$l$k%*%V%8%'%/%H$,(B NamingContext $B$G$"$k$3$H$r=|$$$F(B
-     * bindRecursive() $B$HF1$8$G$"$k!#(B
+     * bind ¤µ¤ì¤ë¥ª¥Ö¥¸¥§¥¯¥È¤¬ NamingContext ¤Ç¤¢¤ë¤³¤È¤ò½ü¤¤¤Æ
+     * bindRecursive() ¤ÈÆ±¤¸¤Ç¤¢¤ë¡£
      *
-     * @param context bind $B$r3+;O$9$k!!(BNamingContext
-     * @param name $B%*%V%8%'%/%H$KIU$1$kL>A0$N%M!<%`%3%s%]!<%M%s%H(B
-     * @param name_cxt $B4XO"IU$1$i$l$k(B NamingContext
-     * @param force true$B$N>l9g!"ESCf$N%3%s%F%-%9%H$r6/@)E*$K%P%$%s%I$9$k(B
+     * @param context bind ¤ò³«»Ï¤¹¤ë¡¡NamingContext
+     * @param name ¥ª¥Ö¥¸¥§¥¯¥È¤ËÉÕ¤±¤ëÌ¾Á°¤Î¥Í¡¼¥à¥³¥ó¥Ý¡¼¥Í¥ó¥È
+     * @param name_cxt ´ØÏ¢ÉÕ¤±¤é¤ì¤ë NamingContext
+     * @param force true¤Î¾ì¹ç¡¢ÅÓÃæ¤Î¥³¥ó¥Æ¥­¥¹¥È¤ò¶¯À©Åª¤Ë¥Ð¥¤¥ó¥É¤¹¤ë
      *
      * @else
      *
@@ -338,16 +346,16 @@ namespace RTM
     /*!
      * @if jp
      *
-     * @brief NamingContext $B$r(B rebind $B$9$k(B
+     * @brief NamingContext ¤ò rebind ¤¹¤ë
      *
-     * name $B$G;XDj$5$l$?%3%s%F%-%9%H$,$9$G$KB8:_$9$k>l9g$r=|$$$F(B bindContext() 
-     * $B$HF1$8$G$"$k!#(B
-     * $B%P%$%s%G%#%s%0$,$9$G$KB8:_$9$k>l9g$K$O!"?7$7$$%P%$%s%G%#%s%0$K(B
-     * $BCV$-49$($i$l$k!#(B
+     * name ¤Ç»ØÄê¤µ¤ì¤¿¥³¥ó¥Æ¥­¥¹¥È¤¬¤¹¤Ç¤ËÂ¸ºß¤¹¤ë¾ì¹ç¤ò½ü¤¤¤Æ bindContext() 
+     * ¤ÈÆ±¤¸¤Ç¤¢¤ë¡£
+     * ¥Ð¥¤¥ó¥Ç¥£¥ó¥°¤¬¤¹¤Ç¤ËÂ¸ºß¤¹¤ë¾ì¹ç¤Ë¤Ï¡¢¿·¤·¤¤¥Ð¥¤¥ó¥Ç¥£¥ó¥°¤Ë
+     * ÃÖ¤­´¹¤¨¤é¤ì¤ë¡£
      *
-     * @param name $B%*%V%8%'%/%H$KIU$1$kL>A0$N%M!<%`%3%s%]!<%M%s%H(B
-     * @param name_cxt $B4XO"IU$1$i$l$k(B NamingContext
-     * @param force true$B$N>l9g!"ESCf$N%3%s%F%-%9%H$r6/@)E*$K%P%$%s%I$9$k(B
+     * @param name ¥ª¥Ö¥¸¥§¥¯¥È¤ËÉÕ¤±¤ëÌ¾Á°¤Î¥Í¡¼¥à¥³¥ó¥Ý¡¼¥Í¥ó¥È
+     * @param name_cxt ´ØÏ¢ÉÕ¤±¤é¤ì¤ë NamingContext
+     * @param force true¤Î¾ì¹ç¡¢ÅÓÃæ¤Î¥³¥ó¥Æ¥­¥¹¥È¤ò¶¯À©Åª¤Ë¥Ð¥¤¥ó¥É¤¹¤ë
      *
      * @else
      *
@@ -363,16 +371,16 @@ namespace RTM
     /*!
      * @if jp
      *
-     * @brief NamingContext $B$r(B rebind $B$9$k(B
+     * @brief NamingContext ¤ò rebind ¤¹¤ë
      *
-     * name $B$G;XDj$5$l$?%3%s%F%-%9%H$,$9$G$KB8:_$9$k>l9g$r=|$$$F(B bindContext() 
-     * $B$HF1$8$G$"$k!#(B
-     * $B%P%$%s%G%#%s%0$,$9$G$KB8:_$9$k>l9g$K$O!"?7$7$$%P%$%s%G%#%s%0$K(B
-     * $BCV$-49$($i$l$k!#(B
+     * name ¤Ç»ØÄê¤µ¤ì¤¿¥³¥ó¥Æ¥­¥¹¥È¤¬¤¹¤Ç¤ËÂ¸ºß¤¹¤ë¾ì¹ç¤ò½ü¤¤¤Æ bindContext() 
+     * ¤ÈÆ±¤¸¤Ç¤¢¤ë¡£
+     * ¥Ð¥¤¥ó¥Ç¥£¥ó¥°¤¬¤¹¤Ç¤ËÂ¸ºß¤¹¤ë¾ì¹ç¤Ë¤Ï¡¢¿·¤·¤¤¥Ð¥¤¥ó¥Ç¥£¥ó¥°¤Ë
+     * ÃÖ¤­´¹¤¨¤é¤ì¤ë¡£
      *
-     * @param name $B%*%V%8%'%/%H$KIU$1$kL>A0$NJ8;zNsI=8=(B
-     * @param name_cxt $B4XO"IU$1$i$l$k(B NamingContext
-     * @param force true$B$N>l9g!"ESCf$N%3%s%F%-%9%H$r6/@)E*$K%P%$%s%I$9$k(B
+     * @param name ¥ª¥Ö¥¸¥§¥¯¥È¤ËÉÕ¤±¤ëÌ¾Á°¤ÎÊ¸»úÎóÉ½¸½
+     * @param name_cxt ´ØÏ¢ÉÕ¤±¤é¤ì¤ë NamingContext
+     * @param force true¤Î¾ì¹ç¡¢ÅÓÃæ¤Î¥³¥ó¥Æ¥­¥¹¥È¤ò¶¯À©Åª¤Ë¥Ð¥¤¥ó¥É¤¹¤ë
      *
      * @else
      *
@@ -393,17 +401,17 @@ namespace RTM
     /*!
      * @if jp
      *
-     * @brief Object $B$r(B name $B$+$i2r7h$9$k(B
+     * @brief Object ¤ò name ¤«¤é²ò·è¤¹¤ë
      *
-     * name $B$K(B bind $B$5$l$F$$$k%*%V%8%'%/%H;2>H$rJV$9!#(B
-     * $B%M!<%`%3%s%]!<%M%s%H(B <c_1, c_2, ... c_n> $B$O:F5"E*$K2r7h$5$l$k!#(B
+     * name ¤Ë bind ¤µ¤ì¤Æ¤¤¤ë¥ª¥Ö¥¸¥§¥¯¥È»²¾È¤òÊÖ¤¹¡£
+     * ¥Í¡¼¥à¥³¥ó¥Ý¡¼¥Í¥ó¥È <c_1, c_2, ... c_n> ¤ÏºÆµ¢Åª¤Ë²ò·è¤µ¤ì¤ë¡£
      * 
-     * CosNaming::resolve() $B$H$[$\F1Ey$NF/$-$r$9$k$,!">o$KM?$($i$l$?(B
-     * $B%M!<%`%5!<%P$N%k!<%H%3%s%F%-%9%H$KBP$7$F(B resolve() $B$,8F$S=P$5$l$kE@$,(B
-     * $B0[$J$k!#(B
+     * CosNaming::resolve() ¤È¤Û¤ÜÆ±Åù¤ÎÆ¯¤­¤ò¤¹¤ë¤¬¡¢¾ï¤ËÍ¿¤¨¤é¤ì¤¿
+     * ¥Í¡¼¥à¥µ¡¼¥Ð¤Î¥ë¡¼¥È¥³¥ó¥Æ¥­¥¹¥È¤ËÂÐ¤·¤Æ resolve() ¤¬¸Æ¤Ó½Ð¤µ¤ì¤ëÅÀ¤¬
+     * °Û¤Ê¤ë¡£
      *
-     * @param name $B2r7h$9$Y$-%*%V%8%'%/%H$NL>A0$N%M!<%`%3%s%]!<%M%s%H(B
-     * @return $B2r7h$5$l$?%*%V%8%'%/%H;2>H(B
+     * @param name ²ò·è¤¹¤Ù¤­¥ª¥Ö¥¸¥§¥¯¥È¤ÎÌ¾Á°¤Î¥Í¡¼¥à¥³¥ó¥Ý¡¼¥Í¥ó¥È
+     * @return ²ò·è¤µ¤ì¤¿¥ª¥Ö¥¸¥§¥¯¥È»²¾È
      *
      * @else
      *
@@ -415,17 +423,17 @@ namespace RTM
     /*!
      * @if jp
      *
-     * @brief Object $B$r(B name $B$+$i2r7h$9$k(B
+     * @brief Object ¤ò name ¤«¤é²ò·è¤¹¤ë
      *
-     * name $B$K(B bind $B$5$l$F$$$k%*%V%8%'%/%H;2>H$rJV$9!#(B
-     * $B%M!<%`%3%s%]!<%M%s%H(B <c_1, c_2, ... c_n> $B$O:F5"E*$K2r7h$5$l$k!#(B
+     * name ¤Ë bind ¤µ¤ì¤Æ¤¤¤ë¥ª¥Ö¥¸¥§¥¯¥È»²¾È¤òÊÖ¤¹¡£
+     * ¥Í¡¼¥à¥³¥ó¥Ý¡¼¥Í¥ó¥È <c_1, c_2, ... c_n> ¤ÏºÆµ¢Åª¤Ë²ò·è¤µ¤ì¤ë¡£
      * 
-     * CosNaming::resolve() $B$H$[$\F1Ey$NF/$-$r$9$k$,!">o$KM?$($i$l$?(B
-     * $B%M!<%`%5!<%P$N%k!<%H%3%s%F%-%9%H$KBP$7$F(B resolve() $B$,8F$S=P$5$l$kE@$,(B
-     * $B0[$J$k!#(B
+     * CosNaming::resolve() ¤È¤Û¤ÜÆ±Åù¤ÎÆ¯¤­¤ò¤¹¤ë¤¬¡¢¾ï¤ËÍ¿¤¨¤é¤ì¤¿
+     * ¥Í¡¼¥à¥µ¡¼¥Ð¤Î¥ë¡¼¥È¥³¥ó¥Æ¥­¥¹¥È¤ËÂÐ¤·¤Æ resolve() ¤¬¸Æ¤Ó½Ð¤µ¤ì¤ëÅÀ¤¬
+     * °Û¤Ê¤ë¡£
      *
-     * @param name $B2r7h$9$Y$-%*%V%8%'%/%H$NL>A0$NJ8;zNsI=8=(B
-     * @return $B2r7h$5$l$?%*%V%8%'%/%H;2>H(B
+     * @param name ²ò·è¤¹¤Ù¤­¥ª¥Ö¥¸¥§¥¯¥È¤ÎÌ¾Á°¤ÎÊ¸»úÎóÉ½¸½
+     * @return ²ò·è¤µ¤ì¤¿¥ª¥Ö¥¸¥§¥¯¥È»²¾È
      *
      * @else
      *
@@ -437,17 +445,17 @@ namespace RTM
     /*!
      * @if jp
      *
-     * @brief $B;XDj$5$l$?L>A0$N%*%V%8%'%/%H$N(B bind $B$r2r=|$9$k(B
+     * @brief »ØÄê¤µ¤ì¤¿Ì¾Á°¤Î¥ª¥Ö¥¸¥§¥¯¥È¤Î bind ¤ò²ò½ü¤¹¤ë
      *
-     * name $B$K(B bind $B$5$l$F$$$k%*%V%8%'%/%H;2>H$rJV$9!#(B
-     * $B%M!<%`%3%s%]!<%M%s%H(B <c_1, c_2, ... c_n> $B$O:F5"E*$K2r7h$5$l$k!#(B
+     * name ¤Ë bind ¤µ¤ì¤Æ¤¤¤ë¥ª¥Ö¥¸¥§¥¯¥È»²¾È¤òÊÖ¤¹¡£
+     * ¥Í¡¼¥à¥³¥ó¥Ý¡¼¥Í¥ó¥È <c_1, c_2, ... c_n> ¤ÏºÆµ¢Åª¤Ë²ò·è¤µ¤ì¤ë¡£
      * 
-     * CosNaming::unbind() $B$H$[$\F1Ey$NF/$-$r$9$k$,!">o$KM?$($i$l$?(B
-     * $B%M!<%`%5!<%P$N%k!<%H%3%s%F%-%9%H$KBP$7$F(B unbind() $B$,8F$S=P$5$l$kE@$,(B
-     * $B0[$J$k!#(B
+     * CosNaming::unbind() ¤È¤Û¤ÜÆ±Åù¤ÎÆ¯¤­¤ò¤¹¤ë¤¬¡¢¾ï¤ËÍ¿¤¨¤é¤ì¤¿
+     * ¥Í¡¼¥à¥µ¡¼¥Ð¤Î¥ë¡¼¥È¥³¥ó¥Æ¥­¥¹¥È¤ËÂÐ¤·¤Æ unbind() ¤¬¸Æ¤Ó½Ð¤µ¤ì¤ëÅÀ¤¬
+     * °Û¤Ê¤ë¡£
      *
-     * @param name $B2r7h$9$Y$-%*%V%8%'%/%H$NL>A0$N%M!<%`%3%s%]!<%M%s%H(B
-     * @return $B2r7h$5$l$?%*%V%8%'%/%H;2>H(B
+     * @param name ²ò·è¤¹¤Ù¤­¥ª¥Ö¥¸¥§¥¯¥È¤ÎÌ¾Á°¤Î¥Í¡¼¥à¥³¥ó¥Ý¡¼¥Í¥ó¥È
+     * @return ²ò·è¤µ¤ì¤¿¥ª¥Ö¥¸¥§¥¯¥È»²¾È
      *
      * @else
      *
@@ -459,17 +467,17 @@ namespace RTM
     /*!
      * @if jp
      *
-     * @brief $B;XDj$5$l$?L>A0$N%*%V%8%'%/%H$N(B bind $B$r2r=|$9$k(B
+     * @brief »ØÄê¤µ¤ì¤¿Ì¾Á°¤Î¥ª¥Ö¥¸¥§¥¯¥È¤Î bind ¤ò²ò½ü¤¹¤ë
      *
-     * name $B$K(B bind $B$5$l$F$$$k%*%V%8%'%/%H;2>H$rJV$9!#(B
-     * $B%M!<%`%3%s%]!<%M%s%H(B <c_1, c_2, ... c_n> $B$O:F5"E*$K2r7h$5$l$k!#(B
+     * name ¤Ë bind ¤µ¤ì¤Æ¤¤¤ë¥ª¥Ö¥¸¥§¥¯¥È»²¾È¤òÊÖ¤¹¡£
+     * ¥Í¡¼¥à¥³¥ó¥Ý¡¼¥Í¥ó¥È <c_1, c_2, ... c_n> ¤ÏºÆµ¢Åª¤Ë²ò·è¤µ¤ì¤ë¡£
      * 
-     * CosNaming::unbind() $B$H$[$\F1Ey$NF/$-$r$9$k$,!">o$KM?$($i$l$?(B
-     * $B%M!<%`%5!<%P$N%k!<%H%3%s%F%-%9%H$KBP$7$F(B unbind() $B$,8F$S=P$5$l$kE@$,(B
-     * $B0[$J$k!#(B
+     * CosNaming::unbind() ¤È¤Û¤ÜÆ±Åù¤ÎÆ¯¤­¤ò¤¹¤ë¤¬¡¢¾ï¤ËÍ¿¤¨¤é¤ì¤¿
+     * ¥Í¡¼¥à¥µ¡¼¥Ð¤Î¥ë¡¼¥È¥³¥ó¥Æ¥­¥¹¥È¤ËÂÐ¤·¤Æ unbind() ¤¬¸Æ¤Ó½Ð¤µ¤ì¤ëÅÀ¤¬
+     * °Û¤Ê¤ë¡£
      *
-     * @param name $B2r7h$9$Y$-%*%V%8%'%/%H$NL>A0$NJ8;zNsI=8=(B
-     * @return $B2r7h$5$l$?%*%V%8%'%/%H;2>H(B
+     * @param name ²ò·è¤¹¤Ù¤­¥ª¥Ö¥¸¥§¥¯¥È¤ÎÌ¾Á°¤ÎÊ¸»úÎóÉ½¸½
+     * @return ²ò·è¤µ¤ì¤¿¥ª¥Ö¥¸¥§¥¯¥È»²¾È
      *
      * @else
      *
@@ -481,12 +489,12 @@ namespace RTM
     /*!
      * @if jp
      *
-     * @brief $B?7$7$$%3%s%F%-%9%H$r@8@.$9$k(B
+     * @brief ¿·¤·¤¤¥³¥ó¥Æ¥­¥¹¥È¤òÀ¸À®¤¹¤ë
      *
-     * $BM?$($i$l$?%M!<%`%5!<%P>e$G@8@.$5$l$?(B NamingContext $B$rJV$9!#(B
-     * $BJV$5$l$?(B NamingContext $B$O(B bind $B$5$l$F$$$J$$!#(B
+     * Í¿¤¨¤é¤ì¤¿¥Í¡¼¥à¥µ¡¼¥Ð¾å¤ÇÀ¸À®¤µ¤ì¤¿ NamingContext ¤òÊÖ¤¹¡£
+     * ÊÖ¤µ¤ì¤¿ NamingContext ¤Ï bind ¤µ¤ì¤Æ¤¤¤Ê¤¤¡£
      * 
-     * @return $B@8@.$5$l$??7$7$$(B NamingContext
+     * @return À¸À®¤µ¤ì¤¿¿·¤·¤¤ NamingContext
      *
      * @else
      *
@@ -497,13 +505,13 @@ namespace RTM
     /*!
      * @if jp
      *
-     * @brief $B?7$7$$%3%s%F%-%9%H$r(B bind $B$9$k(B
+     * @brief ¿·¤·¤¤¥³¥ó¥Æ¥­¥¹¥È¤ò bind ¤¹¤ë
      *
-     * $BM?$($i$l$?(B name $B$KBP$7$F?7$7$$%3%s%F%-%9%H$r%P%$%s%I$9$k!#(B
-     * $B@8@.$5$l$?!!(BNamingContext $B$O%M!<%`%5!<%P>e$G@8@.$5$l$?$b$N$G$"$k!#(B
+     * Í¿¤¨¤é¤ì¤¿ name ¤ËÂÐ¤·¤Æ¿·¤·¤¤¥³¥ó¥Æ¥­¥¹¥È¤ò¥Ð¥¤¥ó¥É¤¹¤ë¡£
+     * À¸À®¤µ¤ì¤¿¡¡NamingContext ¤Ï¥Í¡¼¥à¥µ¡¼¥Ð¾å¤ÇÀ¸À®¤µ¤ì¤¿¤â¤Î¤Ç¤¢¤ë¡£
      * 
-     * @param name NamingContext$B$KIU$1$kL>A0$N%M!<%`%3%s%]!<%M%s%H(B
-     * @return $B@8@.$5$l$??7$7$$(B NamingContext
+     * @param name NamingContext¤ËÉÕ¤±¤ëÌ¾Á°¤Î¥Í¡¼¥à¥³¥ó¥Ý¡¼¥Í¥ó¥È
+     * @return À¸À®¤µ¤ì¤¿¿·¤·¤¤ NamingContext
      *
      * @else
      *
@@ -516,13 +524,13 @@ namespace RTM
     /*!
      * @if jp
      *
-     * @brief $B?7$7$$%3%s%F%-%9%H$r(B bind $B$9$k(B
+     * @brief ¿·¤·¤¤¥³¥ó¥Æ¥­¥¹¥È¤ò bind ¤¹¤ë
      *
-     * $BM?$($i$l$?(B name $B$KBP$7$F?7$7$$%3%s%F%-%9%H$r%P%$%s%I$9$k!#(B
-     * $B@8@.$5$l$?!!(BNamingContext $B$O%M!<%`%5!<%P>e$G@8@.$5$l$?$b$N$G$"$k!#(B
+     * Í¿¤¨¤é¤ì¤¿ name ¤ËÂÐ¤·¤Æ¿·¤·¤¤¥³¥ó¥Æ¥­¥¹¥È¤ò¥Ð¥¤¥ó¥É¤¹¤ë¡£
+     * À¸À®¤µ¤ì¤¿¡¡NamingContext ¤Ï¥Í¡¼¥à¥µ¡¼¥Ð¾å¤ÇÀ¸À®¤µ¤ì¤¿¤â¤Î¤Ç¤¢¤ë¡£
      * 
-     * @param name NamingContext$B$KIU$1$kL>A0$NJ8;zNsI=8=(B
-     * @return $B@8@.$5$l$??7$7$$(B NamingContext
+     * @param name NamingContext¤ËÉÕ¤±¤ëÌ¾Á°¤ÎÊ¸»úÎóÉ½¸½
+     * @return À¸À®¤µ¤ì¤¿¿·¤·¤¤ NamingContext
      *
      * @else
      *
@@ -535,13 +543,13 @@ namespace RTM
     /*!
      * @if jp
      *
-     * @brief NamingContext $B$rHs%"%/%F%#%V2=$9$k(B
+     * @brief NamingContext ¤òÈó¥¢¥¯¥Æ¥£¥Ö²½¤¹¤ë
      *
-     * context $B$G;XDj$5$l$?(B NamingContext $B$rHs%"%/%F%#%V2=$9$k!#(B
-     * context $B$KB>$N%3%s%F%-%9%H$,%P%$%s%I$5$l$F$$$k>l9g$O(B NotEmpty $BNc30$,(B
-     * $BH/@8$9$k!#(B
+     * context ¤Ç»ØÄê¤µ¤ì¤¿ NamingContext ¤òÈó¥¢¥¯¥Æ¥£¥Ö²½¤¹¤ë¡£
+     * context ¤ËÂ¾¤Î¥³¥ó¥Æ¥­¥¹¥È¤¬¥Ð¥¤¥ó¥É¤µ¤ì¤Æ¤¤¤ë¾ì¹ç¤Ï NotEmpty Îã³°¤¬
+     * È¯À¸¤¹¤ë¡£
      * 
-     * @param context $BHs%"%/%F%#%V2=$9$k(B NamingContext
+     * @param context Èó¥¢¥¯¥Æ¥£¥Ö²½¤¹¤ë NamingContext
      *
      * @else
      *
@@ -561,7 +569,7 @@ namespace RTM
 
     /*!
      * @if jp
-     * @brief NamingContext $B$r:F5"E*$K2<$C$FHs%"%/%F%#%V2=$9$k(B
+     * @brief NamingContext ¤òºÆµ¢Åª¤Ë²¼¤Ã¤ÆÈó¥¢¥¯¥Æ¥£¥Ö²½¤¹¤ë
      * @else
      * @brief Destroy the naming context recursively
      * @endif
@@ -572,7 +580,7 @@ namespace RTM
 
     /*!
      * @if jp
-     * @brief $B$9$Y$F$N(B Binding $B$r:o=|$9$k(B
+     * @brief ¤¹¤Ù¤Æ¤Î Binding ¤òºï½ü¤¹¤ë
      * @else
      * @brief Destroy all binding
      * @endif
@@ -582,7 +590,7 @@ namespace RTM
 
     /*!
      * @if jp
-     * @brief $BM?$($i$l$?(B NamingContext $B$N(B Binding $B$r<hF@$9$k(B
+     * @brief Í¿¤¨¤é¤ì¤¿ NamingContext ¤Î Binding ¤ò¼èÆÀ¤¹¤ë
      * @else
      * @brief Get Binding on the NamingContextDestroy all binding
      * @endif
@@ -598,7 +606,7 @@ namespace RTM
     //============================================================
     /*!
      * @if jp
-     * @brief $BM?$($i$l$?(B NameComponent $B$NJ8;zNsI=8=$rJV$9(B
+     * @brief Í¿¤¨¤é¤ì¤¿ NameComponent ¤ÎÊ¸»úÎóÉ½¸½¤òÊÖ¤¹
      * @else
      * @brief Get string representation of given NameComponent
      * @endif
@@ -609,7 +617,7 @@ namespace RTM
 
     /*!
      * @if jp
-     * @brief $BM?$($i$l$?J8;zNsI=8=$r(B NameComponent $B$KJ,2r$9$k(B
+     * @brief Í¿¤¨¤é¤ì¤¿Ê¸»úÎóÉ½¸½¤ò NameComponent ¤ËÊ¬²ò¤¹¤ë
      * @else
      * @brief Get NameComponent from gien string name representation
      * @endif
@@ -620,7 +628,7 @@ namespace RTM
 
     /*!
      * @if jp
-     * @brief $BM?$($i$l$?(B addre $B$H(B string_name $B$+$i(B URL$BI=8=$r<hF@$9$k(B
+     * @brief Í¿¤¨¤é¤ì¤¿ addre ¤È string_name ¤«¤é URLÉ½¸½¤ò¼èÆÀ¤¹¤ë
      * @else
      * @brief Get URL representation from given addr and string_name
      * @endif
@@ -631,7 +639,7 @@ namespace RTM
 
     /*!
      * @if jp
-     * @brief $BM?$($i$l$?J8;zNsI=8=$r(B resolve $B$7%*%V%8%'%/%H$rJV$9(B
+     * @brief Í¿¤¨¤é¤ì¤¿Ê¸»úÎóÉ½¸½¤ò resolve ¤·¥ª¥Ö¥¸¥§¥¯¥È¤òÊÖ¤¹
      * @else
      * @brief Resolve from name of string representation and get object 
      * @endif

@@ -2,7 +2,7 @@
 /*!
  * @file RtcNaming.cpp
  * @brief RT component naming class
- * @date $Date: 2006-09-11 18:26:08 $
+ * @date $Date: 2006-10-17 10:15:00 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
  * Copyright (C) 2003-2005
@@ -12,12 +12,20 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: RtcNaming.cpp,v 1.3 2006-09-11 18:26:08 n-ando Exp $
+ * $Id: RtcNaming.cpp,v 1.4 2006-10-17 10:15:00 n-ando Exp $
  *
  */
 
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.3  2006/09/11 18:26:08  n-ando
+ * RtcNaming class was completely rewritten.
+ * - Now RtcCorbaNaming is a wrapper of CosNaming::NamingContext
+ *   and CosNaming::NamingContextExt with fixed root context.
+ * - find() method is separated from this class.
+ * - This class constructor connects to the NameServer without using
+ *   resolve_initial_reference().
+ *
  * Revision 1.2  2005/05/16 06:28:35  n-ando
  * - ACE_HAS_WINSOCK2 was defined for Windows port.
  *
@@ -55,7 +63,7 @@ namespace RTM
   
   /*!
    * @if jp
-   * @brief Object $B$r(B bind $B$9$k(B
+   * @brief Object ¤ò bind ¤¹¤ë
    * @else
    * @brief Bind object on specified name component position
    * @endif
@@ -81,7 +89,7 @@ namespace RTM
   
   /*!
    * @if jp
-   * @brief Object $B$r(B bind $B$9$k(B
+   * @brief Object ¤ò bind ¤¹¤ë
    * @else
    * @brief Bind object on specified string name position
    * @endif
@@ -96,7 +104,7 @@ namespace RTM
   
   /*!
    * @if jp
-   * @brief $BESCf$N%3%s%F%-%9%H$r:F5"E*$K(B bind $B$7$J$,$i(B Object $B$r(B bind $B$9$k(B
+   * @brief ÅÓÃæ¤Î¥³¥ó¥Æ¥­¥¹¥È¤òºÆµ¢Åª¤Ë bind ¤·¤Ê¤¬¤é Object ¤ò bind ¤¹¤ë
    * @else
    * @brief Bind intermediate context recursively and bind object
    * @endif
@@ -131,7 +139,7 @@ namespace RTM
   
   /*!
    * @if jp
-   * @brief Object $B$r(B rebind $B$9$k(B
+   * @brief Object ¤ò rebind ¤¹¤ë
    * @else
    * @brief Rebind object
    * @endif
@@ -158,7 +166,7 @@ namespace RTM
   
   /*!
    * @if jp
-   * @brief Object $B$r(B rebind $B$9$k(B
+   * @brief Object ¤ò rebind ¤¹¤ë
    * @else
    * @brief Rebind object
    * @endif
@@ -174,7 +182,7 @@ namespace RTM
   
   /*!
    * @if jp
-   * @brief Object $B$r(B rebind $B$9$k(B
+   * @brief Object ¤ò rebind ¤¹¤ë
    * @else
    * @brief Rebind object
    * @endif
@@ -209,7 +217,7 @@ namespace RTM
   
   /*!
    * @if jp
-   * @brief NamingContext $B$r(B bind $B$9$k(B
+   * @brief NamingContext ¤ò bind ¤¹¤ë
    * @else
    * @brief Bind NamingContext
    * @endif
@@ -225,7 +233,7 @@ namespace RTM
   
   /*!
    * @if jp
-   * @brief NamingContext $B$r(B bind $B$9$k(B
+   * @brief NamingContext ¤ò bind ¤¹¤ë
    * @else
    * @brief Bind NamingContext
    * @endif
@@ -241,7 +249,7 @@ namespace RTM
   
   /*!
    * @if jp
-   * @brief $BESCf$N%3%s%F%-%9%H$r:F5"E*$K(B bind $B$7(B NamingContext $B$r(B bind $B$9$k(B
+   * @brief ÅÓÃæ¤Î¥³¥ó¥Æ¥­¥¹¥È¤òºÆµ¢Åª¤Ë bind ¤· NamingContext ¤ò bind ¤¹¤ë
    * @else
    * @brief Rebind object
    * @endif
@@ -258,7 +266,7 @@ namespace RTM
   
   /*!
    * @if jp
-   * @brief NamingContext $B$r(B rebind $B$9$k(B
+   * @brief NamingContext ¤ò rebind ¤¹¤ë
    * @else
    * @brief Rebind NamingContext
    * @endif
@@ -275,7 +283,7 @@ namespace RTM
   
   /*!
    * @if jp
-   * @brief NamingContext $B$r(B rebind $B$9$k(B
+   * @brief NamingContext ¤ò rebind ¤¹¤ë
    * @else
    * @brief Rebind NamingContext
    * @endif
@@ -291,7 +299,7 @@ namespace RTM
   
   /*!
    * @if jp
-   * @brief $BESCf$N%3%s%F%-%9%H$r:F5"E*$K(B rebind $B$7(B NamingContext $B$r(B rebind $B$9$k(B
+   * @brief ÅÓÃæ¤Î¥³¥ó¥Æ¥­¥¹¥È¤òºÆµ¢Åª¤Ë rebind ¤· NamingContext ¤ò rebind ¤¹¤ë
    * @else
    * @brief Create or resolve intermediate context and rebind NamingContext 
    * @endif
@@ -308,7 +316,7 @@ namespace RTM
   
   /*!
    * @if jp
-   * @brief $BM?$($i$l$?(B NameComponent $B$K%P%$%s%I$5$l$F$$$k(B Object $B$rJV$9(B
+   * @brief Í¿¤¨¤é¤ì¤¿ NameComponent ¤Ë¥Ð¥¤¥ó¥É¤µ¤ì¤Æ¤¤¤ë Object ¤òÊÖ¤¹
    * @else
    * @brief Return object bound on the specified NameComponent
    * @endif
@@ -322,7 +330,7 @@ namespace RTM
   
   /*!
    * @if jp
-   * @brief $BM?$($i$l$?(B NameComponent $B$K%P%$%s%I$5$l$F$$$k(B Object $B$rJV$9(B
+   * @brief Í¿¤¨¤é¤ì¤¿ NameComponent ¤Ë¥Ð¥¤¥ó¥É¤µ¤ì¤Æ¤¤¤ë Object ¤òÊÖ¤¹
    * @else
    * @brief Return object bound on the specified NameComponent
    * @endif
@@ -336,7 +344,7 @@ namespace RTM
   
   /*!
    * @if jp
-   * @brief $BM?$($i$l$?(B NameComponent $B$N%P%$%s%G%#%s%0$r:o=|$9$k(B
+   * @brief Í¿¤¨¤é¤ì¤¿ NameComponent ¤Î¥Ð¥¤¥ó¥Ç¥£¥ó¥°¤òºï½ü¤¹¤ë
    * @else
    * @brief Unbind a binding specified by NameComponent
    * @endif
@@ -350,7 +358,7 @@ namespace RTM
   
   /*!
    * @if jp
-   * @brief $BM?$($i$l$?(B NameComponent $B$N%P%$%s%G%#%s%0$r:o=|$9$k(B
+   * @brief Í¿¤¨¤é¤ì¤¿ NameComponent ¤Î¥Ð¥¤¥ó¥Ç¥£¥ó¥°¤òºï½ü¤¹¤ë
    * @else
    * @brief Unbind a binding specified by NameComponent
    * @endif
@@ -364,7 +372,7 @@ namespace RTM
   
   /*!
    * @if jp
-   * @brief $B?7$7$$%3%s%F%-%9%H$r@8@.$9$k(B
+   * @brief ¿·¤·¤¤¥³¥ó¥Æ¥­¥¹¥È¤òÀ¸À®¤¹¤ë
    * @else
    * @brief Create new NamingContext
    * @endif
@@ -377,7 +385,7 @@ namespace RTM
   
   /*!
    * @if jp
-   * @brief $B?7$7$$%3%s%F%-%9%H$r(B bind $B$9$k(B
+   * @brief ¿·¤·¤¤¥³¥ó¥Æ¥­¥¹¥È¤ò bind ¤¹¤ë
    * @else
    * pbrief Bind new namingContext
    * @endif
@@ -404,7 +412,7 @@ namespace RTM
   
   /*!
    * @if jp
-   * @brief $B?7$7$$%3%s%F%-%9%H$r(B bind $B$9$k(B
+   * @brief ¿·¤·¤¤¥³¥ó¥Æ¥­¥¹¥È¤ò bind ¤¹¤ë
    * @else
    * pbrief Bind new namingContext
    * @endif
@@ -419,7 +427,7 @@ namespace RTM
   
   /*!
    * @if jp
-   * @brief NamingContext $B$rHs%"%/%F%#%V2=$9$k(B
+   * @brief NamingContext ¤òÈó¥¢¥¯¥Æ¥£¥Ö²½¤¹¤ë
    * @else
    * @brief Destroy the naming context
    * @endif
@@ -433,7 +441,7 @@ namespace RTM
   
   /*!
    * @if jp
-   * @brief NamingContext $B$r:F5"E*$K2<$C$FHs%"%/%F%#%V2=$9$k(B
+   * @brief NamingContext ¤òºÆµ¢Åª¤Ë²¼¤Ã¤ÆÈó¥¢¥¯¥Æ¥£¥Ö²½¤¹¤ë
    * @else
    * @brief Destroy the naming context recursively
    * @endif
@@ -483,7 +491,7 @@ namespace RTM
   
   /*!
    * @if jp
-   * @brief $B$9$Y$F$N(B Binding $B$r:o=|$9$k(B
+   * @brief ¤¹¤Ù¤Æ¤Î Binding ¤òºï½ü¤¹¤ë
    * @else
    * @brief Destroy all binding
    * @endif
@@ -496,7 +504,7 @@ namespace RTM
   
   /*!
    * @if jp
-   * @brief $BM?$($i$l$?(B NamingContext $B$N(B Binding $B$r<hF@$9$k(B
+   * @brief Í¿¤¨¤é¤ì¤¿ NamingContext ¤Î Binding ¤ò¼èÆÀ¤¹¤ë
    * @else
    * @brief Get Binding on the NamingContextDestroy all binding
    * @endif
@@ -512,7 +520,7 @@ namespace RTM
   
   /*!
    * @if jp
-   * @brief $BM?$($i$l$?(B NameComponent $B$NJ8;zNsI=8=$rJV$9(B
+   * @brief Í¿¤¨¤é¤ì¤¿ NameComponent ¤ÎÊ¸»úÎóÉ½¸½¤òÊÖ¤¹
    * @else
    * @brief Get string representation of given NameComponent
    * @endif
@@ -535,7 +543,7 @@ namespace RTM
   
   /*!
    * @if jp
-   * @brief $BM?$($i$l$?J8;zNsI=8=$r(B NameComponent $B$KJ,2r$9$k(B
+   * @brief Í¿¤¨¤é¤ì¤¿Ê¸»úÎóÉ½¸½¤ò NameComponent ¤ËÊ¬²ò¤¹¤ë
    * @else
    * @brief Get NameComponent from gien string name representation
    * @endif
@@ -586,7 +594,7 @@ namespace RTM
   
   /*!
    * @if jp
-   * @brief $BM?$($i$l$?(B addre $B$H(B string_name $B$+$i(B URL$BI=8=$r<hF@$9$k(B
+   * @brief Í¿¤¨¤é¤ì¤¿ addre ¤È string_name ¤«¤é URLÉ½¸½¤ò¼èÆÀ¤¹¤ë
    * @else
    * @brief Get URL representation from given addr and string_name
    * @endif
@@ -600,7 +608,7 @@ namespace RTM
   
   /*!
    * @if jp
-   * @brief $BM?$($i$l$?J8;zNsI=8=$r(B resolve $B$7%*%V%8%'%/%H$rJV$9(B
+   * @brief Í¿¤¨¤é¤ì¤¿Ê¸»úÎóÉ½¸½¤ò resolve ¤·¥ª¥Ö¥¸¥§¥¯¥È¤òÊÖ¤¹
    * @else
    * @brief Resolve from name of string representation and get object 
    * @endif
