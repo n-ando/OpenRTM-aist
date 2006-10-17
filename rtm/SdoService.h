@@ -2,7 +2,7 @@
 /*!
  * @file SdoService.h
  * @brief SDO Service administration class
- * @date $Date: 2006-09-11 18:48:08 $
+ * @date $Date: 2006-10-17 10:12:51 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
  * Copyright (C) 2006
@@ -12,12 +12,15 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: SdoService.h,v 1.1 2006-09-11 18:48:08 n-ando Exp $
+ * $Id: SdoService.h,v 1.2 2006-10-17 10:12:51 n-ando Exp $
  *
  */
 
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.1  2006/09/11 18:48:08  n-ando
+ * The first commit.
+ *
  *
  */
 
@@ -40,7 +43,7 @@ namespace SDOPackage
     
     /*!
      * @if jp
-     * @brief ServiceProfile.id $B$r%;%C%H$9$k(B
+     * @brief ServiceProfile.id ¤ò¥»¥Ã¥È¤¹¤ë
      * @else
      * @brief Setting ServiceProfile.id
      * @endif
@@ -53,7 +56,7 @@ namespace SDOPackage
     
     /*!
      * @if jp
-     * @brief ServiceProfile.id $B$r<hF@(B
+     * @brief ServiceProfile.id ¤ò¼èÆÀ
      * @else
      * @brief Getting ServiceProfile.id
      * @endif
@@ -65,7 +68,7 @@ namespace SDOPackage
     
     /*!
      * @if jp
-     * @brief RTCServiceProfile.interfaceType $B$r%;%C%H$9$k(B
+     * @brief RTCServiceProfile.interfaceType ¤ò¥»¥Ã¥È¤¹¤ë
      * @else
      * @brief Setting RTCServiceProfile.interfaceType
      * @endif
@@ -77,7 +80,7 @@ namespace SDOPackage
     
     /*!
      * @if jp
-     * @brief RTCServiceProfile.interfaceType $B$r<hF@$9$k(B
+     * @brief RTCServiceProfile.interfaceType ¤ò¼èÆÀ¤¹¤ë
      * @else
      * @brief Getting RTCServiceProfile.interfaceType
      * @endif
@@ -89,7 +92,7 @@ namespace SDOPackage
     
     /*!
      * @if jp
-     * @brief RTCServiceProfile.idlDefinition $B$r%;%C%H$9$k(B
+     * @brief RTCServiceProfile.idlDefinition ¤ò¥»¥Ã¥È¤¹¤ë
      * @else
      * @brief Setting RTCServiceProfile.idlDefnition
      * @endif
@@ -101,7 +104,7 @@ namespace SDOPackage
     
     /*!
      * @if jp
-     * @brief RTCServiceProfile.idlDefinition $B$r<hF@$9$k(B
+     * @brief RTCServiceProfile.idlDefinition ¤ò¼èÆÀ¤¹¤ë
      * @else
      * @brief Getting RTCServiceProfile.idlDefnition
      * @endif
@@ -113,7 +116,7 @@ namespace SDOPackage
     
     /*!
      * @if jp
-     * @brief RTCServiceProfile.properties $B$r%;%C%H$9$k(B
+     * @brief RTCServiceProfile.properties ¤ò¥»¥Ã¥È¤¹¤ë
      * @else
      * @brief Setting RTCServiceProfile.properties
      * @endif
@@ -125,7 +128,7 @@ namespace SDOPackage
     
     /*!
      * @if jp
-     * @brief RTCServiceProfile.properties $B$r<hF@$9$k(B
+     * @brief RTCServiceProfile.properties ¤ò¼èÆÀ¤¹¤ë
      * @else
      * @brief Getting RTCServiceProfile.properties
      * @endif
@@ -139,7 +142,7 @@ namespace SDOPackage
     
     /*!
      * @if jp
-     * @brief RTCServiceProfile.serviceRef $B$r%;%C%H$9$k(B
+     * @brief RTCServiceProfile.serviceRef ¤ò¥»¥Ã¥È¤¹¤ë
      * @else
      * @brief Setting RTCServiceProfile.serviceRef
      * @endif
@@ -151,7 +154,7 @@ namespace SDOPackage
     
     /*!
      * @if jp
-     * @brief RTCServiceProfile.serviceRef $B$r<hF@$9$k(B
+     * @brief RTCServiceProfile.serviceRef ¤ò¼èÆÀ¤¹¤ë
      * @else
      * @brief Getting RTCServiceProfile.serviceRef
      * @endif

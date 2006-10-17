@@ -2,7 +2,7 @@
 /*!
  * @file SdoSystemElement.h
  * @brief SDOSystemElement and SDO implementation classes
- * @date $Date: 2006-09-11 18:14:31 $
+ * @date $Date: 2006-10-17 10:12:39 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
  * Copyright (C) 2006
@@ -12,12 +12,15 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: SdoSystemElement.cpp,v 1.1 2006-09-11 18:14:31 n-ando Exp $
+ * $Id: SdoSystemElement.cpp,v 1.2 2006-10-17 10:12:39 n-ando Exp $
  *
  */
 
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.1  2006/09/11 18:14:31  n-ando
+ * The first commit.
+ *
  *
  */
 
@@ -37,7 +40,7 @@ namespace SDOPackage
   //============================================================
   /*!
    * @if jp
-   * @brief [CORBA interface] Organization $B%j%9%H$N<hF@(B 
+   * @brief [CORBA interface] Organization ¥ê¥¹¥È¤Î¼èÆÀ 
    * @else
    * @brief [CORBA interface] Getting Organizations
    * @endif
@@ -56,7 +59,7 @@ namespace SDOPackage
 
   /*!
    * @if jp
-   * @brief [CORBA interface] Organization $B%j%9%H$N<hF@(B 
+   * @brief [CORBA interface] Organization ¥ê¥¹¥È¤Î¼èÆÀ 
    * @else
    * @brief [CORBA interface] Getting Organizations
    * @endif
@@ -96,7 +99,7 @@ namespace SDOPackage
   
   /*!
    * @if jp
-   * @brief [CORBA interface] SDO ID $B$N<hF@(B
+   * @brief [CORBA interface] SDO ID ¤Î¼èÆÀ
    * @else
    * @brief [CORBA interface] Getting SDO ID
    * @endif
@@ -117,7 +120,7 @@ namespace SDOPackage
   
   /*!
    * @if jp
-   * @brief [CORBA interface] SDO $B%?%$%W$N<hF@(B
+   * @brief [CORBA interface] SDO ¥¿¥¤¥×¤Î¼èÆÀ
    * @else
    * @brief [CORBA interface] Getting SDO type
    * @endif
@@ -138,7 +141,7 @@ namespace SDOPackage
   
   /*!
    * @if jp
-   * @brief [CORBA interface] SDO DeviceProfile $B%j%9%H$N<hF@(B 
+   * @brief [CORBA interface] SDO DeviceProfile ¥ê¥¹¥È¤Î¼èÆÀ 
    * @else
    * @brief [CORBA interface] Getting SDO DeviceProfile
    * @endif
@@ -159,7 +162,7 @@ namespace SDOPackage
   
   /*!
    * @if jp
-   * @brief [CORBA interface] SDO ServiceProfile $B$N<hF@(B 
+   * @brief [CORBA interface] SDO ServiceProfile ¤Î¼èÆÀ 
    * @else
    * @brief [CORBA interface] Getting SDO ServiceProfile
    * @endif
@@ -179,7 +182,7 @@ namespace SDOPackage
   
   /*!
    * @if jp
-   * @brief [CORBA interface] $BFCDj$N(BServiceProfile$B$N<hF@(B 
+   * @brief [CORBA interface] ÆÃÄê¤ÎServiceProfile¤Î¼èÆÀ 
    * @else
    * @brief [CORBA interface] Getting Organizations
    * @endif
@@ -199,7 +202,7 @@ namespace SDOPackage
   
   /*!
    * @if jp
-   * @brief [CORBA interface] $B;XDj$5$l$?(B SDO Service $B$N<hF@(B
+   * @brief [CORBA interface] »ØÄê¤µ¤ì¤¿ SDO Service ¤Î¼èÆÀ
    * @else
    * @brief [CORBA interface] Getting specified SDO Service's reference
    * @endif
@@ -221,7 +224,7 @@ namespace SDOPackage
   
   /*!
    * @if jp
-   * @brief [CORBA interface] Configuration $B%*%V%8%'%/%H$N<hF@(B 
+   * @brief [CORBA interface] Configuration ¥ª¥Ö¥¸¥§¥¯¥È¤Î¼èÆÀ 
    * @else
    * @brief [CORBA interface] Getting Configuration object
    * @endif
@@ -242,7 +245,7 @@ namespace SDOPackage
   
   /*!
    * @if jp
-   * @brief [CORBA interface] Organization $B%j%9%H$N<hF@(B 
+   * @brief [CORBA interface] Organization ¥ê¥¹¥È¤Î¼èÆÀ 
    * @else
    * @brief [CORBA interface] Getting Organizations
    * @endif
@@ -256,7 +259,7 @@ namespace SDOPackage
   
   /*!
    * @if jp
-   * @brief [CORBA interface] Organization $B%j%9%H$N<hF@(B 
+   * @brief [CORBA interface] Organization ¥ê¥¹¥È¤Î¼èÆÀ 
    * @else
    * @endif
    */
@@ -276,7 +279,7 @@ namespace SDOPackage
   
   /*!
    * @if jp
-   * @brief [CORBA interface] Status $B%j%9%H$N<hF@(B
+   * @brief [CORBA interface] Status ¥ê¥¹¥È¤Î¼èÆÀ
    * @else
    * @brief [CORBA interface] Getting list of SDO's status
    * @endif
@@ -297,16 +300,16 @@ namespace SDOPackage
   /*!
    * @if jp
    * 
-   * @brief [CORBA interface] Organization $B%j%9%H$N<hF@(B 
+   * @brief [CORBA interface] Organization ¥ê¥¹¥È¤Î¼èÆÀ 
    *
    * This operation returns the value of the specified status parameter.
    * 
-   * @param name SDO $B$N%9%F!<%?%9$rDj5A$9$k%Q%i%a!<%?!#(B
-   * @return $B;XDj$5$l$?%Q%i%a!<%?$N%9%F!<%?%9CM!#(B
-   * @exception SDONotExists $B%?!<%2%C%H$N(BSDO$B$,B8:_$7$J$$!#(B
-   * @exception NotAvailable SDO$B$OB8:_$9$k$,1~Ez$,$J$$!#(B
-   * @exception InvalidParameter $B0z?t(B "name" $B$,(B null $B$"$k$$$OB8:_$7$J$$!#(B
-   * @exception InternalError $BFbItE*%(%i!<$,H/@8$7$?!#(B
+   * @param name SDO ¤Î¥¹¥Æ¡¼¥¿¥¹¤òÄêµÁ¤¹¤ë¥Ñ¥é¥á¡¼¥¿¡£
+   * @return »ØÄê¤µ¤ì¤¿¥Ñ¥é¥á¡¼¥¿¤Î¥¹¥Æ¡¼¥¿¥¹ÃÍ¡£
+   * @exception SDONotExists ¥¿¡¼¥²¥Ã¥È¤ÎSDO¤¬Â¸ºß¤·¤Ê¤¤¡£
+   * @exception NotAvailable SDO¤ÏÂ¸ºß¤¹¤ë¤¬±þÅú¤¬¤Ê¤¤¡£
+   * @exception InvalidParameter °ú¿ô "name" ¤¬ null ¤¢¤ë¤¤¤ÏÂ¸ºß¤·¤Ê¤¤¡£
+   * @exception InternalError ÆâÉôÅª¥¨¥é¡¼¤¬È¯À¸¤·¤¿¡£
    * @else
    *
    * @brief [CORBA interface] Getting Organizations

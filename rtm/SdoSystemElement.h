@@ -2,7 +2,7 @@
 /*!
  * @file SdoSystemElement.h
  * @brief SDOSystemElement and SDO classes
- * @date $Date: 2006-09-11 18:14:41 $
+ * @date $Date: 2006-10-17 10:12:44 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
  * Copyright (C) 2006
@@ -12,12 +12,15 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: SdoSystemElement.h,v 1.1 2006-09-11 18:14:41 n-ando Exp $
+ * $Id: SdoSystemElement.h,v 1.2 2006-10-17 10:12:44 n-ando Exp $
  *
  */
 
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.1  2006/09/11 18:14:41  n-ando
+ * The first commit.
+ *
  *
  */
 
@@ -43,10 +46,10 @@ namespace SDOPackage
    * @if jp
    *
    * @class SDOSystemElement_impl
-   * @brief SDOSystemElement $B<BAu%/%i%9(B
+   * @brief SDOSystemElement ¼ÂÁõ¥¯¥é¥¹
    *
-   * SDOSystemElement $B%$%s%?!<%U%'!<%9$O(BSDOSystemElement$B$N%5%V%/%i%9$r(B
-   * $B4IM}$9$k$?$a$KMxMQ$5$l$k!#(B
+   * SDOSystemElement ¥¤¥ó¥¿¡¼¥Õ¥§¡¼¥¹¤ÏSDOSystemElement¤Î¥µ¥Ö¥¯¥é¥¹¤ò
+   * ´ÉÍý¤¹¤ë¤¿¤á¤ËÍøÍÑ¤µ¤ì¤ë¡£
    *
    * @else
    *
@@ -65,7 +68,7 @@ namespace SDOPackage
   public:
     /*!
      * @if jp
-     * @brief SDOSystemElement $B%/%i%9%3%s%9%H%i%/%?(B
+     * @brief SDOSystemElement ¥¯¥é¥¹¥³¥ó¥¹¥È¥é¥¯¥¿
      *
      * @else
      *
@@ -79,7 +82,7 @@ namespace SDOPackage
     /*!
      * @if jp
      * 
-     * @brief RtcBase $B%/%i%9%G%9%H%i%/%?(B
+     * @brief RtcBase ¥¯¥é¥¹¥Ç¥¹¥È¥é¥¯¥¿
      *
      * @else
      *
@@ -98,12 +101,12 @@ namespace SDOPackage
     /*!
      * @if jp
      * 
-     * @brief [CORBA interface] Organization $B%j%9%H$N<hF@(B 
+     * @brief [CORBA interface] Organization ¥ê¥¹¥È¤Î¼èÆÀ 
      *
-     * SDOSystemElement $B$O(B0$B8D$b$7$/$O$=$l0J>e$N(B Organization $B$r=jM-$9$k$3$H$,(B
-     * $B=PMh$k!#(B SDOSystemElement $B$,(B1$B$D0J>e$N(B Organization $B$r=jM-$7$F$$$k>l9g(B
-     * $B$K$O!"$3$N%*%Z%l!<%7%g%s$O=jM-$9$k(B Organization $B$N%j%9%H$rJV$9!#(B
-     * $B$b$7(BOrganization$B$r0l$D$b=jM-$7$F$$$J$$$1$l$P6u$N%j%9%H$rJV$9!#(B
+     * SDOSystemElement ¤Ï0¸Ä¤â¤·¤¯¤Ï¤½¤ì°Ê¾å¤Î Organization ¤ò½êÍ­¤¹¤ë¤³¤È¤¬
+     * ½ÐÍè¤ë¡£ SDOSystemElement ¤¬1¤Ä°Ê¾å¤Î Organization ¤ò½êÍ­¤·¤Æ¤¤¤ë¾ì¹ç
+     * ¤Ë¤Ï¡¢¤³¤Î¥ª¥Ú¥ì¡¼¥·¥ç¥ó¤Ï½êÍ­¤¹¤ë Organization ¤Î¥ê¥¹¥È¤òÊÖ¤¹¡£
+     * ¤â¤·Organization¤ò°ì¤Ä¤â½êÍ­¤·¤Æ¤¤¤Ê¤¤¤±¤ì¤Ð¶õ¤Î¥ê¥¹¥È¤òÊÖ¤¹¡£
      *
      * @else
      *
@@ -144,11 +147,11 @@ namespace SDOPackage
    * @if jp
    *
    * @class SDO_impl
-   * @brief SDO $B<BAu%/%i%9(B
+   * @brief SDO ¼ÂÁõ¥¯¥é¥¹
    *
-   * SDO $B%$%s%?!<%U%'!<%9$O(BSDO$BMWAG$r4IM}$9$k$?$a$K;HMQ$5$l$k!#(B
-   * SDO $B;EMM$K$*$$$FDj5A$5$l$F$$$kB>$NA4$F$N%$%s%?!<%U%'!<%9$O(B
-   * SDO $B%$%s%?!<%U%'!<%9$r5/E@$KA`:n$5$l$k!#(B
+   * SDO ¥¤¥ó¥¿¡¼¥Õ¥§¡¼¥¹¤ÏSDOÍ×ÁÇ¤ò´ÉÍý¤¹¤ë¤¿¤á¤Ë»ÈÍÑ¤µ¤ì¤ë¡£
+   * SDO »ÅÍÍ¤Ë¤ª¤¤¤ÆÄêµÁ¤µ¤ì¤Æ¤¤¤ëÂ¾¤ÎÁ´¤Æ¤Î¥¤¥ó¥¿¡¼¥Õ¥§¡¼¥¹¤Ï
+   * SDO ¥¤¥ó¥¿¡¼¥Õ¥§¡¼¥¹¤òµ¯ÅÀ¤ËÁàºî¤µ¤ì¤ë¡£
    *
    * @else
    *
@@ -179,15 +182,15 @@ namespace SDOPackage
     /*!
      * @if jp
      * 
-     * @brief [CORBA interface] SDO ID $B$N<hF@(B
+     * @brief [CORBA interface] SDO ID ¤Î¼èÆÀ
      *
-     * SDO ID $B$rJV$9%*%Z%l!<%7%g%s!#(B
-     * $B$3$N%*%Z%l!<%7%g%s$O0J2<$N7?$NNc30$rH/@8$5$;$k!#(B
+     * SDO ID ¤òÊÖ¤¹¥ª¥Ú¥ì¡¼¥·¥ç¥ó¡£
+     * ¤³¤Î¥ª¥Ú¥ì¡¼¥·¥ç¥ó¤Ï°Ê²¼¤Î·¿¤ÎÎã³°¤òÈ¯À¸¤µ¤»¤ë¡£
      * 
-     * @exception SDONotExists $B%?!<%2%C%H$N(BSDO$B$,B8:_$7$J$$!#(B
-     * @exception NotAvailable SDO$B$OB8:_$9$k$,1~Ez$,$J$$!#(B
-     * @exception InternalError $BFbItE*%(%i!<$,H/@8$7$?!#(B
-     * @return    $B%j%=!<%9%G!<%?%b%G%k$GDj5A$5$l$F$$$k(B SDO $B$N(B ID
+     * @exception SDONotExists ¥¿¡¼¥²¥Ã¥È¤ÎSDO¤¬Â¸ºß¤·¤Ê¤¤¡£
+     * @exception NotAvailable SDO¤ÏÂ¸ºß¤¹¤ë¤¬±þÅú¤¬¤Ê¤¤¡£
+     * @exception InternalError ÆâÉôÅª¥¨¥é¡¼¤¬È¯À¸¤·¤¿¡£
+     * @return    ¥ê¥½¡¼¥¹¥Ç¡¼¥¿¥â¥Ç¥ë¤ÇÄêµÁ¤µ¤ì¤Æ¤¤¤ë SDO ¤Î ID
      *
      * @else
      *
@@ -211,15 +214,15 @@ namespace SDOPackage
     /*!
      * @if jp
      * 
-     * @brief [CORBA interface] SDO $B%?%$%W$N<hF@(B
+     * @brief [CORBA interface] SDO ¥¿¥¤¥×¤Î¼èÆÀ
      * 
-     * SDO Type $B$rJV$9%*%Z%l!<%7%g%s!#(B
-     * $B$3$N%*%Z%l!<%7%g%s$O0J2<$N7?$NNc30$rH/@8$5$;$k!#(B
+     * SDO Type ¤òÊÖ¤¹¥ª¥Ú¥ì¡¼¥·¥ç¥ó¡£
+     * ¤³¤Î¥ª¥Ú¥ì¡¼¥·¥ç¥ó¤Ï°Ê²¼¤Î·¿¤ÎÎã³°¤òÈ¯À¸¤µ¤»¤ë¡£
      *
-     * @exception SDONotExists $B%?!<%2%C%H$N(BSDO$B$,B8:_$7$J$$!#(B
-     * @exception NotAvailable SDO$B$OB8:_$9$k$,1~Ez$,$J$$!#(B
-     * @exception InternalError $BFbItE*%(%i!<$,H/@8$7$?!#(B
-     * @return    $B%j%=!<%9%G!<%?%b%G%k$GDj5A$5$l$F$$$k(B SDO $B$N(B Type
+     * @exception SDONotExists ¥¿¡¼¥²¥Ã¥È¤ÎSDO¤¬Â¸ºß¤·¤Ê¤¤¡£
+     * @exception NotAvailable SDO¤ÏÂ¸ºß¤¹¤ë¤¬±þÅú¤¬¤Ê¤¤¡£
+     * @exception InternalError ÆâÉôÅª¥¨¥é¡¼¤¬È¯À¸¤·¤¿¡£
+     * @return    ¥ê¥½¡¼¥¹¥Ç¡¼¥¿¥â¥Ç¥ë¤ÇÄêµÁ¤µ¤ì¤Æ¤¤¤ë SDO ¤Î Type
      *
      * @else
      *
@@ -243,14 +246,14 @@ namespace SDOPackage
     /*!
      * @if jp
      * 
-     * @brief [CORBA interface] SDO DeviceProfile $B%j%9%H$N<hF@(B 
+     * @brief [CORBA interface] SDO DeviceProfile ¥ê¥¹¥È¤Î¼èÆÀ 
      *
-     * SDO $B$N(B DeviceProfile $B$rJV$9%*%Z%l!<%7%g%s!#(B SDO $B$,%O!<%I%&%(%"%G%P%$%9(B
-     * $B$K4XO"IU$1$i$l$F$$$J$$>l9g$K$O!"6u$N(B DeviceProfile $B$,JV$5$l$k!#(B
-     * $B$3$N%*%Z%l!<%7%g%s$O0J2<$N7?$NNc30$rH/@8$5$;$k!#(B
+     * SDO ¤Î DeviceProfile ¤òÊÖ¤¹¥ª¥Ú¥ì¡¼¥·¥ç¥ó¡£ SDO ¤¬¥Ï¡¼¥É¥¦¥¨¥¢¥Ç¥Ð¥¤¥¹
+     * ¤Ë´ØÏ¢ÉÕ¤±¤é¤ì¤Æ¤¤¤Ê¤¤¾ì¹ç¤Ë¤Ï¡¢¶õ¤Î DeviceProfile ¤¬ÊÖ¤µ¤ì¤ë¡£
+     * ¤³¤Î¥ª¥Ú¥ì¡¼¥·¥ç¥ó¤Ï°Ê²¼¤Î·¿¤ÎÎã³°¤òÈ¯À¸¤µ¤»¤ë¡£
      *
-     * @exception NotAvailable SDO$B$OB8:_$9$k$,1~Ez$,$J$$!#(B
-     * @exception InternalError $BFbItE*%(%i!<$,H/@8$7$?!#(B
+     * @exception NotAvailable SDO¤ÏÂ¸ºß¤¹¤ë¤¬±þÅú¤¬¤Ê¤¤¡£
+     * @exception InternalError ÆâÉôÅª¥¨¥é¡¼¤¬È¯À¸¤·¤¿¡£
      * @return    SDO DeviceProfile
      *
      * @else
@@ -276,16 +279,16 @@ namespace SDOPackage
     /*!
      * @if jp
      * 
-     * @brief [CORBA interface] SDO ServiceProfile $B$N<hF@(B 
+     * @brief [CORBA interface] SDO ServiceProfile ¤Î¼èÆÀ 
      *
-     * SDO $B$,=jM-$7$F$$$k(B Service $B$N(B ServiceProfile $B$rJV$9%*%Z%l!<%7%g%s!#(B
-     * SDO $B$,%5!<%S%9$r0l$D$b=jM-$7$F$$$J$$>l9g$K$O!"6u$N%j%9%H$rJV$9!#(B
-     * $B$3$N%*%Z%l!<%7%g%s$O0J2<$N7?$NNc30$rH/@8$5$;$k!#(B
+     * SDO ¤¬½êÍ­¤·¤Æ¤¤¤ë Service ¤Î ServiceProfile ¤òÊÖ¤¹¥ª¥Ú¥ì¡¼¥·¥ç¥ó¡£
+     * SDO ¤¬¥µ¡¼¥Ó¥¹¤ò°ì¤Ä¤â½êÍ­¤·¤Æ¤¤¤Ê¤¤¾ì¹ç¤Ë¤Ï¡¢¶õ¤Î¥ê¥¹¥È¤òÊÖ¤¹¡£
+     * ¤³¤Î¥ª¥Ú¥ì¡¼¥·¥ç¥ó¤Ï°Ê²¼¤Î·¿¤ÎÎã³°¤òÈ¯À¸¤µ¤»¤ë¡£
      * 
-     * @exception SDONotExists $B%?!<%2%C%H$N(BSDO$B$,B8:_$7$J$$!#(B
-     * @exception NotAvailable SDO$B$OB8:_$9$k$,1~Ez$,$J$$!#(B
-     * @exception InternalError $BFbItE*%(%i!<$,H/@8$7$?!#(B
-     * @return    SDO $B$,Ds6!$9$kA4$F$N(B Service $B$N(B ServiceProfile$B!#(B
+     * @exception SDONotExists ¥¿¡¼¥²¥Ã¥È¤ÎSDO¤¬Â¸ºß¤·¤Ê¤¤¡£
+     * @exception NotAvailable SDO¤ÏÂ¸ºß¤¹¤ë¤¬±þÅú¤¬¤Ê¤¤¡£
+     * @exception InternalError ÆâÉôÅª¥¨¥é¡¼¤¬È¯À¸¤·¤¿¡£
+     * @return    SDO ¤¬Äó¶¡¤¹¤ëÁ´¤Æ¤Î Service ¤Î ServiceProfile¡£
      *
      * @else
      *
@@ -310,14 +313,14 @@ namespace SDOPackage
     /*!
      * @if jp
      * 
-     * @brief [CORBA interface] $BFCDj$N(BServiceProfile$B$N<hF@(B 
+     * @brief [CORBA interface] ÆÃÄê¤ÎServiceProfile¤Î¼èÆÀ 
      *
-     * $B0z?t(B "id" $B$G;XDj$5$l$?L>A0$N%5!<%S%9$N(B ServiceProfile $B$rJV$9!#(B
+     * °ú¿ô "id" ¤Ç»ØÄê¤µ¤ì¤¿Ì¾Á°¤Î¥µ¡¼¥Ó¥¹¤Î ServiceProfile ¤òÊÖ¤¹¡£
      * 
-     * @param     id SDO Service $B$N(B ServiceProfile $B$K4XO"IU$1$i$l$?<1JL;R!#(B
-     * @return    $B;XDj$5$l$?(B SDO Service $B$N(B ServiceProfile$B!#(B
-     * @exception NotAvailable SDO$B$OB8:_$9$k$,1~Ez$,$J$$!#(B
-     * @exception InternalError $BFbItE*%(%i!<$,H/@8$7$?!#(B
+     * @param     id SDO Service ¤Î ServiceProfile ¤Ë´ØÏ¢ÉÕ¤±¤é¤ì¤¿¼±ÊÌ»Ò¡£
+     * @return    »ØÄê¤µ¤ì¤¿ SDO Service ¤Î ServiceProfile¡£
+     * @exception NotAvailable SDO¤ÏÂ¸ºß¤¹¤ë¤¬±þÅú¤¬¤Ê¤¤¡£
+     * @exception InternalError ÆâÉôÅª¥¨¥é¡¼¤¬È¯À¸¤·¤¿¡£
      *
      * @else
      *
@@ -341,14 +344,14 @@ namespace SDOPackage
     /*!
      * @if jp
      * 
-     * @brief [CORBA interface] $B;XDj$5$l$?(B SDO Service $B$N<hF@(B
+     * @brief [CORBA interface] »ØÄê¤µ¤ì¤¿ SDO Service ¤Î¼èÆÀ
      *
-     * $B$3$N%*%Z%l!<%7%g%s$O0z?t(B "id" $B$G;XDj$5$l$?L>A0$K$h$C$F6hJL$5$l$k(B
-     * SDO $B$N(B Service $B$X$N%*%V%8%'%/%H;2>H$rJV$9!#(B SDO $B$K$h$jDs6!$5$l$k(B
-     * Service $B$O$=$l$>$l0l0U$N<1JL;R$K$h$j6hJL$5$l$k!#(B
+     * ¤³¤Î¥ª¥Ú¥ì¡¼¥·¥ç¥ó¤Ï°ú¿ô "id" ¤Ç»ØÄê¤µ¤ì¤¿Ì¾Á°¤Ë¤è¤Ã¤Æ¶èÊÌ¤µ¤ì¤ë
+     * SDO ¤Î Service ¤Ø¤Î¥ª¥Ö¥¸¥§¥¯¥È»²¾È¤òÊÖ¤¹¡£ SDO ¤Ë¤è¤êÄó¶¡¤µ¤ì¤ë
+     * Service ¤Ï¤½¤ì¤¾¤ì°ì°Õ¤Î¼±ÊÌ»Ò¤Ë¤è¤ê¶èÊÌ¤µ¤ì¤ë¡£
      *
-     * @param id SDO Service $B$K4XO"IU$1$i$l$?<1JL;R!#(B
-     * @return $BMW5a$5$l$?(B SDO Service $B$X$N;2>H!#(B
+     * @param id SDO Service ¤Ë´ØÏ¢ÉÕ¤±¤é¤ì¤¿¼±ÊÌ»Ò¡£
+     * @return Í×µá¤µ¤ì¤¿ SDO Service ¤Ø¤Î»²¾È¡£
      *
      * @else
      *
@@ -371,21 +374,21 @@ namespace SDOPackage
     /*!
      * @if jp
      * 
-     * @brief [CORBA interface] Configuration $B%*%V%8%'%/%H$N<hF@(B 
+     * @brief [CORBA interface] Configuration ¥ª¥Ö¥¸¥§¥¯¥È¤Î¼èÆÀ 
      *
-     * $B$3$N%*%Z%l!<%7%g%s$O(B Configuration interface $B$X$N;2>H$rJV$9!#(B
-     * Configuration interface $B$O3F(B SDO $B$r4IM}$9$k$?$a$N%$%s%?!<%U%'!<%9$N(B
-     * $B$R$H$D$G$"$k!#$3$N%$%s%?!<%U%'!<%9$O(B DeviceProfile, ServiceProfile,
-     * Organization $B$GDj5A$5$l$?(B SDO $B$NB0@-CM$r@_Dj$9$k$?$a$K;HMQ$5$l$k!#(B
-     * Configuration $B%$%s%?!<%U%'!<%9$N>\:Y$K$D$$$F$O!"(BOMG SDO specification
-     * $B$N(B 2.3.5$B@a(B, p.2-24 $B$r;2>H$N$3$H!#(B
+     * ¤³¤Î¥ª¥Ú¥ì¡¼¥·¥ç¥ó¤Ï Configuration interface ¤Ø¤Î»²¾È¤òÊÖ¤¹¡£
+     * Configuration interface ¤Ï³Æ SDO ¤ò´ÉÍý¤¹¤ë¤¿¤á¤Î¥¤¥ó¥¿¡¼¥Õ¥§¡¼¥¹¤Î
+     * ¤Ò¤È¤Ä¤Ç¤¢¤ë¡£¤³¤Î¥¤¥ó¥¿¡¼¥Õ¥§¡¼¥¹¤Ï DeviceProfile, ServiceProfile,
+     * Organization ¤ÇÄêµÁ¤µ¤ì¤¿ SDO ¤ÎÂ°À­ÃÍ¤òÀßÄê¤¹¤ë¤¿¤á¤Ë»ÈÍÑ¤µ¤ì¤ë¡£
+     * Configuration ¥¤¥ó¥¿¡¼¥Õ¥§¡¼¥¹¤Î¾ÜºÙ¤Ë¤Ä¤¤¤Æ¤Ï¡¢OMG SDO specification
+     * ¤Î 2.3.5Àá, p.2-24 ¤ò»²¾È¤Î¤³¤È¡£
      *
-     * @return SDO $B$N(B Configuration $B%$%s%?!<%U%'!<%9$X$N;2>H(B
-     * @exception InterfaceNotImplemented SDO$B$O(BConfiguration$B%$%s%?!<%U%'!<%9$r(B
-     *                                    $B;}$?$J$$!#(B
-     * @exception SDONotExists $B%?!<%2%C%H$N(BSDO$B$,B8:_$7$J$$!#(B
-     * @exception NotAvailable SDO$B$OB8:_$9$k$,1~Ez$,$J$$!#(B
-     * @exception InternalError $BFbItE*%(%i!<$,H/@8$7$?!#(B
+     * @return SDO ¤Î Configuration ¥¤¥ó¥¿¡¼¥Õ¥§¡¼¥¹¤Ø¤Î»²¾È
+     * @exception InterfaceNotImplemented SDO¤ÏConfiguration¥¤¥ó¥¿¡¼¥Õ¥§¡¼¥¹¤ò
+     *                                    »ý¤¿¤Ê¤¤¡£
+     * @exception SDONotExists ¥¿¡¼¥²¥Ã¥È¤ÎSDO¤¬Â¸ºß¤·¤Ê¤¤¡£
+     * @exception NotAvailable SDO¤ÏÂ¸ºß¤¹¤ë¤¬±þÅú¤¬¤Ê¤¤¡£
+     * @exception InternalError ÆâÉôÅª¥¨¥é¡¼¤¬È¯À¸¤·¤¿¡£
      *
      * @else
      *
@@ -413,21 +416,21 @@ namespace SDOPackage
     /*!
      * @if jp
      * 
-     * @brief [CORBA interface] Monitoring $B%*%V%8%'%/%H$N<hF@(B 
+     * @brief [CORBA interface] Monitoring ¥ª¥Ö¥¸¥§¥¯¥È¤Î¼èÆÀ 
      *
-     * $B$3$N%*%Z%l!<%7%g%s$O(B Monitoring interface $B$X$N;2>H$rJV$9!#(B
-     * Monitoring interface $B$O(B SDO $B$,4IM}$9$k%$%s%?!<%U%'!<%9$N0l$D$G$"$k!#(B
-     * $B$3$N%$%s%?!<%U%'!<%9$O(B SDO $B$N%W%m%Q%F%#$r%b%K%?%j%s%0$9$k$?$a$K(B
-     * $B;HMQ$5$l$k!#(B
-     * Monitoring interface $B$N>\:Y$K$D$$$F$O(B OMG SDO specification $B$N(B
-     * 2.3.7$B@a(B "Monitoring Interface" p.2-35 $B$r;2>H$N$3$H!#(B
+     * ¤³¤Î¥ª¥Ú¥ì¡¼¥·¥ç¥ó¤Ï Monitoring interface ¤Ø¤Î»²¾È¤òÊÖ¤¹¡£
+     * Monitoring interface ¤Ï SDO ¤¬´ÉÍý¤¹¤ë¥¤¥ó¥¿¡¼¥Õ¥§¡¼¥¹¤Î°ì¤Ä¤Ç¤¢¤ë¡£
+     * ¤³¤Î¥¤¥ó¥¿¡¼¥Õ¥§¡¼¥¹¤Ï SDO ¤Î¥×¥í¥Ñ¥Æ¥£¤ò¥â¥Ë¥¿¥ê¥ó¥°¤¹¤ë¤¿¤á¤Ë
+     * »ÈÍÑ¤µ¤ì¤ë¡£
+     * Monitoring interface ¤Î¾ÜºÙ¤Ë¤Ä¤¤¤Æ¤Ï OMG SDO specification ¤Î
+     * 2.3.7Àá "Monitoring Interface" p.2-35 ¤ò»²¾È¤Î¤³¤È¡£
      *
-     * @return SDO $B$N(B Monitoring interface $B$X$N;2>H(B
-     * @exception InterfaceNotImplemented SDO$B$O(BConfiguration$B%$%s%?!<%U%'!<%9$r(B
-     *                                    $B;}$?$J$$!#(B
-     * @exception SDONotExists $B%?!<%2%C%H$N(BSDO$B$,B8:_$7$J$$!#(B
-     * @exception NotAvailable SDO$B$OB8:_$9$k$,1~Ez$,$J$$!#(B
-     * @exception InternalError $BFbItE*%(%i!<$,H/@8$7$?!#(B
+     * @return SDO ¤Î Monitoring interface ¤Ø¤Î»²¾È
+     * @exception InterfaceNotImplemented SDO¤ÏConfiguration¥¤¥ó¥¿¡¼¥Õ¥§¡¼¥¹¤ò
+     *                                    »ý¤¿¤Ê¤¤¡£
+     * @exception SDONotExists ¥¿¡¼¥²¥Ã¥È¤ÎSDO¤¬Â¸ºß¤·¤Ê¤¤¡£
+     * @exception NotAvailable SDO¤ÏÂ¸ºß¤¹¤ë¤¬±þÅú¤¬¤Ê¤¤¡£
+     * @exception InternalError ÆâÉôÅª¥¨¥é¡¼¤¬È¯À¸¤·¤¿¡£
      *
      * @else
      *
@@ -454,17 +457,17 @@ namespace SDOPackage
     /*!
      * @if jp
      * 
-     * @brief [CORBA interface] Organization $B%j%9%H$N<hF@(B 
+     * @brief [CORBA interface] Organization ¥ê¥¹¥È¤Î¼èÆÀ 
      *
-     * SDO $B$O(B0$B8D0J>e$N(B Organization ($BAH?%(B)$B$K=jB0$9$k$3$H$,$G$-$k!#(B $B$b$7(B SDO $B$,(B
-     * 1$B8D0J>e$N(B Organization $B$K=jB0$7$F$$$k>l9g!"$3$N%*%Z%l!<%7%g%s$O=jB0$9$k(B
-     * Organization $B$N%j%9%H$rJV$9!#(BSDO $B$,(B $B$I$N(B Organization $B$K$b=jB0$7$F$$$J$$(B
-     * $B>l9g$K$O!"6u$N%j%9%H$,JV$5$l$k!#(B
+     * SDO ¤Ï0¸Ä°Ê¾å¤Î Organization (ÁÈ¿¥)¤Ë½êÂ°¤¹¤ë¤³¤È¤¬¤Ç¤­¤ë¡£ ¤â¤· SDO ¤¬
+     * 1¸Ä°Ê¾å¤Î Organization ¤Ë½êÂ°¤·¤Æ¤¤¤ë¾ì¹ç¡¢¤³¤Î¥ª¥Ú¥ì¡¼¥·¥ç¥ó¤Ï½êÂ°¤¹¤ë
+     * Organization ¤Î¥ê¥¹¥È¤òÊÖ¤¹¡£SDO ¤¬ ¤É¤Î Organization ¤Ë¤â½êÂ°¤·¤Æ¤¤¤Ê¤¤
+     * ¾ì¹ç¤Ë¤Ï¡¢¶õ¤Î¥ê¥¹¥È¤¬ÊÖ¤µ¤ì¤ë¡£
      *
-     * @return SDO $B$,=jB0$9$k(B Organization $B$N%j%9%H!#(B
-     * @exception SDONotExists $B%?!<%2%C%H$N(BSDO$B$,B8:_$7$J$$!#(B
-     * @exception NotAvailable SDO$B$OB8:_$9$k$,1~Ez$,$J$$!#(B
-     * @exception InternalError $BFbItE*%(%i!<$,H/@8$7$?!#(B
+     * @return SDO ¤¬½êÂ°¤¹¤ë Organization ¤Î¥ê¥¹¥È¡£
+     * @exception SDONotExists ¥¿¡¼¥²¥Ã¥È¤ÎSDO¤¬Â¸ºß¤·¤Ê¤¤¡£
+     * @exception NotAvailable SDO¤ÏÂ¸ºß¤¹¤ë¤¬±þÅú¤¬¤Ê¤¤¡£
+     * @exception InternalError ÆâÉôÅª¥¨¥é¡¼¤¬È¯À¸¤·¤¿¡£
      * @else
      *
      * @brief [CORBA interface] Getting Organizations
@@ -487,14 +490,14 @@ namespace SDOPackage
     /*!
      * @if jp
      * 
-     * @brief [CORBA interface] SDO Status $B%j%9%H$N<hF@(B 
+     * @brief [CORBA interface] SDO Status ¥ê¥¹¥È¤Î¼èÆÀ 
      *
-     * $B$3$N%*%Z%l!<%7%g%s$O(B SDO $B$N%9%F!<%?%9$rI=$9(B NVList $B$rJV$9!#(B
+     * ¤³¤Î¥ª¥Ú¥ì¡¼¥·¥ç¥ó¤Ï SDO ¤Î¥¹¥Æ¡¼¥¿¥¹¤òÉ½¤¹ NVList ¤òÊÖ¤¹¡£
      *
-     * @return SDO $B$N%9%F!<%?%9!#(B
-     * @exception SDONotExists $B%?!<%2%C%H$N(BSDO$B$,B8:_$7$J$$!#(B
-     * @exception NotAvailable SDO$B$OB8:_$9$k$,1~Ez$,$J$$!#(B
-     * @exception InternalError $BFbItE*%(%i!<$,H/@8$7$?!#(B
+     * @return SDO ¤Î¥¹¥Æ¡¼¥¿¥¹¡£
+     * @exception SDONotExists ¥¿¡¼¥²¥Ã¥È¤ÎSDO¤¬Â¸ºß¤·¤Ê¤¤¡£
+     * @exception NotAvailable SDO¤ÏÂ¸ºß¤¹¤ë¤¬±þÅú¤¬¤Ê¤¤¡£
+     * @exception InternalError ÆâÉôÅª¥¨¥é¡¼¤¬È¯À¸¤·¤¿¡£
      *
      * @else
      *
@@ -516,16 +519,16 @@ namespace SDOPackage
     /*!
      * @if jp
      * 
-     * @brief [CORBA interface] SDO Status $B$N<hF@(B 
+     * @brief [CORBA interface] SDO Status ¤Î¼èÆÀ 
      *
      * This operation returns the value of the specified status parameter.
      * 
-     * @param name SDO $B$N%9%F!<%?%9$rDj5A$9$k%Q%i%a!<%?!#(B
-     * @return $B;XDj$5$l$?%Q%i%a!<%?$N%9%F!<%?%9CM!#(B
-     * @exception SDONotExists $B%?!<%2%C%H$N(BSDO$B$,B8:_$7$J$$!#(B
-     * @exception NotAvailable SDO$B$OB8:_$9$k$,1~Ez$,$J$$!#(B
-     * @exception InvalidParameter $B0z?t(B "name" $B$,(B null $B$"$k$$$OB8:_$7$J$$!#(B
-     * @exception InternalError $BFbItE*%(%i!<$,H/@8$7$?!#(B
+     * @param name SDO ¤Î¥¹¥Æ¡¼¥¿¥¹¤òÄêµÁ¤¹¤ë¥Ñ¥é¥á¡¼¥¿¡£
+     * @return »ØÄê¤µ¤ì¤¿¥Ñ¥é¥á¡¼¥¿¤Î¥¹¥Æ¡¼¥¿¥¹ÃÍ¡£
+     * @exception SDONotExists ¥¿¡¼¥²¥Ã¥È¤ÎSDO¤¬Â¸ºß¤·¤Ê¤¤¡£
+     * @exception NotAvailable SDO¤ÏÂ¸ºß¤¹¤ë¤¬±þÅú¤¬¤Ê¤¤¡£
+     * @exception InvalidParameter °ú¿ô "name" ¤¬ null ¤¢¤ë¤¤¤ÏÂ¸ºß¤·¤Ê¤¤¡£
+     * @exception InternalError ÆâÉôÅª¥¨¥é¡¼¤¬È¯À¸¤·¤¿¡£
      * @else
      *
      * @brief [CORBA interface] Get SDO Status
