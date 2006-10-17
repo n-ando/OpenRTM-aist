@@ -2,7 +2,7 @@
 /*!
  * @file Properties.cpp
  * @brief Property list class (derived from Java Properties)
- * @date $Date: 2006-10-13 03:49:52 $
+ * @date $Date: 2006-10-17 10:10:13 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
  * Copyright (C) 2006
@@ -12,12 +12,15 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: Properties.cpp,v 1.2 2006-10-13 03:49:52 n-ando Exp $
+ * $Id: Properties.cpp,v 1.3 2006-10-17 10:10:13 n-ando Exp $
  *
  */
 
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.2  2006/10/13 03:49:52  n-ando
+ * The bug that white space delimiter did not work properly was fixed.
+ *
  * Revision 1.1  2006/09/11 18:09:42  n-ando
  * Java compatible properties class.
  *
@@ -67,11 +70,11 @@ namespace RTC
 	std::string key(defaults[i]);
 	std::string value(defaults[i + 1]);
 	
-	key = unescape(key);
+	//	key = unescape(key);
 	eraseHeadBlank(key);
 	eraseTailBlank(key);
 	
-	value = unescape(value);
+	//	value = unescape(value);
 	eraseHeadBlank(value);
 	eraseTailBlank(value);
 	
@@ -286,35 +289,7 @@ namespace RTC
       }
   }
   
-  
-  void Properties::eraseHeadBlank(std::string& str)
-  {
-    while (str[0] == ' ' || str[0] == '\t') str.erase(0, 1);
-  }
-  
-  
-  void Properties::eraseTailBlank(std::string& str)
-  {
-    while (str[str.size() - 1] == ' ' || str[str.size() - 1] == '\t')
-      str.erase(str.size() - 1, 1);
-  }
-  
-  
-  void Properties::replaceStr(std::string& str, const std::string from,
-			      const std::string to)
-  {
-    std::string::size_type pos(0);
-    
-    while (pos != std::string::npos)
-      {
-	pos = str.find(from, pos);
-	if (pos == std::string::npos) break;
-	str.replace(pos, from.size(), to);
-	pos += to.size();
-      }
-  }
-  
-  
+ 
   void Properties::splitKeyValue(const std::string& str, std::string& key,
 				 std::string& value)
   {

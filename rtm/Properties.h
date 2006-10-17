@@ -2,7 +2,7 @@
 /*!
  * @file Properties.h
  * @brief Property list class (derived from Java Properties)
- * @date $Date: 2006-10-13 03:50:00 $
+ * @date $Date: 2006-10-17 10:10:21 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
  * Copyright (C) 2006
@@ -12,12 +12,15 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: Properties.h,v 1.2 2006-10-13 03:50:00 n-ando Exp $
+ * $Id: Properties.h,v 1.3 2006-10-17 10:10:21 n-ando Exp $
  *
  */
 
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.2  2006/10/13 03:50:00  n-ando
+ * The bug that white space delimiter did not work properly was fixed.
+ *
  * Revision 1.1  2006/09/11 18:09:57  n-ando
  * Java compatible properties class.
  *
@@ -608,11 +611,6 @@ namespace RTC
     void store(std::ostream& out, const std::string& header);
     
   protected:
-    void eraseHeadBlank(std::string& str);
-    void eraseTailBlank(std::string& str);
-    void replaceStr(std::string& str, const std::string from,
-		    const std::string to);
-    //  void replaceEscape(std::string& str);
     void splitKeyValue(const std::string& str, std::string& key,
 		       std::string& value);
     
