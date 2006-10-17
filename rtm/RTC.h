@@ -2,7 +2,7 @@
 /*!
  * @file RTC.h
  * @brief RTComponent header
- * @date $Date: 2005-05-16 05:49:10 $
+ * @date $Date: 2006-10-17 19:12:01 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
  * Copyright (C) 2003-2005
@@ -12,12 +12,16 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: RTC.h,v 1.2 2005-05-16 05:49:10 n-ando Exp $
+ * $Id: RTC.h,v 1.3 2006-10-17 19:12:01 n-ando Exp $
  *
  */
 
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.2  2005/05/16 05:49:10  n-ando
+ * Some definitions (__declspec(dllexport), __declspec(dllimport) etc..)
+ * were added for Windows ports.
+ *
  * Revision 1.1.1.1  2005/05/12 09:06:18  n-ando
  * Public release.
  *
@@ -40,8 +44,13 @@
 #endif
 
 #ifdef ORB_IS_OMNIORB
-//#include <omniORB4/CORBA.h>
-//#include <omnithread.h>
+#undef PACKAGE_BUGREPORT
+#undef PACKAGE_NAME
+#undef PACKAGE_STRING
+#undef PACKAGE_TARNAME
+#undef PACKAGE_VERSION
+#include <omniORB4/CORBA.h>
+#include <omnithread.h>
 #endif
 
 
