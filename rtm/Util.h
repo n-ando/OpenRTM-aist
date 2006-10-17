@@ -2,7 +2,7 @@
 /*!
  * @file SdoConfiguration.cpp
  * @brief SDO's Configuration implementation class
- * @date $Date: 2006-10-17 10:12:18 $
+ * @date $Date: 2006-10-17 19:07:58 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
  * Copyright (C) 2006
@@ -12,12 +12,15 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: Util.h,v 1.2 2006-10-17 10:12:18 n-ando Exp $
+ * $Id: Util.h,v 1.3 2006-10-17 19:07:58 n-ando Exp $
  *
  */
 
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.2  2006/10/17 10:12:18  n-ando
+ * SequenceEx's copy constructor and assignment operator were implemented.
+ *
  * Revision 1.1  2006/09/11 18:14:53  n-ando
  * The first commit.
  *
@@ -340,7 +343,7 @@ public:
       {
 	this->length(new_size);
 	for (CORBA::ULong i = len; i < new_size; ++i)
-	  (*this)[i] = x;
+	  (*this)[i] = item;
       }
     else if (new_size < len) // shorten sequence
       {
@@ -384,7 +387,7 @@ public:
       {
 	(*this)[i] = (*this)[i-1];
       }
-    (*this)[position] = x;
+    (*this)[position] = item;
   }
 
 
@@ -482,7 +485,7 @@ public:
     ACE_Write_Guard<Mutex> gaurd(lock);
     CORBA::ULong len(this->length());
     this->length(len + 1);
-    (*this)[len] = x;
+    (*this)[len] = item;
   }
 
   void pop_back()
@@ -506,16 +509,19 @@ public:
   mutable Mutex lock;
 };
 
-/*
-template <class CorbaSequence, class F, class SequenceItem>
-SequenceItem& erase_if(CorbaSequence& t, F& f)
+namespace SeqHelper
 {
-ACE_Write_Guard<Mutex> gaurd(t.lock);
-  CORBA::ULong len(t.length());
-  for (CORBA::ULong i = 0; i < len; ++i)
-    if (f(t[i]))
-      return t.erase(i);
+  template <class CorbaSequence, class Functor>
+  Functor for_each(CorbaSequence& seq, Functor f)
+  {
+    CORBA::ULong len;
+    len = seq.length();
+    for (CORBA::ULong i = 0; i < len; ++i)
+      {
+	f(seq[i]);
+      }
+    return f;
+  }
 }
-*/
 
 #endif // Util_h
