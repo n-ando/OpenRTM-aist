@@ -2,7 +2,7 @@
 /*!
  * @file ManagerConfig.cpp
  * @brief RTC manager configuration
- * @date $Date: 2006-10-17 10:21:31 $
+ * @date $Date: 2006-10-17 19:29:53 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
  * Copyright (C) 2003-2005
@@ -12,12 +12,15 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: ManagerConfig.cpp,v 1.1 2006-10-17 10:21:31 n-ando Exp $
+ * $Id: ManagerConfig.cpp,v 1.2 2006-10-17 19:29:53 n-ando Exp $
  *
  */
 
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.1  2006/10/17 10:21:31  n-ando
+ * The first commitment.
+ *
  *
  */
 
@@ -26,6 +29,7 @@
 #include <fstream>
 #include <iostream>
 #include <ace/OS.h>
+#include <rtm/DefaultConfiguration.h>
 
 namespace RTC
 {
