@@ -2,10 +2,14 @@
 /*!
  * @file PropertiesTests.cpp
  * @brief Properties test class
- * @date $Date: 2006-10-16 13:12:21 $
+ * @date $Date: 2006-10-18 05:59:55 $
  * @author Shinji Kurihara
- * $Id: PropertiesTests.cpp,v 1.2 2006-10-16 13:12:21 kurihara Exp $
+ * $Id: PropertiesTests.cpp,v 1.3 2006-10-18 05:59:55 kurihara Exp $
  *
+ */
+
+/*
+ * $Log: not supported by cvs2svn $
  */
 
 #include <cppunit/ui/text/TestRunner.h>
@@ -25,18 +29,32 @@ class PropertiesTest
   : public CppUnit::TestFixture, public RTC::Properties
 {
   CPPUNIT_TEST_SUITE(PropertiesTest);
+
+  // Properties()でインスタンスを生成した場合のテスト
   CPPUNIT_TEST(test_Properties);
+
+  // Properties(const std::map<std::string, std::string>& defaults)でインスタンスを生成した場合のテスト
   CPPUNIT_TEST(test_Properties_map);
+
+  // Properties(const char* defaults[], long num = LONG_MAX)でインスタンスを生成した場合のテスト
   CPPUNIT_TEST(test_Properties_char);
-  CPPUNIT_TEST(test_eraseHeadBlank);
-  CPPUNIT_TEST(test_eraseTailBlank);
-  CPPUNIT_TEST(test_replaceStr);
+
+  // list()のテスト
+  CPPUNIT_TEST(test_list);
+
+  // load()のテスト
+  CPPUNIT_TEST(test_load);
+
+  // store()のテスト
+  CPPUNIT_TEST(test_store);
+
+  // splitKeyValue()のテスト
   CPPUNIT_TEST(test_splitKeyValue);
+
   CPPUNIT_TEST_SUITE_END();
 
 private:
-  map<string, string> m_map;
-  vector<string>      m_keys;
+  RTC::Properties* m_prop;
   
 public:
   
@@ -52,217 +70,22 @@ public:
   {
   }
   
+
   /*
-   * 初期化/後始末 [8]
+   * 初期化
    */
   virtual void setUp()
   {
-    m_map["rtc.openrtm.version"]         = "0.4.0";
-    m_map["rtc.openrtm.release"]         = "aist";
-    m_map["rtc.openrtm.vendor"]          = "AIST";
-    m_map["rtc.openrtm.author"]          = "Noriaki Ando";
-    m_map["rtc.manager.nameserver"]      = "zonu.a02.aist.go.jp";
-    m_map["rtc.manager.debug.level"]     = "PARANOID";
-    m_map["rtc.manager.orb"]             = "omniORB";
-    m_map["rtc.manager.orb.options"]     = "IIOPAddrPort, -ORBendPoint, giop:tcp:";
-    m_map["rtc.manager.arch"]            = "i386";
-    m_map["rtc.manager.os"]              = "FreeBSD";
-    m_map["rtc.manager.os.release"]      = "6.1-RELEASE";
-    m_map["rtc.manager.language"]        = "Python";
-    m_map["rtc.manager.subsystems"]      = "Camera, Manipulator, Force Sensor";
-    m_map["rtc.component.conf.path"]     = "C:\\\\Program\\\\ Files\\\\OpenRTM-aist";
-    m_map["rtc.manager.opening_message"] = "\"Hello RT World\"";
-
-    Itr it    (m_map.begin());
-    Itr it_end(m_map.end());
-
-    while(it != it_end) {
-      m_keys.push_back(it->first);
-      ++it;
-    }
   }
   
+
+
+  /*
+   * 後始末 [8]
+   */
   virtual void tearDown()
   { 
   }
-
-  /* tests for Properties constructor.*/
-  void test_storeMethod(std::ifstream& if1) {
-    string p1,p2;
-
-    getline(if1,p1);
-    p2 = "# defaults settings";
-    CPPUNIT_ASSERT(p1 == p2);
-
-    getline(if1,p1);
-    p2 = "rtc.component.conf.path = C:\\\\Program\\\\ Files\\\\OpenRTM-aist";
-    CPPUNIT_ASSERT(p1 == p2);
-
-    getline(if1,p1);
-    p2 = "rtc.manager.arch = i386";
-    CPPUNIT_ASSERT(p1 == p2);
-
-    getline(if1,p1);
-    p2 = "rtc.manager.debug.level = PARANOID";
-    CPPUNIT_ASSERT(p1 == p2);
-
-    getline(if1,p1);
-    p2 = "rtc.manager.language = Python";
-    CPPUNIT_ASSERT(p1 == p2);
-
-    getline(if1,p1);
-    p2 = "rtc.manager.nameserver = zonu.a02.aist.go.jp";
-    CPPUNIT_ASSERT(p1 == p2);
-
-    getline(if1,p1);
-    p2 = "rtc.manager.opening_message = \\\"Hello RT World\\\"";
-    CPPUNIT_ASSERT(p1 == p2);
-
-    getline(if1,p1);
-    p2 = "rtc.manager.orb = omniORB";
-    CPPUNIT_ASSERT(p1 == p2);
-
-    getline(if1,p1);
-    p2 = "rtc.manager.orb.options = IIOPAddrPort, -ORBendPoint, giop:tcp:";
-    CPPUNIT_ASSERT(p1 == p2);
-
-    getline(if1,p1);
-    p2 = "rtc.manager.os = FreeBSD";
-    CPPUNIT_ASSERT(p1 == p2);
-
-    getline(if1,p1);
-    p2 = "rtc.manager.os.release = 6.1-RELEASE";
-    CPPUNIT_ASSERT(p1 == p2);
-
-    getline(if1,p1);
-    p2 = "rtc.manager.subsystems = Camera, Manipulator, Force Sensor";
-    CPPUNIT_ASSERT(p1 == p2);
-
-    getline(if1,p1);
-    p2 = "rtc.openrtm.author = Noriaki Ando";
-    CPPUNIT_ASSERT(p1 == p2);
-
-    getline(if1,p1);
-    p2 = "rtc.openrtm.release = aist";
-    CPPUNIT_ASSERT(p1 == p2);
-
-    getline(if1,p1);
-    p2 = "rtc.openrtm.vendor = AIST";
-    CPPUNIT_ASSERT(p1 == p2);
-
-    getline(if1,p1);
-    p2 = "rtc.openrtm.version = 0.4.0";
-    CPPUNIT_ASSERT(p1 == p2);
-  }
-
-
-  // getProperty()のメソッドのテスト
-  // ※ このテストでは、setProperty()メソッドの後に呼ばれると仮定し、"rtc.manager.language"と
-  //    "rtc.manager.opening_message"をそれぞれ"Python","\"Hello RT World\""としている。
-  void test_getProperty(RTC::Properties& pProp) {
-    string prof_key, prof_val;
-
-    prof_key = "rtc.openrtm.version";
-    prof_val = "0.4.0";
-    CPPUNIT_ASSERT(pProp.getProperty(prof_key) == prof_val);
-
-    prof_key = "rtc.openrtm.release";
-    prof_val = "aist";
-    CPPUNIT_ASSERT(pProp.getProperty(prof_key) == prof_val);
-
-    prof_key = "rtc.openrtm.vendor";
-    prof_val = "AIST";
-    CPPUNIT_ASSERT(pProp.getProperty(prof_key) == prof_val);
-
-    prof_key = "rtc.openrtm.author";
-    prof_val = "Noriaki Ando";
-    CPPUNIT_ASSERT(pProp.getProperty(prof_key) == prof_val);
-
-    prof_key = "rtc.manager.nameserver";
-    prof_val = "zonu.a02.aist.go.jp";
-    CPPUNIT_ASSERT(pProp.getProperty(prof_key) == prof_val);
-
-    prof_key = "rtc.manager.debug.level";
-    prof_val = "PARANOID";
-    CPPUNIT_ASSERT(pProp.getProperty(prof_key) == prof_val);
-
-    prof_key = "rtc.manager.orb";
-    prof_val = "omniORB";
-    CPPUNIT_ASSERT(pProp.getProperty(prof_key) == prof_val);
-
-    prof_key = "rtc.manager.orb.options";
-    prof_val = "IIOPAddrPort, -ORBendPoint, giop:tcp:";
-    CPPUNIT_ASSERT(pProp.getProperty(prof_key) == prof_val);
-
-    prof_key = "rtc.manager.arch";
-    prof_val = "i386";
-    CPPUNIT_ASSERT(pProp.getProperty(prof_key) == prof_val);
-
-    prof_key = "rtc.manager.os";
-    prof_val = "FreeBSD";
-    CPPUNIT_ASSERT(pProp.getProperty(prof_key) == prof_val);
-
-    prof_key = "rtc.manager.os.release";
-    prof_val = "6.1-RELEASE";
-    CPPUNIT_ASSERT(pProp.getProperty(prof_key) == prof_val);
-
-    prof_key = "rtc.manager.language";
-    prof_val = "Python";
-    CPPUNIT_ASSERT(pProp.getProperty(prof_key) == prof_val);
-
-    prof_key = "rtc.manager.subsystems";
-    prof_val = "Camera, Manipulator, Force Sensor";
-    CPPUNIT_ASSERT(pProp.getProperty(prof_key) == prof_val);
-
-    prof_key = "rtc.component.conf.path";
-    prof_val = "C:\\\\Program\\\\ Files\\\\OpenRTM-aist";
-    CPPUNIT_ASSERT(pProp.getProperty(prof_key) == prof_val);
-
-    prof_key = "rtc.manager.opening_message";
-    prof_val = "\"Hello RT World\"";
-    CPPUNIT_ASSERT(pProp.getProperty(prof_key) == prof_val);
-  }
-
-
-  // propertyNames()メソッドのテスト。
-  // このメソッドも、このテストではsetProperty()の後に呼ばれると仮定している。
-  void test_propertyNames(vector<string> vs) {
-    vector<string>::iterator it_key    (m_keys.begin());
-    vector<string>::iterator it_key_end(m_keys.end());
-
-    while (it_key != it_key_end) {
-      vector<string>::iterator it_vs    (vs.begin());
-      vector<string>::iterator it_vs_end(vs.end());
-      int flag = 0;
-      while (it_vs != it_vs_end) {
-	if ((*it_key) == (*it_vs))
-	  flag = 1;
-	++it_vs;
-      }
-
-      CPPUNIT_ASSERT_MESSAGE("Not found key.", flag == 1);
-      ++it_key;
-    }
-  }
-
-
-  // setProperty()メソッドのテスト
-  void test_setProperty(RTC::Properties& pProp) {
-    string key, value, target;
-    key    = "rtc.manager.opening_message";
-    value  = "\"Hello RT World\"";
-    target = "\"Hello World\"";
-    CPPUNIT_ASSERT(pProp.setProperty(key, value) == target);
-
-    key    = "rtc.manager.language";
-    value  ="Python";
-    target = "C++";
-    CPPUNIT_ASSERT(pProp.setProperty(key, value) == target);
-  }
-
-
-
-
 
 
 
@@ -274,10 +97,10 @@ public:
   {
     RTC::Properties pProp;
     
-    // プロパティリストをファイルから読み込む。 load()のテスト
-    std::ifstream if1("defaults.conf");
-    pProp.load(if1);
-    if1.close();
+    //===================================================================================
+    // test: getProperty() method.
+    //===================================================================================
+    test_getPropertyNoDefaultValue(pProp);
 
     //===================================================================================
     // test: setProperty() method.
@@ -285,26 +108,23 @@ public:
     test_setProperty(pProp);
 
     //===================================================================================
+    // test: getProperty() method.
+    //===================================================================================
+    test_getPropertyAfterSetPropertyNoDefaultValue(pProp);
+
+    //===================================================================================
     // test: propertyNames() method.
     //===================================================================================
     test_propertyNames(pProp.propertyNames());
 
-    //===================================================================================
-    // test: getProperty() method.
-    //===================================================================================
-    test_getProperty(pProp);
-
     // プロパティリストをファイルに書き込む。
     std::ofstream of2("new.conf");
-    pProp.store(of2, "defaults settings");
+    pProp.store(of2, "new settings");
     of2.close();
-
-
     // store()によりファイルに書き込まれたプロパティリストの確認。 store()のテスト
-    std::ifstream if2("new.conf");
-    test_storeMethod(if2);
-    if2.close();
+    test_storedDataNoDefaultValue();
   }
+
 
 
   //=============================================================================================
@@ -327,16 +147,21 @@ public:
     props["rtc.manager.os.release"]      = "6.1-RELEASE";
     props["rtc.manager.language"]        = "C++";
     props["rtc.manager.subsystems"]      = "Camera, Manipulator, Force Sensor";
-    props["rtc.component.conf.path"]     = "C:\\Program\\ Files\\OpenRTM-aist";
+    props["rtc.component.conf.path"]     = "C:\\\\Program\\\\ Files\\\\OpenRTM-aist";
     props["rtc.manager.opening_message"] = "\"Hello World\"";
 
     
     RTC::Properties pProp(props);
     
+    //===================================================================================
+    // test: getProperty() method.
+    //===================================================================================
+    test_getPropertyDefault(pProp);
+
     // プロパティリストをファイルから読み込む。 load()のテスト
-    std::ifstream if1("defaults.conf");
-    pProp.load(if1);
-    if1.close();
+    //    std::ifstream if1("defaults.conf");
+    //    pProp.load(if1);
+    //    if1.close();
 
     //===================================================================================
     // test: setProperty() method.
@@ -351,18 +176,16 @@ public:
     //===================================================================================
     // test: getProperty() method.
     //===================================================================================
-    test_getProperty(pProp);
+    test_getPropertyAfterSetProperty(pProp);
 
     // プロパティリストをファイルに書き込む。
     std::ofstream of2("new.conf");
-    pProp.store(of2, "defaults settings");
+    pProp.store(of2, "new settings");
     of2.close();
-
     // store()によりファイルに書き込まれたプロパティリストの確認。 store()のテスト
-    std::ifstream if2("new.conf");
-    test_storeMethod(if2);
-    if2.close();
+    test_storedData();
   }
+
 
 
   //============================================================================
@@ -385,11 +208,16 @@ public:
       "rtc.manager.os.release", "6.1-RELEASE",
       "rtc.manager.language", "C++",
       "rtc.manager.subsystems", "Camera, Manipulator, Force Sensor",
-      "rtc.component.conf.path", "C:\\Program\\ Files\\OpenRTM-aist",
+      "rtc.component.conf.path", "C:\\\\Program\\\\ Files\\\\OpenRTM-aist",
       "rtc.manager.opening_message", "\"Hello World\"",
       ""};
 
     RTC::Properties pProp(props);
+
+    //===================================================================================
+    // test: getProperty() method.
+    //===================================================================================
+    test_getPropertyDefault(pProp);
 
     //===================================================================================
     // test: constructorArgs -> write-to-"defaults.conf"(method: store) -> 
@@ -400,9 +228,14 @@ public:
     //    of1.close();
     
     // プロパティリストをファイルから読み込む。 load()のテスト
-    std::ifstream if1("defaults.conf");
-    pProp.load(if1);
-    if1.close();
+    //    std::ifstream if1("defaults.conf");
+    //    pProp.load(if1);
+    //    if1.close();
+
+    //===================================================================================
+    // test: getProperty() method.
+    //===================================================================================
+    test_getPropertyDefault(pProp);
 
     //===================================================================================
     // test: setProperty() method.
@@ -417,20 +250,438 @@ public:
     //===================================================================================
     // test: getProperty() method.
     //===================================================================================
-    test_getProperty(pProp);
+    test_getPropertyAfterSetProperty(pProp);
 
     // プロパティリストをファイルに書き込む。
     std::ofstream of2("new.conf");
-    pProp.store(of2, "defaults settings");
+    pProp.store(of2, "new settings");
     of2.close();
-
     // store()によりファイルに書き込まれたプロパティリストの確認。 store()のテスト
-    std::ifstream if2("new.conf");
-    test_storeMethod(if2);
-    if2.close();
+    test_storedData();
   }
 
 
+
+  // splitKeyValue()メソッドのテスト
+  void test_splitKeyValue() {
+    string str, key, value, retk, retv;
+    std::ifstream ifs("splitKeyValueTest.data");
+    getline(ifs, str);
+    getline(ifs, retk);
+    getline(ifs, retv);
+    ifs.close();
+
+    splitKeyValue(str, key, value);
+
+    CPPUNIT_ASSERT(key == retk);
+    CPPUNIT_ASSERT(value == retv);
+  }
+
+
+  void test_list() {
+    m_prop = new RTC::Properties();
+
+    // プロパティリストをファイルから読み込む。 load()のテスト
+    std::ifstream ifl("defaults.conf");
+    m_prop->load(ifl);
+    ifl.close();
+
+    cout << endl;
+    m_prop->list(std::cout);
+    delete m_prop;
+  }
+
+
+  void test_load() {
+    m_prop = new RTC::Properties();
+
+    // プロパティリストをファイルから読み込む。 load()のテスト
+    std::ifstream ifl("defaults.conf");
+    m_prop->load(ifl);
+    ifl.close();
+
+    test_getPropertyDefault();
+
+    delete m_prop;
+  }
+
+
+
+  // store()メソッドのテスト
+  void test_store() {
+
+    m_prop = new RTC::Properties();
+
+    std::ifstream iff1("storedRead.conf");
+    m_prop->load(iff1);
+    iff1.close();
+
+    // プロパティリストをファイルに書き込む。 store()のテスト
+    std::ofstream off("stored.conf");
+    m_prop->store(off, "stored data");
+    off.close();
+    test_checkStoredData();
+
+    delete m_prop;
+  }
+
+
+
+  // store()メソッドのテスト
+  void test_checkStoredData() {
+    string p1,p2;
+
+    std::ifstream iff("store-test.data");
+
+    string str;
+    vector<string> prop;
+
+    while(getline(iff,str)) {
+      prop.push_back(str);
+    }
+
+    iff.close();
+
+    // store()によりファイルに書き込まれたプロパティリスト
+    std::ifstream if1("stored.conf");
+
+    vector<string> vs;
+    vs.push_back("# stored data");
+    vs.push_back("rtc.component.conf.path = " + prop[0]);
+    vs.push_back("rtc.manager.arch = " + prop[1]);
+    vs.push_back("rtc.manager.debug.level = " + prop[2]);
+    vs.push_back("rtc.manager.language = " + prop[3]);
+    vs.push_back("rtc.manager.nameserver = " + prop[4]);
+    vs.push_back("rtc.manager.opening_message = " + prop[5]);
+    vs.push_back("rtc.manager.orb = " + prop[6]);
+    vs.push_back("rtc.manager.orb.options = " + prop[7]);
+    vs.push_back("rtc.manager.os = " + prop[8]);
+    vs.push_back("rtc.manager.os.release = " + prop[9]);
+    vs.push_back("rtc.manager.subsystems = " + prop[10]);
+    vs.push_back("rtc.openrtm.author = " + prop[11]);
+    vs.push_back("rtc.openrtm.release = " + prop[12]);
+    vs.push_back("rtc.openrtm.vendor = " + prop[13]);
+    vs.push_back("rtc.openrtm.version = " + prop[14]);
+
+    vector<string>::iterator it    (vs.begin());
+    vector<string>::iterator it_end(vs.end());
+
+    while (it != it_end) {
+      getline(if1,p1);
+      CPPUNIT_ASSERT(p1 == (*it));
+      ++it;
+    }
+
+    if1.close();
+  }
+
+
+
+  // store()メソッドのテストtest_Properties()用
+  void test_storedDataNoDefaultValue() {
+    string p1,p2;
+
+    // store()によりファイルに書き込まれたプロパティリスト
+    std::ifstream if1("new.conf");
+
+    vector<string> vs;
+    vs.push_back("# new settings");
+    vs.push_back("rtc.component.conf.path = ");
+    vs.push_back("rtc.manager.arch = ");
+    vs.push_back("rtc.manager.debug.level = ");
+    vs.push_back("rtc.manager.language = Python");
+    vs.push_back("rtc.manager.nameserver = ");
+    vs.push_back("rtc.manager.opening_message = \"Hello RT World\"");
+    vs.push_back("rtc.manager.orb = ");
+    vs.push_back("rtc.manager.orb.options = ");
+    vs.push_back("rtc.manager.os = ");
+    vs.push_back("rtc.manager.os.release = ");
+    vs.push_back("rtc.manager.subsystems = ");
+    vs.push_back("rtc.openrtm.author = ");
+    vs.push_back("rtc.openrtm.release = ");
+    vs.push_back("rtc.openrtm.vendor = ");
+    vs.push_back("rtc.openrtm.version = ");
+
+    vector<string>::iterator it    (vs.begin());
+    vector<string>::iterator it_end(vs.end());
+    
+
+    while (it != it_end) {
+      getline(if1,p1);
+      CPPUNIT_ASSERT(p1 == (*it));
+      ++it;
+    }
+
+    if1.close();
+  }
+
+
+
+  // store()メソッドのテスト
+  void test_storedData() {
+    string p1,p2;
+
+    // store()によりファイルに書き込まれたプロパティリスト
+    std::ifstream if1("new.conf");
+
+    vector<string> vs;
+    vs.push_back("# new settings");
+    vs.push_back("rtc.component.conf.path = C:\\\\Program\\\\ Files\\\\OpenRTM-aist");
+    vs.push_back("rtc.manager.arch = i386");
+    vs.push_back("rtc.manager.debug.level = PARANOID");
+    vs.push_back("rtc.manager.language = Python");
+    vs.push_back("rtc.manager.nameserver = zonu.a02.aist.go.jp");
+    vs.push_back("rtc.manager.opening_message = \"Hello RT World\"");
+    vs.push_back("rtc.manager.orb = omniORB");
+    vs.push_back("rtc.manager.orb.options = IIOPAddrPort, -ORBendPoint, giop:tcp:");
+    vs.push_back("rtc.manager.os = FreeBSD");
+    vs.push_back("rtc.manager.os.release = 6.1-RELEASE");
+    vs.push_back("rtc.manager.subsystems = Camera, Manipulator, Force Sensor");
+    vs.push_back("rtc.openrtm.author = Noriaki Ando");
+    vs.push_back("rtc.openrtm.release = aist");
+    vs.push_back("rtc.openrtm.vendor = AIST");
+    vs.push_back("rtc.openrtm.version = 0.4.0");
+
+    vector<string>::iterator it    (vs.begin());
+    vector<string>::iterator it_end(vs.end());
+    
+    while (it != it_end) {
+      getline(if1,p1);
+      CPPUNIT_ASSERT(p1 == (*it));
+      ++it;
+    }
+
+    if1.close();
+  }
+
+
+
+  // getProperty()のメソッドのテスト test_Properties()用
+  // Propertiesクラスのオブジェクト生成時にデフォルト値を与えてない場合。
+  void test_getPropertyNoDefaultValue(RTC::Properties& pProp) {
+
+    // getProperty()で得られる値の期待値リスト
+    map<string, string> prof;
+    prof["rtc.openrtm.version"] = "";
+    prof["rtc.openrtm.release"] = "";
+    prof["rtc.openrtm.vendor"] = "";
+    prof["rtc.openrtm.author"] = "";
+    prof["rtc.manager.nameserver"] = "";
+    prof["rtc.manager.debug.level"] = "";
+    prof["rtc.manager.orb"] = "";
+    prof["rtc.manager.orb.options"] = "";
+    prof["rtc.manager.arch"] = "";
+    prof["rtc.manager.os"] = "";
+    prof["rtc.manager.os.release"] = "";
+    prof["rtc.manager.language"] = "";
+    prof["rtc.manager.subsystems"] = "";
+    prof["rtc.component.conf.path"] = "";
+    prof["rtc.manager.opening_message"] = "";
+
+    map<string, string>::iterator it    (prof.begin());
+    map<string, string>::iterator it_end(prof.end());
+
+    while(it != it_end) {
+      CPPUNIT_ASSERT(pProp.getProperty(it->first) == it->second);
+      ++it;
+    }
+  }
+
+
+
+  // getProperty()のメソッドのテスト test_load()のためのメソッド
+  void test_getPropertyDefault() {
+
+    // getProperty()で得られる値の期待値リスト
+    map<string, string> prof;
+    prof["rtc.openrtm.version"] = "0.4.0";
+    prof["rtc.openrtm.release"] = "aist";
+    prof["rtc.openrtm.vendor"] = "AIST";
+    prof["rtc.openrtm.author"] = "Noriaki Ando";
+    prof["rtc.manager.nameserver"] = "zonu.a02.aist.go.jp";
+    prof["rtc.manager.debug.level"] = "PARANOID";
+    prof["rtc.manager.orb"] = "omniORB";
+    prof["rtc.manager.orb.options"] = "IIOPAddrPort, -ORBendPoint, giop:tcp:";
+    prof["rtc.manager.arch"] = "i386";
+    prof["rtc.manager.os"] = "FreeBSD";
+    prof["rtc.manager.os.release"] = "6.1-RELEASE";
+    prof["rtc.manager.language"] = "C++";
+    prof["rtc.manager.subsystems"] = "Camera, Manipulator, Force Sensor";
+    prof["rtc.component.conf.path"] = "C:\\\\Program\\\\ Files\\\\OpenRTM-aist";
+    prof["rtc.manager.opening_message"] = "\"Hello \" World\"";
+
+    map<string, string>::iterator it    (prof.begin());
+    map<string, string>::iterator it_end(prof.end());
+
+    while(it != it_end) {
+      CPPUNIT_ASSERT(m_prop->getProperty(it->first) == it->second);
+      ++it;
+    }
+
+  }
+
+
+
+  // getProperty()のメソッドのテスト
+  void test_getPropertyDefault(RTC::Properties& pProp) {
+
+    // getProperty()で得られる値の期待値リスト
+    map<string, string> prof;
+    prof["rtc.openrtm.version"] = "0.4.0";
+    prof["rtc.openrtm.release"] = "aist";
+    prof["rtc.openrtm.vendor"] = "AIST";
+    prof["rtc.openrtm.author"] = "Noriaki Ando";
+    prof["rtc.manager.nameserver"] = "zonu.a02.aist.go.jp";
+    prof["rtc.manager.debug.level"] = "PARANOID";
+    prof["rtc.manager.orb"] = "omniORB";
+    prof["rtc.manager.orb.options"] = "IIOPAddrPort, -ORBendPoint, giop:tcp:";
+    prof["rtc.manager.arch"] = "i386";
+    prof["rtc.manager.os"] = "FreeBSD";
+    prof["rtc.manager.os.release"] = "6.1-RELEASE";
+    prof["rtc.manager.language"] = "C++";
+    prof["rtc.manager.subsystems"] = "Camera, Manipulator, Force Sensor";
+    prof["rtc.component.conf.path"] = "C:\\\\Program\\\\ Files\\\\OpenRTM-aist";
+    prof["rtc.manager.opening_message"] = "\"Hello World\"";
+
+    map<string, string>::iterator it    (prof.begin());
+    map<string, string>::iterator it_end(prof.end());
+
+    while(it != it_end) {
+      CPPUNIT_ASSERT(pProp.getProperty(it->first) == it->second);
+      ++it;
+    }
+  }
+
+
+
+  // getProperty()のメソッドのテスト test_Properties()用
+  // ※ このテストでは、setProperty()メソッドの後に呼ばれると仮定し、"rtc.manager.language"と
+  //    "rtc.manager.opening_message"をそれぞれ"Python","\"Hello RT World\""としている。
+  void test_getPropertyAfterSetPropertyNoDefaultValue(RTC::Properties& pProp) {
+
+    // getProperty()で得られる値の期待値リスト
+    map<string, string> prof;
+    prof["rtc.openrtm.version"] = "";
+    prof["rtc.openrtm.release"] = "";
+    prof["rtc.openrtm.vendor"] = "";
+    prof["rtc.openrtm.author"] = "";
+    prof["rtc.manager.nameserver"] = "";
+    prof["rtc.manager.debug.level"] = "";
+    prof["rtc.manager.orb"] = "";
+    prof["rtc.manager.orb.options"] = "";
+    prof["rtc.manager.arch"] = "";
+    prof["rtc.manager.os"] = "";
+    prof["rtc.manager.os.release"] = "";
+    prof["rtc.manager.language"] = "Python";
+    prof["rtc.manager.subsystems"] = "";
+    prof["rtc.component.conf.path"] = "";
+    prof["rtc.manager.opening_message"] = "\"Hello RT World\"";
+
+    map<string, string>::iterator it    (prof.begin());
+    map<string, string>::iterator it_end(prof.end());
+
+    while(it != it_end) {
+      CPPUNIT_ASSERT(pProp.getProperty(it->first) == it->second);
+      ++it;
+    }
+  }
+
+
+
+  // getProperty()のメソッドのテスト
+  // ※ このテストでは、setProperty()メソッドの後に呼ばれると仮定し、"rtc.manager.language"と
+  //    "rtc.manager.opening_message"をそれぞれ"Python","\"Hello RT World\""としている。
+  void test_getPropertyAfterSetProperty(RTC::Properties& pProp) {
+
+    // getProperty()で得られる値の期待値リスト
+    map<string, string> prof;
+    prof["rtc.openrtm.version"] = "0.4.0";
+    prof["rtc.openrtm.release"] = "aist";
+    prof["rtc.openrtm.vendor"] = "AIST";
+    prof["rtc.openrtm.author"] = "Noriaki Ando";
+    prof["rtc.manager.nameserver"] = "zonu.a02.aist.go.jp";
+    prof["rtc.manager.debug.level"] = "PARANOID";
+    prof["rtc.manager.orb"] = "omniORB";
+    prof["rtc.manager.orb.options"] = "IIOPAddrPort, -ORBendPoint, giop:tcp:";
+    prof["rtc.manager.arch"] = "i386";
+    prof["rtc.manager.os"] = "FreeBSD";
+    prof["rtc.manager.os.release"] = "6.1-RELEASE";
+    prof["rtc.manager.language"] = "Python";
+    prof["rtc.manager.subsystems"] = "Camera, Manipulator, Force Sensor";
+    prof["rtc.component.conf.path"] = "C:\\\\Program\\\\ Files\\\\OpenRTM-aist";
+    prof["rtc.manager.opening_message"] = "\"Hello RT World\"";
+
+    map<string, string>::iterator it    (prof.begin());
+    map<string, string>::iterator it_end(prof.end());
+
+    while(it != it_end) {
+      CPPUNIT_ASSERT(pProp.getProperty(it->first) == it->second);
+      ++it;
+    }
+  }
+
+
+
+  // propertyNames()メソッドのテスト。
+  // このメソッドも、このテストではsetProperty()の後に呼ばれると仮定している。
+  void test_propertyNames(vector<string> vs) {
+
+    // プロパティのキーのリスト
+    vector<string> keys;
+    keys.push_back("rtc.openrtm.version");
+    keys.push_back("rtc.openrtm.release");
+    keys.push_back("rtc.openrtm.vendor");
+    keys.push_back("rtc.openrtm.author");
+    keys.push_back("rtc.manager.nameserver");
+    keys.push_back("rtc.manager.debug.level");
+    keys.push_back("rtc.manager.orb");
+    keys.push_back("rtc.manager.orb.options");
+    keys.push_back("rtc.manager.arch");
+    keys.push_back("rtc.manager.os");
+    keys.push_back("rtc.manager.os.release");
+    keys.push_back("rtc.manager.language");
+    keys.push_back("rtc.manager.subsystems");
+    keys.push_back("rtc.component.conf.path");
+    keys.push_back("rtc.manager.opening_message");
+
+    vector<string>::iterator it_key    (keys.begin());
+    vector<string>::iterator it_key_end(keys.end());
+
+    while (it_key != it_key_end) {
+      vector<string>::iterator it_vs    (vs.begin());
+      vector<string>::iterator it_vs_end(vs.end());
+      int flag = 0;
+      while (it_vs != it_vs_end) {
+	if ((*it_key) == (*it_vs))
+	  flag = 1;
+	++it_vs;
+      }
+
+      CPPUNIT_ASSERT_MESSAGE("Not found key.", flag == 1);
+      ++it_key;
+    }
+  }
+
+
+
+  // setProperty()メソッドのテスト
+  void test_setProperty(RTC::Properties& pProp) {
+    string key, value, target;
+
+    key    = "rtc.manager.opening_message";
+    value  = "\"Hello RT World\"";
+    target = pProp.getProperty("rtc.manager.opening_message");
+    CPPUNIT_ASSERT(pProp.setProperty(key, value) == target);
+
+    key    = "rtc.manager.language";
+    value  ="Python";
+    target = pProp.getProperty("rtc.manager.language");
+    CPPUNIT_ASSERT(pProp.setProperty(key, value) == target);
+  }
+
+
+
+  /*
   // eraseHeadBlank()メソッドのテスト
   void test_eraseHeadBlank() {
     //    string str(" \t \t\t\t \t \t test");
@@ -482,27 +733,7 @@ public:
     replaceStr(str, from, to);
     CPPUNIT_ASSERT(str == ret);
   }
-
-
-  // splitKeyValue()メソッドのテスト
-  void test_splitKeyValue() {
-    //    string str("test:C:\\TEST\\test");
-    //    string key,value;                  // key,valueはsplitKeyValue()の中で値が代入される。
-    //    string retk("test");               // splitKeyValue()呼び出し後のkeyの期待される値
-    //    string retv("C:\\TEST\\test");     // splitKeyValue()呼び出し後のvalueの期待される値
-
-    string str, key, value, retk, retv;
-    std::ifstream ifs("splitKeyValueTest.data");
-    getline(ifs, str);
-    getline(ifs, retk);
-    getline(ifs, retv);
-    ifs.close();
-
-    splitKeyValue(str, key, value);
-
-    CPPUNIT_ASSERT(key == retk);
-    CPPUNIT_ASSERT(value == retv);
-  }
+  */
 
 };
 
