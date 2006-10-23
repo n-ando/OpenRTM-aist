@@ -2,7 +2,7 @@
 /*!
  * @file StringUtil.h
  * @brief String operation utility
- * @date $Date: 2006-10-23 07:37:42 $
+ * @date $Date: 2006-10-23 07:41:20 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
  * Copyright (C) 2003-2005
@@ -12,12 +12,17 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: StringUtil.h,v 1.4 2006-10-23 07:37:42 n-ando Exp $
+ * $Id: StringUtil.h,v 1.5 2006-10-23 07:41:20 n-ando Exp $
  *
  */
 
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.4  2006/10/23 07:37:42  n-ando
+ * Bug fix for split(). The problems that split() does not return empty
+ * string as list of results string.
+ * Reference manuals for functions were described.
+ *
  * Revision 1.3  2006/10/17 10:11:09  n-ando
  * Some escape/unescape related bugs are fixed.
  * The following some functions were added.
@@ -42,13 +47,13 @@
 
 /*!
  * @if jp
- * @brief $BJ8;zNs$,%(%9%1!<%W$5$l$F$$$k$+H=CG$9$k(B
+ * @brief Ê¸»úÎó¤¬¥¨¥¹¥±¡¼¥×¤µ¤ì¤Æ¤¤¤ë¤«È½ÃÇ¤¹¤ë
  *
- * $B;XDj$7$?J8;z$,%(%9%1!<%W$5$l$F$$$l$P(Btrue$B!"$5$l$F$$$J$1$l$P(Bfalse$B$rJV$9!#(B
+ * »ØÄê¤·¤¿Ê¸»ú¤¬¥¨¥¹¥±¡¼¥×¤µ¤ì¤Æ¤¤¤ì¤Ðtrue¡¢¤µ¤ì¤Æ¤¤¤Ê¤±¤ì¤Ðfalse¤òÊÖ¤¹¡£
  *
- * @param str $B%(%9%1!<%W$5$l$F$$$k$+$I$&$+H=CG$9$kJ8;z$r4^$`J8;zNs(B
- * @param pos $B%(%9%1!<%W$5$l$F$$$k$+$I$&$+H=CG$9$kJ8;z$N0LCV(B
- * @return $B;XDj$7$?J8;z$,%(%9%1!<%W$5$l$F$$$l$P(B true, $B$=$l0J30$O(B false
+ * @param str ¥¨¥¹¥±¡¼¥×¤µ¤ì¤Æ¤¤¤ë¤«¤É¤¦¤«È½ÃÇ¤¹¤ëÊ¸»ú¤ò´Þ¤àÊ¸»úÎó
+ * @param pos ¥¨¥¹¥±¡¼¥×¤µ¤ì¤Æ¤¤¤ë¤«¤É¤¦¤«È½ÃÇ¤¹¤ëÊ¸»ú¤Î°ÌÃÖ
+ * @return »ØÄê¤·¤¿Ê¸»ú¤¬¥¨¥¹¥±¡¼¥×¤µ¤ì¤Æ¤¤¤ì¤Ð true, ¤½¤ì°Ê³°¤Ï false
  *
  * @else
  * @brief Whether the character is escaped or not
@@ -74,7 +79,7 @@ bool isEscaped(const std::string& str, std::string::size_type pos)
 
 /*!
  * @if jp
- * @brief $BJ8;zNs$r%(%9%1!<%W$9$k$?$a$N(BFanctor
+ * @brief Ê¸»úÎó¤ò¥¨¥¹¥±¡¼¥×¤¹¤ë¤¿¤á¤ÎFanctor
  * @else
  * @brief A fanctor to escape string
  * @endif
@@ -98,14 +103,14 @@ struct escape_functor
 
 /*!
  * @if jp
- * @brief $BJ8;zNs$r%(%9%1!<%W$9$k(B
+ * @brief Ê¸»úÎó¤ò¥¨¥¹¥±¡¼¥×¤¹¤ë
  *
- * $B<!$NJ8;z$r%(%9%1!<%W%7!<%1%s%9$KJQ49$9$k!#(B<br>
+ * ¼¡¤ÎÊ¸»ú¤ò¥¨¥¹¥±¡¼¥×¥·¡¼¥±¥ó¥¹¤ËÊÑ´¹¤¹¤ë¡£<br>
  * HT -> "\t" <br>
  * LF -> "\n" <br>
  * CR -> "\r" <br>
  * FF -> "\f" <br>
- * $B%7%s%0%k%/%*!<%H!"%@%V%k%/%*!<%H$K$D$$$F$O$H$/$K=hM}$O$7$J$$!#(B
+ * ¥·¥ó¥°¥ë¥¯¥ª¡¼¥È¡¢¥À¥Ö¥ë¥¯¥ª¡¼¥È¤Ë¤Ä¤¤¤Æ¤Ï¤È¤¯¤Ë½èÍý¤Ï¤·¤Ê¤¤¡£
  *
  * @else
  *
@@ -128,7 +133,7 @@ std::string escape(const std::string str)
 
 /*!
  * @if jp
- * @brief $BJ8;zNs$r%"%s%(%9%1!<%W$?$a$N(BFanctor
+ * @brief Ê¸»úÎó¤ò¥¢¥ó¥¨¥¹¥±¡¼¥×¤¿¤á¤ÎFanctor
  * @else
  * @brief The functor to unescape string
  * @endif
@@ -173,9 +178,9 @@ struct unescape_functor
 
 /*!
  * @if jp
- * @brief $BJ8;zNs$N%(%9%1!<%W$rLa$9(B
+ * @brief Ê¸»úÎó¤Î¥¨¥¹¥±¡¼¥×¤òÌá¤¹
  *
- * $B<!$N%(%9%1!<%W%7!<%1%s%9$rJ8;z$KJQ49$9$k!#(B<br>
+ * ¼¡¤Î¥¨¥¹¥±¡¼¥×¥·¡¼¥±¥ó¥¹¤òÊ¸»ú¤ËÊÑ´¹¤¹¤ë¡£<br>
  * "\t" -> HT <br>
  * "\n" -> LF <br>
  * "\r" -> CR <br>
@@ -206,7 +211,7 @@ std::string unescape(const std::string str)
 
 /*!
  * @if jp
- * @brief $BJ8;zNs$N@hF,$N6uGrJ8;z$r:o=|$9$k(B
+ * @brief Ê¸»úÎó¤ÎÀèÆ¬¤Î¶õÇòÊ¸»ú¤òºï½ü¤¹¤ë
  * @else
  * @brief Erase the head blank characters of string
  * @endif
@@ -219,7 +224,7 @@ void eraseHeadBlank(std::string& str)
 
 /*!
  * @if jp
- * @brief $BJ8;zNs$NKvHx$N6uGrJ8;z$r:o=|$9$k(B
+ * @brief Ê¸»úÎó¤ÎËöÈø¤Î¶õÇòÊ¸»ú¤òºï½ü¤¹¤ë
  * @else
  * @brief Erase the tail blank characters of string
  * @endif
@@ -234,7 +239,7 @@ void eraseTailBlank(std::string& str)
 
 /*!
  * @if jp
- * @brief $BJ8;zNs$rCV$-49$($k(B
+ * @brief Ê¸»úÎó¤òÃÖ¤­´¹¤¨¤ë
  * @else
  * @brief Replace string
  * @endif
@@ -256,7 +261,7 @@ void replaceString(std::string& str, const std::string from,
 
 /*!
  * @if jp
- * @brief $BJ8;zNs$rJ,3dJ8;z$GJ,3d$9$k(B
+ * @brief Ê¸»úÎó¤òÊ¬³äÊ¸»ú¤ÇÊ¬³ä¤¹¤ë
  * @else
  * @brief Split string by delimiter
  * @endif
@@ -304,7 +309,7 @@ std::vector<std::string> split(const std::string& input,
 
 /*!
  * @if jp
- * @brief $BBgJ8;z$KJQ49$9$k(B Fanctor
+ * @brief ÂçÊ¸»ú¤ËÊÑ´¹¤¹¤ë Fanctor
  * @else
  * @brief A functor to convert to capital letter
  * @endif
@@ -320,7 +325,7 @@ struct Toupper
 
 /*!
  * @if jp
- * @brief $BM?$($i$l$?J8;zNs$r(Bbool$BCM$KJQ49$9$k(B
+ * @brief Í¿¤¨¤é¤ì¤¿Ê¸»úÎó¤òboolÃÍ¤ËÊÑ´¹¤¹¤ë
  * @else
  * @brief Convert given string to bool value
  * @endif
@@ -345,7 +350,7 @@ bool toBool(std::string str, std::string yes, std::string no,
 
 /*!
  * @if jp
- * @brief $BM?$($i$l$?J8;zNs$,@dBP%Q%9$+$I$&$+$rH=CG$9$k(B
+ * @brief Í¿¤¨¤é¤ì¤¿Ê¸»úÎó¤¬ÀäÂÐ¥Ñ¥¹¤«¤É¤¦¤«¤òÈ½ÃÇ¤¹¤ë
  * @else
  * @brief Investigate whether the given string is absolute path or not
  * @endif
@@ -365,7 +370,7 @@ bool isAbsolutePath(const std::string& str)
 
 /*!
  * @if jp
- * @brief $BM?$($i$l$?J8;zNs$,(BURL$B$+$I$&$+$rH=CG$9$k(B
+ * @brief Í¿¤¨¤é¤ì¤¿Ê¸»úÎó¤¬URL¤«¤É¤¦¤«¤òÈ½ÃÇ¤¹¤ë
  * @else
  * @brief Investigate whether the given string is URL or not
  * @endif
