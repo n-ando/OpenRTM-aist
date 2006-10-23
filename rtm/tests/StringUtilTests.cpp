@@ -2,14 +2,18 @@
 /*!
  * @file StringUtilTests.cpp
  * @brief StringUtil test class
- * @date $Date: 2006-10-23 06:10:17 $
+ * @date $Date: 2006-10-23 07:38:37 $
  * @author Shinji Kurihara
- * $Id: StringUtilTests.cpp,v 1.1 2006-10-23 06:10:17 kurihara Exp $
+ * $Id: StringUtilTests.cpp,v 1.2 2006-10-23 07:38:37 n-ando Exp $
  *
  */
 
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.1  2006/10/23 06:10:17  kurihara
+ *
+ * test program for StringUtil class.
+ *
  *
  */
 
@@ -35,7 +39,7 @@ class StringUtilTest
   CPPUNIT_TEST(test_unescape);
   CPPUNIT_TEST(test_eraseHeadBlank);
   CPPUNIT_TEST(test_eraseTailBlank);
-  //  CPPUNIT_TEST(test_replaceString);
+  CPPUNIT_TEST(test_replaceString);
   CPPUNIT_TEST(test_split);
   //  CPPUNIT_TEST(test_toBool);
   CPPUNIT_TEST(test_isAbsolutePath);
@@ -297,25 +301,25 @@ public:
     CPPUNIT_ASSERT(orig == expectation);
   }
 
-  /*
+  
   // replaceString()メソッドのテスト
   void test_replaceString() {
-    //    string str(" \t\t\ttest\t\t TEST");
-    //    string from("\t");
-    //    string to("tab");
-    //    string ret(" tabtabtabtesttabtab TEST");
+    string str(" \t\t\ttest\t\t TEST");
+    string from("\t");
+    string to("tab");
+    string ret(" tabtabtabtesttabtab TEST");
 
-    string str, from, to, ret;
-    std::ifstream ifs("replaceStringTest.data");
-    getline(ifs, str);
-    getline(ifs, from);
-    getline(ifs, to);
-    getline(ifs, ret);
-    ifs.close();
+    //    string str, from, to, ret;
+    //    std::ifstream ifs("replaceStringTest.data");
+    //    getline(ifs, str);
+    //    getline(ifs, from);
+    //    getline(ifs, to);
+    //    getline(ifs, ret);
+    //    ifs.close();
     replaceString(str, from, to);
     CPPUNIT_ASSERT(str == ret);
   }
-  */
+  
 
 
   // split()メソッドのテスト
@@ -341,9 +345,9 @@ public:
     expectation.push_back("");
     result = split(input, delimiter);
     cout << endl;
-    cout << "result0:" << result[0] << "expectation0:" << expectation[0] << endl;
-    cout << "result1:" << result[1] << "expectation1:" << expectation[1] << endl;
-    cout << "result2:" << result[2] << "expectation2:" << expectation[2] << endl;
+    cout << "result0:" << result[0] << "\texpectation0:" << expectation[0] << endl;
+    cout << "result1:" << result[1] << "\texpectation1:" << expectation[1] << endl;
+    cout << "result2:" << result[2] << "\texpectation2:" << expectation[2] << endl;
     CPPUNIT_ASSERT(result[0] == expectation[0]);
     CPPUNIT_ASSERT(result[1] == expectation[1]);
     CPPUNIT_ASSERT(result[2] == expectation[2]);
@@ -353,32 +357,38 @@ public:
     input = "C::Program Files:TEST";
     delimiter = ":";
     expectation.push_back("C");
+    expectation.push_back("");
     expectation.push_back("Program Files");
     expectation.push_back("TEST");
     result = split(input, delimiter);
     cout << endl;
-    cout << "result0:" << result[0] << "expectation0:" << expectation[0] << endl;
-    cout << "result1:" << result[1] << "expectation1:" << expectation[1] << endl;
-    cout << "result2:" << result[2] << "expectation2:" << expectation[2] << endl;
+    cout << "result0:" << result[0] << "\texpectation0:" << expectation[0] << endl;
+    cout << "result1:" << result[1] << "\texpectation1:" << expectation[1] << endl;
+    cout << "result2:" << result[2] << "\texpectation2:" << expectation[2] << endl;
+    cout << "result3:" << result[3] << "\texpectation3:" << expectation[3] << endl;
     CPPUNIT_ASSERT(result[0] == expectation[0]);
     CPPUNIT_ASSERT(result[1] == expectation[1]);
     CPPUNIT_ASSERT(result[2] == expectation[2]);
+    CPPUNIT_ASSERT(result[3] == expectation[3]);
 
     result.clear();
     expectation.clear();
     input = "C\\\\Program Files\\TEST";
     delimiter = "\\";
     expectation.push_back("C");
-    expectation.push_back("\\Program Files");
+    expectation.push_back("");
+    expectation.push_back("Program Files");
     expectation.push_back("TEST");
     result = split(input, delimiter);
     cout << endl;
-    cout << "result0:" << result[0] << "expectation0:" << expectation[0] << endl;
-    cout << "result1:" << result[1] << "expectation1:" << expectation[1] << endl;
-    cout << "result2:" << result[2] << "expectation2:" << expectation[2] << endl;
+    cout << "result0:" << result[0] << "\texpectation0:" << expectation[0] << endl;
+    cout << "result1:" << result[1] << "\texpectation1:" << expectation[1] << endl;
+    cout << "result2:" << result[2] << "\texpectation2:" << expectation[2] << endl;
+    cout << "result3:" << result[3] << "\texpectation3:" << expectation[3] << endl;
     CPPUNIT_ASSERT(result[0] == expectation[0]);
     CPPUNIT_ASSERT(result[1] == expectation[1]);
     CPPUNIT_ASSERT(result[2] == expectation[2]);
+    CPPUNIT_ASSERT(result[3] == expectation[3]);
   }
 
 
@@ -419,7 +429,7 @@ public:
     CPPUNIT_ASSERT(isURL(url) == true);
 
     url = "://robofs";
-    CPPUNIT_ASSERT(isURL(url) == true);
+    CPPUNIT_ASSERT(isURL(url) == false);
 
     url = "\t://robofs";
     CPPUNIT_ASSERT(isURL(url) == true);
