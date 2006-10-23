@@ -2,7 +2,7 @@
 /*!
  * @file ManagerConfig.h
  * @brief RTC manager configuration
- * @date $Date: 2006-10-17 10:21:38 $
+ * @date $Date: 2006-10-23 08:38:23 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
  * Copyright (C) 2003-2005
@@ -12,12 +12,15 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: ManagerConfig.h,v 1.1 2006-10-17 10:21:38 n-ando Exp $
+ * $Id: ManagerConfig.h,v 1.2 2006-10-23 08:38:23 n-ando Exp $
  *
  */
 
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.1  2006/10/17 10:21:38  n-ando
+ * The first commitment.
+ *
  *
  */
 
@@ -84,13 +87,41 @@ namespace RTC
      *
      * @brief ManagerConfig コンストラクタ
      *
+     * 何もしないコンストラクタ。
+     *
      * @else
      *
      * @brief ManagerConfig constructor
      *
+     * Do nothing. 
+     *
      * @endif
      */
     ManagerConfig();
+
+
+    /*!
+     * @if jp
+     *
+     * @brief ManagerConfig コンストラクタ
+     *
+     * 与えられた引数により初期化も同時にするコンストラクタ。
+     *
+     * @param argc コマンドライン引数の数
+     * @param argv コマンドライン引数
+     *
+     * @else
+     *
+     * @brief ManagerConfig constructor
+     *
+     * The constructor that performs initialization at the same time with
+     * given arguments.
+     *
+     * @param argc The number of command line arguments
+     * @param argv The command line arguments
+     *
+     * @endif
+     */
     ManagerConfig(int argc, char** argv);
 
 
@@ -111,16 +142,83 @@ namespace RTC
     /*!
      * @if jp
      *
-     * @brief ManagerConfig デストラクタ
+     * @brief 初期化
+     *
+     * デフォルトサーチパスからコンフィギュレーションファイルを探し初期化
+     * を行うとともにプロパティを返す。サーチパスにコンフィギュレーション
+     * ファイルが存在しない場合、デフォルトのコンフィギュレーションを
+     * 返す。
+     *
+     * @return 初期化された Property 値
      *
      * @else
      *
-     * @brief ManagerConfig destructor
+     * @brief Initialization
+     *
+     * This operation searches the configuration file from default search path,
+     * and initialize and return default properties.
+     * If there is no configuration file in the default search path,
+     * default configuration statically defined is used.
+     *
+     * @return Initialized Property value.
      *
      * @endif
      */
     Properties init();
+
+
+    /*!
+     * @if jp
+     *
+     * @brief 初期化
+     *
+     * コマンドライン引数を与えて初期化する。コマンドラインオプションは
+     * 以下のものが使用可能である。
+     *
+     * -f file   : コンフィギュレーションファイルを指定する。<br>
+     * -l module : ロードするモジュールを指定する。<br>
+     * -o options: その他オプションを指定する。。<br>
+     * -d        : デフォルトのコンフィギュレーションを使う。<br>
+     *
+     * @else
+     *
+     * @brief Initialization
+     *
+     * Initialize with command line options. The following command options
+     * are available.
+     *
+     * -f file   : Specify a configuration file. <br>
+     * -l module : Specify modules to be loaded at the beginning. <br>
+     * -o options: Other options. <br>
+     * -d        : Use default static configuration. <br>
+     *
+     * @endif
+     */
     Properties init(int argc, char** argv);
+
+
+    /*!
+     * @if jp
+     *
+     * @brief コンフィギュレーションを取得する
+     *
+     * コンフィギュレーションを取得する。init()呼び出し前に呼ぶと、
+     * 静的に定義されたデフォルトのコンフィギュレーションを返す。
+     * init() 呼び出し後に呼ぶと、コマンドライン引数、環境変数等に
+     * 基づいた初期化されたコンフィギュレーションを返す。
+     *
+     * @else
+     *
+     * @brief Get configuration value.
+     *
+     * This operation returns default configuration statically defined,
+     * when before calling init() function. When after calling init() function,
+     * this operation returns initialized configuration value according to
+     * command option, environment value and so on.
+     *
+     * @endif
+     */
+    Properties getConfig() const;
 
   protected:
     /*!
@@ -128,14 +226,19 @@ namespace RTC
      *
      * @brief コマンド引数をパースする
      *
-     * -f file   : コンフィギュレーションファイルを指定する。
-     * -l module : ロードするモジュールを指定する。
-     * -o options: その他オプションを指定する。
-     * -d        : デフォルトのコンフィギュレーションを使う
+     * -f file   : コンフィギュレーションファイルを指定する。<br>
+     * -l module : ロードするモジュールを指定する。。<br>
+     * -o options: その他オプションを指定する。。<br>
+     * -d        : デフォルトのコンフィギュレーションを使う。<br>
      *
      * @else
      *
      * @brief Parse command arguments
+     *
+     * -f file   : Specify a configuration file. <br>
+     * -l module : Specify modules to be loaded at the beginning. <br>
+     * -o options: Other options. <br>
+     * -d        : Use default static configuration. <br>
      *
      * @endif
      */
@@ -204,6 +307,7 @@ namespace RTC
     bool fileExist(const std::string& filename);
 
     std::string m_configFile;
+    Properties m_properties;
    
     
   };
