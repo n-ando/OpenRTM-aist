@@ -2,7 +2,7 @@
 /*!
  * @file StringUtil.h
  * @brief String operation utility
- * @date $Date: 2006-10-17 10:11:09 $
+ * @date $Date: 2006-10-23 07:37:42 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
  * Copyright (C) 2003-2005
@@ -12,12 +12,17 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: StringUtil.h,v 1.3 2006-10-17 10:11:09 n-ando Exp $
+ * $Id: StringUtil.h,v 1.4 2006-10-23 07:37:42 n-ando Exp $
  *
  */
 
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.3  2006/10/17 10:11:09  n-ando
+ * Some escape/unescape related bugs are fixed.
+ * The following some functions were added.
+ * - eraseHeadBlank(), eraseTailBlank(), replaceString()
+ *
  * Revision 1.2  2006/10/13 03:51:37  n-ando
  * The "escape" and "unescape" functions were added.
  *
@@ -37,9 +42,24 @@
 
 /*!
  * @if jp
- * @brief
+ * @brief 文字列がエスケープされているか判断する
+ *
+ * 指定した文字がエスケープされていればtrue、されていなければfalseを返す。
+ *
+ * @param str エスケープされているかどうか判断する文字を含む文字列
+ * @param pos エスケープされているかどうか判断する文字の位置
+ * @return 指定した文字がエスケープされていれば true, それ以外は false
+ *
  * @else
- * @brief
+ * @brief Whether the character is escaped or not
+ *
+ * This operation returns true if the specified character is escaped, and
+ * if the specified character is not escaped, it returns false
+ *
+ * @param str The string thath includes the character to be investigated.
+ * @param pos The position of the character to be investigated.
+ * @return true: the character is escaped, false: the character is not escaped.
+ *
  * @endif
  */
 bool isEscaped(const std::string& str, std::string::size_type pos)
@@ -54,9 +74,9 @@ bool isEscaped(const std::string& str, std::string::size_type pos)
 
 /*!
  * @if jp
- * @brief
+ * @brief 文字列をエスケープするためのFanctor
  * @else
- * @brief
+ * @brief A fanctor to escape string
  * @endif
  */
 struct escape_functor
@@ -78,9 +98,26 @@ struct escape_functor
 
 /*!
  * @if jp
- * @brief
+ * @brief 文字列をエスケープする
+ *
+ * 次の文字をエスケープシーケンスに変換する。<br>
+ * HT -> "\t" <br>
+ * LF -> "\n" <br>
+ * CR -> "\r" <br>
+ * FF -> "\f" <br>
+ * シングルクオート、ダブルクオートについてはとくに処理はしない。
+ *
  * @else
- * @brief
+ *
+ * @brief Escape string
+ *
+ * The following characters are converted. <br>
+ * HT -> "\t" <br>
+ * LF -> "\n" <br>
+ * CR -> "\r" <br>
+ * FF -> "\f" <br>
+ * Single quote and dobule quote are not processed.
+ *
  * @endif
  */
 std::string escape(const std::string str)
@@ -91,9 +128,9 @@ std::string escape(const std::string str)
 
 /*!
  * @if jp
- * @brief
+ * @brief 文字列をアンエスケープためのFanctor
  * @else
- * @brief
+ * @brief The functor to unescape string
  * @endif
  */
 struct unescape_functor
@@ -136,9 +173,28 @@ struct unescape_functor
 
 /*!
  * @if jp
- * @brief
+ * @brief 文字列のエスケープを戻す
+ *
+ * 次のエスケープシーケンスを文字に変換する。<br>
+ * "\t" -> HT <br>
+ * "\n" -> LF <br>
+ * "\r" -> CR <br>
+ * "\f" -> FF <br>
+ * "\"" -> "  <br>
+ * "\'" -> '  <br>
+ *
  * @else
- * @brief
+ *
+ * @brief Unescape string
+ *
+ * The following characters are converted. <br>
+ * "\t" -> HT <br>
+ * "\n" -> LF <br>
+ * "\r" -> CR <br>
+ * "\f" -> FF <br>
+ * "\"" -> "  <br>
+ * "\'" -> '  <br>
+ *
  * @endif
  */
 std::string unescape(const std::string str)
@@ -150,9 +206,9 @@ std::string unescape(const std::string str)
 
 /*!
  * @if jp
- * @brief
+ * @brief 文字列の先頭の空白文字を削除する
  * @else
- * @brief
+ * @brief Erase the head blank characters of string
  * @endif
  */
 void eraseHeadBlank(std::string& str)
@@ -163,9 +219,9 @@ void eraseHeadBlank(std::string& str)
 
 /*!
  * @if jp
- * @brief
+ * @brief 文字列の末尾の空白文字を削除する
  * @else
- * @brief
+ * @brief Erase the tail blank characters of string
  * @endif
  */
 void eraseTailBlank(std::string& str)
@@ -178,9 +234,31 @@ void eraseTailBlank(std::string& str)
 
 /*!
  * @if jp
- * @brief
+ * @brief 文字列を置き換える
  * @else
- * @brief
+ * @brief Replace string
+ * @endif
+ */
+void replaceString(std::string& str, const std::string from,
+		const std::string to)
+{
+  std::string::size_type pos(0);
+  
+  while (pos != std::string::npos)
+    {
+      pos = str.find(from, pos);
+      if (pos == std::string::npos) break;
+      str.replace(pos, from.size(), to);
+      pos += to.size();
+    }
+}
+
+
+/*!
+ * @if jp
+ * @brief 文字列を分割文字で分割する
+ * @else
+ * @brief Split string by delimiter
  * @endif
  */
 std::vector<std::string> split(const std::string& input,
@@ -191,8 +269,8 @@ std::vector<std::string> split(const std::string& input,
   size delim_size = delimiter.size();
   size found_pos(0), begin_pos(0), pre_pos(0), substr_size(0);
   
-  if (input.substr(0, delim_size) == delimiter)
-    begin_pos = pre_pos = delim_size;
+  //  if (input.substr(0, delim_size) == delimiter)
+  //    begin_pos = pre_pos = delim_size;
   
   while (1)
     {
@@ -203,18 +281,18 @@ std::vector<std::string> split(const std::string& input,
 	  results.push_back(input.substr(pre_pos));
 	  break;
 	}
-      if ('\\' == input.at(found_pos - 1))
+      /*
+      if (isEscaped(input, found_pos))
 	{
 	  begin_pos = found_pos + delim_size;
 	  goto REFIND;
 	}
-      
+      */
       substr_size = found_pos - pre_pos;
-      
-      if (substr_size > 0)
+      if (substr_size >= 0)
 	{
 	  std::string substr(input.substr(pre_pos, substr_size));
-	  eraseHeadBlank(substr);
+	  //	  eraseHeadBlank(substr);
 	  results.push_back(substr);
 	}
       begin_pos = found_pos + delim_size;
@@ -226,9 +304,9 @@ std::vector<std::string> split(const std::string& input,
 
 /*!
  * @if jp
- * @brief
+ * @brief 大文字に変換する Fanctor
  * @else
- * @brief
+ * @brief A functor to convert to capital letter
  * @endif
  */
 struct Toupper
@@ -240,6 +318,13 @@ struct Toupper
 };
 
 
+/*!
+ * @if jp
+ * @brief 与えられた文字列をbool値に変換する
+ * @else
+ * @brief Convert given string to bool value
+ * @endif
+ */
 bool toBool(std::string str, std::string yes, std::string no, 
 	    bool default_value = true)
 {
@@ -258,12 +343,11 @@ bool toBool(std::string str, std::string yes, std::string no,
 }
 
 
-
 /*!
  * @if jp
- * @brief
+ * @brief 与えられた文字列が絶対パスかどうかを判断する
  * @else
- * @brief
+ * @brief Investigate whether the given string is absolute path or not
  * @endif
  */
 bool isAbsolutePath(const std::string& str)
@@ -281,9 +365,9 @@ bool isAbsolutePath(const std::string& str)
 
 /*!
  * @if jp
- * @brief
+ * @brief 与えられた文字列がURLかどうかを判断する
  * @else
- * @brief
+ * @brief Investigate whether the given string is URL or not
  * @endif
  */
 bool isURL(const std::string& str)
@@ -291,7 +375,8 @@ bool isURL(const std::string& str)
   typedef std::string::size_type size;
   size pos;
   pos = str.find(":");
-  if ((pos != std::string::npos) &&
+  if ((pos != 0) &&
+      (pos != std::string::npos) &&
       (str[pos + 1] == '/') &&
       (str[pos + 2] == '/'))
     return true;
