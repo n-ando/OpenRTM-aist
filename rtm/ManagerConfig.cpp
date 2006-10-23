@@ -2,7 +2,7 @@
 /*!
  * @file ManagerConfig.cpp
  * @brief RTC manager configuration
- * @date $Date: 2006-10-17 19:29:53 $
+ * @date $Date: 2006-10-23 08:38:17 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
  * Copyright (C) 2003-2005
@@ -12,12 +12,15 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: ManagerConfig.cpp,v 1.2 2006-10-17 19:29:53 n-ando Exp $
+ * $Id: ManagerConfig.cpp,v 1.3 2006-10-23 08:38:17 n-ando Exp $
  *
  */
 
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.2  2006/10/17 19:29:53  n-ando
+ * Trivial fix.
+ *
  * Revision 1.1  2006/10/17 10:21:31  n-ando
  * The first commitment.
  *
@@ -41,6 +44,7 @@ namespace RTC
    * @endif
    */
   ManagerConfig::ManagerConfig()
+    : m_properties(default_config)
   {
   }
 
@@ -53,6 +57,7 @@ namespace RTC
    * @endif
    */
   ManagerConfig::ManagerConfig(int argc, char** argv)
+    : m_properties(default_config)
   {
     init(argc, argv);
   }
@@ -81,23 +86,43 @@ namespace RTC
   {
     if (findConfigFile())
       {
-	Properties prop;
 	std::ifstream f(m_configFile.c_str());
-	prop.load(f);
+	m_properties.load(f);
 	f.close();
-	setSystemInformation(prop);
-	return prop;
+	setSystemInformation(m_properties);
+	return m_properties;
       }
     else
       {
-	return Properties(default_config);
+	return m_properties;
       }
   }
 
+
+  /*!
+   * @if jp
+   * @brief 初期化
+   * @else
+   * @brief Initialization
+   * @endif
+   */
   Properties ManagerConfig::init(int argc, char** argv)
   {
     parseArgs(argc, argv);
     return init();
+  }
+
+
+  /*!
+   * @if jp
+   * @brief コンフィギュレーションを取得する
+   * @else
+   * @brief Get configuration value.
+   * @endif
+   */
+  Properties ManagerConfig::getConfig() const
+  {
+    return m_properties;
   }
 
 
