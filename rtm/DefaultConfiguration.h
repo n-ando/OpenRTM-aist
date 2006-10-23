@@ -2,7 +2,7 @@
 /*!
  * @file DefaultConfiguration.h
  * @brief RTC manager default configuration
- * @date $Date: 2006-10-17 19:30:45 $
+ * @date $Date: 2006-10-23 08:40:02 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
  * Copyright (C) 2006
@@ -12,12 +12,15 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: DefaultConfiguration.h,v 1.1 2006-10-17 19:30:45 n-ando Exp $
+ * $Id: DefaultConfiguration.h,v 1.2 2006-10-23 08:40:02 n-ando Exp $
  *
  */
 
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.1  2006/10/17 19:30:45  n-ando
+ * The first comitment.
+ *
  *
  */
 
@@ -43,5 +46,6 @@ static const char* default_config[] =
     "manager.orb.args", "",
     "manager.orb.addr_port", "",
     "manager.orb.id", "",
+    ""
   };
 
