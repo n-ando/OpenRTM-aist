@@ -1,24 +1,15 @@
 // -*- C++ -*-
 /*!
- * @file ObjectManagerTests.cpp
- * @brief ObjectManager class test
- * @date $Date: 2006-10-23 09:37:57 $
- * @author Noriaki Ando <n-ando@aist.go.jp>
- *
- * Copyright (C) 2006
- *     Task-intelligence Research Group,
- *     Intelligent Systems Research Institute,
- *     National Institute of
- *         Advanced Industrial Science and Technology (AIST), Japan
- *     All rights reserved.
- *
- * $Id: ObjectManagerTests.cpp,v 1.1 2006-10-23 09:37:57 n-ando Exp $
+ * @file 
+ * @brief Properties test class
+ * @date $Date: 2006-10-24 03:08:15 $
+ * @author Shinji Kurihara
+ * $Id: ObjectManagerTests.cpp,v 1.2 2006-10-24 03:08:15 kurihara Exp $
  *
  */
 
 /*
  * $Log: not supported by cvs2svn $
- *
  */
 
 #include <cppunit/ui/text/TestRunner.h>
@@ -26,7 +17,9 @@
 #include <cppunit/extensions/TestFactoryRegistry.h>
 #include <cppunit/extensions/HelperMacros.h>
 #include <cppunit/TestAssert.h>
+#include <fstream>
 #include <string>
+
 #include "../ObjectManager.h"
 
 using namespace std;
@@ -34,32 +27,39 @@ using namespace std;
 class A
 {
 public:
-  A(std::string _name) : name(_name) {};
-  std::string name;
+  A(string _name) : name(_name) {};
+  string name;
 };
+
 
 template <class T>
 class Comp
 {
 public:
-  Comp(std::string _name) : name(_name) {};
+  Comp(string _name) : name(_name) {};
   Comp(T* obj) : name(obj->name) {};
   bool operator()(A* obj)
   {
     return obj->name == name;
   }
-  std::string name;
+  string name;
 };
 
 
-class ObjectManagerTest
+// ObjectManagerクラス のテスト [3]
+class ObjectManagerTests
   : public CppUnit::TestFixture
 {
-  CPPUNIT_TEST_SUITE(ObjectManagerTest);
-  CPPUNIT_TEST(test_objmgr);
+  CPPUNIT_TEST_SUITE(ObjectManagerTests);
+  CPPUNIT_TEST(test_registerObject);
+  CPPUNIT_TEST(test_unregisterObject);
+  CPPUNIT_TEST(test_find);
+  CPPUNIT_TEST(test_getObjects);
+  //  CPPUNIT_TEST(test_for_each);
   CPPUNIT_TEST_SUITE_END();
+
 private:
-  typedef ObjectManager<std::string, A, Comp<A> > AMgr;
+  typedef ObjectManager<string, A, Comp<A> > AMgr;
   AMgr* m_pObjMgr;
   
 public:
@@ -67,14 +67,14 @@ public:
   /*
    * コンストラクタ/デストラクタ [7]
    */
-  ObjectManagerTest()
+  ObjectManagerTests()
   {
-
   }
   
-  ~ObjectManagerTest()
+  ~ObjectManagerTests()
   {
   }
+
   
   /*
    * 初期化/後始末 [8]
@@ -82,85 +82,168 @@ public:
   virtual void setUp()
   {
     m_pObjMgr = new AMgr();
+    const char* name[] = {"test0","test1","test2","test3","test4"};
+    try{
+      for (int i = 0; i < 5; i++)
+	m_pObjMgr->registerObject(new A(name[i]));
+    }
+    catch(AMgr::AlreadyRegistered& ar) {
+      cout << "registerObject: " << ar.reason << endl << endl;
+    }
+
+    string str;
+    A* aObj;
+    try{
+      str = "test4";
+      aObj = m_pObjMgr->unregisterObject(str);
+      CPPUNIT_ASSERT(aObj->name == str);
+    }
+    catch(AMgr::NoSuchObject& nso) {
+      cout << "unregisterObject: " << nso.reason << " : " << str << endl;
+    }
+    catch(AMgr::SystemError& se) {
+      cout << se.reason << endl;
+    }
   }
   
   virtual void tearDown()
   { 
     delete m_pObjMgr;
   }
-  
 
-  void test_objmgr()
-  {
-    m_pObjMgr->registerObject(new A("hoge0"));
-    m_pObjMgr->registerObject(new A("hoge1"));
-    m_pObjMgr->registerObject(new A("hoge2"));
-    m_pObjMgr->registerObject(new A("hoge3"));
-    m_pObjMgr->registerObject(new A("hoge4"));
-    std::cout << std::endl;
-    std::cout << (m_pObjMgr->find("hoge0"))->name << std::endl;
-    std::cout << (m_pObjMgr->find("hoge1"))->name << std::endl;
-    std::cout << (m_pObjMgr->find("hoge2"))->name << std::endl;
-    std::cout << (m_pObjMgr->find("hoge3"))->name << std::endl;
-    std::cout << (m_pObjMgr->find("hoge4"))->name << std::endl;
 
-    std::vector<A*> objs;
-    objs = m_pObjMgr->getObjects();
-
-    std::cout << objs.size() << std::endl;
-
-    for (std::vector<A*>::iterator i = objs.begin(); i != objs.end(); ++i)
-      {
-	std::cout << (*i)->name << std::endl;
-      }
-
-    const char* name[] = {"hoge0", "hoge1", "hoge2", "hoge3", "hoge4"};
-
-    for (int j = 0; j < 5; ++j)
-      {
-	A* delobj;
-	delobj = m_pObjMgr->unregisterObject(name[j]);
-	std::cout << "delete: " << delobj->name <<  std::endl;
-	delete delobj;
-	
-	objs = m_pObjMgr->getObjects();
-	std::cout << "rest objects: " << objs.size() << "-> ";
-	for (std::vector<A*>::iterator i = objs.begin(); i != objs.end(); ++i)
-	  {
-	    std::cout << (*i)->name << ",  ";
-	  }
-	std::cout << std::endl;
-      }
-    std::cout << std::endl;
-
-    try
-      {
-	m_pObjMgr->find("hoge0");
-	CPPUNIT_ASSERT_MESSAGE("NoSuchObject should be thrown!!", false);
-      }
-    catch (AMgr::NoSuchObject& e)
-      {
-	std::cout << e.reason << std::endl;
-	std::cout << "find() throws NoSuchObject exception properly." << std::endl;
-      }
-
-    try
-      {
-	m_pObjMgr->unregisterObject("hoge0");
-	CPPUNIT_ASSERT_MESSAGE("NoSuchObject should be thrown!!", false);
-      }
-    catch (AMgr::NoSuchObject& e)
-      {
-	std::cout << e.reason << std::endl;
-	std::cout << "unregisterObject() throws NoSuchObject exception properly." << std::endl;
-      }
+  /* tests for void registerObject(Object* obj) */
+  void test_registerObject() {
+    const char* name[] = {"test0","test1","test2","test3","test4"};
+    int i;
+    try{
+      for (i = 0; i < 5; i++)
+	m_pObjMgr->registerObject(new A(name[i]));
+    }
+    catch(AMgr::AlreadyRegistered& ar) {
+      cout << "registerObject: " << ar.reason << " : " << name[i] << endl << endl;
+    }
   }
 
+
+  /* tests for Object* unregisterObject(const Identifier& id) */
+  void test_unregisterObject() {
+    A* aObj;
+    string str;
+
+    cout << endl << "test unregisterObject." << endl;
+    try{
+      str = "test4";
+      aObj = m_pObjMgr->unregisterObject(str);
+      CPPUNIT_ASSERT(aObj->name == str);
+    }
+    catch(AMgr::NoSuchObject& nso) {
+      cout << "unregisterObject: " << nso.reason << " : " << str << endl;
+    }
+    catch(AMgr::SystemError& se) {
+      cout << se.reason << endl;
+    }
+
+    try{
+      str = "test";
+      aObj = m_pObjMgr->unregisterObject(str);
+      CPPUNIT_ASSERT(aObj->name == str);
+    }
+    catch(AMgr::NoSuchObject& nso) {
+      cout << "unregisterObject: " << nso.reason << " : " << str << endl;
+    }
+    catch(AMgr::SystemError& se) {
+      cout << se.reason << endl;
+    }
+
+    try{
+      str = "";
+      m_pObjMgr->unregisterObject(str);
+      CPPUNIT_ASSERT(aObj->name == str);
+    }
+    catch(AMgr::NoSuchObject& nso) {
+      cout << "unregisterObject: " << nso.reason << " : " << str << endl;
+    }
+    catch(AMgr::SystemError& se) {
+      cout << se.reason << endl;
+    }
+
+  }
+
+
+  /* tests for Object* find(const Identifier& id) */
+  void test_find() {
+    A* aObj;
+    string str;
+    
+    cout << endl << "test find." << endl;
+    try{
+      str = "test0";
+      aObj = m_pObjMgr->find(str);
+      CPPUNIT_ASSERT(aObj->name == str);
+    }
+    catch(AMgr::NoSuchObject& nso) {
+      cout << "find: " << nso.reason << " : " << str << endl;
+    }
+    catch(AMgr::SystemError& se) {
+      cout << se.reason << endl;
+    }
+
+    try{
+      str = "test4";
+      aObj = m_pObjMgr->find(str);
+      CPPUNIT_ASSERT(aObj->name == str);
+    }
+    catch(AMgr::NoSuchObject& nso) {
+      cout << "find: " << nso.reason << " : " << str << endl;
+    }
+    catch(AMgr::SystemError& se) {
+      cout << se.reason << endl;
+    }
+
+    try{
+      str = "";
+      aObj = m_pObjMgr->find(str);
+      CPPUNIT_ASSERT(aObj->name == str);
+    }
+    catch(AMgr::NoSuchObject& nso) {
+      cout << "find: " << nso.reason << " : " << str << endl;
+    }
+    catch(AMgr::SystemError& se) {
+      cout << se.reason << endl;
+    }
+
+  }
+
+
+  /* tests for std::vector<Object*> getObjects() const */
+  void test_getObjects() {
+    const char* name[] = {"test0","test1","test2","test3","test4"};
+    vector<A*> va;
+    va = m_pObjMgr->getObjects();
+    cout << "va size: " << va.size() << endl;
+    for (int i = 0; i < (int)va.size(); i++)
+      CPPUNIT_ASSERT(va[i]->name == name[i]);
+  }
+
+
+  /* tests for template <class Pred> void for_each(Pred p) */
+  void test_for_each() {
+    Comp<string> comp("test0");
+    m_pObjMgr->for_each(comp);
+    //    CPPUNIT_ASSERT();
+  }
+
+
 };
+
+
 /*
  * register test suite
  */
-CPPUNIT_TEST_SUITE_REGISTRATION(ObjectManagerTest);
+CPPUNIT_TEST_SUITE_REGISTRATION(ObjectManagerTests);
+
+
 
 int main(int argc, char* argv[])
 {
