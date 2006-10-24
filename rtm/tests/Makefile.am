@@ -2,9 +2,13 @@
 ##------------------------------------------------------------
 ## Makefile.am for unit test
 ##
-## $Id: Makefile.am,v 1.3 2006-10-23 06:29:22 kurihara Exp $
+## $Id: Makefile.am,v 1.4 2006-10-24 03:07:31 kurihara Exp $
 ##
 ## $Log: not supported by cvs2svn $
+## Revision 1.3  2006/10/23 06:29:22  kurihara
+##
+## add ManagerConfigTests and StringUtilTests.
+##
 ## Revision 1.2  2006/09/20 08:50:31  n-ando
 ## ModuleManagerTests is added.
 ##
@@ -33,7 +37,8 @@ noinst_PROGRAMS = \
 	PropertiesTests \
 	StringUtilTests \
 	ModuleManagerTests \
-	ManagerConfigTests
+	ManagerConfigTests \
+	ObjectManagerTests
 
 RtcNamingTests_SOURCES = RtcNamingTests.cpp
 RtcNamingTests_LDFLAGS = -L$(libdir)
@@ -54,3 +59,7 @@ ModuleManagerTests_LDADD   = ../Properties.o ../ModuleManager.o  -lcppunit -lACE
 ManagerConfigTests_SOURCES = ManagerConfigTests.cpp
 ManagerConfigTests_LDFLAGS = -L$(libdir)
 ManagerConfigTests_LDADD   = ../Properties.o ../ManagerConfig.o -lcppunit
+
+ObjectManagerTests_SOURCES = ObjectManagerTests.cpp
+ObjectManagerTests_LDFLAGS = -L$(libdir)
+ObjectManagerTests_LDADD   = -lcppunit
