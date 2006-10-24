@@ -2,9 +2,13 @@
 ##------------------------------------------------------------
 ## Makefile.am for libRTC
 ##
-## $Id: Makefile.am,v 1.5 2006-10-17 10:00:36 n-ando Exp $
+## $Id: Makefile.am,v 1.6 2006-10-24 06:24:15 n-ando Exp $
 ##
 ## $Log: not supported by cvs2svn $
+## Revision 1.5  2006/10/17 10:00:36  n-ando
+## Some build entry for the following classes was added.
+## PortAdmin, PortProfileHelper, ManagerConfig, Manager.
+##
 ## Revision 1.4  2006/09/20 08:52:50  n-ando
 ## ModuleManager class added.
 ##
@@ -31,6 +35,7 @@ lib_LTLIBRARIES = libRTC.la
 
 # sources of libShared.la
 RTC_SRC = \
+	StringUtil.cpp \
 	PortAdmin.cpp \
 	PortProfileHelper.cpp \
 	PortBase.cpp \

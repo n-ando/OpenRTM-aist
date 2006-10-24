@@ -2,7 +2,7 @@
 /*!
  * @file StringUtil.h
  * @brief String operation utility
- * @date $Date: 2006-10-23 07:41:20 $
+ * @date $Date: 2006-10-24 06:24:45 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
  * Copyright (C) 2003-2005
@@ -12,12 +12,15 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: StringUtil.h,v 1.5 2006-10-23 07:41:20 n-ando Exp $
+ * $Id: StringUtil.h,v 1.6 2006-10-24 06:24:45 n-ando Exp $
  *
  */
 
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.5  2006/10/23 07:41:20  n-ando
+ * Kanji-code was changed from JIS to EUC.
+ *
  * Revision 1.4  2006/10/23 07:37:42  n-ando
  * Bug fix for split(). The problems that split() does not return empty
  * string as list of results string.
@@ -41,7 +44,6 @@
 #define StringUtil_h
 
 #include <string>
-#include <algorithm>
 #include <vector>
 
 
@@ -67,38 +69,7 @@
  *
  * @endif
  */
-bool isEscaped(const std::string& str, std::string::size_type pos)
-{
-  --pos;
-  unsigned int i;
-  for (i = 0; (pos >= 0) && str[pos] == '\\'; --pos, ++i) ;
-  // If the number of \ is odd, delimiter is escaped.
-  return (i % 2) == 1;
-}
-
-
-/*!
- * @if jp
- * @brief 文字列をエスケープするためのFanctor
- * @else
- * @brief A fanctor to escape string
- * @endif
- */
-struct escape_functor
-{
-  escape_functor() {};
-  void operator()(const char c)
-  {
-    if      (c == '\t')  str += "\\t";
-    else if (c == '\n')  str += "\\n";
-    else if (c == '\f')  str += "\\f";
-    else if (c == '\r')  str += "\\r";
-    //    else if (c == '\"')  str += "\\\"";
-    //    else if (c == '\'')  str += "\\\'";
-    else str.push_back(c);
-  }
-  std::string str;
-};
+bool isEscaped(const std::string& str, std::string::size_type pos);
 
 
 /*!
@@ -125,55 +96,7 @@ struct escape_functor
  *
  * @endif
  */
-std::string escape(const std::string str)
-{
-  return for_each(str.begin(), str.end(), escape_functor()).str;
-}
-
-
-/*!
- * @if jp
- * @brief 文字列をアンエスケープためのFanctor
- * @else
- * @brief The functor to unescape string
- * @endif
- */
-struct unescape_functor
-{
-  unescape_functor() : count(0) {};
-  void operator()(char c)
-  {
-    if (c == '\\')
-      {
-	++count;
-	if (!(count % 2))
-	  {
-	    str.push_back(c);
-	  }
-      }
-    else
-      {
-	if (count > 0 && (count % 2))
-	  {
-	    count = 0;
-	    if      (c == 't')  str.push_back('\t');
-	    else if (c == 'n')  str.push_back('\n');
-	    else if (c == 'f')  str.push_back('\f');
-	    else if (c == 'r')  str.push_back('\r');
-	    else if (c == '\"') str.push_back('\"');
-	    else if (c == '\'') str.push_back('\'');
-	    else str.push_back(c);
-	  }
-	else
-	  {
-	    count = 0;
-	    str.push_back(c);
-	  }
-      }
-  } 
-  std::string str;
-  int count;
-};
+std::string escape(const std::string str);
 
 
 /*!
@@ -202,11 +125,7 @@ struct unescape_functor
  *
  * @endif
  */
-std::string unescape(const std::string str)
-{
-  return for_each(str.begin(), str.end(), unescape_functor()).str;
-
-}
+std::string unescape(const std::string str);
 
 
 /*!
@@ -216,10 +135,7 @@ std::string unescape(const std::string str)
  * @brief Erase the head blank characters of string
  * @endif
  */
-void eraseHeadBlank(std::string& str)
-{
-  while (str[0] == ' ' || str[0] == '\t') str.erase(0, 1);
-}
+void eraseHeadBlank(std::string& str);
 
 
 /*!
@@ -229,12 +145,7 @@ void eraseHeadBlank(std::string& str)
  * @brief Erase the tail blank characters of string
  * @endif
  */
-void eraseTailBlank(std::string& str)
-{
-  while ((str[str.size() - 1] == ' ' || str[str.size() - 1] == '\t') &&
-	 !isEscaped(str, str.size() - 1))
-    str.erase(str.size() - 1, 1);
-}
+void eraseTailBlank(std::string& str);
 
 
 /*!
@@ -245,18 +156,7 @@ void eraseTailBlank(std::string& str)
  * @endif
  */
 void replaceString(std::string& str, const std::string from,
-		const std::string to)
-{
-  std::string::size_type pos(0);
-  
-  while (pos != std::string::npos)
-    {
-      pos = str.find(from, pos);
-      if (pos == std::string::npos) break;
-      str.replace(pos, from.size(), to);
-      pos += to.size();
-    }
-}
+		   const std::string to);
 
 
 /*!
@@ -267,60 +167,7 @@ void replaceString(std::string& str, const std::string from,
  * @endif
  */
 std::vector<std::string> split(const std::string& input,
-			       const std::string& delimiter)
-{
-  typedef std::string::size_type size;
-  std::vector<std::string> results;
-  size delim_size = delimiter.size();
-  size found_pos(0), begin_pos(0), pre_pos(0), substr_size(0);
-  
-  //  if (input.substr(0, delim_size) == delimiter)
-  //    begin_pos = pre_pos = delim_size;
-  
-  while (1)
-    {
-    REFIND:
-      found_pos = input.find(delimiter, begin_pos);
-      if (found_pos == std::string::npos) 
-	{
-	  results.push_back(input.substr(pre_pos));
-	  break;
-	}
-      /*
-      if (isEscaped(input, found_pos))
-	{
-	  begin_pos = found_pos + delim_size;
-	  goto REFIND;
-	}
-      */
-      substr_size = found_pos - pre_pos;
-      if (substr_size >= 0)
-	{
-	  std::string substr(input.substr(pre_pos, substr_size));
-	  //	  eraseHeadBlank(substr);
-	  results.push_back(substr);
-	}
-      begin_pos = found_pos + delim_size;
-      pre_pos   = found_pos + delim_size;
-    }
-  return results;
-}
-
-
-/*!
- * @if jp
- * @brief 大文字に変換する Fanctor
- * @else
- * @brief A functor to convert to capital letter
- * @endif
- */
-struct Toupper
-{
-  void operator()(char &c)
-  {
-    c = toupper(c);
-  }
-};
+			       const std::string& delimiter);
 
 
 /*!
@@ -331,21 +178,7 @@ struct Toupper
  * @endif
  */
 bool toBool(std::string str, std::string yes, std::string no, 
-	    bool default_value = true)
-{
-
-  
-  std::for_each(str.begin(), str.end(), Toupper());
-  std::for_each(yes.begin(), yes.end(), Toupper());
-  std::for_each(no.begin(),  no.end(),  Toupper());
-
-  if (str.find(yes) != std::string::npos)
-    return true;
-  else if (!str.find(no) != std::string::npos)
-    return false;
-  else
-    return default_value;
-}
+	    bool default_value = true);
 
 
 /*!
@@ -355,17 +188,7 @@ bool toBool(std::string str, std::string yes, std::string no,
  * @brief Investigate whether the given string is absolute path or not
  * @endif
  */
-bool isAbsolutePath(const std::string& str)
-{
-  // UNIX absolute path is begun from '/'
-  if (str[0] == '/') return true;
-  // Windows absolute path is begun from '[a-zA-Z]:\'
-  if (isalpha(str[0]) && (str[1] == ':') && str[2] == '\\') return true;
-  // Windows network file path is begun from '\\'
-  if (str[0] == '\\' && str[1] == '\\') return true;
-
-  return false;
-}
+bool isAbsolutePath(const std::string& str);
 
 
 /*!
@@ -375,18 +198,7 @@ bool isAbsolutePath(const std::string& str)
  * @brief Investigate whether the given string is URL or not
  * @endif
  */
-bool isURL(const std::string& str)
-{
-  typedef std::string::size_type size;
-  size pos;
-  pos = str.find(":");
-  if ((pos != 0) &&
-      (pos != std::string::npos) &&
-      (str[pos + 1] == '/') &&
-      (str[pos + 2] == '/'))
-    return true;
-  return false;
-}
+bool isURL(const std::string& str);
 
 
 #endif // StringUtil_h
