@@ -2,7 +2,7 @@
 /*!
  * @file RtcFactory.h
  * @brief RT component manager class
- * @date $Date: 2005-05-12 09:06:18 $
+ * @date $Date: 2006-10-24 14:25:26 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
  * Copyright (C) 2003-2005
@@ -12,12 +12,15 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: RtcFactory.cpp,v 1.1.1.1 2005-05-12 09:06:18 n-ando Exp $
+ * $Id: Factory.cpp,v 1.2 2006-10-24 14:25:26 n-ando Exp $
  *
  */
 
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.1.1.1  2005/05/12 09:06:18  n-ando
+ * Public release.
+ *
  *
  */
 
