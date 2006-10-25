@@ -2,7 +2,7 @@
 /*!
  * @file ModulesManager.cpp
  * @brief Loadable modules manager class
- * @date $Date: 2006-10-17 10:06:39 $
+ * @date $Date: 2006-10-25 17:29:27 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
  * Copyright (C) 2006
@@ -12,12 +12,15 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: ModuleManager.cpp,v 1.2 2006-10-17 10:06:39 n-ando Exp $
+ * $Id: ModuleManager.cpp,v 1.3 2006-10-25 17:29:27 n-ando Exp $
  *
  */
 
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.2  2006/10/17 10:06:39  n-ando
+ * Now class ModuleManager is in RTC namespace.
+ *
  * Revision 1.1  2006/09/20 08:47:25  n-ando
  * The first commit of module management class.
  *
@@ -25,6 +28,7 @@
  */
 
 #include <fstream>
+#include <algorithm>
 #include <iostream>
 
 // ACE includes
@@ -41,7 +45,11 @@ namespace RTC
     : m_properties(prop)
   {
     m_configPath      = split(prop.getProperty(CONFIG_PATH), ",");
+    for_each(m_configPath.begin(), m_configPath.end(),
+    	     eraseHeadBlank);
     m_loadPath        = split(prop.getProperty(MOD_LOADPTH), ",");
+    for_each(m_loadPath.begin(), m_loadPath.end(),
+    	     eraseHeadBlank);
     m_absoluteAllowed = toBool(prop.getProperty(ALLOW_ABSPATH),
 			       "yes", "no", false);
     m_downloadAllowed = toBool(prop.getProperty(ALLOW_URL),
@@ -117,7 +125,8 @@ namespace RTC
    * @brief Load module
    * @endif
    */
-  std::string ModuleManager::load(const std::string& file_name, const std::string& init_func)
+  std::string ModuleManager::load(const std::string& file_name,
+				  const std::string& init_func)
   {
     std::string name;
     name = load(file_name);
