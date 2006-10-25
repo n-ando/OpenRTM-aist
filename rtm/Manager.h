@@ -2,7 +2,7 @@
 /*!
  * @file Manager.h
  * @brief RTComponent manager class
- * @date $Date: 2006-10-17 10:21:24 $
+ * @date $Date: 2006-10-25 17:28:05 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
  * Copyright (C) 2006
@@ -12,12 +12,15 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: Manager.h,v 1.1 2006-10-17 10:21:24 n-ando Exp $
+ * $Id: Manager.h,v 1.2 2006-10-25 17:28:05 n-ando Exp $
  *
  */
 
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.1  2006/10/17 10:21:24  n-ando
+ * The first commitment.
+ *
  *
  */
 
@@ -30,7 +33,19 @@
 
 #include <ace/Synch.h>
 
+#include <rtm/Factory.h>
+#include <rtm/ObjectManager.h>
+
 class Properties;
+namespace RTC
+{
+  class RtcBase
+  {
+  public:
+    const char* instance_id();
+  };
+};
+
 
 namespace RTC
 {
@@ -105,6 +120,9 @@ namespace RTC
     static Manager& instance();
 
 
+    //============================================================
+    // Module management
+    //============================================================
     /*!
      * @if jp
      * @brief モジュールのロード
@@ -191,24 +209,33 @@ namespace RTC
     //============================================================
     // Component Factory Management
     //============================================================
-    typedef ObjectManagerRtcFactory
-    registerFactory(const char* modulename, RtcFactory* factory);
+    /*!
+     * @if jp
+     * @brief RTコンポーネントファクトリを登録する
+     * @else
+     * @brief Register RT-Component Factory
+     * @endif
+     */
+    bool registerFactory(Properties profile,
+			 RtcNewFunc new_func,
+			 RtcDeleteFunc delete_func);
     
-    std::vector<std::string> getComponentFactories();
+    std::vector<std::string> getModulesFactories();
     
     //============================================================
     // Component management
     //============================================================
     RtcBase* createComponent(const char* module_name);
+
+    bool registerComponent(RtcBase* comp);
     
     void deleteComponent(const char* instance_name);
     
+
     RtcBase* getComponent(const char* instance_name);
     
     std::vector<RtcBase*> getComponents();
     
-
-
 
   protected:
     void _init(int argc, char** argv);
@@ -221,10 +248,49 @@ namespace RTC
     Properties* m_config;
     ModuleManager* m_module;
     
-    typedef ObjectManager<std::string, RtcBase, instanceName<RtcBase> > ComponentManager;
-    ComponentManager* m_component;
-
+    struct InstanceName
+    {
+      InstanceName(RtcBase* comp) : m_name(comp->instance_id()) {};
+      InstanceName(const char* name) : m_name(name) {};
+      bool operator()(RtcBase* comp)
+      {
+	return m_name == comp->instance_id();
+      }
+      std::string m_name;
     };
+
+    typedef ObjectManager<std::string,
+			  RtcBase,
+			  InstanceName> ComponentManager;
+    ComponentManager m_component;
+
+    struct FactoryPredicate
+    {
+      FactoryPredicate(const char* name) : m_name(name){};
+      FactoryPredicate(FactoryBase* factory)
+	: m_name(factory->profile().getProperty("name")) {};
+      bool operator()(FactoryBase* factory)
+      {
+	return m_name == factory->profile().getProperty("name");
+      }
+      std::string m_name;
+    };
+      
+    typedef ObjectManager<const char*,
+			  FactoryBase,
+			  FactoryPredicate> FactoryManager;
+    FactoryManager m_factory;
+
+    struct ModuleFactories
+    {
+      void operator()(FactoryBase* f)
+      {
+	modlist.push_back(f->profile().getProperty("name"));
+      }
+      std::vector<std::string> modlist;
+    };
+
+  };
 };
 
 #endif // Manager_h
