@@ -2,9 +2,13 @@
 ##------------------------------------------------------------
 ## Makefile.am for unit test
 ##
-## $Id: Makefile.am,v 1.4 2006-10-24 03:07:31 kurihara Exp $
+## $Id: Makefile.am,v 1.5 2006-10-26 08:43:49 kurihara Exp $
 ##
 ## $Log: not supported by cvs2svn $
+## Revision 1.4  2006/10/24 03:07:31  kurihara
+##
+## ObjectManagerTests is added
+##
 ## Revision 1.3  2006/10/23 06:29:22  kurihara
 ##
 ## add ManagerConfigTests and StringUtilTests.
@@ -25,7 +29,7 @@ IDLFLAGS = @IDL_FLAGS@
 LIBS = @LIBS@
 TESTS = RtcNamingTests
 
-INCLUDES = -I$(top_srcdir) -I$(includedir)
+INCLUDES = -I$(top_srcdir) -I$(includedir) -I../../ -I../../rtm/idl
 
 IDL_SOURCES = \
 	HelloWorld.idl
@@ -38,7 +42,10 @@ noinst_PROGRAMS = \
 	StringUtilTests \
 	ModuleManagerTests \
 	ManagerConfigTests \
-	ObjectManagerTests
+	ObjectManagerTests \
+	FactoryTests \
+	PortProfileHelperTests \
+	SdoServiceTests
 
 RtcNamingTests_SOURCES = RtcNamingTests.cpp
 RtcNamingTests_LDFLAGS = -L$(libdir)
@@ -46,20 +53,34 @@ RtcNamingTests_LDADD   = ../RtcNaming.o ./HelloWorld.o -lcppunit
 
 PropertiesTests_SOURCES = PropertiesTests.cpp
 PropertiesTests_LDFLAGS = -L$(libdir)
-PropertiesTests_LDADD   = ../Properties.o -lcppunit
+PropertiesTests_LDADD   = ../StringUtil.o ../Properties.o -lcppunit
 
 StringUtilTests_SOURCES = StringUtilTests.cpp
 StringUtilTests_LDFLAGS = -L$(libdir)
-StringUtilTests_LDADD   = -lcppunit
+StringUtilTests_LDADD   = ../StringUtil.o -lcppunit
 
 ModuleManagerTests_SOURCES = ModuleManagerTests.cpp
 ModuleManagerTests_LDFLAGS = -L$(libdir)
-ModuleManagerTests_LDADD   = ../Properties.o ../ModuleManager.o  -lcppunit -lACE
+ModuleManagerTests_LDADD   = ../StringUtil.o ../Properties.o ../ModuleManager.o  -lcppunit -lACE
 
 ManagerConfigTests_SOURCES = ManagerConfigTests.cpp
 ManagerConfigTests_LDFLAGS = -L$(libdir)
-ManagerConfigTests_LDADD   = ../Properties.o ../ManagerConfig.o -lcppunit
+ManagerConfigTests_LDADD   = ../StringUtil.o ../Properties.o ../ManagerConfig.o -lcppunit
 
 ObjectManagerTests_SOURCES = ObjectManagerTests.cpp
 ObjectManagerTests_LDFLAGS = -L$(libdir)
 ObjectManagerTests_LDADD   = -lcppunit
+
+FactoryTests_SOURCES = FactoryTests.cpp
+FactoryTests_LDFLAGS = -L$(libdir)
+FactoryTests_LDADD   = ../../rtm/idl/RTMBaseSkel.o ../../rtm/idl/RTCPortBaseSkel.o ../../rtm/idl/RTCInPortSkel.o ../../rtm/idl/RTComponentSkel.o ../../rtm/idl/RTCBaseSkel.o ../RtcBase.o ../Properties.o ../Manager.o ../Factory.o -lcppunit
+
+
+PortProfileHelperTests_SOURCES = PortProfileHelperTests.cpp
+PortProfileHelperTests_LDFLAGS = -L$(libdir)
+PortProfileHelperTests_LDADD   = ../../rtm/idl/SDOPackageSkel.o ../../rtm/idl/RTCSkel.o ../PortProfileHelper.o -lcppunit
+
+
+SdoServiceTests_SOURCES = SdoServiceTests.cpp
+SdoServiceTests_LDFLAGS = -L$(libdir)
+SdoServiceTests_LDADD   = ../../rtm/idl/SDOPackageStub.o ../../rtm/idl/SDOPackageSkel.o ../../rtm/idl/RTCSkel.o -lcppunit
