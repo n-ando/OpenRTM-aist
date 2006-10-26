@@ -2,9 +2,13 @@
 ##------------------------------------------------------------
 ## Makefile.am for unit test
 ##
-## $Id: Makefile.am,v 1.5 2006-10-26 08:43:49 kurihara Exp $
+## $Id: Makefile.am,v 1.6 2006-10-26 08:56:22 n-ando Exp $
 ##
 ## $Log: not supported by cvs2svn $
+## Revision 1.5  2006/10/26 08:43:49  kurihara
+##
+## FactoryTests, PortProfileHelperTests, SdoServiceTests, are added.
+##
 ## Revision 1.4  2006/10/24 03:07:31  kurihara
 ##
 ## ObjectManagerTests is added
@@ -45,7 +49,8 @@ noinst_PROGRAMS = \
 	ObjectManagerTests \
 	FactoryTests \
 	PortProfileHelperTests \
-	SdoServiceTests
+	SdoServiceTests \
+	StateMachineTests
 
 RtcNamingTests_SOURCES = RtcNamingTests.cpp
 RtcNamingTests_LDFLAGS = -L$(libdir)
@@ -84,3 +89,7 @@ PortProfileHelperTests_LDADD   = ../../rtm/idl/SDOPackageSkel.o ../../rtm/idl/RT
 SdoServiceTests_SOURCES = SdoServiceTests.cpp
 SdoServiceTests_LDFLAGS = -L$(libdir)
 SdoServiceTests_LDADD   = ../../rtm/idl/SDOPackageStub.o ../../rtm/idl/SDOPackageSkel.o ../../rtm/idl/RTCSkel.o -lcppunit
+
+StateMachineTests_SOURCES = StateMachineTests.cpp
+StateMachineTests_LDFLAGS = -L$(libdir)
+StateMachineTests_LDADD   = -lcppunit
