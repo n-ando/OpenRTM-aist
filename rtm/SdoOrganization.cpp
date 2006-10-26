@@ -2,7 +2,7 @@
 /*!
  * @file RtcBase.h
  * @brief RT component base class
- * @date $Date: 2006-09-11 18:14:11 $
+ * @date $Date: 2006-10-26 09:13:31 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
  * Copyright (C) 2003-2005
@@ -12,7 +12,7 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: SdoOrganization.cpp,v 1.1 2006-09-11 18:14:11 n-ando Exp $
+ * $Id: SdoOrganization.cpp,v 1.2 2006-10-26 09:13:31 n-ando Exp $
  *
  */
 #include <ace/ACE.h>
@@ -82,13 +82,13 @@ namespace SDOPackage
   SDOSystemElement_ptr Organization_impl::get_owner()
     throw (NotAvailable, InternalError)
   {
-	return m_Owner._retn();
+	return m_varOwner._retn();
   }
 
   CORBA::Boolean Organization_impl::set_owner(SDOSystemElement_ptr sdo)
      throw (InvalidParameter, NotAvailable, InternalError)
   {
-	m_Owner = sdo;
+	m_varOwner = sdo;
 	return true;
   }
 
