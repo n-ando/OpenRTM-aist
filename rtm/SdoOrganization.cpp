@@ -1,20 +1,25 @@
 // -*- C++ -*-
 /*!
- * @file RtcBase.h
- * @brief RT component base class
- * @date $Date: 2006-10-26 09:13:31 $
+ * @file SdoOrganization.cpp
+ * @brief SDO Organization class
+ * @date $Date: 2006-10-26 09:15:39 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
- * Copyright (C) 2003-2005
+ * Copyright (C) 2006
  *     Task-intelligence Research Group,
  *     Intelligent Systems Research Institute,
  *     National Institute of
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: SdoOrganization.cpp,v 1.2 2006-10-26 09:13:31 n-ando Exp $
+ * $Id: SdoOrganization.cpp,v 1.3 2006-10-26 09:15:39 n-ando Exp $
  *
  */
+
+/*
+ * $Log: not supported by cvs2svn $
+ */
+
 #include <ace/ACE.h>
 #include <ace/UUID.h> 
 #include "rtm/SdoOrganization.h"
