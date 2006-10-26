@@ -2,7 +2,7 @@
 /*!
  * @file SdoOrganization.cpp
  * @brief SDO Organization class
- * @date $Date: 2006-10-26 09:15:39 $
+ * @date $Date: 2006-10-26 09:36:23 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
  * Copyright (C) 2006
@@ -12,12 +12,15 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: SdoOrganization.cpp,v 1.3 2006-10-26 09:15:39 n-ando Exp $
+ * $Id: SdoOrganization.cpp,v 1.4 2006-10-26 09:36:23 n-ando Exp $
  *
  */
 
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.3  2006/10/26 09:15:39  n-ando
+ * Header comments were fixed.
+ *
  */
 
 #include <ace/ACE.h>
@@ -77,11 +80,18 @@ namespace SDOPackage
    }
 
   CORBA::Boolean
+  Organization_impl::set_organization_property_value(const char* name,
+						     const CORBA::Any& value)
+    throw (InvalidParameter, NotAvailable, InternalError)
+  {
+    return true;
+  }
+
+  CORBA::Boolean
   Organization_impl::remove_organization_property(const char* name)
     throw (InvalidParameter, NotAvailable, InternalError)
   {
-
-	return true;
+    return true;
   }
 
   SDOSystemElement_ptr Organization_impl::get_owner()
