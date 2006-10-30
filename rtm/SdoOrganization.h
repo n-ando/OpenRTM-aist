@@ -2,7 +2,7 @@
 /*!
  * @file SdoOrganization.h
  * @brief SDO Organization implementation class
- * @date $Date: 2006-10-17 10:12:57 $
+ * @date $Date: 2006-10-30 08:10:54 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
  * Copyright (C) 2006
@@ -12,12 +12,15 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: SdoOrganization.h,v 1.2 2006-10-17 10:12:57 n-ando Exp $
+ * $Id: SdoOrganization.h,v 1.3 2006-10-30 08:10:54 n-ando Exp $
  *
  */
 
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.2  2006/10/17 10:12:57  n-ando
+ * Small fixes.
+ *
  * Revision 1.1  2006/09/11 18:14:20  n-ando
  * The first commit.
  *
@@ -31,6 +34,9 @@
 
 #include "rtm/idl/SDOPackageSkel.h"
 
+
+// SdoOrganization.o 23788
+// 41892
 namespace SDOPackage
 {
   
@@ -253,7 +259,7 @@ namespace SDOPackage
     /*!
      * @if jp
      * 
-     * @brief [CORBA interface] SDO の ServiceProfile のセット
+     * @brief [CORBA interface] Organization のオーナーを取得する
      *
      * この Organization のオーナーへの参照を返す。
      *
@@ -263,7 +269,7 @@ namespace SDOPackage
      * @exception InternalError 内部的エラーが発生した。
      * @else
      *
-     * @brief [CORBA interface] Set SDO's ServiceProfile
+     * @brief [CORBA interface] Get the owner of the SDO
      *
      * This operation returns the SDOSystemElement that is owner of
      * the Organization.
@@ -550,7 +556,7 @@ namespace SDOPackage
      *
      * @endif
      */
-    SDOPackage::SDOList m_MemberList;
+    SDOPackage::SDOList m_memberList;
 
     /*!
      * @if jp
@@ -639,7 +645,7 @@ namespace SDOPackage
      *    with each other.
      * @endif
      */
-    SDOPackage::DependencyType m_Dependency;
+    SDOPackage::DependencyType m_dependency;
 
     /*!
      * @if jp
@@ -663,8 +669,31 @@ namespace SDOPackage
      *
      * @endif
      */
-    SDOPackage::OrganizationProperty m_OrganizationProperty;
+    SDOPackage::OrganizationProperty m_orgProperty;
+    ACE_Thread_Mutex m_org_mutex;
 
+    typedef ACE_Guard<ACE_Thread_Mutex> Guard;
+
+    struct nv_name
+    {
+      nv_name(const char* name) : m_name(name) {};
+      bool operator()(const NameValue& nv)
+      {
+	return m_name == std::string(nv.name);
+      }
+      std::string m_name;
+    };
+
+    struct sdo_id
+    {
+      sdo_id(const char* id) : m_id(id) {};
+      bool operator()(const SDO_ptr sdo)
+      {
+	std::string id(sdo->get_sdo_id());
+	return m_id == id;
+      }
+      std::string m_id;
+    };
   };
   
   
