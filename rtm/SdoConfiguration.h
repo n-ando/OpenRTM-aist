@@ -2,7 +2,7 @@
 /*!
  * @file SdoConfiguration.h
  * @brief RT component base class
- * @date $Date: 2006-10-17 10:13:15 $
+ * @date $Date: 2006-10-30 08:05:45 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
  * Copyright (C) 2006
@@ -12,12 +12,15 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: SdoConfiguration.h,v 1.2 2006-10-17 10:13:15 n-ando Exp $
+ * $Id: SdoConfiguration.h,v 1.3 2006-10-30 08:05:45 n-ando Exp $
  *
  */
 
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.2  2006/10/17 10:13:15  n-ando
+ * Small fixes.
+ *
  * Revision 1.1  2006/09/11 18:14:01  n-ando
  * The first commit.
  *
@@ -29,14 +32,15 @@
 
 #include <ace/Guard_T.h>
 #include <ace/Thread_Mutex.h>
-#include <ace/Recursive_Thread_Mutex.h>
 
 // CORBA header include
 #include "rtm/RTC.h"
-#include "rtm/Util.h"
 
 // local includes
 #include "rtm/idl/SDOPackageSkel.h"
+
+// SdoConfiguration with SeqEx 159120
+// SdoConfiguration with SeqUtil 114504 114224
 
 namespace SDOPackage
 {
@@ -59,6 +63,31 @@ namespace SDOPackage
    * ユニークID、詳細とともに持っている。これにより、各設定項目の詳細を記述し
    * 区別することができる。Configuration interface のオペレーションはこれら
    * ConfiguratioinSets の管理を支援する。
+   *
+   *
+   * - ConfigurationSet: id, description, NVList から構成される1セットの設定
+   * - ConfigurationSetList: ConfigurationSet のリスト
+   * - Parameter: name, type, allowed_values から構成されるパラメータ定義。
+   * - ActiveConfigurationSet: 現在有効なコンフィギュレーションの1セット。
+   *
+   * 以下、SDO仕様に明記されていないもしくは解釈がわからないため独自解釈
+   *
+   * 以下の関数は ParameterList に対して処理を行う。
+   * - get_configuration_parameters()
+   *
+   * 以下の関数はアクティブなConfigurationSetに対する処理を行う
+   * - get_configuration_parameter_values()
+   * - get_configuration_parameter_value()
+   * - set_configuration_parameter()
+   *
+   * 以下の関数はConfigurationSetListに対して処理を行う
+   * - get_configuration_sets()
+   * - get_configuration_set()
+   * - set_configuration_set_values()
+   * - get_active_configuration_set()
+   * - add_configuration_set()
+   * - remove_configuration_set()
+   * - activate_configuration_set()
    *
    * @else
    *
@@ -415,6 +444,8 @@ namespace SDOPackage
      * This operation returns a list of ConfigurationSets that the
      * ConfigurationProfile has. An empty list is returned if the SDO does not
      * have any ConfigurationSets.
+     * This operation returns a list of all ConfigurationSets of the SDO.
+     * If no predefined ConfigurationSets exist, then empty list is returned.
      *
      * @return The list of stored configuration with their current values.
      * @exception SDONotExists The target SDO does not exist.
@@ -623,6 +654,11 @@ namespace SDOPackage
      *
      * ConfigurationProfile に格納された ConfigurationSet のうち一つを
      * アクティブにする。
+     * このオペレーションは特定の ConfigurationSet をアクティブにする。
+     * すなわち、SDO のコンフィギュレーション・プロパティがその格納されている
+     * ConfigurationSet により設定されるプロパティの値に変更される。
+     * 指定された ConfigurationSet の値がアクティブ・コンフィギュレーション
+     * にコピーされるということを意味する。
      *
      * @param config_id アクティブ化する ConfigurationSet の id。
      * @return オペレーションが成功したかどうか。
@@ -637,6 +673,11 @@ namespace SDOPackage
      *
      * This operation activates one of the stored ConfigurationSets in the
      * ConfigurationProfile.
+     * This operation activates the specified stored ConfigurationSets.
+     * This means that the configuration properties of the SDO are changed as
+     * the values of these properties specified in the stored ConfigurationSet.
+     * In other words, values of the specified ConfigurationSet are now copied
+     * to the active configuration.
      *
      * @param Identifier of ConfigurationSet to be activated.
      * @return If the operation was successfully completed.
@@ -655,33 +696,16 @@ namespace SDOPackage
     // end of CORBA interface definition
     //============================================================
 
-    const DeviceProfile getDeviceProfile()
-    {
-      //      return reinterpret_cast<DeviceProfile&>(m_deviceProfile);
-      return m_deviceProfile.data;
-    }
+    const DeviceProfile getDeviceProfile();
 
-    const ServiceProfileList getServiceProfiles()
-    {
-      return m_serviceProfiles;
-    }
+    const ServiceProfileList getServiceProfiles();
 
-    const ServiceProfile getServiceProfile(const char* id)
-    {
-      return m_serviceProfiles.find(service_id(id));
-    }
-
-    const OrganizationList getOrganizations()
-    {
-      return m_organizations;
-    }
+    const ServiceProfile getServiceProfile(const char* id);
+    
+    const OrganizationList getOrganizations();
 
   protected:
-    // Partial specialization
-    template <class T, class X>
-    class SeqEx
-      : public SequenceEx <T, X, ACE_Thread_Mutex> {};
-
+    typedef ACE_Guard<ACE_Thread_Mutex> Guard;
     /*!
      * @if jp
      * @brief Lock 付き SDO DeviceProfile
@@ -689,7 +713,8 @@ namespace SDOPackage
      * @brief SDO DeviceProfile with mutex lock
      * @endif
      */
-    LockedStruct<DeviceProfile> m_deviceProfile;
+    DeviceProfile m_deviceProfile;
+    ACE_Thread_Mutex m_dprofile_mutex;
 
     /*!
      * @if jp
@@ -698,7 +723,8 @@ namespace SDOPackage
      * @brief SDO ServiceProfileList
      * @endif
      */
-    SeqEx<ServiceProfileList, ServiceProfile>     m_serviceProfiles;
+    ServiceProfileList m_serviceProfiles;
+    ACE_Thread_Mutex m_sprofile_mutex;
 
     /*!
      * @if jp
@@ -707,7 +733,16 @@ namespace SDOPackage
      * @brief SDO ParameterList
      * @endif
      */
-    SeqEx<ParameterList, Parameter>               m_parameters;
+    /*
+    struct Parameter
+    {
+      string         name;
+      TypeCode  type;
+      AllowedValues allowed_values;
+    };
+    */
+    ParameterList m_parameters;
+    ACE_Thread_Mutex m_params_mutex;
 
     /*!
      * @if jp
@@ -716,7 +751,17 @@ namespace SDOPackage
      * @brief SDO ConfigurationSetList
      * @endif
      */
-    SeqEx<ConfigurationSetList, ConfigurationSet> m_configurations;
+    /*
+      struct ConfigurationSet
+      {
+      string id;
+      string description;
+      NVList configuration_data;
+      };
+    */
+    ConfigurationSetList m_configurations;
+    ConfigurationSet*    m_pActiveConfig;
+    ACE_Thread_Mutex m_config_mutex;
 
     /*!
      * @if jp
@@ -725,17 +770,26 @@ namespace SDOPackage
      * @brief SDO OrganizationList
      * @endif
      */
-    SeqEx<OrganizationList, Organization_ptr>     m_organizations;
+    OrganizationList m_organizations;
+    ACE_Thread_Mutex m_org_mutex;
 
     /*!
      * @if jp
-     * @brief アクティブな ConfigurationSet i
+     * @brief アクティブな ConfigurationSet
      * @else
      * @brief Active ConfigurationSet id
      * @endif
      */
-    std::string m_activeConfigurationSet;
 
+    struct nv_name
+    {
+      nv_name(const char* name) : m_name(name) {};
+      bool operator()(const NameValue& nv)
+      {
+	return m_name == std::string(nv.name);
+      }
+      std::string m_name;
+    };
 
 
     // functor for ServiceProfile
