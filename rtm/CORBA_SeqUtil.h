@@ -2,7 +2,7 @@
 /*!
  * @file CORBA_SeqUtil.h
  * @brief CORBA sequence utility template functions
- * @date $Date: 2006-10-27 09:09:46 $
+ * @date $Date: 2006-10-30 08:09:07 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
  * Copyright (C) 2006
@@ -12,36 +12,73 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: CORBA_SeqUtil.h,v 1.1 2006-10-27 09:09:46 n-ando Exp $
+ * $Id: CORBA_SeqUtil.h,v 1.2 2006-10-30 08:09:07 n-ando Exp $
  *
  */
 
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.1  2006/10/27 09:09:46  n-ando
+ * The first commitment.
+ *
  *
  */
 
 #ifndef CORBA_SeqUtil_h
 #define CORBA_SeqUtil_h
+
+namespace CORBA
+{
+  typedef unsigned long ULong;
+  typedef long Long;
+};
+
 /*!
+ * @if jp
+ * @namespace CORBA_SeqUtil
+ *
  * @brief CORBA sequence ヘルパーテンプレート関数
  *
  * CORBA sequence に対して以下のユーティリティテンプレート関数を提供する。
- * <ul>
- * <li> for_each
- * <li> find
- * <li> push_back
- * <li> insert
- * <li> front
- * <li> back
- * <li> erase
- * <li> clear
- * </ul>
+ * 操作はスレッドセーフではないので、スレッドセーフに操作したい場合は、
+ * 対象となるシーケンス値を適切にmutex等で保護する必要がある。
+ * 
+ * - for_each()
+ * - find()
+ * - push_back()
+ * - insert()
+ * - front()
+ * - back()
+ * - erase()
+ * - clear()
+ *
+ * @else
+ *
+ * @namespace CORBA_SeqUtil
+ *
+ * @brief CORBA sequence helper template functions
+ *
+ * This group provides the following utility function to CORBA sequence.
+ * Since these functions are not thread-safe operations,
+ * if the sequence would be operated in thread-safe,
+ * the value should be protected by mutex properly.
+ * 
+ * - for_each()
+ * - find()
+ * - push_back()
+ * - insert()
+ * - front()
+ * - back()
+ * - erase()
+ * - clear()
+ *
+ * @endif
  */
 namespace CORBA_SeqUtil
 {
   /*!
    * @if jp
+   *
    * @brief CORBA sequence に対して functor を適用する
    *
    * CORBA sequence 全ての要素に対して、与えられた functor を適用する。
@@ -65,7 +102,7 @@ namespace CORBA_SeqUtil
    * @endif
    */
   template <class CorbaSequence, class Functor>
-  Functor for_each(const CorbaSequence& seq, Functor f)
+  Functor for_each(CorbaSequence& seq, Functor f)
   {
     CORBA::ULong len;
     len = seq.length();
@@ -141,11 +178,25 @@ namespace CORBA_SeqUtil
    * @endif
    */
   template <class CorbaSequence, class SequenceElement>
-  void push_back(CorbaSequecne& seq, SequenceElement elem)
+  void push_back(CorbaSequence& seq, SequenceElement elem)
   {
     CORBA::ULong len(seq.length());
     seq.length(len + 1);
-    seq[len] = item;
+    seq[len] = elem;
+  }
+
+  template <class CorbaSequence>
+  void push_back_list(CorbaSequence& seq1, const CorbaSequence& seq2)
+  {
+    CORBA::ULong len1(seq1.length());
+    CORBA::ULong len2(seq2.length());
+    CORBA::ULong len(len1 + len2);
+    seq1.length(len);
+
+    for (CORBA::ULong i = 0; i < len2; ++i)
+      {
+	seq1[len1 + i] = seq2[i];
+      }
   }
 
 
@@ -277,6 +328,15 @@ namespace CORBA_SeqUtil
     seq.length(len - 1);
   }
 
+  template <class CorbaSequence, class Functor>
+  void erase_if(CorbaSequence& seq, Functor f)
+  {
+    CORBA::Long index;
+    index = find(seq, f);
+    if (index < 0) return;
+    CORBA_SeqUtil::erase(seq, index);
+  }
+
   /*!
    * @if jp
    * @brief CORBA sequence の全要素を削除
@@ -298,5 +358,5 @@ namespace CORBA_SeqUtil
   }
   // End of CORBA sequence helper functions
 
-
+}; // namespace CORBA_SeqUtil
 #endif // CORBA_SeqUtil.h
