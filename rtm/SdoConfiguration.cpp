@@ -2,7 +2,7 @@
 /*!
  * @file SdoConfiguration.cpp
  * @brief SDO's Configuration implementation class
- * @date $Date: 2006-10-17 10:13:23 $
+ * @date $Date: 2006-10-30 08:05:38 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
  * Copyright (C) 2006
@@ -12,12 +12,15 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: SdoConfiguration.cpp,v 1.2 2006-10-17 10:13:23 n-ando Exp $
+ * $Id: SdoConfiguration.cpp,v 1.3 2006-10-30 08:05:38 n-ando Exp $
  *
  */
 
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.2  2006/10/17 10:13:23  n-ando
+ * Small fixes.
+ *
  * Revision 1.1  2006/09/11 18:13:49  n-ando
  * The first commit.
  *
@@ -25,6 +28,7 @@
  */
 
 #include "rtm/SdoConfiguration.h"
+#include <rtm/CORBA_SeqUtil.h>
 
 // ACE
 
@@ -49,8 +53,8 @@ namespace SDOPackage
   {
     try
       {
-        Write_Guard guard(m_deviceProfile.lock);
-        m_deviceProfile.data = dProfile;
+	Guard gurad(m_dprofile_mutex);
+        m_deviceProfile = dProfile;
       }
     catch (...)
       {
@@ -75,7 +79,7 @@ namespace SDOPackage
   {
     try
       {
-        m_serviceProfiles.push_back(sProfile);
+        CORBA_SeqUtil::push_back(m_serviceProfiles, sProfile);
       }
     catch (...)
       {
@@ -100,8 +104,7 @@ namespace SDOPackage
   {
     try
       {
-	//        Write_Guard guard(m_organizations.lock);
-        m_organizations.push_back(org);
+        CORBA_SeqUtil::push_back(m_organizations, org);
       }
     catch (...)
       {
@@ -126,7 +129,7 @@ namespace SDOPackage
   {
     try
       {
-        m_serviceProfiles.erase_if(service_id(id));
+	CORBA_SeqUtil::erase_if(m_serviceProfiles, service_id(id));
       }
     catch (...)
       {
@@ -151,7 +154,8 @@ namespace SDOPackage
   {
     try
       {
-        m_organizations.erase_if(org_id(organization_id));
+	Guard gurad(m_org_mutex);
+        CORBA_SeqUtil::erase_if(m_organizations, org_id(organization_id));
       }
     catch (...)
       {
@@ -176,8 +180,9 @@ namespace SDOPackage
   {
     try
       {
-	Read_Guard gaurd(m_parameters.lock);
-	ParameterList_var param(&m_parameters);
+	Guard gaurd(m_params_mutex);
+	ParameterList_var param;
+	param = new ParameterList(m_parameters);
 	return param._retn();
       }
     catch (...)
@@ -201,7 +206,10 @@ namespace SDOPackage
   Configuration_impl::get_configuration_parameter_values()
     throw (NotAvailable, InternalError)
   {
-    return new NVList(0);
+    Guard guard(m_config_mutex);
+    NVList_var nvlist;
+    nvlist = new NVList(m_pActiveConfig->configuration_data);
+    return nvlist._retn();
   }
 
   
@@ -216,7 +224,16 @@ namespace SDOPackage
   Configuration_impl::get_configuration_parameter_value(const char* name)
     throw (InvalidParameter, NotAvailable, InternalError)
   {
-    return new CORBA::Any();
+    if (name == "") throw InvalidParameter();
+
+    CORBA::Long index;
+    index = CORBA_SeqUtil::find(m_pActiveConfig->configuration_data,
+				nv_name(name));
+    if (index < 0) throw InvalidParameter();
+
+    CORBA::Any_var value;
+    value = new CORBA::Any(m_pActiveConfig->configuration_data[index].value);
+    return value._retn();
   }
   
 
@@ -232,6 +249,14 @@ namespace SDOPackage
 						  const CORBA::Any& value)
     throw (InvalidParameter, NotAvailable, InternalError)
   {
+    if (name == "") throw InvalidParameter();
+
+    CORBA::Long index;
+    index = CORBA_SeqUtil::find(m_pActiveConfig->configuration_data,
+				nv_name(name));
+    if (index < 0) throw InvalidParameter();
+
+    m_pActiveConfig->configuration_data[index].value = value;
     return true;
   }
   
@@ -249,8 +274,11 @@ namespace SDOPackage
   {
     try
       {
-	Read_Guard guard(m_configurations.lock);
-	ConfigurationSetList_var config_sets(&m_configurations);
+	Guard guard(m_config_mutex);
+
+	ConfigurationSetList_var config_sets;
+	config_sets = new ConfigurationSetList(m_configurations);
+	
 	return config_sets._retn();
       }
     catch (...)
@@ -273,11 +301,16 @@ namespace SDOPackage
   Configuration_impl::get_configuration_set(const char* id)
     throw (InvalidParameter, NotAvailable, InternalError)
   {
+    if (id == "") throw InvalidParameter();
+    CORBA::Long index;
+    index = CORBA_SeqUtil::find(m_configurations,
+				config_id(id));
+    
+    if (index < 0) throw InvalidParameter();
     try
       {
-	ConfigurationSet config_set;
-	config_set = m_configurations.find(config_id(id));
-	ConfigurationSet_var config(&config_set);
+	ConfigurationSet_var config;
+	config = new ConfigurationSet(m_configurations[index]);
 	return config._retn();
       }
     catch (...)
@@ -298,21 +331,28 @@ namespace SDOPackage
    */
   CORBA::Boolean
   Configuration_impl::
-    set_configuration_set_values(const char* id,
-				 const ConfigurationSet& configuration_set)
+  set_configuration_set_values(const char* id,
+			       const ConfigurationSet& configuration_set)
     throw (InvalidParameter, NotAvailable, InternalError)
   {
+    if (id == "") throw InvalidParameter("Configuration::set_configuration_set_values(): ID is empty.");
+    
     try
       {
-	// validation check of given "configuration_set"
-	// not implemented
-
-	// find and store the configuration_set
-	m_configurations.find(config_id(id)) = configuration_set;
+	CORBA::Long index;
+	index = CORBA_SeqUtil::find(m_configurations, config_id(id));
+	if (index < 0)
+	  {
+	    CORBA_SeqUtil::push_back(m_configurations, configuration_set);
+	  }
+	else
+	  {
+	    m_configurations[index] = configuration_set;
+	  }
       }
     catch (...)
       {
-	throw InvalidParameter("Configuration::set_configuration_set_values()");
+	throw InternalError("Configuration::set_configuration_set_values()");
       }
     return true;
   }
@@ -331,11 +371,8 @@ namespace SDOPackage
   {
     try
       {
-	//	std::string id(m_activeConfigurationSet.id());
-	std::string id("default");
-	ConfigurationSet config_set;
-	config_set = m_configurations.find(config_id(id.c_str()));
-	ConfigurationSet_var config(&config_set);
+	ConfigurationSet_var config;
+	config = new ConfigurationSet(*m_pActiveConfig);
 	return config._retn();
       }
     catch (...)
@@ -361,7 +398,7 @@ namespace SDOPackage
   {
     try
       {
-	m_configurations.push_back(configuration_set);
+	CORBA_SeqUtil::push_back(m_configurations, configuration_set);
       }
     catch (...)
       {
@@ -383,9 +420,11 @@ namespace SDOPackage
   Configuration_impl::remove_configuration_set(const char* id)
     throw (InvalidParameter, NotAvailable, InternalError)
   {
+    if (id == "") throw InvalidParameter("Configuration::remove_configuration_set(): ID is empty.");
     try
       {
-	m_configurations.erase_if(config_id(id));
+	CORBA_SeqUtil::erase_if(m_configurations, config_id(id));
+	return true;
       }
     catch (...)
       {
@@ -407,10 +446,16 @@ namespace SDOPackage
   Configuration_impl::activate_configuration_set(const char* id)
     throw (InvalidParameter, NotAvailable, InternalError)
   {
+    if (id == "") throw InvalidParameter("Configuration::activate_configuration_set(): ID is empty.");
+
+    CORBA::Long index;
+    index = CORBA_SeqUtil::find(m_configurations,
+				config_id(id));
+    if (index < 0) throw InvalidParameter("Configuration::activate_configuration_set(): No ID found.");
+    
     try
       {
-	m_configurations.find(config_id(id));
-	m_activeConfigurationSet = std::string(id);
+	m_pActiveConfig = &m_configurations[index];
       }
     catch (...)
       {
@@ -420,5 +465,28 @@ namespace SDOPackage
     return true;
   }
   
+  
+  const DeviceProfile Configuration_impl::getDeviceProfile()
+  {
+    return m_deviceProfile;
+  }
+
+  const ServiceProfileList Configuration_impl::getServiceProfiles()
+  {
+    return m_serviceProfiles;
+  }
+  const ServiceProfile Configuration_impl::getServiceProfile(const char* id)
+  {
+    CORBA::Long index;
+    index =  CORBA_SeqUtil::find(m_serviceProfiles,
+				 service_id(id));
+    if (index < 0) return ServiceProfile();
+    return m_serviceProfiles[index];
+  }
+  
+  const OrganizationList Configuration_impl::getOrganizations()
+  {
+    return m_organizations;
+  }
   
 };
