@@ -2,7 +2,7 @@
 /*!
  * @file CORBA_Util.h
  * @brief CORBA utility template classes
- * @date $Date: 2006-10-27 09:07:00 $
+ * @date $Date: 2006-10-30 08:15:21 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
  * Copyright (C) 2006
@@ -12,12 +12,15 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: CORBA_SeqEx.h,v 1.1 2006-10-27 09:07:00 n-ando Exp $: Util.h,v 1.3 2006/10/17 19:07:58 n-ando Exp $
+ * $Id: CORBA_SeqEx.h,v 1.2 2006-10-30 08:15:21 n-ando Exp $
  *
  */
 
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.1  2006/10/27 09:07:00  n-ando
+ * Util.h was moved to CORBA_SeqEx.h.
+ *
  * Revision 1.3  2006/10/17 19:07:58  n-ando
  * Helper template function SeqUtil::for_each() for CORBA sequence was added.
  *
