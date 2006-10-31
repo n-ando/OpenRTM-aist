@@ -2,9 +2,12 @@
 ##------------------------------------------------------------
 ## Makefile.am for unit test
 ##
-## $Id: Makefile.am,v 1.6 2006-10-26 08:56:22 n-ando Exp $
+## $Id: Makefile.am,v 1.7 2006-10-31 13:12:49 kurihara Exp $
 ##
 ## $Log: not supported by cvs2svn $
+## Revision 1.6  2006/10/26 08:56:22  n-ando
+## StateMachineTests was added.
+##
 ## Revision 1.5  2006/10/26 08:43:49  kurihara
 ##
 ## FactoryTests, PortProfileHelperTests, SdoServiceTests, are added.
@@ -50,7 +53,10 @@ noinst_PROGRAMS = \
 	FactoryTests \
 	PortProfileHelperTests \
 	SdoServiceTests \
-	StateMachineTests
+	StateMachineTests \
+	SdoOrganizationTests \
+	SdoConfigurationTests \
+	CORBA_SeqUtilTests
 
 RtcNamingTests_SOURCES = RtcNamingTests.cpp
 RtcNamingTests_LDFLAGS = -L$(libdir)
@@ -93,3 +99,17 @@ SdoServiceTests_LDADD   = ../../rtm/idl/SDOPackageStub.o ../../rtm/idl/SDOPackag
 StateMachineTests_SOURCES = StateMachineTests.cpp
 StateMachineTests_LDFLAGS = -L$(libdir)
 StateMachineTests_LDADD   = -lcppunit
+
+SdoOrganizationTests_SOURCES = SdoOrganizationTests.cpp
+SdoOrganizationTests_LDFLAGS = -L$(libdir)
+SdoOrganizationTests_LDADD   = ../../rtm/idl/SDOPackageStub.o ../SdoOrganization.o -lcppunit -lomniDynamic4
+
+
+SdoConfigurationTests_SOURCES = SdoConfigurationTests.cpp
+SdoConfigurationTests_LDFLAGS = -L$(libdir)
+SdoConfigurationTests_LDADD   = ../../rtm/idl/SDOPackageStub.o ../SdoConfiguration.o -lcppunit -lomniDynamic4
+
+
+CORBA_SeqUtilTests_SOURCES = CORBA_SeqUtilTests.cpp
+CORBA_SeqUtilTests_LDFLAGS = -L$(libdir)
+CORBA_SeqUtilTests_LDADD   = SeqUtilTestsSkel.o -lcppunit
