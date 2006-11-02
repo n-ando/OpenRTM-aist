@@ -1,23 +1,17 @@
 // -*- C++ -*-
 /*!
- * @file StringUtilTests.cpp
- * @brief StringUtil test class
- * @date $Date: 2006-10-26 08:56:56 $
+ * @file StateMachineTests.cpp
+ * @brief StateMachine test class
+ * @date $Date: 2006-11-02 12:27:09 $
  * @author Shinji Kurihara
- * $Id: StateMachineTests.cpp,v 1.1 2006-10-26 08:56:56 n-ando Exp $
+ * $Id: StateMachineTests.cpp,v 1.2 2006-11-02 12:27:09 kurihara Exp $
  *
  */
 
 /*
  * $Log: not supported by cvs2svn $
- * Revision 1.2  2006/10/23 07:38:37  n-ando
- * Some fixes for split() tests.
- *
- * Revision 1.1  2006/10/23 06:10:17  kurihara
- *
- * test program for StringUtil class.
- *
- *
+ * Revision 1.1  2006/10/26 08:56:56  n-ando
+ * The first commitment.
  */
 
 #include <cppunit/ui/text/TestRunner.h>
@@ -28,6 +22,7 @@
 #include "../StateMachine.h"
 
 using namespace std;
+
 
 class StateClass
 {
@@ -45,70 +40,135 @@ public:
   StateClass()
     : m_fsm(4)
   {
+    MyStates st;
     m_fsm.setListener(this);
     m_fsm.setNOP(&StateClass::nullFunc);
-    m_fsm.setEntryAction(CREATED, &StateClass::createdEntry);
-    m_fsm.setDoAction   (CREATED, &StateClass::createdDo);
-    m_fsm.setExitAction (CREATED, &StateClass::createdExit);
+    m_fsm.setTransitionAction(&StateClass::transitionAction);
 
-    m_fsm.setEntryAction(INACTIVE, &StateClass::inactiveEntry);
-    m_fsm.setDoAction   (INACTIVE, &StateClass::inactiveDo);
-    m_fsm.setExitAction (INACTIVE, &StateClass::inactiveExit);
+    m_fsm.setEntryAction (CREATED, &StateClass::createdEntry);
+    //    m_fsm.setPreDoAction (CREATED, &StateClass::createdPreDo);
+    m_fsm.setDoAction    (CREATED, &StateClass::createdDo);
+    m_fsm.setPostDoAction(CREATED, &StateClass::createdPostDo);
+    m_fsm.setExitAction  (CREATED, &StateClass::createdExit);
 
-    m_fsm.setEntryAction(ACTIVE, &StateClass::activeEntry);
-    m_fsm.setDoAction   (ACTIVE, &StateClass::activeDo);
-    m_fsm.setExitAction (ACTIVE, &StateClass::activeExit);
+    m_fsm.setEntryAction (INACTIVE, &StateClass::inactiveEntry);
+    m_fsm.setPreDoAction (INACTIVE, &StateClass::inactivePreDo);
+    m_fsm.setDoAction    (INACTIVE, &StateClass::inactiveDo);
+    m_fsm.setPostDoAction(INACTIVE, &StateClass::inactivePostDo);
+    m_fsm.setExitAction  (INACTIVE, &StateClass::inactiveExit);
 
-    m_fsm.setEntryAction(ERROR, &StateClass::errorEntry);
-    m_fsm.setDoAction   (ERROR, &StateClass::errorDo);
-    m_fsm.setExitAction (ERROR, &StateClass::errorExit);
+    m_fsm.setEntryAction (ACTIVE, &StateClass::activeEntry);
+    m_fsm.setPreDoAction (ACTIVE, &StateClass::activePreDo);
+    m_fsm.setDoAction    (ACTIVE, &StateClass::activeDo);
+    m_fsm.setPostDoAction(ACTIVE, &StateClass::activePostDo);
+    m_fsm.setExitAction  (ACTIVE, &StateClass::activeExit);
 
-    MyStates st;
-    st.prev = CREATED;
-    st.curr = CREATED;
-    st.next = CREATED;
+    m_fsm.setEntryAction (ERROR, &StateClass::errorEntry);
+    m_fsm.setPreDoAction (ERROR, &StateClass::errorPreDo);
+    m_fsm.setDoAction    (ERROR, &StateClass::errorDo);
+    m_fsm.setPostDoAction(ERROR, &StateClass::errorPostDo);
+    m_fsm.setExitAction  (ERROR, &StateClass::errorExit);
+
+    //    st.prev = CREATED;
+    //    st.curr = CREATED;
+    //    st.next = CREATED;
+    st.prev = ERROR;
+    st.curr = ERROR;
+    st.next = ERROR;
+    MyStates getst;
+
     m_fsm.setStartState(st);
+    getst = m_fsm.getState();
+    cout << "prev: " << getst.prev << " curr: " << getst.curr << " next: " << getst.next << endl;
     m_fsm.goTo(CREATED);
+
+    i = 0;
 
   }
 
+
   void work()
   {
-    for (int i = 0; i < 100; i++)
-      {
-	m_fsm.worker();
-	usleep(100000);
-      }
+    //    for (int i = 0; i < 20; i++)
+    //      {
+    m_fsm.worker();
+    //	cout << endl;
+    //      }
+  }
+
+  int transitionAction(const MyStates& state)
+  {
+    std::cout << "Transition state prev: " << m_fsm.getState().prev << " curr: " << m_fsm.getState().curr << " next: " << m_fsm.getState().next << std::endl;
+    return true;
   }
 
   int createdEntry(const MyStates& state)
   {
+    // createdDoでgoTo()が呼ばれている場合、ここでのgoTo()は無効
+    m_fsm.goTo(ERROR); 
     std::cout << "Created:Entry" << std::endl;
     return true;
   }
+
+  /*
+  int createdPreDo(const MyStates& state)
+  {
+    // createdDoでgoTo()が呼ばれている場合、ここでのgoTo()は無効
+    m_fsm.goTo(ERROR); 
+    std::cout << "Created:PreDo" << std::endl;
+    return true;
+  }
+  */
+
   int createdDo(const MyStates& state)
   {
     m_fsm.goTo(INACTIVE);
     std::cout << "Created:Do" << std::endl;
+    if (!m_fsm.isIn(CREATED))
+      cout << "Error: createDo" << endl;
     return true;
   }
+
+  int createdPostDo(const MyStates& state)
+  {
+    std::cout << "Created:PostDo" << std::endl;
+    return true;
+  }
+
   int createdExit(const MyStates& state)
   {
     std::cout << "Created:Exit" << std::endl;
     return true;
   }
+
   int inactiveEntry(const MyStates& state)
   {
     std::cout << "Inactive:Entry" << std::endl;
     return true;
   }
+
+  int inactivePreDo(const MyStates& state)
+  {
+    std::cout << "Inactive:PreDo" << std::endl;
+    return true;
+  }
+
   int inactiveDo(const MyStates& state)
   {
     std::cout << "Inactive:Do" << std::endl;
+    if (!m_fsm.isIn(INACTIVE))
+      cout << "Error: inactiveDo" << endl;
     if (i >= 3) i = 0, m_fsm.goTo(ACTIVE);
     ++i;
     return true;
   }
+
+  int inactivePostDo(const MyStates& state)
+  {
+    std::cout << "Inactive:PostDo" << std::endl;
+    return true;
+  }
+
   int inactiveExit(const MyStates& state)
   {
     std::cout << "Inactive:Exit" << std::endl;
@@ -120,14 +180,30 @@ public:
     std::cout << "Active:Entry" << std::endl;
     return true;
   }
+
+  int activePreDo(const MyStates& state)
+  {
+    std::cout << "Active:PreDo" << std::endl;
+    return true;
+  }
+
   int activeDo(const MyStates& state)
   {
     std::cout << "Active:Do" << std::endl;
+    if (!m_fsm.isIn(ACTIVE))
+      cout << "Error: activeDo" << endl;
     if (i == 3) m_fsm.goTo(ACTIVE);
     if (i >= 10) i = 0, m_fsm.goTo(ERROR);
     ++i;
     return true;
   }
+
+  int activePostDo(const MyStates& state)
+  {
+    std::cout << "Active:PostDo" << std::endl;
+    return true;
+  }
+
   int activeExit(const MyStates& state)
   {
     std::cout << "Active:Exit" << std::endl;
@@ -139,13 +215,29 @@ public:
     std::cout << "Error:Entry" << std::endl;
     return true;
   }
+
+  int errorPreDo(const MyStates& state)
+  {
+    std::cout << "Error:PreDo" << std::endl;
+    return true;
+  }
+
   int errorDo(const MyStates& state)
   {
     std::cout << "Error:Do" << std::endl;
+    if (!m_fsm.isIn(ERROR))
+      cout << "Error: errorDo" << endl;
     if (i >= 5) i = 0, m_fsm.goTo(CREATED);
     ++i;
     return true;
   }
+
+  int errorPostDo(const MyStates& state)
+  {
+    std::cout << "Error:PostDo" << std::endl;
+    return true;
+  }
+
   int errorExit(const MyStates& state)
   {
     std::cout << "Error:Exit" << std::endl;
@@ -154,6 +246,8 @@ public:
 
   int nullFunc(const MyStates& state)
   {
+    // createdPreDoを宣言していないため、CREATED状態でのPreDo action時にはここが呼ばれる。
+    cout << "nullfunc" << endl;
     return true;
   }
 
