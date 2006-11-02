@@ -2,7 +2,7 @@
 /*!
  * @file RtcSystemLogger.h
  * @brief RT component logger class
- * @date $Date: 2005-05-16 06:40:19 $
+ * @date $Date: 2006-11-02 15:14:24 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
  * Copyright (C) 2003-2005
@@ -12,12 +12,16 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: RtcSystemLogger.h,v 1.2 2005-05-16 06:40:19 n-ando Exp $
+ * $Id: SystemLogger.h,v 1.1 2006-11-02 15:14:24 n-ando Exp $
  *
  */
 
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.2  2005/05/16 06:40:19  n-ando
+ * - Dummy macro "__restrict" was defined for Windows port.
+ * - Some bugs were fixed.
+ *
  * Revision 1.1.1.1  2005/05/12 09:06:18  n-ando
  * Public release.
  *
