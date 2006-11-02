@@ -2,7 +2,7 @@
 /*!
  * @file CORBA_SeqUtil.h
  * @brief CORBA sequence utility template functions
- * @date $Date: 2006-10-30 08:09:07 $
+ * @date $Date: 2006-11-02 09:04:39 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
  * Copyright (C) 2006
@@ -12,12 +12,16 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: CORBA_SeqUtil.h,v 1.2 2006-10-30 08:09:07 n-ando Exp $
+ * $Id: CORBA_SeqUtil.h,v 1.3 2006-11-02 09:04:39 n-ando Exp $
  *
  */
 
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.2  2006/10/30 08:09:07  n-ando
+ * Two functions push_back_lsit(), erase_if() were added.
+ * Function reference manual was revised.
+ *
  * Revision 1.1  2006/10/27 09:09:46  n-ando
  * The first commitment.
  *
@@ -232,12 +236,16 @@ namespace CORBA_SeqUtil
   void insert(CorbaSequence& seq, SequenceElement& elem, CORBA::ULong index)
   {
     CORBA::ULong len(seq.length());
-    if (index > len) push_back(seq, elem);
+    if (index > len)
+      {
+	push_back(seq, elem);
+	return;
+      }
 
     seq.length(len + 1);
-    for (CORBA::ULong i = len; i >= index; --i)
+    for (CORBA::ULong i = len; i > index; --i)
       {
-	seq[i + 1] = seq[i];
+	seq[i] = seq[i - 1];
       }
     seq[index] = elem;
   }
