@@ -2,7 +2,7 @@ dnl -*- autoconf -*-
 dnl
 dnl @file configure.ac
 dnl @brief Input file for autoconf
-dnl @date $Date: 2006-04-04 05:57:41 $
+dnl @date $Date: 2006-11-04 17:04:06 $
 dnl @author Noriaki Ando <n-ando@aist.go.jp>
 dnl
 dnl This file is an input file used by the GNU "autoconf" program to
@@ -10,11 +10,16 @@ dnl generate the file "configure", which tries to guess your system
 dnl configuration
 dnl
 dnl
-dnl $Id: configure.ac,v 1.5 2006-04-04 05:57:41 n-ando Exp $
+dnl $Id: configure.ac,v 1.6 2006-11-04 17:04:06 n-ando Exp $
 dnl
 
 dnl
 dnl $Log: not supported by cvs2svn $
+dnl Revision 1.5  2006/04/04 05:57:41  n-ando
+dnl - Dist version is now 0.4.0.
+dnl - ORBit2 support was added.
+dnl - Some ORB detection scripts were modified.
+dnl
 dnl Revision 1.4  2006/04/04 02:17:34  n-ando
 dnl - FP_FIND_FILE macro was quoted to prevent warning.
 dnl
@@ -33,8 +38,9 @@ dnl ------------------------------------------------------------
 dnl  Autoconf initial macros
 dnl ------------------------------------------------------------
 dnl  Process this file with autoconf to produce a configure script.
-AC_INIT(rtm/RtcBase.cpp)
-AM_INIT_AUTOMAKE(OpenRTM-aist, 0.4.0, n-ando@aist.go.jp)
+AC_PREREQ(2.59)
+AC_INIT(OpenRTM-aist, 0.4.0, n-ando@aist.go.jp, OpenRTM-aist-0.4.0-RC1)
+AM_INIT_AUTOMAKE
 AM_CONFIG_HEADER([rtm/config_rtc.h])
 
 
@@ -50,8 +56,8 @@ AC_PROG_LIBTOOL
 AC_CHECK_HEADERS([nlist.h stdlib.h unistd.h])
 AC_CHECK_FUNCS([uname])
 
-CPPFLAGS="$CPPFLAGS -I/usr/local/include"
-CXXFLAGS="$CXXFLAGS -I/usr/local/include"
+CPPFLAGS="$CPPFLAGS -I/usr/local/include -Wall"
+CXXFLAGS="$CXXFLAGS -I/usr/local/include -Wall"
 SHLIB_SUFFIX=".so"
 
 AC_SEARCH_LIBS(pthread_create, pthread c_r, , 
@@ -97,57 +103,6 @@ AC_ARG_ENABLE(artlinux,       [  --with-artlinux                 With ART-Linux]
 AC_ARG_ENABLE(artlinux,       [  --with-rdtsc                    With Read Time Stamp Counter])
 
 
-dnl ----------------------------------------------------------------------
-dnl proc to look for a file in a number of places
-dnl
-dnl FP_FIND_FILE[file_to_find, path_prefix, path_subdir, (fp_path_var)]
-dnl
-dnl This macro searches a file in given paths which are the
-dnl combination of each path_prefix/path_subdir.
-dnl The Found path of the file and the directory name are stored
-dnl to the variable named "fp_path_var" and "fp_path_var_dir"
-dnl If "fp_path_var" (4th var) is abbreviated, underscored
-dnl "file_to_find" variable name is used.
-dnl
-dnl Example:
-dnl FP_FIND_FILE[omniORB4/CORBA.h, /usr /usr/local /opt, include cpp/include]
-dnl
-dnl search path: /usr/include, /usr/cpp/include
-dnl              /usr/local/include, /usr/local/cpp/include
-dnl              /opt/include, /opt/cpp/include
-dnl file path var: $omniORB4_CORBA_h
-dnl dir  path var: $omniORB4_CORBA_h_dir
-dnl ----------------------------------------------------------------------
-AC_DEFUN([FP_FIND_FILE], [
-    if test "x$4" = "x" ; then
-	ff_name=[`echo $1 | sed 's/[-.*/ ]/_/g'`]
-    else
-	ff_name="$4"
-    fi
-    eval $ff_name=
-    eval ${ff_name}_dir=
-    ff_file=
-    ff_file_dir=
-    for ff_dir in $2 ; do
-	if test -f $ff_dir/$1 ; then
-	    ff_file_dir=$ff_dir
-	    ff_file=$ff_dir/$1
-	    break
-	fi
-	for ff_subdir in $3 ; do
-	    if test -f $ff_dir/$ff_subdir/$1 ; then
-		ff_file_dir=$ff_dir/$ff_subdir
-		ff_file=$ff_dir/$ff_subdir/$1
-		break
-	    fi
-	done
-	if test "x$ff_file" != "x" ; then
-	    break
-	fi
-    done
-    eval ${ff_name}_dir="$ff_file_dir"
-    eval $ff_name="$ff_file"
-])
 
 
 dnl ------------------------------------------------------------
@@ -191,8 +146,6 @@ case $system in
 esac
 
 AC_MSG_RESULT($system)
-
-
 
 AC_MSG_CHECKING(compiler flags)
 [CFLAGS=`echo $CFLAGS | sed 's/-g//g' | sed 's/-O[0-9]*//g'`]
@@ -574,7 +527,7 @@ EOF
 	dnl ------------------------------------------------------------
 	dnl  Check mico-ld
 	dnl ------------------------------------------------------------
-	AC_MSG_CHECKING(for mico-ld)
+	AC_MSG_CHECKING(for miFPco-ld)
 	FP_FIND_FILE(mico-ld,
 		$MICODIR $MICOSHAREDDIR $with_mico $base_bins $base_dirs,
 		bin)
@@ -1336,11 +1289,25 @@ dnl ARTLinux lib
 AC_SUBST(ARTLIB)
 dnl ------------------------------------------------------------
 
+UNIQUE($CPPFLAGS)
+CPPFLAGS=$u_list
+
+UNIQUE($CXXFLAGS)
+CXXFLAGS=$u_list
+
+UNIQUE($LDFLAGS)
+LDFLAGS=$u_list
+
+UNIQUE($LDSOLIBS)
+LDSOLIBS=$u_list
+
+UNIQUE($IDL_FLAGS)
+IDL_FLAGS=$u_list
 
 echo ''
 echo '------------------------------------------------------------'
 echo ''
-echo ' OpenRTM-aist-0.2.0 will be build with the following options. '
+echo ' '$PACKAGE_NAME' will be build with the following options. '
 echo ''
 echo '------------------------------------------------------------'
 echo 'CXX: '$CXX
@@ -1364,23 +1331,26 @@ echo ''
 AC_OUTPUT([Makefile
 	 build/Makefile
 	 rtm/idl/Makefile
-	 rtm/Makefile
-	 examples/Makefile
-	 examples/HelloWorld/Makefile
-	 examples/SimpleIO/Makefile
-	 examples/SeqIO/Makefile
-	 examples/StringIO/Makefile
-	 examples/Slider_and_Motor/Makefile
-	 examples/SimpleService/Makefile
-	 utils/Makefile
-	 utils/rtm-config/Makefile
-	 utils/rtm-naming/Makefile
-	 utils/rtc-template/Makefile
-	 utils/rtcd/Makefile
-	 utils/rtcsh/Makefile
-	 utils/rtc-link/Makefile
-	 utils/rtm-skelwrapper/Makefile
-	 swig/Makefile
-	 swig/python/Makefile
-	 etc/Makefile
-	 docs/Makefile])
+	 rtm/Makefile])
+#	 rtm/tests/Makefile
+#	 examples/Makefile
+#	 examples/HelloWorld/Makefile
+#	 examples/SimpleIO/Makefile
+#	 examples/SeqIO/Makefile
+#	 examples/StringIO/Makefile
+#	 examples/Slider_and_Motor/Makefile
+#	 examples/SimpleService/Makefile
+#	 utils/Makefile
+#	 utils/rtm-config/Makefile
+#	 utils/rtm-naming/Makefile
+#	 utils/rtc-template/Makefile
+#	 utils/rtcd/Makefile
+#	 utils/rtcsh/Makefile
+#	 utils/rtc-link/Makefile
+#	 utils/rtm-skelwrapper/Makefile
+#	 swig/Makefile
+#	 swig/python/Makefile
+#	 etc/Makefile
+#	 docs/Makefile])
+
+#	 utils/rtmNaming/Makefile
