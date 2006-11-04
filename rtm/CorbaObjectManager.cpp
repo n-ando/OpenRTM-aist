@@ -2,7 +2,7 @@
 /*!
  * @file CorbaObjectManager.h
  * @brief CORBA Object manager class
- * @date $Date: 2006-11-04 19:54:40 $
+ * @date $Date: 2006-11-04 19:56:57 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
  * Copyright (C) 2006
@@ -13,12 +13,15 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: CorbaObjectManager.cpp,v 1.1 2006-11-04 19:54:40 n-ando Exp $
+ * $Id: CorbaObjectManager.cpp,v 1.2 2006-11-04 19:56:57 n-ando Exp $
  *
  */
 
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.1  2006/11/04 19:54:40  n-ando
+ * CORBA object activation class was created.
+ *
  */
 
 #include <rtm/CorbaObjectManager.h>
@@ -27,7 +30,7 @@ namespace RTC
 {
   /*!
    * @if jp
-   * @brief $B%3%s%9%H%i%/%?(B
+   * @brief ¥³¥ó¥¹¥È¥é¥¯¥¿
    * @else
    * @brief Constructor
    * @endif
@@ -40,7 +43,7 @@ namespace RTC
   
   /*!
    * @if jp
-   * @brief CORBA $B%*%V%8%'%/%H$r%"%/%F%#%V2=$9$k(B
+   * @brief CORBA ¥ª¥Ö¥¸¥§¥¯¥È¤ò¥¢¥¯¥Æ¥£¥Ö²½¤¹¤ë
    * @else
    * @brief Activate CORBA object
    * @endif
@@ -55,7 +58,7 @@ namespace RTC
   
   /*!
    * @if jp
-   * @brief CORBA $B%*%V%8%'%/%H$rHs%"%/%F%#%V2=$9$k(B
+   * @brief CORBA ¥ª¥Ö¥¸¥§¥¯¥È¤òÈó¥¢¥¯¥Æ¥£¥Ö²½¤¹¤ë
    * @else
    * @brief Deactivate CORBA object
    * @endif
