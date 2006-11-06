@@ -2,7 +2,7 @@
 /*!
  * @file ObjectManager.h
  * @brief Object management class
- * @date $Date: 2006-10-25 17:31:03 $
+ * @date $Date: 2006-11-06 01:42:22 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
  * Copyright (C) 2003-2005
@@ -12,12 +12,15 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: ObjectManager.h,v 1.2 2006-10-25 17:31:03 n-ando Exp $
+ * $Id: ObjectManager.h,v 1.3 2006-11-06 01:42:22 n-ando Exp $
  *
  */
 
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.2  2006/10/25 17:31:03  n-ando
+ * for_each()'s arguments are changed from value to reference.
+ *
  * Revision 1.1  2006/10/17 10:21:50  n-ando
  * The first commitment.
  *
@@ -142,10 +145,10 @@ class ObjectManager
   }
 
   template <class Pred>
-  void for_each(Pred& p)
+  Pred for_each(Pred p)
   {
     ACE_Guard<ACE_Thread_Mutex> guard(m_objects._mutex);
-    std::for_each(m_objects._obj.begin(), m_objects._obj.end(), p);
+    return std::for_each(m_objects._obj.begin(), m_objects._obj.end(), p);
   }
 
  protected:
