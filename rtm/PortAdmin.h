@@ -2,7 +2,7 @@
 /*!
  * @file PortAdmin.h
  * @brief RTC's Port administration class
- * @date $Date: 2006-10-17 19:16:40 $
+ * @date $Date: 2006-11-06 01:19:04 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
  * Copyright (C) 2006
@@ -12,12 +12,15 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: PortAdmin.h,v 1.2 2006-10-17 19:16:40 n-ando Exp $
+ * $Id: PortAdmin.h,v 1.3 2006-11-06 01:19:04 n-ando Exp $
  *
  */
 
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.2  2006/10/17 19:16:40  n-ando
+ * registerPort() was modified to store Port's object reference in PortProfile.
+ *
  * Revision 1.1  2006/10/17 10:22:01  n-ando
  * The first commitment.
  *
@@ -27,36 +30,14 @@
 #define PortAdmin_h
 
 #include <rtm/idl/RTCSkel.h>
-#include <Util.h>
 #include <rtm/PortBase.h>
 #include <rtm/ObjectManager.h>
-
+// 68608 10 17 23:51 PortAdmin.o
+// 54272 10 29 00:53 PortAdmin.o
+// 54132 10 29 00:54 PortAdmin.o
 namespace RTC
 {
-  template <class T>
-  class Comp
-  {
-  public:
-    Comp(std::string _name) : m_name(_name) {};
-    Comp(T* obj) : m_name(obj->getProfile().name) {};
-    bool operator()(T* obj)
-    {
-      std::string name(obj->getProfile().name);
-      return m_name == name;
-    }
-    std::string m_name;
-  };
-  
-  struct p_name
-  {
-    p_name(const char* name) : m_name(name) {};
-    bool operator()(const Port_ptr& p)
-    {
-      std::string name(p->get_port_profile()->name);
-      return m_name == name;
-    }
-    const std::string m_name;
-  };
+
 
   class PortAdmin
   {
@@ -84,7 +65,7 @@ namespace RTC
      *
      * @endif
      */
-    const PortList* getPorts() const;
+    PortList* getPortList() const;
 
     /*!
      * @if jp
@@ -192,7 +173,6 @@ namespace RTC
      */
     void deletePort(PortBase& port);
 
-
     /*!
      * @if jp
      *
@@ -239,32 +219,36 @@ namespace RTC
     void finalizePorts();
 
   private:
-    // SequenceEx の一部特殊化
-    template <class T, class X>
-    class SeqEx : public SequenceEx <T, X, ACE_Thread_Mutex> {};
-
     // ORB へのポインタ
     CORBA::ORB_var m_pORB;
 
     // POA へのポインタ
     PortableServer::POA_var m_pPOA;
 
-    // Portのオブジェクトリファレンスのリスト. PortListを継承
-    SeqEx<PortList, Port_ptr> m_portRefs;
+    // Portのオブジェクトリファレンスのリスト. PortList
+    PortList m_portRefs;
+
+
+    template <class T>
+    class comp_op
+    {
+    public:
+      comp_op(std::string _name) : m_name(_name) {};
+      comp_op(T* obj) : m_name(obj->getProfile().name) {};
+      bool operator()(T* obj)
+      {
+	std::string name(obj->getProfile().name);
+	return m_name == name;
+      }
+      std::string m_name;
+    };
+    
+    struct find_port_name;
+    struct del_port;
 
     // サーバントを直接格納するオブジェクトマネージャ
-    ObjectManager<std::string, PortBase, Comp<PortBase> > m_portServants;
+    ObjectManager<std::string, PortBase, comp_op<PortBase> > m_portServants;
 
-    class del_port
-    {
-      PortAdmin* m_pa;
-    public:
-      del_port(PortAdmin* pa) : m_pa(pa) {};
-      void operator()(PortBase* p)
-      {
-	m_pa->deletePort(*p);
-      }
-    };
 
   };
 };     // namespace RTC
