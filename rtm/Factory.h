@@ -2,7 +2,7 @@
 /*!
  * @file Factory.h
  * @brief RTComponent factory class
- * @date $Date: 2006-10-25 17:36:00 $
+ * @date $Date: 2006-11-06 01:28:36 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
  * Copyright (C) 2003-2005
@@ -12,12 +12,15 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: Factory.h,v 1.4 2006-10-25 17:36:00 n-ando Exp $
+ * $Id: Factory.h,v 1.5 2006-11-06 01:28:36 n-ando Exp $
  *
  */
 
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.4  2006/10/25 17:36:00  n-ando
+ * Classes were renamed, and class reference manual was described.
+ *
  * Revision 1.3  2006/10/24 14:23:45  n-ando
  * Renamed RtcFactory.h to Factory.h
  *
@@ -34,11 +37,13 @@
 #define RtcFactory_h
 #define EXPORTS
 #include "rtm/Properties.h"
+#include "rtm/RTObject.h"
+#include <rtm/NumberingPolicy.h>
 
 
 namespace RTC 
 {
-  class RtcBase;
+  typedef RTObject_impl RtcBase;
   class Manager;
 
   typedef RtcBase* (*RtcNewFunc)(Manager* manager);
@@ -98,7 +103,7 @@ namespace RTC
      *
      * @endif
      */
-    FactoryBase(Properties profile);
+    FactoryBase(const Properties& profile);
     virtual ~FactoryBase();
     
     /*!
@@ -253,9 +258,10 @@ namespace RTC
      *
      * @endif
      */
-    FactoryCXX(Properties profile,
+    FactoryCXX(const Properties& profile,
 	       RtcNewFunc new_func,
-	       RtcDeleteFunc delete_func);
+	       RtcDeleteFunc delete_func,
+	       NumberingPolicy* policy = new DefaultNumberingPolicy());
     
     /*!
      * @if jp
@@ -317,6 +323,8 @@ namespace RTC
      * @endif
      */
     RtcDeleteFunc m_Delete;
+
+    NumberingPolicy* m_policy;
   };
 };
 
