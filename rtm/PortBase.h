@@ -2,7 +2,7 @@
 /*!
  * @file PortBase.h
  * @brief RTC's Port base class
- * @date $Date: 2006-11-06 01:16:39 $
+ * @date $Date: 2006-11-06 01:46:47 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
  * Copyright (C) 2006
@@ -12,12 +12,16 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: PortBase.h,v 1.3 2006-11-06 01:16:39 n-ando Exp $
+ * $Id: PortBase.h,v 1.4 2006-11-06 01:46:47 n-ando Exp $
  *
  */
 
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.3  2006/11/06 01:16:39  n-ando
+ * Now PortBase doesn't depend on PortProfileHelper.
+ * Class refference manual has been updated.
+ *
  * Revision 1.2  2006/10/17 19:06:45  n-ando
  * connect(), disconnect() and disconnect_all() was implemented.
  *

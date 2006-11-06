@@ -2,7 +2,7 @@
 /*!
  * @file PortBase.h
  * @brief RTC's Port base class
- * @date $Date: 2006-11-06 01:16:31 $
+ * @date $Date: 2006-11-06 01:46:42 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
  * Copyright (C) 2006
@@ -12,12 +12,16 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: PortBase.cpp,v 1.3 2006-11-06 01:16:31 n-ando Exp $
+ * $Id: PortBase.cpp,v 1.4 2006-11-06 01:46:42 n-ando Exp $
  *
  */
 
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.3  2006/11/06 01:16:31  n-ando
+ * Now PortBase doesn't depend on PortProfileHelper.
+ * Class refference manual has been updated.
+ *
  * Revision 1.2  2006/10/17 19:06:37  n-ando
  * connect(), disconnect() and disconnect_all() was implemented.
  *
@@ -30,6 +34,7 @@
 // PortBase.o 87500 without PortProfileHelper
 // PortBase.o 92292 with ACE_Guard
 // PortBase.o 105340 impl local interfaces
+#include <assert.h>
 #include <rtm/PortBase.h>
 #include <rtm/UUID.h>
 #include <rtm/CORBA_SeqUtil.h>
