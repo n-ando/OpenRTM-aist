@@ -2,7 +2,7 @@
 /*!
  * @file ManagerConfig.h
  * @brief RTC manager configuration
- * @date $Date: 2006-10-23 08:38:23 $
+ * @date $Date: 2006-11-06 01:26:28 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
  * Copyright (C) 2003-2005
@@ -12,12 +12,15 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: ManagerConfig.h,v 1.2 2006-10-23 08:38:23 n-ando Exp $
+ * $Id: ManagerConfig.h,v 1.3 2006-11-06 01:26:28 n-ando Exp $
  *
  */
 
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.2  2006/10/23 08:38:23  n-ando
+ * To get Property after "init()" calling, getConfig() was added.
+ *
  * Revision 1.1  2006/10/17 10:21:38  n-ando
  * The first commitment.
  *
@@ -33,19 +36,7 @@
 
 namespace RTC
 {
-  // The list of default configuration file path.
-  static const char* config_file_path[] = 
-    {
-      "./rtc.conf",
-      "/etc/rtc.conf",
-      "/etc/rtc/rtc.conf",
-      "/usr/local/etc/rtc.conf",
-      "/usr/local/etc/rtc/rtc.conf",
-      NULL
-    };
-  
-  // Environment value to specify configuration file
-  static const char* config_file_env = "RTC_MANAGER_CONFIG";
+
   
   /*!
    * @if jp
@@ -82,6 +73,13 @@ namespace RTC
   class ManagerConfig
   {
   public:
+    // The list of default configuration file path.
+    static const char* config_file_path[];
+    
+    // Environment value to specify configuration file
+    static const char* config_file_env;
+
+
     /*!
      * @if jp
      *

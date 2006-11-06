@@ -2,7 +2,7 @@
 /*!
  * @file ManagerConfig.cpp
  * @brief RTC manager configuration
- * @date $Date: 2006-10-23 08:38:17 $
+ * @date $Date: 2006-11-06 01:26:21 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
  * Copyright (C) 2003-2005
@@ -12,12 +12,15 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: ManagerConfig.cpp,v 1.3 2006-10-23 08:38:17 n-ando Exp $
+ * $Id: ManagerConfig.cpp,v 1.4 2006-11-06 01:26:21 n-ando Exp $
  *
  */
 
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.3  2006/10/23 08:38:17  n-ando
+ * To get Property after "init()" calling, getConfig() was added.
+ *
  * Revision 1.2  2006/10/17 19:29:53  n-ando
  * Trivial fix.
  *
@@ -36,6 +39,21 @@
 
 namespace RTC
 {
+
+  // The list of default configuration file path.
+  const char* ManagerConfig::config_file_path[] = 
+    {
+      "./rtc.conf",
+      "/etc/rtc.conf",
+      "/etc/rtc/rtc.conf",
+      "/usr/local/etc/rtc.conf",
+      "/usr/local/etc/rtc/rtc.conf",
+      NULL
+    };
+  
+  // Environment value to specify configuration file
+  const char* ManagerConfig::config_file_env = "RTC_MANAGER_CONFIG";
+
   /*!
    * @if jp
    * @brief ManagerConfig コンストラクタ
@@ -86,6 +104,7 @@ namespace RTC
   {
     if (findConfigFile())
       {
+	std::cout << "**** config file **** " << m_configFile << std::endl;
 	std::ifstream f(m_configFile.c_str());
 	m_properties.load(f);
 	f.close();
@@ -241,7 +260,7 @@ namespace RTC
     
     prop.setProperty("manager.os.name",     sysinfo.sysname);
     prop.setProperty("manager.os.release",  sysinfo.release);
-    prop.setProperty("maanger.os.version",  sysinfo.version);
+    prop.setProperty("manager.os.version",  sysinfo.version);
     prop.setProperty("manager.os.arch",     sysinfo.machine);
     prop.setProperty("manager.os.hostname", sysinfo.nodename);
     prop.setProperty("manager.pid",         pidc);
