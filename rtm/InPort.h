@@ -2,7 +2,7 @@
 /*!
  * @file RtcInPort.h
  * @brief InPort template class
- * @date $Date: 2005-05-27 07:29:32 $
+ * @date $Date: 2006-11-07 09:26:12 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
  * Copyright (C) 2003-2005
@@ -12,12 +12,16 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: RtcInPort.h,v 1.3 2005-05-27 07:29:32 n-ando Exp $
+ * $Id: InPort.h,v 1.4 2006-11-07 09:26:12 n-ando Exp $
  *
  */
 
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.3  2005/05/27 07:29:32  n-ando
+ * - InPort/OutPort interface was changed.
+ *   Exception RTM::InPort::Disconnected -> RTM:PortBase::Disconnected
+ *
  * Revision 1.2  2005/05/16 06:12:15  n-ando
  * - Time variables of "m_Value" were initialized in constructors.
  *
