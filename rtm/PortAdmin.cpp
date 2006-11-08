@@ -2,7 +2,7 @@
 /*!
  * @file PortAdmin.cpp
  * @brief RTC's Port administration class
- * @date $Date: 2006-11-06 01:18:59 $
+ * @date $Date: 2006-11-08 09:57:11 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
  * Copyright (C) 2006
@@ -12,12 +12,15 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: PortAdmin.cpp,v 1.3 2006-11-06 01:18:59 n-ando Exp $
+ * $Id: PortAdmin.cpp,v 1.4 2006-11-08 09:57:11 n-ando Exp $
  *
  */
 
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.3  2006/11/06 01:18:59  n-ando
+ * CORBA sequence manipulation has been rewritten by using CORBA_SeqUtil.
+ *
  * Revision 1.2  2006/10/17 19:16:34  n-ando
  * registerPort() was modified to store Port's object reference in PortProfile.
  *
@@ -88,8 +91,10 @@ namespace RTC
     Port_var port;
     CORBA::Long index;
     index = CORBA_SeqUtil::find(m_portRefs, find_port_name(port_name));
-
-    //    if (index < 0) throw NotFound(port_name);
+    if (index >= 0) 
+      {//throw NotFound(port_name);
+	port = m_portRefs[index];
+      }
     return port._retn();
   }
 
