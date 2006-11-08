@@ -2,9 +2,13 @@
 ##------------------------------------------------------------
 ## Makefile.am for unit test
 ##
-## $Id: Makefile.am,v 1.7 2006-10-31 13:12:49 kurihara Exp $
+## $Id: Makefile.am,v 1.8 2006-11-08 01:18:23 kurihara Exp $
 ##
 ## $Log: not supported by cvs2svn $
+## Revision 1.7  2006/10/31 13:12:49  kurihara
+##
+## SdoConfigurationTests and CORBA_SeqUtilTests were added.
+##
 ## Revision 1.6  2006/10/26 08:56:22  n-ando
 ## StateMachineTests was added.
 ##
@@ -56,7 +60,9 @@ noinst_PROGRAMS = \
 	StateMachineTests \
 	SdoOrganizationTests \
 	SdoConfigurationTests \
-	CORBA_SeqUtilTests
+	CORBA_SeqUtilTests \
+	PortBaseTests \
+	PortAdminTests
 
 RtcNamingTests_SOURCES = RtcNamingTests.cpp
 RtcNamingTests_LDFLAGS = -L$(libdir)
@@ -113,3 +119,11 @@ SdoConfigurationTests_LDADD   = ../../rtm/idl/SDOPackageStub.o ../SdoConfigurati
 CORBA_SeqUtilTests_SOURCES = CORBA_SeqUtilTests.cpp
 CORBA_SeqUtilTests_LDFLAGS = -L$(libdir)
 CORBA_SeqUtilTests_LDADD   = SeqUtilTestsSkel.o -lcppunit
+
+PortBaseTests_SOURCES = PortBaseTests.cpp
+PortBaseTests_LDFLAGS = -L$(libdir)
+PortBaseTests_LDADD   = ../idl/SDOPackageSkel.o ../idl/RTCSkel.o ../PortBase.o -lcppunit
+
+PortAdminTests_SOURCES = PortAdminTests.cpp
+PortAdminTests_LDFLAGS = -L$(libdir)
+PortAdminTests_LDADD   = ../idl/SDOPackageSkel.o ../idl/RTCSkel.o ../PortBase.o ../PortAdmin.o -lcppunit
