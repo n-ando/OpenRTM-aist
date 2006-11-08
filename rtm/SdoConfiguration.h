@@ -2,7 +2,7 @@
 /*!
  * @file SdoConfiguration.h
  * @brief RT component base class
- * @date $Date: 2006-10-30 08:05:45 $
+ * @date $Date: 2006-11-08 20:00:21 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
  * Copyright (C) 2006
@@ -12,12 +12,15 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: SdoConfiguration.h,v 1.3 2006-10-30 08:05:45 n-ando Exp $
+ * $Id: SdoConfiguration.h,v 1.4 2006-11-08 20:00:21 n-ando Exp $
  *
  */
 
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.3  2006/10/30 08:05:45  n-ando
+ * CORBA sequence operations were replaced by CORBA_SeqUtil functions.
+ *
  * Revision 1.2  2006/10/17 10:13:15  n-ando
  * Small fixes.
  *
@@ -705,6 +708,9 @@ namespace SDOPackage
     const OrganizationList getOrganizations();
 
   protected:
+    const std::string getUUID() const;
+    CORBA::Long getActiveConfigIndex();
+
     typedef ACE_Guard<ACE_Thread_Mutex> Guard;
     /*!
      * @if jp
@@ -760,7 +766,8 @@ namespace SDOPackage
       };
     */
     ConfigurationSetList m_configurations;
-    ConfigurationSet*    m_pActiveConfig;
+    std::string  m_activeConfId;
+    CORBA::Long m_activeConfIndex; // -1: active config list has changed
     ACE_Thread_Mutex m_config_mutex;
 
     /*!
