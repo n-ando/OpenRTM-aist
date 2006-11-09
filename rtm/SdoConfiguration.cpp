@@ -2,7 +2,7 @@
 /*!
  * @file SdoConfiguration.cpp
  * @brief SDO's Configuration implementation class
- * @date $Date: 2006-11-08 20:00:12 $
+ * @date $Date: 2006-11-09 10:20:40 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
  * Copyright (C) 2006
@@ -12,12 +12,15 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: SdoConfiguration.cpp,v 1.4 2006-11-08 20:00:12 n-ando Exp $
+ * $Id: SdoConfiguration.cpp,v 1.5 2006-11-09 10:20:40 n-ando Exp $
  *
  */
 
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.4  2006/11/08 20:00:12  n-ando
+ * ConfigurationSet related interfaces are fixed.
+ *
  * Revision 1.3  2006/10/30 08:05:38  n-ando
  * CORBA sequence operations were replaced by CORBA_SeqUtil functions.
  *
@@ -33,7 +36,7 @@
 #include "rtm/SdoConfiguration.h"
 #include <rtm/CORBA_SeqUtil.h>
 #include <rtm/UUID.h>
-
+#include <iostream>
 // ACE
 
 namespace SDOPackage
@@ -81,9 +84,13 @@ namespace SDOPackage
   Configuration_impl::set_service_profile(const ServiceProfile& sProfile)
     throw (InvalidParameter, NotAvailable, InternalError)
   {
+    // SDO specification defines that InvalidParameter() exception
+    // is thrown when sProfile is null.
+    // But sProfile is reference and it becomes never null.
+    // So this operation does not throw InvalidParameter exception.
+    //    if (CORBA::is_nil(sProfile.service)) throw InvalidParameter();
     try
       {
-	if (CORBA::is_nil(sProfile.service)) throw InvalidParameter();
 
 	if (sProfile.id == "")
 	  {
@@ -91,6 +98,7 @@ namespace SDOPackage
 	    prof.id = CORBA::string_dup(getUUID().c_str());
 	    CORBA_SeqUtil::push_back(m_serviceProfiles, prof);
 	    return true;
+
 	  }
 
 	CORBA::Long index;
@@ -106,9 +114,10 @@ namespace SDOPackage
     catch (...)
       {
         throw InternalError("Configuration::set_service_profile");
-        // never reach here
+
         return false;
       }
+    // never reach here
     return true;
   }
   
@@ -558,6 +567,7 @@ namespace SDOPackage
     CORBA::Long index;
     index =  CORBA_SeqUtil::find(m_serviceProfiles,
 				 service_id(id));
+    std::cout << "index: " << index << std::endl;
     if (index < 0) return ServiceProfile();
     return m_serviceProfiles[index];
   }
