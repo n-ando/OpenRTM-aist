@@ -2,14 +2,18 @@
 /*!
  * @file 
  * @brief Properties test class
- * @date $Date: 2006-11-01 11:23:35 $
+ * @date $Date: 2006-11-09 09:29:47 $
  * @author Shinji Kurihara
- * $Id: SdoConfigurationTests.cpp,v 1.1 2006-11-01 11:23:35 kurihara Exp $
+ * $Id: SdoConfigurationTests.cpp,v 1.2 2006-11-09 09:29:47 kurihara Exp $
  *
  */
 
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.1  2006/11/01 11:23:35  kurihara
+ *
+ * test program for SdoConfiguration class.
+ *
  */
 
 #include <cppunit/ui/text/TestRunner.h>
@@ -56,8 +60,8 @@ class SdoConfigurationTests : public CppUnit::TestFixture
 
 private:
   Configuration_impl* m_pConf;
-  CORBA::ORB_var          m_orb;
-  PortableServer::POA_var m_poa;
+  CORBA::ORB_ptr          m_orb;
+  PortableServer::POA_ptr m_poa;
 
 public:
   
@@ -85,7 +89,7 @@ public:
    */
   virtual void setUp()
   {
-    m_pConf = new Configuration_impl(m_orb._retn(), m_poa._retn());
+    m_pConf = new Configuration_impl(m_orb, m_poa);
   }
   
   virtual void tearDown()
@@ -176,35 +180,35 @@ public:
       CPPUNIT_ASSERT(retval == setval);
       (retProf.properties[2].value) >>= retft;
       CPPUNIT_ASSERT(retft == ft);
+
     }
     catch (InvalidParameter ip) {
-      cout << "InvalidParameter exception." << endl;
+      cout << "InvalidParameter exception." << ip.description << endl;
     }
     catch (NotAvailable na) {
-      cout << "NotAvailable exception." << endl;
+      cout << "NotAvailable exception." << na.description << endl;
     }
     catch (InternalError ip) {
-      cout << "InternalError exception." << endl;
+      cout << "InternalError exception." << ip.description << endl;
     }
     catch (...) {
-      cout << "othrer exception." << endl;
+      cout << "othrer exception. at set_device_profile" << endl;
     }
   }
 
 
   /* tests for */
   void test_set_service_profile() {
-    ServiceProfileList setProf, getProf;
+    ServiceProfileList getProf;
+    ServiceProfile svcProf0, svcProf1;
     NameValue nv;
     NVList nvlist;
     //    SDOService service;
     CORBA::Short setst,getst;
     CORBA::Long  setlg,getlg;
-
+    CORBA::Boolean result;
+    
     string setstr, getstr;
-
-    setProf.length(2);
-    getProf.length(2);
 
     try {
       setst = 10;
@@ -213,12 +217,11 @@ public:
       nvlist.length(1);
       nvlist[0] = nv;
 
-      setProf[0].id = "setProfId0";
-      setProf[0].interface_type = "ifTYpe0";
-      setProf[0].properties = nvlist;
-      //    setProf.service = service;
-      m_pConf->set_service_profile(setProf[0]);
-
+      svcProf0.id = "setProfId0";
+      svcProf0.interface_type = "ifTYpe0";
+      svcProf0.properties = nvlist;
+      // Failure case ここでInternalError発生!!!
+      result = m_pConf->set_service_profile(svcProf0);
 
       setlg = 1000;
       nv.name = "long";
@@ -226,24 +229,23 @@ public:
       nvlist.length(1);
       nvlist[0] = nv;
 
-      setProf[1].id = "setProfId0";
-      setProf[1].interface_type = "ifTYpe1";
-      setProf[1].properties = nvlist;
-      m_pConf->set_service_profile(setProf[1]);
+      svcProf1.id = "setProfId0";
+      svcProf1.interface_type = "ifTYpe1";
+      svcProf1.properties = nvlist;
+      m_pConf->set_service_profile(svcProf1);
 
 
+      getProf[0] = m_pConf->getServiceProfile(svcProf0.id);
 
-      getProf[0] = m_pConf->getServiceProfile(setProf[0].id);
-
-      setstr = setProf[0].id;
+      setstr = svcProf0.id;
       getstr = getProf[0].id;
       CPPUNIT_ASSERT(setstr == getstr);
 
-      setstr = setProf[0].interface_type;
+      setstr = svcProf0.interface_type;
       getstr = getProf[0].interface_type;
       CPPUNIT_ASSERT(setstr == getstr);
 
-      setstr = setProf[0].properties[0].name;
+      setstr = svcProf0.properties[0].name;
       getstr = getProf[0].properties[0].name;
       CPPUNIT_ASSERT(setstr == getstr);
 
@@ -252,37 +254,48 @@ public:
 
       // Failure case 同じIDのServiceProfileをセットした後、getServiceProfile(id)を呼び出すと
       //              先にセットしたオブジェクトが返される。
-      //      getProf[1] = m_pConf->getServiceProfile(setProf[1].id);
-      //      setstr = setProf[1].id;
-      //      getstr = getProf[1].id;
-      //      CPPUNIT_ASSERT(setstr == getstr);
-      //      setstr = setProf[1].interface_type;
-      //      getstr = getProf[1].interface_type;
-      //      CPPUNIT_ASSERT(setstr == getstr);
-      //      setstr = setProf[1].properties[0].name;
-      //      getstr = getProf[1].properties[0].name;
-      //      CPPUNIT_ASSERT(setstr == getstr);
-      //      getProf[1].properties[0].value >>= getlg;
-      //      CPPUNIT_ASSERT(setlg == getlg);
+      getProf[1] = m_pConf->getServiceProfile(svcProf1.id);
+      setstr = svcProf1.id;
+      getstr = getProf[1].id;
+      CPPUNIT_ASSERT(setstr == getstr);
+      setstr = svcProf1.interface_type;
+      getstr = getProf[1].interface_type;
+      CPPUNIT_ASSERT(setstr == getstr);
+      setstr = svcProf1.properties[0].name;
+      getstr = getProf[1].properties[0].name;
+      CPPUNIT_ASSERT(setstr == getstr);
+      getProf[1].properties[0].value >>= getlg;
+      CPPUNIT_ASSERT(setlg == getlg);
 
 
       //============  test for getServiceProfiles() ====================
       ServiceProfileList spList;
       spList = m_pConf->getServiceProfiles();
 
-      for (unsigned int i = 0; i < spList.length(); i++) {
-	setstr = setProf[i].id;
-	getstr = spList[i].id;
-	CPPUNIT_ASSERT(setstr == getstr);
+      setstr = svcProf0.id;
+      getstr = spList[0].id;
+      CPPUNIT_ASSERT(setstr == getstr);
 
-	setstr = setProf[i].interface_type;
-	getstr = spList[i].interface_type;
-	CPPUNIT_ASSERT(setstr == getstr);
+      setstr = svcProf1.id;
+      getstr = spList[1].id;
+      CPPUNIT_ASSERT(setstr == getstr);
 
-	setstr = setProf[i].properties[0].name;
-	getstr = spList[i].properties[0].name;
-	CPPUNIT_ASSERT(setstr == getstr);
-      }
+      setstr = svcProf0.interface_type;
+      getstr = spList[0].interface_type;
+      CPPUNIT_ASSERT(setstr == getstr);
+
+      setstr = svcProf1.interface_type;
+      getstr = spList[1].interface_type;
+      CPPUNIT_ASSERT(setstr == getstr);
+
+      setstr = svcProf0.properties[0].name;
+      getstr = spList[0].properties[0].name;
+      CPPUNIT_ASSERT(setstr == getstr);
+
+      setstr = svcProf1.properties[0].name;
+      getstr = spList[1].properties[0].name;
+      CPPUNIT_ASSERT(setstr == getstr);
+
     
       spList[0].properties[0].value >>= getst;
       CPPUNIT_ASSERT(setst == getst);
@@ -292,31 +305,31 @@ public:
 
 
       //============== test for remove_service_profile() ================
-      m_pConf->remove_service_profile(setProf[0].id);
+      m_pConf->remove_service_profile(svcProf0.id);
       //      m_pConf->remove_service_profile("setProfId0");
       spList = m_pConf->getServiceProfiles();
 
-      setstr = setProf[1].id;
+      setstr = svcProf1.id;
       getstr = spList[0].id;
       CPPUNIT_ASSERT(setstr == getstr);
 
-      setstr = setProf[1].interface_type;
+      setstr = svcProf1.interface_type;
       getstr = spList[0].interface_type;
       CPPUNIT_ASSERT(setstr == getstr);
 
-      setstr = setProf[1].properties[0].name;
+      setstr = svcProf1.properties[0].name;
       getstr = spList[0].properties[0].name;
       CPPUNIT_ASSERT(setstr == getstr);
       //=================================================================
     }
     catch (InvalidParameter ip) {
-      cout << "InvalidParameter exception." << endl;
+      cout << "InvalidParameter exception." << ip.description << endl;
     }
     catch (NotAvailable na) {
-      cout << "NotAvailable exception." << endl;
+      cout << "NotAvailable exception." << na.description << endl;
     }
     catch (InternalError ip) {
-      cout << "InternalError exception." << endl;
+      cout << "InternalError exception." << ip.description << endl;
     }
     catch (...) {
       cout << "othrer exception." << endl;
@@ -346,16 +359,16 @@ public:
       //      cout << orgList[0]->get_organization_id() << endl;
     }
     catch (InvalidParameter ip) {
-      cout << "InvalidParameter exception." << endl;
+      cout << "InvalidParameter exception." << ip.description << endl;
     }
     catch (NotAvailable na) {
-      cout << "NotAvailable exception." << endl;
+      cout << "NotAvailable exception." << na.description << endl;
     }
     catch (InternalError ip) {
-      cout << "InternalError exception." << endl;
+      cout << "InternalError exception." << ip.description << endl;
     }
     catch (...) {
-      cout << "othrer exception." << endl;
+      cout << "othrer exception. at add_organization" << endl;
     }
   }
 
@@ -385,16 +398,16 @@ public:
 
     }
     catch (InvalidParameter ip) {
-      cout << "InvalidParameter exception." << endl;
+      cout << "InvalidParameter exception." << ip.description << endl;
     }
     catch (NotAvailable na) {
-      cout << "NotAvailable exception." << endl;
+      cout << "NotAvailable exception." << na.description << endl;
     }
     catch (InternalError ip) {
-      cout << "InternalError exception." << endl;
+      cout << "InternalError exception." << ip.description << endl;
     }
     catch (...) {
-      cout << "othrer exception." << endl;
+      cout << "othrer exception. at get_configuration_parameters" << endl;
     }
   }
   
@@ -610,16 +623,16 @@ public:
 
     }
     catch (InvalidParameter ip) {
-      cout << "InvalidParameter exception." << endl;
+      cout << "InvalidParameter exception." << ip.description << endl;
     }
     catch (NotAvailable na) {
-      cout << "NotAvailable exception." << endl;
+      cout << "NotAvailable exception." << na.description << endl;
     }
     catch (InternalError ip) {
-      cout << "InternalError exception." << endl;
+      cout << "InternalError exception." << ip.description << endl;
     }
     catch (...) {
-      cout << "othrer exception." << endl;
+      cout << "othrer exception. at get_configuration_sets" << endl;
     }
   }
   
