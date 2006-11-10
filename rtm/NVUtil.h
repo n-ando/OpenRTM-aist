@@ -2,7 +2,7 @@
 /*!
  * @file NVUtil.h
  * @brief NameValue and NVList utility functions
- * @date $Date: 2006-11-10 04:32:46 $
+ * @date $Date: 2006-11-10 04:46:15 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
  * Copyright (C) 2006
@@ -13,12 +13,15 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: NVUtil.h,v 1.1 2006-11-10 04:32:46 n-ando Exp $
+ * $Id: NVUtil.h,v 1.2 2006-11-10 04:46:15 n-ando Exp $
  *
  */
 
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.1  2006/11/10 04:32:46  n-ando
+ * NVUtil is SDOPackage::NVList utility.
+ *
  *
  */
 #include <string>
@@ -30,14 +33,14 @@ namespace NVUtil
   /*!
    * @if jp
    *
-   * @brief NameValue $B$r@8@.$9$k(B
+   * @brief NameValue ¤òÀ¸À®¤¹¤ë
    *
-   * $B$3$N%*%Z%l!<%7%g%s$O(BNameValue$B$r:n@.$9$k!#(B
-   * CORBA::Char, CORBA::Boolean, CORBA::Octet $B$O:n@.$G$-$J$$!#(B
-   * $B$3$l$i$NCM$O(B newNVChar(), newNVBool(), newNVOctet() $B$G:n@.$9$k!#(B
+   * ¤³¤Î¥ª¥Ú¥ì¡¼¥·¥ç¥ó¤ÏNameValue¤òºîÀ®¤¹¤ë¡£
+   * CORBA::Char, CORBA::Boolean, CORBA::Octet ¤ÏºîÀ®¤Ç¤­¤Ê¤¤¡£
+   * ¤³¤ì¤é¤ÎÃÍ¤Ï newNVChar(), newNVBool(), newNVOctet() ¤ÇºîÀ®¤¹¤ë¡£
    *
-   * @param name NameValue $B$N(B name
-   * @param value NameValue $B$N(B value
+   * @param name NameValue ¤Î name
+   * @param value NameValue ¤Î value
    * @return NameValue
    *
    * @else
@@ -68,12 +71,12 @@ namespace NVUtil
   /*!
    * @if jp
    *
-   * @brief value $B$,(B CORBA::string $B$N(B NameValue $B$r@8@.$9$k(B
+   * @brief value ¤¬ CORBA::string ¤Î NameValue ¤òÀ¸À®¤¹¤ë
    *
-   * $B$3$N%*%Z%l!<%7%g%s$O(Bf value $B$,(B CORBA::string $B$N(B NameValue$B$r:n@.$9$k!#(B
+   * ¤³¤Î¥ª¥Ú¥ì¡¼¥·¥ç¥ó¤Ïf value ¤¬ CORBA::string ¤Î NameValue¤òºîÀ®¤¹¤ë¡£
    *
-   * @param name NameValue $B$N(B name
-   * @param value NameValue $B$N(B value
+   * @param name NameValue ¤Î name
+   * @param value NameValue ¤Î value
    * @return NameValue
    *
    * @else
@@ -101,12 +104,12 @@ namespace NVUtil
   /*!
    * @if jp
    *
-   * @brief value $B$,(B CORBA::Char $B$N(B NameValue $B$r@8@.$9$k(B
+   * @brief value ¤¬ CORBA::Char ¤Î NameValue ¤òÀ¸À®¤¹¤ë
    *
-   * $B$3$N%*%Z%l!<%7%g%s$O(Bf value $B$,(B CORBA::Char $B$N(B NameValue$B$r:n@.$9$k!#(B
+   * ¤³¤Î¥ª¥Ú¥ì¡¼¥·¥ç¥ó¤Ïf value ¤¬ CORBA::Char ¤Î NameValue¤òºîÀ®¤¹¤ë¡£
    *
-   * @param name NameValue $B$N(B name
-   * @param value NameValue $B$N(B value
+   * @param name NameValue ¤Î name
+   * @param value NameValue ¤Î value
    * @return NameValue
    *
    * @else
@@ -127,12 +130,12 @@ namespace NVUtil
   /*!
    * @if jp
    *
-   * @brief value $B$,(B CORBA::Boolean $B$N(B NameValue $B$r@8@.$9$k(B
+   * @brief value ¤¬ CORBA::Boolean ¤Î NameValue ¤òÀ¸À®¤¹¤ë
    *
-   * $B$3$N%*%Z%l!<%7%g%s$O(Bf value $B$,(B CORBA::Boolean $B$N(B NameValue$B$r:n@.$9$k!#(B
+   * ¤³¤Î¥ª¥Ú¥ì¡¼¥·¥ç¥ó¤Ïf value ¤¬ CORBA::Boolean ¤Î NameValue¤òºîÀ®¤¹¤ë¡£
    *
-   * @param name NameValue $B$N(B name
-   * @param value NameValue $B$N(B value
+   * @param name NameValue ¤Î name
+   * @param value NameValue ¤Î value
    * @return NameValue
    *
    * @else
@@ -154,12 +157,12 @@ namespace NVUtil
   /*!
    * @if jp
    *
-   * @brief value $B$,(B CORBA::Octet $B$N(B NameValue $B$r@8@.$9$k(B
+   * @brief value ¤¬ CORBA::Octet ¤Î NameValue ¤òÀ¸À®¤¹¤ë
    *
-   * $B$3$N%*%Z%l!<%7%g%s$O(Bf value $B$,(B CORBA::Octet $B$N(B NameValue$B$r:n@.$9$k!#(B
+   * ¤³¤Î¥ª¥Ú¥ì¡¼¥·¥ç¥ó¤Ïf value ¤¬ CORBA::Octet ¤Î NameValue¤òºîÀ®¤¹¤ë¡£
    *
-   * @param name NameValue $B$N(B name
-   * @param value NameValue $B$N(B value
+   * @param name NameValue ¤Î name
+   * @param value NameValue ¤Î value
    * @return NameValue
    *
    * @else
@@ -180,13 +183,13 @@ namespace NVUtil
   /*!
    * @if jp
    *
-   * @brief Properties $B$r(B NVList $B$X%3%T!<$9$k(B
+   * @brief Properties ¤ò NVList ¤Ø¥³¥Ô¡¼¤¹¤ë
    *
-   * $B$3$N%*%Z%l!<%7%g%s$O(B Properties $B$r(B NVList $B$X%3%T!<$9$k!#(B
-   * NVList $B$N(B value $B$OA4$F(B CORBA::string $B7?$H$7$F%3%T!<$9$k!#(B
+   * ¤³¤Î¥ª¥Ú¥ì¡¼¥·¥ç¥ó¤Ï Properties ¤ò NVList ¤Ø¥³¥Ô¡¼¤¹¤ë¡£
+   * NVList ¤Î value ¤ÏÁ´¤Æ CORBA::string ·¿¤È¤·¤Æ¥³¥Ô¡¼¤¹¤ë¡£
    *
-   * @param nv Properties $B$NCM$r3JG<$9$k(B NVList
-   * @param prop $B%3%T!<85$N(B Properties
+   * @param nv Properties ¤ÎÃÍ¤ò³ÊÇ¼¤¹¤ë NVList
+   * @param prop ¥³¥Ô¡¼¸µ¤Î Properties
    *
    * @else
    *
@@ -206,12 +209,12 @@ namespace NVUtil
   /*!
    * @if jp
    *
-   * @brief NVList $B$+$i(B name $B$G;XDj$5$l$?(B value $B$rJV$9(B
+   * @brief NVList ¤«¤é name ¤Ç»ØÄê¤µ¤ì¤¿ value ¤òÊÖ¤¹
    *
-   * $B$3$N%*%Z%l!<%7%g%s$O(B name $B$G;XDj$5$l$?(B value $B$r(B Any $B7?$GJV$9!#(B
+   * ¤³¤Î¥ª¥Ú¥ì¡¼¥·¥ç¥ó¤Ï name ¤Ç»ØÄê¤µ¤ì¤¿ value ¤ò Any ·¿¤ÇÊÖ¤¹¡£
    *
-   * @param nv $B8!:wBP>]$N(B NVList
-   * @param name $B8!:w$9$kL>A0(B
+   * @param nv ¸¡º÷ÂÐ¾Ý¤Î NVList
+   * @param name ¸¡º÷¤¹¤ëÌ¾Á°
    *
    * @else
    *
@@ -231,13 +234,13 @@ namespace NVUtil
   /*!
    * @if jp
    *
-   * @brief $B;XDj$5$l$?(B name $B$N(B value $B$N7?$,(B string $B$G$"$k$+$I$&$+!)(B
+   * @brief »ØÄê¤µ¤ì¤¿ name ¤Î value ¤Î·¿¤¬ string ¤Ç¤¢¤ë¤«¤É¤¦¤«¡©
    *
-   * $B$3$N%*%Z%l!<%7%g%s$O(B name $B$G;XDj$5$l$?(B value $B$N7?$,(B CORBA::string
-   * $B$+$I$&$+$r(B bool $BCM$GJV$9!#(B
+   * ¤³¤Î¥ª¥Ú¥ì¡¼¥·¥ç¥ó¤Ï name ¤Ç»ØÄê¤µ¤ì¤¿ value ¤Î·¿¤¬ CORBA::string
+   * ¤«¤É¤¦¤«¤ò bool ÃÍ¤ÇÊÖ¤¹¡£
    *
-   * @param nv $B8!:wBP>]$N(B NVList
-   * @param name $B8!:w$9$kL>A0(B
+   * @param nv ¸¡º÷ÂÐ¾Ý¤Î NVList
+   * @param name ¸¡º÷¤¹¤ëÌ¾Á°
    *
    * @else
    *
@@ -256,15 +259,15 @@ namespace NVUtil
   /*!
    * @if jp
    *
-   * @brief $B;XDj$5$l$?(B name $B$N(B NVList $B$r(B string $B$H$7$FJV$9!#(B
+   * @brief »ØÄê¤µ¤ì¤¿ name ¤Î NVList ¤ò string ¤È¤·¤ÆÊÖ¤¹¡£
    *
-   * $B$3$N%*%Z%l!<%7%g%s$O(B name $B$G;XDj$5$l$?(B NVList $B$NCM$r(B string $B$GJV$9!#(B
-   * $B$b$7!"(Bname $B$G;XDj$7$?(B value $B$NCM$,(B CORBA::string $B$G$J$1$l$P!"(B
-   * $B6u$NJ8;zNs$N(Bstring$B$rJV$9!#(B
+   * ¤³¤Î¥ª¥Ú¥ì¡¼¥·¥ç¥ó¤Ï name ¤Ç»ØÄê¤µ¤ì¤¿ NVList ¤ÎÃÍ¤ò string ¤ÇÊÖ¤¹¡£
+   * ¤â¤·¡¢name ¤Ç»ØÄê¤·¤¿ value ¤ÎÃÍ¤¬ CORBA::string ¤Ç¤Ê¤±¤ì¤Ð¡¢
+   * ¶õ¤ÎÊ¸»úÎó¤Îstring¤òÊÖ¤¹¡£
    *
-   * @param nv $B8!:wBP>]$N(B NVList
-   * @param name $B8!:w$9$kL>A0(B
-   * @return name $B$KBP1~$9$kCM$N(Bstring$B7?$NCM(B
+   * @param nv ¸¡º÷ÂÐ¾Ý¤Î NVList
+   * @param name ¸¡º÷¤¹¤ëÌ¾Á°
+   * @return name ¤ËÂÐ±þ¤¹¤ëÃÍ¤Îstring·¿¤ÎÃÍ
    *
    * @else
    *
