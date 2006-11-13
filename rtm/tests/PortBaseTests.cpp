@@ -2,14 +2,18 @@
 /*!
  * @file 
  * @brief Properties test class
- * @date $Date: 2006-11-08 01:19:07 $
+ * @date $Date: 2006-11-13 12:30:06 $
  * @author Shinji Kurihara
- * $Id: PortBaseTests.cpp,v 1.1 2006-11-08 01:19:07 kurihara Exp $
+ * $Id: PortBaseTests.cpp,v 1.2 2006-11-13 12:30:06 kurihara Exp $
  *
  */
 
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.1  2006/11/08 01:19:07  kurihara
+ *
+ * test program for PortBase class.
+ *
  */
 
 #include <cppunit/ui/text/TestRunner.h>
@@ -35,11 +39,11 @@ class PortBaseTest
 {
   CPPUNIT_TEST_SUITE(PortBaseTest);
   CPPUNIT_TEST(test_get_port_profile);
-  CPPUNIT_TEST(test_get_connetctor_profiles);
-  CPPUNIT_TEST(test_get_connetctor_profile);
-  CPPUNIT_TEST(test_connet);
-  CPPUNIT_TEST(test_disconnet);
-  CPPUNIT_TEST(test_disconnet_all);
+  CPPUNIT_TEST(test_get_connector_profiles);
+  CPPUNIT_TEST(test_get_connector_profile);
+  CPPUNIT_TEST(test_connect);
+  CPPUNIT_TEST(test_disconnect);
+  CPPUNIT_TEST(test_disconnect_all);
   //  CPPUNIT_TEST(test_setProfile);
   CPPUNIT_TEST(test_getProfile);
   CPPUNIT_TEST(test_setName);
@@ -63,39 +67,38 @@ class PortBaseTest
 
 private:
   PortBase* m_ppb;
-  CORBA::ORB_var          m_orb;
-  PortableServer::POA_var m_poa;
+  CORBA::ORB_ptr          m_orb;
+  PortableServer::POA_ptr m_poa;
 
   NVList m_nvlist;
   SDOPackage::NameValue m_nv;
   CORBA::Float m_cnctProfVal,m_portProfVal;
 public:
   
-  /*
-   * コンストラクタ/デストラクタ
+  /*!
+   * @brief コンストラクタ
    */
   PortBaseTest()
   {
-    /*
-    char* argv[g_argc];
-    for (int i = 0; i < g_argc; i++) {
-      argv[i] = (char *)g_argv[i].c_str();
-    }
-
-    m_orb = CORBA::ORB_init(g_argc, argv);
-    CORBA::Object_var  obj = m_orb->resolve_initial_references("RootPOA");
-    m_poa = PortableServer::POA::_narrow(obj);
-    PortableServer::POAManager_var pman = m_poa->the_POAManager();
-    pman->activate();
-    */
   }
   
+  /*!
+   * @brief デストラクタ
+   */
   ~PortBaseTest()
   {
   }
   
-  /*
-   * 初期化/後始末
+  /*!
+   * @brief 初期化
+   *    (1) ORBの初期化,POAのactivate
+   *    (2) PortBaseのインスタンス生成
+   *    (3) PortInterfaceProfileオブジェクト要素のセット
+   *    (4) PortInterfaceProfileListオブジェクト要素(PortProfileの要素)のセット
+   *    (5) ConnectorProfileオブジェクト要素のセット
+   *    (6) ConnectorProfileListオブジェクト要素(PortProfileの要素)のセット
+   *    (7) PortProfileオブジェクト要素のセット
+   *    (8) PortProfileオブジェクトのセット
    */
   virtual void setUp()
   {
@@ -104,26 +107,28 @@ public:
       argv[i] = (char *)g_argv[i].c_str();
     }
 
+    // (1) ORBの初期化,POAのactivate
     m_orb = CORBA::ORB_init(g_argc, argv);
     CORBA::Object_var  obj = m_orb->resolve_initial_references("RootPOA");
     m_poa = PortableServer::POA::_narrow(obj);
     PortableServer::POAManager_var pman = m_poa->the_POAManager();
     pman->activate();
 
-    m_ppb = new PortBase(m_orb._retn(), m_poa._retn());
+    // (2) PortBaseのインスタンス生成
+    m_ppb = new PortBase(m_orb, m_poa);
 
-    // set PortInterfaceProfile
+    // (3) PortInterfaceProfileオブジェクト要素(PortProfileの要素)のセット
     PortInterfaceProfile pIProf;
     pIProf.instance_name = "PortInterfaceProfile-instance_name";
     pIProf.type_name = "PortInterfaceProfile-type_name";
     pIProf.polarity = REQUIRED;
 
-    // set PortInterfaceProfileList
+    // (4) PortInterfaceProfileListオブジェクト要素のセット
     PortInterfaceProfileList pIFProfList;
     pIFProfList.length(1);
     pIFProfList[0] = pIProf;
 
-    // set ConnectorProfile
+    // (5) ConnectorProfileオブジェクト要素のセット
     ConnectorProfile cProf;
     cProf.name = "ConnectorProfile-name";
     cProf.connector_id = "connect_id0";
@@ -134,12 +139,12 @@ public:
     m_nvlist[0] = m_nv;
     cProf.properties = m_nvlist;
 
-    // set ConnectorProfileList
+    // (6) ConnectorProfileListオブジェクト要素(PortProfileの要素)のセット
     ConnectorProfileList cProfList;
     cProfList.length(1);
     cProfList[0] = cProf;
 
-    // set PortProfile
+    // (7) PortProfileオブジェクト要素のセット
     PortProfile pProf;
     pProf.name = "inport0";
     pProf.interfaces = pIFProfList;
@@ -150,30 +155,38 @@ public:
     m_nvlist[0] = m_nv;
     pProf.properties = m_nvlist;
 
-    // set PortProfile
+    // (8) PortProfileオブジェクトのセット
     m_ppb->setProfile(pProf);
   }
   
+
+  /*!
+   * @brief 後処理
+   */
   virtual void tearDown()
   { 
     //    delete m_ppb;
   }
 
 
-  /* tests for */
+  /*!
+   * @brief get_port_profile()のテスト
+   *    ※ PortProfileはsetUp()で登録済みである。
+   *    (1) get_port_profile()にてPortProfile*を取得
+   *    (2) セットしたPortProfileと取得したPortProfileの要素を比較
+   */
   void test_get_port_profile() {
     PortProfile* getProf;
 
-    // get PortProfile
+    // (1) get_port_profile()にてPortProfile*を取得
     getProf = m_ppb->get_port_profile();
 
     string setstr, getstr;
-
+    // (2) セットしたPortProfileと取得したPortProfileの要素を比較
     // check PortProfile.name
     getstr = getProf->name;
     setstr = "inport0";
     CPPUNIT_ASSERT(getstr == setstr);
-
 
     // check PortProfile.interfaces
     getstr = getProf->interfaces[0].instance_name;
@@ -185,7 +198,6 @@ public:
     CPPUNIT_ASSERT(getstr == setstr);
 
     CPPUNIT_ASSERT(getProf->interfaces[0].polarity == REQUIRED);
-
 
     // check PortProfile.connector_profiles
     getstr = getProf->connector_profiles[0].name;
@@ -204,7 +216,6 @@ public:
     getProf->connector_profiles[0].properties[0].value >>= retval;
     CPPUNIT_ASSERT(retval == m_cnctProfVal);
 
-
     // check PortProfile.properties
     getstr = getProf->properties[0].name;
     setstr = "PortProfile-properties0-name";
@@ -215,14 +226,22 @@ public:
   }
 
 
-  /* tests for */
-  void test_get_connetctor_profiles() {
+  /*!
+   * @brief get_connector_profiles()のテスト
+   *    ※ ConnectorProfileListはPortProfileの要素であり、setUp()で登録済みである。
+   *    (1）get_connector_profiles()にてConnectorProfileListを取得
+   *    (2) セットしたConnectorProfileと取得したConnectorProfileListの要素である
+   *        ConnectorProfileの要素を比較。
+   */
+  void test_get_connector_profiles() {
     ConnectorProfileList* cpList;
     string setstr, getstr;
 
     // get ConnectorProfileList
     cpList = m_ppb->get_connector_profiles();
     
+    // (2) セットしたConnectorProfileと取得したConnectorProfileListの要素である
+    //      ConnectorProfileの要素を比較。
     // check ConnectorProfile.name
     setstr = "ConnectorProfile-name";
     getstr = (*cpList)[0].name;
@@ -245,14 +264,21 @@ public:
   }
 
 
-  /* tests for */
-  void test_get_connetctor_profile() {
+  /*!
+   * @brief get_connector_profile()のテスト
+   *    ※ ConnectorProfileはConnectorProfileListの要素であり、ConnectorProfileListは
+   *       PortProfileの要素である。PortProfileはsetUp()で登録済みである。
+   *    (1) get_connector_profileにてConnectorProfileを取得。
+   *    (2) セットしたConnectorProfileと取得したConnectorProfileを比較。
+   */
+  void test_get_connector_profile() {
     ConnectorProfile* cProf;
     string setstr, getstr;
 
-    // get ConnectorProfile
+    // (1) get_connector_profileにてConnectorProfileを取得。
     cProf = m_ppb->get_connector_profile("connect_id0");
     
+    // セットしたConnectorProfileと取得したConnectorProfileを比較。
     // check ConnectorProfile.name
     setstr = "ConnectorProfile-name";
     getstr = cProf->name;
@@ -292,38 +318,53 @@ public:
   }
 
 
-  /* tests for */
-  void test_connet() {}
+  /*!
+   * @brief connect()のテスト
+   *   未テスト
+   */
+  void test_connect() {}
 
 
-  /* tests for */
-  void test_disconnet() {}
+  /*!
+   * @brief disconnect()のテスト
+   *   未テスト
+   */
+  void test_disconnect() {}
 
 
-  /* tests for */
-  void test_disconnet_all() {}
+  /*!
+   * @brief disconnect_all()のテスト
+   *   未テスト
+   */
+  void test_disconnect_all() {}
 
 
-  /* tests for */
-  void test_setProfile() {
-    // test_get_port_profile() にてテスト
-  }
+  /*!
+   * @brief setProfile()のテスト
+   *   test_get_port_profile() にてテスト済み
+   */
+  void test_setProfile() {}
 
 
-  /* tests for */
+  /*!
+   * @brief getProfile()のテスト
+   *   ※ PortProfileはsetUp()で登録済みである。
+   *   (1) getProfile()にてPortProfileを取得。
+   *   (2) セットしたPortProfileと取得したそれとの要素を比較。
+   */
   void test_getProfile() {
     PortProfile getProf;
 
-    // get PortProfile
+    // (1) getProfile()にてPortProfileを取得。
     getProf = m_ppb->getProfile();
 
     string setstr, getstr;
 
+    // (2) セットしたPortProfileと取得したそれとの要素を比較。
     // check PortProfile.name
     getstr = getProf.name;
     setstr = "inport0";
     CPPUNIT_ASSERT(getstr == setstr);
-
 
     // check PortProfile.interfaces
     getstr = getProf.interfaces[0].instance_name;
@@ -335,7 +376,6 @@ public:
     CPPUNIT_ASSERT(getstr == setstr);
 
     CPPUNIT_ASSERT(getProf.interfaces[0].polarity == REQUIRED);
-
 
     // check PortProfile.connector_profiles
     getstr = getProf.connector_profiles[0].name;
@@ -354,7 +394,6 @@ public:
     getProf.connector_profiles[0].properties[0].value >>= retval;
     CPPUNIT_ASSERT(retval == m_cnctProfVal);
 
-
     // check PortProfile.properties
     getstr = getProf.properties[0].name;
     setstr = "PortProfile-properties0-name";
@@ -364,55 +403,89 @@ public:
     CPPUNIT_ASSERT(retval == m_portProfVal);
   }
 
-  /* tests for */
+
+  /*!
+   * @brief setName()のテスト
+   *   ※ PortProfileはsetUp()にて登録済みである。
+   *   (1) setName()にてPortProfile.nameをセット。
+   *   (2) getProfile()にてPortProfileを取得。
+   *   (3) (1)でセットしたnameと(2)で取得したPortProfile.nameを比較。
+   */
   void test_setName() {
+    // (1) setName()にてPortProfile.nameをセット。
     m_ppb->setName("inport0-changed");
     
     PortProfile getProf;
-    // get PortProfile
+
+    // (2) getProfile()にてPortProfileを取得。
     getProf = m_ppb->getProfile();
 
     string setstr, getstr;
 
-    // check PortProfile.name
+    // (3) (1)でセットしたnameと(2)で取得したPortProfile.nameを比較。
     getstr = getProf.name;
     setstr = "inport0-changed";
     CPPUNIT_ASSERT(getstr == setstr);
   }
 
 
-  /* tests for */
+  /*!
+   * @brief  getName()のテスト
+   *   ※ PortProfileはsetUp()にて登録済みである。
+   *   (1) geName()にてPortProfile.nameを取得。
+   *   (2) セット済みのPortProfile.nameと(1)で取得したnameを比較。
+   */
   void test_getName() {
+    // (1) geName()にてPortProfile.nameを取得。
     const char* retval(m_ppb->getName());
+
     string setname, getname;
+
+    // (2) セット済みのPortProfile.nameと(1)で取得したnameを比較。
     setname = "inport0";
     getname = retval;
     CPPUNIT_ASSERT(getname == setname);
   }
 
 
-  /* tests for */
+  /*!
+   * @brief setInterfaceProfiles()のテスト
+   *   (1) PortInterfaceProfileオブジェクト要素のセット。
+   *   (2) (1)でセットしたPortInterfaceProfileをPortInterfaceProfileListにセット。
+   *   (3）setInterfaceProfiles()にてPortInterfaceProfileListをセット。
+   *   (4) getInterfaceProfiles()にてPortInterfaceProfileListを取得。
+   *   (5) (3)でセットしたPortInterfaceProfileListの要素と、(4)で取得したそれとを比較。
+   *   (6) addInterfaceProfile()にてPortInterfaceProfileを追加。
+   *   (7) getInterfaceProfiles()にてPortInterfaceProfileListを取得。
+   *   (8) (6)で追加したPortInterfaceProfileListの要素と、(7)で取得したそれとを比較。
+   *   (9) getInterfaceProfile(name)にてPortInterfaceProfileを取得。
+   *   (10) (6)で追加したPortInterfaceProfileListの要素と、(9)で取得したそれとを比較。
+   */
   void test_setInterfaceProfiles() {
-    // set PortInterfaceProfile
+    // (1) PortInterfaceProfileオブジェクト要素のセット。
     PortInterfaceProfile pIProf;
     pIProf.instance_name = "PortInterfaceProfile-instance_name-changed";
     pIProf.type_name = "PortInterfaceProfile-type_name-changed";
     pIProf.polarity = REQUIRED;
 
-    // set PortInterfaceProfileList
+
+    // (2) (1)でセットしたPortInterfaceProfileをPortInterfaceProfileListにセット。
     PortInterfaceProfileList pIFProfList;
     pIFProfList.length(1);
     pIFProfList[0] = pIProf;
+
+
+    // (3）setInterfaceProfiles()にてPortInterfaceProfileListをセット。
     m_ppb->setInterfaceProfiles(pIFProfList);
 
     
+    // (4) getInterfaceProfiles()にてPortInterfaceProfileListを取得。
     PortInterfaceProfileList getList;
-    // get PortInterfaceProfileList
     getList = m_ppb->getInterfaceProfiles();
 
-    string getstr, setstr;
 
-    // check PortInterfaceProfile
+    // (5) (3)でセットしたPortInterfaceProfileListの要素と、(4)で取得したそれとを比較。
+    string getstr, setstr;
     getstr = getList[0].instance_name;
     setstr = "PortInterfaceProfile-instance_name-changed";
     CPPUNIT_ASSERT(getstr == setstr);
@@ -424,16 +497,18 @@ public:
     CPPUNIT_ASSERT(getList[0].polarity == REQUIRED);
 
 
-    // add InterfaceProfile
+    // (6) addInterfaceProfile()にてPortInterfaceProfileを追加。
     pIProf.instance_name = "PortInterfaceProfile-instance_name-add";
     pIProf.type_name = "PortInterfaceProfile-type_name-add";
     pIProf.polarity = PROVIDED;
-
     m_ppb->addInterfaceProfile(pIProf);
 
+
+    // (7) getInterfaceProfiles()にてPortInterfaceProfileListを取得。
     getList = m_ppb->getInterfaceProfiles();
 
-    // check PortInterfaceProfile
+
+    // (8) (6)で追加したPortInterfaceProfileListの要素と、(7)で取得したそれとを比較。
     getstr = getList[1].instance_name;
     setstr = "PortInterfaceProfile-instance_name-add";
     CPPUNIT_ASSERT(getstr == setstr);
@@ -445,11 +520,11 @@ public:
     CPPUNIT_ASSERT(getList[1].polarity == PROVIDED);
 
 
-    // get PortInterfaceProfile
+    // (9) getInterfaceProfile(name)にてPortInterfaceProfileを取得。
     PortInterfaceProfile getProf;
     getProf = m_ppb->getInterfaceProfile("PortInterfaceProfile-instance_name-add");
 
-    // check PortInterfaceProfile
+    // (10) (6)で追加したPortInterfaceProfileListの要素と、(9)で取得したそれとを比較。
     getstr = getProf.instance_name;
     setstr = "PortInterfaceProfile-instance_name-add";
     CPPUNIT_ASSERT(getstr == setstr);
@@ -461,41 +536,59 @@ public:
     CPPUNIT_ASSERT(getProf.polarity == PROVIDED);
   }
 
-  /* tests for */
-  void test_addInterfaceProfiles() {
-    // test_setInterfaceProfiles()にてテスト。
-  }
+  /*!
+   * @brief addInterfaceProfiles()のテスト
+   *   test_setInterfaceProfiles()にてテスト済み。
+   */
+  void test_addInterfaceProfiles() {}
 
 
-  /* tests for */
-  void test_getInterfaceProfiles() {
-    // test_setInterfaceProfiles()にてテスト。
-  }
+  /*!
+   * @brief getInterfaceProfiles()のテスト
+   *   test_setInterfaceProfiles()にてテスト済み。
+   */
+  void test_getInterfaceProfiles() {}
 
 
-  /* tests for */
-  void test_getInterfaceProfile() {
-    // test_setInterfaceProfiles()にてテスト。
-  }
+  /*!
+   * @brief getInterfaceProfile()のテスト
+   *   test_setInterfaceProfiles()にてテスト済み。
+   */
+  void test_getInterfaceProfile() {}
 
-  /* tests for */
+
+
+  /*!
+   * @brief  setPortRef()のテスト
+   *   ※ PortProfileはsetUp()にて登録済み。
+   *   (1) setPortRef()にてPortBaseオブジェクトの参照をセット。
+   *   (2) getPortRef()にてPortインタフェースのオブジェクト参照を取得。
+   *   (3) (2)で取得したオブジェクト参照を用いPortインタフェースのオペレーション
+   *        呼び出しテスト。
+   *   (4) (3)のオペレーション呼び出しにて取得したPortProfileの要素とsetUp()で
+   *       セットしたそれとを比較。
+   */
   void test_setPortRef() {
     Port_var port = m_ppb->_this();
     m_ppb->_remove_ref();
 
-    // check setPortRef()
+    // (1) setPortRef()にてPortBaseオブジェクトの参照をセット。
     m_ppb->setPortRef(port._retn());
 
+
+    // (2) getPortRef()にてPortインタフェースのオブジェクト参照を取得。
     Port_ptr getP;
     PortProfile* pProf;
-    // check getPortRef()
     getP = m_ppb->getPortRef();
     
-    // Portのオペレーション呼び出しテスト
+
+    // (3) (2)で取得したオブジェクト参照を用いPortインタフェースのオペレーション呼び出しテスト。
     pProf = getP->get_port_profile();
 
-    string setstr, getstr;
 
+    // (4) (3)のオペレーション呼び出しにて取得したPortProfileの要素とsetUp()で
+    //     セットしたそれとを比較。
+    string setstr, getstr;
     getstr = pProf->name;
     setstr = "inport0";
     CPPUNIT_ASSERT(getstr == setstr);
@@ -518,15 +611,27 @@ public:
   }
 
 
-  /* tests for */
-  void test_getPortRef() {
-    // test_setPortRef()にてテスト。
-  }
+  /*!
+   * @brief getPortRefのテスト
+   *   test_setPortRef()にてテスト済み。
+   */
+  void test_getPortRef() {}
 
 
-  /* tests for */
+  /*!
+   * @brief addConnectorProfile()のテスト
+   *   ※ PortProfileはsetUp()で登録済み。
+   *   (1) ConnectorProfileオブジェクト要素のセット
+   *   (2) (1)でセットしたConnectorProfileをaddConnectorProfile()にて追加。
+   *   (3）ConnectorProfileListの取得。
+   *   (4) (2)で追加したConnectorProfileと(3)で取得したそれとを比較。
+   *   (5) eraseConnectorProfile(id)にて,引数で指定したidを持つConnectorProfileを
+   *       ConnectorProfileListから削除する。
+   *   (6) (5)で削除後のConnectorProfileListを取得
+   *   (7) (6)で取得したConnectorProfileListの要素を確認。
+   */
   void test_addConnectorProfile() {
-    // set ConnectorProfile
+    // (1) ConnectorProfileオブジェクト要素のセット
     ConnectorProfile cProf,getProf;
     cProf.name = "ConnectorProfile-name-add";
     cProf.connector_id = "connect_id0-add";
@@ -541,15 +646,18 @@ public:
     nvlist[0] = nv;
     cProf.properties = nvlist;
 
-    // test addConnectorProfile()
+
+    // (2) (1)でセットしたConnectorProfileをaddConnectorProfile()にて追加。
     m_ppb->addConnectorProfile(cProf);
 
+
+    // (3）ConnectorProfileListの取得。
     ConnectorProfileList cnctPList;
-    // test getConnectorProfileList()
     cnctPList = m_ppb->getConnectorProfileList();
 
-    string setstr, getstr;
 
+    // (4) (2)で追加したConnectorProfileと(3)で取得したそれとを比較。
+    string setstr, getstr;
     getstr = cnctPList[1].name;
     setstr = cProf.name;
     CPPUNIT_ASSERT(getstr == setstr);
@@ -565,12 +673,20 @@ public:
     cnctPList[1].properties[0].value >>= retdb;
     CPPUNIT_ASSERT(retdb == db);
 
+
+    // (5) eraseConnectorProfile(id)にて,引数で指定したidを持つConnectorProfileを
+    //     ConnectorProfileListから削除する。
     // test eraseConnectorProfile()
+    // Failure case: 登録していないIDでeraseConnectorProfile()を呼ぶとアボートする。
     //    m_ppb->eraseConnectorProfile("hoge");
     m_ppb->eraseConnectorProfile("connect_id0");
 
+
+    // (6) (5)で削除後のConnectorProfileListを取得。
     getProf = m_ppb->getConnectorProfile("connect_id0-add");
 
+
+    // (7) (6)で取得したConnectorProfileListの要素を確認。
     getstr = getProf.name;
     setstr = getProf.name;
     CPPUNIT_ASSERT(getstr == setstr);
@@ -585,34 +701,39 @@ public:
 
     getProf.properties[0].value >>= retdb;
     CPPUNIT_ASSERT(retdb == db);
-
   }
 
 
-  /* tests for */
-  void test_eraseConnectorProfile() {
-    // test_addConnectorProfileList()にてテスト
-  }
+  /*!
+   * @brief  eraseConnectorProfile()のテスト
+   *   test_addConnectorProfileList()にてテスト済み。
+   */
+  void test_eraseConnectorProfile() {}
 
 
-  /* tests for */
-  void test_getConnectorProfileList() {
-    // test_addConnectorProfileList()にてテスト
-  }
+  /*!
+   * @brief getConnectorProfileList()のテスト
+   *   test_addConnectorProfileList()にてテスト済み。
+   */
+  void test_getConnectorProfileList() {}
 
 
-  /* tests for */
-  void test_getConnectorProfile() {
-    // test_addConnectorProfileList()にてテスト
-  }
+  /*!
+   * @brief getConnectorProfile()のテスト
+   *   test_addConnectorProfileList()にてテスト済み。
+   */
+  void test_getConnectorProfile() {}
 
 
-  /* tests for */
+  /*!
+   * @brief setOwner()
+   *   RTObjectインタフェースの実装が完了していない。
+   */
   void test_setOwner() {
-    /* // RTObjectインタフェースの実装が完了していない。
+    /*
     RTObject_impl* rtobj;
 
-    rtobj = new RTObject_impl(m_orb._retn(), m_poa._retn());
+    rtobj = new RTObject_impl(m_orb, m_poa);
 
     RTObject_var p_rtobj = rtobj->_this();
     rtobj->_remove_ref();
@@ -623,18 +744,30 @@ public:
 
   }
 
-  /* tests for */
+  /*!
+   * @brief getOwner()のテスト
+   */
   void test_getOwner() {}
 
 
-  /* tests for */
+  /*!
+   * @brief setProperties()のテスト
+   *   ※ PortProfileはsetUp()で登録済みである。
+   *   (1) getProperties()にてPortProfile.propertyを取得。
+   *   (2) (1)で取得したpropertyの要素とsetUp()でセットしたそれとを比較。
+   *   (3) setProperties()にてPortProfile.propertyをセット
+   *   (4) getProperties()にてPortProfile.propertyを取得。
+   *   (5) (3)でセットしたPortProfile.propertyと(4)で取得したそれとを比較。
+   */
   void test_setProperties() {
     NVList setlist, getlist;
     SDOPackage::NameValue nv;
 
-    // test getProperties()
+    // (1) getProperties()にてPortProfile.propertyを取得。
     getlist = m_ppb->getProperties();
 
+
+    // (2) (1)で取得したpropertyの要素とsetUp()でセットしたそれとを比較。
     string getstr, setstr;
     CORBA::Float setval, retval;
     getlist[0].value >>= retval;
@@ -644,7 +777,8 @@ public:
     CPPUNIT_ASSERT(getstr == setstr);
     CPPUNIT_ASSERT(retval == m_portProfVal);
 
-    // test setProperties()
+
+    // (3) setProperties()にてPortProfile.propertyをセット
     nv.name = "setProperties test";
     setval = 999.9;
     nv.value <<= setval;
@@ -652,8 +786,13 @@ public:
     setlist.length(1);
     setlist[0] = nv;
     m_ppb->setProperties(setlist);
-    
+
+
+    // (4) getProperties()にてPortProfile.propertyを取得。
     getlist = m_ppb->getProperties();
+
+
+    // (5) (3)でセットしたPortProfile.propertyと(4)で取得したそれとを比較。
     getlist[0].value >>= retval;
 
     getstr = getlist[0].name;
@@ -664,15 +803,23 @@ public:
   }
 
 
-  /* tests for */
-  void test_getProperties() {
-    // test_setPropertiesにてテスト
-  }
+  /*!
+   * @brief getProperties()のテスト
+   *   test_setPropertiesにてテスト済み。
+   */
+  void test_getProperties() {}
 
 
-  /* tests for */
+  /*!
+   * @brief  getUUID()のテスト
+   *   (1) getUUID()にてUUIDの取得。
+   *   (2) 取得したUUIDを標準出力に出力。
+   */
   void test_getUUID() {
+    // (1) getUUID()にてUUIDの取得。
     string getuuid = m_ppb->getUUID();
+
+    // (2) 取得したUUIDを標準出力に出力。
     cout << endl << "uuid: " << getuuid << endl;
   }
 
