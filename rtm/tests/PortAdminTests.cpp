@@ -2,14 +2,18 @@
 /*!
  * @file 
  * @brief Properties test class
- * @date $Date: 2006-11-13 04:18:45 $
+ * @date $Date: 2006-11-14 02:21:09 $
  * @author Shinji Kurihara
- * $Id: PortAdminTests.cpp,v 1.1 2006-11-13 04:18:45 kurihara Exp $
+ * $Id: PortAdminTests.cpp,v 1.2 2006-11-14 02:21:09 kurihara Exp $
  *
  */
 
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.1  2006/11/13 04:18:45  kurihara
+ *
+ * test program for PortAdmin class.
+ *
  */
 
 #include <cppunit/ui/text/TestRunner.h>
@@ -228,21 +232,24 @@ public:
 
   /*!
    * @brief deletePort()のテスト
+   *   ※ Port_ptrはsetUp()にてregisterPort()を用いて登録済みである。(2つのポートを登録。)
    *   (1) deletePort()呼び出し。
-   *   (2) getPortList()にて、(1)の処理が正しく行われているかを確認。
+   *   (2) getPortList()にてPortListを取得。
+   *   (3) (1)の処理が正しく行われているかを確認。
    */
   void test_deletePort() {
 
-    // deletePort()呼び出し。
-    m_ppadm->deletePort(*m_ppb);
+    // (1) deletePort()呼び出し。
+    m_ppadm->deletePort(*m_ppb2);
 
-    // PortListの取得
+    // (2) getPortList()にてPortListを取得。
     PortList* getPList;
     getPList = m_ppadm->getPortList();
 
     cout << getPList->length() << endl;
 
-    /*
+
+    // (3) (1)の処理が正しく行われているかを確認。
     PortProfile *getProf0, *getProf1;
     // 取得したPortBaseオブジェクト−オペレーション呼び出し。
     getProf0 = (*getPList)[0]->get_port_profile();
@@ -251,25 +258,60 @@ public:
     setstr = "port0";
     CPPUNIT_ASSERT(getstr == setstr);
 
+
+    // Failure case :
+    //    setUp()で2つのポートを登録しており、(1)で一つ削除したので、ここでの処理は
+    //    エラーとなるはずである。
     getProf1 = (*getPList)[1]->get_port_profile();
     getstr = getProf1->name;
     setstr = "port1";
     CPPUNIT_ASSERT(getstr == setstr);
-    */
   }
 
 
   /*!
    * @brief tests for deletePortByName()
+   *   ※ Port_ptrはsetUp()にてregisterPort()を用いて登録済みである。(2つのポートを登録。)
+   *    (1) getPortList()にてPortListを取得し登録されているPortの数を確認。
+   *    (2）deletePortByName()にて"port1"の名前を持つPortの削除を行う。
+   *    (3) getPortList()にてPortListを取得し登録されているPortの数を確認。
    */
   void test_deletePortByName() {
+    PortList* getPList;
+
+    // (1) getPortList()にてPortListを取得し登録されているPortの数を確認。
+    getPList = m_ppadm->getPortList();
+    cout << getPList->length() << endl;
+
+    m_ppadm->deletePortByName("port1");
+
+    // (3) getPortList()にてPortListを取得し登録されているPortの数を確認。
+    getPList = m_ppadm->getPortList();
+    cout << getPList->length() << endl;
   }
 
 
   /*!
    * @brief tests for finalizePorts()
+   *   (1) getPortList()にてPortListを取得し登録されているPortの数を確認。
+   *   (2) finalizePorts()の呼び出し。
+   *   (3) getPortList()にてPortListを取得し登録されているPortの数を確認。
    */
   void test_finalizePorts() {
+    PortList* getPList;
+
+    // (1) getPortList()にてPortListを取得し登録されているPortの数を確認。
+    getPList = m_ppadm->getPortList();
+    cout << getPList->length() << endl;
+
+    
+    // (2) finalizePorts()の呼び出し。
+    m_ppadm->finalizePorts();
+
+
+    // (3) getPortList()にてPortListを取得し登録されているPortの数を確認。
+    getPList = m_ppadm->getPortList();
+    cout << getPList->length() << endl;
   }
 
 };
