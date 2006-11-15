@@ -2,9 +2,9 @@
 /*!
  * @file 
  * @brief test for NVUtil module.
- * @date $Date: 2006-11-15 09:44:20 $
+ * @date $Date: 2006-11-15 09:47:18 $
  * @author Shinji Kurihara
- * $Id: NVUtilTests.cpp,v 1.2 2006-11-15 09:44:20 kurihara Exp $
+ * $Id: NVUtilTests.cpp,v 1.3 2006-11-15 09:47:18 kurihara Exp $
  *
  */
 
@@ -350,6 +350,10 @@ public:
 
   /*!
    * @brief toString()のテスト
+   *   (1) NVList要素のnameに"short",valueにshort型のデータをセット。
+   *   (2) NVList要素のnameに"string",valueにstring型のデータをセット。
+   *   (3) toString(nvlist,name)にて,指定されたnameのvalueをstringで取得。
+   *   (4) toString(nvlist,name)にて,指定されたnameのvalueをstringで取得。
    */
   void test_toString() {
     string result;
@@ -375,7 +379,7 @@ public:
 
     // Failure case:
     // 
-    // (4) isString(nvlist,name)にて,指定されたnameのvalueをstringで取得。
+    // (4) toString(nvlist,name)にて,指定されたnameのvalueをstringで取得。
     result = toString(nvlist, "short");
     setstr = "";
     CPPUNIT_ASSERT(result == setstr);
