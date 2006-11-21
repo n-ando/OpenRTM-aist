@@ -2,7 +2,7 @@ dnl -*- autoconf -*-
 dnl
 dnl @file configure.ac
 dnl @brief Input file for autoconf
-dnl @date $Date: 2006-11-04 17:04:06 $
+dnl @date $Date: 2006-11-21 08:13:46 $
 dnl @author Noriaki Ando <n-ando@aist.go.jp>
 dnl
 dnl This file is an input file used by the GNU "autoconf" program to
@@ -10,11 +10,14 @@ dnl generate the file "configure", which tries to guess your system
 dnl configuration
 dnl
 dnl
-dnl $Id: configure.ac,v 1.6 2006-11-04 17:04:06 n-ando Exp $
+dnl $Id: configure.ac,v 1.7 2006-11-21 08:13:46 n-ando Exp $
 dnl
 
 dnl
 dnl $Log: not supported by cvs2svn $
+dnl Revision 1.6  2006/11/04 17:04:06  n-ando
+dnl OpenRTM m4 macros were moved to openrtm.m4.
+dnl
 dnl Revision 1.5  2006/04/04 05:57:41  n-ando
 dnl - Dist version is now 0.4.0.
 dnl - ORBit2 support was added.
@@ -574,7 +577,7 @@ hint: <dir>/bin will be searched.)
 	dnl  Mico setup complete
 	dnl ------------------------------------------------------------
 	IDLC=$idl
-	IDL_FLAGS="--c++-skel --poa --no-boa"
+	IDL_FLAGS="--c++-skel --poa --no-boa --any"
 	CXXFLAGS="$CXXFLAGS -I$CORBA_h_dir"
 	LDFLAGS="$LDFLAGS -L$mico_lib_dir"
 	LIBS="$LIBS -lmico$MICOVERSION $micodeps"
@@ -909,7 +912,7 @@ if test "x$have_tao" = "xyes" ; then
 	dnl  TAO setup complete
 	dnl ------------------------------------------------------------
 	IDLC=$tao_idl
-	IDL_FLAGS="-DTAO_IDL -Ge 1 $tao_include"
+	IDL_FLAGS="-DTAO_IDL -Ge 1 $tao_include/tao"
 	COSNAMES=$Naming_Service
 	CPPFLAGS="$CPPFLAGS $tao_include"
 	CXXFLAGS="$CXXFLAGS $tao_include"
@@ -1331,8 +1334,9 @@ echo ''
 AC_OUTPUT([Makefile
 	 build/Makefile
 	 rtm/idl/Makefile
+	 rtm/tests/Makefile
 	 rtm/Makefile])
-#	 rtm/tests/Makefile
+
 #	 examples/Makefile
 #	 examples/HelloWorld/Makefile
 #	 examples/SimpleIO/Makefile
