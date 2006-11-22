@@ -2,9 +2,13 @@
 ##------------------------------------------------------------
 ## Makefile.am for unit test
 ##
-## $Id: Makefile.am,v 1.10 2006-11-14 07:22:28 kurihara Exp $
+## $Id: Makefile.am,v 1.11 2006-11-22 11:48:33 kurihara Exp $
 ##
 ## $Log: not supported by cvs2svn $
+## Revision 1.10  2006/11/14 07:22:28  kurihara
+##
+## NVUtilTests is added.
+##
 ## Revision 1.9  2006/11/13 09:13:53  kurihara
 ##
 ## PortAdminTests and RingBufferTests were added.
@@ -72,7 +76,9 @@ noinst_PROGRAMS = \
 	PortBaseTests \
 	PortAdminTests \
 	RingBufferTests \
-	NVUtilTests
+	NVUtilTests \
+	CorbaConsumerTests
+
 
 RtcNamingTests_SOURCES = RtcNamingTests.cpp
 RtcNamingTests_LDFLAGS = -L$(libdir)
@@ -145,3 +151,7 @@ RingBufferTests_LDADD   = ../RingBuffer.o -lcppunit
 NVUtilTests_SOURCES = NVUtilTests.cpp
 NVUtilTests_LDFLAGS = -L$(libdir)
 NVUtilTests_LDADD   = ../idl/SDOPackageSkel.o ../StringUtil.o ../Properties.o ../NVUtil.o -lcppunit
+
+CorbaConsumerTests_SOURCES = CorbaConsumerTests.cpp
+CorbaConsumerTests_LDFLAGS = -L$(libdir)
+CorbaConsumerTests_LDADD   = TestSkel.o -lcppunit
