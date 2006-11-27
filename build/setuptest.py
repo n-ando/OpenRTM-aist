@@ -2,7 +2,7 @@
 #
 # @file setuptest.py
 # @brief CppUnit test environment setup script
-# @date $Date: 2006-11-21 17:56:00 $
+# @date $Date: 2006-11-27 07:23:46 $
 # @author Norkai Ando <n-ando@aist.go.jp>
 #
 # Copyright (C) 2006
@@ -13,7 +13,7 @@
 #         Advanced Industrial Science and Technology (AIST), Japan
 #     All rights reserved.
 #
-# $Id: setuptest.py,v 1.1 2006-11-21 17:56:00 n-ando Exp $
+# $Id: setuptest.py,v 1.2 2006-11-27 07:23:46 n-ando Exp $
 #
 # [usage]
 # setuptest.py [class_name]
@@ -45,6 +45,9 @@
 
 
 # $Log: not supported by cvs2svn $
+# Revision 1.1  2006/11/21 17:56:00  n-ando
+# CppUnit environment setup script was added.
+#
 #
 
 import sys
@@ -53,17 +56,19 @@ import ezt
 
 makefile_am = """# -*- Makefile -*-
 #------------------------------------------------------------
-# @file Makefile.am
-# @brief Makefile.am for [class_name] unit test
-# @date $Date: 2006-11-21 17:56:00 $
+# @file   Makefile.am
+# @brief  Makefile.am for [class_name] unit test
+# @date   [dollar]Date[dollar]
 # @author Noriaki Ando <n-ando@aist.go.jp>
 #
-# $Id: setuptest.py,v 1.1 2006-11-21 17:56:00 n-ando Exp $
-#
-#
-# $Log: not supported by cvs2svn $
+# [dollar]Id[dollar]
 #
 #------------------------------------------------------------
+
+#
+# [dollar]Log[dollar]
+#
+
 
 AUTOMAKE_OPTIONS = 1.9
 
@@ -71,18 +76,12 @@ IDLC = @IDLC@
 IDLFLAGS = @IDL_FLAGS@
 LIBS = @LIBS@
 
-AM_CPPFLAGS=                      \\
-	-DLOCAL_MAIN              \\
-	-I$(builddir)             \\
-	-I$(top_builddir)         \\
-        -I$(includedir)           \\
-        -I$(top_builddir)/rtm     \\
-        -I$(top_builddir)/rtm/idl
+AM_CPPFLAGS= -I.                  \\
+	-I$(includedir)           \\
+	-I$(top_builddir)
 
-AM_LDFLAGS=                       \\
-	-L$(top_builddir)         \\
-        -L$(top_builddir)/rtm     \\
-        -L$(top_builddir)/rtm/idl
+AM_LDFLAGS= -L.                   \\
+	-L$(top_builddir)
 
 
 #SUFFIXES = .idl Skel.cpp Stub.cpp Stub.o Skel.o
@@ -104,9 +103,16 @@ AM_LDFLAGS=                       \\
 
 noinst_PROGRAMS = [class_name]Tests
 
-[class_name]Tests_SOURCES = [class_name]Tests.cpp
+[class_name]Tests_SOURCES = ../TestRunner.cpp [class_name]Tests.cpp
 [class_name]Tests_LDFLAGS = -L$(libdir)
 [class_name]Tests_LDADD   = -lcppunit
+
+# all
+all: do-test
+
+# do tests
+do-test:
+	./[class_name]Tests
 
 # clean-up
 clean-local:
@@ -121,17 +127,18 @@ clean-local:
 
 test_cpp = """// -*- C++ -*-
 /*!
- * @file 
- * @brief [class_name] test class
- * @date $Date: 2006-11-21 17:56:00 $
- * @author Noriaki Ando
+ * @file   [class_name]Tests.cpp
+ * @brief  [class_name] test class
+ * @date   [dollar]Date[dollar]
+ * @author Noriaki Ando <n-ando@aist.go.jp>
  *
- * $Id: setuptest.py,v 1.1 2006-11-21 17:56:00 n-ando Exp $
+ * [dollar]Id[dollar]
  *
  */
 
 /*
- * $Log: not supported by cvs2svn $
+ * [dollar]Log[dollar]
+ *
  */
 
 #ifndef [class_name]_cpp
@@ -153,7 +160,7 @@ namespace [class_name]
    : public CppUnit::TestFixture
   {
     CPPUNIT_TEST_SUITE([class_name]Tests);
-    // CPPUNIT_TEST(test_case0);
+    CPPUNIT_TEST(test_case0);
     CPPUNIT_TEST_SUITE_END();
   
   private:
@@ -188,11 +195,10 @@ namespace [class_name]
     { 
     }
   
-    /* test case
+    /* test case */
     void test_case0()
     {
     }
-    */
   };
 }; // namespace [class_name]
 
@@ -209,14 +215,18 @@ int main(int argc, char* argv[])
     CppUnit::Outputter* outputter = 
       new CppUnit::TextOutputter(&runner.result(), std::cout);
     runner.setOutputter(outputter);
-    return runner.run();
+    bool retcode = runner.run();
+    return !retcode;
 }
 #endif // MAIN
 #endif // [class_name]_cpp
 """
+
+
 class test_dict:
     def __init__(self, classname):
         self.data = {}
+        self.data["dollar"] = "$"
         self.data["class_name"] = classname
         self.data["makefile"]   = classname + "/Makefile.am"
         self.data["testcpp"]    = classname + "/" + classname + "Tests.cpp"
