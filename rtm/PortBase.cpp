@@ -2,7 +2,7 @@
 /*!
  * @file PortBase.h
  * @brief RTC's Port base class
- * @date $Date: 2006-11-06 01:46:42 $
+ * @date $Date: 2006-11-27 09:57:04 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
  * Copyright (C) 2006
@@ -12,12 +12,15 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: PortBase.cpp,v 1.4 2006-11-06 01:46:42 n-ando Exp $
+ * $Id: PortBase.cpp,v 1.5 2006-11-27 09:57:04 n-ando Exp $
  *
  */
 
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.4  2006/11/06 01:46:42  n-ando
+ * #include <assert.h> was added.
+ *
  * Revision 1.3  2006/11/06 01:16:31  n-ando
  * Now PortBase doesn't depend on PortProfileHelper.
  * Class refference manual has been updated.
@@ -37,141 +40,20 @@
 #include <assert.h>
 #include <rtm/PortBase.h>
 #include <rtm/UUID.h>
-#include <rtm/CORBA_SeqUtil.h>
 
 namespace RTC
 {
   //============================================================
-  // Functor
-  //============================================================
-  /*!
-   * @if jp
-   * @brief instance_name を持つ PortInterfaceProfile を探す Functor
-   * @else
-   * @brief A functor to find a PortInterfaceProfile named instance_name
-   * @endif
-   */
-  struct PortBase::if_name
-  {
-    if_name(const char* name) : m_name(name) {};
-    bool operator()(const PortInterfaceProfile& prof)
-    {
-      return m_name == std::string(prof.instance_name);
-    }
-    std::string m_name;
-  };
-
-
-  /*!
-   * @if jp
-   * @brief id を持つ ConnectorProfile を探す Functor
-   * @else
-   * @brief A functor to find a ConnectorProfile named id
-   * @endif
-   */
-  struct PortBase::find_conn_id
-  {
-    find_conn_id(const char* id) : m_id(id) {};
-    bool operator()(const ConnectorProfile& cprof)
-    {
-      return m_id == std::string(cprof.connector_id);
-    }
-    std::string m_id;
-  };
-  
-  
-  /*!
-   * @if jp
-   * @brief Port の接続を行う Functor
-   * @else
-   * @brief A functor to connect Ports
-   * @endif
-   */
-  struct PortBase::connect_func
-  {
-    Port_var port_ref;
-    ConnectorProfile connector_profile;
-    ReturnCode_t return_code;
-    
-    connect_func() {};
-    connect_func(Port_ptr p, ConnectorProfile& prof)
-      : port_ref(p), connector_profile(prof) {};
-    void operator()(Port_ptr p)
-    {
-      if (!port_ref->_is_equivalent(p))
-	{
-	  ReturnCode_t retval;
-	  retval = p->connect(connector_profile);
-	  if (retval != RTC::OK)
-	    {
-	      return_code = retval;
-	    }
-	}
-    }
-  };
-
-
-  /*!
-   * @if jp
-   * @brief Port の接続解除を行う Functor
-   * @else
-   * @brief A functor to disconnect Ports
-   * @endif
-   */
-  struct PortBase::disconnect_func
-  {
-    Port_var port_ref;
-    ConnectorProfile connector_profile;
-    ReturnCode_t return_code;
-    
-    disconnect_func() : return_code(RTC::OK) {};
-    disconnect_func(Port_ptr p, ConnectorProfile& prof)
-      : port_ref(p), connector_profile(prof), return_code(RTC::OK) {};
-    void operator()(Port_ptr p)
-    {
-      if (!port_ref->_is_equivalent(p))
-	{
-	  ReturnCode_t retval;
-	  retval = p->disconnect(connector_profile.connector_id);
-	  if (retval != RTC::OK)
-	    {
-	      return_code = retval;
-	    }
-	}
-    }
-  };
-  
-
-  /*!
-   * @if jp
-   * @brief Port の全接続解除を行う Functor
-   * @else
-   * @brief A functor to disconnect all Ports
-   * @endif
-   */
-  struct PortBase::disconnect_all_func
-  {
-    ReturnCode_t return_code;
-    PortBase* port;
-    
-    disconnect_all_func() {};
-    disconnect_all_func(PortBase* p) 
-      : return_code(RTC::OK), port(p) {};
-    void operator()(ConnectorProfile& p)
-    {
-      ReturnCode_t retval;
-      retval = port->disconnect(p.connector_id);
-      if (retval != RTC::OK)
-	{
-	  return_code = retval;
-	}
-    }
-  };
-
-
-  //============================================================
   // class PortBase 
   //============================================================
+  PortBase::PortBase(CORBA::ORB_ptr orb, PortableServer::POA_ptr poa)
+    : m_pORB(orb), m_pPOA(poa)
+  {
+    // activate object and set port_ref
+    PortableServer::ObjectId_var oid;
+    oid = m_pPOA->activate_object(this);
+    m_profile.port_ref = RTC::Port::_narrow(m_pPOA->id_to_reference(oid));
+  }
   /*!
    * @if jp
    * @brief [CORBA interface] PortProfileを取得する
@@ -331,9 +213,50 @@ namespace RTC
   }
   
 
+  
+  
+
   //============================================================
   // Local operations
   //============================================================
+  void PortBase::addProvidor(const char* name, const char* type_name,
+			     PortableServer::RefCountServantBase* provider)
+  {
+    // setup PortInterfaceProfile
+    PortInterfaceProfile prof;
+    prof.instance_name = CORBA::string_dup(name);
+    prof.type_name     = CORBA::string_dup(type_name);
+    prof.polarity      = PROVIDED;
+    CORBA_SeqUtil::push_back(m_profile.interfaces, prof);
+
+    // setup Provider List
+    PortableServer::ObjectId_var oid;
+    oid = m_pPOA->activate_object(provider);
+    Provider prov;
+    prov.name      = name;
+    prov.type_name = type_name;
+    prov.provider  = m_pPOA->id_to_reference(oid);
+    m_providers.push_back(prov);
+  }
+  
+  void PortBase::addConsumer(const char* name, const char* type_name,
+			     ConsumerBase* consumer)
+  {
+    // setup PortInterfaceProfile
+    PortInterfaceProfile prof;
+    prof.instance_name = CORBA::string_dup(name);
+    prof.type_name     = CORBA::string_dup(type_name);
+    prof.polarity      = REQUIRED;
+    CORBA_SeqUtil::push_back(m_profile.interfaces, prof);
+
+    // setup Consumer List
+    Consumer cons;
+    cons.name      = name;
+    cons.type_name = type_name;
+    cons.consumer  = consumer;
+    m_consumers.push_back(cons);
+  }
+
 
   /*!
    * @if jp
@@ -342,11 +265,11 @@ namespace RTC
    * @brief Set a PortProfile to the Port
    * @endif
    */
-  void PortBase::setProfile(const PortProfile& profile)
-  {
-    Guard gaurd(m_profile_mutex);
-    m_profile = profile;
-  }
+//  void PortBase::setProfile(const PortProfile& profile)
+//  {
+//    Guard gaurd(m_profile_mutex);
+//    m_profile = profile;
+//  }
 
   /*!
    * @if jp
@@ -355,11 +278,11 @@ namespace RTC
    * @brief Get the PortProfile of the Port
    * @endif
    */
-  const PortProfile& PortBase::getProfile()
-  {
-    Guard guard(m_profile_mutex);
-    return m_profile;
-  }
+//  const PortProfile& PortBase::getProfile()
+//  {
+//    Guard guard(m_profile_mutex);
+//    return m_profile;
+//  }
 
 
   /*!
@@ -369,11 +292,11 @@ namespace RTC
    * @brief Set the name of this Port
    * @endif
    */
-  void PortBase::setName(const char* name)
-  {
-    Guard guard(m_profile_mutex);
-    m_profile.name = CORBA::string_dup(name);
-  }
+//  void PortBase::setName(const char* name)
+//  {
+//    Guard guard(m_profile_mutex);
+//    m_profile.name = CORBA::string_dup(name);
+//  }
 
   /*!
    * @if jp
@@ -382,11 +305,11 @@ namespace RTC
    * @brief Get the name of this Port
    * @endif
    */
-  const char* PortBase::getName()
-  {
-    Guard gurad(m_profile_mutex);
-    return m_profile.name;
-  }
+//  const char* PortBase::getName()
+//  {
+//    Guard gurad(m_profile_mutex);
+//    return m_profile.name;
+//  }
 
 
   /*!
@@ -396,12 +319,12 @@ namespace RTC
    * @brief Set the PortInterfaceProfileList of this Port
    * @endif
    */
-  void PortBase::setInterfaceProfiles(PortInterfaceProfileList& if_profiles)
-  {
-    Guard gurad(m_profile_mutex);
-    CORBA_SeqUtil::clear(m_profile.interfaces);
-    m_profile.interfaces = if_profiles;
-  }
+//  void PortBase::setInterfaceProfiles(PortInterfaceProfileList& if_profiles)
+//  {
+//    Guard gurad(m_profile_mutex);
+//    CORBA_SeqUtil::clear(m_profile.interfaces);
+//    m_profile.interfaces = if_profiles;
+//  }
 
 
   /*!
@@ -411,11 +334,11 @@ namespace RTC
    * @brief Add the PortInterfaceProfile of this Port
    * @endif
    */
-  void PortBase::addInterfaceProfile(PortInterfaceProfile& if_profile)
-  {
-    Guard gurad(m_profile_mutex);
-    CORBA_SeqUtil::push_back(m_profile.interfaces, if_profile);
-  }
+//  void PortBase::addInterfaceProfile(PortInterfaceProfile& if_profile)
+//  {
+//    Guard gurad(m_profile_mutex);
+//    CORBA_SeqUtil::push_back(m_profile.interfaces, if_profile);
+//  }
 
 
   /*!
@@ -425,11 +348,11 @@ namespace RTC
    * @brief get the InterfaceprofileList of this Port
    * @endif
    */
-  PortInterfaceProfileList PortBase::getInterfaceProfiles()
-  {
-    Guard gurad(m_profile_mutex);
-    return m_profile.interfaces;
-  }
+//  PortInterfaceProfileList PortBase::getInterfaceProfiles()
+//  {
+//    Guard gurad(m_profile_mutex);
+//    return m_profile.interfaces;
+//  }
 
 
   /*!
@@ -439,16 +362,16 @@ namespace RTC
    * @brief Get the Interfaceprofile of this Port
    * @endif
    */
-  PortInterfaceProfile PortBase::getInterfaceProfile(const char* name)
-  {
-    Guard gurad(m_profile_mutex);
-    CORBA::Long index;
-    index = CORBA_SeqUtil::find(m_profile.interfaces,
-				PortBase::if_name(name));
-
-    //    if (index < 0) throw;
-    return m_profile.interfaces[index];
-  }
+//  PortInterfaceProfile PortBase::getInterfaceProfile(const char* name)
+//  {
+//    Guard gurad(m_profile_mutex);
+//    CORBA::Long index;
+//    index = CORBA_SeqUtil::find(m_profile.interfaces,
+//				PortBase::if_name(name));
+//
+//    //    if (index < 0) throw;
+//    return m_profile.interfaces[index];
+//  }
 
 
   /*!
@@ -486,11 +409,11 @@ namespace RTC
    * @brief Set the ConnectorProfile to PortProfile
    * @endif
    */
-  void PortBase::addConnectorProfile(ConnectorProfile conn_prof)
-  {
-    Guard gurad(m_profile_mutex);
-    CORBA_SeqUtil::push_back(m_profile.connector_profiles, conn_prof);
-  }
+//  void PortBase::addConnectorProfile(ConnectorProfile conn_prof)
+//  {
+//    Guard gurad(m_profile_mutex);
+//    CORBA_SeqUtil::push_back(m_profile.connector_profiles, conn_prof);
+//  }
 
 
   /*!
@@ -500,20 +423,20 @@ namespace RTC
    * @brief Delete the ConnectorProfile
    * @endif
    */
-  void PortBase::eraseConnectorProfile(const char* id)
-  {
-    if (id == "") throw;
-
-    Guard gruad(m_profile_mutex);
-
-    CORBA::Long index;
-    index = CORBA_SeqUtil::find(m_profile.connector_profiles,
-				find_conn_id(id));
-    if (index < 0) throw;
-
-    CORBA_SeqUtil::erase(m_profile.connector_profiles, index);
-
-  }
+//  void PortBase::eraseConnectorProfile(const char* id)
+//  {
+//    if (id == "") throw;
+//
+//    Guard gruad(m_profile_mutex);
+//
+//    CORBA::Long index;
+//    index = CORBA_SeqUtil::find(m_profile.connector_profiles,
+//				find_conn_id(id));
+//    if (index < 0) throw;
+//
+//    CORBA_SeqUtil::erase(m_profile.connector_profiles, index);
+//
+//  }
 
 
   /*!
@@ -523,11 +446,11 @@ namespace RTC
    * @brief Get ConnectorProfileList
    * @endif
    */
-  const ConnectorProfileList& PortBase::getConnectorProfileList()
-  {
-    Guard gurad(m_profile_mutex);
-    return m_profile.connector_profiles;
-  }
+//  const ConnectorProfileList& PortBase::getConnectorProfileList()
+//  {
+//    Guard gurad(m_profile_mutex);
+//    return m_profile.connector_profiles;
+//  }
 
 
   /*!
@@ -537,19 +460,19 @@ namespace RTC
    * @brief Get ConnectorProfile
    * @endif
    */
-  const ConnectorProfile& PortBase::getConnectorProfile(const char* id)
-  {
-    if (id == "") throw;
-
-    Guard gurad(m_profile_mutex);
-    CORBA::Long index;
-    index = CORBA_SeqUtil::find(m_profile.connector_profiles,
-				find_conn_id(id));
-
-    if (index < 0) throw;
-    
-    return m_profile.connector_profiles[index];
-  }
+//  const ConnectorProfile& PortBase::getConnectorProfile(const char* id)
+//  {
+//    if (id == "") throw;
+//
+//    Guard gurad(m_profile_mutex);
+//    CORBA::Long index;
+//    index = CORBA_SeqUtil::find(m_profile.connector_profiles,
+//				find_conn_id(id));
+//
+//    if (index < 0) throw;
+//    
+//    return m_profile.connector_profiles[index];
+//  }
 
 
   /*!
@@ -574,11 +497,11 @@ namespace RTC
    * @brief Get the owner RTObject of the Port
    * @endif
    */
-  RTObject_ptr PortBase::getOwner()
-  {
-    Guard gurad(m_profile_mutex);
-    return m_profile.owner;
-  }
+//  RTObject_ptr PortBase::getOwner()
+//  {
+//    Guard gurad(m_profile_mutex);
+//    return m_profile.owner;
+//  }
 
   /*!
    * @if jp
@@ -587,11 +510,11 @@ namespace RTC
    * @brief Set the properties of the PortProfile
    * @endif
    */
-  void PortBase::setProperties(const NVList& properties)
-  {
-    Guard gurad(m_profile_mutex);
-    m_profile.properties = properties;
-  }
+//  void PortBase::setProperties(const NVList& properties)
+//  {
+//    Guard gurad(m_profile_mutex);
+//    m_profile.properties = properties;
+//  }
 
 
   /*!
@@ -601,11 +524,11 @@ namespace RTC
    * @brief Get the properties of the PortProfile
    * @endif
    */
-  const NVList& PortBase::getProperties()
-  {
-    Guard gurad(m_profile_mutex);
-    return m_profile.properties;
-  }
+//  const NVList& PortBase::getProperties()
+//  {
+//    Guard gurad(m_profile_mutex);
+//    return m_profile.properties;
+//  }
 
 
   //============================================================
@@ -626,8 +549,6 @@ namespace RTC
     
     return std::string(uuid->to_string()->c_str());
   }
-
-
 
 
 }; // namespace RTC
