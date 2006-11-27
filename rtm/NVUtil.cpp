@@ -2,7 +2,7 @@
 /*!
  * @file NVUtil.h
  * @brief NameValue and NVList utility functions
- * @date $Date: 2006-11-10 04:32:38 $
+ * @date $Date: 2006-11-27 09:54:42 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
  * Copyright (C) 2006
@@ -13,12 +13,15 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: NVUtil.cpp,v 1.1 2006-11-10 04:32:38 n-ando Exp $
+ * $Id: NVUtil.cpp,v 1.2 2006-11-27 09:54:42 n-ando Exp $
  *
  */
 
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.1  2006/11/10 04:32:38  n-ando
+ * NVUtil is SDOPackage::NVList utility.
+ *
  *
  */
 
@@ -53,12 +56,12 @@ namespace NVUtil
     return nv;
   }
     
-  void copy(SDOPackage::NVList& nv, RTC::Properties& prop)
+  void copy(SDOPackage::NVList& nv, const RTC::Properties& prop)
   {
     CORBA::ULong len((CORBA::ULong)prop.size());
     nv.length(len);
 
-    std::map<std::string, std::string>::iterator it, it_end;
+    std::map<std::string, std::string>::const_iterator it, it_end;
     it     = prop.begin();
     it_end = prop.end();
 
@@ -67,6 +70,28 @@ namespace NVUtil
 	nv[i].name = CORBA::string_dup((it->first).c_str());
 	nv[i].value <<= (it->second).c_str();
       }
+  }
+
+
+  struct to_map
+  {
+    to_map(){};
+    void operator()(SDOPackage::NameValue& nv)
+    {
+      char* value;
+      if (nv.value >>= value)
+	{
+	  m_map[CORBA::string_dup(nv.name)] = std::string(value);
+	};
+    }
+    std::map<std::string, std::string> m_map;
+  };
+
+  RTC::Properties toProperties(SDOPackage::NVList& nv)
+  {
+    to_map m;
+    m = CORBA_SeqUtil::for_each(nv, m);
+    return RTC::Properties(m.m_map);
   }
 
   struct nv_find
@@ -80,7 +105,7 @@ namespace NVUtil
     std::string m_name;
   };
 
-  const CORBA::Any& find(SDOPackage::NVList& nv, const char* name)
+  const CORBA::Any& find(const SDOPackage::NVList& nv, const char* name)
   {
     CORBA::Long index;
     index = CORBA_SeqUtil::find(nv, NVUtil::nv_find(name));
@@ -103,7 +128,7 @@ namespace NVUtil
       }
   }
 
-  std::string toString(SDOPackage::NVList& nv, const char* name)
+  std::string toString(const SDOPackage::NVList& nv, const char* name)
   {
     char* str_value;
     try
