@@ -2,7 +2,7 @@
 /*!
  * @file PortProfileHelper.cpp
  * @brief RTC's PortProfile helper class
- * @date $Date: 2006-10-17 19:04:59 $
+ * @date $Date: 2006-11-27 09:48:13 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
  * Copyright (C) 2006
@@ -12,12 +12,15 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: PortProfileHelper.cpp,v 1.2 2006-10-17 19:04:59 n-ando Exp $
+ * $Id: PortProfileHelper.cpp,v 1.3 2006-11-27 09:48:13 n-ando Exp $
  *
  */
 
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.2  2006/10/17 19:04:59  n-ando
+ * Trivial format fix.
+ *
  * Revision 1.1  2006/10/17 10:22:52  n-ando
  * The first commitment.
  *
@@ -41,7 +44,7 @@ namespace RTC
 
   /*!
    * @if jp
-   * @brief PortProfile $B$r@_Dj$9$k(B
+   * @brief PortProfile ¤òÀßÄê¤¹¤ë
    * @else
    * @brief Set PortProfile
    * @endif
@@ -63,7 +66,7 @@ namespace RTC
 
   /*!
    * @if jp
-   * @brief PortProfile $B$r<hF@$9$k(B
+   * @brief PortProfile ¤ò¼èÆÀ¤¹¤ë
    * @else
    * @brief Get PortProfile
    * @endif
@@ -86,7 +89,7 @@ namespace RTC
 
   /*!
    * @if jp
-   * @brief PortProfile.name $B$r@_Dj$9$k(B
+   * @brief PortProfile.name ¤òÀßÄê¤¹¤ë
    * @else
    * @brief Set PortProfile.name
    * @endif
@@ -101,7 +104,7 @@ namespace RTC
 
   /*!
    * @if jp
-   * @brief PortProfile.name $B$r<hF@$9$k(B
+   * @brief PortProfile.name ¤ò¼èÆÀ¤¹¤ë
    * @else
    * @brief Get PortProfile.name
    * @endif
@@ -116,7 +119,7 @@ namespace RTC
 
   /*!
    * @if jp
-   * @brief PortInterfaceProfile $B$rDI2C$9$k(B
+   * @brief PortInterfaceProfile ¤òÄÉ²Ã¤¹¤ë
    * @else
    * @brief Append PortInterfaceProfile to the PortProfile
    * @endif
@@ -133,7 +136,7 @@ namespace RTC
 
   /*!
    * @if jp
-   * @brief PortInterfaceProfileList $B$r<hF@$9$k(B
+   * @brief PortInterfaceProfileList ¤ò¼èÆÀ¤¹¤ë
    * @else
    * @brief Get PortInterfaceProfileList
    * @endif
@@ -149,7 +152,7 @@ namespace RTC
 
   /*!
    * @if jp
-   * @brief PortInterfaceProfile $B$r<hF@$9$k(B
+   * @brief PortInterfaceProfile ¤ò¼èÆÀ¤¹¤ë
    * @else
    * @brief Get PortInterfaceProfile
    * @endif
@@ -165,7 +168,7 @@ namespace RTC
 
   /*!
    * @if jp
-   * @brief PortInterfaceProfile $B$r:o=|$9$k(B
+   * @brief PortInterfaceProfile ¤òºï½ü¤¹¤ë
    * @else
    * @brief Erase PortInterfaceProfile from the PortProfile
    * @endif
@@ -181,7 +184,7 @@ namespace RTC
 
   /*!
    * @if jp
-   * @brief Port $B$N%*%V%8%'%/%H;2>H$r%;%C%H$9$k(B
+   * @brief Port ¤Î¥ª¥Ö¥¸¥§¥¯¥È»²¾È¤ò¥»¥Ã¥È¤¹¤ë
    * @else
    * @brief Set Port's object reference
    * @endif
@@ -196,7 +199,7 @@ namespace RTC
 
   /*!
    * @if jp
-   * @brief Port $B$N%*%V%8%'%/%H;2>H$r<hF@$9$k(B
+   * @brief Port ¤Î¥ª¥Ö¥¸¥§¥¯¥È»²¾È¤ò¼èÆÀ¤¹¤ë
    * @else
    * @brief Get Port's object reference
    * @endif
@@ -211,7 +214,7 @@ namespace RTC
 
   /*!
    * @if jp
-   * @brief ConnectorProfile $B$rDI2C$9$k(B
+   * @brief ConnectorProfile ¤òÄÉ²Ã¤¹¤ë
    * @else
    * @brief Append ConnectorProfile
    * @endif
@@ -226,7 +229,7 @@ namespace RTC
 
   /*!
    * @if jp
-   * @brief ConnectorProfileList $B$r<hF@$9$k(B
+   * @brief ConnectorProfileList ¤ò¼èÆÀ¤¹¤ë
    * @else
    * @brief Get ConnectorProfileList
    * @endif
@@ -242,7 +245,7 @@ namespace RTC
 
   /*!
    * @if jp
-   * @brief ConnectorProfile $B$r<hF@$9$k(B
+   * @brief ConnectorProfile ¤ò¼èÆÀ¤¹¤ë
    * @else
    * @brief Get ConnectorProfile
    * @endif
@@ -258,7 +261,7 @@ namespace RTC
 
   /*!
    * @if jp
-   * @brief ConnectorProfile $B$r<hF@$9$k(B
+   * @brief ConnectorProfile ¤ò¼èÆÀ¤¹¤ë
    * @else
    * @brief Get ConnectorProfile
    * @endif
@@ -274,8 +277,8 @@ namespace RTC
 
   /*!
    * @if jp
-   * @brief ConnectorProfile $B$r:o=|$9$k(B
-   * @param naem ConnectorProfile $B$NL>A0(B
+   * @brief ConnectorProfile ¤òºï½ü¤¹¤ë
+   * @param naem ConnectorProfile ¤ÎÌ¾Á°
    * @else
    * @brief Erase ConnectorProfile
    * @endif
@@ -291,7 +294,7 @@ namespace RTC
 
   /*!
    * @if jp
-   * @brief ConnectorProfile $B$r:o=|$9$k(B
+   * @brief ConnectorProfile ¤òºï½ü¤¹¤ë
    * @else
    * @brief Erase ConnectorProfile
    * @endif
@@ -307,7 +310,7 @@ namespace RTC
 
   /*!
    * @if jp
-   * @brief PortProfile $B$N(B owner $B$r@_Dj$9$k(B
+   * @brief PortProfile ¤Î owner ¤òÀßÄê¤¹¤ë
    * @else
    * @brief Set owner's object reference to the PortProfile
    * @endif
@@ -322,7 +325,7 @@ namespace RTC
 
   /*!
    * @if jp
-   * @brief PortProfile $B$N(B owner $B$r<hF@$9$k(B
+   * @brief PortProfile ¤Î owner ¤ò¼èÆÀ¤¹¤ë
    * @else
    * @endif
    */
@@ -336,7 +339,7 @@ namespace RTC
 
   /*!
    * @if jp
-   * @brief PortProfile $B$N(B properties $B$r@_Dj$9$k(B
+   * @brief PortProfile ¤Î properties ¤òÀßÄê¤¹¤ë
    * @else
    * @brief Set properties to the PortProfile
    * @endif
@@ -351,7 +354,7 @@ namespace RTC
 
   /*!
    * @if jp
-   * @brief PortProfile $B$N(B properties $B$r<hF@$9$k(B
+   * @brief PortProfile ¤Î properties ¤ò¼èÆÀ¤¹¤ë
    * @else
    * @brief Get properties of the PortProfile
    * @endif
