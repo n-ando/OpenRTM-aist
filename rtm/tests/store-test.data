@@ -15,10 +15,10 @@ AIST TaskIntelligence
 0.4.0
 
 ---------------------------------------------------------
-$B$3$N%U%!%$%k$O(BPropertiesTests.cpp$B$N(Btest_checkStoredData()
-$B%a%=%C%I$GFI$_9~$^$l$k!#(B
-test_store()$B$G(B"stored.conf"$B$K%W%m%Q%F%#$r=q$-=P$7$F$$$k$,(B
-$B$=$N=q$-=P$5$l$k$G$"$m$&CM$r$3$N%U%!%$%k$K5-=R$7$F$$$k!#(B
-test_checkStoredData()$B$G$O!"$3$N%U%!%$%k$K=q$+$l$?CM$H!"(B
-stored.conf$B$K=q$-=P$5$l$?CM$NHf3S$r9T$C$F$$$k!#(B
+¤³¤Î¥Õ¥¡¥¤¥ë¤ÏPropertiesTests.cpp¤Îtest_checkStoredData()
+¥á¥½¥Ã¥É¤ÇÆÉ¤ß¹þ¤Þ¤ì¤ë¡£
+test_store()¤Ç"stored.conf"¤Ë¥×¥í¥Ñ¥Æ¥£¤ò½ñ¤­½Ð¤·¤Æ¤¤¤ë¤¬
+¤½¤Î½ñ¤­½Ð¤µ¤ì¤ë¤Ç¤¢¤í¤¦ÃÍ¤ò¤³¤Î¥Õ¥¡¥¤¥ë¤Ëµ­½Ò¤·¤Æ¤¤¤ë¡£
+test_checkStoredData()¤Ç¤Ï¡¢¤³¤Î¥Õ¥¡¥¤¥ë¤Ë½ñ¤«¤ì¤¿ÃÍ¤È¡¢
+stored.conf¤Ë½ñ¤­½Ð¤µ¤ì¤¿ÃÍ¤ÎÈæ³Ó¤ò¹Ô¤Ã¤Æ¤¤¤ë¡£
 --------------------------------------------------------
