@@ -2,9 +2,12 @@
 ##------------------------------------------------------------
 ## Makefile.am for libRTC
 ##
-## $Id: Makefile.am,v 1.7 2006-11-10 04:33:11 n-ando Exp $
+## $Id: Makefile.am,v 1.8 2006-11-27 10:03:58 n-ando Exp $
 ##
 ## $Log: not supported by cvs2svn $
+## Revision 1.7  2006/11/10 04:33:11  n-ando
+## NVUtil is added.
+##
 ## Revision 1.6  2006/10/24 06:24:15  n-ando
 ## Now StringUtil was devided into definition and implementation.
 ##
@@ -29,7 +32,7 @@
 AUTOMAKE_OPTIONS = 1.4
 
 ARTLIB = @ARTLIB@
-SUBDIRS = idl .
+SUBDIRS = idl . @UNITTEST@
 
 AM_CPPFLAGS=-I$(top_srcdir) -I$(top_srcdir)/rtm/idl
 AM_LDFLAGS=-L$(top_builddir) -L$(top_builddir)/rtm -L$(top_builddir)/rtm/idl
@@ -70,7 +73,9 @@ RTC_SRC = \
 	RTObject.cpp \
 	PortAdmin.cpp \
 	PortBase.cpp \
-	InPortBase.cpp
+	DataInPort.cpp \
+	DataoutPort.cpp \
+	PublisherFactory.cpp
 #	RtcNaming.cpp \
 #	RtcNameComponent.cpp \
 #	RtcConfig.cpp \
@@ -108,7 +113,10 @@ libRTC_la_SOURCES = \
 	SdoConfiguration.cpp \
 	RTObject.cpp \
 	PortAdmin.cpp \
-	PortBase.cpp
+	PortBase.cpp \
+	DataInPort.cpp \
+	DataOutPort.cpp\
+	PublisherFactory.cpp
 #	Properties.cpp \
 #	ModuleManager.cpp \
 #	ManagerConfig.cpp \
