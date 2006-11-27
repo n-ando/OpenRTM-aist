@@ -2,38 +2,34 @@
 ##------------------------------------------------------------
 ## Makefile.am for unit test
 ##
-## $Id: Makefile.am,v 1.11 2006-11-22 11:48:33 kurihara Exp $
+## $Id: Makefile.am,v 1.12 2006-11-27 08:10:26 n-ando Exp $
 ##
 ## $Log: not supported by cvs2svn $
-## Revision 1.10  2006/11/14 07:22:28  kurihara
+## Revision 1.11  2006/11/22 11:48:33  kurihara
+## CorbaConsumerTests is added.
 ##
+## Revision 1.10  2006/11/14 07:22:28  kurihara
 ## NVUtilTests is added.
 ##
 ## Revision 1.9  2006/11/13 09:13:53  kurihara
-##
 ## PortAdminTests and RingBufferTests were added.
 ##
 ## Revision 1.8  2006/11/08 01:18:23  kurihara
-##
 ## PortBaseTests is added.
 ##
 ## Revision 1.7  2006/10/31 13:12:49  kurihara
-##
 ## SdoConfigurationTests and CORBA_SeqUtilTests were added.
 ##
 ## Revision 1.6  2006/10/26 08:56:22  n-ando
 ## StateMachineTests was added.
 ##
 ## Revision 1.5  2006/10/26 08:43:49  kurihara
-##
 ## FactoryTests, PortProfileHelperTests, SdoServiceTests, are added.
 ##
 ## Revision 1.4  2006/10/24 03:07:31  kurihara
-##
 ## ObjectManagerTests is added
 ##
 ## Revision 1.3  2006/10/23 06:29:22  kurihara
-##
 ## add ManagerConfigTests and StringUtilTests.
 ##
 ## Revision 1.2  2006/09/20 08:50:31  n-ando
@@ -41,117 +37,112 @@
 ##
 ## Revision 1.1  2006/09/11 18:40:38  n-ando
 ## The first commit.
-##
-##
 ##------------------------------------------------------------
 
-AUTOMAKE_OPTIONS = 1.4
+AUTOMAKE_OPTIONS = 1.9
+
+SUBDIRS = \
+	Properties        \
+	StringUtil        \
+	ModuleManager     \
+	ManagerConfig     \
+	ObjectManager     \
+	StateMachine      \
+	SdoOrganization   \
+	SdoConfiguration  \
+	CORBA_SeqUtil     \
+	NVUtil 	          \
+	CorbaConsumer	  \
+	DataInPort        \
+	DataOutPort       \
+	.  
+
+#	Factory
+#	SdoService
+#	PortBase
+#	PortAdmin
+#	RingBuffer
+#	InPort
 
 IDLC = @IDLC@
 IDLFLAGS = @IDL_FLAGS@
 LIBS = @LIBS@
-TESTS = RtcNamingTests
 
-INCLUDES = -I$(top_srcdir) -I$(includedir) -I../../ -I../../rtm/idl
+AM_CPPFLAGS= -I.          \
+	-I$(top_builddir) \
+	-I$(includedir)   \
+	-I$(top_builddir)/rtm/idl
 
-IDL_SOURCES = \
-	HelloWorld.idl
+AM_LDFLAGS=                       \
+	-L$(top_builddir)         \
+	-L$(top_builddir)/rtm     \
+	-L$(top_builddir)/rtm/idl
 
+COMMON_OBJS=SdoConfiguration/SDOPackageSkel.o   \
+	PortBase/RTCSkel.o
 
+RTC_OBJS=                                   \
+	SdoOrganization/SdoOrganization.o   \
+	SdoConfiguration/SdoConfiguration.o \
+	CORBA_SeqUtil/CORBA_SeqUtilTests.o  \
+	NVUtil/NVUtil.o                     \
+	NVUtil/Properties.o                 \
+	NVUtil/StringUtil.o
 
-noinst_PROGRAMS = \
-	RtcNamingTests \
-	PropertiesTests \
-	StringUtilTests \
-	ModuleManagerTests \
-	ManagerConfigTests \
-	ObjectManagerTests \
-	FactoryTests \
-	PortProfileHelperTests \
-	SdoServiceTests \
-	StateMachineTests \
-	SdoOrganizationTests \
-	SdoConfigurationTests \
-	CORBA_SeqUtilTests \
-	PortBaseTests \
-	PortAdminTests \
-	RingBufferTests \
-	NVUtilTests \
-	CorbaConsumerTests
+PROPERTIES_OBJS=Properties/PropertiesTests.o
+STRINGUTIL_OBJS=StringUtil/StringUtilTests.o
+SDOSERVICE_OBJS=SdoService/SdoServiceTests.o
+STATEMACHINE_OBJS=StateMachine/StateMachineTests.o
+SDOORGANIZATION_OBJS=SdoOrganization/SdoOrganizationTests.o
+SDOCONFIGURATION_OBJS=SdoConfiguration/SdoConfigurationTests.o
+CORBA_SEQUTIL_OBJS=CORBA_SeqUtil/SeqUtilTestsSkel.o
+PORTBASE_OBJS=PortBase/PortBaseTests.o
+PORTADMIN_OBJS=                   \
+	PortAdminTests.o          \
+	SDOPackageSkel.o          \
+	RTCSkel.o
 
+RINGBUFFER_OBJS=RingBuffer/RingBufferTests.o
 
-RtcNamingTests_SOURCES = RtcNamingTests.cpp
-RtcNamingTests_LDFLAGS = -L$(libdir)
-RtcNamingTests_LDADD   = ../RtcNaming.o ./HelloWorld.o -lcppunit
+NVUTIL_OBJS=NVUtil/NVUtilTests.o
 
-PropertiesTests_SOURCES = PropertiesTests.cpp
-PropertiesTests_LDFLAGS = -L$(libdir)
-PropertiesTests_LDADD   = ../StringUtil.o ../Properties.o -lcppunit
-
-StringUtilTests_SOURCES = StringUtilTests.cpp
-StringUtilTests_LDFLAGS = -L$(libdir)
-StringUtilTests_LDADD   = ../StringUtil.o -lcppunit
-
-ModuleManagerTests_SOURCES = ModuleManagerTests.cpp
-ModuleManagerTests_LDFLAGS = -L$(libdir)
-ModuleManagerTests_LDADD   = ../StringUtil.o ../Properties.o ../ModuleManager.o  -lcppunit -lACE
-
-ManagerConfigTests_SOURCES = ManagerConfigTests.cpp
-ManagerConfigTests_LDFLAGS = -L$(libdir)
-ManagerConfigTests_LDADD   = ../StringUtil.o ../Properties.o ../ManagerConfig.o -lcppunit
-
-ObjectManagerTests_SOURCES = ObjectManagerTests.cpp
-ObjectManagerTests_LDFLAGS = -L$(libdir)
-ObjectManagerTests_LDADD   = -lcppunit
-
-FactoryTests_SOURCES = FactoryTests.cpp
-FactoryTests_LDFLAGS = -L$(libdir)
-FactoryTests_LDADD   = ../../rtm/idl/RTMBaseSkel.o ../../rtm/idl/RTCPortBaseSkel.o ../../rtm/idl/RTCInPortSkel.o ../../rtm/idl/RTComponentSkel.o ../../rtm/idl/RTCBaseSkel.o ../RtcBase.o ../Properties.o ../Manager.o ../Factory.o -lcppunit
+CORBACONSUMER_OBJS=               \
+	CorbaConsumer/HelloSkel.o \
+	CorbaConsumer/CorbaConsumerTests.o
 
 
-PortProfileHelperTests_SOURCES = PortProfileHelperTests.cpp
-PortProfileHelperTests_LDFLAGS = -L$(libdir)
-PortProfileHelperTests_LDADD   = ../../rtm/idl/SDOPackageSkel.o ../../rtm/idl/RTCSkel.o ../PortProfileHelper.o -lcppunit
+TEST_OBJS = $(COMMON_OBJS)      \
+	$(RTC_OBJS)             \
+	$(PROPERTIES_OBJS)      \
+	$(STRINGUTIL_OBJS)      \
+	$(STATEMACHINE_OBJS)    \
+	$(SDOORGANIZATION_OBJS) \
+	$(SDOCONFIGURATION_OBJS)\
+	$(CORBA_SEQUTIL_OBJS)   \
+	$(NVUTIL_OBJS)          \
+	$(CORBACONSUMER_OBJS)
+
+#	$(SDOSERVICE_OBJS)
+
+noinst_PROGRAMS = AllTests
+
+AllTests_SOURCES = TestRunner.cpp
+AllTests_LDFLAGS = -L$(libdir)
+AllTests_LDADD   = -lcppunit $(TEST_OBJS)
 
 
-SdoServiceTests_SOURCES = SdoServiceTests.cpp
-SdoServiceTests_LDFLAGS = -L$(libdir)
-SdoServiceTests_LDADD   = ../../rtm/idl/SDOPackageStub.o ../../rtm/idl/SDOPackageSkel.o ../../rtm/idl/RTCSkel.o -lcppunit
+# all
+all: do-test
 
-StateMachineTests_SOURCES = StateMachineTests.cpp
-StateMachineTests_LDFLAGS = -L$(libdir)
-StateMachineTests_LDADD   = -lcppunit
+# do tests
+do-test:
+	./AllTests --xml alltests.xml --xsl default.xsl
 
-SdoOrganizationTests_SOURCES = SdoOrganizationTests.cpp
-SdoOrganizationTests_LDFLAGS = -L$(libdir)
-SdoOrganizationTests_LDADD   = ../../rtm/idl/SDOPackageStub.o ../SdoOrganization.o -lcppunit -lomniDynamic4
-
-
-SdoConfigurationTests_SOURCES = SdoConfigurationTests.cpp
-SdoConfigurationTests_LDFLAGS = -L$(libdir)
-SdoConfigurationTests_LDADD   = ../../rtm/idl/SDOPackageStub.o ../SdoConfiguration.o -lcppunit -lomniDynamic4
-
-
-CORBA_SeqUtilTests_SOURCES = CORBA_SeqUtilTests.cpp
-CORBA_SeqUtilTests_LDFLAGS = -L$(libdir)
-CORBA_SeqUtilTests_LDADD   = SeqUtilTestsSkel.o -lcppunit
-
-PortBaseTests_SOURCES = PortBaseTests.cpp
-PortBaseTests_LDFLAGS = -L$(libdir)
-PortBaseTests_LDADD   = ../idl/SDOPackageSkel.o ../idl/RTCSkel.o ../PortBase.o -lcppunit
-
-PortAdminTests_SOURCES = PortAdminTests.cpp
-PortAdminTests_LDFLAGS = -L$(libdir)
-PortAdminTests_LDADD   = ../idl/SDOPackageSkel.o ../idl/RTCSkel.o ../PortBase.o ../PortAdmin.o -lcppunit
-
-RingBufferTests_SOURCES = RingBufferTests.cpp
-RingBufferTests_LDFLAGS = -L$(libdir)
-RingBufferTests_LDADD   = ../RingBuffer.o -lcppunit
-
-NVUtilTests_SOURCES = NVUtilTests.cpp
-NVUtilTests_LDFLAGS = -L$(libdir)
-NVUtilTests_LDADD   = ../idl/SDOPackageSkel.o ../StringUtil.o ../Properties.o ../NVUtil.o -lcppunit
-
-CorbaConsumerTests_SOURCES = CorbaConsumerTests.cpp
-CorbaConsumerTests_LDFLAGS = -L$(libdir)
-CorbaConsumerTests_LDADD   = TestSkel.o -lcppunit
+# Cleanup
+clean-local:
+	rm -f \
+	*.o *.Po *.gch *.la \
+	*Skel.cpp *Skel.h *Stub.cpp *Stub.h \
+	*~ *core \
+	Makefile.old \
+	*.cc *.hh *.i *.a *.c *.inl
