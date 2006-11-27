@@ -2,7 +2,7 @@
 /*!
  * @file SdoOrganization.cpp
  * @brief SDO Organization class
- * @date $Date: 2006-10-30 08:10:47 $
+ * @date $Date: 2006-11-27 10:00:56 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
  * Copyright (C) 2006
@@ -12,12 +12,15 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: SdoOrganization.cpp,v 1.5 2006-10-30 08:10:47 n-ando Exp $
+ * $Id: SdoOrganization.cpp,v 1.6 2006-11-27 10:00:56 n-ando Exp $
  *
  */
 
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.5  2006/10/30 08:10:47  n-ando
+ * CORBA sequence operations were replaced by CORBA_SeqUtil functions.
+ *
  * Revision 1.4  2006/10/26 09:36:23  n-ando
  * set_organization_property_value() was not implemented. It was added.
  *
@@ -95,14 +98,14 @@ namespace SDOPackage
     throw (InvalidParameter, NotAvailable, InternalError)
   {
     if (name == "")
-      throw InvalidParameter("get_organization_property_value(): Empty name.");
+      throw InvalidParameter("Empty name.");
 
     CORBA::Long index;
     index = CORBA_SeqUtil::find(m_orgProperty.properties,
 				nv_name(name));
 
     if (index < 0)
-      throw InvalidParameter("get_organization_property_value(): Not found.");
+      throw InvalidParameter("Not found.");
 
     try
       {
