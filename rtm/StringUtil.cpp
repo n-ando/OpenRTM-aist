@@ -2,7 +2,7 @@
 /*!
  * @file StringUtil.cpp
  * @brief String operation utility
- * @date $Date: 2006-10-24 06:24:39 $
+ * @date $Date: 2006-11-27 10:00:11 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
  * Copyright (C) 2006
@@ -12,15 +12,19 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: StringUtil.cpp,v 1.1 2006-10-24 06:24:39 n-ando Exp $
+ * $Id: StringUtil.cpp,v 1.2 2006-11-27 10:00:11 n-ando Exp $
  *
  */
 
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.1  2006/10/24 06:24:39  n-ando
+ * Now StringUtil was devided into definition and implementation.
+ *
  */
 
 #include <algorithm>
+#include <iostream>
 #include <rtm/StringUtil.h>
 
 /*!
@@ -261,7 +265,10 @@ std::vector<std::string> split(const std::string& input,
       found_pos = input.find(delimiter, begin_pos);
       if (found_pos == std::string::npos) 
 	{
-	  results.push_back(input.substr(pre_pos));
+	  std::string substr(input.substr(pre_pos));
+	  eraseHeadBlank(substr);
+	  eraseTailBlank(substr);
+	  results.push_back(substr);
 	  break;
 	}
       /*
@@ -275,7 +282,8 @@ std::vector<std::string> split(const std::string& input,
       if (substr_size >= 0)
 	{
 	  std::string substr(input.substr(pre_pos, substr_size));
-	  //	  eraseHeadBlank(substr);
+	  eraseHeadBlank(substr);
+	  eraseTailBlank(substr);
 	  results.push_back(substr);
 	}
       begin_pos = found_pos + delim_size;
@@ -366,3 +374,32 @@ bool isURL(const std::string& str)
   return false;
 }
 
+
+struct unique_strvec
+{
+  void operator()(const std::string& s)
+  {
+    if (std::find(str.begin(), str.end(), s) == str.end())
+      return str.push_back(s);
+  }
+  std::vector<std::string> str;
+};
+
+
+std::vector<std::string> unique_sv(std::vector<std::string> sv)
+{
+  return std::for_each(sv.begin(), sv.end(), unique_strvec()).str;
+}
+
+
+std::string flatten(std::vector<std::string> sv)
+{
+  std::string str;
+  int size(sv.size());
+
+  for (int i = 0; i < (size - 1); ++i)
+    {
+      str += sv[i] + ", ";
+    }
+  return str + sv[size - 1];
+}

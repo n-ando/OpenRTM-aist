@@ -2,7 +2,7 @@
 /*!
  * @file StringUtil.h
  * @brief String operation utility
- * @date $Date: 2006-10-24 06:24:45 $
+ * @date $Date: 2006-11-27 10:00:15 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
  * Copyright (C) 2003-2005
@@ -12,12 +12,15 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: StringUtil.h,v 1.6 2006-10-24 06:24:45 n-ando Exp $
+ * $Id: StringUtil.h,v 1.7 2006-11-27 10:00:15 n-ando Exp $
  *
  */
 
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.6  2006/10/24 06:24:45  n-ando
+ * Now StringUtil was devided into definition and implementation.
+ *
  * Revision 1.5  2006/10/23 07:41:20  n-ando
  * Kanji-code was changed from JIS to EUC.
  *
@@ -45,7 +48,7 @@
 
 #include <string>
 #include <vector>
-
+#include <sstream>
 
 /*!
  * @if jp
@@ -200,5 +203,24 @@ bool isAbsolutePath(const std::string& str);
  */
 bool isURL(const std::string& str);
 
+
+/*!
+ * @if jp
+ * @brief 与えられたオブジェクトをstd::stringに変換
+ * @else
+ * @brief Convert the given object to st::string.
+ * @endif
+ */
+template <class Printable>
+std::string otos(Printable n)
+{
+  std::stringstream str_stream;
+  str_stream << n;
+  return str_stream.str();
+};
+
+std::vector<std::string> unique_sv(std::vector<std::string> sv);
+
+std::string flatten(std::vector<std::string> sv);
 
 #endif // StringUtil_h
