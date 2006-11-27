@@ -2,7 +2,7 @@
 /*!
  * @file PortBase.h
  * @brief RTC's Port base class
- * @date $Date: 2006-11-06 01:46:47 $
+ * @date $Date: 2006-11-27 09:57:09 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
  * Copyright (C) 2006
@@ -12,12 +12,15 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: PortBase.h,v 1.4 2006-11-06 01:46:47 n-ando Exp $
+ * $Id: PortBase.h,v 1.5 2006-11-27 09:57:09 n-ando Exp $
  *
  */
 
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.4  2006/11/06 01:46:47  n-ando
+ * #include <assert.h> was added.
+ *
  * Revision 1.3  2006/11/06 01:16:39  n-ando
  * Now PortBase doesn't depend on PortProfileHelper.
  * Class refference manual has been updated.
@@ -33,13 +36,18 @@
 #ifndef PortBase_h
 #define PortBase_h
 
-#include <rtm/idl/RTCSkel.h>
 #include <string>
+#include <vector>
 #include <ace/Guard_T.h>
 #include <ace/Recursive_Thread_Mutex.h>
+#include <rtm/idl/RTCSkel.h>
+#include <rtm/CORBA_SeqUtil.h>
+#include <rtm/NVUtil.h>
 
 namespace RTC
 {
+  class ConsumerBase;
+
   /*
     1. RTC内でインスタンス宣言
     2. RTCコンストラクタで初期化
@@ -56,7 +64,7 @@ namespace RTC
       public virtual PortableServer::RefCountServantBase
   {
   public:
-    PortBase(CORBA::ORB_ptr orb, PortableServer::POA_ptr poa){};
+    PortBase(CORBA::ORB_ptr orb, PortableServer::POA_ptr poa);
 
     /*!
      * @if jp
@@ -209,6 +217,9 @@ namespace RTC
      */
     virtual ReturnCode_t disconnect_all();
 
+
+      
+
     //============================================================
     // Local operations
     //============================================================
@@ -236,7 +247,7 @@ namespace RTC
      *
      * @endif
      */
-    void setProfile(const PortProfile& profile);
+    //    void setProfile(const PortProfile& profile);
 
 
     /*!
@@ -258,7 +269,7 @@ namespace RTC
      *
      * @endif
      */
-    const PortProfile& getProfile();
+    //    const PortProfile& getProfile();
     
 
     /*!
@@ -282,7 +293,7 @@ namespace RTC
      *
      * @endif
      */
-    void setName(const char* name);
+    //    void setName(const char* name);
 
 
     /*!
@@ -306,7 +317,7 @@ namespace RTC
      *
      * @endif
      */
-    const char* getName();
+    //    const char* getName();
 
 
     /*!
@@ -337,7 +348,7 @@ namespace RTC
      *
      * @endif
      */
-    void setInterfaceProfiles(PortInterfaceProfileList& if_profiles);
+    //    void setInterfaceProfiles(PortInterfaceProfileList& if_profiles);
 
 
     /*!
@@ -365,7 +376,7 @@ namespace RTC
      *
      * @endif
      */
-    void addInterfaceProfile(PortInterfaceProfile& if_profile);
+    //    void addInterfaceProfile(PortInterfaceProfile& if_profile);
 
 
     /*!
@@ -413,7 +424,7 @@ namespace RTC
      *
      * @endif
      */
-    PortInterfaceProfile getInterfaceProfile(const char* name);
+    //    PortInterfaceProfile getInterfaceProfile(const char* name);
 
 
     /*!
@@ -485,7 +496,7 @@ namespace RTC
      *
      * @endif
      */
-    void addConnectorProfile(ConnectorProfile conn_prof);
+    //    void addConnectorProfile(ConnectorProfile conn_prof);
 
     /*!
      * @if jp
@@ -509,7 +520,7 @@ namespace RTC
      *
      * @endif
      */
-    void eraseConnectorProfile(const char* id);
+    //    void eraseConnectorProfile(const char* id);
 
 
     /*!
@@ -533,7 +544,7 @@ namespace RTC
      *
      * @endif
      */
-    const ConnectorProfileList& getConnectorProfileList();
+    //    const ConnectorProfileList& getConnectorProfileList();
 
 
     /*!
@@ -557,7 +568,7 @@ namespace RTC
      *
      * @endif
      */
-    const ConnectorProfile& getConnectorProfile(const char* id);
+    //    const ConnectorProfile& getConnectorProfile(const char* id);
 
 
     /*!
@@ -601,7 +612,7 @@ namespace RTC
      *
      * @endif
      */
-    RTObject_ptr getOwner();
+    //    RTObject_ptr getOwner();
 
 
     /*!
@@ -623,7 +634,7 @@ namespace RTC
      *
      * @endif
      */
-    void setProperties(const NVList& properties);
+    //    void setProperties(const NVList& properties);
 
 
     /*!
@@ -645,7 +656,7 @@ namespace RTC
      *
      * @endif
      */
-    const NVList& getProperties();
+    //    const NVList& getProperties();
 
     /*!
      * @if jp
@@ -668,11 +679,47 @@ namespace RTC
      */
     const std::string getUUID() const;
     
+    virtual void addProvidor(const char* name, const char* type_name,
+			     PortableServer::RefCountServantBase* provider);
+
+
+    virtual void addConsumer(const char* name, const char* type_name,
+			     ConsumerBase* consumer);
+
+    template <class ValueType>
+    void addProperty(const char* key, ValueType value)
+    {
+      CORBA_SeqUtil::push_back(m_profile.properties,
+			       NVUtil::newNV(key, value));
+    }
+
   protected:
+    CORBA::ORB_var m_pORB;
+    PortableServer::POA_var m_pPOA;
     PortProfile m_profile;
+
+    struct Provider
+    {
+      std::string name;
+      std::string type_name;
+      CORBA::Object_ptr provider;
+    };
+
+    std::vector<Provider> m_providers;
+
+    struct Consumer
+    {
+      std::string name;
+      std::string type_name;
+      ConsumerBase* consumer;
+    };
+
+    std::vector<Consumer> m_consumers;
+
+
     ACE_Recursive_Thread_Mutex m_profile_mutex;
     typedef ACE_Guard<ACE_Recursive_Thread_Mutex> Guard;
-
+    
     //============================================================
     // Functor
     //============================================================
@@ -683,9 +730,17 @@ namespace RTC
      * @brief A functor to find a PortInterfaceProfile named instance_name
      * @endif
      */
-    struct if_name;
-
-
+    struct if_name
+    {
+      if_name(const char* name) : m_name(name) {};
+      bool operator()(const PortInterfaceProfile& prof)
+      {
+	return m_name == std::string(prof.instance_name);
+      }
+      std::string m_name;
+    };
+    
+    
     /*!
      * @if jp
      * @brief id を持つ ConnectorProfile を探す Functor
@@ -693,9 +748,17 @@ namespace RTC
      * @brief A functor to find a ConnectorProfile named id
      * @endif
      */
-    struct find_conn_id;
-
-
+    struct find_conn_id
+    {
+      find_conn_id(const char* id) : m_id(id) {};
+      bool operator()(const ConnectorProfile& cprof)
+      {
+	return m_id == std::string(cprof.connector_id);
+      }
+      std::string m_id;
+    };
+    
+    
     /*!
      * @if jp
      * @brief Port の接続を行う Functor
@@ -703,9 +766,30 @@ namespace RTC
      * @brief A functor to connect Ports
      * @endif
      */
-    struct connect_func;
-
-
+    struct connect_func
+    {
+      Port_var port_ref;
+      ConnectorProfile connector_profile;
+      ReturnCode_t return_code;
+      
+      connect_func() {};
+      connect_func(Port_ptr p, ConnectorProfile& prof)
+	: port_ref(p), connector_profile(prof) {};
+      void operator()(Port_ptr p)
+      {
+	if (!port_ref->_is_equivalent(p))
+	  {
+	    ReturnCode_t retval;
+	    retval = p->connect(connector_profile);
+	    if (retval != RTC::OK)
+	      {
+		return_code = retval;
+	      }
+	  }
+      }
+    };
+    
+    
     /*!
      * @if jp
      * @brief Port の接続解除を行う Functor
@@ -713,9 +797,30 @@ namespace RTC
      * @brief A functor to disconnect Ports
      * @endif
      */
-    struct disconnect_func;
- 
-
+    struct disconnect_func
+    {
+      Port_var port_ref;
+      ConnectorProfile connector_profile;
+      ReturnCode_t return_code;
+      
+      disconnect_func() : return_code(RTC::OK) {};
+      disconnect_func(Port_ptr p, ConnectorProfile& prof)
+	: port_ref(p), connector_profile(prof), return_code(RTC::OK) {};
+      void operator()(Port_ptr p)
+      {
+	if (!port_ref->_is_equivalent(p))
+	  {
+	    ReturnCode_t retval;
+	    retval = p->disconnect(connector_profile.connector_id);
+	    if (retval != RTC::OK)
+	      {
+		return_code = retval;
+	      }
+	  }
+      }
+    };
+    
+    
     /*!
      * @if jp
      * @brief Port の全接続解除を行う Functor
@@ -723,10 +828,27 @@ namespace RTC
      * @brief A functor to disconnect all Ports
      * @endif
      */
-    struct disconnect_all_func;
-
+    struct disconnect_all_func
+    {
+      ReturnCode_t return_code;
+      PortBase* port;
+      
+      disconnect_all_func() {};
+      disconnect_all_func(PortBase* p) 
+	: return_code(RTC::OK), port(p) {};
+      void operator()(ConnectorProfile& p)
+      {
+	ReturnCode_t retval;
+	retval = port->disconnect(p.connector_id);
+	if (retval != RTC::OK)
+	  {
+	    return_code = retval;
+	  }
+      }
+    };
+    
     friend class disconnect_all_func;
-
+    
   };
 };
 #endif // PortBase_h
