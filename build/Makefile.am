@@ -4,9 +4,15 @@
 ## @brief  Makefile.am for build tools
 ## @author Noriaki Ando <n-ando@aist.go.jp>
 ##
-## $Id: Makefile.am,v 1.2 2006-11-04 16:20:42 n-ando Exp $
+## $Id: Makefile.am,v 1.3 2006-11-28 00:54:43 n-ando Exp $
 ##
 ## $Log: not supported by cvs2svn $
+## Revision 1.2  2006/11/04 16:20:42  n-ando
+## The following file entries were added to EXTRA_DIST.
+## - ezt.py
+## - pkg_install_fc4.sh, pkg_install_fc5.sh
+## - pkg_install_freebsd52, pkg_install_freebsd6.sh
+##
 ## Revision 1.1.1.1  2005/05/12 09:06:18  n-ando
 ## Public release.
 ##
@@ -23,3 +29,6 @@ EXTRA_DIST = \
 	pkg_install_fc5.sh \
 	pkg_install_freebsd52.sh \
 	pkg_install_freebsd6.sh
+
+clean-local:
+	rm -f *.pyc *~
