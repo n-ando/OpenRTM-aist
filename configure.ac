@@ -2,7 +2,7 @@ dnl -*- autoconf -*-
 dnl
 dnl @file configure.ac
 dnl @brief Input file for autoconf
-dnl @date $Date: 2006-11-21 08:13:46 $
+dnl @date $Date: 2006-11-29 04:13:46 $
 dnl @author Noriaki Ando <n-ando@aist.go.jp>
 dnl
 dnl This file is an input file used by the GNU "autoconf" program to
@@ -10,11 +10,14 @@ dnl generate the file "configure", which tries to guess your system
 dnl configuration
 dnl
 dnl
-dnl $Id: configure.ac,v 1.7 2006-11-21 08:13:46 n-ando Exp $
+dnl $Id: configure.ac,v 1.8 2006-11-29 04:13:46 n-ando Exp $
 dnl
 
 dnl
 dnl $Log: not supported by cvs2svn $
+dnl Revision 1.7  2006/11/21 08:13:46  n-ando
+dnl MICO's idl flag "--any" was added to handle Any type.
+dnl
 dnl Revision 1.6  2006/11/04 17:04:06  n-ando
 dnl OpenRTM m4 macros were moved to openrtm.m4.
 dnl
@@ -104,6 +107,7 @@ AC_ARG_WITH(libs,             [  --with-libs=dirs                Additional lib 
 AC_ARG_ENABLE(gcc2option,     [  --with-gcc2                     Compile with gcc2])
 AC_ARG_ENABLE(artlinux,       [  --with-artlinux                 With ART-Linux])
 AC_ARG_ENABLE(artlinux,       [  --with-rdtsc                    With Read Time Stamp Counter])
+AC_ARG_ENABLE(unittest,       [  --enable-test                   Enable UnitTest With CppUnit])
 
 
 
@@ -1260,6 +1264,12 @@ fi
 
 
 
+if test "x$enable_test" = "xyes" ; then
+	UNITTEST="tests"
+fi
+
+
+
 dnl ------------------------------------------------------------
 dnl exported environmental variables
 AC_SUBST(TARGET)
@@ -1290,6 +1300,7 @@ AC_SUBST(WRAPPERS)
 AC_SUBST(PYTHON_FLAGS)
 dnl ARTLinux lib
 AC_SUBST(ARTLIB)
+AC_SUBST(UNITTEST)
 dnl ------------------------------------------------------------
 
 UNIQUE($CPPFLAGS)
@@ -1332,10 +1343,29 @@ echo ''
 
 
 AC_OUTPUT([Makefile
-	 build/Makefile
-	 rtm/idl/Makefile
-	 rtm/tests/Makefile
-	 rtm/Makefile])
+	build/Makefile
+	rtm/idl/Makefile
+	rtm/tests/Makefile
+	rtm/tests/Properties/Makefile
+	rtm/tests/StringUtil/Makefile
+	rtm/tests/ModuleManager/Makefile
+	rtm/tests/ManagerConfig/Makefile
+	rtm/tests/ObjectManager/Makefile
+	rtm/tests/Factory/Makefile
+	rtm/tests/SdoService/Makefile
+	rtm/tests/PortBase/Makefile
+	rtm/tests/StateMachine/Makefile
+	rtm/tests/SdoOrganization/Makefile
+	rtm/tests/SdoConfiguration/Makefile
+	rtm/tests/CORBA_SeqUtil/Makefile
+	rtm/tests/PortAdmin/Makefile
+	rtm/tests/RingBuffer/Makefile
+	rtm/tests/NVUtil/Makefile
+	rtm/tests/InPort/Makefile
+	rtm/tests/CorbaConsumer/Makefile
+	rtm/tests/DataInPort/Makefile
+	rtm/tests/DataOutPort/Makefile
+	rtm/Makefile])
 
 #	 examples/Makefile
 #	 examples/HelloWorld/Makefile
