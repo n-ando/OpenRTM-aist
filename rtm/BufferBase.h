@@ -2,7 +2,7 @@
 /*!
  * @file BufferBase.h
  * @brief Buffer abstract class
- * @date $Date: 2006-11-27 09:44:34 $
+ * @date $Date: 2006-12-02 18:24:15 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
  * Copyright (C) 2006
@@ -13,12 +13,15 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: BufferBase.h,v 1.1 2006-11-27 09:44:34 n-ando Exp $
+ * $Id: BufferBase.h,v 1.2 2006-12-02 18:24:15 n-ando Exp $
  *
  */
 
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.1  2006/11/27 09:44:34  n-ando
+ * The first commitment.
+ *
  */
 
 #ifndef BufferBase_h
@@ -32,6 +35,20 @@ namespace RTC
    * @brief BufferBase 抽象クラス
    * 
    * 種々のバッファのための抽象インターフェースクラス。
+   * 具象バッファクラスは、以下の純粋仮想関数の実装を提供しなければならない。
+   *
+   * publicインターフェースとして以下のものを提供する。
+   * - write(): バッファに書き込む
+   * - read(): バッファから読み出す
+   * - length(): バッファ長を返す
+   * - isFull(): バッファが満杯である
+   * - isEmpty(): バッファが空である
+   *
+   * protectedインターフェースとして以下のものを提供する。
+   * - put(): バッファにデータを書き込む
+   * - get(): バッファからデータを読み出す
+   *
+   *
    *
    * @param DataType バッファに格納するデータ型
    *
@@ -65,15 +82,15 @@ namespace RTC
     /*!
      * @if jp
      *
-     * @brief バッファにデータを書き込む
+     * @brief バッファの長さを取得する
      * 
      * @else
      *
-     * @brief Write data into the buffer
+     * @brief Get the buffer length
      *
      * @endif
      */
-    virtual void write(const DataType& value) = 0;
+    virtual long int length() const = 0;
 
     /*!
      * @if jp
@@ -86,8 +103,48 @@ namespace RTC
      *
      * @endif
      */
-    virtual DataType read() = 0;
+    virtual bool write(const DataType& value) = 0;
 
+    /*!
+     * @if jp
+     *
+     * @brief バッファにデータを書き込む
+     * 
+     * @else
+     *
+     * @brief Write data into the buffer
+     *
+     * @endif
+     */
+    virtual bool read(DataType& value) = 0;
+
+    /*!
+     * @if jp
+     *
+     * @brief バッファがfullである
+     * 
+     * @else
+     *
+     * @brief True if the buffer is full, else false.
+     *
+     * @endif
+     */
+    virtual bool isFull() const = 0;
+
+    /*!
+     * @if jp
+     *
+     * @brief バッファがemptyである
+     * 
+     * @else
+     *
+     * @brief True if the buffer is empty, else false.
+     *
+     * @endif
+     */
+    virtual bool isEmpty() const = 0;
+
+  protected:
     /*!
      * @if jp
      *
@@ -127,58 +184,9 @@ namespace RTC
      */
     virtual DataType& getRef() = 0;
 
-    /*!
-     * @if jp
-     *
-     * @brief バッファの長さを取得する
-     * 
-     * @else
-     *
-     * @brief Get the buffer length
-     *
-     * @endif
-     */
-    virtual int length() const = 0;
-
-    /*!
-     * @if jp
-     *
-     * @brief 取得するべき新しいデータがある
-     * 
-     * @else
-     *
-     * @brief New data is exist to be get
-     *
-     * @endif
-     */
-    virtual bool isNew() const = 0;
-
-    /*!
-     * @if jp
-     *
-     * @brief バッファがfullである
-     * 
-     * @else
-     *
-     * @brief The buffer is full
-     *
-     * @endif
-     */
-    virtual bool isFull() const = 0;
-
-    /*!
-     * @if jp
-     *
-     * @brief バッファがemptyである
-     * 
-     * @else
-     *
-     * @brief The buffer is empty
-     *
-     * @endif
-     */
-    virtual bool isEmpty() const = 0;
   };
+
+
 
 
   template <class DataType>
@@ -186,7 +194,8 @@ namespace RTC
     : public BufferBase<DataType>
   {
   public:
-    NullBuffer(int size)
+    NullBuffer(long int size = 1)
+      : m_length(1)
     {
     }
 
@@ -194,43 +203,52 @@ namespace RTC
     {
     }
 
-    inline void put(const DataType& data)
-    {
-      m_data = data;
-    }
-
-    inline const DataType& get()
-    {
-      return m_data;
-    }
-
-    inline DataType& getRef()
-    {
-      return m_data;
-    }
-
-    inline int length()
+    virtual long int length() const
     {
       return 1;
     }
 
-    inline bool isNew()
+    virtual bool write(const DataType& value)
     {
+      m_data = value;
       return true;
     }
 
-    inline bool isFull()
+    virtual bool read(DataType& value)
+    {
+      value = m_data;
+      return true;
+    }
+
+    virtual bool isFull() const
     {
       return false;
     }
 
-    inline bool isEmpty()
+    virtual bool isEmpty() const
     {
       return false;
+    }
+    
+  protected:
+    virtual void put(const DataType& data)
+    {
+      m_data = data;
+    }
+
+    virtual const DataType& get()
+    {
+      return m_data;
+    }
+
+    virtual DataType& getRef()
+    {
+      return m_data;
     }
 
   private:
     DataType m_data;
+    long int m_length;
   };
 
 
