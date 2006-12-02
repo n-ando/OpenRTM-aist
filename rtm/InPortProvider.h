@@ -2,7 +2,7 @@
 /*!
  * @file  InPortProvider.h
  * @brief InPortProvider class
- * @date  $Date: 2006-11-27 09:44:40 $
+ * @date  $Date: 2006-12-02 18:41:51 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
  * Copyright (C) 2006
@@ -13,19 +13,20 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: InPortProvider.h,v 1.1 2006-11-27 09:44:40 n-ando Exp $
+ * $Id: InPortProvider.h,v 1.2 2006-12-02 18:41:51 n-ando Exp $
  *
  */
 
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.1  2006/11/27 09:44:40  n-ando
+ * The first commitment.
+ *
  */
 
 #ifndef InPortProvider_h
 #define InPortProvider_h
 
-#include <rtm/idl/DataPortSkel.h>
-#include <rtm/BufferBase.h>
 
 namespace RTC
 {
@@ -38,10 +39,7 @@ namespace RTC
    * @brief InPortProvider class
    * @endif
    */
-  template <class DataType>
   class InPortProvider
-    : public virtual POA_RTC::InPortAny,
-      public virtual PortableServer::RefCountServantBase
   {
   public:
     /*!
@@ -51,27 +49,23 @@ namespace RTC
      * @brief Constructor
      * @endif
      */
-    InPortProvider(BufferBase<DataType>* buffer)
-      : m_buffer(buffer)
-    {
-    }
+    InPortProvider();
 
-    virtual ~InPortProvider()
-    {
-    }
+    /*!
+     * @if jp
+     * @brief デストラクタ
+     * @else
+     * @brief Destructor
+     * @endif
+     */
+    virtual ~InPortProvider(){};
 
-    virtual void put(const CORBA::Any& data)
-    {
-      DataType* tmp;
-      if (data >>= tmp)
-	{
-	  m_buffer->write(tmp);
-	}
-      return;
-    }
+  protected:
+  
   private:
-    BufferBase<DataType>* m_buffer;
+
   };
+ 
 };     // namespace RTC
 #endif // InPortProvider_h
 
