@@ -2,7 +2,7 @@
 /*!
  * @file DataOutPort.cpp
  * @brief Base class of OutPort
- * @date $Date: 2006-11-27 09:44:36 $
+ * @date $Date: 2006-12-02 18:29:08 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
  * Copyright (C) 2006
@@ -13,12 +13,15 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: DataOutPort.cpp,v 1.1 2006-11-27 09:44:36 n-ando Exp $
+ * $Id: DataOutPort.cpp,v 1.2 2006-12-02 18:29:08 n-ando Exp $
  *
  */
 
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.1  2006/11/27 09:44:36  n-ando
+ * The first commitment.
+ *
  *
  */
 
@@ -58,12 +61,15 @@ namespace RTC
     if (NVUtil::isString(connector_profile.properties,
 			 "dataport.interface_type"))
       {
-	std::string if_type;
-	if_type = NVUtil::toString(connector_profile.properties,
-				   "dataport.interface_type");
+	std::string subs_type;
+	subs_type = NVUtil::toString(connector_profile.properties,
+				   "dataport.subscription_type");
 	
-	m_pf.create(m_consumers[0].consumer,
-		    NVUtil::toProperties(connector_profile.properties));
+	
+	m_pubFactory.create(subs_type.c_str(),
+			    m_inports["CORBA_Any"],
+			    NVUtil::toProperties(connector_profile.properties));
+	
       }
     return retval;
   }
