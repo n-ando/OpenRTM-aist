@@ -2,7 +2,7 @@
 /*!
  * @file DataInPort.cpp
  * @brief Base class of InPort
- * @date $Date: 2006-11-27 09:44:35 $
+ * @date $Date: 2006-12-02 18:25:30 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
  * Copyright (C) 2006
@@ -13,12 +13,15 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: DataInPort.cpp,v 1.1 2006-11-27 09:44:35 n-ando Exp $
+ * $Id: DataInPort.cpp,v 1.2 2006-12-02 18:25:30 n-ando Exp $
  *
  */
 
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.1  2006/11/27 09:44:35  n-ando
+ * The first commitment.
+ *
  *
  */
 
@@ -122,7 +125,7 @@ namespace RTC
 
     // InPort の disconnect 処理を行う
     
-    return f.return_code;
+    return retcode;
   }
 
 };
