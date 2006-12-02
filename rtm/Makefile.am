@@ -2,9 +2,12 @@
 ##------------------------------------------------------------
 ## Makefile.am for libRTC
 ##
-## $Id: Makefile.am,v 1.8 2006-11-27 10:03:58 n-ando Exp $
+## $Id: Makefile.am,v 1.9 2006-12-02 18:42:20 n-ando Exp $
 ##
 ## $Log: not supported by cvs2svn $
+## Revision 1.8  2006/11/27 10:03:58  n-ando
+## CppUnit test sub-directory "tests" was added.
+##
 ## Revision 1.7  2006/11/10 04:33:11  n-ando
 ## NVUtil is added.
 ##
@@ -146,11 +149,6 @@ rtmheaderdir = $(prefix)/include/rtm
 rtmheader_HEADERS = \
 	$(libRTC_la_SOURCES:.cpp=.h) \
 	RTC.h \
-	RtcRingBuffer.h \
-	RtcInPort.h \
-	RtcOutPort.h \
-	RtcServiceBase.h \
-	RtcFactoryPy.h \
 	SystemLogger.h \
 	version.h \
 	config_rtc.h
