@@ -2,7 +2,7 @@
 /*!
  * @file PortBase.h
  * @brief RTC's Port base class
- * @date $Date: 2006-11-27 09:57:09 $
+ * @date $Date: 2006-12-02 18:50:22 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
  * Copyright (C) 2006
@@ -12,12 +12,16 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: PortBase.h,v 1.5 2006-11-27 09:57:09 n-ando Exp $
+ * $Id: PortBase.h,v 1.6 2006-12-02 18:50:22 n-ando Exp $
  *
  */
 
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.5  2006/11/27 09:57:09  n-ando
+ * addProvider() function was added for registration of provider.
+ * addConsumer() function was added for registration of consumer.
+ *
  * Revision 1.4  2006/11/06 01:46:47  n-ando
  * #include <assert.h> was added.
  *
@@ -317,7 +321,7 @@ namespace RTC
      *
      * @endif
      */
-    //    const char* getName();
+    const char* getName() {return m_profile.name; }
 
 
     /*!

@@ -2,7 +2,7 @@
 /*!
  * @file PortAdmin.h
  * @brief RTC's Port administration class
- * @date $Date: 2006-11-06 01:19:04 $
+ * @date $Date: 2006-12-02 18:49:43 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
  * Copyright (C) 2006
@@ -12,12 +12,15 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: PortAdmin.h,v 1.3 2006-11-06 01:19:04 n-ando Exp $
+ * $Id: PortAdmin.h,v 1.4 2006-12-02 18:49:43 n-ando Exp $
  *
  */
 
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.3  2006/11/06 01:19:04  n-ando
+ * CORBA sequence manipulation has been rewritten by using CORBA_SeqUtil.
+ *
  * Revision 1.2  2006/10/17 19:16:40  n-ando
  * registerPort() was modified to store Port's object reference in PortProfile.
  *
@@ -234,10 +237,10 @@ namespace RTC
     {
     public:
       comp_op(std::string _name) : m_name(_name) {};
-      comp_op(T* obj) : m_name(obj->getProfile().name) {};
+      comp_op(T* obj) : m_name(obj->getName()) {};
       bool operator()(T* obj)
       {
-	std::string name(obj->getProfile().name);
+	std::string name(obj->getName());
 	return m_name == name;
       }
       std::string m_name;
