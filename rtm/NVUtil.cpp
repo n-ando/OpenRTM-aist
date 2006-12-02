@@ -2,7 +2,7 @@
 /*!
  * @file NVUtil.h
  * @brief NameValue and NVList utility functions
- * @date $Date: 2006-11-27 09:54:42 $
+ * @date $Date: 2006-12-02 18:44:27 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
  * Copyright (C) 2006
@@ -13,12 +13,15 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: NVUtil.cpp,v 1.2 2006-11-27 09:54:42 n-ando Exp $
+ * $Id: NVUtil.cpp,v 1.3 2006-12-02 18:44:27 n-ando Exp $
  *
  */
 
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.2  2006/11/27 09:54:42  n-ando
+ * Conversion function from NVList to Properties: toProperties() was added.
+ *
  * Revision 1.1  2006/11/10 04:32:38  n-ando
  * NVUtil is SDOPackage::NVList utility.
  *
@@ -113,7 +116,7 @@ namespace NVUtil
     return nv[index].value;
   }
 
-  bool isString(SDOPackage::NVList& nv, const char* name)
+  bool isString(const SDOPackage::NVList& nv, const char* name)
   {
     try
       {
