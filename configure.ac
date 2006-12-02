@@ -2,7 +2,7 @@ dnl -*- autoconf -*-
 dnl
 dnl @file configure.ac
 dnl @brief Input file for autoconf
-dnl @date $Date: 2006-11-29 04:13:46 $
+dnl @date $Date: 2006-12-02 18:22:09 $
 dnl @author Noriaki Ando <n-ando@aist.go.jp>
 dnl
 dnl This file is an input file used by the GNU "autoconf" program to
@@ -10,11 +10,14 @@ dnl generate the file "configure", which tries to guess your system
 dnl configuration
 dnl
 dnl
-dnl $Id: configure.ac,v 1.8 2006-11-29 04:13:46 n-ando Exp $
+dnl $Id: configure.ac,v 1.9 2006-12-02 18:22:09 n-ando Exp $
 dnl
 
 dnl
 dnl $Log: not supported by cvs2svn $
+dnl Revision 1.8  2006/11/29 04:13:46  n-ando
+dnl CppUnit tests Makefile entry was added.
+dnl
 dnl Revision 1.7  2006/11/21 08:13:46  n-ando
 dnl MICO's idl flag "--any" was added to handle Any type.
 dnl
@@ -1362,9 +1365,12 @@ AC_OUTPUT([Makefile
 	rtm/tests/RingBuffer/Makefile
 	rtm/tests/NVUtil/Makefile
 	rtm/tests/InPort/Makefile
+	rtm/tests/OutPortBase/Makefile
+	rtm/tests/OutPort/Makefile
 	rtm/tests/CorbaConsumer/Makefile
 	rtm/tests/DataInPort/Makefile
 	rtm/tests/DataOutPort/Makefile
+	rtm/tests/NullBuffer/Makefile
 	rtm/Makefile])
 
 #	 examples/Makefile
