@@ -1,19 +1,16 @@
 # -*- Makefile -*-
 #------------------------------------------------------------
 # @file   Makefile.am
-# @brief  Makefile.am for OutPort unit test
-# @date   $Date: 2006-12-02 18:52:44 $
+# @brief  Makefile.am for NullBuffer unit test
+# @date   $Date: 2006-12-02 18:54:43 $
 # @author Noriaki Ando <n-ando@aist.go.jp>
 #
-# $Id: Makefile.am,v 1.2 2006-12-02 18:52:44 n-ando Exp $
+# $Id: Makefile.am,v 1.1 2006-12-02 18:54:43 n-ando Exp $
 #
 #------------------------------------------------------------
 
 #
 # $Log: not supported by cvs2svn $
-# Revision 1.1  2006/11/29 04:26:12  n-ando
-# Makefile.am for OutPortTests.
-#
 #
 
 
@@ -48,21 +45,20 @@ AM_LDFLAGS= -L.                   \
 #	$(IDL_SOURCES:.idl=Stub.h)
 #libHogeSkel_la_LIBADD = $(LIBS)
 
-noinst_PROGRAMS = OutPortTests
+noinst_PROGRAMS = NullBufferTests
 
-OutPortTests_SOURCES = \
-	../TestRunner.cpp \
-	OutPortTests.cpp  \
-	$(top_builddir)/rtm/OutPortBase.cpp
-OutPortTests_LDFLAGS = -L$(libdir)
-OutPortTests_LDADD   = -lcppunit
+NullBufferTests_SOURCES =   \
+	../TestRunner.cpp   \
+	NullBufferTests.cpp
+NullBufferTests_LDFLAGS = -L$(libdir)
+NullBufferTests_LDADD   = -lcppunit
 
 # all
 all: do-test
 
 # do tests
 do-test:
-	./OutPortTests
+	./NullBufferTests
 
 # clean-up
 clean-local:
