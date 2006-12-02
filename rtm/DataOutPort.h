@@ -2,7 +2,7 @@
 /*!
  * @file DataOutPort.h
  * @brief Base class of OutPort
- * @date $Date: 2006-11-27 09:44:37 $
+ * @date $Date: 2006-12-02 18:29:15 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
  * Copyright (C) 2006
@@ -13,12 +13,15 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: DataOutPort.h,v 1.1 2006-11-27 09:44:37 n-ando Exp $
+ * $Id: DataOutPort.h,v 1.2 2006-12-02 18:29:15 n-ando Exp $
  *
  */
 
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.1  2006/11/27 09:44:37  n-ando
+ * The first commitment.
+ *
  *
  */
 
@@ -28,7 +31,8 @@
 #include <rtm/RTObject.h>
 #include <rtm/PortBase.h>
 #include <rtm/BufferBase.h>
-#include <rtm/DataPort.h>
+#include <rtm/OutPortCorbaProvider.h>
+#include <rtm/InPortCorbaConsumer.h>
 #include <rtm/NVUtil.h>
 #include <rtm/PublisherFactory.h>
 
@@ -52,11 +56,11 @@ namespace RTC
   public:
     template <class DataType>
     DataOutPort(CORBA::ORB_ptr orb, PortableServer::POA_ptr poa,
-		const char* name, BufferBase<DataType>* buffer,
+		OutPort<DataType>* outport,
 		RTObject_ptr owner)
       : PortBase(orb, poa)
     {
-      m_profile.name = CORBA::string_dup(name);
+      m_profile.name = CORBA::string_dup(outport->name());
       m_profile.connector_profiles.length(0);
       m_profile.owner = owner;
       
@@ -70,16 +74,22 @@ namespace RTC
       addProperty("dataport.dataflow_type",     "Push, Pull");
       addProperty("dataport.subscription_type", "Once, New, Periodic");
       
-      OutPortProvider<DataType> outport;
-      outport = new OutPortProvider<DataType>(buffer);
+      OutPortCorbaProvider<DataType>* outport_provider;
+      outport_provider = new OutPortCorbaProvider<DataType>(buffer);
+      m_outports["CORBA_Any"] = outport_provider;
       addProvider(name, "OutPortAny", outport);
       
-      InPortConsumer<DataType> inport;
-      inport = new InPortConsumer<DataType>();
+      InPortConsumer* inport;
+      inport = new InPortCorbaConsumer<DataType>();
+      m_inports["CORBA_Any"] = inport;
       addConsumer(name, "InPortAny", inport);
     }
     
-    virtual ~DataOutPort(){};
+    virtual ~DataOutPort()
+    {
+      delete [] m_corbaOutPort;
+      delete [] m_corbaInPort;
+    };
 
     /*!
      * @if jp
@@ -143,6 +153,8 @@ namespace RTC
     bool setOutPortRef(ConnectorProfile& cprof);
     bool getInPortRef(const ConnectorProfile& cprof);
     PublisherFactory m_pf;
+    std::map<std::string, InPortConsumer*> m_inports;
+    std::map<std::string, OutPortProvider*> m_outports;
 
   };
 }; // namespace RTC
