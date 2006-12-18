@@ -2,15 +2,18 @@
 #------------------------------------------------------------
 # @file   Makefile.am
 # @brief  Makefile.am for OutPort unit test
-# @date   $Date: 2006-12-02 18:52:44 $
+# @date   $Date: 2006-12-18 06:54:30 $
 # @author Noriaki Ando <n-ando@aist.go.jp>
 #
-# $Id: Makefile.am,v 1.2 2006-12-02 18:52:44 n-ando Exp $
+# $Id: Makefile.am,v 1.3 2006-12-18 06:54:30 n-ando Exp $
 #
 #------------------------------------------------------------
 
 #
 # $Log: not supported by cvs2svn $
+# Revision 1.2  2006/12/02 18:52:44  n-ando
+# *** empty log message ***
+#
 # Revision 1.1  2006/11/29 04:26:12  n-ando
 # Makefile.am for OutPortTests.
 #
@@ -66,7 +69,7 @@ do-test:
 
 # clean-up
 clean-local:
-	rm -f                               \
+	rm -f OutPortTests                  \
 	*.o *.Po *.gch *.la                 \
 	*Skel.cpp *Skel.h *Stub.cpp *Stub.h \
 	*~ *core                            \
