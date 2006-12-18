@@ -2,9 +2,12 @@
 ##------------------------------------------------------------
 ## Makefile.am for unit test
 ##
-## $Id: Makefile.am,v 1.12 2006-11-27 08:10:26 n-ando Exp $
+## $Id: Makefile.am,v 1.13 2006-12-18 06:57:24 n-ando Exp $
 ##
 ## $Log: not supported by cvs2svn $
+## Revision 1.12  2006/11/27 08:10:26  n-ando
+## TestSuites are devided into each directory.
+##
 ## Revision 1.11  2006/11/22 11:48:33  kurihara
 ## CorbaConsumerTests is added.
 ##
@@ -55,6 +58,14 @@ SUBDIRS = \
 	CorbaConsumer	  \
 	DataInPort        \
 	DataOutPort       \
+	OutPort           \
+	OutPortBase       \
+	PublisherFactory  \
+	PublisherFlush    \
+	PublisherNew      \
+	PublisherPeriodic \
+	NullBuffer        \
+	RingBuffer        \
 	.  
 
 #	Factory
@@ -140,7 +151,7 @@ do-test:
 
 # Cleanup
 clean-local:
-	rm -f \
+	rm -f alltests.xml new.conf stored.conf \
 	*.o *.Po *.gch *.la \
 	*Skel.cpp *Skel.h *Stub.cpp *Stub.h \
 	*~ *core \
