@@ -2,7 +2,7 @@
 /*!
  * @file CorbaConsumer.h
  * @brief CORBA Consumer class
- * @date $Date: 2006-11-21 08:32:26 $
+ * @date $Date: 2007-01-04 00:48:20 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
  * Copyright (C) 2006
@@ -13,17 +13,20 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: CorbaConsumer.h,v 1.1 2006-11-21 08:32:26 n-ando Exp $
+ * $Id: CorbaConsumer.h,v 1.2 2007-01-04 00:48:20 n-ando Exp $
  *
  */
 
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.1  2006/11/21 08:32:26  n-ando
+ * ConsumerBase class and Cosnumer class were added for proxy placeholder.
+ *
  */
 
 #ifndef Consumer_h
 #define Consumer_h
-
+#include <iostream>
 #ifdef ORB_IS_MICO
 #include <CORBA.h>
 #endif
@@ -54,7 +57,7 @@ namespace RTC
    * @brief Placeholder base class to hold remote object reference.
    * @endif
    */
-  class ConsumerBase
+  class CorbaConsumerBase
   {
   public:
     /*!
@@ -64,7 +67,7 @@ namespace RTC
      * @brief Consructor
      * @endif
      */
-    ConsumerBase(){};
+    CorbaConsumerBase(){};
 
     /*!
      * @if jp
@@ -73,7 +76,7 @@ namespace RTC
      * @brief Destructor
      * @endif
      */
-    virtual ~ConsumerBase(){};
+    virtual ~CorbaConsumerBase(){};
 
     /*!
      * @if jp
@@ -132,6 +135,11 @@ namespace RTC
       return m_objref;
     }
 
+    virtual void releaseObject()
+    {
+      m_objref = CORBA::Object::_nil();
+    }
+
   protected:
     CORBA::Object_var m_objref;
   };
@@ -180,8 +188,8 @@ namespace RTC
   template <class ObjectType,
 	    class ObjectTypePtr = class ObjectType::_ptr_type,
 	    class ObjectTypeVar = class ObjectType::_var_type>
-  class Consumer
-    : public ConsumerBase
+  class CorbaConsumer
+    : public CorbaConsumerBase
   {
   public:
     /*!
@@ -191,7 +199,7 @@ namespace RTC
      * @brief Consructor
      * @endif
      */
-    Consumer(){};
+    CorbaConsumer(){};
     /*!
      * @if jp
      * @brief デストラクタ
@@ -199,7 +207,7 @@ namespace RTC
      * @brief Destructor
      * @endif
      */
-    virtual ~Consumer(){};
+    virtual ~CorbaConsumer(){};
 
     /*!
      * @if jp
@@ -222,7 +230,7 @@ namespace RTC
      */
     virtual bool setObject(CORBA::Object_ptr obj)
     {
-      if (ConsumerBase::setObject(obj))
+      if (CorbaConsumerBase::setObject(obj))
 	{
 	  m_var = ObjectType::_narrow(m_objref);
 	  if (!CORBA::is_nil(m_var))
@@ -231,10 +239,71 @@ namespace RTC
       return false; // object is nil
     }
 
+
+    /*!
+     * @if jp
+     * @brief ObjectType 型のオブジェクトのリファレンスを取得
+     *
+     * ObjectType に narrow済みのオブジェクトのリファレンスを取得する。
+     * オブジェクトリファレンスを使用するには、setObject() でセット済みで
+     * なければならない。
+     * オブジェクトがセットされていなければ　nil オブジェクトリファレンスが、
+     * 返される。
+     *
+     * @return ObjectType に narrow 済みのオブジェクトのリファレンス
+     * 
+     * @else
+     * @brief Get Object reference narrowed as ObjectType
+     *
+     * This operation returns object reference narrowed as ObjectType.
+     * To use the returned object reference, reference have to be set by
+     * setObject().
+     * If object is not set, this operation returns nil object reference.
+     *
+     * @return The object reference narrowed as ObjectType
+     *
+     * @endif
+     */
     inline ObjectTypePtr _ptr()
     {
       return m_var;
     }
+
+    /*!
+     * @if jp
+     * @brief ObjectType 型のオブジェクトのリファレンスを取得
+     *
+     * ObjectType に narrow済みのオブジェクトのリファレンスを取得する。
+     * オブジェクトリファレンスを使用するには、setObject() でセット済みで
+     * なければならない。
+     * オブジェクトがセットされていなければ　nil オブジェクトリファレンスが、
+     * 返される。
+     *
+     * @return ObjectType に narrow 済みのオブジェクトのリファレンス
+     * 
+     * @else
+     * @brief Get Object reference narrowed as ObjectType
+     *
+     * This operation returns object reference narrowed as ObjectType.
+     * To use the returned object reference, reference have to be set by
+     * setObject().
+     * If object is not set, this operation returns nil object reference.
+     *
+     * @return The object reference narrowed as ObjectType
+     *
+     * @endif
+     */
+    inline ObjectTypePtr operator->()
+    {
+      return m_var;
+    }
+
+    virtual void releaseObject()
+    {
+      CorbaConsumerBase::releaseObject();
+      m_var = ObjectType::_nil();
+    }
+
   protected:
     ObjectTypeVar m_var;
 
