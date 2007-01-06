@@ -2,7 +2,7 @@
 /*!
  * @file InPort.h
  * @brief InPort template class
- * @date $Date: 2006-12-02 18:37:29 $
+ * @date $Date: 2007-01-06 17:47:51 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
  * Copyright (C) 2003-2005
@@ -12,12 +12,15 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: InPort.h,v 1.5 2006-12-02 18:37:29 n-ando Exp $
+ * $Id: InPort.h,v 1.6 2007-01-06 17:47:51 n-ando Exp $
  *
  */
 
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.5  2006/12/02 18:37:29  n-ando
+ * A trivial fix.
+ *
  * Revision 1.4  2006/11/07 09:26:12  n-ando
  * Renamed RtcInPort.h to InPort.h.
  *
@@ -40,8 +43,9 @@
 #include <string>
 #include <vector>
 #include <iostream>
-#include <rtm/InPortBase.h>
+//#include <rtm/InPortBase.h>
 #include <rtm/BufferBase.h>
+#include <rtm/PortCallBack.h>
 
 #define TIMEOUT_TICK_USEC 10
 #define USEC_PER_SEC 1000000
@@ -115,8 +119,8 @@ namespace RTC
 	   int bufsize=64, 
 	   bool read_block = false, bool write_block = false,
 	   int read_timeout = 0, int write_timeout = 0)
-      : m_name(name), m_value(value),
-	m_buffer(bufsize),
+      : Buffer<DataType>(bufsize),
+	m_name(name), m_value(value),
 	m_readBlock(read_block),   m_readTimeout(read_timeout),
 	m_writeBlock(write_block), m_writeTimeout(write_timeout),
 	m_OnWrite(NULL), m_OnWriteConvert(NULL),
@@ -125,7 +129,7 @@ namespace RTC
     {
     };
     
-
+    
     /*!
      * @if jp
      *
@@ -174,7 +178,7 @@ namespace RTC
      *
      * @endif
      */
-    void write(const DataType& value)
+    bool write(const DataType& value)
     {
       if (m_OnWrite != NULL) (*m_OnWrite)(value);      
 
@@ -184,7 +188,7 @@ namespace RTC
       gettimeofday(&tm_pre, NULL);
 
       // blocking and timeout wait
-      while (m_writeBlock && m_buffer.isFull())
+      while (m_writeBlock && this->isFull())
 	{
 	  if (m_writeTimeout < 0) 
 	    {
@@ -204,21 +208,21 @@ namespace RTC
 	  usleep(TIMEOUT_TICK_USEC);
 	}
 
-      if (m_buffer.isFull() && m_OnOverflow != NULL)
+      if (this->isFull() && m_OnOverflow != NULL)
 	{
 	  (*m_OnOverflow)(value);
-	  return;
+	  return false;
 	}
 
       if (m_OnWriteConvert == NULL) 
 	{
-	  m_buffer.put(value);
+	  this->put(value);
 	}
       else
 	{
-	  m_buffer.put((*m_OnWriteConvert)(value));
+	  this->put((*m_OnWriteConvert)(value));
 	}
-      return;
+      return true;
     }
     
 
@@ -257,7 +261,7 @@ namespace RTC
       gettimeofday(&tm_pre, NULL);
 
       // blocking and timeout wait
-      while (m_readBlock && m_buffer.isEmpty())
+      while (m_readBlock && this->isEmpty())
 	{
 	  if (m_readTimeout < 0)
 	    {
@@ -277,18 +281,21 @@ namespace RTC
 	  usleep(TIMEOUT_TICK_USEC);
 	}
 
-      if (m_buffer.isEmpty() && m_OnUnderflow != NULL)
+      if (this->isEmpty() && m_OnUnderflow != NULL)
 	{
-	  return (*m_OnUnderflow)();
+	  m_value = (*m_OnUnderflow)();
+	  return m_value;
 	}
 
       if (m_OnReadConvert == NULL) 
 	{
-	  return m_buffer.get();
+	  m_value = this->get();
+	  return m_value;
 	}
       else
 	{
-	  return (*m_OnReadConvert)(m_buffer.get());
+	  m_value = (*m_OnReadConvert)(this->get());
+	  return m_value;
 	}
       // never comes here
       return m_value;
@@ -335,7 +342,7 @@ namespace RTC
     {
       try
 	{
-	  m_value = m_buffer->get();
+	  m_value = this->get();
 	}
       catch (...)
 	{
@@ -373,32 +380,6 @@ namespace RTC
       return;
     }
 
-    /*!
-     * @if jp
-     *
-     * @brief 最新データが未読の新しいデータかどうかを調べる
-     *
-     * @else
-     *
-     * @brief Check the newest data is new data to be read.
-     *
-     * @endif
-     */
-    bool isNew()
-    {
-      return m_buffer.isNew();
-    }
-
-    bool isFull()
-    {
-      return m_buffer.isFull();
-    }
-
-    bool isEmpty()
-    {
-      return m_buffer.isEmpty();
-    }
-    
     
     /*!
      * @if jp
@@ -480,32 +461,32 @@ namespace RTC
      *
      * @endif
      */
-    inline void setOnWrite(OnWrite* on_write)
+    inline void setOnWrite(OnWrite<DataType>* on_write)
     {
       m_OnWrite = on_write;
     }
 
-    inline void setOnWriteConvert(OnWriteConvert* on_wconvert)
+    inline void setOnWriteConvert(OnWriteConvert<DataType>* on_wconvert)
     {
       m_OnWriteConvert = on_wconvert;
     }
 
-    inline void setOnRead(OnRead* on_read)
+    inline void setOnRead(OnRead<DataType>* on_read)
     {
       m_OnRead = on_read;
     }
 
-    inline void setOnReadConvert(OnReadConvert* on_rconvert)
+    inline void setOnReadConvert(OnReadConvert<DataType>* on_rconvert)
     {
       m_OnReadConvert = on_rconvert;
     }
 
-    inline void setOnOverflow(OnOverflow* on_overflow)
+    inline void setOnOverflow(OnOverflow<DataType>* on_overflow)
     {
       m_OnOverflow = on_overflow;
     }
 
-    inline void setOnUnderflow(OnUnderflow* on_underflow)
+    inline void setOnUnderflow(OnUnderflow<DataType>* on_underflow)
     {
       m_OnUnderflow = on_underflow;
     }
@@ -537,7 +518,7 @@ namespace RTC
      * @brief Buffer
      * @endif
      */
-    Buffer<DataType> m_buffer;
+    //    Buffer<DataType> m_buffer;
 
     bool m_readBlock;
     long int m_readTimeout;
@@ -551,7 +532,7 @@ namespace RTC
      * @brief OnWrite callback functor pointer
      * @endif
      */
-    OnWrite* m_OnWrite;
+    OnWrite<DataType>* m_OnWrite;
 
     /*!
      * @if jp
@@ -560,7 +541,7 @@ namespace RTC
      * @brief OnWriteConvert callback functor pointer
      * @endif
      */
-    OnWriteConvert* m_OnWriteConvert;
+    OnWriteConvert<DataType>* m_OnWriteConvert;
 
     /*!
      * @if jp
@@ -569,7 +550,7 @@ namespace RTC
      * @brief OnRead callback functor pointer
      * @endif
      */
-    OnRead* m_OnRead;
+    OnRead<DataType>* m_OnRead;
 
     /*!
      * @if jp
@@ -578,46 +559,7 @@ namespace RTC
      * @brief OnReadConvert callback functor pointer
      * @endif
      */
-    OnR    bool m_readBlock;
-    long int m_readTimeout;
-    bool m_writeBlock;
-    long int m_writeTimeout;
-
-    /*!
-     * @if jp
-     * @brief OnWrite コールバックファンクタへのポインタ
-     * @else
-     * @brief OnWrite callback functor pointer
-     * @endif
-     */
-    OnWrite* m_OnWrite;
-
-    /*!
-     * @if jp
-     * @brief OnWriteConvert コールバックファンクタへのポインタ
-     * @else
-     * @brief OnWriteConvert callback functor pointer
-     * @endif
-     */
-    OnWriteConvert* m_OnWriteConvert;
-
-    /*!
-     * @if jp
-     * @brief OnRead コールバックファンクタへのポインタ
-     * @else
-     * @brief OnRead callback functor pointer
-     * @endif
-     */
-    OnRead* m_OnRead;
-
-    /*!
-     * @if jp
-     * @brief OnReadConvert コールバックファンクタへのポインタ
-     * @else
-     * @brief OnReadConvert callback functor pointer
-     * @endif
-     */
-    OnReadConvert* m_OnReadConvert;
+    OnReadConvert<DataType>* m_OnReadConvert;
 
     /*!
      * @if jp
@@ -626,7 +568,7 @@ namespace RTC
      * @brief OnOverflow callback functor pointer
      * @endif
      */
-    OnOverflow* m_OnOverflow;
+    OnOverflow<DataType>* m_OnOverflow;
 
     /*!
      * @if jp
@@ -636,27 +578,7 @@ namespace RTC
      *
      * @endif
      */
-    OnUnderflow* m_OnUnderflow;
-
-    /*!
-     * @if jp
-     * @brief OnOverflow コールバックファンクタへのポインタ
-     * @else
-     * @brief OnOverflow callback functor pointer
-     * @endif
-     */
-    OnOverflow* m_OnOverflow;
-
-    /*!
-     * @if jp
-     * @brief OnUnderflow コールバックファンクタへのポインタ
-     * @else
-     * @brief OnUnderflow callback functor pointer
-     *
-     * @endif
-     */
-    OnUnderflow* m_OnUnderflow;
-
+    OnUnderflow<DataType>* m_OnUnderflow;
 
     
   };
