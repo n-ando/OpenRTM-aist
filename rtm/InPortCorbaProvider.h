@@ -2,7 +2,7 @@
 /*!
  * @file  InPortCorbaProvider.h
  * @brief InPortCorbaProvider class
- * @date  $Date: 2006-12-02 18:41:02 $
+ * @date  $Date: 2007-01-06 17:52:54 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
  * Copyright (C) 2006
@@ -13,12 +13,15 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: InPortCorbaProvider.h,v 1.1 2006-12-02 18:41:02 n-ando Exp $
+ * $Id: InPortCorbaProvider.h,v 1.2 2007-01-06 17:52:54 n-ando Exp $
  *
  */
 
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.1  2006/12/02 18:41:02  n-ando
+ * InPortCorbaProvider class is an implementation of InPortAny.
+ *
  */
 
 #ifndef InPortCorbaProvider_h
@@ -53,9 +56,23 @@ namespace RTC
      * @brief Constructor
      * @endif
      */
-    InPortCorbaProvider(BufferBase<DataType>* buffer)
+    InPortCorbaProvider(BufferBase<DataType>& buffer)
       : m_buffer(buffer)
     {
+      CORBA::Any any_var;
+      DataType   tmp_var;
+      any_var <<= tmp_var;
+      
+      // PortProfile setting
+      setDataType(any_var.type()->name());
+      setInterfaceType("CORBA_Any");
+      setDataFlowType("Push, Pull");
+      setSubscriptionType("Any");
+
+      // ConnectorProfile setting
+      CORBA_SeqUtil::push_back(m_properties,
+			       NVUtil::newNV("dataport.corba_any.inport_ref",
+					     this->_this()));
     }
 
     virtual ~InPortCorbaProvider()
@@ -67,12 +84,12 @@ namespace RTC
       DataType* tmp;
       if (data >>= tmp)
 	{
-	  m_buffer->write(tmp);
+	  m_buffer.write(*tmp);
 	}
       return;
     }
   private:
-    BufferBase<DataType>* m_buffer;
+    BufferBase<DataType>& m_buffer;
   };
 
 
