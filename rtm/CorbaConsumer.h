@@ -2,7 +2,7 @@
 /*!
  * @file CorbaConsumer.h
  * @brief CORBA Consumer class
- * @date $Date: 2007-01-04 00:48:20 $
+ * @date $Date: 2007-01-06 17:39:33 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
  * Copyright (C) 2006
@@ -13,12 +13,17 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: CorbaConsumer.h,v 1.2 2007-01-04 00:48:20 n-ando Exp $
+ * $Id: CorbaConsumer.h,v 1.3 2007-01-06 17:39:33 n-ando Exp $
  *
  */
 
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.2  2007/01/04 00:48:20  n-ando
+ * - Class name has changed.
+ * - operator->() was added.
+ * - CorbaConsumer::releaseObject() was added.
+ *
  * Revision 1.1  2006/11/21 08:32:26  n-ando
  * ConsumerBase class and Cosnumer class were added for proxy placeholder.
  *
@@ -71,12 +76,30 @@ namespace RTC
 
     /*!
      * @if jp
+     * @brief コピーコンストラクタ
+     * @else
+     * @brief Copy Consructor
+     * @endif
+     */
+    CorbaConsumerBase(const CorbaConsumerBase& x)
+    {
+      m_objref = x.m_objref;
+    }
+
+    CorbaConsumerBase& operator=(const CorbaConsumerBase& x)
+    {
+      m_objref = x.m_objref;
+    }
+
+    /*!
+     * @if jp
      * @brief デストラクタ
      * @else
      * @brief Destructor
      * @endif
      */
     virtual ~CorbaConsumerBase(){};
+
 
     /*!
      * @if jp
@@ -200,6 +223,17 @@ namespace RTC
      * @endif
      */
     CorbaConsumer(){};
+
+    CorbaConsumer(const CorbaConsumer& x)
+    {
+      m_var = x.m_var;
+    }
+
+    CorbaConsumer& operator=(const CorbaConsumer& x)
+    {
+      m_var = x.m_var;
+    }
+
     /*!
      * @if jp
      * @brief デストラクタ
