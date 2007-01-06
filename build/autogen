@@ -2,7 +2,7 @@
 #
 # @file autogen
 # @brief script for setingup build environment
-# @date $Date: 2006-11-30 10:29:25 $
+# @date $Date: 2007-01-06 18:08:52 $
 # @author Noriaki Ando <n-ando@aist.go.jp>
 #
 # Copyright (C) 2003-2006
@@ -13,9 +13,14 @@
 #         Advanced Industrial Science and Technology (AIST), Japan
 #     All rights reserved.
 #
-# $Id: autogen,v 1.6 2006-11-30 10:29:25 n-ando Exp $
+# $Id: autogen,v 1.7 2007-01-06 18:08:52 n-ando Exp $
 #
 # $Log: not supported by cvs2svn $
+# Revision 1.6  2006/11/30 10:29:25  n-ando
+# Now two type of Autotools version number is supported.
+# - Linux may uses automake-1.9 but FreeBSD may uses automake19
+# "libtool.m4" search directories were added for Linux.
+#
 # Revision 1.5  2006/11/04 16:31:30  n-ando
 # This script was rewritten.
 # - Autotools installation would be checked before reconfiguration.
@@ -46,7 +51,7 @@ lt_ver="15"
 lt_ver2="-1.5"
 
 am_autogen="aclocal.m4 config.guess config.sub missing install-sh" 
-lt_autogen="ltmain.sh"
+#lt_autogen="ltmain.sh"
 other_gen="autom4te.cache configure libtool.m4 *.log configure.scan config.status libtool depcomp configure.lineno"
 
 #------------------------------------------------------------
@@ -151,6 +156,16 @@ find_autotools()
     echo "libtool    was found in ${lt_cmd}."
     echo "libtoolize was found in ${ltz_cmd}."
     echo ""
+    export AUTOCONF=${ac_cmd}
+    export AUTOHEADER=${ah_cmd}
+    export AUTOM4TE=${am4_cmd}
+    export AUTORECONF=${ar_cmd}
+    export AUTOUPDATE=${aup_cmd}
+    export AUTOMAKE=${am_cmd}
+    export ACLOCAL=${al_cmd}
+    export LIBTOOL=${lt_cmd}
+    export LIBTOOLIZE=${ltz_cmd}
+    echo ""
 }
 
 do_prepare()
@@ -178,7 +193,7 @@ do_autoreconf()
     echo "------------------------------------------------------------"
     echo " Doing autoreconf"
     echo "------------------------------------------------------------"
-    ${ar_cmd} -i -v
+    ${ar_cmd} --install --force -v
     echo "done"
     echo ""
 }
