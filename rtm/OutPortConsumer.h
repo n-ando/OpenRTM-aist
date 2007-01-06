@@ -2,7 +2,7 @@
 /*!
  * @file  OutPortConsumer.h
  * @brief OutPortConsumer class
- * @date  $Date: 2006-12-02 18:46:55 $
+ * @date  $Date: 2007-01-06 17:57:14 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
  * Copyright (C) 2006
@@ -13,12 +13,15 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: OutPortConsumer.h,v 1.2 2006-12-02 18:46:55 n-ando Exp $
+ * $Id: OutPortConsumer.h,v 1.3 2007-01-06 17:57:14 n-ando Exp $
  *
  */
 
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.2  2006/12/02 18:46:55  n-ando
+ * OutPortCorbaConsumer class was moved to OutPortCorbaConsumer.h
+ *
  * Revision 1.1  2006/11/27 09:44:41  n-ando
  * The first commitment.
  *
@@ -27,6 +30,8 @@
 #ifndef OutPortConsumer_h
 #define OutPortConsumer_h
 
+#include <rtm/CorbaConsumer.h>
+#include <rtm/NVUtil.h>
 
 namespace RTC
 {
@@ -49,7 +54,7 @@ namespace RTC
      * @brief Constructor
      * @endif
      */
-    OutPortConsumer();
+    //    OutPortConsumer(){};
 
     /*!
      * @if jp
@@ -62,7 +67,8 @@ namespace RTC
     virtual ~OutPortConsumer(){};
 
     virtual void pull() = 0;
-
+    virtual bool subscribeInterface(const SDOPackage::NVList& properties) = 0;
+    virtual void unsubscribeInterface(const SDOPackage::NVList& properties) = 0;
   protected:
   
   private:

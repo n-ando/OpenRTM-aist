@@ -2,7 +2,7 @@
 /*!
  * @file  OutPortCorbaConsumer.h
  * @brief OutPortCorbaConsumer class
- * @date  $Date: 2006-12-02 18:47:29 $
+ * @date  $Date: 2007-01-06 17:57:27 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
  * Copyright (C) 2006
@@ -13,12 +13,15 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: OutPortCorbaConsumer.h,v 1.1 2006-12-02 18:47:29 n-ando Exp $
+ * $Id: OutPortCorbaConsumer.h,v 1.2 2007-01-06 17:57:27 n-ando Exp $
  *
  */
 
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.1  2006/12/02 18:47:29  n-ando
+ * OutPortCorbaConsumer class was moved from OutPortConsumer.h
+ *
  */
 
 #ifndef OutPortCorbaConsumer_h
@@ -43,7 +46,7 @@ namespace RTC
   template <class DataType>
   class OutPortCorbaConsumer
     : public OutPortConsumer,
-      public Consumer<RTC::OutPortAny>
+      public CorbaConsumer<RTC::OutPortAny>
   {
   public:
     /*!
@@ -53,7 +56,7 @@ namespace RTC
      * @brief Constructor
      * @endif
      */
-    OutPortCorbaConsumer(BufferBase<DataType>* buffer)
+    OutPortCorbaConsumer(BufferBase<DataType>& buffer)
       : m_buffer(buffer)
     {}
     
@@ -68,25 +71,68 @@ namespace RTC
     
     bool get(DataType& data)
     {
-      CORBA::Any* tmp;
-      tmp = m_var->get();
-      if (tmp >>= data)
-	return true;
+      DataType* d;
+      try
+	{
+	  if ((*(_ptr()->get())) >>= d)
+	    {
+	      data = (*d);
+	      return true;
+	    }
+	}
+      catch (...)
+	{
+	  return false;
+	}
       return false;
     }
+
 
     virtual void pull()
     {
       DataType data;
       if (get(data))
 	{
-	  m_buffer->write(data);
+	  m_buffer.write(data);
 	}
     }
     
+
+    virtual bool subscribeInterface(const SDOPackage::NVList& properties)
+    {
+      CORBA::Long index;
+      index = NVUtil::find_index(properties,
+				 "dataport.corba_any.outport_ref");
+      if (index < 0) return false;
+
+      CORBA::Object_ptr obj;
+      if (properties[index].value >>= CORBA::Any::to_object(obj))
+	{
+	  setObject(obj);
+	  return true;
+	}
+      return false;
+    }
+
+
+    virtual void unsubscribeInterface(const SDOPackage::NVList& properties)
+    {
+      CORBA::Long index;
+      index = NVUtil::find_index(properties,
+				 "dataport.corba_any.outport_ref");
+      if (index < 0) return;
+
+      CORBA::Object_ptr obj;
+      if (properties[index].value >>= CORBA::Any::to_object(obj))
+	{
+	  if (getObject()->_is_equivalent(obj))
+	    releaseObject();
+	}
+    }
+
   private:
     RTC::OutPortAny_var m_outport;
-    BufferBase<DataType>* m_buffer;
+    BufferBase<DataType>& m_buffer;
   };
 };     // namespace RTC
 #endif // OutPortCorbaConsumer_h
