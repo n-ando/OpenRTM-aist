@@ -2,7 +2,7 @@
 /*!
  * @file Properties.cpp
  * @brief Property list class (derived from Java Properties)
- * @date $Date: 2006-11-06 01:24:56 $
+ * @date $Date: 2007-01-06 17:59:18 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
  * Copyright (C) 2006
@@ -12,12 +12,16 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: Properties.cpp,v 1.4 2006-11-06 01:24:56 n-ando Exp $
+ * $Id: Properties.cpp,v 1.5 2007-01-06 17:59:18 n-ando Exp $
  *
  */
 
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.4  2006/11/06 01:24:56  n-ando
+ * Bug fix.
+ * - Constructor's argument was not stored to the property values.
+ *
  * Revision 1.3  2006/10/17 10:10:13  n-ando
  * Some escape/unescape related bugs are fixed.
  * The following some functions were moved to StringUtil.h
@@ -108,7 +112,7 @@ namespace RTC
    * @brief Searches for the property with the specified key in this property
    * @endif
    */
-  std::string Properties::getProperty(const std::string& key)
+  std::string Properties::getProperty(const std::string& key) const
   {
     return getProperty(key, "");
   }
@@ -122,13 +126,14 @@ namespace RTC
    * @endif
    */
   std::string Properties::getProperty(const std::string& key,
-				      const std::string& defaultValue)
+				      const std::string& defaultValue) const
   {
-    std::string s((*this)[key]);
+    std::string s((*(const_cast<Properties*>(this)))[key]);
     if (s == "")
       {
 	std::string defaults;
-	defaults = m_defaults[key];
+	
+	defaults = (*(const_cast<std::map<std::string, std::string>*>(&m_defaults)))[key];
 	if (defaults == "")
 	  return defaultValue;
 	else
