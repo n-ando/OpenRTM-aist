@@ -2,7 +2,7 @@
 /*!
  * @file NVUtil.h
  * @brief NameValue and NVList utility functions
- * @date $Date: 2006-11-27 09:54:48 $
+ * @date $Date: 2007-01-06 17:55:35 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
  * Copyright (C) 2006
@@ -13,12 +13,15 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: NVUtil.h,v 1.3 2006-11-27 09:54:48 n-ando Exp $
+ * $Id: NVUtil.h,v 1.4 2007-01-06 17:55:35 n-ando Exp $
  *
  */
 
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.3  2006/11/27 09:54:48  n-ando
+ * Conversion function from NVList to Properties: toProperties() was added.
+ *
  * Revision 1.2  2006/11/10 04:46:15  n-ando
  * Kanji-code was changed to EUC.
  *
@@ -187,6 +190,9 @@ namespace NVUtil
    */
   SDOPackage::NameValue newNVOctet(const char* name, const CORBA::Octet value);
 
+  SDOPackage::NameValue newNVAny(const char* name, const CORBA::Any& value);
+
+
 
   /*!
    * @if jp
@@ -214,7 +220,7 @@ namespace NVUtil
   void copy(SDOPackage::NVList& nv, const RTC::Properties& prop);
 
 
-  RTC::Properties toProperties(SDOPackage::NVList& nv);
+  RTC::Properties toProperties(const SDOPackage::NVList& nv);
 
   /*!
    * @if jp
@@ -239,7 +245,7 @@ namespace NVUtil
    * @endif
    */
   const CORBA::Any& find(const SDOPackage::NVList& nv, const char* name);
-
+  const CORBA::Long find_index(const SDOPackage::NVList& nv, const char* name);
 
   /*!
    * @if jp
@@ -265,6 +271,8 @@ namespace NVUtil
    * @endif
    */
   bool isString(const SDOPackage::NVList& nv, const char* name);
+  bool isStringValue(const SDOPackage::NVList& nv, const char* name,
+		     const char* value);
 
   /*!
    * @if jp
@@ -294,6 +302,13 @@ namespace NVUtil
    * @endif
    */
   std::string toString(const SDOPackage::NVList& nv, const char* name);
+
+
+
+  bool appendStringValue(SDOPackage::NVList& nv, const char* name,
+			 const char* value);
+
+  void append(SDOPackage::NVList& dest, const SDOPackage::NVList& src);
 
 };
 
