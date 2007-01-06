@@ -2,7 +2,7 @@
 /*!
  * @file OutPort.h
  * @brief OutPort class
- * @date $Date: 2006-12-02 18:45:30 $
+ * @date $Date: 2007-01-06 17:56:19 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
  * Copyright (C) 2006
@@ -13,21 +13,26 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: OutPort.h,v 1.1 2006-12-02 18:45:30 n-ando Exp $
+ * $Id: OutPort.h,v 1.2 2007-01-06 17:56:19 n-ando Exp $
  *
  */
 
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.1  2006/12/02 18:45:30  n-ando
+ * The first commitment.
+ *
  *
  */
 
 #ifndef OutPort_h
 #define OutPort_h
  
+#include <rtm/BufferBase.h>
 #include <rtm/RingBuffer.h>
 #include <rtm/OutPortBase.h>
 #include <rtm/PortCallBack.h>
+#include <iostream>
 
 namespace RTC
 {
@@ -125,8 +130,6 @@ namespace RTC
 	  usleep(m_timeoutTick);
 	  ++count;
 	}
-
-      std::cout << count << std::endl;
       
       if (this->isFull())
         {
@@ -143,7 +146,6 @@ namespace RTC
 	{
 	  this->put((*m_OnWriteConvert)(value));
 	}
-
       notify();
       return true;
     }
