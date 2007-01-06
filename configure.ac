@@ -2,7 +2,7 @@ dnl -*- autoconf -*-
 dnl
 dnl @file configure.ac
 dnl @brief Input file for autoconf
-dnl @date $Date: 2006-12-02 18:22:09 $
+dnl @date $Date: 2007-01-06 18:06:37 $
 dnl @author Noriaki Ando <n-ando@aist.go.jp>
 dnl
 dnl This file is an input file used by the GNU "autoconf" program to
@@ -10,11 +10,14 @@ dnl generate the file "configure", which tries to guess your system
 dnl configuration
 dnl
 dnl
-dnl $Id: configure.ac,v 1.9 2006-12-02 18:22:09 n-ando Exp $
+dnl $Id: configure.ac,v 1.10 2007-01-06 18:06:37 n-ando Exp $
 dnl
 
 dnl
 dnl $Log: not supported by cvs2svn $
+dnl Revision 1.9  2006/12/02 18:22:09  n-ando
+dnl Add some tests Makefile entry.
+dnl
 dnl Revision 1.8  2006/11/29 04:13:46  n-ando
 dnl CppUnit tests Makefile entry was added.
 dnl
@@ -919,7 +922,7 @@ if test "x$have_tao" = "xyes" ; then
 	dnl  TAO setup complete
 	dnl ------------------------------------------------------------
 	IDLC=$tao_idl
-	IDL_FLAGS="-DTAO_IDL -Ge 1 $tao_include/tao"
+	IDL_FLAGS="-DTAO_IDL -Ge 1 $tao_include/tao $tao_include"
 	COSNAMES=$Naming_Service
 	CPPFLAGS="$CPPFLAGS $tao_include"
 	CXXFLAGS="$CXXFLAGS $tao_include"
@@ -1371,6 +1374,12 @@ AC_OUTPUT([Makefile
 	rtm/tests/DataInPort/Makefile
 	rtm/tests/DataOutPort/Makefile
 	rtm/tests/NullBuffer/Makefile
+	rtm/tests/PublisherNew/Makefile
+	rtm/tests/PublisherPeriodic/Makefile
+	rtm/tests/PublisherFlush/Makefile
+	rtm/tests/PublisherFactory/Makefile
+	rtm/tests/DataInOutPort/Makefile
+	rtm/tests/CorbaPort/Makefile
 	rtm/Makefile])
 
 #	 examples/Makefile
