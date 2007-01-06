@@ -2,7 +2,7 @@
 /*!
  * @file DataInPort.h
  * @brief RTC::Port implementation for Data InPort
- * @date $Date: 2006-12-02 18:27:49 $
+ * @date $Date: 2007-01-06 17:43:39 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
  * Copyright (C) 2006
@@ -13,12 +13,15 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: DataInPort.h,v 1.1 2006-12-02 18:27:49 n-ando Exp $
+ * $Id: DataInPort.h,v 1.2 2007-01-06 17:43:39 n-ando Exp $
  *
  */
 
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.1  2006/12/02 18:27:49  n-ando
+ * The first commitment.
+ *
  *
  */
 
@@ -31,6 +34,7 @@
 #include <rtm/InPortCorbaProvider.h>
 #include <rtm/OutPortCorbaConsumer.h>
 #include <rtm/NVUtil.h>
+#include <rtm/InPort.h>
 namespace RTC
 {
   /*!
@@ -50,32 +54,16 @@ namespace RTC
 
   public:
     template <class DataType>
-    DataInPort(CORBA::ORB_ptr orb, PortableServer::POA_ptr poa,
-	       const char* name, BufferBase<DataType>* buffer,
-	       RTObject_ptr owner)
-      : PortBase(orb, poa)
+    DataInPort(const char* name, InPort<DataType>& inport)
+      : PortBase(name)
     {
-      m_profile.name = CORBA::string_dup(name);
-      m_profile.connector_profiles.length(0);
-      m_profile.owner = owner;
+      // PortProfile::properties ¤òÀßÄê
+      addProperty("port.port_type", "DataInPort");
 
-      CORBA::Any any_var;
-      DataType   tmp_var;
-      any_var <<= tmp_var;
+      m_providers.push_back(new InPortCorbaProvider<DataType>(inport));
 
-      addProperty("port.port_type",             "DataInPort");
-      addProperty("dataport.data_type",         any_var.type().name());
-      addProperty("dataport.interface_type",    "CORBA_Any, RawTCP");
-      addProperty("dataport.dataflow_type",     "Push, Pull");
-      addProperty("dataport.subscription_type", "Any");
+      m_consumers.push_back(new OutPortCorbaConsumer<DataType>(inport));
 
-      InPortCorbaProvider<DataType>* inport;
-      inport = new InPortCorbaProvider<DataType>(buffer);
-      addProvider(name, "InPortAny", inport);
-
-      OutPortConsumer* outport;
-      outport = new OutPortCorbaConsumer<DataType>();
-      addConsumer(name, "OutPortAny", outport);
     }
 
     virtual ~DataInPort(){};
@@ -114,14 +102,52 @@ namespace RTC
      * @brief [CORBA interface] Connect the Port
      * @endif
      */
-    virtual ReturnCode_t connect(ConnectorProfile& connector_profile);
-    virtual ReturnCode_t disconnect(const char* connector_id);
+ 
 
   protected:
-    bool setInPortRef(ConnectorProfile& cprof);
-    bool getOutPortRef(ConnectorProfile& cprof);
+    virtual ReturnCode_t
+    publishInterfaces(ConnectorProfile& connector_profile);
+
+    virtual ReturnCode_t
+    subscribeInterfaces(const ConnectorProfile& connector_profile);
+
+    virtual void
+    unsubscribeInterfaces(const ConnectorProfile& connector_profile);
+    
+    struct publish
+    {
+      publish(SDOPackage::NVList& prop) : m_prop(prop) {}
+      void operator()(InPortProvider* provider)
+      {
+	provider->publishInterface(m_prop);
+      }
+      SDOPackage::NVList& m_prop;
+    };
+
+    struct subscribe
+    {
+      subscribe(const SDOPackage::NVList& prop) : m_prop(prop) {}
+      void operator()(OutPortConsumer* consumer)
+      {
+	consumer->subscribeInterface(m_prop);
+      }
+      const SDOPackage::NVList& m_prop;
+    };
+
+    struct unsubscribe
+    {
+      unsubscribe(const SDOPackage::NVList& prop) : m_prop(prop) {}
+      void operator()(OutPortConsumer* consumer)
+      {
+	consumer->unsubscribeInterface(m_prop);
+      }
+      const SDOPackage::NVList& m_prop;
+    };
+
   private:
     struct find_conn_id;
+    std::vector<InPortProvider*> m_providers;
+    std::vector<OutPortConsumer*> m_consumers;
   };
 }; // namespace RTC
 
