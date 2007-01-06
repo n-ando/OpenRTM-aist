@@ -2,7 +2,7 @@
 /*!
  * @file  PublisherPeriodic.cpp
  * @brief PublisherPeriodic class
- * @date  $Date: 2006-11-27 09:44:50 $
+ * @date  $Date: 2007-01-06 18:01:00 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
  * Copyright (C) 2006
@@ -13,12 +13,15 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: PublisherPeriodic.cpp,v 1.1 2006-11-27 09:44:50 n-ando Exp $
+ * $Id: PublisherPeriodic.cpp,v 1.2 2007-01-06 18:01:00 n-ando Exp $
  *
  */
 
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.1  2006/11/27 09:44:50  n-ando
+ * The first commitment.
+ *
  */
 
 #include <rtm/PublisherPeriodic.h>
@@ -34,8 +37,8 @@ namespace RTC
    * @brief Constructor
    * @endif
    */
-  PublisherPeriodic::PublisherPeriodic(InPortConsumer& consumer,
-				       Properties property)
+  PublisherPeriodic::PublisherPeriodic(InPortConsumer* consumer,
+				       const Properties& property)
     : m_consumer(consumer), m_running(true)
   {
     std::string rate(property.getProperty("dataport.push_interval"));
@@ -50,7 +53,15 @@ namespace RTC
 	hz = 1;
       }
     m_usec = 1000000/hz;
+    open(0);
   }
+
+
+  PublisherPeriodic::~PublisherPeriodic()
+  {
+    delete m_consumer;
+  }
+
 
   /*!
    * @if jp
@@ -79,7 +90,7 @@ namespace RTC
 #endif // ARTLinux
     while (m_running)
       {
-	m_consumer.push();
+	m_consumer->push();
 #ifdef ARTLinux
 	art_wait();
 #else
