@@ -2,7 +2,7 @@
 /*!
  * @file Properties.h
  * @brief Property list class (derived from Java Properties)
- * @date $Date: 2006-10-17 10:10:21 $
+ * @date $Date: 2007-01-06 17:59:23 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
  * Copyright (C) 2006
@@ -12,12 +12,17 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: Properties.h,v 1.3 2006-10-17 10:10:21 n-ando Exp $
+ * $Id: Properties.h,v 1.4 2007-01-06 17:59:23 n-ando Exp $
  *
  */
 
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.3  2006/10/17 10:10:21  n-ando
+ * Some escape/unescape related bugs are fixed.
+ * The following some functions were moved to StringUtil.h
+ * - eraseHeadBlank(), eraseTailBlank(), replaceString()
+ *
  * Revision 1.2  2006/10/13 03:50:00  n-ando
  * The bug that white space delimiter did not work properly was fixed.
  *
@@ -226,7 +231,7 @@ namespace RTC
      *
      * @endif
      */
-    std::string getProperty(const std::string& key);
+    std::string getProperty(const std::string& key) const;
     
     /*!
      * @if jp
@@ -258,7 +263,7 @@ namespace RTC
      * @endif
      */
     std::string getProperty(const std::string& key,
-			    const std::string& defaultValue);
+			    const std::string& defaultValue) const;
     
     /*!
      * @if jp
