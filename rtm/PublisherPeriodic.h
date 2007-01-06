@@ -2,7 +2,7 @@
 /*!
  * @file  PublisherPeriodic.h
  * @brief PublisherPeriodic class
- * @date  $Date: 2006-11-27 09:44:51 $
+ * @date  $Date: 2007-01-06 18:01:06 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
  * Copyright (C) 2006
@@ -13,12 +13,15 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: PublisherPeriodic.h,v 1.1 2006-11-27 09:44:51 n-ando Exp $
+ * $Id: PublisherPeriodic.h,v 1.2 2007-01-06 18:01:06 n-ando Exp $
  *
  */
 
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.1  2006/11/27 09:44:51  n-ando
+ * The first commitment.
+ *
  */
 
 #ifndef PublisherPeriodic_h
@@ -55,8 +58,8 @@ namespace RTC
      * @brief Constructor
      * @endif
      */
-    PublisherPeriodic(InPortConsumer& consumer,
-		      Properties property);
+    PublisherPeriodic(InPortConsumer* consumer,
+		      const Properties& property);
 
     /*!
      * @if jp
@@ -66,7 +69,7 @@ namespace RTC
      * @brief Destructor
      * @endif
      */
-    virtual ~PublisherPeriodic(){};
+    virtual ~PublisherPeriodic();
     /*!
      * @if jp
      * @brief Observer´Ø¿ô
@@ -124,7 +127,7 @@ namespace RTC
   protected:
   
   private:
-    InPortConsumer& m_consumer;
+    InPortConsumer* m_consumer;
     bool m_running;
     unsigned int m_usec;
   };

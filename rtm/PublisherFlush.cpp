@@ -2,7 +2,7 @@
 /*!
  * @file  PublisherFlush.cpp
  * @brief PublisherFlush class
- * @date  $Date: 2006-11-27 09:44:46 $
+ * @date  $Date: 2007-01-06 18:00:38 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
  * Copyright (C) 2006
@@ -13,12 +13,15 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: PublisherFlush.cpp,v 1.1 2006-11-27 09:44:46 n-ando Exp $
+ * $Id: PublisherFlush.cpp,v 1.2 2007-01-06 18:00:38 n-ando Exp $
  *
  */
 
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.1  2006/11/27 09:44:46  n-ando
+ * The first commitment.
+ *
  */
 
 #include <rtm/PublisherFlush.h>
@@ -34,12 +37,17 @@ namespace RTC
    * @brief Constructor
    * @endif
    */
-  PublisherFlush::PublisherFlush(InPortConsumer& consumer,
-				 Properties property)
+  PublisherFlush::PublisherFlush(InPortConsumer* consumer,
+				 const Properties& property)
     : m_consumer(consumer)
   {
   }
 
+  PublisherFlush::~PublisherFlush()
+  {
+    delete m_consumer;
+  }
+  
 
   /*!
    * @if jp
@@ -50,7 +58,7 @@ namespace RTC
    */
   void PublisherFlush::update()
   {
-    m_consumer.push();
+    m_consumer->push();
     return;
   }
   

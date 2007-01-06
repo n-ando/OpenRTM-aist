@@ -2,7 +2,7 @@
 /*!
  * @file  PublisherNew.cpp
  * @brief PublisherNew class
- * @date  $Date: 2006-11-27 09:44:48 $
+ * @date  $Date: 2007-01-06 18:00:49 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
  * Copyright (C) 2006
@@ -13,17 +13,22 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: PublisherNew.cpp,v 1.1 2006-11-27 09:44:48 n-ando Exp $
+ * $Id: PublisherNew.cpp,v 1.2 2007-01-06 18:00:49 n-ando Exp $
  *
  */
 
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.1  2006/11/27 09:44:48  n-ando
+ * The first commitment.
+ *
  */
 
 #include <rtm/PublisherNew.h>
 #include <rtm/InPortConsumer.h>
 #include <rtm/Properties.h>
+#include <iostream>
+
 
 namespace RTC
 {
@@ -34,10 +39,16 @@ namespace RTC
    * @brief Constructor
    * @endif
    */
-  PublisherNew::PublisherNew(InPortConsumer& consumer,
-			     Properties property)
+  PublisherNew::PublisherNew(InPortConsumer* consumer,
+			     const Properties& property)
     : m_consumer(consumer), m_running(true), m_data()
   {
+    open(0);
+  }
+
+  PublisherNew::~PublisherNew()
+  {
+    delete m_consumer;
   }
 
   /*!
@@ -56,12 +67,14 @@ namespace RTC
     m_data._updated = true;
     m_data._cond.signal();
     m_data._mutex.release();
+    pthread_yield();
+    usleep(100);
     return;
   }
   
   /*!
    * @if jp
-   * @brief スレッド実行関数
+   * @brief スレッPublisherNew::ド実行関数
    * @else
    * @brief Thread execution function
    * @endif
@@ -80,7 +93,7 @@ namespace RTC
 	
 	if (m_data._updated)
 	  {
-	    m_consumer.push(); 
+	    m_consumer->push(); 
 	    m_data._updated = false;
 	  }
 	
