@@ -2,7 +2,7 @@
 /*!
  * @file NVUtil.h
  * @brief NameValue and NVList utility functions
- * @date $Date: 2006-12-02 18:44:27 $
+ * @date $Date: 2007-01-06 17:55:29 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
  * Copyright (C) 2006
@@ -13,12 +13,15 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: NVUtil.cpp,v 1.3 2006-12-02 18:44:27 n-ando Exp $
+ * $Id: NVUtil.cpp,v 1.4 2007-01-06 17:55:29 n-ando Exp $
  *
  */
 
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.3  2006/12/02 18:44:27  n-ando
+ * Argument's const declaration was fixed.
+ *
  * Revision 1.2  2006/11/27 09:54:42  n-ando
  * Conversion function from NVList to Properties: toProperties() was added.
  *
@@ -30,8 +33,9 @@
 
 #include <map>
 #include <string>
-#include <CORBA_SeqUtil.h>
-#include <NVUtil.h>
+#include <rtm/CORBA_SeqUtil.h>
+#include <rtm/StringUtil.h>
+#include <rtm/NVUtil.h>
 
 namespace NVUtil
 {
@@ -59,6 +63,14 @@ namespace NVUtil
     return nv;
   }
     
+  SDOPackage::NameValue newNVAny(const char* name, const CORBA::Any& value)
+  {
+    SDOPackage::NameValue nv;
+    nv.name = CORBA::string_dup(name);
+    nv.value = value;
+    return nv;
+  }
+    
   void copy(SDOPackage::NVList& nv, const RTC::Properties& prop)
   {
     CORBA::ULong len((CORBA::ULong)prop.size());
@@ -79,7 +91,7 @@ namespace NVUtil
   struct to_map
   {
     to_map(){};
-    void operator()(SDOPackage::NameValue& nv)
+    void operator()(const SDOPackage::NameValue& nv)
     {
       char* value;
       if (nv.value >>= value)
@@ -90,7 +102,7 @@ namespace NVUtil
     std::map<std::string, std::string> m_map;
   };
 
-  RTC::Properties toProperties(SDOPackage::NVList& nv)
+  RTC::Properties toProperties(const SDOPackage::NVList& nv)
   {
     to_map m;
     m = CORBA_SeqUtil::for_each(nv, m);
@@ -112,8 +124,13 @@ namespace NVUtil
   {
     CORBA::Long index;
     index = CORBA_SeqUtil::find(nv, NVUtil::nv_find(name));
-    if (index < 0) throw;
+    if (index < 0) throw std::string("Not found");
     return nv[index].value;
+  }
+
+  const CORBA::Long find_index(const SDOPackage::NVList& nv, const char* name)
+  {
+    return  CORBA_SeqUtil::find(nv, NVUtil::nv_find(name));
   }
 
   bool isString(const SDOPackage::NVList& nv, const char* name)
@@ -131,6 +148,20 @@ namespace NVUtil
       }
   }
 
+  bool isStringValue(const SDOPackage::NVList& nv,
+		     const char* name,
+		     const char* value)
+  {
+    if (isString(nv, name))
+      {
+	if (toString(nv, name) == value)
+	  {
+	    return true;
+	  }
+      }
+    return false;
+  }
+
   std::string toString(const SDOPackage::NVList& nv, const char* name)
   {
     char* str_value;
@@ -144,4 +175,39 @@ namespace NVUtil
       }
     return str_value;
   }
+
+  bool appendStringValue(SDOPackage::NVList& nv, const char* name,
+			 const char* value)
+  {
+    if (!isString(nv, name)) return false;
+
+    CORBA::Long index;
+    index = find_index(nv, name);
+
+    char* tmp_char;
+    nv[index].value >>= tmp_char;
+    std::string tmp_str(tmp_char);
+    
+    std::vector<std::string> values;
+
+    values = split(tmp_str, ",");
+    if (values.end() == std::find(values.begin(), values.end(), value))
+      {
+	tmp_str.append(", ");
+	tmp_str.append(value);
+	nv[index].value <<= tmp_str.c_str();
+      }
+    return true;
+  }
+
+  void append(SDOPackage::NVList& dest, const SDOPackage::NVList& src)
+  {
+    for (CORBA::ULong i = 0, len = src.length(); i < len; ++i)
+      {
+	CORBA_SeqUtil::push_back(dest, src[i]);
+      }
+  }
+
+
+
 };
