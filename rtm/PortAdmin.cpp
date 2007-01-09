@@ -2,7 +2,7 @@
 /*!
  * @file PortAdmin.cpp
  * @brief RTC's Port administration class
- * @date $Date: 2006-11-08 09:57:11 $
+ * @date $Date: 2007-01-09 15:13:04 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
  * Copyright (C) 2006
@@ -12,12 +12,15 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: PortAdmin.cpp,v 1.4 2006-11-08 09:57:11 n-ando Exp $
+ * $Id: PortAdmin.cpp,v 1.5 2007-01-09 15:13:04 n-ando Exp $
  *
  */
 
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.4  2006/11/08 09:57:11  n-ando
+ * A PortAdmin::getPortRef()'s bug was fixed.
+ *
  * Revision 1.3  2006/11/06 01:18:59  n-ando
  * CORBA sequence manipulation has been rewritten by using CORBA_SeqUtil.
  *
@@ -146,10 +149,11 @@ namespace RTC
   void PortAdmin::deletePort(PortBase& port)
   {
     m_pPOA->deactivate_object(*m_pPOA->servant_to_id(&port));
-    CORBA_SeqUtil::erase_if(m_portRefs, find_port_name(port.getName()));
-    port.setPortRef(RTC::Port::_nil());
-    m_portServants.unregisterObject(port.getName());
 
+    const char* tmp(port.getProfile().name);
+    CORBA_SeqUtil::erase_if(m_portRefs, find_port_name(tmp));
+    port.setPortRef(RTC::Port::_nil());
+    m_portServants.unregisterObject(tmp);
   }
 
 
