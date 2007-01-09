@@ -2,7 +2,7 @@
 /*!
  * @file RTObject.h
  * @brief RT component base class
- * @date $Date: 2006-09-11 19:04:38 $
+ * @date $Date: 2007-01-09 15:21:47 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
  * Copyright (C) 2006
@@ -12,12 +12,15 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: RTObject.h,v 1.1 2006-09-11 19:04:38 n-ando Exp $
+ * $Id: RTObject.h,v 1.2 2007-01-09 15:21:47 n-ando Exp $
  *
  */
 
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.1  2006/09/11 19:04:38  n-ando
+ * The first commit.
+ *
  *
  */
 
@@ -26,32 +29,173 @@
 
 // CORBA header include
 #include "rtm/RTC.h"
-#include "rtm/Util.h"
-
+#include "rtm/Properties.h"
 #include "rtm/idl/RTCSkel.h"
+#include "rtm/PortBase.h"
+//#include "rtm/ObjectManager.h"
+#include "rtm/PortAdmin.h"
+
+// ACE
+#include <ace/Task.h>
+
+
+namespace SDOPackage
+{
+  class Configuration_impl;
+};
 
 namespace RTC
 {
+  class Manager;
+
   class RTObject_impl
-	: public virtual POA_RTC::RTObject, 
-	  public virtual PortableServer::RefCountServantBase
+    : public virtual POA_RTC::DataFlowComponent, 
+      public virtual PortableServer::RefCountServantBase
   {
   public:
+    RTObject_impl(Manager* manager);
     RTObject_impl(CORBA::ORB_ptr orb, PortableServer::POA_ptr poa);
     virtual ~RTObject_impl();
 
 
-    // RTC::RTObject
+
+    //============================================================
+    // RTC::LightweightRTObject
+    //============================================================
     /*!
      * @if jp
      *
-     * @brief $B%3%s%]!<%M%s%H%W%m%U%!%$%k$N<hF@(B
+     * @breif RTC¤ò½é´ü²½¤¹¤ë
      *
-     * $BEv3:%3%s%]!<%M%s%H$N%W%m%U%!%$%k>pJs$rJV$9!#(B 
+     * ¤³¤Î¥ª¥Ú¥ì¡¼¥·¥ç¥ó¸Æ¤Ó½Ð¤·¤Î·ë²Ì¤È¤·¤Æ¡¢ComponentAction::on_initialize
+     * ¥³¡¼¥ë¥Ð¥Ã¥¯´Ø¿ô¤¬¸Æ¤Ð¤ì¤ë¡£
+     * À©Ìó
+     * Created¾õÂÖ¤Ë¤¤¤ë¤È¤­¤Ë¤Î¤ß¡¢½é´ü²½¤¬¹Ô¤ï¤ì¤ë¡£Â¾¤Î¾õÂÖ¤Ë¤¤¤ë¾ì¹ç¤Ë¤Ï
+     * ReturnCode_t::PRECONDITION_NOT_MET ¤¬ÊÖ¤µ¤ì¸Æ¤Ó½Ð¤·¤Ï¼ºÇÔ¤¹¤ë¡£
+     * ¤³¤Î¥ª¥Ú¥ì¡¼¥·¥ç¥ó¤ÏRTC¤Î¥ß¥É¥ë¥¦¥¨¥¢¤«¤é¸Æ¤Ð¤ì¤ë¤³¤È¤òÁÛÄê¤·¤Æ¤ª¤ê¡¢
+     * ¥¢¥×¥ê¥±¡¼¥·¥ç¥ó³«È¯¼Ô¤ÏÄ¾ÀÜ¤³¤Î¥ª¥Ú¥ì¡¼¥·¥ç¥ó¤ò¸Æ¤Ö¤³¤È¤ÏÁÛÄê
+     * ¤µ¤ì¤Æ¤¤¤Ê¤¤¡£
+     * 
+     * @else
+     *
+     * @breif Initialize the RTC that realizes this interface.
+     *
+     * The invocation of this operation shall result in the invocation of the
+     * callback ComponentAction::on_initialize.
+     *
+     * Constraints
+     * - An RTC may be initialized only while it is in the Created state. Any
+     *   attempt to invoke this operation while in another state shall fail
+     *   with ReturnCode_t::PRECONDITION_NOT_MET.
+     * - Application developers are not expected to call this operation
+     *   directly; it exists for use by the RTC infrastructure.
+     *
+     * @endif
+     */
+    virtual ReturnCode_t initialize();
+
+
+    /*!
+     * @if jp
+     *
+     * @brief 
      *
      * @else
      *
-     * @brief Getting RTC's profile
+     * @brief Finalize the RTC for preparing it for destruction
+     * 
+     * This invocation of this operation shall result in the invocation of the
+     * callback ComponentAction::on_finalize.
+     *
+     * Constraints
+     * - An RTC may not be finalized while it is Active in any Running
+     *   execution context. Any attempt to invoke this operation at such a time
+     *   shall fail with ReturnCode_t::PRECONDITION_NOT_MET.
+     * - An RTC may not be finalized while it is in the Created state.
+     *   Any attempt to invoke this operation while in that state shall fail
+     *   with ReturnCode_t::PRECONDITION_NOT_MET.
+     * - Application developers are not expected to call this operation
+     *   directly; it exists for use by the RTC infrastructure.
+     *
+     * @endif
+     */
+    virtual ReturnCode_t finalize();
+
+
+    /*!
+     * @if jp
+     *
+     * @brief
+     *
+     * @else
+     *
+     * @brief Stop the RTC's and finalize it along with its contents.
+     * 
+     * Any execution contexts for which the RTC is the owner shall be stopped. 
+     * If the RTC participates in any execution contexts belonging to another
+     * RTC that contains it, directly or indirectly (i.e. the containing RTC
+     * is the owner of the ExecutionContext), it shall be deactivated in those
+     * contexts.
+     * After the RTC is no longer Active in any Running execution context, it
+     * and any RTCs contained transitively within it shall be finalized.
+     *
+     * Constraints
+     * - An RTC cannot be exited if it has not yet been initialized. Any
+     *   attempt to exit an RTC that is in the Created state shall fail with
+     *   ReturnCode_t::PRECONDITION_NOT_MET.
+     *
+     * @endif
+     */
+    virtual ReturnCode_t exit(); 
+
+    /*!
+     * @if jp
+     *
+     * @brief
+     *
+     * @else
+     *
+     * @brief
+     *
+     * A component is alive or not regardless of the execution context from
+     * which it is observed. However, whether or not it is Active, Inactive,
+     * or in Error is dependent on the execution context(s) in which it is
+     * running. That is, it may be Active in one context but Inactive in
+     * another. Therefore, this operation shall report whether this RTC is
+     * either Active, Inactive or in Error; which of those states a component
+     * is in with respect to a particular context may be queried from the
+     * context itself.
+     *
+     * @endif
+     */
+    virtual CORBA::Boolean is_alive();
+
+
+    /*!
+     * @if jp
+     * @brief [CORBA interface] ExecutionContextList¤ò¼èÆÀ¤¹¤ë
+     * @else
+     * @brief [CORBA interface] Get ExecutionContextList.
+     * @endif
+     */
+    virtual ExecutionContextList* get_contexts();
+
+    virtual UniqueId 
+    set_execution_context_service(const ExecutionContextService_ptr ec);
+
+    //============================================================
+    // RTC::RTObject
+    //============================================================
+    /*!
+     * @if jp
+     *
+     * @brief [RTObject CORBA interface] ¥³¥ó¥Ý¡¼¥Í¥ó¥È¥×¥í¥Õ¥¡¥¤¥ë¤Î¼èÆÀ
+     *
+     * Åö³º¥³¥ó¥Ý¡¼¥Í¥ó¥È¤Î¥×¥í¥Õ¥¡¥¤¥ë¾ðÊó¤òÊÖ¤¹¡£ 
+     *
+     * @else
+     *
+     * @brief [RTObject CORBA interface] Get RTC's profile
      *
      * This operation returns the ComponentProfile of the RTC
      *
@@ -63,13 +207,13 @@ namespace RTC
     /*!
      * @if jp
      *
-     * @brief $B%]!<%H$N<hF@(B
+     * @brief [RTObject CORBA interface] ¥Ý¡¼¥È¤Î¼èÆÀ
      *
-     * $BEv3:%3%s%]!<%M%s%H$,J]M-$9$k%]!<%H$N;2>H$rJV$9!#(B
+     * Åö³º¥³¥ó¥Ý¡¼¥Í¥ó¥È¤¬ÊÝÍ­¤¹¤ë¥Ý¡¼¥È¤Î»²¾È¤òÊÖ¤¹¡£
      *
      * @else
      *
-     * @brief Get Ports
+     * @brief [RTObject CORBA interface] Get Ports
      *
      * This operation returns a list of the RTCs ports.
      *
@@ -81,30 +225,691 @@ namespace RTC
     /*!
      * @if jp
      *
-     * @brief ExecutionContextAdmin $B$N<hF@(B
+     * @brief [RTObject CORBA interface] ExecutionContextAdmin ¤Î¼èÆÀ
      *
-     * $B$3$N%*%Z%l!<%7%g%s$OEv3:!!(BRTC $B$,=jB0$9$k(B ExecutionContext$B$K4XO"$7$?(B
-     * ExecutionContextAdmin $B$N%j%9%H$rJV$9!#(B
+     * ¤³¤Î¥ª¥Ú¥ì¡¼¥·¥ç¥ó¤ÏÅö³º¡¡RTC ¤¬½êÂ°¤¹¤ë ExecutionContext¤Ë´ØÏ¢¤·¤¿
+     * ExecutionContextAdmin ¤Î¥ê¥¹¥È¤òÊÖ¤¹¡£
      *
      * @else
      *
-     * @brief Get ExecutionContextAdmin
+     * @brief [RTObject CORBA interface] Get ExecutionContextAdmin
      *
      * This operation returns a list containing an ExecutionContextAdmin for
      * every ExecutionContext owned by the RTC.	
      *
      * @endif
      */
-    virtual ExecutionContextAdminList* get_execution_context_admins();
+    virtual ExecutionContextServiceList* get_execution_context_services();
+
+
+
+    // RTC::ComponentAction
+    virtual ReturnCode_t on_initialize();
+    virtual ReturnCode_t on_finalize();
+    virtual ReturnCode_t on_startup(UniqueId ec_id);
+    virtual ReturnCode_t on_shutdown(UniqueId ec_id);
+    virtual ReturnCode_t on_activated(UniqueId ec_id);
+    virtual ReturnCode_t on_deactivated(UniqueId ec_id);
+    virtual ReturnCode_t on_aborting(UniqueId ec_id);
+    virtual ReturnCode_t on_error(UniqueId ec_id);
+    virtual ReturnCode_t on_reset(UniqueId ec_id);
+
+    virtual ReturnCode_t on_execute(UniqueId ec_id);
+    virtual ReturnCode_t on_state_update(UniqueId ec_id);
+    virtual ReturnCode_t on_rate_changed(UniqueId ec_id);
+
+
+
+    //============================================================
+    // SDOPackage::SdoSystemElement
+    //============================================================
+    /*!
+     * @if jp
+     * 
+     * @brief [CORBA interface] Organization ¥ê¥¹¥È¤Î¼èÆÀ 
+     *
+     * SDOSystemElement ¤Ï0¸Ä¤â¤·¤¯¤Ï¤½¤ì°Ê¾å¤Î Organization ¤ò½êÍ­¤¹¤ë¤³¤È¤¬
+     * ½ÐÍè¤ë¡£ SDOSystemElement ¤¬1¤Ä°Ê¾å¤Î Organization ¤ò½êÍ­¤·¤Æ¤¤¤ë¾ì¹ç
+     * ¤Ë¤Ï¡¢¤³¤Î¥ª¥Ú¥ì¡¼¥·¥ç¥ó¤Ï½êÍ­¤¹¤ë Organization ¤Î¥ê¥¹¥È¤òÊÖ¤¹¡£
+     * ¤â¤·Organization¤ò°ì¤Ä¤â½êÍ­¤·¤Æ¤¤¤Ê¤¤¤±¤ì¤Ð¶õ¤Î¥ê¥¹¥È¤òÊÖ¤¹¡£
+     *
+     * @else
+     *
+     * @brief [CORBA interface] Getting Organizations
+     *
+     * SDOSystemElement can be the owner of zero or more organizations.
+     * If the SDOSystemElement owns one or more Organizations, this operation
+     * returns the list of Organizations that the SDOSystemElement owns.
+     * If it does not own any Organization, it returns empty list.
+     *
+     * @endif
+     */
+    virtual SDOPackage::OrganizationList* get_owned_organizations()
+      throw (SDOPackage::NotAvailable);
+
+
+    //============================================================
+    // SDOPackage::SDO
+    //============================================================
+    /*!
+     * @if jp
+     * 
+     * @brief [CORBA interface] SDO ID ¤Î¼èÆÀ
+     *
+     * SDO ID ¤òÊÖ¤¹¥ª¥Ú¥ì¡¼¥·¥ç¥ó¡£
+     * ¤³¤Î¥ª¥Ú¥ì¡¼¥·¥ç¥ó¤Ï°Ê²¼¤Î·¿¤ÎÎã³°¤òÈ¯À¸¤µ¤»¤ë¡£
+     * 
+     * @exception SDONotExists ¥¿¡¼¥²¥Ã¥È¤ÎSDO¤¬Â¸ºß¤·¤Ê¤¤¡£
+     * @exception NotAvailable SDO¤ÏÂ¸ºß¤¹¤ë¤¬±þÅú¤¬¤Ê¤¤¡£
+     * @exception InternalError ÆâÉôÅª¥¨¥é¡¼¤¬È¯À¸¤·¤¿¡£
+     * @return    ¥ê¥½¡¼¥¹¥Ç¡¼¥¿¥â¥Ç¥ë¤ÇÄêµÁ¤µ¤ì¤Æ¤¤¤ë SDO ¤Î ID
+     *
+     * @else
+     *
+     * @brief [CORBA interface] Getting SDO ID
+     *
+     * This operation returns id of the SDO.
+     * This operation throws SDOException with one of the following types.
+     *
+     * @exception SDONotExists if the target SDO does not exist.
+     * @exception NotAvailable if the target SDO is reachable but cannot
+     *                         respond.
+     * @exception InternalError if the target SDO cannot execute the operation
+     *                          completely due to some internal error.
+     * @return    id of the SDO defined in the resource data model.
+     *
+     * @endif
+     */
+    virtual char* get_sdo_id()
+      throw (SDOPackage::NotAvailable, SDOPackage::InternalError);
+    
+    /*!
+     * @if jp
+     * 
+     * @brief [CORBA interface] SDO ¥¿¥¤¥×¤Î¼èÆÀ
+     * 
+     * SDO Type ¤òÊÖ¤¹¥ª¥Ú¥ì¡¼¥·¥ç¥ó¡£
+     * ¤³¤Î¥ª¥Ú¥ì¡¼¥·¥ç¥ó¤Ï°Ê²¼¤Î·¿¤ÎÎã³°¤òÈ¯À¸¤µ¤»¤ë¡£
+     *
+     * @exception SDONotExists ¥¿¡¼¥²¥Ã¥È¤ÎSDO¤¬Â¸ºß¤·¤Ê¤¤¡£
+     * @exception NotAvailable SDO¤ÏÂ¸ºß¤¹¤ë¤¬±þÅú¤¬¤Ê¤¤¡£
+     * @exception InternalError ÆâÉôÅª¥¨¥é¡¼¤¬È¯À¸¤·¤¿¡£
+     * @return    ¥ê¥½¡¼¥¹¥Ç¡¼¥¿¥â¥Ç¥ë¤ÇÄêµÁ¤µ¤ì¤Æ¤¤¤ë SDO ¤Î Type
+     *
+     * @else
+     *
+     * @brief [CORBA interface] Getting SDO type
+     *
+     * This operation returns sdoType of the SDO.
+     * This operation throws SDOException with one of the following types.
+     *
+     * @exception SDONotExists if the target SDO does not exist.
+     * @exception NotAvailable if the target SDO is reachable but cannot
+     *                         respond.
+     * @exception InternalError if the target SDO cannot execute the operation
+     *                          completely due to some internal error.
+     * @return    Type of the SDO defined in the resource data model.
+     *
+     * @endif
+     */
+    virtual char* get_sdo_type()
+      throw (SDOPackage::NotAvailable, SDOPackage::InternalError);
+
+    /*!
+     * @if jp
+     * 
+     * @brief [CORBA interface] SDO DeviceProfile ¥ê¥¹¥È¤Î¼èÆÀ 
+     *
+     * SDO ¤Î DeviceProfile ¤òÊÖ¤¹¥ª¥Ú¥ì¡¼¥·¥ç¥ó¡£ SDO ¤¬¥Ï¡¼¥É¥¦¥¨¥¢¥Ç¥Ð¥¤¥¹
+     * ¤Ë´ØÏ¢ÉÕ¤±¤é¤ì¤Æ¤¤¤Ê¤¤¾ì¹ç¤Ë¤Ï¡¢¶õ¤Î DeviceProfile ¤¬ÊÖ¤µ¤ì¤ë¡£
+     * ¤³¤Î¥ª¥Ú¥ì¡¼¥·¥ç¥ó¤Ï°Ê²¼¤Î·¿¤ÎÎã³°¤òÈ¯À¸¤µ¤»¤ë¡£
+     *
+     * @exception NotAvailable SDO¤ÏÂ¸ºß¤¹¤ë¤¬±þÅú¤¬¤Ê¤¤¡£
+     * @exception InternalError ÆâÉôÅª¥¨¥é¡¼¤¬È¯À¸¤·¤¿¡£
+     * @return    SDO DeviceProfile
+     *
+     * @else
+     *
+     * @brief [CORBA interface] Getting SDO DeviceProfile
+     *
+     * This operation returns the DeviceProfile of the SDO. If the SDO does not
+     * represent any hardware device, then a DeviceProfile with empty values
+     * are returned.
+     * This operation throws SDOException with one of the following types.
+     *
+     * @exception NotAvailable if the target SDO is reachable but cannot
+     *                         respond.
+     * @exception InternalError if the target SDO cannot execute the operation
+     *                          completely due to some internal error.
+     * @return    The DeviceProfile of the SDO.
+     *
+     * @endif
+     */
+    virtual SDOPackage::DeviceProfile* get_device_profile()
+      throw (SDOPackage::NotAvailable, SDOPackage::InternalError);
+    
+    /*!
+     * @if jp
+     * 
+     * @brief [CORBA interface] SDO ServiceProfile ¤Î¼èÆÀ 
+     *
+     * SDO ¤¬½êÍ­¤·¤Æ¤¤¤ë Service ¤Î ServiceProfile ¤òÊÖ¤¹¥ª¥Ú¥ì¡¼¥·¥ç¥ó¡£
+     * SDO ¤¬¥µ¡¼¥Ó¥¹¤ò°ì¤Ä¤â½êÍ­¤·¤Æ¤¤¤Ê¤¤¾ì¹ç¤Ë¤Ï¡¢¶õ¤Î¥ê¥¹¥È¤òÊÖ¤¹¡£
+     * ¤³¤Î¥ª¥Ú¥ì¡¼¥·¥ç¥ó¤Ï°Ê²¼¤Î·¿¤ÎÎã³°¤òÈ¯À¸¤µ¤»¤ë¡£
+     * 
+     * @exception SDONotExists ¥¿¡¼¥²¥Ã¥È¤ÎSDO¤¬Â¸ºß¤·¤Ê¤¤¡£
+     * @exception NotAvailable SDO¤ÏÂ¸ºß¤¹¤ë¤¬±þÅú¤¬¤Ê¤¤¡£
+     * @exception InternalError ÆâÉôÅª¥¨¥é¡¼¤¬È¯À¸¤·¤¿¡£
+     * @return    SDO ¤¬Äó¶¡¤¹¤ëÁ´¤Æ¤Î Service ¤Î ServiceProfile¡£
+     *
+     * @else
+     *
+     * @brief [CORBA interface] Getting SDO ServiceProfile
+     * 
+     * This operation returns a list of ServiceProfiles that the SDO has.
+     * If the SDO does not provide any service, then an empty list is returned.
+     * This operation throws SDOException with one of the following types.
+     * 
+     * @exception NotAvailable if the target SDO is reachable but cannot
+     *                         respond.
+     * @exception InternalError if the target SDO cannot execute the operation
+     *                          completely due to some internal error.
+     * @return    List of ServiceProfiles of all the services the SDO is
+     *            providing.
+     *
+     * @endif
+     */
+    virtual SDOPackage::ServiceProfileList* get_service_profiles()
+      throw (SDOPackage::InvalidParameter, SDOPackage::NotAvailable,
+	     SDOPackage::InternalError);
+    
+    /*!
+     * @if jp
+     * 
+     * @brief [CORBA interface] ÆÃÄê¤ÎServiceProfile¤Î¼èÆÀ 
+     *
+     * °ú¿ô "id" ¤Ç»ØÄê¤µ¤ì¤¿Ì¾Á°¤Î¥µ¡¼¥Ó¥¹¤Î ServiceProfile ¤òÊÖ¤¹¡£
+     * 
+     * @param     id SDO Service ¤Î ServiceProfile ¤Ë´ØÏ¢ÉÕ¤±¤é¤ì¤¿¼±ÊÌ»Ò¡£
+     * @return    »ØÄê¤µ¤ì¤¿ SDO Service ¤Î ServiceProfile¡£
+     * @exception NotAvailable SDO¤ÏÂ¸ºß¤¹¤ë¤¬±þÅú¤¬¤Ê¤¤¡£
+     * @exception InternalError ÆâÉôÅª¥¨¥é¡¼¤¬È¯À¸¤·¤¿¡£
+     *
+     * @else
+     *
+     * @brief [CORBA interface] Getting Organizations
+     *
+     * This operation returns the ServiceProfile that is specified by the
+     * argument "id."
+     * 
+     * @param     id The identifier referring to one of the ServiceProfiles.
+     * @return    The profile of the specified service.
+     * @exception NotAvailable If the target SDO is reachable but cannot
+     *                         respond.
+     * @exception InternalError If the target SDO cannot execute the operation
+     *                          completely due to some internal error.
+     *
+     * @endif
+     */
+    virtual SDOPackage::ServiceProfile* get_service_profile(const char* id)
+      throw (SDOPackage::InvalidParameter, SDOPackage::NotAvailable,
+	     SDOPackage::InternalError);
+    
+    /*!
+     * @if jp
+     * 
+     * @brief [CORBA interface] »ØÄê¤µ¤ì¤¿ SDO Service ¤Î¼èÆÀ
+     *
+     * ¤³¤Î¥ª¥Ú¥ì¡¼¥·¥ç¥ó¤Ï°ú¿ô "id" ¤Ç»ØÄê¤µ¤ì¤¿Ì¾Á°¤Ë¤è¤Ã¤Æ¶èÊÌ¤µ¤ì¤ë
+     * SDO ¤Î Service ¤Ø¤Î¥ª¥Ö¥¸¥§¥¯¥È»²¾È¤òÊÖ¤¹¡£ SDO ¤Ë¤è¤êÄó¶¡¤µ¤ì¤ë
+     * Service ¤Ï¤½¤ì¤¾¤ì°ì°Õ¤Î¼±ÊÌ»Ò¤Ë¤è¤ê¶èÊÌ¤µ¤ì¤ë¡£
+     *
+     * @param id SDO Service ¤Ë´ØÏ¢ÉÕ¤±¤é¤ì¤¿¼±ÊÌ»Ò¡£
+     * @return Í×µá¤µ¤ì¤¿ SDO Service ¤Ø¤Î»²¾È¡£
+     *
+     * @else
+     *
+     * @brief [CORBA interface] Getting specified SDO Service's reference
+     *
+     * This operation returns an object implementing an SDO's service that
+     * is identified by the identifier specified as an argument. Different
+     * services provided by an SDO are distinguished with different
+     * identifiers. See OMG SDO specification Section 2.2.8, "ServiceProfile,"
+     * on page 2-12 for more details.
+     *
+     * @param id The identifier referring to one of the SDO Service
+     * @return The object implementing the requested service.
+     *
+     * @endif
+     */
+    virtual SDOPackage::SDOService_ptr get_sdo_service(const char* id)
+      throw (SDOPackage::InvalidParameter, SDOPackage::NotAvailable,
+	     SDOPackage::InternalError);
+    
+    /*!
+     * @if jp
+     * 
+     * @brief [CORBA interface] Configuration ¥ª¥Ö¥¸¥§¥¯¥È¤Î¼èÆÀ 
+     *
+     * ¤³¤Î¥ª¥Ú¥ì¡¼¥·¥ç¥ó¤Ï Configuration interface ¤Ø¤Î»²¾È¤òÊÖ¤¹¡£
+     * Configuration interface ¤Ï³Æ SDO ¤ò´ÉÍý¤¹¤ë¤¿¤á¤Î¥¤¥ó¥¿¡¼¥Õ¥§¡¼¥¹¤Î
+     * ¤Ò¤È¤Ä¤Ç¤¢¤ë¡£¤³¤Î¥¤¥ó¥¿¡¼¥Õ¥§¡¼¥¹¤Ï DeviceProfile, ServiceProfile,
+     * Organization ¤ÇÄêµÁ¤µ¤ì¤¿ SDO ¤ÎÂ°À­ÃÍ¤òÀßÄê¤¹¤ë¤¿¤á¤Ë»ÈÍÑ¤µ¤ì¤ë¡£
+     * Configuration ¥¤¥ó¥¿¡¼¥Õ¥§¡¼¥¹¤Î¾ÜºÙ¤Ë¤Ä¤¤¤Æ¤Ï¡¢OMG SDO specification
+     * ¤Î 2.3.5Àá, p.2-24 ¤ò»²¾È¤Î¤³¤È¡£
+     *
+     * @return SDO ¤Î Configuration ¥¤¥ó¥¿¡¼¥Õ¥§¡¼¥¹¤Ø¤Î»²¾È
+     * @exception InterfaceNotImplemented SDO¤ÏConfiguration¥¤¥ó¥¿¡¼¥Õ¥§¡¼¥¹¤ò
+     *                                    »ý¤¿¤Ê¤¤¡£
+     * @exception SDONotExists ¥¿¡¼¥²¥Ã¥È¤ÎSDO¤¬Â¸ºß¤·¤Ê¤¤¡£
+     * @exception NotAvailable SDO¤ÏÂ¸ºß¤¹¤ë¤¬±þÅú¤¬¤Ê¤¤¡£
+     * @exception InternalError ÆâÉôÅª¥¨¥é¡¼¤¬È¯À¸¤·¤¿¡£
+     *
+     * @else
+     *
+     * @brief [CORBA interface] Getting Configuration object
+     *
+     * This operation returns an object implementing the Configuration
+     * interface. The Configuration interface is one of the interfaces that
+     * each SDO maintains. The interface is used to configure the attributes
+     * defined in DeviceProfile, ServiceProfile, and Organization.
+     * See OMG SDO specification Section 2.3.5, "Configuration Interface,"
+     * on page 2-24 for more details about the Configuration interface.
+     *
+     * @return The Configuration interface of an SDO.
+     * @exception InterfaceNotImplemented The target SDO has no Configuration
+     *                                    interface.
+     * @exception SDONotExists The target SDO does not exist.
+     * @exception NotAvailable The target SDO is reachable but cannot respond.
+     * @exception InternalError The target SDO cannot execute the operation
+     *                          completely due to some internal error.
+     * @endif
+     */
+    virtual SDOPackage::Configuration_ptr get_configuration()
+      throw (SDOPackage::InterfaceNotImplemented, SDOPackage::NotAvailable,
+	     SDOPackage::InternalError);
+    
+    /*!
+     * @if jp
+     * 
+     * @brief [CORBA interface] Monitoring ¥ª¥Ö¥¸¥§¥¯¥È¤Î¼èÆÀ 
+     *
+     * ¤³¤Î¥ª¥Ú¥ì¡¼¥·¥ç¥ó¤Ï Monitoring interface ¤Ø¤Î»²¾È¤òÊÖ¤¹¡£
+     * Monitoring interface ¤Ï SDO ¤¬´ÉÍý¤¹¤ë¥¤¥ó¥¿¡¼¥Õ¥§¡¼¥¹¤Î°ì¤Ä¤Ç¤¢¤ë¡£
+     * ¤³¤Î¥¤¥ó¥¿¡¼¥Õ¥§¡¼¥¹¤Ï SDO ¤Î¥×¥í¥Ñ¥Æ¥£¤ò¥â¥Ë¥¿¥ê¥ó¥°¤¹¤ë¤¿¤á¤Ë
+     * »ÈÍÑ¤µ¤ì¤ë¡£
+     * Monitoring interface ¤Î¾ÜºÙ¤Ë¤Ä¤¤¤Æ¤Ï OMG SDO specification ¤Î
+     * 2.3.7Àá "Monitoring Interface" p.2-35 ¤ò»²¾È¤Î¤³¤È¡£
+     *
+     * @return SDO ¤Î Monitoring interface ¤Ø¤Î»²¾È
+     * @exception InterfaceNotImplemented SDO¤ÏConfiguration¥¤¥ó¥¿¡¼¥Õ¥§¡¼¥¹¤ò
+     *                                    »ý¤¿¤Ê¤¤¡£
+     * @exception SDONotExists ¥¿¡¼¥²¥Ã¥È¤ÎSDO¤¬Â¸ºß¤·¤Ê¤¤¡£
+     * @exception NotAvailable SDO¤ÏÂ¸ºß¤¹¤ë¤¬±þÅú¤¬¤Ê¤¤¡£
+     * @exception InternalError ÆâÉôÅª¥¨¥é¡¼¤¬È¯À¸¤·¤¿¡£
+     *
+     * @else
+     *
+     * @brief [CORBA interface] Get Monitoring object
+     *
+     * This operation returns an object implementing the Monitoring interface.
+     * The Monitoring interface is one of the interfaces that each SDO
+     * maintains. The interface is used to monitor the properties of an SDO.
+     * See OMG SDO specification Section 2.3.7, "Monitoring Interface," on
+     * page 2-35 for more details about the Monitoring interface.
+     *
+     * @return The Monitoring interface of an SDO.
+     * @exception InterfaceNotImplemented The target SDO has no Configuration
+     *                                    interface.
+     * @exception SDONotExists The target SDO does not exist.
+     * @exception NotAvailable The target SDO is reachable but cannot respond.
+     * @exception InternalError The target SDO cannot execute the operation
+     *                          completely due to some internal error.
+     * @endif
+     */
+    virtual SDOPackage::Monitoring_ptr get_monitoring()
+      throw (SDOPackage::InterfaceNotImplemented, SDOPackage::NotAvailable,
+	     SDOPackage::InternalError);
+
+    /*!
+     * @if jp
+     * 
+     * @brief [CORBA interface] Organization ¥ê¥¹¥È¤Î¼èÆÀ 
+     *
+     * SDO ¤Ï0¸Ä°Ê¾å¤Î Organization (ÁÈ¿¥)¤Ë½êÂ°¤¹¤ë¤³¤È¤¬¤Ç¤­¤ë¡£ ¤â¤· SDO ¤¬
+     * 1¸Ä°Ê¾å¤Î Organization ¤Ë½êÂ°¤·¤Æ¤¤¤ë¾ì¹ç¡¢¤³¤Î¥ª¥Ú¥ì¡¼¥·¥ç¥ó¤Ï½êÂ°¤¹¤ë
+     * Organization ¤Î¥ê¥¹¥È¤òÊÖ¤¹¡£SDO ¤¬ ¤É¤Î Organization ¤Ë¤â½êÂ°¤·¤Æ¤¤¤Ê¤¤
+     * ¾ì¹ç¤Ë¤Ï¡¢¶õ¤Î¥ê¥¹¥È¤¬ÊÖ¤µ¤ì¤ë¡£
+     *
+     * @return SDO ¤¬½êÂ°¤¹¤ë Organization ¤Î¥ê¥¹¥È¡£
+     * @exception SDONotExists ¥¿¡¼¥²¥Ã¥È¤ÎSDO¤¬Â¸ºß¤·¤Ê¤¤¡£
+     * @exception NotAvailable SDO¤ÏÂ¸ºß¤¹¤ë¤¬±þÅú¤¬¤Ê¤¤¡£
+     * @exception InternalError ÆâÉôÅª¥¨¥é¡¼¤¬È¯À¸¤·¤¿¡£
+     * @else
+     *
+     * @brief [CORBA interface] Getting Organizations
+     *
+     * An SDO belongs to zero or more organizations. If the SDO belongs to one
+     * or more organizations, this operation returns the list of organizations
+     * that the SDO belongs to. An empty list is returned if the SDO does not
+     * belong to any Organizations.
+     *
+     * @return The list of Organizations that the SDO belong to.
+     * @exception SDONotExists The target SDO does not exist.
+     * @exception NotAvailable The target SDO is reachable but cannot respond.
+     * @exception InternalError The target SDO cannot execute the operation
+     *                          completely due to some internal error.
+     * @endif
+     */
+    virtual SDOPackage::OrganizationList* get_organizations()
+      throw (SDOPackage::NotAvailable, SDOPackage::InternalError);
+    
+    /*!
+     * @if jp
+     * 
+     * @brief [CORBA interface] SDO Status ¥ê¥¹¥È¤Î¼èÆÀ 
+     *
+     * ¤³¤Î¥ª¥Ú¥ì¡¼¥·¥ç¥ó¤Ï SDO ¤Î¥¹¥Æ¡¼¥¿¥¹¤òÉ½¤¹ NVList ¤òÊÖ¤¹¡£
+     *
+     * @return SDO ¤Î¥¹¥Æ¡¼¥¿¥¹¡£
+     * @exception SDONotExists ¥¿¡¼¥²¥Ã¥È¤ÎSDO¤¬Â¸ºß¤·¤Ê¤¤¡£
+     * @exception NotAvailable SDO¤ÏÂ¸ºß¤¹¤ë¤¬±þÅú¤¬¤Ê¤¤¡£
+     * @exception InternalError ÆâÉôÅª¥¨¥é¡¼¤¬È¯À¸¤·¤¿¡£
+     *
+     * @else
+     *
+     * @brief [CORBA interface] Get SDO Status
+     *
+     * This operation returns an NVlist describing the status of an SDO.
+     *
+     * @return The actual status of an SDO.
+     * @exception SDONotExists The target SDO does not exist.
+     * @exception NotAvailable The target SDO is reachable but cannot respond.
+     * @exception InternalError The target SDO cannot execute the operation
+     *                          completely due to some internal error.
+     *
+     * @endif
+     */
+    virtual SDOPackage::NVList* get_status_list()
+      throw (SDOPackage::NotAvailable, SDOPackage::InternalError);
+    
+    /*!
+     * @if jp
+     * 
+     * @brief [CORBA interface] SDO Status ¤Î¼èÆÀ 
+     *
+     * This operation returns the value of the specified status parameter.
+     * 
+     * @param name SDO ¤Î¥¹¥Æ¡¼¥¿¥¹¤òÄêµÁ¤¹¤ë¥Ñ¥é¥á¡¼¥¿¡£
+     * @return »ØÄê¤µ¤ì¤¿¥Ñ¥é¥á¡¼¥¿¤Î¥¹¥Æ¡¼¥¿¥¹ÃÍ¡£
+     * @exception SDONotExists ¥¿¡¼¥²¥Ã¥È¤ÎSDO¤¬Â¸ºß¤·¤Ê¤¤¡£
+     * @exception NotAvailable SDO¤ÏÂ¸ºß¤¹¤ë¤¬±þÅú¤¬¤Ê¤¤¡£
+     * @exception InvalidParameter °ú¿ô "name" ¤¬ null ¤¢¤ë¤¤¤ÏÂ¸ºß¤·¤Ê¤¤¡£
+     * @exception InternalError ÆâÉôÅª¥¨¥é¡¼¤¬È¯À¸¤·¤¿¡£
+     * @else
+     *
+     * @brief [CORBA interface] Get SDO Status
+     *
+     * @param name One of the parameters defining the "status" of an SDO.
+     * @return The value of the specified status parameter.
+     * @exception SDONotExists The target SDO does not exist.
+     * @exception NotAvailable The target SDO is reachable but cannot respond.
+     * @exception InvalidParameter The parameter defined by "name" is null or
+     *                             does not exist.
+     * @exception InternalError The target SDO cannot execute the operation
+     *                          completely due to some internal error.
+     *
+     *
+     * @endif
+     */
+    virtual CORBA::Any* get_status(const char* name)
+      throw (SDOPackage::InvalidParameter, SDOPackage::NotAvailable,
+	     SDOPackage::InternalError);
+
+
+
+    //============================================================
+    // Local interfaces
+    //============================================================
+    const char* getInstanceName() {return m_profile.instance_name;}
+    void setInstanceName(const char* instance_name);
+    const char* getTypeName() {return m_profile.type_name;}
+    const char* getDescription() { return m_profile.description;}
+    const char* getVersion() {return m_profile.version;}
+    const char* getVendor() {return m_profile.vendor;}
+    const char* getCategory() {return m_profile.category;}
+
+    std::vector<std::string> getNamingNames();
+
+    void setObjRef(const RTObject_ptr rtobj);
+    RTObject_ptr getObjRef() const;
+
+
+
+    /*!
+     * @if jp
+     * 
+     * @brief [local interface] RTC ¤Î¥×¥í¥Ñ¥Æ¥£¤òÀßÄê¤¹¤ë
+     *
+     * RTC ¤¬ÊÝ»ý¤¹¤Ù¤­¥×¥í¥Ñ¥Æ¥£¤òÀßÄê¤¹¤ë¡£Í¿¤¨¤é¤ì¤ë¥×¥í¥Ñ¥Æ¥£¤Ï¡¢
+     * ComponentProfile Åù¤ËÀßÄê¤µ¤ì¤ë¤Ù¤­¾ðÊó¤ò»ý¤¿¤Ê¤±¤ì¤Ð¤Ê¤é¤Ê¤¤¡£
+     * ¤³¤Î¥ª¥Ú¥ì¡¼¥·¥ç¥ó¤ÏÄÌ¾ï RTC ¤¬½é´ü²½¤µ¤ì¤ëºÝ¤Ë Manager ¤«¤é
+     * ¸Æ¤Ð¤ì¤ë¤³¤È¤ò°Õ¿Þ¤·¤Æ¤¤¤ë¡£
+     * 
+     * @param prop RTC ¤Î¥×¥í¥Ñ¥Æ¥£
+     *
+     * @else
+     *
+     * @brief [local interface] Set RTC property
+     *
+     * This operation sets the properties to the RTC. The given property
+     * values should include information for ComponentProfile.
+     * Generally, this operation is designed to be called from Manager, when
+     * RTC is initialized
+     *
+     * @param prop Property for RTC.
+     *
+     * @endif
+     */
+    void setProperties(const Properties& prop);
+
+    /*!
+     * @if jp
+     * 
+     * @brief [local interface] RTC ¤Î¥×¥í¥Ñ¥Æ¥£¤ò¼èÆÀ¤¹¤ë
+     *
+     * RTC ¤¬ÊÝ»ý¤·¤Æ¤¤¤ë¥×¥í¥Ñ¥Æ¥£¤òÊÖ¤¹¡£Í¿¤¨¤é¤ì¤ë¥×¥í¥Ñ¥Æ¥£¤Ï¡¢
+     * RTC¤¬¥×¥í¥Ñ¥Æ¥£¤ò»ý¤¿¤Ê¤¤¾ì¹ç¤Ï¶õ¤Î¥×¥í¥Ñ¥Æ¥£¤¬ÊÖ¤µ¤ì¤ë¡£
+     * 
+     * @return RTC ¤Î¥×¥í¥Ñ¥Æ¥£
+     *
+     * @else
+     *
+     * @brief [local interface] Get RTC property
+     *
+     * This operation returns the properties of the RTC.
+     * Empty property would be returned, if RTC has no property.
+     *
+     * @return Property for RTC.
+     *
+     * @endif
+     */
+    Properties& getProperties();
+
+
+    /*!
+     * @if jp
+     * 
+     * @brief [local interface] Port ¤òÅÐÏ¿¤¹¤ë
+     *
+     * RTC ¤¬ÊÝ»ý¤¹¤ëPort¤òÅÐÏ¿¤¹¤ë¡£
+     * Port ¤ò³°Éô¤«¤é¥¢¥¯¥»¥¹²ÄÇ½¤Ë¤¹¤ë¤¿¤á¤Ë¤Ï¡¢¤³¤Î¥ª¥Ú¥ì¡¼¥·¥ç¥ó¤Ë¤è¤ê
+     * ÅÐÏ¿¤µ¤ì¤Æ¤¤¤Ê¤±¤ì¤Ð¤Ê¤é¤Ê¤¤¡£ÅÐÏ¿¤µ¤ì¤ë Port ¤Ï¤³¤Î RTC ÆâÉô¤Ë¤ª¤¤¤Æ
+     * PortProfile.name ¤Ë¤è¤ê¶èÊÌ¤µ¤ì¤ë¡£¤·¤¿¤¬¤Ã¤Æ¡¢Port ¤Ï RTC Æâ¤Ë¤ª¤¤¤Æ¡¢
+     * ¥æ¥Ë¡¼¥¯¤Ê PortProfile.name ¤ò»ý¤¿¤Ê¤±¤ì¤Ð¤Ê¤é¤Ê¤¤¡£
+     * ÅÐÏ¿¤µ¤ì¤¿ Port ¤ÏÆâÉô¤ÇÅ¬ÀÚ¤Ë¥¢¥¯¥Æ¥£¥Ö²½¤µ¤ì¤¿¸å¡¢¤½¤Î»²¾È¤È
+     * ¥ª¥Ö¥¸¥§¥¯¥È»²¾È¤¬¥ê¥¹¥ÈÆâ¤ËÊÝÂ¸¤µ¤ì¤ë¡£
+     * 
+     * @param port RTC ¤ËÅÐÏ¿¤¹¤ë Port
+     *
+     * @else
+     *
+     * @brief [local interface] Register Port
+     *
+     * This operation registers a Port to be held by this RTC.
+     * In order to enable access to the Port from outside of RTC, the Port
+     * must be registered by this operation. The Port that is registered by
+     * this operation would be identified by PortProfile.name in the inside of
+     * RTC. Therefore, the Port should have unique PortProfile.name in the RTC.
+     * The registering Port would be activated properly, and the reference
+     * and the object reference would be stored in lists in RTC.
+     *
+     * @param port Port which is registered in the RTC
+     *
+     * @endif
+     */
+    void registerPort(PortBase& port);
+
+    /*!
+     * @if jp
+     * 
+     * @brief [local interface] Port ¤ÎÅÐÏ¿¤òºï½ü¤¹¤ë
+     *
+     * RTC ¤¬ÊÝ»ý¤¹¤ëPort¤ÎÅÐÏ¿¤òºï½ü¤¹¤ë¡£
+     * 
+     * @param port RTC ¤ËÅÐÏ¿¤¹¤ë Port
+     *
+     * @else
+     *
+     * @brief [local interface] Register Port
+     *
+     * This operation registers a Port to be held by this RTC.
+     * In order to enable access to the Port from outside of RTC, the Port
+     * must be registered by this operation. The Port that is registered by
+     * this operation would be identified by PortProfile.name in the inside of
+     * RTC. Therefore, the Port should have unique PortProfile.name in the RTC.
+     * The registering Port would be activated properly, and the reference
+     * and the object reference would be stored in lists in RTC.
+     *
+     * @param port Port which is registered in the RTC
+     *
+     * @endif
+     */
+    void deletePort(PortBase& port);
+    void deletePortByName(const char* port_name);
+    void finalizePorts();
+
+
+
+    /*
+    template <class DataType>
+    void registerInPort(BufferBase<DataType>& buffer)
+    {
+      CorbaInPort<DataType>* port;
+      p = new CorbaInPort<DataType>(buffer);
+      Port_var inport;
+      inport = new PortInPort();
+      inport->setInPortRef(p->_this());
+    }
+    */
+
+
+
+
 
   protected:
-    // Partial specialization
-    template <class T, class X>
-    class SeqEx
-      : public SequenceEx <T, X, ACE_Thread_Mutex> {};
+    //============================================================
+    // SDO ´Ø·¸¤ÎÊÑ¿ô
+    //============================================================
+    /*!
+     * SDO owned organization list
+     */
+    SDOPackage::OrganizationList m_sdoOwnedOrganizations;
+
+    /*!
+     * SDOService ¤Î¥×¥í¥Õ¥¡¥¤¥ë¥ê¥¹¥È
+     */
+    SDOPackage::ServiceProfileList m_sdoSvcProfiles;
+
+    /*!
+     * SDOService ¤Î¥×¥í¥Õ¥¡¥¤¥ë¥ê¥¹¥È¤«¤éid¤Ç¥µ¡¼¥Á¤¹¤ë¤¿¤á¤Î¥Õ¥¡¥ó¥¯¥¿
+     */
+    struct svc_name
+    {
+      svc_name (const char* id) : m_id(id) {};
+      bool operator()(const SDOPackage::ServiceProfile& prof)
+      {
+	return m_id == std::string(prof.id);
+      }
+      std::string m_id;
+    };
+
+    /*!
+     * SDO Configuratio Interface ¤Ø¤Î¥Ý¥¤¥ó¥¿
+     */
+    SDOPackage::Configuration_impl* m_pSdoConfigImpl;
+    SDOPackage::Configuration_var  m_pSdoConfig;
+
+    /*!
+     * SDO organization
+     */
+    SDOPackage::OrganizationList m_sdoOrganizations;
+
+    /*!
+     * SDO Status
+     */
+    SDOPackage::NVList m_sdoStatus;
+
     
-    RTC::ComponentProfile m_componentProfile;
-    SeqEx<PortList, Port_ptr>  m_Ports;
+    //============================================================
+    // RTC ´Ø·¸¤ÎÊÑ¿ô
+    //============================================================
+    /*!
+     * RTC::ComponentProfile
+     */
+    ComponentProfile m_profile;
+
+    RTObject_ptr m_objref;
+    /*!
+     * Port ¤Î¥ª¥Ö¥¸¥§¥¯¥È¥ê¥Õ¥¡¥ì¥ó¥¹¤Î¥ê¥¹¥È
+     */
+    PortAdmin m_portAdmin;
+
+    ExecutionContextServiceList m_execContexts;
+
+    bool m_alive;
+
+    /*!
+     * RTC ¤Î¥×¥í¥Ñ¥Æ¥£
+     */
+    Properties m_properties;
+
+    struct nv_name
+    {
+      nv_name(const char* name) : m_name(name) {};
+      bool operator()(const SDOPackage::NameValue& nv)
+      {
+        return m_name == std::string(nv.name);
+      }
+      std::string m_name;
+    };
+
+
+    struct ec_copy
+    {
+      ec_copy(ExecutionContextList& eclist)
+	: m_eclist(eclist)
+      {
+      }
+      void operator()(ExecutionContextService_ptr ecs)
+      {
+	CORBA_SeqUtil::push_back(m_eclist, ExecutionContext::_duplicate(ecs));
+      }
+      ExecutionContextList& m_eclist;
+    };
+    //    ExecutionContextAdminList m_execContextList;
+
+
 
   };
 };
