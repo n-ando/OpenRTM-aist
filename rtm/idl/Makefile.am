@@ -2,9 +2,12 @@
 ##------------------------------------------------------------
 ## Makefile.am for libRTCSkel
 ##
-## $Id: Makefile.am,v 1.5 2006-09-11 19:08:18 n-ando Exp $
+## $Id: Makefile.am,v 1.6 2007-01-09 15:39:10 n-ando Exp $
 ##
 ## $Log: not supported by cvs2svn $
+## Revision 1.5  2006/09/11 19:08:18  n-ando
+## OMG's SDO and RTC IDL targets are now included.
+##
 ## Revision 1.4  2006/04/04 06:13:11  n-ando
 ## - New idl (RTCPackage, SDOPackage) was added for OMG's RTC based
 ##   OpenRTM-aist, which verifies consistency of AIST's RTC PIM and PSM.
@@ -33,9 +36,11 @@ AM_LDFLAGS=-L$(top_builddir) -L$(top_builddir)/rtm -L$(top_builddir)/rtm/idl
 SUFFIXES = .idl Skel.cpp Stub.cpp Stub.o Skel.o
 
 # RTM idl sources
-IDL_SOURCES =       	\
-	SDOPackage.idl		\
-	RTC.idl
+IDL_SOURCES =       	  \
+	SDOPackage.idl    \
+	RTC.idl           \
+	BasicDataType.idl \
+	DataPort.idl
 #	RTCDataType.idl 	\
 #	RTCBase.idl     	\
 #	RTCManager.idl
@@ -136,11 +141,15 @@ nodist_rtmskel_HEADERS =         \
 
 #------------------------------------------------------------
 # Intermediate library : libRTCSkel.a
-noinst_LTLIBRARIES = libRTCSkel.la
+noinst_LTLIBRARIES = libRTCSkel.la libRTCStub.la
 
 nodist_libRTCSkel_la_SOURCES = $(IDL_SOURCES:.idl=Skel.cpp)
 
 libRTCSkel_la_LIBADD = $(LIBS)
+
+nodist_libRTCStub_la_SOURCES = $(IDL_SOURCES:.idl=Stub.cpp)
+
+libRTCStub_la_LIBADD = $(LIBS)
 
 
 .idlSkel.cpp:
@@ -157,17 +166,7 @@ EXTRA_DIST =       \
 # Cleanup
 clean-local:
 	rm -f \
-	*Skel.cpp \
-	*Skel.h \
-	*Stub.cpp \
-	*Stub.h \
-	*~ \
-	*core \
+	*Skel.cpp *Skel.h *Stub.cpp *Stub.h \
+	*~ *.core \
 	Makefile.old \
-	*.cc \
-	*.cpp \
-	*.h \
-	*.hh \
-	*.i \
-	*.a \
-	*.c
+	*.cc *.hh *.i *.a *.c *.inl
