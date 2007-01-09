@@ -2,7 +2,7 @@
 /*!
  * @file  InPortCorbaConsumer.h
  * @brief InPortCorbaConsumer class
- * @date  $Date: 2007-01-06 17:50:57 $
+ * @date  $Date: 2007-01-09 09:56:38 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
  * Copyright (C) 2006
@@ -13,12 +13,17 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: InPortCorbaConsumer.h,v 1.2 2007-01-06 17:50:57 n-ando Exp $
+ * $Id: InPortCorbaConsumer.h,v 1.3 2007-01-09 09:56:38 n-ando Exp $
  *
  */
 
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.2  2007/01/06 17:50:57  n-ando
+ * Interface subscription/unsubscription functions (subscribeInterface()
+ * and unsubscribeInterface()) are added.
+ * The clone() function to clone the instance is added.
+ *
  * Revision 1.1  2006/12/02 18:39:57  n-ando
  * InPortCorbaConsumer class was moved from InPortConsumer.h
  *
@@ -77,7 +82,7 @@ namespace RTC
       m_buffer.read(data);
       tmp <<= data;
 
-      //hoge –{“–‚ÍƒGƒ‰[ˆ—‚ð‚·‚×‚«
+      //hoge ËÜÅö¤Ï¥¨¥é¡¼½èÍý¤ò¤¹¤Ù¤­
       if (CORBA::is_nil(_ptr())) return;
       try
 	{
@@ -85,7 +90,7 @@ namespace RTC
 	}
       catch(...)
 	{
-	  //hoge ƒIƒuƒWƒFƒNƒg‚ª–³Œø‚É‚È‚Á‚½‚çdisconnect‚·‚×‚«
+	  //hoge ¥ª¥Ö¥¸¥§¥¯¥È¤¬Ìµ¸ú¤Ë¤Ê¤Ã¤¿¤édisconnect¤¹¤Ù¤­
 	  return;
 	}
     }
