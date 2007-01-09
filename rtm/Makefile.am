@@ -2,9 +2,12 @@
 ##------------------------------------------------------------
 ## Makefile.am for libRTC
 ##
-## $Id: Makefile.am,v 1.9 2006-12-02 18:42:20 n-ando Exp $
+## $Id: Makefile.am,v 1.10 2007-01-09 09:58:45 n-ando Exp $
 ##
 ## $Log: not supported by cvs2svn $
+## Revision 1.9  2006/12/02 18:42:20  n-ando
+## Some file entries were added.
+##
 ## Revision 1.8  2006/11/27 10:03:58  n-ando
 ## CppUnit test sub-directory "tests" was added.
 ##
@@ -55,90 +58,56 @@ version.h:
 lib_LTLIBRARIES = libRTC.la
 
 # sources of libRTC.la
-RTC_SRC = \
+#	ExecutionContext.cpp
+#	PortProfileHelper.cpp
+#	ObjectManager.cpp
+
+UTIL_SRC = \
 	NVUtil.cpp \
-	DataFlowBase.cpp \
-	DefaultConfiguration.h \
-	version.h \
-	StringUtil.cpp \
-	NumberingPolicy.cpp \
-	CorbaObjectManager.cpp \
 	Properties.cpp \
+	StringUtil.cpp
+
+MGR_SRC = \
+	CorbaNaming.cpp \
+	CorbaObjectManager.cpp \
+	Factory.cpp \
 	Manager.cpp \
 	ManagerConfig.cpp \
 	ModuleManager.cpp \
 	NamingManager.cpp \
-	CorbaNaming.cpp \
-	Factory.cpp \
-	ExecutionContext.cpp \
-	SdoOrganization.cpp \
-	SdoConfiguration.cpp \
-	RTObject.cpp \
+	NumberingPolicy.cpp
+
+COMP_SRC = \
+	DataFlowComponentBase.cpp \
+	PeriodicExecutionContext.cpp \
 	PortAdmin.cpp \
-	PortBase.cpp \
+	RTObject.cpp \
+	SdoConfiguration.cpp \
+	SdoOrganization.cpp
+
+PORT_SRC = \
+	CorbaPort.cpp \
 	DataInPort.cpp \
-	DataoutPort.cpp \
-	PublisherFactory.cpp
-#	RtcNaming.cpp \
-#	RtcNameComponent.cpp \
-#	RtcConfig.cpp \
-#	RtcSubscriber.cpp \
-#	RtcInPortBase.cpp \
-#	RtcOutPortBase.cpp \
-#	RtcServiceBase.cpp \
-#	RtcModuleProfile.cpp \
-#	RtcBase.cpp \
-#	RtcLifeCycle.cpp \
-#	RtcComponentAction.cpp \
-#	RtcPort.o \
-#	SdoSystemElement.cpp \
-#	RtcConfiguration.cpp \
-#	RtcProfile.cpp \
-#	RtcTimeStatistics.cpp
-#	RtcCompositeBase.cpp 
+	DataOutPort.cpp \
+	InPortProvider.cpp \
+	OutPortBase.cpp \
+	OutPortProvider.cpp \
+	PortBase.cpp \
+	PublisherFactory.cpp \
+	PublisherFlush.cpp \
+	PublisherNew.cpp \
+	PublisherPeriodic.cpp
+
+
+RTC_SRC = \
+	version.h \
+	$(UTIL_SRC) $(MGR_SRC) $(COMP_SRC) $(PORT_SRC)
+
 
 libRTC_la_SOURCES = \
-	NVUtil.cpp \
-	DefaultConfiguration.h \
 	version.h \
-	StringUtil.cpp \
-	NumberingPolicy.cpp \
-	CorbaObjectManager.cpp \
-	Properties.cpp \
-	Manager.cpp \
-	ManagerConfig.cpp \
-	ModuleManager.cpp \
-	NamingManager.cpp \
-	CorbaNaming.cpp \
-	Factory.cpp \
-	ExecutionContext.cpp \
-	SdoOrganization.cpp \
-	SdoConfiguration.cpp \
-	RTObject.cpp \
-	PortAdmin.cpp \
-	PortBase.cpp \
-	DataInPort.cpp \
-	DataOutPort.cpp\
-	PublisherFactory.cpp
-#	Properties.cpp \
-#	ModuleManager.cpp \
-#	ManagerConfig.cpp \
-#	RtcNaming.cpp \
-#	RtcNameComponent.cpp \
-#	RtcConfig.cpp \
-#	RtcSubscriber.cpp \
-#	RtcInPortBase.cpp \
-#	RtcOutPortBase.cpp \
-#	RtcServiceBase.cpp \
-#	RtcModuleProfile.cpp \
-#	RtcBase.cpp \
-#	RtcFactory.cpp \
-#	Manager.cpp
-#
-#	RtcConfiguration.cpp \
-#	RtcProfile.cpp \
-#	RtcTimeStatistics.cpp
-#	RtcCompositeBase.cpp 
+	$(UTIL_SRC) $(MGR_SRC) $(COMP_SRC) $(PORT_SRC)
+
 
 libRTC_la_LIBADD = $(top_builddir)/rtm/idl/libRTCSkel.la $(ARTLIB)
 libRTC_la_LDFLAGS = -L$(top_builddir)/rtm/idl -release $(PACKAGE_VERSION) -version-info 0:4:0
