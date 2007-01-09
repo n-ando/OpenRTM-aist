@@ -2,7 +2,7 @@
 /*!
  * @file StateMachine.h
  * @brief State machine template class
- * @date $Date: 2006-10-26 08:55:53 $
+ * @date $Date: 2007-01-09 15:26:53 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
  * Copyright (C) 2006
@@ -12,12 +12,15 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: StateMachine.h,v 1.1 2006-10-26 08:55:53 n-ando Exp $
+ * $Id: StateMachine.h,v 1.2 2007-01-09 15:26:53 n-ando Exp $
  *
  */
 
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.1  2006/10/26 08:55:53  n-ando
+ * The first commitment.
+ *
  *
  */
 
@@ -150,6 +153,12 @@ public:
       m_postdo(new Callback[m_num]),
       m_exit  (new Callback[m_num])
   {
+    setNullFunc(m_entry,  NULL);
+    setNullFunc(m_do,     NULL);
+    setNullFunc(m_exit,   NULL);
+    setNullFunc(m_predo,  NULL);
+    setNullFunc(m_postdo, NULL);
+    m_transit = NULL;
   };
 
 
@@ -291,10 +300,16 @@ public:
    * @brief Get state machine's status
    * @endif
    */
-  States getState()
+  States getStates()
   {
     ACE_Guard<ACE_Thread_Mutex> guard(m_mutex);
     return m_states;
+  }
+  
+  State getState()
+  {
+    ACE_Guard<ACE_Thread_Mutex> guard(m_mutex);
+    return m_states.curr;
   }
   
 
@@ -356,7 +371,8 @@ public:
     if ((state.prev != state.curr) || selftrans)
       {
 	// Entry アクションを実行
-	res = (m_listener->*m_entry[state.curr])(state);
+	if (m_entry[state.curr] != NULL)
+	  res = (m_listener->*m_entry[state.curr])(state);
       }
 
     // この区間では状態の変更を感知しない。
@@ -366,9 +382,12 @@ public:
     // Do アクション
     if (state.curr == state.next)
       {
-	res = (m_listener->*m_predo [state.curr])(state);
-	res = (m_listener->*m_do    [state.curr])(state);
-	res = (m_listener->*m_postdo[state.curr])(state);
+	if (m_predo[state.curr] != NULL)
+	  res = (m_listener->*m_predo [state.curr])(state);
+	if (m_do[state.curr] != NULL)
+	  res = (m_listener->*m_do    [state.curr])(state);
+	if (m_postdo[state.curr] != NULL)
+	  res = (m_listener->*m_postdo[state.curr])(state);
       }
 
     // この区間では次の状態が変更されているかもしれない。
@@ -385,8 +404,10 @@ public:
     if ((state.curr != state.next) || selftrans)
       {
 	// Exit action of pre-state
-	res = (m_listener->*m_exit[state.curr])(state);
-	res = (m_listener->*m_transit)(state);
+	if (m_exit[state.curr] != NULL)
+	  res = (m_listener->*m_exit[state.curr])(state);
+	if (m_transit != NULL)
+	  res = (m_listener->*m_transit)(state);
       }
 
     {
