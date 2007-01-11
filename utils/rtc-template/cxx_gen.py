@@ -3,21 +3,24 @@
 #
 #  @file cxx_gen.py
 #  @brief rtc-template C++ source code generator class
-#  @date $Date: 2005-09-08 09:23:55 $
+#  @date $Date: 2007-01-11 07:46:38 $
 #  @author Noriaki Ando <n-ando@aist.go.jp>
 # 
-#  Copyright (C) 2004-2005
+#  Copyright (C) 2004-2007
 #      Task-intelligence Research Group,
 #      Intelligent Systems Research Institute,
 #      National Institute of
 #          Advanced Industrial Science and Technology (AIST), Japan
 #      All rights reserved.
 # 
-#  $Id: cxx_gen.py,v 1.3 2005-09-08 09:23:55 n-ando Exp $
+#  $Id: cxx_gen.py,v 1.4 2007-01-11 07:46:38 n-ando Exp $
 # 
 
 #
 #  $Log: not supported by cvs2svn $
+#  Revision 1.3  2005/09/08 09:23:55  n-ando
+#  - A bug fix for merge function.
+#
 #  Revision 1.2  2005/09/06 14:37:03  n-ando
 #  rtc-template's command options and data structure for ezt (Easy Template)
 #  are changed for RTComponent's service features.
@@ -44,6 +47,18 @@ import cxx_svc_impl
 def description():
 	return "C++ component code generator"
 
+def usage_short():
+	"""
+	C++ generator specific usage (short version)
+	"""
+	return """
+Options for C++ backend:
+
+    [--svc-impl-suffix[=suffix]]          Suffix of implementation class
+    [--svc-skel-suffix[=suffix]]          Suffix of server skeleton files
+    [--svc-stub-suffix[=suffix]]          Suffix of client stub files
+"""
+
 def usage():
 	"""
 	C++ generator specific usage
@@ -52,19 +67,54 @@ def usage():
 -------------------------------
   Help for C++ code geenrator
 -------------------------------
+    --svc-impl-suffix=[Suffix]:
+        Specify the suffix for implementation class name. This suffix is also
+        used for implementation class header file and code file.
+	
+    --svc-skel-suffix=[Suffix]:
+        Specify the suffix for server skeleton files.
+	
+    --svc-stub-suffix=[Suffix]:
+        Specify the suffix for client stub files.
+
 C++ code generator generates the following files.
     [Component name].h.............Component class header
     [Component name].cpp...........Component class soruce code
     [Component name]Comp.cpp.......Component startup code
+    [IDL basename]Skel.h...........Server skeleton header
+    [IDL basename]Skel.cpp.........Server skeleton source code
+    [IDL basename]Stub.h...........Client stub header
+    [IDL basename]Stub.cpp.........Client stub source code
+    [IDL basename]SVC_impl.h.......Server implementation header
+    [IDL basename]SVC_impl.cpp.....Server implementation source code
     Makefile.[Component name]......Makefile to compile this codes
     README.[Component name]........Specification template of the component
 
-No additional options are available for C++ code generator.
+ Suffixes (Skel, Stub, SVC_impl) can be specified --svc-*-suffix option
+
+ Other CORBA implementation specific skeleton/stub code would be generated.
+ --omniORB--
+    [IDL basename].hh..............Client stub header
+    [IDL basename]SK.cc............Server skeleton source code
+    [IDL basename]DynSK.cc.........Dynamic server skeleton source code
+ --TAO--
+    [IDL basename]S.h..............Server skeleton header
+    [IDL basename]S.h..............Server skeleton source code
+    [IDL basename]C.h..............Client stub header
+    [IDL basename]C.h..............Client stub source code
+ --MICO--
+    [IDL basename].h...............Server skeleton header
+    [IDL basename]_skel.cc.........Server skeleton source code
+    [IDL basename].h...............Client stub header
+    [IDL basename].cc..............Client stub source code
 
 """
 
 def get_opt_fmt():
-	return []
+	opt_args_fmt = ["svc-impl-suffix=",
+			"svc-skel-suffix=",
+			"svc-stub-suffix="]
+	return opt_args_fmt
 
 	
 #------------------------------------------------------------
@@ -82,77 +132,101 @@ comp_header = """// -*- C++ -*-
 #ifndef [u_name]_H
 #define [u_name]_H
 
-#include <rtm/RtcBase.h>
-#include <rtm/RtcManager.h>
-#include <rtm/RtcInPort.h>
-#include <rtm/RtcOutPort.h>
+#include <rtm/Manager.h>
+#include <rtm/DataFlowComponentBase.h>
+#include <rtm/CorbaPort.h>
+#include <rtm/DataInPort.h>
+#include <rtm/DataOutPort.h>
+#include <rtm/idl/BasicDataTypeSkel.h>
 
 // Service implementation headers
 // <rtc-template block="service_impl_h">
 // </rtc-template>
 
-using namespace RTM;
-
-// Module specification
-// <rtc-template block="module_spec">
+// Service Consumer stub headers
+// <rtc-template block="consumer_stub_h">
 // </rtc-template>
-	
+
+using namespace RTC;
+
+
 class [module.name]
-  : public RTM::RtcBase
+  : public RTC::DataFlowComponentBase
 {
  public:
-  [module.name](RtcManager* manager);
+  [module.name](RTC::Manager* manager);
+  ~[module.name]();
 
-  // Initializing state
-  //  virtual RtmRes rtc_init_entry();
+  // The initialize action (on CREATED->ALIVE transition)
+  // formaer rtc_init_entry() 
+  // virtual RTC::ReturnCode_t onInitialize();
 
-  // Ready state
-  //  virtual RtmRes rtc_ready_entry();
-  //  virtual RtmRes rtc_ready_do();
-  //  virtual RtmRes rtc_ready_exit();
+  // The finalize action (on ALIVE->END transition)
+  // formaer rtc_exiting_entry()
+  // virtual RTC::ReturnCode_t onFinalize();
 
-  // Starting state
-  //  virtual RtmRes rtc_starting_entry();
+  // The startup action when ExecutionContext startup
+  // former rtc_starting_entry()
+  // virtual RTC::ReturnCode_t onStartup(RTC::UniqueId ec_id);
+
+  // The shutdown action when ExecutionContext stop
+  // former rtc_stopping_entry()
+  // virtual RTC::ReturnCode_t onShutdown(RTC::UniqueId ec_id);
+
+  // The activated action (Active state entry action)
+  // former rtc_active_entry()
+  // virtual RTC::ReturnCode_t onActivated(RTC::UniqueId ec_id);
+
+  // The deactivated action (Active state exit action)
+  // former rtc_active_exit()
+  // virtual RTC::ReturnCode_t onDeactivated(RTC::UniqueId ec_id);
+
+  // The execution action that is invoked periodically
+  // former rtc_active_do()
+  // virtual RTC::ReturnCode_t onExecute(RTC::UniqueId ec_id);
+
+  // The aborting action when main logic error occurred.
+  // former rtc_aborting_entry()
+  // virtual RTC::ReturnCode_t onAborting(RTC::UniqueId ec_id);
+
+  // The error action in ERROR state
+  // former rtc_error_do()
+  // virtual RTC::ReturnCode_t onError(RTC::UniqueId ec_id);
+
+  // The reset action that is invoked resetting
+  // This is same but different the former rtc_init_entry()
+  // virtual RTC::ReturnCode_t onReset(RTC::UniqueId ec_id);
   
-  // Active state
-  //  virtual RtmRes rtc_active_entry();
-  //  virtual RtmRes rtc_active_do();
-  //  virtual RtmRes rtc_active_exit();
+  // The state update action that is invoked after onExecute() action
+  // no corresponding operation exists in OpenRTm-aist-0.2.0
+  // virtual RTC::ReturnCode_t onStateUpdate(RTC::UniqueId ec_id);
 
-  // Stopping state
-  //  virtual RtmRes rtc_stopping_entry();
-
-  // Aborting state
-  //  virtual RtmRes rtc_aborting_entry();
-  
-  // Error state
-  //  virtual RtmRes rtc_error_entry();
-  //  virtual RtmRes rtc_error_do();
-  //  virtual RtmRes rtc_error_exit();
-
-  // Fatal Error state
-  //  virtual RtmRes rtc_fatal_entry();
-  //  virtual RtmRes rtc_fatal_do();
-  //  virtual RtmRes rtc_fatal_exit();
- 
-  // Exiting state
-  //  virtual RtmRes rtc_exiting_entry();
+  // The action that is invoked when execution context's rate is changed
+  // no corresponding operation exists in OpenRTm-aist-0.2.0
+  // virtual RTC::ReturnCode_t onRateChanged(RTC::UniqueId ec_id);
 
 
  protected:
-  // InPort declaration
-  // <rtc-template block="inport_declar">
+  // DataInPort declaration
+  // <rtc-template block="inport_declare">
   // </rtc-template>
 
 
-  // OutPort declaration
-  // <rtc-template block="outport_declar">
+  // DataOutPort declaration
+  // <rtc-template block="outport_declare">
+  // </rtc-template>
+
+  // CORBA Port declaration
+  // <rtc-template block="corbaport_declare">
   // </rtc-template>
 
   // Service declaration
-  // <rtc-template block="service_declar">
+  // <rtc-template block="service_declare">
   // </rtc-template>
 
+  // Consumer declaration
+  // <rtc-template block="consumer_declare">
+  // </rtc-template>
 
  private:
   int dummy;
@@ -162,9 +236,7 @@ class [module.name]
 
 extern "C"
 {
-  RtcBase* [module.name]New(RtcManager* manager);
-  void [module.name]Delete(RtcBase* p);
-  void [module.name]Init(RtcManager* manager);
+  void [module.name]Init(RTC::Manager* manager);
 };
 
 #endif // [u_name]_H
@@ -187,8 +259,12 @@ comp_soruce = """// -*- C++ -*-
 
 using namespace std;
 
-[module.name]::[module.name](RtcManager* manager)
-  : RtcBase(manager),
+// Module specification
+// <rtc-template block="module_spec">
+// </rtc-template>
+
+[module.name]::[module.name](RTC::Manager* manager)
+  : RTC::DataFlowComponentBase(manager),
     // <rtc-template block="initializer">
     // </rtc-template>
 	dummy(0)
@@ -199,12 +275,15 @@ using namespace std;
 
 }
 
+[module.name]::~[module.name]()
+{
+}
 
 [for activity]
 /*
-RtmRes [module.name]::[activity]()
+RTC::ReturnCode_t [module.name]::[activity.name]([activity.args])
 {
-  return RTM_OK;
+  return RTC::OK;
 }
 */
 [end]
@@ -213,23 +292,12 @@ RtmRes [module.name]::[activity]()
 extern "C"
 {
  
-  RtcBase* [module.name]New(RtcManager* manager)
+  void [module.name]Init(RTC::Manager* manager)
   {
-	return new [module.name](manager);
-  }
-  
-  
-  void [module.name]Delete(RtcBase* p)
-  {
-	delete ([module.name] *)p;
-	return;
-  }
-  
-  
-  void [module.name]Init(RtcManager* manager)
-  {
-	RtcModuleProfile profile([l_name]_spec);
-	manager->registerComponent(profile, [module.name]New, [module.name]Delete);
+    RTC::Properties profile([l_name]_spec);
+    manager->registerFactory(profile,
+                             RTC::Create<[module.name]>,
+                             RTC::Delete<[module.name]>);
   }
   
 };
@@ -250,36 +318,70 @@ comp_compsrc = """// -*- C++ -*-
  * [rcs_id]
  */
 
-#include <rtm/RtcManager.h>
+#include <rtm/Manager.h>
 #include <iostream>
 #include <string>
 #include "[fname_h]"
 
 
-void MyModuleInit(RtcManager* manager)
+void MyModuleInit(RTC::Manager* manager)
 {
   [module.name]Init(manager);
 
-  std::string name;
-  RtcBase* comp;
-  comp = manager->createComponent("[module.name]", "[module.category]", name);
+//  std::string name;
 
-  std::cout << "RTComponent: " << name << " was created." << std::endl;
+//  std::cout << "RTComponent: " << name << " was created." << std::endl;
 
   return;
 }
 
 int main (int argc, char** argv)
 {
-  RTM::RtcManager manager(argc, argv);
+  RTC::Manager* manager;
+  manager = RTC::Manager::init(argc, argv);
   // Initialize manager
-  manager.initManager();
+  manager->init(argc, argv);
   // Activate manager and register to naming service
-  manager.activateManager();
+  manager->activateManager();
+  manager->getPOAManager()->activate();
   // Initialize my module on this maneger
-  manager.initModuleProc(MyModuleInit);
+//  manager->initModuleProc(MyModuleInit);
   // Main loop
-  manager.runManager();
+  [module.name]Init(manager);
+  RTC::RtcBase* comp;
+  comp = manager->createComponent("[module.name]");
+
+  RTC::RTObject_var rtobj;
+
+  rtobj = RTC::RTObject::_narrow(manager->getPOA()->servant_to_reference(comp));
+
+  PortList* portlist;
+  portlist = rtobj->get_ports();
+  std::cout << "Number of Portst: " << portlist->length() << std::endl << std::endl; 
+  for (CORBA::ULong i(0), n(portlist->length()); i < n; ++i)
+  {
+    Port_ptr port;
+    port = (*portlist)[begin_brace]i[end_brace];
+    std::cout << "Port" << i << " (name): " << port->get_port_profile()->name << std::endl;
+    
+    RTC::PortInterfaceProfileList iflist;
+    iflist = port->get_port_profile()->interfaces;
+    std::cout << "---interfaces---" << std::endl;
+    for (CORBA::ULong i(0), n(iflist.length()); i < n; ++i)
+    {
+      std::cout << "I/F name: " << iflist[begin_brace]i[end_brace].instance_name << std::endl;
+      std::cout << "I/F type: " << iflist[begin_brace]i[end_brace].type_name << std::endl;
+      const char* pol;
+      pol = iflist[begin_brace]i[end_brace].polarity == 0 ? "PROVIDED" : "REQUIRED";
+      std::cout << "Polarity: " << pol << std::endl;
+    }
+    std::cout << "---properties---" << std::endl;
+    NVUtil::dump(port->get_port_profile()->properties);
+    std::cout << "----------------" << std::endl << std::endl;
+  }
+
+  manager->getORB()->run();
+  manager->runManager();
   return 0;
 }
 """
@@ -310,9 +412,10 @@ IDLFLAGS = `rtm-config --idlflags` -I`rtm-config --prefix`/include/rtm/idl
 WRAPPER  = rtm-skelwrapper
 WRAPPER_FLAGS = --include-dir="" --skel-suffix=Skel --stub-suffix=Stub
 
-SKEL_OBJ = [for service_idl][service_idl.skel_basename].o[end]
-STUB_OBJ = [for service_idl][service_idl.stub_basename].o[end]
-IMPL_OBJ = [for service_idl][service_idl.impl_basename].o[end]
+SKEL_OBJ = [for service_idl][service_idl.skel_basename].o [end] \
+	[for consumer_idl][consumer_idl.stub_basename].o [end]
+STUB_OBJ = [for service_idl][service_idl.stub_basename].o [end]
+IMPL_OBJ = [for service_idl][service_idl.impl_basename].o [end]
 OBJS     = [module.name].o $(SKEL_OBJ) $(IMPL_OBJ)
 
 .SUFFIXES : .so
@@ -359,15 +462,30 @@ clean_skelstub:
 	$(WRAPPER) $(WRAPPER_FLAGS) --idl-file=[service_idl.idl_fname]
 [end]
 
+[for consumer_idl]
+[consumer_idl.stub_basename].cpp : [consumer_idl.idl_fname]
+	$(IDLC) $(IDLFLAGS) [consumer_idl.idl_fname]
+	$(WRAPPER) $(WRAPPER_FLAGS) --idl-file=[consumer_idl.idl_fname]
+[consumer_idl.stub_basename].h : [consumer_idl.idl_fname]
+	$(IDLC) $(IDLFLAGS) [consumer_idl.idl_fname]
+	$(WRAPPER) $(WRAPPER_FLAGS) --idl-file=[consumer_idl.idl_fname]
+[end]
+
 
 [module.name].so: $(OBJS)
-[module.name].o: [for service_idl][service_idl.skel_basename].h [service_idl.impl_basename].h[end]
-[module.name]Comp.o: [module.name]Comp.cpp [module.name].cpp [module.name].h [for service_idl][service_idl.skel_basename].h [service_idl.impl_basename].h[end]
+[module.name].o: [module.name].h \
+	[for service_idl][service_idl.skel_basename].h [service_idl.impl_basename].h [end] \
+	[for consumer_idl][consumer_idl.stub_basename].h [end]
+[module.name]Comp.o: [module.name]Comp.cpp [module.name].cpp [module.name].h [for service_idl][service_idl.skel_basename].h [service_idl.impl_basename].h [end]
 
 [for service_idl]
 [service_idl.impl_basename].o: [service_idl.impl_basename].cpp [service_idl.impl_basename].h [service_idl.skel_basename].h [service_idl.stub_basename].h
 [service_idl.skel_basename].o: [service_idl.skel_basename].cpp [service_idl.skel_basename].h [service_idl.stub_basename].h
 [service_idl.stub_basename].o: [service_idl.stub_basename].cpp [service_idl.stub_basename].h
+[end]
+
+[for consumer_idl]
+[consumer_idl.stub_basename].o: [consumer_idl.stub_basename].cpp [consumer_idl.stub_basename].h
 [end]
 
 # end of Makefile
@@ -377,49 +495,152 @@ clean_skelstub:
 #============================================================
 # Replaced strings definition for <rtc-template> tags
 #============================================================
-service_impl_h = """[for service_idl]#include "[service_idl.impl_h]"[end]"""
+service_impl_h = """[for service_idl]#include "[service_idl.impl_h]"
+[end]"""
+consumer_stub_h = """[for consumer_idl]#include "[consumer_idl.stub_h]"
+[end]"""
 
-module_spec = """static RtcModuleProfSpec [l_name]_spec[] =
+module_spec = """static const char* [l_name]_spec[] =
   {
-    {RTC_MODULE_NAME,      "[module.name]"},
-    {RTC_MODULE_DESC,      "[module.desc]"},
-    {RTC_MODULE_VERSION,   "[module.version]"},
-    {RTC_MODULE_AUTHOR,    "[module.author]"},
-    {RTC_MODULE_CATEGORY,  "[module.category]"},
-    {RTC_MODULE_COMP_TYPE, "[module.comp_type]"},
-    {RTC_MODULE_ACT_TYPE,  "[module.act_type]"},
-    {RTC_MODULE_MAX_INST,  "[module.max_inst]"},
-    {RTC_MODULE_LANG,      "C++"},
-    {RTC_MODULE_LANG_TYPE, "COMPILE"},
-    {RTC_MODULE_SPEC_END,  NULL}
+    "implementation_id", "[module.name]",
+    "type_name",         "[module.type]",
+    "description",       "[module.desc]",
+    "version",           "[module.version]",
+    "vendor",            "[module.vendor]",
+    "category",          "[module.category]",
+    "activity_type",     "[module.comp_type]",
+    "max_instance",      "[module.max_inst]",
+    "language",          "C++",
+    "lang_type",         "compile",
+    ""
   };"""
 
-inport_declar = \
+inport_declare = \
 """  [for inport][inport.type] m_[inport.name];
-  InPortAny<[inport.type]> m_[inport.name]In;
+  InPort<[inport.type]> m_[inport.name]In;
   [end]"""
 
-outport_declar = \
+outport_declare = \
 """  [for outport][outport.type] m_[outport.name];
-  OutPortAny<[outport.type]> m_[outport.name]Out;
+  OutPort<[outport.type]> m_[outport.name]Out;
   [end]"""
 
-service_declar = \
-"""  [for service][service.class_impl] m_[service.name];
-  RtcServiceProfile m_[service.profile];
+corbaport_declare = \
+"""  [for corbaport]RTC::CorbaPort m_[corbaport.name]Port;
+  [end]"""
+ 
+service_declare = \
+"""  [for service][service.type]SVC_impl m_[service.name];
+  [end]"""
+
+consumer_declare = \
+"""  [for consumer]RTC::CorbaConsumer<[consumer.type]> m_[consumer.name];
   [end]"""
 
 initializer = \
 """    [for inport]m_[inport.name]In("[inport.name]", m_[inport.name]),
     [end][for outport]m_[outport.name]Out("[outport.name]", m_[outport.name]),
-    [end][for service]m_[service.profile]("[service.name]", "[service.type]", ""),[end]"""
+    [end][for corbaport]m_[corbaport.name]Port("[corbaport.name]"),[end]"""
 
 
 registration = \
-"""  [for inport]registerInPort(m_[inport.name]In);
-  [end][for outport]registerOutPort(m_[outport.name]Out);
-  [end][for service]registerService(m_[service.name], m_[service.profile]);[end]"""
+"""  // Set InPort buffers
+  [for inport]registerInPort("[inport.name]", m_[inport.name]In);
+  [end]
+  // Set OutPort buffer
+  [for outport]registerOutPort("[outport.name]", m_[outport.name]Out);
+  [end]
+  // Set service provider to Ports
+  [for service]m_[service.port]Port.registerProvider("[service.name]", "[service.type]", m_[service.name]);
+  [end]
+  // Set service consumers to Ports
+  [for consumer]m_[consumer.port]Port.registerConsumer("[consumer.name]", "[consumer.type]", m_[consumer.name]);
+  [end]
+  // Set CORBA Service Ports
+  [for corbaport]registerPort(m_[corbaport.name]Port);
+  [end]"""
 
+#------------------------------------------------------------
+
+
+#============================================================
+# Classes and Functions
+#============================================================
+
+class Struct:
+	def __init__(self):
+		return
+
+
+def MakeSuffix(opts, dict):
+	impl_suffix = "SVC_impl"
+	skel_suffix = "Skel"
+	stub_suffix = "Stub"
+	for opt, arg in opts:
+		if opt.find("--svc-impl-suffix") == 0:
+			impl_suffix = arg
+		if opt.find("--svc-skel-suffix") == 0:
+			skel_suffix = arg
+		if opt.find("--svc-stub-suffix") == 0:
+			stub_suffix = arg
+	dict["impl_suffix"] = impl_suffix
+	dict["skel_suffix"] = skel_suffix
+	dict["stub_suffix"] = stub_suffix
+
+
+def MakeServiceIDL(dict):
+	for d in dict["service_idl"]:
+		d.impl_basename = d.idl_basename + dict["impl_suffix"]
+		d.impl_h        = d.impl_basename + ".h"
+		d.impl_cpp      = d.impl_basename + ".cpp"
+		d.skel_basename = d.idl_basename + dict["skel_suffix"]
+		d.skel_h        = d.skel_basename + ".h"
+		d.skel_cpp      = d.skel_basename + ".cpp"
+		d.stub_suffix   = dict["stub_suffix"]
+		d.stub_basename = d.idl_basename + dict["stub_suffix"]
+		d.stub_h        = d.stub_basename + ".h"
+		d.stub_cpp      = d.stub_basename + ".cpp"
+
+
+def MakeConsumerIDL(dict):
+	conslist = []
+	for cons in dict["consumer_idl"]:
+		dup = False
+		for svc in dict["service_idl"]:
+			if cons.idl_fname == svc.idl_fname:
+				dup = True
+		if not dup:
+			tmp = cons
+			tmp.stub_suffix   = dict["stub_suffix"]
+			tmp.stub_basename = tmp.idl_basename \
+			    + dict["stub_suffix"]
+			tmp.stub_h        = tmp.stub_basename + ".h"
+			tmp.stub_cpp      = tmp.stub_basename + ".cpp"
+			conslist.append(tmp)
+	dict["consumer_idl"] = conslist
+
+
+def MakeActivityFuncs(dict):
+	acts = (("onInitialize",  ""), \
+		("onFinalize",    ""), \
+		("onStaertup",    "RTC::UniqueId ec_id"), \
+		("onShutdown",    "RTC::UniqueId ec_id"), \
+		("onActivated",   "RTC::UniqueId ec_id"), \
+		("onDeactivated", "RTC::UniqueId ec_id"), \
+		("onExecute",     "RTC::UniqueId ec_id"), \
+		("onAborting",    "RTC::UniqueId ec_id"), \
+		("onError",       "RTC::UniqueId ec_id"), \
+		("onReset",       "RTC::UniqueId ec_id"), \
+		("onStateUpdate", "RTC::UniqueId ec_id"), \
+		("onRateChanged", "RTC::UniqueId ec_id"))
+	actlist = []
+	for name, args in acts:
+		a = Struct()
+		a.name = name
+		a.args = args
+		actlist.append(a)
+
+	dict["activity"] = actlist
 
 
 class cxx_gen(gen_base.gen_base):
@@ -429,44 +650,34 @@ class cxx_gen(gen_base.gen_base):
 	_fname_space = 16
 	def __init__(self, data, opts):
 		self.data = data.copy()
+		
+		MakeSuffix(opts, self.data)
+		MakeServiceIDL(self.data)
+		MakeConsumerIDL(self.data)
+		MakeActivityFuncs(self.data)
+		self.data["begin_brace"] = "["
+		self.data["end_brace"] = "]"
 		self.data["rcs_date"] = "$" + "Date" + "$"
 		self.data["rcs_id"] = "$" + "Id" + "$"
 		self.data["fname_h"] = self.data["fname"] + ".h"
 		self.data["fname_cpp"] = self.data["fname"] + ".cpp"
 		self.data["fname_comp"] = self.data["fname"] + "Comp.cpp"
 		self.data["makefile"] = "Makefile." + self.data["fname"]
-		self.data["activity"] = [\
-						   "rtc_init_entry",\
-						   "rtc_ready_entry",\
-						   "rtc_ready_do",\
-						   "rtc_ready_exit",\
-						   "rtc_starting_entry",\
-						   "rtc_active_entry",\
-						   "rtc_active_do",\
-						   "rtc_active_exit",\
-						   "rtc_stopping_entry",\
-						   "rtc_aborting_entry",\
-						   "rtc_error_entry",\
-						   "rtc_error_do",\
-						   "rtc_error_exit",\
-						   "rtc_fatal_entry",\
-						   "rtc_fatal_do",\
-						   "rtc_fatal_exit",\
-						   "rtc_exiting_entry"]
 		self.data["u_name"] = self.data["module"].name.upper()
 		self.data["l_name"] = self.data["module"].name.lower()
-		self.data["impl_suffix"] = self.data["service_idl"][0].impl_suffix
-		self.data["skel_suffix"] = self.data["service_idl"][0].skel_suffix
-		self.data["stub_suffix"] = self.data["service_idl"][0].stub_suffix
+
 
 		self.tags = {}
-		self.tags["service_impl_h"] = service_impl_h
-		self.tags["module_spec"]    = module_spec
-		self.tags["inport_declar"]  = inport_declar
-		self.tags["outport_declar"] = outport_declar
-		self.tags["service_declar"] = service_declar
-		self.tags["initializer"]    = initializer
-		self.tags["registration"]   = registration
+		self.tags["service_impl_h"]    = service_impl_h
+		self.tags["consumer_stub_h"]   = consumer_stub_h
+		self.tags["module_spec"]       = module_spec
+		self.tags["inport_declare"]    = inport_declare
+		self.tags["outport_declare"]   = outport_declare
+		self.tags["corbaport_declare"] = corbaport_declare
+		self.tags["service_declare"]   = service_declare
+		self.tags["consumer_declare"]  = consumer_declare
+		self.tags["initializer"]       = initializer
+		self.tags["registration"]      = registration
 
 		self.gen_tags(self.tags)
 		return
@@ -476,7 +687,8 @@ class cxx_gen(gen_base.gen_base):
 		"""
 		Generate component class header
 		"""
-		self.gen(self.data["fname_h"], comp_header, self.data, self.tags)
+		self.gen(self.data["fname_h"],
+			 comp_header, self.data, self.tags)
 		return
 
 
@@ -484,7 +696,8 @@ class cxx_gen(gen_base.gen_base):
 		"""
 		Generate component class source code
 		"""
-		self.gen(self.data["fname_cpp"], comp_soruce, self.data, self.tags)
+		self.gen(self.data["fname_cpp"],
+			 comp_soruce, self.data, self.tags)
 		return
 
 
@@ -492,7 +705,8 @@ class cxx_gen(gen_base.gen_base):
 		"""
 		Generate component source code
 		"""
-		self.gen(self.data["fname_comp"], comp_compsrc, self.data, self.tags)
+		self.gen(self.data["fname_comp"],
+			 comp_compsrc, self.data, self.tags)
 		return
 
 
@@ -500,37 +714,59 @@ class cxx_gen(gen_base.gen_base):
 		"""
 		Generate Makefile
 		"""
-		self.gen(self.data["makefile"], makefile, self.data, self.tags)
+		self.gen(self.data["makefile"],
+			 makefile, self.data, self.tags)
 
 
 	def print_impl(self):
 		for svc_idl in self.data["service_idl"]:
+			fd_h = None
+			fd_cpp = None
+			lines_h = None
+			lines_cpp = None
 			if not os.access(svc_idl.idl_fname, os.F_OK):
 				sys.stderr.write("Error: IDL file \"" \
-								 + svc_idl.idl_fname \
-								 + "\" not found.\n")
+						 + svc_idl.idl_fname \
+						 + "\" not found.\n")
 				sys.exit(1)
-			fd_h, lines_h      = self.check_overwrite(svc_idl.impl_h)
-			fd_cpp, lines_cpp = self.check_overwrite(svc_idl.impl_cpp)
-
-			if not fd_h or not fd_cpp:
-				return
+			fd_h, lines_h = \
+			    self.check_overwrite(svc_idl.impl_h)
+			fd_cpp, lines_cpp = \
+			    self.check_overwrite(svc_idl.impl_cpp)
+			if not fd_h:
+				sys.stderr.write("Cannot open file:" + 
+						 svc_idl.impl_h + "\n")
+				sys.exit(1)
+			if not fd_cpp:
+				sys.stderr.write("Cannot open file:" + 
+						 svc_idl.impl_cpp + "\n")
+				sys.exit(1)
 			if lines_h or lines_cpp:
-				sys.stderr.write("Merge of service impl. code is not supported.\n")
+				sys.stderr.write("Merge of service impl." +
+						 "code is not supported.\n")
 				return
 
 			try:
+				idl_include = self.data["idl_include"]
+				impl_suffix = self.data["impl_suffix"]
+				skel_suffix = self.data["skel_suffix"]
 				ifs = cxx_svc_impl.generate(svc_idl.idl_fname,
-											self.data["idl_include"],
-											svc_idl.impl_suffix,
-											svc_idl.skel_suffix,
-											fd_h, fd_cpp)
-				print "\"", svc_idl.impl_h, "\" was generated."
-				print "\"", svc_idl.impl_cpp, "\" was generated."
+							    idl_include,
+							    impl_suffix,
+							    skel_suffix,
+							    fd_h, fd_cpp)
+				print "  File \"" \
+				    + svc_idl.impl_h \
+				    + "\" was generated."
+				print "  File \"" \
+				    + svc_idl.impl_cpp \
+				    + "\" was generated."
 			except:
-				sys.stderr.write("Error: " \
-								 + svc_idl.impl_h + svc_idl.impl_cpp + "\n")
-
+				sys.stderr.write("Generate error: " \
+						 + svc_idl.impl_h
+						 + ", "
+						 + svc_idl.impl_cpp + "\n")
+				
 	def print_all(self):
 		self.print_impl()
 		self.print_header()
@@ -549,12 +785,6 @@ class idl2char:
 			l = f.readlines()
 			self.erase_comments(l)
 			f.close()
-
-			#		while 1:
-			#			l = f.readline()
-			#			if not l:
-			#				break
-
 
 	def open_file(self, filename):
 		f = open(filename)
@@ -604,7 +834,8 @@ class idl2char:
 	def make_chardata(self, var_name):
 		self.lines = self.lines.replace("\n","\\n\\\n")
 		self.lines = self.lines.replace("\"","\\\"")
-		self.lines = "static char* " + var_name + " = \"\\\n" + self.lines
+		self.lines = "static char* " + var_name  \
+		    + " = \"\\\n" + self.lines
 		self.lines += "\";\n"
 		return self.lines
 
