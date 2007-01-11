@@ -3,7 +3,7 @@
 #
 #  @file README_src.py
 #  @brief rtc-template RTComponent's README file generator class
-#  @date $Date: 2005-09-08 09:23:36 $
+#  @date $Date: 2007-01-11 07:47:03 $
 #  @author Noriaki Ando <n-ando@aist.go.jp>
 # 
 #  Copyright (C) 2004-2005
@@ -13,11 +13,14 @@
 #          Advanced Industrial Science and Technology (AIST), Japan
 #      All rights reserved.
 # 
-#  $Id: README_src.py,v 1.4 2005-09-08 09:23:36 n-ando Exp $
+#  $Id: README_src.py,v 1.5 2007-01-11 07:47:03 n-ando Exp $
 #
 
 #
 #  $Log: not supported by cvs2svn $
+#  Revision 1.4  2005/09/08 09:23:36  n-ando
+#  - A bug fix for merge function.
+#
 #  Revision 1.3  2005/09/06 14:36:53  n-ando
 #  rtc-template's command options and data structure for ezt (Easy Template)
 #  are changed for RTComponent's service features.
@@ -115,7 +118,7 @@ This area is reserved for future OpenRTM.
 
 module = """Description: [module.desc]
 Version:     [module.version]
-Author:      [module.author]
+Author:      [module.vendor]
 Category:    [module.category]
 Comp. Type:  [module.comp_type]
 Act. Type:   [module.act_type]
@@ -160,7 +163,7 @@ outport = """[for outport]
 [end]
 """
 service = """[for service]
-	Interface:   [service.ifname] 
+	Interface:   [service.type] 
 	Name:        [service.name]
 	Type:        [service.type]
 [end]
