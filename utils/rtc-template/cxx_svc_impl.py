@@ -3,21 +3,28 @@
 #
 #  @file cxx_svc_impl.py
 #  @brief rtc-template C++ service source code generator class
-#  @date $Date: 2005-09-06 14:37:18 $
+#  @date $Date: 2007-01-11 07:44:39 $
 #  @author Noriaki Ando <n-ando@aist.go.jp>
 # 
-#  Copyright (C) 2005
+#  Copyright (C) 2005-2007
 #      Task-intelligence Research Group,
 #      Intelligent Systems Research Institute,
 #      National Institute of
 #          Advanced Industrial Science and Technology (AIST), Japan
 #      All rights reserved.
 # 
-#  $Id: cxx_svc_impl.py,v 1.2 2005-09-06 14:37:18 n-ando Exp $
+#  $Id: cxx_svc_impl.py,v 1.3 2007-01-11 07:44:39 n-ando Exp $
 # 
 
 #
 # $Log: not supported by cvs2svn $
+# Revision 1.2  2005/09/06 14:37:18  n-ando
+# rtc-template's command options and data structure for ezt (Easy Template)
+# are changed for RTComponent's service features.
+# Now rtc-template can generate services' skeletons, stubs and
+# implementation files.
+# The implementation code generation uses omniidl's IDL parser.
+#
 # Revision 1.1  2005/08/29 17:50:57  n-ando
 # The first version.
 #
@@ -44,8 +51,7 @@ interface_def = """\
  * Example class implementing IDL interface @fq_name@
  */
 class @impl_fqname@
- : public virtual RTM::RtcServiceBase,
-   public virtual @fq_POA_name@,
+ : public virtual @fq_POA_name@,
    public virtual PortableServer::RefCountServantBase
 {
  private:
@@ -92,12 +98,11 @@ class_h = """\
 /*!
  * @atmark@file  @impl_h@
  * @atmark@brief Service implementation header of @file@
- * @atmark@date  $Date: 2005-09-06 14:37:18 $
+ * @atmark@date  $Date: 2007-01-11 07:44:39 $
  *
- * $Id: cxx_svc_impl.py,v 1.2 2005-09-06 14:37:18 n-ando Exp $
+ * $Id: cxx_svc_impl.py,v 1.3 2007-01-11 07:44:39 n-ando Exp $
  */
 
-#include <rtm/RtcServiceBase.h>
 #include "@skel_h@"
 
 
@@ -115,9 +120,9 @@ class_cpp = """\
 /*!
  * @atmark@file  @impl_cpp@
  * @atmark@brief Service implementation code of @file@
- * @atmark@date  $Date: 2005-09-06 14:37:18 $
+ * @atmark@date  $Date: 2007-01-11 07:44:39 $
  *
- * $Id: cxx_svc_impl.py,v 1.2 2005-09-06 14:37:18 n-ando Exp $
+ * $Id: cxx_svc_impl.py,v 1.3 2007-01-11 07:44:39 n-ando Exp $
  */
 
 #include "@impl_h@"
@@ -173,13 +178,13 @@ def __init__(idl_filename, impl_basename, skel_filename, \
 
 	if fd_h == None:
 		self.stream_h = \
-					  output.Stream(output.createFile(self.impl_h_filename), 2)
+		    output.Stream(output.createFile(self.impl_h_filename), 2)
 	else:
 		self.stream_h = output.Stream(fd_h, 2)
 		
 	if fd_cpp == None:
 		self.stream_cpp = \
-						output.Stream(output.createFile(self.impl_cpp_filename), 2)
+		    output.Stream(output.createFile(self.impl_cpp_filename), 2)
 	else:
 		self.stream_cpp = output.Stream(fd_cpp, 2)
 		
