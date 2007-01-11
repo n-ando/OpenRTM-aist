@@ -3,7 +3,7 @@
 #
 #  @file gen_base.py
 #  @brief rtc-template source code generator base class
-#  @date $Date: 2005-09-08 09:24:06 $
+#  @date $Date: 2007-01-11 07:43:16 $
 #  @author Noriaki Ando <n-ando@aist.go.jp>
 # 
 #  Copyright (C) 2005
@@ -13,11 +13,14 @@
 #          Advanced Industrial Science and Technology (AIST), Japan
 #      All rights reserved.
 # 
-#  $Id: gen_base.py,v 1.3 2005-09-08 09:24:06 n-ando Exp $
+#  $Id: gen_base.py,v 1.4 2007-01-11 07:43:16 n-ando Exp $
 # 
 
 #
 #  $Log: not supported by cvs2svn $
+#  Revision 1.3  2005/09/08 09:24:06  n-ando
+#  - A bug fix for merge function.
+#
 #  Revision 1.2  2005/09/06 14:37:29  n-ando
 #  rtc-template's command options and data structure for ezt (Easy Template)
 #  are changed for RTComponent's service features.
@@ -114,7 +117,7 @@ class gen_base:
 		gen_txt = self.replace_tags(taged_txt, tags)
 		f.write(gen_txt)
 		f.close()
-		print "\"", fname, "\"" " was generated."
+		print "  File \"" + fname + "\"" " was generated."
 		return
 		
 
