@@ -2,15 +2,18 @@
 /*!
  * @file   PublisherNewTests.cpp
  * @brief  PublisherNew test class
- * @date   $Date: 2006-12-18 06:51:43 $
+ * @date   $Date: 2007-01-12 14:54:39 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
- * $Id: PublisherNewTests.cpp,v 1.1 2006-12-18 06:51:43 n-ando Exp $
+ * $Id: PublisherNewTests.cpp,v 1.2 2007-01-12 14:54:39 n-ando Exp $
  *
  */
 
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.1  2006/12/18 06:51:43  n-ando
+ * The first commitment.
+ *
  *
  */
 
@@ -45,6 +48,19 @@ namespace PublisherNew
       gettimeofday(&m_tm, NULL);
       //      std::cout << "push():   " << m_tm.tv_usec << std::endl;
     }
+	virtual RTC::InPortConsumer* clone() const
+	{
+	  return new TestConsumer();
+	}
+	virtual bool subscribeInterface(const SDOPackage::NVList&)
+	{
+	  return true;
+	}
+	virtual void unsubscribeInterface(const SDOPackage::NVList&)
+	{
+	  return;
+	}
+	
     timeval m_tm;
   };
 
@@ -66,7 +82,7 @@ namespace PublisherNew
      */
     PublisherNewTests()
     {
-      m_publisher = new RTC::PublisherNew(m_consumer, m_properties);
+      m_publisher = new RTC::PublisherNew(&m_consumer, m_properties);
     }
     
     /*!

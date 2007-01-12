@@ -2,15 +2,18 @@
 /*!
  * @file   PublisherPeriodicTests.cpp
  * @brief  PublisherPeriodic test class
- * @date   $Date: 2006-12-18 06:51:55 $
+ * @date   $Date: 2007-01-12 14:54:45 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
- * $Id: PublisherPeriodicTests.cpp,v 1.1 2006-12-18 06:51:55 n-ando Exp $
+ * $Id: PublisherPeriodicTests.cpp,v 1.2 2007-01-12 14:54:45 n-ando Exp $
  *
  */
 
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.1  2006/12/18 06:51:55  n-ando
+ * The first commitment.
+ *
  *
  */
 
@@ -52,6 +55,19 @@ namespace PublisherPeriodic
       //      std::cout << "period: " << interval << std::endl;
       m_tm = tm;
     }
+	virtual RTC::InPortConsumer* clone() const
+	{
+	  return new TestConsumer();
+	}
+	virtual bool subscribeInterface(const SDOPackage::NVList&)
+	{
+	  return true;
+	}
+	virtual void unsubscribeInterface(const SDOPackage::NVList&)
+	{
+	  return;
+	}
+	
     timeval m_tm;
     long int interval;
   };
@@ -75,7 +91,7 @@ namespace PublisherPeriodic
     PublisherPeriodicTests()
     {
       m_properties.setProperty("dataport.push_interval", "100.0");
-      m_publisher = new RTC::PublisherPeriodic(m_consumer, m_properties);
+      m_publisher = new RTC::PublisherPeriodic(&m_consumer, m_properties);
     }
     
     /*!
