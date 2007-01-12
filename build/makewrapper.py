@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 #
 # @brief CORBA stub and skelton wrapper generator
-# @date $Date: 2006-11-04 16:34:47 $
+# @date $Date: 2007-01-12 14:28:31 $
 # @author Norkai Ando <n-ando@aist.go.jp>
 #
 # Copyright (C) 2005-2006
@@ -12,10 +12,13 @@
 #         Advanced Industrial Science and Technology (AIST), Japan
 #     All rights reserved.
 #
-# $Id: makewrapper.py,v 1.4 2006-11-04 16:34:47 n-ando Exp $
+# $Id: makewrapper.py,v 1.5 2007-01-12 14:28:31 n-ando Exp $
 #
 
 # $Log: not supported by cvs2svn $
+# Revision 1.4  2006/11/04 16:34:47  n-ando
+# Some trivial fixes.
+#
 # Revision 1.3  2006/09/11 18:33:14  n-ando
 # A prefix of include directory can be specified with command options.
 #
@@ -29,6 +32,7 @@
 #
 #
 import sys
+import os
 import re
 import time
 import ezt
@@ -222,8 +226,8 @@ if len(sys.argv) > 2:
 else:
     skel_dir = "rtm/idl"
 
-basename = re.sub(".idl", "", idl_file);
-    
+basename = os.path.basename(idl_file)
+basename = re.sub(".idl", "", basename)
 data = wrapper_data(basename, skel_dir)
 gen  = wrapper_gen(data.get_dict())
 gen.gen_all()
