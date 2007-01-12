@@ -2,7 +2,7 @@
 /*!
  * @file PortAdmin.cpp
  * @brief RTC's Port administration class
- * @date $Date: 2007-01-09 15:13:04 $
+ * @date $Date: 2007-01-12 14:37:57 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
  * Copyright (C) 2006
@@ -12,12 +12,16 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: PortAdmin.cpp,v 1.5 2007-01-09 15:13:04 n-ando Exp $
+ * $Id: PortAdmin.cpp,v 1.6 2007-01-12 14:37:57 n-ando Exp $
  *
  */
 
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.5  2007/01/09 15:13:04  n-ando
+ * Now Port does not have getName().
+ * The name of Port is obtained from getProfile().
+ *
  * Revision 1.4  2006/11/08 09:57:11  n-ando
  * A PortAdmin::getPortRef()'s bug was fixed.
  *
@@ -125,14 +129,14 @@ namespace RTC
   void PortAdmin::registerPort(PortBase& port)
   {
     // CORBA Object activation
-    m_pPOA->activate_object(&port);
+    //    m_pPOA->activate_object(&port);
 
     // Setting Port's object reference to its profile
-    Port_ptr port_ref = Port::_narrow(m_pPOA->servant_to_reference(&port));
-    port.setPortRef(port_ref);
+    //    Port_ptr port_ref = Port::_narrow(m_pPOA->servant_to_reference(&port));
+    //    port.setPortRef(port.getRef());
 
     // Store Port's ref to PortList
-    CORBA_SeqUtil::push_back(m_portRefs, port_ref);
+    CORBA_SeqUtil::push_back(m_portRefs, port.getPortRef());
 
     // Store Port servant
     m_portServants.registerObject(&port);
