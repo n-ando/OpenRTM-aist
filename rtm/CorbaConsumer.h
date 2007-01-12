@@ -2,7 +2,7 @@
 /*!
  * @file CorbaConsumer.h
  * @brief CORBA Consumer class
- * @date $Date: 2007-01-06 17:39:33 $
+ * @date $Date: 2007-01-12 14:29:18 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
  * Copyright (C) 2006
@@ -13,12 +13,15 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: CorbaConsumer.h,v 1.3 2007-01-06 17:39:33 n-ando Exp $
+ * $Id: CorbaConsumer.h,v 1.4 2007-01-12 14:29:18 n-ando Exp $
  *
  */
 
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.3  2007/01/06 17:39:33  n-ando
+ * The copy constructor and the substitution operator were added.
+ *
  * Revision 1.2  2007/01/04 00:48:20  n-ando
  * - Class name has changed.
  * - operator->() was added.
@@ -89,6 +92,7 @@ namespace RTC
     CorbaConsumerBase& operator=(const CorbaConsumerBase& x)
     {
       m_objref = x.m_objref;
+      return *this;
     }
 
     /*!
