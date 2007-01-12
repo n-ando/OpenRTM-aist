@@ -2,7 +2,7 @@
 /*!
  * @file RTObject.h
  * @brief RT component base class
- * @date $Date: 2007-01-09 15:21:47 $
+ * @date $Date: 2007-01-12 14:38:48 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
  * Copyright (C) 2006
@@ -12,12 +12,16 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: RTObject.h,v 1.2 2007-01-09 15:21:47 n-ando Exp $
+ * $Id: RTObject.h,v 1.3 2007-01-12 14:38:48 n-ando Exp $
  *
  */
 
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.2  2007/01/09 15:21:47  n-ando
+ * SDO interfaces are marged.
+ * Some RTObject's operation signatures were changed.
+ *
  * Revision 1.1  2006/09/11 19:04:38  n-ando
  * The first commit.
  *
@@ -34,6 +38,10 @@
 #include "rtm/PortBase.h"
 //#include "rtm/ObjectManager.h"
 #include "rtm/PortAdmin.h"
+#include <rtm/DataInPort.h>
+#include <rtm/DataOutPort.h>
+#include <rtm/InPort.h>
+#include <rtm/OutPort.h>
 
 // ACE
 #include <ace/Task.h>
@@ -769,6 +777,21 @@ namespace RTC
      * @endif
      */
     void registerPort(PortBase& port);
+
+    template <class DataType>
+    void registerInPort(const char* name, InPort<DataType>& inport)
+    {
+      PortBase* port = new DataInPort(name, inport);
+      registerPort(*port);
+    }
+
+    template <class DataType>
+    void registerOutPort(const char* name, OutPort<DataType>& outport)
+    {
+      PortBase* port = new DataOutPort(name, outport);
+      registerPort(*port);
+    }
+      
 
     /*!
      * @if jp
