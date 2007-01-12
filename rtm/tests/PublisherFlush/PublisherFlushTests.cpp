@@ -2,15 +2,18 @@
 /*!
  * @file   PublisherFlushTests.cpp
  * @brief  PublisherFlush test class
- * @date   $Date: 2006-12-18 06:51:31 $
+ * @date   $Date: 2007-01-12 14:54:32 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
- * $Id: PublisherFlushTests.cpp,v 1.1 2006-12-18 06:51:31 n-ando Exp $
+ * $Id: PublisherFlushTests.cpp,v 1.2 2007-01-12 14:54:32 n-ando Exp $
  *
  */
 
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.1  2006/12/18 06:51:31  n-ando
+ * The first commitment.
+ *
  *
  */
 
@@ -45,6 +48,18 @@ namespace PublisherFlush
       // std::cout << "push():   " << tm.tv_usec << std::endl;
       // std::cout << "push():" << std::endl;
     }
+	virtual RTC::InPortConsumer* clone() const
+	{
+	  return new TestConsumer();
+	}
+	virtual bool subscribeInterface(const SDOPackage::NVList&)
+	{
+	  return true;
+	}
+	virtual void unsubscribeInterface(const SDOPackage::NVList&)
+	{
+	  return;
+	}
     timeval m_tm;
   };
   
@@ -66,7 +81,7 @@ namespace PublisherFlush
      */
     PublisherFlushTests()
     {
-      m_publisher = new RTC::PublisherFlush(m_consumer, m_properties);
+      m_publisher = new RTC::PublisherFlush(&m_consumer, m_properties);
     }
     
     /*!
