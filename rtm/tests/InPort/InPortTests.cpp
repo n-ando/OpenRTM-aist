@@ -2,7 +2,7 @@
 /*!
  * @file   InPortTests.cpp
  * @brief  InPort test class
- * @date   $Date: 2006-11-27 08:32:39 $
+ * @date   $Date: 2007-01-12 14:51:20 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
  *
@@ -14,12 +14,15 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: InPortTests.cpp,v 1.1 2006-11-27 08:32:39 n-ando Exp $
+ * $Id: InPortTests.cpp,v 1.2 2007-01-12 14:51:20 n-ando Exp $
  *
  */
 
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.1  2006/11/27 08:32:39  n-ando
+ * TestSuites are devided into each directory.
+ *
  *
  */
 
@@ -36,6 +39,7 @@
 #include <string>
 
 #include <rtm/InPort.h>
+#include <rtm/PortCallBack.h>
 
 /*!
  * @class InPortTests class
@@ -73,7 +77,7 @@ namespace InPort
 
 
     class OnWrite
-      : public RTC::InPort<int>::OnWrite
+      : public RTC::OnWrite<int>
     {
       void operator()(const int& value)
       {
@@ -82,7 +86,7 @@ namespace InPort
     };
 
     class OnWriteConvert
-      : public RTC::InPort<int>::OnWriteConvert
+      : public RTC::OnWriteConvert<int>
     {
       int operator()(const int& value)
       {
