@@ -2,7 +2,7 @@
 /*!
  * @file DataOutPort.h
  * @brief Base class of OutPort
- * @date $Date: 2007-01-06 17:44:11 $
+ * @date $Date: 2007-01-12 14:30:01 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
  * Copyright (C) 2006
@@ -13,12 +13,16 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: DataOutPort.h,v 1.3 2007-01-06 17:44:11 n-ando Exp $
+ * $Id: DataOutPort.h,v 1.4 2007-01-12 14:30:01 n-ando Exp $
  *
  */
 
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.3  2007/01/06 17:44:11  n-ando
+ * The behavior on notify_connect() and notify_disconnect() are now
+ * implemented in protected functions(ex. publisherInterfaces()).
+ *
  * Revision 1.2  2006/12/02 18:29:15  n-ando
  * Now OutPortCorbaProvider and InPortCorbaConsumer are used.
  *
@@ -31,7 +35,7 @@
 #ifndef DataOutPort_h
 #define DataOutPort_h
 
-#include <rtm/RTObject.h>
+
 #include <rtm/PortBase.h>
 #include <rtm/BufferBase.h>
 #include <rtm/OutPortCorbaProvider.h>
