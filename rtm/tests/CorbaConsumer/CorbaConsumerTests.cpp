@@ -2,15 +2,18 @@
 /*!
  * @file   CorbaConsumerTests.cpp
  * @brief  CorbaConsumer test class
- * @date   $Date: 2006-11-27 08:30:48 $
+ * @date   $Date: 2007-01-12 14:48:30 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
- * $Id: CorbaConsumerTests.cpp,v 1.1 2006-11-27 08:30:48 n-ando Exp $
+ * $Id: CorbaConsumerTests.cpp,v 1.2 2007-01-12 14:48:30 n-ando Exp $
  *
  */
 
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.1  2006/11/27 08:30:48  n-ando
+ * TestSuites are devided into each directory.
+ *
  *
  */
 
@@ -105,7 +108,7 @@ namespace CorbaConsumer
       PortableServer::ObjectId_var oid;
       oid = m_pPOA->activate_object(servant);
       
-      RTC::Consumer<hello> cons;
+      RTC::CorbaConsumer<hello> cons;
       cons.setObject(m_pPOA->id_to_reference(oid));
       cons._ptr()->hello_world();
     }
