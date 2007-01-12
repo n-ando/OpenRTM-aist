@@ -2,7 +2,7 @@
 /*!
  * @file   PortAdminTests.cpp
  * @brief  PortAdmin test class
- * @date   $Date: 2006-11-27 08:34:18 $
+ * @date   $Date: 2007-01-12 14:44:36 $
  * @author Shinji Kurihara
  *         Noriaki Ando <n-ando@aist.go.jp>
  *
@@ -14,12 +14,15 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: PortAdminTests.cpp,v 1.1 2006-11-27 08:34:18 n-ando Exp $
+ * $Id: PortAdminTests.cpp,v 1.2 2007-01-12 14:44:36 n-ando Exp $
  *
  */
 
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.1  2006/11/27 08:34:18  n-ando
+ * TestSuites are devided into each directory.
+ *
  * Revision 1.2  2006/11/14 02:21:09  kurihara
  *
  * test_deletePortByName() and test_finalizePorts() were added.
@@ -56,6 +59,24 @@ namespace PortAdmin
   int g_argc;
   vector<string> g_argv;
   
+  class PortBase
+	: public RTC::PortBase
+  {
+  protected:
+	virtual RTC::ReturnCode_t publishInterfaces(RTC::ConnectorProfile&)
+	{
+	  return RTC::OK;
+	}
+	virtual RTC::ReturnCode_t subscribeInterfaces(const RTC::ConnectorProfile&)
+	{
+	  return RTC::OK;
+	}
+	virtual void unsubscribeInterfaces(const RTC::ConnectorProfile&)
+	{
+	}
+  };
+
+
   class PortAdminTests
     : public CppUnit::TestFixture
   {
@@ -70,9 +91,9 @@ namespace PortAdmin
     CPPUNIT_TEST_SUITE_END();
     
   private:
-    PortAdmin* m_ppadm;
-    PortBase* m_ppb;
-    PortBase* m_ppb2;
+	RTC::PortAdmin* m_ppadm;
+	PortBase* m_ppb;
+	PortBase* m_ppb2;
     CORBA::ORB_ptr          m_orb;
     PortableServer::POA_ptr m_poa;
     
@@ -112,20 +133,17 @@ namespace PortAdmin
     virtual void setUp()
     {
       // PortAdminクラスのインスタンス生成
-      m_ppadm = new PortAdmin(m_orb, m_poa);
+      m_ppadm = new RTC::PortAdmin(m_orb, m_poa);
       
       // PortBaseクラスのインスタンス生成
-      m_ppb = new PortBase(m_orb, m_poa);
+      m_ppb = new PortBase();
       
       // PortBaseクラスのインスタンス生成
-      m_ppb2 = new PortBase(m_orb, m_poa);
+      m_ppb2 = new PortBase();
       
       // PortProfileの登録
-      PortProfile pProf0, pProf1;
-      pProf0.name = "port0";
-      m_ppb->setProfile(pProf0);
-      pProf1.name = "port1";
-      m_ppb2->setProfile(pProf1);
+      m_ppb->setName("port0");
+      m_ppb2->setName("port1");
       
       // PortBaseオブジェクトの登録
       m_ppadm->registerPort(*m_ppb);
@@ -222,7 +240,7 @@ namespace PortAdmin
      *   ※ PortBaseクラスのポインタはsetUp()で登録済みである。
      */
     void test_getPort() {
-      PortBase* pb;
+	  RTC::PortBase* pb;
       PortProfile* getProf;
       string setstr, getstr;
       

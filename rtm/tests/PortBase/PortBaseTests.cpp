@@ -2,7 +2,7 @@
 /*!
  * @file   PortBaseTests.cpp
  * @brief  PortBase test class
- * @date   $Date: 2006-11-27 08:35:12 $
+ * @date   $Date: 2007-01-12 14:44:43 $
  * @author Shinji Kurihara
  *         Noriaki Ando <n-ando@aist.go.jp>
  *
@@ -14,12 +14,15 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: PortBaseTests.cpp,v 1.1 2006-11-27 08:35:12 n-ando Exp $
+ * $Id: PortBaseTests.cpp,v 1.2 2007-01-12 14:44:43 n-ando Exp $
  *
  */
 
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.1  2006/11/27 08:35:12  n-ando
+ * TestSuites are devided into each directory.
+ *
  * Revision 1.2  2006/11/13 12:30:06  kurihara
  *
  * document is added.
@@ -50,6 +53,28 @@
  */
 namespace PortBase
 {
+  class PortBase
+	: public RTC::PortBase
+  {
+  public:
+	const std::string getUUID() const
+	{
+	  return RTC::PortBase::getUUID();
+	}
+  protected:
+	virtual RTC::ReturnCode_t publishInterfaces(RTC::ConnectorProfile&)
+	{
+	  return RTC::OK;
+	}
+	virtual RTC::ReturnCode_t subscribeInterfaces(const RTC::ConnectorProfile&)
+	{
+	  return RTC::OK;
+	}
+	virtual void unsubscribeInterfaces(const RTC::ConnectorProfile&)
+	{
+	}
+  };
+
   using namespace RTC;
   using namespace std;
   int g_argc;
@@ -81,13 +106,13 @@ namespace PortBase
     //  CPPUNIT_TEST(test_getConnectorProfile);
     CPPUNIT_TEST(test_setOwner);
     CPPUNIT_TEST(test_getOwner);
-    CPPUNIT_TEST(test_setProperties);
-    CPPUNIT_TEST(test_getProperties);
+	//    CPPUNIT_TEST(test_setProperties);
+	//    CPPUNIT_TEST(test_getProperties);
     CPPUNIT_TEST(test_getUUID);
     CPPUNIT_TEST_SUITE_END();
     
   private:
-    RTC::PortBase* m_ppb;
+    PortBase* m_ppb;
     CORBA::ORB_ptr          m_orb;
     PortableServer::POA_ptr m_poa;
     
@@ -137,7 +162,7 @@ namespace PortBase
       pman->activate();
       
       // (2) PortBaseのインスタンス生成
-      m_ppb = new RTC::PortBase(m_orb, m_poa);
+      m_ppb = new PortBase();
       
       // (3) PortInterfaceProfileオブジェクト要素(PortProfileの要素)のセット
       PortInterfaceProfile pIProf;
@@ -794,6 +819,7 @@ namespace PortBase
      *   (4) getProperties()にてPortProfile.propertyを取得。
      *   (5) (3)でセットしたPortProfile.propertyと(4)で取得したそれとを比較。
      */
+	/*
     void test_setProperties() {
       NVList setlist, getlist;
       SDOPackage::NameValue nv;
@@ -836,14 +862,15 @@ namespace PortBase
       CPPUNIT_ASSERT(retval == setval);
       
     }
-    
+    */
     
     /*!
      * @brief getProperties()のテスト
      *   test_setPropertiesにてテスト済み。
      */
+	/*
     void test_getProperties() {}
-    
+    */
     
     /*!
      * @brief  getUUID()のテスト

@@ -2,15 +2,18 @@
 #------------------------------------------------------------
 # @file   Makefile.am
 # @brief  Makefile.am for PublisherFactory unit test
-# @date   $Date: 2006-12-18 06:50:53 $
+# @date   $Date: 2007-01-12 14:44:55 $
 # @author Noriaki Ando <n-ando@aist.go.jp>
 #
-# $Id: Makefile.am,v 1.1 2006-12-18 06:50:53 n-ando Exp $
+# $Id: Makefile.am,v 1.2 2007-01-12 14:44:55 n-ando Exp $
 #
 #------------------------------------------------------------
 
 #
 # $Log: not supported by cvs2svn $
+# Revision 1.1  2006/12/18 06:50:53  n-ando
+# The first commitment.
+#
 #
 
 
@@ -20,27 +23,33 @@ IDLC = @IDLC@
 IDLFLAGS = @IDL_FLAGS@
 LIBS = @LIBS@
 
-AM_CPPFLAGS= -I.                  \
-	-I$(includedir)           \
+AM_CPPFLAGS =         \
+	 -I.              \
+	-I$(includedir)   \
 	-I$(top_builddir)
 
-AM_LDFLAGS= -L.                   \
+AM_LDFLAGS =          \
+	 -L.              \
 	-L$(top_builddir)
 
 
 noinst_PROGRAMS = PublisherFactoryTests
 
-PublisherFactoryTests_SOURCES = \
-	../TestRunner.cpp \
-	PublisherFactoryTests.cpp \
-        $(top_builddir)/rtm/Properties.cpp \
-	$(top_builddir)/rtm/StringUtil.cpp \
-	$(top_builddir)/rtm/PublisherFactory.cpp \
-	$(top_builddir)/rtm/PublisherNew.cpp \
+nodist_PublisherFactoryTests_SOURCES =        \
+	../TestRunner.cpp                         \
+	$(top_builddir)/rtm/Properties.cpp        \
+	$(top_builddir)/rtm/StringUtil.cpp        \
+	$(top_builddir)/rtm/PublisherFactory.cpp  \
+	$(top_builddir)/rtm/PublisherNew.cpp      \
 	$(top_builddir)/rtm/PublisherPeriodic.cpp \
-	$(top_builddir)/rtm/PublisherFlush.cpp
+	$(top_builddir)/rtm/PublisherFlush.cpp    \
+	PublisherFactoryTests.cpp
+
 PublisherFactoryTests_LDFLAGS = -L$(libdir)
 PublisherFactoryTests_LDADD   = -lcppunit
+
+EXTRA_DIST =                  \
+	PublisherFactoryTests.cpp
 
 # all
 all: do-test

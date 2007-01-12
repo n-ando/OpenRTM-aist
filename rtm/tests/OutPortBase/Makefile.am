@@ -2,15 +2,18 @@
 #------------------------------------------------------------
 # @file   Makefile.am
 # @brief  Makefile.am for OutPortBase unit test
-# @date   $Date: 2006-12-18 06:54:13 $
+# @date   $Date: 2007-01-12 14:44:30 $
 # @author Noriaki Ando <n-ando@aist.go.jp>
 #
-# $Id: Makefile.am,v 1.2 2006-12-18 06:54:13 n-ando Exp $
+# $Id: Makefile.am,v 1.3 2007-01-12 14:44:30 n-ando Exp $
 #
 #------------------------------------------------------------
 
 #
 # $Log: not supported by cvs2svn $
+# Revision 1.2  2006/12/18 06:54:13  n-ando
+# clean-local target OutPortBaseTests was added.
+#
 # Revision 1.1  2006/12/02 18:55:38  n-ando
 # *** empty log message ***
 #
@@ -23,39 +26,28 @@ IDLC = @IDLC@
 IDLFLAGS = @IDL_FLAGS@
 LIBS = @LIBS@
 
-AM_CPPFLAGS= -I.                  \
-	-I$(includedir)           \
+AM_CPPFLAGS =         \
+	 -I.              \
+	-I$(includedir)   \
 	-I$(top_builddir)
 
-AM_LDFLAGS= -L.                   \
+AM_LDFLAGS =          \
+	 -L.              \
 	-L$(top_builddir)
 
 
-#SUFFIXES = .idl Skel.cpp Stub.cpp Stub.o Skel.o
-#.idlSkel.cpp:
-#	$(top_srcdir)/build/makewrapper.py $< rtm/tests
-#	$(IDLC) $(IDLFLAGS) $<
-
-# if this test uses other lib libHogeSkel.a or libHogeSkel.so
-#
-#noinst_LTLIBRARIES = libHogeSkel.la
-
-#IDL_SOURCES = hoge.idl
-#libHogeSkel_la_SOURCES =            \
-#	$(IDL_SOURCES:.idl=Skel.cpp) \
-#	$(IDL_SOURCES:.idl=Stub.cpp) \
-#	$(IDL_SOURCES:.idl=Skel.h)   \
-#	$(IDL_SOURCES:.idl=Stub.h)
-#libHogeSkel_la_LIBADD = $(LIBS)
-
 noinst_PROGRAMS = OutPortBaseTests
 
-OutPortBaseTests_SOURCES =                  \
+nodist_OutPortBaseTests_SOURCES =       \
 	../TestRunner.cpp                   \
-	OutPortBaseTests.cpp                \
-	$(top_builddir)/rtm/OutPortBase.cpp
+	$(top_builddir)/rtm/OutPortBase.cpp \
+	OutPortBaseTests.cpp
+
 OutPortBaseTests_LDFLAGS = -L$(libdir)
 OutPortBaseTests_LDADD   = -lcppunit
+
+EXTRA_DIST =       \
+	OutPortBaseTests.cpp
 
 # all
 all: do-test

@@ -2,15 +2,18 @@
 #------------------------------------------------------------
 # @file   Makefile.am
 # @brief  Makefile.am for SdoService unit test
-# @date   $Date: 2006-11-27 08:38:07 $
+# @date   $Date: 2007-01-12 14:45:37 $
 # @author Noriaki Ando <n-ando@aist.go.jp>
 #
-# $Id: Makefile.am,v 1.1 2006-11-27 08:38:07 n-ando Exp $
+# $Id: Makefile.am,v 1.2 2007-01-12 14:45:37 n-ando Exp $
 #
 #------------------------------------------------------------
 
 #
 # $Log: not supported by cvs2svn $
+# Revision 1.1  2006/11/27 08:38:07  n-ando
+# TestSuites are devided into each directory.
+#
 #
 
 
@@ -20,38 +23,27 @@ IDLC = @IDLC@
 IDLFLAGS = @IDL_FLAGS@
 LIBS = @LIBS@
 
-AM_CPPFLAGS= -I.                  \
-	-I$(includedir)           \
+AM_CPPFLAGS=          \
+	-I.               \
+	-I$(includedir)   \
 	-I$(top_builddir)
 
-AM_LDFLAGS= -L.                   \
+AM_LDFLAGS=           \
+	-L.               \
 	-L$(top_builddir)
 
 
-#SUFFIXES = .idl Skel.cpp Stub.cpp Stub.o Skel.o
-#.idlSkel.cpp:
-#	$(top_srcdir)/build/makewrapper.py $< rtm/tests
-#	$(IDLC) $(IDLFLAGS) $<
-
-# if this test uses other lib libHogeSkel.a or libHogeSkel.so
-#
-#noinst_LTLIBRARIES = libHogeSkel.la
-
-#IDL_SOURCES = hoge.idl
-#libHogeSkel_la_SOURCES =            \
-#	$(IDL_SOURCES:.idl=Skel.cpp) \
-#	$(IDL_SOURCES:.idl=Stub.cpp) \
-#	$(IDL_SOURCES:.idl=Skel.h)   \
-#	$(IDL_SOURCES:.idl=Stub.h)
-#libHogeSkel_la_LIBADD = $(LIBS)
-
 noinst_PROGRAMS = SdoServiceTests
 
-SdoServiceTests_SOURCES =   \
-	../TestRunner.cpp   \
+nodist_SdoServiceTests_SOURCES = \
+	../TestRunner.cpp            \
 	SdoServiceTests.cpp
+
 SdoServiceTests_LDFLAGS = -L$(libdir)
 SdoServiceTests_LDADD   = -lcppunit
+
+EXTRA_DIST =            \
+	SdoServiceTests.cpp
 
 # all
 all: do-test
@@ -68,4 +60,4 @@ clean-local:
 	*~ *core                            \
 	Makefile.old                        \
 	*.cc *.hh *.i *.a *.c *.inl
-       
+
