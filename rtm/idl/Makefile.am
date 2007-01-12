@@ -2,9 +2,12 @@
 ##------------------------------------------------------------
 ## Makefile.am for libRTCSkel
 ##
-## $Id: Makefile.am,v 1.6 2007-01-09 15:39:10 n-ando Exp $
+## $Id: Makefile.am,v 1.7 2007-01-12 14:40:01 n-ando Exp $
 ##
 ## $Log: not supported by cvs2svn $
+## Revision 1.6  2007/01/09 15:39:10  n-ando
+## Makefile now also builds libRTCStub.la.
+##
 ## Revision 1.5  2006/09/11 19:08:18  n-ando
 ## OMG's SDO and RTC IDL targets are now included.
 ##
@@ -36,14 +39,11 @@ AM_LDFLAGS=-L$(top_builddir) -L$(top_builddir)/rtm -L$(top_builddir)/rtm/idl
 SUFFIXES = .idl Skel.cpp Stub.cpp Stub.o Skel.o
 
 # RTM idl sources
-IDL_SOURCES =       	  \
+IDL_SOURCES =         \
 	SDOPackage.idl    \
 	RTC.idl           \
 	BasicDataType.idl \
 	DataPort.idl
-#	RTCDataType.idl 	\
-#	RTCBase.idl     	\
-#	RTCManager.idl
 
 if ORB_IS_TAO
 SKEL_SOURCES = $(TAO_SOURCES)
@@ -120,22 +120,19 @@ ORBIT2_SOURCES = \
 	$(IDL_SOURCES:.idl=-cpp.cc) \
 	$(IDL_SOURCES:.idl=-cpp.h)
 
-#SKEL_SOURCES = $(TAO_SOURCES) $(OMNIORB_SOURCES) $(MICO_SOURCES) $(ORBIX_SOURCES) $(ORBACUS_SOURCES)
-
-
 
 # Install directory of headers and idl files
 rtmheaderdir = $(prefix)/include/rtm
 idldir =       $(rtmheaderdir)/idl
 rtmskeldir =   $(rtmheaderdir)/idl
 
-idl_HEADERS = $(IDL_SOURCES)
+idl_DATA = $(IDL_SOURCES)
 
 nodist_rtmskel_HEADERS =         \
-	$(IDL_SOURCES:.idl=Skel.cpp) \
-	$(IDL_SOURCES:.idl=Stub.cpp) \
 	$(IDL_SOURCES:.idl=Skel.h)   \
+	$(IDL_SOURCES:.idl=Skel.cpp) \
 	$(IDL_SOURCES:.idl=Stub.h)   \
+	$(IDL_SOURCES:.idl=Stub.cpp) \
 	$(SKEL_SOURCES)
 
 
@@ -143,7 +140,7 @@ nodist_rtmskel_HEADERS =         \
 # Intermediate library : libRTCSkel.a
 noinst_LTLIBRARIES = libRTCSkel.la libRTCStub.la
 
-nodist_libRTCSkel_la_SOURCES = $(IDL_SOURCES:.idl=Skel.cpp)
+nodist_libRTCSkel_la_SOURCES = $(IDL_SOURCES:.idl=Stub.cpp)
 
 libRTCSkel_la_LIBADD = $(LIBS)
 
@@ -151,8 +148,13 @@ nodist_libRTCStub_la_SOURCES = $(IDL_SOURCES:.idl=Stub.cpp)
 
 libRTCStub_la_LIBADD = $(LIBS)
 
+#BUILT_SOURCES = $(IDL_SOURCES:.idl=Skel.cpp) $(IDL_SOURCES:.idl=Stub.cpp)
 
 .idlSkel.cpp:
+	$(top_srcdir)/build/makewrapper.py $<
+	$(OIDLC) $<
+	$(IDLC) $(IDLFLAGS) $<
+.idlStub.cpp:
 	$(top_srcdir)/build/makewrapper.py $<
 	$(OIDLC) $<
 	$(IDLC) $(IDLFLAGS) $<
@@ -169,4 +171,7 @@ clean-local:
 	*Skel.cpp *Skel.h *Stub.cpp *Stub.h \
 	*~ *.core \
 	Makefile.old \
-	*.cc *.hh *.i *.a *.c *.inl
+	*.cc *.hh *.i *.a *.c *.inl \
+	*C.cpp *C.h *S.h *S.cpp *_T.h *_T.cpp \
+	*-cpp-common.h *-cpp-skels.h *-cpp-stubs.h *-cpp.h \
+	$(IDL_SOURCES:.idl=.h)
