@@ -2,15 +2,18 @@
 #------------------------------------------------------------
 # @file   Makefile.am
 # @brief  Makefile.am for PortBase unit test
-# @date   $Date: 2006-11-27 08:35:06 $
+# @date   $Date: 2007-01-12 14:51:52 $
 # @author Noriaki Ando <n-ando@aist.go.jp>
 #
-# $Id: Makefile.am,v 1.1 2006-11-27 08:35:06 n-ando Exp $
+# $Id: Makefile.am,v 1.2 2007-01-12 14:51:52 n-ando Exp $
 #
 #------------------------------------------------------------
 
 #
 # $Log: not supported by cvs2svn $
+# Revision 1.1  2006/11/27 08:35:06  n-ando
+# TestSuites are devided into each directory.
+#
 #
 
 
@@ -20,34 +23,35 @@ IDLC = @IDLC@
 IDLFLAGS = @IDL_FLAGS@
 LIBS = @LIBS@
 
-AM_CPPFLAGS= -I.                  \
+AM_CPPFLAGS =                 \
+	-I.                       \
 	-I$(includedir)           \
 	-I$(top_builddir)         \
 	-I$(top_builddir)/rtm/idl
 
 
-AM_LDFLAGS= -L.                   \
+AM_LDFLAGS =          \
+	-L.               \
 	-L$(top_builddir)
 
 
-#SUFFIXES = .idl Skel.cpp Stub.cpp Stub.o Skel.o
-#.idlSkel.cpp:
-#	$(top_srcdir)/build/makewrapper.py $< rtm/tests/
-#	$(IDLC) $(IDLFLAGS) $<
-
-IDL_SOURCES =                                \
+IDL_SOURCES =                            \
 	$(top_srcdir)/rtm/idl/RTC.idl        \
 	$(top_srcdir)/rtm/idl/SDOPackage.idl 
 
 noinst_PROGRAMS = PortBaseTests
 
-PortBaseTests_SOURCES =              \
-	../TestRunner.cpp            \
-	$(IDL_SOURCES:.idl=Skel.cpp) \
+nodist_PortBaseTests_SOURCES =       \
+	../TestRunner.cpp                \
+	$(IDL_SOURCES:.idl=Skel.cpp)     \
 	$(top_builddir)/rtm/PortBase.cpp \
 	PortBaseTests.cpp
+
 PortBaseTests_LDFLAGS = -L$(libdir)
 PortBaseTests_LDADD   = -lcppunit
+
+EXTRA_DIST =          \
+	PortBaseTests.cpp
 
 # all
 all: do-test
@@ -64,4 +68,3 @@ clean-local:
 	*~ *core                            \
 	Makefile.old                        \
 	*.cc *.hh *.i *.a *.c *.inl
-       
