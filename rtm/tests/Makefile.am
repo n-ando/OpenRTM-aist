@@ -2,9 +2,12 @@
 ##------------------------------------------------------------
 ## Makefile.am for unit test
 ##
-## $Id: Makefile.am,v 1.13 2006-12-18 06:57:24 n-ando Exp $
+## $Id: Makefile.am,v 1.14 2007-01-12 14:40:56 n-ando Exp $
 ##
 ## $Log: not supported by cvs2svn $
+## Revision 1.13  2006/12/18 06:57:24  n-ando
+## clean-local target alltests.xml and etc. were added.
+##
 ## Revision 1.12  2006/11/27 08:10:26  n-ando
 ## TestSuites are devided into each directory.
 ##
@@ -45,28 +48,36 @@
 AUTOMAKE_OPTIONS = 1.9
 
 SUBDIRS = \
-	Properties        \
-	StringUtil        \
-	ModuleManager     \
-	ManagerConfig     \
-	ObjectManager     \
-	StateMachine      \
-	SdoOrganization   \
-	SdoConfiguration  \
 	CORBA_SeqUtil     \
-	NVUtil 	          \
-	CorbaConsumer	  \
+	CorbaConsumer     \
+	CorbaPort         \
+	DataInOutPort     \
 	DataInPort        \
 	DataOutPort       \
+	Factory           \
+	InPort            \
+	ManagerConfig     \
+	ModuleManager     \
+	NVUtil            \
+	NullBuffer        \
+	ObjectManager     \
 	OutPort           \
 	OutPortBase       \
+	PortAdmin         \
+	PortBase          \
+	Properties        \
 	PublisherFactory  \
 	PublisherFlush    \
 	PublisherNew      \
 	PublisherPeriodic \
-	NullBuffer        \
 	RingBuffer        \
-	.  
+	SdoConfiguration  \
+	SdoOrganization   \
+	SdoService        \
+	StateMachine      \
+	StringUtil        \
+	.
+
 
 #	Factory
 #	SdoService
