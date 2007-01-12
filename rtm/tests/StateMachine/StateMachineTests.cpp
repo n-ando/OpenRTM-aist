@@ -2,7 +2,7 @@
 /*!
  * @file   StateMachineTests.cpp
  * @brief  StateMachine test class
- * @date   $Date: 2006-11-27 08:26:03 $
+ * @date   $Date: 2007-01-12 14:56:19 $
  * @author Shinji Kurihara
  *         Noriaki Ando <n-ando@aist.go.jp>
  *
@@ -14,12 +14,15 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: StateMachineTests.cpp,v 1.1 2006-11-27 08:26:03 n-ando Exp $
+ * $Id: StateMachineTests.cpp,v 1.2 2007-01-12 14:56:19 n-ando Exp $
  *
  */
 
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.1  2006/11/27 08:26:03  n-ando
+ * TestSuites are devided into each directory.
+ *
  * Revision 1.2  2006/11/02 12:27:09  kurihara
  *
  * StateMachineTest is modified by kurihara.
@@ -65,7 +68,7 @@ namespace StateMachineTests
     {
       MyStates st;
       m_fsm.setListener(this);
-      m_fsm.setNOP(&StateClass::nullFunc);
+//      m_fsm.setNOP(&StateClass::nullFunc);
       m_fsm.setTransitionAction(&StateClass::transitionAction);
       
       m_fsm.setEntryAction (CREATED, &StateClass::createdEntry);
@@ -101,7 +104,7 @@ namespace StateMachineTests
       MyStates getst;
       
       m_fsm.setStartState(st);
-      getst = m_fsm.getState();
+      getst = m_fsm.getStates();
       cout << "prev: " << getst.prev << " curr: " << getst.curr << " next: " << getst.next << endl;
       m_fsm.goTo(CREATED);
       
@@ -112,16 +115,17 @@ namespace StateMachineTests
     
     void work()
     {
-      //    for (int i = 0; i < 20; i++)
-      //      {
+          for (int i = 0; i < 20; i++)
+            {
       m_fsm.worker();
-      //	cout << endl;
-      //      }
+      	cout << endl;
+	sleep(1);
+            }
     }
     
     int transitionAction(const MyStates& state)
     {
-      std::cout << "Transition state prev: " << m_fsm.getState().prev << " curr: " << m_fsm.getState().curr << " next: " << m_fsm.getState().next << std::endl;
+      std::cout << "Transition state prev: " << m_fsm.getStates().prev << " curr: " << m_fsm.getStates().curr << " next: " << m_fsm.getStates().next << std::endl;
       return true;
     }
     
