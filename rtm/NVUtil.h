@@ -2,7 +2,7 @@
 /*!
  * @file NVUtil.h
  * @brief NameValue and NVList utility functions
- * @date $Date: 2007-01-06 17:55:35 $
+ * @date $Date: 2007-01-12 14:33:57 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
  * Copyright (C) 2006
@@ -13,12 +13,19 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: NVUtil.h,v 1.4 2007-01-06 17:55:35 n-ando Exp $
+ * $Id: NVUtil.h,v 1.5 2007-01-12 14:33:57 n-ando Exp $
  *
  */
 
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.4  2007/01/06 17:55:35  n-ando
+ * toProperties()'s argument was changed to const.
+ * Some functions were added.
+ * - isStringValue()
+ * - appendStringValue()
+ * - append()
+ *
  * Revision 1.3  2006/11/27 09:54:48  n-ando
  * Conversion function from NVList to Properties: toProperties() was added.
  *
@@ -35,6 +42,7 @@
 #define NVUtil_h
 
 #include <string>
+#include <iostream>
 #include <rtm/idl/SDOPackageSkel.h>
 #include <rtm/Properties.h>
 
@@ -310,6 +318,7 @@ namespace NVUtil
 
   void append(SDOPackage::NVList& dest, const SDOPackage::NVList& src);
 
+  void dump(SDOPackage::NVList& nv);
 };
 
 #endif // NVUtil_h

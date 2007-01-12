@@ -2,7 +2,7 @@
 /*!
  * @file NVUtil.h
  * @brief NameValue and NVList utility functions
- * @date $Date: 2007-01-06 17:55:29 $
+ * @date $Date: 2007-01-12 14:33:50 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
  * Copyright (C) 2006
@@ -13,12 +13,19 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: NVUtil.cpp,v 1.4 2007-01-06 17:55:29 n-ando Exp $
+ * $Id: NVUtil.cpp,v 1.5 2007-01-12 14:33:50 n-ando Exp $
  *
  */
 
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.4  2007/01/06 17:55:29  n-ando
+ * toProperties()'s argument was changed to const.
+ * Some functions were added.
+ * - isStringValue()
+ * - appendStringValue()
+ * - append()
+ *
  * Revision 1.3  2006/12/02 18:44:27  n-ando
  * Argument's const declaration was fixed.
  *
@@ -209,5 +216,20 @@ namespace NVUtil
   }
 
 
+  void dump(SDOPackage::NVList& nv)
+  {
+    for (CORBA::ULong i(0), n(nv.length()); i < n; ++i)
+      {
+	char* str_value;
+	if (nv[i].value >>= str_value)
+	  {
+	    std::cout << nv[i].name << ": " << str_value << std::endl;
+	  }
+	else
+	  {
+	    std::cout << nv[i].name << ": not a string value" << std::endl;
+	  }
+      }
+  }	    
 
 };
