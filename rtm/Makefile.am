@@ -2,9 +2,12 @@
 ##------------------------------------------------------------
 ## Makefile.am for libRTC
 ##
-## $Id: Makefile.am,v 1.10 2007-01-09 09:58:45 n-ando Exp $
+## $Id: Makefile.am,v 1.11 2007-01-12 14:32:49 n-ando Exp $
 ##
 ## $Log: not supported by cvs2svn $
+## Revision 1.10  2007/01/09 09:58:45  n-ando
+## libRTC.so's source entry was divided and organizaed.
+##
 ## Revision 1.9  2006/12/02 18:42:20  n-ando
 ## Some file entries were added.
 ##
@@ -117,12 +120,34 @@ rtmheaderdir = $(prefix)/include/rtm
 
 rtmheader_HEADERS = \
 	$(libRTC_la_SOURCES:.cpp=.h) \
-	RTC.h \
-	SystemLogger.h \
-	version.h \
-	config_rtc.h
+	BufferBase.h                 \
+	CORBA_SeqEx.h                \
+	CORBA_SeqUtil.h              \
+	CorbaConsumer.h              \
+	DefaultConfiguration.h       \
+	InPort.h                     \
+	InPortConsumer.h             \
+	InPortCorbaConsumer.h        \
+	InPortCorbaProvider.h        \
+	ObjectManager.h              \
+	OutPort.h                    \
+	OutPortConsumer.h            \
+	OutPortCorbaConsumer.h       \
+	OutPortCorbaProvider.h       \
+	PortCallBack.h               \
+	PublisherBase.h              \
+	RTC.h                        \
+	RingBuffer.h                 \
+	RtcBase.h                    \
+	SdoService.h                 \
+	StateMachine.h               \
+	SystemLogger.h               \
+	UUID.h                       \
+	config_rtc.h                 \
+	version.h
 
 EXTRA_DIST = $(rtmheader_HEADERS)
+DIST_SUBDIRS = idl tests
 
 clean-local:
 	rm -f *.bak *.rpo *.sym lib*.*_pure_* Makefile.old *core *~

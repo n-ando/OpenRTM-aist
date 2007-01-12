@@ -2,7 +2,7 @@
 /*!
  * @file Manager.h
  * @brief RTComponent manager class
- * @date $Date: 2007-01-09 15:11:24 $
+ * @date $Date: 2007-01-12 14:32:36 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
  * Copyright (C) 2003-2005
@@ -12,12 +12,15 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: Manager.cpp,v 1.4 2007-01-09 15:11:24 n-ando Exp $
+ * $Id: Manager.cpp,v 1.5 2007-01-12 14:32:36 n-ando Exp $
  *
  */
 
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.4  2007/01/09 15:11:24  n-ando
+ * Now RTObject is activated itself. The Manager does nothing.
+ *
  * Revision 1.3  2006/11/06 01:31:50  n-ando
  * Some Manager's functions has been implemented.
  * - Component creation process
@@ -316,6 +319,8 @@ namespace RTC
     std::cout << "naming_name: " << naming_names << std::endl;
 
     comp->getProperties().setProperty("naming_names", naming_names.c_str());
+
+    comp->initialize();
 
     registerComponent(comp);
     return comp;
