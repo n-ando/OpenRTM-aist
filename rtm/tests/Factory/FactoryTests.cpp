@@ -2,7 +2,7 @@
 /*!
  * @file   FactoryTests.cpp
  * @brief  Factory test class
- * @date   $Date: 2006-11-27 08:31:38 $
+ * @date   $Date: 2007-01-12 14:50:35 $
  * @author Shinji Kurihara
  *         Noriaki Ando <n-ando@aist.go.jp>
  *
@@ -14,12 +14,15 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: FactoryTests.cpp,v 1.1 2006-11-27 08:31:38 n-ando Exp $
+ * $Id: FactoryTests.cpp,v 1.2 2007-01-12 14:50:35 n-ando Exp $
  *
  */
 
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.1  2006/11/27 08:31:38  n-ando
+ * TestSuites are devided into each directory.
+ *
  *
  */
 
@@ -32,9 +35,8 @@
 #include <cppunit/extensions/HelperMacros.h>
 #include <cppunit/TestAssert.h>
 
-#include <rtm/Factory.h>
-//#include <rtm/RtcBase.h>
-#include <rtm/Manager.h>
+//#include <rtm/Factory.h>
+//#include <rtm/Manager.h>
 
 namespace RTC
 {
@@ -51,6 +53,7 @@ namespace Factory
 {
   using namespace std;
 
+  /*
   class Sample
     : public RTC::RtcBase
   {
@@ -80,7 +83,7 @@ namespace Factory
     //	manager->registerComponent(profile, SampleNew, SampleDelete);
     //  }
   };
-  
+  */  
   class FactoryTests
     : public CppUnit::TestFixture
   {
@@ -90,7 +93,7 @@ namespace Factory
     CPPUNIT_TEST_SUITE_END();
   
   private:
-    RTC::FactoryCXX*  m_pFC;
+	//    RTC::FactoryCXX*  m_pFC;
   public:
   
     /*!
@@ -112,8 +115,8 @@ namespace Factory
      */
     virtual void setUp()
     {
-      RTC::Properties profile;
-      m_pFC = new RTC::FactoryCXX(profile, SampleNew, SampleDelete);
+	  //      RTC::Properties profile;
+	  //      m_pFC = new RTC::FactoryCXX(profile, SampleNew, SampleDelete);
     }
     
     /*!
@@ -121,17 +124,19 @@ namespace Factory
      */
     virtual void tearDown()
     {
-      delete m_pFC; 
+	  //      delete m_pFC; 
     }
   
     /* tests for RtcBase* create(Manager* mgr) */
-    void test_create() {
+    void test_create()
+	{
       CPPUNIT_FAIL("test");
     }
     
     
     /* tests for RtcBase* create(Manager* mgr) */
-    void test_destroy() {
+    void test_destroy()
+	{
       CPPUNIT_FAIL("test");
     }
   };
