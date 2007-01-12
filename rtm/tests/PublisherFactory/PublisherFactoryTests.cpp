@@ -2,15 +2,18 @@
 /*!
  * @file   PublisherFactoryTests.cpp
  * @brief  PublisherFactory test class
- * @date   $Date: 2006-12-18 06:50:59 $
+ * @date   $Date: 2007-01-12 14:53:53 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
- * $Id: PublisherFactoryTests.cpp,v 1.1 2006-12-18 06:50:59 n-ando Exp $
+ * $Id: PublisherFactoryTests.cpp,v 1.2 2007-01-12 14:53:53 n-ando Exp $
  *
  */
 
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.1  2006/12/18 06:50:59  n-ando
+ * The first commitment.
+ *
  *
  */
 
@@ -50,6 +53,20 @@ namespace PublisherFactory
       //      std::cout << "period: " << interval << std::endl;
       m_tm = tm;
     }
+
+	virtual RTC::InPortConsumer* clone() const
+	{
+	  return new TestConsumer();
+	}
+	virtual bool subscribeInterface(const SDOPackage::NVList&)
+	{
+	  return true;
+	}
+	virtual void unsubscribeInterface(const SDOPackage::NVList&)
+	{
+	  return;
+	}
+	
     timeval m_tm;
     long int interval;
   };
@@ -103,7 +120,7 @@ namespace PublisherFactory
     /* test case */
     void test_new()
     {
-      m_publisher = m_factory.create("New", &m_consumer, m_properties);
+      m_publisher = m_factory.create(&m_consumer, m_properties);
 
       usleep(100000);
       double total(0);
@@ -133,7 +150,7 @@ namespace PublisherFactory
     void test_periodic()
     {
       m_properties.setProperty("dataport.push_interval", "100.0");
-      m_publisher = m_factory.create("Periodic", &m_consumer, m_properties);
+      m_publisher = m_factory.create(&m_consumer, m_properties);
 
       sleep(2);
       for (int i = 0; i < 100; ++i)
@@ -150,7 +167,7 @@ namespace PublisherFactory
 
     void test_flush()
     {
-      m_publisher = m_factory.create("Flush", &m_consumer, m_properties);
+      m_publisher = m_factory.create(&m_consumer, m_properties);
       
       long int interval0, interval1;
       for (int i = 0; i < 100; ++i)
