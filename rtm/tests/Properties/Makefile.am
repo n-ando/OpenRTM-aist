@@ -2,15 +2,18 @@
 #------------------------------------------------------------
 # @file   Makefile.am
 # @brief  Makefile.am for Properties unit test
-# @date   $Date: 2006-11-27 08:29:54 $
+# @date   $Date: 2007-01-12 14:44:49 $
 # @author Noriaki Ando <n-ando@aist.go.jp>
 #
-# $Id: Makefile.am,v 1.1 2006-11-27 08:29:54 n-ando Exp $
+# $Id: Makefile.am,v 1.2 2007-01-12 14:44:49 n-ando Exp $
 #
 #------------------------------------------------------------
 
 #
 # $Log: not supported by cvs2svn $
+# Revision 1.1  2006/11/27 08:29:54  n-ando
+# TestSuites are devided into each directory.
+#
 #
 
 
@@ -20,40 +23,34 @@ IDLC = @IDLC@
 IDLFLAGS = @IDL_FLAGS@
 LIBS = @LIBS@
 
-AM_CPPFLAGS= -I.                  \
-	-I$(includedir)           \
+AM_CPPFLAGS =         \
+	 -I.              \
+	-I$(includedir)   \
 	-I$(top_builddir)
 
-AM_LDFLAGS= -L.                   \
+AM_LDFLAGS =          \
+	 -L.              \
 	-L$(top_builddir)
 
 
-#SUFFIXES = .idl Skel.cpp Stub.cpp Stub.o Skel.o
-#.idlSkel.cpp:
-#	$(top_srcdir)/build/makewrapper.py $< rtm/tests
-#	$(IDLC) $(IDLFLAGS) $<
-
-# if this test uses other lib libHogeSkel.a or libHogeSkel.so
-#
-#noinst_LTLIBRARIES = libHogeSkel.la
-
-#IDL_SOURCES = hoge.idl
-#libHogeSkel_la_SOURCES =            \
-#	$(IDL_SOURCES:.idl=Skel.cpp) \
-#	$(IDL_SOURCES:.idl=Stub.cpp) \
-#	$(IDL_SOURCES:.idl=Skel.h)   \
-#	$(IDL_SOURCES:.idl=Stub.h)
-#libHogeSkel_la_LIBADD = $(LIBS)
-
 noinst_PROGRAMS = PropertiesTests
 
-PropertiesTests_SOURCES =                  \
+nodist_PropertiesTests_SOURCES =       \
 	../TestRunner.cpp                  \
-	PropertiesTests.cpp                \
 	$(top_builddir)/rtm/Properties.cpp \
-	$(top_builddir)/rtm/StringUtil.cpp
+	$(top_builddir)/rtm/StringUtil.cpp \
+	PropertiesTests.cpp
+
 PropertiesTests_LDFLAGS = -L$(libdir)
 PropertiesTests_LDADD   = -lcppunit
+
+EXTRA_DIST =               \
+	PropertiesTests.cpp    \
+	defaults.conf          \
+	storedRead.conf        \
+	splitKeyValueTest.data \
+	store-test.data
+
 
 # all
 all: do-test

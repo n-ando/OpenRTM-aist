@@ -2,15 +2,18 @@
 #------------------------------------------------------------
 # @file   Makefile.am
 # @brief  Makefile.am for NVUtil unit test
-# @date   $Date: 2006-11-27 08:30:12 $
+# @date   $Date: 2007-01-12 14:44:00 $
 # @author Noriaki Ando <n-ando@aist.go.jp>
 #
-# $Id: Makefile.am,v 1.1 2006-11-27 08:30:12 n-ando Exp $
+# $Id: Makefile.am,v 1.2 2007-01-12 14:44:00 n-ando Exp $
 #
 #------------------------------------------------------------
 
 #
 # $Log: not supported by cvs2svn $
+# Revision 1.1  2006/11/27 08:30:12  n-ando
+# TestSuites are devided into each directory.
+#
 #
 
 
@@ -20,35 +23,36 @@ IDLC = @IDLC@
 IDLFLAGS = @IDL_FLAGS@
 LIBS = @LIBS@
 
-AM_CPPFLAGS= -I.                  \
+AM_CPPFLAGS =                 \
+	 -I.                      \
 	-I$(includedir)           \
 	-I$(top_builddir)         \
 	-I$(top_builddir)/rtm/idl
 
-AM_LDFLAGS= -L.                   \
+AM_LDFLAGS =          \
+	 -L.              \
 	-L$(top_builddir)
 
 
-SUFFIXES = .idl Skel.cpp Stub.cpp Stub.o Skel.o
-.idlSkel.cpp:
-	$(top_srcdir)/build/makewrapper.py $< rtm/tests
-	$(IDLC) $(IDLFLAGS) $<
-
-IDL_SOURCES =                                \
+IDL_SOURCES =                            \
 	$(top_srcdir)/rtm/idl/RTC.idl        \
 	$(top_srcdir)/rtm/idl/SDOPackage.idl 
 
 noinst_PROGRAMS = NVUtilTests
 
-NVUtilTests_SOURCES =                    \
+nodist_NVUtilTests_SOURCES =         \
 	../TestRunner.cpp                \
 	$(IDL_SOURCES:.idl=Skel.cpp)     \
 	$(top_srcdir)/rtm/StringUtil.cpp \
 	$(top_srcdir)/rtm/Properties.cpp \
 	$(top_srcdir)/rtm/NVUtil.cpp     \
 	NVUtilTests.cpp
+
 NVUtilTests_LDFLAGS = -L$(libdir)
 NVUtilTests_LDADD   = -lcppunit
+
+EXTRA_DIST =        \
+	NVUtilTests.cpp
 
 # all
 all: do-test

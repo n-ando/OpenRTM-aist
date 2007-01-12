@@ -2,15 +2,18 @@
 #------------------------------------------------------------
 # @file   Makefile.am
 # @brief  Makefile.am for OutPort unit test
-# @date   $Date: 2006-12-18 06:54:30 $
+# @date   $Date: 2007-01-12 14:44:24 $
 # @author Noriaki Ando <n-ando@aist.go.jp>
 #
-# $Id: Makefile.am,v 1.3 2006-12-18 06:54:30 n-ando Exp $
+# $Id: Makefile.am,v 1.4 2007-01-12 14:44:24 n-ando Exp $
 #
 #------------------------------------------------------------
 
 #
 # $Log: not supported by cvs2svn $
+# Revision 1.3  2006/12/18 06:54:30  n-ando
+# clean-local target OutPortTests was added.
+#
 # Revision 1.2  2006/12/02 18:52:44  n-ando
 # *** empty log message ***
 #
@@ -26,39 +29,28 @@ IDLC = @IDLC@
 IDLFLAGS = @IDL_FLAGS@
 LIBS = @LIBS@
 
-AM_CPPFLAGS= -I.                  \
-	-I$(includedir)           \
+AM_CPPFLAGS =         \
+	 -I.              \
+	-I$(includedir)   \
 	-I$(top_builddir)
 
-AM_LDFLAGS= -L.                   \
+AM_LDFLAGS =          \
+	-L.               \
 	-L$(top_builddir)
 
 
-#SUFFIXES = .idl Skel.cpp Stub.cpp Stub.o Skel.o
-#.idlSkel.cpp:
-#	$(top_srcdir)/build/makewrapper.py $< rtm/tests
-#	$(IDLC) $(IDLFLAGS) $<
-
-# if this test uses other lib libHogeSkel.a or libHogeSkel.so
-#
-#noinst_LTLIBRARIES = libHogeSkel.la
-
-#IDL_SOURCES = hoge.idl
-#libHogeSkel_la_SOURCES =            \
-#	$(IDL_SOURCES:.idl=Skel.cpp) \
-#	$(IDL_SOURCES:.idl=Stub.cpp) \
-#	$(IDL_SOURCES:.idl=Skel.h)   \
-#	$(IDL_SOURCES:.idl=Stub.h)
-#libHogeSkel_la_LIBADD = $(LIBS)
-
 noinst_PROGRAMS = OutPortTests
 
-OutPortTests_SOURCES = \
-	../TestRunner.cpp \
-	OutPortTests.cpp  \
-	$(top_builddir)/rtm/OutPortBase.cpp
+nodist_OutPortTests_SOURCES =                  \
+	../TestRunner.cpp                   \
+	$(top_builddir)/rtm/OutPortBase.cpp \
+	OutPortTests.cpp
+
 OutPortTests_LDFLAGS = -L$(libdir)
 OutPortTests_LDADD   = -lcppunit
+
+EXTRA_DIST =         \
+	OutPortTests.cpp
 
 # all
 all: do-test
@@ -75,4 +67,3 @@ clean-local:
 	*~ *core                            \
 	Makefile.old                        \
 	*.cc *.hh *.i *.a *.c *.inl
-       
