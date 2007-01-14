@@ -2,7 +2,7 @@
 /*!
  * @file  OutPortCorbaProvider.h
  * @brief OutPortCorbaProvider class
- * @date  $Date: 2007-01-06 17:57:35 $
+ * @date  $Date: 2007-01-14 23:01:53 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
  * Copyright (C) 2006
@@ -13,12 +13,16 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: OutPortCorbaProvider.h,v 1.2 2007-01-06 17:57:35 n-ando Exp $
+ * $Id: OutPortCorbaProvider.h,v 1.3 2007-01-14 23:01:53 n-ando Exp $
  *
  */
 
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.2  2007/01/06 17:57:35  n-ando
+ * Interface subscription/unsubscription functions (subscribeInterface()
+ * and unsubscribeInterface()) are added.
+ *
  * Revision 1.1  2006/12/02 18:48:21  n-ando
  * The first commitment.
  *
@@ -73,9 +77,10 @@ namespace RTC
       setSubscriptionType("Any");
 
       // ConnectorProfile setting
+      m_objref = this->_this();
       CORBA_SeqUtil::push_back(m_properties,
 			       NVUtil::newNV("dataport.corba_any.outport_ref",
-					     this->_this()));
+					     RTC::OutPortAny::_duplicate(m_objref)));
     }
     
     /*!
@@ -100,6 +105,7 @@ namespace RTC
    
   private:
     BufferBase<DataType>& m_buffer;
+    OutPortAny_var m_objref;
   };
 };     // namespace RTC
 #endif // OutPortCorbaProvider_h

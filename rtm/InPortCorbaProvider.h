@@ -2,7 +2,7 @@
 /*!
  * @file  InPortCorbaProvider.h
  * @brief InPortCorbaProvider class
- * @date  $Date: 2007-01-06 17:52:54 $
+ * @date  $Date: 2007-01-14 23:01:47 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
  * Copyright (C) 2006
@@ -13,12 +13,16 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: InPortCorbaProvider.h,v 1.2 2007-01-06 17:52:54 n-ando Exp $
+ * $Id: InPortCorbaProvider.h,v 1.3 2007-01-14 23:01:47 n-ando Exp $
  *
  */
 
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.2  2007/01/06 17:52:54  n-ando
+ * Interface and its profile publish functions (publishInterfaceProfile()
+ * and publishInterface()) are added.
+ *
  * Revision 1.1  2006/12/02 18:41:02  n-ando
  * InPortCorbaProvider class is an implementation of InPortAny.
  *
@@ -70,9 +74,10 @@ namespace RTC
       setSubscriptionType("Any");
 
       // ConnectorProfile setting
+      m_objref = this->_this();
       CORBA_SeqUtil::push_back(m_properties,
 			       NVUtil::newNV("dataport.corba_any.inport_ref",
-					     this->_this()));
+					     RTC::InPortAny::_duplicate(m_objref)));
     }
 
     virtual ~InPortCorbaProvider()
@@ -90,6 +95,7 @@ namespace RTC
     }
   private:
     BufferBase<DataType>& m_buffer;
+    RTC::InPortAny_var m_objref;
   };
 
 
