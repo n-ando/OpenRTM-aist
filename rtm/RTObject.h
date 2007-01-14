@@ -2,7 +2,7 @@
 /*!
  * @file RTObject.h
  * @brief RT component base class
- * @date $Date: 2007-01-14 19:46:14 $
+ * @date $Date: 2007-01-14 22:59:01 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
  * Copyright (C) 2006
@@ -12,12 +12,16 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: RTObject.h,v 1.4 2007-01-14 19:46:14 n-ando Exp $
+ * $Id: RTObject.h,v 1.5 2007-01-14 22:59:01 n-ando Exp $
  *
  */
 
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.4  2007/01/14 19:46:14  n-ando
+ * The component action implementation functions for Users' business logic
+ * were added (i.e onInitialize(), onExecute(), etc..)
+ *
  * Revision 1.3  2007/01/12 14:38:48  n-ando
  * The registeInPort()/registerOutPort functions are added.
  *
@@ -858,15 +862,17 @@ namespace RTC
      */
     void registerPort(PortBase& port);
 
-    template <class DataType>
-    void registerInPort(const char* name, InPort<DataType>& inport)
+    template <class DataType, template <class DataType> class Buffer>
+    void registerInPort(const char* name,
+			InPort<DataType, Buffer>& inport)
     {
       PortBase* port = new DataInPort(name, inport);
       registerPort(*port);
     }
 
-    template <class DataType>
-    void registerOutPort(const char* name, OutPort<DataType>& outport)
+    template <class DataType, template <class DataType> class Buffer>
+    void registerOutPort(const char* name,
+			 OutPort<DataType, Buffer>& outport)
     {
       PortBase* port = new DataOutPort(name, outport);
       registerPort(*port);
