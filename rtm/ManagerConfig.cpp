@@ -2,7 +2,7 @@
 /*!
  * @file ManagerConfig.cpp
  * @brief RTC manager configuration
- * @date $Date: 2006-11-06 01:26:21 $
+ * @date $Date: 2007-01-14 19:43:01 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
  * Copyright (C) 2003-2005
@@ -12,12 +12,15 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: ManagerConfig.cpp,v 1.4 2006-11-06 01:26:21 n-ando Exp $
+ * $Id: ManagerConfig.cpp,v 1.5 2007-01-14 19:43:01 n-ando Exp $
  *
  */
 
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.4  2006/11/06 01:26:21  n-ando
+ * Some trivial fixes.
+ *
  * Revision 1.3  2006/10/23 08:38:17  n-ando
  * To get Property after "init()" calling, getConfig() was added.
  *
@@ -104,7 +107,6 @@ namespace RTC
   {
     if (findConfigFile())
       {
-	std::cout << "**** config file **** " << m_configFile << std::endl;
 	std::ifstream f(m_configFile.c_str());
 	m_properties.load(f);
 	f.close();
