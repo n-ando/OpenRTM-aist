@@ -2,7 +2,7 @@
 /*!
  * @file Manager.h
  * @brief RTComponent manager class
- * @date $Date: 2006-11-06 01:31:57 $
+ * @date $Date: 2007-01-14 19:42:37 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
  * Copyright (C) 2006
@@ -12,12 +12,17 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: Manager.h,v 1.3 2006-11-06 01:31:57 n-ando Exp $
+ * $Id: Manager.h,v 1.4 2007-01-14 19:42:37 n-ando Exp $
  *
  */
 
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.3  2006/11/06 01:31:57  n-ando
+ * Some Manager's functions has been implemented.
+ * - Component creation process
+ * - System logger initialization
+ *
  * Revision 1.2  2006/10/25 17:28:05  n-ando
  * Component factory registration and relative functions are implemented.
  *
@@ -35,6 +40,7 @@
 #include <vector>
 
 #include <ace/Synch.h>
+#include <ace/Task.h>
 
 #include <rtm/Factory.h>
 #include <rtm/ObjectManager.h>
@@ -49,6 +55,9 @@ namespace RTC
   class ModuleManager;
   class NamingManager;
   class CorbaObjectManager;
+  class Manager;
+
+  typedef void (*ModuleInitProc)(Manager* manager);  
 
   class Manager
   {
@@ -58,6 +67,8 @@ namespace RTC
       //      Manager& operator=(const Manager& manager){return manager;};
     
   public:
+
+
     /*!
      * @if jp
      * @brief マネージャの初期化
@@ -125,6 +136,33 @@ namespace RTC
     /*!
      * @if jp
      *
+     * @brief 初期化プロシージャのセット
+     *
+     * このオペレーションはユーザが行うモジュール等の初期化プロシージャ
+     * を設定する。ここで設定されたプロシージャは、マネージャが初期化され、
+     * アクティブ化された後、適切なタイミングで実行される。
+     *
+     * @param proc 初期化プロシージャの関数ポインタ
+     *
+     * @else
+     *
+     * @brief Run the Manager
+     *
+     * This operation sets the initial procedure call to process module
+     * initialization, other user defined initialization and so on.
+     * The given procedure will be called at the proper timing after the 
+     * manager initialization, activation and run.
+     *
+     * @param proc A function pointer to the initial procedure call
+     *
+     * @endif
+     */
+    void setModuleInitProc(ModuleInitProc proc);
+
+
+    /*!
+     * @if jp
+     *
      * @brief Managerのアクティブ化
      *
      * このオペレーションは以下の処理を行う
@@ -183,33 +221,6 @@ namespace RTC
      */
     void runManager(bool no_block = false);
     
-    typedef void (*InitProc)(Manager* manager);
-
-    /*!
-     * @if jp
-     *
-     * @brief 初期化プロシージャのセット
-     *
-     * このオペレーションはユーザが行うモジュール等の初期化プロシージャ
-     * を設定する。ここで設定されたプロシージャは、マネージャが初期化され、
-     * アクティブ化された後、適切なタイミングで実行される。
-     *
-     * @param proc 初期化プロシージャの関数ポインタ
-     *
-     * @else
-     *
-     * @brief Run the Manager
-     *
-     * This operation sets the initial procedure call to process module
-     * initialization, other user defined initialization and so on.
-     * The given procedure will be called at the proper timing after the 
-     * manager initialization, activation and run.
-     *
-     * @param proc A function pointer to the initial procedure call
-     *
-     * @endif
-     */
-    void setInitProc(InitProc proc);
 
 
 
@@ -490,6 +501,8 @@ namespace RTC
     PortableServer::POAManager_var m_pPOAManager;
 
 
+    ModuleInitProc m_initProc;
+
     /*!
      * @if jp
      * @brief Propery へのポインタ
@@ -519,8 +532,6 @@ namespace RTC
 
     CorbaObjectManager* m_objManager;
 
-
-    InitProc m_initProc;
 
     /*!
      * @if jp
@@ -621,6 +632,35 @@ namespace RTC
       }
       std::vector<std::string> modlist;
     };
+
+
+    class OrbRunner
+      : public ACE_Task<ACE_MT_SYNCH>
+    {
+    public:
+      OrbRunner(CORBA::ORB_ptr orb) : m_pORB(orb)
+      {
+	open(0);
+      };
+      virtual int open(void *args)
+      {
+	activate();
+	return 0;
+      }
+      virtual int svc(void)
+      {
+	m_pORB->run();
+	return 0;
+      }
+      virtual int close(unsigned long flags)
+      {
+	return 0;
+      }
+    private:
+      CORBA::ORB_ptr m_pORB;
+      
+    };
+    OrbRunner* m_runner;
 
   }; // class Manager
 }; // namespace RTC
