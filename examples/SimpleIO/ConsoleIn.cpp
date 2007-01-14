@@ -1,62 +1,84 @@
 // -*- C++ -*-
 /*!
- * @file ConsoleIn.cpp
- * @brief Sample Component: Console In
- * @date $Date: 2005-05-12 09:06:20 $
+ * @file  ConsoleIn.cpp
+ * @brief Console input component
+ * $Date: 2007-01-14 22:51:41 $
  *
- * Copyright (c) 2003 Noriaki Ando <n-ando@aist.go.jp>
- *          National Institute of Industrial Science (AIST), Japan. All rights reserved.
- *
- * $Id: ConsoleIn.cpp,v 1.1.1.1 2005-05-12 09:06:20 n-ando Exp $
+ * $Id: ConsoleIn.cpp,v 1.2 2007-01-14 22:51:41 n-ando Exp $
  */
-
-
 
 #include "ConsoleIn.h"
 #include <iostream>
 
-using namespace std;
+// Module specification
+// <rtc-template block="module_spec">
+static const char* consolein_spec[] =
+  {
+    "implementation_id", "ConsoleIn",
+    "type_name",         "ConsoleIn",
+    "description",       "Console input component",
+    "version",           "1.0",
+    "vendor",            "Noriaki Ando, AIST",
+    "category",          "example",
+    "activity_type",     "DataFlowComponent",
+    "max_instance",      "10",
+    "language",          "C++",
+    "lang_type",         "compile",
+    ""
+  };
+// </rtc-template>
 
-ConsoleIn::ConsoleIn(RtcManager* manager)
-  : RtcBase(manager),
-	m_Out("out", out, 100)
+ConsoleIn::ConsoleIn(RTC::Manager* manager)
+  : RTC::DataFlowComponentBase(manager),
+    // <rtc-template block="initializer">
+    m_outOut("out", m_out),
+    // </rtc-template>
+	dummy(0)
 {
-  registerPort(m_Out);
-  appendAlias("/example/ConsoleIn|rtc");
+  // Registration: InPort/OutPort/Service
+  // <rtc-template block="registration">
+  // Set InPort buffers
+  
+  // Set OutPort buffer
+  registerOutPort("out", m_outOut);
+  
+  // Set service provider to Ports
+  
+  // Set service consumers to Ports
+  
+  // Set CORBA Service Ports
+  
+  // </rtc-template>
+
 }
 
-RtmRes ConsoleIn::rtc_active_do()
+ConsoleIn::~ConsoleIn()
 {
-  cout << "Please input number: ";
-  cin >> out.data;
-  cout << "Sending to subscriber: " << out.data << endl;
-  m_Out << out;
-
-  return RTM_OK;
 }
 
 
+RTC::ReturnCode_t ConsoleIn::onExecute(RTC::UniqueId ec_id)
+{
+  std::cout << "Please input number: ";
+  std::cin >> m_out.data;
+  std::cout << "Sending to subscriber: " << m_out.data << std::endl;
+  m_outOut.write();
+
+  return RTC::OK;
+}
 
 
-extern "C" {
-  
-  RtcBase* ConsoleInNew(RtcManager* manager)
+extern "C"
+{
+ 
+  void ConsoleInInit(RTC::Manager* manager)
   {
-	return new ConsoleIn(manager);
-  }
-  
-  
-  void ConsoleInDelete(RtcBase* p)
-  {
-	delete p;
-	return;
-  }
-  
-  
-  void ConsoleInInit(RtcManager* manager)
-  {
-	RtcModuleProfile profile(consolein_spec);
-	manager->registerComponent(profile, ConsoleInNew, ConsoleInDelete);
+    RTC::Properties profile(consolein_spec);
+    manager->registerFactory(profile,
+                             RTC::Create<ConsoleIn>,
+                             RTC::Delete<ConsoleIn>);
   }
   
 };
+
+
