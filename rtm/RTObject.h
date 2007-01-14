@@ -2,7 +2,7 @@
 /*!
  * @file RTObject.h
  * @brief RT component base class
- * @date $Date: 2007-01-12 14:38:48 $
+ * @date $Date: 2007-01-14 19:46:14 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
  * Copyright (C) 2006
@@ -12,12 +12,15 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: RTObject.h,v 1.3 2007-01-12 14:38:48 n-ando Exp $
+ * $Id: RTObject.h,v 1.4 2007-01-14 19:46:14 n-ando Exp $
  *
  */
 
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.3  2007/01/12 14:38:48  n-ando
+ * The registeInPort()/registerOutPort functions are added.
+ *
  * Revision 1.2  2007/01/09 15:21:47  n-ando
  * SDO interfaces are marged.
  * Some RTObject's operation signatures were changed.
@@ -66,7 +69,60 @@ namespace RTC
     virtual ~RTObject_impl();
 
 
+  protected:
+    //============================================================
+    // Overridden functions
+    //============================================================
+    // The initialize action (on CREATED->ALIVE transition)
+    // formaer rtc_init_entry() 
+    virtual ReturnCode_t onInitialize();
+    
+    // The finalize action (on ALIVE->END transition)
+    // formaer rtc_exiting_entry()
+    virtual ReturnCode_t onFinalize();
+    
+    // The startup action when ExecutionContext startup
+    // former rtc_starting_entry()
+    virtual ReturnCode_t onStartup(RTC::UniqueId ec_id);
+    
+    // The shutdown action when ExecutionContext stop
+    // former rtc_stopping_entry()
+    virtual ReturnCode_t onShutdown(RTC::UniqueId ec_id);
+    
+    // The activated action (Active state entry action)
+    // former rtc_active_entry()
+    virtual ReturnCode_t onActivated(RTC::UniqueId ec_id);
+    
+    // The deactivated action (Active state exit action)
+    // former rtc_active_exit()
+    virtual ReturnCode_t onDeactivated(RTC::UniqueId ec_id);
+    
+    // The execution action that is invoked periodically
+    // former rtc_active_do()
+    virtual ReturnCode_t onExecute(RTC::UniqueId ec_id);
+    
+    // The aborting action when main logic error occurred.
+    // former rtc_aborting_entry()
+    virtual ReturnCode_t onAborting(RTC::UniqueId ec_id);
+    
+    // The error action in ERROR state
+    // former rtc_error_do()
+    virtual ReturnCode_t onError(RTC::UniqueId ec_id);
+    
+    // The reset action that is invoked resetting
+    // This is same but different the former rtc_init_entry()
+    virtual ReturnCode_t onReset(RTC::UniqueId ec_id);
+    
+    // The state update action that is invoked after onExecute() action
+    // no corresponding operation exists in OpenRTm-aist-0.2.0
+    virtual ReturnCode_t onStateUpdate(RTC::UniqueId ec_id);
 
+    // The action that is invoked when execution context's rate is changed
+    // no corresponding operation exists in OpenRTm-aist-0.2.0
+    virtual ReturnCode_t onRateChanged(RTC::UniqueId ec_id);
+
+
+  public:
     //============================================================
     // RTC::LightweightRTObject
     //============================================================
@@ -106,7 +162,20 @@ namespace RTC
     /*!
      * @if jp
      *
-     * @brief 
+     * @brief RTCを解体準備のため終了させる
+     *
+     * このオペレーション呼び出しは結果としてComponentAction::on_finalize()
+     * を呼び出す。
+     *
+     * 制約
+     * - この RTC が属する Running 状態の実行コンテキスト中、Active 状態にある
+     *   ものがあればこの RTC は終了されない。その場合、このオペレーション呼び
+     *   出しはいかなる場合も ReturnCode_t::PRECONDITION_NOT_ME で失敗する。
+     * - この RTC が Created 状態である場合、終了処理は行われない。
+     *   その場合、このオペレーション呼び出しはいかなる場合も 
+     *   ReturnCode_t::PRECONDITION_NOT_MET で失敗する。
+     * - アプリケーション開発者はこのオペレーションを直接的に呼び出すことは
+     *   まれであり、たいていはRTCインフラストラクチャから呼び出される。
      *
      * @else
      *
@@ -133,7 +202,18 @@ namespace RTC
     /*!
      * @if jp
      *
-     * @brief
+     * @brief RTCを停止させ、そのコンテンツと共に終了させる
+     *
+     * この RTC がオーナーであるすべての実行コンテキストが停止される。
+     * この RTC が他の実行コンテキストを所有する RTC に属する実行コンテキスト
+     * (i.e. 実行コンテキストを所有する RTC はすなわちその実行コンテキストの
+     * オーナーである。)に参加している場合、当該 RTC はそれらのコンテキスト上
+     * で非活性化されなければならない。
+     * 
+     * 制約
+     * - RTC が初期化されていなければ、終了させることはできない。
+     *   Created 状態にある RTC に exit() を呼び出した場合、
+     *   ReturnCode_t::PRECONDITION_NOT_MET で失敗する。
      *
      * @else
      *
@@ -900,6 +980,7 @@ namespace RTC
 
     ExecutionContextServiceList m_execContexts;
 
+    bool m_created;
     bool m_alive;
 
     /*!
@@ -932,6 +1013,18 @@ namespace RTC
     };
     //    ExecutionContextAdminList m_execContextList;
 
+    struct deactivate_comps
+    {
+      deactivate_comps(LightweightRTObject_ptr comp)
+	: m_comp(comp)
+      {
+      }
+      void operator()(ExecutionContextService_ptr ec)
+      {
+	ec->deactivate_component(RTC::LightweightRTObject::_duplicate(m_comp));
+      }
+      LightweightRTObject_var m_comp;
+    };
 
 
   };
