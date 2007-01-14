@@ -2,7 +2,7 @@
 /*!
  * @file NamingManager.h
  * @brief naming Service helper class
- * @date $Date: 2006-11-04 21:11:36 $
+ * @date $Date: 2007-01-14 19:43:28 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
  * Copyright (C) 2006
@@ -12,12 +12,15 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: NamingManager.cpp,v 1.1 2006-11-04 21:11:36 n-ando Exp $
+ * $Id: NamingManager.cpp,v 1.2 2007-01-14 19:43:28 n-ando Exp $
  *
  */
 
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.1  2006/11/04 21:11:36  n-ando
+ * NamingManager was introduced to support multiple name server.
+ *
  */
 
 #include <rtm/NamingManager.h>
@@ -30,8 +33,6 @@ namespace RTC
   void NamingOnCorba::bindObject(const char* name,
 				 const RTObject_impl* rtobj)
   {
-    std::cout << "bindObject()" << std::endl;
-    std::cout << name << std::endl;
     try
       {
 	m_cosnaming.rebindByString(name, rtobj->getObjRef(), true);
