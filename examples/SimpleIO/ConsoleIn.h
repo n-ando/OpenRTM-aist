@@ -1,60 +1,128 @@
 // -*- C++ -*-
 /*!
- * @file ConsoleIn.h
- * @brief Sample Component: Console In
- * @date $Date: 2005-05-12 09:06:20 $
+ * @file  ConsoleIn.h
+ * @brief Console input component
+ * @date  $Date: 2007-01-14 22:51:48 $
  *
- * Copyright (c) 2004 Noriaki Ando <n-ando@aist.go.jp>
- *          National Institute of Industrial Science (AIST), Japan. All rights reserved.
- *
- * $Id: ConsoleIn.h,v 1.1.1.1 2005-05-12 09:06:20 n-ando Exp $
+ * $Id: ConsoleIn.h,v 1.2 2007-01-14 22:51:48 n-ando Exp $
  */
 
-#ifndef __ConsoleIn_h__
-#define __ConsoleIn_h__
+#ifndef CONSOLEIN_H
+#define CONSOLEIN_H
 
+#include <rtm/Manager.h>
+#include <rtm/DataFlowComponentBase.h>
+#include <rtm/CorbaPort.h>
+#include <rtm/DataInPort.h>
+#include <rtm/DataOutPort.h>
+#include <rtm/idl/BasicDataTypeSkel.h>
 
-#include <RtcBase.h>
-#include <RtcManager.h>
-#include <RtcOutPort.h>
-#include <iostream>
+// Service implementation headers
+// <rtc-template block="service_impl_h">
 
+// </rtc-template>
 
-using namespace RTM;
-using namespace std;
+// Service Consumer stub headers
+// <rtc-template block="consumer_stub_h">
 
-static RtcModuleProfSpec consolein_spec[] =
-  {
-	{RTC_MODULE_NAME,      "ConsoleIn"},
-	{RTC_MODULE_DESC,      "Console input component"},
-	{RTC_MODULE_VERSION,   "1.0"},
-	{RTC_MODULE_AUTHOR,    "Noriaki Ando"},
-	{RTC_MODULE_COMPANY,   "AIST, Japan"},
-	{RTC_MODULE_CATEGORY,  "example"},
-	{RTC_MODULE_COMP_TYPE, "COMMUTATIVE"},
-	{RTC_MODULE_ACT_TYPE,  "SPORADIC"},
-	{RTC_MODULE_MAX_INST,  "10"},
-	{RTC_MODULE_LANG,      "C++"},
-	{RTC_MODULE_LANG_TYPE, "COMPILE"},
-	{RTC_MODULE_SPEC_END, NULL}
-  };
+// </rtc-template>
 
+using namespace RTC;
 
 class ConsoleIn
-  : public RTM::RtcBase
+  : public RTC::DataFlowComponentBase
 {
  public:
-  ConsoleIn(RtcManager* manager);
+  ConsoleIn(RTC::Manager* manager);
+  ~ConsoleIn();
 
-  virtual RtmRes rtc_active_do();
+  // The initialize action (on CREATED->ALIVE transition)
+  // formaer rtc_init_entry() 
+  // virtual RTC::ReturnCode_t onInitialize();
+
+  // The finalize action (on ALIVE->END transition)
+  // formaer rtc_exiting_entry()
+  // virtual RTC::ReturnCode_t onFinalize();
+
+  // The startup action when ExecutionContext startup
+  // former rtc_starting_entry()
+  // virtual RTC::ReturnCode_t onStartup(RTC::UniqueId ec_id);
+
+  // The shutdown action when ExecutionContext stop
+  // former rtc_stopping_entry()
+  // virtual RTC::ReturnCode_t onShutdown(RTC::UniqueId ec_id);
+
+  // The activated action (Active state entry action)
+  // former rtc_active_entry()
+  // virtual RTC::ReturnCode_t onActivated(RTC::UniqueId ec_id);
+
+  // The deactivated action (Active state exit action)
+  // former rtc_active_exit()
+  // virtual RTC::ReturnCode_t onDeactivated(RTC::UniqueId ec_id);
+
+  // The execution action that is invoked periodically
+  // former rtc_active_do()
+  virtual RTC::ReturnCode_t onExecute(RTC::UniqueId ec_id);
+
+  // The aborting action when main logic error occurred.
+  // former rtc_aborting_entry()
+  // virtual RTC::ReturnCode_t onAborting(RTC::UniqueId ec_id);
+
+  // The error action in ERROR state
+  // former rtc_error_do()
+  // virtual RTC::ReturnCode_t onError(RTC::UniqueId ec_id);
+
+  // The reset action that is invoked resetting
+  // This is same but different the former rtc_init_entry()
+  // virtual RTC::ReturnCode_t onReset(RTC::UniqueId ec_id);
   
-  TimedLong out;
-  OutPortAny<TimedLong> m_Out;
+  // The state update action that is invoked after onExecute() action
+  // no corresponding operation exists in OpenRTm-aist-0.2.0
+  // virtual RTC::ReturnCode_t onStateUpdate(RTC::UniqueId ec_id);
+
+  // The action that is invoked when execution context's rate is changed
+  // no corresponding operation exists in OpenRTm-aist-0.2.0
+  // virtual RTC::ReturnCode_t onRateChanged(RTC::UniqueId ec_id);
+
+
+ protected:
+  // DataInPort declaration
+  // <rtc-template block="inport_declare">
+  
+  // </rtc-template>
+
+
+  // DataOutPort declaration
+  // <rtc-template block="outport_declare">
+  TimedLong m_out;
+  OutPort<TimedLong> m_outOut;
+  
+  // </rtc-template>
+
+  // CORBA Port declaration
+  // <rtc-template block="corbaport_declare">
+  
+  // </rtc-template>
+
+  // Service declaration
+  // <rtc-template block="service_declare">
+  
+  // </rtc-template>
+
+  // Consumer declaration
+  // <rtc-template block="consumer_declare">
+  
+  // </rtc-template>
+
+ private:
+  int dummy;
+
 };
 
-extern "C" {
-  RtcBase* ConsoleInNew(RtcManager* manager);
-  void ConsoleInDelete(RtcBase* p);
-  void ConsoleInInit(RtcManager* manager);
+
+extern "C"
+{
+  void ConsoleInInit(RTC::Manager* manager);
 };
-#endif // __ConsoleIn_h__
+
+#endif // CONSOLEIN_H

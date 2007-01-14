@@ -2,7 +2,7 @@
 /*!
  * @file ConnectorComp.cpp
  * @brief connector application
- * @date $Date: 2005-05-19 16:40:37 $
+ * @date $Date: 2007-01-14 22:51:36 $
  *
  * Copyright (c) 2003 Noriaki Ando <n-ando@aist.go.jp>
  *          Task-intelligence Research Group,
@@ -10,119 +10,75 @@
  *          National Institute of Industrial Science (AIST), Japan
  *          All rights reserved.
  *
- * $Id: ConnectorComp.cpp,v 1.2 2005-05-19 16:40:37 n-ando Exp $
+ * $Id: ConnectorComp.cpp,v 1.3 2007-01-14 22:51:36 n-ando Exp $
  */
 
 #include <iostream>
 #include <vector>
-#include <RtcManager.h>
-#include <RtcBase.h>
-#include <RTComponentStub.h>
+#include <rtm/CorbaNaming.h>
+#include <rtm/RTObject.h>
+#include <rtm/NVUtil.h>
+#include <rtm/CORBA_SeqUtil.h>
+#include <rtm/CorbaConsumer.h>
+#include <assert.h>
 
-using namespace std;
+
+using namespace RTC;
 
 int main (int argc, char** argv)
 {
-  RTM::RtcManager manager(argc, argv);
+  CORBA::ORB_var orb = CORBA::ORB_init(argc, argv);
+  CorbaNaming naming(orb, "localhost:9876");
+  std::cout << "hoge" << std::endl;
+  CorbaConsumer<RTObject> conin, conout;
+  PortList* pin;
+  PortList* pout;
 
-  // Initialize manager
-  manager.initManager();
+  // find ConsoleIn0 component
+  conin.setObject(naming.resolve("ConsoleIn0.rtc"));
+  // get ports
+  pin = conin->get_ports();
+  assert(pin->length() > 0);
+  // activate ConsoleIn0
+  ExecutionContextServiceList* eclisti;
+  eclisti = conin->get_execution_context_services();
+  (*eclisti)[0]->activate_component(RTObject::_duplicate(conin._ptr()));
 
-  // Activate manager and register to naming service
-  manager.activateManager();
 
-  // Initialize my module on this maneger
+  // find ConsoleOut0 component
+  conout.setObject(naming.resolve("ConsoleOut0.rtc"));
+  // get ports
+  pout = conout->get_ports();
+  assert(pout->length() > 0);
+  // activate ConsoleOut0
+  ExecutionContextServiceList* eclisto;
+  eclisto = conout->get_execution_context_services();
+  (*eclisto)[0]->activate_component(RTObject::_duplicate(conout._ptr()));
 
-  vector<RTM::RTCBase_ptr> in_comps, out_comps;
-  cout << "Finding component .*/.*/example/ConsoleIn/ConsoleIn0" << endl;
-  in_comps = manager.findComponents(".*/.*/example/ConsoleIn/ConsoleIn0");
+  // connect ports
+  ConnectorProfile prof;
+  prof.connector_id = "";
+  prof.name = CORBA::string_dup("connector0");
+  prof.ports.length(2);
+  prof.ports[0] = (*pin)[0];
+  prof.ports[1] = (*pout)[0];
+  CORBA_SeqUtil::push_back(prof.properties,
+			   NVUtil::newNV("dataport.interface_type",
+					 "CORBA_Any"));
+  CORBA_SeqUtil::push_back(prof.properties,
+			   NVUtil::newNV("dataport.dataflow_type",
+					 "Push"));
+  CORBA_SeqUtil::push_back(prof.properties,
+			   NVUtil::newNV("dataport.subscription_type",
+					 "Flush"));
+  ReturnCode_t ret;
+  ret = (*pin)[0]->connect(prof);
+  assert(ret == RTC::OK);
 
-  if (in_comps.size() > 0)
-	{
-	  if (CORBA::is_nil(in_comps[0]))
-		{
-		  cout << "Invalid object reference: ConsoleIn0." << endl;
-		  exit(1);
-		}
-	  cout << "ConsoleIn0 found: " << in_comps.size() << "." << endl;
-	}
-  else
-	{
-	  exit(1);
-	}
+  std::cout << "Connector ID: " << prof.connector_id << std::endl;
+  NVUtil::dump(prof.properties);
 
-  cout << "Finding component .*/.*/example/ConsoleIn/ConsoleOut0" << endl;
-  out_comps = manager.findComponents(".*/.*/example/ConsoleOut/ConsoleOut0");
-
-  if (out_comps.size() > 0)
-	{
-	  if (CORBA::is_nil(out_comps[0]))
-		{
-		  cout << "Invalid object reference: ConsoleOut0." << endl;
-		  exit(1);
-		}
-	  cout << "ConsoleOut0 found: " << out_comps.size() << "." << endl;
-	}
-  else
-	{
-	  exit(1);
-	}
-
-  try
-	{
-	  cout << "Starting components" << endl;
-	  in_comps[0]->rtc_start();
-	  out_comps[0]->rtc_start();
-	}
-  catch (...)
-	{
-	  cout << "exception was cought" << endl;
-	}
-  
-  
-  // Get OutPort of ConsoleIn0
-  RTM::OutPort_var outp_obj = in_comps[0]->get_outport("out");
-  RTM::PortProfile_var port_prof;
-  port_prof = outp_obj->profile();
-
-  cout << "Get outport: " << port_prof->name << "." << endl;
-  if (CORBA::is_nil(outp_obj))
-	{
-	  cerr << "Invalid outport" << endl;
-	  exit(1);
-	}
-
-  // Get InPort of ConsoleOut0
-  RTM::InPort_var inp_obj  = out_comps[0]->get_inport("in");
-  port_prof = inp_obj->profile();
-  cout << "Get inport: " << port_prof->name << "." << endl;
-  if (CORBA::is_nil(inp_obj))
-	{
-	  cerr << "Invalid inport" << endl;
-	  exit(1);
-	}
-  
-  // Subscription
-  RTM::SubscriptionProfile sub_prof;
-  sub_prof.subscription_type = RTM::OPS_NEW;
-  sub_prof.in_port = inp_obj;
-  sub_prof.out_port = outp_obj;
-  cout << "Connect OutPort and InPort...";
-  char* uuid;
-  if (outp_obj->subscribe(sub_prof) == RTM::RTM_OK)
-	{
-	  cout << "succeed." << endl;
-	  cout << "Subscription ID is " << sub_prof.id << endl;
-	  CORBA::string_free(sub_prof.id);
-	}
-  else
-	{ 
-	  cout << "failed." << endl;
-	}
-
-  // Main loop
-  manager.runManager();
-
+  orb->destroy();
   return 0;
 }
 

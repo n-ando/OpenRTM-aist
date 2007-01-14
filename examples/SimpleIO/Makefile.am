@@ -2,9 +2,12 @@
 ##---------------------------------------------------------------------------
 ## Makefile.am for ConsoleIn/ConsoleOut components
 ##
-## $Id: Makefile.am,v 1.1.1.1 2005-05-12 09:06:20 n-ando Exp $
+## $Id: Makefile.am,v 1.2 2007-01-14 22:52:23 n-ando Exp $
 ##
 ## $Log: not supported by cvs2svn $
+## Revision 1.1.1.1  2005/05/12 09:06:20  n-ando
+## Public release.
+##
 ##---------------------------------------------------------------------------
 
 AUTOMAKE_OPTIONS = 1.4
@@ -34,7 +37,13 @@ ConnectorComp_SOURCES = ConnectorComp.cpp
 ConnectorComp_LDADD = $(top_builddir)/rtm/libRTC.la
 ConnectorComp_LDFLAGS = -L$(top_builddir)/rtm/.libs
 
-EXTRA_DIST = run.sh
+EXTRA_DIST =                \
+	run.sh              \
+	gen.sh              \
+	Makefile.ConsoleIn  \
+	Makefile.ConsoleOut \
+	README.ConsoleIn    \
+	README.ConsoleOut
 
 clean-local:
-	rm -f *.bak *.rpo *.sym lib*.*_pure_* Makefile.old *core *~
+	rm -f *.bak *.rpo *.sym lib*.*_pure_* Makefile.old *core *~ *.so *.log

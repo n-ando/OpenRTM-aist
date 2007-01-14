@@ -1,61 +1,88 @@
 // -*- C++ -*-
 /*!
- * @file ConsoleOut.cpp
- * @brief Sample Component: Console In
- * @date $Date: 2005-05-12 09:06:20 $
+ * @file  ConsoleOut.cpp
+ * @brief Console output component
+ * $Date: 2007-01-14 22:52:00 $
  *
- * Copyright (c) 2003 Noriaki Ando <n-ando@aist.go.jp>
- *          National Institute of Industrial Science (AIST), Japan. All rights reserved.
- *
- * $Id: ConsoleOut.cpp,v 1.1.1.1 2005-05-12 09:06:20 n-ando Exp $
+ * $Id: ConsoleOut.cpp,v 1.2 2007-01-14 22:52:00 n-ando Exp $
  */
 
-
-
 #include "ConsoleOut.h"
-#include <iostream>
 
-using namespace std;
+// Module specification
+// <rtc-template block="module_spec">
+static const char* consoleout_spec[] =
+  {
+    "implementation_id", "ConsoleOut",
+    "type_name",         "ConsoleOut",
+    "description",       "Console output component",
+    "version",           "1.0",
+    "vendor",            "Noriaki Ando, AIST",
+    "category",          "example",
+    "activity_type",     "DataFlowComponent",
+    "max_instance",      "10",
+    "language",          "C++",
+    "lang_type",         "compile",
+    ""
+  };
+// </rtc-template>
 
-ConsoleOut::ConsoleOut(RtcManager* manager)
-  : RtcBase(manager), 
-	m_In("in", in, 8)
+ConsoleOut::ConsoleOut(RTC::Manager* manager)
+  : RTC::DataFlowComponentBase(manager),
+    // <rtc-template block="initializer">
+    m_inIn("in", m_in),
+    
+    // </rtc-template>
+	dummy(0)
 {
-  in.data = 0;
-  m_In.initBuffer(in);
-  registerPort(m_In);
-  appendAlias("example/ConsoleOut|rtc");
+  // Registration: InPort/OutPort/Service
+  // <rtc-template block="registration">
+  // Set InPort buffers
+  registerInPort("in", m_inIn);
+  
+  // Set OutPort buffer
+  
+  // Set service provider to Ports
+  
+  // Set service consumers to Ports
+  
+  // Set CORBA Service Ports
+  
+  // </rtc-template>
+
 }
 
-RtmRes ConsoleOut::rtc_active_do()
+ConsoleOut::~ConsoleOut()
 {
-  m_In.read();
-  cout << "Received: " << in.data << endl;
-  cout << "TimeStamp: " << in.tm.sec << "[s] " << in.tm.nsec << "[ns]" << endl;
-  sleep(1);
-  return RTM_OK;
 }
 
-extern "C" {
-  
-  RtcBase* ConsoleOutNew(RtcManager* manager)
+
+RTC::ReturnCode_t ConsoleOut::onExecute(RTC::UniqueId ec_id)
+{
+  if (m_inIn.isNew())
+    {
+      m_inIn.read();
+      std::cout << "Received: " << m_in.data << std::endl;
+      std::cout << "TimeStamp: " << m_in.tm.sec << "[s] ";
+      std::cout << m_in.tm.nsec << "[ns]" << std::endl;
+    }
+  usleep(1000);
+
+  return RTC::OK;
+}
+
+
+extern "C"
+{
+ 
+  void ConsoleOutInit(RTC::Manager* manager)
   {
-	return new ConsoleOut(manager);
-  }
-  
-  
-  void ConsoleOutDelete(RtcBase* p)
-  {
-	delete p;
-	return;
-  }
-  
-  
-  void ConsoleOutInit(RtcManager* manager)
-  {
-	RtcModuleProfile profile(consolein_spec);
-	manager->registerComponent(profile, ConsoleOutNew, ConsoleOutDelete);
-	
+    RTC::Properties profile(consoleout_spec);
+    manager->registerFactory(profile,
+                             RTC::Create<ConsoleOut>,
+                             RTC::Delete<ConsoleOut>);
   }
   
 };
+
+
