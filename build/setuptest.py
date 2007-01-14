@@ -2,7 +2,7 @@
 #
 # @file setuptest.py
 # @brief CppUnit test environment setup script
-# @date $Date: 2006-11-27 07:23:46 $
+# @date $Date: 2007-01-14 19:37:17 $
 # @author Norkai Ando <n-ando@aist.go.jp>
 #
 # Copyright (C) 2006
@@ -13,7 +13,7 @@
 #         Advanced Industrial Science and Technology (AIST), Japan
 #     All rights reserved.
 #
-# $Id: setuptest.py,v 1.2 2006-11-27 07:23:46 n-ando Exp $
+# $Id: setuptest.py,v 1.3 2007-01-14 19:37:17 n-ando Exp $
 #
 # [usage]
 # setuptest.py [class_name]
@@ -45,6 +45,10 @@
 
 
 # $Log: not supported by cvs2svn $
+# Revision 1.2  2006/11/27 07:23:46  n-ando
+# Embedded CVS tags's dollar character was replaced.
+# A sample test case "test_case0" was added.
+#
 # Revision 1.1  2006/11/21 17:56:00  n-ando
 # CppUnit environment setup script was added.
 #
@@ -122,7 +126,7 @@ clean-local:
 	*~ *core                            \\
 	Makefile.old                        \\
 	*.cc *.hh *.i *.a *.c *.inl
-       
+
 """
 
 test_cpp = """// -*- C++ -*-
