@@ -2,7 +2,7 @@ dnl -*- autoconf -*-
 dnl
 dnl @file configure.ac
 dnl @brief Input file for autoconf
-dnl @date $Date: 2007-01-06 18:06:37 $
+dnl @date $Date: 2007-01-14 23:36:47 $
 dnl @author Noriaki Ando <n-ando@aist.go.jp>
 dnl
 dnl This file is an input file used by the GNU "autoconf" program to
@@ -10,11 +10,14 @@ dnl generate the file "configure", which tries to guess your system
 dnl configuration
 dnl
 dnl
-dnl $Id: configure.ac,v 1.10 2007-01-06 18:06:37 n-ando Exp $
+dnl $Id: configure.ac,v 1.11 2007-01-14 23:36:47 n-ando Exp $
 dnl
 
 dnl
 dnl $Log: not supported by cvs2svn $
+dnl Revision 1.10  2007/01/06 18:06:37  n-ando
+dnl Makefile entry for some unit-test classes were added.
+dnl
 dnl Revision 1.9  2006/12/02 18:22:09  n-ando
 dnl Add some tests Makefile entry.
 dnl
@@ -51,7 +54,7 @@ dnl  Autoconf initial macros
 dnl ------------------------------------------------------------
 dnl  Process this file with autoconf to produce a configure script.
 AC_PREREQ(2.59)
-AC_INIT(OpenRTM-aist, 0.4.0, n-ando@aist.go.jp, OpenRTM-aist-0.4.0-RC1)
+AC_INIT(OpenRTM-aist, 0.4.0, n-ando@aist.go.jp, OpenRTM-aist)
 AM_INIT_AUTOMAKE
 AM_CONFIG_HEADER([rtm/config_rtc.h])
 
@@ -1350,6 +1353,7 @@ echo ''
 
 AC_OUTPUT([Makefile
 	build/Makefile
+	rtm/Makefile
 	rtm/idl/Makefile
 	rtm/tests/Makefile
 	rtm/tests/Properties/Makefile
@@ -1380,23 +1384,24 @@ AC_OUTPUT([Makefile
 	rtm/tests/PublisherFactory/Makefile
 	rtm/tests/DataInOutPort/Makefile
 	rtm/tests/CorbaPort/Makefile
-	rtm/Makefile])
+	rtm/tests/PeriodicExecutionContext/Makefile
+	utils/Makefile
+	utils/rtm-config/Makefile
+	utils/rtc-template/Makefile
+	utils/rtm-skelwrapper/Makefile
+	utils/rtc-link/Makefile
+	utils/rtm-naming/Makefile
+	examples/SimpleIO/Makefile
+	])
+
 
 #	 examples/Makefile
 #	 examples/HelloWorld/Makefile
-#	 examples/SimpleIO/Makefile
+
 #	 examples/SeqIO/Makefile
 #	 examples/StringIO/Makefile
 #	 examples/Slider_and_Motor/Makefile
 #	 examples/SimpleService/Makefile
-#	 utils/Makefile
-#	 utils/rtm-config/Makefile
-#	 utils/rtm-naming/Makefile
-#	 utils/rtc-template/Makefile
-#	 utils/rtcd/Makefile
-#	 utils/rtcsh/Makefile
-#	 utils/rtc-link/Makefile
-#	 utils/rtm-skelwrapper/Makefile
 #	 swig/Makefile
 #	 swig/python/Makefile
 #	 etc/Makefile
