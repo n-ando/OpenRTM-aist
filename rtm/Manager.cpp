@@ -2,7 +2,7 @@
 /*!
  * @file Manager.h
  * @brief RTComponent manager class
- * @date $Date: 2007-01-12 14:32:36 $
+ * @date $Date: 2007-01-14 19:42:30 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
  * Copyright (C) 2003-2005
@@ -12,12 +12,16 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: Manager.cpp,v 1.5 2007-01-12 14:32:36 n-ando Exp $
+ * $Id: Manager.cpp,v 1.6 2007-01-14 19:42:30 n-ando Exp $
  *
  */
 
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.5  2007/01/12 14:32:36  n-ando
+ * Some headers that should be included in the distribution package were
+ * added to the EXTRA_DIST entry.
+ *
  * Revision 1.4  2007/01/09 15:11:24  n-ando
  * Now RTObject is activated itself. The Manager does nothing.
  *
@@ -53,15 +57,21 @@ namespace RTC
   ACE_Thread_Mutex Manager::mutex;
   
   Manager::Manager()
-    : m_Logbuf(), m_MedLogbuf(m_Logbuf), rtcout(m_MedLogbuf)
+    : m_initProc(NULL),
+      m_Logbuf(), m_MedLogbuf(m_Logbuf), rtcout(m_MedLogbuf)
+      
   {
     ;
   }
   Manager::Manager(const Manager& manager)
-    : m_Logbuf(), m_MedLogbuf(m_Logbuf), rtcout(m_MedLogbuf)
+    : m_initProc(NULL),
+      m_Logbuf(), m_MedLogbuf(m_Logbuf), rtcout(m_MedLogbuf)
+      
   {
     ;
   }
+
+
   /*!
    * @if jp
    * @brief マネージャの初期化
@@ -116,25 +126,48 @@ namespace RTC
   }
 
 
+  void Manager::setModuleInitProc(ModuleInitProc proc)
+  {
+    m_initProc = proc;
+  }
+
+
   bool Manager::activateManager()
   {
     RTC_TRACE(("Manager::activateManager()"));
+
+    try
+      {
+	this->getPOAManager()->activate();
+
+	if (m_initProc != NULL)
+	  m_initProc(this);
+      }
+    catch (...)
+      {
+	return false;
+      }
     return true;
   }
 
 
   void Manager::runManager(bool no_block)
   {
-    if (no_block) {RTC_TRACE(("Manager::runManager(): non-blocking mode"));}
-    else          {RTC_TRACE(("Manager::runManager(): blocking mode"));}
+    if (no_block)
+      {
+	RTC_TRACE(("Manager::runManager(): non-blocking mode"));
+	m_runner = new OrbRunner(m_pORB);
+	m_runner->open(0);
+      }
+    else
+      {
+	RTC_TRACE(("Manager::runManager(): blocking mode"));
+	m_pORB->run();
+      }
     return;
   }
 
 
-  void Manager::setInitProc(InitProc proc)
-  {
-    m_initProc = proc;
-  }
 
 
   //============================================================
@@ -279,9 +312,14 @@ namespace RTC
     {
       std::string conf_key(module_name);
       conf_key += ".config_file";
-      std::cout << "+++ Module config file +++" << std::endl;
-      std::cout << "conf key:  " << conf_key << std::endl;
-      std::cout << "conf file: " << m_config->getProperty(conf_key.c_str()) << std::endl;
+
+      rtcout.level(LogStream::RTL_TRACE) << "Module config file";
+      rtcout.level(LogStream::RTL_TRACE) << " conf key:  " << conf_key;
+      rtcout.level(LogStream::RTL_TRACE) << " conf file:  ";
+      rtcout.level(LogStream::RTL_TRACE)
+	<< m_config->getProperty(conf_key.c_str());
+      rtcout.level(LogStream::RTL_TRACE) << std::endl;
+      
       // コンポーネントが持つプロパティに直接マージ
       // getProperties() は参照を返すので
       mergeProperty(comp->getProperties(),
@@ -295,16 +333,21 @@ namespace RTC
       conf_key += ".";
       conf_key += comp->getInstanceName();
       conf_key += ".config_file";
-      std::cout << "+++ Instance config file +++" << std::endl;
-      std::cout << "conf key:  " << conf_key << std::endl;
-      std::cout << "conf file: " << m_config->getProperty(conf_key.c_str()) << std::endl;
+
+      rtcout.level(LogStream::RTL_TRACE) << "Instance config file";
+      rtcout.level(LogStream::RTL_TRACE) << " conf key:  " << conf_key;
+      rtcout.level(LogStream::RTL_TRACE) << " conf file:  ";
+      rtcout.level(LogStream::RTL_TRACE)
+	<< m_config->getProperty(conf_key.c_str());
+      rtcout.level(LogStream::RTL_TRACE) << std::endl;
+
       // コンポーネントが持つプロパティに直接マージ
       // getProperties() は参照を返すので
       mergeProperty(comp->getProperties(),
 		    m_config->getProperty(conf_key.c_str()).c_str());
     }
 
-    comp->getProperties().list(std::cout);
+    comp->getProperties().list(rtcout.level(LogStream::RTL_TRACE));
     std::string naming_formats;
 
     naming_formats += comp->getProperties().getProperty("naming_formats");
@@ -316,7 +359,6 @@ namespace RTC
     std::string naming_names;
     naming_names = formatString(naming_formats.c_str(),
 				comp->getProperties());
-    std::cout << "naming_name: " << naming_names << std::endl;
 
     comp->getProperties().setProperty("naming_names", naming_names.c_str());
 
@@ -342,15 +384,14 @@ namespace RTC
 
     std::vector<std::string> names(comp->getNamingNames());
     std::vector<std::string>::iterator it, it_end;
-    std::cout << "n size(): " << names.size() << std::endl;
 
     it = names.begin();
     it_end = names.end();
     for ( ; it != it_end; ++it)
       {
-	std::cout << "####bind####: " << *it << std::endl;
-	m_namingManager->bindObject(it->c_str(),
-				    comp);
+	rtcout.level(LogStream::RTL_TRACE) << "Bind name: ";
+	rtcout.level(LogStream::RTL_TRACE) << *it << std::endl;
+	m_namingManager->bindObject(it->c_str(), comp);
       }
     return true;
   }
@@ -514,14 +555,19 @@ namespace RTC
    */
   bool Manager::initNaming()
   {
-    std::cout << "initNaming()" << std::endl;
+    RTC_TRACE(("Manager::initNaming()"));
+
     m_namingManager = new NamingManager();
 
     if (CORBA::is_nil(m_pORB))
       return false;
 
     std::vector<std::string> names;
-    std::cout << m_config->getProperty("corba.nameservers") << std::endl;
+
+    rtcout.level(LogStream::RTL_TRACE) << "CORBA naming servers: ";
+    rtcout.level(LogStream::RTL_TRACE)
+      << m_config->getProperty("corba.nameservers") << std::endl;
+
     names = split(m_config->getProperty("corba.nameservers"), ",");
     std::vector<std::string>::iterator it, it_end;
     it = names.begin();
@@ -529,7 +575,6 @@ namespace RTC
     for ( ; it != it_end; ++it)
       {
 	NamingOnCorba* name;
-	std::cout << "create nameserver proxy: " << it->c_str() << std::endl;
 	name = new NamingOnCorba(m_pORB, it->c_str());
 	m_namingManager->registerNaming(name);
       }
