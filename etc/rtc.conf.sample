@@ -2,98 +2,112 @@
 #
 # RT-Component manager configuration
 #
-# Copyright (c) 2003-2005 Noriaki Ando <n-ando@aist.go.jp>
+# Copyright (c) 2003-2007 Noriaki Ando <n-ando@aist.go.jp>
 #      Task-intelligence Research Group,
 #      Intelligent Systems Research Institute,
 #      National Institute of
 #          Advanced Industrial Science and Technology (AIST), Japan
 #      All rights reserved.
 #
-# $Id: rtc.conf.sample,v 1.1.1.1 2005-05-12 09:06:19 n-ando Exp $
+# $Id: rtc.conf.sample,v 1.2 2007-01-14 23:33:31 n-ando Exp $
 # 
 #----------------------------------------------------------------------
 #
 # $Log: not supported by cvs2svn $
+# Revision 1.1.1.1  2005/05/12 09:06:19  n-ando
+# Public release.
+#
 #
 
 #------------------------------------------------------------
+# Configuration version (optional) 
 #
-# ORB ID
-#
-#ORBid	omniORB4
+#config.version: 0.4.0
 
 #------------------------------------------------------------
-# CORBA name server setting [MANDATORY]
+# OpenRTM-aist version (optional)
+#
+#openrtm.version: 0.4.0
+
+#------------------------------------------------------------
+# The name of manager (default = manager)
+#
+#manager.name: manager
+
+
+
+#============================================================
+# Naming configurations
+#============================================================
+
+#------------------------------------------------------------
+# Naming format
+#
+# The name format of components that is bound to naming services.
+# The delimiter between names is "/".
+# The delimiter between name and kind is ".".
+#
+# example: (OpenRTM-aist-0.2.0 style)
+#       %h.host_cxt/%M.mgr_cxt/%c.cat_cxt/%m.mod_cxt/%n.rtc
+# This is formatted according to the following replacement rules.
+#
+# %n: The instance name of the component.
+# %t: The type name of the component.
+# %m: The module name of the component.
+# %v: The version of the component.
+# %V: The component vendor.
+# %c: The category of the component.
+# %h: The hostname.
+# %M: The manager name.
+# %p: PID of the manager.
+#
+#naming_formats: %h.host_cxt/%M.mgr_cxt/%c.cat_cxt/%m.mod_cxt/%n.rtc
+
+#------------------------------------------------------------
+# CORBA name server setting
 #
 # NameServer host_name:port_number
 #
 # for example
-# NameServer openrtm.aist.go.jp:9876
+# corba.nameservers: openrtm.aist.go.jp:9876
+# corba.nameservers: rtm0.aist.go.jp, rtm1.aist.go.jp, rtm2.aist.go.jp
 #
+# Multiple name servers can be specified separating by comma.
 # If port number is abbreviated, default port number is used.
 # The default port number is depend on ORB implementation.
 #
-NameServer	giko.a02.aist.go.jp
-#NameServer	ti-ohrp3.a02.aist.go.jp:5005
+#corba.nameservers: localhost
 
-# 
-# Default interface IP address and port number of IIOP
-#
-# IIOPAddrPort  host_name:port_number
-#
-#IIOPAddrPort	myhost.mydomain
-#IIOPAddrPort	myhost.mydomain:8888
 
+#============================================================
+# Module management
+#============================================================
 
 #------------------------------------------------------------
-# Default path of loadable components installed.
-#
-#
-#ComponentLoadPath	.:/usr/lib:/usr/local/lib
+#manager.modules.config_ext:
+#manager.modules.config_path:
+#manager.modules.detect_loadable:
+#manager.modules.load_path:
+#manager.modules.init_func_suffix:
+#manager.modules.init_func_prefix:
+#manager.modules.abs_path_allowed:
+#manager.modules.download_allowed:
+#manager.modules.download_dir:
+#manager.modules.download_cleanup:
+#manager.modules.preload:
 
-
-#------------------------------------------------------------
-# Log file name
-#
-# Default log file name is "rtm(pid).log". (pid = process id)
-#
-#LogFile		/var/log/rtc.log
-
-#------------------------------------------------------------
-# LogLevel setting
-#
-# The following LogLevels are allowed.
-# SILENT, ERROR, WARN, NORMAL, INFO, DEBUG, TRACE, VERBOSE, PARANOID
-#
-#
-# SILENT  : completely silent
-# ERROR   : includes (ERROR)
-# WARN    : includes (ERROR, WARN)
-# INFO    : includes (ERROR, WARN, INFO)
-# NORMAL  : includes (ERROR, WARN, INFO, NORMAL)
-# DEBUG   : includes (ERROR, WARN, INFO, NORMAL, DEBUG)
-# TRACE   : includes (ERROR, WARN, INFO, NORMAL, DEBUG, TRACE)
-# VERBOSE : includes (ERROR, WARN, INFO, NORMAL, DEBUG, TRACE, VERBOSE)
-# PARANOID: includes (ERROR, WARN, INFO, NORMAL, DEBUG, TRACE, VERBOSE, PARA)
-#
-# Warning!!!
-# "TRACE", "VERBOSE", "PARANOID" logging level will create a huge log file!!
-# "PARANOID" log level will tangle the log file.
-#
-#LogLevel	NORMAL
+#============================================================
+# Logger configurations
+#============================================================
 
 #------------------------------------------------------------
-# Log stream mutex setting
+# Log file name (default = ./rtc%p.log)
+# %p: PID
 #
-# The following values are allowed.
-# Yes or No, Enable or Disable.
-# [Yy][Ee][Ss] or [Nn][Oo]
-# [Ee][Nn][Aa][Bb][Ll][Ee] or [Dd][Ii][Ss][Aa][Bb][Ll][Ee] 
-#
-#LogStreamLock disable
+#logger.file_name: ./rtc%p.log
 
 #------------------------------------------------------------
-# Date/time format of the prefix of log messages
+# Log date format (default = %b %d %H:%M:%S)
 #
 # The following strftime(3) like format expression is available.
 # If no prefix is needed, use "No" or "Disable".
@@ -122,48 +136,39 @@ NameServer	giko.a02.aist.go.jp
 # %Y year in decimal, with the century 
 # %Z time zone name 
 # %% a percent sign 
+#  
 #
-#LogTimeFormat	No
-#LogTimeFormat	Disable
-#LogTimeFormat	[%Y-%m-%dT%H.%M.%S%Z]     // W3C standard format
-#LogTimeFormat	[%b %d %H:%M:%S]          // Syslog format
-#LogTimeFormat  [%a %b %d %Y %H:%M:%S %Z] // RFC2822 format
-#LogTimeFormat  [%a %b %d %H:%M:%S %Z %Y] // data command format
-#LogTimeFormat	[%Y-%m-%d %H.%M.%S]
+#logger.date_format: No
+#logger.date_format: Disable
+#logger.date_format: [%Y-%m-%dT%H.%M.%S%Z]     // W3C standard format
+#logger.date_format: [%b %d %H:%M:%S]          // Syslog format
+#logger.date_format: [%a %b %d %Y %H:%M:%S %Z] // RFC2822 format
+#logger.date_format: [%a %b %d %H:%M:%S %Z %Y] // data command format
+#logger.date_format: [%Y-%m-%d %H.%M.%S]
+#
+#logger.date_format: %b %d %H:%M:%S
 
 
+#------------------------------------------------------------
+# Log level (default = NORMAL)
 #
-# Set master logger component's name
+# The following LogLevels are allowed.
+# SILENT, ERROR, WARN, NORMAL, INFO, DEBUG, TRACE, VERBOSE, PARANOID
 #
-#MasterLoggerName		/MasterLogger|rtc
-
-
 #
-# Use master logger
+# SILENT  : completely silent
+# ERROR   : includes (ERROR)
+# WARN    : includes (ERROR, WARN)
+# INFO    : includes (ERROR, WARN, INFO)
+# NORMAL  : includes (ERROR, WARN, INFO, NORMAL)
+# DEBUG   : includes (ERROR, WARN, INFO, NORMAL, DEBUG)
+# TRACE   : includes (ERROR, WARN, INFO, NORMAL, DEBUG, TRACE)
+# VERBOSE : includes (ERROR, WARN, INFO, NORMAL, DEBUG, TRACE, VERBOSE)
+# PARANOID: includes (ERROR, WARN, INFO, NORMAL, DEBUG, TRACE, VERBOSE, PARA)
 #
-# If use the master logger in the domain, set Yes
+# Warning!!!
+# "TRACE", "VERBOSE", "PARANOID" logging level will create a huge log file!!
+# "PARANOID" log level will tangle the log file.
 #
-#UseMasterLogger			Yes
-
-
-#
-# CreateMasterLogger
-#
-# Yes - Create master logger on this RT-Component manager, if no master logger
-#       can be found in the domain.
-# No - Do nothing, if no master logger can be found in the domain.
-#
-#CreateMasterLogger		Yes
-
-
-#
-# PreferredMasterLogger
-#
-# Yes - This manager create a master logger in this domain and overwrite
-#       other master logger entry in a name server.
-# No - Do nothing.
-#
-#PreferredMasterLogger	Yes
-
-
+#logger.log_level: NORMAL
 
