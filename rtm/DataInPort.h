@@ -2,7 +2,7 @@
 /*!
  * @file DataInPort.h
  * @brief RTC::Port implementation for Data InPort
- * @date $Date: 2007-01-12 14:29:48 $
+ * @date $Date: 2007-01-14 22:57:48 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
  * Copyright (C) 2006
@@ -13,12 +13,15 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: DataInPort.h,v 1.3 2007-01-12 14:29:48 n-ando Exp $
+ * $Id: DataInPort.h,v 1.4 2007-01-14 22:57:48 n-ando Exp $
  *
  */
 
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.3  2007/01/12 14:29:48  n-ando
+ * A trivial bug fix.
+ *
  * Revision 1.2  2007/01/06 17:43:39  n-ando
  * The behavior on notify_connect() and notify_disconnect() are now
  * implemented in protected functions(ex. publisherInterfaces()).
@@ -56,8 +59,8 @@ namespace RTC
   {
 
   public:
-    template <class DataType>
-    DataInPort(const char* name, InPort<DataType>& inport)
+    template <class DataType, template <class DataType> class Buffer>
+    DataInPort(const char* name, InPort<DataType, Buffer>& inport)
       : PortBase(name)
     {
       // PortProfile::properties ¤òÀßÄê

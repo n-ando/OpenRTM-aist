@@ -2,7 +2,7 @@
 /*!
  * @file DataOutPort.h
  * @brief Base class of OutPort
- * @date $Date: 2007-01-12 14:30:01 $
+ * @date $Date: 2007-01-14 22:57:54 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
  * Copyright (C) 2006
@@ -13,12 +13,15 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: DataOutPort.h,v 1.4 2007-01-12 14:30:01 n-ando Exp $
+ * $Id: DataOutPort.h,v 1.5 2007-01-14 22:57:54 n-ando Exp $
  *
  */
 
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.4  2007/01/12 14:30:01  n-ando
+ * A trivial bug fix.
+ *
  * Revision 1.3  2007/01/06 17:44:11  n-ando
  * The behavior on notify_connect() and notify_disconnect() are now
  * implemented in protected functions(ex. publisherInterfaces()).
@@ -66,8 +69,8 @@ namespace RTC
      * @brief Constructor
      * @endif
      */
-    template <class DataType>
-    DataOutPort(const char* name, OutPort<DataType>& outport)
+    template <class DataType, template <class DataType> class Buffer>
+    DataOutPort(const char* name, OutPort<DataType, Buffer>& outport)
       : PortBase(name), m_outport(outport)
     {
       // PortProfile::properties ¤òÀßÄê
