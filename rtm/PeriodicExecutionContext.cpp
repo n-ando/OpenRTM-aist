@@ -2,7 +2,7 @@
 /*!
  * @file PeriodicExecutionContext.cpp
  * @brief PeriodicExecutionContext class
- * @date $Date: 2007-01-09 15:29:25 $
+ * @date $Date: 2007-01-14 19:44:26 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
  * Copyright (C) 2006
@@ -12,22 +12,27 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: PeriodicExecutionContext.cpp,v 1.1 2007-01-09 15:29:25 n-ando Exp $
+ * $Id: PeriodicExecutionContext.cpp,v 1.2 2007-01-14 19:44:26 n-ando Exp $
  *
  */
 
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.1  2007/01/09 15:29:25  n-ando
+ * PeriodicExecutionContext class
+ *
  */
 
 #include <rtm/PeriodicExecutionContext.h>
 #include <algorithm>
+#include <iostream>
 
 namespace RTC
 {
   PeriodicExecutionContext::
   PeriodicExecutionContext(DataFlowComponent_ptr owner,
 			   double rate)
+    : m_running(false)
   {
     m_profile.kind = PERIODIC;
     m_profile.rate = rate;
@@ -64,13 +69,14 @@ namespace RTC
   int PeriodicExecutionContext::svc(void)
   {
     //    RTC_TRACE(("RtcBase::svc()"));
-    ACE_Time_Value tv(0, m_usec); // (s, us)
-    while (m_running)
+    //    std::cout << (m_running ? "RUNNING" : "STOPPING") << std::endl;
+    do
       {
+	ACE_Time_Value tv(0, m_usec); // (s, us)
 	std::for_each(m_comps.begin(), m_comps.end(), invoke_worker());
 	while (!m_running) {ACE_OS::sleep(tv);}
 	ACE_OS::sleep(tv);
-      }
+      } while (m_running);
     //    forceExit();
     //    finalize();
     return 0;
@@ -122,7 +128,7 @@ namespace RTC
 
     // change EC thread state
     m_running = true;
-    //    this->open(0);
+    this->open(0);
 
     return RTC::OK;
   }
@@ -173,6 +179,7 @@ namespace RTC
     if (rate > 0.0)
       {
 	m_profile.rate = rate;
+	m_usec = (long int)(1000000/rate);
 	std::for_each(m_comps.begin(), m_comps.end(), invoke_on_rate_changed());
 	return RTC::OK;
       }
@@ -200,6 +207,7 @@ namespace RTC
       return RTC::PRECONDITION_NOT_MET;
 
     it->_sm.m_sm.goTo(ACTIVE_STATE);
+    
     return RTC::OK;
   }
   
