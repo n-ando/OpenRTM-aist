@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 #
 # @brief CORBA stub and skelton wrapper generator
-# @date $Date: 2007-01-12 14:28:31 $
+# @date $Date: 2007-01-16 18:35:55 $
 # @author Norkai Ando <n-ando@aist.go.jp>
 #
 # Copyright (C) 2005-2006
@@ -12,10 +12,14 @@
 #         Advanced Industrial Science and Technology (AIST), Japan
 #     All rights reserved.
 #
-# $Id: makewrapper.py,v 1.5 2007-01-12 14:28:31 n-ando Exp $
+# $Id: makewrapper.py,v 1.6 2007-01-16 18:35:55 n-ando Exp $
 #
 
 # $Log: not supported by cvs2svn $
+# Revision 1.5  2007/01/12 14:28:31  n-ando
+# Directory to create output files was the same directory of IDL file.
+# Now it is current directory.
+#
 # Revision 1.4  2006/11/04 16:34:47  n-ando
 # Some trivial fixes.
 #
@@ -201,6 +205,7 @@ class wrapper_gen:
         self.write_skelh()
         self.write_stub()
         self.write_stubh()
+        self.omniorb_gcc4_fix()
         return
 
     def write_skel(self):
@@ -219,6 +224,17 @@ class wrapper_gen:
         self.gen(self.data["stub_h"], stub_h_temp, self.data)
         return
 
+    def omniorb_gcc4_fix(self):
+        """
+        escape the compile error of omniORB's stub/skel on gcc4
+        """
+        omnistub = self.data["basename"] + ".hh"
+        omnistub_tmp = omnistub + ".old"
+        omniskelcc =  self.data["basename"] + "SK.cc"
+        if os.access(omnistub, os.F_OK) and os.access(omniskelcc, os.F_OK):
+            os.rename(omnistub, omnistub_tmp)
+            os.system("sed -e \'s/#if defined(__GNUG__) || defined(__DECCXX) /\#if defined(__GNUG__) \&\& (__GNUG__ < 4) ||  defined(__DECCXX) /g\' " + omnistub_tmp + " > " + omnistub)
+            os.remove(omnistub_tmp)
 
 idl_file = sys.argv[1]
 if len(sys.argv) > 2:
