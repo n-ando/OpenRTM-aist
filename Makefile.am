@@ -2,9 +2,12 @@
 ##---------------------------------------------------------------------------
 ## Makefile.am for the top directory
 ##
-## $Id: Makefile.am,v 1.2 2007-01-14 23:36:59 n-ando Exp $
+## $Id: Makefile.am,v 1.3 2007-01-16 18:36:58 n-ando Exp $
 ##
 ## $Log: not supported by cvs2svn $
+## Revision 1.2  2007/01/14 23:36:59  n-ando
+## SimpleIO sub-directory entry was recovered.
+##
 ## Revision 1.1.1.1  2005/05/12 09:06:18  n-ando
 ## Public release.
 ##
@@ -12,7 +15,7 @@
 
 AUTOMAKE_OPTIONS = 1.4
 
-SUBDIRS = build rtm utils examples
+SUBDIRS = build rtm utils examples etc docs
 
 EXTRA_DIST = \
 	INSTALL.jp \
