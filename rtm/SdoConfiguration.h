@@ -2,7 +2,7 @@
 /*!
  * @file SdoConfiguration.h
  * @brief RT component base class
- * @date $Date: 2006-11-08 20:00:21 $
+ * @date $Date: 2007-01-21 13:05:13 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
  * Copyright (C) 2006
@@ -12,12 +12,15 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: SdoConfiguration.h,v 1.4 2006-11-08 20:00:21 n-ando Exp $
+ * $Id: SdoConfiguration.h,v 1.5 2007-01-21 13:05:13 n-ando Exp $
  *
  */
 
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.4  2006/11/08 20:00:21  n-ando
+ * ConfigurationSet related interfaces are fixed.
+ *
  * Revision 1.3  2006/10/30 08:05:45  n-ando
  * CORBA sequence operations were replaced by CORBA_SeqUtil functions.
  *
@@ -41,6 +44,8 @@
 
 // local includes
 #include "rtm/idl/SDOPackageSkel.h"
+
+#include <string>
 
 // SdoConfiguration with SeqEx 159120
 // SdoConfiguration with SeqUtil 114504 114224
