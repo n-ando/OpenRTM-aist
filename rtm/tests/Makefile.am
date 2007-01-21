@@ -2,9 +2,12 @@
 ##------------------------------------------------------------
 ## Makefile.am for unit test
 ##
-## $Id: Makefile.am,v 1.14 2007-01-12 14:40:56 n-ando Exp $
+## $Id: Makefile.am,v 1.15 2007-01-21 13:06:23 n-ando Exp $
 ##
 ## $Log: not supported by cvs2svn $
+## Revision 1.14  2007/01/12 14:40:56  n-ando
+## Some build subdir entry were added.
+##
 ## Revision 1.13  2006/12/18 06:57:24  n-ando
 ## clean-local target alltests.xml and etc. were added.
 ##
@@ -63,6 +66,7 @@ SUBDIRS = \
 	ObjectManager     \
 	OutPort           \
 	OutPortBase       \
+	PeriodicExecutionContext \
 	PortAdmin         \
 	PortBase          \
 	Properties        \
