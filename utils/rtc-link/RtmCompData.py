@@ -1,9 +1,9 @@
 #!/usr/bin/env python
-# -*- coding: utf-8 -*-
+# -*- Python -*-
 #
 #  @file RtmCompData.py
 #  @brief rtc-link component dict manager class
-#  @date $Date: 2005-05-16 10:11:01 $
+#  @date $Date: 2007-01-21 13:20:47 $
 #  @author Tsuyoshi Tanabe, Noriaki Ando <n-ando@aist.go.jp>
 # 
 #  Copyright (C) 2004-2005
@@ -13,11 +13,14 @@
 #          Advanced Industrial Science and Technology (AIST), Japan
 #      All rights reserved.
 # 
-#  $Id: RtmCompData.py,v 1.2 2005-05-16 10:11:01 n-ando Exp $
+#  $Id: RtmCompData.py,v 1.3 2007-01-21 13:20:47 n-ando Exp $
 # 
 
 #
 #  $Log: not supported by cvs2svn $
+#  Revision 1.2  2005/05/16 10:11:01  n-ando
+#  - Assembly XML data saving/loading function is now enabled. (Experimental)
+#
 #  Revision 1.1.1.1  2005/05/12 09:06:19  n-ando
 #  Public release.
 #
@@ -45,6 +48,7 @@ from omniORB import CORBA
 #import RtmParser as rtxml
 
 # RTM のimportは、PYTHONPATHにIDLスタブのあるディレクトリを追加する事。
+import RTC
 from RTM import *
 from RtmDialog import *
 
@@ -114,7 +118,7 @@ class RtmDictCore:
         self.retlist = []
         try:
             ref = self.dict[fullpath]['objref']
-            ref = ref._narrow(RTCBase)
+            ref = ref._narrow(RTC.RTObject)
 
             in_list = []
             ret_list = []
@@ -154,7 +158,7 @@ class RtmDictCore:
         self.retlist = []
         try:
             ref = self.dict[fullpath]['objref']
-            ref = ref._narrow(RTCBase)
+            ref = ref._narrow(RTC.RTObject)
 
             out_list = []
             out_list = ref._get_outports()
@@ -208,7 +212,7 @@ class RtmDictCore:
                     err_mess = 'duplicate exception!!:%s\n' % comp['objref']
                     except_mess(err_mess)
             try:
-                ref = ref._narrow(RTCBase)
+                ref = ref._narrow(RTC.RTObject)
             except:
                 except_mess('SetObjRefToFullPath error!:')
                 ref = None
@@ -343,7 +347,7 @@ class RtmCompData(RtmDictCore):
         tmp = 0
         try:
             ref = self.GetObjRefToFullpathCallback(fullpath)
-            ref = ref._narrow(RTCBase)
+            ref = ref._narrow(RTC.RTObject)
         except :
             err_mess = 'GetCompState: obj-ref error:%s\n' % fullpath
             except_mess(err_mess)
@@ -432,7 +436,7 @@ class RtmCompData(RtmDictCore):
         ret = RTM_OK
         ref = self.GetObjRefToFullpathCallback(fullpath)
         try:
-            ref = ref._narrow(RTCBase)
+            ref = ref._narrow(RTC.RTObject)
             ret = ref.rtc_start()
             if ret != RTM_OK:
                 print "Error rtc_start(): ",fullpath
@@ -468,7 +472,7 @@ class RtmCompData(RtmDictCore):
         ret = RTM_OK
         ref = self.GetObjRefToFullpathCallback(fullpath)
         try:
-            ref = ref._narrow(RTCBase)
+            ref = ref._narrow(RTC.RTObject)
             ret = ref.rtc_stop()
             if ret != RTM_OK:
                 print "Error rtc_stop(): ",fullpath
@@ -501,7 +505,7 @@ class RtmCompData(RtmDictCore):
         ret = RTM_OK
         ref = self.GetObjRefToFullpathCallback(fullpath)
         try:
-            ref = ref._narrow(RTCBase)
+            ref = ref._narrow(RTC.RTObject)
             ret = ref.rtc_reset()
             if ret != RTM_OK:
                 print "Error rtc_reset(): ",fullpath
@@ -535,7 +539,7 @@ class RtmCompData(RtmDictCore):
         ret = RTM_OK
         ref = self.GetObjRefToFullpathCallback(fullpath)
         try:
-            ref = ref._narrow(RTCBase)
+            ref = ref._narrow(RTC.RTObject)
             ret = ref.rtc_exit()
             if ret != RTM_OK:
                 print "Error rtc_exit(): ",fullpath
@@ -569,7 +573,7 @@ class RtmCompData(RtmDictCore):
         ret = RTM_OK
         ref = self.GetObjRefToFullpathCallback(fullpath)
         try:
-            ref = ref._narrow(RTCBase)
+            ref = ref._narrow(RTC.RTObject)
             ret = ref.rtc_kill()
             if ret != RTM_OK:
                 print "Error rtc_kill(): ",fullpath
