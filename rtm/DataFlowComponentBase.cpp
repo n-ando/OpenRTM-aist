@@ -2,7 +2,7 @@
 /*!
  * @file DataFlowComponentBase.cpp
  * @brief DataFlowParticipant RT-Component base class
- * @date $Date: 2007-01-14 19:39:04 $
+ * @date $Date: 2007-01-21 14:02:37 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
  * Copyright (C) 2006
@@ -12,12 +12,15 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: DataFlowComponentBase.cpp,v 1.2 2007-01-14 19:39:04 n-ando Exp $
+ * $Id: DataFlowComponentBase.cpp,v 1.3 2007-01-21 14:02:37 n-ando Exp $
  *
  */
 
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.2  2007/01/14 19:39:04  n-ando
+ * The debugging messages to stdout were deleted.
+ *
  * Revision 1.1  2007/01/09 09:47:15  n-ando
  * DataFlowParticipant RT-Component base class
  *
@@ -31,7 +34,7 @@ namespace RTC
 {
   /*!
    * @if jp
-   * @brief $B%3%s%9%H%i%/%?(B
+   * @brief ¥³¥ó¥¹¥È¥é¥¯¥¿
    * @else
    * @brief Constructor
    * @endif
@@ -49,7 +52,7 @@ namespace RTC
 
   /*!
    * @if jp
-   * @brief $B%G%9%H%i%/%?(B
+   * @brief ¥Ç¥¹¥È¥é¥¯¥¿
    * @else
    * @brief Destructor
    * @endif
@@ -61,7 +64,7 @@ namespace RTC
 
   /*!
    * @if jp
-   * @brief $B=i4|2=(B
+   * @brief ½é´ü²½
    * @else
    * @brief Initialization
    * @endif
