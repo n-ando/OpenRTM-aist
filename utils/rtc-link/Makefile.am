@@ -2,9 +2,12 @@
 ##---------------------------------------------------------------------------
 ## Makefile.am for rtc-link
 ##
-## $Id: Makefile.am,v 1.4 2005-09-08 12:52:03 n-ando Exp $
+## $Id: Makefile.am,v 1.5 2007-01-21 13:19:41 n-ando Exp $
 ##
 ## $Log: not supported by cvs2svn $
+## Revision 1.4  2005/09/08 12:52:03  n-ando
+## - RTCService.idl was added for RTComponent' service.
+##
 ## Revision 1.3  2005/05/27 10:08:19  n-ando
 ## - InPort/OutPort interface was changed.
 ##   rtc-link assembly function is enabled now.
@@ -20,7 +23,7 @@
 AUTOMAKE_OPTIONS = 1.4
 
 # IDL and omniidl path and options
-IDLDIR = ../../rtm/idl/
+IDLDIR = $(top_srcdir)/rtm/idl/
 IDLC = omniidl
 IDLPYFLAGS = -bpython -nf
 
@@ -61,21 +64,37 @@ RTCLINK_SOURCES = \
 	RtmDtdValidator.py \
 	rtc-link
 
-# rule for installing RTM RTM__POA directories
+# rule for installing RTC RTC__POA SDOPackage SDOPackage__POA directories
 install-stubs:
-	if test -d RTM; then \
-	  $(mkinstalldirs) $(DESTDIR)$(pymoduledir)/RTM; \
-	  for x in RTM/*; do \
+	if test -d RTC; then \
+	  $(mkinstalldirs) $(DESTDIR)$(pymoduledir)/RTC; \
+	  for x in RTC/*; do \
 	    if test -f $$x; then \
-	      $(INSTALL_DATA) $$x $(DESTDIR)$(pymoduledir)/RTM/ ;\
+	      $(INSTALL_DATA) $$x $(DESTDIR)$(pymoduledir)/RTC/ ;\
 	    fi \
 	  done \
 	fi
-	if test -d RTM__POA; then \
-	  $(mkinstalldirs) $(DESTDIR)$(pymoduledir)/RTM__POA; \
-	  for x in RTM__POA/*; do \
+	if test -d RTC__POA; then \
+	  $(mkinstalldirs) $(DESTDIR)$(pymoduledir)/RTC__POA; \
+	  for x in RTC__POA/*; do \
 	    if test -f $$x; then \
-	      $(INSTALL_DATA) $$x $(DESTDIR)$(pymoduledir)/RTM__POA/ ;\
+	      $(INSTALL_DATA) $$x $(DESTDIR)$(pymoduledir)/RTC__POA/ ;\
+	    fi \
+	  done \
+	fi
+	if test -d SDOPackage; then \
+	  $(mkinstalldirs) $(DESTDIR)$(pymoduledir)/SDOPackage; \
+	  for x in SDOPackage/*; do \
+	    if test -f $$x; then \
+	      $(INSTALL_DATA) $$x $(DESTDIR)$(pymoduledir)/SDOPackage/ ;\
+	    fi \
+	  done \
+	fi
+	if test -d SDOPackage__POA; then \
+	  $(mkinstalldirs) $(DESTDIR)$(pymoduledir)/SDOPackage__POA; \
+	  for x in SDOPackage__POA/*; do \
+	    if test -f $$x; then \
+	      $(INSTALL_DATA) $$x $(DESTDIR)$(pymoduledir)/SDOPackage__POA/ ;\
 	    fi \
 	  done \
 	fi
@@ -85,17 +104,9 @@ install-data-local: install-stubs
 
 
 IDL_SOURCES =       \
-	RTMBase.idl     \
-	RTCDataType.idl \
-	RTCSubscription.idl	\
-	RTCPortBase.idl	\
-	RTCInPort.idl   \
-	RTCOutPort.idl  \
-	RTCService.idl  \
-	RTComponent.idl \
-	RTCProfile.idl  \
-	RTCBase.idl     \
-	RTCManager.idl
+	SDOPackage.idl	\
+	RTC.idl 	    
+
 
 #
 # RTM idl stubs for python
@@ -107,12 +118,14 @@ py_stub: $(PY_STUBS)
 
 dist-hook: py_stub
 
-EXTRA_DIST = \
+EXTRA_DIST =           \
 	$(RTCLINK_SOURCES) \
-	$(PY_STUBS) \
-	RTM \
-	RTM__POA
+	$(PY_STUBS)        \
+	RTC                \
+	RTC__POA           \
+	SDOPackage         \
+	SDOPackage__POA
 
 
 clean-local:
-	rm -rf *~ *core *.pyc *_idl.py RTM RTM__POA
+	rm -rf *~ *core *.pyc *_idl.py RTC RTC__POA SDOPackage SDOPackage__POA
