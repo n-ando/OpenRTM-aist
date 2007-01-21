@@ -2,7 +2,7 @@
 /*!
  * @file DataInPort.h
  * @brief RTC::Port implementation for Data InPort
- * @date $Date: 2007-01-21 09:43:22 $
+ * @date $Date: 2007-01-21 17:16:58 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
  * Copyright (C) 2006
@@ -13,12 +13,18 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: DataInPort.h,v 1.5 2007-01-21 09:43:22 n-ando Exp $
+ * $Id: DataInPort.h,v 1.6 2007-01-21 17:16:58 n-ando Exp $
  *
  */
 
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.5  2007/01/21 09:43:22  n-ando
+ * - A bug about memory access violation to m_providers still exists.
+ *   This bug arises on Fedora5/gcc4 environment.
+ *   To escape the bug temporarily dummy variable (m_dummy) is defined.
+ * - Some functors were moved to cpp file.
+ *
  * Revision 1.4  2007/01/14 22:57:48  n-ando
  * A bug fix about template argument for buffer-type in constructor.
  *
@@ -98,7 +104,7 @@ namespace RTC
      *
      * Fedora5/gcc4.1.1. にて DataInPort の先頭領域のメモリ破壊が
      * 起こっている模様。
-     * (gdbでかなり粘って追ってみたが断念(´･ω･`)
+     * (gdbでかなり粘って追ってみたが断念)
      * もともともは std::vector<InPortProvider*> m_providers が先頭
      * このままだと、
      * $vec->_M_impl._M_start:  begin() に相当？
