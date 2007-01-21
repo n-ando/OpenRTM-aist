@@ -2,9 +2,12 @@
 ##---------------------------------------------------------------------------
 ## Makefile.am for swig
 ##
-## $Id: Makefile.am,v 1.1.1.1 2005-05-12 09:06:20 n-ando Exp $
+## $Id: Makefile.am,v 1.2 2007-01-21 13:16:33 n-ando Exp $
 ##
 ## $Log: not supported by cvs2svn $
+## Revision 1.1.1.1  2005/05/12 09:06:20  n-ando
+## Public release.
+##
 ##---------------------------------------------------------------------------
 
 AUTOMAKE_OPTIONS = 1.4
@@ -21,11 +24,11 @@ IDLReference:
 IDLReference-en:
 	make -f Makefile.docs IDLReference-en
 
-DevelopersGuide.ps:
-	make -f Makefile.docs DevelopersGuide.ps
+#DevelopersGuide.ps:
+#	make -f Makefile.docs DevelopersGuide.ps
 
-DevelopersGuide.pdf:
-	make -f Makefile.docs DevelopersGuide.pdf
+#DevelopersGuide.pdf:
+#	make -f Makefile.docs DevelopersGuide.pdf
 
 docsdir = $(pkgdatadir)
 
@@ -33,18 +36,18 @@ EXTRA_DIST = \
 	ClassReference \
 	ClassReference-en \
 	IDLReference \
-	IDLReference-en \
-	DevelopersGuide.ps \
-	DevelopersGuide.pdf
+	IDLReference-en
+#	DevelopersGuide.ps \
+#	DevelopersGuide.pdf
 
-install-manual:
-	$(mkinstalldirs) $(DESTDIR)$(pkgdatadir)/docs/
-	if test -f DevelopersGuide.ps; then \
-	  $(INSTALL_DATA) DevelopersGuide.ps $(DESTDIR)$(pkgdatadir)/docs/; \
-	fi
-	if test -f DevelopersGuide.pdf; then \
-	  $(INSTALL_DATA) DevelopersGuide.pdf $(DESTDIR)$(pkgdatadir)/docs/; \
-	fi
+#install-manual:
+#	$(mkinstalldirs) $(DESTDIR)$(pkgdatadir)/docs/
+#	if test -f DevelopersGuide.ps; then \
+#	  $(INSTALL_DATA) DevelopersGuide.ps $(DESTDIR)$(pkgdatadir)/docs/; \
+#	fi
+#	if test -f DevelopersGuide.pdf; then \
+#	  $(INSTALL_DATA) DevelopersGuide.pdf $(DESTDIR)$(pkgdatadir)/docs/; \
+#	fi
 
 install-class-reference:
 	if test -d ClassReference; then \
@@ -87,7 +90,7 @@ install-idl-reference-en:
 	  done \
 	fi
 
-install-data-local: install-manual install-class-reference install-class-reference-en install-idl-reference install-idl-reference-en
+install-data-local: install-class-reference install-class-reference-en install-idl-reference install-idl-reference-en
 
 clean-local:
 	rm -f Makefile.old *~
