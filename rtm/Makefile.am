@@ -2,9 +2,12 @@
 ##------------------------------------------------------------
 ## Makefile.am for libRTC
 ##
-## $Id: Makefile.am,v 1.12 2007-01-12 15:02:59 n-ando Exp $
+## $Id: Makefile.am,v 1.13 2007-01-21 14:17:21 n-ando Exp $
 ##
 ## $Log: not supported by cvs2svn $
+## Revision 1.12  2007/01/12 15:02:59  n-ando
+## The versioin.h should not be included in dist. files.
+##
 ## Revision 1.11  2007/01/12 14:32:49  n-ando
 ## Some headers that should be included in the distribution package were
 ## added to the EXTRA_DIST entry.
@@ -142,7 +145,6 @@ rtmheader_HEADERS = \
 	PublisherBase.h              \
 	RTC.h                        \
 	RingBuffer.h                 \
-	RtcBase.h                    \
 	SdoService.h                 \
 	StateMachine.h               \
 	SystemLogger.h               \
