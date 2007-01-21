@@ -2,7 +2,7 @@
 /*!
  * @file  InPortProvider.h
  * @brief InPortProvider class
- * @date  $Date: 2007-01-06 17:53:37 $
+ * @date  $Date: 2007-01-21 09:49:46 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
  * Copyright (C) 2006
@@ -13,12 +13,16 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: InPortProvider.cpp,v 1.1 2007-01-06 17:53:37 n-ando Exp $
+ * $Id: InPortProvider.cpp,v 1.2 2007-01-21 09:49:46 n-ando Exp $
  *
  */
 
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.1  2007/01/06 17:53:37  n-ando
+ * Interface and its profile publish functions (publishInterfaceProfile()
+ * and publishInterface()) are added.
+ *
  */
 
 #include <rtm/InPortProvider.h>
@@ -26,7 +30,10 @@
 
 namespace RTC
 {
-  
+  InPortProvider::~InPortProvider()
+  {
+  }
+
   void InPortProvider::publishInterfaceProfile(SDOPackage::NVList& prop)
   {
     NVUtil::appendStringValue(prop, "dataport.data_type",
