@@ -2,15 +2,18 @@
 #------------------------------------------------------------
 # @file   Makefile.am
 # @brief  Makefile.am for ObjectManager unit test
-# @date   $Date: 2007-01-12 14:44:13 $
+# @date   $Date: 2007-01-21 06:52:34 $
 # @author Noriaki Ando <n-ando@aist.go.jp>
 #
-# $Id: Makefile.am,v 1.2 2007-01-12 14:44:13 n-ando Exp $
+# $Id: Makefile.am,v 1.3 2007-01-21 06:52:34 n-ando Exp $
 #
 #------------------------------------------------------------
 
 #
 # $Log: not supported by cvs2svn $
+# Revision 1.2  2007/01/12 14:44:13  n-ando
+# Some fixes for distribution control.
+#
 # Revision 1.1  2006/11/27 08:30:02  n-ando
 # TestSuites are devided into each directory.
 #
@@ -25,17 +28,18 @@ LIBS = @LIBS@
 
 AM_CPPFLAGS =         \
 	 -I.              \
-	-I$(includedir)   \
-	-I$(top_builddir)
+	-I$(top_builddir) \
+	-I$(includedir)
 
-AM_LDFLAGS =          \
+
+AM_LDFLAGS =              \
 	 -L.              \
 	-L$(top_builddir)
 
 
 noinst_PROGRAMS = ObjectManagerTests
 
-nodist_ObjectManagerTests_SOURCES = \
+nodist_ObjectManagerTests_SOURCES =     \
 	../TestRunner.cpp               \
 	ObjectManagerTests.cpp
 

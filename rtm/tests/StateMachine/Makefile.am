@@ -2,15 +2,18 @@
 #------------------------------------------------------------
 # @file   Makefile.am
 # @brief  Makefile.am for StateMachine unit test
-# @date   $Date: 2007-01-12 14:45:43 $
+# @date   $Date: 2007-01-21 06:53:49 $
 # @author Noriaki Ando <n-ando@aist.go.jp>
 #
-# $Id: Makefile.am,v 1.2 2007-01-12 14:45:43 n-ando Exp $
+# $Id: Makefile.am,v 1.3 2007-01-21 06:53:49 n-ando Exp $
 #
 #------------------------------------------------------------
 
 #
 # $Log: not supported by cvs2svn $
+# Revision 1.2  2007/01/12 14:45:43  n-ando
+# Some fixes for distribution control.
+#
 # Revision 1.1  2006/11/27 08:30:04  n-ando
 # TestSuites are devided into each directory.
 #
@@ -23,19 +26,19 @@ IDLC = @IDLC@
 IDLFLAGS = @IDL_FLAGS@
 LIBS = @LIBS@
 
-AM_CPPFLAGS=          \
+AM_CPPFLAGS=              \
 	-I.               \
-	-I$(includedir)   \
-	-I$(top_builddir)
+	-I$(top_builddir) \
+	-I$(includedir)
 
-AM_LDFLAGS=           \
+AM_LDFLAGS=               \
 	-L.               \
 	-L$(top_builddir)
 
 
 noinst_PROGRAMS = StateMachineTests
 
-nodist_StateMachineTests_SOURCES = \
+nodist_StateMachineTests_SOURCES =     \
 	../TestRunner.cpp              \
 	StateMachineTests.cpp
 

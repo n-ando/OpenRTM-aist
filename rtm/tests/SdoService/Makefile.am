@@ -2,15 +2,18 @@
 #------------------------------------------------------------
 # @file   Makefile.am
 # @brief  Makefile.am for SdoService unit test
-# @date   $Date: 2007-01-12 14:45:37 $
+# @date   $Date: 2007-01-21 06:53:43 $
 # @author Noriaki Ando <n-ando@aist.go.jp>
 #
-# $Id: Makefile.am,v 1.2 2007-01-12 14:45:37 n-ando Exp $
+# $Id: Makefile.am,v 1.3 2007-01-21 06:53:43 n-ando Exp $
 #
 #------------------------------------------------------------
 
 #
 # $Log: not supported by cvs2svn $
+# Revision 1.2  2007/01/12 14:45:37  n-ando
+# Some fixes for distribution control.
+#
 # Revision 1.1  2006/11/27 08:38:07  n-ando
 # TestSuites are devided into each directory.
 #
@@ -23,19 +26,20 @@ IDLC = @IDLC@
 IDLFLAGS = @IDL_FLAGS@
 LIBS = @LIBS@
 
-AM_CPPFLAGS=          \
+AM_CPPFLAGS=              \
 	-I.               \
-	-I$(includedir)   \
-	-I$(top_builddir)
+	-I$(top_builddir) \
+	-I$(includedir)
 
-AM_LDFLAGS=           \
+
+AM_LDFLAGS=               \
 	-L.               \
 	-L$(top_builddir)
 
 
 noinst_PROGRAMS = SdoServiceTests
 
-nodist_SdoServiceTests_SOURCES = \
+nodist_SdoServiceTests_SOURCES =     \
 	../TestRunner.cpp            \
 	SdoServiceTests.cpp
 

@@ -2,15 +2,18 @@
 #------------------------------------------------------------
 # @file   Makefile.am
 # @brief  Makefile.am for DataOutPort unit test
-# @date   $Date: 2007-01-12 14:43:27 $
+# @date   $Date: 2007-01-21 06:51:52 $
 # @author Noriaki Ando <n-ando@aist.go.jp>
 #
-# $Id: Makefile.am,v 1.2 2007-01-12 14:43:27 n-ando Exp $
+# $Id: Makefile.am,v 1.3 2007-01-21 06:51:52 n-ando Exp $
 #
 #------------------------------------------------------------
 
 #
 # $Log: not supported by cvs2svn $
+# Revision 1.2  2007/01/12 14:43:27  n-ando
+# Some fixes for distribution control.
+#
 # Revision 1.1  2006/11/27 08:30:18  n-ando
 # TestSuites are devided into each directory.
 #
@@ -23,14 +26,14 @@ IDLC = @IDLC@
 IDLFLAGS = @IDL_FLAGS@
 LIBS = @LIBS@
 
-AM_CPPFLAGS =                 \
+AM_CPPFLAGS =                     \
 	-I.                       \
-	-I$(includedir)           \
 	-I$(top_builddir)         \
 	-I$(top_builddir)/rtm/idl \
+	-I$(includedir)           \
 	-DORB_IS_OMNIORB
 
-AM_LDFLAGS =          \
+AM_LDFLAGS =              \
 	-L.               \
 	-L$(top_builddir)
 
@@ -40,7 +43,7 @@ SUFFIXES = .idl Skel.cpp Stub.cpp Stub.o Skel.o
 	$(top_srcdir)/build/makewrapper.py $< rtm/tests
 	$(IDLC) $(IDLFLAGS) $<
 
-IDL_SOURCES =                               \
+IDL_SOURCES =                                   \
 	$(top_srcdir)/rtm/idl/RTC.idl           \
 	$(top_srcdir)/rtm/idl/SDOPackage.idl    \
 	$(top_srcdir)/rtm/idl/DataPort.idl      \
@@ -48,7 +51,7 @@ IDL_SOURCES =                               \
 
 noinst_PROGRAMS = DataOutPortTests
 
-nodist_DataOutPortTests_SOURCES =           \
+nodist_DataOutPortTests_SOURCES =               \
 	../TestRunner.cpp                       \
 	$(IDL_SOURCES:.idl=Skel.cpp)            \
 	$(top_srcdir)/rtm/StringUtil.cpp        \
