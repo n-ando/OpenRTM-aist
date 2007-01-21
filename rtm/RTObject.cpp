@@ -2,7 +2,7 @@
 /*!
  * @file RTObject.cpp
  * @brief RT component base class
- * @date $Date: 2007-01-14 19:46:09 $
+ * @date $Date: 2007-01-21 10:36:39 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
  * Copyright (C) 2006
@@ -12,12 +12,16 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: RTObject.cpp,v 1.3 2007-01-14 19:46:09 n-ando Exp $
+ * $Id: RTObject.cpp,v 1.4 2007-01-21 10:36:39 n-ando Exp $
  *
  */
 
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.3  2007/01/14 19:46:09  n-ando
+ * The component action implementation functions for Users' business logic
+ * were added (i.e onInitialize(), onExecute(), etc..)
+ *
  * Revision 1.2  2007/01/09 15:21:40  n-ando
  * SDO interfaces are marged.
  * Some RTObject's operation signatures were changed.
@@ -252,7 +256,9 @@ namespace RTC
   RTObject_impl::
   set_execution_context_service(const ExecutionContextService_ptr ec)
   {
-    CORBA_SeqUtil::push_back(m_execContexts, ec);
+    CORBA_SeqUtil::
+      push_back(m_execContexts, ExecutionContextService::_duplicate(ec));
+
     return m_execContexts.length() - 1;
   }
 
@@ -892,18 +898,15 @@ namespace RTC
   }
 
 
-
   RTObject_ptr RTObject_impl::getObjRef() const
   {
     return RTC::RTObject::_duplicate(m_objref);
-    //    return m_objref;
   }
 
 
   void RTObject_impl::setProperties(const Properties& prop)
   {
     m_properties = prop;
-
     m_profile.instance_name = m_properties["instance_name"].c_str();
     m_profile.type_name     = m_properties["type_name"].c_str();
     m_profile.description   = m_properties["description"].c_str();
@@ -913,9 +916,8 @@ namespace RTC
     //    m_componentProfile.port_profiles;
     //    m_componentProfile.parent;
     //    m_componentProfile.properties = toNVList(m_prop);
-
-
   }
+
 
   Properties& RTObject_impl::getProperties()
   {
