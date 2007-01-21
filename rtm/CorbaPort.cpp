@@ -2,7 +2,7 @@
 /*!
  * @file  CorbaPort.h
  * @brief CorbaPort class
- * @date  $Date: 2007-01-04 00:45:13 $
+ * @date  $Date: 2007-01-21 17:16:34 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
  * Copyright (C) 2006
@@ -13,12 +13,15 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: CorbaPort.cpp,v 1.1 2007-01-04 00:45:13 n-ando Exp $
+ * $Id: CorbaPort.cpp,v 1.2 2007-01-21 17:16:34 n-ando Exp $
  *
  */
 
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.1  2007/01/04 00:45:13  n-ando
+ * CORBA serivce provider/consumer Port implementation.
+ *
  *
  */
 
@@ -40,6 +43,7 @@ namespace RTC
   CorbaPort::CorbaPort(const char* name)
     : PortBase(name)
   {
+    addProperty("port.port_type", "CorbaPort");
   }
 
 
