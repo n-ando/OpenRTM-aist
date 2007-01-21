@@ -2,7 +2,7 @@
 /*!
  * @file  PublisherPeriodic.cpp
  * @brief PublisherPeriodic class
- * @date  $Date: 2007-01-06 18:01:00 $
+ * @date  $Date: 2007-01-21 13:04:32 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
  * Copyright (C) 2006
@@ -13,12 +13,15 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: PublisherPeriodic.cpp,v 1.2 2007-01-06 18:01:00 n-ando Exp $
+ * $Id: PublisherPeriodic.cpp,v 1.3 2007-01-21 13:04:32 n-ando Exp $
  *
  */
 
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.2  2007/01/06 18:01:00  n-ando
+ * Some trivial fixes.
+ *
  * Revision 1.1  2006/11/27 09:44:50  n-ando
  * The first commitment.
  *
@@ -27,6 +30,7 @@
 #include <rtm/PublisherPeriodic.h>
 #include <rtm/InPortConsumer.h>
 #include <rtm/Properties.h>
+#include <stdlib.h>
 
 namespace RTC
 {
@@ -42,17 +46,19 @@ namespace RTC
     : m_consumer(consumer), m_running(true)
   {
     std::string rate(property.getProperty("dataport.push_interval"));
-    unsigned long hz;
+    double hz;
 
     if (rate != "")
       {
-	hz = atoi(rate.c_str());
+	std::cout << "Push rate: " << rate << std::endl;
+	hz = atof(rate.c_str());
+	if (hz == 0) hz = 1000.0;
       }
     else
       {
-	hz = 1;
+	hz = 1000.0;
       }
-    m_usec = 1000000/hz;
+    m_usec = static_cast<double>(1000000.0/hz);
     open(0);
   }
 
