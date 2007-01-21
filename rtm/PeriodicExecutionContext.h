@@ -2,7 +2,7 @@
 /*!
  * @file PeriodicExecutionContext.h
  * @brief PeriodicExecutionContext class
- * @date $Date: 2007-01-09 15:29:35 $
+ * @date $Date: 2007-01-21 10:27:00 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
  * Copyright (C) 2006
@@ -12,12 +12,15 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: PeriodicExecutionContext.h,v 1.1 2007-01-09 15:29:35 n-ando Exp $
+ * $Id: PeriodicExecutionContext.h,v 1.2 2007-01-21 10:27:00 n-ando Exp $
  *
  */
 
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.1  2007/01/09 15:29:35  n-ando
+ * PeriodicExecutionContext class
+ *
  */
 
 #ifndef PeriodicExecutionContext_h
@@ -29,6 +32,7 @@
 // ACE
 #include <ace/Task.h>
 #include <vector>
+#include <iostream>
 
 namespace RTC
 {
@@ -304,7 +308,7 @@ namespace RTC
 	return *this;
       }
       LightweightRTObject_var _ref;
-      DFP<DataFlowComponent_ptr> _sm;
+      DFP<DataFlowComponent_var> _sm;
     };
 
 
@@ -315,7 +319,7 @@ namespace RTC
       find_comp(LightweightRTObject_ptr comp) : m_comp(comp) {}
       bool operator()(Comp& comp)
       {
-	return m_comp->_is_equivalent(comp._ref);
+	return comp._ref->_is_equivalent(m_comp);
       }
     };
 
