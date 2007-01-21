@@ -2,7 +2,7 @@
 /*!
  * @file DataFlowComponentBase.h
  * @brief DataFlowParticipant RT-Component base class
- * @date $Date: 2007-01-09 09:47:22 $
+ * @date $Date: 2007-01-21 14:02:42 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
  * Copyright (C) 2006
@@ -12,12 +12,15 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: DataFlowComponentBase.h,v 1.1 2007-01-09 09:47:22 n-ando Exp $
+ * $Id: DataFlowComponentBase.h,v 1.2 2007-01-21 14:02:42 n-ando Exp $
  *
  */
 
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.1  2007/01/09 09:47:22  n-ando
+ * DataFlowParticipant RT-Component base class
+ *
  */
 
 #ifndef DataFlowComponentBase_h
@@ -32,7 +35,7 @@ namespace RTC
   /*!
    * @if jp
    * @class DataFlowComponentBas
-   * @brief DataFlowComponentBase $B%/%i%9(B
+   * @brief DataFlowComponentBase ¥¯¥é¥¹
    * @else
    * @class DataFlowComponentBase
    * @brief DataFlowComponentBase class
@@ -47,7 +50,7 @@ namespace RTC
   public:
     /*!
      * @if jp
-     * @brief $B%3%s%9%H%i%/%?(B
+     * @brief ¥³¥ó¥¹¥È¥é¥¯¥¿
      * @else
      * @brief Constructor
      * @endif
@@ -57,7 +60,7 @@ namespace RTC
 
     /*!
      * @if jp
-     * @brief $B%G%9%H%i%/%?(B
+     * @brief ¥Ç¥¹¥È¥é¥¯¥¿
      * @else
      * @brief Destructor
      * @endif
@@ -67,7 +70,7 @@ namespace RTC
 
     /*!
      * @if jp
-     * @brief $B=i4|2=(B
+     * @brief ½é´ü²½
      * @else
      * @brief Initialization
      * @endif
