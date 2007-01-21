@@ -2,7 +2,7 @@
 /*!
  * @file  OutPortProvider.h
  * @brief OutPortProvider class
- * @date  $Date: 2007-01-06 17:58:47 $
+ * @date  $Date: 2007-01-21 09:22:53 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
  * Copyright (C) 2006
@@ -13,12 +13,16 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: OutPortProvider.cpp,v 1.1 2007-01-06 17:58:47 n-ando Exp $
+ * $Id: OutPortProvider.cpp,v 1.2 2007-01-21 09:22:53 n-ando Exp $
  *
  */
 
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.1  2007/01/06 17:58:47  n-ando
+ * Interface and its profile publish functions (publishInterfaceProfile()
+ * and publishInterface()) are added.
+ *
  *
  */
 
@@ -30,8 +34,6 @@ namespace RTC
   
   void OutPortProvider::publishInterfaceProfile(SDOPackage::NVList& prop)
   {
-    NVUtil::appendStringValue(prop, "port.port_type",
-			      m_portType.c_str());
     NVUtil::appendStringValue(prop, "dataport.data_type",
 			      m_dataType.c_str());
     NVUtil::appendStringValue(prop, "dataport.interface_type",
