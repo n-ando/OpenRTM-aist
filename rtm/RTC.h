@@ -2,7 +2,7 @@
 /*!
  * @file RTC.h
  * @brief RTComponent header
- * @date $Date: 2006-10-17 19:12:01 $
+ * @date $Date: 2007-01-21 10:38:54 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
  * Copyright (C) 2003-2005
@@ -12,12 +12,15 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: RTC.h,v 1.3 2006-10-17 19:12:01 n-ando Exp $
+ * $Id: RTC.h,v 1.4 2007-01-21 10:38:54 n-ando Exp $
  *
  */
 
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.3  2006/10/17 19:12:01  n-ando
+ * Modified to include omniORB4 CORBA/h header file.
+ *
  * Revision 1.2  2005/05/16 05:49:10  n-ando
  * Some definitions (__declspec(dllexport), __declspec(dllimport) etc..)
  * were added for Windows ports.
@@ -52,10 +55,6 @@
 #include <omniORB4/CORBA.h>
 #include <omnithread.h>
 #endif
-
-
-#include <ace/Thread_Manager.h>
-#include <boost/lexical_cast.hpp>
 
 
 // for windows DLL
