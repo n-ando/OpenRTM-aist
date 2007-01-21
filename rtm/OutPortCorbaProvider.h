@@ -2,7 +2,7 @@
 /*!
  * @file  OutPortCorbaProvider.h
  * @brief OutPortCorbaProvider class
- * @date  $Date: 2007-01-14 23:01:53 $
+ * @date  $Date: 2007-01-21 10:25:24 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
  * Copyright (C) 2006
@@ -13,12 +13,15 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: OutPortCorbaProvider.h,v 1.3 2007-01-14 23:01:53 n-ando Exp $
+ * $Id: OutPortCorbaProvider.h,v 1.4 2007-01-21 10:25:24 n-ando Exp $
  *
  */
 
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.3  2007/01/14 23:01:53  n-ando
+ * Now object reference is duplicate to set property.
+ *
  * Revision 1.2  2007/01/06 17:57:35  n-ando
  * Interface subscription/unsubscription functions (subscribeInterface()
  * and unsubscribeInterface()) are added.
@@ -80,7 +83,7 @@ namespace RTC
       m_objref = this->_this();
       CORBA_SeqUtil::push_back(m_properties,
 			       NVUtil::newNV("dataport.corba_any.outport_ref",
-					     RTC::OutPortAny::_duplicate(m_objref)));
+					     m_objref));
     }
     
     /*!
@@ -109,4 +112,3 @@ namespace RTC
   };
 };     // namespace RTC
 #endif // OutPortCorbaProvider_h
-
