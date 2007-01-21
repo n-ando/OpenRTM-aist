@@ -1,9 +1,8 @@
 #!/usr/bin/env python
-# -*- coding: utf-8 -*-
 #
 #  @file RtmTreeCtrl.py
 #  @brief rtc-link name tree management class
-#  @date $Date: 2005-05-27 15:51:31 $
+#  @date $Date: 2007-01-21 13:21:26 $
 #  @author Tsuyoshi Tanabe, Noriaki Ando <n-ando@aist.go.jp>
 # 
 #  Copyright (C) 2004-2005
@@ -13,11 +12,15 @@
 #          Advanced Industrial Science and Technology (AIST), Japan
 #      All rights reserved.
 # 
-#  $Id: RtmTreeCtrl.py,v 1.4 2005-05-27 15:51:31 n-ando Exp $
+#  $Id: RtmTreeCtrl.py,v 1.5 2007-01-21 13:21:26 n-ando Exp $
 # 
 
 #
 #  $Log: not supported by cvs2svn $
+#  Revision 1.4  2005/05/27 15:51:31  n-ando
+#  - Assembly save/load function and creating component on name tree function
+#    is now enabled.
+#
 #  Revision 1.3  2005/05/27 10:08:19  n-ando
 #  - InPort/OutPort interface was changed.
 #    rtc-link assembly function is enabled now.
@@ -244,7 +247,7 @@ class RtmCompPopup(RtmPopup):
 		if kind == "rtc":
 			ref = self.parent.myDict.GetObjRefToFullpath(fullpath)
 			try:
-				self.parent.frame.profilepanel.RefreshProfile(ref._get_profile())
+				self.parent.frame.profilepanel.RefreshProfile(ref.get_component_profile())
 			except:
 				except_mess("except error!:")
 				pass
@@ -1186,7 +1189,7 @@ class RtmTreeCtrlPanel(wx.Panel):
 		if kind == "rtc":
 			ref = self.myDict.GetObjRefToFullpath(fullpath)
 			try:
-				self.frame.profilepanel.RefreshProfile(ref._get_profile())
+				self.frame.profilepanel.RefreshProfile(ref.get_component_profile())
 			except:
 				except_mess("except error!:")
 				pass
@@ -1210,7 +1213,7 @@ class RtmTreeCtrlPanel(wx.Panel):
 		if kind == "rtc":
 			ref = self.myDict.GetObjRefToFullpath(fullpath)
 			try:
-				self.frame.profilepanel.RefreshProfile(ref._get_profile())
+				self.frame.profilepanel.RefreshProfile(ref.get_component_profile())
 			except:
 				except_mess("except error!:")
 				pass
