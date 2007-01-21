@@ -2,7 +2,7 @@
 /*!
  * @file NVUtil.h
  * @brief NameValue and NVList utility functions
- * @date $Date: 2007-01-12 14:33:50 $
+ * @date $Date: 2007-01-21 09:51:06 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
  * Copyright (C) 2006
@@ -13,12 +13,15 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: NVUtil.cpp,v 1.5 2007-01-12 14:33:50 n-ando Exp $
+ * $Id: NVUtil.cpp,v 1.6 2007-01-21 09:51:06 n-ando Exp $
  *
  */
 
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.5  2007/01/12 14:33:50  n-ando
+ * The dump() function was added to dump NVList entries.
+ *
  * Revision 1.4  2007/01/06 17:55:29  n-ando
  * toProperties()'s argument was changed to const.
  * Some functions were added.
@@ -186,24 +189,30 @@ namespace NVUtil
   bool appendStringValue(SDOPackage::NVList& nv, const char* name,
 			 const char* value)
   {
-    if (!isString(nv, name)) return false;
+	//    if (!isString(nv, name)) return false;
 
     CORBA::Long index;
     index = find_index(nv, name);
 
-    char* tmp_char;
-    nv[index].value >>= tmp_char;
-    std::string tmp_str(tmp_char);
-    
-    std::vector<std::string> values;
-
-    values = split(tmp_str, ",");
-    if (values.end() == std::find(values.begin(), values.end(), value))
-      {
-	tmp_str.append(", ");
-	tmp_str.append(value);
-	nv[index].value <<= tmp_str.c_str();
-      }
+	if (index > 0)
+	  {
+		char* tmp_char;
+		nv[index].value >>= tmp_char;
+		std::string tmp_str(tmp_char);
+		
+		std::vector<std::string> values;
+		values = split(tmp_str, ",");
+		if (values.end() == std::find(values.begin(), values.end(), value))
+		  {
+			tmp_str.append(", ");
+			tmp_str.append(value);
+			nv[index].value <<= tmp_str.c_str();
+		  }
+	  }
+	else
+	  {
+		CORBA_SeqUtil::push_back(nv, newNV(name, value));
+	  }
     return true;
   }
 
@@ -211,7 +220,7 @@ namespace NVUtil
   {
     for (CORBA::ULong i = 0, len = src.length(); i < len; ++i)
       {
-	CORBA_SeqUtil::push_back(dest, src[i]);
+		CORBA_SeqUtil::push_back(dest, src[i]);
       }
   }
 
