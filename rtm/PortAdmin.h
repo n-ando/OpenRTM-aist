@@ -2,7 +2,7 @@
 /*!
  * @file PortAdmin.h
  * @brief RTC's Port administration class
- * @date $Date: 2007-01-09 15:13:11 $
+ * @date $Date: 2007-01-21 10:28:09 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
  * Copyright (C) 2006
@@ -12,12 +12,16 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: PortAdmin.h,v 1.5 2007-01-09 15:13:11 n-ando Exp $
+ * $Id: PortAdmin.h,v 1.6 2007-01-21 10:28:09 n-ando Exp $
  *
  */
 
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.5  2007/01/09 15:13:11  n-ando
+ * Now Port does not have getName().
+ * The name of Port is obtained from getProfile().
+ *
  * Revision 1.4  2006/12/02 18:49:43  n-ando
  * A trivial fix.
  *
@@ -239,13 +243,21 @@ namespace RTC
     class comp_op
     {
     public:
-      comp_op(std::string _name) : m_name(_name) {};
-      comp_op(T* obj) : m_name((const char*)obj->getProfile().name) {};
+      comp_op(const char* _name)
+	:
+	m_name(_name)
+      {
+      }
+      comp_op(T* obj) 
+	: m_name((const char*)(obj->getProfile().name))
+      {
+      }
       bool operator()(T* obj)
       {
 	std::string name((const char*)obj->getProfile().name);
 	return m_name == name;
       }
+    private:
       std::string m_name;
     };
     
@@ -253,7 +265,7 @@ namespace RTC
     struct del_port;
 
     // サーバントを直接格納するオブジェクトマネージャ
-    ObjectManager<std::string, PortBase, comp_op<PortBase> > m_portServants;
+    ObjectManager<const char*, PortBase, comp_op<PortBase> > m_portServants;
 
 
   };
