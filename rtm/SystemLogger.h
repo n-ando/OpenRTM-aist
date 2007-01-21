@@ -2,7 +2,7 @@
 /*!
  * @file SystemLogger.h
  * @brief RT component logger class
- * @date $Date: 2006-11-04 20:54:09 $
+ * @date $Date: 2007-01-21 10:37:55 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
  * Copyright (C) 2003-2006
@@ -12,12 +12,15 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: SystemLogger.h,v 1.2 2006-11-04 20:54:09 n-ando Exp $
+ * $Id: SystemLogger.h,v 1.3 2007-01-21 10:37:55 n-ando Exp $
  *
  */
 
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.2  2006/11/04 20:54:09  n-ando
+ * classes were renamed and soruce code was re-formatted.
+ *
  * Revision 1.1  2006/11/02 15:14:24  n-ando
  * RtcSystemLogger.h was moved to SystemLogger.h.
  *
@@ -64,6 +67,7 @@ namespace RTC
   class EXPORTS sync_callback
   {
   public:
+    virtual ~sync_callback(){}
     virtual int operator()(const _CharT* s) = 0;
   };
   
@@ -373,7 +377,7 @@ namespace RTC
      */
     std::string getFmtDate()
     {
-      const int maxsize(256);
+      const int maxsize = 256;
       char buf[maxsize];
       
       /*
@@ -538,7 +542,10 @@ namespace RTC
       this->setp(pStart, pEnd);
       this->setg(pStart, pStart, pEnd);
     }
-    
+
+    ~basic_dummybuf()
+    {
+    }
     
     int_type overflow(int_type c = _Traits::eof() )
     {
