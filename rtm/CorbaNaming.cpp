@@ -2,7 +2,7 @@
 /*!
  * @file CorbaNaming.cpp
  * @brief CORBA naming service helper class
- * @date $Date: 2006-11-04 19:42:55 $
+ * @date $Date: 2007-01-21 09:05:47 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
  * Copyright (C) 2006
@@ -13,18 +13,22 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: CorbaNaming.cpp,v 1.1 2006-11-04 19:42:55 n-ando Exp $
+ * $Id: CorbaNaming.cpp,v 1.2 2007-01-21 09:05:47 n-ando Exp $
  *
  */
 
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.1  2006/11/04 19:42:55  n-ando
+ * CORBA Naming service helper class has rewritten and renamed.
+ *
  */
 
 #ifdef WIN32
 #define ACE_HAS_WINSOCK2 0
 #endif //WIN32
 
+#include <assert.h>
 #include <rtm/CorbaNaming.h>
 
 
