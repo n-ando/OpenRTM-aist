@@ -2,7 +2,7 @@ dnl -*- autoconf -*-
 dnl
 dnl @file configure.ac
 dnl @brief Input file for autoconf
-dnl @date $Date: 2007-01-21 13:36:45 $
+dnl @date $Date: 2007-01-21 13:40:15 $
 dnl @author Noriaki Ando <n-ando@aist.go.jp>
 dnl
 dnl This file is an input file used by the GNU "autoconf" program to
@@ -10,11 +10,15 @@ dnl generate the file "configure", which tries to guess your system
 dnl configuration
 dnl
 dnl
-dnl $Id: configure.ac,v 1.12 2007-01-21 13:36:45 n-ando Exp $
+dnl $Id: configure.ac,v 1.13 2007-01-21 13:40:15 n-ando Exp $
 dnl
 
 dnl
 dnl $Log: not supported by cvs2svn $
+dnl Revision 1.12  2007/01/21 13:36:45  n-ando
+dnl The boost detecting scripts were deleted temporarily.
+dnl Some trivial fixes.
+dnl
 dnl Revision 1.11  2007/01/14 23:36:47  n-ando
 dnl SimpleIO sub-directory entry was recovered.
 dnl
@@ -1194,7 +1198,7 @@ if test "x$with_python" != "x" ; then
 
 	python_version=[`python -V 2>&1 |  sed -e 's/Python //g'`]
 	case $python_version in
-	[2.3.*)]
+	[2.3.*|2.4.*|2.5.*)]
 		;;
 	*)
 		AC_MSG_WARN([Unknown Python version number, expecting 2.3.0 or above.])
