@@ -2,9 +2,12 @@
 ##------------------------------------------------------------
 ## Makefile.am for libRTCSkel
 ##
-## $Id: Makefile.am,v 1.7 2007-01-12 14:40:01 n-ando Exp $
+## $Id: Makefile.am,v 1.8 2007-01-21 13:10:26 n-ando Exp $
 ##
 ## $Log: not supported by cvs2svn $
+## Revision 1.7  2007/01/12 14:40:01  n-ando
+## Some trivial fixes.
+##
 ## Revision 1.6  2007/01/09 15:39:10  n-ando
 ## Makefile now also builds libRTCStub.la.
 ##
@@ -151,13 +154,13 @@ libRTCStub_la_LIBADD = $(LIBS)
 #BUILT_SOURCES = $(IDL_SOURCES:.idl=Skel.cpp) $(IDL_SOURCES:.idl=Stub.cpp)
 
 .idlSkel.cpp:
-	$(top_srcdir)/build/makewrapper.py $<
 	$(OIDLC) $<
 	$(IDLC) $(IDLFLAGS) $<
+	$(top_srcdir)/build/makewrapper.py $<
 .idlStub.cpp:
-	$(top_srcdir)/build/makewrapper.py $<
 	$(OIDLC) $<
 	$(IDLC) $(IDLFLAGS) $<
+	$(top_srcdir)/build/makewrapper.py $<
 #------------------------------------------------------------
 
 # Extra sources included distribution
