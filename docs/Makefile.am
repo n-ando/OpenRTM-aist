@@ -2,9 +2,12 @@
 ##---------------------------------------------------------------------------
 ## Makefile.am for swig
 ##
-## $Id: Makefile.am,v 1.2 2007-01-21 13:16:33 n-ando Exp $
+## $Id: Makefile.am,v 1.3 2007-01-21 13:35:23 n-ando Exp $
 ##
 ## $Log: not supported by cvs2svn $
+## Revision 1.2  2007/01/21 13:16:33  n-ando
+## PS and PDF file generation was temporarily stopped.
+##
 ## Revision 1.1.1.1  2005/05/12 09:06:20  n-ando
 ## Public release.
 ##
@@ -94,3 +97,12 @@ install-data-local: install-class-reference install-class-reference-en install-i
 
 clean-local:
 	rm -f Makefile.old *~
+
+maintainer-clean:
+	rm -rf \
+	ClassReference \
+	ClassReference-en \
+	IDLReference \
+	IDLReference-en \
+	docs/DevelopersGuide/ClassReference \
+	docs/DevelopersGuide/IDLReference

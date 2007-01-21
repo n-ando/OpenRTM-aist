@@ -2,9 +2,12 @@
 ##---------------------------------------------------------------------------
 ## Makefile.am for ConsoleIn/ConsoleOut components
 ##
-## $Id: Makefile.am,v 1.2 2007-01-14 22:52:23 n-ando Exp $
+## $Id: Makefile.am,v 1.3 2007-01-21 13:35:17 n-ando Exp $
 ##
 ## $Log: not supported by cvs2svn $
+## Revision 1.2  2007/01/14 22:52:23  n-ando
+## Updated for OpenRTM-aist-0.4.0.
+##
 ## Revision 1.1.1.1  2005/05/12 09:06:20  n-ando
 ## Public release.
 ##
@@ -46,4 +49,7 @@ EXTRA_DIST =                \
 	README.ConsoleOut
 
 clean-local:
-	rm -f *.bak *.rpo *.sym lib*.*_pure_* Makefile.old *core *~ *.so *.log
+	rm -f \
+	*.bak *.rpo *.sym lib*.*_pure_* \
+	Makefile.old *core *~ *.so *.log\
+	rtc.conf
