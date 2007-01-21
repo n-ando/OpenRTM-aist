@@ -2,7 +2,7 @@
 /*!
  * @file DataOutPort.h
  * @brief Base class of OutPort
- * @date $Date: 2007-01-14 22:57:54 $
+ * @date $Date: 2007-01-21 09:45:31 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
  * Copyright (C) 2006
@@ -13,12 +13,15 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: DataOutPort.h,v 1.5 2007-01-14 22:57:54 n-ando Exp $
+ * $Id: DataOutPort.h,v 1.6 2007-01-21 09:45:31 n-ando Exp $
  *
  */
 
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.5  2007/01/14 22:57:54  n-ando
+ * A bug fix about template argument for buffer-type in constructor.
+ *
  * Revision 1.4  2007/01/12 14:30:01  n-ando
  * A trivial bug fix.
  *
@@ -74,10 +77,10 @@ namespace RTC
       : PortBase(name), m_outport(outport)
     {
       // PortProfile::properties ¤òÀßÄê
-      addProperty("port.port_type",             "DataOutPort");
+      addProperty("port.port_type", "DataOutPort");
       
       m_providers.push_back(new OutPortCorbaProvider<DataType>(outport));
-
+      m_providers.back()->publishInterfaceProfile(m_profile.properties);
       m_consumers.push_back(new InPortCorbaConsumer<DataType>(outport));
     }
 
@@ -293,7 +296,6 @@ namespace RTC
     };
 
   private:
-    struct find_conn_id;
     std::vector<OutPortProvider*> m_providers;
     std::vector<InPortConsumer*> m_consumers;
     OutPortBase& m_outport;
