@@ -2,15 +2,18 @@
 #------------------------------------------------------------
 # @file   Makefile.am
 # @brief  Makefile.am for OutPort unit test
-# @date   $Date: 2007-01-12 14:44:24 $
+# @date   $Date: 2007-01-21 06:52:40 $
 # @author Noriaki Ando <n-ando@aist.go.jp>
 #
-# $Id: Makefile.am,v 1.4 2007-01-12 14:44:24 n-ando Exp $
+# $Id: Makefile.am,v 1.5 2007-01-21 06:52:40 n-ando Exp $
 #
 #------------------------------------------------------------
 
 #
 # $Log: not supported by cvs2svn $
+# Revision 1.4  2007/01/12 14:44:24  n-ando
+# Some fixes for distribution control.
+#
 # Revision 1.3  2006/12/18 06:54:30  n-ando
 # clean-local target OutPortTests was added.
 #
@@ -29,19 +32,20 @@ IDLC = @IDLC@
 IDLFLAGS = @IDL_FLAGS@
 LIBS = @LIBS@
 
-AM_CPPFLAGS =         \
+AM_CPPFLAGS =             \
 	 -I.              \
-	-I$(includedir)   \
-	-I$(top_builddir)
+	-I$(top_builddir) \
+	-I$(includedir)
 
-AM_LDFLAGS =          \
+
+AM_LDFLAGS =              \
 	-L.               \
 	-L$(top_builddir)
 
 
 noinst_PROGRAMS = OutPortTests
 
-nodist_OutPortTests_SOURCES =                  \
+nodist_OutPortTests_SOURCES =               \
 	../TestRunner.cpp                   \
 	$(top_builddir)/rtm/OutPortBase.cpp \
 	OutPortTests.cpp

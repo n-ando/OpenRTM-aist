@@ -2,15 +2,18 @@
 #------------------------------------------------------------
 # @file   Makefile.am
 # @brief  Makefile.am for InPort unit test
-# @date   $Date: 2007-01-12 14:43:41 $
+# @date   $Date: 2007-01-21 06:52:04 $
 # @author Noriaki Ando <n-ando@aist.go.jp>
 #
-# $Id: Makefile.am,v 1.2 2007-01-12 14:43:41 n-ando Exp $
+# $Id: Makefile.am,v 1.3 2007-01-21 06:52:04 n-ando Exp $
 #
 #------------------------------------------------------------
 
 #
 # $Log: not supported by cvs2svn $
+# Revision 1.2  2007/01/12 14:43:41  n-ando
+# Some fixes for distribution control.
+#
 # Revision 1.1  2006/11/27 08:32:45  n-ando
 # TestSuites are devided into each directory.
 #
@@ -23,21 +26,23 @@ IDLC = @IDLC@
 IDLFLAGS = @IDL_FLAGS@
 LIBS = @LIBS@
 
-AM_CPPFLAGS =         \
+AM_CPPFLAGS =             \
 	 -I.              \
-	-I$(includedir)   \
-	-I$(top_builddir)
+	-I$(top_builddir) \
+	-I$(includedir)
 
-AM_LDFLAGS =          \
+
+AM_LDFLAGS =              \
 	 -L.              \
 	-L$(top_builddir)
 
 
 noinst_PROGRAMS = InPortTests
 
-nodist_InPortTests_SOURCES = \
+nodist_InPortTests_SOURCES =     \
 	../TestRunner.cpp        \
 	InPortTests.cpp
+
 InPortTests_LDFLAGS = -L$(libdir)
 InPortTests_LDADD   = -lcppunit
 

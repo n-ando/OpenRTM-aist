@@ -2,15 +2,18 @@
 #------------------------------------------------------------
 # @file   Makefile.am
 # @brief  Makefile.am for DataInOutPort unit test
-# @date   $Date: 2007-01-12 14:43:13 $
+# @date   $Date: 2007-01-21 06:51:41 $
 # @author Noriaki Ando <n-ando@aist.go.jp>
 #
-# $Id: Makefile.am,v 1.2 2007-01-12 14:43:13 n-ando Exp $
+# $Id: Makefile.am,v 1.3 2007-01-21 06:51:41 n-ando Exp $
 #
 #------------------------------------------------------------
 
 #
 # $Log: not supported by cvs2svn $
+# Revision 1.2  2007/01/12 14:43:13  n-ando
+# Some fixes for distribution control.
+#
 # Revision 1.1  2007/01/06 18:05:13  n-ando
 # *** empty log message ***
 #
@@ -23,14 +26,14 @@ IDLC = @IDLC@
 IDLFLAGS = @IDL_FLAGS@
 LIBS = @LIBS@
 
-AM_CPPFLAGS =                 \
+AM_CPPFLAGS =                     \
 	 -I.                      \
-	-I$(includedir)           \
 	-I$(top_builddir)         \
 	-I$(top_builddir)/rtm/idl \
+	-I$(includedir)           \
 	-DORB_IS_OMNIORB
 
-AM_LDFLAGS =          \
+AM_LDFLAGS =              \
 	-L.               \
 	-L$(top_builddir)
 
@@ -42,7 +45,7 @@ IDL_SOURCES = \
 
 noinst_PROGRAMS = DataInOutPortTests
 
-nodist_DataInOutPortTests_SOURCES =             \
+nodist_DataInOutPortTests_SOURCES =                 \
 	../TestRunner.cpp                           \
 	$(IDL_SOURCES:.idl=Skel.cpp)                \
 	$(top_srcdir)/rtm/StringUtil.cpp            \

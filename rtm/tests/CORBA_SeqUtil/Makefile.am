@@ -2,15 +2,18 @@
 #------------------------------------------------------------
 # @file   Makefile.am
 # @brief  Makefile.am for CORBA_SeqUtil unit test
-# @date   $Date: 2007-01-12 14:42:45 $
+# @date   $Date: 2007-01-21 06:51:16 $
 # @author Noriaki Ando <n-ando@aist.go.jp>
 #
-# $Id: Makefile.am,v 1.2 2007-01-12 14:42:45 n-ando Exp $
+# $Id: Makefile.am,v 1.3 2007-01-21 06:51:16 n-ando Exp $
 #
 #------------------------------------------------------------
 
 #
 # $Log: not supported by cvs2svn $
+# Revision 1.2  2007/01/12 14:42:45  n-ando
+# Some fixes for distribution control.
+#
 # Revision 1.1  2006/11/27 08:30:10  n-ando
 # TestSuites are devided into each directory.
 #
@@ -23,12 +26,13 @@ IDLC = @IDLC@
 IDLFLAGS = @IDL_FLAGS@
 LIBS = @LIBS@
 
-AM_CPPFLAGS=          \
+AM_CPPFLAGS=              \
 	-I.               \
-	-I$(includedir)   \
-	-I$(top_builddir)
+	-I$(top_builddir) \
+	-I$(includedir)
 
-AM_LDFLAGS=           \
+
+AM_LDFLAGS=               \
 	-L.               \
 	-L$(top_builddir)
 
@@ -48,7 +52,7 @@ IDL_SOURCES = SeqUtilTests.idl
 
 noinst_PROGRAMS = CORBA_SeqUtilTests
 
-nodist_CORBA_SeqUtilTests_SOURCES =  \
+nodist_CORBA_SeqUtilTests_SOURCES =      \
 	../TestRunner.cpp                \
 	$(IDL_SOURCES:.idl=Skel.cpp)     \
 	CORBA_SeqUtilTests.cpp

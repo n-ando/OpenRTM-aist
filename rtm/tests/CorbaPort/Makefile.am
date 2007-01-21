@@ -2,15 +2,18 @@
 #------------------------------------------------------------
 # @file   Makefile.am
 # @brief  Makefile.am for CorbaPort unit test
-# @date   $Date: 2007-01-12 14:43:07 $
+# @date   $Date: 2007-01-21 06:51:28 $
 # @author Noriaki Ando <n-ando@aist.go.jp>
 #
-# $Id: Makefile.am,v 1.2 2007-01-12 14:43:07 n-ando Exp $
+# $Id: Makefile.am,v 1.3 2007-01-21 06:51:28 n-ando Exp $
 #
 #------------------------------------------------------------
 
 #
 # $Log: not supported by cvs2svn $
+# Revision 1.2  2007/01/12 14:43:07  n-ando
+# Some fixes for distribution control.
+#
 # Revision 1.1  2007/01/04 00:50:44  n-ando
 # *** empty log message ***
 #
@@ -23,13 +26,14 @@ IDLC = @IDLC@
 IDLFLAGS = @IDL_FLAGS@
 LIBS = @LIBS@
 
-AM_CPPFLAGS= -I.              \
-	-I$(includedir)           \
+AM_CPPFLAGS =                     \
+	-I.                       \
 	-I$(top_builddir)         \
-	-I$(top_builddir)/rtm/idl
+	-I$(top_builddir)/rtm/idl \
+	-I$(includedir)
 
-
-AM_LDFLAGS= -L.                   \
+AM_LDFLAGS =              \
+	-L.               \
 	-L$(top_builddir)
 
 SUFFIXES = .idl Skel.cpp Stub.cpp Skel.o Stub.o
@@ -41,7 +45,7 @@ IDL_SOURCES = MyService.idl
 
 noinst_PROGRAMS = CorbaPortTests
 
-nodist_CorbaPortTests_SOURCES =              \
+nodist_CorbaPortTests_SOURCES =                  \
 	../TestRunner.cpp                        \
 	$(IDL_SOURCES:.idl=Skel.cpp)             \
 	$(top_srcdir)/rtm/idl/SDOPackageSkel.cpp \

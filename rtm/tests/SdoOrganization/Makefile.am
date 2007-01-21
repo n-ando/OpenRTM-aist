@@ -2,15 +2,18 @@
 #------------------------------------------------------------
 # @file   Makefile.am
 # @brief  Makefile.am for SdoOrganization unit test
-# @date   $Date: 2007-01-12 14:45:30 $
+# @date   $Date: 2007-01-21 06:53:36 $
 # @author Noriaki Ando <n-ando@aist.go.jp>
 #
-# $Id: Makefile.am,v 1.2 2007-01-12 14:45:30 n-ando Exp $
+# $Id: Makefile.am,v 1.3 2007-01-21 06:53:36 n-ando Exp $
 #
 #------------------------------------------------------------
 
 #
 # $Log: not supported by cvs2svn $
+# Revision 1.2  2007/01/12 14:45:30  n-ando
+# Some fixes for distribution control.
+#
 # Revision 1.1  2006/11/27 08:30:06  n-ando
 # TestSuites are devided into each directory.
 #
@@ -23,12 +26,13 @@ IDLC = @IDLC@
 IDLFLAGS = @IDL_FLAGS@
 LIBS = @LIBS@
 
-AM_CPPFLAGS=          \
+AM_CPPFLAGS=              \
 	-I.               \
-	-I$(includedir)   \
-	-I$(top_builddir)
+	-I$(top_builddir) \
+	-I$(includedir)
 
-AM_LDFLAGS=           \
+
+AM_LDFLAGS=               \
 	-L.               \
 	-L$(top_builddir)
 
@@ -37,7 +41,7 @@ IDL_SOURCES = $(top_builddir)/rtm/idl/SDOPackage.idl
 
 noinst_PROGRAMS = SdoOrganizationTests
 
-nodist_SdoOrganizationTests_SOURCES =          \
+nodist_SdoOrganizationTests_SOURCES =              \
 	../TestRunner.cpp                          \
 	$(IDL_SOURCES:.idl=Skel.cpp)               \
 	$(top_builddir)/rtm/SdoOrganization.cpp    \

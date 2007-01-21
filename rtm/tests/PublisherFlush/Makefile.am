@@ -2,15 +2,18 @@
 #------------------------------------------------------------
 # @file   Makefile.am
 # @brief  Makefile.am for PublisherFlush unit test
-# @date   $Date: 2007-01-12 14:45:00 $
+# @date   $Date: 2007-01-21 06:53:09 $
 # @author Noriaki Ando <n-ando@aist.go.jp>
 #
-# $Id: Makefile.am,v 1.2 2007-01-12 14:45:00 n-ando Exp $
+# $Id: Makefile.am,v 1.3 2007-01-21 06:53:09 n-ando Exp $
 #
 #------------------------------------------------------------
 
 #
 # $Log: not supported by cvs2svn $
+# Revision 1.2  2007/01/12 14:45:00  n-ando
+# Some fixes for distribution control.
+#
 # Revision 1.1  2006/12/18 06:51:03  n-ando
 # The first commitment.
 #
@@ -23,19 +26,20 @@ IDLC = @IDLC@
 IDLFLAGS = @IDL_FLAGS@
 LIBS = @LIBS@
 
-AM_CPPFLAGS =         \
+AM_CPPFLAGS =             \
 	-I.               \
-	-I$(includedir)   \
-	-I$(top_builddir)
+	-I$(top_builddir) \
+	-I$(includedir)
 
-AM_LDFLAGS =          \
-	 -L.              \
+
+AM_LDFLAGS =              \
+	-L.               \
 	-L$(top_builddir)
 
 
 noinst_PROGRAMS = PublisherFlushTests
 
-nodist_PublisherFlushTests_SOURCES =       \
+nodist_PublisherFlushTests_SOURCES =           \
 	../TestRunner.cpp                      \
 	$(top_builddir)/rtm/Properties.cpp     \
 	$(top_builddir)/rtm/PublisherFlush.cpp \

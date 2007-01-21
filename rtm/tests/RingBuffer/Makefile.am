@@ -2,15 +2,18 @@
 #------------------------------------------------------------
 # @file   Makefile.am
 # @brief  Makefile.am for RingBuffer unit test
-# @date   $Date: 2007-01-12 14:45:19 $
+# @date   $Date: 2007-01-21 06:53:26 $
 # @author Noriaki Ando <n-ando@aist.go.jp>
 #
-# $Id: Makefile.am,v 1.2 2007-01-12 14:45:19 n-ando Exp $
+# $Id: Makefile.am,v 1.3 2007-01-21 06:53:26 n-ando Exp $
 #
 #------------------------------------------------------------
 
 #
 # $Log: not supported by cvs2svn $
+# Revision 1.2  2007/01/12 14:45:19  n-ando
+# Some fixes for distribution control.
+#
 # Revision 1.1  2006/11/27 08:36:59  n-ando
 # TestSuites are devided into each directory.
 #
@@ -23,18 +26,19 @@ IDLC = @IDLC@
 IDLFLAGS = @IDL_FLAGS@
 LIBS = @LIBS@
 
-AM_CPPFLAGS =         \
-	 -I.              \
-	-I$(includedir)   \
-	-I$(top_builddir)
+AM_CPPFLAGS =             \
+	-I.               \
+	-I$(top_builddir) \
+	-I$(includedir)
 
-AM_LDFLAGS =          \
-	 -L.              \
+
+AM_LDFLAGS =              \
+	-L.               \
 	-L$(top_builddir)
 
 noinst_PROGRAMS = RingBufferTests
 
-nodist_RingBufferTests_SOURCES = \
+nodist_RingBufferTests_SOURCES =     \
 	../TestRunner.cpp            \
 	RingBufferTests.cpp
 
