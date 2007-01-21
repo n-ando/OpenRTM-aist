@@ -2,12 +2,15 @@
 ##------------------------------------------------------------
 ## Makefile.doc for OpenRTM-aist documents.
 ##
-## $Id: Makefile.docs,v 1.1.1.1 2005-05-12 09:06:20 n-ando Exp $
+## $Id: Makefile.docs,v 1.2 2007-01-21 13:16:38 n-ando Exp $
 ##
 ## $Log: not supported by cvs2svn $
+## Revision 1.1.1.1  2005/05/12 09:06:20  n-ando
+## Public release.
+##
 ##------------------------------------------------------------
 
-all: ClassReference ClassReference-en IDLReference IDLReference-en DevelopersGuide.pdf
+all: ClassReference ClassReference-en IDLReference IDLReference-en
 
 DevelopersGuide.pdf: DevelopersGuide/DevelopersGuide.tex
 	(cd  DevelopersGuide ; make ; cd -)
