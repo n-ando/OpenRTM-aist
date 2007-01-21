@@ -2,7 +2,7 @@
 /*!
  * @file CorbaConsumer.h
  * @brief CORBA Consumer class
- * @date $Date: 2007-01-12 14:29:18 $
+ * @date $Date: 2007-01-21 09:05:13 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
  * Copyright (C) 2006
@@ -13,12 +13,15 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: CorbaConsumer.h,v 1.4 2007-01-12 14:29:18 n-ando Exp $
+ * $Id: CorbaConsumer.h,v 1.5 2007-01-21 09:05:13 n-ando Exp $
  *
  */
 
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.4  2007/01/12 14:29:18  n-ando
+ * A trivial bug fix.
+ *
  * Revision 1.3  2007/01/06 17:39:33  n-ando
  * The copy constructor and the substitution operator were added.
  *
@@ -133,7 +136,7 @@ namespace RTC
 	{
 	  return false;
 	}
-      m_objref = obj;
+      m_objref = CORBA::Object::_duplicate(obj);
       return true;
     }
 
@@ -213,8 +216,8 @@ namespace RTC
    * @endif
    */
   template <class ObjectType,
-	    class ObjectTypePtr = class ObjectType::_ptr_type,
-	    class ObjectTypeVar = class ObjectType::_var_type>
+	    typename ObjectTypePtr = typename ObjectType::_ptr_type,
+	    typename ObjectTypeVar = typename ObjectType::_var_type>
   class CorbaConsumer
     : public CorbaConsumerBase
   {
@@ -245,7 +248,9 @@ namespace RTC
      * @brief Destructor
      * @endif
      */
-    virtual ~CorbaConsumer(){};
+    virtual ~CorbaConsumer()
+    {
+    };
 
     /*!
      * @if jp
@@ -270,7 +275,7 @@ namespace RTC
     {
       if (CorbaConsumerBase::setObject(obj))
 	{
-	  m_var = ObjectType::_narrow(m_objref);
+	  m_var = ObjectType::_duplicate(ObjectType::_narrow(m_objref));
 	  if (!CORBA::is_nil(m_var))
 	    return true;
 	}
