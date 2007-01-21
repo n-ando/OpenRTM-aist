@@ -2,7 +2,7 @@
 /*!
  * @file PeriodicExecutionContext.cpp
  * @brief PeriodicExecutionContext class
- * @date $Date: 2007-01-14 19:44:26 $
+ * @date $Date: 2007-01-21 10:26:55 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
  * Copyright (C) 2006
@@ -12,12 +12,15 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: PeriodicExecutionContext.cpp,v 1.2 2007-01-14 19:44:26 n-ando Exp $
+ * $Id: PeriodicExecutionContext.cpp,v 1.3 2007-01-21 10:26:55 n-ando Exp $
  *
  */
 
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.2  2007/01/14 19:44:26  n-ando
+ * The logic of main activity loop was changed.
+ *
  * Revision 1.1  2007/01/09 15:29:25  n-ando
  * PeriodicExecutionContext class
  *
@@ -199,7 +202,8 @@ namespace RTC
   {
     // コンポーネントが参加者リストに無ければ BAD_PARAMETER を返す
     CompItr it;
-    it = std::find_if(m_comps.begin(), m_comps.end(), find_comp(comp));
+    it = std::find_if(m_comps.begin(), m_comps.end(),
+    		      find_comp(LightweightRTObject::_duplicate(comp)));
     if (it == m_comps.end())
       return RTC::BAD_PARAMETER;
 
@@ -207,7 +211,6 @@ namespace RTC
       return RTC::PRECONDITION_NOT_MET;
 
     it->_sm.m_sm.goTo(ACTIVE_STATE);
-    
     return RTC::OK;
   }
   
@@ -307,7 +310,8 @@ namespace RTC
 	UniqueId id;
 	id = dfp->set_execution_context_service(m_ref);
 
-	m_comps.push_back(Comp(comp, dfp, id));
+	m_comps.push_back(Comp(LightweightRTObject::_duplicate(comp),
+			       DataFlowComponent::_duplicate(dfp), id));
 	return RTC::OK;
       }
     catch (CORBA::Exception& e)
