@@ -2,7 +2,7 @@
 /*!
  * @file Manager.h
  * @brief RTComponent manager class
- * @date $Date: 2007-01-14 19:42:37 $
+ * @date $Date: 2007-01-21 09:54:30 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
  * Copyright (C) 2006
@@ -12,12 +12,17 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: Manager.h,v 1.4 2007-01-14 19:42:37 n-ando Exp $
+ * $Id: Manager.h,v 1.5 2007-01-21 09:54:30 n-ando Exp $
  *
  */
 
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.4  2007/01/14 19:42:37  n-ando
+ * The activate() function now performs POA manager activation and
+ * invoking ModuleInitProc.
+ * Debugging messages are now output to system logger.
+ *
  * Revision 1.3  2006/11/06 01:31:57  n-ando
  * Some Manager's functions has been implemented.
  * - Component creation process
@@ -299,7 +304,7 @@ namespace RTC
      * @brief Get loaded module names
      * @endif
      */
-    std::vector<std::string> Manager::getLoadedModules();
+    std::vector<std::string> getLoadedModules();
     
 
     /*!
