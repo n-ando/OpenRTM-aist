@@ -2,7 +2,7 @@
 /*!
  * @file  InPortCorbaProvider.h
  * @brief InPortCorbaProvider class
- * @date  $Date: 2007-01-14 23:01:47 $
+ * @date  $Date: 2007-01-21 09:48:08 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
  * Copyright (C) 2006
@@ -13,12 +13,15 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: InPortCorbaProvider.h,v 1.3 2007-01-14 23:01:47 n-ando Exp $
+ * $Id: InPortCorbaProvider.h,v 1.4 2007-01-21 09:48:08 n-ando Exp $
  *
  */
 
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.3  2007/01/14 23:01:47  n-ando
+ * Now object reference is duplicate to set property.
+ *
  * Revision 1.2  2007/01/06 17:52:54  n-ando
  * Interface and its profile publish functions (publishInterfaceProfile()
  * and publishInterface()) are added.
@@ -75,10 +78,27 @@ namespace RTC
 
       // ConnectorProfile setting
       m_objref = this->_this();
-      CORBA_SeqUtil::push_back(m_properties,
+      //      CORBA_SeqUtil::push_back(m_properties,
+      //	       NVUtil::newNV("dataport.corba_any.inport_ref",
+      //		     RTC::InPortAny::_duplicate(m_objref)));
+    }
+
+    void publishInterface(SDOPackage::NVList& prop)
+    {
+      if (!NVUtil::isStringValue(prop,
+				 "dataport.interface_type",
+				 "CORBA_Any"))
+	{
+	  return;
+	}
+      SDOPackage::NVList nv(m_properties);
+      CORBA_SeqUtil::push_back(nv,
 			       NVUtil::newNV("dataport.corba_any.inport_ref",
 					     RTC::InPortAny::_duplicate(m_objref)));
+      
+      NVUtil::append(prop, nv);
     }
+
 
     virtual ~InPortCorbaProvider()
     {
