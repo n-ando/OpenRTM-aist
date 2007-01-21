@@ -2,7 +2,7 @@ dnl -*- autoconf -*-
 dnl
 dnl @file configure.ac
 dnl @brief Input file for autoconf
-dnl @date $Date: 2007-01-14 23:36:47 $
+dnl @date $Date: 2007-01-21 13:36:45 $
 dnl @author Noriaki Ando <n-ando@aist.go.jp>
 dnl
 dnl This file is an input file used by the GNU "autoconf" program to
@@ -10,11 +10,14 @@ dnl generate the file "configure", which tries to guess your system
 dnl configuration
 dnl
 dnl
-dnl $Id: configure.ac,v 1.11 2007-01-14 23:36:47 n-ando Exp $
+dnl $Id: configure.ac,v 1.12 2007-01-21 13:36:45 n-ando Exp $
 dnl
 
 dnl
 dnl $Log: not supported by cvs2svn $
+dnl Revision 1.11  2007/01/14 23:36:47  n-ando
+dnl SimpleIO sub-directory entry was recovered.
+dnl
 dnl Revision 1.10  2007/01/06 18:06:37  n-ando
 dnl Makefile entry for some unit-test classes were added.
 dnl
@@ -88,8 +91,8 @@ AC_ARG_WITH(ace-includes,     [  --with-ace-includes=dir         Find ACE includ
 AC_ARG_WITH(ace-lib,          [  --with-ace-lib=dir              Find ACE lib files installation below dir(without "lib"])
 
 dnl  boost directory
-AC_ARG_WITH(boost-includes,   [  --with-boost-includes=dir       Find boost include files installation below dir])
-AC_ARG_WITH(boost-lib,        [  --with-boost-lib=dir            Find boost lib files installation below dir])
+#AC_ARG_WITH(boost-includes,   [  --with-boost-includes=dir       Find boost include files installation below dir])
+#AC_ARG_WITH(boost-lib,        [  --with-boost-lib=dir            Find boost lib files installation below dir])
 
 dnl  ORB selection
 AC_ARG_WITH(mico,             [  --with-mico=dir                 Find MICO installation below dir])
@@ -323,62 +326,62 @@ dnl ============================================================
 dnl ------------------------------------------------------------
 dnl  Find boost/version.hpp
 dnl ------------------------------------------------------------
-AC_MSG_CHECKING(for boost/version.hpp)
-FP_FIND_FILE(boost/version.hpp,
-	$with_boost_includes $more_incs $base_incs $base_dirs,
-	include cxx/include)
-if test "x$boost_version_hpp_dir" = "x" ; then
-	AC_MSG_RESULT(Boost (boost/version.hpp) not found)
-	AC_MSG_ERROR(
-use --with-boost-includes=<dir> to locate Boost's headers.
-hint: <dir>/( include cxx/include ) will be searched.)
-	# Error exit!!
-else
-	AC_MSG_RESULT(found in $boost_version_hpp_dir)
-	have_boost=yes
-fi
-
+dnl AC_MSG_CHECKING(for boost/version.hpp)
+dnl FP_FIND_FILE(boost/version.hpp,
+dnl 	$with_boost_includes $more_incs $base_incs $base_dirs,
+dnl 	include cxx/include)
+dnl if test "x$boost_version_hpp_dir" = "x" ; then
+dnl 	AC_MSG_RESULT(Boost (boost/version.hpp) not found)
+dnl 	AC_MSG_ERROR(
+dnl use --with-boost-includes=<dir> to locate Boost's headers.
+dnl hint: <dir>/( include cxx/include ) will be searched.)
+dnl 	# Error exit!!
+dnl else
+dnl 	AC_MSG_RESULT(found in $boost_version_hpp_dir)
+dnl 	have_boost=yes
+dnl fi
+dnl 
 dnl ------------------------------------------------------------
 dnl  Check boost version/Find libboost_regex.so
 dnl ------------------------------------------------------------
-if test "x$have_boost" = "xyes" ; then
-	AC_MSG_CHECKING(Boost version)
-	boost_version=[`grep ' BOOST_VERSION ' $boost_version_hpp_dir/boost/version.hpp | grep '#define' | cut -d  ' ' -f 3`]
-
-	case $boost_version in
-	[1?????)]
-		;;
-	*)
-		AC_MSG_WARN([Unknown Boost version number, expecting 1.3.0 or above.])
-	esac
- 	AC_MSG_RESULT($boost_version)
-
-	# Checking libboost_regex.so
-	AC_MSG_CHECKING(for libboost_regex.so)
-	FP_FIND_FILE(libboost_regex.so,
-		$with_boost_lib $more_libs $base_libs $base_dirs,
-		lib cxx/lib)
-	if test "x$libboost_regex_so_dir" = "x" ; then
-		AC_MSG_RESULT(not found)
-		AC_MSG_ERROR(
-	use --with-boost-lib=<dir> to locate libboost_regex.so
-hint: <dir>/( lib cxx/lib ) will be searched.)
-		# Error exit!!
-	else
-		AC_MSG_RESULT(found in $libboost_regex_so_dir)
-	fi
-
-	#
-	# Boost setup complete
-	#
-	# Compiler/Linker options
-	CPPFLAGS="$CPPFLAGS -I$boost_version_hpp_dir"
-	CXXFLAGS="$CXXFLAGS -I$boost_version_hpp_dir"
-	LDFLAGS="$LDFLAGS -L$libboost_regex_so_dir "
-	LIBS="$LIBS -lboost_regex"
-	LDSOLIBS="$LDSOLIBS -lboost_regex"
-	AC_DEFINE([WITH_BOOST], [TRUE], [compiled with Boost])
-fi
+dnl if test "x$have_boost" = "xyes" ; then
+dnl 	AC_MSG_CHECKING(Boost version)
+dnl 	boost_version=[`grep ' BOOST_VERSION ' $boost_version_hpp_dir/boost/version.hpp | grep '#define' | cut -d  ' ' -f 3`]
+dnl 
+dnl 	case $boost_version in
+dnl 	[1?????)]
+dnl 		;;
+dnl 	*)
+dnl 		AC_MSG_WARN([Unknown Boost version number, expecting 1.3.0 or above.])
+dnl 	esac
+dnl  	AC_MSG_RESULT($boost_version)
+dnl 
+dnl 	# Checking libboost_regex.so
+dnl 	AC_MSG_CHECKING(for libboost_regex.so)
+dnl 	FP_FIND_FILE(libboost_regex.so,
+dnl 		$with_boost_lib $more_libs $base_libs $base_dirs,
+dnl 		lib cxx/lib)
+dnl 	if test "x$libboost_regex_so_dir" = "x" ; then
+dnl 		AC_MSG_RESULT(not found)
+dnl 		AC_MSG_ERROR(
+dnl 	use --with-boost-lib=<dir> to locate libboost_regex.so
+dnl hint: <dir>/( lib cxx/lib ) will be searched.)
+dnl 		# Error exit!!
+dnl 	else
+dnl 		AC_MSG_RESULT(found in $libboost_regex_so_dir)
+dnl 	fi
+dnl 
+dnl 	#
+dnl 	# Boost setup complete
+dnl 	#
+dnl 	# Compiler/Linker options
+dnl 	CPPFLAGS="$CPPFLAGS -I$boost_version_hpp_dir"
+dnl 	CXXFLAGS="$CXXFLAGS -I$boost_version_hpp_dir"
+dnl 	LDFLAGS="$LDFLAGS -L$libboost_regex_so_dir "
+dnl 	LIBS="$LIBS -lboost_regex"
+dnl 	LDSOLIBS="$LDSOLIBS -lboost_regex"
+dnl 	AC_DEFINE([WITH_BOOST], [TRUE], [compiled with Boost])
+dnl fi
 
 
 
@@ -405,7 +408,8 @@ if test "x$with_orbit2" != "x" ; then
 	orb_to_use=ORBit2
 fi
 if test "x$orb_to_use" = "x" ; then
-	AC_MSG_ERROR(Specify ORB to use: check ./configure --help)
+	orb_to_use=omniORB
+#	AC_MSG_ERROR(Specify ORB to use: check ./configure --help)
 fi
 
 echo 'ORB: '$orb_to_use
@@ -1391,13 +1395,15 @@ AC_OUTPUT([Makefile
 	utils/rtm-skelwrapper/Makefile
 	utils/rtc-link/Makefile
 	utils/rtm-naming/Makefile
+	etc/Makefile
+	examples/Makefile
 	examples/SimpleIO/Makefile
+	docs/Makefile
 	])
 
 
 #	 examples/Makefile
 #	 examples/HelloWorld/Makefile
-
 #	 examples/SeqIO/Makefile
 #	 examples/StringIO/Makefile
 #	 examples/Slider_and_Motor/Makefile
@@ -1405,6 +1411,4 @@ AC_OUTPUT([Makefile
 #	 swig/Makefile
 #	 swig/python/Makefile
 #	 etc/Makefile
-#	 docs/Makefile])
-
 #	 utils/rtmNaming/Makefile
