@@ -2,7 +2,7 @@
 /*!
  * @file DataInPort.h
  * @brief RTC::Port implementation for Data InPort
- * @date $Date: 2007-01-14 22:57:48 $
+ * @date $Date: 2007-01-21 09:43:22 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
  * Copyright (C) 2006
@@ -13,12 +13,15 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: DataInPort.h,v 1.4 2007-01-14 22:57:48 n-ando Exp $
+ * $Id: DataInPort.h,v 1.5 2007-01-21 09:43:22 n-ando Exp $
  *
  */
 
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.4  2007/01/14 22:57:48  n-ando
+ * A bug fix about template argument for buffer-type in constructor.
+ *
  * Revision 1.3  2007/01/12 14:29:48  n-ando
  * A trivial bug fix.
  *
@@ -41,11 +44,12 @@
 #include <rtm/OutPortCorbaConsumer.h>
 #include <rtm/NVUtil.h>
 #include <rtm/InPort.h>
+#include <stdio.h>
+
 namespace RTC
 {
   /*!
    * @if jp
-   *
    * @class DataInPort
    * @brief InPort 用 Port
    * @else
@@ -67,48 +71,12 @@ namespace RTC
       addProperty("port.port_type", "DataInPort");
 
       m_providers.push_back(new InPortCorbaProvider<DataType>(inport));
-
+      m_providers.back()->publishInterfaceProfile(m_profile.properties);
       m_consumers.push_back(new OutPortCorbaConsumer<DataType>(inport));
-
+      m_dummy.push_back(1);
     }
 
-    virtual ~DataInPort(){};
-
-    /*!
-     * @if jp
-     * @brief [CORBA interface] Port の接続を行う
-     *
-     * InPort と OutPort との接続を行う。
-     *
-     * InPort 側の connect() では以下のシーケンスで処理が行われる。
-     *
-     * 1. InPort に関連する connector 情報の生成およびセット
-     *  - ConnectorProfile::properties["dataport.interface_type"] = CORBA_Any
-     *    の場合、InPortAny を通して、RawTCP の場合 Raw TCP socket を通して
-     *    データ交換される。
-     *  - ConnectorProfile::properties["dataport.corba_any.inport_ref"]に
-     *    InPortAny のオブジェクトリファレンスをセットする。(CORBA_Anyの場合)
-     *  - ConnectorProfile::properties["dataport.raw_tcp.server_addr"]
-     *    にInPort側のサーバアドレスをセットする。(RawTCP の場合)
-     * 2. OutPortに関連する connector 情報の取得
-     *  - ConnectorProfile::properties["dataport.corba_any.outport_ref"]に
-     *    OutPortAny のオブジェクトリファレンスが設定されている場合、
-     *    リファレンスを取得してConsumerオブジェクトにセットする。
-     *    リファレンスがセットされていなければ無視して継続。
-     *    (InPortがconnect() 呼び出しのエントリポイントの場合は、
-     *    OutPortのオブジェクトリファレンスはセットされていないはずである。)
-     * 3. PortBase::connect() をコール
-     *    Portの接続の基本処理が行われる。
-     * 4. 上記2.でOutPortのリファレンスが取得できなければ、再度OutPortに
-     *    関連する connector 情報を取得する。
-     * 5. 上記の処理のうち一つでもエラーであれば、エラーリターンする。
-     *    正常に処理が行われた場合はRTC::OKでリターンする。
-     *  
-     * @else
-     * @brief [CORBA interface] Connect the Port
-     * @endif
-     */
- 
+    virtual ~DataInPort();
 
   protected:
     virtual ReturnCode_t
@@ -120,38 +88,27 @@ namespace RTC
     virtual void
     unsubscribeInterfaces(const ConnectorProfile& connector_profile);
     
-    struct publish
-    {
-      publish(SDOPackage::NVList& prop) : m_prop(prop) {}
-      void operator()(InPortProvider* provider)
-      {
-	provider->publishInterface(m_prop);
-      }
-      SDOPackage::NVList& m_prop;
-    };
-
-    struct subscribe
-    {
-      subscribe(const SDOPackage::NVList& prop) : m_prop(prop) {}
-      void operator()(OutPortConsumer* consumer)
-      {
-	consumer->subscribeInterface(m_prop);
-      }
-      const SDOPackage::NVList& m_prop;
-    };
-
-    struct unsubscribe
-    {
-      unsubscribe(const SDOPackage::NVList& prop) : m_prop(prop) {}
-      void operator()(OutPortConsumer* consumer)
-      {
-	consumer->unsubscribeInterface(m_prop);
-      }
-      const SDOPackage::NVList& m_prop;
-    };
+    struct publish;
+    struct subscribe;
+    struct unsubscribe;
 
   private:
-    struct find_conn_id;
+    /*
+     * Bug
+     *
+     * Fedora5/gcc4.1.1. にて DataInPort の先頭領域のメモリ破壊が
+     * 起こっている模様。
+     * (gdbでかなり粘って追ってみたが断念(´･ω･`)
+     * もともともは std::vector<InPortProvider*> m_providers が先頭
+     * このままだと、
+     * $vec->_M_impl._M_start:  begin() に相当？
+     * $vec->_M_impl._M_finish: end() に相当？
+     * においてい _M_start が不可解な位置を指すため、
+     * m_providers に対して for_each を適用するとSegvで落ちる。
+     *
+     * FreeBSD6.0/gcc3.4.4ではこの現象は発生せず。
+     */
+    std::vector<int> m_dummy;
     std::vector<InPortProvider*> m_providers;
     std::vector<OutPortConsumer*> m_consumers;
   };
