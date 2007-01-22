@@ -2,7 +2,7 @@ dnl -*- autoconf -*-
 dnl
 dnl @file configure.ac
 dnl @brief Input file for autoconf
-dnl @date $Date: 2007-01-21 13:40:15 $
+dnl @date $Date: 2007-01-22 02:00:25 $
 dnl @author Noriaki Ando <n-ando@aist.go.jp>
 dnl
 dnl This file is an input file used by the GNU "autoconf" program to
@@ -10,11 +10,14 @@ dnl generate the file "configure", which tries to guess your system
 dnl configuration
 dnl
 dnl
-dnl $Id: configure.ac,v 1.13 2007-01-21 13:40:15 n-ando Exp $
+dnl $Id: configure.ac,v 1.14 2007-01-22 02:00:25 n-ando Exp $
 dnl
 
 dnl
 dnl $Log: not supported by cvs2svn $
+dnl Revision 1.13  2007/01/21 13:40:15  n-ando
+dnl Now python version 2.3.* 2.4.* 2.5.* are allowed.
+dnl
 dnl Revision 1.12  2007/01/21 13:36:45  n-ando
 dnl The boost detecting scripts were deleted temporarily.
 dnl Some trivial fixes.
@@ -1397,7 +1400,6 @@ AC_OUTPUT([Makefile
 	utils/rtm-config/Makefile
 	utils/rtc-template/Makefile
 	utils/rtm-skelwrapper/Makefile
-	utils/rtc-link/Makefile
 	utils/rtm-naming/Makefile
 	etc/Makefile
 	examples/Makefile
@@ -1405,7 +1407,7 @@ AC_OUTPUT([Makefile
 	docs/Makefile
 	])
 
-
+#	utils/rtc-link/Makefile
 #	 examples/Makefile
 #	 examples/HelloWorld/Makefile
 #	 examples/SeqIO/Makefile
