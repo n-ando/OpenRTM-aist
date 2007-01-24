@@ -2,7 +2,7 @@
 /*!
  * @file RTObject.cpp
  * @brief RT component base class
- * @date $Date: 2007-01-21 10:36:39 $
+ * @date $Date: 2007-01-24 15:39:14 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
  * Copyright (C) 2006
@@ -12,12 +12,15 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: RTObject.cpp,v 1.4 2007-01-21 10:36:39 n-ando Exp $
+ * $Id: RTObject.cpp,v 1.5 2007-01-24 15:39:14 n-ando Exp $
  *
  */
 
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.4  2007/01/21 10:36:39  n-ando
+ * Duplicate ExecutionContextService's object reference.
+ *
  * Revision 1.3  2007/01/14 19:46:09  n-ando
  * The component action implementation functions for Users' business logic
  * were added (i.e onInitialize(), onExecute(), etc..)
@@ -45,8 +48,8 @@ namespace RTC
     : m_portAdmin(manager->getORB(), manager->getPOA()),
       m_created(true), m_alive(false)
   {
-
-
+    m_pSdoConfigImpl = new SDOPackage::Configuration_impl();
+    m_pSdoConfig = m_pSdoConfigImpl->getObjRef();
   }
 
   RTObject_impl::RTObject_impl(CORBA::ORB_ptr orb,
@@ -54,8 +57,8 @@ namespace RTC
     : m_portAdmin(orb, poa),
       m_created(true), m_alive(false)
   {
-
-
+    m_pSdoConfigImpl = new SDOPackage::Configuration_impl();
+    m_pSdoConfig = m_pSdoConfigImpl->getObjRef();
   }
 
   RTObject_impl::~RTObject_impl()
@@ -774,7 +777,7 @@ namespace RTC
       {
 	SDOPackage::Configuration_var config;
 	config = m_pSdoConfig;
-	return config;
+	return config._retn();
       }
     catch (...)
       {
