@@ -2,7 +2,7 @@ dnl -*- autoconf -*-
 dnl
 dnl @file configure.ac
 dnl @brief Input file for autoconf
-dnl @date $Date: 2007-01-22 02:00:25 $
+dnl @date $Date: 2007-01-24 16:05:51 $
 dnl @author Noriaki Ando <n-ando@aist.go.jp>
 dnl
 dnl This file is an input file used by the GNU "autoconf" program to
@@ -10,11 +10,14 @@ dnl generate the file "configure", which tries to guess your system
 dnl configuration
 dnl
 dnl
-dnl $Id: configure.ac,v 1.14 2007-01-22 02:00:25 n-ando Exp $
+dnl $Id: configure.ac,v 1.15 2007-01-24 16:05:51 n-ando Exp $
 dnl
 
 dnl
 dnl $Log: not supported by cvs2svn $
+dnl Revision 1.14  2007/01/22 02:00:25  n-ando
+dnl *** empty log message ***
+dnl
 dnl Revision 1.13  2007/01/21 13:40:15  n-ando
 dnl Now python version 2.3.* 2.4.* 2.5.* are allowed.
 dnl
@@ -303,10 +306,10 @@ hint: <dir>/( ACE_wrappers/ace/lib lib cxx/lib ) will be searched.)
 	ace_version=[`grep ACE_VERSION $ace_ACE_h_dir/ace/Version.h | cut -d " " -f 3 | sed 's/[\"]//g'`]
 
 	case $ace_version in
-	[5.4.*|5.3.*|5.4|5.3)]
+	[5.5.*|5.4.*|5.3.*|5.5|5.4|5.3)]
 		;;
 	*)
-		AC_MSG_WARN([Unknown ACE version number, expecting 5.4.0 or above.])
+		AC_MSG_WARN([Unknown ACE version number, expecting 5.3.0 or above.])
 	esac
  	AC_MSG_RESULT($ace_version)
 
