@@ -2,7 +2,7 @@
 /*!
  * @file SdoConfiguration.h
  * @brief RT component base class
- * @date $Date: 2007-01-21 13:05:13 $
+ * @date $Date: 2007-01-24 16:03:58 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
  * Copyright (C) 2006
@@ -12,12 +12,15 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: SdoConfiguration.h,v 1.5 2007-01-21 13:05:13 n-ando Exp $
+ * $Id: SdoConfiguration.h,v 1.6 2007-01-24 16:03:58 n-ando Exp $
  *
  */
 
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.5  2007/01/21 13:05:13  n-ando
+ * A trivial fix.
+ *
  * Revision 1.4  2006/11/08 20:00:21  n-ando
  * ConfigurationSet related interfaces are fixed.
  *
@@ -124,8 +127,8 @@ namespace SDOPackage
       public virtual PortableServer::RefCountServantBase
   {
   public:
-    Configuration_impl(CORBA::ORB_ptr orb, PortableServer::POA_ptr poa);
-    virtual ~Configuration_impl(){};
+    Configuration_impl();
+    virtual ~Configuration_impl();
 
     //============================================================
     //
@@ -704,6 +707,8 @@ namespace SDOPackage
     // end of CORBA interface definition
     //============================================================
 
+    Configuration_ptr getObjRef();
+
     const DeviceProfile getDeviceProfile();
 
     const ServiceProfileList getServiceProfiles();
@@ -715,6 +720,8 @@ namespace SDOPackage
   protected:
     const std::string getUUID() const;
     CORBA::Long getActiveConfigIndex();
+
+    Configuration_var m_objref;
 
     typedef ACE_Guard<ACE_Thread_Mutex> Guard;
     /*!
@@ -840,9 +847,6 @@ namespace SDOPackage
       const std::string m_id;
     };
       
-    CORBA::ORB_var m_varORB;
-    PortableServer::POA_var m_varPOA;
-
   };
 
 }; // namespace SDOPackage

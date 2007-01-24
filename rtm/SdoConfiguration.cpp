@@ -2,7 +2,7 @@
 /*!
  * @file SdoConfiguration.cpp
  * @brief SDO's Configuration implementation class
- * @date $Date: 2006-11-09 10:20:40 $
+ * @date $Date: 2007-01-24 16:03:52 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
  * Copyright (C) 2006
@@ -12,12 +12,15 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: SdoConfiguration.cpp,v 1.5 2006-11-09 10:20:40 n-ando Exp $
+ * $Id: SdoConfiguration.cpp,v 1.6 2007-01-24 16:03:52 n-ando Exp $
  *
  */
 
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.5  2006/11/09 10:20:40  n-ando
+ * set_service_profile never throws InvalidParameter exception.
+ *
  * Revision 1.4  2006/11/08 20:00:12  n-ando
  * ConfigurationSet related interfaces are fixed.
  *
@@ -41,13 +44,15 @@
 
 namespace SDOPackage
 {
-  Configuration_impl::Configuration_impl(CORBA::ORB_ptr orb,
-					 PortableServer::POA_ptr poa)
-    : m_varORB(orb), m_varPOA(poa)
+  Configuration_impl::Configuration_impl()
+  {
+    m_objref = this->_this();
+  }
+
+  Configuration_impl::~Configuration_impl()
   {
   }
 
-  
   /* @if jp
    * @brief [CORBA interface] SDO の DeviceProfile をセットする
    * @else
@@ -551,8 +556,18 @@ namespace SDOPackage
       }
     return true;
   }
+
+
+
+  //============================================================
+  // Local interfaces
+  //============================================================
   
-  
+  Configuration_ptr Configuration_impl::getObjRef()
+  {
+    return m_objref;
+  }
+
   const DeviceProfile Configuration_impl::getDeviceProfile()
   {
     return m_deviceProfile;
