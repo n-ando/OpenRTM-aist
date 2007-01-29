@@ -2,9 +2,12 @@
 ##------------------------------------------------------------
 ## Makefile.am for libRTC
 ##
-## $Id: Makefile.am,v 1.13 2007-01-21 14:17:21 n-ando Exp $
+## $Id: Makefile.am,v 1.14 2007-01-29 07:24:35 n-ando Exp $
 ##
 ## $Log: not supported by cvs2svn $
+## Revision 1.13  2007/01/21 14:17:21  n-ando
+## *** empty log message ***
+##
 ## Revision 1.12  2007/01/12 15:02:59  n-ando
 ## The versioin.h should not be included in dist. files.
 ##
@@ -120,7 +123,11 @@ libRTC_la_SOURCES = \
 
 
 libRTC_la_LIBADD = $(top_builddir)/rtm/idl/libRTCSkel.la $(ARTLIB)
-libRTC_la_LDFLAGS = -L$(top_builddir)/rtm/idl -release $(PACKAGE_VERSION) -version-info 0:4:0
+libRTC_la_LDFLAGS =                 \
+	-no-undefined               \
+	-L$(top_builddir)/rtm/idl   \
+	-release $(PACKAGE_VERSION) \
+	-version-info 0:4:0
 
 
 rtmheaderdir = $(prefix)/include/rtm
