@@ -2,7 +2,7 @@ dnl -*- autoconf -*-
 dnl
 dnl @file configure.ac
 dnl @brief Input file for autoconf
-dnl @date $Date: 2007-01-24 16:05:51 $
+dnl @date $Date: 2007-01-29 07:24:06 $
 dnl @author Noriaki Ando <n-ando@aist.go.jp>
 dnl
 dnl This file is an input file used by the GNU "autoconf" program to
@@ -10,11 +10,14 @@ dnl generate the file "configure", which tries to guess your system
 dnl configuration
 dnl
 dnl
-dnl $Id: configure.ac,v 1.15 2007-01-24 16:05:51 n-ando Exp $
+dnl $Id: configure.ac,v 1.16 2007-01-29 07:24:06 n-ando Exp $
 dnl
 
 dnl
 dnl $Log: not supported by cvs2svn $
+dnl Revision 1.15  2007/01/24 16:05:51  n-ando
+dnl ACE 5.5.* is accepted.
+dnl
 dnl Revision 1.14  2007/01/22 02:00:25  n-ando
 dnl *** empty log message ***
 dnl
@@ -79,6 +82,7 @@ AC_PROG_CXX
 AC_PROG_CXXCPP
 AC_LANG_CPLUSPLUS
 AC_PROG_INSTALL
+AC_LIBTOOL_WIN32_DLL
 AC_PROG_LIBTOOL
 
 AC_CHECK_HEADERS([nlist.h stdlib.h unistd.h])
