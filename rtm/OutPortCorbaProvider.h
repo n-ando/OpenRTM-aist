@@ -2,7 +2,7 @@
 /*!
  * @file  OutPortCorbaProvider.h
  * @brief OutPortCorbaProvider class
- * @date  $Date: 2007-01-21 10:25:24 $
+ * @date  $Date: 2007-02-04 16:56:00 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
  * Copyright (C) 2006
@@ -13,12 +13,15 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: OutPortCorbaProvider.h,v 1.4 2007-01-21 10:25:24 n-ando Exp $
+ * $Id: OutPortCorbaProvider.h,v 1.5 2007-02-04 16:56:00 n-ando Exp $
  *
  */
 
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.4  2007/01/21 10:25:24  n-ando
+ * A trivial fix.
+ *
  * Revision 1.3  2007/01/14 23:01:53  n-ando
  * Now object reference is duplicate to set property.
  *
@@ -77,7 +80,7 @@ namespace RTC
       setDataType(any_var.type()->name());
       setInterfaceType("CORBA_Any");
       setDataFlowType("Push, Pull");
-      setSubscriptionType("Any");
+      setSubscriptionType("Flush, New, Periodic");
 
       // ConnectorProfile setting
       m_objref = this->_this();
