@@ -1,45 +1,91 @@
 // -*- C++ -*-
 /*!
- * @file SeqOutComp.h
- * @brief SeqOut component
- * @date $Date: 2005-05-12 09:06:20 $
+ * @file SeqOutComp.cpp
+ * @brief Standalone component
+ * @date $Date: 2007-02-04 16:48:10 $
  *
- * $Id: SeqOutComp.cpp,v 1.1.1.1 2005-05-12 09:06:20 n-ando Exp $
+ * $Id: SeqOutComp.cpp,v 1.2 2007-02-04 16:48:10 n-ando Exp $
  */
 
-
-
-#include <rtm/RtcManager.h>
+#include <rtm/Manager.h>
 #include <iostream>
 #include <string>
 #include "SeqOut.h"
 
 
-void MyModuleInit(RtcManager* manager)
+void MyModuleInit(RTC::Manager* manager)
 {
   SeqOutInit(manager);
+  RTC::RtcBase* comp;
 
-  std::string name;
-  RtcBase* comp;
-  comp = manager->createComponent("SeqOut", "Generic", name);
+  // Create a component
+  comp = manager->createComponent("SeqOut");
 
-  std::cout << "RTComponent: " << name << " was created." << std::endl;
+
+  // Example
+  // The following procedure is examples how handle RT-Components.
+  // These should not be in this function.
+
+  // Get the component's object reference
+//  RTC::RTObject_var rtobj;
+//  rtobj = RTC::RTObject::_narrow(manager->getPOA()->servant_to_reference(comp));
+
+  // Get the port list of the component
+//  PortList* portlist;
+//  portlist = rtobj->get_ports();
+
+  // getting port profiles
+//  std::cout << "Number of Ports: ";
+//  std::cout << portlist->length() << std::endl << std::endl; 
+//  for (CORBA::ULong i(0), n(portlist->length()); i < n; ++i)
+//  {
+//    Port_ptr port;
+//    port = (*portlist)[i];
+//    std::cout << "Port" << i << " (name): ";
+//    std::cout << port->get_port_profile()->name << std::endl;
+//    
+//    RTC::PortInterfaceProfileList iflist;
+//    iflist = port->get_port_profile()->interfaces;
+//    std::cout << "---interfaces---" << std::endl;
+//    for (CORBA::ULong i(0), n(iflist.length()); i < n; ++i)
+//    {
+//      std::cout << "I/F name: ";
+//      std::cout << iflist[i].instance_name << std::endl;
+//      std::cout << "I/F type: ";
+//      std::cout << iflist[i].type_name << std::endl;
+//      const char* pol;
+//      pol = iflist[i].polarity == 0 ? "PROVIDED" : "REQUIRED";
+//      std::cout << "Polarity: " << pol << std::endl;
+//    }
+//    std::cout << "---properties---" << std::endl;
+//    NVUtil::dump(port->get_port_profile()->properties);
+//    std::cout << "----------------" << std::endl << std::endl;
+//  }
 
   return;
 }
 
-
 int main (int argc, char** argv)
 {
-  RTM::RtcManager manager(argc, argv);
+  RTC::Manager* manager;
+  manager = RTC::Manager::init(argc, argv);
+
   // Initialize manager
-  manager.initManager();
+  manager->init(argc, argv);
+
+  // Set module initialization proceduer
+  // This procedure will be invoked in activateManager() function.
+  manager->setModuleInitProc(MyModuleInit);
+
   // Activate manager and register to naming service
-  manager.activateManager();
-  // Initialize my module on this maneger
-  manager.initModuleProc(MyModuleInit);
-  // Main loop
-  manager.runManager();
+  manager->activateManager();
+
+  // run the manager in blocking mode
+  // runManager(false) is the default.
+  manager->runManager();
+
+  // If you want to run the manager in non-blocking mode, do like this
+  // manager->runManager(true);
+
   return 0;
 }
-

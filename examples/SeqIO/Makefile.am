@@ -2,9 +2,12 @@
 ##---------------------------------------------------------------------------
 ## Makefile.am for SeqIn/SeqOut components
 ##
-## $Id: Makefile.am,v 1.1.1.1 2005-05-12 09:06:20 n-ando Exp $
+## $Id: Makefile.am,v 1.2 2007-02-04 16:47:25 n-ando Exp $
 ##
 ## $Log: not supported by cvs2svn $
+## Revision 1.1.1.1  2005/05/12 09:06:20  n-ando
+## Public release.
+##
 ##---------------------------------------------------------------------------
 
 AUTOMAKE_OPTIONS = 1.4
@@ -30,9 +33,12 @@ SeqOutComp_SOURCES = SeqOutComp.cpp
 SeqOutComp_LDADD = $(top_builddir)/rtm/libRTC.la SeqOut.o
 SeqOutComp_LDFLAGS = -L$(top_builddir)/rtm/.libs
 
-EXTRA_DIST = \
-	Makefile.SeqIn \
-	Makefile.SeqOut
+EXTRA_DIST =            \
+	Makefile.SeqIn  \
+	Makefile.SeqOut \
+	README.SeqIn    \
+	README.SeqOut   \
+	gen.sh
 
 clean-local:
 	rm -f *.bak *.rpo *.sym lib*.*_pure_* Makefile.old *core *~

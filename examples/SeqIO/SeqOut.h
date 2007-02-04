@@ -1,97 +1,142 @@
 // -*- C++ -*-
 /*!
- * @file SeqOut.h
- * @brief SeqOut component
- * @date $Date: 2005-05-12 09:06:20 $
+ * @file  SeqOut.h
+ * @brief Sequence OutPort component
+ * @date  $Date: 2007-02-04 16:48:05 $
  *
- * $Id: SeqOut.h,v 1.1.1.1 2005-05-12 09:06:20 n-ando Exp $
+ * $Id: SeqOut.h,v 1.2 2007-02-04 16:48:05 n-ando Exp $
  */
 
-#ifndef __SEQOUT_h__
-#define __SEQOUT_h__
+#ifndef SEQOUT_H
+#define SEQOUT_H
 
+#include <rtm/Manager.h>
+#include <rtm/DataFlowComponentBase.h>
+#include <rtm/CorbaPort.h>
+#include <rtm/DataInPort.h>
+#include <rtm/DataOutPort.h>
+#include <rtm/idl/BasicDataTypeSkel.h>
 
-#include <rtm/RtcBase.h>
-#include <rtm/RtcManager.h>
-#include <rtm/RtcInPort.h>
-#include <rtm/RtcOutPort.h>
+// Service implementation headers
+// <rtc-template block="service_impl_h">
 
-using namespace RTM;
+// </rtc-template>
 
-static RtcModuleProfSpec seqout_spec[] =
-  {
-  
-  {RTC_MODULE_NAME, "SeqOut"},
-  {RTC_MODULE_DESC, "SeqOut component"},
-  {RTC_MODULE_VERSION, "0.1"},
-  {RTC_MODULE_AUTHOR, "DrSample"},
-  {RTC_MODULE_CATEGORY, "Generic"},
-  {RTC_MODULE_COMP_TYPE, "COMMUTATIVE"},
-  {RTC_MODULE_ACT_TYPE, "SPORADIC"},
-  {RTC_MODULE_MAX_INST, "10"},
-  {RTC_MODULE_LANG, "C++"},
-  {RTC_MODULE_LANG_TYPE, "COMPILE"},
-  {RTC_MODULE_SPEC_END, NULL}
-  };
+// Service Consumer stub headers
+// <rtc-template block="consumer_stub_h">
 
+// </rtc-template>
 
-	
+using namespace RTC;
+
 class SeqOut
-  : public RTM::RtcBase
+  : public RTC::DataFlowComponentBase
 {
  public:
-  SeqOut(RtcManager* manager);
+  SeqOut(RTC::Manager* manager);
+  ~SeqOut();
 
-  // [Initializing state]
-  //  virtual RtmRes rtc_init_entry();
+  // The initialize action (on CREATED->ALIVE transition)
+  // formaer rtc_init_entry() 
+  // virtual RTC::ReturnCode_t onInitialize();
 
-  // [Ready state]
-  //  virtual RtmRes rtc_ready_entry();
-  //  virtual RtmRes rtc_ready_do();
-  //  virtual RtmRes rtc_ready_exit();
+  // The finalize action (on ALIVE->END transition)
+  // formaer rtc_exiting_entry()
+  // virtual RTC::ReturnCode_t onFinalize();
 
-  // [Starting state]
-  //  virtual RtmRes rtc_starting_entry();
+  // The startup action when ExecutionContext startup
+  // former rtc_starting_entry()
+  // virtual RTC::ReturnCode_t onStartup(RTC::UniqueId ec_id);
+
+  // The shutdown action when ExecutionContext stop
+  // former rtc_stopping_entry()
+  // virtual RTC::ReturnCode_t onShutdown(RTC::UniqueId ec_id);
+
+  // The activated action (Active state entry action)
+  // former rtc_active_entry()
+  // virtual RTC::ReturnCode_t onActivated(RTC::UniqueId ec_id);
+
+  // The deactivated action (Active state exit action)
+  // former rtc_active_exit()
+  // virtual RTC::ReturnCode_t onDeactivated(RTC::UniqueId ec_id);
+
+  // The execution action that is invoked periodically
+  // former rtc_active_do()
+  virtual RTC::ReturnCode_t onExecute(RTC::UniqueId ec_id);
+
+  // The aborting action when main logic error occurred.
+  // former rtc_aborting_entry()
+  // virtual RTC::ReturnCode_t onAborting(RTC::UniqueId ec_id);
+
+  // The error action in ERROR state
+  // former rtc_error_do()
+  // virtual RTC::ReturnCode_t onError(RTC::UniqueId ec_id);
+
+  // The reset action that is invoked resetting
+  // This is same but different the former rtc_init_entry()
+  // virtual RTC::ReturnCode_t onReset(RTC::UniqueId ec_id);
   
-  // [Active state]
-  //  virtual RtmRes rtc_active_entry();
-  virtual RtmRes rtc_active_do();
-  //  virtual RtmRes rtc_active_exit();
+  // The state update action that is invoked after onExecute() action
+  // no corresponding operation exists in OpenRTm-aist-0.2.0
+  // virtual RTC::ReturnCode_t onStateUpdate(RTC::UniqueId ec_id);
 
-  // [Stopping state]
-  //  virtual RtmRes rtc_stopping_entry();
+  // The action that is invoked when execution context's rate is changed
+  // no corresponding operation exists in OpenRTm-aist-0.2.0
+  // virtual RTC::ReturnCode_t onRateChanged(RTC::UniqueId ec_id);
 
-  // [Aborting state]
-  //  virtual RtmRes rtc_aborting_entry();
+
+ protected:
+  // DataInPort declaration
+  // <rtc-template block="inport_declare">
   
-  // [Error state]
-  //  virtual RtmRes rtc_error_entry();
-  //  virtual RtmRes rtc_error_do();
-  //  virtual RtmRes rtc_error_exit();
+  // </rtc-template>
 
-  // [Fatal Error state]
-  //  virtual RtmRes rtc_fatal_entry();
-  //  virtual RtmRes rtc_fatal_do();
-  //  virtual RtmRes rtc_fatal_exit();
+
+  // DataOutPort declaration
+  // <rtc-template block="outport_declare">
+  TimedShort m_Short;
+  OutPort<TimedShort> m_ShortOut;
+  TimedLong m_Long;
+  OutPort<TimedLong> m_LongOut;
+  TimedFloat m_Float;
+  OutPort<TimedFloat> m_FloatOut;
+  TimedDouble m_Double;
+  OutPort<TimedDouble> m_DoubleOut;
+  TimedShortSeq m_ShortSeq;
+  OutPort<TimedShortSeq> m_ShortSeqOut;
+  TimedLongSeq m_LongSeq;
+  OutPort<TimedLongSeq> m_LongSeqOut;
+  TimedFloatSeq m_FloatSeq;
+  OutPort<TimedFloatSeq> m_FloatSeqOut;
+  TimedDoubleSeq m_DoubleSeq;
+  OutPort<TimedDoubleSeq> m_DoubleSeqOut;
   
-  // [Exiting state]
-  //  virtual RtmRes rtc_exiting_entry();
+  // </rtc-template>
 
-  TimedDoubleSeq m_Double;
-  OutPortAny<TimedDoubleSeq> m_DoubleOut;
-  TimedFloatSeq m_Float;
-  OutPortAny<TimedFloatSeq> m_FloatOut;
-  TimedLongSeq m_Long;
-  OutPortAny<TimedLongSeq> m_LongOut;
-  TimedShortSeq m_Short;
-  OutPortAny<TimedShortSeq> m_ShortOut;
+  // CORBA Port declaration
+  // <rtc-template block="corbaport_declare">
+  
+  // </rtc-template>
+
+  // Service declaration
+  // <rtc-template block="service_declare">
+  
+  // </rtc-template>
+
+  // Consumer declaration
+  // <rtc-template block="consumer_declare">
+  
+  // </rtc-template>
+
+ private:
+  int dummy;
+
 };
 
 
-extern "C" {
-  RtcBase* SeqOutNew(RtcManager* manager);
-  void SeqOutDelete(RtcBase* p);
-  void SeqOutInit(RtcManager* manager);
+extern "C"
+{
+  void SeqOutInit(RTC::Manager* manager);
 };
-#endif // __SEQOUT_h__
 
+#endif // SEQOUT_H
