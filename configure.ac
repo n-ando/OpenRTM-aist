@@ -2,7 +2,7 @@ dnl -*- autoconf -*-
 dnl
 dnl @file configure.ac
 dnl @brief Input file for autoconf
-dnl @date $Date: 2007-01-29 07:24:06 $
+dnl @date $Date: 2007-02-04 16:48:57 $
 dnl @author Noriaki Ando <n-ando@aist.go.jp>
 dnl
 dnl This file is an input file used by the GNU "autoconf" program to
@@ -10,11 +10,14 @@ dnl generate the file "configure", which tries to guess your system
 dnl configuration
 dnl
 dnl
-dnl $Id: configure.ac,v 1.16 2007-01-29 07:24:06 n-ando Exp $
+dnl $Id: configure.ac,v 1.17 2007-02-04 16:48:57 n-ando Exp $
 dnl
 
 dnl
 dnl $Log: not supported by cvs2svn $
+dnl Revision 1.16  2007/01/29 07:24:06  n-ando
+dnl AC_LIBTOOL_WIN32_DLL macro was added for Cygwin.
+dnl
 dnl Revision 1.15  2007/01/24 16:05:51  n-ando
 dnl ACE 5.5.* is accepted.
 dnl
@@ -1411,13 +1414,13 @@ AC_OUTPUT([Makefile
 	etc/Makefile
 	examples/Makefile
 	examples/SimpleIO/Makefile
+	examples/SeqIO/Makefile
 	docs/Makefile
 	])
 
 #	utils/rtc-link/Makefile
 #	 examples/Makefile
 #	 examples/HelloWorld/Makefile
-#	 examples/SeqIO/Makefile
 #	 examples/StringIO/Makefile
 #	 examples/Slider_and_Motor/Makefile
 #	 examples/SimpleService/Makefile
