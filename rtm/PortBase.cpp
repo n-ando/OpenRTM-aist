@@ -2,7 +2,7 @@
 /*!
  * @file PortBase.h
  * @brief RTC's Port base class
- * @date $Date: 2007-01-04 00:43:42 $
+ * @date $Date: 2007-02-04 17:00:22 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
  * Copyright (C) 2006
@@ -12,12 +12,16 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: PortBase.cpp,v 1.6 2007-01-04 00:43:42 n-ando Exp $
+ * $Id: PortBase.cpp,v 1.7 2007-02-04 17:00:22 n-ando Exp $
  *
  */
 
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.6  2007/01/04 00:43:42  n-ando
+ * Now, notify_connect() and notify_disconnect() behavior can be customized
+ * publishInterfaces(), subscribeInterfaces() and unsubscribeInterfaces().
+ *
  * Revision 1.5  2006/11/27 09:57:04  n-ando
  * addProvider() function was added for registration of provider.
  * addConsumer() function was added for registration of consumer.
@@ -60,7 +64,9 @@ namespace RTC
   PortBase::PortBase(const char* name)
   {
     m_profile.name = CORBA::string_dup(name);
-    m_profile.port_ref = this->_this();
+    m_objref = RTC::Port::_duplicate(this->_this());
+    m_profile.port_ref = m_objref;
+    m_profile.owner = RTC::RTObject::_nil();
   }
   
 
@@ -396,6 +402,7 @@ namespace RTC
 	p = connector_profile.ports[index];
 	return p->notify_disconnect(connector_profile.connector_id);
       }
+    unsubscribeInterfaces(connector_profile);
     return RTC::OK;
   }				  
 
