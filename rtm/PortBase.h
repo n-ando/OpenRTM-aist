@@ -2,7 +2,7 @@
 /*!
  * @file PortBase.h
  * @brief RTC's Port base class
- * @date $Date: 2007-01-04 00:43:35 $
+ * @date $Date: 2007-02-04 17:00:59 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
  * Copyright (C) 2006
@@ -12,12 +12,16 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: PortBase.h,v 1.7 2007-01-04 00:43:35 n-ando Exp $
+ * $Id: PortBase.h,v 1.8 2007-02-04 17:00:59 n-ando Exp $
  *
  */
 
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.7  2007/01/04 00:43:35  n-ando
+ * Now, notify_connect() and notify_disconnect() behavior can be customized
+ * publishInterfaces(), subscribeInterfaces() and unsubscribeInterfaces().
+ *
  * Revision 1.6  2006/12/02 18:50:22  n-ando
  * A trivial fix.
  *
@@ -1061,7 +1065,7 @@ namespace RTC
      * @endif
      */
     PortProfile m_profile;
-
+    RTC::Port_var m_objref;
     mutable ACE_Recursive_Thread_Mutex m_profile_mutex;
     typedef ACE_Guard<ACE_Recursive_Thread_Mutex> Guard;
     
