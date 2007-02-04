@@ -2,7 +2,7 @@
 /*!
  * @file DataOutPort.cpp
  * @brief Base class of OutPort
- * @date $Date: 2007-01-06 17:44:00 $
+ * @date $Date: 2007-02-04 16:54:12 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
  * Copyright (C) 2006
@@ -13,12 +13,16 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: DataOutPort.cpp,v 1.3 2007-01-06 17:44:00 n-ando Exp $
+ * $Id: DataOutPort.cpp,v 1.4 2007-02-04 16:54:12 n-ando Exp $
  *
  */
 
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.3  2007/01/06 17:44:00  n-ando
+ * The behavior on notify_connect() and notify_disconnect() are now
+ * implemented in protected functions(ex. publisherInterfaces()).
+ *
  * Revision 1.2  2006/12/02 18:29:08  n-ando
  * Now OutPortCorbaProvider and InPortCorbaConsumer are used.
  *
@@ -80,7 +84,10 @@ namespace RTC
   void
   DataOutPort::unsubscribeInterfaces(const ConnectorProfile& connector_profile)
   {
-    ;
+    PublisherBase* publisher;
+    publisher = m_outport.detach(connector_profile.connector_id);
+    delete publisher;
+    return;
   }
   
 
