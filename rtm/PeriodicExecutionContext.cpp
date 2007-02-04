@@ -2,7 +2,7 @@
 /*!
  * @file PeriodicExecutionContext.cpp
  * @brief PeriodicExecutionContext class
- * @date $Date: 2007-01-21 10:26:55 $
+ * @date $Date: 2007-02-04 16:56:52 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
  * Copyright (C) 2006
@@ -12,12 +12,15 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: PeriodicExecutionContext.cpp,v 1.3 2007-01-21 10:26:55 n-ando Exp $
+ * $Id: PeriodicExecutionContext.cpp,v 1.4 2007-02-04 16:56:52 n-ando Exp $
  *
  */
 
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.3  2007/01/21 10:26:55  n-ando
+ * Object reference count related bugs were fixed.
+ *
  * Revision 1.2  2007/01/14 19:44:26  n-ando
  * The logic of main activity loop was changed.
  *
@@ -226,7 +229,8 @@ namespace RTC
   PeriodicExecutionContext::deactivate_component(LightweightRTObject_ptr comp)
   {
     CompItr it;
-    it = std::find_if(m_comps.begin(), m_comps.end(), find_comp(comp));
+    it = std::find_if(m_comps.begin(), m_comps.end(),
+		      find_comp(RTC::LightweightRTObject::_duplicate(comp)));
     if (it == m_comps.end())
       return RTC::BAD_PARAMETER;
 
@@ -249,7 +253,8 @@ namespace RTC
   PeriodicExecutionContext::reset_component(LightweightRTObject_ptr comp)
   {
     CompItr it;
-    it = std::find_if(m_comps.begin(), m_comps.end(), find_comp(comp));
+    it = std::find_if(m_comps.begin(), m_comps.end(),
+		      find_comp(RTC::LightweightRTObject::_duplicate(comp)));
     if (it == m_comps.end())
       return RTC::BAD_PARAMETER;
 
@@ -272,7 +277,8 @@ namespace RTC
   PeriodicExecutionContext::get_component_state(LightweightRTObject_ptr comp)
   {
     CompItr it;
-    it = std::find_if(m_comps.begin(), m_comps.end(), find_comp(comp));
+    it = std::find_if(m_comps.begin(), m_comps.end(),
+		      find_comp(RTC::LightweightRTObject::_duplicate(comp)));
     if (it == m_comps.end())
       return RTC::UNKNOWN_STATE;
 
@@ -333,7 +339,8 @@ namespace RTC
   PeriodicExecutionContext::remove(LightweightRTObject_ptr comp)
   {
     CompItr it;
-    it = std::find_if(m_comps.begin(), m_comps.end(), find_comp(comp));
+    it = std::find_if(m_comps.begin(), m_comps.end(),
+		      find_comp(RTC::LightweightRTObject::_duplicate(comp)));
     if (it == m_comps.end())
       return RTC::BAD_PARAMETER;
 
