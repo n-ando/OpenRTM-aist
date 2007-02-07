@@ -1,9 +1,10 @@
-#include <RTCService.idl>
-
+typedef sequence<string> EchoList;
+typedef sequence<float> ValueList;
 interface MyService
-  : RTM::RTCService
 {
-  void setGain(in float gain);
-  float getGain();
+  string echo(in string msg);
+  EchoList get_echo_history();
+  void set_value(in float value);
+  float get_value();
+  ValueList get_value_history();
 };
-
