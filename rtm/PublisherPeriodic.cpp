@@ -2,7 +2,7 @@
 /*!
  * @file  PublisherPeriodic.cpp
  * @brief PublisherPeriodic class
- * @date  $Date: 2007-02-04 17:03:04 $
+ * @date  $Date: 2007-02-07 02:53:01 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
  * Copyright (C) 2006
@@ -13,12 +13,15 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: PublisherPeriodic.cpp,v 1.4 2007-02-04 17:03:04 n-ando Exp $
+ * $Id: PublisherPeriodic.cpp,v 1.5 2007-02-07 02:53:01 n-ando Exp $
  *
  */
 
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.4  2007/02/04 17:03:04  n-ando
+ * The wait func is called in dtor to wait thread termination.
+ *
  * Revision 1.3  2007/01/21 13:04:32  n-ando
  * Data push interval property accepts float.
  *
@@ -48,7 +51,7 @@ namespace RTC
 				       const Properties& property)
     : m_consumer(consumer), m_running(true)
   {
-    std::string rate(property.getProperty("dataport.push_interval"));
+    std::string rate(property.getProperty("dataport.push_rate"));
     double hz;
 
     if (rate != "")
