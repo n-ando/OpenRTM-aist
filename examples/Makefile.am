@@ -2,9 +2,12 @@
 ##------------------------------------------------------------
 ## Makefile.am for examples
 ##
-## $Id: Makefile.am,v 1.4 2007-02-04 16:48:52 n-ando Exp $
+## $Id: Makefile.am,v 1.5 2007-02-07 02:50:31 n-ando Exp $
 ##
 ## $Log: not supported by cvs2svn $
+## Revision 1.4  2007/02/04 16:48:52  n-ando
+## SeqIO was updated.
+##
 ## Revision 1.3  2007/01/14 23:36:35  n-ando
 ## SimpleIO sub-directory entry was recovered.
 ##
@@ -19,5 +22,5 @@
 
 AUTOMAKE_OPTIONS = 1.4
 
-SUBDIRS = SimpleIO SeqIO
+SUBDIRS = SimpleIO SeqIO SimpleService
 
