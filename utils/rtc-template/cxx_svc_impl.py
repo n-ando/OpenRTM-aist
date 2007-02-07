@@ -3,7 +3,7 @@
 #
 #  @file cxx_svc_impl.py
 #  @brief rtc-template C++ service source code generator class
-#  @date $Date: 2007-01-11 07:44:39 $
+#  @date $Date: 2007-02-07 02:51:49 $
 #  @author Noriaki Ando <n-ando@aist.go.jp>
 # 
 #  Copyright (C) 2005-2007
@@ -13,11 +13,15 @@
 #          Advanced Industrial Science and Technology (AIST), Japan
 #      All rights reserved.
 # 
-#  $Id: cxx_svc_impl.py,v 1.3 2007-01-11 07:44:39 n-ando Exp $
+#  $Id: cxx_svc_impl.py,v 1.4 2007-02-07 02:51:49 n-ando Exp $
 # 
 
 #
 # $Log: not supported by cvs2svn $
+# Revision 1.3  2007/01/11 07:44:39  n-ando
+# Now service implementation class does not inherit RtcServiceBase.
+# The implementation template was changed.
+#
 # Revision 1.2  2005/09/06 14:37:18  n-ando
 # rtc-template's command options and data structure for ezt (Easy Template)
 # are changed for RTComponent's service features.
@@ -98,9 +102,7 @@ class_h = """\
 /*!
  * @atmark@file  @impl_h@
  * @atmark@brief Service implementation header of @file@
- * @atmark@date  $Date: 2007-01-11 07:44:39 $
  *
- * $Id: cxx_svc_impl.py,v 1.3 2007-01-11 07:44:39 n-ando Exp $
  */
 
 #include "@skel_h@"
@@ -120,9 +122,7 @@ class_cpp = """\
 /*!
  * @atmark@file  @impl_cpp@
  * @atmark@brief Service implementation code of @file@
- * @atmark@date  $Date: 2007-01-11 07:44:39 $
  *
- * $Id: cxx_svc_impl.py,v 1.3 2007-01-11 07:44:39 n-ando Exp $
  */
 
 #include "@impl_h@"
