@@ -2,14 +2,14 @@
 ##---------------------------------------------------------------------------
 ## Makefile.am for MyServiceProvider/MyServiceConsumer components
 ##
-## $Id: Makefile.am,v 1.4 2007-02-07 02:44:42 n-ando Exp $
+## $Id: Makefile.am,v 1.5 2007-02-08 06:01:25 n-ando Exp $
 ##
 ##---------------------------------------------------------------------------
 
 AUTOMAKE_OPTIONS = 1.4
 
 IDLC = @IDLC@
-IDLFLAGS = @IDL_FLAGS@ -I$(top_srcdir)/rtm/idl
+IDLFLAGS = @IDL_FLAGS@
 LIBS = @LIBS@
 
 AM_CPPFLAGS=-I$(top_srcdir) -I$(top_srcdir)/rtm/idl
@@ -36,31 +36,35 @@ IMPL_OBJ = MyServiceSVC_impl.o
 
 noinst_PROGRAMS = MyServiceConsumerComp MyServiceProviderComp
 
-MyServiceProviderComp_SOURCES =      \
-	$(IDL_SOURCES:.idl=Skel.cpp) \
-	MyServiceSVC_impl.cpp        \
-	MyServiceProvider.cpp        \
+nodist_MyServiceProviderComp_SOURCES = \
+	$(IDL_SOURCES:.idl=Skel.cpp)   \
+	MyServiceSVC_impl.cpp          \
+	MyServiceProvider.cpp          \
 	MyServiceProviderComp.cpp
 MyServiceProviderComp_LDFLAGS = -L$(top_builddir)/rtm
 MyServiceProviderComp_LDADD = -lRTC
 
-MyServiceConsumerComp_SOURCES =      \
-	$(IDL_SOURCES:.idl=Stub.cpp) \
-	MyServiceConsumer.cpp        \
+nodist_MyServiceConsumerComp_SOURCES = \
+	$(IDL_SOURCES:.idl=Stub.cpp)   \
+	MyServiceConsumer.cpp          \
 	MyServiceConsumerComp.cpp
 MyServiceConsumerComp_LDFLAGS = -L$(top_builddir)/rtm
 MyServiceConsumerComp_LDADD = -lRTC
 
-EXTRA_DIST = \
-	$(IDL_SOURCES) \
+EXTRA_DIST =                       \
+	$(IDL_SOURCES)             \
 	Makefile.MyServiceProvider \
 	Makefile.MyServiceConsumer \
-	README.MyServiceProvider \
-	README.MyServiceConsumer \
-	MyServiceSVC_impl.cpp \
-	MyServiceSVC_impl.h \
-	MyServiceProvider.h \
-	MyServiceConsumer.h \
+	README.MyServiceProvider   \
+	README.MyServiceConsumer   \
+	MyServiceSVC_impl.cpp      \
+	MyServiceSVC_impl.h        \
+	MyServiceProvider.h        \
+	MyServiceProvider.cpp      \
+	MyServiceProviderComp.cpp  \
+	MyServiceConsumer.h        \
+	MyServiceConsumer.cpp      \
+	MyServiceConsumerComp.cpp  \
 	gen.sh
 
 clean_objs:
