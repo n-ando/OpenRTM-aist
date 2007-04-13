@@ -2,9 +2,9 @@
 /*!
  * @file  MyServiceProvider.cpp
  * @brief MyService Provider Sample component
- * $Date: 2007-02-07 02:48:37 $
+ * $Date: 2007-04-13 15:03:20 $
  *
- * $Id: MyServiceProvider.cpp,v 1.1 2007-02-07 02:48:37 n-ando Exp $
+ * $Id: MyServiceProvider.cpp,v 1.2 2007-04-13 15:03:20 n-ando Exp $
  */
 
 #include "MyServiceProvider.h"
@@ -60,84 +60,84 @@ MyServiceProvider::~MyServiceProvider()
 /*
 RTC::ReturnCode_t MyServiceProvider::onInitialize()
 {
-  return RTC::OK;
+  return RTC::RTC_OK;
 }
 */
 
 /*
 RTC::ReturnCode_t MyServiceProvider::onFinalize()
 {
-  return RTC::OK;
+  return RTC::RTC_OK;
 }
 */
 
 /*
 RTC::ReturnCode_t MyServiceProvider::onStartup(RTC::UniqueId ec_id)
 {
-  return RTC::OK;
+  return RTC::RTC_OK;
 }
 */
 
 /*
 RTC::ReturnCode_t MyServiceProvider::onShutdown(RTC::UniqueId ec_id)
 {
-  return RTC::OK;
+  return RTC::RTC_OK;
 }
 */
 
 /*
 RTC::ReturnCode_t MyServiceProvider::onActivated(RTC::UniqueId ec_id)
 {
-  return RTC::OK;
+  return RTC::RTC_OK;
 }
 */
 
 /*
 RTC::ReturnCode_t MyServiceProvider::onDeactivated(RTC::UniqueId ec_id)
 {
-  return RTC::OK;
+  return RTC::RTC_OK;
 }
 */
 
 /*
 RTC::ReturnCode_t MyServiceProvider::onExecute(RTC::UniqueId ec_id)
 {
-  return RTC::OK;
+  return RTC::RTC_OK;
 }
 */
 
 /*
 RTC::ReturnCode_t MyServiceProvider::onAborting(RTC::UniqueId ec_id)
 {
-  return RTC::OK;
+  return RTC::RTC_OK;
 }
 */
 
 /*
 RTC::ReturnCode_t MyServiceProvider::onError(RTC::UniqueId ec_id)
 {
-  return RTC::OK;
+  return RTC::RTC_OK;
 }
 */
 
 /*
 RTC::ReturnCode_t MyServiceProvider::onReset(RTC::UniqueId ec_id)
 {
-  return RTC::OK;
+  return RTC::RTC_OK;
 }
 */
 
 /*
 RTC::ReturnCode_t MyServiceProvider::onStateUpdate(RTC::UniqueId ec_id)
 {
-  return RTC::OK;
+  return RTC::RTC_OK;
 }
 */
 
 /*
 RTC::ReturnCode_t MyServiceProvider::onRateChanged(RTC::UniqueId ec_id)
 {
-  return RTC::OK;
+  return RTC::RTC_OK;
 }
 */
 

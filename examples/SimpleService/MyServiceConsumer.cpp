@@ -2,9 +2,9 @@
 /*!
  * @file  MyServiceConsumer.cpp
  * @brief MyService Consumer Sample component
- * $Date: 2007-02-07 02:48:23 $
+ * $Date: 2007-04-13 15:03:14 $
  *
- * $Id: MyServiceConsumer.cpp,v 1.1 2007-02-07 02:48:23 n-ando Exp $
+ * $Id: MyServiceConsumer.cpp,v 1.2 2007-04-13 15:03:14 n-ando Exp $
  */
 
 #include "MyServiceConsumer.h"
@@ -64,42 +64,42 @@ MyServiceConsumer::~MyServiceConsumer()
 /*
 RTC::ReturnCode_t MyServiceConsumer::onInitialize()
 {
-  return RTC::OK;
+  return RTC::RTC_OK;
 }
 */
 
 /*
 RTC::ReturnCode_t MyServiceConsumer::onFinalize()
 {
-  return RTC::OK;
+  return RTC::RTC_OK;
 }
 */
 
 /*
 RTC::ReturnCode_t MyServiceConsumer::onStartup(RTC::UniqueId ec_id)
 {
-  return RTC::OK;
+  return RTC::RTC_OK;
 }
 */
 
 /*
 RTC::ReturnCode_t MyServiceConsumer::onShutdown(RTC::UniqueId ec_id)
 {
-  return RTC::OK;
+  return RTC::RTC_OK;
 }
 */
 
 /*
 RTC::ReturnCode_t MyServiceConsumer::onActivated(RTC::UniqueId ec_id)
 {
-  return RTC::OK;
+  return RTC::RTC_OK;
 }
 */
 
 /*
 RTC::ReturnCode_t MyServiceConsumer::onDeactivated(RTC::UniqueId ec_id)
 {
-  return RTC::OK;
+  return RTC::RTC_OK;
 }
 */
 
@@ -144,7 +144,7 @@ RTC::ReturnCode_t MyServiceConsumer::onExecute(RTC::UniqueId ec_id)
 	  char* retmsg;
 	  retmsg = m_myservice0->echo(argv[1].c_str());
 	  std::cout << "echo return: " << retmsg << std::endl;
-	  return RTC::OK;
+	  return RTC::RTC_OK;
 	}
       
       if (argv[0] == "set_value" && argv.size() > 1)
@@ -152,28 +152,28 @@ RTC::ReturnCode_t MyServiceConsumer::onExecute(RTC::UniqueId ec_id)
 	  CORBA::Float val(atof(argv[1].c_str()));
 	  m_myservice0->set_value(val);
 	  std::cout << "Set remote value: " << val << std::endl;
-	  return RTC::OK;
+	  return RTC::RTC_OK;
 	}
       
       if (argv[0] == "get_value")
 	{
 	  std::cout << "Current remote value: "
 		    << m_myservice0->get_value() << std::endl;
-	  return RTC::OK;
+	  return RTC::RTC_OK;
 	}
       
       if (argv[0] == "get_echo_history")
 	{
 	  CORBA_SeqUtil::for_each(*(m_myservice0->get_echo_history()),
 				  seq_print<char*>());
-	  return RTC::OK;
+	  return RTC::RTC_OK;
 	}
       
       if (argv[0] == "get_value_history")
 	{
 	  CORBA_SeqUtil::for_each(*(m_myservice0->get_value_history()),
 				  seq_print<CORBA::Float>());
-	  return RTC::OK;
+	  return RTC::RTC_OK;
 	}
       
       std::cout << "Invalid command or argument(s)." << std::endl;
@@ -182,42 +182,42 @@ RTC::ReturnCode_t MyServiceConsumer::onExecute(RTC::UniqueId ec_id)
     {
       std::cout << "No service connected." << std::endl;
     }
-  return RTC::OK;
+  return RTC::RTC_OK;
 }
 
 
 /*
 RTC::ReturnCode_t MyServiceConsumer::onAborting(RTC::UniqueId ec_id)
 {
-  return RTC::OK;
+  return RTC::RTC_OK;
 }
 */
 
 /*
 RTC::ReturnCode_t MyServiceConsumer::onError(RTC::UniqueId ec_id)
 {
-  return RTC::OK;
+  return RTC::RTC_OK;
 }
 */
 
 /*
 RTC::ReturnCode_t MyServiceConsumer::onReset(RTC::UniqueId ec_id)
 {
-  return RTC::OK;
+  return RTC::RTC_OK;
 }
 */
 
 /*
 RTC::ReturnCode_t MyServiceConsumer::onStateUpdate(RTC::UniqueId ec_id)
 {
-  return RTC::OK;
+  return RTC::RTC_OK;
 }
 */
 
 /*
 RTC::ReturnCode_t MyServiceConsumer::onRateChanged(RTC::UniqueId ec_id)
 {
-  return RTC::OK;
+  return RTC::RTC_OK;
 }
 */
 

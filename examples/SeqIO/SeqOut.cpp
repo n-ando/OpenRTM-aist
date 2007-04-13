@@ -2,9 +2,9 @@
 /*!
  * @file  SeqOut.cpp
  * @brief Sequence OutPort component
- * $Date: 2007-02-04 16:47:59 $
+ * $Date: 2007-04-13 15:02:49 $
  *
- * $Id: SeqOut.cpp,v 1.2 2007-02-04 16:47:59 n-ando Exp $
+ * $Id: SeqOut.cpp,v 1.3 2007-04-13 15:02:49 n-ando Exp $
  */
 
 #include "SeqOut.h"
@@ -79,42 +79,42 @@ SeqOut::~SeqOut()
 /*
 RTC::ReturnCode_t SeqOut::onInitialize()
 {
-  return RTC::OK;
+  return RTC::RTC_OK;
 }
 */
 
 /*
 RTC::ReturnCode_t SeqOut::onFinalize()
 {
-  return RTC::OK;
+  return RTC::RTC_OK;
 }
 */
 
 /*
 RTC::ReturnCode_t SeqOut::onStartup(RTC::UniqueId ec_id)
 {
-  return RTC::OK;
+  return RTC::RTC_OK;
 }
 */
 
 /*
 RTC::ReturnCode_t SeqOut::onShutdown(RTC::UniqueId ec_id)
 {
-  return RTC::OK;
+  return RTC::RTC_OK;
 }
 */
 
 /*
 RTC::ReturnCode_t SeqOut::onActivated(RTC::UniqueId ec_id)
 {
-  return RTC::OK;
+  return RTC::RTC_OK;
 }
 */
 
 /*
 RTC::ReturnCode_t SeqOut::onDeactivated(RTC::UniqueId ec_id)
 {
-  return RTC::OK;
+  return RTC::RTC_OK;
 }
 */
 
@@ -159,42 +159,42 @@ RTC::ReturnCode_t SeqOut::onExecute(RTC::UniqueId ec_id)
 
   usleep(10000);
 
-  return RTC::OK;
+  return RTC::RTC_OK;
 }
 
 
 /*
 RTC::ReturnCode_t SeqOut::onAborting(RTC::UniqueId ec_id)
 {
-  return RTC::OK;
+  return RTC::RTC_OK;
 }
 */
 
 /*
 RTC::ReturnCode_t SeqOut::onError(RTC::UniqueId ec_id)
 {
-  return RTC::OK;
+  return RTC::RTC_OK;
 }
 */
 
 /*
 RTC::ReturnCode_t SeqOut::onReset(RTC::UniqueId ec_id)
 {
-  return RTC::OK;
+  return RTC::RTC_OK;
 }
 */
 
 /*
 RTC::ReturnCode_t SeqOut::onStateUpdate(RTC::UniqueId ec_id)
 {
-  return RTC::OK;
+  return RTC::RTC_OK;
 }
 */
 
 /*
 RTC::ReturnCode_t SeqOut::onRateChanged(RTC::UniqueId ec_id)
 {
-  return RTC::OK;
+  return RTC::RTC_OK;
 }
 */
 

@@ -2,7 +2,7 @@
 /*!
  * @file ConnectorComp.cpp
  * @brief connector application
- * @date $Date: 2007-01-21 06:45:42 $
+ * @date $Date: 2007-04-13 15:02:57 $
  *
  * Copyright (c) 2003-2007 Noriaki Ando <n-ando@aist.go.jp>
  *          Task-intelligence Research Group,
@@ -10,7 +10,7 @@
  *          National Institute of Industrial Science (AIST), Japan
  *          All rights reserved.
  *
- * $Id: ConnectorComp.cpp,v 1.5 2007-01-21 06:45:42 n-ando Exp $
+ * $Id: ConnectorComp.cpp,v 1.6 2007-04-13 15:02:57 n-ando Exp $
  */
 
 #include <iostream>
@@ -126,7 +126,7 @@ int main (int argc, char** argv)
 					 period.c_str()));
   ReturnCode_t ret;
   ret = pin[0]->connect(prof);
-  assert(ret == RTC::OK);
+  assert(ret == RTC::RTC_OK);
 
   std::cout << "Connector ID: " << prof.connector_id << std::endl;
   NVUtil::dump(prof.properties);
