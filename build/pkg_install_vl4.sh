@@ -15,10 +15,10 @@ libboost_devel=`rpm -qa libboost-devel`
 ace=`rpm -qa ace`
 ace_devel=`rpm -qa ace-devel`
 
-### $B%=!<%9(BRPM$B%U%!%$%k$N<hF@$H%j%S%k%I$K$H$F$b;~4V$,$+$+$k$?$a!"0l;~E*$KC^GHBgBg86;a$N(BHP[RTM$B%$%s%9%H!<%k(B]$B$+$i(Brpm$B%Q%C%1!<%8$r%@%&%s%m!<%I$7$F$$$k!#(B
+### ¥½¡¼¥¹RPM¥Õ¥¡¥¤¥ë¤Î¼èÆÀ¤È¥ê¥Ó¥ë¥É¤Ë¤È¤Æ¤â»þ´Ö¤¬¤«¤«¤ë¤¿¤á¡¢°ì»þÅª¤ËÃÞÇÈÂçÂç¸¶»á¤ÎHP[RTM¥¤¥ó¥¹¥È¡¼¥ë]¤«¤érpm¥Ñ¥Ã¥±¡¼¥¸¤ò¥À¥¦¥ó¥í¡¼¥É¤·¤Æ¤¤¤ë¡£
 ace_pkg="http://www.google.co.jp/url?sa=t&ct=res&cd=2&url=http%3A%2F%2Ff38.aaa.livedoor.jp%2F~kencyo%2Findex.php%3Fplugin%3Dattach%26openfile%3Dace-5.5.4-2.i386.rpm%26refer%3DRTM%25A5%25A4%25A5%25F3%25A5%25B9%25A5%25C8%25A1%25BC%25A5%25EB&ei=ehnARZOPF4OosAKS0ICGCA&usg=__QIYmPcnVjpcDLHfJHXqKGS950K0=&sig2=l1OpHCZ_vF_BTYsRPr6BDw"
 
-### $B%=!<%9(BRPM$B%U%!%$%k$N<hF@$H%j%S%k%I$K$H$F$b;~4V$,$+$+$k$?$a!"0l;~E*$KC^GHBgBg86;a$N(BHP[RTM$B%$%s%9%H!<%k(B]$B$+$i(Brpm$B%Q%C%1!<%8$r%@%&%s%m!<%I$7$F$$$k!#(B
+### ¥½¡¼¥¹RPM¥Õ¥¡¥¤¥ë¤Î¼èÆÀ¤È¥ê¥Ó¥ë¥É¤Ë¤È¤Æ¤â»þ´Ö¤¬¤«¤«¤ë¤¿¤á¡¢°ì»þÅª¤ËÃÞÇÈÂçÂç¸¶»á¤ÎHP[RTM¥¤¥ó¥¹¥È¡¼¥ë]¤«¤érpm¥Ñ¥Ã¥±¡¼¥¸¤ò¥À¥¦¥ó¥í¡¼¥É¤·¤Æ¤¤¤ë¡£
 ace_devel_pkg="http://f38.aaa.livedoor.jp/~kencyo/index.php?plugin=attach&openfile=ace-devel-5.5.4-2.i386.rpm&refer=RTM%A5%A4%A5%F3%A5%B9%A5%C8%A1%BC%A5%EB"
 
 omniorb=`rpm -qa omniORB`
