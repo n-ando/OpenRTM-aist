@@ -4,9 +4,12 @@
 # @brief OpenRTM-aist dependent packages install script for FreeBSD-6
 # @author Noriaki Ando <n-ando@aist.go.jp>
 #
-# $Id: pkg_install_freebsd6.sh,v 1.2 2006-11-04 16:35:47 n-ando Exp $
+# $Id: pkg_install_freebsd6.sh,v 1.3 2007-04-13 14:49:43 n-ando Exp $
 #
 # $Log: not supported by cvs2svn $
+# Revision 1.2  2006/11/04 16:35:47  n-ando
+# Autotools installation was added.
+#
 # Revision 1.1  2006/07/18 08:36:32  n-ando
 # OpenRTM-aist dependent packages install script for FreeBSD 6.0.
 #
@@ -40,7 +43,7 @@ automake="automake-1.9.6"
 automake_pkg="automake19"
 
 libtool="libtool-1.5.22_2"
-libtool_pkc="libtool"
+libtool_pkg="libtool"
 
 
 pkg_install () {
