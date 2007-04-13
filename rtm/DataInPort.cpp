@@ -2,7 +2,7 @@
 /*!
  * @file DataInPort.cpp
  * @brief Base class of InPort
- * @date $Date: 2007-02-04 16:51:55 $
+ * @date $Date: 2007-04-13 15:44:39 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
  * Copyright (C) 2006
@@ -13,12 +13,15 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: DataInPort.cpp,v 1.5 2007-02-04 16:51:55 n-ando Exp $
+ * $Id: DataInPort.cpp,v 1.6 2007-04-13 15:44:39 n-ando Exp $
  *
  */
 
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.5  2007/02/04 16:51:55  n-ando
+ * Debugging message is output to stderr instead of stdout.
+ *
  * Revision 1.4  2007/01/21 09:43:15  n-ando
  * - A bug about memory access violation to m_providers still exists.
  *   This bug arises on Fedora5/gcc4 environment.
@@ -96,7 +99,7 @@ namespace RTC
     std::for_each(m_providers.begin(), m_providers.end(),
 		  publish(connector_profile.properties));
 
-    return RTC::OK;
+    return RTC::RTC_OK;
   }
   
   ReturnCode_t
@@ -104,7 +107,7 @@ namespace RTC
   {
     std::for_each(m_consumers.begin(), m_consumers.end(),
     		  subscribe(connector_profile.properties));
-    return RTC::OK;
+    return RTC::RTC_OK;
   }
 
   void
