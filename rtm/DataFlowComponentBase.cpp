@@ -2,7 +2,7 @@
 /*!
  * @file DataFlowComponentBase.cpp
  * @brief DataFlowParticipant RT-Component base class
- * @date $Date: 2007-01-21 14:02:37 $
+ * @date $Date: 2007-04-13 15:44:03 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
  * Copyright (C) 2006
@@ -12,12 +12,15 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: DataFlowComponentBase.cpp,v 1.3 2007-01-21 14:02:37 n-ando Exp $
+ * $Id: DataFlowComponentBase.cpp,v 1.4 2007-04-13 15:44:03 n-ando Exp $
  *
  */
 
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.3  2007/01/21 14:02:37  n-ando
+ * Kanji-code was changed.
+ *
  * Revision 1.2  2007/01/14 19:39:04  n-ando
  * The debugging messages to stdout were deleted.
  *
@@ -44,9 +47,6 @@ namespace RTC
   {
     m_ref = this->_this();
     m_objref = m_ref;
-    
-    m_pec = new PeriodicExecutionContext(m_ref, 1000);
-    m_pec->add(m_ref);
   }
 
 
