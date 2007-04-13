@@ -2,7 +2,7 @@
 /*!
  * @file Manager.h
  * @brief RTComponent manager class
- * @date $Date: 2007-01-21 09:54:30 $
+ * @date $Date: 2007-04-13 18:02:14 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
  * Copyright (C) 2006
@@ -12,12 +12,15 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: Manager.h,v 1.5 2007-01-21 09:54:30 n-ando Exp $
+ * $Id: Manager.h,v 1.6 2007-04-13 18:02:14 n-ando Exp $
  *
  */
 
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.5  2007/01/21 09:54:30  n-ando
+ * A trivial bug fix.
+ *
  * Revision 1.4  2007/01/14 19:42:37  n-ando
  * The activate() function now performs POA manager activation and
  * invoking ModuleInitProc.
@@ -48,11 +51,13 @@
 #include <ace/Task.h>
 
 #include <rtm/Factory.h>
+#include <rtm/ECFactory.h>
 #include <rtm/ObjectManager.h>
 #include <rtm/RTObject.h>
 #include <rtm/SystemLogger.h>
 
 class Properties;
+class Timer;
 
 namespace RTC
 {
@@ -67,13 +72,27 @@ namespace RTC
   class Manager
   {
   protected:
+    /*!
+     * @if jp
+     * @brief Protected コンストラクタ
+     * @else
+     * @brief Protected Constructor
+     * @endif
+     */
     Manager();
+
+
+    /*!
+     * @if jp
+     * @brief Protected コピーコンストラクタ
+     * @else
+     * @brief Protected Copy Constructor
+     * @endif
+     */
     Manager(const Manager& manager);
       //      Manager& operator=(const Manager& manager){return manager;};
     
   public:
-
-
     /*!
      * @if jp
      * @brief マネージャの初期化
@@ -85,6 +104,14 @@ namespace RTC
      * マネージャのインスタンスを取得する方法として、init(), instance() の
      * 2つの static メンバ関数が用意されているが、初期化はinit()でしか
      * 行われないため、Manager の生存期間の一番最初にはinit()を呼ぶ必要がある。
+     *
+     * ※マネージャの初期化処理
+     * - initManager: 引数処理、configファイルの読み込み、サブシステム初期化
+     * - initLogger: Logger初期化
+     * - initORB: ORB 初期化
+     * - initNaming: NamingService 初期化
+     * - initExecutionContext: ExecutionContext factory 初期化
+     * - initTimer: Timer 初期化
      *
      * @param argc コマンドライン引数の数
      * @param argv コマンドライン引数
@@ -133,10 +160,21 @@ namespace RTC
      */ 
     static Manager& instance();
 
-
     //============================================================
     // Manager
     //============================================================
+
+
+
+    void terminate();
+    void shutdown();
+    void join();
+    
+    Logbuf& getLogbuf() {return m_Logbuf;}
+    Properties& getConfig() { return m_config;}
+    
+    
+    
     
     /*!
      * @if jp
@@ -326,9 +364,13 @@ namespace RTC
      * @brief Register RT-Component Factory
      * @endif
      */
-    bool registerFactory(Properties profile,
+    bool registerFactory(Properties& profile,
 			 RtcNewFunc new_func,
 			 RtcDeleteFunc delete_func);
+    
+    bool registerECFactory(const char* name,
+			   ECNewFunc new_func,
+			   ECDeleteFunc delete_func);
     
     /*!
      * @if jp
@@ -359,6 +401,9 @@ namespace RTC
      * @endif
      */
     bool registerComponent(RtcBase* comp);
+
+
+    bool bindExecutionContext(RtcBase* comp);
 
     /*!
      * @if jp
@@ -411,7 +456,14 @@ namespace RTC
     PortableServer::POAManager_ptr getPOAManager();
 
 
+    //============================================================
+    // Protected functions
+    //============================================================
   protected:
+    
+    //============================================================
+    // Manager initialize and finalization
+    //============================================================
     /*!
      * @if jp
      * @brief Manager の内部初期化処理
@@ -424,24 +476,17 @@ namespace RTC
 
     /*!
      * @if jp
-     * @brief CORBA ORB の初期化処理
+     * @brief Manager の終了処理
      * @else
-     * @brief CORBA ORB initialization
+     * @brief Manager internal finalization
      * @endif
      */
-    bool initORB();
+    void shutdownManager();
 
 
-    /*!
-     * @if jp
-     * @brief NamingManager の初期化
-     * @else
-     * @brief NamingManager initialization
-     * @endif
-     */
-    bool initNaming();
-
-
+    //============================================================
+    // Logger initialize and terminator
+    //============================================================
     /*!
      * @if jp
      * @brief System logger の初期化
@@ -452,6 +497,66 @@ namespace RTC
     bool initLogger();
 
 
+    /*!
+     * @if jp
+     * @brief System Logger の終了処理
+     * @else
+     * @brief System Logger finalization
+     * @endif
+     */
+    void shutdownLogger();
+
+
+    //============================================================
+    // ORB initialization and finalization
+    //============================================================
+    /*!
+     * @if jp
+     * @brief CORBA ORB の初期化処理
+     * @else
+     * @brief CORBA ORB initialization
+     * @endif
+     */
+    bool initORB();
+    
+    
+    /*!
+     * @if jp
+     * @brief ORB のコマンドラインオプション作成
+     * @else
+     * @brief ORB command option creation
+     * @endif
+     */
+    std::string createORBOptions();
+    
+    
+    /*!
+     * @if jp
+     * @brief ORB の終了処理
+     * @else
+     * @brief ORB finalization
+     * @endif
+     */
+    void shutdownORB();
+
+
+
+    /*!
+     * @if jp
+     * @brief NamingManager の初期化
+     * @else
+     * @brief NamingManager initialization
+     * @endif
+     */
+    bool initNaming();
+    void shutdownNaming();
+
+    void shutdownComponents();
+
+
+    bool initExecContext();
+
+    bool initTimer();
 
     bool mergeProperty(Properties& prop, const char* file_name);
     std::string formatString(const char* naming_format,
@@ -460,6 +565,10 @@ namespace RTC
     //============================================================
     // protected 変数
     //============================================================
+
+    //------------------------------------------------------------
+    // static var
+    //------------------------------------------------------------
     /*!
      * @if jp
      * @brief 唯一の Manager へのポインタ
@@ -478,6 +587,10 @@ namespace RTC
      */
     static ACE_Thread_Mutex mutex;
     
+
+    //------------------------------------------------------------
+    // CORBA var
+    //------------------------------------------------------------
     /*!
      * @if jp
      * @brief ORB へのポインタ
@@ -506,16 +619,26 @@ namespace RTC
     PortableServer::POAManager_var m_pPOAManager;
 
 
+    //------------------------------------------------------------
+    // Manager's variable
+    //------------------------------------------------------------
+    /*!
+     * @if jp
+     * @brief ユーザ初期化関数へのポインタ
+     * @else
+     * @brief User's initialization function's pointer
+     * @endif
+     */
     ModuleInitProc m_initProc;
 
     /*!
      * @if jp
-     * @brief Propery へのポインタ
+     * @brief Manager の configuration を格納する Properties
      * @else
-     * @brief The pointer to the Property
+     * @brief Managaer's configuration Properties
      * @endif
      */
-    Properties* m_config;
+    Properties m_config;
 
     /*!
      * @if jp
@@ -537,7 +660,19 @@ namespace RTC
 
     CorbaObjectManager* m_objManager;
 
+    /*!
+     * @if jp
+     * @brief Timer Object
+     * @else
+     * @brief Timer Object
+     * @endif
+     */
+    ::Timer* m_timer;
 
+
+    //------------------------------------------------------------
+    // Logger
+    //------------------------------------------------------------
     /*!
      * @if jp
      * @brief ロガーバッファ
@@ -602,10 +737,10 @@ namespace RTC
     {
       FactoryPredicate(const char* name) : m_name(name){};
       FactoryPredicate(FactoryBase* factory)
-	: m_name(factory->profile().getProperty("implementation_id")) {};
+	: m_name(factory->profile()["implementation_id"]) {};
       bool operator()(FactoryBase* factory)
       {
-	return m_name == factory->profile().getProperty("implementation_id");
+	return m_name == factory->profile()["implementation_id"];
       }
       std::string m_name;
     };
@@ -628,6 +763,27 @@ namespace RTC
      */
     FactoryManager m_factory;
 
+    //============================================================
+    // ExecutionContextファクトリ
+    //============================================================
+    // ECファクトリへ渡す述語クラス
+    struct ECFactoryPredicate
+    {
+      ECFactoryPredicate(const char* name) : m_name(name){};
+      ECFactoryPredicate(ECFactoryBase* factory)
+	: m_name(factory->name()) {};
+      bool operator()(ECFactoryBase* factory)
+      {
+	return m_name == factory->name();
+      }
+      std::string m_name;
+    };
+    typedef ObjectManager<const char*,
+			  ECFactoryBase,
+			  ECFactoryPredicate> ECFactoryManager;
+    ECFactoryManager m_ecfactory;
+
+
     // ファクトリ名をリストアップするためのファンクタ
     struct ModuleFactories
     {
@@ -639,6 +795,9 @@ namespace RTC
     };
 
 
+    //------------------------------------------------------------
+    // ORB runner
+    //------------------------------------------------------------
     class OrbRunner
       : public ACE_Task<ACE_MT_SYNCH>
     {
@@ -655,6 +814,7 @@ namespace RTC
       virtual int svc(void)
       {
 	m_pORB->run();
+	Manager::instance().shutdown();
 	return 0;
       }
       virtual int close(unsigned long flags)
@@ -666,6 +826,43 @@ namespace RTC
       
     };
     OrbRunner* m_runner;
+
+
+    //------------------------------------------------------------
+    // Manager Terminator
+    //------------------------------------------------------------
+    class Terminator
+      : public ACE_Task<ACE_MT_SYNCH>
+    {
+    public:
+      Terminator(Manager* manager) : m_manager(manager) {};
+      void terminate()
+      {
+	open(0);
+      }
+      virtual int open(void *args)
+      {
+	activate();
+	return 0;
+      }
+      virtual int svc(void)
+      {
+	Manager::instance().shutdown();
+	return 0;
+      }
+      Manager* m_manager;
+    };
+
+    Terminator* m_terminator;
+
+    struct Term
+    {
+      int waiting;
+      ACE_Thread_Mutex mutex;
+    };
+    Term m_terminate;
+
+
 
   }; // class Manager
 }; // namespace RTC
