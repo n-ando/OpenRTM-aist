@@ -2,7 +2,7 @@
 /*!
  * @file NVUtil.h
  * @brief NameValue and NVList utility functions
- * @date $Date: 2007-01-21 09:51:06 $
+ * @date $Date: 2007-04-13 18:05:14 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
  * Copyright (C) 2006
@@ -13,12 +13,15 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: NVUtil.cpp,v 1.6 2007-01-21 09:51:06 n-ando Exp $
+ * $Id: NVUtil.cpp,v 1.7 2007-04-13 18:05:14 n-ando Exp $
  *
  */
 
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.6  2007/01/21 09:51:06  n-ando
+ * A trivial bug fix.
+ *
  * Revision 1.5  2007/01/12 14:33:50  n-ando
  * The dump() function was added to dump NVList entries.
  *
@@ -83,40 +86,40 @@ namespace NVUtil
     
   void copy(SDOPackage::NVList& nv, const RTC::Properties& prop)
   {
-    CORBA::ULong len((CORBA::ULong)prop.size());
+    std::vector<std::string> keys;
+    keys = prop.propertyNames();
+    CORBA::ULong len((CORBA::ULong)keys.size());
     nv.length(len);
 
-    std::map<std::string, std::string>::const_iterator it, it_end;
-    it     = prop.begin();
-    it_end = prop.end();
-
-    for (CORBA::ULong i = 0; i < len; ++i, ++it)
+    for (CORBA::ULong i = 0; i < len; ++i)
       {
-	nv[i].name = CORBA::string_dup((it->first).c_str());
-	nv[i].value <<= (it->second).c_str();
+	nv[i].name = CORBA::string_dup(keys[i].c_str());
+	nv[i].value <<= prop[keys[i]].c_str();
       }
   }
 
 
-  struct to_map
+  struct to_prop
   {
-    to_map(){};
+    to_prop()
+    {
+    };
     void operator()(const SDOPackage::NameValue& nv)
     {
       char* value;
       if (nv.value >>= value)
 	{
-	  m_map[CORBA::string_dup(nv.name)] = std::string(value);
+	  m_prop.setProperty(CORBA::string_dup(nv.name), value);
 	};
     }
-    std::map<std::string, std::string> m_map;
+    RTC::Properties m_prop;
   };
 
   RTC::Properties toProperties(const SDOPackage::NVList& nv)
   {
-    to_map m;
-    m = CORBA_SeqUtil::for_each(nv, m);
-    return RTC::Properties(m.m_map);
+    to_prop p;
+    p = CORBA_SeqUtil::for_each(nv, p);
+    return p.m_prop;
   }
 
   struct nv_find
