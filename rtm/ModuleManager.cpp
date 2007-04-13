@@ -2,7 +2,7 @@
 /*!
  * @file ModulesManager.cpp
  * @brief Loadable modules manager class
- * @date $Date: 2006-10-25 17:29:27 $
+ * @date $Date: 2007-04-13 18:02:58 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
  * Copyright (C) 2006
@@ -12,12 +12,15 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: ModuleManager.cpp,v 1.3 2006-10-25 17:29:27 n-ando Exp $
+ * $Id: ModuleManager.cpp,v 1.4 2007-04-13 18:02:58 n-ando Exp $
  *
  */
 
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.3  2006/10/25 17:29:27  n-ando
+ * Bug fix for configuration and load path strings including head blank.
+ *
  * Revision 1.2  2006/10/17 10:06:39  n-ando
  * Now class ModuleManager is in RTC namespace.
  *
@@ -44,18 +47,18 @@ namespace RTC
   ModuleManager::ModuleManager(Properties& prop)
     : m_properties(prop)
   {
-    m_configPath      = split(prop.getProperty(CONFIG_PATH), ",");
+    m_configPath      = split(prop[CONFIG_PATH], ",");
     for_each(m_configPath.begin(), m_configPath.end(),
     	     eraseHeadBlank);
-    m_loadPath        = split(prop.getProperty(MOD_LOADPTH), ",");
+    m_loadPath        = split(prop[MOD_LOADPTH], ",");
     for_each(m_loadPath.begin(), m_loadPath.end(),
     	     eraseHeadBlank);
-    m_absoluteAllowed = toBool(prop.getProperty(ALLOW_ABSPATH),
+    m_absoluteAllowed = toBool(prop[ALLOW_ABSPATH],
 			       "yes", "no", false);
-    m_downloadAllowed = toBool(prop.getProperty(ALLOW_URL),
+    m_downloadAllowed = toBool(prop[ALLOW_URL],
 			       "yes", "no", false);
-    m_initFuncSuffix  = prop.getProperty(INITFUNC_SFX);
-    m_initFuncPrefix  = prop.getProperty(INITFUNC_PFX);
+    m_initFuncSuffix  = prop[INITFUNC_SFX];
+    m_initFuncPrefix  = prop[INITFUNC_PFX];
   }
   
   ModuleManager::~ModuleManager()
