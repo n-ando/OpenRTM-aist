@@ -2,7 +2,7 @@
 /*!
  * @file CorbaNaming.cpp
  * @brief CORBA naming service helper class
- * @date $Date: 2007-01-21 09:05:47 $
+ * @date $Date: 2007-04-13 15:35:16 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
  * Copyright (C) 2006
@@ -13,12 +13,15 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: CorbaNaming.cpp,v 1.2 2007-01-21 09:05:47 n-ando Exp $
+ * $Id: CorbaNaming.cpp,v 1.3 2007-04-13 15:35:16 n-ando Exp $
  *
  */
 
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.2  2007/01/21 09:05:47  n-ando
+ * "assert.h" is included.
+ *
  * Revision 1.1  2006/11/04 19:42:55  n-ando
  * CORBA Naming service helper class has rewritten and renamed.
  *
@@ -30,7 +33,7 @@
 
 #include <assert.h>
 #include <rtm/CorbaNaming.h>
-
+#include <iostream>
 
 namespace RTC
 {
@@ -44,15 +47,22 @@ namespace RTC
 
   CorbaNaming::CorbaNaming(CORBA::ORB_ptr orb,
 				 const char* name_server)
-    : m_varORB(orb), m_nameServer(name_server),
+    : m_varORB(CORBA::ORB::_duplicate(orb)), m_nameServer(name_server),
       m_rootContext(CosNaming::NamingContextExt::_nil()),
       m_blLength(100)
   {
     CORBA::Object_var obj;
     m_nameServer = "corbaloc::" + m_nameServer + "/NameService";
-    obj = m_varORB->string_to_object(m_nameServer.c_str());
-    m_rootContext = CosNaming::NamingContextExt::_narrow(obj);
-    if (CORBA::is_nil(m_rootContext)) throw std::bad_alloc();
+    try
+      {
+	obj = m_varORB->string_to_object(m_nameServer.c_str());
+	m_rootContext = CosNaming::NamingContextExt::_narrow(obj);
+	if (CORBA::is_nil(m_rootContext)) throw std::bad_alloc();
+      }
+    catch(...)
+      {
+	throw std::bad_alloc();
+      }
   }
   
 
@@ -587,22 +597,19 @@ namespace RTC
     // Insert id and kind to name components
     for (CORBA::ULong i = 0; i < nc_length; ++i)
       {
-	std::vector<std::string> id_kind;
-	split(name_comps[i], std::string("."), id_kind);
-	
-	if (id_kind.size() == 2)
+	std::string::size_type pos;
+	pos = name_comps[i].find_last_of(".");
+	if (pos != 0)
 	  {
-	    name[i].id   = CORBA::string_dup(id_kind[0].c_str());
-	    name[i].kind = id_kind[1].c_str();
-	  }
-	else if (id_kind.size() == 1)
-	  {
-	    name[i].id   = id_kind[0].c_str();
-	    name[i].kind = "";
+	    name[i].id   = 
+	      CORBA::string_dup(name_comps[i].substr(0, pos).c_str());
+	    name[i].kind = 
+	      CORBA::string_dup(name_comps[i].substr(pos + 1).c_str());
 	  }
 	else
 	  {
-	    throw InvalidName();
+	    name[i].id   = CORBA::string_dup(name_comps[i].c_str());
+	    name[i].kind = "";
 	  }
       }
     return name;
