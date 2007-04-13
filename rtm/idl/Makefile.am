@@ -2,9 +2,12 @@
 ##------------------------------------------------------------
 ## Makefile.am for libRTCSkel
 ##
-## $Id: Makefile.am,v 1.8 2007-01-21 13:10:26 n-ando Exp $
+## $Id: Makefile.am,v 1.9 2007-04-13 18:24:09 n-ando Exp $
 ##
 ## $Log: not supported by cvs2svn $
+## Revision 1.8  2007/01/21 13:10:26  n-ando
+## To avoid omniORB's stub bug on gcc4, stub creation process was changed.
+##
 ## Revision 1.7  2007/01/12 14:40:01  n-ando
 ## Some trivial fixes.
 ##
@@ -45,6 +48,7 @@ SUFFIXES = .idl Skel.cpp Stub.cpp Stub.o Skel.o
 IDL_SOURCES =         \
 	SDOPackage.idl    \
 	RTC.idl           \
+	OpenRTM.idl       \
 	BasicDataType.idl \
 	DataPort.idl
 
