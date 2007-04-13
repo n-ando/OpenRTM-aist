@@ -2,7 +2,7 @@
 /*!
  * @file   PortBaseTests.cpp
  * @brief  PortBase test class
- * @date   $Date: 2007-01-12 14:44:43 $
+ * @date   $Date: 2007-04-13 15:05:10 $
  * @author Shinji Kurihara
  *         Noriaki Ando <n-ando@aist.go.jp>
  *
@@ -14,12 +14,15 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: PortBaseTests.cpp,v 1.2 2007-01-12 14:44:43 n-ando Exp $
+ * $Id: PortBaseTests.cpp,v 1.3 2007-04-13 15:05:10 n-ando Exp $
  *
  */
 
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.2  2007/01/12 14:44:43  n-ando
+ * Some fixes for distribution control.
+ *
  * Revision 1.1  2006/11/27 08:35:12  n-ando
  * TestSuites are devided into each directory.
  *
@@ -64,11 +67,11 @@ namespace PortBase
   protected:
 	virtual RTC::ReturnCode_t publishInterfaces(RTC::ConnectorProfile&)
 	{
-	  return RTC::OK;
+	  return RTC::RTC_OK;
 	}
 	virtual RTC::ReturnCode_t subscribeInterfaces(const RTC::ConnectorProfile&)
 	{
-	  return RTC::OK;
+	  return RTC::RTC_OK;
 	}
 	virtual void unsubscribeInterfaces(const RTC::ConnectorProfile&)
 	{

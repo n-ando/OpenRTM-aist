@@ -3,7 +3,7 @@
 #
 #  @file cxx_gen.py
 #  @brief rtc-template C++ source code generator class
-#  @date $Date: 2007-01-14 23:38:30 $
+#  @date $Date: 2007-04-13 15:05:50 $
 #  @author Noriaki Ando <n-ando@aist.go.jp>
 # 
 #  Copyright (C) 2004-2007
@@ -13,11 +13,14 @@
 #          Advanced Industrial Science and Technology (AIST), Japan
 #      All rights reserved.
 # 
-#  $Id: cxx_gen.py,v 1.5 2007-01-14 23:38:30 n-ando Exp $
+#  $Id: cxx_gen.py,v 1.6 2007-04-13 15:05:50 n-ando Exp $
 # 
 
 #
 #  $Log: not supported by cvs2svn $
+#  Revision 1.5  2007/01/14 23:38:30  n-ando
+#  Updated to use setModuleInitProc() to initialize component locally.
+#
 #  Revision 1.4  2007/01/11 07:46:38  n-ando
 #  Modified for OMG RTC specificatin and OpenRTM-aist-0.4.0.
 #  Almost all template codes were modified according to the new framework.
@@ -284,7 +287,7 @@ comp_soruce = """// -*- C++ -*-
 /*
 RTC::ReturnCode_t [module.name]::[activity.name]([activity.args])
 {
-  return RTC::OK;
+  return RTC::RTC_OK;
 }
 */
 [end]

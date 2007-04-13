@@ -2,9 +2,9 @@
 /*!
  * @file  SeqIn.cpp
  * @brief Sequence InPort component
- * $Date: 2007-02-04 16:47:43 $
+ * $Date: 2007-04-13 15:02:42 $
  *
- * $Id: SeqIn.cpp,v 1.2 2007-02-04 16:47:43 n-ando Exp $
+ * $Id: SeqIn.cpp,v 1.3 2007-04-13 15:02:42 n-ando Exp $
  */
 
 #include "SeqIn.h"
@@ -75,42 +75,42 @@ SeqIn::~SeqIn()
 /*
 RTC::ReturnCode_t SeqIn::onInitialize()
 {
-  return RTC::OK;
+  return RTC::RTC_OK;
 }
 */
 
 /*
 RTC::ReturnCode_t SeqIn::onFinalize()
 {
-  return RTC::OK;
+  return RTC::RTC_OK;
 }
 */
 
 /*
 RTC::ReturnCode_t SeqIn::onStartup(RTC::UniqueId ec_id)
 {
-  return RTC::OK;
+  return RTC::RTC_OK;
 }
 */
 
 /*
 RTC::ReturnCode_t SeqIn::onShutdown(RTC::UniqueId ec_id)
 {
-  return RTC::OK;
+  return RTC::RTC_OK;
 }
 */
 
 /*
 RTC::ReturnCode_t SeqIn::onActivated(RTC::UniqueId ec_id)
 {
-  return RTC::OK;
+  return RTC::RTC_OK;
 }
 */
 
 /*
 RTC::ReturnCode_t SeqIn::onDeactivated(RTC::UniqueId ec_id)
 {
-  return RTC::OK;
+  return RTC::RTC_OK;
 }
 */
 
@@ -302,42 +302,42 @@ RTC::ReturnCode_t SeqIn::onExecute(RTC::UniqueId ec_id)
       std::cout << "[A\r";
     }
 
-  return RTC::OK;
+  return RTC::RTC_OK;
 }
 
 
 /*
 RTC::ReturnCode_t SeqIn::onAborting(RTC::UniqueId ec_id)
 {
-  return RTC::OK;
+  return RTC::RTC_OK;
 }
 */
 
 /*
 RTC::ReturnCode_t SeqIn::onError(RTC::UniqueId ec_id)
 {
-  return RTC::OK;
+  return RTC::RTC_OK;
 }
 */
 
 /*
 RTC::ReturnCode_t SeqIn::onReset(RTC::UniqueId ec_id)
 {
-  return RTC::OK;
+  return RTC::RTC_OK;
 }
 */
 
 /*
 RTC::ReturnCode_t SeqIn::onStateUpdate(RTC::UniqueId ec_id)
 {
-  return RTC::OK;
+  return RTC::RTC_OK;
 }
 */
 
 /*
 RTC::ReturnCode_t SeqIn::onRateChanged(RTC::UniqueId ec_id)
 {
-  return RTC::OK;
+  return RTC::RTC_OK;
 }
 */
 
