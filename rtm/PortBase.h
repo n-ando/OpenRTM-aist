@@ -1,8 +1,9 @@
+
 // -*- C++ -*-
 /*!
  * @file PortBase.h
  * @brief RTC's Port base class
- * @date $Date: 2007-02-04 17:00:59 $
+ * @date $Date: 2007-04-13 15:53:03 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
  * Copyright (C) 2006
@@ -12,12 +13,15 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: PortBase.h,v 1.8 2007-02-04 17:00:59 n-ando Exp $
+ * $Id: PortBase.h,v 1.9 2007-04-13 15:53:03 n-ando Exp $
  *
  */
 
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.8  2007/02/04 17:00:59  n-ando
+ * Object reference variable was added.
+ *
  * Revision 1.7  2007/01/04 00:43:35  n-ando
  * Now, notify_connect() and notify_disconnect() behavior can be customized
  * publishInterfaces(), subscribeInterfaces() and unsubscribeInterfaces().
@@ -1148,7 +1152,7 @@ namespace RTC
 	  {
 	    ReturnCode_t retval;
 	    retval = p->notify_connect(connector_profile);
-	    if (retval != RTC::OK)
+	    if (retval != RTC::RTC_OK)
 	      {
 		return_code = retval;
 	      }
@@ -1170,16 +1174,16 @@ namespace RTC
       ConnectorProfile connector_profile;
       ReturnCode_t return_code;
       
-      disconnect_func() : return_code(RTC::OK) {};
+      disconnect_func() : return_code(RTC::RTC_OK) {};
       disconnect_func(Port_ptr p, ConnectorProfile& prof)
-	: port_ref(p), connector_profile(prof), return_code(RTC::OK) {};
+	: port_ref(p), connector_profile(prof), return_code(RTC::RTC_OK) {};
       void operator()(Port_ptr p)
       {
 	if (!port_ref->_is_equivalent(p))
 	  {
 	    ReturnCode_t retval;
 	    retval = p->disconnect(connector_profile.connector_id);
-	    if (retval != RTC::OK)
+	    if (retval != RTC::RTC_OK)
 	      {
 		return_code = retval;
 	      }
@@ -1202,12 +1206,12 @@ namespace RTC
       
       disconnect_all_func() {};
       disconnect_all_func(PortBase* p) 
-	: return_code(RTC::OK), port(p) {};
+	: return_code(RTC::RTC_OK), port(p) {};
       void operator()(ConnectorProfile& p)
       {
 	ReturnCode_t retval;
 	retval = port->disconnect(p.connector_id);
-	if (retval != RTC::OK)
+	if (retval != RTC::RTC_OK)
 	  {
 	    return_code = retval;
 	  }
