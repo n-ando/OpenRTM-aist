@@ -2,7 +2,7 @@
 /*!
  * @file PeriodicExecutionContext.cpp
  * @brief PeriodicExecutionContext class
- * @date $Date: 2007-02-04 16:56:52 $
+ * @date $Date: 2007-04-13 15:52:15 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
  * Copyright (C) 2006
@@ -12,12 +12,15 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: PeriodicExecutionContext.cpp,v 1.4 2007-02-04 16:56:52 n-ando Exp $
+ * $Id: PeriodicExecutionContext.cpp,v 1.5 2007-04-13 15:52:15 n-ando Exp $
  *
  */
 
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.4  2007/02/04 16:56:52  n-ando
+ * The bugs around object references count were fixed.
+ *
  * Revision 1.3  2007/01/21 10:26:55  n-ando
  * Object reference count related bugs were fixed.
  *
@@ -36,15 +39,28 @@
 namespace RTC
 {
   PeriodicExecutionContext::
+  PeriodicExecutionContext()
+    : m_running(false)
+  {
+    m_profile.kind = PERIODIC;
+    m_profile.rate = 0.0;
+    m_usec = (long int)0;
+    m_ref = this->_this();
+  }
+
+
+  PeriodicExecutionContext::
   PeriodicExecutionContext(DataFlowComponent_ptr owner,
 			   double rate)
     : m_running(false)
   {
     m_profile.kind = PERIODIC;
     m_profile.rate = rate;
+    if (rate == 0) rate = 0.0000001;
     m_usec = (long int)(1000000/rate);
     m_ref = this->_this();
   }
+
 
   PeriodicExecutionContext::~PeriodicExecutionContext()
   {
@@ -75,7 +91,6 @@ namespace RTC
   int PeriodicExecutionContext::svc(void)
   {
     //    RTC_TRACE(("RtcBase::svc()"));
-    //    std::cout << (m_running ? "RUNNING" : "STOPPING") << std::endl;
     do
       {
 	ACE_Time_Value tv(0, m_usec); // (s, us)
@@ -136,7 +151,7 @@ namespace RTC
     m_running = true;
     this->open(0);
 
-    return RTC::OK;
+    return RTC::RTC_OK;
   }
   
 
@@ -157,7 +172,7 @@ namespace RTC
     // change EC thread state
     m_running = false;
 
-    return RTC::OK;
+    return RTC::RTC_OK;
   }
 
   /*!
@@ -187,7 +202,7 @@ namespace RTC
 	m_profile.rate = rate;
 	m_usec = (long int)(1000000/rate);
 	std::for_each(m_comps.begin(), m_comps.end(), invoke_on_rate_changed());
-	return RTC::OK;
+	return RTC::RTC_OK;
       }
     return RTC::BAD_PARAMETER;
   }
@@ -214,7 +229,7 @@ namespace RTC
       return RTC::PRECONDITION_NOT_MET;
 
     it->_sm.m_sm.goTo(ACTIVE_STATE);
-    return RTC::OK;
+    return RTC::RTC_OK;
   }
   
 
@@ -238,7 +253,7 @@ namespace RTC
       return RTC::PRECONDITION_NOT_MET;
     
     it->_sm.m_sm.goTo(INACTIVE_STATE);
-    return RTC::OK;
+    return RTC::RTC_OK;
   }
   
   
@@ -262,7 +277,7 @@ namespace RTC
       return RTC::PRECONDITION_NOT_MET;
     
     it->_sm.m_sm.goTo(INACTIVE_STATE);
-    return RTC::OK;
+    return RTC::RTC_OK;
   }
   
 
@@ -314,17 +329,17 @@ namespace RTC
 	dfp = DataFlowComponent::_narrow(comp);
 
 	UniqueId id;
-	id = dfp->set_execution_context_service(m_ref);
+	id = dfp->attach_executioncontext(m_ref);
 
 	m_comps.push_back(Comp(LightweightRTObject::_duplicate(comp),
 			       DataFlowComponent::_duplicate(dfp), id));
-	return RTC::OK;
+	return RTC::RTC_OK;
       }
     catch (CORBA::Exception& e)
       {
 	return RTC::BAD_PARAMETER;
       }
-    return RTC::OK;
+    return RTC::RTC_OK;
   }
   
   
@@ -346,7 +361,7 @@ namespace RTC
 
     m_comps.erase(it);
 
-    return RTC::OK;
+    return RTC::RTC_OK;
   }
 
 
@@ -367,7 +382,16 @@ namespace RTC
     p = new ExecutionContextProfile(m_profile);
     return p._retn();
   }
-  
+}; // namespace RTC  
 
+extern "C"
+{
+  void PeriodicExecutionContextInit(RTC::Manager* manager)
+  {
+    manager->registerECFactory("PeriodicExecutionContext",
+			       RTC::ECCreate<RTC::PeriodicExecutionContext>,
+			       RTC::ECDelete<RTC::PeriodicExecutionContext>);
+    
+  }
+};
 
-}; // namespace RTC
