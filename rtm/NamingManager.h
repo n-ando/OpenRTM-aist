@@ -2,7 +2,7 @@
 /*!
  * @file NamingManager.h
  * @brief naming Service helper class
- * @date $Date: 2006-11-04 21:11:44 $
+ * @date $Date: 2007-04-13 18:08:42 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
  * Copyright (C) 2006
@@ -12,22 +12,28 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: NamingManager.h,v 1.1 2006-11-04 21:11:44 n-ando Exp $
+ * $Id: NamingManager.h,v 1.2 2007-04-13 18:08:42 n-ando Exp $
  *
  */
 
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.1  2006/11/04 21:11:44  n-ando
+ * NamingManager was introduced to support multiple name server.
+ *
  */
 #ifndef NamingManager_h
 #define NamingManager_h
 
+#include <ace/Task.h>
 #include <rtm/CorbaNaming.h>
 #include <rtm/RTObject.h>
+#include <rtm/SystemLogger.h>
 
 
 namespace RTC
 {
+  class Manager;
   class NamingBase
   {
   public:
@@ -52,49 +58,65 @@ namespace RTC
 
     virtual void unbindObject(const char* name);
 
+
+
   private:
     CorbaNaming m_cosnaming;
+    std::map<std::string, RTObject_impl*> m_names;
   };
+
+
+
 
   class NamingManager
   {
   public:
-    NamingManager(){};
-    NamingManager(Properties& prop){};
-    ~NamingManager(){};
+    NamingManager(Manager* manager);
+    virtual ~NamingManager();
 
-    void registerNaming(NamingBase* names);
-
+    void registerNameServer(const char* method, const char* name_server);
     void bindObject(const char* name, const RTObject_impl* rtobj);
+    void update();
     void unbindObject(const char* name);
+    void unbindAll();
 
   protected:
-    std::vector<NamingBase*> m_namings;
+    NamingBase* createNamingObj(const char* method, const char* name_server);
+    void bindCompsTo(NamingBase* ns);
+    void registerCompName(const char* name, const RTObject_impl* rtobj);
+    void unregisterCompName(const char* name);
 
-    struct binder
-    {
-      binder(const char* name, const RTObject_impl* rtobj)
-	: m_name(name), m_obj(rtobj) {};
-      void operator()(NamingBase* naming)
-      {
-	naming->bindObject(m_name, m_obj);
-      }
-      const char* m_name;
-      const RTObject_impl* m_obj;
-    };
 
-    struct unbinder
+  protected:
+    // Name Servers' method/name and object
+    struct Names
     {
-      unbinder(const char* name) : m_name(name) {};
-      void operator()(NamingBase* naming)
+      Names(const char* meth, const char* name, NamingBase* naming)
+	: method(meth), nsname(name), ns(naming)
       {
-	naming->unbindObject(m_name);
       }
-      const char* m_name;
+      std::string method;
+      std::string nsname;
+      NamingBase* ns;
     };
-    
+    std::vector<Names*> m_names;
+    ACE_Thread_Mutex m_namesMutex;
+
+    // Components' name and object
+    struct Comps
+    {
+      Comps(const char* n, const RTObject_impl* obj)
+	: name(n), rtobj(obj)
+      {}
+      std::string name;
+      const RTObject_impl* rtobj;
+    };
+    std::vector<Comps*> m_compNames;
+
+    Manager* m_manager;
+    MedLogbuf m_MedLogbuf;
+    LogStream rtcout;
   }; // class NamingManager
-
 
 
 }; // namespace RTC
