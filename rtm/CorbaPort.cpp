@@ -2,7 +2,7 @@
 /*!
  * @file  CorbaPort.h
  * @brief CorbaPort class
- * @date  $Date: 2007-01-21 17:16:34 $
+ * @date  $Date: 2007-04-13 15:37:33 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
  * Copyright (C) 2006
@@ -13,12 +13,15 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: CorbaPort.cpp,v 1.2 2007-01-21 17:16:34 n-ando Exp $
+ * $Id: CorbaPort.cpp,v 1.3 2007-04-13 15:37:33 n-ando Exp $
  *
  */
 
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.2  2007/01/21 17:16:34  n-ando
+ * PortProfile.properties = {"port.port_type": "CorbaPort"}
+ *
  * Revision 1.1  2007/01/04 00:45:13  n-ando
  * CORBA serivce provider/consumer Port implementation.
  *
@@ -135,7 +138,7 @@ namespace RTC
   {
     CORBA_SeqUtil::push_back_list(connector_profile.properties,
 				  m_providers);
-    return RTC::OK;
+    return RTC::RTC_OK;
   }
 
 
@@ -152,7 +155,7 @@ namespace RTC
     const NVList& nv(connector_profile.properties);
 
     CORBA_SeqUtil::for_each(nv, subscribe(m_consumers));
-    return RTC::OK;
+    return RTC::RTC_OK;
   }
 
 
