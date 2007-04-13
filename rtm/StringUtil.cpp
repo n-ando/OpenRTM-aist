@@ -2,7 +2,7 @@
 /*!
  * @file StringUtil.cpp
  * @brief String operation utility
- * @date $Date: 2006-11-27 10:00:11 $
+ * @date $Date: 2007-04-13 15:57:07 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
  * Copyright (C) 2006
@@ -12,12 +12,16 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: StringUtil.cpp,v 1.2 2006-11-27 10:00:11 n-ando Exp $
+ * $Id: StringUtil.cpp,v 1.3 2007-04-13 15:57:07 n-ando Exp $
  *
  */
 
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.2  2006/11/27 10:00:11  n-ando
+ * otos() function that converts object to string was added.
+ * flatten() function that flattens string vector was added.
+ *
  * Revision 1.1  2006/10/24 06:24:39  n-ando
  * Now StringUtil was devided into definition and implementation.
  *
@@ -255,7 +259,9 @@ std::vector<std::string> split(const std::string& input,
   std::vector<std::string> results;
   size delim_size = delimiter.size();
   size found_pos(0), begin_pos(0), pre_pos(0), substr_size(0);
-  
+ 
+  if (input.empty()) return results;
+ 
   //  if (input.substr(0, delim_size) == delimiter)
   //    begin_pos = pre_pos = delim_size;
   
@@ -268,7 +274,7 @@ std::vector<std::string> split(const std::string& input,
 	  std::string substr(input.substr(pre_pos));
 	  eraseHeadBlank(substr);
 	  eraseTailBlank(substr);
-	  results.push_back(substr);
+	  if (!substr.empty()) results.push_back(substr);
 	  break;
 	}
       /*
@@ -284,7 +290,7 @@ std::vector<std::string> split(const std::string& input,
 	  std::string substr(input.substr(pre_pos, substr_size));
 	  eraseHeadBlank(substr);
 	  eraseTailBlank(substr);
-	  results.push_back(substr);
+	  if (!substr.empty()) results.push_back(substr);
 	}
       begin_pos = found_pos + delim_size;
       pre_pos   = found_pos + delim_size;
@@ -394,12 +400,31 @@ std::vector<std::string> unique_sv(std::vector<std::string> sv)
 
 std::string flatten(std::vector<std::string> sv)
 {
-  std::string str;
-  int size(sv.size());
 
-  for (int i = 0; i < (size - 1); ++i)
+  if (sv.size() == 0) return "";
+
+  std::string str;
+  for (int i(0), len(sv.size() - 1); i < len; ++i)
     {
       str += sv[i] + ", ";
     }
-  return str + sv[size - 1];
+  return str + sv.back();
+}
+
+
+char** toArgv(const std::vector<std::string>& args)
+{
+  char** argv;
+  int argc(args.size());
+
+  argv = new char*[argc];
+
+  for (int i(0); i < argc; ++i)
+    {
+      int sz(args[i].size());
+      argv[i] = new char[sz + 1];
+      args[i].copy(argv[i], sz);
+      argv[i][sz] = '\0';
+    }
+  return argv;
 }
