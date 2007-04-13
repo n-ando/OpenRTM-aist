@@ -2,9 +2,12 @@
 ##------------------------------------------------------------
 ## Makefile.am for libRTC
 ##
-## $Id: Makefile.am,v 1.14 2007-01-29 07:24:35 n-ando Exp $
+## $Id: Makefile.am,v 1.15 2007-04-13 17:59:04 n-ando Exp $
 ##
 ## $Log: not supported by cvs2svn $
+## Revision 1.14  2007/01/29 07:24:35  n-ando
+## Ld option -no-undefined for Windows DLLs was added.
+##
 ## Revision 1.13  2007/01/21 14:17:21  n-ando
 ## *** empty log message ***
 ##
@@ -78,21 +81,25 @@ lib_LTLIBRARIES = libRTC.la
 UTIL_SRC = \
 	NVUtil.cpp \
 	Properties.cpp \
-	StringUtil.cpp
+	StringUtil.cpp \
+	RTCUtil.cpp
 
 MGR_SRC = \
 	CorbaNaming.cpp \
 	CorbaObjectManager.cpp \
 	Factory.cpp \
+	ECFactory.cpp \
 	Manager.cpp \
 	ManagerConfig.cpp \
 	ModuleManager.cpp \
 	NamingManager.cpp \
-	NumberingPolicy.cpp
+	NumberingPolicy.cpp \
+	Timer.cpp
 
 COMP_SRC = \
 	DataFlowComponentBase.cpp \
 	PeriodicExecutionContext.cpp \
+	ExtTrigExecutionContext.cpp \
 	PortAdmin.cpp \
 	RTObject.cpp \
 	SdoConfiguration.cpp \
@@ -139,10 +146,12 @@ rtmheader_HEADERS = \
 	CORBA_SeqUtil.h              \
 	CorbaConsumer.h              \
 	DefaultConfiguration.h       \
+	ExecutionContextBase.h       \
 	InPort.h                     \
 	InPortConsumer.h             \
 	InPortCorbaConsumer.h        \
 	InPortCorbaProvider.h        \
+	Listener.h                   \
 	ObjectManager.h              \
 	OutPort.h                    \
 	OutPortConsumer.h            \
@@ -155,6 +164,7 @@ rtmheader_HEADERS = \
 	SdoService.h                 \
 	StateMachine.h               \
 	SystemLogger.h               \
+	TimeValue.h                  \
 	UUID.h                       \
 	config_rtc.h
 
@@ -163,4 +173,4 @@ EXTRA_DIST = $(rtmheader_HEADERS)
 DIST_SUBDIRS = idl tests
 
 clean-local:
-	rm -f *.bak *.rpo *.sym lib*.*_pure_* Makefile.old *core *~
+	rm -f *.gch *.bak *.rpo *.sym lib*.*_pure_* Makefile.old *core *~
