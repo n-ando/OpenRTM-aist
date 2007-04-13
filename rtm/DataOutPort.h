@@ -2,7 +2,7 @@
 /*!
  * @file DataOutPort.h
  * @brief Base class of OutPort
- * @date $Date: 2007-01-21 09:45:31 $
+ * @date $Date: 2007-04-13 15:45:08 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
  * Copyright (C) 2006
@@ -13,12 +13,15 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: DataOutPort.h,v 1.6 2007-01-21 09:45:31 n-ando Exp $
+ * $Id: DataOutPort.h,v 1.7 2007-04-13 15:45:08 n-ando Exp $
  *
  */
 
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.6  2007/01/21 09:45:31  n-ando
+ * To advertise interface profile, publishInterfaceProfile() is called now.
+ *
  * Revision 1.5  2007/01/14 22:57:54  n-ando
  * A bug fix about template argument for buffer-type in constructor.
  *
@@ -144,7 +147,7 @@ namespace RTC
      * -- dataport.subscription_type=Periodicの場合周期を設定する。
      *
      * 6. 上記の処理のうち一つでもエラーであれば、エラーリターンする。
-     *    正常に処理が行われた場合はRTC::OKでリターンする。
+     *    正常に処理が行われた場合はRTC::RTC_OKでリターンする。
      *  
      * @else
      * @brief [CORBA interface] Connect the Port
