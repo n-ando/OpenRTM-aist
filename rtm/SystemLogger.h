@@ -2,7 +2,7 @@
 /*!
  * @file SystemLogger.h
  * @brief RT component logger class
- * @date $Date: 2007-01-21 10:37:55 $
+ * @date $Date: 2007-04-13 16:01:32 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
  * Copyright (C) 2003-2006
@@ -12,12 +12,16 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: SystemLogger.h,v 1.3 2007-01-21 10:37:55 n-ando Exp $
+ * $Id: SystemLogger.h,v 1.4 2007-04-13 16:01:32 n-ando Exp $
  *
  */
 
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.3  2007/01/21 10:37:55  n-ando
+ * Dtor for sync_callback and basic_ummybuf classes was defined.
+ * A trivial fix;
+ *
  * Revision 1.2  2006/11/04 20:54:09  n-ando
  * classes were renamed and soruce code was re-formatted.
  *
@@ -64,13 +68,14 @@ namespace RTC
   
 #ifndef NO_LOGGING 
   template <typename _CharT, typename _Traits=std::char_traits<_CharT> >
-  class EXPORTS sync_callback
+  class sync_callback
   {
   public:
     virtual ~sync_callback(){}
     virtual int operator()(const _CharT* s) = 0;
   };
   
+  //============================================================
   /*!
    * @if jp
    *
@@ -91,7 +96,7 @@ namespace RTC
    * @endif
    */
   template <typename _CharT, typename _Traits=std::char_traits<_CharT> >
-  class EXPORTS basic_logbuf
+  class basic_logbuf
     : public std::basic_filebuf<_CharT, _Traits>
   {
   public:
@@ -216,6 +221,7 @@ namespace RTC
   
   
   
+  //============================================================
   /*!
    * @if jp
    *
@@ -467,12 +473,13 @@ namespace RTC
      */
     virtual int sync()
     {
+      ACE_Guard<ACE_Thread_Mutex> guard(m_Mutex);
       int ret(0); 
       if (m_pLogbuf != NULL &&
 	  (this->pptr() - this->pbase()) > 0)
 	{
 	  {
-	    ACE_Guard<ACE_Thread_Mutex> guard(m_Mutex);
+	    //ACE_Guard<ACE_Thread_Mutex> guard(m_Mutex);
 	    *(this->pptr()) = '\0';
 	    std::string::basic_string<_CharT> tmp(this->pbase(),
 						  this->pptr() - 
@@ -522,7 +529,7 @@ namespace RTC
    * @endif
    */
   template <typename _CharT, typename _Traits=std::char_traits<_CharT> >
-  class EXPORTS basic_dummybuf
+  class basic_dummybuf
     : public std::basic_streambuf<_CharT, _Traits>
   {
   public:
@@ -790,14 +797,14 @@ namespace RTC
   
 #else //// NO_LOGGING  
   
-  class EXPORTS SyncCallback
+  class SyncCallback
   {
   public:
     SyncCallback() {;};
     virtual int operator()(const char* s) {;};
   };
   
-  class EXPORTS Logbuf
+  class Logbuf
   {
   public:
     Logbuf() {;};
@@ -806,7 +813,7 @@ namespace RTC
     void setSyncCallBack(SyncCallback& cb) {;};
   };
   
-  class EXPORTS MedLogbuf
+  class MedLogbuf
   {
   public:
     MedLogbuf() {;};
@@ -817,7 +824,7 @@ namespace RTC
     void setSuffix(const std::string& suffix) {;};
   };
   
-  class EXPORTS LogStream
+  class LogStream
     : public ostream
   {
   public:
