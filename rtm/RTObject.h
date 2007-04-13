@@ -2,7 +2,7 @@
 /*!
  * @file RTObject.h
  * @brief RT component base class
- * @date $Date: 2007-01-14 22:59:01 $
+ * @date $Date: 2007-04-13 15:55:43 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
  * Copyright (C) 2006
@@ -12,12 +12,15 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: RTObject.h,v 1.5 2007-01-14 22:59:01 n-ando Exp $
+ * $Id: RTObject.h,v 1.6 2007-04-13 15:55:43 n-ando Exp $
  *
  */
 
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.5  2007/01/14 22:59:01  n-ando
+ * A bug fix about template argument for buffer-type.
+ *
  * Revision 1.4  2007/01/14 19:46:14  n-ando
  * The component action implementation functions for Users' business logic
  * were added (i.e onInitialize(), onExecute(), etc..)
@@ -42,6 +45,7 @@
 #include "rtm/RTC.h"
 #include "rtm/Properties.h"
 #include "rtm/idl/RTCSkel.h"
+#include "rtm/idl/OpenRTMSkel.h"
 #include "rtm/PortBase.h"
 //#include "rtm/ObjectManager.h"
 #include "rtm/PortAdmin.h"
@@ -272,8 +276,19 @@ namespace RTC
      */
     virtual ExecutionContextList* get_contexts();
 
+    /*!
+     * @if jp
+     * @brief [CORBA interface] ExecutionContextを取得する
+     * @else
+     * @brief [CORBA interface] Get ExecutionContext.
+     * @endif
+     */
+    virtual ExecutionContext_ptr get_context(const UniqueId ec_id);
+
+    /*
     virtual UniqueId 
     set_execution_context_service(const ExecutionContextService_ptr ec);
+    */
 
     //============================================================
     // RTC::RTObject
@@ -336,6 +351,8 @@ namespace RTC
 
 
     // RTC::ComponentAction
+    UniqueId attach_executioncontext(ExecutionContext_ptr exec_context);
+    ReturnCode_t detach_executioncontext(UniqueId ec_id);
     virtual ReturnCode_t on_initialize();
     virtual ReturnCode_t on_finalize();
     virtual ReturnCode_t on_startup(UniqueId ec_id);
