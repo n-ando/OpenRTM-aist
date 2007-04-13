@@ -2,9 +2,12 @@
 ##------------------------------------------------------------
 ## Makefile.am for examples
 ##
-## $Id: Makefile.am,v 1.5 2007-02-07 02:50:31 n-ando Exp $
+## $Id: Makefile.am,v 1.6 2007-04-13 15:01:20 n-ando Exp $
 ##
 ## $Log: not supported by cvs2svn $
+## Revision 1.5  2007/02/07 02:50:31  n-ando
+## SimpleService example was recovered.
+##
 ## Revision 1.4  2007/02/04 16:48:52  n-ando
 ## SeqIO was updated.
 ##
@@ -22,5 +25,5 @@
 
 AUTOMAKE_OPTIONS = 1.4
 
-SUBDIRS = SimpleIO SeqIO SimpleService
+SUBDIRS = SimpleIO SeqIO SimpleService ExtTrigger
 
