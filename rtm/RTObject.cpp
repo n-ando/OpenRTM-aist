@@ -2,7 +2,7 @@
 /*!
  * @file RTObject.cpp
  * @brief RT component base class
- * @date $Date: 2007-01-24 15:39:14 $
+ * @date $Date: 2007-04-13 15:55:17 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
  * Copyright (C) 2006
@@ -12,12 +12,15 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: RTObject.cpp,v 1.5 2007-01-24 15:39:14 n-ando Exp $
+ * $Id: RTObject.cpp,v 1.6 2007-04-13 15:55:17 n-ando Exp $
  *
  */
 
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.5  2007/01/24 15:39:14  n-ando
+ * SDO's Configuration service is now active.
+ *
  * Revision 1.4  2007/01/21 10:36:39  n-ando
  * Duplicate ExecutionContextService's object reference.
  *
@@ -73,84 +76,84 @@ namespace RTC
     // formaer rtc_init_entry() 
     ReturnCode_t RTObject_impl::onInitialize()
     {
-      return RTC::OK;
+      return RTC::RTC_OK;
     }
 
     // The finalize action (on ALIVE->END transition)
     // formaer rtc_exiting_entry()
     ReturnCode_t RTObject_impl::onFinalize()
     {
-      return RTC::OK;
+      return RTC::RTC_OK;
     }
     
     // The startup action when ExecutionContext startup
     // former rtc_starting_entry()
     ReturnCode_t RTObject_impl::onStartup(RTC::UniqueId ec_id)
     {
-      return RTC::OK;
+      return RTC::RTC_OK;
     }
     
     // The shutdown action when ExecutionContext stop
     // former rtc_stopping_entry()
     ReturnCode_t RTObject_impl::onShutdown(RTC::UniqueId ec_id)
     {
-      return RTC::OK;
+      return RTC::RTC_OK;
     }
     
     // The activated action (Active state entry action)
     // former rtc_active_entry()
     ReturnCode_t RTObject_impl::onActivated(RTC::UniqueId ec_id)
     {
-      return RTC::OK;
+      return RTC::RTC_OK;
     }
 
     // The deactivated action (Active state exit action)
     // former rtc_active_exit()
     ReturnCode_t RTObject_impl::onDeactivated(RTC::UniqueId ec_id)
     {
-      return RTC::OK;
+      return RTC::RTC_OK;
     }
     
     // The execution action that is invoked periodically
     // former rtc_active_do()
     ReturnCode_t RTObject_impl::onExecute(RTC::UniqueId ec_id)
     {
-      return RTC::OK;
+      return RTC::RTC_OK;
     }
     
     // The aborting action when main logic error occurred.
     // former rtc_aborting_entry()
     ReturnCode_t RTObject_impl::onAborting(RTC::UniqueId ec_id)
     {
-      return RTC::OK;
+      return RTC::RTC_OK;
     }
     
     // The error action in ERROR state
     // former rtc_error_do()
     ReturnCode_t RTObject_impl::onError(RTC::UniqueId ec_id)
     {
-      return RTC::OK;
+      return RTC::RTC_OK;
     }
     
     // The reset action that is invoked resetting
     // This is same but different the former rtc_init_entry()
     ReturnCode_t RTObject_impl::onReset(RTC::UniqueId ec_id)
     {
-      return RTC::OK;
+      return RTC::RTC_OK;
     }
     
     // The state update action that is invoked after onExecute() action
     // no corresponding operation exists in OpenRTm-aist-0.2.0
     ReturnCode_t RTObject_impl::onStateUpdate(RTC::UniqueId ec_id)
     {
-      return RTC::OK;
+      return RTC::RTC_OK;
     }
 
     // The action that is invoked when execution context's rate is changed
     // no corresponding operation exists in OpenRTm-aist-0.2.0
     ReturnCode_t RTObject_impl::onRateChanged(RTC::UniqueId ec_id)
     {
-      return RTC::OK;
+      return RTC::RTC_OK;
     }
 
 
@@ -170,7 +173,7 @@ namespace RTC
     ret = on_initialize();
     m_created = false;
 
-    if (ret == RTC::OK)
+    if (ret == RTC::RTC_OK)
       {
 	if (m_execContexts.length() > 0)
 	  {
@@ -241,7 +244,7 @@ namespace RTC
    * @if jp
    * @brief [CORBA interface] ExecutionContextListを取得する
    * @else
-   * @brief [CORBA interface] Get ExecutionContextList.
+   * @brief [CORBA interface] Get ExecutionContextList
    * @endif
    */
   ExecutionContextList* RTObject_impl::get_contexts()
@@ -255,15 +258,76 @@ namespace RTC
   }
 
 
-  UniqueId 
-  RTObject_impl::
-  set_execution_context_service(const ExecutionContextService_ptr ec)
+  /*!
+   * @if jp
+   * @brief [CORBA interface] ExecutionContextを取得する
+   * @else
+   * @brief [CORBA interface] Get ExecutionContext
+   * @endif
+   */
+  ExecutionContext_ptr RTObject_impl::get_context(const UniqueId ec_id)
   {
-    CORBA_SeqUtil::
-      push_back(m_execContexts, ExecutionContextService::_duplicate(ec));
+    ExecutionContext_var ec;
 
+    if (((CORBA::Long)ec_id) > ((CORBA::Long)m_execContexts.length() - 1))
+      {
+	return ExecutionContext::_nil();
+      }
+    ec = m_execContexts[ec_id];
+
+    return ec._retn();
+  }
+
+
+  /*!
+   * @if jp
+   * @brief [CORBA interface] ExecutionContextをattachする
+   * @else
+   * @brief [CORBA interface] Attach ExecutionContext
+   * @endif
+   */
+  UniqueId RTObject_impl::
+  attach_executioncontext(ExecutionContext_ptr exec_context)
+  {
+    ExecutionContextService_var ecs;
+    ecs = ExecutionContextService::_narrow(exec_context);
+    if (CORBA::is_nil(ecs))
+      {
+	return -1;
+      }
+
+    CORBA_SeqUtil::
+      push_back(m_execContexts, ExecutionContextService::_duplicate(ecs));
+    
     return m_execContexts.length() - 1;
   }
+
+
+  /*!
+   * @if jp
+   * @brief [CORBA interface] ExecutionContextをdetachする
+   * @else
+   * @brief [CORBA interface] Detach ExecutionContext
+   * @endif
+   */
+  ReturnCode_t RTObject_impl::detach_executioncontext(UniqueId ec_id)
+  {
+    if (((CORBA::Long)ec_id) > ((CORBA::Long)m_execContexts.length() - 1))
+      {
+	return RTC::BAD_PARAMETER;
+      }
+
+    ExecutionContext_var ec;
+    ec = m_execContexts[ec_id];
+    if (CORBA::is_nil(ec))
+      {
+	return RTC::BAD_PARAMETER;
+      }
+
+    m_execContexts[ec_id] = ExecutionContextService::_nil();
+    return RTC::RTC_OK;
+  }
+
 
   //============================================================
   // RTC::RTObject
@@ -352,14 +416,14 @@ namespace RTC
    */
   ReturnCode_t RTObject_impl::on_initialize()
   {
-    ReturnCode_t ret(RTC::ERROR);
+    ReturnCode_t ret(RTC::RTC_ERROR);
     try
       {
 	ret = onInitialize();
       }
     catch (...)
       {
-	return RTC::ERROR;
+	return RTC::RTC_ERROR;
       }
     return ret;
   }
@@ -373,14 +437,14 @@ namespace RTC
    */
   ReturnCode_t RTObject_impl::on_finalize()
   {
-    ReturnCode_t ret(RTC::ERROR);
+    ReturnCode_t ret(RTC::RTC_ERROR);
     try
       {
 	ret = onFinalize();
       }
     catch (...)
       {
-	return RTC::ERROR;
+	return RTC::RTC_ERROR;
       }
     return ret;
   }
@@ -394,14 +458,14 @@ namespace RTC
    */
   ReturnCode_t RTObject_impl::on_startup(UniqueId ec_id)
   {
-    ReturnCode_t ret(RTC::ERROR);
+    ReturnCode_t ret(RTC::RTC_ERROR);
     try
       {
 	ret = onStartup(ec_id);
       }
     catch (...)
       {
-	return RTC::ERROR;
+	return RTC::RTC_ERROR;
       }
     return ret;
   }
@@ -415,14 +479,14 @@ namespace RTC
    */
   ReturnCode_t RTObject_impl::on_shutdown(UniqueId ec_id)
   {
-    ReturnCode_t ret(RTC::ERROR);
+    ReturnCode_t ret(RTC::RTC_ERROR);
     try
       {
 	ret = onShutdown(ec_id);
       }
     catch (...)
       {
-	return RTC::ERROR;
+	return RTC::RTC_ERROR;
       }
     return ret;
   }
@@ -436,14 +500,14 @@ namespace RTC
    */
   ReturnCode_t RTObject_impl::on_activated(UniqueId ec_id)
   {
-    ReturnCode_t ret(RTC::ERROR);
+    ReturnCode_t ret(RTC::RTC_ERROR);
     try
       {
 	ret = onActivated(ec_id);
       }
     catch (...)
       {
-	return RTC::ERROR;
+	return RTC::RTC_ERROR;
       }
     return ret;
   }
@@ -457,14 +521,14 @@ namespace RTC
    */
   ReturnCode_t RTObject_impl::on_deactivated(UniqueId ec_id)
   {
-    ReturnCode_t ret(RTC::ERROR);
+    ReturnCode_t ret(RTC::RTC_ERROR);
     try
       {
 	ret = onDeactivated(ec_id);
       }
     catch (...)
       {
-	return RTC::ERROR;
+	return RTC::RTC_ERROR;
       }
     return ret;
   }
@@ -478,14 +542,14 @@ namespace RTC
    */
   ReturnCode_t RTObject_impl::on_aborting(UniqueId ec_id)
   {
-    ReturnCode_t ret(RTC::ERROR);
+    ReturnCode_t ret(RTC::RTC_ERROR);
     try
       {
 	ret = onAborting(ec_id);
       }
     catch (...)
       {
-	return RTC::ERROR;
+	return RTC::RTC_ERROR;
       }
     return ret;
   }
@@ -499,14 +563,14 @@ namespace RTC
    */
   ReturnCode_t RTObject_impl::on_error(UniqueId ec_id)
   {
-    ReturnCode_t ret(RTC::ERROR);
+    ReturnCode_t ret(RTC::RTC_ERROR);
     try
       {
 	ret = onError(ec_id);
       }
     catch (...)
       {
-	return RTC::ERROR;
+	return RTC::RTC_ERROR;
       }
     return ret;
   }
@@ -520,56 +584,56 @@ namespace RTC
    */
   ReturnCode_t RTObject_impl::on_reset(UniqueId ec_id)
   {
-    ReturnCode_t ret(RTC::ERROR);
+    ReturnCode_t ret(RTC::RTC_ERROR);
     try
       {
 	ret = onReset(ec_id);
       }
     catch (...)
       {
-	return RTC::ERROR;
+	return RTC::RTC_ERROR;
       }
     return ret;
   }
 
   ReturnCode_t RTObject_impl::on_execute(UniqueId ec_id)
   {
-    ReturnCode_t ret(RTC::ERROR);
+    ReturnCode_t ret(RTC::RTC_ERROR);
     try
       {
 	ret = onExecute(ec_id);
       }
     catch (...)
       {
-	return RTC::ERROR;
+	return RTC::RTC_ERROR;
       }
     return ret;
   }
 
   ReturnCode_t RTObject_impl::on_state_update(UniqueId ec_id)
   {
-    ReturnCode_t ret(RTC::ERROR);
+    ReturnCode_t ret(RTC::RTC_ERROR);
     try
       {
 	ret = onStateUpdate(ec_id);
       }
     catch (...)
       {
-	return RTC::ERROR;
+	return RTC::RTC_ERROR;
       }
     return ret;
   }
 
   ReturnCode_t RTObject_impl::on_rate_changed(UniqueId ec_id)
   {
-    ReturnCode_t ret(RTC::ERROR);
+    ReturnCode_t ret(RTC::RTC_ERROR);
     try
       {
 	ret = onRateChanged(ec_id);
       }
     catch (...)
       {
-	return RTC::ERROR;
+	return RTC::RTC_ERROR;
       }
     return ret;
   }
@@ -890,7 +954,6 @@ namespace RTC
 
   std::vector<std::string> RTObject_impl::getNamingNames()
   {
-    std::vector<std::string> naming_names;
     return split(m_properties.getProperty("naming_names"), ",");
   }
 
