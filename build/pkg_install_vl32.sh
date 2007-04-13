@@ -13,10 +13,10 @@ rpm_dir='/root/rpm/RPMS/i386'
 ace=`rpm -qa ace`
 ace_devel=`rpm -qa ace-devel`
 
-### $B%=!<%9(BRPM$B%U%!%$%k$N<hF@$H%j%S%k%I$K$H$F$b;~4V$,$+$+$k$?$a!"(B[OpenRTM$B%$%s%9%H!<%k(B]$B$N%Z!<%8$+$i(Brpm$B%Q%C%1!<%8$r%@%&%s%m!<%I$7$F$$$k!#(B
+### ¥½¡¼¥¹RPM¥Õ¥¡¥¤¥ë¤Î¼èÆÀ¤È¥ê¥Ó¥ë¥É¤Ë¤È¤Æ¤â»þ´Ö¤¬¤«¤«¤ë¤¿¤á¡¢[OpenRTM¥¤¥ó¥¹¥È¡¼¥ë]¤Î¥Ú¡¼¥¸¤«¤érpm¥Ñ¥Ã¥±¡¼¥¸¤ò¥À¥¦¥ó¥í¡¼¥É¤·¤Æ¤¤¤ë¡£
 ace_pkg="http://www.is.aist.go.jp/rt/OpenRTM-aist-Tutorial/packages/Vine3.0/RPMS/i386/ace-5.4.1-1.i386.rpm"
 
-### $B%=!<%9(BRPM$B%U%!%$%k$N<hF@$H%j%S%k%I$K$H$F$b;~4V$,$+$+$k$?$a!"(B[OpenRTM$B%$%s%9%H!<%k(B]$B$N%Z!<%8$+$i(Brpm$B%Q%C%1!<%8$r%@%&%s%m!<%I$7$F$$$k!#(B
+### ¥½¡¼¥¹RPM¥Õ¥¡¥¤¥ë¤Î¼èÆÀ¤È¥ê¥Ó¥ë¥É¤Ë¤È¤Æ¤â»þ´Ö¤¬¤«¤«¤ë¤¿¤á¡¢[OpenRTM¥¤¥ó¥¹¥È¡¼¥ë]¤Î¥Ú¡¼¥¸¤«¤érpm¥Ñ¥Ã¥±¡¼¥¸¤ò¥À¥¦¥ó¥í¡¼¥É¤·¤Æ¤¤¤ë¡£
 ace_devel_pkg="http://www.is.aist.go.jp/rt/OpenRTM-aist-Tutorial/packages/Vine3.0/RPMS/i386/ace-devel-5.4.1-1.i386.rpm"
 
 boost=`rpm -qa boost`
