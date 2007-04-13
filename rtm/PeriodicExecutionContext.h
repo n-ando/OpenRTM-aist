@@ -2,7 +2,7 @@
 /*!
  * @file PeriodicExecutionContext.h
  * @brief PeriodicExecutionContext class
- * @date $Date: 2007-01-21 10:27:00 $
+ * @date $Date: 2007-04-13 15:52:34 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
  * Copyright (C) 2006
@@ -12,12 +12,15 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: PeriodicExecutionContext.h,v 1.2 2007-01-21 10:27:00 n-ando Exp $
+ * $Id: PeriodicExecutionContext.h,v 1.3 2007-04-13 15:52:34 n-ando Exp $
  *
  */
 
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.2  2007/01/21 10:27:00  n-ando
+ * Object reference count related bugs were fixed.
+ *
  * Revision 1.1  2007/01/09 15:29:35  n-ando
  * PeriodicExecutionContext class
  *
@@ -27,7 +30,10 @@
 #define PeriodicExecutionContext_h
 
 #include <rtm/idl/RTCSkel.h>
+#include <rtm/idl/OpenRTMSkel.h>
+#include <rtm/Manager.h>
 #include <rtm/StateMachine.h>
+#include <rtm/ExecutionContextBase.h>
 
 // ACE
 #include <ace/Task.h>
@@ -38,12 +44,13 @@ namespace RTC
 {
 
   class PeriodicExecutionContext
-    : public virtual POA_RTC::ExecutionContextService,
-      public virtual PortableServer::RefCountServantBase,
+    : public virtual ExecutionContextBase,
       public ACE_Task<ACE_MT_SYNCH>
   {
   public:
-    PeriodicExecutionContext(DataFlowComponent_ptr owner, double rate = 0.0);
+    PeriodicExecutionContext();
+    PeriodicExecutionContext(DataFlowComponent_ptr owner,
+			     double rate = 1000.0);
     virtual ~PeriodicExecutionContext();
     
     ExecutionContextService_ptr getRef() {return m_ref;}
@@ -223,21 +230,21 @@ namespace RTC
 
       ReturnCode_t on_activated(const ECStates& st)
       {
-	if (m_obj->on_activated(ec_id) != RTC::OK)
+	if (m_obj->on_activated(ec_id) != RTC::RTC_OK)
 	  {
 	    m_sm.goTo(ERROR_STATE);
-	    return RTC::ERROR;
+	    return RTC::RTC_ERROR;
 	  }
-	return RTC::OK;
+	return RTC::RTC_OK;
       }
       ReturnCode_t on_deactivated(const ECStates& st)
       {
-	if (m_obj->on_deactivated(ec_id) != RTC::OK)
+	if (m_obj->on_deactivated(ec_id) != RTC::RTC_OK)
 	  {
 	    m_sm.goTo(ERROR_STATE);
-	    return RTC::ERROR;
+	    return RTC::RTC_ERROR;
 	  }
-	return RTC::OK;
+	return RTC::RTC_OK;
       }
 
       ReturnCode_t on_aborting(const ECStates& st)
@@ -252,32 +259,32 @@ namespace RTC
 
       ReturnCode_t on_reset(const ECStates& st)
       {
-	if (m_obj->on_reset(ec_id) != RTC::OK)
+	if (m_obj->on_reset(ec_id) != RTC::RTC_OK)
 	  {
 	    m_sm.goTo(ERROR_STATE);
-	    return RTC::ERROR;
+	    return RTC::RTC_ERROR;
 	  }
-	return RTC::OK;
+	return RTC::RTC_OK;
       }
 
       ReturnCode_t on_execute(const ECStates& st)
       {
-	if (m_obj->on_execute(ec_id) != RTC::OK)
+	if (m_obj->on_execute(ec_id) != RTC::RTC_OK)
 	  {
 	    m_sm.goTo(ERROR_STATE);
-	    return RTC::ERROR;
+	    return RTC::RTC_ERROR;
 	  }  
-	return RTC::OK;
+	return RTC::RTC_OK;
       }
 
       ReturnCode_t on_state_update(const ECStates& st)
       {
-	if (m_obj->on_state_update(ec_id) != RTC::OK)
+	if (m_obj->on_state_update(ec_id) != RTC::RTC_OK)
 	  {
 	    m_sm.goTo(ERROR_STATE);
-	    return RTC::ERROR;
+	    return RTC::RTC_ERROR;
 	  }
-	return RTC::OK;
+	return RTC::RTC_OK;
       }
 
       ReturnCode_t on_rate_changed()
@@ -366,5 +373,10 @@ namespace RTC
   
   }; // class PeriodicExecutionContext
 }; // namespace RTC
+
+extern "C"
+{
+  void PeriodicExecutionContextInit(RTC::Manager* manager);
+};
 
 #endif
