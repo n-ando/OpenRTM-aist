@@ -2,7 +2,7 @@
 /*!
  * @file Manager.h
  * @brief RTComponent manager class
- * @date $Date: 2007-04-13 18:02:14 $
+ * @date $Date: 2007-04-17 09:22:08 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
  * Copyright (C) 2006
@@ -12,12 +12,15 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: Manager.h,v 1.6 2007-04-13 18:02:14 n-ando Exp $
+ * $Id: Manager.h,v 1.7 2007-04-17 09:22:08 n-ando Exp $
  *
  */
 
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.6  2007/04/13 18:02:14  n-ando
+ * Some configuration properties handling processes were changed.
+ *
  * Revision 1.5  2007/01/21 09:54:30  n-ando
  * A trivial bug fix.
  *
@@ -57,7 +60,6 @@
 #include <rtm/SystemLogger.h>
 
 class Properties;
-class Timer;
 
 namespace RTC
 {
@@ -66,6 +68,7 @@ namespace RTC
   class NamingManager;
   class CorbaObjectManager;
   class Manager;
+  class Timer;
 
   typedef void (*ModuleInitProc)(Manager* manager);  
 
@@ -667,7 +670,7 @@ namespace RTC
      * @brief Timer Object
      * @endif
      */
-    ::Timer* m_timer;
+    Timer* m_timer;
 
 
     //------------------------------------------------------------

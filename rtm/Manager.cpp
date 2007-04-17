@@ -2,7 +2,7 @@
 /*!
  * @file Manager.h
  * @brief RTComponent manager class
- * @date $Date: 2007-04-13 18:02:01 $
+ * @date $Date: 2007-04-17 09:22:13 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
  * Copyright (C) 2003-2005
@@ -12,12 +12,15 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: Manager.cpp,v 1.7 2007-04-13 18:02:01 n-ando Exp $
+ * $Id: Manager.cpp,v 1.8 2007-04-17 09:22:13 n-ando Exp $
  *
  */
 
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.7  2007/04/13 18:02:01  n-ando
+ * Some configuration properties handling processes were changed.
+ *
  * Revision 1.6  2007/01/14 19:42:30  n-ando
  * The activate() function now performs POA manager activation and
  * invoking ModuleInitProc.
@@ -674,7 +677,7 @@ namespace RTC
 	if (!tick.empty())
 	  {
 	    tm = atof(tick.c_str());
-	    m_timer = new ::Timer(tm);
+	    m_timer = new Timer(tm);
 	    m_timer->start();
 	  }
       }
