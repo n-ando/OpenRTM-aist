@@ -2,7 +2,7 @@
 /*!
  * @file CorbaNaming.cpp
  * @brief CORBA naming service helper class
- * @date $Date: 2007-04-13 15:35:16 $
+ * @date $Date: 2007-04-17 09:22:21 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
  * Copyright (C) 2006
@@ -13,12 +13,16 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: CorbaNaming.cpp,v 1.3 2007-04-13 15:35:16 n-ando Exp $
+ * $Id: CorbaNaming.cpp,v 1.4 2007-04-17 09:22:21 n-ando Exp $
  *
  */
 
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.3  2007/04/13 15:35:16  n-ando
+ * Error handing processing in case NameServer does not exist was added.
+ * Some bug fixes.
+ *
  * Revision 1.2  2007/01/21 09:05:47  n-ando
  * "assert.h" is included.
  *
@@ -56,6 +60,7 @@ namespace RTC
     try
       {
 	obj = m_varORB->string_to_object(m_nameServer.c_str());
+	std::cout << m_varORB->object_to_string(obj) << std::endl;
 	m_rootContext = CosNaming::NamingContextExt::_narrow(obj);
 	if (CORBA::is_nil(m_rootContext)) throw std::bad_alloc();
       }
