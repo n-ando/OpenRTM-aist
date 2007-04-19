@@ -4,9 +4,12 @@
 # @brief OpenRTM-aist dependent packages install script for Fedora Core 6
 # @author Noriaki Ando <n-ando@aist.go.jp>
 #
-# $Id: pkg_install_fc6.sh,v 1.2 2007-04-13 14:49:22 n-ando Exp $
+# $Id: pkg_install_fc6.sh,v 1.3 2007-04-19 10:16:36 kurihara Exp $
 #
 # $Log: not supported by cvs2svn $
+# Revision 1.2  2007/04/13 14:49:22  n-ando
+# Some trivial fix.
+#
 # Revision 1.1  2006/07/18 08:36:07  n-ando
 # OpenRTM-aist dependent packages install script for Fedora Core 6.
 #
@@ -349,59 +352,96 @@ fi
 EOF
 }
 
-rpm_dir='/usr/src/redhat/RPMS/'`uname -i`
+/etc/init.d/yum-updatesd stop
 
-rpm_build=`rpm -qa rpm-build`
-python_devel=`rpm -qa python-devel`
-openssl_devel=`rpm -qa openssl-devel`
+rpm -qa > yum_list.txt
 
-boost=`rpm -qa boost`
-boost_devel=`rpm -qa boost-devel`
+yum_installs () {
+    pkgs="gcc-c++ boost boost-devel rpm-build python-devel openssl-devel"
+    for pkg in $pkgs ; do
+	echo "checking package $pkg..."
+	target=`grep $pkg yum_list.txt`
+	if test "x$target" = "x" ; then
+	    echo "$pkg is not installed."
+	    echo "Installing $pkg...."
+            yum install $pkg -y
+	else
+	    echo "$pkg is already installed."
+	fi
+    done
+}
+
+yum_installs
+
+rm yum_list.txt
+
+/etc/init.d/yum-updatesd start
+
+
+
+rpm_mkdir () {
+    rpm_dirs="BUILD RPMS SOURCES SPECS SRPMS"
+    rpm_root=$1
+    for dirs in $rpm_dirs ; do
+	mkdir -p $rpm_root/$dirs
+    done
+    mkdir -p $rpm_root/RPMS/`uname -i`
+}
+
+rpm_dir='/usr/src/redhat'
+rpm_mkdir $rpm_dir
+
+
+
+
+rpm_rpmdir="$rpm_dir/RPMS/`uname -i`"
+rpm_srcdir="$rpm_dir/SOURCES"
 
 ace=`rpm -qa ace`
 ace_devel=`rpm -qa ace-devel`
 
 ace_pkg="http://dist.bonsai.com/ken/ace_tao_rpm/FC6.i386/5.5.4-1/ace-5.5.4-1.FC6.i386.rpm"
+ace_pkg_name="ace-5.5.4-1.FC6.i386.rpm"
+
 ace_devel_pkg="http://dist.bonsai.com/ken/ace_tao_rpm/FC6.i386/5.5.4-1/ace-devel-5.5.4-1.FC6.i386.rpm"
+ace_devel_pkg_name="ace-devel-5.5.4-1.FC6.i386.rpm"
 
 
 omniorb=`rpm -qa omniORB`
-omniorbpy=`rpm -qa omniORBpy`
-
-omniorb_pkg="http://opensource.nederland.net/omniORB/downloads/4.0.7/SRPMS/omniORB-4.0.7-2.src.rpm"
-
-omniorbpy_pkg="http://opensource.nederland.net/omniORB/downloads/4.0.7/SRPMS/omniORBpy-2.7-1.src.rpm"
+#omniorbpy=`rpm -qa omniORBpy`
 
 omniorb_src="ftp://ftp.jp.freebsd.org/pub/FreeBSD/ports/distfiles/omniORB-4.0.7.tar.gz"
+omniorb_src_name="omniORB-4.0.7.tar.gz"
 
-if test "x$boost" = "x" ; then
-	echo "boost is not installed."
-	echo "Installing boost"
-	yum install boost
-	echo "done"
-else
-	echo "boost is already installed."
-fi
- 
+omniorb_pkg_name="omniORB-4.0.7-2.i386.rpm"
+omniorb_devel_pkg_name="omniORB-devel-4.0.7-2.i386.rpm"
+omniorb_doc_pkg_name="omniORB-doc-4.0.7-2.i386.rpm"
+omniorb_servers_pkg_name="omniORB-servers-4.0.7-2.i386.rpm"
+omniorb_utils_pkg_name="omniORB-utils-4.0.7-2.i386.rpm"
+omniorb_boot_pkg_name="omniORB-bootscripts-4.0.7-2.i386.rpm"
+
+#omniorbpy_src_pkg="http://opensource.nederland.net/omniORB/downloads/4.0.7/SRPMS/omniORBpy-2.7-1.src.rpm"
+#omniorbpy_src_pkg_name="omniORBpy-2.7-1.src.rpm"
+
+#omniorbpy_pkg_name="omniORBpy-2.7-1.i386.rpm"
+#omniorbpy_devel_pkg_name="omniORBpy-devel-2.7-1.i386.rpm"
+#omniorbpy_doc_pkg_name="omniORBpy-doc-2.7-1.i386.rpm"
+#omniorbpy_stand_pkg_name="omniORBpy-standard-2.7-1.i386.rpm"
+
+
 echo ""
 echo "---------------------------------------------------"
 echo ""
 
-if test "x$boost_devel" = "x" ; then
-	echo "boost-devel is not installed."
-	echo "Installing boost-devel"
-	yum install boost-devel
-	echo "done"
-else
-	echo "boost-devel is already installed."
-fi
- 
 if test "x$ace" = "x" ; then
 	echo "ace is not installed."
-	echo "downloading ace...."
-	wget $ace_pkg
+	dl_pkg=`ls $ace_pkg_name`
+	if test "x$dl_pkg" = "x" ; then
+	    echo "downloading ace...."
+	    wget $ace_pkg
+	fi
 	echo "Installing ace...."
-	rpm -ivh ace-5.5.4-1.FC6.i386.rpm
+	rpm -ivh $ace_pkg_name
 	echo "done"
 else
 	echo "ace is already installed."
@@ -411,53 +451,15 @@ echo ""
 echo "---------------------------------------------------"
 echo ""
 
-if test "x$rpm_build" = "x" ; then
-	echo "rpm-build is not installed."
-	echo "Installing rpm-build...."
-	yum install rpm-build
-	echo "done"
-else
-	echo "rpm-build is already installed."
-fi
-
-echo ""
-echo "---------------------------------------------------"
-echo ""
-
-if test "x$python_devel" = "x" ; then
-	echo "python-devel is not installed."
-	echo "Installing python-devel...."
-	yum install python-devel
-	echo "done"
-else
-	echo "python-devel is already installed."
-fi
-
-
-echo ""
-echo "---------------------------------------------------"
-echo ""
-
-if test "x$openssl_devel" = "x" ; then
-	echo "openssl-devel is not installed."
-	echo "Installing openssl-devel...."
-	yum install openssl-devel
-	echo "done"
-else
-	echo "openssl-devel is already installed."
-fi
-
-
-echo ""
-echo "---------------------------------------------------"
-echo ""
-
 if test "x$ace_devel" = "x" ; then
 	echo "ace-devel is not installed."
-	echo "downloading ace-devel...."
-	wget $ace_devel_pkg
+	dl_pkg=`ls $ace_devel_pkg_name`
+	if test "x$dl_pkg" = "x" ; then
+	    echo "downloading ace-devel...."
+	    wget $ace_devel_pkg
+	fi
 	echo "Installing ace-devel...."
-	rpm -ivh ace-devel-5.5.4-1.FC6.i386.rpm
+	rpm -ivh $ace_devel_pkg_name
 	echo "done"
 else
 	echo "ace-devel is already installed."
@@ -469,23 +471,27 @@ echo ""
 
 if test "x$omniorb" = "x" ; then
 	echo "omniORB is not installed."
-	if ! [ -f $rpm_dir"/omniORB-4.0.7-2.i386.rpm" ] ; then
+	if ! [ -f $rpm_rpmdir"/$omniorb_pkg_name" ] ; then
+	    pushd $rpm_srcdir
+	    dl_pkg=`ls $omniorb_src_name`
+	    if test "x$dl_pkg" = "x" ; then
 		echo "downloading omniORB...."
-		mkdir -p /usr/src/redhat/SOURCES
-		(cd /usr/src/redhat/SOURCES ; wget $omniorb_src )
-		echo "Rebuilding omniORB...."
-		omniORB_spec > omniORB.spec
-		rpmbuild -ba omniORB.spec
+		wget $omniorb_src
+	    fi
+	    echo "Rebuilding omniORB...."
+	    omniORB_spec > omniORB.spec
+	    rpmbuild -ba omniORB.spec
+	    popd
 	else
-		echo "Pre-build package was found."
+	    echo "Pre-build package was found."
 	fi
 	echo "Installing omniORB...."
-	( cd $rpm_dir ; rpm -ivh omniORB-4.0.7-2.i386.rpm )
-	( cd $rpm_dir ; rpm -ivh omniORB-devel-4.0.7-2.i386.rpm )
-	( cd $rpm_dir ; rpm -ivh omniORB-doc-4.0.7-2.i386.rpm )
-	( cd $rpm_dir ; rpm -ivh omniORB-servers-4.0.7-2.i386.rpm )
-	( cd $rpm_dir ; rpm -ivh omniORB-utils-4.0.7-2.i386.rpm )
-	( cd $rpm_dir ; rpm -ivh omniORB-bootscripts-4.0.7-2.i386.rpm )
+	( cd $rpm_rpmdir ; rpm -ivh $omniorb_pkg_name )
+	( cd $rpm_rpmdir ; rpm -ivh $omniorb_devel_pkg_name )
+	( cd $rpm_rpmdir ; rpm -ivh $omniorb_doc_pkg_name )
+	( cd $rpm_rpmdir ; rpm -ivh $omniorb_servers_pkg_name )
+	( cd $rpm_rpmdir ; rpm -ivh $omniorb_utils_pkg_name )
+	( cd $rpm_rpmdir ; rpm -ivh $omniorb_boot_pkg_name )
 	echo "Making /var/omninames"
 	mkdir -p /var/omninames
 	echo "done"
@@ -497,31 +503,34 @@ echo ""
 echo "---------------------------------------------------"
 echo ""
 
-if test "x$omniorbpy" = "x" ; then
-	echo "omniORBpy is not installed."
-
-	echo "Chacking Orbit-py."
-	pyorbit=`rpm -qa pyorbit`
-	if ! test "x$pyorbit" = "x" ; then
-		echo "ORBit-py is already installed."
-		echo "omniORBpy files conflict with ORBit files (eg. CORBA.py)."
-		echo "omniORBpy installation is stopped."
-	else
-		if ! [ -f $rpm_dir"/omniORBpy-2.7-1.i386.rpm" ] ; then
-			echo "downloading omniORBpy...."
-			wget $omniorbpy_pkg
-			echo "Rebuilding omniORBpy...."
-			rpmbuild --rebuild omniORBpy-2.7-1.src.rpm
-		else
-			echo "Pre-build package was found."
-		fi
-		echo "Installing ommniORBpy...."
-		(cd $rpm_dir ; rpm -ivh omniORBpy-2.7-1.i386.rpm)
-		(cd $rpm_dir ; rpm -ivh omniORBpy-devel-2.7-1.i386.rpm)
-		(cd $rpm_dir ; rpm -ivh omniORBpy-doc-2.7-1.i386.rpm)
-		(cd $rpm_dir ; rpm -ivh omniORBpy-standard-2.7-1.i386.rpm)
-		echo "done"
-	fi
-else
-	echo "omniORBpy is already installed."
-fi
+#if test "x$omniorbpy" = "x" ; then
+#	echo "omniORBpy is not installed."
+#
+#	echo "Chacking Orbit-py."
+#	pyorbit=`rpm -qa pyorbit`
+#	if ! test "x$pyorbit" = "x" ; then
+#		echo "ORBit-py is already installed."
+#		echo "omniORBpy files conflict with ORBit files (eg. CORBA.py)."
+#		echo "omniORBpy installation is stopped."
+#	else
+#		if ! [ -f $rpm_rpmdir"/$omniorbpy_src_pkg_name" ] ; then
+#		    dl_pkg=`ls $omniorbpy_src_pkg_name`
+#		    if test "xdl_pkg" = "x" ; then
+#			echo "downloading omniORBpy...."
+#			wget $omniorbpy_src_pkg
+#		    fi
+#		    echo "Rebuilding omniORBpy...."
+#		    rpmbuild --rebuild $omniorbpy_src_pkg_name
+#		else
+#			echo "Pre-build package was found."
+#		fi
+#		echo "Installing ommniORBpy...."
+#		(cd $rpm_rpmdir ; rpm -ivh $omniorbpy_pkg_name)
+#		(cd $rpm_rpmdir ; rpm -ivh $omniorbpy_devel_pkg_name)
+#		(cd $rpm_rpmdir ; rpm -ivh $omniorbpy_doc_pkg_name)
+#		(cd $rpm_rpmdir ; rpm -ivh $omniorbpy_stand_pkg_name)
+#		echo "done"
+#	fi
+#else
+#	echo "omniORBpy is already installed."
+#fi
