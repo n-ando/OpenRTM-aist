@@ -2,9 +2,12 @@
 ##------------------------------------------------------------
 ## Makefile.am for examples
 ##
-## $Id: Makefile.am,v 1.6 2007-04-13 15:01:20 n-ando Exp $
+## $Id: Makefile.am,v 1.7 2007-04-23 07:24:09 n-ando Exp $
 ##
 ## $Log: not supported by cvs2svn $
+## Revision 1.6  2007/04/13 15:01:20  n-ando
+## ExtTrigger sample was added.
+##
 ## Revision 1.5  2007/02/07 02:50:31  n-ando
 ## SimpleService example was recovered.
 ##
@@ -25,5 +28,5 @@
 
 AUTOMAKE_OPTIONS = 1.4
 
-SUBDIRS = SimpleIO SeqIO SimpleService ExtTrigger
+SUBDIRS = ConfigSample SimpleIO SeqIO SimpleService ExtTrigger
 
