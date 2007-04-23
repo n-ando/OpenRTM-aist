@@ -2,7 +2,7 @@
 /*!
  * @file Properties.cpp
  * @brief Property list class (derived from Java Properties)
- * @date $Date: 2007-04-13 18:14:02 $
+ * @date $Date: 2007-04-23 04:56:39 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
  * Copyright (C) 2006
@@ -12,12 +12,16 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: Properties.cpp,v 1.6 2007-04-13 18:14:02 n-ando Exp $
+ * $Id: Properties.cpp,v 1.7 2007-04-23 04:56:39 n-ando Exp $
  *
  */
 
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.6  2007/04/13 18:14:02  n-ando
+ * Now Properties class is implemented as hierarchical data structure
+ * instead of std::map based data structure.
+ *
  * Revision 1.5  2007/01/06 17:59:18  n-ando
  * getProperty() is now const function.
  *
@@ -465,7 +469,7 @@ namespace RTC
    * @brief Get number of Properties
    * @endif
    */
-  int Properties::size()
+  int Properties::size() const
   {
     return propertyNames().size();
   }
@@ -554,7 +558,7 @@ namespace RTC
    * @brief Merge properties
    * @endif
    */
-  Properties& Properties::operator<<(Properties& prop)
+  Properties& Properties::operator<<(const Properties& prop)
   {
     std::vector<std::string> keys;
     keys = prop.propertyNames();
