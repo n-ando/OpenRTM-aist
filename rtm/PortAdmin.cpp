@@ -2,7 +2,7 @@
 /*!
  * @file PortAdmin.cpp
  * @brief RTC's Port administration class
- * @date $Date: 2007-01-12 14:37:57 $
+ * @date $Date: 2007-04-23 04:55:40 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
  * Copyright (C) 2006
@@ -12,12 +12,15 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: PortAdmin.cpp,v 1.6 2007-01-12 14:37:57 n-ando Exp $
+ * $Id: PortAdmin.cpp,v 1.7 2007-04-23 04:55:40 n-ando Exp $
  *
  */
 
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.6  2007/01/12 14:37:57  n-ando
+ * Since Port activates itself now, PortAdmin does not need to activate Port.
+ *
  * Revision 1.5  2007/01/09 15:13:04  n-ando
  * Now Port does not have getName().
  * The name of Port is obtained from getProfile().
@@ -152,12 +155,23 @@ namespace RTC
    */
   void PortAdmin::deletePort(PortBase& port)
   {
-    m_pPOA->deactivate_object(*m_pPOA->servant_to_id(&port));
+    try
+      {
+	port.disconnect_all();
+	// port.shutdown();
 
-    const char* tmp(port.getProfile().name);
-    CORBA_SeqUtil::erase_if(m_portRefs, find_port_name(tmp));
-    port.setPortRef(RTC::Port::_nil());
-    m_portServants.unregisterObject(tmp);
+	const char* tmp(port.getProfile().name);
+	CORBA_SeqUtil::erase_if(m_portRefs, find_port_name(tmp));
+
+	m_pPOA->deactivate_object(*m_pPOA->servant_to_id(&port));
+	port.setPortRef(RTC::Port::_nil());
+
+	m_portServants.unregisterObject(tmp);
+      }
+    catch (...)
+      {
+	;
+      }
   }
 
 
