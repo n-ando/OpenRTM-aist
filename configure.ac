@@ -2,7 +2,7 @@ dnl -*- autoconf -*-
 dnl
 dnl @file configure.ac
 dnl @brief Input file for autoconf
-dnl @date $Date: 2007-04-13 14:48:14 $
+dnl @date $Date: 2007-04-23 07:27:38 $
 dnl @author Noriaki Ando <n-ando@aist.go.jp>
 dnl
 dnl This file is an input file used by the GNU "autoconf" program to
@@ -10,11 +10,14 @@ dnl generate the file "configure", which tries to guess your system
 dnl configuration
 dnl
 dnl
-dnl $Id: configure.ac,v 1.19 2007-04-13 14:48:14 n-ando Exp $
+dnl $Id: configure.ac,v 1.20 2007-04-23 07:27:38 n-ando Exp $
 dnl
 
 dnl
 dnl $Log: not supported by cvs2svn $
+dnl Revision 1.19  2007/04/13 14:48:14  n-ando
+dnl New example "ExtTrigger" was added.
+dnl
 dnl Revision 1.18  2007/02/07 02:50:39  n-ando
 dnl SimpleService example was recovered.
 dnl
@@ -1419,6 +1422,7 @@ AC_OUTPUT([Makefile
 	utils/rtm-naming/Makefile
 	etc/Makefile
 	examples/Makefile
+	examples/ConfigSample/Makefile
 	examples/SimpleIO/Makefile
 	examples/SeqIO/Makefile
 	examples/SimpleService/Makefile
