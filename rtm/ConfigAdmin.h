@@ -2,7 +2,7 @@
 /*!
  * @file ConfigAdmin.h
  * @brief Configuration Administration classes
- * @date $Date: 2007-04-23 04:51:21 $
+ * @date $Date: 2007-04-23 07:28:08 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
  * Copyright (C) 2007
@@ -12,12 +12,15 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: ConfigAdmin.h,v 1.1 2007-04-23 04:51:21 n-ando Exp $
+ * $Id: ConfigAdmin.h,v 1.2 2007-04-23 07:28:08 n-ando Exp $
  *
  */
 
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.1  2007/04/23 04:51:21  n-ando
+ * COnfiguration Admin class.
+ *
  */
 
 #ifndef ConfigAdmin_h
@@ -106,8 +109,11 @@ namespace RTC
 
     void update();
     
-
     bool isExist(const char* name);
+
+    bool isChanged() {return m_changed;}
+    
+    const char* getActiveId() {return m_activeId.c_str();}
 
     bool haveConfig(const char* config_id)
     {
