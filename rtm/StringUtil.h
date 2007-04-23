@@ -2,7 +2,7 @@
 /*!
  * @file StringUtil.h
  * @brief String operation utility
- * @date $Date: 2007-04-13 15:57:13 $
+ * @date $Date: 2007-04-23 04:58:53 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
  * Copyright (C) 2003-2005
@@ -12,12 +12,16 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: StringUtil.h,v 1.8 2007-04-13 15:57:13 n-ando Exp $
+ * $Id: StringUtil.h,v 1.9 2007-04-23 04:58:53 n-ando Exp $
  *
  */
 
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.8  2007/04/13 15:57:13  n-ando
+ * toArgv() was added to create command line arguments.
+ * Some bug fixes.
+ *
  * Revision 1.7  2006/11/27 10:00:15  n-ando
  * otos() function that converts object to string was added.
  * flatten() function that flattens string vector was added.
@@ -222,6 +226,14 @@ std::string otos(Printable n)
   str_stream << n;
   return str_stream.str();
 };
+
+template <typename To>
+bool stringTo(To& val, const char* str)
+{
+  std::stringstream s;
+  return (s << str && s >> val);
+}
+
 
 std::vector<std::string> unique_sv(std::vector<std::string> sv);
 
