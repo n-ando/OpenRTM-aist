@@ -3,7 +3,7 @@
 #
 #  @file rtc-template
 #  @brief rtc-template RTComponent source code generator tool
-#  @date $Date: 2007-04-23 01:41:21 $
+#  @date $Date: 2007-04-23 07:31:28 $
 #  @author Noriaki Ando <n-ando@aist.go.jp>
 # 
 #  Copyright (C) 2004-2007
@@ -13,11 +13,14 @@
 #          Advanced Industrial Science and Technology (AIST), Japan
 #      All rights reserved.
 # 
-#  $Id: rtc-template,v 1.6 2007-04-23 01:41:21 n-ando Exp $
+#  $Id: rtc-template,v 1.7 2007-04-23 07:31:28 n-ando Exp $
 #
 
 #
 #  $Log: not supported by cvs2svn $
+#  Revision 1.6  2007/04/23 01:41:21  n-ando
+#  New option "--config" and configuration template code were added.
+#
 #  Revision 1.5  2007/01/11 07:42:25  n-ando
 #  Modified for OMG RTC specificatin and OpenRTM-aist-0.4.0
 #  - Some command option was chaged and removed.
@@ -334,7 +337,12 @@ def MakeConfig(opts):
 	for opt, arg in opts:
 		if opt == ("--config"):
 			try:
+				# For C++ scope resolution operator 
+				arg = re.sub("::", "@@", arg)
 				name, type, default = arg.split(":")
+				name    = re.sub("@@", "::", name)
+				type    = re.sub("@@", "::", type)
+				default = re.sub("@@", "::", default)
 			except:
 				sys.stderr("Invalid option: " \
 					   + opt \
