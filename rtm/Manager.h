@@ -2,7 +2,7 @@
 /*!
  * @file Manager.h
  * @brief RTComponent manager class
- * @date $Date: 2007-04-17 09:22:08 $
+ * @date $Date: 2007-04-23 04:53:29 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
  * Copyright (C) 2006
@@ -12,12 +12,15 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: Manager.h,v 1.7 2007-04-17 09:22:08 n-ando Exp $
+ * $Id: Manager.h,v 1.8 2007-04-23 04:53:29 n-ando Exp $
  *
  */
 
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.7  2007/04/17 09:22:08  n-ando
+ * Namespace of Timer class was changed from ::Timer to RTC::Timer.
+ *
  * Revision 1.6  2007/04/13 18:02:14  n-ando
  * Some configuration properties handling processes were changed.
  *
@@ -395,7 +398,7 @@ namespace RTC
      * @endif
      */
     RtcBase* createComponent(const char* module_name);
-
+    void cleanupComponent(RtcBase* comp);
     /*!
      * @if jp
      * @brief RTコンポーネントを直接 Manager に登録する
@@ -404,6 +407,7 @@ namespace RTC
      * @endif
      */
     bool registerComponent(RtcBase* comp);
+    bool unregisterComponent(RtcBase* comp);
 
 
     bool bindExecutionContext(RtcBase* comp);
@@ -542,8 +546,10 @@ namespace RTC
      */
     void shutdownORB();
 
-
-
+   
+    //============================================================
+    // NamingService initialization and finalization
+    //============================================================
     /*!
      * @if jp
      * @brief NamingManager の初期化
@@ -554,7 +560,14 @@ namespace RTC
     bool initNaming();
     void shutdownNaming();
 
+
+    //============================================================
+    // Component management
+    //============================================================
     void shutdownComponents();
+
+
+    void configureComponent(RtcBase* comp);
 
 
     bool initExecContext();
@@ -719,7 +732,7 @@ namespace RTC
       std::string m_name;
     };
 
-    typedef ObjectManager<std::string,
+    typedef ObjectManager<const char*,
 			  RtcBase,
 			  InstanceName> ComponentManager;
     /*!
