@@ -2,7 +2,7 @@
 /*!
  * @file Manager.h
  * @brief RTComponent manager class
- * @date $Date: 2007-04-17 09:22:13 $
+ * @date $Date: 2007-04-23 04:53:15 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
  * Copyright (C) 2003-2005
@@ -12,12 +12,15 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: Manager.cpp,v 1.8 2007-04-17 09:22:13 n-ando Exp $
+ * $Id: Manager.cpp,v 1.9 2007-04-23 04:53:15 n-ando Exp $
  *
  */
 
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.8  2007/04/17 09:22:13  n-ando
+ * Namespace of Timer class was changed from ::Timer to RTC::Timer.
+ *
  * Revision 1.7  2007/04/13 18:02:01  n-ando
  * Some configuration properties handling processes were changed.
  *
@@ -425,55 +428,7 @@ namespace RTC
     // rtc.conf:
     //   [category].[type_name].config_file = file_name
     //   [category].[instance_name].config_file = file_name
-    {
-      std::string category(comp->getCategory());
-      std::string type_name(comp->getTypeName());
-      std::string inst_name(comp->getInstanceName());
-
-      std::string type_conf(category + "." + type_name + ".config_file");
-      std::string name_conf(category + "." + inst_name + ".config_file");
-
-
-      Properties type_prop, name_prop;
-
-      // Load "category.instance_name.config_file"
-      if (!m_config[name_conf].empty())
-	{
-	  std::ifstream conff(m_config[name_conf].c_str());
-	  if (!conff.fail())
-	    {
-	      name_prop.load(conff);
-	    }
-	}
-
-      if (!m_config[type_conf].empty())
-	{
-	  std::ifstream conff(m_config[type_conf].c_str());
-	  if (!conff.fail())
-	    {
-	      type_prop.load(conff);
-	    }
-	}
-      // Merge Properties. type_prop is merged properties
-      type_prop << name_prop;
-      comp->getProperties() << type_prop;
-
-    }
-
-
-    //------------------------------------------------------------
-    // Format component's name for NameService
-    std::string naming_formats;
-    Properties& comp_prop(comp->getProperties());
-
-    naming_formats += m_config["naming_formats"];
-    naming_formats += ", " + comp_prop["naming_formats"];
-    naming_formats = flatten(unique_sv(split(naming_formats, ",")));
-
-    std::string naming_names;
-    naming_names = formatString(naming_formats.c_str(), comp->getProperties());
-    comp->getProperties()["naming_names"] = naming_names;
-
+    configureComponent(comp);
 
     //------------------------------------------------------------
     // Component initialization
@@ -497,6 +452,7 @@ namespace RTC
   bool Manager::registerComponent(RtcBase* comp)
   {
     RTC_TRACE(("Manager::registerComponent(%s)", comp->getInstanceName()));
+    // ### NamingManager のみで代用可能
     m_compManager.registerObject(comp);
 
     std::vector<std::string> names(comp->getNamingNames());
@@ -508,6 +464,24 @@ namespace RTC
       }
     return true;
   }
+
+  bool Manager::unregisterComponent(RtcBase* comp)
+  {
+    RTC_TRACE(("Manager::unregisterComponent(%s)", comp->getInstanceName()));
+    // ### NamingManager のみで代用可能
+    m_compManager.unregisterObject(comp->getInstanceName());
+    
+    std::vector<std::string> names(comp->getNamingNames());
+
+    for (int i(0), len(names.size()); i < len; ++i)
+      {
+	RTC_TRACE(("Unbind name: %s", names[i].c_str()));
+	m_namingManager->unbindObject(names[i].c_str());
+      }
+    return true;
+  }
+
+  
 
 
   bool Manager::bindExecutionContext(RtcBase* comp)
@@ -994,6 +968,62 @@ namespace RTC
   {
     RTC_TRACE(("Manager::shutdownComponents()"));
   }
+
+  void Manager::cleanupComponent(RtcBase* comp)
+  {
+    RTC_TRACE(("Manager::shutdownComponents()"));
+    unregisterComponent(comp);
+  }
+
+  void Manager::configureComponent(RtcBase* comp)
+  {
+    std::string category(comp->getCategory());
+    std::string type_name(comp->getTypeName());
+    std::string inst_name(comp->getInstanceName());
+    
+    std::string type_conf(category + "." + type_name + ".config_file");
+    std::string name_conf(category + "." + inst_name + ".config_file");
+    
+    
+    Properties type_prop, name_prop;
+    
+    // Load "category.instance_name.config_file"
+    if (!m_config[name_conf].empty())
+      {
+	std::ifstream conff(m_config[name_conf].c_str());
+	if (!conff.fail())
+	  {
+	    name_prop.load(conff);
+	  }
+      }
+    
+    if (!m_config[type_conf].empty())
+      {
+	std::ifstream conff(m_config[type_conf].c_str());
+	if (!conff.fail())
+	  {
+	    type_prop.load(conff);
+	  }
+      }
+    // Merge Properties. type_prop is merged properties
+    type_prop << name_prop;
+    comp->getProperties() << type_prop;
+
+    //------------------------------------------------------------
+    // Format component's name for NameService
+    std::string naming_formats;
+    Properties& comp_prop(comp->getProperties());
+    
+    naming_formats += m_config["naming_formats"];
+    naming_formats += ", " + comp_prop["naming_formats"];
+    naming_formats = flatten(unique_sv(split(naming_formats, ",")));
+
+    std::string naming_names;
+    naming_names = formatString(naming_formats.c_str(), comp->getProperties());
+    comp->getProperties()["naming_formats"] = naming_formats;
+    comp->getProperties()["naming_names"] = naming_names;
+  }
+
 
 
 
