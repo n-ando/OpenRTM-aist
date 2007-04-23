@@ -2,7 +2,7 @@
 /*!
  * @file SdoConfiguration.h
  * @brief RT component base class
- * @date $Date: 2007-01-24 16:03:58 $
+ * @date $Date: 2007-04-23 04:58:21 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
  * Copyright (C) 2006
@@ -12,12 +12,15 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: SdoConfiguration.h,v 1.6 2007-01-24 16:03:58 n-ando Exp $
+ * $Id: SdoConfiguration.h,v 1.7 2007-04-23 04:58:21 n-ando Exp $
  *
  */
 
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.6  2007/01/24 16:03:58  n-ando
+ * The ctor. was changed.
+ *
  * Revision 1.5  2007/01/21 13:05:13  n-ando
  * A trivial fix.
  *
@@ -43,11 +46,11 @@
 #include <ace/Thread_Mutex.h>
 
 // CORBA header include
-#include "rtm/RTC.h"
+#include <rtm/RTC.h>
 
 // local includes
-#include "rtm/idl/SDOPackageSkel.h"
-
+#include <rtm/idl/SDOPackageSkel.h>
+#include <rtm/ConfigAdmin.h>
 #include <string>
 
 // SdoConfiguration with SeqEx 159120
@@ -127,7 +130,7 @@ namespace SDOPackage
       public virtual PortableServer::RefCountServantBase
   {
   public:
-    Configuration_impl();
+    Configuration_impl(RTC::ConfigAdmin& configAdmin);
     virtual ~Configuration_impl();
 
     //============================================================
@@ -719,7 +722,6 @@ namespace SDOPackage
 
   protected:
     const std::string getUUID() const;
-    CORBA::Long getActiveConfigIndex();
 
     Configuration_var m_objref;
 
@@ -777,9 +779,7 @@ namespace SDOPackage
       NVList configuration_data;
       };
     */
-    ConfigurationSetList m_configurations;
-    std::string  m_activeConfId;
-    CORBA::Long m_activeConfIndex; // -1: active config list has changed
+    RTC::ConfigAdmin& m_configsets;
     ACE_Thread_Mutex m_config_mutex;
 
     /*!
@@ -846,7 +846,7 @@ namespace SDOPackage
       }
       const std::string m_id;
     };
-      
+
   };
 
 }; // namespace SDOPackage

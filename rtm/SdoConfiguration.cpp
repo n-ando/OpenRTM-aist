@@ -2,7 +2,7 @@
 /*!
  * @file SdoConfiguration.cpp
  * @brief SDO's Configuration implementation class
- * @date $Date: 2007-01-24 16:03:52 $
+ * @date $Date: 2007-04-23 04:58:16 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
  * Copyright (C) 2006
@@ -12,12 +12,15 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: SdoConfiguration.cpp,v 1.6 2007-01-24 16:03:52 n-ando Exp $
+ * $Id: SdoConfiguration.cpp,v 1.7 2007-04-23 04:58:16 n-ando Exp $
  *
  */
 
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.6  2007/01/24 16:03:52  n-ando
+ * The ctor. was changed.
+ *
  * Revision 1.5  2006/11/09 10:20:40  n-ando
  * set_service_profile never throws InvalidParameter exception.
  *
@@ -39,12 +42,34 @@
 #include "rtm/SdoConfiguration.h"
 #include <rtm/CORBA_SeqUtil.h>
 #include <rtm/UUID.h>
+#include <rtm/NVUtil.h>
 #include <iostream>
 // ACE
 
 namespace SDOPackage
 {
-  Configuration_impl::Configuration_impl()
+  void 
+  toProperties(RTC::Properties& prop, const SDOPackage::ConfigurationSet& conf)
+  {
+    NVUtil::copyToProperties(prop, conf.configuration_data);
+    //    prop["description"] = conf.description;
+  }
+
+  void
+  toConfigurationSet(SDOPackage::ConfigurationSet& conf,
+		     const RTC::Properties& prop)
+  {
+    conf.description = CORBA::string_dup(prop["description"].c_str());
+    conf.id = CORBA::string_dup(prop.getName());
+    NVUtil::copyFromProperties(conf.configuration_data, prop);
+  }
+
+  //============================================================
+  // Ctor and Dtor
+  //============================================================
+
+  Configuration_impl::Configuration_impl(RTC::ConfigAdmin& configsets)
+    : m_configsets(configsets)
   {
     m_objref = this->_this();
   }
@@ -53,6 +78,10 @@ namespace SDOPackage
   {
   }
 
+
+  //============================================================
+  // Basic Configuration 
+  //============================================================
   /* @if jp
    * @brief [CORBA interface] SDO の DeviceProfile をセットする
    * @else
@@ -103,7 +132,6 @@ namespace SDOPackage
 	    prof.id = CORBA::string_dup(getUUID().c_str());
 	    CORBA_SeqUtil::push_back(m_serviceProfiles, prof);
 	    return true;
-
 	  }
 
 	CORBA::Long index;
@@ -202,7 +230,10 @@ namespace SDOPackage
     return true;
   }
 
-  
+
+  //============================================================
+  // Configuration Parameter manipulation
+  //============================================================
   /*!
    * @if jp
    * @brief [CORBA interface] 設定パラメータのリストの取得
@@ -246,13 +277,14 @@ namespace SDOPackage
     NVList_var nvlist;
     nvlist = new NVList((CORBA::ULong)0);
 
+    /*
     CORBA::Long index;
     index = getActiveConfigIndex();
     if (index >= 0)
       {
 	nvlist = new NVList(m_configurations[index].configuration_data);
       }
-
+    */
     return nvlist._retn();
   }
 
@@ -269,10 +301,11 @@ namespace SDOPackage
     throw (InvalidParameter, NotAvailable, InternalError)
   {
     if (name == "") throw InvalidParameter("Name is empty.");
-    if (m_activeConfId == "") return new CORBA::Any();
 
-    CORBA::Long index;
+    //    CORBA::Long index;
     CORBA::Any_var value;
+    value = new CORBA::Any();
+    /*
     index = getActiveConfigIndex();
     if (index < 0) throw InternalError("No active configuration.");
 
@@ -282,6 +315,7 @@ namespace SDOPackage
     if (item < 0) throw InvalidParameter("No such name."); 
     
     value = new CORBA::Any(m_configurations[index].configuration_data[item].value);
+    */
     return value._retn();
   }
   
@@ -298,6 +332,7 @@ namespace SDOPackage
 						  const CORBA::Any& value)
     throw (InvalidParameter, NotAvailable, InternalError)
   {
+    /*
     if (name == "") throw InvalidParameter("Name is empty.");
     
     CORBA::Long index(getActiveConfigIndex());
@@ -309,6 +344,7 @@ namespace SDOPackage
     if (item < 0) throw InvalidParameter("No such name.");
     
     m_configurations[index].configuration_data[item].value = value;
+    */
     return true;
   }
   
@@ -329,8 +365,15 @@ namespace SDOPackage
 	Guard guard(m_config_mutex);
 
 	ConfigurationSetList_var config_sets;
-	config_sets = new ConfigurationSetList(m_configurations);
+	config_sets = new ConfigurationSetList((CORBA::ULong)0);
 	
+	std::vector<RTC::Properties*> cf(m_configsets.getConfigurationSets());
+	config_sets->length(cf.size());
+	for (CORBA::ULong i(0), len(cf.size()); i < len; ++i)
+	  {
+	    toConfigurationSet(config_sets[i], *(cf[i]));
+	  }
+
 	return config_sets._retn();
       }
     catch (...)
@@ -356,15 +399,17 @@ namespace SDOPackage
     if (id == "") throw InvalidParameter("ID is empty");
 
     Guard guard(m_config_mutex);
-    CORBA::Long index;
-    index = CORBA_SeqUtil::find(m_configurations,
-				config_id(id));
-    
-    if (index < 0) throw InvalidParameter("No such ConfigurationSet");
+
+    if (!m_configsets.haveConfig(id))
+      throw InvalidParameter("No such ConfigurationSet");
+
+    const RTC::Properties& configset(m_configsets.getConfigurationSet(id));
+
     try
       {
 	ConfigurationSet_var config;
-	config = new ConfigurationSet(m_configurations[index]);
+	config = new ConfigurationSet();
+	toConfigurationSet(config, configset);
 	return config._retn();
       }
     catch (...)
@@ -393,16 +438,9 @@ namespace SDOPackage
     
     try
       {
-	CORBA::Long index;
-	index = CORBA_SeqUtil::find(m_configurations, config_id(id));
-	if (index < 0)
-	  { // idに同一なものは無いのでリストの後ろに追加
-	    CORBA_SeqUtil::push_back(m_configurations, configuration_set);
-	  }
-	else
-	  { // 同一なIDがある場合上書き
-	    m_configurations[index] = configuration_set;
-	  }
+	RTC::Properties conf(id);
+	toProperties(conf, configuration_set);
+	return m_configsets.setConfigurationSetValues(id, conf);
       }
     catch (...)
       {
@@ -423,16 +461,16 @@ namespace SDOPackage
   Configuration_impl::get_active_configuration_set()
     throw (NotAvailable, InternalError)
   {
+    // activeなConfigurationSetは無い
+    if (!m_configsets.isActive()) throw NotAvailable();    
+    
     try
       {
 	Guard gurad(m_config_mutex);
-	CORBA::Long index(getActiveConfigIndex());
-	// activeなConfigurationSetは無い
-	if (index < 0) return new ConfigurationSet();
-
 	// activeなConfigurationSetを返す
 	ConfigurationSet_var config;
-	config = new ConfigurationSet(m_configurations[index]);
+	config = new ConfigurationSet();
+	toConfigurationSet(config, m_configsets.getActiveConfigurationSet());
 	return config._retn();
       }
     catch (...)
@@ -459,18 +497,10 @@ namespace SDOPackage
     try
       {
 	Guard gurad(m_config_mutex);
-	// 同じIDのConfigurationSetがあるか？
-	CORBA::Long index;
-	index = CORBA_SeqUtil::find(m_configurations,
-				    config_id(configuration_set.id));
-	if (index < 0)
-	  { // 新規IDなので後ろに追加
-	    CORBA_SeqUtil::push_back(m_configurations, configuration_set);
-	  }
-	else // 同一IDのConfigurationSetが存在：上書き
-	  { // 
-	    m_configurations[index] = configuration_set;
-	  }
+	const char* config_id(configuration_set.id);
+	RTC::Properties config(config_id);
+	toProperties(config, configuration_set);
+	return m_configsets.addConfigurationSet(config);
       }
     catch (...)
       {
@@ -498,29 +528,14 @@ namespace SDOPackage
     try
       {
 	Guard guard(m_config_mutex);
-
-	// id は存在するか？
-	CORBA::Long index;
-	index = CORBA_SeqUtil::find(m_configurations, config_id(id));
-	if (index < 0) throw InvalidParameter("No such id");
-
-	// active な ID と同じなら active ID を消去
-	if (m_activeConfId == id)
-	  {
-	    m_activeConfId == "";
-	  }
-	CORBA_SeqUtil::erase(m_configurations, index);
-
-	// configsetlist が変更された
-	m_activeConfIndex = -1;
-	return true;
+	return m_configsets.removeConfigurationSet(id);
       }
     catch (...)
       {
 	throw InternalError("Configuration::remove_configuration_set()");
 	return false;
       }
-    return true;
+    return false;
   }
   
 
@@ -538,23 +553,16 @@ namespace SDOPackage
     if (id == "")
       throw InvalidParameter("ID is empty.");
 
-    CORBA::Long index;
-    index = CORBA_SeqUtil::find(m_configurations,
-				config_id(id));
-    if (index < 0)
-      throw InvalidParameter("No ID found.");
-    
     try
       {
-	m_activeConfId = id;
-	m_activeConfIndex = index;
+	return m_configsets.activateConfigurationSet(id);
       }
     catch (...)
       {
 	throw InternalError("Configuration::activate_configuration_set()");
 	return false;
       }
-    return true;
+    return false;
   }
 
 
@@ -582,7 +590,6 @@ namespace SDOPackage
     CORBA::Long index;
     index =  CORBA_SeqUtil::find(m_serviceProfiles,
 				 service_id(id));
-    std::cout << "index: " << index << std::endl;
     if (index < 0) return ServiceProfile();
     return m_serviceProfiles[index];
   }
@@ -606,24 +613,6 @@ namespace SDOPackage
     RTC_Utils::UUID* uuid = uugen.generateUUID(2,0x01);
     
     return std::string(uuid->to_string()->c_str());
-  }
-
-
-  CORBA::Long Configuration_impl::getActiveConfigIndex()
-  {
-    // index が変わっていないならキャッシュしている番号を返す
-    if (m_activeConfIndex != -1) return m_activeConfIndex;
-
-    // IDがからなら、active な ConfigurationSet が無いことになる
-    if (m_activeConfId == "")
-      {
-	return -1;
-      }
-    CORBA::Long index;
-    index = CORBA_SeqUtil::find(m_configurations,
-				config_id(m_activeConfId.c_str()));
-
-    return index;
   }
 
 };
