@@ -2,7 +2,7 @@
 /*!
  * @file NVUtil.h
  * @brief NameValue and NVList utility functions
- * @date $Date: 2007-01-12 14:33:57 $
+ * @date $Date: 2007-04-23 04:54:32 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
  * Copyright (C) 2006
@@ -13,12 +13,15 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: NVUtil.h,v 1.5 2007-01-12 14:33:57 n-ando Exp $
+ * $Id: NVUtil.h,v 1.6 2007-04-23 04:54:32 n-ando Exp $
  *
  */
 
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.5  2007/01/12 14:33:57  n-ando
+ * The dump() function was added to dump NVList entries.
+ *
  * Revision 1.4  2007/01/06 17:55:35  n-ando
  * toProperties()'s argument was changed to const.
  * Some functions were added.
@@ -225,9 +228,9 @@ namespace NVUtil
    *
    * @endif
    */
-  void copy(SDOPackage::NVList& nv, const RTC::Properties& prop);
+  void copyFromProperties(SDOPackage::NVList& nv, const RTC::Properties& prop);
 
-
+  void copyToProperties(RTC::Properties& prop, const SDOPackage::NVList& nv);
   RTC::Properties toProperties(const SDOPackage::NVList& nv);
 
   /*!
@@ -319,6 +322,8 @@ namespace NVUtil
   void append(SDOPackage::NVList& dest, const SDOPackage::NVList& src);
 
   void dump(SDOPackage::NVList& nv);
+
+
 };
 
 #endif // NVUtil_h

@@ -2,7 +2,7 @@
 /*!
  * @file NVUtil.h
  * @brief NameValue and NVList utility functions
- * @date $Date: 2007-04-13 18:05:14 $
+ * @date $Date: 2007-04-23 04:54:28 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
  * Copyright (C) 2006
@@ -13,12 +13,15 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: NVUtil.cpp,v 1.7 2007-04-13 18:05:14 n-ando Exp $
+ * $Id: NVUtil.cpp,v 1.8 2007-04-23 04:54:28 n-ando Exp $
  *
  */
 
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.7  2007/04/13 18:05:14  n-ando
+ * Some changes of the logic accompanying change of the Properties class.
+ *
  * Revision 1.6  2007/01/21 09:51:06  n-ando
  * A trivial bug fix.
  *
@@ -84,7 +87,7 @@ namespace NVUtil
     return nv;
   }
     
-  void copy(SDOPackage::NVList& nv, const RTC::Properties& prop)
+  void copyFromProperties(SDOPackage::NVList& nv, const RTC::Properties& prop)
   {
     std::vector<std::string> keys;
     keys = prop.propertyNames();
@@ -98,6 +101,19 @@ namespace NVUtil
       }
   }
 
+
+  void copyToProperties(RTC::Properties& prop, const SDOPackage::NVList& nv)
+  {
+    for (CORBA::ULong i(0), len(nv.length()); i < len; ++i)
+      {
+	char* value;
+	if (nv[i].value >>= value)
+	  {
+	    const char* name(nv[i].name);
+	    prop[name] = value;
+	  };
+      }
+  }
 
   struct to_prop
   {
