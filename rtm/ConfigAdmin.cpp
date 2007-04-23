@@ -2,7 +2,7 @@
 /*!
  * @file ConfigAdmin.cpp
  * @brief Configuration Administration classes
- * @date $Date: 2007-04-23 04:51:16 $
+ * @date $Date: 2007-04-23 11:20:30 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
  * Copyright (C) 2007
@@ -12,12 +12,15 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: ConfigAdmin.cpp,v 1.1 2007-04-23 04:51:16 n-ando Exp $
+ * $Id: ConfigAdmin.cpp,v 1.2 2007-04-23 11:20:30 n-ando Exp $
  *
  */
 
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.1  2007/04/23 04:51:16  n-ando
+ * COnfiguration Admin class.
+ *
  */
 
 
@@ -198,6 +201,7 @@ namespace RTC
     if (!m_configsets.hasKey(config_id)) return false;
     m_activeId = config_id;
     m_active = true;
+    m_changed = true;
     return true;
   }
 
