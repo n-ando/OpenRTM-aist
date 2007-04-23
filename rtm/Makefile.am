@@ -2,9 +2,12 @@
 ##------------------------------------------------------------
 ## Makefile.am for libRTC
 ##
-## $Id: Makefile.am,v 1.15 2007-04-13 17:59:04 n-ando Exp $
+## $Id: Makefile.am,v 1.16 2007-04-23 04:50:22 n-ando Exp $
 ##
 ## $Log: not supported by cvs2svn $
+## Revision 1.15  2007/04/13 17:59:04  n-ando
+## Some .cpp files and .h files are added.
+##
 ## Revision 1.14  2007/01/29 07:24:35  n-ando
 ## Ld option -no-undefined for Windows DLLs was added.
 ##
@@ -78,44 +81,45 @@ lib_LTLIBRARIES = libRTC.la
 #	PortProfileHelper.cpp
 #	ObjectManager.cpp
 
-UTIL_SRC = \
-	NVUtil.cpp \
+UTIL_SRC =             \
+	NVUtil.cpp     \
 	Properties.cpp \
 	StringUtil.cpp \
 	RTCUtil.cpp
 
-MGR_SRC = \
-	CorbaNaming.cpp \
+MGR_SRC =                      \
+	CorbaNaming.cpp        \
 	CorbaObjectManager.cpp \
-	Factory.cpp \
-	ECFactory.cpp \
-	Manager.cpp \
-	ManagerConfig.cpp \
-	ModuleManager.cpp \
-	NamingManager.cpp \
-	NumberingPolicy.cpp \
+	Factory.cpp            \
+	ECFactory.cpp          \
+	Manager.cpp            \
+	ManagerConfig.cpp      \
+	ModuleManager.cpp      \
+	NamingManager.cpp      \
+	NumberingPolicy.cpp    \
 	Timer.cpp
 
-COMP_SRC = \
-	DataFlowComponentBase.cpp \
+COMP_SRC =                           \
+	DataFlowComponentBase.cpp    \
 	PeriodicExecutionContext.cpp \
-	ExtTrigExecutionContext.cpp \
-	PortAdmin.cpp \
-	RTObject.cpp \
-	SdoConfiguration.cpp \
+	ExtTrigExecutionContext.cpp  \
+	PortAdmin.cpp                \
+	RTObject.cpp                 \
+	ConfigAdmin.cpp              \
+	SdoConfiguration.cpp         \
 	SdoOrganization.cpp
 
-PORT_SRC = \
-	CorbaPort.cpp \
-	DataInPort.cpp \
-	DataOutPort.cpp \
-	InPortProvider.cpp \
-	OutPortBase.cpp \
-	OutPortProvider.cpp \
-	PortBase.cpp \
-	PublisherFactory.cpp \
-	PublisherFlush.cpp \
-	PublisherNew.cpp \
+PORT_SRC =                    \
+	CorbaPort.cpp         \
+	DataInPort.cpp        \
+	DataOutPort.cpp       \
+	InPortProvider.cpp    \
+	OutPortBase.cpp       \
+	OutPortProvider.cpp   \
+	PortBase.cpp          \
+	PublisherFactory.cpp  \
+	PublisherFlush.cpp    \
+	PublisherNew.cpp      \
 	PublisherPeriodic.cpp
 
 
