@@ -2,7 +2,7 @@
 /*!
  * @file ConfigAdmin.cpp
  * @brief Configuration Administration classes
- * @date $Date: 2007-04-23 11:20:30 $
+ * @date $Date: 2007-04-24 01:26:59 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
  * Copyright (C) 2007
@@ -12,12 +12,15 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: ConfigAdmin.cpp,v 1.2 2007-04-23 11:20:30 n-ando Exp $
+ * $Id: ConfigAdmin.cpp,v 1.3 2007-04-24 01:26:59 n-ando Exp $
  *
  */
 
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.2  2007/04/23 11:20:30  n-ando
+ * Bug fix.
+ *
  * Revision 1.1  2007/04/23 04:51:16  n-ando
  * COnfiguration Admin class.
  *
@@ -26,6 +29,8 @@
 
 #include <rtm/ConfigAdmin.h>
 #include <algorithm>
+#include <assert.h>
+
 namespace RTC
 {
   ConfigAdmin::ConfigAdmin(RTC::Properties& configsets)
@@ -131,20 +136,22 @@ namespace RTC
 
   const Properties& ConfigAdmin::getConfigurationSet(const char* config_id)
   {
-    return *(m_configsets.getNode(config_id));
+    Properties* p(m_configsets.getNode(config_id));
+    if (p == NULL) return m_emptyconf;
+    return *p;
   }
 
 
   bool
   ConfigAdmin::setConfigurationSetValues(const char* config_id,
-					 const RTC::Properties& configuration_set)
+					 const RTC::Properties& config_set)
   {
-    if (strcmp(configuration_set.getName(), config_id) != 0)
-      {
-	return false;
-      } 
-    if (!m_configsets.hasKey(config_id)) return false;
-    *(m_configsets.getNode(config_id)) << configuration_set;
+    if (strcmp(config_set.getName(), config_id) != 0) return false;
+    if (!m_configsets.hasKey(config_id))              return false;
+
+    Properties* p(m_configsets.getNode(config_id));
+    assert(p != NULL);
+    *p << config_set;
     
     m_changed = true;
     m_active = false;
@@ -154,21 +161,25 @@ namespace RTC
 
   const Properties& ConfigAdmin::getActiveConfigurationSet()
   {
-    return *(m_configsets.getNode(m_activeId));
+    Properties* p(m_configsets.getNode(m_activeId));
+    if (p == NULL) return m_emptyconf;
+    return *p;
   }
 
 
   bool ConfigAdmin::addConfigurationSet(const Properties& configset)
   {
-    if (m_configsets.hasKey(configset.getName()))
-      {
-	return false;
-      }
+    if (m_configsets.hasKey(configset.getName())) return false;
 
     std::string node(configset.getName());
-    m_configsets[node.c_str()] = "";
-    *(m_configsets.getNode(node.c_str())) << configset;
-    m_newConfig.push_back(configset.getName());
+
+    // Create node
+    m_configsets.createNode(node.c_str());
+
+    Properties* p(m_configsets.getNode(node.c_str()));
+    assert(p != NULL);
+    *p << configset;
+    m_newConfig.push_back(node);
     
     m_changed = true;
     m_active = false;
@@ -178,7 +189,7 @@ namespace RTC
 
   bool ConfigAdmin::removeConfigurationSet(const char* config_id)
   {
-    if (strcmp(config_id, "default") == 0) return false;
+    //    if (strcmp(config_id, "default") == 0) return false;
 
     std::vector<std::string>::iterator it;
     it = std::find(m_newConfig.begin(), m_newConfig.end(), config_id);
