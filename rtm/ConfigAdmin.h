@@ -2,7 +2,7 @@
 /*!
  * @file ConfigAdmin.h
  * @brief Configuration Administration classes
- * @date $Date: 2007-04-23 07:28:08 $
+ * @date $Date: 2007-04-24 01:27:22 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
  * Copyright (C) 2007
@@ -12,12 +12,15 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: ConfigAdmin.h,v 1.2 2007-04-23 07:28:08 n-ando Exp $
+ * $Id: ConfigAdmin.h,v 1.3 2007-04-24 01:27:22 n-ando Exp $
  *
  */
 
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.2  2007/04/23 07:28:08  n-ando
+ * Some functions were added.
+ *
  * Revision 1.1  2007/04/23 04:51:21  n-ando
  * COnfiguration Admin class.
  *
@@ -156,6 +159,7 @@ namespace RTC
     
     
     RTC::Properties& m_configsets;
+    RTC::Properties  m_emptyconf;
     std::vector<ConfigBase*> m_params;
     std::string m_activeId;
     bool m_active;
