@@ -2,7 +2,7 @@
 /*!
  * @file CORBA_Util.h
  * @brief CORBA utility template classes
- * @date $Date: 2006-10-30 08:15:21 $
+ * @date $Date: 2007-04-26 15:24:41 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
  * Copyright (C) 2006
@@ -12,12 +12,15 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: CORBA_SeqEx.h,v 1.2 2006-10-30 08:15:21 n-ando Exp $
+ * $Id: CORBA_SeqEx.h,v 1.3 2007-04-26 15:24:41 n-ando Exp $
  *
  */
 
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.2  2006/10/30 08:15:21  n-ando
+ * CVS's information tag was revised.
+ *
  * Revision 1.1  2006/10/27 09:07:00  n-ando
  * Util.h was moved to CORBA_SeqEx.h.
  *
@@ -36,11 +39,11 @@
 #ifndef CORBA_Util_h
 #define CORBA_Util_h
 
-
+#include <rtm/RTC.h>
 #include <ace/Guard_T.h>
 #include <ace/Thread_Mutex.h>
 #include <ace/Recursive_Thread_Mutex.h>
-#include <rtm/RTC.h>
+
 
 typedef ACE_Guard<ACE_Thread_Mutex> Guard;
 typedef ACE_Read_Guard<ACE_Thread_Mutex> Read_Guard;
