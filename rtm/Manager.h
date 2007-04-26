@@ -2,7 +2,7 @@
 /*!
  * @file Manager.h
  * @brief RTComponent manager class
- * @date $Date: 2007-04-23 04:53:29 $
+ * @date $Date: 2007-04-26 15:36:54 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
  * Copyright (C) 2006
@@ -12,12 +12,15 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: Manager.h,v 1.8 2007-04-23 04:53:29 n-ando Exp $
+ * $Id: Manager.h,v 1.9 2007-04-26 15:36:54 n-ando Exp $
  *
  */
 
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.8  2007/04/23 04:53:29  n-ando
+ * Component instantiation processes were divided into some functions.
+ *
  * Revision 1.7  2007/04/17 09:22:08  n-ando
  * Namespace of Timer class was changed from ::Timer to RTC::Timer.
  *
@@ -48,6 +51,8 @@
 
 #ifndef Manager_h
 #define Manager_h
+
+#include <rtm/RTC.h>
 
 #include <iostream>
 #include <string>
@@ -798,6 +803,7 @@ namespace RTC
 			  ECFactoryBase,
 			  ECFactoryPredicate> ECFactoryManager;
     ECFactoryManager m_ecfactory;
+    std::vector<ExecutionContextBase*> m_ecs;
 
 
     // ファクトリ名をリストアップするためのファンクタ

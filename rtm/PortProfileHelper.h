@@ -2,7 +2,7 @@
 /*!
  * @file PortProfileHelper.h
  * @brief RTC's PortProfile helper class
- * @date $Date: 2006-10-17 10:23:00 $
+ * @date $Date: 2007-04-26 15:32:25 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
  * Copyright (C) 2006
@@ -12,29 +12,32 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: PortProfileHelper.h,v 1.1 2006-10-17 10:23:00 n-ando Exp $
+ * $Id: PortProfileHelper.h,v 1.2 2007-04-26 15:32:25 n-ando Exp $
  *
  */
 
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.1  2006/10/17 10:23:00  n-ando
+ * The first commitment.
+ *
  */
 
 #ifndef PortProfileHelper_h
 #define PortProfilehelper_h
 
 
+// RTC header include
+#include "rtm/RTC.h"
+#include "rtm/Util.h"
+
 // ACE includes
 #include <ace/Thread_Mutex.h>
-
 
 // CORBA header include
 #include "rtm/idl/RTCSkel.h"
 
 
-// RTC header include
-#include "rtm/RTC.h"
-#include "rtm/Util.h"
 
 
 namespace RTC

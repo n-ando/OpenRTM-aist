@@ -2,7 +2,7 @@
 /*!
  * @file RingBuffer.h
  * @brief Defautl Buffer class
- * @date $Date: 2007-01-06 18:02:49 $
+ * @date $Date: 2007-04-26 15:32:56 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
  * Copyright (C) 2006
@@ -13,19 +13,23 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: RingBuffer.h,v 1.4 2007-01-06 18:02:49 n-ando Exp $
+ * $Id: RingBuffer.h,v 1.5 2007-04-26 15:32:56 n-ando Exp $
  *
  */
 
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.4  2007/01/06 18:02:49  n-ando
+ * The RingBuffer has been completely re-implemented.
+ *
  *
  */
 
 #ifndef RingBuffer_h
 #define RingBuffer_h
 
-#include <vector>
+#include <rtm/RTC.h>
+
 #include <algorithm>
 //#include <ace/Synch.h>
 #include <rtm/BufferBase.h>
