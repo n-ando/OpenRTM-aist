@@ -2,7 +2,7 @@
 /*!
  * @file SdoConfiguration.h
  * @brief RT component base class
- * @date $Date: 2007-04-23 04:58:21 $
+ * @date $Date: 2007-04-26 15:33:21 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
  * Copyright (C) 2006
@@ -12,12 +12,15 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: SdoConfiguration.h,v 1.7 2007-04-23 04:58:21 n-ando Exp $
+ * $Id: SdoConfiguration.h,v 1.8 2007-04-26 15:33:21 n-ando Exp $
  *
  */
 
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.7  2007/04/23 04:58:21  n-ando
+ * SDO Configuration was modified to use Configuration admin class.
+ *
  * Revision 1.6  2007/01/24 16:03:58  n-ando
  * The ctor. was changed.
  *
@@ -42,11 +45,11 @@
 #ifndef SdoConfiguration_h
 #define SdoConfiguration_h
 
-#include <ace/Guard_T.h>
-#include <ace/Thread_Mutex.h>
-
 // CORBA header include
 #include <rtm/RTC.h>
+
+#include <ace/Guard_T.h>
+#include <ace/Thread_Mutex.h>
 
 // local includes
 #include <rtm/idl/SDOPackageSkel.h>

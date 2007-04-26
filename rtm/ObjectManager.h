@@ -2,7 +2,7 @@
 /*!
  * @file ObjectManager.h
  * @brief Object management class
- * @date $Date: 2007-04-13 18:11:26 $
+ * @date $Date: 2007-04-26 15:30:32 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
  * Copyright (C) 2003-2007
@@ -12,12 +12,15 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: ObjectManager.h,v 1.4 2007-04-13 18:11:26 n-ando Exp $
+ * $Id: ObjectManager.h,v 1.5 2007-04-26 15:30:32 n-ando Exp $
  *
  */
 
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.4  2007/04/13 18:11:26  n-ando
+ * Now return values are used for error propagation instead of exception.
+ *
  * Revision 1.3  2006/11/06 01:42:22  n-ando
  * ObjectManager's for_each has been modified to return Predicate object.
  *
@@ -32,6 +35,8 @@
 
 #ifndef ObjectManager_h
 #define ObjectManager_h
+
+#include <RTC.h>
 
 #include <vector>
 #include <string>

@@ -2,7 +2,7 @@
 /*!
  * @file Timer.h
  * @brief Timer class
- * @date $Date: 2007-04-17 09:21:57 $
+ * @date $Date: 2007-04-26 15:34:05 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
  * Copyright (C) 2007
@@ -12,13 +12,14 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: Timer.h,v 1.2 2007-04-17 09:21:57 n-ando Exp $
+ * $Id: Timer.h,v 1.3 2007-04-26 15:34:05 n-ando Exp $
  *
  */
 
 #ifndef Timer_h
 #define Timer_h
 
+#include <rtm/RTC.h>
 #include <rtm/TimeValue.h>
 #include <rtm/Listener.h>
 #include <ace/Synch.h>

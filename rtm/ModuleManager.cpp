@@ -2,7 +2,7 @@
 /*!
  * @file ModulesManager.cpp
  * @brief Loadable modules manager class
- * @date $Date: 2007-04-13 18:02:58 $
+ * @date $Date: 2007-04-26 15:30:00 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
  * Copyright (C) 2006
@@ -12,12 +12,15 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: ModuleManager.cpp,v 1.4 2007-04-13 18:02:58 n-ando Exp $
+ * $Id: ModuleManager.cpp,v 1.5 2007-04-26 15:30:00 n-ando Exp $
  *
  */
 
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.4  2007/04/13 18:02:58  n-ando
+ * Some configuration properties handling processes were changed.
+ *
  * Revision 1.3  2006/10/25 17:29:27  n-ando
  * Bug fix for configuration and load path strings including head blank.
  *
@@ -29,6 +32,8 @@
  *
  *
  */
+
+#include <rtm/RTC.h>
 
 #include <fstream>
 #include <algorithm>

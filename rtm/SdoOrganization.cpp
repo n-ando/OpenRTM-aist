@@ -2,7 +2,7 @@
 /*!
  * @file SdoOrganization.cpp
  * @brief SDO Organization class
- * @date $Date: 2006-11-27 10:00:56 $
+ * @date $Date: 2007-04-26 15:33:28 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
  * Copyright (C) 2006
@@ -12,12 +12,15 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: SdoOrganization.cpp,v 1.6 2006-11-27 10:00:56 n-ando Exp $
+ * $Id: SdoOrganization.cpp,v 1.7 2007-04-26 15:33:28 n-ando Exp $
  *
  */
 
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.6  2006/11/27 10:00:56  n-ando
+ * Some trivial fixes.
+ *
  * Revision 1.5  2006/10/30 08:10:47  n-ando
  * CORBA sequence operations were replaced by CORBA_SeqUtil functions.
  *
@@ -29,9 +32,9 @@
  *
  */
 
+#include <rtm/SdoOrganization.h>
 #include <ace/ACE.h>
 #include <ace/UUID.h> 
-#include <rtm/SdoOrganization.h>
 #include <rtm/CORBA_SeqUtil.h>
 
 namespace SDOPackage

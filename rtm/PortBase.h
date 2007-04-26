@@ -3,7 +3,7 @@
 /*!
  * @file PortBase.h
  * @brief RTC's Port base class
- * @date $Date: 2007-04-13 15:53:03 $
+ * @date $Date: 2007-04-26 15:31:34 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
  * Copyright (C) 2006
@@ -13,12 +13,15 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: PortBase.h,v 1.9 2007-04-13 15:53:03 n-ando Exp $
+ * $Id: PortBase.h,v 1.10 2007-04-26 15:31:34 n-ando Exp $
  *
  */
 
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.9  2007/04/13 15:53:03  n-ando
+ * RTC::OK was changed to RTC::RTC_OK.
+ *
  * Revision 1.8  2007/02/04 17:00:59  n-ando
  * Object reference variable was added.
  *
@@ -50,6 +53,8 @@
 
 #ifndef PortBase_h
 #define PortBase_h
+
+#include <rtm/RTC.h>
 
 #include <string>
 #include <vector>

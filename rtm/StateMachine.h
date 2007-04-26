@@ -2,7 +2,7 @@
 /*!
  * @file StateMachine.h
  * @brief State machine template class
- * @date $Date: 2007-01-09 15:26:53 $
+ * @date $Date: 2007-04-26 15:33:39 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
  * Copyright (C) 2006
@@ -12,12 +12,16 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: StateMachine.h,v 1.2 2007-01-09 15:26:53 n-ando Exp $
+ * $Id: StateMachine.h,v 1.3 2007-04-26 15:33:39 n-ando Exp $
  *
  */
 
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.2  2007/01/09 15:26:53  n-ando
+ * Now StateMachine does not need NOP function.
+ * All null function pointer is checked and skipped.
+ *
  * Revision 1.1  2006/10/26 08:55:53  n-ando
  * The first commitment.
  *
@@ -26,6 +30,8 @@
 
 #ifndef StateMachine_h
 #define StateMachine_h
+
+#include <rtm/RTC.h>
 
 #include <ace/Guard_T.h>
 #include <ace/Thread_Mutex.h>

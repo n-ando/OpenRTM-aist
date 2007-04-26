@@ -2,7 +2,7 @@
 /*!
  * @file SystemLogger.h
  * @brief RT component logger class
- * @date $Date: 2007-04-13 16:01:32 $
+ * @date $Date: 2007-04-26 15:33:44 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
  * Copyright (C) 2003-2006
@@ -12,12 +12,15 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: SystemLogger.h,v 1.4 2007-04-13 16:01:32 n-ando Exp $
+ * $Id: SystemLogger.h,v 1.5 2007-04-26 15:33:44 n-ando Exp $
  *
  */
 
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.4  2007/04/13 16:01:32  n-ando
+ * Timing of mutex acquisition was changed for buffer synchronization bugs.
+ *
  * Revision 1.3  2007/01/21 10:37:55  n-ando
  * Dtor for sync_callback and basic_ummybuf classes was defined.
  * A trivial fix;
@@ -41,6 +44,8 @@
 #ifndef SystemLogger_h
 #define SystemLogger_h
 
+#include <rtm/RTC.h>
+
 #include <iostream>
 #include <fstream>
 #include <stdio.h>
@@ -51,8 +56,6 @@
 
 // ACE
 #include <ace/Mutex.h>
-
-#include "rtm/config_rtc.h"
 
 #ifdef RTM_GCC2
 #define NO_LOGGING
