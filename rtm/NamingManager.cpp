@@ -2,7 +2,7 @@
 /*!
  * @file NamingManager.h
  * @brief naming Service helper class
- * @date $Date: 2007-04-13 18:08:38 $
+ * @date $Date: 2007-04-26 15:37:43 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
  * Copyright (C) 2006
@@ -12,12 +12,15 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: NamingManager.cpp,v 1.3 2007-04-13 18:08:38 n-ando Exp $
+ * $Id: NamingManager.cpp,v 1.4 2007-04-26 15:37:43 n-ando Exp $
  *
  */
 
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.3  2007/04/13 18:08:38  n-ando
+ * Some changes for NameServers rebinding and objects rebinding.
+ *
  * Revision 1.2  2007/01/14 19:43:28  n-ando
  * Debugging messages to stdout were deleted.
  *
@@ -150,12 +153,26 @@ namespace RTC
   void NamingManager::unbindAll()
   {
     RTC_TRACE(("NamingManager::unbindAll(): %d names.", m_compNames.size()));
-    ACE_Guard<ACE_Thread_Mutex> guard(m_namesMutex);
+    ACE_Guard<ACE_Thread_Mutex> guard(m_compNamesMutex);
     for (int i(0), len(m_compNames.size()); i < len; ++i)
       {
 	unbindObject(m_compNames[i]->name.c_str());
       }
   }
+
+
+  std::vector<RTObject_impl*> NamingManager::getObjects()
+  {
+    std::vector<RTObject_impl*> comps;
+    ACE_Guard<ACE_Thread_Mutex> guard(m_compNamesMutex);
+
+    for (int i(0), len(m_compNames.size()); i < len; ++i)
+      {
+	comps.push_back(const_cast<RTObject_impl*>(m_compNames[i]->rtobj));
+      }
+    return comps;
+  }
+    
 
 
   //============================================================

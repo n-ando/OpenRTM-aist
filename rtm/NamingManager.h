@@ -2,7 +2,7 @@
 /*!
  * @file NamingManager.h
  * @brief naming Service helper class
- * @date $Date: 2007-04-13 18:08:42 $
+ * @date $Date: 2007-04-26 15:37:48 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
  * Copyright (C) 2006
@@ -12,18 +12,23 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: NamingManager.h,v 1.2 2007-04-13 18:08:42 n-ando Exp $
+ * $Id: NamingManager.h,v 1.3 2007-04-26 15:37:48 n-ando Exp $
  *
  */
 
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.2  2007/04/13 18:08:42  n-ando
+ * Some changes for NameServers rebinding and objects rebinding.
+ *
  * Revision 1.1  2006/11/04 21:11:44  n-ando
  * NamingManager was introduced to support multiple name server.
  *
  */
 #ifndef NamingManager_h
 #define NamingManager_h
+
+#include <rtm/RTC.h>
 
 #include <ace/Task.h>
 #include <rtm/CorbaNaming.h>
@@ -79,6 +84,7 @@ namespace RTC
     void update();
     void unbindObject(const char* name);
     void unbindAll();
+    std::vector<RTObject_impl*> getObjects();
 
   protected:
     NamingBase* createNamingObj(const char* method, const char* name_server);
@@ -112,6 +118,7 @@ namespace RTC
       const RTObject_impl* rtobj;
     };
     std::vector<Comps*> m_compNames;
+    ACE_Thread_Mutex m_compNamesMutex;
 
     Manager* m_manager;
     MedLogbuf m_MedLogbuf;
