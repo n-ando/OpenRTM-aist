@@ -2,7 +2,7 @@
 /*!
  * @file PortBase.h
  * @brief RTC's Port base class
- * @date $Date: 2007-04-13 15:52:57 $
+ * @date $Date: 2007-04-26 15:38:53 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
  * Copyright (C) 2006
@@ -12,12 +12,15 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: PortBase.cpp,v 1.8 2007-04-13 15:52:57 n-ando Exp $
+ * $Id: PortBase.cpp,v 1.9 2007-04-26 15:38:53 n-ando Exp $
  *
  */
 
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.8  2007/04/13 15:52:57  n-ando
+ * RTC::OK was changed to RTC::RTC_OK.
+ *
  * Revision 1.7  2007/02/04 17:00:22  n-ando
  * The ubsubscribeInterfaces is calle for disconnection.
  *
@@ -250,9 +253,11 @@ namespace RTC
       }
     CORBA::Long index;
     index = findConnProfileIndex(connector_id);
+
     ConnectorProfile prof(m_profile.connector_profiles[index]);
 
     ReturnCode_t retval;
+    unsubscribeInterfaces(prof);
     retval = disconnectNext(prof);
 
     CORBA_SeqUtil::erase(m_profile.connector_profiles, index);
