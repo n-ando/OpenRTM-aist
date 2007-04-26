@@ -2,7 +2,7 @@
 /*!
  * @file Manager.h
  * @brief RTComponent manager class
- * @date $Date: 2007-04-23 04:53:15 $
+ * @date $Date: 2007-04-26 15:36:07 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
  * Copyright (C) 2003-2005
@@ -12,12 +12,15 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: Manager.cpp,v 1.9 2007-04-23 04:53:15 n-ando Exp $
+ * $Id: Manager.cpp,v 1.10 2007-04-26 15:36:07 n-ando Exp $
  *
  */
 
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.9  2007/04/23 04:53:15  n-ando
+ * Component instantiation processes were divided into some functions.
+ *
  * Revision 1.8  2007/04/17 09:22:13  n-ando
  * Namespace of Timer class was changed from ::Timer to RTC::Timer.
  *
@@ -182,6 +185,7 @@ namespace RTC
   void Manager::shutdown()
   {
     RTC_TRACE(("Manager::shutdown()"));
+    shutdownComponents();
     shutdownNaming();
     shutdownORB();
     shutdownManager();
@@ -525,6 +529,7 @@ namespace RTC
 	exec_cxt = m_ecfactory.find(ectype)->create();
       }
     exec_cxt->add(rtobj);
+    m_ecs.push_back(exec_cxt);
     return true;
   }
 
@@ -643,6 +648,11 @@ namespace RTC
     
     m_module = new ModuleManager(m_config);
     m_terminator = new Terminator(this);
+    
+    {
+      ACE_Guard<ACE_Thread_Mutex> guard(m_terminate.mutex);
+      m_terminate.waiting = 0;
+    }
     
     if (toBool(m_config["timer.enable"], "YES", "NO", true))
       {
@@ -823,6 +833,7 @@ namespace RTC
     RTC_TRACE(("Manager::shutdownORB()"));
     while (m_pORB->work_pending())
       {
+	RTC_PARANOID(("Pending work still exists."));
 	if (m_pORB->work_pending())
 	  m_pORB->perform_work();
       }
@@ -832,9 +843,10 @@ namespace RTC
       {
 	try
 	  {
-	    m_pPOAManager->deactivate(true, true);
+	    if (!CORBA::is_nil(m_pPOAManager))
+	      m_pPOAManager->deactivate(false, true);
 	    RTC_DEBUG(("POA Manager was deactivated."));
-	    m_pPOA->destroy(true, true);
+	    m_pPOA->destroy(false, true);
 	    m_pPOA = PortableServer::POA::_nil();
 	    RTC_DEBUG(("POA was destroid."));
 	  }
@@ -854,7 +866,7 @@ namespace RTC
 	 {
 	   m_pORB->shutdown(true);
 	   RTC_DEBUG(("ORB was shutdown."));
-	   m_pORB->destroy();
+    //     m_pORB->destroy();
 	   RTC_DEBUG(("ORB was destroied."));
 	   m_pORB = CORBA::ORB::_nil();
 	 }
@@ -967,6 +979,29 @@ namespace RTC
   void Manager::shutdownComponents()
   {
     RTC_TRACE(("Manager::shutdownComponents()"));
+    std::vector<RTObject_impl*> comps;
+    comps = m_namingManager->getObjects();
+    for (int i(0), len(comps.size()); i < len; ++i)
+      {
+	try
+	  {
+	    comps[i]->exit();
+	  }
+	catch (...)
+	  {
+	    ;
+	  }
+      }
+    for (CORBA::ULong i(0), len(m_ecs.size()); i < len; ++i)
+      {
+	try{
+	  m_pPOA->deactivate_object(*m_pPOA->servant_to_id(m_ecs[i]));
+	}
+	catch (...)
+	  {
+	    ;
+	  }
+      }
   }
 
   void Manager::cleanupComponent(RtcBase* comp)
