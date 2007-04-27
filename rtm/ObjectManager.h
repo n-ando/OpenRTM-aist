@@ -2,7 +2,7 @@
 /*!
  * @file ObjectManager.h
  * @brief Object management class
- * @date $Date: 2007-04-26 15:30:32 $
+ * @date $Date: 2007-04-27 03:27:25 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
  * Copyright (C) 2003-2007
@@ -12,12 +12,17 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: ObjectManager.h,v 1.5 2007-04-26 15:30:32 n-ando Exp $
+ * $Id: ObjectManager.h,v 1.6 2007-04-27 03:27:25 n-ando Exp $
  *
  */
 
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.5  2007/04/26 15:30:32  n-ando
+ * The header include order was modified to define _REENTRANT before
+ * including ace/config-lite.h in Linux systems.
+ * In ace 5.4.7 or later, _REENTRANT flag should be defined explicitly.
+ *
  * Revision 1.4  2007/04/13 18:11:26  n-ando
  * Now return values are used for error propagation instead of exception.
  *
@@ -36,7 +41,7 @@
 #ifndef ObjectManager_h
 #define ObjectManager_h
 
-#include <RTC.h>
+#include <rtm/RTC.h>
 
 #include <vector>
 #include <string>
