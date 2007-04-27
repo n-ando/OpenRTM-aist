@@ -2,7 +2,7 @@
 /*!
  * @file RTObject.cpp
  * @brief RT component base class
- * @date $Date: 2007-04-23 04:57:40 $
+ * @date $Date: 2007-04-27 07:51:06 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
  * Copyright (C) 2006
@@ -12,12 +12,16 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: RTObject.cpp,v 1.7 2007-04-23 04:57:40 n-ando Exp $
+ * $Id: RTObject.cpp,v 1.8 2007-04-27 07:51:06 n-ando Exp $
  *
  */
 
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.7  2007/04/23 04:57:40  n-ando
+ * Finalization processed was modified.
+ * Configuration admin class was introduced.
+ *
  * Revision 1.6  2007/04/13 15:55:17  n-ando
  * RTObject interface operations in RTC.idl were changed.
  * - attach_executioncontext()
@@ -988,7 +992,7 @@ namespace RTC
   
   std::vector<std::string> RTObject_impl::getNamingNames()
   {
-    return split(m_properties["naming_names"], ",");
+    return split(m_properties["naming.names"], ",");
   }
   
   
