@@ -2,7 +2,7 @@
 /*!
  * @file Manager.h
  * @brief RTComponent manager class
- * @date $Date: 2007-04-26 15:36:07 $
+ * @date $Date: 2007-04-27 06:13:12 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
  * Copyright (C) 2003-2005
@@ -12,12 +12,16 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: Manager.cpp,v 1.10 2007-04-26 15:36:07 n-ando Exp $
+ * $Id: Manager.cpp,v 1.11 2007-04-27 06:13:12 n-ando Exp $
  *
  */
 
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.10  2007/04/26 15:36:07  n-ando
+ * The components' and ExecutionContexts' shutdown process was added.
+ * The manager's shutdown process was modified.
+ *
  * Revision 1.9  2007/04/23 04:53:15  n-ando
  * Component instantiation processes were divided into some functions.
  *
@@ -900,10 +904,10 @@ namespace RTC
     m_namingManager = new NamingManager(this);
 
     // If NameService is disabled, return immediately
-    if (!toBool(m_config["name_svc.enable"], "YES", "NO", true)) return true;
+    if (!toBool(m_config["naming.enable"], "YES", "NO", true)) return true;
 
     // NameServer registration for each method and servers
-    std::vector<std::string> meth(split(m_config["name_svc.type"], ","));
+    std::vector<std::string> meth(split(m_config["naming.type"], ","));
 
     for (int i(0), len_i(meth.size()); i < len_i; ++i)
       {
@@ -921,10 +925,10 @@ namespace RTC
       }
 
     // NamingManager Timer update initialization
-    if (toBool(m_config["name_svc.update.enable"], "YES", "NO", true))
+    if (toBool(m_config["naming.update.enable"], "YES", "NO", true))
       {
 	TimeValue tm(10, 0); // default interval = 10sec for safty
-	std::string intr(m_config["name_svc.update.interval"]);
+	std::string intr(m_config["naming.update.interval"]);
 	if (!intr.empty())
 	  {
 	    tm = atof(intr.c_str());
@@ -1049,14 +1053,14 @@ namespace RTC
     std::string naming_formats;
     Properties& comp_prop(comp->getProperties());
     
-    naming_formats += m_config["naming_formats"];
-    naming_formats += ", " + comp_prop["naming_formats"];
+    naming_formats += m_config["naming.formats"];
+    naming_formats += ", " + comp_prop["naming.formats"];
     naming_formats = flatten(unique_sv(split(naming_formats, ",")));
 
     std::string naming_names;
     naming_names = formatString(naming_formats.c_str(), comp->getProperties());
-    comp->getProperties()["naming_formats"] = naming_formats;
-    comp->getProperties()["naming_names"] = naming_names;
+    comp->getProperties()["naming.formats"] = naming_formats;
+    comp->getProperties()["naming.names"] = naming_names;
   }
 
 

@@ -2,7 +2,7 @@
 #
 # @file run.sh
 # @brief SimpleIO example startup script
-# @date $Date: 2007-04-13 15:01:01 $
+# @date $Date: 2007-04-27 06:12:53 $
 #
 # Copyright (c) 2003-2007 Noriaki Ando <n-ando@aist.go.jp>
 #          Task-intelligence Research Group,
@@ -10,7 +10,7 @@
 #          National Institute of Industrial Science (AIST), Japan
 #          All rights reserved.
 #
-# $Id: run.sh,v 1.1 2007-04-13 15:01:01 n-ando Exp $
+# $Id: run.sh,v 1.2 2007-04-27 06:12:53 n-ando Exp $
 #
 
 nsport='9876'
@@ -39,7 +39,7 @@ fi
 ../../utils/rtm-naming/rtm-naming $nsport
 
 echo 'corba.nameservers: '$hostname':'$nsport > ./rtc.conf
-echo 'naming_formats: %n.rtc' >> ./rtc.conf
+echo 'naming.formats: %n.rtc' >> ./rtc.conf
 echo 'logger.log_level: TRACE' >> ./rtc.conf
 echo 'exec_cxt.periodic.type: ExtTrigExecutionContext' >> ./rtc.conf
 echo 'exec_cxt.periodic.rate: 1000' >> ./rtc.conf
