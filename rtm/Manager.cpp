@@ -2,7 +2,7 @@
 /*!
  * @file Manager.h
  * @brief RTComponent manager class
- * @date $Date: 2007-04-27 06:13:12 $
+ * @date $Date: 2007-04-27 07:50:25 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
  * Copyright (C) 2003-2005
@@ -12,12 +12,15 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: Manager.cpp,v 1.11 2007-04-27 06:13:12 n-ando Exp $
+ * $Id: Manager.cpp,v 1.12 2007-04-27 07:50:25 n-ando Exp $
  *
  */
 
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.11  2007/04/27 06:13:12  n-ando
+ * Configuration: naming_format to naming.format
+ *
  * Revision 1.10  2007/04/26 15:36:07  n-ando
  * The components' and ExecutionContexts' shutdown process was added.
  * The manager's shutdown process was modified.
@@ -990,6 +993,9 @@ namespace RTC
 	try
 	  {
 	    comps[i]->exit();
+	    Properties p(comps[i]->getInstanceName());
+	    p << comps[i]->getProperties();
+	    rtcout.level(LogStream::RTL_PARANOID) << p;
 	  }
 	catch (...)
 	  {
