@@ -2,7 +2,7 @@
 /*!
  * @file CorbaNaming.cpp
  * @brief CORBA naming service helper class
- * @date $Date: 2007-04-23 04:49:45 $
+ * @date $Date: 2007-04-27 07:48:13 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
  * Copyright (C) 2006
@@ -13,12 +13,15 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: CorbaNaming.cpp,v 1.5 2007-04-23 04:49:45 n-ando Exp $
+ * $Id: CorbaNaming.cpp,v 1.6 2007-04-27 07:48:13 n-ando Exp $
  *
  */
 
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.5  2007/04/23 04:49:45  n-ando
+ * Trivial fix.
+ *
  * Revision 1.4  2007/04/17 09:22:21  n-ando
  * Namespace of Timer class was changed from ::Timer to RTC::Timer.
  *
@@ -606,7 +609,7 @@ namespace RTC
       {
 	std::string::size_type pos;
 	pos = name_comps[i].find_last_of(".");
-	if (pos != 0)
+	if (pos != name_comps[i].npos)
 	  {
 	    name[i].id   = 
 	      CORBA::string_dup(name_comps[i].substr(0, pos).c_str());
