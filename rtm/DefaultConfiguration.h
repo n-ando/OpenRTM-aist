@@ -2,7 +2,7 @@
 /*!
  * @file DefaultConfiguration.h
  * @brief RTC manager default configuration
- * @date $Date: 2007-04-13 18:16:47 $
+ * @date $Date: 2007-04-27 06:13:27 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
  * Copyright (C) 2006
@@ -12,12 +12,15 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: DefaultConfiguration.h,v 1.4 2007-04-13 18:16:47 n-ando Exp $
+ * $Id: DefaultConfiguration.h,v 1.5 2007-04-27 06:13:27 n-ando Exp $
  *
  */
 
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.4  2007/04/13 18:16:47  n-ando
+ * New default configuration values are added.
+ *
  * Revision 1.3  2006/12/02 18:37:06  n-ando
  * Default configuration parameters were changed.
  *
@@ -51,10 +54,11 @@ static const char* default_config[] =
     "logger.master_logger",   "",
     "module.conf_path",       "",
     "module.load_path",       "",
-    "name_svc.enable",        "YES",
-    "name_svc.type",          "corba",
-    "name_svc.update.enable", "YES",
-    "name_svc.update.interval","10.0",
+    "naming.enable",          "YES",
+    "naming.type",            "corba",
+    "naming.formats",         "%h.host/%n.rtc",
+    "naming.update.enable",   "YES",
+    "naming.update.interval", "10.0",
     "timer.enable",           "YES",
     "timer.tick",             "0.1",
     "corba.args",             "",
