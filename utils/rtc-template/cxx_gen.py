@@ -3,7 +3,7 @@
 #
 #  @file cxx_gen.py
 #  @brief rtc-template C++ source code generator class
-#  @date $Date: 2007-04-23 01:41:16 $
+#  @date $Date: 2007-05-29 01:44:29 $
 #  @author Noriaki Ando <n-ando@aist.go.jp>
 # 
 #  Copyright (C) 2004-2007
@@ -13,11 +13,14 @@
 #          Advanced Industrial Science and Technology (AIST), Japan
 #      All rights reserved.
 # 
-#  $Id: cxx_gen.py,v 1.7 2007-04-23 01:41:16 n-ando Exp $
+#  $Id: cxx_gen.py,v 1.8 2007-05-29 01:44:29 n-ando Exp $
 # 
 
 #
 #  $Log: not supported by cvs2svn $
+#  Revision 1.7  2007/04/23 01:41:16  n-ando
+#  New option "--config" and configuration template code were added.
+#
 #  Revision 1.6  2007/04/13 15:05:50  n-ando
 #  Now RTC::OK becomes RTC::RTC_OK in RTC.idl.
 #
@@ -474,7 +477,7 @@ clean: clean_objs clean_skelstub
 	rm -f *~
 
 clean_objs:
-	rm -f $(OBJS) [module.name].so [module.name]Comp
+	rm -f $(OBJS) [module.name]Comp.o [module.name].so [module.name]Comp
 
 clean_skelstub:
 	rm -f *[skel_suffix].h *[skel_suffix].cpp
