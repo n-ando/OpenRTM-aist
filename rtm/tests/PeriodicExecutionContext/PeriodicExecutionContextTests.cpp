@@ -2,15 +2,18 @@
 /*!
  * @file   PeriodicExecutionContextTests.cpp
  * @brief  PeriodicExecutionContext test class
- * @date   $Date: 2007-01-21 13:07:20 $
+ * @date   $Date: 2007-04-13 15:04:39 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
- * $Id: PeriodicExecutionContextTests.cpp,v 1.1 2007-01-21 13:07:20 n-ando Exp $
+ * $Id: PeriodicExecutionContextTests.cpp,v 1.2 2007-04-13 15:04:39 n-ando Exp $
  *
  */
 
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.1  2007/01/21 13:07:20  n-ando
+ * *** empty log message ***
+ *
  *
  */
 
@@ -59,15 +62,15 @@ namespace PeriodicExecutionContext
     
     virtual ReturnCode_t initialize()
     {
-      return RTC::OK;
+      return RTC::RTC_OK;
     }
     virtual ReturnCode_t finalize()
     {
-      return RTC::OK;
+      return RTC::RTC_OK;
     }
     virtual ReturnCode_t exit()
     {
-      return RTC::OK;
+      return RTC::RTC_OK;
     }
     virtual CORBA::Boolean is_alive()
     {
@@ -106,47 +109,47 @@ namespace PeriodicExecutionContext
     virtual ReturnCode_t on_initialize()
     {
       std::cout << "on_initialize()" << std::endl;
-      return RTC::OK;
+      return RTC::RTC_OK;
     }
     virtual ReturnCode_t on_finalize()
     {
       std::cout << "on_finalize()" << std::endl;
-      return RTC::OK;
+      return RTC::RTC_OK;
     }
     virtual ReturnCode_t on_startup(UniqueId ec_id)
     {
       std::cout << "on_startup()" << std::endl;
-      return RTC::OK;
+      return RTC::RTC_OK;
     }
     virtual ReturnCode_t on_shutdown(UniqueId ec_id)
     {
       std::cout << "on_shutdown()" << std::endl;
-      return RTC::OK;
+      return RTC::RTC_OK;
     }
     virtual ReturnCode_t on_activated(UniqueId ec_id)
     {
       std::cout << "on_activated()" << std::endl;
-      return RTC::OK;
+      return RTC::RTC_OK;
     }
     virtual ReturnCode_t on_deactivated(UniqueId ec_id)
     {
       std::cout << "on_deactivated()" << std::endl;
-      return RTC::OK;
+      return RTC::RTC_OK;
     }
     virtual ReturnCode_t on_aborting(UniqueId ec_id)
     {
       std::cout << "on_aborting()" << std::endl;
-      return RTC::OK;
+      return RTC::RTC_OK;
     }
     virtual ReturnCode_t on_error(UniqueId ec_id)
     {
       std::cout << "on_error()" << std::endl;
-      return RTC::OK;
+      return RTC::RTC_OK;
     }
     virtual ReturnCode_t on_reset(UniqueId ec_id)
     {
       std::cout << "on_reset()" << std::endl;
-      return RTC::OK;
+      return RTC::RTC_OK;
     }
 
     virtual ReturnCode_t on_execute(UniqueId ec_id)
@@ -155,19 +158,19 @@ namespace PeriodicExecutionContext
       if (m_error) 
 	{
 	  m_error = false;
-	  return RTC::ERROR;
+	  return RTC::RTC_ERROR;
 	}
-      return RTC::OK;
+      return RTC::RTC_OK;
     }
     virtual ReturnCode_t on_state_update(UniqueId ec_id)
     {
       std::cout << "on_state_update()" << std::endl;
-      return RTC::OK;
+      return RTC::RTC_OK;
     }
     virtual ReturnCode_t on_rate_changed(UniqueId ec_id)
     {
       std::cout << "on_rate_changed()" << std::endl;
-      return RTC::OK;
+      return RTC::RTC_OK;
     }
 
     virtual SDOPackage::OrganizationList* get_owned_organizations()

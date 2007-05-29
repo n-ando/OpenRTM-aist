@@ -2,7 +2,7 @@
 /*!
  * @file DataOutPort.cpp
  * @brief Base class of OutPort
- * @date $Date: 2007-01-06 17:44:00 $
+ * @date $Date: 2007-04-13 15:44:56 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
  * Copyright (C) 2006
@@ -13,12 +13,19 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: DataOutPort.cpp,v 1.3 2007-01-06 17:44:00 n-ando Exp $
+ * $Id: DataOutPort.cpp,v 1.5 2007-04-13 15:44:56 n-ando Exp $
  *
  */
 
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.4  2007/02/04 16:54:12  n-ando
+ * The disconnection process was implemented.
+ *
+ * Revision 1.3  2007/01/06 17:44:00  n-ando
+ * The behavior on notify_connect() and notify_disconnect() are now
+ * implemented in protected functions(ex. publisherInterfaces()).
+ *
  * Revision 1.2  2006/12/02 18:29:08  n-ando
  * Now OutPortCorbaProvider and InPortCorbaConsumer are used.
  *
@@ -55,7 +62,7 @@ namespace RTC
   {
     std::for_each(m_providers.begin(), m_providers.end(),
 		  publish(connector_profile.properties));
-    return RTC::OK;
+    return RTC::RTC_OK;
   }
   
   ReturnCode_t
@@ -63,7 +70,7 @@ namespace RTC
   {
     subscribe s(connector_profile);
     s = std::for_each(m_consumers.begin(), m_consumers.end(), s);
-    if (s._consumer == NULL) return RTC::OK;
+    if (s._consumer == NULL) return RTC::RTC_OK;
     
     // Pubslihser を生成
     PublisherBase* publisher;
@@ -74,13 +81,16 @@ namespace RTC
     // Publisher を OutPort にアタッチ
     m_outport.attach(connector_profile.connector_id, publisher);
 
-    return RTC::OK;
+    return RTC::RTC_OK;
   }
   
   void
   DataOutPort::unsubscribeInterfaces(const ConnectorProfile& connector_profile)
   {
-    ;
+    PublisherBase* publisher;
+    publisher = m_outport.detach(connector_profile.connector_id);
+    delete publisher;
+    return;
   }
   
 

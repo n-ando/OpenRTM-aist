@@ -2,7 +2,7 @@
 /*!
  * @file   SdoConfigurationTests.cpp
  * @brief  SdoConfiguration test class
- * @date   $Date: 2006-11-27 08:26:07 $
+ * @date   $Date: 2007-01-24 16:04:18 $
  * @author Shinji Kurihara
  *         Noriaki Ando <n-ando@aist.go.jp>
  * 
@@ -14,12 +14,15 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: SdoConfigurationTests.cpp,v 1.1 2006-11-27 08:26:07 n-ando Exp $
+ * $Id: SdoConfigurationTests.cpp,v 1.2 2007-01-24 16:04:18 n-ando Exp $
  *
  */
 
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.1  2006/11/27 08:26:07  n-ando
+ * TestSuites are devided into each directory.
+ *
  * Revision 1.3  2006/11/10 07:13:44  kurihara
  * A test after SdoConfiguration class revision.
  *
@@ -118,7 +121,7 @@ namespace SdoConfiguration
     virtual void setUp()
     {
       // Configuration_implクラスのインスタンス生成
-      m_pConf = new Configuration_impl(m_orb, m_poa);
+      m_pConf = new Configuration_impl();
     }
     
     /*!

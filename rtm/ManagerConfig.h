@@ -2,7 +2,7 @@
 /*!
  * @file ManagerConfig.h
  * @brief RTC manager configuration
- * @date $Date: 2006-11-06 01:26:28 $
+ * @date $Date: 2007-04-13 18:02:28 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
  * Copyright (C) 2003-2005
@@ -12,12 +12,15 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: ManagerConfig.h,v 1.3 2006-11-06 01:26:28 n-ando Exp $
+ * $Id: ManagerConfig.h,v 1.4 2007-04-13 18:02:28 n-ando Exp $
  *
  */
 
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.3  2006/11/06 01:26:28  n-ando
+ * Some trivial fixes.
+ *
  * Revision 1.2  2006/10/23 08:38:23  n-ando
  * To get Property after "init()" calling, getConfig() was added.
  *
@@ -162,7 +165,8 @@ namespace RTC
      *
      * @endif
      */
-    Properties init();
+    //    void init();
+
 
 
     /*!
@@ -192,7 +196,17 @@ namespace RTC
      *
      * @endif
      */
-    Properties init(int argc, char** argv);
+    void init(int argc, char** argv);
+
+
+    /*!
+     * @if jp
+     * @brief Configuration の結果をPropertyに反映させる
+     * @else
+     * @brief Apply configuration results to Property
+     * @endif
+     */
+    void configure(Properties& prop);
 
 
     /*!
@@ -305,9 +319,6 @@ namespace RTC
     bool fileExist(const std::string& filename);
 
     std::string m_configFile;
-    Properties m_properties;
-   
-    
   };
   
 }; // namespace RTC  

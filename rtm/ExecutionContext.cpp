@@ -1,7 +1,7 @@
 /*!
  * @file ExecutionContext.h
  * @brief ExecutionContext class
- * @date $Date: 2007-01-21 13:43:13 $
+ * @date $Date: 2007-04-13 15:45:29 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
  * Copyright (C) 2006
@@ -11,12 +11,15 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: ExecutionContext.cpp,v 1.1 2007-01-21 13:43:13 n-ando Exp $
+ * $Id: ExecutionContext.cpp,v 1.2 2007-04-13 15:45:29 n-ando Exp $
  *
  */
 
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.1  2007/01/21 13:43:13  n-ando
+ * *** empty log message ***
+ *
  */
 
 #include <rtm/ExecutionContext.h>
@@ -56,7 +59,7 @@ namespace RTC
    */
   ReturnCode_t ExecutionContextBase::start()
   {
-    return RTC::OK;
+    return RTC::RTC_OK;
   }
   
 
@@ -69,7 +72,7 @@ namespace RTC
    */
   ReturnCode_t ExecutionContextBase::stop()
   {
-    return RTC::OK;
+    return RTC::RTC_OK;
   }
   
   
@@ -98,7 +101,7 @@ namespace RTC
     if (rate > 0.0)
       {
 	m_profile.rate = rate;
-	return RTC::OK;
+	return RTC::RTC_OK;
       }
     return RTC::BAD_PARAMETER;
   }
@@ -114,7 +117,7 @@ namespace RTC
   ReturnCode_t
   ExecutionContextBase::activate_component(LightweightRTObject_ptr comp)
   {
-    return RTC::OK;
+    return RTC::RTC_OK;
   }
   
 
@@ -128,7 +131,7 @@ namespace RTC
   ReturnCode_t
   ExecutionContextBase::deactivate_component(LightweightRTObject_ptr comp)
   {
-    return RTC::OK;
+    return RTC::RTC_OK;
   }
   
 
@@ -142,7 +145,7 @@ namespace RTC
   ReturnCode_t
   ExecutionContextBase::reset_component(LightweightRTObject_ptr comp)
   {
-    return RTC::OK;
+    return RTC::RTC_OK;
   }
   
   
@@ -186,7 +189,7 @@ namespace RTC
       {
 	CORBA_SeqUtil::push_back(m_profile.participants,
 				 RTC::RTObject::_narrow(comp));
-	return RTC::OK;
+	return RTC::RTC_OK;
       }
     return RTC::BAD_PARAMETER;
   }
@@ -208,7 +211,7 @@ namespace RTC
 				
     if (index < 0) return RTC::BAD_PARAMETER;
     CORBA_SeqUtil::erase(m_profile.participants, index);
-    return RTC::OK;
+    return RTC::RTC_OK;
   }
 
 

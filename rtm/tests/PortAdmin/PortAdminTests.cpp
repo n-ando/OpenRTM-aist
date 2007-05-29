@@ -2,7 +2,7 @@
 /*!
  * @file   PortAdminTests.cpp
  * @brief  PortAdmin test class
- * @date   $Date: 2007-01-12 14:44:36 $
+ * @date   $Date: 2007-04-13 15:05:03 $
  * @author Shinji Kurihara
  *         Noriaki Ando <n-ando@aist.go.jp>
  *
@@ -14,12 +14,15 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: PortAdminTests.cpp,v 1.2 2007-01-12 14:44:36 n-ando Exp $
+ * $Id: PortAdminTests.cpp,v 1.3 2007-04-13 15:05:03 n-ando Exp $
  *
  */
 
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.2  2007/01/12 14:44:36  n-ando
+ * Some fixes for distribution control.
+ *
  * Revision 1.1  2006/11/27 08:34:18  n-ando
  * TestSuites are devided into each directory.
  *
@@ -65,11 +68,11 @@ namespace PortAdmin
   protected:
 	virtual RTC::ReturnCode_t publishInterfaces(RTC::ConnectorProfile&)
 	{
-	  return RTC::OK;
+	  return RTC::RTC_OK;
 	}
 	virtual RTC::ReturnCode_t subscribeInterfaces(const RTC::ConnectorProfile&)
 	{
-	  return RTC::OK;
+	  return RTC::RTC_OK;
 	}
 	virtual void unsubscribeInterfaces(const RTC::ConnectorProfile&)
 	{

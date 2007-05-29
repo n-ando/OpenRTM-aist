@@ -2,9 +2,18 @@
 ##------------------------------------------------------------
 ## Makefile.am for libRTC
 ##
-## $Id: Makefile.am,v 1.13 2007-01-21 14:17:21 n-ando Exp $
+## $Id: Makefile.am,v 1.16 2007-04-23 04:50:22 n-ando Exp $
 ##
 ## $Log: not supported by cvs2svn $
+## Revision 1.15  2007/04/13 17:59:04  n-ando
+## Some .cpp files and .h files are added.
+##
+## Revision 1.14  2007/01/29 07:24:35  n-ando
+## Ld option -no-undefined for Windows DLLs was added.
+##
+## Revision 1.13  2007/01/21 14:17:21  n-ando
+## *** empty log message ***
+##
 ## Revision 1.12  2007/01/12 15:02:59  n-ando
 ## The versioin.h should not be included in dist. files.
 ##
@@ -72,40 +81,45 @@ lib_LTLIBRARIES = libRTC.la
 #	PortProfileHelper.cpp
 #	ObjectManager.cpp
 
-UTIL_SRC = \
-	NVUtil.cpp \
+UTIL_SRC =             \
+	NVUtil.cpp     \
 	Properties.cpp \
-	StringUtil.cpp
+	StringUtil.cpp \
+	RTCUtil.cpp
 
-MGR_SRC = \
-	CorbaNaming.cpp \
+MGR_SRC =                      \
+	CorbaNaming.cpp        \
 	CorbaObjectManager.cpp \
-	Factory.cpp \
-	Manager.cpp \
-	ManagerConfig.cpp \
-	ModuleManager.cpp \
-	NamingManager.cpp \
-	NumberingPolicy.cpp
+	Factory.cpp            \
+	ECFactory.cpp          \
+	Manager.cpp            \
+	ManagerConfig.cpp      \
+	ModuleManager.cpp      \
+	NamingManager.cpp      \
+	NumberingPolicy.cpp    \
+	Timer.cpp
 
-COMP_SRC = \
-	DataFlowComponentBase.cpp \
+COMP_SRC =                           \
+	DataFlowComponentBase.cpp    \
 	PeriodicExecutionContext.cpp \
-	PortAdmin.cpp \
-	RTObject.cpp \
-	SdoConfiguration.cpp \
+	ExtTrigExecutionContext.cpp  \
+	PortAdmin.cpp                \
+	RTObject.cpp                 \
+	ConfigAdmin.cpp              \
+	SdoConfiguration.cpp         \
 	SdoOrganization.cpp
 
-PORT_SRC = \
-	CorbaPort.cpp \
-	DataInPort.cpp \
-	DataOutPort.cpp \
-	InPortProvider.cpp \
-	OutPortBase.cpp \
-	OutPortProvider.cpp \
-	PortBase.cpp \
-	PublisherFactory.cpp \
-	PublisherFlush.cpp \
-	PublisherNew.cpp \
+PORT_SRC =                    \
+	CorbaPort.cpp         \
+	DataInPort.cpp        \
+	DataOutPort.cpp       \
+	InPortProvider.cpp    \
+	OutPortBase.cpp       \
+	OutPortProvider.cpp   \
+	PortBase.cpp          \
+	PublisherFactory.cpp  \
+	PublisherFlush.cpp    \
+	PublisherNew.cpp      \
 	PublisherPeriodic.cpp
 
 
@@ -120,7 +134,11 @@ libRTC_la_SOURCES = \
 
 
 libRTC_la_LIBADD = $(top_builddir)/rtm/idl/libRTCSkel.la $(ARTLIB)
-libRTC_la_LDFLAGS = -L$(top_builddir)/rtm/idl -release $(PACKAGE_VERSION) -version-info 0:4:0
+libRTC_la_LDFLAGS =                 \
+	-no-undefined               \
+	-L$(top_builddir)/rtm/idl   \
+	-release $(PACKAGE_VERSION) \
+	-version-info 0:4:0
 
 
 rtmheaderdir = $(prefix)/include/rtm
@@ -132,10 +150,12 @@ rtmheader_HEADERS = \
 	CORBA_SeqUtil.h              \
 	CorbaConsumer.h              \
 	DefaultConfiguration.h       \
+	ExecutionContextBase.h       \
 	InPort.h                     \
 	InPortConsumer.h             \
 	InPortCorbaConsumer.h        \
 	InPortCorbaProvider.h        \
+	Listener.h                   \
 	ObjectManager.h              \
 	OutPort.h                    \
 	OutPortConsumer.h            \
@@ -148,6 +168,7 @@ rtmheader_HEADERS = \
 	SdoService.h                 \
 	StateMachine.h               \
 	SystemLogger.h               \
+	TimeValue.h                  \
 	UUID.h                       \
 	config_rtc.h
 
@@ -156,4 +177,4 @@ EXTRA_DIST = $(rtmheader_HEADERS)
 DIST_SUBDIRS = idl tests
 
 clean-local:
-	rm -f *.bak *.rpo *.sym lib*.*_pure_* Makefile.old *core *~
+	rm -f *.gch *.bak *.rpo *.sym lib*.*_pure_* Makefile.old *core *~

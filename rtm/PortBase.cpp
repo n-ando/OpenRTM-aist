@@ -2,7 +2,7 @@
 /*!
  * @file PortBase.h
  * @brief RTC's Port base class
- * @date $Date: 2007-01-04 00:43:42 $
+ * @date $Date: 2007-04-27 00:57:37 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
  * Copyright (C) 2006
@@ -12,12 +12,25 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: PortBase.cpp,v 1.6 2007-01-04 00:43:42 n-ando Exp $
+ * $Id: PortBase.cpp,v 1.10 2007-04-27 00:57:37 n-ando Exp $
  *
  */
 
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.9  2007/04/26 15:38:53  n-ando
+ * Character code was changed.
+ *
+ * Revision 1.8  2007/04/13 15:52:57  n-ando
+ * RTC::OK was changed to RTC::RTC_OK.
+ *
+ * Revision 1.7  2007/02/04 17:00:22  n-ando
+ * The ubsubscribeInterfaces is calle for disconnection.
+ *
+ * Revision 1.6  2007/01/04 00:43:42  n-ando
+ * Now, notify_connect() and notify_disconnect() behavior can be customized
+ * publishInterfaces(), subscribeInterfaces() and unsubscribeInterfaces().
+ *
  * Revision 1.5  2006/11/27 09:57:04  n-ando
  * addProvider() function was added for registration of provider.
  * addConsumer() function was added for registration of consumer.
@@ -60,7 +73,9 @@ namespace RTC
   PortBase::PortBase(const char* name)
   {
     m_profile.name = CORBA::string_dup(name);
-    m_profile.port_ref = this->_this();
+    m_objref = RTC::Port::_duplicate(this->_this());
+    m_profile.port_ref = m_objref;
+    m_profile.owner = RTC::RTObject::_nil();
   }
   
 
@@ -165,15 +180,15 @@ namespace RTC
     // publish owned interface information to the ConnectorProfile
     ReturnCode_t retval;
     retval = publishInterfaces(connector_profile);
-    if (retval != RTC::OK) return retval;
+    if (retval != RTC::RTC_OK) return retval;
 
     // call notify_connect() of the next Port
     retval = connectNext(connector_profile);
-    if (retval != RTC::OK) return retval;
+    if (retval != RTC::RTC_OK) return retval;
 
     // subscribe interface from the ConnectorProfile's information
     retval = subscribeInterfaces(connector_profile);
-    if (retval != RTC::OK)
+    if (retval != RTC::RTC_OK)
       {
 	// cleanup this connection for downstream ports
 	notify_disconnect(connector_profile.connector_id);
@@ -241,9 +256,11 @@ namespace RTC
       }
     CORBA::Long index;
     index = findConnProfileIndex(connector_id);
+
     ConnectorProfile prof(m_profile.connector_profiles[index]);
 
     ReturnCode_t retval;
+    unsubscribeInterfaces(prof);
     retval = disconnectNext(prof);
 
     CORBA_SeqUtil::erase(m_profile.connector_profiles, index);
@@ -372,7 +389,7 @@ namespace RTC
 	p = connector_profile.ports[index];
 	return p->notify_connect(connector_profile);
       }
-    return RTC::OK;
+    return RTC::RTC_OK;
   }				  
   
 
@@ -396,7 +413,8 @@ namespace RTC
 	p = connector_profile.ports[index];
 	return p->notify_disconnect(connector_profile.connector_id);
       }
-    return RTC::OK;
+    unsubscribeInterfaces(connector_profile);
+    return RTC::RTC_OK;
   }				  
 
 

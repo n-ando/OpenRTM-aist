@@ -2,9 +2,9 @@
 /*!
  * @file ConsoleOutComp.cpp
  * @brief Standalone component
- * @date $Date: 2007-01-14 22:52:11 $
+ * @date $Date: 2007-02-08 06:21:16 $
  *
- * $Id: ConsoleOutComp.cpp,v 1.2 2007-01-14 22:52:11 n-ando Exp $
+ * $Id: ConsoleOutComp.cpp,v 1.3 2007-02-08 06:21:16 n-ando Exp $
  */
 
 #include <rtm/Manager.h>
@@ -46,7 +46,7 @@ void MyModuleInit(RTC::Manager* manager)
       port = (*portlist)[i];
       std::cout << "================================================="
 		<< std::endl;
-      std::cout << "Port" << i << " (name): " << std::endl;
+      std::cout << "Port" << i << " (name): ";
       std::cout << port->get_port_profile()->name << std::endl;
       std::cout << "-------------------------------------------------"
 		<< std::endl;
@@ -67,7 +67,8 @@ void MyModuleInit(RTC::Manager* manager)
 	}
       std::cout << "- properties -" << std::endl;
       NVUtil::dump(port->get_port_profile()->properties);
-      std::cout << "-------------------------------------------------" << std::endl;
+      std::cout << "-------------------------------------------------"
+		<< std::endl;
     }
 
 

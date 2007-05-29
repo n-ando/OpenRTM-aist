@@ -2,7 +2,7 @@ dnl -*- autoconf -*-
 dnl
 dnl @file configure.ac
 dnl @brief Input file for autoconf
-dnl @date $Date: 2007-01-22 02:00:25 $
+dnl @date $Date: 2007-04-26 15:40:36 $
 dnl @author Noriaki Ando <n-ando@aist.go.jp>
 dnl
 dnl This file is an input file used by the GNU "autoconf" program to
@@ -10,11 +10,32 @@ dnl generate the file "configure", which tries to guess your system
 dnl configuration
 dnl
 dnl
-dnl $Id: configure.ac,v 1.14 2007-01-22 02:00:25 n-ando Exp $
+dnl $Id: configure.ac,v 1.21 2007-04-26 15:40:36 n-ando Exp $
 dnl
 
 dnl
 dnl $Log: not supported by cvs2svn $
+dnl Revision 1.20  2007/04/23 07:27:38  n-ando
+dnl ConfigSample example was added.
+dnl
+dnl Revision 1.19  2007/04/13 14:48:14  n-ando
+dnl New example "ExtTrigger" was added.
+dnl
+dnl Revision 1.18  2007/02/07 02:50:39  n-ando
+dnl SimpleService example was recovered.
+dnl
+dnl Revision 1.17  2007/02/04 16:48:57  n-ando
+dnl SeqIO was updated.
+dnl
+dnl Revision 1.16  2007/01/29 07:24:06  n-ando
+dnl AC_LIBTOOL_WIN32_DLL macro was added for Cygwin.
+dnl
+dnl Revision 1.15  2007/01/24 16:05:51  n-ando
+dnl ACE 5.5.* is accepted.
+dnl
+dnl Revision 1.14  2007/01/22 02:00:25  n-ando
+dnl *** empty log message ***
+dnl
 dnl Revision 1.13  2007/01/21 13:40:15  n-ando
 dnl Now python version 2.3.* 2.4.* 2.5.* are allowed.
 dnl
@@ -76,6 +97,7 @@ AC_PROG_CXX
 AC_PROG_CXXCPP
 AC_LANG_CPLUSPLUS
 AC_PROG_INSTALL
+AC_LIBTOOL_WIN32_DLL
 AC_PROG_LIBTOOL
 
 AC_CHECK_HEADERS([nlist.h stdlib.h unistd.h])
@@ -147,6 +169,7 @@ case $system in
 	;;	
 [Linux*)]
 	AC_DEFINE([RTM_OS_LINUX], [TRUE], [OS is Linux])
+	AC_DEFINE([_REENTRANT], [TRUE], [Multi Thread Support])
 	;;	
 [HP-UX*)]
 	AC_DEFINE([RTM_OS_HPUX], [TRUE], [OS is HP-UX])
@@ -303,10 +326,10 @@ hint: <dir>/( ACE_wrappers/ace/lib lib cxx/lib ) will be searched.)
 	ace_version=[`grep ACE_VERSION $ace_ACE_h_dir/ace/Version.h | cut -d " " -f 3 | sed 's/[\"]//g'`]
 
 	case $ace_version in
-	[5.4.*|5.3.*|5.4|5.3)]
+	[5.5.*|5.4.*|5.3.*|5.5|5.4|5.3)]
 		;;
 	*)
-		AC_MSG_WARN([Unknown ACE version number, expecting 5.4.0 or above.])
+		AC_MSG_WARN([Unknown ACE version number, expecting 5.3.0 or above.])
 	esac
  	AC_MSG_RESULT($ace_version)
 
@@ -1403,17 +1426,19 @@ AC_OUTPUT([Makefile
 	utils/rtm-naming/Makefile
 	etc/Makefile
 	examples/Makefile
+	examples/ConfigSample/Makefile
 	examples/SimpleIO/Makefile
+	examples/SeqIO/Makefile
+	examples/SimpleService/Makefile
+	examples/ExtTrigger/Makefile
 	docs/Makefile
 	])
 
 #	utils/rtc-link/Makefile
 #	 examples/Makefile
 #	 examples/HelloWorld/Makefile
-#	 examples/SeqIO/Makefile
 #	 examples/StringIO/Makefile
 #	 examples/Slider_and_Motor/Makefile
-#	 examples/SimpleService/Makefile
 #	 swig/Makefile
 #	 swig/python/Makefile
 #	 etc/Makefile

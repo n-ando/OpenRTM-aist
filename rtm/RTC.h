@@ -2,7 +2,7 @@
 /*!
  * @file RTC.h
  * @brief RTComponent header
- * @date $Date: 2007-01-21 10:38:54 $
+ * @date $Date: 2007-04-13 18:14:41 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
  * Copyright (C) 2003-2005
@@ -12,12 +12,15 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: RTC.h,v 1.4 2007-01-21 10:38:54 n-ando Exp $
+ * $Id: RTC.h,v 1.5 2007-04-13 18:14:41 n-ando Exp $
  *
  */
 
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.4  2007/01/21 10:38:54  n-ando
+ * Some tirivial fixex.
+ *
  * Revision 1.3  2006/10/17 19:12:01  n-ando
  * Modified to include omniORB4 CORBA/h header file.
  *
@@ -76,5 +79,5 @@ BOOL WINAPI DllMain (HINSTANCE hinstDll, DWORD fdwReason, LPVOID lpvReserved);
 
 #endif // WIN32
 
-
+#include "rtm/idl/OpenRTMSkel.h"
 #endif // RTC_h

@@ -2,7 +2,7 @@
 /*!
  * @file Properties.h
  * @brief Property list class (derived from Java Properties)
- * @date $Date: 2007-01-06 17:59:23 $
+ * @date $Date: 2007-04-24 01:24:32 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
  * Copyright (C) 2006
@@ -12,12 +12,22 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: Properties.h,v 1.4 2007-01-06 17:59:23 n-ando Exp $
+ * $Id: Properties.h,v 1.7 2007-04-24 01:24:32 n-ando Exp $
  *
  */
 
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.6  2007/04/23 04:56:43  n-ando
+ * Some fixes about const.
+ *
+ * Revision 1.5  2007/04/13 18:14:07  n-ando
+ * Now Properties class is implemented as hierarchical data structure
+ * instead of std::map based data structure.
+ *
+ * Revision 1.4  2007/01/06 17:59:23  n-ando
+ * getProperty() is now const function.
+ *
  * Revision 1.3  2006/10/17 10:10:21  n-ando
  * Some escape/unescape related bugs are fixed.
  * The following some functions were moved to StringUtil.h
@@ -37,8 +47,8 @@
 
 
 #include <string>
-#include <map>
 #include <vector>
+#include <map>
 
 
 namespace RTC
@@ -56,9 +66,6 @@ namespace RTC
    * ことができる。元のプロパティリストでプロパティキーが見つからないと、この
    * 2番目のプロパティリストが検索される。 
    *
-   * Properties は std::map<std::string, std:string> を継承するので、std::map
-   * が持つメソッドを適用することができる。しかし、これらのメソッドを使用する
-   * ことは推奨されない。
    * プロパティの取得には getProperty、プロパティのセットには setProperty と
    * いったメソッドを使用することが推奨される。
    *
@@ -103,7 +110,6 @@ namespace RTC
    * @endif
    */
   class Properties
-    : public std::map<std::string, std::string>
   {
   public:
     /*!
@@ -111,17 +117,37 @@ namespace RTC
      *
      * @brief コンストラクタ
      *
-     * デフォルト値を持たない空のプロパティリストを作成する。
+     * key と value のみを与えて Property のルートノードを作成する。
+     * 値は全てデフォルト値として設定される。
      * 
      * @else
      *
      * @brief Constructor
      *
-     * Creates an empty property list with no default values.
+     * Creates a root node of Property with root's key and value.
      *
      * @endif
      */
-    Properties(){};
+    Properties(const char* key = "", const char* value = "");
+    
+    
+    /*!
+     * @if jp
+     *
+     * @brief コンストラクタ
+     *
+     * std::string の std::map をデフォルト値にもつPropertiesを作成する。
+     * 値は全てデフォルト値として設定される。
+     * 
+     * @else
+     *
+     * @brief Constructor
+     *
+     * Creates an Properties with default value of std::string map.
+     *
+     * @endif
+     */
+    Properties(std::map<std::string, std::string>& defaults);
     
     
     /*!
@@ -130,24 +156,7 @@ namespace RTC
      * @brief コンストラクタ
      *
      * 指定されたデフォルト値を持つ空のプロパティリストを作成する。
-     * 
-     * @else
-     *
-     * @brief Constructor
-     *
-     * Creates an empty property list with the specified defaults.
-     *
-     * @endif
-     */
-    Properties(const std::map<std::string, std::string>& defaults);
-    
-    
-    /*!
-     * @if jp
-     *
-     * @brief コンストラクタ
-     *
-     * 指定されたデフォルト値を持つ空のプロパティリストを作成する。
+     * 値は全てデフォルト値として設定される。
      * デフォルト値は char* の配列により与えられ、key と value の対になっており、
      * リストの終端は配列の数を表す引数 num か、空文字の key で与えらられなければ
      * ならない。
@@ -192,6 +201,43 @@ namespace RTC
     
     /*!
      * @if jp
+     * @brief コピーコンストラクタ
+     *
+     * 引数に与えられた Properties のキー、値およびデフォルト値が
+     * 全てそのままコピーされる。
+     *
+     * @else
+     *
+     * @brief Copy Constructor
+     *
+     * All of given Properties's keys, values and default values 
+     * are copied to new Properties.
+     * 
+     * @endif
+     */
+    Properties(const Properties& prop);
+
+
+    /*!
+     * @if jp
+     * @brief 代入演算子
+     *
+     * 左辺値の Properties のキー、値およびデフォルト値は全て削除され、
+     * 右辺値の Properties のキー、値およびデフォルト値が全てそのまま
+     * コピーされる。
+     *
+     * @else
+     *
+     * @brief Assignment operator
+     *
+     *
+     * @endif
+     */
+    Properties& operator=(const Properties& prop);
+    
+
+    /*!
+     * @if jp
      *
      * @brief デストラクタ
      *
@@ -203,7 +249,18 @@ namespace RTC
      */
     virtual ~Properties();
     
+
+    //============================================================
+    // public functions
+    //============================================================
     
+
+    inline const char* getName() const          {return name.c_str();}
+    inline const char* getVlue() const         {return value.c_str();}
+    inline const char* getDefaultValue() const {return default_value.c_str();}
+    inline const std::vector<Properties*>& getLeaf() const {return leaf;}
+    inline const Properties* getRoot() const    {return root;}
+
     /*!
      * @if jp
      *
@@ -231,8 +288,9 @@ namespace RTC
      *
      * @endif
      */
-    std::string getProperty(const std::string& key) const;
+    const std::string& getProperty(const std::string& key) const;
     
+
     /*!
      * @if jp
      *
@@ -262,9 +320,133 @@ namespace RTC
      *
      * @endif
      */
-    std::string getProperty(const std::string& key,
-			    const std::string& defaultValue) const;
+    const std::string& getProperty(const std::string& key,
+			     const std::string& def) const;
+
+    /*!
+     * @if jp
+     *
+     * @brief 指定されたキーを持つプロパティを、プロパティリストから探す。 
+     *
+     * 指定されたキーを持つプロパティを返す。
+     * そのキーがプロパティリストになければデフォルト値を返す。
+     * さらに見つからなければ、空文字を返す。
+     *
+     * @param key プロパティキー
+     * @return 指定されたキー値を持つこのプロパティリストの値
+     *
+     * @else
+     *
+     * @brief Searches for the property with the specified key in this property
+     *
+     * Searches for the property with the specified key in this property list.
+     * If the key is not found in this property list, the default property list,
+     * and its defaults, recursively, are then checked. The method returns the
+     * default value argument if the property is not found.
+     *
+     * @param key the property key
+     * @param defaultValue a default value. 
+     * @return the value in this property list with the specified key value.
+     *
+     * @endif
+     */
+    const std::string& operator[](const std::string& key) const;
+
+
+    /*!
+     * @if jp
+     *
+     * @brief 指定されたキーを持つプロパティを、プロパティリストから探す。 
+     *
+     * 指定されたキーを持つプロパティを返す。
+     * そのキーの値がプロパティリストになければデフォルト値を返す。
+     * さらに見つからなければ、空文字を返す。
+     * 左辺値になる場合に、同じ値を持つ要素がないときは与えられたキー
+     * に対応するプロパティに右辺値を挿入。
+     *
+     * @param key プロパティキー
+     * @return 指定されたキー値を持つこのプロパティリストの値
+     *
+     * @else
+     *
+     * @brief Searches for the property with the specified key in this property
+     *
+     * Searches for the property with the specified key in this property list.
+     * If the key is not found in this property list, the default property list,
+     * and its defaults, recursively, are then checked. The method returns the
+     * default value argument if the property is not found.
+     *
+     * @param key the property key
+     * @param defaultValue a default value. 
+     * @return the value in this property list with the specified key value.
+     *
+     * @endif
+     */
+    std::string& operator[](const std::string& key);
+
     
+    /*!
+     * @if jp
+     * @brief 指定されたキーに対してデフォルト値を設定する
+     * @else
+     * @brief Set value as the default value to specified key's property
+     * @endif
+     */
+    const std::string& getDefault(const std::string& key) const;
+
+    
+    /*!
+     * @if jp
+     *
+     * @brief Properties に value を key について登録する
+     *
+     * Properties に value を key について登録する。
+     * すでに key に対する値を持っている場合、戻り値に古い値を返す。
+     *
+     * @param key プロパティリストに配置されるキー
+     * @param value key に対応する値 
+     * @return プロパティリストの指定されたキーの前の値。それがない場合は null
+     *
+     * @else
+     *
+     * @brief Sets a value associated with key in the property list
+     *
+     * This method sets the "value" associated with "key" in the property list.
+     * If the property list has a value of "key", old value is returned.
+     *
+     * @param key the key to be placed into this property list.
+     * @param value the value corresponding to key. 
+     * @return the previous value of the specified key in this property list,
+     *         or null if it did not have one.
+     *
+     *@endif
+     */
+    std::string setProperty(const std::string& key, const std::string& value);
+
+
+    /*!
+     * @if jp
+     * @brief Properties にデフォルト value を key について登録する
+     * @else
+     * @brief Sets a default value associated with key in the property list
+     * @endif
+     */
+    std::string setDefault(const std::string& key, const std::string& value);
+    
+
+    /*!
+     * @if jp
+     * @brief Properties にデフォルト値をまとめて登録する
+     * @else
+     * @brief Sets a default value associated with key in the property list
+     * @endif
+     */
+    void setDefaults(const char* defaults[], long num = LONG_MAX);
+
+    
+    //============================================================
+    // load and save functions
+    //============================================================
     /*!
      * @if jp
      *
@@ -453,34 +635,6 @@ namespace RTC
     /*!
      * @if jp
      *
-     * @brief プロパティのキーのリストを vector で返す
-     *
-     * メインプロパティリストに同じ名前のキーが見つからない場合は、デフォルトの
-     * プロパティリストにある個別のキーを含む、このプロパティリストにあるすべて
-     * のキーのリストを返します。 
-     *
-     * @return プロパティリストにあるすべてのキーのリスト。
-     *         デフォルトのプロパティリストにあるキーを含む
-     *
-     * @else
-     *
-     * @brief Returns an vector of all the keys in this property
-     *
-     * Returns an enumeration of all the keys in this property list, including
-     * distinct keys in the default property list if a key of the same name has
-     * not already been found from the main properties list.
-     *
-     * @return an vector of all the keys in this property list, including the
-     *         keys in the default property list.
-     *
-     * @endif
-     */
-    std::vector<std::string> propertyNames();
-    
-    
-    /*!
-     * @if jp
-     *
      * @brief プロパティリストを指定されたストリームに保存する
      *
      * 推奨されていません。プロパティリストの保存方法としては、
@@ -502,35 +656,6 @@ namespace RTC
      * @endif
      */
     void save(std::ostream& out, const std::string& header);
-    
-    
-    /*!
-     * @if jp
-     *
-     * @brief Properties に value を key について登録する
-     *
-     * Properties に value を key について登録する。
-     * すでに key に対する値を持っている場合、戻り値に古い値を返す。
-     *
-     * @param key プロパティリストに配置されるキー
-     * @param value key に対応する値 
-     * @return プロパティリストの指定されたキーの前の値。それがない場合は null
-     *
-     * @else
-     *
-     * @brief Sets a value associated with key in the property list
-     *
-     * This method sets the "value" associated with "key" in the property list.
-     * If the property list has a value of "key", old value is returned.
-     *
-     * @param key the key to be placed into this property list.
-     * @param value the value corresponding to key. 
-     * @return the previous value of the specified key in this property list,
-     *         or null if it did not have one.
-     *
-     *@endif
-     */
-    std::string setProperty(const std::string& key, const std::string& value);
     
     
     /*!
@@ -614,14 +739,137 @@ namespace RTC
      * @endif
      */
     void store(std::ostream& out, const std::string& header);
+
     
+    //============================================================
+    // other util functions
+    //============================================================
+    /*!
+     * @if jp
+     *
+     * @brief プロパティのキーのリストを vector で返す
+     *
+     * メインプロパティリストに同じ名前のキーが見つからない場合は、デフォルトの
+     * プロパティリストにある個別のキーを含む、このプロパティリストにあるすべて
+     * のキーのリストを返します。 
+     *
+     * @return プロパティリストにあるすべてのキーのリスト。
+     *         デフォルトのプロパティリストにあるキーを含む
+     *
+     * @else
+     *
+     * @brief Returns an vector of all the keys in this property
+     *
+     * Returns an enumeration of all the keys in this property list, including
+     * distinct keys in the default property list if a key of the same name has
+     * not already been found from the main properties list.
+     *
+     * @return an vector of all the keys in this property list, including the
+     *         keys in the default property list.
+     *
+     * @endif
+     */
+    std::vector<std::string> propertyNames() const;
+
+
+    /*!
+     * @if jp
+     * @brief プロパティの数を取得する
+     * @else
+     * @brief Get number of Properties
+     * @endif
+     */
+    int size() const;
+
+
+    /*!
+     * @if jp
+     * @brief ノードを取得する
+     * @else
+     * @brief Get node of Properties
+     * @endif
+     */
+    Properties* getNode(const std::string& key) const;
+    bool createNode(const char* key)
+    {
+      Properties* p(getNode(key));
+      if (p != NULL) return false;
+      (*this)[key] = "";
+      return true;
+    }
+
+    /*!
+     * @if jp
+     * @brief ノードを切断する
+     * @else
+     * @brief Get node of Properties
+     * @endif
+     */
+    Properties* removeNode(const char* leaf_name);
+
+
+    /*!
+     * @if jp
+     * @brief 子ノードにkeyがあるかどうか
+     * @else
+     * @brief If key exists in the children
+     * @endif
+     */
+    Properties* hasKey(const char* key) const;
+
+
+    /*!
+     * @if jp
+     * @brief 子ノードを全て削除する
+     * @else
+     * @brief If key exists in the children
+     * @endif
+     */
+    void clear();
+
+
+    /*!
+     * @if jp
+     * @brief Propertyをマージする
+     * @else
+     * @brief Merge properties
+     * @endif
+     */
+    Properties& operator<<(const Properties& prop);
+    
+
   protected:
-    void splitKeyValue(const std::string& str, std::string& key,
-		       std::string& value);
+    static void splitKeyValue(const std::string& str, std::string& key,
+			      std::string& value);
+
+    static bool split(const std::string& str, const char delim,
+		      std::vector<std::string>& value);
+
+    static Properties* _getNode(std::vector<std::string>& keys,
+				std::vector<Properties*>::size_type index,
+				const Properties* curr);
+
+    static void _propertiyNames(std::vector<std::string>& names,
+				std::string curr_name,
+				const Properties* curr);
+
+    static void _store(std::ostream& out, std::string curr_name,
+		       Properties* curr);
+
+    static std::ostream& _dump(std::ostream& out, const Properties& curr,
+			       int index);
+
+    static std::string indent(int index);
     
-    std::map<std::string, std::string> m_defaults;
-    typedef std::map<std::string, std::string>::iterator Itr;
-    
+  private:
+    std::string name;
+    std::string value;
+    std::string default_value;
+    Properties* root;
+    std::vector<Properties*> leaf;
+    const std::string m_empty;
+    friend std::ostream& operator<<(std::ostream& lhs, const Properties& rhs);
+
   };   // class Properties
 };     // namespace RTC  
 #endif // Properties_h

@@ -2,9 +2,9 @@
 /*!
  * @file  ConsoleOut.cpp
  * @brief Console output component
- * $Date: 2007-01-14 22:52:00 $
+ * $Date: 2007-04-13 15:03:07 $
  *
- * $Id: ConsoleOut.cpp,v 1.2 2007-01-14 22:52:00 n-ando Exp $
+ * $Id: ConsoleOut.cpp,v 1.3 2007-04-13 15:03:07 n-ando Exp $
  */
 
 #include "ConsoleOut.h"
@@ -68,7 +68,7 @@ RTC::ReturnCode_t ConsoleOut::onExecute(RTC::UniqueId ec_id)
     }
   usleep(1000);
 
-  return RTC::OK;
+  return RTC::RTC_OK;
 }
 
 

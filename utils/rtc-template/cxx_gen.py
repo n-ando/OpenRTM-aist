@@ -3,7 +3,7 @@
 #
 #  @file cxx_gen.py
 #  @brief rtc-template C++ source code generator class
-#  @date $Date: 2007-01-14 23:38:30 $
+#  @date $Date: 2007-05-29 01:44:29 $
 #  @author Noriaki Ando <n-ando@aist.go.jp>
 # 
 #  Copyright (C) 2004-2007
@@ -13,11 +13,20 @@
 #          Advanced Industrial Science and Technology (AIST), Japan
 #      All rights reserved.
 # 
-#  $Id: cxx_gen.py,v 1.5 2007-01-14 23:38:30 n-ando Exp $
+#  $Id: cxx_gen.py,v 1.8 2007-05-29 01:44:29 n-ando Exp $
 # 
 
 #
 #  $Log: not supported by cvs2svn $
+#  Revision 1.7  2007/04/23 01:41:16  n-ando
+#  New option "--config" and configuration template code were added.
+#
+#  Revision 1.6  2007/04/13 15:05:50  n-ando
+#  Now RTC::OK becomes RTC::RTC_OK in RTC.idl.
+#
+#  Revision 1.5  2007/01/14 23:38:30  n-ando
+#  Updated to use setModuleInitProc() to initialize component locally.
+#
 #  Revision 1.4  2007/01/11 07:46:38  n-ando
 #  Modified for OMG RTC specificatin and OpenRTM-aist-0.4.0.
 #  Almost all template codes were modified according to the new framework.
@@ -162,7 +171,7 @@ class [module.name]
 
   // The initialize action (on CREATED->ALIVE transition)
   // formaer rtc_init_entry() 
-  // virtual RTC::ReturnCode_t onInitialize();
+ virtual RTC::ReturnCode_t onInitialize();
 
   // The finalize action (on ALIVE->END transition)
   // formaer rtc_exiting_entry()
@@ -210,10 +219,13 @@ class [module.name]
 
 
  protected:
+  // Configuration variable declaration
+  // <rtc-template block="config_declare">
+  // </rtc-template>
+
   // DataInPort declaration
   // <rtc-template block="inport_declare">
   // </rtc-template>
-
 
   // DataOutPort declaration
   // <rtc-template block="outport_declare">
@@ -280,11 +292,20 @@ comp_soruce = """// -*- C++ -*-
 {
 }
 
+
+RTC::ReturnCode_t [module.name]::onInitialize()
+{
+  // <rtc-template block="bind_config">
+  // </rtc-template>
+  return RTC::RTC_OK;
+}
+
+
 [for activity]
 /*
 RTC::ReturnCode_t [module.name]::[activity.name]([activity.args])
 {
-  return RTC::OK;
+  return RTC::RTC_OK;
 }
 */
 [end]
@@ -456,7 +477,7 @@ clean: clean_objs clean_skelstub
 	rm -f *~
 
 clean_objs:
-	rm -f $(OBJS) [module.name].so [module.name]Comp
+	rm -f $(OBJS) [module.name]Comp.o [module.name].so [module.name]Comp
 
 clean_skelstub:
 	rm -f *[skel_suffix].h *[skel_suffix].cpp
@@ -520,7 +541,7 @@ consumer_stub_h = """[for consumer_idl]#include "[consumer_idl.stub_h]"
 module_spec = """static const char* [l_name]_spec[] =
   {
     "implementation_id", "[module.name]",
-    "type_name",         "[module.type]",
+    "type_name",         "[module.name]",
     "description",       "[module.desc]",
     "version",           "[module.version]",
     "vendor",            "[module.vendor]",
@@ -529,8 +550,16 @@ module_spec = """static const char* [l_name]_spec[] =
     "max_instance",      "[module.max_inst]",
     "language",          "C++",
     "lang_type",         "compile",
+    // Configuration variables
+[for config]    "conf.default.[config.name]", "[config.default]",
+[end]
     ""
   };"""
+
+config_declare = \
+"""  [for config][config.type] m_[config.name];
+  [end]"""
+  
 
 inport_declare = \
 """  [for inport][inport.type] m_[inport.name];
@@ -575,6 +604,11 @@ registration = \
   [end]
   // Set CORBA Service Ports
   [for corbaport]registerPort(m_[corbaport.name]Port);
+  [end]"""
+
+bind_config = \
+"""  // Bind variables and configuration variable
+  [for config]bindParameter("[config.name]", m_[config.name], "[config.default]");
   [end]"""
 
 #------------------------------------------------------------
@@ -638,8 +672,7 @@ def MakeConsumerIDL(dict):
 
 
 def MakeActivityFuncs(dict):
-	acts = (("onInitialize",  ""), \
-		("onFinalize",    ""), \
+	acts = (("onFinalize",    ""), \
 		("onStartup",     "RTC::UniqueId ec_id"), \
 		("onShutdown",    "RTC::UniqueId ec_id"), \
 		("onActivated",   "RTC::UniqueId ec_id"), \
@@ -688,6 +721,7 @@ class cxx_gen(gen_base.gen_base):
 		self.tags["service_impl_h"]    = service_impl_h
 		self.tags["consumer_stub_h"]   = consumer_stub_h
 		self.tags["module_spec"]       = module_spec
+		self.tags["config_declare"]    = config_declare
 		self.tags["inport_declare"]    = inport_declare
 		self.tags["outport_declare"]   = outport_declare
 		self.tags["corbaport_declare"] = corbaport_declare
@@ -695,6 +729,7 @@ class cxx_gen(gen_base.gen_base):
 		self.tags["consumer_declare"]  = consumer_declare
 		self.tags["initializer"]       = initializer
 		self.tags["registration"]      = registration
+		self.tags["bind_config"]       = bind_config
 
 		self.gen_tags(self.tags)
 		return

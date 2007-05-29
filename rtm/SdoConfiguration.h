@@ -2,7 +2,7 @@
 /*!
  * @file SdoConfiguration.h
  * @brief RT component base class
- * @date $Date: 2007-01-21 13:05:13 $
+ * @date $Date: 2007-04-26 15:33:21 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
  * Copyright (C) 2006
@@ -12,12 +12,21 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: SdoConfiguration.h,v 1.5 2007-01-21 13:05:13 n-ando Exp $
+ * $Id: SdoConfiguration.h,v 1.8 2007-04-26 15:33:21 n-ando Exp $
  *
  */
 
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.7  2007/04/23 04:58:21  n-ando
+ * SDO Configuration was modified to use Configuration admin class.
+ *
+ * Revision 1.6  2007/01/24 16:03:58  n-ando
+ * The ctor. was changed.
+ *
+ * Revision 1.5  2007/01/21 13:05:13  n-ando
+ * A trivial fix.
+ *
  * Revision 1.4  2006/11/08 20:00:21  n-ando
  * ConfigurationSet related interfaces are fixed.
  *
@@ -36,15 +45,15 @@
 #ifndef SdoConfiguration_h
 #define SdoConfiguration_h
 
+// CORBA header include
+#include <rtm/RTC.h>
+
 #include <ace/Guard_T.h>
 #include <ace/Thread_Mutex.h>
 
-// CORBA header include
-#include "rtm/RTC.h"
-
 // local includes
-#include "rtm/idl/SDOPackageSkel.h"
-
+#include <rtm/idl/SDOPackageSkel.h>
+#include <rtm/ConfigAdmin.h>
 #include <string>
 
 // SdoConfiguration with SeqEx 159120
@@ -124,8 +133,8 @@ namespace SDOPackage
       public virtual PortableServer::RefCountServantBase
   {
   public:
-    Configuration_impl(CORBA::ORB_ptr orb, PortableServer::POA_ptr poa);
-    virtual ~Configuration_impl(){};
+    Configuration_impl(RTC::ConfigAdmin& configAdmin);
+    virtual ~Configuration_impl();
 
     //============================================================
     //
@@ -704,6 +713,8 @@ namespace SDOPackage
     // end of CORBA interface definition
     //============================================================
 
+    Configuration_ptr getObjRef();
+
     const DeviceProfile getDeviceProfile();
 
     const ServiceProfileList getServiceProfiles();
@@ -714,7 +725,8 @@ namespace SDOPackage
 
   protected:
     const std::string getUUID() const;
-    CORBA::Long getActiveConfigIndex();
+
+    Configuration_var m_objref;
 
     typedef ACE_Guard<ACE_Thread_Mutex> Guard;
     /*!
@@ -770,9 +782,7 @@ namespace SDOPackage
       NVList configuration_data;
       };
     */
-    ConfigurationSetList m_configurations;
-    std::string  m_activeConfId;
-    CORBA::Long m_activeConfIndex; // -1: active config list has changed
+    RTC::ConfigAdmin& m_configsets;
     ACE_Thread_Mutex m_config_mutex;
 
     /*!
@@ -839,9 +849,6 @@ namespace SDOPackage
       }
       const std::string m_id;
     };
-      
-    CORBA::ORB_var m_varORB;
-    PortableServer::POA_var m_varPOA;
 
   };
 

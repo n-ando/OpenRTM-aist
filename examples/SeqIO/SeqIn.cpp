@@ -1,47 +1,121 @@
 // -*- C++ -*-
 /*!
- * @file SeqIn.cpp
- * @brief SeqIn component
- * @date $Date: 2005-05-12 09:06:20 $
+ * @file  SeqIn.cpp
+ * @brief Sequence InPort component
+ * $Date: 2007-04-13 15:02:42 $
  *
- * $Id: SeqIn.cpp,v 1.1.1.1 2005-05-12 09:06:20 n-ando Exp $
+ * $Id: SeqIn.cpp,v 1.3 2007-04-13 15:02:42 n-ando Exp $
  */
 
-
-
 #include "SeqIn.h"
+#include <iostream>
 
-using namespace std;
+// Module specification
+// <rtc-template block="module_spec">
+static const char* seqin_spec[] =
+  {
+    "implementation_id", "SeqIn",
+    "type_name",         "SequenceInComponent",
+    "description",       "Sequence InPort component",
+    "version",           "1.0",
+    "vendor",            "Noriaki Ando, AIST",
+    "category",          "example",
+    "activity_type",     "DataFlowComponent",
+    "max_instance",      "10",
+    "language",          "C++",
+    "lang_type",         "compile",
+    ""
+  };
+// </rtc-template>
 
-SeqIn::SeqIn(RtcManager* manager)
-  : RtcBase(manager) ,
-    m_DoubleIn("Double", m_Double),
-	m_FloatIn("Float", m_Float),
+SeqIn::SeqIn(RTC::Manager* manager)
+  : RTC::DataFlowComponentBase(manager),
+    // <rtc-template block="initializer">
+    m_ShortIn("Short", m_Short),
     m_LongIn("Long", m_Long),
-	m_ShortIn("Short", m_Short),
-    m_DoubleSeqIn("DoubleSeq", m_DoubleSeq),
-	m_FloatSeqIn("FloatSeq", m_FloatSeq),
+    m_FloatIn("Float", m_Float),
+    m_DoubleIn("Double", m_Double),
+    m_ShortSeqIn("ShortSeq", m_ShortSeq),
     m_LongSeqIn("LongSeq", m_LongSeq),
-	m_ShortSeqIn("ShortSeq", m_ShortSeq)
-
+    m_FloatSeqIn("FloatSeq", m_FloatSeq),
+    m_DoubleSeqIn("DoubleSeq", m_DoubleSeq),
+    
+    // </rtc-template>
+	dummy(0)
 {
-  registerInPort(m_DoubleIn);
-  registerInPort(m_FloatIn);
-  registerInPort(m_LongIn);
-  registerInPort(m_ShortIn);
-  registerInPort(m_DoubleSeqIn);
-  registerInPort(m_FloatSeqIn);
-  registerInPort(m_LongSeqIn);
-  registerInPort(m_ShortSeqIn);
+  // Registration: InPort/OutPort/Service
+  // <rtc-template block="registration">
+  // Set InPort buffers
+  registerInPort("Short", m_ShortIn);
+  registerInPort("Long", m_LongIn);
+  registerInPort("Float", m_FloatIn);
+  registerInPort("Double", m_DoubleIn);
+  registerInPort("ShortSeq", m_ShortSeqIn);
+  registerInPort("LongSeq", m_LongSeqIn);
+  registerInPort("FloatSeq", m_FloatSeqIn);
+  registerInPort("DoubleSeq", m_DoubleSeqIn);
+  
+  // Set OutPort buffer
+  
+  // Set service provider to Ports
+  
+  // Set service consumers to Ports
+  
+  // Set CORBA Service Ports
+  
+  // </rtc-template>
 
-  appendAlias("example/SeqIn|rtc");
 }
 
-RtmRes SeqIn::rtc_ready_do()
+SeqIn::~SeqIn()
 {
 }
 
-RtmRes SeqIn::rtc_active_do()
+
+/*
+RTC::ReturnCode_t SeqIn::onInitialize()
+{
+  return RTC::RTC_OK;
+}
+*/
+
+/*
+RTC::ReturnCode_t SeqIn::onFinalize()
+{
+  return RTC::RTC_OK;
+}
+*/
+
+/*
+RTC::ReturnCode_t SeqIn::onStartup(RTC::UniqueId ec_id)
+{
+  return RTC::RTC_OK;
+}
+*/
+
+/*
+RTC::ReturnCode_t SeqIn::onShutdown(RTC::UniqueId ec_id)
+{
+  return RTC::RTC_OK;
+}
+*/
+
+/*
+RTC::ReturnCode_t SeqIn::onActivated(RTC::UniqueId ec_id)
+{
+  return RTC::RTC_OK;
+}
+*/
+
+/*
+RTC::ReturnCode_t SeqIn::onDeactivated(RTC::UniqueId ec_id)
+{
+  return RTC::RTC_OK;
+}
+*/
+
+
+RTC::ReturnCode_t SeqIn::onExecute(RTC::UniqueId ec_id)
 {
   m_DoubleIn.read();
   m_FloatIn.read();
@@ -51,24 +125,24 @@ RtmRes SeqIn::rtc_active_do()
   m_FloatSeqIn.read();
   m_LongSeqIn.read();
   m_ShortSeqIn.read();
-
+  
   int h_col(4);
   int col(13);
   int all_col = h_col + (col * 4);
   int all_row(0);
-
+  
   int d_size(1);
   int f_size(1);
   int l_size(1);
   int s_size(1);
-
+  
   int ds_size(m_DoubleSeq.data.length());
   int fs_size(m_FloatSeq.data.length());
   int ls_size(m_LongSeq.data.length());
   int ss_size(m_ShortSeq.data.length());
   
   int max_size;
-
+  
   std::vector<int> in_size;
   std::vector<int>::iterator it;
   in_size.reserve(8);
@@ -80,15 +154,15 @@ RtmRes SeqIn::rtc_active_do()
   in_size.push_back(fs_size);
   in_size.push_back(ls_size);
   in_size.push_back(ss_size);
-
+  
   it = std::max_element(in_size.begin(), in_size.end());
-		
+  
   max_size = *it;
-
+  
   std::cout.width(h_col + (col * 4));
   std::cout.fill('-');
   std::cout << "-" << std::endl; all_row++;
-
+  
   std::cout.width(h_col);
   std::cout.setf(ios::right, ios::adjustfield);
   std::cout.fill(' ');
@@ -109,23 +183,23 @@ RtmRes SeqIn::rtc_active_do()
   std::cout.setf(ios::right, ios::adjustfield);
   std::cout.fill(' ');
   std::cout << "Short";
-  std::cout << endl; all_row++;
-
+  std::cout << std::endl; all_row++;
+  
   std::cout.width(all_col);
   std::cout.fill('-');
   std::cout << "-" << std::endl;  all_row++;
-
+  
   for (int i = 0; i < (all_col - 10)/ 2; i++)
-	std::cout << " ";
+    std::cout << " ";
   std::cout << "Basic type";
   for (int i = 0; i < (all_col - 10)/ 2; i++)
-	std::cout << " ";
-  std::cout << endl; all_row++;
-
+    std::cout << " ";
+  std::cout << std::endl; all_row++;
+  
   std::cout.width(h_col + (col * 4));
   std::cout.fill('-');
   std::cout << "-" << std::endl; all_row++;
-
+  
   std::cout.width(h_col);
   std::cout.setf(ios::right, ios::adjustfield);
   std::cout.fill(' ');
@@ -147,110 +221,139 @@ RtmRes SeqIn::rtc_active_do()
   std::cout.fill(' ');
   std::cout << m_Short.data;
   std::cout << std::endl; all_row++;
-
+  
   std::cout.width(all_col);
   std::cout.fill('-');
   std::cout << "-" << std::endl; all_row++;
-
+  
   for (int i = 0; i < (all_col - 13)/ 2; i++)
-	std::cout << " ";
+    std::cout << " ";
   std::cout << "Sequence type";
   for (int i = 0; i < (all_col - 13)/ 2; i++)
-	std::cout << " ";
-  std::cout << endl; all_row++;
-
+    std::cout << " ";
+  std::cout << std::endl; all_row++;
+  
   std::cout.width(all_col);
   std::cout.fill('-');
   std::cout << "-" << std::endl; all_row++;
-
+  
   for (int i = 0; i < max_size; i++)
+    {
+      std::cout.width(h_col - 2);
+      std::cout.setf(ios::right, ios::adjustfield);
+      std::cout.fill(' ');
+      std::cout << i;
+      std::cout.width(2);
+      std::cout << ": ";
+      
+      std::cout.width(col);
+      std::cout.setf(ios::right, ios::adjustfield);
+      std::cout.fill(' ');
+      if (i < ds_size)
 	{
-	  std::cout.width(h_col - 2);
-	  std::cout.setf(ios::right, ios::adjustfield);
-	  std::cout.fill(' ');
-	  std::cout << i;
-	  std::cout.width(2);
-	  std::cout << ": ";
-
-	  std::cout.width(col);
-	  std::cout.setf(ios::right, ios::adjustfield);
-	  std::cout.fill(' ');
-	  if (i < ds_size)
-		{
-		  std::cout << m_DoubleSeq.data[i];
-		}
-	  else
-		{
-		  std::cout << "-";
-		}
-
-	  std::cout.width(col);
-	  std::cout.setf(ios::right, ios::adjustfield);
-	  std::cout.fill(' ');
-	  if (i < fs_size)
-		{
-		  std::cout << m_FloatSeq.data[i];
-		}
-	  else
-		{
-		  std::cout << "-";
-		}
-
-	  std::cout.width(col);
-	  std::cout.setf(ios::right, ios::adjustfield);
-	  std::cout.fill(' ');
-	  if (i < ls_size)
-		{
-		  std::cout << m_LongSeq.data[i];
-		}
-	  else
-		{
-		  std::cout << "-";
-		}
-
-	  std::cout.width(col);
-	  std::cout.setf(ios::right, ios::adjustfield);
-	  std::cout.fill(' ');
-	  if (i < ss_size)
-		{
-		  std::cout << m_ShortSeq.data[i];
-		}
-	  else
-		{
-		  std::cout << "-";
-		}
-
-	  std::cout << endl; all_row++;
+	  std::cout << m_DoubleSeq.data[i];
 	}
-
+      else
+	{
+	  std::cout << "-";
+	}
+      
+      std::cout.width(col);
+      std::cout.setf(ios::right, ios::adjustfield);
+      std::cout.fill(' ');
+      if (i < fs_size)
+	{
+	  std::cout << m_FloatSeq.data[i];
+	}
+      else
+	{
+	  std::cout << "-";
+	}
+      
+      std::cout.width(col);
+      std::cout.setf(ios::right, ios::adjustfield);
+      std::cout.fill(' ');
+      if (i < ls_size)
+	{
+	  std::cout << m_LongSeq.data[i];
+	}
+      else
+	{
+	  std::cout << "-";
+	}
+      
+      std::cout.width(col);
+      std::cout.setf(ios::right, ios::adjustfield);
+      std::cout.fill(' ');
+      if (i < ss_size)
+	{
+	  std::cout << m_ShortSeq.data[i];
+	}
+      else
+	{
+	  std::cout << "-";
+	}
+      
+      std::cout << std::endl; all_row++;
+    }
+  
   for (int i = 0 ; i < all_row; i++)
-	{
-	  std::cout << "[A\r";
-	}
+    {
+      std::cout << "[A\r";
+    }
 
-  return RTM_OK;
+  return RTC::RTC_OK;
 }
 
 
-extern "C" {
-  
-  RtcBase* SeqInNew(RtcManager* manager)
+/*
+RTC::ReturnCode_t SeqIn::onAborting(RTC::UniqueId ec_id)
+{
+  return RTC::RTC_OK;
+}
+*/
+
+/*
+RTC::ReturnCode_t SeqIn::onError(RTC::UniqueId ec_id)
+{
+  return RTC::RTC_OK;
+}
+*/
+
+/*
+RTC::ReturnCode_t SeqIn::onReset(RTC::UniqueId ec_id)
+{
+  return RTC::RTC_OK;
+}
+*/
+
+/*
+RTC::ReturnCode_t SeqIn::onStateUpdate(RTC::UniqueId ec_id)
+{
+  return RTC::RTC_OK;
+}
+*/
+
+/*
+RTC::ReturnCode_t SeqIn::onRateChanged(RTC::UniqueId ec_id)
+{
+  return RTC::RTC_OK;
+}
+*/
+
+
+
+extern "C"
+{
+ 
+  void SeqInInit(RTC::Manager* manager)
   {
-	return new SeqIn(manager);
+    RTC::Properties profile(seqin_spec);
+    manager->registerFactory(profile,
+                             RTC::Create<SeqIn>,
+                             RTC::Delete<SeqIn>);
   }
   
-  
-  void SeqInDelete(RtcBase* p)
-  {
-	delete (SeqIn *)p;
-	return;
-  }
-  
-  
-  void SeqInInit(RtcManager* manager)
-  {
-	RtcModuleProfile profile(seqin_spec);
-	manager->registerComponent(profile, SeqInNew, SeqInDelete);
-  }
 };
+
 

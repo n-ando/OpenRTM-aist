@@ -2,7 +2,7 @@
 /*!
  * @file Factory.h
  * @brief RT component manager class
- * @date $Date: 2006-11-06 01:28:31 $
+ * @date $Date: 2007-04-13 16:09:10 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
  * Copyright (C) 2003-2005
@@ -12,12 +12,15 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: Factory.cpp,v 1.4 2006-11-06 01:28:31 n-ando Exp $
+ * $Id: Factory.cpp,v 1.5 2007-04-13 16:09:10 n-ando Exp $
  *
  */
 
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.4  2006/11/06 01:28:31  n-ando
+ * Now the "instance_name" is set to the component at creation time.
+ *
  * Revision 1.3  2006/10/25 17:35:52  n-ando
  * Classes were renamed, and class reference manual was described.
  *
@@ -71,14 +74,25 @@ namespace RTC
 
   RtcBase* FactoryCXX::create(Manager* mgr)
   {
-    ++m_Number;
-    RtcBase* rtobj(m_New(mgr));
-    rtobj->setProperties(this->profile());
+    try
+      {
+	RtcBase* rtobj(m_New(mgr));
+	if (rtobj == 0) return NULL;
 
-    std::string instance_name(rtobj->getTypeName());
-    instance_name.append(m_policy->onCreate(rtobj));
-    rtobj->setInstanceName(instance_name.c_str());
-    return rtobj;
+	++m_Number;
+	rtobj->setProperties(this->profile());
+
+	// create instance_name
+	std::string instance_name(rtobj->getTypeName());
+	instance_name.append(m_policy->onCreate(rtobj));
+	rtobj->setInstanceName(instance_name.c_str());
+
+	return rtobj;
+      }
+    catch (...)
+      {
+	return NULL;
+      }
   }
 
   void FactoryCXX::destroy(RtcBase* comp)

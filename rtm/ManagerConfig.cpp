@@ -2,7 +2,7 @@
 /*!
  * @file ManagerConfig.cpp
  * @brief RTC manager configuration
- * @date $Date: 2007-01-14 19:43:01 $
+ * @date $Date: 2007-04-26 15:37:16 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
  * Copyright (C) 2003-2005
@@ -12,12 +12,18 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: ManagerConfig.cpp,v 1.5 2007-01-14 19:43:01 n-ando Exp $
+ * $Id: ManagerConfig.cpp,v 1.7 2007-04-26 15:37:16 n-ando Exp $
  *
  */
 
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.6  2007/04/13 18:02:21  n-ando
+ * Some configuration properties handling processes were changed.
+ *
+ * Revision 1.5  2007/01/14 19:43:01  n-ando
+ * Debugging messages to stdout were deleted.
+ *
  * Revision 1.4  2006/11/06 01:26:21  n-ando
  * Some trivial fixes.
  *
@@ -33,6 +39,7 @@
  *
  */
 
+#include <rtm/RTC.h>
 #include <rtm/ManagerConfig.h>
 #include <ace/Get_Opt.h>
 #include <fstream>
@@ -65,7 +72,6 @@ namespace RTC
    * @endif
    */
   ManagerConfig::ManagerConfig()
-    : m_properties(default_config)
   {
   }
 
@@ -78,7 +84,6 @@ namespace RTC
    * @endif
    */
   ManagerConfig::ManagerConfig(int argc, char** argv)
-    : m_properties(default_config)
   {
     init(argc, argv);
   }
@@ -103,47 +108,32 @@ namespace RTC
    * @brief Initialization
    * @endif
    */
-  Properties ManagerConfig::init()
+  void ManagerConfig::init(int argc, char** argv)
   {
+    parseArgs(argc, argv);
+  }
+
+
+  /*!
+   * @if jp
+   * @brief Configuration の結果をPropertyに反映させる
+   * @else
+   * @brief Apply configuration results to Property
+   * @endif
+   */
+  void ManagerConfig::configure(Properties& prop)
+  {
+    prop.setDefaults(default_config);
     if (findConfigFile())
       {
 	std::ifstream f(m_configFile.c_str());
-	m_properties.load(f);
-	f.close();
-	setSystemInformation(m_properties);
-	return m_properties;
+	if (f.is_open())
+	  {
+	    prop.load(f);
+	    f.close();
+	  }
       }
-    else
-      {
-	return m_properties;
-      }
-  }
-
-
-  /*!
-   * @if jp
-   * @brief 初期化
-   * @else
-   * @brief Initialization
-   * @endif
-   */
-  Properties ManagerConfig::init(int argc, char** argv)
-  {
-    parseArgs(argc, argv);
-    return init();
-  }
-
-
-  /*!
-   * @if jp
-   * @brief コンフィギュレーションを取得する
-   * @else
-   * @brief Get configuration value.
-   * @endif
-   */
-  Properties ManagerConfig::getConfig() const
-  {
-    return m_properties;
+    setSystemInformation(prop);
   }
 
 

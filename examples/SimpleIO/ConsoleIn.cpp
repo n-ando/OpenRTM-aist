@@ -2,9 +2,9 @@
 /*!
  * @file  ConsoleIn.cpp
  * @brief Console input component
- * $Date: 2007-01-14 22:51:41 $
+ * $Date: 2007-04-13 15:03:02 $
  *
- * $Id: ConsoleIn.cpp,v 1.2 2007-01-14 22:51:41 n-ando Exp $
+ * $Id: ConsoleIn.cpp,v 1.3 2007-04-13 15:03:02 n-ando Exp $
  */
 
 #include "ConsoleIn.h"
@@ -64,7 +64,7 @@ RTC::ReturnCode_t ConsoleIn::onExecute(RTC::UniqueId ec_id)
   std::cout << "Sending to subscriber: " << m_out.data << std::endl;
   m_outOut.write();
 
-  return RTC::OK;
+  return RTC::RTC_OK;
 }
 
 

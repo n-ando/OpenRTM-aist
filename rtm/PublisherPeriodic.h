@@ -2,7 +2,7 @@
 /*!
  * @file  PublisherPeriodic.h
  * @brief PublisherPeriodic class
- * @date  $Date: 2007-01-06 18:01:06 $
+ * @date  $Date: 2007-04-26 15:32:52 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
  * Copyright (C) 2006
@@ -13,12 +13,15 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: PublisherPeriodic.h,v 1.2 2007-01-06 18:01:06 n-ando Exp $
+ * $Id: PublisherPeriodic.h,v 1.3 2007-04-26 15:32:52 n-ando Exp $
  *
  */
 
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.2  2007/01/06 18:01:06  n-ando
+ * Some trivial fixes.
+ *
  * Revision 1.1  2006/11/27 09:44:51  n-ando
  * The first commitment.
  *
@@ -26,6 +29,8 @@
 
 #ifndef PublisherPeriodic_h
 #define PublisherPeriodic_h
+
+#include <rtm/RTC.h>
 
 #include <ace/Task.h>
 #include <ace/Synch.h>

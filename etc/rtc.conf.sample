@@ -9,11 +9,14 @@
 #          Advanced Industrial Science and Technology (AIST), Japan
 #      All rights reserved.
 #
-# $Id: rtc.conf.sample,v 1.2 2007-01-14 23:33:31 n-ando Exp $
+# $Id: rtc.conf.sample,v 1.3 2007-04-27 06:12:27 n-ando Exp $
 # 
 #----------------------------------------------------------------------
 #
 # $Log: not supported by cvs2svn $
+# Revision 1.2  2007/01/14 23:33:31  n-ando
+# Updated for OpenRTM-aist-0.4.0.
+#
 # Revision 1.1.1.1  2005/05/12 09:06:19  n-ando
 # Public release.
 #
@@ -22,25 +25,64 @@
 #------------------------------------------------------------
 # Configuration version (optional) 
 #
-#config.version: 0.4.0
+config.version: 0.4.0
 
 #------------------------------------------------------------
 # OpenRTM-aist version (optional)
 #
-#openrtm.version: 0.4.0
+openrtm.version: 0.4.0
 
 #------------------------------------------------------------
 # The name of manager (default = manager)
 #
-#manager.name: manager
+manager.name: manager
 
+
+#============================================================
+# CORBA configuration
+#============================================================
+#
+# ORB specific command line options given to ORB_init()
+#
+corba.args:
+#
+# ORB endpoint
+# If you have two or more network interfaces, ORB endpoint address and/or
+# port have to be specified. If hostname or port number is abbreviated,
+# default interface or port number is used. At least one colon ':'
+# is needed when you specify this option.
+# example
+# corba.endpoint: myhost:      (use myhost and default port)
+# corba.endpoint: :9876        (use default addr and port 9876)
+# corba.endpoint: myhost:9876  (use myhost and port 9876)
+#
+corba.endpoint:
+#
+# CORBA name server setting
+# example
+# corba.nameservers: openrtm.aist.go.jp:9876
+# corba.nameservers: rtm0.aist.go.jp, rtm1.aist.go.jp, rtm2.aist.go.jp
+#
+# Multiple name servers can be specified separating by comma.
+# If port number is abbreviated, default port number is used.
+# The default port number is depend on ORB implementation.
+#
+corba.nameservers: localhost
 
 
 #============================================================
 # Naming configurations
 #============================================================
-
-#------------------------------------------------------------
+#
+# Enable/Disable naming functions
+#
+naming.enable: YES
+#
+# Naming Types
+# Now only "corba" is supported.
+#
+naming.type: corba
+#
 # Naming format
 #
 # The name format of components that is bound to naming services.
@@ -61,29 +103,20 @@
 # %M: The manager name.
 # %p: PID of the manager.
 #
-#naming_formats: %h.host_cxt/%M.mgr_cxt/%c.cat_cxt/%m.mod_cxt/%n.rtc
+naming.formats: %h.host_cxt/%M.mgr_cxt/%c.cat_cxt/%m.mod_cxt/%n.rtc
+#
+# Autoupdate to Naming Server
+# Enable/Disable and update interval [s]
+naming.update.enable: YES
+naming.update.interval 10.0
 
+# End of Naming configuration section
 #------------------------------------------------------------
-# CORBA name server setting
-#
-# NameServer host_name:port_number
-#
-# for example
-# corba.nameservers: openrtm.aist.go.jp:9876
-# corba.nameservers: rtm0.aist.go.jp, rtm1.aist.go.jp, rtm2.aist.go.jp
-#
-# Multiple name servers can be specified separating by comma.
-# If port number is abbreviated, default port number is used.
-# The default port number is depend on ORB implementation.
-#
-#corba.nameservers: localhost
-
 
 #============================================================
 # Module management
 #============================================================
-
-#------------------------------------------------------------
+#
 #manager.modules.config_ext:
 #manager.modules.config_path:
 #manager.modules.detect_loadable:
@@ -99,13 +132,16 @@
 #============================================================
 # Logger configurations
 #============================================================
-
+#
+# Enable/Disable logger [YES/NO]
+logger.enable: YES
+#
 #------------------------------------------------------------
 # Log file name (default = ./rtc%p.log)
 # %p: PID
 #
-#logger.file_name: ./rtc%p.log
-
+logger.file_name: ./rtc%p.log
+#
 #------------------------------------------------------------
 # Log date format (default = %b %d %H:%M:%S)
 #
@@ -146,10 +182,8 @@
 #logger.date_format: [%a %b %d %H:%M:%S %Z %Y] // data command format
 #logger.date_format: [%Y-%m-%d %H.%M.%S]
 #
-#logger.date_format: %b %d %H:%M:%S
-
-
-#------------------------------------------------------------
+logger.date_format: %b %d %H:%M:%S
+#
 # Log level (default = NORMAL)
 #
 # The following LogLevels are allowed.
@@ -170,5 +204,4 @@
 # "TRACE", "VERBOSE", "PARANOID" logging level will create a huge log file!!
 # "PARANOID" log level will tangle the log file.
 #
-#logger.log_level: NORMAL
-
+logger.log_level: NORMAL

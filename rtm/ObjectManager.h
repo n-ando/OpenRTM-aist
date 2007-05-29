@@ -2,22 +2,33 @@
 /*!
  * @file ObjectManager.h
  * @brief Object management class
- * @date $Date: 2006-11-06 01:42:22 $
+ * @date $Date: 2007-04-27 03:27:25 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
- * Copyright (C) 2003-2005
+ * Copyright (C) 2003-2007
  *     Task-intelligence Research Group,
  *     Intelligent Systems Research Institute,
  *     National Institute of
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: ObjectManager.h,v 1.3 2006-11-06 01:42:22 n-ando Exp $
+ * $Id: ObjectManager.h,v 1.6 2007-04-27 03:27:25 n-ando Exp $
  *
  */
 
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.5  2007/04/26 15:30:32  n-ando
+ * The header include order was modified to define _REENTRANT before
+ * including ace/config-lite.h in Linux systems.
+ * In ace 5.4.7 or later, _REENTRANT flag should be defined explicitly.
+ *
+ * Revision 1.4  2007/04/13 18:11:26  n-ando
+ * Now return values are used for error propagation instead of exception.
+ *
+ * Revision 1.3  2006/11/06 01:42:22  n-ando
+ * ObjectManager's for_each has been modified to return Predicate object.
+ *
  * Revision 1.2  2006/10/25 17:31:03  n-ando
  * for_each()'s arguments are changed from value to reference.
  *
@@ -29,6 +40,8 @@
 
 #ifndef ObjectManager_h
 #define ObjectManager_h
+
+#include <rtm/RTC.h>
 
 #include <vector>
 #include <string>
@@ -45,39 +58,14 @@ class ObjectManager
   typedef typename ObjectVector::iterator       ObjectVectorItr;
   typedef typename ObjectVector::const_iterator ObjectVectorConstItr;
 
-  struct Error
-  {
-    Error(const std::string& _reason)
-      : reason(_reason) {};
-    std::string reason;
-  };
-
-  struct AlreadyRegistered
-    : public Error
-  {
-    AlreadyRegistered()
-      : Error("Already registered") {};
-  };
-
-  struct NoSuchObject
-    : public Error
-  {
-    NoSuchObject()
-      : Error("No such object") {};
-  };
-
-  struct SystemError
-    : public Error
-  {
-    SystemError()
-      : Error("System error") {};
-  };
 
   ObjectManager(){};
 
+
   ~ObjectManager(){};
 
-  void registerObject(Object* obj)
+
+  bool registerObject(Object* obj)
   {
     ObjectVectorItr it;
     ACE_Guard<ACE_Thread_Mutex> guard(m_objects._mutex);
@@ -87,14 +75,11 @@ class ObjectManager
     if (it == m_objects._obj.end())
       {
 	m_objects._obj.push_back(obj);
-	return;
+	return true;
       }
-    else
-      {
-	throw AlreadyRegistered();
-      }
-    return;
+    return false;
   }
+
 
   Object* unregisterObject(const Identifier& id)
   {
@@ -103,17 +88,12 @@ class ObjectManager
 
     it = std::find_if(m_objects._obj.begin(), m_objects._obj.end(),
 		      Predicate(id));
-    if (it == m_objects._obj.end())
-      {
-	throw NoSuchObject();
-      }
-    else
+    if (it != m_objects._obj.end())
       {
 	Object* obj(*it);
 	m_objects._obj.erase(it);
 	return obj;
       }
-    throw SystemError();
     return NULL;;
   }
 
@@ -122,18 +102,12 @@ class ObjectManager
   {
     ObjectVectorConstItr it;
     ACE_Guard<ACE_Thread_Mutex> guard(m_objects._mutex);
-
     it = std::find_if(m_objects._obj.begin(), m_objects._obj.end(),
 		      Predicate(id));
-    if (it == m_objects._obj.end())
-      {
-	throw NoSuchObject();
-      }
-    else
+    if (it != m_objects._obj.end())
       {
 	return *it;
       }
-    throw SystemError();
     return NULL;
   }
 
@@ -143,6 +117,7 @@ class ObjectManager
     ACE_Guard<ACE_Thread_Mutex> guard(m_objects._mutex);
     return m_objects._obj;
   }
+
 
   template <class Pred>
   Pred for_each(Pred p)
@@ -158,7 +133,6 @@ class ObjectManager
     ObjectVector _obj;
   };
   Objects m_objects;
-
 };
 
 #endif // ObjectManager_h

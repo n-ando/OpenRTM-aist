@@ -2,7 +2,7 @@
 /*!
  * @file CorbaNaming.h
  * @brief CORBA naming service helper class
- * @date $Date: 2006-11-04 19:43:01 $
+ * @date $Date: 2007-04-13 15:35:21 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
  * Copyright (C) 2006
@@ -13,12 +13,15 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: CorbaNaming.h,v 1.1 2006-11-04 19:43:01 n-ando Exp $
+ * $Id: CorbaNaming.h,v 1.2 2007-04-13 15:35:21 n-ando Exp $
  *
  */
 
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.1  2006/11/04 19:43:01  n-ando
+ * CORBA Naming service helper class has rewritten and renamed.
+ *
  */
 
 
@@ -796,6 +799,8 @@ namespace RTC
     unsigned int split(const std::string& input,
 		       const std::string& delimiter,
 		       std::vector<std::string>& results);
+
+
     
     CORBA::ORB_var m_varORB;
     std::string m_nameServer;

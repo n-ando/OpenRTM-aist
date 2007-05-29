@@ -1,75 +1,142 @@
 // -*- C++ -*-
 /*!
- * @file SeqIn.h
- * @brief SeqIn component
- * @date $Date: 2005-05-12 09:06:20 $
+ * @file  SeqIn.h
+ * @brief Sequence InPort component
+ * @date  $Date: 2007-02-04 16:47:48 $
  *
- * $Id: SeqIn.h,v 1.1.1.1 2005-05-12 09:06:20 n-ando Exp $
+ * $Id: SeqIn.h,v 1.2 2007-02-04 16:47:48 n-ando Exp $
  */
 
-#ifndef __SEQIN_h__
-#define __SEQIN_h__
+#ifndef SEQIN_H
+#define SEQIN_H
 
+#include <rtm/Manager.h>
+#include <rtm/DataFlowComponentBase.h>
+#include <rtm/CorbaPort.h>
+#include <rtm/DataInPort.h>
+#include <rtm/DataOutPort.h>
+#include <rtm/idl/BasicDataTypeSkel.h>
 
-#include <rtm/RtcBase.h>
-#include <rtm/RtcManager.h>
-#include <rtm/RtcInPort.h>
-#include <rtm/RtcOutPort.h>
+// Service implementation headers
+// <rtc-template block="service_impl_h">
 
-using namespace RTM;
+// </rtc-template>
 
-static RtcModuleProfSpec seqin_spec[] =
-  {
-  
-  {RTC_MODULE_NAME, "SeqIn"},
-  {RTC_MODULE_DESC, "SeqIn component"},
-  {RTC_MODULE_VERSION, "0.1"},
-  {RTC_MODULE_AUTHOR, "DrSample"},
-  {RTC_MODULE_CATEGORY, "Generic"},
-  {RTC_MODULE_COMP_TYPE, "COMMUTATIVE"},
-  {RTC_MODULE_ACT_TYPE, "SPORADIC"},
-  {RTC_MODULE_MAX_INST, "10"},
-  {RTC_MODULE_LANG, "C++"},
-  {RTC_MODULE_LANG_TYPE, "COMPILE"},
-  {RTC_MODULE_SPEC_END, NULL}
-  };
+// Service Consumer stub headers
+// <rtc-template block="consumer_stub_h">
 
+// </rtc-template>
 
-	
+using namespace RTC;
+
 class SeqIn
-  : public RTM::RtcBase
+  : public RTC::DataFlowComponentBase
 {
  public:
-  SeqIn(RtcManager* manager);
+  SeqIn(RTC::Manager* manager);
+  ~SeqIn();
 
-  virtual RtmRes rtc_ready_do();
-  virtual RtmRes rtc_active_do();
+  // The initialize action (on CREATED->ALIVE transition)
+  // formaer rtc_init_entry() 
+  // virtual RTC::ReturnCode_t onInitialize();
 
-  TimedDouble m_Double;
-  InPortAny<TimedDouble> m_DoubleIn;
-  TimedFloat m_Float;
-  InPortAny<TimedFloat> m_FloatIn;
-  TimedLong m_Long;
-  InPortAny<TimedLong> m_LongIn;
+  // The finalize action (on ALIVE->END transition)
+  // formaer rtc_exiting_entry()
+  // virtual RTC::ReturnCode_t onFinalize();
+
+  // The startup action when ExecutionContext startup
+  // former rtc_starting_entry()
+  // virtual RTC::ReturnCode_t onStartup(RTC::UniqueId ec_id);
+
+  // The shutdown action when ExecutionContext stop
+  // former rtc_stopping_entry()
+  // virtual RTC::ReturnCode_t onShutdown(RTC::UniqueId ec_id);
+
+  // The activated action (Active state entry action)
+  // former rtc_active_entry()
+  // virtual RTC::ReturnCode_t onActivated(RTC::UniqueId ec_id);
+
+  // The deactivated action (Active state exit action)
+  // former rtc_active_exit()
+  // virtual RTC::ReturnCode_t onDeactivated(RTC::UniqueId ec_id);
+
+  // The execution action that is invoked periodically
+  // former rtc_active_do()
+  virtual RTC::ReturnCode_t onExecute(RTC::UniqueId ec_id);
+
+  // The aborting action when main logic error occurred.
+  // former rtc_aborting_entry()
+  // virtual RTC::ReturnCode_t onAborting(RTC::UniqueId ec_id);
+
+  // The error action in ERROR state
+  // former rtc_error_do()
+  // virtual RTC::ReturnCode_t onError(RTC::UniqueId ec_id);
+
+  // The reset action that is invoked resetting
+  // This is same but different the former rtc_init_entry()
+  // virtual RTC::ReturnCode_t onReset(RTC::UniqueId ec_id);
+  
+  // The state update action that is invoked after onExecute() action
+  // no corresponding operation exists in OpenRTm-aist-0.2.0
+  // virtual RTC::ReturnCode_t onStateUpdate(RTC::UniqueId ec_id);
+
+  // The action that is invoked when execution context's rate is changed
+  // no corresponding operation exists in OpenRTm-aist-0.2.0
+  // virtual RTC::ReturnCode_t onRateChanged(RTC::UniqueId ec_id);
+
+
+ protected:
+  // DataInPort declaration
+  // <rtc-template block="inport_declare">
   TimedShort m_Short;
-  InPortAny<TimedShort> m_ShortIn;
-
-  TimedDoubleSeq m_DoubleSeq;
-  InPortAny<TimedDoubleSeq> m_DoubleSeqIn;
-  TimedFloatSeq m_FloatSeq;
-  InPortAny<TimedFloatSeq> m_FloatSeqIn;
-  TimedLongSeq m_LongSeq;
-  InPortAny<TimedLongSeq> m_LongSeqIn;
+  InPort<TimedShort> m_ShortIn;
+  TimedLong m_Long;
+  InPort<TimedLong> m_LongIn;
+  TimedFloat m_Float;
+  InPort<TimedFloat> m_FloatIn;
+  TimedDouble m_Double;
+  InPort<TimedDouble> m_DoubleIn;
   TimedShortSeq m_ShortSeq;
-  InPortAny<TimedShortSeq> m_ShortSeqIn;
+  InPort<TimedShortSeq> m_ShortSeqIn;
+  TimedLongSeq m_LongSeq;
+  InPort<TimedLongSeq> m_LongSeqIn;
+  TimedFloatSeq m_FloatSeq;
+  InPort<TimedFloatSeq> m_FloatSeqIn;
+  TimedDoubleSeq m_DoubleSeq;
+  InPort<TimedDoubleSeq> m_DoubleSeqIn;
+  
+  // </rtc-template>
+
+
+  // DataOutPort declaration
+  // <rtc-template block="outport_declare">
+  
+  // </rtc-template>
+
+  // CORBA Port declaration
+  // <rtc-template block="corbaport_declare">
+  
+  // </rtc-template>
+
+  // Service declaration
+  // <rtc-template block="service_declare">
+  
+  // </rtc-template>
+
+  // Consumer declaration
+  // <rtc-template block="consumer_declare">
+  
+  // </rtc-template>
+
+ private:
+  int dummy;
 
 };
 
 
-extern "C" {
-  RtcBase* SeqInNew(RtcManager* manager);
-  void SeqInDelete(RtcBase* p);
-  void SeqInInit(RtcManager* manager);
+extern "C"
+{
+  void SeqInInit(RTC::Manager* manager);
 };
-#endif // __SEQIN_h__
 
+#endif // SEQIN_H

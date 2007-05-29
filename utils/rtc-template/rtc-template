@@ -3,7 +3,7 @@
 #
 #  @file rtc-template
 #  @brief rtc-template RTComponent source code generator tool
-#  @date $Date: 2007-01-11 07:42:25 $
+#  @date $Date: 2007-04-27 00:56:35 $
 #  @author Noriaki Ando <n-ando@aist.go.jp>
 # 
 #  Copyright (C) 2004-2007
@@ -13,11 +13,23 @@
 #          Advanced Industrial Science and Technology (AIST), Japan
 #      All rights reserved.
 # 
-#  $Id: rtc-template,v 1.5 2007-01-11 07:42:25 n-ando Exp $
+#  $Id: rtc-template,v 1.8 2007-04-27 00:56:35 n-ando Exp $
 #
 
 #
 #  $Log: not supported by cvs2svn $
+#  Revision 1.7  2007/04/23 07:31:28  n-ando
+#  Now "--conf" option can accept scope resolution operator of C++.
+#
+#  Revision 1.6  2007/04/23 01:41:21  n-ando
+#  New option "--config" and configuration template code were added.
+#
+#  Revision 1.5  2007/01/11 07:42:25  n-ando
+#  Modified for OMG RTC specificatin and OpenRTM-aist-0.4.0
+#  - Some command option was chaged and removed.
+#  - Now empty Struct class is used instead of *Profile classes for ezt dict.
+#  - Some bugs were fixed.
+#
 #  Revision 1.4  2005/09/08 09:24:18  n-ando
 #  - A bug fix for merge function.
 #
@@ -69,6 +81,7 @@ opt_args_fmt = ["help",
 		"module-act-type=",
 		"module-max-inst=",
 		"module-lang=",
+                "config=",
 		"inport=",
 		"outport=",
 		"service=",
@@ -100,7 +113,8 @@ Options:
     [--module-act-type[=activity_type]]   Component's activity type.
     [--module-max-inst[=max_instance]]    Number of maximum instance.
     [--module-lang[=language]]            Language.
-    [--inport[=PortName:Type]]            InPort's name and tyoe.
+    [--config[=ParamName:Type:Default]]   Configuration variable.
+    [--inport[=PortName:Type]]            InPort's name and type.
     [--outport[=PortName:Type]]           OutPort's name and type
     [--service[=PortName:Name:Type]]      Service Provider Port
     [--service-idl[=IDL_file]]            IDL file name for service
@@ -147,6 +161,17 @@ def usage_long():
 
     --module-max-inst[=max_instance]:
         Specify maximum number of component instance.
+
+    --config=[ParamName:Type:Default]:
+        Specify configuration value. The 'ParamName' is used as the
+        configuration value identifier. This character string is also used as
+        variable name in the source code. The 'Type' is type of configuration
+        value. The type that can be converted to character string is allowed.
+        In C++ language, the type should have operators '<<' and '>>' that
+        are defined as
+        'istream& operator<<(Type)'
+        and
+        'ostream& operator>>(Type)'.
 
     --inport=[PortName:Type]:
         Specify InPort's name and type. 'PortName' is used as this InPort's
@@ -197,10 +222,14 @@ Example:
     --module-version=0.1 --module-vendor=AIST --module-category=Generic \\
     --module-comp-type=DataFlowComponent --module-act-type=SPORADIC \\
     --module-max-inst=10  \\
+    --config=int_param0:int:0 --config=int_param1:int:1 \\
+    --config=double_param0:double:3.14 --config=double_param1:double:9.99 \\
+    --config="str_param0:std::string:hoge" \\
+    --config="str_param1:std::string:foo" \\
     --inport=Ref:TimedFloat --inport=Sens:TimedFloat \\
     --outport=Ctrl:TimedDouble --outport=Monitor:TimedShort \\
     --service=MySvcPort:myservice0:MyService \\
-    --consumer=YourSvcPort:yourservice0:YourService \\ 
+    --consumer=YourSvcPort:yourservice0:YourService \\
     --service-idl=MyService.idl --consumer-idl=YourService.idl
 
 """
@@ -302,6 +331,39 @@ def MakeModuleProfile(opts):
 			var = opt.replace("--module-","")
 			prof.setValue(var, arg)
 	return prof
+
+
+def MakeConfig(opts):
+	"""
+	MakeConfigurationParameters
+
+	Create Configuration list from command options
+	"""
+	prof_list = []
+	cnt = 0
+	for opt, arg in opts:
+		if opt == ("--config"):
+			try:
+				# For C++ scope resolution operator 
+				arg = re.sub("::", "@@", arg)
+				name, type, default = arg.split(":")
+				name    = re.sub("@@", "::", name)
+				type    = re.sub("@@", "::", type)
+				default = re.sub("@@", "::", default)
+			except:
+				sys.stderr("Invalid option: " \
+					   + opt \
+					   + "=" \
+					   + arg)
+			prof = Struct()
+			prof.name = name
+                        prof.l_name = name.lower()
+                        prof.u_name = name.upper()
+			prof.type = type
+			prof.default  = default
+			prof_list.append(prof)
+			cnt += 1
+	return prof_list
 
 
 def MakeDataPort(opts, port_type):
@@ -592,6 +654,7 @@ def main():
 	# Create dictionary for ezt
 	data = {
 		'module':       MakeModuleProfile(opts),
+                'config':       MakeConfig(opts),
 		'inport':       MakeDataPort(opts, "inport"),
 		'outport':      MakeDataPort(opts, "outport"),
 		'service':      MakePortInterface(opts, "service"),

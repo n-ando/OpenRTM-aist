@@ -2,7 +2,7 @@
 /*!
  * @file RTObject.h
  * @brief RT component base class
- * @date $Date: 2007-01-14 22:59:01 $
+ * @date $Date: 2007-04-23 04:57:44 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
  * Copyright (C) 2006
@@ -12,12 +12,20 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: RTObject.h,v 1.5 2007-01-14 22:59:01 n-ando Exp $
+ * $Id: RTObject.h,v 1.7 2007-04-23 04:57:44 n-ando Exp $
  *
  */
 
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.6  2007/04/13 15:55:43  n-ando
+ * RTObject interface operations in RTC.idl were changed.
+ * - attach_executioncontext()
+ * - detach_executioncontext()
+ *
+ * Revision 1.5  2007/01/14 22:59:01  n-ando
+ * A bug fix about template argument for buffer-type.
+ *
  * Revision 1.4  2007/01/14 19:46:14  n-ando
  * The component action implementation functions for Users' business logic
  * were added (i.e onInitialize(), onExecute(), etc..)
@@ -42,6 +50,7 @@
 #include "rtm/RTC.h"
 #include "rtm/Properties.h"
 #include "rtm/idl/RTCSkel.h"
+#include "rtm/idl/OpenRTMSkel.h"
 #include "rtm/PortBase.h"
 //#include "rtm/ObjectManager.h"
 #include "rtm/PortAdmin.h"
@@ -49,6 +58,7 @@
 #include <rtm/DataOutPort.h>
 #include <rtm/InPort.h>
 #include <rtm/OutPort.h>
+#include <rtm/ConfigAdmin.h>
 
 // ACE
 #include <ace/Task.h>
@@ -272,8 +282,19 @@ namespace RTC
      */
     virtual ExecutionContextList* get_contexts();
 
+    /*!
+     * @if jp
+     * @brief [CORBA interface] ExecutionContextを取得する
+     * @else
+     * @brief [CORBA interface] Get ExecutionContext.
+     * @endif
+     */
+    virtual ExecutionContext_ptr get_context(const UniqueId ec_id);
+
+    /*
     virtual UniqueId 
     set_execution_context_service(const ExecutionContextService_ptr ec);
+    */
 
     //============================================================
     // RTC::RTObject
@@ -336,6 +357,8 @@ namespace RTC
 
 
     // RTC::ComponentAction
+    UniqueId attach_executioncontext(ExecutionContext_ptr exec_context);
+    ReturnCode_t detach_executioncontext(UniqueId ec_id);
     virtual ReturnCode_t on_initialize();
     virtual ReturnCode_t on_finalize();
     virtual ReturnCode_t on_startup(UniqueId ec_id);
@@ -810,7 +833,7 @@ namespace RTC
      * 
      * @brief [local interface] RTC のプロパティを取得する
      *
-     * RTC が保持しているプロパティを返す。与えられるプロパティは、
+     * RTC が保持しているプロパティを返す。
      * RTCがプロパティを持たない場合は空のプロパティが返される。
      * 
      * @return RTC のプロパティ
@@ -828,6 +851,17 @@ namespace RTC
      */
     Properties& getProperties();
 
+
+    template <typename VarType>
+    bool bindParameter(const char* param_name, VarType& var,
+		       const char* def_val,
+		       bool (*trans)(VarType&, const char*) = ::stringTo)
+    {
+      m_configsets.bindParameter(param_name, var, def_val, trans);
+      return true;
+    }
+
+    void updateParameters(const char* config_set);
 
     /*!
      * @if jp
@@ -922,11 +956,18 @@ namespace RTC
     }
     */
 
+  protected:
+    void shutdown();
+
 
 
 
 
   protected:
+    Manager* m_pManager;
+    CORBA::ORB_var m_pORB;
+    PortableServer::POA_var m_pPOA;
+
     //============================================================
     // SDO 関係の変数
     //============================================================
@@ -994,6 +1035,11 @@ namespace RTC
      */
     Properties m_properties;
 
+    ConfigAdmin m_configsets;
+
+    //------------------------------------------------------------
+    // Functor
+    //------------------------------------------------------------
     struct nv_name
     {
       nv_name(const char* name) : m_name(name) {};
