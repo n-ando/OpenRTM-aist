@@ -2,8 +2,8 @@
 Copyright (C) 2003-2007
      Noriaki Ando and the OpenRTM-aist Project team
      Intelligent Systems Research Institute,
-     National Institute of Advanced Industrial Science and Technology (AIST)
-     All rights reserved.
+     National Institute of Advanced Industrial Science and Technology (AIST),
+     Tsukuba, Japan, All rights reserved.
 
 
 NOTICE
@@ -18,9 +18,10 @@ WRITTEN NEGOTIATED AGREEMENT SIGNED BY YOU.
 
 LICENSE
 -------
-The OpenRTM-aist is the dual-licensed open source software. You can use,
-copy, distribute and/or modify this library under the terms and conditions
-of either of the licenses below.
+The OpenRTM-aist-0.4.0 (AIST Software Distribution Number: H19PRO-693) is the
+dual-licensed open source software. You can use, copy, distribute and/or
+modify this library under the terms and conditions of either of the
+licenses below.
 
 1) LGPL (GNU LESSER GENERAL PUBLIC LICENSE)
 See COPYING.LIB.
@@ -31,6 +32,23 @@ modify and/or sublicense the library without any limitation in the terms of
 LGPL. The individual license should be concluded with a negotiated agreement
 between you and AIST and/or AIST TLO. To conclude individual license,
 contact the person responsible of AIST.
+
+
+SUBMISSIONS
+-----------
+The OpenRTM-aist is maintained by the National Institute of Advanced Industrial
+Science and Technology (AIST), Tsukuba, Japan for the development of open-source
+software as part of the open-source software community.
+By submitting comments, suggestions, code, code snippets, techniques (including
+that of usage) and algorithms (collectively ``Submissions''), submitters
+acknowledge that they have the right to do so, that any such Submissions are
+given freely and unreservedly, and that they waive any claims to copyright or
+ownership. In addition, submitters acknowledge that any such Submission might
+become part of the copyright maintained on the overall body of code that
+comprises the OpenRTM-aist. By making a Submission, submitter agree to these
+terms. Moreover, submitters acknowledge that the incorporation or modification
+of such Submissions is entirely at the discretion of the moderators of the
+open-source software projects or their designees. 
 
 
 DISCLAIMER
