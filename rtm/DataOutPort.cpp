@@ -2,7 +2,7 @@
 /*!
  * @file DataOutPort.cpp
  * @brief Base class of OutPort
- * @date $Date: 2007-04-13 15:44:56 $
+ * @date $Date: 2007-06-22 10:54:56 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
  * Copyright (C) 2006
@@ -13,12 +13,15 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: DataOutPort.cpp,v 1.5 2007-04-13 15:44:56 n-ando Exp $
+ * $Id: DataOutPort.cpp,v 1.5.2.1 2007-06-22 10:54:56 n-ando Exp $
  *
  */
 
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.5  2007/04/13 15:44:56  n-ando
+ * RTC::OK was changed to RTC::RTC_OK.
+ *
  * Revision 1.4  2007/02/04 16:54:12  n-ando
  * The disconnection process was implemented.
  *
@@ -89,7 +92,7 @@ namespace RTC
   {
     PublisherBase* publisher;
     publisher = m_outport.detach(connector_profile.connector_id);
-    delete publisher;
+    m_pf.destroy(publisher);
     return;
   }
   

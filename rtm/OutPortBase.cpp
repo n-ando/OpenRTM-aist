@@ -2,7 +2,7 @@
  *
  * @file RtcOutPortBase.cpp
  * @brief Output porty base class
- * @date $Date: 2006-12-02 18:46:05 $
+ * @date $Date: 2007-06-22 10:55:01 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
  * Copyright (C) 2003-2005
@@ -12,12 +12,15 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: OutPortBase.cpp,v 1.1 2006-12-02 18:46:05 n-ando Exp $
+ * $Id: OutPortBase.cpp,v 1.1.4.1 2007-06-22 10:55:01 n-ando Exp $
  *
  */
 
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.1  2006/12/02 18:46:05  n-ando
+ * The first commitment.
+ *
  * Revision 1.3  2005/05/27 07:34:21  n-ando
  * - InPort/OutPort interface was changed.
  *   subscribe/unsubscribe were completely changed.
@@ -135,6 +138,7 @@ namespace RTC
     if (it == m_publishers.end())
       return NULL;
     PublisherBase* pub((*it)->publisher);
+    delete (*it);
     m_publishers.erase(it);
     return pub;
   }

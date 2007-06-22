@@ -2,7 +2,7 @@
 /*!
  * @file  PublisherFactory.h
  * @brief PublisherFactory class
- * @date  $Date: 2007-01-06 18:00:31 $
+ * @date  $Date: 2007-06-22 10:55:11 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
  * Copyright (C) 2006
@@ -13,12 +13,15 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: PublisherFactory.h,v 1.2 2007-01-06 18:00:31 n-ando Exp $
+ * $Id: PublisherFactory.h,v 1.2.4.1 2007-06-22 10:55:11 n-ando Exp $
  *
  */
 
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.2  2007/01/06 18:00:31  n-ando
+ * Some trivial fixes.
+ *
  * Revision 1.1  2006/11/27 09:44:45  n-ando
  * The first commitment.
  *
@@ -76,6 +79,8 @@ namespace RTC
      * @endif
      */
     PublisherBase* create(InPortConsumer* consumer, Properties& property);
+
+    void destroy(PublisherBase *publisher);
   protected:
   
   private:

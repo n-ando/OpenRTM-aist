@@ -2,7 +2,7 @@
 /*!
  * @file PublisherBase.h
  * @brief Publisher base class
- * @date $Date: 2006-11-27 09:44:43 $
+ * @date $Date: 2007-06-22 10:55:07 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
  * Copyright (C) 2006
@@ -13,12 +13,15 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: PublisherBase.h,v 1.1 2006-11-27 09:44:43 n-ando Exp $
+ * $Id: PublisherBase.h,v 1.1.4.1 2007-06-22 10:55:07 n-ando Exp $
  *
  */
 
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.1  2006/11/27 09:44:43  n-ando
+ * The first commitment.
+ *
  */
 
 #ifndef PublisherBase_h
@@ -72,6 +75,7 @@ namespace RTC
   public:
     virtual void update() = 0;
     virtual ~PublisherBase(){};
+    virtual void release(){}
   };
 
 };

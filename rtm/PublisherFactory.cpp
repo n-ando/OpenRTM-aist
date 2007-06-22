@@ -2,7 +2,7 @@
 /*!
  * @file  PublisherFactory.cpp
  * @brief PublisherFactory class
- * @date  $Date: 2007-01-06 18:00:25 $
+ * @date  $Date: 2007-06-22 10:55:09 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
  * Copyright (C) 2006
@@ -13,12 +13,15 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: PublisherFactory.cpp,v 1.2 2007-01-06 18:00:25 n-ando Exp $
+ * $Id: PublisherFactory.cpp,v 1.2.4.1 2007-06-22 10:55:09 n-ando Exp $
  *
  */
 
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.2  2007/01/06 18:00:25  n-ando
+ * Some trivial fixes.
+ *
  * Revision 1.1  2006/11/27 09:44:44  n-ando
  * The first commitment.
  *
@@ -63,4 +66,11 @@ namespace RTC
       }
     return NULL;
   }
+
+  void PublisherFactory::destroy(PublisherBase* publisher)
+  {
+    publisher->release();
+    delete publisher;
+  }
+  
 }; // namespace RTC
