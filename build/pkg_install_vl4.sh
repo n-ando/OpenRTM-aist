@@ -16,7 +16,7 @@ ace=`rpm -qa ace`
 ace_devel=`rpm -qa ace-devel`
 
 ### ソースRPMファイルの取得とリビルドにとても時間がかかるため、一時的に筑波大大原氏のHP[RTMインストール]からrpmパッケージをダウンロードしている。
-ace_pkg="http://www.google.co.jp/url?sa=t&ct=res&cd=2&url=http%3A%2F%2Ff38.aaa.livedoor.jp%2F~kencyo%2Findex.php%3Fplugin%3Dattach%26openfile%3Dace-5.5.4-2.i386.rpm%26refer%3DRTM%25A5%25A4%25A5%25F3%25A5%25B9%25A5%25C8%25A1%25BC%25A5%25EB&ei=ehnARZOPF4OosAKS0ICGCA&usg=__QIYmPcnVjpcDLHfJHXqKGS950K0=&sig2=l1OpHCZ_vF_BTYsRPr6BDw"
+ace_pkg="http://f38.aaa.livedoor.jp/~kencyo/download/ace-5.5.4-2.i386.rpm"
 
 ### ソースRPMファイルの取得とリビルドにとても時間がかかるため、一時的に筑波大大原氏のHP[RTMインストール]からrpmパッケージをダウンロードしている。
 ace_devel_pkg="http://f38.aaa.livedoor.jp/~kencyo/index.php?plugin=attach&openfile=ace-devel-5.5.4-2.i386.rpm&refer=RTM%A5%A4%A5%F3%A5%B9%A5%C8%A1%BC%A5%EB"
