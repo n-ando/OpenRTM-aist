@@ -1,8 +1,11 @@
 ## Makefile.am for win32/OpenRTM-aist/bin
 ##
-## $Id: Makefile.am,v 1.1.2.1 2007-07-20 16:26:26 n-ando Exp $
+## $Id: Makefile.am,v 1.1.2.2 2007-07-20 20:31:24 n-ando Exp $
 ##
 ## $Log: not supported by cvs2svn $
+## Revision 1.1.2.1  2007/07/20 16:26:26  n-ando
+## Makefile for Win32 source tree management.
+##
 ##
 ##---------------------------------------------------------------------------
 clean-local:
@@ -14,3 +17,4 @@ dist-hook: clean-local
 	cp $(top_srcdir)/utils/rtm-skelwrapper/*.py .
 	cp $(top_srcdir)/utils/rtm-skelwrapper/rtm-skelwrapper rtm-skelwrapper.py
 
+EXTRA_DIST = rtm-naming.bat
