@@ -2,7 +2,7 @@
 /*!
  * @file TimeValue.h
  * @brief TimeValue class
- * @date $Date: 2007-04-13 16:02:40 $
+ * @date $Date: 2007-07-20 16:11:00 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
  * Copyright (C) 2007
@@ -12,7 +12,7 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: TimeValue.h,v 1.1 2007-04-13 16:02:40 n-ando Exp $
+ * $Id: TimeValue.h,v 1.1.2.1 2007-07-20 16:11:00 n-ando Exp $
  *
  */
 
@@ -20,7 +20,7 @@
 #define TimeValue_h
 
 #include <iostream>
-#include <sys/time.h>
+#include <ace/OS_NS_time.h>
 
 
 struct TimeValue
