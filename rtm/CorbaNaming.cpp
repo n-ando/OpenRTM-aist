@@ -2,7 +2,7 @@
 /*!
  * @file CorbaNaming.cpp
  * @brief CORBA naming service helper class
- * @date $Date: 2007-04-27 07:48:13 $
+ * @date $Date: 2007-07-20 15:50:32 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
  * Copyright (C) 2006
@@ -13,12 +13,16 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: CorbaNaming.cpp,v 1.6 2007-04-27 07:48:13 n-ando Exp $
+ * $Id: CorbaNaming.cpp,v 1.6.2.1 2007-07-20 15:50:32 n-ando Exp $
  *
  */
 
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.6  2007/04/27 07:48:13  n-ando
+ * When no "kind" was specified within naming sequence, unexpected copy to
+ * "kind" in name component sequence had occurred.
+ *
  * Revision 1.5  2007/04/23 04:49:45  n-ando
  * Trivial fix.
  *
@@ -239,6 +243,7 @@ namespace RTC
 		  }
 		catch (AlreadyBound& e)
 		  {
+		    e;
 		    cxt = CosNaming::
 		      NamingContextExt::
 		      _narrow(cxt->resolve(subName(name, i, i)));
@@ -677,6 +682,7 @@ namespace RTC
       }
     catch (AlreadyBound& e)
       {
+	e;
 	return context->resolve(name);
       }
     return CORBA::Object::_nil();
