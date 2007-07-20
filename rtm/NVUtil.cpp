@@ -2,7 +2,7 @@
 /*!
  * @file NVUtil.h
  * @brief NameValue and NVList utility functions
- * @date $Date: 2007-04-23 04:54:28 $
+ * @date $Date: 2007-07-20 15:56:50 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
  * Copyright (C) 2006
@@ -13,12 +13,15 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: NVUtil.cpp,v 1.8 2007-04-23 04:54:28 n-ando Exp $
+ * $Id: NVUtil.cpp,v 1.8.2.1 2007-07-20 15:56:50 n-ando Exp $
  *
  */
 
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.8  2007/04/23 04:54:28  n-ando
+ * Conversion functions between Properties and NVList were added.
+ *
  * Revision 1.7  2007/04/13 18:05:14  n-ando
  * Some changes of the logic accompanying change of the Properties class.
  *
@@ -47,11 +50,12 @@
  *
  */
 
-#include <map>
-#include <string>
 #include <rtm/CORBA_SeqUtil.h>
 #include <rtm/StringUtil.h>
 #include <rtm/NVUtil.h>
+#include <string>
+#include <map>
+#include <algorithm>
 
 namespace NVUtil
 {
