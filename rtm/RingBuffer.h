@@ -2,7 +2,7 @@
 /*!
  * @file RingBuffer.h
  * @brief Defautl Buffer class
- * @date $Date: 2007-04-26 15:32:56 $
+ * @date $Date: 2007-07-20 16:07:58 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
  * Copyright (C) 2006
@@ -13,12 +13,17 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: RingBuffer.h,v 1.5 2007-04-26 15:32:56 n-ando Exp $
+ * $Id: RingBuffer.h,v 1.5.2.1 2007-07-20 16:07:58 n-ando Exp $
  *
  */
 
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.5  2007/04/26 15:32:56  n-ando
+ * The header include order was modified to define _REENTRANT before
+ * including ace/config-lite.h in Linux systems.
+ * In ace 5.4.7 or later, _REENTRANT flag should be defined explicitly.
+ *
  * Revision 1.4  2007/01/06 18:02:49  n-ando
  * The RingBuffer has been completely re-implemented.
  *
@@ -30,6 +35,7 @@
 
 #include <rtm/RTC.h>
 
+#include <vector>
 #include <algorithm>
 //#include <ace/Synch.h>
 #include <rtm/BufferBase.h>
@@ -42,9 +48,9 @@ namespace RTC
   {
   public:
     RingBuffer(long int length)
-      : m_length(length < 2 ? 2 : length - 1),
+      : m_length(length < 2 ? 2 : length),
 	m_oldPtr(0),
-	m_newPtr(length < 2 ? 2 : length - 1)
+	m_newPtr(length < 2 ? 1 : length - 1)
     {
       m_buffer.resize(m_length);
     }
