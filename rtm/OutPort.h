@@ -2,7 +2,7 @@
 /*!
  * @file OutPort.h
  * @brief OutPort class
- * @date $Date: 2007-01-06 17:56:19 $
+ * @date $Date: 2007-07-20 15:58:03 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
  * Copyright (C) 2006
@@ -13,12 +13,15 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: OutPort.h,v 1.2 2007-01-06 17:56:19 n-ando Exp $
+ * $Id: OutPort.h,v 1.2.4.1 2007-07-20 15:58:03 n-ando Exp $
  *
  */
 
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.2  2007/01/06 17:56:19  n-ando
+ * A trivial fix.
+ *
  * Revision 1.1  2006/12/02 18:45:30  n-ando
  * The first commitment.
  *
@@ -32,6 +35,7 @@
 #include <rtm/RingBuffer.h>
 #include <rtm/OutPortBase.h>
 #include <rtm/PortCallBack.h>
+#include <rtm/RTC.h>
 #include <iostream>
 
 namespace RTC
@@ -106,7 +110,9 @@ namespace RTC
       long int timeout = m_writeTimeout;
       
       timeval tm_cur, tm_pre;
-      gettimeofday(&tm_pre, NULL);
+      ACE_Time_Value tt;
+      tt = ACE_OS::gettimeofday();
+      tm_pre = tt.operator timeval();
       
       // blocking and timeout wait
       long int count(0);
@@ -119,7 +125,9 @@ namespace RTC
 	    }
 	  
 	  // timeout wait
-	  gettimeofday(&tm_cur, NULL);
+	  ACE_Time_Value tt;
+	  tt = ACE_OS::gettimeofday();
+	  tm_cur = tt.operator timeval();
 	  long int sec (tm_cur.tv_sec  - tm_pre.tv_sec);
 	  long int usec(tm_cur.tv_usec - tm_pre.tv_usec);
 	  
@@ -176,10 +184,11 @@ namespace RTC
       if (m_OnRead != NULL) (*m_OnRead)();      
       
       long int timeout = m_readTimeout;
-      
       timeval tm_cur, tm_pre;
-      gettimeofday(&tm_pre, NULL);
-      
+      ACE_Time_Value tt;
+      tt = ACE_OS::gettimeofday();
+      tm_pre = tt.operator timeval();
+
       // blocking and timeout wait
       while (m_readBlock && this->isEmpty())
       {
@@ -190,7 +199,9 @@ namespace RTC
 	    }
 	  
 	  // timeout wait
-	  gettimeofday(&tm_cur, NULL);
+	  ACE_Time_Value tt;
+	  tt = ACE_OS::gettimeofday();
+	  tm_cur = tt.operator timeval();
 	  long int sec (tm_cur.tv_sec  - tm_pre.tv_sec);
 	  long int usec(tm_cur.tv_usec - tm_pre.tv_usec);
 	  

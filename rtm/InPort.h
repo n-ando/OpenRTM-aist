@@ -2,7 +2,7 @@
 /*!
  * @file InPort.h
  * @brief InPort template class
- * @date $Date: 2007-01-06 17:47:51 $
+ * @date $Date: 2007-07-20 15:54:50 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
  * Copyright (C) 2003-2005
@@ -12,12 +12,17 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: InPort.h,v 1.6 2007-01-06 17:47:51 n-ando Exp $
+ * $Id: InPort.h,v 1.6.4.1 2007-07-20 15:54:50 n-ando Exp $
  *
  */
 
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.6  2007/01/06 17:47:51  n-ando
+ * Some changes.
+ * - Callback declarations are changed.
+ * - Return value of write().
+ *
  * Revision 1.5  2006/12/02 18:37:29  n-ando
  * A trivial fix.
  *
@@ -46,6 +51,7 @@
 //#include <rtm/InPortBase.h>
 #include <rtm/BufferBase.h>
 #include <rtm/PortCallBack.h>
+#include <rtm/RTC.h>
 
 #define TIMEOUT_TICK_USEC 10
 #define USEC_PER_SEC 1000000
@@ -185,7 +191,9 @@ namespace RTC
       long int timeout = m_writeTimeout;
 
       timeval tm_cur, tm_pre;
-      gettimeofday(&tm_pre, NULL);
+      ACE_Time_Value tt;
+      tt = ACE_OS::gettimeofday();
+      tm_pre = tt.operator timeval();
 
       // blocking and timeout wait
       while (m_writeBlock && this->isFull())
@@ -197,7 +205,9 @@ namespace RTC
 	    }
 
 	  // timeout wait
-	  gettimeofday(&tm_cur, NULL);
+	  ACE_Time_Value tt;
+	  tt = ACE_OS::gettimeofday();
+	  tm_cur = tt.operator timeval();
 	  long int sec (tm_cur.tv_sec  - tm_pre.tv_sec);
 	  long int usec(tm_cur.tv_usec - tm_pre.tv_usec);
 
@@ -258,7 +268,9 @@ namespace RTC
       long int timeout = m_readTimeout;
 
       timeval tm_cur, tm_pre;
-      gettimeofday(&tm_pre, NULL);
+      ACE_Time_Value tt;
+      tt = ACE_OS::gettimeofday();
+      tm_pre = tt.operator timeval();
 
       // blocking and timeout wait
       while (m_readBlock && this->isEmpty())
@@ -270,7 +282,9 @@ namespace RTC
 	    }
 
 	  // timeout wait
-	  gettimeofday(&tm_cur, NULL);
+	  ACE_Time_Value tt;
+	  tt = ACE_OS::gettimeofday();
+	  tm_cur = tt.operator timeval();
 	  long int sec (tm_cur.tv_sec  - tm_pre.tv_sec);
 	  long int usec(tm_cur.tv_usec - tm_pre.tv_usec);
 
