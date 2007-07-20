@@ -2,7 +2,7 @@
 /*!
  * @file RTObject.cpp
  * @brief RT component base class
- * @date $Date: 2007-04-27 07:51:06 $
+ * @date $Date: 2007-07-20 16:06:02 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
  * Copyright (C) 2006
@@ -12,12 +12,15 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: RTObject.cpp,v 1.8 2007-04-27 07:51:06 n-ando Exp $
+ * $Id: RTObject.cpp,v 1.8.2.1 2007-07-20 16:06:02 n-ando Exp $
  *
  */
 
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.8  2007/04/27 07:51:06  n-ando
+ * Change from "naming_names" to "naming.names".
+ *
  * Revision 1.7  2007/04/23 04:57:40  n-ando
  * Finalization processed was modified.
  * Configuration admin class was introduced.
@@ -302,7 +305,7 @@ namespace RTC
    * @brief [CORBA interface] Get ExecutionContext
    * @endif
    */
-  ExecutionContext_ptr RTObject_impl::get_context(const UniqueId ec_id)
+  ExecutionContext_ptr RTObject_impl::get_context(UniqueId ec_id)
   {
     ExecutionContext_var ec;
     

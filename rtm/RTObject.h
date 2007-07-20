@@ -2,7 +2,7 @@
 /*!
  * @file RTObject.h
  * @brief RT component base class
- * @date $Date: 2007-04-23 04:57:44 $
+ * @date $Date: 2007-07-20 16:06:13 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
  * Copyright (C) 2006
@@ -12,12 +12,16 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: RTObject.h,v 1.7 2007-04-23 04:57:44 n-ando Exp $
+ * $Id: RTObject.h,v 1.7.2.1 2007-07-20 16:06:13 n-ando Exp $
  *
  */
 
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.7  2007/04/23 04:57:44  n-ando
+ * Finalization processed was modified.
+ * Configuration admin class was introduced.
+ *
  * Revision 1.6  2007/04/13 15:55:43  n-ando
  * RTObject interface operations in RTC.idl were changed.
  * - attach_executioncontext()
@@ -289,7 +293,7 @@ namespace RTC
      * @brief [CORBA interface] Get ExecutionContext.
      * @endif
      */
-    virtual ExecutionContext_ptr get_context(const UniqueId ec_id);
+    virtual ExecutionContext_ptr get_context(UniqueId ec_id);
 
     /*
     virtual UniqueId 
