@@ -2,7 +2,7 @@
 /*!
  * @file StateMachine.h
  * @brief State machine template class
- * @date $Date: 2007-04-26 15:33:39 $
+ * @date $Date: 2007-07-20 16:08:57 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
  * Copyright (C) 2006
@@ -12,12 +12,17 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: StateMachine.h,v 1.3 2007-04-26 15:33:39 n-ando Exp $
+ * $Id: StateMachine.h,v 1.3.2.1 2007-07-20 16:08:57 n-ando Exp $
  *
  */
 
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.3  2007/04/26 15:33:39  n-ando
+ * The header include order was modified to define _REENTRANT before
+ * including ace/config-lite.h in Linux systems.
+ * In ace 5.4.7 or later, _REENTRANT flag should be defined explicitly.
+ *
  * Revision 1.2  2007/01/09 15:26:53  n-ando
  * Now StateMachine does not need NOP function.
  * All null function pointer is checked and skipped.
@@ -360,7 +365,7 @@ public:
    */
   Result worker()
   {
-    Result res;
+    Result res = RTC::RTC_OK;
     States state;
     bool selftrans;
 

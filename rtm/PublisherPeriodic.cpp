@@ -2,7 +2,7 @@
 /*!
  * @file  PublisherPeriodic.cpp
  * @brief PublisherPeriodic class
- * @date  $Date: 2007-02-07 02:53:01 $
+ * @date  $Date: 2007-07-20 16:04:22 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
  * Copyright (C) 2006
@@ -13,12 +13,15 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: PublisherPeriodic.cpp,v 1.5 2007-02-07 02:53:01 n-ando Exp $
+ * $Id: PublisherPeriodic.cpp,v 1.5.2.1 2007-07-20 16:04:22 n-ando Exp $
  *
  */
 
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.5  2007/02/07 02:53:01  n-ando
+ * The property dataport.push_interval was changed to dataport.push_rate.
+ *
  * Revision 1.4  2007/02/04 17:03:04  n-ando
  * The wait func is called in dtor to wait thread termination.
  *
@@ -36,6 +39,7 @@
 #include <rtm/PublisherPeriodic.h>
 #include <rtm/InPortConsumer.h>
 #include <rtm/Properties.h>
+#include <rtm/RTC.h>
 #include <stdlib.h>
 
 namespace RTC
@@ -63,7 +67,7 @@ namespace RTC
       {
 	hz = 1000.0;
       }
-    m_usec = static_cast<double>(1000000.0/hz);
+    m_usec = static_cast<unsigned int>(1000000.0/hz);
     open(0);
   }
 
