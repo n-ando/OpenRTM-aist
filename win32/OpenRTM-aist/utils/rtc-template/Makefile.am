@@ -3,22 +3,18 @@
 ## Makefile.am for rtc-template
 ##
 ## $Log: not supported by cvs2svn $
+## Revision 1.1.2.1  2007/07/20 16:27:16  n-ando
+## Makefile for Win32 source tree management.
+##
 ##
 ##---------------------------------------------------------------------------
 
 clean-local:
 	rm -rf *~ *core *.pyc
 
-dist-hook: clean-local
+src:
+	cp $(top_srcdir)/utils/rtc-template/rtc-template rtc-template.py
+	cp $(top_srcdir)/utils/rtc-template/*.py .
 
-EXTRA_DIST = \
-	rtc-template \
-	README_src.py \
-	cxx_gen.py \
-	vcproject_gen.py \
-	uuid.py \
-	cxx_svc_impl.py \
-	python_gen.py \
-	gen_base.py \
-	ezt.py
 
+dist-hook: clean-local src

@@ -3,7 +3,7 @@
 #
 #  @file cxx_gen.py
 #  @brief rtc-template C++ source code generator class
-#  @date $Date: 2007-05-29 01:44:29 $
+#  @date $Date: 2007-07-20 17:28:56 $
 #  @author Noriaki Ando <n-ando@aist.go.jp>
 # 
 #  Copyright (C) 2004-2007
@@ -13,11 +13,14 @@
 #          Advanced Industrial Science and Technology (AIST), Japan
 #      All rights reserved.
 # 
-#  $Id: cxx_gen.py,v 1.8 2007-05-29 01:44:29 n-ando Exp $
+#  $Id: cxx_gen.py,v 1.8.2.1 2007-07-20 17:28:56 n-ando Exp $
 # 
 
 #
 #  $Log: not supported by cvs2svn $
+#  Revision 1.8  2007/05/29 01:44:29  n-ando
+#  make clean target was modified to delete *Compl.o
+#
 #  Revision 1.7  2007/04/23 01:41:16  n-ando
 #  New option "--config" and configuration template code were added.
 #
@@ -55,7 +58,7 @@ import sys
 import StringIO
 import ezt
 import gen_base
-import cxx_svc_impl
+
 
 def description():
 	return "C++ component code generator"
@@ -802,6 +805,7 @@ class cxx_gen(gen_base.gen_base):
 				idl_include = self.data["idl_include"]
 				impl_suffix = self.data["impl_suffix"]
 				skel_suffix = self.data["skel_suffix"]
+				import cxx_svc_impl
 				ifs = cxx_svc_impl.generate(svc_idl.idl_fname,
 							    idl_include,
 							    impl_suffix,
