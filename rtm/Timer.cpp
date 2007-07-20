@@ -2,7 +2,7 @@
 /*!
  * @file Timer.cpp
  * @brief Timer class
- * @date $Date: 2007-04-13 16:04:00 $
+ * @date $Date: 2007-07-20 16:12:58 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
  * Copyright (C) 2007
@@ -12,7 +12,7 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: Timer.cpp,v 1.1 2007-04-13 16:04:00 n-ando Exp $
+ * $Id: Timer.cpp,v 1.1.2.1 2007-07-20 16:12:58 n-ando Exp $
  *
  */
 
@@ -46,7 +46,14 @@ namespace RTC
     while (m_running)
       {
 	invoke();
-	if (m_interval.tv_sec != 0) sleep(m_interval.tv_sec);
+	if (m_interval.tv_sec != 0)
+	  {
+#ifdef WIN32
+	    Sleep(m_interval.tv_sec * 1000);
+#else
+	    sleep(m_interval.tv_sec);
+#endif
+	  }
 	usleep(m_interval.tv_usec);
       }
     return 0;
