@@ -2,9 +2,12 @@
 ##---------------------------------------------------------------------------
 ## Makefile.am for the top directory
 ##
-## $Id: Makefile.am,v 1.4 2007-04-27 03:30:42 n-ando Exp $
+## $Id: Makefile.am,v 1.4.2.1 2007-07-20 15:28:11 n-ando Exp $
 ##
 ## $Log: not supported by cvs2svn $
+## Revision 1.4  2007/04/27 03:30:42  n-ando
+## Modified for OpenRTM-aist-0.4.0
+##
 ## Revision 1.3  2007/01/16 18:36:58  n-ando
 ## Distribution subdirectories (etc, docs) were added.
 ##
@@ -18,7 +21,7 @@
 
 AUTOMAKE_OPTIONS = 1.4
 
-SUBDIRS = build rtm utils examples etc docs
+SUBDIRS = build rtm utils examples etc docs win32
 
 EXTRA_DIST =        \
 	README      \

@@ -4,9 +4,12 @@
 ## @brief  Makefile.am for build tools
 ## @author Noriaki Ando <n-ando@aist.go.jp>
 ##
-## $Id: Makefile.am,v 1.6 2007-04-27 03:28:29 n-ando Exp $
+## $Id: Makefile.am,v 1.6.2.1 2007-07-20 15:29:04 n-ando Exp $
 ##
 ## $Log: not supported by cvs2svn $
+## Revision 1.6  2007/04/27 03:28:29  n-ando
+## Some package installer script was added.
+##
 ## Revision 1.5  2007/04/24 01:23:57  n-ando
 ## pkg_install_fc6.sh was added.
 ##
@@ -31,38 +34,49 @@ AUTOMAKE_OPTIONS = 1.9
 
 all:
 	chmod 755                  \
-	autogen		           \
-	makewrapper.py	           \
-	makewrapper.pl	           \
+	autogen                    \
+	codegen.py                 \
+	distbuild.sh               \
+	ezt.py                     \
+	makedeffile.py             \
+	makevcproj.py              \
+	makewrapper.pl             \
+	makewrapper.py             \
+	pickupprojs.py             \
+	pkg_install_debianSarge.sh \
 	pkg_install_fc4.sh         \
 	pkg_install_fc5.sh         \
 	pkg_install_fc6.sh         \
 	pkg_install_freebsd52.sh   \
 	pkg_install_freebsd6.sh    \
-	pkg_install_debianSarge.sh \
 	pkg_install_vl32.sh        \
 	pkg_install_vl4.sh         \
-	codegen.py                 \
 	setuptest.py               \
-	distbuild.sh
+	uuid.py
+
 
 EXTRA_DIST =                       \
-	autogen		           \
-	makewrapper.py	           \
-	makewrapper.pl	           \
-	ezt.py		           \
+	README.Debian              \
+	autogen                    \
+	codegen.py                 \
+	distbuild.sh               \
+	ezt.py                     \
+	makedeffile.py             \
+	makevcproj.py              \
+	makewrapper.pl             \
+	makewrapper.py             \
+	pickupprojs.py             \
+	pkg_install_debianSarge.sh \
 	pkg_install_fc4.sh         \
 	pkg_install_fc5.sh         \
 	pkg_install_fc6.sh         \
 	pkg_install_freebsd52.sh   \
 	pkg_install_freebsd6.sh    \
-	pkg_install_debianSarge.sh \
 	pkg_install_vl32.sh        \
 	pkg_install_vl4.sh         \
-	codegen.py                 \
 	setuptest.py               \
-	distbuild.sh               \
-	README.Debian
+	uuid.py
+
 
 clean-local:
 	rm -f *.pyc *~

@@ -2,7 +2,7 @@ dnl -*- autoconf -*-
 dnl
 dnl @file configure.ac
 dnl @brief Input file for autoconf
-dnl @date $Date: 2007-04-26 15:40:36 $
+dnl @date $Date: 2007-07-20 15:28:35 $
 dnl @author Noriaki Ando <n-ando@aist.go.jp>
 dnl
 dnl This file is an input file used by the GNU "autoconf" program to
@@ -10,11 +10,15 @@ dnl generate the file "configure", which tries to guess your system
 dnl configuration
 dnl
 dnl
-dnl $Id: configure.ac,v 1.21 2007-04-26 15:40:36 n-ando Exp $
+dnl $Id: configure.ac,v 1.21.2.1 2007-07-20 15:28:35 n-ando Exp $
 dnl
 
 dnl
 dnl $Log: not supported by cvs2svn $
+dnl Revision 1.21  2007/04/26 15:40:36  n-ando
+dnl In ace 5.4.7 or later, _REENTRANT flag should be defined explicitly.
+dnl AC_DEFINE for _REENTRANT was added.
+dnl
 dnl Revision 1.20  2007/04/23 07:27:38  n-ando
 dnl ConfigSample example was added.
 dnl
@@ -1432,6 +1436,20 @@ AC_OUTPUT([Makefile
 	examples/SimpleService/Makefile
 	examples/ExtTrigger/Makefile
 	docs/Makefile
+	win32/Makefile
+	win32/OpenRTM-aist/Makefile
+	win32/OpenRTM-aist/bin/Makefile
+	win32/OpenRTM-aist/docs/Makefile
+	win32/OpenRTM-aist/build/Makefile
+	win32/OpenRTM-aist/examples/Makefile
+	win32/OpenRTM-aist/examples/ConfigSample/Makefile
+	win32/OpenRTM-aist/examples/SimpleIO/Makefile
+	win32/OpenRTM-aist/examples/SeqIO/Makefile
+	win32/OpenRTM-aist/examples/SimpleService/Makefile
+	win32/OpenRTM-aist/utils/Makefile
+	win32/OpenRTM-aist/utils/rtc-template/Makefile
+	win32/OpenRTM-aist/rtm/Makefile
+	win32/OpenRTM-aist/rtm/idl/Makefile
 	])
 
 #	utils/rtc-link/Makefile
