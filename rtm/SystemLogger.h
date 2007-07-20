@@ -2,7 +2,7 @@
 /*!
  * @file SystemLogger.h
  * @brief RT component logger class
- * @date $Date: 2007-04-26 15:33:44 $
+ * @date $Date: 2007-07-20 16:10:32 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
  * Copyright (C) 2003-2006
@@ -12,12 +12,17 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: SystemLogger.h,v 1.5 2007-04-26 15:33:44 n-ando Exp $
+ * $Id: SystemLogger.h,v 1.5.2.1 2007-07-20 16:10:32 n-ando Exp $
  *
  */
 
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.5  2007/04/26 15:33:44  n-ando
+ * The header include order was modified to define _REENTRANT before
+ * including ace/config-lite.h in Linux systems.
+ * In ace 5.4.7 or later, _REENTRANT flag should be defined explicitly.
+ *
  * Revision 1.4  2007/04/13 16:01:32  n-ando
  * Timing of mutex acquisition was changed for buffer synchronization bugs.
  *
@@ -56,6 +61,8 @@
 
 // ACE
 #include <ace/Mutex.h>
+
+#include <rtm/config_rtc.h>
 
 #ifdef RTM_GCC2
 #define NO_LOGGING
@@ -245,7 +252,7 @@ namespace RTC
    * @endif
    */
   template <typename _CharT, typename _Traits=std::char_traits<_CharT> >
-  class EXPORTS basic_medlogbuf
+  class basic_medlogbuf
     : public std::basic_streambuf<_CharT, _Traits>
   {
   public:
@@ -593,7 +600,7 @@ namespace RTC
    * @endif
    */
   template <typename _CharT, typename _Traits=std::char_traits<_CharT> >
-  class EXPORTS basic_logstream
+  class basic_logstream
     : public std::basic_ostream<_CharT, _Traits>
   {
   public:
