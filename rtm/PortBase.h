@@ -3,7 +3,7 @@
 /*!
  * @file PortBase.h
  * @brief RTC's Port base class
- * @date $Date: 2007-04-26 15:31:34 $
+ * @date $Date: 2007-07-20 16:01:45 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
  * Copyright (C) 2006
@@ -13,12 +13,17 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: PortBase.h,v 1.10 2007-04-26 15:31:34 n-ando Exp $
+ * $Id: PortBase.h,v 1.10.2.1 2007-07-20 16:01:45 n-ando Exp $
  *
  */
 
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.10  2007/04/26 15:31:34  n-ando
+ * The header include order was modified to define _REENTRANT before
+ * including ace/config-lite.h in Linux systems.
+ * In ace 5.4.7 or later, _REENTRANT flag should be defined explicitly.
+ *
  * Revision 1.9  2007/04/13 15:53:03  n-ando
  * RTC::OK was changed to RTC::RTC_OK.
  *
@@ -1245,9 +1250,6 @@ namespace RTC
       std::string m_name;
       PortInterfacePolarity m_pol;
     };
-
-    friend class disconnect_all_func;
-    
   };
 };
 #endif // PortBase_h
