@@ -2,7 +2,7 @@
 /*!
  * @file NumberingPolicy.cpp
  * @brief Object numbering policy class
- * @date $Date: 2006-11-04 21:07:31 $
+ * @date $Date: 2007-07-20 15:57:32 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
  * Copyright (C) 2006
@@ -12,12 +12,15 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: NumberingPolicy.cpp,v 1.1 2006-11-04 21:07:31 n-ando Exp $
+ * $Id: NumberingPolicy.cpp,v 1.1.4.1 2007-07-20 15:57:32 n-ando Exp $
  *
  */
 
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.1  2006/11/04 21:07:31  n-ando
+ * Component numbering rule was derived into policy class.
+ *
  */
 
 #include <rtm/NumberingPolicy.h>
@@ -39,6 +42,7 @@ std::string DefaultNumberingPolicy::onCreate(void* obj)
     }
   catch (ObjectNotFound& e)
     {
+      e;
       m_objects.push_back(obj);
       return otos((int)(m_objects.size() - 1));
     }

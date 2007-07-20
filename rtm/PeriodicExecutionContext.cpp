@@ -2,7 +2,7 @@
 /*!
  * @file PeriodicExecutionContext.cpp
  * @brief PeriodicExecutionContext class
- * @date $Date: 2007-04-13 15:52:15 $
+ * @date $Date: 2007-07-20 15:58:50 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
  * Copyright (C) 2006
@@ -12,12 +12,16 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: PeriodicExecutionContext.cpp,v 1.5 2007-04-13 15:52:15 n-ando Exp $
+ * $Id: PeriodicExecutionContext.cpp,v 1.5.2.1 2007-07-20 15:58:50 n-ando Exp $
  *
  */
 
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.5  2007/04/13 15:52:15  n-ando
+ * RTC::OK was changed to RTC::RTC_OK.
+ * Initialization function was added to make it an external module.
+ *
  * Revision 1.4  2007/02/04 16:56:52  n-ando
  * The bugs around object references count were fixed.
  *
@@ -337,6 +341,7 @@ namespace RTC
       }
     catch (CORBA::Exception& e)
       {
+	e;
 	return RTC::BAD_PARAMETER;
       }
     return RTC::RTC_OK;
