@@ -2,7 +2,7 @@
 /*!
  * @file Manager.h
  * @brief RTComponent manager class
- * @date $Date: 2007-04-27 07:50:25 $
+ * @date $Date: 2007-07-20 15:51:49 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
  * Copyright (C) 2003-2005
@@ -12,12 +12,15 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: Manager.cpp,v 1.12 2007-04-27 07:50:25 n-ando Exp $
+ * $Id: Manager.cpp,v 1.12.2.1 2007-07-20 15:51:49 n-ando Exp $
  *
  */
 
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.12  2007/04/27 07:50:25  n-ando
+ * Now Components' properties are dumped to the log when they are terminated.
+ *
  * Revision 1.11  2007/04/27 06:13:12  n-ando
  * Configuration: naming_format to naming.format
  *
@@ -492,8 +495,6 @@ namespace RTC
     return true;
   }
 
-  
-
 
   bool Manager::bindExecutionContext(RtcBase* comp)
   {
@@ -777,7 +778,7 @@ namespace RTC
     try
       {
 	std::vector<std::string> args(split(createORBOptions(), " "));
-	char** argv(toArgv(args));
+	char** argv = toArgv(args);
 	int argc(args.size());
 
 	// ORB initialization
@@ -879,6 +880,7 @@ namespace RTC
 	 }
        catch (CORBA::SystemException& ex)
 	 {
+	   ex;
 	   RTC_ERROR(("Caught CORBA::SystemException during ORB shutdown"));
 	 }
        catch (...)
@@ -1014,6 +1016,7 @@ namespace RTC
       }
   }
 
+
   void Manager::cleanupComponent(RtcBase* comp)
   {
     RTC_TRACE(("Manager::shutdownComponents()"));
@@ -1074,6 +1077,11 @@ namespace RTC
 
   bool Manager::mergeProperty(Properties& prop, const char* file_name)
   {
+    if (file_name == NULL)
+      {
+	RTC_ERROR(("Invalid configuration file name."));
+	return false;
+      }
     if (file_name[0] != '\0')
       {
 	std::ifstream conff(file_name);
