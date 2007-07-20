@@ -2,7 +2,7 @@
 /*!
  * @file Manager.h
  * @brief RTComponent manager class
- * @date $Date: 2007-04-26 15:36:54 $
+ * @date $Date: 2007-07-20 15:56:14 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
  * Copyright (C) 2006
@@ -12,12 +12,17 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: Manager.h,v 1.9 2007-04-26 15:36:54 n-ando Exp $
+ * $Id: Manager.h,v 1.9.2.1 2007-07-20 15:56:14 n-ando Exp $
  *
  */
 
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.9  2007/04/26 15:36:54  n-ando
+ * The header include order was modified to define _REENTRANT before
+ * including ace/config-lite.h in Linux systems.
+ * In ace 5.4.7 or later, _REENTRANT flag should be defined explicitly.
+ *
  * Revision 1.8  2007/04/23 04:53:29  n-ando
  * Component instantiation processes were divided into some functions.
  *
@@ -68,6 +73,7 @@
 #include <rtm/SystemLogger.h>
 
 class Properties;
+
 
 namespace RTC
 {
@@ -403,7 +409,9 @@ namespace RTC
      * @endif
      */
     RtcBase* createComponent(const char* module_name);
+
     void cleanupComponent(RtcBase* comp);
+
     /*!
      * @if jp
      * @brief RTコンポーネントを直接 Manager に登録する
@@ -412,8 +420,8 @@ namespace RTC
      * @endif
      */
     bool registerComponent(RtcBase* comp);
-    bool unregisterComponent(RtcBase* comp);
 
+    bool unregisterComponent(RtcBase* comp);
 
     bool bindExecutionContext(RtcBase* comp);
 
@@ -730,6 +738,7 @@ namespace RTC
     {
       InstanceName(RtcBase* comp) : m_name(comp->getInstanceName()) {};
       InstanceName(const char* name) : m_name(name) {};
+      InstanceName(const std::string name) : m_name(name) {};
       bool operator()(RtcBase* comp)
       {
 	return m_name == comp->getInstanceName();
@@ -737,7 +746,7 @@ namespace RTC
       std::string m_name;
     };
 
-    typedef ObjectManager<const char*,
+    typedef ObjectManager<std::string,
 			  RtcBase,
 			  InstanceName> ComponentManager;
     /*!
