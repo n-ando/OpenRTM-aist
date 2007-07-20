@@ -2,7 +2,7 @@
 /*!
  * @file DataInPort.cpp
  * @brief Base class of InPort
- * @date $Date: 2007-04-13 15:44:39 $
+ * @date $Date: 2007-07-20 15:52:52 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
  * Copyright (C) 2006
@@ -13,12 +13,15 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: DataInPort.cpp,v 1.6 2007-04-13 15:44:39 n-ando Exp $
+ * $Id: DataInPort.cpp,v 1.6.2.1 2007-07-20 15:52:52 n-ando Exp $
  *
  */
 
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.6  2007/04/13 15:44:39  n-ando
+ * RTC::OK was changed to RTC::RTC_OK.
+ *
  * Revision 1.5  2007/02/04 16:51:55  n-ando
  * Debugging message is output to stderr instead of stdout.
  *
@@ -45,6 +48,7 @@
 #include <rtm/CORBA_SeqUtil.h>
 #include <rtm/NVUtil.h>
 #include <iostream>
+#include <algorithm>
 
 namespace RTC
 {
