@@ -1,13 +1,16 @@
 ## Makefile.am for win32/OpenRTM-aist/examples/SimpleService
 ##
-## $Id: Makefile.am,v 1.1.2.1 2007-07-20 16:26:59 n-ando Exp $
+## $Id: Makefile.am,v 1.1.2.2 2007-07-20 16:56:55 n-ando Exp $
 ##
 ## $Log: not supported by cvs2svn $
+## Revision 1.1.2.1  2007/07/20 16:26:59  n-ando
+## Makefile for Win32 source tree management.
+##
 ##
 ##---------------------------------------------------------------------------
 clean-local:
 	rm -rf Debug Release
-	rm -rf *~ *.cpp *.h *.user
+	rm -rf *~ *.cpp *.h *.idl *.user
 
 vcprojs: MyServiceProvidervc8.vcproj MyServiceConsumervc8.vcproj
 
