@@ -2,7 +2,7 @@
 /*!
  * @file  PublisherNew.cpp
  * @brief PublisherNew class
- * @date  $Date: 2007-01-06 18:00:49 $
+ * @date  $Date: 2007-07-20 16:03:50 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
  * Copyright (C) 2006
@@ -13,12 +13,15 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: PublisherNew.cpp,v 1.2 2007-01-06 18:00:49 n-ando Exp $
+ * $Id: PublisherNew.cpp,v 1.2.4.1 2007-07-20 16:03:50 n-ando Exp $
  *
  */
 
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.2  2007/01/06 18:00:49  n-ando
+ * Some trivial fixes.
+ *
  * Revision 1.1  2006/11/27 09:44:48  n-ando
  * The first commitment.
  *
@@ -27,6 +30,7 @@
 #include <rtm/PublisherNew.h>
 #include <rtm/InPortConsumer.h>
 #include <rtm/Properties.h>
+#include <rtm/RTC.h>
 #include <iostream>
 
 
@@ -67,7 +71,11 @@ namespace RTC
     m_data._updated = true;
     m_data._cond.signal();
     m_data._mutex.release();
+#ifdef WIN32
+    ACE_OS::thr_yield();
+#else
     pthread_yield();
+#endif
     usleep(100);
     return;
   }
