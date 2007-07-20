@@ -2,7 +2,7 @@
 /*!
  * @file StringUtil.cpp
  * @brief String operation utility
- * @date $Date: 2007-04-13 15:57:07 $
+ * @date $Date: 2007-07-20 16:10:01 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
  * Copyright (C) 2006
@@ -12,12 +12,16 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: StringUtil.cpp,v 1.3 2007-04-13 15:57:07 n-ando Exp $
+ * $Id: StringUtil.cpp,v 1.3.2.1 2007-07-20 16:10:01 n-ando Exp $
  *
  */
 
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.3  2007/04/13 15:57:07  n-ando
+ * toArgv() was added to create command line arguments.
+ * Some bug fixes.
+ *
  * Revision 1.2  2006/11/27 10:00:11  n-ando
  * otos() function that converts object to string was added.
  * flatten() function that flattens string vector was added.
@@ -204,6 +208,7 @@ std::string unescape(const std::string str)
  */
 void eraseHeadBlank(std::string& str)
 {
+  if (str.empty()) return;
   while (str[0] == ' ' || str[0] == '\t') str.erase(0, 1);
 }
 
@@ -217,6 +222,7 @@ void eraseHeadBlank(std::string& str)
  */
 void eraseTailBlank(std::string& str)
 {
+  if (str.empty()) return;
   while ((str[str.size() - 1] == ' ' || str[str.size() - 1] == '\t') &&
 	 !isEscaped(str, str.size() - 1))
     str.erase(str.size() - 1, 1);
@@ -371,6 +377,7 @@ bool isURL(const std::string& str)
 {
   typedef std::string::size_type size;
   size pos;
+  if (str.empty()) return false;
   pos = str.find(":");
   if ((pos != 0) &&
       (pos != std::string::npos) &&
