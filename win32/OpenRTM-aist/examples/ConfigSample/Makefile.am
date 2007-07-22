@@ -1,8 +1,13 @@
+## -*- Makefile -*-
+##---------------------------------------------------------------------------
 ## Makefile.am for win32/OpenRTM-aist/examples/ConfigSample
 ##
-## $Id: Makefile.am,v 1.1.2.2 2007-07-20 16:54:56 n-ando Exp $
+## $Id: Makefile.am,v 1.1.2.3 2007-07-22 10:34:11 n-ando Exp $
 ##
 ## $Log: not supported by cvs2svn $
+## Revision 1.1.2.2  2007/07/20 16:54:56  n-ando
+## VC project template and yaml file for makevcproj.py script are added.
+##
 ## Revision 1.1.2.1  2007/07/20 16:26:46  n-ando
 ## Makefile for Win32 source tree management.
 ##

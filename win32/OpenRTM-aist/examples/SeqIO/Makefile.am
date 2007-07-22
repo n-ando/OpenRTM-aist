@@ -1,13 +1,18 @@
+## -*- Makefile -*-
+##---------------------------------------------------------------------------
 ## Makefile.am for win32/OpenRTM-aist/examples/SeqIO
 ##
-## $Id: Makefile.am,v 1.1.2.1 2007-07-20 16:26:51 n-ando Exp $
+## $Id: Makefile.am,v 1.1.2.2 2007-07-22 10:34:15 n-ando Exp $
 ##
 ## $Log: not supported by cvs2svn $
+## Revision 1.1.2.1  2007/07/20 16:26:51  n-ando
+## Makefile for Win32 source tree management.
+##
 ##
 ##---------------------------------------------------------------------------
 clean-local:
 	rm -rf Debug Release
-	rm -rf *~ *.cpp *.h  *.user
+	rm -rf *~ *.cpp *.h rtc.conf *.user
 
 
 vcprojs: SeqInvc8.vcproj SeqOutvc8.vcproj
@@ -16,6 +21,7 @@ vcprojs: SeqInvc8.vcproj SeqOutvc8.vcproj
 src:
 	cp $(top_srcdir)/examples/SeqIO/*.cpp .
 	cp $(top_srcdir)/examples/SeqIO/*.h .
+	cp $(top_srcdir)/examples/SeqIO/rtc.conf .
 	qkc -ms *.cpp
 	qkc -ms *.h
 
