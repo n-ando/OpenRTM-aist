@@ -2,7 +2,7 @@
 ##---------------------------------------------------------------------------
 ## Makefile.am for MyServiceProvider/MyServiceConsumer components
 ##
-## $Id: Makefile.am,v 1.5 2007-02-08 06:01:25 n-ando Exp $
+## $Id: Makefile.am,v 1.5.2.1 2007-07-22 14:26:37 n-ando Exp $
 ##
 ##---------------------------------------------------------------------------
 
@@ -65,7 +65,8 @@ EXTRA_DIST =                       \
 	MyServiceConsumer.h        \
 	MyServiceConsumer.cpp      \
 	MyServiceConsumerComp.cpp  \
-	gen.sh
+	gen.sh                     \
+	rtc.conf
 
 clean_objs:
 	rm -f $(OBJS) SimpleService.so SimpleServiceComp

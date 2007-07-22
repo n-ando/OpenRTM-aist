@@ -2,9 +2,12 @@
 ##---------------------------------------------------------------------------
 ## Makefile.am for ConsoleIn/ConsoleOut components
 ##
-## $Id: Makefile.am,v 1.1 2007-04-13 15:00:38 n-ando Exp $
+## $Id: Makefile.am,v 1.1.2.1 2007-07-22 14:26:28 n-ando Exp $
 ##
 ## $Log: not supported by cvs2svn $
+## Revision 1.1  2007/04/13 15:00:38  n-ando
+## ExtTrigger sample
+##
 ## Revision 1.3  2007/01/21 13:35:17  n-ando
 ## A trivial fix.
 ##
@@ -49,7 +52,8 @@ EXTRA_DIST =                \
 	Makefile.ConsoleIn  \
 	Makefile.ConsoleOut \
 	README.ConsoleIn    \
-	README.ConsoleOut
+	README.ConsoleOut   \
+	rtc.conf
 
 clean-local:
 	rm -f \

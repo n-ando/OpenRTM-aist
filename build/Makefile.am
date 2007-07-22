@@ -4,9 +4,12 @@
 ## @brief  Makefile.am for build tools
 ## @author Noriaki Ando <n-ando@aist.go.jp>
 ##
-## $Id: Makefile.am,v 1.6.2.1 2007-07-20 15:29:04 n-ando Exp $
+## $Id: Makefile.am,v 1.6.2.2 2007-07-22 14:31:15 n-ando Exp $
 ##
 ## $Log: not supported by cvs2svn $
+## Revision 1.6.2.1  2007/07/20 15:29:04  n-ando
+## Modified for win32 porting.
+##
 ## Revision 1.6  2007/04/27 03:28:29  n-ando
 ## Some package installer script was added.
 ##
@@ -54,6 +57,7 @@ all:
 	setuptest.py               \
 	uuid.py
 
+dist-hook: all
 
 EXTRA_DIST =                       \
 	README.Debian              \
