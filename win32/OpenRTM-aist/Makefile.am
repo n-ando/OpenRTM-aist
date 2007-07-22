@@ -1,8 +1,13 @@
+## -*- Makefile -*-
+##---------------------------------------------------------------------------
 ## Makefile.am for win32/OpenRTM-aist
 ##
-## $Id: Makefile.am,v 1.1.2.1 2007-07-20 16:26:19 n-ando Exp $
+## $Id: Makefile.am,v 1.1.2.2 2007-07-22 10:59:44 n-ando Exp $
 ##
 ## $Log: not supported by cvs2svn $
+## Revision 1.1.2.1  2007/07/20 16:26:19  n-ando
+## Makefile for Win32 source tree management.
+##
 ##
 ##---------------------------------------------------------------------------
 SUBDIRS = bin build docs examples utils rtm .
