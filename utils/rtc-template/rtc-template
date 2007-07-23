@@ -3,7 +3,7 @@
 #
 #  @file rtc-template
 #  @brief rtc-template RTComponent source code generator tool
-#  @date $Date: 2007-07-20 17:29:03 $
+#  @date $Date: 2007-07-23 08:06:27 $
 #  @author Noriaki Ando <n-ando@aist.go.jp>
 # 
 #  Copyright (C) 2004-2007
@@ -13,11 +13,14 @@
 #          Advanced Industrial Science and Technology (AIST), Japan
 #      All rights reserved.
 # 
-#  $Id: rtc-template,v 1.8.2.1 2007-07-20 17:29:03 n-ando Exp $
+#  $Id: rtc-template,v 1.8.2.2 2007-07-23 08:06:27 n-ando Exp $
 #
 
 #
 #  $Log: not supported by cvs2svn $
+#  Revision 1.8.2.1  2007/07/20 17:29:03  n-ando
+#  A fix for win32 porting.
+#
 #  Revision 1.8  2007/04/27 00:56:35  n-ando
 #  Example shown in help message was modified for new version.
 #
@@ -651,10 +654,11 @@ def main():
 			output = a
 			# ...
 
-	prefix, dummy = os.popen("rtm-config --prefix", "r").read().split("\n")
+	prefix = os.popen("rtm-config --prefix", "r").read().split("\n")
 	idl_inc = []
-	idl_inc.append(prefix + "/include/rtm/idl")
-	idl_inc.append(prefix + "/include/rtm")
+	if prefix[0] != '':
+		idl_inc.append(prefix[0] + "/include/rtm/idl")
+		idl_inc.append(prefix[0] + "/include/rtm")
 	idl_inc.append(".")
 
 	# Create dictionary for ezt
