@@ -17,10 +17,10 @@ goto other
 
 :omni
 rem if exist %cosnames%  echo "ok"
-if EXIST .\omninames-%hosts%.log del /f .\omninames-%hosts%.log
-if EXIST .\omninames-%hosts%.bak del /f .\omninames-%hosts%.bak
+if EXIST %TEMP%\omninames-%hosts%.log del /f %TEMP%\omninames-%hosts%.log
+if EXIST %TEMP%\omninames-%hosts%.bak del /f %TEMP%\omninames-%hosts%.bak
 echo Starting omniORB omniNames: %hosts%:%port%
-%cosnames% -start %port% -logdir .\
+%cosnames% -start %port% -logdir %TEMP%\
 
 goto:EOF
 
