@@ -2,7 +2,7 @@
 /*!
  * @file PortBase.h
  * @brief RTC's Port base class
- * @date $Date: 2007-04-27 00:57:37 $
+ * @date $Date: 2007-08-20 06:12:34 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
  * Copyright (C) 2006
@@ -12,12 +12,15 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: PortBase.cpp,v 1.10 2007-04-27 00:57:37 n-ando Exp $
+ * $Id: PortBase.cpp,v 1.10.2.1 2007-08-20 06:12:34 n-ando Exp $
  *
  */
 
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.10  2007/04/27 00:57:37  n-ando
+ * *** empty log message ***
+ *
  * Revision 1.9  2007/04/26 15:38:53  n-ando
  * Character code was changed.
  *
@@ -164,7 +167,15 @@ namespace RTC
 	setUUID(connector_profile);
 	assert(!isExistingConnId(connector_profile.connector_id));
       }
-    return connector_profile.ports[0]->notify_connect(connector_profile);
+    try
+      {
+	return connector_profile.ports[0]->notify_connect(connector_profile);
+      }
+    catch (...)
+      {
+	return RTC::BAD_PARAMETER;
+      }
+    return RTC::RTC_ERROR;
   }
 
 
@@ -260,8 +271,8 @@ namespace RTC
     ConnectorProfile prof(m_profile.connector_profiles[index]);
 
     ReturnCode_t retval;
-    unsubscribeInterfaces(prof);
     retval = disconnectNext(prof);
+    unsubscribeInterfaces(prof);
 
     CORBA_SeqUtil::erase(m_profile.connector_profiles, index);
     
@@ -413,7 +424,6 @@ namespace RTC
 	p = connector_profile.ports[index];
 	return p->notify_disconnect(connector_profile.connector_id);
       }
-    unsubscribeInterfaces(connector_profile);
     return RTC::RTC_OK;
   }				  
 
