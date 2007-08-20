@@ -2,7 +2,7 @@
 /*!
  * @file InPort.h
  * @brief InPort template class
- * @date $Date: 2007-07-20 15:54:50 $
+ * @date $Date: 2007-08-20 05:15:39 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
  * Copyright (C) 2003-2005
@@ -12,12 +12,15 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: InPort.h,v 1.6.4.1 2007-07-20 15:54:50 n-ando Exp $
+ * $Id: InPort.h,v 1.6.4.2 2007-08-20 05:15:39 n-ando Exp $
  *
  */
 
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.6.4.1  2007/07/20 15:54:50  n-ando
+ * Now ACE_OS::gettimeofday() is used for win32 porting.
+ *
  * Revision 1.6  2007/01/06 17:47:51  n-ando
  * Some changes.
  * - Callback declarations are changed.
@@ -91,7 +94,7 @@ namespace RTC
    * @endif
    */
   template <class DataType,
-	    template <class DataType> class Buffer = NullBuffer >
+	    template <class DataType> class Buffer = RingBuffer >
   class InPort
     : public Buffer<DataType>
   {
