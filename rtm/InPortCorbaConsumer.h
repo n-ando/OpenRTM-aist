@@ -2,7 +2,7 @@
 /*!
  * @file  InPortCorbaConsumer.h
  * @brief InPortCorbaConsumer class
- * @date  $Date: 2007-01-09 09:56:38 $
+ * @date  $Date: 2007-08-20 06:31:10 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
  * Copyright (C) 2006
@@ -13,12 +13,15 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: InPortCorbaConsumer.h,v 1.3 2007-01-09 09:56:38 n-ando Exp $
+ * $Id: InPortCorbaConsumer.h,v 1.3.4.1 2007-08-20 06:31:10 n-ando Exp $
  *
  */
 
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.3  2007/01/09 09:56:38  n-ando
+ * Kanji-code has changed.
+ *
  * Revision 1.2  2007/01/06 17:50:57  n-ando
  * Interface subscription/unsubscription functions (subscribeInterface()
  * and unsubscribeInterface()) are added.
@@ -79,10 +82,10 @@ namespace RTC
     {
       DataType data;
       CORBA::Any tmp;
-      m_buffer.read(data);
+      if (!m_buffer.read(data)) return;
       tmp <<= data;
 
-      //hoge 本当はエラー処理をすべき
+      // 本当はエラー処理をすべき
       if (CORBA::is_nil(_ptr())) return;
       try
 	{
