@@ -2,7 +2,7 @@
 /*!
  * @file  PublisherNew.cpp
  * @brief PublisherNew class
- * @date  $Date: 2007-07-20 16:03:50 $
+ * @date  $Date: 2007-08-20 06:32:27 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
  * Copyright (C) 2006
@@ -13,12 +13,15 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: PublisherNew.cpp,v 1.2.4.1 2007-07-20 16:03:50 n-ando Exp $
+ * $Id: PublisherNew.cpp,v 1.2.4.2 2007-08-20 06:32:27 n-ando Exp $
  *
  */
 
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.2.4.1  2007/07/20 16:03:50  n-ando
+ * ACE_OS::thr_yield() is used for win32 porting.
+ *
  * Revision 1.2  2007/01/06 18:00:49  n-ando
  * Some trivial fixes.
  *
@@ -76,7 +79,6 @@ namespace RTC
 #else
     pthread_yield();
 #endif
-    usleep(100);
     return;
   }
   
@@ -136,6 +138,7 @@ namespace RTC
   void PublisherNew::release()
   {
     m_running = false;
+    m_data._cond.broadcast();
   }
 
 }; // namespace RTC
