@@ -2,7 +2,7 @@
 /*!
  * @file Properties.cpp
  * @brief Property list class (derived from Java Properties)
- * @date $Date: 2007-04-23 04:56:39 $
+ * @date $Date: 2007-09-19 03:00:08 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
  * Copyright (C) 2006
@@ -12,12 +12,15 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: Properties.cpp,v 1.7 2007-04-23 04:56:39 n-ando Exp $
+ * $Id: Properties.cpp,v 1.7.2.1 2007-09-19 03:00:08 n-ando Exp $
  *
  */
 
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.7  2007/04/23 04:56:39  n-ando
+ * Some fixes about const.
+ *
  * Revision 1.6  2007/04/13 18:14:02  n-ando
  * Now Properties class is implemented as hierarchical data structure
  * instead of std::map based data structure.
@@ -289,8 +292,9 @@ namespace RTC
 	  }
 	curr = next;
       }
+    std::string retval(curr->value);
     curr->value = value;
-    return value;
+    return retval;
   }
 
 
