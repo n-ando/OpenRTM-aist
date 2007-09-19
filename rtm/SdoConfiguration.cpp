@@ -2,7 +2,7 @@
 /*!
  * @file SdoConfiguration.cpp
  * @brief SDO's Configuration implementation class
- * @date $Date: 2007-04-23 04:58:16 $
+ * @date $Date: 2007-09-19 03:00:52 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
  * Copyright (C) 2006
@@ -12,12 +12,15 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: SdoConfiguration.cpp,v 1.7 2007-04-23 04:58:16 n-ando Exp $
+ * $Id: SdoConfiguration.cpp,v 1.7.2.1 2007-09-19 03:00:52 n-ando Exp $
  *
  */
 
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.7  2007/04/23 04:58:16  n-ando
+ * SDO Configuration was modified to use Configuration admin class.
+ *
  * Revision 1.6  2007/01/24 16:03:52  n-ando
  * The ctor. was changed.
  *
@@ -394,9 +397,11 @@ namespace SDOPackage
    */
   ConfigurationSet*
   Configuration_impl::get_configuration_set(const char* id)
-    throw (InvalidParameter, NotAvailable, InternalError)
+    throw (NotAvailable, InternalError)
   {
-    if (id == "") throw InvalidParameter("ID is empty");
+    if (id == "") throw InternalError("ID is empty");
+    // Originally getConfigurationSet raises InvalidParameter according to the 
+    // SDO specification. However, SDO's IDL lacks InvalidParameter.
 
     Guard guard(m_config_mutex);
 

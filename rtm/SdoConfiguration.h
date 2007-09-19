@@ -2,7 +2,7 @@
 /*!
  * @file SdoConfiguration.h
  * @brief RT component base class
- * @date $Date: 2007-04-26 15:33:21 $
+ * @date $Date: 2007-09-19 03:01:42 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
  * Copyright (C) 2006
@@ -12,12 +12,17 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: SdoConfiguration.h,v 1.8 2007-04-26 15:33:21 n-ando Exp $
+ * $Id: SdoConfiguration.h,v 1.8.2.1 2007-09-19 03:01:42 n-ando Exp $
  *
  */
 
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.8  2007/04/26 15:33:21  n-ando
+ * The header include order was modified to define _REENTRANT before
+ * including ace/config-lite.h in Linux systems.
+ * In ace 5.4.7 or later, _REENTRANT flag should be defined explicitly.
+ *
  * Revision 1.7  2007/04/23 04:58:21  n-ando
  * SDO Configuration was modified to use Configuration admin class.
  *
@@ -505,7 +510,7 @@ namespace SDOPackage
      * @endif
      */
     virtual ConfigurationSet* get_configuration_set(const char* config_id)
-      throw (InvalidParameter, NotAvailable, InternalError);
+      throw (NotAvailable, InternalError);
 
     /*!
      * @if jp
