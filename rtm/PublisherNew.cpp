@@ -2,7 +2,7 @@
 /*!
  * @file  PublisherNew.cpp
  * @brief PublisherNew class
- * @date  $Date: 2007-08-20 06:32:27 $
+ * @date  $Date: 2007-09-19 07:41:04 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
  * Copyright (C) 2006
@@ -13,12 +13,15 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: PublisherNew.cpp,v 1.2.4.2 2007-08-20 06:32:27 n-ando Exp $
+ * $Id: PublisherNew.cpp,v 1.2.4.3 2007-09-19 07:41:04 n-ando Exp $
  *
  */
 
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.2.4.2  2007/08/20 06:32:27  n-ando
+ * release() function was modified to broadcast signal to finalize task.
+ *
  * Revision 1.2.4.1  2007/07/20 16:03:50  n-ando
  * ACE_OS::thr_yield() is used for win32 porting.
  *
@@ -84,7 +87,7 @@ namespace RTC
   
   /*!
    * @if jp
-   * @brief スレッPublisherNew::ド実行関数
+   * @brief PublisherNew::スレッド実行関数
    * @else
    * @brief Thread execution function
    * @endif
@@ -137,8 +140,14 @@ namespace RTC
    */
   void PublisherNew::release()
   {
+    if (m_data._mutex.acquire() != 0)
+      {
+	return;
+      }
     m_running = false;
-    m_data._cond.broadcast();
+    m_data._cond.signal(); //broadcast();
+    m_data._mutex.release();
+    wait();
   }
 
 }; // namespace RTC
