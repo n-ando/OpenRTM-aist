@@ -2,7 +2,7 @@
 /*!
  * @file PeriodicExecutionContext.h
  * @brief PeriodicExecutionContext class
- * @date $Date: 2007-07-20 15:59:18 $
+ * @date $Date: 2007-09-19 07:44:35 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
  * Copyright (C) 2006
@@ -12,12 +12,15 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: PeriodicExecutionContext.h,v 1.4.2.1 2007-07-20 15:59:18 n-ando Exp $
+ * $Id: PeriodicExecutionContext.h,v 1.4.2.2 2007-09-19 07:44:35 n-ando Exp $
  *
  */
 
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.4.2.1  2007/07/20 15:59:18  n-ando
+ * ACE header include was added.
+ *
  * Revision 1.4  2007/04/26 15:30:46  n-ando
  * The header include order was modified to define _REENTRANT before
  * including ace/config-lite.h in Linux systems.
@@ -380,7 +383,7 @@ namespace RTC
     ExecutionContextProfile m_profile;
     long int m_usec;
     ExecutionContextService_var m_ref;
-
+    bool m_nowait;
   
   }; // class PeriodicExecutionContext
 }; // namespace RTC
