@@ -2,7 +2,7 @@
 /*!
  * @file PortCallBack.h
  * @brief PortCallBack class
- * @date $Date: 2007-01-21 12:56:35 $
+ * @date $Date: 2007-09-19 07:41:28 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
  * Copyright (C) 2006
@@ -13,12 +13,15 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: PortCallBack.h,v 1.2 2007-01-21 12:56:35 n-ando Exp $
+ * $Id: PortCallBack.h,v 1.2.4.1 2007-09-19 07:41:28 n-ando Exp $
  *
  */
 
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.2  2007/01/21 12:56:35  n-ando
+ * virtual dtors were defined.
+ *
  * Revision 1.1  2006/12/02 18:51:18  n-ando
  * The first commitment.
  *
@@ -156,6 +159,23 @@ namespace RTC
     virtual ~OnUnderflow(){}
     virtual DataType operator()() = 0;
   };
+
+
+  template <class DataType>
+  struct OnWriteTimeout
+  {
+    virtual ~OnWriteTimeout(){}
+    virtual void operator()(const DataType& value) = 0;
+  };
+
+  template <class DataType>
+  struct OnReadTimeout
+  {
+    virtual ~OnReadTimeout(){}
+    virtual DataType operator()() = 0;
+  };
+
+
   
 };
 #endif // PortCallBack_h
