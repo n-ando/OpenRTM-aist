@@ -2,7 +2,7 @@
 /*!
  * @file  InPortCorbaConsumer.h
  * @brief InPortCorbaConsumer class
- * @date  $Date: 2007-08-20 06:31:10 $
+ * @date  $Date: 2007-09-19 07:47:28 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
  * Copyright (C) 2006
@@ -13,12 +13,15 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: InPortCorbaConsumer.h,v 1.3.4.1 2007-08-20 06:31:10 n-ando Exp $
+ * $Id: InPortCorbaConsumer.h,v 1.3.4.2 2007-09-19 07:47:28 n-ando Exp $
  *
  */
 
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.3.4.1  2007/08/20 06:31:10  n-ando
+ * push() function was modified to detect buffer read error.
+ *
  * Revision 1.3  2007/01/09 09:56:38  n-ando
  * Kanji-code has changed.
  *
@@ -82,7 +85,7 @@ namespace RTC
     {
       DataType data;
       CORBA::Any tmp;
-      if (!m_buffer.read(data)) return;
+      m_buffer.read(data);
       tmp <<= data;
 
       // 本当はエラー処理をすべき

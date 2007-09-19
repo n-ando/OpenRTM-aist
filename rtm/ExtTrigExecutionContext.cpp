@@ -2,7 +2,7 @@
 /*!
  * @file ExtTrigExecutionContext.cpp
  * @brief ExtTrigExecutionContext class
- * @date $Date: 2007-04-13 16:08:18 $
+ * @date $Date: 2007-09-19 07:48:47 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
  * Copyright (C) 2007
@@ -12,12 +12,15 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: ExtTrigExecutionContext.cpp,v 1.1 2007-04-13 16:08:18 n-ando Exp $
+ * $Id: ExtTrigExecutionContext.cpp,v 1.1.2.1 2007-09-19 07:48:47 n-ando Exp $
  *
  */
 
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.1  2007/04/13 16:08:18  n-ando
+ * External Triggered ExecutionContext class.
+ *
  */
 
 #include <rtm/ExtTrigExecutionContext.h>
@@ -36,7 +39,6 @@ namespace RTC
 
   void ExtTrigExecutionContext::tick()
   {
-    std::cout << "tick!!!" << std::endl;
     if (m_worker._mutex.tryacquire() != 0)
       {
 	return;
@@ -62,8 +64,6 @@ namespace RTC
 	  {
 	    m_worker._called = false;
 	    std::for_each(m_comps.begin(), m_comps.end(), invoke_worker());
-	    while (!m_running) {ACE_OS::sleep(tv);}
-	    ACE_OS::sleep(tv);
 	  }
 	m_worker._mutex.release();
       } while (m_running);
