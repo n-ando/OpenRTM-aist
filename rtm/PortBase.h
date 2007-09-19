@@ -3,7 +3,7 @@
 /*!
  * @file PortBase.h
  * @brief RTC's Port base class
- * @date $Date: 2007-07-20 16:01:45 $
+ * @date $Date: 2007-09-19 07:42:01 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
  * Copyright (C) 2006
@@ -13,12 +13,15 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: PortBase.h,v 1.10.2.1 2007-07-20 16:01:45 n-ando Exp $
+ * $Id: PortBase.h,v 1.10.2.2 2007-09-19 07:42:01 n-ando Exp $
  *
  */
 
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.10.2.1  2007/07/20 16:01:45  n-ando
+ * Useless friend class declaration was deleted.
+ *
  * Revision 1.10  2007/04/26 15:31:34  n-ando
  * The header include order was modified to define _REENTRANT before
  * including ace/config-lite.h in Linux systems.
@@ -1155,7 +1158,7 @@ namespace RTC
       
       connect_func() {};
       connect_func(Port_ptr p, ConnectorProfile& prof)
-	: port_ref(p), connector_profile(prof) {};
+	: port_ref(p), connector_profile(prof), return_code(RTC::RTC_OK) {};
       void operator()(Port_ptr p)
       {
 	if (!port_ref->_is_equivalent(p))
