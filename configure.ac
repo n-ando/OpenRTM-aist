@@ -2,7 +2,7 @@ dnl -*- autoconf -*-
 dnl
 dnl @file configure.ac
 dnl @brief Input file for autoconf
-dnl @date $Date: 2007-07-22 13:48:14 $
+dnl @date $Date: 2007-09-19 02:33:31 $
 dnl @author Noriaki Ando <n-ando@aist.go.jp>
 dnl
 dnl This file is an input file used by the GNU "autoconf" program to
@@ -10,11 +10,14 @@ dnl generate the file "configure", which tries to guess your system
 dnl configuration
 dnl
 dnl
-dnl $Id: configure.ac,v 1.21.2.2 2007-07-22 13:48:14 n-ando Exp $
+dnl $Id: configure.ac,v 1.21.2.3 2007-09-19 02:33:31 n-ando Exp $
 dnl
 
 dnl
 dnl $Log: not supported by cvs2svn $
+dnl Revision 1.21.2.2  2007/07/22 13:48:14  n-ando
+dnl *** empty log message ***
+dnl
 dnl Revision 1.21.2.1  2007/07/20 15:28:35  n-ando
 dnl Modified for win32 porting.
 dnl
@@ -1397,6 +1400,8 @@ AC_OUTPUT([Makefile
 	rtm/Makefile
 	rtm/idl/Makefile
 	rtm/tests/Makefile
+	rtm/tests/SyncFIFO/Makefile
+	rtm/tests/SyncLIFO/Makefile
 	rtm/tests/Properties/Makefile
 	rtm/tests/StringUtil/Makefile
 	rtm/tests/ModuleManager/Makefile
