@@ -2,7 +2,7 @@
 /*!
  * @file TimeValue.h
  * @brief TimeValue class
- * @date $Date: 2007-07-20 16:11:00 $
+ * @date $Date: 2007-09-19 02:59:08 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
  * Copyright (C) 2007
@@ -12,7 +12,7 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: TimeValue.h,v 1.1.2.1 2007-07-20 16:11:00 n-ando Exp $
+ * $Id: TimeValue.h,v 1.1.2.2 2007-09-19 02:59:08 n-ando Exp $
  *
  */
 
@@ -37,12 +37,12 @@ struct TimeValue
     TimeValue res;
     if (tv_sec >= tm.tv_sec) // +
       {
-	if (tv_usec >= tm.tv_usec)
+	if (tv_usec >= tm.tv_usec) // ŒJ‚è‰º‚ª‚è–³‚µ
 	  {
 	    res.tv_sec  = tv_sec  - tm.tv_sec;  // -
 	    res.tv_usec = tv_usec - tm.tv_usec; // +
 	  }
-	else // tv_usec < tm.tv_usec
+	else // tv_usec < tm.tv_usec ŒJ‚è‰º‚ª‚è—L‚è
 	  {
 	    res.tv_sec  = tv_sec  - tm.tv_sec - 1;
 	    res.tv_usec = (tv_usec + 1000000) - tm.tv_usec;
@@ -50,14 +50,14 @@ struct TimeValue
       }
     else // tv_sec < tm.tv_sec // -
       {
-	if (tm.tv_usec >= tv_usec)
+	if (tm.tv_usec >= tv_usec) // ŒJ‚è‰º‚ª‚è–³‚µ
 	  {
 	    res.tv_sec  = - (tm.tv_sec  - tv_sec); // +
 	    res.tv_usec = - (tm.tv_usec - tv_usec);  // +
 	  }
-	else // tm.tv_usec < tv_usec
+	else // tm.tv_usec < tv_usec ŒJ‚è‰º‚ª‚è—L‚è
 	  {
-	    res.tv_sec  = tm.tv_sec - tv_sec  - 1;
+	    res.tv_sec  = - (tm.tv_sec - tv_sec  - 1);
 	    res.tv_usec = - (tm.tv_usec + 1000000) + tv_usec;
 	  }
       }
