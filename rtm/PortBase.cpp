@@ -2,7 +2,7 @@
 /*!
  * @file PortBase.h
  * @brief RTC's Port base class
- * @date $Date: 2007-08-20 06:12:34 $
+ * @date $Date: 2007-09-20 11:26:03 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
  * Copyright (C) 2006
@@ -12,12 +12,15 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: PortBase.cpp,v 1.10.2.1 2007-08-20 06:12:34 n-ando Exp $
+ * $Id: PortBase.cpp,v 1.10.2.2 2007-09-20 11:26:03 n-ando Exp $
  *
  */
 
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.10.2.1  2007/08/20 06:12:34  n-ando
+ * A bug that the unsubscribeInterfaces() was called twice was fixed.
+ *
  * Revision 1.10  2007/04/27 00:57:37  n-ando
  * *** empty log message ***
  *
@@ -107,6 +110,11 @@ namespace RTC
     PortProfile_var prof;
     prof = new PortProfile(m_profile);
     return prof._retn();
+  }
+
+  const PortProfile& PortBase::getPortProfile() const
+  {
+    return m_profile;
   }
 
 
