@@ -2,7 +2,7 @@
 /*!
  * @file RTObject.cpp
  * @brief RT component base class
- * @date $Date: 2007-07-20 16:06:02 $
+ * @date $Date: 2007-09-20 11:41:37 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
  * Copyright (C) 2006
@@ -12,12 +12,15 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: RTObject.cpp,v 1.8.2.1 2007-07-20 16:06:02 n-ando Exp $
+ * $Id: RTObject.cpp,v 1.8.2.2 2007-09-20 11:41:37 n-ando Exp $
  *
  */
 
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.8.2.1  2007/07/20 16:06:02  n-ando
+ * CORBA interface inconsistency was fixed.
+ *
  * Revision 1.8  2007/04/27 07:51:06  n-ando
  * Change from "naming_names" to "naming.names".
  *
@@ -216,8 +219,8 @@ namespace RTC
 	if (m_execContexts.length() > 0)
 	  {
 	    m_execContexts[0]->start();
-	    m_alive = true;
 	  }
+	m_alive = true;
       }
     return ret;
   }
@@ -386,6 +389,7 @@ namespace RTC
       {
 	ComponentProfile_var profile
 	  = new ComponentProfile(m_profile);
+	profile->port_profiles = m_portAdmin.getPortProfileList();
 	return profile._retn();
       }
     catch (...)
@@ -543,6 +547,7 @@ namespace RTC
     ReturnCode_t ret(RTC::RTC_ERROR);
     try
       {
+	m_configsets.update();
 	ret = onActivated(ec_id);
       }
     catch (...)
@@ -607,6 +612,7 @@ namespace RTC
     try
       {
 	ret = onError(ec_id);
+	m_configsets.update();
       }
     catch (...)
       {
