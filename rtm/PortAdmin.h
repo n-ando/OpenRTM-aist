@@ -2,7 +2,7 @@
 /*!
  * @file PortAdmin.h
  * @brief RTC's Port administration class
- * @date $Date: 2007-01-21 10:28:09 $
+ * @date $Date: 2007-09-20 11:25:11 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
  * Copyright (C) 2006
@@ -12,12 +12,15 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: PortAdmin.h,v 1.6 2007-01-21 10:28:09 n-ando Exp $
+ * $Id: PortAdmin.h,v 1.6.4.1 2007-09-20 11:25:11 n-ando Exp $
  *
  */
 
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.6  2007/01/21 10:28:09  n-ando
+ * Some trivial fixes.
+ *
  * Revision 1.5  2007/01/09 15:13:11  n-ando
  * Now Port does not have getName().
  * The name of Port is obtained from getProfile().
@@ -77,6 +80,7 @@ namespace RTC
      */
     PortList* getPortList() const;
 
+    PortProfileList getPortProfileList() const;
     /*!
      * @if jp
      *
@@ -259,6 +263,18 @@ namespace RTC
       }
     private:
       std::string m_name;
+    };
+
+    class port_prof_collect
+    {
+    public:
+      port_prof_collect(PortProfileList& p) : m_p(p) {}
+      void operator()(const PortBase* port)
+      {
+	CORBA_SeqUtil::push_back(m_p, port->getPortProfile());
+      }
+    private:
+      PortProfileList& m_p;
     };
     
     struct find_port_name;

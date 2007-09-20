@@ -2,7 +2,7 @@
 /*!
  * @file PortAdmin.cpp
  * @brief RTC's Port administration class
- * @date $Date: 2007-04-23 04:55:40 $
+ * @date $Date: 2007-09-20 11:25:16 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
  * Copyright (C) 2006
@@ -12,12 +12,15 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: PortAdmin.cpp,v 1.7 2007-04-23 04:55:40 n-ando Exp $
+ * $Id: PortAdmin.cpp,v 1.7.2.1 2007-09-20 11:25:16 n-ando Exp $
  *
  */
 
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.7  2007/04/23 04:55:40  n-ando
+ * Port finalization process was modified.
+ *
  * Revision 1.6  2007/01/12 14:37:57  n-ando
  * Since Port activates itself now, PortAdmin does not need to activate Port.
  *
@@ -86,6 +89,14 @@ namespace RTC
     PortList_var ports;
     ports = new PortList(m_portRefs);
     return ports._retn();
+  }
+
+  PortProfileList PortAdmin::getPortProfileList() const
+  {
+    PortProfileList port_profs;
+    port_prof_collect p(port_profs);
+    m_portServants.for_each(p);
+    return port_profs;
   }
 
 
