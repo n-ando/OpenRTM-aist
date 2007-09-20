@@ -2,7 +2,7 @@
 /*!
  * @file PeriodicExecutionContext.h
  * @brief PeriodicExecutionContext class
- * @date $Date: 2007-09-19 07:44:35 $
+ * @date $Date: 2007-09-20 11:22:08 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
  * Copyright (C) 2006
@@ -12,12 +12,15 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: PeriodicExecutionContext.h,v 1.4.2.2 2007-09-19 07:44:35 n-ando Exp $
+ * $Id: PeriodicExecutionContext.h,v 1.4.2.3 2007-09-20 11:22:08 n-ando Exp $
  *
  */
 
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.4.2.2  2007/09/19 07:44:35  n-ando
+ * The usleep() in the execution loop will be skipped, if wait-time is 0.
+ *
  * Revision 1.4.2.1  2007/07/20 15:59:18  n-ando
  * ACE header include was added.
  *
@@ -201,22 +204,22 @@ namespace RTC
 	m_sm.goTo(INACTIVE_STATE);
       }	
       virtual ~DFPBase(){}
-      virtual ReturnCode_t on_startup() = 0;
-      virtual ReturnCode_t on_shutdown() = 0;
+      virtual void on_startup() = 0;
+      virtual void on_shutdown() = 0;
 
-      virtual ReturnCode_t on_activated(const ECStates& st) = 0;
-      virtual ReturnCode_t on_deactivated(const ECStates& st) = 0;
-      virtual ReturnCode_t on_aborting(const ECStates& st) = 0;
-      virtual ReturnCode_t on_error(const ECStates& st) = 0;
-      virtual ReturnCode_t on_reset(const ECStates& st) = 0;
-      virtual ReturnCode_t on_execute(const ECStates& st) = 0;
-      virtual ReturnCode_t on_state_update(const ECStates& st) = 0;
+      virtual void on_activated(const ECStates& st) = 0;
+      virtual void on_deactivated(const ECStates& st) = 0;
+      virtual void on_aborting(const ECStates& st) = 0;
+      virtual void on_error(const ECStates& st) = 0;
+      virtual void on_reset(const ECStates& st) = 0;
+      virtual void on_execute(const ECStates& st) = 0;
+      virtual void on_state_update(const ECStates& st) = 0;
 
-      virtual ReturnCode_t on_rate_changed() = 0;
-      virtual ReturnCode_t worker() {return m_sm.worker();}
+      virtual void on_rate_changed() = 0;
+      virtual void worker() {return m_sm.worker();}
       virtual ExecContextState get_state(){ return m_sm.getState();}
       UniqueId ec_id;
-      StateMachine<ExecContextState, ReturnCode_t, DFPBase> m_sm;
+      StateMachine<ExecContextState, DFPBase> m_sm;
     };
 
 
@@ -233,77 +236,73 @@ namespace RTC
       {
 	
       }
-      ReturnCode_t on_startup()
+      void on_startup()
       {
-	return m_obj->on_startup(ec_id);
+	m_obj->on_startup(ec_id);
       }
-      ReturnCode_t on_shutdown()
+      void on_shutdown()
       {
-	return m_obj->on_shutdown(ec_id);
+	m_obj->on_shutdown(ec_id);
       }
 
-      ReturnCode_t on_activated(const ECStates& st)
+      void on_activated(const ECStates& st)
       {
 	if (m_obj->on_activated(ec_id) != RTC::RTC_OK)
 	  {
 	    m_sm.goTo(ERROR_STATE);
-	    return RTC::RTC_ERROR;
+	    return;
 	  }
-	return RTC::RTC_OK;
-      }
-      ReturnCode_t on_deactivated(const ECStates& st)
-      {
-	if (m_obj->on_deactivated(ec_id) != RTC::RTC_OK)
-	  {
-	    m_sm.goTo(ERROR_STATE);
-	    return RTC::RTC_ERROR;
-	  }
-	return RTC::RTC_OK;
+	return;
       }
 
-      ReturnCode_t on_aborting(const ECStates& st)
+      void on_deactivated(const ECStates& st)
       {
-	return m_obj->on_aborting(ec_id);
+	m_obj->on_deactivated(ec_id);
       }
 
-      ReturnCode_t on_error(const ECStates& st)
+      void on_aborting(const ECStates& st)
       {
-	return m_obj->on_error(ec_id);
+	m_obj->on_aborting(ec_id);
       }
 
-      ReturnCode_t on_reset(const ECStates& st)
+      void on_error(const ECStates& st)
+      {
+	m_obj->on_error(ec_id);
+      }
+
+      void on_reset(const ECStates& st)
       {
 	if (m_obj->on_reset(ec_id) != RTC::RTC_OK)
 	  {
 	    m_sm.goTo(ERROR_STATE);
-	    return RTC::RTC_ERROR;
+	    return;
 	  }
-	return RTC::RTC_OK;
+	return;
       }
 
-      ReturnCode_t on_execute(const ECStates& st)
+      void on_execute(const ECStates& st)
       {
 	if (m_obj->on_execute(ec_id) != RTC::RTC_OK)
 	  {
 	    m_sm.goTo(ERROR_STATE);
-	    return RTC::RTC_ERROR;
+	    return;
 	  }  
-	return RTC::RTC_OK;
+	return;
       }
 
-      ReturnCode_t on_state_update(const ECStates& st)
+      void on_state_update(const ECStates& st)
       {
 	if (m_obj->on_state_update(ec_id) != RTC::RTC_OK)
 	  {
 	    m_sm.goTo(ERROR_STATE);
-	    return RTC::RTC_ERROR;
+	    return;
 	  }
-	return RTC::RTC_OK;
+	return;
       }
 
-      ReturnCode_t on_rate_changed()
+      void on_rate_changed()
       {
-	return m_obj->on_rate_changed(ec_id);
+	m_obj->on_rate_changed(ec_id);
       }
 
       Object m_obj;
