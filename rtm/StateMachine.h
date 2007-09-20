@@ -2,7 +2,7 @@
 /*!
  * @file StateMachine.h
  * @brief State machine template class
- * @date $Date: 2007-07-20 16:08:57 $
+ * @date $Date: 2007-09-20 11:21:12 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
  * Copyright (C) 2006
@@ -12,12 +12,15 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: StateMachine.h,v 1.3.2.1 2007-07-20 16:08:57 n-ando Exp $
+ * $Id: StateMachine.h,v 1.3.2.2 2007-09-20 11:21:12 n-ando Exp $
  *
  */
 
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.3.2.1  2007/07/20 16:08:57  n-ando
+ * A bug fix.
+ *
  * Revision 1.3  2007/04/26 15:33:39  n-ando
  * The header include order was modified to define _REENTRANT before
  * including ace/config-lite.h in Linux systems.
@@ -141,10 +144,10 @@ struct StateHolder
  *
  * @endif
  */
-template <class State, class Result,
+template <class State,
 	  class Listener,
 	  class States = StateHolder<State>, 
-	  class Callback = Result (Listener::*)(const States& states)
+	  class Callback = void (Listener::*)(const States& states)
 	  >
 class StateMachine
 {
@@ -363,72 +366,45 @@ public:
    * @brief Worker function
    * @endif
    */
-  Result worker()
+  void worker()
   {
-    Result res = RTC::RTC_OK;
     States state;
-    bool selftrans;
 
-    { // lock
-      ACE_Guard<ACE_Thread_Mutex> guard(m_mutex);
-      state = m_states;
-      selftrans = m_selftrans;
-      m_selftrans = false;
-    }
+    sync(state);
 
-    // Entry アクション
-    // 前回から状態が変わった
-    // もしくは自己遷移が行われたのでEntryアクションを行う
-    if ((state.prev != state.curr) || selftrans)
-      {
-	// Entry アクションを実行
-	if (m_entry[state.curr] != NULL)
-	  res = (m_listener->*m_entry[state.curr])(state);
-      }
-
-    // この区間では状態の変更を感知しない。
-    // ただし状態変数 m_states は外部から変更される可能性がある。
-    // Do アクション判定にはローカル変数を使う。
-
-    // Do アクション
     if (state.curr == state.next)
       {
+	// pre-do
 	if (m_predo[state.curr] != NULL)
-	  res = (m_listener->*m_predo [state.curr])(state);
+	  (m_listener->*m_predo [state.curr])(state);
+
+	if (need_trans()) return;
+	
+	// do
 	if (m_do[state.curr] != NULL)
-	  res = (m_listener->*m_do    [state.curr])(state);
+	  (m_listener->*m_do    [state.curr])(state);
+
+	if (need_trans()) return;
+	
+	// post-do
 	if (m_postdo[state.curr] != NULL)
-	  res = (m_listener->*m_postdo[state.curr])(state);
+	  (m_listener->*m_postdo[state.curr])(state);
       }
-
-    // この区間では次の状態が変更されているかもしれない。
-    // 状態は m_states.next に反映されている。
-    // lock
-    {
-      ACE_Guard<ACE_Thread_Mutex> guard(m_mutex);
-      // 状態のコピー
-      state.next = m_states.next;
-      selftrans = m_selftrans;
-    }
-
-    // Exit アクション
-    if ((state.curr != state.next) || selftrans)
+    else
       {
-	// Exit action of pre-state
 	if (m_exit[state.curr] != NULL)
-	  res = (m_listener->*m_exit[state.curr])(state);
-	if (m_transit != NULL)
-	  res = (m_listener->*m_transit)(state);
+	  (m_listener->*m_exit[state.curr])(state);
+
+	sync(state);
+	
+	if (state.curr != state.next)
+	  {
+	    state.curr = state.next;
+	    if(m_entry[state.curr] != NULL)
+	      (m_listener->*m_entry[state.curr])(state);
+	    update_curr(state.curr);
+	  }
       }
-
-    {
-      ACE_Guard<ACE_Thread_Mutex> guard(m_mutex);
-      // 状態を更新
-      m_states.prev = m_states.curr;
-      m_states.curr = m_states.next;
-    }
-
-    return res;
   }
 
 protected:
@@ -450,6 +426,25 @@ protected:
   States m_states;
   bool m_selftrans;
   ACE_Thread_Mutex m_mutex;
+
+private:
+  inline void sync(States& st)
+  {
+    ACE_Guard<ACE_Thread_Mutex> guard(m_mutex);
+    st = m_states;
+  }
+  
+  inline bool need_trans()
+  {
+    ACE_Guard<ACE_Thread_Mutex> guard(m_mutex);
+    return (m_states.curr != m_states.next);
+  }
+
+  inline void update_curr(const State curr)
+  {
+    ACE_Guard<ACE_Thread_Mutex> guard(m_mutex);
+    m_states.curr = curr;
+  }
 };
 
 #endif // StateMachine_h
