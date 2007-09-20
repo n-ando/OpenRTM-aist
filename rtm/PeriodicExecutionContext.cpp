@@ -2,7 +2,7 @@
 /*!
  * @file PeriodicExecutionContext.cpp
  * @brief PeriodicExecutionContext class
- * @date $Date: 2007-09-19 07:44:37 $
+ * @date $Date: 2007-09-20 11:22:45 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
  * Copyright (C) 2006
@@ -12,12 +12,15 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: PeriodicExecutionContext.cpp,v 1.5.2.2 2007-09-19 07:44:37 n-ando Exp $
+ * $Id: PeriodicExecutionContext.cpp,v 1.5.2.3 2007-09-20 11:22:45 n-ando Exp $
  *
  */
 
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.5.2.2  2007/09/19 07:44:37  n-ando
+ * The usleep() in the execution loop will be skipped, if wait-time is 0.
+ *
  * Revision 1.5.2.1  2007/07/20 15:58:50  n-ando
  * Some ineffective expressions were added to suppress compiler's warning.
  *
@@ -209,7 +212,7 @@ namespace RTC
       {
 	m_profile.rate = rate;
 	m_usec = (long int)(1000000/rate);
-	if (m_usec == 0) m_nowait = ture;
+	if (m_usec == 0) m_nowait = true;
 	std::for_each(m_comps.begin(), m_comps.end(), invoke_on_rate_changed());
 	return RTC::RTC_OK;
       }
