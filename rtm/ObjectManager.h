@@ -2,7 +2,7 @@
 /*!
  * @file ObjectManager.h
  * @brief Object management class
- * @date $Date: 2007-04-27 03:27:25 $
+ * @date $Date: 2007-09-20 11:42:25 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
  * Copyright (C) 2003-2007
@@ -12,12 +12,15 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: ObjectManager.h,v 1.6 2007-04-27 03:27:25 n-ando Exp $
+ * $Id: ObjectManager.h,v 1.6.2.1 2007-09-20 11:42:25 n-ando Exp $
  *
  */
 
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.6  2007/04/27 03:27:25  n-ando
+ * A trivial fix.
+ *
  * Revision 1.5  2007/04/26 15:30:32  n-ando
  * The header include order was modified to define _REENTRANT before
  * including ace/config-lite.h in Linux systems.
@@ -121,6 +124,13 @@ class ObjectManager
 
   template <class Pred>
   Pred for_each(Pred p)
+  {
+    ACE_Guard<ACE_Thread_Mutex> guard(m_objects._mutex);
+    return std::for_each(m_objects._obj.begin(), m_objects._obj.end(), p);
+  }
+
+  template <class Pred>
+  Pred for_each(Pred p) const
   {
     ACE_Guard<ACE_Thread_Mutex> guard(m_objects._mutex);
     return std::for_each(m_objects._obj.begin(), m_objects._obj.end(), p);
