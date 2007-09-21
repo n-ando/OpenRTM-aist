@@ -2,9 +2,12 @@
 ##---------------------------------------------------------------------------
 ## Makefile.am for ConsoleIn/ConsoleOut components
 ##
-## $Id: Makefile.am,v 1.3.4.1 2007-07-22 14:26:35 n-ando Exp $
+## $Id: Makefile.am,v 1.3.4.2 2007-09-21 09:21:04 n-ando Exp $
 ##
 ## $Log: not supported by cvs2svn $
+## Revision 1.3.4.1  2007/07/22 14:26:35  n-ando
+## *** empty log message ***
+##
 ## Revision 1.3  2007/01/21 13:35:17  n-ando
 ## A trivial fix.
 ##
@@ -55,5 +58,4 @@ EXTRA_DIST =                \
 clean-local:
 	rm -f \
 	*.bak *.rpo *.sym lib*.*_pure_* \
-	Makefile.old *core *~ *.so *.log\
-	rtc.conf
+	Makefile.old *core *~ *.so *.log
