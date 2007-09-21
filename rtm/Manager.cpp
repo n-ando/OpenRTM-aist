@@ -2,7 +2,7 @@
 /*!
  * @file Manager.h
  * @brief RTComponent manager class
- * @date $Date: 2007-07-20 15:51:49 $
+ * @date $Date: 2007-09-21 09:14:33 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
  * Copyright (C) 2003-2005
@@ -12,12 +12,16 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: Manager.cpp,v 1.12.2.1 2007-07-20 15:51:49 n-ando Exp $
+ * $Id: Manager.cpp,v 1.12.2.2 2007-09-21 09:14:33 n-ando Exp $
  *
  */
 
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.12.2.1  2007/07/20 15:51:49  n-ando
+ * Bug fixes.
+ * Some ineffective expressions were added to suppress compiler's warning.
+ *
  * Revision 1.12  2007/04/27 07:50:25  n-ando
  * Now Components' properties are dumped to the log when they are terminated.
  *
@@ -446,8 +450,15 @@ namespace RTC
 
     //------------------------------------------------------------
     // Component initialization
+    if (comp->initialize() != RTC::RTC_OK)
+      {
+	RTC_TRACE(("RTC initialization failed: %s", module_name));
+	comp->exit();
+	RTC_TRACE(("%s was finalized", module_name));
+	return NULL;
+      }
+    RTC_TRACE(("RTC initialization succeeded: %s", module_name));
     bindExecutionContext(comp);
-    comp->initialize();
 
     //------------------------------------------------------------
     // Bind component to naming service
@@ -537,6 +548,7 @@ namespace RTC
 	exec_cxt = m_ecfactory.find(ectype)->create();
       }
     exec_cxt->add(rtobj);
+    exec_cxt->start();
     m_ecs.push_back(exec_cxt);
     return true;
   }
@@ -574,8 +586,7 @@ namespace RTC
   RtcBase* Manager::getComponent(const char* instance_name)
   {
     RTC_TRACE(("Manager::getComponent(%s)", instance_name));
-    //    return m_component->find(instance_name);
-    return NULL;
+    return m_compManager.find(instance_name);
   }
 
 
