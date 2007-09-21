@@ -2,7 +2,7 @@ dnl -*- autoconf -*-
 dnl
 dnl @file configure.ac
 dnl @brief Input file for autoconf
-dnl @date $Date: 2007-09-19 02:33:31 $
+dnl @date $Date: 2007-09-21 08:53:45 $
 dnl @author Noriaki Ando <n-ando@aist.go.jp>
 dnl
 dnl This file is an input file used by the GNU "autoconf" program to
@@ -10,11 +10,14 @@ dnl generate the file "configure", which tries to guess your system
 dnl configuration
 dnl
 dnl
-dnl $Id: configure.ac,v 1.21.2.3 2007-09-19 02:33:31 n-ando Exp $
+dnl $Id: configure.ac,v 1.21.2.4 2007-09-21 08:53:45 n-ando Exp $
 dnl
 
 dnl
 dnl $Log: not supported by cvs2svn $
+dnl Revision 1.21.2.3  2007/09/19 02:33:31  n-ando
+dnl Unit tests for SyncLIFO and SyncFIFO were added.
+dnl
 dnl Revision 1.21.2.2  2007/07/22 13:48:14  n-ando
 dnl *** empty log message ***
 dnl
@@ -95,7 +98,7 @@ dnl  Autoconf initial macros
 dnl ------------------------------------------------------------
 dnl  Process this file with autoconf to produce a configure script.
 AC_PREREQ(2.59)
-AC_INIT(OpenRTM-aist, 0.4.0, n-ando@aist.go.jp, OpenRTM-aist)
+AC_INIT(OpenRTM-aist, 0.4.1, n-ando@aist.go.jp, OpenRTM-aist)
 AM_INIT_AUTOMAKE
 AM_CONFIG_HEADER([rtm/config_rtc.h])
 
@@ -1021,7 +1024,7 @@ if test "x$have_omniorb" = "xyes" ; then
 	dnl ------------------------------------------------------------
 	AC_MSG_CHECKING(for libomniORB4.so)
 	dnl  libomniORB4.so -> %libomniORB4_so $libomniORB4_so_dir
-	FP_FIND_FILE(libomniORB4.so,$omniorb/lib $more_libs $base_libs $base_dirs,lib cxx/lib)
+	FP_FIND_FILE(libomniORB4.so,$with_omniorb/lib $more_libs $base_libs $base_dirs,lib cxx/lib)
 	if test "x$libomniORB4_so_dir" = "x" ; then
 		AC_MSG_RESULT(not found)
 		AC_MSG_ERROR(use --with-omniorb to locate libomniORB4.so)
@@ -1074,8 +1077,8 @@ if test "x$have_omniorb" = "xyes" ; then
 	IDL_FLAGS="-bcxx -Wba -nf -I/usr/local/share/omniORB/idl/ -I/usr/local/share/omniORB/idl/COS"
 	COSNAMES=$omniNames
 	dnl  Compiler/Linker options
-	CPPFLAGS="$CPPFLAGS -I$omniORB4_CORBA_h_dir -I/usr/local/include/COS/"
-	CXXFLAGS="$CXXFLAGS -I$omniORB4_CORBA_h_dir -I/usr/local/include/COS/"
+	CPPFLAGS="-I$omniORB4_CORBA_h_dir $CPPFLAGS -I/usr/local/include/COS/"
+	CXXFLAGS="-I$omniORB4_CORBA_h_dir $CXXFLAGS -I/usr/local/include/COS/"
 	LDFLAGS="$LDFLAGS -L$libomniORB4_so_dir"
 	LIBS="$LIBS -lomniORB4 -lomnithread -lomniDynamic4"
 	LDSOLIBS="$LDSOLIBS -lomniORB4 -lomnithread -lomniDynamic4"
