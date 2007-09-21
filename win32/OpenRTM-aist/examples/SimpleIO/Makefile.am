@@ -2,9 +2,12 @@
 ##---------------------------------------------------------------------------
 ## Makefile.am for win32/OpenRTM-aist/examples/SimpleIO
 ##
-## $Id: Makefile.am,v 1.1.2.2 2007-07-22 10:34:18 n-ando Exp $
+## $Id: Makefile.am,v 1.1.2.3 2007-09-21 10:30:49 n-ando Exp $
 ##
 ## $Log: not supported by cvs2svn $
+## Revision 1.1.2.2  2007/07/22 10:34:18  n-ando
+## *** empty log message ***
+##
 ## Revision 1.1.2.1  2007/07/20 16:26:56  n-ando
 ## Makefile for Win32 source tree management.
 ##
@@ -12,7 +15,7 @@
 ##---------------------------------------------------------------------------
 clean-local:
 	rm -rf Debug Release
-	rm -rf *~ *.cpp *.h rtc.conf *.user
+	rm -rf *~ *.cpp *.h rtc.conf *.user *.vcproj
 
 vcprojs: ConsoleInvc8.vcproj ConsoleOutvc8.vcproj
 

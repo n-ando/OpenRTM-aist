@@ -2,9 +2,12 @@
 ##---------------------------------------------------------------------------
 ## Makefile.am for win32/OpenRTM-aist/examples/SimpleService
 ##
-## $Id: Makefile.am,v 1.1.2.3 2007-07-22 10:34:21 n-ando Exp $
+## $Id: Makefile.am,v 1.1.2.4 2007-09-21 10:30:52 n-ando Exp $
 ##
 ## $Log: not supported by cvs2svn $
+## Revision 1.1.2.3  2007/07/22 10:34:21  n-ando
+## *** empty log message ***
+##
 ## Revision 1.1.2.2  2007/07/20 16:56:55  n-ando
 ## A trivial fix.
 ##
@@ -15,7 +18,7 @@
 ##---------------------------------------------------------------------------
 clean-local:
 	rm -rf Debug Release
-	rm -rf *~ *.cpp *.h *.idl rtc.conf *.user
+	rm -rf *~ *.cpp *.h *.idl rtc.conf *.user *.vcproj
 
 vcprojs: MyServiceProvidervc8.vcproj MyServiceConsumervc8.vcproj
 

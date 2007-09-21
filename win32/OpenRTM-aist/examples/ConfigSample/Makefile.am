@@ -2,9 +2,12 @@
 ##---------------------------------------------------------------------------
 ## Makefile.am for win32/OpenRTM-aist/examples/ConfigSample
 ##
-## $Id: Makefile.am,v 1.1.2.3 2007-07-22 10:34:11 n-ando Exp $
+## $Id: Makefile.am,v 1.1.2.4 2007-09-21 10:30:44 n-ando Exp $
 ##
 ## $Log: not supported by cvs2svn $
+## Revision 1.1.2.3  2007/07/22 10:34:11  n-ando
+## *** empty log message ***
+##
 ## Revision 1.1.2.2  2007/07/20 16:54:56  n-ando
 ## VC project template and yaml file for makevcproj.py script are added.
 ##
@@ -15,7 +18,7 @@
 ##---------------------------------------------------------------------------
 clean-local:
 	rm -rf Debug Release
-	rm -rf *~ *.cpp *.h *.user *.conf
+	rm -rf *~ *.cpp *.h *.user *.conf *.vcproj
 
 vcprojs: ConfigSamplevc8.vcproj
 
