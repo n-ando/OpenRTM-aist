@@ -2,9 +2,12 @@
 ##------------------------------------------------------------
 ## Makefile.am for libRTC
 ##
-## $Id: Makefile.am,v 1.16 2007-04-23 04:50:22 n-ando Exp $
+## $Id: Makefile.am,v 1.16.2.1 2007-09-21 10:53:18 n-ando Exp $
 ##
 ## $Log: not supported by cvs2svn $
+## Revision 1.16  2007/04/23 04:50:22  n-ando
+## ConfigAdmin class was added.
+##
 ## Revision 1.15  2007/04/13 17:59:04  n-ando
 ## Some .cpp files and .h files are added.
 ##
@@ -178,3 +181,4 @@ DIST_SUBDIRS = idl tests
 
 clean-local:
 	rm -f *.gch *.bak *.rpo *.sym lib*.*_pure_* Makefile.old *core *~
+	rm -f config_rtc.h.in
