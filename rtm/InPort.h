@@ -2,7 +2,7 @@
 /*!
  * @file InPort.h
  * @brief InPort template class
- * @date $Date: 2007-08-20 05:15:39 $
+ * @date $Date: 2007-09-21 09:15:16 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
  * Copyright (C) 2003-2005
@@ -12,12 +12,15 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: InPort.h,v 1.6.4.2 2007-08-20 05:15:39 n-ando Exp $
+ * $Id: InPort.h,v 1.6.4.3 2007-09-21 09:15:16 n-ando Exp $
  *
  */
 
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.6.4.2  2007/08/20 05:15:39  n-ando
+ * Now default buffer is RingBuffer instead of NullBuffer.
+ *
  * Revision 1.6.4.1  2007/07/20 15:54:50  n-ando
  * Now ACE_OS::gettimeofday() is used for win32 porting.
  *
@@ -51,8 +54,8 @@
 #include <string>
 #include <vector>
 #include <iostream>
-//#include <rtm/InPortBase.h>
 #include <rtm/BufferBase.h>
+#include <rtm/RingBuffer.h>
 #include <rtm/PortCallBack.h>
 #include <rtm/RTC.h>
 
