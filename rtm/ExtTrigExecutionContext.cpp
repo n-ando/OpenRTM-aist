@@ -2,7 +2,7 @@
 /*!
  * @file ExtTrigExecutionContext.cpp
  * @brief ExtTrigExecutionContext class
- * @date $Date: 2007-09-19 07:48:47 $
+ * @date $Date: 2007-09-21 09:17:21 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
  * Copyright (C) 2007
@@ -12,12 +12,15 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: ExtTrigExecutionContext.cpp,v 1.1.2.1 2007-09-19 07:48:47 n-ando Exp $
+ * $Id: ExtTrigExecutionContext.cpp,v 1.1.2.2 2007-09-21 09:17:21 n-ando Exp $
  *
  */
 
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.1.2.1  2007/09/19 07:48:47  n-ando
+ * A trivial fix.
+ *
  * Revision 1.1  2007/04/13 16:08:18  n-ando
  * External Triggered ExecutionContext class.
  *
@@ -39,10 +42,7 @@ namespace RTC
 
   void ExtTrigExecutionContext::tick()
   {
-    if (m_worker._mutex.tryacquire() != 0)
-      {
-	return;
-      }
+    m_worker._mutex.acquire();
     m_worker._called = true;
     m_worker._cond.signal();
     m_worker._mutex.release();
