@@ -2,7 +2,7 @@
 /*!
  * @file Manager.h
  * @brief RTComponent manager class
- * @date $Date: 2007-09-21 09:14:33 $
+ * @date $Date: 2007-09-22 08:47:13 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
  * Copyright (C) 2003-2005
@@ -12,12 +12,18 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: Manager.cpp,v 1.12.2.2 2007-09-21 09:14:33 n-ando Exp $
+ * $Id: Manager.cpp,v 1.12.2.3 2007-09-22 08:47:13 n-ando Exp $
  *
  */
 
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.12.2.2  2007/09/21 09:14:33  n-ando
+ * Some fixes.
+ * - getComponents() was implemented.
+ * - Component's init logic was modified to fix behavior of "on_initialize"
+ *   error return.
+ *
  * Revision 1.12.2.1  2007/07/20 15:51:49  n-ando
  * Bug fixes.
  * Some ineffective expressions were added to suppress compiler's warning.
@@ -1134,7 +1140,7 @@ namespace RTC
 		else if (c == 'v')  str += prop["version"];
 		else if (c == 'V')  str += prop["vendor"];
 		else if (c == 'c')  str += prop["category"];
-		else if (c == 'h')  str += m_config["os.hostname"];
+		else if (c == 'h')  str += m_config["manager.os.hostname"];
 		else if (c == 'M')  str += m_config["manager.name"];
 		else if (c == 'p')  str += m_config["manager.pid"];
 		else str.push_back(c);
