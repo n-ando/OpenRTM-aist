@@ -2,7 +2,7 @@
 /*!
  * @file ModulesManager.h
  * @brief Loadable modules manager class
- * @date $Date: 2006-10-17 10:06:47 $
+ * @date $Date: 2007-09-22 10:29:38 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
  * Copyright (C) 2006
@@ -12,12 +12,15 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: ModuleManager.h,v 1.2 2006-10-17 10:06:47 n-ando Exp $
+ * $Id: ModuleManager.h,v 1.2.4.1 2007-09-22 10:29:38 n-ando Exp $
  *
  */
 
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.2  2006/10/17 10:06:47  n-ando
+ * Now class ModuleManager is in RTC namespace.
+ *
  * Revision 1.1  2006/09/20 08:47:33  n-ando
  * The first commit of module management class.
  *
@@ -36,6 +39,7 @@
 #include <ace/DLL.h>
 
 // RTC includes
+#include <rtm/Manager.h>
 #include <rtm/Properties.h>
 
 
@@ -127,7 +131,7 @@ namespace RTC
       InvalidOperation(const std::string& _reason)
 	: Error(_reason) {}
     };
-    typedef void (*ModuleInitFunc)(void);
+    typedef void (*ModuleInitFunc)(Manager*);
     /*!
      * @if jp
      *

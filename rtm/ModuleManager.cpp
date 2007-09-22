@@ -2,7 +2,7 @@
 /*!
  * @file ModulesManager.cpp
  * @brief Loadable modules manager class
- * @date $Date: 2007-04-26 15:30:00 $
+ * @date $Date: 2007-09-22 10:29:36 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
  * Copyright (C) 2006
@@ -12,12 +12,17 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: ModuleManager.cpp,v 1.5 2007-04-26 15:30:00 n-ando Exp $
+ * $Id: ModuleManager.cpp,v 1.5.2.1 2007-09-22 10:29:36 n-ando Exp $
  *
  */
 
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.5  2007/04/26 15:30:00  n-ando
+ * The header include order was modified to define _REENTRANT before
+ * including ace/config-lite.h in Linux systems.
+ * In ace 5.4.7 or later, _REENTRANT flag should be defined explicitly.
+ *
  * Revision 1.4  2007/04/13 18:02:58  n-ando
  * Some configuration properties handling processes were changed.
  *
@@ -43,6 +48,7 @@
 #include <ace/ACE.h>
 
 // RTC includes
+#include <rtm/Manager.h>
 #include <rtm/ModuleManager.h>
 #include <rtm/StringUtil.h>
 
@@ -150,7 +156,7 @@ namespace RTC
     
     init = (ModuleInitFunc)this->symbol(name.c_str(), init_func);
     
-    init();
+    init(&(Manager::instance()));
     
     return name;
   }
