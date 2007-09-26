@@ -2,9 +2,12 @@
 ##---------------------------------------------------------------------------
 ## Makefile.am for SeqIn/SeqOut components
 ##
-## $Id: Makefile.am,v 1.2.2.1 2007-07-22 14:26:32 n-ando Exp $
+## $Id: Makefile.am,v 1.2.2.2 2007-09-26 07:43:40 n-ando Exp $
 ##
 ## $Log: not supported by cvs2svn $
+## Revision 1.2.2.1  2007/07/22 14:26:32  n-ando
+## *** empty log message ***
+##
 ## Revision 1.2  2007/02/04 16:47:25  n-ando
 ## Updated for 0.4.0.
 ##
@@ -45,4 +48,4 @@ EXTRA_DIST =            \
 	rtc.conf
 
 clean-local:
-	rm -f *.bak *.rpo *.sym lib*.*_pure_* Makefile.old *core *~
+	rm -f *.bak *.rpo *.sym lib*.*_pure_* Makefile.old *core *~ *.log

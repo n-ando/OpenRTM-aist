@@ -58,11 +58,11 @@
 	/>
 	<UserMacro
 		Name="rtm_dlibs"
-		Value="aced.lib RTC040d.lib omniORB407_rtd.lib omniDynamic407_rtd.lib omnithread32_rtd.lib advapi32.lib ws2_32.lib mswsock.lib"
+		Value="aced.lib RTC041d.lib omniORB407_rtd.lib omniDynamic407_rtd.lib omnithread32_rtd.lib advapi32.lib ws2_32.lib mswsock.lib"
 	/>
 	<UserMacro
 		Name="rtm_libs"
-		Value="aced.lib RTC040d.lib omniORB407_rtd.lib omniDynamic407_rtd.lib omnithread32_rtd.lib advapi32.lib ws2_32.lib mswsock.lib"
+		Value="aced.lib RTC041d.lib omniORB407_rtd.lib omniDynamic407_rtd.lib omnithread32_rtd.lib advapi32.lib ws2_32.lib mswsock.lib"
 	/>
 	<UserMacro
 		Name="rtm_path"

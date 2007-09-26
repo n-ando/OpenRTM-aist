@@ -6,8 +6,8 @@ export PATH=/usr/local/bin:/usr/bin:/bin:/usr/X11R6/bin:/usr/local/X11R6/bin:/us
 date=`date "+%y%m%d%H%M"`
 time=/usr/bin/time
 # package location and build directory
-package=/usr/users/n-ando/OpenRTM-aist/OpenRTM-aist-0.4.0.tar.gz
-packagedir=OpenRTM-aist-0.4.0
+package=/usr/users/n-ando/OpenRTM-aist/OpenRTM-aist-0.4.1.tar.gz
+packagedir=OpenRTM-aist-0.4.1
 package_date=`ls -al $package | awk '{printf("%s/%s %s\n",$6,$7,$8);}'`
 package_name=`basename $package`
 buildroot=/usr/users/n-ando/BuildTests

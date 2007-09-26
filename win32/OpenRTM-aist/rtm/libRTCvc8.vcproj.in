@@ -58,12 +58,12 @@
 			/>
 			<Tool
 				Name="VCPreLinkEventTool"
-				CommandLine="lib -out:&quot;$(TargetDir)RTC_static.lib&quot; &quot;$(TargetDir)*.obj&quot; &quot;$(SolutionDir)\rtm\idl\$(ConfigurationName)\*.obj&quot;&#x0D;&#x0A;set PATH=%PATH%;$(rtm_path)&#x0D;&#x0A;cd $(OutDir)&#x0D;&#x0A;start /wait cmd /c makedeffile.py RTC_static.lib RTC040d 0.4.0 RTC040d.def&#x0D;&#x0A;&#x0D;&#x0A;move RTC040d.def ..\&#x0D;&#x0A;"
+				CommandLine="lib -out:&quot;$(TargetDir)RTC_static.lib&quot; &quot;$(TargetDir)*.obj&quot; &quot;$(SolutionDir)\rtm\idl\$(ConfigurationName)\*.obj&quot;&#x0D;&#x0A;set PATH=%PATH%;$(rtm_path)&#x0D;&#x0A;cd $(OutDir)&#x0D;&#x0A;start /wait cmd /c makedeffile.py RTC_static.lib RTC041d 0.4.1 RTC041d.def&#x0D;&#x0A;&#x0D;&#x0A;move RTC041d.def ..\&#x0D;&#x0A;"
 			/>
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalDependencies="[DebugLibs]"
-				OutputFile="$(OutDir)\RTC040d.dll"
+				OutputFile="$(OutDir)\RTC041d.dll"
 				Version="[Version]"
 				LinkIncremental="2"
 				ModuleDefinitionFile="$(TargetName).def"
@@ -139,14 +139,14 @@
 			/>
 			<Tool
 				Name="VCPreLinkEventTool"
-				CommandLine="lib -out:&quot;$(TargetDir)RTC_static.lib&quot; &quot;$(TargetDir)*.obj&quot; &quot;$(SolutionDir)\rtm\idl\$(ConfigurationName)\*.obj&quot;&#x0D;&#x0A;set PATH=%PATH%;$(rtm_path)&#x0D;&#x0A;cd $(OutDir)&#x0D;&#x0A;start /wait cmd /c makedeffile.py RTC_static.lib RTC040 0.4.0 RTC040.def&#x0D;&#x0A;&#x0D;&#x0A;move RTC040.def ..\&#x0D;&#x0A;"
+				CommandLine="lib -out:&quot;$(TargetDir)RTC_static.lib&quot; &quot;$(TargetDir)*.obj&quot; &quot;$(SolutionDir)\rtm\idl\$(ConfigurationName)\*.obj&quot;&#x0D;&#x0A;set PATH=%PATH%;$(rtm_path)&#x0D;&#x0A;cd $(OutDir)&#x0D;&#x0A;start /wait cmd /c makedeffile.py RTC_static.lib RTC041 0.4.1 RTC041.def&#x0D;&#x0A;&#x0D;&#x0A;move RTC041.def ..\&#x0D;&#x0A;"
 			/>
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalDependencies="[ReleaseLibs]"
-				OutputFile="$(OutDir)\RTC040.dll"
+				OutputFile="$(OutDir)\RTC041.dll"
 				LinkIncremental="1"
-				ModuleDefinitionFile="RTC040.def"
+				ModuleDefinitionFile="RTC041.def"
 				GenerateDebugInformation="false"
 				SubSystem="2"
 				OptimizeReferences="2"

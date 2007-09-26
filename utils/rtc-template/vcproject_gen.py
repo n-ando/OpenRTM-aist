@@ -4,7 +4,7 @@
 
 #  @file vcproject_gen.py
 #  @brief rtc-template VC++ project file generator class
-#  @date $Date: 2007-07-20 16:16:24 $
+#  @date $Date: 2007-09-26 07:43:29 $
 #  @author Noriaki Ando <n-ando@aist.go.jp> and S.Kurihara
 
 import re
@@ -105,7 +105,7 @@ proj_file = """<?xml version="1.0" encoding="shift_jis"?>
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="ACEd.lib RTC040d.lib omniORB407_rtd.lib omniDynamic407_rtd.lib omnithread32_rtd.lib advapi32.lib ws2_32.lib mswsock.lib"
+				AdditionalDependencies="ACEd.lib RTC041d.lib omniORB407_rtd.lib omniDynamic407_rtd.lib omnithread32_rtd.lib advapi32.lib ws2_32.lib mswsock.lib"
 				OutputFile="$(OutDir)\\[fname].exe"
 				LinkIncremental="2"
 				IgnoreDefaultLibraryNames=""
@@ -182,7 +182,7 @@ proj_file = """<?xml version="1.0" encoding="shift_jis"?>
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="ACE.lib RTC040.lib omniORB407_rt.lib omniDynamic407_rt.lib omnithread32_rt.lib advapi32.lib ws2_32.lib mswsock.lib"
+				AdditionalDependencies="ACE.lib RTC041.lib omniORB407_rt.lib omniDynamic407_rt.lib omnithread32_rt.lib advapi32.lib ws2_32.lib mswsock.lib"
 				OutputFile="$(OutDir)/$(ProjectName).exe"
 				LinkIncremental="1"
 				GenerateDebugInformation="false"
