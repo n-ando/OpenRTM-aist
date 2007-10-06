@@ -2,7 +2,7 @@
 /*!
  * @file RTObject.h
  * @brief RT component base class
- * @date $Date: 2007-07-20 16:06:13 $
+ * @date $Date: 2007-10-06 12:26:23 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
  * Copyright (C) 2006
@@ -12,12 +12,15 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: RTObject.h,v 1.7.2.1 2007-07-20 16:06:13 n-ando Exp $
+ * $Id: RTObject.h,v 1.7.2.2 2007-10-06 12:26:23 n-ando Exp $
  *
  */
 
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.7.2.1  2007/07/20 16:06:13  n-ando
+ * CORBA interface inconsistency was fixed.
+ *
  * Revision 1.7  2007/04/23 04:57:44  n-ando
  * Finalization processed was modified.
  * Configuration admin class was introduced.
@@ -904,7 +907,12 @@ namespace RTC
     void registerInPort(const char* name,
 			InPort<DataType, Buffer>& inport)
     {
-      PortBase* port = new DataInPort(name, inport);
+      std::string propkey("port.dataport.");
+      propkey += name;
+      propkey += ".tcp_any";
+      m_properties[propkey];
+      PortBase* port = new DataInPort(name, inport,
+				      *m_properties.getNode(propkey));
       registerPort(*port);
     }
 
@@ -912,7 +920,12 @@ namespace RTC
     void registerOutPort(const char* name,
 			 OutPort<DataType, Buffer>& outport)
     {
-      PortBase* port = new DataOutPort(name, outport);
+      std::string propkey("port.dataport.");
+      propkey += name;
+      propkey += ".tcp_any";
+      m_properties[propkey];
+      PortBase* port = new DataOutPort(name, outport,
+				       *m_properties.getNode(propkey));
       registerPort(*port);
     }
       
