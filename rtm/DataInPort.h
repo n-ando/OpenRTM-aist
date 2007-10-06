@@ -2,7 +2,7 @@
 /*!
  * @file DataInPort.h
  * @brief RTC::Port implementation for Data InPort
- * @date $Date: 2007-01-21 17:16:58 $
+ * @date $Date: 2007-10-06 12:23:26 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
  * Copyright (C) 2006
@@ -13,12 +13,15 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: DataInPort.h,v 1.6 2007-01-21 17:16:58 n-ando Exp $
+ * $Id: DataInPort.h,v 1.6.4.1 2007-10-06 12:23:26 n-ando Exp $
  *
  */
 
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.6  2007/01/21 17:16:58  n-ando
+ * Invalid kanji code was deleted.
+ *
  * Revision 1.5  2007/01/21 09:43:22  n-ando
  * - A bug about memory access violation to m_providers still exists.
  *   This bug arises on Fedora5/gcc4 environment.
@@ -47,6 +50,7 @@
 #include <rtm/PortBase.h>
 #include <rtm/BufferBase.h>
 #include <rtm/InPortCorbaProvider.h>
+#include <rtm/InPortTcpSockProvider.h>
 #include <rtm/OutPortCorbaConsumer.h>
 #include <rtm/NVUtil.h>
 #include <rtm/InPort.h>
@@ -70,15 +74,25 @@ namespace RTC
 
   public:
     template <class DataType, template <class DataType> class Buffer>
-    DataInPort(const char* name, InPort<DataType, Buffer>& inport)
+    DataInPort(const char* name, InPort<DataType, Buffer>& inport,
+	       Properties& prop)
       : PortBase(name)
     {
       // PortProfile::properties ¤òÀßÄê
       addProperty("port.port_type", "DataInPort");
 
+      // CORBA InPort Provider
       m_providers.push_back(new InPortCorbaProvider<DataType>(inport));
       m_providers.back()->publishInterfaceProfile(m_profile.properties);
+
+      // TCP Socket InPort Provider
+      m_providers.push_back(new InPortTcpSockProvider<DataType>(inport, prop));
+      m_providers.back()->publishInterfaceProfile(m_profile.properties);
+
+      // CORBA OutPort Consumer
       m_consumers.push_back(new OutPortCorbaConsumer<DataType>(inport));
+
+      // dummy var
       m_dummy.push_back(1);
     }
 

@@ -2,7 +2,7 @@
 /*!
  * @file DataOutPort.h
  * @brief Base class of OutPort
- * @date $Date: 2007-04-13 15:45:08 $
+ * @date $Date: 2007-10-06 12:23:47 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
  * Copyright (C) 2006
@@ -13,12 +13,15 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: DataOutPort.h,v 1.7 2007-04-13 15:45:08 n-ando Exp $
+ * $Id: DataOutPort.h,v 1.7.2.1 2007-10-06 12:23:47 n-ando Exp $
  *
  */
 
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.7  2007/04/13 15:45:08  n-ando
+ * RTC::OK was changed to RTC::RTC_OK.
+ *
  * Revision 1.6  2007/01/21 09:45:31  n-ando
  * To advertise interface profile, publishInterfaceProfile() is called now.
  *
@@ -48,10 +51,13 @@
 #include <rtm/PortBase.h>
 #include <rtm/BufferBase.h>
 #include <rtm/OutPortCorbaProvider.h>
+#include <rtm/OutPortTcpSockProvider.h>
 #include <rtm/InPortCorbaConsumer.h>
+#include <rtm/InPortTcpSockConsumer.h>
 #include <rtm/OutPort.h>
 #include <rtm/NVUtil.h>
 #include <rtm/PublisherFactory.h>
+#include <rtm/Properties.h>
 
 namespace RTC
 {
@@ -76,7 +82,8 @@ namespace RTC
      * @endif
      */
     template <class DataType, template <class DataType> class Buffer>
-    DataOutPort(const char* name, OutPort<DataType, Buffer>& outport)
+    DataOutPort(const char* name, OutPort<DataType, Buffer>& outport,
+		Properties& prop)
       : PortBase(name), m_outport(outport)
     {
       // PortProfile::properties ¤òÀßÄê
@@ -84,7 +91,13 @@ namespace RTC
       
       m_providers.push_back(new OutPortCorbaProvider<DataType>(outport));
       m_providers.back()->publishInterfaceProfile(m_profile.properties);
+
+      m_providers.push_back(new OutPortTcpSockProvider<DataType>(outport));
+      m_providers.back()->publishInterfaceProfile(m_profile.properties);
+
       m_consumers.push_back(new InPortCorbaConsumer<DataType>(outport));
+      m_consumers.push_back(new InPortTcpSockConsumer<DataType>(outport, prop));
+
     }
 
 

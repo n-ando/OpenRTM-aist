@@ -2,9 +2,12 @@
 ##------------------------------------------------------------
 ## Makefile.am for libRTC
 ##
-## $Id: Makefile.am,v 1.16.2.1 2007-09-21 10:53:18 n-ando Exp $
+## $Id: Makefile.am,v 1.16.2.2 2007-10-06 12:24:04 n-ando Exp $
 ##
 ## $Log: not supported by cvs2svn $
+## Revision 1.16.2.1  2007/09/21 10:53:18  n-ando
+## A trivial fix.
+##
 ## Revision 1.16  2007/04/23 04:50:22  n-ando
 ## ConfigAdmin class was added.
 ##
@@ -158,12 +161,16 @@ rtmheader_HEADERS = \
 	InPortConsumer.h             \
 	InPortCorbaConsumer.h        \
 	InPortCorbaProvider.h        \
+	InPortTcpSockConsumer.h      \
+	InPortTcpSockProvider.h      \
+	TcpSockServer.h              \
 	Listener.h                   \
 	ObjectManager.h              \
 	OutPort.h                    \
 	OutPortConsumer.h            \
 	OutPortCorbaConsumer.h       \
 	OutPortCorbaProvider.h       \
+	OutPortTcpSockProvider.h     \
 	PortCallBack.h               \
 	PublisherBase.h              \
 	RTC.h                        \
