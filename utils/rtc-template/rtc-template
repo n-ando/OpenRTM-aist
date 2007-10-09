@@ -3,7 +3,7 @@
 #
 #  @file rtc-template
 #  @brief rtc-template RTComponent source code generator tool
-#  @date $Date: 2007-07-23 08:06:27 $
+#  @date $Date: 2007-10-09 07:19:15 $
 #  @author Noriaki Ando <n-ando@aist.go.jp>
 # 
 #  Copyright (C) 2004-2007
@@ -13,11 +13,14 @@
 #          Advanced Industrial Science and Technology (AIST), Japan
 #      All rights reserved.
 # 
-#  $Id: rtc-template,v 1.8.2.2 2007-07-23 08:06:27 n-ando Exp $
+#  $Id: rtc-template,v 1.8.2.3 2007-10-09 07:19:15 n-ando Exp $
 #
 
 #
 #  $Log: not supported by cvs2svn $
+#  Revision 1.8.2.2  2007/07/23 08:06:27  n-ando
+#  Modified for win32 porting about rtm-config.
+#
 #  Revision 1.8.2.1  2007/07/20 17:29:03  n-ando
 #  A fix for win32 porting.
 #
@@ -672,7 +675,7 @@ def main():
                 'corbaport':    MakeCorbaPort(opts),
 		'service_idl':  MakeServiceIDL(opts),
 		'consumer_idl': MakeConsumerIDL(opts),
-		'idl_include':  find_opt_list(opts, "--idl-include", idl_inc),
+		'idl_include':  find_opt_list(opts, "idl-include", idl_inc),
 		'fname':        output,
 		'args':         sys.argv,
 		'fmtd_args':    fmtd_args(70, sys.argv)
