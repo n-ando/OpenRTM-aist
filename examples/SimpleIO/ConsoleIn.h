@@ -2,9 +2,9 @@
 /*!
  * @file  ConsoleIn.h
  * @brief Console input component
- * @date  $Date: 2007-01-14 22:51:48 $
+ * @date  $Date: 2007-10-09 07:33:10 $
  *
- * $Id: ConsoleIn.h,v 1.2 2007-01-14 22:51:48 n-ando Exp $
+ * $Id: ConsoleIn.h,v 1.2.4.1 2007-10-09 07:33:10 n-ando Exp $
  */
 
 #ifndef CONSOLEIN_H
@@ -38,7 +38,7 @@ class ConsoleIn
 
   // The initialize action (on CREATED->ALIVE transition)
   // formaer rtc_init_entry() 
-  // virtual RTC::ReturnCode_t onInitialize();
+  virtual RTC::ReturnCode_t onInitialize();
 
   // The finalize action (on ALIVE->END transition)
   // formaer rtc_exiting_entry()

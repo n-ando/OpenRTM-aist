@@ -2,9 +2,9 @@
 /*!
  * @file  ConsoleOut.cpp
  * @brief Console output component
- * $Date: 2007-04-13 15:03:07 $
+ * $Date: 2007-10-09 07:33:08 $
  *
- * $Id: ConsoleOut.cpp,v 1.3 2007-04-13 15:03:07 n-ando Exp $
+ * $Id: ConsoleOut.cpp,v 1.3.2.1 2007-10-09 07:33:08 n-ando Exp $
  */
 
 #include "ConsoleOut.h"
@@ -38,7 +38,6 @@ ConsoleOut::ConsoleOut(RTC::Manager* manager)
   // Registration: InPort/OutPort/Service
   // <rtc-template block="registration">
   // Set InPort buffers
-  registerInPort("in", m_inIn);
   
   // Set OutPort buffer
   
@@ -56,6 +55,12 @@ ConsoleOut::~ConsoleOut()
 {
 }
 
+
+RTC::ReturnCode_t ConsoleOut::onInitialize()
+{
+  registerInPort("in", m_inIn);
+  return RTC::RTC_OK;
+}
 
 RTC::ReturnCode_t ConsoleOut::onExecute(RTC::UniqueId ec_id)
 {

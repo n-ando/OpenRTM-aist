@@ -2,9 +2,12 @@
 ##---------------------------------------------------------------------------
 ## Makefile.am for ConsoleIn/ConsoleOut components
 ##
-## $Id: Makefile.am,v 1.3.4.2 2007-09-21 09:21:04 n-ando Exp $
+## $Id: Makefile.am,v 1.3.4.3 2007-10-09 07:33:15 n-ando Exp $
 ##
 ## $Log: not supported by cvs2svn $
+## Revision 1.3.4.2  2007/09/21 09:21:04  n-ando
+## Now rtc.conf is not deleted in clean.
+##
 ## Revision 1.3.4.1  2007/07/22 14:26:35  n-ando
 ## *** empty log message ***
 ##
@@ -53,7 +56,9 @@ EXTRA_DIST =                \
 	Makefile.ConsoleOut \
 	README.ConsoleIn    \
 	README.ConsoleOut   \
-	rtc.conf
+	rtc.conf            \
+	consin.conf         \
+	consout.conf
 
 clean-local:
 	rm -f \
