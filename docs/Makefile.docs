@@ -2,9 +2,12 @@
 ##------------------------------------------------------------
 ## Makefile.doc for OpenRTM-aist documents.
 ##
-## $Id: Makefile.docs,v 1.2 2007-01-21 13:16:38 n-ando Exp $
+## $Id: Makefile.docs,v 1.2.4.1 2007-12-31 15:35:12 n-ando Exp $
 ##
 ## $Log: not supported by cvs2svn $
+## Revision 1.2  2007/01/21 13:16:38  n-ando
+## PS and PDF file generation was temporarily stopped.
+##
 ## Revision 1.1.1.1  2005/05/12 09:06:20  n-ando
 ## Public release.
 ##
@@ -20,7 +23,7 @@ DevelopersGuide.ps: DevelopersGuide/DevelopersGuide.tex
 
 ClassReference: doxygen_classref.conf
 	doxygen doxygen_classref.conf
-	(cd ClassReference/platex ; make)
+	(cd ClassReference/platex ; nkf --euc --overwrite * ; make)
 
 ClassReference-en: doxygen_classref.conf
 	rm -f tmp.conf
@@ -29,12 +32,12 @@ ClassReference-en: doxygen_classref.conf
 	echo "OUTPUT_LANGUAGE        = English" >> tmp.conf
 	echo "OUTPUT_DIRECTORY       = ClassReference-en" >> tmp.conf
 	doxygen tmp.conf
-	(cd ClassReference-en/platex ; make)
+	(cd ClassReference-en/platex ; nkf --euc --overwrite * ; make)
 	rm -f tmp.conf
 
 IDLReference: doxygen_idlref.conf
 	doxygen doxygen_idlref.conf
-	(cd IDLReference/platex ; make)
+	(cd IDLReference/platex ; nkf --euc --overwrite * ; make)
 
 IDLReference-en: doxygen_idlref.conf
 	rm -f tmp.conf
@@ -43,7 +46,7 @@ IDLReference-en: doxygen_idlref.conf
 	echo "OUTPUT_LANGUAGE        = English" >> tmp.conf
 	echo "OUTPUT_DIRECTORY       = IDLReference-en" >> tmp.conf
 	doxygen tmp.conf
-	(cd IDLReference-en/platex ; make)
+	(cd IDLReference-en/platex ; nkf --euc --overwrite * ; make)
 	rm -f tmp.conf
 
 clean:
