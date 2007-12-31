@@ -2,22 +2,26 @@
 /*!
  * @file Manager.h
  * @brief RTComponent manager class
- * @date $Date: 2007-07-20 15:56:14 $
+ * @date $Date: 2007-12-31 03:08:04 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
- * Copyright (C) 2006
+ * Copyright (C) 2006-2008
+ *     Noriaki Ando
  *     Task-intelligence Research Group,
  *     Intelligent Systems Research Institute,
  *     National Institute of
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: Manager.h,v 1.9.2.1 2007-07-20 15:56:14 n-ando Exp $
+ * $Id: Manager.h,v 1.9.2.2 2007-12-31 03:08:04 n-ando Exp $
  *
  */
 
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.9.2.1  2007/07/20 15:56:14  n-ando
+ * Functor InstanceName was modified for win32 porting.
+ *
  * Revision 1.9  2007/04/26 15:36:54  n-ando
  * The header include order was modified to define _REENTRANT before
  * including ace/config-lite.h in Linux systems.
@@ -83,31 +87,54 @@ namespace RTC
   class CorbaObjectManager;
   class Manager;
   class Timer;
-
+  
   typedef void (*ModuleInitProc)(Manager* manager);  
-
+  
+  /*!
+   * @if jp
+   * @class Manager
+   * @brief Manager クラス
+   *
+   * コンポーネントなど各種の情報管理を行うマネージャクラス。
+   *
+   * @since 0.2.0
+   *
+   * @else
+   * @class Manager
+   * @brief Manager class
+   * @endif
+   */
   class Manager
   {
   protected:
     /*!
      * @if jp
      * @brief Protected コンストラクタ
+     *
+     * Protected コンストラクタ
+     *
      * @else
      * @brief Protected Constructor
+     *
      * @endif
      */
     Manager();
-
-
+    
     /*!
      * @if jp
      * @brief Protected コピーコンストラクタ
+     *
+     * Protected コピーコンストラクタ
+     *
+     * @param manager コピー元マネージャオブジェクト
+     *
      * @else
      * @brief Protected Copy Constructor
+     *
      * @endif
      */
     Manager(const Manager& manager);
-      //      Manager& operator=(const Manager& manager){return manager;};
+    //      Manager& operator=(const Manager& manager){return manager;};
     
   public:
     /*!
@@ -133,6 +160,8 @@ namespace RTC
      * @param argc コマンドライン引数の数
      * @param argv コマンドライン引数
      * 
+     * @return Manager の唯一のインスタンスの参照
+     *
      * @else
      * @brief Initializa manager
      *
@@ -149,10 +178,9 @@ namespace RTC
      * @param argv The array of the command line arguments.
      *
      * @endif
-     */ 
+     */
     static Manager* init(int argc, char** argv);
-
-
+    
     /*!
      * @if jp
      * @brief マネージャのインスタンスの取得
@@ -176,22 +204,75 @@ namespace RTC
      * @endif
      */ 
     static Manager& instance();
-
+    
     //============================================================
     // Manager
     //============================================================
-
-
-
+    
+    /*!
+     * @if jp
+     * @brief マネージャ終了処理
+     *
+     * マネージャの終了処理を実行する。
+     *
+     * @else
+     *
+     * @endif
+     */
     void terminate();
+    
+    /*!
+     * @if jp
+     * @brief マネージャ・シャットダウン
+     *
+     * マネージャの終了処理を実行する。
+     * ORB終了後、同期を取って終了する。
+     *
+     * @else
+     *
+     * @endif
+     */
     void shutdown();
+    
+    /*!
+     * @if jp
+     * @brief マネージャ終了処理の待ち合わせ
+     *
+     * 同期を取るため、マネージャ終了処理の待ち合わせを行う。
+     *
+     * @else
+     *
+     * @endif
+     */
     void join();
     
+    /*!
+     * @if jp
+     * @brief ログバッファの取得
+     *
+     * マネージャに設定したログバッファを取得する。
+     *
+     * @return マネージャに設定したログバッファ
+     *
+     * @else
+     *
+     * @endif
+     */
     Logbuf& getLogbuf() {return m_Logbuf;}
+    
+    /*!
+     * @if jp
+     * @brief マネージャコンフィギュレーションの取得
+     *
+     * マネージャに設定したコンフィギュレーションを取得する。
+     *
+     * @return マネージャのコンフィギュレーション
+     *
+     * @else
+     *
+     * @endif
+     */
     Properties& getConfig() { return m_config;}
-    
-    
-    
     
     /*!
      * @if jp
@@ -218,8 +299,7 @@ namespace RTC
      * @endif
      */
     void setModuleInitProc(ModuleInitProc proc);
-
-
+    
     /*!
      * @if jp
      *
@@ -232,6 +312,9 @@ namespace RTC
      *
      * このオペレーションは、マネージャの初期化後、runManager()
      * の前に呼ぶ必要がある。
+     *
+     *
+     * @return 処理結果(アクティブ化成功:true、失敗:false)
      *
      * @else
      *
@@ -248,7 +331,7 @@ namespace RTC
      * @endif
      */
     bool activateManager();
-
+    
     /*!
      * @if jp
      *
@@ -281,9 +364,6 @@ namespace RTC
      */
     void runManager(bool no_block = false);
     
-
-
-
     //============================================================
     // Module management
     //============================================================
@@ -291,7 +371,8 @@ namespace RTC
      * @if jp
      * @brief [CORBA interface] モジュールのロード
      *
-     * コンポーネントのモジュールをロードして初期化関数を実行する。
+     * 指定したコンポーネントのモジュールをロードするとともに、
+     * 指定した初期化関数を実行する。
      *
      * @param fname   モジュールファイル名
      * @param initfunc 初期化関数名
@@ -309,8 +390,7 @@ namespace RTC
      * @endif
      */  
     void load(const char* fname, const char* initfunc);
-
-
+    
     /*!
      * @if jp
      *
@@ -330,10 +410,8 @@ namespace RTC
      *
      * @endif
      */ 
-
     void unload(const char* fname);
-
-
+    
     /*!
      * @if jp
      *
@@ -350,33 +428,52 @@ namespace RTC
      * @endif
      */ 
     void unloadAll();
-
-
+    
     /*!
      * @if jp
      * @brief ロード済みのモジュールリストを取得する
+     *
+     * 現在マネージャにロードされているモジュールのリストを取得する。
+     *
+     * @return ロード済みモジュールリスト
+     *
      * @else
      * @brief Get loaded module names
      * @endif
      */
     std::vector<std::string> getLoadedModules();
     
-
     /*!
      * @if jp
      * @brief ロード可能なモジュールリストを取得する
+     *
+     * ロード可能モジュールのリストを取得する。
+     * (現在はModuleManager側で未実装)
+     *
+     * @return ロード可能モジュール　リスト
+     *
      * @else
      * @brief Get loadable module names
      * @endif
      */
     std::vector<std::string> getLoadableModules();
-
+    
     //============================================================
     // Component Factory Management
     //============================================================
     /*!
      * @if jp
-     * @brief RTコンポーネントファクトリを登録する
+     * @brief RTコンポーネント用ファクトリを登録する
+     *
+     * RTコンポーネントのインスタンスを生成するための
+     * Factoryを登録する。
+     *
+     * @param profile RTコンポーネント プロファイル
+     * @param new_func RTコンポーネント生成用関数
+     * @param delete_func RTコンポーネント破棄用関数
+     *
+     * @return 登録処理結果(登録成功:true、失敗:false)
+     *
      * @else
      * @brief Register RT-Component Factory
      * @endif
@@ -385,6 +482,23 @@ namespace RTC
 			 RtcNewFunc new_func,
 			 RtcDeleteFunc delete_func);
     
+    /*!
+     * @if jp
+     * @brief ExecutionContext用ファクトリを登録する
+     *
+     * ExecutionContextのインスタンスを生成するための
+     * Factoryを登録する。
+     *
+     * @param name 生成対象ExecutionContext名称
+     * @param new_func ExecutionContext生成用関数
+     * @param delete_func ExecutionContext破棄用関数
+     *
+     * @return 登録処理結果(登録成功:true、失敗:false)
+     *
+     * @else
+     * @brief Register ExecutionContext Factory
+     * @endif
+     */
     bool registerECFactory(const char* name,
 			   ECNewFunc new_func,
 			   ECDeleteFunc delete_func);
@@ -392,6 +506,11 @@ namespace RTC
     /*!
      * @if jp
      * @brief ファクトリ全リストを取得する
+     *
+     * 登録されているファクトリの全リストを取得する。
+     *
+     * @return 登録ファクトリ リスト
+     *
      * @else
      * @brief Get the list of all RT-Component Factory
      * @endif
@@ -403,31 +522,102 @@ namespace RTC
     //============================================================
     /*!
      * @if jp
-     * @brief RTコンポーネントを生成する
+     * @brief RTコンポーネントの生成
+     *
+     * 指定したRTコンポーネントのインスタンスを登録されたFactory経由
+     * で生成する。
+     * インスタンス生成が成功した場合、併せて以下の処理を実行する。
+     *  - 外部ファイルで設定したコンフィギュレーション情報の読み込み，設定
+     *  - ExecutionContextのバインド，動作開始
+     *  - ネーミングサービスへの登録
+     *
+     * @param module_name 生成対象RTコンポーネント名称
+     *
+     * @return 生成したRTコンポーネントのインスタンス
+     *
      * @else
      * @brief Create RT-Component
      * @endif
      */
     RtcBase* createComponent(const char* module_name);
-
+    
+    /*!
+     * @if jp
+     * @brief RTコンポーネントの登録解除
+     *
+     * 指定したRTコンポーネントのインスタンスをネーミングサービスから
+     * 登録解除する。
+     *
+     * @param comp 登録解除対象RTコンポーネント
+     *
+     * @else
+     *
+     * @endif
+     */
     void cleanupComponent(RtcBase* comp);
-
+    
     /*!
      * @if jp
      * @brief RTコンポーネントを直接 Manager に登録する
+     *
+     * 指定したRTコンポーネントのインスタンスを
+     * ファクトリ経由ではなく直接マネージャに登録する。
+     *
+     * @param comp 登録対象RTコンポーネントのインスタンス
+     *
+     * @return 登録処理結果(登録成功:true、失敗:false)
+     *
      * @else
      * @brief Register RT-Component directly without Factory
      * @endif
      */
     bool registerComponent(RtcBase* comp);
-
+    
+    /*!
+     * @if jp
+     * @brief RTコンポーネントの登録を解除する
+     *
+     * 指定したRTコンポーネントの登録を解除する。
+     *
+     * @param comp 登録解除対象RTコンポーネントのインスタンス
+     *
+     * @return 登録解除処理結果(解除成功:true、解除失敗:false)
+     *
+     * @else
+     * @brief Register RT-Component directly without Factory
+     * @endif
+     */
     bool unregisterComponent(RtcBase* comp);
-
+    
+    /*!
+     * @if jp
+     * @brief RTコンポーネントにExecutionContextをバインドする
+     *
+     * 指定したRTコンポーネントにExecutionContextをバインドする。
+     * バインドするExecutionContextの型はプロパティ・ファイルの
+     * "exec_cxt.periodic.type"属性によって指定する。
+     *
+     * @param comp バインド対象RTコンポーネントのインスタンス
+     *
+     * @return バインド処理結果(バインド成功:true、失敗:false)
+     *
+     * @else
+     * @brief Register RT-Component directly without Factory
+     * @endif
+     */
     bool bindExecutionContext(RtcBase* comp);
-
+    
     /*!
      * @if jp
      * @brief Manager に登録されているRTコンポーネントを削除する
+     *
+     * マネージャに登録されているRTコンポーネントを削除する。
+     * 指定されたRTコンポーネントをネーミングサービスから削除し、
+     * RTコンポーネント自体を終了させるとともに、インスタンスを解放する。
+     * (現状では未実装)
+     *
+     * @param instance_name 削除対象RTコンポーネントのインスタンス名
+     *
      * @else
      * @brief Unregister RT-Component that is registered in the Manager
      * @endif
@@ -436,7 +626,15 @@ namespace RTC
     
     /*!
      * @if jp
-     * @brief Manager に登録されているRTコンポーネントを取得する
+     * @brief Manager に登録されているRTコンポーネントを検索する
+     *
+     * Manager に登録されているRTコンポーネントを指定した名称で検索し、
+     * 合致するコンポーネントを取得する。
+     *
+     * @param instance_name 検索対象RTコンポーネントの名称
+     *
+     * @return 名称が一致するRTコンポーネントのインスタンス
+     *
      * @else
      * @brief Get RT-Component's pointer
      * @endif
@@ -446,36 +644,62 @@ namespace RTC
     /*!
      * @if jp
      * @brief Manager に登録されている全RTコンポーネントを取得する
+     *
+     * Managerに登録されているRTコンポーネントの全インスタンスを取得する。
+     *
+     * @return 全RTコンポーネントのインスタンスリスト
+     *
      * @else
      * @brief Get all RT-Component's pointer
      * @endif
      */
     std::vector<RtcBase*> getComponents();
     
-
     //============================================================
     // CORBA 関連
     //============================================================
     /*!
      * @if jp
      * @brief ORB のポインタを取得する
+     *
+     * Manager に設定された ORB のポインタを取得する。
+     *
+     * @return ORB オブジェクト
+     *
      * @else
      * @brief Get the pointer to the ORB
      * @endif
      */
     CORBA::ORB_ptr getORB();
-
+    
     /*!
      * @if jp
      * @brief Manager が持つ RootPOA のポインタを取得する
+     *
+     * Manager に設定された RootPOA へのポインタを取得する。
+     *
+     * @return RootPOAオブジェクト
+     *
      * @else
      * @brief Get the pointer to the RootPOA 
      * @endif
      */
     PortableServer::POA_ptr getPOA();
+    
+    /*!
+     * @if jp
+     * @brief Manager が持つ POAManager を取得する
+     *
+     * Manager に設定された POAMAnager を取得する。
+     *
+     * @return POAマネージャ
+     *
+     * @else
+     *
+     * @endif
+     */
     PortableServer::POAManager_ptr getPOAManager();
-
-
+    
     //============================================================
     // Protected functions
     //============================================================
@@ -487,114 +711,267 @@ namespace RTC
     /*!
      * @if jp
      * @brief Manager の内部初期化処理
+     * 
+     * Manager の内部初期化処理を実行する。
+     *  - Manager コンフィギュレーションの設定
+     *  - ログ出力ファイルの設定
+     *  - 終了処理用スレッドの生成
+     *  - タイマ用スレッドの生成(タイマ使用時)
+     *
+     * @param argc コマンドライン引数の数
+     * @param argv コマンドライン引数
+     * 
      * @else
      * @brief Manager internal initialization
      * @endif
      */
     void initManager(int argc, char** argv);
-
-
+    
     /*!
      * @if jp
      * @brief Manager の終了処理
+     *
+     * Manager を終了する
+     * (ただし，現在は未実装)
+     *
      * @else
-     * @brief Manager internal finalization
+     *
      * @endif
      */
     void shutdownManager();
-
-
+    
     //============================================================
     // Logger initialize and terminator
     //============================================================
     /*!
      * @if jp
      * @brief System logger の初期化
+     *
+     * System logger の初期化を実行する。
+     * コンフィギュレーションファイルに設定された情報に基づき、
+     * ロガーの初期化，設定を実行する。
+     *
+     * @return 初期化実行結果(初期化成功:true、初期化失敗:false)
+     *
      * @else
      * @brief System logger initialization
      * @endif
      */
     bool initLogger();
-
-
+    
     /*!
      * @if jp
      * @brief System Logger の終了処理
+     *
+     * System Loggerの終了処理を実行する。
+     * バッファ内に保持されているログ情報が存在する場合には、
+     * 強制的にログファイルに出力し、ログファイルを閉じる。
+     *
      * @else
      * @brief System Logger finalization
      * @endif
      */
     void shutdownLogger();
-
-
+    
     //============================================================
     // ORB initialization and finalization
     //============================================================
     /*!
      * @if jp
      * @brief CORBA ORB の初期化処理
+     *
+     * 引数により与えられた設定を元にORBを初期化する。
+     *
+     * @return ORB 初期化処理結果(初期化成功:true、初期化失敗:false)
+     *
      * @else
      * @brief CORBA ORB initialization
      * @endif
      */
     bool initORB();
     
-    
     /*!
      * @if jp
      * @brief ORB のコマンドラインオプション作成
+     *
+     * コンフィギュレーション情報に設定された内容から
+     * ORB の起動時オプションを作成する。
+     *
+     * @return ORB 起動時オプション
+     *
      * @else
      * @brief ORB command option creation
      * @endif
      */
     std::string createORBOptions();
     
-    
     /*!
      * @if jp
      * @brief ORB の終了処理
+     *
+     * ORB の終了処理を実行する。
+     * 実行待ちの処理が存在する場合には、その処理が終了するまで待つ。
+     * 実際の終了処理では、POA Managerを非活性化し、 ORB のシャットダウンを実行
+     * する。
+     *
      * @else
      * @brief ORB finalization
      * @endif
      */
     void shutdownORB();
-
-   
+    
     //============================================================
     // NamingService initialization and finalization
     //============================================================
     /*!
      * @if jp
      * @brief NamingManager の初期化
+     *
+     * NamingManager の初期化処理を実行する。
+     * ただし、NamingManager を使用しないようにプロパティ情報に設定されている
+     * 場合には何もしない。
+     * NamingManager を使用する場合、プロパティ情報に設定されている
+     * デフォルトNamingServer を登録する。
+     * また、定期的に情報を更新するように設定されている場合には、指定された周期
+     * で自動更新を行うためのタイマを起動するとともに、更新用メソッドをタイマに
+     * 登録する。
+     *
+     * @return 初期化処理結果(初期化成功:true、初期化失敗:false)
+     *
      * @else
-     * @brief NamingManager initialization
+     *
      * @endif
      */
     bool initNaming();
+    
+    /*!
+     * @if jp
+     * @brief NamingManager の終了処理
+     *
+     * NamingManager を終了する。
+     * 登録されている全要素をアンバインドし、終了する。
+     *
+     * @else
+     *
+     * @endif
+     */
     void shutdownNaming();
-
-
+    
     //============================================================
     // Component management
     //============================================================
+    /*!
+     * @if jp
+     * @brief NamingManager に登録されている RTコンポーネントの終了処理
+     *
+     * NamingManager に登録されているRTコンポーネントのリストを取得し、
+     * 全コンポーネントを終了する。
+     *
+     * @else
+     *
+     * @endif
+     */
     void shutdownComponents();
-
-
+    
+    /*!
+     * @if jp
+     * @brief RTコンポーネントのコンフィギュレーション処理
+     *
+     * RTコンポーネントの型およびインスタンス毎に記載されたプロパティファイルの
+     * 情報を読み込み、コンポーネントに設定する。
+     * また、各コンポーネントの NamingService 登録時の名称を取得し、設定する。
+     *
+     * @param comp コンフィギュレーション対象RTコンポーネント
+     *
+     * @else
+     *
+     * @endif
+     */
     void configureComponent(RtcBase* comp);
-
-
+    
+    /*!
+     * @if jp
+     * @brief ExecutionContextManager の初期化
+     *
+     * 使用する各 ExecutionContext の初期化処理を実行し、各 ExecutionContext 
+     * 生成用 Factory を ExecutionContextManager に登録する。
+     *
+     * @return ExecutionContextManager 初期化処理実行結果
+     *         (初期化成功:true、初期化失敗:false)
+     *
+     * @else
+     *
+     * @endif
+     */
     bool initExecContext();
-
+    
+    /*!
+     * @if jp
+     * @brief Timer の初期化
+     *
+     * 使用する各 Timer の初期化処理を実行する。
+     * (現状の実装では何もしない)
+     *
+     * @return Timer 初期化処理実行結果(初期化成功:true、初期化失敗:false)
+     *
+     * @else
+     *
+     * @endif
+     */
     bool initTimer();
-
+    
+    /*!
+     * @if jp
+     * @brief プロパティ情報のマージ
+     *
+     * 指定されたファイル内に設定されているプロパティ情報をロードし、
+     * 既存の設定済みプロパティとマージする。
+     *
+     * @param prop マージ対象プロパティ
+     * @param file_name プロパティ情報が記述されているファイル名
+     *
+     * @return マージ処理実行結果(マージ成功:true、マージ失敗:false)
+     *
+     * @else
+     *
+     * @endif
+     */
     bool mergeProperty(Properties& prop, const char* file_name);
+    
+    /*!
+     * @if jp
+     * @brief NamingServer に登録する際の登録情報を組み立てる
+     *
+     * 指定された書式とプロパティ情報を基に NameServer に登録する際の情報を
+     * 組み立てる。
+     * 各書式指定用文字の意味は以下のとおり
+     * - % : コンテキストの区切り
+     * - n : インスタンス名称
+     * - t : 型名
+     * - m : 型名
+     * - v : バージョン
+     * - V : ベンダー
+     * - c : カテゴリ
+     * - h : ホスト名
+     * - M : マネージャ名
+     * - p : プロセスID
+     *
+     * @param naming_format NamingService 登録情報書式指定
+     * @param prop 使用するプロパティ情報
+     *
+     * @return 指定書式変換結果
+     *
+     * @else
+     *
+     * @endif
+     */
     std::string formatString(const char* naming_format,
 			     Properties& prop);
     
     //============================================================
     // protected 変数
     //============================================================
-
+    
     //------------------------------------------------------------
     // static var
     //------------------------------------------------------------
@@ -606,7 +983,7 @@ namespace RTC
      * @endif
      */
     static Manager* manager;
-
+    
     /*!
      * @if jp
      * @brief 唯一の Manager へのポインタに対する mutex
@@ -616,7 +993,6 @@ namespace RTC
      */
     static ACE_Thread_Mutex mutex;
     
-
     //------------------------------------------------------------
     // CORBA var
     //------------------------------------------------------------
@@ -628,7 +1004,7 @@ namespace RTC
      * @endif
      */
     CORBA::ORB_var m_pORB;
-
+    
     /*!
      * @if jp
      * @brief POA へのポインタ
@@ -637,7 +1013,7 @@ namespace RTC
      * @endif
      */
     PortableServer::POA_var m_pPOA;
-
+    
     /*!
      * @if jp
      * @brief POAManager へのポインタ
@@ -646,8 +1022,7 @@ namespace RTC
      * @endif
      */
     PortableServer::POAManager_var m_pPOAManager;
-
-
+    
     //------------------------------------------------------------
     // Manager's variable
     //------------------------------------------------------------
@@ -659,7 +1034,7 @@ namespace RTC
      * @endif
      */
     ModuleInitProc m_initProc;
-
+    
     /*!
      * @if jp
      * @brief Manager の configuration を格納する Properties
@@ -668,7 +1043,7 @@ namespace RTC
      * @endif
      */
     Properties m_config;
-
+    
     /*!
      * @if jp
      * @brief ModuleManager へのポインタ
@@ -680,15 +1055,22 @@ namespace RTC
     
     /*!
      * @if jp
-     * @brief ModuleManager へのポインタ
+     * @brief NamingManager へのポインタ
      * @else
-     * @brief The pointer to the ModuleManager
+     * @brief The pointer to the NamingManager
      * @endif
      */
     NamingManager* m_namingManager;
-
+    
+    /*!
+     * @if jp
+     * @brief CORBA ObjectManager へのポインタ
+     * @else
+     * @brief The pointer to the CORBA ObjectManager
+     * @endif
+     */
     CorbaObjectManager* m_objManager;
-
+    
     /*!
      * @if jp
      * @brief Timer Object
@@ -697,8 +1079,7 @@ namespace RTC
      * @endif
      */
     Timer* m_timer;
-
-
+    
     //------------------------------------------------------------
     // Logger
     //------------------------------------------------------------
@@ -710,7 +1091,7 @@ namespace RTC
      * @endif
      */
     Logbuf m_Logbuf;
-
+    
     /*!
      * @if jp
      * @brief ロガー仲介バッファ
@@ -719,7 +1100,7 @@ namespace RTC
      * @endif
      */
     MedLogbuf m_MedLogbuf;
-
+    
     /*!
      * @if jp
      * @brief ロガーストリーム
@@ -729,7 +1110,6 @@ namespace RTC
      */
     LogStream rtcout;
     
-
     //============================================================
     // コンポーネントマネージャ
     //============================================================
@@ -745,10 +1125,9 @@ namespace RTC
       }
       std::string m_name;
     };
+    
+    typedef ObjectManager<std::string, RtcBase, InstanceName> ComponentManager;
 
-    typedef ObjectManager<std::string,
-			  RtcBase,
-			  InstanceName> ComponentManager;
     /*!
      * @if jp
      * @brief コンポーネントマネージャ
@@ -757,8 +1136,7 @@ namespace RTC
      * @endif
      */
     ComponentManager m_compManager;
-
-
+    
     //============================================================
     // コンポーネントファクトリ
     //============================================================
@@ -774,6 +1152,7 @@ namespace RTC
       }
       std::string m_name;
     };
+    
     /*!
      * @if jp
      * @brief コンポーネントファクトリ
@@ -781,9 +1160,9 @@ namespace RTC
      * @brief The ComponentFactory
      * @endif
      */
-    typedef ObjectManager<const char*,
-			  FactoryBase,
+    typedef ObjectManager<const char*, FactoryBase,
 			  FactoryPredicate> FactoryManager;
+
     /*!
      * @if jp
      * @brief ComponentManager
@@ -792,7 +1171,7 @@ namespace RTC
      * @endif
      */
     FactoryManager m_factory;
-
+    
     //============================================================
     // ExecutionContextファクトリ
     //============================================================
@@ -811,10 +1190,25 @@ namespace RTC
     typedef ObjectManager<const char*,
 			  ECFactoryBase,
 			  ECFactoryPredicate> ECFactoryManager;
+    
+    /*!
+     * @if jp
+     * @brief ExecutionContext マネージャ
+     * @else
+     *
+     * @endif
+     */
     ECFactoryManager m_ecfactory;
+    
+    /*!
+     * @if jp
+     * @brief ExecutionContext リスト
+     * @else
+     *
+     * @endif
+     */
     std::vector<ExecutionContextBase*> m_ecs;
-
-
+    
     // ファクトリ名をリストアップするためのファンクタ
     struct ModuleFactories
     {
@@ -824,58 +1218,188 @@ namespace RTC
       }
       std::vector<std::string> modlist;
     };
-
-
+    
     //------------------------------------------------------------
     // ORB runner
     //------------------------------------------------------------
+    /*!
+     * @if jp
+     * @class OrbRunner
+     * @brief OrbRunner クラス
+     *
+     * ORB 実行用ヘルパークラス。
+     *
+     * @since 0.4.0
+     *
+     * @else
+     * @class OrbRunner
+     * @brief OrbRunner class
+     * @endif
+     */
     class OrbRunner
       : public ACE_Task<ACE_MT_SYNCH>
     {
     public:
+      /*!
+       * @if jp
+       * @brief コンストラクタ
+       *
+       * コンストラクタ
+       *
+       * @else
+       * @brief Constructor
+       *
+       * @endif
+       */
       OrbRunner(CORBA::ORB_ptr orb) : m_pORB(orb)
       {
 	open(0);
       };
+      
+      /*!
+       * @if jp
+       * @brief ORB 活性化処理
+       *
+       * ORB 活性化処理
+       *
+       * @param args 活性化時引数
+       *
+       * @return 活性化結果
+       *
+       * @else
+       *
+       * @endif
+       */
       virtual int open(void *args)
       {
 	activate();
 	return 0;
       }
+      
+      /*!
+       * @if jp
+       * @brief ORB 開始処理
+       *
+       * ORB 開始処理
+       *
+       * @return 開始処理結果
+       *
+       * @else
+       *
+       * @endif
+       */
       virtual int svc(void)
       {
 	m_pORB->run();
 	Manager::instance().shutdown();
 	return 0;
       }
+      
+      /*!
+       * @if jp
+       * @brief ORB 終了処理
+       *
+       * ORB 終了処理
+       *
+       * @param flags 終了処理フラグ
+       *
+       * @return 終了処理結果
+       *
+       * @else
+       *
+       * @endif
+       */
       virtual int close(unsigned long flags)
       {
 	return 0;
       }
     private:
       CORBA::ORB_ptr m_pORB;
-      
     };
     OrbRunner* m_runner;
-
-
+    
     //------------------------------------------------------------
     // Manager Terminator
     //------------------------------------------------------------
+    /*!
+     * @if jp
+     * @class Terminator
+     * @brief Terminator クラス
+     *
+     * ORB 終了用ヘルパークラス。
+     *
+     * @since 0.4.0
+     *
+     * @else
+     *
+     * @endif
+     */
     class Terminator
       : public ACE_Task<ACE_MT_SYNCH>
     {
     public:
+      /*!
+       * @if jp
+       * @brief コンストラクタ
+       *
+       * コンストラクタ
+       *
+       * @param manager マネージャ・オブジェクト
+       *
+       * @else
+       * @brief Constructor
+       *
+       * @endif
+       */
       Terminator(Manager* manager) : m_manager(manager) {};
+      
+      /*!
+       * @if jp
+       * @brief 終了処理
+       *
+       * ORB，マネージャ終了処理を開始する。
+       *
+       * @else
+       *
+       * @endif
+       */
       void terminate()
       {
 	open(0);
       }
+      
+      /*!
+       * @if jp
+       * @brief 終了処理活性化処理
+       *
+       * 終了処理活性化処理
+       *
+       * @param args 活性化時引数
+       *
+       * @return 活性化結果
+       *
+       * @else
+       *
+       * @endif
+       */
       virtual int open(void *args)
       {
 	activate();
 	return 0;
       }
+      
+      /*!
+       * @if jp
+       * @brief ORB，マネージャ終了処理
+       *
+       * ORB，マネージャ終了処理
+       *
+       * @return 終了処理結果
+       *
+       * @else
+       *
+       * @endif
+       */
       virtual int svc(void)
       {
 	Manager::instance().shutdown();
@@ -883,18 +1407,22 @@ namespace RTC
       }
       Manager* m_manager;
     };
-
+    
+    /*!
+     * @if jp
+     * @brief Terminator
+     * @else
+     *
+     * @endif
+     */
     Terminator* m_terminator;
-
+    
     struct Term
     {
       int waiting;
       ACE_Thread_Mutex mutex;
     };
     Term m_terminate;
-
-
-
   }; // class Manager
 }; // namespace RTC
 

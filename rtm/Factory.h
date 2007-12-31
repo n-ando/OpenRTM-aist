@@ -2,22 +2,26 @@
 /*!
  * @file Factory.h
  * @brief RTComponent factory class
- * @date $Date: 2006-11-06 01:28:36 $
+ * @date $Date: 2007-12-31 03:08:03 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
- * Copyright (C) 2003-2005
+ * Copyright (C) 2003-2008
+ *     Noriaki Ando
  *     Task-intelligence Research Group,
  *     Intelligent Systems Research Institute,
  *     National Institute of
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: Factory.h,v 1.5 2006-11-06 01:28:36 n-ando Exp $
+ * $Id: Factory.h,v 1.5.4.1 2007-12-31 03:08:03 n-ando Exp $
  *
  */
 
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.5  2006/11/06 01:28:36  n-ando
+ * Now the "instance_name" is set to the component at creation time.
+ *
  * Revision 1.4  2006/10/25 17:36:00  n-ando
  * Classes were renamed, and class reference manual was described.
  *
@@ -33,11 +37,11 @@
  *
  */
 
-#ifndef RtcFactory_h
-#define RtcFactory_h
-#define EXPORTS
-#include "rtm/Properties.h"
-#include "rtm/RTObject.h"
+#ifndef Factory_h
+#define Factory_h
+
+#include <rtm/Properties.h>
+#include <rtm/RTObject.h>
 #include <rtm/NumberingPolicy.h>
 
 
@@ -45,65 +49,109 @@ namespace RTC
 {
   typedef RTObject_impl RtcBase;
   class Manager;
-
+  
   typedef RtcBase* (*RtcNewFunc)(Manager* manager);
   typedef void (*RtcDeleteFunc)(RtcBase* rtc);
-
+  
+  /*!
+   * @if jp
+   *
+   * @brief RTコンポーネント生成用テンプレート関数
+   * 
+   * RTコンポーネントのインスタンスを生成するためのテンプレート関数。
+   * RTコンポーネント管理用マネージャから呼び出される。
+   * 実際には各コンポーネントのコンストラクタが呼び出される。
+   * \<_New\>で生成対象RTコンポーネントの型を指定する。
+   *
+   * @param manager マネージャオブジェクト
+   *
+   * @return 生成した RTコンポーネント インスタンス
+   * 
+   * @else
+   *
+   * @endif
+   */
   template <class _New>
   RtcBase* Create(Manager* manager)
   {
     return new _New(manager);
   }
-
+  
+  /*!
+   * @if jp
+   *
+   * @brief RTコンポーネント破棄用テンプレート関数
+   * 
+   * RTコンポーネントのインスタンスを破棄するためのテンプレート関数。
+   * \<_Delete\>にて破棄対象RTコンポーネントの型を指定する。
+   *
+   * @param rtc 破棄対象RTコンポーネントのインスタンス
+   *
+   * @else
+   *
+   * @endif
+   */
   template <class _Delete>
   void Delete(RtcBase* rtc)
   {
     delete rtc;
   }
-
-
+  
   /*!
    * @if jp
    *
-   * @class RtcFactoryBase
-   *
-   * @brief RtcFactoryBase 基底クラス
+   * @class FactoryBase
+   * @brief FactoryBase 基底クラス
    * 
    * コンポーネントファクトリの基底クラス。
    *
+   * @since 0.2.0
+   *
    * @else
    *
-   * @class RtcFactoryBase
-   *
-   * @brief RtcFactoryBase base class
+   * @class FactoryBase
+   * @brief FactoryBase base class
    *
    * RTComponent factory base class.
    *
+   * @since 0.2.0
+   *
    * @endif
    */
-  class EXPORTS FactoryBase
+  class FactoryBase
   {
   public:
     /*!
      * @if jp
      *
-     * @brief RtcFactoryBase クラスコンストラクタ
+     * @brief コンストラクタ
      *
-     * RtcFactoryBase クラスのコンストラクタ。
+     * コンストラクタ。
      *
      * @param profile コンポーネントのプロファイル
      *
      * @else
      *
-     * @brief RtcFactoryBase class constructor.
+     * @brief Constructor.
      *
-     * RtcFactoryBase class constructor.
+     * Constructor.
      *
      * @param profile component profile
      *
      * @endif
      */
     FactoryBase(const Properties& profile);
+    
+    /*!
+     * @if jp
+     * @brief デストラクタ
+     *
+     * デストラクタ
+     *
+     * @else
+     * @brief Destructor
+     * @endif
+     */
     virtual ~FactoryBase();
     
     /*!
@@ -111,17 +159,15 @@ namespace RTC
      *
      * @brief コンポーネントの生成
      *
-     * Python で実装された RTComponent のインスタンスを生成する。
-     * 純粋仮想関数。
+     * RTComponent のインスタンスを生成するための純粋仮想関数。
      *
-     * @param mgr RtcManager へのポインタ
+     * @param mgr マネージャオブジェクト
+     *
+     * @return 生成したコンポーネント
      *
      * @else
      *
      * @brief Create component
-     *
-     * Create component implemented in Python.
-     * Pure virtual method.
      *
      * @param mgr pointer to RtcManager
      *
@@ -134,17 +180,13 @@ namespace RTC
      *
      * @brief コンポーネントの破棄
      *
-     * RTComponent のインスタンスを破棄する。
-     * 純粋仮想関数。
+     * RTComponent のインスタンスを破棄するための純粋仮想関数。
      *
-     * @param comp RtcBase へのポインタ
+     * @param comp 破棄対象 RTコンポーネント
      *
      * @else
      *
      * @brief Destroy component
-     *
-     * Destroy component instance
-     * Pure virtual method.
      *
      * @param comp pointer to RtcBase
      *
@@ -159,6 +201,8 @@ namespace RTC
      *
      * コンポーネントのプロファイルを取得する
      *
+     * @return コンポーネントのプロファイル
+     *
      * @else
      *
      * @brief Get component profile
@@ -172,9 +216,11 @@ namespace RTC
     /*!
      * @if jp
      *
-     * @brief 現在のインスタンス数
+     * @brief 現在のインスタンス数の取得
      *
      * コンポーネントの現在のインスタンス数を取得する。
+     *
+     * @return コンポーネントのインスタンス数
      *
      * @else
      *
@@ -195,6 +241,7 @@ namespace RTC
      * @endif
      */
     Properties m_Profile;
+    
     /*!
      * @if jp
      * @brief 現在のインスタンス数
@@ -205,49 +252,50 @@ namespace RTC
     int m_Number;
   };
   
-  
-  
   /*!
    * @if jp
-   *
-   * @class RtcFactoryCXX
-   *
-   * @brief RtcFactoryCXX クラス
+   * @class FactoryCXX
+   * @brief FactoryCXX クラス
    * 
    * C++用コンポーネントファクトリクラス。
    *
+   * @since 0.2.0
+   *
+   *
    * @else
    *
-   * @class RtcFactoryCXX
-   *
-   * @brief RtcFactoryCXX class
+   * @class FactoryCXX
+   * @brief FactoryCXX class
    *
    * RTComponent factory class for C++.
    *
    * @endif
    */
-  class EXPORTS FactoryCXX
+  class FactoryCXX
     : public FactoryBase
   {
   public:
     /*!
      * @if jp
      *
-     * @brief RtcFactoryCXX クラスコンストラクタ
+     * @brief コンストラクタ
      *
-     * RtcFactoryCXX クラスのコンストラクタ。
-     * プロファイル、生成関数へのポインタ、破棄関数へのポインタを引数に取り、
+     * コンストラクタ。
+     * プロファイル、生成関数へのポインタ、破棄関数へのポインタ、
+     * コンポーネント生成時の命名ポリシーを引数に取り、
      * C++ で実装されたコンポーネントのファクトリクラスを生成する。
      *
      * @param profile コンポーネントのプロファイル
      * @param new_func コンポーネントの生成関数へのポインタ
      * @param delete_func コンポーネントの破棄関数へのポインタ
+     * @param policy コンポーネント生成時の命名ポリシー
+     * (デフォルト値:DefaultNumberingPolicy)
      *
      * @else
      *
-     * @brief RtcFactoryCXX class constructor.
+     * @brief Constructor.
      *
-     * RtcFactoryCXX class constructor.
+     * Constructor.
      * Create component factory class with three arguments:
      * component profile, function pointer to object create function and
      * object delete function.
@@ -255,6 +303,7 @@ namespace RTC
      * @param profile Component profile
      * @param new_func Pointer to component create function
      * @param delete_func Pointer to component delete function
+     * @param policy Pointer to component delete function
      *
      * @endif
      */
@@ -268,9 +317,11 @@ namespace RTC
      *
      * @brief コンポーネントの生成
      *
-     * Python で実装された RTComponent のインスタンスを生成する。
+     * RTComponent のインスタンスを生成する。
      *
-     * @param mgr RtcManager へのポインタ
+     * @param mgr マネージャオブジェクト
+     *
+     * @return 生成したコンポーネント
      *
      * @else
      *
@@ -278,7 +329,7 @@ namespace RTC
      *
      * Create component implemented in Python.
      *
-     * @param mgr pointer to RtcManager
+     * @param mgr
      *
      * @endif
      */
@@ -291,7 +342,7 @@ namespace RTC
      *
      * RTComponent のインスタンスを破棄する。
      *
-     * @param comp RtcBase へのポインタ
+     * @param comp 破棄対象 RTComponent
      *
      * @else
      *
@@ -299,7 +350,7 @@ namespace RTC
      *
      * Destroy component instance
      *
-     * @param comp pointer to RtcBase
+     * @param comp
      *
      * @endif
      */
@@ -323,10 +374,14 @@ namespace RTC
      * @endif
      */
     RtcDeleteFunc m_Delete;
-
+    
+    /*!
+     * @if jp
+     * @brief コンポーネント生成時の命名ポリシー
+     * @else
+     * @endif
+     */
     NumberingPolicy* m_policy;
   };
 };
-
-
-#endif // RtcFactory_h
+#endif // Factory_h

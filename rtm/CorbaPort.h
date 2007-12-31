@@ -2,10 +2,10 @@
 /*!
  * @file  CorbaPort.h
  * @brief CorbaPort class
- * @date  $Date: 2007-01-04 00:45:21 $
+ * @date  $Date: 2007-12-31 03:08:02 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
- * Copyright (C) 2006
+ * Copyright (C) 2006-2008
  *     Noriaki Ando
  *     Task-intelligence Research Group,
  *     Intelligent Systems Research Institute,
@@ -13,12 +13,15 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: CorbaPort.h,v 1.1 2007-01-04 00:45:21 n-ando Exp $
+ * $Id: CorbaPort.h,v 1.1.4.1 2007-12-31 03:08:02 n-ando Exp $
  *
  */
 
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.1  2007/01/04 00:45:21  n-ando
+ * CORBA serivce provider/consumer Port implementation.
+ *
  *
  */
 
@@ -30,12 +33,24 @@
 #include <rtm/CorbaConsumer.h>
 #include <rtm/NVUtil.h>
 
+/*!
+ * @if jp
+ * @namespace RTC
+ *
+ * @brief RTコンポーネント
+ *
+ * @else
+ *
+ * @namespace RTC
+ *
+ * @endif
+ */
 namespace RTC
 {
   /*!
    * @if jp
    * @class CorbaPort
-   * @brief RT コンポーネント CORBA service/consumer 用 Port
+   * @brief RT コンポーネント CORBA provider/consumer 用 Port
    *
    * CorbaPort は RT コンポーネントにおいて、ユーザ定義の CORBA オブジェクト
    * サービスおよびコンシューマを提供する Port 実装である。
@@ -75,6 +90,8 @@ namespace RTC
    * 利用したい Service Consumer を registerConsumer() で登録することにより
    * 他のコンポーネントの Service をコンポーネント内で利用可能にすることが
    * できる。
+   *
+   * @since 0.4.0
    *
    * @else
    * @class CorbaPort
@@ -118,6 +135,8 @@ namespace RTC
    * Registering Service Consumer by registerConsumer(), other RT-Component's
    * services can be used through the consumer object.
    *
+   * @since 0.4.0
+   *
    * @endif
    */
   class CorbaPort
@@ -139,22 +158,20 @@ namespace RTC
      * @endif
      */
     CorbaPort(const char* name);
-
-
+    
     /*!
      * @if jp
      *
-     * @brief デストラクタ
+     * @brief 仮想デストラクタ
      *
      * @else
      *
-     * @brief Destructor
+     * @brief Virtual destructor
      *
      * @endif
      */
     virtual ~CorbaPort();
-
-
+    
     /*!
      * @if jp
      *
@@ -168,6 +185,7 @@ namespace RTC
      * @param instance_name サーバントのインスタンス名
      * @param type_name サーバントのタイプ名
      * @param provider CORBA サーバント
+     *
      * @return 既に同名の instance_name が登録されていれば false を返す。
      *
      * @else
@@ -182,14 +200,14 @@ namespace RTC
      * @param instance_name サーバントのインスタンス名
      * @param type_name サーバントのタイプ名
      * @param provider CORBA サーバント
+     *
      * @return 既に同名の instance_name が登録されていれば false を返す。
      *
      * @endif
      */
     bool registerProvider(const char* instance_name, const char* type_name,
 			  PortableServer::RefCountServantBase& provider);
-
-
+    
     /*!
      * @if jp
      *
@@ -207,6 +225,7 @@ namespace RTC
      * @param instance_name Consumer が要求するサービスのインスタンス名
      * @param type_name Consumer が要求するサービスのタイプ名
      * @param consumer CORBA サービスコンシューマ
+     *
      * @return 既に同名の instance_name が登録されていれば false を返す。
      *
      * @else
@@ -221,14 +240,14 @@ namespace RTC
      * @param instance_name An instance name of the service required
      * @param type_name An type name of the service required
      * @param consumer CORBA service consumer
+     *
      * @return False would be returned if the same instance_name is registered
      *
      * @endif
      */
     bool registerConsumer(const char* instance_name, const char* type_name,
 			  CorbaConsumerBase& consumer);
-
-
+    
   protected:
     /*!
      * @if jp
@@ -268,16 +287,19 @@ namespace RTC
      * 存在すれば、ConnectorProfile からこのキーからオブジェクトリファレンスを
      * 取得し何らかの形で使用される。
      *
+     * @param connector_profile コネクタプロファイル
+     *
+     * @return ReturnCode_t 型のリターンコード
+     *
      * @else
      *
      * @brief Publish interface information
      *
      * @endif
      */
-     virtual ReturnCode_t
-     publishInterfaces(ConnectorProfile& connector_profile);
-
-
+    virtual ReturnCode_t
+    publishInterfaces(ConnectorProfile& connector_profile);
+    
     /*!
      * @if jp
      *
@@ -314,16 +336,19 @@ namespace RTC
      * として登録されている NameValue を探し、そのオブジェクト参照を
      * Consumer にセットする。
      *
+     * @param connector_profile コネクタプロファイル
+     *
+     * @return ReturnCode_t 型のリターンコード
+     *
      * @else
      *
      * @brief Subscribe interfaces
      *
      * @endif
      */
-     virtual ReturnCode_t
-     subscribeInterfaces(const ConnectorProfile& connector_profile);
-
-
+    virtual ReturnCode_t
+    subscribeInterfaces(const ConnectorProfile& connector_profile);
+    
     /*!
      * @if jp
      *
@@ -332,16 +357,17 @@ namespace RTC
      * 与えられた ConnectorProfile に関連する Consumer にセットされた
      * すべての Object を解放し接続を解除する。
      *
+     * @param connector_profile コネクタプロファイル
+     *
      * @else
      *
      * @brief Unsubscribe interfaces
      *
      * @endif
      */
-     virtual void
-     unsubscribeInterfaces(const ConnectorProfile& connector_profile);
-
-
+    virtual void
+    unsubscribeInterfaces(const ConnectorProfile& connector_profile);
+    
   private:
     /*!
      * @if jp
@@ -351,8 +377,7 @@ namespace RTC
      * @endif
      */
     NVList m_providers;
-
-
+    
     /*!
      * @if jp
      * @brief Consumer の情報を格納する構造体
@@ -383,7 +408,7 @@ namespace RTC
       CorbaConsumerBase& consumer;
     };
     std::vector<Consumer> m_consumers;
-
+    
     // functors
     /*!
      * @if jp
@@ -397,29 +422,28 @@ namespace RTC
     {
       subscribe(std::vector<Consumer>& cons)
 	: m_cons(cons), m_len(cons.size())
-	{
-	}
-	
-	void operator()(const SDOPackage::NameValue& nv)
-	{
-	  for (CORBA::ULong i = 0; i < m_len; ++i)
-	    {
-	      std::string name(nv.name);
-	      if (m_cons[i].name == name)
-		{
-		  CORBA::Object_ptr obj;
-		  if (nv.value >>= CORBA::Any::to_object(obj))
-		    {
-		      m_cons[i].consumer.setObject(obj);
-		    }
-		}
-	}
-	}
-	std::vector<Consumer> m_cons;
-	CORBA::ULong m_len;
+      {
+      }
+      
+      void operator()(const SDOPackage::NameValue& nv)
+      {
+	for (CORBA::ULong i = 0; i < m_len; ++i)
+	  {
+	    std::string name(nv.name);
+	    if (m_cons[i].name == name)
+	      {
+		CORBA::Object_ptr obj;
+		if (nv.value >>= CORBA::Any::to_object(obj))
+		  {
+		    m_cons[i].consumer.setObject(obj);
+		  }
+	      }
+	  }
+      }
+      std::vector<Consumer> m_cons;
+      CORBA::ULong m_len;
     };
-
-
+    
     /*!
      * @if jp
      * @brief Consumer のオブジェクトを解放するための Functor
@@ -448,7 +472,6 @@ namespace RTC
       std::vector<Consumer> m_cons;
       CORBA::ULong m_len;
     };
-    
   };
 };
 #endif // CorbaPort_h

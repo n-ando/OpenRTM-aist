@@ -2,22 +2,26 @@
 /*!
  * @file InPort.h
  * @brief InPort template class
- * @date $Date: 2007-09-21 09:15:16 $
+ * @date $Date: 2007-12-31 03:08:03 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
- * Copyright (C) 2003-2005
+ * Copyright (C) 2003-2008
+ *     Noriaki Ando
  *     Task-intelligence Research Group,
  *     Intelligent Systems Research Institute,
  *     National Institute of
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: InPort.h,v 1.6.4.3 2007-09-21 09:15:16 n-ando Exp $
+ * $Id: InPort.h,v 1.6.4.4 2007-12-31 03:08:03 n-ando Exp $
  *
  */
 
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.6.4.3  2007/09/21 09:15:16  n-ando
+ * Now InPort's default buffer is RingBuffer.
+ *
  * Revision 1.6.4.2  2007/08/20 05:15:39  n-ando
  * Now default buffer is RingBuffer instead of NullBuffer.
  *
@@ -71,7 +75,7 @@ namespace RTC
    *
    * @brief InPort テンプレートクラス
    * 
-   * InPort の実装である InPortAny<T> のテンプレートクラス。
+   * InPort の実装である InPort<T> のテンプレートクラス。
    * <T> はRTCDataType.idl にて定義されている型で、メンバとして
    * Time 型の tm , および T型の data を持つ構造体でなくてはならない。
    * InPort は内部にリングバッファを持ち、外部から送信されたデータを順次
@@ -81,11 +85,13 @@ namespace RTC
    * getNewList(), getNewListReverse() 等のメソッドによりハンドリングすることが
    * できる。
    *
+   * @since 0.2.0
+   *
    * @else
    *
-   * @class InPortAny
+   * @class InPort
    *
-   * @brief OutPort template class
+   * @brief InPort template class
    *
    * This class template provides interfaces to input port.
    * Component developer can define input value, which act as input
@@ -93,6 +99,8 @@ namespace RTC
    * This is class template. This class have to be incarnated class as port
    * value types. This value types are previously define RtComponent IDL.
    * ex. type T: TimedFload, TimedLong etc... 
+   *
+   * @since 0.2.0
    *
    * @endif
    */
@@ -105,14 +113,24 @@ namespace RTC
     /*!
      * @if jp
      *
-     * @brief InPortAny クラスコンストラクタ
+     * @brief コンストラクタ
      *
-     * InPortAny<T> クラスのコンストラクタ。
+     * コンストラクタ。
      * パラメータとして与えられる T 型の変数にバインドされる。
      *
      * @param name InPort 名。InPortBase:name() により参照される。
      * @param value この InPort にバインドされる T 型の変数
-     * @param bufsize InPort 内部のリングバッファのバッファ長
+     * @param bufsize InPort 内部のリングバッファのバッファ長(デフォルト値:64)
+     * @param read_block 読込ブロックフラグ。
+     *        データ読込時に未読データがない場合、次のデータ受信までブロックする
+     *        かどうかを設定(デフォルト値:false)
+     * @param write_block 書込ブロックフラグ。
+     *        データ書込時にバッファがフルであった場合、バッファに空きができる
+     *        までブロックするかどうかを設定(デフォルト値:false)
+     * @param read_timeout 読込ブロックを指定していない場合の、データ読取タイム
+     *        アウト時間(ミリ秒)(デフォルト値:0)
+     * @param write_timeout 書込ブロックを指定していない場合の、データ書込タイム
+     *        アウト時間(ミリ秒)(デフォルト値:0)
      *
      * @else
      *
@@ -141,13 +159,12 @@ namespace RTC
     {
     };
     
-    
     /*!
      * @if jp
      *
-     * @brief InPortAny クラスデストラクタ
+     * @brief デストラクタ
      *
-     * InPortAny<T> クラスのデストラクタ。
+     * デストラクタ。
      *
      * @else
      *
@@ -156,15 +173,25 @@ namespace RTC
      * @endif
      */
     virtual ~InPort(){};
-
-
-
+    
+    /*!
+     * @if jp
+     *
+     * @brief ポート名称を取得する。
+     *
+     * ポート名称を取得する。
+     *
+     * @return ポート名称
+     *
+     * @else
+     *
+     * @endif
+     */
     virtual const char* name()
     {
       return m_name.c_str();
     }
-
-
+    
     /*!
      * @if jp
      *
@@ -184,6 +211,10 @@ namespace RTC
      *   タイムアウト時間だけバッファフル状態が解除するのを待ち、
      *   OnOverflowがセットされていればこれを呼び出して戻る。
      *
+     * @param value 書込対象データ
+     *
+     * @return 書込処理結果(書込成功:true、書込失敗:false)
+     *
      * @else
      *
      * @brief 
@@ -193,14 +224,14 @@ namespace RTC
     bool write(const DataType& value)
     {
       if (m_OnWrite != NULL) (*m_OnWrite)(value);      
-
+      
       long int timeout = m_writeTimeout;
-
+      
       timeval tm_cur, tm_pre;
       ACE_Time_Value tt;
       tt = ACE_OS::gettimeofday();
       tm_pre = tt.operator timeval();
-
+      
       // blocking and timeout wait
       while (m_writeBlock && this->isFull())
 	{
@@ -209,27 +240,27 @@ namespace RTC
 	      usleep(TIMEOUT_TICK_USEC);
 	      continue;
 	    }
-
+	  
 	  // timeout wait
 	  ACE_Time_Value tt;
 	  tt = ACE_OS::gettimeofday();
 	  tm_cur = tt.operator timeval();
 	  long int sec (tm_cur.tv_sec  - tm_pre.tv_sec);
 	  long int usec(tm_cur.tv_usec - tm_pre.tv_usec);
-
+	  
 	  timeout -= (sec * USEC_PER_SEC + usec);
 	  if (timeout < 0) break;
-
+	  
 	  tm_pre = tm_cur;
 	  usleep(TIMEOUT_TICK_USEC);
 	}
-
+      
       if (this->isFull() && m_OnOverflow != NULL)
 	{
 	  (*m_OnOverflow)(value);
 	  return false;
 	}
-
+      
       if (m_OnWriteConvert == NULL) 
 	{
 	  this->put(value);
@@ -241,7 +272,6 @@ namespace RTC
       return true;
     }
     
-
     /*!
      * @if jp
      *
@@ -261,6 +291,8 @@ namespace RTC
      *   バッファアンダーフロー状態が解除されるまでタイムアウト時間だけ待ち、
      *   OnUnderflowがセットされていればこれを呼び出して戻る
      *
+     * @return 読み出したデータ
+     *
      * @else
      *
      * @brief [CORBA interface] Put data on InPort
@@ -269,15 +301,15 @@ namespace RTC
      */
     DataType read()
     {
-      if (m_OnRead != NULL) (*m_OnRead)();      
-
+      if (m_OnRead != NULL) (*m_OnRead)();
+      
       long int timeout = m_readTimeout;
-
+      
       timeval tm_cur, tm_pre;
       ACE_Time_Value tt;
       tt = ACE_OS::gettimeofday();
       tm_pre = tt.operator timeval();
-
+      
       // blocking and timeout wait
       while (m_readBlock && this->isEmpty())
 	{
@@ -286,27 +318,27 @@ namespace RTC
 	      usleep(TIMEOUT_TICK_USEC);
 	      continue;
 	    }
-
+	  
 	  // timeout wait
 	  ACE_Time_Value tt;
 	  tt = ACE_OS::gettimeofday();
 	  tm_cur = tt.operator timeval();
 	  long int sec (tm_cur.tv_sec  - tm_pre.tv_sec);
 	  long int usec(tm_cur.tv_usec - tm_pre.tv_usec);
-
+	  
 	  timeout -= (sec * USEC_PER_SEC + usec);
 	  if (timeout < 0) break;
-
+	  
 	  tm_pre = tm_cur;
 	  usleep(TIMEOUT_TICK_USEC);
 	}
-
+      
       if (this->isEmpty() && m_OnUnderflow != NULL)
 	{
 	  m_value = (*m_OnUnderflow)();
 	  return m_value;
 	}
-
+      
       if (m_OnReadConvert == NULL) 
 	{
 	  m_value = this->get();
@@ -320,15 +352,16 @@ namespace RTC
       // never comes here
       return m_value;
     }
-
-
-
+    
     /*!
      * @if jp
      *
      * @brief InPort 内のリングバッファの値を初期化
      *
-     * InPort 内のリングバッファの値を初期化する。
+     * InPort 内のリングバッファの値を指定した値で初期化する。
+     * (現状ではコメントアウト)
+     *
+     * @param value 初期化対象データ
      *
      * @else
      *
@@ -340,7 +373,6 @@ namespace RTC
     {
       //      m_buffer.init(value);
     }
-    
     
     /*!
      * @if jp
@@ -371,11 +403,13 @@ namespace RTC
       return;
     };
     
-    
     /*!
      * @if jp
      *
      * @brief T 型のデータへ InPort の最新値データを読み込む
+     *
+     * InPort に設定されている最新データを読み込み、
+     * 指定されたデータ変数に設定する。
      *
      * @param rhs InPort バッファから値を読み込む T 型変数
      *
@@ -393,15 +427,26 @@ namespace RTC
       return;
     }
     
-
+    /*!
+     * @if jp
+     *
+     * @brief T 型のデータを DataPort へ書き込み
+     *
+     * 設定された T 型のデータをDataPortに書き込む。
+     *
+     * @param value DaraPort へ書き込む T 型変数
+     *
+     * @else
+     *
+     * @endif
+     */
     void operator<<(DataType& value)
     {
       write(value);
       return;
     }
-
     
-    /*!
+    /***
      * @if jp
      *
      * @brief 未読の新しいデータ数を取得する
@@ -413,13 +458,13 @@ namespace RTC
      * @endif
      */
     /*
-    virtual int getNewDataLen()
-    {
+      virtual int getNewDataLen()
+      {
       return m_buffer->new_data_len();
-    }
-    */    
+      }
+    */
     
-    /*!
+    /***
      * @if jp
      *
      * @brief 未読の新しいデータを取得する
@@ -431,13 +476,13 @@ namespace RTC
      * @endif
      */
     /*
-    virtual std::vector<T> getNewList()
-    {
+      virtual std::vector<T> getNewList()
+      {
       return m_buffer.get_new_list();
-    }
+      }
     */
     
-    /*!
+    /***
      * @if jp
      *
      * @brief 未読の新しいデータを逆順(新->古)で取得する
@@ -449,16 +494,16 @@ namespace RTC
      * @endif
      */
     /*
-    virtual std::vector<T> getNewListReverse()
-    {
+      virtual std::vector<T> getNewListReverse()
+      {
       return m_buffer.get_new_rlist();
-    }
+      }
     */
-
+    
     /*!
      * @if jp
      *
-     * @brief InPort バッファにデータ入力時のコールバックの設定
+     * @brief InPort バッファへデータ入力時のコールバックの設定
      *
      * InPort が持つバッファにデータがputされたときに呼ばれるコールバック
      * オブジェクトを設定する。設定されるコールバックオブジェクトは
@@ -475,6 +520,8 @@ namespace RTC
      * m_inport.setOnPut(new MyOnPutCallback());<br>
      * のようにコールバックオブジェクトをセットする。
      *
+     * @param on_write OnWrite&lt;DataType&gt;型のオブジェクト
+     *
      * @else
      *
      * @brief Get new data to be read.
@@ -485,33 +532,104 @@ namespace RTC
     {
       m_OnWrite = on_write;
     }
-
+    
+    /*!
+     * @if jp
+     *
+     * @brief InPort バッファへデータ書き込み時のコールバックの設定
+     *
+     * InPort が持つバッファにデータ書き込まれる時に呼ばれるコールバック
+     * オブジェクトを設定する。バッファにはコールバックオブジェクトの
+     * 戻り値が設定される。
+     * 
+     * @param on_wconvert OnWriteConvert&lt;DataType&gt;型のオブジェクト
+     *
+     * @else
+     *
+     * @endif
+     */
     inline void setOnWriteConvert(OnWriteConvert<DataType>* on_wconvert)
     {
       m_OnWriteConvert = on_wconvert;
     }
-
+    
+    /*!
+     * @if jp
+     *
+     * @brief InPort バッファへデータ読み込み時のコールバックの設定
+     *
+     * InPort が持つバッファからデータが読み込まれる直前に呼ばれるコールバック
+     * オブジェクトを設定する。
+     * 
+     * @param on_read OnRead&lt;DataType&gt;型のオブジェクト
+     *
+     * @else
+     *
+     * @endif
+     */
     inline void setOnRead(OnRead<DataType>* on_read)
     {
       m_OnRead = on_read;
     }
-
+    
+    /*!
+     * @if jp
+     *
+     * @brief InPort バッファへデータ読み出し時のコールバックの設定
+     *
+     * InPort が持つバッファからデータが読み出される際に呼ばれるコールバック
+     * オブジェクトを設定する。コールバックオブジェクトの戻り値がread()メソッド
+     * の呼出結果となる。
+     * 
+     * @param on_rconvert OnReadConvert&lt;DataType&gt;型のオブジェクト
+     *
+     * @else
+     *
+     * @endif
+     */
     inline void setOnReadConvert(OnReadConvert<DataType>* on_rconvert)
     {
       m_OnReadConvert = on_rconvert;
     }
-
+    
+    /*!
+     * @if jp
+     *
+     * @brief InPort バッファへバッファオーバーフロー時のコールバックの設定
+     *
+     * InPort が持つバッファでバッファオーバーフローが検出された際に呼び出される
+     * コールバックオブジェクトを設定する。
+     * 
+     * @param on_overflow OnOverflow&lt;DataType&gt;型のオブジェクト
+     *
+     * @else
+     *
+     * @endif
+     */
     inline void setOnOverflow(OnOverflow<DataType>* on_overflow)
     {
       m_OnOverflow = on_overflow;
     }
-
+    
+    /*!
+     * @if jp
+     *
+     * @brief InPort バッファへバッファアンダーフロー時のコールバックの設定
+     *
+     * InPort が持つバッファでバッファアンダーフローが検出された際に呼び出される
+     * コールバックオブジェクトを設定する。
+     * 
+     * @param on_underflow OnUnderflow&lt;DataType&gt;型のオブジェクト
+     *
+     * @else
+     *
+     * @endif
+     */
     inline void setOnUnderflow(OnUnderflow<DataType>* on_underflow)
     {
       m_OnUnderflow = on_underflow;
     }
-
-
+    
   private:
     /*!
      * @if jp
@@ -519,9 +637,10 @@ namespace RTC
      * @else
      * @berif Port's name
      * @else
+     * @endif
      */
     std::string m_name;
-
+    
     /*!
      * @if jp
      * @brief バインドされる T 型の変数への参照
@@ -539,12 +658,12 @@ namespace RTC
      * @endif
      */
     //    Buffer<DataType> m_buffer;
-
+    
     bool m_readBlock;
     long int m_readTimeout;
     bool m_writeBlock;
     long int m_writeTimeout;
-
+    
     /*!
      * @if jp
      * @brief OnWrite コールバックファンクタへのポインタ
@@ -553,7 +672,7 @@ namespace RTC
      * @endif
      */
     OnWrite<DataType>* m_OnWrite;
-
+    
     /*!
      * @if jp
      * @brief OnWriteConvert コールバックファンクタへのポインタ
@@ -562,7 +681,7 @@ namespace RTC
      * @endif
      */
     OnWriteConvert<DataType>* m_OnWriteConvert;
-
+    
     /*!
      * @if jp
      * @brief OnRead コールバックファンクタへのポインタ
@@ -571,7 +690,7 @@ namespace RTC
      * @endif
      */
     OnRead<DataType>* m_OnRead;
-
+    
     /*!
      * @if jp
      * @brief OnReadConvert コールバックファンクタへのポインタ
@@ -580,7 +699,7 @@ namespace RTC
      * @endif
      */
     OnReadConvert<DataType>* m_OnReadConvert;
-
+    
     /*!
      * @if jp
      * @brief OnOverflow コールバックファンクタへのポインタ
@@ -589,7 +708,7 @@ namespace RTC
      * @endif
      */
     OnOverflow<DataType>* m_OnOverflow;
-
+    
     /*!
      * @if jp
      * @brief OnUnderflow コールバックファンクタへのポインタ
@@ -599,10 +718,7 @@ namespace RTC
      * @endif
      */
     OnUnderflow<DataType>* m_OnUnderflow;
-
-    
   };
-  
 }; // End of namesepace RTM
 
 #endif // RtcInPort_h

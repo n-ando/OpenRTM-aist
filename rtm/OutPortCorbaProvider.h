@@ -2,10 +2,10 @@
 /*!
  * @file  OutPortCorbaProvider.h
  * @brief OutPortCorbaProvider class
- * @date  $Date: 2007-02-04 16:56:00 $
+ * @date  $Date: 2007-12-31 03:08:05 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
- * Copyright (C) 2006
+ * Copyright (C) 2006-2008
  *     Noriaki Ando
  *     Task-intelligence Research Group,
  *     Intelligent Systems Research Institute,
@@ -13,12 +13,15 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: OutPortCorbaProvider.h,v 1.5 2007-02-04 16:56:00 n-ando Exp $
+ * $Id: OutPortCorbaProvider.h,v 1.5.2.1 2007-12-31 03:08:05 n-ando Exp $
  *
  */
 
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.5  2007/02/04 16:56:00  n-ando
+ * The subscription types were updated.
+ *
  * Revision 1.4  2007/01/21 10:25:24  n-ando
  * A trivial fix.
  *
@@ -50,6 +53,13 @@ namespace RTC
    * @if jp
    * @class OutPortCorbaProvider
    * @brief OutPortCorbaProvider クラス
+   *
+   * 通信手段に CORBA を利用した出力ポートプロバイダーの実装クラス。
+   *
+   * @param DataType 当該プロバイダに割り当てたバッファが保持するデータ型
+   *
+   * @since 0.4.0
+   *
    * @else
    * @class OutPortCorbaProvider
    * @brief OutPortCorbaProvider class
@@ -65,6 +75,11 @@ namespace RTC
     /*!
      * @if jp
      * @brief コンストラクタ
+     *
+     * コンストラクタ
+     *
+     * @param buffer 当該プロバイダに割り当てるバッファオブジェクト
+     *
      * @else
      * @brief Constructor
      * @endif
@@ -81,7 +96,7 @@ namespace RTC
       setInterfaceType("CORBA_Any");
       setDataFlowType("Push, Pull");
       setSubscriptionType("Flush, New, Periodic");
-
+      
       // ConnectorProfile setting
       m_objref = this->_this();
       CORBA_SeqUtil::push_back(m_properties,
@@ -92,13 +107,28 @@ namespace RTC
     /*!
      * @if jp
      * @brief デストラクタ
+     *
+     * デストラクタ
+     *
      * @else
      * @brief Destructor
      * @endif
      */
     virtual ~OutPortCorbaProvider()
     {}
-
+    
+    /*!
+     * @if jp
+     * @brief バッファからデータを取得する
+     *
+     * 設定された内部バッファからデータを取得する。
+     *
+     * @return 取得データ
+     *
+     * @else
+     *
+     * @endif
+     */
     CORBA::Any* get()
     {
       DataType data;
@@ -107,8 +137,7 @@ namespace RTC
       tmp <<= data;
       return tmp._retn();
     }
-
-   
+    
   private:
     BufferBase<DataType>& m_buffer;
     OutPortAny_var m_objref;

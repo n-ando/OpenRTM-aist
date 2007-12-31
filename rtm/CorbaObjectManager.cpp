@@ -2,10 +2,10 @@
 /*!
  * @file CorbaObjectManager.h
  * @brief CORBA Object manager class
- * @date $Date: 2006-11-04 19:56:57 $
+ * @date $Date: 2007-12-31 03:08:02 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
- * Copyright (C) 2006
+ * Copyright (C) 2006-2008
  *     Noriaki Ando
  *     Task-intelligence Research Group,
  *     Intelligent Systems Research Institute,
@@ -13,12 +13,15 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: CorbaObjectManager.cpp,v 1.2 2006-11-04 19:56:57 n-ando Exp $
+ * $Id: CorbaObjectManager.cpp,v 1.2.4.1 2007-12-31 03:08:02 n-ando Exp $
  *
  */
 
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.2  2006/11/04 19:56:57  n-ando
+ * Kanji-code was converted into EUC.
+ *
  * Revision 1.1  2006/11/04 19:54:40  n-ando
  * CORBA object activation class was created.
  *

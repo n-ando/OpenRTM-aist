@@ -2,7 +2,7 @@
 /*!
  * @file  PublisherFactory.cpp
  * @brief PublisherFactory class
- * @date  $Date: 2007-06-22 10:55:09 $
+ * @date  $Date: 2007-12-31 03:08:06 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
  * Copyright (C) 2006
@@ -13,12 +13,15 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: PublisherFactory.cpp,v 1.2.4.1 2007-06-22 10:55:09 n-ando Exp $
+ * $Id: PublisherFactory.cpp,v 1.2.4.2 2007-12-31 03:08:06 n-ando Exp $
  *
  */
 
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.2.4.1  2007/06/22 10:55:09  n-ando
+ * The bug of OutPort's disconnect operation was fixed.
+ *
  * Revision 1.2  2007/01/06 18:00:25  n-ando
  * Some trivial fixes.
  *
@@ -41,7 +44,7 @@ namespace RTC
 {
   /*!
    * @if jp
-   * @brief Publisherを生成する。
+   * @brief Publisherの生成
    * @else
    * @brief Create Publisher
    * @endif
@@ -51,7 +54,7 @@ namespace RTC
   {
     std::string pub_type;
     pub_type = property.getProperty("dataport.subscription_type", "New");
-
+    
     if (pub_type == "New")
       {
 	return new PublisherNew(consumer, property);
@@ -66,11 +69,17 @@ namespace RTC
       }
     return NULL;
   }
-
+  
+  /*!
+   * @if jp
+   * @brief Publisherの破棄
+   * @else
+   * @brief Destroy Publisher
+   * @endif
+   */
   void PublisherFactory::destroy(PublisherBase* publisher)
   {
     publisher->release();
     delete publisher;
   }
-  
 }; // namespace RTC

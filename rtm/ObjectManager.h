@@ -2,7 +2,7 @@
 /*!
  * @file ObjectManager.h
  * @brief Object management class
- * @date $Date: 2007-09-20 11:42:25 $
+ * @date $Date: 2007-12-31 03:08:04 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
  * Copyright (C) 2003-2007
@@ -12,12 +12,15 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: ObjectManager.h,v 1.6.2.1 2007-09-20 11:42:25 n-ando Exp $
+ * $Id: ObjectManager.h,v 1.6.2.2 2007-12-31 03:08:04 n-ando Exp $
  *
  */
 
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.6.2.1  2007/09/20 11:42:25  n-ando
+ * for_each const function was added.
+ *
  * Revision 1.6  2007/04/27 03:27:25  n-ando
  * A trivial fix.
  *
@@ -53,26 +56,74 @@
 #include <ace/Thread.h>
 #include <ace/Synch.h>
 
+/*!
+ * @if jp
+ *
+ * @brief オブジェクト管理用クラス
+ *
+ * 各種オブジェクトを管理するためのクラス。
+ *
+ * @since 0.4.0
+ *
+ * @else
+ *
+ * @endif
+ */
 template <typename Identifier, typename Object, typename Predicate>
 class ObjectManager
 {
- public:
+public:
   typedef std::vector<Object*>                  ObjectVector;
   typedef typename ObjectVector::iterator       ObjectVectorItr;
   typedef typename ObjectVector::const_iterator ObjectVectorConstItr;
-
-
+  
+  /*!
+   * @if jp
+   *
+   * @brief コンストラクタ
+   * 
+   * コンストラクタ
+   * 
+   * @else
+   *
+   * @endif
+   */
   ObjectManager(){};
-
-
+  
+  /*!
+   * @if jp
+   *
+   * @brief デストラクタ
+   * 
+   * デストラクタ
+   * 
+   * @else
+   *
+   * @endif
+   */
   ~ObjectManager(){};
-
-
+  
+  /*!
+   * @if jp
+   *
+   * @brief 指定したオブジェクトを登録する
+   * 
+   * 指定したオブジェクトを登録する。
+   * 同一オブジェクトが登録済みの場合は、何も行わない。
+   *
+   * @param obj 登録対象オブジェクト
+   *
+   * @return 登録処理結果(オブジェクトを登録した場合にtrue)
+   * 
+   * @else
+   *
+   * @endif
+   */
   bool registerObject(Object* obj)
   {
     ObjectVectorItr it;
     ACE_Guard<ACE_Thread_Mutex> guard(m_objects._mutex);
-
+    
     it = std::find_if(m_objects._obj.begin(), m_objects._obj.end(),
 		      Predicate(obj));
     if (it == m_objects._obj.end())
@@ -82,13 +133,28 @@ class ObjectManager
       }
     return false;
   }
-
-
+  
+  /*!
+   * @if jp
+   *
+   * @brief 指定したオブジェクトを登録解除する
+   * 
+   * 指定したオブジェクトの登録を解除し、取得する。
+   * 指定したオブジェクトが登録されていない場合にはNULLを返す。
+   *
+   * @param id 登録解除対象オブジェクトのID
+   *
+   * @return 登録解除されたオブジェクト
+   * 
+   * @else
+   *
+   * @endif
+   */
   Object* unregisterObject(const Identifier& id)
   {
     ObjectVectorItr it;
     ACE_Guard<ACE_Thread_Mutex> guard(m_objects._mutex);
-
+    
     it = std::find_if(m_objects._obj.begin(), m_objects._obj.end(),
 		      Predicate(id));
     if (it != m_objects._obj.end())
@@ -99,8 +165,24 @@ class ObjectManager
       }
     return NULL;;
   }
-
-
+  
+  /*!
+   * @if jp
+   *
+   * @brief オブジェクトを検索する
+   * 
+   * 登録されているオブジェクトの中から指定した条件に合致するオブジェクトを検索
+   * して取得する。
+   * 指定した条件に合致するオブジェクトが登録されていない場合にはNULLを返す。
+   *
+   * @param id 検索対象オブジェクトのID
+   *
+   * @return オブジェクトの検索結果
+   * 
+   * @else
+   *
+   * @endif
+   */
   Object* find(const Identifier& id) const
   {
     ObjectVectorConstItr it;
@@ -113,36 +195,74 @@ class ObjectManager
       }
     return NULL;
   }
-
-
+  
+  /*!
+   * @if jp
+   *
+   * @brief 登録されているオブジェクトのリストを取得する
+   * 
+   * 登録されているオブジェクトのリストを取得する。
+   *
+   * @return 登録されているオブジェクト・リスト
+   * 
+   * @else
+   *
+   * @endif
+   */
   std::vector<Object*> getObjects() const
   {
     ACE_Guard<ACE_Thread_Mutex> guard(m_objects._mutex);
     return m_objects._obj;
   }
-
-
+  
+  /*!
+   * @if jp
+   * @brief オブジェクト検索用ファンクタ
+   * @else
+   *
+   * @endif
+   */
   template <class Pred>
   Pred for_each(Pred p)
   {
     ACE_Guard<ACE_Thread_Mutex> guard(m_objects._mutex);
     return std::for_each(m_objects._obj.begin(), m_objects._obj.end(), p);
   }
-
+  
+  /*!
+   * @if jp
+   * @brief オブジェクト検索用ファンクタ
+   * @else
+   *
+   * @endif
+   */
   template <class Pred>
   Pred for_each(Pred p) const
   {
     ACE_Guard<ACE_Thread_Mutex> guard(m_objects._mutex);
     return std::for_each(m_objects._obj.begin(), m_objects._obj.end(), p);
   }
-
- protected:
+  
+protected:
+  /*!
+   * @if jp
+   * @brief オブジェクト管理用構造体
+   * @else
+   *
+   * @endif
+   */
   struct Objects
   {
     mutable ACE_Thread_Mutex _mutex;
     ObjectVector _obj;
   };
+  /*!
+   * @if jp
+   * @brief 登録済みオブジェクト・リスト
+   * @else
+   *
+   * @endif
+   */
   Objects m_objects;
 };
-
 #endif // ObjectManager_h

@@ -2,10 +2,10 @@
 /*!
  * @file CorbaConsumer.h
  * @brief CORBA Consumer class
- * @date $Date: 2007-01-21 09:05:13 $
+ * @date $Date: 2007-12-31 03:08:02 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
- * Copyright (C) 2006
+ * Copyright (C) 2006-2008
  *     Noriaki Ando
  *     Task-intelligence Research Group,
  *     Intelligent Systems Research Institute,
@@ -13,12 +13,16 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: CorbaConsumer.h,v 1.5 2007-01-21 09:05:13 n-ando Exp $
+ * $Id: CorbaConsumer.h,v 1.5.4.1 2007-12-31 03:08:02 n-ando Exp $
  *
  */
 
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.5  2007/01/21 09:05:13  n-ando
+ * Template arguments "_ptr_type" and "_var_type" are defined as typename.
+ * The given object references are duplicated.
+ *
  * Revision 1.4  2007/01/12 14:29:18  n-ando
  * A trivial bug fix.
  *
@@ -57,12 +61,30 @@
 #include <tao/corba.h>
 #endif
 
+/*!
+ * @if jp
+ * @namespace RTC
+ *
+ * @brief RTコンポーネント
+ *
+ * @else
+ *
+ * @namespace RTC
+ *
+ * @endif
+ */
 namespace RTC
 {
   /*!
    * @if jp
-   * @class ConsumerBase
+   * @class CorbaConsumerBase
+   *
    * @brief オブジェクトリファレンスを保持するプレースホルダ基底クラス
+   *
+   * 通信手段として CORBA を選択した場合のコンシューマ実装のための基底クラス
+   *
+   * @since 0.4.0
+   *
    * @else
    * @class ConsumerBase
    * @brief Placeholder base class to hold remote object reference.
@@ -73,41 +95,71 @@ namespace RTC
   public:
     /*!
      * @if jp
+     *
      * @brief コンストラクタ
+     *
      * @else
+     *
      * @brief Consructor
+     *
      * @endif
      */
     CorbaConsumerBase(){};
-
+    
     /*!
      * @if jp
+     *
      * @brief コピーコンストラクタ
+     *
+     * @param x コピー元のCorbaConsumerBaseオブジェクト
+     *
      * @else
+     *
      * @brief Copy Consructor
+     *
      * @endif
      */
     CorbaConsumerBase(const CorbaConsumerBase& x)
     {
       m_objref = x.m_objref;
     }
-
+    
+    /*!
+     * @if jp
+     *
+     * @brief 代入演算子
+     *
+     * @param x 代入元
+     *
+     * @return 代入結果
+     *
+     * @else
+     *
+     * @brief Assignment operator
+     *
+     * @param x Copy source.
+     *
+     * @endif
+     */
     CorbaConsumerBase& operator=(const CorbaConsumerBase& x)
     {
       m_objref = x.m_objref;
       return *this;
     }
-
+    
     /*!
      * @if jp
-     * @brief デストラクタ
+     *
+     * @brief 仮想デストラクタ
+     * 
      * @else
-     * @brief Destructor
+     * 
+     * @brief virtual destructor
+     * 
      * @endif
      */
     virtual ~CorbaConsumerBase(){};
-
-
+    
     /*!
      * @if jp
      *
@@ -117,6 +169,7 @@ namespace RTC
      * CORBA::Object_var 型として保持される。 
      *
      * @param obj CORBA オブジェクトのリファレンス
+     *
      * @return obj が nil リファレンスの場合 false を返す。
      *
      * @else
@@ -126,6 +179,7 @@ namespace RTC
      * The given CORBA Object is held as CORBA::Object_var type
      *
      * @param obj Object reference of CORBA object
+     *
      * @return If obj is nil reference, it returns false.
      *
      * @endif
@@ -139,24 +193,22 @@ namespace RTC
       m_objref = CORBA::Object::_duplicate(obj);
       return true;
     }
-
+    
     /*!
      * @if jp
      *
      * @brief CORBAオブジェクトを取得する
      *
-     * 与えられたオブジェクトリファレンスは、ConsumerBase オブジェクト内に
-     * CORBA::Object_var 型として保持される。 
+     * ConsumerBase オブジェクト内に CORBA::Object_var 型として保持されている
+     * オブジェクトリファレンスを取得する。 
      *
-     * @param obj CORBA オブジェクトのリファレンス
+     * @return obj CORBA オブジェクトのリファレンス
      *
      * @else
      *
-     * @brief Set CORBA Object
+     * @brief Get CORBA Object
      *
-     * The given CORBA Object is held as CORBA::Object_var type
-     *
-     * @param obj Object reference of CORBA object
+     * @return Object reference of CORBA object
      *
      * @endif
      */
@@ -164,25 +216,41 @@ namespace RTC
     {
       return m_objref;
     }
-
+    
+    /*!
+     * @if jp
+     *
+     * @brief CORBAオブジェクトの設定をクリアする
+     *
+     * 設定されている CORBA オブジェクトをクリアする。
+     * CORBAオブジェクトそのものに対しては何も操作しない。
+     *
+     * @else
+     *
+     * @endif
+     */
     virtual void releaseObject()
     {
       m_objref = CORBA::Object::_nil();
     }
-
+    
   protected:
+    /*!
+     * @if jp
+     * @brief 設定された CORBA オブジェクト
+     * @else
+     * @endif
+     */
     CORBA::Object_var m_objref;
   };
-
-
-
+  
   /*!
    * @if jp
    *
-   * @class Consumer
+   * @class CorbaConsumer
    * @brief オブジェクトリファレンスを保持するプレースホルダテンプレートクラス
    * 
-   * テンプレート引数で与えられた型のオブジェクトを保持する。
+   * テンプレート引数で与えられた型のCORBAオブジェクトを保持する。
    * オブジェクトがセットされたときに、与えられた型で narrow されるので、
    * _ptr() で取得するリファレンスは、narrow 済みのリファレンスである。
    * 内部的な使用のために、_ptr 型, _var型も同時にテンプレート引数として
@@ -197,6 +265,8 @@ namespace RTC
    * @param ObjectType このホルダが保持するオブジェクトの型
    * @param ObjectTypePtr このホルダが保持する _ptr 型
    * @param ObjectTypeVar このホルダが保持する _var 型
+   *
+   * @since 0.4.0
    *
    * @else
    *
@@ -213,6 +283,8 @@ namespace RTC
    *       _var_type as _ptr type and _var type in stub code.
    *       Usually, you don't need to specify 2nd and 3rd template arguments.
    *       
+   * @since 0.4.0
+   *
    * @endif
    */
   template <class ObjectType,
@@ -224,34 +296,74 @@ namespace RTC
   public:
     /*!
      * @if jp
+     *
      * @brief コンストラクタ
+     *
      * @else
+     *
      * @brief Consructor
+     *
      * @endif
      */
     CorbaConsumer(){};
-
+    
+    /*!
+     * @if jp
+     *
+     * @brief コピーコンストラクタ
+     *
+     * @param x コピー元
+     *
+     * @else
+     *
+     * @brief Copy constructor
+     *
+     * @param x Copy source.
+     *
+     * @endif
+     */
     CorbaConsumer(const CorbaConsumer& x)
     {
       m_var = x.m_var;
     }
-
+    
+    /*!
+     * @if jp
+     *
+     * @brief 代入演算子
+     *
+     * @param x 代入元
+     *
+     * @return 代入結果
+     *
+     * @else
+     *
+     * @brief Assignment operator
+     *
+     * @param x Copy source.
+     *
+     * @endif
+     */
     CorbaConsumer& operator=(const CorbaConsumer& x)
     {
       m_var = x.m_var;
     }
-
+    
     /*!
      * @if jp
-     * @brief デストラクタ
+     *
+     * @brief 仮想デストラクタ
+     *
      * @else
-     * @brief Destructor
+     *
+     * @brief virtual destructor
+     *
      * @endif
      */
     virtual ~CorbaConsumer()
     {
     };
-
+    
     /*!
      * @if jp
      * @brief オブジェクトをセットする
@@ -261,6 +373,9 @@ namespace RTC
      * メンバ変数に保持する。
      *
      * @param obj CORBA Objecct
+     *
+     * @return オブジェクト設定結果
+     *         設定対象オブジェクトが null の場合は false が返ってくる
      * 
      * @else
      * @brief Set Object
@@ -281,8 +396,7 @@ namespace RTC
 	}
       return false; // object is nil
     }
-
-
+    
     /*!
      * @if jp
      * @brief ObjectType 型のオブジェクトのリファレンスを取得
@@ -311,7 +425,7 @@ namespace RTC
     {
       return m_var;
     }
-
+    
     /*!
      * @if jp
      * @brief ObjectType 型のオブジェクトのリファレンスを取得
@@ -340,16 +454,33 @@ namespace RTC
     {
       return m_var;
     }
-
+    
+    /*!
+     * @if jp
+     *
+     * @brief CORBAオブジェクトの設定をクリアする
+     *
+     * 設定されている CORBA オブジェクトをクリアする。
+     * CORBAオブジェクトそのものに対しては何も操作しない。
+     *
+     * @else
+     *
+     * @endif
+     */
     virtual void releaseObject()
     {
       CorbaConsumerBase::releaseObject();
       m_var = ObjectType::_nil();
     }
-
+    
   protected:
+    /*!
+     * @if jp
+     * @brief 設定された CORBA オブジェクト
+     * @else
+     * @endif
+     */
     ObjectTypeVar m_var;
-
   };
 }; // namespace RTC
 #endif // Consumer_h

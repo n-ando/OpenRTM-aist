@@ -2,22 +2,26 @@
 /*!
  * @file Properties.cpp
  * @brief Property list class (derived from Java Properties)
- * @date $Date: 2007-09-19 03:00:08 $
+ * @date $Date: 2007-12-31 03:08:06 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
- * Copyright (C) 2006
+ * Copyright (C) 2006-2008
+ *     Noriaki Ando
  *     Task-intelligence Research Group,
  *     Intelligent Systems Research Institute,
  *     National Institute of
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: Properties.cpp,v 1.7.2.1 2007-09-19 03:00:08 n-ando Exp $
+ * $Id: Properties.cpp,v 1.7.2.2 2007-12-31 03:08:06 n-ando Exp $
  *
  */
 
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.7.2.1  2007/09/19 03:00:08  n-ando
+ * Inconsistency between spec. and impl. in setProperty() was modified.
+ *
  * Revision 1.7  2007/04/23 04:56:39  n-ando
  * Some fixes about const.
  *
@@ -65,8 +69,7 @@ namespace RTC
   {
     leaf.clear();
   }
-
-
+  
   /*!
    * @if jp
    * @brief コンストラクタ(mapでデフォルト値を与える)
@@ -83,11 +86,10 @@ namespace RTC
     
     while (it != it_end)
       {
-        setDefault(it->first.c_str(), it->second.c_str());
-        ++it;
+	setDefault(it->first.c_str(), it->second.c_str());
+	++it;
       }
   }
-  
   
   /*!
    * @if jp
@@ -103,7 +105,6 @@ namespace RTC
     setDefaults(defaults, num);
   }
   
-
   /*!
    * @if jp
    * @brief コピーコンストラクタ
@@ -127,8 +128,7 @@ namespace RTC
 	  }
       }
   }
-
-
+  
   /*!
    * @if jp
    * @brief 代入演算子
@@ -142,7 +142,7 @@ namespace RTC
     name = prop.name;
     value = prop.value;
     default_value = prop.default_value;
-
+    
     std::vector<std::string> keys;
     keys = prop.propertyNames();
     for (int i(0), len(keys.size()); i < len; ++i)
@@ -154,11 +154,10 @@ namespace RTC
 	    setProperty(keys[i], node->value);
 	  }
       }
-
+    
     return *this;
   }
-
-
+  
   /*!
    * @if jp
    * @brief デストラクタ
@@ -170,7 +169,7 @@ namespace RTC
   {  
     // Delete children
     clear();
-
+    
     // delete myself from parent
     if (root != NULL)
       {
@@ -178,7 +177,6 @@ namespace RTC
       }
   };
   
-
   //============================================================
   // public fnctions
   //============================================================
@@ -201,7 +199,6 @@ namespace RTC
     return m_empty;
   }
   
-
   /*!
    * @if jp
    * @brief 指定されたキーを持つプロパティを、プロパティリストから探す
@@ -216,8 +213,7 @@ namespace RTC
     
     return value.empty() ? def : value;
   }
-
-
+  
   /*!
    * @if jp
    * @brief 指定されたキーを持つプロパティを、プロパティリストから探す
@@ -229,7 +225,6 @@ namespace RTC
   {
     return getProperty(key);
   }
-  
   
   /*!
    * @if jp
@@ -245,8 +240,7 @@ namespace RTC
     
     return prop->value;
   }
-
-
+  
   /*!
    * @if jp
    * @brief 指定されたキーに対してデフォルト値を設定する
@@ -265,8 +259,7 @@ namespace RTC
       }
     return m_empty;
   }
-
-
+  
   /*!
    * @if jp
    * @brief Properties に value を key について登録する
@@ -296,11 +289,10 @@ namespace RTC
     curr->value = value;
     return retval;
   }
-
-
+  
   /*!
    * @if jp
-   * @brief Properties にデフォルト value を key について登録する
+   * @brief デフォルト値を登録する
    * @else
    * @brief Sets a default value associated with key in the property list
    * @endif
@@ -310,7 +302,7 @@ namespace RTC
   {
     std::vector<std::string> keys;
     split(key, '.', keys);
-
+    
     Properties* curr(this);
     for (int i(0), len(keys.size()); i < len; ++i)
       {
@@ -327,7 +319,6 @@ namespace RTC
     return value;
   }
   
-
   /*!
    * @if jp
    * @brief Properties にデフォルト値をまとめて登録する
@@ -351,8 +342,7 @@ namespace RTC
 	setDefault(key.c_str(), value.c_str());
       }
   }
-
-
+  
   //============================================================
   // load and save functions
   //============================================================
@@ -367,7 +357,6 @@ namespace RTC
   {
     _store(out, "", this);
   }
-  
   
   /*!
    * @if jp
@@ -415,8 +404,7 @@ namespace RTC
 	pline.clear();
       }
   }
-    
-
+  
   /*!
    * @if jp
    * @brief プロパティリストを指定されたストリームに保存する
@@ -430,7 +418,6 @@ namespace RTC
     return;
   }
   
-  
   /*!
    * @if jp
    * @brief プロパティリストを出力ストリームへ保存する
@@ -443,8 +430,7 @@ namespace RTC
     out << "# " << header << std::endl;
     _store(out, "", this);
   }
-
-
+  
   //============================================================
   // other util functions
   //============================================================
@@ -465,7 +451,6 @@ namespace RTC
     return names;
   }
   
-  
   /*!
    * @if jp
    * @brief プロパティの数を取得する
@@ -477,8 +462,7 @@ namespace RTC
   {
     return propertyNames().size();
   }
-
-
+  
   /*!
    * @if jp
    * @brief ノードを取得する
@@ -494,7 +478,6 @@ namespace RTC
     return _getNode(keys, 0, this);
   }
   
-
   /*!
    * @if jp
    * @brief ノードを切断する
@@ -518,7 +501,6 @@ namespace RTC
       }
     return NULL;
   }
- 
   
   /*!
    * @if jp
@@ -536,8 +518,7 @@ namespace RTC
       }
     return NULL;
   }
-
-
+  
   /*!
    * @if jp
    * @brief 子ノードを全て削除する
@@ -553,8 +534,7 @@ namespace RTC
 	  delete leaf.back();    // back() returns always new
       }
   }
-
-
+  
   /*!
    * @if jp
    * @brief Propertyをマージする
@@ -572,12 +552,17 @@ namespace RTC
       }
     return (*this);
   }
-
-
-
+  
   //------------------------------------------------------------
   // Protected functions
   //------------------------------------------------------------
+  /*!
+   * @if jp
+   * @brief 文字列をキーと値のペアに分割する
+   * @else
+   *
+   * @endif
+   */
   void Properties::splitKeyValue(const std::string& str, std::string& key,
 				 std::string& value)
   {
@@ -612,10 +597,16 @@ namespace RTC
     value = "";
     return;
   }
-
-
+  
+  /*!
+   * @if jp
+   * @brief 文字列を分割する
+   * @else
+   *
+   * @endif
+   */
   bool Properties::split(const std::string& str, const char delim,
-				std::vector<std::string>& value)
+			 std::vector<std::string>& value)
   {
     if (str.empty()) return false;
     
@@ -636,30 +627,25 @@ namespace RTC
     return true;
   }
   
-
-  std::string indent(int index)
-  {
-    std::string space;
-    for (int i(0); i < index - 1; ++i)
-      {
-	space += "  ";
-      }
-    return space;
-  }
-
-
+  /*!
+   * @if jp
+   * @brief プロパティを取得する
+   * @else
+   *
+   * @endif
+   */
   Properties*
   Properties::_getNode(std::vector<std::string>& keys,
 		       std::vector<Properties*>::size_type index,
 		       const Properties* curr)
   {
     Properties* next(curr->hasKey(keys[index].c_str()));
-
+    
     if (next == NULL)
       {
 	return NULL;
       }
-
+    
     if (index < keys.size() - 1) // node
       {
 	return next->_getNode(keys, ++index, next);
@@ -670,7 +656,14 @@ namespace RTC
       }
     return NULL;
   }
-
+  
+  /*!
+   * @if jp
+   * @brief プロパティの名称リストを取得する
+   * @else
+   *
+   * @endif
+   */
   void
   Properties::_propertiyNames(std::vector<std::string>& names,
 			      std::string curr_name,
@@ -692,7 +685,14 @@ namespace RTC
       }
     return;
   }
-
+  
+  /*!
+   * @if jp
+   * @brief プロパティの名称リストを保存する
+   * @else
+   *
+   * @endif
+   */
   void
   Properties::_store(std::ostream& out, std::string curr_name,
 		     Properties* curr)
@@ -714,8 +714,14 @@ namespace RTC
       }
     return;
   }
-
-
+  
+  /*!
+   * @if jp
+   * @brief プロパティの内容を保存する
+   * @else
+   *
+   * @endif
+   */
   std::ostream&
   Properties::_dump(std::ostream& out, const Properties& curr, int index)
   {
@@ -739,8 +745,14 @@ namespace RTC
       }
     return out;
   }
-
-
+  
+  /*!
+   * @if jp
+   * @brief インデントを生成する
+   * @else
+   *
+   * @endif
+   */
   std::string Properties::indent(int index)
   {
     std::string space;
@@ -750,12 +762,19 @@ namespace RTC
       }
     return space;
   }
-
-
+  
+  std::string indent(int index)
+  {
+    std::string space;
+    for (int i(0); i < index - 1; ++i)
+      {
+	space += "  ";
+      }
+    return space;
+  }
+  
   std::ostream& operator<<(std::ostream& lhs, const Properties& rhs)
   {
     return rhs._dump(lhs, rhs, 0);
   }
-
-
 }; // namespace RTC

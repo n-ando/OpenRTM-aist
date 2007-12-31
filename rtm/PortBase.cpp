@@ -2,22 +2,26 @@
 /*!
  * @file PortBase.h
  * @brief RTC's Port base class
- * @date $Date: 2007-09-20 11:26:03 $
+ * @date $Date: 2007-12-31 03:08:05 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
- * Copyright (C) 2006
+ * Copyright (C) 2006-2008
+ *     Noriaki Ando
  *     Task-intelligence Research Group,
  *     Intelligent Systems Research Institute,
  *     National Institute of
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: PortBase.cpp,v 1.10.2.2 2007-09-20 11:26:03 n-ando Exp $
+ * $Id: PortBase.cpp,v 1.10.2.3 2007-12-31 03:08:05 n-ando Exp $
  *
  */
 
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.10.2.2  2007/09/20 11:26:03  n-ando
+ * A function getPortProfile() was added to get PortProfile locally.
+ *
  * Revision 1.10.2.1  2007/08/20 06:12:34  n-ando
  * A bug that the unsubscribeInterfaces() was called twice was fixed.
  *
@@ -84,7 +88,6 @@ namespace RTC
     m_profile.owner = RTC::RTObject::_nil();
   }
   
-
   /*!
    * @if jp
    * @brief デストラクタ
@@ -95,8 +98,7 @@ namespace RTC
   PortBase::~PortBase()
   {
   }
-
-
+  
   /*!
    * @if jp
    * @brief [CORBA interface] PortProfileを取得する
@@ -111,13 +113,19 @@ namespace RTC
     prof = new PortProfile(m_profile);
     return prof._retn();
   }
-
+  
+  /*!
+   * @if jp
+   * @brief PortProfile を取得する。
+   * @else
+   *
+   * @endif
+   */
   const PortProfile& PortBase::getPortProfile() const
   {
     return m_profile;
   }
-
-
+  
   /*!
    * @if jp
    * @brief [CORBA interface] ConnectorProfileListを取得する
@@ -132,8 +140,7 @@ namespace RTC
     conn_prof = new ConnectorProfileList(m_profile.connector_profiles);
     return conn_prof._retn();
   }
-
-
+  
   /*!
    * @if jp
    * @brief [CORBA interface] ConnectorProfile を取得する
@@ -157,8 +164,7 @@ namespace RTC
     conn_prof = new ConnectorProfile(m_profile.connector_profiles[index]);
     return conn_prof._retn();
   }
-
-
+  
   /*!
    * @if jp
    * @brief [CORBA interface] Port の接続を行う
@@ -185,13 +191,12 @@ namespace RTC
       }
     return RTC::RTC_ERROR;
   }
-
-
+  
   /*!
    * @if jp
-   * @brief [CORBA interface] Port の接続を行う
+   * @brief [CORBA interface] Port の接続通知を行う
    * @else
-   * @brief [CORBA interface] Connect the Port
+   * @brief [CORBA interface] Notify the Ports connection
    * @endif
    */
   ReturnCode_t PortBase::notify_connect(ConnectorProfile& connector_profile)
@@ -200,11 +205,11 @@ namespace RTC
     ReturnCode_t retval;
     retval = publishInterfaces(connector_profile);
     if (retval != RTC::RTC_OK) return retval;
-
+    
     // call notify_connect() of the next Port
     retval = connectNext(connector_profile);
     if (retval != RTC::RTC_OK) return retval;
-
+    
     // subscribe interface from the ConnectorProfile's information
     retval = subscribeInterfaces(connector_profile);
     if (retval != RTC::RTC_OK)
@@ -213,7 +218,7 @@ namespace RTC
 	notify_disconnect(connector_profile.connector_id);
 	return retval;
       }
-
+    
     // update ConnectorProfile
     CORBA::Long index;
     index = findConnProfileIndex(connector_profile.connector_id);
@@ -228,8 +233,7 @@ namespace RTC
       }
     return retval;
   }
-
-
+  
   /*!
    * @if jp
    * @brief [CORBA interface] Port の接続を解除する
@@ -247,11 +251,10 @@ namespace RTC
     CORBA::Long index;
     index = findConnProfileIndex(connector_id);
     ConnectorProfile prof(m_profile.connector_profiles[index]);
-
+    
     return prof.ports[0]->notify_disconnect(connector_id);
   }
-
-
+  
   /*!
    * @if jp
    * @brief [CORBA interface] Port の接続解除通知を行う
@@ -266,28 +269,26 @@ namespace RTC
     // The master Port has the responsibility of disconnecting all Ports.
     // The slave Ports have only responsibility of deleting its own
     // ConnectorProfile.
-
+    
     // find connector_profile
     if (!isExistingConnId(connector_id)) 
       {
-	
 	return RTC::BAD_PARAMETER;
       }
     CORBA::Long index;
     index = findConnProfileIndex(connector_id);
-
+    
     ConnectorProfile prof(m_profile.connector_profiles[index]);
-
+    
     ReturnCode_t retval;
     retval = disconnectNext(prof);
     unsubscribeInterfaces(prof);
-
+    
     CORBA_SeqUtil::erase(m_profile.connector_profiles, index);
     
     return retval;
-  }    
-
-
+  }
+  
   /*!
    * @if jp
    * @brief [CORBA interface] Port の全接続を解除する
@@ -300,15 +301,14 @@ namespace RTC
     Guard gaurd(m_profile_mutex);
     // disconnect all connections
     disconnect_all_func f;
-
+    
     // Call disconnect() for each ConnectorProfile.
     f = CORBA_SeqUtil::for_each(m_profile.connector_profiles,
 				disconnect_all_func(this));
-
+    
     return f.return_code;
   }
   
-
   //============================================================
   // Local operations
   //============================================================
@@ -324,8 +324,7 @@ namespace RTC
     Guard guard(m_profile_mutex);
     m_profile.name = CORBA::string_dup(name);
   }
-
-
+  
   /*!
    * @if jp
    * @brief PortProfileを取得する
@@ -338,8 +337,7 @@ namespace RTC
     Guard guard(m_profile_mutex);
     return m_profile;
   }
-
-
+  
   /*!
    * @if jp
    * @brief Port のオブジェクト参照を設定する
@@ -352,23 +350,20 @@ namespace RTC
     Guard gurad(m_profile_mutex);
     m_profile.port_ref = port_ref;
   }
-
-
-   /*!
-    * @if jp
-    * @brief Port のオブジェクト参照を取得する
-    * @else
-    * @brief Get the object reference of this Port
-    * @endif
-    */
+  
+  /*!
+   * @if jp
+   * @brief Port のオブジェクト参照を取得する
+   * @else
+   * @brief Get the object reference of this Port
+   * @endif
+   */
   Port_ptr PortBase::getPortRef()
   {
     Guard gurad(m_profile_mutex);
     return m_profile.port_ref;
   }
-
-
-
+  
   /*!
    * @if jp
    * @brief Port の owner の RTObject を指定する
@@ -379,11 +374,9 @@ namespace RTC
   void PortBase::setOwner(RTObject_ptr owner)
   {
     Guard gurad(m_profile_mutex); 
-
     m_profile.owner = owner;
   }
-
-
+  
   //============================================================
   // protected operations
   //============================================================
@@ -409,9 +402,8 @@ namespace RTC
 	return p->notify_connect(connector_profile);
       }
     return RTC::RTC_OK;
-  }				  
+  }
   
-
   /*!
    * @if jp
    * @brief 次の Port に対して notify_disconnect() をコールする
@@ -433,9 +425,8 @@ namespace RTC
 	return p->notify_disconnect(connector_profile.connector_id);
       }
     return RTC::RTC_OK;
-  }				  
-
-
+  }
+  
   //============================================================
   // protected utility functions
   //============================================================
@@ -451,7 +442,7 @@ namespace RTC
     return connector_profile.connector_id[(CORBA::ULong)0] == 0;
   }
   
-
+  
   /*!
    * @if jp
    * @brief UUIDを生成する
@@ -468,7 +459,6 @@ namespace RTC
     return std::string(uuid->to_string()->c_str());
   }
   
-
   /*!
    * @if jp
    * @brief UUIDを生成し ConnectorProfile にセットする
@@ -482,7 +472,6 @@ namespace RTC
     assert(connector_profile.connector_id[(CORBA::ULong)0] != 0);
   }
   
-
   /*!
    * @if jp
    * @brief id が既存の ConnectorProfile のものかどうか判定する
@@ -495,8 +484,7 @@ namespace RTC
     return CORBA_SeqUtil::find(m_profile.connector_profiles,
 			       find_conn_id(id)) >= 0;
   }
-
-
+  
   /*!
    * @if jp
    * @brief id を持つ ConnectorProfile を探す
@@ -512,7 +500,6 @@ namespace RTC
     return m_profile.connector_profiles[index];
   }
   
-
   /*!
    * @if jp
    * @brief id を持つ ConnectorProfile を探す
@@ -526,7 +513,6 @@ namespace RTC
 			       find_conn_id(id));
   }
   
-
   /*!
    * @if jp
    * @brief ConnectorProfile の追加もしくは更新
@@ -552,7 +538,6 @@ namespace RTC
       }
   }
   
-
   /*!
    * @if jp
    * @brief ConnectorProfile を削除する
@@ -568,12 +553,11 @@ namespace RTC
     index = CORBA_SeqUtil::find(m_profile.connector_profiles,
 				find_conn_id(id));
     if (index < 0) return false;
-
+    
     CORBA_SeqUtil::erase(m_profile.connector_profiles, index);
     return true;
   }
-
-
+  
   /*!
    * @if jp
    * @brief PortInterfaceProfile に インターフェースを登録する
@@ -599,7 +583,6 @@ namespace RTC
     
     return true;
   }
-
   
   /*!
    * @if jp
@@ -619,5 +602,5 @@ namespace RTC
     CORBA_SeqUtil::erase(m_profile.interfaces, index);
     return true;
   }
-
+  
 }; // namespace RTC

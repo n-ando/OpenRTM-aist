@@ -2,22 +2,26 @@
 /*!
  * @file PortAdmin.h
  * @brief RTC's Port administration class
- * @date $Date: 2007-09-20 11:25:11 $
+ * @date $Date: 2007-12-31 03:08:05 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
- * Copyright (C) 2006
+ * Copyright (C) 2006-2008
+ *     Noriaki Ando
  *     Task-intelligence Research Group,
  *     Intelligent Systems Research Institute,
  *     National Institute of
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: PortAdmin.h,v 1.6.4.1 2007-09-20 11:25:11 n-ando Exp $
+ * $Id: PortAdmin.h,v 1.6.4.2 2007-12-31 03:08:05 n-ando Exp $
  *
  */
 
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.6.4.1  2007/09/20 11:25:11  n-ando
+ * A function getPortProfileList() was added to get PortProfileList locally.
+ *
  * Revision 1.6  2007/01/21 10:28:09  n-ando
  * Some trivial fixes.
  *
@@ -45,27 +49,63 @@
 #include <rtm/idl/RTCSkel.h>
 #include <rtm/PortBase.h>
 #include <rtm/ObjectManager.h>
-// 68608 10 17 23:51 PortAdmin.o
-// 54272 10 29 00:53 PortAdmin.o
-// 54132 10 29 00:54 PortAdmin.o
+
 namespace RTC
 {
-
-
+  /*!
+   * @if jp
+   * @class PortAdmin
+   * @brief PortAdmin クラス
+   *
+   * 各種 Port の管理を行うクラス。
+   * Port の登録/登録解除など各種管理操作を実行するとともに、登録されている Port
+   * Port の管理を行うクラス。
+   *
+   * @since 0.4.0
+   *
+   * @else
+   * @class PortAdmin
+   * @brief PortAdmin class
+   * @endif
+   */
   class PortAdmin
   {
   public:
-    PortAdmin(CORBA::ORB_ptr, PortableServer::POA_ptr poa);
+    /*!
+     * @if jp
+     * @brief コンストラクタ
+     *
+     * コンストラクタ
+     *
+     * @param orb ORB
+     * @param poa POA
+     *
+     * @else
+     * @brief Constructor
+     * @endif
+     */
+    PortAdmin(CORBA::ORB_ptr orb, PortableServer::POA_ptr poa);
+    
+    /*!
+     * @if jp
+     * @brief デストラクタ
+     *
+     * デストラクタ
+     *
+     * @else
+     * @brief Destructor
+     * @endif
+     */
     virtual ~PortAdmin(){};
-
+    
     /*!
      * @if jp
      *
-     * @brief PortList の取得
+     * @brief Port リストの取得
      *
-     * registerPort() により登録された Port の PortList へのポインタを返す。
+     * registerPort() により登録された Port の リストを取得する。
      *
-     * @return PortList* PortList へのポインタ
+     * @return Port リスト
      *
      * @else
      *
@@ -79,8 +119,22 @@ namespace RTC
      * @endif
      */
     PortList* getPortList() const;
-
+    
+    /*!
+     * @if jp
+     *
+     * @brief PorProfile リストの取得
+     *
+     * registerPort() により登録された Port の Profile リストを取得する。
+     *
+     * @return PortProfile リスト
+     *
+     * @else
+     *
+     * @endif
+     */
     PortProfileList getPortProfileList() const;
+    
     /*!
      * @if jp
      *
@@ -91,6 +145,7 @@ namespace RTC
      * なければならない。
      *
      * @param port_name 参照を返すPortの名前
+     *
      * @return Port_ptr Portのオブジェクト参照
      *
      * @else
@@ -101,13 +156,13 @@ namespace RTC
      * by registerPort().
      *
      * @param port_name The name of Port to be returned the reference.
+     *
      * @return Port_ptr Port's object reference.
      *
      * @endif
      */
     Port_ptr getPortRef(const char* port_name) const;
-
-
+    
     /*!
      * @if jp
      *
@@ -118,6 +173,7 @@ namespace RTC
      * なければならない。
      *
      * @param port_name 参照を返すPortの名前
+     *
      * @return PortBase* Portサーバント基底クラスのポインタ
      *
      * @else
@@ -128,13 +184,13 @@ namespace RTC
      * by registerPort().
      *
      * @param port_name The name of Port to be returned the servant pointer.
+     *
      * @return PortBase* Port's servant's pointer.
      *
      * @endif
      */
     PortBase* getPort(const char* port_name) const;
-
-
+    
     /*!
      * @if jp
      *
@@ -160,14 +216,13 @@ namespace RTC
      * @endif
      */
     void registerPort(PortBase& port);
-
-
+    
     /*!
      * @if jp
      *
-     * @brief Port の登録を削除する
+     * @brief Port の登録を解除する
      *
-     * 引数 port で指定された Port の登録を削除する。
+     * 引数 port で指定された Port の登録を解除する。
      * 削除時に Port は deactivate され、PortのProfileのリファレンスには、
      * nil値が代入される。
      *
@@ -186,11 +241,11 @@ namespace RTC
      * @endif
      */
     void deletePort(PortBase& port);
-
+    
     /*!
      * @if jp
      *
-     * @brief Port の登録を削除する
+     * @brief 名称指定によりPort の登録を解除する
      *
      * 引数で指定された名前を持つ Port の登録を削除する。
      * 削除時に Port は deactivate され、PortのProfileのリファレンスには、
@@ -211,8 +266,7 @@ namespace RTC
      * @endif
      */
     void deletePortByName(const char* port_name);
-
-
+    
     /*!
      * @if jp
      *
@@ -231,25 +285,24 @@ namespace RTC
      * @endif
      */
     void finalizePorts();
-
+    
   private:
     // ORB へのポインタ
     CORBA::ORB_var m_pORB;
-
+    
     // POA へのポインタ
     PortableServer::POA_var m_pPOA;
-
+    
     // Portのオブジェクトリファレンスのリスト. PortList
     PortList m_portRefs;
-
-
+    
+    
     template <class T>
     class comp_op
     {
     public:
       comp_op(const char* _name)
-	:
-	m_name(_name)
+	: m_name(_name)
       {
       }
       comp_op(T* obj) 
@@ -264,7 +317,7 @@ namespace RTC
     private:
       std::string m_name;
     };
-
+    
     class port_prof_collect
     {
     public:
@@ -279,11 +332,10 @@ namespace RTC
     
     struct find_port_name;
     struct del_port;
-
+    
     // サーバントを直接格納するオブジェクトマネージャ
     ObjectManager<const char*, PortBase, comp_op<PortBase> > m_portServants;
-
-
+    
   };
 };     // namespace RTC
 #endif // PortAdmin_h

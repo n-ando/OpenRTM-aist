@@ -2,10 +2,10 @@
 /*!
  * @file CorbaObjManager.h
  * @brief CORBA Object manager class
- * @date $Date: 2006-11-04 19:57:05 $
+ * @date $Date: 2007-12-31 03:08:02 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
- * Copyright (C) 2006
+ * Copyright (C) 2006-2008
  *     Noriaki Ando
  *     Task-intelligence Research Group,
  *     Intelligent Systems Research Institute,
@@ -13,12 +13,15 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: CorbaObjectManager.h,v 1.2 2006-11-04 19:57:05 n-ando Exp $
+ * $Id: CorbaObjectManager.h,v 1.2.4.1 2007-12-31 03:08:02 n-ando Exp $
  *
  */
 
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.2  2006/11/04 19:57:05  n-ando
+ * Kanji-code was converted into EUC.
+ *
  * Revision 1.1  2006/11/04 19:54:48  n-ando
  * CORBA object activation class was created.
  *
@@ -30,12 +33,31 @@
 #include <rtm/RTC.h>
 #include <rtm/RTObject.h>
 
+/*!
+ * @if jp
+ * @namespace RTC
+ *
+ * @brief RTコンポーネント
+ *
+ * @else
+ *
+ * @namespace RTC
+ *
+ * @endif
+ */
 namespace RTC
 {
   /*!
    * @if jp
    * @class CorbaObjectManager
    * @brief CORBA オブジェクトをアクティブ化、非アクティブ化する
+   *
+   * RTObjectのアクティブ化，非アクティブ化を行うクラスである。
+   * 保持しているORB，POAを用いて CORBA オブジェクトのアクティブ化，
+   * 非アクティブ化を行う。
+   *
+   * @since 0.4.0
+   *
    * @else
    * @class CorbaObjectManager
    * @brief Activate and deactivate CORBA objects
@@ -46,37 +68,58 @@ namespace RTC
   public:
     /*!
      * @if jp
+     *
      * @brief コンストラクタ
+     *
+     * @param orb ORB
+     * @param poa POA
+     *
      * @else
-     * @brief Constructor
+     *
+     * @brief Consructor
+     *
+     * @param orb ORB
+     *
      * @endif
      */
     CorbaObjectManager(CORBA::ORB_ptr orb, PortableServer::POA_ptr poa);
-
-
+    
     /*!
      * @if jp
-     * @brief デストラクタ
+     *
+     * @brief 仮想デストラクタ
+     * 
      * @else
-     * @brief Destructor
+     * 
+     * @brief virtual destructor
+     * 
      * @endif
      */
     virtual ~CorbaObjectManager() {};
-
-
+    
     /*!
      * @if jp
      * @brief CORBA オブジェクトをアクティブ化する
+     *
+     * 指定されたRTObjectを CORBA オブジェクトとしてアクティブ化し、
+     * オブジェクトリファレンスを設定する。
+     *
+     * @param comp アクティブ化対象RTObject
+     *
      * @else
      * @brief Activate CORBA object
      * @endif
      */
     void activate(RTObject_impl* comp);
-
-
+    
     /*!
      * @if jp
      * @brief CORBA オブジェクトを非アクティブ化する
+     *
+     * 指定されたRTObjectの非アクティブ化を行う
+     *
+     * @param comp 非アクティブ化対象RTObject
+     *
      * @else
      * @brief Deactivate CORBA object
      * @endif
@@ -90,5 +133,3 @@ namespace RTC
 }; // namespace RTC
 
 #endif // CoabrObjectManager
-
-

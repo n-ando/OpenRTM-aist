@@ -2,22 +2,26 @@
 /*!
  * @file DefaultConfiguration.h
  * @brief RTC manager default configuration
- * @date $Date: 2007-04-27 06:13:27 $
+ * @date $Date: 2007-12-31 03:08:03 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
- * Copyright (C) 2006
+ * Copyright (C) 2006-2008
+ *     Noriaki Ando
  *     Task-intelligence Research Group,
  *     Intelligent Systems Research Institute,
  *     National Institute of
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: DefaultConfiguration.h,v 1.5 2007-04-27 06:13:27 n-ando Exp $
+ * $Id: DefaultConfiguration.h,v 1.5.2.1 2007-12-31 03:08:03 n-ando Exp $
  *
  */
 
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.5  2007/04/27 06:13:27  n-ando
+ * Configuration: naming_format to naming.format, name_svc to naming.
+ *
  * Revision 1.4  2007/04/13 18:16:47  n-ando
  * New default configuration values are added.
  *
@@ -35,6 +39,17 @@
 
 #include "rtm/version.h"
 
+/*!
+ * @if jp
+ * @brief Manager 用 デフォルト・コンフィギュレーション
+ *
+ * Managerクラス用デフォルトコンフィギュレーション。
+ *
+ * @since 0.4.0
+ *
+ * @else
+ * @endif
+ */
 static const char* default_config[] =
   {
     "config.version",         openrtm_version,

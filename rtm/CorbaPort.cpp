@@ -2,10 +2,10 @@
 /*!
  * @file  CorbaPort.h
  * @brief CorbaPort class
- * @date  $Date: 2007-04-13 15:37:33 $
+ * @date  $Date: 2007-12-31 03:08:02 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
- * Copyright (C) 2006
+ * Copyright (C) 2006-2008
  *     Noriaki Ando
  *     Task-intelligence Research Group,
  *     Intelligent Systems Research Institute,
@@ -13,12 +13,15 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: CorbaPort.cpp,v 1.3 2007-04-13 15:37:33 n-ando Exp $
+ * $Id: CorbaPort.cpp,v 1.3.2.1 2007-12-31 03:08:02 n-ando Exp $
  *
  */
 
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.3  2007/04/13 15:37:33  n-ando
+ * RTC::OK was changed to RTC::RTC_OK.
+ *
  * Revision 1.2  2007/01/21 17:16:34  n-ando
  * PortProfile.properties = {"port.port_type": "CorbaPort"}
  *
@@ -48,20 +51,18 @@ namespace RTC
   {
     addProperty("port.port_type", "CorbaPort");
   }
-
-
+  
   /*!
    * @if jp
-   * @brief デストラクタ
+   * @brief 仮想デストラクタ
    * @else
-   * @brief Destructor
+   * @brief Virtual Destructor
    * @endif
    */
   CorbaPort::~CorbaPort()
   {
   }
-
-
+  
   /*!
    * @if jp
    * @brief Provider を登録する
@@ -90,13 +91,12 @@ namespace RTC
     std::string key("port");
     key.append(".");key.append(type_name);
     key.append(".");key.append(instance_name);
-
+    
     CORBA_SeqUtil::
       push_back(m_providers, NVUtil::newNV(key.c_str(), obj));
-
+    
     return true;
   };
-  
   
   /*!
    * @if jp
@@ -117,12 +117,10 @@ namespace RTC
     
     Consumer cons(instance_name, type_name, consumer);
     m_consumers.push_back(cons);
-
+    
     return true;
   }
   
-
-
   //============================================================
   // protected functions
   //============================================================
@@ -140,8 +138,7 @@ namespace RTC
 				  m_providers);
     return RTC::RTC_OK;
   }
-
-
+  
   /*!
    * @if jp
    * @brief Interface に接続する
@@ -153,12 +150,11 @@ namespace RTC
   CorbaPort::subscribeInterfaces(const ConnectorProfile& connector_profile)
   {
     const NVList& nv(connector_profile.properties);
-
+    
     CORBA_SeqUtil::for_each(nv, subscribe(m_consumers));
     return RTC::RTC_OK;
   }
-
-
+  
   /*!
    * @if jp
    * @brief Interface への接続を解除する
@@ -173,5 +169,5 @@ namespace RTC
     
     CORBA_SeqUtil::for_each(nv, unsubscribe(m_consumers));
   }
-
+  
 };

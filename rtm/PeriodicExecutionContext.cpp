@@ -2,22 +2,26 @@
 /*!
  * @file PeriodicExecutionContext.cpp
  * @brief PeriodicExecutionContext class
- * @date $Date: 2007-09-20 11:22:45 $
+ * @date $Date: 2007-12-31 03:08:05 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
- * Copyright (C) 2006
+ * Copyright (C) 2006-2008
+ *     Noriaki Ando
  *     Task-intelligence Research Group,
  *     Intelligent Systems Research Institute,
  *     National Institute of
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: PeriodicExecutionContext.cpp,v 1.5.2.3 2007-09-20 11:22:45 n-ando Exp $
+ * $Id: PeriodicExecutionContext.cpp,v 1.5.2.4 2007-12-31 03:08:05 n-ando Exp $
  *
  */
 
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.5.2.3  2007/09/20 11:22:45  n-ando
+ * A trivial fix.
+ *
  * Revision 1.5.2.2  2007/09/19 07:44:37  n-ando
  * The usleep() in the execution loop will be skipped, if wait-time is 0.
  *
@@ -48,6 +52,13 @@
 
 namespace RTC
 {
+  /*!
+   * @if jp
+   * @brief デフォルトコンストラクタ
+   * @else
+   * 
+   * @endif
+   */
   PeriodicExecutionContext::
   PeriodicExecutionContext()
     : m_running(false), m_nowait(false)
@@ -57,8 +68,14 @@ namespace RTC
     m_usec = (long int)0;
     m_ref = this->_this();
   }
-
-
+  
+  /*!
+   * @if jp
+   * @brief コンストラクタ
+   * @else
+   * 
+   * @endif
+   */
   PeriodicExecutionContext::
   PeriodicExecutionContext(DataFlowComponent_ptr owner,
 			   double rate)
@@ -71,20 +88,30 @@ namespace RTC
     if (m_usec == 0) m_nowait = true;
     m_ref = this->_this();
   }
-
-
+  
+  /*!
+   * @if jp
+   * @brief デストラクタ
+   * @else
+   * 
+   * @endif
+   */
   PeriodicExecutionContext::~PeriodicExecutionContext()
   {
     ;
   }
-
-
   
-
   /*------------------------------------------------------------
    * Start activity
    * ACE_Task class method over ride.
    *------------------------------------------------------------*/
+  /*!
+   * @if jp
+   * @brief ExecutionContext用アクティビティスレッドを生成する
+   * @else
+   * 
+   * @endif
+   */
   int PeriodicExecutionContext::open(void *args)
   {
     //    RTC_TRACE(("RtcBase::open()"));
@@ -94,11 +121,17 @@ namespace RTC
     return 0;
   }
   
-  
   /*------------------------------------------------------------
    * Run by a daemon thread to handle deferred processing
    * ACE_Task class method over ride.
    *------------------------------------------------------------*/
+  /*!
+   * @if jp
+   * @brief ExecutionContext 用のスレッド実行関数
+   * @else
+   * 
+   * @endif
+   */
   int PeriodicExecutionContext::svc(void)
   {
     //    RTC_TRACE(("RtcBase::svc()"));
@@ -114,7 +147,13 @@ namespace RTC
     return 0;
   }
   
-  
+  /*!
+   * @if jp
+   * @brief ExecutionContext 用のスレッド実行関数
+   * @else
+   * 
+   * @endif
+   */
   int PeriodicExecutionContext::close(unsigned long flags)
   {
     //    RTC_TRACE(("RtcBase::close()"));
@@ -125,28 +164,25 @@ namespace RTC
     return 0;
   }
   
-
-
-
+  
   //============================================================
   // ExecutionContext
   //============================================================
   /*!
    * @if jp
-   * @brief ExecutionContext が実行中かどうかのテスト
+   * @brief ExecutionContext 実行状態確認関数
    * @else
-   * @brief Test for ExecutionContext running state
+   * @brief Check for ExecutionContext running state
    * @endif
    */
   CORBA::Boolean PeriodicExecutionContext::is_running()
   {
     return m_running;
   }
-
-
+  
   /*!
    * @if jp
-   * @brief ExecutionContext をスタートさせる
+   * @brief ExecutionContext の実行を開始
    * @else
    * @brief Start the ExecutionContext
    * @endif
@@ -154,21 +190,20 @@ namespace RTC
   ReturnCode_t PeriodicExecutionContext::start()
   {
     if (m_running) return RTC::PRECONDITION_NOT_MET;
-
+    
     // invoke ComponentAction::on_startup for each comps.
     std::for_each(m_comps.begin(), m_comps.end(), invoke_on_startup());
-
+    
     // change EC thread state
     m_running = true;
     this->open(0);
-
+    
     return RTC::RTC_OK;
   }
   
-
   /*!
    * @if jp
-   * @brief ExecutionContext をストップさせる
+   * @brief ExecutionContext の実行を停止
    * @else
    * @brief Stop the ExecutionContext
    * @endif
@@ -176,16 +211,16 @@ namespace RTC
   ReturnCode_t PeriodicExecutionContext::stop()
   {
     if (!m_running) return RTC::PRECONDITION_NOT_MET;
-
+    
     // invoke on_shutdown for each comps.
     std::for_each(m_comps.begin(), m_comps.end(), invoke_on_shutdown());
-
+    
     // change EC thread state
     m_running = false;
-
+    
     return RTC::RTC_OK;
   }
-
+  
   /*!
    * @if jp
    * @brief 実行周期(Hz)を取得する
@@ -197,11 +232,10 @@ namespace RTC
   {
     return m_profile.rate;
   }
-
-
+  
   /*!
    * @if jp
-   * @brief 実行周期(Hz)を与える 
+   * @brief 実行周期(Hz)を設定する 
    * @else
    * @brief Set rate (Hz)
    * @endif
@@ -218,13 +252,12 @@ namespace RTC
       }
     return RTC::BAD_PARAMETER;
   }
-
-
+  
   /*!
    * @if jp
-   * @brief コンポーネントをアクティブ化する
+   * @brief RTコンポーネントをアクティブ化する
    * @else
-   * @brief Activate a component
+   * @brief Activate a RT-component
    * @endif
    */ 
   ReturnCode_t
@@ -233,23 +266,22 @@ namespace RTC
     // コンポーネントが参加者リストに無ければ BAD_PARAMETER を返す
     CompItr it;
     it = std::find_if(m_comps.begin(), m_comps.end(),
-    		      find_comp(LightweightRTObject::_duplicate(comp)));
+		      find_comp(LightweightRTObject::_duplicate(comp)));
     if (it == m_comps.end())
       return RTC::BAD_PARAMETER;
-
+    
     if (!(it->_sm.m_sm.isIn(INACTIVE_STATE)))
       return RTC::PRECONDITION_NOT_MET;
-
+    
     it->_sm.m_sm.goTo(ACTIVE_STATE);
     return RTC::RTC_OK;
   }
   
-
   /*!
    * @if jp
-   * @brief コンポーネントを非アクティブ化する
+   * @brief RTコンポーネントを非アクティブ化する
    * @else
-   * @brief Deactivate a component
+   * @brief Deactivate a RT-component
    * @endif
    */  
   ReturnCode_t
@@ -260,7 +292,7 @@ namespace RTC
 		      find_comp(RTC::LightweightRTObject::_duplicate(comp)));
     if (it == m_comps.end())
       return RTC::BAD_PARAMETER;
-
+    
     if (!(it->_sm.m_sm.isIn(ACTIVE_STATE)))
       return RTC::PRECONDITION_NOT_MET;
     
@@ -268,12 +300,11 @@ namespace RTC
     return RTC::RTC_OK;
   }
   
-  
   /*!
    * @if jp
-   * @brief コンポーネントを非アクティブ化する
+   * @brief RTコンポーネントをリセットする
    * @else
-   * @brief Deactivate a component
+   * @brief Reset a RT-component
    * @endif
    */  
   ReturnCode_t
@@ -284,7 +315,7 @@ namespace RTC
 		      find_comp(RTC::LightweightRTObject::_duplicate(comp)));
     if (it == m_comps.end())
       return RTC::BAD_PARAMETER;
-
+    
     if (!(it->_sm.m_sm.isIn(ERROR_STATE)))
       return RTC::PRECONDITION_NOT_MET;
     
@@ -292,12 +323,11 @@ namespace RTC
     return RTC::RTC_OK;
   }
   
-
   /*!
    * @if jp
-   * @brief コンポーネントの状態を取得する
+   * @brief RTコンポーネントの状態を取得する
    * @else
-   * @brief Get component's state
+   * @brief Get RT-component's state
    * @endif
    */
   LifeCycleState
@@ -308,10 +338,10 @@ namespace RTC
 		      find_comp(RTC::LightweightRTObject::_duplicate(comp)));
     if (it == m_comps.end())
       return RTC::UNKNOWN_STATE;
-
+    
     return it->_sm.m_sm.getState();
   }
-
+  
   /*!
    * @if jp
    * @brief ExecutionKind を取得する
@@ -326,23 +356,23 @@ namespace RTC
   
   /*!
    * @if jp
-   * @brief コンポーネントを追加する
+   * @brief RTコンポーネントを追加する
    * @else
-   * @brief Add a component
+   * @brief Add a RT-component
    * @endif
    */
   ReturnCode_t PeriodicExecutionContext::add(LightweightRTObject_ptr comp)
   {
     if (CORBA::is_nil(comp)) return RTC::BAD_PARAMETER;
-
+    
     try
       {
 	DataFlowComponent_ptr dfp;
 	dfp = DataFlowComponent::_narrow(comp);
-
+	
 	UniqueId id;
 	id = dfp->attach_executioncontext(m_ref);
-
+	
 	m_comps.push_back(Comp(LightweightRTObject::_duplicate(comp),
 			       DataFlowComponent::_duplicate(dfp), id));
 	return RTC::RTC_OK;
@@ -354,7 +384,6 @@ namespace RTC
       }
     return RTC::RTC_OK;
   }
-  
   
   /*!
    * @if jp
@@ -371,16 +400,14 @@ namespace RTC
 		      find_comp(RTC::LightweightRTObject::_duplicate(comp)));
     if (it == m_comps.end())
       return RTC::BAD_PARAMETER;
-
+    
     m_comps.erase(it);
-
+    
     return RTC::RTC_OK;
   }
-
-
-
+  
   //============================================================
-  // ExecutionContextAdmin interfaces
+  // ExecutionContextService interfaces
   //============================================================
   /*!
    * @if jp
@@ -404,7 +431,6 @@ extern "C"
     manager->registerECFactory("PeriodicExecutionContext",
 			       RTC::ECCreate<RTC::PeriodicExecutionContext>,
 			       RTC::ECDelete<RTC::PeriodicExecutionContext>);
-    
   }
 };
 

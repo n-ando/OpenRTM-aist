@@ -2,22 +2,26 @@
 /*!
  * @file Properties.h
  * @brief Property list class (derived from Java Properties)
- * @date $Date: 2007-04-24 01:24:32 $
+ * @date $Date: 2007-12-31 03:08:06 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
- * Copyright (C) 2006
+ * Copyright (C) 2006-2008
+ *     Noriaki Ando
  *     Task-intelligence Research Group,
  *     Intelligent Systems Research Institute,
  *     National Institute of
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: Properties.h,v 1.7 2007-04-24 01:24:32 n-ando Exp $
+ * $Id: Properties.h,v 1.7.2.1 2007-12-31 03:08:06 n-ando Exp $
  *
  */
 
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.7  2007/04/24 01:24:32  n-ando
+ * createNode() was added.
+ *
  * Revision 1.6  2007/04/23 04:56:43  n-ando
  * Some fixes about const.
  *
@@ -57,6 +61,7 @@ namespace RTC
    * @if jp
    *
    * @class Properties
+   * @brief プロパティセットを表現するクラス
    *
    * Properties クラスは、不変のプロパティセットを表す。Properties をストリーム
    * に保管したり、ストリームからロードしたりすることができる。
@@ -69,13 +74,15 @@ namespace RTC
    * プロパティの取得には getProperty、プロパティのセットには setProperty と
    * いったメソッドを使用することが推奨される。
    *
-   * プロパティをストリームに保存するとき、またはストリームからロードするときに、
-   * ISO 8859-1 文字エンコーディングが使用される。このエンコーディングに直接表示
-   * できない文字は、扱うことができない。
+   * プロパティをストリームに保存するとき、またはストリームからロードするとき
+   * に、ISO 8859-1 文字エンコーディングが使用される。このエンコーディングに
+   * 直接表示できない文字は、扱うことができない。
    *
    * このクラスは、Java の Properties クラス (java.util.Properties) とほぼ同様の
    * メソッドを持つ。また、入出力されるファイルは Java の Properties クラスが
    * 出力するものと互換性があるが、Unicode を含むものは扱うことができない。
+   *
+   * @since 0.4.0
    *
    * @else
    *
@@ -90,11 +97,11 @@ namespace RTC
    * original property list. 
    *
    * Because Properties inherits from Hashtable, the put and putAll methods can
-   * be applied to a Properties object. Their use is strongly discouraged as they
-   * allow the caller to insert entries whose keys or values are not Strings. The
-   * setProperty method should be used instead. If the store or save method is
-   * called on a "compromised" Properties object that contains a non-String key
-   * or value, the call will fail. 
+   * be applied to a Properties object. Their use is strongly discouraged as 
+   * they allow the caller to insert entries whose keys or values are not 
+   * Strings. The setProperty method should be used instead. If the store or 
+   * save method is called on a "compromised" Properties object that contains a 
+   * non-String key or value, the call will fail. 
    *
    * The load and store methods load and store properties in a simple
    * line-oriented format specified below. This format uses the ISO 8859-1
@@ -119,6 +126,9 @@ namespace RTC
      *
      * key と value のみを与えて Property のルートノードを作成する。
      * 値は全てデフォルト値として設定される。
+     *
+     * @param key プロパティのキー(デフォルト値:"")
+     * @param value プロパティの値(デフォルト値:"")
      * 
      * @else
      *
@@ -130,7 +140,6 @@ namespace RTC
      */
     Properties(const char* key = "", const char* value = "");
     
-    
     /*!
      * @if jp
      *
@@ -138,6 +147,8 @@ namespace RTC
      *
      * std::string の std::map をデフォルト値にもつPropertiesを作成する。
      * 値は全てデフォルト値として設定される。
+     * 
+     * @param defaults デフォルト値として指定されるmap
      * 
      * @else
      *
@@ -149,7 +160,6 @@ namespace RTC
      */
     Properties(std::map<std::string, std::string>& defaults);
     
-    
     /*!
      * @if jp
      *
@@ -157,9 +167,9 @@ namespace RTC
      *
      * 指定されたデフォルト値を持つ空のプロパティリストを作成する。
      * 値は全てデフォルト値として設定される。
-     * デフォルト値は char* の配列により与えられ、key と value の対になっており、
-     * リストの終端は配列の数を表す引数 num か、空文字の key で与えらられなければ
-     * ならない。
+     * デフォルト値は char* の配列により与えられ、key と value の対になって
+     * おり、リストの終端は配列の数を表す引数 num か、空文字の key で与えらられ
+     * なければならない。
      * 以下に例を示す。
      *
      * const char* defaults = {
@@ -172,6 +182,9 @@ namespace RTC
      * Properties p(defaults);
      * // もしくは
      * Properties p(defaults, 10);
+     * 
+     * @param defaults デフォルト値を指定する配列
+     * @param num デフォルト値を設定する要素数(デフォルト値:LONG_MAX)
      * 
      * @else
      *
@@ -198,7 +211,6 @@ namespace RTC
      */
     Properties(const char* defaults[], long num = LONG_MAX);
     
-    
     /*!
      * @if jp
      * @brief コピーコンストラクタ
@@ -216,8 +228,7 @@ namespace RTC
      * @endif
      */
     Properties(const Properties& prop);
-
-
+    
     /*!
      * @if jp
      * @brief 代入演算子
@@ -235,7 +246,6 @@ namespace RTC
      */
     Properties& operator=(const Properties& prop);
     
-
     /*!
      * @if jp
      *
@@ -249,18 +259,80 @@ namespace RTC
      */
     virtual ~Properties();
     
-
     //============================================================
     // public functions
     //============================================================
     
-
+    /*!
+     * @if jp
+     * @brief Name の取得
+     *
+     * プロパティの名称を取得する。
+     *
+     * @return プロパティ名
+     *
+     * @else
+     *
+     * @endif
+     */
     inline const char* getName() const          {return name.c_str();}
+    
+    /*!
+     * @if jp
+     * @brief 値の取得
+     *
+     * プロパティの値を取得する。
+     *
+     * @return プロパティ値
+     *
+     * @else
+     *
+     * @endif
+     */
     inline const char* getVlue() const         {return value.c_str();}
+    
+    /*!
+     * @if jp
+     * @brief デフォルト値の取得
+     *
+     * プロパティのデフォルト値を取得する。
+     *
+     * @return プロパティデフォルト値
+     *
+     * @else
+     *
+     * @endif
+     */
     inline const char* getDefaultValue() const {return default_value.c_str();}
+    
+    /*!
+     * @if jp
+     * @brief 子要素の取得
+     *
+     * プロパティの子要素を取得する。
+     *
+     * @return 子要素
+     *
+     * @else
+     *
+     * @endif
+     */
     inline const std::vector<Properties*>& getLeaf() const {return leaf;}
+    
+    /*!
+     * @if jp
+     * @brief ルート要素の取得
+     *
+     * プロパティのルート要素を取得する。
+     *
+     * @return ルート要素
+     *
+     * @else
+     *
+     * @endif
+     */
     inline const Properties* getRoot() const    {return root;}
-
+    
     /*!
      * @if jp
      *
@@ -272,6 +344,7 @@ namespace RTC
      * そのプロパティが見つからない場合は、null が返される。 
      *
      * @param key プロパティキー
+     *
      * @return 指定されたキー値を持つこのプロパティリストの値
      *
      * @else
@@ -284,25 +357,24 @@ namespace RTC
      * if the property is not found. 
      *
      * @param key the property key.
+     *
      * @return the value in this property list with the specified key value.
      *
      * @endif
      */
     const std::string& getProperty(const std::string& key) const;
     
-
     /*!
      * @if jp
      *
      * @brief 指定されたキーを持つプロパティを、プロパティリストから探す。 
      *
      * 指定されたキーを持つプロパティを、プロパティリストから探す。
-     * そのキーがプロパティリストにないと、デフォルトのプロパティリスト、
-     * さらにそのデフォルト値が繰り返し調べられる。
-     * そのプロパティが見つからない場合は、デフォルト値の引数が返される。 
+     * そのキーがプロパティリストにない場合は、デフォルト値の引数が返される。 
      *
      * @param key プロパティキー
-     * @param defaultValue デフォルト値
+     * @param def デフォルト値
+     *
      * @return 指定されたキー値を持つこのプロパティリストの値
      *
      * @else
@@ -310,19 +382,19 @@ namespace RTC
      * @brief Searches for the property with the specified key in this property
      *
      * Searches for the property with the specified key in this property list.
-     * If the key is not found in this property list, the default property list,
-     * and its defaults, recursively, are then checked. The method returns the
-     * default value argument if the property is not found.
+     * The method returns the default value argument if the property is not 
+     * found.
      *
      * @param key the property key
      * @param defaultValue a default value. 
+     *
      * @return the value in this property list with the specified key value.
      *
      * @endif
      */
     const std::string& getProperty(const std::string& key,
-			     const std::string& def) const;
-
+				   const std::string& def) const;
+    
     /*!
      * @if jp
      *
@@ -333,6 +405,7 @@ namespace RTC
      * さらに見つからなければ、空文字を返す。
      *
      * @param key プロパティキー
+     *
      * @return 指定されたキー値を持つこのプロパティリストの値
      *
      * @else
@@ -341,18 +414,17 @@ namespace RTC
      *
      * Searches for the property with the specified key in this property list.
      * If the key is not found in this property list, the default property list,
-     * and its defaults, recursively, are then checked. The method returns the
-     * default value argument if the property is not found.
+     * and its defaults, recursively, are then checked. The method returns null
+     * if the property is not found. 
      *
      * @param key the property key
-     * @param defaultValue a default value. 
+     *
      * @return the value in this property list with the specified key value.
      *
      * @endif
      */
     const std::string& operator[](const std::string& key) const;
-
-
+    
     /*!
      * @if jp
      *
@@ -365,6 +437,7 @@ namespace RTC
      * に対応するプロパティに右辺値を挿入。
      *
      * @param key プロパティキー
+     *
      * @return 指定されたキー値を持つこのプロパティリストの値
      *
      * @else
@@ -377,23 +450,29 @@ namespace RTC
      * default value argument if the property is not found.
      *
      * @param key the property key
-     * @param defaultValue a default value. 
+     *
      * @return the value in this property list with the specified key value.
      *
      * @endif
      */
     std::string& operator[](const std::string& key);
-
     
     /*!
      * @if jp
-     * @brief 指定されたキーに対してデフォルト値を設定する
+     * @brief 指定されたキーに対してデフォルト値を取得する
+     *
+     * 指定されたキーを持つプロパティのデフォルト値を返す。
+     * 指定されたキーを持つプロパティが存在しない場合には空文字を返す。
+     *
+     * @param key プロパティキー
+     *
+     * @return 指定されたキー値を持つプロパティのデフォルト値
+     *
      * @else
      * @brief Set value as the default value to specified key's property
      * @endif
      */
     const std::string& getDefault(const std::string& key) const;
-
     
     /*!
      * @if jp
@@ -405,6 +484,7 @@ namespace RTC
      *
      * @param key プロパティリストに配置されるキー
      * @param value key に対応する値 
+     *
      * @return プロパティリストの指定されたキーの前の値。それがない場合は null
      *
      * @else
@@ -416,33 +496,48 @@ namespace RTC
      *
      * @param key the key to be placed into this property list.
      * @param value the value corresponding to key. 
+     *
      * @return the previous value of the specified key in this property list,
      *         or null if it did not have one.
      *
      *@endif
      */
     std::string setProperty(const std::string& key, const std::string& value);
-
-
+    
     /*!
      * @if jp
-     * @brief Properties にデフォルト value を key について登録する
+     * @brief デフォルト値を登録する
+     *
+     * key で指定される要素にデフォルト値を登録する。
+     *
+     * @param key デフォルト値を登録するプロパティのキー
+     * @param value 登録されるデフォルト値
+     *
+     * @return 指定されたデフォルト値
+     *
      * @else
      * @brief Sets a default value associated with key in the property list
      * @endif
      */
     std::string setDefault(const std::string& key, const std::string& value);
     
-
     /*!
      * @if jp
      * @brief Properties にデフォルト値をまとめて登録する
+     *
+     * 配列で指定された要素にデフォルト値をまとめて登録する。
+     * デフォルト値は char* の配列により与えられ、key と value の対になって
+     * おり、リストの終端は配列の数を表す引数 num か、空文字の key で与えらられ
+     * なければならない。
+     * 
+     * @param defaults デフォルト値を指定する配列
+     * @param num デフォルト値を設定する要素数(デフォルト値:LONG_MAX)
+     * 
      * @else
      * @brief Sets a default value associated with key in the property list
      * @endif
      */
     void setDefaults(const char* defaults[], long num = LONG_MAX);
-
     
     //============================================================
     // load and save functions
@@ -469,7 +564,6 @@ namespace RTC
      * @endif
      */
     void list(std::ostream& out);
-    
     
     /*!
      * @if jp
@@ -502,7 +596,7 @@ namespace RTC
      * 扱われる。その場合、\ と行区切り文字が破棄され、継続行の先頭に空白が
      * あればそれもすべて破棄され、要素文字列の一部にはならない。 
      *
-     * たとえば、次の 4 行はそれぞれキー Truth と、関連した要素値 Beauty を表す。
+     * たとえば、次の 4 行はそれぞれキー Truth と関連した要素値 Beauty を表す。
      * 
      * Truth = Beauty <BR>
      *	Truth:Beauty <BR>
@@ -542,9 +636,9 @@ namespace RTC
      * - The method does not treat a backslash character, \, before a non-valid
      *   escape character as an error; the backslash is silently dropped. For
      *   example, in a Java string the sequence "\z" would cause a compile time
-     *   error. In contrast, this method silently drops the backslash. Therefore,
-     *   this method treats the two character sequence "\b" as equivalent to the
-     *   single character 'b'. 
+     *   error. In contrast, this method silently drops the backslash. 
+     *   Therefore, this method treats the two character sequence "\b" as 
+     *   equivalent to the single character 'b'. 
      * - Escapes are not necessary for single and double quotes; however, by the
      *   rule above, single and double quote characters preceded by a backslash
      *   still yield single and double quote characters, respectively. 
@@ -553,16 +647,16 @@ namespace RTC
      *
      * This method processes input in terms of lines. A natural line of input is
      * terminated either by a set of line terminator characters
-     * (\n or \r or \r\n) or by the end of the file. A natural line may be either
-     * a blank line, a comment line, or hold some part of a key-element pair.
-     * The logical line holding all the data for a key-element pair may be spread
-     * out across several adjacent natural lines by escaping the line terminator
-     * sequence with a backslash character, \. Note that a comment line cannot be
-     * extended in this manner; every natural line that is a comment must have
-     * its own comment indicator, as described below. If a logical line is
-     * continued over several natural lines, the continuation lines receive
-     * further processing, also described below. Lines are read from the input
-     * stream until end of file is reached. 
+     * (\n or \r or \r\n) or by the end of the file. A natural line may be 
+     * either a blank line, a comment line, or hold some part of a key-element 
+     * pair. The logical line holding all the data for a key-element pair may 
+     * be spread out across several adjacent natural lines by escaping the line 
+     * terminator sequence with a backslash character, \. Note that a comment 
+     * line cannot be extended in this manner; every natural line that is a 
+     * comment must have its own comment indicator, as described below. If a 
+     * logical line is continued over several natural lines, the continuation 
+     * lines receive further processing, also described below. Lines are read 
+     * from the input stream until end of file is reached. 
      *
      * A natural line that contains only white space characters is considered
      * blank and is ignored. A comment line has an ASCII '#' or '!' as its first
@@ -577,38 +671,41 @@ namespace RTC
      * or element values. The remainder of the discussion of key and element
      * parsing will assume all the characters constituting the key and element
      * appear on a single natural line after line continuation characters have
-     * been removed. Note that it is not sufficient to only examine the character
-     * preceding a line terminator sequence to see if the line terminator is
-     * escaped; there must be an odd number of contiguous backslashes for the
-     * line terminator to be escaped. Since the input is processed from left to
-     * right, a non-zero even number of 2n contiguous backslashes before a line
-     * terminator (or elsewhere) encodes n backslashes after escape processing. 
+     * been removed. Note that it is not sufficient to only examine the 
+     * character preceding a line terminator sequence to see if the line 
+     * terminator is escaped; there must be an odd number of contiguous 
+     * backslashes for the line terminator to be escaped. Since the input is 
+     * processed from left to right, a non-zero even number of 2n contiguous 
+     * backslashes before a line terminator (or elsewhere) encodes n 
+     * backslashes after escape processing. 
      *
-     * The key contains all of the characters in the line starting with the first
-     * non-white space character and up to, but not including, the first
-     * unescaped '=', ':', or white space character other than a line terminator.
-     * All of these key termination characters may be included in the key by
-     * escaping them with a preceding backslash character; for example,
+     * The key contains all of the characters in the line starting with the 
+     * first non-white space character and up to, but not including, the first
+     * unescaped '=', ':', or white space character other than a line 
+     * terminator. All of these key termination characters may be included in 
+     * the key by escaping them with a preceding backslash character; 
+     * for example,
      *
      * \:\=
      *
      * would be the two-character key ":=". Line terminator characters can be
      * included using \r and \n escape sequences. Any white space after the key
-     * is skipped; if the first non-white space character after the key is '=' or
-     * ':', then it is ignored and any white space characters after it are also
-     * skipped. All remaining characters on the line become part of the
+     * is skipped; if the first non-white space character after the key is '=' 
+     * or ':', then it is ignored and any white space characters after it are 
+     * also skipped. All remaining characters on the line become part of the
      * associated element string; if there are no remaining characters, the
      * element is the empty string "". Once the raw character sequences
      * constituting the key and element are identified, escape processing is
      * performed as described above. 
      *
-     * As an example, each of the following three lines specifies the key "Truth"
-     * and the associated element value "Beauty": 
+     * As an example, each of the following three lines specifies the key 
+     * "Truth" and the associated element value "Beauty": 
      *
      * Truth = Beauty <BR>
      *        Truth:Beauty <BR>
      * Truth                  :Beauty <BR>
-     *  As another example, the following three lines specify a single property: 
+     *  As another example, the following three lines specify a single 
+     * property: 
      *
      * fruits                           apple, banana, pear, \ <BR>
      *                                  cantaloupe, watermelon, \ <BR>
@@ -630,7 +727,6 @@ namespace RTC
      * @endif
      */
     void load(std::istream& inStream);
-    
     
     /*!
      * @if jp
@@ -657,7 +753,6 @@ namespace RTC
      */
     void save(std::ostream& out, const std::string& header);
     
-    
     /*!
      * @if jp
      *
@@ -665,44 +760,47 @@ namespace RTC
      *
      * Properties テーブル内のプロパティリスト (キーと要素のペア) を、load
      * メソッドを使って Properties テーブルにロードするのに適切なフォーマットで
-     * 出力ストリームに書き込みます。 
+     * 出力ストリームに書き込む。 
      *
      * Properties テーブル内のプロパティリスト (キーと要素のペア) を、load
      * メソッドを使って Properties テーブルにロードするのに適切なフォーマットで
-     * 出力ストリームに書き込みます。ストリームは、ISO 8859-1 文字
-     * エンコーディングを使用して書き込まれます。 
+     * 出力ストリームに書き込む。ストリームは、ISO 8859-1 文字
+     * エンコーディングを使用して書き込まれる。 
      * Properties テーブル (存在する場合) のデフォルトテーブルからの
-     * プロパティは、このメソッドによっては書き込まれません。 
+     * プロパティは、このメソッドによっては書き込まれない。 
      *
      * header 引数が null でない場合は、ASCII 文字の #、header の文字列、
      * および行区切り文字が最初に出力ストリームに書き込まれます。このため、
-     * header は識別コメントとして使うことができます。 
+     * header は識別コメントとして使うことができる。 
      *
      * 次に、ASCII 文字の #、現在の日時 (Date の toString メソッドによって
      * 現在時刻が生成されるのと同様)、および Writer によって生成される行区切り
-     * からなるコメント行が書き込まれます。 
+     * からなるコメント行が書き込まれる。 
      *
-     * 続いて、Properties テーブル内のすべてのエントリが 1 行ずつ書き出されます。
-     * 各エントリのキー文字列、ASCII 文字の =、関連した要素文字列が書き込まれま
-     * す。要素文字列の各文字は、エスケープシーケンスとして描画する必要があるか
-     * どうか確認されます。ASCII 文字の \、タブ、改行、および復帰はそれぞれ \\、
-     * \t、\n、および \r として書き込まれます。\u0020 より小さい文字および
+     * 続いて、Properties テーブル内のすべてのエントリが 1 行ずつ書き出される。
+     * 各エントリのキー文字列、ASCII 文字の=、関連した要素文字列が書き込まれる。
+     * 要素文字列の各文字は、エスケープシーケンスとして描画する必要があるか
+     * どうか確認される。ASCII 文字の \、タブ、改行、および復帰はそれぞれ \\、
+     * \t、\n、および \r として書き込まれる。\u0020 より小さい文字および
      * \u007E より大きい文字は、対応する 16 進値 xxxx を使って \uxxxx として書き
-     * 込まれます。埋め込み空白文字でも後書き空白文字でもない先行空白文字は、
-     * 前に \ を付けて書き込まれます。キーと値の文字 #、!、=、および : は、
-     * 必ず正しくロードされるように、前にスラッシュを付けて書き込まれます。 
+     * 込まれる。埋め込み空白文字でも後書き空白文字でもない先行空白文字は、
+     * 前に \ を付けて書き込まれる。キーと値の文字 #、!、=、および : は、
+     * 必ず正しくロードされるように、前にスラッシュを付けて書き込まれる。 
      *
-     * エントリが書き込まれたあとで、出力ストリームがフラッシュされます。
-     * 出力ストリームはこのメソッドから復帰したあとも開いたままです。 
+     * エントリが書き込まれたあとで、出力ストリームがフラッシュされる。
+     * 出力ストリームはこのメソッドから復帰したあとも開いたままとなる。 
+     *
+     * @param out 出力ストリーム
+     * @param header プロパティリストの記述 
      *
      * @else
      *
      * @brief Stores property list to the output stream
      *
-     * Writes this property list (key and element pairs) in this Properties table
-     * to the output stream in a format suitable for loading into a Properties
-     * table using the load method. The stream is written using the ISO 8859-1
-     * character encoding. 
+     * Writes this property list (key and element pairs) in this Properties 
+     * table to the output stream in a format suitable for loading into a 
+     * Properties table using the load method. The stream is written using the 
+     * ISO 8859-1 character encoding. 
      *
      * Properties from the defaults table of this Properties table (if any) are
      * not written out by this method. 
@@ -739,7 +837,6 @@ namespace RTC
      * @endif
      */
     void store(std::ostream& out, const std::string& header);
-
     
     //============================================================
     // other util functions
@@ -770,26 +867,53 @@ namespace RTC
      * @endif
      */
     std::vector<std::string> propertyNames() const;
-
-
+    
     /*!
      * @if jp
      * @brief プロパティの数を取得する
+     *
+     * 設定済みのプロパティ数を取得する。
+     *
+     * @return プロパティ数
+     *
      * @else
      * @brief Get number of Properties
      * @endif
      */
     int size() const;
-
-
+    
     /*!
      * @if jp
      * @brief ノードを取得する
+     *
+     * 指定したキーを持つノードを取得する。
+     *
+     * @param key 取得対象ノードのキー
+     *
+     * @return 対象ノード
+     *
      * @else
      * @brief Get node of Properties
      * @endif
      */
     Properties* getNode(const std::string& key) const;
+    
+    /*!
+     * @if jp
+     * @brief 新規ノードを生成する
+     *
+     * 指定したキーを持つ新規ノードを生成する。
+     * 既に同一キーを持つノードが登録済みの場合にはエラーを返す。
+     *
+     * @param key 新規ノードのキー
+     *
+     * @return 新規ノード生成結果
+     *         指定したキーを持つノードが既に存在する場合にはfalse
+     *
+     * @else
+     *
+     * @endif
+     */
     bool createNode(const char* key)
     {
       Properties* p(getNode(key));
@@ -797,27 +921,41 @@ namespace RTC
       (*this)[key] = "";
       return true;
     }
-
+    
     /*!
      * @if jp
-     * @brief ノードを切断する
+     * @brief ノードを削除する
+     *
+     * 指定した名称を持つプロパティを削除する。
+     * 削除したプロパティを返す。
+     *
+     * @param leaf_name 削除対象プロパティ名称
+     *
+     * @return 削除したプロパティ
+     *
      * @else
      * @brief Get node of Properties
      * @endif
      */
     Properties* removeNode(const char* leaf_name);
-
-
+    
     /*!
      * @if jp
      * @brief 子ノードにkeyがあるかどうか
+     *
+     * 指定したキーを持つ子ノードが存在するかどうか確認する。
+     * 存在する場合、子ノードを返す。
+     *
+     * @param key 確認対象のキー
+     *
+     * @return 子ノード
+     *
      * @else
      * @brief If key exists in the children
      * @endif
      */
     Properties* hasKey(const char* key) const;
-
-
+    
     /*!
      * @if jp
      * @brief 子ノードを全て削除する
@@ -826,39 +964,162 @@ namespace RTC
      * @endif
      */
     void clear();
-
-
+    
     /*!
      * @if jp
      * @brief Propertyをマージする
+     *
+     * 現在のプロパティに設定したプロパティをマージする。
+     *
+     * @param prop マージするプロパティ
+     *
+     * @return プロパティマージ結果
+     *
      * @else
      * @brief Merge properties
      * @endif
      */
     Properties& operator<<(const Properties& prop);
     
-
   protected:
+    /*!
+     * @if jp
+     * @brief 文字列をキーと値のペアに分割する
+     *
+     * 与えられた文字列を、設定されたデリミタでキーと値のペアに分割する。
+     * まず最初に与えられた文字列に':'もしくは'='が含まれるかを検索し、
+     * どちらかの文字が含まれている場合にはそれをデリミタとして使用する。
+     * 両方とも含まれていない場合には、' 'を用いて分割を試みる。
+     * 全てのデリミタ候補が含まれていない場合には、与えられた文字列をキーとして
+     * 設定し、値に空の文字列を設定する。
+     * どのデリミタ候補についてもエスケープされている(直前に'\'が設定されている)
+     * 場合には、デリミタとして使用しない。
+     *
+     * @param str 分割対象文字列
+     * @param key 分割結果キー
+     * @param value 分割結果値
+     *
+     * @else
+     *
+     * @endif
+     */
     static void splitKeyValue(const std::string& str, std::string& key,
 			      std::string& value);
-
+    
+    /*!
+     * @if jp
+     * @brief 文字列を分割する
+     *
+     * 与えられた文字列を、与えられたデリミタで分割する。
+     * 与えられた文字列が空の場合は、エラーを返す。
+     * 与えられたデリミタがエスケープされている(直前に'\'が設定されている)場合
+     * には、デリミタとして使用しない。
+     *
+     * @param str 分割対象文字列
+     * @param delim デリミタ
+     * @param value 分割結果値リスト
+     *
+     * @return 分割処理結果
+     *
+     * @else
+     *
+     * @endif
+     */
     static bool split(const std::string& str, const char delim,
 		      std::vector<std::string>& value);
-
+    
+    /*!
+     * @if jp
+     * @brief プロパティを取得する
+     *
+     * キーリストで指定されたプロパティを取得する。
+     * キーリストでは、指定するキーのプロパティでの階層関係をリスト形式で表現
+     * する。
+     * 指定したキーリストに該当するプロパティが存在しない場合はNULLを返す。
+     *
+     * @param keys 取得対象プロパティのキーのリスト表現
+     * @param index キーリストの階層数
+     * @param curr 検索対象プロパティ
+     *
+     * @return 検索対象プロパティ
+     *
+     * @else
+     *
+     * @endif
+     */
     static Properties* _getNode(std::vector<std::string>& keys,
 				std::vector<Properties*>::size_type index,
 				const Properties* curr);
-
+    
+    /*!
+     * @if jp
+     * @brief プロパティの名称リストを取得する
+     *
+     * プロパティの名称を'.'区切りで表現したリストを取得する。
+     *
+     * @param names プロパティの名称リスト
+     * @param curr_name 現在のプロパティ名
+     * @param curr 対象プロパティ
+     *
+     * @else
+     *
+     * @endif
+     */
     static void _propertiyNames(std::vector<std::string>& names,
 				std::string curr_name,
 				const Properties* curr);
-
+    
+    /*!
+     * @if jp
+     * @brief プロパティの名称リストを保存する
+     *
+     * プロパティの名称を'.'区切りで表現したリストを保存する。
+     *
+     * @param out プロパティの名称リスト保存先の出力ストリーム
+     * @param curr_name 現在のプロパティ名
+     * @param curr 対象プロパティ
+     *
+     * @else
+     *
+     * @endif
+     */
     static void _store(std::ostream& out, std::string curr_name,
 		       Properties* curr);
-
+    
+    /*!
+     * @if jp
+     * @brief プロパティの内容を保存する
+     *
+     * プロパティに設定された内容を保存する。
+     * 保存時にはプロパティ階層の深さを表す数字が付加される。
+     * 値が設定されていないプロパティについては、デフォルト値が出力される。
+     *
+     * @param out プロパティ内容保存先の出力ストリーム
+     * @param curr 対象プロパティ
+     * @param index 現在のプロパティ階層
+     *
+     * @else
+     *
+     * @endif
+     */
     static std::ostream& _dump(std::ostream& out, const Properties& curr,
 			       int index);
-
+    
+    /*!
+     * @if jp
+     * @brief インデントを生成する
+     *
+     * 指定された数字に従って生成したインデントを返す。
+     * 返されるインデントは、指定数字×2つの空白。
+     *
+     * @param index インデント数の指定
+     *
+     * @return 生成されたインデント
+     *
+     * @else
+     *
+     * @endif
+     */
     static std::string indent(int index);
     
   private:
@@ -869,8 +1130,6 @@ namespace RTC
     std::vector<Properties*> leaf;
     const std::string m_empty;
     friend std::ostream& operator<<(std::ostream& lhs, const Properties& rhs);
-
   };   // class Properties
 };     // namespace RTC  
 #endif // Properties_h
-  

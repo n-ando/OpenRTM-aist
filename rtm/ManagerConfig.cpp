@@ -2,22 +2,28 @@
 /*!
  * @file ManagerConfig.cpp
  * @brief RTC manager configuration
- * @date $Date: 2007-04-26 15:37:16 $
+ * @date $Date: 2007-12-31 03:08:04 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
- * Copyright (C) 2003-2005
+ * Copyright (C) 2003-2007
+ *     Noriaki Ando
  *     Task-intelligence Research Group,
  *     Intelligent Systems Research Institute,
  *     National Institute of
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: ManagerConfig.cpp,v 1.7 2007-04-26 15:37:16 n-ando Exp $
+ * $Id: ManagerConfig.cpp,v 1.7.2.1 2007-12-31 03:08:04 n-ando Exp $
  *
  */
 
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.7  2007/04/26 15:37:16  n-ando
+ * The header include order was modified to define _REENTRANT before
+ * including ace/config-lite.h in Linux systems.
+ * In ace 5.4.7 or later, _REENTRANT flag should be defined explicitly.
+ *
  * Revision 1.6  2007/04/13 18:02:21  n-ando
  * Some configuration properties handling processes were changed.
  *
@@ -49,7 +55,7 @@
 
 namespace RTC
 {
-
+  
   // The list of default configuration file path.
   const char* ManagerConfig::config_file_path[] = 
     {
@@ -63,44 +69,41 @@ namespace RTC
   
   // Environment value to specify configuration file
   const char* ManagerConfig::config_file_env = "RTC_MANAGER_CONFIG";
-
+  
   /*!
    * @if jp
-   * @brief ManagerConfig コンストラクタ
+   * @brief コンストラクタ
    * @else
-   * @brief ManagerConfig constructor
+   * @brief constructor
    * @endif
    */
   ManagerConfig::ManagerConfig()
   {
   }
-
-
+  
   /*!
    * @if jp
-   * @brief ManagerConfig コンストラクタ
+   * @brief コンストラクタ
    * @else
-   * @brief ManagerConfig constructor
+   * @brief constructor
    * @endif
    */
   ManagerConfig::ManagerConfig(int argc, char** argv)
   {
     init(argc, argv);
   }
-
-
+  
   /*!
    * @if jp
-   * @brief ManagerConfig デストラクタ
+   * @brief デストラクタ
    * @else
-   * @brief ManagerConfig destructor
+   * @brief destructor
    * @endif
    */
   ManagerConfig::~ManagerConfig()
   {
   }
-
-
+  
   /*!
    * @if jp
    * @brief 初期化
@@ -112,11 +115,10 @@ namespace RTC
   {
     parseArgs(argc, argv);
   }
-
-
+  
   /*!
    * @if jp
-   * @brief Configuration の結果をPropertyに反映させる
+   * @brief Configuration 情報を Property に設定する
    * @else
    * @brief Apply configuration results to Property
    * @endif
@@ -135,8 +137,7 @@ namespace RTC
       }
     setSystemInformation(prop);
   }
-
-
+  
   /*!
    * @if jp
    * @brief コマンド引数をパースする
@@ -175,11 +176,10 @@ namespace RTC
       }
     return;
   }
-
-
+  
   /*!
    * @if jp
-   * @brief Configuration file を探す
+   * @brief Configuration file の検索
    * @else
    * @brief Find configuration file
    * @endif
@@ -204,8 +204,7 @@ namespace RTC
 	    m_configFile = env;
 	    return true;
 	  }
-	}
-    
+      }
     // Search rtc configuration file from default search path
     int i = 0;
     while (config_file_path[i] != NULL)
@@ -217,20 +216,15 @@ namespace RTC
 	  }
 	++i;
       }
-    
     return false;
   }
   
-
   /*!
-   *
-   * manager.os.name: 
-   * manager.os.release:
-   * maanger.os.version:
-   * manager.os.arch:
-   * manager.os.hostname:
-   * manager.pid:
-   *
+   * @if jp
+   * @brief システム情報を設定する
+   * @else
+   * @brief Set system information
+   * @endif
    */
   void ManagerConfig::setSystemInformation(Properties& prop)
   { 
@@ -260,10 +254,9 @@ namespace RTC
     return;
   }
   
-  
   /*!
    * @if jp
-   * @brief ファイルが存在するかどうか確かめる
+   * @brief ファイルの存在確認
    * @else
    * @brief Check file existance
    * @endif
@@ -278,12 +271,11 @@ namespace RTC
 	infile.close();
 	return false;
       }
-      else
-	{
-	  infile.close();
-	  return true;
-	}
+    else
+      {
+	infile.close();
+	return true;
+      }
     return false;
   }
-
 }

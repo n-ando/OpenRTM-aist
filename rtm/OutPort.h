@@ -2,7 +2,7 @@
 /*!
  * @file OutPort.h
  * @brief OutPort class
- * @date $Date: 2007-07-20 15:58:03 $
+ * @date $Date: 2007-12-31 03:08:05 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
  * Copyright (C) 2006
@@ -13,12 +13,15 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: OutPort.h,v 1.2.4.1 2007-07-20 15:58:03 n-ando Exp $
+ * $Id: OutPort.h,v 1.2.4.2 2007-12-31 03:08:05 n-ando Exp $
  *
  */
 
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.2.4.1  2007/07/20 15:58:03  n-ando
+ * Now ACE_OS::gettimeofday() is used for win32 porting.
+ *
  * Revision 1.2  2007/01/06 17:56:19  n-ando
  * A trivial fix.
  *
@@ -30,7 +33,7 @@
 
 #ifndef OutPort_h
 #define OutPort_h
- 
+
 #include <rtm/BufferBase.h>
 #include <rtm/RingBuffer.h>
 #include <rtm/OutPortBase.h>
@@ -49,7 +52,8 @@ namespace RTC
    * 
    * OutPort テンプレートクラス、テンプレートの引数として、OutPortが
    * 扱うデータ型 DataType, OutPortのバッファ型 BufferType をとる。
-   * OutPort<> クラスは、ミドルウエア側のインターフェースとして
+   *
+   * @since 0.2.0
    *
    * @else
    * 
@@ -65,7 +69,13 @@ namespace RTC
     /*!
      * @if jp
      *
-     * @brief OutPort<DataType, BufferType> クラスのコンストラクタ
+     * @brief コンストラクタ
+     *
+     * コンストラクタ
+     *
+     * @param name ポート名
+     * @param value このポートにバインドされるデータ変数
+     * @param length バッファ長(デフォルト値:8)
      *
      * @else
      *
@@ -85,14 +95,40 @@ namespace RTC
     {
     }
     
+    /*!
+     * @if jp
+     *
+     * @brief デストラクタ
+     * 
+     * デストラクタ
+     * 
+     * @else
+     *
+     * @endif
+     */
     virtual ~OutPort()
     {
     }
-
+    
     /*!
      * @if jp
      *
      * @brief データ書き込み
+     *
+     * ポートへデータを書き込む。
+     *
+     * - コールバックファンクタ OnWrite がセットされている場合、
+     *   OutPort が保持するバッファに書き込む前に OnWrite が呼ばれる。
+     * - OutPort が保持するバッファがオーバーフローを検出できるバッファであり、
+     *   かつ、書き込む際にバッファがオーバーフローを検出した場合、
+     *   コールバックファンクタ OnOverflow が呼ばれる。
+     * - コールバックファンクタ OnWriteConvert がセットされている場合、
+     *   バッファ書き込み時に、OnWriteConvert の operator()() の戻り値が
+     *   バッファに書き込まれる。
+     *
+     * @param value 書き込み対象データ
+     *
+     * @return 書き込み処理結果(書き込み成功:true、書き込み失敗:false)
      *
      * @else
      *
@@ -103,9 +139,9 @@ namespace RTC
     virtual bool write(const DataType& value)
     {
       if (m_OnWrite != NULL)
-        {
+	{
 	  (*m_OnWrite)(value);
-        }
+	}
       
       long int timeout = m_writeTimeout;
       
@@ -117,7 +153,7 @@ namespace RTC
       // blocking and timeout wait
       long int count(0);
       while (m_writeBlock && this->isFull())
-        {
+	{
 	  if (m_writeTimeout < 0) 
 	    {
 	      usleep(m_timeoutTick);
@@ -140,14 +176,14 @@ namespace RTC
 	}
       
       if (this->isFull())
-        {
+	{
 	  if (m_OnOverflow != NULL)
 	    (*m_OnOverflow)(value);
 	  return false;
 	}
       
       if (m_OnWriteConvert == NULL) 
-        {
+	{
 	  this->put(value);
 	}
       else
@@ -157,21 +193,69 @@ namespace RTC
       notify();
       return true;
     }
-
+    
+    /*!
+     * @if jp
+     *
+     * @brief データ書き込み
+     *
+     * ポートへデータを書き込む。
+     * バインドされた変数に設定された値をポートに書き込む。
+     *
+     * @return 書き込み処理結果(書き込み成功:true、書き込み失敗:false)
+     *
+     * @else
+     *
+     * @endif
+     */
     bool write()
     {
       return write(m_value);
     }
-
+    
+    /*!
+     * @if jp
+     *
+     * @brief データ書き込み
+     *
+     * ポートへデータを書き込む。
+     * 設定された値をポートに書き込む。
+     *
+     * @param value 書き込み対象データ
+     *
+     * @return 書き込み処理結果(書き込み成功:true、書き込み失敗:false)
+     *
+     * @else
+     *
+     * @endif
+     */
     bool operator<<(DataType& value)
     {
       return write(value);
     }
-
+    
     /*!
      * @if jp
      *
      * @brief データ読み出し
+     *
+     * DataPort から値を読み出す
+     *
+     * - コールバックファンクタ OnRead がセットされている場合、
+     *   DataPort が保持するバッファから読み出す前に OnRead が呼ばれる。
+     * - DataPort が保持するバッファがアンダーフローを検出できるバッファで、
+     *   かつ、読み出す際にバッファがアンダーフローを検出した場合、
+     *   コールバックファンクタ OnUnderflow が呼ばれる。
+     * - コールバックファンクタ OnReadConvert がセットされている場合、
+     *   バッファ書き込み時に、OnReadConvert の operator()() の戻り値が
+     *   read()の戻り値となる。
+     * - setReadTimeout() により読み出し時のタイムアウトが設定されている場合、
+     *   バッファアンダーフロー状態が解除されるまでタイムアウト時間だけ待ち、
+     *   OnUnderflowがセットされていればこれを呼び出して戻る
+     *
+     * @param value 読み出したデータ
+     *
+     * @return 読み出し処理実行結果(読み出し成功:true、読み出し失敗:false)
      *
      * @else
      *
@@ -188,10 +272,10 @@ namespace RTC
       ACE_Time_Value tt;
       tt = ACE_OS::gettimeofday();
       tm_pre = tt.operator timeval();
-
+      
       // blocking and timeout wait
       while (m_readBlock && this->isEmpty())
-      {
+	{
 	  if (m_readTimeout < 0)
 	    {
 	      usleep(m_timeoutTick);
@@ -213,9 +297,9 @@ namespace RTC
 	}
       
       if (this->isEmpty())
-        {
-          if (m_OnUnderflow != NULL)
-            {
+	{
+	  if (m_OnUnderflow != NULL)
+	    {
 	      value = (*m_OnUnderflow)();
 	      return false;
 	    }
@@ -224,9 +308,9 @@ namespace RTC
 	      return false;
 	    }
 	}
-
+      
       if (m_OnReadConvert == NULL) 
-        {
+	{
 	  value = this->get();
 	  return true;
 	}
@@ -238,11 +322,17 @@ namespace RTC
       // never comes here
       return false;
     }
-
+    
     /*!
      * @if jp
      *
-     * @brief read() のブロック・非ブロックモードのセット
+     * @brief データ読み出し処理のブロックモードの設定
+     *
+     * 読み出し処理に対してブロックモードを設定する。
+     * ブロックモードを指定した場合、読み出せるデータを受信するかタイムアウト
+     * が発生するまで、read()メソッドの呼びだしがブロックされる。
+     *
+     * @param block ブロックモードフラグ
      *
      * @else
      *
@@ -254,11 +344,17 @@ namespace RTC
     {
       m_readBlock = block;
     }
-
+    
     /*!
      * @if jp
      *
-     * @brief write() のブロック・非ブロックモードのセット
+     * @brief データ書き込み処理のブロックモードの設定
+     *
+     * 書き込み処理に対してブロックモードを設定する。
+     * ブロックモードを指定した場合、バッファに書き込む領域ができるか
+     * タイムアウトが発生するまでwrite()メソッドの呼びだしがブロックされる。
+     *
+     * @param block ブロックモードフラグ
      *
      * @else
      *
@@ -270,14 +366,15 @@ namespace RTC
     {
       m_writeBlock = block;
     }
-
+    
     /*!
      * @if jp
      *
-     * @brief read() のタイムアウト時間の設定
+     * @brief 読み出し処理のタイムアウト時間の設定
      * 
      * read() のタイムアウト時間を usec で設定する。
      * read() はブロックモードでなければならない。
+     *
      * @param timeout タイムアウト時間 [usec]
      *
      * @else
@@ -290,14 +387,15 @@ namespace RTC
     {
       m_readTimeout = timeout;
     }
-
+    
     /*!
      * @if jp
      *
-     * @brief write() のタイムアウト時間の設定
+     * @brief 書き込み処理のタイムアウト時間の設定
      * 
      * write() のタイムアウト時間を usec で設定する。
      * write() はブロックモードでなければならない。
+     *
      * @param timeout タイムアウト時間 [usec]
      *
      * @else
@@ -310,11 +408,15 @@ namespace RTC
     {
       m_writeTimeout = timeout;
     }
-
+    
     /*!
      * @if jp
      *
-     * @brief OutWrite コールバックの設定
+     * @brief OnWrite コールバックの設定
+     *
+     * データ書き込み直前に呼ばれる OnWrite コールバックファンクタを設定する。
+     *
+     * @param on_write OnWrite コールバックファンクタ
      *
      * @else
      *
@@ -326,11 +428,18 @@ namespace RTC
     {
       m_OnWrite = on_write;
     }
-
+    
     /*!
      * @if jp
      *
-     * @brief OutWriteConvert コールバックの設定
+     * @brief OnWriteConvert コールバックの設定
+     *
+     * データ書き込み時に呼ばれる OnWriteConvert コールバックファンクタを設定
+     * する。
+     * このコールバック関数の処理結果が書き込まれる。
+     * このため書き込みデータのフィルタリングが可能となる。
+     *
+     * @param on_wconvert OnWriteConvert コールバックファンクタ
      *
      * @else
      *
@@ -342,11 +451,16 @@ namespace RTC
     {
       m_OnWriteConvert = on_wconvert;
     }
-
+    
     /*!
      * @if jp
      *
-     * @brief OutOverflow コールバックの設定
+     * @brief OnOverflow コールバックの設定
+     *
+     * バッファフルによりデータ書き込みができない場合に呼び出される OnOverflow
+     * コールバックファンクタを設定する。
+     *
+     * @param on_overflow OnOverflow コールバックファンクタ
      *
      * @else
      *
@@ -358,11 +472,16 @@ namespace RTC
     {
       m_OnOverflow = on_overflow;
     }
-
+    
     /*!
      * @if jp
      *
-     * @brief OutRead コールバックの設定
+     * @brief OnRead コールバックの設定
+     *
+     * データ読み出し直前に呼び出される OnRead コールバックファンクタを設定
+     * する。
+     *
+     * @param on_read OnRead コールバックファンクタ
      *
      * @else
      *
@@ -374,11 +493,18 @@ namespace RTC
     {
       m_OnRead = on_read;
     }
-
+    
     /*!
      * @if jp
      *
-     * @brief OutReadConvert コールバックの設定
+     * @brief OnReadConvert コールバックの設定
+     *
+     * データ読み出し時に呼ばれる OnReadConvert コールバックファンクタを設定
+     * する。
+     * このコールバック関数の処理結果が読み込まれる。
+     * このため読み込みデータのフィルタリングが可能となる。
+     *
+     * @param on_rconvert OnReadConvert コールバックファンクタ
      *
      * @else
      *
@@ -390,11 +516,16 @@ namespace RTC
     {
       m_OnReadConvert = on_rconvert;
     }
-
+    
     /*!
      * @if jp
      *
-     * @brief OutUnderflow コールバックの設定
+     * @brief OnUnderflow コールバックの設定
+     *
+     * バッファエンプティにより読み出せるデータがない場合に呼び出される
+     * コールバックファンクタ OnUnderflow を設定する。
+     *
+     * @param on_underflow OnUnderflow コールバックファンクタ
      *
      * @else
      *
@@ -406,7 +537,7 @@ namespace RTC
     {
       m_OnUnderflow = on_underflow;
     }    
-
+    
   private:
     /*!
      * @if jp
@@ -416,7 +547,7 @@ namespace RTC
      * @endif
      */
     DataType& m_value;
-
+    
     /*!
      * @if jp
      * @brief タイムアウトのポーリング周期　[usec]
@@ -425,43 +556,43 @@ namespace RTC
      * @endif
      */
     long int m_timeoutTick;
-
+    
     /*!
      * @if jp
-     * @brief read() のブロック・非ブロックモードフラグ
+     * @brief 読み込み処理時のブロック・非ブロックモードフラグ
      * @else
      * @brief Flag of read()'s blocking/non-blocking mode
      * @endif
      */
     bool m_readBlock;
-
+    
     /*!
      * @if jp
-     * @brief read() の Timeout [usec]
+     * @brief 読み込み処理のタイムアウト時間 [usec]
      * @else
      * @brief Timeout of read()
      * @endif
      */
     long int m_readTimeout;
-
+    
     /*!
      * @if jp
-     * @brief read() のブロック・非ブロックモードフラグ
+     * @brief 書き込み処理時のブロック・非ブロックモードフラグ
      * @else
-     * @brief Flag of read()'s blocking/non-blocking mode
+     * @brief Flag of write()'s blocking/non-blocking mode
      * @endif
      */
     bool m_writeBlock;
-
+    
     /*!
      * @if jp
-     * @brief write() の Timeout [usec]
+     * @brief 書き込み処理のタイムアウト時間 [usec]
      * @else
      * @brief Timeout of write()
      * @endif
      */
     long int m_writeTimeout;
-
+    
     /*!
      * @if jp
      * @brief OnWrite コールバックファンクタへのポインタ
@@ -470,7 +601,7 @@ namespace RTC
      * @endif
      */
     OnWrite<DataType>* m_OnWrite;
-
+    
     /*!
      * @if jp
      * @brief OnWriteConvert コールバックファンクタへのポインタ
@@ -479,7 +610,7 @@ namespace RTC
      * @endif
      */
     OnWriteConvert<DataType>* m_OnWriteConvert;
-
+    
     /*!
      * @if jp
      * @brief OnRead コールバックファンクタへのポインタ
@@ -488,7 +619,7 @@ namespace RTC
      * @endif
      */
     OnRead<DataType>* m_OnRead;
-
+    
     /*!
      * @if jp
      * @brief OnReadConvert コールバックファンクタへのポインタ
@@ -497,7 +628,7 @@ namespace RTC
      * @endif
      */
     OnReadConvert<DataType>* m_OnReadConvert;
-
+    
     /*!
      * @if jp
      * @brief OnOverflow コールバックファンクタへのポインタ
@@ -506,7 +637,7 @@ namespace RTC
      * @endif
      */
     OnOverflow<DataType>* m_OnOverflow;
-
+    
     /*!
      * @if jp
      * @brief OnUnderflow コールバックファンクタへのポインタ
@@ -516,9 +647,8 @@ namespace RTC
      * @endif
      */
     OnUnderflow<DataType>* m_OnUnderflow;
-
+    
     static const long int usec_per_sec = 1000000;
-
   };
 }; // namespace RTC
 

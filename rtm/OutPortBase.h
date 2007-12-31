@@ -1,23 +1,27 @@
 // -*- C++ -*-
 /*!
- * @file RtcOutPortBase.h
+ * @file OutPortBase.h
  * @brief InPortBase base class
- * @date $Date: 2006-12-02 18:46:13 $
+ * @date $Date: 2007-12-31 03:08:05 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
- * Copyright (C) 2003-2006
+ * Copyright (C) 2003-2008
+ *     Noriaki Ando
  *     Task-intelligence Research Group,
  *     Intelligent Systems Research Institute,
  *     National Institute of
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: OutPortBase.h,v 1.1 2006-12-02 18:46:13 n-ando Exp $
+ * $Id: OutPortBase.h,v 1.1.4.1 2007-12-31 03:08:05 n-ando Exp $
  *
  */
 
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.1  2006/12/02 18:46:13  n-ando
+ * The first commitment.
+ *
  * Revision 1.3  2005/05/27 07:34:21  n-ando
  * - InPort/OutPort interface was changed.
  *   subscribe/unsubscribe were completely changed.
@@ -54,6 +58,8 @@ namespace RTC
    * OutPortBase の attach(), detach(), notify() および
    * PublisherBase の push() は Observer パターンに関連したメソッドである。
    *
+   * @since 0.2.0
+   *
    * @else
    *
    * @class OutPortBase
@@ -69,9 +75,11 @@ namespace RTC
   public:
     /*!
      * @if jp
-     * @brief OutPortBase クラスコンストラクタ
+     * @brief コンストラクタ
      *
-     * OutPortBase のクラスコンストラクタ。
+     * コンストラクタ。
+     *
+     * @param name ポート名
      *
      * @else
      *
@@ -85,30 +93,31 @@ namespace RTC
       : m_name(name)
     {
     };
-
-
+    
     /*!
      * @if jp
-     * @brief OutPortBase クラスデストラクタ
+     * @brief デストラクタ
      *
-     * OutPortBase のクラスデストラクタ。
+     * デストラクタ。
+     * 登録された全ての Publisher を削除する。
      *
      * @else
      *
-     * @brief A destructor of OutPortBase class.
+     * @brief destructor
      *
-     * Destructor of OutPortBase.
+     * Destructor
      *
      * @endif
      */
     virtual ~OutPortBase();
-
-
+    
     /*!
      * @if jp
-     * @brief OutPortの名前
+     * @brief OutPort名称の取得
      *
-     * OutPortの名前を返す。
+     * OutPortの名称を取得する。
+     *
+     * @return ポート名称
      *
      * @else
      *
@@ -120,12 +129,15 @@ namespace RTC
      */
     inline const char* name() {return m_name.c_str();}
     
-
     /*!
      * @if jp
      * @brief Publisherの追加
      *
-     * Publisherを追加する。
+     * 指定したPublisherをデータ更新通知先としてリストの最後尾に追加する。
+     * attach_back() と同様な機能。
+     *
+     * @param id 指定されたPublisherに割り当てるID
+     * @param publisher 登録対象Publisherオブジェクト
      *
      * @else
      *
@@ -136,12 +148,15 @@ namespace RTC
      * @endif
      */
     void attach(const char* id, PublisherBase* publisher);
-
+    
     /*!
      * @if jp
-     * @brief Publisherの追加
+     * @brief リスト先頭へのPublisherの追加
      *
      * Publisherをリストの先頭に追加する。
+     *
+     * @param id 指定されたPublisherに割り当てるID
+     * @param publisher 登録対象Publisherオブジェクト
      *
      * @else
      *
@@ -152,12 +167,15 @@ namespace RTC
      * @endif
      */
     void attach_front(const char* id, PublisherBase* publisher);
-
+    
     /*!
      * @if jp
-     * @brief Publisherの追加
+     * @brief リスト最後尾へのPublisherの追加
      *
      * Publisherをリストの最後尾に追加する。
+     *
+     * @param id 指定されたPublisherに割り当てるID
+     * @param publisher 登録対象Publisherオブジェクト
      *
      * @else
      *
@@ -168,12 +186,17 @@ namespace RTC
      * @endif
      */
     void attach_back(const char* id, PublisherBase* publisher);
-
+    
     /*!
      * @if jp
      * @brief Publisherの削除
      *
-     * Publisherを削除する。
+     * 指定された Publisher をデータ更新通知先リストから削除する。
+     *
+     * @param id 削除対象 Publisher のID
+     *
+     * @return 削除に成功した場合は、削除した Publisher オブジェクト
+     *         指定した Publisher が存在しない場合は null
      *
      * @else
      *
@@ -184,13 +207,12 @@ namespace RTC
      * @endif
      */
     PublisherBase* detach(const char* id);
-
-
-     /*!
+    
+    /*!
      * @if jp
      * @brief 更新の通知
      *
-     * Publisherにデータの更新を通知する。
+     * 登録されている全ての Publisher にデータ更新を通知する。
      *
      * @else
      *
@@ -203,11 +225,22 @@ namespace RTC
     void notify();
     
   protected:
-    std::string m_name;
-
     /*!
-     * @brief Publisher struct
-     */ 
+     * @if jp
+     * @brief ポート名
+     * @else
+     *
+     * @endif
+     */
+    std::string m_name;
+    
+    /*!
+     * @if jp
+     * @brief Publisher 用構造体
+     * @else
+     *
+     * @endif
+     */
     struct Publisher
     {
       Publisher(const char* _id, PublisherBase* _publisher)
@@ -215,26 +248,45 @@ namespace RTC
       std::string id;
       PublisherBase* publisher;
     };
-
+    
     /*!
-     * @brief Publisher list
-     */ 
+     * @if jp
+     * @brief 登録された Publisher リスト
+     * @else
+     *
+     * @endif
+     */
     std::vector<Publisher*> m_publishers;
-
-
+    
+    /*!
+     * @if jp
+     * @brief Publisher を ID によって検索するための Functor
+     * @else
+     *
+     * @endif
+     */
     // Functor to find Publisher by id
     struct find_id;
-
+    
+    /*!
+     * @if jp
+     * @brief Publisher にデータ更新を通知するための Functor
+     * @else
+     *
+     * @endif
+     */
     // Functor to notify update to Publishers
     struct pub_push;
-
+    
+    /*!
+     * @if jp
+     * @brief Publisher を削除するための Functor
+     * @else
+     *
+     * @endif
+     */
     // Functor to delete Publishers
     struct pub_del;
-
   };
-
-
-  
 }; // End of namespace RTM
-
 #endif // RtcOutPortBase_h

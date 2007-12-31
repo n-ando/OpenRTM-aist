@@ -2,10 +2,10 @@
 /*!
  * @file DataOutPort.cpp
  * @brief Base class of OutPort
- * @date $Date: 2007-06-22 10:54:56 $
+ * @date $Date: 2007-12-31 03:08:02 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
- * Copyright (C) 2006
+ * Copyright (C) 2006-2008
  *     Noriaki Ando
  *     Task-intelligence Research Group,
  *     Intelligent Systems Research Institute,
@@ -13,12 +13,15 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: DataOutPort.cpp,v 1.5.2.1 2007-06-22 10:54:56 n-ando Exp $
+ * $Id: DataOutPort.cpp,v 1.5.2.2 2007-12-31 03:08:02 n-ando Exp $
  *
  */
 
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.5.2.1  2007/06/22 10:54:56  n-ando
+ * The bug of OutPort's disconnect operation was fixed.
+ *
  * Revision 1.5  2007/04/13 15:44:56  n-ando
  * RTC::OK was changed to RTC::RTC_OK.
  *
@@ -46,10 +49,17 @@
 
 namespace RTC
 {
+  /*!
+   * @if jp
+   * @brief デストラクタ
+   * @else
+   * @brief Destructor
+   * @endif
+   */
   DataOutPort::~DataOutPort()
   {
   };
-
+  
   //============================================================
   // protected functions
   //============================================================
@@ -68,6 +78,12 @@ namespace RTC
     return RTC::RTC_OK;
   }
   
+  /*!
+   * @if jp
+   * @brief Interface に接続する
+   * @else
+   * @endif
+   */
   ReturnCode_t
   DataOutPort::subscribeInterfaces(const ConnectorProfile& connector_profile)
   {
@@ -78,15 +94,21 @@ namespace RTC
     // Pubslihser を生成
     PublisherBase* publisher;
     Properties prop(NVUtil::toProperties(connector_profile.properties));
-
+    
     publisher = m_pf.create(s._consumer->clone(), prop);
-
+    
     // Publisher を OutPort にアタッチ
     m_outport.attach(connector_profile.connector_id, publisher);
-
+    
     return RTC::RTC_OK;
   }
   
+  /*!
+   * @if jp
+   * @brief Interface の接続を解除する
+   * @else
+   * @endif
+   */
   void
   DataOutPort::unsubscribeInterfaces(const ConnectorProfile& connector_profile)
   {
@@ -95,7 +117,4 @@ namespace RTC
     m_pf.destroy(publisher);
     return;
   }
-  
-
-
 };

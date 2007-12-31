@@ -2,22 +2,26 @@
 /*!
  * @file StringUtil.cpp
  * @brief String operation utility
- * @date $Date: 2007-07-20 16:10:01 $
+ * @date $Date: 2007-12-31 03:08:07 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
- * Copyright (C) 2006
+ * Copyright (C) 2006-2008
+ *     Noriaki Ando
  *     Task-intelligence Research Group,
  *     Intelligent Systems Research Institute,
  *     National Institute of
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: StringUtil.cpp,v 1.3.2.1 2007-07-20 16:10:01 n-ando Exp $
+ * $Id: StringUtil.cpp,v 1.3.2.2 2007-12-31 03:08:07 n-ando Exp $
  *
  */
 
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.3.2.1  2007/07/20 16:10:01  n-ando
+ * Some improvement of logic.
+ *
  * Revision 1.3  2007/04/13 15:57:07  n-ando
  * toArgv() was added to create command line arguments.
  * Some bug fixes.
@@ -38,23 +42,8 @@
 /*!
  * @if jp
  * @brief 文字列がエスケープされているか判断する
- *
- * 指定した文字がエスケープされていればtrue、されていなければfalseを返す。
- *
- * @param str エスケープされているかどうか判断する文字を含む文字列
- * @param pos エスケープされているかどうか判断する文字の位置
- * @return 指定した文字がエスケープされていれば true, それ以外は false
- *
  * @else
  * @brief Whether the character is escaped or not
- *
- * This operation returns true if the specified character is escaped, and
- * if the specified character is not escaped, it returns false
- *
- * @param str The string thath includes the character to be investigated.
- * @param pos The position of the character to be investigated.
- * @return true: the character is escaped, false: the character is not escaped.
- *
  * @endif
  */
 bool isEscaped(const std::string& str, std::string::size_type pos)
@@ -65,7 +54,6 @@ bool isEscaped(const std::string& str, std::string::size_type pos)
   // If the number of \ is odd, delimiter is escaped.
   return (i % 2) == 1;
 }
-
 
 /*!
  * @if jp
@@ -90,36 +78,17 @@ struct escape_functor
   std::string str;
 };
 
-
 /*!
  * @if jp
  * @brief 文字列をエスケープする
- *
- * 次の文字をエスケープシーケンスに変換する。<br>
- * HT -> "\t" <br>
- * LF -> "\n" <br>
- * CR -> "\r" <br>
- * FF -> "\f" <br>
- * シングルクオート、ダブルクオートについてはとくに処理はしない。
- *
  * @else
- *
  * @brief Escape string
- *
- * The following characters are converted. <br>
- * HT -> "\t" <br>
- * LF -> "\n" <br>
- * CR -> "\r" <br>
- * FF -> "\f" <br>
- * Single quote and dobule quote are not processed.
- *
  * @endif
  */
 std::string escape(const std::string str)
 {
   return for_each(str.begin(), str.end(), escape_functor()).str;
 }
-
 
 /*!
  * @if jp
@@ -160,44 +129,22 @@ struct unescape_functor
 	    str.push_back(c);
 	  }
       }
-  } 
+  }
   std::string str;
   int count;
 };
 
-
 /*!
  * @if jp
  * @brief 文字列のエスケープを戻す
- *
- * 次のエスケープシーケンスを文字に変換する。<br>
- * "\t" -> HT <br>
- * "\n" -> LF <br>
- * "\r" -> CR <br>
- * "\f" -> FF <br>
- * "\"" -> "  <br>
- * "\'" -> '  <br>
- *
  * @else
- *
  * @brief Unescape string
- *
- * The following characters are converted. <br>
- * "\t" -> HT <br>
- * "\n" -> LF <br>
- * "\r" -> CR <br>
- * "\f" -> FF <br>
- * "\"" -> "  <br>
- * "\'" -> '  <br>
- *
  * @endif
  */
 std::string unescape(const std::string str)
 {
   return for_each(str.begin(), str.end(), unescape_functor()).str;
-
 }
-
 
 /*!
  * @if jp
@@ -211,7 +158,6 @@ void eraseHeadBlank(std::string& str)
   if (str.empty()) return;
   while (str[0] == ' ' || str[0] == '\t') str.erase(0, 1);
 }
-
 
 /*!
  * @if jp
@@ -228,7 +174,6 @@ void eraseTailBlank(std::string& str)
     str.erase(str.size() - 1, 1);
 }
 
-
 /*!
  * @if jp
  * @brief 文字列を置き換える
@@ -237,7 +182,7 @@ void eraseTailBlank(std::string& str)
  * @endif
  */
 void replaceString(std::string& str, const std::string from,
-		const std::string to)
+		   const std::string to)
 {
   std::string::size_type pos(0);
   
@@ -249,7 +194,6 @@ void replaceString(std::string& str, const std::string from,
       pos += to.size();
     }
 }
-
 
 /*!
  * @if jp
@@ -265,9 +209,9 @@ std::vector<std::string> split(const std::string& input,
   std::vector<std::string> results;
   size delim_size = delimiter.size();
   size found_pos(0), begin_pos(0), pre_pos(0), substr_size(0);
- 
+  
   if (input.empty()) return results;
- 
+  
   //  if (input.substr(0, delim_size) == delimiter)
   //    begin_pos = pre_pos = delim_size;
   
@@ -284,10 +228,10 @@ std::vector<std::string> split(const std::string& input,
 	  break;
 	}
       /*
-      if (isEscaped(input, found_pos))
+	if (isEscaped(input, found_pos))
 	{
-	  begin_pos = found_pos + delim_size;
-	  goto REFIND;
+	begin_pos = found_pos + delim_size;
+	goto REFIND;
 	}
       */
       substr_size = found_pos - pre_pos;
@@ -304,7 +248,6 @@ std::vector<std::string> split(const std::string& input,
   return results;
 }
 
-
 /*!
  * @if jp
  * @brief 大文字に変換する Fanctor
@@ -320,7 +263,6 @@ struct Toupper
   }
 };
 
-
 /*!
  * @if jp
  * @brief 与えられた文字列をbool値に変換する
@@ -331,12 +273,10 @@ struct Toupper
 bool toBool(std::string str, std::string yes, std::string no, 
 	    bool default_value)
 {
-
-  
   std::for_each(str.begin(), str.end(), Toupper());
   std::for_each(yes.begin(), yes.end(), Toupper());
   std::for_each(no.begin(),  no.end(),  Toupper());
-
+  
   if (str.find(yes) != std::string::npos)
     return true;
   else if (!str.find(no) != std::string::npos)
@@ -344,7 +284,6 @@ bool toBool(std::string str, std::string yes, std::string no,
   else
     return default_value;
 }
-
 
 /*!
  * @if jp
@@ -361,10 +300,9 @@ bool isAbsolutePath(const std::string& str)
   if (isalpha(str[0]) && (str[1] == ':') && str[2] == '\\') return true;
   // Windows network file path is begun from '\\'
   if (str[0] == '\\' && str[1] == '\\') return true;
-
+  
   return false;
 }
-
 
 /*!
  * @if jp
@@ -387,7 +325,13 @@ bool isURL(const std::string& str)
   return false;
 }
 
-
+/*!
+ * @if jp
+ * @brief リスト内の文字列を検索する Fanctor
+ * @else
+ *
+ * @endif
+ */
 struct unique_strvec
 {
   void operator()(const std::string& s)
@@ -398,18 +342,29 @@ struct unique_strvec
   std::vector<std::string> str;
 };
 
-
+/*!
+ * @if jp
+ * @brief 与えられた文字列リストから重複を削除
+ * @else
+ *
+ * @endif
+ */
 std::vector<std::string> unique_sv(std::vector<std::string> sv)
 {
   return std::for_each(sv.begin(), sv.end(), unique_strvec()).str;
 }
 
-
+/*!
+ * @if jp
+ * @brief 与えられた文字列リストからCSVを生成
+ * @else
+ *
+ * @endif
+ */
 std::string flatten(std::vector<std::string> sv)
 {
-
   if (sv.size() == 0) return "";
-
+  
   std::string str;
   for (int i(0), len(sv.size() - 1); i < len; ++i)
     {
@@ -418,14 +373,20 @@ std::string flatten(std::vector<std::string> sv)
   return str + sv.back();
 }
 
-
+/*!
+ * @if jp
+ * @brief 与えられた文字列リストを引数リストに変換
+ * @else
+ *
+ * @endif
+ */
 char** toArgv(const std::vector<std::string>& args)
 {
   char** argv;
   int argc(args.size());
-
+  
   argv = new char*[argc];
-
+  
   for (int i(0); i < argc; ++i)
     {
       int sz(args[i].size());

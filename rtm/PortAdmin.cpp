@@ -2,7 +2,7 @@
 /*!
  * @file PortAdmin.cpp
  * @brief RTC's Port administration class
- * @date $Date: 2007-09-20 11:25:16 $
+ * @date $Date: 2007-12-31 03:08:05 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
  * Copyright (C) 2006
@@ -12,12 +12,15 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: PortAdmin.cpp,v 1.7.2.1 2007-09-20 11:25:16 n-ando Exp $
+ * $Id: PortAdmin.cpp,v 1.7.2.2 2007-12-31 03:08:05 n-ando Exp $
  *
  */
 
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.7.2.1  2007/09/20 11:25:16  n-ando
+ * A function getPortProfileList() was added to get PortProfileList locally.
+ *
  * Revision 1.7  2007/04/23 04:55:40  n-ando
  * Port finalization process was modified.
  *
@@ -48,6 +51,13 @@
 
 namespace RTC
 {
+  /*!
+   * @if jp
+   * @brief Port検索用ファンクタ
+   * @else
+   *
+   * @endif
+   */
   struct PortAdmin::find_port_name
   {
     find_port_name(const char* name) : m_name(name) {};
@@ -59,6 +69,13 @@ namespace RTC
     const std::string m_name;
   };
   
+  /*!
+   * @if jp
+   * @brief Port削除用ファンクタ
+   * @else
+   *
+   * @endif
+   */
   struct PortAdmin::del_port
   {
     PortAdmin* m_pa;
@@ -68,15 +85,19 @@ namespace RTC
       m_pa->deletePort(*p);
     }
   };
-
-
+  
+  /*!
+   * @if jp
+   * @brief コンストラクタ
+   * @else
+   * 
+   * @endif
+   */
   PortAdmin::PortAdmin(CORBA::ORB_ptr orb, PortableServer::POA_ptr poa)
     : m_pORB(orb), m_pPOA(poa)
   {
-    
   }
-
-
+  
   /*!
    * @if jp
    * @brief PortList の取得
@@ -90,7 +111,14 @@ namespace RTC
     ports = new PortList(m_portRefs);
     return ports._retn();
   }
-
+  
+  /*!
+   * @if jp
+   * @brief PortProfileList の取得
+   * @else
+   * @brief Get PortProfileList
+   * @endif
+   */
   PortProfileList PortAdmin::getPortProfileList() const
   {
     PortProfileList port_profs;
@@ -98,8 +126,7 @@ namespace RTC
     m_portServants.for_each(p);
     return port_profs;
   }
-
-
+  
   /*!
    * @if jp
    * @brief Port のオブジェクト参照の取得
@@ -118,7 +145,6 @@ namespace RTC
       }
     return port._retn();
   }
-
   
   /*!
    * @if jp
@@ -131,7 +157,6 @@ namespace RTC
   {
     return m_portServants.find(port_name);
   }
-
   
   /*!
    * @if jp
@@ -142,24 +167,23 @@ namespace RTC
    */
   void PortAdmin::registerPort(PortBase& port)
   {
-    // CORBA Object activation
-    //    m_pPOA->activate_object(&port);
-
-    // Setting Port's object reference to its profile
-    //    Port_ptr port_ref = Port::_narrow(m_pPOA->servant_to_reference(&port));
-    //    port.setPortRef(port.getRef());
-
+    //CORBA Object activation
+    //m_pPOA->activate_object(&port);
+    
+    //Setting Port's object reference to its profile
+    //Port_ptr port_ref = Port::_narrow(m_pPOA->servant_to_reference(&port));
+    //port.setPortRef(port.getRef());
+    
     // Store Port's ref to PortList
     CORBA_SeqUtil::push_back(m_portRefs, port.getPortRef());
-
+    
     // Store Port servant
     m_portServants.registerObject(&port);
   }
-
-
+  
   /*!
    * @if jp
-   * @brief Port の登録を削除する
+   * @brief Port の登録を解除する
    * @else
    * @brief Delete the Port's registration
    * @endif
@@ -170,13 +194,13 @@ namespace RTC
       {
 	port.disconnect_all();
 	// port.shutdown();
-
+	
 	const char* tmp(port.getProfile().name);
 	CORBA_SeqUtil::erase_if(m_portRefs, find_port_name(tmp));
-
+	
 	m_pPOA->deactivate_object(*m_pPOA->servant_to_id(&port));
 	port.setPortRef(RTC::Port::_nil());
-
+	
 	m_portServants.unregisterObject(tmp);
       }
     catch (...)
@@ -184,11 +208,10 @@ namespace RTC
 	;
       }
   }
-
-
+  
   /*!
    * @if jp
-   * @brief Port の登録を削除する
+   * @brief 名称指定によりPort の登録を解除する
    * @else
    * @brief Delete the Port' registration
    * @endif
@@ -199,8 +222,7 @@ namespace RTC
     PortBase& p(*m_portServants.find(port_name));
     deletePort(p);
   }
-
-
+  
   /*!
    * @if jp
    * @brief 全ての Port をdeactivateし登録を削除する
@@ -214,6 +236,4 @@ namespace RTC
     ports = m_portServants.getObjects();
     for_each(ports.begin(), ports.end(), del_port(this));
   }
-  
-
 };

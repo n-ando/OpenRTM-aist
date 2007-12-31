@@ -2,7 +2,7 @@
 /*!
  * @file  InPortTcpSockProvider.h
  * @brief InPortTcpSockProvider class
- * @date  $Date: 2007-10-06 12:29:17 $
+ * @date  $Date: 2007-12-31 03:08:04 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
  * Copyright (C) 2007
@@ -13,12 +13,15 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: InPortTcpSockProvider.h,v 1.1.2.1 2007-10-06 12:29:17 n-ando Exp $
+ * $Id: InPortTcpSockProvider.h,v 1.1.2.2 2007-12-31 03:08:04 n-ando Exp $
  *
  */
 
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.1.2.1  2007/10/06 12:29:17  n-ando
+ * InPort provider for TCP socket data port.
+ *
  */
 
 #ifndef InPortTcpSockProvider_h
@@ -35,6 +38,13 @@ namespace RTC
    * @if jp
    * @class InPortTcpSockProvider
    * @brief InPortTcpSockProvider クラス
+   *
+   * 通信手段に TCP ソケットを利用した入力ポートプロバイダの実装クラス。
+   *
+   * @param DataType 当該プロバイダに割り当てたバッファが保持するデータ型
+   *
+   * @since 0.4.1
+   *
    * @else
    * @class InPortTcpSockProvider
    * @brief InPortTcpSockProvider class
@@ -48,6 +58,16 @@ namespace RTC
     /*!
      * @if jp
      * @brief コンストラクタ
+     *
+     * コンストラクタ
+     * ポートプロパティに以下の項目を設定する。
+     * 　インターフェースタイプ : TCP_Any
+     * 　データフロータイプ : Push
+     * 　サブスクリプションタイプ : Any
+     *
+     * @param buffer 当該プロバイダに割り当てるバッファオブジェクト
+     * @param prop TCP 通信設定用プロパティ
+     *
      * @else
      * @brief Constructor
      * @endif
@@ -64,25 +84,45 @@ namespace RTC
       setInterfaceType("TCP_Any");
       setDataFlowType("Push");
       setSubscriptionType("Any");
-
+      
       // setup TCP server
       m_server.open(0);
-
+      
       // set the TCP server address to properties
       std::string addr;
       addr  = m_server.getHostName();
       addr += ":";
       addr += otos(m_server.getPortNumber());
       CORBA_SeqUtil::push_back(m_properties,
-	       NVUtil::newNV("dataport.tcp_any.inport_addr", addr.c_str()));
+			       NVUtil::newNV("dataport.tcp_any.inport_addr", addr.c_str()));
     }
-
-
+    
+    /*!
+     * @if jp
+     * @brief デストラクタ
+     *
+     * デストラクタ
+     *
+     * @else
+     * @brief Destructor
+     * @endif
+     */
     virtual ~InPortTcpSockProvider()
     {
     }
-
-
+    
+    /*!
+     * @if jp
+     * @brief Interface情報を公開する
+     *
+     * Interface情報を公開する。
+     *
+     * @param prop Interface情報を受け取るプロパティ
+     *
+     * @else
+     *
+     * @endif
+     */
     void publishInterface(SDOPackage::NVList& prop)
     {
       if (!NVUtil::isStringValue(prop,
@@ -94,7 +134,7 @@ namespace RTC
       SDOPackage::NVList nv(m_properties);
       NVUtil::append(prop, nv);
     }
-
+    
   private:
     TcpServer<DataType> m_server;
     BufferBase<DataType>& m_buffer;
@@ -102,4 +142,3 @@ namespace RTC
   };
 };     // namespace RTC
 #endif // InPortTcpSockProvider_h
-

@@ -2,10 +2,10 @@
 /*!
  * @file  PublisherPeriodic.cpp
  * @brief PublisherPeriodic class
- * @date  $Date: 2007-07-20 16:04:22 $
+ * @date  $Date: 2007-12-31 03:08:06 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
- * Copyright (C) 2006
+ * Copyright (C) 2006-2008
  *     Noriaki Ando
  *     Task-intelligence Research Group,
  *     Intelligent Systems Research Institute,
@@ -13,12 +13,15 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: PublisherPeriodic.cpp,v 1.5.2.1 2007-07-20 16:04:22 n-ando Exp $
+ * $Id: PublisherPeriodic.cpp,v 1.5.2.2 2007-12-31 03:08:06 n-ando Exp $
  *
  */
 
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.5.2.1  2007/07/20 16:04:22  n-ando
+ * A bug fix.
+ *
  * Revision 1.5  2007/02/07 02:53:01  n-ando
  * The property dataport.push_interval was changed to dataport.push_rate.
  *
@@ -57,7 +60,7 @@ namespace RTC
   {
     std::string rate(property.getProperty("dataport.push_rate"));
     double hz;
-
+    
     if (rate != "")
       {
 	hz = atof(rate.c_str());
@@ -70,16 +73,23 @@ namespace RTC
     m_usec = static_cast<unsigned int>(1000000.0/hz);
     open(0);
   }
+  
 
-
+  /*!
+   * @if jp
+   * @brief デストラクタ
+   * @else
+   * @brief Destructor
+   * @endif
+   */
   PublisherPeriodic::~PublisherPeriodic()
   {
     m_running = 0;
     wait();
     delete m_consumer;
   }
-
-
+  
+  
   /*!
    * @if jp
    * @brief Observer関数
@@ -91,7 +101,7 @@ namespace RTC
   {
   }
   
-
+  
   /*!
    * @if jp
    * @brief スレッド実行関数
@@ -116,8 +126,8 @@ namespace RTC
       }
     return 0;
   }
-
-
+  
+  
   /*!
    * @if jp
    * @brief タスク開始
@@ -127,11 +137,11 @@ namespace RTC
    */
   int PublisherPeriodic::open(void *args)
   {
-        m_running = true;
-        this->activate();
-        return 0;
+    m_running = true;
+    this->activate();
+    return 0;
   }
-
+  
   
   /*!
    * @if jp

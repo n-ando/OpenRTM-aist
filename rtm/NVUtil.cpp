@@ -2,10 +2,10 @@
 /*!
  * @file NVUtil.h
  * @brief NameValue and NVList utility functions
- * @date $Date: 2007-07-20 15:56:50 $
+ * @date $Date: 2007-12-31 03:08:04 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
- * Copyright (C) 2006
+ * Copyright (C) 2006-2008
  *     Noriaki Ando
  *     Task-intelligence Research Group,
  *     Intelligent Systems Research Institute,
@@ -13,12 +13,15 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: NVUtil.cpp,v 1.8.2.1 2007-07-20 15:56:50 n-ando Exp $
+ * $Id: NVUtil.cpp,v 1.8.2.2 2007-12-31 03:08:04 n-ando Exp $
  *
  */
 
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.8.2.1  2007/07/20 15:56:50  n-ando
+ * STL algorithm header include.
+ *
  * Revision 1.8  2007/04/23 04:54:28  n-ando
  * Conversion functions between Properties and NVList were added.
  *
@@ -59,6 +62,13 @@
 
 namespace NVUtil
 {
+  /*!
+   * @if jp
+   * @brief value が CORBA::Char の NameValue を生成する
+   * @else
+   * 
+   * @endif
+   */
   SDOPackage::NameValue newNVChar(const char* name, const CORBA::Char value)
   {
     SDOPackage::NameValue nv;
@@ -66,7 +76,14 @@ namespace NVUtil
     nv.value <<= CORBA::Any::from_char(value);
     return nv;
   }
-    
+  
+  /*!
+   * @if jp
+   * @brief value が CORBA::Boolean の NameValue を生成する
+   * @else
+   * 
+   * @endif
+   */
   SDOPackage::NameValue newNVBool(const char* name, const CORBA::Boolean value)
   {
     SDOPackage::NameValue nv;
@@ -74,7 +91,14 @@ namespace NVUtil
     nv.value <<= CORBA::Any::from_boolean(value);
     return nv;
   }
-    
+  
+  /*!
+   * @if jp
+   * @brief value が CORBA::Octet の NameValue を生成する
+   * @else
+   * 
+   * @endif
+   */
   SDOPackage::NameValue newNVOctet(const char* name, const CORBA::Octet value)
   {
     SDOPackage::NameValue nv;
@@ -82,7 +106,14 @@ namespace NVUtil
     nv.value <<= CORBA::Any::from_octet(value);
     return nv;
   }
-    
+  
+  /*!
+   * @if jp
+   * @brief value が CORBA::Any の NameValue を生成する
+   * @else
+   * 
+   * @endif
+   */
   SDOPackage::NameValue newNVAny(const char* name, const CORBA::Any& value)
   {
     SDOPackage::NameValue nv;
@@ -90,22 +121,35 @@ namespace NVUtil
     nv.value = value;
     return nv;
   }
-    
+  
+  /*!
+   * @if jp
+   * @brief Properties を NVList へコピーする
+   * @else
+   * 
+   * @endif
+   */
   void copyFromProperties(SDOPackage::NVList& nv, const RTC::Properties& prop)
   {
     std::vector<std::string> keys;
     keys = prop.propertyNames();
     CORBA::ULong len((CORBA::ULong)keys.size());
     nv.length(len);
-
+    
     for (CORBA::ULong i = 0; i < len; ++i)
       {
 	nv[i].name = CORBA::string_dup(keys[i].c_str());
 	nv[i].value <<= prop[keys[i]].c_str();
       }
   }
-
-
+  
+  /*!
+   * @if jp
+   * @brief NVList を Properties へコピーする
+   * @else
+   * 
+   * @endif
+   */
   void copyToProperties(RTC::Properties& prop, const SDOPackage::NVList& nv)
   {
     for (CORBA::ULong i(0), len(nv.length()); i < len; ++i)
@@ -118,7 +162,14 @@ namespace NVUtil
 	  };
       }
   }
-
+  
+  /*!
+   * @if jp
+   * @brief NVList を Properties に変換するためのファンクタ
+   * @else
+   *
+   * @endif
+   */
   struct to_prop
   {
     to_prop()
@@ -134,14 +185,28 @@ namespace NVUtil
     }
     RTC::Properties m_prop;
   };
-
+  
+  /*!
+   * @if jp
+   * @brief NVList を Properties へ変換する
+   * @else
+   * 
+   * @endif
+   */
   RTC::Properties toProperties(const SDOPackage::NVList& nv)
   {
     to_prop p;
     p = CORBA_SeqUtil::for_each(nv, p);
     return p.m_prop;
   }
-
+  
+  /*!
+   * @if jp
+   * @brief NVList を検索するためのファンクタ
+   * @else
+   *
+   * @endif
+   */
   struct nv_find
   {
     nv_find(const char* name) : m_name(name) {};
@@ -152,7 +217,14 @@ namespace NVUtil
     }
     std::string m_name;
   };
-
+  
+  /*!
+   * @if jp
+   * @brief NVList から name で指定された value を返す
+   * @else
+   * 
+   * @endif
+   */
   const CORBA::Any& find(const SDOPackage::NVList& nv, const char* name)
   {
     CORBA::Long index;
@@ -160,12 +232,26 @@ namespace NVUtil
     if (index < 0) throw std::string("Not found");
     return nv[index].value;
   }
-
+  
+  /*!
+   * @if jp
+   * @brief name で指定された要素のインデックスを返す
+   * @else
+   * 
+   * @endif
+   */
   const CORBA::Long find_index(const SDOPackage::NVList& nv, const char* name)
   {
     return  CORBA_SeqUtil::find(nv, NVUtil::nv_find(name));
   }
-
+  
+  /*!
+   * @if jp
+   * @brief 指定された name の value の型が string であるか検証する
+   * @else
+   * 
+   * @endif
+   */
   bool isString(const SDOPackage::NVList& nv, const char* name)
   {
     try
@@ -180,10 +266,16 @@ namespace NVUtil
 	return false;
       }
   }
-
+  
+  /*!
+   * @if jp
+   * @brief 指定された name の value の型が指定した文字列と一致するか検証する
+   * @else
+   * 
+   * @endif
+   */
   bool isStringValue(const SDOPackage::NVList& nv,
-		     const char* name,
-		     const char* value)
+		     const char* name, const char* value)
   {
     if (isString(nv, name))
       {
@@ -194,7 +286,14 @@ namespace NVUtil
       }
     return false;
   }
-
+  
+  /*!
+   * @if jp
+   * @brief 指定された name の NVList を string として返す。
+   * @else
+   * 
+   * @endif
+   */
   std::string toString(const SDOPackage::NVList& nv, const char* name)
   {
     char* str_value;
@@ -208,46 +307,66 @@ namespace NVUtil
       }
     return str_value;
   }
-
+  
+  /*!
+   * @if jp
+   * @brief 指定された文字列を NVList の要素に追加する。
+   * @else
+   * 
+   * @endif
+   */
   bool appendStringValue(SDOPackage::NVList& nv, const char* name,
 			 const char* value)
   {
-	//    if (!isString(nv, name)) return false;
-
+    //    if (!isString(nv, name)) return false;
+    
     CORBA::Long index;
     index = find_index(nv, name);
-
-	if (index > 0)
+    
+    if (index > 0)
+      {
+	char* tmp_char;
+	nv[index].value >>= tmp_char;
+	std::string tmp_str(tmp_char);
+	
+	std::vector<std::string> values;
+	values = split(tmp_str, ",");
+	if (values.end() == std::find(values.begin(), values.end(), value))
 	  {
-		char* tmp_char;
-		nv[index].value >>= tmp_char;
-		std::string tmp_str(tmp_char);
-		
-		std::vector<std::string> values;
-		values = split(tmp_str, ",");
-		if (values.end() == std::find(values.begin(), values.end(), value))
-		  {
-			tmp_str.append(", ");
-			tmp_str.append(value);
-			nv[index].value <<= tmp_str.c_str();
-		  }
+	    tmp_str.append(", ");
+	    tmp_str.append(value);
+	    nv[index].value <<= tmp_str.c_str();
 	  }
-	else
-	  {
-		CORBA_SeqUtil::push_back(nv, newNV(name, value));
-	  }
+      }
+    else
+      {
+	CORBA_SeqUtil::push_back(nv, newNV(name, value));
+      }
     return true;
   }
-
+  
+  /*!
+   * @if jp
+   * @brief NVList に要素を追加する。
+   * @else
+   * 
+   * @endif
+   */
   void append(SDOPackage::NVList& dest, const SDOPackage::NVList& src)
   {
     for (CORBA::ULong i = 0, len = src.length(); i < len; ++i)
       {
-		CORBA_SeqUtil::push_back(dest, src[i]);
+	CORBA_SeqUtil::push_back(dest, src[i]);
       }
   }
-
-
+  
+  /*!
+   * @if jp
+   * @brief NVList に設定されている内容を文字列として出力する。
+   * @else
+   * 
+   * @endif
+   */
   void dump(SDOPackage::NVList& nv)
   {
     for (CORBA::ULong i(0), n(nv.length()); i < n; ++i)
@@ -262,6 +381,6 @@ namespace NVUtil
 	    std::cout << nv[i].name << ": not a string value" << std::endl;
 	  }
       }
-  }	    
-
+  }
+  
 };

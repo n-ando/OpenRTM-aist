@@ -2,10 +2,10 @@
 /*!
  * @file DataInPort.cpp
  * @brief Base class of InPort
- * @date $Date: 2007-07-20 15:52:52 $
+ * @date $Date: 2007-12-31 03:08:02 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
- * Copyright (C) 2006
+ * Copyright (C) 2006-2008
  *     Noriaki Ando
  *     Task-intelligence Research Group,
  *     Intelligent Systems Research Institute,
@@ -13,12 +13,15 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: DataInPort.cpp,v 1.6.2.1 2007-07-20 15:52:52 n-ando Exp $
+ * $Id: DataInPort.cpp,v 1.6.2.2 2007-12-31 03:08:02 n-ando Exp $
  *
  */
 
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.6.2.1  2007/07/20 15:52:52  n-ando
+ * A bug fix.
+ *
  * Revision 1.6  2007/04/13 15:44:39  n-ando
  * RTC::OK was changed to RTC::RTC_OK.
  *
@@ -52,6 +55,13 @@
 
 namespace RTC
 {
+  /*!
+   * @if jp
+   * @brief Interface公開用Functor
+   * @else
+   *
+   * @endif
+   */
   struct DataInPort::publish
   {
     publish(SDOPackage::NVList& prop) : m_prop(prop) {}
@@ -62,6 +72,13 @@ namespace RTC
     SDOPackage::NVList& m_prop;
   };
   
+  /*!
+   * @if jp
+   * @brief Interface接続用Functor
+   * @else
+   *
+   * @endif
+   */
   struct DataInPort::subscribe
   {
     subscribe(const SDOPackage::NVList& prop) : m_prop(prop) {}
@@ -72,6 +89,13 @@ namespace RTC
     const SDOPackage::NVList& m_prop;
   };
   
+  /*!
+   * @if jp
+   * @brief Interface接続解除用Functor
+   * @else
+   *
+   * @endif
+   */
   struct DataInPort::unsubscribe
   {
     unsubscribe(const SDOPackage::NVList& prop) : m_prop(prop) {}
@@ -81,16 +105,29 @@ namespace RTC
     }
     const SDOPackage::NVList& m_prop;
   };
-
+  
+  /*!
+   * @if jp
+   * @brief デストラクタ
+   * @else
+   * @brief Destructor
+   * @endif
+   */
   DataInPort::~DataInPort()
   {
   }
-
+  
   //============================================================
   // protected interfaces
   //============================================================
-
-
+  
+  /*!
+   * @if jp
+   * @brief Interface情報を公開する
+   * @else
+   *
+   * @endif
+   */
   ReturnCode_t
   DataInPort::publishInterfaces(ConnectorProfile& connector_profile)
   {    
@@ -102,23 +139,37 @@ namespace RTC
       }
     std::for_each(m_providers.begin(), m_providers.end(),
 		  publish(connector_profile.properties));
-
+    
     return RTC::RTC_OK;
   }
   
+  /*!
+   * @if jp
+   * @brief Interfaceに接続する
+   * @else
+   *
+   * @endif
+   */
   ReturnCode_t
   DataInPort::subscribeInterfaces(const ConnectorProfile& connector_profile)
   {
     std::for_each(m_consumers.begin(), m_consumers.end(),
-    		  subscribe(connector_profile.properties));
+		  subscribe(connector_profile.properties));
     return RTC::RTC_OK;
   }
-
+  
+  /*!
+   * @if jp
+   * @brief Interfaceの接続を解除する
+   * @else
+   *
+   * @endif
+   */
   void
   DataInPort::unsubscribeInterfaces(const ConnectorProfile& connector_profile)
   {
     std::for_each(m_consumers.begin(), m_consumers.end(),
-    		  unsubscribe(connector_profile.properties));
+		  unsubscribe(connector_profile.properties));
   }
-
+  
 };

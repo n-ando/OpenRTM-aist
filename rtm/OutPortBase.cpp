@@ -1,23 +1,27 @@
 /*! -*- C++ -*-
  *
- * @file RtcOutPortBase.cpp
+ * @file OutPortBase.cpp
  * @brief Output porty base class
- * @date $Date: 2007-06-22 10:55:01 $
+ * @date $Date: 2007-12-31 03:08:05 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
- * Copyright (C) 2003-2005
+ * Copyright (C) 2003-2008
+ *     Noriaki Ando
  *     Task-intelligence Research Group,
  *     Intelligent Systems Research Institute,
  *     National Institute of
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: OutPortBase.cpp,v 1.1.4.1 2007-06-22 10:55:01 n-ando Exp $
+ * $Id: OutPortBase.cpp,v 1.1.4.2 2007-12-31 03:08:05 n-ando Exp $
  *
  */
 
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.1.4.1  2007/06/22 10:55:01  n-ando
+ * The bug of OutPort's disconnect operation was fixed.
+ *
  * Revision 1.1  2006/12/02 18:46:05  n-ando
  * The first commitment.
  *
@@ -42,7 +46,14 @@
 
 namespace RTC
 {
-
+  
+  /*!
+   * @if jp
+   * @brief Publisher を ID によって検索するための Functor
+   * @else
+   *
+   * @endif
+   */
   // Functor to find Publisher by id
   struct OutPortBase::find_id
   {
@@ -54,6 +65,13 @@ namespace RTC
     std::string m_id;
   };
   
+  /*!
+   * @if jp
+   * @brief Publisher にデータ更新を通知するための Functor
+   * @else
+   *
+   * @endif
+   */
   // Functor to notify update to Publishers
   struct OutPortBase::pub_push
   {
@@ -63,6 +81,13 @@ namespace RTC
     }
   };
   
+  /*!
+   * @if jp
+   * @brief Publisher を削除するための Functor
+   * @else
+   *
+   * @endif
+   */
   // Functor to delete Publishers
   struct OutPortBase::pub_del
   {
@@ -71,20 +96,19 @@ namespace RTC
       delete pub;
     }
   }; 
-
+  
   /*!
    * @if jp
-   * @brief OutPortBase クラスデストラクタ
+   * @brief デストラクタ
    * @else
-   * @brief A destructor of OutPortBase class.
+   * @brief Destructor
    * @endif
    */
   OutPortBase::~OutPortBase()
   {
     std::for_each(m_publishers.begin(), m_publishers.end(), pub_del());
   }
-
-
+  
   /*!
    * @if jp
    * @brief Publisherの追加
@@ -96,11 +120,10 @@ namespace RTC
   {
     attach_back(id, publisher);
   }
-
-
+  
   /*!
    * @if jp
-   * @brief Publisherの追加
+   * @brief リスト先頭へのPublisherの追加
    * @else
    * @brief Attach a publisher
    * @endif
@@ -109,11 +132,10 @@ namespace RTC
   {
     m_publishers.insert(m_publishers.begin(), new Publisher(id, publisher));
   }
-
-
+  
   /*!
    * @if jp
-   * @brief Publisherの追加
+   * @brief リスト最後尾へのPublisherの追加
    * @else
    * @brief Attach a publisher
    * @endif
@@ -123,7 +145,6 @@ namespace RTC
     m_publishers.push_back(new Publisher(id, publisher));
   }
   
-
   /*!
    * @if jp
    * @brief Publisherの削除
@@ -142,26 +163,16 @@ namespace RTC
     m_publishers.erase(it);
     return pub;
   }
-
-
+  
   /*!
    * @if jp
    * @brief 更新の通知
-   *
-   * Publisherにデータの更新を通知する。
-   *
    * @else
-   *
    * @brief Notify data update
-   *
-   * This operation notify data update to Publishers
-   *
    * @endif
    */
   void OutPortBase::notify()
   {
     std::for_each(m_publishers.begin(), m_publishers.end(), pub_push());
   }
-
-
 }; // end of namespace RTM

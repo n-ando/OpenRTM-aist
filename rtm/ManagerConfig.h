@@ -2,22 +2,26 @@
 /*!
  * @file ManagerConfig.h
  * @brief RTC manager configuration
- * @date $Date: 2007-04-13 18:02:28 $
+ * @date $Date: 2007-12-31 03:08:04 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
- * Copyright (C) 2003-2005
+ * Copyright (C) 2003-2008
+ *     Noriaki Ando
  *     Task-intelligence Research Group,
  *     Intelligent Systems Research Institute,
  *     National Institute of
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: ManagerConfig.h,v 1.4 2007-04-13 18:02:28 n-ando Exp $
+ * $Id: ManagerConfig.h,v 1.4.2.1 2007-12-31 03:08:04 n-ando Exp $
  *
  */
 
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.4  2007/04/13 18:02:28  n-ando
+ * Some configuration properties handling processes were changed.
+ *
  * Revision 1.3  2006/11/06 01:26:28  n-ando
  * Some trivial fixes.
  *
@@ -39,8 +43,6 @@
 
 namespace RTC
 {
-
-  
   /*!
    * @if jp
    *
@@ -48,11 +50,11 @@ namespace RTC
    * @brief Manager configuration クラス
    *
    * Manager のコンフィギュレーションを行う、コマンドライン引数を受け取り、
-   * (あるいは引数なしで)インスタンス化される。、Manager のプロパティの前設定
-   * を行い
+   * (あるいは引数なしで)インスタンス化される。
+   * コマンドライン引数で指定された設定ファイル、環境変数などから Manager の
+   * プロパティ情報を設定する。
    *
-   * 設定(ファイル)の指定の強さは以下のとおりである。
-   * 上がもっとも強く、下がもっとも弱い。
+   * 各設定の優先度は以下のとおりである。
    * <OL>
    * <LI>コマンドラインオプション "-f"
    * <LI>環境変数 "RTC_MANAGER_CONFIG"
@@ -67,6 +69,8 @@ namespace RTC
    * (たとえ -f で設定ファイルを指定しても)埋め込みコンフィギュレーション値
    * が使用される。
    *
+   * @since 0.4.0
+   *
    * @else
    *
    * @brief
@@ -77,36 +81,47 @@ namespace RTC
   {
   public:
     // The list of default configuration file path.
+    /*!
+     * @if jp
+     * @brief Manager コンフィギュレーションのデフォルト・ファイル・パス
+     * @else
+     * @endif
+     */
     static const char* config_file_path[];
     
     // Environment value to specify configuration file
+    /*!
+     * @if jp
+     * @brief デフォルト・コンフィギュレーションのファイル・パスを識別する
+     *        環境変数
+     * @else
+     * @endif
+     */
     static const char* config_file_env;
-
-
+    
     /*!
      * @if jp
      *
-     * @brief ManagerConfig コンストラクタ
+     * @brief コンストラクタ
      *
-     * 何もしないコンストラクタ。
+     * コンストラクタ。(何もしない)
      *
      * @else
      *
-     * @brief ManagerConfig constructor
+     * @brief constructor
      *
      * Do nothing. 
      *
      * @endif
      */
     ManagerConfig();
-
-
+    
     /*!
      * @if jp
      *
-     * @brief ManagerConfig コンストラクタ
+     * @brief コンストラクタ
      *
-     * 与えられた引数により初期化も同時にするコンストラクタ。
+     * 与えられた引数によりコンフィギュレーション情報の初期化を行う。
      *
      * @param argc コマンドライン引数の数
      * @param argv コマンドライン引数
@@ -124,63 +139,35 @@ namespace RTC
      * @endif
      */
     ManagerConfig(int argc, char** argv);
-
-
+    
     /*!
      * @if jp
      *
-     * @brief ManagerConfig デストラクタ
+     * @brief デストラクタ
      *
      * @else
      *
-     * @brief ManagerConfig destructor
+     * @brief destructor
      *
      * @endif
      */
     virtual ~ManagerConfig();
     
-
     /*!
      * @if jp
      *
      * @brief 初期化
      *
-     * デフォルトサーチパスからコンフィギュレーションファイルを探し初期化
-     * を行うとともにプロパティを返す。サーチパスにコンフィギュレーション
-     * ファイルが存在しない場合、デフォルトのコンフィギュレーションを
-     * 返す。
-     *
-     * @return 初期化された Property 値
-     *
-     * @else
-     *
-     * @brief Initialization
-     *
-     * This operation searches the configuration file from default search path,
-     * and initialize and return default properties.
-     * If there is no configuration file in the default search path,
-     * default configuration statically defined is used.
-     *
-     * @return Initialized Property value.
-     *
-     * @endif
-     */
-    //    void init();
-
-
-
-    /*!
-     * @if jp
-     *
-     * @brief 初期化
-     *
-     * コマンドライン引数を与えて初期化する。コマンドラインオプションは
+     * コマンドライン引数に応じて初期化を実行する。コマンドラインオプションは
      * 以下のものが使用可能である。
      *
      * -f file   : コンフィギュレーションファイルを指定する。<br>
-     * -l module : ロードするモジュールを指定する。<br>
-     * -o options: その他オプションを指定する。。<br>
-     * -d        : デフォルトのコンフィギュレーションを使う。<br>
+     * -l module : ロードするモジュールを指定する。(未実装)<br>
+     * -o options: その他オプションを指定する。(未実装)<br>
+     * -d        : デフォルトのコンフィギュレーションを使う。(未実装)<br>
+     *
+     * @param argc コマンドライン引数の数
+     * @param argv コマンドライン引数
      *
      * @else
      *
@@ -197,18 +184,21 @@ namespace RTC
      * @endif
      */
     void init(int argc, char** argv);
-
-
+    
     /*!
      * @if jp
-     * @brief Configuration の結果をPropertyに反映させる
+     * @brief Configuration 情報を Property に設定する
+     * 
+     * Manager のConfiguration 情報を指定された Property に設定する。
+     *
+     * @param prop Configuration 設定対象 Property
+     * 
      * @else
      * @brief Apply configuration results to Property
      * @endif
      */
     void configure(Properties& prop);
-
-
+    
     /*!
      * @if jp
      *
@@ -218,6 +208,9 @@ namespace RTC
      * 静的に定義されたデフォルトのコンフィギュレーションを返す。
      * init() 呼び出し後に呼ぶと、コマンドライン引数、環境変数等に
      * 基づいた初期化されたコンフィギュレーションを返す。
+     * (未実装)
+     *
+     * @return Manager のコンフィギュレーション情報
      *
      * @else
      *
@@ -231,7 +224,7 @@ namespace RTC
      * @endif
      */
     Properties getConfig() const;
-
+    
   protected:
     /*!
      * @if jp
@@ -239,9 +232,12 @@ namespace RTC
      * @brief コマンド引数をパースする
      *
      * -f file   : コンフィギュレーションファイルを指定する。<br>
-     * -l module : ロードするモジュールを指定する。。<br>
-     * -o options: その他オプションを指定する。。<br>
-     * -d        : デフォルトのコンフィギュレーションを使う。<br>
+     * -l module : ロードするモジュールを指定する。(未実装)<br>
+     * -o options: その他オプションを指定する。(未実装)<br>
+     * -d        : デフォルトのコンフィギュレーションを使う。(未実装)<br>
+     *
+     * @param argc コマンドライン引数の数
+     * @param argv コマンドライン引数
      *
      * @else
      *
@@ -256,19 +252,21 @@ namespace RTC
      */
     void parseArgs(int argc, char** argv);
     
-    
     /*!
      * @if jp
      *
-     * @brief Configuration file を探す
+     * @brief Configuration file の検索
+     *
+     * Configuration file を検索し、設定する。
+     * 既に Configuration file が設定済みの場合は、ファイルの存在確認を行う。
      *
      * Configuration file の優先順位
-     *
      * コマンドオプション指定＞環境変数＞デフォルトファイル＞デフォルト設定
      *
      * デフォルト強制オプション(-d): デフォルトファイルがあっても無視して
      *                               デフォルト設定を使う
      *
+     * @return Configuration file 検索結果
      *
      * @else
      *
@@ -277,12 +275,11 @@ namespace RTC
      * @endif
      */
     bool findConfigFile();
-
     
     /*!
      * @if jp
      *
-     * @brief システム情報をセットする
+     * @brief システム情報を設定する
      *
      * システム情報を取得しプロパティにセットする。設定されるキーは以下の通り。
      * manager.os.name    : OS名
@@ -292,6 +289,7 @@ namespace RTC
      * manager.os.hostname: ホスト名
      * manager.pid        : プロセスID
      * 
+     * @param prop システム情報を設定したプロパティ
      * @else
      * 
      * @brief Set system information
@@ -307,22 +305,30 @@ namespace RTC
      * @endif
      */
     void setSystemInformation(Properties& prop);
-
-
+    
     /*!
      * @if jp
-     * @brief ファイルが存在するかどうか確かめる
+     * @brief ファイルの存在確認
+     *
+     * 指定されたファイルが存在するか確認する。
+     *
+     * @param filename 確認対象ファイル名称
+     *
+     * @return 対象ファイル確認結果(存在する場合にtrue)
+     *
      * @else
      * @brief Check file existance
      * @endif
      */
     bool fileExist(const std::string& filename);
-
+    
+    /*!
+     * @if jp
+     * @brief Manager コンフィギュレーション・ファイルのパス
+     * @else
+     * @endif
+     */
     std::string m_configFile;
   };
-  
 }; // namespace RTC  
-  
-  
 #endif // ManagerConfig_h
-  

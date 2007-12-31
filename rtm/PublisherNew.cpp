@@ -2,10 +2,10 @@
 /*!
  * @file  PublisherNew.cpp
  * @brief PublisherNew class
- * @date  $Date: 2007-09-19 07:41:04 $
+ * @date  $Date: 2007-12-31 03:08:06 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
- * Copyright (C) 2006
+ * Copyright (C) 2006-2008
  *     Noriaki Ando
  *     Task-intelligence Research Group,
  *     Intelligent Systems Research Institute,
@@ -13,12 +13,15 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: PublisherNew.cpp,v 1.2.4.3 2007-09-19 07:41:04 n-ando Exp $
+ * $Id: PublisherNew.cpp,v 1.2.4.4 2007-12-31 03:08:06 n-ando Exp $
  *
  */
 
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.2.4.3  2007/09/19 07:41:04  n-ando
+ * PublisherNew thread termination problem was solved.
+ *
  * Revision 1.2.4.2  2007/08/20 06:32:27  n-ando
  * release() function was modified to broadcast signal to finalize task.
  *
@@ -56,11 +59,18 @@ namespace RTC
     open(0);
   }
 
+  /*!
+   * @if jp
+   * @brief デストラクタ
+   * @else
+   * @brief Destructor
+   * @endif
+   */
   PublisherNew::~PublisherNew()
   {
     delete m_consumer;
   }
-
+  
   /*!
    * @if jp
    * @brief Observer関数
@@ -115,7 +125,7 @@ namespace RTC
     return 0;
   }
 
-
+  
   /*!
    * @if jp
    * @brief タスク開始
@@ -125,11 +135,11 @@ namespace RTC
    */
   int PublisherNew::open(void *args)
   {
-        m_running = true;
-        this->activate();
-        return 0;
+    m_running = true;
+    this->activate();
+    return 0;
   }
-
+  
   
   /*!
    * @if jp
@@ -149,5 +159,5 @@ namespace RTC
     m_data._mutex.release();
     wait();
   }
-
+  
 }; // namespace RTC

@@ -2,22 +2,28 @@
 /*!
  * @file SdoOrganization.cpp
  * @brief SDO Organization class
- * @date $Date: 2007-04-26 15:33:28 $
+ * @date $Date: 2007-12-31 03:08:07 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
- * Copyright (C) 2006
+ * Copyright (C) 2006-2008
+ *     Noriaki Ando
  *     Task-intelligence Research Group,
  *     Intelligent Systems Research Institute,
  *     National Institute of
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: SdoOrganization.cpp,v 1.7 2007-04-26 15:33:28 n-ando Exp $
+ * $Id: SdoOrganization.cpp,v 1.7.2.1 2007-12-31 03:08:07 n-ando Exp $
  *
  */
 
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.7  2007/04/26 15:33:28  n-ando
+ * The header include order was modified to define _REENTRANT before
+ * including ace/config-lite.h in Linux systems.
+ * In ace 5.4.7 or later, _REENTRANT flag should be defined explicitly.
+ *
  * Revision 1.6  2006/11/27 10:00:56  n-ando
  * Some trivial fixes.
  *
@@ -39,25 +45,34 @@
 
 namespace SDOPackage
 {
+  /* @if jp
+   * @brief コンストラクタ
+   * @else
+   * @endif
+   */
   Organization_impl::Organization_impl()
   {
-	ACE_Utils::UUID_Generator uugen;
-	uugen.init();
-	ACE_Utils::UUID* uuid = uugen.generateUUID(2,0x01);
-	m_pId = CORBA::string_dup((uuid->to_string())->c_str());
+    ACE_Utils::UUID_Generator uugen;
+    uugen.init();
+    ACE_Utils::UUID* uuid = uugen.generateUUID(2,0x01);
+    m_pId = CORBA::string_dup((uuid->to_string())->c_str());
 #ifdef WIN32
-	uuid->~UUID();
+    uuid->~UUID();
 #else
-	delete uuid;
+    delete uuid;
 #endif
   }
-
-
+  
+  /* @if jp
+   * @brief 仮想デストラクタ
+   * @else
+   * @brief virtual destractor
+   * @endif
+   */
   Organization_impl::~Organization_impl()
   {
   }
-
-
+  
   /*!
    * @if jp
    * @brief [CORBA interface] Organization ID を取得する
@@ -68,10 +83,9 @@ namespace SDOPackage
   char* Organization_impl::get_organization_id()
     throw (InvalidParameter, NotAvailable, InternalError)
   {
-	return m_pId;
+    return m_pId;
   }
-
-
+  
   /*!
    * @if jp
    * @brief [CORBA interface] OrganizationProperty の取得
@@ -87,8 +101,7 @@ namespace SDOPackage
     prop = new OrganizationProperty(m_orgProperty);
     return prop._retn();
   }
-
-
+  
   /*!
    * @if jp
    * @brief [CORBA interface] OrganizationProperty の特定の値の取得
@@ -102,14 +115,13 @@ namespace SDOPackage
   {
     if (name == "")
       throw InvalidParameter("Empty name.");
-
+    
     CORBA::Long index;
-    index = CORBA_SeqUtil::find(m_orgProperty.properties,
-				nv_name(name));
-
+    index = CORBA_SeqUtil::find(m_orgProperty.properties, nv_name(name));
+    
     if (index < 0)
       throw InvalidParameter("Not found.");
-
+    
     try
       {
 	CORBA::Any_var value;
@@ -123,7 +135,6 @@ namespace SDOPackage
     // never reach here
     return new CORBA::Any();
   }
-
   
   /*!
    * @if jp
@@ -148,9 +159,8 @@ namespace SDOPackage
 	throw InternalError("set_organization_property()");
       }
     return false;
-   }
-
-
+  }
+  
   /*!
    * @if jp
    * @brief [CORBA interface] OrganizationProperty の値のセット
@@ -167,10 +177,9 @@ namespace SDOPackage
       {
 	throw InvalidParameter("set_organization_property_value(): Enpty name.");
       }
-
+    
     CORBA::Long index;
-    index = CORBA_SeqUtil::find(m_orgProperty.properties,
-				nv_name(name));
+    index = CORBA_SeqUtil::find(m_orgProperty.properties,nv_name(name));
     if (index < 0)
       {
 	NameValue nv;
@@ -184,8 +193,7 @@ namespace SDOPackage
       }
     return true;
   }
-
-
+  
   /*!
    * @if jp
    * @brief [CORBA interface] OrganizationProperty の削除
@@ -199,15 +207,14 @@ namespace SDOPackage
   {
     if (name == "")
       throw InvalidParameter("set_organization_property_value(): Enpty name.");
-
+    
     CORBA::Long index;
-    index = CORBA_SeqUtil::find(m_orgProperty.properties,
-				nv_name(name));
+    index = CORBA_SeqUtil::find(m_orgProperty.properties,nv_name(name));
     if (index < 0)
       throw InvalidParameter("set_organization_property_value(): Not found.");
-
+    
     try
-       {
+      {
 	CORBA_SeqUtil::erase(m_orgProperty.properties, index);
 	return true;
       }
@@ -217,7 +224,6 @@ namespace SDOPackage
       }
     return false;
   }
-
   
   /*!
    * @if jp
@@ -232,7 +238,6 @@ namespace SDOPackage
     return m_varOwner._retn();
   }
   
-
   /*!
    * @if jp
    * @brief [CORBA interface] Organization にオーナーをセットする
@@ -256,8 +261,7 @@ namespace SDOPackage
       }
     return true;
   }
-
-
+  
   /*!
    * @if jp
    * @brief [CORBA interface] Organization のメンバーを取得する
@@ -266,7 +270,7 @@ namespace SDOPackage
    * @endif
    */
   SDOList* Organization_impl::get_members()
-     throw (NotAvailable, InternalError)
+    throw (NotAvailable, InternalError)
   {
     try
       {
@@ -279,8 +283,7 @@ namespace SDOPackage
 	throw InternalError("get_members()");
       }
   }
-
-
+  
   /*!
    * @if jp
    * @brief [CORBA interface] SDO の ServiceProfile のセット
@@ -304,8 +307,7 @@ namespace SDOPackage
       }
     return true;
   }
-
-
+  
   /*!
    * @if jp
    * @brief [CORBA interface] SDO メンバーの追加
@@ -327,8 +329,7 @@ namespace SDOPackage
       }
     return false;	
   }
-
-
+  
   /*!
    * @if jp
    * @brief [CORBA interface] SDO メンバーの削除
@@ -341,13 +342,13 @@ namespace SDOPackage
   {
     if (id == "")
       throw InvalidParameter("remove_member(): Enpty name.");
-
+    
     CORBA::Long index;
     index = CORBA_SeqUtil::find(m_memberList, sdo_id(id));
-
+    
     if (index < 0)
       throw InvalidParameter("remove_member(): Not found.");
-
+    
     try
       {
 	CORBA_SeqUtil::erase(m_memberList, index);
@@ -359,8 +360,7 @@ namespace SDOPackage
       }
     return false;
   }
-	
-
+  
   /*!
    * @if jp
    * @brief [CORBA interface] Organization の DependencyType を取得
@@ -369,12 +369,11 @@ namespace SDOPackage
    * @endif
    */
   DependencyType Organization_impl::get_dependency()
-     throw (NotAvailable, InternalError)
+    throw (NotAvailable, InternalError)
   {
-	return m_dependency;
+    return m_dependency;
   }
   
-
   /*!
    * @if jp
    * @brief [CORBA interface] Organization の DependencyType をセットする
@@ -396,5 +395,4 @@ namespace SDOPackage
       }
     return false;
   }
-
 };

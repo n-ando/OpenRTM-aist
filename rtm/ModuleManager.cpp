@@ -1,23 +1,27 @@
 // -*- C++ -*-
 /*!
- * @file ModulesManager.cpp
+ * @file ModuleManager.cpp
  * @brief Loadable modules manager class
- * @date $Date: 2007-09-22 10:29:36 $
+ * @date $Date: 2007-12-31 03:08:04 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
- * Copyright (C) 2006
+ * Copyright (C) 2006-2008
+ *     Noriaki Ando
  *     Task-intelligence Research Group,
  *     Intelligent Systems Research Institute,
  *     National Institute of
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: ModuleManager.cpp,v 1.5.2.1 2007-09-22 10:29:36 n-ando Exp $
+ * $Id: ModuleManager.cpp,v 1.5.2.2 2007-12-31 03:08:04 n-ando Exp $
  *
  */
 
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.5.2.1  2007/09/22 10:29:36  n-ando
+ * The argument of the module init function was modified.
+ *
  * Revision 1.5  2007/04/26 15:30:00  n-ando
  * The header include order was modified to define _REENTRANT before
  * including ace/config-lite.h in Linux systems.
@@ -55,23 +59,33 @@
 namespace RTC
 {
   
+  /*!
+   * @if jp
+   * @brief コンストラクタ
+   * @else
+   * @brief constructor
+   * @endif
+   */
   ModuleManager::ModuleManager(Properties& prop)
     : m_properties(prop)
   {
     m_configPath      = split(prop[CONFIG_PATH], ",");
-    for_each(m_configPath.begin(), m_configPath.end(),
-    	     eraseHeadBlank);
+    for_each(m_configPath.begin(), m_configPath.end(), eraseHeadBlank);
     m_loadPath        = split(prop[MOD_LOADPTH], ",");
-    for_each(m_loadPath.begin(), m_loadPath.end(),
-    	     eraseHeadBlank);
-    m_absoluteAllowed = toBool(prop[ALLOW_ABSPATH],
-			       "yes", "no", false);
-    m_downloadAllowed = toBool(prop[ALLOW_URL],
-			       "yes", "no", false);
+    for_each(m_loadPath.begin(), m_loadPath.end(), eraseHeadBlank);
+    m_absoluteAllowed = toBool(prop[ALLOW_ABSPATH], "yes", "no", false);
+    m_downloadAllowed = toBool(prop[ALLOW_URL], "yes", "no", false);
     m_initFuncSuffix  = prop[INITFUNC_SFX];
     m_initFuncPrefix  = prop[INITFUNC_PFX];
   }
   
+  /*!
+   * @if jp
+   * @brief デストラクタ
+   * @else
+   * @brief destructor
+   * @endif
+   */
   ModuleManager::~ModuleManager()
   {
     unloadAll();
@@ -131,10 +145,9 @@ namespace RTC
     return file_path;
   }
   
-  
   /*!
    * @if jp
-   * @brief モジュールのロード
+   * @brief モジュールのロード、初期化
    * @else
    * @brief Load module
    * @endif
@@ -161,7 +174,6 @@ namespace RTC
     return name;
   }
   
-  
   /*!
    * @if jp
    * @brief モジュールのアンロード
@@ -179,7 +191,6 @@ namespace RTC
     
     return;
   }
-  
   
   /*!
    * @if jp
@@ -203,7 +214,6 @@ namespace RTC
     
     return;
   }
-  
   
   /*!
    * @if jp
@@ -243,10 +253,8 @@ namespace RTC
   void ModuleManager::setLoadpath(const std::vector<std::string>& load_path)
   {
     m_loadPath = load_path;
-    
     return;
   }
-  
   
   /*!
    * @if jp
@@ -269,7 +277,6 @@ namespace RTC
     return;
   }
   
-  
   /*!
    * @if jp
    * @brief ロード済みのモジュールリストを取得する
@@ -291,7 +298,6 @@ namespace RTC
     return modules;
   }
   
-  
   /*!
    * @if jp
    * @brief ロード可能なモジュールリストを取得する(未実装)
@@ -305,7 +311,6 @@ namespace RTC
     
     return modules;
   }
-  
   
   /*!
    * @if jp
@@ -336,7 +341,6 @@ namespace RTC
     return std::string("");
   }
   
-  
   /*!
    * @if jp
    * @brief ファイルが存在するかどうかのチェック
@@ -363,7 +367,6 @@ namespace RTC
     return false;
   }
   
-  
   /*!
    * @if jp
    * @brief 初期化関数シンボルを生成する
@@ -377,5 +380,4 @@ namespace RTC
     
     return m_initFuncPrefix + base_name + m_initFuncSuffix;
   }
-  
 }; // namespace RTC
