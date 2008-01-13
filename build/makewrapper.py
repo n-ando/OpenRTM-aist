@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 #
 # @brief CORBA stub and skelton wrapper generator
-# @date $Date: 2007-01-16 18:35:55 $
+# @date $Date: 2008-01-13 07:21:41 $
 # @author Norkai Ando <n-ando@aist.go.jp>
 #
 # Copyright (C) 2005-2006
@@ -12,10 +12,13 @@
 #         Advanced Industrial Science and Technology (AIST), Japan
 #     All rights reserved.
 #
-# $Id: makewrapper.py,v 1.6 2007-01-16 18:35:55 n-ando Exp $
+# $Id: makewrapper.py,v 1.6.4.1 2008-01-13 07:21:41 n-ando Exp $
 #
 
 # $Log: not supported by cvs2svn $
+# Revision 1.6  2007/01/16 18:35:55  n-ando
+# Escape the compile error of omniORB's stub/skel on gcc4.
+#
 # Revision 1.5  2007/01/12 14:28:31  n-ando
 # Directory to create output files was the same directory of IDL file.
 # Now it is current directory.
@@ -120,8 +123,7 @@ stub_cpp_temp = """// -*- C++ -*-
 #if   defined ORB_IS_TAO
 #include "[skel_dir]/[basename]C.cpp"
 #elif defined ORB_IS_OMNIORB
-#include "[skel_dir]/[basename]SK.cc"
-#include "[skel_dir]/[basename]DynSK.cc"
+
 #elif defined ORB_IS_MICO
 #include "[skel_dir]/[basename].cc"
 #elif defined ORB_IS_ORBIT2
