@@ -2,7 +2,7 @@
 /*!
  * @file SdoConfiguration.cpp
  * @brief SDO's Configuration implementation class
- * @date $Date: 2007-12-31 03:08:06 $
+ * @date $Date: 2008-01-13 07:33:26 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
  * Copyright (C) 2006-2007
@@ -13,12 +13,15 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: SdoConfiguration.cpp,v 1.7.2.2 2007-12-31 03:08:06 n-ando Exp $
+ * $Id: SdoConfiguration.cpp,v 1.7.2.3 2008-01-13 07:33:26 n-ando Exp $
  *
  */
 
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.7.2.2  2007/12/31 03:08:06  n-ando
+ * Class reference by doxygen comment was revised.
+ *
  * Revision 1.7.2.1  2007/09/19 03:00:52  n-ando
  * Inconsistency between idl and impl. in get_configuration_set() was modified.
  *
@@ -169,7 +172,7 @@ namespace SDOPackage
     //    if (CORBA::is_nil(sProfile.service)) throw InvalidParameter();
     try
       {
-	if (sProfile.id == "")
+	if (strcmp(sProfile.id, "") == 0)
 	  {
 	    ServiceProfile prof(sProfile);
 	    prof.id = CORBA::string_dup(getUUID().c_str());
