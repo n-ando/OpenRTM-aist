@@ -2,7 +2,7 @@
 /*!
  * @file  InPortCorbaProvider.h
  * @brief InPortCorbaProvider class
- * @date  $Date: 2007-12-31 03:08:03 $
+ * @date  $Date: 2008-01-13 07:41:29 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
  * Copyright (C) 2006-2008
@@ -13,12 +13,15 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: InPortCorbaProvider.h,v 1.4.4.1 2007-12-31 03:08:03 n-ando Exp $
+ * $Id: InPortCorbaProvider.h,v 1.4.4.2 2008-01-13 07:41:29 n-ando Exp $
  *
  */
 
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.4.4.1  2007/12/31 03:08:03  n-ando
+ * Class reference by doxygen comment was revised.
+ *
  * Revision 1.4  2007/01/21 09:48:08  n-ando
  * A method to advertise interface profile was changed.
  *
@@ -158,7 +161,7 @@ namespace RTC
      */
     virtual void put(const CORBA::Any& data)
     {
-      DataType* tmp;
+      const DataType* tmp;
       if (data >>= tmp)
 	{
 	  m_buffer.write(*tmp);

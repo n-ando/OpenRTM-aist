@@ -2,7 +2,7 @@
 /*!
  * @file NVUtil.h
  * @brief NameValue and NVList utility functions
- * @date $Date: 2007-12-31 03:08:04 $
+ * @date $Date: 2008-01-13 07:41:08 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
  * Copyright (C) 2006-2008
@@ -13,12 +13,15 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: NVUtil.cpp,v 1.8.2.2 2007-12-31 03:08:04 n-ando Exp $
+ * $Id: NVUtil.cpp,v 1.8.2.3 2008-01-13 07:41:08 n-ando Exp $
  *
  */
 
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.8.2.2  2007/12/31 03:08:04  n-ando
+ * Class reference by doxygen comment was revised.
+ *
  * Revision 1.8.2.1  2007/07/20 15:56:50  n-ando
  * STL algorithm header include.
  *
@@ -154,7 +157,7 @@ namespace NVUtil
   {
     for (CORBA::ULong i(0), len(nv.length()); i < len; ++i)
       {
-	char* value;
+	const char* value;
 	if (nv[i].value >>= value)
 	  {
 	    const char* name(nv[i].name);
@@ -177,7 +180,7 @@ namespace NVUtil
     };
     void operator()(const SDOPackage::NameValue& nv)
     {
-      char* value;
+      const char* value;
       if (nv.value >>= value)
 	{
 	  m_prop.setProperty(CORBA::string_dup(nv.name), value);
@@ -258,7 +261,7 @@ namespace NVUtil
       {
 	CORBA::Any value;
 	value = find(nv, name);
-	char* str_value;
+	const char* str_value;
 	return value >>= str_value;
       }
     catch (...)
@@ -296,7 +299,7 @@ namespace NVUtil
    */
   std::string toString(const SDOPackage::NVList& nv, const char* name)
   {
-    char* str_value;
+    const char* str_value;
     try
       {
 	find(nv, name) >>= str_value;
@@ -325,7 +328,7 @@ namespace NVUtil
     
     if (index > 0)
       {
-	char* tmp_char;
+	const char* tmp_char;
 	nv[index].value >>= tmp_char;
 	std::string tmp_str(tmp_char);
 	
@@ -371,7 +374,7 @@ namespace NVUtil
   {
     for (CORBA::ULong i(0), n(nv.length()); i < n; ++i)
       {
-	char* str_value;
+	const char* str_value;
 	if (nv[i].value >>= str_value)
 	  {
 	    std::cout << nv[i].name << ": " << str_value << std::endl;

@@ -2,7 +2,7 @@
 /*!
  * @file  InPortTcpSockConsumer.h
  * @brief InPortTcpSockConsumer class
- * @date  $Date: 2007-12-31 03:08:03 $
+ * @date  $Date: 2008-01-13 07:41:50 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
  * Copyright (C) 2007-2008
@@ -13,12 +13,15 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: InPortTcpSockConsumer.h,v 1.1.2.2 2007-12-31 03:08:03 n-ando Exp $
+ * $Id: InPortTcpSockConsumer.h,v 1.1.2.3 2008-01-13 07:41:50 n-ando Exp $
  *
  */
 
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.1.2.2  2007/12/31 03:08:03  n-ando
+ * Class reference by doxygen comment was revised.
+ *
  * Revision 1.1.2.1  2007/10/06 12:28:53  n-ando
  * InPort consumer for TCP socket data port.
  *
@@ -228,7 +231,7 @@ namespace RTC
 	  return false;
 	}
       
-      char* inport_addr;
+      const char* inport_addr;
       if (!(properties[index].value >>= inport_addr))
 	{
 	  return false;
