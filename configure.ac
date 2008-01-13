@@ -2,7 +2,7 @@ dnl -*- autoconf -*-
 dnl
 dnl @file configure.ac
 dnl @brief Input file for autoconf
-dnl @date $Date: 2008-01-13 07:21:13 $
+dnl @date $Date: 2008-01-13 15:03:14 $
 dnl @author Noriaki Ando <n-ando@aist.go.jp>
 dnl
 dnl This file is an input file used by the GNU "autoconf" program to
@@ -10,11 +10,15 @@ dnl generate the file "configure", which tries to guess your system
 dnl configuration
 dnl
 dnl
-dnl $Id: configure.ac,v 1.21.2.5 2008-01-13 07:21:13 n-ando Exp $
+dnl $Id: configure.ac,v 1.21.2.6 2008-01-13 15:03:14 n-ando Exp $
 dnl
 
 dnl
 dnl $Log: not supported by cvs2svn $
+dnl Revision 1.21.2.5  2008/01/13 07:21:13  n-ando
+dnl - The Version number was updated to 0.4.2.
+dnl - MICO related configuration was modified.
+dnl
 dnl Revision 1.21.2.4  2007/09/21 08:53:45  n-ando
 dnl Some modifications
 dnl - The version number was modified as 0.4.1.
@@ -165,6 +169,7 @@ AC_ARG_WITH(includes,         [  --with-includes=dirs            Additional incl
 AC_ARG_WITH(libs,             [  --with-libs=dirs                Additional lib dirs (separated by ':')])
 AC_ARG_ENABLE(gcc2option,     [  --with-gcc2                     Compile with gcc2])
 AC_ARG_ENABLE(artlinux,       [  --with-artlinux                 With ART-Linux])
+AC_ARG_ENABLE(sockdataport,   [  --with-sockdataport             With Socket DataPort])
 AC_ARG_ENABLE(artlinux,       [  --with-rdtsc                    With Read Time Stamp Counter])
 AC_ARG_ENABLE(unittest,       [  --enable-test                   Enable UnitTest With CppUnit])
 
@@ -1073,7 +1078,17 @@ if test "x$have_omniorb" = "xyes" ; then
 	if test "x$omniorb_version" = "x" ; then
 		omniorb_version=unknown
 	fi
+	case $omniorb_version in
+	4.0.*)
+		AC_MSG_RESULT(CORBA C++ mapping ver1.0 is used.)
+		;;
+	4.1|4.1.*)
+		AC_DEFINE([RTC_CORBA_CXXMAPPING11], [TRUE], [CORBA C++ mapping is ver1.1])
+		AC_MSG_RESULT(CORBA C++ mapping ver1.1 is used.)
+		;;
+	esac
 	AC_MSG_RESULT($omnirob_version)
+
 
 	dnl ------------------------------------------------------------
 	dnl  omniORB setup complete
@@ -1324,7 +1339,23 @@ if test "x$with_rdtsc" != "x" ; then
 fi
 
 
+dnl ------------------------------------------------------------
+dnl Socket DataPort
+dnl
+dnl ------------------------------------------------------------
+if test "x$with_sockdataport" != "x" ; then
+	if test "x$orb_to_use" = "xomniORB" ; then
+		AC_DEFINE([RTC_SOCK_DATAPORT], [TRUE], [Socket DataPort is enable])
+	else
+		AC_MSG_WARN([To use socket dataport, CORBA should be omniORB.])
+	fi
+fi
 
+
+dnl ------------------------------------------------------------
+dnl Unit test
+dnl
+dnl ------------------------------------------------------------
 if test "x$enable_test" = "xyes" ; then
 	UNITTEST="tests"
 fi
