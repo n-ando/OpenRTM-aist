@@ -2,7 +2,7 @@
 /*!
  * @file PortBase.h
  * @brief RTC's Port base class
- * @date $Date: 2007-12-31 03:08:05 $
+ * @date $Date: 2008-01-13 07:38:51 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
  * Copyright (C) 2006-2008
@@ -13,12 +13,15 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: PortBase.cpp,v 1.10.2.3 2007-12-31 03:08:05 n-ando Exp $
+ * $Id: PortBase.cpp,v 1.10.2.4 2008-01-13 07:38:51 n-ando Exp $
  *
  */
 
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.10.2.3  2007/12/31 03:08:05  n-ando
+ * Class reference by doxygen comment was revised.
+ *
  * Revision 1.10.2.2  2007/09/20 11:26:03  n-ando
  * A function getPortProfile() was added to get PortProfile locally.
  *
@@ -183,10 +186,13 @@ namespace RTC
       }
     try
       {
-	return connector_profile.ports[0]->notify_connect(connector_profile);
+	RTC::Port_var p;
+	p = connector_profile.ports[0];
+	return p->notify_connect(connector_profile);
       }
     catch (...)
       {
+	std::cout << "exception" << std::endl;
 	return RTC::BAD_PARAMETER;
       }
     return RTC::RTC_ERROR;
@@ -251,8 +257,9 @@ namespace RTC
     CORBA::Long index;
     index = findConnProfileIndex(connector_id);
     ConnectorProfile prof(m_profile.connector_profiles[index]);
-    
-    return prof.ports[0]->notify_disconnect(connector_id);
+    RTC::Port_var p;
+    p = prof.ports[0];
+    return p->notify_disconnect(connector_id);
   }
   
   /*!
