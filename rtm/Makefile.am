@@ -2,9 +2,12 @@
 ##------------------------------------------------------------
 ## Makefile.am for libRTC
 ##
-## $Id: Makefile.am,v 1.16.2.2 2007-10-06 12:24:04 n-ando Exp $
+## $Id: Makefile.am,v 1.16.2.3 2008-01-13 07:42:40 n-ando Exp $
 ##
 ## $Log: not supported by cvs2svn $
+## Revision 1.16.2.2  2007/10/06 12:24:04  n-ando
+## TCP socket data port was added.
+##
 ## Revision 1.16.2.1  2007/09/21 10:53:18  n-ando
 ## A trivial fix.
 ##
@@ -139,7 +142,7 @@ libRTC_la_SOURCES = \
 	$(UTIL_SRC) $(MGR_SRC) $(COMP_SRC) $(PORT_SRC)
 
 
-libRTC_la_LIBADD = $(top_builddir)/rtm/idl/libRTCSkel.la $(ARTLIB)
+libRTC_la_LIBADD = $(top_builddir)/rtm/idl/libRTCSkel.la $(top_builddir)/rtm/idl/libRTCStub.la $(ARTLIB)
 libRTC_la_LDFLAGS =                 \
 	-no-undefined               \
 	-L$(top_builddir)/rtm/idl   \
@@ -188,4 +191,4 @@ DIST_SUBDIRS = idl tests
 
 clean-local:
 	rm -f *.gch *.bak *.rpo *.sym lib*.*_pure_* Makefile.old *core *~
-	rm -f config_rtc.h.in
+
