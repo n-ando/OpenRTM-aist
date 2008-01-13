@@ -2,7 +2,7 @@
 /*!
  * @file ConnectorComp.cpp
  * @brief connector application
- * @date $Date: 2007-04-13 15:02:57 $
+ * @date $Date: 2008-01-13 07:24:08 $
  *
  * Copyright (c) 2003-2007 Noriaki Ando <n-ando@aist.go.jp>
  *          Task-intelligence Research Group,
@@ -10,7 +10,7 @@
  *          National Institute of Industrial Science (AIST), Japan
  *          All rights reserved.
  *
- * $Id: ConnectorComp.cpp,v 1.6 2007-04-13 15:02:57 n-ando Exp $
+ * $Id: ConnectorComp.cpp,v 1.6.2.1 2008-01-13 07:24:08 n-ando Exp $
  */
 
 #include <iostream>
@@ -86,31 +86,31 @@ int main (int argc, char** argv)
 
   // get ports
   pin = conin->get_ports();
-  pin[0]->disconnect_all();
+  pin[(CORBA::ULong)0]->disconnect_all();
   assert(pin->length() > 0);
   // activate ConsoleIn0
   ExecutionContextServiceList_var eclisti;
   eclisti = conin->get_execution_context_services();
-  eclisti[0]->activate_component(RTObject::_duplicate(conin._ptr()));
+  eclisti[(CORBA::ULong)0]->activate_component(RTObject::_duplicate(conin._ptr()));
 
   // find ConsoleOut0 component
   conout.setObject(naming.resolve("ConsoleOut0.rtc"));
   // get ports
   pout = conout->get_ports();
-  pout[0]->disconnect_all();
+  pout[(CORBA::ULong)0]->disconnect_all();
   assert(pout->length() > 0);
   // activate ConsoleOut0
   ExecutionContextServiceList_var eclisto;
   eclisto = conout->get_execution_context_services();
-  eclisto[0]->activate_component(RTObject::_duplicate(conout._ptr()));
+  eclisto[(CORBA::ULong)0]->activate_component(RTObject::_duplicate(conout._ptr()));
 
   // connect ports
   ConnectorProfile prof;
   prof.connector_id = "";
   prof.name = CORBA::string_dup("connector0");
   prof.ports.length(2);
-  prof.ports[0] = pin[0];
-  prof.ports[1] = pout[0];
+  prof.ports[0] = pin[(CORBA::ULong)0];
+  prof.ports[1] = pout[(CORBA::ULong)0];
   CORBA_SeqUtil::push_back(prof.properties,
 			   NVUtil::newNV("dataport.interface_type",
 					 "CORBA_Any"));
@@ -125,7 +125,7 @@ int main (int argc, char** argv)
 			   NVUtil::newNV("dataport.push_interval",
 					 period.c_str()));
   ReturnCode_t ret;
-  ret = pin[0]->connect(prof);
+  ret = pin[(CORBA::ULong)0]->connect(prof);
   assert(ret == RTC::RTC_OK);
 
   std::cout << "Connector ID: " << prof.connector_id << std::endl;
