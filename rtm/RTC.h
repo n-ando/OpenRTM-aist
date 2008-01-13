@@ -2,7 +2,7 @@
 /*!
  * @file RTC.h
  * @brief RTComponent header
- * @date $Date: 2007-07-20 16:05:14 $
+ * @date $Date: 2008-01-13 07:52:44 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
  * Copyright (C) 2003-2005
@@ -12,12 +12,16 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: RTC.h,v 1.5.2.1 2007-07-20 16:05:14 n-ando Exp $
+ * $Id: RTC.h,v 1.5.2.2 2008-01-13 07:52:44 n-ando Exp $
  *
  */
 
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.5.2.1  2007/07/20 16:05:14  n-ando
+ * usleep definition for win32 porting.
+ * Useless __declspec definitions were deleted.
+ *
  * Revision 1.5  2007/04/13 18:14:41  n-ando
  * Now OpenRTMSkel.h is included.
  *
@@ -45,6 +49,7 @@
 #ifdef ORB_IS_MICO
 #include <CORBA.h>
 #include <coss/CosNaming.h>
+#include <rtm/idl/RTC.h>
 #endif
 
 #ifdef ORB_IS_TAO
