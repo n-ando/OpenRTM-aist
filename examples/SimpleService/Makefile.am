@@ -2,7 +2,7 @@
 ##---------------------------------------------------------------------------
 ## Makefile.am for MyServiceProvider/MyServiceConsumer components
 ##
-## $Id: Makefile.am,v 1.5.2.1 2007-07-22 14:26:37 n-ando Exp $
+## $Id: Makefile.am,v 1.5.2.2 2008-01-13 07:26:32 n-ando Exp $
 ##
 ##---------------------------------------------------------------------------
 
@@ -38,6 +38,7 @@ noinst_PROGRAMS = MyServiceConsumerComp MyServiceProviderComp
 
 nodist_MyServiceProviderComp_SOURCES = \
 	$(IDL_SOURCES:.idl=Skel.cpp)   \
+	$(IDL_SOURCES:.idl=Stub.cpp)   \
 	MyServiceSVC_impl.cpp          \
 	MyServiceProvider.cpp          \
 	MyServiceProviderComp.cpp
@@ -45,6 +46,7 @@ MyServiceProviderComp_LDFLAGS = -L$(top_builddir)/rtm
 MyServiceProviderComp_LDADD = -lRTC
 
 nodist_MyServiceConsumerComp_SOURCES = \
+	$(IDL_SOURCES:.idl=Skel.cpp)   \
 	$(IDL_SOURCES:.idl=Stub.cpp)   \
 	MyServiceConsumer.cpp          \
 	MyServiceConsumerComp.cpp
