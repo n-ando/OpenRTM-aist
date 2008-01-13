@@ -2,7 +2,7 @@ dnl -*- autoconf -*-
 dnl
 dnl @file configure.ac
 dnl @brief Input file for autoconf
-dnl @date $Date: 2007-09-21 08:53:45 $
+dnl @date $Date: 2008-01-13 07:21:13 $
 dnl @author Noriaki Ando <n-ando@aist.go.jp>
 dnl
 dnl This file is an input file used by the GNU "autoconf" program to
@@ -10,11 +10,16 @@ dnl generate the file "configure", which tries to guess your system
 dnl configuration
 dnl
 dnl
-dnl $Id: configure.ac,v 1.21.2.4 2007-09-21 08:53:45 n-ando Exp $
+dnl $Id: configure.ac,v 1.21.2.5 2008-01-13 07:21:13 n-ando Exp $
 dnl
 
 dnl
 dnl $Log: not supported by cvs2svn $
+dnl Revision 1.21.2.4  2007/09/21 08:53:45  n-ando
+dnl Some modifications
+dnl - The version number was modified as 0.4.1.
+dnl - Bugs of omniORB's detection script was fixed.
+dnl
 dnl Revision 1.21.2.3  2007/09/19 02:33:31  n-ando
 dnl Unit tests for SyncLIFO and SyncFIFO were added.
 dnl
@@ -98,7 +103,7 @@ dnl  Autoconf initial macros
 dnl ------------------------------------------------------------
 dnl  Process this file with autoconf to produce a configure script.
 AC_PREREQ(2.59)
-AC_INIT(OpenRTM-aist, 0.4.1, n-ando@aist.go.jp, OpenRTM-aist)
+AC_INIT(OpenRTM-aist, 0.4.2, n-ando@aist.go.jp, OpenRTM-aist)
 AM_INIT_AUTOMAKE
 AM_CONFIG_HEADER([rtm/config_rtc.h])
 
@@ -640,11 +645,11 @@ hint: <dir>/bin will be searched.)
 	IDL_FLAGS="--c++-skel --poa --no-boa --any"
 	CXXFLAGS="$CXXFLAGS -I$CORBA_h_dir"
 	LDFLAGS="$LDFLAGS -L$mico_lib_dir"
-	LIBS="$LIBS -lmico$MICOVERSION $micodeps"
-	LDSOLIBS="$LDSOLIBS -lmico$MICOVERSION $micodeps"
+	LIBS="$LIBS -lmico$MICOVERSION -lmicocoss$MICOVERSION $micodeps"
+	LDSOLIBS="$LDSOLIBS -lmico$MICOVERSION -lmicocoss$MICOVERSION $micodeps"
 
 	if test "x$micoir_lib_dir" != "x" ; then
-		LIBS="-lmicoir$MICOVERSION $LIBS"
+		LIBS="-lmicoir$MICOVERSION -lmicocoss$MICOVERSION $LIBS"
 		LDSOLIBS="-lmicoir$MICOVERSION $LDSOLIBS"
 	fi
 	AC_DEFINE([ORB_IS_MICO], [TRUE], [ORB is MICO])
