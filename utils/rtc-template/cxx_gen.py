@@ -3,7 +3,7 @@
 #
 #  @file cxx_gen.py
 #  @brief rtc-template C++ source code generator class
-#  @date $Date: 2007-07-20 17:28:56 $
+#  @date $Date: 2008-01-13 10:29:34 $
 #  @author Noriaki Ando <n-ando@aist.go.jp>
 # 
 #  Copyright (C) 2004-2007
@@ -13,11 +13,14 @@
 #          Advanced Industrial Science and Technology (AIST), Japan
 #      All rights reserved.
 # 
-#  $Id: cxx_gen.py,v 1.8.2.1 2007-07-20 17:28:56 n-ando Exp $
+#  $Id: cxx_gen.py,v 1.8.2.2 2008-01-13 10:29:34 n-ando Exp $
 # 
 
 #
 #  $Log: not supported by cvs2svn $
+#  Revision 1.8.2.1  2007/07/20 17:28:56  n-ando
+#  A fix for win32 porting.
+#
 #  Revision 1.8  2007/05/29 01:44:29  n-ando
 #  make clean target was modified to delete *Compl.o
 #
@@ -444,7 +447,7 @@ makefile = """# -*- Makefile -*-
 #
 # [rcs_id]
 #
-CXXFLAGS = `rtm-config --cflags`
+CXXFLAGS = `rtm-config --cflags` -I.
 LDFLAGS  = `rtm-config --libs`
 SHFLAGS  = -shared
 
@@ -454,10 +457,11 @@ WRAPPER  = rtm-skelwrapper
 WRAPPER_FLAGS = --include-dir="" --skel-suffix=Skel --stub-suffix=Stub
 
 SKEL_OBJ = [for service_idl][service_idl.skel_basename].o [end] \
+	[for consumer_idl][consumer_idl.skel_basename].o [end]
+STUB_OBJ = [for service_idl][service_idl.stub_basename].o [end] \
 	[for consumer_idl][consumer_idl.stub_basename].o [end]
-STUB_OBJ = [for service_idl][service_idl.stub_basename].o [end]
 IMPL_OBJ = [for service_idl][service_idl.impl_basename].o [end]
-OBJS     = [module.name].o $(SKEL_OBJ) $(IMPL_OBJ)
+OBJS     = [module.name].o $(SKEL_OBJ) $(STUB_OBJ) $(IMPL_OBJ)
 
 .SUFFIXES : .so
 
@@ -504,6 +508,12 @@ clean_skelstub:
 [end]
 
 [for consumer_idl]
+[consumer_idl.skel_basename].cpp : [consumer_idl.idl_fname]
+	$(IDLC) $(IDLFLAGS) [consumer_idl.idl_fname]
+	$(WRAPPER) $(WRAPPER_FLAGS) --idl-file=[consumer_idl.idl_fname]
+[consumer_idl.skel_basename].h : [consumer_idl.idl_fname]
+	$(IDLC) $(IDLFLAGS) [consumer_idl.idl_fname]
+	$(WRAPPER) $(WRAPPER_FLAGS) --idl-file=[consumer_idl.idl_fname]
 [consumer_idl.stub_basename].cpp : [consumer_idl.idl_fname]
 	$(IDLC) $(IDLFLAGS) [consumer_idl.idl_fname]
 	$(WRAPPER) $(WRAPPER_FLAGS) --idl-file=[consumer_idl.idl_fname]
@@ -526,6 +536,7 @@ clean_skelstub:
 [end]
 
 [for consumer_idl]
+[consumer_idl.skel_basename].o: [consumer_idl.skel_basename].cpp [consumer_idl.skel_basename].h [consumer_idl.stub_basename].h
 [consumer_idl.stub_basename].o: [consumer_idl.stub_basename].cpp [consumer_idl.stub_basename].h
 [end]
 
@@ -665,9 +676,13 @@ def MakeConsumerIDL(dict):
 				dup = True
 		if not dup:
 			tmp = cons
+			tmp.skel_basename = tmp.idl_basename + \
+			    dict["skel_suffix"]
+			tmp.skel_h        = tmp.skel_basename + ".h"
+			tmp.skel_cpp      = tmp.skel_basename + ".cpp"
 			tmp.stub_suffix   = dict["stub_suffix"]
-			tmp.stub_basename = tmp.idl_basename \
-			    + dict["stub_suffix"]
+			tmp.stub_basename = tmp.idl_basename + \
+			    dict["stub_suffix"]
 			tmp.stub_h        = tmp.stub_basename + ".h"
 			tmp.stub_cpp      = tmp.stub_basename + ".cpp"
 			conslist.append(tmp)
