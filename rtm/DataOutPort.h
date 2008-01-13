@@ -2,7 +2,7 @@
 /*!
  * @file DataOutPort.h
  * @brief Base class of OutPort
- * @date $Date: 2007-12-31 03:08:02 $
+ * @date $Date: 2008-01-13 15:06:58 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
  * Copyright (C) 2006
@@ -13,12 +13,15 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: DataOutPort.h,v 1.7.2.2 2007-12-31 03:08:02 n-ando Exp $
+ * $Id: DataOutPort.h,v 1.7.2.3 2008-01-13 15:06:58 n-ando Exp $
  *
  */
 
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.7.2.2  2007/12/31 03:08:02  n-ando
+ * Class reference by doxygen comment was revised.
+ *
  * Revision 1.7.2.1  2007/10/06 12:23:47  n-ando
  * TCP socket data port was added.
  *
@@ -54,13 +57,16 @@
 #include <rtm/PortBase.h>
 #include <rtm/BufferBase.h>
 #include <rtm/OutPortCorbaProvider.h>
-#include <rtm/OutPortTcpSockProvider.h>
 #include <rtm/InPortCorbaConsumer.h>
-#include <rtm/InPortTcpSockConsumer.h>
 #include <rtm/OutPort.h>
 #include <rtm/NVUtil.h>
 #include <rtm/PublisherFactory.h>
 #include <rtm/Properties.h>
+
+#ifdef RTC_SOCK_DATAPORT
+#include <rtm/OutPortTcpSockProvider.h>
+#include <rtm/InPortTcpSockConsumer.h>
+#endif
 
 namespace RTC
 {
@@ -153,11 +159,14 @@ namespace RTC
       m_providers.push_back(new OutPortCorbaProvider<DataType>(outport));
       m_providers.back()->publishInterfaceProfile(m_profile.properties);
       
+#ifdef RTC_SOCK_DATAPORT
       m_providers.push_back(new OutPortTcpSockProvider<DataType>(outport));
       m_providers.back()->publishInterfaceProfile(m_profile.properties);
-      
+#endif      
       m_consumers.push_back(new InPortCorbaConsumer<DataType>(outport));
+#ifdef RTC_SOCK_DATAPORT
       m_consumers.push_back(new InPortTcpSockConsumer<DataType>(outport, prop));
+#endif
     }
     
     /*!

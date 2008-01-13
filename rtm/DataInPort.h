@@ -2,7 +2,7 @@
 /*!
  * @file DataInPort.h
  * @brief RTC::Port implementation for Data InPort
- * @date $Date: 2007-12-31 03:08:02 $
+ * @date $Date: 2008-01-13 15:06:40 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
  * Copyright (C) 2006
@@ -13,12 +13,15 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: DataInPort.h,v 1.6.4.2 2007-12-31 03:08:02 n-ando Exp $
+ * $Id: DataInPort.h,v 1.6.4.3 2008-01-13 15:06:40 n-ando Exp $
  *
  */
 
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.6.4.2  2007/12/31 03:08:02  n-ando
+ * Class reference by doxygen comment was revised.
+ *
  * Revision 1.6.4.1  2007/10/06 12:23:26  n-ando
  * TCP socket data port was added.
  *
@@ -54,10 +57,12 @@
 #include <rtm/BufferBase.h>
 #include <rtm/InPortCorbaProvider.h>
 #include <rtm/OutPortCorbaConsumer.h>
-#include <rtm/InPortTcpSockProvider.h>
 #include <rtm/NVUtil.h>
 #include <rtm/InPort.h>
-#include <stdio.h>
+
+#ifdef RTC_SOCK_DATAPORT
+#include <rtm/InPortTcpSockProvider.h>
+#endif
 
 /*!
  * @if jp
@@ -119,8 +124,10 @@ namespace RTC
       m_providers.back()->publishInterfaceProfile(m_profile.properties);
       
       // TCP Socket InPort Provider
+#ifdef RTC_SOCK_DATAPORT
       m_providers.push_back(new InPortTcpSockProvider<DataType>(inport, prop));
       m_providers.back()->publishInterfaceProfile(m_profile.properties);
+#endif
       
       // CORBA OutPort Consumer
       m_consumers.push_back(new OutPortCorbaConsumer<DataType>(inport));
