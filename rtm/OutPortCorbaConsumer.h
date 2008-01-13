@@ -2,7 +2,7 @@
 /*!
  * @file  OutPortCorbaConsumer.h
  * @brief OutPortCorbaConsumer class
- * @date  $Date: 2007-12-31 03:08:05 $
+ * @date  $Date: 2008-01-13 10:28:27 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
  * Copyright (C) 2006-2007
@@ -13,12 +13,15 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: OutPortCorbaConsumer.h,v 1.2.4.1 2007-12-31 03:08:05 n-ando Exp $
+ * $Id: OutPortCorbaConsumer.h,v 1.2.4.2 2008-01-13 10:28:27 n-ando Exp $
  *
  */
 
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.2.4.1  2007/12/31 03:08:05  n-ando
+ * Class reference by doxygen comment was revised.
+ *
  * Revision 1.2  2007/01/06 17:57:27  n-ando
  * Interface subscription/unsubscription functions (subscribeInterface()
  * and unsubscribeInterface()) are added.
@@ -105,7 +108,7 @@ namespace RTC
      */
     bool get(DataType& data)
     {
-      DataType* d;
+      const DataType* d;
       try
 	{
 	  if ((*(_ptr()->get())) >>= d)
