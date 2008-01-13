@@ -2,9 +2,12 @@
 ##------------------------------------------------------------
 ## Makefile.am for libRTCSkel
 ##
-## $Id: Makefile.am,v 1.9 2007-04-13 18:24:09 n-ando Exp $
+## $Id: Makefile.am,v 1.9.2.1 2008-01-13 07:32:05 n-ando Exp $
 ##
 ## $Log: not supported by cvs2svn $
+## Revision 1.9  2007/04/13 18:24:09  n-ando
+## OpenRTM specific idl definition (OpenRTM.idl) is added.
+##
 ## Revision 1.8  2007/01/21 13:10:26  n-ando
 ## To avoid omniORB's stub bug on gcc4, stub creation process was changed.
 ##
@@ -147,7 +150,7 @@ nodist_rtmskel_HEADERS =         \
 # Intermediate library : libRTCSkel.a
 noinst_LTLIBRARIES = libRTCSkel.la libRTCStub.la
 
-nodist_libRTCSkel_la_SOURCES = $(IDL_SOURCES:.idl=Stub.cpp)
+nodist_libRTCSkel_la_SOURCES = $(IDL_SOURCES:.idl=Skel.cpp)
 
 libRTCSkel_la_LIBADD = $(LIBS)
 
