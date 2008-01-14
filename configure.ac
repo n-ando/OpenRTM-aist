@@ -2,7 +2,7 @@ dnl -*- autoconf -*-
 dnl
 dnl @file configure.ac
 dnl @brief Input file for autoconf
-dnl @date $Date: 2008-01-13 15:03:14 $
+dnl @date $Date: 2008-01-14 07:42:21 $
 dnl @author Noriaki Ando <n-ando@aist.go.jp>
 dnl
 dnl This file is an input file used by the GNU "autoconf" program to
@@ -10,11 +10,14 @@ dnl generate the file "configure", which tries to guess your system
 dnl configuration
 dnl
 dnl
-dnl $Id: configure.ac,v 1.21.2.6 2008-01-13 15:03:14 n-ando Exp $
+dnl $Id: configure.ac,v 1.21.2.7 2008-01-14 07:42:21 n-ando Exp $
 dnl
 
 dnl
 dnl $Log: not supported by cvs2svn $
+dnl Revision 1.21.2.6  2008/01/13 15:03:14  n-ando
+dnl --with-sockdataport option was added for TCP socket DataPort.
+dnl
 dnl Revision 1.21.2.5  2008/01/13 07:21:13  n-ando
 dnl - The Version number was updated to 0.4.2.
 dnl - MICO related configuration was modified.
@@ -982,7 +985,7 @@ if test "x$have_tao" = "xyes" ; then
 	dnl  TAO setup complete
 	dnl ------------------------------------------------------------
 	IDLC=$tao_idl
-	IDL_FLAGS="-DTAO_IDL -Ge 1 $tao_include/tao $tao_include"
+	IDL_FLAGS="-DTAO_IDL -Ge 0 $tao_include/tao $tao_include"
 	COSNAMES=$Naming_Service
 	CPPFLAGS="$CPPFLAGS $tao_include"
 	CXXFLAGS="$CXXFLAGS $tao_include"
