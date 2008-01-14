@@ -2,9 +2,9 @@
 /*!
  * @file ConsoleInComp.cpp
  * @brief Standalone component
- * @date $Date: 2007-01-14 22:51:53 $
+ * @date $Date: 2008-01-14 07:43:41 $
  *
- * $Id: ConsoleInComp.cpp,v 1.2 2007-01-14 22:51:53 n-ando Exp $
+ * $Id: ConsoleInComp.cpp,v 1.2.4.1 2008-01-14 07:43:41 n-ando Exp $
  */
 
 #include <rtm/Manager.h>
@@ -78,9 +78,6 @@ int main (int argc, char** argv)
 {
   RTC::Manager* manager;
   manager = RTC::Manager::init(argc, argv);
-
-  // Initialize manager
-  manager->init(argc, argv);
 
   // Set module initialization proceduer
   // This procedure will be invoked in activateManager() function.

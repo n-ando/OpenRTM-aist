@@ -2,9 +2,9 @@
 /*!
  * @file MyServiceProviderComp.cpp
  * @brief Standalone component
- * @date $Date: 2007-02-07 02:48:47 $
+ * @date $Date: 2008-01-14 07:46:54 $
  *
- * $Id: MyServiceProviderComp.cpp,v 1.1 2007-02-07 02:48:47 n-ando Exp $
+ * $Id: MyServiceProviderComp.cpp,v 1.1.2.1 2008-01-14 07:46:54 n-ando Exp $
  */
 
 #include <rtm/Manager.h>
@@ -69,9 +69,6 @@ int main (int argc, char** argv)
 {
   RTC::Manager* manager;
   manager = RTC::Manager::init(argc, argv);
-
-  // Initialize manager
-  manager->init(argc, argv);
 
   // Set module initialization proceduer
   // This procedure will be invoked in activateManager() function.
