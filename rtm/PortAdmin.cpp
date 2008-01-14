@@ -2,7 +2,7 @@
 /*!
  * @file PortAdmin.cpp
  * @brief RTC's Port administration class
- * @date $Date: 2007-12-31 03:08:05 $
+ * @date $Date: 2008-01-14 07:56:11 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
  * Copyright (C) 2006
@@ -12,12 +12,15 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: PortAdmin.cpp,v 1.7.2.2 2007-12-31 03:08:05 n-ando Exp $
+ * $Id: PortAdmin.cpp,v 1.7.2.3 2008-01-14 07:56:11 n-ando Exp $
  *
  */
 
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.7.2.2  2007/12/31 03:08:05  n-ando
+ * Class reference by doxygen comment was revised.
+ *
  * Revision 1.7.2.1  2007/09/20 11:25:16  n-ando
  * A function getPortProfileList() was added to get PortProfileList locally.
  *
@@ -136,14 +139,13 @@ namespace RTC
    */
   Port_ptr PortAdmin::getPortRef(const char* port_name) const
   {
-    Port_var port;
     CORBA::Long index;
     index = CORBA_SeqUtil::find(m_portRefs, find_port_name(port_name));
     if (index >= 0) 
       {//throw NotFound(port_name);
-	port = m_portRefs[index];
+	return RTC::Port::_duplicate(m_portRefs[index]);
       }
-    return port._retn();
+    return RTC::Port::_nil();
   }
   
   /*!
