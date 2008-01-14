@@ -2,7 +2,7 @@
 /*!
  * @file Manager.h
  * @brief RTComponent manager class
- * @date $Date: 2007-12-31 03:08:04 $
+ * @date $Date: 2008-01-14 07:57:40 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
  * Copyright (C) 2003-2005
@@ -12,12 +12,15 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: Manager.cpp,v 1.12.2.4 2007-12-31 03:08:04 n-ando Exp $
+ * $Id: Manager.cpp,v 1.12.2.5 2008-01-14 07:57:40 n-ando Exp $
  *
  */
 
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.12.2.4  2007/12/31 03:08:04  n-ando
+ * Class reference by doxygen comment was revised.
+ *
  * Revision 1.12.2.3  2007/09/22 08:47:13  n-ando
  * A bug about the conversion specifier %h was fixed.
  *
@@ -825,6 +828,8 @@ namespace RTC
     try
       {
 	std::vector<std::string> args(split(createORBOptions(), " "));
+	// TAO's ORB_init needs argv[0] as command name.
+	args.insert(args.begin(), "manager");
 	char** argv = toArgv(args);
 	int argc(args.size());
 	
