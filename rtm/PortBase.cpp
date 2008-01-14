@@ -2,7 +2,7 @@
 /*!
  * @file PortBase.h
  * @brief RTC's Port base class
- * @date $Date: 2008-01-14 07:56:40 $
+ * @date $Date: 2008-01-14 10:19:42 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
  * Copyright (C) 2006-2008
@@ -13,12 +13,15 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: PortBase.cpp,v 1.10.2.5 2008-01-14 07:56:40 n-ando Exp $
+ * $Id: PortBase.cpp,v 1.10.2.6 2008-01-14 10:19:42 n-ando Exp $
  *
  */
 
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.10.2.5  2008/01/14 07:56:40  n-ando
+ * CORBA operations need exception declaration of CORBA::SystemException.
+ *
  * Revision 1.10.2.4  2008/01/13 07:38:51  n-ando
  * Since direct operation call from given object reference from argument
  * causes a segmentation fault in MICO, it is modified so that the object
@@ -201,7 +204,6 @@ namespace RTC
       }
     catch (...)
       {
-	std::cout << "exception" << std::endl;
 	return RTC::BAD_PARAMETER;
       }
     return RTC::RTC_ERROR;
