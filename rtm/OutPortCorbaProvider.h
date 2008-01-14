@@ -2,7 +2,7 @@
 /*!
  * @file  OutPortCorbaProvider.h
  * @brief OutPortCorbaProvider class
- * @date  $Date: 2007-12-31 03:08:05 $
+ * @date  $Date: 2008-01-14 07:52:40 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
  * Copyright (C) 2006-2008
@@ -13,12 +13,15 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: OutPortCorbaProvider.h,v 1.5.2.1 2007-12-31 03:08:05 n-ando Exp $
+ * $Id: OutPortCorbaProvider.h,v 1.5.2.2 2008-01-14 07:52:40 n-ando Exp $
  *
  */
 
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.5.2.1  2007/12/31 03:08:05  n-ando
+ * Class reference by doxygen comment was revised.
+ *
  * Revision 1.5  2007/02/04 16:56:00  n-ando
  * The subscription types were updated.
  *
@@ -130,12 +133,13 @@ namespace RTC
      * @endif
      */
     CORBA::Any* get()
+      throw (CORBA::SystemException)
     {
       DataType data;
-      CORBA::Any_var tmp = new CORBA::Any();
+      CORBA::Any* tmp = new CORBA::Any();
       m_buffer.read(data);
-      tmp <<= data;
-      return tmp._retn();
+      (*tmp) <<= data;
+      return tmp;
     }
     
   private:
