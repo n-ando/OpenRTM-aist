@@ -2,7 +2,7 @@
 /*!
  * @file  InPortCorbaProvider.h
  * @brief InPortCorbaProvider class
- * @date  $Date: 2008-01-13 07:41:29 $
+ * @date  $Date: 2008-01-14 07:49:59 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
  * Copyright (C) 2006-2008
@@ -13,12 +13,15 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: InPortCorbaProvider.h,v 1.4.4.2 2008-01-13 07:41:29 n-ando Exp $
+ * $Id: InPortCorbaProvider.h,v 1.4.4.3 2008-01-14 07:49:59 n-ando Exp $
  *
  */
 
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.4.4.2  2008/01/13 07:41:29  n-ando
+ * The pointer variables to be copied from Any value should be const.
+ *
  * Revision 1.4.4.1  2007/12/31 03:08:03  n-ando
  * Class reference by doxygen comment was revised.
  *
@@ -160,6 +163,7 @@ namespace RTC
      * @endif
      */
     virtual void put(const CORBA::Any& data)
+      throw (CORBA::SystemException)
     {
       const DataType* tmp;
       if (data >>= tmp)

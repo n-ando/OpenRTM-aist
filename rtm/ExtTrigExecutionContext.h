@@ -2,7 +2,7 @@
 /*!
  * @file ExtTrigExecutionContext.h
  * @brief ExtTrigExecutionContext class
- * @date $Date: 2007-12-31 03:08:03 $
+ * @date $Date: 2008-01-14 07:49:16 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
  * Copyright (C) 2007
@@ -12,12 +12,15 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: ExtTrigExecutionContext.h,v 1.2.2.1 2007-12-31 03:08:03 n-ando Exp $
+ * $Id: ExtTrigExecutionContext.h,v 1.2.2.2 2008-01-14 07:49:16 n-ando Exp $
  *
  */
 
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.2.2.1  2007/12/31 03:08:03  n-ando
+ * Class reference by doxygen comment was revised.
+ *
  * Revision 1.2  2007/04/26 15:29:39  n-ando
  * The header include order was modified to define _REENTRANT before
  * including ace/config-lite.h in Linux systems.
@@ -94,7 +97,8 @@ namespace RTC
      *
      * @endif
      */
-    virtual void tick();
+    virtual void tick()
+      throw (CORBA::SystemException);
     
     /*!
      * @if jp

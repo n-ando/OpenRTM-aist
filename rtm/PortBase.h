@@ -2,7 +2,7 @@
 /*!
  * @file PortBase.h
  * @brief RTC's Port base class
- * @date $Date: 2007-12-31 03:08:05 $
+ * @date $Date: 2008-01-14 07:56:44 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
  * Copyright (C) 2006-2008
@@ -13,12 +13,15 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: PortBase.h,v 1.10.2.4 2007-12-31 03:08:05 n-ando Exp $
+ * $Id: PortBase.h,v 1.10.2.5 2008-01-14 07:56:44 n-ando Exp $
  *
  */
 
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.10.2.4  2007/12/31 03:08:05  n-ando
+ * Class reference by doxygen comment was revised.
+ *
  * Revision 1.10.2.3  2007/09/20 11:26:08  n-ando
  * A function getPortProfile() was added to get PortProfile locally.
  *
@@ -218,7 +221,8 @@ namespace RTC
      *
      * @endif
      */
-    virtual PortProfile* get_port_profile();
+    virtual PortProfile* get_port_profile()
+      throw (CORBA::SystemException);
     
     /*!
      * @if jp
@@ -274,7 +278,8 @@ namespace RTC
      *
      * @endif
      */
-    virtual ConnectorProfileList* get_connector_profiles();
+    virtual ConnectorProfileList* get_connector_profiles()
+      throw (CORBA::SystemException);
     
     /*!
      * @if jp
@@ -301,7 +306,8 @@ namespace RTC
      *
      * @endif
      */
-    virtual ConnectorProfile* get_connector_profile(const char* connector_id);
+    virtual ConnectorProfile* get_connector_profile(const char* connector_id)
+      throw (CORBA::SystemException);
     
     /*!
      * @if jp
@@ -385,7 +391,8 @@ namespace RTC
      *
      * @endif
      */
-    virtual ReturnCode_t connect(ConnectorProfile& connector_profile);
+    virtual ReturnCode_t connect(ConnectorProfile& connector_profile)
+      throw (CORBA::SystemException);
     
     /*!
      * @if jp
@@ -426,7 +433,8 @@ namespace RTC
      *
      * @endif
      */
-    virtual ReturnCode_t notify_connect(ConnectorProfile& connector_profile);
+    virtual ReturnCode_t notify_connect(ConnectorProfile& connector_profile)
+      throw (CORBA::SystemException);
     
     /*!
      * @if jp
@@ -460,7 +468,8 @@ namespace RTC
      *
      * @endif
      */
-    virtual ReturnCode_t disconnect(const char* connector_id);
+    virtual ReturnCode_t disconnect(const char* connector_id)
+      throw (CORBA::SystemException);
     
     /*!
      * @if jp
@@ -503,7 +512,8 @@ namespace RTC
      *
      * @endif
      */
-    virtual ReturnCode_t notify_disconnect(const char* connector_id);
+    virtual ReturnCode_t notify_disconnect(const char* connector_id)
+      throw (CORBA::SystemException);
     
     /*!
      * @if jp
@@ -524,7 +534,8 @@ namespace RTC
      *
      * @endif
      */
-    virtual ReturnCode_t disconnect_all();
+    virtual ReturnCode_t disconnect_all()
+      throw (CORBA::SystemException);
     
     //============================================================
     // Local operations

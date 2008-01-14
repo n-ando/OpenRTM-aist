@@ -2,7 +2,7 @@
 /*!
  * @file SdoOrganization.h
  * @brief SDO Organization implementation class
- * @date $Date: 2007-12-31 03:08:07 $
+ * @date $Date: 2008-01-14 07:49:28 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
  * Copyright (C) 2006-2008
@@ -13,12 +13,15 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: SdoOrganization.h,v 1.4.4.1 2007-12-31 03:08:07 n-ando Exp $
+ * $Id: SdoOrganization.h,v 1.4.4.2 2008-01-14 07:49:28 n-ando Exp $
  *
  */
 
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.4.4.1  2007/12/31 03:08:07  n-ando
+ * Class reference by doxygen comment was revised.
+ *
  * Revision 1.4  2007/01/21 13:05:21  n-ando
  * Some trivial fixes.
  *
@@ -142,7 +145,8 @@ namespace SDOPackage
      * @endif
      */
     virtual char* get_organization_id()
-      throw (InvalidParameter, NotAvailable, InternalError);
+      throw (CORBA::SystemException,
+	     InvalidParameter, NotAvailable, InternalError);
     
     /*!
      * @if jp
@@ -184,7 +188,8 @@ namespace SDOPackage
      */
     virtual CORBA::Boolean
     set_organization_property(const OrganizationProperty& org_property)
-      throw (InvalidParameter, NotAvailable, InternalError);
+      throw (CORBA::SystemException,
+	     InvalidParameter, NotAvailable, InternalError);
     
     /*!
      * @if jp
@@ -216,7 +221,8 @@ namespace SDOPackage
      * @endif
      */
     virtual OrganizationProperty* get_organization_property()
-      throw (NotAvailable, InternalError);
+      throw (CORBA::SystemException,
+	     NotAvailable, InternalError);
     
     /*!
      * @if jp
@@ -253,7 +259,8 @@ namespace SDOPackage
      * @endif
      */
     virtual CORBA::Any* get_organization_property_value(const char* name)
-      throw (InvalidParameter, NotAvailable, InternalError);
+      throw (CORBA::SystemException,
+	     InvalidParameter, NotAvailable, InternalError);
     
     /*!
      * @if jp
@@ -298,7 +305,8 @@ namespace SDOPackage
      */
     virtual CORBA::Boolean
     set_organization_property_value(const char* name, const CORBA::Any& value)
-      throw (InvalidParameter, NotAvailable, InternalError);
+      throw (CORBA::SystemException,
+	     InvalidParameter, NotAvailable, InternalError);
     
     /*!
      * @if jp
@@ -338,7 +346,8 @@ namespace SDOPackage
      * @endif
      */
     virtual CORBA::Boolean remove_organization_property(const char* name)
-      throw (InvalidParameter, NotAvailable, InternalError);
+      throw (CORBA::SystemException,
+	     InvalidParameter, NotAvailable, InternalError);
     
     /*!
      * @if jp
@@ -375,7 +384,8 @@ namespace SDOPackage
      * @endif
      */
     virtual CORBA::Boolean add_members(const SDOList& sdo_list)
-      throw (InvalidParameter, NotAvailable, InternalError);
+      throw (CORBA::SystemException,
+	     InvalidParameter, NotAvailable, InternalError);
     
     /*!
      * @if jp
@@ -407,7 +417,8 @@ namespace SDOPackage
      * @endif
      */
     virtual SDOList* get_members()
-      throw (NotAvailable, InternalError);
+      throw (CORBA::SystemException,
+	     NotAvailable, InternalError);
     
     /*!
      * @if jp
@@ -450,7 +461,8 @@ namespace SDOPackage
      * @endif
      */
     virtual CORBA::Boolean set_members(const SDOList& sdos)
-      throw (InvalidParameter, NotAvailable, InternalError);
+      throw (CORBA::SystemException,
+	     InvalidParameter, NotAvailable, InternalError);
     
     /*!
      * @if jp
@@ -486,7 +498,8 @@ namespace SDOPackage
      * @endif
      */
     virtual CORBA::Boolean remove_member(const char* id)
-      throw (InvalidParameter, NotAvailable, InternalError);
+      throw (CORBA::SystemException,
+	     InvalidParameter, NotAvailable, InternalError);
     
     /*!
      * @if jp
@@ -516,7 +529,8 @@ namespace SDOPackage
      * @endif
      */
     virtual SDOSystemElement_ptr get_owner()
-      throw (NotAvailable, InternalError);
+      throw (CORBA::SystemException,
+	     NotAvailable, InternalError);
     
     /*!
      * @if jp
@@ -556,7 +570,8 @@ namespace SDOPackage
      * @endif
      */
     virtual CORBA::Boolean set_owner(SDOSystemElement_ptr sdo)
-      throw (InvalidParameter, NotAvailable, InternalError);
+      throw (CORBA::SystemException,
+	     InvalidParameter, NotAvailable, InternalError);
     
     /*!
      * @if jp
@@ -591,7 +606,8 @@ namespace SDOPackage
      * @endif
      */
     virtual DependencyType get_dependency()
-      throw (NotAvailable, InternalError);
+      throw (CORBA::SystemException,
+	     NotAvailable, InternalError);
     
     /*!
      * @if jp
@@ -633,7 +649,8 @@ namespace SDOPackage
      * @endif
      */
     virtual CORBA::Boolean set_dependency(DependencyType dependency)
-      throw (NotAvailable, InternalError);
+      throw (CORBA::SystemException,
+	     NotAvailable, InternalError);
     
     // end of CORBA interface definition
     //============================================================

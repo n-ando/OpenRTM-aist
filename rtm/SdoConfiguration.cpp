@@ -2,7 +2,7 @@
 /*!
  * @file SdoConfiguration.cpp
  * @brief SDO's Configuration implementation class
- * @date $Date: 2008-01-13 07:33:26 $
+ * @date $Date: 2008-01-14 07:49:37 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
  * Copyright (C) 2006-2007
@@ -13,12 +13,15 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: SdoConfiguration.cpp,v 1.7.2.3 2008-01-13 07:33:26 n-ando Exp $
+ * $Id: SdoConfiguration.cpp,v 1.7.2.4 2008-01-14 07:49:37 n-ando Exp $
  *
  */
 
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.7.2.3  2008/01/13 07:33:26  n-ando
+ * A trivial fix.
+ *
  * Revision 1.7.2.2  2007/12/31 03:08:06  n-ando
  * Class reference by doxygen comment was revised.
  *
@@ -138,7 +141,8 @@ namespace SDOPackage
    */
   CORBA::Boolean
   Configuration_impl::set_device_profile(const DeviceProfile& dProfile)
-    throw (InvalidParameter, NotAvailable, InternalError)
+    throw (CORBA::SystemException,
+	   InvalidParameter, NotAvailable, InternalError)
   {
     try
       {
@@ -163,7 +167,8 @@ namespace SDOPackage
    */
   CORBA::Boolean
   Configuration_impl::set_service_profile(const ServiceProfile& sProfile)
-    throw (InvalidParameter, NotAvailable, InternalError)
+    throw (CORBA::SystemException,
+	   InvalidParameter, NotAvailable, InternalError)
   {
     // SDO specification defines that InvalidParameter() exception
     // is thrown when sProfile is null.
@@ -208,7 +213,8 @@ namespace SDOPackage
    */ 
   CORBA::Boolean
   Configuration_impl::add_organization(Organization_ptr org)
-    throw (InvalidParameter, NotAvailable, InternalError)
+    throw (CORBA::SystemException,
+	   InvalidParameter, NotAvailable, InternalError)
   {
     try
       {
@@ -232,7 +238,8 @@ namespace SDOPackage
    */  
   CORBA::Boolean
   Configuration_impl::remove_service_profile(const char* id)
-    throw (InvalidParameter, NotAvailable, InternalError)
+    throw (CORBA::SystemException,
+	   InvalidParameter, NotAvailable, InternalError)
   {
     try
       {
@@ -256,7 +263,8 @@ namespace SDOPackage
    */
   CORBA::Boolean
   Configuration_impl::remove_organization(const char* organization_id)
-    throw (InvalidParameter, NotAvailable, InternalError)
+    throw (CORBA::SystemException,
+	   InvalidParameter, NotAvailable, InternalError)
   {
     try
       {
@@ -284,7 +292,8 @@ namespace SDOPackage
    */ 
   ParameterList*
   Configuration_impl::get_configuration_parameters()
-    throw (NotAvailable, InternalError)
+    throw (CORBA::SystemException,
+	   NotAvailable, InternalError)
   {
     try
       {
@@ -311,7 +320,8 @@ namespace SDOPackage
    */
   NVList*
   Configuration_impl::get_configuration_parameter_values()
-    throw (NotAvailable, InternalError)
+    throw (CORBA::SystemException,
+	   NotAvailable, InternalError)
   {
     Guard guard(m_config_mutex);
     NVList_var nvlist;
@@ -337,7 +347,8 @@ namespace SDOPackage
    */
   CORBA::Any*
   Configuration_impl::get_configuration_parameter_value(const char* name)
-    throw (InvalidParameter, NotAvailable, InternalError)
+    throw (CORBA::SystemException,
+	   InvalidParameter, NotAvailable, InternalError)
   {
     if (name == "") throw InvalidParameter("Name is empty.");
     
@@ -368,7 +379,8 @@ namespace SDOPackage
   CORBA::Boolean
   Configuration_impl::set_configuration_parameter(const char* name,
 						  const CORBA::Any& value)
-    throw (InvalidParameter, NotAvailable, InternalError)
+    throw (CORBA::SystemException,
+	   InvalidParameter, NotAvailable, InternalError)
   {
     /*
       if (name == "") throw InvalidParameter("Name is empty.");
@@ -395,7 +407,8 @@ namespace SDOPackage
    */
   ConfigurationSetList*
   Configuration_impl::get_configuration_sets()
-    throw (NotAvailable, InternalError)
+    throw (CORBA::SystemException,
+	   NotAvailable, InternalError)
   {
     try
       {
@@ -430,7 +443,8 @@ namespace SDOPackage
    */
   ConfigurationSet*
   Configuration_impl::get_configuration_set(const char* id)
-    throw (NotAvailable, InternalError)
+    throw (CORBA::SystemException,
+	   NotAvailable, InternalError)
   {
     if (id == "") throw InternalError("ID is empty");
     // Originally getConfigurationSet raises InvalidParameter according to the 
@@ -469,7 +483,8 @@ namespace SDOPackage
   Configuration_impl::
   set_configuration_set_values(const char* id,
 			       const ConfigurationSet& configuration_set)
-    throw (InvalidParameter, NotAvailable, InternalError)
+    throw (CORBA::SystemException,
+	   InvalidParameter, NotAvailable, InternalError)
   {
     if (id == "") throw InvalidParameter("ID is empty.");
     
@@ -495,7 +510,8 @@ namespace SDOPackage
    */ 
   ConfigurationSet*
   Configuration_impl::get_active_configuration_set()
-    throw (NotAvailable, InternalError)
+    throw (CORBA::SystemException,
+	   NotAvailable, InternalError)
   {
     // activeなConfigurationSetは無い
     if (!m_configsets.isActive()) throw NotAvailable();    
@@ -527,7 +543,8 @@ namespace SDOPackage
   CORBA::Boolean
   Configuration_impl::
   add_configuration_set(const ConfigurationSet& configuration_set)
-    throw (InvalidParameter, NotAvailable, InternalError)
+    throw (CORBA::SystemException,
+	   InvalidParameter, NotAvailable, InternalError)
   {
     try
       {
@@ -554,7 +571,8 @@ namespace SDOPackage
    */
   CORBA::Boolean
   Configuration_impl::remove_configuration_set(const char* id)
-    throw (InvalidParameter, NotAvailable, InternalError)
+    throw (CORBA::SystemException,
+	   InvalidParameter, NotAvailable, InternalError)
   {
     if (id == "")
       throw InvalidParameter("ID is empty.");
@@ -581,7 +599,8 @@ namespace SDOPackage
    */ 
   CORBA::Boolean
   Configuration_impl::activate_configuration_set(const char* id)
-    throw (InvalidParameter, NotAvailable, InternalError)
+    throw (CORBA::SystemException,
+	   InvalidParameter, NotAvailable, InternalError)
   {
     if (id == "")
       throw InvalidParameter("ID is empty.");

@@ -2,7 +2,7 @@
 /*!
  * @file SdoOrganization.cpp
  * @brief SDO Organization class
- * @date $Date: 2007-12-31 03:08:07 $
+ * @date $Date: 2008-01-14 07:49:31 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
  * Copyright (C) 2006-2008
@@ -13,12 +13,15 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: SdoOrganization.cpp,v 1.7.2.1 2007-12-31 03:08:07 n-ando Exp $
+ * $Id: SdoOrganization.cpp,v 1.7.2.2 2008-01-14 07:49:31 n-ando Exp $
  *
  */
 
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.7.2.1  2007/12/31 03:08:07  n-ando
+ * Class reference by doxygen comment was revised.
+ *
  * Revision 1.7  2007/04/26 15:33:28  n-ando
  * The header include order was modified to define _REENTRANT before
  * including ace/config-lite.h in Linux systems.
@@ -81,7 +84,8 @@ namespace SDOPackage
    * @endif
    */
   char* Organization_impl::get_organization_id()
-    throw (InvalidParameter, NotAvailable, InternalError)
+    throw (CORBA::SystemException,
+	   InvalidParameter, NotAvailable, InternalError)
   {
     return m_pId;
   }
@@ -94,7 +98,8 @@ namespace SDOPackage
    * @endif
    */
   OrganizationProperty* Organization_impl::get_organization_property()
-    throw (NotAvailable, InternalError)
+    throw (CORBA::SystemException,
+	   NotAvailable, InternalError)
   {
     Guard guard(m_org_mutex);
     OrganizationProperty_var prop;
@@ -111,7 +116,8 @@ namespace SDOPackage
    */
   CORBA::Any*
   Organization_impl::get_organization_property_value(const char* name)
-    throw (InvalidParameter, NotAvailable, InternalError)
+    throw (CORBA::SystemException,
+	   InvalidParameter, NotAvailable, InternalError)
   {
     if (name == "")
       throw InvalidParameter("Empty name.");
@@ -146,7 +152,8 @@ namespace SDOPackage
   CORBA::Boolean
   Organization_impl::
   set_organization_property(const OrganizationProperty& organization_property)
-    throw (InvalidParameter, NotAvailable, InternalError)
+    throw (CORBA::SystemException,
+	   InvalidParameter, NotAvailable, InternalError)
   {
     try
       {
@@ -171,7 +178,8 @@ namespace SDOPackage
   CORBA::Boolean
   Organization_impl::set_organization_property_value(const char* name,
 						     const CORBA::Any& value)
-    throw (InvalidParameter, NotAvailable, InternalError)
+    throw (CORBA::SystemException,
+	   InvalidParameter, NotAvailable, InternalError)
   {
     if (name == "")
       {
@@ -203,7 +211,8 @@ namespace SDOPackage
    */   
   CORBA::Boolean
   Organization_impl::remove_organization_property(const char* name)
-    throw (InvalidParameter, NotAvailable, InternalError)
+    throw (CORBA::SystemException,
+	   InvalidParameter, NotAvailable, InternalError)
   {
     if (name == "")
       throw InvalidParameter("set_organization_property_value(): Enpty name.");
@@ -233,7 +242,8 @@ namespace SDOPackage
    * @endif
    */
   SDOSystemElement_ptr Organization_impl::get_owner()
-    throw (NotAvailable, InternalError)
+    throw (CORBA::SystemException,
+	   NotAvailable, InternalError)
   {
     return m_varOwner._retn();
   }
@@ -246,7 +256,8 @@ namespace SDOPackage
    * @endif
    */
   CORBA::Boolean Organization_impl::set_owner(SDOSystemElement_ptr sdo)
-    throw (InvalidParameter, NotAvailable, InternalError)
+    throw (CORBA::SystemException,
+	   InvalidParameter, NotAvailable, InternalError)
   {
     if (CORBA::is_nil(sdo))
       throw InvalidParameter("set_owner()");
@@ -270,7 +281,8 @@ namespace SDOPackage
    * @endif
    */
   SDOList* Organization_impl::get_members()
-    throw (NotAvailable, InternalError)
+    throw (CORBA::SystemException,
+	   NotAvailable, InternalError)
   {
     try
       {
@@ -292,7 +304,8 @@ namespace SDOPackage
    * @endif
    */
   CORBA::Boolean Organization_impl::set_members(const SDOList& sdos)
-    throw (InvalidParameter, NotAvailable, InternalError)
+    throw (CORBA::SystemException,
+	   InvalidParameter, NotAvailable, InternalError)
   {
     if (sdos.length() == 0)
       throw InvalidParameter("set_members(): SDOList is empty.");
@@ -316,7 +329,8 @@ namespace SDOPackage
    * @endif
    */
   CORBA::Boolean Organization_impl::add_members(const SDOList& sdo_list)
-    throw (InvalidParameter, NotAvailable, InternalError)
+    throw (CORBA::SystemException,
+	   InvalidParameter, NotAvailable, InternalError)
   {
     try
       {
@@ -338,7 +352,8 @@ namespace SDOPackage
    * @endif
    */
   CORBA::Boolean Organization_impl::remove_member(const char* id)
-    throw (InvalidParameter, NotAvailable, InternalError)
+    throw (CORBA::SystemException,
+	   InvalidParameter, NotAvailable, InternalError)
   {
     if (id == "")
       throw InvalidParameter("remove_member(): Enpty name.");
@@ -369,7 +384,8 @@ namespace SDOPackage
    * @endif
    */
   DependencyType Organization_impl::get_dependency()
-    throw (NotAvailable, InternalError)
+    throw (CORBA::SystemException,
+	   NotAvailable, InternalError)
   {
     return m_dependency;
   }
@@ -382,7 +398,8 @@ namespace SDOPackage
    * @endif
    */
   CORBA::Boolean Organization_impl::set_dependency(DependencyType dependency)
-    throw (NotAvailable, InternalError)
+    throw (CORBA::SystemException,
+	   NotAvailable, InternalError)
   {
     try
       {

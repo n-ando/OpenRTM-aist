@@ -2,7 +2,7 @@
 /*!
  * @file RTObject.cpp
  * @brief RT component base class
- * @date $Date: 2007-09-20 11:41:37 $
+ * @date $Date: 2008-01-14 07:57:15 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
  * Copyright (C) 2006
@@ -12,12 +12,19 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: RTObject.cpp,v 1.8.2.2 2007-09-20 11:41:37 n-ando Exp $
+ * $Id: RTObject.cpp,v 1.8.2.3 2008-01-14 07:57:15 n-ando Exp $
  *
  */
 
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.8.2.2  2007/09/20 11:41:37  n-ando
+ * Some fixes.
+ * - Now the configuration updateing is performed before onActivated and
+ *   after onError in addition to after onStateUpdate.
+ * - A bug which get_component_profile() returns empty PortProfile was fixed.
+ * - The transition condition to alive state was modified.
+ *
  * Revision 1.8.2.1  2007/07/20 16:06:02  n-ando
  * CORBA interface inconsistency was fixed.
  *
@@ -209,6 +216,7 @@ namespace RTC
    * @endif
    */
   ReturnCode_t RTObject_impl::initialize()
+    throw (CORBA::SystemException)
   {
     ReturnCode_t ret;
     ret = on_initialize();
@@ -233,6 +241,7 @@ namespace RTC
    * @endif
    */
   ReturnCode_t RTObject_impl::finalize()
+    throw (CORBA::SystemException)
   {
     if (m_created) return RTC::PRECONDITION_NOT_MET;
     
@@ -256,6 +265,7 @@ namespace RTC
    * @endif
    */
   ReturnCode_t RTObject_impl::exit()
+    throw (CORBA::SystemException)
   {
     if (m_execContexts.length() > 0)
       {
@@ -278,6 +288,7 @@ namespace RTC
    * @endif
    */
   CORBA::Boolean RTObject_impl::is_alive()
+    throw (CORBA::SystemException)
   {
     return m_alive;
   }
@@ -291,6 +302,7 @@ namespace RTC
    * @endif
    */
   ExecutionContextList* RTObject_impl::get_contexts()
+    throw (CORBA::SystemException)
   {
     ExecutionContextList_var execlist;
     execlist = new ExecutionContextList();
@@ -309,16 +321,13 @@ namespace RTC
    * @endif
    */
   ExecutionContext_ptr RTObject_impl::get_context(UniqueId ec_id)
+    throw (CORBA::SystemException)
   {
-    ExecutionContext_var ec;
-    
     if (((CORBA::Long)ec_id) > ((CORBA::Long)m_execContexts.length() - 1))
       {
 	return ExecutionContext::_nil();
       }
-    ec = m_execContexts[ec_id];
-    
-    return ec._retn();
+    return ExecutionContext::_duplicate(m_execContexts[ec_id]);
   }
   
   
@@ -331,6 +340,7 @@ namespace RTC
    */
   UniqueId RTObject_impl::
   attach_executioncontext(ExecutionContext_ptr exec_context)
+    throw (CORBA::SystemException)
   {
     ExecutionContextService_var ecs;
     ecs = ExecutionContextService::_narrow(exec_context);
@@ -354,19 +364,19 @@ namespace RTC
    * @endif
    */
   ReturnCode_t RTObject_impl::detach_executioncontext(UniqueId ec_id)
+    throw (CORBA::SystemException)
   {
     if (((CORBA::Long)ec_id) > ((CORBA::Long)m_execContexts.length() - 1))
       {
 	return RTC::BAD_PARAMETER;
       }
     
-    ExecutionContext_var ec;
-    ec = m_execContexts[ec_id];
-    if (CORBA::is_nil(ec))
+    if (CORBA::is_nil(m_execContexts[ec_id]))
       {
 	return RTC::BAD_PARAMETER;
       }
     
+    CORBA::release(m_execContexts[ec_id]);
     m_execContexts[ec_id] = ExecutionContextService::_nil();
     return RTC::RTC_OK;
   }
@@ -384,6 +394,7 @@ namespace RTC
    * @endif
    */
   ComponentProfile* RTObject_impl::get_component_profile()
+    throw (CORBA::SystemException)
   {
     try
       {
@@ -409,6 +420,7 @@ namespace RTC
    * @endif
    */
   PortList* RTObject_impl::get_ports()
+    throw (CORBA::SystemException)
   {
     try
       {
@@ -431,6 +443,7 @@ namespace RTC
    * @endif
    */
   ExecutionContextServiceList* RTObject_impl::get_execution_context_services()
+    throw (CORBA::SystemException)
   {
     try
       {
@@ -459,6 +472,7 @@ namespace RTC
    * @endif
    */
   ReturnCode_t RTObject_impl::on_initialize()
+    throw (CORBA::SystemException)
   {
     ReturnCode_t ret(RTC::RTC_ERROR);
     try
@@ -480,6 +494,7 @@ namespace RTC
    * @endif
    */
   ReturnCode_t RTObject_impl::on_finalize()
+    throw (CORBA::SystemException)
   {
     ReturnCode_t ret(RTC::RTC_ERROR);
     try
@@ -501,6 +516,7 @@ namespace RTC
    * @endif
    */
   ReturnCode_t RTObject_impl::on_startup(UniqueId ec_id)
+    throw (CORBA::SystemException)
   {
     ReturnCode_t ret(RTC::RTC_ERROR);
     try
@@ -522,6 +538,7 @@ namespace RTC
    * @endif
    */
   ReturnCode_t RTObject_impl::on_shutdown(UniqueId ec_id)
+    throw (CORBA::SystemException)
   {
     ReturnCode_t ret(RTC::RTC_ERROR);
     try
@@ -543,6 +560,7 @@ namespace RTC
    * @endif
    */
   ReturnCode_t RTObject_impl::on_activated(UniqueId ec_id)
+    throw (CORBA::SystemException)
   {
     ReturnCode_t ret(RTC::RTC_ERROR);
     try
@@ -565,6 +583,7 @@ namespace RTC
    * @endif
    */
   ReturnCode_t RTObject_impl::on_deactivated(UniqueId ec_id)
+    throw (CORBA::SystemException)
   {
     ReturnCode_t ret(RTC::RTC_ERROR);
     try
@@ -586,6 +605,7 @@ namespace RTC
    * @endif
    */
   ReturnCode_t RTObject_impl::on_aborting(UniqueId ec_id)
+    throw (CORBA::SystemException)
   {
     ReturnCode_t ret(RTC::RTC_ERROR);
     try
@@ -607,6 +627,7 @@ namespace RTC
    * @endif
    */
   ReturnCode_t RTObject_impl::on_error(UniqueId ec_id)
+    throw (CORBA::SystemException)
   {
     ReturnCode_t ret(RTC::RTC_ERROR);
     try
@@ -629,6 +650,7 @@ namespace RTC
    * @endif
    */
   ReturnCode_t RTObject_impl::on_reset(UniqueId ec_id)
+    throw (CORBA::SystemException)
   {
     ReturnCode_t ret(RTC::RTC_ERROR);
     try
@@ -643,6 +665,7 @@ namespace RTC
   }
   
   ReturnCode_t RTObject_impl::on_execute(UniqueId ec_id)
+    throw (CORBA::SystemException)
   {
     ReturnCode_t ret(RTC::RTC_ERROR);
     try
@@ -657,6 +680,7 @@ namespace RTC
   }
   
   ReturnCode_t RTObject_impl::on_state_update(UniqueId ec_id)
+    throw (CORBA::SystemException)
   {
     ReturnCode_t ret(RTC::RTC_ERROR);
     try
@@ -672,6 +696,7 @@ namespace RTC
   }
   
   ReturnCode_t RTObject_impl::on_rate_changed(UniqueId ec_id)
+    throw (CORBA::SystemException)
   {
     ReturnCode_t ret(RTC::RTC_ERROR);
     try
@@ -696,7 +721,7 @@ namespace RTC
    * @endif
    */
   SDOPackage::OrganizationList* RTObject_impl::get_owned_organizations()
-    throw (SDOPackage::NotAvailable)
+    throw (CORBA::SystemException, SDOPackage::NotAvailable)
   {
     try
       {
@@ -720,7 +745,8 @@ namespace RTC
    * @endif
    */
   char* RTObject_impl::get_sdo_id()
-    throw (SDOPackage::NotAvailable, SDOPackage::InternalError)
+    throw (CORBA::SystemException, 
+	   SDOPackage::NotAvailable, SDOPackage::InternalError)
   {
     try
       {
@@ -742,7 +768,8 @@ namespace RTC
    * @endif
    */
   char* RTObject_impl::get_sdo_type()
-    throw (SDOPackage::NotAvailable, SDOPackage::InternalError)
+    throw (CORBA::SystemException, 
+	   SDOPackage::NotAvailable, SDOPackage::InternalError)
   {
     try
       {
@@ -765,7 +792,8 @@ namespace RTC
    * @endif
    */
   SDOPackage::DeviceProfile* RTObject_impl::get_device_profile()
-    throw (SDOPackage::NotAvailable, SDOPackage::InternalError)
+    throw (CORBA::SystemException, 
+	   SDOPackage::NotAvailable, SDOPackage::InternalError)
   {
     try
       {
@@ -793,8 +821,8 @@ namespace RTC
    * @endif
    */
   SDOPackage::ServiceProfileList* RTObject_impl::get_service_profiles()
-    throw (SDOPackage::InvalidParameter, SDOPackage::NotAvailable,
-	   SDOPackage::InternalError)
+    throw (CORBA::SystemException, 
+	   SDOPackage::NotAvailable, SDOPackage::InternalError)
   {
     try
       {
@@ -819,7 +847,8 @@ namespace RTC
    */
   SDOPackage::ServiceProfile*
   RTObject_impl::get_service_profile(const char* id)
-    throw (SDOPackage::InvalidParameter, SDOPackage::NotAvailable,
+    throw (CORBA::SystemException, 
+	   SDOPackage::InvalidParameter, SDOPackage::NotAvailable,
 	   SDOPackage::InternalError)
   {
     if (!id)
@@ -849,7 +878,8 @@ namespace RTC
    * @endif
    */
   SDOPackage::SDOService_ptr RTObject_impl::get_sdo_service(const char* id)
-    throw (SDOPackage::InvalidParameter, SDOPackage::NotAvailable,
+    throw (CORBA::SystemException, 
+	   SDOPackage::InvalidParameter, SDOPackage::NotAvailable,
 	   SDOPackage::InternalError)
   {
     if (!id)
@@ -879,7 +909,8 @@ namespace RTC
    * @endif
    */
   SDOPackage::Configuration_ptr RTObject_impl::get_configuration()
-    throw (SDOPackage::InterfaceNotImplemented, SDOPackage::NotAvailable,
+    throw (CORBA::SystemException, 
+	   SDOPackage::InterfaceNotImplemented, SDOPackage::NotAvailable,
 	   SDOPackage::InternalError)
   {
     if (m_pSdoConfig == NULL)
@@ -905,7 +936,8 @@ namespace RTC
    * @endif
    */
   SDOPackage::Monitoring_ptr RTObject_impl::get_monitoring()
-    throw (SDOPackage::InterfaceNotImplemented, SDOPackage::NotAvailable,
+    throw (CORBA::SystemException, 
+	   SDOPackage::InterfaceNotImplemented, SDOPackage::NotAvailable,
 	   SDOPackage::InternalError)
   {
     throw SDOPackage::InterfaceNotImplemented();
@@ -920,7 +952,8 @@ namespace RTC
    * @endif
    */
   SDOPackage::OrganizationList* RTObject_impl::get_organizations()
-    throw (SDOPackage::NotAvailable, SDOPackage::InternalError)
+    throw (CORBA::SystemException, 
+	   SDOPackage::NotAvailable, SDOPackage::InternalError)
   {
     try
       {
@@ -943,7 +976,8 @@ namespace RTC
    * @endif
    */
   SDOPackage::NVList* RTObject_impl::get_status_list()
-    throw (SDOPackage::NotAvailable, SDOPackage::InternalError)
+    throw (CORBA::SystemException, 
+	   SDOPackage::NotAvailable, SDOPackage::InternalError)
   {
     try
       {
@@ -967,7 +1001,8 @@ namespace RTC
    * @endif
    */
   CORBA::Any* RTObject_impl::get_status(const char* name)
-    throw (SDOPackage::InvalidParameter, SDOPackage::NotAvailable,
+    throw (CORBA::SystemException, 
+	   SDOPackage::InvalidParameter, SDOPackage::NotAvailable,
 	   SDOPackage::InternalError)
   {
     CORBA::Long index;

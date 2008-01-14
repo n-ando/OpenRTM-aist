@@ -2,7 +2,7 @@
 /*!
  * @file PeriodicExecutionContext.cpp
  * @brief PeriodicExecutionContext class
- * @date $Date: 2007-12-31 03:08:05 $
+ * @date $Date: 2008-01-14 07:53:01 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
  * Copyright (C) 2006-2008
@@ -13,12 +13,15 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: PeriodicExecutionContext.cpp,v 1.5.2.4 2007-12-31 03:08:05 n-ando Exp $
+ * $Id: PeriodicExecutionContext.cpp,v 1.5.2.5 2008-01-14 07:53:01 n-ando Exp $
  *
  */
 
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.5.2.4  2007/12/31 03:08:05  n-ando
+ * Class reference by doxygen comment was revised.
+ *
  * Revision 1.5.2.3  2007/09/20 11:22:45  n-ando
  * A trivial fix.
  *
@@ -176,6 +179,7 @@ namespace RTC
    * @endif
    */
   CORBA::Boolean PeriodicExecutionContext::is_running()
+    throw (CORBA::SystemException)
   {
     return m_running;
   }
@@ -188,6 +192,7 @@ namespace RTC
    * @endif
    */
   ReturnCode_t PeriodicExecutionContext::start()
+    throw (CORBA::SystemException)
   {
     if (m_running) return RTC::PRECONDITION_NOT_MET;
     
@@ -209,6 +214,7 @@ namespace RTC
    * @endif
    */
   ReturnCode_t PeriodicExecutionContext::stop()
+    throw (CORBA::SystemException)
   {
     if (!m_running) return RTC::PRECONDITION_NOT_MET;
     
@@ -229,6 +235,7 @@ namespace RTC
    * @endif
    */
   CORBA::Double PeriodicExecutionContext::get_rate()
+    throw (CORBA::SystemException)
   {
     return m_profile.rate;
   }
@@ -241,6 +248,7 @@ namespace RTC
    * @endif
    */
   ReturnCode_t PeriodicExecutionContext::set_rate(CORBA::Double rate)
+    throw (CORBA::SystemException)
   {
     if (rate > 0.0)
       {
@@ -262,6 +270,7 @@ namespace RTC
    */ 
   ReturnCode_t
   PeriodicExecutionContext::activate_component(LightweightRTObject_ptr comp)
+    throw (CORBA::SystemException)
   {
     // コンポーネントが参加者リストに無ければ BAD_PARAMETER を返す
     CompItr it;
@@ -286,6 +295,7 @@ namespace RTC
    */  
   ReturnCode_t
   PeriodicExecutionContext::deactivate_component(LightweightRTObject_ptr comp)
+    throw (CORBA::SystemException)
   {
     CompItr it;
     it = std::find_if(m_comps.begin(), m_comps.end(),
@@ -309,6 +319,7 @@ namespace RTC
    */  
   ReturnCode_t
   PeriodicExecutionContext::reset_component(LightweightRTObject_ptr comp)
+    throw (CORBA::SystemException)
   {
     CompItr it;
     it = std::find_if(m_comps.begin(), m_comps.end(),
@@ -332,6 +343,7 @@ namespace RTC
    */
   LifeCycleState
   PeriodicExecutionContext::get_component_state(LightweightRTObject_ptr comp)
+    throw (CORBA::SystemException)
   {
     CompItr it;
     it = std::find_if(m_comps.begin(), m_comps.end(),
@@ -350,6 +362,7 @@ namespace RTC
    * @endif
    */
   ExecutionKind PeriodicExecutionContext::get_kind()
+    throw (CORBA::SystemException)
   {
     return m_profile.kind;
   }
@@ -362,6 +375,7 @@ namespace RTC
    * @endif
    */
   ReturnCode_t PeriodicExecutionContext::add(LightweightRTObject_ptr comp)
+    throw (CORBA::SystemException)
   {
     if (CORBA::is_nil(comp)) return RTC::BAD_PARAMETER;
     
@@ -394,6 +408,7 @@ namespace RTC
    */	
   ReturnCode_t
   PeriodicExecutionContext::remove(LightweightRTObject_ptr comp)
+    throw (CORBA::SystemException)
   {
     CompItr it;
     it = std::find_if(m_comps.begin(), m_comps.end(),
@@ -417,6 +432,7 @@ namespace RTC
    * @endif
    */
   ExecutionContextProfile* PeriodicExecutionContext::get_profile()
+    throw (CORBA::SystemException)
   {
     ExecutionContextProfile_var p;
     p = new ExecutionContextProfile(m_profile);

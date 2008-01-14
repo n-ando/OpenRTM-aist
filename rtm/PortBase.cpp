@@ -2,7 +2,7 @@
 /*!
  * @file PortBase.h
  * @brief RTC's Port base class
- * @date $Date: 2008-01-13 07:38:51 $
+ * @date $Date: 2008-01-14 07:56:40 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
  * Copyright (C) 2006-2008
@@ -13,12 +13,17 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: PortBase.cpp,v 1.10.2.4 2008-01-13 07:38:51 n-ando Exp $
+ * $Id: PortBase.cpp,v 1.10.2.5 2008-01-14 07:56:40 n-ando Exp $
  *
  */
 
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.10.2.4  2008/01/13 07:38:51  n-ando
+ * Since direct operation call from given object reference from argument
+ * causes a segmentation fault in MICO, it is modified so that the object
+ * references are copied to local _var variable and are used.
+ *
  * Revision 1.10.2.3  2007/12/31 03:08:05  n-ando
  * Class reference by doxygen comment was revised.
  *
@@ -110,6 +115,7 @@ namespace RTC
    * @endif
    */
   PortProfile* PortBase::get_port_profile()
+    throw (CORBA::SystemException)
   {
     Guard gaurd(m_profile_mutex);
     PortProfile_var prof;
@@ -137,6 +143,7 @@ namespace RTC
    * @endif
    */
   ConnectorProfileList* PortBase::get_connector_profiles()
+    throw (CORBA::SystemException)
   {
     Guard gaurd(m_profile_mutex);
     ConnectorProfileList_var conn_prof;
@@ -152,6 +159,7 @@ namespace RTC
    * @endif
    */
   ConnectorProfile* PortBase::get_connector_profile(const char* connector_id)
+    throw (CORBA::SystemException)
   {
     Guard gaurd(m_profile_mutex);
     CORBA::Long index;
@@ -176,6 +184,7 @@ namespace RTC
    * @endif
    */
   ReturnCode_t PortBase::connect(ConnectorProfile& connector_profile)
+    throw (CORBA::SystemException)
   {
     if (isEmptyId(connector_profile))
       {
@@ -186,8 +195,8 @@ namespace RTC
       }
     try
       {
-	RTC::Port_var p;
-	p = connector_profile.ports[0];
+	RTC::Port_ptr p;
+	p = connector_profile.ports[(CORBA::ULong)0];
 	return p->notify_connect(connector_profile);
       }
     catch (...)
@@ -206,6 +215,7 @@ namespace RTC
    * @endif
    */
   ReturnCode_t PortBase::notify_connect(ConnectorProfile& connector_profile)
+    throw (CORBA::SystemException)
   {
     // publish owned interface information to the ConnectorProfile
     ReturnCode_t retval;
@@ -248,6 +258,7 @@ namespace RTC
    * @endif
    */
   ReturnCode_t PortBase::disconnect(const char* connector_id)
+    throw (CORBA::SystemException)
   {
     // find connector_profile
     if (!isExistingConnId(connector_id)) 
@@ -257,8 +268,8 @@ namespace RTC
     CORBA::Long index;
     index = findConnProfileIndex(connector_id);
     ConnectorProfile prof(m_profile.connector_profiles[index]);
-    RTC::Port_var p;
-    p = prof.ports[0];
+    RTC::Port_ptr p;
+    p = prof.ports[(CORBA::ULong)0];
     return p->notify_disconnect(connector_id);
   }
   
@@ -270,6 +281,7 @@ namespace RTC
    * @endif
    */
   ReturnCode_t PortBase::notify_disconnect(const char* connector_id)
+    throw (CORBA::SystemException)
   {
     // The Port of which the reference is stored in the beginning of
     // ConnectorProfile's PortList is master Port.
@@ -304,6 +316,7 @@ namespace RTC
    * @endif
    */
   ReturnCode_t PortBase::disconnect_all()
+    throw (CORBA::SystemException)
   {
     Guard gaurd(m_profile_mutex);
     // disconnect all connections
@@ -404,7 +417,7 @@ namespace RTC
     
     if (++index < static_cast<CORBA::Long>(connector_profile.ports.length()))
       {
-	RTC::Port_var p;
+	RTC::Port_ptr p;
 	p = connector_profile.ports[index];
 	return p->notify_connect(connector_profile);
       }
@@ -427,7 +440,7 @@ namespace RTC
     
     if (++index < static_cast<CORBA::Long>(connector_profile.ports.length()))
       {
-	RTC::Port_var p;
+	RTC::Port_ptr p;
 	p = connector_profile.ports[index];
 	return p->notify_disconnect(connector_profile.connector_id);
       }

@@ -28,11 +28,16 @@ class MyServiceSVC_impl
    virtual ~MyServiceSVC_impl();
 
    // attributes and operations
-   char* echo(const char* msg);
-   EchoList* get_echo_history();
-   void set_value(CORBA::Float value);
-   CORBA::Float get_value();
-   ValueList* get_value_history();
+   char* echo(const char* msg)
+     throw (CORBA::SystemException);
+   EchoList* get_echo_history()
+     throw (CORBA::SystemException);
+   void set_value(CORBA::Float value)
+     throw (CORBA::SystemException);
+   CORBA::Float get_value()
+     throw (CORBA::SystemException);
+   ValueList* get_value_history()
+     throw (CORBA::SystemException);
 
 private:
   CORBA::Float m_value;

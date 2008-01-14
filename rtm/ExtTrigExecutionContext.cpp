@@ -2,7 +2,7 @@
 /*!
  * @file ExtTrigExecutionContext.cpp
  * @brief ExtTrigExecutionContext class
- * @date $Date: 2007-12-31 03:08:03 $
+ * @date $Date: 2008-01-14 07:49:14 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
  * Copyright (C) 2007-2008
@@ -13,12 +13,15 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: ExtTrigExecutionContext.cpp,v 1.1.2.3 2007-12-31 03:08:03 n-ando Exp $
+ * $Id: ExtTrigExecutionContext.cpp,v 1.1.2.4 2008-01-14 07:49:14 n-ando Exp $
  *
  */
 
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.1.2.3  2007/12/31 03:08:03  n-ando
+ * Class reference by doxygen comment was revised.
+ *
  * Revision 1.1.2.2  2007/09/21 09:17:21  n-ando
  * The mutex acquisition was changed from "tryacquire" to "acquire".
  *
@@ -66,6 +69,7 @@ namespace RTC
    * @endif
    */
   void ExtTrigExecutionContext::tick()
+    throw (CORBA::SystemException)
   {
     m_worker._mutex.acquire();
     m_worker._called = true;

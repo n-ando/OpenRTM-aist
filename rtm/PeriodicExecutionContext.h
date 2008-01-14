@@ -2,7 +2,7 @@
 /*!
  * @file PeriodicExecutionContext.h
  * @brief PeriodicExecutionContext class
- * @date $Date: 2007-12-31 03:08:05 $
+ * @date $Date: 2008-01-14 07:53:05 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
  * Copyright (C) 2006-2008
@@ -13,12 +13,15 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: PeriodicExecutionContext.h,v 1.4.2.4 2007-12-31 03:08:05 n-ando Exp $
+ * $Id: PeriodicExecutionContext.h,v 1.4.2.5 2008-01-14 07:53:05 n-ando Exp $
  *
  */
 
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.4.2.4  2007/12/31 03:08:05  n-ando
+ * Class reference by doxygen comment was revised.
+ *
  * Revision 1.4.2.3  2007/09/20 11:22:08  n-ando
  * Some fixes.
  * - Template parameter "Result" is deleted.
@@ -233,7 +236,8 @@ namespace RTC
      *
      * @endif
      */
-    virtual CORBA::Boolean is_running();
+    virtual CORBA::Boolean is_running()
+      throw (CORBA::SystemException);
     
     /*!
      * @if jp
@@ -260,7 +264,8 @@ namespace RTC
      *
      * @endif
      */
-    virtual ReturnCode_t start();
+    virtual ReturnCode_t start()
+      throw (CORBA::SystemException);
     
     /*!
      * @if jp
@@ -287,7 +292,8 @@ namespace RTC
      *
      * @endif
      */
-    virtual ReturnCode_t stop();
+    virtual ReturnCode_t stop()
+      throw (CORBA::SystemException);
     
     /*!
      * @if jp
@@ -306,7 +312,8 @@ namespace RTC
      *
      * @endif
      */
-    virtual CORBA::Double get_rate();
+    virtual CORBA::Double get_rate()
+      throw (CORBA::SystemException);
     
     /*!
      * @if jp
@@ -333,7 +340,8 @@ namespace RTC
      *
      * @endif
      */
-    virtual ReturnCode_t  set_rate(CORBA::Double rate);
+    virtual ReturnCode_t  set_rate(CORBA::Double rate)
+      throw (CORBA::SystemException);
     
     /*!
      * @if jp
@@ -364,7 +372,8 @@ namespace RTC
      *
      * @endif
      */
-    virtual ReturnCode_t activate_component(LightweightRTObject_ptr comp);
+    virtual ReturnCode_t activate_component(LightweightRTObject_ptr comp)
+      throw (CORBA::SystemException);
     
     /*!
      * @if jp
@@ -394,7 +403,8 @@ namespace RTC
      *
      * @endif
      */
-    virtual ReturnCode_t deactivate_component(LightweightRTObject_ptr comp);
+    virtual ReturnCode_t deactivate_component(LightweightRTObject_ptr comp)
+      throw (CORBA::SystemException);
     
     /*!
      * @if jp
@@ -424,7 +434,8 @@ namespace RTC
      *
      * @endif
      */
-    virtual ReturnCode_t reset_component(LightweightRTObject_ptr comp);
+    virtual ReturnCode_t reset_component(LightweightRTObject_ptr comp)
+      throw (CORBA::SystemException);
     
     /*!
      * @if jp
@@ -447,7 +458,8 @@ namespace RTC
      *
      * @endif
      */
-    virtual LifeCycleState get_component_state(LightweightRTObject_ptr comp);
+    virtual LifeCycleState get_component_state(LightweightRTObject_ptr comp)
+      throw (CORBA::SystemException);
     
     /*!
      * @if jp
@@ -465,7 +477,8 @@ namespace RTC
      *
      * @endif
      */
-    virtual ExecutionKind get_kind();
+    virtual ExecutionKind get_kind()
+      throw (CORBA::SystemException);
     
     /*!
      * @if jp
@@ -493,7 +506,8 @@ namespace RTC
      *
      * @endif
      */
-    virtual ReturnCode_t add(LightweightRTObject_ptr comp);
+    virtual ReturnCode_t add(LightweightRTObject_ptr comp)
+      throw (CORBA::SystemException);
     
     /*!
      * @if jp
@@ -519,7 +533,8 @@ namespace RTC
      *
      * @endif
      */
-    virtual ReturnCode_t remove(LightweightRTObject_ptr comp);
+    virtual ReturnCode_t remove(LightweightRTObject_ptr comp)
+      throw (CORBA::SystemException);
     
     /*!
      * @if jp
@@ -538,7 +553,8 @@ namespace RTC
      *
      * @endif
      */
-    virtual ExecutionContextProfile* get_profile();
+    virtual ExecutionContextProfile* get_profile()
+      throw (CORBA::SystemException);
     
   protected:
     //============================================================
