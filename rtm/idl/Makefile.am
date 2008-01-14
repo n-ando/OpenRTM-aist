@@ -2,9 +2,12 @@
 ##------------------------------------------------------------
 ## Makefile.am for libRTCSkel
 ##
-## $Id: Makefile.am,v 1.9.2.1 2008-01-13 07:32:05 n-ando Exp $
+## $Id: Makefile.am,v 1.9.2.2 2008-01-14 07:58:10 n-ando Exp $
 ##
 ## $Log: not supported by cvs2svn $
+## Revision 1.9.2.1  2008/01/13 07:32:05  n-ando
+## The improperly specified libRTCSkel source list was fixed.
+##
 ## Revision 1.9  2007/04/13 18:24:09  n-ando
 ## OpenRTM specific idl definition (OpenRTM.idl) is added.
 ##
@@ -92,10 +95,7 @@ TAO_SOURCES = \
 	$(IDL_SOURCES:.idl=S_T.inl) \
 	$(IDL_SOURCES:.idl=C.h) \
 	$(IDL_SOURCES:.idl=C.cpp) \
-	$(IDL_SOURCES:.idl=C.inl) \
-	$(IDL_SOURCES:.idl=C_T.cpp) \
-	$(IDL_SOURCES:.idl=C_T.h) \
-	$(IDL_SOURCES:.idl=C_T.inl)
+	$(IDL_SOURCES:.idl=C.inl)
 
 OMNIORB_SOURCES = \
 	$(IDL_SOURCES:.idl=.hh) \
