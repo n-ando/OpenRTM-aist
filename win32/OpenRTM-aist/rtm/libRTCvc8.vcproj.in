@@ -225,6 +225,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\OpenHRPExecutionContext.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\Factory.cpp"
 				>
 			</File>
@@ -388,6 +392,10 @@
 			</File>
 			<File
 				RelativePath=".\ExtTrigExecutionContext.h"
+				>
+			</File>
+			<File
+				RelativePath=".\OpenHRPExecutionContext.h"
 				>
 			</File>
 			<File

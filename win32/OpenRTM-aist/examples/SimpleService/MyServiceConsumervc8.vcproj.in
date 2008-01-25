@@ -196,6 +196,10 @@
 				RelativePath=".\MyServiceStub.cpp"
 				>
 			</File>
+			<File
+				RelativePath=".\MyServiceSkel.cpp"
+				>
+			</File>
 		</Filter>
 		<Filter
 			Name="ヘッダー ファイル"
@@ -208,6 +212,10 @@
 			</File>
 			<File
 				RelativePath=".\MyServiceStub.h"
+				>
+			</File>
+			<File
+				RelativePath=".\MyServiceSkel.h"
 				>
 			</File>
 		</Filter>
