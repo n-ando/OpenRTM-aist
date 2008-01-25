@@ -2,7 +2,7 @@
 /*!
  * @file Manager.h
  * @brief RTComponent manager class
- * @date $Date: 2008-01-14 07:57:40 $
+ * @date $Date: 2008-01-25 10:50:44 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
  * Copyright (C) 2003-2005
@@ -12,12 +12,15 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: Manager.cpp,v 1.12.2.5 2008-01-14 07:57:40 n-ando Exp $
+ * $Id: Manager.cpp,v 1.12.2.6 2008-01-25 10:50:44 n-ando Exp $
  *
  */
 
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.12.2.5  2008/01/14 07:57:40  n-ando
+ * TAO's ORB_init needs argv[0] as command name.
+ *
  * Revision 1.12.2.4  2007/12/31 03:08:04  n-ando
  * Class reference by doxygen comment was revised.
  *
@@ -90,6 +93,7 @@
 #include <rtm/StringUtil.h>
 #include <rtm/PeriodicExecutionContext.h>
 #include <rtm/ExtTrigExecutionContext.h>
+#include <rtm/OpenHRPExecutionContext.h>
 #include <rtm/RTCUtil.h>
 #include <fstream>
 #include <ace/Signal.h>
@@ -1023,6 +1027,7 @@ namespace RTC
     RTC_TRACE(("Manager::initExecContext()"));
     PeriodicExecutionContextInit(this);
     ExtTrigExecutionContextInit(this);
+    OpenHRPExecutionContextInit(this);
     return true;
   }
   

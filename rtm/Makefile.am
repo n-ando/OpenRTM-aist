@@ -2,9 +2,12 @@
 ##------------------------------------------------------------
 ## Makefile.am for libRTC
 ##
-## $Id: Makefile.am,v 1.16.2.3 2008-01-13 07:42:40 n-ando Exp $
+## $Id: Makefile.am,v 1.16.2.4 2008-01-25 10:49:28 n-ando Exp $
 ##
 ## $Log: not supported by cvs2svn $
+## Revision 1.16.2.3  2008/01/13 07:42:40  n-ando
+## Now libRTCSkel.la and libRTCStub.la are linked to libRTC.la.
+##
 ## Revision 1.16.2.2  2007/10/06 12:24:04  n-ando
 ## TCP socket data port was added.
 ##
@@ -112,6 +115,7 @@ COMP_SRC =                           \
 	DataFlowComponentBase.cpp    \
 	PeriodicExecutionContext.cpp \
 	ExtTrigExecutionContext.cpp  \
+	OpenHRPExecutionContext.cpp  \
 	PortAdmin.cpp                \
 	RTObject.cpp                 \
 	ConfigAdmin.cpp              \
