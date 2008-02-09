@@ -1,15 +1,18 @@
 #!/usr/bin/env python
 #
 # @brief YAT: YAml Template text processor
-# @date $Date: 2008-02-01 02:48:50 $
+# @date $Date: 2008-02-09 20:04:27 $
 # @author Norkai Ando <n-ando@aist.go.jp>
 #
 # Copyright (C) 2008 Noriaki Ando, All rights reserved.
 #
-# $Id: yat.py,v 1.1.2.1 2008-02-01 02:48:50 n-ando Exp $
+# $Id: yat.py,v 1.1.2.2 2008-02-09 20:04:27 n-ando Exp $
 #
 
 # $Log: not supported by cvs2svn $
+# Revision 1.1.2.1  2008/02/01 02:48:50  n-ando
+# YAML template text processor
+#
 #
 
 #
@@ -160,8 +163,8 @@ class Template:
             (begin_mark, re_item, re_item, end_mark)
         re_bracket   = r'%s%s%s' % \
             (begin_mark, begin_mark, end_mark)
-        re_comment   = r'%s#[^\]]*%s' % \
-            (begin_mark, end_mark)
+        re_comment   = r'%s#[^\%s]*%s' % \
+            (begin_mark, end_mark, end_mark)
         self.re_parse = re.compile(r'%s|(%s)|%s' % \
                                        (re_command, re_bracket, re_comment))
         self.re_args  = re.compile(r'"(?:[^\\"]|\\.)*"|[-\w.]+')
@@ -245,7 +248,13 @@ class Template:
             
     def __proc_cmd(self):
         cmd = self.token[self.index]
-        args = self.re_args.findall(cmd)
+        try:
+            args = self.re_args.findall(cmd)
+        except:
+            print self.re_args
+            print cmd
+            print self.lineno()
+            raise "HOGE"
         self.del_nl_after_cmd()
         argc = len(args)
         if argc == 0:
@@ -538,7 +547,7 @@ class GeneratorBase:
         val = self.get_value(keytext)
         if isinstance(val, StringType):
             return val
-        if isinstance(val, IntType) or isinstance(value, FloatType):
+        if isinstance(val, IntType) or isinstance(val, FloatType):
             return str(val)
         raise UnexpectedData(self.lineno(), "\"" + keytext + \
                                  "\" should have string, int or float value.")
