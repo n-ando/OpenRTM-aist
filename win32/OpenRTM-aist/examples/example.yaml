@@ -1,0 +1,43 @@
+Examples:
+  GUID: C41EB819-D5E6-11DC-A98E-0090CC74407B
+  Files:
+    - Id: rtc.conf
+      ShortName: rtc.cnf
+      Name: rtc.conf
+      Source: ..\\examples\\SimpleIO\\rtc.conf
+    - Id: ConsoleInComp.exe
+      ShortName: ConsIn.exe
+      Name: ConsoleInComp.exe
+      Source: ..\\examples\\SimpleIO\\Release\\ConsoleInComp.exe
+    - Id: ConsoleOutComp.exe
+      ShortName: ConsOut.exe
+      Name: ConsoleOutComp.exe
+      Source: ..\\examples\\SimpleIO\\Release\\ConsoleOutComp.exe
+    - Id: SeqInComp.exe
+      ShortName: SeqIn.exe
+      Name: SeqInComp.exe
+      Source: ..\\examples\\SeqIO\\Release\\SeqInComp.exe
+    - Id: SeqOutComp.exe
+      ShortName: ConsOut.exe
+      Name: SeqOutComp.exe
+      Source: ..\\examples\\SeqIO\\Release\\SeqOutComp.exe
+    - Id: MyServcieProviderComp.exe
+      ShortName: SvcProv.exe
+      Name: MyServcieProviderComp.exe
+      Source: ..\\examples\\SimpleService\\Release\\MyServiceProviderComp.exe
+    - Id: MyServcieConsumerComp.exe
+      ShortName: SvcCons.exe
+      Name: MyServcieConsumerComp.exe
+      Source: ..\\examples\\SimpleService\\Release\\MyServiceConsumerComp.exe
+    - Id: ConfigSampleComp.exe
+      ShortName: ConfSamp.exe
+      Name: ConfigSampleComp.exe
+      Source: ..\\examples\\ConfigSample\\Release\\ConfigSampleComp.exe
+    - Id: USBCameraAqcuireComp.exe
+      ShortName: CamAq.exe
+      Name: USBCameraAqcuireComp.exe
+      Source: ..\\examples\\USBcamera\\Release\\USBCameraAcquire.exe
+    - Id: USBCameraMonitorComp.exe
+      ShortName: CamMon.exe
+      Name: USBCameraMonitorComp.exe
+      Source: ..\\examples\\USBcamera\\Release\\USBCameraMonitor.exe
