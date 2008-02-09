@@ -2,7 +2,7 @@ dnl -*- autoconf -*-
 dnl
 dnl @file configure.ac
 dnl @brief Input file for autoconf
-dnl @date $Date: 2008-01-14 07:42:21 $
+dnl @date $Date: 2008-02-09 20:05:33 $
 dnl @author Noriaki Ando <n-ando@aist.go.jp>
 dnl
 dnl This file is an input file used by the GNU "autoconf" program to
@@ -10,11 +10,14 @@ dnl generate the file "configure", which tries to guess your system
 dnl configuration
 dnl
 dnl
-dnl $Id: configure.ac,v 1.21.2.7 2008-01-14 07:42:21 n-ando Exp $
+dnl $Id: configure.ac,v 1.21.2.8 2008-02-09 20:05:33 n-ando Exp $
 dnl
 
 dnl
 dnl $Log: not supported by cvs2svn $
+dnl Revision 1.21.2.7  2008/01/14 07:42:21  n-ando
+dnl TAO's tao_idl option was modified from -Ge 1 to -Ge 0.
+dnl
 dnl Revision 1.21.2.6  2008/01/13 15:03:14  n-ando
 dnl --with-sockdataport option was added for TCP socket DataPort.
 dnl
@@ -1501,4 +1504,5 @@ AC_OUTPUT([Makefile
 	win32/OpenRTM-aist/utils/rtc-template/Makefile
 	win32/OpenRTM-aist/rtm/Makefile
 	win32/OpenRTM-aist/rtm/idl/Makefile
+	win32/OpenRTM-aist/installer/Makefile
 	])
