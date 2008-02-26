@@ -2,9 +2,12 @@
 ##---------------------------------------------------------------------------
 ## Makefile.am for ConsoleIn/ConsoleOut components
 ##
-## $Id: Makefile.am,v 1.3.4.3 2007-10-09 07:33:15 n-ando Exp $
+## $Id: Makefile.am,v 1.3.4.4 2008-02-26 14:13:35 n-ando Exp $
 ##
 ## $Log: not supported by cvs2svn $
+## Revision 1.3.4.3  2007/10/09 07:33:15  n-ando
+## Modification for TCP socket data port.
+##
 ## Revision 1.3.4.2  2007/09/21 09:21:04  n-ando
 ## Now rtc.conf is not deleted in clean.
 ##
@@ -59,6 +62,115 @@ EXTRA_DIST =                \
 	rtc.conf            \
 	consin.conf         \
 	consout.conf
+
+ALL_SRC =                  \
+	ConsoleInComp.cpp  \
+	ConsoleIn.cpp      \
+	ConsoleIn.h        \
+	ConsoleOutComp.cpp \
+	ConsoleOut.cpp     \
+	ConsoleOut.h       \
+	ConnectorComp.cpp
+
+#------------------------------------------------------------
+# File list for deb/ports packages
+#------------------------------------------------------------
+lst:
+	echo $(ALL_SRC) > src.lst
+	echo $(EXTRA_DIST) > other.lst
+
+#------------------------------------------------------------
+# Visual Studio Project
+#------------------------------------------------------------
+win32_builddir=$(top_builddir)/win32/OpenRTM-aist/examples/SimpleIO
+
+vcproj: vc8proj vc9proj
+
+vc8proj: 
+	$(top_builddir)/build/vcprojtool.py vcproj           \
+		--type EXE                                   \
+		--vcversion "8.00"                           \
+		--projectname "ConsoleInComp"                \
+		--version $(RTM_VERSION)                     \
+		--out $(win32_builddir)/ConsoleIn_vc8.vcproj \
+		--yaml ../rtc.vcproj.yaml                    \
+		--source ConsoleIn.cpp ConsoleInComp.cpp     \
+		--header ConsoleIn.h
+	qkc -sm $(win32_builddir)/ConsoleIn_vc8.vcproj
+	$(top_builddir)/build/vcprojtool.py vcproj              \
+		--type DLL                                      \
+		--vcversion "8.00"                              \
+		--projectname "ConsoleIn"                       \
+		--version $(RTM_VERSION)                        \
+		--out $(win32_builddir)/ConsoleInDll_vc8.vcproj \
+		--yaml ../rtcdll.vcproj.yaml                    \
+		--source ConsoleIn.cpp                          \
+		--header ConsoleIn.h
+	qkc -sm $(win32_builddir)/ConsoleInDll_vc8.vcproj
+	$(top_builddir)/build/vcprojtool.py vcproj            \
+		--type EXE                                    \
+		--vcversion "8.00"                            \
+		--projectname "ConsoleOutComp"                \
+		--version $(RTM_VERSION)                      \
+		--out $(win32_builddir)/ConsoleOut_vc8.vcproj \
+		--yaml ../rtc.vcproj.yaml                     \
+		--source ConsoleOut.cpp ConsoleOutComp.cpp    \
+		--header ConsoleOut.h
+	qkc -sm $(win32_builddir)/ConsoleOut_vc8.vcproj
+	$(top_builddir)/build/vcprojtool.py vcproj               \
+		--type DLL                                       \
+		--vcversion "8.00"                               \
+		--projectname "ConsoleOut"                       \
+		--version $(RTM_VERSION)                         \
+		--out $(win32_builddir)/ConsoleOutDll_vc8.vcproj \
+		--yaml ../rtcdll.vcproj.yaml                     \
+		--source ConsoleOut.cpp                          \
+		--header ConsoleOut.h
+	qkc -sm $(win32_builddir)/ConsoleOutDll_vc8.vcproj
+
+vc9proj:
+	$(top_builddir)/build/vcprojtool.py vcproj           \
+		--type EXE                                   \
+		--vcversion "9.00"                           \
+		--projectname "ConsoleInComp"                \
+		--version $(RTM_VERSION)                     \
+		--out $(win32_builddir)/ConsoleIn_vc9.vcproj \
+		--yaml ../rtc.vcproj.yaml                    \
+		--source ConsoleIn.cpp ConsoleInComp.cpp     \
+		--header ConsoleIn.h
+	qkc -sm $(win32_builddir)/ConsoleIn_vc9.vcproj
+	$(top_builddir)/build/vcprojtool.py vcproj              \
+		--type DLL                                      \
+		--vcversion "9.00"                              \
+		--projectname "ConsoleIn"                       \
+		--version $(RTM_VERSION)                        \
+		--out $(win32_builddir)/ConsoleInDll_vc9.vcproj \
+		--yaml ../rtcdll.vcproj.yaml                    \
+		--source ConsoleIn.cpp                          \
+		--header ConsoleIn.h
+	qkc -sm $(win32_builddir)/ConsoleInDll_vc9.vcproj
+	$(top_builddir)/build/vcprojtool.py vcproj            \
+		--type EXE                                    \
+		--vcversion "9.00"                            \
+		--projectname "ConsoleOutComp"                \
+		--version $(RTM_VERSION)                      \
+		--out $(win32_builddir)/ConsoleOut_vc9.vcproj \
+		--yaml ../rtc.vcproj.yaml                     \
+		--source ConsoleOut.cpp ConsoleOutComp.cpp    \
+		--header ConsoleOut.h
+	qkc -sm $(win32_builddir)/ConsoleOut_vc9.vcproj
+	$(top_builddir)/build/vcprojtool.py vcproj               \
+		--type DLL                                       \
+		--vcversion "9.00"                               \
+		--projectname "ConsoleOut"                       \
+		--version $(RTM_VERSION)                         \
+		--out $(win32_builddir)/ConsoleOutDll_vc9.vcproj \
+		--yaml ../rtcdll.vcproj.yaml                     \
+		--source ConsoleOut.cpp                          \
+		--header ConsoleOut.h
+	qkc -sm $(win32_builddir)/ConsoleOutDll_vc9.vcproj
+
+dist-hool: lst vcproj
 
 clean-local:
 	rm -f \

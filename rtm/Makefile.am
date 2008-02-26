@@ -2,9 +2,12 @@
 ##------------------------------------------------------------
 ## Makefile.am for libRTC
 ##
-## $Id: Makefile.am,v 1.16.2.4 2008-01-25 10:49:28 n-ando Exp $
+## $Id: Makefile.am,v 1.16.2.5 2008-02-26 14:15:09 n-ando Exp $
 ##
 ## $Log: not supported by cvs2svn $
+## Revision 1.16.2.4  2008/01/25 10:49:28  n-ando
+## OpenHRPExecutionContext was added.
+##
 ## Revision 1.16.2.3  2008/01/13 07:42:40  n-ando
 ## Now libRTCSkel.la and libRTCStub.la are linked to libRTC.la.
 ##
@@ -192,6 +195,44 @@ rtmheader_HEADERS = \
 
 EXTRA_DIST = $(rtmheader_HEADERS)
 DIST_SUBDIRS = idl tests
+
+#------------------------------------------------------------
+# File list for deb/ports packages
+#------------------------------------------------------------
+lst:
+	echo $(RTC_SRC) > src.lst
+	echo $(rtmheader_HEADERS) > header.lst
+
+#------------------------------------------------------------
+# Visual Studio Project
+#------------------------------------------------------------
+win32_builddir = $(top_builddir)/win32/OpenRTM-aist/
+
+vcproj: vc8proj vc9proj
+
+vc8proj: libRTC.vcproj.yaml
+	$(top_builddir)/build/vcprojtool.py vcproj \
+		--type DLL \
+		--vcversion "8.00" \
+		--version $(RTM_VERSION) \
+		--out $(win32_builddir)/rtm/libRTC_vc8.vcproj \
+		--yaml libRTC.vcproj.yaml \
+		--source $(RTC_SRC) \
+		--header $(rtmheader_HEADERS)
+	qkc -sm $(win32_builddir)/rtm/libRTC_vc8.vcproj
+
+vc9proj: libRTC.vcproj.yaml
+	$(top_builddir)/build/vcprojtool.py vcproj \
+		--type DLL \
+		--vcversion "9.00" \
+		--version $(RTM_VERSION) \
+		--out $(win32_builddir)/rtm/libRTC_vc9.vcproj \
+		--yaml libRTC.vcproj.yaml \
+		--source $(RTC_SRC) \
+		--header $(rtmheader_HEADERS)
+	qkc -sm $(win32_builddir)/rtm/libRTC_vc9.vcproj
+
+dist-hook: clean-local lst vcproj
 
 clean-local:
 	rm -f *.gch *.bak *.rpo *.sym lib*.*_pure_* Makefile.old *core *~

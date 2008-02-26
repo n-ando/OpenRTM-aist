@@ -2,9 +2,12 @@
 ##------------------------------------------------------------
 ## Makefile.am for libRTCSkel
 ##
-## $Id: Makefile.am,v 1.9.2.2 2008-01-14 07:58:10 n-ando Exp $
+## $Id: Makefile.am,v 1.9.2.3 2008-02-26 14:18:58 n-ando Exp $
 ##
 ## $Log: not supported by cvs2svn $
+## Revision 1.9.2.2  2008/01/14 07:58:10  n-ando
+## A trivial fix for TAO.
+##
 ## Revision 1.9.2.1  2008/01/13 07:32:05  n-ando
 ## The improperly specified libRTCSkel source list was fixed.
 ##
@@ -51,42 +54,53 @@ AM_LDFLAGS=-L$(top_builddir) -L$(top_builddir)/rtm -L$(top_builddir)/rtm/idl
 SUFFIXES = .idl Skel.cpp Stub.cpp Stub.o Skel.o
 
 # RTM idl sources
-IDL_SOURCES =         \
+IDL_SOURCES =             \
 	SDOPackage.idl    \
 	RTC.idl           \
 	OpenRTM.idl       \
 	BasicDataType.idl \
 	DataPort.idl
 
+SKEL_H   = $(IDL_SOURCES:.idl=Skel.h)
+SKEL_CPP = $(IDL_SOURCES:.idl=Skel.cpp)
+STUB_H   = $(IDL_SOURCES:.idl=Stub.h)
+STUB_CPP = $(IDL_SOURCES:.idl=Stub.cpp)
+ALL_SRC =           \
+	$(SKEL_H)   \
+	$(SKEL_CPP) \
+	$(STUB_H)   \
+	$(STUB_CPP) \
+	$(ORB_SRC)
+
 if ORB_IS_TAO
-SKEL_SOURCES = $(TAO_SOURCES)
+ORB_SRC = $(TAO_SRC)
 endif
 
 if ORB_IS_OMNIORB
-SKEL_SOURCES = $(OMNIORB_SOURCES)
+ORB_SRC = $(OMNIORB_SRC)
 endif
 
 if ORB_IS_MICO
-SKEL_SOURCES = $(MICO_SOURCES)
+ORB_SRC = $(MICO_SRC)
 endif
 
 if ORB_IS_ORBIX
-SKEL_SOURCES = $(ORBIX_SOURCES)
+ORB_SRC = $(ORBIX_SRC)
 endif
 
 if ORB_IS_ORBACUS
-SKEL_SOURCES = $(ORBACUS_SOURCES)
+ORB_SRC = $(ORBACUS_SRC)
 endif
 
 if ORB_IS_ORBIT2
-SKEL_SOURCES = $(ORBIT2_SOURCES)
+ORB_SRC = $(ORBIT2_SRC)
 OIDLC = $(IDLC) -DORBIT2_IDL
 else
 OIDLC = echo
 endif
 
 
-TAO_SOURCES = \
+TAO_SRC = \
 	$(IDL_SOURCES:.idl=S.h) \
 	$(IDL_SOURCES:.idl=S.cpp) \
 	$(IDL_SOURCES:.idl=S.inl) \
@@ -97,28 +111,28 @@ TAO_SOURCES = \
 	$(IDL_SOURCES:.idl=C.cpp) \
 	$(IDL_SOURCES:.idl=C.inl)
 
-OMNIORB_SOURCES = \
+OMNIORB_SRC = \
 	$(IDL_SOURCES:.idl=.hh) \
 	$(IDL_SOURCES:.idl=SK.cc) \
 	$(IDL_SOURCES:.idl=DynSK.cc)
 
-MICO_SOURCES = \
+MICO_SRC = \
 	$(IDL_SOURCES:.idl=.h) \
 	$(IDL_SOURCES:.idl=.cc) \
 	$(IDL_SOURCES:.idl=_skel.cc)
 
-ORBIX_SOURCES = \
+ORBIX_SRC = \
 	$(IDL_SOURCES:.idl=.hh) \
 	$(IDL_SOURCES:.idl=S.cc) \
 	$(IDL_SOURCES:.idl=C.cc)
 
-ORBACUS_SOURCES = \
+ORBACUS_SRC = \
 	$(IDL_SOURCES:.idl=.h) \
 	$(IDL_SOURCES:.idl=.cpp) \
 	$(IDL_SOURCES:.idl=_skel.h) \
 	$(IDL_SOURCES:.idl=_skel.cpp)
 
-ORBIT2_SOURCES = \
+ORBIT2_SRC = \
 	$(IDL_SOURCES:.idl=.h) \
 	$(IDL_SOURCES:.idl=-common.c) \
 	$(IDL_SOURCES:.idl=-cpp-common.cc) \
@@ -138,27 +152,20 @@ rtmskeldir =   $(rtmheaderdir)/idl
 
 idl_DATA = $(IDL_SOURCES)
 
-nodist_rtmskel_HEADERS =         \
-	$(IDL_SOURCES:.idl=Skel.h)   \
-	$(IDL_SOURCES:.idl=Skel.cpp) \
-	$(IDL_SOURCES:.idl=Stub.h)   \
-	$(IDL_SOURCES:.idl=Stub.cpp) \
-	$(SKEL_SOURCES)
+nodist_rtmskel_HEADERS = $(ALL_SRC)
 
 
 #------------------------------------------------------------
 # Intermediate library : libRTCSkel.a
 noinst_LTLIBRARIES = libRTCSkel.la libRTCStub.la
 
-nodist_libRTCSkel_la_SOURCES = $(IDL_SOURCES:.idl=Skel.cpp)
+nodist_libRTCSkel_la_SOURCES = $(SKEL_CPP)
 
 libRTCSkel_la_LIBADD = $(LIBS)
 
-nodist_libRTCStub_la_SOURCES = $(IDL_SOURCES:.idl=Stub.cpp)
+nodist_libRTCStub_la_SOURCES = $(STUB_CPP)
 
 libRTCStub_la_LIBADD = $(LIBS)
-
-#BUILT_SOURCES = $(IDL_SOURCES:.idl=Skel.cpp) $(IDL_SOURCES:.idl=Stub.cpp)
 
 .idlSkel.cpp:
 	$(OIDLC) $<
@@ -171,17 +178,48 @@ libRTCStub_la_LIBADD = $(LIBS)
 #------------------------------------------------------------
 
 # Extra sources included distribution
-EXTRA_DIST =       \
-	$(IDL_SOURCES) 
+EXTRA_DIST = $(IDL_SOURCES) 
 
+
+
+#------------------------------------------------------------
+# File list for deb/ports packages
+#------------------------------------------------------------
+lst:
+	echo $(ALL_SRC) > skelstub.lst
+	echo $(IDL_SOURCES) > idls.lst
+
+#------------------------------------------------------------
+# Visual Studio Project
+#------------------------------------------------------------
+win32_builddir=$(top_builddir)/win32/OpenRTM-aist/
+
+vcproj: vc8proj vc9proj
+
+vc8proj: libRTCSkel.vcproj.yaml
+	$(top_builddir)/build/vcprojtool.py vcproj \
+		--type LIB \
+		--vcversion "8.00" \
+		--version $(RTM_VERSION) \
+		--out $(win32_builddir)/rtm/idl/libRTCSkel_vc8.vcproj \
+		--yaml libRTCSkel.vcproj.yaml \
+		--source $(SKEL_CPP) $(STUB_CPP) \
+		--header $(SKEL_H)   $(STUB_H)
+	qkc -sm $(win32_builddir)/rtm/idl/libRTCSkel_vc8.vcproj
+
+vc9proj: libRTCSkel.vcproj.yaml
+	$(top_builddir)/build/vcprojtool.py vcproj \
+		--type LIB \
+		--vcversion "9.00" \
+		--version $(RTM_VERSION) \
+		--out $(win32_builddir)/rtm/idl/libRTCSkel_vc9.vcproj \
+		--yaml libRTCSkel.vcproj.yaml \
+		--source $(SKEL_CPP) $(STUB_CPP) \
+		--header $(SKEL_H)   $(STUB_H)
+	qkc -sm $(win32_builddir)/rtm/idl/libRTCSkel_vc9.vcproj
+
+dist-hook: lst vcproj
 
 # Cleanup
 clean-local:
-	rm -f \
-	*Skel.cpp *Skel.h *Stub.cpp *Stub.h \
-	*~ *.core \
-	Makefile.old \
-	*.cc *.hh *.i *.a *.c *.inl \
-	*C.cpp *C.h *S.h *S.cpp *_T.h *_T.cpp \
-	*-cpp-common.h *-cpp-skels.h *-cpp-stubs.h *-cpp.h \
-	$(IDL_SOURCES:.idl=.h)
+	rm -f $(ALL_SRC) *~ *.core *.lst Makefile.old

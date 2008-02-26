@@ -2,9 +2,12 @@
 ##---------------------------------------------------------------------------
 ## Makefile.am for SeqIn/SeqOut components
 ##
-## $Id: Makefile.am,v 1.2.2.2 2007-09-26 07:43:40 n-ando Exp $
+## $Id: Makefile.am,v 1.2.2.3 2008-02-26 14:13:32 n-ando Exp $
 ##
 ## $Log: not supported by cvs2svn $
+## Revision 1.2.2.2  2007/09/26 07:43:40  n-ando
+## Some modification for version 0.4.1.
+##
 ## Revision 1.2.2.1  2007/07/22 14:26:32  n-ando
 ## *** empty log message ***
 ##
@@ -46,6 +49,114 @@ EXTRA_DIST =            \
 	README.SeqOut   \
 	gen.sh          \
 	rtc.conf
+
+ALL_SRC =              \
+	SeqInComp.cpp  \
+	SeqIn.cpp      \
+	SeqIn.h        \
+	SeqOutComp.cpp \
+	SeqOut.cpp     \
+	SeqOut.h
+
+#------------------------------------------------------------
+# File list for deb/ports packages
+#------------------------------------------------------------
+lst:
+	echo $(ALL_SRC) > src.lst
+	echo $(EXTRA_DIST) > other.lst
+
+#------------------------------------------------------------
+# Visual Studio Project
+#------------------------------------------------------------
+win32_builddir=$(top_builddir)/win32/OpenRTM-aist/examples/SeqIO
+
+vcproj: vc8proj vc9proj
+
+vc8proj: 
+	$(top_builddir)/build/vcprojtool.py vcproj       \
+		--type EXE                               \
+		--vcversion "8.00"                       \
+		--projectname "SeqInComp"                \
+		--version $(RTM_VERSION)                 \
+		--out $(win32_builddir)/SeqIn_vc8.vcproj \
+		--yaml ../rtc.vcproj.yaml                \
+		--source SeqIn.cpp SeqInComp.cpp         \
+		--header SeqIn.h
+	qkc -sm $(win32_builddir)/SeqIn_vc8.vcproj
+	$(top_builddir)/build/vcprojtool.py vcproj          \
+		--type DLL                                  \
+		--vcversion "8.00"                          \
+		--projectname "SeqIn"                       \
+		--version $(RTM_VERSION)                    \
+		--out $(win32_builddir)/SeqInDll_vc8.vcproj \
+		--yaml ../rtcdll.vcproj.yaml                \
+		--source SeqIn.cpp                          \
+		--header SeqIn.h
+	qkc -sm $(win32_builddir)/SeqInDll_vc8.vcproj
+	$(top_builddir)/build/vcprojtool.py vcproj        \
+		--type EXE                                \
+		--vcversion "8.00"                        \
+		--projectname "SeqOutComp"                \
+		--version $(RTM_VERSION)                  \
+		--out $(win32_builddir)/SeqOut_vc8.vcproj \
+		--yaml ../rtc.vcproj.yaml                 \
+		--source SeqOut.cpp SeqOutComp.cpp        \
+		--header SeqOut.h
+	qkc -sm $(win32_builddir)/SeqOut_vc8.vcproj
+	$(top_builddir)/build/vcprojtool.py vcproj           \
+		--type DLL                                   \
+		--vcversion "8.00"                           \
+		--projectname "SeqOut"                       \
+		--version $(RTM_VERSION)                     \
+		--out $(win32_builddir)/SeqOutDll_vc8.vcproj \
+		--yaml ../rtcdll.vcproj.yaml                 \
+		--source SeqOut.cpp                          \
+		--header SeqOut.h
+	qkc -sm $(win32_builddir)/SeqOutDll_vc8.vcproj
+
+vc9proj:
+	$(top_builddir)/build/vcprojtool.py vcproj       \
+		--type EXE                               \
+		--vcversion "9.00"                       \
+		--projectname "SeqInComp"                \
+		--version $(RTM_VERSION)                 \
+		--out $(win32_builddir)/SeqIn_vc9.vcproj \
+		--yaml ../rtc.vcproj.yaml                \
+		--source SeqIn.cpp SeqInComp.cpp         \
+		--header SeqIn.h
+	qkc -sm $(win32_builddir)/SeqIn_vc9.vcproj
+	$(top_builddir)/build/vcprojtool.py vcproj          \
+		--type DLL                                  \
+		--vcversion "9.00"                          \
+		--projectname "SeqIn"                       \
+		--version $(RTM_VERSION)                    \
+		--out $(win32_builddir)/SeqInDll_vc9.vcproj \
+		--yaml ../rtcdll.vcproj.yaml                \
+		--source SeqIn.cpp                          \
+		--header SeqIn.h
+	qkc -sm $(win32_builddir)/SeqInDll_vc9.vcproj
+	$(top_builddir)/build/vcprojtool.py vcproj        \
+		--type EXE                                \
+		--vcversion "9.00"                        \
+		--projectname "SeqOutComp"                \
+		--version $(RTM_VERSION)                  \
+		--out $(win32_builddir)/SeqOut_vc9.vcproj \
+		--yaml ../rtc.vcproj.yaml                 \
+		--source SeqOut.cpp SeqOutComp.cpp        \
+		--header SeqOut.h
+	qkc -sm $(win32_builddir)/SeqOut_vc9.vcproj
+	$(top_builddir)/build/vcprojtool.py vcproj           \
+		--type DLL                                   \
+		--vcversion "9.00"                           \
+		--projectname "SeqOut"                       \
+		--version $(RTM_VERSION)                     \
+		--out $(win32_builddir)/SeqOutDll_vc9.vcproj \
+		--yaml ../rtcdll.vcproj.yaml                 \
+		--source SeqOut.cpp                          \
+		--header SeqOut.h
+	qkc -sm $(win32_builddir)/SeqOutDll_vc9.vcproj
+
+dist-hook: lst vcproj
 
 clean-local:
 	rm -f *.bak *.rpo *.sym lib*.*_pure_* Makefile.old *core *~ *.log
