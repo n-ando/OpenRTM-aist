@@ -1,4 +1,22 @@
 #!/usr/bin/env python
+#
+# @brief WiX wxsd file generator
+# @date $Date: 2008-02-26 13:58:13 $
+# @author Norkai Ando <n-ando@aist.go.jp>
+#
+# Copyright (C) 2008
+#     Noriaki Ando
+#     Task-intelligence Research Group,
+#     Intelligent Systems Research Institute,
+#     National Institute of
+#         Advanced Industrial Science and Technology (AIST), Japan
+#     All rights reserved.
+#
+# $Id: makewxs.py,v 1.1.2.2 2008-02-26 13:58:13 n-ando Exp $
+#
+
+# $Log: not supported by cvs2svn $
+#
 
 import yaml
 import yat
@@ -20,13 +38,6 @@ def replace_uuid(text):
         u = "_" + str(uuid.uuid1()).replace("-", "")
         text1 += u + token1[i]
     return text1
-
-#intext = open("OpenRTM-aist.wxs.yaml", "r").read()
-#intext = replace_uuid(intext)
-
-#dict = yaml.load(intext)
-#t = yat.Template(open("OpenRTM-aist.wxs.in", "r").read(), "{% ", " %}")
-#print t.generate(dict)
 
 class file_list:
     def __init__(self, comp, path, files):
@@ -146,7 +157,7 @@ def main(argv):
         sys.exit(-1)
 
     cmd = argv[0]
-
+    out = None
     if cmd == "flist":
         opts, args = getopt.getopt(argv[1:], "c:p:o:", [])
         if opts == None:
@@ -161,7 +172,10 @@ def main(argv):
             if o in ("-o"):
                 out = a
         fl = file_list(comp, path, args)
-        f = open(out, "w")
+        if out == None:
+            f = sys.stdout
+        else:
+            f = open(out, "w")
         f.write(fl.yaml())
         f.close()
     elif cmd == "wxs":
