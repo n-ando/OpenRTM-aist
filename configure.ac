@@ -2,7 +2,7 @@ dnl -*- autoconf -*-
 dnl
 dnl @file configure.ac
 dnl @brief Input file for autoconf
-dnl @date $Date: 2008-02-09 20:05:33 $
+dnl @date $Date: 2008-02-26 15:21:04 $
 dnl @author Noriaki Ando <n-ando@aist.go.jp>
 dnl
 dnl This file is an input file used by the GNU "autoconf" program to
@@ -10,11 +10,14 @@ dnl generate the file "configure", which tries to guess your system
 dnl configuration
 dnl
 dnl
-dnl $Id: configure.ac,v 1.21.2.8 2008-02-09 20:05:33 n-ando Exp $
+dnl $Id: configure.ac,v 1.21.2.9 2008-02-26 15:21:04 n-ando Exp $
 dnl
 
 dnl
 dnl $Log: not supported by cvs2svn $
+dnl Revision 1.21.2.8  2008/02/09 20:05:33  n-ando
+dnl For wix's wxs file generation
+dnl
 dnl Revision 1.21.2.7  2008/01/14 07:42:21  n-ando
 dnl TAO's tao_idl option was modified from -Ge 1 to -Ge 0.
 dnl
@@ -117,6 +120,25 @@ AC_INIT(OpenRTM-aist, 0.4.2, n-ando@aist.go.jp, OpenRTM-aist)
 AM_INIT_AUTOMAKE
 AM_CONFIG_HEADER([rtm/config_rtc.h])
 
+dnl ------------------------------------------------------------
+dnl  Version number
+dnl ------------------------------------------------------------
+major_version=[`echo $VERSION | sed -e 's/\([0-9]\{1,\}\)\.\([0-9]\{1,\}\)\.\([0-9]\{1,\}\)/\1/g'`]
+minor_version=[`echo $VERSION | sed -e 's/\([0-9]\{1,\}\)\.\([0-9]\{1,\}\)\.\([0-9]\{1,\}\)/\2/g'`]
+revision_num=[`echo $VERSION | sed -e 's/\([0-9]\{1,\}\)\.\([0-9]\{1,\}\)\.\([0-9]\{1,\}\)/\3/g'`]
+short_version=$major_version$minor_version$revision_num
+
+RTM_VERSION=$VERSION
+RTM_MAJOR_VERSION=$major_version
+RTM_MINOR_VERSION=$minor_version
+RTM_REVISION_NUM=$revision_num
+RTM_SHORT_VERSION=$short_version
+
+AC_DEFINE_UNQUOTED([RTM_VERSION],       "$VERSION",       [RTM version])
+AC_DEFINE_UNQUOTED([RTM_MAJOR_VERSION], "$major_version", [RTM major version])
+AC_DEFINE_UNQUOTED([RTM_MINOR_VERSION], "$minor_version", [RTM minor version])
+AC_DEFINE_UNQUOTED([RTM_REVISION_NUM],  "$revision_num",  [RTM revision numver])
+AC_DEFINE_UNQUOTED([RTM_SHORT_VERSION], "$short_version", [RTM short version])
 
 dnl ------------------------------------------------------------
 dnl  Basic setup
@@ -1386,6 +1408,13 @@ AC_SUBST(LDSO)
 AC_SUBST(SOEXT)
 AC_SUBST(LDSOOPTS)
 AC_SUBST(LDSOLIBS)
+
+dnl RTM version related options
+AC_SUBST(RTM_VERSION)
+AC_SUBST(RTM_MAJOR_VERSION)
+AC_SUBST(RTM_MINOR_VERSION)
+AC_SUBST(RTM_REVISION_NUM)
+AC_SUBST(RTM_SHORT_VERSION)
 
 dnl ORB related options
 AC_SUBST(ORB)
