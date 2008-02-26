@@ -2,9 +2,12 @@
 ##---------------------------------------------------------------------------
 ## Makefile.am for win32/OpenRTM-aist/examples/ConfigSample
 ##
-## $Id: Makefile.am,v 1.1.2.4 2007-09-21 10:30:44 n-ando Exp $
+## $Id: Makefile.am,v 1.1.2.5 2008-02-26 15:11:10 n-ando Exp $
 ##
 ## $Log: not supported by cvs2svn $
+## Revision 1.1.2.4  2007/09/21 10:30:44  n-ando
+## Now vcproj is not deleted in clean target.
+##
 ## Revision 1.1.2.3  2007/07/22 10:34:11  n-ando
 ## *** empty log message ***
 ##
@@ -20,9 +23,6 @@ clean-local:
 	rm -rf Debug Release
 	rm -rf *~ *.cpp *.h *.user *.conf *.vcproj
 
-vcprojs: ConfigSamplevc8.vcproj
-
-
 src:
 	cp $(top_srcdir)/examples/ConfigSample/*.cpp .
 	cp $(top_srcdir)/examples/ConfigSample/*.h .
@@ -31,19 +31,4 @@ src:
 	qkc -ms *.h
 	qkc -ms *.conf
 
-
-ConfigSamplevc8.vcproj:
-	$(top_srcdir)/build/makevcproj.py      \
-		-i ConfigSamplevc8.vcproj.in   \
-		-d ConfigSamplevc8.vcproj.yaml \
-		-o ConfigSamplevc8.vcproj
-	qkc -ms ConfigSamplevc8.vcproj
-
-
-dist-hook: clean-local src vcprojs
-
-EXTRA_DIST =                         \
-	ConfigSamplevc8.vcproj.in    \
-	ConfigSamplevc8.vcproj.yaml
-
-
+dist-hook: src

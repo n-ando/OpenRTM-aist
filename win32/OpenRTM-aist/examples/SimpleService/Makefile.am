@@ -2,9 +2,12 @@
 ##---------------------------------------------------------------------------
 ## Makefile.am for win32/OpenRTM-aist/examples/SimpleService
 ##
-## $Id: Makefile.am,v 1.1.2.4 2007-09-21 10:30:52 n-ando Exp $
+## $Id: Makefile.am,v 1.1.2.5 2008-02-26 15:12:01 n-ando Exp $
 ##
 ## $Log: not supported by cvs2svn $
+## Revision 1.1.2.4  2007/09/21 10:30:52  n-ando
+## Now vcproj is not deleted in clean target.
+##
 ## Revision 1.1.2.3  2007/07/22 10:34:21  n-ando
 ## *** empty log message ***
 ##
@@ -20,9 +23,6 @@ clean-local:
 	rm -rf Debug Release
 	rm -rf *~ *.cpp *.h *.idl rtc.conf *.user *.vcproj
 
-vcprojs: MyServiceProvidervc8.vcproj MyServiceConsumervc8.vcproj
-
-
 src:
 	cp $(top_srcdir)/examples/SimpleService/*.cpp .
 	cp $(top_srcdir)/examples/SimpleService/*.h .
@@ -32,28 +32,4 @@ src:
 	qkc -ms *.h
 	qkc -ms *.idl
 
-
-MyServiceProvidervc8.vcproj:
-	$(top_srcdir)/build/makevcproj.py            \
-		-i MyServiceProvidervc8.vcproj.in    \
-		-d MyServiceProvidervc8.vcproj.yaml  \
-		-o MyServiceProvidervc8.vcproj
-	qkc -ms MyServiceProvidervc8.vcproj
-
-
-MyServiceConsumervc8.vcproj:
-	$(top_srcdir)/build/makevcproj.py            \
-		-i MyServiceConsumervc8.vcproj.in    \
-		-d MyServiceConsumervc8.vcproj.yaml  \
-		-o MyServiceConsumervc8.vcproj
-	qkc -ms MyServiceConsumervc8.vcproj
-
-
-dist-hook: clean-local src vcprojs
-
-EXTRA_DIST=                              \
-	MyServiceProvidervc8.vcproj.in   \
-	MyServiceConsumervc8.vcproj.in   \
-	MyServiceConsumervc8.vcproj.yaml \
-	MyServiceProvidervc8.vcproj.yaml
-
+dist-hook: src

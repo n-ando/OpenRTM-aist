@@ -2,9 +2,12 @@
 ##---------------------------------------------------------------------------
 ## Makefile.am for win32/OpenRTM-aist/examples/SimpleIO
 ##
-## $Id: Makefile.am,v 1.1.2.3 2007-09-21 10:30:49 n-ando Exp $
+## $Id: Makefile.am,v 1.1.2.4 2008-02-26 15:11:41 n-ando Exp $
 ##
 ## $Log: not supported by cvs2svn $
+## Revision 1.1.2.3  2007/09/21 10:30:49  n-ando
+## Now vcproj is not deleted in clean target.
+##
 ## Revision 1.1.2.2  2007/07/22 10:34:18  n-ando
 ## *** empty log message ***
 ##
@@ -17,9 +20,6 @@ clean-local:
 	rm -rf Debug Release
 	rm -rf *~ *.cpp *.h rtc.conf *.user *.vcproj
 
-vcprojs: ConsoleInvc8.vcproj ConsoleOutvc8.vcproj
-
-
 src:
 	cp $(top_srcdir)/examples/SimpleIO/*.cpp .
 	cp $(top_srcdir)/examples/SimpleIO/*.h .
@@ -27,27 +27,4 @@ src:
 	qkc -ms *.cpp
 	qkc -ms *.h
 
-
-ConsoleInvc8.vcproj:
-	$(top_srcdir)/build/makevcproj.py   \
-		-i ConsoleInvc8.vcproj.in   \
-		-d ConsoleInvc8.vcproj.yaml \
-		-o ConsoleInvc8.vcproj
-	qkc -ms ConsoleInvc8.vcproj
-
-
-ConsoleOutvc8.vcproj:
-	$(top_srcdir)/build/makevcproj.py    \
-		-i ConsoleOutvc8.vcproj.in   \
-		-d ConsoleOutvc8.vcproj.yaml \
-		-o ConsoleOutvc8.vcproj
-	qkc -ms ConsoleOutvc8.vcproj
-
-
-dist-hook: clean-local src vcprojs
-
-EXTRA_DIST =                      \
-	ConsoleInvc8.vcproj.in    \
-	ConsoleOutvc8.vcproj.in   \
-	ConsoleInvc8.vcproj.yaml  \
-	ConsoleOutvc8.vcproj.yaml
+dist-hook: src
