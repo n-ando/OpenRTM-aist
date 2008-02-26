@@ -1,10 +1,18 @@
+#
+# @brief VCProject configuration file for libRTC
+# @date $Date: 2008-02-26 14:17:32 $
+# @author Norkai Ando <n-ando@aist.go.jp>
+#
 ProjectType: "Visual C++"
-Version: "8.00"
+Version: "__VCVERSION__"
 Name: libRTC
 ProjectGUID: __GUID__
 RootNamespace: libRTC
 Keyword: "Win32Proj"
 Configurations:
+#------------------------------------------------------------
+# Debug Configuration
+#------------------------------------------------------------
   - Name: "Debug|Win32"
     OutputDirectory: "$(ProjectDir)$(ConfigurationName)"
     IntermediateDirectory: "$(ConfigurationName)"
@@ -40,7 +48,7 @@ Configurations:
           move RTC$(rtm_dllver)d.def ..\
     VCLinkerTool:
       - Key: AdditionalDependencies
-        Value: "$(rtm_debuglibs)"
+        Value: "$(rtm_depend_libd)"
       - Key: OutputFile
         Value: "$(OutDir)\\RTC$(rtm_dllver)d.dll"
       - Key: Version
@@ -60,6 +68,9 @@ Configurations:
         Value: |
           copy $(OutDir)\\$(TargetName).lib "$(SolutionDir)bin\\"
           copy $(OutDir)\\$(TargetName).dll "$(SolutionDir)bin\\"
+#------------------------------------------------------------
+# Release Configuration
+#------------------------------------------------------------
   - Name: "Release|Win32"
     OutputDirectory: "$(ProjectDir)$(ConfigurationName)"
     IntermediateDirectory: "$(ConfigurationName)"
@@ -90,7 +101,7 @@ Configurations:
           move RTC$(rtm_dllver).def ..\\
     VCLinkerTool:
       - Key: AdditionalDependencies
-        Value: "$(rtm_libs)"
+        Value: "$(rtm_depend_lib)"
       - Key: OutputFile
         Value: "$(OutDir)\\RTC$(rtm_dllver).dll"
       - Key: LinkIncremental
