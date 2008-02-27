@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 #
 # @brief VCProject file generator
-# @date $Date: 2008-02-26 14:00:57 $
+# @date $Date: 2008-02-27 11:31:20 $
 # @author Norkai Ando <n-ando@aist.go.jp>
 #
 # Copyright (C) 2008
@@ -12,10 +12,13 @@
 #         Advanced Industrial Science and Technology (AIST), Japan
 #     All rights reserved.
 #
-# $Id: vcprojtool.py,v 1.1.2.1 2008-02-26 14:00:57 n-ando Exp $
+# $Id: vcprojtool.py,v 1.1.2.2 2008-02-27 11:31:20 n-ando Exp $
 #
 
 # $Log: not supported by cvs2svn $
+# Revision 1.1.2.1  2008/02/26 14:00:57  n-ando
+# Visual Studio project file generator
+#
 #
 
 #------------------------------------------------------------
@@ -149,7 +152,7 @@ tools = {"EXE":
               "VCFxCopTool",
               "VCAppVerifierTool",
               "VCWebDeploymentTool",
-              "VCPostBuildEventToo"],
+              "VCPostBuildEventTool"],
          "LIB":
              ["VCPreBuildEventTool",
               "VCCustomBuildTool",
@@ -176,8 +179,6 @@ tool_elem = """			<Tool
 [if-any conf.%s][for tool in conf.%s]
 [if-any tool.Key]
 				[tool.Key]="[tool.Value]"
-[else]
-####
 [endif]
 [endfor][endif]
 			/>
