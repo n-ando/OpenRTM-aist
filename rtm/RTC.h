@@ -2,7 +2,7 @@
 /*!
  * @file RTC.h
  * @brief RTComponent header
- * @date $Date: 2008-01-13 07:52:44 $
+ * @date $Date: 2008-02-29 04:57:44 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
  * Copyright (C) 2003-2005
@@ -12,12 +12,17 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: RTC.h,v 1.5.2.2 2008-01-13 07:52:44 n-ando Exp $
+ * $Id: RTC.h,v 1.5.2.3 2008-02-29 04:57:44 n-ando Exp $
  *
  */
 
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.5.2.2  2008/01/13 07:52:44  n-ando
+ * In case of using MICO, two RTC.h exists as rtm/RTC.h and rtm/idl/RTC.h.
+ * Since the "#include <RTC.h>" only includes rtm/RTC.h, this file should
+ * include rtm/idl/RTC.h in case of MICO.
+ *
  * Revision 1.5.2.1  2007/07/20 16:05:14  n-ando
  * usleep definition for win32 porting.
  * Useless __declspec definitions were deleted.
@@ -68,30 +73,19 @@
 #endif
 
 
-// for windows DLL
-#ifdef WIN32
-
-//#ifdef DLLEXT
-//#define EXPORTS __declspec(dllexport)
-//#else  // DLLEXT
-//#define EXPORTS __declspec(dllimport)
-//#endif // DLLEXT
-
-#define LINE_MAX 256
+// for Windows DLL export 
+#if defined(WIN32) || defined(_WIN32) || defined(__WIN32__) || defined(__NT__)
+#   define DLL_EXPORT __declspec(dllexport)
+#   define usleep(x) Sleep(x/1000);
+#   define LINE_MAX 256
 BOOL WINAPI DllMain (HINSTANCE hinstDll, DWORD fdwReason, LPVOID lpvReserved);
+#else 
+#   define DLL_EXPORT 
+#   define WINAPI
+#endif /* Windows */
 
-#else  // WIN32
-
-#define EXPORTS
-#define WINAPI
-
-#endif // WIN32
 
 #include "rtm/idl/OpenRTMSkel.h"
 
-
-#ifdef WIN32
-#define usleep(x) Sleep(x/1000);
-#endif // WIN32
 
 #endif // RTC_h
