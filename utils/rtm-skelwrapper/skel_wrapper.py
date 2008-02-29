@@ -3,7 +3,7 @@
 #
 #  @file skel_wrapper.py
 #  @brief CORBA skelton/stub wrapper generator module
-#  @date $Date: 2008-01-13 07:32:56 $
+#  @date $Date: 2008-02-29 05:22:51 $
 #  @author Noriaki Ando <n-ando@aist.go.jp>
 # 
 #  Copyright (C) 2004-2007
@@ -13,11 +13,14 @@
 #          Advanced Industrial Science and Technology (AIST), Japan
 #      All rights reserved.
 # 
-#  $Id: skel_wrapper.py,v 1.3.4.1 2008-01-13 07:32:56 n-ando Exp $
+#  $Id: skel_wrapper.py,v 1.3.4.2 2008-02-29 05:22:51 n-ando Exp $
 # 
 
 #
 #  $Log: not supported by cvs2svn $
+#  Revision 1.3.4.1  2008/01/13 07:32:56  n-ando
+#  omniORB wrapper code was modified.
+#
 #  Revision 1.3  2007/01/21 18:12:08  n-ando
 #  A trivial bug fix.
 #
@@ -29,7 +32,7 @@
 #
 #
 
-import ezt
+import yat
 import re
 import sys
 import os
@@ -45,8 +48,10 @@ skel_h = """// -*- C++ -*-
  * THIS FILE IS GENERATED AUTOMATICALLY!! DO NOT EDIT!!
  *
  * @file [skel_h]
+ 
  * @brief [basename] server skeleton header wrapper code
  * @date [date]
+ 
  *
  */
 
@@ -80,8 +85,10 @@ skel_cpp = """// -*- C++ -*-
  * THIS FILE IS GENERATED AUTOMATICALLY!! DO NOT EDIT!!
  *
  * @file [skel_cpp]
+ 
  * @brief [basename] server skeleton wrapper
  * @date [date]
+
  *
  */
 
@@ -112,8 +119,10 @@ stub_h = """// -*- C++ -*-
  * THIS FILE IS GENERATED AUTOMATICALLY!! DO NOT EDIT!!
  *
  * @file [stub_h]
+ 
  * @brief [basename] client stub header wrapper code
  * @date [date]
+
  *
  */
 
@@ -146,8 +155,10 @@ stub_cpp = """// -*- C++ -*-
  * THIS FILE IS GENERATED AUTOMATICALLY!! DO NOT EDIT!!
  *
  * @file [stub_cpp]
+ 
  * @brief [basename] client stub wrapper code
  * @date [date]
+
  *
  */
 
@@ -208,33 +219,37 @@ class skel_wrapper:
 
 	def print_skel_h(self):
 		f = file(self.data["skel_h"], "w")
-		t = ezt.Template(compress_whitespace = 0)
-		t.parse(skel_h)
-		t.generate(f, self.data)
+		t = yat.Template(skel_h)
+		text=t.generate(self.data)
+		f.write(text)
+		f.close()
 		print self.data["skel_h"], " was generated."
 		return
 
 	def print_skel_cpp(self):
 		f = file(self.data["skel_cpp"], "w")
-		t = ezt.Template(compress_whitespace = 0)
-		t.parse(skel_cpp)
-		t.generate(f, self.data)
+		t = yat.Template(skel_cpp)
+		text=t.generate(self.data)
+		f.write(text)
+		f.close()
 		print self.data["skel_cpp"], " was generated."
 		return
 
 	def print_stub_h(self):
 		f = file(self.data["stub_h"], "w")
-		t = ezt.Template(compress_whitespace = 0)
-		t.parse(stub_h)
-		t.generate(f, self.data)
+		t = yat.Template(stub_h)
+		text=t.generate(self.data)
+		f.write(text)
+		f.close()
 		print self.data["stub_h"], " was generated."
 		return
 
 	def print_stub_cpp(self):
 		f = file(self.data["stub_cpp"], "w")
-		t = ezt.Template(compress_whitespace = 0)
-		t.parse(stub_cpp)
-		t.generate(f, self.data)
+		t = yat.Template(stub_cpp)
+		text=t.generate(self.data)
+		f.write(text)
+		f.close()
 		print self.data["stub_cpp"], " was generated."
 		return
 
