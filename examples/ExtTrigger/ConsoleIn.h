@@ -2,9 +2,9 @@
 /*!
  * @file  ConsoleIn.h
  * @brief Console input component
- * @date  $Date: 2007-04-13 14:59:19 $
+ * @date  $Date: 2008-02-29 04:54:45 $
  *
- * $Id: ConsoleIn.h,v 1.1 2007-04-13 14:59:19 n-ando Exp $
+ * $Id: ConsoleIn.h,v 1.1.2.1 2008-02-29 04:54:45 n-ando Exp $
  */
 
 #ifndef CONSOLEIN_H
@@ -122,7 +122,7 @@ class ConsoleIn
 
 extern "C"
 {
-  void ConsoleInInit(RTC::Manager* manager);
+  DLL_EXPORT void ConsoleInInit(RTC::Manager* manager);
 };
 
 #endif // CONSOLEIN_H

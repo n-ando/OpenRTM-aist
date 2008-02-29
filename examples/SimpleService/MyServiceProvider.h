@@ -2,9 +2,9 @@
 /*!
  * @file  MyServiceProvider.h
  * @brief MyService Provider Sample component
- * @date  $Date: 2007-02-07 02:48:42 $
+ * @date  $Date: 2008-02-29 04:55:11 $
  *
- * $Id: MyServiceProvider.h,v 1.1 2007-02-07 02:48:42 n-ando Exp $
+ * $Id: MyServiceProvider.h,v 1.1.2.1 2008-02-29 04:55:11 n-ando Exp $
  */
 
 #ifndef MYSERVICEPROVIDER_H
@@ -123,7 +123,7 @@ class MyServiceProvider
 
 extern "C"
 {
-  void MyServiceProviderInit(RTC::Manager* manager);
+  DLL_EXPORT void MyServiceProviderInit(RTC::Manager* manager);
 };
 
 #endif // MYSERVICEPROVIDER_H

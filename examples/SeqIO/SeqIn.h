@@ -2,9 +2,9 @@
 /*!
  * @file  SeqIn.h
  * @brief Sequence InPort component
- * @date  $Date: 2007-02-04 16:47:48 $
+ * @date  $Date: 2008-02-29 04:54:53 $
  *
- * $Id: SeqIn.h,v 1.2 2007-02-04 16:47:48 n-ando Exp $
+ * $Id: SeqIn.h,v 1.2.2.1 2008-02-29 04:54:53 n-ando Exp $
  */
 
 #ifndef SEQIN_H
@@ -136,7 +136,7 @@ class SeqIn
 
 extern "C"
 {
-  void SeqInInit(RTC::Manager* manager);
+  DLL_EXPORT void SeqInInit(RTC::Manager* manager);
 };
 
 #endif // SEQIN_H

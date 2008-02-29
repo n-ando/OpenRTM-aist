@@ -2,9 +2,9 @@
 /*!
  * @file  ConsoleOut.h
  * @brief Console output component
- * @date  $Date: 2007-10-09 07:33:12 $
+ * @date  $Date: 2008-02-29 04:55:03 $
  *
- * $Id: ConsoleOut.h,v 1.2.4.1 2007-10-09 07:33:12 n-ando Exp $
+ * $Id: ConsoleOut.h,v 1.2.4.2 2008-02-29 04:55:03 n-ando Exp $
  */
 
 #ifndef CONSOLEOUT_H
@@ -123,7 +123,7 @@ class ConsoleOut
 
 extern "C"
 {
-  void ConsoleOutInit(RTC::Manager* manager);
+  DLL_EXPORT void ConsoleOutInit(RTC::Manager* manager);
 };
 
 #endif // CONSOLEOUT_H

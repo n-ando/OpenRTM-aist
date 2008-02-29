@@ -2,9 +2,9 @@
 /*!
  * @file  ConfigSample.h
  * @brief Configuration example component
- * @date  $Date: 2007-04-23 07:26:28 $
+ * @date  $Date: 2008-02-29 04:54:41 $
  *
- * $Id: ConfigSample.h,v 1.1 2007-04-23 07:26:28 n-ando Exp $
+ * $Id: ConfigSample.h,v 1.1.2.1 2008-02-29 04:54:41 n-ando Exp $
  */
 
 #ifndef CONFIGSAMPLE_H
@@ -131,7 +131,7 @@ class ConfigSample
 
 extern "C"
 {
-  void ConfigSampleInit(RTC::Manager* manager);
+  DLL_EXPORT void ConfigSampleInit(RTC::Manager* manager);
 };
 
 #endif // CONFIGSAMPLE_H

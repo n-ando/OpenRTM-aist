@@ -2,9 +2,9 @@
 /*!
  * @file  SeqOut.h
  * @brief Sequence OutPort component
- * @date  $Date: 2007-02-04 16:48:05 $
+ * @date  $Date: 2008-02-29 04:54:56 $
  *
- * $Id: SeqOut.h,v 1.2 2007-02-04 16:48:05 n-ando Exp $
+ * $Id: SeqOut.h,v 1.2.2.1 2008-02-29 04:54:56 n-ando Exp $
  */
 
 #ifndef SEQOUT_H
@@ -136,7 +136,7 @@ class SeqOut
 
 extern "C"
 {
-  void SeqOutInit(RTC::Manager* manager);
+  DLL_EXPORT void SeqOutInit(RTC::Manager* manager);
 };
 
 #endif // SEQOUT_H
