@@ -2,7 +2,7 @@
 ##---------------------------------------------------------------------------
 ## Makefile.am for MyServiceProvider/MyServiceConsumer components
 ##
-## $Id: Makefile.am,v 1.5.2.3 2008-02-26 14:13:41 n-ando Exp $
+## $Id: Makefile.am,v 1.5.2.4 2008-02-29 11:05:01 n-ando Exp $
 ##
 ##---------------------------------------------------------------------------
 
@@ -201,4 +201,6 @@ clean_skelstub:
 	rm -f *Stub.h *Stub.cpp
 
 clean-local: clean_objs clean_skelstub
-	rm -f *.bak *.rpo *.sym lib*.*_pure_* Makefile.old *core *~ *loT
+	rm -f \
+	*.bak *.rpo *.sym lib*.*_pure_* *.lst \
+	Makefile.old *core *~ *loT

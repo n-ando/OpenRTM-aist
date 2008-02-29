@@ -2,9 +2,12 @@
 ##---------------------------------------------------------------------------
 ## Makefile.am for ConsoleIn/ConsoleOut components
 ##
-## $Id: Makefile.am,v 1.1.2.4 2008-02-29 04:56:27 n-ando Exp $
+## $Id: Makefile.am,v 1.1.2.5 2008-02-29 11:04:50 n-ando Exp $
 ##
 ## $Log: not supported by cvs2svn $
+## Revision 1.1.2.4  2008/02/29 04:56:27  n-ando
+## A trivial fix.
+##
 ## Revision 1.1.2.3  2008/02/26 14:13:29  n-ando
 ## Visual Studio project file generation
 ##
@@ -175,5 +178,5 @@ dist-hook: lst
 
 clean-local:
 	rm -f \
-	*.bak *.rpo *.sym lib*.*_pure_* \
+	*.bak *.rpo *.sym lib*.*_pure_* *.lst \
 	Makefile.old *core *~ *.so *.log

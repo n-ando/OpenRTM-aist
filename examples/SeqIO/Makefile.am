@@ -2,9 +2,12 @@
 ##---------------------------------------------------------------------------
 ## Makefile.am for SeqIn/SeqOut components
 ##
-## $Id: Makefile.am,v 1.2.2.3 2008-02-26 14:13:32 n-ando Exp $
+## $Id: Makefile.am,v 1.2.2.4 2008-02-29 11:04:54 n-ando Exp $
 ##
 ## $Log: not supported by cvs2svn $
+## Revision 1.2.2.3  2008/02/26 14:13:32  n-ando
+## Visual Studio project file generation
+##
 ## Revision 1.2.2.2  2007/09/26 07:43:40  n-ando
 ## Some modification for version 0.4.1.
 ##
@@ -159,4 +162,6 @@ vc9proj:
 dist-hook: lst vcproj
 
 clean-local:
-	rm -f *.bak *.rpo *.sym lib*.*_pure_* Makefile.old *core *~ *.log
+	rm -f \
+	*.bak *.rpo *.sym lib*.*_pure_* *.lst \
+	Makefile.old *core *~ *.log
