@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 #
 # @brief VCProject file generator
-# @date $Date: 2008-02-27 11:31:20 $
+# @date $Date: 2008-02-29 04:52:14 $
 # @author Norkai Ando <n-ando@aist.go.jp>
 #
 # Copyright (C) 2008
@@ -12,10 +12,13 @@
 #         Advanced Industrial Science and Technology (AIST), Japan
 #     All rights reserved.
 #
-# $Id: vcprojtool.py,v 1.1.2.2 2008-02-27 11:31:20 n-ando Exp $
+# $Id: vcprojtool.py,v 1.1.2.3 2008-02-29 04:52:14 n-ando Exp $
 #
 
 # $Log: not supported by cvs2svn $
+# Revision 1.1.2.2  2008/02/27 11:31:20  n-ando
+# Bug fix
+#
 # Revision 1.1.2.1  2008/02/26 14:00:57  n-ando
 # Visual Studio project file generator
 #
@@ -44,8 +47,8 @@ vcproj_template = """<?xml version="1.0" encoding="shift_jis"?>
 [for conf in Configurations]
 		<Configuration
 			Name="[conf.Name]"
-			OutputDirectory="$(ProjectDir)$(ConfigurationName)"
-			IntermediateDirectory="$(ConfigurationName)"
+			OutputDirectory="[conf.OutputDirectory]"
+			IntermediateDirectory="[conf.IntermediateDirectory]"
 			ConfigurationType="%d"
 			CharacterSet="0"
 [if-any conf.InheritedPropertySheets]
