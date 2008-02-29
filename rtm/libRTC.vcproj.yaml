@@ -1,6 +1,6 @@
 #
 # @brief VCProject configuration file for libRTC
-# @date $Date: 2008-02-26 14:17:32 $
+# @date $Date: 2008-02-29 04:58:39 $
 # @author Norkai Ando <n-ando@aist.go.jp>
 #
 ProjectType: "Visual C++"
@@ -48,7 +48,7 @@ Configurations:
           move RTC$(rtm_dllver)d.def ..\
     VCLinkerTool:
       - Key: AdditionalDependencies
-        Value: "$(rtm_depend_libd)"
+        Value: "libRTCSkeld.lib $(rtm_depend_libd)"
       - Key: OutputFile
         Value: "$(OutDir)\\RTC$(rtm_dllver)d.dll"
       - Key: Version
@@ -101,7 +101,7 @@ Configurations:
           move RTC$(rtm_dllver).def ..\\
     VCLinkerTool:
       - Key: AdditionalDependencies
-        Value: "$(rtm_depend_lib)"
+        Value: "libRTCSkel.lib $(rtm_depend_lib)"
       - Key: OutputFile
         Value: "$(OutDir)\\RTC$(rtm_dllver).dll"
       - Key: LinkIncremental
