@@ -3,7 +3,7 @@
 #
 #  @file skel_wrapper.py
 #  @brief CORBA skelton/stub wrapper generator module
-#  @date $Date: 2008-02-29 05:22:51 $
+#  @date $Date: 2008-02-29 11:10:28 $
 #  @author Noriaki Ando <n-ando@aist.go.jp>
 # 
 #  Copyright (C) 2004-2007
@@ -13,7 +13,7 @@
 #          Advanced Industrial Science and Technology (AIST), Japan
 #      All rights reserved.
 # 
-#  $Id: skel_wrapper.py,v 1.3.4.2 2008-02-29 05:22:51 n-ando Exp $
+#  $Id: skel_wrapper.py,v 1.3.4.3 2008-02-29 11:10:28 n-ando Exp $
 # 
 
 #
@@ -56,20 +56,28 @@ skel_h = """// -*- C++ -*-
  */
 
 #ifndef [skel_h_inc_guard]
+
 #define [skel_h_inc_guard]
+
+
 
 [config_inc]
 
 #if   defined ORB_IS_TAO
-#include "[include_dir][basename]S.h"
+#  include "[include_dir][basename]S.h"
 #elif defined ORB_IS_OMNIORB
-#include "[include_dir][basename].hh"
+#  if defined(WIN32) || defined(_WIN32) || defined(__WIN32__) || defined(__NT__)
+#    ifndef _USRDLL
+#      undef USE_stub_in_nt_dll
+#    endif
+#  endif
+#  include "[include_dir][basename].hh"
 #elif defined ORB_IS_MICO
-#include "[include_dir][basename].h"
+#  include "[include_dir][basename].h"
 #elif defined ORB_IS_ORBIT2
-#include "[include_dir]/[basename]-cpp-skels.h"
+#  include "[include_dir]/[basename]-cpp-skels.h"
 #else
-#error "NO ORB defined"
+#  error "NO ORB defined"
 #endif
 
 #endif // [skel_h_inc_guard]
@@ -88,23 +96,23 @@ skel_cpp = """// -*- C++ -*-
  
  * @brief [basename] server skeleton wrapper
  * @date [date]
-
+ 
  *
  */
 
 #include "[include_dir][skel_h]"
 
-#if   defined ORB_IS_TAO
-#include "[include_dir][basename]S.cpp"
+#if defined ORB_IS_TAO
+#  include "[include_dir][basename]S.cpp"
 #elif defined ORB_IS_OMNIORB
-#include "[include_dir][basename]SK.cc"
-#include "[include_dir][basename]DynSK.cc"
+#  include "[include_dir][basename]SK.cc"
+#  include "[include_dir][basename]DynSK.cc"
 #elif defined ORB_IS_MICO
-#include "[include_dir][basename]_skel.cc"
+#  include "[include_dir][basename]_skel.cc"
 #elif defined ORB_IS_ORBIT2
-#include "[include_dir][basename]-cpp-skels.cc"
+#  include "[include_dir][basename]-cpp-skels.cc"
 #else
-#error "NO ORB defined"
+#  error "NO ORB defined"
 #endif
 
 // end of [skel_cpp]
@@ -122,25 +130,28 @@ stub_h = """// -*- C++ -*-
  
  * @brief [basename] client stub header wrapper code
  * @date [date]
-
+ 
  *
  */
 
 #ifndef [stub_h_inc_guard]
+
 #define [stub_h_inc_guard]
+
+
 
 [config_inc]
 
 #if   defined ORB_IS_TAO
-#include "[include_dir][basename]C.h"
+#  include "[include_dir][basename]C.h"
 #elif defined ORB_IS_OMNIORB
-#include "[include_dir][basename].hh"
+#  include "[include_dir][basename].hh"
 #elif defined ORB_IS_MICO
-#include "[include_dir][basename].h"
+#  include "[include_dir][basename].h"
 #elif defined ORB_IS_ORBIT2
-#include "[include_dir][basename]-cpp-stubs.h"
+#  include "[include_dir][basename]-cpp-stubs.h"
 #else
-#error "NO ORB defined"
+#  error "NO ORB defined"
 #endif
 
 #endif // [stub_h_inc_guard]
@@ -158,22 +169,22 @@ stub_cpp = """// -*- C++ -*-
  
  * @brief [basename] client stub wrapper code
  * @date [date]
-
+ 
  *
  */
 
 #include "[include_dir][stub_h]"
 
 #if   defined ORB_IS_TAO
-#include "[include_dir][basename]C.cpp"
+#  include "[include_dir][basename]C.cpp"
 #elif defined ORB_IS_OMNIORB
 
 #elif defined ORB_IS_MICO
-#include "[include_dir][basename].cc"
+#  include "[include_dir][basename].cc"
 #elif defined ORB_IS_ORBIT2
-#include "[include_dir][basename]-cpp-stubs.cc"
+#  include "[include_dir][basename]-cpp-stubs.cc"
 #else
-#error "NO ORB defined"
+#  error "NO ORB defined"
 #endif
 
 // end of [stub_cpp]
@@ -230,8 +241,8 @@ class skel_wrapper:
 		f = file(self.data["skel_cpp"], "w")
 		t = yat.Template(skel_cpp)
 		text=t.generate(self.data)
-		f.write(text)
-		f.close()
+                f.write(text)
+                f.close()
 		print self.data["skel_cpp"], " was generated."
 		return
 
@@ -239,8 +250,8 @@ class skel_wrapper:
 		f = file(self.data["stub_h"], "w")
 		t = yat.Template(stub_h)
 		text=t.generate(self.data)
-		f.write(text)
-		f.close()
+                f.write(text)
+                f.close()
 		print self.data["stub_h"], " was generated."
 		return
 
@@ -248,8 +259,8 @@ class skel_wrapper:
 		f = file(self.data["stub_cpp"], "w")
 		t = yat.Template(stub_cpp)
 		text=t.generate(self.data)
-		f.write(text)
-		f.close()
+                f.write(text)
+                f.close()
 		print self.data["stub_cpp"], " was generated."
 		return
 
