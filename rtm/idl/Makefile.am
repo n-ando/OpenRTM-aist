@@ -2,9 +2,12 @@
 ##------------------------------------------------------------
 ## Makefile.am for libRTCSkel
 ##
-## $Id: Makefile.am,v 1.9.2.3 2008-02-26 14:18:58 n-ando Exp $
+## $Id: Makefile.am,v 1.9.2.4 2008-02-29 04:59:03 n-ando Exp $
 ##
 ## $Log: not supported by cvs2svn $
+## Revision 1.9.2.3  2008/02/26 14:18:58  n-ando
+## Visual Studio project file generation
+##
 ## Revision 1.9.2.2  2008/01/14 07:58:10  n-ando
 ## A trivial fix for TAO.
 ##
@@ -218,7 +221,17 @@ vc9proj: libRTCSkel.vcproj.yaml
 		--header $(SKEL_H)   $(STUB_H)
 	qkc -sm $(win32_builddir)/rtm/idl/libRTCSkel_vc9.vcproj
 
-dist-hook: lst vcproj
+#------------------------------------------------------------
+# for wxs file
+#------------------------------------------------------------
+wxs:
+	$(top_srcdir)/build/makewxs.py flist \
+		-c IDLs \
+		-o $(win32_builddir)installer/idls.yaml \
+		-p ..\\rtm\\idl \
+		$(IDL_SORUCES) $(ALL_SRC)
+
+dist-hook: lst vcproj wxs
 
 # Cleanup
 clean-local:
