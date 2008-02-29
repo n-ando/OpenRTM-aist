@@ -1,5 +1,5 @@
 ProjectType: "Visual C++"
-Version: __VCVERSION__
+Version: "__VCVERSION__"
 Name: libRTCSkel
 ProjectGUID: __GUID__
 RootNamespace: libRTCSkel

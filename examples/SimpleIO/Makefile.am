@@ -2,9 +2,12 @@
 ##---------------------------------------------------------------------------
 ## Makefile.am for ConsoleIn/ConsoleOut components
 ##
-## $Id: Makefile.am,v 1.3.4.4 2008-02-26 14:13:35 n-ando Exp $
+## $Id: Makefile.am,v 1.3.4.5 2008-02-29 04:56:46 n-ando Exp $
 ##
 ## $Log: not supported by cvs2svn $
+## Revision 1.3.4.4  2008/02/26 14:13:35  n-ando
+## Visual Studio project file generation
+##
 ## Revision 1.3.4.3  2007/10/09 07:33:15  n-ando
 ## Modification for TCP socket data port.
 ##
@@ -170,7 +173,7 @@ vc9proj:
 		--header ConsoleOut.h
 	qkc -sm $(win32_builddir)/ConsoleOutDll_vc9.vcproj
 
-dist-hool: lst vcproj
+dist-hook: lst vcproj
 
 clean-local:
 	rm -f \

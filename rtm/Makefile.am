@@ -2,9 +2,12 @@
 ##------------------------------------------------------------
 ## Makefile.am for libRTC
 ##
-## $Id: Makefile.am,v 1.16.2.5 2008-02-26 14:15:09 n-ando Exp $
+## $Id: Makefile.am,v 1.16.2.6 2008-02-29 04:57:17 n-ando Exp $
 ##
 ## $Log: not supported by cvs2svn $
+## Revision 1.16.2.5  2008/02/26 14:15:09  n-ando
+## Visual Studio project file generation
+##
 ## Revision 1.16.2.4  2008/01/25 10:49:28  n-ando
 ## OpenHRPExecutionContext was added.
 ##
@@ -232,7 +235,19 @@ vc9proj: libRTC.vcproj.yaml
 		--header $(rtmheader_HEADERS)
 	qkc -sm $(win32_builddir)/rtm/libRTC_vc9.vcproj
 
-dist-hook: clean-local lst vcproj
+#------------------------------------------------------------
+# for wxs file
+#------------------------------------------------------------
+wxs:
+	$(top_srcdir)/build/makewxs.py flist \
+		-c Headers \
+		-o $(win32_builddir)installer/headers.yaml \
+		-p ..\\rtm \
+		$(rtmheader_HEADERS) $(RTC_SRC)
+
+
+
+dist-hook: lst vcproj wxs
 
 clean-local:
 	rm -f *.gch *.bak *.rpo *.sym lib*.*_pure_* Makefile.old *core *~

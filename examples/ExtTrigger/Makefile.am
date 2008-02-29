@@ -2,9 +2,12 @@
 ##---------------------------------------------------------------------------
 ## Makefile.am for ConsoleIn/ConsoleOut components
 ##
-## $Id: Makefile.am,v 1.1.2.3 2008-02-26 14:13:29 n-ando Exp $
+## $Id: Makefile.am,v 1.1.2.4 2008-02-29 04:56:27 n-ando Exp $
 ##
 ## $Log: not supported by cvs2svn $
+## Revision 1.1.2.3  2008/02/26 14:13:29  n-ando
+## Visual Studio project file generation
+##
 ## Revision 1.1.2.2  2007/09/21 10:30:31  n-ando
 ## Now rtc.conf is not deleted.
 ##
@@ -168,7 +171,7 @@ vc9proj:
 		--header ConsoleOut.h
 	qkc -sm $(win32_builddir)/ConsoleOutDll_vc9.vcproj
 
-dist-hook: lst vcproj
+dist-hook: lst
 
 clean-local:
 	rm -f \

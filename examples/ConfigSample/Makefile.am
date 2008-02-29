@@ -2,9 +2,12 @@
 ##---------------------------------------------------------------------------
 ## Makefile.am for ConsoleIn/ConsoleOut components
 ##
-## $Id: Makefile.am,v 1.1.2.1 2008-02-26 14:13:25 n-ando Exp $
+## $Id: Makefile.am,v 1.1.2.2 2008-02-29 04:56:04 n-ando Exp $
 ##
 ## $Log: not supported by cvs2svn $
+## Revision 1.1.2.1  2008/02/26 14:13:25  n-ando
+## Visual Studio project file generation
+##
 ## Revision 1.1  2007/04/23 07:26:43  n-ando
 ## ConfigSample example.
 ##
@@ -87,7 +90,7 @@ vc9proj:
 	$(top_builddir)/build/vcprojtool.py vcproj              \
 		--type EXE                                      \
 		--vcversion "9.00"                              \
-		--projectname "COnfigSampleComp"                \
+		--projectname "ConfigSampleComp"                \
 		--version $(RTM_VERSION)                        \
 		--out $(win32_builddir)/ConfigSample_vc9.vcproj \
 		--yaml ../rtc.vcproj.yaml                       \
