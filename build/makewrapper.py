@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 #
 # @brief CORBA stub and skelton wrapper generator
-# @date $Date: 2008-01-13 07:21:41 $
+# @date $Date: 2008-02-29 04:50:39 $
 # @author Norkai Ando <n-ando@aist.go.jp>
 #
 # Copyright (C) 2005-2006
@@ -12,10 +12,13 @@
 #         Advanced Industrial Science and Technology (AIST), Japan
 #     All rights reserved.
 #
-# $Id: makewrapper.py,v 1.6.4.1 2008-01-13 07:21:41 n-ando Exp $
+# $Id: makewrapper.py,v 1.6.4.2 2008-02-29 04:50:39 n-ando Exp $
 #
 
 # $Log: not supported by cvs2svn $
+# Revision 1.6.4.1  2008/01/13 07:21:41  n-ando
+# omniORB wrapper code was modified.
+#
 # Revision 1.6  2007/01/16 18:35:55  n-ando
 # Escape the compile error of omniORB's stub/skel on gcc4.
 #
@@ -42,7 +45,7 @@ import sys
 import os
 import re
 import time
-import ezt
+import yat
 
 skel_cpp_temp = """// -*- C++ -*-
 /*!
@@ -50,8 +53,10 @@ skel_cpp_temp = """// -*- C++ -*-
  * THIS FILE IS GENERATED AUTOMATICALLY!! DO NOT EDIT!!
  *
  * @file  [skel_cpp]
+ 
  * @brief [basename] server skeleton wrapper code
  * @date  [date]
+ 
  *
  */
 
@@ -77,8 +82,10 @@ skel_h_temp = """// -*- C++ -*-
  * THIS FILE IS GENERATED AUTOMATICALLY!! DO NOT EDIT!!
  *
  * @file  [skel_h]
+ 
  * @brief [basename] server skeleton wrapper code
  * @date  [date]
+
  *
  */
 
@@ -113,8 +120,10 @@ stub_cpp_temp = """// -*- C++ -*-
  * THIS FILE IS GENERATED AUTOMATICALLY!! DO NOT EDIT!!
  *
  * @file  [stub_cpp]
+ 
  * @brief [basename] server skeleton wrapper code
  * @date  [date]
+ 
  *
  */
 
@@ -139,8 +148,10 @@ stub_h_temp = """// -*- C++ -*-
  * THIS FILE IS GENERATED AUTOMATICALLY!! DO NOT EDIT!!
  *
  * @file  [stub_h]
+ 
  * @brief [basename] server skeleton wrapper code
  * @date  [date]
+
  *
  */
 
@@ -193,11 +204,11 @@ class wrapper_gen:
     def gen(self, fname, temp_txt, data):
         f = file(fname, "w")
         #		s = StringIO.StringIO()
-        t = ezt.Template(compress_whitespace = 0)
-        t.parse(temp_txt)
-        t.generate(f, data)
+        t = yat.Template(temp_txt)
+        text=t.generate(data)
         #		gen_txt = s.getvalue().splitlines()
         #		f.write(gen_txt)
+        f.write(text)
         f.close()
         print "\"", fname, "\"" " was generated."
         return
@@ -249,5 +260,3 @@ basename = re.sub(".idl", "", basename)
 data = wrapper_data(basename, skel_dir)
 gen  = wrapper_gen(data.get_dict())
 gen.gen_all()
-
-
