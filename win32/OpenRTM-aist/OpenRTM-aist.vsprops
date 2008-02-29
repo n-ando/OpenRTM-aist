@@ -56,4 +56,36 @@
 		Name="rtm_path"
 		Value="$(SolutionDir)\bin;$(SolutionDir)\build;&quot;$(omni_bin)&quot;"
 	/>
+	<UserMacro
+		Name="rtm_dllver"
+		Value="042"
+	/>
+	<UserMacro
+		Name="rtm_version"
+		Value="0.4.2"
+	/>
+	<UserMacro
+		Name="rtm_depend_libd"
+		Value="ACEd.lib libRTCSkeld.lib omniORB407_rtd.lib omniDynamic407_rtd.lib omnithread32_rtd.lib advapi32.lib ws2_32.lib mswsock.lib"
+	/>
+	<UserMacro
+		Name="rtm_depend_lib"
+		Value="ACE.lib libRTCSkel.lib omniORB407_rt.lib omniDynamic407_rt.lib omnithread32_rt.lib advapi32.lib ws2_32.lib mswsock.lib"
+	/>
+	<UserMacro
+		Name="rtm_libd"
+		Value="ACEd.lib RTC$(rtm_dllver)d.lib omniORB407_rtd.lib omniDynamic407_rtd.lib omnithread32_rtd.lib advapi32.lib ws2_32.lib mswsock.lib"
+	/>
+	<UserMacro
+		Name="rtm_lib"
+		Value="ACE.lib RTC$(rtm_dllver).lib omniORB407_rt.lib omniDynamic407_rt.lib omnithread32_rt.lib advapi32.lib ws2_32.lib mswsock.lib"
+	/>
+	<UserMacro
+		Name="rtm_idlc"
+		Value="omniidl"
+	/>
+	<UserMacro
+		Name="rtm_idlflags"
+		Value="-bcxx -Wba -nf"
+	/>
 </VisualStudioPropertySheet>
