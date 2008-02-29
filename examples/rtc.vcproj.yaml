@@ -1,6 +1,6 @@
 #
 # @brief VCProject configuration file for standalone RT-Component 
-# @date $Date: 2008-02-27 11:31:27 $
+# @date $Date: 2008-02-29 04:53:35 $
 # @author Norkai Ando <n-ando@aist.go.jp>
 #
 ProjectType: "Visual C++"
@@ -14,8 +14,8 @@ Configurations:
 # Debug Configuration
 #------------------------------------------------------------
   - Name: "Debug|Win32"
-    OutputDirectory: "$(ProjectDir)$(ConfigurationName)"
-    IntermediateDirectory: "$(ConfigurationName)"
+    OutputDirectory: "$(ProjectDir)__PROJECT_NAME__\\$(ConfigurationName)"
+    IntermediateDirectory: "__PROJECT_NAME__\\$(ConfigurationName)"
     ConfigurationType: "1"
     InheritedPropertySheets: "$(SolutionDir)OpenRTM-aist.vsprops"
     CharacterSet: "0"
@@ -61,8 +61,8 @@ Configurations:
 # Release Configuration
 #------------------------------------------------------------
   - Name: "Release|Win32"
-    OutputDirectory: $(ProjectDir)$(ConfigurationName)"
-    IntermediateDirectory: "$(ConfiguratioName)"
+    OutputDirectory: "$(ProjectDir)__PROJECT_NAME__\\$(ConfigurationName)"
+    IntermediateDirectory: "__PROJECT_NAME__\\$(ConfigurationName)"
     ConfigurationType: "1"
     InheritedPropertySheets: "$(SolutionDir)OpenRTM-aist.vsprops"
     CharacterSet: "0"
