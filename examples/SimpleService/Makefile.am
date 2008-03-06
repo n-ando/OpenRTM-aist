@@ -2,7 +2,7 @@
 ##---------------------------------------------------------------------------
 ## Makefile.am for MyServiceProvider/MyServiceConsumer components
 ##
-## $Id: Makefile.am,v 1.5.2.4 2008-02-29 11:05:01 n-ando Exp $
+## $Id: Makefile.am,v 1.5.2.5 2008-03-06 06:49:36 n-ando Exp $
 ##
 ##---------------------------------------------------------------------------
 
@@ -22,10 +22,14 @@ WRAPPER_FLAGS = --include-dir="" --skel-suffix=Skel --stub-suffix=Stub
 
 .idlSkel.cpp:
 	$(IDLC) $(IDLFLAGS) MyService.idl
+	PYTHONPATH=$(top_srcdir)/build:$(PYTHONPATH) \
+	PATH=$(top_srcdir)/utils/rtm-config:$(PATH)  \
 	$(WRAPPER) $(WRAPPER_FLAGS) --idl-file=MyService.idl
 
 .idlStub.cpp:
 	$(IDLC) $(IDLFLAGS) MyService.idl
+	PYTHONPATH=$(PYTHONPATH):$(top_srcdir)/build \
+	PATH=$(top_srcdir)/utils/rtm-config:$(PATH)  \
 	$(WRAPPER) $(WRAPPER_FLAGS) --idl-file=MyService.idl
 
 IDL_SOURCES = MyService.idl
