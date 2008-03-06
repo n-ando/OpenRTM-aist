@@ -2,9 +2,12 @@
 ##---------------------------------------------------------------------------
 ## Makefile.am for win32/OpenRTM-aist
 ##
-## $Id: Makefile.am,v 1.1.2.4 2008-02-29 05:07:17 n-ando Exp $
+## $Id: Makefile.am,v 1.1.2.5 2008-03-06 06:53:39 n-ando Exp $
 ##
 ## $Log: not supported by cvs2svn $
+## Revision 1.1.2.4  2008/02/29 05:07:17  n-ando
+## Changes for new solution tool.
+##
 ## Revision 1.1.2.3  2008/02/09 20:01:37  n-ando
 ## For wix's wxs file generation.
 ##
@@ -26,17 +29,19 @@ clean-local:
 sln: OpenRTM-aist_vc8.sln OpenRTM-aist_vc9.sln
 
 OpenRTM-aist_vc8.sln: OpenRTM-aist.sln.dep
-	$(top_srcdir)/build/slntool.py \
+	$(top_srcdir)/build/slntool.py     \
+		--vcversion VC8            \
 		--dep OpenRTM-aist.sln.dep \
 		--out OpenRTM-aist_vc8.sln \
-		`find ./ -name '*_vc8.vcproj'`
+		`find ./ -name '*_vc8.vcproj' \! -name 'USB*.vcproj'`
 	qkc -ms OpenRTM-aist_vc8.sln
 
 OpenRTM-aist_vc9.sln:
-	$(top_srcdir)/build/slntool.py \
+	$(top_srcdir)/build/slntool.py     \
+		--vcversion VC9            \
 		--dep OpenRTM-aist.sln.dep \
 		--out OpenRTM-aist_vc9.sln \
-		`find ./ -name '*_vc9.vcproj'`
+		`find ./ -name '*_vc9.vcproj' \! -name 'USB*.vcproj'`
 	qkc -ms OpenRTM-aist_vc9.sln
 
 dist-hook: clean-local sln
