@@ -2,7 +2,7 @@
 /*!
  * @file Manager.h
  * @brief RTComponent manager class
- * @date $Date: 2008-01-25 10:50:44 $
+ * @date $Date: 2008-03-06 06:58:40 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
  * Copyright (C) 2003-2005
@@ -12,12 +12,15 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: Manager.cpp,v 1.12.2.6 2008-01-25 10:50:44 n-ando Exp $
+ * $Id: Manager.cpp,v 1.12.2.7 2008-03-06 06:58:40 n-ando Exp $
  *
  */
 
 /*
  * $Log: not supported by cvs2svn $
+ * Revision 1.12.2.6  2008/01/25 10:50:44  n-ando
+ * OpenHRPExecutionContext was added.
+ *
  * Revision 1.12.2.5  2008/01/14 07:57:40  n-ando
  * TAO's ORB_init needs argv[0] as command name.
  *
@@ -288,6 +291,19 @@ namespace RTC
     catch (...)
       {
 	return false;
+      }
+
+    std::vector<std::string> mods(split(m_config["manager.modules.preload"], ","));
+    for (int i(0), len(mods.size()); i < len; ++i)
+      {
+	std::string basename(split(mods[i], ".").operator[](0));
+	basename += "Init";
+	m_module->load(mods[i], basename);
+      }
+    std::vector<std::string> comp(split(m_config["manager.components.precreate"], ","));
+    for (int i(0), len(comp.size()); i < len; ++i)
+      {
+	this->createComponent(comp[i].c_str());
       }
     return true;
   }
@@ -708,19 +724,23 @@ namespace RTC
    */
   void Manager::initManager(int argc, char** argv)
   {
+    // load configurations
     ManagerConfig config(argc, argv);
     config.configure(m_config);
     m_config["logger.file_name"] = 
       formatString(m_config["logger.file_name"].c_str(), m_config);
     
+    // initialize ModuleManager
     m_module = new ModuleManager(m_config);
+
+    // initialize Terminator
     m_terminator = new Terminator(this);
-    
     {
       ACE_Guard<ACE_Thread_Mutex> guard(m_terminate.mutex);
       m_terminate.waiting = 0;
     }
     
+    // initialize Timer
     if (toBool(m_config["timer.enable"], "YES", "NO", true))
       {
 	TimeValue tm(0, 100000);
