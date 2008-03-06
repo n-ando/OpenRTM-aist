@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 #
 # @brief Visual Studio solution generator
-# @date $Date: 2008-02-29 05:05:45 $
+# @date $Date: 2008-03-06 06:46:37 $
 # @author Norkai Ando <n-ando@aist.go.jp>
 #
 # Copyright (C) 2008
@@ -12,10 +12,13 @@
 #         Advanced Industrial Science and Technology (AIST), Japan
 #     All rights reserved.
 #
-# $Id: slntool.py,v 1.1.2.1 2008-02-29 05:05:45 n-ando Exp $
+# $Id: slntool.py,v 1.1.2.2 2008-03-06 06:46:37 n-ando Exp $
 #
 
 # $Log: not supported by cvs2svn $
+# Revision 1.1.2.1  2008/02/29 05:05:45  n-ando
+# VC's solution generator tool.
+#
 #
 
 import sys
@@ -26,8 +29,11 @@ import yat
 #------------------------------------------------------------
 # Generic vcproj template
 #------------------------------------------------------------
-sln_template = """Microsoft Visual Studio Solution File, Format Version 9.00
-# Visual Studio 2005
+vcversions = {"VC8": {"sln": "9.00", "vc": "2005"},
+              "VC9": {"sln": "10.00", "vc": "2008"}
+              }
+sln_template = """Microsoft Visual Studio Solution File, Format Version %s
+# Visual Studio %s
 [for proj in Projects]
 Project("{[SolutionGUID]}") = "[proj.Name]", "[proj.FileName]", "{[proj.GUID]}"
 	ProjectSection(ProjectDependencies) = postProject
@@ -77,6 +83,7 @@ Usage:
   slntool.py --dep dep_file [--outfile outfile] vcproj_files...
 
 Options:
+    --vcversion: Visual C++'s version [VC8|VC9]
     --dep: dependency file
     --out or --output: output file name
 
@@ -138,6 +145,7 @@ def parse_args(argv):
     argc = len(argv)
     depfile = None
     outfile = None
+    vcversion = "VC8"
     flist = []
     i = 0
     while i < argc:
@@ -150,12 +158,19 @@ def parse_args(argv):
             i += 1
             if i < argc: outfile = argv[i]
             else: raise InvalidOption(opt + " needs value")
+        elif opt == "--vcversion":
+            i += 1
+            if i < argc: vcversion = argv[i]
+            else: raise InvalidOption(opt + " needs value")
+            if not vcversions.has_key(vcversion):
+                allowedvers = vcversions.keys().__repr__()
+                raise InvalidOption("allowed vcversions are " + allowedvers)
         else:
             while i < argc and argv[i][:2] != "--":
                 flist.append(argv[i])
                 i += 1
         i += 1
-    return (depfile, outfile, flist)
+    return (vcversion, depfile, outfile, flist)
 
 def get_slnyaml(depfile, projfiles):
     depdict = get_dependencies(depfile)
@@ -182,9 +197,11 @@ def get_slnyaml(depfile, projfiles):
     yaml_text = sln_yaml + projlist
     return yaml_text
         
-def gen_solution(yaml_text):
+def gen_solution(version, yaml_text):
     dict = yaml.load(yaml_text)
-    t = yat.Template(sln_template)
+    t = yat.Template(sln_template 
+                     % (vcversions[version]["sln"],
+                        vcversions[version]["vc"]))
     return t.generate(dict)
 
 
@@ -210,11 +227,12 @@ def main(argv):
         usage()
         sys.exit(-1)
 
-    depfile = res[0]
-    outfile = res[1]
-    flist   = res[2]
+    version = res[0]
+    depfile = res[1]
+    outfile = res[2]
+    flist   = res[3]
 
-    sln_text = gen_solution(get_slnyaml(depfile, flist))
+    sln_text = gen_solution(version, get_slnyaml(depfile, flist))
 
     if outfile == None:
         fd = sys.stdout
