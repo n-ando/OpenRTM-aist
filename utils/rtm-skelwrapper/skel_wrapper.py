@@ -3,7 +3,7 @@
 #
 #  @file skel_wrapper.py
 #  @brief CORBA skelton/stub wrapper generator module
-#  @date $Date: 2008-02-29 11:10:28 $
+#  @date $Date: 2008-03-06 06:51:10 $
 #  @author Noriaki Ando <n-ando@aist.go.jp>
 # 
 #  Copyright (C) 2004-2007
@@ -13,11 +13,14 @@
 #          Advanced Industrial Science and Technology (AIST), Japan
 #      All rights reserved.
 # 
-#  $Id: skel_wrapper.py,v 1.3.4.3 2008-02-29 11:10:28 n-ando Exp $
+#  $Id: skel_wrapper.py,v 1.3.4.4 2008-03-06 06:51:10 n-ando Exp $
 # 
 
 #
 #  $Log: not supported by cvs2svn $
+#  Revision 1.3.4.3  2008/02/29 11:10:28  n-ando
+#  USE_stub_in_nt_dll is undefed in case of WIN32 and !_USERDLL
+#
 #  Revision 1.3.4.1  2008/01/13 07:32:56  n-ando
 #  omniORB wrapper code was modified.
 #
@@ -67,9 +70,7 @@ skel_h = """// -*- C++ -*-
 #  include "[include_dir][basename]S.h"
 #elif defined ORB_IS_OMNIORB
 #  if defined(WIN32) || defined(_WIN32) || defined(__WIN32__) || defined(__NT__)
-#    ifndef _USRDLL
-#      undef USE_stub_in_nt_dll
-#    endif
+#    undef USE_stub_in_nt_dll
 #  endif
 #  include "[include_dir][basename].hh"
 #elif defined ORB_IS_MICO
@@ -81,6 +82,7 @@ skel_h = """// -*- C++ -*-
 #endif
 
 #endif // [skel_h_inc_guard]
+
 """
 
 
@@ -116,6 +118,7 @@ skel_cpp = """// -*- C++ -*-
 #endif
 
 // end of [skel_cpp]
+
 """
 
 #------------------------------------------------------------
@@ -155,6 +158,7 @@ stub_h = """// -*- C++ -*-
 #endif
 
 #endif // [stub_h_inc_guard]
+
 """
  
 #------------------------------------------------------------
@@ -188,6 +192,7 @@ stub_cpp = """// -*- C++ -*-
 #endif
 
 // end of [stub_cpp]
+
 """
 
 
