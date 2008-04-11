@@ -32,25 +32,38 @@
 namespace RTC_Utils
 {
 #ifdef WITH_ACE
-  typedef ACE_Utils::UUID_Generator UUID_Generator;
-  typedef ACE_Utils::UUID           UUID;
+  typedef ACE_Utils::UUID UUID;
+
+  class UUID_Generator
+    : public ACE_Utils::UUID_Generator
+  {
+  public:
+    UUID_Generator() : ACE_Utils::UUID_Generator() {};
+#ifndef ACE_5_6_1_OR_EARLIER  
+    ACE_Utils::UUID*
+    generateUUID(ACE_UINT16 version=0x0001, u_char variant=0x80)
+    {
+      return ACE_Utils::UUID_Generator::generate_UUID(version, variant);
+    }
+#endif
+  };
 #else
   class UUID
-    {
-      uuid_t _uuid;
-    public:
-      UUID();
-      UUID(uuid_t*);
-      std::string* to_string();
-    };
+  {
+    uuid_t _uuid;
+  public:
+    UUID();
+    UUID(uuid_t*);
+    std::string* to_string();
+  };
   
   class UUID_Generator
-    {
-    public:
-      UUID_Generator();
-      
-      void init();
-      UUID* generateUUID(int n, int h);
+  {
+  public:
+    UUID_Generator();
+    
+    void init();
+    UUID* generateUUID(int n, int h);
   };
 #endif
 };

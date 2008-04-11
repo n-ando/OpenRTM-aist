@@ -43,7 +43,7 @@
 
 #include <rtm/SdoOrganization.h>
 #include <ace/ACE.h>
-#include <ace/UUID.h> 
+#include <rtm/UUID.h> 
 #include <rtm/CORBA_SeqUtil.h>
 
 namespace SDOPackage
@@ -55,9 +55,9 @@ namespace SDOPackage
    */
   Organization_impl::Organization_impl()
   {
-    ACE_Utils::UUID_Generator uugen;
+    RTC_Utils::UUID_Generator uugen;
     uugen.init();
-    ACE_Utils::UUID* uuid = uugen.generateUUID(2,0x01);
+    RTC_Utils::UUID* uuid = uugen.generateUUID(2,0x01);
     m_pId = CORBA::string_dup((uuid->to_string())->c_str());
 #ifdef WIN32
     uuid->~UUID();
