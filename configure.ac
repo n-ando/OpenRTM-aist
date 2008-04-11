@@ -277,7 +277,7 @@ orb_to_use=
 more_incs="`echo $with_includes | sed 's/:/ /g'`"
 more_libs="`echo $with_libs     | sed 's/:/ /g'`"
 base_incs="`echo $CPLUS_INCLUDE_PATH | sed 's/:/ /g'` /local/include /usr/local/include /usr/include"
-base_libs="`echo $LIBPATH $LIBRARY_PATH $LD_LIBRARY_PATH $SHLIB_PATH | sed 's/:/ /g'` /local/lib /usr/local/lib /usr/lib"
+base_libs="`echo $LIBPATH $LIBRARY_PATH $LD_LIBRARY_PATH $SHLIB_PATH | sed 's/:/ /g'` /usr/local/lib /usr/lib /usr/lib64"
 base_bins="`echo $PATH | sed 's/:/\/.. /g'` /local/bin /usr/local/bin /usr/bin"
 base_dirs="$prefix `echo $PATH | sed 's/:/\/.. /g'`"
 
@@ -374,10 +374,18 @@ hint: <dir>/( ACE_wrappers/ace/lib lib cxx/lib ) will be searched.)
 	fi
 
 	AC_MSG_CHECKING(ACE version)
-	ace_version=[`grep ACE_VERSION $ace_ACE_h_dir/ace/Version.h | cut -d " " -f 3 | sed 's/[\"]//g'`]
+
+	# In ACE 5.5.4, ACE_VERSION is defined as ACE_VERSION " 5.5.4"
+	# "cut" cannot be used to extract version strings
+	ace_version=[`grep ACE_VERSION $ace_ACE_h_dir/ace/Version.h | sed 's/.*\"\(.*\)\"/\1/' | sed 's/ //g'`]
 
 	case $ace_version in
-	[5.5.*|5.4.*|5.3.*|5.5|5.4|5.3)]
+	[5.6.1|5.5.*|5.4.*|5.3.*|5.5|5.4|5.3)]
+		AC_DEFINE([ACE_5_6_1_OR_EARLIER], [TRUE], [ACE version 5.6.1 or earlier])
+		;;
+	# ACE 5.6.2 or later signature of UUID_Generator::generateUUID
+	# has been changed as generate_UUID
+	[5.7.*|5.6.[2-9]|5.7|5.6)]
 		;;
 	*)
 		AC_MSG_WARN([Unknown ACE version number, expecting 5.3.0 or above.])
