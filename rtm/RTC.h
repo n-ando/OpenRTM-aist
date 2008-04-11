@@ -72,6 +72,9 @@
 #include <omnithread.h>
 #endif
 
+#ifdef RTC_CORBA_CXXMAPPING11
+#define RefCountServantBase ServantBase
+#endif
 
 // for Windows DLL export 
 #if defined(WIN32) || defined(_WIN32) || defined(__WIN32__) || defined(__NT__)
