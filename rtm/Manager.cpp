@@ -816,7 +816,11 @@ namespace RTC
 	RTC_INFO(("Manager starting."));
 	RTC_INFO(("Starting local logging."));
       }
-    
+    else
+      {
+    	m_config["logger.log_level"] = "SILENT";
+      }
+
     return true;;
   }
   

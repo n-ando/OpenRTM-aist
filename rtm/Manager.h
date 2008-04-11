@@ -259,6 +259,7 @@ namespace RTC
      * @endif
      */
     Logbuf& getLogbuf() {return m_Logbuf;}
+    MedLogbuf& getMedLogbuf() {return m_MedLogbuf;}
     
     /*!
      * @if jp

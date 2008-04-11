@@ -93,13 +93,15 @@ namespace RTC
    */
   NamingManager::NamingManager(Manager* manager)
     :m_manager(manager), 
-     m_MedLogbuf(manager->getLogbuf()), rtcout(m_MedLogbuf)
+     m_MedLogbuf(manager->getMedLogbuf()), rtcout(m_MedLogbuf)
   {
     m_MedLogbuf.setSuffix("naming_svc");
-    m_MedLogbuf.setDateFmt(manager->getConfig()["logger.date_format"]);
+    std::cout << "Suffix naming: " << m_MedLogbuf.getSuffix() << std::endl;
+    //    m_MedLogbuf.setDateFmt(manager->getConfig()["logger.date_format"]);
     rtcout.setLogLevel(manager->getConfig()["logger.log_level"]);
     rtcout.setLogLock(toBool(manager->getConfig()["logger.stream_lock"],
 			     "enable", "disable", false));
+    RTC_TRACE(("HOGEHOGEHOGE"));
   }
   
   /*!

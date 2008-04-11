@@ -282,7 +282,21 @@ namespace RTC
       // W3C standard date and time format.
       m_DateFmt = "[%Y-%m-%dT%H.%M.%S%Z]";
     }
-    
+
+    /*!
+     * @if jp
+     *
+     * @brief basic_medlogbuf クラスコンストラクタ
+     *
+     * 引数に basic_filebuf オブジェクトを受け取る。
+     * 受け取った filebuf に対してヘッダ等を付加した文字列を渡す。
+     *
+     * @else
+     *
+     * @brief basic_medlogbuf class constructor.
+     *
+     * @endif
+     */
     basic_medlogbuf(__filebuf_type& filebuf)
       : __streambuf_type(), m_pLogbuf(&filebuf)
     {
@@ -295,6 +309,27 @@ namespace RTC
       m_DateFmt = "[%Y-%m-%dT%H.%M.%S%Z]";
     }
     
+    /*!
+     * @if jp
+     *
+     * @brief basic_medlogbuf コピーコンストラクタ
+     *
+     * @else
+     *
+     * @brief basic_medlogbuf copy constructor.
+     *
+     * @endif
+     */
+    basic_medlogbuf(const basic_medlogbuf& x)
+      : __streambuf_type(), m_pLogbuf(x.m_pLogbuf),
+	m_DateFmt(x.m_DateFmt), m_Suffix(x.m_Suffix)
+    {
+      char *pStart = m_Data;
+      char *pEnd = m_Data + (LINE_MAX - 1);
+      this->setp(pStart, pEnd);            // 書き込みポインタ。
+      this->setg(pStart, pStart, pEnd);    // 読み取りポインタ。
+    }
+
     /*!
      * @if jp
      *
