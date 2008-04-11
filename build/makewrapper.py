@@ -64,6 +64,8 @@ skel_cpp_temp = """// -*- C++ -*-
 
 #if   defined ORB_IS_TAO
 #include "[skel_dir]/[basename]S.cpp"
+#elif defined ORB_IS_OE
+#include "[skel_dir]/[basename]_s.cxx"
 #elif defined ORB_IS_OMNIORB
 #include "[skel_dir]/[basename]SK.cc"
 #include "[skel_dir]/[basename]DynSK.cc"
@@ -101,6 +103,8 @@ skel_h_temp = """// -*- C++ -*-
 
 #if   defined ORB_IS_TAO
 #include "[skel_dir]/[basename]S.h"
+#elif defined ORB_IS_OE
+#include "[skel_dir]/[basename]_s.h"
 #elif defined ORB_IS_OMNIORB
 #include "[skel_dir]/[basename].hh"
 #elif defined ORB_IS_MICO
@@ -131,6 +135,8 @@ stub_cpp_temp = """// -*- C++ -*-
 
 #if   defined ORB_IS_TAO
 #include "[skel_dir]/[basename]C.cpp"
+#elif defined ORB_IS_OE
+#include "[skel_dir]/[basename].cxx"
 #elif defined ORB_IS_OMNIORB
 
 #elif defined ORB_IS_MICO
@@ -167,6 +173,8 @@ stub_h_temp = """// -*- C++ -*-
 
 #if   defined ORB_IS_TAO
 #include "[skel_dir]/[basename]C.h"
+#elif defined ORB_IS_OE
+#include "[skel_dir]/[basename].h"
 #elif defined ORB_IS_OMNIORB
 #include "[skel_dir]/[basename].hh"
 #elif defined ORB_IS_MICO
