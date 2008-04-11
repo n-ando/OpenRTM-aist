@@ -182,6 +182,34 @@ def get_slnyaml(depfile, projfiles):
         if depdict.has_key(pj["Name"]):
             pj["Depend"] = depdict[pj["Name"]]
         projs.append(pj)
+    def depsort(d0, d1):
+        """
+        d0  < d1: return -1 
+        d0 == d1: return  0 
+        d0  < d1: return  1 
+        """
+        d0_depends = d0.has_key("Depend")
+        d1_depends = d1.has_key("Depend")
+        if not d0_depends and not d1_depends:
+            return 0
+        elif not d0_depends and d1_depends:
+            return -1 
+        elif d0_depends and not d1_depends:
+            return 1 
+        elif d0_depends and d1_depends:
+            d0_in_dep = depdict.has_key(d0["Name"])
+            d1_in_dep = depdict.has_key(d1["Name"])
+            if not d0_in_dep and not d1_in_dep:
+                return 0
+            elif not d0_in_dep and d1_in_dep:
+                return -1
+            elif d0_in_dep and not d1_in_dep:
+                return 1
+            else:
+                return 0
+        else:
+            return 0
+    projs.sort(depsort)
     for pj in projs:
         list = """  - Name: %s
     FileName: %s
