@@ -40,7 +40,7 @@ all:
 	autogen                    \
 	codegen.py                 \
 	distbuild.sh               \
-	ezt.py                     \
+	yat.py                     \
 	makedeffile.py             \
 	makevcproj.py              \
 	makewrapper.pl             \
@@ -64,7 +64,7 @@ EXTRA_DIST =                       \
 	autogen                    \
 	codegen.py                 \
 	distbuild.sh               \
-	ezt.py                     \
+	yat.py                     \
 	makedeffile.py             \
 	makevcproj.py              \
 	makewrapper.pl             \
