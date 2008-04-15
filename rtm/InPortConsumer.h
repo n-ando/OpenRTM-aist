@@ -17,24 +17,6 @@
  *
  */
 
-/*
- * $Log: not supported by cvs2svn $
- * Revision 1.4  2007/01/09 09:56:01  n-ando
- * Include order has changed.
- *
- * Revision 1.3  2007/01/06 17:50:22  n-ando
- * Interface subscription/unsubscription functions (subscribeInterface()
- * and unsubscribeInterface()) are added.
- * The clone() function to clone the instance is added.
- *
- * Revision 1.2  2006/12/02 18:39:06  n-ando
- * InPortCorbaConsumer class moved to InPortCorbaConsumer.h
- *
- * Revision 1.1  2006/11/27 09:44:39  n-ando
- * The first commitment.
- *
- */
-
 #ifndef InPortConsumer_h
 #define InPortConsumer_h
 
@@ -61,13 +43,25 @@ namespace RTC
    *
    * @else
    * @class InPortConsumer
-   * @brief InPortConsumer class
+   *
+   * @brief InPortConsumer abstract class
+   *
+   * This is the abstract interface class for the input port Consumer.
+   * Concrete classes must implement the following pure virtual functions.
+   * - push(): Send data
+   * - clone(): Copy ports
+   * - subscribeInterface(): Subscribe the data send notification
+   * - unsubscribeInterface(): Unsubscribe the data send notification
+   *
+   * @since 0.4.0
+   *
    * @endif
+   *
    */
   class InPortConsumer
   {
   public:
-    /***
+    /*!
      * @if jp
      * @brief コンストラクタ
      *
@@ -75,6 +69,9 @@ namespace RTC
      *
      * @else
      * @brief Constructor
+     *
+     * Constructor
+     *
      * @endif
      */
     //InPortConsumer();
@@ -87,6 +84,9 @@ namespace RTC
      *
      * @else
      * @brief Destructor
+     *
+     * Destructor
+     *
      * @endif
      */
     virtual ~InPortConsumer(){};
@@ -98,6 +98,9 @@ namespace RTC
      * 接続先のポートへデータを送信するための純粋仮想関数。
      *
      * @else
+     * @brief Send data to the destination port
+     *
+     * Pure virtual function to send data to the destination port.
      *
      * @endif
      */
@@ -112,6 +115,11 @@ namespace RTC
      * @return 複製された InPortConsumer オブジェクト
      *
      * @else
+     * @brief Clone this port
+     *
+     * Pure virtual function to generate this clone port.
+     *
+     * @return The clone InPortConsumer object
      *
      * @endif
      */
@@ -129,6 +137,14 @@ namespace RTC
      * @return 登録処理結果
      *
      * @else
+     * @brief Subscribe the data send notification
+     *
+     * Pure virtual function to subscribe the data send notification
+     * based on specified property information.
+     *
+     * @param properties Properties for reference when subscribing
+     *
+     * @return Subscription result
      *
      * @endif
      */
@@ -143,6 +159,11 @@ namespace RTC
      * @param properties 登録解除時に参照するプロパティ
      *
      * @else
+     * @brief Unsubscribe the data send notification
+     *
+     * Pure virtual function to unsubscribe the data send notification.
+     *
+     * @param properties Properties for reference when unsubscribing
      *
      * @endif
      */

@@ -17,19 +17,11 @@
  *
  */
 
-/*
- * $Log: not supported by cvs2svn $
- * Revision 1.1.2.1  2007/10/06 12:29:48  n-ando
- * OutPort provider for TCP socket data port.
- *
- */
-
 #ifndef OutPortTcpSockProvider_h
 #define OutPortTcpSockProvider_h
 
 #include <rtm/BufferBase.h>
 #include <rtm/OutPortProvider.h>
-
 
 namespace RTC
 {
@@ -45,6 +37,12 @@ namespace RTC
    * @else
    * @class OutPortTcpSockProvider
    * @brief OutPortTcpSockProvider class
+   *
+   * This is an implementation class of OutPort Provider 
+   * that uses TCP socket for means of communication.
+   *
+   * @param DataType Data type held by the buffer that attached to this provider
+   *
    * @endif
    */
   template <class DataType>
@@ -58,14 +56,23 @@ namespace RTC
      *
      * コンストラクタ
      * ポートプロパティに以下の項目を設定する。
-     * 　インターフェースタイプ : TCP_Any
-     * 　データフロータイプ : Push, Pull
-     * 　サブスクリプションタイプ : Flush, New, Periodic
+     *  - インターフェースタイプ : TCP_Any
+     *  - データフロータイプ : Push, Pull
+     *  - サブスクリプションタイプ : Flush, New, Periodic
      *
      * @param buffer 当該プロバイダに割り当てるバッファオブジェクト
      *
      * @else
      * @brief Constructor
+     *
+     * Constructor.
+     * Set the following items to port properties.
+     *  - Interface type : TCP_Any
+     *  - Data flow type : Push, Pull
+     *  - Subscription type : Flush, New, Periodic
+     *
+     * @param buffer Buffer object that is attached to this provider
+     *
      * @endif
      */
     OutPortTcpSockProvider(BufferBase<DataType>& buffer)

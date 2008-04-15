@@ -17,28 +17,6 @@
  *
  */
 
-/*
- * $Log: not supported by cvs2svn $
- * Revision 1.5  2007/01/21 09:05:13  n-ando
- * Template arguments "_ptr_type" and "_var_type" are defined as typename.
- * The given object references are duplicated.
- *
- * Revision 1.4  2007/01/12 14:29:18  n-ando
- * A trivial bug fix.
- *
- * Revision 1.3  2007/01/06 17:39:33  n-ando
- * The copy constructor and the substitution operator were added.
- *
- * Revision 1.2  2007/01/04 00:48:20  n-ando
- * - Class name has changed.
- * - operator->() was added.
- * - CorbaConsumer::releaseObject() was added.
- *
- * Revision 1.1  2006/11/21 08:32:26  n-ando
- * ConsumerBase class and Cosnumer class were added for proxy placeholder.
- *
- */
-
 #ifndef Consumer_h
 #define Consumer_h
 #include <iostream>
@@ -71,6 +49,8 @@
  *
  * @namespace RTC
  *
+ * @brief RT-Component
+ *
  * @endif
  */
 namespace RTC
@@ -86,8 +66,16 @@ namespace RTC
    * @since 0.4.0
    *
    * @else
+   *
    * @class ConsumerBase
+   *
    * @brief Placeholder base class to hold remote object reference.
+   *
+   * A base class for consumer implementation when chose CORBA 
+   * as a communication tool.
+   *
+   * @since 0.4.0
+   *
    * @endif
    */
   class CorbaConsumerBase
@@ -117,6 +105,8 @@ namespace RTC
      *
      * @brief Copy Consructor
      *
+     * @param x A CorbaConsumerBase object of copy source
+     *
      * @endif
      */
     CorbaConsumerBase(const CorbaConsumerBase& x)
@@ -139,6 +129,8 @@ namespace RTC
      *
      * @param x Copy source.
      *
+     * @return An assignment result
+     *
      * @endif
      */
     CorbaConsumerBase& operator=(const CorbaConsumerBase& x)
@@ -154,7 +146,7 @@ namespace RTC
      * 
      * @else
      * 
-     * @brief virtual destructor
+     * @brief Virtual destructor
      * 
      * @endif
      */
@@ -176,7 +168,8 @@ namespace RTC
      *
      * @brief Set CORBA Object
      *
-     * The given CORBA Object is held as CORBA::Object_var type
+     * The given CORBA Object is held as CORBA::Object_var type in ConsumerBase
+     * object.
      *
      * @param obj Object reference of CORBA object
      *
@@ -208,6 +201,9 @@ namespace RTC
      *
      * @brief Get CORBA Object
      *
+     * Get the object reference held as CORBA::Object_var type in ConsumerBase
+     * object.
+     *
      * @return Object reference of CORBA object
      *
      * @endif
@@ -227,6 +223,11 @@ namespace RTC
      *
      * @else
      *
+     * @brief Clear CORBA object setting
+     *
+     * Clear CORBA object which is set.
+     * Operate nothing for CORBA object itself.
+     *
      * @endif
      */
     virtual void releaseObject()
@@ -239,6 +240,7 @@ namespace RTC
      * @if jp
      * @brief 設定された CORBA オブジェクト
      * @else
+     * @brief CORBA object which is set.
      * @endif
      */
     CORBA::Object_var m_objref;
@@ -342,6 +344,8 @@ namespace RTC
      *
      * @param x Copy source.
      *
+     * @return An assignment result
+     *
      * @endif
      */
     CorbaConsumer& operator=(const CorbaConsumer& x)
@@ -356,7 +360,7 @@ namespace RTC
      *
      * @else
      *
-     * @brief virtual destructor
+     * @brief Virtual destructor
      *
      * @endif
      */
@@ -384,6 +388,11 @@ namespace RTC
      * CORBA:Object_var in the class, and this object is narrowed to
      * given template parameter and stored in the member variable.
      *
+     * @param obj CORBA Objecct
+     *
+     * @return An object setting result.
+     *         If target object is null, it returns false.
+     *
      * @endif
      */
     virtual bool setObject(CORBA::Object_ptr obj)
@@ -404,7 +413,7 @@ namespace RTC
      * ObjectType に narrow済みのオブジェクトのリファレンスを取得する。
      * オブジェクトリファレンスを使用するには、setObject() でセット済みで
      * なければならない。
-     * オブジェクトがセットされていなければ　nil オブジェクトリファレンスが、
+     * オブジェクトがセットされていなければ　nil オブジェクトリファレンスが
      * 返される。
      *
      * @return ObjectType に narrow 済みのオブジェクトのリファレンス
@@ -433,7 +442,7 @@ namespace RTC
      * ObjectType に narrow済みのオブジェクトのリファレンスを取得する。
      * オブジェクトリファレンスを使用するには、setObject() でセット済みで
      * なければならない。
-     * オブジェクトがセットされていなければ　nil オブジェクトリファレンスが、
+     * オブジェクトがセットされていなければ　nil オブジェクトリファレンスが
      * 返される。
      *
      * @return ObjectType に narrow 済みのオブジェクトのリファレンス
@@ -465,6 +474,11 @@ namespace RTC
      *
      * @else
      *
+     * @brief Clear CORBA object setting
+     *
+     * Clear CORBA object which is set.
+     * Operate nothing for CORBA object itself.
+     *
      * @endif
      */
     virtual void releaseObject()
@@ -478,6 +492,7 @@ namespace RTC
      * @if jp
      * @brief 設定された CORBA オブジェクト
      * @else
+     * @brief CORBA object which has been set.
      * @endif
      */
     ObjectTypeVar m_var;

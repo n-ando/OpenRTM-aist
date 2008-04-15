@@ -17,19 +17,6 @@
  *
  */
 
-/*
- * $Log: not supported by cvs2svn $
- * Revision 1.2.4.1  2007/06/22 10:55:11  n-ando
- * The bug of OutPort's disconnect operation was fixed.
- *
- * Revision 1.2  2007/01/06 18:00:31  n-ando
- * Some trivial fixes.
- *
- * Revision 1.1  2006/11/27 09:44:45  n-ando
- * The first commitment.
- *
- */
-
 #ifndef PublisherFactory_h
 #define PublisherFactory_h
 
@@ -53,6 +40,12 @@ namespace RTC
    * @else
    * @class PublisherFactory
    * @brief PublisherFactory class
+   *
+   * This is a factory class to manage for creation and destruction of
+   * various Publisher objects.
+   * Note: This is temporary implementation.
+   *  We try to be able to generate any Publisher in the future.
+   *
    * @endif
    */
   class PublisherFactory
@@ -66,6 +59,9 @@ namespace RTC
      *
      * @else
      * @brief Constructor
+     *
+     * Default constructor
+     *
      * @endif
      */
     PublisherFactory(){};
@@ -78,6 +74,9 @@ namespace RTC
      *
      * @else
      * @brief Destructor
+     *
+     * Destructor
+     *
      * @endif
      */
     virtual ~PublisherFactory(){};
@@ -102,7 +101,26 @@ namespace RTC
      * @return 生成したPublisherオブジェクト。生成に失敗した場合はNullを返す。
      *
      * @else
-     * @brief Create Publisher
+     * @brief Create the Publisher
+     *
+     * Create the Publisher's object.
+     * The appropriate Publisher implementation object according to the
+     * specified argument is generated.
+     * The type of generated Publisher needs to be set to the 
+     * dataport.subscription_type member of the specified Property object.
+     * Also, depending on the type, information that controls the behavior of
+     * Publisher needs to be set.
+     * For more details on these contents, please refer to each Publisher 
+     * implementation.
+     *
+     * @param consumer Consumer that is driven the data sending by Publisher
+     * @param property Property object to be set information for specifying to
+     *                 the generated Publisher and for controlling the drive of
+     *                 Publisher.
+     *
+     * @return The generated Publisher's object. Null will be returned if failed
+     *         to be generated.
+     *
      * @endif
      */
     PublisherBase* create(InPortConsumer* consumer, Properties& property);
@@ -116,7 +134,12 @@ namespace RTC
      * @param publisher 破棄対象Publisherオブジェクト
      *
      * @else
-     * @brief Destroy Publisher
+     * @brief Destroy the Publisher
+     *
+     * Destroy the specified Publisher's object
+     *
+     * @param publisher The target Publisher's object for the delete
+     *
      * @endif
      */
     void destroy(PublisherBase *publisher);
@@ -127,3 +150,4 @@ namespace RTC
   };
 };     // namespace RTC
 #endif // PublisherFactory_h
+

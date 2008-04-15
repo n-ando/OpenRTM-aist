@@ -17,16 +17,6 @@
  *
  */
 
-/*
- * $Log: not supported by cvs2svn $
- * Revision 1.2  2007/01/21 09:52:28  n-ando
- * A trivial bug fix about dtor.
- *
- * Revision 1.1  2006/11/04 21:07:40  n-ando
- * Component numbering rule was derived into policy class.
- *
- */
-
 #ifndef NumberingPolicy_h
 #define NumberingPolicy_h
 
@@ -36,6 +26,7 @@
 /*!
  * @if jp
  *
+ * @class NumberingPolicy
  * @brief オブジェクト生成時ネーミング・ポリシー(命名規則)管理用抽象クラス
  *
  * オブジェクトを生成する際のネーミング・ポリシー(命名規則)を管理するための
@@ -47,6 +38,16 @@
  * @since 0.4.0
  *
  * @else
+ * @class NumberingPolicy
+ * @brief Abstruct class for naming policy management when creating objects
+ *
+ * This is the abstract interface class to manage the naming policy when
+ * creating objects.
+ * Concrete classes must implement the following pure virtual functions.
+ * - onCreate() : Create the name when creating objects.
+ * - onDelete() : Delete the name when deleting objects.
+ *
+ * @since 0.4.0
  *
  * @endif
  */
@@ -57,7 +58,8 @@ public:
    * @if jp
    * @brief オブジェクト未発見例外処理用構造体
    * @else
-   *
+   * @brief The structures for exception handling when object was not
+   *        found.
    * @endif
    */
   struct ObjectNotFound {};
@@ -69,7 +71,7 @@ public:
    * 
    * @else
    *
-   * @brief virtual destractor
+   * @brief Virtual destractor
    *
    * @endif
    */
@@ -88,6 +90,14 @@ public:
    *
    * @else
    *
+   * @brief Create the name when creating objects
+   *
+   * Pure virtual function to create the name when creating objects.
+   * 
+   * @param obj The target object for the creation
+   *
+   * @return Name of the created object
+   *
    * @endif
    */
   virtual std::string onCreate(void* obj) = 0;
@@ -103,6 +113,12 @@ public:
    *
    * @else
    *
+   * @brief Delete the name when deleting objects
+   *
+   * Pure virtual function to delete the name when deleting object.
+   * 
+   * @param obj The target object of the delete
+   *
    * @endif
    */
   virtual void onDelete(void* obj) = 0;
@@ -111,6 +127,7 @@ public:
 /*!
  * @if jp
  *
+ * @class DefaultNumberingPolicy
  * @brief オブジェクト生成時ネーミング・ポリシー(命名規則)管理用クラス
  *
  * オブジェクトを生成する際のネーミング・ポリシー(命名規則)を管理するための
@@ -119,6 +136,13 @@ public:
  * @since 0.4.0
  *
  * @else
+ *
+ * @class DefaultNumberingPolicy
+ * @brief Class for naming policy management when creating objects
+ *
+ * This is a class to manage the naming policy when creating objects.
+ *
+ * @since 0.4.0
  *
  * @endif
  */
@@ -135,8 +159,10 @@ public:
    * 
    * @else
    *
-   * @brief virtual destractor
-   *
+   * @brief Constructor
+   * 
+   * Constructor
+   * 
    * @endif
    */
   DefaultNumberingPolicy() : m_num(0) {};
@@ -148,7 +174,7 @@ public:
    * 
    * @else
    *
-   * @brief destractor
+   * @brief Destractor
    *
    * @endif
    */
@@ -168,6 +194,15 @@ public:
    *
    * @else
    *
+   * @brief Create the name when creating object
+   *
+   * Create the name when creating object.
+   * Create the name corresponding to the number of generated instances.
+   * 
+   * @param obj The target object for the name creation
+   *
+   * @return Names of the created object
+   *
    * @endif
    */
   virtual std::string onCreate(void* obj);
@@ -183,6 +218,13 @@ public:
    * @param obj 名称解放対象オブジェクト
    *
    * @else
+   *
+   * @brief Delete the name when deleting object
+   *
+   * Delete the name when deleting object.
+   * Substract the generated number of instances when deleting the object.
+   * 
+   * @param obj The target object for the name delete
    *
    * @endif
    */
@@ -202,6 +244,15 @@ protected:
    * @return オブジェクト格納インデックス
    *
    * @else
+   *
+   * @brief Find the object
+   *
+   * Find the specified object in the object list and return its index
+   * when it is stored.
+   * 
+   * @param obj The target object for the find
+   *
+   * @return Object index for storage
    *
    * @endif
    */

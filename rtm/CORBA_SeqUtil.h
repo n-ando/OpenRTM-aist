@@ -16,24 +16,6 @@
  *
  */
 
-/*
- * $Log: not supported by cvs2svn $
- * Revision 1.3.4.1  2007/09/16 08:19:02  n-ando
- * The problem of redefinition of CORBA::ULong and CORBA::Long was modified.
- *
- * Revision 1.3  2006/11/02 09:04:39  n-ando
- * CORBA_SeqUtil::insert()'s bug was fixed.
- *
- * Revision 1.2  2006/10/30 08:09:07  n-ando
- * Two functions push_back_lsit(), erase_if() were added.
- * Function reference manual was revised.
- *
- * Revision 1.1  2006/10/27 09:09:46  n-ando
- * The first commitment.
- *
- *
- */
-
 #ifndef CORBA_SeqUtil_h
 #define CORBA_SeqUtil_h
 
@@ -105,7 +87,7 @@ namespace CORBA_SeqUtil
    * functor should be void functor(CORBA sequence element).
    *
    * @param seq CORBA sequence to be applied the functor
-   * @param functor A functor to process CORBA sequence elements
+   * @param f A functor to process CORBA sequence elements
    *
    * @return Functor that processed all CORBA sequence elements
    *
@@ -148,7 +130,7 @@ namespace CORBA_SeqUtil
    * and it would return true, if the element matched the functor.
    *
    * @param seq CORBA sequence to be applied the functor
-   * @param functor A functor to process CORBA sequence elements
+   * @param f A functor to process CORBA sequence elements
    *
    * @return The index of the element that functor matches.
    *         If no element found, it would return -1.
@@ -206,6 +188,13 @@ namespace CORBA_SeqUtil
    * @param seq2 マージされる CORBA sequence
    *
    * @else
+   *
+   * @brief Merge the elements of the CORBA sequence
+   *
+   * Merge given CORBA sequences.
+   *
+   * @param seq1 merge target CORBA sequence
+   * @param seq2 merge target CORBA sequence
    *
    * @endif
    */
@@ -286,6 +275,10 @@ namespace CORBA_SeqUtil
    *
    * This operation returns seq[0].
    *
+   * @param seq CORBA sequence which acquires an element
+   *
+   * @return An acquisition element
+   *
    * @param seq The CORBA sequence to be get the element
    *
    * @endif
@@ -314,6 +307,8 @@ namespace CORBA_SeqUtil
    * This operation returns seq[seq.length() - 1].
    *
    * @param seq The CORBA sequence to be get the element
+   *
+   * @return An acquisition element
    *
    * @endif
    */	
@@ -361,7 +356,7 @@ namespace CORBA_SeqUtil
   /*!
    * @if jp
    *
-   * @brief シーケンスの要素を述語のしたがって削除する
+   * @brief シーケンスの要素を述語にしたがって削除する
    *
    * このオペレーションは述語として与えられた関数オブジェクトの
    * 条件が真のとき、そのシーケンスの要素を削除する。
@@ -370,6 +365,14 @@ namespace CORBA_SeqUtil
    * @param f 削除するシーケンスを決定する術語
    *
    * @else
+   *
+   * @brief Remove an element of a sequence according to a predicate
+   *
+   * This operation removes the element from sequence when a condition of 
+   * a function object given as a predicate is True.
+   *
+   * @param seq target CORBA sequence
+   * @param f predicate which decides a sequence to remove
    *
    * @endif
    */

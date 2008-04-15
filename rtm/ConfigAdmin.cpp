@@ -16,20 +16,6 @@
  *
  */
 
-/*
- * $Log: not supported by cvs2svn $
- * Revision 1.3  2007/04/24 01:26:59  n-ando
- * Bug fix.
- *
- * Revision 1.2  2007/04/23 11:20:30  n-ando
- * Bug fix.
- *
- * Revision 1.1  2007/04/23 04:51:16  n-ando
- * COnfiguration Admin class.
- *
- */
-
-
 #include <rtm/ConfigAdmin.h>
 #include <algorithm>
 #include <assert.h>
@@ -40,7 +26,6 @@ namespace RTC
    * @if jp
    * @brief コンストラクタ
    * @else
-   *
    * @endif
    */
   ConfigAdmin::ConfigAdmin(RTC::Properties& configsets)
@@ -53,7 +38,7 @@ namespace RTC
    * @if jp
    * @brief 仮想デストラクタ
    * @else
-   *
+   * @brief Virtual destructor
    * @endif
    */
   ConfigAdmin::~ConfigAdmin()
@@ -70,7 +55,7 @@ namespace RTC
    * @if jp
    * @brief コンフィギュレーションパラメータの更新(ID指定)
    * @else
-   *
+   * @brief Update configuration parameter (By ID)
    * @endif
    */
   void ConfigAdmin::update(const char* config_set)
@@ -92,7 +77,8 @@ namespace RTC
    * @brief コンフィギュレーションパラメータの更新
    *        (アクティブコンフィギュレーションセット)
    * @else
-   *
+   * @brief Update the values of configuration parameters
+   *        (Active configuration set)
    * @endif
    */
   void ConfigAdmin::update()
@@ -109,7 +95,7 @@ namespace RTC
    * @if jp
    * @brief コンフィギュレーションパラメータの更新(名称指定)
    * @else
-   *
+   * @brief Update the values of configuration parameters (By name)
    * @endif
    */
   void ConfigAdmin::update(const char* config_set, const char* config_param)
@@ -131,7 +117,7 @@ namespace RTC
    * @if jp
    * @brief コンフィギュレーションパラメータの存在確認
    * @else
-   *
+   * @brief Check the existence of configuration parameters
    * @endif
    */
   bool ConfigAdmin::isExist(const char* param_name)
@@ -170,7 +156,7 @@ namespace RTC
    * @if jp
    * @brief 全コンフィギュレーションセットの取得
    * @else
-   *
+   * @brief Get all configuration sets
    * @endif
    */
   const std::vector<Properties*>& ConfigAdmin::getConfigurationSets()
@@ -182,7 +168,7 @@ namespace RTC
    * @if jp
    * @brief 指定したIDのコンフィギュレーションセットの取得
    * @else
-   *
+   * @brief Get a configuration set by specified ID
    * @endif
    */
   const Properties& ConfigAdmin::getConfigurationSet(const char* config_id)
@@ -196,7 +182,7 @@ namespace RTC
    * @if jp
    * @brief 指定したプロパティのコンフィギュレーションセットへの追加
    * @else
-   *
+   * @brief Add to the configuration set from specified property
    * @endif
    */
   bool
@@ -219,7 +205,7 @@ namespace RTC
    * @if jp
    * @brief アクティブ・コンフィギュレーションセットを取得
    * @else
-   *
+   * @brief Get the active configuration set
    * @endif
    */
   const Properties& ConfigAdmin::getActiveConfigurationSet()
@@ -233,7 +219,7 @@ namespace RTC
    * @if jp
    * @brief コンフィギュレーションセットに設定値を追加
    * @else
-   *
+   * @brief Add the configuration value to the configuration set
    * @endif
    */
   bool ConfigAdmin::addConfigurationSet(const Properties& configset)
@@ -259,7 +245,7 @@ namespace RTC
    * @if jp
    * @brief コンフィギュレーションセットの削除
    * @else
-   *
+   * @brief Remove the configuration set
    * @endif
    */
   bool ConfigAdmin::removeConfigurationSet(const char* config_id)
@@ -284,7 +270,7 @@ namespace RTC
    * @if jp
    * @brief コンフィギュレーションセットのアクティブ化
    * @else
-   *
+   * @brief Activate the configuration set
    * @endif
    */
   bool ConfigAdmin::activateConfigurationSet(const char* config_id)

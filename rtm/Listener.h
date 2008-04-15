@@ -32,6 +32,12 @@
  * @else
  * @class ListenerBase
  * @brief ListenerBase class
+ *
+ * This is the abstract interface for Listener that registers
+ * to the timer
+ *
+ * @since 0.4.0
+ *
  * @endif
  */
 class ListenerBase
@@ -45,6 +51,9 @@ public:
    *
    * @else
    * @brief Destructor
+   *
+   * Destructor
+   *
    * @endif
    */
   virtual ~ListenerBase(){}
@@ -56,6 +65,9 @@ public:
    * コールバック処理用純粋仮想関数
    *
    * @else
+   * @brief Callback
+   *
+   * Pure virtual function for callback-handling
    *
    * @endif
    */
@@ -74,6 +86,11 @@ public:
  * @else
  * @class ListenerObject
  * @brief ListenerObject class
+ *
+ * This is a base class for Listener that registers to the timer
+ *
+ * @since 0.4.0
+ *
  * @endif
  */
 template <class ListenerClass,
@@ -92,6 +109,12 @@ public:
    * @param cbf コールバック用関数
    *
    * @else
+   * @brief Constructor
+   *
+   * Constructor
+   *
+   * @param obj Listener Object
+   * @param cbf Callback Function
    *
    * @endif
    */
@@ -108,6 +131,9 @@ public:
    *
    * @else
    * @brief Destructor
+   *
+   * Destructor
+   *
    * @endif
    */
   virtual ~ListenerObject()
@@ -121,6 +147,9 @@ public:
    * コールバック処理用関数
    *
    * @else
+   * @brief Callback
+   *
+   * Callback function
    *
    * @endif
    */
@@ -146,6 +175,11 @@ private:
  * @else
  * @class ListenerFunc
  * @brief ListenerFunc class
+ *
+ * Callback object
+ *
+ * @since 0.4.0
+ *
  * @endif
  */
 typedef void (*CallbackFunc)();
@@ -162,6 +196,11 @@ public:
    * @param cbf コールバック用関数
    *
    * @else
+   * @brief Constructor
+   *
+   * Constructor
+   *
+   * @param cbf Callback Function
    *
    * @endif
    */
@@ -178,6 +217,9 @@ public:
    *
    * @else
    * @brief Destructor
+   *
+   * Destructor
+   *
    * @endif
    */
   virtual ~ListenerFunc(){}
@@ -189,6 +231,9 @@ public:
    * コールバック処理用関数
    *
    * @else
+   * @brief Callback
+   *
+   * Callback function
    *
    * @endif
    */

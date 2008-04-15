@@ -17,20 +17,6 @@
  *
  */
 
-/*
- * $Log: not supported by cvs2svn $
- * Revision 1.2.4.1  2007/09/19 07:41:28  n-ando
- * Timeout callbacks were added.
- *
- * Revision 1.2  2007/01/21 12:56:35  n-ando
- * virtual dtors were defined.
- *
- * Revision 1.1  2006/12/02 18:51:18  n-ando
- * The first commitment.
- *
- *
- */
-
 #ifndef PortCallBack_h
 #define PortCallBack_h
 
@@ -51,8 +37,15 @@ namespace RTC
    * @since 0.4.0
    *
    * @else
-   * @class OnPut
-   * @brief OnPut abstract class
+   * @class OnWrite
+   * @brief Callback abstract class on write()
+   *
+   * This is the interface for callback invoked immediately before
+   * data is done write() into the DataPort's buffer.
+   *
+   * @param DataType Data type to write into the buffer
+   *
+   * @since 0.4.0
    *
    * @endif
    */
@@ -87,6 +80,13 @@ namespace RTC
      *
      * @else
      *
+     * @brief Callback method
+     *
+     * This is the callback method invoked immediately before data is written
+     * into the buffer.
+     *
+     * @param value Data that is written into the buffer
+     *
      * @endif
      */
     virtual void operator()(const DataType& value) = 0;
@@ -105,7 +105,13 @@ namespace RTC
    *
    * @else
    * @class OnWriteConvert
-   * @brief OnWriteConvert abstract class
+   * @brief Data convert callback abstract class on write()
+   *
+   * This is the interface for callback invoked when data is done write()
+   * into the InPort/OutPort's buffer.
+   * The return value of this callback will be stored in the buffer.
+   *
+   * @since 0.4.0
    *
    * @endif
    */
@@ -142,6 +148,15 @@ namespace RTC
      *
      * @else
      *
+     * @brief Callback method
+     *
+     * This is the callback method invoked when data is written into the
+     * buffer.
+     *
+     * @param value Data before the convert
+     *
+     * @return Data after the convert
+     *
      * @endif
      */
     virtual DataType operator()(const DataType& value) = 0;
@@ -159,7 +174,12 @@ namespace RTC
    *
    * @else
    * @class OnRead
-   * @brief OnRead abstract class
+   * @brief Callback abstract class on read()
+   *
+   * This is the interface for callback invoked immediately before
+   * data is done read() from the InPort/OutPort's buffer.
+   *
+   * @since 0.4.0
    *
    * @endif
    */
@@ -192,6 +212,11 @@ namespace RTC
      *
      * @else
      *
+     * @brief Callback method
+     *
+     * This is the callback method invoked immediately before data is readout
+     * from the buffer.
+     *
      * @endif
      */
     virtual void operator()() = 0;
@@ -210,7 +235,13 @@ namespace RTC
    *
    * @else
    * @class OnReadConvert
-   * @brief OnReadConvert abstract class
+   * @brief Data convert callback abstract class on read()
+   *
+   * This is the interface for callback invoked when data is done read()
+   * from the InPort/OutPort's buffer.
+   * The return value of this callback will be the return value of read().
+   *
+   * @since 0.4.0
    *
    * @endif
    */
@@ -243,6 +274,11 @@ namespace RTC
      *
      * @else
      *
+     * @brief Callback method
+     *
+     * This is the callback method invoked when data is readout from the
+     * buffer.
+     *
      * @endif
      */
     virtual DataType operator()(const DataType& value) = 0;
@@ -260,7 +296,12 @@ namespace RTC
    *
    * @else
    * @class OnOverflow
-   * @brief OnOverflow abstract class
+   * @brief Callback abstract class when the buffer overflow occurs
+   *
+   * This is the callback method invoked when data is done put()
+   * into the InPort/OutPort's buffer or when the buffer overflow occurs.
+   *
+   * @since 0.4.0
    *
    * @endif
    */
@@ -295,6 +336,12 @@ namespace RTC
      *
      * @else
      *
+     * @brief Callback method
+     *
+     * This is the callback method invoked when the buffer overflow occurs.
+     *
+     * @param value Data that is written into the buffer
+     *
      * @endif
      */
     virtual void operator()(const DataType& value) = 0;
@@ -313,7 +360,13 @@ namespace RTC
    *
    * @else
    * @class OnUnderflow
-   * @brief OnUnderflow abstract class
+   * @brief Callback abstract class on underflow
+   *
+   * @since 0.4.0
+   *
+   * This is the interface for callback invoked when data is done read()
+   * into the InPort/OutPort's buffer and the readout data does not exist.
+   * The return value of this callback will be the return value of read().
    *
    * @endif
    */
@@ -348,6 +401,12 @@ namespace RTC
      *
      * @else
      *
+     * @brief Callback method
+     *
+     * This is the callback method invoked when the buffer underflow occurs.
+     *
+     * @return Substituted readout data
+     *
      * @endif
      */
     virtual DataType operator()() = 0;
@@ -365,7 +424,12 @@ namespace RTC
    *
    * @else
    * @class OnWriteTimeout
-   * @brief OnWriteTimeout abstract class
+   * @brief Callback abstract class on timeout
+   *
+   * This is the interface for callback invoked when data is done write()
+   * into the InPort/OutPort's buffer and the timeout occurred.
+   *
+   * @since 0.4.0
    *
    * @endif
    */
@@ -400,6 +464,12 @@ namespace RTC
      *
      * @else
      *
+     * @brief Callback method
+     *
+     * This is the callback method invoked when the timeout occurs.
+     *
+     * @param value Data that is written into the buffer
+     *
      * @endif
      */
     virtual void operator()(const DataType& value) = 0;
@@ -418,6 +488,11 @@ namespace RTC
    * @else
    * @class OnReadTimeout
    * @brief OnReadTimeout abstract class
+   *
+   * This is the interface for callback invoked when data is done read()
+   * into the InPort/OutPort's buffer and the timeout occurred.
+   *
+   * @since 0.4.0
    *
    * @endif
    */
@@ -451,6 +526,12 @@ namespace RTC
      * @return 代替となる読み出しデータ
      *
      * @else
+     *
+     * @brief Callback method
+     *
+     * This is the callback method invoked when the timeout occurs.
+     *
+     * @return Substituted readout data
      *
      * @endif
      */

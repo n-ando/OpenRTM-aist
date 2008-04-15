@@ -17,16 +17,6 @@
  *
  */
 
-/*
- * $Log: not supported by cvs2svn $
- * Revision 1.2  2007/01/06 18:00:44  n-ando
- * Some trivial fixes.
- *
- * Revision 1.1  2006/11/27 09:44:47  n-ando
- * The first commitment.
- *
- */
-
 #ifndef PublisherFlush_h
 #define PublisherFlush_h
 
@@ -48,6 +38,12 @@ namespace RTC
    * @else
    * @class PublisherFlush
    * @brief PublisherFlush class
+   *
+   * This is a Publisher class of Flush type.
+   * This class sends unsend data that has been stored in the buffer.
+   * This executes Consumer that waits for the data send timing in the same 
+   * thread as its send side.
+   *
    * @endif
    */
   class PublisherFlush
@@ -65,6 +61,13 @@ namespace RTC
      *
      * @else
      * @brief Constructor
+     *
+     * Consrtuctor.
+     *
+     * @param consumer Consumer to wait for the data sending
+     * @param property Property object that have been set the control
+     *                 information of this Publisher
+     *
      * @endif
      */
     PublisherFlush(InPortConsumer* consumer,
@@ -79,6 +82,10 @@ namespace RTC
      *
      * @else
      * @brief Destructor
+     *
+     * Destructor
+     * This is invoked by PublisherFactory when this Publisher is destoroyed.
+     *
      * @endif
      */
     virtual ~PublisherFlush();
@@ -92,6 +99,10 @@ namespace RTC
      *
      * @else
      * @brief Observer function
+     *
+     * This is invoked at the send timing.
+     * Immediately, the Consumer's sending process is invoked in the same thread.
+     *
      * @endif
      */
     virtual void update();
@@ -103,3 +114,4 @@ namespace RTC
   };
 };     // namespace RTC
 #endif // PublisherFlush_h
+

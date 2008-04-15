@@ -17,31 +17,6 @@
  *
  */
 
-/*
- * $Log: not supported by cvs2svn $
- * Revision 1.5.2.1  2007/09/22 10:29:36  n-ando
- * The argument of the module init function was modified.
- *
- * Revision 1.5  2007/04/26 15:30:00  n-ando
- * The header include order was modified to define _REENTRANT before
- * including ace/config-lite.h in Linux systems.
- * In ace 5.4.7 or later, _REENTRANT flag should be defined explicitly.
- *
- * Revision 1.4  2007/04/13 18:02:58  n-ando
- * Some configuration properties handling processes were changed.
- *
- * Revision 1.3  2006/10/25 17:29:27  n-ando
- * Bug fix for configuration and load path strings including head blank.
- *
- * Revision 1.2  2006/10/17 10:06:39  n-ando
- * Now class ModuleManager is in RTC namespace.
- *
- * Revision 1.1  2006/09/20 08:47:25  n-ando
- * The first commit of module management class.
- *
- *
- */
-
 #include <rtm/RTC.h>
 
 #include <fstream>
@@ -63,7 +38,7 @@ namespace RTC
    * @if jp
    * @brief コンストラクタ
    * @else
-   * @brief constructor
+   * @brief Constructor
    * @endif
    */
   ModuleManager::ModuleManager(Properties& prop)
@@ -83,7 +58,7 @@ namespace RTC
    * @if jp
    * @brief デストラクタ
    * @else
-   * @brief destructor
+   * @brief Destructor
    * @endif
    */
   ModuleManager::~ModuleManager()
@@ -95,7 +70,7 @@ namespace RTC
    * @if jp
    * @brief モジュールのロード
    * @else
-   * @brief Load module
+   * @brief Load the module
    * @endif
    */
   std::string ModuleManager::load(const std::string& file_name)
@@ -149,7 +124,7 @@ namespace RTC
    * @if jp
    * @brief モジュールのロード、初期化
    * @else
-   * @brief Load module
+   * @brief Load and initialize the module
    * @endif
    */
   std::string ModuleManager::load(const std::string& file_name,
@@ -178,7 +153,7 @@ namespace RTC
    * @if jp
    * @brief モジュールのアンロード
    * @else
-   * @brief Unload module
+   * @brief Unload the module
    * @endif
    */
   void ModuleManager::unload(const std::string& file_name)
@@ -219,7 +194,7 @@ namespace RTC
    * @if jp
    * @brief モジュールのシンボルの参照
    * @else
-   * @brief Look up a named symbol in the module
+   * @brief Refer to the symbol of the module
    * @endif
    */
   void* ModuleManager::symbol(const std::string& file_name,
@@ -247,7 +222,7 @@ namespace RTC
    * @if jp
    * @brief モジュールロードパスを指定する
    * @else
-   * @brief Set default module load path
+   * @brief Set the module load path
    * @endif
    */
   void ModuleManager::setLoadpath(const std::vector<std::string>& load_path)
@@ -260,7 +235,7 @@ namespace RTC
    * @if jp
    * @brief モジュールロードパスを追加する
    * @else
-   * @brief Add module load path
+   * @brief Add the module load path
    * @endif
    */
   void ModuleManager::addLoadpath(const std::vector<std::string>& load_path)
@@ -281,7 +256,7 @@ namespace RTC
    * @if jp
    * @brief ロード済みのモジュールリストを取得する
    * @else
-   * @brief Get loaded module names
+   * @brief Get the module list that has been loaded
    * @endif
    */
   std::vector<std::string> ModuleManager::getLoadedModules()
@@ -302,7 +277,7 @@ namespace RTC
    * @if jp
    * @brief ロード可能なモジュールリストを取得する(未実装)
    * @else
-   * @brief Get loadable module names
+   * @brief Get the loadable module list(not implemented)
    * @endif
    */
   std::vector<std::string> ModuleManager::getLoadableModules()
@@ -316,7 +291,7 @@ namespace RTC
    * @if jp
    * @brief LoadPath からのファイルの検索
    * @else
-   * @brief Search file from load path
+   * @brief Search the file from the LoadPath
    * @endif
    */
   std::string ModuleManager::findFile(const std::string& fname,
@@ -345,7 +320,7 @@ namespace RTC
    * @if jp
    * @brief ファイルが存在するかどうかのチェック
    * @else
-   * @brief Check file existance
+   * @brief Check whether the file exists
    * @endif
    */
   bool ModuleManager::fileExist(const std::string& filename)
@@ -371,7 +346,7 @@ namespace RTC
    * @if jp
    * @brief 初期化関数シンボルを生成する
    * @else
-   * @brief Create initialize function symbol
+   * @brief Create initialization function symbol
    * @endif
    */
   std::string ModuleManager::getInitFuncName(const std::string& file_path)

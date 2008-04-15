@@ -17,32 +17,6 @@
  *
  */
 
-/*
- * $Log: not supported by cvs2svn $
- * Revision 1.6.4.1  2007/09/20 11:25:11  n-ando
- * A function getPortProfileList() was added to get PortProfileList locally.
- *
- * Revision 1.6  2007/01/21 10:28:09  n-ando
- * Some trivial fixes.
- *
- * Revision 1.5  2007/01/09 15:13:11  n-ando
- * Now Port does not have getName().
- * The name of Port is obtained from getProfile().
- *
- * Revision 1.4  2006/12/02 18:49:43  n-ando
- * A trivial fix.
- *
- * Revision 1.3  2006/11/06 01:19:04  n-ando
- * CORBA sequence manipulation has been rewritten by using CORBA_SeqUtil.
- *
- * Revision 1.2  2006/10/17 19:16:40  n-ando
- * registerPort() was modified to store Port's object reference in PortProfile.
- *
- * Revision 1.1  2006/10/17 10:22:01  n-ando
- * The first commitment.
- *
- */
-
 #ifndef PortAdmin_h
 #define PortAdmin_h
 
@@ -66,6 +40,13 @@ namespace RTC
    * @else
    * @class PortAdmin
    * @brief PortAdmin class
+   *
+   * This is a class to manage various Ports.
+   * It executes various management operations such as registering and 
+   * unregistering Port etc and also manages registered ports.
+   *
+   * @since 0.4.0
+   *
    * @endif
    */
   class PortAdmin
@@ -82,6 +63,12 @@ namespace RTC
      *
      * @else
      * @brief Constructor
+     *
+     * Constructor
+     *
+     * @param orb ORB
+     * @param poa POA
+     *
      * @endif
      */
     PortAdmin(CORBA::ORB_ptr orb, PortableServer::POA_ptr poa);
@@ -94,6 +81,9 @@ namespace RTC
      *
      * @else
      * @brief Destructor
+     *
+     * Destructor
+     *
      * @endif
      */
     virtual ~PortAdmin(){};
@@ -111,10 +101,10 @@ namespace RTC
      *
      * @brief Get PortList
      *
-     * This operation returns the pointer to the PortList of Ports regsitered
+     * This operation returns the pointer to the PortList of Ports registered
      * by registerPort().
      *
-     * @return PortList+ The pointer points PortList
+     * @return The pointer points PortList
      *
      * @endif
      */
@@ -130,6 +120,13 @@ namespace RTC
      * @return PortProfile ¥ê¥¹¥È
      *
      * @else
+     *
+     * @brief Get PorProfileList
+     *
+     * This operation gets the Profile list of Ports registered by 
+     * registerPort().
+     *
+     * @return The pointer points PortProfile list
      *
      * @endif
      */
@@ -150,14 +147,16 @@ namespace RTC
      *
      * @else
      *
-     * @brief Get PortList
+     * @brief Get the reference to Port object
      *
-     * This operation returns the pointer to the PortList of Ports regsitered
-     * by registerPort().
+     * This operation returns the reference of Port object specified
+     * by port_name.
+     * The port specified by port_name must be already registered in 
+     * registerPort().
      *
      * @param port_name The name of Port to be returned the reference.
      *
-     * @return Port_ptr Port's object reference.
+     * @return Port_ptr Port object reference.
      *
      * @endif
      */
@@ -178,14 +177,16 @@ namespace RTC
      *
      * @else
      *
-     * @brief Getpointer to the Port's servant
+     * @brief Get pointer to the Port's servant
      *
-     * This operation returns the pointer to the PortBase servant regsitered
+     * This operation returns the pointer to the PortBase servant registered
      * by registerPort().
+     * The port specified by port_name must be already registered in 
+     * registerPort().
      *
      * @param port_name The name of Port to be returned the servant pointer.
      *
-     * @return PortBase* Port's servant's pointer.
+     * @return PortBase* The pointer to Port's servant.
      *
      * @endif
      */
@@ -204,7 +205,7 @@ namespace RTC
      *
      * @else
      *
-     * @brief Regsiter Port
+     * @brief Regsiter the Port
      *
      * This operation registers the Port's servant given by argument.
      * The given Port's servant will be activated on the POA that is given
@@ -230,9 +231,9 @@ namespace RTC
      *
      * @else
      *
-     * @brief Delete the Port's registration
+     * @brief Unregister the Port registration
      *
-     * This operation unregisters the Port's registration.
+     * This operation unregisters the Port registration.
      * When the Port is unregistered, Port is deactivated, and the object
      * reference in the Port's profile is set to nil.
      *
@@ -255,9 +256,9 @@ namespace RTC
      *
      * @else
      *
-     * @brief Delete the Port' registration
+     * @brief Unregister the Port's registration by its name
      *
-     * This operation delete the Port's registration specified by port_ name.
+     * This operation unregister the Port's registration specified by port_ name.
      * When the Port is unregistered, Port is deactivated, and the object
      * reference in the Port's profile is set to nil.
      *
@@ -277,7 +278,7 @@ namespace RTC
      *
      * @else
      *
-     * @brief Unregister the Port
+     * @brief Deactivate all Ports and unregister them
      *
      * This operation deactivates the all Port and deletes the all Port's
      * registrations from the list.

@@ -17,24 +17,6 @@
  *
  */
 
-/*
- * $Log: not supported by cvs2svn $
- * Revision 1.3.2.1  2007/07/20 16:10:01  n-ando
- * Some improvement of logic.
- *
- * Revision 1.3  2007/04/13 15:57:07  n-ando
- * toArgv() was added to create command line arguments.
- * Some bug fixes.
- *
- * Revision 1.2  2006/11/27 10:00:11  n-ando
- * otos() function that converts object to string was added.
- * flatten() function that flattens string vector was added.
- *
- * Revision 1.1  2006/10/24 06:24:39  n-ando
- * Now StringUtil was devided into definition and implementation.
- *
- */
-
 #include <algorithm>
 #include <iostream>
 #include <rtm/StringUtil.h>
@@ -43,7 +25,7 @@
  * @if jp
  * @brief 文字列がエスケープされているか判断する
  * @else
- * @brief Whether the character is escaped or not
+ * @brief Check whether the character is escaped or not
  * @endif
  */
 bool isEscaped(const std::string& str, std::string::size_type pos)
@@ -57,9 +39,9 @@ bool isEscaped(const std::string& str, std::string::size_type pos)
 
 /*!
  * @if jp
- * @brief 文字列をエスケープするためのFanctor
+ * @brief 文字列をエスケープするためのFunctor
  * @else
- * @brief A fanctor to escape string
+ * @brief Functor to escape string
  * @endif
  */
 struct escape_functor
@@ -71,6 +53,7 @@ struct escape_functor
     else if (c == '\n')  str += "\\n";
     else if (c == '\f')  str += "\\f";
     else if (c == '\r')  str += "\\r";
+    else if (c == '\\')  str += "\\\\";
     //    else if (c == '\"')  str += "\\\"";
     //    else if (c == '\'')  str += "\\\'";
     else str.push_back(c);
@@ -92,9 +75,9 @@ std::string escape(const std::string str)
 
 /*!
  * @if jp
- * @brief 文字列をアンエスケープためのFanctor
+ * @brief 文字列をアンエスケープためのFunctor
  * @else
- * @brief The functor to unescape string
+ * @brief Functor to unescape string
  * @endif
  */
 struct unescape_functor
@@ -250,9 +233,9 @@ std::vector<std::string> split(const std::string& input,
 
 /*!
  * @if jp
- * @brief 大文字に変換する Fanctor
+ * @brief 大文字に変換する Functor
  * @else
- * @brief A functor to convert to capital letter
+ * @brief Functor to convert to capital letters
  * @endif
  */
 struct Toupper
@@ -267,7 +250,7 @@ struct Toupper
  * @if jp
  * @brief 与えられた文字列をbool値に変換する
  * @else
- * @brief Convert given string to bool value
+ * @brief Convert given string into bool value
  * @endif
  */
 bool toBool(std::string str, std::string yes, std::string no, 
@@ -279,7 +262,7 @@ bool toBool(std::string str, std::string yes, std::string no,
   
   if (str.find(yes) != std::string::npos)
     return true;
-  else if (!str.find(no) != std::string::npos)
+  else if (str.find(no) != std::string::npos)
     return false;
   else
     return default_value;
@@ -327,9 +310,9 @@ bool isURL(const std::string& str)
 
 /*!
  * @if jp
- * @brief リスト内の文字列を検索する Fanctor
+ * @brief リスト内の文字列を検索する Functor
  * @else
- *
+ * @brief Functor to find string in a list
  * @endif
  */
 struct unique_strvec
@@ -346,7 +329,7 @@ struct unique_strvec
  * @if jp
  * @brief 与えられた文字列リストから重複を削除
  * @else
- *
+ * @brief Eliminate duplication from the given string list
  * @endif
  */
 std::vector<std::string> unique_sv(std::vector<std::string> sv)
@@ -358,7 +341,7 @@ std::vector<std::string> unique_sv(std::vector<std::string> sv)
  * @if jp
  * @brief 与えられた文字列リストからCSVを生成
  * @else
- *
+ * @brief Create CSV file from the given string list
  * @endif
  */
 std::string flatten(std::vector<std::string> sv)
@@ -377,7 +360,7 @@ std::string flatten(std::vector<std::string> sv)
  * @if jp
  * @brief 与えられた文字列リストを引数リストに変換
  * @else
- *
+ * @brief Convert the given string list into the argument list
  * @endif
  */
 char** toArgv(const std::vector<std::string>& args)

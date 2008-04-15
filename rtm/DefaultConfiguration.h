@@ -17,26 +17,6 @@
  *
  */
 
-/*
- * $Log: not supported by cvs2svn $
- * Revision 1.5  2007/04/27 06:13:27  n-ando
- * Configuration: naming_format to naming.format, name_svc to naming.
- *
- * Revision 1.4  2007/04/13 18:16:47  n-ando
- * New default configuration values are added.
- *
- * Revision 1.3  2006/12/02 18:37:06  n-ando
- * Default configuration parameters were changed.
- *
- * Revision 1.2  2006/10/23 08:40:02  n-ando
- * The last entry "" that inidicate the end of entry did not exist. Fixed it.
- *
- * Revision 1.1  2006/10/17 19:30:45  n-ando
- * The first comitment.
- *
- *
- */
-
 #include "rtm/version.h"
 
 /*!
@@ -48,6 +28,12 @@
  * @since 0.4.0
  *
  * @else
+ * @brief Default configuration for Manager
+ *
+ * Default configuration for Manager class
+ *
+ * @since 0.4.0
+ *
  * @endif
  */
 static const char* default_config[] =

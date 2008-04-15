@@ -17,9 +17,6 @@
  *
  */
 
-/*
- * $Log: not supported by cvs2svn $
- */
 #ifndef RTCUtil_h
 #define RTCUtil_h
 
@@ -40,10 +37,20 @@
  * - isMultiModeObject
  *
  * @else
+ * @namespace RTC
+ *
+ * @brief Utility functions for RT-Component
+ *
+ * This provides the following utility functions to RT-Component.
+ * 
+ * - isDataFlowParticipant
+ * - isFsmParticipant
+ * - isFsmObject
+ * - isMultiModeObject
  *
  * @endif
  */
-namespace RTC
+namespace RTC_Utils
 {
   /*!
    * @if jp
@@ -51,7 +58,7 @@ namespace RTC
    * @brief DataFlowComponent であるか判定する
    *
    * 指定されたRTコンポーネントが DataFlowComponent であるか判定する。
-   * DataFlowComponent、 ExecutionContext の Semantics が
+   * DataFlowComponentは、 ExecutionContext の Semantics が
    * Periodic Sampled Data Processing の場合に利用されるRTコンポーネントの型
    * である。
    *
@@ -63,9 +70,21 @@ namespace RTC
    *
    * @else
    *
+   * @brief Confirm whether specified RT-Component is DataFlowComponent
+   *
+   * Confirm whether specified RT-Component is DataFlowComponent.
+   * DataFlowComponent is a type of the RT-Component which is used 
+   * when Semantics of ExecutionContext is Periodic Sampled Data Processing.
+   *
+   * @param obj The target CORBA object for the investigation
+   *
+   * @return Investigation result of DataFlowComponent
+   *
+   * @since 0.4.0
+   *
    * @endif
    */
-  bool isDataFlowParticipant(CORBA::Object_ptr obj);
+  bool isDataFlowComponent(CORBA::Object_ptr obj);
   
   /*!
    * @if jp
@@ -84,6 +103,19 @@ namespace RTC
    * @since 0.4.0
    *
    * @else
+   *
+   * @brief Confirm whether specified RT-Component is FsmParticipant
+   *
+   * Confirm whether specified RT-Component is FsmParticipant.
+   * FsmParticipant is a type of the RT-Component which is used when Semantics
+   * of ExecutionContext is Stimulus Response Processing. It is used to define 
+   * the actions in the state.
+   *
+   * @param obj The target CORBA object for the investigation
+   *
+   * @return Investigation result of FsmParticipant
+   *
+   * @since 0.4.0
    *
    * @endif
    */
@@ -106,6 +138,19 @@ namespace RTC
    *
    * @else
    *
+   * @brief Confirm whether specified RT-Component is Fsm
+   *
+   * Confirm whether specified RT-Component is Fsm.
+   * Fsm is a type of the RT-Component that is used when Semantics of 
+   * ExecutionContext is Stimulus Response Processing. It is uset to define the 
+   * state transition.
+   *
+   * @param obj The target CORBA object for the investigation
+   *
+   * @return Investigation result of Fsm
+   *
+   * @since 0.4.0
+   *
    * @endif
    */
   bool isFsmObject(CORBA::Object_ptr obj);
@@ -116,8 +161,8 @@ namespace RTC
    * @brief multiModeComponent であるか判定する
    *
    * 指定されたRTコンポーネントが multiModeComponent であるか判定する。
-   * Fsm は、 ExecutionContext の Semantics が Modes of Operatin の場合に、
-   * Mode を定義するために利用されるRTコンポーネントの型である。
+   * multiModeComponent は、 ExecutionContext の Semantics が Modes of Operation 
+   * の場合に、 Mode を定義するために利用されるRTコンポーネントの型である。
    *
    * @param obj 判定対象の CORBA オブジェクト
    *
@@ -127,8 +172,21 @@ namespace RTC
    *
    * @else
    *
+   * @brief Confirm whether specified RT-Component is multiModeComponent
+   *
+   * Confirm whether specified RT-Component is multiModeComponent.
+   * multiModeComponent is a type of the RT-Component which is used when
+   * Semantics of ExecutionContext is Modes of Operation. It is used to define
+   * Mode.
+   *
+   * @param obj The target CORBA object for the investigation
+   *
+   * @return Investigation result of multiModeComponent
+   *
+   * @since 0.4.0
+   *
    * @endif
    */
   bool isMultiModeObject(CORBA::Object_ptr obj);
-}; // namespace RTC
+}; // namespace RTC_Utils
 #endif // RTCUtil_h

@@ -17,16 +17,6 @@
  *
  */
 
-/*
- * $Log: not supported by cvs2svn $
- * Revision 1.1.2.2  2007/12/31 03:08:03  n-ando
- * Class reference by doxygen comment was revised.
- *
- * Revision 1.1.2.1  2007/10/06 12:28:53  n-ando
- * InPort consumer for TCP socket data port.
- *
- */
-
 #ifndef InPortTcpSockConsumer_h
 #define InPortTcpSockConsumer_h
 
@@ -57,7 +47,16 @@ namespace RTC
    *
    * @else
    * @class InPortTcpSockConsumer
+   *
    * @brief InPortTcpSockConsumer class
+   *
+   * This is an implementation class of OutPort Consumer 
+   * that uses TCP socket for means of communication.
+   *
+   * @param DataType Data type held by the buffer that attached to this provider
+   *
+   * @since 0.4.1
+   *
    * @endif
    */
   template <class DataType>
@@ -76,6 +75,12 @@ namespace RTC
      *
      * @else
      * @brief Constructor
+     *
+     * Constructor
+     *
+     * @param buffer Buffer objects that are attached to this Consumer
+     * @param prop Properties for TCP communication setup
+     *
      * @endif
      */
     InPortTcpSockConsumer(BufferBase<DataType>& buffer, Properties& prop)
@@ -94,6 +99,11 @@ namespace RTC
      * @param consumer コピー元 InPortTcpSockConsumer オブジェクト
      *
      * @else
+     * @brief Copy constructor
+     *
+     * Copy constructor
+     *
+     * @param consumer InPortTcpSockConsumer object of copy source
      *
      * @endif
      */
@@ -115,6 +125,13 @@ namespace RTC
      * @return 代入結果
      *
      * @else
+     * @brief Assignment operator
+     *
+     * Assignment operator
+     *
+     * @param consumer InPortTcpSockConsumer object of assignment source
+     *
+     * @return The assignment result
      *
      * @endif
      */
@@ -136,6 +153,9 @@ namespace RTC
      *
      * @else
      * @brief Destructor
+     *
+     * Destructor
+     *
      * @endif
      */
     virtual ~InPortTcpSockConsumer()
@@ -148,6 +168,9 @@ namespace RTC
      * バッファからデータを取り出して送出する。
      *
      * @else
+     * @brief Read data from the buffer
+     *
+     * Read data from the buffer and send it.
      *
      * @endif
      */
@@ -192,6 +215,11 @@ namespace RTC
      * @return コピーされたInPortTcpSockConsumerオブジェクト
      *
      * @else
+     * @brief Create clone
+     *
+     * Create clone objects of this InPortTcpSockConsumer.
+     *
+     * @return Clone InPortTcpSockConsumer objects
      *
      * @endif
      */
@@ -211,6 +239,14 @@ namespace RTC
      * @return 登録処理結果(登録成功:true、登録失敗:false)
      *
      * @else
+     * @brief Subscribe to the data send notification
+     *
+     * Subscribe the data send notification according to the specified property
+     * information.
+     *
+     * @param properties Information for subscription
+     *
+     * @return Subscription result (Successful:true, Failed:false)
      *
      * @endif
      */
@@ -268,6 +304,9 @@ namespace RTC
      * データ送出通知の受け取りから登録を解除し、TCP ストリームを閉じる。
      *
      * @else
+     * @brief Unsubscribe the data send notification
+     *
+     * Unsubscribe the data send notification and close the TCP stream.
      *
      * @endif
      */

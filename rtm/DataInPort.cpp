@@ -17,36 +17,6 @@
  *
  */
 
-/*
- * $Log: not supported by cvs2svn $
- * Revision 1.6.2.1  2007/07/20 15:52:52  n-ando
- * A bug fix.
- *
- * Revision 1.6  2007/04/13 15:44:39  n-ando
- * RTC::OK was changed to RTC::RTC_OK.
- *
- * Revision 1.5  2007/02/04 16:51:55  n-ando
- * Debugging message is output to stderr instead of stdout.
- *
- * Revision 1.4  2007/01/21 09:43:15  n-ando
- * - A bug about memory access violation to m_providers still exists.
- *   This bug arises on Fedora5/gcc4 environment.
- *   To escape the bug temporarily dummy variable (m_dummy) is defined.
- * - Some functors were moved to cpp file.
- *
- * Revision 1.3  2007/01/06 17:43:32  n-ando
- * The behavior on notify_connect() and notify_disconnect() are now
- * implemented in protected functions(ex. publisherInterfaces()).
- *
- * Revision 1.2  2006/12/02 18:25:30  n-ando
- * A trivial fix.
- *
- * Revision 1.1  2006/11/27 09:44:35  n-ando
- * The first commitment.
- *
- *
- */
-
 #include <rtm/DataInPort.h>
 #include <rtm/CORBA_SeqUtil.h>
 #include <rtm/NVUtil.h>
@@ -59,7 +29,7 @@ namespace RTC
    * @if jp
    * @brief Interface公開用Functor
    * @else
-   *
+   * @brief Functor to publish the interface
    * @endif
    */
   struct DataInPort::publish
@@ -76,7 +46,7 @@ namespace RTC
    * @if jp
    * @brief Interface接続用Functor
    * @else
-   *
+   * @brief Functor to subscribe the interface
    * @endif
    */
   struct DataInPort::subscribe
@@ -93,7 +63,7 @@ namespace RTC
    * @if jp
    * @brief Interface接続解除用Functor
    * @else
-   *
+   * @brief Functor to unsubscribe the interface
    * @endif
    */
   struct DataInPort::unsubscribe
@@ -125,7 +95,7 @@ namespace RTC
    * @if jp
    * @brief Interface情報を公開する
    * @else
-   *
+   * @brief Publish interface information
    * @endif
    */
   ReturnCode_t
@@ -147,7 +117,7 @@ namespace RTC
    * @if jp
    * @brief Interfaceに接続する
    * @else
-   *
+   * @brief Subscribe to the interface
    * @endif
    */
   ReturnCode_t
@@ -160,9 +130,9 @@ namespace RTC
   
   /*!
    * @if jp
-   * @brief Interfaceの接続を解除する
+   * @brief Interfaceへの接続を解除する
    * @else
-   *
+   * @brief Disconnect the interface connection
    * @endif
    */
   void

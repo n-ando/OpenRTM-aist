@@ -17,39 +17,6 @@
  *
  */
 
-/*
- * $Log: not supported by cvs2svn $
- * Revision 1.4.2.4  2007/12/31 03:08:05  n-ando
- * Class reference by doxygen comment was revised.
- *
- * Revision 1.4.2.3  2007/09/20 11:22:08  n-ando
- * Some fixes.
- * - Template parameter "Result" is deleted.
- *   Now listener return type is void instead of the Result.
- *
- * Revision 1.4.2.2  2007/09/19 07:44:35  n-ando
- * The usleep() in the execution loop will be skipped, if wait-time is 0.
- *
- * Revision 1.4.2.1  2007/07/20 15:59:18  n-ando
- * ACE header include was added.
- *
- * Revision 1.4  2007/04/26 15:30:46  n-ando
- * The header include order was modified to define _REENTRANT before
- * including ace/config-lite.h in Linux systems.
- * In ace 5.4.7 or later, _REENTRANT flag should be defined explicitly.
- *
- * Revision 1.3  2007/04/13 15:52:34  n-ando
- * RTC::OK was changed to RTC::RTC_OK.
- * Initialization function was added to make it an external module.
- *
- * Revision 1.2  2007/01/21 10:27:00  n-ando
- * Object reference count related bugs were fixed.
- *
- * Revision 1.1  2007/01/09 15:29:35  n-ando
- * PeriodicExecutionContext class
- *
- */
-
 #ifndef PeriodicExecutionContext_h
 #define PeriodicExecutionContext_h
 
@@ -80,6 +47,12 @@ namespace RTC
    * @else
    * @class PeriodicExecutionContext
    * @brief PeriodicExecutionContext class
+   *
+   * Periodic Sampled Data Processing (for the execution cycles)
+   * ExecutionContext class
+   *
+   * @since 0.4.0
+   *
    * @endif
    */
   class PeriodicExecutionContext
@@ -93,11 +66,17 @@ namespace RTC
      *
      * デフォルトコンストラクタ
      * プロファイルに以下の項目を設定する。
-     * 　kind : PERIODIC
-     * 　rate : 0.0
+     *  - kind : PERIODIC
+     *  - rate : 0.0
      *
      * @else
-     * @brief Constructor
+     * @brief Default Constructor
+     *
+     * Default Constructor
+     * Set the following items to profile.
+     *  - kind : PERIODIC
+     *  - rate : 0.0
+     *
      * @endif
      */
     PeriodicExecutionContext();
@@ -114,6 +93,13 @@ namespace RTC
      *
      * @else
      * @brief Constructor
+     *
+     * Constructor
+     * Set the configuration value to profile.
+     *
+     * @param owner The owner of this Executioncontext
+     * @param rate Execution cycle(Hz)(The default value:1000)
+     *
      * @endif
      */
     PeriodicExecutionContext(DataFlowComponent_ptr owner,
@@ -127,6 +113,9 @@ namespace RTC
      *
      * @else
      * @brief Destructor
+     *
+     * Destructor
+     *
      * @endif
      */
     virtual ~PeriodicExecutionContext();
@@ -141,6 +130,12 @@ namespace RTC
      * @return CORBA オブジェクト参照
      *
      * @else
+     * @brief Get the reference to the CORBA object
+     *
+     * Get the reference to the CORBA object as ExecutioncontextService
+     * of this object.
+     *
+     * @return The reference to CORBA object
      *
      * @endif
      */
@@ -159,11 +154,14 @@ namespace RTC
      *
      * @else
      *
-     * @brief Create internal activity thread
+     * @brief Generate internal activity thread for ExecutionContext
      *
-     * Create internal activity thread. This is ACE_Task class method over ride.
+     * Generate internal activity thread and run. 
+     * This is ACE_Task class method's override.
      *
-     * @param args usually give 0
+     * @param args Usually give 0
+     *
+     * @return The generation result
      *
      * @endif
      */     
@@ -179,9 +177,12 @@ namespace RTC
      * @return 実行結果
      *
      * @else
+     * @brief Thread execution function for ExecutionContext
      *
-     * Run by a daemon thread to handle deferred processing.
-     * ACE_Task class method override.
+     * Thread execution function for ExecutionContext.
+     * Invoke the registered components operation.
+     *
+     * @return The execution result
      *
      * @endif
      */     
@@ -189,7 +190,7 @@ namespace RTC
     
     /*!
      * @if jp
-     * @brief ExecutionContext 用のスレッド終了関数
+     * @brief ExecutionContext 用のスレッド実行関数
      *
      * ExecutionContext 用のスレッド終了時に呼ばれる。
      * コンポーネントオブジェクトの非アクティブ化、マネージャへの通知を行う。
@@ -201,11 +202,15 @@ namespace RTC
      *
      * @else
      *
-     * @brief Close activity thread
+     * @brief Thread execution function for ExecutionContext
      *
-     * close() method is called when activity thread svc() is returned.
-     * This method deactivate this object and notify it to manager.
-     * ACE_Task class method override.
+     * This function is invoked when activity thread for ExecutionContext exits.
+     * Deactivate the component object and notify it to manager.
+     * This is ACE_Task class method's override.
+     *
+     * @param flags Flag of the close
+     *
+     * @return The close result
      *
      * @endif
      */     
@@ -220,7 +225,7 @@ namespace RTC
      *
      * この操作は ExecutionContext が Runnning 状態の場合に true を返す。
      * Executioncontext が Running の間、当該 Executioncontext に参加している
-     * 全てのアクティブRTコンポーネントが、 ExecutionContext の実行種類に応じて
+     * 全てのアクティブRTコンポーネントが、ExecutionContext の実行種類に応じて
      * 実行される。
      *
      * @return 状態確認関数(動作中:true、停止中:false)
@@ -234,6 +239,8 @@ namespace RTC
      * in the context shall be executed according to the context’s execution
      * kind.
      *
+     * @return Check state function (Running:true、Stopping:false)
+     *
      * @endif
      */
     virtual CORBA::Boolean is_running()
@@ -243,24 +250,27 @@ namespace RTC
      * @if jp
      * @brief ExecutionContext の実行を開始
      *
-     * ExecutionContext の実行状態を Runnning とするためのリクエストを発行する。			 * ExecutionContext の状態が遷移すると ComponentAction::on_startup が
+     * ExecutionContext の実行状態を Runnning とするためのリクエストを発行する。
+     * ExecutionContext の状態が遷移すると ComponentAction::on_startup が
      * 呼び出される。
      * 参加しているRTコンポーネントが、初期化されるまで ExecutionContext を開始
      * することはできない。
      * ExecutionContext は複数回開始/停止を繰り返すことができる。
      *
-     * @return 処理実行結果
+     * @return ReturnCode_t 型のリターンコード
      *
      * @else
      *
-     * @brief Start ExecutionContext
+     * @brief Start the ExecutionContext
      *
      * Request that the context enter the Running state. 
      * Once the state transition occurs, the ComponentAction::on_startup 
      * operation will be invoked.
-     * An execution context may not be started until the RT components that
+     * An execution context may not be started until the RT-Components that
      * participate in it have been initialized.
      * An execution context may be started and stopped multiple times.
+     *
+     * @return The return code of ReturnCode_t type
      *
      * @endif
      */
@@ -272,16 +282,16 @@ namespace RTC
      * @brief ExecutionContext の実行を停止
      *
      * ExecutionContext の状態を Stopped とするためのリクエストを発行する。
-     * 遷移が発生した場合は、 ComponentAction::on_shutdown が呼び出される。
+     * 遷移が発生した場合は、ComponentAction::on_shutdown が呼び出される。
      * 参加しているRTコンポーネントが終了する前に ExecutionContext を停止する
      * 必要がある。
      * ExecutionContext は複数回開始/停止を繰り返すことができる。
      *
-     * @return 処理実行結果
+     * @return ReturnCode_t 型のリターンコード
      *
      * @else
      *
-     * @brief Stop ExecutionContext
+     * @brief Stop the ExecutionContext
      *
      * Request that the context enter the Stopped state. 
      * Once the transition occurs, the ComponentAction::on_shutdown operation
@@ -290,6 +300,8 @@ namespace RTC
      * participate in it are finalized.
      * An execution context may be started and stopped multiple times.
      *
+     * @return The return code of ReturnCode_t type
+     *
      * @endif
      */
     virtual ReturnCode_t stop()
@@ -297,7 +309,7 @@ namespace RTC
     
     /*!
      * @if jp
-     * @brief ExecutionContext の実行周期を取得
+     * @brief ExecutionContext の実行周期(Hz)を取得する
      *
      * Active 状態にてRTコンポーネントが実行される周期(単位:Hz)を取得する。
      *
@@ -305,10 +317,12 @@ namespace RTC
      *
      * @else
      *
-     * @brief Get ExecutionRate
+     * @brief Get execution rate(Hz) of ExecutionContext
      *
      * This operation shall return the rate (in hertz) at which its Active
      * participating RTCs are being invoked.
+     *
+     * @return Execution cycle(Unit:Hz)
      *
      * @endif
      */
@@ -317,19 +331,19 @@ namespace RTC
     
     /*!
      * @if jp
-     * @brief ExecutionContext の実行周期を設定
+     * @brief ExecutionContext の実行周期(Hz)を設定する
      *
      * Active 状態にてRTコンポーネントが実行される周期(単位:Hz)を設定する。
-     * 実行周期の変更は、 DataFlowComponentAction の on_rate_changed によって
+     * 実行周期の変更は、DataFlowComponentAction の on_rate_changed によって
      * 各RTコンポーネントに伝達される。
      *
      * @param rate 処理周期(単位:Hz)
      *
-     * @return 処理実行結果
+     * @return ReturnCode_t 型のリターンコード
      *
      * @else
      *
-     * @brief Set ExecutionRate
+     * @brief Set execution rate(Hz) of ExecutionContext
      *
      * This operation shall set the rate (in hertz) at which this context’s 
      * Active participating RTCs are being called.
@@ -337,6 +351,10 @@ namespace RTC
      * result in the invocation of on_rate_changed on any RTCs realizing
      * DataFlowComponentAction that are registered with any RTCs participating
      * in the context.
+     *
+     * @param rate Execution cycle(Unit:Hz)
+     *
+     * @return The return code of ReturnCode_t type
      *
      * @endif
      */
@@ -349,18 +367,19 @@ namespace RTC
      *
      * Inactive 状態にあるRTコンポーネントをActive に遷移させ、
      * アクティブ化する。
-     * この操作が呼ばれた結果、 on_activate が呼び出される。
-     * 指定したRTコンポーネントが参加者リストに含まれない場合は、BAD_PARAMETERが			 * 返される。
+     * この操作が呼ばれた結果、on_activate が呼び出される。
+     * 指定したRTコンポーネントが参加者リストに含まれない場合は、BAD_PARAMETER 
+     * が返される。
      * 指定したRTコンポーネントの状態が Inactive 以外の場合は、
-     * PRECONDITION_NOT_METが返される。
+     *  PRECONDITION_NOT_MET が返される。
      *
      * @param comp アクティブ化対象RTコンポーネント
      *
-     * @return 処理実行結果
+     * @return ReturnCode_t 型のリターンコード
      *
      * @else
      *
-     * @brief Activate a RT-component
+     * @brief Activate an RT-component
      *
      * The given participant RTC is Inactive and is therefore not being invoked
      * according to the execution context’s execution kind. This operation
@@ -369,6 +388,10 @@ namespace RTC
      * The callback on_activate shall be called as a result of calling this
      * operation. This operation shall not return until the callback has
      * returned, and shall result in an error if the callback does.
+     *
+     * @param comp The target RT-Component for activation
+     *
+     * @return The return code of ReturnCode_t type
      *
      * @endif
      */
@@ -381,18 +404,19 @@ namespace RTC
      *
      * Inactive 状態にあるRTコンポーネントを非アクティブ化し、
      * Inactive に遷移させる。
-     * この操作が呼ばれた結果、 on_deactivate が呼び出される。
-     * 指定したRTコンポーネントが参加者リストに含まれない場合は、BAD_PARAMETERが			 * 返される。
+     * この操作が呼ばれた結果、on_deactivate が呼び出される。
+     * 指定したRTコンポーネントが参加者リストに含まれない場合は、BAD_PARAMETER 
+     * が返される。
      * 指定したRTコンポーネントの状態が Active 以外の場合は、
-     * PRECONDITION_NOT_METが返される。
+     * PRECONDITION_NOT_MET が返される。
      *
      * @param comp 非アクティブ化対象RTコンポーネント
      *
-     * @return 処理実行結果
+     * @return ReturnCode_t 型のリターンコード
      *
      * @else
      *
-     * @brief Deactivate a RT-component
+     * @brief Deactivate an RT-component
      *
      * The given RTC is Active in the execution context. Cause it to transition 
      * to the Inactive state such that it will not be subsequently invoked from
@@ -400,6 +424,10 @@ namespace RTC
      * The callback on_deactivate shall be called as a result of calling this
      * operation. This operation shall not return until the callback has 
      * returned, and shall result in an error if the callback does.
+     *
+     * @param comp The target RT-Component for deactivate
+     *
+     * @return The return code of ReturnCode_t type
      *
      * @endif
      */
@@ -411,19 +439,19 @@ namespace RTC
      * @brief RTコンポーネントをリセットする
      *
      * Error 状態のRTコンポーネントの復帰を試みる。
-     * この操作が呼ばれた結果、 on_reset が呼び出される。
-     * 指定したRTコンポーネントが参加者リストに含まれない場合は、BAD_PARAMETERが
-     * 返される。
+     * この操作が呼ばれた結果、on_reset が呼び出される。
+     * 指定したRTコンポーネントが参加者リストに含まれない場合は、BAD_PARAMETER
+     * が返される。
      * 指定したRTコンポーネントの状態が Error 以外の場合は、PRECONDITION_NOT_MET
      * が返される。
      *
      * @param comp リセット対象RTコンポーネント
      *
-     * @return 処理実行結果
+     * @return ReturnCode_t 型のリターンコード
      *
      * @else
      *
-     * @brief Reset a RT-component
+     * @brief Reset the RT-component
      *
      * Attempt to recover the RTC when it is in Error.
      * The ComponentAction::on_reset callback shall be invoked. This operation
@@ -431,6 +459,10 @@ namespace RTC
      * error if the callback does. If possible, the RTC developer should
      * implement that callback such that the RTC may be returned to a valid
      * state.
+     *
+     * @param comp The target RT-Component for reset
+     *
+     * @return The return code of ReturnCode_t type
      *
      * @endif
      */
@@ -442,8 +474,8 @@ namespace RTC
      * @brief RTコンポーネントの状態を取得する
      *
      * 指定したRTコンポーネントの状態(LifeCycleState)を取得する。
-     * 指定したRTコンポーネントが参加者リストに含まれない場合は、UNKNOWN_STATEが
-     * 返される。
+     * 指定したRTコンポーネントが参加者リストに含まれない場合は、UNKNOWN_STATE 
+     * が返される。
      *
      * @param comp 状態取得対象RTコンポーネント
      *
@@ -455,6 +487,12 @@ namespace RTC
      *
      * This operation shall report the LifeCycleState of the given participant
      * RTC.
+     * UNKNOWN_STATE will be returned, if the given RT-Component is not inclued
+     * in the participant list.
+     *
+     * @param comp The target RT-Component to get the state
+     *
+     * @return The current state of the target RT-Component(LifeCycleState)
      *
      * @endif
      */
@@ -475,6 +513,8 @@ namespace RTC
      *
      * This operation shall report the execution kind of the execution context.
      *
+     * @return ExecutionKind
+     *
      * @endif
      */
     virtual ExecutionKind get_kind()
@@ -488,21 +528,27 @@ namespace RTC
      * 追加されたRTコンポーネントは attach_context が呼ばれ、Inactive 状態に遷移
      * する。
      * 指定されたRTコンポーネントがnullの場合は、BAD_PARAMETER が返される。
-     * 指定されたRTコンポーネントがDataFlowComponent以外の場合は、
+     * 指定されたRTコンポーネントが DataFlowComponent 以外の場合は、
      * BAD_PARAMETER が返される。
      *
      * @param comp 追加対象RTコンポーネント
      *
-     * @return 処理実行結果
+     * @return ReturnCode_t 型のリターンコード
      *
      * @else
      *
-     * @brief Add a RT-component
+     * @brief Add an RT-component
      *
      * The operation causes the given RTC to begin participating in the
      * execution context.
      * The newly added RTC will receive a call to 
      * LightweightRTComponent::attach_context and then enter the Inactive state.
+     * BAD_PARAMETER will be invoked, if the given RT-Component is null or
+     * if the given RT-Component is other than DataFlowComponent.
+     *
+     * @param comp The target RT-Component for add
+     *
+     * @return The return code of ReturnCode_t type
      *
      * @endif
      */
@@ -520,16 +566,22 @@ namespace RTC
      *
      * @param comp 削除対象RTコンポーネント
      *
-     * @return 処理実行結果
+     * @return ReturnCode_t 型のリターンコード
      *
      * @else
      *
-     * @brief Remove the RT-component from participant list
+     * @brief Remove the RT-Component from participant list
      *
      * This operation causes a participant RTC to stop participating in the
      * execution context.
      * The removed RTC will receive a call to
      * LightweightRTComponent::detach_context.
+     * BAD_PARAMETER will be returned, if the given RT-Component is not 
+     * participating in the participant list.
+     *
+     * @param comp The target RT-Component for delete
+     *
+     * @return The return code of ReturnCode_t type
      *
      * @endif
      */
@@ -551,6 +603,8 @@ namespace RTC
      * This operation provides a profile “descriptor” for the execution 
      * context.
      *
+     * @return ExecutionContextProfile
+     *
      * @endif
      */
     virtual ExecutionContextProfile* get_profile()
@@ -569,7 +623,7 @@ namespace RTC
 	ERROR_STATE,
 	};
     */
-    typedef StateHolder<ExecContextState> ECStates;
+    typedef RTC_Utils::StateHolder<ExecContextState> ECStates;
     
     /*!
      * @if jp
@@ -581,6 +635,13 @@ namespace RTC
      * @since 0.4.0
      *
      * @else
+     * @class DFPBase
+     * @brief DFPBase class
+     *
+     * The abstract class to manage DataFlowParticipant registered in 
+     * tha participant list.
+     *
+     * @since 0.4.0
      *
      * @endif
      */
@@ -598,6 +659,11 @@ namespace RTC
        *
        * @else
        * @brief Constructor
+       *
+       * Constructor
+       *
+       * @param id ID of participating ExecutionContext
+       *
        * @endif
        */
       DFPBase(UniqueId id)
@@ -628,6 +694,9 @@ namespace RTC
        *
        * @else
        * @brief Destructor
+       *
+       * Destructor
+       *
        * @endif
        */
       virtual ~DFPBase(){}
@@ -641,10 +710,10 @@ namespace RTC
        *
        * @else
        *
-       * @brief
+       * @brief Pure virtual function to be invoked when ExecutionContext starts
        *
-       * The given execution context, in which the RTC is participating, has 
-       * transitioned from Stopped to Running.
+       * Pure virtual function to be invoked when given execution context, in
+       * which the RTC is participating, has transited from Stopped to Running.
        *
        * @endif
        */
@@ -659,10 +728,10 @@ namespace RTC
        *
        * @else
        *
-       * @brief
+       * @brief Pure virtual function to be invoked when ExecutionContext stops
        *
-       * The given execution context, in which the RTC is participating, has 
-       * transitioned from Running to Stopped.
+       * Pure virtual function to be invoked when given execution context, in
+       * which the RTC is participating, has transited from Running to Stopped.
        *
        * @endif
        */
@@ -679,9 +748,13 @@ namespace RTC
        *
        * @else
        *
-       * @brief
+       * @brief Pure virtual function to be invoked when RT-Component is 
+       *        activated
        *
-       * The RTC has been activated in the given execution context.
+       * Pure virtual function to be invoked when the RTC has been activated
+       * in the given execution context.
+       *
+       * @param st The current state of the target RT-Component
        *
        * @endif
        */
@@ -698,9 +771,13 @@ namespace RTC
        *
        * @else
        *
-       * @brief
+       * @brief Pure virtual function to be invoked when RT-Component is 
+       *        deactivated
        *
-       * The RTC has been deactivated in the given execution context.
+       * Pure virtual function to be invoked when the RTC has been deactivated
+       * in the given execution context.
+       *
+       * @param st The current state of the target RT-Component
        *
        * @endif
        */
@@ -717,10 +794,13 @@ namespace RTC
        *
        * @else
        *
-       * @brief
+       * @brief Pure virtual function to be invoked when RT-Component occurs 
+       *        error
        *
-       * The RTC is transitioning from the Active state to the Error state 
-       * in some execution context.
+       * Pure virtual function to be invoked when the RTC is transiting from
+       * the Active state to the Error state in some execution context.
+       *
+       * @param st The current state of the target RT-Component
        *
        * @endif
        */
@@ -730,14 +810,15 @@ namespace RTC
        * @if jp
        * @brief RTコンポーネントがエラー状態の時に呼ばれる純粋仮想関数
        *
-       * 管理対象のRTコンポーネントがエラー状態にいる間、 on_execute と
+       * 管理対象のRTコンポーネントがエラー状態にいる間、on_execute と
        * on_state_update に替わって定期的に呼び出される純粋仮想関数。
        *
        * @param st 対象RTコンポーネントの現在の状態
        *
        * @else
        *
-       * @brief
+       * @brief Pure virtual function to be invoked while RT-Component
+       * is in the error state
        *
        * If the RTC is in the Error state relative to some execution context
        * when it would otherwise be invoked from that context.
@@ -745,6 +826,8 @@ namespace RTC
        * context instead of DataFlowComponentAction::on_execute and 
        * on_state_update.The RTC is transitioning from the Active state to 
        * the Error state in some execution context.
+       *
+       * @param st The current state of the target RT-Component
        *
        * @endif
        */
@@ -762,7 +845,7 @@ namespace RTC
        *
        * @else
        *
-       * @brief
+       * @brief Pure virtual function to be invoked when RT-Component resets.
        *
        * The RTC is in the Error state. An attempt is being made to recover it 
        * such that it can return to the Inactive state.
@@ -770,6 +853,8 @@ namespace RTC
        * the Inactive state, this method shall complete with ReturnCode_t::OK.
        * Any other result shall indicate that the RTC should remain in the 
        * Error state.
+       *
+       * @param st The current state of the target RT-Component
        *
        * @endif
        */
@@ -788,13 +873,16 @@ namespace RTC
        *
        * @else
        *
-       * @brief
+       * @brief Pure virtual function to be periodically invoked while 
+       *        RT-Component is running
        *
        * This operation will be invoked periodically at the rate of the given
        * execution context as long as the following conditions hold:
        *  - The RTC is Active.
        *  - The given execution context is Running.
        * This callback occurs during the first execution pass.
+       *
+       * @param st The current state of the target RT-Component
        *
        * @endif
        */
@@ -813,13 +901,16 @@ namespace RTC
        *
        * @else
        *
-       * @brief
+       * @brief Pure virtual function to be periodically invoked while 
+       *        RT-Component is running
        *
        * This operation will be invoked periodically at the rate of the given
        * execution context as long as the following conditions hold:
        *  - The RTC is Active.
        *  - The given execution context is Running.
        * This callback occurs during the second execution pass.
+       *
+       * @param st The current state of the target RT-Component
        *
        * @endif
        */
@@ -834,7 +925,8 @@ namespace RTC
        *
        * @else
        *
-       * @brief
+       * @brief Pure virtual function to be invoked when when the execution 
+       *        cycles of ExecutionContext is changed.
        *
        * This operation is a notification that the rate of the indicated
        * execution context has changed.
@@ -852,8 +944,12 @@ namespace RTC
        * @return ワーカー
        *
        * @else
+       * @brief Get the worker to execute the state transition
        *
-       * @brief
+       * Get the worker that executes the state transition of the target
+       * component to manage.
+       *
+       * @return The worker
        *
        * @endif
        */
@@ -868,8 +964,11 @@ namespace RTC
        * @return 現在状態
        *
        * @else
+       * @brief Get the current state of the target component
        *
-       * @brief
+       * Get the current state of the target component to manage
+       *
+       * @return The current state of the target RT-Component
        *
        * @endif
        */
@@ -879,7 +978,7 @@ namespace RTC
        * @if jp
        * @brief 参加している ExecutionContext の ID
        * @else
-       *
+       * @brief ID of participating ExecutionContext
        * @endif
        */
       UniqueId ec_id;
@@ -888,10 +987,10 @@ namespace RTC
        * @if jp
        * @brief 管理対象RTコンポーネントのステートマシン
        * @else
-       *
+       * @brief The state machine of the target RT-Component to manage
        * @endif
        */
-      StateMachine<ExecContextState, DFPBase> m_sm;
+      RTC_Utils::StateMachine<ExecContextState, DFPBase> m_sm;
     };
     
     //============================================================
@@ -910,6 +1009,15 @@ namespace RTC
      * @since 0.4.0
      *
      * @else
+     * @class DFP
+     * @brief DFP class
+     *
+     * Template class to invoke DataFlowParticipant registered
+     * in the participant list.
+     *
+     * @param Object Type of the target component to manage
+     *
+     * @since 0.4.0
      *
      * @endif
      */
@@ -928,7 +1036,13 @@ namespace RTC
        * @param id 所属する ExecutionContext のID
        *
        * @else
-       * @brief Constructor
+       * @brief Default constructor
+       *
+       * Default constructor
+       *
+       * @param obj The target component to manage
+       * @param id ID of participating ExecutionContext
+       *
        * @endif
        */
       DFP(Object obj, UniqueId id)
@@ -944,8 +1058,10 @@ namespace RTC
        * に、管理対象コンポーネントの on_startup を呼びだす。
        *
        * @else
+       * @brief Function to be invoked when ExecutionContext starts
        *
-       * @brief
+       * When the given ExecutionContext transits from Stopped to Running,
+       * on_startup of the participation component will be invoked.
        *
        * @endif
        */
@@ -962,6 +1078,10 @@ namespace RTC
        * に、管理対象コンポーネントの on_shutdown を呼びだす。
        *
        * @else
+       * @brief Function to be invoked when ExecutionContext stops
+       *
+       * When the given ExecutionContext transits from Running to Stopped,
+       * on_shutdown of the participation component will be invoked.
        *
        * @endif
        */
@@ -982,6 +1102,13 @@ namespace RTC
        * @param st 対象RTコンポーネントの現在の状態
        *
        * @else
+       * @brief Function to be invoked when RT-Component was activated
+       *
+       * When the given ExecutionContext transits to the Active state,
+       * on_activated of the participation component will be invoked.
+       * If it fails, the state machine transits to the Errot state.
+       *
+       * @param st The current state of the target RT-Component
        *
        * @endif
        */
@@ -1006,6 +1133,12 @@ namespace RTC
        * @param st 対象RTコンポーネントの現在の状態
        *
        * @else
+       * @brief Function to be invoked when RT-Component was deactivated
+       *
+       * When the given ExecutionContext transits the Deactivate state,
+       * on_deactivated of the participation component will be invoked.
+       *
+       * @param st The current state of the target RT-Component
        *
        * @endif
        */
@@ -1024,8 +1157,12 @@ namespace RTC
        * @param st 対象RTコンポーネントの現在の状態
        *
        * @else
+       * @brief Function to be invoked when RT-Component occured error
        *
-       * @brief
+       * When the given ExecutionContext transits the Error state,
+       * on_aborting of the participation component will be invoked.
+       *
+       * @param st The current state of the target RT-Component
        *
        * @endif
        */
@@ -1038,14 +1175,18 @@ namespace RTC
        * @if jp
        * @brief RTコンポーネントがエラー状態の時に呼ばれる関数
        *
-       * 管理対象のRTコンポーネントがエラー状態にいる間、 
+       * 管理対象のRTコンポーネントがエラー状態にいる間、
        * 管理対象コンポーネントの on_aborting を定期的に呼びだす。
        *
        * @param st 対象RTコンポーネントの現在の状態
        *
        * @else
+       * @brief Function to be invoked while RT-Component is in the error state
        *
-       * @brief
+       * While the given RT-Component is in the Error state,
+       * its on_aborting will be periodically invoked.
+       *
+       * @param st The current state of the target RT-Component
        *
        * @endif
        */
@@ -1064,6 +1205,12 @@ namespace RTC
        * @param st 対象RTコンポーネントの現在の状態
        *
        * @else
+       * @brief Function to be invoked when RT-Component is reset.
+       *
+       * When the target RT-Component is reset,
+       * invoke on_reset of the target component to manage.
+       *
+       * @param st The current state of the target RT-Component
        *
        * @endif
        */
@@ -1090,6 +1237,15 @@ namespace RTC
        * @param st 対象RTコンポーネントの現在の状態
        *
        * @else
+       * @brief Function to be periodically invoked while RT-Component is running
+       *
+       * If the given RT-Component is in the Active state and ExecutionContext
+       * is in the Running state, on_execute of the given component will be
+       * invoked periodically at the specified execution cycle.
+       * If it fails (the return value is other than RTC_OK), its state transits 
+       * to the Errot state.
+       *
+       * @param st The current state of the target RT-Component
        *
        * @endif
        */
@@ -1116,6 +1272,15 @@ namespace RTC
        * @param st 対象RTコンポーネントの現在の状態
        *
        * @else
+       * @brief Function to be invoked periodically while RT-Component executes
+       *
+       * When the target RT-Component to manage is in the Active state and
+       * ExecutionContext is the Running, invoke on_state_update of the target
+       * component to manage periodically in specified execution cycle.
+       * If it fails (the return value is other than RTC_OK), its state transits 
+       * to the Errot state.
+       *
+       * @param st The current state of the target RT-Component
        *
        * @endif
        */
@@ -1137,6 +1302,11 @@ namespace RTC
        * 管理対象コンポーネントの on_rate_changed を呼びだす。
        *
        * @else
+       * @brief Function to be invoked when the execution cycles of
+       *        ExecutionContext is changed
+       *
+       * When the execution cycle of the participating ExecutionContext is
+       * changed, invoke on_rate_changed of the target component will be invoked.
        *
        * @endif
        */
@@ -1149,7 +1319,7 @@ namespace RTC
        * @if jp
        * @brief 管理対象コンポーネント
        * @else
-       *
+       * @brief The target component to manage
        * @endif
        */
       Object m_obj;
@@ -1158,7 +1328,7 @@ namespace RTC
        * @if jp
        * @brief 管理対象コンポーネントの動作状態フラグ
        * @else
-       *
+       * @brief State flag of the target component to manage
        * @endif
        */
       bool m_active;
@@ -1168,7 +1338,7 @@ namespace RTC
      * @if jp
      * @brief コンポーネント管理用構造体
      * @else
-     *
+     * @brief The structure for the component management
      * @endif
      */
     struct Comp
@@ -1197,7 +1367,7 @@ namespace RTC
      * @if jp
      * @brief コンポーネント検索用ファンクタ
      * @else
-     *
+     * @brief Functor to find the component
      * @endif
      */
     struct find_comp
@@ -1214,7 +1384,7 @@ namespace RTC
      * @if jp
      * @brief on_startup 起動用ファンクタ
      * @else
-     *
+     * @brief Functor to invoke on_startup
      * @endif
      */
     struct invoke_on_startup
@@ -1229,7 +1399,7 @@ namespace RTC
      * @if jp
      * @brief on_shutdown 起動用ファンクタ
      * @else
-     *
+     * @brief Functor to invoke on_shutdown
      * @endif
      */
     struct invoke_on_shutdown
@@ -1244,7 +1414,7 @@ namespace RTC
      * @if jp
      * @brief on_rate_changed 起動用ファンクタ
      * @else
-     *
+     * @brief Functor to invoke on_rate_changed
      * @endif
      */
     struct invoke_on_rate_changed
@@ -1259,7 +1429,7 @@ namespace RTC
      * @if jp
      * @brief ワーカー実行用ファンクタ
      * @else
-     *
+     * @brief Functor to invoke worker
      * @endif
      */
     struct invoke_worker
@@ -1274,7 +1444,7 @@ namespace RTC
      * @if jp
      * @brief コンポーネントの参加者リスト
      * @else
-     *
+     * @brief List of the participating component
      * @endif
      */
     std::vector<Comp> m_comps;
@@ -1284,7 +1454,7 @@ namespace RTC
      * @if jp
      * @brief ExecutionContext の実行状態
      * @else
-     *
+     * @brief The running state of ExecutionContext
      * @endif
      */
     bool m_running;
@@ -1293,7 +1463,7 @@ namespace RTC
      * @if jp
      * @brief ExecutionContextProfile
      * @else
-     *
+     * @brief ExecutionContextProfile
      * @endif
      */
     ExecutionContextProfile m_profile;
@@ -1302,7 +1472,7 @@ namespace RTC
      * @if jp
      * @brief ExecutionContext の実行周期
      * @else
-     *
+     * @brief Execution cycle of ExecutionContext
      * @endif
      */
     long int m_usec;
@@ -1311,7 +1481,7 @@ namespace RTC
      * @if jp
      * @brief ExecutionContextService オブジェクトへの参照
      * @else
-     *
+     * @brief Reference to ExecutionContextService object
      * @endif
      */
     ExecutionContextService_var m_ref;
@@ -1320,7 +1490,8 @@ namespace RTC
      * @if jp
      * @brief ExecutionContext 即時実行(wait無し実行)フラグ
      * @else
-     *
+     * @brief Flag of ExecutionContext to run immediately
+     *        (to run without waiting)
      * @endif
      */
     bool m_nowait;

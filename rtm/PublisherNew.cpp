@@ -17,25 +17,6 @@
  *
  */
 
-/*
- * $Log: not supported by cvs2svn $
- * Revision 1.2.4.3  2007/09/19 07:41:04  n-ando
- * PublisherNew thread termination problem was solved.
- *
- * Revision 1.2.4.2  2007/08/20 06:32:27  n-ando
- * release() function was modified to broadcast signal to finalize task.
- *
- * Revision 1.2.4.1  2007/07/20 16:03:50  n-ando
- * ACE_OS::thr_yield() is used for win32 porting.
- *
- * Revision 1.2  2007/01/06 18:00:49  n-ando
- * Some trivial fixes.
- *
- * Revision 1.1  2006/11/27 09:44:48  n-ando
- * The first commitment.
- *
- */
-
 #include <rtm/PublisherNew.h>
 #include <rtm/InPortConsumer.h>
 #include <rtm/Properties.h>

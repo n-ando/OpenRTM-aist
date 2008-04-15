@@ -5,7 +5,7 @@
  * @date  $Date: 2007-12-31 03:08:06 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
- * Copyright (C) 2006
+ * Copyright (C) 2006-2008
  *     Noriaki Ando
  *     Task-intelligence Research Group,
  *     Intelligent Systems Research Institute,
@@ -13,20 +13,7 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: PublisherFactory.cpp,v 1.2.4.2 2007-12-31 03:08:06 n-ando Exp $
- *
- */
-
-/*
- * $Log: not supported by cvs2svn $
- * Revision 1.2.4.1  2007/06/22 10:55:09  n-ando
- * The bug of OutPort's disconnect operation was fixed.
- *
- * Revision 1.2  2007/01/06 18:00:25  n-ando
- * Some trivial fixes.
- *
- * Revision 1.1  2006/11/27 09:44:44  n-ando
- * The first commitment.
+ * $Id: PublisherFactory.cpp,v 1.2.4.1 2007/06/22 10:55:09 n-ando Exp $
  *
  */
 
@@ -46,7 +33,7 @@ namespace RTC
    * @if jp
    * @brief Publisher¤ÎÀ¸À®
    * @else
-   * @brief Create Publisher
+   * @brief Create the Publishers
    * @endif
    */
   PublisherBase* PublisherFactory::create(InPortConsumer* consumer,
@@ -74,7 +61,7 @@ namespace RTC
    * @if jp
    * @brief Publisher¤ÎÇË´þ
    * @else
-   * @brief Destroy Publisher
+   * @brief Destroy the Publishers
    * @endif
    */
   void PublisherFactory::destroy(PublisherBase* publisher)

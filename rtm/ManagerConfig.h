@@ -17,24 +17,6 @@
  *
  */
 
-/*
- * $Log: not supported by cvs2svn $
- * Revision 1.4  2007/04/13 18:02:28  n-ando
- * Some configuration properties handling processes were changed.
- *
- * Revision 1.3  2006/11/06 01:26:28  n-ando
- * Some trivial fixes.
- *
- * Revision 1.2  2006/10/23 08:38:23  n-ando
- * To get Property after "init()" calling, getConfig() was added.
- *
- * Revision 1.1  2006/10/17 10:21:38  n-ando
- * The first commitment.
- *
- *
- */
-
-
 #ifndef ManagerConfig_h
 #define ManagerConfig_h
 
@@ -73,7 +55,29 @@ namespace RTC
    *
    * @else
    *
-   * @brief
+   * @class ManagerConfig
+   * @brief Manager configuration class
+   *
+   * Modify Manager's configuration. 
+   * This class receives the command line arguments and will be instantiated.
+   * Set property information of Manager with the configuration file specified
+   * by the command line argument or the environment variable etc.
+   *
+   * The priorities of each configuration are as follows:
+   * <OL>
+   * <LI>Command option "-f"
+   * <LI>Environment variable "RTC_MANAGER_CONFIG"
+   * <LI>Default configuration file "./rtc.conf"
+   * <LI>Default configuration file "/etc/rtc.conf"
+   * <LI>Default configuration file "/etc/rtc/rtc.conf"
+   * <LI>Default configuration file "/usr/local/etc/rtc.conf"
+   * <LI>Default configuration file "/usr/local/etc/rtc/rtc.conf"
+   * <LI>Embedded configuration value
+   *</OL>
+   * If the command option "-d" is specified (even if specify configuration file
+   * by "-f" option), the embedded configuration values will be used.
+   *
+   * @since 0.4.0
    *
    * @endif
    */
@@ -85,6 +89,7 @@ namespace RTC
      * @if jp
      * @brief Manager コンフィギュレーションのデフォルト・ファイル・パス
      * @else
+     * @brief The default configuration file path for manager
      * @endif
      */
     static const char* config_file_path[];
@@ -95,6 +100,8 @@ namespace RTC
      * @brief デフォルト・コンフィギュレーションのファイル・パスを識別する
      *        環境変数
      * @else
+     * @brief The environment variable to distinguish the default configuration
+     *        file path
      * @endif
      */
     static const char* config_file_env;
@@ -108,9 +115,9 @@ namespace RTC
      *
      * @else
      *
-     * @brief constructor
+     * @brief Constructor
      *
-     * Do nothing. 
+     * Constructor (Do nothing)
      *
      * @endif
      */
@@ -128,12 +135,11 @@ namespace RTC
      *
      * @else
      *
-     * @brief ManagerConfig constructor
+     * @brief Constructor
      *
-     * The constructor that performs initialization at the same time with
-     * given arguments.
+     * Initialize configuration information by given arguments.
      *
-     * @param argc The number of command line arguments
+     * @param argc Number of command line arguments
      * @param argv The command line arguments
      *
      * @endif
@@ -147,7 +153,7 @@ namespace RTC
      *
      * @else
      *
-     * @brief destructor
+     * @brief Destructor
      *
      * @endif
      */
@@ -161,10 +167,10 @@ namespace RTC
      * コマンドライン引数に応じて初期化を実行する。コマンドラインオプションは
      * 以下のものが使用可能である。
      *
-     * -f file   : コンフィギュレーションファイルを指定する。<br>
-     * -l module : ロードするモジュールを指定する。(未実装)<br>
-     * -o options: その他オプションを指定する。(未実装)<br>
-     * -d        : デフォルトのコンフィギュレーションを使う。(未実装)<br>
+     *  - -f file   : コンフィギュレーションファイルを指定する。
+     *  - -l module : ロードするモジュールを指定する。(未実装)
+     *  - -o options: その他オプションを指定する。(未実装)
+     *  - -d        : デフォルトのコンフィギュレーションを使う。(未実装)
      *
      * @param argc コマンドライン引数の数
      * @param argv コマンドライン引数
@@ -176,10 +182,13 @@ namespace RTC
      * Initialize with command line options. The following command options
      * are available.
      *
-     * -f file   : Specify a configuration file. <br>
-     * -l module : Specify modules to be loaded at the beginning. <br>
-     * -o options: Other options. <br>
-     * -d        : Use default static configuration. <br>
+     * - -f file   : Specify the configuration file.
+     * - -l module : Specify modules to be loaded. (Not implemented)
+     * - -o options: Specify other options. (Not implemented)
+     * - -d        : Use default static configuration. (Not implemented)
+     *
+     * @param argc Number of command line arguments
+     * @param argv The command line arguments
      *
      * @endif
      */
@@ -194,7 +203,12 @@ namespace RTC
      * @param prop Configuration 設定対象 Property
      * 
      * @else
-     * @brief Apply configuration results to Property
+     * @brief Specify the configuration information to the Property
+     * 
+     * Configure to the properties specified by Manager's configuration
+     *
+     * @param prop The target properties to configure
+     * 
      * @endif
      */
     void configure(Properties& prop);
@@ -214,12 +228,17 @@ namespace RTC
      *
      * @else
      *
-     * @brief Get configuration value.
+     * @brief Get the configuration.
      *
-     * This operation returns default configuration statically defined,
-     * when before calling init() function. When after calling init() function,
-     * this operation returns initialized configuration value according to
-     * command option, environment value and so on.
+     * Get the configuration.
+     * When this operation is called before calling init() function,
+     * return the default configuration statically defined,
+     * When this operation is called after calling init() function,
+     * return the initialized configuration according to
+     * the command line arguments, the environment variables etc.
+     * (Not implemented)
+     *
+     * @return Manager's configuration information
      *
      * @endif
      */
@@ -231,22 +250,25 @@ namespace RTC
      *
      * @brief コマンド引数をパースする
      *
-     * -f file   : コンフィギュレーションファイルを指定する。<br>
-     * -l module : ロードするモジュールを指定する。(未実装)<br>
-     * -o options: その他オプションを指定する。(未実装)<br>
-     * -d        : デフォルトのコンフィギュレーションを使う。(未実装)<br>
+     * - -f file   : コンフィギュレーションファイルを指定する。
+     * - -l module : ロードするモジュールを指定する。(未実装)
+     * - -o options: その他オプションを指定する。(未実装)
+     * - -d        : デフォルトのコンフィギュレーションを使う。(未実装)
      *
      * @param argc コマンドライン引数の数
      * @param argv コマンドライン引数
      *
      * @else
      *
-     * @brief Parse command arguments
+     * @brief Parse the command arguments
      *
-     * -f file   : Specify a configuration file. <br>
-     * -l module : Specify modules to be loaded at the beginning. <br>
-     * -o options: Other options. <br>
-     * -d        : Use default static configuration. <br>
+     *  - -f file   : Specify the configuration file.
+     *  - -l module : Specify modules to be loaded. (Not implemented)
+     *  - -o options: Other options. (Not implemented)
+     *  - -d        : Use default static configuration. (Not implemented)
+     *
+     * @param argc Number of command line arguments
+     * @param argv The command line arguments
      *
      * @endif
      */
@@ -260,7 +282,7 @@ namespace RTC
      * Configuration file を検索し、設定する。
      * 既に Configuration file が設定済みの場合は、ファイルの存在確認を行う。
      *
-     * Configuration file の優先順位
+     * Configuration file の優先順位<br>
      * コマンドオプション指定＞環境変数＞デフォルトファイル＞デフォルト設定
      *
      * デフォルト強制オプション(-d): デフォルトファイルがあっても無視して
@@ -270,7 +292,20 @@ namespace RTC
      *
      * @else
      *
-     * @brief Find configuration file
+     * @brief Find the configuration file
+     *
+     * Find the configuration file and configure it.
+     * Confirm the file existence when the configuration file has 
+     * already configured.
+     *
+     * The priority of the configuration file<br>
+     * The command option＞the environment variable＞the default file＞
+     * the default configuration
+     *
+     * Default force option(-d): Ignore any default files and use the default 
+     * configuration.
+     *
+     * @return Configuration file search result
      *
      * @endif
      */
@@ -282,25 +317,27 @@ namespace RTC
      * @brief システム情報を設定する
      *
      * システム情報を取得しプロパティにセットする。設定されるキーは以下の通り。
-     * manager.os.name    : OS名
-     * manager.os.release : OSリリース名
-     * maanger.os.version : OSバージョン名
-     * manager.os.arch    : OSアーキテクチャ
-     * manager.os.hostname: ホスト名
-     * manager.pid        : プロセスID
+     *  - manager.os.name    : OS名
+     *  - manager.os.release : OSリリース名
+     *  - maanger.os.version : OSバージョン名
+     *  - manager.os.arch    : OSアーキテクチャ
+     *  - manager.os.hostname: ホスト名
+     *  - manager.pid        : プロセスID
      * 
      * @param prop システム情報を設定したプロパティ
      * @else
      * 
      * @brief Set system information
      * 
-     * Get the following system info and set them to Manager's properties.
-     * manager.os.name    : OS name
-     * manager.os.release : OS release name
-     * maanger.os.version : OS version
-     * manager.os.arch    : OS architecture
-     * manager.os.hostname: Hostname
-     * manager.pid        : process ID
+     * Get the following system info. and set them to Manager's properties.
+     *  - manager.os.name    : OS name
+     *  - manager.os.release : OS release name
+     *  - manager.os.version : OS version
+     *  - manager.os.arch    : OS architecture
+     *  - manager.os.hostname: Hostname
+     *  - manager.pid        : process ID
+     *
+     * @param prop Properties to set system information
      *
      * @endif
      */
@@ -317,7 +354,14 @@ namespace RTC
      * @return 対象ファイル確認結果(存在する場合にtrue)
      *
      * @else
-     * @brief Check file existance
+     * @brief Check the file existence
+     *
+     * Confirm whether the specified file exists
+     *
+     * @param filename The target confirmation file
+     *
+     * @return file existance confirmation (True if the file exists.)
+     *
      * @endif
      */
     bool fileExist(const std::string& filename);
@@ -326,6 +370,7 @@ namespace RTC
      * @if jp
      * @brief Manager コンフィギュレーション・ファイルのパス
      * @else
+     * @brief Manager's configuration file path
      * @endif
      */
     std::string m_configFile;

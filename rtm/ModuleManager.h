@@ -17,20 +17,6 @@
  *
  */
 
-/*
- * $Log: not supported by cvs2svn $
- * Revision 1.2.4.1  2007/09/22 10:29:38  n-ando
- * The argument of the module init function was modified.
- *
- * Revision 1.2  2006/10/17 10:06:47  n-ando
- * Now class ModuleManager is in RTC namespace.
- *
- * Revision 1.1  2006/09/20 08:47:33  n-ando
- * The first commit of module management class.
- *
- *
- */
-
 #ifndef ModuleManager_h
 #define ModuleManager_h
 
@@ -63,7 +49,7 @@ namespace RTC
 {
   /*!
    * @if jp
-   *
+   * @class ModuleManager
    * @brief モジュールマネージャクラス
    *
    * モジュールのロード、アンロードなどを管理するクラス
@@ -71,8 +57,12 @@ namespace RTC
    * @since 0.4.0
    *
    * @else
+   * @class ModuleManager
+   * @brief ModuleManager class
    *
-   * @biref ModuleManager class
+   * This is a class to manage for loading and unloading modules.
+   *
+   * @since 0.4.0
    *
    * @endif
    */
@@ -91,7 +81,12 @@ namespace RTC
      *
      * @else
      *
-     * @brief constructor
+     * @brief Constructor
+     *
+     * Constructor.
+     * Initialize based on information in the set Property object.
+     *
+     * @param prop Properties for initialization
      *
      * @endif
      */
@@ -104,7 +99,7 @@ namespace RTC
      *
      * @else
      *
-     * @brief destructor
+     * @brief Destructor
      *
      * @endif
      */
@@ -114,7 +109,7 @@ namespace RTC
      * @if jp
      * @brief ファイル・オープン失敗例外処理用構造体
      * @else
-     *
+     * @brief Structure for exception handling when file open is failed
      * @endif
      */
     struct Error
@@ -128,7 +123,8 @@ namespace RTC
      * @if jp
      * @brief 未実装部，指定モジュール不明例外処理用構造体
      * @else
-     *
+     * @brief Structure for exception handling of unimplemented part
+     *        and specified module missing
      * @endif
      */
     struct NotFound
@@ -142,7 +138,8 @@ namespace RTC
      * @if jp
      * @brief 指定ファイル不明例外処理用構造体
      * @else
-     *
+     * @brief Structure for exception handling when specified file
+     *        cannot be found
      * @endif
      */
     struct FileNotFound
@@ -156,7 +153,8 @@ namespace RTC
      * @if jp
      * @brief 指定モジュール不明例外処理用構造体
      * @else
-     *
+     * @brief Structure for exception handling when specified module
+     *        cannot be found
      * @endif
      */
     struct ModuleNotFound
@@ -170,7 +168,8 @@ namespace RTC
      * @if jp
      * @brief 指定シンボル不明例外処理用構造体
      * @else
-     *
+     * @brief Structure for exception handling when specified symbol
+     *        cannot be found
      * @endif
      */
     struct SymbolNotFound
@@ -184,7 +183,8 @@ namespace RTC
      * @if jp
      * @brief 指定操作禁止時例外処理用構造体
      * @else
-     *
+     * @brief Structure for exception handling when specified
+     *        operation cannot be allowed.
      * @endif
      */
     struct NotAllowedOperation
@@ -198,7 +198,8 @@ namespace RTC
      * @if jp
      * @brief 指定引数不正時例外処理用構造体
      * @else
-     *
+     * @brief Structure for exception handling when specified
+     *        argument is invalid.
      * @endif
      */
     struct InvalidArguments
@@ -212,7 +213,8 @@ namespace RTC
      * @if jp
      * @brief 指定操作不正時例外処理用構造体
      * @else
-     *
+     * @brief Structure for exception handling when specified
+     *        operation is invalid.
      * @endif
      */
     struct InvalidOperation
@@ -233,7 +235,7 @@ namespace RTC
      * 相対パスで指定する。
      *
      * Property manager.modules.abs_path_allowed が yes の場合、
-     * ロードするモジュールを絶対パスで指定することができる。
+     * ロードするモジュールを絶対パスで指定することができる。<br>
      * Property manager.modules.download_allowed が yes の場合、
      * ロードするモジュールをURLで指定することができる。
      *
@@ -247,8 +249,24 @@ namespace RTC
      *
      * @else
      *
-     * @brief Load module
+     * @brief Load the module
      *
+     * Load file_name as DLL or a shared liblary.
+     * The file_name is specified by the relative path to default load
+     * path (manager.modules.load_path).
+     *
+     * If Property manager.modules.abs_path_allowed is yes,
+     * the load module can be specified by the absolute path.<br>
+     * If Property manager.modules.download_allowed is yes,
+     * the load module can be specified with URL.
+     *
+     * The file_name can be specified by the absolute path.
+     * If manager.modules.allowAbsolutePath is no, module of file_name
+     * will be searched from the default module load path and loaded.
+     * 
+     * @param file_name The target module name for the loading
+     *
+     * @return Name of module for the specified load
      *
      * @endif
      */
@@ -269,8 +287,15 @@ namespace RTC
      *
      * @else
      *
-     * @brief Load module
+     * @brief Load and intialize the module
      *
+     * Load the specified file as DLL or a shared library, and execute operation
+     * for specified initialization.
+     * 
+     * @param file_name The target module name for the loading
+     * @param init_func Operation for initialization
+     *
+     * @return Name of module for the specified load
      *
      * @endif
      */
@@ -285,7 +310,12 @@ namespace RTC
      * @param file_name アンロード対象モジュール名
      *
      * @else
-     * @brief Unload module
+     * @brief Unload the module
+     *
+     * Close and unload the specified module that has been loaded.
+     *
+     * @param file_name Name of module for the unloading
+     *
      * @endif
      */
     void unload(const std::string& file_name);
@@ -298,6 +328,9 @@ namespace RTC
      *
      * @else
      * @brief Unload all modules
+     *
+     * Unload all modules that have been loaded.
+     *
      * @endif
      */
     void unloadAll();
@@ -306,7 +339,7 @@ namespace RTC
      * @if jp
      * @brief モジュールのシンボルの参照
      * @else
-     * @brief Look up a named symbol in the module
+     * @brief Refer to the symbol of the module
      * @endif
      */
     void* symbol(const std::string& file_name, const std::string& func_name)
@@ -321,7 +354,12 @@ namespace RTC
      * @param load_path モジュール検索対象パスリスト
      *
      * @else
-     * @brief Set default module load path
+     * @brief Set the module load path
+     * 
+     * Specify searching path to find the target module when loading module.
+     *
+     * @param load_path List of module search path
+     *
      * @endif
      */
     void setLoadpath(const std::vector<std::string>& load_path);
@@ -335,7 +373,12 @@ namespace RTC
      * @return load_path モジュール検索対象パスリスト
      *
      * @else
-     * @brief Get default module load path
+     * @brief Get the module load path
+     * 
+     * Get the search path of the set module.
+     * 
+     * @return load_path List of module search path
+     *
      * @endif
      */
     inline std::vector<std::string> getLoadPath()
@@ -352,7 +395,12 @@ namespace RTC
      * @return load_path 追加モジュール検索対象パスリスト
      *
      * @else
-     * @brief Add module load path
+     * @brief Add the module load path
+     * 
+     * Add specified path list to search path list.
+     * 
+     * @return load_path List of additional module search path
+     *
      * @endif
      */
     void addLoadpath(const std::vector<std::string>& load_path);
@@ -366,7 +414,12 @@ namespace RTC
      * @return ロード済みモジュールリスト
      *
      * @else
-     * @brief Get loaded module names
+     * @brief Get the module list that has been loaded
+     *
+     * Get the module list that has been loaded.
+     *
+     * @return List of module that has been loaded
+     *
      * @endif
      */
     std::vector<std::string> getLoadedModules();
@@ -381,7 +434,12 @@ namespace RTC
      * @return ロード可能モジュールリスト
      *
      * @else
-     * @brief Get loadable module names
+     * @brief Get the loadable module list
+     *
+     * Get the loadable module list (not implemented).
+     *
+     * @return Loadable module list
+     *
      * @endif
      */
     std::vector<std::string> getLoadableModules();
@@ -393,7 +451,10 @@ namespace RTC
      * ロード対象モジュールの絶対パス指定を許可するように設定する。
      *
      * @else
-     * @brief Allow absolute load path
+     * @brief Allow absolute path when specify module path
+     *
+     * Set to allow the absolute path when specify the module for the load.
+     *
      * @endif
      */
     inline void allowAbsolutePath()
@@ -408,7 +469,10 @@ namespace RTC
      * ロード対象モジュールの絶対パス指定を禁止するように設定する。
      *
      * @else
-     * @brief Forbid absolute load path
+     * @brief Disallow absolute path when specify module path
+     *
+     * Set to disallow the absolute path when specify the module for the load.
+     *
      * @endif
      */
     inline void disallowAbsolutePath()
@@ -425,7 +489,12 @@ namespace RTC
      * 許可される。
      *
      * @else
-     * @brief Allow module download
+     * @brief Allow URL when specify module path
+     *
+     * Allow URL when specify module for the load.
+     * When this setup is allowed, downloading and loading the module will
+     * be allowed.
+     *
      * @endif
      */
     inline void allowModuleDownload()
@@ -440,7 +509,10 @@ namespace RTC
      * ロード対象モジュールのURL指定を禁止する。
      *
      * @else
-     * @brief Forbid module download
+     * @brief Disallow URL when specify module path
+     *
+     * Disallow URL when specify module for the load.
+     *
      * @endif
      */
     inline void disallowModuleDownload()
@@ -460,7 +532,15 @@ namespace RTC
      * @return 検索されたファイル名
      *
      * @else
-     * @brief Search file from load path
+     * @brief Search the file from the LoadPath
+     * 
+     * Check whether the specified file exists in the specified path.
+     *
+     * @param fname Target file name of the search
+     * @param load_path Path list for the search
+     *
+     * @return File name that was found
+     *
      * @endif
      */
     std::string findFile(const std::string& fname,
@@ -477,7 +557,14 @@ namespace RTC
      * @return ファイル存在確認結果(ファイルあり:true，なし:false)
      *
      * @else
-     * @brief Check file existance
+     * @brief Check whether the file exists
+     *
+     * Check whether the specified file exists.
+     *
+     * @param filename Name of file existence for checking
+     *
+     * @return File existence result(File existence:true, Else:false)
+     *
      * @endif
      */
     bool fileExist(const std::string& filename);
@@ -493,7 +580,14 @@ namespace RTC
      * @return 初期化関数名称組み立て結果
      *
      * @else
-     * @brief Create initialize function symbol
+     * @brief Create initialization function symbol
+     *
+     * Assemble names of the initialization functions.
+     *
+     * @param file_path Name of module for initialization
+     *
+     * @return Assembly result of initialization function name
+     *
      * @endif
      */
     std::string getInitFuncName(const std::string& file_path);
@@ -516,7 +610,7 @@ namespace RTC
      * @if jp
      * @brief Module Manager プロパティ
      * @else
-     *
+     * @brief Module Manager properties
      * @endif
      */
     Properties& m_properties;
@@ -525,7 +619,7 @@ namespace RTC
      * @if jp
      * @brief ロード済みモジュールリスト
      * @else
-     *
+     * @brief Module list that has already loaded
      * @endif
      */
     DllMap m_modules;
@@ -534,7 +628,7 @@ namespace RTC
      * @if jp
      * @brief モジュール・ロード・パス・リスト
      * @else
-     *
+     * @brief Module load path list
      * @endif
      */
     StringVector m_loadPath;
@@ -542,7 +636,7 @@ namespace RTC
      * @if jp
      * @brief コンフィギュレーション・パス・リスト
      * @else
-     *
+     * @brief Configuration path list
      * @endif
      */
     StringVector m_configPath;
@@ -550,7 +644,7 @@ namespace RTC
      * @if jp
      * @brief モジュールURL指定許可フラグ
      * @else
-     *
+     * @brief Flag of URL when specify module for the load.
      * @endif
      */
     bool m_downloadAllowed;
@@ -558,7 +652,7 @@ namespace RTC
      * @if jp
      * @brief モジュール絶対パス指定許可フラグ
      * @else
-     *
+     * @brief Flag of absolute path when specify module for the load.
      * @endif
      */
     bool m_absoluteAllowed;
@@ -567,7 +661,7 @@ namespace RTC
      * @if jp
      * @brief 初期実行関数サフィックス
      * @else
-     *
+     * @brief Initial execution function suffix
      * @endif
      */
     std::string m_initFuncSuffix;
@@ -575,7 +669,7 @@ namespace RTC
      * @if jp
      * @brief 初期実行関数プリフィックス
      * @else
-     *
+     * @brief Initial execution function prefix
      * @endif
      */
     std::string m_initFuncPrefix;

@@ -17,39 +17,6 @@
  *
  */
 
-/*
- * $Log: not supported by cvs2svn $
- * Revision 1.7.2.2  2007/12/31 03:08:02  n-ando
- * Class reference by doxygen comment was revised.
- *
- * Revision 1.7.2.1  2007/10/06 12:23:47  n-ando
- * TCP socket data port was added.
- *
- * Revision 1.7  2007/04/13 15:45:08  n-ando
- * RTC::OK was changed to RTC::RTC_OK.
- *
- * Revision 1.6  2007/01/21 09:45:31  n-ando
- * To advertise interface profile, publishInterfaceProfile() is called now.
- *
- * Revision 1.5  2007/01/14 22:57:54  n-ando
- * A bug fix about template argument for buffer-type in constructor.
- *
- * Revision 1.4  2007/01/12 14:30:01  n-ando
- * A trivial bug fix.
- *
- * Revision 1.3  2007/01/06 17:44:11  n-ando
- * The behavior on notify_connect() and notify_disconnect() are now
- * implemented in protected functions(ex. publisherInterfaces()).
- *
- * Revision 1.2  2006/12/02 18:29:15  n-ando
- * Now OutPortCorbaProvider and InPortCorbaConsumer are used.
- *
- * Revision 1.1  2006/11/27 09:44:37  n-ando
- * The first commitment.
- *
- *
- */
-
 #ifndef DataOutPort_h
 #define DataOutPort_h
 
@@ -146,6 +113,15 @@ namespace RTC
      *
      * @else
      * @brief Constructor
+     *
+     * Constructor
+     *
+     * @param name Port name
+     * @param outport OutPort object associated with this data output port.
+     *                Specify also the data type and the buffer type used in
+     *                the OutPort object.
+     * @param prop Property for setting ports
+     *
      * @endif
      */
     template <class DataType, template <class DataType> class Buffer>
@@ -177,6 +153,9 @@ namespace RTC
      *
      * @else
      * @brief Destructor
+     *
+     * Destructor
+     *
      * @endif
      */
     virtual ~DataOutPort();
@@ -209,7 +188,7 @@ namespace RTC
      *
      * @brief Publish interface information
      *
-     * This operation is pure virutal method that would be called at the
+     * This operation is pure virutal function that would be called at the
      * beginning of the notify_connect() process sequence.
      * In the notify_connect(), the following methods would be called in order.
      *
@@ -252,10 +231,10 @@ namespace RTC
      *
      * @else
      *
-     * @brief Publish interface information
+     * @brief Subscribe to the interface
      *
-     * This operation is pure virutal method that would be called at the
-     * mid-flow of the notify_connect() process sequence.
+     * This operation is pure virutal function that would be called at the
+     * middle of the notify_connect() process sequence.
      * In the notify_connect(), the following methods would be called in order.
      *
      * - publishInterfaces()
@@ -289,16 +268,17 @@ namespace RTC
      *
      * @else
      *
-     * @brief Disconnect interface connection
+     * @brief Disconnect the interface connection
      *
-     * This operation is pure virutal method that would be called at the
+     * This operation is pure virutal function that would be called at the
      * end of the notify_disconnect() process sequence.
      * In the notify_disconnect(), the following methods would be called.
      * - disconnectNext()
      * - unsubscribeInterfaces()
      * - eraseConnectorProfile() 
      *
-     * @param connector_profile The connection profile information
+     * @param connector_profile The profile information associated with 
+     *                          the connection
      *
      * @endif
      */
@@ -309,7 +289,7 @@ namespace RTC
      * @if jp
      * @brief Interface公開用Functor
      * @else
-     *
+     * @brief Functor to publish the interface
      * @endif
      */
     struct publish
@@ -326,7 +306,7 @@ namespace RTC
      * @if jp
      * @brief Interface接続解除用Functor
      * @else
-     *
+     * @brief Functor to unsubscribe the interface
      * @endif
      */
     struct unsubscribe

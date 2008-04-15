@@ -17,38 +17,6 @@
  *
  */
 
-/*
- * $Log: not supported by cvs2svn $
- * Revision 1.5.2.4  2007/12/31 03:08:05  n-ando
- * Class reference by doxygen comment was revised.
- *
- * Revision 1.5.2.3  2007/09/20 11:22:45  n-ando
- * A trivial fix.
- *
- * Revision 1.5.2.2  2007/09/19 07:44:37  n-ando
- * The usleep() in the execution loop will be skipped, if wait-time is 0.
- *
- * Revision 1.5.2.1  2007/07/20 15:58:50  n-ando
- * Some ineffective expressions were added to suppress compiler's warning.
- *
- * Revision 1.5  2007/04/13 15:52:15  n-ando
- * RTC::OK was changed to RTC::RTC_OK.
- * Initialization function was added to make it an external module.
- *
- * Revision 1.4  2007/02/04 16:56:52  n-ando
- * The bugs around object references count were fixed.
- *
- * Revision 1.3  2007/01/21 10:26:55  n-ando
- * Object reference count related bugs were fixed.
- *
- * Revision 1.2  2007/01/14 19:44:26  n-ando
- * The logic of main activity loop was changed.
- *
- * Revision 1.1  2007/01/09 15:29:25  n-ando
- * PeriodicExecutionContext class
- *
- */
-
 #include <rtm/PeriodicExecutionContext.h>
 #include <algorithm>
 #include <iostream>
@@ -59,7 +27,7 @@ namespace RTC
    * @if jp
    * @brief デフォルトコンストラクタ
    * @else
-   * 
+   * @brief Default constructor
    * @endif
    */
   PeriodicExecutionContext::
@@ -76,7 +44,7 @@ namespace RTC
    * @if jp
    * @brief コンストラクタ
    * @else
-   * 
+   * @brief Construnctor
    * @endif
    */
   PeriodicExecutionContext::
@@ -96,7 +64,7 @@ namespace RTC
    * @if jp
    * @brief デストラクタ
    * @else
-   * 
+   * @brief Destructor
    * @endif
    */
   PeriodicExecutionContext::~PeriodicExecutionContext()
@@ -112,7 +80,7 @@ namespace RTC
    * @if jp
    * @brief ExecutionContext用アクティビティスレッドを生成する
    * @else
-   * 
+   * @brief Generate internal activity thread for ExecutionContext
    * @endif
    */
   int PeriodicExecutionContext::open(void *args)
@@ -132,7 +100,7 @@ namespace RTC
    * @if jp
    * @brief ExecutionContext 用のスレッド実行関数
    * @else
-   * 
+   * @brief Thread execution function for ExecutionContext
    * @endif
    */
   int PeriodicExecutionContext::svc(void)
@@ -154,7 +122,7 @@ namespace RTC
    * @if jp
    * @brief ExecutionContext 用のスレッド実行関数
    * @else
-   * 
+   * @brief Thread execution function for ExecutionContext
    * @endif
    */
   int PeriodicExecutionContext::close(unsigned long flags)
@@ -229,9 +197,9 @@ namespace RTC
   
   /*!
    * @if jp
-   * @brief 実行周期(Hz)を取得する
+   * @brief ExecutionContext の実行周期(Hz)を取得する
    * @else
-   * @brief Get executionrate(Hz)
+   * @brief Get execution rate(Hz) of ExecutionContext
    * @endif
    */
   CORBA::Double PeriodicExecutionContext::get_rate()
@@ -242,9 +210,9 @@ namespace RTC
   
   /*!
    * @if jp
-   * @brief 実行周期(Hz)を設定する 
+   * @brief ExecutionContext の実行周期(Hz)を設定する
    * @else
-   * @brief Set rate (Hz)
+   * @brief Set execution rate(Hz) of ExecutionContext
    * @endif
    */
   ReturnCode_t PeriodicExecutionContext::set_rate(CORBA::Double rate)
@@ -265,7 +233,7 @@ namespace RTC
    * @if jp
    * @brief RTコンポーネントをアクティブ化する
    * @else
-   * @brief Activate a RT-component
+   * @brief Activate an RT-Component
    * @endif
    */ 
   ReturnCode_t
@@ -290,7 +258,7 @@ namespace RTC
    * @if jp
    * @brief RTコンポーネントを非アクティブ化する
    * @else
-   * @brief Deactivate a RT-component
+   * @brief Deactivate an RT-Component
    * @endif
    */  
   ReturnCode_t
@@ -314,7 +282,7 @@ namespace RTC
    * @if jp
    * @brief RTコンポーネントをリセットする
    * @else
-   * @brief Reset a RT-component
+   * @brief Reset the RT-Component
    * @endif
    */  
   ReturnCode_t
@@ -338,7 +306,7 @@ namespace RTC
    * @if jp
    * @brief RTコンポーネントの状態を取得する
    * @else
-   * @brief Get RT-component's state
+   * @brief Get RT-Component's state
    * @endif
    */
   LifeCycleState
@@ -371,7 +339,7 @@ namespace RTC
    * @if jp
    * @brief RTコンポーネントを追加する
    * @else
-   * @brief Add a RT-component
+   * @brief Add an RT-Component
    * @endif
    */
   ReturnCode_t PeriodicExecutionContext::add(LightweightRTObject_ptr comp)
@@ -403,7 +371,7 @@ namespace RTC
    * @if jp
    * @brief コンポーネントをコンポーネントリストから削除する
    * @else
-   * @brief Remove the component from component list
+   * @brief Remove the RT-Component from participant list
    * @endif
    */	
   ReturnCode_t

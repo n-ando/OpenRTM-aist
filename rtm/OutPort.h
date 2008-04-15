@@ -5,7 +5,7 @@
  * @date $Date: 2007-12-31 03:08:05 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
- * Copyright (C) 2006
+ * Copyright (C) 2006-2008
  *     Noriaki Ando
  *     Task-intelligence Research Group,
  *     Intelligent Systems Research Institute,
@@ -14,20 +14,6 @@
  *     All rights reserved.
  *
  * $Id: OutPort.h,v 1.2.4.2 2007-12-31 03:08:05 n-ando Exp $
- *
- */
-
-/*
- * $Log: not supported by cvs2svn $
- * Revision 1.2.4.1  2007/07/20 15:58:03  n-ando
- * Now ACE_OS::gettimeofday() is used for win32 porting.
- *
- * Revision 1.2  2007/01/06 17:56:19  n-ando
- * A trivial fix.
- *
- * Revision 1.1  2006/12/02 18:45:30  n-ando
- * The first commitment.
- *
  *
  */
 
@@ -56,7 +42,15 @@ namespace RTC
    * @since 0.2.0
    *
    * @else
+   *
+   * @brief OutPort template class
    * 
+   * This is the OutPort template class. 
+   * The data type "DateType" supported by OutPort and the buffer type
+   * "BufferType" are used as template arguments.
+   *
+   * @since 0.2.0
+   *
    * @endif
    */
   template <class DataType,
@@ -81,6 +75,12 @@ namespace RTC
      *
      * @brief Constructor
      *
+     * Constructor
+     *
+     * @param name Port's name
+     * @param value Data variable bound to this port
+     * @param length Buffer length (The default value:8)
+     *
      * @endif
      */
     OutPort(const char* name, DataType& value, long int length = 8)
@@ -104,6 +104,10 @@ namespace RTC
      * 
      * @else
      *
+     * @brief Destructor
+     * 
+     * Destructor
+     * 
      * @endif
      */
     virtual ~OutPort()
@@ -123,7 +127,7 @@ namespace RTC
      *   かつ、書き込む際にバッファがオーバーフローを検出した場合、
      *   コールバックファンクタ OnOverflow が呼ばれる。
      * - コールバックファンクタ OnWriteConvert がセットされている場合、
-     *   バッファ書き込み時に、OnWriteConvert の operator()() の戻り値が
+     *   バッファ書き込み時に、 OnWriteConvert の operator() の戻り値が
      *   バッファに書き込まれる。
      *
      * @param value 書き込み対象データ
@@ -133,6 +137,21 @@ namespace RTC
      * @else
      *
      * @brief Write data
+     *
+     * Write data in the port.
+     *
+     * - When callback functor OnWrite is already set, OnWrite will be
+     *   invoked before writing into the buffer held by OutPort.
+     * - When the buffer held by OutPort can detect the overflow,
+     *   and when it detected the overflow at writing, callback functor
+     *   OnOverflow will be invoked.
+     * - When callback functor OnWriteConvert is already set, 
+     *   the return value of operator() of OnWriteConvert will be written
+     *   into the buffer at the writing.
+     *
+     * @param value The target data for writing
+     *
+     * @return Writing result (Successful:true, Failed:false)
      *
      * @endif
      */
@@ -206,6 +225,13 @@ namespace RTC
      *
      * @else
      *
+     * @brief Write data
+     *
+     * Write data to the port.
+     * Write the value, which was set to the bound variable, to the port.
+     *
+     * @return Writing result (Successful:true, Failed:false)
+     *
      * @endif
      */
     bool write()
@@ -227,6 +253,15 @@ namespace RTC
      *
      * @else
      *
+     * @brief Write data
+     *
+     * Write data to the port.
+     * Write the set value to the port.
+     *
+     * @param value The target data for writing
+     *
+     * @return Writing result (Successful:true, Failed:false)
+     *
      * @endif
      */
     bool operator<<(DataType& value)
@@ -247,11 +282,11 @@ namespace RTC
      *   かつ、読み出す際にバッファがアンダーフローを検出した場合、
      *   コールバックファンクタ OnUnderflow が呼ばれる。
      * - コールバックファンクタ OnReadConvert がセットされている場合、
-     *   バッファ書き込み時に、OnReadConvert の operator()() の戻り値が
+     *   バッファ書き込み時に、OnReadConvert の operator() の戻り値が
      *   read()の戻り値となる。
      * - setReadTimeout() により読み出し時のタイムアウトが設定されている場合、
      *   バッファアンダーフロー状態が解除されるまでタイムアウト時間だけ待ち、
-     *   OnUnderflowがセットされていればこれを呼び出して戻る
+     *   OnUnderflow がセットされていればこれを呼び出して戻る
      *
      * @param value 読み出したデータ
      *
@@ -259,7 +294,25 @@ namespace RTC
      *
      * @else
      *
-     * @brief Read data
+     * @brief Readout the data
+     *
+     * Readout the value from DataPort
+     *
+     * - When Callback functor OnRead is already set, OnRead will be invoked
+     *   before reading from the buffer held by DataPort.
+     * - When the buffer held by DataPort can detect the underflow,
+     *   and when it detected the underflow at reading, callback functor
+     *   OnUnderflow will be invoked.
+     * - When callback functor OnReadConvert is already set, the return value of
+     *   operator() of OnReadConvert will be the return value of read().
+     * - When timeout at the time of reading is already set by setReadTimeout(),
+     *   it waits for only timeout period until the state of the buffer underflow
+     *   is released, and if OnUnderflow is already set, this will be invoked to
+     *   return.
+     *
+     * @param value Readout data
+     *
+     * @return Readout result (Successful:true, Failed:false)
      *
      * @endif
      */
@@ -330,13 +383,19 @@ namespace RTC
      *
      * 読み出し処理に対してブロックモードを設定する。
      * ブロックモードを指定した場合、読み出せるデータを受信するかタイムアウト
-     * が発生するまで、read()メソッドの呼びだしがブロックされる。
+     * が発生するまで、read() メソッドの呼びだしがブロックされる。
      *
      * @param block ブロックモードフラグ
      *
      * @else
      *
-     * @brief Set read() block mode
+     * @brief Set blocking mode of the data read processing
+     *
+     * Set the blocking mode for the readout.
+     * When the block mode is specified, the invoke of read() method is
+     * blocked until the readout data is received or timeout occurs.
+     *
+     * @param block Flag of blocking mode
      *
      * @endif
      */
@@ -352,13 +411,20 @@ namespace RTC
      *
      * 書き込み処理に対してブロックモードを設定する。
      * ブロックモードを指定した場合、バッファに書き込む領域ができるか
-     * タイムアウトが発生するまでwrite()メソッドの呼びだしがブロックされる。
+     * タイムアウトが発生するまで write() メソッドの呼びだしがブロックされる。
      *
      * @param block ブロックモードフラグ
      *
      * @else
      *
-     * @brief Set read() block mode
+     * @brief Set blocking mode of the data writing processing
+     *
+     * Set the blocking mode for the writing.
+     * When the block mode is specified, the invoke of write() method is
+     * blocked until the area written into the buffer can be used or timeout
+     * occurs.
+     *
+     * @param block Flag of blocking mode
      *
      * @endif
      */
@@ -379,7 +445,14 @@ namespace RTC
      *
      * @else
      *
-     * @brief Set read() timeout
+     * @brief Set timeout of the data read processing
+     * 
+     * Set the timeout period of read() with usec.
+     * read() must be a block mode.
+     *
+     * @param timeout Timeout period[usec]
+     *
+     * @else
      *
      * @endif
      */
@@ -400,7 +473,12 @@ namespace RTC
      *
      * @else
      *
-     * @brief Set write() timeout
+     * @brief Set timeout of the data writing processing
+     * 
+     * Set the timeout period of write() with usec.
+     * write() must be a block mode.
+     *
+     * @param timeout Timeout period[usec]
      *
      * @endif
      */
@@ -421,6 +499,10 @@ namespace RTC
      * @else
      *
      * @brief Set OnWrite callback
+     *
+     * Set OnWrite callback functor invoked immediately before data is written.
+     *
+     * @param on_write OnWrite callback functor
      *
      * @endif
      */
@@ -445,6 +527,12 @@ namespace RTC
      *
      * @brief Set OnWriteConvert callback
      *
+     * Set OnWriteConvert callback functor invoked when data is written.
+     * The processing result of this callback function is written.
+     * Therefore, filtering of the writing data will be possible.
+     *
+     * @param on_wconvert OnWriteConvert callback functor
+     *
      * @endif
      */
     inline void setOnWriteConvert(OnWriteConvert<DataType>* on_wconvert)
@@ -466,6 +554,11 @@ namespace RTC
      *
      * @brief Set OnOverflow callback
      *
+     * Set OnOverflow callback functor, which is invoked when data cannot be
+     * written because of the buffer full.
+     *
+     * @param on_overflow OnOverflow callback functor
+     *
      * @endif
      */
     inline void setOnOverflow(OnOverflow<DataType>* on_overflow)
@@ -486,6 +579,10 @@ namespace RTC
      * @else
      *
      * @brief Set OnRead callback
+     *
+     * Set OnWrite callback functor invoked immediately before data is readout.
+     *
+     * @param on_read OnRead callback functor
      *
      * @endif
      */
@@ -510,6 +607,12 @@ namespace RTC
      *
      * @brief Set OnReadConvert callback
      *
+     * Set OnReadConvert callback functor invoked when data is readout.
+     * The processing result of this callback function is readout.
+     * Therefore, filtering of the read data will be possible.
+     *
+     * @param on_rconvert OnReadConvert callback functor
+     *
      * @endif
      */
     inline void setOnReadConvert(OnReadConvert<DataType>* on_rconvert)
@@ -531,6 +634,11 @@ namespace RTC
      *
      * @brief Set OnUnderflow callback
      *
+     * Set OnUnderflow callback functor, which is invoked when data cannot be
+     * readout because of the buffer empty.
+     *
+     * @param on_underflow OnUnderflow callback functor
+     *
      * @endif
      */
     inline void setOnUnderflow(OnUnderflow<DataType>* on_underflow)
@@ -543,16 +651,16 @@ namespace RTC
      * @if jp
      * @brief バインドされる T 型の変数への参照
      * @else
-     * @brief reference to type-T value bound this OutPort
+     * @brief The reference to type-T variable that is bound.
      * @endif
      */
     DataType& m_value;
     
     /*!
      * @if jp
-     * @brief タイムアウトのポーリング周期　[usec]
+     * @brief タイムアウトのポーリング周期 [usec]
      * @else
-     * @brief reference to type-T value bound this OutPort
+     * @brief Polling cycle of time-out [usec]
      * @endif
      */
     long int m_timeoutTick;
@@ -570,7 +678,7 @@ namespace RTC
      * @if jp
      * @brief 読み込み処理のタイムアウト時間 [usec]
      * @else
-     * @brief Timeout of read()
+     * @brief Timeout of read() [usec]
      * @endif
      */
     long int m_readTimeout;
@@ -588,7 +696,7 @@ namespace RTC
      * @if jp
      * @brief 書き込み処理のタイムアウト時間 [usec]
      * @else
-     * @brief Timeout of write()
+     * @brief Timeout of write() [usec]
      * @endif
      */
     long int m_writeTimeout;
@@ -597,7 +705,7 @@ namespace RTC
      * @if jp
      * @brief OnWrite コールバックファンクタへのポインタ
      * @else
-     * @brief OnWrite callback functor pointer
+     * @brief Pointer to OnWrite callback functor
      * @endif
      */
     OnWrite<DataType>* m_OnWrite;
@@ -606,7 +714,7 @@ namespace RTC
      * @if jp
      * @brief OnWriteConvert コールバックファンクタへのポインタ
      * @else
-     * @brief OnWriteConvert callback functor pointer
+     * @brief Pointer to OnWriteConvert callback functor
      * @endif
      */
     OnWriteConvert<DataType>* m_OnWriteConvert;
@@ -615,7 +723,7 @@ namespace RTC
      * @if jp
      * @brief OnRead コールバックファンクタへのポインタ
      * @else
-     * @brief OnRead callback functor pointer
+     * @brief Pointer to OnRead callback functor
      * @endif
      */
     OnRead<DataType>* m_OnRead;
@@ -624,7 +732,7 @@ namespace RTC
      * @if jp
      * @brief OnReadConvert コールバックファンクタへのポインタ
      * @else
-     * @brief OnReadConvert callback functor pointer
+     * @brief Pointer to OnReadConvert callback functor
      * @endif
      */
     OnReadConvert<DataType>* m_OnReadConvert;
@@ -633,7 +741,7 @@ namespace RTC
      * @if jp
      * @brief OnOverflow コールバックファンクタへのポインタ
      * @else
-     * @brief OnOverflow callback functor pointer
+     * @brief Pointer to OnOverflow callback functor
      * @endif
      */
     OnOverflow<DataType>* m_OnOverflow;
@@ -642,7 +750,7 @@ namespace RTC
      * @if jp
      * @brief OnUnderflow コールバックファンクタへのポインタ
      * @else
-     * @brief OnUnderflow callback functor pointer
+     * @brief Pointer to OnUnderflow callback functor
      *
      * @endif
      */

@@ -6,7 +6,7 @@
  * @date $Date: 2007-12-31 03:06:12 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
- * Copyright (C) 2006-2007
+ * Copyright (C) 2006-2008
  *     Noriaki Ando
  *     Task-intelligence Research Group,
  *     Intelligent Systems Research Institute,
@@ -15,19 +15,6 @@
  *     All rights reserved.
  *
  * $Id: BufferBase.h,v 1.2.4.3 2007-12-31 03:06:12 n-ando Exp $
- */
-
-/*
- * $Log: not supported by cvs2svn $
- * Revision 1.2.4.2  2007/09/21 09:18:12  n-ando
- * Documentation was modified.
- *
- * Revision 1.2  2006/12/02 18:24:15  n-ando
- * BufferBase's interfaces were changed.
- *
- * Revision 1.1  2006/11/27 09:44:34  n-ando
- * The first commitment.
- *
  */
 
 #ifndef BufferBase_h
@@ -42,6 +29,8 @@
  * @else
  *
  * @namespace RTC
+ *
+ * @brief RT-Component
  *
  * @endif
  */
@@ -76,6 +65,20 @@ namespace RTC
    * @brief BufferBase abstract class
    *
    * This is the abstract interface class for various Buffer.
+   * Concrete buffer classes must implement the following pure virtual
+   * functions.
+   * The users specify data type to hold it in a buffer as \<DataType\>.
+   *
+   * This class provides public interface as follows.
+   * - write(): Write data into the buffer.
+   * - read(): Read data from the buffer.
+   * - length(): Get the buffer length.
+   * - isFull(): Check on whether the buffer is full.
+   * - isEmpty(): Check on whether the buffer is empty.
+   *
+   * This class provides protected interface as follows.
+   * - put(): Store data into the buffer.
+   * - get(): Get data from the buffer.
    *
    * @param DataType Data type to be stored to the buffer.
    *
@@ -94,11 +97,13 @@ namespace RTC
      * 
      * @else
      *
-     * @brief virtual destractor
+     * @brief Virtual destructor
      *
      * @endif
      */
-    virtual ~BufferBase(){};
+    virtual ~BufferBase()
+    {
+    };
     
     /*!
      * @if jp
@@ -112,6 +117,8 @@ namespace RTC
      * @else
      *
      * @brief Get the buffer length
+     *
+     * Pure virtual function to get the buffer length.
      *
      * @return buffer length
      * 
@@ -134,6 +141,12 @@ namespace RTC
      *
      * @brief Write data into the buffer
      *
+     * Pure virtual function to write data into the buffer.
+     *
+     * @param value Target data to write.
+     *
+     * @return Result of having written in data (true:Successful, false:Failed)
+     *
      * @endif
      */
     virtual bool write(const DataType& value) = 0;
@@ -153,6 +166,12 @@ namespace RTC
      *
      * @brief Read data from the buffer
      *
+     * Pure virtual function to read data from the buffer.
+     *
+     * @param value Read data.
+     *
+     * @return Result of having read (true:Successful, false:Failed)
+     *
      * @endif
      */
     virtual bool read(DataType& value) = 0;
@@ -168,7 +187,11 @@ namespace RTC
      * 
      * @else
      *
-     * @brief True if the buffer is full, else false.
+     * @brief Check on whether the buffer is full.
+     *
+     * Pure virtual function to check on whether the buffer is full.
+     *
+     * @return True if the buffer is full, else false.
      *
      * @endif
      */
@@ -185,7 +208,11 @@ namespace RTC
      * 
      * @else
      *
-     * @brief True if the buffer is empty, else false.
+     * @brief Check on whether the buffer is empty.
+     *
+     * Pure virtual function to check on whether the buffer is empty.
+     *
+     * @return True if the buffer is empty, else false.
      *
      * @endif
      */
@@ -203,8 +230,12 @@ namespace RTC
      * 
      * @else
      *
-     * @brief Write data into the buffer
+     * @brief Store data into the buffer
      *
+     * Pure virtual function to store data into the buffer.
+     *
+     * @param data Target data
+     * 
      * @endif
      */
     virtual void put(const DataType& data) = 0;
@@ -221,6 +252,10 @@ namespace RTC
      * @else
      *
      * @brief Get data from the buffer
+     *
+     * Pure virtual function to get data from the buffer.
+     *
+     * @return Data got from buffer.
      *
      * @endif
      */
@@ -239,6 +274,11 @@ namespace RTC
      *
      * @brief Get the buffer's reference to be written the next
      *
+     * Pure virtual function to get the buffer's reference to be written 
+     * the next.
+     *
+     * @return Reference to be written the next
+     * 
      * @endif
      */
     virtual DataType& getRef() = 0;
@@ -258,6 +298,16 @@ namespace RTC
    *
    * @else
    *
+   * @class NullBuffer
+   * @brief Concrete buffer class for dummy
+   * 
+   * Concrete buffer class for dummy. Buffer length is fixed to 1.
+   * The users specify data type to hold it in a buffer as \<DataType\>.
+   *
+   * @param DataType Data type to hold in a buffer
+   *
+   * @since 0.4.0
+   *
    * @endif
    */
   template <class DataType>
@@ -271,12 +321,19 @@ namespace RTC
      * @brief コンストラクタ
      * 
      * コンストラクタ
-     * バッファ長を１(固定)で初期化する。
+     * バッファ長を1(固定)で初期化する。
      *
      * @param size バッファ長(ただし無効)
      * 
      * @else
      *
+     * @brief Constructer
+     * 
+     * Constructer.
+     * Initialize buffer length to always 1.
+     *
+     * @param size Buffer length(Not use)
+     * 
      * @endif
      */
     NullBuffer(long int size = 1)
@@ -293,6 +350,10 @@ namespace RTC
      *
      * @else
      *
+     * @brief Destructor
+     *
+     * Destractor
+     *
      * @endif
      */
     virtual ~NullBuffer()
@@ -302,15 +363,17 @@ namespace RTC
     /*!
      * @if jp
      *
-     * @brief バッファ長(１固定)を取得する
+     * @brief バッファ長(1固定)を取得する
      * 
-     * バッファ長を取得する。(常に１を返す。)
+     * バッファ長を取得する。(常に1を返す。)
      * 
-     * @return バッファ長(１固定)
+     * @return バッファ長(1固定)
      * 
      * @else
      *
-     * @brief Get the buffer length
+     * @brief Get the buffer length (always 1)
+     *
+     * Get the buffer length. (Return always 1.)
      *
      * @return buffer length(always 1)
      * 
@@ -336,6 +399,12 @@ namespace RTC
      *
      * @brief Write data into the buffer
      *
+     * Write data which were given with an argument into the buffer.
+     *
+     * @param value Target data to write.
+     *
+     * @return Result of having written in data (true:Successful, false:Failed)
+     *
      * @endif
      */
     virtual bool write(const DataType& value)
@@ -359,6 +428,12 @@ namespace RTC
      *
      * @brief Read data from the buffer
      *
+     * Read data stored in the buffer.
+     *
+     * @param value Read data.
+     *
+     * @return Result of having read (true:Successful, false:Failed)
+     *
      * @endif
      */
     virtual bool read(DataType& value)
@@ -378,7 +453,11 @@ namespace RTC
      * 
      * @else
      *
-     * @brief Always false.
+     * @brief Check on whether the buffer is full.
+     *
+     * Check on whether the buffer is full. (Always false.)
+     *
+     * @return Always false.
      *
      * @endif
      */
@@ -398,7 +477,11 @@ namespace RTC
      * 
      * @else
      *
-     * @brief Always false.
+     * @brief Check on whether the buffer is empty.
+     *
+     * Check on whether the buffer is empty. (Always false.)
+     *
+     * @return Always false.
      *
      * @endif
      */
@@ -419,7 +502,11 @@ namespace RTC
      * 
      * @else
      *
-     * @brief Write data into the buffer
+     * @brief Store data into the buffer
+     *
+     * Store data which were given with an argument into the buffer.
+     *
+     * @param data Target data to store.
      *
      * @endif
      */
@@ -440,6 +527,10 @@ namespace RTC
      * @else
      *
      * @brief Get data from the buffer
+     *
+     * Get data from the buffer.
+     *
+     * @return Data got from buffer.
      *
      * @endif
      */
@@ -462,6 +553,11 @@ namespace RTC
      * @else
      *
      * @brief Get the buffer's reference to be written the next
+     *
+     * Get the reference to be written buffer.
+     * Return always same position because this buffer's length is always 1.
+     *
+     * @return Reference to be written the next(always same)
      *
      * @endif
      */

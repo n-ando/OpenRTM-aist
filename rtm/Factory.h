@@ -1,7 +1,7 @@
 // -*- C++ -*-
 /*!
  * @file Factory.h
- * @brief RTComponent factory class
+ * @brief RT-Component factory class
  * @date $Date: 2007-12-31 03:08:03 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
@@ -14,26 +14,6 @@
  *     All rights reserved.
  *
  * $Id: Factory.h,v 1.5.4.1 2007-12-31 03:08:03 n-ando Exp $
- *
- */
-
-/*
- * $Log: not supported by cvs2svn $
- * Revision 1.5  2006/11/06 01:28:36  n-ando
- * Now the "instance_name" is set to the component at creation time.
- *
- * Revision 1.4  2006/10/25 17:36:00  n-ando
- * Classes were renamed, and class reference manual was described.
- *
- * Revision 1.3  2006/10/24 14:23:45  n-ando
- * Renamed RtcFactory.h to Factory.h
- *
- * Revision 1.2  2005/05/16 06:06:30  n-ando
- * - RtcFactoryBase, RtcFactoryCXX classes were DLL exported for Windows port.
- *
- * Revision 1.1.1.1  2005/05/12 09:06:18  n-ando
- * Public release.
- *
  *
  */
 
@@ -68,6 +48,16 @@ namespace RTC
    * @return 生成した RTコンポーネント インスタンス
    * 
    * @else
+   * @brief Template function to create RT-Components
+   * 
+   * This is the template function to create RT-Component's instances.
+   * This is invoked from RT-Components manager.
+   * Actually, each component's constructor is invoked.
+   * Specify the type of the target RT-Components for creation by \<_New\>.
+   *
+   * @param manager Manager object
+   *
+   * @return Created RT-Component's instances
    *
    * @endif
    */
@@ -88,6 +78,13 @@ namespace RTC
    * @param rtc 破棄対象RTコンポーネントのインスタンス
    *
    * @else
+   *
+   * @brief Template function to destroy RT-Components
+   * 
+   * This is the template function to destroy RT-Component's instances.
+   * Specify the type of the target RT-Components for destroy by \<_Delete\>.
+   *
+   * @param rtc The target RT-Component's instances for destruction
    *
    * @endif
    */
@@ -112,7 +109,7 @@ namespace RTC
    * @class FactoryBase
    * @brief FactoryBase base class
    *
-   * RTComponent factory base class.
+   * This is a base class for RT-Component factory.
    *
    * @since 0.2.0
    *
@@ -132,11 +129,11 @@ namespace RTC
      *
      * @else
      *
-     * @brief Constructor.
+     * @brief Constructor
      *
      * Constructor.
      *
-     * @param profile component profile
+     * @param profile Component profile
      *
      * @endif
      */
@@ -150,6 +147,9 @@ namespace RTC
      *
      * @else
      * @brief Destructor
+     *
+     * Destructor
+     *
      * @endif
      */
     virtual ~FactoryBase();
@@ -159,7 +159,7 @@ namespace RTC
      *
      * @brief コンポーネントの生成
      *
-     * RTComponent のインスタンスを生成するための純粋仮想関数。
+     * RT-Component のインスタンスを生成するための純粋仮想関数。
      *
      * @param mgr マネージャオブジェクト
      *
@@ -167,9 +167,13 @@ namespace RTC
      *
      * @else
      *
-     * @brief Create component
+     * @brief Create components
      *
-     * @param mgr pointer to RtcManager
+     * Pure virtual function to create RT-Component's instances
+     *
+     * @param mgr Manager object
+     *
+     * @return Created RT-Components
      *
      * @endif
      */
@@ -180,15 +184,17 @@ namespace RTC
      *
      * @brief コンポーネントの破棄
      *
-     * RTComponent のインスタンスを破棄するための純粋仮想関数。
+     * RT-Component のインスタンスを破棄するための純粋仮想関数。
      *
      * @param comp 破棄対象 RTコンポーネント
      *
      * @else
      *
-     * @brief Destroy component
+     * @brief Destroy components
      *
-     * @param comp pointer to RtcBase
+     * Pure virtual function to destroy RT-Component's instances
+     *
+     * @param comp The target RT-Component for destruction
      *
      * @endif
      */
@@ -205,9 +211,11 @@ namespace RTC
      *
      * @else
      *
-     * @brief Get component profile
+     * @brief Get the component profile
      *
-     * Get component profile.
+     * Get the component profile.
+     *
+     * @return The component profile
      *
      * @endif
      */
@@ -224,9 +232,11 @@ namespace RTC
      *
      * @else
      *
-     * @brief Get number of component instances
+     * @brief Get the number of current instances
      *
-     * Get number of current component instances.
+     * Get the number of current RT-Component's instances.
+     *
+     * @return Number of RT-Component's instances
      *
      * @endif
      */
@@ -246,7 +256,7 @@ namespace RTC
      * @if jp
      * @brief 現在のインスタンス数
      * @else
-     * @brief Number of current component instances.
+     * @brief Number of current RT-Component's instances.
      * @endif
      */
     int m_Number;
@@ -267,7 +277,9 @@ namespace RTC
    * @class FactoryCXX
    * @brief FactoryCXX class
    *
-   * RTComponent factory class for C++.
+   * RT-Component factory class for C++.
+   *
+   * @since 0.2.0
    *
    * @endif
    */
@@ -298,12 +310,13 @@ namespace RTC
      * Constructor.
      * Create component factory class with three arguments:
      * component profile, function pointer to object create function and
-     * object delete function.
+     * object destroy function.
      *
      * @param profile Component profile
      * @param new_func Pointer to component create function
-     * @param delete_func Pointer to component delete function
-     * @param policy Pointer to component delete function
+     * @param delete_func Pointer to component destroy function
+     * @param policy The naming policy at component creation
+     * (The default value:DefaultNumberingPolicy)
      *
      * @endif
      */
@@ -317,7 +330,7 @@ namespace RTC
      *
      * @brief コンポーネントの生成
      *
-     * RTComponent のインスタンスを生成する。
+     * RT-Component のインスタンスを生成する。
      *
      * @param mgr マネージャオブジェクト
      *
@@ -325,11 +338,13 @@ namespace RTC
      *
      * @else
      *
-     * @brief Create component
+     * @brief Create RT-Components
      *
-     * Create component implemented in Python.
+     * Create RT-Component's instances
      *
-     * @param mgr
+     * @param mgr Manager object
+     *
+     * @return Created RT-Components
      *
      * @endif
      */
@@ -340,17 +355,17 @@ namespace RTC
      *
      * @brief コンポーネントの破棄
      *
-     * RTComponent のインスタンスを破棄する。
+     * RT-Component のインスタンスを破棄する。
      *
-     * @param comp 破棄対象 RTComponent
+     * @param comp 破棄対象 RT-Component
      *
      * @else
      *
-     * @brief Destroy component
+     * @brief Destroy RT-Components
      *
-     * Destroy component instance
+     * Destroy RT-Component's instances
      *
-     * @param comp
+     * @param comp The target RT-Component for destruction
      *
      * @endif
      */
@@ -370,7 +385,7 @@ namespace RTC
      * @if jp
      * @brief コンポーネントオブジェクト破棄関数へのポインタ
      * @else
-     * @brief The pointer to component object delete function
+     * @brief The pointer to component object destroy function
      * @endif
      */
     RtcDeleteFunc m_Delete;
@@ -379,6 +394,7 @@ namespace RTC
      * @if jp
      * @brief コンポーネント生成時の命名ポリシー
      * @else
+     * @brief The naming policy on creating the components
      * @endif
      */
     NumberingPolicy* m_policy;

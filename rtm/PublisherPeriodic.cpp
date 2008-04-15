@@ -17,28 +17,6 @@
  *
  */
 
-/*
- * $Log: not supported by cvs2svn $
- * Revision 1.5.2.1  2007/07/20 16:04:22  n-ando
- * A bug fix.
- *
- * Revision 1.5  2007/02/07 02:53:01  n-ando
- * The property dataport.push_interval was changed to dataport.push_rate.
- *
- * Revision 1.4  2007/02/04 17:03:04  n-ando
- * The wait func is called in dtor to wait thread termination.
- *
- * Revision 1.3  2007/01/21 13:04:32  n-ando
- * Data push interval property accepts float.
- *
- * Revision 1.2  2007/01/06 18:01:00  n-ando
- * Some trivial fixes.
- *
- * Revision 1.1  2006/11/27 09:44:50  n-ando
- * The first commitment.
- *
- */
-
 #include <rtm/PublisherPeriodic.h>
 #include <rtm/InPortConsumer.h>
 #include <rtm/Properties.h>
@@ -132,7 +110,7 @@ namespace RTC
    * @if jp
    * @brief タスク開始
    * @else
-   * @brief Task start function
+   * @brief Start task
    * @endif
    */
   int PublisherPeriodic::open(void *args)

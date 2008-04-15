@@ -16,13 +16,6 @@
  *
  */
 
-/*
- * $Log: not supported by cvs2svn $
- * Revision 1.1  2007/04/13 16:06:16  n-ando
- * ExecutionContext Factory class.
- *
- */
-
 #include <rtm/ECFactory.h>
 
 namespace RTC 
@@ -32,7 +25,7 @@ namespace RTC
    * @if jp
    * @brief コンストラクタ
    * @else
-   *
+   * @brief Constructor
    * @endif
    */
   ECFactoryCXX::ECFactoryCXX(const char* name,
@@ -48,7 +41,7 @@ namespace RTC
    * @if jp
    * @brief 仮想デストラクタ
    * @else
-   *
+   * @brief Virtual destructor
    * @endif
    */
   ECFactoryCXX::~ECFactoryCXX()
@@ -59,7 +52,7 @@ namespace RTC
    * @if jp
    * @brief 生成対象ExecutionContext名称を取得
    * @else
-   *
+   * @brief Get names of the target ExecutionContext for creation
    * @endif
    */
   const char* ECFactoryCXX::name()
@@ -71,7 +64,7 @@ namespace RTC
    * @if jp
    * @brief 生成対象ExecutionContextインスタンスを生成
    * @else
-   *
+   * @brief Create the target ExecutionContext's instances
    * @endif
    */
   ExecutionContextBase* ECFactoryCXX::create()
@@ -83,7 +76,7 @@ namespace RTC
    * @if jp
    * @brief 対象ExecutionContextインスタンスを破棄
    * @else
-   *
+   * @brief Destroy the target ExecutionContext's instances
    * @endif
    */
   void ECFactoryCXX::destroy(ExecutionContextBase* ec)

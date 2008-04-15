@@ -17,22 +17,6 @@
  *
  */
 
-/*
- * $Log: not supported by cvs2svn $
- * Revision 1.5.2.1  2007/07/20 16:07:58  n-ando
- * Shimizu's patch to modify vector access violation.
- *
- * Revision 1.5  2007/04/26 15:32:56  n-ando
- * The header include order was modified to define _REENTRANT before
- * including ace/config-lite.h in Linux systems.
- * In ace 5.4.7 or later, _REENTRANT flag should be defined explicitly.
- *
- * Revision 1.4  2007/01/06 18:02:49  n-ando
- * The RingBuffer has been completely re-implemented.
- *
- *
- */
-
 #ifndef RingBuffer_h
 #define RingBuffer_h
 
@@ -53,6 +37,8 @@
  *
  * @namespace RTC
  *
+ * @brief RT-Component
+ *
  * @endif
  */
 namespace RTC
@@ -66,6 +52,7 @@ namespace RTC
    * バッファ全体にデータが格納された場合、以降のデータは古いデータから
    * 順次上書きされる。
    * 従って、バッファ内には直近のバッファ長分のデータのみ保持される。
+   *
    * 注)現在の実装では、一番最後に格納したデータのみバッファから読み出し可能
    *
    * @param DataType バッファに格納するデータ型
@@ -73,6 +60,21 @@ namespace RTC
    * @since 0.4.0
    *
    * @else
+   * @class RingBuffer
+   * @brief Ring buffer implementation class
+   * 
+   * This is the buffer implementation class with ring shaped buffer of
+   * specified length.
+   * If data is stored in the entire buffer, data from now on will be
+   * overwritten from old data one by one.
+   * Therefore, only the length of latest data is stored in the buffer.
+   *
+   * Note: In the current implementation, only last stored data can be read
+   *       from the buffer.
+   *
+   * @param DataType Data type to store in the buffer
+   *
+   * @since 0.4.0
    *
    * @endif
    */
@@ -94,6 +96,15 @@ namespace RTC
      * 
      * @else
      *
+     * @brief Constructor
+     * 
+     * Constructor.
+     * Initialize the buffer by specified buffer length.
+     * However, if the specified length is less than two, the buffer should
+     * be initialized by two in length.
+     *
+     * @param length Buffer length
+     * 
      * @endif
      */
     RingBuffer(long int length)
@@ -113,8 +124,10 @@ namespace RTC
      * 
      * @else
      *
-     * @brief virtual destractor
-     *
+     * @brief Virtual destractor
+     * 
+     * Virtual destractor
+     * 
      * @endif
      */
     virtual ~RingBuffer(){};
@@ -124,13 +137,20 @@ namespace RTC
      *
      * @brief 初期化
      * 
-     * バッファの初期化
+     * バッファの初期化を実行する。
      * 指定された値をバッファ全体に格納する。
      *
      * @param data 初期化用データ
      * 
      * @else
      *
+     * @brief Initialize the buffer
+     * 
+     * Initialize the buffer.
+     * Store the specified value to eitire buffer.
+     *
+     * @param data Data for initialization
+     * 
      * @endif
      */
     void init(DataType& data)
@@ -153,6 +173,11 @@ namespace RTC
      * @else
      *
      * @brief Get the buffer length
+     * 
+     * Get the buffer length.
+     * 
+     * @return Buffer length
+     * 
      *
      * @endif
      */
@@ -175,7 +200,13 @@ namespace RTC
      * @else
      *
      * @brief Write data into the buffer
+     * 
+     * Write data which is given argument into the buffer.
+     * 
+     * @param value Target data for writing
      *
+     * @return Writing result (Always true: writing success is returned)
+     * 
      * @endif
      */
     virtual bool write(const DataType& value)
@@ -197,8 +228,14 @@ namespace RTC
      * 
      * @else
      *
-     * @brief Write data into the buffer
+     * @brief Readout data from the buffer
+     * 
+     * Readout data stored into the buffer.
+     * 
+     * @param value Readout data
      *
+     * @return Readout result (Always true: readout success is returned)
+     * 
      * @endif
      */
     virtual bool read(DataType& value)
@@ -218,8 +255,12 @@ namespace RTC
      * 
      * @else
      *
-     * @brief True if the buffer is full, else false.
+     * @brief Check whether the buffer is full.
+     * 
+     * Check whether the buffer is full (Always return false)
      *
+     * @return Full check result (Always false)
+     * 
      * @endif
      */
     virtual bool isFull() const
@@ -233,6 +274,7 @@ namespace RTC
      * @brief バッファが空であるか確認する
      * 
      * バッファ空を確認する。
+     * 
      * 注)現在の実装では，現在のバッファ位置に格納されたデータが読み出されたか
      * どうかを返す。( true:データ読み出し済，false:データ未読み出し)
      *
@@ -240,8 +282,16 @@ namespace RTC
      * 
      * @else
      *
-     * @brief True if the buffer is empty, else false.
+     * @brief Check whether the buffer is empty
+     * 
+     * Check whether the buffer is empty.
+     * 
+     * Note: In the current implementation, return whether the data which was
+     *       stored at a current buffer's position was readout.
+     *       (true:it has already readout data，false:it does not readout data)
      *
+     * @return Empty check result
+     * 
      * @endif
      */
     virtual bool isEmpty() const
@@ -262,6 +312,14 @@ namespace RTC
      * 
      * @else
      *
+     * @brief Check whether the data is newest
+     * 
+     * Check whether the data stored at a current buffer position is newest.
+     *
+     * @return Newest data check result
+     *         ( true:Newest data. Data has not been readout yet.
+     *          false:Past data．Data has already been readout.)
+     * 
      * @endif
      */
     bool isNew() const
@@ -276,6 +334,7 @@ namespace RTC
      * @brief バッファにデータを格納する
      * 
      * 引数で与えられたデータをバッファに格納する。
+     * 
      * 注)現在の実装ではデータを格納すると同時に、データの読み出し位置を
      * 格納したデータ位置に設定している。このため、常に直近に格納したデータを
      * 取得する形となっている。
@@ -284,8 +343,16 @@ namespace RTC
      * 
      * @else
      *
-     * @brief Write data into the buffer
-     *
+     * @brief Store data into the buffer
+     * 
+     * Store data given by argument into the buffer.
+     * 
+     * Note: In the current implementation, the data position is set the
+     *       readout position of data at the same time of storing data
+     *       Therefore, the latest stored data is always got.
+     * 
+     * @param data Target data for the store
+     * 
      * @endif
      */
     virtual void put(const DataType& data)
@@ -308,7 +375,11 @@ namespace RTC
      * @else
      *
      * @brief Get data from the buffer
+     * 
+     * Get data stored into the buffer.
      *
+     * @return Data got from buffer
+     * 
      * @endif
      */
     virtual const DataType& get()
@@ -328,6 +399,10 @@ namespace RTC
      * @else
      *
      * @brief Get the buffer's reference to be written the next
+     * 
+     * Get the reference to the buffer that will be written.
+     * 
+     * @return The buffer's reference to be written the next
      *
      * @endif
      */
@@ -353,7 +428,14 @@ namespace RTC
      * @since 0.4.0
      *
      * @else
-     * @brief Buffer sequence
+     * @brief Buffer array
+     * 
+     * This is an array class for storing buffer's data.
+     *
+     * @param D Data type to store into the buffer
+     *
+     * @since 0.4.0
+     *
      * @endif
      */
     template <class D>

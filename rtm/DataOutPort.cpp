@@ -17,30 +17,6 @@
  *
  */
 
-/*
- * $Log: not supported by cvs2svn $
- * Revision 1.5.2.1  2007/06/22 10:54:56  n-ando
- * The bug of OutPort's disconnect operation was fixed.
- *
- * Revision 1.5  2007/04/13 15:44:56  n-ando
- * RTC::OK was changed to RTC::RTC_OK.
- *
- * Revision 1.4  2007/02/04 16:54:12  n-ando
- * The disconnection process was implemented.
- *
- * Revision 1.3  2007/01/06 17:44:00  n-ando
- * The behavior on notify_connect() and notify_disconnect() are now
- * implemented in protected functions(ex. publisherInterfaces()).
- *
- * Revision 1.2  2006/12/02 18:29:08  n-ando
- * Now OutPortCorbaProvider and InPortCorbaConsumer are used.
- *
- * Revision 1.1  2006/11/27 09:44:36  n-ando
- * The first commitment.
- *
- *
- */
-
 #include <rtm/DataOutPort.h>
 #include <rtm/CORBA_SeqUtil.h>
 #include <rtm/NVUtil.h>
@@ -82,6 +58,7 @@ namespace RTC
    * @if jp
    * @brief Interface に接続する
    * @else
+   * @brief Subscribe to the interface
    * @endif
    */
   ReturnCode_t
@@ -107,6 +84,7 @@ namespace RTC
    * @if jp
    * @brief Interface の接続を解除する
    * @else
+   * @brief Disconnect the interface connection
    * @endif
    */
   void

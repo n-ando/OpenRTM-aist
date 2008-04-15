@@ -17,41 +17,6 @@
  *
  */
 
-/*
- * $Log: not supported by cvs2svn $
- * Revision 1.6.4.3  2007/09/21 09:15:16  n-ando
- * Now InPort's default buffer is RingBuffer.
- *
- * Revision 1.6.4.2  2007/08/20 05:15:39  n-ando
- * Now default buffer is RingBuffer instead of NullBuffer.
- *
- * Revision 1.6.4.1  2007/07/20 15:54:50  n-ando
- * Now ACE_OS::gettimeofday() is used for win32 porting.
- *
- * Revision 1.6  2007/01/06 17:47:51  n-ando
- * Some changes.
- * - Callback declarations are changed.
- * - Return value of write().
- *
- * Revision 1.5  2006/12/02 18:37:29  n-ando
- * A trivial fix.
- *
- * Revision 1.4  2006/11/07 09:26:12  n-ando
- * Renamed RtcInPort.h to InPort.h.
- *
- * Revision 1.3  2005/05/27 07:29:32  n-ando
- * - InPort/OutPort interface was changed.
- *   Exception RTM::InPort::Disconnected -> RTM:PortBase::Disconnected
- *
- * Revision 1.2  2005/05/16 06:12:15  n-ando
- * - Time variables of "m_Value" were initialized in constructors.
- *
- * Revision 1.1.1.1  2005/05/12 09:06:18  n-ando
- * Public release.
- *
- *
- */
-
 #ifndef RtcInPort_h
 #define RtcInPort_h
 
@@ -76,14 +41,13 @@ namespace RTC
    * @brief InPort テンプレートクラス
    * 
    * InPort の実装である InPort<T> のテンプレートクラス。
-   * <T> はRTCDataType.idl にて定義されている型で、メンバとして
+   * <T> はBasicDataType.idl にて定義されている型で、メンバとして
    * Time 型の tm , および T型の data を持つ構造体でなくてはならない。
    * InPort は内部にリングバッファを持ち、外部から送信されたデータを順次
    * このリングバッファに格納する。リングバッファのサイズはデフォルトで64と
    * なっているが、コンストラクタ引数によりサイズを指定することができる。
-   * データはフラグによって未読、既読状態が管理され、isNew(), getNewDataLen()
-   * getNewList(), getNewListReverse() 等のメソッドによりハンドリングすることが
-   * できる。
+   * データはフラグによって未読、既読状態が管理され、isNew(), write(), read(),
+   * isFull(), isEmpty() 等のメソッドによりハンドリングすることができる。
    *
    * @since 0.2.0
    *
@@ -93,12 +57,15 @@ namespace RTC
    *
    * @brief InPort template class
    *
-   * This class template provides interfaces to input port.
-   * Component developer can define input value, which act as input
-   * port from other components, using this template.
-   * This is class template. This class have to be incarnated class as port
-   * value types. This value types are previously define RtComponent IDL.
-   * ex. type T: TimedFload, TimedLong etc... 
+   * This is a template class that implements InPort.
+   * <T> is the type defined in BasicDataType.idl and must be the structure which
+   * has both Time type tm and type-T data as a member. InPort has a ring
+   * buffer internally, and stores the received data externally in this buffer
+   * one by one. The size of ring buffer can be specified according to 
+   * the argument of constructor, though the default size is 64. Unread
+   * data and data which is already read are managed with the flag, and the
+   * data can be handled by the isNew(), write(), read(), isFull() and isEmpty()
+   * method etc. 
    *
    * @since 0.2.0
    *
@@ -136,12 +103,28 @@ namespace RTC
      *
      * @brief A constructor.
      *
-     * Setting channel name and registering channel value.
+     * constructor.
+     * This is bound to type-T variable given as a parameter.
      *
      * @param name A name of the InPort. This name is referred by
      *             InPortBase::name().
-     * @param value A channel value related with the channel.
-     * @param bufsize Buffer length of internal ring buffer of InPort 
+     * @param value type-T variable that is bound to this InPort.
+     * @param bufsize Buffer length of internal ring buffer of InPort
+     *                (The default value:64)
+     * @param read_block Flag of reading block.
+     *                   When there are not unread data at reading data,
+     *                   set whether to block data until receiving the next 
+     *                   data. (The default value:false)
+     * @param write_block Flag of writing block.
+     *                    If the buffer was full at writing data, set whether 
+     *                    to block data until the buffer has space. 
+     *                    (The default value:false)
+     * @param read_timeout Data reading timeout time (millisecond) 
+     *                     when not specifying read blocking.
+     *                     (The default value:0)
+     * @param write_timeout Data writing timeout time (millisecond)
+     *                      when not specifying writing block.
+     *                      (The default value:0)
      *
      * @endif
      */
@@ -168,7 +151,9 @@ namespace RTC
      *
      * @else
      *
-     * @brief A destructor
+     * @brief Destructor
+     *
+     * Destructor
      *
      * @endif
      */
@@ -184,6 +169,12 @@ namespace RTC
      * @return ポート名称
      *
      * @else
+     *
+     * @brief Get port name
+     *
+     * Get port name.
+     *
+     * @return The port name
      *
      * @endif
      */
@@ -205,7 +196,7 @@ namespace RTC
      *   かつ、書き込む際にバッファがオーバーフローを検出した場合、
      *   コールバックファンクタ OnOverflow が呼ばれる。
      * - コールバックファンクタ OnWriteConvert がセットされている場合、
-     *   バッファ書き込み時に、OnWriteConvert の operator()() の戻り値が
+     *   バッファ書き込み時に、OnWriteConvert の operator() の戻り値が
      *   バッファに書き込まれる。
      * - setWriteTimeout() により書き込み時のタイムアウトが設定されている場合、
      *   タイムアウト時間だけバッファフル状態が解除するのを待ち、
@@ -217,7 +208,26 @@ namespace RTC
      *
      * @else
      *
-     * @brief 
+     * @brief  Write the value to DataPort
+     *
+     * Write the value to DataPort
+     *
+     * - When callback functor OnWrite is already set, OnWrite will be
+     *   invoked before writing into the buffer held by InPort.
+     * - When the buffer held by InPort can detect the overflow,
+     *   and when it detected the overflow at writing, callback functor
+     *   OnOverflow will be invoked.
+     * - When callback functor OnWriteConvert is set, the return value of
+     *   operator() of OnWriteConvert will be written into the buffer 
+     *   at the writing.
+     * - When timeout of writing time is already set by setWriteTimeout(),
+     *   it will wait for only timeout time until the state of the buffer full
+     *   is reset, if OnOverflow is already set this will be invoked to 
+     *   return.
+     *
+     * @param value The target data for the writing
+     *
+     * @return Writing result (Successful:true, Failed:false)
      *
      * @endif
      */
@@ -285,7 +295,7 @@ namespace RTC
      *   かつ、読み出す際にバッファがアンダーフローを検出した場合、
      *   コールバックファンクタ OnUnderflow が呼ばれる。
      * - コールバックファンクタ OnReadConvert がセットされている場合、
-     *   バッファ書き込み時に、OnReadConvert の operator()() の戻り値が
+     *   バッファ書き込み時に、OnReadConvert の operator() の戻り値が
      *   read()の戻り値となる。
      * - setReadTimeout() により読み出し時のタイムアウトが設定されている場合、
      *   バッファアンダーフロー状態が解除されるまでタイムアウト時間だけ待ち、
@@ -295,7 +305,23 @@ namespace RTC
      *
      * @else
      *
-     * @brief [CORBA interface] Put data on InPort
+     * @brief Readout the value from DataPort
+     *
+     * Readout the value from DataPort
+     *
+     * - When Callback functor OnRead is already set, OnRead will be invoked
+     *   before reading from the buffer held by DataPort.
+     * - When the buffer held by DataPort can detect the underflow,
+     *   and when it detected the underflow at reading, callback functor
+     *   OnUnderflow will be invoked.
+     * - When callback functor OnReadConvert is already set, the return value of
+     *   operator() of OnReadConvert will be the return value of read().
+     * - When timeout of reading is already set by setReadTimeout(),
+     *   it waits for only timeout time until the state of the buffer underflow
+     *   is reset, and if OnUnderflow is already set, this will be invoked to 
+     *   return.
+     *
+     * @return Readout data
      *
      * @endif
      */
@@ -365,7 +391,12 @@ namespace RTC
      *
      * @else
      *
-     * @brief Initialize ring buffer value of InPort
+     * @brief Initialize the ring buffer value in InPort
+     *
+     * Initialize the ring buffer in InPort by specified value.
+     * (Currently, commented out)
+     *
+     * @param value The target initialization data
      *
      * @endif
      */
@@ -386,7 +417,13 @@ namespace RTC
      *
      * @else
      *
-     * @brief Read into bound T-type data from current InPort
+     * @brief Read the newly value to type-T variable which is bound to InPort's
+     *        buffer.
+     *
+     * Read the newly value to type-T data which is bound to InPort's buffer.
+     * The type-T variable must be bound to InPort in constructor.
+     * Since this method assumes to be used for polymorphic,
+     * its argument and the return value do not depend on type.
      *
      * @endif
      */
@@ -415,9 +452,11 @@ namespace RTC
      *
      * @else
      *
-     * @brief Read from InPort buffer to type-T variable
+     * @brief Read the newly value data in InPort to type-T variable
      *
-     * @param rhs type-T variable which is wrote from InPort buffer
+     * Read the newly data set in InPort and set to specified data variable.
+     *
+     * @param rhs The type-T variable to read from InPort's buffer
      *
      * @endif
      */
@@ -438,6 +477,12 @@ namespace RTC
      *
      * @else
      *
+     * @brief Write the type-T data to DataPort
+     *
+     * Write the given type-T data to DataPort.
+     *
+     * @param value The type-T variable to write to DaraPort
+     *
      * @endif
      */
     void operator<<(DataType& value)
@@ -453,7 +498,7 @@ namespace RTC
      *
      * @else
      *
-     * @brief Get number of new data to be read.
+     * @brief Get number of new unread data
      *
      * @endif
      */
@@ -471,7 +516,7 @@ namespace RTC
      *
      * @else
      *
-     * @brief Get new data to be read.
+     * @brief Get new unread data
      *
      * @endif
      */
@@ -489,7 +534,7 @@ namespace RTC
      *
      * @else
      *
-     * @brief Get new data to be read.
+     * @brief Get new unread data backwards by date (new->old)
      *
      * @endif
      */
@@ -524,7 +569,24 @@ namespace RTC
      *
      * @else
      *
-     * @brief Get new data to be read.
+     * @brief Set callback for inputting data into the InPort buffer.
+     *
+     * Set the callback object invoked when data was put in the InPort's buffer.
+     * The callback object which was set inherits InPort<DataType>::OnPut class,
+     * and the method operator(), which has the argument "const DataType&"
+     * and the return value "void", need to be implemented.
+     *
+     * Callback object should be implemented as follow:<br>
+     * struct MyOnPutCallback : public InPort<DataType> {<br>
+     *   void operator()(const DataType data) {<br>
+     *     Operation<br>
+     *   }<br>
+     * };<br>
+     * and should be set as follow:
+     * <br> 
+     * m_inport.setOnPut(new MyOnPutCallback());<br>
+     *
+     * @param on_write OnWrite&lt;DataType&gt; type object
      *
      * @endif
      */
@@ -546,6 +608,14 @@ namespace RTC
      *
      * @else
      *
+     * @brief Set callback when data is written into the InPort buffer
+     *
+     * Set the callback object that is invoked when data is written into 
+     * the InPort's buffer. The return value of the callback object is set to
+     * the buffer.
+     * 
+     * @param on_wconvert OnWriteConvert&lt;DataType&gt; type object
+     *
      * @endif
      */
     inline void setOnWriteConvert(OnWriteConvert<DataType>* on_wconvert)
@@ -564,6 +634,13 @@ namespace RTC
      * @param on_read OnRead&lt;DataType&gt;型のオブジェクト
      *
      * @else
+     *
+     * @brief Set callback when data is read from the InPort buffer
+     *
+     * Set the callback object that is invoked right before data is read from 
+     * the InPort's buffer
+     * 
+     * @param on_read OnRead&lt;DataType&gt; type object
      *
      * @endif
      */
@@ -585,6 +662,14 @@ namespace RTC
      *
      * @else
      *
+     * @brief Set callback when data is readout to the InPort buffer
+     *
+     * Set the callback object that is invoked when data is readout to
+     * the InPort's buffer. The return value of callback object is the return
+     * result of the read() method.
+     * 
+     * @param on_rconvert OnReadConvert&lt;DataType&gt; type object
+     *
      * @endif
      */
     inline void setOnReadConvert(OnReadConvert<DataType>* on_rconvert)
@@ -603,6 +688,13 @@ namespace RTC
      * @param on_overflow OnOverflow&lt;DataType&gt;型のオブジェクト
      *
      * @else
+     *
+     * @brief Set callback when the InPort buffer occurs overflow
+     *
+     * Set the callback object that is invoked when the buffer overflow was
+     * detected in the InPort's buffer.
+     * 
+     * @param on_overflow OnOverflow&lt;DataType&gt; type object
      *
      * @endif
      */
@@ -623,6 +715,13 @@ namespace RTC
      *
      * @else
      *
+     * @brief Set callback when the InPort buffer occurs underflow.
+     *
+     * Set the callback object that is invoked when the buffer underflow was
+     * detected in the InPort's buffer.
+     * 
+     * @param on_underflow OnUnderflow&lt;DataType&gt; type object
+     *
      * @endif
      */
     inline void setOnUnderflow(OnUnderflow<DataType>* on_underflow)
@@ -636,7 +735,6 @@ namespace RTC
      * @brief ポート名
      * @else
      * @berif Port's name
-     * @else
      * @endif
      */
     std::string m_name;
@@ -645,7 +743,7 @@ namespace RTC
      * @if jp
      * @brief バインドされる T 型の変数への参照
      * @else
-     * @brief reference to type-T value bound this OutPort
+     * @brief The reference to type-T value bound this OutPort
      * @endif
      */
     DataType& m_value;
@@ -668,7 +766,7 @@ namespace RTC
      * @if jp
      * @brief OnWrite コールバックファンクタへのポインタ
      * @else
-     * @brief OnWrite callback functor pointer
+     * @brief Pointer to OnWrite callback functor
      * @endif
      */
     OnWrite<DataType>* m_OnWrite;
@@ -677,7 +775,7 @@ namespace RTC
      * @if jp
      * @brief OnWriteConvert コールバックファンクタへのポインタ
      * @else
-     * @brief OnWriteConvert callback functor pointer
+     * @brief Pointer to OnWriteConvert callback functor
      * @endif
      */
     OnWriteConvert<DataType>* m_OnWriteConvert;
@@ -686,7 +784,7 @@ namespace RTC
      * @if jp
      * @brief OnRead コールバックファンクタへのポインタ
      * @else
-     * @brief OnRead callback functor pointer
+     * @brief Pointer to OnRead callback functor
      * @endif
      */
     OnRead<DataType>* m_OnRead;
@@ -695,7 +793,7 @@ namespace RTC
      * @if jp
      * @brief OnReadConvert コールバックファンクタへのポインタ
      * @else
-     * @brief OnReadConvert callback functor pointer
+     * @brief Pointer to OnReadConvert callback functor
      * @endif
      */
     OnReadConvert<DataType>* m_OnReadConvert;
@@ -704,7 +802,7 @@ namespace RTC
      * @if jp
      * @brief OnOverflow コールバックファンクタへのポインタ
      * @else
-     * @brief OnOverflow callback functor pointer
+     * @brief Pointer to OnOverflow callback functor
      * @endif
      */
     OnOverflow<DataType>* m_OnOverflow;
@@ -713,7 +811,7 @@ namespace RTC
      * @if jp
      * @brief OnUnderflow コールバックファンクタへのポインタ
      * @else
-     * @brief OnUnderflow callback functor pointer
+     * @brief Pointer to OnUnderflow callback functor
      *
      * @endif
      */

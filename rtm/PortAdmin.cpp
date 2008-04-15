@@ -16,38 +16,6 @@
  *
  */
 
-/*
- * $Log: not supported by cvs2svn $
- * Revision 1.7.2.2  2007/12/31 03:08:05  n-ando
- * Class reference by doxygen comment was revised.
- *
- * Revision 1.7.2.1  2007/09/20 11:25:16  n-ando
- * A function getPortProfileList() was added to get PortProfileList locally.
- *
- * Revision 1.7  2007/04/23 04:55:40  n-ando
- * Port finalization process was modified.
- *
- * Revision 1.6  2007/01/12 14:37:57  n-ando
- * Since Port activates itself now, PortAdmin does not need to activate Port.
- *
- * Revision 1.5  2007/01/09 15:13:04  n-ando
- * Now Port does not have getName().
- * The name of Port is obtained from getProfile().
- *
- * Revision 1.4  2006/11/08 09:57:11  n-ando
- * A PortAdmin::getPortRef()'s bug was fixed.
- *
- * Revision 1.3  2006/11/06 01:18:59  n-ando
- * CORBA sequence manipulation has been rewritten by using CORBA_SeqUtil.
- *
- * Revision 1.2  2006/10/17 19:16:34  n-ando
- * registerPort() was modified to store Port's object reference in PortProfile.
- *
- * Revision 1.1  2006/10/17 10:21:56  n-ando
- * The first commitment.
- *
- */
-
 #include <functional>
 #include <rtm/PortAdmin.h>
 #include <rtm/CORBA_SeqUtil.h>
@@ -58,7 +26,7 @@ namespace RTC
    * @if jp
    * @brief Port検索用ファンクタ
    * @else
-   *
+   * @brief Functor to fing a Port
    * @endif
    */
   struct PortAdmin::find_port_name
@@ -76,7 +44,7 @@ namespace RTC
    * @if jp
    * @brief Port削除用ファンクタ
    * @else
-   *
+   * @brief Functor to delete the Port
    * @endif
    */
   struct PortAdmin::del_port
@@ -93,7 +61,7 @@ namespace RTC
    * @if jp
    * @brief コンストラクタ
    * @else
-   * 
+   * @brief Constructor
    * @endif
    */
   PortAdmin::PortAdmin(CORBA::ORB_ptr orb, PortableServer::POA_ptr poa)
@@ -134,7 +102,7 @@ namespace RTC
    * @if jp
    * @brief Port のオブジェクト参照の取得
    * @else
-   * @brief Get PortList
+   * @brief Get the reference to the Port's object
    * @endif
    */
   Port_ptr PortAdmin::getPortRef(const char* port_name) const
@@ -152,7 +120,7 @@ namespace RTC
    * @if jp
    * @brief Port のサーバントのポインタの取得
    * @else
-   * @brief Getpointer to the Port's servant
+   * @brief Get pointer to the Port's servant
    * @endif
    */
   PortBase* PortAdmin::getPort(const char* port_name) const
@@ -164,7 +132,7 @@ namespace RTC
    * @if jp
    * @brief Port を登録する
    * @else
-   * @brief Regsiter Port
+   * @brief Regsiter the Port
    * @endif
    */
   void PortAdmin::registerPort(PortBase& port)
@@ -187,7 +155,7 @@ namespace RTC
    * @if jp
    * @brief Port の登録を解除する
    * @else
-   * @brief Delete the Port's registration
+   * @brief Unregister the Port's registration
    * @endif
    */
   void PortAdmin::deletePort(PortBase& port)
@@ -215,7 +183,7 @@ namespace RTC
    * @if jp
    * @brief 名称指定によりPort の登録を解除する
    * @else
-   * @brief Delete the Port' registration
+   * @brief Unregister the Port's registration by its name
    * @endif
    */
   void PortAdmin::deletePortByName(const char* port_name)
@@ -229,7 +197,7 @@ namespace RTC
    * @if jp
    * @brief 全ての Port をdeactivateし登録を削除する
    * @else
-   * @brief Unregister the Port
+   * @brief Deactivate all Ports and unregister them
    * @endif
    */
   void PortAdmin::finalizePorts()

@@ -17,17 +17,6 @@
  *
  */
 
-/*
- * $Log: not supported by cvs2svn $
- * Revision 1.2  2006/10/17 10:12:51  n-ando
- * Small fixes.
- *
- * Revision 1.1  2006/09/11 18:48:08  n-ando
- * The first commit.
- *
- *
- */
-
 /*!
  * @if jp
  * @namespace SDOPackage
@@ -37,6 +26,8 @@
  * @else
  *
  * @namespace SDOPackage
+ *
+ * @brief SDO package
  *
  * @endif
  */
@@ -56,6 +47,8 @@ namespace SDOPackage
    *
    * @class SDOServiceProfile
    * @brief SDO Service Profile class
+   *
+   * SDO Service Profile is a class to hold information of SDO Service.
    *
    * @since 0.4.0
    *
@@ -77,6 +70,13 @@ namespace SDOPackage
      *
      * @else
      *
+     * @brief Constructor
+     * 
+     * Constructor
+     *
+     * @param id ID of the Service(The default value:"")
+     * @param type Type of the Service(The default value:"")
+     *
      * @endif
      */
     SDOService(char* id = "", char type = "")
@@ -94,6 +94,12 @@ namespace SDOPackage
      * 
      * @else
      *
+     * @brief Get Service Profile
+     * 
+     * Get Service Profile.
+     * 
+     * @return Service Profile
+     * 
      * @endif
      */
     inline const SDOPackage::Service getProfile()
@@ -110,7 +116,12 @@ namespace SDOPackage
      * @param id Service のID
      * 
      * @else
-     * @brief Setting ServiceProfile.id
+     * @brief Set ServiceProfile.id
+     * 
+     * Set ID of SDO Service.
+     * 
+     * @param id ID of the Service
+     * 
      * @endif
      */
     inline void setName(char* id)
@@ -128,7 +139,12 @@ namespace SDOPackage
      * @return Service のID
      * 
      * @else
-     * @brief Getting ServiceProfile.id
+     * @brief Get ServiceProfile.id
+     * 
+     * Get ID of SDO Service.
+     * 
+     * @return ID of the Service
+     * 
      * @endif
      */
     inline const char* getName() const
@@ -138,14 +154,19 @@ namespace SDOPackage
     
     /*!
      * @if jp
-     * @brief RTCServiceProfile.interfaceType をセットする
+     * @brief SDO ServiceProfile.interfaceType をセットする
      * 
      * SDO Service のinterfaceTypeをセットする
      * 
      * @param interfaceType Service のinterfaceType
      * 
      * @else
-     * @brief Setting RTCServiceProfile.interfaceType
+     * @brief Set SDOServiceProfile.interfaceType
+     * 
+     * Set interfaceType of SDO Service.
+     * 
+     * @param interfaceType interfaceType of the Service
+     * 
      * @endif
      */
     inline void setInterfaceType(char* interfaceType)
@@ -155,14 +176,19 @@ namespace SDOPackage
     
     /*!
      * @if jp
-     * @brief RTCServiceProfile.interfaceType を取得する
+     * @brief SDO ServiceProfile.interfaceType を取得する
      * 
      * SDO Service のinterfaceTypeを取得する
      * 
      * @return Service のinterfaceType
      * 
      * @else
-     * @brief Getting RTCServiceProfile.interfaceType
+     * @brief Get SDOServiceProfile.interfaceType
+     * 
+     * Get interfaceType of SDO Service
+     * 
+     * @return interfaceType of the Service
+     * 
      * @endif
      */
     inline const char* getInterfaceType() const
@@ -172,14 +198,19 @@ namespace SDOPackage
     
     /*!
      * @if jp
-     * @brief RTCServiceProfile.idlDefinition をセットする
+     * @brief SDO ServiceProfile.idlDefinition をセットする
      * 
      * SDO Service のidlDefinitionをセットする
      * 
      * @param idlDefinition Service のidlDefinition
      * 
      * @else
-     * @brief Setting RTCServiceProfile.idlDefnition
+     * @brief Set SDOServiceProfile.idlDefnition
+     * 
+     * Set idlDefinition of SDO Service
+     * 
+     * @param idlDefinition idlDefinition of the Service
+     * 
      * @endif
      */
     inline void setIdlDefinition(char* idlDefinition)
@@ -189,14 +220,19 @@ namespace SDOPackage
     
     /*!
      * @if jp
-     * @brief RTCServiceProfile.idlDefinition を取得する
+     * @brief SDO ServiceProfile.idlDefinition を取得する
      * 
      * SDO Service のidlDefinitionを取得する
      * 
      * @return Service のidlDefinition
      * 
      * @else
-     * @brief Getting RTCServiceProfile.idlDefnition
+     * @brief Get SDO ServiceProfile.idlDefnition
+     * 
+     * Get idlDefinition of SDO Service
+     * 
+     * @return idlDefinition of the Service
+     * 
      * @endif
      */
     inline const char* getIdlDefinition() const
@@ -206,14 +242,19 @@ namespace SDOPackage
     
     /*!
      * @if jp
-     * @brief RTCServiceProfile.properties をセットする
+     * @brief SDO ServiceProfile.properties をセットする
      * 
      * SDO Service のpropertiesをセットする
      * 
      * @param properties Service のproperties
      * 
      * @else
-     * @brief Setting RTCServiceProfile.properties
+     * @brief Set SDO ServiceProfile.properties
+     * 
+     * Set properties of SDO Service
+     * 
+     * @param properties Properties of the Service
+     * 
      * @endif
      */
     inline void setProperties(NVList properties)
@@ -223,14 +264,19 @@ namespace SDOPackage
     
     /*!
      * @if jp
-     * @brief RTCServiceProfile.properties を取得する
+     * @brief SDO ServiceProfile.properties を取得する
      * 
      * SDO Service のpropertiesを取得する
      * 
      * @return Service のproperties
      * 
      * @else
-     * @brief Getting RTCServiceProfile.properties
+     * @brief Get SDO ServiceProfile.properties
+     * 
+     * Get properties of SDO Service
+     * 
+     * @return Properties of the Service
+     * 
      * @endif
      */
     inline const NVList getProperties() const
@@ -242,14 +288,19 @@ namespace SDOPackage
     
     /*!
      * @if jp
-     * @brief RTCServiceProfile.serviceRef をセットする
+     * @brief SDO ServiceProfile.serviceRef をセットする
      * 
      * SDO Service のserviceRefをセットする
      * 
      * @param serviceRef Serviceへの参照
      * 
      * @else
-     * @brief Setting RTCServiceProfile.serviceRef
+     * @brief Set SDO ServiceProfile.serviceRef
+     * 
+     * Set serviceRef of SDO Service.
+     * 
+     * @param serviceRef The reference to Service
+     * 
      * @endif
      */
     inline void setServiceRef(RTCService_ptr serviceRef)
@@ -259,14 +310,19 @@ namespace SDOPackage
     
     /*!
      * @if jp
-     * @brief RTCServiceProfile.serviceRef を取得する
+     * @brief SDO ServiceProfile.serviceRef を取得する
      * 
      * SDO Service への参照を取得する
      * 
      * @return Serviceへの参照
      * 
      * @else
-     * @brief Getting RTCServiceProfile.serviceRef
+     * @brief Get SDO ServiceProfile.serviceRef
+     * 
+     * Get the reference to SDO Service
+     * 
+     * @return The reference to Service
+     * 
      * @endif
      */
     RTCService_ptr getServiceRef() const

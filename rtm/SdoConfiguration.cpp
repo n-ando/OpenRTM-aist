@@ -5,7 +5,7 @@
  * @date $Date: 2008-01-14 07:49:37 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
- * Copyright (C) 2006-2007
+ * Copyright (C) 2006-2008
  *     Noriaki Ando
  *     Task-intelligence Research Group,
  *     Intelligent Systems Research Institute,
@@ -14,41 +14,6 @@
  *     All rights reserved.
  *
  * $Id: SdoConfiguration.cpp,v 1.7.2.4 2008-01-14 07:49:37 n-ando Exp $
- *
- */
-
-/*
- * $Log: not supported by cvs2svn $
- * Revision 1.7.2.3  2008/01/13 07:33:26  n-ando
- * A trivial fix.
- *
- * Revision 1.7.2.2  2007/12/31 03:08:06  n-ando
- * Class reference by doxygen comment was revised.
- *
- * Revision 1.7.2.1  2007/09/19 03:00:52  n-ando
- * Inconsistency between idl and impl. in get_configuration_set() was modified.
- *
- * Revision 1.7  2007/04/23 04:58:16  n-ando
- * SDO Configuration was modified to use Configuration admin class.
- *
- * Revision 1.6  2007/01/24 16:03:52  n-ando
- * The ctor. was changed.
- *
- * Revision 1.5  2006/11/09 10:20:40  n-ando
- * set_service_profile never throws InvalidParameter exception.
- *
- * Revision 1.4  2006/11/08 20:00:12  n-ando
- * ConfigurationSet related interfaces are fixed.
- *
- * Revision 1.3  2006/10/30 08:05:38  n-ando
- * CORBA sequence operations were replaced by CORBA_SeqUtil functions.
- *
- * Revision 1.2  2006/10/17 10:13:23  n-ando
- * Small fixes.
- *
- * Revision 1.1  2006/09/11 18:13:49  n-ando
- * The first commit.
- *
  *
  */
 
@@ -73,6 +38,13 @@ namespace SDOPackage
    * 
    * @else
    *
+   * @brief Store SDO ConfigurationSet to properties
+   * 
+   * Store SDO ConfigurationSet to properties for RTC.
+   *
+   * @param prop Properties to store
+   * @param conf SDO ConfigurationSet
+   * 
    * @endif
    */
   void 
@@ -94,6 +66,13 @@ namespace SDOPackage
    * 
    * @else
    *
+   * @brief Convert properties into SDO ConfigurationSet
+   * 
+   * Convert properties for RTC into SDO ConfigurationSet.
+   *
+   * @param conf SDO ConfigurationSet to store
+   * @param prop Properties
+   * 
    * @endif
    */
   void
@@ -112,6 +91,7 @@ namespace SDOPackage
   /* @if jp
    * @brief コンストラクタ
    * @else
+   * @brief Constructor
    * @endif
    */
   Configuration_impl::Configuration_impl(RTC::ConfigAdmin& configsets)
@@ -123,7 +103,7 @@ namespace SDOPackage
   /* @if jp
    * @brief 仮想デストラクタ
    * @else
-   * @brief virtual destractor
+   * @brief Virtual destructor
    * @endif
    */
   Configuration_impl::~Configuration_impl()
@@ -233,7 +213,7 @@ namespace SDOPackage
    * @if jp
    * @brief [CORBA interface] ServiceProfile の削除
    * @else
-   * @brief [CORBA interface] Getting Organizations
+   * @brief [CORBA interface] Remove ServiceProfile
    * @endif
    */  
   CORBA::Boolean
@@ -287,7 +267,7 @@ namespace SDOPackage
    * @if jp
    * @brief [CORBA interface] 設定パラメータのリストの取得
    * @else
-   * @brief [CORBA interface] Getting a list of configuration parameter
+   * @brief [CORBA interface] Get a list of configuration parameters
    * @endif
    */ 
   ParameterList*
@@ -315,7 +295,7 @@ namespace SDOPackage
    * @if jp
    * @brief [CORBA interface] Configuration parameter の値のリストの取得
    * @else
-   * @brief [CORBA interface] Getting value list of configuration parameter
+   * @brief [CORBA interface] Get a list of the value of configuration parameters
    * @endif
    */
   NVList*
@@ -342,7 +322,7 @@ namespace SDOPackage
    * @if jp
    * @brief [CORBA interface] Configuration parameter の値の取得
    * @else
-   * @brief [CORBA interface] Getting value of configuration parameter
+   * @brief [CORBA interface] Get the value of configuration parameter
    * @endif
    */
   CORBA::Any*
@@ -373,7 +353,7 @@ namespace SDOPackage
    * @if jp
    * @brief [CORBA interface] Configuration パラメータの変更
    * @else
-   * @brief [CORBA interface] Modify the parameter value
+   * @brief [CORBA interface] Modify the configuration parameter value
    * @endif
    */
   CORBA::Boolean
@@ -402,7 +382,7 @@ namespace SDOPackage
    * @if jp
    * @brief [CORBA interface] ConfigurationSet リストの取得 
    * @else
-   * @brief [CORBA interface] Getting list of ConfigurationSet
+   * @brief [CORBA interface] Get a list of ConfigurationSet
    * @endif
    */
   ConfigurationSetList*
@@ -438,7 +418,7 @@ namespace SDOPackage
    * @if jp
    * @brief [CORBA interface] ConfigurationSet の取得
    * @else
-   * @brief [CORBA interface] Getting a ConfigurationSet
+   * @brief [CORBA interface] Get a ConfigurationSet
    * @endif
    */
   ConfigurationSet*
@@ -625,6 +605,7 @@ namespace SDOPackage
    * @if jp
    * @brief オブジェクト　リファレンスを取得する
    * @else
+   * @brief Get object reference
    * @endif
    */
   Configuration_ptr Configuration_impl::getObjRef()
@@ -636,6 +617,7 @@ namespace SDOPackage
    * @if jp
    * @brief SDO の DeviceProfile を取得する
    * @else
+   * @brief Get the DeviceProfile of SDO
    * @endif
    */
   const DeviceProfile Configuration_impl::getDeviceProfile()
@@ -647,6 +629,7 @@ namespace SDOPackage
    * @if jp
    * @brief SDO の ServiceProfile のリストを取得する
    * @else
+   * @brief Get a list of ServiceProfile of SDO
    * @endif
    */
   const ServiceProfileList Configuration_impl::getServiceProfiles()
@@ -657,6 +640,7 @@ namespace SDOPackage
    * @if jp
    * @brief SDO の ServiceProfile を取得する
    * @else
+   * @brief Get Service Profile of SDO
    * @endif
    */
   const ServiceProfile Configuration_impl::getServiceProfile(const char* id)
@@ -671,6 +655,7 @@ namespace SDOPackage
    * @if jp
    * @brief SDO の Organization リストを取得する
    * @else
+   * @brief Get a list of Organization of SDO
    * @endif
    */
   const OrganizationList Configuration_impl::getOrganizations()
@@ -682,7 +667,7 @@ namespace SDOPackage
    * @if jp
    * @brief UUIDを生成する
    * @else
-   * @brief Get the UUID
+   * @brief Generate UUID
    * @endif
    */
   const std::string Configuration_impl::getUUID() const

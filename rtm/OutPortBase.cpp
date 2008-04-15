@@ -17,28 +17,6 @@
  *
  */
 
-/*
- * $Log: not supported by cvs2svn $
- * Revision 1.1.4.1  2007/06/22 10:55:01  n-ando
- * The bug of OutPort's disconnect operation was fixed.
- *
- * Revision 1.1  2006/12/02 18:46:05  n-ando
- * The first commitment.
- *
- * Revision 1.3  2005/05/27 07:34:21  n-ando
- * - InPort/OutPort interface was changed.
- *   subscribe/unsubscribe were completely changed.
- *
- * Revision 1.2  2005/05/16 06:35:11  n-ando
- * - In windows "delete uuid;" in constructor of OutPortBase does not work.
- *   To avoid this bug, "delete uuid" was replaced with "uuid->~UUID()".
- *
- * Revision 1.1.1.1  2005/05/12 09:06:18  n-ando
- * Public release.
- *
- *
- */
-
 #include <algorithm>
 #include <rtm/OutPortBase.h>
 #include <rtm/PublisherBase.h>
@@ -51,7 +29,7 @@ namespace RTC
    * @if jp
    * @brief Publisher を ID によって検索するための Functor
    * @else
-   *
+   * @brief Functor to find Publisher by ID
    * @endif
    */
   // Functor to find Publisher by id
@@ -69,7 +47,7 @@ namespace RTC
    * @if jp
    * @brief Publisher にデータ更新を通知するための Functor
    * @else
-   *
+   * @brief Functor to notify the data update to Publishers
    * @endif
    */
   // Functor to notify update to Publishers
@@ -85,7 +63,7 @@ namespace RTC
    * @if jp
    * @brief Publisher を削除するための Functor
    * @else
-   *
+   * @brief Functor to delete Publishers
    * @endif
    */
   // Functor to delete Publishers
@@ -113,7 +91,7 @@ namespace RTC
    * @if jp
    * @brief Publisherの追加
    * @else
-   * @brief Attach a publisher
+   * @brief Attach the publisher
    * @endif
    */
   void OutPortBase::attach(const char* id, PublisherBase* publisher)
@@ -125,7 +103,7 @@ namespace RTC
    * @if jp
    * @brief リスト先頭へのPublisherの追加
    * @else
-   * @brief Attach a publisher
+   * @brief Attach the publisher to the top of the Publisher list.
    * @endif
    */
   void OutPortBase::attach_front(const char* id, PublisherBase* publisher)
@@ -137,7 +115,7 @@ namespace RTC
    * @if jp
    * @brief リスト最後尾へのPublisherの追加
    * @else
-   * @brief Attach a publisher
+   * @brief Attach the publisher at the end of the Publisher list.
    * @endif
    */
   void OutPortBase::attach_back(const char* id, PublisherBase* publisher)
@@ -149,7 +127,7 @@ namespace RTC
    * @if jp
    * @brief Publisherの削除
    * @else
-   * @brief Detach a publisher
+   * @brief Detach the publisher
    * @endif
    */
   PublisherBase* OutPortBase::detach(const char* id)
@@ -168,7 +146,7 @@ namespace RTC
    * @if jp
    * @brief 更新の通知
    * @else
-   * @brief Notify data update
+   * @brief Notify the data update
    * @endif
    */
   void OutPortBase::notify()

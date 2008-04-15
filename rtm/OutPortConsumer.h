@@ -17,20 +17,6 @@
  *
  */
 
-/*
- * $Log: not supported by cvs2svn $
- * Revision 1.3  2007/01/06 17:57:14  n-ando
- * Interface subscription/unsubscription functions (subscribeInterface()
- * and unsubscribeInterface()) are added.
- *
- * Revision 1.2  2006/12/02 18:46:55  n-ando
- * OutPortCorbaConsumer class was moved to OutPortCorbaConsumer.h
- *
- * Revision 1.1  2006/11/27 09:44:41  n-ando
- * The first commitment.
- *
- */
-
 #ifndef OutPortConsumer_h
 #define OutPortConsumer_h
 
@@ -56,7 +42,17 @@ namespace RTC
    *
    * @else
    * @class OutPortConsumer
-   * @brief OutPortConsumer class
+   *
+   * @brief OutPortConsumer abstract class
+   *
+   * This is the abstract interface class for the output port Consumer.
+   * Concrete classes must implement the following pure virtual functions.
+   * - pull(): Receive data
+   * - subscribeInterface(): Subscribe to the data receive notification
+   * - unsubscribeInterface(): Unsubscribe the data receive notification
+   *
+   * @since 0.4.0
+   *
    * @endif
    */
   class OutPortConsumer
@@ -70,6 +66,9 @@ namespace RTC
      *
      * @else
      * @brief Constructor
+     *
+     * Constructor
+     *
      * @endif
      */
     //    OutPortConsumer(){};
@@ -83,6 +82,9 @@ namespace RTC
      *
      * @else
      * @brief Destructor
+     *
+     * Destructor
+     *
      * @endif
      */
     virtual ~OutPortConsumer(){};
@@ -95,6 +97,10 @@ namespace RTC
      * データ受信を実行するための純粋仮想関数。
      *
      * @else
+     *
+     * @brief Receive data
+     *
+     * Pure virtual function to receive data.
      *
      * @endif
      */
@@ -114,6 +120,15 @@ namespace RTC
      *
      * @else
      *
+     * @brief Subscribe the data receive notification
+     *
+     * Pure virtual function to subscribe the data receive notification
+     * based on specified property information.
+     *
+     * @param properties Properties for subscription
+     *
+     * @return Subscription result (Successful:true, Failed:false)
+     *
      * @endif
      */
     virtual bool subscribeInterface(const SDOPackage::NVList& properties) = 0;
@@ -130,6 +145,14 @@ namespace RTC
      * @return 登録解除処理結果(登録解除成功:true、登録解除失敗:false)
      *
      * @else
+     *
+     * @brief Unsubscribe the data receive notification
+     *
+     * Pure virtual function to unsubscribe the data receive notification.
+     *
+     * @param properties Properties for unsubscription
+     *
+     * @return Unsubscription result (Successful:true, Failed:false)
      *
      * @endif
      */

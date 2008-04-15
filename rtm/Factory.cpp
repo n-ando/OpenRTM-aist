@@ -17,26 +17,6 @@
  *
  */
 
-/*
- * $Log: not supported by cvs2svn $
- * Revision 1.5  2007/04/13 16:09:10  n-ando
- * Error handling was added.
- *
- * Revision 1.4  2006/11/06 01:28:31  n-ando
- * Now the "instance_name" is set to the component at creation time.
- *
- * Revision 1.3  2006/10/25 17:35:52  n-ando
- * Classes were renamed, and class reference manual was described.
- *
- * Revision 1.2  2006/10/24 14:25:26  n-ando
- * Renamed RtcFactory.cpp to Factory.cpp
- *
- * Revision 1.1.1.1  2005/05/12 09:06:18  n-ando
- * Public release.
- *
- *
- */
-
 #include <rtm/Factory.h>
 
 namespace RTC 
@@ -46,7 +26,7 @@ namespace RTC
    * @if jp
    * @brief コンストラクタ
    * @else
-   *
+   * @brief Constructor
    * @endif
    */
   FactoryBase::FactoryBase(const Properties& profile)
@@ -58,7 +38,7 @@ namespace RTC
    * @if jp
    * @brief デストラクタ
    * @else
-   *
+   * @brief Destructor
    * @endif
    */
   FactoryBase::~FactoryBase()
@@ -69,7 +49,7 @@ namespace RTC
    * @if jp
    * @brief コンポーネントプロファイルの取得
    * @else
-   *
+   * @brief Get the component profile
    * @endif
    */
   Properties& FactoryBase::profile()
@@ -81,7 +61,7 @@ namespace RTC
    * @if jp
    * @brief 現在のインスタンス数の取得
    * @else
-   *
+   * @brief Get the number of current instances
    * @endif
    */
   int FactoryBase::number()
@@ -93,7 +73,7 @@ namespace RTC
    * @if jp
    * @brief コンストラクタ
    * @else
-   *
+   * @brief Constructor
    * @endif
    */
   FactoryCXX::FactoryCXX(const Properties& profile,
@@ -111,7 +91,7 @@ namespace RTC
    * @if jp
    * @brief コンポーネントの生成
    * @else
-   *
+   * @brief Create RT-Components
    * @endif
    */
   RtcBase* FactoryCXX::create(Manager* mgr)
@@ -141,7 +121,7 @@ namespace RTC
    * @if jp
    * @brief コンポーネントの破棄
    * @else
-   *
+   * @brief Destroy RT-Components
    * @endif
    */
   void FactoryCXX::destroy(RtcBase* comp)

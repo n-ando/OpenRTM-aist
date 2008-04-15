@@ -17,39 +17,6 @@
  *
  */
 
-/*
- * $Log: not supported by cvs2svn $
- * Revision 1.6.4.2  2007/12/31 03:08:02  n-ando
- * Class reference by doxygen comment was revised.
- *
- * Revision 1.6.4.1  2007/10/06 12:23:26  n-ando
- * TCP socket data port was added.
- *
- * Revision 1.6  2007/01/21 17:16:58  n-ando
- * Invalid kanji code was deleted.
- *
- * Revision 1.5  2007/01/21 09:43:22  n-ando
- * - A bug about memory access violation to m_providers still exists.
- *   This bug arises on Fedora5/gcc4 environment.
- *   To escape the bug temporarily dummy variable (m_dummy) is defined.
- * - Some functors were moved to cpp file.
- *
- * Revision 1.4  2007/01/14 22:57:48  n-ando
- * A bug fix about template argument for buffer-type in constructor.
- *
- * Revision 1.3  2007/01/12 14:29:48  n-ando
- * A trivial bug fix.
- *
- * Revision 1.2  2007/01/06 17:43:39  n-ando
- * The behavior on notify_connect() and notify_disconnect() are now
- * implemented in protected functions(ex. publisherInterfaces()).
- *
- * Revision 1.1  2006/12/02 18:27:49  n-ando
- * The first commitment.
- *
- *
- */
-
 #ifndef DataInPort_h
 #define DataInPort_h
 
@@ -74,6 +41,8 @@
  *
  * @namespace RTC
  *
+ * @brief RT-Component
+ *
  * @endif
  */
 namespace RTC
@@ -89,7 +58,12 @@ namespace RTC
    *
    * @else
    * @class DataInPort
-   * @brief InPort abstruct class
+   * @brief Port for InPort
+   *
+   * This is an implementation class for the data input port.
+   *
+   * @since 0.4.0
+   *
    * @endif
    */
   class DataInPort
@@ -109,6 +83,15 @@ namespace RTC
      *
      * @else
      * @brief Constructor
+     *
+     * Constructor
+     *
+     * @param name Port name
+     * @param inport InPort object that is associated with this data input port.
+     *               Specify also the data type and the buffer type used in 
+     *               the InPort object.
+     * @param prop Property for setting ports
+     *
      * @endif
      */
     template <class DataType, template <class DataType> class Buffer>
@@ -144,6 +127,9 @@ namespace RTC
      *
      * @else
      * @brief Destructor
+     *
+     * Destructor
+     *
      * @endif
      */
     virtual ~DataInPort();
@@ -155,14 +141,23 @@ namespace RTC
      *
      * Interface情報を公開する。
      * このPortが所有しているプロバイダ(Provider)に関する情報を、
-     * ConnectorProfile#propertiesに代入します。
+     * ConnectorProfile#propertiesに代入する。
      *
      * @param connector_profile コネクタプロファイル
      *
      * @return ReturnCode_t 型のリターンコード
      *
      * @else
-     * @brief Destructor
+     * @brief Publish interface information
+     *
+     * Publish interface information.
+     * Assign the Provider information that owned by this port
+     * to ConnectorProfile#properties
+     *
+     * @param connector_profile The connector profile
+     *
+     * @return The return code of ReturnCode_t type
+     *
      * @endif
      */
     virtual ReturnCode_t
@@ -182,7 +177,17 @@ namespace RTC
      * @return ReturnCode_t 型のリターンコード
      *
      * @else
-     * @brief Destructor
+     * @brief Subscribe to the interface
+     *
+     * Subscribe to interface.
+     * Derive Provider information that matches Consumer owned by the Port 
+     * from ConnectorProfile#properties and 
+     * set the Consumer to the reference of the CORBA object.
+     *
+     * @param connector_profile The connector profile
+     *
+     * @return ReturnCode_t The return code of ReturnCode_t type
+     *
      * @endif
      */
     virtual ReturnCode_t
@@ -199,7 +204,14 @@ namespace RTC
      * @param connector_profile コネクタ・プロファイル
      *
      * @else
-     * @brief Destructor
+     * @brief Disconnect the interface connection
+     *
+     * Disconnect the interface connection.
+     * Release all objects set in Consumer associated with 
+     * given ConnectorProfile and unscribe the interface.
+     *
+     * @param connector_profile The connector profile
+     *
      * @endif
      */
     virtual void
@@ -212,6 +224,9 @@ namespace RTC
      * Interface公開処理を実行するためのFunctor。
      *
      * @else
+     * @brief Functor to publish the interface
+     *
+     * Functor to publish the interface
      *
      * @endif
      */
@@ -224,6 +239,9 @@ namespace RTC
      * Interface接続処理を実行するためのFunctor。
      *
      * @else
+     * @brief Functor to subscribe the interface
+     *
+     * Functor to subscribe the interface
      *
      * @endif
      */
@@ -236,6 +254,9 @@ namespace RTC
      * Interface接続解除処理を実行するためのFunctor。
      *
      * @else
+     * @brief Functor to unsubscribe the interface
+     *
+     * Functor to unsubscribe the interface
      *
      * @endif
      */

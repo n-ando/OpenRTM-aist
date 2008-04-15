@@ -17,20 +17,6 @@
  *
  */
 
-/*
- * $Log: not supported by cvs2svn $
- * Revision 1.3  2007/04/13 15:37:33  n-ando
- * RTC::OK was changed to RTC::RTC_OK.
- *
- * Revision 1.2  2007/01/21 17:16:34  n-ando
- * PortProfile.properties = {"port.port_type": "CorbaPort"}
- *
- * Revision 1.1  2007/01/04 00:45:13  n-ando
- * CORBA serivce provider/consumer Port implementation.
- *
- *
- */
-
 #include <rtm/CorbaPort.h>
 #include <rtm/CORBA_SeqUtil.h>
 #include <rtm/NVUtil.h>
@@ -56,7 +42,7 @@ namespace RTC
    * @if jp
    * @brief 仮想デストラクタ
    * @else
-   * @brief Virtual Destructor
+   * @brief Virtual destructor
    * @endif
    */
   CorbaPort::~CorbaPort()
@@ -67,7 +53,7 @@ namespace RTC
    * @if jp
    * @brief Provider を登録する
    * @else
-   * @brief Register provider
+   * @brief Register the provider
    * @endif
    */
   bool
@@ -102,7 +88,7 @@ namespace RTC
    * @if jp
    * @brief Consumer を登録する
    * @else
-   * @brief Register consumer
+   * @brief Register the consumer
    * @endif
    */
   bool
@@ -143,7 +129,7 @@ namespace RTC
    * @if jp
    * @brief Interface に接続する
    * @else
-   * @brief Subscribe interfaces
+   * @brief Subscribe to interfaces
    * @endif
    */
   ReturnCode_t

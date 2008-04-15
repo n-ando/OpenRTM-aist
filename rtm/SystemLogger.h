@@ -5,7 +5,7 @@
  * @date $Date: 2007-07-20 16:10:32 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
- * Copyright (C) 2003-2006
+ * Copyright (C) 2003-2008
  *     Task-intelligence Research Group,
  *     Intelligent Systems Research Institute,
  *     National Institute of
@@ -13,36 +13,6 @@
  *     All rights reserved.
  *
  * $Id: SystemLogger.h,v 1.5.2.1 2007-07-20 16:10:32 n-ando Exp $
- *
- */
-
-/*
- * $Log: not supported by cvs2svn $
- * Revision 1.5  2007/04/26 15:33:44  n-ando
- * The header include order was modified to define _REENTRANT before
- * including ace/config-lite.h in Linux systems.
- * In ace 5.4.7 or later, _REENTRANT flag should be defined explicitly.
- *
- * Revision 1.4  2007/04/13 16:01:32  n-ando
- * Timing of mutex acquisition was changed for buffer synchronization bugs.
- *
- * Revision 1.3  2007/01/21 10:37:55  n-ando
- * Dtor for sync_callback and basic_ummybuf classes was defined.
- * A trivial fix;
- *
- * Revision 1.2  2006/11/04 20:54:09  n-ando
- * classes were renamed and soruce code was re-formatted.
- *
- * Revision 1.1  2006/11/02 15:14:24  n-ando
- * RtcSystemLogger.h was moved to SystemLogger.h.
- *
- * Revision 1.2  2005/05/16 06:40:19  n-ando
- * - Dummy macro "__restrict" was defined for Windows port.
- * - Some bugs were fixed.
- *
- * Revision 1.1.1.1  2005/05/12 09:06:18  n-ando
- * Public release.
- *
  *
  */
 
@@ -77,11 +47,59 @@ namespace RTC
 {
   
 #ifndef NO_LOGGING 
+  /*!
+   * @if jp
+   * @class sync_callback
+   * @brief sync_callback 抽象クラス
+   *
+   * バッファ同期処理のためのコールバック関数用抽象インターフェースクラス。
+   *
+   * @else
+   * @class sync_callback
+   * @brief sync_callback abstract class
+   *
+   * This is the abstract interface class for callback function to
+   * synchronize buffer processings.
+   *
+   * @endif
+   */
   template <typename _CharT, typename _Traits=std::char_traits<_CharT> >
   class sync_callback
   {
   public:
+    /*!
+     * @if jp
+     * @brief 仮想デストラクタ
+     * 
+     * @else
+     * @brief Virtual destractor
+     *
+     * @endif
+     */
     virtual ~sync_callback(){}
+    
+    /*!
+     * @if jp
+     * @brief 代入演算子
+     *
+     * 引数で与えられた値を代入する。
+     *
+     * @param s 代入値
+     *
+     * @return 代入結果
+     *
+     * @else
+     *
+     * @brief Assignment operator
+     *
+     * Assign the value given by the argument.
+     *
+     * @param s Assignment value
+     *
+     * @return Assignment result
+     *
+     * @endif
+     */
     virtual int operator()(const _CharT* s) = 0;
   };
   
@@ -102,6 +120,8 @@ namespace RTC
    *
    * @brief Logger buffer class
    *
+   * This is a logger buffer class like basic_filebuf.
+   * Buffer class that manages to output logfiles to the local file.
    *
    * @endif
    */
@@ -118,13 +138,15 @@ namespace RTC
     /*!
      * @if jp
      *
-     * @brief basic_logbuf クラスコンストラクタ
+     * @brief コンストラクタ
      *
      * デフォルトコンストラクタ
      *
      * @else
      *
-     * @brief basic_logbuf class constructor.
+     * @brief constructor.
+     *
+     * Default constructor
      *
      * @endif
      */
@@ -135,13 +157,23 @@ namespace RTC
     /*!
      * @if jp
      *
-     * @brief basic_logbuf クラスコンストラクタ
+     * @brief コンストラクタ
      *
      * ファイル名およびオープンモードを指定してコンストラクトするコンストラクタ
      *
+     * @param s ログファイル名
+     * @param mode オープンモード(デフォルト値:書き込みモード)
+     * @param protection 
+     *
      * @else
      *
-     * @brief basic_logbuf class constructor.
+     * @brief Constructor.
+     *
+     * Constructor that constructs with specifying file names and open-mode.
+     *
+     * @param s Log file name
+     * @param mode Open mode(The default value:write-mode)
+     * @param protection 
      *
      * @endif
      */
@@ -156,13 +188,15 @@ namespace RTC
     /*!
      * @if jp
      *
-     * @brief basic_logbuf クラスデストラクタ
+     * @brief デストラクタ
      *
      * デストラクタ。ファイルをクローズする。
      *
      * @else
      *
-     * @brief basic_logbuf class destractor.
+     * @brief Destractor.
+     *
+     * Destructor. Close the file.
      *
      * @endif
      */
@@ -172,6 +206,32 @@ namespace RTC
       this->close();
     };
     
+    /*!
+     * @if jp
+     *
+     * @brief バッファへの書き込み
+     *
+     * 指定された文字列を指定された文字数分バッファへ書き込む。
+     *
+     * @param s 書き込み対象文字列
+     * @param n 書き込む文字数
+     *
+     * @return 実際に書き込みを行った文字数
+     *
+     * @else
+     *
+     * @brief Write into the buffer
+     *
+     * Write specified string through specified number of characters into the
+     * buffer
+     *
+     * @param s Target string
+     * @param n Number of characters
+     *
+     * @return Number of actual written characters
+     *
+     * @endif
+     */
     virtual std::streamsize sputn(const char_type* s, std::streamsize n)
     {
       ACE_Guard<ACE_Thread_Mutex> gaurd(m_Mutex);
@@ -189,6 +249,25 @@ namespace RTC
       return ssize;
     }
     
+    /*!
+     * @if jp
+     *
+     * @brief バッファ同期用コールバック関数の設定
+     *
+     * バッファ同期を実行するためのコールバック関数を設定する。
+     *
+     * @param cb 設定対象コールバック関数
+     *
+     * @else
+     *
+     * @brief Set callback function for buffer's synchronization
+     *
+     * Set the callback function to execute the buffer's synchronization.
+     *
+     * @param cb Target callback function for setting
+     *
+     * @endif
+     */
     void setSyncCallBack(sync_callback<char_type>& cb)
     {
       m_pCallBack = &cb;
@@ -202,9 +281,15 @@ namespace RTC
      *
      * バッファがフラッシュされた際に呼ばれる同期関数。
      *
+     * @return バッファ同期処理結果
+     *
      * @else
      *
-     * @brief synchronize buffer
+     * @brief Synchronization of buffer
+     *
+     * Synchronous function to be invoked when the buffer was flushed.
+     *
+     * @return Synchronous processing result of the buffer
      *
      * @endif
      */
@@ -216,7 +301,6 @@ namespace RTC
 	{
 	  (*m_pCallBack)(s.c_str());
 	}
-      
       // __filebuf_type::sync() resets the pointer
       int ret = __filebuf_type::sync();
       
@@ -226,10 +310,7 @@ namespace RTC
   private:
     ACE_Thread_Mutex m_Mutex;
     sync_callback<char_type>* m_pCallBack;
-    
   };
-  
-  
   
   //============================================================
   /*!
@@ -246,8 +327,12 @@ namespace RTC
    *
    * @class basic_medlogbuf
    *
-   * @brief Logger buffer class
+   * @brief Mediate logger buffer class
    *
+   * This is a logger buffer class like basic_streambuf.
+   * Mediates to basic_filebuf.
+   * Add the header etc to the string received from stream and pass it to
+   * basic_filebuf.
    *
    * @endif
    */
@@ -264,15 +349,14 @@ namespace RTC
     
     /*!
      * @if jp
+     * @brief コンストラクタ
      *
-     * @brief basic_medlogbuf クラスコンストラクタ
-     *
-     * 引数に basic_filebuf オブジェクトを受け取る。
-     * 受け取った filebuf に対してヘッダ等を付加した文字列を渡す。
+     * コンストラクタ
      *
      * @else
+     * @brief Constructor
      *
-     * @brief basic_medlogbuf class constructor.
+     * Constructor
      *
      * @endif
      */
@@ -282,18 +366,21 @@ namespace RTC
       // W3C standard date and time format.
       m_DateFmt = "[%Y-%m-%dT%H.%M.%S%Z]";
     }
-
+    
     /*!
      * @if jp
+     * @brief コンストラクタ
      *
-     * @brief basic_medlogbuf クラスコンストラクタ
+     * コンストラクタ
      *
-     * 引数に basic_filebuf オブジェクトを受け取る。
-     * 受け取った filebuf に対してヘッダ等を付加した文字列を渡す。
+     * @param filebuf ログファイル用バッファ
      *
      * @else
+     * @brief Constructor
      *
-     * @brief basic_medlogbuf class constructor.
+     * Constructor
+     *
+     * @param filebuf Buffer for log file
      *
      * @endif
      */
@@ -329,17 +416,19 @@ namespace RTC
       this->setp(pStart, pEnd);            // 書き込みポインタ。
       this->setg(pStart, pStart, pEnd);    // 読み取りポインタ。
     }
-
+    
     /*!
      * @if jp
      *
-     * @brief basic_medlogbuf クラスデストラクタ
+     * @brief デストラクタ
      *
      * デストラクタ。
      *
      * @else
      *
-     * @brief basic_medlogbuf class destractor.
+     * @brief Destractor
+     *
+     * Destructor
      *
      * @endif
      */
@@ -348,6 +437,23 @@ namespace RTC
       this->sync();
     }
     
+    /*!
+     * @if jp
+     * @brief ログバッファ設定
+     *
+     * 指定したファイルバッファをログバッファとして設定する。
+     *
+     * @param filebuf ログファイル用バッファ
+     *
+     * @else
+     * @brief Set the log buffer
+     *
+     * Set the specified file buffer as log buffer.
+     *
+     * @param filebuf Buffer for log file
+     *
+     * @endif
+     */
     void setBuffer(__filebuf_type& filebuf)
     {
       m_pLogbuf = &filebuf;
@@ -363,34 +469,68 @@ namespace RTC
      * @brief ヘッダに付加する日時フォーマットを指定する。
      *
      * フォーマット指定文字列は以下のとおり。
-     * %a abbreviated weekday name 
-     * %A full weekday name 
-     * %b abbreviated month name 
-     * %B full month name 
-     * %c the standard date and time string 
-     * %d day of the month, as a number (1-31) 
-     * %H hour, 24 hour format (0-23) 
-     * %I hour, 12 hour format (1-12) 
-     * %j day of the year, as a number (1-366) 
-     * %m month as a number (1-12).
+     * <pre>
+     * @%a abbreviated weekday name 
+     * @%A full weekday name 
+     * @%b abbreviated month name 
+     * @%B full month name 
+     * @%c the standard date and time string 
+     * @%d day of the month, as a number (1-31) 
+     * @%H hour, 24 hour format (0-23) 
+     * @%I hour, 12 hour format (1-12) 
+     * @%j day of the year, as a number (1-366) 
+     * @%m month as a number (1-12).
      *    Note: some versions of Microsoft Visual C++ may use values that range
      *    from 0-11. 
-     * %M minute as a number (0-59) 
-     * %p locale's equivalent of AM or PM 
-     * %S second as a number (0-59) 
-     * %U week of the year, sunday as the first day 
-     * %w weekday as a decimal (0-6, sunday=0) 
-     * %W week of the year, monday as the first day 
-     * %x standard date string 
-     * %X standard time string 
-     * %y year in decimal, without the century (0-99) 
-     * %Y year in decimal, with the century 
-     * %Z time zone name 
+     * @%M minute as a number (0-59) 
+     * @%p locale's equivalent of AM or PM 
+     * @%S second as a number (0-59) 
+     * @%U week of the year, sunday as the first day 
+     * @%w weekday as a decimal (0-6, sunday=0) 
+     * @%W week of the year, monday as the first day 
+     * @%x standard date string 
+     * @%X standard time string 
+     * @%y year in decimal, without the century (0-99) 
+     * @%Y year in decimal, with the century 
+     * @%Z time zone name 
      * %% a percent sign 
+     * </pre>
+     *
+     * @param fmt 日時フォーマット
      *
      * @else
      *
-     * @brief Set date/time format.
+     * @brief Set date/time format for adding the header
+     *
+     * The format specification string is as follows:
+     * <pre>
+     * @%a abbreviated weekday name 
+     * @%A full weekday name 
+     * @%b abbreviated month name 
+     * @%B full month name 
+     * @%c the standard date and time string 
+     * @%d day of the month, as a number (1-31) 
+     * @%H hour, 24 hour format (0-23) 
+     * @%I hour, 12 hour format (1-12) 
+     * @%j day of the year, as a number (1-366) 
+     * @%m month as a number (1-12).
+     *    Note: some versions of Microsoft Visual C++ may use values that range
+     *    from 0-11. 
+     * @%M minute as a number (0-59) 
+     * @%p locale's equivalent of AM or PM 
+     * @%S second as a number (0-59) 
+     * @%U week of the year, sunday as the first day 
+     * @%w weekday as a decimal (0-6, sunday=0) 
+     * @%W week of the year, monday as the first day 
+     * @%x standard date string 
+     * @%X standard time string 
+     * @%y year in decimal, without the century (0-99) 
+     * @%Y year in decimal, with the century 
+     * @%Z time zone name 
+     * %% a percent sign 
+     * </pre>
+     *
+     * @param fmt Datetime format
      *
      * @endif
      */
@@ -404,9 +544,18 @@ namespace RTC
      *
      * @brief ヘッダに付加する日時フォーマットを指定する。
      *
+     * フォーマット指定文字列については、void setDateFmt(char*)を参照。
+     *
+     * @param fmt 日時フォーマット文字列
+     *
      * @else
      *
-     * @brief Set date/time format
+     * @brief Set date/time format for adding the header
+     *
+     * For more details on the format specification string, please refer to
+     * void setDateFmt(char*).
+     *
+     * @param fmt Datetime format string
      *
      * @endif
      */
@@ -420,9 +569,17 @@ namespace RTC
      *
      * @brief フォーマットされた現在日時文字列を取得する。
      *
+     * 指定された書式で記述した現在日時を取得する。
+     *
+     * @return 書式指定現在日時
+     *
      * @else
      *
-     * @brief Get formatted date/time string.
+     * @brief Get the current formatted date/time string
+     *
+     * Get the current datetime described by specified format.
+     *
+     * @return Format specification current datetime
      *
      * @endif
      */
@@ -430,7 +587,6 @@ namespace RTC
     {
       const int maxsize = 256;
       char buf[maxsize];
-      
       /*
 	struct timeval tp;
 	struct timezone tzp;
@@ -452,9 +608,17 @@ namespace RTC
      *
      * @brief ヘッダの日時の後に付加する文字列を設定する。
      *
+     * ヘッダの日時の後に付加する接頭語文字列を設定する。
+     *
+     * @param suffix 接頭語文字列
+     *
      * @else
      *
      * @brief Set suffix of date/time string of header.
+     *
+     * Set the suffix string added after the datatime of the header.
+     *
+     * @param suffix Suffix string
      *
      * @endif
      */
@@ -468,9 +632,17 @@ namespace RTC
      *
      * @brief ヘッダの日時の後に付加する文字列を設定する。
      *
+     * ヘッダの日時の後に付加する接頭語文字列を設定する。
+     *
+     * @param suffix 接頭語文字列
+     *
      * @else
      *
      * @brief Set suffix of date/time string of header.
+     *
+     * Set the suffix string added after the datatime of the header.
+     *
+     * @param suffix Suffix string
      *
      * @endif
      */
@@ -484,9 +656,17 @@ namespace RTC
      *
      * @brief ヘッダの日時の後に付加する文字列を取得する。
      *
+     * ヘッダの日時の後に付加する接頭語文字列を取得する。
+     *
+     * @return 接頭語文字列
+     *
      * @else
      *
      * @brief Get suffix of date/time string of header.
+     *
+     * Get the suffix string added after the datatime of the header.
+     *
+     * @return Suffix string
      *
      * @endif
      */
@@ -510,9 +690,15 @@ namespace RTC
      *
      * バッファがフラッシュされた際に呼ばれる同期関数。
      *
+     * @return バッファ同期処理結果
+     *
      * @else
      *
-     * @brief synchronize buffer
+     * @brief synchronization of buffer
+     *
+     * Synchronous function to be invoked when the buffer was flushed.
+     *
+     * @return Synchronous processing result of the buffer
      *
      * @endif
      */
@@ -520,8 +706,7 @@ namespace RTC
     {
       ACE_Guard<ACE_Thread_Mutex> guard(m_Mutex);
       int ret(0); 
-      if (m_pLogbuf != NULL &&
-	  (this->pptr() - this->pbase()) > 0)
+      if (m_pLogbuf != NULL && (this->pptr() - this->pbase()) > 0)
 	{
 	  {
 	    //ACE_Guard<ACE_Thread_Mutex> guard(m_Mutex);
@@ -554,7 +739,6 @@ namespace RTC
     ACE_Thread_Mutex m_Mutex;
   };
   
-  
   /*!
    * @if jp
    *
@@ -570,6 +754,7 @@ namespace RTC
    *
    * @brief Dummy buffer class
    *
+   * Dummy buffer class that does not do anything.
    *
    * @endif
    */
@@ -587,6 +772,19 @@ namespace RTC
     typedef std::basic_streambuf<char_type, traits_type> __streambuf_type;
     typedef std::basic_filebuf<char_type, traits_type>   __filebuf_type;
     
+    /*!
+     * @if jp
+     * @brief コンストラクタ
+     *
+     * コンストラクタ
+     *
+     * @else
+     * @brief Constructor
+     *
+     * Constructor
+     *
+     * @endif
+     */
     basic_dummybuf()
     {
       char *pStart = m_Data;
@@ -594,17 +792,76 @@ namespace RTC
       this->setp(pStart, pEnd);
       this->setg(pStart, pStart, pEnd);
     }
-
+    
+    /*!
+     * @if jp
+     *
+     * @brief デストラクタ
+     *
+     * デストラクタ。
+     *
+     * @else
+     *
+     * @brief Destractor
+     *
+     * Destractor
+     *
+     * @endif
+     */
     ~basic_dummybuf()
     {
     }
     
+    /*!
+     * @if jp
+     *
+     * @brief バッファ書き出し処理
+     *
+     * バッファの書き出し処理を実行する。
+     * 出力バッファがフルになった際に呼ばれる。
+     *
+     * @param c バッファに書き込む文字列
+     *
+     * @return 書き込み処理結果
+     *
+     * @else
+     *
+     * @brief Write the buffer
+     *
+     * Run writing processing of the buffer
+     * When the output buffer is full, this is invoked.
+     *
+     * @param c String written into the buffer
+     *
+     * @return Writing processing result
+     *
+     * @endif
+     */
     int_type overflow(int_type c = _Traits::eof() )
     {
       pbump( this->pbase() - this->pptr() );
       return _Traits::not_eof(c);
     }
     
+    /*!
+     * @if jp
+     *
+     * @brief バッファ同期
+     *
+     * バッファがフラッシュされた際に呼ばれる同期関数。
+     *
+     * @return 同期処理結果
+     *
+     * @else
+     *
+     * @brief synchronization of buffer
+     *
+     * Synchronous function invoked when the buffer was flushed.
+     *
+     * @return Synchronous processing result
+     *
+     * @endif
+     */
     virtual int sync()
     {
       pbump( this->pbase() - this->pptr() );
@@ -614,7 +871,6 @@ namespace RTC
   private:
     char m_Data[255];
   };
-  
   
   /*!
    * @if jp
@@ -631,6 +887,7 @@ namespace RTC
    *
    * @brief Logger format class
    *
+   * This is a logger format class like basic_ostream.
    *
    * @endif
    */
@@ -654,6 +911,29 @@ namespace RTC
 	RTL_MANDATORY// This level is used for only LogLockLevel
       };
     
+    /*!
+     * @if jp
+     *
+     * @brief ログレベル設定
+     *
+     * 与えられた文字列に対応したログレベルを設定する。
+     *
+     * @param lv ログレベル文字列
+     *
+     * @return 設定したログレベル
+     *
+     * @else
+     *
+     * @brief Set the log level
+     *
+     * Set the log level corresponding to the given string.
+     *
+     * @param lv Log level string
+     *
+     * @return The set log level
+     *
+     * @endif
+     */
     static int strToLogLevel(const std::string& lv)
     {
       if (lv == "SILENT")
@@ -692,15 +972,19 @@ namespace RTC
     /*!
      * @if jp
      *
-     * @brief basic_logstream クラスコンストラクタ
+     * @brief コンストラクタ
      *
-     * デフォルトコンストラクタ
+     * コンストラクタ
      *
      * @param streambuf basic_streambuf 型オブジェクト
      *
      * @else
      *
-     * @brief basic_logbuf class constructor.
+     * @brief Constructor
+     *
+     * Constructor
+     *
+     * @param streambuf basic_streambuf type object
      *
      * @endif
      */
@@ -715,13 +999,15 @@ namespace RTC
     /*!
      * @if jp
      *
-     * @brief basic_logstream クラスデストラクタ
+     * @brief デストラクタ
      *
      * デストラクタ。
      *
      * @else
      *
-     * @brief basic_logstream class destractor.
+     * @brief Destructor
+     *
+     * Destructor
      *
      * @endif
      */
@@ -729,14 +1015,14 @@ namespace RTC
     {
     }
     
-    /*!
+    /***
      * @if jp
      *
      * @brief 現在保持しているバッファへのポインタを返す。
      *
      * @else
      *
-     * @brief return a pointer of a current buffer.
+     * @brief Return a pointer of a current holding buffer.
      *
      * @endif
      */
@@ -754,9 +1040,19 @@ namespace RTC
      *
      * printfライクな書式でログ出力する。
      *
+     * @param fmt 書式文字列
+     *
+     * @return 書式付き文字列出力
+     *
      * @else
      *
      * @brief Formatted output like printf
+     *
+     * Output a log with a format like printf.
+     *
+     * @param fmt Formatted string
+     *
+     * @return Formatted string output
      *
      * @endif
      */
@@ -777,33 +1073,149 @@ namespace RTC
       return s;
     }
     
-    
+    /*!
+     * @if jp
+     *
+     * @brief ログレベル設定
+     *
+     * 与えられた文字列に対応したログレベルを設定する。
+     *
+     * @param level ログレベル文字列
+     *
+     * @else
+     *
+     * @brief Set the log level
+     *
+     * Set the log level corresponding to the given string.
+     *
+     * @param level Log level string
+     *
+     * @endif
+     */
     void setLogLevel(const std::string& level)
     {
       m_LogLevel = strToLogLevel(level);
     }
-
+    
+    /*!
+     * @if jp
+     *
+     * @brief ログレベル設定
+     *
+     * ログレベルを設定する。
+     *
+     * @param level ログレベル
+     *
+     * @else
+     *
+     * @brief Set the log level
+     *
+     * Set the log level.
+     *
+     * @param level Log level
+     *
+     * @endif
+     */
     void setLogLevel(int level)
     {
       m_LogLevel = level;
     }
     
+    /*!
+     * @if jp
+     *
+     * @brief ロックモード設定
+     *
+     * ログのロックモードを設定する。
+     *
+     * @param lock ログロックフラグ
+     *
+     * @else
+     *
+     * @brief Set the lock mode
+     *
+     * Set the lock mode of log.
+     *
+     * @param lock Flag of log lock
+     *
+     * @endif
+     */
     void setLogLock(bool lock)
     {
       m_LogLock = lock;
     }
     
-    
+    /*!
+     * @if jp
+     *
+     * @brief ロックモード設定
+     *
+     * ロックモードを有効にする。
+     *
+     * @else
+     *
+     * @brief Enable the lock mode
+     *
+     * Enable the lock mode.
+     *
+     * @endif
+     */
     void enableLogLock()
     {
       m_LogLock = true;
     }
     
+    /*!
+     * @if jp
+     *
+     * @brief ロックモード解除
+     *
+     * ロックモードを無効にする。
+     *
+     * @else
+     *
+     * @brief Disable the lock mode
+     *
+     * Disable the lock mode.
+     *
+     * @endif
+     */
     void disableLogLock()
     {
       m_LogLock = false;
     }
     
+    /*!
+     * @if jp
+     *
+     * @brief ログストリームの取得
+     *
+     * 指定されたログレベルを判断し、ログストリームを取得する。
+     * 指定されたログレベルが設定されているログレベル以下の場合には、本クラスを
+     * 返す。
+     * 指定されたログレベルが設定されているログレベルを超えている場合には、
+     * ダミーログクラスを返す。
+     *
+     * @param level 指定ログレベル
+     *
+     * @return 対象ログストリーム
+     *
+     * @else
+     *
+     * @brief Acquire log stream
+     *
+     * Investigate the specified log level and get its log stream.
+     * If the specified log level is under the set log level, this class
+     * will be returned.
+     * If the specified log level exceeds the set log level, a dummy log class
+     * will be returned.
+     *
+     * @param level The specified log level
+     *
+     * @return Target log stream
+     *
+     * @endif
+     */
     __ostream_type& level(int level)
     {
       if (m_LogLevel >= level)
@@ -814,26 +1226,57 @@ namespace RTC
 	{
 	  return m_DummyStream;
 	}
-      
     }
     
+    /*!
+     * @if jp
+     *
+     * @brief ログロック取得
+     * ロックモードが設定されている場合、ログのロックを取得する。
+     *
+     * @else
+     *
+     * @brief Acquire log lock
+     * Acquire log lock when the lock mode is set.
+     *
+     * @endif
+     */
     inline void acquire()
     {
       if (m_LogLock) m_Mutex.acquire();
     }
     
+    /*!
+     * @if jp
+     *
+     * @brief ログロック解放
+     * ロックモードが設定されている場合に、ログのロックを解放する。
+     *
+     * @else
+     *
+     * @brief Release the log lock
+     * Release the log lock when the lock mode is set.
+     *
+     * @endif
+     */
     inline void release()
     {
       if (m_LogLock) m_Mutex.release();
     }
     
+    /*!
+     * @if jp
+     * @brief ダミーログ
+     * @else
+     * @brief Dummy log
+     * @endif
+     */
     __ostream_type m_DummyStream;
     
   private:
     int m_LogLevel;
     bool m_LogLock;
     ACE_Thread_Mutex m_Mutex;
-    
   };
   typedef sync_callback<char>   SyncCallback;
   typedef basic_logbuf<char>    Logbuf;
@@ -842,42 +1285,472 @@ namespace RTC
   
 #else //// NO_LOGGING  
   
+  /*!
+   * @if jp
+   * @class sync_callback
+   * @brief sync_callback ダミークラス
+   *
+   * バッファ同期処理のためのコールバック用インターフェースクラスのダミー。
+   *
+   * @else
+   * @class sync_callback
+   * @brief sync_callback dummy class
+   *
+   * This is a the dummy interface class for callback function to
+   * synchronize buffer processing.
+   *
+   * @endif
+   */
   class SyncCallback
   {
   public:
+    /*!
+     * @if jp
+     * @brief コンストラクタ
+     *
+     * コンストラクタ(ダミー)
+     *
+     * @else
+     * @brief Constructor
+     *
+     * Constructor(dummy)
+     *
+     * @endif
+     */
     SyncCallback() {;};
+    
+    /*!
+     * @if jp
+     * @brief 代入演算子
+     *
+     * 引数で与えられた値を代入する。(ダミー)
+     *
+     * @param s 代入値
+     *
+     * @return 代入結果
+     *
+     * @else
+     * @brief Assignment operator
+     *
+     * Assign the value given by the argument(dummy).
+     *
+     * @param s Assignment value
+     *
+     * @return Assignment result
+     *
+     * @endif
+     */
     virtual int operator()(const char* s) {;};
   };
   
+  /*!
+   * @if jp
+   *
+   * @class Logbuf
+   *
+   * @brief ロガーバッファダミークラス
+   *
+   * ログバッファのダミークラス。
+   *
+   * @else
+   *
+   * @class Logbuf
+   *
+   * @brief Logger buffer dummy class
+   *
+   * Dummy class of log buffer.
+   *
+   * @endif
+   */
   class Logbuf
   {
   public:
+    /*!
+     * @if jp
+     *
+     * @brief コンストラクタ
+     *
+     * デフォルトコンストラクタ
+     *
+     * @else
+     *
+     * @brief Constructor
+     *
+     * Default constructor
+     *
+     * @endif
+     */
     Logbuf() {;};
+    
+    /*!
+     * @if jp
+     *
+     * @brief コンストラクタ
+     *
+     * ファイル名およびオープンモードを指定してコンストラクトするコンストラクタ
+     * (ダミー)
+     *
+     * @param s ログファイル名
+     * @param m オープンモード(デフォルト値:書き込みモード)
+     *
+     * @else
+     *
+     * @brief Constructor
+     *
+     * Constructor that constructs by specifying file names and open mode.
+     * (Dummy)
+     *
+     * @param s Log file name
+     * @param m Open mode(The default value:write-mode)
+     *
+     * @endif
+     */
     Logbuf(const char* s, int m) {;};
+    
+    /*!
+     * @if jp
+     *
+     * @brief ログバッファのオープン
+     *
+     * ファイル名およびオープンモードを指定してログバッファをオープンする。
+     * (ダミー)
+     *
+     * @param s ログファイル名
+     * @param m オープンモード(デフォルト値:書き込みモード)
+     *
+     * @else
+     *
+     * @brief Open the log buffer
+     *
+     * Open the log buffer by specifying file names and open mode.
+     * (Dummy)
+     *
+     * @param s Log file name
+     * @param m Open mode(The default value:write-mode)
+     *
+     * @endif
+     */
     void open(const char* s, int m) {;};
+    
+    /*!
+     * @if jp
+     *
+     * @brief バッファ同期用コールバック関数の設定
+     *
+     * バッファ同期を実行するためのコールバック関数を設定する。
+     * (ダミー)
+     *
+     * @param cb 設定対象コールバック関数
+     *
+     * @else
+     *
+     * @brief Set callback function for buffer's synchronization
+     *
+     * Set the callback function to execute the buffer's synchronization.
+     * (Dummy)
+     *
+     * @param cb Target callback function for setting
+     *
+     * @endif
+     */
     void setSyncCallBack(SyncCallback& cb) {;};
   };
   
+  /*!
+   * @if jp
+   * @class MedLogbuf
+   * @brief 仲介ロガーバッファダミークラス
+   *
+   * 仲介ロガーバッファのダミークラス。
+   *
+   * @else
+   * @class MedLogbuf
+   * @brief Mediate logger buffer dummy class
+   *
+   * Mediate logger buffer dummy class.
+   *
+   * @endif
+   */
   class MedLogbuf
   {
   public:
+    /*!
+     * @if jp
+     * @brief コンストラクタ
+     *
+     * コンストラクタ(ダミー)
+     *
+     * @else
+     * @brief Constructor
+     *
+     * Constructor(dummy)
+     *
+     * @endif
+     */
     MedLogbuf() {;};
+    
+    /*!
+     * @if jp
+     * @brief コンストラクタ
+     *
+     * コンストラクタ(ダミー)
+     *
+     * @param filebuf ログファイル用バッファ
+     *
+     * @else
+     * @brief Constructor
+     *
+     * Constructor(dummy)
+     *
+     * @param filebuf Buffer for log file
+     *
+     * @endif
+     */
     MedLogbuf(Logbuf& f) {;};
+    
+    /*!
+     * @if jp
+     * @brief ヘッダに付加する日時フォーマットを指定する。
+     *
+     * 日時フォーマット指定用ダミー
+     *
+     * @param fmt 日時フォーマット
+     *
+     * @else
+     * @brief Set date/time format for adding the header
+     *
+     * Dummy for datetime format specification.
+     *
+     * @param fmt Datetime format
+     *
+     * @endif
+     */
     void setDateFmt(char* fmt) {;};
+    
+    /*!
+     * @if jp
+     *
+     * @brief ヘッダに付加する日時フォーマットを指定する。
+     *
+     * 日時フォーマット指定用ダミー
+     *
+     * @param fmt 日時フォーマット文字列
+     *
+     * @else
+     *
+     * @brief Set date/time format for adding the header
+     *
+     * Dummy for datetime format specification.
+     *
+     * @param fmt Datetime format string
+     *
+     * @endif
+     */
     void setDateFmt(const std::string& fmt) {;};
+    
+    /*!
+     * @if jp
+     *
+     * @brief ヘッダの日時の後に付加する文字列を設定する。
+     *
+     * ヘッダの日時の後に付加する接頭語文字列を設定する。
+     * (ダミー)
+     *
+     * @param suffix 接頭語文字列
+     *
+     * @else
+     *
+     * @brief Set suffix of date/time string of header.
+     *
+     * Set the suffix string added after the datatime of the header.
+     * (Dummy)
+     *
+     * @param suffix Suffix string
+     *
+     * @endif
+     */
     void setSuffix(const char* suffix) {;};
+    
+    /*!
+     * @if jp
+     *
+     * @brief ヘッダの日時の後に付加する文字列を設定する。
+     *
+     * ヘッダの日時の後に付加する接頭語文字列を設定する。
+     * (ダミー)
+     *
+     * @param suffix 接頭語文字列
+     *
+     * @else
+     *
+     * @brief Set suffix of date/time string of header.
+     *
+     * Set the suffix string added after the datatime of the header.
+     * (Dummy)
+     *
+     * @param suffix Suffix string
+     *
+     * @endif
+     */
     void setSuffix(const std::string& suffix) {;};
   };
   
+  /*!
+   * @if jp
+   *
+   * @class basic_logstream
+   *
+   * @brief ロガーフォーマットダミークラス
+   *
+   * ログフォーマット用ダミークラス。
+   *
+   * @else
+   *
+   * @class basic_logstream
+   *
+   * @brief Logger format dummy class
+   *
+   * Dummy class of log format.
+   *
+   * @endif
+   */
   class LogStream
     : public ostream
   {
   public:
-    enum {SILENT, ERROR, WARN, INFO, NORMAL, DEBUG, TRACE, VERBOSE, PARANOID, MANDATORY };
+    enum
+      {
+	SILENT,
+	ERROR,
+	WARN,
+	INFO,
+	NORMAL,
+	DEBUG,
+	TRACE,
+	VERBOSE,
+	PARANOID,
+	MANDATORY
+      };
+    
+    /*!
+     * @if jp
+     *
+     * @brief ログレベル設定
+     *
+     * 与えられた文字列に対応したログレベルを設定する。
+     * (ダミー)
+     *
+     * @param lv ログレベル文字列
+     *
+     * @return 設定したログレベル
+     *
+     * @else
+     *
+     * @brief Set the log level
+     *
+     * Set the log level corresponding to the given string.
+     * (Dummy)
+     *
+     * @param lv Log level string
+     *
+     * @return Log level that was set
+     *
+     * @endif
+     */
     static int strToLogLevel(const std::string& lv){return NORMAL;}
+    
+    /*!
+     * @if jp
+     *
+     * @brief コンストラクタ
+     *
+     * コンストラクタ
+     * (ダミー)
+     *
+     * @param streambuf basic_streambuf 型オブジェクト
+     *
+     * @else
+     *
+     * @brief Constructor
+     *
+     * Constructor
+     * (Dummy)
+     *
+     * @param streambuf basic_streambuf type object
+     *
+     * @endif
+     */
     LogStream(MedLogbuf& buf) {;};
+    
+    /*!
+     * @if jp
+     *
+     * @brief ログレベル設定
+     *
+     * 与えられた文字列に対応したログレベルを設定する。
+     * (ダミー)
+     *
+     * @param level ログレベル文字列
+     *
+     * @else
+     *
+     * @brief Set the log level
+     *
+     * Set the log level corresponding to the given string.
+     * (Dummy)
+     *
+     * @param level Log level string
+     *
+     * @endif
+     */
     void setLogLevel(int level) {;};
+    
+    /*!
+     * @if jp
+     *
+     * @brief ロックモード設定
+     *
+     * ログのロックモードを設定する。
+     * (ダミー)
+     *
+     * @param lock ログロックフラグ
+     *
+     * @else
+     *
+     * @brief Set the lock mode
+     *
+     * Set the lock mode of log.
+     * (Dummy
+     *
+     * @param lock Flag of log lock
+     *
+     * @endif
+     */
     void setLogLock(int lock) {;};
+    
+    /*!
+     * @if jp
+     *
+     * @brief ログストリームの取得
+     *
+     * 常に本ダミークラスを返す。
+     *
+     * @param level 指定ログレベル
+     *
+     * @return 対象ログストリーム
+     *
+     * @else
+     *
+     * @brief Acquire log stream
+     *
+     * Always return this dummy class.
+     *
+     * @param level Specified log level
+     *
+     * @return Target log stream
+     *
+     * @endif
+     */
     LogStream& level(int level) {return *this;};
     /*
       LogStream& operator<<(const char* s) {return *this;};
@@ -892,23 +1765,23 @@ namespace RTC
   
   // __VA_ARGS__ cannot be used in VC	
 #if 0
-#define RTC_LOG(LV, fmt, ...) \
+#define RTC_LOG(LV, fmt, ...)						\
   rtcout.level(LV) << rtcout.printf(fmt, __VA_ARGS__) << std::endl;
-#define RTC_ERROR(fmt, ...) \
+#define RTC_ERROR(fmt, ...)				\
   RTC_LOG(LogStream::RTL_ERROR, fmt, __VA_ARGS__)
-#define RTC_WARN(fmt, ...) \
+#define RTC_WARN(fmt, ...)				\
   RTC_LOG(LogStream::RTL_WARN, fmt, __VA_ARGS__)
-#define RTC_NORMAL(fmt, ...) \
+#define RTC_NORMAL(fmt, ...)				\
   RTC_LOG(LogStream::RTL_NORMAL, fmt, __VA_ARGS__)
-#define RTC_INFO(fmt, ...) \
+#define RTC_INFO(fmt, ...)				\
   RTC_LOG(LogStream::RTL_INFO, fmt, __VA_ARGS__)
-#define RTC_DEBUG(fmt, ...) \
+#define RTC_DEBUG(fmt, ...)				\
   RTC_LOG(LogStream::RTL_DEBUG, fmt, __VA_ARGS__)
-#define RTC_TRACE(fmt, ...) \
+#define RTC_TRACE(fmt, ...)				\
   RTC_LOG(LogStream::RTL_TRACE, fmt, __VA_ARGS__)
-#define RTC_VERBOSE(fmt, ...) \
+#define RTC_VERBOSE(fmt, ...)				\
   RTC_LOG(LogStream::RTL_VERBOSE, fmt, __VA_ARGS__)
-#define RTC_PARANOID(fmt, ...) \
+#define RTC_PARANOID(fmt, ...)				\
   RTC_LOG(LogStream::RTL_PARANOID, fmt, __VA_ARGS__)
 #endif
   
@@ -923,12 +1796,14 @@ namespace RTC
    *
    * @else
    *
-   * @brief Log output macro
+   * @brief General-purpose log output macro
+   *
+   * Acquire log level and output format string as arguments.
    *
    * @endif
    */
-#define RTC_LOG(LV, fmt) \
-  rtcout.acquire(); \
+#define RTC_LOG(LV, fmt)			      \
+  rtcout.acquire();				      \
   rtcout.level(LV) << rtcout.printf fmt << std::endl; \
   rtcout.release()
   
@@ -937,18 +1812,22 @@ namespace RTC
    *
    * @brief エラーログ出力マクロ。
    *
-   * エラーレベルのログ出力マクロ。ログレベルが
+   * エラーレベルのログ出力マクロ。<BR>ログレベルが
    * ERROR, WARN, INFO, NORMAL, DEBUG, TRACE, VERBOSE, PARANOID
    * の場合にログ出力される。
    *
    * @else
    *
-   * @brief Error log output macro.
+   * @brief Error log output macro
+   *
+   * This is a log output macro of the error level.
+   * If log levels are ERROR, WARN, INFO, NORMAL, DEBUG, TRACE,
+   * VERBOSE or PARANOID, message will be output to log.
    *
    * @endif
    */
-#define RTC_ERROR(fmt) \
-  rtcout.acquire(); \
+#define RTC_ERROR(fmt)							\
+  rtcout.acquire();							\
   rtcout.level(LogStream::RTL_ERROR)  << rtcout.printf fmt << std::endl; \
   rtcout.release()
   
@@ -957,23 +1836,23 @@ namespace RTC
    *
    * @brief ワーニングログ出力マクロ。
    *
-   * ウォーニングレベルのログ出力マクロ。ログレベルが
+   * ワーニングレベルのログ出力マクロ。<BR>ログレベルが
    * ( WARN, INFO, NORMAL, DEBUG, TRACE, VERBOSE, PARANOID )
    * の場合にログ出力される。
    *
    * @else
    *
-   * @brief Warning log output macro.
+   * @brief Warning log output macro
    *
-   * If logging levels are
+   * If log levels are
    * ( WARN, INFO, NORMAL, DEBUG, TRACE, VERBOSE, PARANOID ),
    * message will be output to log.
    *
    * @endif
    */
-#define RTC_WARN(fmt) \
-  rtcout.acquire(); \
-  rtcout.level(LogStream::RTL_WARN) << rtcout.printf fmt << std::endl;\
+#define RTC_WARN(fmt)							\
+  rtcout.acquire();							\
+  rtcout.level(LogStream::RTL_WARN) << rtcout.printf fmt << std::endl;	\
   rtcout.release()
   
   /*!
@@ -981,23 +1860,23 @@ namespace RTC
    *
    * @brief インフォログ出力マクロ。
    *
-   * インフォレベルのログ出力マクロ。ログレベルが
+   * インフォレベルのログ出力マクロ。<BR>ログレベルが
    * ( INFO, NORMAL, DEBUG, TRACE, VERBOSE, PARANOID )
    * の場合にログ出力される。
    *
    * @else
    *
-   * @brief Infomation level log output macro.
+   * @brief Information level log output macro
    *
-   *  If logging levels are
+   *  If log levels are
    * ( INFO, NORMAL, DEBUG, TRACE, VERBOSE, PARANOID ),
    * message will be output to log.
    *
    * @endif
    */
-#define RTC_INFO(fmt) \
-  rtcout.acquire(); \
-  rtcout.level(LogStream::RTL_INFO) << rtcout.printf fmt << std::endl;\
+#define RTC_INFO(fmt)							\
+  rtcout.acquire();							\
+  rtcout.level(LogStream::RTL_INFO) << rtcout.printf fmt << std::endl;	\
   rtcout.release()
   
   /*!
@@ -1005,7 +1884,7 @@ namespace RTC
    *
    * @brief ノーマルログ出力マクロ。
    *
-   * ノーマルレベルのログ出力マクロ。ログレベルが
+   * ノーマルレベルのログ出力マクロ。<BR>ログレベルが
    * ( NORMAL, DEBUG, TRACE, VERBOSE, PARANOID )
    * の場合にログ出力される。
    *
@@ -1013,15 +1892,15 @@ namespace RTC
    *
    * @brief Normal level log output macro.
    *
-   * If logging levels are
+   * If log levels are
    * ( NORMAL, DEBUG, TRACE, VERBOSE, PARANOID ),
    * message will be output to log.
    *
    * @endif
    */
-#define RTC_NORMAL(fmt)	\
-  rtcout.acquire();	\
-  rtcout.level(LogStream::RTL_NORMAL) << rtcout.printf fmt << std::endl;\
+#define RTC_NORMAL(fmt)							\
+  rtcout.acquire();							\
+  rtcout.level(LogStream::RTL_NORMAL) << rtcout.printf fmt << std::endl; \
   rtcout.release()
   
   /*!
@@ -1029,7 +1908,7 @@ namespace RTC
    *
    * @brief デバッグログ出力マクロ。
    *
-   * デバッグレベルのログ出力マクロ。ログレベルが
+   * デバッグレベルのログ出力マクロ。<BR>ログレベルが
    * ( DEBUG, TRACE, VERBOSE, PARANOID )
    * の場合にログ出力される。
    *
@@ -1037,14 +1916,14 @@ namespace RTC
    *
    * @brief Debug level log output macro.
    *
-   * If logging levels are
+   * If log levels are
    * ( DEBUG, TRACE, VERBOSE, PARANOID ),
    * message will be output to log.
    *
    * @endif
    */
-#define RTC_DEBUG(fmt) \
-  rtcout.acquire(); \
+#define RTC_DEBUG(fmt)							\
+  rtcout.acquire();							\
   rtcout.level(LogStream::RTL_DEBUG) << rtcout.printf fmt << std::endl; \
   rtcout.release()
   
@@ -1053,7 +1932,7 @@ namespace RTC
    *
    * @brief トレースログ出力マクロ。
    *
-   * トレースレベルのログ出力マクロ。ログレベルが
+   * トレースレベルのログ出力マクロ。<BR>ログレベルが
    * ( TRACE, VERBOSE, PARANOID )
    * の場合にログ出力される。
    *
@@ -1061,14 +1940,14 @@ namespace RTC
    *
    * @brief Trace level log output macro.
    *
-   * If logging levels are
+   * If log levels are
    * ( TRACE, VERBOSE, PARANOID ),
    * message will be output to log.
    *
    * @endif
    */
-#define RTC_TRACE(fmt) \
-  rtcout.acquire(); \
+#define RTC_TRACE(fmt)							\
+  rtcout.acquire();							\
   rtcout.level(LogStream::RTL_TRACE) << rtcout.printf fmt << std::endl; \
   rtcout.release()
   
@@ -1077,7 +1956,7 @@ namespace RTC
    *
    * @brief ベルボーズログ出力マクロ。
    *
-   * ベルボーズレベルのログ出力マクロ。ログレベルが
+   * ベルボーズレベルのログ出力マクロ。<BR>ログレベルが
    * ( VERBOSE, PARANOID )
    * の場合にログ出力される。
    *
@@ -1085,14 +1964,14 @@ namespace RTC
    *
    * @brief Verbose level log output macro.
    *
-   * If logging levels are
+   * If log levels are
    * ( VERBOSE, PARANOID ),
    * message will be output to log.
    *
    * @endif
    */
-#define RTC_VERBOSE(fmt) \
-  rtcout.acquire(); \
+#define RTC_VERBOSE(fmt)						\
+  rtcout.acquire();							\
   rtcout.level(LogStream::RTL_VERBOSE) << rtcout.printf fmt << std::endl; \
   rtcout.release()
   
@@ -1101,7 +1980,7 @@ namespace RTC
    *
    * @brief パラノイドログ出力マクロ。
    *
-   * パラノイドレベルのログ出力マクロ。ログレベルが
+   * パラノイドレベルのログ出力マクロ。<BR>ログレベルが
    * ( PARANOID )
    * の場合にログ出力される。
    *
@@ -1109,14 +1988,14 @@ namespace RTC
    *
    * @brief Paranoid level log output macro.
    *
-   * If logging levels are
+   * If log levels are
    * ( PARANOID ),
    * message will be output to log.
    *
    * @endif
    */
-#define RTC_PARANOID(fmt) \
-  rtcout.acquire(); \
+#define RTC_PARANOID(fmt)						\
+  rtcout.acquire();							\
   rtcout.level(LogStream::RTL_PARANOID) << rtcout.printf fmt << std::endl; \
   rtcout.release()
   

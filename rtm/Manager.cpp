@@ -16,75 +16,6 @@
  *
  */
 
-/*
- * $Log: not supported by cvs2svn $
- * Revision 1.12.2.6  2008/01/25 10:50:44  n-ando
- * OpenHRPExecutionContext was added.
- *
- * Revision 1.12.2.5  2008/01/14 07:57:40  n-ando
- * TAO's ORB_init needs argv[0] as command name.
- *
- * Revision 1.12.2.4  2007/12/31 03:08:04  n-ando
- * Class reference by doxygen comment was revised.
- *
- * Revision 1.12.2.3  2007/09/22 08:47:13  n-ando
- * A bug about the conversion specifier %h was fixed.
- *
- * Revision 1.12.2.2  2007/09/21 09:14:33  n-ando
- * Some fixes.
- * - getComponents() was implemented.
- * - Component's init logic was modified to fix behavior of "on_initialize"
- *   error return.
- *
- * Revision 1.12.2.1  2007/07/20 15:51:49  n-ando
- * Bug fixes.
- * Some ineffective expressions were added to suppress compiler's warning.
- *
- * Revision 1.12  2007/04/27 07:50:25  n-ando
- * Now Components' properties are dumped to the log when they are terminated.
- *
- * Revision 1.11  2007/04/27 06:13:12  n-ando
- * Configuration: naming_format to naming.format
- *
- * Revision 1.10  2007/04/26 15:36:07  n-ando
- * The components' and ExecutionContexts' shutdown process was added.
- * The manager's shutdown process was modified.
- *
- * Revision 1.9  2007/04/23 04:53:15  n-ando
- * Component instantiation processes were divided into some functions.
- *
- * Revision 1.8  2007/04/17 09:22:13  n-ando
- * Namespace of Timer class was changed from ::Timer to RTC::Timer.
- *
- * Revision 1.7  2007/04/13 18:02:01  n-ando
- * Some configuration properties handling processes were changed.
- *
- * Revision 1.6  2007/01/14 19:42:30  n-ando
- * The activate() function now performs POA manager activation and
- * invoking ModuleInitProc.
- * Debugging messages are now output to system logger.
- *
- * Revision 1.5  2007/01/12 14:32:36  n-ando
- * Some headers that should be included in the distribution package were
- * added to the EXTRA_DIST entry.
- *
- * Revision 1.4  2007/01/09 15:11:24  n-ando
- * Now RTObject is activated itself. The Manager does nothing.
- *
- * Revision 1.3  2006/11/06 01:31:50  n-ando
- * Some Manager's functions has been implemented.
- * - Component creation process
- * - System logger initialization
- *
- * Revision 1.2  2006/10/25 17:27:57  n-ando
- * Component factory registration and relative functions are implemented.
- *
- * Revision 1.1  2006/10/17 10:21:17  n-ando
- * The first commitment.
- *
- *
- */
-
 #include <rtm/Manager.h>
 #include <rtm/ManagerConfig.h>
 #include <rtm/Properties.h>
@@ -149,7 +80,7 @@ namespace RTC
    * @if jp
    * @brief マネージャの初期化
    * @else
-   * @brief Initializa manager
+   * @brief Initialize manager
    * @endif
    */
   Manager* Manager::init(int argc, char** argv)
@@ -177,7 +108,6 @@ namespace RTC
    * @brief マネージャのインスタンスの取得
    * @else
    * @brief Get instance of the manager
-   * @return The only instance reference of the manager
    * @endif
    */ 
   Manager& Manager::instance()
@@ -204,6 +134,7 @@ namespace RTC
    * @if jp
    * @brief マネージャ終了処理
    * @else
+   * @brief Terminate Manager
    * @endif
    */ 
   void Manager::terminate()
@@ -214,10 +145,11 @@ namespace RTC
   
   /*!
    * @if jp
-   * @brief マネージャ終了処理
+   * @brief マネージャ・シャットダウン
    * @else
+   * @brief Shutdown Manager
    * @endif
-   */ 
+   */
   void Manager::shutdown()
   {
     RTC_TRACE(("Manager::shutdown()"));
@@ -241,6 +173,7 @@ namespace RTC
    * @if jp
    * @brief マネージャ終了処理の待ち合わせ
    * @else
+   * @brief Wait for Manager's termination
    * @endif
    */ 
   void Manager::join()
@@ -264,6 +197,7 @@ namespace RTC
    * @if jp
    * @brief 初期化プロシージャのセット
    * @else
+   * @brief Set initial procedure
    * @endif
    */ 
   void Manager::setModuleInitProc(ModuleInitProc proc)
@@ -275,6 +209,7 @@ namespace RTC
    * @if jp
    * @brief Managerのアクティブ化
    * @else
+   * @brief Activate the Manager
    * @endif
    */ 
   bool Manager::activateManager()
@@ -312,6 +247,7 @@ namespace RTC
    * @if jp
    * @brief Managerの実行
    * @else
+   * @brief Run the Manager
    * @endif
    */ 
   void Manager::runManager(bool no_block)
@@ -354,7 +290,6 @@ namespace RTC
    * @brief モジュールのアンロード
    * @else
    * @brief Unload module
-   * @param pathname Module file name
    * @endif
    */
   void Manager::unload(const char* fname)
@@ -368,7 +303,7 @@ namespace RTC
    * @if jp
    * @brief 全モジュールのアンロード
    * @else
-   * @brief Unload module
+   * @brief Unload all modules
    * @endif
    */ 
   void Manager::unloadAll()
@@ -382,7 +317,7 @@ namespace RTC
    * @if jp
    * @brief ロード済みのモジュールリストを取得する
    * @else
-   * @brief Get loaded module names
+   * @brief Get a list of loaded modules
    * @endif
    */
   std::vector<std::string> Manager::getLoadedModules()
@@ -395,7 +330,7 @@ namespace RTC
    * @if jp
    * @brief ロード可能なモジュールリストを取得する
    * @else
-   * @brief Get loadable module names
+   * @brief Get a list of loadable modules
    * @endif
    */
   std::vector<std::string> Manager::getLoadableModules()
@@ -409,7 +344,7 @@ namespace RTC
   //============================================================
   /*!
    * @if jp
-   * @brief RTコンポーネントファクトリを登録する
+   * @brief RTコンポーネント用ファクトリを登録する
    * @else
    * @brief Register RT-Component Factory
    * @endif
@@ -462,7 +397,7 @@ namespace RTC
    * @if jp
    * @brief ファクトリ全リストを取得する
    * @else
-   * @brief Get the list of all RT-Component Factory
+   * @brief Get the list of all Factories
    * @endif
    */
   std::vector<std::string> Manager::getModulesFactories()
@@ -480,7 +415,7 @@ namespace RTC
    * @if jp
    * @brief RTコンポーネントを生成する
    * @else
-   * @brief Create RT-Component
+   * @brief Create RT-Components
    * @endif
    */
   RtcBase* Manager::createComponent(const char* module_name)
@@ -547,7 +482,7 @@ namespace RTC
    * @if jp
    * @brief RTコンポーネントの登録を解除する
    * @else
-   *
+   * @brief Unregister RT-Components
    * @endif
    */
   bool Manager::unregisterComponent(RtcBase* comp)
@@ -570,7 +505,7 @@ namespace RTC
    * @if jp
    * @brief RTコンポーネントにExecutionContextをバインドする
    * @else
-   *
+   * @brief Bind ExecutionContext to RT-Component
    * @endif
    */
   bool Manager::bindExecutionContext(RtcBase* comp)
@@ -584,7 +519,7 @@ namespace RTC
     
     ExecutionContextBase* exec_cxt;
     
-    if (isDataFlowParticipant(rtobj))
+    if (RTC_Utils::isDataFlowComponent(rtobj))
       {
 	const char* ectype
 	  = m_config.getProperty("exec_cxt.periodic.type").c_str();
@@ -623,7 +558,7 @@ namespace RTC
    * @if jp
    * @brief Manager に登録されているRTコンポーネントを削除する
    * @else
-   * @brief Unregister RT-Component that is registered in the Manager
+   * @brief Unregister RT-Components that have been registered to Manager
    * @endif
    */
   void Manager::deleteComponent(const char* instance_name)
@@ -657,7 +592,7 @@ namespace RTC
    * @if jp
    * @brief Manager に登録されている全RTコンポーネントを取得する
    * @else
-   * @brief Get all RT-Component's pointer
+   * @brief Get all RT-Components registered in the Manager
    * @endif
    */
   std::vector<RtcBase*> Manager::getComponents()
@@ -1071,7 +1006,7 @@ namespace RTC
    * @if jp
    * @brief NamingManager の終了処理
    * @else
-   *
+   * @brief NamingManager finalization
    * @endif
    */
   void Manager::shutdownComponents()
@@ -1109,7 +1044,7 @@ namespace RTC
    * @if jp
    * @brief RTコンポーネントの登録解除
    * @else
-   *
+   * @brief Unregister RT-Components
    * @endif
    */
   void Manager::cleanupComponent(RtcBase* comp)
@@ -1178,7 +1113,7 @@ namespace RTC
    * @if jp
    * @brief プロパティ情報のマージ
    * @else
-   *
+   * @brief Merge property information
    * @endif
    */
   bool Manager::mergeProperty(Properties& prop, const char* file_name)
@@ -1205,7 +1140,7 @@ namespace RTC
    * @if jp
    * @brief NamingServer に登録する際の登録情報を組み立てる
    * @else
-   *
+   * @brief Construct registration information when registering to Naming server
    * @endif
    */
   std::string Manager::formatString(const char* naming_format,

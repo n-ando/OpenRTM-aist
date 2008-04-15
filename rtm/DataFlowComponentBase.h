@@ -17,16 +17,6 @@
  *
  */
 
-/*
- * $Log: not supported by cvs2svn $
- * Revision 1.2  2007/01/21 14:02:42  n-ando
- * Kanji-code was changed.
- *
- * Revision 1.1  2007/01/09 09:47:22  n-ando
- * DataFlowParticipant RT-Component base class
- *
- */
-
 #ifndef DataFlowComponentBase_h
 #define DataFlowComponentBase_h
 
@@ -43,6 +33,8 @@
  * @else
  *
  * @namespace RTC
+ *
+ * @brief RT-Component
  *
  * @endif
  */
@@ -63,6 +55,12 @@ namespace RTC
    * @else
    * @class DataFlowComponentBase
    * @brief DataFlowComponentBase class
+   *
+   * This is a base class of the data flow type RT-Component.
+   * Inherit this class when implementing various data flow type RT-Components.
+   *
+   * @since 0.4.0
+   *
    * @endif
    */
   
@@ -80,6 +78,11 @@ namespace RTC
      *
      * @else
      * @brief Constructor
+     *
+     * Constructor
+     *
+     * @param manager Manager object
+     *
      * @endif
      */
     DataFlowComponentBase(Manager* manager);
@@ -92,6 +95,9 @@ namespace RTC
      *
      * @else
      * @brief Destructor
+     *
+     * Destructor
+     *
      * @endif
      */
     virtual ~DataFlowComponentBase();
@@ -105,6 +111,10 @@ namespace RTC
      *
      * @else
      * @brief Initialization
+     *
+     * Initialization the data flow type RT-Component.
+     * Write the actual initialization code in each concrete class.
+     *
      * @endif
      */
     void init();

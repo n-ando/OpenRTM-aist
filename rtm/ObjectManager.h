@@ -16,34 +16,6 @@
  *
  */
 
-/*
- * $Log: not supported by cvs2svn $
- * Revision 1.6.2.1  2007/09/20 11:42:25  n-ando
- * for_each const function was added.
- *
- * Revision 1.6  2007/04/27 03:27:25  n-ando
- * A trivial fix.
- *
- * Revision 1.5  2007/04/26 15:30:32  n-ando
- * The header include order was modified to define _REENTRANT before
- * including ace/config-lite.h in Linux systems.
- * In ace 5.4.7 or later, _REENTRANT flag should be defined explicitly.
- *
- * Revision 1.4  2007/04/13 18:11:26  n-ando
- * Now return values are used for error propagation instead of exception.
- *
- * Revision 1.3  2006/11/06 01:42:22  n-ando
- * ObjectManager's for_each has been modified to return Predicate object.
- *
- * Revision 1.2  2006/10/25 17:31:03  n-ando
- * for_each()'s arguments are changed from value to reference.
- *
- * Revision 1.1  2006/10/17 10:21:50  n-ando
- * The first commitment.
- *
- *
- */
-
 #ifndef ObjectManager_h
 #define ObjectManager_h
 
@@ -67,6 +39,12 @@
  *
  * @else
  *
+ * @brief Class for managing objects
+ *
+ * This is a class for managing various objects.
+ *
+ * @since 0.4.0
+ *
  * @endif
  */
 template <typename Identifier, typename Object, typename Predicate>
@@ -86,6 +64,10 @@ public:
    * 
    * @else
    *
+   * @brief Constructor
+   * 
+   * Constructor
+   * 
    * @endif
    */
   ObjectManager(){};
@@ -99,6 +81,10 @@ public:
    * 
    * @else
    *
+   * @brief Destructor
+   * 
+   * Destructor
+   * 
    * @endif
    */
   ~ObjectManager(){};
@@ -117,6 +103,15 @@ public:
    * 
    * @else
    *
+   * @brief Register the specified object
+   * 
+   * Register the object that was specified.
+   * If the same object is already registered, this does not anything.
+   *
+   * @param obj The target object for the registration
+   *
+   * @return Registration result (True if object was registerd)
+   * 
    * @endif
    */
   bool registerObject(Object* obj)
@@ -148,6 +143,15 @@ public:
    * 
    * @else
    *
+   * @brief Unregister the specified object
+   * 
+   * Unregister the object that was specified and get it.
+   * This operation returns NULL if the specified object is not 
+   * registered.
+   *
+   * @param id ID of the target object for the unregistration
+   *
+   * @return Unregistered object
    * @endif
    */
   Object* unregisterObject(const Identifier& id)
@@ -181,6 +185,17 @@ public:
    * 
    * @else
    *
+   * @brief Find the object
+   * 
+   * Find the object that matches the specified condition among the registered
+   * objects and get it.
+   * This operation returns NULL if the object that does matches the specified
+   * condition is not registered.
+   *
+   * @param id ID of the target object for finding
+   *
+   * @return Result of finding object
+   * 
    * @endif
    */
   Object* find(const Identifier& id) const
@@ -207,6 +222,12 @@ public:
    * 
    * @else
    *
+   * @brief Get a list of obejects that are registerd
+   * 
+   * Get a list of objects that are registerd.
+   *
+   * @return List of registerd objects.
+   * 
    * @endif
    */
   std::vector<Object*> getObjects() const
@@ -219,7 +240,7 @@ public:
    * @if jp
    * @brief オブジェクト検索用ファンクタ
    * @else
-   *
+   * @brief Functor for searching object
    * @endif
    */
   template <class Pred>
@@ -233,7 +254,7 @@ public:
    * @if jp
    * @brief オブジェクト検索用ファンクタ
    * @else
-   *
+   * @brief Functor for searching object
    * @endif
    */
   template <class Pred>
@@ -248,7 +269,7 @@ protected:
    * @if jp
    * @brief オブジェクト管理用構造体
    * @else
-   *
+   * @brief The structure for object management
    * @endif
    */
   struct Objects
@@ -260,7 +281,7 @@ protected:
    * @if jp
    * @brief 登録済みオブジェクト・リスト
    * @else
-   *
+   * @brief The list of registered objects
    * @endif
    */
   Objects m_objects;

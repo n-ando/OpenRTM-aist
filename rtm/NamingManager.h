@@ -16,18 +16,6 @@
  *
  */
 
-/*
- * $Log: not supported by cvs2svn $
- * Revision 1.3  2007/04/26 15:37:48  n-ando
- * getObjects() function was added.
- *
- * Revision 1.2  2007/04/13 18:08:42  n-ando
- * Some changes for NameServers rebinding and objects rebinding.
- *
- * Revision 1.1  2006/11/04 21:11:44  n-ando
- * NamingManager was introduced to support multiple name server.
- *
- */
 #ifndef NamingManager_h
 #define NamingManager_h
 
@@ -44,6 +32,7 @@ namespace RTC
   /*!
    * @if jp
    *
+   * @class NamingBase
    * @brief NamingService 管理用抽象クラス
    *
    * NamingServer 管理用抽象インターフェースクラス。
@@ -54,6 +43,17 @@ namespace RTC
    * @since 0.4.0
    *
    * @else
+   *
+   * @class NamingBase
+   * @brief NamingService management abstract class
+   *
+   * This is the abstract interface class for NamingServer management.
+   * Concrete management classes must implement the following pure virtual 
+   * functions.
+   * - bindObject() : Bind the specified object to NamingService
+   * - unbindObject() : Unbind the specified object from NamingService
+   *
+   * @since 0.4.0
    *
    * @endif
    */
@@ -67,6 +67,8 @@ namespace RTC
      *
      * @else
      *
+     * @brief Constructor
+     *
      * @endif
      */
     NamingBase() {};
@@ -78,7 +80,7 @@ namespace RTC
      *
      * @else
      *
-     * @brief destructor
+     * @brief Destructor
      *
      * @endif
      */
@@ -94,6 +96,12 @@ namespace RTC
      *
      * @else
      *
+     * @brief Pure virtual function to bind the specified objects 
+     *        to NamingService
+     *
+     * @param name Names at the binding
+     * @param rtobj The target objects for the binding
+     *
      * @endif
      */
     virtual void bindObject(const char* name, const RTObject_impl* rtobj) = 0;
@@ -108,6 +116,11 @@ namespace RTC
      *
      * @else
      *
+     * @brief Pure virtual function to unbind the specified objects from 
+     *        NamingService
+     *
+     * @param name The target objects for the unbinding
+     *
      * @endif
      */
     virtual void unbindObject(const char* name) = 0;
@@ -116,6 +129,7 @@ namespace RTC
   /*!
    * @if jp
    *
+   * @class NamingOnCorba
    * @brief CORBA 用 NamingServer 管理クラス
    *
    * CORBA 用 NamingServer 管理用クラス。
@@ -125,7 +139,13 @@ namespace RTC
    *
    * @else
    *
-   * @biref ModuleManager class
+   * @class NamingOnCorba
+   * @brief NamingServer management class for CORBA
+   *
+   * NamingServer management class for CORBA.
+   * Manage to register and unregister CORBA components to NamingService.
+   *
+   * @since 0.4.0
    *
    * @endif
    */
@@ -145,6 +165,13 @@ namespace RTC
      *
      * @else
      *
+     * @brief Constructor
+     *
+     * Constructor
+     *
+     * @param orb ORB
+     * @param names Name of NamingServer
+     *
      * @endif
      */
     NamingOnCorba(CORBA::ORB_ptr orb, const char* names)
@@ -158,7 +185,7 @@ namespace RTC
      *
      * @else
      *
-     * @brief destructor
+     * @brief Destructor
      *
      * @endif
      */
@@ -177,6 +204,14 @@ namespace RTC
      *
      * @else
      *
+     * @brief Bind the specified CORBA objects to NamingService
+     * 
+     * Bind the specified CORBA objects to CORBA NamingService
+     * by specified names.
+     * 
+     * @param name Names at the binding
+     * @param rtobj The target objects for the binding
+     *
      * @endif
      */
     virtual void bindObject(const char* name, const RTObject_impl* rtobj);
@@ -192,6 +227,12 @@ namespace RTC
      *
      * @else
      *
+     * @brief Unbind the specified CORBA objects from NamingService
+     * 
+     * Unbind the specified CORBA objects from CORBA NamingService.
+     * 
+     * @param name The target objects for the unbinding
+     *
      * @endif
      */
     virtual void unbindObject(const char* name);
@@ -204,6 +245,7 @@ namespace RTC
   /*!
    * @if jp
    *
+   * @class NamingManager
    * @brief NamingServer 管理クラス
    *
    * NamingServer 管理用クラス。
@@ -213,7 +255,13 @@ namespace RTC
    *
    * @else
    *
-   * @biref ModuleManager class
+   * @class NamingManager
+   * @brief NamingServer management class
+   *
+   * NamingServer management class.
+   * Manage to register and unregister components to NamingService.
+   *
+   * @since 0.4.0
    *
    * @endif
    */
@@ -231,6 +279,12 @@ namespace RTC
      *
      * @else
      *
+     * @brief Constructor
+     *
+     * Constructor
+     *
+     * @param manager Manager object
+     *
      * @endif
      */
     NamingManager(Manager* manager);
@@ -242,7 +296,7 @@ namespace RTC
      *
      * @else
      *
-     * @brief destructor
+     * @brief Destructor
      *
      * @endif
      */
@@ -261,6 +315,14 @@ namespace RTC
      *
      * @else
      *
+     * @brief Regster the NameServer
+     *
+     * Register NameServer by specified format.
+     * Currently. only CORBA can be specified.
+     *
+     * @param method Format of NamingService
+     * @param name_server Name of NameServer for registration
+     *
      * @endif
      */
     void registerNameServer(const char* method, const char* name_server);
@@ -277,6 +339,13 @@ namespace RTC
      *
      * @else
      *
+     * @brief Bind the specified objects to NamingService
+     * 
+     * Bind the specified objects to CORBA NamingService by specified names.
+     * 
+     * @param name Names at the binding
+     * @param rtobj The target objects for the binding
+     *
      * @endif
      */
     void bindObject(const char* name, const RTObject_impl* rtobj);
@@ -291,6 +360,10 @@ namespace RTC
      * 
      * @else
      *
+     * @brief Update information of NamingServer
+     * 
+     * Update the object information registered in the specified NameServer.
+     * 
      * @endif
      */
     void update();
@@ -306,6 +379,12 @@ namespace RTC
      *
      * @else
      *
+     * @brief Unbind the specified objects from NamingService
+     * 
+     * Unbind the specified objects from NamingService.
+     * 
+     * @param name The target objects for the unbinding
+     *
      * @endif
      */
     void unbindObject(const char* name);
@@ -319,6 +398,10 @@ namespace RTC
      * 
      * @else
      *
+     * @brief Unbind all objects from NamingService
+     * 
+     * Unbind all objects from CORBA NamingService.
+     * 
      * @endif
      */
     void unbindAll();
@@ -334,6 +417,12 @@ namespace RTC
      * 
      * @else
      *
+     * @brief Get all bound objects
+     * 
+     * Get all bound objects.
+     *
+     * @return Bound object list
+     * 
      * @endif
      */
     std::vector<RTObject_impl*> getObjects();
@@ -353,6 +442,15 @@ namespace RTC
      * 
      * @else
      *
+     * @brief Create objects for NameServer management
+     * 
+     * Create objects of specified type for NameServer management.
+     *
+     * @param method NamingService format
+     * @param name_server NameServer name
+     * 
+     * @return Created NameServer objects
+     * 
      * @endif
      */
     NamingBase* createNamingObj(const char* method, const char* name_server);
@@ -368,6 +466,12 @@ namespace RTC
      * 
      * @else
      *
+     * @brief Register the configured component to NameServer
+     * 
+     * Register the already configured components to NameServer.
+     *
+     * @param ns The target NameServer for the registration
+     * 
      * @endif
      */
     void bindCompsTo(NamingBase* ns);
@@ -384,6 +488,13 @@ namespace RTC
      * 
      * @else
      *
+     * @brief Configure the components that will be registered to NameServer
+     * 
+     * Configure the components that will be registered to NameServer.
+     *
+     * @param name Names of components at the registration
+     * @param rtobj The target objects for registration
+     * 
      * @endif
      */
     void registerCompName(const char* name, const RTObject_impl* rtobj);
@@ -399,6 +510,12 @@ namespace RTC
      * 
      * @else
      *
+     * @brief Unregister the components that will be registered to NameServer
+     * 
+     * Unregister the components that will be registered to NameServer.
+     *
+     * @param name Names of the target components for unregistration
+     * 
      * @endif
      */
     void unregisterCompName(const char* name);
@@ -409,7 +526,7 @@ namespace RTC
      * @if jp
      * @brief NameServer 管理用構造体
      * @else
-     *
+     * @brief Structure for NameServer management
      * @endif
      */
     struct Names
@@ -426,7 +543,7 @@ namespace RTC
      * @if jp
      * @brief NameServer リスト
      * @else
-     *
+     * @brief NameServer list
      * @endif
      */
     std::vector<Names*> m_names;
@@ -437,7 +554,7 @@ namespace RTC
      * @if jp
      * @brief コンポーネント管理用構造体
      * @else
-     *
+     * @brief Structure for component management
      * @endif
      */
     struct Comps
@@ -452,7 +569,7 @@ namespace RTC
      * @if jp
      * @brief コンポーネントリスト
      * @else
-     *
+     * @brief Component list
      * @endif
      */
     std::vector<Comps*> m_compNames;
@@ -462,7 +579,7 @@ namespace RTC
      * @if jp
      * @brief マネージャオブジェクト
      * @else
-     *
+     * @brief Manager object
      * @endif
      */
     Manager* m_manager;

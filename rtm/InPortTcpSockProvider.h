@@ -17,13 +17,6 @@
  *
  */
 
-/*
- * $Log: not supported by cvs2svn $
- * Revision 1.1.2.1  2007/10/06 12:29:17  n-ando
- * InPort provider for TCP socket data port.
- *
- */
-
 #ifndef InPortTcpSockProvider_h
 #define InPortTcpSockProvider_h
 
@@ -48,6 +41,14 @@ namespace RTC
    * @else
    * @class InPortTcpSockProvider
    * @brief InPortTcpSockProvider class
+   *
+   * This is an implementation class of OutPort Provider 
+   * that uses TCP socket for means of communication.
+   *
+   * @param DataType Data type held by the buffer that attached to this provider
+   *
+   * @since 0.4.1
+   *
    * @endif
    */
   template <class DataType>
@@ -61,15 +62,25 @@ namespace RTC
      *
      * コンストラクタ
      * ポートプロパティに以下の項目を設定する。
-     * 　インターフェースタイプ : TCP_Any
-     * 　データフロータイプ : Push
-     * 　サブスクリプションタイプ : Any
+     *  - インターフェースタイプ : TCP_Any
+     *  - データフロータイプ : Push
+     *  - サブスクリプションタイプ : Any
      *
      * @param buffer 当該プロバイダに割り当てるバッファオブジェクト
      * @param prop TCP 通信設定用プロパティ
      *
      * @else
      * @brief Constructor
+     *
+     * Constructor
+     * Set the following items to port properties
+     *  - Interface type : TCP_Any
+     *  - Data flow type : Push
+     *  - Subscription type : Any
+     *
+     * @param buffer Buffer object that is attached to this provider
+     * @param prop Property for setup TCP communication.
+     *
      * @endif
      */
     InPortTcpSockProvider(BufferBase<DataType>& buffer, Properties& prop)
@@ -105,6 +116,9 @@ namespace RTC
      *
      * @else
      * @brief Destructor
+     *
+     * Destructor
+     *
      * @endif
      */
     virtual ~InPortTcpSockProvider()
@@ -120,6 +134,11 @@ namespace RTC
      * @param prop Interface情報を受け取るプロパティ
      *
      * @else
+     * @brief Publish interface information
+     *
+     * Publish interface information
+     *
+     * @param prop Property for receiving interface information
      *
      * @endif
      */

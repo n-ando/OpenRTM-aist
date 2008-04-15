@@ -17,29 +17,6 @@
  *
  */
 
-/*
- * $Log: not supported by cvs2svn $
- * Revision 1.4.4.2  2008/01/13 07:41:29  n-ando
- * The pointer variables to be copied from Any value should be const.
- *
- * Revision 1.4.4.1  2007/12/31 03:08:03  n-ando
- * Class reference by doxygen comment was revised.
- *
- * Revision 1.4  2007/01/21 09:48:08  n-ando
- * A method to advertise interface profile was changed.
- *
- * Revision 1.3  2007/01/14 23:01:47  n-ando
- * Now object reference is duplicate to set property.
- *
- * Revision 1.2  2007/01/06 17:52:54  n-ando
- * Interface and its profile publish functions (publishInterfaceProfile()
- * and publishInterface()) are added.
- *
- * Revision 1.1  2006/12/02 18:41:02  n-ando
- * InPortCorbaProvider class is an implementation of InPortAny.
- *
- */
-
 #ifndef InPortCorbaProvider_h
 #define InPortCorbaProvider_h
 
@@ -63,6 +40,15 @@ namespace RTC
    * @else
    * @class InPortCorbaProvider
    * @brief InPortCorbaProvider class
+   *
+   * This is an implementation class of the input port Provider 
+   * that uses CORBA for means of communication.
+   *
+   * @param DataType Data type held by the buffer that attached 
+   *                 to this provider.
+   *
+   * @since 0.4.0
+   *
    * @endif
    */
   template <class DataType>
@@ -78,14 +64,23 @@ namespace RTC
      *
      * コンストラクタ
      * ポートプロパティに以下の項目を設定する。
-     * 　インターフェースタイプ : CORBA_Any
-     * 　データフロータイプ : Push, Pull
-     * 　サブスクリプションタイプ : Any
+     *  - インターフェースタイプ : CORBA_Any
+     *  - データフロータイプ : Push, Pull
+     *  - サブスクリプションタイプ : Any
      *
      * @param buffer 当該プロバイダに割り当てるバッファオブジェクト
      *
      * @else
      * @brief Constructor
+     *
+     * Constructor
+     * Set the following items to port properties
+     *  - Interface type : CORBA_Any
+     *  - Data flow type : Push, Pull
+     *  - Subscription type : Any
+     *
+     * @param buffer Buffer object that is attached to this provider
+     *
      * @endif
      */
     InPortCorbaProvider(BufferBase<DataType>& buffer)
@@ -117,6 +112,11 @@ namespace RTC
      * @param prop Interface情報を受け取るプロパティ
      *
      * @else
+     * @brief Publish interface information
+     *
+     * Publish interface information.
+     *
+     * @param prop Properties to receive interface information
      *
      * @endif
      */
@@ -144,6 +144,9 @@ namespace RTC
      *
      * @else
      * @brief Destructor
+     *
+     * Destructor
+     *
      * @endif
      */
     virtual ~InPortCorbaProvider()
@@ -159,6 +162,11 @@ namespace RTC
      * @param data 書込対象データ
      *
      * @else
+     * @brief Write data into the buffer
+     *
+     * Write data into the specified buffer.
+     *
+     * @param data The target data for writing
      *
      * @endif
      */

@@ -16,21 +16,6 @@
  *
  */
 
-/*
- * $Log: not supported by cvs2svn $
- * Revision 1.2.2.1  2007/12/31 03:08:03  n-ando
- * Class reference by doxygen comment was revised.
- *
- * Revision 1.2  2007/04/26 15:29:39  n-ando
- * The header include order was modified to define _REENTRANT before
- * including ace/config-lite.h in Linux systems.
- * In ace 5.4.7 or later, _REENTRANT flag should be defined explicitly.
- *
- * Revision 1.1  2007/04/13 16:08:24  n-ando
- * External Triggered ExecutionContext class.
- *
- */
-
 #ifndef ExtTrigExecutionContext_h
 #define ExtTrigExecutionContext_h
 
@@ -51,11 +36,18 @@ namespace RTC
    *
    * 1周期毎の実行が可能なPeriodic Sampled Data Processing(周期実行用)
    * ExecutionContextクラス。
-   * 外部からのメソッド呼びだしによって時間が１周期づつ進む。
+   * 外部からのメソッド呼びだしによって時間が1周期づつ進む。
    *
    * @since 0.4.0
    *
    * @else
+   * @brief ExecutionContext class that enables one step execution
+   *
+   * ExecutionContext class that can execute every one cycle for Periodic
+   * Sampled Data Processing.
+   * Time(Tick) advances one cycle by invoking method externally.
+   *
+   * @since 0.4.0
    *
    * @endif
    */
@@ -71,6 +63,9 @@ namespace RTC
      *
      * @else
      * @brief Constructor
+     *
+     * Constructor
+     *
      * @endif
      */
     ExtTrigExecutionContext();
@@ -83,6 +78,9 @@ namespace RTC
      *
      * @else
      * @brief Destructor
+     *
+     * Destructor
+     *
      * @endif
      */
     virtual ~ExtTrigExecutionContext();
@@ -91,9 +89,12 @@ namespace RTC
      * @if jp
      * @brief 処理を1ステップ進める
      *
-     * ExecutionContextの処理を１周期分進める。
+     * ExecutionContextの処理を1周期分進める。
      *
      * @else
+     * @brief Move forward one step of ExecutionContext
+     *
+     * Move forward one step of the ExecutionContext processing.
      *
      * @endif
      */
@@ -110,6 +111,13 @@ namespace RTC
      * @return 処理結果
      *
      * @else
+     * @brief Invoke each component's operation
+     *
+     * Invoke each component's operation which is attached this ExecutionContext.
+     * Stop until the next operation is invoked after all component operations
+     * are invoked.
+     *
+     * @return Operation result
      *
      * @endif
      */
@@ -138,6 +146,10 @@ extern "C"
    * ExecutionContext管理用ObjectManagerに登録する。
    *
    * @else
+   * @brief Register Factory class for this ExecutionContext
+   *
+   * Register the Factory class to create this ExecutionContext
+   * to the ObjectManager for management ExecutionContext
    *
    * @endif
    */

@@ -1,6 +1,6 @@
 // -*- C++ -*-
 /*!
- * @file PortBase.h
+ * @file PortBase.cpp
  * @brief RTC's Port base class
  * @date $Date: 2008-01-14 10:19:42 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
@@ -17,64 +17,6 @@
  *
  */
 
-/*
- * $Log: not supported by cvs2svn $
- * Revision 1.10.2.5  2008/01/14 07:56:40  n-ando
- * CORBA operations need exception declaration of CORBA::SystemException.
- *
- * Revision 1.10.2.4  2008/01/13 07:38:51  n-ando
- * Since direct operation call from given object reference from argument
- * causes a segmentation fault in MICO, it is modified so that the object
- * references are copied to local _var variable and are used.
- *
- * Revision 1.10.2.3  2007/12/31 03:08:05  n-ando
- * Class reference by doxygen comment was revised.
- *
- * Revision 1.10.2.2  2007/09/20 11:26:03  n-ando
- * A function getPortProfile() was added to get PortProfile locally.
- *
- * Revision 1.10.2.1  2007/08/20 06:12:34  n-ando
- * A bug that the unsubscribeInterfaces() was called twice was fixed.
- *
- * Revision 1.10  2007/04/27 00:57:37  n-ando
- * *** empty log message ***
- *
- * Revision 1.9  2007/04/26 15:38:53  n-ando
- * Character code was changed.
- *
- * Revision 1.8  2007/04/13 15:52:57  n-ando
- * RTC::OK was changed to RTC::RTC_OK.
- *
- * Revision 1.7  2007/02/04 17:00:22  n-ando
- * The ubsubscribeInterfaces is calle for disconnection.
- *
- * Revision 1.6  2007/01/04 00:43:42  n-ando
- * Now, notify_connect() and notify_disconnect() behavior can be customized
- * publishInterfaces(), subscribeInterfaces() and unsubscribeInterfaces().
- *
- * Revision 1.5  2006/11/27 09:57:04  n-ando
- * addProvider() function was added for registration of provider.
- * addConsumer() function was added for registration of consumer.
- *
- * Revision 1.4  2006/11/06 01:46:42  n-ando
- * #include <assert.h> was added.
- *
- * Revision 1.3  2006/11/06 01:16:31  n-ando
- * Now PortBase doesn't depend on PortProfileHelper.
- * Class refference manual has been updated.
- *
- * Revision 1.2  2006/10/17 19:06:37  n-ando
- * connect(), disconnect() and disconnect_all() was implemented.
- *
- * Revision 1.1  2006/10/17 10:22:07  n-ando
- * The first commitment.
- *
- */
-// PortBase.o 74584, PortProfileHelper.o 82624
-// (+ 74584 82624) 157208
-// PortBase.o 87500 without PortProfileHelper
-// PortBase.o 92292 with ACE_Guard
-// PortBase.o 105340 impl local interfaces
 #include <assert.h>
 #include <rtm/PortBase.h>
 #include <rtm/UUID.h>
@@ -130,7 +72,7 @@ namespace RTC
    * @if jp
    * @brief PortProfile を取得する。
    * @else
-   *
+   * @brief Get the PortProfile of the Port
    * @endif
    */
   const PortProfile& PortBase::getPortProfile() const
@@ -256,7 +198,7 @@ namespace RTC
    * @if jp
    * @brief [CORBA interface] Port の接続を解除する
    * @else
-   * @brief [CORBA interface] Connect the Port
+   * @brief [CORBA interface] Disconnect the Port
    * @endif
    */
   ReturnCode_t PortBase::disconnect(const char* connector_id)
@@ -314,7 +256,7 @@ namespace RTC
    * @if jp
    * @brief [CORBA interface] Port の全接続を解除する
    * @else
-   * @brief [CORBA interface] Connect the Port
+   * @brief [CORBA interface] Disconnect the All Ports
    * @endif
    */
   ReturnCode_t PortBase::disconnect_all()
@@ -364,7 +306,7 @@ namespace RTC
    * @if jp
    * @brief Port のオブジェクト参照を設定する
    * @else
-   * @brief Set the object reference of this Port
+   * @brief Set the object reference of the Port
    * @endif
    */
   void PortBase::setPortRef(Port_ptr port_ref)
@@ -377,7 +319,7 @@ namespace RTC
    * @if jp
    * @brief Port のオブジェクト参照を取得する
    * @else
-   * @brief Get the object reference of this Port
+   * @brief Get the object reference of the Port
    * @endif
    */
   Port_ptr PortBase::getPortRef()
@@ -406,7 +348,7 @@ namespace RTC
    * @if jp
    * @brief 次の Port に対して notify_connect() をコールする
    * @else
-   * @brief Call notify_connect() of the next Port
+   * @brief Call notify_connect() for the next Port
    * @endif
    */
   ReturnCode_t PortBase::connectNext(ConnectorProfile& connector_profile)
@@ -430,7 +372,7 @@ namespace RTC
    * @if jp
    * @brief 次の Port に対して notify_disconnect() をコールする
    * @else
-   * @brief Call notify_disconnect() of the next Port
+   * @brief Call notify_disconnect() for the next Port
    * @endif
    */
   ReturnCode_t PortBase::disconnectNext(ConnectorProfile& connector_profile)
@@ -456,7 +398,7 @@ namespace RTC
    * @if jp
    * @brief ConnectorProfile の connector_id フィールドが空かどうか判定
    * @else
-   * @brief Whether connector_id of ConnectorProfile is empty
+   * @brief Check whether connector_id of ConnectorProfile is empty
    * @endif
    */
   bool PortBase::isEmptyId(const ConnectorProfile& connector_profile) const
@@ -469,7 +411,7 @@ namespace RTC
    * @if jp
    * @brief UUIDを生成する
    * @else
-   * @brief Get the UUID
+   * @brief Generate the UUID
    * @endif
    */
   const std::string PortBase::getUUID() const
@@ -485,7 +427,7 @@ namespace RTC
    * @if jp
    * @brief UUIDを生成し ConnectorProfile にセットする
    * @else
-   * @brief Create and set the UUID to the ConnectorProfile
+   * @brief Generate the UUID and set it to the ConnectorProfile
    * @endif
    */
   void PortBase::setUUID(ConnectorProfile& connector_profile) const
@@ -498,7 +440,7 @@ namespace RTC
    * @if jp
    * @brief id が既存の ConnectorProfile のものかどうか判定する
    * @else
-   * @brief Whether the given id exists in stored ConnectorProfiles
+   * @brief Check whether the given id exists in stored ConnectorProfiles
    * @endif
    */
   bool PortBase::isExistingConnId(const char* id)
@@ -610,7 +552,7 @@ namespace RTC
    * @if jp
    * @brief PortInterfaceProfile からインターフェース登録を削除する
    * @else
-   * @brief Delete an interface from the PortInterfaceProfile
+   * @brief Delete the interface registration from the PortInterfaceProfile
    * @endif
    */
   bool PortBase::deleteInterface(const char* name, PortInterfacePolarity pol)

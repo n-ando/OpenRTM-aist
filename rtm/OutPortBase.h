@@ -17,25 +17,6 @@
  *
  */
 
-/*
- * $Log: not supported by cvs2svn $
- * Revision 1.1  2006/12/02 18:46:13  n-ando
- * The first commitment.
- *
- * Revision 1.3  2005/05/27 07:34:21  n-ando
- * - InPort/OutPort interface was changed.
- *   subscribe/unsubscribe were completely changed.
- *
- * Revision 1.2  2005/05/16 06:37:11  n-ando
- * - OutPortBase class was DLL exported for Windows port.
- * - m_Profile.name should be initialized with empty string.
- *
- * Revision 1.1.1.1  2005/05/12 09:06:18  n-ando
- * Public release.
- *
- *
- */
-
 #ifndef RtcOutPortBase_h
 #define RtcOutPortBase_h
 
@@ -64,9 +45,15 @@ namespace RTC
    *
    * @class OutPortBase
    *
-   * @brief Output port base class.
+   * @brief Output base class.
    *
-   * The base class of OutPort<T> s which are implementations of OutPort  
+   * The base class of OutPort<T> which are implementations of OutPort
+   *
+   * Form a kind of Observer pattern with OutPortBase and PublisherBase.
+   * attach(), detach(), notify() of OutPortBase and
+   * push() of PublisherBase are methods associated with the Observer pattern.
+   *
+   * @since 0.2.0
    *
    * @endif
    */
@@ -82,10 +69,11 @@ namespace RTC
      * @param name ポート名
      *
      * @else
+     * @brief Constructor
      *
-     * @brief A constructor of OutPortBase class.
+     * Constructor
      *
-     * Constructor of OutPortBase.
+     * @param name Port name
      *
      * @endif
      */
@@ -103,9 +91,10 @@ namespace RTC
      *
      * @else
      *
-     * @brief destructor
+     * @brief Destructor
      *
      * Destructor
+     * Detach all subscribed Publishers.
      *
      * @endif
      */
@@ -121,9 +110,11 @@ namespace RTC
      *
      * @else
      *
-     * @brief OutPort's name
+     * @brief Retrieve OutPort name
      *
-     * This operation returns OutPort's name
+     * Retrieve OutPort name
+     *
+     * @return the port name
      *
      * @endif
      */
@@ -141,9 +132,14 @@ namespace RTC
      *
      * @else
      *
-     * @brief Attach a publisher
+     * @brief Attach the publisher
      *
-     * Attach a publisher to observe OutPort.
+     * Attach the specified publisher as the destination of the data update
+     * notification to the end of the Publisher list.
+     * This function is similar to attach_back().
+     *
+     * @param id ID assigned to the Publisher that is specified
+     * @param publisher The target Publisher object for attachment
      *
      * @endif
      */
@@ -160,9 +156,12 @@ namespace RTC
      *
      * @else
      *
-     * @brief Attach a publisher
+     * @brief Attach the publisher to the top of the Publisher list.
      *
-     * Attach a publisher to the head of the Publisher list.
+     * Attach the publisher to the top of the Publisher list.
+     *
+     * @param id ID assigned to the Publisher that is specified
+     * @param publisher The target Publisher object for attachment
      *
      * @endif
      */
@@ -179,9 +178,12 @@ namespace RTC
      *
      * @else
      *
-     * @brief Attach a publisher
+     * @brief Attach the publisher at the end of the Publisher list.
      *
-     * Attach a publisher to the taile of the Publisher list.
+     * Attach the publisher to the end of the Publisher list.
+     *
+     * @param id ID assigned to the Publisher that is specified
+     * @param publisher The target Publisher object for attachment
      *
      * @endif
      */
@@ -200,9 +202,15 @@ namespace RTC
      *
      * @else
      *
-     * @brief Detach a publisher
+     * @brief Detach the publisher
      *
-     * Detach a publisher to observe OutPort.
+     * Detach the specified Publisher from the update notification list
+     *
+     * @param id ID of the deleted Publisher
+     *
+     * @return The deleted publisher object if the deletion completed
+     *         successfully.
+     *         Null if the specified Publisher does not exist.
      *
      * @endif
      */
@@ -216,9 +224,9 @@ namespace RTC
      *
      * @else
      *
-     * @brief Notify data update
+     * @brief Notify the data updates
      *
-     * This operation notify data update to Publishers
+     * Notify data updates to all registered Publishers
      *
      * @endif
      */
@@ -229,7 +237,7 @@ namespace RTC
      * @if jp
      * @brief ポート名
      * @else
-     *
+     * @brief Port name
      * @endif
      */
     std::string m_name;
@@ -238,7 +246,7 @@ namespace RTC
      * @if jp
      * @brief Publisher 用構造体
      * @else
-     *
+     * @brief Structure of Publisher
      * @endif
      */
     struct Publisher
@@ -253,7 +261,7 @@ namespace RTC
      * @if jp
      * @brief 登録された Publisher リスト
      * @else
-     *
+     * @brief Registered Publisher list
      * @endif
      */
     std::vector<Publisher*> m_publishers;
@@ -262,7 +270,7 @@ namespace RTC
      * @if jp
      * @brief Publisher を ID によって検索するための Functor
      * @else
-     *
+     * @brief Functor to find Publisher by id
      * @endif
      */
     // Functor to find Publisher by id
@@ -272,7 +280,7 @@ namespace RTC
      * @if jp
      * @brief Publisher にデータ更新を通知するための Functor
      * @else
-     *
+     * @brief Functor to notify updates to Publishers
      * @endif
      */
     // Functor to notify update to Publishers
@@ -282,7 +290,7 @@ namespace RTC
      * @if jp
      * @brief Publisher を削除するための Functor
      * @else
-     *
+     * @brief Functor to delete Publishers
      * @endif
      */
     // Functor to delete Publishers

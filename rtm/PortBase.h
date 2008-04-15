@@ -17,57 +17,6 @@
  *
  */
 
-/*
- * $Log: not supported by cvs2svn $
- * Revision 1.10.2.4  2007/12/31 03:08:05  n-ando
- * Class reference by doxygen comment was revised.
- *
- * Revision 1.10.2.3  2007/09/20 11:26:08  n-ando
- * A function getPortProfile() was added to get PortProfile locally.
- *
- * Revision 1.10.2.2  2007/09/19 07:42:01  n-ando
- * A trivial bug fix.
- *
- * Revision 1.10.2.1  2007/07/20 16:01:45  n-ando
- * Useless friend class declaration was deleted.
- *
- * Revision 1.10  2007/04/26 15:31:34  n-ando
- * The header include order was modified to define _REENTRANT before
- * including ace/config-lite.h in Linux systems.
- * In ace 5.4.7 or later, _REENTRANT flag should be defined explicitly.
- *
- * Revision 1.9  2007/04/13 15:53:03  n-ando
- * RTC::OK was changed to RTC::RTC_OK.
- *
- * Revision 1.8  2007/02/04 17:00:59  n-ando
- * Object reference variable was added.
- *
- * Revision 1.7  2007/01/04 00:43:35  n-ando
- * Now, notify_connect() and notify_disconnect() behavior can be customized
- * publishInterfaces(), subscribeInterfaces() and unsubscribeInterfaces().
- *
- * Revision 1.6  2006/12/02 18:50:22  n-ando
- * A trivial fix.
- *
- * Revision 1.5  2006/11/27 09:57:09  n-ando
- * addProvider() function was added for registration of provider.
- * addConsumer() function was added for registration of consumer.
- *
- * Revision 1.4  2006/11/06 01:46:47  n-ando
- * #include <assert.h> was added.
- *
- * Revision 1.3  2006/11/06 01:16:39  n-ando
- * Now PortBase doesn't depend on PortProfileHelper.
- * Class refference manual has been updated.
- *
- * Revision 1.2  2006/10/17 19:06:45  n-ando
- * connect(), disconnect() and disconnect_all() was implemented.
- *
- * Revision 1.1  2006/10/17 10:22:24  n-ando
- * The first commitment.
- *
- */
-
 #ifndef PortBase_h
 #define PortBase_h
 
@@ -129,7 +78,48 @@ namespace RTC
    * @since 0.4.0
    *
    * @else
+   * @class PortBase
+   * @brief Port base class
    *
+   * This class is a base class of RTC::Port.
+   * RTC::Port inherits a concept of RT-Component, and can be regarded as almost
+   * the same as it. In the concept of RT-Component, Port is attached to the
+   * component, can mediate interaction between other components and usually is
+   * associated with some interfaces.
+   * Component can provide or require interface for outside via Port, and the
+   * Port plays a role to manage the connection.
+   * <p>
+   * Concrete class of Port assumes to be usually created at the same time that
+   * RT-Component's instance is created, be registerd to RT-Component after
+   * provided and required interfaces are registerd, and function as accessible
+   * Port from outside.
+   * <p>
+   * RTC::Port provides the following operations as CORBA interface:
+   *
+   * - get_port_profile()
+   * - get_connector_profiles()
+   * - get_connector_profile()
+   * - connect()
+   * - notify_connect()
+   * - disconnect()
+   * - notify_disconnect()
+   * - disconnect_all()
+   *
+   * This class provides implementations of these operations.
+   * <p>
+   * In these operations, as for get_port_profile(), get_connector_profiles(),
+   * get_connector_profile(), connect(), disconnect() and disconnect_all(),
+   * since their behaviors especially need not to be change in subclass, 
+   * overriding is not recommended.
+   * <p>
+   * As for notify_connect() and notify_disconnect(), you may have to modify
+   * behavior according to the kind of interfaces that subclass provides and
+   * requires, however it is not recommended these are overriden directly.
+   * In the section of notify_connect() and notify_disconnect() as described
+   * below, it is recommended that you modify behavior by overriding the
+   * protected function related to these functions.
+   *
+   * @since 0.4.0
    *
    * @endif
    */  
@@ -157,7 +147,7 @@ namespace RTC
      * as CORBA object and stores its object reference to the PortProfile's 
      * port_ref member.
      *
-     * @param name The name of Port 
+     * @param name The name of Port (The default value:"")
      *
      * @endif
      */
@@ -205,19 +195,19 @@ namespace RTC
      * @brief [CORBA interface] Get the PortProfile of the Port
      *
      * This operation returns the PortProfile of the Port.
-     * PortProfile struct has the following members,
+     * PortProfile struct has the following members:
      *
-     * - name              [string ] The name of the Port.
-     * - interfaces        [PortInterfaceProfileList 型] The sequence of 
+     * - name              [string type] The name of the Port.
+     * - interfaces        [PortInterfaceProfileList type] The sequence of 
      *                     PortInterfaceProfile owned by the Port
-     * - port_ref          [Port Object] The object reference of the Port.
-     * - connector_profile [ConnectorProfileList 型] The sequence of 
+     * - port_ref          [Port Object type] The object reference of the Port.
+     * - connector_profile [ConnectorProfileList type] The sequence of 
      *                     ConnectorProfile owned by the Port.
-     * - owner             [RTObject Object] The object reference of 
+     * - owner             [RTObject Object type] The object reference of 
      *                     RTObject that is owner of the Port.
-     * - properties        [NVList] The other properties.
+     * - properties        [NVList type] The other properties.
      *
-     * @return the PortProfile of the Port
+     * @return PortProfile of the Port
      *
      * @endif
      */
@@ -234,6 +224,12 @@ namespace RTC
      * @return PortProfile
      *
      * @else
+     *
+     * @brief Get the PortProfile of the Port
+     *
+     * Get the PortProfile of this Port.
+     *
+     * @return PortProfile
      *
      * @endif
      */
@@ -265,16 +261,16 @@ namespace RTC
      * This operation returns a list of the ConnectorProfiles of the Port.
      * ConnectorProfile includes the connection information that describes 
      * relation between (among) Ports, and Ports exchange the ConnectionProfile
-     * on connection process and hold the same information in each Port.
-     * ConnectionProfile has the following members,
+     * on connection process and hold the same information in every Port.
+     * ConnectionProfile has the following members:
      *
-     * - name         [string] The name of the connection.
-     * - connector_id [string] Unique identifier.
+     * - name         [string type] The name of the connection.
+     * - connector_id [string type] Unique identifier.
      * - ports        [Port sequnce] The sequence of Port's object reference
      *                that are related the connection.
-     * - properties   [NVList] The other properties.
+     * - properties   [NVList type] The other properties.
      *
-     * @return the ConnectorProfileList of the Port
+     * @return ConnectorProfileList of the Port
      *
      * @endif
      */
@@ -299,6 +295,8 @@ namespace RTC
      * @brief [CORBA interface] Get the ConnectorProfile
      *
      * This operation returns the ConnectorProfiles specified connector_id.
+     * If ConnectorProfile with specified connector_id is not included,
+     * empty ConnectorProfile is returned.
      *
      * @param connector_id ID of the ConnectorProfile
      *
@@ -334,43 +332,45 @@ namespace RTC
      *    リファレンスがセットされていなければ無視して継続。
      *    (OutPortがconnect() 呼び出しのエントリポイントの場合は、
      *    InPortのオブジェクトリファレンスはセットされていないはずである。)
+     *
      * 3. PortBase::connect() をコール
      *    Portの接続の基本処理が行われる。
+     *
      * 4. 上記2.でInPortのリファレンスが取得できなければ、再度InPortに
      *    関連する connector 情報を取得する。
      *
      * 5. ConnectorProfile::properties で与えられた情報から、
      *    OutPort側の初期化処理を行う。
      *
-     * - [dataport.interface_type]
+     * - [dataport.interface_type]<BR>
      * -- CORBA_Any の場合: 
      *    InPortAny を通してデータ交換される。
      *    ConnectorProfile::properties["dataport.corba_any.inport_ref"]に
-     *    InPortAny のオブジェクトリファレンスをセットする。
+     *    InPortAny のオブジェクトリファレンスをセットする。<BR>
      * -- RawTCP の場合: Raw TCP socket を通してデータ交換される。
      *    ConnectorProfile::properties["dataport.raw_tcp.server_addr"]
      *    にInPort側のサーバアドレスをセットする。
      *
-     * - [dataport.dataflow_type]
+     * - [dataport.dataflow_type]<BR>
      * -- Pushの場合: Subscriberを生成する。Subscriberのタイプは、
-     *    dataport.subscription_type に設定されている。
+     *    dataport.subscription_type に設定されている。<BR>
      * -- Pullの場合: InPort側がデータをPull型で取得するため、
      *    特に何もする必要が無い。
      *
-     * - [dataport.subscription_type]
-     * -- Onceの場合: SubscriberOnceを生成する。
-     * -- Newの場合: SubscriberNewを生成する。
+     * - [dataport.subscription_type]<BR>
+     * -- Onceの場合: SubscriberOnceを生成する。<BR>
+     * -- Newの場合: SubscriberNewを生成する。<BR>
      * -- Periodicの場合: SubscriberPeriodicを生成する。
      *
-     * - [dataport.push_interval]
+     * - [dataport.push_interval]<BR>
      * -- dataport.subscription_type=Periodicの場合周期を設定する。
      *
      * 6. 上記の処理のうち一つでもエラーであれば、エラーリターンする。
-     *    正常に処理が行われた場合はRTC::RTC_OKでリターンする。
+     *    正常に処理が行われた場合は RTC::RTC_OK でリターンする。
      *  
      * @param connector_profile ConnectorProfile
      *
-     * @return 接続結果
+     * @return ReturnCode_t 型のリターンコード
      *
      * @else
      *
@@ -382,12 +382,61 @@ namespace RTC
      * among Ports owned by RT-Components, have to set valid values to the 
      * ConnectorProfile and give it to the argument of connect() operation.
      * 
-     * name, ports, properties members of ConnectorProfile should be set
-     * valid values before giving to the argument of connect() operation.
+     * name, ports and properties which are members of ConnectorProfile,
+     * should be set valid values before giving to the argument of connect()
+     * operation.
      *
+     * The following sequences are executed in connect() of OutPort side.
+     *
+     * 1. Create and set connector information associated with OutPort.
+     *
+     * 2. Get connector information associated with InPort.
+     *  - If the object reference of OutPortAny is set in 
+     *    ConnectorProfile::properties["dataport.corba_any.inport_ref"],
+     *    get its reference and set to Consumer object.
+     *    If the object reference of OutPortAny is not set, 
+     *    it ignores and continues.
+     *    (If OutPort is an entry point of connect call, the object reference
+     *    of InPort sure not to be set.)
+     *
+     * 3. Invoke PortBase::connect().
+     *    Execute the basic processing of Port's connection.
+     *
+     * 4. If the reference of InPort cannot be got (by step2), get connector
+     *    information associated with InPort again.
+     *
+     * 5. Initialize on OutPort side from information given by
+     *    ConnectorProfile::properties.
+     *
+     * - [dataport.interface_type]<BR>
+     * -- For CORBA_Any: 
+     *    Exchange data via InPortAny.
+     *    Set the object reference of InPortAny to
+     *    ConnectorProfile::properties["dataport.corba_any.inport_ref"].
+     * -- For RawTCP:
+     *    Exechange data via Raw TCP socket.
+     *    Set server address of InPort to
+     *    ConnectorProfile::properties["dataport.raw_tcp.server_addr"].
+     *
+     * - [dataport.dataflow_type]<BR>
+     * -- For Push: Create Subscriber. Type of Subscriber is set to
+     *    dataport.subscription_type.<BR>
+     * -- For Pull: Operate nothing since InPort side gets data in Pull type.
+     *
+     * - [dataport.subscription_type]<BR>
+     * -- For Once: Create SubscriberOnce.<BR>
+     * -- For New: Create SubscriberNew.<BR>
+     * -- For Periodic: Create SubscriberPeriodic.
+     *
+     * - [dataport.push_interval]<BR>
+     * -- For dataport.subscription_type=Periodic, the cycle is set.
+     *
+     * 6. If error occurs in one of the above processings, return error.
+     *    If processing has completed successfully, return RTC::RTC_OK.
+     *  
      * @param connector_profile The ConnectorProfile.
      *
-     * @return ReturnCode_t The return code of this operation.
+     * @return ReturnCode_t The return code of ReturnCode_t type.
      *
      * @endif
      */
@@ -402,14 +451,14 @@ namespace RTC
      * このオペレーションは、Port間の接続が行われる際に、Port間で内部的に
      * 呼ばれるオペレーションである。
      * ConnectorProfile には接続対象 Port のリスト情報が保持されている。Port は
-     * ConnectorProfile を保持するとともに、リスト中の次 Port の notify_connect
+     * ConnectorProfile を保持するとともに、リスト中の次 Port の notify_connect 
      * を呼び出す。そして、ポートをコネクタに追加した後、ConnectorProfile に
      * 呼びだし先の Port を設定し、呼びだし元に返す。このように ConnectorProfile
      * を使用して接続通知が伝達されていく。
      *
      * @param connector_profile ConnectorProfile
      *
-     * @return 接続通知結果
+     * @return ReturnCode_t 型のリターンコード
      *
      * @else
      *
@@ -417,19 +466,16 @@ namespace RTC
      *
      * This operation is invoked between Ports internally when the connection
      * is established.
-     * This operation notifies this PortService of the connection between its 
-     * corresponding port and the other ports and propagates the given 
-     * ConnectionProfile.
-     * A ConnectorProfile has a sequence of port references. This PortService 
+     * A ConnectorProfile has a sequence of port references. This Port 
      * stores the ConnectorProfile and invokes the notify_connect operation of 
-     * the next PortService in the sequence. As ports are added to the 
-     * connector, PortService references are added to the ConnectorProfile and
-     * provided to the caller. In this way, notification of connection is 
-     * propagated with the ConnectorProfile.
+     * the next Port in the sequence. As ports are added to the connector, 
+     * Port references are added to the ConnectorProfile and provided to 
+     * the caller. In this way, notification of connection is propagated with
+     * the ConnectorProfile.
      *
      * @param connector_profile The ConnectorProfile.
      *
-     * @return ReturnCode_t The return code of this operation.
+     * @return ReturnCode_t The return code of ReturnCode_t type.
      *
      * @endif
      */
@@ -449,22 +495,22 @@ namespace RTC
      *
      * @param connector_id ConnectorProfile の ID
      *
-     * @return 接続解除結果
+     * @return ReturnCode_t 型のリターンコード
      *
      * @else
      *
-     * @brief [CORBA interface] Connect the Port
+     * @brief [CORBA interface] Disconnect the Port
      *
      * This operation destroys connection between this port and the peer port
-     * according to given id that is given when the connection established.
-     * This port invokes the notify_disconnect operation of one of the ports 
-     * included in the sequence of the ConnectorProfile stored when the 
-     * connection was established. The notification of disconnection is 
-     * propagated by the notify_disconnect operation.
+     * according to given connector_id when the connection established.
+     * This port invokes the notify_disconnect of one of the ports included
+     * a port list in ConnectorProfile stored when the connection was
+     * established. The notification of disconnection is executed by
+     * the notify_disconnect.
      *
      * @param connector_id The ID of the ConnectorProfile.
      *
-     * @return ReturnCode_t The return code of this operation.
+     * @return ReturnCode_t The return code of ReturnCode_t type.
      *
      * @endif
      */
@@ -487,7 +533,7 @@ namespace RTC
      *
      * @param connector_id ConnectorProfile の ID
      *
-     * @return 接続解除通知結果
+     * @return ReturnCode_t 型のリターンコード
      *
      * @else
      *
@@ -495,20 +541,18 @@ namespace RTC
      *
      * This operation is invoked between Ports internally when the connection
      * is destroied.
-     * This operation notifies a PortService of a disconnection between its 
-     * corresponding port and the other ports. The disconnected connector is 
-     * identified by the given ID, which was given when the connection was 
-     * established.
-     * This port invokes the notify_disconnect operation of the next PortService
+     * This operation notifies a disconnection between corresponding port and
+     * the other ports. The disconnected Port is identified by the given ID.
+     * This port invokes the notify_disconnect operation of the next Port
      * in the sequence of the ConnectorProfile that was stored when the 
-     * connection was established. As ports are disconnected, PortService 
-     * references are removed from the ConnectorProfile. In this way, 
-     * the notification of disconnection is propagated by the notify_disconnect
+     * connection was established. As ports are disconnected, corresponding port
+     * information are removed from the ConnectorProfile. In this way, the
+     * notification of disconnection is propagated by the notify_disconnect
      * operation.
      *
      * @param connector_id The ID of the ConnectorProfile.
      *
-     * @return ReturnCode_t The return code of this operation.
+     * @return ReturnCode_t The return code of ReturnCode_t type.
      *
      * @endif
      */
@@ -522,15 +566,15 @@ namespace RTC
      *
      * このオペレーションはこの Port に関連した全ての接続を解除する。
      *
-     * @return 接続解除結果
+     * @return ReturnCode_t 型のリターンコード
      *
      * @else
      *
-     * @brief [CORBA interface] Connect the Port
+     * @brief [CORBA interface] Disconnect the All Ports
      *
-     * This operation destroys all connection channels owned by the Port.
+     * This operation destroys all connections associated with this Port.
      *
-     * @return ReturnCode_t The return code of this operation.
+     * @return ReturnCode_t The return code of ReturnCode_t type.
      *
      * @endif
      */
@@ -574,7 +618,7 @@ namespace RTC
      *
      * This operation returns const reference of the PortProfile.
      *
-     * @return the PortProfile of the Port
+     * @return PortProfile of the Port
      *
      * @endif
      */
@@ -597,7 +641,7 @@ namespace RTC
      * This operation sets the object reference itself
      * to the Port's PortProfile.
      *
-     * @param The object reference of this Port.
+     * @param port_ref The object reference of this Port.
      *
      * @endif
      */
@@ -688,7 +732,7 @@ namespace RTC
      *
      * @brief Publish interface information
      *
-     * This operation is pure virutal method that would be called at the
+     * This operation is pure virutal function that would be called at the
      * beginning of the notify_connect() process sequence.
      * In the notify_connect(), the following methods would be called in order.
      *
@@ -731,7 +775,7 @@ namespace RTC
      *
      * @param connector_profile 接続に関するプロファイル情報
      *
-     * @return 接続通知結果
+     * @return ReturnCode_t 型のリターンコード
      *
      * @else
      *
@@ -759,7 +803,7 @@ namespace RTC
      *
      * @param connector_profile 接続に関するプロファイル情報
      *
-     * @return 接続解除通知結果
+     * @return ReturnCode_t 型のリターンコード
      *
      * @else
      *
@@ -811,7 +855,7 @@ namespace RTC
      *
      * @brief Publish interface information
      *
-     * This operation is pure virutal method that would be called at the
+     * This operation is pure virutal function that would be called at the
      * mid-flow of the notify_connect() process sequence.
      * In the notify_connect(), the following methods would be called in order.
      *
@@ -863,9 +907,10 @@ namespace RTC
      *
      * @brief Disconnect interface connection
      *
-     * This operation is pure virutal method that would be called at the
+     * This operation is pure virutal function that would be called at the
      * end of the notify_disconnect() process sequence.
-     * In the notify_disconnect(), the following methods would be called.
+     * In the notify_disconnect(), the following methods would be called
+     * in order to disconnect.
      * - disconnectNext()
      * - unsubscribeInterfaces()
      * - eraseConnectorProfile() 
@@ -892,12 +937,18 @@ namespace RTC
      * 指定された ConnectorProfile の connector_id が空であるかどうかの判定を
      * 行う。
      *
+     * @param connector_profile 判定対象コネクタプロファイル
+     *
      * @return 引数で与えられた ConnectorProfile の connector_id が空であれば、
      *         true、そうでなければ false を返す。
      *
      * @else
      *
-     * @brief Whether connector_id of ConnectorProfile is empty
+     * @brief Check whether connector_id of ConnectorProfile is empty
+     *
+     * Check whether connector_id of specified ConnectorProfile is empty.
+     * 
+     * @param connector_profile Target ConnectorProfile for the check
      *
      * @return If the given ConnectorProfile's connector_id is empty string,
      *         it returns true.
@@ -917,7 +968,7 @@ namespace RTC
      *
      * @else
      *
-     * @brief Get the UUID
+     * @brief Generate the UUID
      *
      * This operation generates UUID.
      *
@@ -938,7 +989,7 @@ namespace RTC
      *
      * @else
      *
-     * @brief Create and set the UUID to the ConnectorProfile
+     * @brief Generate and set the UUID to the ConnectorProfile
      *
      * This operation generates and set UUID to the ConnectorProfile.
      *
@@ -962,12 +1013,14 @@ namespace RTC
      *
      * @else
      *
-     * @brief Whether the given id exists in stored ConnectorProfiles
+     * @brief Check whether the given id exists in stored ConnectorProfiles
      *
      * This operation returns boolean whether the given id exists in 
      * the Port's ConnectorProfiles.
      *
      * @param id connector_id to be find in Port's ConnectorProfiles
+     *
+     * @return id exestance resutl
      *
      * @endif
      */
@@ -1024,9 +1077,9 @@ namespace RTC
      * This operation returns ConnectorProfile with the given id from Port's
      * ConnectorProfiles' list.
      * If the ConnectorProfile with connector id that is identical with the
-     * given id does not exist, empty ConnectorProfile is returned.
+     * given id does not exist, -1 is returned.
      *
-     * @param id the connector_id to be searched in Port's ConnectorProfiles
+     * @param id the connector_id to be searched
      *
      * @return The index of ConnectorProfile of the Port
      *
@@ -1039,8 +1092,8 @@ namespace RTC
      *
      * @brief ConnectorProfile の追加もしくは更新
      *
-     * このオペレーションは与えられた与えられた ConnectorProfile を
-     * Port に追加もしくは更新保存する。
+     * このオペレーションは与えられた ConnectorProfile を Port に追加もしくは
+     * 更新保存する。
      * 与えられた ConnectorProfile の connector_id と同じ ID を持つ
      * ConnectorProfile がリストになければ、リストに追加し、
      * 同じ ID が存在すれば ConnectorProfile を上書き保存する。
@@ -1086,6 +1139,10 @@ namespace RTC
      *
      * @param id The id of the ConnectorProfile to be deleted.
      *
+     * @return true would be returned if it deleted correctly.
+     *         false woluld be returned if specified ConnectorProfile
+     *         cannot be found.
+     *
      * @endif
      */
     bool eraseConnectorProfile(const char* id);
@@ -1097,10 +1154,10 @@ namespace RTC
      *
      * このオペレーションは Port が持つ PortProfile の、PortInterfaceProfile
      * にインターフェースの情報を追加する。
-     * この情報は、get_port_profile() 似よって得られる PortProfile のうち
+     * この情報は、get_port_profile() によって得られる PortProfile のうち
      * PortInterfaceProfile の値を変更するのみであり、実際にインターフェースを
-     * 提供したり要求したりする場合には、サブクラスで、publishInterface(),
-     * subscribeInterface() 等の関数を適切にオーバーライドしインターフェースの
+     * 提供したり要求したりする場合には、サブクラスで、 publishInterface() ,
+     *  subscribeInterface() 等の関数を適切にオーバーライドしインターフェースの
      * 提供、要求処理を行わなければならない。
      *
      * インターフェース(のインスタンス)名は Port 内で一意でなければならない。
@@ -1158,7 +1215,7 @@ namespace RTC
      *
      * @else
      *
-     * @brief Delete an interface from the PortInterfaceProfile
+     * @brief Delete the interface registration from the PortInterfaceProfile
      *
      * This operation deletes interface information from the
      * PortInterfaceProfile that is owned by the Port.
@@ -1166,7 +1223,8 @@ namespace RTC
      * @param name The instance name of the interface.
      * @param pol The interface's polarity (RTC::PROVIDED or RTC:REQUIRED)
      *
-     * @return false would be returned if the given name is not registered.
+     * @return Delete processing result of interface.
+     *         false would be returned if the given name is not registered.
      *
      * @endif
      */
@@ -1186,6 +1244,9 @@ namespace RTC
      * @else
      *
      * @brief Add NameValue data to PortProfile's properties
+     *
+     * Add NameValue data to PortProfile's properties.
+     * Type of additional data is specified by ValueType.
      *
      * @param key The name of properties
      * @param value The value of properties
@@ -1227,7 +1288,7 @@ namespace RTC
      * @if jp
      * @brief instance_name を持つ PortInterfaceProfile を探す Functor
      * @else
-     * @brief A functor to find a PortInterfaceProfile named instance_name
+     * @brief Functor to find a PortInterfaceProfile named instance_name
      * @endif
      */
     struct if_name
@@ -1244,7 +1305,7 @@ namespace RTC
      * @if jp
      * @brief id を持つ ConnectorProfile を探す Functor
      * @else
-     * @brief A functor to find a ConnectorProfile named id
+     * @brief Functor to find a ConnectorProfile named id
      * @endif
      */
     struct find_conn_id
@@ -1261,7 +1322,7 @@ namespace RTC
      * @if jp
      * @brief コンストラクタ引数 port_ref と同じオブジェクト参照を探す Functor
      * @else
-     * @brief A functor to find the object reference that is identical port_ref
+     * @brief Functor to find the object reference that is identical port_ref
      * @endif
      */
     struct find_port_ref
@@ -1278,7 +1339,7 @@ namespace RTC
      * @if jp
      * @brief Port の接続を行う Functor
      * @else
-     * @brief A functor to connect Ports
+     * @brief Functor to connect Ports
      * @endif
      */
     struct connect_func
@@ -1308,7 +1369,7 @@ namespace RTC
      * @if jp
      * @brief Port の接続解除を行う Functor
      * @else
-     * @brief A functor to disconnect Ports
+     * @brief Functor to disconnect Ports
      * @endif
      */
     struct disconnect_func
@@ -1338,7 +1399,7 @@ namespace RTC
      * @if jp
      * @brief Port の全接続解除を行う Functor
      * @else
-     * @brief A functor to disconnect all Ports
+     * @brief Functor to disconnect all Ports
      * @endif
      */
     struct disconnect_all_func
@@ -1364,7 +1425,7 @@ namespace RTC
      * @if jp
      * @brief name と polarity から interface を探す Functor
      * @else
-     * @brief A functor to find interface from name and polarity
+     * @brief Functor to find interface from name and polarity
      * @endif
      */
     struct find_interface

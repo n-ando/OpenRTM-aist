@@ -17,23 +17,6 @@
  *
  */
 
-/*
- * $Log: not supported by cvs2svn $
- * Revision 1.4  2007/01/21 09:49:52  n-ando
- * The destructor was moved to cpp file.
- *
- * Revision 1.3  2007/01/06 17:53:42  n-ando
- * Interface and its profile publish functions (publishInterfaceProfile()
- * and publishInterface()) are added.
- *
- * Revision 1.2  2006/12/02 18:41:51  n-ando
- * A trivial fix.
- *
- * Revision 1.1  2006/11/27 09:44:40  n-ando
- * The first commitment.
- *
- */
-
 #ifndef InPortProvider_h
 #define InPortProvider_h
 
@@ -54,12 +37,17 @@ namespace RTC
    * @else
    * @class InPortProvider
    * @brief InPortProvider class
+   *
+   * Class to hold InPort information.
+   *
+   * @since 0.4.0
+   *
    * @endif
    */
   class InPortProvider
   {
   public:
-    /***
+    /*!
      * @if jp
      * @brief コンストラクタ
      *
@@ -67,6 +55,9 @@ namespace RTC
      *
      * @else
      * @brief Constructor
+     *
+     * Constructor
+     *
      * @endif
      */
     //    InPortProvider();
@@ -79,6 +70,9 @@ namespace RTC
      *
      * @else
      * @brief Destructor
+     *
+     * Destructor
+     *
      * @endif
      */
     virtual ~InPortProvider();
@@ -92,6 +86,11 @@ namespace RTC
      * @param properties InterfaceProfile情報を受け取るプロパティ
      *
      * @else
+     * @brief Publish InterfaceProfile information
+     *
+     * Publish InterfaceProfile information.
+     *
+     * @param properties Properties to receive InterfaceProfile information
      *
      * @endif
      */
@@ -106,6 +105,11 @@ namespace RTC
      * @param properties Interface情報を受け取るプロパティ
      *
      * @else
+     * @brief Publish interface information
+     *
+     * Publish interface information.
+     *
+     * @param properties Properties to receive interface information
      *
      * @endif
      */
@@ -121,6 +125,11 @@ namespace RTC
      * @param data_type 設定対象データタイプ
      *
      * @else
+     * @brief Set the data type
+     *
+     * Set the data type.
+     *
+     * @param data_type The target data type for set
      *
      * @endif
      */
@@ -135,6 +144,11 @@ namespace RTC
      * @param interface_type 設定対象インタフェースタイプ
      *
      * @else
+     * @brief Set the interface type
+     *
+     * Set the interface type.
+     *
+     * @param interface_type The target interface type for set
      *
      * @endif
      */
@@ -149,6 +163,11 @@ namespace RTC
      * @param dataflow_type 設定対象データフロータイプ
      *
      * @else
+     * @brief Set the dataflow type
+     *
+     * Set the dataflow type.
+     *
+     * @param dataflow_type The target data flow type for set
      *
      * @endif
      */
@@ -163,6 +182,11 @@ namespace RTC
      * @param subs_type 設定対象サブスクリプションタイプ
      *
      * @else
+     * @brief Set the subscription type
+     *
+     * Set the subscription type.
+     *
+     * @param subs_type The target subscription type for set
      *
      * @endif
      */
@@ -172,7 +196,7 @@ namespace RTC
      * @if jp
      * @brief ポートプロファイルを保持するプロパティ
      * @else
-     *
+     * @brief Properties to hold port profile
      * @endif
      */
     SDOPackage::NVList m_properties;

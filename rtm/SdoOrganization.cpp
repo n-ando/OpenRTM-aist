@@ -17,30 +17,6 @@
  *
  */
 
-/*
- * $Log: not supported by cvs2svn $
- * Revision 1.7.2.1  2007/12/31 03:08:07  n-ando
- * Class reference by doxygen comment was revised.
- *
- * Revision 1.7  2007/04/26 15:33:28  n-ando
- * The header include order was modified to define _REENTRANT before
- * including ace/config-lite.h in Linux systems.
- * In ace 5.4.7 or later, _REENTRANT flag should be defined explicitly.
- *
- * Revision 1.6  2006/11/27 10:00:56  n-ando
- * Some trivial fixes.
- *
- * Revision 1.5  2006/10/30 08:10:47  n-ando
- * CORBA sequence operations were replaced by CORBA_SeqUtil functions.
- *
- * Revision 1.4  2006/10/26 09:36:23  n-ando
- * set_organization_property_value() was not implemented. It was added.
- *
- * Revision 1.3  2006/10/26 09:15:39  n-ando
- * Header comments were fixed.
- *
- */
-
 #include <rtm/SdoOrganization.h>
 #include <ace/ACE.h>
 #include <rtm/UUID.h> 
@@ -51,6 +27,7 @@ namespace SDOPackage
   /* @if jp
    * @brief コンストラクタ
    * @else
+   * @brief Constructor
    * @endif
    */
   Organization_impl::Organization_impl()
@@ -69,7 +46,7 @@ namespace SDOPackage
   /* @if jp
    * @brief 仮想デストラクタ
    * @else
-   * @brief virtual destractor
+   * @brief Virtual destructor
    * @endif
    */
   Organization_impl::~Organization_impl()
@@ -238,7 +215,7 @@ namespace SDOPackage
    * @if jp
    * @brief [CORBA interface] Organization のオーナーを取得する
    * @else
-   * @brief [CORBA interface] Get the owner of the SDO
+   * @brief [CORBA interface] Get the owner of Organization
    * @endif
    */
   SDOSystemElement_ptr Organization_impl::get_owner()
@@ -252,7 +229,7 @@ namespace SDOPackage
    * @if jp
    * @brief [CORBA interface] Organization にオーナーをセットする
    * @else
-   * @brief [CORBA interface] Set the orner of the Organization
+   * @brief [CORBA interface] Set the owner to the Organization
    * @endif
    */
   CORBA::Boolean Organization_impl::set_owner(SDOSystemElement_ptr sdo)
@@ -277,7 +254,7 @@ namespace SDOPackage
    * @if jp
    * @brief [CORBA interface] Organization のメンバーを取得する
    * @else
-   * @brief [CORBA interface] Get a menber list of the Organization
+   * @brief [CORBA interface] Get the member of the Organization
    * @endif
    */
   SDOList* Organization_impl::get_members()
@@ -298,9 +275,9 @@ namespace SDOPackage
   
   /*!
    * @if jp
-   * @brief [CORBA interface] SDO の ServiceProfile のセット
+   * @brief [CORBA interface] SDO の セット
    * @else
-   * @brief [CORBA interface] Set SDO's ServiceProfile
+   * @brief [CORBA interface] Set SDO
    * @endif
    */
   CORBA::Boolean Organization_impl::set_members(const SDOList& sdos)
@@ -325,7 +302,7 @@ namespace SDOPackage
    * @if jp
    * @brief [CORBA interface] SDO メンバーの追加
    * @else
-   * @brief [CORBA interface] Add the menebr SDOs
+   * @brief [CORBA interface] Add the member of SDO
    * @endif
    */
   CORBA::Boolean Organization_impl::add_members(const SDOList& sdo_list)
@@ -348,7 +325,7 @@ namespace SDOPackage
    * @if jp
    * @brief [CORBA interface] SDO メンバーの削除
    * @else
-   * @brief [CORBA interface] Remove menber SDO from Organization
+   * @brief [CORBA interface] Remove member SDO from Organization
    * @endif
    */
   CORBA::Boolean Organization_impl::remove_member(const char* id)

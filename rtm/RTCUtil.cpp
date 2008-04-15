@@ -5,7 +5,7 @@
  * @date $Date: 2007-12-31 03:08:06 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
- * Copyright (C) 2007
+ * Copyright (C) 2007-2008
  *     Task-intelligence Research Group,
  *     Intelligent Systems Research Institute,
  *     National Institute of
@@ -16,24 +16,21 @@
  *
  */
 
-/*
- * $Log: not supported by cvs2svn $
- */
-
 #include <rtm/RTCUtil.h>
 
-namespace RTC
+namespace RTC_Utils
 {
   /*!
    * @if jp
-   * @brief DataFlowParticipant であるか判定する
+   * @brief DataFlowComponent であるか判定する
    * @else
+   * @brief Confirm whether specified RT-Component is DataFlowComponent
    * @endif
    */
-  bool isDataFlowParticipant(CORBA::Object_ptr obj)
+  bool isDataFlowComponent(CORBA::Object_ptr obj)
   {
-    DataFlowParticipant_var dfp;
-    dfp = DataFlowParticipant::_narrow(obj);
+    RTC::DataFlowParticipant_var dfp;
+    dfp = RTC::DataFlowParticipant::_narrow(obj);
     return !CORBA::is_nil(dfp);
   }
   
@@ -41,12 +38,13 @@ namespace RTC
    * @if jp
    * @brief FsmParticipant であるか判定する
    * @else
+   * @brief Confirm whether specified RT-Component is FsmParticipant
    * @endif
    */
   bool isFsmParticipant(CORBA::Object_ptr obj)
   {
-    FsmParticipant_var fsmp;
-    fsmp = FsmParticipant::_narrow(obj);
+    RTC::FsmParticipant_var fsmp;
+    fsmp = RTC::FsmParticipant::_narrow(obj);
     return !CORBA::is_nil(fsmp);
   }
   
@@ -54,12 +52,13 @@ namespace RTC
    * @if jp
    * @brief Fsm であるか判定する
    * @else
+   * @brief Confirm whether specified RT-Component is Fsm
    * @endif
    */
   bool isFsmObject(CORBA::Object_ptr obj)
   {
-    FsmObject_var fsm;
-    fsm = FsmObject::_narrow(obj);
+    RTC::FsmObject_var fsm;
+    fsm = RTC::FsmObject::_narrow(obj);
     return !CORBA::is_nil(fsm);
   }
   
@@ -67,13 +66,14 @@ namespace RTC
    * @if jp
    * @brief multiModeComponent であるか判定する
    * @else
+   * @brief Confirm whether specified RT-Component is multiModeComponent
    * @endif
    */
   bool isMultiModeObject(CORBA::Object_ptr obj)
   {
-    MultiModeObject_var mmc;
-    mmc = MultiModeObject::_narrow(obj);
+    RTC::MultiModeObject_var mmc;
+    mmc = RTC::MultiModeObject::_narrow(obj);
     return !CORBA::is_nil(mmc);
   }
-}; // namespace RTC
+}; // namespace RTC_Utils
 

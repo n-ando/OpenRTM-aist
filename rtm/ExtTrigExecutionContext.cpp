@@ -17,22 +17,6 @@
  *
  */
 
-/*
- * $Log: not supported by cvs2svn $
- * Revision 1.1.2.3  2007/12/31 03:08:03  n-ando
- * Class reference by doxygen comment was revised.
- *
- * Revision 1.1.2.2  2007/09/21 09:17:21  n-ando
- * The mutex acquisition was changed from "tryacquire" to "acquire".
- *
- * Revision 1.1.2.1  2007/09/19 07:48:47  n-ando
- * A trivial fix.
- *
- * Revision 1.1  2007/04/13 16:08:18  n-ando
- * External Triggered ExecutionContext class.
- *
- */
-
 #include <rtm/ExtTrigExecutionContext.h>
 #include <rtm/ECFactory.h>
 
@@ -42,7 +26,7 @@ namespace RTC
    * @if jp
    * @brief コンストラクタ
    * @else
-   *
+   * @brief Constructor
    * @endif
    */
   ExtTrigExecutionContext::ExtTrigExecutionContext()
@@ -54,7 +38,7 @@ namespace RTC
    * @if jp
    * @brief デストラクタ
    * @else
-   *
+   * @brief Destructor
    * @endif
    */
   ExtTrigExecutionContext::~ExtTrigExecutionContext()
@@ -65,7 +49,7 @@ namespace RTC
    * @if jp
    * @brief 処理を1ステップ進める
    * @else
-   *
+   * @brief Move forward one step of ExecutionContext
    * @endif
    */
   void ExtTrigExecutionContext::tick()
@@ -82,7 +66,7 @@ namespace RTC
    * @if jp
    * @brief 各 Component の処理を呼び出す。
    * @else
-   *
+   * @brief Invoke each component's operation
    * @endif
    */
   int ExtTrigExecutionContext::svc(void)
@@ -115,7 +99,7 @@ extern "C"
    * @if jp
    * @brief 当該 ExecutionContext 用Factoryクラスの登録。
    * @else
-   *
+   * @brief Register Factory class for this ExecutionContext
    * @endif
    */
   void ExtTrigExecutionContextInit(RTC::Manager* manager)

@@ -16,19 +16,6 @@
  *
  */
 
-/*
- * $Log: not supported by cvs2svn $
- * Revision 1.3  2007/01/21 14:02:37  n-ando
- * Kanji-code was changed.
- *
- * Revision 1.2  2007/01/14 19:39:04  n-ando
- * The debugging messages to stdout were deleted.
- *
- * Revision 1.1  2007/01/09 09:47:15  n-ando
- * DataFlowParticipant RT-Component base class
- *
- */
-
 #include <rtm/DataFlowComponentBase.h>
 #include <rtm/Manager.h>
 #include <iostream>

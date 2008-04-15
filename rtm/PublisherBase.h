@@ -17,16 +17,6 @@
  *
  */
 
-/*
- * $Log: not supported by cvs2svn $
- * Revision 1.1.4.1  2007/06/22 10:55:07  n-ando
- * The bug of OutPort's disconnect operation was fixed.
- *
- * Revision 1.1  2006/11/27 09:44:43  n-ando
- * The first commitment.
- *
- */
-
 #ifndef PublisherBase_h
 #define PublisherBase_h
 
@@ -50,9 +40,9 @@ namespace RTC
    *
    * @brief Base class of Publisher.
    *
-   * A base class of Publisher*.
-   * Variation of Publisher* which implements details of Publisher
-   * inherits this PublisherBase class.
+   * This is a base class of Publisher*. This class manages data send timing.
+   * Variation of Publisher* which implements details of Publisher inherits
+   * this PublisherBase class.
    *
    * @endif
    */
@@ -68,6 +58,11 @@ namespace RTC
      * 
      * @else
      *
+     * @brief Notify the data send timing
+     *
+     * Pure virtual function to notify the send timing to the object 
+     * that waits for the send.
+     * 
      * @endif
      */
     virtual void update() = 0;
@@ -94,6 +89,12 @@ namespace RTC
      * 当該 Publisher が不要になった場合に PublisherFactory から呼び出される。
      *
      * @else
+     *
+     * @brief Release the Publisher
+     *
+     * Release this Publisher.
+     * When Publisher becomes unnecessary, this is invoked from
+     * PublisherFactory. 
      *
      * @endif
      */

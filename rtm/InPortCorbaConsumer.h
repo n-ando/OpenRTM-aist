@@ -17,27 +17,6 @@
  *
  */
 
-/*
- * $Log: not supported by cvs2svn $
- * Revision 1.3.4.2  2007/09/19 07:47:28  n-ando
- * A trivial fix.
- *
- * Revision 1.3.4.1  2007/08/20 06:31:10  n-ando
- * push() function was modified to detect buffer read error.
- *
- * Revision 1.3  2007/01/09 09:56:38  n-ando
- * Kanji-code has changed.
- *
- * Revision 1.2  2007/01/06 17:50:57  n-ando
- * Interface subscription/unsubscription functions (subscribeInterface()
- * and unsubscribeInterface()) are added.
- * The clone() function to clone the instance is added.
- *
- * Revision 1.1  2006/12/02 18:39:57  n-ando
- * InPortCorbaConsumer class was moved from InPortConsumer.h
- *
- */
-
 #ifndef InPortCorbaConsumer_h
 #define InPortCorbaConsumer_h
 
@@ -64,7 +43,16 @@ namespace RTC
    *
    * @else
    * @class InPortCorbaConsumer
+   *
    * @brief InPortCorbaConsumer class
+   *
+   * This is an implementation class of the input port Consumer 
+   * that uses CORBA for means of communication.
+   *
+   * @param DataType Data type for this port
+   *
+   * @since 0.4.0
+   *
    * @endif
    */
   template <class DataType>
@@ -83,6 +71,11 @@ namespace RTC
      *
      * @else
      * @brief Constructor
+     *
+     * Constructor
+     *
+     * @param buffer The buffer object that is attached to this Consumer
+     *
      * @endif
      */
     InPortCorbaConsumer(BufferBase<DataType>& buffer)
@@ -99,6 +92,11 @@ namespace RTC
      * @param consumer コピー元 InPortCorbaConsumer オブジェクト
      *
      * @else
+     * @brief Copy constructor
+     *
+     * Copy constructor
+     *
+     * @param consumer InPortCorbaConsumer object of copy source
      *
      * @endif
      */
@@ -118,6 +116,13 @@ namespace RTC
      * @return 代入結果
      *
      * @else
+     * @brief Assignment operator
+     *
+     * Assignment operator
+     *
+     * @param consumer InPortCorbaConsumer object of assignment source
+     *
+     * @return The assignment result
      *
      * @endif
      */
@@ -136,6 +141,9 @@ namespace RTC
      *
      * @else
      * @brief Destructor
+     *
+     * Destructor
+     *
      * @endif
      */
     virtual ~InPortCorbaConsumer()
@@ -150,6 +158,11 @@ namespace RTC
      * @param data 書込対象データ
      *
      * @else
+     * @brief Write data into the buffer
+     *
+     * Write data into the buffer.
+     *
+     * @param data The target data for writing
      *
      * @endif
      */
@@ -167,6 +180,9 @@ namespace RTC
      * バッファからデータを取り出して送出する。
      *
      * @else
+     * @brief Read data from the buffer
+     *
+     * Read data from the buffer and send it.
      *
      * @endif
      */
@@ -199,6 +215,11 @@ namespace RTC
      * @return コピーされたInPortCorbaConsumerオブジェクト
      *
      * @else
+     * @brief Generate clone
+     *
+     * Clone this InPortCorbaConsumer object.
+     *
+     * @return The clone InPortCorbaConsumer object
      *
      * @endif
      */
@@ -218,6 +239,14 @@ namespace RTC
      * @return 登録処理結果(登録成功:true、登録失敗:false)
      *
      * @else
+     * @brief Subscribe to the data sending notification
+     *
+     * Subscribe to the data sending notification based on specified 
+     * property information.
+     *
+     * @param properties Information for subscription
+     *
+     * @return Subscription result (Successful:true, Failed:false)
      *
      * @endif
      */
@@ -259,6 +288,11 @@ namespace RTC
      * @param properties 登録解除情報
      *
      * @else
+     * @brief Unsubscribe the data send notification
+     *
+     * Unsubscribe the data send notification.
+     *
+     * @param properties Information for unsubscription
      *
      * @endif
      */

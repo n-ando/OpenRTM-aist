@@ -5,7 +5,7 @@
  * @date  $Date: 2008-01-13 10:28:27 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
- * Copyright (C) 2006-2007
+ * Copyright (C) 2006-2008
  *     Noriaki Ando
  *     Task-intelligence Research Group,
  *     Intelligent Systems Research Institute,
@@ -14,20 +14,6 @@
  *     All rights reserved.
  *
  * $Id: OutPortCorbaConsumer.h,v 1.2.4.2 2008-01-13 10:28:27 n-ando Exp $
- *
- */
-
-/*
- * $Log: not supported by cvs2svn $
- * Revision 1.2.4.1  2007/12/31 03:08:05  n-ando
- * Class reference by doxygen comment was revised.
- *
- * Revision 1.2  2007/01/06 17:57:27  n-ando
- * Interface subscription/unsubscription functions (subscribeInterface()
- * and unsubscribeInterface()) are added.
- *
- * Revision 1.1  2006/12/02 18:47:29  n-ando
- * OutPortCorbaConsumer class was moved from OutPortConsumer.h
  *
  */
 
@@ -55,7 +41,16 @@ namespace RTC
    *
    * @else
    * @class OutPortCorbaConsumer
+   *
    * @brief OutPortCorbaConsumer class
+   *
+   * This is an implementation class of the output Consumer 
+   * that uses CORBA for means of communication.
+   *
+   * @param DataType Data type for this port
+   *
+   * @since 0.4.0
+   *
    * @endif
    */
   template <class DataType>
@@ -74,6 +69,11 @@ namespace RTC
      *
      * @else
      * @brief Constructor
+     *
+     * Constructor
+     *
+     * @param buffer Buffer that is attached to this port
+     *
      * @endif
      */
     OutPortCorbaConsumer(BufferBase<DataType>& buffer)
@@ -88,6 +88,9 @@ namespace RTC
      *
      * @else
      * @brief Destructor
+     *
+     * Destructor
+     *
      * @endif
      */
     virtual ~OutPortCorbaConsumer(){} 
@@ -103,6 +106,13 @@ namespace RTC
      * @return データ読み出し処理結果(読み出し成功:true、読み出し失敗:false)
      *
      * @else
+     * @brief Read data
+     *
+     * Read set data
+     *
+     * @param data Object to receive the read data
+     *
+     * @return Read result (Successful:true, Failed:false)
      *
      * @endif
      */
@@ -132,6 +142,10 @@ namespace RTC
      * 受信したデータは内部に設定されたバッファに書き込まれる。
      *
      * @else
+     * @brief Receive data from the port
+     *
+     * Receive data from the destination port.
+     * Write the received data into the set internal buffer.
      *
      * @endif
      */
@@ -155,6 +169,14 @@ namespace RTC
      * @return 登録処理結果(登録成功:true、登録失敗:false)
      *
      * @else
+     * @brief Subscribe the data receive notification
+     *
+     * Subscribe the data receive notification based on specified property
+     * information
+     *
+     * @param properties Subscription information
+     *
+     * @return Subscription result (Successful:true, Failed:false)
      *
      * @endif
      */
@@ -183,6 +205,11 @@ namespace RTC
      * @param properties 登録解除情報
      *
      * @else
+     * @brief Unsubscribe the data receive notification
+     *
+     * Unsubscribe the data receive notification.
+     *
+     * @param properties Unsubscription information
      *
      * @endif
      */

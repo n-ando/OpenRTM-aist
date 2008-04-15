@@ -17,32 +17,6 @@
  *
  */
 
-/*
- * $Log: not supported by cvs2svn $
- * Revision 1.5.2.1  2007/12/31 03:08:05  n-ando
- * Class reference by doxygen comment was revised.
- *
- * Revision 1.5  2007/02/04 16:56:00  n-ando
- * The subscription types were updated.
- *
- * Revision 1.4  2007/01/21 10:25:24  n-ando
- * A trivial fix.
- *
- * Revision 1.3  2007/01/14 23:01:53  n-ando
- * Now object reference is duplicate to set property.
- *
- * Revision 1.2  2007/01/06 17:57:35  n-ando
- * Interface subscription/unsubscription functions (subscribeInterface()
- * and unsubscribeInterface()) are added.
- *
- * Revision 1.1  2006/12/02 18:48:21  n-ando
- * The first commitment.
- *
- * Revision 1.1  2006/11/27 09:44:42  n-ando
- * The first commitment.
- *
- */
-
 #ifndef OutPortCorbaProvider_h
 #define OutPortCorbaProvider_h
 
@@ -66,6 +40,15 @@ namespace RTC
    * @else
    * @class OutPortCorbaProvider
    * @brief OutPortCorbaProvider class
+   *
+   * This is an implementation class of OutPort Provider that uses 
+   * CORBA for mean of communication.
+   *
+   * @param DataType Data type held by the buffer that is assigned to this 
+   *        provider
+   *
+   * @since 0.4.0
+   *
    * @endif
    */
   template <class DataType>
@@ -85,6 +68,11 @@ namespace RTC
      *
      * @else
      * @brief Constructor
+     *
+     * Constructor
+     *
+     * @param buffer Buffer object that is assigned to this provider
+     *
      * @endif
      */
     OutPortCorbaProvider(BufferBase<DataType>& buffer)
@@ -115,6 +103,9 @@ namespace RTC
      *
      * @else
      * @brief Destructor
+     *
+     * Destructor
+     *
      * @endif
      */
     virtual ~OutPortCorbaProvider()
@@ -129,17 +120,21 @@ namespace RTC
      * @return 取得データ
      *
      * @else
+     * @brief Get data from the buffer
+     *
+     * Get data from the internal buffer.
+     *
+     * @return Data got from the buffer.
      *
      * @endif
      */
     CORBA::Any* get()
-      throw (CORBA::SystemException)
     {
       DataType data;
-      CORBA::Any* tmp = new CORBA::Any();
+      CORBA::Any_var tmp = new CORBA::Any();
       m_buffer.read(data);
-      (*tmp) <<= data;
-      return tmp;
+      tmp <<= data;
+      return tmp._retn();
     }
     
   private:

@@ -1,6 +1,6 @@
 // -*- C++ -*-
 /*!
- * @file CorbaObjectManager.h
+ * @file CorbaObjectManager.cpp
  * @brief CORBA Object manager class
  * @date $Date: 2007-12-31 03:08:02 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
@@ -14,16 +14,6 @@
  *     All rights reserved.
  *
  * $Id: CorbaObjectManager.cpp,v 1.2.4.1 2007-12-31 03:08:02 n-ando Exp $
- *
- */
-
-/*
- * $Log: not supported by cvs2svn $
- * Revision 1.2  2006/11/04 19:56:57  n-ando
- * Kanji-code was converted into EUC.
- *
- * Revision 1.1  2006/11/04 19:54:40  n-ando
- * CORBA object activation class was created.
  *
  */
 
@@ -48,7 +38,7 @@ namespace RTC
    * @if jp
    * @brief CORBA オブジェクトをアクティブ化する
    * @else
-   * @brief Activate CORBA object
+   * @brief Activate the CORBA object
    * @endif
    */
   void CorbaObjectManager::activate(RTObject_impl* comp)
@@ -63,7 +53,7 @@ namespace RTC
    * @if jp
    * @brief CORBA オブジェクトを非アクティブ化する
    * @else
-   * @brief Deactivate CORBA object
+   * @brief Deactivate the CORBA object
    * @endif
    */
   void CorbaObjectManager::deactivate(RTObject_impl* comp)

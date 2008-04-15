@@ -5,7 +5,7 @@
  * @date $Date: 2007-12-31 03:08:04 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
- * Copyright (C) 2003-2007
+ * Copyright (C) 2003-2008
  *     Noriaki Ando
  *     Task-intelligence Research Group,
  *     Intelligent Systems Research Institute,
@@ -14,34 +14,6 @@
  *     All rights reserved.
  *
  * $Id: ManagerConfig.cpp,v 1.7.2.1 2007-12-31 03:08:04 n-ando Exp $
- *
- */
-
-/*
- * $Log: not supported by cvs2svn $
- * Revision 1.7  2007/04/26 15:37:16  n-ando
- * The header include order was modified to define _REENTRANT before
- * including ace/config-lite.h in Linux systems.
- * In ace 5.4.7 or later, _REENTRANT flag should be defined explicitly.
- *
- * Revision 1.6  2007/04/13 18:02:21  n-ando
- * Some configuration properties handling processes were changed.
- *
- * Revision 1.5  2007/01/14 19:43:01  n-ando
- * Debugging messages to stdout were deleted.
- *
- * Revision 1.4  2006/11/06 01:26:21  n-ando
- * Some trivial fixes.
- *
- * Revision 1.3  2006/10/23 08:38:17  n-ando
- * To get Property after "init()" calling, getConfig() was added.
- *
- * Revision 1.2  2006/10/17 19:29:53  n-ando
- * Trivial fix.
- *
- * Revision 1.1  2006/10/17 10:21:31  n-ando
- * The first commitment.
- *
  *
  */
 
@@ -74,7 +46,7 @@ namespace RTC
    * @if jp
    * @brief コンストラクタ
    * @else
-   * @brief constructor
+   * @brief Constructor
    * @endif
    */
   ManagerConfig::ManagerConfig()
@@ -85,7 +57,7 @@ namespace RTC
    * @if jp
    * @brief コンストラクタ
    * @else
-   * @brief constructor
+   * @brief Constructor
    * @endif
    */
   ManagerConfig::ManagerConfig(int argc, char** argv)
@@ -97,7 +69,7 @@ namespace RTC
    * @if jp
    * @brief デストラクタ
    * @else
-   * @brief destructor
+   * @brief Destructor
    * @endif
    */
   ManagerConfig::~ManagerConfig()
@@ -120,7 +92,7 @@ namespace RTC
    * @if jp
    * @brief Configuration 情報を Property に設定する
    * @else
-   * @brief Apply configuration results to Property
+   * @brief Specify the configuration information to the Property
    * @endif
    */
   void ManagerConfig::configure(Properties& prop)
@@ -142,7 +114,7 @@ namespace RTC
    * @if jp
    * @brief コマンド引数をパースする
    * @else
-   * @brief Parse command arguments
+   * @brief Parse the command arguments
    * @endif
    */
   void ManagerConfig::parseArgs(int argc, char** argv)
@@ -181,7 +153,7 @@ namespace RTC
    * @if jp
    * @brief Configuration file の検索
    * @else
-   * @brief Find configuration file
+   * @brief Find the configuration file
    * @endif
    */
   bool ManagerConfig::findConfigFile()
@@ -258,7 +230,7 @@ namespace RTC
    * @if jp
    * @brief ファイルの存在確認
    * @else
-   * @brief Check file existance
+   * @brief Check the file existence
    * @endif
    */
   bool ManagerConfig::fileExist(const std::string& filename)

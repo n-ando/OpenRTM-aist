@@ -17,21 +17,6 @@
  *
  */
 
-/*
- * $Log: not supported by cvs2svn $
- * Revision 1.3  2007/04/26 15:32:45  n-ando
- * The header include order was modified to define _REENTRANT before
- * including ace/config-lite.h in Linux systems.
- * In ace 5.4.7 or later, _REENTRANT flag should be defined explicitly.
- *
- * Revision 1.2  2007/01/06 18:00:54  n-ando
- * Some trivial fixes.
- *
- * Revision 1.1  2006/11/27 09:44:49  n-ando
- * The first commitment.
- *
- */
-
 #ifndef PublisherNew_h
 #define PublisherNew_h
 
@@ -59,6 +44,14 @@ namespace RTC
    * @else
    * @class PublisherNew
    * @brief PublisherNew class
+   *
+   * Send new data at timing of when it is stored into the buffer.
+   * This class is used when operating Consumer that waits for the data send
+   * timing in different thread from one of the send side.
+   * Publisher's driven is blocked until the data send timing reaches, if the
+   * send timing notification is received, the Consumer's send processing will
+   * be invoked immediately.
+   *
    * @endif
    */
   class PublisherNew
@@ -78,6 +71,13 @@ namespace RTC
      *                 (本Publisherでは未使用)
      * @else
      * @brief Constructor
+     *
+     * Constructor
+     * Create new thread for this Publisher.
+     *
+     * @param consumer Consumer that waits for the data sending
+     * @param property Property object that is configured this Publisher's
+     *                 control information.(Unused in this Publisher)
      * @endif
      */
     PublisherNew(InPortConsumer* consumer,
@@ -86,9 +86,14 @@ namespace RTC
     /*!
      * @if jp
      * @brief デストラクタ
+     *
      * デストラクタ
+     *
      * @else
      * @brief Destructor
+     *
+     * Destructor
+     *
      * @endif
      */
     virtual ~PublisherNew();
@@ -103,6 +108,11 @@ namespace RTC
      *
      * @else
      * @brief Observer function
+     *
+     * Invoke at send timing.
+     * Start this Publisher's control that has been blocked and do the send
+     * processing to Consumer.
+     *
      * @endif
      */
     virtual void update();
@@ -119,7 +129,10 @@ namespace RTC
      * @else
      * @brief Thread execution function
      *
-     * ACE_Task::svc() override function
+     * ACE_Task::svc() override function.
+     * Make thread stand by until data in the buffer is updated.
+     *
+     * @return Execution result
      *
      * @endif
      */
@@ -139,7 +152,12 @@ namespace RTC
      * @else
      * @brief Task start function
      *
-     * ACE_Task::open() override function
+     * ACE_Task::open() override function.
+     * Create newly thread for this Publisher.
+     *
+     * @param args Thread creation arguments (Unused in this Publisher)
+     *
+     * @return Execution result
      *
      * @endif
      */
@@ -157,7 +175,10 @@ namespace RTC
      * @else
      * @brief Task terminate function
      *
-     * ACE_Task::release() override function
+     * ACE_Task::release() override function.
+     * Set driven flag to false, and terminate this Publisher's operation.
+     * However, if the driven thread is blocked, Consumer's send
+     * processing may be invoked maximum once.
      *
      * @endif
      */

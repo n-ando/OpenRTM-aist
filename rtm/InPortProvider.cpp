@@ -17,17 +17,6 @@
  *
  */
 
-/*
- * $Log: not supported by cvs2svn $
- * Revision 1.2  2007/01/21 09:49:46  n-ando
- * The destructor was moved to cpp file.
- *
- * Revision 1.1  2007/01/06 17:53:37  n-ando
- * Interface and its profile publish functions (publishInterfaceProfile()
- * and publishInterface()) are added.
- *
- */
-
 #include <rtm/InPortProvider.h>
 #include <iostream>
 
@@ -37,7 +26,7 @@ namespace RTC
    * @if jp
    * @brief デストラクタ
    * @else
-   *
+   * @brief Destructor
    * @endif
    */
   InPortProvider::~InPortProvider()
@@ -48,7 +37,7 @@ namespace RTC
    * @if jp
    * @brief InterfaceProfile情報を公開する
    * @else
-   *
+   * @brief Publish InterfaceProfile information
    * @endif
    */
   void InPortProvider::publishInterfaceProfile(SDOPackage::NVList& prop)
@@ -67,7 +56,7 @@ namespace RTC
    * @if jp
    * @brief Interface情報を公開する
    * @else
-   *
+   * @brief Publish Interface information
    * @endif
    */
   void InPortProvider::publishInterface(SDOPackage::NVList& prop)
@@ -86,7 +75,7 @@ namespace RTC
    * @if jp
    * @brief データタイプを設定する
    * @else
-   *
+   * @brief Set the data tape
    * @endif
    */
   void InPortProvider::setDataType(const char* data_type)
@@ -98,7 +87,7 @@ namespace RTC
    * @if jp
    * @brief インターフェースタイプを設定する
    * @else
-   *
+   * @brief Set the interface type
    * @endif
    */
   void InPortProvider::setInterfaceType(const char* interface_type)
@@ -110,7 +99,7 @@ namespace RTC
    * @if jp
    * @brief データフロータイプを設定する
    * @else
-   *
+   * @brief Set the dataflow type
    * @endif
    */
   void InPortProvider::setDataFlowType(const char* dataflow_type)
@@ -122,7 +111,7 @@ namespace RTC
    * @if jp
    * @brief サブスクリプションタイプを設定する
    * @else
-   *
+   * @brief Set the subscription type
    * @endif
    */
   void InPortProvider::setSubscriptionType(const char* subs_type)

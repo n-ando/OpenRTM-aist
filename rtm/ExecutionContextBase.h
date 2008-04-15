@@ -16,16 +16,6 @@
  *
  */
 
-/*
- * $Log: not supported by cvs2svn $
- * Revision 1.1.2.1  2007/12/31 03:08:03  n-ando
- * Class reference by doxygen comment was revised.
- *
- * Revision 1.1  2007/04/13 16:07:22  n-ando
- * ExecutionContext base class.
- *
- */
-
 #ifndef ExecutionContextBase_h
 #define ExecutionContextBase_h
 
@@ -44,6 +34,13 @@ namespace RTC
    * @since 0.4.0
    *
    * @else
+   * @class ExecutionContextBase
+   * @brief A base class for ExecutionContext
+   *
+   * A base class of ExecutionContext.
+   *
+   * @since 0.4.0
+   *
    * @endif
    */
   class ExecutionContextBase
@@ -59,6 +56,9 @@ namespace RTC
      *
      * @else
      * @brief Virtual Destructor
+     *
+     * Virtual Destructor
+     *
      * @endif
      */
     virtual ~ExecutionContextBase(){};
@@ -70,7 +70,10 @@ namespace RTC
      * ExecutionContextの処理を１周期分進める。
      *
      * @else
-     * @brief Destructor
+     * @brief Proceed with tick of ExecutionContext
+     *
+     * Proceed with tick of ExecutionContext for one period.
+     *
      * @endif
      */
     virtual void tick()

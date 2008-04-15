@@ -16,26 +16,6 @@
  *
  */
 
-/*
- * $Log: not supported by cvs2svn $
- * Revision 1.2  2006/10/30 08:15:21  n-ando
- * CVS's information tag was revised.
- *
- * Revision 1.1  2006/10/27 09:07:00  n-ando
- * Util.h was moved to CORBA_SeqEx.h.
- *
- * Revision 1.3  2006/10/17 19:07:58  n-ando
- * Helper template function SeqUtil::for_each() for CORBA sequence was added.
- *
- * Revision 1.2  2006/10/17 10:12:18  n-ando
- * SequenceEx's copy constructor and assignment operator were implemented.
- *
- * Revision 1.1  2006/09/11 18:14:53  n-ando
- * The first commit.
- *
- *
- */
-
 #ifndef CORBA_Util_h
 #define CORBA_Util_h
 
@@ -76,9 +56,10 @@ namespace CORBA_Sequence_Util
    * CORBA sequence 全ての要素に対して、与えられた functor を適用する。
    * functor は void functor(CORBA sequence の要素) の形式をとる必要がある。
    *
-   * @return 全ての要素を処理した Functor
    * @param seq Functor を適用する CORBA sequence
-   * @param functor CORBA sequence の要素を処理する Functor
+   * @param f CORBA sequence の要素を処理する Functor
+   *
+   * @return 全ての要素を処理した Functor
    *
    * @else
    *
@@ -87,9 +68,10 @@ namespace CORBA_Sequence_Util
    * Apply the given functor to the given CORBA sequence.
    * functor should be void functor(CORBA sequence element).
    *
-   * @return Functor that processed all CORBA sequence elements
    * @param seq CORBA sequence to be applied the functor
-   * @param functor A functor to process CORBA sequence elements
+   * @param f A functor to process CORBA sequence elements
+   *
+   * @return Functor that processed all CORBA sequence elements
    *
    * @endif
    */
@@ -111,14 +93,15 @@ namespace CORBA_Sequence_Util
    * @brief CORBA sequence の中から functor に適合する要素のインデックスを返す
    *
    * CORBA sequence 全ての要素に対して、与えられた functor を適用し、
-   * functor が true を返すようそのインデックスを返す。
+   * functor が true を返す要素のインデックスを返す。
    * functor は bool functor(const CORBA sequence の要素) の形式をとり、
    * 適合する要素に対して true を返す必要がある。
    *
-   * @return Functor に適合する要素のインデックス。
-   *         見つからないときは -1 を返す。
    * @param seq Functor を適用する CORBA sequence
-   * @param functor CORBA sequence から要素を見つける Functor
+   * @param f CORBA sequence から要素を見つける Functor
+   *
+   * @return Functorに適合する要素のインデックス。
+   *         見つからないときは -1 を返す。
    *
    * @else
    *
@@ -129,10 +112,11 @@ namespace CORBA_Sequence_Util
    * The functor should be bool functor(const CORBA sequence element) type,
    * and it would return true, if the element matched the functor.
    *
+   * @param seq CORBA sequence to be applied the functor
+   * @param f A functor to process CORBA sequence elements
+   *
    * @return The index of the element that functor matches.
    *         If no element found, it would return -1.
-   * @param seq CORBA sequence to be applied the functor
-   * @param functor A functor to process CORBA sequence elements
    *
    * @endif
    */
@@ -225,9 +209,11 @@ namespace CORBA_Sequence_Util
    * @if jp
    * @brief CORBA sequence の先頭要素を取得する
    *
-   * seq[0] と同じ。
+   * CORBA sequence の先頭要素を取得する。seq[0] と同じ。
    *
    * @param seq 要素を取得する CORBA sequence
+   *
+   * @return 取得した要素
    *
    * @else
    *
@@ -250,9 +236,11 @@ namespace CORBA_Sequence_Util
    * @if jp
    * @brief CORBA sequence の末尾要素を取得する
    *
-   * seq[seq.length() - 1] と同じ。
+   * CORBA sequence の末尾要素を取得する。seq[seq.length() - 1] と同じ。
    *
    * @param seq 要素を取得する CORBA sequence
+   *
+   * @return 取得した要素
    *
    * @else
    *
@@ -310,11 +298,12 @@ namespace CORBA_Sequence_Util
    * @if jp
    * @brief CORBA sequence の全要素を削除
    *   
+   * CORBA sequence の全要素を削除する。
    * seq.length(0) と同じ。
    *
    * @else
    *
-   * @brief Erase all the elements of the CORBA sequence
+   * @brief Erase all elements of the CORBA sequence
    *
    * same as seq.length(0).
    *
@@ -333,6 +322,13 @@ namespace CORBA_Sequence_Util
   // CORBA sequence extention class
   //============================================================
 
+  /*!
+   * @if jp
+   * @brief  ロック付きデータ
+   * @else
+   * @brief  Data with mutex lock
+   * @endif
+   */
   template <class T>
   struct LockedStruct
   {
@@ -351,7 +347,9 @@ namespace CORBA_Sequence_Util
    * CORBA の sequence 型を継承しているため、CORBA の sequence 型の
    * オペレーション(like operator=(), maximum(), length(), operator[])も
    * 使用可能である。
-   * .
+   * 
+   * @since 0.4.0
+   *
    * @else
    *
    * @brief CORBA::sequence extention class
@@ -361,6 +359,8 @@ namespace CORBA_Sequence_Util
    * erase(), erase_if(), push_back(), pop_back(), find()).
    * Since this class inherits CORBA sequence class, user can also use CORBA
    * sequence interfaces (like operator=(), maximum(), length(), operator[]).
+   *
+   * @since 0.4.0
    *
    * @endif
    */ 
@@ -377,20 +377,12 @@ namespace CORBA_Sequence_Util
      * デフォルトコンストラクタ。デフォルトコンストラクタでは、
      * 基底クラスのCORBA::sequence の長さを 0 にセットする。
      * 
-     * @param CorbaSequence CORBA IDL で定義される sequence 形
-     * @param SeuenceItem CorbaSequence の要素型
-     * @param Mutex Mutexの型
-     *
      * @else
      *
      * @brief Default constructor
      *
      * Default constructor. This default constructor sets the sequence length
      * of CorbaSequence base class.
-     *
-     * @param CorbaSequence Sequence type defined in CORBA IDL
-     * @param SeuenceItem The item type of CorbaSequence
-     * @param Mutex The type of mutex
      *
      * @endif
      */
@@ -458,13 +450,17 @@ namespace CORBA_Sequence_Util
      *
      * @brief 代入演算子
      *
-     * @param _sq コピー元
+     * @param _sq 代入元
+     *
+     * @return 代入結果
      *
      * @else
      *
      * @brief Assignment operator
      *
      * @param _sq Copy source.
+     *
+     * @return An assignment result
      *
      * @endif
      */
@@ -483,13 +479,17 @@ namespace CORBA_Sequence_Util
      *
      * @brief CorbaSequence からの代入演算子
      *
-     * @param _sq コピー元
+     * @param _sq 代入元
+     *
+     * @return 代入結果
      *
      * @else
      *
      * @brief Assignment operator from CorbaSequence
      *
      * @param _sq Copy source.
+     *
+     * @return An assignment result
      *
      * @endif
      */
@@ -599,7 +599,7 @@ namespace CORBA_Sequence_Util
      * @brief シーケンスをリサイズする
      *
      * このオペレーションはシーケンスの長さを変更する。
-     * 現在の長さより大きなサイズが与えられた場合、引数 x で、
+     * 現在の長さより大きなサイズが与えられた場合、引数 item で、
      * 新たにアロケートされた部分が埋められる。
      * 現在の長さより小さいサイズが与えられた場合、CorabSequence と同様に
      * 余分なシーケンスの要素は削除される。
@@ -619,7 +619,7 @@ namespace CORBA_Sequence_Util
      * CorabSequence
      *
      * @param new_size The new size of the sequence
-     * @param item　   Sequence element to be assigned to new rooms.
+     * @param item     Sequence element to be assigned to new rooms.
      *
      * @endif
      */
@@ -646,18 +646,20 @@ namespace CORBA_Sequence_Util
      * @brief シーケンスに要素を挿入する
      *
      * このオペレーションはシーケンスの途中に要素を挿入する。
+     * sequence の長さは自動的に拡張される。
      *
      * @param position 新しい要素を挿入する場所
-     * @param item　挿入するシーケンスの要素
+     * @param item 挿入するシーケンスの要素
      *
      * @else
      *
      * @brief Insert a new item to the sequence
      *
      * This operation inserts a new item to the sequence.
+     * The length of the sequence will be expanded automatically.
      *
      * @param position The position of new inserted item.
-     * @param item　   Sequence element to be inserted.
+     * @param item     Sequence element to be inserted.
      *
      * @endif
      */
@@ -685,8 +687,11 @@ namespace CORBA_Sequence_Util
      * @brief シーケンスの要素を削除する
      *
      * このオペレーションはシーケンスの要素を削除する
+     * sequence の長さは自動的に縮小される。
      *
      * @param position 削除するシーケンス要素の場所
+     *
+     * @return 削除された要素
      *
      * @else
      *
@@ -695,6 +700,8 @@ namespace CORBA_Sequence_Util
      * This operation erases an item from the sequence.
      *
      * @param position The position of erased item.
+     *
+     * @return The element which was removed
      *
      * @endif
      */
@@ -720,12 +727,14 @@ namespace CORBA_Sequence_Util
     /*!
      * @if jp
      *
-     * @brief シーケンスの要素を述語のしたがって削除する
+     * @brief シーケンスの要素を述語にしたがって削除する
      *
      * このオペレーションは述語として与えられた関数オブジェクトの
      * 条件が真のとき、そのシーケンスの要素を削除する。
      *
      * @param f 削除するシーケンスを決定する術語
+     *
+     * @return 削除された要素
      *
      * @else
      *
@@ -734,6 +743,8 @@ namespace CORBA_Sequence_Util
      * This operation erases an item according to the given predicate.
      *
      * @param f The predicate functor to decide deletion.
+     *
+     * @return The element which was removed
      *
      * @endif
      */
@@ -755,6 +766,7 @@ namespace CORBA_Sequence_Util
      * @brief 要素を最後尾に追加する
      *
      * このオペレーションは与えられた要素をシーケンスの最後に追加する。
+     * sequence の長さは自動的に拡張される。
      *
      * @param item 追加するするオブジェクト
      *
@@ -762,7 +774,8 @@ namespace CORBA_Sequence_Util
      *
      * @brief Append an item to the end of the sequence.
      *
-     * This operation push back an item to the of the sequence.
+     * This operation push back an item to the end of the sequence.
+     * The length of the sequence will be expanded automatically.
      *
      * @param item The object to be added to the end of the sequnce.
      *
@@ -775,14 +788,38 @@ namespace CORBA_Sequence_Util
       this->length(len + 1);
       (*this)[len] = item;
     }
-    
+
+    /*!
+     * @if jp
+     *
+     * @brief 最後尾の要素を削除する
+     *
+     * このオペレーションはシーケンスの最後尾の要素を削除する。
+     * sequence の長さは自動的に縮小される。
+     *
+     * @else
+     *
+     * @brief Remove an item from the end of the sequence.
+     *
+     * This operation removes an item from the end of the sequence.
+     * The length of the sequence will be diminished automatically.
+     *
+     * @endif
+     */
     void pop_back()
     {
       ACE_Write_Guard<Mutex> gaurd(lock);
       CORBA::ULong len(this->length());
       this->len(len - 1);
     }
-    
+
+    /*!
+     * @if jp
+     * @brief sequence検索用functor
+     * @else
+     * @brief Functor for sequence searches
+     * @endif
+     */
     template <class F>
     SequenceItem find(F f) const
     {
@@ -793,7 +830,14 @@ namespace CORBA_Sequence_Util
 	  return (*this)[i];
       throw; // InvalidParameter("Not found.");
     }
-    
+
+    /*!
+     * @if jp
+     * @brief データロック用mutex
+     * @else
+     * @brief mutex for data locks
+     * @endif
+     */
     mutable Mutex lock;
   }; // class SequenceEx
   

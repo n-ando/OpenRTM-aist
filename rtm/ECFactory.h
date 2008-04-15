@@ -17,13 +17,6 @@
  *
  */
 
-/*
- * $Log: not supported by cvs2svn $
- * Revision 1.1  2007/04/13 16:06:22  n-ando
- * ExecutionContext Factory class.
- *
- */
-
 #ifndef ECFactory_h
 #define ECFactory_h
 
@@ -47,6 +40,12 @@ namespace RTC
    * 
    * @else
    *
+   * @brief Template function to create ExecutionContext
+   * 
+   * Template function to create ExecutionContext's instances.
+   *
+   * @return Created ExecutionContext's instances
+   *
    * @endif
    */
   template <class _New>
@@ -65,6 +64,12 @@ namespace RTC
    * @param ec 破棄対象ExecutionContextのインスタンス
    *
    * @else
+   *
+   * @brief Template function to destroy ExecutionContext
+   * 
+   * Template function to destroy ExecutionContext's instances.
+   *
+   * @param ec The target ExecutionContext's instances for destruction
    *
    * @endif
    */
@@ -91,6 +96,19 @@ namespace RTC
    * @since 0.4.0
    *
    * @else
+   * @class ECFactoryBase
+   * @brief ECFactoryBase abstract class
+   * 
+   * This is the abstruct Factory classes for ExecutionContext creation.
+   * Concrete classes for each ExecutionContext creation must implement 
+   * the following pure virtual functions.
+   *
+   * This class provides the following public interfaces.
+   * - name()   : Get names of the target ExecutionContext for creation
+   * - create() : Create ExecutionContext's instances
+   * - destroy(): Destroy ExecutionContext's instances
+   *
+   * @since 0.4.0
    *
    * @endif
    */
@@ -105,6 +123,10 @@ namespace RTC
      * 仮想デストラクタ。
      *
      * @else
+     *
+     * @brief Virtual destructor
+     * 
+     * Virtual destructor
      *
      * @endif
      */
@@ -121,6 +143,14 @@ namespace RTC
      * 
      * @else
      *
+     * @brief Pure virtual function to get names of creation target 
+     *        ExecutionContext
+     * 
+     * Pure virtual function to get names of the target ExecutionContext
+     * for creation.
+     *
+     * @return Names of the target ExecutionContext for creation
+     *
      * @endif
      */
     virtual const char* name() = 0;
@@ -136,6 +166,12 @@ namespace RTC
      * 
      * @else
      *
+     * @brief Pure virtual function to create ExecutionContext.
+     * 
+     * Pure virtual function to create ExecutionContext's instances.
+     *
+     * @return Created ExecutionContext's instances
+     *
      * @endif
      */
     virtual ExecutionContextBase* create() = 0;
@@ -150,6 +186,12 @@ namespace RTC
      * @param comp 破棄対象のExecutionContextインスタンス
      * 
      * @else
+     *
+     * @brief Pure virtual function to destroy ExecutionContext.
+     * 
+     * Pure virtual function to destroy ExecutionContext's instances.
+     *
+     * @param comp The target ExecutionContext's instances for destruction
      *
      * @endif
      */
@@ -167,6 +209,12 @@ namespace RTC
    * @since 0.4.0
    *
    * @else
+   * @class ECFactoryCXX
+   * @brief ECFactoryCXX class
+   * 
+   * Factory class to create the ExecutionContext's instances for C++.
+   *
+   * @since 0.4.0
    *
    * @endif
    */
@@ -187,6 +235,14 @@ namespace RTC
      * 
      * @else
      *
+     * @brief Constructor
+     * 
+     * Constructor
+     *
+     * @param name Name of the target ExecutionContext for creation
+     * @param new_func Function to create ExecutionContext
+     * @param delete_func Function to destroy ExecutionContext
+     *
      * @endif
      */
     ECFactoryCXX(const char* name,
@@ -201,6 +257,10 @@ namespace RTC
      * 仮想デストラクタ。
      *
      * @else
+     *
+     * @brief Virtual destructor
+     * 
+     * Virtual destructor.
      *
      * @endif
      */
@@ -217,6 +277,12 @@ namespace RTC
      * 
      * @else
      *
+     * @brief Get names of the target ExecutionContext for creation
+     * 
+     * Get names of the target ExecutionContext for creation.
+     *
+     * @return Names of target ExecutionContext for creation
+     *
      * @endif
      */
     virtual const char* name();
@@ -231,6 +297,12 @@ namespace RTC
      * @return 生成したExecutionContextインスタンス
      * 
      * @else
+     *
+     * @brief Create the target ExecutionContext's instances
+     * 
+     * Create the target ExecutionContext class's instances.
+     *
+     * @return Created ExecutionContext's instances
      *
      * @endif
      */
@@ -247,6 +319,12 @@ namespace RTC
      * 
      * @else
      *
+     * @brief Destroy the target ExecutionContext's instances
+     * 
+     * Destroy the target ExecutionContext's instances.
+     *
+     * @param comp The target ExecutionContext's instances to destroy
+     *
      * @endif
      */
     virtual void destroy(ExecutionContextBase* comp);
@@ -256,6 +334,7 @@ namespace RTC
      * @if jp
      * @brief  生成対象ExecutionContext名称
      * @else
+     * @brief  Names of the target ExecutionContext for creation
      * @endif
      */
     std::string m_name;
@@ -264,6 +343,7 @@ namespace RTC
      * @if jp
      * @brief  対象ExecutionContext生成用関数
      * @else
+     * @brief  Function to create the target ExecutionContext
      * @endif
      */
     ECNewFunc m_New;
@@ -272,6 +352,7 @@ namespace RTC
      * @if jp
      * @brief  対象ExecutionContext破棄用関数
      * @else
+     * @brief  Function to destroy the target ExecutionContext
      * @endif
      */
     ECDeleteFunc m_Delete;

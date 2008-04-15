@@ -17,15 +17,6 @@
  *
  */
 
-/*
- * $Log: not supported by cvs2svn $
- * Revision 1.2  2007/01/06 17:58:52  n-ando
- * Interface and its profile publish functions (publishInterfaceProfile()
- * and publishInterface()) are added.
- *
- *
- */
-
 #ifndef OutPortProvider_h
 #define OutPortProvider_h
 
@@ -37,7 +28,8 @@ namespace RTC
   /*!
    * @if jp
    *
-   * @brief OutPort
+   * @class OutPortProvider
+   * @brief OutPortProvider
    *
    * - Port に対して何を提供しているかを宣言する。
    *   PortProfile の properties に Provider に関する情報を追加する。
@@ -45,24 +37,48 @@ namespace RTC
    * (例) OutPort を Provide する場合
    *
    * OutPortCorbaProvider が以下を宣言
-   * dataport.interface_type = CORBA_Any
-   * dataport.dataflow_type = Push, Pull
-   * dataport.subscription_type = Once, New, Periodic
+   *  - dataport.interface_type = CORBA_Any
+   *  - dataport.dataflow_type = Push, Pull
+   *  - dataport.subscription_type = Once, New, Periodic
    * 
-   * OutPortRawTCPProviderが以下を宣言
-   * dataport.interface_type = RawTCP
-   * dataport.dataflow_type = Push, Pull
-   * dataport.subscription_type = Once, New, Periodic
+   * OutPortRawTCPProvider が以下を宣言
+   *  - dataport.interface_type = RawTCP
+   *  - dataport.dataflow_type = Push, Pull
+   *  - dataport.subscription_type = Once, New, Periodic
    * 
    * 最終的に PortProfile::properties は
-   * dataport.interface_type = CORBA_Any, RawTCP
-   * dataport.dataflow_type = Push, Pull
-   * dataport.subscription_type = Once, New, Periodic
+   *  - dataport.interface_type = CORBA_Any, RawTCP
+   *  - dataport.dataflow_type = Push, Pull
+   *  - dataport.subscription_type = Once, New, Periodic
    *
    * @since 0.4.0
    *
    * @else
    *
+   * @class OutPortProvider
+   * @brief OutPortProvider
+   *
+   * - Declare what is provided to the port.
+   *   Add information associated with Provider to the properties of PortProfile.
+   *
+   * (Example) When OutPort is provided:
+   *
+   * OutPortCorbaProvider declares the following:
+   *  - dataport.interface_type = CORBA_Any
+   *  - dataport.dataflow_type = Push, Pull
+   *  - dataport.subscription_type = Once, New, Periodic
+   * 
+   * OutPortRawTCPProvider declares the following:
+   *  - dataport.interface_type = RawTCP
+   *  - dataport.dataflow_type = Push, Pull
+   *  - dataport.subscription_type = Once, New, Periodic
+   * 
+   * Finally, PortProfile::properties declares the following:
+   *  - dataport.interface_type = CORBA_Any, RawTCP
+   *  - dataport.dataflow_type = Push, Pull
+   *  - dataport.subscription_type = Once, New, Periodic
+   *
+   * @since 0.4.0
    *
    * @endif
    */
@@ -93,6 +109,14 @@ namespace RTC
      * @param properties InterfaceProfile情報を受け取るプロパティ
      *
      * @else
+     * @brief Publish InterfaceProfile information
+     *
+     * Publish interfaceProfile information.
+     * Check the dataport.interface_type value of the NameValue object 
+     * specified by an argument in property information and get information
+     * only when the interface type of the specified port is matched.
+     *
+     * @param properties Properties to get InterfaceProfile information
      *
      * @endif
      */
@@ -102,15 +126,24 @@ namespace RTC
      * @if jp
      * @brief Interface情報を公開する
      *
-     * Interface情報を公開する。
+     * Interface情報を公開する
      * 引数で指定するプロパティ情報内の NameValue オブジェクトの
      * dataport.interface_type 値を調べ、当該ポートに設定されていなければ
      * NameValue に情報を追加する。
      * すでに同一インターフェースが登録済みの場合は何も行わない。
      *
-     * @param properties InterfaceProfile情報を受け取るプロパティ
+     * @param properties Interface情報を受け取るプロパティ
      *
      * @else
+     * @brief Publish interface information
+     *
+     * Publish interface information.
+     * Check the dataport.interface_type value of the NameValue object specified 
+     * by an argument in the property information, and add the information to the
+     * NameValue if this port is not specified.
+     * This does not do anything if the same interface is already subscribed.
+     *
+     * @param properties Properties to receive interface information
      *
      * @endif
      */
@@ -126,6 +159,11 @@ namespace RTC
      * @param port_type 設定対象ポートタイプ
      *
      * @else
+     * @brief Set the port type
+     *
+     * Set the port type specified by the argument.
+     *
+     * @param port_type The target port type to set
      *
      * @endif
      */
@@ -140,6 +178,11 @@ namespace RTC
      * @param data_type 設定対象データタイプ
      *
      * @else
+     * @brief Set the data type
+     *
+     * Set the data type specified by the argument.
+     *
+     * @param data_type The target data type to set
      *
      * @endif
      */
@@ -154,6 +197,11 @@ namespace RTC
      * @param interface_type 設定対象インターフェースタイプ
      *
      * @else
+     * @brief Set the interface type
+     *
+     * Set theinterface type specified by the argument.
+     *
+     * @param interface_type The target interface type to set
      *
      * @endif
      */
@@ -168,6 +216,11 @@ namespace RTC
      * @param dataflow_type 設定対象データフロータイプ
      *
      * @else
+     * @brief Set the data flow type
+     *
+     * Set the data flow type specified by the argument.
+     *
+     * @param dataflow_type The target data flow type to set
      *
      * @endif
      */
@@ -182,6 +235,11 @@ namespace RTC
      * @param subs_type 設定対象サブスクリプションタイプ
      *
      * @else
+     * @brief Set the subscription type
+     *
+     * Set the subscription type specified by the argument.
+     *
+     * @param subs_type The target subscription type to set
      *
      * @endif
      */
@@ -191,7 +249,7 @@ namespace RTC
      * @if jp
      * @brief ポートプロファイルを保持するプロパティ
      * @else
-     *
+     * @brief Properties to hold the port profiles
      * @endif
      */
     SDOPackage::NVList m_properties;

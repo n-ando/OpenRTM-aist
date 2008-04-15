@@ -17,33 +17,6 @@
  *
  */
 
-/*
- * $Log: not supported by cvs2svn $
- * Revision 1.6  2007/04/23 04:54:32  n-ando
- * Conversion functions between Properties and NVList were added.
- *
- * Revision 1.5  2007/01/12 14:33:57  n-ando
- * The dump() function was added to dump NVList entries.
- *
- * Revision 1.4  2007/01/06 17:55:35  n-ando
- * toProperties()'s argument was changed to const.
- * Some functions were added.
- * - isStringValue()
- * - appendStringValue()
- * - append()
- *
- * Revision 1.3  2006/11/27 09:54:48  n-ando
- * Conversion function from NVList to Properties: toProperties() was added.
- *
- * Revision 1.2  2006/11/10 04:46:15  n-ando
- * Kanji-code was changed to EUC.
- *
- * Revision 1.1  2006/11/10 04:32:46  n-ando
- * NVUtil is SDOPackage::NVList utility.
- *
- *
- */
-
 #ifndef NVUtil_h
 #define NVUtil_h
 
@@ -61,6 +34,8 @@
  * @else
  *
  * @namespace NVUtil
+ *
+ * @brief Utility for NameValue
  *
  * @endif
  */
@@ -82,15 +57,15 @@ namespace NVUtil
    *
    * @else
    *
-   * @brief Create NameVale
+   * @brief Create NameValue
    *
-   * This operation creates NameVale.
+   * This operation creates NameValue.
    * CORBA::Char, CORBA::Boolean, CORBA::Octet creation is not supported.
    * These type of NameValue should be created by using 
    * newNVChar(), newNVBool(), newNVOctet() functions.
    *
-   * @param name name of NameValue
-   * @param value value of NameValue
+   * @param name Name of NameValue
+   * @param value The value of NameValue
    *
    * @return NameValue
    *
@@ -119,12 +94,12 @@ namespace NVUtil
    *
    * @else
    *
-   * @brief Create CORBA::string value type NameVale
+   * @brief Create NameValue typed CORBA::string
    *
-   * This operation creates CORBA::string value type NameVale.
+   * This operation creates NameValue typed CORBA::string.
    *
-   * @param name name of NameValue
-   * @param value value of NameValue
+   * @param name Name of NameValue
+   * @param value The value of NameValue
    *
    * @return NameValue
    *
@@ -155,12 +130,12 @@ namespace NVUtil
    *
    * @else
    *
-   * @brief Create CORBA::Char value type NameVale
+   * @brief Create NameValue typed CORBA::Char
    *
-   * This operation creates CORBA::Char value type NameVale.
+   * This operation creates NameValue typed CORBA::Char.
    *
-   * @param name name of NameValue
-   * @param value value of NameValue
+   * @param name Name of NameValue
+   * @param value The value of NameValue
    *
    * @return NameValue
    *
@@ -182,12 +157,12 @@ namespace NVUtil
    *
    * @else
    *
-   * @brief Create CORBA::Boolean value type NameVale
+   * @brief Create NameValue typed CORBA::Boolean
    *
-   * This operation creates CORBA::Boolean value type NameVale.
+   * This operation creates NameValue typed CORBA::Boolean.
    *
-   * @param name name of NameValue
-   * @param value value of NameValue
+   * @param name Name of NameValue
+   * @param value The value of NameValue
    *
    * @return NameValue
    *
@@ -201,7 +176,7 @@ namespace NVUtil
    *
    * @brief value が CORBA::Octet の NameValue を生成する
    *
-   * このオペレーションはf value が CORBA::Octet の NameValueを作成する。
+   * このオペレーションは value が CORBA::Octet の NameValueを作成する。
    *
    * @param name NameValue の name
    * @param value NameValue の value
@@ -210,12 +185,12 @@ namespace NVUtil
    *
    * @else
    *
-   * @brief Create CORBA::Octet value type NameVale
+   * @brief Create NameValue typed CORBA::Octet
    *
-   * This operation creates CORBA::Octet value type NameVale.
+   * This operation creates NameValue typed CORBA::Octet.
    *
-   * @param name name of NameValue
-   * @param value value of NameValue
+   * @param name Name of NameValue
+   * @param value The value of NameValue
    *
    * @return NameValue
    *
@@ -237,12 +212,12 @@ namespace NVUtil
    *
    * @else
    *
-   * @brief Create CORBA::Any value type NameVale
+   * @brief Create NameValue typed CORBA::Any
    *
-   * This operation creates CORBA::any value type NameVale.
+   * This operation creates NameValue typed CORBA::Any.
    *
-   * @param name name of NameValue
-   * @param value value of NameValue
+   * @param name Name of NameValue
+   * @param value The value of NameValue
    *
    * @return NameValue
    *
@@ -263,12 +238,12 @@ namespace NVUtil
    *
    * @else
    *
-   * @brief Copy to NVList from Proeprties
+   * @brief Copy the properties to NVList
    *
-   * This operation copies Properties to NVList.
-   * Created NVList's values are CORBA::string.
+   * This operation copies the properties to NVList.
+   * All NVList's values are copied as CORBA::string.
    *
-   * @param nv NVList to store Properties values
+   * @param nv NVList to store properties values
    * @param prop Properties that is copies from
    *
    * @endif
@@ -287,12 +262,12 @@ namespace NVUtil
    *
    * @else
    *
-   * @brief Copy to Proeprties from NVList
+   * @brief Copy NVList to the Proeprties
    *
-   * This operation copies NVList to Properties.
+   * This operation copies NVList to properties.
    *
    * @param prop Properties to store NVList values
-   * @param nv NVList that is copies from
+   * @param nv NVList of copy source
    *
    * @endif
    */
@@ -310,6 +285,14 @@ namespace NVUtil
    * @return 変換結果Property
    *
    * @else
+   *
+   * @brief Transform NVList to the properties
+   *
+   * This operation transforms NVList to properties
+   *
+   * @param nv NVList of tranformation source
+   *
+   * @return Transformation result Property
    *
    * @endif
    */
@@ -330,13 +313,15 @@ namespace NVUtil
    *
    * @else
    *
-   * @brief Get value in NVList specified by name
+   * @brief Return the value specified by name from NVList
    *
    * This operation returns Any type of value specified by name.
-   * Created NVList's values are CORBA::string.
+   * When an element of specified name doesn't exist, the exception will occur.
    *
-   * @param nv NVList to be searched
-   * @param prop name to seartch in NVList
+   * @param nv The target NVList for the find
+   * @param name  Name for the find
+   *
+   * @return Find result
    *
    * @endif
    */
@@ -357,6 +342,16 @@ namespace NVUtil
    *
    * @else
    *
+   * @brief Return the index of element specified by name from NVList
+   *
+   * This operation returns the index at the position where the element
+   * specified by name is stored.
+   *
+   * @param nv The target NVList for the find
+   * @param name  Name for the find
+   *
+   * @return Index of target object for the find
+   *
    * @endif
    */
   const CORBA::Long find_index(const SDOPackage::NVList& nv, const char* name);
@@ -376,6 +371,16 @@ namespace NVUtil
    *
    * @else
    *
+   * @brief Validate whether value type specified by name is string type
+   *
+   * This operation returns the bool value by checking whether the type of
+   * value specified with name is CORBA::string.
+   *
+   * @param nv The target NVList for the search
+   * @param name Name for the search
+   *
+   * @return String validation result (String:true, Else:false)
+   *
    * @endif
    */
   bool isString(const SDOPackage::NVList& nv, const char* name);
@@ -383,7 +388,7 @@ namespace NVUtil
   /*!
    * @if jp
    *
-   * @brief 指定された name の value の型が指定した文字列と一致するか検証する
+   * @brief 指定された name の value の値が指定した文字列と一致するか検証する
    *
    * このオペレーションは name で指定された value の型が CORBA::string
    * かどうかを判断し、  CORBA::string である場合には指定した文字列と一致するか
@@ -396,6 +401,18 @@ namespace NVUtil
    * @return 検証結果(文字列と一致:true、非一致:false)
    *
    * @else
+   *
+   * @brief Check whether the value of specified name matches the specified
+   *        string
+   *
+   * This operation checks whether the value specified with name is 
+   * CORBA::string and returns the bool value which matches spcified string.
+   *
+   * @param nv The target NVList for the search
+   * @param name Name for the search
+   * @param value String value to compare
+   *
+   * @return Check result (Match:true, Unmatch:false)
    *
    * @endif
    */
@@ -418,16 +435,16 @@ namespace NVUtil
    *
    * @else
    *
-   * @brief Get string value in NVList specified by name
+   * @brief Get NVList of specifid name as string
    *
    * This operation returns string value in NVList specified by name.
    * If the value in NVList specified by name is not CORBA::string type
    * this operation returns empty string value.
    *
-   * @param nv NVList to be searched
-   * @param name name to to serach
+   * @param nv The target NVList for the search
+   * @param name Name for the search
    *
-   * @return string value named by name
+   * @return String value corresponding to name
    *
    * @endif
    */
@@ -455,6 +472,24 @@ namespace NVUtil
    *
    * @else
    *
+   * @brief Append the specified string to element of NVList
+   *
+   * This operation appends the string value specified by value to the element
+   * specified by name.
+   * Operate nothing when the 'value' value has already been set to the
+   * element specified by name.
+   * Add the 'value' value each separating by a comma "," when the 'value'
+   * value is not set to the element specified by name.
+   * Set the specified value.
+   * Add a new element at the end of NVList, and set the specified value,
+   * when the element specified by name does not exist.
+   *
+   * @param nv The target NVList for the search
+   * @param name The target element name for the appending
+   * @param value String to append
+   *
+   * @return Append operation result
+   *
    * @endif
    */
   bool appendStringValue(SDOPackage::NVList& nv, const char* name,
@@ -473,6 +508,14 @@ namespace NVUtil
    *
    * @else
    *
+   * @brief Append an element to NVList
+   *
+   * This operation appends elements specified by src to NVList specified
+   * by dest.
+   *
+   * @param dest NVList to be appended
+   * @param src NVList to append
+   *
    * @endif
    */
   void append(SDOPackage::NVList& dest, const SDOPackage::NVList& src);
@@ -489,6 +532,14 @@ namespace NVUtil
    * @param nv 出力対象 NVList
    *
    * @else
+   *
+   * @brief Print information configured in NVList as string type
+   *
+   * Print configured information as string type in specified NVList.
+   * Also, print the reason (this is not string type) if the configured
+   * element is other than string type.
+   *
+   * @param nv The target NVList for the print
    *
    * @endif
    */

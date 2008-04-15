@@ -17,45 +17,6 @@
  *
  */
 
-/*
- * $Log: not supported by cvs2svn $
- * Revision 1.8.2.2  2007/12/31 03:08:04  n-ando
- * Class reference by doxygen comment was revised.
- *
- * Revision 1.8.2.1  2007/07/20 15:56:50  n-ando
- * STL algorithm header include.
- *
- * Revision 1.8  2007/04/23 04:54:28  n-ando
- * Conversion functions between Properties and NVList were added.
- *
- * Revision 1.7  2007/04/13 18:05:14  n-ando
- * Some changes of the logic accompanying change of the Properties class.
- *
- * Revision 1.6  2007/01/21 09:51:06  n-ando
- * A trivial bug fix.
- *
- * Revision 1.5  2007/01/12 14:33:50  n-ando
- * The dump() function was added to dump NVList entries.
- *
- * Revision 1.4  2007/01/06 17:55:29  n-ando
- * toProperties()'s argument was changed to const.
- * Some functions were added.
- * - isStringValue()
- * - appendStringValue()
- * - append()
- *
- * Revision 1.3  2006/12/02 18:44:27  n-ando
- * Argument's const declaration was fixed.
- *
- * Revision 1.2  2006/11/27 09:54:42  n-ando
- * Conversion function from NVList to Properties: toProperties() was added.
- *
- * Revision 1.1  2006/11/10 04:32:38  n-ando
- * NVUtil is SDOPackage::NVList utility.
- *
- *
- */
-
 #include <rtm/CORBA_SeqUtil.h>
 #include <rtm/StringUtil.h>
 #include <rtm/NVUtil.h>
@@ -69,7 +30,7 @@ namespace NVUtil
    * @if jp
    * @brief value が CORBA::Char の NameValue を生成する
    * @else
-   * 
+   * @brief Create NameValue typed CORBA::Char
    * @endif
    */
   SDOPackage::NameValue newNVChar(const char* name, const CORBA::Char value)
@@ -84,7 +45,7 @@ namespace NVUtil
    * @if jp
    * @brief value が CORBA::Boolean の NameValue を生成する
    * @else
-   * 
+   * @brief This operation creates NameValue typed CORBA::Boolean.
    * @endif
    */
   SDOPackage::NameValue newNVBool(const char* name, const CORBA::Boolean value)
@@ -99,7 +60,7 @@ namespace NVUtil
    * @if jp
    * @brief value が CORBA::Octet の NameValue を生成する
    * @else
-   * 
+   * @brief Create NameValue typed CORBA::Octet
    * @endif
    */
   SDOPackage::NameValue newNVOctet(const char* name, const CORBA::Octet value)
@@ -114,7 +75,7 @@ namespace NVUtil
    * @if jp
    * @brief value が CORBA::Any の NameValue を生成する
    * @else
-   * 
+   * @brief Create NameValue typed CORBA::Any
    * @endif
    */
   SDOPackage::NameValue newNVAny(const char* name, const CORBA::Any& value)
@@ -129,7 +90,7 @@ namespace NVUtil
    * @if jp
    * @brief Properties を NVList へコピーする
    * @else
-   * 
+   * @brief Copy the properties to NVList
    * @endif
    */
   void copyFromProperties(SDOPackage::NVList& nv, const RTC::Properties& prop)
@@ -150,7 +111,7 @@ namespace NVUtil
    * @if jp
    * @brief NVList を Properties へコピーする
    * @else
-   * 
+   * @brief Copy NVList to the Proeprties
    * @endif
    */
   void copyToProperties(RTC::Properties& prop, const SDOPackage::NVList& nv)
@@ -170,7 +131,7 @@ namespace NVUtil
    * @if jp
    * @brief NVList を Properties に変換するためのファンクタ
    * @else
-   *
+   * @brief Functor to transform NVList into the properties
    * @endif
    */
   struct to_prop
@@ -193,7 +154,7 @@ namespace NVUtil
    * @if jp
    * @brief NVList を Properties へ変換する
    * @else
-   * 
+   * @brief Transform NVList to the properties
    * @endif
    */
   RTC::Properties toProperties(const SDOPackage::NVList& nv)
@@ -207,7 +168,7 @@ namespace NVUtil
    * @if jp
    * @brief NVList を検索するためのファンクタ
    * @else
-   *
+   * @brief Functor to find a NVList
    * @endif
    */
   struct nv_find
@@ -225,7 +186,7 @@ namespace NVUtil
    * @if jp
    * @brief NVList から name で指定された value を返す
    * @else
-   * 
+   * @brief Return the value specified by name from NVList
    * @endif
    */
   const CORBA::Any& find(const SDOPackage::NVList& nv, const char* name)
@@ -240,7 +201,7 @@ namespace NVUtil
    * @if jp
    * @brief name で指定された要素のインデックスを返す
    * @else
-   * 
+   * @brief Return the index of element specified by name from NVList
    * @endif
    */
   const CORBA::Long find_index(const SDOPackage::NVList& nv, const char* name)
@@ -252,7 +213,7 @@ namespace NVUtil
    * @if jp
    * @brief 指定された name の value の型が string であるか検証する
    * @else
-   * 
+   * @brief Validate whether value type specified by name is string type
    * @endif
    */
   bool isString(const SDOPackage::NVList& nv, const char* name)
@@ -272,9 +233,10 @@ namespace NVUtil
   
   /*!
    * @if jp
-   * @brief 指定された name の value の型が指定した文字列と一致するか検証する
+   * @brief 指定された name の value の値が指定した文字列と一致するか検証する
    * @else
-   * 
+   * @brief Check whether the value of specified name specified matches
+   *        the specified string
    * @endif
    */
   bool isStringValue(const SDOPackage::NVList& nv,
@@ -294,7 +256,7 @@ namespace NVUtil
    * @if jp
    * @brief 指定された name の NVList を string として返す。
    * @else
-   * 
+   * @brief Get NVList of specifid name as string
    * @endif
    */
   std::string toString(const SDOPackage::NVList& nv, const char* name)
@@ -308,6 +270,12 @@ namespace NVUtil
       {
 	str_value = "";
       }
+
+    if (str_value == NULL)
+      {
+	str_value = "";
+      }
+    
     return str_value;
   }
   
@@ -315,7 +283,7 @@ namespace NVUtil
    * @if jp
    * @brief 指定された文字列を NVList の要素に追加する。
    * @else
-   * 
+   * @brief Append the specified string to element of NVList
    * @endif
    */
   bool appendStringValue(SDOPackage::NVList& nv, const char* name,
@@ -326,7 +294,11 @@ namespace NVUtil
     CORBA::Long index;
     index = find_index(nv, name);
     
-    if (index > 0)
+    if (index < 0)
+      {
+	CORBA_SeqUtil::push_back(nv, newNV(name, value));
+      }
+    else
       {
 	const char* tmp_char;
 	nv[index].value >>= tmp_char;
@@ -341,10 +313,6 @@ namespace NVUtil
 	    nv[index].value <<= tmp_str.c_str();
 	  }
       }
-    else
-      {
-	CORBA_SeqUtil::push_back(nv, newNV(name, value));
-      }
     return true;
   }
   
@@ -352,7 +320,7 @@ namespace NVUtil
    * @if jp
    * @brief NVList に要素を追加する。
    * @else
-   * 
+   * @brief Append an element to NVList
    * @endif
    */
   void append(SDOPackage::NVList& dest, const SDOPackage::NVList& src)
@@ -367,7 +335,7 @@ namespace NVUtil
    * @if jp
    * @brief NVList に設定されている内容を文字列として出力する。
    * @else
-   * 
+   * @brief Print information configured in NVList as a string type
    * @endif
    */
   void dump(SDOPackage::NVList& nv)
