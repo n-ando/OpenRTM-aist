@@ -203,6 +203,7 @@ clean_objs:
 clean_skelstub:
 	rm -f *Skel.h *Skel.cpp
 	rm -f *Stub.h *Stub.cpp
+	rm -f *.hh *SK.cc
 
 clean-local: clean_objs clean_skelstub
 	rm -f \
