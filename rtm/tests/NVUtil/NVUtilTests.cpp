@@ -14,7 +14,7 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: NVUtilTests.cpp,v 1.1 2006-11-27 08:26:13 n-ando Exp $
+ * $Id$
  *
  */
 

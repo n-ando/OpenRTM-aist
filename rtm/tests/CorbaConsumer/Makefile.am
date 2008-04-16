@@ -5,7 +5,7 @@
 # @date   $Date: 2007-01-21 06:51:22 $
 # @author Noriaki Ando <n-ando@aist.go.jp>
 #
-# $Id: Makefile.am,v 1.3 2007-01-21 06:51:22 n-ando Exp $
+# $Id$
 #
 #------------------------------------------------------------
 

@@ -2,7 +2,7 @@
 ##---------------------------------------------------------------------------
 ## Makefile.am for ConsoleIn/ConsoleOut components
 ##
-## $Id: Makefile.am,v 1.1.2.5 2008-02-29 11:04:50 n-ando Exp $
+## $Id$
 ##
 ## $Log: not supported by cvs2svn $
 ## Revision 1.1.2.4  2008/02/29 04:56:27  n-ando

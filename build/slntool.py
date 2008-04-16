@@ -12,7 +12,7 @@
 #         Advanced Industrial Science and Technology (AIST), Japan
 #     All rights reserved.
 #
-# $Id: slntool.py,v 1.1.2.2 2008-03-06 06:46:37 n-ando Exp $
+# $Id$
 #
 
 # $Log: not supported by cvs2svn $

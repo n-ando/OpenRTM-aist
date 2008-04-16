@@ -13,7 +13,7 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: DataInPort.h,v 1.6.4.3 2008-01-13 15:06:40 n-ando Exp $
+ * $Id$
  *
  */
 

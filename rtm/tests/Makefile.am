@@ -2,7 +2,7 @@
 ##------------------------------------------------------------
 ## Makefile.am for unit test
 ##
-## $Id: Makefile.am,v 1.15.4.1 2007-09-19 02:33:40 n-ando Exp $
+## $Id$
 ##
 ## $Log: not supported by cvs2svn $
 ## Revision 1.15  2007/01/21 13:06:23  n-ando

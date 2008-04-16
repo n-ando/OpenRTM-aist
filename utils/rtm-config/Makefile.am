@@ -2,7 +2,7 @@
 ##---------------------------------------------------------------------------
 ## Makefile for rtm-config: rtm configuration information viewer
 ##
-## $Id: Makefile.am,v 1.1.1.1.6.1 2007-09-16 08:14:40 n-ando Exp $
+## $Id$
 ##
 ## $Log: not supported by cvs2svn $
 ## Revision 1.1.1.1  2005/05/12 09:06:18  n-ando

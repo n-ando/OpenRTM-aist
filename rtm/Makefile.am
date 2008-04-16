@@ -2,7 +2,7 @@
 ##------------------------------------------------------------
 ## Makefile.am for libRTC
 ##
-## $Id: Makefile.am,v 1.16.2.6 2008-02-29 04:57:17 n-ando Exp $
+## $Id$
 ##
 ## $Log: not supported by cvs2svn $
 ## Revision 1.16.2.5  2008/02/26 14:15:09  n-ando
@@ -250,5 +250,7 @@ wxs:
 dist-hook: lst vcproj wxs
 
 clean-local:
-	rm -f *.gch *.bak *.rpo *.sym lib*.*_pure_* Makefile.old *core *~
+	rm -f *~ Makefile.old *core
+	rm -f *.lst
+	rm -f *.gch *.bak *.rpo *.sym lib*.*_pure_*
 

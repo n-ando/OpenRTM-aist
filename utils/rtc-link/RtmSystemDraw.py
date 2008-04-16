@@ -13,7 +13,7 @@
 #          Advanced Industrial Science and Technology (AIST), Japan
 #      All rights reserved.
 # 
-#  $Id: RtmSystemDraw.py,v 1.6 2005-05-27 15:51:31 n-ando Exp $
+#  $Id$
 #
 # RtmSystemDraw.py                    Created on: 2004/09/13
 #                            Author    : Tsuyoshi Tanabe

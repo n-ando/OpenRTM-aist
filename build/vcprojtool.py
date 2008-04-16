@@ -12,7 +12,7 @@
 #         Advanced Industrial Science and Technology (AIST), Japan
 #     All rights reserved.
 #
-# $Id: vcprojtool.py,v 1.1.2.3 2008-02-29 04:52:14 n-ando Exp $
+# $Id$
 #
 
 # $Log: not supported by cvs2svn $

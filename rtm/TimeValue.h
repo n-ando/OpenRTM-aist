@@ -12,7 +12,7 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: TimeValue.h,v 1.1.2.3 2007-10-06 12:27:35 n-ando Exp $
+ * $Id$
  *
  */
 

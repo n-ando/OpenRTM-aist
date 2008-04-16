@@ -13,7 +13,7 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: PublisherFactory.cpp,v 1.2.4.1 2007/06/22 10:55:09 n-ando Exp $
+ * $Id$
  *
  */
 

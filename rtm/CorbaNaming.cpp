@@ -13,7 +13,7 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: CorbaNaming.cpp,v 1.6.2.2 2007-12-31 03:08:02 n-ando Exp $
+ * $Id$
  *
  */
 

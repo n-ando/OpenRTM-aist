@@ -6,7 +6,7 @@
 #
 # Copyright (C) 2008 Noriaki Ando, All rights reserved.
 #
-# $Id: yat.py,v 1.1.2.2 2008-02-09 20:04:27 n-ando Exp $
+# $Id$
 #
 
 # $Log: not supported by cvs2svn $

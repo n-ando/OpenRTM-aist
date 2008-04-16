@@ -1,6 +1,6 @@
 ## Makefile.am for win32/OpenRTM-aist/utils
 ##
-## $Id: Makefile.am,v 1.1.2.1 2007-07-20 16:27:12 n-ando Exp $
+## $Id$
 ##
 ## $Log: not supported by cvs2svn $
 ##

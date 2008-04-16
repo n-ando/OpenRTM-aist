@@ -12,7 +12,7 @@
 #         Advanced Industrial Science and Technology (AIST), Japan
 #     All rights reserved.
 #
-# $Id: makevcproj.py,v 1.1.2.1 2007-07-20 15:36:59 n-ando Exp $
+# $Id$
 #
 
 # $Log: not supported by cvs2svn $

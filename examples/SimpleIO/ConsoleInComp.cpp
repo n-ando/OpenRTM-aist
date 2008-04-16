@@ -4,7 +4,7 @@
  * @brief Standalone component
  * @date $Date: 2008-01-14 07:43:41 $
  *
- * $Id: ConsoleInComp.cpp,v 1.2.4.1 2008-01-14 07:43:41 n-ando Exp $
+ * $Id$
  */
 
 #include <rtm/Manager.h>

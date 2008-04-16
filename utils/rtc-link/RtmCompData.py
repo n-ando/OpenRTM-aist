@@ -13,7 +13,7 @@
 #          Advanced Industrial Science and Technology (AIST), Japan
 #      All rights reserved.
 # 
-#  $Id: RtmCompData.py,v 1.3 2007-01-21 13:20:47 n-ando Exp $
+#  $Id$
 # 
 
 #

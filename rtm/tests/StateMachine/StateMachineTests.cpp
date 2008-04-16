@@ -14,7 +14,7 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: StateMachineTests.cpp,v 1.2 2007-01-12 14:56:19 n-ando Exp $
+ * $Id$
  *
  */
 

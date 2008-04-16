@@ -11,7 +11,7 @@
 @rem         Advanced Industrial Science and Technology (AIST), Japan
 @rem     All rights reserved.
 @rem
-@rem $Id: autobuild.bat,v 1.1.2.2 2008-02-09 20:01:28 n-ando Exp $
+@rem $Id$
 @rem
 
 @rem $Log: not supported by cvs2svn $

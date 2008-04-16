@@ -14,7 +14,7 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: SdoConfigurationTests.cpp,v 1.2 2007-01-24 16:04:18 n-ando Exp $
+ * $Id$
  *
  */
 

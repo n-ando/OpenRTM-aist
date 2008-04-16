@@ -12,7 +12,7 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: UUID.h,v 1.1 2006-10-17 19:18:50 n-ando Exp $
+ * $Id$
  *
  */
 

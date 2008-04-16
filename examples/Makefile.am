@@ -2,7 +2,7 @@
 ##------------------------------------------------------------
 ## Makefile.am for examples
 ##
-## $Id: Makefile.am,v 1.7 2007-04-23 07:24:09 n-ando Exp $
+## $Id$
 ##
 ## $Log: not supported by cvs2svn $
 ## Revision 1.6  2007/04/13 15:01:20  n-ando

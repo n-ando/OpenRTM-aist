@@ -13,7 +13,7 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: SyncLIFO.h,v 1.1.2.1 2007-09-21 09:25:28 n-ando Exp $
+ * $Id$
  *
  */
 

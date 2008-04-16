@@ -12,7 +12,7 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: ExecutionContextBase.h,v 1.1.2.2 2008-01-14 07:48:55 n-ando Exp $
+ * $Id$
  *
  */
 

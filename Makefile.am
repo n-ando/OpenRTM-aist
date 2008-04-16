@@ -2,7 +2,7 @@
 ##---------------------------------------------------------------------------
 ## Makefile.am for the top directory
 ##
-## $Id: Makefile.am,v 1.4.2.1 2007-07-20 15:28:11 n-ando Exp $
+## $Id$
 ##
 ## $Log: not supported by cvs2svn $
 ## Revision 1.4  2007/04/27 03:30:42  n-ando

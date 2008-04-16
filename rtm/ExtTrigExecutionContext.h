@@ -12,7 +12,7 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: ExtTrigExecutionContext.h,v 1.2.2.2 2008-01-14 07:49:16 n-ando Exp $
+ * $Id$
  *
  */
 

@@ -14,7 +14,7 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: RingBufferTests.cpp,v 1.2 2006-12-02 18:53:08 n-ando Exp $
+ * $Id$
  *
  */
 

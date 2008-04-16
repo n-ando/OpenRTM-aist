@@ -10,7 +10,7 @@
 #          National Institute of Industrial Science (AIST), Japan
 #          All rights reserved.
 #
-# $Id: run.sh,v 1.4 2007-04-27 06:12:58 n-ando Exp $
+# $Id$
 #
 
 nsport='9876'

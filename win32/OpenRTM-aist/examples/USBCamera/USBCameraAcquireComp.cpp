@@ -4,7 +4,7 @@
  * @brief Standalone component
  * @date $Date: 2007-07-20 20:33:27 $
  *
- * $Id: USBCameraAcquireComp.cpp,v 1.1.2.1 2007-07-20 20:33:27 n-ando Exp $
+ * $Id$
  */
 
 #include <rtm/Manager.h>

@@ -4,7 +4,7 @@
  * @brief Console input component
  * @date  $Date: 2008-02-29 04:54:45 $
  *
- * $Id: ConsoleIn.h,v 1.1.2.1 2008-02-29 04:54:45 n-ando Exp $
+ * $Id$
  */
 
 #ifndef CONSOLEIN_H

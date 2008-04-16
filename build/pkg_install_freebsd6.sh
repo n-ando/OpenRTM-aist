@@ -4,7 +4,7 @@
 # @brief OpenRTM-aist dependent packages install script for FreeBSD-6
 # @author Noriaki Ando <n-ando@aist.go.jp>
 #
-# $Id: pkg_install_freebsd6.sh,v 1.3 2007-04-13 14:49:43 n-ando Exp $
+# $Id$
 #
 # $Log: not supported by cvs2svn $
 # Revision 1.2  2006/11/04 16:35:47  n-ando

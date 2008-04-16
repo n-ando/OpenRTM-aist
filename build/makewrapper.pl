@@ -11,7 +11,7 @@
 #         Advanced Industrial Science and Technology (AIST), Japan
 #     All rights reserved.
 #
-# $Id: makewrapper.pl,v 1.1.1.1 2005-05-12 09:06:18 n-ando Exp $
+# $Id$
 #
 
 # $Log: not supported by cvs2svn $

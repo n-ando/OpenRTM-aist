@@ -13,7 +13,7 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: PortBase.h,v 1.10.2.5 2008-01-14 07:56:44 n-ando Exp $
+ * $Id$
  *
  */
 

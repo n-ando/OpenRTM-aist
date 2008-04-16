@@ -13,7 +13,7 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: StringUtil.cpp,v 1.3.2.2 2007-12-31 03:08:07 n-ando Exp $
+ * $Id$
  *
  */
 

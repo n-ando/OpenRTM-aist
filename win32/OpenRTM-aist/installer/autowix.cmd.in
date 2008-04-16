@@ -11,7 +11,7 @@
 @rem         Advanced Industrial Science and Technology (AIST), Japan
 @rem     All rights reserved.
 @rem
-@rem $Id: autowix.cmd.in,v 1.1.2.1 2008-02-09 20:04:03 n-ando Exp $
+@rem $Id$
 @rem
 
 @set WIX_ROOT=C:\WiX

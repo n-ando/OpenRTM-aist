@@ -13,7 +13,7 @@
 #         Advanced Industrial Science and Technology (AIST), Japan
 #     All rights reserved.
 #
-# $Id: codegen.py,v 1.1.4.1 2008-02-27 11:31:04 n-ando Exp $
+# $Id$
 #
 # [usage]
 # codegen.py [class_name]

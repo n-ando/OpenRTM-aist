@@ -12,7 +12,7 @@
 #         Advanced Industrial Science and Technology (AIST), Japan
 #     All rights reserved.
 #
-# $Id: makewrapper.py,v 1.6.4.2 2008-02-29 04:50:39 n-ando Exp $
+# $Id$
 #
 
 # $Log: not supported by cvs2svn $

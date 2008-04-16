@@ -12,7 +12,7 @@
 #          Advanced Industrial Science and Technology (AIST), Japan
 #      All rights reserved.
 # 
-#  $Id: RtmTreeCtrl.py,v 1.5 2007-01-21 13:21:26 n-ando Exp $
+#  $Id$
 # 
 
 #

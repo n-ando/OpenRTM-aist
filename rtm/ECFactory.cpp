@@ -12,7 +12,7 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: ECFactory.cpp,v 1.1.2.1 2007-12-31 03:08:03 n-ando Exp $
+ * $Id$
  *
  */
 

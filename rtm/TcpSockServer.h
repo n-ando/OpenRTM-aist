@@ -13,7 +13,7 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: TcpSockServer.h,v 1.1.2.1 2007-10-06 12:30:16 n-ando Exp $
+ * $Id$
  *
  */
 

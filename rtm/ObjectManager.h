@@ -12,7 +12,7 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: ObjectManager.h,v 1.6.2.2 2007-12-31 03:08:04 n-ando Exp $
+ * $Id$
  *
  */
 

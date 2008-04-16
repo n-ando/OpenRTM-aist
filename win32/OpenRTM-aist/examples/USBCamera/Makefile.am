@@ -2,7 +2,7 @@
 ##---------------------------------------------------------------------------
 ## Makefile.am for win32/OpenRTM-aist/examples/USBCamera
 ##
-## $Id: Makefile.am,v 1.1.2.2 2008-03-06 07:03:10 n-ando Exp $
+## $Id$
 ##
 ## $Log: not supported by cvs2svn $
 ## Revision 1.1.2.1  2007/07/22 13:48:06  n-ando

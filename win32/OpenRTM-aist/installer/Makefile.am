@@ -1,6 +1,6 @@
 ## Makefile.am for win32/OpenRTM-aist/installer
 ##
-## $Id: Makefile.am,v 1.1.2.1 2008-02-09 20:03:52 n-ando Exp $
+## $Id$
 ##
 ##---------------------------------------------------------------------------
 clean-local:

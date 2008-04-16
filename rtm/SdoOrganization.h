@@ -13,7 +13,7 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: SdoOrganization.h,v 1.4.4.2 2008-01-14 07:49:28 n-ando Exp $
+ * $Id$
  *
  */
 

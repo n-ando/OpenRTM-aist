@@ -5,7 +5,7 @@
  * @date   $Date: 2007-01-12 14:53:53 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
- * $Id: PublisherFactoryTests.cpp,v 1.2 2007-01-12 14:53:53 n-ando Exp $
+ * $Id$
  *
  */
 

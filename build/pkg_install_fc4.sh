@@ -4,7 +4,7 @@
 # @brief OpenRTM-aist dependent packages install script for Fedora Core 4
 # @author Noriaki Ando <n-ando@aist.go.jp>
 #
-# $Id: pkg_install_fc4.sh,v 1.1 2006-07-18 08:35:52 n-ando Exp $
+# $Id$
 #
 # $Log: not supported by cvs2svn $
 #

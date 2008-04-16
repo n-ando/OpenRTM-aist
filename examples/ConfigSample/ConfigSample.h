@@ -4,7 +4,7 @@
  * @brief Configuration example component
  * @date  $Date: 2008-02-29 04:54:41 $
  *
- * $Id: ConfigSample.h,v 1.1.2.1 2008-02-29 04:54:41 n-ando Exp $
+ * $Id$
  */
 
 #ifndef CONFIGSAMPLE_H

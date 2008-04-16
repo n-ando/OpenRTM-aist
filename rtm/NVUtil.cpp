@@ -13,7 +13,7 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: NVUtil.cpp,v 1.8.2.3 2008-01-13 07:41:08 n-ando Exp $
+ * $Id$
  *
  */
 

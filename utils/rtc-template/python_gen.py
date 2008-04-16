@@ -13,7 +13,7 @@
 #          Advanced Industrial Science and Technology (AIST), Japan
 #      All rights reserved.
 # 
-#  $Id: python_gen.py,v 1.1 2005-08-26 12:02:37 n-ando Exp $
+#  $Id$
 # 
 
 #

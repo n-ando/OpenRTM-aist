@@ -2,7 +2,7 @@
 ##---------------------------------------------------------------------------
 ## Makefile.am for rtm-skelwrapper: rtm skeleton/stub wrapper generator
 ##
-## $Id: Makefile.am,v 1.3 2007-02-08 06:00:25 n-ando Exp $
+## $Id$
 ##
 ## $Log: not supported by cvs2svn $
 ## Revision 1.2  2005/09/09 09:31:13  n-ando

@@ -4,7 +4,7 @@
  * @brief Console output component
  * $Date: 2007-10-09 07:33:08 $
  *
- * $Id: ConsoleOut.cpp,v 1.3.2.1 2007-10-09 07:33:08 n-ando Exp $
+ * $Id$
  */
 
 #include "ConsoleOut.h"

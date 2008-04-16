@@ -4,7 +4,7 @@
  * @brief MyService Consumer Sample component
  * @date  $Date: 2008-02-29 04:55:08 $
  *
- * $Id: MyServiceConsumer.h,v 1.1.2.1 2008-02-29 04:55:08 n-ando Exp $
+ * $Id$
  */
 
 #ifndef MYSERVICECONSUMER_H

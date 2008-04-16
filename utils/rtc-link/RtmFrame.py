@@ -13,7 +13,7 @@
 #          Advanced Industrial Science and Technology (AIST), Japan
 #      All rights reserved.
 # 
-#  $Id: RtmFrame.py,v 1.3 2005-05-27 15:51:31 n-ando Exp $
+#  $Id$
 # 
 
 #

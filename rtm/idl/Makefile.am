@@ -2,7 +2,7 @@
 ##------------------------------------------------------------
 ## Makefile.am for libRTCSkel
 ##
-## $Id: Makefile.am,v 1.9.2.4 2008-02-29 04:59:03 n-ando Exp $
+## $Id$
 ##
 ## $Log: not supported by cvs2svn $
 ## Revision 1.9.2.3  2008/02/26 14:18:58  n-ando

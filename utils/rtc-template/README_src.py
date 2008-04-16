@@ -13,7 +13,7 @@
 #          Advanced Industrial Science and Technology (AIST), Japan
 #      All rights reserved.
 # 
-#  $Id: README_src.py,v 1.5 2007-01-11 07:47:03 n-ando Exp $
+#  $Id$
 #
 
 #

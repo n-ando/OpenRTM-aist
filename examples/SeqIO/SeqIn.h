@@ -4,7 +4,7 @@
  * @brief Sequence InPort component
  * @date  $Date: 2008-02-29 04:54:53 $
  *
- * $Id: SeqIn.h,v 1.2.2.1 2008-02-29 04:54:53 n-ando Exp $
+ * $Id$
  */
 
 #ifndef SEQIN_H

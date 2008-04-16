@@ -14,7 +14,7 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: FactoryTests.cpp,v 1.2 2007-01-12 14:50:35 n-ando Exp $
+ * $Id$
  *
  */
 

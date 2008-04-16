@@ -6,7 +6,7 @@
  * @author Shinji Kurihara
  *         Noriaki Ando <n-ando@aist.go.jp>
  *
- * $Id: SdoServiceTests.cpp,v 1.1 2006-11-27 08:38:37 n-ando Exp $
+ * $Id$
  *
  */
 

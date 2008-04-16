@@ -13,7 +13,7 @@
 #          Advanced Industrial Science and Technology (AIST), Japan
 #      All rights reserved.
 # 
-#  $Id: cxx_svc_impl.py,v 1.4 2007-02-07 02:51:49 n-ando Exp $
+#  $Id$
 # 
 
 #

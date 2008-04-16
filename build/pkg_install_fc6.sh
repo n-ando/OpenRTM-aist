@@ -4,7 +4,7 @@
 # @brief OpenRTM-aist dependent packages install script for Fedora Core 6
 # @author Noriaki Ando <n-ando@aist.go.jp>
 #
-# $Id: pkg_install_fc6.sh,v 1.3 2007-04-19 10:16:36 kurihara Exp $
+# $Id$
 #
 # $Log: not supported by cvs2svn $
 # Revision 1.2  2007/04/13 14:49:22  n-ando

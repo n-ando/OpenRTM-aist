@@ -2,7 +2,7 @@
 ##---------------------------------------------------------------------------
 ## Makefile.am for swig
 ##
-## $Id: Makefile.am,v 1.2 2005-05-19 09:29:05 n-ando Exp $
+## $Id$
 ##
 ## $Log: not supported by cvs2svn $
 ## Revision 1.1.1.1  2005/05/12 09:06:19  n-ando

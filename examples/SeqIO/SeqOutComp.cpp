@@ -4,7 +4,7 @@
  * @brief Standalone component
  * @date $Date: 2008-01-14 07:46:03 $
  *
- * $Id: SeqOutComp.cpp,v 1.2.2.1 2008-01-14 07:46:03 n-ando Exp $
+ * $Id$
  */
 
 #include <rtm/Manager.h>

@@ -5,7 +5,7 @@
  * @date   $Date: 2007-09-19 02:37:17 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
- * $Id: SyncLIFOTests.cpp,v 1.1.2.1 2007-09-19 02:37:17 n-ando Exp $
+ * $Id$
  *
  */
 

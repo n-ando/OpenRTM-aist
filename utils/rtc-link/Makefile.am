@@ -2,7 +2,7 @@
 ##---------------------------------------------------------------------------
 ## Makefile.am for rtc-link
 ##
-## $Id: Makefile.am,v 1.5 2007-01-21 13:19:41 n-ando Exp $
+## $Id$
 ##
 ## $Log: not supported by cvs2svn $
 ## Revision 1.4  2005/09/08 12:52:03  n-ando

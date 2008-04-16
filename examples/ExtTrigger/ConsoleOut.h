@@ -4,7 +4,7 @@
  * @brief Console output component
  * @date  $Date: 2008-02-29 04:54:47 $
  *
- * $Id: ConsoleOut.h,v 1.1.2.1 2008-02-29 04:54:47 n-ando Exp $
+ * $Id$
  */
 
 #ifndef CONSOLEOUT_H

@@ -4,7 +4,7 @@
 # @brief OpenRTM-aist dependent packages install script for FreeBSD-5.2
 # @author Noriaki Ando <n-ando@aist.go.jp>
 #
-# $Id: pkg_install_freebsd52.sh,v 1.1 2006-07-18 08:36:22 n-ando Exp $
+# $Id$
 #
 # $Log: not supported by cvs2svn $
 #

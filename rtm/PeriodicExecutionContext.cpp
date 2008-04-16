@@ -13,7 +13,7 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: PeriodicExecutionContext.cpp,v 1.5.2.5 2008-01-14 07:53:01 n-ando Exp $
+ * $Id$
  *
  */
 

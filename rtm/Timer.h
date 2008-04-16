@@ -12,7 +12,7 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: Timer.h,v 1.3 2007-04-26 15:34:05 n-ando Exp $
+ * $Id$
  *
  */
 

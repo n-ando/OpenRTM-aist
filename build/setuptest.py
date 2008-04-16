@@ -13,7 +13,7 @@
 #         Advanced Industrial Science and Technology (AIST), Japan
 #     All rights reserved.
 #
-# $Id: setuptest.py,v 1.3.4.1 2008-02-29 04:50:54 n-ando Exp $
+# $Id$
 #
 # [usage]
 # setuptest.py [class_name]

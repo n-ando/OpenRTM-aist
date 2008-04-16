@@ -2,7 +2,7 @@
 ##---------------------------------------------------------------------------
 ## Makefile.am for SeqIn/SeqOut components
 ##
-## $Id: Makefile.am,v 1.2.2.4 2008-02-29 11:04:54 n-ando Exp $
+## $Id$
 ##
 ## $Log: not supported by cvs2svn $
 ## Revision 1.2.2.3  2008/02/26 14:13:32  n-ando

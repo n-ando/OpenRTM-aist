@@ -18,7 +18,7 @@
 #  --inport=DoubleSeq:TimedDoubleSeq 
 #
 #
-# $Id: Makefile.SeqIn,v 1.2 2007-02-04 16:47:14 n-ando Exp $
+# $Id$
 #
 CXXFLAGS = `rtm-config --cflags`
 LDFLAGS  = `rtm-config --libs`

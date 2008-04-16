@@ -13,7 +13,7 @@
 #          Advanced Industrial Science and Technology (AIST), Japan
 #      All rights reserved.
 # 
-#  $Id: RtmProfileList.py,v 1.2 2007-01-21 13:21:20 n-ando Exp $
+#  $Id$
 # 
 
 #

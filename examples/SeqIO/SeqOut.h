@@ -4,7 +4,7 @@
  * @brief Sequence OutPort component
  * @date  $Date: 2008-02-29 04:54:56 $
  *
- * $Id: SeqOut.h,v 1.2.2.1 2008-02-29 04:54:56 n-ando Exp $
+ * $Id$
  */
 
 #ifndef SEQOUT_H

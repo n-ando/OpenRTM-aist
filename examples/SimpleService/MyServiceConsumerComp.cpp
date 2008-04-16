@@ -4,7 +4,7 @@
  * @brief Standalone component
  * @date $Date: 2008-01-14 07:46:49 $
  *
- * $Id: MyServiceConsumerComp.cpp,v 1.1.2.1 2008-01-14 07:46:49 n-ando Exp $
+ * $Id$
  */
 
 #include <rtm/Manager.h>

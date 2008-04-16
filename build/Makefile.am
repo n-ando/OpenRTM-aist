@@ -4,7 +4,7 @@
 ## @brief  Makefile.am for build tools
 ## @author Noriaki Ando <n-ando@aist.go.jp>
 ##
-## $Id: Makefile.am,v 1.6.2.2 2007-07-22 14:31:15 n-ando Exp $
+## $Id$
 ##
 ## $Log: not supported by cvs2svn $
 ## Revision 1.6.2.1  2007/07/20 15:29:04  n-ando

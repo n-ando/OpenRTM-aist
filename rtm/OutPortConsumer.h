@@ -13,7 +13,7 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: OutPortConsumer.h,v 1.3.4.1 2007-12-31 03:08:05 n-ando Exp $
+ * $Id$
  *
  */
 

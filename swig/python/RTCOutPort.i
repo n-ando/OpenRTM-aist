@@ -12,7 +12,7 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: RTCOutPort.i,v 1.2 2005-05-27 15:49:29 n-ando Exp $
+ * $Id$
  *
  */
 

@@ -4,7 +4,7 @@
  * @brief USB Camera Acquire component
  * $Date: 2007-09-26 07:42:38 $
  *
- * $Id: USBCameraAcquire.cpp,v 1.1.2.2 2007-09-26 07:42:38 n-ando Exp $
+ * $Id$
  */
 
 #include "USBCameraAcquire.h"

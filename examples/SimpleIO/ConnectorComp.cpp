@@ -10,7 +10,7 @@
  *          National Institute of Industrial Science (AIST), Japan
  *          All rights reserved.
  *
- * $Id: ConnectorComp.cpp,v 1.6.2.1 2008-01-13 07:24:08 n-ando Exp $
+ * $Id$
  */
 
 #include <iostream>

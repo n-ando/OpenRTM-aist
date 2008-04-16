@@ -12,7 +12,7 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: RTC.h,v 1.5.2.3 2008-02-29 04:57:44 n-ando Exp $
+ * $Id$
  *
  */
 

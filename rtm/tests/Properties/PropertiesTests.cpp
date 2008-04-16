@@ -6,7 +6,7 @@
  * @author Noriaki Ando <n-ando@aist.go.jp>,
  *         Shinji Kurihara
  *
- *  $Id: PropertiesTests.cpp,v 1.1 2006-11-27 08:23:25 n-ando Exp $
+ *  $Id$
  *
  */
 

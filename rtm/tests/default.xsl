@@ -6,7 +6,7 @@
  @author Noriaki Ando <n-ando@aist.go.jp>
  Copyright (C) 2006 Noriaki Ando
 
- $Id: default.xsl,v 1.1 2006-11-27 07:34:28 n-ando Exp $
+ $Id$
 
 -->
 <?xml version="1.0" encoding="shift_jis"?>

@@ -12,7 +12,7 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: StateMachine.h,v 1.3.2.2 2007-09-20 11:21:12 n-ando Exp $
+ * $Id$
  *
  */
 

@@ -13,7 +13,7 @@
 #          Advanced Industrial Science and Technology (AIST), Japan
 #      All rights reserved.
 # 
-#  $Id: skel_wrapper.py,v 1.3.4.4 2008-03-06 06:51:10 n-ando Exp $
+#  $Id$
 # 
 
 #

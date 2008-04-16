@@ -6,7 +6,7 @@
  * @author Noriaki Ando <n-ando@aist.go.jp>,
  *         Shinji Kurihara
  *
- * $Id: StringUtilTests.cpp,v 1.1 2006-11-27 08:25:52 n-ando Exp $
+ * $Id$
  *
  */
 

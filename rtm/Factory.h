@@ -13,7 +13,7 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: Factory.h,v 1.5.4.1 2007-12-31 03:08:03 n-ando Exp $
+ * $Id$
  *
  */
 

@@ -2,7 +2,7 @@
 ##---------------------------------------------------------------------------
 ## Makefile.am for rtc-template: rtm template code generator script
 ##
-## $Id: Makefile.am,v 1.3.4.1 2007-07-20 16:16:13 n-ando Exp $
+## $Id$
 ##
 ## $Log: not supported by cvs2svn $
 ## Revision 1.3  2005/09/08 09:21:57  n-ando

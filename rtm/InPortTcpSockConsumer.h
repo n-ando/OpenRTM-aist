@@ -13,7 +13,7 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: InPortTcpSockConsumer.h,v 1.1.2.3 2008-01-13 07:41:50 n-ando Exp $
+ * $Id$
  *
  */
 

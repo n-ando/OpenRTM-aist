@@ -13,7 +13,7 @@
 #          Advanced Industrial Science and Technology (AIST), Japan
 #      All rights reserved.
 # 
-#  $Id: RtmDialog.py,v 1.2 2005-05-16 10:11:01 n-ando Exp $
+#  $Id$
 #
 
 #

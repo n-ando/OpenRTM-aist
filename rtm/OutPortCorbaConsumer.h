@@ -13,7 +13,7 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: OutPortCorbaConsumer.h,v 1.2.4.2 2008-01-13 10:28:27 n-ando Exp $
+ * $Id$
  *
  */
 
