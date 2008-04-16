@@ -100,6 +100,7 @@ clean-local:
 
 maintainer-clean:
 	rm -rf \
+	Makefile \
 	ClassReference \
 	ClassReference-en \
 	IDLReference \
