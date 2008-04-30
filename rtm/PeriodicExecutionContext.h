@@ -1453,8 +1453,19 @@ namespace RTC
     /*!
      * @if jp
      * @brief ExecutionContext の実行状態
+     * true: running, false: stopped
      * @else
      * @brief The running state of ExecutionContext
+     * true: running, false: stopped
+     * @endif
+     */
+    bool m_state;
+
+    /*!
+     * @if jp
+     * @brief ExecutionContext のスレッド実行フラグ
+     * @else
+     * @brief The thread running flag of ExecutionContext
      * @endif
      */
     bool m_running;

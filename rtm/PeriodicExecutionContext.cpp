@@ -32,7 +32,7 @@ namespace RTC
    */
   PeriodicExecutionContext::
   PeriodicExecutionContext()
-    : m_running(false), m_nowait(false)
+    : m_state(false), m_running(false), m_nowait(false)
   {
     m_profile.kind = PERIODIC;
     m_profile.rate = 0.0;
@@ -50,7 +50,7 @@ namespace RTC
   PeriodicExecutionContext::
   PeriodicExecutionContext(DataFlowComponent_ptr owner,
 			   double rate)
-    : m_running(false), m_nowait(false)
+    : m_state(false), m_running(false), m_nowait(false)
   {
     m_profile.kind = PERIODIC;
     m_profile.rate = rate;
@@ -149,7 +149,7 @@ namespace RTC
   CORBA::Boolean PeriodicExecutionContext::is_running()
     throw (CORBA::SystemException)
   {
-    return m_running;
+    return m_state;
   }
   
   /*!
@@ -162,12 +162,13 @@ namespace RTC
   ReturnCode_t PeriodicExecutionContext::start()
     throw (CORBA::SystemException)
   {
-    if (m_running) return RTC::PRECONDITION_NOT_MET;
+    if (m_state) return RTC::PRECONDITION_NOT_MET;
     
     // invoke ComponentAction::on_startup for each comps.
     std::for_each(m_comps.begin(), m_comps.end(), invoke_on_startup());
     
     // change EC thread state
+    m_state = true;
     m_running = true;
     this->open(0);
     
@@ -186,11 +187,14 @@ namespace RTC
   {
     if (!m_running) return RTC::PRECONDITION_NOT_MET;
     
+    // stop thread
+    m_running = false;
+
     // invoke on_shutdown for each comps.
     std::for_each(m_comps.begin(), m_comps.end(), invoke_on_shutdown());
     
     // change EC thread state
-    m_running = false;
+    m_state = false;
     
     return RTC::RTC_OK;
   }
@@ -384,6 +388,9 @@ namespace RTC
     if (it == m_comps.end())
       return RTC::BAD_PARAMETER;
     
+    Comp& c(*it);
+    c._ref->detach_executioncontext(c._sm.ec_id);
+    c._ref = RTC::LightweightRTObject::_nil();
     m_comps.erase(it);
     
     return RTC::RTC_OK;
