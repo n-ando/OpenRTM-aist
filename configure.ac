@@ -13,104 +13,6 @@ dnl
 dnl $Id$
 dnl
 
-dnl
-dnl $Log: not supported by cvs2svn $
-dnl Revision 1.21.2.8  2008/02/09 20:05:33  n-ando
-dnl For wix's wxs file generation
-dnl
-dnl Revision 1.21.2.7  2008/01/14 07:42:21  n-ando
-dnl TAO's tao_idl option was modified from -Ge 1 to -Ge 0.
-dnl
-dnl Revision 1.21.2.6  2008/01/13 15:03:14  n-ando
-dnl --with-sockdataport option was added for TCP socket DataPort.
-dnl
-dnl Revision 1.21.2.5  2008/01/13 07:21:13  n-ando
-dnl - The Version number was updated to 0.4.2.
-dnl - MICO related configuration was modified.
-dnl
-dnl Revision 1.21.2.4  2007/09/21 08:53:45  n-ando
-dnl Some modifications
-dnl - The version number was modified as 0.4.1.
-dnl - Bugs of omniORB's detection script was fixed.
-dnl
-dnl Revision 1.21.2.3  2007/09/19 02:33:31  n-ando
-dnl Unit tests for SyncLIFO and SyncFIFO were added.
-dnl
-dnl Revision 1.21.2.2  2007/07/22 13:48:14  n-ando
-dnl *** empty log message ***
-dnl
-dnl Revision 1.21.2.1  2007/07/20 15:28:35  n-ando
-dnl Modified for win32 porting.
-dnl
-dnl Revision 1.21  2007/04/26 15:40:36  n-ando
-dnl In ace 5.4.7 or later, _REENTRANT flag should be defined explicitly.
-dnl AC_DEFINE for _REENTRANT was added.
-dnl
-dnl Revision 1.20  2007/04/23 07:27:38  n-ando
-dnl ConfigSample example was added.
-dnl
-dnl Revision 1.19  2007/04/13 14:48:14  n-ando
-dnl New example "ExtTrigger" was added.
-dnl
-dnl Revision 1.18  2007/02/07 02:50:39  n-ando
-dnl SimpleService example was recovered.
-dnl
-dnl Revision 1.17  2007/02/04 16:48:57  n-ando
-dnl SeqIO was updated.
-dnl
-dnl Revision 1.16  2007/01/29 07:24:06  n-ando
-dnl AC_LIBTOOL_WIN32_DLL macro was added for Cygwin.
-dnl
-dnl Revision 1.15  2007/01/24 16:05:51  n-ando
-dnl ACE 5.5.* is accepted.
-dnl
-dnl Revision 1.14  2007/01/22 02:00:25  n-ando
-dnl *** empty log message ***
-dnl
-dnl Revision 1.13  2007/01/21 13:40:15  n-ando
-dnl Now python version 2.3.* 2.4.* 2.5.* are allowed.
-dnl
-dnl Revision 1.12  2007/01/21 13:36:45  n-ando
-dnl The boost detecting scripts were deleted temporarily.
-dnl Some trivial fixes.
-dnl
-dnl Revision 1.11  2007/01/14 23:36:47  n-ando
-dnl SimpleIO sub-directory entry was recovered.
-dnl
-dnl Revision 1.10  2007/01/06 18:06:37  n-ando
-dnl Makefile entry for some unit-test classes were added.
-dnl
-dnl Revision 1.9  2006/12/02 18:22:09  n-ando
-dnl Add some tests Makefile entry.
-dnl
-dnl Revision 1.8  2006/11/29 04:13:46  n-ando
-dnl CppUnit tests Makefile entry was added.
-dnl
-dnl Revision 1.7  2006/11/21 08:13:46  n-ando
-dnl MICO's idl flag "--any" was added to handle Any type.
-dnl
-dnl Revision 1.6  2006/11/04 17:04:06  n-ando
-dnl OpenRTM m4 macros were moved to openrtm.m4.
-dnl
-dnl Revision 1.5  2006/04/04 05:57:41  n-ando
-dnl - Dist version is now 0.4.0.
-dnl - ORBit2 support was added.
-dnl - Some ORB detection scripts were modified.
-dnl
-dnl Revision 1.4  2006/04/04 02:17:34  n-ando
-dnl - FP_FIND_FILE macro was quoted to prevent warning.
-dnl
-dnl Revision 1.3  2006/03/31 05:31:17  n-ando
-dnl - Dist version is now 0.3.0.
-dnl
-dnl Revision 1.2  2005/09/06 14:50:05  n-ando
-dnl rtm-skelwrapper added.
-dnl
-dnl Revision 1.1.1.1  2005/05/12 09:06:18  n-ando
-dnl Public release.
-dnl
-dnl 
-
 dnl ------------------------------------------------------------
 dnl  Autoconf initial macros
 dnl ------------------------------------------------------------
@@ -153,8 +55,8 @@ AC_PROG_LIBTOOL
 AC_CHECK_HEADERS([nlist.h stdlib.h unistd.h])
 AC_CHECK_FUNCS([uname])
 
-CPPFLAGS="$CPPFLAGS -I/usr/local/include -Wall"
-CXXFLAGS="$CXXFLAGS -I/usr/local/include -Wall"
+CPPFLAGS="-Wall -fPIC $CPPFLAGS"
+CXXFLAGS="-Wall -fPIC $CXXFLAGS"
 SHLIB_SUFFIX=".so"
 
 AC_SEARCH_LIBS(pthread_create, pthread c_r, , 
@@ -180,6 +82,7 @@ AC_ARG_WITH(orbacus,          [  --with-orbacus=dir              Find ORBacus in
 AC_ARG_WITH(tao,              [  --with-tao=dir                  Find TAO installation below dir])
 AC_ARG_WITH(omniorb,          [  --with-omniorb=dir              Find omniORB installation below dir])
 AC_ARG_WITH(omniorb,          [  --with-orbit2=dir               Find ORBit2 installation below dir])
+AC_ARG_WITH(orbexpress,       [  --with-orbexpress=dir           Find ORBexpress installation below dir])
 AC_ARG_WITH(generic-orb,      [  --with-generic-orb              Use other CORBA 2.3 ORB])
 AC_ARG_WITH(generic-orb-lib,  [  --with-generic-orb-lib	=libs    ORB libraries (-l...)])
 
@@ -286,12 +189,12 @@ dnl ------------------------------------------------------------
 dnl  Use with_includes and with_libs
 dnl ------------------------------------------------------------
 for ipath in $more_incs ; do
-	CPPFLAGS="$CPPFLAGS -I$ipath"
-	CXXFLAGS="$CXXFLAGS -I$ipath"
+	CPPFLAGS="-I$ipath $CPPFLAGS"
+	CXXFLAGS="-I$ipath $CXXFLAGS"
 done
 
 for lpath in $more_libs ; do
-	LDFLAGS="$LDFLAGS -L$lpath"
+	LDFLAGS="-L$lpath $LDFLAGS"
 done
 
 
@@ -341,6 +244,7 @@ dnl ------------------------------------------------------------
 dnl  Find ace/ACE.h
 dnl ------------------------------------------------------------
 AC_MSG_CHECKING(for ace/ACE.h)
+dnl PKG_CHECK_MODULES(ACE,ACE)
 FP_FIND_FILE(ace/ACE.h,
 	$with_ace_includes $more_incs $base_incs $base_dirs,
 	ACE_wrappers include cxx/include)
@@ -396,11 +300,11 @@ hint: <dir>/( ACE_wrappers/ace/lib lib cxx/lib ) will be searched.)
 	# ACE setup complete
 	#
 	# Compiler/Linker options
-	CPPFLAGS="$CPPFLAGS -I$ace_ACE_h_dir"
-	CXXFLAGS="$CXXFLAGS -I$ace_ACE_h_dir"
-	LDFLAGS="$LDFLAGS -L$libACE_so_dir "
-	LIBS="$LIBS -lACE"
-	LDSOLIBS="$LDSOLIBS -lACE"
+	CPPFLAGS="-I$ace_ACE_h_dir $CPPFLAGS"
+	CXXFLAGS="-I$ace_ACE_h_dir $CXXFLAGS"
+	LDFLAGS="-L$libACE_so_dir $LDFLAGS "
+	LIBS="-lACE $LIBS"
+	LDSOLIBS="-lACE $LDSOLIBS"
 	AC_DEFINE([WITH_ACE], [TRUE], [compiled with ACE])
 fi
 
@@ -496,9 +400,11 @@ fi
 if test "x$with_orbit2" != "x" ; then
 	orb_to_use=ORBit2
 fi
+if test "x$with_orbexpress" != "x" ; then
+	orb_to_use=ORBexpress
+fi
 if test "x$orb_to_use" = "x" ; then
 	orb_to_use=omniORB
-#	AC_MSG_ERROR(Specify ORB to use: check ./configure --help)
 fi
 
 echo 'ORB: '$orb_to_use
@@ -630,7 +536,7 @@ EOF
 	fi
 	AC_MSG_RESULT($have_mini_stl)
 	if test "x$have_mini_stl" = "xyes" ; then
-		CPPFLAGS="$CPPFLAGS -I$CORBA_h_dir/ministl"
+		CPPFLAGS="-I$CORBA_h_dir/ministl $CPPFLAGS"
 	fi
 
 	dnl ------------------------------------------------------------
@@ -684,7 +590,7 @@ hint: <dir>/bin will be searched.)
 	dnl ------------------------------------------------------------
 	IDLC=$idl
 	IDL_FLAGS="--c++-skel --poa --no-boa --any"
-	CXXFLAGS="$CXXFLAGS -I$CORBA_h_dir"
+	CXXFLAGS="-I$CORBA_h_dir $CXXFLAGS"
 	LDFLAGS="$LDFLAGS -L$mico_lib_dir"
 	LIBS="$LIBS -lmico$MICOVERSION -lmicocoss$MICOVERSION $micodeps"
 	LDSOLIBS="$LDSOLIBS -lmico$MICOVERSION -lmicocoss$MICOVERSION $micodeps"
@@ -818,8 +724,8 @@ if test "x$have_orbacus" = "xyes" ; then
 
 	# Compiler/Linker options
 	# CPPFLAGS="$CPPFLAGS -I$OB_CORBA_h_dir"
-	CXXFLAGS="$CXXFLAGS -I$OB_CORBA_h_dir"
-	LDFLAGS="$LDFLAGS -L$ob_lib_dir"
+	CXXFLAGS="-I$OB_CORBA_h_dir $CXXFLAGS"
+	LDFLAGS="-L$ob_lib_dir $LDFLAGS"
 
 	if test "x$ob_jtc_lib_dir" != "x" ; then
 		LIBS=" $LIBS -lJTC"
@@ -921,7 +827,7 @@ if test "x$have_orbix" = "xyes" ; then
 	COSNAMES = $enameserv
 	dnl  Compiler/Linker options
 	dnl  CPPFLAGS="$CPPFLAGS -D_REENTRANT -I$orbix_corba_hh_dir"
-	CXXFLAGS="$CXXFLAGS -D_REENTRANT -I$orbix_corba_hh_dir"
+	CXXFLAGS="-D_REENTRANT -I$orbix_corba_hh_dir $CXXFLAGS"
 	LDFLAGS="$LDFLAGS -L$libit_art_so_dir"
 	LIBS="$LIBS -lit_dynany -lit_poa -lit_art -lit_itl -lit_ts -lit_base -lpthread"
 	LDSOLIBS="$LDSOLIBS -lit_dynany -lit_poa -lit_art -lit_itl -lit_ts -lit_base -lpthread"
@@ -1020,11 +926,11 @@ if test "x$have_tao" = "xyes" ; then
 	IDLC=$tao_idl
 	IDL_FLAGS="-DTAO_IDL -Ge 0 $tao_include/tao $tao_include"
 	COSNAMES=$Naming_Service
-	CPPFLAGS="$CPPFLAGS $tao_include"
-	CXXFLAGS="$CXXFLAGS $tao_include"
-	LDFLAGS="$LDFLAGS -L$libTAO_so_dir"
-	LIBS="$LIBS -lTAO -lTAO_CosNaming -lTAO_DynamicAny -lTAO_DynamicInterface"
-	LDSOLIBS="$LDSOLIBS -lTAO -lTAO_CosNaming -lTAO_DynamicAny -lTAO_DynamicInterface"
+	CPPFLAGS="$tao_include $CPPFLAGS"
+	CXXFLAGS="$tao_include $CXXFLAGS"
+	LDFLAGS="-L$libTAO_so_dir $LDFLAGS"
+	LIBS="-lTAO -lTAO_CosNaming -lTAO_DynamicAny -lTAO_DynamicInterface $LIBS "
+	LDSOLIBS="-lTAO -lTAO_CosNaming -lTAO_DynamicAny -lTAO_DynamicInterface $LDSOLIBS"
 	AC_DEFINE([ORB_IS_TAO], [TRUE], [ORB is TAO])
 fi
 
@@ -1130,15 +1036,15 @@ if test "x$have_omniorb" = "xyes" ; then
 	dnl  omniORB setup complete
 	dnl ------------------------------------------------------------
 	IDLC=$omniidl	
-	IDL_FLAGS="-bcxx -Wba -nf -I/usr/local/share/omniORB/idl/ -I/usr/local/share/omniORB/idl/COS"
+#	IDL_FLAGS="-bcxx -Wba -nf -I/usr/local/share/omniORB/idl/ -I/usr/local/share/omniORB/idl/COS"
+	IDL_FLAGS="-bcxx -Wba -nf"
 	COSNAMES=$omniNames
 	dnl  Compiler/Linker options
-	CPPFLAGS="-I$omniORB4_CORBA_h_dir $CPPFLAGS -I/usr/local/include/COS/"
-	CXXFLAGS="-I$omniORB4_CORBA_h_dir $CXXFLAGS -I/usr/local/include/COS/"
-	LDFLAGS="$LDFLAGS -L$libomniORB4_so_dir"
+	CPPFLAGS="-I$omniORB4_CORBA_h_dir $CPPFLAGS"
+	CXXFLAGS="-I$omniORB4_CORBA_h_dir $CXXFLAGS"
+	LDFLAGS="-L$libomniORB4_so_dir $LDFLAGS"
 	LIBS="$LIBS -lomniORB4 -lomnithread -lomniDynamic4"
 	LDSOLIBS="$LDSOLIBS -lomniORB4 -lomnithread -lomniDynamic4"
-	OMNILIBS=$LIBS
 	AC_DEFINE([ORB_IS_OMNIORB], [TRUE], [ORB is omniORB])
 fi
 
@@ -1152,9 +1058,9 @@ dnl------------------------------------------------------------
 dnl ============================================================
 dnl ORBit2 setup
 dnl
-dnl 1. check omniORB4/CORBA.h for omniORB
-dnl 2. check omniORB library "libomniORB4.so"
-dnl 3. check omniORB idl compiler "omniidl"
+dnl 1. check orbit2-config
+dnl 2. check libORBit-2-cpp.so
+dnl 3. check orbit-idl-2
 dnl 4. check omniORB version using libomniORB4.so
 dnl 5. set IDL compile options, CPPFLAGS, LDFLAGS, LIBS etc...
 dnl ============================================================
@@ -1207,14 +1113,14 @@ if test "x$have_orbit2" = "xyes" ; then
 	fi
 
 	dnl ------------------------------------------------------------
-	dnl  omniORB setup complete
+	dnl  ORBit2 setup complete
 	dnl ------------------------------------------------------------
 	IDLC=$orbit_idl_2	
 	IDL_FLAGS="--lang cpp -DORBIT2_IDL"
 	COSNAMES=
 	dnl  Compiler/Linker options
-	CPPFLAGS="$CPPFLAGS $orbit2_cflags -I$orbit2_prefix/include/orbitcpp-2.0"
-	CXXFLAGS="$CXXFLAGS $orbit2_cflags -I$orbit2_prefix/include/orbitcpp-2.0"
+	CPPFLAGS="$orbit2_cflags -I$orbit2_prefix/include/orbitcpp-2.0 $CPPFLAGS"
+	CXXFLAGS="$orbit2_cflags -I$orbit2_prefix/include/orbitcpp-2.0 $CXXFLAGS"
 	LDFLAGS="$LDFLAGS $orbit2_libs"
 	LIBS="$LIBS $orbit2_libs -lORBit-2-cpp -lORBitCosNaming-2-cpp"
 	LDSOLIBS="$LDSOLIBS $orbit2_libs -lORBit-2-cpp -lORBitCosNaming-2-cpp"
@@ -1227,6 +1133,13 @@ fi
 
 dnl end of ORBit2 setup
 dnl------------------------------------------------------------
+
+dnl ------------------------------------------------------------
+dnl ORBexpress
+dnl ------------------------------------------------------------
+
+dnl end of ORBexpres
+dnl ------------------------------------------------------------
 
 
 dnl ------------------------------------------------------------
@@ -1252,6 +1165,9 @@ omniORB)
 ORBit2)
         AC_MSG_RESULT([ORBit2, version $orbit2_version])
         ;;
+ORBexpress)
+        AC_MSG_RESULT([ORBexpress, version $orbexpress_version])
+        ;;
 generic)
         AC_MSG_RESULT([generic ORB, unknown version])
         ORB_SOURCES="event-corba.cc"
@@ -1272,6 +1188,7 @@ AM_CONDITIONAL(ORB_IS_ORBACUS, test x$orb_to_use = xORBacus)
 AM_CONDITIONAL(ORB_IS_OMNIORB, test x$orb_to_use = xomniORB)
 AM_CONDITIONAL(ORB_IS_MICO, test x$orb_to_use = xMICO)
 AM_CONDITIONAL(ORB_IS_ORBIT2, test x$orb_to_use = xORBit2)
+AM_CONDITIONAL(ORB_IS_ORBEXPRESS, test x$orb_to_use = xORBexpress)
 
 
 dnl ------------------------------------------------------------
@@ -1439,16 +1356,28 @@ AC_SUBST(UNITTEST)
 dnl ------------------------------------------------------------
 
 UNIQUE($CPPFLAGS)
-CPPFLAGS=$u_list
+CPPFLAGS=$u_list" "
+CPPFLAGS=`echo $CPPFLAGS | sed -e 's/-I\/usr\/include //g'`
+CPPFLAGS=`echo $CPPFLAGS | sed -e 's/-I\/usr\/include$//g'`
+CPPFLAGS="$more_incs $CPPFLAGS"
 
 UNIQUE($CXXFLAGS)
-CXXFLAGS=$u_list
+CXXFLAGS=$u_list" "
+CXXFLAGS=`echo $CXXFLAGS | sed -e 's/-I\/usr\/include //g'`
+CPPFLAGS=`echo $CXXFLAGS | sed -e 's/-I\/usr\/include$//g'`
+CXXFLAGS="$more_incs $CXXFLAGS"
 
 UNIQUE($LDFLAGS)
-LDFLAGS=$u_list
+LDFLAGS=$u_list" "
+LDFLAGS=`echo $LDFLAGS | sed -e 's/-L\/usr\/lib //g'`
+LDFLAGS=`echo $LDFLAGS | sed -e 's/-L\/usr\/lib$//g'`
+LDFLAGS="$more_libs $LDFLAGS"
 
 UNIQUE($LDSOLIBS)
-LDSOLIBS=$u_list
+LDSOLIBS=$u_list" "
+LDSOLIBS=`echo $LDSOLIBS | sed -e 's/-L\/usr\/lib //g'`
+LDSOLIBS=`echo $LDSOLIBS | sed -e 's/-L\/usr\/lib$//g'`
+LDSOLIBS="$more_libs $LDSOLIBS"
 
 UNIQUE($IDL_FLAGS)
 IDL_FLAGS=$u_list
