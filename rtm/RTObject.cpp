@@ -333,13 +333,13 @@ namespace RTC
   ReturnCode_t RTObject_impl::exit()
     throw (CORBA::SystemException)
   {
+    CORBA_SeqUtil::for_each(m_execContexts,
+	    deactivate_comps(RTC::LightweightRTObject::_duplicate(m_objref)));
     if (m_execContexts.length() > 0)
       {
 	m_execContexts[0]->stop();
 	m_alive = false;
       }
-    CORBA_SeqUtil::for_each(m_execContexts,
-	    deactivate_comps(RTC::LightweightRTObject::_duplicate(m_objref)));
     ReturnCode_t ret(finalize());
     
     return ret;
@@ -1204,6 +1204,7 @@ namespace RTC
   void RTObject_impl::registerPort(PortBase& port)
   {
     m_portAdmin.registerPort(port);
+    port.setOwner(this->getObjRef());
     return;
   }
   
