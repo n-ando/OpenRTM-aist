@@ -295,8 +295,8 @@ namespace RTC
      */
     virtual int sync()
     {
-      std::string::basic_string<_CharT> s(this->pbase(),
-					  this->pptr() - this->pbase());
+      std::basic_string<_CharT> s(this->pbase(),
+				  this->pptr() - this->pbase());
       if (m_pCallBack != NULL)
 	{
 	  (*m_pCallBack)(s.c_str());
@@ -711,7 +711,7 @@ namespace RTC
 	  {
 	    //ACE_Guard<ACE_Thread_Mutex> guard(m_Mutex);
 	    *(this->pptr()) = '\0';
-	    std::string::basic_string<_CharT> tmp(this->pbase(),
+	    std::basic_string<_CharT> tmp(this->pbase(),
 						  this->pptr() - 
 						  this->pbase());
 	    
