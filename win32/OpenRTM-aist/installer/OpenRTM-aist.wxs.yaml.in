@@ -5,6 +5,7 @@ Product:
   Language: "1041"
   Codepage: "932"
   Version: __VERSION__
+  ShortVersion: __SHORT_VERSION__
   Manufacturer: AIST
   UpgradeCode: 572C59A1-4637-4624-AD55-FC4533CE4C8B
 Package:

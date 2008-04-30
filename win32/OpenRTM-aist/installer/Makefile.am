@@ -7,7 +7,9 @@ clean-local:
 	rm -rf *.yaml *.wxs *.wixobj *.msi *~ autowix.cmd
 
 wxs:
-	sed -e 's/__VERSION__/$(VERSION)/g' OpenRTM-aist.wxs.yaml.in > OpenRTM-aist.wxs.yaml
+	sed -e 's/__VERSION__/$(VERSION)/g' OpenRTM-aist.wxs.yaml.in > OpenRTM-aist.wxs.yaml.1
+	sed -e 's/__SHORT_VERSION__/$(RTM_MAJOR_VERSION)\.$(RTM_MINOR_VERSION)/g' OpenRTM-aist.wxs.yaml.1 > OpenRTM-aist.wxs.yaml
+	rm -f OpenRTM-aist.wxs.yaml.1
 	sed -e 's/__VERSION__/$(VERSION)/g' autowix.cmd.in > autowix.cmd
 	$(top_srcdir)/build/makewxs.py wxs \
 		-o OpenRTM-aist.wxs \

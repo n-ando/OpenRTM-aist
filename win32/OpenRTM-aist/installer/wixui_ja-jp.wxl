@@ -177,7 +177,7 @@
 
   <String Id="VerifyReadyDlg_Title">[ProductName] セットアップ</String>
   <String Id="VerifyReadyDlgBannerBitmap">WixUI_Bmp_Banner</String>
-  <String Id="VerifyReadyDlgInstall">インストール(&amp;I)</String>
+  <String Id="VerifyReadyDlgInstall">ｲﾝｽﾄｰﾙ(&amp;I)</String>
   <String Id="VerifyReadyDlgInstallText">インストールを開始するには、[\[]インストール[\]] をクリックしてください。インストールの設定を確認または変更するには、[\[]戻る[\]] をクリックしてください。このウィザードを終了するには、[\[]キャンセル[\]] をクリックしてください。</String>
   <String Id="VerifyReadyDlgInstallTitle">{\WixUI_Font_Title}[ProductName] のインストールの準備完了</String>
   <String Id="VerifyReadyDlgChange">変更(&amp;C)</String>
@@ -204,7 +204,7 @@
   <String Id="WelcomeEulaDlg_Title">[ProductName] セットアップ</String>
   <String Id="WelcomeEulaDlgBitmap">WixUI_Bmp_Dialog</String>
   <String Id="WelcomeEulaDlgLicenseAcceptedCheckBox">「使用許諾契約書」の条項に同意します(&amp;A)</String>
-  <String Id="WelcomeEulaDlgInstall">インストール(&amp;I)</String>
+  <String Id="WelcomeEulaDlgInstall">ｲﾝｽﾄｰﾙ(&amp;I)</String>
   <String Id="WelcomeEulaDlgTitle">{\WixUI_Font_Title}[ProductName] の使用許諾契約書をお読みください</String>
   <String Id="WelcomeEulaDlgAgreementText"/>
 

@@ -23,11 +23,11 @@
     <Directory Id="TARGETDIR" Name="SourceDir">
       <!-- Program Files フォルダ -->
       <Directory Id="ProgramFilesFolder" SourceName="PFILE">
-	<Directory Id="{% Product.Manufacturer %}"
-		   Name="{% Product.Manufacturer %}">
-	  <Directory Id="INSTALLLOCATION"
-		     Name="{% Product.ShortName %}"
-		     LongName="{% Product.Name %}">
+	<Directory Id="INSTALLLOCATION"
+		   Name="{% Product.ShortName %}"
+		   LongName="{% Product.Name %}">
+	  <Directory Id="Version"
+		     Name="{% Product.ShortVersion %}">
 	    <!-- bin -->
 	    <Directory Id="bin" Name="bin">
 	      <Component Id="Bin" Guid="{% Bin.GUID %}">
@@ -36,7 +36,7 @@
 		      LongName="{% file.Name %}" DiskId="1" Compressed="yes"
 		      Source="{% file.Source %}">
 		  {% if file.Name is rtm-naming.bat %}
-		  <Shortcut Id="{% file.Id %}" Directory="AppMenuFolder"
+		  <Shortcut Id="{% file.Id %}" Directory="ExpMenuFolder"
 			    Name="Naming" LongName="Start Naming Service"
 			    Show="normal" WorkingDirectory="examples"/>
 		  {% endif %}
@@ -66,73 +66,75 @@
 	    </Directory><!--end of rtm-->
 	    
 	    <!-- doc -->
-	    <Directory Id="docs" Name="docs">
-	      <!-- Classref_jp -->
-	      <Directory Id="classref_jp" Name="clsref_j" LongName="classref_jp">
-		<Component Id="Classref_jp" Guid="{% Classref_jp.GUID %}">
-	      	  {% for file in Classref_jp.Files %}
-		  <File Id="{% file.Id %}" Name="{% file.ShortName %}"
-			LongName="{% file.Name %}" DiskId="1" Compressed="yes"
-			Source="{% file.Source %}">
-		    {% if file.Name is index.html %}
-		    <Shortcut Id="{% file.Id %}" Directory="DocMenuFolder"
-			      Name="ClsRef_j" LongName="Japanese Class reference"
-			      Show="normal"/>
-		    {% endif %}
-		  </File>
-		  {% endfor %}
-		</Component>
+	    <Directory Id="doc" Name="doc">
+	      <Directory Id="CXXdoc" Name="CXX" LongName="C++">
+		<!-- Classref_jp -->
+		<Directory Id="classref_jp" Name="clsref_j" LongName="classref_jp">
+		  <Component Id="Classref_jp" Guid="{% Classref_jp.GUID %}">
+	      	    {% for file in Classref_jp.Files %}
+		    <File Id="{% file.Id %}" Name="{% file.ShortName %}"
+			  LongName="{% file.Name %}" DiskId="1" Compressed="yes"
+			  Source="{% file.Source %}">
+		      {% if file.Name is index.html %}
+		      <Shortcut Id="{% file.Id %}" Directory="DocMenuFolder"
+				Name="ClsRef_j" LongName="Japanese Class reference"
+				Show="normal"/>
+		      {% endif %}
+		    </File>
+		    {% endfor %}
+		  </Component>
+		</Directory>
+		<!-- Classref_en -->
+		<Directory Id="classref_en" Name="clsref_e" LongName="classref_en">
+		  <Component Id="Classref_en" Guid="{% Classref_en.GUID %}">
+	      	    {% for file in Classref_en.Files %}
+		    <File Id="{% file.Id %}" Name="{% file.ShortName %}"
+			  LongName="{% file.Name %}" DiskId="1" Compressed="yes"
+			  Source="{% file.Source %}">
+		      {% if file.Name is index.html %}
+		      <Shortcut Id="{% file.Id %}" Directory="DocMenuFolder"
+				Name="ClsRef_e" LongName="English Class reference"
+				Show="normal"/>
+		      {% endif %}
+		    </File>
+		    {% endfor %}
+		  </Component>
+		</Directory>
+		<!-- IDLref_jp -->
+		<Directory Id="idlref_jp" Name="idlref_j" LongName="idlref_jp">
+		  <Component Id="IDLref_jp" Guid="{% IDLref_jp.GUID %}">
+	      	    {% for file in IDLref_jp.Files %}
+		    <File Id="{% file.Id %}" Name="{% file.ShortName %}"
+			  LongName="{% file.Name %}" DiskId="1" Compressed="yes"
+			  Source="{% file.Source %}">
+		      {% if file.Name is index.html %}
+		      <Shortcut Id="{% file.Id %}" Directory="DocMenuFolder"
+				Name="IDLRef_j" LongName="Japanese IDL reference"
+				Show="normal"/>
+		      {% endif %}
+		    </File>
+		    {% endfor %}
+		  </Component>
+		</Directory>
+		<!-- IDLref_en -->
+		<Directory Id="idlref_en" Name="idlref_e" LongName="idlref_en">
+		  <Component Id="IDLref_en" Guid="{% IDLref_en.GUID %}">
+	      	    {% for file in IDLref_en.Files %}
+		    <File Id="{% file.Id %}" Name="{% file.ShortName %}"
+			  LongName="{% file.Name %}" DiskId="1" Compressed="yes"
+			  Source="{% file.Source %}">
+		      {% if file.Name is index.html %}
+		      <Shortcut Id="{% file.Id %}" Directory="DocMenuFolder"
+				Name="DILRef_e" LongName="English IDL reference"
+				Show="normal"/>
+		      {% endif %}
+		    </File>
+		    {% endfor %}
+		  </Component>
+		</Directory>
 	      </Directory>
-	      <!-- Classref_en -->
-	      <Directory Id="classref_en" Name="clsref_e" LongName="classref_en">
-		<Component Id="Classref_en" Guid="{% Classref_en.GUID %}">
-	      	  {% for file in Classref_en.Files %}
-		  <File Id="{% file.Id %}" Name="{% file.ShortName %}"
-			LongName="{% file.Name %}" DiskId="1" Compressed="yes"
-			Source="{% file.Source %}">
-		    {% if file.Name is index.html %}
-		    <Shortcut Id="{% file.Id %}" Directory="DocMenuFolder"
-			      Name="ClsRef_e" LongName="English Class reference"
-			      Show="normal"/>
-		    {% endif %}
-		  </File>
-		  {% endfor %}
-		</Component>
-	      </Directory>
-	      <!-- IDLref_jp -->
-	      <Directory Id="idlref_jp" Name="idlref_j" LongName="idlref_jp">
-		<Component Id="IDLref_jp" Guid="{% IDLref_jp.GUID %}">
-	      	  {% for file in IDLref_jp.Files %}
-		  <File Id="{% file.Id %}" Name="{% file.ShortName %}"
-			LongName="{% file.Name %}" DiskId="1" Compressed="yes"
-			Source="{% file.Source %}">
-		    {% if file.Name is index.html %}
-		    <Shortcut Id="{% file.Id %}" Directory="DocMenuFolder"
-			      Name="IDLRef_j" LongName="Japanese IDL reference"
-			      Show="normal"/>
-		    {% endif %}
-		  </File>
-		  {% endfor %}
-		</Component>
-	      </Directory>
-	      <!-- IDLref_en -->
-	      <Directory Id="idlref_en" Name="idlref_e" LongName="idlref_en">
-		<Component Id="IDLref_en" Guid="{% IDLref_en.GUID %}">
-	      	  {% for file in IDLref_en.Files %}
-		  <File Id="{% file.Id %}" Name="{% file.ShortName %}"
-			LongName="{% file.Name %}" DiskId="1" Compressed="yes"
-			Source="{% file.Source %}">
-		    {% if file.Name is index.html %}
-		    <Shortcut Id="{% file.Id %}" Directory="DocMenuFolder"
-			      Name="DILRef_e" LongName="English IDL reference"
-			      Show="normal"/>
-		    {% endif %}
-		  </File>
-		  {% endfor %}
-		</Component>
-	      </Directory>
-	    </Directory>
-
+	    </Directory><!--end of doc-->
+	    
 	    <!-- utils -->
 	    <Directory Id="utils" Name="utils">
 	      <Directory Id="rtc_template" Name="rtc-temp"
@@ -149,24 +151,28 @@
 	    
 	    <!-- examples -->
 	    <Directory Id="examples" Name="examples">
-	      <Component Id="Examples" Guid="{% Examples.GUID %}">
-		{% for file in Examples.Files %}
-		<File Id="{% file.Id %}" Name="{% file.ShortName %}"
-		      LongName="{% file.Name %}" DiskId="1" Compressed="yes"
-		      Source="{% file.Source %}">
-		  <Shortcut Id="{% file.Id %}" Directory="ExpMenuFolder"
-			    Name="{% file.ShortName %}"
-			    LongName="{% file.Name %}"
-			    Show="normal"
-			    WorkingDirectory="examples"
-			    Icon="RTC.ico" IconIndex="0">
-		    {% if file.Name is ConsoleInComp.exe %}
-		    <Icon Id="RTC.ico" SourceFile="Bitmaps\RTC.ico"/>
-		    {% endif %}
-		  </Shortcut>
-		</File>
-		{% endfor %}
-	      </Component>
+	      <Directory Id="CXXexamples" Name="CXX" LongName="C++">
+		<Component Id="Examples" Guid="{% Examples.GUID %}">
+		  {% for file in Examples.Files %}
+		  <File Id="{% file.Id %}" Name="{% file.ShortName %}"
+			LongName="{% file.Name %}" DiskId="1" Compressed="yes"
+			Source="{% file.Source %}">
+		    {% if-any file.Shortcut %}{% if file.Shortcut is True %}
+		    <Shortcut Id="{% file.Id %}" Directory="ExpMenuFolder"
+			      Name="{% file.ShortName %}"
+			      LongName="{% file.Name %}"
+			      Show="normal"
+			      WorkingDirectory="CXXexamples"
+			      Icon="RTC.ico" IconIndex="0">
+		      {% if file.Name is ConsoleInComp.exe %}
+		      <Icon Id="RTC.ico" SourceFile="Bitmaps\RTC.ico"/>
+		      {% endif %}
+		    </Shortcut>
+		    {% endif %}{% endif %}
+		  </File>
+		  {% endfor %}
+		</Component>
+	      </Directory>
 	    </Directory>
 	  </Directory>
 	</Directory><!--end of OpenRTM-aist-->
@@ -174,12 +180,12 @@
 	<Component Id="ENV" Guid="C41EB819-D5E6-11DC-A98E-0090CC744077">
 	  <Environment Id='UpdatePath' Name='PATH' Action='create'
 		       System='yes' Part='last'
-		       Value='[INSTALLLOCATION]bin' />
+		       Value='[bin]' />
 	  <Environment Id='UpdatePath2' Name='PATH' Action='create'
 		       System='yes' Part='all'
-		       Value='[INSTALLLOCATION]utils\rtc-template' />
+		       Value='[rtc_template]' />
 	  <Environment Id='RTM_ROOT' Name='RTM_ROOT' Action='create'
-		       System='yes' Part='all' Value='[INSTALLLOCATION]' />
+		       System='yes' Part='all' Value='[Version]' />
 	</Component>
       </Directory>
 
@@ -194,14 +200,16 @@
 	<Directory Id="AppMenuFolder"
 		   Name="{% Product.ShortName %}"
 		   LongName="{% Product.Name %}">
-	  <Directory Id="ExpMenuFolder" Name="examples">
-	  </Directory>
-	  <Directory Id="DocMenuFolder" Name="document">
+	  <Directory Id="CxxMenuFolder" Name="CXX" LongName="C++">
+	    <Directory Id="ExpMenuFolder" Name="examples">
+	    </Directory>
+	    <Directory Id="DocMenuFolder" Name="document" LongName="documents">
+	    </Directory>
 	  </Directory>
 	</Directory>
       </Directory>
     </Directory>
-
+    
     <Feature Id="Devel" Level="1" Title="Development Environment">
       <ComponentRef Id="Bin"/>
       <ComponentRef Id="Headers"/>

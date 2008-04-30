@@ -4,40 +4,53 @@ Examples:
     - Id: rtc.conf
       ShortName: rtc.cnf
       Name: rtc.conf
-      Source: ..\\examples\\SimpleIO\\rtc.conf
+      Source: ..\\examples\\ConfigSample\\rtc.conf
+    - Id: configsample.conf
+      ShortName: cnfgsmpl.cnf
+      Name: configsample.conf
+      Source: ..\\examples\\ConfigSample\\configsample.conf
     - Id: ConsoleInComp.exe
       ShortName: ConsIn.exe
       Name: ConsoleInComp.exe
-      Source: ..\\examples\\SimpleIO\\Release\\ConsoleInComp.exe
+      Source: ..\\examples\\SimpleIO\\ConsoleInComp\\Release\\ConsoleInComp.exe
+      Shortcut: true
     - Id: ConsoleOutComp.exe
       ShortName: ConsOut.exe
       Name: ConsoleOutComp.exe
-      Source: ..\\examples\\SimpleIO\\Release\\ConsoleOutComp.exe
+      Source: ..\\examples\\SimpleIO\\ConsoleOutComp\\Release\\ConsoleOutComp.exe
+      Shortcut: true
     - Id: SeqInComp.exe
       ShortName: SeqIn.exe
       Name: SeqInComp.exe
-      Source: ..\\examples\\SeqIO\\Release\\SeqInComp.exe
+      Source: ..\\examples\\SeqIO\\SeqInComp\\Release\\SeqInComp.exe
+      Shortcut: true
     - Id: SeqOutComp.exe
       ShortName: ConsOut.exe
       Name: SeqOutComp.exe
-      Source: ..\\examples\\SeqIO\\Release\\SeqOutComp.exe
+      Source: ..\\examples\\SeqIO\\SeqOutComp\\Release\\SeqOutComp.exe
+      Shortcut: true
     - Id: MyServcieProviderComp.exe
       ShortName: SvcProv.exe
       Name: MyServcieProviderComp.exe
-      Source: ..\\examples\\SimpleService\\Release\\MyServiceProviderComp.exe
+      Source: ..\\examples\\SimpleService\\MyServiceProviderComp\\Release\\MyServiceProviderComp.exe
+      Shortcut: true
     - Id: MyServcieConsumerComp.exe
       ShortName: SvcCons.exe
       Name: MyServcieConsumerComp.exe
-      Source: ..\\examples\\SimpleService\\Release\\MyServiceConsumerComp.exe
+      Source: ..\\examples\\SimpleService\\MyServiceConsumerComp\\Release\\MyServiceConsumerComp.exe
+      Shortcut: true
     - Id: ConfigSampleComp.exe
       ShortName: ConfSamp.exe
       Name: ConfigSampleComp.exe
-      Source: ..\\examples\\ConfigSample\\Release\\ConfigSampleComp.exe
+      Source: ..\\examples\\ConfigSample\\ConfigSampleComp\\Release\\ConfigSampleComp.exe
+      Shortcut: true
     - Id: USBCameraAqcuireComp.exe
       ShortName: CamAq.exe
       Name: USBCameraAqcuireComp.exe
-      Source: ..\\examples\\USBcamera\\Release\\USBCameraAcquire.exe
+      Source: ..\\examples\\USBCamera\\USBCameraAcquireComp\\Release\\USBCameraAcquireComp.exe
+      Shortcut: true
     - Id: USBCameraMonitorComp.exe
       ShortName: CamMon.exe
       Name: USBCameraMonitorComp.exe
-      Source: ..\\examples\\USBcamera\\Release\\USBCameraMonitor.exe
+      Source: ..\\examples\\USBCamera\\USBCameraMonitorComp\\Release\\USBCameraMonitorComp.exe
+      Shortcut: true
