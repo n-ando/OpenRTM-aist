@@ -12,7 +12,7 @@
 clean-local:
 	rm -rf USBCameraAcquire USBCameraAcquireComp
 	rm -rf USBCameraMonitor USBCameraMonitorComp
-	rm -rf *.vcproj *.user *.ncb *.suo
+	rm -rf *.vcproj *.user *.ncb *.suo *.sln *.lst
 
 
 vcproj: vc8proj vc9proj
