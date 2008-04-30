@@ -6,11 +6,11 @@
 	>
 	<Tool
 		Name="VCCLCompilerTool"
-		AdditionalIncludeDirectories="&quot;$(ace_include)&quot;;&quot;$(omni_include)&quot;;&quot;$(rtm_include)&quot;;&quot;$(rtmidl_include)&quot;"
+		AdditionalIncludeDirectories="&quot;$(ace_include)&quot;;&quot;$(omni_include)&quot;;&quot;$(rtm_include)&quot;;&quot;$(rtmidl_include)&quot;;$(cv_includes)"
 	/>
 	<Tool
 		Name="VCLinkerTool"
-		AdditionalLibraryDirectories="&quot;$(ace_libdir)&quot;;&quot;$(omni_libdir)&quot;;&quot;$(rtm_libdir)&quot;"
+		AdditionalLibraryDirectories="&quot;$(ace_libdir)&quot;;&quot;$(omni_libdir)&quot;;&quot;$(rtm_libdir)&quot;;&quot;$(cv_libdir)&quot;"
 	/>
 	<UserMacro
 		Name="ace_root"
@@ -22,7 +22,7 @@
 	/>
 	<UserMacro
 		Name="rtm_root"
-		Value="%RTM_ROOT%"
+		Value="..\..\"
 	/>
 	<UserMacro
 		Name="ace_include"
@@ -57,12 +57,12 @@
 		Value="$(rtm_root)\bin"
 	/>
 	<UserMacro
-		Name="rtm_dlibs"
-		Value="aced.lib RTC041d.lib omniORB407_rtd.lib omniDynamic407_rtd.lib omnithread32_rtd.lib advapi32.lib ws2_32.lib mswsock.lib"
+		Name="rtm_lib"
+		Value="ace.lib RTC042.lib omniORB407_rt.lib omniDynamic407_rt.lib omnithread32_rt.lib advapi32.lib ws2_32.lib mswsock.lib cv.lib cvcam.lib highgui.lib cxcore.lib"
 	/>
 	<UserMacro
-		Name="rtm_libs"
-		Value="aced.lib RTC041d.lib omniORB407_rtd.lib omniDynamic407_rtd.lib omnithread32_rtd.lib advapi32.lib ws2_32.lib mswsock.lib"
+		Name="rtm_libd"
+		Value="aced.lib RTC042d.lib omniORB407_rtd.lib omniDynamic407_rtd.lib omnithread32_rtd.lib advapi32.lib ws2_32.lib mswsock.lib cv.lib cvcam.lib highgui.lib cxcore.lib"
 	/>
 	<UserMacro
 		Name="rtm_path"
@@ -73,8 +73,8 @@
 		Value="C:\Program Files\OpenCV"
 	/>
 	<UserMacro
-		Name="cv_include"
-		Value="$(cv_root)"
+		Name="cv_includes"
+		Value="&quot;$(cv_root)\cv\include&quot;;&quot;$(cv_root)\cvaux\include&quot;;&quot;$(cv_root)\cxcore\include&quot;;&quot;$(cv_root)\otherlibs\highgui&quot;;&quot;$(cv_root)\otherlibs\cvcam\include&quot;"
 	/>
 	<UserMacro
 		Name="cv_libdir"
