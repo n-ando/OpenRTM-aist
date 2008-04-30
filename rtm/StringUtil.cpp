@@ -23,6 +23,41 @@
 
 /*!
  * @if jp
+ * @brief 入力ストリームから1行読み込む
+ * @else
+ * @brief Read a line from input stream
+ * @endif
+ */
+int getlinePortable(std::istream& istr, std::string& line)
+{
+  char c;
+  std::stringstream s;
+
+  while (istr.get(c))
+    {
+      if (c == '\n')
+	{
+	  break;
+	}
+      else if (c == '\r')
+	{
+	  if (istr.peek() == '\n')
+	    {
+	      istr.ignore();
+	    }
+	  break;
+	}
+      else
+	{
+	  s << c;
+	}
+    }
+  line = s.str();
+  return line.size();
+}
+
+/*!
+ * @if jp
  * @brief 文字列がエスケープされているか判断する
  * @else
  * @brief Check whether the character is escaped or not

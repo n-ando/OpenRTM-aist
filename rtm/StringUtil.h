@@ -26,6 +26,34 @@
 
 /*!
  * @if jp
+ * @brief 入力ストリームから1行読み込む
+ *
+ * 入力ストリームから1行読み込む。
+ * 入力ストリームはの改行コードはUNIX, Windowsの改行コードのいずれか、
+ * もしくは混在していてもよい。
+ *
+ * @param istr 入力ストリーム
+ * @param line 読み込んだ文字列を格納する変数
+ *
+ * @return 改行文字を除く読み込んだ文字列の長さ
+ *
+ * @else
+ * @brief Read a line from input stream
+ *
+ * This function reads a line from input stream.
+ * UNIX, Windows or mixed line feed code is acceptable.
+ *
+ * @param istr The input stream.
+ * @param line The output variable to store string to be read.
+ *
+ * @return The length of read string except line feed character.
+ *
+ * @endif
+ */
+int getlinePortable(std::istream& istr, std::string& line);
+
+/*!
+ * @if jp
  * @brief 文字列がエスケープされているか判断する
  *
  * 指定された文字がエスケープされているかどうかを判断する。

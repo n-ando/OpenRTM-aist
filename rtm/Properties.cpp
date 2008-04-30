@@ -338,7 +338,7 @@ namespace RTC
     while(!inStream.eof())
       {
 	std::string tmp;
-	getline(inStream, tmp);
+	getlinePortable(inStream, tmp);
 	eraseHeadBlank(tmp);
 	
 	// Skip comments or empty lines
