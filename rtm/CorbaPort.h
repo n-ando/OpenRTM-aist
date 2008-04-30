@@ -508,8 +508,9 @@ namespace RTC
 	    std::string name(nv.name);
 	    if (m_cons[i].name == name)
 	      {
-		CORBA::Object_ptr obj;
-		if (nv.value >>= CORBA::Any::to_object(obj))
+		CORBA::Object_var obj;
+		CORBA::Any::to_object to_obj(obj.inout());
+		if (nv.value >>= to_obj)
 		  {
 		    m_cons[i].consumer.setObject(obj);
 		  }
