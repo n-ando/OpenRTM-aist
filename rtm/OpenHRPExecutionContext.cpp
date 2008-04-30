@@ -31,7 +31,7 @@ extern "C"
 {
   void OpenHRPExecutionContextInit(RTC::Manager* manager)
   {
-    manager->registerECFactory("OpenHRPExecutionContext",
+    manager->registerECFactory("SynchExtTriggerEC",
 			       RTC::ECCreate<RTC::OpenHRPExecutionContext>,
 			       RTC::ECDelete<RTC::OpenHRPExecutionContext>);
     
