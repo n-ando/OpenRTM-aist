@@ -35,11 +35,11 @@
 #include <rtm/RTObject.h>
 #include <rtm/SystemLogger.h>
 
-class Properties;
 
 
 namespace RTC
 {
+  class Properties;
   class CorbaNaming;
   class ModuleManager;
   class NamingManager;
