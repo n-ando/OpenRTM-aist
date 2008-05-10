@@ -151,14 +151,11 @@ esac
 AC_MSG_RESULT($system)
 
 AC_MSG_CHECKING(compiler flags)
-[CFLAGS=`echo $CFLAGS | sed 's/-g//g' | sed 's/-O[0-9]*//g'`]
-[CXXFLAGS=`echo $CXXFLAGS | sed 's/-g//g' | sed 's/-O[0-9]*//g'`]
+[CXXFLAGS=`echo $CXXFLAGS | sed 's/-g //g' | sed 's/-O[0-9]*//g'`]
 if test "x$enable_debug" = "xyes" ; then
-	CFLAGS="$CFLAGS -g"
 	CXXFLAGS="$CXXFLAGS -g"
 elif test "x$enable_optimize" != "xno" ; then
-	CFLAGS="$CFLAGS -O"
-	CXXFLAGS="$CXXFLAGS -O"
+	CXXFLAGS="$CXXFLAGS -O2"
 fi
 if test "x$CXXFLAGS" = "x" ; then
         AC_MSG_RESULT(none)

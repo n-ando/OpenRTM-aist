@@ -10,13 +10,12 @@
 #ifndef CONSOLEOUT_H
 #define CONSOLEOUT_H
 
+#include <rtm/idl/BasicDataTypeSkel.h>
 #include <rtm/Manager.h>
 #include <rtm/DataFlowComponentBase.h>
 #include <rtm/CorbaPort.h>
 #include <rtm/DataInPort.h>
 #include <rtm/DataOutPort.h>
-#include <rtm/idl/BasicDataTypeSkel.h>
-#include <rtm/RingBuffer.h>
 
 // Service implementation headers
 // <rtc-template block="service_impl_h">
@@ -90,7 +89,7 @@ class ConsoleOut
   // DataInPort declaration
   // <rtc-template block="inport_declare">
   TimedLong m_in;
-  InPort<TimedLong, RTC::RingBuffer> m_inIn;
+  InPort<TimedLong> m_inIn;
   
   // </rtc-template>
 
