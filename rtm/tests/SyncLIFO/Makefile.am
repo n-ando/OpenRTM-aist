@@ -9,11 +9,6 @@
 #
 #------------------------------------------------------------
 
-#
-# $Log: not supported by cvs2svn $
-#
-
-
 AUTOMAKE_OPTIONS = 1.9
 
 IDLC = @IDLC@

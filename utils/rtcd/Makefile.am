@@ -3,13 +3,7 @@
 ## Makefile for rtcd
 ##
 ## $Id$
-##
-## $Log: not supported by cvs2svn $
 ##---------------------------------------------------------------------------
-
-##
-##  Process this file with automake to create Makefile.in
-##
 
 AUTOMAKE_OPTIONS = 1.4
 

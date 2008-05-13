@@ -3,16 +3,7 @@
 ## Makefile for rtm-config: rtm configuration information viewer
 ##
 ## $Id$
-##
-## $Log: not supported by cvs2svn $
-## Revision 1.1.1.1  2005/05/12 09:06:18  n-ando
-## Public release.
-##
 ##---------------------------------------------------------------------------
-
-##
-##  Process this file with automake to create Makefile.in
-##
 
 AUTOMAKE_OPTIONS = 1.4
 

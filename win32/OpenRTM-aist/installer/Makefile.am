@@ -1,7 +1,8 @@
+## -*- Makefile -*-
+##---------------------------------------------------------------------------
 ## Makefile.am for win32/OpenRTM-aist/installer
 ##
 ## $Id$
-##
 ##---------------------------------------------------------------------------
 clean-local:
 	rm -rf *.yaml *.wxs *.wixobj *.msi *~ autowix.cmd
@@ -18,8 +19,11 @@ wxs:
 
 dist-hook: wxs
 
-EXTRA_DIST = \
-	OpenRTM-aist.wxs.in \
+EXTRA_DIST =                     \
+	OpenRTM-aist.wxs.in      \
 	OpenRTM-aist.wxs.yaml.in \
-	wixui_ja-jp.wxl \
+	autowix.cmd.in           \
+	wixui_ja-jp.wxl          \
 	License.rtf
+
+DIST_SUBDIRS = Bitmaps

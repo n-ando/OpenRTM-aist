@@ -3,14 +3,6 @@
 ## Makefile.am for swig
 ##
 ## $Id$
-##
-## $Log: not supported by cvs2svn $
-## Revision 1.2  2007/01/21 13:16:33  n-ando
-## PS and PDF file generation was temporarily stopped.
-##
-## Revision 1.1.1.1  2005/05/12 09:06:20  n-ando
-## Public release.
-##
 ##---------------------------------------------------------------------------
 
 AUTOMAKE_OPTIONS = 1.4

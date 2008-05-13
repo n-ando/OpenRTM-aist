@@ -1,18 +1,8 @@
+## -*- Makefile -*-
+##------------------------------------------------------------
 ## Makefile.am for win32/OpenRTM-aist/bin
 ##
 ## $Id$
-##
-## $Log: not supported by cvs2svn $
-## Revision 1.1.2.3  2008/02/09 20:01:08  n-ando
-## For wix's wxs file generation.
-##
-## Revision 1.1.2.2  2007/07/20 20:31:24  n-ando
-## rtm-naming.bat was added.
-##
-## Revision 1.1.2.1  2007/07/20 16:26:26  n-ando
-## Makefile for Win32 source tree management.
-##
-##
 ##---------------------------------------------------------------------------
 
 VER = $(RTM_SHORT_VERSION)

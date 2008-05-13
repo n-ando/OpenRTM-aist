@@ -3,21 +3,6 @@
 ## Makefile.am for rtc-link
 ##
 ## $Id$
-##
-## $Log: not supported by cvs2svn $
-## Revision 1.4  2005/09/08 12:52:03  n-ando
-## - RTCService.idl was added for RTComponent' service.
-##
-## Revision 1.3  2005/05/27 10:08:19  n-ando
-## - InPort/OutPort interface was changed.
-##   rtc-link assembly function is enabled now.
-##
-## Revision 1.2  2005/05/23 07:13:43  n-ando
-## - Now, DESTDIR is supported for rtc-link python modules.
-##
-## Revision 1.1.1.1  2005/05/12 09:06:19  n-ando
-## Public release.
-##
 ##---------------------------------------------------------------------------
 
 AUTOMAKE_OPTIONS = 1.4

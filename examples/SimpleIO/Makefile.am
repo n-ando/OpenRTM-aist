@@ -3,38 +3,9 @@
 ## Makefile.am for ConsoleIn/ConsoleOut components
 ##
 ## $Id$
-##
-## $Log: not supported by cvs2svn $
-## Revision 1.3.4.6  2008/02/29 11:04:58  n-ando
-## A trivial fix.
-##
-## Revision 1.3.4.5  2008/02/29 04:56:46  n-ando
-## A trivial fix.
-##
-## Revision 1.3.4.4  2008/02/26 14:13:35  n-ando
-## Visual Studio project file generation
-##
-## Revision 1.3.4.3  2007/10/09 07:33:15  n-ando
-## Modification for TCP socket data port.
-##
-## Revision 1.3.4.2  2007/09/21 09:21:04  n-ando
-## Now rtc.conf is not deleted in clean.
-##
-## Revision 1.3.4.1  2007/07/22 14:26:35  n-ando
-## *** empty log message ***
-##
-## Revision 1.3  2007/01/21 13:35:17  n-ando
-## A trivial fix.
-##
-## Revision 1.2  2007/01/14 22:52:23  n-ando
-## Updated for OpenRTM-aist-0.4.0.
-##
-## Revision 1.1.1.1  2005/05/12 09:06:20  n-ando
-## Public release.
-##
 ##---------------------------------------------------------------------------
 
-AUTOMAKE_OPTIONS = 1.4
+AUTOMAKE_OPTIONS = 1.9
 
 AM_CPPFLAGS=-I$(top_srcdir) -I$(top_srcdir)/rtm/idl
 AM_LDFLAGS=-L$(top_builddir) -L$(top_builddir)/rtm -L$(top_builddir)/rtm/idl

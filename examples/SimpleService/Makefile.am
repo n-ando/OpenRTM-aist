@@ -3,7 +3,6 @@
 ## Makefile.am for MyServiceProvider/MyServiceConsumer components
 ##
 ## $Id$
-##
 ##---------------------------------------------------------------------------
 
 AUTOMAKE_OPTIONS = 1.4

@@ -3,15 +3,6 @@
 ## Makefile.am for rtm-skelwrapper: rtm skeleton/stub wrapper generator
 ##
 ## $Id$
-##
-## $Log: not supported by cvs2svn $
-## Revision 1.2  2005/09/09 09:31:13  n-ando
-## - ezt, rtm-skelwrapper was included in EXTRA_DIST.
-##
-## Revision 1.1  2005/09/06 14:47:32  n-ando
-## The first version of rtm-skelwrapper.
-##
-##
 ##---------------------------------------------------------------------------
 
 AUTOMAKE_OPTIONS = 1.4

@@ -113,7 +113,8 @@ vcproj_template = """<?xml version="1.0" encoding="shift_jis"?>
 #------------------------------------------------------------
 # ConfigurationType
 #------------------------------------------------------------
-conf_type = {"EXE": 1, "DLL": 2, "NMAKE": 3, "LIB": 4}
+conf_type = {"EXE": 1, "DLL": 2, "NMAKE": 3, "LIB": 4,
+             "RTCEXE": 1, "RTCDLL": 2}
 
 #------------------------------------------------------------
 # Tool set for configuration
@@ -173,6 +174,9 @@ tools = {"EXE":
               "VCFxCopTool",
               "VCPostBuildEventTool"]
          }
+tools["RTCEXE"] = tools["EXE"]
+tools["RTCDLL"] = tools["DLL"]
+
 
 #------------------------------------------------------------
 # Tool element
@@ -220,8 +224,8 @@ Configurations:
 # Debug Configuration
 #------------------------------------------------------------
   - Name: "Debug|Win32"
-    OutputDirectory: "$(ProjectDir)$(ConfigurationName)"
-    IntermediateDirectory: "$(ConfigurationName)"
+    OutputDirectory: $(ProjectDir)$(ConfigurationName)"
+    IntermediateDirectory: "$(ConfiguratioName)"
     ConfigurationType: "1"
 #    InheritedPropertySheets:
     CharacterSet: "0"
@@ -586,7 +590,227 @@ Configurations:
 """
 
 
+rtcexe_yaml="""ProjectType: "Visual C++"
+Version: "__VCVERSION__"
+Name: __PROJECT_NAME__
+ProjectGUID: __GUID__
+RootNamespace: __PROJECT_NAME__
+Keyword: "Win32Proj"
+Configurations:
+#------------------------------------------------------------
+# Debug Configuration
+#------------------------------------------------------------
+  - Name: "Debug|Win32"
+    OutputDirectory: "$(ProjectDir)__PROJECT_NAME__\\\\$(ConfigurationName)"
+    IntermediateDirectory: "__PROJECT_NAME__\\\\$(ConfigurationName)"
+    ConfigurationType: "1"
+    InheritedPropertySheets: "$(SolutionDir)rtm_config.vsprops;$(SolutionDir)user_config.vsprops"
+    CharacterSet: "0"
+    VCPreBuildEventTool:
+      - Key: CommandLine
+        Value: |
+          set PATH=$(rtm_path);%PYTHON_ROOT%\\\\;%PATH%
+          for %%x in (*.idl) do rtm-skelwrapper.py --include-dir="" --skel-suffix=Skel --stub-suffix=Stub --idl-file=%%x
+          for %%x in (*.idl) do $(rtm_idlc) $(rtm_idlflags) %%x
+    VCCLCompilerTool:
+      - Key: Optimization
+        Value: 0
+      - Key: PreprocessorDefinitions
+        Value: "USE_stub_in_nt_dll;WIN32;_DEBUG;_CONSOLE;__WIN32__;__x86__;_WIN32_WINNT=0x0400;__NT__;__OSVERSION__=4;_CRT_SECURE_NO_DEPRECATE"
+      - Key: MinimalRebuild
+        Value: "true"
+      - Key: BasicRuntimeChecks
+        Value: "3"
+      - Key: RuntimeLibrary
+        Value: "3"
+      - Key: UsePrecompiledHeader
+        Value: "0"
+      - Key: WarningLevel
+        Value: "3"
+      - Key: Detect64BitPortabilityProblems
+        Value: "true"
+      - Key: DebugInformationFormat
+        Value: "4"
+    VCLinkerTool:
+      - Key: AdditionalDependencies
+        Value: "$(rtm_libd)"
+      - Key: OutputFile
+        Value: "$(OutDir)\\\\__PROJECT_NAME__.exe"
+      - Key: LinkIncremental
+        Value: "2"
+      - Key: GenerateDebugInformation
+        Value: "true"
+      - Key: SubSystem
+        Value: "1"
+      - Key: TargetMachine
+        Value: "1"
+#------------------------------------------------------------
+# Release Configuration
+#------------------------------------------------------------
+  - Name: "Release|Win32"
+    OutputDirectory: "$(ProjectDir)__PROJECT_NAME__\\\\$(ConfigurationName)"
+    IntermediateDirectory: "__PROJECT_NAME__\\\\$(ConfigurationName)"
+    ConfigurationType: "1"
+    InheritedPropertySheets: "$(SolutionDir)rtm_config.vsprops;$(SolutionDir)user_config.vsprops"
+    CharacterSet: "0"
+    WholeProgramOptimization: "0"
+    VCPreBuildEventTool:
+      - Key: CommandLine
+        Value: |
+          set PATH=$(rtm_path);%PYTHON_ROOT%\\\\;%PATH%
+          for %%x in (*.idl) do rtm-skelwrapper.py --include-dir="" --skel-suffix=Skel --stub-suffix=Stub --idl-file=%%x
+          for %%x in (*.idl) do $(rtm_idlc) $(rtm_idlflags) %%x
+    VCPostBuildEventTool:
+      - Key: CommandLine
+        Value: |
+          if NOT EXIST $(SolutionDir)\\\\components mkdir $(SolutionDir)\\\\components
+          copy $(OutDir)\\\\__PROJECT_NAME__.exe $(SolutionDir)\\\\components
+    VCCLCompilerTool:
+      - Key: PreprocessorDefinitions
+        Value: "USE_stub_in_nt_dll;WIN32;NDEBUG;_CONSOLE;__WIN32__;__x86__;_WIN32_WINNT=0x0400;__NT__;__OSVERSION__=4;_CRT_SECURE_NO_DEPRECATE"
+      - Key: RuntimeLibrary
+        Value: "2"
+      - Key: UsePrecompiledHeader
+        Value: "0"
+      - Key: WarningLevel
+        Value: "3"
+      - Key: Detect64BitPortabilityProblems
+        Value: "true"
+      - Key: DebugInformationFormat
+        Value: "3"
+    VCLinkerTool:
+      - Key: AdditionalDependencies
+        Value: "$(rtm_lib)"
+      - Key: OutputFile
+        Value: "$(OutDir)\\\\__PROJECT_NAME__.exe"
+      - Key: LinkIncremental
+        Value: "1"
+      - Key: GenerateDebugInformation
+        Value: "false"
+      - Key: SubSystem
+        Value: "1"
+      - Key: OptimizeReferences
+        Value: "2"
+      - Key: EnableCOMDATFolding
+        Value: "2"
+      - Key: LinkTimeCodeGeneration
+        Value: "0"
+      - Key: TargetMachine
+        Value: "1"
+"""
 
+rtcdll_yaml="""ProjectType: "Visual C++"
+Version: "__VCVERSION__"
+Name: __PROJECT_NAME__
+ProjectGUID: __GUID__
+RootNamespace: __PROJECT_NAME__
+Keyword: "Win32Proj"
+Configurations:
+#------------------------------------------------------------
+# Debug Configuration
+#------------------------------------------------------------
+  - Name: "Debug|Win32"
+    OutputDirectory: "$(ProjectDir)__PROJECT_NAME__\\\\$(ConfigurationName)"
+    IntermediateDirectory: "__PROJECT_NAME__\\\\$(ConfigurationName)"
+    ConfigurationType: "2"
+    InheritedPropertySheets: "$(SolutionDir)rtm_config.vsprops;$(SolutionDir)user_config.vsprops"
+    CharacterSet: "0"
+    VCPreBuildEventTool:
+      - Key: CommandLine
+        Value: |
+          set PATH=$(rtm_path);%PYTHON_ROOT%\\\\;%PATH%
+          for %%x in (*.idl) do rtm-skelwrapper.py --include-dir="" --skel-suffix=Skel --stub-suffix=Stub --idl-file=%%x
+          for %%x in (*.idl) do $(rtm_idlc) $(rtm_idlflags) %%x
+    VCCLCompilerTool:
+      - Key: Optimization
+        Value: "0"
+      - Key: PreprocessorDefinitions
+        Value: "USE_stub_in_nt_dll;WIN32;_DEBUG;_WINDOWS;_USRDLL;__WIN32__;__NT__;__OSVERSION__=4;__x86__;_WIN32_WINNT=0x0400;_CRT_SECURE_NO_DEPRECATE"
+      - Key: MinimalRebuild
+        Value: "true"
+      - Key: BasicRuntimeChecks
+        Value: "3"
+      - Key: RuntimeLibrary
+        Value: "3"
+      - Key: UsePrecompiledHeader
+        Value: "0"
+      - Key: WarningLevel
+        Value: "3"
+      - Key: Detect64BitPortabilityProblems
+        Value: "true"
+      - Key: DebugInformationFormat
+        Value: "4"
+    VCLinkerTool:
+      - Key: AdditionalDependencies
+        Value: "$(rtm_libd)"
+#      - Key: OutputFile
+#        Value: "$(OutDir)\\\\__PROJECT_NAME__.dll"
+#      - Key: Version
+#        Value: __VERSION__
+      - Key: LinkIncremental
+        Value: "2"
+#      - Key: ModuleDefinitionFile
+#        Value: "$(TargetName).def"
+      - Key: GenerateDebugInformation
+        Value: "true"
+      - Key: SubSystem
+        Value: "2"
+      - Key: TargetMachine
+        Value: "1"
+#------------------------------------------------------------
+# Release Configuration
+#------------------------------------------------------------
+  - Name: "Release|Win32"
+    OutputDirectory: "$(ProjectDir)__PROJECT_NAME__\\\\$(ConfigurationName)"
+    IntermediateDirectory: "__PROJECT_NAME__\\\\$(ConfigurationName)"
+    ConfigurationType: "2"
+    InheritedPropertySheets: "$(SolutionDir)rtm_config.vsprops;$(SolutionDir)user_config.vsprops"
+    CharacterSet: "0"
+    WholeProgramOptimization: "0"
+    VCPreBuildEventTool:
+      - Key: CommandLine
+        Value: |
+          set PATH=$(rtm_path);%PYTHON_ROOT%\\\\;%PATH%
+          for %%x in (*.idl) do rtm-skelwrapper.py --include-dir="" --skel-suffix=Skel --stub-suffix=Stub --idl-file=%%x
+          for %%x in (*.idl) do $(rtm_idlc) $(rtm_idlflags) %%x
+    VCPostBuildEventTool:
+      - Key: CommandLine
+        Value: |
+          if NOT EXIST $(SolutionDir)\\\\components mkdir $(SolutionDir)\\\\components
+          copy $(OutDir)\\\\__PROJECT_NAME__.dll $(SolutionDir)\\\\components
+    VCCLCompilerTool:
+      - Key: PreprocessorDefinitions
+        Value: "USE_stub_in_nt_dll;WIN32;NDEBUG;_WINDOWS;_USRDLL;__WIN32__;__NT__;__OSVERSION__=4;__x86__;_WIN32_WINNT=0x0400;_CRT_SECURE_NO_DEPRECATE"
+      - Key:         RuntimeLibrary
+        Value: "2"
+      - Key:         UsePrecompiledHeader
+        Value: "0"
+      - Key:         WarningLevel
+        Value: "3"
+      - Key:         Detect64BitPortabilityProblems
+        Value: "true"
+      - Key:         DebugInformationFormat
+        Value: "3"
+    VCLinkerTool:
+      - Key: AdditionalDependencies
+        Value: "$(rtm_lib)"
+#      - Key: OutputFile
+#        Value: "$(OutDir)\\\\__PROJECT_NAME__.dll"
+      - Key: LinkIncremental
+        Value: "1"
+#      - Key: ModuleDefinitionFile
+#        Value: "$(TargetName).def"
+      - Key: GenerateDebugInformation
+        Value: "false"
+      - Key: SubSystem
+        Value: "2"
+      - Key: OptimizeReferences
+        Value: "2"
+      - Key: EnableCOMDATFolding
+        Value: "2"
+      - Key: TargetMachine
+        Value: "1"
+"""
 
 
 
@@ -681,7 +905,8 @@ class YamlConfig:
         self.version = version
         self.flist = flist
 
-        self.yaml_template = {"EXE": exe_yaml, "DLL": dll_yaml, "LIB": lib_yaml}
+        self.yaml_template = {"EXE": exe_yaml, "DLL": dll_yaml, "LIB": lib_yaml,
+                              "RTCEXE": rtcexe_yaml, "RTCDLL": rtcdll_yaml}
 
     def load_yamls(self, yfiles):
         text = ""
@@ -713,8 +938,12 @@ class YamlConfig:
             loaded = self.load_yamls(self.flist["yaml"])
 
         if loaded.find("ProjectType:") < 0: # No toplevel config
-            text = self.yaml_template[self.type]
-            text += loaded
+            if self.yaml_template.has_key(self.type):
+                text = self.yaml_template[self.type]
+                text += loaded
+            else:
+                print "type should be specified."
+                usage()
         else:
             text = loaded
 
@@ -842,8 +1071,7 @@ def parse_args(argv):
             if i < argc: type = argv[i]
             else: raise InvalidOption(opt + " needs value")
             type = type.upper()
-            if not (type == "EXE"   or type == "DLL" or 
-                    type == "NMAKE" or type == "LIB"):
+            if not conf_type.has_key(type):
                 raise InvalidOption("unknown type: "
                                     + type + "\n" +
                                     "    --type should be [exe|dll|nmake|lib]")

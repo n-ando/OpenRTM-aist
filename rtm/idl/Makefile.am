@@ -3,46 +3,6 @@
 ## Makefile.am for libRTCSkel
 ##
 ## $Id$
-##
-## $Log: not supported by cvs2svn $
-## Revision 1.9.2.3  2008/02/26 14:18:58  n-ando
-## Visual Studio project file generation
-##
-## Revision 1.9.2.2  2008/01/14 07:58:10  n-ando
-## A trivial fix for TAO.
-##
-## Revision 1.9.2.1  2008/01/13 07:32:05  n-ando
-## The improperly specified libRTCSkel source list was fixed.
-##
-## Revision 1.9  2007/04/13 18:24:09  n-ando
-## OpenRTM specific idl definition (OpenRTM.idl) is added.
-##
-## Revision 1.8  2007/01/21 13:10:26  n-ando
-## To avoid omniORB's stub bug on gcc4, stub creation process was changed.
-##
-## Revision 1.7  2007/01/12 14:40:01  n-ando
-## Some trivial fixes.
-##
-## Revision 1.6  2007/01/09 15:39:10  n-ando
-## Makefile now also builds libRTCStub.la.
-##
-## Revision 1.5  2006/09/11 19:08:18  n-ando
-## OMG's SDO and RTC IDL targets are now included.
-##
-## Revision 1.4  2006/04/04 06:13:11  n-ando
-## - New idl (RTCPackage, SDOPackage) was added for OMG's RTC based
-##   OpenRTM-aist, which verifies consistency of AIST's RTC PIM and PSM.
-##
-## Revision 1.3  2005/09/07 05:11:45  n-ando
-## RTCService.idl was added for RTComponent's service feature.
-##
-## Revision 1.2  2005/05/27 07:40:46  n-ando
-## - InPort/OutPort interface was changed.
-##   InPort/OutPort share SubscriptionProfile structure.
-##
-## Revision 1.1.1.1  2005/05/12 09:06:18  n-ando
-## Public release.
-##
 ##------------------------------------------------------------
 
 AUTOMAKE_OPTIONS = 1.4
@@ -180,10 +140,6 @@ libRTCStub_la_LIBADD = $(LIBS)
 	$(top_srcdir)/build/makewrapper.py $<
 #------------------------------------------------------------
 
-# Extra sources included distribution
-EXTRA_DIST = $(IDL_SOURCES) 
-
-
 
 #------------------------------------------------------------
 # File list for deb/ports packages
@@ -236,3 +192,11 @@ dist-hook: lst vcproj wxs
 # Cleanup
 clean-local:
 	rm -f $(ALL_SRC) *~ *.core *.lst Makefile.old
+
+# Extra sources included distribution
+EXTRA_DIST = \
+	$(IDL_SOURCES) \
+	libRTCSkel.vcproj.yaml
+
+
+

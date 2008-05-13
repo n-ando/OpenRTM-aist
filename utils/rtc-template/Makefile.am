@@ -3,17 +3,6 @@
 ## Makefile.am for rtc-template: rtm template code generator script
 ##
 ## $Id$
-##
-## $Log: not supported by cvs2svn $
-## Revision 1.3  2005/09/08 09:21:57  n-ando
-## - Little bug fix.
-##
-## Revision 1.2  2005/08/26 11:59:17  n-ando
-## Now rtc-template uses ezt (Easy Template).
-##
-## Revision 1.1.1.1  2005/05/12 09:06:18  n-ando
-## Public release.
-##
 ##---------------------------------------------------------------------------
 
 AUTOMAKE_OPTIONS = 1.4

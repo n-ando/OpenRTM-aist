@@ -35,11 +35,9 @@ devenv.com OpenRTM-aist_vc8.sln /rebuild Debug /projectconfig Debug > build_debu
 @rem ============================================================
 @rem build USBCamera examples
 @rem ============================================================
-devenv.com examples\USBCamera\USBCameraAcquire_vc8.vcproj /rebuild Release /projectconfig Release >> build.log
-devenv.com examples\USBCamera\USBCameraMonitor_vc8.vcproj /rebuild Release /projectconfig Release >> build.log
-devenv.com examples\USBCamera\USBCameraAcquire_vc8.vcproj /rebuild Debug /projectconfig Debug >> build.log
-devenv.com examples\USBCamera\USBCameraMonitor_vc8.vcproj /rebuild Debug /projectconfig Debug >> build.log
-
+devenv.com examples\USBCamera\USBCamera_vc8.sln /rebuild Release /projectconfig Release > USBCamera_build_release.log
+devenv.com examples\USBCamera\USBCamera_vc8.sln /rebuild Debug /projectconfig Debug > USBCamera_build_debug.log
 
 cd installer
 call autowix.cmd
+cd ..

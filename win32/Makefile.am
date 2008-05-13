@@ -3,11 +3,6 @@
 ## Makefile.am for win32/OpenRTM-aist
 ##
 ## $Id$
-##
-## $Log: not supported by cvs2svn $
-## Revision 1.1.2.2  2007/07/22 10:59:38  n-ando
-## *** empty log message ***
-##
 ##---------------------------------------------------------------------------
 SUBDIRS = OpenRTM-aist .
 

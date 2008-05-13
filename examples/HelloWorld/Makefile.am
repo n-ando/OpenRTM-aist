@@ -3,8 +3,6 @@
 ## Makefile.am for HelloRTWorld component
 ##
 ## $Id$
-##
-## $Log: not supported by cvs2svn $
 ##---------------------------------------------------------------------------
 
 AUTOMAKE_OPTIONS = 1.4

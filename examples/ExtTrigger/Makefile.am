@@ -3,32 +3,6 @@
 ## Makefile.am for ConsoleIn/ConsoleOut components
 ##
 ## $Id$
-##
-## $Log: not supported by cvs2svn $
-## Revision 1.1.2.4  2008/02/29 04:56:27  n-ando
-## A trivial fix.
-##
-## Revision 1.1.2.3  2008/02/26 14:13:29  n-ando
-## Visual Studio project file generation
-##
-## Revision 1.1.2.2  2007/09/21 10:30:31  n-ando
-## Now rtc.conf is not deleted.
-##
-## Revision 1.1.2.1  2007/07/22 14:26:28  n-ando
-## *** empty log message ***
-##
-## Revision 1.1  2007/04/13 15:00:38  n-ando
-## ExtTrigger sample
-##
-## Revision 1.3  2007/01/21 13:35:17  n-ando
-## A trivial fix.
-##
-## Revision 1.2  2007/01/14 22:52:23  n-ando
-## Updated for OpenRTM-aist-0.4.0.
-##
-## Revision 1.1.1.1  2005/05/12 09:06:20  n-ando
-## Public release.
-##
 ##---------------------------------------------------------------------------
 
 AUTOMAKE_OPTIONS = 1.4

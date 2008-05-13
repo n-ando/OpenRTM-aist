@@ -1468,4 +1468,5 @@ AC_OUTPUT([Makefile
 	win32/OpenRTM-aist/rtm/Makefile
 	win32/OpenRTM-aist/rtm/idl/Makefile
 	win32/OpenRTM-aist/installer/Makefile
+	win32/OpenRTM-aist/installer/Bitmaps/Makefile
 	])

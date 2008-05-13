@@ -1,12 +1,8 @@
+## -*- Makefile -*-
+##---------------------------------------------------------------------------
 ## Makefile.am win32/OpenRTM-aist/docs
 ##
 ## $Id$
-##
-## $Log: not supported by cvs2svn $
-## Revision 1.1.2.1  2007/07/20 16:26:34  n-ando
-## Makefile for Win32 source tree management.
-##
-##
 ##---------------------------------------------------------------------------
 
 ClassReference:

@@ -3,23 +3,6 @@
 ## Makefile.am for SeqIn/SeqOut components
 ##
 ## $Id$
-##
-## $Log: not supported by cvs2svn $
-## Revision 1.2.2.3  2008/02/26 14:13:32  n-ando
-## Visual Studio project file generation
-##
-## Revision 1.2.2.2  2007/09/26 07:43:40  n-ando
-## Some modification for version 0.4.1.
-##
-## Revision 1.2.2.1  2007/07/22 14:26:32  n-ando
-## *** empty log message ***
-##
-## Revision 1.2  2007/02/04 16:47:25  n-ando
-## Updated for 0.4.0.
-##
-## Revision 1.1.1.1  2005/05/12 09:06:20  n-ando
-## Public release.
-##
 ##---------------------------------------------------------------------------
 
 AUTOMAKE_OPTIONS = 1.4

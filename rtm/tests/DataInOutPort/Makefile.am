@@ -9,17 +9,6 @@
 #
 #------------------------------------------------------------
 
-#
-# $Log: not supported by cvs2svn $
-# Revision 1.2  2007/01/12 14:43:13  n-ando
-# Some fixes for distribution control.
-#
-# Revision 1.1  2007/01/06 18:05:13  n-ando
-# *** empty log message ***
-#
-#
-
-
 AUTOMAKE_OPTIONS = 1.9
 
 IDLC = @IDLC@
