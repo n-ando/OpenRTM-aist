@@ -14,10 +14,6 @@
 # $Id$
 #
 
-# $Log: not supported by cvs2svn $
-#
-#
-
 $date = localtime();
 $skel_dir = "rtm/idl/";
 $rtc_dir = "rtm/";

@@ -18,16 +18,6 @@
  *
  */
 
-/*
- * $Log: not supported by cvs2svn $
- * Revision 1.2  2006/10/26 01:34:57  kurihara
- * test program of class ModuelManager.
- *
- * Revision 1.1  2006/09/20 08:52:19  n-ando
- * The first commit.
- *
- */
-
 #ifndef ModuleManager_cpp
 #define ModuleManager_cpp
 

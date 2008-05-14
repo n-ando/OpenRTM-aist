@@ -16,17 +16,6 @@
  *
  */
 
-/*
- * $Log: not supported by cvs2svn $
- * Revision 1.2  2006/11/08 15:57:03  n-ando
- * RTCDataType.idl was moved to BasicDataType.idl.
- *
- * Revision 1.1.1.1  2005/05/12 09:06:18  n-ando
- * Public release.
- *
- *
- */
-
 #ifndef BasicDataType_idl
 #define BasicDataType_idl
 

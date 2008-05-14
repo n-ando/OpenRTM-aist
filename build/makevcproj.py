@@ -15,8 +15,6 @@
 # $Id$
 #
 
-# $Log: not supported by cvs2svn $
-
 import sys
 import getopt
 import ezt

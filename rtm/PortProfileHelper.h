@@ -16,13 +16,6 @@
  *
  */
 
-/*
- * $Log: not supported by cvs2svn $
- * Revision 1.1  2006/10/17 10:23:00  n-ando
- * The first commitment.
- *
- */
-
 #ifndef PortProfileHelper_h
 #define PortProfilehelper_h
 

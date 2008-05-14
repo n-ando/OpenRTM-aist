@@ -16,16 +16,6 @@
 #  $Id$
 # 
 
-#
-#  $Log: not supported by cvs2svn $
-#  Revision 1.2  2005/05/16 10:11:01  n-ando
-#  - Assembly XML data saving/loading function is now enabled. (Experimental)
-#
-#  Revision 1.1.1.1  2005/05/12 09:06:19  n-ando
-#  Public release.
-#
-#
-
 import sys, os, time
 import wx                  # This module uses the new wx namespace
 import wx.html

@@ -16,10 +16,6 @@
 # $Id$
 #
 
-#
-# $Log: not supported by cvs2svn $
-#
-
 dnl ----------------------------------------------------------------------
 dnl proc to look for a file in a number of places
 dnl

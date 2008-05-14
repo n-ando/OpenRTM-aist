@@ -16,11 +16,6 @@
  *
  */
 
-/*
- * $Log: not supported by cvs2svn $
- *
- */
-
 namespace RTM {
   typedef short int RtmRes;
 };

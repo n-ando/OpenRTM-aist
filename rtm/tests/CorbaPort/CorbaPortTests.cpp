@@ -9,11 +9,6 @@
  *
  */
 
-/*
- * $Log: not supported by cvs2svn $
- *
- */
-
 #ifndef CorbaPort_cpp
 #define CorbaPort_cpp
 

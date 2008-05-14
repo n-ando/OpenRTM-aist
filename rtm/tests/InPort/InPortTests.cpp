@@ -18,14 +18,6 @@
  *
  */
 
-/*
- * $Log: not supported by cvs2svn $
- * Revision 1.1  2006/11/27 08:32:39  n-ando
- * TestSuites are devided into each directory.
- *
- *
- */
-
 #ifndef InPort_cpp
 #define InPort_cpp
 

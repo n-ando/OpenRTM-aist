@@ -16,10 +16,6 @@
 #  $Id$
 # 
 
-#
-#  $Log: not supported by cvs2svn $
-#
-
 from wxPython.wx import *
 import RtmFrame
 import rtimages

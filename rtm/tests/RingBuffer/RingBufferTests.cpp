@@ -18,14 +18,6 @@
  *
  */
 
-/*
- * $Log: not supported by cvs2svn $
- * Revision 1.1  2006/11/27 08:37:03  n-ando
- * TestSuites are devided into each directory.
- *
- *
- */
-
 #ifndef RingBuffer_cpp
 #define RingBuffer_cpp
 

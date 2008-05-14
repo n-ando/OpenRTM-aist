@@ -18,14 +18,6 @@
  *
  */
 
-/*
- * $Log: not supported by cvs2svn $
- * Revision 1.2  2006/10/24 03:08:15  kurihara
- *
- * test program for ObjectManager class
- *
- */
-
 #ifndef ObjectManager_cpp
 #define ObjectManager_cpp
 

@@ -9,11 +9,6 @@
  *
  */
 
-/*
- * $Log: not supported by cvs2svn $
- *
- */
-
 #ifndef NullBuffer_cpp
 #define NullBuffer_cpp
 

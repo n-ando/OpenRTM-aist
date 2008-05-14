@@ -16,11 +16,6 @@
  *
  */
 
-/*
- * $Log: not supported by cvs2svn $
- *
- */
-
 %module RTCInPort
 
 

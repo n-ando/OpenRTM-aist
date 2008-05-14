@@ -9,11 +9,6 @@
  *
  */
 
-/*
- * $Log: not supported by cvs2svn $
- *
- */
-
 #ifndef SyncFIFO_cpp
 #define SyncFIFO_cpp
 

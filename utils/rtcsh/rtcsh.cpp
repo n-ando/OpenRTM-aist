@@ -16,12 +16,6 @@
  *
  */
 
-/*
- * $Log: not supported by cvs2svn $
- *
- */
-
-
 #include <iostream>
 #include <boost/regex.hpp>
 #include <boost/tokenizer.hpp>

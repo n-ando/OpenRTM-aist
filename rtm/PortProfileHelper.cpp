@@ -16,16 +16,6 @@
  *
  */
 
-/*
- * $Log: not supported by cvs2svn $
- * Revision 1.2  2006/10/17 19:04:59  n-ando
- * Trivial format fix.
- *
- * Revision 1.1  2006/10/17 10:22:52  n-ando
- * The first commitment.
- *
- */
-
 #include "rtm/PortProfileHelper.h"
 
 namespace RTC

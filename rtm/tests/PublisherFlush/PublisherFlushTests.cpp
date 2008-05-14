@@ -9,14 +9,6 @@
  *
  */
 
-/*
- * $Log: not supported by cvs2svn $
- * Revision 1.1  2006/12/18 06:51:31  n-ando
- * The first commitment.
- *
- *
- */
-
 #ifndef PublisherFlush_cpp
 #define PublisherFlush_cpp
 

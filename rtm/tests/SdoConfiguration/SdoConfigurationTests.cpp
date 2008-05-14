@@ -18,22 +18,6 @@
  *
  */
 
-/*
- * $Log: not supported by cvs2svn $
- * Revision 1.1  2006/11/27 08:26:07  n-ando
- * TestSuites are devided into each directory.
- *
- * Revision 1.3  2006/11/10 07:13:44  kurihara
- * A test after SdoConfiguration class revision.
- *
- * Revision 1.2  2006/11/09 09:29:47  kurihara
- * A test after SdoConfiguration class revision.
- *
- * Revision 1.1  2006/11/01 11:23:35  kurihara
- * test program for SdoConfiguration class.
- *
- */
-
 #ifndef SdoConfiguration_cpp
 #define SdoConfiguration_cpp
 

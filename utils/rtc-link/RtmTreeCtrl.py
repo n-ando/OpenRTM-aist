@@ -15,24 +15,6 @@
 #  $Id$
 # 
 
-#
-#  $Log: not supported by cvs2svn $
-#  Revision 1.4  2005/05/27 15:51:31  n-ando
-#  - Assembly save/load function and creating component on name tree function
-#    is now enabled.
-#
-#  Revision 1.3  2005/05/27 10:08:19  n-ando
-#  - InPort/OutPort interface was changed.
-#    rtc-link assembly function is enabled now.
-#
-#  Revision 1.2  2005/05/16 10:11:01  n-ando
-#  - Assembly XML data saving/loading function is now enabled. (Experimental)
-#
-#  Revision 1.1.1.1  2005/05/12 09:06:19  n-ando
-#  Public release.
-#
-#
-
 # Basic modules
 import string
 import time

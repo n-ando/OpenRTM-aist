@@ -6,8 +6,6 @@
 #
 # $Id$
 #
-# $Log: not supported by cvs2svn $
-#
 
 omniORB_spec () {
 cat << EOF

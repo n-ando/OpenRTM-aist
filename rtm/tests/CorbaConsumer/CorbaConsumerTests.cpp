@@ -9,14 +9,6 @@
  *
  */
 
-/*
- * $Log: not supported by cvs2svn $
- * Revision 1.1  2006/11/27 08:30:48  n-ando
- * TestSuites are devided into each directory.
- *
- *
- */
-
 #ifndef CorbaConsumer_cpp
 #define CorbaConsumer_cpp
 

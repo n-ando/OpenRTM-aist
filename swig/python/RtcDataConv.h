@@ -16,11 +16,6 @@
  *
  */
 
-/*
- * $Log: not supported by cvs2svn $
- *
- */
-
 #ifndef RtcDataConv_h
 #define RtcDataConv_h
 

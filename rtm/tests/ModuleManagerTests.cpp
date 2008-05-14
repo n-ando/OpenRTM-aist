@@ -8,10 +8,6 @@
  *
  */
 
-/*
- * $Log: not supported by cvs2svn $
- */
-
 #include <cppunit/ui/text/TestRunner.h>
 #include <cppunit/TextOutputter.h>
 #include <cppunit/extensions/TestFactoryRegistry.h>

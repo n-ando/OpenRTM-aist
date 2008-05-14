@@ -16,10 +16,6 @@
 #  $Id$
 #
 
-#
-# $Log: not supported by cvs2svn $
-#
-
 # dtdValidator.py -- xml with DTD Validator
 # (C)K.Kitagaki 2004.8.26
 #

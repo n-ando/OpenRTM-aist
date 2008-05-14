@@ -15,23 +15,6 @@
 #
 # $Id$
 #
-# $Log: not supported by cvs2svn $
-# Revision 1.6  2006/11/30 10:29:25  n-ando
-# Now two type of Autotools version number is supported.
-# - Linux may uses automake-1.9 but FreeBSD may uses automake19
-# "libtool.m4" search directories were added for Linux.
-#
-# Revision 1.5  2006/11/04 16:31:30  n-ando
-# This script was rewritten.
-# - Autotools installation would be checked before reconfiguration.
-# - Automatically generated files clean-up script was added.
-# - Reconfiguration uses autoreconf now.
-#
-# Revision 1.4  2006/04/04 02:20:38  n-ando
-# - Some fixes to prevent warning.
-#
-#
-#
 
 #
 # autogen [--clean] [--prepare]

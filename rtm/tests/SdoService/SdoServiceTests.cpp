@@ -10,11 +10,6 @@
  *
  */
 
-/*
- * $Log: not supported by cvs2svn $
- *
- */
-
 #ifndef SdoService_cpp
 #define SdoService_cpp
 

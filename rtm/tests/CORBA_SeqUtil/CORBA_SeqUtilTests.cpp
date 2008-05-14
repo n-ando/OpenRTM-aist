@@ -18,14 +18,6 @@
  *
  */
 
-/*
- * $Log: not supported by cvs2svn $
- * Revision 1.1  2006/10/31 13:10:51  kurihara
- *
- * test program for CORBA_SeqUtil.h
- *
- */
-
 #ifndef CORBA_SeqUtil_cpp
 #define CORBA_SeqUtil_cpp
 

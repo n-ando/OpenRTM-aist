@@ -17,10 +17,6 @@
  *
  */
 
-/*
- * $Log: not supported by cvs2svn $
- */
-
 #ifndef SyncFIFO_h
 #define SyncFIFO_h
 

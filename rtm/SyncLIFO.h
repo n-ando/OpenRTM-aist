@@ -17,10 +17,6 @@
  *
  */
 
-/*
- * $Log: not supported by cvs2svn $
- */
-
 #ifndef SyncLIFO_h
 #define SyncLIFO_h
 

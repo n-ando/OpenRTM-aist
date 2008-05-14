@@ -9,11 +9,6 @@
  *
  */
 
-/*
- * $Log: not supported by cvs2svn $
- *
- */
-
 #ifndef DataInOutPort_cpp
 #define DataInOutPort_cpp
 

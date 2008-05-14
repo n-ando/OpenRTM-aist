@@ -16,26 +16,6 @@
 #  $Id$
 #
 
-#
-#  $Log: not supported by cvs2svn $
-#  Revision 1.4  2005/09/08 09:23:36  n-ando
-#  - A bug fix for merge function.
-#
-#  Revision 1.3  2005/09/06 14:36:53  n-ando
-#  rtc-template's command options and data structure for ezt (Easy Template)
-#  are changed for RTComponent's service features.
-#  Now rtc-template can generate services' skeletons, stubs and
-#  implementation files.
-#  The implementation code generation uses omniidl's IDL parser.
-#
-#  Revision 1.2  2005/08/26 12:01:15  n-ando
-#  Now rtc-template uses ezt (Easy Template).
-#
-#  Revision 1.1.1.1  2005/05/12 09:06:18  n-ando
-#  Public release.
-#
-#
-
 import re
 import os
 import time

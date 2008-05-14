@@ -43,20 +43,6 @@
 #
 # done
 
-
-# $Log: not supported by cvs2svn $
-# Revision 1.3  2007/01/14 19:37:17  n-ando
-# Unnecessary tab in Makefile.am template was deleted.
-#
-# Revision 1.2  2006/11/27 07:23:46  n-ando
-# Embedded CVS tags's dollar character was replaced.
-# A sample test case "test_case0" was added.
-#
-# Revision 1.1  2006/11/21 17:56:00  n-ando
-# CppUnit environment setup script was added.
-#
-#
-
 import sys
 import os
 import yat

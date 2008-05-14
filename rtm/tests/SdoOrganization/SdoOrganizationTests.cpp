@@ -18,11 +18,6 @@
  *
  */
 
-/*
- * $Log: not supported by cvs2svn $
- *
- */
-
 #ifndef SdoOrganization_cpp
 #define SdoOrganization_cpp
 

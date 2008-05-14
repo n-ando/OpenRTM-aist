@@ -16,55 +16,6 @@
 #  $Id$
 #
 
-#
-#  $Log: not supported by cvs2svn $
-#  Revision 1.8.2.2  2007/07/23 08:06:27  n-ando
-#  Modified for win32 porting about rtm-config.
-#
-#  Revision 1.8.2.1  2007/07/20 17:29:03  n-ando
-#  A fix for win32 porting.
-#
-#  Revision 1.8  2007/04/27 00:56:35  n-ando
-#  Example shown in help message was modified for new version.
-#
-#  Revision 1.7  2007/04/23 07:31:28  n-ando
-#  Now "--conf" option can accept scope resolution operator of C++.
-#
-#  Revision 1.6  2007/04/23 01:41:21  n-ando
-#  New option "--config" and configuration template code were added.
-#
-#  Revision 1.5  2007/01/11 07:42:25  n-ando
-#  Modified for OMG RTC specificatin and OpenRTM-aist-0.4.0
-#  - Some command option was chaged and removed.
-#  - Now empty Struct class is used instead of *Profile classes for ezt dict.
-#  - Some bugs were fixed.
-#
-#  Revision 1.4  2005/09/08 09:24:18  n-ando
-#  - A bug fix for merge function.
-#
-#  Revision 1.3  2005/09/06 14:37:40  n-ando
-#  rtc-template's command options and data structure for ezt (Easy Template)
-#  are changed for RTComponent's service features.
-#  Now rtc-template can generate services' skeletons, stubs and
-#  implementation files.
-#  The implementation code generation uses omniidl's IDL parser.
-#
-#  Revision 1.2  2005/08/26 11:32:26  n-ando
-#  "rtc-template" was completely rewritten to use ezt (Easy Template) module.
-#  "ezt" module is originally included in "Subversion".
-#
-#  Now template code generator modules, which are named xxx_gen.py, are
-#  automatically imported from rtc-template, and command options and help
-#  menu are automatically generated.
-#
-#  New template code generator has to inherit base_gen class in
-#  "base_gen.py" module to utilize this framework.
-#
-#  Revision 1.1.1.1  2005/05/12 09:06:18  n-ando
-#  Public release.
-#
-#
-
 import getopt, sys
 import re
 import os

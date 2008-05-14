@@ -17,10 +17,6 @@
  *
  */
 
-/*
- * $Log: not supported by cvs2svn $
- */
-
 #include <string>
 #include <fstream>
 #include <cppunit/ui/text/TestRunner.h>

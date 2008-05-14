@@ -16,10 +16,6 @@
 # $Id$
 #
 
-#
-# $Log: not supported by cvs2svn $
-#
-
 # includes libtool macros
 m4_include([libtool.m4])
 

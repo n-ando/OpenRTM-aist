@@ -6,8 +6,6 @@
 #
 # $Id$
 #
-# $Log: not supported by cvs2svn $
-#
 
 PACKAGEROOT='ftp://ftp.jp.freebsd.org'
 export PACKAGEROOT

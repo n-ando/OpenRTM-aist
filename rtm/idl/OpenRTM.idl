@@ -16,13 +16,6 @@
  *
  */
 
-/*
- * $Log: not supported by cvs2svn $
- * Revision 1.1  2007/04/13 18:17:59  n-ando
- * OpenRTM specific interface definition.
- *
- */
-
 #include "RTC.idl"
 
 #pragma prefix "openrtm.aist.go.jp"

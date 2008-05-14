@@ -9,12 +9,6 @@
 # $Id$
 #
 
-# $Log: not supported by cvs2svn $
-# Revision 1.1.2.1  2008/02/01 02:48:50  n-ando
-# YAML template text processor
-#
-#
-
 #
 # Usage:
 #------------------------------------------------------------

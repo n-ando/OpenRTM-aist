@@ -16,25 +16,6 @@
 #  $Id$
 # 
 
-#
-#  $Log: not supported by cvs2svn $
-#  Revision 1.3.4.3  2008/02/29 11:10:28  n-ando
-#  USE_stub_in_nt_dll is undefed in case of WIN32 and !_USERDLL
-#
-#  Revision 1.3.4.1  2008/01/13 07:32:56  n-ando
-#  omniORB wrapper code was modified.
-#
-#  Revision 1.3  2007/01/21 18:12:08  n-ando
-#  A trivial bug fix.
-#
-#  Revision 1.2  2007/01/11 08:59:35  n-ando
-#  Now wrapper codes support ORBit-cpp.
-#
-#  Revision 1.1  2005/09/06 14:47:56  n-ando
-#  The first version of rtm-skelwrapper.
-#
-#
-
 import yat
 import re
 import sys

@@ -6,14 +6,6 @@
 #
 # $Id$
 #
-# $Log: not supported by cvs2svn $
-# Revision 1.2  2007/04/13 14:49:22  n-ando
-# Some trivial fix.
-#
-# Revision 1.1  2006/07/18 08:36:07  n-ando
-# OpenRTM-aist dependent packages install script for Fedora Core 6.
-#
-#
 
 omniORB_spec () {
 cat << EOF

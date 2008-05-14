@@ -18,24 +18,6 @@
  *
  */
 
-/*
- * $Log: not supported by cvs2svn $
- * Revision 1.2  2007/01/12 14:44:36  n-ando
- * Some fixes for distribution control.
- *
- * Revision 1.1  2006/11/27 08:34:18  n-ando
- * TestSuites are devided into each directory.
- *
- * Revision 1.2  2006/11/14 02:21:09  kurihara
- *
- * test_deletePortByName() and test_finalizePorts() were added.
- *
- * Revision 1.1  2006/11/13 04:18:45  kurihara
- *
- * test program for PortAdmin class.
- *
- */
-
 #ifndef PortAdmin_cpp
 #define PortAdmin_cpp
 

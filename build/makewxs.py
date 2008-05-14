@@ -15,9 +15,6 @@
 # $Id$
 #
 
-# $Log: not supported by cvs2svn $
-#
-
 import yaml
 import yat
 import sys

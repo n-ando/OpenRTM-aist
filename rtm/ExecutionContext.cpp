@@ -15,13 +15,6 @@
  *
  */
 
-/*
- * $Log: not supported by cvs2svn $
- * Revision 1.1  2007/01/21 13:43:13  n-ando
- * *** empty log message ***
- *
- */
-
 #include <rtm/ExecutionContext.h>
 #include <rtm/CORBA_SeqUtil.h>
 

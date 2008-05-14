@@ -9,14 +9,6 @@
  *
  */
 
-/*
- * $Log: not supported by cvs2svn $
- * Revision 1.1  2006/12/18 06:51:55  n-ando
- * The first commitment.
- *
- *
- */
-
 #ifndef PublisherPeriodic_cpp
 #define PublisherPeriodic_cpp
 

@@ -15,32 +15,6 @@
 # $Id$
 #
 
-# $Log: not supported by cvs2svn $
-# Revision 1.6.4.1  2008/01/13 07:21:41  n-ando
-# omniORB wrapper code was modified.
-#
-# Revision 1.6  2007/01/16 18:35:55  n-ando
-# Escape the compile error of omniORB's stub/skel on gcc4.
-#
-# Revision 1.5  2007/01/12 14:28:31  n-ando
-# Directory to create output files was the same directory of IDL file.
-# Now it is current directory.
-#
-# Revision 1.4  2006/11/04 16:34:47  n-ando
-# Some trivial fixes.
-#
-# Revision 1.3  2006/09/11 18:33:14  n-ando
-# A prefix of include directory can be specified with command options.
-#
-# Revision 1.2  2006/03/31 05:26:34  n-ando
-# - Almost all functions are rewritten to use ezt.py (Easy Template module).
-# - Now makewrapper.py uses ezt.py (Easy Template module).
-#
-# Revision 1.1.1.1  2005/05/12 09:06:18  n-ando
-# Public release.
-#
-#
-#
 import sys
 import os
 import re

@@ -18,19 +18,6 @@
  *
  */
 
-/*
- * $Log: not supported by cvs2svn $
- * Revision 1.1  2006/11/27 08:26:03  n-ando
- * TestSuites are devided into each directory.
- *
- * Revision 1.2  2006/11/02 12:27:09  kurihara
- *
- * StateMachineTest is modified by kurihara.
- *
- * Revision 1.1  2006/10/26 08:56:56  n-ando
- * The first commitment.
- */
-
 #ifndef StateMachine_cpp
 #define StateMachine_cpp
 

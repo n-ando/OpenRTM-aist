@@ -9,14 +9,6 @@
  *
  */
 
-/*
- * $Log: not supported by cvs2svn $
- * Revision 1.1  2006/11/29 04:26:28  n-ando
- * CppUnit tests for OutPort.
- *
- *
- */
-
 #ifndef OutPort_cpp
 #define OutPort_cpp
 

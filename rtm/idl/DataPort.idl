@@ -18,12 +18,6 @@
  *
  */
 
-/*
- * $Log: not supported by cvs2svn $
- *
- */
-
-
 #ifndef DataInPort_idl
 #define DataInPort_idl
 

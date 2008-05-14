@@ -14,11 +14,6 @@
 #  $Id$
 # 
 
-#
-#  $Log: not supported by cvs2svn $
-# 
-
-
 hostname=`hostname`
 currdir=`pwd`
 

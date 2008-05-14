@@ -16,13 +16,6 @@
 #  $Id$
 #
 
-#
-#  $Log: not supported by cvs2svn $
-#  Revision 1.1.1.1  2005/05/12 09:06:19  n-ando
-#  Public release.
-#
-#
-
 # RtmDialog.py               Created on: 2005/01/20
 #                            Author    : Tsuyoshi Tanabe
 

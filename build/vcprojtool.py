@@ -15,15 +15,6 @@
 # $Id$
 #
 
-# $Log: not supported by cvs2svn $
-# Revision 1.1.2.2  2008/02/27 11:31:20  n-ando
-# Bug fix
-#
-# Revision 1.1.2.1  2008/02/26 14:00:57  n-ando
-# Visual Studio project file generator
-#
-#
-
 #------------------------------------------------------------
 # Generic vcproj template
 #------------------------------------------------------------

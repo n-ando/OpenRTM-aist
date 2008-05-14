@@ -15,12 +15,6 @@
 # $Id$
 #
 
-# $Log: not supported by cvs2svn $
-# Revision 1.1.2.1  2008/02/29 05:05:45  n-ando
-# VC's solution generator tool.
-#
-#
-
 import sys
 import re
 import yaml

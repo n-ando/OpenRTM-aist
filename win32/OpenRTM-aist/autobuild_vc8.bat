@@ -14,14 +14,6 @@
 @rem $Id$
 @rem
 
-@rem $Log: not supported by cvs2svn $
-@rem Revision 1.1.2.2  2008/02/09 20:01:28  n-ando
-@rem For wix's wxs file generation.
-@rem
-@rem Revision 1.1.2.1  2008/01/25 10:53:30  n-ando
-@rem Automatic build script for Visual Studio
-@rem
-
 @set RTM_ROOT=%~dp0
 @set PATH=C:\WINDOWS\Microsoft.NET\Framework\v2.0.50727;"C:\Program Files\Microsoft Visual Studio 8\Common7\IDE";%PATH%
 

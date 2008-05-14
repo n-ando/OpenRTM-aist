@@ -16,10 +16,6 @@
 #  $Id$
 # 
 
-#
-#  $Log: not supported by cvs2svn $
-#
-
 import sys
 #sys.path.append("/usr/local/lib/python2.3/site-packages")
 import omniORB.CORBA as CORBA

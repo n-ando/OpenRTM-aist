@@ -16,10 +16,6 @@
  *
  */
 
-/*
- * $Log: not supported by cvs2svn $
- */
-
 #ifndef ExecutionContext_h
 #define ExecutionContext_h
 

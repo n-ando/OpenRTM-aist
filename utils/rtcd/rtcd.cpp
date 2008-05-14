@@ -16,11 +16,6 @@
  *
  */
 
-/*
- * $Log: not supported by cvs2svn $
- *
- */
-
 #include <iostream>
 #include <rtm/RtcManager.h>
 

@@ -6,14 +6,6 @@
 #
 # $Id$
 #
-# $Log: not supported by cvs2svn $
-# Revision 1.2  2006/11/04 16:35:47  n-ando
-# Autotools installation was added.
-#
-# Revision 1.1  2006/07/18 08:36:32  n-ando
-# OpenRTM-aist dependent packages install script for FreeBSD 6.0.
-#
-#
 
 PACKAGEROOT='ftp://ftp.jp.freebsd.org'
 export PACKAGEROOT

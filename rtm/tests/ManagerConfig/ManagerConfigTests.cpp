@@ -9,11 +9,6 @@
  *
  */
 
-/*
- * $Log: not supported by cvs2svn $
- *
- */
-
 #ifndef ManagerConfig_cpp
 #define ManagerConfig_cpp
 

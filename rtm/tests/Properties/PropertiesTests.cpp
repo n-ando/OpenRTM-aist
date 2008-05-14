@@ -10,14 +10,6 @@
  *
  */
 
-/*
- * $Log: not supported by cvs2svn $
- * Revision 1.3  2006/10/18 05:59:55  kurihara
- *
- * test_list(),test_load(),test_store() added and It is a revision generally.
- *
- */
-
 #ifndef Properties_cpp
 #define Properties_cpp
 

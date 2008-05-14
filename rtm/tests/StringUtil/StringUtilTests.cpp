@@ -10,18 +10,6 @@
  *
  */
 
-/*
- * $Log: not supported by cvs2svn $
- * Revision 1.2  2006/10/23 07:38:37  n-ando
- * Some fixes for split() tests.
- *
- * Revision 1.1  2006/10/23 06:10:17  kurihara
- *
- * test program for StringUtil class.
- *
- *
- */
-
 #ifndef StringUtil_cpp
 #define StringUtil_cpp
 

@@ -18,24 +18,6 @@
  *
  */
 
-/*
- * $Log: not supported by cvs2svn $
- * Revision 1.2  2007/01/12 14:44:43  n-ando
- * Some fixes for distribution control.
- *
- * Revision 1.1  2006/11/27 08:35:12  n-ando
- * TestSuites are devided into each directory.
- *
- * Revision 1.2  2006/11/13 12:30:06  kurihara
- *
- * document is added.
- *
- * Revision 1.1  2006/11/08 01:19:07  kurihara
- *
- * test program for PortBase class.
- *
- */
-
 #ifndef PortBase_cpp
 #define PortBase_cpp
 

@@ -9,14 +9,6 @@
  *
  */
 
-/*
- * $Log: not supported by cvs2svn $
- * Revision 1.1  2007/01/21 13:07:20  n-ando
- * *** empty log message ***
- *
- *
- */
-
 #ifndef PeriodicExecutionContext_cpp
 #define PeriodicExecutionContext_cpp
 

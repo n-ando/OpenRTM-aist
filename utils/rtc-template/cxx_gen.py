@@ -16,45 +16,6 @@
 #  $Id$
 # 
 
-#
-#  $Log: not supported by cvs2svn $
-#  Revision 1.8.2.1  2007/07/20 17:28:56  n-ando
-#  A fix for win32 porting.
-#
-#  Revision 1.8  2007/05/29 01:44:29  n-ando
-#  make clean target was modified to delete *Compl.o
-#
-#  Revision 1.7  2007/04/23 01:41:16  n-ando
-#  New option "--config" and configuration template code were added.
-#
-#  Revision 1.6  2007/04/13 15:05:50  n-ando
-#  Now RTC::OK becomes RTC::RTC_OK in RTC.idl.
-#
-#  Revision 1.5  2007/01/14 23:38:30  n-ando
-#  Updated to use setModuleInitProc() to initialize component locally.
-#
-#  Revision 1.4  2007/01/11 07:46:38  n-ando
-#  Modified for OMG RTC specificatin and OpenRTM-aist-0.4.0.
-#  Almost all template codes were modified according to the new framework.
-#
-#  Revision 1.3  2005/09/08 09:23:55  n-ando
-#  - A bug fix for merge function.
-#
-#  Revision 1.2  2005/09/06 14:37:03  n-ando
-#  rtc-template's command options and data structure for ezt (Easy Template)
-#  are changed for RTComponent's service features.
-#  Now rtc-template can generate services' skeletons, stubs and
-#  implementation files.
-#  The implementation code generation uses omniidl's IDL parser.
-#
-#  Revision 1.1  2005/08/26 12:02:14  n-ando
-#  This code generator module uses ezt (Easy Template).
-#
-#  Revision 1.1.1.1  2005/05/12 09:06:18  n-ando
-#  Public release.
-#
-#
-
 import re
 import os
 import sys

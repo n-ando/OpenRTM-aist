@@ -16,12 +16,6 @@
  *
  */
 
-/*
- * $Log: not supported by cvs2svn $
- *
- */
-
-
 #ifndef PYHELPER_H
 #define PYHELPER_H
 

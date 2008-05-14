@@ -19,13 +19,6 @@
 # codegen.py [class_name]
 #
 
-
-# $Log: not supported by cvs2svn $
-# Revision 1.1  2006/11/27 07:24:49  n-ando
-# Class code generator for OpenRTM-aist.
-#
-
-
 import sys
 import os
 import yat

@@ -17,16 +17,6 @@
 #  $Id$
 # 
 
-#
-#  $Log: not supported by cvs2svn $
-#  Revision 1.2  2005/09/09 09:30:21  n-ando
-#  - A little bug fix.
-#
-#  Revision 1.1  2005/09/06 14:47:44  n-ando
-#  The first version of rtm-skelwrapper.
-#
-#
-
 import os
 import sys
 import getopt
