@@ -16,14 +16,6 @@
  *
  */
 
-/*
- * $Log: not supported by cvs2svn $
- * Revision 1.1.1.1  2005/05/12 09:06:19  n-ando
- * Public release.
- *
- *
- */
-
 %module RTCOutPort
 
 
