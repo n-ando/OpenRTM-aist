@@ -854,7 +854,7 @@ class VCProject:
     def generate(self):
         import yat
         self.template = yat.Template(self.get_template(self.type))
-        return self.template.generate(self.dict)
+        return self.template.generate(self.dict).replace("\r\n", "\n").replace("\n", "\r\n")
 
     def tool_element(self, type):
         text = ""
@@ -1117,7 +1117,8 @@ def main(argv):
     if outfile == None:
         fd = sys.stdout
     else:
-        fd = open(outfile, "w")
+        fd = open(outfile, "wb")
+
     fd.write(t)
         
 #------------------------------------------------------------

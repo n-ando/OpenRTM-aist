@@ -224,7 +224,7 @@ def gen_solution(version, yaml_text):
     t = yat.Template(sln_template 
                      % (vcversions[version]["sln"],
                         vcversions[version]["vc"]))
-    return t.generate(dict)
+    return t.generate(dict).replace("\r\n", "\n").replace("\n", "\r\n")
 
 
 class SlnToolException:
@@ -259,7 +259,8 @@ def main(argv):
     if outfile == None:
         fd = sys.stdout
     else:
-        fd = open(outfile, "w")
+        fd = open(outfile, "wb")
+
     fd.write(sln_text)
 
 #------------------------------------------------------------
