@@ -1,9 +1,10 @@
 #!/usr/bin/env python
 # -*- python -*-
+# -*- condig shift_jis -*-
 #
 #  @file gen_base.py
 #  @brief rtc-template source code generator base class
-#  @date $Date: 2007-01-11 07:43:16 $
+#  @date $Date: 2007/01/11 07:43:16 $
 #  @author Noriaki Ando <n-ando@aist.go.jp>
 # 
 #  Copyright (C) 2005
@@ -19,9 +20,8 @@
 import os
 import re
 import time
-import ezt
+import yat
 import StringIO
-
 class gen_base:
 	
 	def check_overwrite(self, fname):
@@ -78,11 +78,9 @@ class gen_base:
 
 	def gen_tags(self, tags):
 		for key in tags.keys():
-			s = StringIO.StringIO()
-			t = ezt.Template(compress_whitespace = 0)
-			t.parse(tags[key])
-			t.generate(s, self.data)
-			tags[key] = s.getvalue()
+			t = yat.Template(tags[key])
+			text=t.generate(self.data)
+			tags[key] = text
 		return
 
 	def gen(self, fname, temp_txt, data, tags):
@@ -91,33 +89,14 @@ class gen_base:
 			return
 
 		if not lines:  # overwrite: Yes
-			s = StringIO.StringIO()
-			t = ezt.Template(compress_whitespace = 0)
-			t.parse(temp_txt)
-			t.generate(s, data)
-			taged_txt = s.getvalue().splitlines()
+			t = yat.Template(temp_txt)
+			taged_txt = t.generate(self.data)
 		else:          # overwrite: Merge mode
 			taged_txt = lines
 
 		# replace tags
-		gen_txt = self.replace_tags(taged_txt, tags)
+		gen_txt = self.replace_tags(taged_txt.split("\n"), tags)
 		f.write(gen_txt)
 		f.close()
 		print "  File \"" + fname + "\"" " was generated."
 		return
-		
-
-
-if __name__ == "__main__":
-	hoge = """
- protected:
-  // <rtc-template block="inport_declar">
-  // </rtc-template>
-
-  // <rtc-template block="outport_declar">
-  // </rtc-template>
-"""
-	data = {"inport_declar": "  hoge;\n  dara;\n  munya;",
-			"outport_declar": "  1;\n  2;\n  3;"}
-	g = gen_base()
-	print g.replace_tags(hoge.splitlines(), data)

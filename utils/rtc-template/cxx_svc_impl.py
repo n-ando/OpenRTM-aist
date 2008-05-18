@@ -344,7 +344,9 @@ class BuildInterfaceImplementations(idlvisitor.AstVisitor):
 
 {
   // Please insert your code here and remove the following warning pragma
+#ifndef WIN32
   #warning "Code missing in function <""" + x + """>"
+#endif
 }
 
 """,

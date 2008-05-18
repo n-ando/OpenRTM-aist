@@ -16,14 +16,9 @@
 #  $Id$
 # 
 
-import re
 import os
-import time
-import StringIO
 import yat
 import gen_base
-import uuid
-
 
 class vcproj_gen(gen_base.gen_base):
 	"""
