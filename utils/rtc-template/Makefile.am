@@ -21,30 +21,31 @@ rtc-template:
 pyhelperdir = $(pkglibdir)/py_helper
 
 pyhelper_SCRIPTS =       \
-	README_src.py    \
-	cxx_gen.py       \
-	vcproject_gen.py \
-	uuid.py          \
-	cxx_svc_impl.py  \
-	python_gen.py    \
-	gen_base.py      \
 	yat.py           \
+	uuid.py          \
+	README_gen.py    \
+	gen_base.py      \
+	cxx_gen.py       \
+	cxx_svc_impl.py  \
+	vcproj_gen.py    \
+	python_gen.py    \
 	slntool.py       \
 	vcprojtool.py
 
 
 EXTRA_DIST =             \
 	rtc-template     \
-	README_src.py    \
-	cxx_gen.py       \
-	vcproject_gen.py \
-	uuid.py          \
-	cxx_svc_impl.py  \
-	python_gen.py    \
-	gen_base.py      \
 	yat.py           \
+	uuid.py          \
+	README_gen.py    \
+	gen_base.py      \
+	cxx_gen.py       \
+	cxx_svc_impl.py  \
+	vcproj_gen.py    \
+	python_gen.py    \
 	slntool.py       \
-	vsprojtool.py
+	vcprojtool.py
+
 
 clean-local:
 	rm -rf *~ *core *.pyc
