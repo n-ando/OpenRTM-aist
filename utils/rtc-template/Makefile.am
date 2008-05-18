@@ -49,4 +49,4 @@ EXTRA_DIST =             \
 
 clean-local:
 	rm -rf *~ *core *.pyc
-	rm -rf yat.py
+	rm -rf yat.py slntool.py vcprojtool.py
