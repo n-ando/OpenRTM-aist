@@ -15,100 +15,161 @@
 # import yaml
 # import yat
 #
-# dict = yaml.load(open(filename, "r").read())
-# t = Template(template_text)
-# generated_text = t.generate(dict)
+# dict   = yaml.load(open(filename, "r").read())
+# t      = yat.Template(template, "\[", "\]")
+# result = t.generate(dict)
 #------------------------------------------------------------
 #
-# -# Simple directive
+# 1. Simple directive:
+#    [dictionary_key]
 #
-# dict = {"One": "1", "Two":"2", "Three":"3"}
+#    Nested dictionaries can be expressed by dotted expression.
 #
-# text = "
-#   [One], [Two], [Three]
-#   -[One] One
-#   -[Two] Two
-#   -[Three] Three
-# "
-# Processed text:
-#   1 2 3
-#   -1 One
-#   -2 Two
-#   -3 Three
+# example:
+# dict = {"a": "This is a",
+#         "b": {"1": "This is b.1",
+#               "2": "This is b.2"}
+#        }
 #
-# -# Nested directive
+# template:
+# [a]
 #
-# dict = {"A":
-#          {"a": "This is A.a",
-#           "b": "This is A.b",
-#           "c": "This is A.c"},
-#         "B":
-#          {"a": "This is B.a",
-#           "b": "This is B.b",
-#           "c": "This is B.c"}}
-# text = "
-# - A.a: [A.a]
-# - A.b: [A.b]
-# - A.c: [A.c]
-# - B.a: [B.a]
-# - B.b: [B.b]
-# - B.c: [B.c]
-# "
-# Processed text:
-# - A.a: This is A.a
-# - A.b: This is A.b
-# - A.c: This is A.c
-# - B.a: This is B.a
-# - B.b: This is B.b
-# - B.c: This is B.c
+# [b.1]
 #
-# -# for directive:
+# [b.2]
 #
-# dict = {"Items":
-#          ["UUID": "00000000-0000-0000-0000-000000000000",
-#           "Name": "stdio.h",
-#           "Description": "Standard I/O"],
-#          ["UUID": "11111111-1111-1111-1111-111111111111",
-#           "Name": "stdlib.h",
-#           "Path": "Standard library"],
-#          ["UUID": "22222222-2222-2222-2222-222222222222",
-#           "Name": "stdlib.h",
-#           "Path": "UNIX standard system calls"]}
-# text = "
-# [for key in Items]"Item"
-# {
-#   UUID = "[key.UUID]";
-#   Name = "[key.Name]";
-#   Description = "[key.Description]"
-# }
-# [end]
-# "
-# Processed text:
-# "Item"
-# {
-#   UUID = "00000000-0000-0000-0000-000000000000";
-#   Name = "stdio.h";
-#   Description = "Standard I/O"
-# }
-# "Item"
-# {
-#   UUID = "11111111-1111-1111-1111-111111111111";
-#   Name = "Standard library";
-#   Description = "Standard library"
-# }
-# "Item"
-# {
-#   UUID = "22222222-2222-2222-2222-222222222222";
-#   Name = "stdlib.h";
-#   Description = "UNIX standard system calls"
-# }
+# result:
+# This is a
+# This is b.1
+# This is b.2
 #
 #
-
+# 2. "for" directive:
+#    [for key in list] statement [endfor]
+#
+#    Iterative evaluation for listed values is performed by "for" statement.
+#    In iteration at each evaluation, the value of the list is assigned to
+#    "key". The "key" also can be the nested dictionary directive.
+#
+# example:
+# dict = {"list": [0, 1, 2],
+#         "listed_dict": [
+#           {"name": "x", "value": "1.0"},
+#           {"name": "y", "value": "0.2"},
+#           {"name": "z", "value": "0.1"}]}
+#
+# template:
+# [for lst in list]
+# [lst],  
+# [endfor]
+# [for lst in listed_dict]
+# [lst.name]: [lst.value]
+# 
+# [endfor]
+#
+# result:
+# 1, 2, 3,
+# x: 1.0
+# y: 0.2
+# x: 0.1
+#
+#
+# 3. "if-index" directive:
+#    [for key in val]
+#    [if-index key is first|even|odd|last|NUMBER] statement1
+#    [elif-index key is first|even|odd|last|NUMBER] statement2
+#    [endif][endfor]
+#
+#    "if-index" is used to specify the index of the "for" iteration.
+#    The "key" string which is defined in the "for" statement is used as index.
+#    A number or predefined directives such as "first", "even", "odd" and
+#    "last" can be used to specify the index.
+#
+# example:
+# dict = {"list": [0,1,2,3,4,5,6,7,8,9,10]}
+#
+# template:
+# [for key in list]
+# [if-index key is 3] [key] is hoge!!
+# [elif-index key is 6] [key] is foo!!
+# [elif-index key is 9] [key] is bar!!
+# [elif-index key is first] [key] is first
+# [elif-index key is last] Omoro-------!!!!
+# [elif-index key is odd] [key] is odd number
+# [elif-index key is even] [key] is even number
+# [endif]
+# [endfor]
+#
+# result:
+#  0 is first
+#  1 is odd number
+#  2 is even number
+#  3 is hoge!!
+#  4 is even number
+#  5 is odd number
+#  6 is foo!!
+#  7 is odd number
+#  8 is even number
+#  9 is bar!!
+#  Omoro-------!!!!
+#
+#
+# 4. "if" directive: [if key is value] text1 [else] text2 [endif]
+#    If "key" is "value", "text1" appears, otherwise "text2" appears.
+#
+# example:
+# dict = {"key1": "a", "key2": "b"}
+#
+# template:
+# [if key1 is a]
+# The key1 is "a".
+# [else]
+# This key1 is not "a".
+# [endif]
+#
+# result:
+# The key1 is "a".
+#
+#
+# 5. "if-any" directive: [if-any key1] text1 [else] text2 [endif]
+#    If the "key1" exists in the dictionary, "text1" appears, otherwise
+#    "text2" appears.
+#
+# example:
+# dict = {"key1": "a", "key2": "b"}
+#
+# template:
+# [if-any key1]
+# key1 exists.
+# [endif][if-any key3]
+# key3 exists.
+# [else]
+# key3 does not exists.
+# [endif]
+#
+# result:
+# key1 exists.
+# key3 does not exists.
+#
+#
+# 6. bracket and comment:
+#    [[] is left bracket if begin mark is "["
+#    [# comment ] is comment if begin/end marks are "[" and "]"
+#
+# example:
+# dict = {}
+#
+# template:
+# [[]bracket]
+# [# comment]
+#
+# result:
+# [bracket]
+#
 import string
 import re
 from types import StringType, IntType, FloatType, DictType, ListType, ClassType
-import os, sys
+import sys
 
 class Template:
     """
@@ -152,16 +213,17 @@ class Template:
         # re_args      = re.compile(r'"(?:[^\\"]|\\.)*"|[-\w.]+')
         #
         #
-        re_item      = r'(?:"(?:[^\\"]|\\.)*"|[-\w.]+)'
+        re_item      = r'(?:"(?:[^\\"]|\\.)*"|[-\w.:]+)'
         re_command   = r'%s(%s(?: +%s)*)%s' % \
             (begin_mark, re_item, re_item, end_mark)
         re_bracket   = r'%s%s%s' % \
             (begin_mark, begin_mark, end_mark)
-        re_comment   = r'%s#[^\%s]*%s' % \
+        re_comment   = r'%s#[^%s]*%s' % \
             (begin_mark, end_mark, end_mark)
+        self.begin_mark = begin_mark.replace("\\","")
         self.re_parse = re.compile(r'%s|(%s)|%s' % \
                                        (re_command, re_bracket, re_comment))
-        self.re_args  = re.compile(r'"(?:[^\\"]|\\.)*"|[-\w.]+')
+        self.re_args  = re.compile(r'"(?:[^\\"]|\\.)*"|[-\w.:]+')
         self.re_number = re.compile(r'[0-9]+')
 
         # tokenize input text
@@ -236,7 +298,7 @@ class Template:
     def __proc_bracket(self):
         if self.token[self.index] == None:
             return
-        cmd_text = "self.write_token(\"[\")"
+        cmd_text = "self.write(\"" + self.begin_mark + "\")"
         self.__write_cmd(cmd_text)
         return True
             
@@ -245,10 +307,7 @@ class Template:
         try:
             args = self.re_args.findall(cmd)
         except:
-            print self.re_args
-            print cmd
-            print self.lineno()
-            raise "HOGE"
+            return
         self.del_nl_after_cmd()
         argc = len(args)
         if argc == 0:
@@ -329,11 +388,15 @@ class Template:
         self.cmd_cxt.append("for")
 
     def __endfor_cmd(self, args):
-        cxt = self.cmd_cxt.pop()
-        if cxt != "for":
+        try:
+            cxt = self.cmd_cxt.pop()
+            if cxt != "for":
+                raise UnmatchedBlock(self.lineno(), "endfor")
+            self.__write_cmd("self.pop_dict()")
+            self.__pop_level()
+        except:
+            print args, self.lineno()
             raise UnmatchedBlock(self.lineno(), "endfor")
-        self.__write_cmd("self.pop_dict()")
-        self.__pop_level()
         return
 
     # end of [for] commands
@@ -386,7 +449,10 @@ class Template:
         if len(self.re_number.findall(cmd)) == 1:
             cmd_text = "if %s_index == %s:" % (key, cmd)
         elif cmdlist.has_key(cmd):
-            cmd_text = cmdlist[cmd] % (key)
+            if cmd == "last":
+                cmd_text = cmdlist[cmd] % (key,key)
+            else:
+                cmd_text = cmdlist[cmd] % (key)
         else:
             raise InvalidDirective(self.lineno(), ''.join(args))
         self.__write_cmd(cmd_text)
@@ -407,7 +473,10 @@ class Template:
         if len(self.re_number.findall(cmd)) == 1:
             cmd_text = "elif %s_index == %s:" % (key, cmd)
         elif cmdlist.has_key(cmd):
-            cmd_text = cmdlist[cmd] % (key)
+            if cmd == "last":
+                cmd_text = cmdlist[cmd] % (key,key)
+            else:
+                cmd_text = cmdlist[cmd] % (key)
         else:
             raise InvalidDirective(self.lineno(), ' '.join(args))
         self.__pop_level()
@@ -454,8 +523,19 @@ class Template:
     #------------------------------------------------------------
 
     def __print_error(self, e):
-        print "Error: line", e.lineno, "in input data"
+        print "Parse Error: line", e.lineno, "in input data"
         print "  " + ''.join(nesteditem(e.value))
+        lines = self.template.split("\n")
+        length = len(lines)
+        print "------------------------------------------------------------"
+        for i in range(1,10):
+            l = e.lineno - 6 + i
+            if l > 0 and l < length:
+                print lines[l]
+                if i == 5:
+                    uline = '~'*len(lines[l])
+                    print uline
+        print "------------------------------------------------------------"
     
     def del_nl_after_cmd(self):
         # next text index after command
@@ -478,6 +558,8 @@ class Template:
         for i in range(self.index):
             if isinstance(self.token[i], StringType):
                 l += self.token[i].count('\n')
+        for i in range(1, self.index, 3):
+            l += 1
         return l
 
 
@@ -507,8 +589,26 @@ class GeneratorBase:
         self.text = ""
 
     def print_error(self, e):
-        print "Error: line", e.lineno, "in input data"
+        print "\nTemplate Generation Error: line", e.lineno, "in input data"
         print "  " + ''.join(nesteditem(e.value))
+        temp = ""
+        for i, s in enumerate(self.token):
+            if s != None:
+                if i % 3 == 1:
+                    temp += "[" + s + "]\n"
+                else:
+                    temp += s
+        lines = temp.split("\n")
+        length = len(lines)
+        print "------------------------------------------------------------"
+        for i in range(1,10):
+            l = e.lineno - 6 + i
+            if l > 0 and l < length:
+                print lines[l]
+                if i == 5:
+                    uline = '~'*len(lines[l])
+                    print uline
+        print "------------------------------------------------------------"
         
     def set_index(self, index):
         self.index = index
@@ -534,7 +634,11 @@ class GeneratorBase:
         cnt = 1
         for i in range(0, self.index, 3):
             if self.token[i] != None:
-                cnt += self.token[i].count('\\n')
+                cnt += self.token[i].count('\n')
+        # count deleted '\n' after commands
+        for i in range(1, self.index, 3):
+            if self.token[i] != None:
+                cnt += 1
         return cnt
                                 
     def get_text(self, keytext):
@@ -634,51 +738,96 @@ def nesteditem(aList):
 
 
 if __name__ == "__main__":
-    test_dict = {"DeployProject":
-                     {"VSVersion": 800,
-                      "ProjectType": "UUID",
-                      "IsWebType": "FALSE",
-                      "ProjectName": "OpenRTM-aist",
-                      "Entry":
-                          [{"MsmKey": "000-000-000",
-                            "OwnerKey": "Undefined"},
-                           {"MsmKey": "111-111-111",
-                            "OwnerKey": "Undefined"},
-                           {"MsmKey": "222-222-222",
-                            "OwnerKey": "Undefined"},
-                           {"MsmKey": "333-333-333",
-                            "OwnerKey": "Undefined"}],
-                      "List": [1,2,3,4,5,6,7,8,9,0]
-                      }
-                 
-                 }
-    
-    test_text = """
-{% for key in DeployProject.Entry %}
-    "Item"
-    {
-        "MsmKey" = "8:{% key.MsmKey %}"
-        "OwnerKey" = "8:{% key.OwnerKey %}"
-    }
-{% endfor %}
-    "List"
-    {
-{% for list in DeployProject.List %}
-{% if-index list is odd %}
-        odd index {% list %},
-{% elif-index list is even %}
-        even index {% list %},
-{% endif %}
-{% endfor %}
+    dict = []
+    template = []
+    #------------------------------------------------------------
+    # Example 0
+    #------------------------------------------------------------
+    dict.append({"a": "This is a",
+                 "b": {"1": "This is b.1",
+                       "2": "This is b.2"}
+                 })
+    template.append("""[a]
 
-{% if-any Hogehoge %}
-      Hogehoge
-{% else %}
-      # Hogehoge
-{% endif %}
-    }
-"""
+[b.1]
 
-    t = Template(test_text, "{% ", " %}")
-#    print t.get_script()
-    print t.generate(test_dict)
+[b.2]""")
+
+    #------------------------------------------------------------
+    # Example 1
+    #------------------------------------------------------------
+    dict.append({"list": [0, 1, 2],
+                 "listed_dict": [
+                {"name": "x", "value": "1.0"},
+                {"name": "y", "value": "0.2"},
+                {"name": "z", "value": "0.1"}]})
+    template.append("""[for lst in list]
+[lst],  
+[endfor]
+[for lst in listed_dict]
+[lst.name]: [lst.value]
+
+[endfor]""")
+
+    #------------------------------------------------------------
+    # Example 2
+    #------------------------------------------------------------
+    dict.append({"list": [0,1,2,3,4,5,6,7,8,9,10]})
+    template.append("""[for key in list]
+[if-index key is 3] [key] is hoge!!
+[elif-index key is 6] [key] is foo!!
+[elif-index key is 9] [key] is bar!!
+[elif-index key is first] [key] is first
+[elif-index key is last] Omoro-------!!!!
+[elif-index key is odd] [key] is odd number
+[elif-index key is even] [key] is even number
+[endif]
+[endfor]""")
+
+    #------------------------------------------------------------
+    # Example 3
+    #------------------------------------------------------------
+    dict.append({"key1": "a", "key2": "b"})
+    template.append("""[if key1 is a]
+The key1 is "a".
+[else]
+This key1 is not "a".
+[endif]""")
+
+    #------------------------------------------------------------
+    # Example 4
+    #------------------------------------------------------------
+    dict.append({"key1": "a", "key2": "b"})
+    template.append("""[if-any key1]
+key1 exists.
+[endif][if-any key3]
+key3 exists.
+[else]
+key3 does not exists.
+[endif]""")
+
+    dict.append({})
+    template.append("""
+[[]bracket]
+[# comment]
+""")
+
+    import yaml
+    if len(dict) == len(template):
+        for i in range(len(dict)-1,len(dict)):
+            t = Template(template[i])
+            print "-" * 60
+            print "Example:", i
+            print "-" * 60
+            print "Template:\n"
+            print template[i]
+            print "-" * 60
+            print "Dictionary:\n"
+            print yaml.dump(dict[i], default_flow_style=False)
+            print "-" * 60
+            print "Generated Script:\n"
+            print t.get_script()
+            print "-" * 60
+            print "Generated Text:\n"
+            print t.generate(dict[i])
+            print ""
