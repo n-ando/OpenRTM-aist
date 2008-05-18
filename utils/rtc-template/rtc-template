@@ -594,7 +594,6 @@ def CreateDataPorts(opts):
 			tmp["rtcExt::position"] = position[opt]
 			prof_list.append(tmp)
 			cnt += 1
-#	print yaml.dump(prof_list)
 	return prof_list
 
 
@@ -680,7 +679,6 @@ def CreateServicePorts(opts):
 			port["serviceInterface"].append(tmp)
 			port["rtcExt::position"] = lr(port)
 			cnt += 1
-#	print yaml.dump(prof_list)
 	return prof_list
 
 
