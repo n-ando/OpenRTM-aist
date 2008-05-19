@@ -333,7 +333,7 @@ namespace SDOPackage
      * Service の ServiceProfile を削除する。削除する ServiceProfile
      * は引数により指定される。
      *
-     * @param id 削除する ServcieProfile の serviceID。
+     * @param id 削除する ServiceProfile の serviceID。
      *
      * @return オペレーションが成功したかどうかを返す。
      *
