@@ -340,12 +340,14 @@ class Template:
                 return True
             elif args[0] == "if" and args[2] == "is":
                 self.__if_cmd(args)
+            elif args[0] == "elif" and args[2] == "is":
+                self.__elif_cmd(args)
             elif args[0] == "if-index" and args[2] == "is":
                 self.__if_index_cmd(args)
             elif args[0] == "elif-index" and args[2] == "is":
                 self.__elif_index_cmd(args)
             else:
-                raise InvalidCommand()
+                raise InvalidDirective(self.lineno(), cmd)
         else:
             raise InvalidDirective(self.lineno(), cmd)
         return True
