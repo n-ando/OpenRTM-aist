@@ -6,7 +6,7 @@
 #  @date $Date: 2005/08/26 12:02:37 $
 #  @author Noriaki Ando <n-ando@aist.go.jp>
 # 
-#  Copyright (C) 2004-2005
+#  Copyright (C) 2004-2008
 #      Task-intelligence Research Group,
 #      Intelligent Systems Research Institute,
 #      National Institute of
@@ -16,19 +16,9 @@
 #  $Id$
 # 
 
-#
-#  $Log: python_gen.py,v $
-#  Revision 1.1  2005/08/26 12:02:37  n-ando
-#  This code generator module uses ezt (Easy Template).
-#
-#  Revision 1.1.1.1  2005/05/12 09:06:18  n-ando
-#  Public release.
-#
-#
-
 import re
 import os
-import ezt
+import yat
 import gen_base
 
 import string
@@ -56,32 +46,73 @@ No additional options are available for Python code generator.
 def get_opt_fmt():
 	return []
 
-
 service_impl = """\
-[for service_idl]from [service_idl.idl_basename]_idl_example import *
-[end]"""
+[for sidl in service_idl]from [sidl.idl_basename]_idl_example import *
+[endfor]"""
 
 consumer_import = """\
 import _GlobalIDL, _GlobalIDL__POA
 """
 
-initialize_configuration_param = """\
-		[for config]self._[config.name] = [config.default_data]
-		[end]"""
-
 module_spec = """\
-[l_name]_spec = ["implementation_id", "[module.name]", 
-		 "type_name",         "[module.name]", 
-		 "description",       "[module.desc]", 
-		 "version",           "[module.version]", 
-		 "vendor",            "[module.vendor]", 
-		 "category",          "[module.category]", 
-		 "activity_type",     "[module.comp_type]", 
-		 "max_instance",      "[module.max_inst]", 
+[l_name]_spec = ["implementation_id", "[basicInfo.name]", 
+		 "type_name",         "[basicInfo.name]", 
+		 "description",       "[basicInfo.description]", 
+		 "version",           "[basicInfo.version]", 
+		 "vendor",            "[basicInfo.vendor]", 
+		 "category",          "[basicInfo.category]", 
+		 "activity_type",     "[basicInfo.componentType]", 
+		 "max_instance",      "[basicInfo.maxInstances]", 
 		 "language",          "Python", 
 		 "lang_type",         "SCRIPT",
-[for config]		 "conf.default.[config.name]", "[config.default]",
-[end]		 ""]"""
+[if-any configurationSet.configuration]
+[for config in configurationSet.configuration]
+		 "conf.default.[config.name]", "[config.defaultValue]",
+[endfor][endif]
+		 ""]
+"""
+
+data_ports = """\
+[for dport in dataPorts]
+		self._d_[dport.name] = RTC.[dport.type]([dport.data_type_args])
+[if dport.portType is DataInPort]
+		self._[dport.name]In = OpenRTM.InPort("[dport.name]", self._d_[dport.name], OpenRTM.RingBuffer(8))
+		self.registerInPort("[dport.name]",self._[dport.name]In)
+[elif dport.portType is DataOutPort]
+		self._[dport.name]Out = OpenRTM.OutPort("[dport.name]", self._d_[dport.name], OpenRTM.RingBuffer(8))
+		self.registerOutPort("[dport.name]",self._[dport.name]Out)
+[endif]
+[endfor]
+"""
+
+service_ports = """\
+[for sport in servicePorts]
+		self._[sport.name]Port = OpenRTM.CorbaPort("[sport.name]")
+[for sif in sport.serviceInterface]
+[if sif.direction is Provided]
+		self._[sif.name] = [sif.type]_i()
+		self._[sport.name]Port.registerProvider("[sif.name]", "[sif.type]", self._[sif.name])
+[elif sif.direction is Required]
+		self._[sif.name] = OpenRTM.CorbaConsumer(interfaceType=_GlobalIDL.[sif.type])
+		self._[sport.name]Port.registerConsumer("[sif.name]", "[sif.type]", self._[sif.name])
+[endif]
+		self.registerPort(self._[sport.name]Port)
+[endfor]
+[endfor]
+"""
+
+configurations = """\
+[for config in configurationSet.configuration]
+		self._[config.name] = [config.defaultData]
+
+[endfor]
+"""
+
+bind_config = """
+[for conf in configurationSet.configuration]
+		self.bindParameter("[conf.name]", self._[conf.name], "[conf.defaultValue]")
+[endfor]"""
+
 
 #------------------------------------------------------------
 # Python component source code template
@@ -110,70 +141,48 @@ import RTC
 # <rtc-template block="module_spec">
 # </rtc-template>
 
-class [module.name](OpenRTM.DataFlowComponentBase):
+class [basicInfo.name](OpenRTM.DataFlowComponentBase):
 	def __init__(self, manager):
 		OpenRTM.DataFlowComponentBase.__init__(self, manager)
 
-		[for inport]self._d_[inport.name] = RTC.[inport.type]([inport.data_type_args])
-		self._[inport.name]In = OpenRTM.InPort("[inport.name]", self._d_[inport.name], OpenRTM.RingBuffer(8))
-		[end][for outport]self._d_[outport.name] = RTC.[outport.type]([outport.data_type_args])
-		self._[outport.name]Out = OpenRTM.OutPort("[outport.name]", self._d_[outport.name], OpenRTM.RingBuffer(8))
-		[end]
-
-		# Set InPort buffers
-		[for inport]self.registerInPort("[inport.name]",self._[inport.name]In)
-		[end]
-		# Set OutPort buffers
-		[for outport]self.registerOutPort("[outport.name]",self._[outport.name]Out)
-		[end]
-
-		[for corbaport]self._[corbaport.name]Port = OpenRTM.CorbaPort("[corbaport.name]")
-		[end]
-
-		[for service]self._[service.name] = [service.type]_i()
-		[end]
-
-		[for consumer]self._[consumer.name] = OpenRTM.CorbaConsumer(interfaceType=_GlobalIDL.[consumer.type])
-		[end]
-		# Set service provider to Ports
-		[for service]self._[service.port]Port.registerProvider("[service.name]", "[service.type]", self._[service.name])
-		[end]
-		# Set service consumers to Ports
-		[for consumer]self._[consumer.port]Port.registerConsumer("[consumer.name]", "[consumer.type]", self._[consumer.name])
-		[end]
-		# Set CORBA Service Ports
-		[for corbaport]self.registerPort(self._[corbaport.name]Port)
-		[end]
-
-		# initialize of configuration-data.
-		# <rtc-template block="init_conf_param">
+		# DataPorts initialization
+		# <rtc-template block="data_ports">
 		# </rtc-template>
 
+
+		# DataPorts initialization
+		# <rtc-template block="service_ports">
+		# </rtc-template>
+
+
+		# initialize of configuration-data.
+		# <rtc-template block="configurations">
+		# </rtc-template>
 
 		 
 	def onInitialize(self):
 		# Bind variables and configuration variable
-		[for config]self.bindParameter("[config.name]", self._[config.name], "[config.default]")
-		[end]
+		# <rtc-template block="bind_config">
+		# </rtc-template>
 		return RTC.RTC_OK
 
 
-	[for activity]
-	#def [activity.name](self, ec_id):
-	#
+[for act in activity]
+	#def [act.name](self[if-any act.args], [act.args][else][endif]):
 	#	return RTC.RTC_OK
-	[end]
+
+[endfor]
 
 
 
 def MyModuleInit(manager):
     profile = OpenRTM.Properties(defaults_str=[l_name]_spec)
     manager.registerFactory(profile,
-                            [module.name],
+                            [basicInfo.name],
                             OpenRTM.Delete)
 
     # Create a component
-    comp = manager.createComponent("[module.name]")
+    comp = manager.createComponent("[basicInfo.name]")
 
 
 
@@ -190,134 +199,121 @@ if __name__ == "__main__":
 
 
 
-class Struct:
-	def __init__(self):
-		return
 
-
-def MakeActivityFuncs(dict):
-	acts = (("onFinalize",    ""), \
-		("onStartup",     "RTC::UniqueId ec_id"), \
-		("onShutdown",    "RTC::UniqueId ec_id"), \
-		("onActivated",   "RTC::UniqueId ec_id"), \
-		("onDeactivated", "RTC::UniqueId ec_id"), \
-		("onExecute",     "RTC::UniqueId ec_id"), \
-		("onAborting",    "RTC::UniqueId ec_id"), \
-		("onError",       "RTC::UniqueId ec_id"), \
-		("onReset",       "RTC::UniqueId ec_id"), \
-		("onStateUpdate", "RTC::UniqueId ec_id"), \
-		("onRateChanged", "RTC::UniqueId ec_id"))
-	actlist = []
-	for name, args in acts:
-		a = Struct()
-		a.name = name
-		a.args = args
-		actlist.append(a)
-
-	dict["activity"] = actlist
-
-
-def MakeSuffix(opts, dict):
-	impl_suffix = "SVC_impl"
-	skel_suffix = "Skel"
-	stub_suffix = "Stub"
-	for opt, arg in opts:
-		if opt.find("--svc-impl-suffix") == 0:
-			impl_suffix = arg
-		if opt.find("--svc-skel-suffix") == 0:
-			skel_suffix = arg
-		if opt.find("--svc-stub-suffix") == 0:
-			stub_suffix = arg
-	dict["impl_suffix"] = impl_suffix
-	dict["skel_suffix"] = skel_suffix
-	dict["stub_suffix"] = stub_suffix
-	
 
 class python_gen(gen_base.gen_base):
 	"""
 	Python component source code generation class
 	"""
 	def __init__(self, data, opts):
-		self.data = data.copy()
-		MakeActivityFuncs(self.data)
-		MakeSuffix(opts, self.data)
+		self.data = data
+		self.data['fname'] = self.data['basicInfo']['name']
 		self.data['fname_py'] = self.data['fname'] + ".py"
-		self.data["begin_brace"] = "["
-		self.data["end_brace"] = "]"
-		self.data["u_name"] = self.data["module"].name.upper()
-		self.data["l_name"] = self.data["module"].name.lower()
+		self.data["u_name"] = self.data["fname"].upper()
+		self.data["l_name"] = self.data["fname"].lower()
 
-
+		self.CreateActivityFuncs(self.data)
+		self.CreateDataPorts(self.data)
+		self.CreateService(self.data)
+		self.CreateConfiguration(self.data)
+		import yaml
+		print yaml.dump(self.data, default_flow_style=False)
 		self.tags = {}
-		if self.data["service_idl"]:
-			for svc in self.data["service_idl"]:
-				svc.impl_py = svc.idl_basename + "_idl_example.py"
-			self.tags["service_impl"]    = service_impl
-
-		if self.data["consumer_idl"]:
-			for cons in self.data["consumer_idl"]:
-				try:
-					cons.modulename = "_GlobalIDL"
-					f = open(cons.idl_fname,'a+')
-					while 1:
-						_str = f.readline()
-						if not _str:
-							break
-						mod_idx = _str.find("module",0)
-						if mod_idx > -1:
-							_str = _str[mod_idx+6:]
-							idx = _str.find("{",0)
-							if idx > -1:
-								_str = _str[:idx]
-							cons.modulename = string.strip(_str)
-							break
-					f.close()
-				except IOError:
-					print "Can't find file:", file
-
-			self.tags["consumer_import"] = consumer_import
-				
-		if self.data["config"]:
-			for i in range(len(self.data["config"])):
-				split_data = self.data["config"][i].default.split(",")
-				if len(split_data) > 1:
-					_data = []
-					_type = self.get_type(self.data["config"][i].type)
-					for d in split_data:
-						_data.append(_type(d))
-					self.data["config"][i].default_data = [_data]
-				else:
-					_type = self.get_type(self.data["config"][i].type)
-					self.data["config"][i].default_data = [_type(self.data["config"][i].default)]
-				
-		self.tags["init_conf_param"] = initialize_configuration_param
-
-		if self.data["inport"]:
-			for inp in self.data["inport"]:
-				if self.check_data_type(inp.type) == "sequence":
-					inp.data_type_args = "RTC.Time(0,0),[]"
-				else:
-					inp.data_type_args = "RTC.Time(0,0),0"
-
-		if self.data["outport"]:
-			for outp in self.data["outport"]:
-				if self.check_data_type(outp.type) == "sequence":
-					outp.data_type_args = "RTC.Time(0,0),[]"
-				else:
-					outp.data_type_args = "RTC.Time(0,0),0"
-
-
-			
-		self.tags["module_spec"]       = module_spec
+		self.tags["service_impl"]    = service_impl
+		self.tags["consumer_import"] = consumer_import
+		self.tags["module_spec"]     = module_spec
+		self.tags["data_ports"]      = data_ports
+		self.tags["service_ports"]   = service_ports
+		self.tags["configurations"]  = configurations
+		self.tags["bind_config"]     = bind_config
 		self.gen_tags(self.tags)
 		return
 
 
+	def CreateActivityFuncs(self, dict):
+		acts = (("onFinalize",    None), \
+			("onStartup",     "RTC::UniqueId ec_id"), \
+			("onShutdown",    "RTC::UniqueId ec_id"), \
+			("onActivated",   "RTC::UniqueId ec_id"), \
+			("onDeactivated", "RTC::UniqueId ec_id"), \
+			("onExecute",     "RTC::UniqueId ec_id"), \
+			("onAborting",    "RTC::UniqueId ec_id"), \
+			("onError",       "RTC::UniqueId ec_id"), \
+			("onReset",       "RTC::UniqueId ec_id"), \
+			("onStateUpdate", "RTC::UniqueId ec_id"), \
+			("onRateChanged", "RTC::UniqueId ec_id"))
+		actlist = []
+		for name, args in acts:
+			a = {}
+			a["name"] = name
+			a["args"] = args
+			actlist.append(a)
+	
+		dict["activity"] = actlist
+	
+	
+	def CreateService(self, dict):
+		if dict["service_idl"]:
+			for svc in dict["service_idl"]:
+				svc["impl_py"] = svc["idl_basename"] + \
+				    "_idl_example.py"
+			
+		if dict["consumer_idl"]:
+			for cons in dict["consumer_idl"]:
+				try:
+					cons["modulename"] = "_GlobalIDL"
+					f = open(cons.idl_fname, 'a+')
+					while 1:
+						_str = f.readline()
+						if not _str:
+							break
+						mod_idx = _str.find("module", 0)
+						if mod_idx < 0:
+							break;
+						_str = _str[mod_idx + 6:]
+						idx = _str.find("{", 0)
+						if idx < 0:
+							break
+						_str = _str[:idx]
+						cons["modulename"] = \
+						    string.strip(_str)
+						break
+					f.close()
+				except IOError:
+					print "Can't find file:", file
+	
+	def CreateDataPorts(self, dict):
+		if dict["dataPorts"] == None:
+			return
+		for dport in dict["dataPorts"]:
+			if self.check_data_type(dport["type"]) == "sequence":
+				dport["data_type_args"] = "RTC.Time(0,0),[]"
+			else:
+				dport["data_type_args"] = "RTC.Time(0,0),0"
+	
+	def CreateConfiguration(self, dict):
+		config = dict["configurationSet"]["configuration"]
+		if config:
+			for i, conf in enumerate(config):
+				split_data = conf["defaultValue"].split(",")
+				if len(split_data) > 1:
+					_data = []
+					_type = self.get_type(conf["type"])
+					for d in split_data:
+						_data.append(_type(d))
+					conf["defaultData"] = "hgoe" + str([_data])
+				else:
+					_type = self.get_type(conf["type"])
+					conf["defaultData"] = "hoge" + \
+					    str([_type(conf["defaultValue"])])
+		return
+
 	def check_data_type(self, _type):
-		if str(_type) in ["TimedShortSeq", "TimedLongSeq", "TimedUShortSeq",
-				  "TimedULongSeq", "TimedFloatSeq", "TimedDoubleSeq",
-				  "TimedCharSeq","TimedBooleanSeq", "TimedOctetSeq",
-				  "TimedStringSeq"]:
+		if str(_type) in ["TimedShortSeq", "TimedLongSeq",
+				  "TimedUShortSeq", "TimedULongSeq",
+				  "TimedFloatSeq", "TimedDoubleSeq",
+				  "TimedCharSeq","TimedBooleanSeq",
+				  "TimedOctetSeq", "TimedStringSeq"]:
 			return "sequence"
 		else:
 			return None
@@ -337,42 +333,43 @@ class python_gen(gen_base.gen_base):
 		else:
 			return str
 		
-
 	def print_impl(self):
-		for svc_idl in self.data["service_idl"]:
-			if not os.access(svc_idl.idl_fname, os.F_OK):
+		for sidl in self.data["service_idl"]:
+			if not os.access(sidl["idl_fname"], os.F_OK):
 				sys.stderr.write("Error: IDL file \"" \
-						 + svc_idl.idl_fname \
+						 + sidl["idl_fname"] \
 						 + "\" not found.\n")
 				sys.exit(1)
 
 			try:
-				cmd = "omniidl -bpython -Wbexample "+svc_idl.idl_fname
+				cmd = "omniidl -bpython -Wbexample " + \
+				    sidl["idl_fname"]
 				os.system(cmd)
 			except:
 				sys.stderr.write("Generate error: " \
-						 + svc_idl.impl_py + "\n")
+						 + sidl["impl_py"] + "\n")
 
 
 			print "  File \"" \
-			      + svc_idl.impl_py \
+			      + sidl["impl_py"] \
 			      + "\" was generated."
 
 		for cons in self.data["consumer_idl"]:
 			dup = False
 			for svc in self.data["service_idl"]:
-				if cons.idl_fname == svc.idl_fname:
+				if cons["idl_fname"] == svc["idl_fname"]:
 					dup = True
 
 			if not dup:
-				if not os.access(cons.idl_fname, os.F_OK):
+				if not os.access(cons["idl_fname"], os.F_OK):
 					sys.stderr.write("Error: IDL file \"" \
-							 + cons.idl_fname \
+							 + cons["idl_fname"] \
 							 + "\" not found.\n")
 					sys.exit(1)
 
 				try:
-					cmd = "omniidl -bpython "+cons.idl_fname
+					cmd = "omniidl -bpython " + \
+					    cons["idl_fname"]
 					os.system(cmd)
 				except:
 					sys.stderr.write("Generate error: omniidl -bpython "+cons.idl_fname)
@@ -382,7 +379,7 @@ class python_gen(gen_base.gen_base):
 		"""
 		Generate component class script
 		"""
-		self.gen(self.data["fname_py"],py_source,self.data, self.tags)
+		self.gen(self.data["fname_py"], py_source, self.data, self.tags)
 		return
 
 
