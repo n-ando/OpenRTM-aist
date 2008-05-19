@@ -233,7 +233,22 @@ namespace RTC
       {
 	std::string basename(split(mods[i], ".").operator[](0));
 	basename += "Init";
-	m_module->load(mods[i], basename);
+	try
+	  {
+	    m_module->load(mods[i], basename);
+	  }
+	catch (ModuleManager::Error& e)
+	  {
+	    RTC_ERROR(("Error: %s", e.reason.c_str()));
+	  }
+	catch (ModuleManager::NotFound& e)
+	  {
+	    RTC_ERROR(("NotFount: %s", e.name.c_str()));
+	  }
+	catch (...)
+	  {
+	    RTC_ERROR(("Unknown Exception"));
+	  }
       }
     std::vector<std::string> comp(split(m_config["manager.components.precreate"], ","));
     for (int i(0), len(comp.size()); i < len; ++i)
@@ -425,9 +440,19 @@ namespace RTC
     //------------------------------------------------------------
     // Create Component
     RtcBase* comp;
-    comp = m_factory.find(module_name)->create(this);
-    if (comp == NULL) return NULL;
-    RTC_TRACE(("RTC Created: %s", module_name));
+    FactoryBase* factory(m_factory.find(module_name));
+    if (factory == NULL)
+      {
+	RTC_ERROR(("Factory not found: %s", module_name));
+	return NULL;
+      }
+    comp = factory->create(this);
+    if (comp == NULL)
+      {
+	RTC_ERROR(("RTC creation failed: %s", module_name));
+	return NULL;
+      }
+    RTC_TRACE(("RTC created: %s", module_name));
     
     //------------------------------------------------------------
     // Load configuration file specified in "rtc.conf"

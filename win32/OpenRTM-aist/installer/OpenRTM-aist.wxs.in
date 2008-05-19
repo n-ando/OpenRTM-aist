@@ -42,6 +42,12 @@
 		  {% endif %}
 		</File>
 		{% endfor %}
+		{% for file in Rtcd.Files %}
+		<File Id="{% file.Id %}" Name="{% file.ShortName %}"
+		      LongName="{% file.Name %}" DiskId="1" Compressed="yes"
+		      Source="{% file.Source %}">
+		</File>
+		{% endfor %}
 	      </Component>
 	    </Directory>
 	    <!-- rtm -->

@@ -775,7 +775,6 @@ class BackendLoader:
 						be = Backend(mod_name, mod)
 						self.backends[opt_name] = be
 					except:
-						print "Invalid backend: ", f
 						pass
 
 		return self.backends

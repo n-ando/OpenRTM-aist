@@ -31,8 +31,10 @@ wxs:
 		-c Bin \
 		-o ../installer/bin.yaml \
 		-p ..\\bin \
-		*.py *.bat $(WINLIBS)
+		*.py *.bat rtc.conf $(WINLIBS)
 
 dist-hook: clean-local copy_scripts wxs
 
-EXTRA_DIST = rtm-naming.bat
+EXTRA_DIST = \
+	rtm-naming.bat \
+	rtc.conf

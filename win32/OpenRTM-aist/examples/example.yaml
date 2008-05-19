@@ -29,14 +29,14 @@ Examples:
       Name: SeqOutComp.exe
       Source: ..\\examples\\SeqIO\\SeqOutComp\\Release\\SeqOutComp.exe
       Shortcut: true
-    - Id: MyServcieProviderComp.exe
+    - Id: MyServiceProviderComp.exe
       ShortName: SvcProv.exe
-      Name: MyServcieProviderComp.exe
+      Name: MyServiceProviderComp.exe
       Source: ..\\examples\\SimpleService\\MyServiceProviderComp\\Release\\MyServiceProviderComp.exe
       Shortcut: true
-    - Id: MyServcieConsumerComp.exe
+    - Id: MyServiceConsumerComp.exe
       ShortName: SvcCons.exe
-      Name: MyServcieConsumerComp.exe
+      Name: MyServiceConsumerComp.exe
       Source: ..\\examples\\SimpleService\\MyServiceConsumerComp\\Release\\MyServiceConsumerComp.exe
       Shortcut: true
     - Id: ConfigSampleComp.exe
@@ -54,3 +54,40 @@ Examples:
       Name: USBCameraMonitorComp.exe
       Source: ..\\examples\\USBCamera\\USBCameraMonitorComp\\Release\\USBCameraMonitorComp.exe
       Shortcut: true
+    - Id: ConsoleIn.dll
+      ShortName: ConsIn.dll
+      Name: ConsoleIn.dll
+      Source: ..\\examples\\SimpleIO\\ConsoleIn\\Release\\ConsoleIn.dll
+    - Id: ConsoleOut.dll
+      ShortName: ConsOut.dll
+      Name: ConsoleOut.dll
+      Source: ..\\examples\\SimpleIO\\ConsoleOut\\Release\\ConsoleOut.dll
+    - Id: SeqIn.dll
+      ShortName: SeqIn.dll
+      Name: SeqIn.dll
+      Source: ..\\examples\\SeqIO\\SeqIn\\Release\\SeqIn.dll
+    - Id: SeqOut.dll
+      ShortName: ConsOut.dll
+      Name: SeqOut.dll
+      Source: ..\\examples\\SeqIO\\SeqOut\\Release\\SeqOut.dll
+    - Id: MyServiceProvider.dll
+      ShortName: SvcProv.dll
+      Name: MyServiceProvider.dll
+      Source: ..\\examples\\SimpleService\\MyServiceProvider\\Release\\MyServiceProvider.dll
+    - Id: MyServiceConsumer.dll
+      ShortName: SvcCons.dll
+      Name: MyServiceConsumer.dll
+      Source: ..\\examples\\SimpleService\\MyServiceConsumer\\Release\\MyServiceConsumer.dll
+    - Id: ConfigSample.dll
+      ShortName: ConfSamp.dll
+      Name: ConfigSample.dll
+      Source: ..\\examples\\ConfigSample\\ConfigSample\\Release\\ConfigSample.dll
+    - Id: USBCameraAqcuire.dll
+      ShortName: CamAq.dll
+      Name: USBCameraAqcuire.dll
+      Source: ..\\examples\\USBCamera\\USBCameraAcquire\\Release\\USBCameraAcquire.dll
+    - Id: USBCameraMonitor.dll
+      ShortName: CamMon.dll
+      Name: USBCameraMonitor.dll
+      Source: ..\\examples\\USBCamera\\USBCameraMonitor\\Release\\USBCameraMonitor.dll
+

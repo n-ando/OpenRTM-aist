@@ -1,8 +1,15 @@
 ## -*- Makefile -*-
 ##---------------------------------------------------------------------------
-## Makefile.am for win32/OpenRTM-aist/utils
+## Makefile.am for rtcd
 ##
 ## $Id$
 ##---------------------------------------------------------------------------
-SUBDIRS = rtc-template rtcd
 
+clean-local:
+	rm -rf *~ *core *.cpp *.vcproj
+
+src:
+	cp $(top_srcdir)/utils/rtcd/*.cpp .
+	qkc -ms *.cpp
+
+dist-hook: src

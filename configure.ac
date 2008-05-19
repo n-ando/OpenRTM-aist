@@ -1444,6 +1444,7 @@ AC_OUTPUT([Makefile
 	utils/rtc-template/Makefile
 	utils/rtm-skelwrapper/Makefile
 	utils/rtm-naming/Makefile
+	utils/rtcd/Makefile
 	etc/Makefile
 	examples/Makefile
 	examples/ConfigSample/Makefile
@@ -1465,6 +1466,7 @@ AC_OUTPUT([Makefile
 	win32/OpenRTM-aist/examples/USBCamera/Makefile
 	win32/OpenRTM-aist/utils/Makefile
 	win32/OpenRTM-aist/utils/rtc-template/Makefile
+	win32/OpenRTM-aist/utils/rtcd/Makefile
 	win32/OpenRTM-aist/rtm/Makefile
 	win32/OpenRTM-aist/rtm/idl/Makefile
 	win32/OpenRTM-aist/installer/Makefile

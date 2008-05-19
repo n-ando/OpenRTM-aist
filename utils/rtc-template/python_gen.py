@@ -47,12 +47,14 @@ def get_opt_fmt():
 	return []
 
 service_impl = """\
-[for sidl in service_idl]from [sidl.idl_basename]_idl_example import *
+[for sidl in service_idl]
+from [sidl.idl_basename]_idl_example import *
 [endfor]"""
 
-consumer_import = """\
+global_idl = """\
 import _GlobalIDL, _GlobalIDL__POA
 """
+no_global_idl = ""
 
 module_spec = """\
 [l_name]_spec = ["implementation_id", "[basicInfo.name]", 
@@ -133,7 +135,7 @@ import RTC
 # </rtc-template>
 
 # Import Service stub modules
-# <rtc-template block="consumer_import">
+# <rtc-template block="global_idl">
 # </rtc-template>
 
 
@@ -218,7 +220,11 @@ class python_gen(gen_base.gen_base):
 		self.CreateConfiguration(self.data)
 		self.tags = {}
 		self.tags["service_impl"]    = service_impl
-		self.tags["consumer_import"] = consumer_import
+		if len(self.data["service_idl"]) > 0 or \
+			    len(self.data["consumer_idl"]) > 0:
+			self.tags["global_idl"] = global_idl
+		else:
+			self.tags["global_idl"] = no_global_idl
 		self.tags["module_spec"]     = module_spec
 		self.tags["data_ports"]      = data_ports
 		self.tags["service_ports"]   = service_ports
@@ -230,16 +236,16 @@ class python_gen(gen_base.gen_base):
 
 	def CreateActivityFuncs(self, dict):
 		acts = (("onFinalize",    None), \
-			("onStartup",     "RTC::UniqueId ec_id"), \
-			("onShutdown",    "RTC::UniqueId ec_id"), \
-			("onActivated",   "RTC::UniqueId ec_id"), \
-			("onDeactivated", "RTC::UniqueId ec_id"), \
-			("onExecute",     "RTC::UniqueId ec_id"), \
-			("onAborting",    "RTC::UniqueId ec_id"), \
-			("onError",       "RTC::UniqueId ec_id"), \
-			("onReset",       "RTC::UniqueId ec_id"), \
-			("onStateUpdate", "RTC::UniqueId ec_id"), \
-			("onRateChanged", "RTC::UniqueId ec_id"))
+			("onStartup",     "ec_id"), \
+			("onShutdown",    "ec_id"), \
+			("onActivated",   "ec_id"), \
+			("onDeactivated", "ec_id"), \
+			("onExecute",     "ec_id"), \
+			("onAborting",    "ec_id"), \
+			("onError",       "ec_id"), \
+			("onReset",       "ec_id"), \
+			("onStateUpdate", "ec_id"), \
+			("onRateChanged", "ec_id"))
 		actlist = []
 		for name, args in acts:
 			a = {}
@@ -260,7 +266,7 @@ class python_gen(gen_base.gen_base):
 			for cons in dict["consumer_idl"]:
 				try:
 					cons["modulename"] = "_GlobalIDL"
-					f = open(cons.idl_fname, 'a+')
+					f = open(cons["idl_fname"], 'a+')
 					while 1:
 						_str = f.readline()
 						if not _str:
@@ -299,10 +305,10 @@ class python_gen(gen_base.gen_base):
 					_type = self.get_type(conf["type"])
 					for d in split_data:
 						_data.append(_type(d))
-					conf["defaultData"] = "hgoe" + str([_data])
+					conf["defaultData"] = str([_data])
 				else:
 					_type = self.get_type(conf["type"])
-					conf["defaultData"] = "hoge" + \
+					conf["defaultData"] = \
 					    str([_type(conf["defaultValue"])])
 		return
 
@@ -370,7 +376,7 @@ class python_gen(gen_base.gen_base):
 					    cons["idl_fname"]
 					os.system(cmd)
 				except:
-					sys.stderr.write("Generate error: omniidl -bpython "+cons.idl_fname)
+					sys.stderr.write("Generate error: omniidl -bpython " + cons["idl_fname"])
 
 
 	def print_pysrc(self):
