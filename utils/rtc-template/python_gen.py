@@ -216,8 +216,6 @@ class python_gen(gen_base.gen_base):
 		self.CreateDataPorts(self.data)
 		self.CreateService(self.data)
 		self.CreateConfiguration(self.data)
-		import yaml
-		print yaml.dump(self.data, default_flow_style=False)
 		self.tags = {}
 		self.tags["service_impl"]    = service_impl
 		self.tags["consumer_import"] = consumer_import
