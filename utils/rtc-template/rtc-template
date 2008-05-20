@@ -398,7 +398,7 @@ def CreateBasicInfo(opts):
 		'category': 'category',
 		'comp-type': 'componentType',
 		'act-type': 'activityType',
-		'comp-kind': 'componentKind',
+		'type': 'componentKind',
 		'max-inst': 'maxInstances'
 		}
 	# default "basicInfo"
