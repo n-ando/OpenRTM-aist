@@ -109,7 +109,7 @@ find_autotools()
     ar_cmd=${cmd_path}
 
     # autoupdate
-    find_cmd "autoupdate${ac_ver} autoupdate${ac_ver2} autoupdate"
+    find_cmd "autoupdate${ac_ver} autoupdate${ac_ver2} autoupdate autoupdates"
     aup_cmd=${cmd_path}
 
     #============================================================

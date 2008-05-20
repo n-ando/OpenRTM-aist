@@ -14,7 +14,7 @@ omni="omniORB"
 omniorbpy="py24-omniorb py24-tkinter"
 ace="ace+tao"
 autotools="autoconf259 automake19 libtool"
-packages="$omni $ace"
+packages="$omni $ace $autotools"
 
 #----------------------------------------
 # root かどうかをチェック
@@ -34,10 +34,10 @@ check_root () {
 #----------------------------------------
 install_packages () {
     for p in $*; do
-	ins=`rpm -qa $p`
+	ins=`pkg_info -E $p-*`
 	if test "x$ins" = "x"; then
 	    echo "Now installing: " $p
-	    pkg_add -r install $p
+	    pkg_add -r $p
 	    echo "done."
 	    echo ""
 	else
@@ -75,6 +75,5 @@ check_root
 if test "x$1" = "x-u" ; then
     uninstall_packages `reverse $packages`
 else
-    create_repo
     install_packages $packages
 fi

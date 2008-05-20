@@ -19,14 +19,10 @@ EXTRA_DIST =                       \
 	makewxs.py                 \
 	makewrapper.pl             \
 	makewrapper.py             \
-	pkg_install_debianSarge.sh \
-	pkg_install_fc4.sh         \
-	pkg_install_fc5.sh         \
-	pkg_install_fc6.sh         \
-	pkg_install_freebsd52.sh   \
-	pkg_install_freebsd6.sh    \
-	pkg_install_vl32.sh        \
-	pkg_install_vl4.sh         \
+	pkg_install_debian.sh      \
+	pkg_install_fedora.sh      \
+	pkg_install_freebsd.sh     \
+	pkg_install_vine.sh        \
 	setuptest.py               \
 	uuid.py
 

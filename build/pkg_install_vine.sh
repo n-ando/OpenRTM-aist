@@ -22,7 +22,7 @@ openrtm_repo="rpm     http://www.openrtm.org/pub/Linux/Vine/apt $vinever/\$(ARCH
 #---------------------------------------
 # パッケージリスト
 #---------------------------------------
-omni="omniORB-devel omniORB-servers omniORB omniORB-doc"
+omni="omniORB omniORB-devel omniORB-servers omniORB-doc"
 ace="ace ace-devel"
 packages="$omni $ace"
 
