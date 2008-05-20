@@ -31,8 +31,15 @@ OpenRTM-aist_vc9.sln:
 
 dist-hook: clean-local sln
 
-EXTRA_DIST =                  \
-	rtm_config.vsprops    \
-	rtm_distbuild.vsprops \
-	OpenRTM-aist.sln.dep  \
-	RunAtFirst.py
+EXTRA_DIST =                          \
+	OpenRTM-aist_vc8.sln          \
+	OpenRTM-aist_vc9.sln          \
+	OpenRTM-aist.sln.dep          \
+	RunAtFirst.py                 \
+	autobuild_vc8.bat             \
+	autobuild_vc9.bat             \
+	rtm_config.vsprops            \
+	rtm_config_omni412.vsprops    \
+	rtm_distbuild.vsprops
+
+
