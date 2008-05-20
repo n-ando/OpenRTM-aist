@@ -1,5 +1,5 @@
 libRTC: libRTCSkel
-rtc: libRTC
+rtcd: libRTC
 ConfigSampleComp: libRTC
 ConfigSample: libRTC
 ConsoleInComp: libRTC

@@ -38,6 +38,7 @@
 #undef PACKAGE_STRING
 #undef PACKAGE_TARNAME
 #undef PACKAGE_VERSION
+#undef PACKAGE_TARNAME
 #include <omniORB4/CORBA.h>
 #include <omnithread.h>
 #endif
