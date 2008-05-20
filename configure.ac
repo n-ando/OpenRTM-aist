@@ -19,7 +19,7 @@ dnl ------------------------------------------------------------
 dnl  Process this file with autoconf to produce a configure script.
 AC_PREREQ(2.59)
 AC_INIT(OpenRTM-aist, 0.4.2, n-ando@aist.go.jp, OpenRTM-aist)
-AM_INIT_AUTOMAKE
+AM_INIT_AUTOMAKE([dist-bzip2 tar-pax])
 AM_CONFIG_HEADER([rtm/config_rtc.h])
 
 dnl ------------------------------------------------------------
