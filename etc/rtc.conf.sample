@@ -175,6 +175,20 @@ manager.modules.abs_path_allowed: YES
 # manager.modules.download_cleanup:
 #
 
+#
+# Advance component creation
+#
+# This option specifies components' names (module name) creating in advance
+# before starting the manager's event-loop. The components' factories should
+# be registered by manager.module.preload option or statically linked to the
+#  manager.
+#
+# Example:
+# manager.components.precreate: ConsoleIn, ConsoleOut, SeqIn, SeqOut
+#
+manager.components.precreate: 
+
+
 #============================================================
 # Logger configurations
 #============================================================
