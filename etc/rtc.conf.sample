@@ -2,7 +2,7 @@
 #
 # RT-Component manager configuration
 #
-# Copyright (c) 2003-2007 Noriaki Ando <n-ando@aist.go.jp>
+# Copyright (c) 2003-2008 Noriaki Ando <n-ando@aist.go.jp>
 #      Task-intelligence Research Group,
 #      Intelligent Systems Research Institute,
 #      National Institute of
@@ -21,7 +21,7 @@ config.version: 0.4
 #------------------------------------------------------------
 # OpenRTM-aist version (optional)
 #
-openrtm.version: 0.4.1
+openrtm.version: 0.4.2
 
 #------------------------------------------------------------
 # The name of manager (default = manager)
@@ -35,28 +35,37 @@ manager.name: manager
 #
 # ORB specific command line options given to ORB_init()
 #
+# Example:
+#   corba.args: -ORBInitialHost myhost -ORBInitialPort 8888
+#
+#
 corba.args:
+
 #
 # ORB endpoint
+#
 # If you have two or more network interfaces, ORB endpoint address and/or
 # port have to be specified. If hostname or port number is abbreviated,
 # default interface or port number is used. At least one colon ':'
 # is needed when you specify this option.
-# example
-# corba.endpoint: myhost:      (use myhost and default port)
-# corba.endpoint: :9876        (use default addr and port 9876)
-# corba.endpoint: myhost:9876  (use myhost and port 9876)
+#
+# Examples:
+#   corba.endpoint: myhost:      (use myhost and default port)
+#   corba.endpoint: :9876        (use default addr and port 9876)
+#   corba.endpoint: myhost:9876  (use myhost and port 9876)
 #
 corba.endpoint:
+
 #
 # CORBA name server setting
-# example
-# corba.nameservers: openrtm.aist.go.jp:9876
-# corba.nameservers: rtm0.aist.go.jp, rtm1.aist.go.jp, rtm2.aist.go.jp
 #
 # Multiple name servers can be specified separating by comma.
 # If port number is abbreviated, default port number is used.
 # The default port number is depend on ORB implementation.
+#
+# Examples:
+#   corba.nameservers: openrtm.aist.go.jp:9876
+#   corba.nameservers: rtm0.aist.go.jp, rtm1.aist.go.jp, rtm2.aist.go.jp
 #
 corba.nameservers: localhost
 
@@ -68,11 +77,14 @@ corba.nameservers: localhost
 # Enable/Disable naming functions
 #
 naming.enable: YES
+
 #
 # Naming Types
+#
 # Now only "corba" is supported.
 #
 naming.type: corba
+
 #
 # Naming format
 #
@@ -94,12 +106,17 @@ naming.type: corba
 # %M: The manager name.
 # %p: PID of the manager.
 #
-naming.formats: %h.host_cxt/%M.mgr_cxt/%c.cat_cxt/%m.mod_cxt/%n.rtc
+naming.formats: %h.host/%n.rtc
+
 #
-# Autoupdate to Naming Server
-# Enable/Disable and update interval [s]
+# Auto update to Naming Server
+#
 naming.update.enable: YES
-naming.update.interval 10.0
+
+#
+# Update interval [s] for auto update
+#
+naming.update.interval: 10.0
 
 # End of Naming configuration section
 #------------------------------------------------------------
@@ -108,17 +125,55 @@ naming.update.interval 10.0
 # Module management
 #============================================================
 #
-#manager.modules.config_ext:
-#manager.modules.config_path:
-#manager.modules.detect_loadable:
-#manager.modules.load_path:
-#manager.modules.init_func_suffix:
-#manager.modules.init_func_prefix:
-#manager.modules.abs_path_allowed:
-#manager.modules.download_allowed:
-#manager.modules.download_dir:
-#manager.modules.download_cleanup:
-#manager.modules.preload:
+# Loadable module search path list
+#
+# Manager searches loadable modules from the specified search path list.
+# Path list elements should be separated by comma.
+# Path delimiter is '/' on UNIX, and '\\' on Windows
+# Valid path examples:
+#   manager.modules.load_path: C:/Program Files/OpenRTM-aist,  \
+#   			       C:\\Program Files\\OpenRTM-aist
+#   manager.modules.load_path: /usr/lib, /usr/local/lib,       \
+#   			       /usr/local/lib/OpenRTM-aist/libs
+#
+manager.modules.load_path: ./
+
+#
+# Preload module list
+#
+# Manager can load loadable modules before starting up.
+# Loadable modules, which is specified only as its file name, is searched
+# in each module load path specified in the "manager.modules.load_path".
+# If the "manager.modules.abs_path_allowed" option is YES, loadable file
+# can be specified as full-path name,
+#
+# Valid settings:
+# manager.modules.preload: ConsoleIn.dll, ConsoleOut.dll
+# manager.modules.preload: ConsoleIn.so, ConsoleOut.so
+# manager.modules.abs_path_allowed: YES
+# manager.modules.preload: /usr/lib/OpenRTM-aist/ConsoleIn.so
+#
+manager.modules.preload:
+
+#
+# Permission flag of absolute module path
+#
+# If this option is "YES", absolute path specification for module is allowed.
+#
+manager.modules.abs_path_allowed: YES
+
+#
+# The following options are not implemented yet. 
+#
+# manager.modules.config_ext:
+# manager.modules.config_path:
+# manager.modules.detect_loadable:
+# manager.modules.init_func_suffix:
+# manager.modules.init_func_prefix:
+# manager.modules.download_allowed:
+# manager.modules.download_dir:
+# manager.modules.download_cleanup:
+#
 
 #============================================================
 # Logger configurations
@@ -126,14 +181,15 @@ naming.update.interval 10.0
 #
 # Enable/Disable logger [YES/NO]
 logger.enable: YES
+
 #
-#------------------------------------------------------------
 # Log file name (default = ./rtc%p.log)
+#
 # %p: PID
 #
 logger.file_name: ./rtc%p.log
+
 #
-#------------------------------------------------------------
 # Log date format (default = %b %d %H:%M:%S)
 #
 # The following strftime(3) like format expression is available.
@@ -165,15 +221,16 @@ logger.file_name: ./rtc%p.log
 # %% a percent sign 
 #  
 #
-#logger.date_format: No
-#logger.date_format: Disable
-#logger.date_format: [%Y-%m-%dT%H.%M.%S%Z]     // W3C standard format
-#logger.date_format: [%b %d %H:%M:%S]          // Syslog format
-#logger.date_format: [%a %b %d %Y %H:%M:%S %Z] // RFC2822 format
-#logger.date_format: [%a %b %d %H:%M:%S %Z %Y] // data command format
-#logger.date_format: [%Y-%m-%d %H.%M.%S]
+# logger.date_format: No
+# logger.date_format: Disable
+# logger.date_format: [%Y-%m-%dT%H.%M.%S%Z]     // W3C standard format
+# logger.date_format: [%b %d %H:%M:%S]          // Syslog format
+# logger.date_format: [%a %b %d %Y %H:%M:%S %Z] // RFC2822 format
+# logger.date_format: [%a %b %d %H:%M:%S %Z %Y] // data command format
+# logger.date_format: [%Y-%m-%d %H.%M.%S]
 #
 logger.date_format: %b %d %H:%M:%S
+
 #
 # Log level (default = NORMAL)
 #
@@ -196,3 +253,29 @@ logger.date_format: %b %d %H:%M:%S
 # "PARANOID" log level will tangle the log file.
 #
 logger.log_level: NORMAL
+
+#============================================================
+# Timer configuration
+#============================================================
+#
+# Enable/disable timer function
+#
+timer.enable: YES
+
+#
+# Timer clock tick setting [s]
+#
+timer.tick: 0.1
+
+#============================================================
+# Execution context settings
+#============================================================
+#
+# Periodic type ExecutionContext
+#
+exec_cxt.periodic.type: PeriodicExecutionContext
+
+#
+# The execution cycle of ExecutionContext
+#
+exec_cxt.periodic.rate: 1000
