@@ -4,7 +4,7 @@
 ##
 ## $Id$
 ##---------------------------------------------------------------------------
-SUBDIRS = bin build docs examples utils rtm installer .
+SUBDIRS = bin etc build docs examples utils rtm installer .
 
 
 clean-local:
