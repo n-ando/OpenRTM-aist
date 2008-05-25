@@ -423,8 +423,7 @@ WRAPPER  = rtm-skelwrapper
 WRAPPER_FLAGS = --include-dir="" --skel-suffix=Skel --stub-suffix=Stub
 
 SKEL_OBJ = [for sidl in service_idl][sidl.skel_basename].o [endfor] 
-STUB_OBJ = [for sidl in service_idl][sidl.stub_basename].o [endfor] \
-	[for cidl in consumer_idl][cidl.stub_basename].o [endfor] 
+STUB_OBJ = [for cidl in consumer_idl][cidl.stub_basename].o [endfor] 
 IMPL_OBJ = [for sidl in service_idl][sidl.impl_basename].o [endfor] 
 OBJS     = [basicInfo.name].o $(SKEL_OBJ) $(STUB_OBJ) $(IMPL_OBJ)
 
@@ -568,17 +567,22 @@ consumer_declare = \
 [endif]
 [endfor][endfor]"""
 
-initializer = \
-"""[for inport in dataPorts][if inport.portType is DataInPort]
-    m_[inport.name]In("[inport.name]", m_[inport.name]),
-[endif][endfor]
-[for outport in dataPorts][if outport.portType is DataOutPort]
-    m_[outport.name]Out("[outport.name]", m_[outport.name]),
-[endif][endfor]
-[for corbaport in servicePorts]
-    m_[corbaport.name]Port("[corbaport.name]")[if-index corbaport is last][else],[endif] 
-[endfor]"""
+initializer = """[for port in port_init]
+[if-any port.portType]
+[if port.portType is DataInPort]
+    m_[port.name]In("[port.name]", m_[port.name])[if-index port is last][else],[endif]
 
+[endif]
+[if port.portType is DataOutPort]
+    m_[port.name]Out("[port.name]", m_[port.name])[if-index port is last][else],[endif]
+
+[endif]
+[else]
+    m_[port.name]Port("[port.name]")[if-index port is last][else],[endif]
+
+[endif]
+[endfor]
+"""
 
 registration = \
 """  // Set InPort buffers
@@ -695,6 +699,16 @@ def CreateActivityFuncs(dict):
 	dict["activity"] = actlist
 
 
+def PortInitializer(dict):
+	dict["port_init"] = []
+	for d in dict["dataPorts"]:
+		dict["port_init"].append(d)
+		print "daraport: ", d
+	for d in dict["servicePorts"]:
+		dict["port_init"].append(d)
+		print "servieport: ", d
+
+
 class cxx_gen(gen_base.gen_base):
 	"""
 	C++ component source code generator
@@ -707,7 +721,7 @@ class cxx_gen(gen_base.gen_base):
 		CreateServiceIDL(self.data)
 		CreateConsumerIDL(self.data)
 		CreateActivityFuncs(self.data)
-
+		PortInitializer(self.data)
 		self.data["rcs_date"] = "$" + "Date" + "$"
 		self.data["rcs_id"] = "$" + "Id" + "$"
 		self.data["fname"] = self.data["basicInfo"]["name"]
