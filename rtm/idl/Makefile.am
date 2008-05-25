@@ -162,8 +162,8 @@ vc8proj: libRTCSkel.vcproj.yaml
 		--version $(RTM_VERSION) \
 		--out $(win32_builddir)/rtm/idl/libRTCSkel_vc8.vcproj \
 		--yaml libRTCSkel.vcproj.yaml \
-		--source $(SKEL_CPP) $(STUB_CPP) \
-		--header $(SKEL_H)   $(STUB_H)
+		--source $(SKEL_CPP) \
+		--header $(SKEL_H)
 	qkc -sm $(win32_builddir)/rtm/idl/libRTCSkel_vc8.vcproj
 
 vc9proj: libRTCSkel.vcproj.yaml
@@ -173,8 +173,8 @@ vc9proj: libRTCSkel.vcproj.yaml
 		--version $(RTM_VERSION) \
 		--out $(win32_builddir)/rtm/idl/libRTCSkel_vc9.vcproj \
 		--yaml libRTCSkel.vcproj.yaml \
-		--source $(SKEL_CPP) $(STUB_CPP) \
-		--header $(SKEL_H)   $(STUB_H)
+		--source $(SKEL_CPP) \
+		--header $(SKEL_H)
 	qkc -sm $(win32_builddir)/rtm/idl/libRTCSkel_vc9.vcproj
 
 #------------------------------------------------------------
