@@ -24,7 +24,7 @@ openrtm_repo="rpm     http://www.openrtm.org/pub/Linux/Vine/apt $vinever/\$(ARCH
 #---------------------------------------
 omni="omniORB omniORB-devel omniORB-servers omniORB-doc"
 ace="ace ace-devel"
-openrtm="OpenRTM-aist OpenRTM-aist-devel OpenRTM-aist-doc OpenRTM-aist-example"
+openrtm="OpenRTM-aist OpenRTM-aist-devel OpenRTM-aist-doc OpenRTM-aist-example PyYAML"
 packages="$omni $ace $openrtm"
 
 

@@ -10,8 +10,9 @@
 #---------------------------------------
 omni="libomniorb4 libomniorb4-de omniidl4 omniorb4-nameserver"
 ace="libace libace-dev"
+openrtm="python-yaml"
 devel="gcc g++ make"
-packages="$devel $omni $ace"
+packages="$devel $omni $ace $openrtm"
 
 #----------------------------------------
 # root かどうかをチェック
