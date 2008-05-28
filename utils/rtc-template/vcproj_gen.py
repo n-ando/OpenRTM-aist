@@ -30,6 +30,14 @@ userprops = """<?xml version="1.0" encoding="shift_jis"?>
 	Version="8.00"
 	Name="User property"
 	>
+	<UserMacro
+		Name="user_lib"
+		Value=""
+	/>
+	<UserMacro
+		Name="user_libd"
+		Value=""
+	/>
 </VisualStudioPropertySheet>
 """
 
@@ -97,12 +105,12 @@ class vcproj_gen(gen_base.gen_base):
 		nlist = ["stub_basename"]
 		for sidl in self.data["consumer_idl"]:
 			for l in slist:
-				l += [(sidl[key] + ".cpp") for key in nlist]
+				l += [(sidl[key] + ".cpp") for key in nlist if sidl.has_key(key)]
 			for l in hlist:
-				l += [(sidl[key] + ".h") for key in nlist]
+				l += [(sidl[key] + ".h") for key in nlist if sidl.has_key(key)]
 		
 
-	def check_overwrite(self, fname):
+	def check_overwrite(self, fname, wmode="wb"):
 		"""
 		Check file exist or not.
 		"""
@@ -110,11 +118,11 @@ class vcproj_gen(gen_base.gen_base):
 		if (os.access(fname, os.F_OK)):
 			ans = raw_input("\"" + fname + "\"" + msg)
 			if (ans == "y" or ans == "Y"):
-				return file(fname, "w")
+				return file(fname, "wb")
 			else:
 				return None
 		else:
-			return file(fname, "w")
+			return file(fname, "wb")
 		return None, None
 
 	def print_vcproject(self):

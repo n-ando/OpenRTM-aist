@@ -38,8 +38,6 @@ EXTRA_DIST =                          \
 	RunAtFirst.py                 \
 	autobuild_vc8.bat             \
 	autobuild_vc9.bat             \
-	rtm_config.vsprops            \
-	rtm_config_omni412.vsprops    \
 	rtm_distbuild.vsprops
 
 

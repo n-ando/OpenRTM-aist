@@ -15,20 +15,24 @@
 @rem
 
 @set RTM_ROOT=%~dp0
-@set PATH=C:\WINDOWS\Microsoft.NET\Framework\v2.0.50727;"C:\Program Files\Microsoft Visual Studio 8\Common7\IDE";%PATH%
+@set PATH="C:\Program Files\Microsoft Visual Studio 8\VC\vcpackages";%PATH%
+
+@rem ============================================================
+@rem copy property sheet
+@rem ============================================================
+copy   etc\rtm_config_omni407.vsprops rtm_config.vsprops
+copy   etc\rtm_config_omni407.vsprops examples\USBCamera\rtm_config.vsprops
 
 @rem ============================================================
 @rem build OpenRTM-aist
 @rem ============================================================
 
-devenv.com OpenRTM-aist_vc8.sln /rebuild Release /projectconfig Release > build_release.log
-devenv.com OpenRTM-aist_vc8.sln /rebuild Debug /projectconfig Debug > build_debug.log
+vcbuild OpenRTM-aist_vc8.sln
 
 @rem ============================================================
 @rem build USBCamera examples
 @rem ============================================================
-devenv.com examples\USBCamera\USBCamera_vc8.sln /rebuild Release /projectconfig Release > USBCamera_build_release.log
-devenv.com examples\USBCamera\USBCamera_vc8.sln /rebuild Debug /projectconfig Debug > USBCamera_build_debug.log
+vcbuild examples\USBCamera\USBCamera_vc8.sln
 
 cd installer
 call autowix.cmd

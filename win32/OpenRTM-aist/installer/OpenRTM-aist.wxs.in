@@ -229,6 +229,7 @@
     
     <Feature Id="Devel" Level="1" Title="Development Environment">
       <ComponentRef Id="Bin"/>
+      <ComponentRef Id="Etc"/>
       <ComponentRef Id="Headers"/>
       <ComponentRef Id="IDLs"/>
       <ComponentRef Id="RtcTemplate"/>

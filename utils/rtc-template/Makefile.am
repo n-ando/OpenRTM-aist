@@ -31,7 +31,8 @@ pyhelper_SCRIPTS =       \
 	vcproj_gen.py    \
 	python_gen.py    \
 	slntool.py       \
-	vcprojtool.py
+	vcprojtool.py    \
+	test-template.py
 
 
 EXTRA_DIST =             \
@@ -47,6 +48,7 @@ EXTRA_DIST =             \
 	python_gen.py    \
 	slntool.py       \
 	vcprojtool.py
+	test-template.py
 
 
 clean-local:

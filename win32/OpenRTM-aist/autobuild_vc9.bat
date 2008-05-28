@@ -15,15 +15,13 @@
 @rem
 
 @set RTM_ROOT=%~dp0
-@set PATH=C:\WINDOWS\Microsoft.NET\Framework\v2.0.50727;"C:\Program Files\Microsoft Visual Studio 9.0\VC\vcpackages";%PATH%
+@set PATH="C:\Program Files\Microsoft Visual Studio 9.0\VC\vcpackages";%PATH%
 
 @rem ============================================================
-@rem rename and copy property sheet
+@rem copy property sheet
 @rem ============================================================
-rename rtm_config.vsprops rtm_config_omni407.vsprops
-rename rtm_config_omni412.vsprops rtm_config.vsprops
-rename examples\USBCamera\rtm_config.vsprops rtm_config_omni407.vsprops
-copy   rtm_config.vsprops examples\USBCamera\rtm_config.vsprops
+copy   etc\rtm_config_omni412.vsprops rtm_config.vsprops
+copy   etc\rtm_config_omni412.vsprops examples\USBCamera\rtm_config.vsprops
 
 @rem ============================================================
 @rem build OpenRTM-aist
@@ -34,7 +32,7 @@ vcbuild OpenRTM-aist_vc9.sln
 @rem ============================================================
 @rem build USBCamera examples
 @rem ============================================================
-vcbuild examples\USBCamera\USBCamera_vc8.sln
+vcbuild examples\USBCamera\USBCamera_vc9.sln
 
 cd installer
 call autowix.cmd

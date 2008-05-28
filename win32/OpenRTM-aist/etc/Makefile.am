@@ -6,19 +6,18 @@
 ##---------------------------------------------------------------------------
 
 clean-local:
-	rm -f *.vsprops *.conf.*
+	rm -f *.conf.*
 
 copy_etc:
-	cp $(top_srcdir)/win32/OpenRTM-aist/*.vsprops .
 	cp $(top_srcdir)/etc/rtc.conf.sample .
 
 wxs:
-	$(top_srcdir)/build/makewxs.py flist \
-		-c Etc \
-		-o ../installer/etc.yaml \
-		-p ..\\etc \
-		*.vsprops rtc.conf.sample
+	cp etc.yaml ../installer/etc.yaml
 
 dist-hook: clean-local copy_etc wxs
 
-
+EXTRA_DIST =                       \
+	rtc.conf.sample            \
+	etc.yaml                   \
+	rtm_config_omni407.vsprops \
+	rtm_config_omni412.vsprops
