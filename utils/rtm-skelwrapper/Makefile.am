@@ -19,8 +19,7 @@ pyhelper_SCRIPTS = skel_wrapper.py
 
 EXTRA_DIST = \
 	rtm-skelwrapper \
-	skel_wrapper.py \
-	ezt.py
+	skel_wrapper.py
 
 
 clean-local:

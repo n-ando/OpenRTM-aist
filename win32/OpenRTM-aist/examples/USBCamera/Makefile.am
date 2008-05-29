@@ -8,7 +8,6 @@ clean-local:
 	rm -rf USBCameraAcquire USBCameraAcquireComp
 	rm -rf USBCameraMonitor USBCameraMonitorComp
 	rm -rf *.vcproj *.user *.ncb *.suo *.sln *.lst
-	rm -rf rtm_config.vsprops
 
 
 vcproj: vc8proj vc9proj
@@ -117,13 +116,9 @@ USBCamera_vc9.sln: vc9proj
 		`find ./ -name '*_vc9.vcproj'`
 	qkc -ms USBCamera_vc9.sln
 
-rtm_config.vsprops:
-	cp ../../rtm_config.vsprops .
-
 dist-hook: vcproj sln lst
 
 EXTRA_DIST =                             \
-	rtm_config.vsprops               \
 	user_config.vsprops              \
 	USBCameraAcquire.cpp             \
 	USBCameraAcquire.h               \

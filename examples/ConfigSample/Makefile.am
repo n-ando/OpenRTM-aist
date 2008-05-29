@@ -10,16 +10,36 @@ AUTOMAKE_OPTIONS = 1.9
 AM_CPPFLAGS=-I$(top_srcdir) -I$(top_srcdir)/rtm/idl
 AM_LDFLAGS=-L$(top_builddir) -L$(top_builddir)/rtm -L$(top_builddir)/rtm/idl
 
-noinst_LTLIBRARIES = libConfigSample.la
-libConfigSample_la_SOURCES = ConfigSample.cpp ConfigSample.h
-libConfigSample_la_LIBADD = $(top_builddir)/rtm/libRTC.la
-libConfigSample_la_FLAGS = -L$(top_builddir)/rtm/.lib
+#------------------------------------------------------------
+# Targets
+#------------------------------------------------------------
+# Targets directories
+exampledir = $(pkgdatadir)/examples
+socompdir  = $(exampledir)/rtcs
+sourcedir  = $(exampledir)/src/ConfigSample
 
-noinst_PROGRAMS = ConfigSampleComp
+# Loadable RTCs
+socomp_LTLIBRARIES = ConfigSample.la
+
+ConfigSample_la_SOURCES = ConfigSample.cpp ConfigSample.h
+ConfigSample_la_LDFLAGS = -module
+ConfigSample_la_FLAGS   = -L$(top_builddir)/rtm/.lib
+ConfigSample_la_LIBADD  = $(top_builddir)/rtm/libRTC.la
+
+
+# Standalone RTCs
+example_PROGRAMS = ConfigSampleComp
+
 ConfigSampleComp_SOURCES = ConfigSampleComp.cpp 
-ConfigSampleComp_LDADD = $(top_builddir)/rtm/libRTC.la ConfigSample.o
 ConfigSampleComp_LDFLAGS = -L$(top_builddir)/rtm/.libs
+ConfigSampleComp_LDADD   = $(top_builddir)/rtm/libRTC.la ConfigSample.o
 
+# Example sources
+source_DATA = $(ALL_SRC) $(EXTRA_DIST)
+
+#------------------------------------------------------------
+# Extra distributed files
+#------------------------------------------------------------
 EXTRA_DIST =                  \
 	gen.sh                \
 	rtc.conf              \

@@ -5,29 +5,49 @@
 ## $Id$
 ##---------------------------------------------------------------------------
 
-AUTOMAKE_OPTIONS = 1.4
+AUTOMAKE_OPTIONS = 1.9
 
 AM_CPPFLAGS=-I$(top_srcdir) -I$(top_srcdir)/rtm/idl
 AM_LDFLAGS=-L$(top_builddir) -L$(top_builddir)/rtm -L$(top_builddir)/rtm/idl
 
-noinst_LTLIBRARIES = libSeqIn.la libSeqOut.la
-libSeqIn_la_SOURCES = SeqIn.cpp SeqIn.h
-libSeqIn_la_LIBADD = $(top_builddir)/rtm/libRTC.la
-libSeqIn_la_FLAGS = -L$(top_builddir)/rtm/.lib
+#------------------------------------------------------------
+# Targets
+#------------------------------------------------------------
+# Targets directories
+exampledir = $(pkgdatadir)/examples
+socompdir  = $(exampledir)/rtcs
+sourcedir  = $(exampledir)/src/SeqIO
 
-libSeqOut_la_SOURCES = SeqOut.cpp SeqOut.h
-libSeqOut_la_LIBADD = $(top_builddir)/rtm/libRTC.la
-libSeqOut_la_FLAGS = -L$(top_builddir)/rtm/.lib
+# Loadable RTCs
+socomp_LTLIBRARIES = SeqIn.la SeqOut.la
 
-noinst_PROGRAMS = SeqInComp SeqOutComp
+SeqIn_la_SOURCES = SeqIn.cpp SeqIn.h
+SeqIn_la_LDFLAGS = -module
+SeqIn_la_FLAGS   = -L$(top_builddir)/rtm/.lib
+SeqIn_la_LIBADD  = $(top_builddir)/rtm/libRTC.la
+
+SeqOut_la_SOURCES = SeqOut.cpp SeqOut.h
+SeqOut_la_LDFLAGS = -module
+SeqOut_la_FLAGS   = -L$(top_builddir)/rtm/.lib
+SeqOut_la_LIBADD  = $(top_builddir)/rtm/libRTC.la
+
+# Standalone RTCs
+example_PROGRAMS = SeqInComp SeqOutComp
+
 SeqInComp_SOURCES = SeqInComp.cpp 
-SeqInComp_LDADD = $(top_builddir)/rtm/libRTC.la SeqIn.o
 SeqInComp_LDFLAGS = -L$(top_builddir)/rtm/.libs
+SeqInComp_LDADD = $(top_builddir)/rtm/libRTC.la SeqIn.o
 
 SeqOutComp_SOURCES = SeqOutComp.cpp 
-SeqOutComp_LDADD = $(top_builddir)/rtm/libRTC.la SeqOut.o
 SeqOutComp_LDFLAGS = -L$(top_builddir)/rtm/.libs
+SeqOutComp_LDADD = $(top_builddir)/rtm/libRTC.la SeqOut.o
 
+# Example sources
+source_DATA = $(ALL_SRC) $(EXTRA_DIST)
+
+#------------------------------------------------------------
+# Extra distribution files
+#------------------------------------------------------------
 EXTRA_DIST =            \
 	Makefile.SeqIn  \
 	Makefile.SeqOut \

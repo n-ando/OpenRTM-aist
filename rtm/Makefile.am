@@ -85,7 +85,8 @@ libRTC_la_SOURCES = \
 	$(UTIL_SRC) $(MGR_SRC) $(COMP_SRC) $(PORT_SRC)
 
 
-libRTC_la_LIBADD = $(top_builddir)/rtm/idl/libRTCSkel.la $(top_builddir)/rtm/idl/libRTCStub.la $(ARTLIB)
+libRTC_la_LIBADD = $(top_builddir)/rtm/idl/libRTCSkel.la
+# $(top_builddir)/rtm/idl/libRTCStub.la $(ARTLIB)
 libRTC_la_LDFLAGS =                 \
 	-no-undefined               \
 	-L$(top_builddir)/rtm/idl   \

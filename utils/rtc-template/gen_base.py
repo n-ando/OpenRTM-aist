@@ -24,7 +24,7 @@ import yat
 import StringIO
 class gen_base:
 	
-	def check_overwrite(self, fname):
+	def check_overwrite(self, fname, wmode="w"):
 		"""
 		Check file exist or not.
 		"""
@@ -32,7 +32,7 @@ class gen_base:
 		if (os.access(fname, os.F_OK)):
 			ans = raw_input("\"" + fname + "\"" + msg)
 			if (ans == "y" or ans == "Y"):
-				return file(fname, "w"), None
+				return file(fname, wmode), None
 			elif (ans == "m" or ans == "M"):
 				f = file(fname, "r")
 				lines = []
@@ -41,11 +41,11 @@ class gen_base:
 				f.close()
 				oldfname = fname + ".old." + time.strftime("%y%m%d%H%M%S")
 				os.rename(fname, oldfname)
-				return file(fname, "w"), lines
+				return file(fname, wmode), lines
 			else:
 				return None, None
 		else:
-			return file(fname, "w"), None
+			return file(fname, wmode), None
 		return
 	
 	def replace_tags(self, lines, data):

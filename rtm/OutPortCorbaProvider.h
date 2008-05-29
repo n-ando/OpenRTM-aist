@@ -129,17 +129,18 @@ namespace RTC
      * @endif
      */
     CORBA::Any* get()
+      throw (CORBA::SystemException)
     {
       DataType data;
-      CORBA::Any_var tmp = new CORBA::Any();
       m_buffer.read(data);
-      tmp <<= data;
-      return tmp._retn();
+      m_tmp <<= data;
+      return new CORBA::Any(m_tmp);
     }
     
   private:
     BufferBase<DataType>& m_buffer;
     OutPortAny_var m_objref;
+    CORBA::Any m_tmp;
   };
 };     // namespace RTC
 #endif // OutPortCorbaProvider_h
