@@ -353,7 +353,7 @@ outports = [
     {"name": "out06", "type": "TimedChar"},
     {"name": "out07", "type": "TimedBoolean"},
     {"name": "out08", "type": "TimedOctet"},
-    {"name": "out09", "type": "TimedStroutg"},
+    {"name": "out09", "type": "TimedString"},
     {"name": "out10", "type": "TimedShortSeq"},
     {"name": "out11", "type": "TimedLongSeq"},
     {"name": "out12", "type": "TimedUShortSeq"},
