@@ -8,13 +8,13 @@
 clean-local:
 	rm -f *.conf.*
 
-copy_etc:
+rtc.conf.sample:
 	cp $(top_srcdir)/etc/rtc.conf.sample .
 
 wxs:
 	cp etc.yaml ../installer/etc.yaml
 
-dist-hook: clean-local copy_etc wxs
+dist-hook: clean-local rtc.conf.sample wxs
 
 EXTRA_DIST =                       \
 	rtc.conf.sample            \

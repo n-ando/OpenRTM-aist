@@ -47,7 +47,7 @@ EXTRA_DIST =             \
 	vcproj_gen.py    \
 	python_gen.py    \
 	slntool.py       \
-	vcprojtool.py
+	vcprojtool.py    \
 	test-template.py
 
 

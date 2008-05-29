@@ -27,12 +27,12 @@ copy   etc\rtm_config_omni407.vsprops examples\USBCamera\rtm_config.vsprops
 @rem build OpenRTM-aist
 @rem ============================================================
 
-vcbuild OpenRTM-aist_vc8.sln
+vcbuild /rebuild OpenRTM-aist_vc8.sln
 
 @rem ============================================================
 @rem build USBCamera examples
 @rem ============================================================
-vcbuild examples\USBCamera\USBCamera_vc8.sln
+vcbuild /rebuild examples\USBCamera\USBCamera_vc8.sln
 
 cd installer
 call autowix.cmd
