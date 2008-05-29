@@ -121,8 +121,8 @@ namespace RTC
       const DataType* d;
       try
 	{
-	  CORBA::Any_var a_var(_ptr()->get());
-	  if (*((const CORBA::Any*)(a_var.operator->())) >>= d)
+	  const CORBA::Any_var a(_ptr()->get());
+	  if (a >>= d)
 	    {
 	      data = (*d);
 	      return true;

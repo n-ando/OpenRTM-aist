@@ -1,7 +1,7 @@
 #!/bin/sh
 #
-# @file pkg_install_freebsd.sh
-# @brief OpenRTM-aist dependent packages install script for FreeBSD
+# @file pkg_install_freebsd6.sh
+# @brief OpenRTM-aist dependent packages install script for FreeBSD-6
 # @author Noriaki Ando <n-ando@aist.go.jp>
 #
 # $Id: pkg_install_freebsd6.sh 726 2008-05-14 03:05:42Z n-ando $
@@ -14,8 +14,7 @@ omni="omniORB"
 omniorbpy="py24-omniorb py24-tkinter"
 ace="ace+tao"
 autotools="autoconf259 automake19 libtool"
-openrtm=""
-packages="$omni $ace $autotools $openrtm"
+packages="$omni $ace $autotools"
 
 #----------------------------------------
 # root かどうかをチェック

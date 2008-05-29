@@ -50,17 +50,6 @@
 		{% endfor %}
 	      </Component>
 	    </Directory>
-	    <!-- etc -->
-	    <Directory Id="etc" Name="etc">
-	      <Component Id="Etc" Guid="{% Etc.GUID %}">
-		{% for file in Etc.Files %}
-		<File Id="{% file.Id %}" Name="{% file.ShortName %}"
-		      LongName="{% file.Name %}" DiskId="1" Compressed="yes"
-		      Source="{% file.Source %}">
-		</File>
-		{% endfor %}
-	      </Component>
-	    </Directory>
 	    <!-- rtm -->
 	    <Directory Id="rtm" Name="rtm">
 	      <Component Id="Headers" Guid="{% Headers.GUID %}">
@@ -229,7 +218,6 @@
     
     <Feature Id="Devel" Level="1" Title="Development Environment">
       <ComponentRef Id="Bin"/>
-      <ComponentRef Id="Etc"/>
       <ComponentRef Id="Headers"/>
       <ComponentRef Id="IDLs"/>
       <ComponentRef Id="RtcTemplate"/>

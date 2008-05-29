@@ -244,6 +244,7 @@ comp_soruce = """// -*- C++ -*-
 // </rtc-template>
 
 [basicInfo.name]::[basicInfo.name](RTC::Manager* manager)
+  : RTC::DataFlowComponentBase(manager),
     // <rtc-template block="initializer">
     // </rtc-template>
 {
@@ -422,7 +423,8 @@ WRAPPER  = rtm-skelwrapper
 WRAPPER_FLAGS = --include-dir="" --skel-suffix=Skel --stub-suffix=Stub
 
 SKEL_OBJ = [for sidl in service_idl][sidl.skel_basename].o [endfor] 
-STUB_OBJ = [for cidl in consumer_idl][if-any cidl.stub_basename][cidl.stub_basename].o [endif][endfor] 
+STUB_OBJ = [for sidl in service_idl][sidl.stub_basename].o [endfor] \
+	[for cidl in consumer_idl][cidl.stub_basename].o [endfor] 
 IMPL_OBJ = [for sidl in service_idl][sidl.impl_basename].o [endfor] 
 OBJS     = [basicInfo.name].o $(SKEL_OBJ) $(STUB_OBJ) $(IMPL_OBJ)
 
@@ -453,27 +455,39 @@ clean_skelstub:
 	rm -f *[skel_suffix].h *[skel_suffix].cpp
 	rm -f *[stub_suffix].h *[stub_suffix].cpp
 
-[for sidl in service_idl][if-any sidl.skel_basename]
+[for sidl in service_idl]
 [sidl.skel_basename].cpp : [sidl.idl_fname] 
 	$(IDLC) $(IDLFLAGS) [sidl.idl_fname] 
 	$(WRAPPER) $(WRAPPER_FLAGS) --idl-file=[sidl.idl_fname] 
 [sidl.skel_basename].h : [sidl.idl_fname] 
 	$(IDLC) $(IDLFLAGS) [sidl.idl_fname] 
 	$(WRAPPER) $(WRAPPER_FLAGS) --idl-file=[sidl.idl_fname] 
-[endif][endfor]
+[sidl.stub_basename].cpp : [sidl.idl_fname] 
+	$(IDLC) $(IDLFLAGS) [sidl.idl_fname] 
+	$(WRAPPER) $(WRAPPER_FLAGS) --idl-file=[sidl.idl_fname] 
+[sidl.stub_basename].h : [sidl.idl_fname] 
+	$(IDLC) $(IDLFLAGS) [sidl.idl_fname] 
+	$(WRAPPER) $(WRAPPER_FLAGS) --idl-file=[sidl.idl_fname] 
+[endfor]
 
-[for cidl in consumer_idl][if-any cidl.stub_basename]
+[for cidl in consumer_idl]
+[cidl.skel_basename].cpp : [cidl.idl_fname] 
+	$(IDLC) $(IDLFLAGS) [cidl.idl_fname] 
+	$(WRAPPER) $(WRAPPER_FLAGS) --idl-file=[cidl.idl_fname] 
+[cidl.skel_basename].h : [cidl.idl_fname] 
+	$(IDLC) $(IDLFLAGS) [cidl.idl_fname] 
+	$(WRAPPER) $(WRAPPER_FLAGS) --idl-file=[cidl.idl_fname] 
 [cidl.stub_basename].cpp : [cidl.idl_fname] 
 	$(IDLC) $(IDLFLAGS) [cidl.idl_fname] 
 	$(WRAPPER) $(WRAPPER_FLAGS) --idl-file=[cidl.idl_fname] 
 [cidl.stub_basename].h : [cidl.idl_fname] 
 	$(IDLC) $(IDLFLAGS) [cidl.idl_fname] 
 	$(WRAPPER) $(WRAPPER_FLAGS) --idl-file=[cidl.idl_fname] 
-[endif][endfor]
+[endfor]
 
 [basicInfo.name].so: $(OBJS)
 [basicInfo.name].o: [basicInfo.name].h [for sidl in service_idl][sidl.skel_basename].h [sidl.impl_basename].h [endfor]
-[for cidl in consumer_idl][if-any cidl.stub_basename][cidl.stub_basename].h [endif][endfor] 
+[for cidl in consumer_idl][cidl.stub_basename].h [endfor] 
 [basicInfo.name]Comp.o: [basicInfo.name]Comp.cpp [basicInfo.name].cpp [basicInfo.name].h [for sidl in service_idl][sidl.skel_basename].h [sidl.impl_basename].h [endfor] 
 
 [for sidl in service_idl]
@@ -482,10 +496,10 @@ clean_skelstub:
 [sidl.stub_basename].o: [sidl.stub_basename].cpp [sidl.stub_basename].h
 [endfor]
 
-[for cidl in consumer_idl][if-any cidl.skel_basename]
+[for cidl in consumer_idl]
 [cidl.skel_basename].o: [cidl.skel_basename].cpp [cidl.skel_basename].h [cidl.stub_basename].h
 [cidl.stub_basename].o: [cidl.stub_basename].cpp [cidl.stub_basename].h
-[endif][endfor]
+[endfor]
 
 # end of Makefile
 """
@@ -496,9 +510,8 @@ clean_skelstub:
 #============================================================
 service_impl_h = """[for sidl in service_idl]#include "[sidl.impl_h]"
 [endfor]"""
-consumer_stub_h = """[for cidl in consumer_idl][if-any cidl.stub_h]
-#include "[cidl.stub_h]"
-[endif][endfor]"""
+consumer_stub_h = """[for cidl in consumer_idl]#include "[cidl.stub_h]"
+[endfor]"""
 
 module_spec = """static const char* [l_name]_spec[] =
   {
@@ -555,24 +568,17 @@ consumer_declare = \
 [endif]
 [endfor][endfor]"""
 
-initializer = """  : RTC::DataFlowComponentBase(manager)[if-any port_init],
-[for port in port_init]
-[if-any port.portType]
-[if port.portType is DataInPort]
-    m_[port.name]In("[port.name]", m_[port.name])[if-index port is last][else],[endif]
+initializer = \
+"""[for inport in dataPorts][if inport.portType is DataInPort]
+    m_[inport.name]In("[inport.name]", m_[inport.name]),
+[endif][endfor]
+[for outport in dataPorts][if outport.portType is DataOutPort]
+    m_[outport.name]Out("[outport.name]", m_[outport.name]),
+[endif][endfor]
+[for corbaport in servicePorts]
+    m_[corbaport.name]Port("[corbaport.name]")[if-index corbaport is last][else],[endif] 
+[endfor]"""
 
-[endif]
-[if port.portType is DataOutPort]
-    m_[port.name]Out("[port.name]", m_[port.name])[if-index port is last][else],[endif]
-
-[endif]
-[else]
-    m_[port.name]Port("[port.name]")[if-index port is last][else],[endif]
-
-[endif]
-[endfor]
-[else][endif]
-"""
 
 registration = \
 """  // Set InPort buffers
@@ -665,7 +671,6 @@ def CreateConsumerIDL(dict):
 			tmp["stub_h"]        = tmp["stub_basename"] + ".h"
 			tmp["stub_cpp"]      = tmp["stub_basename"] + ".cpp"
 			conslist.append(tmp)
-			
 
 
 def CreateActivityFuncs(dict):
@@ -690,16 +695,6 @@ def CreateActivityFuncs(dict):
 	dict["activity"] = actlist
 
 
-def PortInitializer(dict):
-	dict["port_init"] = []
-	for d in dict["dataPorts"]:
-		dict["port_init"].append(d)
-	for d in dict["servicePorts"]:
-		dict["port_init"].append(d)
-	if len(dict["port_init"]) == 0:
-		dict.pop("port_init")
-
-
 class cxx_gen(gen_base.gen_base):
 	"""
 	C++ component source code generator
@@ -712,7 +707,7 @@ class cxx_gen(gen_base.gen_base):
 		CreateServiceIDL(self.data)
 		CreateConsumerIDL(self.data)
 		CreateActivityFuncs(self.data)
-		PortInitializer(self.data)
+
 		self.data["rcs_date"] = "$" + "Date" + "$"
 		self.data["rcs_id"] = "$" + "Id" + "$"
 		self.data["fname"] = self.data["basicInfo"]["name"]

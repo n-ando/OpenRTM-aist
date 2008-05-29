@@ -915,7 +915,6 @@ if test "x$have_tao" = "xyes" ; then
 	if test "x$tao_version" = "x" ; then
 		tao_version=unknown
 	fi
-	AC_DEFINE([RTC_CORBA_CXXMAPPING11], [TRUE], [CORBA C++ mapping is ver1.1])
 	AC_MSG_RESULT($tao_version)
 
 	dnl ------------------------------------------------------------
@@ -1457,7 +1456,6 @@ AC_OUTPUT([Makefile
 	win32/Makefile
 	win32/OpenRTM-aist/Makefile
 	win32/OpenRTM-aist/bin/Makefile
-	win32/OpenRTM-aist/etc/Makefile
 	win32/OpenRTM-aist/docs/Makefile
 	win32/OpenRTM-aist/build/Makefile
 	win32/OpenRTM-aist/examples/Makefile

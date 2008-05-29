@@ -17,8 +17,7 @@
 #---------------------------------------
 omni="omniORB omniORB-devel omniORB-doc omniORB-servers omniORB-utils omniORB-bootscripts"
 ace="ace ace-devel"
-openrtm="OpenRTM-aist OpenRTM-aist-devel OpenRTM-aist-doc OpenRTM-aist-example PyYAML"
-packages="gcc-c++ $omni $ace $openrtm"
+packages="gcc-c++ $omni $ace"
 
 
 #----------------------------------------

@@ -1,6 +1,6 @@
 // -*- C++ -*-
 /*!
- * @file NVUtil.cpp
+ * @file NVUtil.h
  * @brief NameValue and NVList utility functions
  * @date $Date: 2008-01-13 07:41:08 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
@@ -17,9 +17,9 @@
  *
  */
 
+#include <rtm/CORBA_SeqUtil.h>
 #include <rtm/StringUtil.h>
 #include <rtm/NVUtil.h>
-#include <rtm/CORBA_SeqUtil.h>
 #include <string>
 #include <map>
 #include <algorithm>

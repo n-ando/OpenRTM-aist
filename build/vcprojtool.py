@@ -404,8 +404,8 @@ Configurations:
     VCPostBuildEventTool:
       - Key: CommandLine
         Value: |
-          copy "$(OutDir)\\\\$(TargetName).lib" "$(SolutionDir)bin\\\\"
-          copy "$(OutDir)\\\\$(TargetName).dll" "$(SolutionDir)bin\\\\"
+          copy $(OutDir)\\\\$(TargetName).lib "$(SolutionDir)bin\\\\"
+          copy $(OutDir)\\\\$(TargetName).dll "$(SolutionDir)bin\\\\"
   - Name: "Release|Win32"
     OutputDirectory: "$(ProjectDir)$(ConfigurationName)"
     IntermediateDirectory: "$(ConfigurationName)"
@@ -438,8 +438,7 @@ Configurations:
         Value: |
           lib -out:"$(TargetDir)RTC_static.lib" "$(TargetDir)*.obj" "$(SolutionDir)\\\\rtm\\\\idl\\\\$(ConfigurationName)\\\\*.obj"
           set PATH=%PATH%;$(rtm_path)
-          cd "$(OutDir)"
-          start /wait cmd /c makedeffile.py RTC_static.lib RTC042 0.4.1 RTC042.def
+          cd $(OutDir)&#x0D;&#x0A;start /wait cmd /c makedeffile.py RTC_static.lib RTC042 0.4.1 RTC042.def
           move RTC042.def ..\\\\
     VCLinkerTool:
       - Key: AdditionalDependencies
@@ -532,7 +531,8 @@ Configurations:
         Value: "make .def file"
       - Key: CommandLine
         Value: |
-          copy "$(OutDir)\\\\libRTCSkeld.lib" "$(SolutionDir)\\\\bin"
+          cd $(OutDir)
+          copy libRTCSkeld.lib "$(SolutionDir)\\\\bin"
   - Name: "Release|Win32"
     OutputDirectory: "$(ProjectDir)$(ConfigurationName)"
     IntermediateDirectory: "$(ConfigurationName)"
@@ -576,7 +576,8 @@ Configurations:
     VCPostBuildEventTool:
       - Key: CommandLine
         Value: |
-          copy "$(OutDir)\\\\libRTCSkel.lib" "$(SolutionDir)\\\\bin"
+          cd $(OutDir)
+          copy libRTCSkel.lib "$(SolutionDir)\\\\bin"
 """
 
 
@@ -653,8 +654,8 @@ Configurations:
     VCPostBuildEventTool:
       - Key: CommandLine
         Value: |
-          if NOT EXIST "$(SolutionDir)\\\\components" mkdir "$(SolutionDir)\\\\components"
-          copy "$(OutDir)\\\\__PROJECT_NAME__.exe" "$(SolutionDir)\\\\components"
+          if NOT EXIST $(SolutionDir)\\\\components mkdir $(SolutionDir)\\\\components
+          copy $(OutDir)\\\\__PROJECT_NAME__.exe $(SolutionDir)\\\\components
     VCCLCompilerTool:
       - Key: PreprocessorDefinitions
         Value: "USE_stub_in_nt_dll;WIN32;NDEBUG;_CONSOLE;__WIN32__;__x86__;_WIN32_WINNT=0x0400;__NT__;__OSVERSION__=4;_CRT_SECURE_NO_DEPRECATE"
@@ -766,8 +767,8 @@ Configurations:
     VCPostBuildEventTool:
       - Key: CommandLine
         Value: |
-          if NOT EXIST "$(SolutionDir)\\\\components" mkdir "$(SolutionDir)\\\\components"
-          copy "$(OutDir)\\\\__PROJECT_NAME__.dll" "$(SolutionDir)\\\\components"
+          if NOT EXIST $(SolutionDir)\\\\components mkdir $(SolutionDir)\\\\components
+          copy $(OutDir)\\\\__PROJECT_NAME__.dll $(SolutionDir)\\\\components
     VCCLCompilerTool:
       - Key: PreprocessorDefinitions
         Value: "USE_stub_in_nt_dll;WIN32;NDEBUG;_WINDOWS;_USRDLL;__WIN32__;__NT__;__OSVERSION__=4;__x86__;_WIN32_WINNT=0x0400;_CRT_SECURE_NO_DEPRECATE"

@@ -692,7 +692,7 @@ def FindIdlFile(opts, ifname):
 				print "IDL file not found: ", arg
 				sys.exit(1)
 			t = fd.read()
-			if None != re.compile(_re_text).search(t):
+			if None != re.compile(_re_text).search(t, 1):
 				fd.close()
 				return fname
 			fd.close()

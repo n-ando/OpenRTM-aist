@@ -10,34 +10,28 @@ AUTOMAKE_OPTIONS = 1.4
 AM_CPPFLAGS=-I$(top_srcdir) -I$(top_srcdir)/rtm/idl
 AM_LDFLAGS=-L$(top_builddir) -L$(top_builddir)/rtm -L$(top_builddir)/rtm/idl
 
-#------------------------------------------------------------
-# Targets
-#------------------------------------------------------------
-# Targets directories
-exampledir = $(pkgdatadir)/examples
-socompdir  = $(exampledir)/rtcs
-sourcedir  = $(exampledir)/src/ExtTrigger
+noinst_LTLIBRARIES = libConsoleIn.la libConsoleOut.la
+libConsoleIn_la_SOURCES = ConsoleIn.cpp ConsoleIn.h
+libConsoleIn_la_LIBADD = $(top_builddir)/rtm/libRTC.la
+libConsoleIn_la_FLAGS = -L$(top_builddir)/rtm/.lib
 
-# Standalone RTCs
-example_PROGRAMS = ConsoleInCompExt ConsoleOutCompExt ConnectorCompExt
-ConsoleInCompExt_SOURCES = ConsoleInComp.cpp ConsoleIn.cpp ConsoleIn.h
-ConsoleInCompExt_LDADD   = $(top_builddir)/rtm/libRTC.la 
-ConsoleInCompExt_LDFLAGS = -L$(top_builddir)/rtm/.libs
+libConsoleOut_la_SOURCES = ConsoleOut.cpp ConsoleOut.h
+libConsoleOut_la_LIBADD = $(top_builddir)/rtm/libRTC.la
+libConsoleOut_la_FLAGS = -L$(top_builddir)/rtm/.lib
 
-ConsoleOutCompExt_SOURCES = ConsoleOutComp.cpp ConsoleOut.cpp ConsoleOut.h
-ConsoleOutCompExt_LDADD   = $(top_builddir)/rtm/libRTC.la
-ConsoleOutCompExt_LDFLAGS = -L$(top_builddir)/rtm/.libs
+noinst_PROGRAMS = ConsoleInComp ConsoleOutComp ConnectorComp
+ConsoleInComp_SOURCES = ConsoleInComp.cpp 
+ConsoleInComp_LDADD = $(top_builddir)/rtm/libRTC.la ConsoleIn.o
+ConsoleInComp_LDFLAGS = -L$(top_builddir)/rtm/.libs
 
-ConnectorCompExt_SOURCES = ConnectorComp.cpp
-ConnectorCompExt_LDADD   = $(top_builddir)/rtm/libRTC.la
-ConnectorCompExt_LDFLAGS = -L$(top_builddir)/rtm/.libs
+ConsoleOutComp_SOURCES = ConsoleOutComp.cpp 
+ConsoleOutComp_LDADD = $(top_builddir)/rtm/libRTC.la ConsoleOut.o
+ConsoleOutComp_LDFLAGS = -L$(top_builddir)/rtm/.libs
 
-# Example sources
-source_DATA = $(ALL_SRC) $(EXTRA_DIST)
+ConnectorComp_SOURCES = ConnectorComp.cpp
+ConnectorComp_LDADD = $(top_builddir)/rtm/libRTC.la
+ConnectorComp_LDFLAGS = -L$(top_builddir)/rtm/.libs
 
-#------------------------------------------------------------
-# Extra distributed files
-#------------------------------------------------------------
 EXTRA_DIST =                \
 	run.sh              \
 	gen.sh              \
@@ -160,4 +154,3 @@ clean-local:
 	rm -f \
 	*.bak *.rpo *.sym lib*.*_pure_* *.lst \
 	Makefile.old *core *~ *.so *.log
-	rm -f $(example_PROGRAMS)

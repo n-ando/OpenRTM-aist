@@ -5,49 +5,29 @@
 ## $Id$
 ##---------------------------------------------------------------------------
 
-AUTOMAKE_OPTIONS = 1.9
+AUTOMAKE_OPTIONS = 1.4
 
 AM_CPPFLAGS=-I$(top_srcdir) -I$(top_srcdir)/rtm/idl
 AM_LDFLAGS=-L$(top_builddir) -L$(top_builddir)/rtm -L$(top_builddir)/rtm/idl
 
-#------------------------------------------------------------
-# Targets
-#------------------------------------------------------------
-# Targets directories
-exampledir = $(pkgdatadir)/examples
-socompdir  = $(exampledir)/rtcs
-sourcedir  = $(exampledir)/src/SeqIO
+noinst_LTLIBRARIES = libSeqIn.la libSeqOut.la
+libSeqIn_la_SOURCES = SeqIn.cpp SeqIn.h
+libSeqIn_la_LIBADD = $(top_builddir)/rtm/libRTC.la
+libSeqIn_la_FLAGS = -L$(top_builddir)/rtm/.lib
 
-# Loadable RTCs
-socomp_LTLIBRARIES = SeqIn.la SeqOut.la
+libSeqOut_la_SOURCES = SeqOut.cpp SeqOut.h
+libSeqOut_la_LIBADD = $(top_builddir)/rtm/libRTC.la
+libSeqOut_la_FLAGS = -L$(top_builddir)/rtm/.lib
 
-SeqIn_la_SOURCES = SeqIn.cpp SeqIn.h
-SeqIn_la_LDFLAGS = -module
-SeqIn_la_FLAGS   = -L$(top_builddir)/rtm/.lib
-SeqIn_la_LIBADD  = $(top_builddir)/rtm/libRTC.la
-
-SeqOut_la_SOURCES = SeqOut.cpp SeqOut.h
-SeqOut_la_LDFLAGS = -module
-SeqOut_la_FLAGS   = -L$(top_builddir)/rtm/.lib
-SeqOut_la_LIBADD  = $(top_builddir)/rtm/libRTC.la
-
-# Standalone RTCs
-example_PROGRAMS = SeqInComp SeqOutComp
-
+noinst_PROGRAMS = SeqInComp SeqOutComp
 SeqInComp_SOURCES = SeqInComp.cpp 
-SeqInComp_LDFLAGS = -L$(top_builddir)/rtm/.libs
 SeqInComp_LDADD = $(top_builddir)/rtm/libRTC.la SeqIn.o
+SeqInComp_LDFLAGS = -L$(top_builddir)/rtm/.libs
 
 SeqOutComp_SOURCES = SeqOutComp.cpp 
-SeqOutComp_LDFLAGS = -L$(top_builddir)/rtm/.libs
 SeqOutComp_LDADD = $(top_builddir)/rtm/libRTC.la SeqOut.o
+SeqOutComp_LDFLAGS = -L$(top_builddir)/rtm/.libs
 
-# Example sources
-source_DATA = $(ALL_SRC) $(EXTRA_DIST)
-
-#------------------------------------------------------------
-# Extra distribution files
-#------------------------------------------------------------
 EXTRA_DIST =            \
 	Makefile.SeqIn  \
 	Makefile.SeqOut \

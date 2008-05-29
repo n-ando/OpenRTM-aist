@@ -20,28 +20,6 @@ import os
 import yat
 import gen_base
 
-copyprops = """
-copy "%RTM_ROOT%\\etc\\rtm_config.vsprops" .
-"""
-
-userprops = """<?xml version="1.0" encoding="shift_jis"?>
-<VisualStudioPropertySheet
-	ProjectType="Visual C++"
-	Version="8.00"
-	Name="User property"
-	>
-	<UserMacro
-		Name="user_lib"
-		Value=""
-	/>
-	<UserMacro
-		Name="user_libd"
-		Value=""
-	/>
-</VisualStudioPropertySheet>
-"""
-
-
 class vcproj_gen(gen_base.gen_base):
 	"""
 	VC++ project-file generator
@@ -94,23 +72,19 @@ class vcproj_gen(gen_base.gen_base):
 		ds += [name + ".cpp"]
 		dh += [name + ".h"]
 
-		slist = [es, ds]
-		hlist = [eh, dh]
-		nlist = ["skel_basename", "impl_basename"]
+		slist = [es, eh, ds, dh]
+		nlist = ["skel_basename", "stub_basename", "impl_basename"]
 		for sidl in self.data["service_idl"]:
 			for l in slist:
 				l += [(sidl[key] + ".cpp") for key in nlist]
-			for l in hlist:
-				l += [(sidl[key] + ".h") for key in nlist]
 		nlist = ["stub_basename"]
 		for sidl in self.data["consumer_idl"]:
 			for l in slist:
-				l += [(sidl[key] + ".cpp") for key in nlist if sidl.has_key(key)]
-			for l in hlist:
-				l += [(sidl[key] + ".h") for key in nlist if sidl.has_key(key)]
+				l += [(sidl[key] + ".cpp") for key in nlist]
+
 		
 
-	def check_overwrite(self, fname, wmode="wb"):
+	def check_overwrite(self, fname):
 		"""
 		Check file exist or not.
 		"""
@@ -118,11 +92,11 @@ class vcproj_gen(gen_base.gen_base):
 		if (os.access(fname, os.F_OK)):
 			ans = raw_input("\"" + fname + "\"" + msg)
 			if (ans == "y" or ans == "Y"):
-				return file(fname, "wb")
+				return file(fname, "w")
 			else:
 				return None
 		else:
-			return file(fname, "wb")
+			return file(fname, "w")
 		return None, None
 
 	def print_vcproject(self):
@@ -182,29 +156,11 @@ class vcproj_gen(gen_base.gen_base):
 				fd.write(sln)
 				print "  File \"" + fname + "\" was generated."
 				fd.close()
+						     
 		return
 
-	def print_copybat(self):
-		fname = "copyprops.bat"
-		fd = self.check_overwrite(fname)
-		if fd != None:
-			o = copyprops.replace("\r\n","\n").replace("\n", "\r\n")
-			fd.write(o)
-			print "  File \"" + fname + "\" was generated."
-			fd.close()
-
-	def print_userprops(self):
-		fname = "user_config.vsprops"
-		fd = self.check_overwrite(fname)
-		if fd != None:
-			o = userprops.replace("\r\n","\n").replace("\n", "\r\n")
-			fd.write(o)
-			print "  File \"" + fname + "\" was generated."
-			fd.close()
 
 	def print_all(self):
 		self.print_vcproject()
 		self.print_solution()
-		self.print_copybat()
-		self.print_userprops()
 

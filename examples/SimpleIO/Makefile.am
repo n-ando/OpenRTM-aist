@@ -10,49 +10,28 @@ AUTOMAKE_OPTIONS = 1.9
 AM_CPPFLAGS=-I$(top_srcdir) -I$(top_srcdir)/rtm/idl
 AM_LDFLAGS=-L$(top_builddir) -L$(top_builddir)/rtm -L$(top_builddir)/rtm/idl
 
-#------------------------------------------------------------
-# Targets
-#------------------------------------------------------------
-# Targets directories
-exampledir = $(pkgdatadir)/examples
-socompdir  = $(exampledir)/rtcs
-sourcedir  = $(exampledir)/src/SimpleIO
+noinst_LTLIBRARIES = libConsoleIn.la libConsoleOut.la
+libConsoleIn_la_SOURCES = ConsoleIn.cpp ConsoleIn.h
+libConsoleIn_la_LIBADD = $(top_builddir)/rtm/libRTC.la
+libConsoleIn_la_FLAGS = -L$(top_builddir)/rtm/.lib
 
-# Loadable RTCs
-socomp_LTLIBRARIES = ConsoleIn.la ConsoleOut.la
+libConsoleOut_la_SOURCES = ConsoleOut.cpp ConsoleOut.h
+libConsoleOut_la_LIBADD = $(top_builddir)/rtm/libRTC.la
+libConsoleOut_la_FLAGS = -L$(top_builddir)/rtm/.lib
 
-ConsoleIn_la_SOURCES = ConsoleIn.cpp ConsoleIn.h
-ConsoleIn_la_LDFLAGS = -module
-ConsoleIn_la_FLAGS   = -L$(top_builddir)/rtm/.lib
-ConsoleIn_la_LIBADD  = $(top_builddir)/rtm/libRTC.la
-
-ConsoleOut_la_SOURCES = ConsoleOut.cpp ConsoleOut.h
-ConsoleOut_la_LDFLAGS = -module
-ConsoleOut_la_FLAGS   = -L$(top_builddir)/rtm/.lib
-ConsoleOut_la_LIBADD  = $(top_builddir)/rtm/libRTC.la
-
-# Standalone RTCs
-example_PROGRAMS = ConsoleInComp ConsoleOutComp ConnectorComp
-example_DATA = rtc.conf consin.conf consout.conf
-
+noinst_PROGRAMS = ConsoleInComp ConsoleOutComp ConnectorComp
 ConsoleInComp_SOURCES = ConsoleInComp.cpp 
+ConsoleInComp_LDADD = $(top_builddir)/rtm/libRTC.la ConsoleIn.o
 ConsoleInComp_LDFLAGS = -L$(top_builddir)/rtm/.libs
-ConsoleInComp_LDADD   = $(top_builddir)/rtm/libRTC.la ConsoleIn.o
 
 ConsoleOutComp_SOURCES = ConsoleOutComp.cpp 
+ConsoleOutComp_LDADD = $(top_builddir)/rtm/libRTC.la ConsoleOut.o
 ConsoleOutComp_LDFLAGS = -L$(top_builddir)/rtm/.libs
-ConsoleOutComp_LDADD   = $(top_builddir)/rtm/libRTC.la ConsoleOut.o
 
 ConnectorComp_SOURCES = ConnectorComp.cpp
+ConnectorComp_LDADD = $(top_builddir)/rtm/libRTC.la
 ConnectorComp_LDFLAGS = -L$(top_builddir)/rtm/.libs
-ConnectorComp_LDADD   = $(top_builddir)/rtm/libRTC.la
 
-# Example sources
-source_DATA = $(ALL_SRC) $(EXTRA_DIST)
-
-#------------------------------------------------------------
-# Extra distributed files
-#------------------------------------------------------------
 EXTRA_DIST =                \
 	run.sh              \
 	gen.sh              \

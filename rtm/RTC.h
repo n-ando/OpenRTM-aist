@@ -43,8 +43,6 @@
 #include <omnithread.h>
 #endif
 
-#include "rtm/idl/OpenRTMSkel.h"
-
 #ifdef RTC_CORBA_CXXMAPPING11
 #define RefCountServantBase ServantBase
 #endif
@@ -61,7 +59,7 @@ BOOL WINAPI DllMain (HINSTANCE hinstDll, DWORD fdwReason, LPVOID lpvReserved);
 #endif /* Windows */
 
 
-
+#include "rtm/idl/OpenRTMSkel.h"
 
 
 #endif // RTC_h

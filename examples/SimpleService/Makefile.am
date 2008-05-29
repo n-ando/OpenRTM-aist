@@ -5,7 +5,7 @@
 ## $Id$
 ##---------------------------------------------------------------------------
 
-AUTOMAKE_OPTIONS = 1.9
+AUTOMAKE_OPTIONS = 1.4
 
 IDLC = @IDLC@
 IDLFLAGS = @IDL_FLAGS@
@@ -14,113 +14,86 @@ LIBS = @LIBS@
 AM_CPPFLAGS=-I$(top_srcdir) -I$(top_srcdir)/rtm/idl
 AM_LDFLAGS=-L$(top_builddir) -L$(top_builddir)/rtm -L$(top_builddir)/rtm/idl
 
-#------------------------------------------------------------
-# Some rules for IDL compile
-#------------------------------------------------------------
 SUFFIXES = .o .so .idl Skel.cpp Stub.cpp Stub.o Skel.o
 
 WRAPPER  = $(top_builddir)/utils/rtm-skelwrapper/rtm-skelwrapper
 WRAPPER_FLAGS = --include-dir="" --skel-suffix=Skel --stub-suffix=Stub
 
 .idlSkel.cpp:
-	echo $(PROVIDER_OBJ)
-	$(IDLC) $(IDLFLAGS) $<
+	$(IDLC) $(IDLFLAGS) MyService.idl
 	PYTHONPATH=$(top_srcdir)/build:$(PYTHONPATH) \
 	PATH=$(top_srcdir)/utils/rtm-config:$(PATH)  \
-	$(WRAPPER) $(WRAPPER_FLAGS) --idl-file=$<
+	$(WRAPPER) $(WRAPPER_FLAGS) --idl-file=MyService.idl
 
 .idlStub.cpp:
-	$(IDLC) $(IDLFLAGS) $<
+	$(IDLC) $(IDLFLAGS) MyService.idl
 	PYTHONPATH=$(PYTHONPATH):$(top_srcdir)/build \
 	PATH=$(top_srcdir)/utils/rtm-config:$(PATH)  \
-	$(WRAPPER) $(WRAPPER_FLAGS) --idl-file=$<
+	$(WRAPPER) $(WRAPPER_FLAGS) --idl-file=MyService.idl
 
-#------------------------------------------------------------
-# Source list
-#------------------------------------------------------------
 IDL_SOURCES = MyService.idl
 
-PROVIDER_DIST_SRC   = MyServiceSVC_impl.cpp MyServiceProvider.cpp
-PROVIDER_NODIST_SRC = $(IDL_SOURCES:.idl=Skel.cpp)
-PROVIDER_SRC        = $(PROVIDER_DIST_SRC) $(PROVIDER_NODIST_SRC)
+SKEL_OBJ = MyServiceSkel.o
+STUB_OBJ = MyServiceStub.o
+IMPL_OBJ = MyServiceSVC_impl.o
 
-PROVIDER_DIST_H     = $(PROVIDER_DIST_SRC:.cpp=.h)
-PROVIDER_NODIST_H   = $(PROVIDER_NODIST_SRC:.cpp=.h)
-PROVIDER_H          = $(PROVIDER_DIST_H) $(PROVIDER_NODIST_H)
-PROVIDER_COMP_SRC   = $(PROVIDER_SRC) MyServiceProviderComp.cpp
+PROVIDER_SRC = \
+	$(IDL_SOURCES:.idl=Skel.cpp) \
+	$(IDL_SOURCES:.idl=Stub.cpp) \
+	MyServiceSVC_impl.cpp        \
+	MyServiceProvider.cpp
 
-CONSUMER_DIST_SRC   = MyServiceConsumer.cpp
-CONSUMER_NODIST_SRC = $(IDL_SOURCES:.idl=Stub.cpp)
-CONSUMER_SRC        = $(CONSUMER_DIST_SRC) $(CONSUMER_NODIST_SRC)
+PROVIDER_COMP_SRC = $(PROVIDER_SRC) MyServiceProviderComp.cpp
 
-CONSUMER_DIST_H     = $(CONSUMER_DIST_SRC:.cpp=.h)
-CONSUMER_NODIST_H   = $(CONSUMER_NODIST_SRC:.cpp=.h)
-CONSUMER_H          = $(CONSUMER_DIST_H) $(CONSUMER_NODIST_H)
-CONSUMER_COMP_SRC   = $(CONSUMER_SRC) MyServiceConsumerComp.cpp
+PROVIDER_H = \
+	$(IDL_SOURCES:.idl=Skel.h) \
+	$(IDL_SOURCES:.idl=Stub.h) \
+	MyServiceSVC_impl.h        \
+	MyServiceProvider.h
 
-#------------------------------------------------------------
-# Object list
-#------------------------------------------------------------
-PROVIDER_OBJ=$(PROVIDER_DIST_SRC:.cpp=.o)
-CONSUMER_OBJ=$(CONSUMER_DIST_SRC:.cpp=.o)
+CONSUMER_SRC = \
+	$(IDL_SOURCES:.idl=Skel.cpp) \
+	$(IDL_SOURCES:.idl=Stub.cpp) \
+	MyServiceConsumer.cpp
 
-#------------------------------------------------------------
-# Targets
-#------------------------------------------------------------
-# Targets directories
-exampledir = $(pkgdatadir)/examples
-socompdir  = $(exampledir)/rtcs
-sourcedir  = $(exampledir)/src/SimpleService
+CONSUMER_COMP_SRC = $(CONSUMER_SRC) MyServiceConsumerComp.cpp
 
-# Loadable RTCs
-noinst_LTLIBRARIES = libMyServiceSkel.la libMyServiceStub.la 
-nodist_libMyServiceSkel_la_SOURCES = $(PROVIDER_NODIST_SRC)
-nodist_libMyServiceStub_la_SOURCES = $(CONSUMER_NODIST_SRC)
-
-socomp_LTLIBRARIES = MyServiceProvider.la MyServiceConsumer.la
-
-dist_MyServiceProvider_la_SOURCES = $(PROVIDER_DIST_SRC) $(PROVIDER_DIST_H) 
-MyServiceProvider_la_LDFLAGS = -module
-MyServiceProvider_la_FLAGS   = -L$(top_builddir)/rtm/.libs -L.
-MyServiceProvider_la_LIBADD  = $(top_builddir)/rtm/libRTC.la -lMyServiceSkel
-
-dist_MyServiceConsumer_la_SOURCES = $(CONSUMER_DIST_SRC) $(CONSUMER_DIST_H)
-MyServiceConsumer_la_LDFLAGS = -module
-MyServiceConsumer_la_FLAGS   = -L$(top_builddir)/rtm/.libs
-MyServiceConsumer_la_LIBADD  = $(top_builddir)/rtm/libRTC.la -lMyServiceStub
-
-# Standalone RTCs
-example_PROGRAMS = MyServiceProviderComp MyServiceConsumerComp
-MyServiceProviderComp_SOURCES = MyServiceProviderComp.cpp
-MyServiceProviderComp_LDFLAGS = -L$(top_builddir)/rtm/.libs
-MyServiceProviderComp_LDADD   = .libs/MyServiceProvider.a \
-	$(top_builddir)/rtm/libRTC.la
-
-MyServiceConsumerComp_SOURCES = MyServiceConsumerComp.cpp
-MyServiceConsumerComp_LDFLAGS = -L$(top_builddir)/rtm/.libs
-MyServiceConsumerComp_LDADD   = .libs/MyServiceConsumer.a \
-	$(top_builddir)/rtm/libRTC.la
+CONSUMER_H = \
+	$(IDL_SOURCES:.idl=Skel.h) \
+	$(IDL_SOURCES:.idl=Stub.h) \
+	MyServiceConsumer.h
 
 
-# Example sources
-source_DATA = $(ALL_SRC) $(EXTRA_DIST)
+noinst_PROGRAMS = MyServiceConsumerComp MyServiceProviderComp
 
-#------------------------------------------------------------
-# Extra distributed files
-#------------------------------------------------------------
+nodist_MyServiceProviderComp_SOURCES = $(PROVIDER_COMP_SRC)
+MyServiceProviderComp_LDFLAGS = -L$(top_builddir)/rtm
+MyServiceProviderComp_LDADD = -lRTC
+
+nodist_MyServiceConsumerComp_SOURCES = $(CONSUMER_COMP_SRC)
+MyServiceConsumerComp_LDFLAGS = -L$(top_builddir)/rtm
+MyServiceConsumerComp_LDADD = -lRTC
+
 EXTRA_DIST =                       \
 	$(IDL_SOURCES)             \
 	Makefile.MyServiceProvider \
 	Makefile.MyServiceConsumer \
 	README.MyServiceProvider   \
 	README.MyServiceConsumer   \
+	MyServiceSVC_impl.cpp      \
+	MyServiceSVC_impl.h        \
+	MyServiceProvider.h        \
+	MyServiceProvider.cpp      \
+	MyServiceProviderComp.cpp  \
+	MyServiceConsumer.h        \
+	MyServiceConsumer.cpp      \
+	MyServiceConsumerComp.cpp  \
 	gen.sh                     \
 	rtc.conf
 
-ALL_SRC =                    \
-	$(IDL_SOURCES)       \
-        $(PROVIDER_COMP_SRC) \
-        $(CONSUMER_COMP_SRC)
+ALL_SRC = \
+	$(PROVIDER_COMP_SRC) \
+	$(CONSUMER_COMP_SRC)
 
 #------------------------------------------------------------
 # File list for deb/ports packages
@@ -224,13 +197,12 @@ dist-hook: lst vcproj
 
 
 clean_objs:
-	rm -f $(OBJS)
+	rm -f $(OBJS) SimpleService.so SimpleServiceComp
 
 clean_skelstub:
 	rm -f *Skel.h *Skel.cpp
 	rm -f *Stub.h *Stub.cpp
 	rm -f *.hh *SK.cc
-	rm -f *C.cpp *C.h *S.cpp *S.h *_T.cpp *_T.h *.inl
 
 clean-local: clean_objs clean_skelstub
 	rm -f \

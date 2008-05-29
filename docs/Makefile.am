@@ -49,6 +49,7 @@ install-class-reference:
 	  $(mkinstalldirs) $(DESTDIR)$(pkgdatadir)/docs/ClassReference/html; \
 	  for x in ClassReference/html/*; do \
 	    if test -f $$x; then \
+	      echo $(INSTALL_DATA) $$x $(DESTDIR)$(pkgdatadir)/ClassReference/html;\
 	      $(INSTALL_DATA) $$x $(DESTDIR)$(pkgdatadir)/docs/ClassReference/html/;\
 	    fi \
 	  done \

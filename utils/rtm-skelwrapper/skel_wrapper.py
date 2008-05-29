@@ -48,7 +48,6 @@ skel_h = """// -*- C++ -*-
 [config_inc]
 
 #if   defined ORB_IS_TAO
-#  include "[include_dir][basename]C.h"
 #  include "[include_dir][basename]S.h"
 #elif defined ORB_IS_OMNIORB
 #  if defined(WIN32) || defined(_WIN32) || defined(__WIN32__) || defined(__NT__)
@@ -58,7 +57,6 @@ skel_h = """// -*- C++ -*-
 #elif defined ORB_IS_MICO
 #  include "[include_dir][basename].h"
 #elif defined ORB_IS_ORBIT2
-#  include "[include_dir]/[basename]-cpp-stubs.h"
 #  include "[include_dir]/[basename]-cpp-skels.h"
 #else
 #  error "NO ORB defined"
@@ -88,16 +86,13 @@ skel_cpp = """// -*- C++ -*-
 #include "[include_dir][skel_h]"
 
 #if defined ORB_IS_TAO
-#  include "[include_dir][basename]C.cpp"
 #  include "[include_dir][basename]S.cpp"
 #elif defined ORB_IS_OMNIORB
 #  include "[include_dir][basename]SK.cc"
 #  include "[include_dir][basename]DynSK.cc"
 #elif defined ORB_IS_MICO
-#  include "[include_dir][basename].cc"
 #  include "[include_dir][basename]_skel.cc"
 #elif defined ORB_IS_ORBIT2
-#  include "[include_dir][basename]-cpp-stubs.cc"
 #  include "[include_dir][basename]-cpp-skels.cc"
 #else
 #  error "NO ORB defined"
@@ -134,9 +129,6 @@ stub_h = """// -*- C++ -*-
 #if   defined ORB_IS_TAO
 #  include "[include_dir][basename]C.h"
 #elif defined ORB_IS_OMNIORB
-#  if defined(WIN32) || defined(_WIN32) || defined(__WIN32__) || defined(__NT__)
-#    undef USE_stub_in_nt_dll
-#  endif
 #  include "[include_dir][basename].hh"
 #elif defined ORB_IS_MICO
 #  include "[include_dir][basename].h"
@@ -171,8 +163,7 @@ stub_cpp = """// -*- C++ -*-
 #if   defined ORB_IS_TAO
 #  include "[include_dir][basename]C.cpp"
 #elif defined ORB_IS_OMNIORB
-#  include "[include_dir][basename]SK.cc"
-#  include "[include_dir][basename]DynSK.cc"
+
 #elif defined ORB_IS_MICO
 #  include "[include_dir][basename].cc"
 #elif defined ORB_IS_ORBIT2

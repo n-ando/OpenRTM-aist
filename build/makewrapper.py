@@ -37,20 +37,16 @@ skel_cpp_temp = """// -*- C++ -*-
 #include "[skel_dir]/[basename]Skel.h"
 
 #if   defined ORB_IS_TAO
-#include "[skel_dir]/[basename]C.cpp"
 #include "[skel_dir]/[basename]S.cpp"
 #elif defined ORB_IS_OE
-#include "[skel_dir]/[basename].cxx"
 #include "[skel_dir]/[basename]_s.cxx"
 #elif defined ORB_IS_OMNIORB
 #include "[skel_dir]/[basename]SK.cc"
 #include "[skel_dir]/[basename]DynSK.cc"
 #elif defined ORB_IS_MICO
-#include "[skel_dir]/[basename].cc"
 #include "[skel_dir]/[basename]_skel.cc"
 #elif defined ORB_IS_ORBIT2
 #include "[skel_dir]/[basename]-cpp-skels.cc"
-#include "[skel_dir]/[basename]-cpp-stubs.cc"
 #else
 #error "NO ORB defined"
 #endif
@@ -80,17 +76,14 @@ skel_h_temp = """// -*- C++ -*-
 #undef PACKAGE_VERSION
 
 #if   defined ORB_IS_TAO
-#include "[skel_dir]/[basename]C.h"
 #include "[skel_dir]/[basename]S.h"
 #elif defined ORB_IS_OE
 #include "[skel_dir]/[basename]_s.h"
-#include "[skel_dir]/[basename].h"
 #elif defined ORB_IS_OMNIORB
 #include "[skel_dir]/[basename].hh"
 #elif defined ORB_IS_MICO
 #include "[skel_dir]/[basename].h"
 #elif defined ORB_IS_ORBIT2
-#include "[skel_dir]/[basename]-cpp-stubs.h"
 #include "[skel_dir]/[basename]-cpp-skels.h"
 #else
 #error "NO ORB defined"
@@ -119,8 +112,7 @@ stub_cpp_temp = """// -*- C++ -*-
 #elif defined ORB_IS_OE
 #include "[skel_dir]/[basename].cxx"
 #elif defined ORB_IS_OMNIORB
-#include "[skel_dir]/[basename]SK.cc"
-#include "[skel_dir]/[basename]DynSK.cc"
+
 #elif defined ORB_IS_MICO
 #include "[skel_dir]/[basename].cc"
 #elif defined ORB_IS_ORBIT2

@@ -5,7 +5,7 @@
 ## $Id$
 ##---------------------------------------------------------------------------
 
-AUTOMAKE_OPTIONS = 1.9
+AUTOMAKE_OPTIONS = 1.4
 
 bin_SCRIPTS = rtc-template
 
@@ -24,23 +24,6 @@ pyhelper_SCRIPTS =       \
 	yat.py           \
 	uuid.py          \
 	README_gen.py    \
-	profile_gen.py   \
-	gen_base.py      \
-	cxx_gen.py       \
-	cxx_svc_impl.py  \
-	vcproj_gen.py    \
-	python_gen.py    \
-	slntool.py       \
-	vcprojtool.py    \
-	test-template.py
-
-
-EXTRA_DIST =             \
-	rtc-template     \
-	yat.py           \
-	uuid.py          \
-	README_gen.py    \
-	profile_gen.py   \
 	gen_base.py      \
 	cxx_gen.py       \
 	cxx_svc_impl.py  \
@@ -48,7 +31,20 @@ EXTRA_DIST =             \
 	python_gen.py    \
 	slntool.py       \
 	vcprojtool.py
-	test-template.py
+
+
+EXTRA_DIST =             \
+	rtc-template     \
+	yat.py           \
+	uuid.py          \
+	README_gen.py    \
+	gen_base.py      \
+	cxx_gen.py       \
+	cxx_svc_impl.py  \
+	vcproj_gen.py    \
+	python_gen.py    \
+	slntool.py       \
+	vcprojtool.py
 
 
 clean-local:
