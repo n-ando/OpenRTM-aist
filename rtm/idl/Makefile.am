@@ -185,7 +185,7 @@ wxs:
 		-c IDLs \
 		-o $(win32_builddir)installer/idls.yaml \
 		-p ..\\rtm\\idl \
-		$(IDL_SORUCES) $(ALL_SRC)
+		$(IDL_SOURCES) $(ALL_SRC)
 
 dist-hook: lst vcproj wxs
 

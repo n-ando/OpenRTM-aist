@@ -43,7 +43,7 @@ Configurations:
         Value: |
           lib -out:"$(TargetDir)RTC_static.lib" "$(TargetDir)*.obj" "$(ProjectDir)idl\$(ConfigurationName)\*.obj"
           set PATH=%PATH%;$(rtm_path)
-          cd $(TargetDir)
+          cd "$(TargetDir)"
           start /wait cmd /c makedeffile.py RTC_static.lib RTC$(rtm_dllver)d $(rtm_version) RTC$(rtm_dllver)d.def
           move RTC$(rtm_dllver)d.def ..\
     VCLinkerTool:
@@ -66,8 +66,8 @@ Configurations:
     VCPostBuildEventTool:
       - Key: CommandLine
         Value: |
-          copy $(OutDir)\\$(TargetName).lib "$(SolutionDir)bin\\"
-          copy $(OutDir)\\$(TargetName).dll "$(SolutionDir)bin\\"
+          copy "$(OutDir)\\$(TargetName).lib" "$(SolutionDir)bin\\"
+          copy "$(OutDir)\\$(TargetName).dll" "$(SolutionDir)bin\\"
 #------------------------------------------------------------
 # Release Configuration
 #------------------------------------------------------------
@@ -96,7 +96,7 @@ Configurations:
         Value: |
           lib -out:"$(TargetDir)RTC_static.lib" "$(TargetDir)*.obj" "$(ProjectDir)idl\$(ConfigurationName)\*.obj"
           set PATH=%PATH%;$(rtm_path)
-          cd $(OutDir)
+          cd "$(OutDir)"
           start /wait cmd /c makedeffile.py RTC_static.lib $(TargetName) $(rtm_version) $(TargetName).def
           move RTC$(rtm_dllver).def ..\\
     VCLinkerTool:

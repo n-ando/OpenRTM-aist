@@ -42,7 +42,7 @@ Configurations:
     VCPostBuildEventTool:
       - Key: CommandLine
         Value: |
-          cd $(OutDir)
+          cd "$(OutDir)"
           copy libRTCSkeld.lib "$(SolutionDir)\\bin"
   - Name: "Release|Win32"
     OutputDirectory: "$(ProjectDir)$(ConfigurationName)"
@@ -76,5 +76,5 @@ Configurations:
     VCPostBuildEventTool:
       - Key: CommandLine
         Value: |
-          cd $(OutDir)
+          cd "$(OutDir)"
           copy libRTCSkel.lib "$(SolutionDir)\\bin"
