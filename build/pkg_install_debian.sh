@@ -6,16 +6,70 @@
 #
 
 #---------------------------------------
-# 僷僢働乕僕儕僗僩
+# パッケ〖ジリスト
 #---------------------------------------
 omni="libomniorb4 libomniorb4-dev omniidl4 omniorb4-nameserver"
 ace="libace libace-dev"
-openrtm="python-yaml"
+openrtm="openrtm-aist openrtm-aist-doc openrtm-aist-dev openrtm-aist-example python-yaml"
+
 devel="gcc g++ make"
 packages="$devel $omni $ace $openrtm"
+u_packages="$omni $ace $openrtm "
+
+#---------------------------------------
+# リポジトリサ〖バ
+#---------------------------------------
+create_srclist () {
+    cnames="sarge edgy feisty gutsy hardy"
+    for c in $cnames; do
+	if test -f "/etc/apt/sources.list"; then
+	    res=`grep $c /etc/apt/sources.list`
+	else
+	    echo "This distribution may not be debian/ubuntu."
+	    exit
+	fi
+	if test ! "x$res" = "x" ; then
+	    code_name=$c
+	fi
+    done
+    if test ! "x$code_name" = "x"; then
+	echo "The code name is : " $code_name
+    else
+	echo "This OS is not supported."
+	exit
+    fi
+    dist_name="debian"
+    if test -f "/etc/lsb-release" ; then
+	res=`grep Ubuntu /etc/lsb-release`
+	if test ! "x$res" = "x" ; then
+	    dist_name="ubuntu"
+	fi
+    fi
+    openrtm_repo="deb http://www.openrtm.org/pub/Linux/$dist_name/ $code_name main"
+}
+
+#---------------------------------------
+# ソ〖スリスト构糠簇眶の年盗
+#---------------------------------------
+update_source_list () {
+    rtmsite=`grep openrtm /etc/apt/sources.list`
+    if test "x$rtmsite" = "x" ; then
+	echo "OpenRTM-aist のリポジトリが判峡されていません。"
+	echo "Source.list に OpenRTM-aist のリポジトリ: "
+	echo "  " $openrtm_repo
+	read -p "を纳裁します。よろしいですか々 (y/n) [y] " kick_shell
+
+	if test "x$kick_shell" = "xn" ; then
+	    echo "面们します。"
+	    exit 0
+	else
+	    echo $openrtm_repo >> /etc/apt/sources.list
+	fi
+    fi
+}
 
 #----------------------------------------
-# root 偐偳偆偐傪僠僃僢僋
+# root かどうかをチェック
 #----------------------------------------
 check_root () {
     if test ! `id -u` = 0 ; then
@@ -28,7 +82,7 @@ check_root () {
 }
 
 #----------------------------------------
-# 僷僢働乕僕僀儞僗僩乕儖娭悢
+# パッケ〖ジインスト〖ル簇眶
 #----------------------------------------
 install_packages () {
     for p in $*; do
@@ -40,7 +94,7 @@ install_packages () {
 }
 
 #------------------------------------------------------------
-# 儕僗僩傪媡弴偵偡傞
+# リストを嫡界にする
 #------------------------------------------------------------
 reverse () {
     for i in $*; do
@@ -49,7 +103,7 @@ reverse () {
 }
 
 #----------------------------------------
-# 僷僢働乕僕傪傾儞僀儞僗僩乕儖偡傞
+# パッケ〖ジをアンインスト〖ルする
 #----------------------------------------
 uninstall_packages () {
     for p in $*; do
@@ -61,12 +115,15 @@ uninstall_packages () {
 }
 
 #---------------------------------------
-# 儊僀儞
+# メイン
 #---------------------------------------
 check_root
 if test "x$1" = "x-u" ; then
-    uninstall_packages `reverse $packages`
+    uninstall_packages `reverse $u_packages`
 else
+    create_srclist
+    update_source_list
+    apt-get update
     install_packages $packages
 fi
 
