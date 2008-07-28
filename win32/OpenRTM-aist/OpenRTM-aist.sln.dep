@@ -1,0 +1,16 @@
+libRTC: libRTCSkel
+rtcd: libRTC
+ConfigSampleComp: libRTC
+ConfigSample: libRTC
+ConsoleInComp: libRTC
+ConsoleIn: libRTC
+ConsoleOutComp: libRTC
+ConsoleOut: libRTC
+SeqInComp: libRTC
+SeqIn: libRTC
+SeqOutComp: libRTC
+SeqOut: libRTC
+MyServiceProviderComp: libRTC
+MyServiceProvider: libRTC
+MyServiceConsumerComp: libRTC
+MyServiceConsumer: libRTC

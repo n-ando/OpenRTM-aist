@@ -14,15 +14,7 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: CORBA_SeqUtilTests.cpp,v 1.1 2006-11-27 08:26:10 n-ando Exp $
- *
- */
-
-/*
- * $Log: not supported by cvs2svn $
- * Revision 1.1  2006/10/31 13:10:51  kurihara
- *
- * test program for CORBA_SeqUtil.h
+ * $Id$
  *
  */
 

@@ -13,12 +13,8 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: TestRunner.cpp,v 1.1 2006-11-27 07:31:50 n-ando Exp $
+ * $Id$
  *
- */
-
-/*
- * $Log: not supported by cvs2svn $
  */
 
 #include <string>

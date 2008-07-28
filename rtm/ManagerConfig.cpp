@@ -2,40 +2,18 @@
 /*!
  * @file ManagerConfig.cpp
  * @brief RTC manager configuration
- * @date $Date: 2007-04-26 15:37:16 $
+ * @date $Date: 2007-12-31 03:08:04 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
- * Copyright (C) 2003-2005
+ * Copyright (C) 2003-2008
+ *     Noriaki Ando
  *     Task-intelligence Research Group,
  *     Intelligent Systems Research Institute,
  *     National Institute of
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: ManagerConfig.cpp,v 1.7 2007-04-26 15:37:16 n-ando Exp $
- *
- */
-
-/*
- * $Log: not supported by cvs2svn $
- * Revision 1.6  2007/04/13 18:02:21  n-ando
- * Some configuration properties handling processes were changed.
- *
- * Revision 1.5  2007/01/14 19:43:01  n-ando
- * Debugging messages to stdout were deleted.
- *
- * Revision 1.4  2006/11/06 01:26:21  n-ando
- * Some trivial fixes.
- *
- * Revision 1.3  2006/10/23 08:38:17  n-ando
- * To get Property after "init()" calling, getConfig() was added.
- *
- * Revision 1.2  2006/10/17 19:29:53  n-ando
- * Trivial fix.
- *
- * Revision 1.1  2006/10/17 10:21:31  n-ando
- * The first commitment.
- *
+ * $Id$
  *
  */
 
@@ -49,7 +27,7 @@
 
 namespace RTC
 {
-
+  
   // The list of default configuration file path.
   const char* ManagerConfig::config_file_path[] = 
     {
@@ -63,44 +41,41 @@ namespace RTC
   
   // Environment value to specify configuration file
   const char* ManagerConfig::config_file_env = "RTC_MANAGER_CONFIG";
-
+  
   /*!
    * @if jp
-   * @brief ManagerConfig コンストラクタ
+   * @brief コンストラクタ
    * @else
-   * @brief ManagerConfig constructor
+   * @brief Constructor
    * @endif
    */
   ManagerConfig::ManagerConfig()
   {
   }
-
-
+  
   /*!
    * @if jp
-   * @brief ManagerConfig コンストラクタ
+   * @brief コンストラクタ
    * @else
-   * @brief ManagerConfig constructor
+   * @brief Constructor
    * @endif
    */
   ManagerConfig::ManagerConfig(int argc, char** argv)
   {
     init(argc, argv);
   }
-
-
+  
   /*!
    * @if jp
-   * @brief ManagerConfig デストラクタ
+   * @brief デストラクタ
    * @else
-   * @brief ManagerConfig destructor
+   * @brief Destructor
    * @endif
    */
   ManagerConfig::~ManagerConfig()
   {
   }
-
-
+  
   /*!
    * @if jp
    * @brief 初期化
@@ -112,13 +87,12 @@ namespace RTC
   {
     parseArgs(argc, argv);
   }
-
-
+  
   /*!
    * @if jp
-   * @brief Configuration の結果をPropertyに反映させる
+   * @brief Configuration 情報を Property に設定する
    * @else
-   * @brief Apply configuration results to Property
+   * @brief Specify the configuration information to the Property
    * @endif
    */
   void ManagerConfig::configure(Properties& prop)
@@ -135,13 +109,12 @@ namespace RTC
       }
     setSystemInformation(prop);
   }
-
-
+  
   /*!
    * @if jp
    * @brief コマンド引数をパースする
    * @else
-   * @brief Parse command arguments
+   * @brief Parse the command arguments
    * @endif
    */
   void ManagerConfig::parseArgs(int argc, char** argv)
@@ -175,13 +148,12 @@ namespace RTC
       }
     return;
   }
-
-
+  
   /*!
    * @if jp
-   * @brief Configuration file を探す
+   * @brief Configuration file の検索
    * @else
-   * @brief Find configuration file
+   * @brief Find the configuration file
    * @endif
    */
   bool ManagerConfig::findConfigFile()
@@ -204,8 +176,7 @@ namespace RTC
 	    m_configFile = env;
 	    return true;
 	  }
-	}
-    
+      }
     // Search rtc configuration file from default search path
     int i = 0;
     while (config_file_path[i] != NULL)
@@ -217,20 +188,15 @@ namespace RTC
 	  }
 	++i;
       }
-    
     return false;
   }
   
-
   /*!
-   *
-   * manager.os.name: 
-   * manager.os.release:
-   * maanger.os.version:
-   * manager.os.arch:
-   * manager.os.hostname:
-   * manager.pid:
-   *
+   * @if jp
+   * @brief システム情報を設定する
+   * @else
+   * @brief Set system information
+   * @endif
    */
   void ManagerConfig::setSystemInformation(Properties& prop)
   { 
@@ -260,12 +226,11 @@ namespace RTC
     return;
   }
   
-  
   /*!
    * @if jp
-   * @brief ファイルが存在するかどうか確かめる
+   * @brief ファイルの存在確認
    * @else
-   * @brief Check file existance
+   * @brief Check the file existence
    * @endif
    */
   bool ManagerConfig::fileExist(const std::string& filename)
@@ -278,12 +243,11 @@ namespace RTC
 	infile.close();
 	return false;
       }
-      else
-	{
-	  infile.close();
-	  return true;
-	}
+    else
+      {
+	infile.close();
+	return true;
+      }
     return false;
   }
-
 }

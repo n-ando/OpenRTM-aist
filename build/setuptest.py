@@ -2,7 +2,7 @@
 #
 # @file setuptest.py
 # @brief CppUnit test environment setup script
-# @date $Date: 2007-01-14 19:37:17 $
+# @date $Date: 2008-02-29 04:50:54 $
 # @author Norkai Ando <n-ando@aist.go.jp>
 #
 # Copyright (C) 2006
@@ -13,7 +13,7 @@
 #         Advanced Industrial Science and Technology (AIST), Japan
 #     All rights reserved.
 #
-# $Id: setuptest.py,v 1.3 2007-01-14 19:37:17 n-ando Exp $
+# $Id$
 #
 # [usage]
 # setuptest.py [class_name]
@@ -43,34 +43,26 @@
 #
 # done
 
-
-# $Log: not supported by cvs2svn $
-# Revision 1.2  2006/11/27 07:23:46  n-ando
-# Embedded CVS tags's dollar character was replaced.
-# A sample test case "test_case0" was added.
-#
-# Revision 1.1  2006/11/21 17:56:00  n-ando
-# CppUnit environment setup script was added.
-#
-#
-
 import sys
 import os
-import ezt
+import yat
 
 makefile_am = """# -*- Makefile -*-
 #------------------------------------------------------------
 # @file   Makefile.am
 # @brief  Makefile.am for [class_name] unit test
 # @date   [dollar]Date[dollar]
+
 # @author Noriaki Ando <n-ando@aist.go.jp>
 #
 # [dollar]Id[dollar]
+
 #
 #------------------------------------------------------------
 
 #
 # [dollar]Log[dollar]
+
 #
 
 
@@ -134,14 +126,17 @@ test_cpp = """// -*- C++ -*-
  * @file   [class_name]Tests.cpp
  * @brief  [class_name] test class
  * @date   [dollar]Date[dollar]
+ 
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
  * [dollar]Id[dollar]
+ 
  *
  */
 
 /*
  * [dollar]Log[dollar]
+
  *
  */
 
@@ -159,6 +154,7 @@ test_cpp = """// -*- C++ -*-
  * @brief [class_name] test
  */
 namespace [class_name]
+
 {
   class [class_name]Tests
    : public CppUnit::TestFixture
@@ -206,6 +202,7 @@ namespace [class_name]
   };
 }; // namespace [class_name]
 
+
 /*
  * Register test suite
  */
@@ -246,9 +243,10 @@ class test_gen:
     
     def gen(self, fname, temp_txt, data):
         f = file(fname, "w")
-        t = ezt.Template(compress_whitespace = 0)
-        t.parse(temp_txt)
-        t.generate(f, data)
+        t = yat.Template(temp_txt)
+        #t.parse(temp_txt)
+        text=t.generate(data)
+        f.write(text)
         f.close()
         print "\"", fname, "\"" " was generated."
         return

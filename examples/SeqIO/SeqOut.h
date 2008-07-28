@@ -2,20 +2,20 @@
 /*!
  * @file  SeqOut.h
  * @brief Sequence OutPort component
- * @date  $Date: 2007-02-04 16:48:05 $
+ * @date  $Date: 2008-02-29 04:54:56 $
  *
- * $Id: SeqOut.h,v 1.2 2007-02-04 16:48:05 n-ando Exp $
+ * $Id$
  */
 
 #ifndef SEQOUT_H
 #define SEQOUT_H
 
+#include <rtm/idl/BasicDataTypeSkel.h>
 #include <rtm/Manager.h>
 #include <rtm/DataFlowComponentBase.h>
 #include <rtm/CorbaPort.h>
 #include <rtm/DataInPort.h>
 #include <rtm/DataOutPort.h>
-#include <rtm/idl/BasicDataTypeSkel.h>
 
 // Service implementation headers
 // <rtc-template block="service_impl_h">
@@ -136,7 +136,7 @@ class SeqOut
 
 extern "C"
 {
-  void SeqOutInit(RTC::Manager* manager);
+  DLL_EXPORT void SeqOutInit(RTC::Manager* manager);
 };
 
 #endif // SEQOUT_H

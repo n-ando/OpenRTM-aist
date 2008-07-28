@@ -18,7 +18,7 @@
 #  --outport=DoubleSeq:TimedDoubleSeq 
 #
 #
-# $Id: Makefile.SeqOut,v 1.2 2007-02-04 16:47:19 n-ando Exp $
+# $Id$
 #
 CXXFLAGS = `rtm-config --cflags`
 LDFLAGS  = `rtm-config --libs`

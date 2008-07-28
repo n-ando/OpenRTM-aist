@@ -2,14 +2,8 @@
 ##---------------------------------------------------------------------------
 ## Makefile for rtcd
 ##
-## $Id: Makefile.am,v 1.1.1.1 2005-05-12 09:06:19 n-ando Exp $
-##
-## $Log: not supported by cvs2svn $
+## $Id$
 ##---------------------------------------------------------------------------
-
-##
-##  Process this file with automake to create Makefile.in
-##
 
 AUTOMAKE_OPTIONS = 1.4
 
@@ -24,5 +18,54 @@ rtcd_LDADD = $(top_builddir)/rtm/libRTC.la
 
 rtcd_LDFLAGS = -L$(top_builddir)/rtm
 
+#------------------------------------------------------------
+# File list for deb/ports packages
+#------------------------------------------------------------
+lst:
+	echo $(RTC_SRC) > src.lst
+	echo $(rtmheader_HEADERS) > header.lst
+
+#------------------------------------------------------------
+# Visual Studio Project
+#------------------------------------------------------------
+win32_builddir = $(top_builddir)/win32/OpenRTM-aist/
+
+vcproj: vc8proj vc9proj
+
+vc8proj: rtcd.yaml
+	$(top_builddir)/build/vcprojtool.py vcproj                 \
+		--type RTCEXE                                      \
+		--vcversion "8.00"                                 \
+		--projectname "rtcd"                               \
+		--version $(RTM_VERSION)                           \
+		--out $(win32_builddir)/utils/rtcd/rtcd_vc8.vcproj \
+		--yaml rtcd.yaml                                   \
+		--source $(rtcd_SOURCES)
+#	qkc -sm $(win32_builddir)/rtm/libRTC_vc8.vcproj
+
+vc9proj: rtcd.yaml
+	$(top_builddir)/build/vcprojtool.py vcproj                 \
+		--type RTCEXE                                      \
+		--vcversion "9.00"                                 \
+		--projectname "rtcd"                               \
+		--version $(RTM_VERSION)                           \
+		--out $(win32_builddir)/utils/rtcd/rtcd_vc9.vcproj \
+		--yaml rtcd.yaml                                   \
+		--source $(rtcd_SOURCES)
+#	qkc -sm $(win32_builddir)/rtm/rtcd_vc9.vcproj
+#------------------------------------------------------------
+# for wxs file
+#------------------------------------------------------------
+wxs:
+	$(top_srcdir)/build/makewxs.py flist \
+		-c Rtcd \
+		-o $(win32_builddir)installer/rtcd.yaml \
+		-p ..\\bin \
+		$(bin_PROGRAMS).exe
+
+dist-hook: lst vcproj wxs
+
 clean-local:
-	rm -rf rtcd *.o *~ *core .libs
+	rm -rf rtcd *.o *~ *core .libs *.lst
+
+EXTRA_DIST = rtcd.yaml

@@ -5,15 +5,7 @@
  * @date   $Date: 2007-01-12 14:49:42 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
- * $Id: DataInPortTests.cpp,v 1.2 2007-01-12 14:49:42 n-ando Exp $
- *
- */
-
-/*
- * $Log: not supported by cvs2svn $
- * Revision 1.1  2006/11/27 08:30:56  n-ando
- * TestSuites are devided into each directory.
- *
+ * $Id$
  *
  */
 

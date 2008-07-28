@@ -2,10 +2,10 @@
 /*!
  * @file  PublisherFactory.cpp
  * @brief PublisherFactory class
- * @date  $Date: 2007-01-06 18:00:25 $
+ * @date  $Date: 2007-12-31 03:08:06 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
- * Copyright (C) 2006
+ * Copyright (C) 2006-2008
  *     Noriaki Ando
  *     Task-intelligence Research Group,
  *     Intelligent Systems Research Institute,
@@ -13,14 +13,7 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: PublisherFactory.cpp,v 1.2 2007-01-06 18:00:25 n-ando Exp $
- *
- */
-
-/*
- * $Log: not supported by cvs2svn $
- * Revision 1.1  2006/11/27 09:44:44  n-ando
- * The first commitment.
+ * $Id$
  *
  */
 
@@ -38,9 +31,9 @@ namespace RTC
 {
   /*!
    * @if jp
-   * @brief Publisherを生成する。
+   * @brief Publisherの生成
    * @else
-   * @brief Create Publisher
+   * @brief Create the Publishers
    * @endif
    */
   PublisherBase* PublisherFactory::create(InPortConsumer* consumer,
@@ -48,7 +41,7 @@ namespace RTC
   {
     std::string pub_type;
     pub_type = property.getProperty("dataport.subscription_type", "New");
-
+    
     if (pub_type == "New")
       {
 	return new PublisherNew(consumer, property);
@@ -62,5 +55,18 @@ namespace RTC
 	return new PublisherFlush(consumer, property);
       }
     return NULL;
+  }
+  
+  /*!
+   * @if jp
+   * @brief Publisherの破棄
+   * @else
+   * @brief Destroy the Publishers
+   * @endif
+   */
+  void PublisherFactory::destroy(PublisherBase* publisher)
+  {
+    publisher->release();
+    delete publisher;
   }
 }; // namespace RTC

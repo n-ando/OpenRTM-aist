@@ -2,9 +2,9 @@
 /*!
  * @file  ConsoleIn.h
  * @brief Console input component
- * @date  $Date: 2007-01-14 22:51:48 $
+ * @date  $Date: 2008-02-29 04:55:01 $
  *
- * $Id: ConsoleIn.h,v 1.2 2007-01-14 22:51:48 n-ando Exp $
+ * $Id$
  */
 
 #ifndef CONSOLEIN_H
@@ -38,7 +38,7 @@ class ConsoleIn
 
   // The initialize action (on CREATED->ALIVE transition)
   // formaer rtc_init_entry() 
-  // virtual RTC::ReturnCode_t onInitialize();
+  virtual RTC::ReturnCode_t onInitialize();
 
   // The finalize action (on ALIVE->END transition)
   // formaer rtc_exiting_entry()
@@ -122,7 +122,7 @@ class ConsoleIn
 
 extern "C"
 {
-  void ConsoleInInit(RTC::Manager* manager);
+  DLL_EXPORT void ConsoleInInit(RTC::Manager* manager);
 };
 
 #endif // CONSOLEIN_H

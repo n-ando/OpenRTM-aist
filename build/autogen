@@ -13,24 +13,7 @@
 #         Advanced Industrial Science and Technology (AIST), Japan
 #     All rights reserved.
 #
-# $Id: autogen,v 1.7 2007-01-06 18:08:52 n-ando Exp $
-#
-# $Log: not supported by cvs2svn $
-# Revision 1.6  2006/11/30 10:29:25  n-ando
-# Now two type of Autotools version number is supported.
-# - Linux may uses automake-1.9 but FreeBSD may uses automake19
-# "libtool.m4" search directories were added for Linux.
-#
-# Revision 1.5  2006/11/04 16:31:30  n-ando
-# This script was rewritten.
-# - Autotools installation would be checked before reconfiguration.
-# - Automatically generated files clean-up script was added.
-# - Reconfiguration uses autoreconf now.
-#
-# Revision 1.4  2006/04/04 02:20:38  n-ando
-# - Some fixes to prevent warning.
-#
-#
+# $Id$
 #
 
 #
@@ -126,7 +109,7 @@ find_autotools()
     ar_cmd=${cmd_path}
 
     # autoupdate
-    find_cmd "autoupdate${ac_ver} autoupdate${ac_ver2} autoupdate"
+    find_cmd "autoupdate${ac_ver} autoupdate${ac_ver2} autoupdate autoupdates"
     aup_cmd=${cmd_path}
 
     #============================================================

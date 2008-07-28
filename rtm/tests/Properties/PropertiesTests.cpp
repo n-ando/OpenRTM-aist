@@ -6,15 +6,7 @@
  * @author Noriaki Ando <n-ando@aist.go.jp>,
  *         Shinji Kurihara
  *
- *  $Id: PropertiesTests.cpp,v 1.1 2006-11-27 08:23:25 n-ando Exp $
- *
- */
-
-/*
- * $Log: not supported by cvs2svn $
- * Revision 1.3  2006/10/18 05:59:55  kurihara
- *
- * test_list(),test_load(),test_store() added and It is a revision generally.
+ *  $Id$
  *
  */
 

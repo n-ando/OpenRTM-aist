@@ -14,7 +14,7 @@
 #  --outport=out:TimedLong 
 #
 #
-# $Id: Makefile.ConsoleIn,v 1.1 2007-01-14 22:53:59 n-ando Exp $
+# $Id$
 #
 CXXFLAGS = `rtm-config --cflags`
 LDFLAGS  = `rtm-config --libs`

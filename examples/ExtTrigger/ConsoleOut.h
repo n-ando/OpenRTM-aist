@@ -2,21 +2,20 @@
 /*!
  * @file  ConsoleOut.h
  * @brief Console output component
- * @date  $Date: 2007-04-13 14:59:57 $
+ * @date  $Date: 2008-02-29 04:54:47 $
  *
- * $Id: ConsoleOut.h,v 1.1 2007-04-13 14:59:57 n-ando Exp $
+ * $Id$
  */
 
 #ifndef CONSOLEOUT_H
 #define CONSOLEOUT_H
 
+#include <rtm/idl/BasicDataTypeSkel.h>
 #include <rtm/Manager.h>
 #include <rtm/DataFlowComponentBase.h>
 #include <rtm/CorbaPort.h>
 #include <rtm/DataInPort.h>
 #include <rtm/DataOutPort.h>
-#include <rtm/idl/BasicDataTypeSkel.h>
-#include <rtm/RingBuffer.h>
 
 // Service implementation headers
 // <rtc-template block="service_impl_h">
@@ -123,7 +122,7 @@ class ConsoleOut
 
 extern "C"
 {
-  void ConsoleOutInit(RTC::Manager* manager);
+  DLL_EXPORT void ConsoleOutInit(RTC::Manager* manager);
 };
 
 #endif // CONSOLEOUT_H

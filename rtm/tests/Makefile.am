@@ -2,55 +2,14 @@
 ##------------------------------------------------------------
 ## Makefile.am for unit test
 ##
-## $Id: Makefile.am,v 1.15 2007-01-21 13:06:23 n-ando Exp $
-##
-## $Log: not supported by cvs2svn $
-## Revision 1.14  2007/01/12 14:40:56  n-ando
-## Some build subdir entry were added.
-##
-## Revision 1.13  2006/12/18 06:57:24  n-ando
-## clean-local target alltests.xml and etc. were added.
-##
-## Revision 1.12  2006/11/27 08:10:26  n-ando
-## TestSuites are devided into each directory.
-##
-## Revision 1.11  2006/11/22 11:48:33  kurihara
-## CorbaConsumerTests is added.
-##
-## Revision 1.10  2006/11/14 07:22:28  kurihara
-## NVUtilTests is added.
-##
-## Revision 1.9  2006/11/13 09:13:53  kurihara
-## PortAdminTests and RingBufferTests were added.
-##
-## Revision 1.8  2006/11/08 01:18:23  kurihara
-## PortBaseTests is added.
-##
-## Revision 1.7  2006/10/31 13:12:49  kurihara
-## SdoConfigurationTests and CORBA_SeqUtilTests were added.
-##
-## Revision 1.6  2006/10/26 08:56:22  n-ando
-## StateMachineTests was added.
-##
-## Revision 1.5  2006/10/26 08:43:49  kurihara
-## FactoryTests, PortProfileHelperTests, SdoServiceTests, are added.
-##
-## Revision 1.4  2006/10/24 03:07:31  kurihara
-## ObjectManagerTests is added
-##
-## Revision 1.3  2006/10/23 06:29:22  kurihara
-## add ManagerConfigTests and StringUtilTests.
-##
-## Revision 1.2  2006/09/20 08:50:31  n-ando
-## ModuleManagerTests is added.
-##
-## Revision 1.1  2006/09/11 18:40:38  n-ando
-## The first commit.
+## $Id$
 ##------------------------------------------------------------
 
 AUTOMAKE_OPTIONS = 1.9
 
 SUBDIRS = \
+	SyncFIFO          \
+	SyncLIFO          \
 	CORBA_SeqUtil     \
 	CorbaConsumer     \
 	CorbaPort         \

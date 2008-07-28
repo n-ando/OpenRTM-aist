@@ -2,20 +2,20 @@
 /*!
  * @file  ConsoleIn.h
  * @brief Console input component
- * @date  $Date: 2007-04-13 14:59:19 $
+ * @date  $Date: 2008-02-29 04:54:45 $
  *
- * $Id: ConsoleIn.h,v 1.1 2007-04-13 14:59:19 n-ando Exp $
+ * $Id$
  */
 
 #ifndef CONSOLEIN_H
 #define CONSOLEIN_H
 
+#include <rtm/idl/BasicDataTypeSkel.h>
 #include <rtm/Manager.h>
 #include <rtm/DataFlowComponentBase.h>
 #include <rtm/CorbaPort.h>
 #include <rtm/DataInPort.h>
 #include <rtm/DataOutPort.h>
-#include <rtm/idl/BasicDataTypeSkel.h>
 
 // Service implementation headers
 // <rtc-template block="service_impl_h">
@@ -122,7 +122,7 @@ class ConsoleIn
 
 extern "C"
 {
-  void ConsoleInInit(RTC::Manager* manager);
+  DLL_EXPORT void ConsoleInInit(RTC::Manager* manager);
 };
 
 #endif // CONSOLEIN_H

@@ -5,15 +5,7 @@
  * @date   $Date: 2007-01-12 14:54:45 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
- * $Id: PublisherPeriodicTests.cpp,v 1.2 2007-01-12 14:54:45 n-ando Exp $
- *
- */
-
-/*
- * $Log: not supported by cvs2svn $
- * Revision 1.1  2006/12/18 06:51:55  n-ando
- * The first commitment.
- *
+ * $Id$
  *
  */
 

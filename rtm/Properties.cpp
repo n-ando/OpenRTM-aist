@@ -2,47 +2,20 @@
 /*!
  * @file Properties.cpp
  * @brief Property list class (derived from Java Properties)
- * @date $Date: 2007-04-23 04:56:39 $
+ * @date $Date: 2007-12-31 03:08:06 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
- * Copyright (C) 2006
+ * Copyright (C) 2006-2008
+ *     Noriaki Ando
  *     Task-intelligence Research Group,
  *     Intelligent Systems Research Institute,
  *     National Institute of
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: Properties.cpp,v 1.7 2007-04-23 04:56:39 n-ando Exp $
+ * $Id$
  *
  */
-
-/*
- * $Log: not supported by cvs2svn $
- * Revision 1.6  2007/04/13 18:14:02  n-ando
- * Now Properties class is implemented as hierarchical data structure
- * instead of std::map based data structure.
- *
- * Revision 1.5  2007/01/06 17:59:18  n-ando
- * getProperty() is now const function.
- *
- * Revision 1.4  2006/11/06 01:24:56  n-ando
- * Bug fix.
- * - Constructor's argument was not stored to the property values.
- *
- * Revision 1.3  2006/10/17 10:10:13  n-ando
- * Some escape/unescape related bugs are fixed.
- * The following some functions were moved to StringUtil.h
- * - eraseHeadBlank(), eraseTailBlank(), replaceString()
- *
- * Revision 1.2  2006/10/13 03:49:52  n-ando
- * The bug that white space delimiter did not work properly was fixed.
- *
- * Revision 1.1  2006/09/11 18:09:42  n-ando
- * Java compatible properties class.
- *
- *
- */
-
 
 #include <rtm/Properties.h>
 #include <rtm/StringUtil.h>
@@ -54,7 +27,7 @@ namespace RTC
    * @if jp
    * @brief コンストラクタ(rootノードのみ作成)
    * @else
-   * @brief Constructor
+   * @brief Constructor(Create only root node)
    * @endif
    */
   Properties::Properties(const char* key, const char* value)
@@ -62,13 +35,12 @@ namespace RTC
   {
     leaf.clear();
   }
-
-
+  
   /*!
    * @if jp
    * @brief コンストラクタ(mapでデフォルト値を与える)
    * @else
-   * @brief Constructor
+   * @brief Constructor(Give the default value with map)
    * @endif
    */
   Properties::Properties(std::map<std::string, std::string>& defaults)
@@ -80,17 +52,16 @@ namespace RTC
     
     while (it != it_end)
       {
-        setDefault(it->first.c_str(), it->second.c_str());
-        ++it;
+	setDefault(it->first.c_str(), it->second.c_str());
+	++it;
       }
   }
-  
   
   /*!
    * @if jp
    * @brief コンストラクタ(char*[] でデフォルト値を与える)
    * @else
-   * @brief Constructor
+   * @brief Constructor(Give the default value with char*[])
    * @endif
    */
   Properties::Properties(const char* defaults[], long num)
@@ -100,7 +71,6 @@ namespace RTC
     setDefaults(defaults, num);
   }
   
-
   /*!
    * @if jp
    * @brief コピーコンストラクタ
@@ -124,8 +94,7 @@ namespace RTC
 	  }
       }
   }
-
-
+  
   /*!
    * @if jp
    * @brief 代入演算子
@@ -139,7 +108,7 @@ namespace RTC
     name = prop.name;
     value = prop.value;
     default_value = prop.default_value;
-
+    
     std::vector<std::string> keys;
     keys = prop.propertyNames();
     for (int i(0), len(keys.size()); i < len; ++i)
@@ -151,11 +120,10 @@ namespace RTC
 	    setProperty(keys[i], node->value);
 	  }
       }
-
+    
     return *this;
   }
-
-
+  
   /*!
    * @if jp
    * @brief デストラクタ
@@ -167,7 +135,7 @@ namespace RTC
   {  
     // Delete children
     clear();
-
+    
     // delete myself from parent
     if (root != NULL)
       {
@@ -175,7 +143,6 @@ namespace RTC
       }
   };
   
-
   //============================================================
   // public fnctions
   //============================================================
@@ -183,7 +150,7 @@ namespace RTC
    * @if jp
    * @brief 指定されたキーを持つプロパティを、プロパティリストから探す
    * @else
-   * @brief Searches for the property with the specified key in this property
+   * @brief Search for the property with the specified key in the property list.
    * @endif
    */
   const std::string& Properties::getProperty(const std::string& key) const
@@ -198,12 +165,11 @@ namespace RTC
     return m_empty;
   }
   
-
   /*!
    * @if jp
    * @brief 指定されたキーを持つプロパティを、プロパティリストから探す
    * @else
-   * @brief Searches for the property with the specified key in this property
+   * @brief Search for the property with the specified key in the property list
    * @endif
    */
   const std::string& Properties::getProperty(const std::string& key,
@@ -213,13 +179,12 @@ namespace RTC
     
     return value.empty() ? def : value;
   }
-
-
+  
   /*!
    * @if jp
    * @brief 指定されたキーを持つプロパティを、プロパティリストから探す
    * @else
-   * @brief Searches for the property with the specified key in this property
+   * @brief Search for the property with the specified key in the property list
    * @endif
    */
   const std::string& Properties::operator[](const std::string& key) const
@@ -227,12 +192,11 @@ namespace RTC
     return getProperty(key);
   }
   
-  
   /*!
    * @if jp
    * @brief 指定されたキーを持つプロパティを、プロパティリストから探す
    * @else
-   * @brief Searches for the property with the specified key in this property
+   * @brief Search for the property with the specified key in the property list
    * @endif
    */
   std::string& Properties::operator[](const std::string& key)
@@ -242,13 +206,12 @@ namespace RTC
     
     return prop->value;
   }
-
-
+  
   /*!
    * @if jp
-   * @brief 指定されたキーに対してデフォルト値を設定する
+   * @brief 指定されたキーに対してデフォルト値を取得する
    * @else
-   * @brief Set value as the default value to specified key's property
+   * @brief Get the default value with specified key
    * @endif
    */
   const std::string& Properties::getDefault(const std::string& key) const
@@ -262,13 +225,12 @@ namespace RTC
       }
     return m_empty;
   }
-
-
+  
   /*!
    * @if jp
    * @brief Properties に value を key について登録する
    * @else
-   * @brief Sets a value associated with key in the property list
+   * @brief Set the value associated with key in the property list
    * @endif
    */
   std::string Properties::setProperty(const std::string& key,
@@ -289,16 +251,16 @@ namespace RTC
 	  }
 	curr = next;
       }
+    std::string retval(curr->value);
     curr->value = value;
-    return value;
+    return retval;
   }
-
-
+  
   /*!
    * @if jp
-   * @brief Properties にデフォルト value を key について登録する
+   * @brief デフォルト値を登録する
    * @else
-   * @brief Sets a default value associated with key in the property list
+   * @brief Set the default value associated with key in the property list
    * @endif
    */
   std::string Properties::setDefault(const std::string& key,
@@ -306,7 +268,7 @@ namespace RTC
   {
     std::vector<std::string> keys;
     split(key, '.', keys);
-
+    
     Properties* curr(this);
     for (int i(0), len(keys.size()); i < len; ++i)
       {
@@ -323,12 +285,11 @@ namespace RTC
     return value;
   }
   
-
   /*!
    * @if jp
    * @brief Properties にデフォルト値をまとめて登録する
    * @else
-   * @brief Sets a default value associated with key in the property list
+   * @brief Set a default value together in the property list
    * @endif
    */
   void Properties::setDefaults(const char* defaults[], long num)
@@ -347,8 +308,7 @@ namespace RTC
 	setDefault(key.c_str(), value.c_str());
       }
   }
-
-
+  
   //============================================================
   // load and save functions
   //============================================================
@@ -356,7 +316,7 @@ namespace RTC
    * @if jp
    * @brief 指定された出力ストリームに、プロパティリストを出力する
    * @else
-   * @brief Prints this property list out to the specified output stream
+   * @brief Print this property list out to the specified output stream
    * @endif
    */
   void Properties::list(std::ostream& out)
@@ -364,12 +324,11 @@ namespace RTC
     _store(out, "", this);
   }
   
-  
   /*!
    * @if jp
    * @brief 入力ストリームからキーと要素が対になったプロパティリストを読み込む
    * @else
-   * @brief Loads property list consists of key:value from input stream
+   * @brief Load property list that consists of key:value from input stream
    * @endif
    */
   void Properties::load(std::istream& inStream)
@@ -379,7 +338,7 @@ namespace RTC
     while(!inStream.eof())
       {
 	std::string tmp;
-	getline(inStream, tmp);
+	getlinePortable(inStream, tmp);
 	eraseHeadBlank(tmp);
 	
 	// Skip comments or empty lines
@@ -411,13 +370,12 @@ namespace RTC
 	pline.clear();
       }
   }
-    
-
+  
   /*!
    * @if jp
    * @brief プロパティリストを指定されたストリームに保存する
    * @else
-   * @brief Save the properties list to the stream
+   * @brief Save the property list to the specified stream
    * @endif
    */
   void Properties::save(std::ostream& out, const std::string& header)
@@ -426,12 +384,11 @@ namespace RTC
     return;
   }
   
-  
   /*!
    * @if jp
    * @brief プロパティリストを出力ストリームへ保存する
    * @else
-   * @brief Stores property list to the output stream
+   * @brief Store the property list to the output stream
    * @endif
    */
   void Properties::store(std::ostream& out, const std::string& header)
@@ -439,8 +396,7 @@ namespace RTC
     out << "# " << header << std::endl;
     _store(out, "", this);
   }
-
-
+  
   //============================================================
   // other util functions
   //============================================================
@@ -448,7 +404,7 @@ namespace RTC
    * @if jp
    * @brief プロパティのキーのリストを vector で返す
    * @else
-   * @brief Returns an vector of all the keys in this property
+   * @brief Return an vector of all the keys in this property
    * @endif
    */
   std::vector<std::string> Properties::propertyNames() const
@@ -461,25 +417,23 @@ namespace RTC
     return names;
   }
   
-  
   /*!
    * @if jp
    * @brief プロパティの数を取得する
    * @else
-   * @brief Get number of Properties
+   * @brief Get the number of properties
    * @endif
    */
   int Properties::size() const
   {
     return propertyNames().size();
   }
-
-
+  
   /*!
    * @if jp
    * @brief ノードを取得する
    * @else
-   * @brief Get node of Properties
+   * @brief Get node of properties
    * @endif
    */
   Properties* Properties::getNode(const std::string& key) const
@@ -490,12 +444,11 @@ namespace RTC
     return _getNode(keys, 0, this);
   }
   
-
   /*!
    * @if jp
-   * @brief ノードを切断する
+   * @brief ノードを削除する
    * @else
-   * @brief Get node of Properties
+   * @brief Remove node of properties
    * @endif
    */
   Properties* Properties::removeNode(const char* leaf_name)
@@ -514,13 +467,12 @@ namespace RTC
       }
     return NULL;
   }
- 
   
   /*!
    * @if jp
    * @brief 子ノードにkeyがあるかどうか
    * @else
-   * @brief If key exists in the children
+   * @brief Check whether key exists in the children
    * @endif
    */
   Properties* Properties::hasKey(const char* key) const
@@ -532,13 +484,12 @@ namespace RTC
       }
     return NULL;
   }
-
-
+  
   /*!
    * @if jp
    * @brief 子ノードを全て削除する
    * @else
-   * @brief If key exists in the children
+   * @brief Clear the children
    * @endif
    */
   void Properties::clear()
@@ -549,8 +500,7 @@ namespace RTC
 	  delete leaf.back();    // back() returns always new
       }
   }
-
-
+  
   /*!
    * @if jp
    * @brief Propertyをマージする
@@ -568,12 +518,17 @@ namespace RTC
       }
     return (*this);
   }
-
-
-
+  
   //------------------------------------------------------------
   // Protected functions
   //------------------------------------------------------------
+  /*!
+   * @if jp
+   * @brief 文字列をキーと値のペアに分割する
+   * @else
+   * @brief Split the string into a pair of the key and the value.
+   * @endif
+   */
   void Properties::splitKeyValue(const std::string& str, std::string& key,
 				 std::string& value)
   {
@@ -585,7 +540,11 @@ namespace RTC
 	if ((str[i] == ':' || str[i] == '=') && !isEscaped(str, i))
 	  {
 	    key   = str.substr(0, i); // substr(0, i) returns 0...(i-1) chars.
+	    eraseHeadBlank(key);
+	    eraseTailBlank(key);
 	    value = str.substr(i + 1);
+	    eraseHeadBlank(value);
+	    eraseTailBlank(value);
 	    return;
 	  }
 	++i;
@@ -598,7 +557,11 @@ namespace RTC
 	if ((str[i] == ' ') && !isEscaped(str, i))
 	  {
 	    key   = str.substr(0, i); // substr(0, i) returns 0...(i-1) chars.
+	    eraseHeadBlank(key);
+	    eraseTailBlank(key);
 	    value = str.substr(i + 1);
+	    eraseHeadBlank(value);
+	    eraseTailBlank(value);
 	    return;
 	  }
 	++i;
@@ -608,10 +571,16 @@ namespace RTC
     value = "";
     return;
   }
-
-
+  
+  /*!
+   * @if jp
+   * @brief 文字列を分割する
+   * @else
+   * @brief Split the string
+   * @endif
+   */
   bool Properties::split(const std::string& str, const char delim,
-				std::vector<std::string>& value)
+			 std::vector<std::string>& value)
   {
     if (str.empty()) return false;
     
@@ -632,30 +601,25 @@ namespace RTC
     return true;
   }
   
-
-  std::string indent(int index)
-  {
-    std::string space;
-    for (int i(0); i < index - 1; ++i)
-      {
-	space += "  ";
-      }
-    return space;
-  }
-
-
+  /*!
+   * @if jp
+   * @brief プロパティを取得する
+   * @else
+   * @brief Get properties
+   * @endif
+   */
   Properties*
   Properties::_getNode(std::vector<std::string>& keys,
 		       std::vector<Properties*>::size_type index,
 		       const Properties* curr)
   {
     Properties* next(curr->hasKey(keys[index].c_str()));
-
+    
     if (next == NULL)
       {
 	return NULL;
       }
-
+    
     if (index < keys.size() - 1) // node
       {
 	return next->_getNode(keys, ++index, next);
@@ -666,7 +630,14 @@ namespace RTC
       }
     return NULL;
   }
-
+  
+  /*!
+   * @if jp
+   * @brief プロパティの名称リストを取得する
+   * @else
+   * @brief Get a property name list
+   * @endif
+   */
   void
   Properties::_propertiyNames(std::vector<std::string>& names,
 			      std::string curr_name,
@@ -688,7 +659,14 @@ namespace RTC
       }
     return;
   }
-
+  
+  /*!
+   * @if jp
+   * @brief プロパティの名称リストを保存する
+   * @else
+   * @brief Store the property name list
+   * @endif
+   */
   void
   Properties::_store(std::ostream& out, std::string curr_name,
 		     Properties* curr)
@@ -699,19 +677,34 @@ namespace RTC
 	for (int i(0), len(curr->leaf.size()); i < len; ++i)
 	  {
 	    std::string next_name;
-	    if (curr_name == "") next_name = curr->leaf[i]->name;
-	    else next_name = curr_name + "." + curr->leaf[i]->name;
+	    if (curr_name == "")
+	      {
+		next_name = curr->leaf[i]->name;
+	      }
+	    else
+	      {
+		next_name = curr_name + "." + curr->leaf[i]->name;
+	      }
 	    _store(out, next_name, curr->leaf[i]);
 	  }
       }
-    else
+    
+    if (curr->root != NULL)
       {
-	out << curr_name << ": " << curr->value << std::endl;
+	if (curr->value.length() > 0)
+	  {
+	    out << curr_name << ": " << escape(curr->value) << std::endl;
+	  }
       }
-    return;
   }
-
-
+  
+  /*!
+   * @if jp
+   * @brief プロパティの内容を保存する
+   * @else
+   * @brief Save property's contents
+   * @endif
+   */
   std::ostream&
   Properties::_dump(std::ostream& out, const Properties& curr, int index)
   {
@@ -735,8 +728,14 @@ namespace RTC
       }
     return out;
   }
-
-
+  
+  /*!
+   * @if jp
+   * @brief インデントを生成する
+   * @else
+   * @brief Create indents
+   * @endif
+   */
   std::string Properties::indent(int index)
   {
     std::string space;
@@ -746,12 +745,19 @@ namespace RTC
       }
     return space;
   }
-
-
+  
+  std::string indent(int index)
+  {
+    std::string space;
+    for (int i(0); i < index - 1; ++i)
+      {
+	space += "  ";
+      }
+    return space;
+  }
+  
   std::ostream& operator<<(std::ostream& lhs, const Properties& rhs)
   {
     return rhs._dump(lhs, rhs, 0);
   }
-
-
 }; // namespace RTC

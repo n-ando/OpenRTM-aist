@@ -2,10 +2,10 @@
 /*!
  * @file DataOutPort.cpp
  * @brief Base class of OutPort
- * @date $Date: 2007-04-13 15:44:56 $
+ * @date $Date: 2007-12-31 03:08:02 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
- * Copyright (C) 2006
+ * Copyright (C) 2006-2008
  *     Noriaki Ando
  *     Task-intelligence Research Group,
  *     Intelligent Systems Research Institute,
@@ -13,25 +13,7 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: DataOutPort.cpp,v 1.5 2007-04-13 15:44:56 n-ando Exp $
- *
- */
-
-/*
- * $Log: not supported by cvs2svn $
- * Revision 1.4  2007/02/04 16:54:12  n-ando
- * The disconnection process was implemented.
- *
- * Revision 1.3  2007/01/06 17:44:00  n-ando
- * The behavior on notify_connect() and notify_disconnect() are now
- * implemented in protected functions(ex. publisherInterfaces()).
- *
- * Revision 1.2  2006/12/02 18:29:08  n-ando
- * Now OutPortCorbaProvider and InPortCorbaConsumer are used.
- *
- * Revision 1.1  2006/11/27 09:44:36  n-ando
- * The first commitment.
- *
+ * $Id$
  *
  */
 
@@ -43,10 +25,17 @@
 
 namespace RTC
 {
+  /*!
+   * @if jp
+   * @brief デストラクタ
+   * @else
+   * @brief Destructor
+   * @endif
+   */
   DataOutPort::~DataOutPort()
   {
   };
-
+  
   //============================================================
   // protected functions
   //============================================================
@@ -65,6 +54,13 @@ namespace RTC
     return RTC::RTC_OK;
   }
   
+  /*!
+   * @if jp
+   * @brief Interface に接続する
+   * @else
+   * @brief Subscribe to the interface
+   * @endif
+   */
   ReturnCode_t
   DataOutPort::subscribeInterfaces(const ConnectorProfile& connector_profile)
   {
@@ -75,24 +71,28 @@ namespace RTC
     // Pubslihser を生成
     PublisherBase* publisher;
     Properties prop(NVUtil::toProperties(connector_profile.properties));
-
+    
     publisher = m_pf.create(s._consumer->clone(), prop);
-
+    
     // Publisher を OutPort にアタッチ
     m_outport.attach(connector_profile.connector_id, publisher);
-
+    
     return RTC::RTC_OK;
   }
   
+  /*!
+   * @if jp
+   * @brief Interface の接続を解除する
+   * @else
+   * @brief Disconnect the interface connection
+   * @endif
+   */
   void
   DataOutPort::unsubscribeInterfaces(const ConnectorProfile& connector_profile)
   {
     PublisherBase* publisher;
     publisher = m_outport.detach(connector_profile.connector_id);
-    delete publisher;
+    m_pf.destroy(publisher);
     return;
   }
-  
-
-
 };

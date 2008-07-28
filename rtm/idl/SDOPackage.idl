@@ -23,10 +23,6 @@
 //error. 
 //SDOPackage.idl
 
-/*
- * $Log: not supported by cvs2svn $
- */
-
 #ifndef    _SDO_PACKAGE_IDL_
 #define    _SDO_PACKAGE_IDL_
 

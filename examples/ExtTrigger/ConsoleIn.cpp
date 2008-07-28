@@ -4,7 +4,7 @@
  * @brief Console input component
  * $Date: 2007-04-13 14:59:11 $
  *
- * $Id: ConsoleIn.cpp,v 1.1 2007-04-13 14:59:11 n-ando Exp $
+ * $Id$
  */
 
 #include "ConsoleIn.h"

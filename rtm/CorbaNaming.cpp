@@ -2,10 +2,10 @@
 /*!
  * @file CorbaNaming.cpp
  * @brief CORBA naming service helper class
- * @date $Date: 2007-04-27 07:48:13 $
+ * @date $Date: 2007-12-31 03:08:02 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
- * Copyright (C) 2006
+ * Copyright (C) 2006-2008
  *     Noriaki Ando
  *     Task-intelligence Research Group,
  *     Intelligent Systems Research Institute,
@@ -13,27 +13,7 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: CorbaNaming.cpp,v 1.6 2007-04-27 07:48:13 n-ando Exp $
- *
- */
-
-/*
- * $Log: not supported by cvs2svn $
- * Revision 1.5  2007/04/23 04:49:45  n-ando
- * Trivial fix.
- *
- * Revision 1.4  2007/04/17 09:22:21  n-ando
- * Namespace of Timer class was changed from ::Timer to RTC::Timer.
- *
- * Revision 1.3  2007/04/13 15:35:16  n-ando
- * Error handing processing in case NameServer does not exist was added.
- * Some bug fixes.
- *
- * Revision 1.2  2007/01/21 09:05:47  n-ando
- * "assert.h" is included.
- *
- * Revision 1.1  2006/11/04 19:42:55  n-ando
- * CORBA Naming service helper class has rewritten and renamed.
+ * $Id$
  *
  */
 
@@ -47,16 +27,28 @@
 
 namespace RTC
 {
+  /*!
+   * @if jp
+   * @brief コンストラクタ
+   * @else
+   * @brief Constructor
+   * @endif
+   */
   CorbaNaming::CorbaNaming(CORBA::ORB_ptr orb)
     : m_varORB(orb), m_nameServer(""),
       m_rootContext(CosNaming::NamingContextExt::_nil()),
       m_blLength(100)
   {
   }
-
-
-  CorbaNaming::CorbaNaming(CORBA::ORB_ptr orb,
-				 const char* name_server)
+  
+  /*!
+   * @if jp
+   * @brief コンストラクタ
+   * @else
+   * @brief Constructor
+   * @endif
+   */
+  CorbaNaming::CorbaNaming(CORBA::ORB_ptr orb, const char* name_server)
     : m_varORB(CORBA::ORB::_duplicate(orb)), m_nameServer(name_server),
       m_rootContext(CosNaming::NamingContextExt::_nil()),
       m_blLength(100)
@@ -75,7 +67,13 @@ namespace RTC
       }
   }
   
-
+  /*!
+   * @if jp
+   * @brief ネーミングサービスの初期化
+   * @else
+   * @brief Initialize the Naming Service
+   * @endif
+   */
   void CorbaNaming::init(const char* name_server)
   {
     m_nameServer = name_server;
@@ -85,8 +83,7 @@ namespace RTC
     m_rootContext = CosNaming::NamingContextExt::_narrow(obj);
     if (CORBA::is_nil(m_rootContext)) throw std::bad_alloc();
   }
-
-
+  
   /*!
    * @if jp
    * @brief Object を bind する
@@ -95,7 +92,7 @@ namespace RTC
    * @endif
    */
   void CorbaNaming::bind(const CosNaming::Name& name, CORBA::Object_ptr obj,
-			    const bool force)
+			 const bool force)
     throw(NotFound, CannotProceed, InvalidName, AlreadyBound)
   {
     try
@@ -112,7 +109,6 @@ namespace RTC
       }
   }
   
-  
   /*!
    * @if jp
    * @brief Object を bind する
@@ -121,12 +117,11 @@ namespace RTC
    * @endif
    */
   void CorbaNaming::bindByString(const char* string_name, CORBA::Object_ptr obj,
-			    const bool force)
+				 const bool force)
     throw(NotFound, CannotProceed, InvalidName, AlreadyBound)
   {
     this->bind(toName(string_name), obj, force);
   }
-  
   
   /*!
    * @if jp
@@ -136,8 +131,8 @@ namespace RTC
    * @endif
    */
   void CorbaNaming::bindRecursive(CosNaming::NamingContext_ptr context,
-				     const CosNaming::Name& name,
-				     CORBA::Object_ptr obj)
+				  const CosNaming::Name& name,
+				  CORBA::Object_ptr obj)
     throw(CannotProceed, InvalidName, AlreadyBound)
   {
     CORBA::ULong len(name.length());
@@ -162,7 +157,6 @@ namespace RTC
     return;
   }
   
-  
   /*!
    * @if jp
    * @brief Object を rebind する
@@ -171,8 +165,8 @@ namespace RTC
    * @endif
    */
   void CorbaNaming::rebind(const CosNaming::Name& name,
-			      CORBA::Object_ptr obj,
-			      const bool force)
+			   CORBA::Object_ptr obj,
+			   const bool force)
     throw(NotFound, CannotProceed, InvalidName)
   {
     try
@@ -189,7 +183,6 @@ namespace RTC
       }
   }
   
-  
   /*!
    * @if jp
    * @brief Object を rebind する
@@ -198,24 +191,23 @@ namespace RTC
    * @endif
    */
   void CorbaNaming::rebindByString(const char* string_name,
-				      CORBA::Object_ptr obj,
-				      const bool force)
+				   CORBA::Object_ptr obj,
+				   const bool force)
     throw(NotFound, CannotProceed, InvalidName)
   {
     rebind(toName(string_name), obj, force);
   }
   
-  
   /*!
    * @if jp
-   * @brief Object を rebind する
+   * @brief 途中のコンテキストを bind しながら Object を rebind する
    * @else
-   * @brief Rebind object
+   * @brief Bind intermediate context recursively and rebind object
    * @endif
    */
   void CorbaNaming::rebindRecursive(CosNaming::NamingContext_ptr context,
-				       const CosNaming::Name& name,
-				       CORBA::Object_ptr obj)
+				    const CosNaming::Name& name,
+				    CORBA::Object_ptr obj)
     throw(CannotProceed, InvalidName)
   {
     CORBA::ULong len(name.length());
@@ -239,6 +231,7 @@ namespace RTC
 		  }
 		catch (AlreadyBound& e)
 		  {
+		    e;
 		    cxt = CosNaming::
 		      NamingContextExt::
 		      _narrow(cxt->resolve(subName(name, i, i)));
@@ -251,7 +244,6 @@ namespace RTC
     return;
   }
   
-  
   /*!
    * @if jp
    * @brief NamingContext を bind する
@@ -260,13 +252,12 @@ namespace RTC
    * @endif
    */
   void CorbaNaming::bindContext(const CosNaming::Name& name,
-				   CosNaming::NamingContext_ptr name_cxt,
-				   const bool force)
+				CosNaming::NamingContext_ptr name_cxt,
+				const bool force)
     throw(NotFound, CannotProceed, InvalidName, AlreadyBound)
   {
     bind(name, name_cxt, force);
   }
-  
   
   /*!
    * @if jp
@@ -276,30 +267,28 @@ namespace RTC
    * @endif
    */
   void CorbaNaming::bindContext(const char* string_name,
-				   CosNaming::NamingContext_ptr name_cxt,
-				   const bool force)
+				CosNaming::NamingContext_ptr name_cxt,
+				const bool force)
     throw(NotFound, CannotProceed, InvalidName, AlreadyBound)
   {
     bindContext(toName(string_name), name_cxt, force);
   }
   
-  
   /*!
    * @if jp
    * @brief 途中のコンテキストを再帰的に bind し NamingContext を bind する
    * @else
-   * @brief Rebind object
+   * @brief Bind intermediate context recursively and bind NamingContext
    * @endif
    */
   void
   CorbaNaming::bindContextRecursive(CosNaming::NamingContext_ptr context,
-				       const CosNaming::Name& name,
-				       CosNaming::NamingContext_ptr name_cxt)
+				    const CosNaming::Name& name,
+				    CosNaming::NamingContext_ptr name_cxt)
   {
     bindRecursive(context, name, name_cxt);
     return;
   }
-  
   
   /*!
    * @if jp
@@ -309,14 +298,13 @@ namespace RTC
    * @endif
    */
   void CorbaNaming::rebindContext(const CosNaming::Name& name,
-				     CosNaming::NamingContext_ptr name_cxt,
-				     const bool force)
+				  CosNaming::NamingContext_ptr name_cxt,
+				  const bool force)
     throw(NotFound, CannotProceed, InvalidName)
   {
     rebind(name, name_cxt, force);
     return;
   }
-  
   
   /*!
    * @if jp
@@ -326,30 +314,28 @@ namespace RTC
    * @endif
    */
   void CorbaNaming::rebindContext(const char* string_name,
-				     CosNaming::NamingContext_ptr name_cxt,
-				     const bool force)
+				  CosNaming::NamingContext_ptr name_cxt,
+				  const bool force)
     throw(NotFound, CannotProceed, InvalidName)
   {
     rebindContext(toName(string_name), name_cxt, force);
   }
   
-  
   /*!
    * @if jp
    * @brief 途中のコンテキストを再帰的に rebind し NamingContext を rebind する
    * @else
-   * @brief Create or resolve intermediate context and rebind NamingContext 
+   * @brief Rebind intermediate context recursively and rebind NamingContext 
    * @endif
    */
   void
   CorbaNaming::rebindContextRecursive(CosNaming::NamingContext_ptr context,
-					 const CosNaming::Name& name,
-					 CosNaming::NamingContext_ptr name_cxt)
+				      const CosNaming::Name& name,
+				      CosNaming::NamingContext_ptr name_cxt)
   {
     rebindRecursive(context, name, name_cxt);
     return;
   }
-  
   
   /*!
    * @if jp
@@ -364,12 +350,11 @@ namespace RTC
     return m_rootContext->resolve(name);
   }
   
-  
   /*!
    * @if jp
    * @brief 与えられた NameComponent にバインドされている Object を返す
    * @else
-   * @brief Return object bound on the specified NameComponent
+   * @brief Return object bound on the specified name
    * @endif
    */
   CORBA::Object_ptr CorbaNaming::resolve(const char* string_name)
@@ -377,7 +362,6 @@ namespace RTC
   { 
     return resolve(toName(string_name));
   }
-  
   
   /*!
    * @if jp
@@ -392,7 +376,6 @@ namespace RTC
     m_rootContext->unbind(name);
   }
   
-  
   /*!
    * @if jp
    * @brief 与えられた NameComponent のバインディングを削除する
@@ -406,7 +389,6 @@ namespace RTC
     unbind(toName(string_name));
   }
   
-  
   /*!
    * @if jp
    * @brief 新しいコンテキストを生成する
@@ -418,7 +400,6 @@ namespace RTC
   {
     return m_rootContext->new_context();
   }
-  
   
   /*!
    * @if jp
@@ -446,7 +427,6 @@ namespace RTC
     return CosNaming::NamingContext::_nil();
   }
   
-  
   /*!
    * @if jp
    * @brief 新しいコンテキストを bind する
@@ -461,7 +441,6 @@ namespace RTC
     return bindNewContext(toName(string_name));
   }
   
-  
   /*!
    * @if jp
    * @brief NamingContext を非アクティブ化する
@@ -474,7 +453,6 @@ namespace RTC
   {
     context->destroy();
   }
-  
   
   /*!
    * @if jp
@@ -525,12 +503,11 @@ namespace RTC
     return;
   }
   
-  
   /*!
    * @if jp
    * @brief すべての Binding を削除する
    * @else
-   * @brief Destroy all binding
+   * @brief Destroy all bindings
    * @endif
    */
   void CorbaNaming::clearAll()
@@ -538,22 +515,20 @@ namespace RTC
     destroyRecursive(m_rootContext);
   }
   
-  
   /*!
    * @if jp
    * @brief 与えられた NamingContext の Binding を取得する
    * @else
-   * @brief Get Binding on the NamingContextDestroy all binding
+   * @brief Get Binding on the given NamingContext
    * @endif
    */
   void CorbaNaming::list(CosNaming::NamingContext_ptr name_cxt,
-			    unsigned long how_many,
-			    CosNaming::BindingList_var& bl,
-			    CosNaming::BindingIterator_var& bi)
+			 unsigned long how_many,
+			 CosNaming::BindingList_var& bl,
+			 CosNaming::BindingIterator_var& bi)
   {
     name_cxt->list(how_many, bl, bi);
   }
-  
   
   /*!
    * @if jp
@@ -577,12 +552,11 @@ namespace RTC
     return string_name;
   }
   
-  
   /*!
    * @if jp
    * @brief 与えられた文字列表現を NameComponent に分解する
    * @else
-   * @brief Get NameComponent from gien string name representation
+   * @brief Resolve given string representation to NameComponent
    * @endif
    */
   CosNaming::Name CorbaNaming::toName(const char* sname)
@@ -625,7 +599,6 @@ namespace RTC
     return name;
   }
   
-  
   /*!
    * @if jp
    * @brief 与えられた addre と string_name から URL表現を取得する
@@ -639,12 +612,11 @@ namespace RTC
     return m_rootContext->to_url(addr, string_name);
   }
   
-  
   /*!
    * @if jp
    * @brief 与えられた文字列表現を resolve しオブジェクトを返す
    * @else
-   * @brief Resolve from name of string representation and get object 
+   * @brief Resolve from name of string representation and get object
    * @endif
    */
   CORBA::Object_ptr CorbaNaming::resolveStr(const char* string_name)
@@ -653,22 +625,20 @@ namespace RTC
     return resolve(string_name);
   }
   
-  
-  
   //======================================================================
   // Util functions
   //======================================================================
   /*!
    * @if jp
-   * @brief 名前をバインドまたは解決する
+   * @brief オブジェクトの名前をバインドまたは解決する
    * @else
-   * @brief Bind of resolve the given name component
+   * @brief Bind or resolve the given name component
    * @endif
    */
   CORBA::Object_ptr
   CorbaNaming::bindOrResolve(CosNaming::NamingContext_ptr context,
-				const CosNaming::Name& name,
-				CORBA::Object_ptr obj)
+			     const CosNaming::Name& name,
+			     CORBA::Object_ptr obj)
   {
     try
       {
@@ -677,43 +647,40 @@ namespace RTC
       }
     catch (AlreadyBound& e)
       {
+	e;
 	return context->resolve(name);
       }
     return CORBA::Object::_nil();
   }
   
-  
   /*!
    * @if jp
    * @brief 名前をバインドまたは解決する
    * @else
-   * @brief Bind of resolve the given name component
+   * @brief Bind or resolve the given name component
    * @endif
    */
   CosNaming::NamingContext_ptr
   CorbaNaming::bindOrResolveContext(CosNaming::NamingContext_ptr context,
-				       const CosNaming::Name& name,
-				       CosNaming::NamingContext_ptr new_context)
+				    const CosNaming::Name& name,
+				    CosNaming::NamingContext_ptr new_context)
   {
     return CosNaming::NamingContext::_narrow(bindOrResolve(context, name, new_context));
   }
   
-  
   /*!
    * @if jp
    * @brief 名前をバインドまたは解決する
    * @else
-   * @brief Bind of resolve the given name component
+   * @brief Bind or resolve the given name component
    * @endif
    */
   CosNaming::NamingContext_ptr
   CorbaNaming::bindOrResolveContext(CosNaming::NamingContext_ptr context,
-				       const CosNaming::Name& name)
+				    const CosNaming::Name& name)
   {
     return bindOrResolveContext(context, name, newContext());
   }
-  
-  
   
   /*!
    * @if jp
@@ -727,7 +694,6 @@ namespace RTC
     return m_nameServer.c_str();
   }
   
-  
   /*!
    * @if jp
    * @brief ルートコンテキストを取得する
@@ -740,12 +706,11 @@ namespace RTC
     return m_rootContext;
   }
   
-  
   /*!
    * @if jp
    * @brief オブジェクトがネーミングコンテキストか判別する
    * @else
-   * @brief Whether the object is NamingContext
+   * @brief Determine whether the object is NamingContext
    * @endif
    */
   bool CorbaNaming::isNamingContext(CORBA::Object_ptr obj)
@@ -755,12 +720,11 @@ namespace RTC
     return CORBA::is_nil(nc) ? false : true;
   }
   
-  
   /*!
    * @if jp
    * @brief 与えられた名前がネーミングコンテキストかどうか
    * @else
-   * @brief Whether the given name component is NamingContext
+   * @brief Determine whether the given name component is NamingContext
    * @endif
    */
   bool CorbaNaming::isNamingContext(const CosNaming::Name& name)
@@ -768,19 +732,17 @@ namespace RTC
     return isNamingContext(resolve(name));
   }
   
-  
   /*!
    * @if jp
    * @brief 与えられた名前がネーミングコンテキストかどうか
    * @else
-   * @brief Whether the given string name is NamingContext
+   * @brief Determine whether the given string name is NamingContext
    * @endif
    */
   bool CorbaNaming::isNamingContext(const char* string_name)
   {
     return isNamingContext(resolve(string_name));
   }
-  
   
   /*!
    * @if jp
@@ -814,7 +776,6 @@ namespace RTC
     return sub_name;
   }
   
-  
   //------------------------------------------------------------
   // Protected member functions
   //------------------------------------------------------------
@@ -826,8 +787,8 @@ namespace RTC
    * @endif
    */
   void CorbaNaming::nameToString(const CosNaming::Name& name,
-				    char* string_name,
-				    unsigned long slen)
+				 char* string_name,
+				 unsigned long slen)
   {
     char* s = string_name;
     for (CORBA::ULong i = 0; i < name.length(); ++i)
@@ -854,7 +815,6 @@ namespace RTC
       }
     string_name[slen-1] = '\0';
   }
-  
   
   /*!
    * @if jp
@@ -894,7 +854,6 @@ namespace RTC
     return slen;
   }
   
-  
   /*!
    * @if jp
    * @brief 文字列の分割
@@ -903,8 +862,8 @@ namespace RTC
    * @endif
    */
   unsigned int CorbaNaming::split(const std::string& input,
-				     const std::string& delimiter,
-				     std::vector<std::string>& results)
+				  const std::string& delimiter,
+				  std::vector<std::string>& results)
   {
     typedef std::string::size_type size;
     size delim_size = delimiter.size();

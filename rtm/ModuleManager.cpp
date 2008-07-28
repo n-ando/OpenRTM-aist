@@ -1,35 +1,19 @@
 // -*- C++ -*-
 /*!
- * @file ModulesManager.cpp
+ * @file ModuleManager.cpp
  * @brief Loadable modules manager class
- * @date $Date: 2007-04-26 15:30:00 $
+ * @date $Date: 2007-12-31 03:08:04 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
- * Copyright (C) 2006
+ * Copyright (C) 2006-2008
+ *     Noriaki Ando
  *     Task-intelligence Research Group,
  *     Intelligent Systems Research Institute,
  *     National Institute of
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: ModuleManager.cpp,v 1.5 2007-04-26 15:30:00 n-ando Exp $
- *
- */
-
-/*
- * $Log: not supported by cvs2svn $
- * Revision 1.4  2007/04/13 18:02:58  n-ando
- * Some configuration properties handling processes were changed.
- *
- * Revision 1.3  2006/10/25 17:29:27  n-ando
- * Bug fix for configuration and load path strings including head blank.
- *
- * Revision 1.2  2006/10/17 10:06:39  n-ando
- * Now class ModuleManager is in RTC namespace.
- *
- * Revision 1.1  2006/09/20 08:47:25  n-ando
- * The first commit of module management class.
- *
+ * $Id$
  *
  */
 
@@ -43,29 +27,40 @@
 #include <ace/ACE.h>
 
 // RTC includes
+#include <rtm/Manager.h>
 #include <rtm/ModuleManager.h>
 #include <rtm/StringUtil.h>
 
 namespace RTC
 {
   
+  /*!
+   * @if jp
+   * @brief コンストラクタ
+   * @else
+   * @brief Constructor
+   * @endif
+   */
   ModuleManager::ModuleManager(Properties& prop)
     : m_properties(prop)
   {
     m_configPath      = split(prop[CONFIG_PATH], ",");
-    for_each(m_configPath.begin(), m_configPath.end(),
-    	     eraseHeadBlank);
+    for_each(m_configPath.begin(), m_configPath.end(), eraseHeadBlank);
     m_loadPath        = split(prop[MOD_LOADPTH], ",");
-    for_each(m_loadPath.begin(), m_loadPath.end(),
-    	     eraseHeadBlank);
-    m_absoluteAllowed = toBool(prop[ALLOW_ABSPATH],
-			       "yes", "no", false);
-    m_downloadAllowed = toBool(prop[ALLOW_URL],
-			       "yes", "no", false);
+    for_each(m_loadPath.begin(), m_loadPath.end(), eraseHeadBlank);
+    m_absoluteAllowed = toBool(prop[ALLOW_ABSPATH], "yes", "no", false);
+    m_downloadAllowed = toBool(prop[ALLOW_URL], "yes", "no", false);
     m_initFuncSuffix  = prop[INITFUNC_SFX];
     m_initFuncPrefix  = prop[INITFUNC_PFX];
   }
   
+  /*!
+   * @if jp
+   * @brief デストラクタ
+   * @else
+   * @brief Destructor
+   * @endif
+   */
   ModuleManager::~ModuleManager()
   {
     unloadAll();
@@ -75,7 +70,7 @@ namespace RTC
    * @if jp
    * @brief モジュールのロード
    * @else
-   * @brief Load module
+   * @brief Load the module
    * @endif
    */
   std::string ModuleManager::load(const std::string& file_name)
@@ -125,12 +120,11 @@ namespace RTC
     return file_path;
   }
   
-  
   /*!
    * @if jp
-   * @brief モジュールのロード
+   * @brief モジュールのロード、初期化
    * @else
-   * @brief Load module
+   * @brief Load and initialize the module
    * @endif
    */
   std::string ModuleManager::load(const std::string& file_name,
@@ -150,17 +144,16 @@ namespace RTC
     
     init = (ModuleInitFunc)this->symbol(name.c_str(), init_func);
     
-    init();
+    init(&(Manager::instance()));
     
     return name;
   }
-  
   
   /*!
    * @if jp
    * @brief モジュールのアンロード
    * @else
-   * @brief Unload module
+   * @brief Unload the module
    * @endif
    */
   void ModuleManager::unload(const std::string& file_name)
@@ -173,7 +166,6 @@ namespace RTC
     
     return;
   }
-  
   
   /*!
    * @if jp
@@ -198,12 +190,11 @@ namespace RTC
     return;
   }
   
-  
   /*!
    * @if jp
    * @brief モジュールのシンボルの参照
    * @else
-   * @brief Look up a named symbol in the module
+   * @brief Refer to the symbol of the module
    * @endif
    */
   void* ModuleManager::symbol(const std::string& file_name,
@@ -231,22 +222,20 @@ namespace RTC
    * @if jp
    * @brief モジュールロードパスを指定する
    * @else
-   * @brief Set default module load path
+   * @brief Set the module load path
    * @endif
    */
   void ModuleManager::setLoadpath(const std::vector<std::string>& load_path)
   {
     m_loadPath = load_path;
-    
     return;
   }
-  
   
   /*!
    * @if jp
    * @brief モジュールロードパスを追加する
    * @else
-   * @brief Add module load path
+   * @brief Add the module load path
    * @endif
    */
   void ModuleManager::addLoadpath(const std::vector<std::string>& load_path)
@@ -263,12 +252,11 @@ namespace RTC
     return;
   }
   
-  
   /*!
    * @if jp
    * @brief ロード済みのモジュールリストを取得する
    * @else
-   * @brief Get loaded module names
+   * @brief Get the module list that has been loaded
    * @endif
    */
   std::vector<std::string> ModuleManager::getLoadedModules()
@@ -285,12 +273,11 @@ namespace RTC
     return modules;
   }
   
-  
   /*!
    * @if jp
    * @brief ロード可能なモジュールリストを取得する(未実装)
    * @else
-   * @brief Get loadable module names
+   * @brief Get the loadable module list(not implemented)
    * @endif
    */
   std::vector<std::string> ModuleManager::getLoadableModules()
@@ -300,12 +287,11 @@ namespace RTC
     return modules;
   }
   
-  
   /*!
    * @if jp
    * @brief LoadPath からのファイルの検索
    * @else
-   * @brief Search file from load path
+   * @brief Search the file from the LoadPath
    * @endif
    */
   std::string ModuleManager::findFile(const std::string& fname,
@@ -330,12 +316,11 @@ namespace RTC
     return std::string("");
   }
   
-  
   /*!
    * @if jp
    * @brief ファイルが存在するかどうかのチェック
    * @else
-   * @brief Check file existance
+   * @brief Check whether the file exists
    * @endif
    */
   bool ModuleManager::fileExist(const std::string& filename)
@@ -357,12 +342,11 @@ namespace RTC
     return false;
   }
   
-  
   /*!
    * @if jp
    * @brief 初期化関数シンボルを生成する
    * @else
-   * @brief Create initialize function symbol
+   * @brief Create initialization function symbol
    * @endif
    */
   std::string ModuleManager::getInitFuncName(const std::string& file_path)
@@ -371,5 +355,4 @@ namespace RTC
     
     return m_initFuncPrefix + base_name + m_initFuncSuffix;
   }
-  
 }; // namespace RTC

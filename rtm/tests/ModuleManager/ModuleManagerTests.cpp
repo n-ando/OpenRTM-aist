@@ -14,17 +14,7 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: ModuleManagerTests.cpp,v 1.1 2006-11-27 08:33:02 n-ando Exp $
- *
- */
-
-/*
- * $Log: not supported by cvs2svn $
- * Revision 1.2  2006/10/26 01:34:57  kurihara
- * test program of class ModuelManager.
- *
- * Revision 1.1  2006/09/20 08:52:19  n-ando
- * The first commit.
+ * $Id$
  *
  */
 

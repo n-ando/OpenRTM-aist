@@ -2,10 +2,10 @@
 /*!
  * @file  PublisherNew.cpp
  * @brief PublisherNew class
- * @date  $Date: 2007-01-06 18:00:49 $
+ * @date  $Date: 2007-12-31 03:08:06 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
- * Copyright (C) 2006
+ * Copyright (C) 2006-2008
  *     Noriaki Ando
  *     Task-intelligence Research Group,
  *     Intelligent Systems Research Institute,
@@ -13,20 +13,14 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: PublisherNew.cpp,v 1.2 2007-01-06 18:00:49 n-ando Exp $
- *
- */
-
-/*
- * $Log: not supported by cvs2svn $
- * Revision 1.1  2006/11/27 09:44:48  n-ando
- * The first commitment.
+ * $Id$
  *
  */
 
 #include <rtm/PublisherNew.h>
 #include <rtm/InPortConsumer.h>
 #include <rtm/Properties.h>
+#include <rtm/RTC.h>
 #include <iostream>
 
 
@@ -46,11 +40,18 @@ namespace RTC
     open(0);
   }
 
+  /*!
+   * @if jp
+   * @brief デストラクタ
+   * @else
+   * @brief Destructor
+   * @endif
+   */
   PublisherNew::~PublisherNew()
   {
     delete m_consumer;
   }
-
+  
   /*!
    * @if jp
    * @brief Observer関数
@@ -67,14 +68,17 @@ namespace RTC
     m_data._updated = true;
     m_data._cond.signal();
     m_data._mutex.release();
+#ifdef WIN32
+    ACE_OS::thr_yield();
+#else
     pthread_yield();
-    usleep(100);
+#endif
     return;
   }
   
   /*!
    * @if jp
-   * @brief スレッPublisherNew::ド実行関数
+   * @brief PublisherNew::スレッド実行関数
    * @else
    * @brief Thread execution function
    * @endif
@@ -102,7 +106,7 @@ namespace RTC
     return 0;
   }
 
-
+  
   /*!
    * @if jp
    * @brief タスク開始
@@ -112,11 +116,11 @@ namespace RTC
    */
   int PublisherNew::open(void *args)
   {
-        m_running = true;
-        this->activate();
-        return 0;
+    m_running = true;
+    this->activate();
+    return 0;
   }
-
+  
   
   /*!
    * @if jp
@@ -127,7 +131,14 @@ namespace RTC
    */
   void PublisherNew::release()
   {
+    if (m_data._mutex.acquire() != 0)
+      {
+	return;
+      }
     m_running = false;
+    m_data._cond.signal(); //broadcast();
+    m_data._mutex.release();
+    wait();
   }
-
+  
 }; // namespace RTC

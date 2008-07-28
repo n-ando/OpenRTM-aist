@@ -5,12 +5,7 @@
  * @date   $Date: 2006-12-02 18:54:50 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
- * $Id: NullBufferTests.cpp,v 1.1 2006-12-02 18:54:50 n-ando Exp $
- *
- */
-
-/*
- * $Log: not supported by cvs2svn $
+ * $Id$
  *
  */
 

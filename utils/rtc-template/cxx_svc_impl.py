@@ -13,26 +13,8 @@
 #          Advanced Industrial Science and Technology (AIST), Japan
 #      All rights reserved.
 # 
-#  $Id: cxx_svc_impl.py,v 1.4 2007-02-07 02:51:49 n-ando Exp $
+#  $Id$
 # 
-
-#
-# $Log: not supported by cvs2svn $
-# Revision 1.3  2007/01/11 07:44:39  n-ando
-# Now service implementation class does not inherit RtcServiceBase.
-# The implementation template was changed.
-#
-# Revision 1.2  2005/09/06 14:37:18  n-ando
-# rtc-template's command options and data structure for ezt (Easy Template)
-# are changed for RTComponent's service features.
-# Now rtc-template can generate services' skeletons, stubs and
-# implementation files.
-# The implementation code generation uses omniidl's IDL parser.
-#
-# Revision 1.1  2005/08/29 17:50:57  n-ando
-# The first version.
-#
-#
 
 import string
 import os
@@ -362,7 +344,9 @@ class BuildInterfaceImplementations(idlvisitor.AstVisitor):
 
 {
   // Please insert your code here and remove the following warning pragma
+#ifndef WIN32
   #warning "Code missing in function <""" + x + """>"
+#endif
 }
 
 """,

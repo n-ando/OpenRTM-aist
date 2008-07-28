@@ -6,19 +6,7 @@
  * @author Noriaki Ando <n-ando@aist.go.jp>,
  *         Shinji Kurihara
  *
- * $Id: StringUtilTests.cpp,v 1.1 2006-11-27 08:25:52 n-ando Exp $
- *
- */
-
-/*
- * $Log: not supported by cvs2svn $
- * Revision 1.2  2006/10/23 07:38:37  n-ando
- * Some fixes for split() tests.
- *
- * Revision 1.1  2006/10/23 06:10:17  kurihara
- *
- * test program for StringUtil class.
- *
+ * $Id$
  *
  */
 

@@ -2,7 +2,7 @@
 /*!
  * @file DataOutPort.h
  * @brief Base class of OutPort
- * @date $Date: 2007-04-13 15:45:08 $
+ * @date $Date: 2008-01-13 15:06:58 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
  * Copyright (C) 2006
@@ -13,31 +13,7 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: DataOutPort.h,v 1.7 2007-04-13 15:45:08 n-ando Exp $
- *
- */
-
-/*
- * $Log: not supported by cvs2svn $
- * Revision 1.6  2007/01/21 09:45:31  n-ando
- * To advertise interface profile, publishInterfaceProfile() is called now.
- *
- * Revision 1.5  2007/01/14 22:57:54  n-ando
- * A bug fix about template argument for buffer-type in constructor.
- *
- * Revision 1.4  2007/01/12 14:30:01  n-ando
- * A trivial bug fix.
- *
- * Revision 1.3  2007/01/06 17:44:11  n-ando
- * The behavior on notify_connect() and notify_disconnect() are now
- * implemented in protected functions(ex. publisherInterfaces()).
- *
- * Revision 1.2  2006/12/02 18:29:15  n-ando
- * Now OutPortCorbaProvider and InPortCorbaConsumer are used.
- *
- * Revision 1.1  2006/11/27 09:44:37  n-ando
- * The first commitment.
- *
+ * $Id$
  *
  */
 
@@ -52,16 +28,72 @@
 #include <rtm/OutPort.h>
 #include <rtm/NVUtil.h>
 #include <rtm/PublisherFactory.h>
+#include <rtm/Properties.h>
+
+#ifdef RTC_SOCK_DATAPORT
+#include <rtm/OutPortTcpSockProvider.h>
+#include <rtm/InPortTcpSockConsumer.h>
+#endif
 
 namespace RTC
 {
   /*!
    * @if jp
    * @class DataOutPort
-   * @brief InPort 用 Port
+   * @brief Outort 用 Port
+   *
+   * データ出力ポートの実装クラス。
+   * 
+   * OutPort 側の connect() では以下のシーケンスで処理が行われる。
+   *
+   * 1. OutPort に関連する connector 情報の生成およびセット
+   *
+   * 2. InPortに関連する connector 情報の取得
+   *  - ConnectorProfile::properties["dataport.corba_any.inport_ref"]に
+   *    OutPortAny のオブジェクトリファレンスが設定されている場合、
+   *    リファレンスを取得してConsumerオブジェクトにセットする。
+   *    リファレンスがセットされていなければ無視して継続。
+   *    (OutPortがconnect() 呼び出しのエントリポイントの場合は、
+   *    InPortのオブジェクトリファレンスはセットされていないはずである。)
+   * 3. PortBase::connect() をコール
+   *    Portの接続の基本処理が行われる。
+   * 4. 上記2.でInPortのリファレンスが取得できなければ、再度InPortに
+   *    関連する connector 情報を取得する。
+   *
+   * 5. ConnectorProfile::properties で与えられた情報から、
+   *    OutPort側の初期化処理を行う。
+   *
+   * - [dataport.interface_type]
+   * -- CORBA_Any の場合: 
+   *    InPortAny を通してデータ交換される。
+   *    ConnectorProfile::properties["dataport.corba_any.inport_ref"]に
+   *    InPortAny のオブジェクトリファレンスをセットする。
+   * -- RawTCP の場合: Raw TCP socket を通してデータ交換される。
+   *    ConnectorProfile::properties["dataport.raw_tcp.server_addr"]
+   *    にInPort側のサーバアドレスをセットする。
+   *
+   * - [dataport.dataflow_type]
+   * -- Pushの場合: Subscriberを生成する。Subscriberのタイプは、
+   *    dataport.subscription_type に設定されている。
+   * -- Pullの場合: InPort側がデータをPull型で取得するため、
+   *    特に何もする必要が無い。
+   *
+   * - [dataport.subscription_type]
+   * -- Onceの場合: SubscriberOnceを生成する。
+   * -- Newの場合: SubscriberNewを生成する。
+   * -- Periodicの場合: SubscriberPeriodicを生成する。
+   *
+   * - [dataport.push_interval]
+   * -- dataport.subscription_type=Periodicの場合周期を設定する。
+   *
+   * 6. 上記の処理のうち一つでもエラーであれば、エラーリターンする。
+   *    正常に処理が行われた場合はRTC::RTC_OKでリターンする。
+   *  
+   * @since 0.4.0
+   *
    * @else
    * @class DataOutPort
-   * @brief InPort abstruct class
+   * @brief OutPort abstruct class
    * @endif
    */
   class DataOutPort
@@ -71,12 +103,30 @@ namespace RTC
     /*!
      * @if jp
      * @brief コンストラクタ
+     *
+     * コンストラクタ
+     *
+     * @param name ポート名称
+     * @param outport 当該データ出力ポートに関連付けるOutPortオブジェクト
+     *                OutPortオブジェクトで扱うデータ型、バッファタイプも指定する
+     * @param prop ポート設定用プロパティ
+     *
      * @else
      * @brief Constructor
+     *
+     * Constructor
+     *
+     * @param name Port name
+     * @param outport OutPort object associated with this data output port.
+     *                Specify also the data type and the buffer type used in
+     *                the OutPort object.
+     * @param prop Property for setting ports
+     *
      * @endif
      */
     template <class DataType, template <class DataType> class Buffer>
-    DataOutPort(const char* name, OutPort<DataType, Buffer>& outport)
+    DataOutPort(const char* name, OutPort<DataType, Buffer>& outport,
+		Properties& prop)
       : PortBase(name), m_outport(outport)
     {
       // PortProfile::properties を設定
@@ -84,75 +134,31 @@ namespace RTC
       
       m_providers.push_back(new OutPortCorbaProvider<DataType>(outport));
       m_providers.back()->publishInterfaceProfile(m_profile.properties);
+      
+#ifdef RTC_SOCK_DATAPORT
+      m_providers.push_back(new OutPortTcpSockProvider<DataType>(outport));
+      m_providers.back()->publishInterfaceProfile(m_profile.properties);
+#endif      
       m_consumers.push_back(new InPortCorbaConsumer<DataType>(outport));
+#ifdef RTC_SOCK_DATAPORT
+      m_consumers.push_back(new InPortTcpSockConsumer<DataType>(outport, prop));
+#endif
     }
-
-
-    /*!
-     * @if jp
-     * @brief デストラクタ
-     * @else
-     * @brief Destructor
-     * @endif
-     */
-    virtual ~DataOutPort();
-
     
     /*!
      * @if jp
-     * @brief [CORBA interface] Port の接続を行う
+     * @brief デストラクタ
      *
-     * OutPort と InPort との接続を行う。
+     * デストラクタ
      *
-     * OutPort 側の connect() では以下のシーケンスで処理が行われる。
-     *
-     * 1. OutPort に関連する connector 情報の生成およびセット
-     *
-     * 2. InPortに関連する connector 情報の取得
-     *  - ConnectorProfile::properties["dataport.corba_any.inport_ref"]に
-     *    OutPortAny のオブジェクトリファレンスが設定されている場合、
-     *    リファレンスを取得してConsumerオブジェクトにセットする。
-     *    リファレンスがセットされていなければ無視して継続。
-     *    (OutPortがconnect() 呼び出しのエントリポイントの場合は、
-     *    InPortのオブジェクトリファレンスはセットされていないはずである。)
-     * 3. PortBase::connect() をコール
-     *    Portの接続の基本処理が行われる。
-     * 4. 上記2.でInPortのリファレンスが取得できなければ、再度InPortに
-     *    関連する connector 情報を取得する。
-     *
-     * 5. ConnectorProfile::properties で与えられた情報から、
-     *    OutPort側の初期化処理を行う。
-     *
-     * - [dataport.interface_type]
-     * -- CORBA_Any の場合: 
-     *    InPortAny を通してデータ交換される。
-     *    ConnectorProfile::properties["dataport.corba_any.inport_ref"]に
-     *    InPortAny のオブジェクトリファレンスをセットする。
-     * -- RawTCP の場合: Raw TCP socket を通してデータ交換される。
-     *    ConnectorProfile::properties["dataport.raw_tcp.server_addr"]
-     *    にInPort側のサーバアドレスをセットする。
-     *
-     * - [dataport.dataflow_type]
-     * -- Pushの場合: Subscriberを生成する。Subscriberのタイプは、
-     *    dataport.subscription_type に設定されている。
-     * -- Pullの場合: InPort側がデータをPull型で取得するため、
-     *    特に何もする必要が無い。
-     *
-     * - [dataport.subscription_type]
-     * -- Onceの場合: SubscriberOnceを生成する。
-     * -- Newの場合: SubscriberNewを生成する。
-     * -- Periodicの場合: SubscriberPeriodicを生成する。
-     *
-     * - [dataport.push_interval]
-     * -- dataport.subscription_type=Periodicの場合周期を設定する。
-     *
-     * 6. 上記の処理のうち一つでもエラーであれば、エラーリターンする。
-     *    正常に処理が行われた場合はRTC::RTC_OKでリターンする。
-     *  
      * @else
-     * @brief [CORBA interface] Connect the Port
+     * @brief Destructor
+     *
+     * Destructor
+     *
      * @endif
      */
+    virtual ~DataOutPort();
     
   protected:
     /*!
@@ -175,13 +181,14 @@ namespace RTC
      * 既存の connector_id に対しては更新が適切に行われる必要がある。
      *
      * @param connector_profile 接続に関するプロファイル情報
+     *
      * @return ReturnCode_t 型のリターンコード
      *
      * @else
      *
      * @brief Publish interface information
      *
-     * This operation is pure virutal method that would be called at the
+     * This operation is pure virutal function that would be called at the
      * beginning of the notify_connect() process sequence.
      * In the notify_connect(), the following methods would be called in order.
      *
@@ -195,6 +202,7 @@ namespace RTC
      * connection_id.
      *
      * @param connector_profile The connection profile information
+     *
      * @return The return code of ReturnCode_t type.
      *
      * @endif
@@ -202,10 +210,9 @@ namespace RTC
     virtual ReturnCode_t
     publishInterfaces(ConnectorProfile& connector_profile);
     
-
     /*! @if jp
      *
-     * @brief Interface 情報を取得する
+     * @brief Interface に接続する
      *
      * このオペレーションは、notify_connect() 処理シーケンスの中間にコール
      * される純粋仮想関数である。
@@ -219,14 +226,15 @@ namespace RTC
      * の順に protected 関数がコールされ接続処理が行われる。
      *
      * @param connector_profile 接続に関するプロファイル情報
+     *
      * @return ReturnCode_t 型のリターンコード
      *
      * @else
      *
-     * @brief Publish interface information
+     * @brief Subscribe to the interface
      *
-     * This operation is pure virutal method that would be called at the
-     * mid-flow of the notify_connect() process sequence.
+     * This operation is pure virutal function that would be called at the
+     * middle of the notify_connect() process sequence.
      * In the notify_connect(), the following methods would be called in order.
      *
      * - publishInterfaces()
@@ -235,6 +243,7 @@ namespace RTC
      * - updateConnectorProfile()
      *
      * @param connector_profile The connection profile information
+     *
      * @return The return code of ReturnCode_t type.
      *
      * @endif
@@ -242,7 +251,6 @@ namespace RTC
     virtual ReturnCode_t
     subscribeInterfaces(const ConnectorProfile& connector_profile);
     
-
     /*!
      * @if jp
      *
@@ -260,24 +268,30 @@ namespace RTC
      *
      * @else
      *
-     * @brief Disconnect interface connection
+     * @brief Disconnect the interface connection
      *
-     * This operation is pure virutal method that would be called at the
+     * This operation is pure virutal function that would be called at the
      * end of the notify_disconnect() process sequence.
      * In the notify_disconnect(), the following methods would be called.
      * - disconnectNext()
      * - unsubscribeInterfaces()
      * - eraseConnectorProfile() 
      *
-     * @param connector_profile The connection profile information
+     * @param connector_profile The profile information associated with 
+     *                          the connection
      *
      * @endif
      */
     virtual void
     unsubscribeInterfaces(const ConnectorProfile& connector_profile);
-
-
     
+    /*!
+     * @if jp
+     * @brief Interface公開用Functor
+     * @else
+     * @brief Functor to publish the interface
+     * @endif
+     */
     struct publish
     {
       publish(SDOPackage::NVList& prop) : m_prop(prop) {}
@@ -287,7 +301,14 @@ namespace RTC
       }
       SDOPackage::NVList& m_prop;
     };
-
+    
+    /*!
+     * @if jp
+     * @brief Interface接続解除用Functor
+     * @else
+     * @brief Functor to unsubscribe the interface
+     * @endif
+     */
     struct unsubscribe
     {
       unsubscribe(const SDOPackage::NVList& prop) : m_prop(prop) {}
@@ -297,27 +318,27 @@ namespace RTC
       }
       const SDOPackage::NVList& m_prop;
     };
-
+    
   private:
     std::vector<OutPortProvider*> m_providers;
     std::vector<InPortConsumer*> m_consumers;
     OutPortBase& m_outport;
-
+    
     PublisherFactory m_pf;
-
+    
     struct subscribe
     {
       subscribe(const ConnectorProfile& prof)
 	: m_prof(&prof), _consumer(NULL) 
       {
       }
-
+      
       subscribe(const subscribe& subs)
 	: m_prof(subs.m_prof),
 	  _consumer(subs._consumer)
       {
       }
-
+      
       subscribe& operator=(const subscribe& subs)
       {
 	if (this == &subs) return *this;
@@ -325,7 +346,7 @@ namespace RTC
 	_consumer = subs._consumer;
 	return *this;
       }
-
+      
       void operator()(InPortConsumer* cons)
       {
 	if (cons->subscribeInterface(m_prof->properties))
@@ -336,8 +357,6 @@ namespace RTC
       const ConnectorProfile* m_prof;
       InPortConsumer* _consumer;
     };
-
-
   };
 }; // namespace RTC
 

@@ -5,20 +5,9 @@
 # @date   $Date: 2007-01-21 06:52:23 $
 # @author Noriaki Ando <n-ando@aist.go.jp>
 #
-# $Id: Makefile.am,v 1.3 2007-01-21 06:52:23 n-ando Exp $
+# $Id$
 #
 #------------------------------------------------------------
-
-#
-# $Log: not supported by cvs2svn $
-# Revision 1.2  2007/01/12 14:44:00  n-ando
-# Some fixes for distribution control.
-#
-# Revision 1.1  2006/11/27 08:30:12  n-ando
-# TestSuites are devided into each directory.
-#
-#
-
 
 AUTOMAKE_OPTIONS = 1.9
 

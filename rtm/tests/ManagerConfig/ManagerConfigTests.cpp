@@ -5,12 +5,7 @@
  * @date   $Date: 2006-11-27 08:25:57 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
- * $Id: ManagerConfigTests.cpp,v 1.1 2006-11-27 08:25:57 n-ando Exp $
- *
- */
-
-/*
- * $Log: not supported by cvs2svn $
+ * $Id$
  *
  */
 

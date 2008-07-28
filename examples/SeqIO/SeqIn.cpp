@@ -4,7 +4,7 @@
  * @brief Sequence InPort component
  * $Date: 2007-04-13 15:02:42 $
  *
- * $Id: SeqIn.cpp,v 1.3 2007-04-13 15:02:42 n-ando Exp $
+ * $Id$
  */
 
 #include "SeqIn.h"

@@ -4,7 +4,7 @@
  * @brief Sample string out component
  * @date $Date: 2005-05-12 09:06:20 $
  *
- * $Id: StringOut.cpp,v 1.1.1.1 2005-05-12 09:06:20 n-ando Exp $
+ * $Id$
  */
 
 

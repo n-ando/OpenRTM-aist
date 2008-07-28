@@ -1,8 +1,8 @@
 #!/usr/bin/env python
-#
+# -*- coding: euc-jp -*-
 # @file codegen.py
 # @brief simple code template generator
-# @date $Date: 2006-11-27 07:24:49 $
+# @date $Date: 2008-02-27 11:31:04 $
 # @author Norkai Ando <n-ando@aist.go.jp>
 #
 # Copyright (C) 2006
@@ -13,25 +13,22 @@
 #         Advanced Industrial Science and Technology (AIST), Japan
 #     All rights reserved.
 #
-# $Id: codegen.py,v 1.1 2006-11-27 07:24:49 n-ando Exp $
+# $Id$
 #
 # [usage]
 # codegen.py [class_name]
 #
 
-
-# $Log: not supported by cvs2svn $
-
-
 import sys
 import os
-import ezt
+import yat
 
 src_cpp = """// -*- C++ -*-
 /*!
  * @file  [class_name].cpp
  * @brief [class_name] class
  * @date  [dollar]Date[dollar]
+ 
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
  * Copyright (C) 2006
@@ -43,11 +40,13 @@ src_cpp = """// -*- C++ -*-
  *     All rights reserved.
  *
  * [dollar]Id[dollar]
+
  *
  */
 
 /*
  * [dollar]Log[dollar]
+
  */
 
 #include <rtm/[class_name].h>
@@ -74,6 +73,7 @@ src_h = """// -*- C++ -*-
  * @file  [class_name].h
  * @brief [class_name] class
  * @date  [dollar]Date[dollar]
+
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
  * Copyright (C) 2006
@@ -85,11 +85,13 @@ src_h = """// -*- C++ -*-
  *     All rights reserved.
  *
  * [dollar]Id[dollar]
+
  *
  */
 
 /*
  * [dollar]Log[dollar]
+
  */
 
 #ifndef [class_name]_h
@@ -100,13 +102,16 @@ namespace RTC
   /*!
    * @if jp
    * @class [class_name]
+
    * @brief [class_name] епеще╣
    * @else
    * @class [class_name]
+
    * @brief [class_name] class
    * @endif
    */
   class [class_name]
+
   {
   public:
     /*!
@@ -138,18 +143,13 @@ namespace RTC
 
 """
 
-
-class src_dict:
-    def __init__(self, classname):
-        self.data = {}
-        self.data["dollar"] = "$"
-        self.data["class_name"] = classname
-        self.data["src_cpp"]    = classname + ".cpp"
-        self.data["src_h"]      = classname + ".h"
-        return
-    def get_dict(self):
-        return self.data
-    
+def make_dict(classname):
+    data = {}
+    data["dollar"] = "$"
+    data["class_name"] = classname
+    data["src_cpp"]    = classname + ".cpp"
+    data["src_h"]      = classname + ".h"
+    return data
 
 class src_gen:
     def __init__(self, data):
@@ -171,13 +171,13 @@ class src_gen:
             return file(fname, "w")
     
     def gen(self, fname, temp_txt, data):
-        f = self.check_overwrite(fname)
-        if not f:
+        fd = self.check_overwrite(fname)
+        if not fd:
             return
-        t = ezt.Template(compress_whitespace = 0)
-        t.parse(temp_txt)
-        t.generate(f, data)
-        f.close()
+        t = yat.Template(temp_txt)
+        text = t.generate(data)
+	fd.write(text)
+        fd.close()
         print "\"" + fname + "\"" " was generated."
         return
 
@@ -195,11 +195,12 @@ class src_gen:
         return
 
 
-if len(sys.argv) < 2:
-    sys.exit(1)
+#if len(sys.argv) < 2
+#    sys.exit(1)
+#
+#class_name = sys.argv[1]
+#
+#gen  = src_gen(make_dict(class_name))
+#gen.gen_all()
 
-class_name = sys.argv[1]
-
-data = src_dict(class_name)
-gen  = src_gen(data.get_dict())
-gen.gen_all()
+print make_dict("hogehgoe")

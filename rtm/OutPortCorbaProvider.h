@@ -2,10 +2,10 @@
 /*!
  * @file  OutPortCorbaProvider.h
  * @brief OutPortCorbaProvider class
- * @date  $Date: 2007-02-04 16:56:00 $
+ * @date  $Date: 2008-01-14 07:52:40 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
- * Copyright (C) 2006
+ * Copyright (C) 2006-2008
  *     Noriaki Ando
  *     Task-intelligence Research Group,
  *     Intelligent Systems Research Institute,
@@ -13,27 +13,7 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: OutPortCorbaProvider.h,v 1.5 2007-02-04 16:56:00 n-ando Exp $
- *
- */
-
-/*
- * $Log: not supported by cvs2svn $
- * Revision 1.4  2007/01/21 10:25:24  n-ando
- * A trivial fix.
- *
- * Revision 1.3  2007/01/14 23:01:53  n-ando
- * Now object reference is duplicate to set property.
- *
- * Revision 1.2  2007/01/06 17:57:35  n-ando
- * Interface subscription/unsubscription functions (subscribeInterface()
- * and unsubscribeInterface()) are added.
- *
- * Revision 1.1  2006/12/02 18:48:21  n-ando
- * The first commitment.
- *
- * Revision 1.1  2006/11/27 09:44:42  n-ando
- * The first commitment.
+ * $Id$
  *
  */
 
@@ -50,9 +30,25 @@ namespace RTC
    * @if jp
    * @class OutPortCorbaProvider
    * @brief OutPortCorbaProvider クラス
+   *
+   * 通信手段に CORBA を利用した出力ポートプロバイダーの実装クラス。
+   *
+   * @param DataType 当該プロバイダに割り当てたバッファが保持するデータ型
+   *
+   * @since 0.4.0
+   *
    * @else
    * @class OutPortCorbaProvider
    * @brief OutPortCorbaProvider class
+   *
+   * This is an implementation class of OutPort Provider that uses 
+   * CORBA for mean of communication.
+   *
+   * @param DataType Data type held by the buffer that is assigned to this 
+   *        provider
+   *
+   * @since 0.4.0
+   *
    * @endif
    */
   template <class DataType>
@@ -65,8 +61,18 @@ namespace RTC
     /*!
      * @if jp
      * @brief コンストラクタ
+     *
+     * コンストラクタ
+     *
+     * @param buffer 当該プロバイダに割り当てるバッファオブジェクト
+     *
      * @else
      * @brief Constructor
+     *
+     * Constructor
+     *
+     * @param buffer Buffer object that is assigned to this provider
+     *
      * @endif
      */
     OutPortCorbaProvider(BufferBase<DataType>& buffer)
@@ -81,7 +87,7 @@ namespace RTC
       setInterfaceType("CORBA_Any");
       setDataFlowType("Push, Pull");
       setSubscriptionType("Flush, New, Periodic");
-
+      
       // ConnectorProfile setting
       m_objref = this->_this();
       CORBA_SeqUtil::push_back(m_properties,
@@ -92,26 +98,49 @@ namespace RTC
     /*!
      * @if jp
      * @brief デストラクタ
+     *
+     * デストラクタ
+     *
      * @else
      * @brief Destructor
+     *
+     * Destructor
+     *
      * @endif
      */
     virtual ~OutPortCorbaProvider()
     {}
-
+    
+    /*!
+     * @if jp
+     * @brief バッファからデータを取得する
+     *
+     * 設定された内部バッファからデータを取得する。
+     *
+     * @return 取得データ
+     *
+     * @else
+     * @brief Get data from the buffer
+     *
+     * Get data from the internal buffer.
+     *
+     * @return Data got from the buffer.
+     *
+     * @endif
+     */
     CORBA::Any* get()
+      throw (CORBA::SystemException)
     {
       DataType data;
-      CORBA::Any_var tmp = new CORBA::Any();
       m_buffer.read(data);
-      tmp <<= data;
-      return tmp._retn();
+      m_tmp <<= data;
+      return new CORBA::Any(m_tmp);
     }
-
-   
+    
   private:
     BufferBase<DataType>& m_buffer;
     OutPortAny_var m_objref;
+    CORBA::Any m_tmp;
   };
 };     // namespace RTC
 #endif // OutPortCorbaProvider_h

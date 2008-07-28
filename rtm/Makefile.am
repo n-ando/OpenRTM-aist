@@ -2,56 +2,7 @@
 ##------------------------------------------------------------
 ## Makefile.am for libRTC
 ##
-## $Id: Makefile.am,v 1.16 2007-04-23 04:50:22 n-ando Exp $
-##
-## $Log: not supported by cvs2svn $
-## Revision 1.15  2007/04/13 17:59:04  n-ando
-## Some .cpp files and .h files are added.
-##
-## Revision 1.14  2007/01/29 07:24:35  n-ando
-## Ld option -no-undefined for Windows DLLs was added.
-##
-## Revision 1.13  2007/01/21 14:17:21  n-ando
-## *** empty log message ***
-##
-## Revision 1.12  2007/01/12 15:02:59  n-ando
-## The versioin.h should not be included in dist. files.
-##
-## Revision 1.11  2007/01/12 14:32:49  n-ando
-## Some headers that should be included in the distribution package were
-## added to the EXTRA_DIST entry.
-##
-## Revision 1.10  2007/01/09 09:58:45  n-ando
-## libRTC.so's source entry was divided and organizaed.
-##
-## Revision 1.9  2006/12/02 18:42:20  n-ando
-## Some file entries were added.
-##
-## Revision 1.8  2006/11/27 10:03:58  n-ando
-## CppUnit test sub-directory "tests" was added.
-##
-## Revision 1.7  2006/11/10 04:33:11  n-ando
-## NVUtil is added.
-##
-## Revision 1.6  2006/10/24 06:24:15  n-ando
-## Now StringUtil was devided into definition and implementation.
-##
-## Revision 1.5  2006/10/17 10:00:36  n-ando
-## Some build entry for the following classes was added.
-## PortAdmin, PortProfileHelper, ManagerConfig, Manager.
-##
-## Revision 1.4  2006/09/20 08:52:50  n-ando
-## ModuleManager class added.
-##
-## Revision 1.3  2006/09/11 18:44:23  n-ando
-## SDO and Properties classes are added.
-##
-## Revision 1.2  2005/09/07 04:58:22  n-ando
-## RTComponent's service management feature was added.
-##
-## Revision 1.1.1.1  2005/05/12 09:06:18  n-ando
-## Public release.
-##
+## $Id$
 ##------------------------------------------------------------
 
 AUTOMAKE_OPTIONS = 1.4
@@ -103,6 +54,7 @@ COMP_SRC =                           \
 	DataFlowComponentBase.cpp    \
 	PeriodicExecutionContext.cpp \
 	ExtTrigExecutionContext.cpp  \
+	OpenHRPExecutionContext.cpp  \
 	PortAdmin.cpp                \
 	RTObject.cpp                 \
 	ConfigAdmin.cpp              \
@@ -133,7 +85,8 @@ libRTC_la_SOURCES = \
 	$(UTIL_SRC) $(MGR_SRC) $(COMP_SRC) $(PORT_SRC)
 
 
-libRTC_la_LIBADD = $(top_builddir)/rtm/idl/libRTCSkel.la $(ARTLIB)
+libRTC_la_LIBADD = $(top_builddir)/rtm/idl/libRTCSkel.la
+# $(top_builddir)/rtm/idl/libRTCStub.la $(ARTLIB)
 libRTC_la_LDFLAGS =                 \
 	-no-undefined               \
 	-L$(top_builddir)/rtm/idl   \
@@ -155,12 +108,16 @@ rtmheader_HEADERS = \
 	InPortConsumer.h             \
 	InPortCorbaConsumer.h        \
 	InPortCorbaProvider.h        \
+	InPortTcpSockConsumer.h      \
+	InPortTcpSockProvider.h      \
+	TcpSockServer.h              \
 	Listener.h                   \
 	ObjectManager.h              \
 	OutPort.h                    \
 	OutPortConsumer.h            \
 	OutPortCorbaConsumer.h       \
 	OutPortCorbaProvider.h       \
+	OutPortTcpSockProvider.h     \
 	PortCallBack.h               \
 	PublisherBase.h              \
 	RTC.h                        \
@@ -173,8 +130,64 @@ rtmheader_HEADERS = \
 	config_rtc.h
 
 
-EXTRA_DIST = $(rtmheader_HEADERS)
-DIST_SUBDIRS = idl tests
+#------------------------------------------------------------
+# File list for deb/ports packages
+#------------------------------------------------------------
+lst:
+	echo $(RTC_SRC) > src.lst
+	echo $(rtmheader_HEADERS) > header.lst
+
+#------------------------------------------------------------
+# Visual Studio Project
+#------------------------------------------------------------
+win32_builddir = $(top_builddir)/win32/OpenRTM-aist/
+
+vcproj: vc8proj vc9proj
+
+vc8proj: libRTC.vcproj.yaml
+	$(top_builddir)/build/vcprojtool.py vcproj \
+		--type DLL \
+		--vcversion "8.00" \
+		--version $(RTM_VERSION) \
+		--out $(win32_builddir)/rtm/libRTC_vc8.vcproj \
+		--yaml libRTC.vcproj.yaml \
+		--source $(RTC_SRC) \
+		--header $(rtmheader_HEADERS)
+	qkc -sm $(win32_builddir)/rtm/libRTC_vc8.vcproj
+
+vc9proj: libRTC.vcproj.yaml
+	$(top_builddir)/build/vcprojtool.py vcproj \
+		--type DLL \
+		--vcversion "9.00" \
+		--version $(RTM_VERSION) \
+		--out $(win32_builddir)/rtm/libRTC_vc9.vcproj \
+		--yaml libRTC.vcproj.yaml \
+		--source $(RTC_SRC) \
+		--header $(rtmheader_HEADERS)
+	qkc -sm $(win32_builddir)/rtm/libRTC_vc9.vcproj
+
+#------------------------------------------------------------
+# for wxs file
+#------------------------------------------------------------
+wxs:
+	$(top_srcdir)/build/makewxs.py flist \
+		-c Headers \
+		-o $(win32_builddir)installer/headers.yaml \
+		-p ..\\rtm \
+		$(rtmheader_HEADERS) $(RTC_SRC)
+
+
+
+dist-hook: lst vcproj wxs
 
 clean-local:
-	rm -f *.gch *.bak *.rpo *.sym lib*.*_pure_* Makefile.old *core *~
+	rm -f *~ Makefile.old *core
+	rm -f *.lst
+	rm -f *.gch *.bak *.rpo *.sym lib*.*_pure_*
+
+
+EXTRA_DIST = \
+	$(rtmheader_HEADERS) \
+	libRTC.vcproj.yaml
+
+DIST_SUBDIRS = idl tests

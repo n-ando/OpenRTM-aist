@@ -2,7 +2,7 @@ dnl -*- autoconf -*-
 dnl
 dnl @file configure.ac
 dnl @brief Input file for autoconf
-dnl @date $Date: 2007-04-26 15:40:36 $
+dnl @date $Date: 2008-02-26 15:21:04 $
 dnl @author Noriaki Ando <n-ando@aist.go.jp>
 dnl
 dnl This file is an input file used by the GNU "autoconf" program to
@@ -10,85 +10,37 @@ dnl generate the file "configure", which tries to guess your system
 dnl configuration
 dnl
 dnl
-dnl $Id: configure.ac,v 1.21 2007-04-26 15:40:36 n-ando Exp $
+dnl $Id$
 dnl
-
-dnl
-dnl $Log: not supported by cvs2svn $
-dnl Revision 1.20  2007/04/23 07:27:38  n-ando
-dnl ConfigSample example was added.
-dnl
-dnl Revision 1.19  2007/04/13 14:48:14  n-ando
-dnl New example "ExtTrigger" was added.
-dnl
-dnl Revision 1.18  2007/02/07 02:50:39  n-ando
-dnl SimpleService example was recovered.
-dnl
-dnl Revision 1.17  2007/02/04 16:48:57  n-ando
-dnl SeqIO was updated.
-dnl
-dnl Revision 1.16  2007/01/29 07:24:06  n-ando
-dnl AC_LIBTOOL_WIN32_DLL macro was added for Cygwin.
-dnl
-dnl Revision 1.15  2007/01/24 16:05:51  n-ando
-dnl ACE 5.5.* is accepted.
-dnl
-dnl Revision 1.14  2007/01/22 02:00:25  n-ando
-dnl *** empty log message ***
-dnl
-dnl Revision 1.13  2007/01/21 13:40:15  n-ando
-dnl Now python version 2.3.* 2.4.* 2.5.* are allowed.
-dnl
-dnl Revision 1.12  2007/01/21 13:36:45  n-ando
-dnl The boost detecting scripts were deleted temporarily.
-dnl Some trivial fixes.
-dnl
-dnl Revision 1.11  2007/01/14 23:36:47  n-ando
-dnl SimpleIO sub-directory entry was recovered.
-dnl
-dnl Revision 1.10  2007/01/06 18:06:37  n-ando
-dnl Makefile entry for some unit-test classes were added.
-dnl
-dnl Revision 1.9  2006/12/02 18:22:09  n-ando
-dnl Add some tests Makefile entry.
-dnl
-dnl Revision 1.8  2006/11/29 04:13:46  n-ando
-dnl CppUnit tests Makefile entry was added.
-dnl
-dnl Revision 1.7  2006/11/21 08:13:46  n-ando
-dnl MICO's idl flag "--any" was added to handle Any type.
-dnl
-dnl Revision 1.6  2006/11/04 17:04:06  n-ando
-dnl OpenRTM m4 macros were moved to openrtm.m4.
-dnl
-dnl Revision 1.5  2006/04/04 05:57:41  n-ando
-dnl - Dist version is now 0.4.0.
-dnl - ORBit2 support was added.
-dnl - Some ORB detection scripts were modified.
-dnl
-dnl Revision 1.4  2006/04/04 02:17:34  n-ando
-dnl - FP_FIND_FILE macro was quoted to prevent warning.
-dnl
-dnl Revision 1.3  2006/03/31 05:31:17  n-ando
-dnl - Dist version is now 0.3.0.
-dnl
-dnl Revision 1.2  2005/09/06 14:50:05  n-ando
-dnl rtm-skelwrapper added.
-dnl
-dnl Revision 1.1.1.1  2005/05/12 09:06:18  n-ando
-dnl Public release.
-dnl
-dnl 
 
 dnl ------------------------------------------------------------
 dnl  Autoconf initial macros
 dnl ------------------------------------------------------------
 dnl  Process this file with autoconf to produce a configure script.
 AC_PREREQ(2.59)
-AC_INIT(OpenRTM-aist, 0.4.0, n-ando@aist.go.jp, OpenRTM-aist)
-AM_INIT_AUTOMAKE
+AC_INIT(OpenRTM-aist, 0.4.2, n-ando@aist.go.jp, OpenRTM-aist)
+AM_INIT_AUTOMAKE([dist-bzip2 tar-pax])
 AM_CONFIG_HEADER([rtm/config_rtc.h])
 
+dnl ------------------------------------------------------------
+dnl  Version number
+dnl ------------------------------------------------------------
+major_version=[`echo $VERSION | sed -e 's/\([0-9]\{1,\}\)\.\([0-9]\{1,\}\)\.\([0-9]\{1,\}\)/\1/g'`]
+minor_version=[`echo $VERSION | sed -e 's/\([0-9]\{1,\}\)\.\([0-9]\{1,\}\)\.\([0-9]\{1,\}\)/\2/g'`]
+revision_num=[`echo $VERSION | sed -e 's/\([0-9]\{1,\}\)\.\([0-9]\{1,\}\)\.\([0-9]\{1,\}\)/\3/g'`]
+short_version=$major_version$minor_version$revision_num
+
+RTM_VERSION=$VERSION
+RTM_MAJOR_VERSION=$major_version
+RTM_MINOR_VERSION=$minor_version
+RTM_REVISION_NUM=$revision_num
+RTM_SHORT_VERSION=$short_version
+
+AC_DEFINE_UNQUOTED([RTM_VERSION],       "$VERSION",       [RTM version])
+AC_DEFINE_UNQUOTED([RTM_MAJOR_VERSION], "$major_version", [RTM major version])
+AC_DEFINE_UNQUOTED([RTM_MINOR_VERSION], "$minor_version", [RTM minor version])
+AC_DEFINE_UNQUOTED([RTM_REVISION_NUM],  "$revision_num",  [RTM revision numver])
+AC_DEFINE_UNQUOTED([RTM_SHORT_VERSION], "$short_version", [RTM short version])
 
 dnl ------------------------------------------------------------
 dnl  Basic setup
@@ -103,8 +55,8 @@ AC_PROG_LIBTOOL
 AC_CHECK_HEADERS([nlist.h stdlib.h unistd.h])
 AC_CHECK_FUNCS([uname])
 
-CPPFLAGS="$CPPFLAGS -I/usr/local/include -Wall"
-CXXFLAGS="$CXXFLAGS -I/usr/local/include -Wall"
+CPPFLAGS="-Wall -fPIC $CPPFLAGS"
+CXXFLAGS="-Wall -fPIC $CXXFLAGS"
 SHLIB_SUFFIX=".so"
 
 AC_SEARCH_LIBS(pthread_create, pthread c_r, , 
@@ -130,6 +82,7 @@ AC_ARG_WITH(orbacus,          [  --with-orbacus=dir              Find ORBacus in
 AC_ARG_WITH(tao,              [  --with-tao=dir                  Find TAO installation below dir])
 AC_ARG_WITH(omniorb,          [  --with-omniorb=dir              Find omniORB installation below dir])
 AC_ARG_WITH(omniorb,          [  --with-orbit2=dir               Find ORBit2 installation below dir])
+AC_ARG_WITH(orbexpress,       [  --with-orbexpress=dir           Find ORBexpress installation below dir])
 AC_ARG_WITH(generic-orb,      [  --with-generic-orb              Use other CORBA 2.3 ORB])
 AC_ARG_WITH(generic-orb-lib,  [  --with-generic-orb-lib	=libs    ORB libraries (-l...)])
 
@@ -147,6 +100,7 @@ AC_ARG_WITH(includes,         [  --with-includes=dirs            Additional incl
 AC_ARG_WITH(libs,             [  --with-libs=dirs                Additional lib dirs (separated by ':')])
 AC_ARG_ENABLE(gcc2option,     [  --with-gcc2                     Compile with gcc2])
 AC_ARG_ENABLE(artlinux,       [  --with-artlinux                 With ART-Linux])
+AC_ARG_ENABLE(sockdataport,   [  --with-sockdataport             With Socket DataPort])
 AC_ARG_ENABLE(artlinux,       [  --with-rdtsc                    With Read Time Stamp Counter])
 AC_ARG_ENABLE(unittest,       [  --enable-test                   Enable UnitTest With CppUnit])
 
@@ -197,14 +151,11 @@ esac
 AC_MSG_RESULT($system)
 
 AC_MSG_CHECKING(compiler flags)
-[CFLAGS=`echo $CFLAGS | sed 's/-g//g' | sed 's/-O[0-9]*//g'`]
-[CXXFLAGS=`echo $CXXFLAGS | sed 's/-g//g' | sed 's/-O[0-9]*//g'`]
+[CXXFLAGS=`echo $CXXFLAGS | sed 's/-g //g' | sed 's/-O[0-9]*//g'`]
 if test "x$enable_debug" = "xyes" ; then
-	CFLAGS="$CFLAGS -g"
 	CXXFLAGS="$CXXFLAGS -g"
 elif test "x$enable_optimize" != "xno" ; then
-	CFLAGS="$CFLAGS -O"
-	CXXFLAGS="$CXXFLAGS -O"
+	CXXFLAGS="$CXXFLAGS -O2"
 fi
 if test "x$CXXFLAGS" = "x" ; then
         AC_MSG_RESULT(none)
@@ -226,7 +177,7 @@ orb_to_use=
 more_incs="`echo $with_includes | sed 's/:/ /g'`"
 more_libs="`echo $with_libs     | sed 's/:/ /g'`"
 base_incs="`echo $CPLUS_INCLUDE_PATH | sed 's/:/ /g'` /local/include /usr/local/include /usr/include"
-base_libs="`echo $LIBPATH $LIBRARY_PATH $LD_LIBRARY_PATH $SHLIB_PATH | sed 's/:/ /g'` /local/lib /usr/local/lib /usr/lib"
+base_libs="`echo $LIBPATH $LIBRARY_PATH $LD_LIBRARY_PATH $SHLIB_PATH | sed 's/:/ /g'` /usr/local/lib /usr/lib /usr/lib64"
 base_bins="`echo $PATH | sed 's/:/\/.. /g'` /local/bin /usr/local/bin /usr/bin"
 base_dirs="$prefix `echo $PATH | sed 's/:/\/.. /g'`"
 
@@ -235,12 +186,12 @@ dnl ------------------------------------------------------------
 dnl  Use with_includes and with_libs
 dnl ------------------------------------------------------------
 for ipath in $more_incs ; do
-	CPPFLAGS="$CPPFLAGS -I$ipath"
-	CXXFLAGS="$CXXFLAGS -I$ipath"
+	CPPFLAGS="-I$ipath $CPPFLAGS"
+	CXXFLAGS="-I$ipath $CXXFLAGS"
 done
 
 for lpath in $more_libs ; do
-	LDFLAGS="$LDFLAGS -L$lpath"
+	LDFLAGS="-L$lpath $LDFLAGS"
 done
 
 
@@ -290,6 +241,7 @@ dnl ------------------------------------------------------------
 dnl  Find ace/ACE.h
 dnl ------------------------------------------------------------
 AC_MSG_CHECKING(for ace/ACE.h)
+dnl PKG_CHECK_MODULES(ACE,ACE)
 FP_FIND_FILE(ace/ACE.h,
 	$with_ace_includes $more_incs $base_incs $base_dirs,
 	ACE_wrappers include cxx/include)
@@ -323,10 +275,18 @@ hint: <dir>/( ACE_wrappers/ace/lib lib cxx/lib ) will be searched.)
 	fi
 
 	AC_MSG_CHECKING(ACE version)
-	ace_version=[`grep ACE_VERSION $ace_ACE_h_dir/ace/Version.h | cut -d " " -f 3 | sed 's/[\"]//g'`]
+
+	# In ACE 5.5.4, ACE_VERSION is defined as ACE_VERSION " 5.5.4"
+	# "cut" cannot be used to extract version strings
+	ace_version=[`grep ACE_VERSION $ace_ACE_h_dir/ace/Version.h | sed 's/.*\"\(.*\)\"/\1/' | sed 's/ //g'`]
 
 	case $ace_version in
-	[5.5.*|5.4.*|5.3.*|5.5|5.4|5.3)]
+	[5.6.1|5.5.*|5.4.*|5.3.*|5.5|5.4|5.3)]
+		AC_DEFINE([ACE_5_6_1_OR_EARLIER], [TRUE], [ACE version 5.6.1 or earlier])
+		;;
+	# ACE 5.6.2 or later signature of UUID_Generator::generateUUID
+	# has been changed as generate_UUID
+	[5.7.*|5.6.[2-9]|5.7|5.6)]
 		;;
 	*)
 		AC_MSG_WARN([Unknown ACE version number, expecting 5.3.0 or above.])
@@ -337,11 +297,11 @@ hint: <dir>/( ACE_wrappers/ace/lib lib cxx/lib ) will be searched.)
 	# ACE setup complete
 	#
 	# Compiler/Linker options
-	CPPFLAGS="$CPPFLAGS -I$ace_ACE_h_dir"
-	CXXFLAGS="$CXXFLAGS -I$ace_ACE_h_dir"
-	LDFLAGS="$LDFLAGS -L$libACE_so_dir "
-	LIBS="$LIBS -lACE"
-	LDSOLIBS="$LDSOLIBS -lACE"
+	CPPFLAGS="-I$ace_ACE_h_dir $CPPFLAGS"
+	CXXFLAGS="-I$ace_ACE_h_dir $CXXFLAGS"
+	LDFLAGS="-L$libACE_so_dir $LDFLAGS "
+	LIBS="-lACE $LIBS"
+	LDSOLIBS="-lACE $LDSOLIBS"
 	AC_DEFINE([WITH_ACE], [TRUE], [compiled with ACE])
 fi
 
@@ -437,9 +397,11 @@ fi
 if test "x$with_orbit2" != "x" ; then
 	orb_to_use=ORBit2
 fi
+if test "x$with_orbexpress" != "x" ; then
+	orb_to_use=ORBexpress
+fi
 if test "x$orb_to_use" = "x" ; then
 	orb_to_use=omniORB
-#	AC_MSG_ERROR(Specify ORB to use: check ./configure --help)
 fi
 
 echo 'ORB: '$orb_to_use
@@ -571,7 +533,7 @@ EOF
 	fi
 	AC_MSG_RESULT($have_mini_stl)
 	if test "x$have_mini_stl" = "xyes" ; then
-		CPPFLAGS="$CPPFLAGS -I$CORBA_h_dir/ministl"
+		CPPFLAGS="-I$CORBA_h_dir/ministl $CPPFLAGS"
 	fi
 
 	dnl ------------------------------------------------------------
@@ -625,13 +587,13 @@ hint: <dir>/bin will be searched.)
 	dnl ------------------------------------------------------------
 	IDLC=$idl
 	IDL_FLAGS="--c++-skel --poa --no-boa --any"
-	CXXFLAGS="$CXXFLAGS -I$CORBA_h_dir"
+	CXXFLAGS="-I$CORBA_h_dir $CXXFLAGS"
 	LDFLAGS="$LDFLAGS -L$mico_lib_dir"
-	LIBS="$LIBS -lmico$MICOVERSION $micodeps"
-	LDSOLIBS="$LDSOLIBS -lmico$MICOVERSION $micodeps"
+	LIBS="$LIBS -lmico$MICOVERSION -lmicocoss$MICOVERSION $micodeps"
+	LDSOLIBS="$LDSOLIBS -lmico$MICOVERSION -lmicocoss$MICOVERSION $micodeps"
 
 	if test "x$micoir_lib_dir" != "x" ; then
-		LIBS="-lmicoir$MICOVERSION $LIBS"
+		LIBS="-lmicoir$MICOVERSION -lmicocoss$MICOVERSION $LIBS"
 		LDSOLIBS="-lmicoir$MICOVERSION $LDSOLIBS"
 	fi
 	AC_DEFINE([ORB_IS_MICO], [TRUE], [ORB is MICO])
@@ -759,8 +721,8 @@ if test "x$have_orbacus" = "xyes" ; then
 
 	# Compiler/Linker options
 	# CPPFLAGS="$CPPFLAGS -I$OB_CORBA_h_dir"
-	CXXFLAGS="$CXXFLAGS -I$OB_CORBA_h_dir"
-	LDFLAGS="$LDFLAGS -L$ob_lib_dir"
+	CXXFLAGS="-I$OB_CORBA_h_dir $CXXFLAGS"
+	LDFLAGS="-L$ob_lib_dir $LDFLAGS"
 
 	if test "x$ob_jtc_lib_dir" != "x" ; then
 		LIBS=" $LIBS -lJTC"
@@ -862,7 +824,7 @@ if test "x$have_orbix" = "xyes" ; then
 	COSNAMES = $enameserv
 	dnl  Compiler/Linker options
 	dnl  CPPFLAGS="$CPPFLAGS -D_REENTRANT -I$orbix_corba_hh_dir"
-	CXXFLAGS="$CXXFLAGS -D_REENTRANT -I$orbix_corba_hh_dir"
+	CXXFLAGS="-D_REENTRANT -I$orbix_corba_hh_dir $CXXFLAGS"
 	LDFLAGS="$LDFLAGS -L$libit_art_so_dir"
 	LIBS="$LIBS -lit_dynany -lit_poa -lit_art -lit_itl -lit_ts -lit_base -lpthread"
 	LDSOLIBS="$LDSOLIBS -lit_dynany -lit_poa -lit_art -lit_itl -lit_ts -lit_base -lpthread"
@@ -953,19 +915,20 @@ if test "x$have_tao" = "xyes" ; then
 	if test "x$tao_version" = "x" ; then
 		tao_version=unknown
 	fi
+	AC_DEFINE([RTC_CORBA_CXXMAPPING11], [TRUE], [CORBA C++ mapping is ver1.1])
 	AC_MSG_RESULT($tao_version)
 
 	dnl ------------------------------------------------------------
 	dnl  TAO setup complete
 	dnl ------------------------------------------------------------
 	IDLC=$tao_idl
-	IDL_FLAGS="-DTAO_IDL -Ge 1 $tao_include/tao $tao_include"
+	IDL_FLAGS="-DTAO_IDL -Ge 0 $tao_include/tao $tao_include"
 	COSNAMES=$Naming_Service
-	CPPFLAGS="$CPPFLAGS $tao_include"
-	CXXFLAGS="$CXXFLAGS $tao_include"
-	LDFLAGS="$LDFLAGS -L$libTAO_so_dir"
-	LIBS="$LIBS -lTAO -lTAO_CosNaming -lTAO_DynamicAny -lTAO_DynamicInterface"
-	LDSOLIBS="$LDSOLIBS -lTAO -lTAO_CosNaming -lTAO_DynamicAny -lTAO_DynamicInterface"
+	CPPFLAGS="$tao_include $CPPFLAGS"
+	CXXFLAGS="$tao_include $CXXFLAGS"
+	LDFLAGS="-L$libTAO_so_dir $LDFLAGS"
+	LIBS="-lTAO -lTAO_CosNaming -lTAO_DynamicAny -lTAO_DynamicInterface $LIBS "
+	LDSOLIBS="-lTAO -lTAO_CosNaming -lTAO_DynamicAny -lTAO_DynamicInterface $LDSOLIBS"
 	AC_DEFINE([ORB_IS_TAO], [TRUE], [ORB is TAO])
 fi
 
@@ -1011,7 +974,7 @@ if test "x$have_omniorb" = "xyes" ; then
 	dnl ------------------------------------------------------------
 	AC_MSG_CHECKING(for libomniORB4.so)
 	dnl  libomniORB4.so -> %libomniORB4_so $libomniORB4_so_dir
-	FP_FIND_FILE(libomniORB4.so,$omniorb/lib $more_libs $base_libs $base_dirs,lib cxx/lib)
+	FP_FIND_FILE(libomniORB4.so,$with_omniorb/lib $more_libs $base_libs $base_dirs,lib cxx/lib)
 	if test "x$libomniORB4_so_dir" = "x" ; then
 		AC_MSG_RESULT(not found)
 		AC_MSG_ERROR(use --with-omniorb to locate libomniORB4.so)
@@ -1055,21 +1018,31 @@ if test "x$have_omniorb" = "xyes" ; then
 	if test "x$omniorb_version" = "x" ; then
 		omniorb_version=unknown
 	fi
+	case $omniorb_version in
+	4.0.*)
+		AC_MSG_RESULT(CORBA C++ mapping ver1.0 is used.)
+		;;
+	4.1|4.1.*)
+		AC_DEFINE([RTC_CORBA_CXXMAPPING11], [TRUE], [CORBA C++ mapping is ver1.1])
+		AC_MSG_RESULT(CORBA C++ mapping ver1.1 is used.)
+		;;
+	esac
 	AC_MSG_RESULT($omnirob_version)
+
 
 	dnl ------------------------------------------------------------
 	dnl  omniORB setup complete
 	dnl ------------------------------------------------------------
 	IDLC=$omniidl	
-	IDL_FLAGS="-bcxx -Wba -nf -I/usr/local/share/omniORB/idl/ -I/usr/local/share/omniORB/idl/COS"
+#	IDL_FLAGS="-bcxx -Wba -nf -I/usr/local/share/omniORB/idl/ -I/usr/local/share/omniORB/idl/COS"
+	IDL_FLAGS="-bcxx -Wba -nf"
 	COSNAMES=$omniNames
 	dnl  Compiler/Linker options
-	CPPFLAGS="$CPPFLAGS -I$omniORB4_CORBA_h_dir -I/usr/local/include/COS/"
-	CXXFLAGS="$CXXFLAGS -I$omniORB4_CORBA_h_dir -I/usr/local/include/COS/"
-	LDFLAGS="$LDFLAGS -L$libomniORB4_so_dir"
+	CPPFLAGS="-I$omniORB4_CORBA_h_dir $CPPFLAGS"
+	CXXFLAGS="-I$omniORB4_CORBA_h_dir $CXXFLAGS"
+	LDFLAGS="-L$libomniORB4_so_dir $LDFLAGS"
 	LIBS="$LIBS -lomniORB4 -lomnithread -lomniDynamic4"
 	LDSOLIBS="$LDSOLIBS -lomniORB4 -lomnithread -lomniDynamic4"
-	OMNILIBS=$LIBS
 	AC_DEFINE([ORB_IS_OMNIORB], [TRUE], [ORB is omniORB])
 fi
 
@@ -1083,9 +1056,9 @@ dnl------------------------------------------------------------
 dnl ============================================================
 dnl ORBit2 setup
 dnl
-dnl 1. check omniORB4/CORBA.h for omniORB
-dnl 2. check omniORB library "libomniORB4.so"
-dnl 3. check omniORB idl compiler "omniidl"
+dnl 1. check orbit2-config
+dnl 2. check libORBit-2-cpp.so
+dnl 3. check orbit-idl-2
 dnl 4. check omniORB version using libomniORB4.so
 dnl 5. set IDL compile options, CPPFLAGS, LDFLAGS, LIBS etc...
 dnl ============================================================
@@ -1138,14 +1111,14 @@ if test "x$have_orbit2" = "xyes" ; then
 	fi
 
 	dnl ------------------------------------------------------------
-	dnl  omniORB setup complete
+	dnl  ORBit2 setup complete
 	dnl ------------------------------------------------------------
 	IDLC=$orbit_idl_2	
 	IDL_FLAGS="--lang cpp -DORBIT2_IDL"
 	COSNAMES=
 	dnl  Compiler/Linker options
-	CPPFLAGS="$CPPFLAGS $orbit2_cflags -I$orbit2_prefix/include/orbitcpp-2.0"
-	CXXFLAGS="$CXXFLAGS $orbit2_cflags -I$orbit2_prefix/include/orbitcpp-2.0"
+	CPPFLAGS="$orbit2_cflags -I$orbit2_prefix/include/orbitcpp-2.0 $CPPFLAGS"
+	CXXFLAGS="$orbit2_cflags -I$orbit2_prefix/include/orbitcpp-2.0 $CXXFLAGS"
 	LDFLAGS="$LDFLAGS $orbit2_libs"
 	LIBS="$LIBS $orbit2_libs -lORBit-2-cpp -lORBitCosNaming-2-cpp"
 	LDSOLIBS="$LDSOLIBS $orbit2_libs -lORBit-2-cpp -lORBitCosNaming-2-cpp"
@@ -1158,6 +1131,13 @@ fi
 
 dnl end of ORBit2 setup
 dnl------------------------------------------------------------
+
+dnl ------------------------------------------------------------
+dnl ORBexpress
+dnl ------------------------------------------------------------
+
+dnl end of ORBexpres
+dnl ------------------------------------------------------------
 
 
 dnl ------------------------------------------------------------
@@ -1183,6 +1163,9 @@ omniORB)
 ORBit2)
         AC_MSG_RESULT([ORBit2, version $orbit2_version])
         ;;
+ORBexpress)
+        AC_MSG_RESULT([ORBexpress, version $orbexpress_version])
+        ;;
 generic)
         AC_MSG_RESULT([generic ORB, unknown version])
         ORB_SOURCES="event-corba.cc"
@@ -1203,6 +1186,7 @@ AM_CONDITIONAL(ORB_IS_ORBACUS, test x$orb_to_use = xORBacus)
 AM_CONDITIONAL(ORB_IS_OMNIORB, test x$orb_to_use = xomniORB)
 AM_CONDITIONAL(ORB_IS_MICO, test x$orb_to_use = xMICO)
 AM_CONDITIONAL(ORB_IS_ORBIT2, test x$orb_to_use = xORBit2)
+AM_CONDITIONAL(ORB_IS_ORBEXPRESS, test x$orb_to_use = xORBexpress)
 
 
 dnl ------------------------------------------------------------
@@ -1306,7 +1290,23 @@ if test "x$with_rdtsc" != "x" ; then
 fi
 
 
+dnl ------------------------------------------------------------
+dnl Socket DataPort
+dnl
+dnl ------------------------------------------------------------
+if test "x$with_sockdataport" != "x" ; then
+	if test "x$orb_to_use" = "xomniORB" ; then
+		AC_DEFINE([RTC_SOCK_DATAPORT], [TRUE], [Socket DataPort is enable])
+	else
+		AC_MSG_WARN([To use socket dataport, CORBA should be omniORB.])
+	fi
+fi
 
+
+dnl ------------------------------------------------------------
+dnl Unit test
+dnl
+dnl ------------------------------------------------------------
 if test "x$enable_test" = "xyes" ; then
 	UNITTEST="tests"
 fi
@@ -1332,6 +1332,13 @@ AC_SUBST(SOEXT)
 AC_SUBST(LDSOOPTS)
 AC_SUBST(LDSOLIBS)
 
+dnl RTM version related options
+AC_SUBST(RTM_VERSION)
+AC_SUBST(RTM_MAJOR_VERSION)
+AC_SUBST(RTM_MINOR_VERSION)
+AC_SUBST(RTM_REVISION_NUM)
+AC_SUBST(RTM_SHORT_VERSION)
+
 dnl ORB related options
 AC_SUBST(ORB)
 AC_SUBST(IDLC)
@@ -1347,16 +1354,28 @@ AC_SUBST(UNITTEST)
 dnl ------------------------------------------------------------
 
 UNIQUE($CPPFLAGS)
-CPPFLAGS=$u_list
+CPPFLAGS=$u_list" "
+CPPFLAGS=`echo $CPPFLAGS | sed -e 's/-I\/usr\/include //g'`
+CPPFLAGS=`echo $CPPFLAGS | sed -e 's/-I\/usr\/include$//g'`
+CPPFLAGS="$more_incs $CPPFLAGS"
 
 UNIQUE($CXXFLAGS)
-CXXFLAGS=$u_list
+CXXFLAGS=$u_list" "
+CXXFLAGS=`echo $CXXFLAGS | sed -e 's/-I\/usr\/include //g'`
+CPPFLAGS=`echo $CXXFLAGS | sed -e 's/-I\/usr\/include$//g'`
+CXXFLAGS="$more_incs $CXXFLAGS"
 
 UNIQUE($LDFLAGS)
-LDFLAGS=$u_list
+LDFLAGS=$u_list" "
+LDFLAGS=`echo $LDFLAGS | sed -e 's/-L\/usr\/lib //g'`
+LDFLAGS=`echo $LDFLAGS | sed -e 's/-L\/usr\/lib$//g'`
+LDFLAGS="$more_libs $LDFLAGS"
 
 UNIQUE($LDSOLIBS)
-LDSOLIBS=$u_list
+LDSOLIBS=$u_list" "
+LDSOLIBS=`echo $LDSOLIBS | sed -e 's/-L\/usr\/lib //g'`
+LDSOLIBS=`echo $LDSOLIBS | sed -e 's/-L\/usr\/lib$//g'`
+LDSOLIBS="$more_libs $LDSOLIBS"
 
 UNIQUE($IDL_FLAGS)
 IDL_FLAGS=$u_list
@@ -1390,6 +1409,8 @@ AC_OUTPUT([Makefile
 	rtm/Makefile
 	rtm/idl/Makefile
 	rtm/tests/Makefile
+	rtm/tests/SyncFIFO/Makefile
+	rtm/tests/SyncLIFO/Makefile
 	rtm/tests/Properties/Makefile
 	rtm/tests/StringUtil/Makefile
 	rtm/tests/ModuleManager/Makefile
@@ -1424,6 +1445,7 @@ AC_OUTPUT([Makefile
 	utils/rtc-template/Makefile
 	utils/rtm-skelwrapper/Makefile
 	utils/rtm-naming/Makefile
+	utils/rtcd/Makefile
 	etc/Makefile
 	examples/Makefile
 	examples/ConfigSample/Makefile
@@ -1432,14 +1454,23 @@ AC_OUTPUT([Makefile
 	examples/SimpleService/Makefile
 	examples/ExtTrigger/Makefile
 	docs/Makefile
+	win32/Makefile
+	win32/OpenRTM-aist/Makefile
+	win32/OpenRTM-aist/bin/Makefile
+	win32/OpenRTM-aist/etc/Makefile
+	win32/OpenRTM-aist/docs/Makefile
+	win32/OpenRTM-aist/build/Makefile
+	win32/OpenRTM-aist/examples/Makefile
+	win32/OpenRTM-aist/examples/ConfigSample/Makefile
+	win32/OpenRTM-aist/examples/SimpleIO/Makefile
+	win32/OpenRTM-aist/examples/SeqIO/Makefile
+	win32/OpenRTM-aist/examples/SimpleService/Makefile
+	win32/OpenRTM-aist/examples/USBCamera/Makefile
+	win32/OpenRTM-aist/utils/Makefile
+	win32/OpenRTM-aist/utils/rtc-template/Makefile
+	win32/OpenRTM-aist/utils/rtcd/Makefile
+	win32/OpenRTM-aist/rtm/Makefile
+	win32/OpenRTM-aist/rtm/idl/Makefile
+	win32/OpenRTM-aist/installer/Makefile
+	win32/OpenRTM-aist/installer/Bitmaps/Makefile
 	])
-
-#	utils/rtc-link/Makefile
-#	 examples/Makefile
-#	 examples/HelloWorld/Makefile
-#	 examples/StringIO/Makefile
-#	 examples/Slider_and_Motor/Makefile
-#	 swig/Makefile
-#	 swig/python/Makefile
-#	 etc/Makefile
-#	 utils/rtmNaming/Makefile

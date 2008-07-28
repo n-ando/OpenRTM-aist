@@ -12,17 +12,7 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: PortProfileHelper.cpp,v 1.3 2006-11-27 09:48:13 n-ando Exp $
- *
- */
-
-/*
- * $Log: not supported by cvs2svn $
- * Revision 1.2  2006/10/17 19:04:59  n-ando
- * Trivial format fix.
- *
- * Revision 1.1  2006/10/17 10:22:52  n-ando
- * The first commitment.
+ * $Id$
  *
  */
 

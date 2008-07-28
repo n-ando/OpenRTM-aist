@@ -2,9 +2,9 @@
 /*!
  * @file ConfigSampleComp.cpp
  * @brief Standalone component
- * @date $Date: 2007-04-23 07:26:34 $
+ * @date $Date: 2008-01-14 07:45:52 $
  *
- * $Id: ConfigSampleComp.cpp,v 1.1 2007-04-23 07:26:34 n-ando Exp $
+ * $Id$
  */
 
 #include <rtm/Manager.h>
@@ -32,7 +32,7 @@ void MyModuleInit(RTC::Manager* manager)
 
   RTC::ExecutionContextServiceList_var ecs;
   ecs = rtobj->get_execution_context_services();
-  ecs[0]->activate_component(rtobj);
+  ecs[(CORBA::ULong)0]->activate_component(rtobj);
 
   return;
 }
@@ -41,9 +41,6 @@ int main (int argc, char** argv)
 {
   RTC::Manager* manager;
   manager = RTC::Manager::init(argc, argv);
-
-  // Initialize manager
-  manager->init(argc, argv);
 
   // Set module initialization proceduer
   // This procedure will be invoked in activateManager() function.

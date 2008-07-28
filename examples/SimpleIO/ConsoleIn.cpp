@@ -2,9 +2,9 @@
 /*!
  * @file  ConsoleIn.cpp
  * @brief Console input component
- * $Date: 2007-04-13 15:03:02 $
+ * $Date: 2007-10-09 07:33:04 $
  *
- * $Id: ConsoleIn.cpp,v 1.3 2007-04-13 15:03:02 n-ando Exp $
+ * $Id$
  */
 
 #include "ConsoleIn.h"
@@ -40,7 +40,6 @@ ConsoleIn::ConsoleIn(RTC::Manager* manager)
   // Set InPort buffers
   
   // Set OutPort buffer
-  registerOutPort("out", m_outOut);
   
   // Set service provider to Ports
   
@@ -57,6 +56,11 @@ ConsoleIn::~ConsoleIn()
 }
 
 
+RTC::ReturnCode_t ConsoleIn::onInitialize()
+{
+  registerOutPort("out", m_outOut);
+  return RTC::RTC_OK;
+}
 RTC::ReturnCode_t ConsoleIn::onExecute(RTC::UniqueId ec_id)
 {
   std::cout << "Please input number: ";
