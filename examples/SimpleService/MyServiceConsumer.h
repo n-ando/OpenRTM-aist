@@ -2,20 +2,20 @@
 /*!
  * @file  MyServiceConsumer.h
  * @brief MyService Consumer Sample component
- * @date  $Date: 2007-02-07 02:48:28 $
+ * @date  $Date: 2008-02-29 04:55:08 $
  *
- * $Id: MyServiceConsumer.h,v 1.1 2007-02-07 02:48:28 n-ando Exp $
+ * $Id$
  */
 
 #ifndef MYSERVICECONSUMER_H
 #define MYSERVICECONSUMER_H
 
+#include <rtm/idl/BasicDataTypeSkel.h>
 #include <rtm/Manager.h>
 #include <rtm/DataFlowComponentBase.h>
 #include <rtm/CorbaPort.h>
 #include <rtm/DataInPort.h>
 #include <rtm/DataOutPort.h>
-#include <rtm/idl/BasicDataTypeSkel.h>
 #include <iostream>
 
 // Service implementation headers
@@ -137,7 +137,7 @@ class MyServiceConsumer
 
 extern "C"
 {
-  void MyServiceConsumerInit(RTC::Manager* manager);
+  DLL_EXPORT void MyServiceConsumerInit(RTC::Manager* manager);
 };
 
 #endif // MYSERVICECONSUMER_H

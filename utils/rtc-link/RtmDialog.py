@@ -13,14 +13,7 @@
 #          Advanced Industrial Science and Technology (AIST), Japan
 #      All rights reserved.
 # 
-#  $Id: RtmDialog.py,v 1.2 2005-05-16 10:11:01 n-ando Exp $
-#
-
-#
-#  $Log: not supported by cvs2svn $
-#  Revision 1.1.1.1  2005/05/12 09:06:19  n-ando
-#  Public release.
-#
+#  $Id$
 #
 
 # RtmDialog.py               Created on: 2005/01/20

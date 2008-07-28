@@ -2,40 +2,24 @@
 /*!
  * @file CORBA_SeqUtil.h
  * @brief CORBA sequence utility template functions
- * @date $Date: 2006-11-02 09:04:39 $
+ * @date $Date: 2007-12-31 03:06:24 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
- * Copyright (C) 2006
+ * Copyright (C) 2006-2008
  *     Task-intelligence Research Group,
  *     Intelligent Systems Research Institute,
  *     National Institute of
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: CORBA_SeqUtil.h,v 1.3 2006-11-02 09:04:39 n-ando Exp $
- *
- */
-
-/*
- * $Log: not supported by cvs2svn $
- * Revision 1.2  2006/10/30 08:09:07  n-ando
- * Two functions push_back_lsit(), erase_if() were added.
- * Function reference manual was revised.
- *
- * Revision 1.1  2006/10/27 09:09:46  n-ando
- * The first commitment.
- *
+ * $Id$
  *
  */
 
 #ifndef CORBA_SeqUtil_h
 #define CORBA_SeqUtil_h
 
-namespace CORBA
-{
-  typedef unsigned long ULong;
-  typedef long Long;
-};
+#include <rtm/RTC.h>
 
 /*!
  * @if jp
@@ -88,9 +72,12 @@ namespace CORBA_SeqUtil
    * CORBA sequence 全ての要素に対して、与えられた functor を適用する。
    * functor は void functor(CORBA sequence の要素) の形式をとる必要がある。
    *
-   * @return 全ての要素を処理した Functor
    * @param seq Functor を適用する CORBA sequence
-   * @param functor CORBA sequence の要素を処理する Functor
+   * @param f CORBA sequence の要素を処理する Functor
+   *
+   * @return 全ての要素を処理した Functor
+   *
+   * @since 0.4.0
    *
    * @else
    *
@@ -99,9 +86,10 @@ namespace CORBA_SeqUtil
    * Apply the given functor to the given CORBA sequence.
    * functor should be void functor(CORBA sequence element).
    *
-   * @return Functor that processed all CORBA sequence elements
    * @param seq CORBA sequence to be applied the functor
-   * @param functor A functor to process CORBA sequence elements
+   * @param f A functor to process CORBA sequence elements
+   *
+   * @return Functor that processed all CORBA sequence elements
    *
    * @endif
    */
@@ -116,8 +104,7 @@ namespace CORBA_SeqUtil
       }
     return f;
   }
-
-
+  
   /*!
    * @if jp
    * @brief CORBA sequence の中から functor に適合する要素のインデックスを返す
@@ -127,10 +114,11 @@ namespace CORBA_SeqUtil
    * functor は bool functor(const CORBA sequence の要素) の形式をとり、
    * 適合する要素に対して true を返す必要がある。
    *
+   * @param seq Functor を適用する CORBA sequence
+   * @param f CORBA sequence から要素を見つける Functor
+   *
    * @return Functor に適合する要素のインデックス。
    *         見つからないときは -1 を返す。
-   * @param seq Functor を適用する CORBA sequence
-   * @param functor CORBA sequence から要素を見つける Functor
    *
    * @else
    *
@@ -141,10 +129,11 @@ namespace CORBA_SeqUtil
    * The functor should be bool functor(const CORBA sequence element) type,
    * and it would return true, if the element matched the functor.
    *
+   * @param seq CORBA sequence to be applied the functor
+   * @param f A functor to process CORBA sequence elements
+   *
    * @return The index of the element that functor matches.
    *         If no element found, it would return -1.
-   * @param seq CORBA sequence to be applied the functor
-   * @param functor A functor to process CORBA sequence elements
    *
    * @endif
    */
@@ -158,7 +147,7 @@ namespace CORBA_SeqUtil
       }
     return -1;
   }
-
+  
   /*!
    * @if jp
    * @brief CORBA sequence の最後に要素を追加する
@@ -188,7 +177,27 @@ namespace CORBA_SeqUtil
     seq.length(len + 1);
     seq[len] = elem;
   }
-
+  
+  /*!
+   * @if jp
+   * @brief CORBA sequence をマージする
+   *
+   * 与えられた CORBA sequence をマージする。
+   *
+   * @param seq1 マージされる CORBA sequence
+   * @param seq2 マージされる CORBA sequence
+   *
+   * @else
+   *
+   * @brief Merge the elements of the CORBA sequence
+   *
+   * Merge given CORBA sequences.
+   *
+   * @param seq1 merge target CORBA sequence
+   * @param seq2 merge target CORBA sequence
+   *
+   * @endif
+   */
   template <class CorbaSequence>
   void push_back_list(CorbaSequence& seq1, const CorbaSequence& seq2)
   {
@@ -196,14 +205,13 @@ namespace CORBA_SeqUtil
     CORBA::ULong len2(seq2.length());
     CORBA::ULong len(len1 + len2);
     seq1.length(len);
-
+    
     for (CORBA::ULong i = 0; i < len2; ++i)
       {
 	seq1[len1 + i] = seq2[i];
       }
   }
-
-
+  
   /*!
    * @if jp
    * @brief CORBA sequence に要素を挿入する
@@ -241,7 +249,7 @@ namespace CORBA_SeqUtil
 	push_back(seq, elem);
 	return;
       }
-
+    
     seq.length(len + 1);
     for (CORBA::ULong i = len; i > index; --i)
       {
@@ -249,21 +257,27 @@ namespace CORBA_SeqUtil
       }
     seq[index] = elem;
   }
-
-
+  
   /*!
    * @if jp
    * @brief CORBA sequence の先頭要素を取得する
    *
+   * CORBA sequence の先頭要素を取得する。
    * seq[0] と同じ。
    *
    * @param seq 要素を取得する CORBA sequence
+   *
+   * @return 取得した要素
    *
    * @else
    *
    * @brief Get the front element of the CORBA sequence
    *
    * This operation returns seq[0].
+   *
+   * @param seq CORBA sequence which acquires an element
+   *
+   * @return An acquisition element
    *
    * @param seq The CORBA sequence to be get the element
    *
@@ -274,15 +288,17 @@ namespace CORBA_SeqUtil
   {
     return seq[0];
   }
-
-
+  
   /*!
    * @if jp
    * @brief CORBA sequence の末尾要素を取得する
    *
+   * CORBA sequence の末尾要素を取得する。
    * seq[seq.length() - 1] と同じ。
    *
    * @param seq 要素を取得する CORBA sequence
+   *
+   * @return 取得した要素
    *
    * @else
    *
@@ -292,6 +308,8 @@ namespace CORBA_SeqUtil
    *
    * @param seq The CORBA sequence to be get the element
    *
+   * @return An acquisition element
+   *
    * @endif
    */	
   template <class CorbaSequence, class SequenceElement>
@@ -299,8 +317,7 @@ namespace CORBA_SeqUtil
   {
     return seq[seq.length() - 1];
   }
-
-
+  
   /*!
    * @if jp
    * @brief CORBA sequence の指定された位置の要素を削除する
@@ -328,14 +345,37 @@ namespace CORBA_SeqUtil
   {
     CORBA::ULong len(seq.length());
     if (index > len) return;
-
+    
     for (CORBA::ULong i = index; i < len - 1; ++i)
       {
 	seq[i] = seq[i + 1];
       }
     seq.length(len - 1);
   }
-
+  
+  /*!
+   * @if jp
+   *
+   * @brief シーケンスの要素を述語にしたがって削除する
+   *
+   * このオペレーションは述語として与えられた関数オブジェクトの
+   * 条件が真のとき、そのシーケンスの要素を削除する。
+   *
+   * @param seq 要素検索対象の CORBA sequence
+   * @param f 削除するシーケンスを決定する術語
+   *
+   * @else
+   *
+   * @brief Remove an element of a sequence according to a predicate
+   *
+   * This operation removes the element from sequence when a condition of 
+   * a function object given as a predicate is True.
+   *
+   * @param seq target CORBA sequence
+   * @param f predicate which decides a sequence to remove
+   *
+   * @endif
+   */
   template <class CorbaSequence, class Functor>
   void erase_if(CorbaSequence& seq, Functor f)
   {
@@ -344,11 +384,12 @@ namespace CORBA_SeqUtil
     if (index < 0) return;
     CORBA_SeqUtil::erase(seq, index);
   }
-
+  
   /*!
    * @if jp
    * @brief CORBA sequence の全要素を削除
    *   
+   * CORBA sequence の全要素を削除する。
    * seq.length(0) と同じ。
    *
    * @else
@@ -365,6 +406,6 @@ namespace CORBA_SeqUtil
     seq.length(0);
   }
   // End of CORBA sequence helper functions
-
+  
 }; // namespace CORBA_SeqUtil
 #endif // CORBA_SeqUtil.h

@@ -5,15 +5,7 @@
  * @date   $Date: 2006-12-02 18:52:54 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
- * $Id: OutPortTests.cpp,v 1.2 2006-12-02 18:52:54 n-ando Exp $
- *
- */
-
-/*
- * $Log: not supported by cvs2svn $
- * Revision 1.1  2006/11/29 04:26:28  n-ando
- * CppUnit tests for OutPort.
- *
+ * $Id$
  *
  */
 

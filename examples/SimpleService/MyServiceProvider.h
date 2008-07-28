@@ -2,20 +2,20 @@
 /*!
  * @file  MyServiceProvider.h
  * @brief MyService Provider Sample component
- * @date  $Date: 2007-02-07 02:48:42 $
+ * @date  $Date: 2008-02-29 04:55:11 $
  *
- * $Id: MyServiceProvider.h,v 1.1 2007-02-07 02:48:42 n-ando Exp $
+ * $Id$
  */
 
 #ifndef MYSERVICEPROVIDER_H
 #define MYSERVICEPROVIDER_H
 
+#include <rtm/idl/BasicDataTypeSkel.h>
 #include <rtm/Manager.h>
 #include <rtm/DataFlowComponentBase.h>
 #include <rtm/CorbaPort.h>
 #include <rtm/DataInPort.h>
 #include <rtm/DataOutPort.h>
-#include <rtm/idl/BasicDataTypeSkel.h>
 
 // Service implementation headers
 // <rtc-template block="service_impl_h">
@@ -123,7 +123,7 @@ class MyServiceProvider
 
 extern "C"
 {
-  void MyServiceProviderInit(RTC::Manager* manager);
+  DLL_EXPORT void MyServiceProviderInit(RTC::Manager* manager);
 };
 
 #endif // MYSERVICEPROVIDER_H

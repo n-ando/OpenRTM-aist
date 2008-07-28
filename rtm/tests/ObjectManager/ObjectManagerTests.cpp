@@ -14,15 +14,7 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: ObjectManagerTests.cpp,v 1.1 2006-11-27 08:26:00 n-ando Exp $
- *
- */
-
-/*
- * $Log: not supported by cvs2svn $
- * Revision 1.2  2006/10/24 03:08:15  kurihara
- *
- * test program for ObjectManager class
+ * $Id$
  *
  */
 

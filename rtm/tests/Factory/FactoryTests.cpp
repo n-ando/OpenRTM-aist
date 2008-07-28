@@ -14,15 +14,7 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: FactoryTests.cpp,v 1.2 2007-01-12 14:50:35 n-ando Exp $
- *
- */
-
-/*
- * $Log: not supported by cvs2svn $
- * Revision 1.1  2006/11/27 08:31:38  n-ando
- * TestSuites are devided into each directory.
- *
+ * $Id$
  *
  */
 

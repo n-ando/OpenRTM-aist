@@ -2,10 +2,10 @@
 /*!
  * @file  PublisherPeriodic.cpp
  * @brief PublisherPeriodic class
- * @date  $Date: 2007-02-07 02:53:01 $
+ * @date  $Date: 2007-12-31 03:08:06 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
- * Copyright (C) 2006
+ * Copyright (C) 2006-2008
  *     Noriaki Ando
  *     Task-intelligence Research Group,
  *     Intelligent Systems Research Institute,
@@ -13,29 +13,14 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: PublisherPeriodic.cpp,v 1.5 2007-02-07 02:53:01 n-ando Exp $
- *
- */
-
-/*
- * $Log: not supported by cvs2svn $
- * Revision 1.4  2007/02/04 17:03:04  n-ando
- * The wait func is called in dtor to wait thread termination.
- *
- * Revision 1.3  2007/01/21 13:04:32  n-ando
- * Data push interval property accepts float.
- *
- * Revision 1.2  2007/01/06 18:01:00  n-ando
- * Some trivial fixes.
- *
- * Revision 1.1  2006/11/27 09:44:50  n-ando
- * The first commitment.
+ * $Id$
  *
  */
 
 #include <rtm/PublisherPeriodic.h>
 #include <rtm/InPortConsumer.h>
 #include <rtm/Properties.h>
+#include <rtm/RTC.h>
 #include <stdlib.h>
 
 namespace RTC
@@ -53,7 +38,7 @@ namespace RTC
   {
     std::string rate(property.getProperty("dataport.push_rate"));
     double hz;
-
+    
     if (rate != "")
       {
 	hz = atof(rate.c_str());
@@ -63,19 +48,26 @@ namespace RTC
       {
 	hz = 1000.0;
       }
-    m_usec = static_cast<double>(1000000.0/hz);
+    m_usec = static_cast<unsigned int>(1000000.0/hz);
     open(0);
   }
+  
 
-
+  /*!
+   * @if jp
+   * @brief デストラクタ
+   * @else
+   * @brief Destructor
+   * @endif
+   */
   PublisherPeriodic::~PublisherPeriodic()
   {
     m_running = 0;
     wait();
     delete m_consumer;
   }
-
-
+  
+  
   /*!
    * @if jp
    * @brief Observer関数
@@ -87,7 +79,7 @@ namespace RTC
   {
   }
   
-
+  
   /*!
    * @if jp
    * @brief スレッド実行関数
@@ -112,22 +104,22 @@ namespace RTC
       }
     return 0;
   }
-
-
+  
+  
   /*!
    * @if jp
    * @brief タスク開始
    * @else
-   * @brief Task start function
+   * @brief Start task
    * @endif
    */
   int PublisherPeriodic::open(void *args)
   {
-        m_running = true;
-        this->activate();
-        return 0;
+    m_running = true;
+    this->activate();
+    return 0;
   }
-
+  
   
   /*!
    * @if jp

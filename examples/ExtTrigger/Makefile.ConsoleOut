@@ -14,7 +14,7 @@
 #  --module-max-inst=10 --inport=in:TimedLong 
 #
 #
-# $Id: Makefile.ConsoleOut,v 1.1 2007-04-13 15:00:26 n-ando Exp $
+# $Id$
 #
 CXXFLAGS = `rtm-config --cflags`
 LDFLAGS  = `rtm-config --libs`

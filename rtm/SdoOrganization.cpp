@@ -2,62 +2,57 @@
 /*!
  * @file SdoOrganization.cpp
  * @brief SDO Organization class
- * @date $Date: 2007-04-26 15:33:28 $
+ * @date $Date: 2008-01-14 07:49:31 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
- * Copyright (C) 2006
+ * Copyright (C) 2006-2008
+ *     Noriaki Ando
  *     Task-intelligence Research Group,
  *     Intelligent Systems Research Institute,
  *     National Institute of
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: SdoOrganization.cpp,v 1.7 2007-04-26 15:33:28 n-ando Exp $
- *
- */
-
-/*
- * $Log: not supported by cvs2svn $
- * Revision 1.6  2006/11/27 10:00:56  n-ando
- * Some trivial fixes.
- *
- * Revision 1.5  2006/10/30 08:10:47  n-ando
- * CORBA sequence operations were replaced by CORBA_SeqUtil functions.
- *
- * Revision 1.4  2006/10/26 09:36:23  n-ando
- * set_organization_property_value() was not implemented. It was added.
- *
- * Revision 1.3  2006/10/26 09:15:39  n-ando
- * Header comments were fixed.
+ * $Id$
  *
  */
 
 #include <rtm/SdoOrganization.h>
 #include <ace/ACE.h>
-#include <ace/UUID.h> 
+#include <rtm/UUID.h> 
 #include <rtm/CORBA_SeqUtil.h>
 
 namespace SDOPackage
 {
+  /* @if jp
+   * @brief コンストラクタ
+   * @else
+   * @brief Constructor
+   * @endif
+   */
   Organization_impl::Organization_impl()
   {
-	ACE_Utils::UUID_Generator uugen;
-	uugen.init();
-	ACE_Utils::UUID* uuid = uugen.generateUUID(2,0x01);
-	m_pId = CORBA::string_dup((uuid->to_string())->c_str());
+    RTC_Utils::UUID_Generator uugen;
+    uugen.init();
+    RTC_Utils::UUID* uuid = uugen.generateUUID(2,0x01);
+    m_pId = CORBA::string_dup((uuid->to_string())->c_str());
 #ifdef WIN32
-	uuid->~UUID();
+    uuid->~UUID();
 #else
-	delete uuid;
+    delete uuid;
 #endif
   }
-
-
+  
+  /* @if jp
+   * @brief 仮想デストラクタ
+   * @else
+   * @brief Virtual destructor
+   * @endif
+   */
   Organization_impl::~Organization_impl()
   {
   }
-
-
+  
   /*!
    * @if jp
    * @brief [CORBA interface] Organization ID を取得する
@@ -66,12 +61,12 @@ namespace SDOPackage
    * @endif
    */
   char* Organization_impl::get_organization_id()
-    throw (InvalidParameter, NotAvailable, InternalError)
+    throw (CORBA::SystemException,
+	   InvalidParameter, NotAvailable, InternalError)
   {
-	return m_pId;
+    return m_pId;
   }
-
-
+  
   /*!
    * @if jp
    * @brief [CORBA interface] OrganizationProperty の取得
@@ -80,15 +75,15 @@ namespace SDOPackage
    * @endif
    */
   OrganizationProperty* Organization_impl::get_organization_property()
-    throw (NotAvailable, InternalError)
+    throw (CORBA::SystemException,
+	   NotAvailable, InternalError)
   {
     Guard guard(m_org_mutex);
     OrganizationProperty_var prop;
     prop = new OrganizationProperty(m_orgProperty);
     return prop._retn();
   }
-
-
+  
   /*!
    * @if jp
    * @brief [CORBA interface] OrganizationProperty の特定の値の取得
@@ -98,18 +93,18 @@ namespace SDOPackage
    */
   CORBA::Any*
   Organization_impl::get_organization_property_value(const char* name)
-    throw (InvalidParameter, NotAvailable, InternalError)
+    throw (CORBA::SystemException,
+	   InvalidParameter, NotAvailable, InternalError)
   {
     if (name == "")
       throw InvalidParameter("Empty name.");
-
+    
     CORBA::Long index;
-    index = CORBA_SeqUtil::find(m_orgProperty.properties,
-				nv_name(name));
-
+    index = CORBA_SeqUtil::find(m_orgProperty.properties, nv_name(name));
+    
     if (index < 0)
       throw InvalidParameter("Not found.");
-
+    
     try
       {
 	CORBA::Any_var value;
@@ -123,7 +118,6 @@ namespace SDOPackage
     // never reach here
     return new CORBA::Any();
   }
-
   
   /*!
    * @if jp
@@ -135,7 +129,8 @@ namespace SDOPackage
   CORBA::Boolean
   Organization_impl::
   set_organization_property(const OrganizationProperty& organization_property)
-    throw (InvalidParameter, NotAvailable, InternalError)
+    throw (CORBA::SystemException,
+	   InvalidParameter, NotAvailable, InternalError)
   {
     try
       {
@@ -148,9 +143,8 @@ namespace SDOPackage
 	throw InternalError("set_organization_property()");
       }
     return false;
-   }
-
-
+  }
+  
   /*!
    * @if jp
    * @brief [CORBA interface] OrganizationProperty の値のセット
@@ -161,16 +155,16 @@ namespace SDOPackage
   CORBA::Boolean
   Organization_impl::set_organization_property_value(const char* name,
 						     const CORBA::Any& value)
-    throw (InvalidParameter, NotAvailable, InternalError)
+    throw (CORBA::SystemException,
+	   InvalidParameter, NotAvailable, InternalError)
   {
     if (name == "")
       {
 	throw InvalidParameter("set_organization_property_value(): Enpty name.");
       }
-
+    
     CORBA::Long index;
-    index = CORBA_SeqUtil::find(m_orgProperty.properties,
-				nv_name(name));
+    index = CORBA_SeqUtil::find(m_orgProperty.properties,nv_name(name));
     if (index < 0)
       {
 	NameValue nv;
@@ -184,8 +178,7 @@ namespace SDOPackage
       }
     return true;
   }
-
-
+  
   /*!
    * @if jp
    * @brief [CORBA interface] OrganizationProperty の削除
@@ -195,19 +188,19 @@ namespace SDOPackage
    */   
   CORBA::Boolean
   Organization_impl::remove_organization_property(const char* name)
-    throw (InvalidParameter, NotAvailable, InternalError)
+    throw (CORBA::SystemException,
+	   InvalidParameter, NotAvailable, InternalError)
   {
     if (name == "")
       throw InvalidParameter("set_organization_property_value(): Enpty name.");
-
+    
     CORBA::Long index;
-    index = CORBA_SeqUtil::find(m_orgProperty.properties,
-				nv_name(name));
+    index = CORBA_SeqUtil::find(m_orgProperty.properties,nv_name(name));
     if (index < 0)
       throw InvalidParameter("set_organization_property_value(): Not found.");
-
+    
     try
-       {
+      {
 	CORBA_SeqUtil::erase(m_orgProperty.properties, index);
 	return true;
       }
@@ -217,31 +210,31 @@ namespace SDOPackage
       }
     return false;
   }
-
   
   /*!
    * @if jp
    * @brief [CORBA interface] Organization のオーナーを取得する
    * @else
-   * @brief [CORBA interface] Get the owner of the SDO
+   * @brief [CORBA interface] Get the owner of Organization
    * @endif
    */
   SDOSystemElement_ptr Organization_impl::get_owner()
-    throw (NotAvailable, InternalError)
+    throw (CORBA::SystemException,
+	   NotAvailable, InternalError)
   {
     return m_varOwner._retn();
   }
   
-
   /*!
    * @if jp
    * @brief [CORBA interface] Organization にオーナーをセットする
    * @else
-   * @brief [CORBA interface] Set the orner of the Organization
+   * @brief [CORBA interface] Set the owner to the Organization
    * @endif
    */
   CORBA::Boolean Organization_impl::set_owner(SDOSystemElement_ptr sdo)
-    throw (InvalidParameter, NotAvailable, InternalError)
+    throw (CORBA::SystemException,
+	   InvalidParameter, NotAvailable, InternalError)
   {
     if (CORBA::is_nil(sdo))
       throw InvalidParameter("set_owner()");
@@ -256,17 +249,17 @@ namespace SDOPackage
       }
     return true;
   }
-
-
+  
   /*!
    * @if jp
    * @brief [CORBA interface] Organization のメンバーを取得する
    * @else
-   * @brief [CORBA interface] Get a menber list of the Organization
+   * @brief [CORBA interface] Get the member of the Organization
    * @endif
    */
   SDOList* Organization_impl::get_members()
-     throw (NotAvailable, InternalError)
+    throw (CORBA::SystemException,
+	   NotAvailable, InternalError)
   {
     try
       {
@@ -279,17 +272,17 @@ namespace SDOPackage
 	throw InternalError("get_members()");
       }
   }
-
-
+  
   /*!
    * @if jp
-   * @brief [CORBA interface] SDO の ServiceProfile のセット
+   * @brief [CORBA interface] SDO の セット
    * @else
-   * @brief [CORBA interface] Set SDO's ServiceProfile
+   * @brief [CORBA interface] Set SDO
    * @endif
    */
   CORBA::Boolean Organization_impl::set_members(const SDOList& sdos)
-    throw (InvalidParameter, NotAvailable, InternalError)
+    throw (CORBA::SystemException,
+	   InvalidParameter, NotAvailable, InternalError)
   {
     if (sdos.length() == 0)
       throw InvalidParameter("set_members(): SDOList is empty.");
@@ -304,17 +297,17 @@ namespace SDOPackage
       }
     return true;
   }
-
-
+  
   /*!
    * @if jp
    * @brief [CORBA interface] SDO メンバーの追加
    * @else
-   * @brief [CORBA interface] Add the menebr SDOs
+   * @brief [CORBA interface] Add the member of SDO
    * @endif
    */
   CORBA::Boolean Organization_impl::add_members(const SDOList& sdo_list)
-    throw (InvalidParameter, NotAvailable, InternalError)
+    throw (CORBA::SystemException,
+	   InvalidParameter, NotAvailable, InternalError)
   {
     try
       {
@@ -327,27 +320,27 @@ namespace SDOPackage
       }
     return false;	
   }
-
-
+  
   /*!
    * @if jp
    * @brief [CORBA interface] SDO メンバーの削除
    * @else
-   * @brief [CORBA interface] Remove menber SDO from Organization
+   * @brief [CORBA interface] Remove member SDO from Organization
    * @endif
    */
   CORBA::Boolean Organization_impl::remove_member(const char* id)
-    throw (InvalidParameter, NotAvailable, InternalError)
+    throw (CORBA::SystemException,
+	   InvalidParameter, NotAvailable, InternalError)
   {
     if (id == "")
       throw InvalidParameter("remove_member(): Enpty name.");
-
+    
     CORBA::Long index;
     index = CORBA_SeqUtil::find(m_memberList, sdo_id(id));
-
+    
     if (index < 0)
       throw InvalidParameter("remove_member(): Not found.");
-
+    
     try
       {
 	CORBA_SeqUtil::erase(m_memberList, index);
@@ -359,8 +352,7 @@ namespace SDOPackage
       }
     return false;
   }
-	
-
+  
   /*!
    * @if jp
    * @brief [CORBA interface] Organization の DependencyType を取得
@@ -369,12 +361,12 @@ namespace SDOPackage
    * @endif
    */
   DependencyType Organization_impl::get_dependency()
-     throw (NotAvailable, InternalError)
+    throw (CORBA::SystemException,
+	   NotAvailable, InternalError)
   {
-	return m_dependency;
+    return m_dependency;
   }
   
-
   /*!
    * @if jp
    * @brief [CORBA interface] Organization の DependencyType をセットする
@@ -383,7 +375,8 @@ namespace SDOPackage
    * @endif
    */
   CORBA::Boolean Organization_impl::set_dependency(DependencyType dependency)
-    throw (NotAvailable, InternalError)
+    throw (CORBA::SystemException,
+	   NotAvailable, InternalError)
   {
     try
       {
@@ -396,5 +389,4 @@ namespace SDOPackage
       }
     return false;
   }
-
 };

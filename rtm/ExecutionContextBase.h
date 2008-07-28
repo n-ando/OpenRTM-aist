@@ -2,7 +2,7 @@
 /*!
  * @file ExecutionContextBase.h
  * @brief ExecutionContext base class
- * @date $Date: 2007-04-13 16:07:22 $
+ * @date $Date: 2008-01-14 07:48:55 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
  * Copyright (C) 2007
@@ -12,12 +12,8 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: ExecutionContextBase.h,v 1.1 2007-04-13 16:07:22 n-ando Exp $
+ * $Id$
  *
- */
-
-/*
- * $Log: not supported by cvs2svn $
  */
 
 #ifndef ExecutionContextBase_h
@@ -28,13 +24,61 @@
 
 namespace RTC
 {
+  /*!
+   * @if jp
+   * @class ExecutionContextBase
+   * @brief ExecutionContext用基底クラス
+   *
+   * ExecutionContextの基底クラス。
+   *
+   * @since 0.4.0
+   *
+   * @else
+   * @class ExecutionContextBase
+   * @brief A base class for ExecutionContext
+   *
+   * A base class of ExecutionContext.
+   *
+   * @since 0.4.0
+   *
+   * @endif
+   */
   class ExecutionContextBase
     : public virtual POA_RTC::ExtTrigExecutionContextService,
       public virtual PortableServer::RefCountServantBase
   {
   public:
+    /*!
+     * @if jp
+     * @brief 仮想デストラクタ
+     *
+     * 仮想デストラクタ
+     *
+     * @else
+     * @brief Virtual Destructor
+     *
+     * Virtual Destructor
+     *
+     * @endif
+     */
     virtual ~ExecutionContextBase(){};
-    virtual void tick(){};
+    
+    /*!
+     * @if jp
+     * @brief ExecutionContextの処理を進める
+     *
+     * ExecutionContextの処理を１周期分進める。
+     *
+     * @else
+     * @brief Proceed with tick of ExecutionContext
+     *
+     * Proceed with tick of ExecutionContext for one period.
+     *
+     * @endif
+     */
+    virtual void tick()
+      throw (CORBA::SystemException)
+    {};
   };
 };
 #endif // ExecutionContextBase_h

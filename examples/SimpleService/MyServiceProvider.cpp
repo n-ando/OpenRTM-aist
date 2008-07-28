@@ -4,7 +4,7 @@
  * @brief MyService Provider Sample component
  * $Date: 2007-04-13 15:03:20 $
  *
- * $Id: MyServiceProvider.cpp,v 1.2 2007-04-13 15:03:20 n-ando Exp $
+ * $Id$
  */
 
 #include "MyServiceProvider.h"

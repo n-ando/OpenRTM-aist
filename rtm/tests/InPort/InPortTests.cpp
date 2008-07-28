@@ -14,15 +14,7 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: InPortTests.cpp,v 1.2 2007-01-12 14:51:20 n-ando Exp $
- *
- */
-
-/*
- * $Log: not supported by cvs2svn $
- * Revision 1.1  2006/11/27 08:32:39  n-ando
- * TestSuites are devided into each directory.
- *
+ * $Id$
  *
  */
 

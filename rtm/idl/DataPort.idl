@@ -14,15 +14,9 @@
  *
  *     All rights reserved.
  *
- * $Id: DataPort.idl,v 1.1 2007-01-09 15:40:14 n-ando Exp $
+ * $Id$
  *
  */
-
-/*
- * $Log: not supported by cvs2svn $
- *
- */
-
 
 #ifndef DataInPort_idl
 #define DataInPort_idl

@@ -13,18 +13,8 @@
 #          Advanced Industrial Science and Technology (AIST), Japan
 #      All rights reserved.
 # 
-#  $Id: RtmCompData.py,v 1.3 2007-01-21 13:20:47 n-ando Exp $
+#  $Id$
 # 
-
-#
-#  $Log: not supported by cvs2svn $
-#  Revision 1.2  2005/05/16 10:11:01  n-ando
-#  - Assembly XML data saving/loading function is now enabled. (Experimental)
-#
-#  Revision 1.1.1.1  2005/05/12 09:06:19  n-ando
-#  Public release.
-#
-#
 
 #
 # RtmCompData.py             Created on: 2004/11/02

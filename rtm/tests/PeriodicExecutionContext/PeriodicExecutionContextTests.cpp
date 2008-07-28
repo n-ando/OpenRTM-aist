@@ -5,15 +5,7 @@
  * @date   $Date: 2007-04-13 15:04:39 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
- * $Id: PeriodicExecutionContextTests.cpp,v 1.2 2007-04-13 15:04:39 n-ando Exp $
- *
- */
-
-/*
- * $Log: not supported by cvs2svn $
- * Revision 1.1  2007/01/21 13:07:20  n-ando
- * *** empty log message ***
- *
+ * $Id$
  *
  */
 

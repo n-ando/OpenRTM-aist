@@ -5,26 +5,9 @@
 # @date   $Date: 2007-01-21 06:52:40 $
 # @author Noriaki Ando <n-ando@aist.go.jp>
 #
-# $Id: Makefile.am,v 1.5 2007-01-21 06:52:40 n-ando Exp $
+# $Id$
 #
 #------------------------------------------------------------
-
-#
-# $Log: not supported by cvs2svn $
-# Revision 1.4  2007/01/12 14:44:24  n-ando
-# Some fixes for distribution control.
-#
-# Revision 1.3  2006/12/18 06:54:30  n-ando
-# clean-local target OutPortTests was added.
-#
-# Revision 1.2  2006/12/02 18:52:44  n-ando
-# *** empty log message ***
-#
-# Revision 1.1  2006/11/29 04:26:12  n-ando
-# Makefile.am for OutPortTests.
-#
-#
-
 
 AUTOMAKE_OPTIONS = 1.9
 

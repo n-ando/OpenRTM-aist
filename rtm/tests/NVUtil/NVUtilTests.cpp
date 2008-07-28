@@ -14,17 +14,7 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: NVUtilTests.cpp,v 1.1 2006-11-27 08:26:13 n-ando Exp $
- *
- */
-
-/*
- * $Log: not supported by cvs2svn $
- * Revision 1.3  2006/11/15 09:47:18  kurihara
- * tests for find(),isString(),toString() are added.
- *
- * Revision 1.1  2006/11/14 07:23:16  kurihara
- * test program for NVUtil module. first commit.
+ * $Id$
  *
  */
 

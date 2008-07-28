@@ -13,12 +13,8 @@
 #          Advanced Industrial Science and Technology (AIST), Japan
 #      All rights reserved.
 # 
-#  $Id: RtmParser.py,v 1.1.1.1 2005-05-12 09:06:19 n-ando Exp $
+#  $Id$
 # 
-
-#
-#  $Log: not supported by cvs2svn $
-#
 
 import sys,os
 import string

@@ -2,22 +2,19 @@
 /*!
  * @file NumberingPolicy.cpp
  * @brief Object numbering policy class
- * @date $Date: 2006-11-04 21:07:31 $
+ * @date $Date: 2007-12-31 03:08:04 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
- * Copyright (C) 2006
+ * Copyright (C) 2006-2008
+ *     Noriaki Ando
  *     Task-intelligence Research Group,
  *     Intelligent Systems Research Institute,
  *     National Institute of
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: NumberingPolicy.cpp,v 1.1 2006-11-04 21:07:31 n-ando Exp $
+ * $Id$
  *
- */
-
-/*
- * $Log: not supported by cvs2svn $
  */
 
 #include <rtm/NumberingPolicy.h>
@@ -25,6 +22,13 @@
 //============================================================
 // DefaultNumberingPolicy
 //============================================================
+/*!
+ * @if jp
+ * @brief オブジェクト生成時の名称作成
+ * @else
+ * @brief Create the name when creating objects
+ * @endif
+ */
 std::string DefaultNumberingPolicy::onCreate(void* obj)
 {
   std::vector<void*>::size_type pos;
@@ -39,11 +43,19 @@ std::string DefaultNumberingPolicy::onCreate(void* obj)
     }
   catch (ObjectNotFound& e)
     {
+      e;
       m_objects.push_back(obj);
       return otos((int)(m_objects.size() - 1));
     }
 }
 
+/*!
+ * @if jp
+ * @brief オブジェクト削除時の名称解放
+ * @else
+ * @brief Delete the name when deleting objects
+ * @endif
+ */
 void DefaultNumberingPolicy::onDelete(void* obj)
 {
   std::vector<void*>::size_type pos;
@@ -55,7 +67,13 @@ void DefaultNumberingPolicy::onDelete(void* obj)
   --m_num;
 }
 
-
+/*!
+ * @if jp
+ * @brief オブジェクトの検索
+ * @else
+ * @brief Find the object
+ * @endif
+ */
 long int DefaultNumberingPolicy::find(void* obj)
 {
   std::vector<void*>::size_type len(m_objects.size());

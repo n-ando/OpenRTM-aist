@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 #
 # @brief CORBA stub and skelton wrapper generator
-# @date $Date: 2007-01-16 18:35:55 $
+# @date $Date: 2008-02-29 04:50:39 $
 # @author Norkai Ando <n-ando@aist.go.jp>
 #
 # Copyright (C) 2005-2006
@@ -12,34 +12,14 @@
 #         Advanced Industrial Science and Technology (AIST), Japan
 #     All rights reserved.
 #
-# $Id: makewrapper.py,v 1.6 2007-01-16 18:35:55 n-ando Exp $
+# $Id$
 #
 
-# $Log: not supported by cvs2svn $
-# Revision 1.5  2007/01/12 14:28:31  n-ando
-# Directory to create output files was the same directory of IDL file.
-# Now it is current directory.
-#
-# Revision 1.4  2006/11/04 16:34:47  n-ando
-# Some trivial fixes.
-#
-# Revision 1.3  2006/09/11 18:33:14  n-ando
-# A prefix of include directory can be specified with command options.
-#
-# Revision 1.2  2006/03/31 05:26:34  n-ando
-# - Almost all functions are rewritten to use ezt.py (Easy Template module).
-# - Now makewrapper.py uses ezt.py (Easy Template module).
-#
-# Revision 1.1.1.1  2005/05/12 09:06:18  n-ando
-# Public release.
-#
-#
-#
 import sys
 import os
 import re
 import time
-import ezt
+import yat
 
 skel_cpp_temp = """// -*- C++ -*-
 /*!
@@ -47,22 +27,30 @@ skel_cpp_temp = """// -*- C++ -*-
  * THIS FILE IS GENERATED AUTOMATICALLY!! DO NOT EDIT!!
  *
  * @file  [skel_cpp]
+ 
  * @brief [basename] server skeleton wrapper code
  * @date  [date]
+ 
  *
  */
 
 #include "[skel_dir]/[basename]Skel.h"
 
 #if   defined ORB_IS_TAO
+#include "[skel_dir]/[basename]C.cpp"
 #include "[skel_dir]/[basename]S.cpp"
+#elif defined ORB_IS_OE
+#include "[skel_dir]/[basename].cxx"
+#include "[skel_dir]/[basename]_s.cxx"
 #elif defined ORB_IS_OMNIORB
 #include "[skel_dir]/[basename]SK.cc"
 #include "[skel_dir]/[basename]DynSK.cc"
 #elif defined ORB_IS_MICO
+#include "[skel_dir]/[basename].cc"
 #include "[skel_dir]/[basename]_skel.cc"
 #elif defined ORB_IS_ORBIT2
 #include "[skel_dir]/[basename]-cpp-skels.cc"
+#include "[skel_dir]/[basename]-cpp-stubs.cc"
 #else
 #error "NO ORB defined"
 #endif
@@ -74,8 +62,10 @@ skel_h_temp = """// -*- C++ -*-
  * THIS FILE IS GENERATED AUTOMATICALLY!! DO NOT EDIT!!
  *
  * @file  [skel_h]
+ 
  * @brief [basename] server skeleton wrapper code
  * @date  [date]
+
  *
  */
 
@@ -90,12 +80,17 @@ skel_h_temp = """// -*- C++ -*-
 #undef PACKAGE_VERSION
 
 #if   defined ORB_IS_TAO
+#include "[skel_dir]/[basename]C.h"
 #include "[skel_dir]/[basename]S.h"
+#elif defined ORB_IS_OE
+#include "[skel_dir]/[basename]_s.h"
+#include "[skel_dir]/[basename].h"
 #elif defined ORB_IS_OMNIORB
 #include "[skel_dir]/[basename].hh"
 #elif defined ORB_IS_MICO
 #include "[skel_dir]/[basename].h"
 #elif defined ORB_IS_ORBIT2
+#include "[skel_dir]/[basename]-cpp-stubs.h"
 #include "[skel_dir]/[basename]-cpp-skels.h"
 #else
 #error "NO ORB defined"
@@ -110,8 +105,10 @@ stub_cpp_temp = """// -*- C++ -*-
  * THIS FILE IS GENERATED AUTOMATICALLY!! DO NOT EDIT!!
  *
  * @file  [stub_cpp]
+ 
  * @brief [basename] server skeleton wrapper code
  * @date  [date]
+ 
  *
  */
 
@@ -119,6 +116,8 @@ stub_cpp_temp = """// -*- C++ -*-
 
 #if   defined ORB_IS_TAO
 #include "[skel_dir]/[basename]C.cpp"
+#elif defined ORB_IS_OE
+#include "[skel_dir]/[basename].cxx"
 #elif defined ORB_IS_OMNIORB
 #include "[skel_dir]/[basename]SK.cc"
 #include "[skel_dir]/[basename]DynSK.cc"
@@ -137,8 +136,10 @@ stub_h_temp = """// -*- C++ -*-
  * THIS FILE IS GENERATED AUTOMATICALLY!! DO NOT EDIT!!
  *
  * @file  [stub_h]
+ 
  * @brief [basename] server skeleton wrapper code
  * @date  [date]
+
  *
  */
 
@@ -154,6 +155,8 @@ stub_h_temp = """// -*- C++ -*-
 
 #if   defined ORB_IS_TAO
 #include "[skel_dir]/[basename]C.h"
+#elif defined ORB_IS_OE
+#include "[skel_dir]/[basename].h"
 #elif defined ORB_IS_OMNIORB
 #include "[skel_dir]/[basename].hh"
 #elif defined ORB_IS_MICO
@@ -191,11 +194,11 @@ class wrapper_gen:
     def gen(self, fname, temp_txt, data):
         f = file(fname, "w")
         #		s = StringIO.StringIO()
-        t = ezt.Template(compress_whitespace = 0)
-        t.parse(temp_txt)
-        t.generate(f, data)
+        t = yat.Template(temp_txt)
+        text=t.generate(data)
         #		gen_txt = s.getvalue().splitlines()
         #		f.write(gen_txt)
+        f.write(text)
         f.close()
         print "\"", fname, "\"" " was generated."
         return
@@ -247,5 +250,3 @@ basename = re.sub(".idl", "", basename)
 data = wrapper_data(basename, skel_dir)
 gen  = wrapper_gen(data.get_dict())
 gen.gen_all()
-
-

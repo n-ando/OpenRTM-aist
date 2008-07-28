@@ -14,15 +14,7 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: RingBufferTests.cpp,v 1.2 2006-12-02 18:53:08 n-ando Exp $
- *
- */
-
-/*
- * $Log: not supported by cvs2svn $
- * Revision 1.1  2006/11/27 08:37:03  n-ando
- * TestSuites are devided into each directory.
- *
+ * $Id$
  *
  */
 

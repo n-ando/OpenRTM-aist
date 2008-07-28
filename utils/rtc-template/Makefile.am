@@ -2,42 +2,55 @@
 ##---------------------------------------------------------------------------
 ## Makefile.am for rtc-template: rtm template code generator script
 ##
-## $Id: Makefile.am,v 1.3 2005-09-08 09:21:57 n-ando Exp $
-##
-## $Log: not supported by cvs2svn $
-## Revision 1.2  2005/08/26 11:59:17  n-ando
-## Now rtc-template uses ezt (Easy Template).
-##
-## Revision 1.1.1.1  2005/05/12 09:06:18  n-ando
-## Public release.
-##
+## $Id$
 ##---------------------------------------------------------------------------
 
-AUTOMAKE_OPTIONS = 1.4
+AUTOMAKE_OPTIONS = 1.9
 
 bin_SCRIPTS = rtc-template
+
+yat.py:
+	cp $(top_srcdir)/build/yat.py .
+vcprojtool.py:
+	cp $(top_srcdir)/build/vcprojtool.py .
+slntool.py:
+	cp $(top_srcdir)/build/slntool.py .
 
 rtc-template: 
 
 pyhelperdir = $(pkglibdir)/py_helper
 
-pyhelper_SCRIPTS = \
-	README_src.py \
-	cxx_gen.py \
-	cxx_svc_impl.py \
-	python_gen.py \
-	gen_base.py \
-	ezt.py
+pyhelper_SCRIPTS =       \
+	yat.py           \
+	uuid.py          \
+	README_gen.py    \
+	profile_gen.py   \
+	gen_base.py      \
+	cxx_gen.py       \
+	cxx_svc_impl.py  \
+	vcproj_gen.py    \
+	python_gen.py    \
+	slntool.py       \
+	vcprojtool.py    \
+	test-template.py
 
 
-EXTRA_DIST = \
-	rtc-template \
-	README_src.py \
-	cxx_gen.py \
-	cxx_svc_impl.py \
-	python_gen.py \
-	gen_base.py \
-	ezt.py
+EXTRA_DIST =             \
+	rtc-template     \
+	yat.py           \
+	uuid.py          \
+	README_gen.py    \
+	profile_gen.py   \
+	gen_base.py      \
+	cxx_gen.py       \
+	cxx_svc_impl.py  \
+	vcproj_gen.py    \
+	python_gen.py    \
+	slntool.py       \
+	vcprojtool.py    \
+	test-template.py
+
 
 clean-local:
 	rm -rf *~ *core *.pyc
+	rm -rf yat.py slntool.py vcprojtool.py

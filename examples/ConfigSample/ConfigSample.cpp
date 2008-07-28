@@ -4,7 +4,7 @@
  * @brief Configuration example component
  * $Date: 2007-04-23 07:26:22 $
  *
- * $Id: ConfigSample.cpp,v 1.1 2007-04-23 07:26:22 n-ando Exp $
+ * $Id$
  */
 
 #include "ConfigSample.h"

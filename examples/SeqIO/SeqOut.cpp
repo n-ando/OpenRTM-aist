@@ -4,7 +4,7 @@
  * @brief Sequence OutPort component
  * $Date: 2007-04-13 15:02:49 $
  *
- * $Id: SeqOut.cpp,v 1.3 2007-04-13 15:02:49 n-ando Exp $
+ * $Id$
  */
 
 #include "SeqOut.h"

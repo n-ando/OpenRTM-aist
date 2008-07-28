@@ -2,9 +2,9 @@
 /*!
  * @file  MyServiceConsumer.cpp
  * @brief MyService Consumer Sample component
- * $Date: 2007-04-13 15:03:14 $
+ * $Date: 2008-01-14 07:46:42 $
  *
- * $Id: MyServiceConsumer.cpp,v 1.2 2007-04-13 15:03:14 n-ando Exp $
+ * $Id$
  */
 
 #include "MyServiceConsumer.h"
@@ -165,7 +165,7 @@ RTC::ReturnCode_t MyServiceConsumer::onExecute(RTC::UniqueId ec_id)
       if (argv[0] == "get_echo_history")
 	{
 	  CORBA_SeqUtil::for_each(*(m_myservice0->get_echo_history()),
-				  seq_print<char*>());
+				  seq_print<const char*>());
 	  return RTC::RTC_OK;
 	}
       

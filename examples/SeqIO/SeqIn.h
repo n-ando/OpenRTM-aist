@@ -2,20 +2,20 @@
 /*!
  * @file  SeqIn.h
  * @brief Sequence InPort component
- * @date  $Date: 2007-02-04 16:47:48 $
+ * @date  $Date: 2008-02-29 04:54:53 $
  *
- * $Id: SeqIn.h,v 1.2 2007-02-04 16:47:48 n-ando Exp $
+ * $Id$
  */
 
 #ifndef SEQIN_H
 #define SEQIN_H
 
+#include <rtm/idl/BasicDataTypeSkel.h>
 #include <rtm/Manager.h>
 #include <rtm/DataFlowComponentBase.h>
 #include <rtm/CorbaPort.h>
 #include <rtm/DataInPort.h>
 #include <rtm/DataOutPort.h>
-#include <rtm/idl/BasicDataTypeSkel.h>
 
 // Service implementation headers
 // <rtc-template block="service_impl_h">
@@ -136,7 +136,7 @@ class SeqIn
 
 extern "C"
 {
-  void SeqInInit(RTC::Manager* manager);
+  DLL_EXPORT void SeqInInit(RTC::Manager* manager);
 };
 
 #endif // SEQIN_H

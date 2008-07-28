@@ -2,11 +2,10 @@
 ##---------------------------------------------------------------------------
 ## Makefile.am for MyServiceProvider/MyServiceConsumer components
 ##
-## $Id: Makefile.am,v 1.5 2007-02-08 06:01:25 n-ando Exp $
-##
+## $Id$
 ##---------------------------------------------------------------------------
 
-AUTOMAKE_OPTIONS = 1.4
+AUTOMAKE_OPTIONS = 1.9
 
 IDLC = @IDLC@
 IDLFLAGS = @IDL_FLAGS@
@@ -15,64 +14,225 @@ LIBS = @LIBS@
 AM_CPPFLAGS=-I$(top_srcdir) -I$(top_srcdir)/rtm/idl
 AM_LDFLAGS=-L$(top_builddir) -L$(top_builddir)/rtm -L$(top_builddir)/rtm/idl
 
+#------------------------------------------------------------
+# Some rules for IDL compile
+#------------------------------------------------------------
 SUFFIXES = .o .so .idl Skel.cpp Stub.cpp Stub.o Skel.o
 
 WRAPPER  = $(top_builddir)/utils/rtm-skelwrapper/rtm-skelwrapper
 WRAPPER_FLAGS = --include-dir="" --skel-suffix=Skel --stub-suffix=Stub
 
 .idlSkel.cpp:
-	$(IDLC) $(IDLFLAGS) MyService.idl
-	$(WRAPPER) $(WRAPPER_FLAGS) --idl-file=MyService.idl
+	echo $(PROVIDER_OBJ)
+	$(IDLC) $(IDLFLAGS) $<
+	PYTHONPATH=$(top_srcdir)/build:$(PYTHONPATH) \
+	PATH=$(top_srcdir)/utils/rtm-config:$(PATH)  \
+	$(WRAPPER) $(WRAPPER_FLAGS) --idl-file=$<
 
 .idlStub.cpp:
-	$(IDLC) $(IDLFLAGS) MyService.idl
-	$(WRAPPER) $(WRAPPER_FLAGS) --idl-file=MyService.idl
+	$(IDLC) $(IDLFLAGS) $<
+	PYTHONPATH=$(PYTHONPATH):$(top_srcdir)/build \
+	PATH=$(top_srcdir)/utils/rtm-config:$(PATH)  \
+	$(WRAPPER) $(WRAPPER_FLAGS) --idl-file=$<
 
+#------------------------------------------------------------
+# Source list
+#------------------------------------------------------------
 IDL_SOURCES = MyService.idl
 
-SKEL_OBJ = MyServiceSkel.o
-STUB_OBJ = MyServiceStub.o
-IMPL_OBJ = MyServiceSVC_impl.o
+PROVIDER_DIST_SRC   = MyServiceSVC_impl.cpp MyServiceProvider.cpp
+PROVIDER_NODIST_SRC = $(IDL_SOURCES:.idl=Skel.cpp)
+PROVIDER_SRC        = $(PROVIDER_DIST_SRC) $(PROVIDER_NODIST_SRC)
 
-noinst_PROGRAMS = MyServiceConsumerComp MyServiceProviderComp
+PROVIDER_DIST_H     = $(PROVIDER_DIST_SRC:.cpp=.h)
+PROVIDER_NODIST_H   = $(PROVIDER_NODIST_SRC:.cpp=.h)
+PROVIDER_H          = $(PROVIDER_DIST_H) $(PROVIDER_NODIST_H)
+PROVIDER_COMP_SRC   = $(PROVIDER_SRC) MyServiceProviderComp.cpp
 
-nodist_MyServiceProviderComp_SOURCES = \
-	$(IDL_SOURCES:.idl=Skel.cpp)   \
-	MyServiceSVC_impl.cpp          \
-	MyServiceProvider.cpp          \
-	MyServiceProviderComp.cpp
-MyServiceProviderComp_LDFLAGS = -L$(top_builddir)/rtm
-MyServiceProviderComp_LDADD = -lRTC
+CONSUMER_DIST_SRC   = MyServiceConsumer.cpp
+CONSUMER_NODIST_SRC = $(IDL_SOURCES:.idl=Stub.cpp)
+CONSUMER_SRC        = $(CONSUMER_DIST_SRC) $(CONSUMER_NODIST_SRC)
 
-nodist_MyServiceConsumerComp_SOURCES = \
-	$(IDL_SOURCES:.idl=Stub.cpp)   \
-	MyServiceConsumer.cpp          \
-	MyServiceConsumerComp.cpp
-MyServiceConsumerComp_LDFLAGS = -L$(top_builddir)/rtm
-MyServiceConsumerComp_LDADD = -lRTC
+CONSUMER_DIST_H     = $(CONSUMER_DIST_SRC:.cpp=.h)
+CONSUMER_NODIST_H   = $(CONSUMER_NODIST_SRC:.cpp=.h)
+CONSUMER_H          = $(CONSUMER_DIST_H) $(CONSUMER_NODIST_H)
+CONSUMER_COMP_SRC   = $(CONSUMER_SRC) MyServiceConsumerComp.cpp
 
+#------------------------------------------------------------
+# Object list
+#------------------------------------------------------------
+PROVIDER_OBJ=$(PROVIDER_DIST_SRC:.cpp=.o)
+CONSUMER_OBJ=$(CONSUMER_DIST_SRC:.cpp=.o)
+
+#------------------------------------------------------------
+# Targets
+#------------------------------------------------------------
+# Targets directories
+exampledir = $(pkgdatadir)/examples
+socompdir  = $(exampledir)/rtcs
+sourcedir  = $(exampledir)/src/SimpleService
+
+# Loadable RTCs
+noinst_LTLIBRARIES = libMyServiceSkel.la libMyServiceStub.la 
+nodist_libMyServiceSkel_la_SOURCES = $(PROVIDER_NODIST_SRC)
+nodist_libMyServiceStub_la_SOURCES = $(CONSUMER_NODIST_SRC)
+
+socomp_LTLIBRARIES = MyServiceProvider.la MyServiceConsumer.la
+
+dist_MyServiceProvider_la_SOURCES = $(PROVIDER_DIST_SRC) $(PROVIDER_DIST_H) 
+MyServiceProvider_la_LDFLAGS = -module
+MyServiceProvider_la_FLAGS   = -L$(top_builddir)/rtm/.libs -L.
+MyServiceProvider_la_LIBADD  = $(top_builddir)/rtm/libRTC.la -lMyServiceSkel
+
+dist_MyServiceConsumer_la_SOURCES = $(CONSUMER_DIST_SRC) $(CONSUMER_DIST_H)
+MyServiceConsumer_la_LDFLAGS = -module
+MyServiceConsumer_la_FLAGS   = -L$(top_builddir)/rtm/.libs
+MyServiceConsumer_la_LIBADD  = $(top_builddir)/rtm/libRTC.la -lMyServiceStub
+
+# Standalone RTCs
+example_PROGRAMS = MyServiceProviderComp MyServiceConsumerComp
+MyServiceProviderComp_SOURCES = MyServiceProviderComp.cpp
+MyServiceProviderComp_LDFLAGS = -L$(top_builddir)/rtm/.libs
+MyServiceProviderComp_LDADD   = .libs/MyServiceProvider.a \
+	$(top_builddir)/rtm/libRTC.la
+
+MyServiceConsumerComp_SOURCES = MyServiceConsumerComp.cpp
+MyServiceConsumerComp_LDFLAGS = -L$(top_builddir)/rtm/.libs
+MyServiceConsumerComp_LDADD   = .libs/MyServiceConsumer.a \
+	$(top_builddir)/rtm/libRTC.la
+
+
+# Example sources
+source_DATA = $(ALL_SRC) $(EXTRA_DIST)
+
+#------------------------------------------------------------
+# Extra distributed files
+#------------------------------------------------------------
 EXTRA_DIST =                       \
 	$(IDL_SOURCES)             \
 	Makefile.MyServiceProvider \
 	Makefile.MyServiceConsumer \
 	README.MyServiceProvider   \
 	README.MyServiceConsumer   \
-	MyServiceSVC_impl.cpp      \
-	MyServiceSVC_impl.h        \
-	MyServiceProvider.h        \
-	MyServiceProvider.cpp      \
-	MyServiceProviderComp.cpp  \
-	MyServiceConsumer.h        \
-	MyServiceConsumer.cpp      \
-	MyServiceConsumerComp.cpp  \
-	gen.sh
+	gen.sh                     \
+	rtc.conf
+
+ALL_SRC =                    \
+	$(IDL_SOURCES)       \
+        $(PROVIDER_COMP_SRC) \
+        $(CONSUMER_COMP_SRC)
+
+#------------------------------------------------------------
+# File list for deb/ports packages
+#------------------------------------------------------------
+lst:
+	echo $(ALL_SRC) > src.lst
+	echo $(EXTRA_DIST) > other.lst
+
+#------------------------------------------------------------
+# Visual Studio Project
+#------------------------------------------------------------
+win32_builddir=$(top_builddir)/win32/OpenRTM-aist/examples/SimpleService
+
+vcproj: vc8proj vc9proj
+
+vc8proj: 
+	$(top_builddir)/build/vcprojtool.py vcproj                   \
+		--type EXE                                           \
+		--vcversion "8.00"                                   \
+		--projectname "MyServiceProviderComp"                \
+		--version $(RTM_VERSION)                             \
+		--out $(win32_builddir)/MyServiceProvider_vc8.vcproj \
+		--yaml ../rtc.vcproj.yaml                            \
+		--source $(PROVIDER_COMP_SRC)                        \
+		--header $(PROVIDER_H)
+	qkc -sm $(win32_builddir)/MyServiceProvider_vc8.vcproj
+	$(top_builddir)/build/vcprojtool.py vcproj                      \
+		--type DLL                                              \
+		--vcversion "8.00"                                      \
+		--projectname "MyServiceProvider"                       \
+		--version $(RTM_VERSION)                                \
+		--out $(win32_builddir)/MyServiceProviderDll_vc8.vcproj \
+		--yaml ../rtcdll.vcproj.yaml                            \
+		--source $(PROVIDER_SRC)                                \
+		--header $(PROVIDER_H)
+	qkc -sm $(win32_builddir)/MyServiceProviderDll_vc8.vcproj
+	$(top_builddir)/build/vcprojtool.py vcproj                   \
+		--type EXE                                           \
+		--vcversion "8.00"                                   \
+		--projectname "MyServiceConsumerComp"                \
+		--version $(RTM_VERSION)                             \
+		--out $(win32_builddir)/MyServiceConsumer_vc8.vcproj \
+		--yaml ../rtc.vcproj.yaml                            \
+		--source $(CONSUMER_COMP_SRC)                        \
+		--header $(CONSUMER_H)
+	qkc -sm $(win32_builddir)/MyServiceConsumer_vc8.vcproj
+	$(top_builddir)/build/vcprojtool.py vcproj                      \
+		--type DLL                                              \
+		--vcversion "8.00"                                      \
+		--projectname "MyServiceConsumer"                       \
+		--version $(RTM_VERSION)                                \
+		--out $(win32_builddir)/MyServiceConsumerDll_vc8.vcproj \
+		--yaml ../rtcdll.vcproj.yaml                            \
+		--source $(CONSUMER_COMP_SRC)                           \
+		--header $(CONSUMER_H)
+	qkc -sm $(win32_builddir)/MyServiceConsumerDll_vc8.vcproj
+
+vc9proj: 
+	$(top_builddir)/build/vcprojtool.py vcproj                   \
+		--type EXE                                           \
+		--vcversion "9.00"                                   \
+		--projectname "MyServiceProviderComp"                \
+		--version $(RTM_VERSION)                             \
+		--out $(win32_builddir)/MyServiceProvider_vc9.vcproj \
+		--yaml ../rtc.vcproj.yaml                            \
+		--source $(PROVIDER_COMP_SRC)                        \
+		--header $(PROVIDER_H)
+	qkc -sm $(win32_builddir)/MyServiceProvider_vc9.vcproj
+	$(top_builddir)/build/vcprojtool.py vcproj                      \
+		--type DLL                                              \
+		--vcversion "9.00"                                      \
+		--projectname "MyServiceProvider"                       \
+		--version $(RTM_VERSION)                                \
+		--out $(win32_builddir)/MyServiceProviderDll_vc9.vcproj \
+		--yaml ../rtcdll.vcproj.yaml                            \
+		--source $(PROVIDER_SRC)                                \
+		--header $(PROVIDER_H)
+	qkc -sm $(win32_builddir)/MyServiceProviderDll_vc9.vcproj
+	$(top_builddir)/build/vcprojtool.py vcproj                   \
+		--type EXE                                           \
+		--vcversion "9.00"                                   \
+		--projectname "MyServiceConsumerComp"                \
+		--version $(RTM_VERSION)                             \
+		--out $(win32_builddir)/MyServiceConsumer_vc9.vcproj \
+		--yaml ../rtc.vcproj.yaml                            \
+		--source $(CONSUMER_COMP_SRC)                        \
+		--header $(CONSUMER_H)
+	qkc -sm $(win32_builddir)/MyServiceConsumer_vc9.vcproj
+	$(top_builddir)/build/vcprojtool.py vcproj                      \
+		--type DLL                                              \
+		--vcversion "9.00"                                      \
+		--projectname "MyServiceConsumer"                       \
+		--version $(RTM_VERSION)                                \
+		--out $(win32_builddir)/MyServiceConsumerDll_vc9.vcproj \
+		--yaml ../rtcdll.vcproj.yaml                            \
+		--source $(CONSUMER_COMP_SRC)                           \
+		--header $(CONSUMER_H)
+	qkc -sm $(win32_builddir)/MyServiceConsumerDll_vc9.vcproj
+
+dist-hook: lst vcproj
+
 
 clean_objs:
-	rm -f $(OBJS) SimpleService.so SimpleServiceComp
+	rm -f $(OBJS)
 
 clean_skelstub:
 	rm -f *Skel.h *Skel.cpp
 	rm -f *Stub.h *Stub.cpp
+	rm -f *.hh *SK.cc
+	rm -f *C.cpp *C.h *S.cpp *S.h *_T.cpp *_T.h *.inl
 
 clean-local: clean_objs clean_skelstub
-	rm -f *.bak *.rpo *.sym lib*.*_pure_* Makefile.old *core *~ *loT
+	rm -f \
+	*.bak *.rpo *.sym lib*.*_pure_* *.lst \
+	Makefile.old *core *~ *loT

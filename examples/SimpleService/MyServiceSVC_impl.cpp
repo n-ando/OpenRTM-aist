@@ -40,6 +40,7 @@ MyServiceSVC_impl::~MyServiceSVC_impl()
  * Methods corresponding to IDL attributes and operations
  */
 char* MyServiceSVC_impl::echo(const char* msg)
+  throw (CORBA::SystemException)
 {
   CORBA_SeqUtil::push_back(m_echoList, msg);
   std::cout << "MyService::echo() was called." << std::endl;
@@ -48,9 +49,10 @@ char* MyServiceSVC_impl::echo(const char* msg)
 }
 
 EchoList* MyServiceSVC_impl::get_echo_history()
+  throw (CORBA::SystemException)
 {
   std::cout << "MyService::get_echo_history() was called." << std::endl;
-  CORBA_SeqUtil::for_each(m_echoList, seq_print<char*>());
+  CORBA_SeqUtil::for_each(m_echoList, seq_print<const char*>());
   
   EchoList_var el;
   el = new EchoList(m_echoList);
@@ -58,6 +60,7 @@ EchoList* MyServiceSVC_impl::get_echo_history()
 }
 
 void MyServiceSVC_impl::set_value(CORBA::Float value)
+  throw (CORBA::SystemException)
 {
   CORBA_SeqUtil::push_back(m_valueList, value);
   m_value = value;
@@ -69,6 +72,7 @@ void MyServiceSVC_impl::set_value(CORBA::Float value)
 }
 
 CORBA::Float MyServiceSVC_impl::get_value()
+  throw (CORBA::SystemException)
 {
   std::cout << "MyService::get_value() was called." << std::endl;
   std::cout << "Current value: " << m_value << std::endl;
@@ -77,6 +81,7 @@ CORBA::Float MyServiceSVC_impl::get_value()
 }
 
 ValueList* MyServiceSVC_impl::get_value_history()
+  throw (CORBA::SystemException)
 {
   std::cout << "MyService::get_value_history() was called." << std::endl;
   CORBA_SeqUtil::for_each(m_valueList, seq_print<CORBA::Float>());

@@ -2,10 +2,10 @@
 /*!
  * @file  CorbaPort.h
  * @brief CorbaPort class
- * @date  $Date: 2007-01-04 00:45:21 $
+ * @date  $Date: 2007-12-31 03:08:02 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
- * Copyright (C) 2006
+ * Copyright (C) 2006-2008
  *     Noriaki Ando
  *     Task-intelligence Research Group,
  *     Intelligent Systems Research Institute,
@@ -13,15 +13,9 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: CorbaPort.h,v 1.1 2007-01-04 00:45:21 n-ando Exp $
+ * $Id$
  *
  */
-
-/*
- * $Log: not supported by cvs2svn $
- *
- */
-
 
 #ifndef CorbaPort_h
 #define CorbaPort_h
@@ -30,12 +24,26 @@
 #include <rtm/CorbaConsumer.h>
 #include <rtm/NVUtil.h>
 
+/*!
+ * @if jp
+ * @namespace RTC
+ *
+ * @brief RTコンポーネント
+ *
+ * @else
+ *
+ * @namespace RTC
+ *
+ * @brief RT-Component
+ *
+ * @endif
+ */
 namespace RTC
 {
   /*!
    * @if jp
    * @class CorbaPort
-   * @brief RT コンポーネント CORBA service/consumer 用 Port
+   * @brief RT コンポーネント CORBA provider/consumer 用 Port
    *
    * CorbaPort は RT コンポーネントにおいて、ユーザ定義の CORBA オブジェクト
    * サービスおよびコンシューマを提供する Port 実装である。
@@ -75,6 +83,8 @@ namespace RTC
    * 利用したい Service Consumer を registerConsumer() で登録することにより
    * 他のコンポーネントの Service をコンポーネント内で利用可能にすることが
    * できる。
+   *
+   * @since 0.4.0
    *
    * @else
    * @class CorbaPort
@@ -118,6 +128,8 @@ namespace RTC
    * Registering Service Consumer by registerConsumer(), other RT-Component's
    * services can be used through the consumer object.
    *
+   * @since 0.4.0
+   *
    * @endif
    */
   class CorbaPort
@@ -139,22 +151,20 @@ namespace RTC
      * @endif
      */
     CorbaPort(const char* name);
-
-
+    
     /*!
      * @if jp
      *
-     * @brief デストラクタ
+     * @brief 仮想デストラクタ
      *
      * @else
      *
-     * @brief Destructor
+     * @brief Virtual destructor
      *
      * @endif
      */
     virtual ~CorbaPort();
-
-
+    
     /*!
      * @if jp
      *
@@ -168,28 +178,30 @@ namespace RTC
      * @param instance_name サーバントのインスタンス名
      * @param type_name サーバントのタイプ名
      * @param provider CORBA サーバント
+     *
      * @return 既に同名の instance_name が登録されていれば false を返す。
      *
      * @else
      *
-     * @brief Register provider
+     * @brief Register the provider
      *
      * This operation registers a servant, which is provided in this Port,
      * to the Port. The servant is associated with "instance_name" and
      * "type_name" as the instance name of the servant and as the type name
      * of the servant.
      *
-     * @param instance_name サーバントのインスタンス名
-     * @param type_name サーバントのタイプ名
-     * @param provider CORBA サーバント
-     * @return 既に同名の instance_name が登録されていれば false を返す。
+     * @param instance_name Instance name of servant
+     * @param type_name Type name of the servant
+     * @param provider CORBA servant
+     *
+     * @return Return false if the same name of instance_name is already 
+     *         registered.
      *
      * @endif
      */
     bool registerProvider(const char* instance_name, const char* type_name,
 			  PortableServer::RefCountServantBase& provider);
-
-
+    
     /*!
      * @if jp
      *
@@ -207,28 +219,32 @@ namespace RTC
      * @param instance_name Consumer が要求するサービスのインスタンス名
      * @param type_name Consumer が要求するサービスのタイプ名
      * @param consumer CORBA サービスコンシューマ
+     *
      * @return 既に同名の instance_name が登録されていれば false を返す。
      *
      * @else
      *
-     * @brief Register consumer
+     * @brief Register the consumer
      *
-     * This operation registers a consumer, which requiers a service,
-     * to the other Port. The consumer is associated with "instance_name" and
-     * "type_name" as the instance name of the service and as the type name
-     * of the service that is required.
+     * This operation registers a consumer, which is a service placeholder
+     * this port requires. These are associated internally by specified 
+     * instance_name, type_name and Consumer itself to the argument as
+     * service's instance name and its type name associated with Consumer.
+     * If the service with the same instance_name and type_name is provided
+     * by the other port when connecting between ports, its service object
+     * reference will be set automatically.
      *
-     * @param instance_name An instance name of the service required
-     * @param type_name An type name of the service required
+     * @param instance_name Instance name of the service Consumer requires
+     * @param type_name Type name of the service Consumer requires
      * @param consumer CORBA service consumer
-     * @return False would be returned if the same instance_name is registered
+     *
+     * @return False would be returned if the same instance_name was registered
      *
      * @endif
      */
     bool registerConsumer(const char* instance_name, const char* type_name,
 			  CorbaConsumerBase& consumer);
-
-
+    
   protected:
     /*!
      * @if jp
@@ -244,6 +260,7 @@ namespace RTC
      * ここで、
      * - <type_name>: PortInterfaceProfile::type_name
      * - <instance_name>: PortInterfaceProfile::instance_name
+     *
      * である。
      * ConnectorProfile::properties では、これらを .(ドット)表記で、
      * NameValue のキーとしている。したがって、
@@ -268,16 +285,57 @@ namespace RTC
      * 存在すれば、ConnectorProfile からこのキーからオブジェクトリファレンスを
      * 取得し何らかの形で使用される。
      *
+     * @param connector_profile コネクタプロファイル
+     *
+     * @return ReturnCode_t 型のリターンコード
+     *
      * @else
      *
      * @brief Publish interface information
      *
+     * Assign information associated with Provider owned by this Port
+     * to ConnectorProfile::properties.
+     * In assignment information, the following is stored as NVList name and 
+     * its value.
+     *
+     * - port.<type_name>.<instance_name>: <CORBA::Object_ptr>
+     *
+     * Here,
+     * - <type_name>: PortInterfaceProfile::type_name
+     * - <instance_name>: PortInterfaceProfile::instance_name<br>
+     * <br>
+     * In ConnectorProfile::properties, these are keys of NameValue written 
+     * with .(dot) notation. Therefore,
+     *
+     * <pre>
+     *  PortInterfaceProfile
+     *  {
+     *    instance_name = "PA10_0";
+     *    type_name     = "Manipulator";
+     *    polarity      = PROVIDED;
+     *  }
+     *</pre>
+     *
+     * so,
+     *
+     * <pre>
+     * NameValue = { "port.Manipulator.PA10_0": <Object reference> }
+     * </pre>
+     *
+     * The above value is set to ConnectorProfile::properties and sent to other
+     * ports. If Consumer that uses this interface in other Port exists,
+     * the object references will be got and use from the key of 
+     * ConnectorProfile.
+     *
+     * @param connector_profile Connector profile
+     *
+     * @return The return code of ReturnCode_t type
+     *
      * @endif
      */
-     virtual ReturnCode_t
-     publishInterfaces(ConnectorProfile& connector_profile);
-
-
+    virtual ReturnCode_t
+    publishInterfaces(ConnectorProfile& connector_profile);
+    
     /*!
      * @if jp
      *
@@ -314,16 +372,53 @@ namespace RTC
      * として登録されている NameValue を探し、そのオブジェクト参照を
      * Consumer にセットする。
      *
+     * @param connector_profile コネクタプロファイル
+     *
+     * @return ReturnCode_t 型のリターンコード
+     *
      * @else
      *
-     * @brief Subscribe interfaces
+     * @brief Subscribe to interface
+     *
+     * Retrieve information associated with Provider matches Consumer
+     * owned by this port and set the object reference to Consumer.
+     *
+     * Now, Consumer is registered as the following:
+     * <pre>
+     *  PortInterfaceProfile
+     *  {
+     *    instance_name = "PA10_0";
+     *    type_name     = "Manipulator";
+     *    polarity      = REQUIRED;
+     *  }
+     *</pre>
+     * Find the object reference of Serivce Provider that is registered as
+     * the following of other ports:
+     * <pre>
+     *  PortInterfaceProfile
+     *  {
+     *    instance_name = "PA10_0";
+     *    type_name     = "Manipulator";
+     *    polarity      = PROVIDED;
+     *  }
+     * </pre> 
+     * and set to Consumer.
+     * In fact, find NameValue that is registered as the following to 
+     * ConnectorProfile::properties:
+     * <pre>
+     * NameValue = { "port.Manipulator.PA10_0": <Object reference> }
+     * </pre>
+     * and set the object reference to Consumer.
+     *
+     * @param connector_profile Connector profile
+     *
+     * @return The return code of ReturnCode_t type
      *
      * @endif
      */
-     virtual ReturnCode_t
-     subscribeInterfaces(const ConnectorProfile& connector_profile);
-
-
+    virtual ReturnCode_t
+    subscribeInterfaces(const ConnectorProfile& connector_profile);
+    
     /*!
      * @if jp
      *
@@ -332,16 +427,22 @@ namespace RTC
      * 与えられた ConnectorProfile に関連する Consumer にセットされた
      * すべての Object を解放し接続を解除する。
      *
+     * @param connector_profile コネクタプロファイル
+     *
      * @else
      *
      * @brief Unsubscribe interfaces
      *
+     * Release all Objects that was set in Consumer associated with the given 
+     * ConnectorProfile.
+     *
+     * @param connector_profile Connector profile
+     *
      * @endif
      */
-     virtual void
-     unsubscribeInterfaces(const ConnectorProfile& connector_profile);
-
-
+    virtual void
+    unsubscribeInterfaces(const ConnectorProfile& connector_profile);
+    
   private:
     /*!
      * @if jp
@@ -351,13 +452,12 @@ namespace RTC
      * @endif
      */
     NVList m_providers;
-
-
+    
     /*!
      * @if jp
      * @brief Consumer の情報を格納する構造体
      * @else
-     * @brief Consumer inforamtion struct
+     * @brief The structure to be stored Consumer information.
      * @endif
      */
     struct Consumer
@@ -383,48 +483,49 @@ namespace RTC
       CorbaConsumerBase& consumer;
     };
     std::vector<Consumer> m_consumers;
-
+    
     // functors
     /*!
      * @if jp
      * @brief ConnectorProfile と Consuemr の比較をしオブジェクト参照を
      *        セットするための Functor
      * @else
-     * @brief Subscription mutching functor for Consumer
+     * @brief Functor to compare ConnectorProfile and Consuemr, to set object 
+     *        reference
      * @endif
      */
     struct subscribe
     {
       subscribe(std::vector<Consumer>& cons)
 	: m_cons(cons), m_len(cons.size())
-	{
-	}
-	
-	void operator()(const SDOPackage::NameValue& nv)
-	{
-	  for (CORBA::ULong i = 0; i < m_len; ++i)
-	    {
-	      std::string name(nv.name);
-	      if (m_cons[i].name == name)
-		{
-		  CORBA::Object_ptr obj;
-		  if (nv.value >>= CORBA::Any::to_object(obj))
-		    {
-		      m_cons[i].consumer.setObject(obj);
-		    }
-		}
-	}
-	}
-	std::vector<Consumer> m_cons;
-	CORBA::ULong m_len;
+      {
+      }
+      
+      void operator()(const SDOPackage::NameValue& nv)
+      {
+	for (CORBA::ULong i = 0; i < m_len; ++i)
+	  {
+	    std::string name(nv.name);
+	    if (m_cons[i].name == name)
+	      {
+		CORBA::Object_var obj;
+		CORBA::Any::to_object to_obj(obj.inout());
+		if (nv.value >>= to_obj)
+		  {
+		    m_cons[i].consumer.setObject(obj);
+		  }
+	      }
+	  }
+      }
+      std::vector<Consumer> m_cons;
+      CORBA::ULong m_len;
     };
-
-
+    
     /*!
      * @if jp
      * @brief Consumer のオブジェクトを解放するための Functor
      * @else
-     * @brief Unsubscription functor for Consumer
+     * @brief Functor to release Consumer's object
      * @endif
      */
     struct unsubscribe
@@ -448,7 +549,6 @@ namespace RTC
       std::vector<Consumer> m_cons;
       CORBA::ULong m_len;
     };
-    
   };
 };
 #endif // CorbaPort_h

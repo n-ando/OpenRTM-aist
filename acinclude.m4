@@ -13,11 +13,7 @@
 #         Advanced Industrial Science and Technology (AIST), Japan
 #     All rights reserved.
 #
-# $Id: acinclude.m4,v 1.1 2006-11-04 17:06:08 n-ando Exp $
-#
-
-#
-# $Log: not supported by cvs2svn $
+# $Id$
 #
 
 # includes libtool macros
