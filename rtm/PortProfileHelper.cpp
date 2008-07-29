@@ -179,7 +179,7 @@ namespace RTC
    * @brief Set Port's object reference
    * @endif
    */
-  void PortProfileHelper::setPortRef(Port_ptr port)
+  void PortProfileHelper::setPortRef(PortService_ptr port)
   {
     Guard guard(m_mutex);
 
@@ -194,7 +194,7 @@ namespace RTC
    * @brief Get Port's object reference
    * @endif
    */
-  Port_ptr PortProfileHelper::getPortRef() const
+  PortService_ptr PortProfileHelper::getPortRef() const
   {
     Guard guard(m_mutex);
 

@@ -29,8 +29,8 @@ namespace RTC_Utils
    */
   bool isDataFlowComponent(CORBA::Object_ptr obj)
   {
-    RTC::DataFlowParticipant_var dfp;
-    dfp = RTC::DataFlowParticipant::_narrow(obj);
+    RTC::DataFlowComponent_var dfp;
+    dfp = RTC::DataFlowComponent::_narrow(obj);
     return !CORBA::is_nil(dfp);
   }
   

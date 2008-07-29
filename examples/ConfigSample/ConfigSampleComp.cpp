@@ -30,8 +30,8 @@ void MyModuleInit(RTC::Manager* manager)
   RTC::RTObject_var rtobj;
   rtobj = RTC::RTObject::_narrow(manager->getPOA()->servant_to_reference(comp));
 
-  RTC::ExecutionContextServiceList_var ecs;
-  ecs = rtobj->get_execution_context_services();
+  RTC::ExecutionContextList_var ecs;
+  ecs = rtobj->get_owned_contexts();
   ecs[(CORBA::ULong)0]->activate_component(rtobj);
 
   return;

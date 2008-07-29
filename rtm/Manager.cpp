@@ -574,7 +574,7 @@ namespace RTC
 	  = m_config.getProperty("exec_cxt.evdriven.type").c_str();
 	exec_cxt = m_ecfactory.find(ectype)->create();
       }
-    exec_cxt->add(rtobj);
+    exec_cxt->add_component(rtobj);
     exec_cxt->start();
     m_ecs.push_back(exec_cxt);
     return true;

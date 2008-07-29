@@ -44,7 +44,8 @@ namespace SDOPackage
 namespace RTC
 {
   class Manager;
-  
+  typedef ExecutionContextHandle_t UniqueId;
+
   /*!
    * @if jp
    * @brief RTコンポーネントクラス
@@ -80,7 +81,7 @@ namespace RTC
    * @endif
    */
   class RTObject_impl
-    : public virtual POA_RTC::DataFlowComponent, 
+    : public virtual POA_OpenRTM::DataFlowComponent, 
       public virtual PortableServer::RefCountServantBase
   {
   public:
@@ -216,7 +217,7 @@ namespace RTC
      * 各コンポーネントの実際の開始処理は、本関数をオーバーライドして実装する
      * 必要がある。
      * 
-     * @param ec_id 参加している ExecutionContext の ID
+     * @param exec_handle 参加している ExecutionContext の ID
      *
      * @return ReturnCode_t 型のリターンコード
      * 
@@ -230,7 +231,7 @@ namespace RTC
      * dummy-implemented to return RTC::RTC_OK unconditionally, you need to
      * implement this function by overriding it.
      * 
-     * @param ec_id ID of the participant ExecutionContext
+     * @param exec_handle ID of the participant ExecutionContext
      *
      * @return The return code of ReturnCode_t type
      * 
@@ -238,7 +239,7 @@ namespace RTC
      */
     // The startup action when ExecutionContext startup
     // former rtc_starting_entry()
-    virtual ReturnCode_t onStartup(RTC::UniqueId ec_id);
+    virtual ReturnCode_t onStartup(RTC::UniqueId exec_handle);
     
     /*!
      * @if jp
@@ -251,7 +252,7 @@ namespace RTC
      * 各コンポーネントの実際の停止処理は、本関数をオーバーライドして実装する
      * 必要がある。
      * 
-     * @param ec_id 参加している ExecutionContext の ID
+     * @param exec_handle 参加している ExecutionContext の ID
      *
      * @return ReturnCode_t 型のリターンコード
      * 
@@ -265,7 +266,7 @@ namespace RTC
      * dummy-implemented to return RTC::RTC_OK unconditionally, you need to
      * implement this function by overriding it.
      * 
-     * @param ec_id ID of the participant ExecutionContext
+     * @param exec_handle ID of the participant ExecutionContext
      *
      * @return The return code of ReturnCode_t type
      * 
@@ -273,7 +274,7 @@ namespace RTC
      */
     // The shutdown action when ExecutionContext stop
     // former rtc_stopping_entry()
-    virtual ReturnCode_t onShutdown(RTC::UniqueId ec_id);
+    virtual ReturnCode_t onShutdown(RTC::UniqueId exec_handle);
     
     /*!
      * @if jp
@@ -286,7 +287,7 @@ namespace RTC
      * 各コンポーネントの実際の活性化処理は、本関数をオーバーライドして実装する
      * 必要がある。
      * 
-     * @param ec_id 参加している ExecutionContext の ID
+     * @param exec_handle 参加している ExecutionContext の ID
      *
      * @return ReturnCode_t 型のリターンコード
      * 
@@ -300,7 +301,7 @@ namespace RTC
      * dummy-implemented to return RTC::RTC_OK unconditionally, you need to
      * implement this function by overriding it.
      * 
-     * @param ec_id ID of the participant ExecutionContext
+     * @param exec_handle ID of the participant ExecutionContext
      *
      * @return The return code of ReturnCode_t type
      * 
@@ -308,7 +309,7 @@ namespace RTC
      */
     // The activated action (Active state entry action)
     // former rtc_active_entry()
-    virtual ReturnCode_t onActivated(RTC::UniqueId ec_id);
+    virtual ReturnCode_t onActivated(RTC::UniqueId exec_handle);
     
     /*!
      * @if jp
@@ -321,7 +322,7 @@ namespace RTC
      * 各コンポーネントの実際の非活性化処理は、本関数をオーバーライドして実装する
      * 必要がある。
      * 
-     * @param ec_id 参加している ExecutionContext の ID
+     * @param exec_handle 参加している ExecutionContext の ID
      *
      * @return ReturnCode_t 型のリターンコード
      * 
@@ -335,7 +336,7 @@ namespace RTC
      * dummy-implemented to return RTC::RTC_OK unconditionally, you need to
      * implement this function by overriding it.
      * 
-     * @param ec_id ID of the participant ExecutionContext
+     * @param exec_handle ID of the participant ExecutionContext
      *
      * @return The return code of ReturnCode_t type
      * 
@@ -343,7 +344,7 @@ namespace RTC
      */
     // The deactivated action (Active state exit action)
     // former rtc_active_exit()
-    virtual ReturnCode_t onDeactivated(RTC::UniqueId ec_id);
+    virtual ReturnCode_t onDeactivated(RTC::UniqueId exec_handle);
     
     /*!
      * @if jp
@@ -358,7 +359,7 @@ namespace RTC
      * 本関数は Periodic Sampled Data Processing における Two-Pass Executionの
      * １回目の実行パスとして定期的に呼び出される。
      * 
-     * @param ec_id 参加している ExecutionContext の ID
+     * @param exec_handle 参加している ExecutionContext の ID
      *
      * @return ReturnCode_t 型のリターンコード
      * 
@@ -374,7 +375,7 @@ namespace RTC
      * This function is invoked periodically as the first execution pass of
      * Two-Pass Execution in Periodic Sampled Data Processing.
      * 
-     * @param ec_id ID of the participant ExecutionContext
+     * @param exec_handle ID of the participant ExecutionContext
      *
      * @return The return code of ReturnCode_t type
      * 
@@ -382,7 +383,7 @@ namespace RTC
      */
     // The execution action that is invoked periodically
     // former rtc_active_do()
-    virtual ReturnCode_t onExecute(RTC::UniqueId ec_id);
+    virtual ReturnCode_t onExecute(RTC::UniqueId exec_handle);
     
     /*!
      * @if jp
@@ -395,7 +396,7 @@ namespace RTC
      * 各コンポーネントの実際の中断処理は、本関数をオーバーライドして実装する
      * 必要がある。
      * 
-     * @param ec_id 参加している ExecutionContext の ID
+     * @param exec_handle 参加している ExecutionContext の ID
      *
      * @return ReturnCode_t 型のリターンコード
      * 
@@ -409,7 +410,7 @@ namespace RTC
      * dummy-implemented to return RTC::RTC_OK unconditionally, you need to
      * implement this function by overriding it.
      * 
-     * @param ec_id ID of the participant ExecutionContext
+     * @param exec_handle ID of the participant ExecutionContext
      *
      * @return The return code of ReturnCode_t type
      * 
@@ -417,7 +418,7 @@ namespace RTC
      */
     // The aborting action when main logic error occurred.
     // former rtc_aborting_entry()
-    virtual ReturnCode_t onAborting(RTC::UniqueId ec_id);
+    virtual ReturnCode_t onAborting(RTC::UniqueId exec_handle);
     
     /*!
      * @if jp
@@ -429,7 +430,7 @@ namespace RTC
      * 各コンポーネントの実際のエラー処理は、本関数をオーバーライドして実装する
      * 必要がある。
      * 
-     * @param ec_id 参加している ExecutionContext の ID
+     * @param exec_handle 参加している ExecutionContext の ID
      *
      * @return ReturnCode_t 型のリターンコード
      * 
@@ -443,7 +444,7 @@ namespace RTC
      * dummy-implemented to return RTC::RTC_OK unconditionally, you need to
      * implement this function by overriding it.
      * 
-     * @param ec_id ID of the participant ExecutionContext
+     * @param exec_handle ID of the participant ExecutionContext
      *
      * @return The return code of ReturnCode_t type
      * 
@@ -451,7 +452,7 @@ namespace RTC
      */
     // The error action in ERROR state
     // former rtc_error_do()
-    virtual ReturnCode_t onError(RTC::UniqueId ec_id);
+    virtual ReturnCode_t onError(RTC::UniqueId exec_handle);
     
     /*!
      * @if jp
@@ -463,7 +464,7 @@ namespace RTC
      * 各コンポーネントの実際のリセット処理は、本関数をオーバーライドして実装する
      * 必要がある。
      * 
-     * @param ec_id 参加している ExecutionContext の ID
+     * @param exec_handle 参加している ExecutionContext の ID
      *
      * @return ReturnCode_t 型のリターンコード
      * 
@@ -477,7 +478,7 @@ namespace RTC
      * dummy-implemented to return RTC::RTC_OK unconditionally, you need to
      * implement this function by overriding it.
      * 
-     * @param ec_id ID of the participant ExecutionContext
+     * @param exec_handle ID of the participant ExecutionContext
      *
      * @return The return code of ReturnCode_t type
      * 
@@ -485,7 +486,7 @@ namespace RTC
      */
     // The reset action that is invoked resetting
     // This is same but different the former rtc_init_entry()
-    virtual ReturnCode_t onReset(RTC::UniqueId ec_id);
+    virtual ReturnCode_t onReset(RTC::UniqueId exec_handle);
     
     /*!
      * @if jp
@@ -500,7 +501,7 @@ namespace RTC
      * 本関数は Periodic Sampled Data Processing における Two-Pass Executionの
      * ２回目の実行パスとして定期的に呼び出される。
      *
-     * @param ec_id 参加している ExecutionContext の ID
+     * @param exec_handle 参加している ExecutionContext の ID
      * 
      * @return ReturnCode_t 型のリターンコード
      * 
@@ -516,7 +517,7 @@ namespace RTC
      * This function is invoked periodically as the second execution pass of
      * Two-Pass Execution in Periodic Sampled Data Processing.
      *
-     * @param ec_id ID of the participant ExecutionContext
+     * @param exec_handle ID of the participant ExecutionContext
      * 
      * @return The return code of ReturnCode_t type
      * 
@@ -524,7 +525,7 @@ namespace RTC
      */
     // The state update action that is invoked after onExecute() action
     // no corresponding operation exists in OpenRTm-aist-0.2.0
-    virtual ReturnCode_t onStateUpdate(RTC::UniqueId ec_id);
+    virtual ReturnCode_t onStateUpdate(RTC::UniqueId exec_handle);
     
     /*!
      * @if jp
@@ -539,7 +540,7 @@ namespace RTC
      * 本関数は Periodic Sampled Data Processing において ExecutionContext の
      * 実行が更新された際に呼び出される。
      *
-     * @param ec_id 参加している ExecutionContext の ID
+     * @param exec_handle 参加している ExecutionContext の ID
      * 
      * @return ReturnCode_t 型のリターンコード
      * 
@@ -555,7 +556,7 @@ namespace RTC
      * This function is invoked when the execution of ExecutionContext 
      * was updated in Periodic Sampled Data Processing.
      *
-     * @param ec_id ID of the participant ExecutionContext
+     * @param exec_handle ID of the participant ExecutionContext
      * 
      * @return The return code of ReturnCode_t type
      * 
@@ -563,7 +564,7 @@ namespace RTC
      */
     // The action that is invoked when execution context's rate is changed
     // no corresponding operation exists in OpenRTm-aist-0.2.0
-    virtual ReturnCode_t onRateChanged(RTC::UniqueId ec_id);
+    virtual ReturnCode_t onRateChanged(RTC::UniqueId exec_handle);
     
   public:
     //============================================================
@@ -617,7 +618,7 @@ namespace RTC
      *
      * 制約
      * - RTC が ExecutionContext に所属している間は終了されない。この場合は、
-     *   まず最初に ExecutionContextOperations::remove_component によって参加を
+     *   まず最初に ExecutionContextOperations::remove によって参加を
      *   解除しなければならない。これ以外の場合は、このオペレーション呼び出しは
      *   いかなる場合も ReturnCode_t::PRECONDITION_NOT_ME で失敗する。
      * - RTC が Created 状態である場合、終了処理は行われない。
@@ -639,7 +640,7 @@ namespace RTC
      * Constraints
      * - An RTC may not be finalized while it is participating in any execution
      *   context. It must first be removed with 
-     *   ExecutionContextOperations::remove_component. Otherwise, this operation
+     *   ExecutionContextOperations::remove. Otherwise, this operation
      *   shall fail with ReturnCode_t::PRECONDITION_NOT_MET. 
      * - An RTC may not be finalized while it is in the Created state. Any 
      *   attempt to invoke this operation while in that state shall fail with 
@@ -732,27 +733,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual CORBA::Boolean is_alive()
-      throw (CORBA::SystemException);
-    
-    /*!
-     * @if jp
-     * @brief [CORBA interface] ExecutionContextListを取得する
-     *
-     * この RTC が所有する ExecutionContext のリストを取得する。
-     *
-     * @return ExecutionContext リスト
-     *
-     * @else
-     * @brief [CORBA interface] Get ExecutionContextList.
-     *
-     * This operation returns a list of all execution contexts owned by this RTC.
-     *
-     * @return ExecutionContext List
-     *
-     * @endif
-     */
-    virtual ExecutionContextList* get_contexts()
+    virtual CORBA::Boolean is_alive(ExecutionContext_ptr exec_context)
       throw (CORBA::SystemException);
     
     /*!
@@ -763,7 +744,7 @@ namespace RTC
      * ハンドルから ExecutionContext へのマッピングは、特定の RTC インスタンスに
      * 固有である。ハンドルはこの RTC を attach_context した際に取得できる。
      *
-     * @param ec_id 取得対象 ExecutionContext ハンドル
+     * @param exec_handle 取得対象 ExecutionContext ハンドル
      *
      * @return ExecutionContext
      *
@@ -776,13 +757,36 @@ namespace RTC
      * instance. The given handle must have been obtained by a previous call to 
      * attach_context on this RTC.
      *
-     * @param ec_id ExecutionContext handle
+     * @param exec_handle ExecutionContext handle
      *
      * @return ExecutionContext
      *
      * @endif
      */
-    virtual ExecutionContext_ptr get_context(UniqueId ec_id)
+    virtual ExecutionContext_ptr get_context(UniqueId exec_handle)
+      throw (CORBA::SystemException);
+
+    /*!
+     * @if jp
+     * @brief [CORBA interface] ExecutionContextListを取得する
+     *
+     * この RTC が所有する ExecutionContext のリストを取得する。
+     *
+     * @return ExecutionContext リスト
+     *
+     * @else
+     * @brief [CORBA interface] Get ExecutionContextList.
+     *
+     * This operation returns a list of all execution contexts owned by this
+     * RTC.
+     *
+     * @return ExecutionContext List
+     *
+     * @endif
+     */
+    virtual ExecutionContextList* get_owned_contexts()
+      throw (CORBA::SystemException);
+    virtual ExecutionContextList* get_participating_contexts()
       throw (CORBA::SystemException);
     
     /*
@@ -820,7 +824,7 @@ namespace RTC
      *
      * @endif
      */
-    UniqueId attach_executioncontext(ExecutionContext_ptr exec_context)
+    UniqueId attach_context(ExecutionContext_ptr exec_context)
       throw (CORBA::SystemException);
     
     /*!
@@ -828,7 +832,7 @@ namespace RTC
      * @brief [CORBA interface] ExecutionContextをdetachする
      *
      * 指定した ExecutionContext からこの RTC の所属を解除する。
-     * このオペレーションは、ExecutionContextOperations::remove_component が呼ば
+     * このオペレーションは、ExecutionContextOperations::remove が呼ば
      * れた際に呼び出される。返されたハンドルは他のクライアントで使用することを
      * 想定していない。
      * 
@@ -838,7 +842,7 @@ namespace RTC
      * - 指定された ExecutionContext にたしいて対して RTC がActive 状態である場
      *   合には、 ReturnCode_t::PRECONDITION_NOT_MET が返される。
      *
-     * @param ec_id 解除対象 ExecutionContextハンドル
+     * @param exec_handle 解除対象 ExecutionContextハンドル
      *
      * @return ReturnCode_t 型のリターンコード
      *
@@ -848,7 +852,7 @@ namespace RTC
      * Inform this RTC that it is no longer participating in the given execution 
      * context.
      * This operation is intended to be invoked by 
-     * ExecutionContextOperations::remove_component. It is not intended for use 
+     * ExecutionContextOperations::remove. It is not intended for use 
      * by other clients.
      * Constraints
      * - This operation may not be invoked if this RTC is not already 
@@ -858,13 +862,13 @@ namespace RTC
      *   execution context. Otherwise, it shall fail with 
      *   ReturnCode_t::PRECONDITION_NOT_MET.
      *
-     * @param ec_id Detaching ExecutionContext Handle
+     * @param exec_handle Detaching ExecutionContext Handle
      *
      * @return The return code of ReturnCode_t type
      *
      * @endif
      */
-    ReturnCode_t detach_executioncontext(UniqueId ec_id)
+    ReturnCode_t detach_context(UniqueId exec_handle)
       throw (CORBA::SystemException);
     
     //============================================================
@@ -907,11 +911,11 @@ namespace RTC
      *
      * This operation returns the reference of ports held by RTC.
      *
-     * @return PortList
+     * @return PortServiceList
      *
      * @endif
      */
-    virtual PortList* get_ports()
+    virtual PortServiceList* get_ports()
       throw (CORBA::SystemException);
     
     /*!
@@ -1005,7 +1009,7 @@ namespace RTC
      * このオペレーション呼び出しの結果として onStartup() コールバック関数が
      * 呼び出される。
      *
-     * @param ec_id 状態遷移した ExecutionContext の ID
+     * @param exec_handle 状態遷移した ExecutionContext の ID
      *
      * @return ReturnCode_t 型のリターンコード
      *
@@ -1017,13 +1021,13 @@ namespace RTC
      * transitioned from Stopped to Running.
      * As a result of this operation, onStartup() callback function is called.
      *
-     * @param ec_id ID of ExecutionContext that transited to the state
+     * @param exec_handle ID of ExecutionContext that transited to the state
      *
      * @return The return code of ReturnCode_t type
      *
      * @endif
      */
-    virtual ReturnCode_t on_startup(UniqueId ec_id)
+    virtual ReturnCode_t on_startup(UniqueId exec_handle)
       throw (CORBA::SystemException);
     
     /*!
@@ -1036,7 +1040,7 @@ namespace RTC
      * このオペレーション呼び出しの結果として onShutdown() コールバック関数が
      * 呼び出される。
      *
-     * @param ec_id 状態遷移した ExecutionContext の ID
+     * @param exec_handle 状態遷移した ExecutionContext の ID
      *
      * @return ReturnCode_t 型のリターンコード
      *
@@ -1048,13 +1052,13 @@ namespace RTC
      * transitioned from Running to Stopped.
      * As a result of this operation, onShutdown() callback function is called.
      *
-     * @param ec_id ID of ExecutionContext that transited to the state
+     * @param exec_handle ID of ExecutionContext that transited to the state
      *
      * @return The return code of ReturnCode_t type
      *
      * @endif
      */
-    virtual ReturnCode_t on_shutdown(UniqueId ec_id)
+    virtual ReturnCode_t on_shutdown(UniqueId exec_handle)
       throw (CORBA::SystemException);
     
     /*!
@@ -1066,7 +1070,7 @@ namespace RTC
      * このオペレーション呼び出しの結果として onActivated() コールバック関数が
      * 呼び出される。
      *
-     * @param ec_id 活性化 ExecutionContext の ID
+     * @param exec_handle 活性化 ExecutionContext の ID
      *
      * @return ReturnCode_t 型のリターンコード
      *
@@ -1077,13 +1081,13 @@ namespace RTC
      * The RTC has been activated in the given execution context.
      * As a result of this operation, onActivated() callback function is called.
      *
-     * @param ec_id ID of activation ExecutionContext
+     * @param exec_handle ID of activation ExecutionContext
      *
      * @return The return code of ReturnCode_t type
      *
      * @endif
      */
-    virtual ReturnCode_t on_activated(UniqueId ec_id)
+    virtual ReturnCode_t on_activated(UniqueId exec_handle)
       throw (CORBA::SystemException);
     
     /*!
@@ -1095,7 +1099,7 @@ namespace RTC
      * このオペレーション呼び出しの結果として onDeactivated() コールバック関数が
      * 呼び出される。
      *
-     * @param ec_id 非活性化 ExecutionContext の ID
+     * @param exec_handle 非活性化 ExecutionContext の ID
      *
      * @return ReturnCode_t 型のリターンコード
      *
@@ -1107,13 +1111,13 @@ namespace RTC
      * As a result of this operation, onDeactivated() callback function
      * is called.
      *
-     * @param ec_id ID of deactivation ExecutionContext
+     * @param exec_handle ID of deactivation ExecutionContext
      *
      * @return The return code of ReturnCode_t type
      *
      * @endif
      */
-    virtual ReturnCode_t on_deactivated(UniqueId ec_id)
+    virtual ReturnCode_t on_deactivated(UniqueId exec_handle)
       throw (CORBA::SystemException);
     
     /*!
@@ -1127,7 +1131,7 @@ namespace RTC
      * このオペレーション呼び出しの結果として onAborting() コールバック関数が
      * 呼び出される。
      *
-     * @param ec_id 状態遷移した ExecutionContext の ID
+     * @param exec_handle 状態遷移した ExecutionContext の ID
      *
      * @return ReturnCode_t 型のリターンコード
      *
@@ -1142,13 +1146,13 @@ namespace RTC
      * contrast to that of on_error.
      * As a result of this operation, onAborting() callback function is invoked.
      *
-     * @param ec_id ID of ExecutionContext that transited to the state
+     * @param exec_handle ID of ExecutionContext that transited to the state
      *
      * @return The return code of ReturnCode_t type
      *
      * @endif
      */
-    virtual ReturnCode_t on_aborting(UniqueId ec_id)
+    virtual ReturnCode_t on_aborting(UniqueId exec_handle)
       throw (CORBA::SystemException);
     
     /*!
@@ -1167,7 +1171,7 @@ namespace RTC
      * このオペレーション呼び出しの結果として onError() コールバック関数が呼び出
      * される。
      *
-     * @param ec_id 対象 ExecutionContext の ID
+     * @param exec_handle 対象 ExecutionContext の ID
      *
      * @return ReturnCode_t 型のリターンコード
      *
@@ -1188,13 +1192,13 @@ namespace RTC
      *   invoked.
      * As a result of this operation, onError() callback function is invoked.
      *
-     * @param ec_id ID of target ExecutionContext
+     * @param exec_handle ID of target ExecutionContext
      *
      * @return The return code of ReturnCode_t type
      *
      * @endif
      */
-    virtual ReturnCode_t on_error(UniqueId ec_id)
+    virtual ReturnCode_t on_error(UniqueId exec_handle)
       throw (CORBA::SystemException);
     
     /*!
@@ -1209,7 +1213,7 @@ namespace RTC
      * このオペレーション呼び出しの結果として onReset() コールバック関数が呼び
      * 出される。
      *
-     * @param ec_id リセット対象 ExecutionContext の ID
+     * @param exec_handle リセット対象 ExecutionContext の ID
      *
      * @return ReturnCode_t 型のリターンコード
      *
@@ -1224,13 +1228,13 @@ namespace RTC
      * other result shall indicate that the RTC should remain in the Error state.
      * As a result of this operation, onReset() callback function is invoked.
      *
-     * @param ec_id ID of target ExecutionContext for the reset
+     * @param exec_handle ID of target ExecutionContext for the reset
      *
      * @return The return code of ReturnCode_t type
      *
      * @endif
      */
-    virtual ReturnCode_t on_reset(UniqueId ec_id)
+    virtual ReturnCode_t on_reset(UniqueId exec_handle)
       throw (CORBA::SystemException);
     
     //============================================================
@@ -1252,7 +1256,7 @@ namespace RTC
      * - 指定された ExecutionContext の ExecutionKind は、 PERIODIC でなければな
      *   らない
      *
-     * @param ec_id 定常処理対象 ExecutionContext の ID
+     * @param exec_handle 定常処理対象 ExecutionContext の ID
      *
      * @return ReturnCode_t 型のリターンコード
      *
@@ -1271,13 +1275,13 @@ namespace RTC
      * Constraints
      * - The execution context of the given context shall be PERIODIC.
      *
-     * @param ec_id ID of target ExecutionContext for Primary Periodic Operation
+     * @param exec_handle ID of target ExecutionContext for Primary Periodic Operation
      *
      * @return The return code of ReturnCode_t type
      *
      * @endif
      */
-    virtual ReturnCode_t on_execute(UniqueId ec_id)
+    virtual ReturnCode_t on_execute(UniqueId exec_handle)
       throw (CORBA::SystemException);
     
     /*!
@@ -1296,7 +1300,7 @@ namespace RTC
      * - 指定された ExecutionContext の ExecutionKind は、 PERIODIC でなければな
      *   らない
      *
-     * @param ec_id 定常処理対象 ExecutionContext の ID
+     * @param exec_handle 定常処理対象 ExecutionContext の ID
      *
      * @return ReturnCode_t 型のリターンコード
      *
@@ -1316,14 +1320,14 @@ namespace RTC
      * Constraints
      * - The execution context of the given context shall be PERIODIC.
      *
-     * @param ec_id ID of target ExecutionContext for 
+     * @param exec_handle ID of target ExecutionContext for 
      *              Secondary Periodic Operation
      *
      * @return The return code of ReturnCode_t type
      *
      * @endif
      */
-    virtual ReturnCode_t on_state_update(UniqueId ec_id)
+    virtual ReturnCode_t on_state_update(UniqueId exec_handle)
       throw (CORBA::SystemException);
     
     /*!
@@ -1340,7 +1344,7 @@ namespace RTC
      * - 指定された ExecutionContext の ExecutionKind は、 PERIODIC でなければな
      *   らない
      *
-     * @param ec_id 定常処理対象 ExecutionContext の ID
+     * @param exec_handle 定常処理対象 ExecutionContext の ID
      *
      * @return ReturnCode_t 型のリターンコード
      *
@@ -1356,13 +1360,13 @@ namespace RTC
      * Constraints
      * - The execution context of the given context shall be PERIODIC.
      *
-     * @param ec_id ID of target ExecutionContext for Operation
+     * @param exec_handle ID of target ExecutionContext for Operation
      *
      * @return The return code of ReturnCode_t type
      *
      * @endif
      */
-    virtual ReturnCode_t on_rate_changed(UniqueId ec_id)
+    virtual ReturnCode_t on_rate_changed(UniqueId exec_handle)
       throw (CORBA::SystemException);
     
     //============================================================
@@ -2384,7 +2388,7 @@ namespace RTC
       {
       CorbaInPort<DataType>* port;
       p = new CorbaInPort<DataType>(buffer);
-      Port_var inport;
+      PortService_var inport;
       inport = new PortInPort();
       inport->setInPortRef(p->_this());
       }

@@ -552,7 +552,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual ReturnCode_t add(LightweightRTObject_ptr comp)
+    virtual ReturnCode_t add_component(LightweightRTObject_ptr comp)
       throw (CORBA::SystemException);
     
     /*!
@@ -585,7 +585,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual ReturnCode_t remove(LightweightRTObject_ptr comp)
+    virtual ReturnCode_t remove_component(LightweightRTObject_ptr comp)
       throw (CORBA::SystemException);
     
     /*!
@@ -666,7 +666,7 @@ namespace RTC
        *
        * @endif
        */
-      DFPBase(UniqueId id)
+      DFPBase(RTC::ExecutionContextHandle_t id)
 	: ec_id(id), m_sm(3)
       {
 	m_sm.setListener(this);
@@ -1045,7 +1045,7 @@ namespace RTC
        *
        * @endif
        */
-      DFP(Object obj, UniqueId id)
+      DFP(Object obj, ExecutionContextHandle_t id)
 	: DFPBase(id), m_obj(obj), m_active(true)
       {
       }
@@ -1343,7 +1343,7 @@ namespace RTC
      */
     struct Comp
     {
-      Comp(LightweightRTObject_ptr ref, DataFlowComponent_ptr dfp,
+      Comp(LightweightRTObject_ptr ref, OpenRTM::DataFlowComponent_ptr dfp,
 	   UniqueId id)
 	: _ref(ref), _sm(dfp, id)
       {
@@ -1360,7 +1360,7 @@ namespace RTC
 	return *this;
       }
       LightweightRTObject_var _ref;
-      DFP<DataFlowComponent_var> _sm;
+      DFP<OpenRTM::DataFlowComponent_var> _sm;
     };
     
     /*!

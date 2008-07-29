@@ -321,7 +321,10 @@ namespace RTC
     it = std::find_if(m_comps.begin(), m_comps.end(),
 		      find_comp(RTC::LightweightRTObject::_duplicate(comp)));
     if (it == m_comps.end())
-      return RTC::UNKNOWN_STATE;
+      {
+	// ### return RTC::UNKNOWN_STATE ### 
+	return RTC::CREATED_STATE;
+      }
     
     return it->_sm.m_sm.getState();
   }
@@ -346,21 +349,23 @@ namespace RTC
    * @brief Add an RT-Component
    * @endif
    */
-  ReturnCode_t PeriodicExecutionContext::add(LightweightRTObject_ptr comp)
+  ReturnCode_t
+  PeriodicExecutionContext::add_component(LightweightRTObject_ptr comp)
     throw (CORBA::SystemException)
   {
     if (CORBA::is_nil(comp)) return RTC::BAD_PARAMETER;
     
     try
       {
-	DataFlowComponent_ptr dfp;
-	dfp = DataFlowComponent::_narrow(comp);
+	OpenRTM::DataFlowComponent_ptr dfp;
+	dfp = OpenRTM::DataFlowComponent::_narrow(comp);
 	
 	UniqueId id;
-	id = dfp->attach_executioncontext(m_ref);
+	id = dfp->attach_context(m_ref);
 	
 	m_comps.push_back(Comp(LightweightRTObject::_duplicate(comp),
-			       DataFlowComponent::_duplicate(dfp), id));
+			       OpenRTM::DataFlowComponent::_duplicate(dfp),
+			       id));
 	return RTC::RTC_OK;
       }
     catch (CORBA::Exception& e)
@@ -379,7 +384,7 @@ namespace RTC
    * @endif
    */	
   ReturnCode_t
-  PeriodicExecutionContext::remove(LightweightRTObject_ptr comp)
+  PeriodicExecutionContext::remove_component(LightweightRTObject_ptr comp)
     throw (CORBA::SystemException)
   {
     CompItr it;
@@ -389,7 +394,7 @@ namespace RTC
       return RTC::BAD_PARAMETER;
     
     Comp& c(*it);
-    c._ref->detach_executioncontext(c._sm.ec_id);
+    c._ref->detach_context(c._sm.ec_id);
     c._ref = RTC::LightweightRTObject::_nil();
     m_comps.erase(it);
     

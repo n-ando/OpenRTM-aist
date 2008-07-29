@@ -44,7 +44,7 @@ namespace RTC
    * @endif
    */
   class ExecutionContextBase
-    : public virtual POA_RTC::ExtTrigExecutionContextService,
+    : public virtual POA_OpenRTM::ExtTrigExecutionContextService,
       public virtual PortableServer::RefCountServantBase
   {
   public:

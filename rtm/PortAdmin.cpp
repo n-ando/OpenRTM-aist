@@ -32,7 +32,7 @@ namespace RTC
   struct PortAdmin::find_port_name
   {
     find_port_name(const char* name) : m_name(name) {};
-    bool operator()(const Port_ptr& p)
+    bool operator()(const PortService_ptr& p)
     {
       std::string name(p->get_port_profile()->name);
       return m_name == name;
@@ -71,15 +71,15 @@ namespace RTC
   
   /*!
    * @if jp
-   * @brief PortList の取得
+   * @brief PortServiceList の取得
    * @else
-   * @brief Get PortList
+   * @brief Get PortServiceList
    * @endif
    */
-  PortList* PortAdmin::getPortList() const
+  PortServiceList* PortAdmin::getPortServiceList() const
   {
-    PortList_var ports;
-    ports = new PortList(m_portRefs);
+    PortServiceList_var ports;
+    ports = new PortServiceList(m_portRefs);
     return ports._retn();
   }
   
@@ -105,15 +105,15 @@ namespace RTC
    * @brief Get the reference to the Port's object
    * @endif
    */
-  Port_ptr PortAdmin::getPortRef(const char* port_name) const
+  PortService_ptr PortAdmin::getPortRef(const char* port_name) const
   {
     CORBA::Long index;
     index = CORBA_SeqUtil::find(m_portRefs, find_port_name(port_name));
     if (index >= 0) 
       {//throw NotFound(port_name);
-	return RTC::Port::_duplicate(m_portRefs[index]);
+	return RTC::PortService::_duplicate(m_portRefs[index]);
       }
-    return RTC::Port::_nil();
+    return RTC::PortService::_nil();
   }
   
   /*!
@@ -141,10 +141,10 @@ namespace RTC
     //m_pPOA->activate_object(&port);
     
     //Setting Port's object reference to its profile
-    //Port_ptr port_ref = Port::_narrow(m_pPOA->servant_to_reference(&port));
+    //PortService_ptr port_ref = Port::_narrow(m_pPOA->servant_to_reference(&port));
     //port.setPortRef(port.getRef());
     
-    // Store Port's ref to PortList
+    // Store Port's ref to PortServiceList
     CORBA_SeqUtil::push_back(m_portRefs, port.getPortRef());
     
     // Store Port servant
@@ -169,7 +169,7 @@ namespace RTC
 	CORBA_SeqUtil::erase_if(m_portRefs, find_port_name(tmp));
 	
 	m_pPOA->deactivate_object(*m_pPOA->servant_to_id(&port));
-	port.setPortRef(RTC::Port::_nil());
+	port.setPortRef(RTC::PortService::_nil());
 	
 	m_portServants.unregisterObject(tmp);
       }

@@ -36,7 +36,7 @@ namespace RTC
   PortBase::PortBase(const char* name)
   {
     m_profile.name = CORBA::string_dup(name);
-    m_objref = RTC::Port::_duplicate(this->_this());
+    m_objref = RTC::PortService::_duplicate(this->_this());
     m_profile.port_ref = m_objref;
     m_profile.owner = RTC::RTObject::_nil();
   }
@@ -140,7 +140,7 @@ namespace RTC
       }
     try
       {
-	RTC::Port_ptr p;
+	RTC::PortService_ptr p;
 	p = connector_profile.ports[(CORBA::ULong)0];
 	return p->notify_connect(connector_profile);
       }
@@ -212,7 +212,7 @@ namespace RTC
     CORBA::Long index;
     index = findConnProfileIndex(connector_id);
     ConnectorProfile prof(m_profile.connector_profiles[index]);
-    RTC::Port_ptr p;
+    RTC::PortService_ptr p;
     p = prof.ports[(CORBA::ULong)0];
     return p->notify_disconnect(connector_id);
   }
@@ -228,7 +228,7 @@ namespace RTC
     throw (CORBA::SystemException)
   {
     // The Port of which the reference is stored in the beginning of
-    // ConnectorProfile's PortList is master Port.
+    // ConnectorProfile's PortServiceList is master Port.
     // The master Port has the responsibility of disconnecting all Ports.
     // The slave Ports have only responsibility of deleting its own
     // ConnectorProfile.
@@ -309,7 +309,7 @@ namespace RTC
    * @brief Set the object reference of the Port
    * @endif
    */
-  void PortBase::setPortRef(Port_ptr port_ref)
+  void PortBase::setPortRef(PortService_ptr port_ref)
   {
     Guard gurad(m_profile_mutex);
     m_profile.port_ref = port_ref;
@@ -322,7 +322,7 @@ namespace RTC
    * @brief Get the object reference of the Port
    * @endif
    */
-  Port_ptr PortBase::getPortRef()
+  PortService_ptr PortBase::getPortRef()
   {
     Guard gurad(m_profile_mutex);
     return m_profile.port_ref;
@@ -361,7 +361,7 @@ namespace RTC
     
     if (++index < static_cast<CORBA::Long>(connector_profile.ports.length()))
       {
-	RTC::Port_ptr p;
+	RTC::PortService_ptr p;
 	p = connector_profile.ports[index];
 	return p->notify_connect(connector_profile);
       }
@@ -384,7 +384,7 @@ namespace RTC
     
     if (++index < static_cast<CORBA::Long>(connector_profile.ports.length()))
       {
-	RTC::Port_ptr p;
+	RTC::PortService_ptr p;
 	p = connector_profile.ports[index];
 	return p->notify_disconnect(connector_profile.connector_id);
       }

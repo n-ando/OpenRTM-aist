@@ -79,10 +79,10 @@ int main (int argc, char** argv)
   CorbaNaming naming(orb, "localhost:9876");
 
   CorbaConsumer<RTObject> conin, conout;
-  CorbaConsumer<ExtTrigExecutionContextService> ec0, ec1;
+  CorbaConsumer<OpenRTM::ExtTrigExecutionContextService> ec0, ec1;
 
-  PortList_var pin;
-  PortList_var pout;
+  PortServiceList_var pin;
+  PortServiceList_var pout;
 
   // find ConsoleIn0 component
   conin.setObject(naming.resolve("ConsoleIn0.rtc"));
@@ -92,8 +92,8 @@ int main (int argc, char** argv)
   pin[(CORBA::ULong)0]->disconnect_all();
   assert(pin->length() > 0);
   // activate ConsoleIn0
-  ExecutionContextServiceList_var eclisti;
-  eclisti = conin->get_execution_context_services();
+  ExecutionContextList_var eclisti;
+  eclisti = conin->get_owned_contexts();
   eclisti[(CORBA::ULong)0]->activate_component(RTObject::_duplicate(conin._ptr()));
   ec0.setObject(eclisti[(CORBA::ULong)0]);
 
@@ -104,8 +104,8 @@ int main (int argc, char** argv)
   pout[(CORBA::ULong)0]->disconnect_all();
   assert(pout->length() > 0);
   // activate ConsoleOut0
-  ExecutionContextServiceList_var eclisto;
-  eclisto = conout->get_execution_context_services();
+  ExecutionContextList_var eclisto;
+  eclisto = conout->get_owned_contexts();
   eclisto[(CORBA::ULong)0]->activate_component(RTObject::_duplicate(conout._ptr()));
   ec1.setObject(eclisto[(CORBA::ULong)0]);
 
