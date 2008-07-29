@@ -1,6 +1,6 @@
 #!/bin/sh
 #
-# @file pkg_install_debian.sh
+# @file pkg_install_ubuntu.sh
 # @brief OpenRTM-aist dependent packages install script for Debian-sarge
 # @author Noriaki Ando <n-ando@aist.go.jp>
 #         Shinji Kurihara
@@ -13,7 +13,7 @@
 #---------------------------------------
 omni="libomniorb4 libomniorb4-dev omniidl4 omniorb4-nameserver"
 ace="libace libace-dev"
-openrtm="openrtm-aist openrtm-aist-doc openrtm-aist-dev openrtm-aist-examplel"
+openrtm="openrtm-aist openrtm-aist-doc openrtm-aist-dev openrtm-aist-example python-yaml"
 
 devel="gcc g++ make"
 packages="$devel $omni $ace $openrtm"
@@ -23,7 +23,7 @@ u_packages="$omni $ace $openrtm "
 # リポジトリサーバ
 #---------------------------------------
 create_srclist () {
-    cnames="sarge etch"
+    cnames="sarge edgy feisty gutsy hardy"
     for c in $cnames; do
 	if test -f "/etc/apt/sources.list"; then
 	    res=`grep $c /etc/apt/sources.list`
@@ -41,7 +41,7 @@ create_srclist () {
 	echo "This OS is not supported."
 	exit
     fi
-    openrtm_repo="deb http://www.openrtm.org/pub/Linux/debian/ $code_name main"
+    openrtm_repo="deb http://www.openrtm.org/pub/Linux/ubuntu/ $code_name main"
 }
 
 #---------------------------------------
