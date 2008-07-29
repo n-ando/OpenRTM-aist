@@ -31,6 +31,7 @@
 #include <rtm/RTCUtil.h>
 #include <fstream>
 #include <ace/Signal.h>
+#include <ace/OS.h>
 #include <rtm/TimeValue.h>
 #include <rtm/Timer.h>
 
@@ -1184,6 +1185,26 @@ namespace RTC
 	  {
 	    ++count;
 	    if (!(count % 2)) str.push_back((*it));
+	  }
+	else if (c == '$')
+	  {
+	    count = 0;
+	    ++it;
+	    if (*it == '{' || *it == '(')
+	      {
+		++it;
+		std::string env;
+		for ( ; it != it_end && (*it) != '}' && (*it) != ')'; ++it)
+		  {
+		    env += *it;
+		  }
+		char* envval = ACE_OS::getenv(env.c_str());
+		if (envval != NULL) str += envval;
+	      }
+	    else
+	      {
+		str.push_back(c);
+	      }
 	  }
 	else
 	  {
