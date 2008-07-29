@@ -124,7 +124,7 @@ namespace RTC
    * @endif
    */  
   class PortBase
-    : public virtual POA_RTC::Port,
+    : public virtual POA_RTC::PortService,
       public virtual PortableServer::RefCountServantBase
   {
   public:
@@ -645,7 +645,7 @@ namespace RTC
      *
      * @endif
      */
-    void setPortRef(Port_ptr port_ref);
+    void setPortRef(PortService_ptr port_ref);
     
     /*!
      * @if jp
@@ -668,7 +668,7 @@ namespace RTC
      *
      * @endif
      */
-    Port_ptr getPortRef();
+    PortService_ptr getPortRef();
     
     /*!
      * @if jp
@@ -1277,7 +1277,7 @@ namespace RTC
      * @brief Object Reference of the Port
      * @endif
      */
-    RTC::Port_var m_objref;
+    RTC::PortService_var m_objref;
     mutable ACE_Recursive_Thread_Mutex m_profile_mutex;
     typedef ACE_Guard<ACE_Recursive_Thread_Mutex> Guard;
     
@@ -1327,12 +1327,12 @@ namespace RTC
      */
     struct find_port_ref
     {
-      find_port_ref(Port_ptr port_ref) : m_port(port_ref) {};
-      bool operator()(Port_ptr port_ref)
+      find_port_ref(PortService_ptr port_ref) : m_port(port_ref) {};
+      bool operator()(PortService_ptr port_ref)
       {
 	return m_port->_is_equivalent(port_ref);
       }
-      Port_ptr m_port;
+      PortService_ptr m_port;
     };
     
     /*!
@@ -1344,14 +1344,14 @@ namespace RTC
      */
     struct connect_func
     {
-      Port_var port_ref;
+      PortService_var port_ref;
       ConnectorProfile connector_profile;
       ReturnCode_t return_code;
       
       connect_func() {};
-      connect_func(Port_ptr p, ConnectorProfile& prof)
+      connect_func(PortService_ptr p, ConnectorProfile& prof)
 	: port_ref(p), connector_profile(prof), return_code(RTC::RTC_OK) {};
-      void operator()(Port_ptr p)
+      void operator()(PortService_ptr p)
       {
 	if (!port_ref->_is_equivalent(p))
 	  {
@@ -1374,14 +1374,14 @@ namespace RTC
      */
     struct disconnect_func
     {
-      Port_var port_ref;
+      PortService_var port_ref;
       ConnectorProfile connector_profile;
       ReturnCode_t return_code;
       
       disconnect_func() : return_code(RTC::RTC_OK) {};
-      disconnect_func(Port_ptr p, ConnectorProfile& prof)
+      disconnect_func(PortService_ptr p, ConnectorProfile& prof)
 	: port_ref(p), connector_profile(prof), return_code(RTC::RTC_OK) {};
-      void operator()(Port_ptr p)
+      void operator()(PortService_ptr p)
       {
 	if (!port_ref->_is_equivalent(p))
 	  {

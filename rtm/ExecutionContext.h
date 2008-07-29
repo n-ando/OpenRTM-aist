@@ -630,7 +630,7 @@ namespace RTC
      * </p>
      * @endif
      */
-    virtual ReturnCode_t add(LightweightRTObject_ptr comp);
+    virtual ReturnCode_t add_component(LightweightRTObject_ptr comp);
 
     /*!
      * @if jp
@@ -668,7 +668,7 @@ namespace RTC
      * </ul>
      * @endif
      */			     
-    virtual ReturnCode_t remove(LightweightRTObject_ptr comp);
+    virtual ReturnCode_t remove_component(LightweightRTObject_ptr comp);
 
 
     //============================================================

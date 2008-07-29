@@ -176,7 +176,8 @@ namespace RTC
    * @brief Add a component
    * @endif
    */
-  ReturnCode_t ExecutionContextBase::add(LightweightRTObject_ptr comp)
+  ReturnCode_t
+  ExecutionContextBase::add_component(LightweightRTObject_ptr comp)
   {
     if (!CORBA::is_nil(comp))
       {
@@ -196,7 +197,7 @@ namespace RTC
    * @endif
    */	
   ReturnCode_t
-  ExecutionContextBase::remove(LightweightRTObject_ptr comp)
+  ExecutionContextBase::remove_component(LightweightRTObject_ptr comp)
   {
     CORBA::ULong index;
     index = CORBA_SeqUtil::find(m_profile.participants,

@@ -37,12 +37,12 @@ void MyModuleInit(RTC::Manager* manager)
   NVUtil::dump(prof->properties);
   std::cout << "=================================================" << std::endl;
 
-  PortList* portlist;
+  PortServiceList* portlist;
   portlist = comp->get_ports();
 
   for (CORBA::ULong i(0), n(portlist->length()); i < n; ++i)
     {
-      Port_ptr port;
+      PortService_ptr port;
       port = (*portlist)[i];
       std::cout << "================================================="
 		<< std::endl;

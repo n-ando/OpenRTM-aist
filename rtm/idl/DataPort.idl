@@ -25,7 +25,7 @@ module RTC
 {
   interface InPortAny
   {
-    oneway void put(in any data);
+    void put(in any data);
   };
 
 

@@ -99,16 +99,16 @@ namespace RTC
      *
      * @else
      *
-     * @brief Get PortList
+     * @brief Get PortServiceList
      *
-     * This operation returns the pointer to the PortList of Ports registered
+     * This operation returns the pointer to the PortServiceList of Ports registered
      * by registerPort().
      *
-     * @return The pointer points PortList
+     * @return The pointer points PortServiceList
      *
      * @endif
      */
-    PortList* getPortList() const;
+    PortServiceList* getPortServiceList() const;
     
     /*!
      * @if jp
@@ -143,7 +143,7 @@ namespace RTC
      *
      * @param port_name 参照を返すPortの名前
      *
-     * @return Port_ptr Portのオブジェクト参照
+     * @return PortService_ptr Portのオブジェクト参照
      *
      * @else
      *
@@ -156,11 +156,11 @@ namespace RTC
      *
      * @param port_name The name of Port to be returned the reference.
      *
-     * @return Port_ptr Port object reference.
+     * @return PortService_ptr Port object reference.
      *
      * @endif
      */
-    Port_ptr getPortRef(const char* port_name) const;
+    PortService_ptr getPortRef(const char* port_name) const;
     
     /*!
      * @if jp
@@ -294,8 +294,8 @@ namespace RTC
     // POA へのポインタ
     PortableServer::POA_var m_pPOA;
     
-    // Portのオブジェクトリファレンスのリスト. PortList
-    PortList m_portRefs;
+    // Portのオブジェクトリファレンスのリスト. PortServiceList
+    PortServiceList m_portRefs;
     
     
     template <class T>

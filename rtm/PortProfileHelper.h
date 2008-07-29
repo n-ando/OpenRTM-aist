@@ -268,7 +268,7 @@ namespace RTC
      *
      * @endif
      */
-    void setPortRef(Port_ptr port);
+    void setPortRef(PortService_ptr port);
 
 
     /*!
@@ -291,7 +291,7 @@ namespace RTC
      *
      * @endif
      */
-    Port_ptr getPortRef() const;
+    PortService_ptr getPortRef() const;
 
 
     /*!
@@ -536,7 +536,7 @@ namespace RTC
     IfProfiles m_ifProfiles;
 
     // PortProfile.port_ref
-    Port_ptr m_portRef;
+    PortService_ptr m_portRef;
 
     // PortProfile.connector_profile
     typedef SequenceEx<ConnectorProfileList,

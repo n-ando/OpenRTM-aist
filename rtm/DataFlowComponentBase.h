@@ -38,8 +38,10 @@
  *
  * @endif
  */
+
 namespace RTC
 {
+
   class Manager;
   /*!
    * @if jp
@@ -120,7 +122,7 @@ namespace RTC
     void init();
     
   private:
-    DataFlowComponent_var m_ref;
+    OpenRTM::DataFlowComponent_var m_ref;
     PeriodicExecutionContext* m_pec;
     ExecutionContextService_var m_ecref;
   };

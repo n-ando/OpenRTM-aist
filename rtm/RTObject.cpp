@@ -352,28 +352,11 @@ namespace RTC
    * @brief [CORBA interface] Confirm whether RTC is the alive state
    * @endif
    */
-  CORBA::Boolean RTObject_impl::is_alive()
+  CORBA::Boolean RTObject_impl::is_alive(ExecutionContext_ptr exec_context)
     throw (CORBA::SystemException)
   {
+    // ### not implemented ###
     return m_alive;
-  }
-  
-  /*!
-   * @if jp
-   * @brief [CORBA interface] ExecutionContextListを取得する
-   * @else
-   * @brief [CORBA interface] Get ExecutionContextList
-   * @endif
-   */
-  ExecutionContextList* RTObject_impl::get_contexts()
-    throw (CORBA::SystemException)
-  {
-    ExecutionContextList_var execlist;
-    execlist = new ExecutionContextList();
-    
-    CORBA_SeqUtil::for_each(m_execContexts, ec_copy(execlist));
-    
-    return execlist._retn();
   }
   
   /*!
@@ -392,7 +375,37 @@ namespace RTC
       }
     return ExecutionContext::_duplicate(m_execContexts[ec_id]);
   }
-  
+    
+  /*!
+   * @if jp
+   * @brief [CORBA interface] ExecutionContextListを取得する
+   * @else
+   * @brief [CORBA interface] Get ExecutionContextList
+   * @endif
+   */
+  ExecutionContextList* RTObject_impl::get_owned_contexts()
+    throw (CORBA::SystemException)
+  {
+    ExecutionContextList_var execlist;
+    execlist = new ExecutionContextList();
+    
+    CORBA_SeqUtil::for_each(m_execContexts, ec_copy(execlist));
+    
+    return execlist._retn();
+  }
+
+  ExecutionContextList* RTObject_impl::get_participating_contexts()
+    throw (CORBA::SystemException)
+  {
+    ExecutionContextList_var execlist;
+    execlist = new ExecutionContextList();
+    
+    // ### not implemented ###
+    //    CORBA_SeqUtil::for_each(m_execContexts, ec_copy(execlist));
+    
+    return execlist._retn();
+  }
+
   /*!
    * @if jp
    * @brief [CORBA interface] ExecutionContextをattachする
@@ -400,8 +413,7 @@ namespace RTC
    * @brief [CORBA interface] Attach ExecutionContext
    * @endif
    */
-  UniqueId RTObject_impl::
-  attach_executioncontext(ExecutionContext_ptr exec_context)
+  UniqueId RTObject_impl::attach_context(ExecutionContext_ptr exec_context)
     throw (CORBA::SystemException)
   {
     ExecutionContextService_var ecs;
@@ -424,7 +436,7 @@ namespace RTC
    * @brief [CORBA interface] Detach ExecutionContext
    * @endif
    */
-  ReturnCode_t RTObject_impl::detach_executioncontext(UniqueId ec_id)
+  ReturnCode_t RTObject_impl::detach_context(UniqueId ec_id)
     throw (CORBA::SystemException)
   {
     if (((CORBA::Long)ec_id) > ((CORBA::Long)m_execContexts.length() - 1))
@@ -478,12 +490,12 @@ namespace RTC
    * @brief [RTCObject CORBA interface] Get Ports
    * @endif
    */
-  PortList* RTObject_impl::get_ports()
+  PortServiceList* RTObject_impl::get_ports()
     throw (CORBA::SystemException)
   {
     try
       {
-	return m_portAdmin.getPortList();
+	return m_portAdmin.getPortServiceList();
       }
     catch (...)
       {
