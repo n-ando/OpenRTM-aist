@@ -432,8 +432,13 @@ namespace SDOPackage
     
     Guard guard(m_config_mutex);
     
-    if (!m_configsets.haveConfig(id))
-      throw InvalidParameter("No such ConfigurationSet");
+    try {
+      if (!m_configsets.haveConfig(id))
+	throw InvalidParameter("No such ConfigurationSet");
+    }
+    catch(...) {
+      // throw InvalidParameter("No such ConfigurationSet");
+    }
     
     const RTC::Properties& configset(m_configsets.getConfigurationSet(id));
     
