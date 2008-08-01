@@ -2,12 +2,26 @@
 #------------------------------------------------------------
 # @file   Makefile.am
 # @brief  Makefile.am for CorbaPort unit test
-# @date   $Date: 2007-01-21 06:51:28 $
+# @date   $Date: 2007/01/21 06:51:28 $
 # @author Noriaki Ando <n-ando@aist.go.jp>
 #
 # $Id$
 #
 #------------------------------------------------------------
+
+#
+# $Log: Makefile.am,v $
+# Revision 1.3  2007/01/21 06:51:28  n-ando
+# The include search path option order in AM_CPPFLAGS was changed.
+#
+# Revision 1.2  2007/01/12 14:43:07  n-ando
+# Some fixes for distribution control.
+#
+# Revision 1.1  2007/01/04 00:50:44  n-ando
+# *** empty log message ***
+#
+#
+
 
 AUTOMAKE_OPTIONS = 1.9
 
@@ -58,7 +72,7 @@ all: do-test
 
 # do tests
 do-test:
-	./CorbaPortTests
+	./CorbaPortTests --xml corbaporttests.xml --xsl defaults.xsl
 
 # clean-up
 clean-local:

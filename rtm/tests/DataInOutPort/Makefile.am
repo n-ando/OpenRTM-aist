@@ -2,12 +2,26 @@
 #------------------------------------------------------------
 # @file   Makefile.am
 # @brief  Makefile.am for DataInOutPort unit test
-# @date   $Date: 2007-01-21 06:51:41 $
+# @date   $Date: 2007/01/21 06:51:41 $
 # @author Noriaki Ando <n-ando@aist.go.jp>
 #
 # $Id$
 #
 #------------------------------------------------------------
+
+#
+# $Log: Makefile.am,v $
+# Revision 1.3  2007/01/21 06:51:41  n-ando
+# The include search path option order in AM_CPPFLAGS was changed.
+#
+# Revision 1.2  2007/01/12 14:43:13  n-ando
+# Some fixes for distribution control.
+#
+# Revision 1.1  2007/01/06 18:05:13  n-ando
+# *** empty log message ***
+#
+#
+
 
 AUTOMAKE_OPTIONS = 1.9
 
@@ -65,7 +79,7 @@ all: do-test
 
 # do tests
 do-test:
-	./DataInOutPortTests
+	./DataInOutPortTests --xml datainoutporttests.xml --xsl default.xsl
 
 # clean-up
 clean-local:

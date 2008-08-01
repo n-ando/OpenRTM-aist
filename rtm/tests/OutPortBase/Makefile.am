@@ -2,12 +2,26 @@
 #------------------------------------------------------------
 # @file   Makefile.am
 # @brief  Makefile.am for OutPortBase unit test
-# @date   $Date: 2007-01-12 14:44:30 $
+# @date   $Date: 2007/01/12 14:44:30 $
 # @author Noriaki Ando <n-ando@aist.go.jp>
 #
 # $Id$
 #
 #------------------------------------------------------------
+
+#
+# $Log: Makefile.am,v $
+# Revision 1.3  2007/01/12 14:44:30  n-ando
+# Some fixes for distribution control.
+#
+# Revision 1.2  2006/12/18 06:54:13  n-ando
+# clean-local target OutPortBaseTests was added.
+#
+# Revision 1.1  2006/12/02 18:55:38  n-ando
+# *** empty log message ***
+#
+#
+
 
 AUTOMAKE_OPTIONS = 1.9
 
@@ -17,8 +31,8 @@ LIBS = @LIBS@
 
 AM_CPPFLAGS =         \
 	 -I.              \
-	-I$(includedir)   \
-	-I$(top_builddir)
+	-I$(top_builddir) \
+	-I$(includedir)
 
 AM_LDFLAGS =          \
 	 -L.              \
@@ -43,7 +57,8 @@ all: do-test
 
 # do tests
 do-test:
-	./OutPortBaseTests
+	./OutPortBaseTests --xml outportbasetests.xml \
+	--xsl default.xsl
 
 # clean-up
 clean-local:

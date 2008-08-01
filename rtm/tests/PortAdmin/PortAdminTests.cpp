@@ -2,7 +2,7 @@
 /*!
  * @file   PortAdminTests.cpp
  * @brief  PortAdmin test class
- * @date   $Date: 2007-04-13 15:05:03 $
+ * @date   $Date: 2008/04/21 04:01:01 $
  * @author Shinji Kurihara
  *         Noriaki Ando <n-ando@aist.go.jp>
  *
@@ -15,6 +15,33 @@
  *     All rights reserved.
  *
  * $Id$
+ *
+ */
+
+/*
+ * $Log: PortAdminTests.cpp,v $
+ * Revision 1.2  2008/04/21 04:01:01  arafune
+ * Modified some tests.
+ *
+ * Revision 1.1  2007/12/20 07:50:16  arafune
+ * *** empty log message ***
+ *
+ * Revision 1.3  2007/04/13 15:05:03  n-ando
+ * Now RTC::OK becomes RTC::RTC_OK in RTC.idl.
+ *
+ * Revision 1.2  2007/01/12 14:44:36  n-ando
+ * Some fixes for distribution control.
+ *
+ * Revision 1.1  2006/11/27 08:34:18  n-ando
+ * TestSuites are devided into each directory.
+ *
+ * Revision 1.2  2006/11/14 02:21:09  kurihara
+ *
+ * test_deletePortByName() and test_finalizePorts() were added.
+ *
+ * Revision 1.1  2006/11/13 04:18:45  kurihara
+ *
+ * test program for PortAdmin class.
  *
  */
 
@@ -38,30 +65,26 @@
  */
 namespace PortAdmin
 {
-  using namespace RTC;
-  using namespace std;
-  
   int g_argc;
-  vector<string> g_argv;
-  
-  class PortBase
-	: public RTC::PortBase
+  std::vector<std::string> g_argv;
+	
+  class PortMock
+    : public RTC::PortBase
   {
   protected:
-	virtual RTC::ReturnCode_t publishInterfaces(RTC::ConnectorProfile&)
-	{
-	  return RTC::RTC_OK;
-	}
-	virtual RTC::ReturnCode_t subscribeInterfaces(const RTC::ConnectorProfile&)
-	{
-	  return RTC::RTC_OK;
-	}
-	virtual void unsubscribeInterfaces(const RTC::ConnectorProfile&)
-	{
-	}
+    virtual RTC::ReturnCode_t publishInterfaces(RTC::ConnectorProfile&)
+    {
+      return RTC::RTC_OK;
+    }
+    virtual RTC::ReturnCode_t subscribeInterfaces(const RTC::ConnectorProfile&)
+    {
+      return RTC::RTC_OK;
+    }
+    virtual void unsubscribeInterfaces(const RTC::ConnectorProfile&)
+    {
+    }
   };
-
-
+	
   class PortAdminTests
     : public CppUnit::TestFixture
   {
@@ -74,274 +97,251 @@ namespace PortAdmin
     CPPUNIT_TEST(test_deletePortByName);
     CPPUNIT_TEST(test_finalizePorts);
     CPPUNIT_TEST_SUITE_END();
-    
+	
   private:
-	RTC::PortAdmin* m_ppadm;
-	PortBase* m_ppb;
-	PortBase* m_ppb2;
     CORBA::ORB_ptr          m_orb;
     PortableServer::POA_ptr m_poa;
-    
+	
   public:
-    
-    /*!
-     * @brief Constructor
-     */
     PortAdminTests()
     {
       char* argv[g_argc];
       for (int i = 0; i < g_argc; i++) {
 	argv[i] = (char *)g_argv[i].c_str();
       }
-      
+			
       m_orb = CORBA::ORB_init(g_argc, argv);
       CORBA::Object_var  obj = m_orb->resolve_initial_references("RootPOA");
       m_poa = PortableServer::POA::_narrow(obj);
       PortableServer::POAManager_var pman = m_poa->the_POAManager();
       pman->activate();
     }
-    
-    /*!
-     * @brief Destructor
-     */
+		
     ~PortAdminTests()
     {
     }
-    
-    /*!
-     * @brief 初期化/後始末
-     * ここでは以下の処理を行っている。
-     *  (1) PortAdminクラス、PortBaseクラスのインスタンス生成
-     *  (2) PortBaseクラスにPortProfileを登録
-     *  (3) PortAdminクラスにPortBaseオブジェクトを登録
-     */
+		
     virtual void setUp()
     {
-      // PortAdminクラスのインスタンス生成
-      m_ppadm = new RTC::PortAdmin(m_orb, m_poa);
-      
-      // PortBaseクラスのインスタンス生成
-      m_ppb = new PortBase();
-      
-      // PortBaseクラスのインスタンス生成
-      m_ppb2 = new PortBase();
-      
-      // PortProfileの登録
-      m_ppb->setName("port0");
-      m_ppb2->setName("port1");
-      
-      // PortBaseオブジェクトの登録
-      m_ppadm->registerPort(*m_ppb);
-      m_ppadm->registerPort(*m_ppb2);
+      sleep(1);
     }
-    
-    /*!
-     * @brief Test finalization
-     */
+		
     virtual void tearDown()
     { 
-      //    delete m_ppb;
-      // PortAdminインスタンスの破棄
-      delete m_ppadm;
     }
-    
+		
     /*!
-     * @brief getPortList()のテスト
-     *    getPortList()でPortListのポインタを取得し、そのポインタを用いPortインタフェースの
-     *    オペレーション呼び出しを行っている。
-     *    PortListは事前にsetUp()メソッドで登録している。
+     * @brief getPortList()メソッドのテスト
+     * 
+     * - 取得されたPortが、あらかじめ登録したものと一致するか？
      */
-    void test_getPortList() {
-      PortList* getPList;
-      // getPortList()のテスト
-      getPList = m_ppadm->getPortList();
-      
-      PortProfile *getProf0, *getProf1;
-      // 取得したPortインタフェースのオペレーション呼び出し。
-      getProf0 = (*getPList)[0]->get_port_profile();
-      
-      string setstr, getstr;
-      getstr = getProf0->name;
-      setstr = "port0";
-      CPPUNIT_ASSERT(getstr == setstr);
-      
-      getProf1 = (*getPList)[1]->get_port_profile();
-      getstr = getProf1->name;
-      setstr = "port1";
-      CPPUNIT_ASSERT(getstr == setstr);
+    void test_getPortList()
+    {
+      RTC::PortAdmin portAdmin(m_orb, m_poa);
+			
+      // Portを登録しておく
+      PortMock* port0 = new PortMock();
+      port0->setName("port0");
+      portAdmin.registerPort(*port0);
+
+      PortMock* port1 = new PortMock();
+      port1->setName("port1");
+      portAdmin.registerPort(*port1);
+			
+      // getPortList()で登録されている全Portを取得する
+      RTC::PortList* portList = portAdmin.getPortList();
+			
+      // 取得されたPortが、あらかじめ登録したものと一致するか？
+      RTC::PortProfile* portProf0 = (*portList)[0]->get_port_profile();
+      CPPUNIT_ASSERT(portProf0 != NULL);
+      CPPUNIT_ASSERT_EQUAL(std::string("port0"), std::string(portProf0->name));
+			
+      RTC::PortProfile* portProf1 = (*portList)[1]->get_port_profile();
+      CPPUNIT_ASSERT(portProf1 != NULL);
+      CPPUNIT_ASSERT_EQUAL(std::string("port1"), std::string(portProf1->name));
+      portAdmin.deletePort(*port1);
+      portAdmin.deletePort(*port0);
+      delete port1;
+      delete port0;
     }
-    
-    
+		
     /*!
-     * @brief getPortRef()のテスト
-     *   (1) get_PortRef()でPortのオブジェクトリファレンス取得
-     *   (2) 取得したオブジェクトリファレンスを用いPortオペレーションの呼び出しを行う。
-     *   ※ PortのオブジェクトリファレンスはsetUp()にて登録している。
+     * @brief getPortRef()メソッドのテスト
+     * 
+     * - 登録されているPortの参照を正しく取得できるか？
+     * - 登録されていないPortの名称を指定した場合、意図どおりnil参照が得られるか？
      */
-    void test_getPortRef() {
-      Port_var getP;
-      string getstr, setstr;
-      PortProfile *getProf;
-      
-      //========= Failure case ================
-      // 登録していないPortProfile.nameでgetPortRef()を呼ぶとnillが返される。OK.
-      //    getP = m_ppadm->getPortRef("");
-      //    if (CORBA::is_nil(getP))
-      //      cout << "getP is nil." << endl;
-      //    getP = m_ppadm->getPortRef("test");
-      //    if (CORBA::is_nil(getP))
-      //      cout << "getP is nil." << endl;
-      //========================================================
-      
-      // getPortRef()のテスト
-      getP = m_ppadm->getPortRef("port1");
-      
-      if (CORBA::is_nil(getP))
-	cout << "getP is nil." << endl;
-      
-      getProf = getP->get_port_profile();
-      getstr = getProf->name;
-      setstr = "port1";
-      CPPUNIT_ASSERT(getstr == setstr);
-      
-      
-      // test  getPortRef()
-      getP = m_ppadm->getPortRef("port0");
-      
-      if (CORBA::is_nil(getP))
-	cout << "getP is nil." << endl;
-      
-      getProf = getP->get_port_profile();
-      getstr = getProf->name;
-      setstr = "port0";
-      CPPUNIT_ASSERT(getstr == setstr);
+    void test_getPortRef()
+    {
+      RTC::PortAdmin portAdmin(m_orb, m_poa);
+			
+      // Portを登録しておく
+      PortMock* port0 = new PortMock();
+      port0->setName("port0");
+      portAdmin.registerPort(*port0);
+
+      PortMock* port1 = new PortMock();
+      port1->setName("port1");
+      portAdmin.registerPort(*port1);
+			
+      // 登録されているPortの参照を正しく取得できるか？
+      RTC::Port_var portRef0 = portAdmin.getPortRef("port0");
+      CPPUNIT_ASSERT(! CORBA::is_nil(portRef0));
+      RTC::PortProfile* portProf0 = portRef0->get_port_profile();
+      CPPUNIT_ASSERT_EQUAL(std::string("port0"), std::string(portProf0->name));
+
+      RTC::Port_var portRef1 = portAdmin.getPortRef("port1");
+      CPPUNIT_ASSERT(! CORBA::is_nil(portRef1));
+      RTC::PortProfile* portProf1 = portRef1->get_port_profile();
+      CPPUNIT_ASSERT_EQUAL(std::string("port1"), std::string(portProf1->name));
+			
+      // 登録されていないPortの名称を指定した場合、意図どおりnil参照が得られるか？
+      CPPUNIT_ASSERT(CORBA::is_nil(portAdmin.getPortRef("inexist")));
     }
-    
-    
+		
     /*!
-     * @brief getPort()のテスト
-     *   (1) getPort()にてPortBaseへのポインタを取得
-     *   (2) 取得したポインタを用い、PortBaseクラスのメソッド呼び出しを行う。
-     *   ※ PortBaseクラスのポインタはsetUp()で登録済みである。
+     * @brief getPort()メソッドのテスト
+     * 
+     * - ポート名称を指定して、登録されているPortオブジェクトを正しく取得できるか？
      */
-    void test_getPort() {
-	  RTC::PortBase* pb;
-      PortProfile* getProf;
-      string setstr, getstr;
-      
-      // Failure case: unknown exception例外発生。
-      //    pb = m_ppadm->getPort("");
-      //    pb = m_ppadm->getPort("test"); // 登録していないname
-      
-      // test getPort()
-      pb = m_ppadm->getPort("port1");
-      getProf = pb->get_port_profile();
-      setstr = "port1";
-      getstr = getProf->name;
-      CPPUNIT_ASSERT(setstr == getstr);
-      
-      // test getPort()
-      pb = m_ppadm->getPort("port0");
-      getProf = pb->get_port_profile();
-      setstr = "port0";
-      getstr = getProf->name;
-      CPPUNIT_ASSERT(setstr == getstr);
+    void test_getPort()
+    {
+      RTC::PortAdmin portAdmin(m_orb, m_poa);
+			
+      // Portを登録しておく
+      PortMock* port0 = new PortMock();
+      port0->setName("port0");
+      portAdmin.registerPort(*port0);
+
+      PortMock* port1 = new PortMock();
+      port1->setName("port1");
+      portAdmin.registerPort(*port1);
+
+      // ポート名称を指定して、登録されているPortオブジェクトを正しく取得できるか？
+      RTC::PortBase* portRet0 = portAdmin.getPort("port0");
+      RTC::PortProfile* portProf0 = portRet0->get_port_profile();
+      CPPUNIT_ASSERT_EQUAL(std::string("port0"), std::string(portProf0->name));
+
+      RTC::PortBase* portRet1 = portAdmin.getPort("port1");
+      RTC::PortProfile* portProf1 = portRet1->get_port_profile();
+      CPPUNIT_ASSERT_EQUAL(std::string("port1"), std::string(portProf1->name));
     }
-    
-    
+		
     /*!
-     * @brief tests for registerPort()
+     * @brief registerPort()メソッドのテスト
      */
-    void test_registerPort() {
-      // setUp()にてテスト。
+    void test_registerPort()
+    {
+      // 他テストにてテストされている
     }
-    
-    
+		
     /*!
      * @brief deletePort()のテスト
-     *   ※ Port_ptrはsetUp()にてregisterPort()を用いて登録済みである。(2つのポートを登録。)
-     *   (1) deletePort()呼び出し。
-     *   (2) getPortList()にてPortListを取得。
-     *   (3) (1)の処理が正しく行われているかを確認。
+     * 
+     * - Portを正しく削除できるか？
+     * - 削除したPortのProfileのリファレンスがnilになっているか？
      */
-    void test_deletePort() {
-      
-      // (1) deletePort()呼び出し。
-      m_ppadm->deletePort(*m_ppb2);
-      
-      // (2) getPortList()にてPortListを取得。
-      PortList* getPList;
-      getPList = m_ppadm->getPortList();
-      
-      cout << getPList->length() << endl;
-      
-      
-      // (3) (1)の処理が正しく行われているかを確認。
-      PortProfile *getProf0, *getProf1;
-      // 取得したPortBaseオブジェクト−オペレーション呼び出し。
-      getProf0 = (*getPList)[0]->get_port_profile();
-      string setstr, getstr;
-      getstr = getProf0->name;
-      setstr = "port0";
-      CPPUNIT_ASSERT(getstr == setstr);
-      
-      
-      // Failure case :
-      //    setUp()で2つのポートを登録しており、(1)で一つ削除したので、ここでの処理は
-      //    エラーとなるはずである。
-      getProf1 = (*getPList)[1]->get_port_profile();
-      getstr = getProf1->name;
-      setstr = "port1";
-      CPPUNIT_ASSERT(getstr == setstr);
+    void test_deletePort()
+    {
+      RTC::PortAdmin portAdmin(m_orb, m_poa);
+			
+      // Portを登録しておく
+      PortMock* port0 = new PortMock();
+      port0->setName("port0");
+      portAdmin.registerPort(*port0);
+
+      PortMock* port1 = new PortMock();
+      port1->setName("port1");
+      portAdmin.registerPort(*port1);
+
+      // 登録されているうち、１つのPortを削除する
+      portAdmin.deletePort(*port0);
+			
+      // getPortList()にて、登録されている全Portを取得する
+      RTC::PortList* portList = portAdmin.getPortList();
+			
+      // 削除したPortが、取得したPortList内に含まれていないことを確認する
+      CPPUNIT_ASSERT_EQUAL(CORBA::ULong(1), portList->length());
+      RTC::PortProfile* portProf1 = (*portList)[0]->get_port_profile();
+      CPPUNIT_ASSERT_EQUAL(std::string("port1"), std::string(portProf1->name));
+			
+      // 削除したPortのProfileのリファレンスがnilになっているか？
+      const RTC::PortProfile& portProf0 = port0->getProfile();
+      CPPUNIT_ASSERT(CORBA::is_nil(portProf0.port_ref));
     }
-    
-    
+		
     /*!
-     * @brief tests for deletePortByName()
-     *   ※ Port_ptrはsetUp()にてregisterPort()を用いて登録済みである。(2つのポートを登録。)
-     *    (1) getPortList()にてPortListを取得し登録されているPortの数を確認。
-     *    (2）deletePortByName()にて"port1"の名前を持つPortの削除を行う。
-     *    (3) getPortList()にてPortListを取得し登録されているPortの数を確認。
+     * @brief deletePortByName()メソッドのテスト
+     * 
+     * - 指定した名称を持つPortを正しく削除できるか？
+     * - 削除したPortのProfileのリファレンスがnilになっているか？
      */
-    void test_deletePortByName() {
-      PortList* getPList;
-      
-      // (1) getPortList()にてPortListを取得し登録されているPortの数を確認。
-      getPList = m_ppadm->getPortList();
-      cout << getPList->length() << endl;
-      
-      m_ppadm->deletePortByName("port1");
-      
-      // (3) getPortList()にてPortListを取得し登録されているPortの数を確認。
-      getPList = m_ppadm->getPortList();
-      cout << getPList->length() << endl;
+    void test_deletePortByName()
+    {
+      RTC::PortAdmin portAdmin(m_orb, m_poa);
+			
+      // Portを登録しておく
+      PortMock* port0 = new PortMock();
+      port0->setName("port0");
+      portAdmin.registerPort(*port0);
+
+      PortMock* port1 = new PortMock();
+      port1->setName("port1");
+      portAdmin.registerPort(*port1);
+
+      // 登録されているうち、１つのPortを削除する
+      portAdmin.deletePortByName("port0");
+			
+      // getPortList()にて、登録されている全Portを取得する
+      RTC::PortList* portList = portAdmin.getPortList();
+			
+      // 削除したPortが、取得したPortList内に含まれていないことを確認する
+      CPPUNIT_ASSERT_EQUAL(CORBA::ULong(1), portList->length());
+      RTC::PortProfile* portProf1 = (*portList)[0]->get_port_profile();
+      CPPUNIT_ASSERT_EQUAL(std::string("port1"), std::string(portProf1->name));
+			
+      // 削除したPortのProfileのリファレンスがnilになっているか？
+      const RTC::PortProfile& portProf0 = port0->getProfile();
+      CPPUNIT_ASSERT(CORBA::is_nil(portProf0.port_ref));
     }
-    
-    
+		
     /*!
-     * @brief tests for finalizePorts()
-     *   (1) getPortList()にてPortListを取得し登録されているPortの数を確認。
-     *   (2) finalizePorts()の呼び出し。
-     *   (3) getPortList()にてPortListを取得し登録されているPortの数を確認。
+     * @brief finalizePorts()メソッドのテスト
+     * 
+     * - 登録されているすべてのPortを、PortAdminから削除できるか？
+     * - すべてのPortのProfileのリファレンスがnilになっているか？
      */
-    void test_finalizePorts() {
-      PortList* getPList;
-      
-      // (1) getPortList()にてPortListを取得し登録されているPortの数を確認。
-      getPList = m_ppadm->getPortList();
-      cout << getPList->length() << endl;
-      
-      
-      // (2) finalizePorts()の呼び出し。
-      m_ppadm->finalizePorts();
-      
-      
-      // (3) getPortList()にてPortListを取得し登録されているPortの数を確認。
-      getPList = m_ppadm->getPortList();
-      cout << getPList->length() << endl;
+    void test_finalizePorts()
+    {
+      RTC::PortAdmin portAdmin(m_orb, m_poa);
+			
+      // Portを登録しておく
+      PortMock* port0 = new PortMock();
+      port0->setName("port0");
+      portAdmin.registerPort(*port0);
+
+      PortMock* port1 = new PortMock();
+      port1->setName("port1");
+      portAdmin.registerPort(*port1);
+
+      // finalizePorts()を呼出す
+      portAdmin.finalizePorts();
+			
+      // getPortList()にて、登録されている全Portを取得する
+      RTC::PortList* portList = portAdmin.getPortList();
+			
+      // 取得したPortListが空であることを確認する
+      CPPUNIT_ASSERT_EQUAL(CORBA::ULong(0), portList->length());
+			
+      // すべてのPortのProfileのリファレンスがnilになっているか？
+      const RTC::PortProfile& portProf0 = port0->getProfile();
+      CPPUNIT_ASSERT(CORBA::is_nil(portProf0.port_ref));
+      const RTC::PortProfile& portProf1 = port1->getProfile();
+      CPPUNIT_ASSERT(CORBA::is_nil(portProf1.port_ref));
+      delete port1;
+      delete port0;
     }
-    
-    
+		
   };
 }; // namespace PortAdmin
 
@@ -353,13 +353,83 @@ CPPUNIT_TEST_SUITE_REGISTRATION(PortAdmin::PortAdminTests);
 #ifdef LOCAL_MAIN
 int main(int argc, char* argv[])
 {
+
+  FORMAT format = TEXT_OUT;
+  int target = 0;
+  std::string xsl;
+  std::string ns;
+  std::string fname;
+  std::ofstream ofs;
+
+  int i(1);
+  while (i < argc)
+    {
+      std::string arg(argv[i]);
+      std::string next_arg;
+      if (i + 1 < argc) next_arg = argv[i + 1];
+      else              next_arg = "";
+
+      if (arg == "--text") { format = TEXT_OUT; break; }
+      if (arg == "--xml")
+	{
+	  if (next_arg == "")
+	    {
+	      fname = argv[0];
+	      fname += ".xml";
+	    }
+	  else
+	    {
+	      fname = next_arg;
+	    }
+	  format = XML_OUT;
+	  ofs.open(fname.c_str());
+	}
+      if ( arg == "--compiler"  ) { format = COMPILER_OUT; break; }
+      if ( arg == "--cerr"      ) { target = 1; break; }
+      if ( arg == "--xsl"       )
+	{
+	  if (next_arg == "") xsl = "default.xsl"; 
+	  else                xsl = next_arg;
+	}
+      if ( arg == "--namespace" )
+	{
+	  if (next_arg == "")
+	    {
+	      std::cerr << "no namespace specified" << std::endl;
+	      exit(1); 
+	    }
+	  else
+	    {
+	      xsl = next_arg;
+	    }
+	}
+      ++i;
+    }
   CppUnit::TextUi::TestRunner runner;
-  runner.addTest(CppUnit::TestFactoryRegistry::getRegistry().makeTest());
-  CppUnit::Outputter* outputter = 
-    new CppUnit::TextOutputter(&runner.result(), std::cout);
+  if ( ns.empty() )
+    runner.addTest(CppUnit::TestFactoryRegistry::getRegistry().makeTest());
+  else
+    runner.addTest(CppUnit::TestFactoryRegistry::getRegistry(ns).makeTest());
+  CppUnit::Outputter* outputter = 0;
+  std::ostream* stream = target ? &std::cerr : &std::cout;
+  switch ( format )
+    {
+    case TEXT_OUT :
+      outputter = new CppUnit::TextOutputter(&runner.result(),*stream);
+      break;
+    case XML_OUT :
+      std::cout << "XML_OUT" << std::endl;
+      outputter = new CppUnit::XmlOutputter(&runner.result(),
+					    ofs, "shift_jis");
+      static_cast<CppUnit::XmlOutputter*>(outputter)->setStyleSheet(xsl);
+      break;
+    case COMPILER_OUT :
+      outputter = new CppUnit::CompilerOutputter(&runner.result(),*stream);
+      break;
+    }
   runner.setOutputter(outputter);
-  bool retcode = runner.run();
-  return !retcode;
+  runner.run();
+  return 0; // runner.run() ? 0 : 1;
 }
 #endif // MAIN
 #endif // PortAdmin_cpp

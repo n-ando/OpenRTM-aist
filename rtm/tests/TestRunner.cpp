@@ -2,7 +2,7 @@
 /*!
  * @file Run.cpp
  * @brief CppUnit test runner
- * @date $Date: 2006-11-27 07:31:50 $
+ * @date $Date: 2007/12/20 07:50:17 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
  * Copyright (C) 2006
@@ -14,6 +14,16 @@
  *     All rights reserved.
  *
  * $Id$
+ *
+ */
+
+/*
+ * $Log: TestRunner.cpp,v $
+ * Revision 1.1  2007/12/20 07:50:17  arafune
+ * *** empty log message ***
+ *
+ * Revision 1.1  2006/11/27 07:31:50  n-ando
+ * CppUnit tests runner.
  *
  */
 
@@ -86,7 +96,6 @@ int main(int argc, char* argv[])
 	}
       ++i;
     }
-
   CppUnit::TextUi::TestRunner runner;
   if ( ns.empty() )
     runner.addTest(CppUnit::TestFactoryRegistry::getRegistry().makeTest());
@@ -100,6 +109,7 @@ int main(int argc, char* argv[])
       outputter = new CppUnit::TextOutputter(&runner.result(),*stream);
       break;
     case XML_OUT :
+      std::cout << "XML_OUT" << std::endl;
       outputter = new CppUnit::XmlOutputter(&runner.result(),
 					    ofs, "shift_jis");
       static_cast<CppUnit::XmlOutputter*>(outputter)->setStyleSheet(xsl);

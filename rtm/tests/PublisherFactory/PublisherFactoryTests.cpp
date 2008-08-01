@@ -2,10 +2,29 @@
 /*!
  * @file   PublisherFactoryTests.cpp
  * @brief  PublisherFactory test class
- * @date   $Date: 2007-01-12 14:53:53 $
+ * @date   $Date: 2008/01/30 10:25:59 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
  * $Id$
+ *
+ */
+
+/*
+ * $Log: PublisherFactoryTests.cpp,v $
+ * Revision 1.2  2008/01/30 10:25:59  arafune
+ * The test_create was added.
+ * Some tests were deleted.
+ *
+ * Revision 1.1  2007/12/20 07:50:17  arafune
+ * *** empty log message ***
+ *
+ * Revision 1.2  2007/01/12 14:53:53  n-ando
+ * The create() function's signature was changed.
+ * InPortConsumer base class is now abstruct class. It needs concrete class.
+ *
+ * Revision 1.1  2006/12/18 06:50:59  n-ando
+ * The first commitment.
+ *
  *
  */
 
@@ -30,159 +49,111 @@
  */
 namespace PublisherFactory
 {
-  class TestConsumer
-    : public RTC::InPortConsumer
+  class NullConsumer : public RTC::InPortConsumer
   {
   public:
-    TestConsumer() : RTC::InPortConsumer() {};
-    virtual ~TestConsumer(){};
+	
+    NullConsumer() : RTC::InPortConsumer()
+    {
+    }
+		
+    virtual ~NullConsumer()
+    {
+    }
+		
     virtual void push()
     {
-      timeval tm;
-      gettimeofday(&tm, NULL);
-      interval = (tm.tv_sec - m_tm.tv_sec) * 1000000
-	+ (tm.tv_usec - m_tm.tv_usec);
-      //      std::cout << "period: " << interval << std::endl;
-      m_tm = tm;
     }
-
-	virtual RTC::InPortConsumer* clone() const
-	{
-	  return new TestConsumer();
-	}
-	virtual bool subscribeInterface(const SDOPackage::NVList&)
-	{
-	  return true;
-	}
-	virtual void unsubscribeInterface(const SDOPackage::NVList&)
-	{
-	  return;
-	}
-	
-    timeval m_tm;
-    long int interval;
+		
+    virtual RTC::InPortConsumer* clone() const
+    {
+      return new NullConsumer();
+    }
+		
+    virtual bool subscribeInterface(const SDOPackage::NVList&)
+    {
+      return true;
+    }
+		
+    virtual void unsubscribeInterface(const SDOPackage::NVList&)
+    {
+    }
   };
-  
+
   class PublisherFactoryTests
-   : public CppUnit::TestFixture
+    : public CppUnit::TestFixture
   {
     CPPUNIT_TEST_SUITE(PublisherFactoryTests);
-    CPPUNIT_TEST(test_new);
-    CPPUNIT_TEST(test_periodic);
-    CPPUNIT_TEST(test_flush);
+    CPPUNIT_TEST(test_create);
     CPPUNIT_TEST_SUITE_END();
-  
-  private:
-    RTC::PublisherFactory m_factory;
-    RTC::PublisherBase* m_publisher;
-    TestConsumer m_consumer;
-    RTC::Properties m_properties;
+		
   public:
-  
+	
     /*!
      * @brief Constructor
      */
     PublisherFactoryTests()
     {
     }
-    
+		
     /*!
      * @brief Destructor
      */
     ~PublisherFactoryTests()
     {
     }
-  
+		
     /*!
      * @brief Test initialization
      */
     virtual void setUp()
     {
     }
-    
+		
     /*!
      * @brief Test finalization
      */
     virtual void tearDown()
-    { 
-    }
-#define CNTNUM 100
-#define DEBUG
-
-    /* test case */
-    void test_new()
     {
-      m_publisher = m_factory.create(&m_consumer, m_properties);
-
-      usleep(100000);
-      double total(0);
-      for (int i = 0; i < CNTNUM; ++i)
-	{
-	  timeval tm;
-	  gettimeofday(&tm, NULL);
-	  //	  std::cout << "update(): " << tm.tv_usec << std::endl;
-	  m_publisher->update();
-	  long int interval;
-	  interval = (m_consumer.m_tm.tv_sec - tm.tv_sec) * 1000000
-	    + (m_consumer.m_tm.tv_usec - tm.tv_usec);
-	  total += interval;
-#ifdef DEBUG
-	  std::cout << "update() - push(): " << interval << " [us]" << std::endl;
-#endif
-
-	  usleep(1000);
-	}
-      double mean;
-      mean = total/CNTNUM;
-      CPPUNIT_ASSERT(mean < 20);
-
-      delete m_publisher;
     }
-
-    void test_periodic()
+		
+    /*!
+     * @brief create()メソッドのテスト
+     * 
+     * - "dataport.subscription_type"を指定しない場合、デフォルトとしてPublisherNewが生成されるか？
+     * - "dataport.subscription_type"に"New"を指定した場合、PublisherNewが生成されるか？
+     * - "dataport.subscription_type"に"Periodic"を指定した場合、PublisherPeriodicが生成されるか？
+     * - "dataport.subscription_type"に"Flush"を指定した場合、PublisherFlushが生成されるか？
+     */
+    void test_create()
     {
-      m_properties.setProperty("dataport.push_interval", "100.0");
-      m_publisher = m_factory.create(&m_consumer, m_properties);
-
-      sleep(2);
-      for (int i = 0; i < 100; ++i)
-	{
-	  m_publisher->update();
-	  //std::cout << m_consumer.interval << std::endl;
-	  CPPUNIT_ASSERT(m_consumer.interval < 13000 &&
-			 m_consumer.interval >  7000);
-	  usleep(10000);
-	}
-
-      delete m_publisher;
-    }
-
-    void test_flush()
-    {
-      m_publisher = m_factory.create(&m_consumer, m_properties);
-      
-      long int interval0, interval1;
-      for (int i = 0; i < 100; ++i)
-	{
-	  timeval tm0, tm1;
-	  gettimeofday(&tm0, NULL);
-	  m_publisher->update();
-	  gettimeofday(&tm1, NULL);
-
-	  interval0 = (m_consumer.m_tm.tv_sec - tm0.tv_sec) * 1000000
-	    + (m_consumer.m_tm.tv_usec - tm0.tv_usec);
-	  interval1 = (tm1.tv_sec - m_consumer.m_tm.tv_sec) * 1000000
-	    + (tm1.tv_usec - m_consumer.m_tm.tv_usec);
-#ifdef DEBUG
-	  std::cout << "update() - push(): " << interval0 << std::endl;
-	  std::cout << "push() - return  : " << interval1 << std::endl;
-#endif
-	  usleep(1000);
-	  CPPUNIT_ASSERT(interval0 < 15);
-	  CPPUNIT_ASSERT(interval1 < 15);
-	}
-
-      delete m_publisher;
+      RTC::PublisherFactory factory;
+      NullConsumer consumer;
+    	
+      // (1) "dataport.subscription_type"を指定しない場合、デフォルトとしてPublisherNewが生成されるか？
+      RTC::Properties propDefault;
+      RTC::PublisherBase* publisherDefault = factory.create(&consumer, propDefault);
+      CPPUNIT_ASSERT(dynamic_cast<RTC::PublisherNew*>(publisherDefault) != 0);
+    	
+      // (2) "dataport.subscription_type"に"New"を指定した場合、PublisherNewが生成されるか？
+      RTC::Properties propNew;
+      propNew.setProperty("dataport.subscription_type", "New");
+      RTC::PublisherBase* publisherNew = factory.create(&consumer, propNew);
+      CPPUNIT_ASSERT(dynamic_cast<RTC::PublisherNew*>(publisherNew) != 0);
+      publisherNew->release();
+    	
+      // (3) "dataport.subscription_type"に"Periodic"を指定した場合、PublisherPeriodicが生成されるか？
+      RTC::Properties propPeriodic;
+      propPeriodic.setProperty("dataport.subscription_type", "Periodic");
+      RTC::PublisherBase* publisherPeriodic = factory.create(&consumer, propPeriodic);
+      CPPUNIT_ASSERT(dynamic_cast<RTC::PublisherPeriodic*>(publisherPeriodic) != 0);
+      publisherPeriodic->release();
+    	
+      // (4) "dataport.subscription_type"に"Flush"を指定した場合、PublisherFlushが生成されるか？
+      RTC::Properties propFlush;
+      propFlush.setProperty("dataport.subscription_type", "Flush");
+      RTC::PublisherBase* publisherFlush = factory.create(&consumer, propFlush);
+      CPPUNIT_ASSERT(dynamic_cast<RTC::PublisherFlush*>(publisherFlush) != 0);
     }
   };
 }; // namespace PublisherFactory
@@ -195,13 +166,83 @@ CPPUNIT_TEST_SUITE_REGISTRATION(PublisherFactory::PublisherFactoryTests);
 #ifdef LOCAL_MAIN
 int main(int argc, char* argv[])
 {
-    CppUnit::TextUi::TestRunner runner;
+
+  FORMAT format = TEXT_OUT;
+  int target = 0;
+  std::string xsl;
+  std::string ns;
+  std::string fname;
+  std::ofstream ofs;
+
+  int i(1);
+  while (i < argc)
+    {
+      std::string arg(argv[i]);
+      std::string next_arg;
+      if (i + 1 < argc) next_arg = argv[i + 1];
+      else              next_arg = "";
+
+      if (arg == "--text") { format = TEXT_OUT; break; }
+      if (arg == "--xml")
+	{
+	  if (next_arg == "")
+	    {
+	      fname = argv[0];
+	      fname += ".xml";
+	    }
+	  else
+	    {
+	      fname = next_arg;
+	    }
+	  format = XML_OUT;
+	  ofs.open(fname.c_str());
+	}
+      if ( arg == "--compiler"  ) { format = COMPILER_OUT; break; }
+      if ( arg == "--cerr"      ) { target = 1; break; }
+      if ( arg == "--xsl"       )
+	{
+	  if (next_arg == "") xsl = "default.xsl"; 
+	  else                xsl = next_arg;
+	}
+      if ( arg == "--namespace" )
+	{
+	  if (next_arg == "")
+	    {
+	      std::cerr << "no namespace specified" << std::endl;
+	      exit(1); 
+	    }
+	  else
+	    {
+	      xsl = next_arg;
+	    }
+	}
+      ++i;
+    }
+  CppUnit::TextUi::TestRunner runner;
+  if ( ns.empty() )
     runner.addTest(CppUnit::TestFactoryRegistry::getRegistry().makeTest());
-    CppUnit::Outputter* outputter = 
-      new CppUnit::TextOutputter(&runner.result(), std::cout);
-    runner.setOutputter(outputter);
-    bool retcode = runner.run();
-    return !retcode;
+  else
+    runner.addTest(CppUnit::TestFactoryRegistry::getRegistry(ns).makeTest());
+  CppUnit::Outputter* outputter = 0;
+  std::ostream* stream = target ? &std::cerr : &std::cout;
+  switch ( format )
+    {
+    case TEXT_OUT :
+      outputter = new CppUnit::TextOutputter(&runner.result(),*stream);
+      break;
+    case XML_OUT :
+      std::cout << "XML_OUT" << std::endl;
+      outputter = new CppUnit::XmlOutputter(&runner.result(),
+					    ofs, "shift_jis");
+      static_cast<CppUnit::XmlOutputter*>(outputter)->setStyleSheet(xsl);
+      break;
+    case COMPILER_OUT :
+      outputter = new CppUnit::CompilerOutputter(&runner.result(),*stream);
+      break;
+    }
+  runner.setOutputter(outputter);
+  runner.run();
+  return 0; // runner.run() ? 0 : 1;
 }
 #endif // MAIN
 #endif // PublisherFactory_cpp
