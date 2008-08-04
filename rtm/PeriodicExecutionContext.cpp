@@ -48,7 +48,7 @@ namespace RTC
    * @endif
    */
   PeriodicExecutionContext::
-  PeriodicExecutionContext(DataFlowComponent_ptr owner,
+  PeriodicExecutionContext(OpenRTM::DataFlowComponent_ptr owner,
 			   double rate)
     : m_state(false), m_running(false), m_nowait(false)
   {
