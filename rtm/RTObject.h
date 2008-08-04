@@ -768,7 +768,7 @@ namespace RTC
 
     /*!
      * @if jp
-     * @brief [CORBA interface] ExecutionContextListを取得する
+     * @brief [CORBA interface] 所有する ExecutionContextListを 取得する
      *
      * この RTC が所有する ExecutionContext のリストを取得する。
      *
@@ -786,14 +786,46 @@ namespace RTC
      */
     virtual ExecutionContextList* get_owned_contexts()
       throw (CORBA::SystemException);
+
+    /*!
+     * @if jp
+     * @brief [CORBA interface] 参加している ExecutionContextList を取得する
+     *
+     * この RTC が参加している ExecutionContext のリストを取得する。
+     *
+     * @return ExecutionContext リスト
+     *
+     * @else
+     * @brief [CORBA interface] Get participating ExecutionContextList.
+     *
+     * This operation returns a list of all execution contexts in
+     * which this RTC participates.
+     *
+     * @return ExecutionContext List
+     *
+     * @endif
+     */
     virtual ExecutionContextList* get_participating_contexts()
       throw (CORBA::SystemException);
-    
-    /*
-      virtual UniqueId 
-      set_execution_context_service(const ExecutionContextService_ptr ec);
-    */
-    
+
+    /*!
+     * @if jp
+     * @brief [CORBA interface] ExecutionContext のハンドルを返す
+     *
+     * 与えられた実行コンテキストに関連付けられたハンドルを返す。
+     *
+     * @else
+     * @brief [CORBA interface] Return a handle of a ExecutionContext
+     *
+     * This operation returns a handle that is associated with the given
+     * execution context.
+     *
+     * @endif
+     */
+    virtual ExecutionContextHandle_t
+    get_context_handle(ExecutionContext_ptr cxt)
+      throw (CORBA::SystemException);
+
     /*!
      * @if jp
      * @brief [CORBA interface] ExecutionContextをattachする
@@ -939,8 +971,8 @@ namespace RTC
      *
      * @endif
      */
-    virtual ExecutionContextServiceList* get_execution_context_services()
-      throw (CORBA::SystemException);
+    //    virtual ExecutionContextServiceList* get_execution_context_services()
+    //      throw (CORBA::SystemException);
     
     //============================================================
     // RTC::ComponentAction
@@ -2631,6 +2663,29 @@ namespace RTC
 	CORBA_SeqUtil::push_back(m_eclist, ExecutionContext::_duplicate(ecs));
       }
       ExecutionContextList& m_eclist;
+    };
+
+    struct ec_find
+    {
+      ec_find(ExecutionContext_ptr& ec)
+	: m_ec(ec)
+      {
+      }
+      bool operator()(ExecutionContextService_ptr ecs)
+      {
+	try
+	  {
+	    ExecutionContext_ptr ec;
+	    ec = ExecutionContext::_narrow(ecs);
+	    return m_ec->_is_equivalent(ec);
+	  }
+	catch (...)
+	  {
+	    return false;
+	  }
+	return false;
+      }
+      ExecutionContext_ptr m_ec;
     };
     //    ExecutionContextAdminList m_execContextList;
     

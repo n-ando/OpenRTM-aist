@@ -394,6 +394,13 @@ namespace RTC
     return execlist._retn();
   }
 
+  /*!
+   * @if jp
+   * @brief [CORBA interface] 参加している ExecutionContextList を取得する
+   * @else
+   * @brief [CORBA interface] Get participating ExecutionContextList.
+   * @endif
+   */
   ExecutionContextList* RTObject_impl::get_participating_contexts()
     throw (CORBA::SystemException)
   {
@@ -405,6 +412,24 @@ namespace RTC
     
     return execlist._retn();
   }
+
+
+  /*!
+   * @if jp
+   * @brief [CORBA interface] ExecutionContext のハンドルを返す
+   * @else
+   * @brief [CORBA interface] Return a handle of a ExecutionContext
+   * @endif
+   */
+  ExecutionContextHandle_t
+  RTObject_impl::get_context_handle(ExecutionContext_ptr cxt)
+    throw (CORBA::SystemException)
+  {
+    CORBA::Long num;
+    num = CORBA_SeqUtil::find(m_execContexts, ec_find(cxt));
+    return (ExecutionContextHandle_t)num;
+  }
+
 
   /*!
    * @if jp
@@ -512,22 +537,22 @@ namespace RTC
    * @brief [RTCObject CORBA interface] Get ExecutionContextAdmin
    * @endif
    */
-  ExecutionContextServiceList* RTObject_impl::get_execution_context_services()
-    throw (CORBA::SystemException)
-  {
-    try
-      {
-	ExecutionContextServiceList_var exec_context;
-	exec_context = new ExecutionContextServiceList(m_execContexts);
-	return exec_context._retn();
-      }
-    catch (...)
-      {
-	; // This operation throws no exception.
-      }
-    assert(false);
-    return 0;
-  }
+//  ExecutionContextServiceList* RTObject_impl::get_execution_context_services()
+//    throw (CORBA::SystemException)
+//  {
+//    try
+//      {
+//	ExecutionContextServiceList_var exec_context;
+//	exec_context = new ExecutionContextServiceList(m_execContexts);
+//	return exec_context._retn();
+//      }
+//    catch (...)
+//      {
+//	; // This operation throws no exception.
+//      }
+//    assert(false);
+//    return 0;
+//  }
   
   //============================================================
   // RTC::ComponentAction
