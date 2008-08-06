@@ -102,7 +102,7 @@ namespace RTC
      *
      * @endif
      */
-    PeriodicExecutionContext(DataFlowComponent_ptr owner,
+    PeriodicExecutionContext(OpenRTM::DataFlowComponent_ptr owner,
 			     double rate = 1000.0);
     
     /*!
