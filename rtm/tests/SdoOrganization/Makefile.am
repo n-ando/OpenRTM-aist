@@ -2,12 +2,26 @@
 #------------------------------------------------------------
 # @file   Makefile.am
 # @brief  Makefile.am for SdoOrganization unit test
-# @date   $Date: 2007-01-21 06:53:36 $
+# @date   $Date: 2007/01/21 06:53:36 $
 # @author Noriaki Ando <n-ando@aist.go.jp>
 #
 # $Id$
 #
 #------------------------------------------------------------
+
+#
+# $Log: Makefile.am,v $
+# Revision 1.3  2007/01/21 06:53:36  n-ando
+# The include search path option order in AM_CPPFLAGS was changed.
+#
+# Revision 1.2  2007/01/12 14:45:30  n-ando
+# Some fixes for distribution control.
+#
+# Revision 1.1  2006/11/27 08:30:06  n-ando
+# TestSuites are devided into each directory.
+#
+#
+
 
 AUTOMAKE_OPTIONS = 1.9
 
@@ -18,6 +32,7 @@ LIBS = @LIBS@
 AM_CPPFLAGS=              \
 	-I.               \
 	-I$(top_builddir) \
+	-I$(top_builddir)/rtm/idl \
 	-I$(includedir)
 
 
@@ -47,7 +62,8 @@ all: do-test
 
 # do tests
 do-test:
-	./SdoOrganizationTests
+	./SdoOrganizationTests --xml sdoorganizationtests.xml \
+	--xsl default.xsl
 
 # clean-up
 clean-local:

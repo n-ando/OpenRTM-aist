@@ -26,6 +26,8 @@
 #include <rtm/PortCallBack.h>
 #include <rtm/RTC.h>
 #include <iostream>
+#include <ace/Time_Value.h>
+#include <ace/OS.h>
 
 namespace RTC
 {

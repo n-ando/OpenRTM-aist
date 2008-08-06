@@ -2,7 +2,7 @@
 /*!
  * @file   SdoConfigurationTests.cpp
  * @brief  SdoConfiguration test class
- * @date   $Date: 2007-01-24 16:04:18 $
+ * @date   $Date: 2008/04/23 10:43:41 $
  * @author Shinji Kurihara
  *         Noriaki Ando <n-ando@aist.go.jp>
  * 
@@ -18,6 +18,34 @@
  *
  */
 
+/*
+ * $Log: SdoConfigurationTests.cpp,v $
+ * Revision 1.3  2008/04/23 10:43:41  arafune
+ * Modified / Added some tests.
+ *
+ * Revision 1.2  2008/04/17 13:21:45  arafune
+ * Modified some tests, and added new tests.
+ *
+ * Revision 1.1  2007/12/20 07:50:18  arafune
+ * *** empty log message ***
+ *
+ * Revision 1.2  2007/01/24 16:04:18  n-ando
+ * The SdoConfiguration's ctor. was changed.
+ *
+ * Revision 1.1  2006/11/27 08:26:07  n-ando
+ * TestSuites are devided into each directory.
+ *
+ * Revision 1.3  2006/11/10 07:13:44  kurihara
+ * A test after SdoConfiguration class revision.
+ *
+ * Revision 1.2  2006/11/09 09:29:47  kurihara
+ * A test after SdoConfiguration class revision.
+ *
+ * Revision 1.1  2006/11/01 11:23:35  kurihara
+ * test program for SdoConfiguration class.
+ *
+ */
+
 #ifndef SdoConfiguration_cpp
 #define SdoConfiguration_cpp
 
@@ -30,6 +58,7 @@
 #include <vector>
 #include <string>
 
+#include <rtm/CORBA_SeqUtil.h>
 #include <rtm/SdoConfiguration.h>
 
 /*!
@@ -40,56 +69,59 @@ namespace SdoConfiguration
 {
   using namespace SDOPackage;
   using namespace std;
-
+	
   int g_argc;
   vector<string> g_argv;
+	
+  struct ServiceProfileFinder
+  {
+    ServiceProfileFinder(const std::string& id) : _id(id) { }
+			
+    bool operator()(const ServiceProfile& svcProf)
+    {
+      return (_id == std::string(svcProf.id));
+    }
+			
+    std::string _id;
+  };
 
   class SdoConfigurationTests
     : public CppUnit::TestFixture
   {
     CPPUNIT_TEST_SUITE(SdoConfigurationTests);
-    CPPUNIT_TEST(test_set_device_profile);
-    CPPUNIT_TEST(test_set_service_profile);
-    CPPUNIT_TEST(test_add_organization);
+    CPPUNIT_TEST(test_set_device_profile_and_getDeviceProfile);
+    CPPUNIT_TEST(test_set_service_profile_and_getServiceProfile);
+    CPPUNIT_TEST(test_getServiceProfiles);
     CPPUNIT_TEST(test_remove_service_profile);
-    CPPUNIT_TEST(test_remove_organization);
-    CPPUNIT_TEST(test_get_configuration_parameters);
-    //  CPPUNIT_TEST(test_get_configuration_parameter_values);
-    //  CPPUNIT_TEST(test_get_configuration_parameter_value);
-    //  CPPUNIT_TEST(test_set_configuration_parameter);
-    CPPUNIT_TEST(test_get_configuration_sets);
-    //  CPPUNIT_TEST(test_get_configuration_set);
-    //  CPPUNIT_TEST(test_set_configuration_set_values);
-    //  CPPUNIT_TEST(test_get_active_configuration_set);
-    //  CPPUNIT_TEST(test_add_configuration_set);
-    //  CPPUNIT_TEST(test_remove_configuration_set);
-    //  CPPUNIT_TEST(test_activate_configuration_set);
-    //  CPPUNIT_TEST(test_getDeviceProfile);
-    //  CPPUNIT_TEST(test_getServiceProfiles);
-    //  CPPUNIT_TEST(test_getServiceProfile);
-    //  CPPUNIT_TEST(test_getOrganizations);
+    CPPUNIT_TEST(test_add_organization_and_getOrganizations);
+    //		CPPUNIT_TEST(test_remove_organization); // 未テストにつきコメントアウトしている
+    //		CPPUNIT_TEST(test_get_configuration_parameters); // 未テストにつきコメントアウトしている
+    //		CPPUNIT_TEST(test_get_configuration_parameter_values); // 未テストにつきコメントアウトしている
+    //		CPPUNIT_TEST(test_get_configuration_parameter_value); // 未テストにつきコメントアウトしている
+    CPPUNIT_TEST(test_add_configuration_set_and_get_configuration_set);
+    CPPUNIT_TEST(test_remove_configuration_set);
+    CPPUNIT_TEST(test_activate_configuration_set_and_get_active_configuration_set);
     CPPUNIT_TEST_SUITE_END();
-    
+	
   private:
-    Configuration_impl* m_pConf;
     CORBA::ORB_ptr          m_orb;
     PortableServer::POA_ptr m_poa;
-    
+		
   public:
-    
     /*!
      * @brief Constructor
      */
     SdoConfigurationTests()
     {
       char* argv[g_argc];
-      for (int i = 0; i < g_argc; i++) {
-	argv[i] = (char *)g_argv[i].c_str();
-      }
-      
+      for (int i = 0; i < g_argc; i++)
+	{
+	  argv[i] = (char *) g_argv[i].c_str();
+	}
+			
       m_orb = CORBA::ORB_init(g_argc, argv);
-      CORBA::Object_var  obj = m_orb->resolve_initial_references("RootPOA");
-      m_poa = PortableServer::POA::_narrow(obj);
+      m_poa = PortableServer::POA::_narrow(
+					   m_orb->resolve_initial_references("RootPOA"));
     }
     
     /*!
@@ -98,561 +130,633 @@ namespace SdoConfiguration
     ~SdoConfigurationTests()
     {
     }
-    
+		
     /*!
      * @brief Test initialization
      */
     virtual void setUp()
     {
-      // Configuration_implクラスのインスタンス生成
-      m_pConf = new Configuration_impl();
+      usleep(100000);
     }
-    
+		
     /*!
      * @brief Test finalization
      */
     virtual void tearDown()
     { 
-      delete m_pConf;
     }
-    
-    /*
-     * @brief set_device_profile(),getDeviceProfile()のテスト
-     *    set_device_profile()にてDeviceProfileをセット後,
-     *    getDeviceProfile()でDeviceProfile
-     *    を取得。セットしたDeviceProfileと取得したDeviceProfileの比較を行う。
+		
+    /*!
+     * set_device_profile()メソッドとgetDeviceProfile()メソッドのテスト
+     * 
+     * - set_device_profile()で設定したDeviceProfileを、getDeviceProfile()で正しく取得できるか？
      */
-    void test_set_device_profile() {
-      
-      CORBA::Short st, retst;
-      CORBA::Long  lg, retlg;
-      CORBA::Float ft, retft;
-      NVList nlist;
-      
-      // DeviceProfile.properties要素のセット
-      nlist.length(3);
-      st = 10;
-      nlist[0].name = "short data";
-      nlist[0].value <<= st;
-      
-      lg = 100000;
-      nlist[1].name = "long data";
-      nlist[1].value <<= lg;
-      
-      ft = 1234.5;
-      nlist[2].name = "float data";
-      nlist[2].value <<= ft;
-      
-      // DeviceProfile要素のセット
-      DeviceProfile setProf, retProf;
-      setProf.device_type = "Joystick";
-      setProf.manufacturer = "Aist";
-      setProf.model = "hoge";
-      setProf.version = "0.4.0";
-      setProf.properties = nlist;
-      
-      CORBA::Boolean result;
-      
-      // DeviceProfileのセット
-      result = m_pConf->set_device_profile(setProf);
-      if (!result)
-	cout << "Error: set_device_profile()" << endl;
-      
-      
-      // DeviceProfileの取得
-      retProf = m_pConf->getDeviceProfile();
-      string setval, retval;
-      
-      // セットしたDeviceProfileの要素と取得したDeviceProfileの要素を比較。
-      setval = setProf.device_type;
-      retval = retProf.device_type;
-      CPPUNIT_ASSERT(retval == setval);
-      
-      setval = setProf.manufacturer;
-      retval = retProf.manufacturer;
-      CPPUNIT_ASSERT(retval == setval);
-      
-      setval = setProf.model;
-      retval = retProf.model;
-      CPPUNIT_ASSERT(retval == setval);
-      
-      setval = setProf.version;
-      retval = retProf.version;
-      CPPUNIT_ASSERT(retval == setval);
-      
-      setval = nlist[0].name;
-      retval = retProf.properties[0].name;
-      CPPUNIT_ASSERT(retval == setval);
-      (retProf.properties[0].value) >>= retst;
-      CPPUNIT_ASSERT(retst == st);
-      
-      setval = nlist[1].name;
-      retval = retProf.properties[1].name;
-      CPPUNIT_ASSERT(retval == setval);
-      (retProf.properties[1].value) >>= retlg;
-      CPPUNIT_ASSERT(retlg == lg);
-      
-      setval = nlist[2].name;
-      retval = retProf.properties[2].name;
-      CPPUNIT_ASSERT(retval == setval);
-      (retProf.properties[2].value) >>= retft;
-      CPPUNIT_ASSERT(retft == ft);
-      //=================================================================
+    void test_set_device_profile_and_getDeviceProfile()
+    {
+      RTC::Properties cfgAdminProp;
+      RTC::ConfigAdmin cfgAdmin(cfgAdminProp);
+      SDOPackage::Configuration_impl sdoCfg(cfgAdmin);
+			
+      // DeviceProfileを準備する
+      SDOPackage::DeviceProfile devProf;
+      devProf.device_type = "DEVICE_TYPE";
+      devProf.manufacturer = "MANUFACTURER";
+      devProf.model = "MODEL";
+      devProf.version = "VERSION";
+      {
+	SDOPackage::NVList properties;
+	properties.length(2);
+	properties[0].name = "name 0";
+	properties[0].value <<= CORBA::Float(3.14159);
+	properties[1].name = "name 1";
+	properties[1].value <<= CORBA::Float(2.71828);
+	devProf.properties = properties;
+      }
+			
+      // set_device_profile()を呼出して、準備したDeviceProfileを設定する
+      CPPUNIT_ASSERT_EQUAL(CORBA::Boolean(true), sdoCfg.set_device_profile(devProf));
+			
+      // getDeviceProfile()で設定されているDeviceProfileを取り出し、設定したものと一致することを確認する
+      const SDOPackage::DeviceProfile devProfRet = sdoCfg.getDeviceProfile();
+      CPPUNIT_ASSERT_EQUAL(std::string("DEVICE_TYPE"),
+			   std::string(devProfRet.device_type));
+      CPPUNIT_ASSERT_EQUAL(std::string("MANUFACTURER"),
+			   std::string(devProfRet.manufacturer));
+      CPPUNIT_ASSERT_EQUAL(std::string("MODEL"),
+			   std::string(devProfRet.model));
+      CPPUNIT_ASSERT_EQUAL(std::string("VERSION"),
+			   std::string(devProfRet.version));
+      CPPUNIT_ASSERT_EQUAL(std::string("name 0"),
+			   std::string(devProfRet.properties[0].name));
+      {
+	CORBA::Float value; devProfRet.properties[0].value >>= value;
+	CPPUNIT_ASSERT_EQUAL(CORBA::Float(3.14159), value);
+      }
+      CPPUNIT_ASSERT_EQUAL(std::string("name 1"),
+			   std::string(devProfRet.properties[1].name));
+      {
+	CORBA::Float value; devProfRet.properties[1].value >>= value;
+	CPPUNIT_ASSERT_EQUAL(CORBA::Float(2.71828), value);
+      }
+    }
+		
+    /*!
+     * @brief set_service_profile()メソッドとgetServiceProfile()メソッドのテスト
+     * 
+     * - set_service_profile()で設定したServiceProfileを、getServiceProfile()で正しく取得できるか？
+     */
+    void test_set_service_profile_and_getServiceProfile()
+    {
+      RTC::Properties cfgAdminProp;
+      RTC::ConfigAdmin cfgAdmin(cfgAdminProp);
+      SDOPackage::Configuration_impl sdoCfg(cfgAdmin);
+			
+      // ServiceProfileを準備する
+      SDOPackage::ServiceProfile svcProf;
+      svcProf.id = "ID";
+      svcProf.interface_type = "INTERFACE_TYPE";
+      {
+	SDOPackage::NVList properties;
+	properties.length(2);
+	properties[0].name = "name 0";
+	properties[0].value <<= CORBA::Float(3.14159);
+	properties[1].name = "name 1";
+	properties[1].value <<= CORBA::Float(2.71828);
+	svcProf.properties = properties;
+      }
+			
+      // ServiceProfileを設定する
+      CPPUNIT_ASSERT_EQUAL(CORBA::Boolean(true), sdoCfg.set_service_profile(svcProf));
+			
+      // getServiceProfile()でServiceProfileを取得し、設定したものと一致しているか確認する
+      const SDOPackage::ServiceProfile svcProfRet = sdoCfg.getServiceProfile("ID");
+      CPPUNIT_ASSERT_EQUAL(std::string("ID"), std::string(svcProfRet.id));
+      CPPUNIT_ASSERT_EQUAL(std::string("INTERFACE_TYPE"),
+			   std::string(svcProfRet.interface_type));
+      CPPUNIT_ASSERT_EQUAL(std::string("name 0"),
+			   std::string(svcProfRet.properties[0].name));
+      {
+	CORBA::Float value; svcProfRet.properties[0].value >>= value;
+	CPPUNIT_ASSERT_EQUAL(CORBA::Float(3.14159), value);
+      }
+      CPPUNIT_ASSERT_EQUAL(std::string("name 1"),
+			   std::string(svcProfRet.properties[1].name));
+      {
+	CORBA::Float value; svcProfRet.properties[1].value >>= value;
+	CPPUNIT_ASSERT_EQUAL(CORBA::Float(2.71828), value);
+      }
+    }
+		
+    /*!
+     * @brief getServiceProfiles()メソッドのテスト
+     * 
+     * - 登録されている複数のServiceProfileを、getServiceProfiles()で正しく取得できるか？
+     */
+    void test_getServiceProfiles()
+    {
+      RTC::Properties cfgAdminProp;
+      RTC::ConfigAdmin cfgAdmin(cfgAdminProp);
+      SDOPackage::Configuration_impl sdoCfg(cfgAdmin);
+			
+      // ServiceProfileを準備する
+      SDOPackage::ServiceProfile svcProf0;
+      svcProf0.id = "ID 0";
+      svcProf0.interface_type = "INTERFACE_TYPE 0";
+      {
+	SDOPackage::NVList properties;
+	properties.length(2);
+	properties[0].name = "name 0-0";
+	properties[0].value <<= CORBA::Float(3.14159);
+	properties[1].name = "name 0-1";
+	properties[1].value <<= CORBA::Float(2.71828);
+	svcProf0.properties = properties;
+      }
+    	
+      SDOPackage::ServiceProfile svcProf1;
+      svcProf1.id = "ID 1";
+      svcProf1.interface_type = "INTERFACE_TYPE 1";
+      {
+	SDOPackage::NVList properties;
+	properties.length(2);
+	properties[0].name = "name 1-0";
+	properties[0].value <<= CORBA::Float(1.41421356);
+	properties[1].name = "name 1-1";
+	properties[1].value <<= CORBA::Float(1.7320508);
+	svcProf1.properties = properties;
+      }
+			
+      // ServiceProfileを設定する
+      CPPUNIT_ASSERT_EQUAL(CORBA::Boolean(true), sdoCfg.set_service_profile(svcProf0));
+      CPPUNIT_ASSERT_EQUAL(CORBA::Boolean(true), sdoCfg.set_service_profile(svcProf1));
+			
+      // getServiceProfiles()で設定されているServiceProfile群を取得する
+      const SDOPackage::ServiceProfileList svcProfList = sdoCfg.getServiceProfiles();
+      CPPUNIT_ASSERT_EQUAL(CORBA::ULong(2), svcProfList.length());
+			
+      // 設定したServiceProfileと一致しているか？
+      {
+	CORBA::ULong idx = CORBA_SeqUtil::find(svcProfList, ServiceProfileFinder("ID 0"));
+				
+	CPPUNIT_ASSERT_EQUAL(std::string("ID 0"),
+			     std::string(svcProfList[idx].id));
+	CPPUNIT_ASSERT_EQUAL(std::string("INTERFACE_TYPE 0"),
+			     std::string(svcProfList[idx].interface_type));
+	CPPUNIT_ASSERT_EQUAL(std::string("name 0-0"),
+			     std::string(svcProfList[idx].properties[0].name));
+	{
+	  CORBA::Float value; svcProfList[idx].properties[0].value >>= value;
+	  CPPUNIT_ASSERT_EQUAL(CORBA::Float(3.14159), value);
+	}
+	CPPUNIT_ASSERT_EQUAL(std::string("name 0-1"),
+			     std::string(svcProfList[idx].properties[1].name));
+	{
+	  CORBA::Float value; svcProfList[idx].properties[1].value >>= value;
+	  CPPUNIT_ASSERT_EQUAL(CORBA::Float(2.71828), value);
+	}
+      }
+
+      {
+	CORBA::ULong idx = CORBA_SeqUtil::find(svcProfList, ServiceProfileFinder("ID 1"));
+				
+	CPPUNIT_ASSERT_EQUAL(std::string("ID 1"),
+			     std::string(svcProfList[idx].id));
+	CPPUNIT_ASSERT_EQUAL(std::string("INTERFACE_TYPE 1"),
+			     std::string(svcProfList[idx].interface_type));
+	CPPUNIT_ASSERT_EQUAL(std::string("name 1-0"),
+			     std::string(svcProfList[idx].properties[0].name));
+	{
+	  CORBA::Float value; svcProfList[idx].properties[0].value >>= value;
+	  CPPUNIT_ASSERT_EQUAL(CORBA::Float(1.41421356), value);
+	}
+	CPPUNIT_ASSERT_EQUAL(std::string("name 1-1"),
+			     std::string(svcProfList[idx].properties[1].name));
+	{
+	  CORBA::Float value; svcProfList[idx].properties[1].value >>= value;
+	  CPPUNIT_ASSERT_EQUAL(CORBA::Float(1.7320508), value);
+	}
+      }
     }
     
+    /*!
+     * @brief remove_service_profile()メソッドのテスト
+     * 
+     * - 指定したIDを持つServiceProfileを正しく登録解除できるか？
+     */
+    void test_remove_service_profile()
+    {
+
+      RTC::Properties cfgAdminProp;
+      RTC::ConfigAdmin cfgAdmin(cfgAdminProp);
+      SDOPackage::Configuration_impl sdoCfg(cfgAdmin);
+			
+      // ServiceProfileを準備する
+      SDOPackage::ServiceProfile svcProf0;
+      svcProf0.id = "ID 0";
+      svcProf0.interface_type = "INTERFACE_TYPE 0";
+      {
+	SDOPackage::NVList properties;
+	properties.length(2);
+	properties[0].name = "name 0-0";
+	properties[0].value <<= CORBA::Float(3.14159);
+	properties[1].name = "name 0-1";
+	properties[1].value <<= CORBA::Float(2.71828);
+	svcProf0.properties = properties;
+      }
+    	
+      SDOPackage::ServiceProfile svcProf1;
+      svcProf1.id = "ID 1";
+      svcProf1.interface_type = "INTERFACE_TYPE 1";
+      {
+	SDOPackage::NVList properties;
+	properties.length(2);
+	properties[0].name = "name 1-0";
+	properties[0].value <<= CORBA::Float(1.41421356);
+	properties[1].name = "name 1-1";
+	properties[1].value <<= CORBA::Float(1.7320508);
+	svcProf1.properties = properties;
+      }
+			
+      // ServiceProfileを設定する
+      CPPUNIT_ASSERT_EQUAL(CORBA::Boolean(true), sdoCfg.set_service_profile(svcProf0));
+      CPPUNIT_ASSERT_EQUAL(CORBA::Boolean(true), sdoCfg.set_service_profile(svcProf1));
+			
+      // 設定したServiceProfileのうち、片方を登録解除する
+      CPPUNIT_ASSERT_EQUAL(CORBA::Boolean(true), sdoCfg.remove_service_profile("ID 0"));
+			
+      // getServiceProfiles()で全ServiceProfileを取得し、登録解除したものが含まれないことを確認する
+      const SDOPackage::ServiceProfileList svcProfList = sdoCfg.getServiceProfiles();
+      CPPUNIT_ASSERT_EQUAL(CORBA::ULong(1), svcProfList.length());
+      CPPUNIT_ASSERT_EQUAL(CORBA::Long(-1),
+			   CORBA_SeqUtil::find(svcProfList, ServiceProfileFinder("ID 0")));
+			
+      // 登録解除していないものは、依然として含まれているか？
+      CPPUNIT_ASSERT_EQUAL(CORBA::Long(0),
+			   CORBA_SeqUtil::find(svcProfList, ServiceProfileFinder("ID 1")));
+    }
     
     /* 
-     * @brief set_service_profile(),getServiceProfile()のテスト。
-     *    set_service_profile()にてServiceProfileをセット後、getServiceProfiles()で
-     *    ServiceProfileListを取得。
-     *    ServiceProfileが取得したServiceProfileListに追加されているかを確認。
+     * @brief add_organization()メソッドとgetOrganizations()メソッドのテスト
+     * 
+     * - add_organization()でOrganization_ptrインスタンスを登録できるか？
+     * - getOrganizations()で登録されているOrganization_ptrインスタンス群を取得できるか？
      */
-    void test_set_service_profile() {
-      ServiceProfileList getProf;
-      ServiceProfile svcProf0, svcProf1;
-      NameValue nv;
-      NVList nvlist;
-      CORBA::Short setst,getst;
-      CORBA::Long  setlg,getlg;
-      CORBA::Boolean result;
+    void test_add_organization_and_getOrganizations()
+    {
+      RTC::Properties cfgAdminProp;
+      RTC::ConfigAdmin cfgAdmin(cfgAdminProp);
+      SDOPackage::Configuration_impl sdoCfg(cfgAdmin);
+			
+      // Organizationを2つ登録する
+      SDOPackage::Organization_var org1;
+      CPPUNIT_ASSERT_EQUAL(CORBA::Boolean(true),
+			   sdoCfg.add_organization(org1._retn()));
+
+      SDOPackage::Organization_var org2;
+      CPPUNIT_ASSERT_EQUAL(CORBA::Boolean(true),
+			   sdoCfg.add_organization(org2._retn()));
       
-      string setstr, getstr;
-      
-      // ServiceProfile.properties要素のセット
-      setst = 10;
-      nv.name = "short";
-      nv.value <<= setst;
-      nvlist.length(1);
-      nvlist[0] = nv;
-      // ServiceProfileの要素セット
-      svcProf0.id = "setProfId0";
-      svcProf0.interface_type = "ifTYpe0";
-      svcProf0.properties = nvlist;
-      
-      // ServiceProfileのセット
-      result = m_pConf->set_service_profile(svcProf0);
-      
-      // ServiceProfile.properties要素のセット
-      setlg = 1000;
-      nv.name = "long";
-      nv.value <<= setlg;
-      nvlist.length(1);
-      nvlist[0] = nv;
-      // ServiceProfileの要素セット
-      svcProf1.id = "setProfId1";
-      svcProf1.interface_type = "ifTYpe1";
-      svcProf1.properties = nvlist;
-      
-      // ServiceProfileのセット
-      m_pConf->set_service_profile(svcProf1);
-      
-      
-      
-      getProf.length(2);
-      
-      //====== ServiceProfileの取得とデータの比較 =========================
-      getProf[0] = m_pConf->getServiceProfile(svcProf0.id);
-      
-      setstr = svcProf0.id;
-      getstr = getProf[0].id;
-      CPPUNIT_ASSERT(setstr == getstr);
-      
-      setstr = svcProf0.interface_type;
-      getstr = getProf[0].interface_type;
-      CPPUNIT_ASSERT(setstr == getstr);
-      
-      setstr = svcProf0.properties[0].name;
-      getstr = getProf[0].properties[0].name;
-      CPPUNIT_ASSERT(setstr == getstr);
-      
-      getProf[0].properties[0].value >>= getst;
-      CPPUNIT_ASSERT(setst == getst);
-      //===================================================================
-      
-      //======= ServiceProfileの取得 ======================================
-      getProf[1] = m_pConf->getServiceProfile(svcProf1.id);
-      setstr = svcProf1.id;
-      getstr = getProf[1].id;
-      CPPUNIT_ASSERT(setstr == getstr);
-      setstr = svcProf1.interface_type;
-      getstr = getProf[1].interface_type;
-      CPPUNIT_ASSERT(setstr == getstr);
-      setstr = svcProf1.properties[0].name;
-      getstr = getProf[1].properties[0].name;
-      CPPUNIT_ASSERT(setstr == getstr);
-      getProf[1].properties[0].value >>= getlg;
-      CPPUNIT_ASSERT(setlg == getlg);
-      //===================================================================
-      
-      
-      //============  ServiceProfileListの取得とデータ比較 ====================
-      ServiceProfileList spList;
-      spList = m_pConf->getServiceProfiles();
-      
-      setstr = svcProf0.id;
-      getstr = spList[0].id;
-      CPPUNIT_ASSERT(setstr == getstr);
-      
-      setstr = svcProf1.id;
-      getstr = spList[1].id;
-      CPPUNIT_ASSERT(setstr == getstr);
-      
-      setstr = svcProf0.interface_type;
-      getstr = spList[0].interface_type;
-      CPPUNIT_ASSERT(setstr == getstr);
-      
-      setstr = svcProf1.interface_type;
-      getstr = spList[1].interface_type;
-      CPPUNIT_ASSERT(setstr == getstr);
-      
-      setstr = svcProf0.properties[0].name;
-      getstr = spList[0].properties[0].name;
-      CPPUNIT_ASSERT(setstr == getstr);
-      
-      setstr = svcProf1.properties[0].name;
-      getstr = spList[1].properties[0].name;
-      CPPUNIT_ASSERT(setstr == getstr);
-      
-      
-      spList[0].properties[0].value >>= getst;
-      CPPUNIT_ASSERT(setst == getst);
-      spList[1].properties[0].value >>= getlg;
-      CPPUNIT_ASSERT(setlg == getlg);
-      //================================================================
-      
-      
-      // ServiceProfileListから引数で与えたidを持つ
-      // ServiceProfileの削除を行う
-      m_pConf->remove_service_profile(svcProf0.id);
-      spList = m_pConf->getServiceProfiles();
-      
-      setstr = svcProf1.id;
-      getstr = spList[0].id;
-      CPPUNIT_ASSERT(setstr == getstr);
-      
-      setstr = svcProf1.interface_type;
-      getstr = spList[0].interface_type;
-      CPPUNIT_ASSERT(setstr == getstr);
-      
-      setstr = svcProf1.properties[0].name;
-      getstr = spList[0].properties[0].name;
-      CPPUNIT_ASSERT(setstr == getstr);
-      //==================================================================
+      // 取得されるOrganizationの数は、意図どおり2つか？
+      SDOPackage::OrganizationList orgList = sdoCfg.getOrganizations();
+      CPPUNIT_ASSERT_EQUAL(CORBA::ULong(2), orgList.length());
     }
     
-    
-    /* 
-     * @brief add_organization()のテスト
-     *    
-     */
-    void test_add_organization() {
-      Organization_var orgPtr;
-      CORBA::Boolean result;
-      OrganizationList orgList;
-      
-      result = m_pConf->add_organization(orgPtr._retn());
-      if (!result)
-	cout << "Couldn't add organization object." << endl;
-      
-      orgList = m_pConf->getOrganizations();
+    void test_remove_organization()
+    {
+      // 未テスト
     }
-    
-    
-    /* tests for */
-    void test_remove_service_profile() {
-      //    test_set_service_profile()にてテスト
-    }
-    
-    
-    /* tests for */
-    void test_remove_organization() {
-      //    test_add_organization()にてテスト
-    }
-    
-    
+				
     /*
      * @brief get_configuration_parameters()のテスト
-     *    
      */
-    void test_get_configuration_parameters() {
-      ParameterList* paramList;
-      
-      // length 0のリストが戻される。 OK.
-      paramList = m_pConf->get_configuration_parameters();
-      int length = paramList->length();
-      CPPUNIT_ASSERT(length == 0);
+    void test_get_configuration_parameters()
+    {
+      // テスト対象であるSDOPackage::Confirutaion_impl::get_configuration_parameters()が
+      // 未実装であるため、本テストも未実装である。
     }
-    
-    
-    /* tests for */
-    void test_get_configuration_parameter_values() {
-      //    test_get_configuration_sets()にてテスト
-    }
-    
-    
-    /* tests for */
-    void test_get_configuration_parameter_value() {
-      //    test_get_configuration_sets()にてテスト
-    }
-    
-    /* tests for */
-    void test_set_configuration_parameter() {
-      //    test_get_configuration_sets()にてテスト
-    }
-    
-    
-    /*
-     * @brief get_configuration_sets(), add_configuration_set(),
-     *        activate_configuration_set(), set_configuration_parameter()
-     *        get_configuration_parameter_values(), get_configuration_set()
-     *        get_active_configuration_set(),
-     *        remove_configuration_set()のテスト
+		
+    /*!
+     * @brief get_configuration_parameter_values()のテスト
      */
-    void test_get_configuration_sets() {
-      ConfigurationSet confset;
-      NVList nvlist;
-      NameValue nv;
-      CORBA::Short st, rst;
-      CORBA::Long lg, rlg;
-      CORBA::Float ft, rft;
-      CORBA::Boolean result;
-      string setname, getname;
-      CORBA::Any any;
-      int llength;
-      
-      //============ ConfigurationSet1 =================================
-      // ConfigurationSet要素のセット
-      confset.id = "configset_id1";
-      confset.description = "configset_description";
-      nvlist.length(1);
-      nv.name = "short";
-      st = 10000;
-      nv.value <<= st;
-      nvlist[0] = nv;
-      confset.configuration_data = nvlist;
-      //================================================================
-      
-      
-      // ConfigurationSetの追加
-      result = m_pConf->add_configuration_set(confset);
-      
-      // Activate ConfigurationSet1.
-      result = m_pConf->activate_configuration_set(confset.id);
-      if(!result)
-	cout << "Error: activate_configuration_set()" << endl;
-      
-      
-      //=== set_configuration_parameter()のテスト ===================
-      st = 9;
-      any <<= st;
-      const char* name = "short";
-      result = m_pConf->set_configuration_parameter(name, any);
-      
-      if(!result)
-	cout << "Error: set_configuration_parameter()." << endl;
-      //==============================================================
-      
-      
-      //==== get_configuration_parameter_values()のテスト =====
-      NVList* getList;
-      
-      setname = "short";
-      getList = m_pConf->get_configuration_parameter_values();
-      getname = (*getList)[0].name;
-      CPPUNIT_ASSERT(getname == setname);
-      (*getList)[0].value >>= rst;
-      CPPUNIT_ASSERT(rst == st);
-      //=======================================================
-      
-      
-      //============ ConfigurationSet2 =================================
-      // ConfigurationSet要素のセット
-      confset.id = "configset_id2";
-      confset.description = "configset_description2";
-      nvlist.length(1);
-      nv.name = "long";
-      lg = 20000;
-      nv.value <<= lg;
-      nvlist[0] = nv;
-      confset.configuration_data = nvlist;
-      //================================================================
-      
-      
-      // ConfigurationSetの追加
-      result = m_pConf->add_configuration_set(confset);
-      
-      // Activate ConfigurationSet2.
-      result = m_pConf->activate_configuration_set(confset.id);
-      if(!result)
-	cout << "Error: activate_configuration_set()" << endl;
-      
-      
-      //================= get_configuration_sets()のテスト ==============
-      ConfigurationSetList* confSetList;
-      confSetList = m_pConf->get_configuration_sets();
-      llength = confSetList->length();
-      CPPUNIT_ASSERT(llength == 2);
-      
-      setname = "configset_id1";
-      getname = (*confSetList)[0].id;
-      CPPUNIT_ASSERT(getname == setname);
-      (*confSetList)[0].configuration_data[0].value >>= rst;
-      CPPUNIT_ASSERT(rst == st);
-      
-      setname = "configset_id2";
-      getname = (*confSetList)[1].id;
-      CPPUNIT_ASSERT(getname == setname);
-      (*confSetList)[1].configuration_data[0].value >>= rlg;
-      CPPUNIT_ASSERT(rlg == lg);
-      //=================================================================
-      
-      
-      //=============== get_configuration_set()のテスト ==================
-      ConfigurationSet* confSet;
-      confSet = m_pConf->get_configuration_set("configset_id1");
-      
-      setname = "configset_id1";
-      getname = confSet->id;
-      CPPUNIT_ASSERT(getname == setname);
-      confSet->configuration_data[0].value >>= rst;
-      CPPUNIT_ASSERT(rst == st);
-      
-      confSet = m_pConf->get_configuration_set("configset_id2");
-      
-      setname = "configset_id2";
-      getname = confSet->id;
-      CPPUNIT_ASSERT(getname == setname);
-      confSet->configuration_data[0].value >>= rlg;
-      CPPUNIT_ASSERT(rlg == lg);
-      //==================================================================
-      
-      
-      //========== set_configuration_set_values()のテスト ===============
-      confset.id = "configset_id2";
-      confset.description = "changed configset_description.";
-      nvlist.length(1);
-      nv.name = "float";
-      ft = 999.999;
-      nv.value <<= ft;
-      nvlist[0] = nv;
-      confset.configuration_data = nvlist;
-      result = m_pConf->set_configuration_set_values("configset_id2", confset);
-      
-      // ConfigurationSetが正しくセットされているかを確認するため
-      // get_configuration_set()を使用。
-      confSet = m_pConf->get_configuration_set("configset_id2");
-      setname = "configset_id2";
-      getname = confSet->id;
-      CPPUNIT_ASSERT(getname == setname);
-      confSet->configuration_data[0].value >>= rft;
-      CPPUNIT_ASSERT(rft == ft);
-      
-      // ConfigurationSetが正しくセットされているかを確認するため
-      // get_configuration_sets()を使用。
-      confSetList = m_pConf->get_configuration_sets();
-      llength = confSetList->length();
-      CPPUNIT_ASSERT(llength == 2);
-      
-      setname = "configset_id1";
-      getname = (*confSetList)[0].id;
-      CPPUNIT_ASSERT(getname == setname);
-      (*confSetList)[0].configuration_data[0].value >>= rst;
-      CPPUNIT_ASSERT(rst == st);
-      
-      setname = "configset_id2";
-      getname = (*confSetList)[1].id;
-      CPPUNIT_ASSERT(getname == setname);
-      (*confSetList)[1].configuration_data[0].value >>= rft;
-      CPPUNIT_ASSERT(rft == ft);
-      //===================================================================
-      
-      
-      //=========== get_active_configuration_set()のテスト ===============
-      confSet = m_pConf->get_active_configuration_set();
-      setname = "configset_id2";
-      getname = confSet->id;
-      CPPUNIT_ASSERT(getname == setname);
-      
-      string setdesc,getdesc;
-      setdesc = "changed configset_description.";
-      getdesc = confSet->description;
-      CPPUNIT_ASSERT(getdesc == setdesc);
-      //===================================================================
-      
-      
-      //=========== remove_configuration_set()のテスト ===================
-      result = m_pConf->remove_configuration_set("configset_id2");
-      // "configset_id2"を要素に持つConfigurationSetが削除されているか
-      // を確認するため get_configuration_sets()を使用。
-      confSetList = m_pConf->get_configuration_sets();
-      llength = confSetList->length();
-      CPPUNIT_ASSERT(llength == 1);
-      
-      confSet = m_pConf->get_configuration_set("configset_id1");
-      
-      setname = "configset_id1";
-      getname = confSet->id;
-      CPPUNIT_ASSERT(getname == setname);
-      confSet->configuration_data[0].value >>= rst;
-      CPPUNIT_ASSERT(rst == st);
-      //===================================================================
+    void test_get_configuration_parameter_values()
+    {
+      // テスト対象であるSDOPackage::Confirutaion_impl::get_configuration_parameter_values()が
+      // 未実装であるため、本テストも未実装である。
     }
-    
-    
-    /* tests for */
-    void test_get_configuration_set() {
-      //    test_get_configuration_sets()にてテスト
+		
+    /*!
+     * @brief get_configuration_parameter_value()のテスト
+     */
+    void test_get_configuration_parameter_value()
+    {
+      // テスト対象であるSDOPackage::Confirutaion_impl::get_configuration_parameter_value()が
+      // 未実装であるため、本テストも未実装である。
     }
-    
-    /* tests for */
-    void test_set_configuration_set_values() {
-      //    test_get_configuration_sets()にてテスト
+		
+    void test_set_configuration_parameter()
+    {
+      // テスト対象であるSDOPackage::Confirutaion_impl::set_configuration_parameter()が
+      // 未実装であるため、本テストも未実装である。
     }
-    
-    
-    /* tests for */
-    void test_get_active_configuration_set() {
-      //    test_get_configuration_sets()にてテスト
+		
+    /*!
+     * @brief add/get_configuration_set()メソッドのテスト
+     * 
+     * - ConfigurationSetをadd_configuration_set()で正常に登録できるか？
+     * - add_configuration_set()で登録したConfigurationSetを、get_configuration_set()で正しく取得できるか？
+     */
+    void test_add_configuration_set_and_get_configuration_set()
+    {
+      RTC::Properties cfgAdminProp;
+      RTC::ConfigAdmin cfgAdmin(cfgAdminProp);
+      SDOPackage::Configuration_impl sdoCfg(cfgAdmin);
+			
+      // ConfigurationSetを準備する
+      SDOPackage::ConfigurationSet cfgSet0;
+      cfgSet0.id = "ID 0";
+      cfgSet0.description = "DESCRIPTION 0";
+      cfgSet0.configuration_data.length(2);
+      cfgSet0.configuration_data[0].name = "NAME 0-0";
+      cfgSet0.configuration_data[0].value <<= "3.14159";
+      cfgSet0.configuration_data[1].name = "NAME 0-1";
+      cfgSet0.configuration_data[1].value <<= "2.71828";
+			
+      SDOPackage::ConfigurationSet cfgSet1;
+      cfgSet1.id = "ID 1";
+      cfgSet1.description = "DESCRIPTION 1";
+      cfgSet1.configuration_data.length(2);
+      cfgSet1.configuration_data[0].name = "NAME 1-0";
+      cfgSet1.configuration_data[0].value <<= "1.41421356";
+      cfgSet1.configuration_data[1].name = "NAME 1-1";
+      cfgSet1.configuration_data[1].value <<= "1.7320508";
+			
+      // 準備したConfigurationSetを登録する
+      CPPUNIT_ASSERT_EQUAL(CORBA::Boolean(true), sdoCfg.add_configuration_set(cfgSet0));
+      CPPUNIT_ASSERT_EQUAL(CORBA::Boolean(true), sdoCfg.add_configuration_set(cfgSet1));
+			
+      // 登録したConfigurationSetを正しく取得できるか？
+      SDOPackage::ConfigurationSet* cfgSetRet0 = sdoCfg.get_configuration_set("ID 0");
+      CPPUNIT_ASSERT_EQUAL(std::string("ID 0"),
+			   std::string(cfgSetRet0->id));
+      CPPUNIT_ASSERT_EQUAL(std::string("DESCRIPTION 0"),
+			   std::string(cfgSetRet0->description));
+      CPPUNIT_ASSERT_EQUAL(CORBA::ULong(2),
+			   cfgSetRet0->configuration_data.length());
+      CPPUNIT_ASSERT_EQUAL(std::string("NAME 0-0"),
+			   std::string(cfgSetRet0->configuration_data[0].name));
+      {
+	char* value; cfgSetRet0->configuration_data[0].value >>= value;
+	CPPUNIT_ASSERT_EQUAL(std::string("3.14159"), std::string(value));
+      }
+      CPPUNIT_ASSERT_EQUAL(std::string("NAME 0-1"),
+			   std::string(cfgSetRet0->configuration_data[1].name));
+      {
+	char* value; cfgSetRet0->configuration_data[1].value >>= value;
+	CPPUNIT_ASSERT_EQUAL(std::string("2.71828"), std::string(value));
+      }
+
+      SDOPackage::ConfigurationSet* cfgSetRet1 = sdoCfg.get_configuration_set("ID 1");
+      CPPUNIT_ASSERT_EQUAL(std::string("ID 1"),
+			   std::string(cfgSetRet1->id));
+      CPPUNIT_ASSERT_EQUAL(std::string("DESCRIPTION 1"),
+			   std::string(cfgSetRet1->description));
+      CPPUNIT_ASSERT_EQUAL(CORBA::ULong(2),
+			   cfgSetRet1->configuration_data.length());
+      CPPUNIT_ASSERT_EQUAL(std::string("NAME 1-0"),
+			   std::string(cfgSetRet1->configuration_data[0].name));
+      {
+	char* value; cfgSetRet1->configuration_data[0].value >>= value;
+	CPPUNIT_ASSERT_EQUAL(std::string("1.41421356"), std::string(value));
+      }
+      CPPUNIT_ASSERT_EQUAL(std::string("NAME 1-1"),
+			   std::string(cfgSetRet1->configuration_data[1].name));
+      {
+	char* value; cfgSetRet1->configuration_data[1].value >>= value;
+	CPPUNIT_ASSERT_EQUAL(std::string("1.7320508"), std::string(value));
+      }
     }
-    
-    
-    /* tests for */
-    void test_add_configuration_set() {
-      //    test_get_configuration_sets()にてテスト。
+		
+    /*!
+     * @brief remove_configuration_set()メソッドのテスト
+     * 
+     * - 登録済みのConfigurationSetを正しく登録解除できるか？
+     * - 登録されていないIDを指定した場合、意図どおり例外がスローされるか？
+     */
+    void test_remove_configuration_set()
+    {
+      RTC::Properties cfgAdminProp;
+      RTC::ConfigAdmin cfgAdmin(cfgAdminProp);
+      SDOPackage::Configuration_impl sdoCfg(cfgAdmin);
+			
+      // ConfigurationSetを準備する
+      SDOPackage::ConfigurationSet cfgSet0;
+      cfgSet0.id = "ID 0";
+      cfgSet0.description = "DESCRIPTION 0";
+      cfgSet0.configuration_data.length(2);
+      cfgSet0.configuration_data[0].name = "NAME 0-0";
+      cfgSet0.configuration_data[0].value <<= "3.14159";
+      cfgSet0.configuration_data[1].name = "NAME 0-1";
+      cfgSet0.configuration_data[1].value <<= "2.71828";
+			
+      SDOPackage::ConfigurationSet cfgSet1;
+      cfgSet1.id = "ID 1";
+      cfgSet1.description = "DESCRIPTION 1";
+      cfgSet1.configuration_data.length(2);
+      cfgSet1.configuration_data[0].name = "NAME 1-0";
+      cfgSet1.configuration_data[0].value <<= "1.41421356";
+      cfgSet1.configuration_data[1].name = "NAME 1-1";
+      cfgSet1.configuration_data[1].value <<= "1.7320508";
+			
+      // 準備したConfigurationSetを登録する
+      CPPUNIT_ASSERT_EQUAL(CORBA::Boolean(true), sdoCfg.add_configuration_set(cfgSet0));
+      CPPUNIT_ASSERT_EQUAL(CORBA::Boolean(true), sdoCfg.add_configuration_set(cfgSet1));
+			
+      // 登録したうち、片方のConfigurationSetを登録解除する
+      CPPUNIT_ASSERT_EQUAL(CORBA::Boolean(true), sdoCfg.remove_configuration_set("ID 0"));
+			
+      // 登録解除したConfigurationSetを指定して、get_configuration_set()呼出を試みて、
+      // 意図どおりに例外がスローされるか？
+      try
+	{
+	  sdoCfg.get_configuration_set("ID 0");
+	  CPPUNIT_FAIL("ID 0 was not removed.");
+	}
+      catch (SDOPackage::InvalidParameter expected) {}
+      catch (...) {}
+			
+      // 登録解除していないConfigurationSetは、依然として取得できるか？
+      SDOPackage::ConfigurationSet* cfgSetRet = sdoCfg.get_configuration_set("ID 1");
+      CPPUNIT_ASSERT_EQUAL(std::string("ID 1"), std::string(cfgSetRet->id));
+			
+      // 存在しないIDを指定して登録解除を試みた場合に、意図どおりに例外がスローされるか？
+      try
+	{
+	  sdoCfg.remove_configuration_set("inexist ID");
+	  CPPUNIT_FAIL("Exception not thrown.");
+	}
+      catch (SDOPackage::InvalidParameter expected) {}
+      catch (...) {}
     }
-    
-    
-    /* tests for */
-    void test_remove_configuration_set() {
-      //    test_get_configuration_sets()にてテスト。
+		
+    /*!
+     * @brief set_configuration_set_values()メソッドのテスト
+     * 
+     * - 登録済みのConfigurationSetのIDを指定して、正しくConfigurationSetを更新できるか？
+     * - 存在しないIDを指定した場合に、意図どおりに例外がスローされるか？
+     */
+    void test_set_configuration_set_values()
+    {
+      RTC::Properties cfgAdminProp;
+      RTC::ConfigAdmin cfgAdmin(cfgAdminProp);
+      SDOPackage::Configuration_impl sdoCfg(cfgAdmin);
+			
+      // ConfigurationSetを準備する
+      SDOPackage::ConfigurationSet cfgSet0;
+      cfgSet0.id = "ID 0";
+      cfgSet0.description = "DESCRIPTION 0";
+      cfgSet0.configuration_data.length(2);
+      cfgSet0.configuration_data[0].name = "NAME 0-0";
+      cfgSet0.configuration_data[0].value <<= "3.14159";
+      cfgSet0.configuration_data[1].name = "NAME 0-1";
+      cfgSet0.configuration_data[1].value <<= "2.71828";
+			
+      SDOPackage::ConfigurationSet cfgSet1;
+      cfgSet1.id = "ID 1";
+      cfgSet1.description = "DESCRIPTION 1";
+      cfgSet1.configuration_data.length(2);
+      cfgSet1.configuration_data[0].name = "NAME 1-0";
+      cfgSet1.configuration_data[0].value <<= "1.41421356";
+      cfgSet1.configuration_data[1].name = "NAME 1-1";
+      cfgSet1.configuration_data[1].value <<= "1.7320508";
+
+      SDOPackage::ConfigurationSet cfgSet1_Modified;
+      cfgSet1_Modified.id = "ID 1";
+      cfgSet1_Modified.description = "DESCRIPTION 1 M";
+      cfgSet1_Modified.configuration_data.length(2);
+      cfgSet1_Modified.configuration_data[0].name = "NAME 1-0 M";
+      cfgSet1_Modified.configuration_data[0].value <<= "2.23620679";
+      cfgSet1_Modified.configuration_data[1].name = "NAME 1-1 M";
+      cfgSet1_Modified.configuration_data[1].value <<= "2.44948974";
+
+      // 準備したConfigurationSetを登録する
+      CPPUNIT_ASSERT_EQUAL(CORBA::Boolean(true), sdoCfg.add_configuration_set(cfgSet0));
+      CPPUNIT_ASSERT_EQUAL(CORBA::Boolean(true), sdoCfg.add_configuration_set(cfgSet1));
+			
+      // 登録したConfigurationSetのうち片方を、set_configuration_set_values()で更新する
+      CPPUNIT_ASSERT_EQUAL(CORBA::Boolean(true),
+			   sdoCfg.set_configuration_set_values("ID 1", cfgSet1_Modified));
+			
+      // 更新したConfigurationSetを、正しく取得できるか？
+      SDOPackage::ConfigurationSet* cfgSetRet = sdoCfg.get_configuration_set("ID 1");
+      CPPUNIT_ASSERT_EQUAL(std::string("ID 1"), std::string(cfgSetRet->id));
+      CPPUNIT_ASSERT_EQUAL(std::string("DESCRIPTION 1 M"),
+			   std::string(cfgSetRet->description));
+      CPPUNIT_ASSERT_EQUAL(CORBA::ULong(2),
+			   cfgSetRet->configuration_data.length());
+      CPPUNIT_ASSERT_EQUAL(std::string("NAME 1-0 M"),
+			   std::string(cfgSetRet->configuration_data[0].name));
+      {
+	char* value; cfgSetRet->configuration_data[0].value >>= value;
+	CPPUNIT_ASSERT_EQUAL(std::string("2.23620679"), std::string(value));
+      }
+      CPPUNIT_ASSERT_EQUAL(std::string("NAME 1-1 M"),
+			   std::string(cfgSetRet->configuration_data[1].name));
+      {
+	char* value; cfgSetRet->configuration_data[1].value >>= value;
+	CPPUNIT_ASSERT_EQUAL(std::string("2.44948974"), std::string(value));
+      }
+			
+      // 存在しないIDを指定してset_configuration_set_values()を呼出し、
+      // 意図どおり例外がスローされるか？
+      try
+	{
+	  sdoCfg.get_configuration_set("inexist ID");
+	  CPPUNIT_FAIL("Exception not thrown.");
+	}
+      catch (SDOPackage::InvalidParameter expected) {}
     }
-    
-    
-    /* tests for */
-    void test_activate_configuration_set() {
-      //    test_get_configuration_sets()にてテスト。
-    }
-    
-    
-    /* tests for */
-    void test_getDeviceProfile() {
-      //    test_set_device_profile()にてテスト
-    }
-    
-    
-    /* tests for */
-    void test_getServiceProfiles() {
-      //    test_set_service_profile()にてテスト
-    }
-    
-    /* tests for */
-    void test_getServiceProfile() {
-      //    test_set_service_profile()にてテスト
-    }
-    
-    /* tests for */
-    void test_getOrganizations() {
-      //    test_add_organization()にてテスト
+		
+    void test_activate_configuration_set_and_get_active_configuration_set()
+    {
+      RTC::Properties cfgAdminProp;
+      RTC::ConfigAdmin cfgAdmin(cfgAdminProp);
+      SDOPackage::Configuration_impl sdoCfg(cfgAdmin);
+			
+      // ConfigurationSetを準備する
+      SDOPackage::ConfigurationSet cfgSet0;
+      cfgSet0.id = "ID 0";
+      cfgSet0.description = "DESCRIPTION 0";
+      cfgSet0.configuration_data.length(2);
+      cfgSet0.configuration_data[0].name = "NAME 0-0";
+      cfgSet0.configuration_data[0].value <<= "3.14159";
+      cfgSet0.configuration_data[1].name = "NAME 0-1";
+      cfgSet0.configuration_data[1].value <<= "2.71828";
+			
+      SDOPackage::ConfigurationSet cfgSet1;
+      cfgSet1.id = "ID 1";
+      cfgSet1.description = "DESCRIPTION 1";
+      cfgSet1.configuration_data.length(2);
+      cfgSet1.configuration_data[0].name = "NAME 1-0";
+      cfgSet1.configuration_data[0].value <<= "1.41421356";
+      cfgSet1.configuration_data[1].name = "NAME 1-1";
+      cfgSet1.configuration_data[1].value <<= "1.7320508";
+
+      // 準備したConfigurationSetを登録する
+      CPPUNIT_ASSERT_EQUAL(CORBA::Boolean(true), sdoCfg.add_configuration_set(cfgSet0));
+      CPPUNIT_ASSERT_EQUAL(CORBA::Boolean(true), sdoCfg.add_configuration_set(cfgSet1));
+			
+      // "ID 0"のほうをアクティブ化する
+      CPPUNIT_ASSERT_EQUAL(CORBA::Boolean(true), sdoCfg.activate_configuration_set("ID 0"));
+			
+      // アクティブなConfigurationSetを取得し、それがアクティブ化したものと一致するか？
+      SDOPackage::ConfigurationSet* cfgSetRet0 = sdoCfg.get_configuration_set("ID 0");
+      CPPUNIT_ASSERT_EQUAL(std::string("ID 0"), std::string(cfgSetRet0->id));
+      CPPUNIT_ASSERT_EQUAL(std::string("DESCRIPTION 0"),
+			   std::string(cfgSetRet0->description));
+      CPPUNIT_ASSERT_EQUAL(CORBA::ULong(2),
+			   cfgSetRet0->configuration_data.length());
+      CPPUNIT_ASSERT_EQUAL(std::string("NAME 0-0"),
+			   std::string(cfgSetRet0->configuration_data[0].name));
+      {
+	char* value; cfgSetRet0->configuration_data[0].value >>= value;
+	CPPUNIT_ASSERT_EQUAL(std::string("3.14159"), std::string(value));
+      }
+      CPPUNIT_ASSERT_EQUAL(std::string("NAME 0-1"),
+			   std::string(cfgSetRet0->configuration_data[1].name));
+      {
+	char* value; cfgSetRet0->configuration_data[1].value >>= value;
+	CPPUNIT_ASSERT_EQUAL(std::string("2.71828"), std::string(value));
+      }
+
+      // "ID 0"のほうをアクティブ化する
+      CPPUNIT_ASSERT_EQUAL(CORBA::Boolean(true), sdoCfg.activate_configuration_set("ID 0"));
+			
+      // アクティブなConfigurationSetを取得し、それがアクティブ化したものと一致するか？
+      SDOPackage::ConfigurationSet* cfgSetRet1 = sdoCfg.get_configuration_set("ID 1");
+      CPPUNIT_ASSERT_EQUAL(std::string("ID 1"), std::string(cfgSetRet1->id));
+      CPPUNIT_ASSERT_EQUAL(std::string("DESCRIPTION 1"),
+			   std::string(cfgSetRet1->description));
+      CPPUNIT_ASSERT_EQUAL(CORBA::ULong(2),
+			   cfgSetRet1->configuration_data.length());
+      CPPUNIT_ASSERT_EQUAL(std::string("NAME 1-0"),
+			   std::string(cfgSetRet1->configuration_data[0].name));
+      {
+	char* value; cfgSetRet1->configuration_data[0].value >>= value;
+	CPPUNIT_ASSERT_EQUAL(std::string("1.41421356"), std::string(value));
+      }
+      CPPUNIT_ASSERT_EQUAL(std::string("NAME 1-1"),
+			   std::string(cfgSetRet1->configuration_data[1].name));
+      {
+	char* value; cfgSetRet1->configuration_data[1].value >>= value;
+	CPPUNIT_ASSERT_EQUAL(std::string("1.7320508"), std::string(value));
+      }
+			
+      // 存在しないIDを指定してactivate_configuration_set()を呼出し、意図どおりの例外がスローされるか？
+      try
+	{
+	  sdoCfg.activate_configuration_set("inexist ID");
+	  CPPUNIT_FAIL("Exception not thrown.");
+	}
+      catch (SDOPackage::InvalidParameter expected) {}
     }
     
   };
@@ -666,13 +770,83 @@ CPPUNIT_TEST_SUITE_REGISTRATION(SdoConfiguration::SdoConfigurationTests);
 #ifdef LOCAL_MAIN
 int main(int argc, char* argv[])
 {
+
+  FORMAT format = TEXT_OUT;
+  int target = 0;
+  std::string xsl;
+  std::string ns;
+  std::string fname;
+  std::ofstream ofs;
+
+  int i(1);
+  while (i < argc)
+    {
+      std::string arg(argv[i]);
+      std::string next_arg;
+      if (i + 1 < argc) next_arg = argv[i + 1];
+      else              next_arg = "";
+
+      if (arg == "--text") { format = TEXT_OUT; break; }
+      if (arg == "--xml")
+	{
+	  if (next_arg == "")
+	    {
+	      fname = argv[0];
+	      fname += ".xml";
+	    }
+	  else
+	    {
+	      fname = next_arg;
+	    }
+	  format = XML_OUT;
+	  ofs.open(fname.c_str());
+	}
+      if ( arg == "--compiler"  ) { format = COMPILER_OUT; break; }
+      if ( arg == "--cerr"      ) { target = 1; break; }
+      if ( arg == "--xsl"       )
+	{
+	  if (next_arg == "") xsl = "default.xsl"; 
+	  else                xsl = next_arg;
+	}
+      if ( arg == "--namespace" )
+	{
+	  if (next_arg == "")
+	    {
+	      std::cerr << "no namespace specified" << std::endl;
+	      exit(1); 
+	    }
+	  else
+	    {
+	      xsl = next_arg;
+	    }
+	}
+      ++i;
+    }
   CppUnit::TextUi::TestRunner runner;
-  runner.addTest(CppUnit::TestFactoryRegistry::getRegistry().makeTest());
-  CppUnit::Outputter* outputter = 
-    new CppUnit::TextOutputter(&runner.result(), std::cout);
+  if ( ns.empty() )
+    runner.addTest(CppUnit::TestFactoryRegistry::getRegistry().makeTest());
+  else
+    runner.addTest(CppUnit::TestFactoryRegistry::getRegistry(ns).makeTest());
+  CppUnit::Outputter* outputter = 0;
+  std::ostream* stream = target ? &std::cerr : &std::cout;
+  switch ( format )
+    {
+    case TEXT_OUT :
+      outputter = new CppUnit::TextOutputter(&runner.result(),*stream);
+      break;
+    case XML_OUT :
+      std::cout << "XML_OUT" << std::endl;
+      outputter = new CppUnit::XmlOutputter(&runner.result(),
+					    ofs, "shift_jis");
+      static_cast<CppUnit::XmlOutputter*>(outputter)->setStyleSheet(xsl);
+      break;
+    case COMPILER_OUT :
+      outputter = new CppUnit::CompilerOutputter(&runner.result(),*stream);
+      break;
+    }
   runner.setOutputter(outputter);
-  bool retcode = runner.run();
-  return !retcode;
+  runner.run();
+  return 0; // runner.run() ? 0 : 1;
 }
 #endif // MAIN
 #endif // SdoConfiguration_cpp
