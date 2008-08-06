@@ -2,12 +2,26 @@
 #------------------------------------------------------------
 # @file   Makefile.am
 # @brief  Makefile.am for CORBA_SeqUtil unit test
-# @date   $Date: 2007-01-21 06:51:16 $
+# @date   $Date: 2007/01/21 06:51:16 $
 # @author Noriaki Ando <n-ando@aist.go.jp>
 #
 # $Id$
 #
 #------------------------------------------------------------
+
+#
+# $Log: Makefile.am,v $
+# Revision 1.3  2007/01/21 06:51:16  n-ando
+# The include search path option order in AM_CPPFLAGS was changed.
+#
+# Revision 1.2  2007/01/12 14:42:45  n-ando
+# Some fixes for distribution control.
+#
+# Revision 1.1  2006/11/27 08:30:10  n-ando
+# TestSuites are devided into each directory.
+#
+#
+
 
 AUTOMAKE_OPTIONS = 1.9
 
@@ -18,7 +32,8 @@ LIBS = @LIBS@
 AM_CPPFLAGS=              \
 	-I.               \
 	-I$(top_builddir) \
-	-I$(includedir)
+	-I$(includedir) \
+	-I$(top_builddir)/rtm/idl
 
 
 AM_LDFLAGS=               \
@@ -58,7 +73,7 @@ all: do-test
 
 # do tests
 do-test:
-	./CORBA_SeqUtilTests
+	./CORBA_SeqUtilTests --xml corba_sequtiltests.xml --xsl default.xsl
 
 # clean-up
 clean-local:

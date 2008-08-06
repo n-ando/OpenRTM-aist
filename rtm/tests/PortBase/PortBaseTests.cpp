@@ -2,7 +2,7 @@
 /*!
  * @file   PortBaseTests.cpp
  * @brief  PortBase test class
- * @date   $Date: 2007-04-13 15:05:10 $
+ * @date   $Date: 2008/02/08 10:57:23 $
  * @author Shinji Kurihara
  *         Noriaki Ando <n-ando@aist.go.jp>
  *
@@ -18,6 +18,33 @@
  *
  */
 
+/*
+ * $Log: PortBaseTests.cpp,v $
+ * Revision 1.2  2008/02/08 10:57:23  arafune
+ * Some tests were added.
+ *
+ * Revision 1.1  2007/12/20 07:50:17  arafune
+ * *** empty log message ***
+ *
+ * Revision 1.3  2007/04/13 15:05:10  n-ando
+ * Now RTC::OK becomes RTC::RTC_OK in RTC.idl.
+ *
+ * Revision 1.2  2007/01/12 14:44:43  n-ando
+ * Some fixes for distribution control.
+ *
+ * Revision 1.1  2006/11/27 08:35:12  n-ando
+ * TestSuites are devided into each directory.
+ *
+ * Revision 1.2  2006/11/13 12:30:06  kurihara
+ *
+ * document is added.
+ *
+ * Revision 1.1  2006/11/08 01:19:07  kurihara
+ *
+ * test program for PortBase class.
+ *
+ */
+
 #ifndef PortBase_cpp
 #define PortBase_cpp
 
@@ -29,6 +56,7 @@
 
 #include <vector>
 #include <string>
+#include <rtm/RTC.h>
 #include <rtm/PortBase.h>
 #include <rtm/RTObject.h>
 
@@ -38,88 +66,144 @@
  */
 namespace PortBase
 {
-  class PortBase
-	: public RTC::PortBase
+  class PortBaseMock : public RTC::PortBase
   {
   public:
-	const std::string getUUID() const
-	{
-	  return RTC::PortBase::getUUID();
-	}
+		
+    PortBaseMock(const RTC::PortProfile& profile)
+    {
+      this->m_profile = profile;
+      this->m_profile.port_ref = this->m_objref;
+    }
+
+    const std::string getUUID() const
+    {
+      return RTC::PortBase::getUUID();
+    }
+		
+    virtual RTC::ReturnCode_t notify_connect(RTC::ConnectorProfile& connector_profile)
+      throw (CORBA::SystemException)
+    {
+      _notifyConnectTimes.push_back(getNow());
+      return PortBase::notify_connect(connector_profile);
+    }
+		
+    virtual RTC::ReturnCode_t notify_disconnect(const char* connector_id)
+      throw (CORBA::SystemException)
+    {
+      _notifyDisconnectTimes.push_back(getNow());
+      return PortBase::notify_disconnect(connector_id);
+    }
+		
   protected:
-	virtual RTC::ReturnCode_t publishInterfaces(RTC::ConnectorProfile&)
-	{
-	  return RTC::RTC_OK;
-	}
-	virtual RTC::ReturnCode_t subscribeInterfaces(const RTC::ConnectorProfile&)
-	{
-	  return RTC::RTC_OK;
-	}
-	virtual void unsubscribeInterfaces(const RTC::ConnectorProfile&)
-	{
-	}
+	
+    virtual RTC::ReturnCode_t publishInterfaces(RTC::ConnectorProfile& connector_profile)
+    {
+      _publishIfsTimes.push_back(getNow());
+      return RTC::RTC_OK;
+    }
+		
+    virtual RTC::ReturnCode_t subscribeInterfaces(const RTC::ConnectorProfile& connector_profile)
+    {
+      _subscribeIfsTimes.push_back(getNow());
+      return RTC::RTC_OK;
+    }
+		
+    virtual void unsubscribeInterfaces(const RTC::ConnectorProfile& connector_profile)
+    {
+      _unsubscribeIfsTimes.push_back(getNow());
+    }
+	
+  private:
+	
+    std::vector<timeval> _notifyConnectTimes;
+    std::vector<timeval> _notifyDisconnectTimes;
+    std::vector<timeval> _publishIfsTimes;
+    std::vector<timeval> _subscribeIfsTimes;
+    std::vector<timeval> _unsubscribeIfsTimes;
+	
+  private:
+	
+    timeval getNow() const
+    {
+      timeval now;
+      gettimeofday(&now, 0);
+      return now;
+    }
+		
+  public:
+	
+    const std::vector<timeval>& getNotifyConnectTimes() const
+    {
+      return _notifyConnectTimes;
+    }
+		
+    const std::vector<timeval>& getNotifyDisconnectTimes() const
+    {
+      return _notifyDisconnectTimes;
+    }
+		
+    const std::vector<timeval>& getPublishIfsTimes() const
+    {
+      return _publishIfsTimes;
+    }
+		
+    const std::vector<timeval>& getSubscribeIfsTimes() const
+    {
+      return _subscribeIfsTimes;
+    }
+		
+    const std::vector<timeval>& getUnsubscribeIfsTimes() const
+    {
+      return _unsubscribeIfsTimes;
+    }
   };
 
-  using namespace RTC;
-  using namespace std;
+  
   int g_argc;
-  vector<string> g_argv;
+  std::vector<std::string> g_argv;
 
   class PortBaseTests
     : public CppUnit::TestFixture
   {
     CPPUNIT_TEST_SUITE(PortBaseTests);
+		
     CPPUNIT_TEST(test_get_port_profile);
+    CPPUNIT_TEST(test_getPortProfile);
     CPPUNIT_TEST(test_get_connector_profiles);
     CPPUNIT_TEST(test_get_connector_profile);
     CPPUNIT_TEST(test_connect);
+    CPPUNIT_TEST(test_notify_connect);
     CPPUNIT_TEST(test_disconnect);
-    CPPUNIT_TEST(test_disconnect_all);
-    //  CPPUNIT_TEST(test_setProfile);
-    //  CPPUNIT_TEST(test_getProfile);
-    //    CPPUNIT_TEST(test_setName);
-    //    CPPUNIT_TEST(test_getName);
-    //    CPPUNIT_TEST(test_setInterfaceProfiles);
-    //  CPPUNIT_TEST(test_addInterfaceProfiles);
-    //  CPPUNIT_TEST(test_getInterfaceProfiles);
-    //  CPPUNIT_TEST(test_getInterfaceProfile);
+    CPPUNIT_TEST(test_setName);
+    CPPUNIT_TEST(test_getProfile);
     CPPUNIT_TEST(test_setPortRef);
-    //  CPPUNIT_TEST(test_getPortRef);
-    //  CPPUNIT_TEST(test_addConnectorProfile);
-    //  CPPUNIT_TEST(test_eraseConnectorProfile);
-    //  CPPUNIT_TEST(test_getConnectorProfileList);
-    //  CPPUNIT_TEST(test_getConnectorProfile);
-    CPPUNIT_TEST(test_setOwner);
-    CPPUNIT_TEST(test_getOwner);
-	//    CPPUNIT_TEST(test_setProperties);
-	//    CPPUNIT_TEST(test_getProperties);
+    CPPUNIT_TEST(test_getPortRef);
     CPPUNIT_TEST(test_getUUID);
+		
     CPPUNIT_TEST_SUITE_END();
-    
+		
   private:
-    PortBase* m_ppb;
-    CORBA::ORB_ptr          m_orb;
-    PortableServer::POA_ptr m_poa;
-    
-    SDOPackage::NVList m_nvlist;
-    SDOPackage::NameValue m_nv;
-    CORBA::Float m_cnctProfVal,m_portProfVal;
+	
+    CORBA::ORB_ptr m_orb;
+    RTC::PortBase* m_pPortBase;
+
   public:
-    
+	
     /*!
      * @brief Constructor
      */
     PortBaseTests()
     {
     }
-    
+		
     /*!
      * @brief Destructor
      */
     ~PortBaseTests()
     {
     }
-    
+		
     /*!
      * @brief 初期化
      *    (1) ORBの初期化,POAのactivate
@@ -138,738 +222,508 @@ namespace PortBase
       for (int i = 0; i < g_argc; i++) {
 	argv[i] = (char *)g_argv[i].c_str();
       }
-      
-      // (1) ORBの初期化,POAのactivate
+
+      // ORBの初期化
       m_orb = CORBA::ORB_init(g_argc, argv);
-      CORBA::Object_var  obj = m_orb->resolve_initial_references("RootPOA");
-      m_poa = PortableServer::POA::_narrow(obj);
-      PortableServer::POAManager_var pman = m_poa->the_POAManager();
-      pman->activate();
-      
-      // (2) PortBaseのインスタンス生成
-      m_ppb = new PortBase();
-      
-      // (3) PortInterfaceProfileオブジェクト要素(PortProfileの要素)のセット
-      PortInterfaceProfile pIProf;
-      pIProf.instance_name = "PortInterfaceProfile-instance_name";
-      pIProf.type_name = "PortInterfaceProfile-type_name";
-      pIProf.polarity = REQUIRED;
-      
-      // (4) PortInterfaceProfileListオブジェクト要素のセット
-      PortInterfaceProfileList pIFProfList;
-      pIFProfList.length(1);
-      pIFProfList[0] = pIProf;
-      
-      // (5) ConnectorProfileオブジェクト要素のセット
-      ConnectorProfile cProf;
-      cProf.name = "ConnectorProfile-name";
-      cProf.connector_id = "connect_id0";
-      m_nv.name = "ConnectorProfile-properties0-name";
-      m_cnctProfVal = 1.1;
-      m_nv.value <<= m_cnctProfVal;
-      m_nvlist.length(1);
-      m_nvlist[0] = m_nv;
-      cProf.properties = m_nvlist;
-      
-      // (6) ConnectorProfileListオブジェクト要素(PortProfileの要素)のセット
-      ConnectorProfileList cProfList;
-      cProfList.length(1);
-      cProfList[0] = cProf;
-      
-      // (7) PortProfileオブジェクト要素のセット
-      PortProfile pProf;
-      pProf.name = "inport0";
-      pProf.interfaces = pIFProfList;
-      pProf.connector_profiles = cProfList;
-      m_nv.name = "PortProfile-properties0-name";
-      m_portProfVal = 2.2;
-      m_nv.value <<= m_portProfVal;
-      m_nvlist[0] = m_nv;
-      pProf.properties = m_nvlist;
-      
-      // (8) PortProfileオブジェクトのセット
-      //### m_ppb->setProfile(pProf);
+      PortableServer::POA_ptr poa = PortableServer::POA::_narrow(
+								 m_orb->resolve_initial_references("RootPOA"));
+			
+      // PortProfile.interfacesの構築準備
+      RTC::PortInterfaceProfile portIfProfile;
+      portIfProfile.instance_name = "PortInterfaceProfile-instance_name";
+      portIfProfile.type_name = "PortInterfaceProfile-type_name";
+      portIfProfile.polarity = RTC::REQUIRED;
+
+      RTC::PortInterfaceProfileList portIfProfiles;
+      portIfProfiles.length(1);
+      portIfProfiles[0] = portIfProfile;
+
+      // PortProfile.connector_profilesの構築準備
+      SDOPackage::NameValue connProfileProperty;
+      connProfileProperty.name = "ConnectorProfile-properties0-name";
+      connProfileProperty.value <<= CORBA::Float(1.1);
+			
+      SDOPackage::NVList connProfileProperties;
+      connProfileProperties.length(1);
+      connProfileProperties[0] = connProfileProperty;
+      RTC::ConnectorProfile connProfile;
+      connProfile.name = "ConnectorProfile-name";
+      connProfile.connector_id = "connect_id0";
+      connProfile.properties = connProfileProperties;
+
+      RTC::ConnectorProfileList connProfiles;
+      connProfiles.length(1);
+      connProfiles[0] = connProfile;
+
+      // PortProfile.propertiesの構築準備
+      SDOPackage::NameValue portProfileProperty;
+      portProfileProperty.name = "PortProfile-properties0-name";
+      portProfileProperty.value <<= CORBA::Float(2.2);
+      SDOPackage::NVList portProfileProperties;
+      portProfileProperties.length(1);
+      portProfileProperties[0] = portProfileProperty;
+
+      // PortProfileを構築する
+      RTC::PortProfile portProfile;
+      portProfile.name = "inport0";
+      portProfile.interfaces = portIfProfiles;
+      portProfile.connector_profiles = connProfiles;
+      portProfile.properties = portProfileProperties;
+
+      // PortBaseのインスタンスを生成する
+      m_pPortBase = new PortBaseMock(portProfile);
+
+      // POAを活性化する			
+      PortableServer::POAManager_var poaMgr = poa->the_POAManager();
+      poaMgr->activate();
     }
-    
+		
     /*!
      * @brief Test finalization
      */
     virtual void tearDown()
-    { 
+    {
+      //if (m_orb != 0) {
+      // m_orb->destroy();
+      // m_orb = 0;
+      // m_pPortBase = 0;
+      // }
     }
-    
+		
     /*!
-     * @brief get_port_profile()のテスト
-     *    ※ PortProfileはsetUp()で登録済みである。
-     *    (1) get_port_profile()にてPortProfile*を取得
-     *    (2) セットしたPortProfileと取得したPortProfileの要素を比較
+     * @brief get_port_profile()メソッドのテスト
+     * 
+     * - オブジェクト参照経由で、get_port_profile()に正しくアクセスできるか？
+     * - PortProfile.nameを正しく取得できるか？
+     * - PortProfile.interfaceを正しく取得できるか？
+     * - PortProfile.connector_profilesを正しく取得できるか？
+     * - PortProfile.propertiesを正しく取得できるか？
      */
-    void test_get_port_profile() {
-      PortProfile* getProf;
+    void test_get_port_profile()
+    {
+      // (1) オブジェクト参照経由で、get_port_profile()に正しくアクセスできるか？
+      // get_port_profile()はCORBAインタフェースなので、オブジェクト参照経由でアクセスし、
+      // CORBAインタフェースとして機能していることを確認する
+      const RTC::Port_ptr portRef = m_pPortBase->getPortRef();
+      const RTC::PortProfile* pPortProfile = portRef->get_port_profile();
+			
+      // (2) PortProfile.nameを正しく取得できるか？
+      CPPUNIT_ASSERT_EQUAL(
+			   std::string("inport0"),
+			   std::string(pPortProfile->name));
+
+      // (3) PortProfile.interfaceを正しく取得できるか？
+      const RTC::PortInterfaceProfile& portIfProfile = pPortProfile->interfaces[0];
+      // (3-a) PortInterfaceProfile.instance_nameを正しく取得できるか？
+      CPPUNIT_ASSERT_EQUAL(
+			   std::string("PortInterfaceProfile-instance_name"),
+			   std::string(portIfProfile.instance_name));
+
+      // (3-b) PortInterfaceProfile.type_nameを正しく取得できるか？
+      CPPUNIT_ASSERT_EQUAL(
+			   std::string("PortInterfaceProfile-type_name"),
+			   std::string(portIfProfile.type_name));
+
+      // (3-c) PortInterfaceProfile.polarityを正しく取得できるか？
+      CPPUNIT_ASSERT_EQUAL(RTC::REQUIRED, portIfProfile.polarity);
+
+      // (4) PortProfile.connector_profilesを正しく取得できるか？
+      const RTC::ConnectorProfile& connProfile = pPortProfile->connector_profiles[0];
+      // (4-a) ConnectorProfile.nameを正しく取得できるか？
+      CPPUNIT_ASSERT_EQUAL(
+			   std::string("ConnectorProfile-name"),
+			   std::string(connProfile.name));
       
-      // (1) get_port_profile()にてPortProfile*を取得
-      getProf = m_ppb->get_port_profile();
-      
-      string setstr, getstr;
-      // (2) セットしたPortProfileと取得したPortProfileの要素を比較
-      // check PortProfile.name
-      getstr = getProf->name;
-      setstr = "inport0";
-      CPPUNIT_ASSERT(getstr == setstr);
-      
-      // check PortProfile.interfaces
-      getstr = getProf->interfaces[0].instance_name;
-      setstr = "PortInterfaceProfile-instance_name";
-      CPPUNIT_ASSERT(getstr == setstr);
-      
-      getstr = getProf->interfaces[0].type_name;
-      setstr = "PortInterfaceProfile-type_name";
-      CPPUNIT_ASSERT(getstr == setstr);
-      
-      CPPUNIT_ASSERT(getProf->interfaces[0].polarity == REQUIRED);
-      
-      // check PortProfile.connector_profiles
-      getstr = getProf->connector_profiles[0].name;
-      setstr = "ConnectorProfile-name";
-      CPPUNIT_ASSERT(getstr == setstr);
-      
-      getstr = getProf->connector_profiles[0].connector_id;
-      setstr = "connect_id0";
-      CPPUNIT_ASSERT(getstr == setstr);
-      
-      getstr = getProf->connector_profiles[0].properties[0].name;
-      setstr = "ConnectorProfile-properties0-name";
-      CPPUNIT_ASSERT(getstr == setstr);
-      
-      CORBA::Float retval;
-      getProf->connector_profiles[0].properties[0].value >>= retval;
-      CPPUNIT_ASSERT(retval == m_cnctProfVal);
-      
-      // check PortProfile.properties
-      getstr = getProf->properties[0].name;
-      setstr = "PortProfile-properties0-name";
-      CPPUNIT_ASSERT(getstr == setstr);
-      
-      getProf->properties[0].value >>= retval;
-      CPPUNIT_ASSERT(retval == m_portProfVal);
+      // (4-b) ConnectorProfile.connector_idを正しく取得できるか？
+      CPPUNIT_ASSERT_EQUAL(
+			   std::string("connect_id0"),
+			   std::string(connProfile.connector_id));
+			
+      // (4-c) ConnectorProfile.propertiesを正しく取得できるか？
+      CPPUNIT_ASSERT_EQUAL(
+			   std::string("ConnectorProfile-properties0-name"),
+			   std::string(connProfile.properties[0].name));
+			
+      {
+	CORBA::Float value;
+	connProfile.properties[0].value >>= value;
+	CPPUNIT_ASSERT_EQUAL(CORBA::Float(1.1), value);
+      }
+			
+      // (5) PortProfile.propertiesを正しく取得できるか？
+      CPPUNIT_ASSERT_EQUAL(
+			   std::string("PortProfile-properties0-name"),
+			   std::string(pPortProfile->properties[0].name));
+
+      {
+	CORBA::Float value;
+	pPortProfile->properties[0].value >>= value;
+	CPPUNIT_ASSERT_EQUAL(CORBA::Float(2.2), value);
+      }
     }
-    
-    
+		
     /*!
-     * @brief get_connector_profiles()のテスト
-     *    ※ ConnectorProfileListはPortProfileの要素であり、
-     *       setUp()で登録済みである。
-     *    (1）get_connector_profiles()にてConnectorProfileListを取得
-     *    (2) セットしたConnectorProfileと取得したConnectorProfileListの
-     *        要素であるConnectorProfileの要素を比較。
+     * @brief getPortProfile()メソッドのテスト
+     * 
+     * - PortProfile.nameを正しく取得できるか？
+     * - PortProfile.interfaceを正しく取得できるか？
+     * - PortProfile.connector_profilesを正しく取得できるか？
+     * - PortProfile.propertiesを正しく取得できるか？
      */
-    void test_get_connector_profiles() {
-      ConnectorProfileList* cpList;
-      string setstr, getstr;
+    void test_getPortProfile()
+    {
+      const RTC::PortProfile& portProfile = m_pPortBase->getPortProfile();
+			
+      // (1) PortProfile.nameを正しく取得できるか？
+      CPPUNIT_ASSERT_EQUAL(
+			   std::string("inport0"),
+			   std::string(portProfile.name));
+
+      // (2) PortProfile.interfaceを正しく取得できるか？
+      const RTC::PortInterfaceProfile& portIfProfile = portProfile.interfaces[0];
+      // (2-a) PortInterfaceProfile.instance_nameを正しく取得できるか？
+      CPPUNIT_ASSERT_EQUAL(
+			   std::string("PortInterfaceProfile-instance_name"),
+			   std::string(portIfProfile.instance_name));
+
+      // (2-b) PortInterfaceProfile.type_nameを正しく取得できるか？
+      CPPUNIT_ASSERT_EQUAL(
+			   std::string("PortInterfaceProfile-type_name"),
+			   std::string(portIfProfile.type_name));
+
+      // (2-c) PortInterfaceProfile.polarityを正しく取得できるか？
+      CPPUNIT_ASSERT_EQUAL(RTC::REQUIRED, portIfProfile.polarity);
+
+      // (3) PortProfile.connector_profilesを正しく取得できるか？
+      const RTC::ConnectorProfile& connProfile = portProfile.connector_profiles[0];
+      // (3-a) ConnectorProfile.nameを正しく取得できるか？
+      CPPUNIT_ASSERT_EQUAL(
+			   std::string("ConnectorProfile-name"),
+			   std::string(connProfile.name));
       
-      // get ConnectorProfileList
-      cpList = m_ppb->get_connector_profiles();
-      
-      // (2) セットしたConnectorProfileと取得したConnectorProfileListの
-      //     要素である
-      //      ConnectorProfileの要素を比較。
-      // check ConnectorProfile.name
-      setstr = "ConnectorProfile-name";
-      getstr = (*cpList)[0].name;
-      CPPUNIT_ASSERT(getstr == setstr);
-      
-      // check ConnectorProfile.connector_id
-      setstr = "connect_id0";
-      getstr = (*cpList)[0].connector_id;
-      CPPUNIT_ASSERT(getstr == setstr);
-      
-      // check ConnectorProfile.properties.name
-      setstr = "ConnectorProfile-properties0-name";
-      getstr = (*cpList)[0].properties[0].name;
-      CPPUNIT_ASSERT(getstr == setstr);
-      
-      // check ConnectorProfile.properties.value
-      CORBA::Float retval;
-      (*cpList)[0].properties[0].value >>= retval;
-      CPPUNIT_ASSERT(m_cnctProfVal == retval);
+      // (3-b) ConnectorProfile.connector_idを正しく取得できるか？
+      CPPUNIT_ASSERT_EQUAL(
+			   std::string("connect_id0"),
+			   std::string(connProfile.connector_id));
+			
+      // (3-c) ConnectorProfile.propertiesを正しく取得できるか？
+      CPPUNIT_ASSERT_EQUAL(
+			   std::string("ConnectorProfile-properties0-name"),
+			   std::string(connProfile.properties[0].name));
+			
+      {
+	CORBA::Float value;
+	connProfile.properties[0].value >>= value;
+	CPPUNIT_ASSERT_EQUAL(CORBA::Float(1.1), value);
+      }
+			
+      // (4) PortProfile.propertiesを正しく取得できるか？
+      CPPUNIT_ASSERT_EQUAL(
+			   std::string("PortProfile-properties0-name"),
+			   std::string(portProfile.properties[0].name));
+
+      {
+	CORBA::Float value;
+	portProfile.properties[0].value >>= value;
+	CPPUNIT_ASSERT_EQUAL(CORBA::Float(2.2), value);
+      }
     }
-    
-    
+		
     /*!
-     * @brief get_connector_profile()のテスト
-     *    ※ ConnectorProfileはConnectorProfileListの要素であり、
-     *       ConnectorProfileListはPortProfileの要素である。
-     *       PortProfileはsetUp()で登録済みである。
-     *    (1) get_connector_profileにてConnectorProfileを取得。
-     *    (2) セットしたConnectorProfileと取得したConnectorProfileを比較。
+     * @brief get_connector_profiles()メソッドのテスト
+     * 
+     * - オブジェクト参照経由で、get_connector_profiles()に正しくアクセスできるか？
+     * - ConnectorProfile.nameを正しく取得できるか？
+     * - ConnectorProfile.connector_idを正しく取得できるか？
+     * - ConnectorProfile.propertiesを正しく取得できるか？
      */
-    void test_get_connector_profile() {
-      ConnectorProfile* cProf;
-      string setstr, getstr;
-      
-      // (1) get_connector_profileにてConnectorProfileを取得。
-      cProf = m_ppb->get_connector_profile("connect_id0");
-      
-      // セットしたConnectorProfileと取得したConnectorProfileを比較。
-      // check ConnectorProfile.name
-      setstr = "ConnectorProfile-name";
-      getstr = cProf->name;
-      CPPUNIT_ASSERT(getstr == setstr);
-      
-      // check ConnectorProfile.connector_id
-      setstr = "connect_id0";
-      getstr = cProf->connector_id;
-      CPPUNIT_ASSERT(getstr == setstr);
-      
-      // check ConnectorProfile.properties.name
-      setstr = "ConnectorProfile-properties0-name";
-      getstr = cProf->properties[0].name;
-      CPPUNIT_ASSERT(getstr == setstr);
-      
-      // check ConnectorProfile.properties.value
-      CORBA::Float retval;
-      cProf->properties[0].value >>= retval;
-      CPPUNIT_ASSERT(m_cnctProfVal == retval);
-      
-      ReturnCode_t result;
-      
-      result = m_ppb->connect(*cProf);
-      
-      if (result == OK)
-	cout << "connect result OK. " << endl;
-      else if (result == ERROR)
-	cout << "connect result ERROR. " << endl;
-      else if (result == BAD_PARAMETER)
-	cout << "connect result BAD_PARAMETER. " << endl;
-      else if (result == UNSUPPORTED)
-	cout << "connect result UNSUPPORTED. " << endl;
-      else if (result == OUT_OF_RESOURCES)
-	cout << "connect result OUT_OF_RESOURCES. " << endl;
-      else if (result == PRECONDITION_NOT_MET)
-	cout << "connect result PRECONDITION_NOT_MET. " << endl;
+    void test_get_connector_profiles()
+    {
+      // (1) オブジェクト参照経由で、get_connector_profiles()に正しくアクセスできるか？
+      // get_connector_profiles()はCORBAインタフェースなので、オブジェクト参照経由でアクセスし、
+      // CORBAインタフェースとして機能していることを確認する
+      const RTC::Port_ptr portRef = m_pPortBase->getPortRef();
+      const RTC::ConnectorProfileList* pConnProfList = portRef->get_connector_profiles();
+
+      // ConnectorProfileList内のConnectorProfileのチェック
+      const RTC::ConnectorProfile& connProfile = (*pConnProfList)[0];
+      // (2) ConnectorProfile.nameを正しく取得できるか？
+      CPPUNIT_ASSERT_EQUAL(
+			   std::string("ConnectorProfile-name"),
+			   std::string(connProfile.name));
+			
+      // (3) ConnectorProfile.connector_idを正しく取得できるか？
+      CPPUNIT_ASSERT_EQUAL(
+			   std::string("connect_id0"),
+			   std::string(connProfile.connector_id));
+
+      // (4) ConnectorProfile.propertiesを正しく取得できるか？
+      const SDOPackage::NameValue& property = connProfile.properties[0];
+      // (4-a) nameを正しく取得できるか？
+      CPPUNIT_ASSERT_EQUAL(
+			   std::string("ConnectorProfile-properties0-name"),
+			   std::string(property.name));
+			
+      // (4-b) valueを正しく取得できるか？
+      {
+	CORBA::Float value;
+	property.value >>= value;
+	CPPUNIT_ASSERT_EQUAL(CORBA::Float(1.1), value);
+      }
     }
-    
-    
+		
     /*!
-     * @brief connect()のテスト
-     *   未テスト
+     * @brief get_connector_profile()メソッドのテスト
+     * 
+     * - オブジェクト参照経由で、get_connector_profile()に正しくアクセスできるか？
+     * - ConnectorProfile.nameを正しく取得できるか？
+     * - ConnectorProfile.connector_idを正しく取得できるか？
+     * - ConnectorProfile.propertiesを正しく取得できるか？
      */
-    void test_connect() {}
-    
-    
-    /*!
-     * @brief disconnect()のテスト
-     *   未テスト
-     */
-    void test_disconnect() {}
-    
-    
-    /*!
-     * @brief disconnect_all()のテスト
-     *   未テスト
-     */
-    void test_disconnect_all() {}
-    
-    
-    /*!
-     * @brief setProfile()のテスト
-     *   test_get_port_profile() にてテスト済み
-     */
-    void test_setProfile() {}
-    
-    
-    /*!
-     * @brief getProfile()のテスト
-     *   ※ PortProfileはsetUp()で登録済みである。
-     *   (1) getProfile()にてPortProfileを取得。
-     *   (2) セットしたPortProfileと取得したそれとの要素を比較。
-     */
-    /*
-    void test_getProfile() {
-      PortProfile getProf;
-      
-      // (1) getProfile()にてPortProfileを取得。
-      // ### getProf = m_ppb->getProfile();
-      
-      string setstr, getstr;
-      
-      // (2) セットしたPortProfileと取得したそれとの要素を比較。
-      // check PortProfile.name
-      getstr = getProf.name;
-      setstr = "inport0";
-      CPPUNIT_ASSERT(getstr == setstr);
-      
-      // check PortProfile.interfaces
-      getstr = getProf.interfaces[0].instance_name;
-      setstr = "PortInterfaceProfile-instance_name";
-      CPPUNIT_ASSERT(getstr == setstr);
-      
-      getstr = getProf.interfaces[0].type_name;
-      setstr = "PortInterfaceProfile-type_name";
-      CPPUNIT_ASSERT(getstr == setstr);
-      
-      CPPUNIT_ASSERT(getProf.interfaces[0].polarity == REQUIRED);
-      
-      // check PortProfile.connector_profiles
-      getstr = getProf.connector_profiles[0].name;
-      setstr = "ConnectorProfile-name";
-      CPPUNIT_ASSERT(getstr == setstr);
-      
-      getstr = getProf.connector_profiles[0].connector_id;
-      setstr = "connect_id0";
-      CPPUNIT_ASSERT(getstr == setstr);
-      
-      getstr = getProf.connector_profiles[0].properties[0].name;
-      setstr = "ConnectorProfile-properties0-name";
-      CPPUNIT_ASSERT(getstr == setstr);
-      
-      CORBA::Float retval;
-      getProf.connector_profiles[0].properties[0].value >>= retval;
-      CPPUNIT_ASSERT(retval == m_cnctProfVal);
-      
-      // check PortProfile.properties
-      getstr = getProf.properties[0].name;
-      setstr = "PortProfile-properties0-name";
-      CPPUNIT_ASSERT(getstr == setstr);
-      
-      getProf.properties[0].value >>= retval;
-      CPPUNIT_ASSERT(retval == m_portProfVal);
+    void test_get_connector_profile()
+    {
+      // (1) オブジェクト参照経由で、get_connector_profile()に正しくアクセスできるか？
+      // get_connector_profile()はCORBAインタフェースなので、オブジェクト参照経由でアクセスし、
+      // CORBAインタフェースとして機能していることを確認する
+      const RTC::Port_ptr portRef = m_pPortBase->getPortRef();
+      const RTC::ConnectorProfile* pConnProfile = portRef->get_connector_profile("connect_id0");
+
+      // (2) ConnectorProfile.nameを正しく取得できるか？
+      CPPUNIT_ASSERT_EQUAL(
+			   std::string("ConnectorProfile-name"),
+			   std::string(pConnProfile->name));
+
+      // (3) ConnectorProfile.connector_idを正しく取得できるか？
+      CPPUNIT_ASSERT_EQUAL(
+			   std::string("connect_id0"),
+			   std::string(pConnProfile->connector_id));
+
+      // (4) ConnectorProfile.propertiesを正しく取得できるか？
+      const SDOPackage::NameValue& property = pConnProfile->properties[0];
+      // (4-a) nameを正しく取得できるか？
+      CPPUNIT_ASSERT_EQUAL(
+			   std::string("ConnectorProfile-properties0-name"),
+			   std::string(property.name));
+
+      // (4-b) valueを正しく取得できるか？
+      {
+	CORBA::Float value;
+	property.value >>= value;
+	CPPUNIT_ASSERT_EQUAL(CORBA::Float(1.1), value);
+      }
     }
-    */
-    
+		
     /*!
-     * @brief setName()のテスト
-     *   ※ PortProfileはsetUp()にて登録済みである。
-     *   (1) setName()にてPortProfile.nameをセット。
-     *   (2) getProfile()にてPortProfileを取得。
-     *   (3) (1)でセットしたnameと(2)で取得したPortProfile.nameを比較。
+     * @brief connect()メソッドのテスト
+     * 
+     * - オブジェクト参照経由で、connect()に正しくアクセスできるか？
+     * - 接続が成功するか？
+     * - 接続時にnotify_connect()が意図どおりに１回だけ呼び出されたか？
      */
-    /*
-    void test_setName() {
-      // (1) setName()にてPortProfile.nameをセット。
-      m_ppb->setName("inport0-changed");
+    void test_connect()
+    {
+      // (1) オブジェクト参照経由で、connect()に正しくアクセスできるか？
+      // connect()はCORBAインタフェースなので、オブジェクト参照経由でアクセスし、
+      // CORBAインタフェースとして機能していることを確認する
+      RTC::Port_ptr portRef = m_pPortBase->getPortRef();
+			
+      // 接続時に必要となるConnectorProfileを構築する
+      RTC::ConnectorProfile connProfile;
+      connProfile.name = "ConnectorProfile-name";
+      connProfile.connector_id = "connect_id0";
+      connProfile.ports.length(1);
+      connProfile.ports[0] = portRef;
+
+      // (2) 接続が成功するか？
+      CPPUNIT_ASSERT_EQUAL(RTC::RTC_OK, portRef->connect(connProfile));
       
-      PortProfile getProf;
-      
-      // (2) getProfile()にてPortProfileを取得。
-      getProf = m_ppb->getProfile();
-      
-      string setstr, getstr;
-      
-      // (3) (1)でセットしたnameと(2)で取得したPortProfile.nameを比較。
-      getstr = getProf.name;
-      setstr = "inport0-changed";
-      CPPUNIT_ASSERT(getstr == setstr);
+      // (3) 接続時にnotify_connect()が意図どおりに１回だけ呼び出されたか？
+      const PortBaseMock* pPortBaseMock = dynamic_cast<const PortBaseMock*>(m_pPortBase);
+      CPPUNIT_ASSERT(pPortBaseMock != 0);
+      CPPUNIT_ASSERT_EQUAL(1, (int) pPortBaseMock->getNotifyConnectTimes().size());
     }
-    */
-    
+		
     /*!
-     * @brief  getName()のテスト
-     *   ※ PortProfileはsetUp()にて登録済みである。
-     *   (1) geName()にてPortProfile.nameを取得。
-     *   (2) セット済みのPortProfile.nameと(1)で取得したnameを比較。
+     * @brief notify_connect()メソッドのテスト
      */
-    /*
-    void test_getName() {
-      // (1) geName()にてPortProfile.nameを取得。
-      const char* retval(m_ppb->getName());
-      
-      string setname, getname;
-      
-      // (2) セット済みのPortProfile.nameと(1)で取得したnameを比較。
-      setname = "inport0";
-      getname = retval;
-      CPPUNIT_ASSERT(getname == setname);
+    void test_notify_connect()
+    {
+      // notify_connect()メソッドは、test_connectにて間接的にテストされているので、ここではテスト不要である
     }
-    */
-    
+		
     /*!
-     * @brief setInterfaceProfiles()のテスト
-     *   (1) PortInterfaceProfileオブジェクト要素のセット。
-     *   (2) (1)でセットしたPortInterfaceProfileをPortInterfaceProfileListに
-     *       セット。
-     *   (3）setInterfaceProfiles()にてPortInterfaceProfileListをセット。
-     *   (4) getInterfaceProfiles()にてPortInterfaceProfileListを取得。
-     *   (5) (3)でセットしたPortInterfaceProfileListの要素と、
-     *       (4)で取得したそれとを比較。
-     *   (6) addInterfaceProfile()にてPortInterfaceProfileを追加。
-     *   (7) getInterfaceProfiles()にてPortInterfaceProfileListを取得。
-     *   (8) (6)で追加したPortInterfaceProfileListの要素と、
-     *       (7)で取得したそれとを比較。
-     *   (9) getInterfaceProfile(name)にてPortInterfaceProfileを取得。
-     *   (10) (6)で追加したPortInterfaceProfileListの要素と、
-     *        (9)で取得したそれとを比較。
+     * @brief disconnect()メソッドのテスト
+     * 
+     * - オブジェクト参照経由で、disconnect()に正しくアクセスできるか？
+     * - 切断が成功するか？
+     * - 切断時にnotify_disconnect()が、意図どおり１回だけ呼び出されているか？
      */
-    /*
-    void test_setInterfaceProfiles() {
-      // (1) PortInterfaceProfileオブジェクト要素のセット。
-      PortInterfaceProfile pIProf;
-      pIProf.instance_name = "PortInterfaceProfile-instance_name-changed";
-      pIProf.type_name = "PortInterfaceProfile-type_name-changed";
-      pIProf.polarity = REQUIRED;
+    void test_disconnect()
+    {
+      // (1) オブジェクト参照経由で、disconnect()に正しくアクセスできるか？
+      // disconnect()はCORBAインタフェースなので、オブジェクト参照経由でアクセスし、
+      // CORBAインタフェースとして機能していることを確認する
+      RTC::Port_ptr portRef = m_pPortBase->getPortRef();
+			
+      // 接続時に必要となるConnectorProfileを構築する
+      RTC::ConnectorProfile connProfile;
+      connProfile.name = "ConnectorProfile-name";
+      connProfile.connector_id = "connect_id0";
+      connProfile.ports.length(1);
+      connProfile.ports[0] = portRef;
+
+      // まずは接続する
+      CPPUNIT_ASSERT_EQUAL(RTC::RTC_OK, portRef->connect(connProfile));
       
+      // (2) 切断が成功するか？
+      CPPUNIT_ASSERT_EQUAL(RTC::RTC_OK, portRef->disconnect(connProfile.connector_id));
       
-      // (2) (1)でセットしたPortInterfaceProfileをPortInterfaceProfileList
-      // にセット。
-      PortInterfaceProfileList pIFProfList;
-      pIFProfList.length(1);
-      pIFProfList[0] = pIProf;
-      
-      
-      // (3）setInterfaceProfiles()にてPortInterfaceProfileListをセット。
-      m_ppb->setInterfaceProfiles(pIFProfList);
-      
-      
-      // (4) getInterfaceProfiles()にてPortInterfaceProfileListを取得。
-      PortInterfaceProfileList getList;
-      getList = m_ppb->getInterfaceProfiles();
-      
-      
-      // (5) (3)でセットしたPortInterfaceProfileListの要素と、
-      // (4)で取得したそれとを比較。
-      string getstr, setstr;
-      getstr = getList[0].instance_name;
-      setstr = "PortInterfaceProfile-instance_name-changed";
-      CPPUNIT_ASSERT(getstr == setstr);
-      
-      getstr = getList[0].type_name;
-      setstr = "PortInterfaceProfile-type_name-changed";
-      CPPUNIT_ASSERT(getstr == setstr);
-      
-      CPPUNIT_ASSERT(getList[0].polarity == REQUIRED);
-      
-      
-      // (6) addInterfaceProfile()にてPortInterfaceProfileを追加。
-      pIProf.instance_name = "PortInterfaceProfile-instance_name-add";
-      pIProf.type_name = "PortInterfaceProfile-type_name-add";
-      pIProf.polarity = PROVIDED;
-      m_ppb->addInterfaceProfile(pIProf);
-      
-      
-      // (7) getInterfaceProfiles()にてPortInterfaceProfileListを取得。
-      getList = m_ppb->getInterfaceProfiles();
-      
-      
-      // (8) (6)で追加したPortInterfaceProfileListの要素と、
-      // (7)で取得したそれとを比較。
-      getstr = getList[1].instance_name;
-      setstr = "PortInterfaceProfile-instance_name-add";
-      CPPUNIT_ASSERT(getstr == setstr);
-      
-      getstr = getList[1].type_name;
-      setstr = "PortInterfaceProfile-type_name-add";
-      CPPUNIT_ASSERT(getstr == setstr);
-      
-      CPPUNIT_ASSERT(getList[1].polarity == PROVIDED);
-      
-      
-      // (9) getInterfaceProfile(name)にてPortInterfaceProfileを取得。
-      PortInterfaceProfile getProf;
-      getProf = m_ppb->getInterfaceProfile("PortInterfaceProfile-instance_name-add");
-      
-      // (10) (6)で追加したPortInterfaceProfileListの要素と、(9)で取得したそれとを比較。
-      getstr = getProf.instance_name;
-      setstr = "PortInterfaceProfile-instance_name-add";
-      CPPUNIT_ASSERT(getstr == setstr);
-      
-      getstr = getProf.type_name;
-      setstr = "PortInterfaceProfile-type_name-add";
-      CPPUNIT_ASSERT(getstr == setstr);
-      
-      CPPUNIT_ASSERT(getProf.polarity == PROVIDED);
+      // (3) 切断時にnotify_disconnect()が、意図どおり１回だけ呼び出されているか？
+      const PortBaseMock* pPortBaseMock = dynamic_cast<const PortBaseMock*>(m_pPortBase);
+      CPPUNIT_ASSERT(pPortBaseMock != 0);
+      CPPUNIT_ASSERT_EQUAL(1, (int) pPortBaseMock->getNotifyDisconnectTimes().size());
     }
-    */
-    /*!
-     * @brief addInterfaceProfiles()のテスト
-     *   test_setInterfaceProfiles()にてテスト済み。
-     */
-    void test_addInterfaceProfiles() {}
-    
-    
-    /*!
-     * @brief getInterfaceProfiles()のテスト
-     *   test_setInterfaceProfiles()にてテスト済み。
-     */
-    void test_getInterfaceProfiles() {}
-    
-    
-    /*!
-     * @brief getInterfaceProfile()のテスト
-     *   test_setInterfaceProfiles()にてテスト済み。
-     */
-    void test_getInterfaceProfile() {}
-    
-    
-    
-    /*!
-     * @brief  setPortRef()のテスト
-     *   ※ PortProfileはsetUp()にて登録済み。
-     *   (1) setPortRef()にてPortBaseオブジェクトの参照をセット。
-     *   (2) getPortRef()にてPortインタフェースのオブジェクト参照を取得。
-     *   (3) (2)で取得したオブジェクト参照を用いPortインタフェースの
-     *       オペレーション呼び出しテスト。
-     *   (4) (3)のオペレーション呼び出しにて取得したPortProfileの要素と
-     *       setUp()でセットしたそれとを比較。
-     */
-    void test_setPortRef() {
-      Port_var port = m_ppb->_this();
-      m_ppb->_remove_ref();
-      
-      // (1) setPortRef()にてPortBaseオブジェクトの参照をセット。
-      m_ppb->setPortRef(port._retn());
-      
-      
-      // (2) getPortRef()にてPortインタフェースのオブジェクト参照を取得。
-      Port_ptr getP;
-      PortProfile* pProf;
-      getP = m_ppb->getPortRef();
-      
-      
-      // (3) (2)で取得したオブジェクト参照を用いPortインタフェースのオペレーション呼び出しテスト。
-      pProf = getP->get_port_profile();
-      
-      
-      // (4) (3)のオペレーション呼び出しにて取得したPortProfileの要素とsetUp()で
-      //     セットしたそれとを比較。
-      string setstr, getstr;
-      getstr = pProf->name;
-      setstr = "inport0";
-      CPPUNIT_ASSERT(getstr == setstr);
-      
-      getstr = pProf->interfaces[0].instance_name;
-      setstr = "PortInterfaceProfile-instance_name";
-      CPPUNIT_ASSERT(getstr == setstr);
-      
-      getstr = pProf->interfaces[0].type_name;
-      setstr = "PortInterfaceProfile-type_name";
-      CPPUNIT_ASSERT(getstr == setstr);
-      
-      CORBA::Float getval;
-      pProf->properties[0].value >>= getval;
-      CPPUNIT_ASSERT(m_portProfVal == getval);
-      
-      getstr = pProf->properties[0].name;
-      setstr = "PortProfile-properties0-name";
-      CPPUNIT_ASSERT(getstr == setstr);
+		
+    void test_disconnect_all()
+    {
+      // TODO 未テスト
     }
-    
-    
+		
     /*!
-     * @brief getPortRefのテスト
-     *   test_setPortRef()にてテスト済み。
+     * @brief setName()メソッドのテスト
+     * 
+     * - setName()により、意図どおりにPortProfile.nameが書き換えられているか？
      */
-    void test_getPortRef() {}
-    
-    
-    /*!
-     * @brief addConnectorProfile()のテスト
-     *   ※ PortProfileはsetUp()で登録済み。
-     *   (1) ConnectorProfileオブジェクト要素のセット
-     *   (2) (1)でセットしたConnectorProfileをaddConnectorProfile()にて追加。
-     *   (3）ConnectorProfileListの取得。
-     *   (4) (2)で追加したConnectorProfileと(3)で取得したそれとを比較。
-     *   (5) eraseConnectorProfile(id)にて,引数で指定したidを持つ
-     *       ConnectorProfileをConnectorProfileListから削除する。
-     *   (6) (5)で削除後のConnectorProfileListを取得
-     *   (7) (6)で取得したConnectorProfileListの要素を確認。
-     */
-    /*
-    void test_addConnectorProfile() {
-      // (1) ConnectorProfileオブジェクト要素のセット
-      ConnectorProfile cProf,getProf;
-      cProf.name = "ConnectorProfile-name-add";
-      cProf.connector_id = "connect_id0-add";
-      
-      SDOPackage::NameValue nv;
-      NVList nvlist;
-      CORBA::Double db, retdb;
-      nv.name = "ConnectorProfile-properties0-name-add";
-      db = 9999999.999;
-      nv.value <<= db;
-      nvlist.length(1);
-      nvlist[0] = nv;
-      cProf.properties = nvlist;
-      
-      
-      // (2) (1)でセットしたConnectorProfileをaddConnectorProfile()にて追加。
-      m_ppb->addConnectorProfile(cProf);
-      
-      
-      // (3）ConnectorProfileListの取得。
-      ConnectorProfileList cnctPList;
-      cnctPList = m_ppb->getConnectorProfileList();
-      
-      
-      // (4) (2)で追加したConnectorProfileと(3)で取得したそれとを比較。
-      string setstr, getstr;
-      getstr = cnctPList[1].name;
-      setstr = cProf.name;
-      CPPUNIT_ASSERT(getstr == setstr);
-      
-      getstr = cnctPList[1].connector_id;
-      setstr = cProf.connector_id;
-      CPPUNIT_ASSERT(getstr == setstr);
-      
-      getstr = cnctPList[1].properties[0].name;
-      setstr = nv.name;
-      CPPUNIT_ASSERT(getstr == setstr);
-      
-      cnctPList[1].properties[0].value >>= retdb;
-      CPPUNIT_ASSERT(retdb == db);
-      
-      
-      // (5) eraseConnectorProfile(id)にて,引数で指定したidを持つ
-      //     ConnectorProfileをConnectorProfileListから削除する。
-      // test eraseConnectorProfile()
-      // Failure case: 登録していないIDでeraseConnectorProfile()を
-      // 呼ぶとアボートする。
-      //    m_ppb->eraseConnectorProfile("hoge");
-      m_ppb->eraseConnectorProfile("connect_id0");
-      
-      
-      // (6) (5)で削除後のConnectorProfileListを取得。
-      getProf = m_ppb->getConnectorProfile("connect_id0-add");
-      
-      
-      // (7) (6)で取得したConnectorProfileListの要素を確認。
-      getstr = getProf.name;
-      setstr = getProf.name;
-      CPPUNIT_ASSERT(getstr == setstr);
-      
-      getstr = getProf.connector_id;
-      setstr = getProf.connector_id;
-      CPPUNIT_ASSERT(getstr == setstr);
-      
-      getstr = getProf.properties[0].name;
-      setstr = nv.name;
-      CPPUNIT_ASSERT(getstr == setstr);
-      
-      getProf.properties[0].value >>= retdb;
-      CPPUNIT_ASSERT(retdb == db);
+    void test_setName()
+    {
+      // setName()を用いて、PortProfile.nameを書き換える
+      m_pPortBase->setName("inport0-changed");
+			
+      // setName()により、意図どおりにPortProfile.nameが書き換えられているか？
+      const RTC::PortProfile& portProfile = m_pPortBase->getPortProfile();
+      CPPUNIT_ASSERT_EQUAL(std::string("inport0-changed"), std::string(portProfile.name));
     }
-    */
-    
+		
     /*!
-     * @brief  eraseConnectorProfile()のテスト
-     *   test_addConnectorProfileList()にてテスト済み。
+     * @brief getProfile()メソッドのテスト
+     * 
+     * - PortProfile.nameを正しく取得できるか？
+     * - PortProfile.interfacesを正しく取得できるか？
+     * - PortProfile.connector_profilesを正しく取得できるか？
+     * - PortProfile.propertiesを正しく取得できるか？
      */
-    void test_eraseConnectorProfile() {}
-    
-    
-    /*!
-     * @brief getConnectorProfileList()のテスト
-     *   test_addConnectorProfileList()にてテスト済み。
-     */
-    void test_getConnectorProfileList() {}
-    
-    
-    /*!
-     * @brief getConnectorProfile()のテスト
-     *   test_addConnectorProfileList()にてテスト済み。
-     */
-    void test_getConnectorProfile() {}
-    
-    
-    /*!
-     * @brief setOwner()
-     *   RTObjectインタフェースの実装が完了していない。
-     */
-    void test_setOwner() {
-      /*
-	RTObject_impl* rtobj;
-	
-	rtobj = new RTObject_impl(m_orb, m_poa);
-	
-	RTObject_var p_rtobj = rtobj->_this();
-	rtobj->_remove_ref();
-	
-	// check setOwner()
-	m_ppb->setOwner(p_rtobj._retn());
-      */
-      
+    void test_getProfile()
+    {
+      const RTC::PortProfile& portProfile = m_pPortBase->getProfile();
+
+      // (1) PortProfile.nameを正しく取得できるか？
+      CPPUNIT_ASSERT_EQUAL(std::string("inport0"), std::string(portProfile.name));
+
+      // (2) PortProfile.interfacesを正しく取得できるか？
+      const RTC::PortInterfaceProfile& portIfProfile = portProfile.interfaces[0];
+      // (2-a) PortInterfaceProfile.instance_nameを正しく取得できるか？
+      CPPUNIT_ASSERT_EQUAL(
+			   std::string("PortInterfaceProfile-instance_name"),
+			   std::string(portIfProfile.instance_name));
+
+      // (2-b) PortInterfaceProfile.type_nameを正しく取得できるか？
+      CPPUNIT_ASSERT_EQUAL(
+			   std::string("PortInterfaceProfile-type_name"),
+			   std::string(portIfProfile.type_name));
+			
+      // (2-c) PortInterfaceProfile.polarityを正しく取得できるか？
+      CPPUNIT_ASSERT_EQUAL(RTC::REQUIRED, portIfProfile.polarity);
+
+      // (3) PortProfile.connector_profilesを正しく取得できるか？
+      const RTC::ConnectorProfile& connProfile = portProfile.connector_profiles[0];
+      // (3-a) ConnectorProfile.nameを正しく取得できるか？
+      CPPUNIT_ASSERT_EQUAL(
+			   std::string("ConnectorProfile-name"),
+			   std::string(connProfile.name));
+			
+      // (3-b) ConnectorProfile.connector_idを正しく取得できるか？
+      CPPUNIT_ASSERT_EQUAL(
+			   std::string("connect_id0"),
+			   std::string(connProfile.connector_id));
+
+      // (3-c) ConnectorPofile.propertiesを正しく取得できるか？
+      {
+	const SDOPackage::NameValue& property = connProfile.properties[0];
+	// (3-c-1) nameを正しく取得できるか？
+	CPPUNIT_ASSERT_EQUAL(
+			     std::string("ConnectorProfile-properties0-name"),
+			     std::string(property.name));
+			
+	// (3-c-2) valueを正しく取得できるか？
+	{
+	  CORBA::Float value;
+	  property.value >>= value;
+	  CPPUNIT_ASSERT_EQUAL(CORBA::Float(1.1), value);
+	}
+      }
+
+      // (4) PortProfile.propertiesを正しく取得できるか？
+      {
+	const SDOPackage::NameValue& property = portProfile.properties[0];
+	// (4-a) nameを正しく取得できるか？
+	CPPUNIT_ASSERT_EQUAL(
+			     std::string("PortProfile-properties0-name"),
+			     std::string(property.name));
+				
+	// (4-b) valueを正しく取得できるか？
+	{
+	  CORBA::Float value;
+	  property.value >>= value;
+	  CPPUNIT_ASSERT_EQUAL(CORBA::Float(2.2), value);
+	}
+      }
     }
-    
+		
     /*!
-     * @brief getOwner()のテスト
+     * @brief setPortRef()メソッドのテスト
+     * 
+     * - setPortRef()を用いて、PortBaseオブジェクト参照を正しく設定できるか？
      */
-    void test_getOwner() {}
-    
-    
-    /*!
-     * @brief setProperties()のテスト
-     *   ※ PortProfileはsetUp()で登録済みである。
-     *   (1) getProperties()にてPortProfile.propertyを取得。
-     *   (2) (1)で取得したpropertyの要素とsetUp()でセットしたそれとを比較。
-     *   (3) setProperties()にてPortProfile.propertyをセット
-     *   (4) getProperties()にてPortProfile.propertyを取得。
-     *   (5) (3)でセットしたPortProfile.propertyと(4)で取得したそれとを比較。
-     */
-	/*
-    void test_setProperties() {
-      NVList setlist, getlist;
-      SDOPackage::NameValue nv;
-      
-      // (1) getProperties()にてPortProfile.propertyを取得。
-      getlist = m_ppb->getProperties();
-      
-      
-      // (2) (1)で取得したpropertyの要素とsetUp()でセットしたそれとを比較。
-      string getstr, setstr;
-      CORBA::Float setval, retval;
-      getlist[0].value >>= retval;
-      
-      getstr = getlist[0].name;
-      setstr = m_nv.name;
-      CPPUNIT_ASSERT(getstr == setstr);
-      CPPUNIT_ASSERT(retval == m_portProfVal);
-      
-      
-      // (3) setProperties()にてPortProfile.propertyをセット
-      nv.name = "setProperties test";
-      setval = 999.9;
-      nv.value <<= setval;
-      
-      setlist.length(1);
-      setlist[0] = nv;
-      m_ppb->setProperties(setlist);
-      
-      
-      // (4) getProperties()にてPortProfile.propertyを取得。
-      getlist = m_ppb->getProperties();
-      
-      
-      // (5) (3)でセットしたPortProfile.propertyと(4)で取得したそれとを比較。
-      getlist[0].value >>= retval;
-      
-      getstr = getlist[0].name;
-      setstr = nv.name;
-      CPPUNIT_ASSERT(getstr == setstr);
-      CPPUNIT_ASSERT(retval == setval);
-      
+    void test_setPortRef()
+    {
+      // 一旦、設定済みのPortBaseオブジェクト参照をリセットしておく
+      m_pPortBase->_remove_ref();
+
+      // setPortRef()を用いて、PortBaseオブジェクト参照を正しく設定できるか？
+      // (getPortRef()を用いて、Portインタフェースのオブジェクト参照を取得し、
+      // 取得した参照が、あらかじめ設定した参照と一致することを確認する)
+      RTC::Port_var port = m_pPortBase->_this();
+      RTC::Port_ptr portRef = port._retn();
+      m_pPortBase->setPortRef(portRef);
+
+      CPPUNIT_ASSERT_EQUAL(portRef, m_pPortBase->getPortRef());
     }
-    */
-    
+
     /*!
-     * @brief getProperties()のテスト
-     *   test_setPropertiesにてテスト済み。
+     * @brief getPortRef()メソッドのテスト
      */
-	/*
-    void test_getProperties() {}
-    */
-    
-    /*!
-     * @brief  getUUID()のテスト
-     *   (1) getUUID()にてUUIDの取得。
-     *   (2) 取得したUUIDを標準出力に出力。
-     */
-    void test_getUUID() {
-      // (1) getUUID()にてUUIDの取得。
-      string getuuid = m_ppb->getUUID();
-      
-      // (2) 取得したUUIDを標準出力に出力。
-      cout << endl << "uuid: " << getuuid << endl;
+    void test_getPortRef()
+    {
+      // test_setPortRef()によりテストされている
     }
-    
+		
+    /*!
+     * @brief getUUID()メソッドのテスト
+     * 
+     * - UUIDを取得できるか？（空文字列でないかどうかのみでチェック）
+     */
+    void test_getUUID()
+    {
+      // getUUID()メソッドはprotectedであるため、PortBaseMockにダウンキャストしてからアクセスする
+      PortBaseMock* pPortBase = dynamic_cast<PortBaseMock*>(m_pPortBase);
+      CPPUNIT_ASSERT(pPortBase != 0);
+			
+      // UUIDを取得できるか？（空文字列でないかどうかのみでチェック）
+      std::string uuid = pPortBase->getUUID();
+      CPPUNIT_ASSERT(uuid.length() > 0);
+      //std::cout << std::endl << "uuid: " << uuid << std::endl;
+    }
+		
   };
 }; // namespace PortBase
 
@@ -881,13 +735,83 @@ CPPUNIT_TEST_SUITE_REGISTRATION(PortBase::PortBaseTests);
 #ifdef LOCAL_MAIN
 int main(int argc, char* argv[])
 {
+
+  FORMAT format = TEXT_OUT;
+  int target = 0;
+  std::string xsl;
+  std::string ns;
+  std::string fname;
+  std::ofstream ofs;
+
+  int i(1);
+  while (i < argc)
+    {
+      std::string arg(argv[i]);
+      std::string next_arg;
+      if (i + 1 < argc) next_arg = argv[i + 1];
+      else              next_arg = "";
+
+      if (arg == "--text") { format = TEXT_OUT; break; }
+      if (arg == "--xml")
+	{
+	  if (next_arg == "")
+	    {
+	      fname = argv[0];
+	      fname += ".xml";
+	    }
+	  else
+	    {
+	      fname = next_arg;
+	    }
+	  format = XML_OUT;
+	  ofs.open(fname.c_str());
+	}
+      if ( arg == "--compiler"  ) { format = COMPILER_OUT; break; }
+      if ( arg == "--cerr"      ) { target = 1; break; }
+      if ( arg == "--xsl"       )
+	{
+	  if (next_arg == "") xsl = "default.xsl"; 
+	  else                xsl = next_arg;
+	}
+      if ( arg == "--namespace" )
+	{
+	  if (next_arg == "")
+	    {
+	      std::cerr << "no namespace specified" << std::endl;
+	      exit(1); 
+	    }
+	  else
+	    {
+	      xsl = next_arg;
+	    }
+	}
+      ++i;
+    }
   CppUnit::TextUi::TestRunner runner;
-  runner.addTest(CppUnit::TestFactoryRegistry::getRegistry().makeTest());
-  CppUnit::Outputter* outputter = 
-    new CppUnit::TextOutputter(&runner.result(), std::cout);
+  if ( ns.empty() )
+    runner.addTest(CppUnit::TestFactoryRegistry::getRegistry().makeTest());
+  else
+    runner.addTest(CppUnit::TestFactoryRegistry::getRegistry(ns).makeTest());
+  CppUnit::Outputter* outputter = 0;
+  std::ostream* stream = target ? &std::cerr : &std::cout;
+  switch ( format )
+    {
+    case TEXT_OUT :
+      outputter = new CppUnit::TextOutputter(&runner.result(),*stream);
+      break;
+    case XML_OUT :
+      std::cout << "XML_OUT" << std::endl;
+      outputter = new CppUnit::XmlOutputter(&runner.result(),
+					    ofs, "shift_jis");
+      static_cast<CppUnit::XmlOutputter*>(outputter)->setStyleSheet(xsl);
+      break;
+    case COMPILER_OUT :
+      outputter = new CppUnit::CompilerOutputter(&runner.result(),*stream);
+      break;
+    }
   runner.setOutputter(outputter);
-  bool retcode = runner.run();
-  return !retcode;
+  runner.run();
+  return 0; // runner.run() ? 0 : 1;
 }
 #endif // MAIN
 #endif // PortBase_cpp

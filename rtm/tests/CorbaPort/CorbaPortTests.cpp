@@ -2,10 +2,24 @@
 /*!
  * @file   CorbaPortTests.cpp
  * @brief  CorbaPort test class
- * @date   $Date: 2007-01-04 00:50:38 $
+ * @date   $Date: 2008/04/04 12:06:09 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
  * $Id$
+ *
+ */
+
+/*
+ * $Log: CorbaPortTests.cpp,v $
+ * Revision 1.2  2008/04/04 12:06:09  arafune
+ * Refactored some tests. No new tests were added.
+ *
+ * Revision 1.1  2007/12/20 07:50:18  arafune
+ * *** empty log message ***
+ *
+ * Revision 1.1  2007/01/04 00:50:38  n-ando
+ * *** empty log message ***
+ *
  *
  */
 
@@ -28,12 +42,42 @@ class MyService_impl
     public virtual PortableServer::RefCountServantBase
 {
 public:
-  virtual ~MyService_impl(){};
-  void setName(const char* name) { m_name = name; }
-  char* name(){ return "MyService"; }
-  void hello_world() { std::cout << m_name << ": Hello, World!!!" << std::endl; }
-  void print_msg(const char* msg) { std::cout << m_name << ": " << msg << std::endl; }
+  MyService_impl() : m_hello_world_called(false)
+  {
+  };
+
+  virtual ~MyService_impl()
+  {
+  };
+	
+  void setName(const char* name)
+  {
+    m_name = name;
+  }
+	
+  char* name()
+  {
+    return "MyService";
+  }
+	
+  void hello_world()
+  {
+    m_hello_world_called = true;
+  }
+	
+  void print_msg(const char* msg)
+  {
+    std::cout << m_name << ": " << msg << std::endl;
+  }
+
+  bool is_hello_world_called()
+  {
+    return m_hello_world_called;
+  }
+	
+private:
   std::string m_name;
+  bool m_hello_world_called;
 };
 
 
@@ -44,53 +88,24 @@ public:
 namespace CorbaPort
 {
   class CorbaPortTests
-   : public CppUnit::TestFixture
+    : public CppUnit::TestFixture
   {
     CPPUNIT_TEST_SUITE(CorbaPortTests);
-    CPPUNIT_TEST(test_ifprofile);
+    CPPUNIT_TEST(test_get_port_profile);
     CPPUNIT_TEST(test_connect);
     CPPUNIT_TEST(test_disconnect);
     CPPUNIT_TEST_SUITE_END();
-  
+		
   private:
-    RTC::CorbaPort* m_port0;
-    RTC::Port_var m_port0ref;
-    MyService_impl m_mysvc0;
-    RTC::CorbaConsumer<MyService> m_cons0;
-
-    RTC::CorbaPort* m_port1;
-    RTC::Port_var m_port1ref;
-    MyService_impl m_mysvc1;
-    RTC::CorbaConsumer<MyService> m_cons1;
     CORBA::ORB_ptr m_pORB;
     PortableServer::POA_ptr m_pPOA;
+		
   public:
-  
     /*!
      * @brief Constructor
      */
     CorbaPortTests()
     {
-      int argc(0);
-      char** argv(NULL);
-      m_pORB = CORBA::ORB_init(argc, argv);
-      m_pPOA = PortableServer::POA::_narrow(
-	         m_pORB->resolve_initial_references("RootPOA"));
-      m_pPOA->the_POAManager()->activate();
-
-      m_port0 = new RTC::CorbaPort("port0");
-      m_port1 = new RTC::CorbaPort("port1");
-
-      m_port0ref = m_port0->getPortRef();
-      m_port1ref = m_port1->getPortRef();
-
-      m_mysvc0.setName("MyService0 in Port0");
-      m_port0->registerProvider("MyService0", "Generic", m_mysvc0);
-      m_port0->registerConsumer("MyService1", "Generic", m_cons0 );
-
-      m_mysvc1.setName("MyService1 in Port1");
-      m_port1->registerProvider("MyService1", "Generic", m_mysvc1);
-      m_port1->registerConsumer("MyService0", "Generic", m_cons1 );
     }
     
     /*!
@@ -98,141 +113,209 @@ namespace CorbaPort
      */
     ~CorbaPortTests()
     {
-      try
-	{
-	  m_pPOA->destroy(false, false);
-	  m_pPOA->the_POAManager()->deactivate(false, false);
-	  m_pORB->destroy(); 
-	}
-      catch (...)
-	{
-	  ; // do nothing
-	}
     }
-  
+		
     /*!
      * @brief Test initialization
      */
     virtual void setUp()
     {
+      int argc(0);
+      char** argv(NULL);
+			
+      m_pORB = CORBA::ORB_init(argc, argv);
+      m_pPOA = PortableServer::POA::_narrow(
+					    m_pORB->resolve_initial_references("RootPOA"));
+      m_pPOA->the_POAManager()->activate();
     }
-    
+		
     /*!
      * @brief Test finalization
      */
     virtual void tearDown()
     { 
-    }
-  
-    /* test case */
-    void test_ifprofile()
-    {
-      RTC::PortProfile* prof0;
-      prof0 = m_port0ref->get_port_profile();
-
-      std::cout << "port0.name:" << prof0->name << std::endl;
-
-      CORBA::ULong len0(prof0->interfaces.length());
-      RTC::PortInterfaceProfileList& iflist0(prof0->interfaces);
-      for (CORBA::ULong i = 0; i < len0; ++i)
-	{
-	  std::cout << "port0.if" << i << ".instance_name:"
-		    << iflist0[i].instance_name << std::endl;
-	  std::cout << "port0.if" << i << ".type_name:"
-		    << iflist0[i].type_name << std::endl;
-	  std::cout <<  "port0.if" << i << ".polarity:"
-		    << ((iflist0[i].polarity == RTC::PROVIDED)
-			? "PROVIDED" : "REQUIRED") << std::endl;
-	}
-
-      RTC::PortProfile* prof1;
-      prof1 = m_port1ref->get_port_profile();
-
-      std::cout << "port1.name:" << prof1->name << std::endl;
-
-      CORBA::ULong len1(prof1->interfaces.length());
-      RTC::PortInterfaceProfileList& iflist1(prof1->interfaces);
-      for (CORBA::ULong i = 0; i < len1; ++i)
-	{
-	  std::cout << "port1.if" << i << ".instance_name:"
-		    << iflist1[i].instance_name << std::endl;
-	  std::cout << "port1.if" << i << ".type_name:"
-		    << iflist1[i].type_name << std::endl;
-	  std::cout <<  "port1.if" << i << ".polarity:"
-		    << ((iflist1[i].polarity == RTC::PROVIDED)
-			? "PROVIDED" : "REQUIRED") << std::endl;
-	}
-
-    }
-
-    void test_connect()
-    {
-      RTC::ConnectorProfile prof;
-      prof.connector_id = "";
-      prof.name = CORBA::string_dup("connector0");
-      prof.ports.length(2);
-      prof.ports[0] = m_port0ref;
-      prof.ports[1] = m_port1ref;
-
-      m_port0ref->connect(prof);
-
-      std::cout << prof.connector_id << std::endl;
-
-      std::cout << "Consumer0: " << m_cons0->name() << std::endl;
-      m_cons0->hello_world();
-      m_cons0->print_msg("hogehoge");
-
-      std::cout << "Consumer1: " << m_cons1->name() << std::endl;
-      m_cons1->hello_world();
-      m_cons1->print_msg("hogehoge");
-
-    }
-
-    void test_disconnect()
-    {
-      RTC::ConnectorProfile prof;
-      prof.connector_id = "";
-      prof.name = CORBA::string_dup("connector0");
-      prof.ports.length(2);
-      prof.ports[0] = m_port0ref;
-      prof.ports[1] = m_port1ref;
-
-      RTC::ReturnCode_t retval;
-      retval = m_port0ref->connect(prof);
-      std::cout << "retval: " << retval << std::endl;
-
-      std::cout << prof.connector_id << std::endl;
-
-      RTC::ConnectorProfileList* proflist;
-
-      proflist = m_port0ref->get_connector_profiles();
-
-      std::cout << "conn proflist len: " << proflist->length() << std::endl;
-
-      std::cout << m_cons0->name() << std::endl;
-      m_cons0->hello_world();
-      m_cons0->print_msg("hogehoge");
-
-      m_port0ref->disconnect(prof.connector_id);
-
       try
 	{
-	  CPPUNIT_ASSERT(CORBA::is_nil(m_cons0._ptr()));
-	  std::cout << m_cons0->name() << std::endl;
-	  m_cons0->hello_world();
-	  m_cons0->print_msg("hogehoge");
-	  CPPUNIT_ASSERT(false);
+	  // m_pPOA->destroy(false, false);
+	  // m_pPOA->the_POAManager()->deactivate(false, false);
+	  // m_pORB->destroy(); 
 	}
       catch (...)
 	{
-	  std::cout << "Properly disconnected" << std::endl;
+	  // do nothing
 	}
-
     }
+		
+    /*!
+     * @brief get_port_profile()メソッドのテスト
+     * 
+     * - プロファイル内の、ポート名称を正しく取得できるか？
+     * - インタフェースプロファイル内の、instance_nameを正しく取得できるか？
+     * - インタフェースプロファイル内の、type_nameを正しく取得できるか？
+     * - インタフェースプロファイル内の、polarityを正しく取得できるか？
+     */
+    void test_get_port_profile()
+    {
+      // テスト対象となるCorbaPortを構成する
+      MyService_impl* pMyServiceImpl
+	= new MyService_impl(); // will be deleted automatically
+      RTC::CorbaConsumer<MyService>* pMyServiceConsumer
+	= new RTC::CorbaConsumer<MyService>(); // will be deleted automatically
+			
+      RTC::CorbaPort* port = new RTC::CorbaPort("name of port");
+      port->registerProvider("MyService (provided)", "Generic (provided)", *pMyServiceImpl);
+      port->registerConsumer("MyService (required)", "Generic (required)", *pMyServiceConsumer);
+			
+      RTC::Port_var portRef = port->getPortRef();
+      RTC::PortProfile* profile = portRef->get_port_profile();
 
+      // ポート名称を正しく取得できるか？
+      CPPUNIT_ASSERT_EQUAL(std::string("name of port"), std::string(profile->name));
+			
+      // インタフェースプロファイルを取得し、あらかじめ設定しておいた内容と一致することを確認する
+      RTC::PortInterfaceProfileList& profiles = profile->interfaces;
+      for (CORBA::ULong i = 0; i < profile->interfaces.length(); ++i)
+	{
+	  if (std::string(profiles[i].instance_name)
+	      == std::string("MyService (provided)"))
+	    {
+	      // type_nameを正しく取得できるか？
+	      CPPUNIT_ASSERT_EQUAL(std::string("Generic (provided)"),
+				   std::string(profiles[i].type_name));
+					
+	      // polarityを正しく取得できるか？
+	      CPPUNIT_ASSERT_EQUAL(RTC::PROVIDED, profiles[i].polarity);
+	    }
+	  else if (std::string(profiles[i].instance_name)
+		   == std::string("MyService (required)"))
+	    {
+	      // type_nameを正しく取得できるか？
+	      CPPUNIT_ASSERT_EQUAL(std::string("Generic (required)"),
+				   std::string(profiles[i].type_name));
 
+	      // polarityを正しく取得できるか？
+	      CPPUNIT_ASSERT_EQUAL(RTC::REQUIRED, profiles[i].polarity);
+	    }
+	  else
+	    {
+	      // 予期しないinstance_nameが取得された場合
+	      std::string msg("Unexpected instance_name:");
+	      msg += std::string(profiles[i].instance_name);
+	      CPPUNIT_FAIL(msg);
+	    }
+	}
+    }
+		
+    /*!
+     * connect()メソッド、および、そこから呼び出される各protectedメソッドのテスト
+     * 
+     * - ポート1のコンシューマ側からメソッドを呼び出すと、ポート0のプロバイダ側が意図どおり呼び出されるか？
+     * - ポート0のコンシューマ側からメソッドを呼び出すと、ポート1のプロバイダ側が意図どおり呼び出されるか？
+     */
+    void test_connect()
+    {
+      // ポート0を構成する
+      MyService_impl* pMyServiceImplA
+	= new MyService_impl(); // will be deleted automatically
+      RTC::CorbaConsumer<MyService>* pMyServiceConsumerB
+	= new RTC::CorbaConsumer<MyService>(); // will be deleted automatically
+			
+      RTC::CorbaPort* port0 = new RTC::CorbaPort("name of port0");
+      port0->registerProvider("MyServiceA", "Generic", *pMyServiceImplA);
+      port0->registerConsumer("MyServiceB", "Generic", *pMyServiceConsumerB);
 
+      // ポート1を構成する
+      MyService_impl* pMyServiceImplB
+	= new MyService_impl(); // will be deleted automatically
+      RTC::CorbaConsumer<MyService>* pMyServiceConsumerA
+	= new RTC::CorbaConsumer<MyService>(); // will be deleted automatically
+			
+      RTC::CorbaPort* port1 = new RTC::CorbaPort("name of port1");
+      port1->registerProvider("MyServiceB", "Generic", *pMyServiceImplB);
+      port1->registerConsumer("MyServiceA", "Generic", *pMyServiceConsumerA);
+			
+      // 接続プロファイルを構成する
+      RTC::ConnectorProfile connProfile;
+      connProfile.connector_id = "";
+      connProfile.name = CORBA::string_dup("name of connector profile");
+      connProfile.ports.length(2);
+      connProfile.ports[0] = port0->getPortRef();
+      connProfile.ports[1] = port1->getPortRef();
 
+      // 接続する
+      port0->getPortRef()->connect(connProfile);
+
+      // ポート1のコンシューマ側からメソッドを呼び出すと、ポート0のプロバイダ側が意図どおり呼び出されるか？
+      CPPUNIT_ASSERT(! pMyServiceImplA->is_hello_world_called());
+      (*pMyServiceConsumerA)->hello_world();
+      CPPUNIT_ASSERT(pMyServiceImplA->is_hello_world_called());
+
+      // ポート0のコンシューマ側からメソッドを呼び出すと、ポート1のプロバイダ側が意図どおり呼び出されるか？
+      CPPUNIT_ASSERT(! pMyServiceImplB->is_hello_world_called());
+      (*pMyServiceConsumerB)->hello_world();
+      CPPUNIT_ASSERT(pMyServiceImplB->is_hello_world_called());
+    }
+    
+    /*!
+     * @brief disconnect()メソッド、および、そこから呼び出される各protectedメソッドのテスト
+     * 
+     * - 接続が成功した後に切断を行い、リモートメソッドの呼出しが意図どおり失敗することを確認する
+     */
+    void test_disconnect()
+    {
+      // ポート0を構成する
+      MyService_impl* pMyServiceImplA
+	= new MyService_impl(); // will be deleted automatically
+      RTC::CorbaConsumer<MyService>* pMyServiceConsumerB
+	= new RTC::CorbaConsumer<MyService>(); // will be deleted automatically
+			
+      RTC::CorbaPort* port0 = new RTC::CorbaPort("name of port0");
+      port0->registerProvider("MyServiceA", "Generic", *pMyServiceImplA);
+      port0->registerConsumer("MyServiceB", "Generic", *pMyServiceConsumerB);
+
+      // ポート1を構成する
+      MyService_impl* pMyServiceImplB
+	= new MyService_impl(); // will be deleted automatically
+      RTC::CorbaConsumer<MyService>* pMyServiceConsumerA
+	= new RTC::CorbaConsumer<MyService>(); // will be deleted automatically
+			
+      RTC::CorbaPort* port1 = new RTC::CorbaPort("name of port1");
+      port1->registerProvider("MyServiceB", "Generic", *pMyServiceImplB);
+      port1->registerConsumer("MyServiceA", "Generic", *pMyServiceConsumerA);
+			
+      // 接続プロファイルを構成する
+      RTC::ConnectorProfile connProfile;
+      connProfile.connector_id = "";
+      connProfile.name = CORBA::string_dup("name of connector profile");
+      connProfile.ports.length(2);
+      connProfile.ports[0] = port0->getPortRef();
+      connProfile.ports[1] = port1->getPortRef();
+
+      // 接続する
+      port0->getPortRef()->connect(connProfile);
+
+      // ポート1のコンシューマ側からメソッドを呼び出すと、ポート0のプロバイダ側が意図どおり呼び出されるか？
+      CPPUNIT_ASSERT(! pMyServiceImplA->is_hello_world_called());
+      (*pMyServiceConsumerA)->hello_world();
+      CPPUNIT_ASSERT(pMyServiceImplA->is_hello_world_called());
+			
+      // 切断する
+      port0->getPortRef()->disconnect(connProfile.connector_id);
+			
+      // ポート0のコンシューマ側からメソッドを呼び出しを試みると、意図どおりに失敗するか？
+      try
+	{
+	  CPPUNIT_ASSERT(! pMyServiceImplB->is_hello_world_called());
+	  (*pMyServiceConsumerB)->hello_world();
+							
+	  CPPUNIT_FAIL("Couldn't catch no exceptions. Disconnection failed.");
+	}
+      catch(...)
+	{
+	  // Properly disconnected.
+	}
+    }
+    
   };
 }; // namespace CorbaPort
 
@@ -244,13 +327,83 @@ CPPUNIT_TEST_SUITE_REGISTRATION(CorbaPort::CorbaPortTests);
 #ifdef LOCAL_MAIN
 int main(int argc, char* argv[])
 {
-    CppUnit::TextUi::TestRunner runner;
+
+  FORMAT format = TEXT_OUT;
+  int target = 0;
+  std::string xsl;
+  std::string ns;
+  std::string fname;
+  std::ofstream ofs;
+
+  int i(1);
+  while (i < argc)
+    {
+      std::string arg(argv[i]);
+      std::string next_arg;
+      if (i + 1 < argc) next_arg = argv[i + 1];
+      else              next_arg = "";
+
+      if (arg == "--text") { format = TEXT_OUT; break; }
+      if (arg == "--xml")
+	{
+	  if (next_arg == "")
+	    {
+	      fname = argv[0];
+	      fname += ".xml";
+	    }
+	  else
+	    {
+	      fname = next_arg;
+	    }
+	  format = XML_OUT;
+	  ofs.open(fname.c_str());
+	}
+      if ( arg == "--compiler"  ) { format = COMPILER_OUT; break; }
+      if ( arg == "--cerr"      ) { target = 1; break; }
+      if ( arg == "--xsl"       )
+	{
+	  if (next_arg == "") xsl = "default.xsl"; 
+	  else                xsl = next_arg;
+	}
+      if ( arg == "--namespace" )
+	{
+	  if (next_arg == "")
+	    {
+	      std::cerr << "no namespace specified" << std::endl;
+	      exit(1); 
+	    }
+	  else
+	    {
+	      xsl = next_arg;
+	    }
+	}
+      ++i;
+    }
+  CppUnit::TextUi::TestRunner runner;
+  if ( ns.empty() )
     runner.addTest(CppUnit::TestFactoryRegistry::getRegistry().makeTest());
-    CppUnit::Outputter* outputter = 
-      new CppUnit::TextOutputter(&runner.result(), std::cout);
-    runner.setOutputter(outputter);
-    bool retcode = runner.run();
-    return !retcode;
+  else
+    runner.addTest(CppUnit::TestFactoryRegistry::getRegistry(ns).makeTest());
+  CppUnit::Outputter* outputter = 0;
+  std::ostream* stream = target ? &std::cerr : &std::cout;
+  switch ( format )
+    {
+    case TEXT_OUT :
+      outputter = new CppUnit::TextOutputter(&runner.result(),*stream);
+      break;
+    case XML_OUT :
+      std::cout << "XML_OUT" << std::endl;
+      outputter = new CppUnit::XmlOutputter(&runner.result(),
+					    ofs, "shift_jis");
+      static_cast<CppUnit::XmlOutputter*>(outputter)->setStyleSheet(xsl);
+      break;
+    case COMPILER_OUT :
+      outputter = new CppUnit::CompilerOutputter(&runner.result(),*stream);
+      break;
+    }
+  runner.setOutputter(outputter);
+  runner.run();
+  return 0; // runner.run() ? 0 : 1;
 }
 #endif // MAIN
 #endif // CorbaPort_cpp

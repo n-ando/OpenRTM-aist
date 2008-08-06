@@ -2,7 +2,7 @@
 /*!
  * @file  MyService.idl
  * @brief sample serivce interface
- * @date  $Date: 2007-01-04 00:50:51 $
+ * @date  $Date: 2007/01/04 00:50:51 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
  * Copyright (C) 2006
@@ -14,6 +14,14 @@
  *     All rights reserved.
  *
  * $Id$
+ *
+ */
+
+/*
+ * $Log: MyService.idl,v $
+ * Revision 1.1  2007/01/04 00:50:51  n-ando
+ * *** empty log message ***
+ *
  *
  */
 

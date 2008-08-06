@@ -2,12 +2,26 @@
 #------------------------------------------------------------
 # @file   Makefile.am
 # @brief  Makefile.am for StringUtil unit test
-# @date   $Date: 2007-01-21 06:53:55 $
+# @date   $Date: 2007/01/21 06:53:55 $
 # @author Noriaki Ando <n-ando@aist.go.jp>
 #
 # $Id$
 #
 #------------------------------------------------------------
+
+#
+# $Log: Makefile.am,v $
+# Revision 1.3  2007/01/21 06:53:55  n-ando
+# The include search path option order in AM_CPPFLAGS was changed.
+#
+# Revision 1.2  2007/01/12 14:45:50  n-ando
+# Some fixes for distribution control.
+#
+# Revision 1.1  2006/11/27 08:29:56  n-ando
+# TestSuites are devided into each directory.
+#
+#
+
 
 AUTOMAKE_OPTIONS = 1.9
 
@@ -43,7 +57,8 @@ all: do-test
 
 # do tests
 do-test:
-	./StringUtilTests
+	./StringUtilTests --xml stringutiltests.xml \
+	--xsl default.xsl
 
 # clean-up
 clean-local:

@@ -24,6 +24,8 @@
 #include <rtm/InPortProvider.h>
 #include <rtm/TcpSockServer.h>
 #include <rtm/StringUtil.h>
+#include <rtm/Properties.h>
+#include <rtm/CORBA_SeqUtil.h>
 
 namespace RTC
 {

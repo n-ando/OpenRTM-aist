@@ -27,6 +27,8 @@
 #include <rtm/RingBuffer.h>
 #include <rtm/PortCallBack.h>
 #include <rtm/RTC.h>
+#include <ace/Time_Value.h>
+#include <ace/OS.h>
 
 #define TIMEOUT_TICK_USEC 10
 #define USEC_PER_SEC 1000000

@@ -1409,37 +1409,55 @@ AC_OUTPUT([Makefile
 	rtm/Makefile
 	rtm/idl/Makefile
 	rtm/tests/Makefile
-	rtm/tests/SyncFIFO/Makefile
-	rtm/tests/SyncLIFO/Makefile
-	rtm/tests/Properties/Makefile
-	rtm/tests/StringUtil/Makefile
-	rtm/tests/ModuleManager/Makefile
-	rtm/tests/ManagerConfig/Makefile
-	rtm/tests/ObjectManager/Makefile
-	rtm/tests/Factory/Makefile
-	rtm/tests/SdoService/Makefile
-	rtm/tests/PortBase/Makefile
-	rtm/tests/StateMachine/Makefile
-	rtm/tests/SdoOrganization/Makefile
-	rtm/tests/SdoConfiguration/Makefile
 	rtm/tests/CORBA_SeqUtil/Makefile
-	rtm/tests/PortAdmin/Makefile
-	rtm/tests/RingBuffer/Makefile
-	rtm/tests/NVUtil/Makefile
-	rtm/tests/InPort/Makefile
-	rtm/tests/OutPortBase/Makefile
-	rtm/tests/OutPort/Makefile
+	rtm/tests/ConfigAdmin/Makefile
 	rtm/tests/CorbaConsumer/Makefile
+	rtm/tests/CorbaNaming/Makefile
+	rtm/tests/CorbaObjectManager/Makefile
+	rtm/tests/CorbaPort/Makefile
+	rtm/tests/DataInOutPort/Makefile
 	rtm/tests/DataInPort/Makefile
 	rtm/tests/DataOutPort/Makefile
+	rtm/tests/ECFactory/Makefile
+	rtm/tests/ExtTrigExecutionContext/Makefile
+	rtm/tests/Factory/Makefile
+	rtm/tests/InPort/Makefile
+	rtm/tests/InPortCorbaConsumer/Makefile
+	rtm/tests/InPortCorbaProvider/Makefile
+	rtm/tests/InPortProvider/Makefile
+	rtm/tests/InPortTcpSockConsumer/Makefile
+	rtm/tests/InPortTcpSockProvider/Makefile
+	rtm/tests/Manager/Makefile
+	rtm/tests/ManagerConfig/Makefile
+	rtm/tests/ModuleManager/Makefile
+	rtm/tests/NVUtil/Makefile
+	rtm/tests/NamingManager/Makefile
 	rtm/tests/NullBuffer/Makefile
+	rtm/tests/NumberingPolicy/Makefile
+	rtm/tests/ObjectManager/Makefile
+	rtm/tests/OutPort/Makefile
+	rtm/tests/OutPortBase/Makefile
+	rtm/tests/OutPortCorbaConsumer/Makefile
+	rtm/tests/OutPortCorbaProvider/Makefile
+	rtm/tests/OutPortProvider/Makefile
+	rtm/tests/PeriodicExecutionContext/Makefile
+	rtm/tests/PortAdmin/Makefile
+	rtm/tests/PortBase/Makefile
+	rtm/tests/Properties/Makefile
+	rtm/tests/PublisherFactory/Makefile
+	rtm/tests/PublisherFlush/Makefile
 	rtm/tests/PublisherNew/Makefile
 	rtm/tests/PublisherPeriodic/Makefile
-	rtm/tests/PublisherFlush/Makefile
-	rtm/tests/PublisherFactory/Makefile
-	rtm/tests/DataInOutPort/Makefile
-	rtm/tests/CorbaPort/Makefile
-	rtm/tests/PeriodicExecutionContext/Makefile
+	rtm/tests/RTCUtil/Makefile
+	rtm/tests/RTObject/Makefile
+	rtm/tests/RingBuffer/Makefile
+	rtm/tests/SdoConfiguration/Makefile
+	rtm/tests/SdoOrganization/Makefile
+	rtm/tests/SdoService/Makefile
+	rtm/tests/StateMachine/Makefile
+	rtm/tests/StringUtil/Makefile
+	rtm/tests/TimeValue/Makefile
+	rtm/tests/Timer/Makefile
 	utils/Makefile
 	utils/rtm-config/Makefile
 	utils/rtc-template/Makefile

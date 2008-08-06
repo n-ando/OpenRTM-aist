@@ -32,6 +32,7 @@
 #include <iostream>
 #include <rtm/BufferBase.h>
 #include <rtm/StringUtil.h>
+#include <rtm/Properties.h>
 
 namespace RTC
 {

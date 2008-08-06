@@ -2,12 +2,26 @@
 #------------------------------------------------------------
 # @file   Makefile.am
 # @brief  Makefile.am for PublisherNew unit test
-# @date   $Date: 2007-01-21 06:53:14 $
+# @date   $Date: 2007/01/21 06:53:14 $
 # @author Noriaki Ando <n-ando@aist.go.jp>
 #
 # $Id$
 #
 #------------------------------------------------------------
+
+#
+# $Log: Makefile.am,v $
+# Revision 1.3  2007/01/21 06:53:14  n-ando
+# The include search path option order in AM_CPPFLAGS was changed.
+#
+# Revision 1.2  2007/01/12 14:45:06  n-ando
+# Some fixes for distribution control.
+#
+# Revision 1.1  2006/12/18 06:51:38  n-ando
+# The first commitment.
+#
+#
+
 
 AUTOMAKE_OPTIONS = 1.9
 
@@ -18,6 +32,7 @@ LIBS = @LIBS@
 AM_CPPFLAGS =         \
 	-I.               \
 	-I$(top_builddir) \
+	-I$(top_builddir)/rtm/idl \
 	-I$(includedir)
 
 AM_LDFLAGS =              \
@@ -45,7 +60,8 @@ all: do-test
 
 # do tests
 do-test:
-	./PublisherNewTests
+	./PublisherNewTests --xml publishernewtests.xml \
+	--xsl default.xsl
 
 # clean-up
 clean-local:

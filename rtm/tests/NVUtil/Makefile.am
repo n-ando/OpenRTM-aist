@@ -2,12 +2,26 @@
 #------------------------------------------------------------
 # @file   Makefile.am
 # @brief  Makefile.am for NVUtil unit test
-# @date   $Date: 2007-01-21 06:52:23 $
+# @date   $Date: 2007/01/21 06:52:23 $
 # @author Noriaki Ando <n-ando@aist.go.jp>
 #
 # $Id$
 #
 #------------------------------------------------------------
+
+#
+# $Log: Makefile.am,v $
+# Revision 1.3  2007/01/21 06:52:23  n-ando
+# The include search path option order in AM_CPPFLAGS was changed.
+#
+# Revision 1.2  2007/01/12 14:44:00  n-ando
+# Some fixes for distribution control.
+#
+# Revision 1.1  2006/11/27 08:30:12  n-ando
+# TestSuites are devided into each directory.
+#
+#
+
 
 AUTOMAKE_OPTIONS = 1.9
 
@@ -51,7 +65,7 @@ all: do-test
 
 # do tests
 do-test:
-	./NVUtilTests
+	./NVUtilTests --xml nvutiltests.xml --xsl default.xsl
 
 # clean-up
 clean-local:

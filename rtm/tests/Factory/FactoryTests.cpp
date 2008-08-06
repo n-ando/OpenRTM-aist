@@ -2,7 +2,7 @@
 /*!
  * @file   FactoryTests.cpp
  * @brief  Factory test class
- * @date   $Date: 2007-01-12 14:50:35 $
+ * @date   $Date: 2008/05/02 12:30:29 $
  * @author Shinji Kurihara
  *         Noriaki Ando <n-ando@aist.go.jp>
  *
@@ -18,6 +18,23 @@
  *
  */
 
+/*
+ * $Log: FactoryTests.cpp,v $
+ * Revision 1.2  2008/05/02 12:30:29  arafune
+ * Modified some tests.
+ *
+ * Revision 1.1  2007/12/20 07:50:18  arafune
+ * *** empty log message ***
+ *
+ * Revision 1.2  2007/01/12 14:50:35  n-ando
+ * A trivial fix.
+ *
+ * Revision 1.1  2006/11/27 08:31:38  n-ando
+ * TestSuites are devided into each directory.
+ *
+ *
+ */
+
 #ifndef Factory_cpp
 #define Factory_cpp
 
@@ -27,128 +44,303 @@
 #include <cppunit/extensions/HelperMacros.h>
 #include <cppunit/TestAssert.h>
 
-//#include <rtm/Factory.h>
-//#include <rtm/Manager.h>
+#include <rtm/Factory.h>
+#include <rtm/Manager.h>
+#include <rtm/Properties.h>
 
-namespace RTC
+
+namespace Tests
 {
-  class RtcBase
-  {
-  };
-};
-
-/*!
- * @class FactoryTests class
- * @brief Factory test
- */
-namespace Factory
-{
-  using namespace std;
-
-  /*
-  class Sample
-    : public RTC::RtcBase
+  class Logger
   {
   public:
-    Sample() {};
+    void log(const std::string& msg)
+    {
+      m_log.push_back(msg);
+    }
+		
+    int countLog(const std::string& line)
+    {
+      int count = 0;
+      for (int i = 0; i < (int) m_log.size(); ++i)
+	{
+	  if (m_log[i] == line) ++count;
+	}
+      return count;
+    }
+		
+  private:
+    std::vector<std::string> m_log;
   };
-  
-  
-  extern "C"
+	
+  class RTObjectMock
+    : public virtual RTC::RTObject_impl
   {
-    RTC::RtcBase* SampleNew(RTC::Manager* manager)
+  public:
+    RTObjectMock(CORBA::ORB_ptr orb, PortableServer::POA_ptr poa)
+      : RTC::RTObject_impl(orb, poa), m_logger(NULL)
     {
-      return new Sample();
     }
-    
-    
-    void SampleDelete(RTC::RtcBase* p)
+		
+  public: // helper for test
+    void setLogger(Logger* logger)
     {
-      delete (Sample *)p;
-      return;
+      m_logger = logger;
     }
-    
-    
-    //  void SampleInit(Manager* manager)
-    //  {
-    //	RtcModuleProfile profile(sample_spec);
-    //	manager->registerComponent(profile, SampleNew, SampleDelete);
-    //  }
+		
+  private:
+    Logger* m_logger;
+	
+  private:
+    void log(const std::string& msg)
+    {
+      if (m_logger != NULL) m_logger->log(msg);
+    }
   };
-  */  
+
+  RTC::RtcBase* CreateRTObjectMock(RTC::Manager* manager)
+  {
+    CORBA::ORB_ptr orb = manager->getORB();
+    PortableServer::POA_ptr poa = manager->getPOA();
+    return new RTObjectMock(orb, poa);
+  }
+
+  void DeleteRTObjectMock(RTC::RtcBase* rtc)
+  {
+    if (rtc != NULL) rtc->_remove_ref();
+  }
+	
   class FactoryTests
     : public CppUnit::TestFixture
   {
     CPPUNIT_TEST_SUITE(FactoryTests);
-    CPPUNIT_TEST(test_create);
-    CPPUNIT_TEST(test_destroy);
+    CPPUNIT_TEST(test_create_and_destroy);
+    CPPUNIT_TEST(test_profile);
+    CPPUNIT_TEST(test_number);
     CPPUNIT_TEST_SUITE_END();
-  
+
   private:
-	//    RTC::FactoryCXX*  m_pFC;
+    RTC::Manager* m_mgr;
+	
   public:
-  
     /*!
      * @brief Constructor
      */
     FactoryTests()
     {
     }
-    
+		
     /*!
      * @brief Destructor
      */
     ~FactoryTests()
     {
     }
-  
+		
     /*!
      * @brief Test initialization
      */
     virtual void setUp()
     {
-	  //      RTC::Properties profile;
-	  //      m_pFC = new RTC::FactoryCXX(profile, SampleNew, SampleDelete);
+      m_mgr = RTC::Manager::init(0, NULL);
     }
-    
+		
     /*!
      * @brief Test finalization
      */
     virtual void tearDown()
     {
-	  //      delete m_pFC; 
+      // m_mgr->terminate();
     }
-  
-    /* tests for RtcBase* create(Manager* mgr) */
-    void test_create()
+		
+    /*!
+     * @brief create()メソッドとdestroy()メソッドのテスト
+     * 
+     * - 正常にコンポーネントを生成できるか？
+     * - 生成されたコンポーネントには、正しくプロパティが設定されているか？
+     * - 正常にコンポーネントを破棄できるか？（デストラクタが呼ばれるか？）
+     */
+    void test_create_and_destroy()
+    {
+      RTC::Properties properties;
+      properties.setProperty("name", "NAME");
+			
+      RTC::FactoryCXX factory(
+			      properties, CreateRTObjectMock, DeleteRTObjectMock);
+			
+      // 正常にコンポーネントを生成できるか？
+      RTC::RtcBase* rtc = factory.create(m_mgr);
+      CPPUNIT_ASSERT(rtc != NULL);
+			
+      RTObjectMock* mock = dynamic_cast<RTObjectMock*>(rtc);
+      CPPUNIT_ASSERT(mock != NULL);
+			
+      Logger logger;
+      mock->setLogger(&logger);
+			
+      // 生成されたコンポーネントには、正しくプロパティが設定されているか？
+      RTC::Properties propertiesRet = rtc->getProperties();
+      CPPUNIT_ASSERT_EQUAL(std::string("NAME"), propertiesRet.getProperty("name"));
+			
+      // 正常にコンポーネントを破棄できるか？
+      factory.destroy(rtc);
+    }
+		
+    /*!
+     * @brief profile()メソッドのテスト
+     * 
+     * - コンストラクタで指定したプロパティを取得できるか？
+     */
+    void test_profile()
+    {
+      RTC::Properties properties;
+      properties.setProperty("name", "NAME");
+			
+      RTC::FactoryCXX factory(
+			      properties, CreateRTObjectMock, DeleteRTObjectMock);
+			
+      // コンストラクタで指定したプロパティを取得できるか？
+      RTC::Properties propertiesRet = factory.profile();
+      CPPUNIT_ASSERT_EQUAL(std::string("NAME"), propertiesRet.getProperty("name"));
+    }
+		
+    /*!
+     * @brief number()メソッドのテスト
+     * 
+     * - 生成したインスタンス数が正しく得られるか？
+     */
+    void test_number()
+    {
+			
+      RTC::Properties properties;
+      properties.setProperty("name", "NAME");
+			
+      RTC::FactoryCXX factory(
+			      properties, CreateRTObjectMock, DeleteRTObjectMock);
+			
+      int MAX_NUM = 1;
+			
+      std::vector<RTC::RtcBase*> rtcList;
+      for (int i = 0; i < MAX_NUM; ++i)
 	{
-      CPPUNIT_FAIL("test");
-    }
-    
-    
-    /* tests for RtcBase* create(Manager* mgr) */
-    void test_destroy()
+	  // create()呼出前のインスタンス数は期待どおりか？
+	  CPPUNIT_ASSERT_EQUAL(i-1, factory.number());
+				
+	  // createする
+	  RTC::RtcBase* rtc = factory.create(m_mgr);
+	  CPPUNIT_ASSERT(rtc != NULL);
+				
+	  // create()呼出後のインスタンス数は期待どおりか？
+	  CPPUNIT_ASSERT_EQUAL(i, factory.number());
+				
+	  rtcList.push_back(rtc);
+	}
+			
+      for (int i = 0; i < MAX_NUM; ++i)
 	{
-      CPPUNIT_FAIL("test");
+	  // destroy()呼出前のインスタンス数は期待どおりか？
+	  CPPUNIT_ASSERT_EQUAL(i, factory.number());
+				
+	  try {
+	    // destroyする
+	    factory.destroy(rtcList[i]);
+	  }
+	  catch (...) {}
+				
+	  // destroy()呼出後のインスタンス数は期待どおりか？
+	  CPPUNIT_ASSERT_EQUAL(i-1, factory.number());
+	}
+
     }
+		
   };
 }; // namespace Factory
 
 /*
  * Register test suite
  */
-CPPUNIT_TEST_SUITE_REGISTRATION(Factory::FactoryTests);
+CPPUNIT_TEST_SUITE_REGISTRATION(Tests::FactoryTests);
 
 #ifdef LOCAL_MAIN
 int main(int argc, char* argv[])
 {
-    CppUnit::TextUi::TestRunner runner;
+
+  FORMAT format = TEXT_OUT;
+  int target = 0;
+  std::string xsl;
+  std::string ns;
+  std::string fname;
+  std::ofstream ofs;
+
+  int i(1);
+  while (i < argc)
+    {
+      std::string arg(argv[i]);
+      std::string next_arg;
+      if (i + 1 < argc) next_arg = argv[i + 1];
+      else              next_arg = "";
+
+      if (arg == "--text") { format = TEXT_OUT; break; }
+      if (arg == "--xml")
+	{
+	  if (next_arg == "")
+	    {
+	      fname = argv[0];
+	      fname += ".xml";
+	    }
+	  else
+	    {
+	      fname = next_arg;
+	    }
+	  format = XML_OUT;
+	  ofs.open(fname.c_str());
+	}
+      if ( arg == "--compiler"  ) { format = COMPILER_OUT; break; }
+      if ( arg == "--cerr"      ) { target = 1; break; }
+      if ( arg == "--xsl"       )
+	{
+	  if (next_arg == "") xsl = "default.xsl"; 
+	  else                xsl = next_arg;
+	}
+      if ( arg == "--namespace" )
+	{
+	  if (next_arg == "")
+	    {
+	      std::cerr << "no namespace specified" << std::endl;
+	      exit(1); 
+	    }
+	  else
+	    {
+	      xsl = next_arg;
+	    }
+	}
+      ++i;
+    }
+  CppUnit::TextUi::TestRunner runner;
+  if ( ns.empty() )
     runner.addTest(CppUnit::TestFactoryRegistry::getRegistry().makeTest());
-    CppUnit::Outputter* outputter = 
-      new CppUnit::TextOutputter(&runner.result(), std::cout);
-    runner.setOutputter(outputter);
-    bool retcode = runner.run();
-    return !retcode;
+  else
+    runner.addTest(CppUnit::TestFactoryRegistry::getRegistry(ns).makeTest());
+  CppUnit::Outputter* outputter = 0;
+  std::ostream* stream = target ? &std::cerr : &std::cout;
+  switch ( format )
+    {
+    case TEXT_OUT :
+      outputter = new CppUnit::TextOutputter(&runner.result(),*stream);
+      break;
+    case XML_OUT :
+      std::cout << "XML_OUT" << std::endl;
+      outputter = new CppUnit::XmlOutputter(&runner.result(),
+					    ofs, "shift_jis");
+      static_cast<CppUnit::XmlOutputter*>(outputter)->setStyleSheet(xsl);
+      break;
+    case COMPILER_OUT :
+      outputter = new CppUnit::CompilerOutputter(&runner.result(),*stream);
+      break;
+    }
+  runner.setOutputter(outputter);
+  runner.run();
+  return 0; // runner.run() ? 0 : 1;
 }
 #endif // MAIN
 #endif // Factory_cpp

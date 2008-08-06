@@ -2,10 +2,24 @@
 /*!
  * @file   OutPortBaseTests.cpp
  * @brief  OutPortBase test class
- * @date   $Date: 2006-12-02 18:55:54 $
+ * @date   $Date: 2008/02/21 07:36:39 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
  * $Id$
+ *
+ */
+
+/*
+ * $Log: OutPortBaseTests.cpp,v $
+ * Revision 1.2  2008/02/21 07:36:39  arafune
+ * Some tests were added.
+ *
+ * Revision 1.1  2007/12/20 07:50:17  arafune
+ * *** empty log message ***
+ *
+ * Revision 1.1  2006/12/02 18:55:54  n-ando
+ * *** empty log message ***
+ *
  *
  */
 
@@ -31,244 +45,263 @@ namespace OutPortBase
     : public RTC::PublisherBase
   {
   public:
-    std::string& m_str;
-    PublisherA(std::string& str) : m_str(str) {};
-    virtual ~PublisherA(){m_str = "DeleteA";}
-    void update(){m_str += "A";}
+    PublisherA(std::string& footPrints) : m_footPrints(footPrints) {};
+    virtual ~PublisherA() { 
+      m_footPrints += "a"; 
+    }
+
+    void update() { m_footPrints += "A"; }
+	  
+    std::string& m_footPrints;
+    // std::string m_footPrints;
   };
+	
   class PublisherB
     : public RTC::PublisherBase
   {
   public:
-    std::string& m_str;
-    PublisherB(std::string& str) : m_str(str) {};
-    virtual ~PublisherB(){m_str = "DeleteB";}
-    void update(){m_str += "B";}
+    std::string& m_footPrints;
+    // std::string m_footPrints;
+    PublisherB(std::string& footPrints) : m_footPrints(footPrints) {};
+    virtual ~PublisherB() { 
+      m_footPrints += "b"; 
+    }
+    void update() { m_footPrints += "B"; }
   };
+	
   class PublisherC
     : public RTC::PublisherBase
   {
   public:
-    std::string& m_str;
-    PublisherC(std::string& str) : m_str(str) {};
-    virtual ~PublisherC(){m_str = "DeleteC";}
-    void update(){m_str += "C";}
+    std::string& m_footPrints;
+    //    std::string m_footPrints;
+    PublisherC(std::string& footPrints) : m_footPrints(footPrints) {};
+    virtual ~PublisherC() {
+      m_footPrints += "c";
+    }
+    void update() { m_footPrints += "C"; }
   };
+	
   class PublisherD
     : public RTC::PublisherBase
   {
   public:
-    std::string& m_str;
-    PublisherD(std::string& str) : m_str(str) {};
-    virtual ~PublisherD(){m_str = "DeleteD";}
-    void update(){m_str += "D";}
+    std::string& m_footPrints;
+    // std::string m_footPrints;
+    PublisherD(std::string& footPrints) : m_footPrints(footPrints) {};
+    virtual ~PublisherD() {
+      m_footPrints += "d";
+    }
+    void update() { m_footPrints += "D"; }
   };
 
-
-  const char* outport_name = "MyOutPort";
-
-  class OutPort
+  class OutPortMock
     : public RTC::OutPortBase
   {
   public:
-    OutPort(const char* name)
-      : OutPortBase(name)
-    {
-    }
+    OutPortMock(const char* name) : OutPortBase(name) {}
   };
+	
   class OutPortBaseTests
-   : public CppUnit::TestFixture
+    : public CppUnit::TestFixture
   {
     CPPUNIT_TEST_SUITE(OutPortBaseTests);
     CPPUNIT_TEST(test_name);
     CPPUNIT_TEST(test_attach);
-    CPPUNIT_TEST(test_attach_back);
-    CPPUNIT_TEST(test_attach_front);
-    CPPUNIT_TEST(test_attach_mix);
+    // CPPUNIT_TEST(test_attach_back);
+    //CPPUNIT_TEST(test_attach_front);
+    //	CPPUNIT_TEST(test_attach_mix);
     CPPUNIT_TEST(test_detach);
+    CPPUNIT_TEST(test_destructor);
     CPPUNIT_TEST_SUITE_END();
-  
-  private:
-    PublisherA* m_pubA;
-    PublisherB* m_pubB;
-    PublisherC* m_pubC;
-    PublisherD* m_pubD;
-    OutPort* m_outport;
-    std::string m_str;
+	
   public:
-  
+	
     /*!
      * @brief Constructor
      */
     OutPortBaseTests()
     {
-      m_pubA = new PublisherA(m_str);
-      m_pubB = new PublisherB(m_str);
-      m_pubC = new PublisherC(m_str);
-      m_pubD = new PublisherD(m_str);
-      m_outport = new OutPort(outport_name);
     }
-    
+		
     /*!
      * @brief Destructor
      */
     ~OutPortBaseTests()
     {
-      if (m_outport != NULL)
-	delete m_outport;
     }
-  
+		
     /*!
      * @brief Test initialization
      */
     virtual void setUp()
     {
     }
-    
+		
     /*!
      * @brief Test finalization
      */
     virtual void tearDown()
     { 
     }
-  
+		
     /*!
-     * @brief OutPortBase::name() $B$N%F%9%H(B
+     * @brief name()¥á¥½¥Ã¥É¤Î¥Æ¥¹¥È
+     * 
+     * - ¥Ý¡¼¥ÈÌ¾¤òÀµ¤·¤¯¼èÆÀ¤Ç¤­¤ë¤«¡©
      */
     void test_name()
     {
-      CPPUNIT_ASSERT(!strcmp(outport_name, m_outport->name()));
+      OutPortMock outPort("Hello, World!");
+      CPPUNIT_ASSERT_EQUAL(std::string("Hello, World!"), std::string(outPort.name()));
     }
-
+		
     /*!
-     * @brief OutPortBase::attach() $B$N%F%9%H(B
-     * Publisher$B$N%j%9%H$K(BA,B,C,D$B$N=g$G(Bpush_back$B$9$k!#(B
-     * notify() $B$r8F$V$H(B m_str $B$K(B A,B,C,D$B$N=g$GJ8;z$,F~$k(B
+     * @brief attach()¥á¥½¥Ã¥É¤Î¥Æ¥¹¥È
+     * 
+     * - attach()¥á¥½¥Ã¥É¤òÍÑ¤¤¤ÆÊ£¿ô¤ÎPublisher¤ò½çÈÖ¤ËÅÐÏ¿¤·¤¿¸å¤Ënotify()¤ò¸Æ¤Ó½Ð¤·¡¢
+     * ÅÐÏ¿¤µ¤ì¤Æ¤¤¤ë³ÆPublisher¤¬ÅÐÏ¿½ç¤Ë¥³¡¼¥ë¥Ð¥Ã¥¯¤µ¤ì¤ë¤«¡©
      */
     void test_attach()
     {
-      m_outport->attach("A", m_pubA);
-      m_outport->attach("B", m_pubB);
-      m_outport->attach("C", m_pubC);
-      m_outport->attach("D", m_pubD);
-      m_outport->notify();
-
-      CPPUNIT_ASSERT(m_str == "ABCD");
+			
+      std::string footPrints;
+      OutPortMock outPort("MyOutPort");
+      outPort.attach("A", new PublisherA(footPrints));
+      outPort.attach("B", new PublisherB(footPrints));
+      outPort.attach("C", new PublisherC(footPrints));
+      outPort.attach("D", new PublisherD(footPrints));
+      outPort.notify();
+			
+      CPPUNIT_ASSERT_EQUAL(std::string("ABCD"), footPrints);
     }
-
+		
     /*!
-     * @brief OutPortBase::attach_back() $B$N%F%9%H(B
-     * Publisher$B$N%j%9%H$K(BA,B,C,D$B$N=g$G(Bpush_back$B$9$k!#(B
-     * notify() $B$r8F$V$H(B m_str $B$K(B A,B,C,D$B$N=g$GJ8;z$,F~$k(B
+     * @brief attach_back()¥á¥½¥Ã¥É¤Î¥Æ¥¹¥È
+     * 
+     * - attach_back()¥á¥½¥Ã¥É¤òÍÑ¤¤¤ÆÊ£¿ô¤ÎPublisher¤ò½çÈÖ¤ËÅÐÏ¿¤·¤¿¸å¤Ënotify()¤ò¸Æ¤Ó½Ð¤·¡¢
+     * ÅÐÏ¿¤µ¤ì¤Æ¤¤¤ë³ÆPublisher¤¬ÅÐÏ¿½ç¤Ë¥³¡¼¥ë¥Ð¥Ã¥¯¤µ¤ì¤ë¤«¡©
      */
     void test_attach_back()
     {
-      m_outport->attach_back("A", m_pubA);
-      m_outport->attach_back("B", m_pubB);
-      m_outport->attach_back("C", m_pubC);
-      m_outport->attach_back("D", m_pubD);
-      m_outport->notify();
-
-      CPPUNIT_ASSERT(m_str == "ABCD");
+      OutPortMock outPort("MyOutPort");
+			
+      std::string footPrints;
+      outPort.attach_back("A", new PublisherA(footPrints));
+      outPort.attach_back("B", new PublisherB(footPrints));
+      outPort.attach_back("C", new PublisherC(footPrints));
+      outPort.attach_back("D", new PublisherD(footPrints));
+      outPort.notify();
+			
+      CPPUNIT_ASSERT_EQUAL(std::string("ABCD"), footPrints);
     }
-
+		
     /*!
-     * @brief OutPortBase::attach_front() $B$N%F%9%H(B
-     * Publisher$B$N%j%9%H$K(BA,B,C,D$B$N=g$G%j%9%H$N@hF,$KA^F~$9$k!#(B
-     * notify() $B$r8F$V$H(B m_str $B$K(B D,C,B,A$B$N=g$GJ8;z$,F~$k!#(B
+     * @brief attach_front()¥á¥½¥Ã¥É¤Î¥Æ¥¹¥È
+     * 
+     * - attach_front()¥á¥½¥Ã¥É¤òÍÑ¤¤¤ÆÊ£¿ô¤ÎPublisher¤ò½çÈÖ¤ËÅÐÏ¿¤·¤¿¸å¤Ënotify()¤ò¸Æ¤Ó½Ð¤·¡¢
+     * ÅÐÏ¿¤µ¤ì¤Æ¤¤¤ë³ÆPublisher¤¬ÅÐÏ¿½ç¤ÎµÕ½ç¤Ë¥³¡¼¥ë¥Ð¥Ã¥¯¤µ¤ì¤ë¤«¡©
      */
     void test_attach_front()
     {
-      m_outport->attach_front("A", m_pubA);
-      m_outport->attach_front("B", m_pubB);
-      m_outport->attach_front("C", m_pubC);
-      m_outport->attach_front("D", m_pubD);
-      m_outport->notify();
-
-      CPPUNIT_ASSERT(m_str == "DCBA");
+      OutPortMock outPort("MyOutPort");
+			
+      std::string footPrints;
+      outPort.attach_front("A", new PublisherA(footPrints));
+      outPort.attach_front("B", new PublisherB(footPrints));
+      outPort.attach_front("C", new PublisherC(footPrints));
+      outPort.attach_front("D", new PublisherD(footPrints));
+      outPort.notify();
+			
+      CPPUNIT_ASSERT_EQUAL(std::string("DCBA"), footPrints);
     }
-
+		
     /*!
-     * @brief OutPortBase::attach_front/back() $B$N%F%9%H(B
-     * Publisher$B$N%j%9%H$K(BA,B,C,D$B$r(Battach_front(), attach_back()
-     * $B$r:.$<$F%3!<%k!#(Bback:A, back:B, front:C, front:D $B$J$N$G(B
-     * notify() $B$r8F$V$H(B m_str $B$K(B D,C,A,B$B$N=g$GJ8;z$,F~$k!#(B
+     * @brief attach_back()¥á¥½¥Ã¥É¤Èattach_front()¥á¥½¥Ã¥É¤òÁÈ¤ß¹ç¤ï¤»¤¿¥Æ¥¹¥È
+     * 
+     * - attach_back()¥á¥½¥Ã¥É¤Èattach_front()¥á¥½¥Ã¥É¤òÍÑ¤¤¤ÆÊ£¿ô¤ÎPublisher¤òÅÐÏ¿¤·¤¿¸å¤Ë
+     * notify()¤ò¸Æ¤Ó½Ð¤·¡¢ÅÐÏ¿¤µ¤ì¤Æ¤¤¤ë³ÆPublisher¤¬°Õ¿Þ¤É¤ª¤ê¤Î½ç¤Ë¥³¡¼¥ë¥Ð¥Ã¥¯¤µ¤ì¤ë¤«¡©
      */
     void test_attach_mix()
     {
-      m_outport->attach_back ("A", m_pubA); // A
-      m_outport->attach_back ("B", m_pubB); // AB
-      m_outport->attach_front("C", m_pubC); // CAB
-      m_outport->attach_front("D", m_pubD); // DCAB
-      m_outport->notify();
-
-      CPPUNIT_ASSERT(m_str == "DCAB");
+      OutPortMock outPort("MyOutPort");
+			
+      std::string footPrints;
+      outPort.attach_back("A", new PublisherA(footPrints)); // A
+      outPort.attach_back("B", new PublisherB(footPrints)); // AB
+      outPort.attach_front("C", new PublisherC(footPrints)); // CAB
+      outPort.attach_front("D", new PublisherD(footPrints)); // DCAB
+      outPort.notify();
+			
+      CPPUNIT_ASSERT_EQUAL(std::string("DCAB"), footPrints);
     }
-
+		
     /*!
-     * @brief OutPortBase::detach() $B$N%F%9%H(B
-     *
-     * $B%j%9%H$K(BA,B,C,D$B$N=g$K(Battach()$B$7!"(BA,B,D,C $B$N=g$G(Bdetach()$B!#(B
-     * notify() $B$r8F$s$G!";D$j$N(BPublisher$B$r%A%'%C%/!#(B
+     * @brief detach()¥á¥½¥Ã¥É¤Î¥Æ¥¹¥È
      * 
-     * detach() $B$O8F$P$l$k$H!"(BPublisher $B$N%]%$%s%?$rJV$9$N$G$=$l$r(Bdelete$B!#(B
-     * Publisher$B$N%G%9%H%i%/%?$G$O!"(Bm_str $B$K(B "Delete?" $B$r%;%C%H$9$k$N$G!"(B
-     * m_str $B$r%A%'%C%/!#(B
+     * - ¤Ï¤¸¤á¤ËÊ£¿ô¤ÎPublisher¤òÅÐÏ¿¤·¡¢¤½¤Î¸å¡¢£±¤Ä¤º¤ÄÅÐÏ¿²ò½ü¤·¤Æ¤¤¤­¡¢°Õ¿Þ¤É¤ª¤ê¤Ë»ØÄê¤·¤¿Publihser¤¬ÅÐÏ¿²ò½ü¤µ¤ì¤Æ¤¤¤ë¤«¡©
      */
     void test_detach()
     {
-      // A,B,C,D $B$N=g$K%"%?%C%A(B
-      RTC::PublisherBase* pub;
-      m_outport->attach("A", m_pubA);
-      m_outport->attach("B", m_pubB);
-      m_outport->attach("C", m_pubC);
-      m_outport->attach("D", m_pubD);
-      // update() $B$,8F$P$l$F(B m_str = "ABCD" $B$N$O$:(B
-      m_outport->notify();
-      CPPUNIT_ASSERT(m_str == "ABCD");
-
-      // detach $B$N%F%9%H(B
-      m_str.clear();
-      pub = m_outport->detach("A");
-      m_outport->notify();
-      // "A" $B$r%G%?%C%A$7$?$N$G(B m_str = "BCD" $B$N$O$:(B
-      CPPUNIT_ASSERT(m_str == "BCD");
-
-      // A $B$r(Bdelete$B$9$k$N$G!"%G%9%H%i%/%?$G(B m_str = "DeleteA"
-      delete pub;
-      CPPUNIT_ASSERT(m_str == "DeleteA");
-
-      m_str.clear();
-      pub = m_outport->detach("B");
-      m_outport->notify();
-      // "B" $B$r%G%?%C%A$7$?$N$G(B m_str = "CD" $B$N$O$:(B
-      CPPUNIT_ASSERT(m_str == "CD");
-
-      // B $B$r(Bdelete$B$9$k$N$G!"%G%9%H%i%/%?$G(B m_str = "DeleteB"
-      delete pub;
-      CPPUNIT_ASSERT(m_str == "DeleteB");
-
-      m_str.clear();
-      pub = m_outport->detach("D");
-      m_outport->notify();
-      // "D" $B$r%G%?%C%A$7$?$N$G(B m_str = "C" $B$N$O$:(B
-      CPPUNIT_ASSERT(m_str == "C");
-
-      // D $B$r(Bdelete$B$9$k$N$G!"%G%9%H%i%/%?$G(B m_str = "DeleteD"
-      delete pub;
-      CPPUNIT_ASSERT(m_str == "DeleteD");
-
-      m_str.clear();
-      pub = m_outport->detach("C");
-      m_outport->notify();
-      // "C" $B$r%G%?%C%A$7$?$N$G(B m_str = "" $B$N$O$:(B
-      CPPUNIT_ASSERT(m_str == "");
-
-      // C $B$r(Bdelete$B$9$k$N$G!"%G%9%H%i%/%?$G(B m_str = "DeleteC"
-      delete pub;
-      CPPUNIT_ASSERT(m_str == "DeleteC");
+      OutPortMock outPort("MyOutPort");
+      std::string footPrints;
+			
+      // ¤Ï¤¸¤á¤ËÊ£¿ô¤ÎPublisher¤òÅÐÏ¿¤·¤Æ¤ª¤¯
+      outPort.attach("A", new PublisherA(footPrints));
+      outPort.attach("B", new PublisherB(footPrints));
+      outPort.attach("C", new PublisherC(footPrints));
+      outPort.attach("D", new PublisherD(footPrints));
+      outPort.notify();
+      CPPUNIT_ASSERT_EQUAL(std::string("ABCD"), footPrints);
+			
+      // PublisherA¤òÅÐÏ¿²ò½ü¤·¤Ænotify()¤ò¸Æ½Ð¤·¤¿ºÝ¡¢ÅÐÏ¿²ò½ü¤µ¤ì¤Æ¤¤¤Ê¤¤³ÆPublisher¤Î¤ß¤¬°Õ¿Þ¤É¤ª¤ê¤Î½ç½ø¤Ç¸Æ¤Ó½Ð¤µ¤ì¤ë¤«¡©
+      footPrints.clear();
+      std::auto_ptr<RTC::PublisherBase> pubA(outPort.detach("A"));
+      outPort.notify();
+      CPPUNIT_ASSERT_EQUAL(std::string("BCD"), footPrints);
+			
+      // PublisherB¤òÅÐÏ¿²ò½ü¤·¤Ænotify()¤ò¸Æ½Ð¤·¤¿ºÝ¡¢ÅÐÏ¿²ò½ü¤µ¤ì¤Æ¤¤¤Ê¤¤³ÆPublisher¤Î¤ß¤¬°Õ¿Þ¤É¤ª¤ê¤Î½ç½ø¤Ç¸Æ¤Ó½Ð¤µ¤ì¤ë¤«¡©
+      footPrints.clear();
+      std::auto_ptr<RTC::PublisherBase> pubB(outPort.detach("B"));
+      outPort.notify();
+      CPPUNIT_ASSERT_EQUAL(std::string("CD"), footPrints);
+			
+      // PublisherD¤òÅÐÏ¿²ò½ü¤·¤Ænotify()¤ò¸Æ½Ð¤·¤¿ºÝ¡¢ÅÐÏ¿²ò½ü¤µ¤ì¤Æ¤¤¤Ê¤¤³ÆPublisher¤Î¤ß¤¬°Õ¿Þ¤É¤ª¤ê¤Î½ç½ø¤Ç¸Æ¤Ó½Ð¤µ¤ì¤ë¤«¡©
+      footPrints.clear();
+      std::auto_ptr<RTC::PublisherBase> pubD(outPort.detach("D"));
+      outPort.notify();
+      CPPUNIT_ASSERT_EQUAL(std::string("C"), footPrints);
+			
+      // PublisherC¤òÅÐÏ¿²ò½ü¤·¤Ænotify()¤ò¸Æ½Ð¤·¤¿ºÝ¡¢ÅÐÏ¿²ò½ü¤µ¤ì¤Æ¤¤¤Ê¤¤³ÆPublisher¤Î¤ß¤¬°Õ¿Þ¤É¤ª¤ê¤Î½ç½ø¤Ç¸Æ¤Ó½Ð¤µ¤ì¤ë¤«¡©
+      footPrints.clear();
+      std::auto_ptr<RTC::PublisherBase> pubC(outPort.detach("C"));
+      outPort.notify();
+      CPPUNIT_ASSERT_EQUAL(std::string(""), footPrints);
     }
-
+    
+    /*!
+     * @brief ¥Ç¥¹¥È¥é¥¯¥¿¤Î¥Æ¥¹¥È
+     * 
+     * - ÅÐÏ¿¤µ¤ì¤Æ¤¤¤ë³ÆPublisher¤¬ÇË´þ¤µ¤ì¤ë¤«¡©
+     */
+    void test_destructor()
+    {
+      std::string footPrints;
+      {
+	OutPortMock outPort("MyOutPort");
+	outPort.attach("A", new PublisherA(footPrints));
+	outPort.attach("B", new PublisherB(footPrints));
+	outPort.attach("C", new PublisherC(footPrints));
+	outPort.attach("D", new PublisherD(footPrints));
+				
+	// ¤³¤Î»þÅÀ¤Ç¥Õ¥Ã¥È¥×¥ê¥ó¥È¤Ï²¿¤â¤Ê¤¤¤Ï¤º
+	CPPUNIT_ASSERT_EQUAL(std::string(""), footPrints);
+      } // destructor¸Æ½Ð¤·
+			
+      // ³Æ¥Ç¥¹¥È¥é¥¯¥¿¤¬¸Æ¤Ó½Ð¤µ¤ì¤Æ¤¤¤ë¤«¡©
+      CPPUNIT_ASSERT_EQUAL(std::string("abcd"), footPrints);
+    }
+    
   };
 }; // namespace OutPortBase
 
@@ -280,13 +313,83 @@ CPPUNIT_TEST_SUITE_REGISTRATION(OutPortBase::OutPortBaseTests);
 #ifdef LOCAL_MAIN
 int main(int argc, char* argv[])
 {
-    CppUnit::TextUi::TestRunner runner;
+
+  FORMAT format = TEXT_OUT;
+  int target = 0;
+  std::string xsl;
+  std::string ns;
+  std::string fname;
+  std::ofstream ofs;
+
+  int i(1);
+  while (i < argc)
+    {
+      std::string arg(argv[i]);
+      std::string next_arg;
+      if (i + 1 < argc) next_arg = argv[i + 1];
+      else              next_arg = "";
+
+      if (arg == "--text") { format = TEXT_OUT; break; }
+      if (arg == "--xml")
+	{
+	  if (next_arg == "")
+	    {
+	      fname = argv[0];
+	      fname += ".xml";
+	    }
+	  else
+	    {
+	      fname = next_arg;
+	    }
+	  format = XML_OUT;
+	  ofs.open(fname.c_str());
+	}
+      if ( arg == "--compiler"  ) { format = COMPILER_OUT; break; }
+      if ( arg == "--cerr"      ) { target = 1; break; }
+      if ( arg == "--xsl"       )
+	{
+	  if (next_arg == "") xsl = "default.xsl"; 
+	  else                xsl = next_arg;
+	}
+      if ( arg == "--namespace" )
+	{
+	  if (next_arg == "")
+	    {
+	      std::cerr << "no namespace specified" << std::endl;
+	      exit(1); 
+	    }
+	  else
+	    {
+	      xsl = next_arg;
+	    }
+	}
+      ++i;
+    }
+  CppUnit::TextUi::TestRunner runner;
+  if ( ns.empty() )
     runner.addTest(CppUnit::TestFactoryRegistry::getRegistry().makeTest());
-    CppUnit::Outputter* outputter = 
-      new CppUnit::TextOutputter(&runner.result(), std::cout);
-    runner.setOutputter(outputter);
-    bool retcode = runner.run();
-    return !retcode;
+  else
+    runner.addTest(CppUnit::TestFactoryRegistry::getRegistry(ns).makeTest());
+  CppUnit::Outputter* outputter = 0;
+  std::ostream* stream = target ? &std::cerr : &std::cout;
+  switch ( format )
+    {
+    case TEXT_OUT :
+      outputter = new CppUnit::TextOutputter(&runner.result(),*stream);
+      break;
+    case XML_OUT :
+      std::cout << "XML_OUT" << std::endl;
+      outputter = new CppUnit::XmlOutputter(&runner.result(),
+					    ofs, "shift_jis");
+      static_cast<CppUnit::XmlOutputter*>(outputter)->setStyleSheet(xsl);
+      break;
+    case COMPILER_OUT :
+      outputter = new CppUnit::CompilerOutputter(&runner.result(),*stream);
+      break;
+    }
+  runner.setOutputter(outputter);
+  runner.run();
+  return 0; // runner.run() ? 0 : 1;
 }
 #endif // MAIN
 #endif // OutPortBase_cpp

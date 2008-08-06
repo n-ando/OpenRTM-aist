@@ -2,11 +2,11 @@
 /*!
  * @file   NVUtilTests.cpp
  * @brief  NVUtil test class
- * @date   $Date: 2006-11-27 08:26:13 $
+ * @date   $Date: 2008/03/03 12:24:24 $
  * @author Shinji Kurihara
  *         Noriaki Ando <n-ando@aist.go.jp>
  * 
- * Copyright (C) 2006
+ * Copyright (C) 2006-2008
  *     Noriaki Ando
  *     Task-intelligence Research Group,
  *     Intelligent Systems Research Institute,
@@ -15,6 +15,34 @@
  *     All rights reserved.
  *
  * $Id$
+ *
+ */
+
+/*
+ * $Log: NVUtilTests.cpp,v $
+ * Revision 1.5  2008/03/03 12:24:24  arafune
+ * Added some tests.
+ *
+ * Revision 1.4  2008/01/24 01:51:58  tsakamoto
+ * *** empty log message ***
+ *
+ * Revision 1.3  2007/12/27 10:28:16  arafune
+ * *** empty log message ***
+ *
+ * Revision 1.2  2007/12/25 12:13:38  arafune
+ * *** empty log message ***
+ *
+ * Revision 1.1  2007/12/20 07:50:18  arafune
+ * *** empty log message ***
+ *
+ * Revision 1.1  2006/11/27 08:26:13  n-ando
+ * TestSuites are devided into each directory.
+ *
+ * Revision 1.3  2006/11/15 09:47:18  kurihara
+ * tests for find(),isString(),toString() are added.
+ *
+ * Revision 1.1  2006/11/14 07:23:16  kurihara
+ * test program for NVUtil module. first commit.
  *
  */
 
@@ -29,40 +57,43 @@
 
 #include <rtm/NVUtil.h>
 
-/*!
- * @class NVUtilTests class
- * @brief NVUtil test
- */
 namespace NVUtil
 {
   using namespace NVUtil;
   using namespace std;
-  
+
   int g_argc;
   vector<string> g_argv;
   
+  /*!
+   * @class NVUtilTests class
+   * @brief NVUtil Test
+   */
   class NVUtilTests
     : public CppUnit::TestFixture
   {
     CPPUNIT_TEST_SUITE(NVUtilTests);
-    CPPUNIT_TEST(test_newNV);
-    //  CPPUNIT_TEST(test_newNVStr);
+    CPPUNIT_TEST(test_newNV_Short);
+    CPPUNIT_TEST(test_newNV_Long);
+    CPPUNIT_TEST(test_newNV_Float);
+    CPPUNIT_TEST(test_newNV_Double);
+    CPPUNIT_TEST(test_newNV_Str);
     CPPUNIT_TEST(test_newNVChar);
     CPPUNIT_TEST(test_newNVBool);
     CPPUNIT_TEST(test_newNVOctet);
     CPPUNIT_TEST(test_copy);
+    CPPUNIT_TEST(test_toProperties);
+    CPPUNIT_TEST(test_copyToProperties);
     CPPUNIT_TEST(test_find);
     CPPUNIT_TEST(test_isString);
     CPPUNIT_TEST(test_toString);
+    CPPUNIT_TEST(test_appendStringValue);
+    CPPUNIT_TEST(test_append);
     CPPUNIT_TEST_SUITE_END();
-    
+
   private:
-    
+
   public:
-    
-    /*!
-     * @brief Constructor
-     */
     NVUtilTests()
     {
       CORBA::ORB_var orb;
@@ -70,328 +101,466 @@ namespace NVUtil
       for (int i = 0; i < g_argc; i++) {
 	argv[i] = (char *)g_argv[i].c_str();
       }
-      
+	      
       orb = CORBA::ORB_init(g_argc, argv);
     }
-    
-    /*!
-     * @brief Destructor
-     */
+
     ~NVUtilTests()
     {
     }
-    
-    /*!
-     * @brief Test initialization
-     */
+
     virtual void setUp()
     {
     }
     
-    /*!
-     * @brief Test finalization
-     */
     virtual void tearDown()
     { 
     }
-    
+
     /*!
      * @brief newNV(char*,Value)のテスト
-     *   (1) newNV()を用いCORBA::Short型のデータとnameのNameValueを取得。
-     *   (2) newNV()に渡したデータと取得したNameValueの要素を比較。
-     *   (3) newNV()を用いCORBA::Long型のデータとnameのNameValueを取得。
-     *   (4) newNV()に渡したデータと取得したNameValueの要素を比較。
-     *   (5) newNV()を用いCORBA::Float型のデータとnameのNameValueを取得。
-     *   (6) newNV()に渡したデータと取得したNameValueの要素を比較。
-     *   (7) newNV()を用いCORBA::Double型のデータとnameのNameValueを取得。
-     *   (8) newNV()に渡したデータと取得したNameValueの要素を比較。
+     * 
+     * - CORBA::Short型データのNameValueを正しく生成できるか？
      */
-    void test_newNV() {
-      CORBA::Short  setSt, getSt;
-      CORBA::Long   setLg, getLg;
-      CORBA::Float  setFt, getFt;
-      CORBA::Double setDl, getDl;
-      SDOPackage::NameValue nv;
-      string setname, getname;
+    void test_newNV_Short()
+    {
+      // CORBA::Short型のデータを持つNameValueを生成し、値を比較して正しく生成されていることを確認する
+      CORBA::Short value = 1;
+      string name = "short";
+      SDOPackage::NameValue nv = newNV(name.c_str(), value);
       
-      // (1) newNV()を用いCORBA::Short型のデータとnameのNameValueを取得。
-      setSt = 1;
-      nv = newNV("short", setSt);
-      
-      // (2) newNV()に渡したデータと取得したNameValueの要素を比較。
-      setname = "short";
-      getname = nv.name;
-      CPPUNIT_ASSERT(getname == setname);
-      nv.value >>= getSt;
-      CPPUNIT_ASSERT(setSt == getSt);
-      
-      
-      
-      // (3) newNV()を用いCORBA::Long型のデータとnameのNameValueを取得。
-      setLg = 999999999;
-      nv = newNV("long", setLg);
-      
-      // (4) newNV()に渡したデータと取得したNameValueの要素を比較。
-      setname = "long";
-      getname = nv.name;
-      CPPUNIT_ASSERT(getname == setname);
-      nv.value >>= getLg;
-      CPPUNIT_ASSERT(setLg == getLg);
-      
-      
-      
-      // (5) newNV()を用いCORBA::Float型のデータとnameのNameValueを取得。
-      setFt = 99999.9;
-      nv = newNV("float", setFt);
-      
-      // (6) newNV()に渡したデータと取得したNameValueの要素を比較。
-      setname = "float";
-      getname = nv.name;
-      CPPUNIT_ASSERT(getname == setname);
-      nv.value >>= getFt;
-      CPPUNIT_ASSERT(setFt == getFt);
-      
-      
-      
-      // (7) newNV()を用いCORBA::Double型のデータとnameのNameValueを取得。
-      setDl = 9999999.999;
-      nv = newNV("double", setDl);
-      
-      // (8) newNV()に渡したデータと取得したNameValueの要素を比較。
-      setname = "double";
-      getname = nv.name;
-      CPPUNIT_ASSERT(getname == setname);
-      nv.value >>= getDl;
-      CPPUNIT_ASSERT(setDl == getDl);
+      string nvName(nv.name);
+      CPPUNIT_ASSERT_EQUAL(name, nvName);
+
+      CORBA::Short nvValue;
+      nv.value >>= nvValue;
+      CPPUNIT_ASSERT_EQUAL(value, nvValue);
     }
-    
+
+    /*!
+     * @brief newNV(char*,Value)のテスト
+     * 
+     * - CORBA::Long型データのNameValueを正しく生成できるか？
+     */
+    void test_newNV_Long()
+    {
+      // CORBA::Long型のデータを持つNameValueを生成し、値を比較して正しく生成されていることを確認する
+      CORBA::Long value = 999999999;
+      string name = "long";
+      SDOPackage::NameValue nv = newNV(name.c_str(), value);
+      
+      string nvName(nv.name);
+      CPPUNIT_ASSERT_EQUAL(name, nvName);
+
+      CORBA::Long nvValue;
+      nv.value >>= nvValue;
+      CPPUNIT_ASSERT_EQUAL(value, nvValue);
+    }
+
+    /*!
+     * @brief newNV(char*,Value)のテスト
+     * 
+     *  - CORBA::Float型データのNameValueを正しく生成できるか？
+     */
+    void test_newNV_Float()
+    {
+      // CORBA::Float型のデータを持つNameValueを生成し、値を比較して正しく生成されていることを確認する
+      CORBA::Float value = 99999.9;
+      string name = "float";
+      SDOPackage::NameValue nv = newNV(name.c_str(), value);
+      
+      string nvName(nv.name);
+      CPPUNIT_ASSERT_EQUAL(name, nvName);
+
+      CORBA::Float nvValue;
+      nv.value >>= nvValue;
+      CPPUNIT_ASSERT_EQUAL(value, nvValue);
+    }
+
+    /*!
+     * @brief newNV(char*,Value)のテスト
+     * 
+     * - CORBA::Double型データのNameValueを正しく生成できるか？
+     */
+    void test_newNV_Double()
+    {
+      // CORBA::Double型のデータを持つNameValueを生成し、値を比較して正しく生成されていることを確認する
+      CORBA::Double value = 9999999.999;
+      string name = "double";
+      SDOPackage::NameValue nv = newNV(name.c_str(), value);
+      
+      string nvName(nv.name);
+      CPPUNIT_ASSERT_EQUAL(name, nvName);
+
+      CORBA::Double nvValue;
+      nv.value >>= nvValue;
+      CPPUNIT_ASSERT_EQUAL(value, nvValue);
+    }
     
     /*!
-     * @brief newNV(char*,char*)のテスト
-     *    (1) const char*型のnameとvalueをnewNV()に渡し、NameValueを取得する。
+     * @brief newNV(const char*, const char*)のテスト
+     * 
+     * - const char*型データのNameValueを正しく生成できるか？
      */
-    void test_newNVStr() {
-      SDOPackage::NameValue nv;
-      const char* name  = "string";
-      const char* value = "string-data";
-      // (1) const char*型のnameとvalueをnewNV()に渡し、NameValueを取得する。
-      nv = newNV(name, value);
+    void test_newNV_Str()
+    {
+      // (1) CORBA::String_var型のvalueとchar*型のnameをnewNV()に渡し、NameValueを取得する
+      string name = "string";
+      CORBA::String_var value = CORBA::string_dup("Hello, world!");
+      SDOPackage::NameValue nv = newNV(name.c_str(), value);
+    	
+      // (2) newNV()にセットしたnameと、取得したNameValue.nameを比較する
+      string nvName(nv.name);
+      CPPUNIT_ASSERT_EQUAL(name, nvName);
+    	
+      // (3) newNV()にセットしたvalueと、取得したNameValue.valueを比較する
+      //    	CORBA::String_var nvValue;
+      char* nvValue;
+      nv.value >>= nvValue;
+      CPPUNIT_ASSERT_EQUAL(string("Hello, world!"), string(nvValue));
     }
-    
     
     /*!
      * @brief newNVChar()のテスト
-     *   (1) CORBA::Char型のvalueとchar*型のnameをnewNVChar()に渡し、NameValueを取得する。
-     *   (2) newNVChar()にセットしたnameと取得したNameValue.nameの比較。
-     *   (3) newNVChar()にセットしたvalueと取得したNameValue.valueの比較。
+     * 
+     * - CORBA::Char型データのNameValueを正しく生成できるか？
      */
-    void test_newNVChar() {
-      CORBA::Char ch = 'A', getch;
-      SDOPackage::NameValue nv;
+    void test_newNVChar()
+    {
       // (1) CORBA::Char型のvalueとchar*型のnameをnewNVChar()に渡し、NameValueを取得する。
-      nv = newNVChar("char", ch);
-      
-      string setstr, getstr;
+      string name = "char";
+      CORBA::Char value = 'A';
+      SDOPackage::NameValue nv = newNVChar(name.c_str(), value);
       
       // (2) newNVChar()にセットしたnameと取得したNameValue.nameの比較。
-      setstr = "char";
-      getstr = nv.name;
-      CPPUNIT_ASSERT(getstr == setstr);
+      string nvName(nv.name);
+      CPPUNIT_ASSERT_EQUAL(name, nvName);
       
       // (3) newNVChar()にセットしたvalueと取得したNameValue.valueの比較。
-      nv.value >>= CORBA::Any::to_char(getch);
-      CPPUNIT_ASSERT(ch == getch);
+      CORBA::Char nvValue;
+      nv.value >>= CORBA::Any::to_char(nvValue);
+      CPPUNIT_ASSERT_EQUAL(value, nvValue);
     }
-    
     
     /*!
      * @brief newNVBool()のテスト
+     * 
+     * - CORBA::Boolean型データのNameValueを正しく生成できるか？
      */
-    void test_newNVBool() {
-      SDOPackage::NameValue nv;
-      CORBA::Boolean setval=false, retval;
+    void test_newNVBool()
+    {
+      string name = "bool";
+      CORBA::Boolean value = false;
+      SDOPackage::NameValue nv = newNVBool(name.c_str(), value);
       
-      nv = newNVBool("bool", setval);
+      string nvName(nv.name);
+      CPPUNIT_ASSERT_EQUAL(name, nvName);
       
-      string setstr, getstr;
-      
-      setstr = "bool";
-      getstr = nv.name;
-      CPPUNIT_ASSERT(getstr == setstr);
-      
-      nv.value >>= CORBA::Any::to_boolean(retval);
-      CPPUNIT_ASSERT(setval == retval);
+      CORBA::Boolean nvValue;
+      nv.value >>= CORBA::Any::to_boolean(nvValue);
+      CPPUNIT_ASSERT_EQUAL(value, nvValue);
     }
-    
-    
+
     /*!
      * @brief newNVOctet()のテスト
+     * 
+     * - CORBA::Octet型データのNameValueを正しく生成できるか？
      */
-    void test_newNVOctet() {
-      SDOPackage::NameValue nv;
-      CORBA::Octet setval=030, getval;
+    void test_newNVOctet()
+    {
+      string name = "octet";
+      CORBA::Octet value = 030;
+      SDOPackage::NameValue nv = newNVOctet(name.c_str(), value);
       
-      nv = newNVOctet("octet", setval);
+      string nvName(nv.name);
+      CPPUNIT_ASSERT_EQUAL(name, nvName);
       
-      string setstr, getstr;
-      
-      setstr = "octet";
-      getstr = nv.name;
-      CPPUNIT_ASSERT(getstr == setstr);
-      
-      nv.value >>= CORBA::Any::to_octet(getval);
-      CPPUNIT_ASSERT(setval == getval);
+      CORBA::Octet nvValue;
+      nv.value >>= CORBA::Any::to_octet(nvValue);
+      CPPUNIT_ASSERT_EQUAL(value, nvValue);
     }
     
     /*!
      * @brief copy()のテスト
-     *   (1) RTC::Propertiesオブジェクトの生成
-     *   (2）copy()にてPropertiesオブジェクトをnvlistにコピー
-     *   (3) NVList[0].valueからデータを抽出
-     *   (4) copy()により引数で与えたnvlistが書き換えられているかを確認。
+     * 
+     * - RTC::Propertiesの内容を正しくをNVListにコピーできるか？
      */
-    void test_copy() {
-      SDOPackage::NVList nvlist;
-      
-      map<string, string> mProp;
+    void test_copy()
+    {
       // (1) RTC::Propertiesオブジェクトの生成
-      // ※ Propertiesのコンストラクタでは引数で与えれたmapのキー値だけが保存される。
-      mProp["potr-type"];
+      // ※ Propertiesのコンストラクタでは引数で与えられたmapのキー値だけが保存される。
+      string name = "port-type";
+      string value = "port-type-value";
+      map<string, string> mProp;
+      mProp[name] = value;
       RTC::Properties prop(mProp);
       
-      
       // (2）copy()にてPropertiesオブジェクトをnvlistにコピー
-      copy(nvlist, prop);
+      SDOPackage::NVList nvlist;
+      copyFromProperties(nvlist, prop);
       
+      // (3) copy()により引数で与えたnvlistが書き換えられているかを確認。
+      string nvName(nvlist[0].name);
+      CPPUNIT_ASSERT_EQUAL(name, nvName);
       
-      // (3) NVList[0].valueからデータを抽出
       const char* getval;
       nvlist[0].value >>= getval;
-      
-      string setstr, getstr;
-      
-      
-      // (4) copy()により引数で与えたnvlistが書き換えられているかを確認。
-      setstr = "potr-type";
-      getstr = nvlist[0].name;
-      CPPUNIT_ASSERT(setstr == getstr);
-      
-      setstr = "";
-      getstr = getval;
-      CPPUNIT_ASSERT(setstr == getstr);
-      
+      string nvValue(getval);
+      CPPUNIT_ASSERT_EQUAL(value, nvValue);
     }
-    
+
+    /*!
+     * @brief toProperties()のテスト
+     * 
+     * - NVListの内容を正しくRTC::Propertiesに変換できるか？
+     */
+    void test_toProperties()
+    {
+      // (1) 変換元となるNVListオブジェクトを生成する
+      SDOPackage::NVList nvlist;		    	
+      nvlist.length(2);
+    	
+      string name1 = "testname.test1";
+      string value1 = "testval1";
+      nvlist[0].name = name1.c_str();
+      nvlist[0].value <<= value1.c_str();
+			
+      string name2 = "testname.test2";
+      string value2 = "testval2";
+      nvlist[1].name = name2.c_str();
+      nvlist[1].value <<= value2.c_str();
+			
+      // (2) RTC::Propertiesへ変換する
+      RTC::Properties prop = toProperties(nvlist);
+			
+      // (3) 正しく変換されていることを確認する
+      string propValue1 = prop.getProperty(name1);
+      CPPUNIT_ASSERT_EQUAL(value1, propValue1);
+			
+      string propValue2 = prop.getProperty(name2);
+      CPPUNIT_ASSERT_EQUAL(value2, propValue2);
+    }
+
+    /*!
+     * @brief copyToProperties()のテスト
+     * 
+     * - NVListの内容を正しくRTC::Propertiesにコピーできるか？
+     */
+    void test_copyToProperties()
+    {
+      // (1) コピー元となるNVListオブジェクトを生成する
+      SDOPackage::NVList nvlist;
+      nvlist.length(2);
+
+      string name1 = "testname.test1";
+      string value1 = "testval1";
+      nvlist[0].name = name1.c_str();
+      nvlist[0].value <<= value1.c_str();
+			
+      string name2 = "testname.test2";
+      string value2 = "testval2";
+      nvlist[1].name = name2.c_str();
+      nvlist[1].value <<= value2.c_str();
+
+      // (2) RTC::Propertiesへコピーする
+      RTC::Properties prop;
+      copyToProperties(prop, nvlist);
+    	
+      // (3) 値を比較して、正しくコピーされていることを確認する
+      string propValue1 = prop.getProperty(name1);
+      CPPUNIT_ASSERT_EQUAL(value1, propValue1);
+      string propValue2 = prop.getProperty(name2);
+      CPPUNIT_ASSERT_EQUAL(value2, propValue2);
+    }
     
     /*!
      * @brief find()のテスト
-     *   (1) NVList要素のnameに"short",valueにshort型のデータをセット。
-     *   (2) NVList要素のnameに"long",valueにlong型のデータをセット。
-     *   (3) nvlistの中からNameValue.nameが"long"のNameValue.valueを取得。
-     *   (4) nvlistの中からNameValue.nameが"short"のNameValue.valueを取得。
+     * 
+     * - 指定した名称でNVList内の値を正しく検索できるか？
      */
-    void test_find() {
+    void test_find()
+    {
       SDOPackage::NVList nvlist;
-      CORBA::Any any;
-      CORBA::Short setst,getst;
-      CORBA::Long  setlg,getlg;
-      
       nvlist.length(2);
       
       // (1) NVList要素のnameに"short",valueにshort型のデータをセット。
-      setst = 1;
-      nvlist[0].name = "short";
-      nvlist[0].value <<= setst;
+      string name1 = "short";
+      CORBA::Short value1 = 1;
+      nvlist[0].name = name1.c_str();
+      nvlist[0].value <<= value1;
       
       // (2) NVList要素のnameに"long",valueにlong型のデータをセット。
-      setlg =111;
-      nvlist[1].name = "long";
-      nvlist[1].value <<= setlg;
+      string name2 = "long";
+      CORBA::Long value2 = 111;
+      nvlist[1].name = name2.c_str();
+      nvlist[1].value <<= value2;
+
+      // (3) nvlistの中からNameValue.nameが"long"のNameValue.valueを検索して、正しい値を取得できることを確認する。
+      CORBA::Short foundValue1;
+      (find(nvlist, name1.c_str())) >>= foundValue1;
+      CPPUNIT_ASSERT_EQUAL(value1, foundValue1);
       
-      // (3) nvlistの中からNameValue.nameが"long"のNameValue.valueを取得。
-      any = find(nvlist, "long");
-      any >>= getlg;
-      CPPUNIT_ASSERT(setlg == getlg);
-      
-      // (4) nvlistの中からNameValue.nameが"short"のNameValue.valueを取得。
-      any = find(nvlist, "short");
-      any >>= getst;
-      CPPUNIT_ASSERT(setst == getst);
+      // (4) nvlistの中からNameValue.nameが"short"のNameValue.valueを検索して、正しい値を取得できることを確認する。
+      CORBA::Long foundValue2;
+      (find(nvlist, name2.c_str())) >>= foundValue2;
+      CPPUNIT_ASSERT_EQUAL(value2, foundValue2);
     }
-    
     
     /*!
      * @brief isString()のテスト
-     *   (1) NVList要素のnameに"short",valueにshort型のデータをセット。
-     *   (2) NVList要素のnameに"string",valueにstring型のデータをセット。
-     *   (3) isString(nvlist,name)にて,指定されたnameのvalueの型がstringかどうかを判定。
-     *   (4) isString(nvlist,name)にて,指定されたnameのvalueの型がstringかどうかを判定。
+     * 
+     *  - NVList内の指定した名称を持つ値がstring型かどうかを正しく判定できるか？
      */
-    void test_isString() {
-      bool result;
+    void test_isString()
+    {
       SDOPackage::NVList nvlist;
-      CORBA::Short setst;
-      
       nvlist.length(2);
       
       // (1) NVList要素のnameに"short",valueにshort型のデータをセット。
-      setst = 1;
-      nvlist[0].name = "short";
-      nvlist[0].value <<= setst;
+      string name1 = "short";
+      CORBA::Short value1 = 1;
+      nvlist[0].name = name1.c_str();
+      nvlist[0].value <<= value1;
       
       // (2) NVList要素のnameに"string",valueにstring型のデータをセット。
-      string str("test");
-      nvlist[1].name = "string";
-      nvlist[1].value <<= str.c_str();
+      string name2 = "string";
+      string value2 = "test";
+      nvlist[1].name = name2.c_str();
+      nvlist[1].value <<= value2.c_str();
       
       // (3) isString(nvlist,name)にて,指定されたnameのvalueの型がstringかどうかを判定。
-      result = isString(nvlist, "string");
-      CPPUNIT_ASSERT(result == true);
-      
-      // (4) isString(nvlist,name)にて,指定されたnameのvalueの型がstringかどうかを判定。
-      result = isString(nvlist, "short");
-      CPPUNIT_ASSERT(result == false);
-      
+      CPPUNIT_ASSERT(!isString(nvlist, name1.c_str()));
+      CPPUNIT_ASSERT(isString(nvlist, name2.c_str()));
     }
-    
-    
+
     /*!
      * @brief toString()のテスト
-     *   (1) NVList要素のnameに"short",valueにshort型のデータをセット。
-     *   (2) NVList要素のnameに"string",valueにstring型のデータをセット。
-     *   (3) toString(nvlist,name)にて,指定されたnameのvalueをstringで取得。
-     *   (4) toString(nvlist,name)にて,指定されたnameのvalueをstringで取得。
+     * 
+     * - NVList内の指定した名称を持つ値がstring型である場合に、その値を正しく取得できるか？
      */
     void test_toString() {
-      string result;
+
+			
       SDOPackage::NVList nvlist;
-      CORBA::Short setst;
-      
       nvlist.length(2);
-      
+			
       // (1) NVList要素のnameに"short",valueにshort型のデータをセット。
-      setst = 1;
-      nvlist[0].name = "short";
-      nvlist[0].value <<= setst;
-      
+      string name1 = "short";
+      CORBA::Short value1 = 1;
+      nvlist[0].name = name1.c_str();
+      nvlist[0].value <<= value1;
+			
       // (2) NVList要素のnameに"string",valueにstring型のデータをセット。
-      string str("test"), setstr;
-      nvlist[1].name = "string";
-      nvlist[1].value <<= str.c_str();
-      
-      // (3) toString(nvlist,name)にて,指定されたnameのvalueをstringで取得。
-      result = toString(nvlist, "string");
-      setstr = "test";
-      CPPUNIT_ASSERT(result == setstr);
-      
-      // Failure case:
-      // 
-      // (4) toString(nvlist,name)にて,指定されたnameのvalueをstringで取得。
-      result = toString(nvlist, "short");
-      setstr = "";
-      CPPUNIT_ASSERT(result == setstr);
+      string name2 = "string";
+      string value2 = "test";
+      nvlist[1].name = name2.c_str();
+      nvlist[1].value <<= value2.c_str();
+			
+      // (3) toString(nvlist,name)にて,指定されたnameのvalueをstring型で意図とおりに取得できるか？
+      string empty("");
+      CPPUNIT_ASSERT_EQUAL(empty, toString(nvlist, name1.c_str()));
+      CPPUNIT_ASSERT_EQUAL(value2, toString(nvlist, name2.c_str()));
     }
-    
+
+    /*!
+     * @brief appendStringValue()のテスト
+     * 
+     * - 指定した名称と値を持つNameValueを、NVListに正しく追加できるか？
+     */
+    void test_appendStringValue()
+    {
+
+      SDOPackage::NVList nvlist;
+      nvlist.length(3);
+			
+      // (1) 追加対象となるNVListを作成する
+      string name1 = "language";
+      string value1 = "japanese";
+      nvlist[0].name = name1.c_str();
+      nvlist[0].value <<= value1.c_str();
+			
+      string name2 = "fruit";
+      string value2 = "apple";
+      nvlist[1].name = name2.c_str();
+      nvlist[1].value <<= value2.c_str();
+			
+      string name3 = "drink";
+      string value3 = "coffee, coke";
+      nvlist[2].name = name3.c_str();
+      nvlist[2].value <<= value3.c_str();
+			
+      // (2) 作成したNVListに、名称"os", 値"unix"のNameValueを正しく追加できるか？
+      string name4 = "os";
+      string value4 = "unix";
+      CPPUNIT_ASSERT(appendStringValue(nvlist, name4.c_str(), value4.c_str()));
+      CPPUNIT_ASSERT_EQUAL(value4, toString(nvlist, name4.c_str()));
+			
+      // (3) 既存の名称である"language"に、値"english"を正しく追加できるか？
+      string name5 = name1;
+      string value5 = "english";
+      CPPUNIT_ASSERT(appendStringValue(nvlist, name5.c_str(), value5.c_str()));
+      string expectedValueLanguage = "japanese, english";
+      CPPUNIT_ASSERT_EQUAL(expectedValueLanguage, toString(nvlist, name5.c_str()));
+			
+      // (4) 既存の名称・値と全く同一のNameValueを追加しようとしたときに、意図どおり何も追加せずに終了するか？
+      string name6 = name2;
+      string value6 = value2;
+      CPPUNIT_ASSERT(appendStringValue(nvlist, name6.c_str(), value6.c_str()));
+      CPPUNIT_ASSERT_EQUAL(value2, toString(nvlist, name6.c_str()));
+			
+      // (5) 一部の値が、既存の値と重複するNameValueを追加しようとした時に、意図どおりにマージされるか？
+      string name7 = name3;
+      string value7 = "coke, beer";
+      CPPUNIT_ASSERT(appendStringValue(nvlist, name7.c_str(), value7.c_str()));
+      string expectedValueDrink = "coffee, coke, coke, beer";
+      CPPUNIT_ASSERT_EQUAL(expectedValueDrink, toString(nvlist, name7.c_str()));
+    }
+
+    /*!
+     * @brief append()のテスト
+     * 
+     * - NVListの内容を、他のNVListに正しく追加できるか？
+     */
+    void test_append()
+    {
+      // (1) 1つ目のNVListを作成する
+      SDOPackage::NVList nvlistA;
+      nvlistA.length(2);
+			
+      string nameA1 = "nameA1";
+      string valueA1 = "valueA1";
+      nvlistA[0].name = nameA1.c_str();
+      nvlistA[0].value <<= valueA1.c_str();
+			
+      string nameA2 = "nameA2";
+      string valueA2 = "valueA2";
+      nvlistA[1].name = nameA2.c_str();
+      nvlistA[1].value <<= valueA2.c_str();
+			
+      // (2) 2つ目のNVListを作成する
+      SDOPackage::NVList nvlistB;
+      nvlistB.length(2);
+			
+      string nameB1 = "nameB1";
+      string valueB1 = "valueB1";
+      nvlistB[0].name = nameB1.c_str();
+      nvlistB[0].value <<= valueB1.c_str();
+			
+      string nameB2 = "nameB2";
+      string valueB2 = "valueB2";
+      nvlistB[1].name = nameB2.c_str();
+      nvlistB[1].value <<= valueB2.c_str();
+			
+      // (3) 1つ目のNVListに、2つ目のNVListを追加する
+      append(nvlistA, nvlistB);
+			
+      // (4) 正しく追加されたことを確認する
+      CPPUNIT_ASSERT_EQUAL(valueA1, toString(nvlistA, nameA1.c_str()));
+      CPPUNIT_ASSERT_EQUAL(valueA2, toString(nvlistA, nameA2.c_str()));
+      CPPUNIT_ASSERT_EQUAL(valueB1, toString(nvlistA, nameB1.c_str()));
+      CPPUNIT_ASSERT_EQUAL(valueB2, toString(nvlistA, nameB2.c_str()));
+    }
+		
   };
 }; // namespace NVUtil
 
@@ -403,13 +572,83 @@ CPPUNIT_TEST_SUITE_REGISTRATION(NVUtil::NVUtilTests);
 #ifdef LOCAL_MAIN
 int main(int argc, char* argv[])
 {
+
+  FORMAT format = TEXT_OUT;
+  int target = 0;
+  std::string xsl;
+  std::string ns;
+  std::string fname;
+  std::ofstream ofs;
+
+  int i(1);
+  while (i < argc)
+    {
+      std::string arg(argv[i]);
+      std::string next_arg;
+      if (i + 1 < argc) next_arg = argv[i + 1];
+      else              next_arg = "";
+
+      if (arg == "--text") { format = TEXT_OUT; break; }
+      if (arg == "--xml")
+	{
+	  if (next_arg == "")
+	    {
+	      fname = argv[0];
+	      fname += ".xml";
+	    }
+	  else
+	    {
+	      fname = next_arg;
+	    }
+	  format = XML_OUT;
+	  ofs.open(fname.c_str());
+	}
+      if ( arg == "--compiler"  ) { format = COMPILER_OUT; break; }
+      if ( arg == "--cerr"      ) { target = 1; break; }
+      if ( arg == "--xsl"       )
+	{
+	  if (next_arg == "") xsl = "default.xsl"; 
+	  else                xsl = next_arg;
+	}
+      if ( arg == "--namespace" )
+	{
+	  if (next_arg == "")
+	    {
+	      std::cerr << "no namespace specified" << std::endl;
+	      exit(1); 
+	    }
+	  else
+	    {
+	      xsl = next_arg;
+	    }
+	}
+      ++i;
+    }
   CppUnit::TextUi::TestRunner runner;
-  runner.addTest(CppUnit::TestFactoryRegistry::getRegistry().makeTest());
-  CppUnit::Outputter* outputter = 
-    new CppUnit::TextOutputter(&runner.result(), std::cout);
+  if ( ns.empty() )
+    runner.addTest(CppUnit::TestFactoryRegistry::getRegistry().makeTest());
+  else
+    runner.addTest(CppUnit::TestFactoryRegistry::getRegistry(ns).makeTest());
+  CppUnit::Outputter* outputter = 0;
+  std::ostream* stream = target ? &std::cerr : &std::cout;
+  switch ( format )
+    {
+    case TEXT_OUT :
+      outputter = new CppUnit::TextOutputter(&runner.result(),*stream);
+      break;
+    case XML_OUT :
+      std::cout << "XML_OUT" << std::endl;
+      outputter = new CppUnit::XmlOutputter(&runner.result(),
+					    ofs, "shift_jis");
+      static_cast<CppUnit::XmlOutputter*>(outputter)->setStyleSheet(xsl);
+      break;
+    case COMPILER_OUT :
+      outputter = new CppUnit::CompilerOutputter(&runner.result(),*stream);
+      break;
+    }
   runner.setOutputter(outputter);
-  bool retcode = runner.run();
-  return !retcode;
+  runner.run();
+  return 0; // runner.run() ? 0 : 1;
 }
 #endif // MAIN
 #endif // NVUtil_cpp

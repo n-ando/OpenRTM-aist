@@ -23,6 +23,7 @@
 #include <rtm/idl/DataPortSkel.h>
 #include <rtm/BufferBase.h>
 #include <rtm/OutPortProvider.h>
+#include <rtm/CORBA_SeqUtil.h>
 
 namespace RTC
 {
