@@ -31,7 +31,7 @@ src_cpp = """// -*- C++ -*-
  
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
- * Copyright (C) 2006
+ * Copyright (C) 2008
  *     Noriaki Ando
  *     Task-intelligence Research Group,
  *     Intelligent Systems Research Institute,
@@ -42,11 +42,6 @@ src_cpp = """// -*- C++ -*-
  * [dollar]Id[dollar]
 
  *
- */
-
-/*
- * [dollar]Log[dollar]
-
  */
 
 #include <rtm/[class_name].h>
@@ -76,7 +71,7 @@ src_h = """// -*- C++ -*-
 
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
- * Copyright (C) 2006
+ * Copyright (C) 2008
  *     Noriaki Ando
  *     Task-intelligence Research Group,
  *     Intelligent Systems Research Institute,
@@ -89,14 +84,9 @@ src_h = """// -*- C++ -*-
  *
  */
 
-/*
- * [dollar]Log[dollar]
-
- */
-
 #ifndef [class_name]_h
 #define [class_name]_h
- 
+
 namespace RTC
 {
   /*!
@@ -195,12 +185,10 @@ class src_gen:
         return
 
 
-#if len(sys.argv) < 2
-#    sys.exit(1)
-#
-#class_name = sys.argv[1]
-#
-#gen  = src_gen(make_dict(class_name))
-#gen.gen_all()
+if len(sys.argv) < 2:
+    sys.exit(1)
 
-print make_dict("hogehgoe")
+class_name = sys.argv[1]
+
+gen  = src_gen(make_dict(class_name))
+gen.gen_all()
