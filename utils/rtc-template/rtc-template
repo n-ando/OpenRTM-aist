@@ -577,7 +577,10 @@ def CreateDataPorts(opts):
 	for opt, arg in opts:
 		if opt == "--inport" or opt == "--outport":
 			try:
+				arg = re.sub("::", "@@", arg)
 				name, type = arg.split(":")
+				name    = re.sub("@@", "::", name)
+				type    = re.sub("@@", "::", type)
 			except:
 				sys.stderr("Invalid option: " \
 					   + opt \
@@ -652,7 +655,11 @@ def CreateServicePorts(opts):
 	for opt, arg in opts:
 		if opt == "--service" or opt == "--consumer":
 			try:
+				arg = re.sub("::", "@@", arg)
 				portname, name, type = arg.split(":")
+				portname = re.sub("@@", "::", portname)
+				name     = re.sub("@@", "::", name)
+				type     = re.sub("@@", "::", type)
 			except:
 				sys.stderr.write("Invalid option: " \
 						 + opt \
