@@ -33,6 +33,9 @@ lib_LTLIBRARIES = libRTC.la
 #	ObjectManager.cpp
 
 UTIL_SRC =             \
+	Task.cpp       \
+	TaskPosix.cpp  \
+	DynamicLib.cpp \
 	NVUtil.cpp     \
 	Properties.cpp \
 	StringUtil.cpp \

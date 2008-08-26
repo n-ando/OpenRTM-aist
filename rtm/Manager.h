@@ -27,7 +27,7 @@
 #include <vector>
 
 #include <ace/Synch.h>
-#include <ace/Task.h>
+#include <rtm/Task.h>
 
 #include <rtm/Factory.h>
 #include <rtm/ECFactory.h>
@@ -1471,7 +1471,7 @@ namespace RTC
      * @endif
      */
     class OrbRunner
-      : public ACE_Task<ACE_MT_SYNCH>
+      : public RTM::Task
     {
     public:
       /*!
@@ -1596,7 +1596,7 @@ namespace RTC
      * @endif
      */
     class Terminator
-      : public ACE_Task<ACE_MT_SYNCH>
+      : public RTM::Task
     {
     public:
       /*!

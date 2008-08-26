@@ -21,7 +21,7 @@
 
 #include <rtm/RTC.h>
 
-#include <ace/Task.h>
+#include <rtm/Task.h>
 #include <ace/Synch.h>
 
 #include <rtm/Manager.h>

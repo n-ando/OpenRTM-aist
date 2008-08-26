@@ -22,7 +22,7 @@
 
 #include <rtm/RTC.h>
 
-#include <ace/Task.h>
+#include <rtm/Task.h>
 #include <ace/Synch.h>
 #include <rtm/PublisherBase.h>
 
@@ -49,7 +49,7 @@ namespace RTC
    */
   class PublisherPeriodic
     : public PublisherBase,
-      public ACE_Task<ACE_MT_SYNCH>
+      public RTM::Task
   {
     //    class InPortConsumer;
     
