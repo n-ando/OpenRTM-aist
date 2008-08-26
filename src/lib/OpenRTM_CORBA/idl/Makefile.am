@@ -10,8 +10,8 @@ AUTOMAKE_OPTIONS = 1.4
 IDLC = @IDLC@
 IDLFLAGS = @IDL_FLAGS@
 LIBS = @LIBS@
-AM_CPPFLAGS=-I$(top_srcdir) -I$(top_srcdir)/rtm/idl
-AM_LDFLAGS=-L$(top_builddir) -L$(top_builddir)/rtm -L$(top_builddir)/rtm/idl
+AM_CPPFLAGS=-I$(top_srcdir) -I$(top_srcdir)/src/lib/OpenRTM_CORBA
+AM_LDFLAGS=-L$(top_builddir) -L$(top_builddir)/rtm -L$(top_builddir)/src/lib/OpenRTM_CORBA/idl
 
 # Suffix definition of sources and headers of skeletons and stubs 
 SUFFIXES = .idl Skel.cpp Stub.cpp Stub.o Skel.o
@@ -133,11 +133,11 @@ libRTCStub_la_LIBADD = $(LIBS)
 .idlSkel.cpp:
 	$(OIDLC) $<
 	$(IDLC) $(IDLFLAGS) $<
-	$(top_srcdir)/build/makewrapper.py $<
+	$(top_srcdir)/build/makewrapper.py $< idl
 .idlStub.cpp:
 	$(OIDLC) $<
 	$(IDLC) $(IDLFLAGS) $<
-	$(top_srcdir)/build/makewrapper.py $<
+	$(top_srcdir)/build/makewrapper.py $< idl
 #------------------------------------------------------------
 
 
