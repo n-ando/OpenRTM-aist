@@ -412,6 +412,7 @@ makefile = """# -*- Makefile -*-
 # [rcs_id]
 
 #
+CXX      = `rtm-config --cxx`
 CXXFLAGS = `rtm-config --cflags` -I.
 LDFLAGS  = `rtm-config --libs`
 SHFLAGS  = -shared
