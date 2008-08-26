@@ -18,7 +18,8 @@ rtm-config: rtm-config.in
 	echo '' >> $@
 	echo 'rtm_prefix="'${prefix}'"' >> $@
 	echo 'rtm_exec_prefix="'${exec_prefix}'"' >> $@
-	echo 'rtm_cflags="'${CXXFLAGS}' -I'${prefix}'/include/rtm/idl"' >> $@
+	echo 'rtm_cxx="'${CXX}'"' >> $@
+	echo 'rtm_cflags="'${CXXFLAGS}' -I'${prefix}'/include -I'${prefix}'/include/rtm/idl"' >> $@
 	echo 'rtm_libs="'${LDFLAGS}' -L'${prefix}'/lib '${LIBS}' -lRTC"' >> $@
 	echo 'rtm_libdir="'${pkglibdir}'"' >> $@
 	echo 'rtm_version="'${VERSION}'"' >> $@
