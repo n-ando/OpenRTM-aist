@@ -23,7 +23,7 @@
 #include <rtm/TimeValue.h>
 #include <rtm/Listener.h>
 #include <ace/Synch.h>
-#include <ace/Task.h>
+#include <rtm/Task.h>
 #include <vector>
 
 typedef ListenerBase* ListenerId;
@@ -51,7 +51,7 @@ namespace RTC
    * @endif
    */
   class Timer
-    : public ACE_Task<ACE_MT_SYNCH>
+    : public RTM::Task
   {
   public:
     /*!

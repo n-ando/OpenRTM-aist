@@ -21,7 +21,7 @@
 
 #include <rtm/RTC.h>
 
-#include <ace/Task.h>
+#include <rtm/Task.h>
 #include <rtm/CorbaNaming.h>
 #include <rtm/RTObject.h>
 #include <rtm/SystemLogger.h>

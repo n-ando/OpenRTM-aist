@@ -26,7 +26,7 @@
 #include <map>
 
 // ACE includes
-#include <ace/DLL.h>
+#include <rtm/DynamicLib.h>
 
 // RTC includes
 #include <rtm/Manager.h>
@@ -595,7 +595,7 @@ namespace RTC
   protected:
     struct DLL
     {
-      ACE_DLL dll;
+      RTM::DynamicLib dll;
     };
     
     typedef std::vector<std::string>     StringVector;
