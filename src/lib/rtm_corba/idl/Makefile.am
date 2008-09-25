@@ -10,8 +10,8 @@ AUTOMAKE_OPTIONS = 1.4
 IDLC = @IDLC@
 IDLFLAGS = @IDL_FLAGS@
 LIBS = @LIBS@
-AM_CPPFLAGS=-I$(top_srcdir) -I$(top_srcdir)/src/lib/OpenRTM_CORBA
-AM_LDFLAGS=-L$(top_builddir) -L$(top_builddir)/rtm -L$(top_builddir)/src/lib/OpenRTM_CORBA/idl
+AM_CPPFLAGS=-I$(top_srcdir)/src/lib -I$(top_srcdir)/src/lib/rtm_corba
+AM_LDFLAGS=-L$(top_builddir)/src/lib/rtm -L$(top_builddir)/src/lib/rtm_corba/idl
 
 # Suffix definition of sources and headers of skeletons and stubs 
 SUFFIXES = .idl Skel.cpp Stub.cpp Stub.o Skel.o
