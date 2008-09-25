@@ -24,7 +24,7 @@
 
 #include <vector>
 #include <algorithm>
-//#include <ace/Synch.h>
+#include <coil/Guard.h>
 #include <rtm/BufferBase.h>
 
 /*!
@@ -358,7 +358,7 @@ namespace RTC
     virtual void put(const DataType& data)
     {
       m_buffer[m_oldPtr].write(data);
-      //      ACE_Guard<ACE_Thread_Mutex> guard(m_Mutex);
+      //      Guard guard(m_Mutex);
       m_newPtr = m_oldPtr;
       m_oldPtr = (++m_oldPtr) % m_length;
     }

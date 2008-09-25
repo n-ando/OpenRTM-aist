@@ -22,8 +22,8 @@
 
 #include <rtm/RTC.h>
 
-#include <rtm/Task.h>
-#include <ace/Synch.h>
+#include <coil/Task.h>
+
 #include <rtm/PublisherBase.h>
 
 namespace RTC
@@ -49,7 +49,7 @@ namespace RTC
    */
   class PublisherPeriodic
     : public PublisherBase,
-      public RTM::Task
+      public coil::Task
   {
     //    class InPortConsumer;
     

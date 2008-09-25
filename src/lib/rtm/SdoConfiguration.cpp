@@ -17,10 +17,11 @@
  *
  */
 
+#include <coil/UUID.h>
 #include "rtm/SdoConfiguration.h"
 #include <rtm/CORBA_SeqUtil.h>
-#include <rtm/UUID.h>
 #include <rtm/NVUtil.h>
+#include <memory>
 #include <iostream>
 // ACE
 
@@ -330,7 +331,7 @@ namespace SDOPackage
     throw (CORBA::SystemException,
 	   InvalidParameter, NotAvailable, InternalError)
   {
-    if (name == "") throw InvalidParameter("Name is empty.");
+    if (std::string(name).empty()) throw InvalidParameter("Name is empty.");
     
     //    CORBA::Long index;
     CORBA::Any_var value;
@@ -426,7 +427,7 @@ namespace SDOPackage
     throw (CORBA::SystemException,
 	   NotAvailable, InternalError)
   {
-    if (id == "") throw InternalError("ID is empty");
+    if (std::string(id).empty()) throw InternalError("ID is empty");
     // Originally getConfigurationSet raises InvalidParameter according to the 
     // SDO specification. However, SDO's IDL lacks InvalidParameter.
     
@@ -471,7 +472,7 @@ namespace SDOPackage
     throw (CORBA::SystemException,
 	   InvalidParameter, NotAvailable, InternalError)
   {
-    if (id == "") throw InvalidParameter("ID is empty.");
+    if (std::string(id).empty()) throw InvalidParameter("ID is empty.");
     
     try
       {
@@ -559,7 +560,7 @@ namespace SDOPackage
     throw (CORBA::SystemException,
 	   InvalidParameter, NotAvailable, InternalError)
   {
-    if (id == "")
+    if (std::string(id).empty())
       throw InvalidParameter("ID is empty.");
     
     try
@@ -587,7 +588,7 @@ namespace SDOPackage
     throw (CORBA::SystemException,
 	   InvalidParameter, NotAvailable, InternalError)
   {
-    if (id == "")
+    if (std::string(id).empty())
       throw InvalidParameter("ID is empty.");
     
     try
@@ -677,10 +678,10 @@ namespace SDOPackage
    */
   const std::string Configuration_impl::getUUID() const
   {
-    RTC_Utils::UUID_Generator uugen;
+    coil::UUID_Generator uugen;
     uugen.init();
-    RTC_Utils::UUID* uuid = uugen.generateUUID(2,0x01);
+    std::auto_ptr<coil::UUID> uuid(uugen.generateUUID(2,0x01));
     
-    return std::string(uuid->to_string()->c_str());
+    return (const char*) uuid->to_string();
   }
 };

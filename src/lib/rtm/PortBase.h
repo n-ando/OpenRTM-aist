@@ -24,9 +24,9 @@
 
 #include <string>
 #include <vector>
-#include <ace/Guard_T.h>
-#include <ace/Recursive_Thread_Mutex.h>
-#include <rtm/idl/RTCSkel.h>
+#include <coil/Guard.h>
+#include <coil/Mutex.h>
+#include <rtm_corba/idl/RTCSkel.h>
 #include <rtm/CORBA_SeqUtil.h>
 #include <rtm/NVUtil.h>
 
@@ -1278,8 +1278,8 @@ namespace RTC
      * @endif
      */
     RTC::PortService_var m_objref;
-    mutable ACE_Recursive_Thread_Mutex m_profile_mutex;
-    typedef ACE_Guard<ACE_Recursive_Thread_Mutex> Guard;
+    mutable coil::Mutex m_profile_mutex;
+    typedef coil::Guard<coil::Mutex> Guard;
     
     //============================================================
     // Functor

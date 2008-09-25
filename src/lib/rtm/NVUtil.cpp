@@ -17,7 +17,7 @@
  *
  */
 
-#include <rtm/StringUtil.h>
+#include <coil/stringutil.h>
 #include <rtm/NVUtil.h>
 #include <rtm/CORBA_SeqUtil.h>
 #include <string>
@@ -305,7 +305,7 @@ namespace NVUtil
 	std::string tmp_str(tmp_char);
 	
 	std::vector<std::string> values;
-	values = split(tmp_str, ",");
+	values = coil::split(tmp_str, ",");
 	if (values.end() == std::find(values.begin(), values.end(), value))
 	  {
 	    tmp_str.append(", ");

@@ -20,19 +20,19 @@
 #ifndef PeriodicExecutionContext_h
 #define PeriodicExecutionContext_h
 
+#include <coil/Task.h>
+#include <vector>
+#include <iostream>
+
 #include <rtm/RTC.h>
-#include <rtm/idl/RTCSkel.h>
-#include <rtm/idl/OpenRTMSkel.h>
+#include <rtm_corba/idl/RTCSkel.h>
+#include <rtm_corba/idl/OpenRTMSkel.h>
 #include <rtm/Manager.h>
 #include <rtm/StateMachine.h>
 #include <rtm/ExecutionContextBase.h>
 
 // ACE
-#include <ace/Task.h>
-#include <ace/OS_NS_unistd.h>
-#include <vector>
-#include <iostream>
-
+#define NUM_OF_LIFECYCLESTATE 4
 namespace RTC
 {
   /*!
@@ -57,7 +57,7 @@ namespace RTC
    */
   class PeriodicExecutionContext
     : public virtual ExecutionContextBase,
-      public ACE_Task<ACE_MT_SYNCH>
+      public coil::Task
   {
   public:
     /*!
@@ -667,7 +667,7 @@ namespace RTC
        * @endif
        */
       DFPBase(RTC::ExecutionContextHandle_t id)
-	: ec_id(id), m_sm(3)
+	: ec_id(id), m_sm(NUM_OF_LIFECYCLESTATE)
       {
 	m_sm.setListener(this);
 	m_sm.setEntryAction (ACTIVE_STATE, &DFPBase::on_activated);
@@ -1348,6 +1348,9 @@ namespace RTC
 	: _ref(ref), _sm(dfp, id)
       {
       }
+      ~Comp()
+      {
+      }
       Comp(const Comp& comp)
 	: _ref(comp._ref), _sm(comp._sm.m_obj, comp._sm.ec_id)
       {
@@ -1362,7 +1365,7 @@ namespace RTC
       LightweightRTObject_var _ref;
       DFP<OpenRTM::DataFlowComponent_var> _sm;
     };
-    
+
     /*!
      * @if jp
      * @brief コンポーネント検索用ファンクタ

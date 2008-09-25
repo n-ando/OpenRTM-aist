@@ -19,7 +19,7 @@
 #ifndef ExecutionContext_h
 #define ExecutionContext_h
 
-#include <rtm/idl/RTCSkel.h>
+#include <rtm_corba/idl/RTCSkel.h>
 
 namespace RTC
 {

@@ -17,6 +17,7 @@
  *
  */
 
+#include <coil/TimeValue.h>
 #include <rtm/PeriodicExecutionContext.h>
 #include <algorithm>
 #include <iostream>
@@ -86,7 +87,7 @@ namespace RTC
   int PeriodicExecutionContext::open(void *args)
   {
     //    RTC_TRACE(("RtcBase::open()"));
-    //    ACE_Guard<ACE_Thread_Mutex> guard_next(m_NextState._mutex);
+    //    Guard guard_next(m_NextState._mutex);
     //    m_NextState._state = RTC_INITIALIZING;
     activate();
     return 0;
@@ -108,10 +109,10 @@ namespace RTC
     //    RTC_TRACE(("RtcBase::svc()"));
     do
       {
-	ACE_Time_Value tv(0, m_usec); // (s, us)
+        coil::TimeValue tv(0, m_usec); // (s, us)
 	std::for_each(m_comps.begin(), m_comps.end(), invoke_worker());
-	while (!m_running) {ACE_OS::sleep(tv);}
-	if (!m_nowait) ACE_OS::sleep(tv);
+	while (!m_running) {coil::sleep(tv);}
+	if (!m_nowait) coil::sleep(tv);
       } while (m_running);
     //    forceExit();
     //    finalize();
@@ -362,7 +363,6 @@ namespace RTC
 	
 	UniqueId id;
 	id = dfp->attach_context(m_ref);
-	
 	m_comps.push_back(Comp(LightweightRTObject::_duplicate(comp),
 			       OpenRTM::DataFlowComponent::_duplicate(dfp),
 			       id));

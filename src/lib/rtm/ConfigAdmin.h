@@ -20,7 +20,7 @@
 #define ConfigAdmin_h
 
 #include <rtm/Properties.h>
-#include <rtm/StringUtil.h>
+#include <coil/stringutil.h>
 #include <string>
 #include <vector>
 #include <iostream>
@@ -230,7 +230,7 @@ namespace RTC
      * @endif
      */
     Config(const char* name, VarType& var, const char* def_val,
-	   TransFunc trans = stringTo)
+	   TransFunc trans = coil::stringTo)
       : ConfigBase(name, def_val), m_var(var), m_trans(trans)
     {
     }
@@ -405,10 +405,10 @@ namespace RTC
     template <typename VarType>
     bool bindParameter(const char* param_name, VarType& var,
 		       const char* def_val,
-		       bool (*trans)(VarType&, const char*) = ::stringTo)
+		       bool (*trans)(VarType&, const char*) = coil::stringTo)
     {
       if (isExist(param_name)) return false;
-      if (!::stringTo(var, def_val)) return false;
+      if (!coil::stringTo(var, def_val)) return false;
       m_params.push_back(new Config<VarType>(param_name, var, def_val, trans));
       return true;
     }

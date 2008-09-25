@@ -25,8 +25,8 @@
 #include <string>
 #include <algorithm>
 
-#include <ace/Thread.h>
-#include <ace/Synch.h>
+#include <coil/Mutex.h>
+#include <coil/Guard.h>
 
 /*!
  * @if jp
@@ -54,7 +54,8 @@ public:
   typedef std::vector<Object*>                  ObjectVector;
   typedef typename ObjectVector::iterator       ObjectVectorItr;
   typedef typename ObjectVector::const_iterator ObjectVectorConstItr;
-  
+  typedef coil::Mutex Mutex;
+  typedef coil::Guard<coil::Mutex> Guard;
   /*!
    * @if jp
    *
@@ -117,7 +118,7 @@ public:
   bool registerObject(Object* obj)
   {
     ObjectVectorItr it;
-    ACE_Guard<ACE_Thread_Mutex> guard(m_objects._mutex);
+    Guard guard(m_objects._mutex);
     
     it = std::find_if(m_objects._obj.begin(), m_objects._obj.end(),
 		      Predicate(obj));
@@ -157,7 +158,7 @@ public:
   Object* unregisterObject(const Identifier& id)
   {
     ObjectVectorItr it;
-    ACE_Guard<ACE_Thread_Mutex> guard(m_objects._mutex);
+    Guard guard(m_objects._mutex);
     
     it = std::find_if(m_objects._obj.begin(), m_objects._obj.end(),
 		      Predicate(id));
@@ -201,7 +202,7 @@ public:
   Object* find(const Identifier& id) const
   {
     ObjectVectorConstItr it;
-    ACE_Guard<ACE_Thread_Mutex> guard(m_objects._mutex);
+    Guard guard(m_objects._mutex);
     it = std::find_if(m_objects._obj.begin(), m_objects._obj.end(),
 		      Predicate(id));
     if (it != m_objects._obj.end())
@@ -232,7 +233,7 @@ public:
    */
   std::vector<Object*> getObjects() const
   {
-    ACE_Guard<ACE_Thread_Mutex> guard(m_objects._mutex);
+    Guard guard(m_objects._mutex);
     return m_objects._obj;
   }
   
@@ -246,7 +247,7 @@ public:
   template <class Pred>
   Pred for_each(Pred p)
   {
-    ACE_Guard<ACE_Thread_Mutex> guard(m_objects._mutex);
+    Guard guard(m_objects._mutex);
     return std::for_each(m_objects._obj.begin(), m_objects._obj.end(), p);
   }
   
@@ -260,7 +261,7 @@ public:
   template <class Pred>
   Pred for_each(Pred p) const
   {
-    ACE_Guard<ACE_Thread_Mutex> guard(m_objects._mutex);
+    Guard guard(m_objects._mutex);
     return std::for_each(m_objects._obj.begin(), m_objects._obj.end(), p);
   }
   
@@ -274,7 +275,7 @@ protected:
    */
   struct Objects
   {
-    mutable ACE_Thread_Mutex _mutex;
+    mutable Mutex _mutex;
     ObjectVector _obj;
   };
   /*!

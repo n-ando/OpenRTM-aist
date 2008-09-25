@@ -19,10 +19,9 @@
 
 #include <rtm/RTC.h>
 #include <rtm/ManagerConfig.h>
-#include <ace/Get_Opt.h>
 #include <fstream>
 #include <iostream>
-#include <ace/OS.h>
+#include <coil/OS.h>
 #include <rtm/DefaultConfiguration.h>
 
 namespace RTC
@@ -119,7 +118,7 @@ namespace RTC
    */
   void ManagerConfig::parseArgs(int argc, char** argv)
   {
-    ACE_Get_Opt get_opts(argc, argv, "f:l:o:d", 0);
+    coil::GetOpt get_opts(argc, argv, "f:l:o:d", 0);
     int opt;
     
     //  if (argc == 0) return true;
@@ -203,8 +202,8 @@ namespace RTC
     //
     // Get system information by using ACE_OS::uname (UNIX/Windows)
     // 
-    ACE_utsname  sysinfo;
-    if (ACE_OS::uname(&sysinfo) != 0)
+    coil::utsname  sysinfo;
+    if (coil::uname(&sysinfo) != 0)
       {
 	return;
       }
@@ -212,7 +211,7 @@ namespace RTC
     //
     // Getting current proccess pid by using ACE_OS::getpid() (UNIX/Windows)
     //
-    pid_t pid = ACE_OS::getpid();
+    pid_t pid = coil::getpid();
     char pidc[8];
     sprintf(pidc, "%d", pid);
     

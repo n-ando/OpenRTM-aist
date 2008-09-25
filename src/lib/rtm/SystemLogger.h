@@ -29,8 +29,9 @@
 #include <time.h>
 #include <errno.h>
 
-// ACE
-#include <ace/Mutex.h>
+// COIL
+#include <coil/Mutex.h>
+#include <coil/Guard.h>
 
 #include <rtm/config_rtc.h>
 
@@ -134,6 +135,8 @@ namespace RTC
     typedef _CharT                                     char_type;
     typedef _Traits                                    traits_type;
     typedef std::basic_filebuf<char_type, traits_type> __filebuf_type;
+    typedef coil::Mutex Mutex;
+    typedef coil::Guard<coil::Mutex> Guard;
     
     /*!
      * @if jp
@@ -234,7 +237,7 @@ namespace RTC
      */
     virtual std::streamsize sputn(const char_type* s, std::streamsize n)
     {
-      ACE_Guard<ACE_Thread_Mutex> gaurd(m_Mutex);
+      Guard gaurd(m_Mutex);
       //	  std::string ss(s, n);
       //	  std::string sss;
       //	  sss = "HogeDara" + ss;
@@ -308,7 +311,7 @@ namespace RTC
     }
     
   private:
-    ACE_Thread_Mutex m_Mutex;
+    Mutex m_Mutex;
     sync_callback<char_type>* m_pCallBack;
   };
   
@@ -346,7 +349,8 @@ namespace RTC
     typedef _Traits                                      traits_type;
     typedef std::basic_streambuf<char_type, traits_type> __streambuf_type;
     typedef std::basic_filebuf<char_type, traits_type>   __filebuf_type;
-    
+    typedef coil::Mutex Mutex;
+    typedef coil::Guard<coil::Mutex> Guard;
     /*!
      * @if jp
      * @brief コンストラクタ
@@ -704,12 +708,12 @@ namespace RTC
      */
     virtual int sync()
     {
-      ACE_Guard<ACE_Thread_Mutex> guard(m_Mutex);
+      Guard guard(m_Mutex);
       int ret(0); 
       if (m_pLogbuf != NULL && (this->pptr() - this->pbase()) > 0)
 	{
 	  {
-	    //ACE_Guard<ACE_Thread_Mutex> guard(m_Mutex);
+	    //Guard guard(m_Mutex);
 	    *(this->pptr()) = '\0';
 	    std::basic_string<_CharT> tmp(this->pbase(),
 						  this->pptr() - 
@@ -736,7 +740,7 @@ namespace RTC
     char m_Data[LINE_MAX];
     std::string m_DateFmt;
     std::string m_Suffix;
-    ACE_Thread_Mutex m_Mutex;
+    Mutex m_Mutex;
   };
   
   /*!
@@ -968,7 +972,8 @@ namespace RTC
     typedef basic_logstream<char_type, traits_type>      __logstream_type;
     typedef std::basic_ostream<char_type, traits_type>   __ostream_type;
     typedef std::basic_streambuf<char_type, traits_type> __streambuf_type;
-    
+    typedef coil::Mutex Mutex;
+    typedef coil::Guard<Mutex> Guard;
     /*!
      * @if jp
      *
@@ -1243,7 +1248,7 @@ namespace RTC
      */
     inline void acquire()
     {
-      if (m_LogLock) m_Mutex.acquire();
+      if (m_LogLock) m_Mutex.lock();
     }
     
     /*!
@@ -1261,7 +1266,7 @@ namespace RTC
      */
     inline void release()
     {
-      if (m_LogLock) m_Mutex.release();
+      if (m_LogLock) m_Mutex.unlock();
     }
     
     /*!
@@ -1276,7 +1281,7 @@ namespace RTC
   private:
     int m_LogLevel;
     bool m_LogLock;
-    ACE_Thread_Mutex m_Mutex;
+    Mutex m_Mutex;
   };
   typedef sync_callback<char>   SyncCallback;
   typedef basic_logbuf<char>    Logbuf;

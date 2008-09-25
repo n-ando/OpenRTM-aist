@@ -18,7 +18,7 @@
  */
 
 #include <rtm/Properties.h>
-#include <rtm/StringUtil.h>
+#include <coil/stringutil.h>
 #include <iostream>
 
 namespace RTC
@@ -299,11 +299,11 @@ namespace RTC
 	std::string key(defaults[i]);
 	std::string value(defaults[i + 1]);
 	
-	eraseHeadBlank(key);
-	eraseTailBlank(key);
+	coil::eraseHeadBlank(key);
+	coil::eraseTailBlank(key);
 	
-	eraseHeadBlank(value);
-	eraseTailBlank(value);
+	coil::eraseHeadBlank(value);
+	coil::eraseTailBlank(value);
 	
 	setDefault(key.c_str(), value.c_str());
       }
@@ -338,14 +338,14 @@ namespace RTC
     while(!inStream.eof())
       {
 	std::string tmp;
-	getlinePortable(inStream, tmp);
-	eraseHeadBlank(tmp);
+        coil::getlinePortable(inStream, tmp);
+	coil::eraseHeadBlank(tmp);
 	
 	// Skip comments or empty lines
 	if (tmp[0] == '#' || tmp[0] == '!' || tmp == "") continue;
 	
 	// line-end '\' continues entry
-	if (tmp[tmp.size() - 1] == '\\' && !isEscaped(tmp, tmp.size() - 1))
+	if (tmp[tmp.size() - 1] == '\\' && !coil::isEscaped(tmp, tmp.size() - 1))
 	  {
 	    tmp.erase(tmp.size() - 1);
 	    pline += tmp;
@@ -358,13 +358,13 @@ namespace RTC
 	
 	std::string key, value;
 	splitKeyValue(pline, key, value);
-	key = unescape(key);
-	eraseHeadBlank(key);
-	eraseTailBlank(key);
+	key = coil::unescape(key);
+	coil::eraseHeadBlank(key);
+	coil::eraseTailBlank(key);
 	
-	value = unescape(value);
-	eraseHeadBlank(value);
-	eraseTailBlank(value);
+	value = coil::unescape(value);
+	coil::eraseHeadBlank(value);
+	coil::eraseTailBlank(value);
 	
 	setProperty(key.c_str(), value.c_str());
 	pline.clear();
@@ -537,14 +537,14 @@ namespace RTC
     
     while (i < len)
       {
-	if ((str[i] == ':' || str[i] == '=') && !isEscaped(str, i))
+	if ((str[i] == ':' || str[i] == '=') && !coil::isEscaped(str, i))
 	  {
 	    key   = str.substr(0, i); // substr(0, i) returns 0...(i-1) chars.
-	    eraseHeadBlank(key);
-	    eraseTailBlank(key);
+	    coil::eraseHeadBlank(key);
+	    coil::eraseTailBlank(key);
 	    value = str.substr(i + 1);
-	    eraseHeadBlank(value);
-	    eraseTailBlank(value);
+	    coil::eraseHeadBlank(value);
+	    coil::eraseTailBlank(value);
 	    return;
 	  }
 	++i;
@@ -554,14 +554,14 @@ namespace RTC
     i = 0;
     while (i < len)
       {
-	if ((str[i] == ' ') && !isEscaped(str, i))
+	if ((str[i] == ' ') && !coil::isEscaped(str, i))
 	  {
 	    key   = str.substr(0, i); // substr(0, i) returns 0...(i-1) chars.
-	    eraseHeadBlank(key);
-	    eraseTailBlank(key);
+	    coil::eraseHeadBlank(key);
+	    coil::eraseTailBlank(key);
 	    value = str.substr(i + 1);
-	    eraseHeadBlank(value);
-	    eraseTailBlank(value);
+	    coil::eraseHeadBlank(value);
+	    coil::eraseTailBlank(value);
 	    return;
 	  }
 	++i;
@@ -589,7 +589,7 @@ namespace RTC
     
     while (end_it < len)
       {
-	if ((str[end_it] == delim) && !isEscaped(str, end_it))
+	if ((str[end_it] == delim) && !coil::isEscaped(str, end_it))
 	  {
 	    // substr(0, i) returns 0...(i-1) chars.
 	    value.push_back(str.substr(begin_it, end_it - begin_it));
@@ -693,7 +693,7 @@ namespace RTC
       {
 	if (curr->value.length() > 0)
 	  {
-	    out << curr_name << ": " << escape(curr->value) << std::endl;
+	    out << curr_name << ": " << coil::escape(curr->value) << std::endl;
 	  }
       }
   }

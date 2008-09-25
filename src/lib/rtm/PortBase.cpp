@@ -18,9 +18,11 @@
  */
 
 #include <assert.h>
+#include <coil/UUID.h>
 #include <rtm/PortBase.h>
-#include <rtm/UUID.h>
+#include <memory>
 #include <iostream>
+
 namespace RTC
 {
   //============================================================
@@ -416,11 +418,11 @@ namespace RTC
    */
   const std::string PortBase::getUUID() const
   {
-    RTC_Utils::UUID_Generator uugen;
+    coil::UUID_Generator uugen;
     uugen.init();
-    RTC_Utils::UUID* uuid = uugen.generateUUID(2,0x01);
+    std::auto_ptr<coil::UUID> uuid(uugen.generateUUID(2,0x01));
     
-    return std::string(uuid->to_string()->c_str());
+    return std::string((const char*)uuid->to_string());
   }
   
   /*!
