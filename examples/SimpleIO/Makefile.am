@@ -7,8 +7,8 @@
 
 AUTOMAKE_OPTIONS = 1.9
 
-AM_CPPFLAGS=-I$(top_srcdir) -I$(top_srcdir)/rtm/idl
-AM_LDFLAGS=-L$(top_builddir) -L$(top_builddir)/rtm -L$(top_builddir)/rtm/idl
+AM_CPPFLAGS=-I$(top_srcdir)/src/lib -I$(top_srcdir)/src/lib/coil/include -I$(top_srcdir)/src/lib/rtm_corba -I$(top_srcdir)/src/lib/rtm_corba/idl
+AM_LDFLAGS=-L$(top_builddir) -L$(top_builddir)/src/lib/rtm -L$(top_builddir)/src/lib/rtm_corba/idl
 
 #------------------------------------------------------------
 # Targets
@@ -23,29 +23,29 @@ socomp_LTLIBRARIES = ConsoleIn.la ConsoleOut.la
 
 ConsoleIn_la_SOURCES = ConsoleIn.cpp ConsoleIn.h
 ConsoleIn_la_LDFLAGS = -module
-ConsoleIn_la_FLAGS   = -L$(top_builddir)/rtm/.lib
-ConsoleIn_la_LIBADD  = $(top_builddir)/rtm/libRTC.la
+ConsoleIn_la_FLAGS   = -L$(top_builddir)/src/lib/rtm/.lib
+ConsoleIn_la_LIBADD  = $(top_builddir)/src/lib/rtm/libRTC.la
 
 ConsoleOut_la_SOURCES = ConsoleOut.cpp ConsoleOut.h
 ConsoleOut_la_LDFLAGS = -module
-ConsoleOut_la_FLAGS   = -L$(top_builddir)/rtm/.lib
-ConsoleOut_la_LIBADD  = $(top_builddir)/rtm/libRTC.la
+ConsoleOut_la_FLAGS   = -L$(top_builddir)/src/lib/rtm/.lib
+ConsoleOut_la_LIBADD  = $(top_builddir)/src/lib/rtm/libRTC.la
 
 # Standalone RTCs
 example_PROGRAMS = ConsoleInComp ConsoleOutComp ConnectorComp
 example_DATA = rtc.conf consin.conf consout.conf
 
 ConsoleInComp_SOURCES = ConsoleInComp.cpp 
-ConsoleInComp_LDFLAGS = -L$(top_builddir)/rtm/.libs
-ConsoleInComp_LDADD   = $(top_builddir)/rtm/libRTC.la ConsoleIn.o
+ConsoleInComp_LDFLAGS = -L$(top_builddir)/src/lib/rtm/.libs
+ConsoleInComp_LDADD   = $(top_builddir)/src/lib/rtm/libRTC.la ConsoleIn.o
 
 ConsoleOutComp_SOURCES = ConsoleOutComp.cpp 
-ConsoleOutComp_LDFLAGS = -L$(top_builddir)/rtm/.libs
-ConsoleOutComp_LDADD   = $(top_builddir)/rtm/libRTC.la ConsoleOut.o
+ConsoleOutComp_LDFLAGS = -L$(top_builddir)/src/lib/rtm/.libs
+ConsoleOutComp_LDADD   = $(top_builddir)/src/lib/rtm/libRTC.la ConsoleOut.o
 
 ConnectorComp_SOURCES = ConnectorComp.cpp
-ConnectorComp_LDFLAGS = -L$(top_builddir)/rtm/.libs
-ConnectorComp_LDADD   = $(top_builddir)/rtm/libRTC.la
+ConnectorComp_LDFLAGS = -L$(top_builddir)/src/lib/rtm/.libs
+ConnectorComp_LDADD   = $(top_builddir)/src/lib/rtm/libRTC.la
 
 # Example sources
 source_DATA = $(ALL_SRC) $(EXTRA_DIST)

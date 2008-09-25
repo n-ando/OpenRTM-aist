@@ -7,16 +7,14 @@
 
 AUTOMAKE_OPTIONS = 1.4
 
-AM_CPPFLAGS=-I$(top_srcdir) -I$(top_srcdir)/rtm/idl
+AM_CPPFLAGS=-I$(top_srcdir) -I$(top_srcdir)/src/lib -I$(top_srcdir)/src/lib/coil/include -I$(top_srcdir)/src/lib/rtm_corba/idl -I$(top_srcdir)/src/lib/rtm_corba
 AM_LDFLAGS=-L$(top_builddir) -L$(top_buiddir)/rtm -L$(top_builddir)/rtm/idl
 
 bin_PROGRAMS = rtcd
 
 rtcd_SOURCES = rtcd.cpp
-
-rtcd_LDADD = $(top_builddir)/rtm/libRTC.la
-
-rtcd_LDFLAGS = -L$(top_builddir)/rtm
+rtcd_LDADD   = $(top_builddir)/src/lib/rtm/libRTC.la
+rtcd_LDFLAGS = -L$(top_builddir)/src/lib/rtm
 
 #------------------------------------------------------------
 # File list for deb/ports packages

@@ -10,7 +10,7 @@
 #ifndef CONSOLEIN_H
 #define CONSOLEIN_H
 
-#include <rtm/idl/BasicDataTypeSkel.h>
+#include <rtm_corba/idl/BasicDataTypeSkel.h>
 #include <rtm/Manager.h>
 #include <rtm/DataFlowComponentBase.h>
 #include <rtm/CorbaPort.h>

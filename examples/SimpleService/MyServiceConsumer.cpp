@@ -8,7 +8,6 @@
  */
 
 #include "MyServiceConsumer.h"
-#include <rtm/StringUtil.h>
 #include <rtm/CORBA_SeqUtil.h>
 #include <vector>
 #include <stdlib.h>

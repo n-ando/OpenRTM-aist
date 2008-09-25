@@ -22,7 +22,7 @@ rtm-config: rtm-config.in
 	echo 'rtm_cflags="'${CXXFLAGS}' -I'${prefix}'/include -I'${prefix}'/include/rtm/idl"' >> $@
 	echo 'rtm_libs="'${LDFLAGS}' -L'${prefix}'/lib '${LIBS}' -lRTC"' >> $@
 	echo 'rtm_libdir="'${pkglibdir}'"' >> $@
-	echo 'rtm_version="'${VERSION}'"' >> $@
+	echo 'rtm_version="'${RTM_VERSION}'"' >> $@
 	echo 'rtm_orb="'${ORB}'"' >> $@
 	echo 'rtm_idlc="'${IDLC}'"' >> $@
 	echo 'rtm_idlflags="'${IDLFLAGS}'"' >> $@

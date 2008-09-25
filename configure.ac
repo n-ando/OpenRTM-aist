@@ -19,8 +19,10 @@ dnl ------------------------------------------------------------
 dnl  Process this file with autoconf to produce a configure script.
 AC_PREREQ(2.59)
 AC_INIT(OpenRTM-aist, 0.4.2, n-ando@aist.go.jp, OpenRTM-aist)
+AC_CONFIG_AUX_DIR([.])
 AM_INIT_AUTOMAKE([dist-bzip2 tar-pax])
-AM_CONFIG_HEADER([rtm/config_rtc.h])
+AM_CONFIG_HEADER([src/lib/rtm/config_rtc.h])
+AC_CONFIG_SUBDIRS([src/lib/coil])
 
 dnl ------------------------------------------------------------
 dnl  Version number
@@ -51,7 +53,7 @@ AC_LANG_CPLUSPLUS
 AC_PROG_INSTALL
 AC_LIBTOOL_WIN32_DLL
 AC_PROG_LIBTOOL
-
+AM_WITH_DMALLOC
 AC_CHECK_HEADERS([nlist.h stdlib.h unistd.h])
 AC_CHECK_FUNCS([uname])
 
@@ -124,6 +126,7 @@ case $system in
 [Linux*)]
 	AC_DEFINE([RTM_OS_LINUX], [TRUE], [OS is Linux])
 	AC_DEFINE([_REENTRANT], [TRUE], [Multi Thread Support])
+	LDFLAGS="$LDFLAGS -luuid -ldl"
 	;;	
 [HP-UX*)]
 	AC_DEFINE([RTM_OS_HPUX], [TRUE], [OS is HP-UX])
@@ -240,70 +243,70 @@ dnl ============================================================
 dnl ------------------------------------------------------------
 dnl  Find ace/ACE.h
 dnl ------------------------------------------------------------
-AC_MSG_CHECKING(for ace/ACE.h)
-dnl PKG_CHECK_MODULES(ACE,ACE)
-FP_FIND_FILE(ace/ACE.h,
-	$with_ace_includes $more_incs $base_incs $base_dirs,
-	ACE_wrappers include cxx/include)
-if test "x$ace_ACE_h_dir" = "x" ; then
-	AC_MSG_RESULT(ACE (ace/ACE.h) not found)
-	AC_MSG_ERROR(
-	use --with-ace-includes=<dir> to locate ace/ACE.h
-hint: <dir>/( ACE_wrappers | include | cxx/include ) will be searched.)
-	# Error exit!!
-else
-	AC_MSG_RESULT(found in $ace_ACE_h_dir)
-	have_ace=yes
-fi
-
-dnl ------------------------------------------------------------
-dnl  Find libACE.so / Checking ACE version
-dnl ------------------------------------------------------------
-if test "x$have_ace" = "xyes" ; then
-	AC_MSG_CHECKING(for libACE.so)
-	FP_FIND_FILE(libACE.so,
-		$with_ace_lib $more_libs $base_libs $base_dirs,
-		ACE_wrappers/ace/lib lib cxx/lib)
-	if test "x$libACE_so_dir" = "x" ; then
-		AC_MSG_RESULT(not found)
-		AC_MSG_ERROR(
-	use --with-ace-lib=<dir> to locate libACE.so.
-hint: <dir>/( ACE_wrappers/ace/lib lib cxx/lib ) will be searched.)
-		# Error exit!!
-	else
-		AC_MSG_RESULT(found in $libACE_so_dir)
-	fi
-
-	AC_MSG_CHECKING(ACE version)
-
-	# In ACE 5.5.4, ACE_VERSION is defined as ACE_VERSION " 5.5.4"
-	# "cut" cannot be used to extract version strings
-	ace_version=[`grep ACE_VERSION $ace_ACE_h_dir/ace/Version.h | sed 's/.*\"\(.*\)\"/\1/' | sed 's/ //g'`]
-
-	case $ace_version in
-	[5.6.1|5.5.*|5.4.*|5.3.*|5.5|5.4|5.3)]
-		AC_DEFINE([ACE_5_6_1_OR_EARLIER], [TRUE], [ACE version 5.6.1 or earlier])
-		;;
-	# ACE 5.6.2 or later signature of UUID_Generator::generateUUID
-	# has been changed as generate_UUID
-	[5.7.*|5.6.[2-9]|5.7|5.6)]
-		;;
-	*)
-		AC_MSG_WARN([Unknown ACE version number, expecting 5.3.0 or above.])
-	esac
- 	AC_MSG_RESULT($ace_version)
-
-	#
-	# ACE setup complete
-	#
-	# Compiler/Linker options
-	CPPFLAGS="-I$ace_ACE_h_dir $CPPFLAGS"
-	CXXFLAGS="-I$ace_ACE_h_dir $CXXFLAGS"
-	LDFLAGS="-L$libACE_so_dir $LDFLAGS "
-	LIBS="-lACE $LIBS"
-	LDSOLIBS="-lACE $LDSOLIBS"
-	AC_DEFINE([WITH_ACE], [TRUE], [compiled with ACE])
-fi
+dnl AC_MSG_CHECKING(for ace/ACE.h)
+dnl dnl PKG_CHECK_MODULES(ACE,ACE)
+dnl FP_FIND_FILE(ace/ACE.h,
+dnl 	$with_ace_includes $more_incs $base_incs $base_dirs,
+dnl 	ACE_wrappers include cxx/include)
+dnl if test "x$ace_ACE_h_dir" = "x" ; then
+dnl 	AC_MSG_RESULT(ACE (ace/ACE.h) not found)
+dnl 	AC_MSG_ERROR(
+dnl 	use --with-ace-includes=<dir> to locate ace/ACE.h
+dnl hint: <dir>/( ACE_wrappers | include | cxx/include ) will be searched.)
+dnl 	# Error exit!!
+dnl else
+dnl 	AC_MSG_RESULT(found in $ace_ACE_h_dir)
+dnl 	have_ace=yes
+dnl fi
+dnl 
+dnl dnl ------------------------------------------------------------
+dnl dnl  Find libACE.so / Checking ACE version
+dnl dnl ------------------------------------------------------------
+dnl if test "x$have_ace" = "xyes" ; then
+dnl 	AC_MSG_CHECKING(for libACE.so)
+dnl 	FP_FIND_FILE(libACE.so,
+dnl 		$with_ace_lib $more_libs $base_libs $base_dirs,
+dnl 		ACE_wrappers/ace/lib lib cxx/lib)
+dnl 	if test "x$libACE_so_dir" = "x" ; then
+dnl 		AC_MSG_RESULT(not found)
+dnl 		AC_MSG_ERROR(
+dnl 	use --with-ace-lib=<dir> to locate libACE.so.
+dnl hint: <dir>/( ACE_wrappers/ace/lib lib cxx/lib ) will be searched.)
+dnl 		# Error exit!!
+dnl 	else
+dnl 		AC_MSG_RESULT(found in $libACE_so_dir)
+dnl 	fi
+dnl 
+dnl 	AC_MSG_CHECKING(ACE version)
+dnl 
+dnl 	# In ACE 5.5.4, ACE_VERSION is defined as ACE_VERSION " 5.5.4"
+dnl 	# "cut" cannot be used to extract version strings
+dnl 	ace_version=[`grep ACE_VERSION $ace_ACE_h_dir/ace/Version.h | sed 's/.*\"\(.*\)\"/\1/' | sed 's/ //g'`]
+dnl 
+dnl 	case $ace_version in
+dnl 	[5.6.1|5.5.*|5.4.*|5.3.*|5.5|5.4|5.3)]
+dnl 		AC_DEFINE([ACE_5_6_1_OR_EARLIER], [TRUE], [ACE version 5.6.1 or earlier])
+dnl 		;;
+dnl 	# ACE 5.6.2 or later signature of UUID_Generator::generateUUID
+dnl 	# has been changed as generate_UUID
+dnl 	[5.7.*|5.6.[2-9]|5.7|5.6)]
+dnl 		;;
+dnl 	*)
+dnl 		AC_MSG_WARN([Unknown ACE version number, expecting 5.3.0 or above.])
+dnl 	esac
+dnl  	AC_MSG_RESULT($ace_version)
+dnl 
+dnl 	#
+dnl 	# ACE setup complete
+dnl 	#
+dnl 	# Compiler/Linker options
+dnl 	CPPFLAGS="-I$ace_ACE_h_dir $CPPFLAGS"
+dnl 	CXXFLAGS="-I$ace_ACE_h_dir $CXXFLAGS"
+dnl 	LDFLAGS="-L$libACE_so_dir $LDFLAGS "
+dnl 	LIBS="-lACE $LIBS"
+dnl 	LDSOLIBS="-lACE $LDSOLIBS"
+dnl 	AC_DEFINE([WITH_ACE], [TRUE], [compiled with ACE])
+dnl fi
 
 
 dnl ============================================================
@@ -1406,58 +1409,61 @@ echo ''
 
 AC_OUTPUT([Makefile
 	build/Makefile
-	rtm/Makefile
-	rtm/idl/Makefile
-	rtm/tests/Makefile
-	rtm/tests/CORBA_SeqUtil/Makefile
-	rtm/tests/ConfigAdmin/Makefile
-	rtm/tests/CorbaConsumer/Makefile
-	rtm/tests/CorbaNaming/Makefile
-	rtm/tests/CorbaObjectManager/Makefile
-	rtm/tests/CorbaPort/Makefile
-	rtm/tests/DataInOutPort/Makefile
-	rtm/tests/DataInPort/Makefile
-	rtm/tests/DataOutPort/Makefile
-	rtm/tests/ECFactory/Makefile
-	rtm/tests/ExtTrigExecutionContext/Makefile
-	rtm/tests/Factory/Makefile
-	rtm/tests/InPort/Makefile
-	rtm/tests/InPortCorbaConsumer/Makefile
-	rtm/tests/InPortCorbaProvider/Makefile
-	rtm/tests/InPortProvider/Makefile
-	rtm/tests/InPortTcpSockConsumer/Makefile
-	rtm/tests/InPortTcpSockProvider/Makefile
-	rtm/tests/Manager/Makefile
-	rtm/tests/ManagerConfig/Makefile
-	rtm/tests/ModuleManager/Makefile
-	rtm/tests/NVUtil/Makefile
-	rtm/tests/NamingManager/Makefile
-	rtm/tests/NullBuffer/Makefile
-	rtm/tests/NumberingPolicy/Makefile
-	rtm/tests/ObjectManager/Makefile
-	rtm/tests/OutPort/Makefile
-	rtm/tests/OutPortBase/Makefile
-	rtm/tests/OutPortCorbaConsumer/Makefile
-	rtm/tests/OutPortCorbaProvider/Makefile
-	rtm/tests/OutPortProvider/Makefile
-	rtm/tests/PeriodicExecutionContext/Makefile
-	rtm/tests/PortAdmin/Makefile
-	rtm/tests/PortBase/Makefile
-	rtm/tests/Properties/Makefile
-	rtm/tests/PublisherFactory/Makefile
-	rtm/tests/PublisherFlush/Makefile
-	rtm/tests/PublisherNew/Makefile
-	rtm/tests/PublisherPeriodic/Makefile
-	rtm/tests/RTCUtil/Makefile
-	rtm/tests/RTObject/Makefile
-	rtm/tests/RingBuffer/Makefile
-	rtm/tests/SdoConfiguration/Makefile
-	rtm/tests/SdoOrganization/Makefile
-	rtm/tests/SdoService/Makefile
-	rtm/tests/StateMachine/Makefile
-	rtm/tests/StringUtil/Makefile
-	rtm/tests/TimeValue/Makefile
-	rtm/tests/Timer/Makefile
+	src/Makefile
+	src/lib/Makefile
+	src/lib/rtm/Makefile
+	src/lib/rtm/tests/Makefile
+	src/lib/rtm/tests/CORBA_SeqUtil/Makefile
+	src/lib/rtm/tests/ConfigAdmin/Makefile
+	src/lib/rtm/tests/CorbaConsumer/Makefile
+	src/lib/rtm/tests/CorbaNaming/Makefile
+	src/lib/rtm/tests/CorbaObjectManager/Makefile
+	src/lib/rtm/tests/CorbaPort/Makefile
+	src/lib/rtm/tests/DataInOutPort/Makefile
+	src/lib/rtm/tests/DataInPort/Makefile
+	src/lib/rtm/tests/DataOutPort/Makefile
+	src/lib/rtm/tests/ECFactory/Makefile
+	src/lib/rtm/tests/ExtTrigExecutionContext/Makefile
+	src/lib/rtm/tests/Factory/Makefile
+	src/lib/rtm/tests/InPort/Makefile
+	src/lib/rtm/tests/InPortCorbaConsumer/Makefile
+	src/lib/rtm/tests/InPortCorbaProvider/Makefile
+	src/lib/rtm/tests/InPortProvider/Makefile
+	src/lib/rtm/tests/InPortTcpSockConsumer/Makefile
+	src/lib/rtm/tests/InPortTcpSockProvider/Makefile
+	src/lib/rtm/tests/Manager/Makefile
+	src/lib/rtm/tests/ManagerConfig/Makefile
+	src/lib/rtm/tests/ModuleManager/Makefile
+	src/lib/rtm/tests/NVUtil/Makefile
+	src/lib/rtm/tests/NamingManager/Makefile
+	src/lib/rtm/tests/NullBuffer/Makefile
+	src/lib/rtm/tests/NumberingPolicy/Makefile
+	src/lib/rtm/tests/ObjectManager/Makefile
+	src/lib/rtm/tests/OutPort/Makefile
+	src/lib/rtm/tests/OutPortBase/Makefile
+	src/lib/rtm/tests/OutPortCorbaConsumer/Makefile
+	src/lib/rtm/tests/OutPortCorbaProvider/Makefile
+	src/lib/rtm/tests/OutPortProvider/Makefile
+	src/lib/rtm/tests/PeriodicExecutionContext/Makefile
+	src/lib/rtm/tests/PortAdmin/Makefile
+	src/lib/rtm/tests/PortBase/Makefile
+	src/lib/rtm/tests/Properties/Makefile
+	src/lib/rtm/tests/PublisherFactory/Makefile
+	src/lib/rtm/tests/PublisherFlush/Makefile
+	src/lib/rtm/tests/PublisherNew/Makefile
+	src/lib/rtm/tests/PublisherPeriodic/Makefile
+	src/lib/rtm/tests/RTCUtil/Makefile
+	src/lib/rtm/tests/RTObject/Makefile
+	src/lib/rtm/tests/RingBuffer/Makefile
+	src/lib/rtm/tests/SdoConfiguration/Makefile
+	src/lib/rtm/tests/SdoOrganization/Makefile
+	src/lib/rtm/tests/SdoService/Makefile
+	src/lib/rtm/tests/StateMachine/Makefile
+	src/lib/rtm/tests/StringUtil/Makefile
+	src/lib/rtm/tests/TimeValue/Makefile
+	src/lib/rtm/tests/Timer/Makefile
+	src/lib/rtm_corba/Makefile
+	src/lib/rtm_corba/idl/Makefile
 	utils/Makefile
 	utils/rtm-config/Makefile
 	utils/rtc-template/Makefile
@@ -1492,3 +1498,10 @@ AC_OUTPUT([Makefile
 	win32/OpenRTM-aist/installer/Makefile
 	win32/OpenRTM-aist/installer/Bitmaps/Makefile
 	])
+
+dnl ------------------------------------------------------------
+dnl rename config header's PACKAGE_* definition
+dnl ------------------------------------------------------------
+mv src/lib/rtm/config_rtc.h src/lib/rtm/config_rtc.h.org
+sed -e 's/define PACKAGE/define RTMPACKAGE/g' src/lib/rtm/config_rtc.h.org | sed -e 's/\#define VERSION/\/\/ \#define VERSION/g' > src/lib/rtm/config_rtc.h
+rm -f src/lib/rtm/config_rtc.h.org

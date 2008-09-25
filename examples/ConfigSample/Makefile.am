@@ -7,8 +7,8 @@
 
 AUTOMAKE_OPTIONS = 1.9
 
-AM_CPPFLAGS=-I$(top_srcdir) -I$(top_srcdir)/rtm/idl
-AM_LDFLAGS=-L$(top_builddir) -L$(top_builddir)/rtm -L$(top_builddir)/rtm/idl
+AM_CPPFLAGS=-I$(top_srcdir)/src/lib -I$(top_srcdir)/src/lib/coil/include -I$(top_srcdir)/src/lib/rtm_corba -I$(top_srcdir)/src/lib/rtm_corba/idl
+AM_LDFLAGS=-L$(top_builddir) -L$(top_builddir)src/lib/rtm -L$(top_builddir)/src/lib/rtm_corba/idl
 
 #------------------------------------------------------------
 # Targets
@@ -23,17 +23,17 @@ socomp_LTLIBRARIES = ConfigSample.la
 
 ConfigSample_la_SOURCES = ConfigSample.cpp ConfigSample.h
 ConfigSample_la_LDFLAGS = -module
-ConfigSample_la_FLAGS   = -L$(top_builddir)/rtm/.lib
-ConfigSample_la_LIBADD  = $(top_builddir)/rtm/libRTC.la
+ConfigSample_la_FLAGS   = -L$(top_builddir)/src/lib/rtm/.lib
+ConfigSample_la_LIBADD  = $(top_builddir)/src/lib/rtm/libRTC.la
 
 
 # Standalone RTCs
 example_PROGRAMS = ConfigSampleComp
 
 ConfigSampleComp_SOURCES = ConfigSampleComp.cpp 
-ConfigSampleComp_LDFLAGS = -L$(top_builddir)/rtm/.libs
-ConfigSampleComp_LDADD   = $(top_builddir)/rtm/libRTC.la ConfigSample.o
-
+ConfigSampleComp_LDFLAGS = -L$(top_builddir)/src/lib/rtm/.libs
+ConfigSampleComp_LDADD   = $(top_builddir)/src/lib/rtm/libRTC.la ConfigSample.o
+#$(top_builddir)/src/lib/coil/libcoil.la 
 # Example sources
 source_DATA = $(ALL_SRC) $(EXTRA_DIST)
 

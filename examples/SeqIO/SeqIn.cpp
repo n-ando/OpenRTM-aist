@@ -164,23 +164,23 @@ RTC::ReturnCode_t SeqIn::onExecute(RTC::UniqueId ec_id)
   std::cout << "-" << std::endl; all_row++;
   
   std::cout.width(h_col);
-  std::cout.setf(ios::right, ios::adjustfield);
+  std::cout.setf(std::ios::right, std::ios::adjustfield);
   std::cout.fill(' ');
   std::cout << " ";   
   std::cout.width(col);
-  std::cout.setf(ios::right, ios::adjustfield);
+  std::cout.setf(std::ios::right, std::ios::adjustfield);
   std::cout.fill(' ');
   std::cout << "Double";
   std::cout.width(col);
-  std::cout.setf(ios::right, ios::adjustfield);
+  std::cout.setf(std::ios::right, std::ios::adjustfield);
   std::cout.fill(' ');
   std::cout << "Float";
   std::cout.width(col);
-  std::cout.setf(ios::right, ios::adjustfield);
+  std::cout.setf(std::ios::right, std::ios::adjustfield);
   std::cout.fill(' ');
   std::cout << "Long";
   std::cout.width(col);
-  std::cout.setf(ios::right, ios::adjustfield);
+  std::cout.setf(std::ios::right, std::ios::adjustfield);
   std::cout.fill(' ');
   std::cout << "Short";
   std::cout << std::endl; all_row++;
@@ -201,23 +201,23 @@ RTC::ReturnCode_t SeqIn::onExecute(RTC::UniqueId ec_id)
   std::cout << "-" << std::endl; all_row++;
   
   std::cout.width(h_col);
-  std::cout.setf(ios::right, ios::adjustfield);
+  std::cout.setf(std::ios::right, std::ios::adjustfield);
   std::cout.fill(' ');
   std::cout << " ";   
   std::cout.width(col);
-  std::cout.setf(ios::right, ios::adjustfield);
+  std::cout.setf(std::ios::right, std::ios::adjustfield);
   std::cout.fill(' ');
   std::cout << m_Double.data;
   std::cout.width(col);
-  std::cout.setf(ios::right, ios::adjustfield);
+  std::cout.setf(std::ios::right, std::ios::adjustfield);
   std::cout.fill(' ');
   std::cout << m_Float.data;
   std::cout.width(col);
-  std::cout.setf(ios::right, ios::adjustfield);
+  std::cout.setf(std::ios::right, std::ios::adjustfield);
   std::cout.fill(' ');
   std::cout << m_Long.data;
   std::cout.width(col);
-  std::cout.setf(ios::right, ios::adjustfield);
+  std::cout.setf(std::ios::right, std::ios::adjustfield);
   std::cout.fill(' ');
   std::cout << m_Short.data;
   std::cout << std::endl; all_row++;
@@ -240,14 +240,14 @@ RTC::ReturnCode_t SeqIn::onExecute(RTC::UniqueId ec_id)
   for (int i = 0; i < max_size; i++)
     {
       std::cout.width(h_col - 2);
-      std::cout.setf(ios::right, ios::adjustfield);
+      std::cout.setf(std::ios::right, std::ios::adjustfield);
       std::cout.fill(' ');
       std::cout << i;
       std::cout.width(2);
       std::cout << ": ";
       
       std::cout.width(col);
-      std::cout.setf(ios::right, ios::adjustfield);
+      std::cout.setf(std::ios::right, std::ios::adjustfield);
       std::cout.fill(' ');
       if (i < ds_size)
 	{
@@ -259,7 +259,7 @@ RTC::ReturnCode_t SeqIn::onExecute(RTC::UniqueId ec_id)
 	}
       
       std::cout.width(col);
-      std::cout.setf(ios::right, ios::adjustfield);
+      std::cout.setf(std::ios::right, std::ios::adjustfield);
       std::cout.fill(' ');
       if (i < fs_size)
 	{
@@ -271,7 +271,7 @@ RTC::ReturnCode_t SeqIn::onExecute(RTC::UniqueId ec_id)
 	}
       
       std::cout.width(col);
-      std::cout.setf(ios::right, ios::adjustfield);
+      std::cout.setf(std::ios::right, std::ios::adjustfield);
       std::cout.fill(' ');
       if (i < ls_size)
 	{
@@ -283,7 +283,7 @@ RTC::ReturnCode_t SeqIn::onExecute(RTC::UniqueId ec_id)
 	}
       
       std::cout.width(col);
-      std::cout.setf(ios::right, ios::adjustfield);
+      std::cout.setf(std::ios::right, std::ios::adjustfield);
       std::cout.fill(' ');
       if (i < ss_size)
 	{
