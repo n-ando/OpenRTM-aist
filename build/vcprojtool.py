@@ -986,6 +986,8 @@ class FileList:
                     (self.filter[f]["Id"], self.filter[f]["name"],
                      self.filter[f]["filter"])
                 for file in self.flist[f]:
+                    # vcproj's path delimiter should be "\"
+                    file = file.replace("/","\\")
                     text += "    - Path: " + file + "\n"
         return text
 
