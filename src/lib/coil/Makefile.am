@@ -16,4 +16,5 @@ SUBDIRS = $(PLATFORM) @UNITTEST@ include lib build common posix win32 ace
 
 
 clean-local:
+	rm -f config_coil.h
 	rm -f *~
