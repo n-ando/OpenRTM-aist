@@ -7,6 +7,7 @@
 
 clean-local:
 	rm -f *~
+	rm -f *.pyc
 
 EXTRA_DIST =                   \
 	makedeffile.py
