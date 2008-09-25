@@ -20,8 +20,8 @@
 #ifndef RTCUtil_h
 #define RTCUtil_h
 
-#include <rtm/idl/RTCSkel.h>
-#include <rtm/idl/OpenRTMSkel.h>
+#include <rtm_corba/idl/RTCSkel.h>
+#include <rtm_corba/idl/OpenRTMSkel.h>
 
 /*!
  * @if jp

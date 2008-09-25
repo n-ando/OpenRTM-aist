@@ -21,7 +21,9 @@
 
 #include <rtm/RTC.h>
 
-#include <rtm/Task.h>
+#include <coil/Task.h>
+#include <coil/Mutex.h>
+#include <coil/Guard.h>
 #include <rtm/CorbaNaming.h>
 #include <rtm/RTObject.h>
 #include <rtm/SystemLogger.h>
@@ -59,6 +61,8 @@ namespace RTC
    */
   class NamingBase
   {
+    typedef coil::Mutex Mutex;
+    typedef coil::Guard<Mutex> Guard;
   public:
     /*!
      * @if jp
@@ -267,6 +271,8 @@ namespace RTC
    */
   class NamingManager
   {
+    typedef coil::Mutex Mutex;
+    typedef coil::Guard<Mutex> Guard;
   public:
     /*!
      * @if jp
@@ -547,7 +553,7 @@ namespace RTC
      * @endif
      */
     std::vector<Names*> m_names;
-    ACE_Thread_Mutex m_namesMutex;
+    Mutex m_namesMutex;
     
     // Components' name and object
     /*!
@@ -573,7 +579,7 @@ namespace RTC
      * @endif
      */
     std::vector<Comps*> m_compNames;
-    ACE_Thread_Mutex m_compNamesMutex;
+    Mutex m_compNamesMutex;
     
     /*!
      * @if jp

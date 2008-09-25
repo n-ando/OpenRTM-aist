@@ -24,12 +24,12 @@
 #include <iostream>
 
 // ACE includes
-#include <ace/ACE.h>
+#include <coil/File.h>
 
 // RTC includes
 #include <rtm/Manager.h>
 #include <rtm/ModuleManager.h>
-#include <rtm/StringUtil.h>
+#include <coil/stringutil.h>
 
 namespace RTC
 {
@@ -44,12 +44,12 @@ namespace RTC
   ModuleManager::ModuleManager(Properties& prop)
     : m_properties(prop)
   {
-    m_configPath      = split(prop[CONFIG_PATH], ",");
-    for_each(m_configPath.begin(), m_configPath.end(), eraseHeadBlank);
-    m_loadPath        = split(prop[MOD_LOADPTH], ",");
-    for_each(m_loadPath.begin(), m_loadPath.end(), eraseHeadBlank);
-    m_absoluteAllowed = toBool(prop[ALLOW_ABSPATH], "yes", "no", false);
-    m_downloadAllowed = toBool(prop[ALLOW_URL], "yes", "no", false);
+    m_configPath      = coil::split(prop[CONFIG_PATH], ",");
+    for_each(m_configPath.begin(), m_configPath.end(), coil::eraseHeadBlank);
+    m_loadPath        = coil::split(prop[MOD_LOADPTH], ",");
+    for_each(m_loadPath.begin(), m_loadPath.end(), coil::eraseHeadBlank);
+    m_absoluteAllowed = coil::toBool(prop[ALLOW_ABSPATH], "yes", "no", false);
+    m_downloadAllowed = coil::toBool(prop[ALLOW_URL], "yes", "no", false);
     m_initFuncSuffix  = prop[INITFUNC_SFX];
     m_initFuncPrefix  = prop[INITFUNC_PFX];
   }
@@ -77,7 +77,7 @@ namespace RTC
   {
     if (file_name == "") throw InvalidArguments("Invalid file name.");
     
-    if (isURL(file_name))
+    if (coil::isURL(file_name))
       {
 	if (!m_downloadAllowed)
 	  {
@@ -91,7 +91,7 @@ namespace RTC
     
     // Find local file from load path or absolute directory
     std::string file_path;
-    if (isAbsolutePath(file_name))
+    if (coil::isAbsolutePath(file_name))
       {
 	if (!m_absoluteAllowed)
 	  {
@@ -351,7 +351,7 @@ namespace RTC
    */
   std::string ModuleManager::getInitFuncName(const std::string& file_path)
   {
-    std::string base_name(ACE::basename(file_path.c_str()));
+    std::string base_name(coil::basename(file_path.c_str()));
     
     return m_initFuncPrefix + base_name + m_initFuncSuffix;
   }

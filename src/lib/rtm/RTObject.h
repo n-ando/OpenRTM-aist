@@ -22,8 +22,8 @@
 // CORBA header include
 #include "rtm/RTC.h"
 #include "rtm/Properties.h"
-#include "rtm/idl/RTCSkel.h"
-#include "rtm/idl/OpenRTMSkel.h"
+#include "rtm_corba/idl/RTCSkel.h"
+#include "rtm_corba/idl/OpenRTMSkel.h"
 #include "rtm/PortBase.h"
 //#include "rtm/ObjectManager.h"
 #include "rtm/PortAdmin.h"
@@ -33,8 +33,6 @@
 #include <rtm/OutPort.h>
 #include <rtm/ConfigAdmin.h>
 
-// ACE
-#include <ace/Task.h>
 
 namespace SDOPackage
 {
@@ -2210,7 +2208,7 @@ namespace RTC
     template <typename VarType>
     bool bindParameter(const char* param_name, VarType& var,
 		       const char* def_val,
-		       bool (*trans)(VarType&, const char*) = ::stringTo)
+		       bool (*trans)(VarType&, const char*) = coil::stringTo)
     {
       m_configsets.bindParameter(param_name, var, def_val, trans);
       return true;

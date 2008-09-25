@@ -17,10 +17,10 @@
  *
  */
 
+#include <coil/UUID.h> 
 #include <rtm/SdoOrganization.h>
-#include <ace/ACE.h>
-#include <rtm/UUID.h> 
 #include <rtm/CORBA_SeqUtil.h>
+#include <memory>
 
 namespace SDOPackage
 {
@@ -32,14 +32,12 @@ namespace SDOPackage
    */
   Organization_impl::Organization_impl()
   {
-    RTC_Utils::UUID_Generator uugen;
+    coil::UUID_Generator uugen;
     uugen.init();
-    RTC_Utils::UUID* uuid = uugen.generateUUID(2,0x01);
-    m_pId = CORBA::string_dup((uuid->to_string())->c_str());
+    std::auto_ptr<coil::UUID> uuid(uugen.generateUUID(2,0x01));
+    m_pId = CORBA::string_dup((const char*)uuid->to_string());
 #ifdef WIN32
     uuid->~UUID();
-#else
-    delete uuid;
 #endif
   }
   
@@ -96,7 +94,7 @@ namespace SDOPackage
     throw (CORBA::SystemException,
 	   InvalidParameter, NotAvailable, InternalError)
   {
-    if (name == "")
+    if (std::string(name).empty())
       throw InvalidParameter("Empty name.");
     
     CORBA::Long index;
@@ -158,7 +156,7 @@ namespace SDOPackage
     throw (CORBA::SystemException,
 	   InvalidParameter, NotAvailable, InternalError)
   {
-    if (name == "")
+    if (std::string(name).empty())
       {
 	throw InvalidParameter("set_organization_property_value(): Enpty name.");
       }
@@ -191,7 +189,7 @@ namespace SDOPackage
     throw (CORBA::SystemException,
 	   InvalidParameter, NotAvailable, InternalError)
   {
-    if (name == "")
+    if (std::string(name).empty())
       throw InvalidParameter("set_organization_property_value(): Enpty name.");
     
     CORBA::Long index;
@@ -332,7 +330,7 @@ namespace SDOPackage
     throw (CORBA::SystemException,
 	   InvalidParameter, NotAvailable, InternalError)
   {
-    if (id == "")
+    if (std::string(id).empty())
       throw InvalidParameter("remove_member(): Enpty name.");
     
     CORBA::Long index;

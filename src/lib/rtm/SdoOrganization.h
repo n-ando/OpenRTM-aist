@@ -21,10 +21,10 @@
 #define SdoOrganization_h
 
 #include <rtm/RTC.h>
-#include <rtm/idl/SDOPackageSkel.h>
+#include <rtm_corba/idl/SDOPackageSkel.h>
 #include <string>
-#include <ace/Guard_T.h>
-#include <ace/Thread_Mutex.h>
+#include <coil/Mutex.h>
+#include <coil/Guard.h>
 
 /*!
  * @if jp
@@ -67,6 +67,8 @@ namespace SDOPackage
    */
   class Organization_impl 
   {
+    typedef coil::Mutex Mutex;
+    typedef coil::Guard<Mutex> Guardl;
   public:
     /*!
      * @if jp
@@ -813,9 +815,9 @@ namespace SDOPackage
      * @endif
      */
     SDOPackage::OrganizationProperty m_orgProperty;
-    ACE_Thread_Mutex m_org_mutex;
+    Mutex m_org_mutex;
     
-    typedef ACE_Guard<ACE_Thread_Mutex> Guard;
+    typedef coil::Guard<coil::Mutex> Guard;
     
     /*!
      * @if jp

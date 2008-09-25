@@ -61,13 +61,13 @@ namespace RTC
    */
   void PublisherNew::update()
   {
-    if (m_data._mutex.tryacquire() != 0)
+    if (m_data._mutex.trylock() != 0)
       {
 	return;
       }
     m_data._updated = true;
     m_data._cond.signal();
-    m_data._mutex.release();
+    m_data._mutex.unlock();
 #ifdef WIN32
     ACE_OS::thr_yield();
 #else
@@ -87,7 +87,7 @@ namespace RTC
   {
     while (m_running)
       {
-	m_data._mutex.acquire();
+	m_data._mutex.lock();
 	
 	// Waiting for new data updated
 	while (!m_data._updated && m_running)
@@ -101,7 +101,7 @@ namespace RTC
 	    m_data._updated = false;
 	  }
 	
-	m_data._mutex.release();	
+	m_data._mutex.unlock();	
       }
     return 0;
   }
@@ -131,13 +131,13 @@ namespace RTC
    */
   void PublisherNew::release()
   {
-    if (m_data._mutex.acquire() != 0)
+    if (m_data._mutex.trylock() != 0)
       {
 	return;
       }
     m_running = false;
     m_data._cond.signal(); //broadcast();
-    m_data._mutex.release();
+    m_data._mutex.unlock();
     wait();
   }
   

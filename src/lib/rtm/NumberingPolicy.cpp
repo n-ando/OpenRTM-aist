@@ -18,7 +18,7 @@
  */
 
 #include <rtm/NumberingPolicy.h>
-#include <rtm/StringUtil.h>
+#include <coil/stringutil.h>
 //============================================================
 // DefaultNumberingPolicy
 //============================================================
@@ -39,13 +39,13 @@ std::string DefaultNumberingPolicy::onCreate(void* obj)
     {
       pos = find(NULL);
       m_objects[pos] = obj;
-      return otos(pos);
+      return coil::otos(pos);
     }
   catch (ObjectNotFound& e)
     {
       e;
       m_objects.push_back(obj);
-      return otos((int)(m_objects.size() - 1));
+      return coil::otos((int)(m_objects.size() - 1));
     }
 }
 

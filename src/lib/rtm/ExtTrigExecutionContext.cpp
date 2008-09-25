@@ -17,6 +17,7 @@
  *
  */
 
+#include <coil/TimeValue.h>
 #include <rtm/ExtTrigExecutionContext.h>
 #include <rtm/ECFactory.h>
 
@@ -55,10 +56,10 @@ namespace RTC
   void ExtTrigExecutionContext::tick()
     throw (CORBA::SystemException)
   {
-    m_worker._mutex.acquire();
+    m_worker._mutex.lock();
     m_worker._called = true;
     m_worker._cond.signal();
-    m_worker._mutex.release();
+    m_worker._mutex.unlock();
     return;
   }
   
@@ -73,9 +74,7 @@ namespace RTC
   {
     do
       {
-	ACE_Time_Value tv(0, m_usec); // (s, us)
-	
-	m_worker._mutex.acquire();
+	m_worker._mutex.lock();
 	while (!m_worker._called && m_running)
 	  {
 	    m_worker._cond.wait();
@@ -85,7 +84,7 @@ namespace RTC
 	    m_worker._called = false;
 	    std::for_each(m_comps.begin(), m_comps.end(), invoke_worker());
 	  }
-	m_worker._mutex.release();
+	m_worker._mutex.unlock();
       } while (m_running);
     
     return 0;

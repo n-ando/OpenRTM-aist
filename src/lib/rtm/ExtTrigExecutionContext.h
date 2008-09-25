@@ -21,8 +21,9 @@
 
 #include <rtm/RTC.h>
 
-#include <rtm/Task.h>
-#include <ace/Synch.h>
+#include <coil/Mutex.h>
+#include <coil/Condition.h>
+#include <coil/Task.h>
 
 #include <rtm/Manager.h>
 #include <rtm/PeriodicExecutionContext.h>
@@ -54,6 +55,8 @@ namespace RTC
   class ExtTrigExecutionContext
     : public virtual PeriodicExecutionContext
   {
+    typedef coil::Mutex Mutex;
+    typedef coil::Condition<Mutex> Condition;
   public:
     /*!
      * @if jp
@@ -127,8 +130,8 @@ namespace RTC
     struct Worker
     {
       Worker() : _cond(_mutex), _called(false) {};
-      ACE_Thread_Mutex _mutex;
-      ACE_Condition<ACE_Thread_Mutex> _cond;
+      Mutex _mutex;
+      Condition _cond;
       bool _called;
     };
     // A condition variable for external triggered worker

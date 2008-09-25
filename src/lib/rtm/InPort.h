@@ -27,8 +27,9 @@
 #include <rtm/RingBuffer.h>
 #include <rtm/PortCallBack.h>
 #include <rtm/RTC.h>
-#include <ace/Time_Value.h>
-#include <ace/OS.h>
+#include <coil/TimeValue.h>
+#include <coil/Time.h>
+#include <coil/OS.h>
 
 #define TIMEOUT_TICK_USEC 10
 #define USEC_PER_SEC 1000000
@@ -239,32 +240,25 @@ namespace RTC
       
       long int timeout = m_writeTimeout;
       
-      timeval tm_cur, tm_pre;
-      ACE_Time_Value tt;
-      tt = ACE_OS::gettimeofday();
-      tm_pre = tt.operator timeval();
+      coil::TimeValue tm_cur, tm_pre;
+      tm_pre = coil::gettimeofday();
       
       // blocking and timeout wait
       while (m_writeBlock && this->isFull())
 	{
 	  if (m_writeTimeout < 0) 
 	    {
-	      usleep(TIMEOUT_TICK_USEC);
+              coil::usleep(TIMEOUT_TICK_USEC);
 	      continue;
 	    }
 	  
 	  // timeout wait
-	  ACE_Time_Value tt;
-	  tt = ACE_OS::gettimeofday();
-	  tm_cur = tt.operator timeval();
-	  long int sec (tm_cur.tv_sec  - tm_pre.tv_sec);
-	  long int usec(tm_cur.tv_usec - tm_pre.tv_usec);
-	  
-	  timeout -= (sec * USEC_PER_SEC + usec);
+	  tm_cur = coil::gettimeofday();
+	  timeout -= (double)(tm_cur - tm_pre);
 	  if (timeout < 0) break;
 	  
 	  tm_pre = tm_cur;
-	  usleep(TIMEOUT_TICK_USEC);
+          coil::usleep(TIMEOUT_TICK_USEC);
 	}
       
       if (this->isFull() && m_OnOverflow != NULL)
@@ -333,32 +327,25 @@ namespace RTC
       
       long int timeout = m_readTimeout;
       
-      timeval tm_cur, tm_pre;
-      ACE_Time_Value tt;
-      tt = ACE_OS::gettimeofday();
-      tm_pre = tt.operator timeval();
+      coil::TimeValue tm_cur, tm_pre;
+      tm_pre = coil::gettimeofday();
       
       // blocking and timeout wait
       while (m_readBlock && this->isEmpty())
 	{
 	  if (m_readTimeout < 0)
 	    {
-	      usleep(TIMEOUT_TICK_USEC);
+              coil::usleep(TIMEOUT_TICK_USEC);
 	      continue;
 	    }
 	  
 	  // timeout wait
-	  ACE_Time_Value tt;
-	  tt = ACE_OS::gettimeofday();
-	  tm_cur = tt.operator timeval();
-	  long int sec (tm_cur.tv_sec  - tm_pre.tv_sec);
-	  long int usec(tm_cur.tv_usec - tm_pre.tv_usec);
-	  
-	  timeout -= (sec * USEC_PER_SEC + usec);
+	  tm_cur = coil::gettimeofday();
+	  timeout -= (double)(tm_cur - tm_pre);
 	  if (timeout < 0) break;
 	  
 	  tm_pre = tm_cur;
-	  usleep(TIMEOUT_TICK_USEC);
+          coil::usleep(TIMEOUT_TICK_USEC);
 	}
       
       if (this->isEmpty() && m_OnUnderflow != NULL)

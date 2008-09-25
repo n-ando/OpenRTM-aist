@@ -24,17 +24,17 @@
 #include <rtm/CorbaObjectManager.h>
 #include <rtm/NamingManager.h>
 #include <rtm/RTC.h>
-#include <rtm/StringUtil.h>
 #include <rtm/PeriodicExecutionContext.h>
 #include <rtm/ExtTrigExecutionContext.h>
 #include <rtm/OpenHRPExecutionContext.h>
 #include <rtm/RTCUtil.h>
 #include <fstream>
-#include <ace/Signal.h>
-#include <ace/OS.h>
-#include <rtm/TimeValue.h>
-#include <rtm/Timer.h>
-
+#include <iostream>
+#include <coil/stringutil.h>
+#include <coil/Signal.h>
+#include <coil/TimeValue.h>
+#include <coil/Timer.h>
+#include <coil/OS.h>
 
 //static sig_atomic_t g_mgrActive = true;
 extern "C" void handler (int)
@@ -45,7 +45,7 @@ extern "C" void handler (int)
 namespace RTC
 {
   Manager* Manager::manager = NULL;
-  ACE_Thread_Mutex Manager::mutex;
+  coil::Mutex Manager::mutex;
   
   /*!
    * @if jp
@@ -59,7 +59,7 @@ namespace RTC
       m_Logbuf(), m_MedLogbuf(m_Logbuf), rtcout(m_MedLogbuf),
       m_runner(NULL), m_terminator(NULL)
   {
-    new ACE_Sig_Action((ACE_SignalHandler) handler, SIGINT);
+    new coil::SignalAction((coil::SignalHandler) handler, SIGINT);
   }
   
   /*!
@@ -74,7 +74,7 @@ namespace RTC
       m_Logbuf(), m_MedLogbuf(m_Logbuf), rtcout(m_MedLogbuf),
       m_runner(NULL), m_terminator(NULL)
   {
-    new ACE_Sig_Action((ACE_SignalHandler) handler, SIGINT);
+    new coil::SignalAction((coil::SignalHandler) handler, SIGINT);
   }
   
   /*!
@@ -89,7 +89,7 @@ namespace RTC
     // DCL for singleton
     if (!manager)
       {
-	ACE_Guard<ACE_Thread_Mutex> guard(mutex);
+	Guard guard(mutex);
 	if (!manager)
 	  {
 	    manager = new Manager();
@@ -116,7 +116,7 @@ namespace RTC
     // DCL for singleton
     if (!manager)
       {
-	ACE_Guard<ACE_Thread_Mutex> guard(mutex);
+	Guard guard(mutex);
 	if (!manager)
 	  {
 	    manager = new Manager();
@@ -181,13 +181,13 @@ namespace RTC
   {
     RTC_TRACE(("Manager::wait()"));
     {
-      ACE_Guard<ACE_Thread_Mutex> guard(m_terminate.mutex);
+      Guard guard(m_terminate.mutex);
       ++m_terminate.waiting;
     }
     while (1)
       {
 	{
-	  ACE_Guard<ACE_Thread_Mutex> guard(m_terminate.mutex);
+	  Guard guard(m_terminate.mutex);
 	  if (m_terminate.waiting > 1) break;
 	}
 	usleep(100000);
@@ -229,10 +229,10 @@ namespace RTC
 	return false;
       }
 
-    std::vector<std::string> mods(split(m_config["manager.modules.preload"], ","));
+    std::vector<std::string> mods(coil::split(m_config["manager.modules.preload"], ","));
     for (int i(0), len(mods.size()); i < len; ++i)
       {
-	std::string basename(split(mods[i], ".").operator[](0));
+	std::string basename(coil::split(mods[i], ".").operator[](0));
 	basename += "Init";
 	try
 	  {
@@ -251,7 +251,7 @@ namespace RTC
 	    RTC_ERROR(("Unknown Exception"));
 	  }
       }
-    std::vector<std::string> comp(split(m_config["manager.components.precreate"], ","));
+    std::vector<std::string> comp(coil::split(m_config["manager.components.precreate"], ","));
     for (int i(0), len(comp.size()); i < len; ++i)
       {
 	this->createComponent(comp[i].c_str());
@@ -697,19 +697,19 @@ namespace RTC
     // initialize Terminator
     m_terminator = new Terminator(this);
     {
-      ACE_Guard<ACE_Thread_Mutex> guard(m_terminate.mutex);
+      Guard guard(m_terminate.mutex);
       m_terminate.waiting = 0;
     }
     
     // initialize Timer
-    if (toBool(m_config["timer.enable"], "YES", "NO", true))
+    if (coil::toBool(m_config["timer.enable"], "YES", "NO", true))
       {
-	TimeValue tm(0, 100000);
+        coil::TimeValue tm(0, 100000);
 	std::string tick(m_config["timer.tick"]);
 	if (!tick.empty())
 	  {
 	    tm = atof(tick.c_str());
-	    m_timer = new Timer(tm);
+	    m_timer = new coil::Timer(tm);
 	    m_timer->start();
 	  }
       }
@@ -741,13 +741,13 @@ namespace RTC
   {
     rtcout.setLogLevel("SILENT");
     
-    if (toBool(m_config["logger.enable"], "YES", "NO", true))
+    if (coil::toBool(m_config["logger.enable"], "YES", "NO", true))
       {
 	std::string logfile(m_config["logger.file_name"]);
 	if (logfile == "") logfile = "./rtc.log";
 	
 	// Open logfile
-	m_Logbuf.open(logfile.c_str(), std::ios::out | ios::app);
+	m_Logbuf.open(logfile.c_str(), std::ios::out | std::ios::app);
 	
 	if (!m_Logbuf.is_open())
 	  {
@@ -766,7 +766,7 @@ namespace RTC
 	rtcout.setLogLevel(m_config["logger.log_level"]);
 	
 	// Log stream mutex locking mode
-	rtcout.setLogLock(toBool(m_config["logger.stream_lock"],
+	rtcout.setLogLock(coil::toBool(m_config["logger.stream_lock"],
 				 "enable", "disable", false));
 	
 	RTC_INFO(("%s", m_config["openrtm.version"].c_str()));
@@ -816,10 +816,10 @@ namespace RTC
     // Initialize ORB
     try
       {
-	std::vector<std::string> args(split(createORBOptions(), " "));
+	std::vector<std::string> args(coil::split(createORBOptions(), " "));
 	// TAO's ORB_init needs argv[0] as command name.
 	args.insert(args.begin(), "manager");
-	char** argv = toArgv(args);
+	char** argv = coil::toArgv(args);
 	int argc(args.size());
 	
 	// ORB initialization
@@ -946,15 +946,15 @@ namespace RTC
     m_namingManager = new NamingManager(this);
     
     // If NameService is disabled, return immediately
-    if (!toBool(m_config["naming.enable"], "YES", "NO", true)) return true;
+    if (!coil::toBool(m_config["naming.enable"], "YES", "NO", true)) return true;
     
     // NameServer registration for each method and servers
-    std::vector<std::string> meth(split(m_config["naming.type"], ","));
+    std::vector<std::string> meth(coil::split(m_config["naming.type"], ","));
     
     for (int i(0), len_i(meth.size()); i < len_i; ++i)
       {
 	std::vector<std::string> names;
-	names = split(m_config[meth[i] + ".nameservers"], ",");
+	names = coil::split(m_config[meth[i] + ".nameservers"], ",");
 	
 	
 	for (int j(0), len_j(names.size()); j < len_j; ++j)
@@ -967,9 +967,9 @@ namespace RTC
       }
     
     // NamingManager Timer update initialization
-    if (toBool(m_config["naming.update.enable"], "YES", "NO", true))
+    if (coil::toBool(m_config["naming.update.enable"], "YES", "NO", true))
       {
-	TimeValue tm(10, 0); // default interval = 10sec for safty
+        coil::TimeValue tm(10, 0); // default interval = 10sec for safty
 	std::string intr(m_config["naming.update.interval"]);
 	if (!intr.empty())
 	  {
@@ -1127,7 +1127,7 @@ namespace RTC
     
     naming_formats += m_config["naming.formats"];
     naming_formats += ", " + comp_prop["naming.formats"];
-    naming_formats = flatten(unique_sv(split(naming_formats, ",")));
+    naming_formats = coil::flatten(coil::unique_sv(coil::split(naming_formats, ",")));
     
     std::string naming_names;
     naming_names = formatString(naming_formats.c_str(), comp->getProperties());
@@ -1198,7 +1198,7 @@ namespace RTC
 		  {
 		    env += *it;
 		  }
-		char* envval = ACE_OS::getenv(env.c_str());
+		char* envval = coil::getenv(env.c_str());
 		if (envval != NULL) str += envval;
 	      }
 	    else

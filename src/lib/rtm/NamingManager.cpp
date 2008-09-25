@@ -19,7 +19,7 @@
 
 #include <rtm/NamingManager.h>
 #include <rtm/Manager.h>
-#include <rtm/StringUtil.h>
+#include <coil/stringutil.h>
 #include <functional>
 #include <algorithm>
 #include <iostream>
@@ -81,7 +81,7 @@ namespace RTC
   {
     m_MedLogbuf.setSuffix("naming_svc");
     rtcout.setLogLevel(manager->getConfig()["logger.log_level"]);
-    rtcout.setLogLock(toBool(manager->getConfig()["logger.stream_lock"],
+    rtcout.setLogLock(coil::toBool(manager->getConfig()["logger.stream_lock"],
 			     "enable", "disable", false));
   }
   
@@ -125,7 +125,7 @@ namespace RTC
   {
     RTC_TRACE(("NamingManager::bindObject(%s)", name));
     
-    ACE_Guard<ACE_Thread_Mutex> guard(m_namesMutex);
+    Guard guard(m_namesMutex);
     for (int i(0), len(m_names.size()); i < len; ++i)
       {
 	if (m_names[i]->ns != NULL)
@@ -145,7 +145,7 @@ namespace RTC
   {
     RTC_TRACE(("NamingManager::update()"));
     
-    ACE_Guard<ACE_Thread_Mutex> guard(m_namesMutex);
+    Guard guard(m_namesMutex);
     
     for (int i(0), len(m_names.size()); i < len; ++i)
       {
@@ -177,7 +177,7 @@ namespace RTC
   {
     RTC_TRACE(("NamingManager::unbindObject(%s)", name));
     
-    ACE_Guard<ACE_Thread_Mutex> guard(m_namesMutex);
+    Guard guard(m_namesMutex);
     for (int i(0), len(m_names.size()); i < len; ++i)
       {
 	if (m_names[i]->ns != NULL)
@@ -196,7 +196,7 @@ namespace RTC
   void NamingManager::unbindAll()
   {
     RTC_TRACE(("NamingManager::unbindAll(): %d names.", m_compNames.size()));
-    ACE_Guard<ACE_Thread_Mutex> guard(m_compNamesMutex);
+    Guard guard(m_compNamesMutex);
     for (int i(0), len(m_compNames.size()); i < len; ++i)
       {
 	unbindObject(m_compNames[i]->name.c_str());
@@ -213,7 +213,7 @@ namespace RTC
   std::vector<RTObject_impl*> NamingManager::getObjects()
   {
     std::vector<RTObject_impl*> comps;
-    ACE_Guard<ACE_Thread_Mutex> guard(m_compNamesMutex);
+    Guard guard(m_compNamesMutex);
     
     for (int i(0), len(m_compNames.size()); i < len; ++i)
       {

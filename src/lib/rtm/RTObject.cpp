@@ -17,11 +17,11 @@
  */
 
 #include <assert.h>
-#include "rtm/RTObject.h"
-#include "rtm/SdoConfiguration.h"
-#include "rtm/CORBA_SeqUtil.h"
-#include "rtm/Manager.h"
-#include <rtm/StringUtil.h>
+#include <rtm/RTObject.h>
+#include <rtm/SdoConfiguration.h>
+#include <rtm/CORBA_SeqUtil.h>
+#include <rtm/Manager.h>
+#include <coil/stringutil.h>
 #include <iostream>
 
 namespace RTC
@@ -1161,7 +1161,7 @@ namespace RTC
    */
   std::vector<std::string> RTObject_impl::getNamingNames()
   {
-    return split(m_properties["naming.names"], ",");
+    return coil::split(m_properties["naming.names"], ",");
   }
   
   /*!

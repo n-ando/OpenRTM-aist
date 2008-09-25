@@ -26,8 +26,9 @@
 #include <string>
 #include <vector>
 
-#include <ace/Synch.h>
-#include <rtm/Task.h>
+#include <coil/Mutex.h>
+#include <coil/Guard.h>
+#include <coil/Task.h>
 
 #include <rtm/Factory.h>
 #include <rtm/ECFactory.h>
@@ -36,6 +37,10 @@
 #include <rtm/SystemLogger.h>
 
 
+namespace coil
+{
+  class Timer;
+};
 
 namespace RTC
 {
@@ -45,7 +50,7 @@ namespace RTC
   class NamingManager;
   class CorbaObjectManager;
   class Manager;
-  class Timer;
+
   
   typedef void (*ModuleInitProc)(Manager* manager);  
   
@@ -71,6 +76,8 @@ namespace RTC
    */
   class Manager
   {
+    typedef coil::Mutex Mutex;
+    typedef coil::Guard<Mutex> Guard;
   protected:
     /*!
      * @if jp
@@ -1220,7 +1227,7 @@ namespace RTC
      * @brief The mutex of the pointer to the Manager 
      * @endif
      */
-    static ACE_Thread_Mutex mutex;
+    static Mutex mutex;
     
     //------------------------------------------------------------
     // CORBA var
@@ -1307,7 +1314,7 @@ namespace RTC
      * @brief Timer Object
      * @endif
      */
-    Timer* m_timer;
+    coil::Timer* m_timer;
     
     //------------------------------------------------------------
     // Logger
@@ -1471,7 +1478,7 @@ namespace RTC
      * @endif
      */
     class OrbRunner
-      : public RTM::Task
+      : public coil::Task
     {
     public:
       /*!
@@ -1596,7 +1603,7 @@ namespace RTC
      * @endif
      */
     class Terminator
-      : public RTM::Task
+      : public coil::Task
     {
     public:
       /*!
@@ -1700,7 +1707,7 @@ namespace RTC
     struct Term
     {
       int waiting;
-      ACE_Thread_Mutex mutex;
+      Mutex mutex;
     };
     Term m_terminate;
   }; // class Manager

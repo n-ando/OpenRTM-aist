@@ -22,8 +22,9 @@
 
 #include <rtm/RTC.h>
 
-#include <rtm/Task.h>
-#include <ace/Synch.h>
+#include <coil/Task.h>
+#include <coil/Mutex.h>
+#include <coil/Condition.h>
 #include <rtm/PublisherBase.h>
 
 namespace RTC
@@ -56,8 +57,10 @@ namespace RTC
    */
   class PublisherNew
     : public PublisherBase,
-      public RTM::Task
+      public coil::Task
   {
+    typedef coil::Mutex Mutex;
+    typedef coil::Condition<Mutex> Condition;
   public:
     /*!
      * @if jp
@@ -195,8 +198,8 @@ namespace RTC
     struct NewData
     {
       NewData() : _cond(_mutex), _updated(false) {};
-      ACE_Thread_Mutex _mutex;
-      ACE_Condition<ACE_Thread_Mutex> _cond;
+      Mutex _mutex;
+      Condition _cond;
       bool _updated;
     };
     

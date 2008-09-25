@@ -22,12 +22,11 @@
 
 // CORBA header include
 #include <rtm/RTC.h>
-
-#include <ace/Guard_T.h>
-#include <ace/Thread_Mutex.h>
+#include <coil/Mutex.h>
+#include <coil/Guard.h>
 
 // local includes
-#include <rtm/idl/SDOPackageSkel.h>
+#include <rtm_corba/idl/SDOPackageSkel.h>
 #include <rtm/ConfigAdmin.h>
 #include <string>
 
@@ -148,6 +147,8 @@ namespace SDOPackage
     : public virtual POA_SDOPackage::Configuration,
       public virtual PortableServer::RefCountServantBase
   {
+    typedef coil::Mutex Mutex;
+    typedef coil::Guard<Mutex> Guard;
   public:
     /*!
      * @if jp
@@ -1054,7 +1055,6 @@ namespace SDOPackage
      */
     Configuration_var m_objref;
     
-    typedef ACE_Guard<ACE_Thread_Mutex> Guard;
     /*!
      * @if jp
      * @brief Lock …’§≠ SDO DeviceProfile
@@ -1063,7 +1063,7 @@ namespace SDOPackage
      * @endif
      */
     DeviceProfile m_deviceProfile;
-    ACE_Thread_Mutex m_dprofile_mutex;
+    Mutex m_dprofile_mutex;
     
     /*!
      * @if jp
@@ -1073,7 +1073,7 @@ namespace SDOPackage
      * @endif
      */
     ServiceProfileList m_serviceProfiles;
-    ACE_Thread_Mutex m_sprofile_mutex;
+    Mutex m_sprofile_mutex;
     
     /*!
      * @if jp
@@ -1137,7 +1137,7 @@ namespace SDOPackage
      * @endif
      */
     ParameterList m_parameters;
-    ACE_Thread_Mutex m_params_mutex;
+    Mutex m_params_mutex;
     
     /*!
      * @if jp
@@ -1155,7 +1155,7 @@ namespace SDOPackage
       };
     */
     RTC::ConfigAdmin& m_configsets;
-    ACE_Thread_Mutex m_config_mutex;
+    Mutex m_config_mutex;
     
     /*!
      * @if jp
@@ -1165,7 +1165,7 @@ namespace SDOPackage
      * @endif
      */
     OrganizationList m_organizations;
-    ACE_Thread_Mutex m_org_mutex;
+    Mutex m_org_mutex;
     
     /*!
      * @if jp

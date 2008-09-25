@@ -23,7 +23,7 @@
 #include <iostream>
 #include <vector>
 #include <algorithm>
-//#include <ace/Synch.h>
+
 #include <rtm/BufferBase.h>
 
 namespace RTC
@@ -162,7 +162,7 @@ namespace RTC
     
     virtual void pbump(int n)
     {
-      //      ACE_Guard<ACE_Thread_Mutex> guard(m_wmutex);
+      //      Guard guard(m_wmutex);
       m_wpos = (m_wpos + n) % m_size;
       m_wnext = (m_wnext + n) % m_size;
     }

@@ -20,9 +20,8 @@
 #define StateMachine_h
 
 #include <rtm/RTC.h>
-
-#include <ace/Guard_T.h>
-#include <ace/Thread_Mutex.h>
+#include <coil/Mutex.h>
+#include <coil/Guard.h>
 
 namespace RTC_Utils
 {
@@ -263,6 +262,8 @@ namespace RTC_Utils
 	    >
   class StateMachine
   {
+    typedef coil::Mutex Mutex;
+    typedef coil::Guard<Mutex> Guard;
   public:
     /*!
      * @if jp
@@ -567,7 +568,7 @@ namespace RTC_Utils
      */
     States getStates()
     {
-      ACE_Guard<ACE_Thread_Mutex> guard(m_mutex);
+      Guard guard(m_mutex);
       return m_states;
     }
     
@@ -590,7 +591,7 @@ namespace RTC_Utils
      */
     State getState()
     {
-      ACE_Guard<ACE_Thread_Mutex> guard(m_mutex);
+      Guard guard(m_mutex);
       return m_states.curr;
     }
     
@@ -617,7 +618,7 @@ namespace RTC_Utils
      */
     bool isIn(State state)
     {
-      ACE_Guard<ACE_Thread_Mutex> guard(m_mutex);
+      Guard guard(m_mutex);
       return m_states.curr == state ? true : false;
     }
     
@@ -649,7 +650,7 @@ namespace RTC_Utils
      */
     void goTo(State state)
     {
-      ACE_Guard<ACE_Thread_Mutex> guard(m_mutex);
+      Guard guard(m_mutex);
       m_states.next = state;
       if (m_states.curr == state)
 	{
@@ -821,24 +822,24 @@ namespace RTC_Utils
      */
     States m_states;
     bool m_selftrans;
-    ACE_Thread_Mutex m_mutex;
+    Mutex m_mutex;
     
   private:
     inline void sync(States& st)
     {
-      ACE_Guard<ACE_Thread_Mutex> guard(m_mutex);
+      Guard guard(m_mutex);
       st = m_states;
     }
     
     inline bool need_trans()
     {
-      ACE_Guard<ACE_Thread_Mutex> guard(m_mutex);
+      Guard guard(m_mutex);
       return (m_states.curr != m_states.next);
     }
     
     inline void update_curr(const State curr)
     {
-      ACE_Guard<ACE_Thread_Mutex> guard(m_mutex);
+      Guard guard(m_mutex);
       m_states.curr = curr;
     }
   };

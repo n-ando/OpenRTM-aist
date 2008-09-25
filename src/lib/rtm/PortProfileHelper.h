@@ -25,10 +25,10 @@
 #include "rtm/Util.h"
 
 // ACE includes
-#include <ace/Thread_Mutex.h>
+#include <coil/Mutex.h>
 
 // CORBA header include
-#include "rtm/idl/RTCSkel.h"
+#include "rtm_corba/idl/RTCSkel.h"
 
 
 
@@ -56,6 +56,8 @@ namespace RTC
    */
   class PortProfileHelper
   {
+    typedef coil::Mutex Mutex;
+
   public:
     PortProfileHelper();
     virtual ~PortProfileHelper();
@@ -532,7 +534,7 @@ namespace RTC
     // PortProfile.interfaces
     typedef SequenceEx<PortInterfaceProfileList,
 		       PortInterfaceProfile,
-		       ACE_Thread_Mutex> IfProfiles;
+		       Mutex> IfProfiles;
     IfProfiles m_ifProfiles;
 
     // PortProfile.port_ref
@@ -541,7 +543,7 @@ namespace RTC
     // PortProfile.connector_profile
     typedef SequenceEx<ConnectorProfileList,
 		       ConnectorProfile,
-		       ACE_Thread_Mutex> ConnProfiles;
+		       Mutex> ConnProfiles;
     ConnProfiles m_connProfiles ;
 
     // PortProfile.owner
@@ -551,7 +553,7 @@ namespace RTC
     NVList m_properties;
 
     // Mutex
-    mutable ACE_Thread_Mutex m_mutex;
+    mutable Mutex m_mutex;
 
 
     // Functor to find PortInterfaceProfile by name

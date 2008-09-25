@@ -20,7 +20,7 @@
 #ifndef OutPortCorbaProvider_h
 #define OutPortCorbaProvider_h
 
-#include <rtm/idl/DataPortSkel.h>
+#include <rtm_corba/idl/DataPortSkel.h>
 #include <rtm/BufferBase.h>
 #include <rtm/OutPortProvider.h>
 #include <rtm/CORBA_SeqUtil.h>

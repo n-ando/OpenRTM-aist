@@ -20,18 +20,7 @@
 #define CORBA_Util_h
 
 #include <rtm/RTC.h>
-#include <ace/Guard_T.h>
-#include <ace/Thread_Mutex.h>
-#include <ace/Recursive_Thread_Mutex.h>
-
-
-typedef ACE_Guard<ACE_Thread_Mutex> Guard;
-typedef ACE_Read_Guard<ACE_Thread_Mutex> Read_Guard;
-typedef ACE_Write_Guard<ACE_Thread_Mutex> Write_Guard;
-
-typedef ACE_Guard<ACE_Recursive_Thread_Mutex> Guard_r;
-typedef ACE_Read_Guard<ACE_Recursive_Thread_Mutex> Read_Guard_r;
-typedef ACE_Write_Guard<ACE_Recursive_Thread_Mutex> Write_Guard_r;
+#include <coil/Guard.h>
 
 
 /*!
@@ -332,7 +321,7 @@ namespace CORBA_Sequence_Util
   template <class T>
   struct LockedStruct
   {
-    ACE_Thread_Mutex lock;
+    coil::Mutex lock;
     T                data;
   };
   
@@ -368,6 +357,7 @@ namespace CORBA_Sequence_Util
   class SequenceEx
     : public CorbaSequence
   {
+    typedef coil::Guard<coil::Mutex> Guard;
   public:
     /*!
      * @if jp
@@ -625,7 +615,7 @@ namespace CORBA_Sequence_Util
      */
     void resize(CORBA::ULong new_size, SequenceItem& item)
     {
-      ACE_Write_Guard<Mutex> gaurd(lock);
+      Guard gaurd(lock);
       CORBA::ULong len(this->length);
       if (new_size > len) // Widen sequence
 	{
@@ -665,7 +655,7 @@ namespace CORBA_Sequence_Util
      */
     void insert(CORBA::ULong position, const SequenceItem& item)
     {
-      ACE_Write_Guard<Mutex> gaurd(lock);
+      Guard gaurd(lock);
       CORBA::ULong len(this->length());
       // allowed position: [0, len]
       if (position > len) throw; // InvalidParameter("Invalid index");
@@ -707,7 +697,7 @@ namespace CORBA_Sequence_Util
      */
     SequenceItem erase(CORBA::ULong position)
     {
-      ACE_Write_Guard<Mutex> gaurd(lock);
+      Guard gaurd(lock);
       CORBA::ULong len(this->length());
       // allowed position: [0, len)
       if (position > (len - 1)) throw; // InvalidParameter("Invalid index");
@@ -751,7 +741,7 @@ namespace CORBA_Sequence_Util
     template <class Predicate>
     SequenceItem erase_if(Predicate f)
     {
-      ACE_Write_Guard<Mutex> gaurd(lock);
+      Guard gaurd(lock);
       CORBA::ULong len(this->length());
       for (CORBA::ULong i = 0; i < len; ++i)
 	if (f((*this)[i]))
@@ -783,7 +773,7 @@ namespace CORBA_Sequence_Util
      */ 
     void push_back(const SequenceItem& item)
     {
-      ACE_Write_Guard<Mutex> gaurd(lock);
+      Guard gaurd(lock);
       CORBA::ULong len(this->length());
       this->length(len + 1);
       (*this)[len] = item;
@@ -808,7 +798,7 @@ namespace CORBA_Sequence_Util
      */
     void pop_back()
     {
-      ACE_Write_Guard<Mutex> gaurd(lock);
+      Guard gaurd(lock);
       CORBA::ULong len(this->length());
       this->len(len - 1);
     }
@@ -823,7 +813,7 @@ namespace CORBA_Sequence_Util
     template <class F>
     SequenceItem find(F f) const
     {
-      ACE_Read_Guard<Mutex> guard(lock);
+      Guard guard(lock);
       CORBA::ULong len(this->length());
       for (CORBA::ULong i = 0; i < len; ++i)
 	if (f((*this)[i]))

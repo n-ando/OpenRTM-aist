@@ -8,10 +8,10 @@
 AUTOMAKE_OPTIONS = 1.4
 
 ARTLIB = @ARTLIB@
-SUBDIRS = idl . @UNITTEST@
+SUBDIRS = . @UNITTEST@
 
-AM_CPPFLAGS=-I$(top_srcdir) -I$(top_srcdir)/rtm/idl
-AM_LDFLAGS=-L$(top_builddir) -L$(top_builddir)/rtm -L$(top_builddir)/rtm/idl
+AM_CPPFLAGS=-I$(top_srcdir)/src/lib -I$(top_srcdir)/src/lib/coil/include -I$(top_srcdir)/src/lib/rtm_corba -I$(top_srcdir)/src/lib/rtm_corba/idl
+AM_LDFLAGS=-L$(top_builddir) -L$(top_builddir)/rtm -L$(top_builddir)/src/lib/rtm_corba/idl -L$(top_builddir)/src/lib/coil/lib
 
 # version.h would be generated from configure before lib build process.
 BUILT_SOURCES = version.h
@@ -33,12 +33,8 @@ lib_LTLIBRARIES = libRTC.la
 #	ObjectManager.cpp
 
 UTIL_SRC =             \
-	Task.cpp       \
-	TaskPosix.cpp  \
-	DynamicLib.cpp \
 	NVUtil.cpp     \
 	Properties.cpp \
-	StringUtil.cpp \
 	RTCUtil.cpp
 
 MGR_SRC =                      \
@@ -50,8 +46,7 @@ MGR_SRC =                      \
 	ManagerConfig.cpp      \
 	ModuleManager.cpp      \
 	NamingManager.cpp      \
-	NumberingPolicy.cpp    \
-	Timer.cpp
+	NumberingPolicy.cpp
 
 COMP_SRC =                           \
 	DataFlowComponentBase.cpp    \
@@ -88,11 +83,14 @@ libRTC_la_SOURCES = \
 	$(UTIL_SRC) $(MGR_SRC) $(COMP_SRC) $(PORT_SRC)
 
 
-libRTC_la_LIBADD = $(top_builddir)/rtm/idl/libRTCSkel.la
+libRTC_la_LIBADD = \
+	$(top_builddir)/src/lib/coil/lib/libcoil.a \
+	$(top_builddir)/src/lib/rtm_corba/idl/libRTCSkel.la
+
 # $(top_builddir)/rtm/idl/libRTCStub.la $(ARTLIB)
 libRTC_la_LDFLAGS =                 \
 	-no-undefined               \
-	-L$(top_builddir)/rtm/idl   \
+	-L$(top_builddir)/src/lib/rtm_corba/idl   \
 	-release $(PACKAGE_VERSION) \
 	-version-info 0:4:0
 
@@ -114,7 +112,6 @@ rtmheader_HEADERS = \
 	InPortTcpSockConsumer.h      \
 	InPortTcpSockProvider.h      \
 	TcpSockServer.h              \
-	Listener.h                   \
 	ObjectManager.h              \
 	OutPort.h                    \
 	OutPortConsumer.h            \
@@ -128,8 +125,6 @@ rtmheader_HEADERS = \
 	SdoService.h                 \
 	StateMachine.h               \
 	SystemLogger.h               \
-	TimeValue.h                  \
-	UUID.h                       \
 	config_rtc.h
 
 
@@ -193,4 +188,4 @@ EXTRA_DIST = \
 	$(rtmheader_HEADERS) \
 	libRTC.vcproj.yaml
 
-DIST_SUBDIRS = idl tests
+DIST_SUBDIRS = tests

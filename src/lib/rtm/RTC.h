@@ -24,7 +24,7 @@
 #ifdef ORB_IS_MICO
 #include <CORBA.h>
 #include <coss/CosNaming.h>
-#include <rtm/idl/RTC.h>
+#include <rtm_corba/idl/RTC.h>
 #endif
 
 #ifdef ORB_IS_TAO
@@ -43,7 +43,7 @@
 #include <omnithread.h>
 #endif
 
-#include "rtm/idl/OpenRTMSkel.h"
+#include "rtm_corba/idl/OpenRTMSkel.h"
 
 #ifdef RTC_CORBA_CXXMAPPING11
 #define RefCountServantBase ServantBase
