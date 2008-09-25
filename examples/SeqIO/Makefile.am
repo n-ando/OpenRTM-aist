@@ -7,8 +7,8 @@
 
 AUTOMAKE_OPTIONS = 1.9
 
-AM_CPPFLAGS=-I$(top_srcdir) -I$(top_srcdir)/rtm/idl
-AM_LDFLAGS=-L$(top_builddir) -L$(top_builddir)/rtm -L$(top_builddir)/rtm/idl
+AM_CPPFLAGS=-I$(top_srcdir)/src/lib -I$(top_srcdir)/src/lib/coil/include -I$(top_srcdir)/src/lib/rtm_corba -I$(top_srcdir)/src/lib/rtm_corba/idl
+AM_LDFLAGS=-L$(top_builddir) -L$(top_builddir)/src/lib/rtm -L$(top_builddir)/src/lib/rtm_corba/idl
 
 #------------------------------------------------------------
 # Targets
@@ -23,24 +23,24 @@ socomp_LTLIBRARIES = SeqIn.la SeqOut.la
 
 SeqIn_la_SOURCES = SeqIn.cpp SeqIn.h
 SeqIn_la_LDFLAGS = -module
-SeqIn_la_FLAGS   = -L$(top_builddir)/rtm/.lib
-SeqIn_la_LIBADD  = $(top_builddir)/rtm/libRTC.la
+SeqIn_la_FLAGS   = -L$(top_builddir)/src/lib/rtm/.lib
+SeqIn_la_LIBADD  = $(top_builddir)/src/lib/rtm/libRTC.la
 
 SeqOut_la_SOURCES = SeqOut.cpp SeqOut.h
 SeqOut_la_LDFLAGS = -module
-SeqOut_la_FLAGS   = -L$(top_builddir)/rtm/.lib
-SeqOut_la_LIBADD  = $(top_builddir)/rtm/libRTC.la
+SeqOut_la_FLAGS   = -L$(top_builddir)/src/lib/rtm/.lib
+SeqOut_la_LIBADD  = $(top_builddir)/src/lib/rtm/libRTC.la
 
 # Standalone RTCs
 example_PROGRAMS = SeqInComp SeqOutComp
 
 SeqInComp_SOURCES = SeqInComp.cpp 
-SeqInComp_LDFLAGS = -L$(top_builddir)/rtm/.libs
-SeqInComp_LDADD = $(top_builddir)/rtm/libRTC.la SeqIn.o
+SeqInComp_LDFLAGS = -L$(top_builddir)/src/lib/rtm/.libs
+SeqInComp_LDADD = $(top_builddir)/src/lib/rtm/libRTC.la SeqIn.o
 
 SeqOutComp_SOURCES = SeqOutComp.cpp 
-SeqOutComp_LDFLAGS = -L$(top_builddir)/rtm/.libs
-SeqOutComp_LDADD = $(top_builddir)/rtm/libRTC.la SeqOut.o
+SeqOutComp_LDFLAGS = -L$(top_builddir)/src/lib/rtm/.libs
+SeqOutComp_LDADD = $(top_builddir)/src/lib/rtm/libRTC.la SeqOut.o
 
 # Example sources
 source_DATA = $(ALL_SRC) $(EXTRA_DIST)

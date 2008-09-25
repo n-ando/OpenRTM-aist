@@ -10,7 +10,7 @@
 #ifndef CONSOLEOUT_H
 #define CONSOLEOUT_H
 
-#include <rtm/idl/BasicDataTypeSkel.h>
+#include <rtm_corba/idl/BasicDataTypeSkel.h>
 #include <rtm/Manager.h>
 #include <rtm/DataFlowComponentBase.h>
 #include <rtm/CorbaPort.h>

@@ -11,8 +11,8 @@ IDLC = @IDLC@
 IDLFLAGS = @IDL_FLAGS@
 LIBS = @LIBS@
 
-AM_CPPFLAGS=-I$(top_srcdir) -I$(top_srcdir)/rtm/idl
-AM_LDFLAGS=-L$(top_builddir) -L$(top_builddir)/rtm -L$(top_builddir)/rtm/idl
+AM_CPPFLAGS=-I$(top_srcdir)/src/lib -I$(top_srcdir)/src/lib/coil/include -I$(top_srcdir)/src/lib/rtm_corba -I$(top_srcdir)/src/lib/rtm_corba/idl
+AM_LDFLAGS=-L$(top_builddir) -L$(top_builddir)/src/lib/rtm -L$(top_builddir)/src/lib/rtm_corba/idl
 
 #------------------------------------------------------------
 # Some rules for IDL compile
@@ -81,25 +81,25 @@ socomp_LTLIBRARIES = MyServiceProvider.la MyServiceConsumer.la
 
 dist_MyServiceProvider_la_SOURCES = $(PROVIDER_DIST_SRC) $(PROVIDER_DIST_H) 
 MyServiceProvider_la_LDFLAGS = -module
-MyServiceProvider_la_FLAGS   = -L$(top_builddir)/rtm/.libs -L.
-MyServiceProvider_la_LIBADD  = $(top_builddir)/rtm/libRTC.la -lMyServiceSkel
+MyServiceProvider_la_FLAGS   = -L$(top_builddir)/src/lib/rtm/.libs -L.
+MyServiceProvider_la_LIBADD  = $(top_builddir)/src/lib/rtm/libRTC.la -lMyServiceSkel
 
 dist_MyServiceConsumer_la_SOURCES = $(CONSUMER_DIST_SRC) $(CONSUMER_DIST_H)
 MyServiceConsumer_la_LDFLAGS = -module
-MyServiceConsumer_la_FLAGS   = -L$(top_builddir)/rtm/.libs
-MyServiceConsumer_la_LIBADD  = $(top_builddir)/rtm/libRTC.la -lMyServiceStub
+MyServiceConsumer_la_FLAGS   = -L$(top_builddir)/src/lib/rtm/.libs
+MyServiceConsumer_la_LIBADD  = $(top_builddir)/src/lib/rtm/libRTC.la -lMyServiceStub
 
 # Standalone RTCs
 example_PROGRAMS = MyServiceProviderComp MyServiceConsumerComp
 MyServiceProviderComp_SOURCES = MyServiceProviderComp.cpp
-MyServiceProviderComp_LDFLAGS = -L$(top_builddir)/rtm/.libs
+MyServiceProviderComp_LDFLAGS = -L$(top_builddir)/src/lib/rtm/.libs
 MyServiceProviderComp_LDADD   = .libs/MyServiceProvider.a \
-	$(top_builddir)/rtm/libRTC.la
+	$(top_builddir)/src/lib/rtm/libRTC.la
 
 MyServiceConsumerComp_SOURCES = MyServiceConsumerComp.cpp
-MyServiceConsumerComp_LDFLAGS = -L$(top_builddir)/rtm/.libs
+MyServiceConsumerComp_LDFLAGS = -L$(top_builddir)/src/lib/rtm/.libs
 MyServiceConsumerComp_LDADD   = .libs/MyServiceConsumer.a \
-	$(top_builddir)/rtm/libRTC.la
+	$(top_builddir)/src/lib/rtm/libRTC.la
 
 
 # Example sources
