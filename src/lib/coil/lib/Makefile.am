@@ -18,3 +18,4 @@ all:
 
 clean-local:
 	rm -f *~
+	rm -f libcoil*
