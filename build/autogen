@@ -167,6 +167,7 @@ do_prepare()
 
     echo " Copying libtool.m4 from ${libtool_m4}"
     cp -f ${libtool_m4} libtool.m4
+    cp -f ${libtool_m4} src/lib/coil/libtool.m4
     echo ""
 }
 
