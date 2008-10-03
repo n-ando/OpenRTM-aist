@@ -31,32 +31,54 @@ namespace coil
   public:
     Mutex()
     {
-      ::InitializeCriticalSection(&mutex_);
+		m_Security_attr.nLength = sizeof(SECURITY_ATTRIBUTES);
+		m_Security_attr.lpSecurityDescriptor = NULL;
+		m_Security_attr.bInheritHandle = TRUE;
+		m_hMutex = ::CreateMutex( &m_Security_attr,
+		                          FALSE,
+								  NULL );
     }
 
     ~Mutex()
     {
-      ::DeleteCriticalSection(&mutex_);
+		::CloseHandle(m_hMutex);
+		
     }
 
     inline void lock()
     {
-      ::EnterCriticalSection(&mutex_);
+		::WaitForSingleObject(m_hMutex,INFINITE);
     }
 
     inline bool trylock()
     {
-		return ::TryEnterCriticalSection(&mutex_) ? true : false;
+        unsigned long dwret;
+		dwret = ::WaitForSingleObject(m_hMutex,0);
+        switch(dwret)
+		{
+		  case WAIT_ABANDONED:
+			  return true;
+			  break;
+		  case WAIT_OBJECT_0:
+			  return false;
+		  case WAIT_TIMEOUT:
+			  return true;
+		  default:
+			  return true;
+		}
     }
 
     inline void unlock()
     {
-      ::LeaveCriticalSection(&mutex_);
+		::ReleaseMutex(m_hMutex);
     }
     CRITICAL_SECTION mutex_;
     
   private:
-    Mutex(const Mutex&);
+    pthread_mutex_t m_hMutex;
+    SECURITY_ATTRIBUTES m_Security_attr;
+
+	Mutex(const Mutex&);
     Mutex& operator=(const Mutex &);
   };
 };
