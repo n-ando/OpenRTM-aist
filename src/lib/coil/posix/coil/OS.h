@@ -58,19 +58,19 @@ namespace coil
   {
   public:
     GetOpt(int argc, char* const argv[], const char* opt, int flag)
-      : m_argc(argc), m_argv(*argv), m_opt(opt), m_flag(flag)
+      : m_argc(argc), m_argv(argv), m_opt(opt), m_flag(flag)
     {
       this->optarg = ::optarg;
     }
 
     int operator()()
     {
-      return getopt(m_argc, &m_argv, m_opt);
+      return getopt(m_argc, m_argv, m_opt);
     }
     char* optarg;
   private:
     int m_argc;
-    char* const m_argv;
+    char* const * m_argv;
     const char* m_opt;
     int m_flag;
   };
