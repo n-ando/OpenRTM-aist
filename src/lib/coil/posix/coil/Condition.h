@@ -41,29 +41,25 @@ namespace coil
 
     inline void signal()
     {
-      m_mutex.trylock();
       ::pthread_cond_signal(&m_cond);
     }
 
     inline void broadcast()
     {
-      m_mutex.trylock();
       ::pthread_cond_broadcast(&m_cond);
     }
 
     bool wait()
     {
-      m_mutex.trylock();
       return 0 == ::pthread_cond_wait(&m_cond, &m_mutex.mutex_);
     }
 
     bool wait(long second, long nano_second = 0)
     {
-      m_mutex.trylock();
       timespec abstime;
       abstime.tv_sec = std::time(0) + second;
       abstime.tv_nsec = nano_second;
-      return 0 == ::pthread_cond_timedwait(m_cond, &m_mutex.mutex_, &abstime);
+      return 0 == ::pthread_cond_timedwait(&m_cond, &m_mutex.mutex_, &abstime);
     }
 
   private:
