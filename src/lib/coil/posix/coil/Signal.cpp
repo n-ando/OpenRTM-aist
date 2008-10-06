@@ -19,6 +19,7 @@
 
 #include <coil/config_coil.h>
 #include <coil/Signal.h>
+#include <string.h>
 
 #ifdef COIL_OS_FREEBSD
 #define _SIGSET_NWORDS _SIG_WORDS
@@ -31,29 +32,12 @@ namespace coil
   {
   }
 
-  SignalAction::SignalAction(SignalHandler handle, int signum,
-                             sigset_t *mask, int flags)
-    : m_handle(handle), m_signum(signum), m_mask(mask), m_flags(flags)
+  SignalAction::SignalAction(SignalHandler handle, int signum)
+    : m_handle(handle), m_signum(signum), m_mask(0), m_flags(0)
   {
     struct sigaction action;
+    memset(&action, 0, sizeof(action));  // clear.
     action.sa_handler = m_handle;
-    if (m_mask)
-      {
-        action.sa_mask = *m_mask;
-      }
-    else
-      {
-        for (unsigned int i(0); i < _SIGSET_NWORDS; ++i)
-          {
-#ifdef COIL_OS_FREEBSD
-            action.sa_mask.__bits[i] = 0;
-#else
-            action.sa_mask.__val[i] = 0;
-#endif
-
-          }
-      }
-    action.sa_flags = m_flags;
 
     signal(m_signum, SIG_IGN);
     if (sigaction(m_signum, &action, 0) < 0)
