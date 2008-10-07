@@ -37,7 +37,7 @@ namespace coil
   struct utsname
   {
     char sysname[COIL_UTSNAME_LENGTH];
-    char nodenam[COIL_UTSNAME_LENGTH];
+    char nodename[COIL_UTSNAME_LENGTH];
     char release[COIL_UTSNAME_LENGTH];
     char version[COIL_UTSNAME_LENGTH];
     char machine[COIL_UTSNAME_LENGTH];
@@ -52,13 +52,13 @@ namespace coil
     ::strcpy(name->sysname, "Win32");
 
     // name.release, name.version
-    LPOSVERSIONINFO version_info;
-    version_info.dwOSVersionInfoSize = sizeof(ACE_TEXT_OSVERSIONINFO);
+    OSVERSIONINFO version_info;
+    version_info.dwOSVersionInfoSize = sizeof(OSVERSIONINFO);
     if (::GetVersionEx(&version_info) == false)
       ret = -1;
 
     const char *os;
-    if (vinfo.dwPlatformId == VER_PLATFORM_WIN32_NT)
+    if (version_info.dwPlatformId == VER_PLATFORM_WIN32_NT)
       {
         os = "Windows NT %d.%d";
       }
@@ -73,12 +73,12 @@ namespace coil
 
     sprintf(name->version, "Build %d %s",
             (int) version_info.dwBuildNumber,
-            vinfo.szCSDVersion);
+            version_info.szCSDVersion);
 
     // name.machine
-    LPSYSTEM_INFO sys_info;
+    SYSTEM_INFO sys_info;
     GetSystemInfo(&sys_info);
-    WORD arch = sysinfo.wProcessorArchitecture;
+    WORD arch = sys_info.wProcessorArchitecture;
     char cputype[COIL_UTSNAME_LENGTH/2];
     char subtype[COIL_UTSNAME_LENGTH/2];
 
@@ -106,11 +106,11 @@ namespace coil
     sprintf(name->machine, "%s %s", cputype, subtype);
 
     // name.nodename
-    if (::GetComputerNameEx(ComputerNameDnsHostname,
-                            name->nodename,
-                            COIL_UTSNAME_LENGTH) == false)
+    DWORD len = COIL_UTSNAME_LENGTH;
+    if (GetComputerNameExA(ComputerNameDnsHostname,
+							name->nodename,
+                            &len) == false)
       ret = -1;
-
     return ret;
   }
 
@@ -142,7 +142,7 @@ namespace coil
   int getopt(int nargc, char * const *nargv, const char *ostr)
   {
     static char *place = EMSG;		/* option letter processing */
-    char *oli;			/* option letter list index */
+    const char *oli;			/* option letter list index */
     char *p;
     
     if (optreset || !*place) {		/* update scanning pointer */
