@@ -54,20 +54,41 @@ namespace coil
   }
 
 
+  /* Global Variables for getopt() */
+
   class GetOpt
   {
   public:
     GetOpt(int argc, char* const argv[], const char* opt, int flag)
-      : m_argc(argc), m_argv(argv), m_opt(opt), m_flag(flag)
+      : m_argc(argc), m_argv(argv), m_opt(opt), m_flag(flag), optind(1), opterr(1), optopt(0)
     {
       this->optarg = ::optarg;
+      ::optind = 1;
+    }
+
+    ~GetOpt()
+    {
+      ::optind = 1;
     }
 
     int operator()()
     {
-      return getopt(m_argc, m_argv, m_opt);
+      ::opterr = opterr;
+      ::optind = optind;
+
+      int result = getopt(m_argc, m_argv, m_opt);
+
+      optarg = ::optarg;
+      optind = ::optind;
+      optopt = ::optopt;
+
+      return result;
     }
-    char* optarg;
+    char* optarg;     //! オプション引数
+    int optind;       //! 処理対象引数
+    int opterr;       //! エラー表示 0:抑止、1:表示
+    int optopt;       //! オプション文字が足りない時、多い時にセットされる
+
   private:
     int m_argc;
     char* const * m_argv;
