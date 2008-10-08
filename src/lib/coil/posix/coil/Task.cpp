@@ -55,6 +55,7 @@ namespace coil
                          &m_attr,
                          (void* (*)(void*))Task::svc_run,
                          this);
+        ++m_count;
       };
   }
 
