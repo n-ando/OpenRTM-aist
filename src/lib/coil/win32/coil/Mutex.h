@@ -34,26 +34,26 @@ namespace coil
 		m_Security_attr.nLength = sizeof(SECURITY_ATTRIBUTES);
 		m_Security_attr.lpSecurityDescriptor = NULL;
 		m_Security_attr.bInheritHandle = TRUE;
-		m_hMutex = ::CreateMutex( &m_Security_attr,
+		Mutex_ = ::CreateMutex( &m_Security_attr,
 		                          FALSE,
 								  NULL );
     }
 
     ~Mutex()
     {
-		::CloseHandle(m_hMutex);
+		::CloseHandle(Mutex_);
 		
     }
 
     inline void lock()
     {
-		::WaitForSingleObject(m_hMutex,INFINITE);
+		::WaitForSingleObject(Mutex_,INFINITE);
     }
 
     inline bool trylock()
     {
         unsigned long dwret;
-		dwret = ::WaitForSingleObject(m_hMutex,0);
+		dwret = ::WaitForSingleObject(Mutex_,0);
         switch(dwret)
 		{
 		  case WAIT_ABANDONED:
@@ -70,12 +70,11 @@ namespace coil
 
     inline void unlock()
     {
-		::ReleaseMutex(m_hMutex);
+		::ReleaseMutex(Mutex_);
     }
-    CRITICAL_SECTION mutex_;
+    pthread_mutex_t Mutex_;
     
   private:
-    pthread_mutex_t m_hMutex;
     SECURITY_ATTRIBUTES m_Security_attr;
 
 	Mutex(const Mutex&);
