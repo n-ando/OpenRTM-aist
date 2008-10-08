@@ -21,6 +21,8 @@
 
 
 #include <windows.h>
+//#include <winsock2.h>
+//#pragma comment(lib, "WS2_32.LIB")
 #include <time.h>
 #include <coil/config_coil.h>
 #include <coil/TimeValue.h>
@@ -32,34 +34,113 @@ struct timezone {
 	  int tz_minuteswest;
 	  int tz_dsttime;
   };
-
 inline unsigned int sleep(unsigned int seconds)
   {
-    timeval tv;
-    tv.tv_sec = seconds;
-    tv.tv_usec = 0;
-    return ::select(0, 0, 0, 0, &tv);
+
+    ::Sleep( seconds *1000 );
+    return 0;
   }
 
+//static short m_time_DLLinit_count = 0;
   inline int sleep(TimeValue& interval)
   {
-//    timeval tv;
-//    tv.tv_sec = interval.sec();
-//    tv.tv_usec = interval.usec();
-//	::Sleep(tv.tv_sec * 1000);
-//	::Sleep(tv.tv_usec / 1000);
-    timeval tv;
+    struct timeval tv;
+    WSADATA wsa;
+    SOCKET ssoc;
+    fd_set mask;
+    WORD ver;
+    int iret;
+
+    //The WSAStartup function initiates use of the Winsock DLL by a process.
+    ver = MAKEWORD(2,2);
+    iret = ::WSAStartup(ver,&wsa);
+    if( iret != 0 ) 
+    {
+        return iret;
+    }
+
+    //The socket function creates a socket that is bound to a specific transport service provider.
+    ssoc = ::socket(AF_INET,      //It is assumed AF_INET because there is no AF_UNIX for Windows.
+                    SOCK_STREAM,
+                    0);
+    if(ssoc==INVALID_SOCKET){
+      iret = ::WSAGetLastError();
+      ::WSACleanup();
+      return iret;  
+    }
+
+
+    //Initialize fd_set. 
+    FD_ZERO(&mask);
+    //Register the reading socket.
+    FD_SET(ssoc,&mask);
+
     tv.tv_sec = interval.sec();
     tv.tv_usec = interval.usec();
-    return ::select(0, 0, 0, 0, &tv);
+    iret = ::select((int)ssoc+1, &mask, NULL, NULL, &tv);
+    if( iret == SOCKET_ERROR ) 
+    {
+      iret = ::WSAGetLastError();
+      //The closesocket function closes an existing socket.
+      ::closesocket(ssoc);
+      //The WSACleanup function terminates use of the Winsock 2 DLL (Ws2_32.dll).
+      ::WSACleanup();
+      return iret;  
+    }
+
+    //The closesocket function closes an existing socket.
+    ::closesocket(ssoc);
+
+    //The WSACleanup function terminates use of the Winsock 2 DLL (Ws2_32.dll).
+    ::WSACleanup();
+    return iret;
   }
 
   inline int usleep(unsigned int usec)
   {
-    timeval tv;
-    tv.tv_sec = 0;
-    tv.tv_usec = usec;
-    return ::select(0, 0, 0, 0, &tv);
+    struct timeval tv;
+    int iret;
+    WORD ver;
+    WSADATA wsa;
+    fd_set mask;
+    SOCKET ssoc;
+
+    //The WSAStartup function initiates use of the Winsock DLL by a process.
+    ver = MAKEWORD(2,2);
+    iret = ::WSAStartup(ver,&wsa);
+    if( iret != 0 ) 
+    {
+        return iret;
+    }
+
+    //The socket function creates a socket that is bound to a specific transport service provider.
+    ssoc = ::socket(AF_INET,SOCK_STREAM,0);
+    if(ssoc==INVALID_SOCKET){
+      iret = ::WSAGetLastError();
+      ::WSACleanup();
+      return iret;  
+    }
+    FD_ZERO(&mask);
+    FD_SET(ssoc,&mask);
+    
+    tv.tv_sec = usec / 1000000;
+    tv.tv_usec = usec % 1000000;
+    iret = ::select((int)ssoc+1, &mask, NULL, NULL, &tv);
+    if( iret == SOCKET_ERROR ) 
+    {
+      iret = ::WSAGetLastError();
+      //The closesocket function closes an existing socket.
+      ::closesocket(ssoc);
+      //The WSACleanup function terminates use of the Winsock 2 DLL (Ws2_32.dll).
+      ::WSACleanup();
+      return iret;  
+    }
+    //The closesocket function closes an existing socket.
+    ::closesocket(ssoc);
+    //The WSACleanup function terminates use of the Winsock 2 DLL (Ws2_32.dll).
+    ::WSACleanup();
+    return iret;
+
   }
 
   inline int gettimeofday(struct timeval *tv, struct timezone *tz)
