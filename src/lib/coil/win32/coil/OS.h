@@ -19,8 +19,10 @@
 #ifndef COIL_OS_H
 #define COIL_OS_H
 
-#include <string.h>
+
+
 #include <windows.h>
+#include <string.h>
 #include <stdio.h>
 #include <process.h>
 #include <stdlib.h>
@@ -110,7 +112,7 @@ namespace coil
     if (GetComputerNameExA(ComputerNameDnsHostname,
 							name->nodename,
                             &len) == false)
-      ret = -1;
+    ret = -1;
     return ret;
   }
 
@@ -147,9 +149,33 @@ namespace coil
     
     if (optreset || !*place) {		/* update scanning pointer */
       optreset = 0;
-      if (optind >= nargc || *(place = nargv[optind]) != '-') {
+      /* Check that the scanning reached the last element. */
+      if (optind >= nargc)
+      { 
         place = EMSG;
         return(-1);
+      }
+      for(;;)
+      {
+        /* Check that the scanning reached the last element. */
+        if (optind >= nargc)
+        {                
+          place = EMSG;
+          return(-1);
+        }
+        place = nargv[optind];
+        /* Check that the first character of the element is '-'. */
+        if (*place != '-')
+        {                  
+          /* When the head of the element is not '-',        */
+          /* Scan the next element disregarding the element. */
+          optind++;
+                   
+        }
+        else
+        {
+          break;
+        }
       }
       if (place[1] && *++place == '-') {	/* found "--" */
         ++optind;
@@ -211,21 +237,43 @@ namespace coil
   {
   public:
     GetOpt(int argc, char* const argv[], const char* opt, int flag)
-      : m_argc(argc), m_argv(*argv), m_opt(opt), m_flag(flag)
+      : m_argc(argc), m_argv(argv), m_opt(opt), m_flag(flag), optind(1), opterr(1), optopt(0)
+
     {
-      this->optarg = ::optarg;
+      this->optarg = coil::optarg;
+      coil::optind = 1;
+    }
+
+    ~GetOpt()
+    {
+      coil::optind = 1;
     }
 
     int operator()()
     {
-      return coil::getopt(m_argc, &m_argv, m_opt);
+      coil::opterr = opterr;
+      coil::optind = optind;
+
+      int result = getopt(m_argc, m_argv, m_opt);
+
+      optarg = coil::optarg;
+      optind = coil::optind;
+      optopt = coil::optopt;
+
+      return result;
     }
-    char* optarg;
+    char* optarg;     //! オプション引数
+    int optind;       //! 処理対象引数
+    int opterr;       //! エラー表示 0:抑止、1:表示
+    int optopt;       //! オプション文字が足りない時、多い時にセットされる
+ 
+
   private:
     int m_argc;
-    char* const m_argv;
+    char* const * m_argv;
     const char* m_opt;
     int m_flag;
+
   };
     
 };
