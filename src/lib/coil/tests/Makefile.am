@@ -8,7 +8,13 @@
 SUBDIRS = \
 	TimeValue \
 	Task      \
-	Timer
+	Timer     \
+	Mutex     \
+        Guard     \
+        Listener  \
+        Timer     \
+        Time      \
+        OS
 
 
 clean-local:
