@@ -44,6 +44,8 @@ namespace OS
     CPPUNIT_TEST(test_invalid_option);
     CPPUNIT_TEST(test_not_option);
     CPPUNIT_TEST(test_arg_option);
+    CPPUNIT_TEST(test_uname);
+    CPPUNIT_TEST(test_getenv);
     CPPUNIT_TEST_SUITE_END();
   
   private:
@@ -198,6 +200,58 @@ namespace OS
       
       result = go();
       CPPUNIT_ASSERT_EQUAL(-1, result);
+    }
+    /*
+    ---------------------------------------------------------------------------
+    This function tests the Task::open function and the coill::uname function.
+     -coil::uname
+     -coil::getpid
+    ---------------------------------------------------------------------------
+    */
+    void test_uname()
+    {
+      coil::utsname  sysinfo;
+      int iret;
+      iret = coil::uname(&sysinfo);
+
+      coil::pid_t pid = coil::getpid();
+      char pidc[8];
+      sprintf(pidc, "%d", pid);
+
+      std::cout<<"manager.os.name:"<<sysinfo.sysname<<std::endl;
+      std::cout<<"manager.os.release:"<<sysinfo.release<<std::endl;
+      std::cout<<"manager.os.version:"<<sysinfo.version<<std::endl;
+      std::cout<<"manager.os.arch:"<<sysinfo.machine<<std::endl;
+      std::cout<<"manager.os.hostname:"<<sysinfo.nodename<<std::endl;
+      std::cout<<"manager.pid:"<<pidc<<std::endl;
+      
+
+      CPPUNIT_ASSERT(iret == 0 );
+
+    }
+    /*
+    ---------------------------------------------------------------------------
+    This function tests the Task::open function and the coill::getenv function.
+
+    Please confirm environment variable and 'const char* config_file_env' 
+    before executing this test.  
+    ---------------------------------------------------------------------------
+    */
+    void test_getenv()
+    {
+      // Environment value to specify configuration file
+      const char* config_file_env = "JAVA_HOME";
+
+      // Search rtc configuration file from environment variable
+      char* env = getenv(config_file_env);
+
+      if (env != NULL)
+      {
+        std::cout<<env<<std::endl;
+      }
+      CPPUNIT_ASSERT(env != NULL );
+
+      
     }
 
   };
