@@ -50,6 +50,7 @@ namespace coil
     int m_closeflag;
     HINSTANCE m_handle;
     int m_error;
+    char m_strbuf[256];
   };
 
 };
