@@ -41,9 +41,11 @@ namespace Condition
   class ConditionCheckTask : public coil::Task
   {
   public:
-    ConditionCheckTask() { id = 0; }
+    ConditionCheckTask() : id(0) { }
     ConditionCheckTask(coil::Mutex & aMutex, coil::Condition<coil::Mutex> & aCondition, int anId)
-        : mutex(&aMutex), cond(&aCondition), id(anId) { }
+        : mutex(&aMutex), cond(&aCondition), id(anId) {
+//        std::cout << "Task(" << id << ") created." << std::endl;
+        }
     ~ConditionCheckTask() { };
     virtual int svc()
     {
@@ -137,9 +139,17 @@ namespace Condition
 
       CPPUNIT_ASSERT_EQUAL(0x00, ConditionCheckTask::getStatus());
 
+      mu1.lock();
       cond1.signal();
+      mu1.unlock();
+
+      mu1.lock();
       cond1.signal();
+      mu1.unlock();
+
+      mu2.lock();
       cond2.wait(1);
+      mu2.unlock();
       CPPUNIT_ASSERT_EQUAL(id1 + id2, ConditionCheckTask::getStatus());
     }
 
@@ -160,17 +170,26 @@ namespace Condition
       ConditionCheckTask cct2(*mu, cd, 0x02);
       ConditionCheckTask cct1(*mu, cd, 0x01);
 
-      cct1.activate();
-      cct2.activate();
-      cct3.activate();
-      cct4.activate();
-      cct5.activate();
       cct6.activate();
+      cct5.activate();
+      cct4.activate();
+      cct3.activate();
+      cct2.activate();
+      cct1.activate();
 
       CPPUNIT_ASSERT_EQUAL(0, ConditionCheckTask::getStatus());
 
+      mu2.lock();
+      cond2.wait(0, 300000000);
+      mu2.unlock();
+
+      mu->lock();
       cd.broadcast();
+      mu->unlock();
+
+      mu2.lock();
       cond2.wait(1);
+      mu2.unlock();
 
 //      std::cout << "Status is : " << ConditionCheckTask::getStatus() << std::endl;
       CPPUNIT_ASSERT_EQUAL(0x3f, ConditionCheckTask::getStatus());
@@ -185,9 +204,11 @@ namespace Condition
     {
       int waitSec(2);
       coil::Condition<coil::Mutex> cd(*mu);
-      std::cout << "Before wait " << waitSec << " sec." << std::endl << std::flush;
+//      std::cout << "Before wait " << waitSec << " sec." << std::endl << std::flush;
+      mu->lock();
       int result = cd.wait(waitSec);
-      std::cout << " After wait (result:" << result << ")" << std::endl;
+      mu->unlock();
+//      std::cout << " After wait (result:" << result << ")" << std::endl;
       
       CPPUNIT_ASSERT(true);
     }
