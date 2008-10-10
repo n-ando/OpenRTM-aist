@@ -45,8 +45,8 @@ namespace coil
   DynamicLib::DynamicLib(const DynamicLib& rhs)
     : m_name(""), m_mode(0), m_closeflag(0), m_handle(0)
   {
-    if (rhs.m_name.empty() &&
-        open(rhs.m_name.c_str(), rhs.m_mode, rhs.m_closeflag) != 0)
+    if (!rhs.m_name.empty() &&
+        open(rhs.m_name.c_str(), rhs.m_mode, rhs.m_closeflag) == 0)
       return;
     throw std::bad_alloc();
   }
