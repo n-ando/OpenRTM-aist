@@ -92,17 +92,21 @@ namespace coil
   const char* DynamicLib::error(void) const
   {
     DWORD dwcode;
-    char cstr[256] = "";
+    static char cstr[256] = "";
+
     /* Get the error code. */
     dwcode = ::GetLastError();
+
     /* Clear the error code. */
     ::SetLastError(ERROR_SUCCESS);
+
     /* Because it is a normal termination when the error code is 0, */
     /* return NULL. */
     if(dwcode == 0 ) 
     {
       return NULL;
     }
+
     /* Convert the error code into the message. */
 	::FormatMessage(
 		FORMAT_MESSAGE_FROM_SYSTEM |
@@ -114,8 +118,7 @@ namespace coil
 		256,
 		NULL
 	);
-    ::strcpy((char*)m_strbuf,cstr);
-    return m_strbuf;
+    return cstr;
   }
 };
 
