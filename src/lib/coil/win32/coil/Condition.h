@@ -23,6 +23,7 @@
 #include <windows.h>
 #include <algorithm>
 #include <coil/Mutex.h>
+#include <iostream>
 
 namespace coil
 {
@@ -32,7 +33,7 @@ namespace coil
     int waiters_count_;
     
     // Serialize access to <waiters_count_>.
-    CRITICAL_SECTION waiters_count_lock_;
+    coil::Mutex waiters_count_lock_;
 
     // Semaphore used to queue up threads waiting for the condition to
     // become signaled. 
@@ -58,29 +59,85 @@ namespace coil
                                   0,          // initially 0
                                   0x7fffffff, // max count
                                   NULL);      // unnamed 
-    InitializeCriticalSection (&cv->waiters_count_lock_);
 	cv->waiters_done_ = ::CreateEvent (NULL,  // no security
                                      FALSE, // auto-reset
                                      FALSE, // non-signaled initially
                                      NULL); // unnamed
 	return 0;
   }
-  
-  
-  int pthread_cond_wait (coil::pthread_cond_t *cv, pthread_mutex_t *external_mutex)
+
+  template <class M>
+  class Condition
   {
+  public:
+    Condition(M& mutex)
+      : m_mutex(mutex)
+    {
+      pthread_cond_init(&m_cond);
+    }
+    ~Condition()
+    {
+    }
+
+    inline void signal()
+    {
+      pthread_cond_signal(&m_cond);
+    }
+
+    inline void broadcast()
+    {
+      pthread_cond_broadcast(&m_cond);
+    }
+
+    bool wait()
+    {
+	  return 0 == pthread_cond_wait(&m_cond, &m_mutex, INFINITE);
+	}
+
+    bool wait(long second, long nano_second = 0)
+    {
+      DWORD milli_second = second * 1000 + nano_second / 1000000;
+      return 0 == pthread_cond_wait(&m_cond, &m_mutex, milli_second);
+    }
+
+  private:
+
+  int pthread_cond_wait (coil::pthread_cond_t *cv, coil::Mutex *external_mutex, DWORD aMilliSecond)
+  {
+    DWORD result;
+
     // Avoid race conditions.
-    EnterCriticalSection (&cv->waiters_count_lock_);
+    cv->waiters_count_lock_.lock();
     cv->waiters_count_++;
-    LeaveCriticalSection (&cv->waiters_count_lock_);
+    cv->waiters_count_lock_.unlock();
     
     // This call atomically releases the mutex and waits on the
     // semaphore until <pthread_cond_signal> or <pthread_cond_broadcast>
     // are called by another thread.
-    SignalObjectAndWait (*external_mutex, cv->sema_, INFINITE, FALSE);
-    
+//    std::cout << "Before SignalObjectAndWait [wait with time(" << milliSecond << ")]" << std::endl << std::flush ; 
+    result = SignalObjectAndWait (external_mutex->mutex_, cv->sema_, aMilliSecond, FALSE);
+
+//    char * p;
+//    switch (result) {
+//    case WAIT_ABANDONED :
+//        p = "Abandoned";
+//        break;
+//    case WAIT_OBJECT_0 :
+//        p = "Signaled";
+//        break;
+//    case WAIT_TIMEOUT :
+//        p = "Timeout";
+//        break;
+//    default :
+//        p = "Other !?";
+//        break;
+//    }
+//      std::cout << "After SignalObjectAndWait [wait with time(" << milliSecond << ")]" 
+//        << " result(" << result << ":" << p << ")"
+//        << std::endl << std::flush ; 
+
     // Reacquire lock to avoid race conditions.
-    EnterCriticalSection (&cv->waiters_count_lock_);
+    cv->waiters_count_lock_.lock();
     
     // We're no longer waiting...
     cv->waiters_count_--;
@@ -88,41 +145,43 @@ namespace coil
     // Check to see if we're the last waiter after <pthread_cond_broadcast>.
     int last_waiter = cv->was_broadcast_ && cv->waiters_count_ == 0;
     
-    LeaveCriticalSection (&cv->waiters_count_lock_);
+    cv->waiters_count_lock_.unlock();
     
     // If we're the last waiter thread during this particular broadcast
     // then let all the other threads proceed.
-    if (last_waiter)
+    if (last_waiter) {
       // This call atomically signals the <waiters_done_> event and
       // waits until it can acquire the <external_mutex>.  This is
       // required to ensure fairness.
-      SignalObjectAndWait (cv->waiters_done_, *external_mutex, INFINITE, FALSE);
-    else
+      result = SignalObjectAndWait (cv->waiters_done_, external_mutex->mutex_, INFINITE, FALSE);
+//      std::cout << "result " << result << std::endl;
+    } else {
       // Always regain the external mutex since that's the guarantee we
       // give to our callers. 
-	  ::WaitForSingleObject (*external_mutex, 0);
-	return 0;
+      ::WaitForSingleObject (external_mutex->mutex_, 0);
+    }
+  return 0;
   }
-  
-  
+
   int pthread_cond_signal (pthread_cond_t *cv)
   {
-    EnterCriticalSection (&cv->waiters_count_lock_);
+    cv->waiters_count_lock_.lock();
     int have_waiters = cv->waiters_count_ > 0;
-    LeaveCriticalSection (&cv->waiters_count_lock_);
+    cv->waiters_count_lock_.unlock();
     
     // If there aren't any waiters, then this is a no-op.  
     if (have_waiters)
+//    std::cout << "Before ReleaseSemaphore(1)" << std::endl << std::flush ; 
       ReleaseSemaphore (cv->sema_, 1, 0);
+//    std::cout << "After ReleaseSemaphore(1)" << std::endl << std::flush ; 
 	return 0;
   }
-  
-  
+
   int pthread_cond_broadcast (pthread_cond_t *cv)
   {
     // This is needed to ensure that <waiters_count_> and <was_broadcast_> are
     // consistent relative to each other.
-    EnterCriticalSection (&cv->waiters_count_lock_);
+    cv->waiters_count_lock_.lock();
     int have_waiters = 0;
     
     if (cv->waiters_count_ > 0) {
@@ -135,10 +194,12 @@ namespace coil
     
     if (have_waiters) {
       // Wake up all the waiters atomically.
+//    std::cout << "Before ReleaseSemaphore(" << cv->waiters_count_ << ")" << std::endl << std::flush ; 
       ReleaseSemaphore (cv->sema_, cv->waiters_count_, 0);
+//    std::cout << "After ReleaseSemaphore(" << cv->waiters_count_ << ")" << std::endl << std::flush ; 
       
-      LeaveCriticalSection (&cv->waiters_count_lock_);
-      
+    cv->waiters_count_lock_.unlock();
+
       // Wait for all the awakened threads to acquire the counting
       // semaphore. 
       WaitForSingleObject (cv->waiters_done_, INFINITE);
@@ -147,63 +208,15 @@ namespace coil
       cv->was_broadcast_ = 0;
     }
     else
-      LeaveCriticalSection (&cv->waiters_count_lock_);
+    cv->waiters_count_lock_.unlock();
 	return 0;
   }
-  
 
-  template <class M>
-  class Condition
-  {
-  public:
-    Condition(M& mutex)
-      : m_mutex(mutex)
-    {
-      coil::pthread_cond_init(&m_cond, 0);
-    }
-    ~Condition()
-    {
-      ::pthread_cond_destroy(&m_cond);
-    }
-
-    inline void signal()
-    {
-      m_mutex.trylock();
-      coil::pthread_cond_signal(&m_cond);
-    }
-
-    inline void broadcast()
-    {
-      m_mutex.trylock();
-      coil::pthread_cond_broadcast(&m_cond);
-    }
-
-    bool wait()
-    {
-      m_mutex.trylock();
-      return 0 == coil::pthread_cond_wait(&m_cond, &m_mutex.mutex_);
-    }
-
-    bool wait(long second, long nano_second = 0)
-    {
-      m_mutex.trylock();
-      timespec abstime;
-      abstime.tv_sec = std::time(0) + second;
-      abstime.tv_nsec = nano_second;
-      return 0 == coil::pthread_cond_timedwait(m_cond,
-                                               &m_mutex.mutex_,
-                                               &abstime);
-    }
-
-  private:
     Condition(const Mutex&);
     Condition& operator=(const Mutex &);
     coil::pthread_cond_t m_cond;
     M& m_mutex;
-  };
+  };  // class Condition
 
-
-
-
-};
+};    // namespace Coil
 #endif // COIL_CONDITION_H
