@@ -198,6 +198,7 @@ COIL_PLATFORM_H = \
 # coil common source
 COIL_COMMON_SRC = \
 	stringutil.cpp \
+	Properties.cpp \
 	TimeValue.cpp  \
 	Timer.cpp
 

@@ -27,6 +27,7 @@ COIL_PLATFORM_H   =    \
 # coil common source
 COIL_COMMON_SRC =      \
 	stringutil.cpp \
+	Properties.cpp \
 	TimeValue.cpp  \
 	Timer.cpp
 
@@ -46,6 +47,7 @@ config_coil.h:
 	cp $(top_srcdir)/config_coil.h .
 
 $(COIL_COMMON_SRC):
+	cp $(top_srcdir)/config_coil.h .
 	cp $(top_srcdir)/common/*.cpp .
 	cp $(top_srcdir)/common/*.h .
 	qkc -ms *.cpp *.h
