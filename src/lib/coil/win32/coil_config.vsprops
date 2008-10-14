@@ -43,10 +43,10 @@
 	/>
 	<UserMacro
 		Name="coil_libd"
-		Value="advapi32.lib ws2_32.lib mswsock.lib $(user_libd)"
+		Value="advapi32.lib ws2_32.lib mswsock.lib coild$(coil_dllver).lib $(user_libd)"
 	/>
 	<UserMacro
 		Name="coil_lib"
-		Value="advapi32.lib ws2_32.lib mswsock.lib $(user_lib)"
+		Value="advapi32.lib ws2_32.lib mswsock.lib coil$(coil_dllver).lib $(user_lib)"
 	/>
 </VisualStudioPropertySheet>
