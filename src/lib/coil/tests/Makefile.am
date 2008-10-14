@@ -14,7 +14,8 @@ SUBDIRS = \
         Listener  \
         Timer     \
         Time      \
-        OS
+        OS        \
+        DynamicLib
 
 
 clean-local:
