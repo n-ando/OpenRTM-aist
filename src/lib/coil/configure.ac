@@ -110,7 +110,7 @@ case $system in
 	AC_DEFINE([COIL_OS_LINUX], [TRUE], [OS is Linux])
 	AC_DEFINE([_REENTRANT], [TRUE], [Multi Thread Support])
 	AC_DEFINE([COIL_PLATFORM], [POSIX], [Platform is POSIX])
-	LDFLAGS="$LDFLAGS -luuid -ldl"
+	LDFLAGS="$LDFLAGS -luuid -ldl -lcoil"
 	COIL_PLATFORM=posix
 	;;	
 [HP-UX*)]
@@ -515,6 +515,12 @@ AC_OUTPUT([Makefile
 	tests/TimeValue/Makefile
 	tests/Task/Makefile
 	tests/Timer/Makefile
+	tests/Guard/Makefile
+	tests/Listener/Makefile
+	tests/Time/Makefile
+	tests/Mutex/Makefile
+	tests/OS/Makefile
+	tests/DynamicLib/Makefile
 	])
 
 dnl ------------------------------------------------------------
