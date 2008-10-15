@@ -18,7 +18,8 @@ AUTOMAKE_OPTIONS = 1.9
 
 AM_CPPFLAGS= -I.                  \
 	-I$(includedir)           \
-	-I$(top_builddir)
+	-I$(top_builddir)         \
+	-I$(top_srcdir)/include
 
 AM_LDFLAGS= -L.                   \
 	-L$(top_builddir)
@@ -28,7 +29,7 @@ noinst_PROGRAMS = OSTests
 
 OSTests_SOURCES = ../TestRunner.cpp OSTests.cpp
 OSTests_LDFLAGS = -L$(libdir)
-OSTests_LDADD   = -lcppunit
+OSTests_LDADD   = -lcppunit -lcoil
 
 TEST_SRC = $(OSTests_SOURCES)
 TEST_H   = 
