@@ -18,7 +18,8 @@ AUTOMAKE_OPTIONS = 1.9
 
 AM_CPPFLAGS= -I.                  \
 	-I$(includedir)           \
-	-I$(top_builddir)
+	-I$(top_builddir)         \
+	-I$(top_srcdir)/include
 
 AM_LDFLAGS= -L.                   \
 	-L$(top_builddir)
@@ -28,7 +29,7 @@ noinst_PROGRAMS = MutexTests
 
 MutexTests_SOURCES = ../TestRunner.cpp MutexTests.cpp
 MutexTests_LDFLAGS = -L$(libdir)
-MutexTests_LDADD   = -lcppunit
+MutexTests_LDADD   = -lcppunit -lcoil
 
 TEST_SRC = $(MutexTests_SOURCES)
 TEST_H   = 
