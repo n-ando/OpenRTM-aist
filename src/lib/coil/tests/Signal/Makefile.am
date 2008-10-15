@@ -18,7 +18,8 @@ AUTOMAKE_OPTIONS = 1.9
 
 AM_CPPFLAGS= -I.                  \
 	-I$(includedir)           \
-	-I$(top_builddir)
+	-I$(top_builddir)         \
+	-I$(top_srcdir)/include
 
 AM_LDFLAGS= -L.                   \
 	-L$(top_builddir)
@@ -28,7 +29,7 @@ noinst_PROGRAMS = SignalTests
 
 SignalTests_SOURCES = ../TestRunner.cpp SignalTests.cpp
 SignalTests_LDFLAGS = -L$(libdir)
-SignalTests_LDADD   = -lcppunit
+SignalTests_LDADD   = -lcppunit -lcoil
 
 TEST_SRC = $(SignalTests_SOURCES)
 TEST_H   = 
