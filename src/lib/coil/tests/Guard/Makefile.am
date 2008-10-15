@@ -18,7 +18,8 @@ AUTOMAKE_OPTIONS = 1.9
 
 AM_CPPFLAGS= -I.                  \
 	-I$(includedir)           \
-	-I$(top_builddir)
+	-I$(top_builddir)         \
+	-I$(top_srcdir)/include
 
 AM_LDFLAGS= -L.                   \
 	-L$(top_builddir)
@@ -28,7 +29,7 @@ noinst_PROGRAMS = GuardTests
 
 GuardTests_SOURCES = ../TestRunner.cpp GuardTests.cpp
 GuardTests_LDFLAGS = -L$(libdir)
-GuardTests_LDADD   = -lcppunit
+GuardTests_LDADD   = -lcppunit -lcoil
 
 TEST_SRC = $(GuardTests_SOURCES)
 TEST_H   = 
