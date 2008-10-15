@@ -39,7 +39,7 @@
 #include <cppunit/extensions/HelperMacros.h>
 #include <cppunit/TestAssert.h>
 #include <fstream>
-#include <rtm/Properties.h>
+#include <coil/Properties.h>
 
 /*!
  * @class PropertiesTests class
@@ -76,7 +76,8 @@ namespace Properties
     string EMPTY_STRING;
     map<string, string> DEFAULTS_CONF;
 		
-    RTC::Properties* m_prop;
+//    RTC::Properties* m_prop;
+    coil::Properties* m_prop;
     
   public:
     /*!
@@ -138,7 +139,7 @@ namespace Properties
       string oldValue = "old-value";
       string newValue = "new-value";
 			
-      RTC::Properties prop;
+      coil::Properties prop;
       prop.setProperty(key, oldValue);
 			
       // (1) 設定時に指定した値が、正しく設定されるか？
@@ -163,7 +164,8 @@ namespace Properties
      */		
     void test_getProperty()
     {
-      RTC::Properties prop;
+//      RTC::Properties prop;
+      coil::Properties prop;
 			
       prop.setDefault("property_1", "default_1");
       prop.setProperty("property_1", "value_1");
@@ -199,7 +201,7 @@ namespace Properties
      */
     void test_getDefault()
     {
-      RTC::Properties prop;
+      coil::Properties prop;
 			
       string key1 = "key1";
       string key1DefaultValue = "key1-default-value";
@@ -241,7 +243,7 @@ namespace Properties
      */
     void test_createNode()
     {
-      RTC::Properties prop;
+      coil::Properties prop;
 			
       string key1 = "key1";
       string key1DefaultValue = "key1-default-value";
@@ -283,7 +285,7 @@ namespace Properties
     void test_substitute()
     {
       // 代入元となるPropertiesを作成する
-      RTC::Properties propSrc;
+      coil::Properties propSrc;
 			
       // (1) デフォルト値、通常値のいずれも設定されている場合
       string key1 = "key1";
@@ -303,7 +305,7 @@ namespace Properties
       propSrc.setProperty(key3, key3Value);
 			
       // 代入を行い、それぞれの場合で、正しく代入されたことを確認する
-      RTC::Properties prop;
+      coil::Properties prop;
       prop = propSrc;
 			
       CPPUNIT_ASSERT_EQUAL(key1DefaultValue, prop.getDefault(key1));
@@ -326,7 +328,7 @@ namespace Properties
     void test_streamInput()
     {
       // 入力元となるPropertiesの１つ目を作成する
-      RTC::Properties propA;
+      coil::Properties propA;
 			
       string keyA1 = "keyA1";
       string keyA1DefaultValue = "keyA1-default-value";
@@ -343,7 +345,7 @@ namespace Properties
       propA.setProperty(keyA3, keyA3Value);
 			
       // 入力元となるPropertiesの２つ目を作成する
-      RTC::Properties propB;
+      coil::Properties propB;
 			
       string keyB1 = "keyB1";
       string keyB1DefaultValue = "keyB1-default-value";
@@ -402,7 +404,7 @@ namespace Properties
      */
     void test_splitKeyValue() {
 			
-      class P : public RTC::Properties
+      class P : public coil::Properties
       {
       public:
 	void splitKeyValue_protected(const std::string& str, std::string& key, std::string& value)
@@ -434,7 +436,7 @@ namespace Properties
     void test_load()
     {
       // プロパティリストをファイルからPropertiesオブジェクトへ読み込む
-      RTC::Properties prop;
+      coil::Properties prop;
       std::ifstream ifl("defaults.conf");
       prop.load(ifl);
       ifl.close();
@@ -460,7 +462,7 @@ namespace Properties
     void test_store()
     {
       // テスト用のプロパティを設定する
-      RTC::Properties prop;
+      coil::Properties prop;
       prop.setProperty("rtc.component.conf.path", "C:\\Program\\ Files\\OpenRTM-aist");
       prop.setProperty("rtc.manager.arch", "i386");
       prop.setProperty("rtc.manager.debug.level", "PARANOID");
@@ -530,7 +532,7 @@ namespace Properties
      */
     void test_list()
     {
-      RTC::Properties prop;
+      coil::Properties prop;
       prop.setProperty("rtc.component.conf.path", "C:\\Program\\ Files\\OpenRTM-aist");
       prop.setProperty("rtc.manager.arch", "i386");
       prop.setProperty("rtc.manager.debug.level", "PARANOID");
@@ -612,7 +614,8 @@ namespace Properties
       defaults["rtc.openrtm.version"] = "0.4.0";
 			
       // mapによるデフォルト値指定でPropertiesオブジェクトを生成する
-      RTC::Properties prop(defaults);
+//      RTC::Properties prop(defaults);
+      coil::Properties prop(defaults);
 			
       // 各プロパティのデフォルト値および通常値がいずれも、コンストラクタで指定した値で取得されることを確認する
       for (map<string, string>::iterator it = defaults.begin(); it != defaults.end(); it++) {
@@ -644,7 +647,7 @@ namespace Properties
 	""
       };
 			
-      RTC::Properties prop(defaults);
+      coil::Properties prop(defaults);
       // 各プロパティのデフォルト値および通常値がいずれも、コンストラクタで指定した値で取得されることを確認する
       for (int i = 0; defaults[i] != ""; i += 2) {
 	string key = defaults[i];
@@ -665,7 +668,7 @@ namespace Properties
      */
     void test_propertyNames()
     {
-      RTC::Properties prop;
+      coil::Properties prop;
 			
       // (1) 通常のプロパティ値とデフォルト値の両方を設定する
       prop.setProperty("property_01", "value_01");
