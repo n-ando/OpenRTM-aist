@@ -18,7 +18,8 @@ AUTOMAKE_OPTIONS = 1.9
 
 AM_CPPFLAGS= -I.                  \
 	-I$(includedir)           \
-	-I$(top_builddir)
+	-I$(top_builddir)         \
+	-I$(top_srcdir)/include
 
 AM_LDFLAGS= -L.                   \
 	-L$(top_builddir)
@@ -28,7 +29,7 @@ noinst_PROGRAMS = TaskTests
 
 TaskTests_SOURCES = ../TestRunner.cpp TaskTests.cpp
 TaskTests_LDFLAGS = -L$(libdir)
-TaskTests_LDADD   = -lcppunit
+TaskTests_LDADD   = -lcppunit -lcoil
 
 TEST_SRC = $(TaskTests_SOURCES)
 TEST_H   = 
