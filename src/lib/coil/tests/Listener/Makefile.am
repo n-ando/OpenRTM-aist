@@ -18,7 +18,8 @@ AUTOMAKE_OPTIONS = 1.9
 
 AM_CPPFLAGS= -I.                  \
 	-I$(includedir)           \
-	-I$(top_builddir)
+	-I$(top_builddir)         \
+	-I$(top_srcdir)/include
 
 AM_LDFLAGS= -L.                   \
 	-L$(top_builddir)
@@ -28,7 +29,7 @@ noinst_PROGRAMS = ListenerTests
 
 ListenerTests_SOURCES = ../TestRunner.cpp ListenerTests.cpp
 ListenerTests_LDFLAGS = -L$(libdir)
-ListenerTests_LDADD   = -lcppunit
+ListenerTests_LDADD   = -lcppunit -lcoil
 
 TEST_SRC = $(ListenerTests_SOURCES)
 TEST_H   = 
