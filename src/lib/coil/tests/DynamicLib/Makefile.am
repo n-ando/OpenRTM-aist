@@ -18,7 +18,8 @@ AUTOMAKE_OPTIONS = 1.9
 
 AM_CPPFLAGS= -I.                  \
 	-I$(includedir)           \
-	-I$(top_builddir)
+	-I$(top_builddir)         \
+	-I$(top_srcdir)/include
 
 AM_LDFLAGS= -L.                   \
 	-L$(top_builddir)
@@ -28,7 +29,7 @@ noinst_PROGRAMS = DynamicLibTests
 
 DynamicLibTests_SOURCES = ../TestRunner.cpp DynamicLibTests.cpp
 DynamicLibTests_LDFLAGS = -L$(libdir)
-DynamicLibTests_LDADD   = -lcppunit
+DynamicLibTests_LDADD   = -lcppunit -lcoil
 
 TEST_SRC = $(DynamicLibTests_SOURCES)
 TEST_H   = 
