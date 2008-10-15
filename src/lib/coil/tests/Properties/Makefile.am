@@ -32,7 +32,8 @@ LIBS = @LIBS@
 AM_CPPFLAGS =             \
 	 -I.              \
 	-I$(top_builddir) \
-	-I$(includedir)
+	-I$(includedir)   \
+	-I$(top_srcdir)/include
 
 
 AM_LDFLAGS =              \
@@ -44,8 +45,8 @@ noinst_PROGRAMS = PropertiesTests
 
 nodist_PropertiesTests_SOURCES =           \
 	../TestRunner.cpp                  \
-	$(top_builddir)/rtm/Properties.cpp \
-	$(top_builddir)/rtm/StringUtil.cpp \
+	$(top_builddir)/common/Properties.cpp \
+	$(top_builddir)/common/stringutil.cpp \
 	PropertiesTests.cpp
 
 PropertiesTests_LDFLAGS = -L$(libdir)
