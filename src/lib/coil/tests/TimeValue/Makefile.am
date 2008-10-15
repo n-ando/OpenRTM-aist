@@ -18,7 +18,8 @@ AUTOMAKE_OPTIONS = 1.9
 
 AM_CPPFLAGS= -I.                  \
 	-I$(includedir)           \
-	-I$(top_builddir)
+	-I$(top_builddir)         \
+	-I$(top_srcdir)/include
 
 AM_LDFLAGS= -L.                   \
 	-L$(top_builddir)
@@ -28,7 +29,7 @@ noinst_PROGRAMS = TimeValueTests
 
 TimeValueTests_SOURCES = ../TestRunner.cpp TimeValueTests.cpp
 TimeValueTests_LDFLAGS = -L$(libdir)
-TimeValueTests_LDADD   = -lcppunit
+TimeValueTests_LDADD   = -lcppunit -lcoil
 
 TEST_SRC = $(TimeValueTests_SOURCES)
 TEST_H   = 
