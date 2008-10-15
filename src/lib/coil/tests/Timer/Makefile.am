@@ -18,7 +18,8 @@ AUTOMAKE_OPTIONS = 1.9
 
 AM_CPPFLAGS= -I.                  \
 	-I$(includedir)           \
-	-I$(top_builddir)
+	-I$(top_builddir)         \
+	-I$(top_srcdir)/include
 
 AM_LDFLAGS= -L.                   \
 	-L$(top_builddir)
@@ -28,7 +29,7 @@ noinst_PROGRAMS = TimerTests
 
 TimerTests_SOURCES = ../TestRunner.cpp TimerTests.cpp
 TimerTests_LDFLAGS = -L$(libdir)
-TimerTests_LDADD   = -lcppunit
+TimerTests_LDADD   = -lcppunit -lcoil
 
 TEST_SRC = $(TimerTests_SOURCES)
 TEST_H   = 
