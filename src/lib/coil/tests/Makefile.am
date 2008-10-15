@@ -6,16 +6,18 @@
 ##---------------------------------------------------------------------------
 
 SUBDIRS = \
-	TimeValue \
-	Task      \
-	Timer     \
-	Mutex     \
-        Guard     \
-        Listener  \
-        Timer     \
-        Time      \
-        OS        \
-        DynamicLib
+        Condition  \
+        DynamicLib \
+        Guard      \
+        Listener   \
+	Mutex      \
+        OS         \
+        Signal     \
+	Task       \
+        Time       \
+	Timer      \
+	TimeValue  \
+	UUID
 
 
 clean-local:
