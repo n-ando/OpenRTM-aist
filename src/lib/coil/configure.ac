@@ -110,7 +110,7 @@ case $system in
 	AC_DEFINE([COIL_OS_LINUX], [TRUE], [OS is Linux])
 	AC_DEFINE([_REENTRANT], [TRUE], [Multi Thread Support])
 	AC_DEFINE([COIL_PLATFORM], [POSIX], [Platform is POSIX])
-	LDFLAGS="$LDFLAGS -luuid -ldl -lcoil"
+	LDFLAGS="$LDFLAGS -luuid -ldl"
 	COIL_PLATFORM=posix
 	;;	
 [HP-UX*)]
