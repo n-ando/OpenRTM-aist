@@ -495,11 +495,9 @@ echo 'WRAPPERS: '$WRAPPERS
 echo '------------------------------------------------------------'
 echo ''
 
+
 AC_OUTPUT([Makefile
 	build/Makefile
-	include/Makefile
-	include/coil/Makefile
-	lib/Makefile
 	common/Makefile
 	posix/Makefile
 	posix/coil/Makefile
@@ -512,21 +510,16 @@ AC_OUTPUT([Makefile
 	ace/build/Makefile
 	ace/coil/Makefile
 	tests/Makefile
-	tests/TimeValue/Makefile
-	tests/Task/Makefile
-	tests/Timer/Makefile
+	tests/Condition/Makefile
+	tests/DynamicLib/Makefile
 	tests/Guard/Makefile
 	tests/Listener/Makefile
-	tests/Time/Makefile
 	tests/Mutex/Makefile
 	tests/OS/Makefile
-	tests/DynamicLib/Makefile
+	tests/Signal/Makefile
+	tests/Task/Makefile
+	tests/Time/Makefile
+	tests/Timer/Makefile
+	tests/TimeValue/Makefile
+	tests/UUID/Makefile
 	])
-
-dnl ------------------------------------------------------------
-dnl rename config header's PACKAGE_* definition
-dnl ------------------------------------------------------------
-mv config_coil.h config_coil.h.org
-sed -e 's/define PACKAGE/define COILPACKAGE/g' config_coil.h.org | sed -e 's/\#define VERSION/\/\/ \#define VERSION/g' > config_coil.h
-rm -f config_coil.h.org
-
