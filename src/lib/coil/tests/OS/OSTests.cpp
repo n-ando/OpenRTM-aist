@@ -240,7 +240,8 @@ namespace OS
     void test_getenv()
     {
       // Environment value to specify configuration file
-      const char* config_file_env = "JAVA_HOME";
+//      const char* config_file_env = "JAVA_HOME";
+      const char* config_file_env = "PATH";
 
       // Search rtc configuration file from environment variable
       char* env = getenv(config_file_env);
