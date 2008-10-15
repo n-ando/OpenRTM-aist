@@ -18,7 +18,8 @@ AUTOMAKE_OPTIONS = 1.9
 
 AM_CPPFLAGS= -I.                  \
 	-I$(includedir)           \
-	-I$(top_builddir)
+	-I$(top_builddir)         \
+	-I$(top_srcdir)/include
 
 AM_LDFLAGS= -L.                   \
 	-L$(top_builddir)
@@ -28,7 +29,7 @@ noinst_PROGRAMS = UUIDTests
 
 UUIDTests_SOURCES = ../TestRunner.cpp UUIDTests.cpp
 UUIDTests_LDFLAGS = -L$(libdir)
-UUIDTests_LDADD   = -lcppunit
+UUIDTests_LDADD   = -lcppunit -lcoil -luuid
 
 TEST_SRC = $(UUIDTests_SOURCES)
 TEST_H   = 
