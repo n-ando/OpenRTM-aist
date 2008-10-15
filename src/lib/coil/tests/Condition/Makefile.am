@@ -18,7 +18,8 @@ AUTOMAKE_OPTIONS = 1.9
 
 AM_CPPFLAGS= -I.                  \
 	-I$(includedir)           \
-	-I$(top_builddir)
+	-I$(top_builddir)         \
+	-I$(top_srcdir)/include
 
 AM_LDFLAGS= -L.                   \
 	-L$(top_builddir)
@@ -28,7 +29,7 @@ noinst_PROGRAMS = ConditionTests
 
 ConditionTests_SOURCES = ../TestRunner.cpp ConditionTests.cpp
 ConditionTests_LDFLAGS = -L$(libdir)
-ConditionTests_LDADD   = -lcppunit
+ConditionTests_LDADD   = -lcppunit -lcoil
 
 TEST_SRC = $(ConditionTests_SOURCES)
 TEST_H   = 
