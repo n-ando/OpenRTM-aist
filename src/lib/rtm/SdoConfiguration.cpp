@@ -49,7 +49,8 @@ namespace SDOPackage
    * @endif
    */
   void 
-  toProperties(RTC::Properties& prop, const SDOPackage::ConfigurationSet& conf)
+//  toProperties(RTC::Properties& prop, const SDOPackage::ConfigurationSet& conf)
+  toProperties(coil::Properties& prop, const SDOPackage::ConfigurationSet& conf)
   {
     NVUtil::copyToProperties(prop, conf.configuration_data);
     //    prop["description"] = conf.description;
@@ -76,9 +77,12 @@ namespace SDOPackage
    * 
    * @endif
    */
+//  void
+//  toConfigurationSet(SDOPackage::ConfigurationSet& conf,
+//		     const RTC::Properties& prop)
   void
   toConfigurationSet(SDOPackage::ConfigurationSet& conf,
-		     const RTC::Properties& prop)
+		     const coil::Properties& prop)
   {
     conf.description = CORBA::string_dup(prop["description"].c_str());
     conf.id = CORBA::string_dup(prop.getName());
@@ -398,7 +402,8 @@ namespace SDOPackage
 	ConfigurationSetList_var config_sets;
 	config_sets = new ConfigurationSetList((CORBA::ULong)0);
 	
-	std::vector<RTC::Properties*> cf(m_configsets.getConfigurationSets());
+//	std::vector<RTC::Properties*> cf(m_configsets.getConfigurationSets());
+	std::vector<coil::Properties*> cf(m_configsets.getConfigurationSets());
 	config_sets->length(cf.size());
 	for (CORBA::ULong i(0), len(cf.size()); i < len; ++i)
 	  {
@@ -441,7 +446,8 @@ namespace SDOPackage
       // throw InvalidParameter("No such ConfigurationSet");
     }
     
-    const RTC::Properties& configset(m_configsets.getConfigurationSet(id));
+//    const RTC::Properties& configset(m_configsets.getConfigurationSet(id));
+    const coil::Properties& configset(m_configsets.getConfigurationSet(id));
     
     try
       {
@@ -476,7 +482,8 @@ namespace SDOPackage
     
     try
       {
-	RTC::Properties conf(id);
+//	RTC::Properties conf(id);
+	coil::Properties conf(id);
 	toProperties(conf, configuration_set);
 	return m_configsets.setConfigurationSetValues(id, conf);
       }
@@ -536,7 +543,8 @@ namespace SDOPackage
       {
 	Guard gurad(m_config_mutex);
 	const char* config_id(configuration_set.id);
-	RTC::Properties config(config_id);
+//	RTC::Properties config(config_id);
+	coil::Properties config(config_id);
 	toProperties(config, configuration_set);
 	return m_configsets.addConfigurationSet(config);
       }
