@@ -20,7 +20,7 @@
 #ifndef PublisherFactory_h
 #define PublisherFactory_h
 
-#include <rtm/Properties.h>
+#include <coil/Properties.h>
 
 namespace RTC
 {
@@ -123,7 +123,7 @@ namespace RTC
      *
      * @endif
      */
-    PublisherBase* create(InPortConsumer* consumer, Properties& property);
+    PublisherBase* create(InPortConsumer* consumer, coil::Properties& property);
     
     /*!
      * @if jp
