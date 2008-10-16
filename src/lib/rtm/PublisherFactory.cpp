@@ -21,7 +21,7 @@
 #include <rtm/PublisherNew.h>
 #include <rtm/PublisherPeriodic.h>
 #include <rtm/PublisherFlush.h>
-#include <rtm/Properties.h>
+#include <coil/Properties.h>
 #include <rtm/NVUtil.h>
 #include <rtm/InPortConsumer.h>
 #include <iostream>
@@ -37,7 +37,7 @@ namespace RTC
    * @endif
    */
   PublisherBase* PublisherFactory::create(InPortConsumer* consumer,
-					  Properties& property)
+					  coil::Properties& property)
   {
     std::string pub_type;
     pub_type = property.getProperty("dataport.subscription_type", "New");
