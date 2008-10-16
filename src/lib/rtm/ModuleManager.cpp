@@ -41,7 +41,7 @@ namespace RTC
    * @brief Constructor
    * @endif
    */
-  ModuleManager::ModuleManager(Properties& prop)
+  ModuleManager::ModuleManager(coil::Properties& prop)
     : m_properties(prop)
   {
     m_configPath      = coil::split(prop[CONFIG_PATH], ",");
