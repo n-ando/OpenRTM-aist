@@ -29,7 +29,7 @@ namespace RTC
    * @brief Constructor
    * @endif
    */
-  FactoryBase::FactoryBase(const Properties& profile)
+  FactoryBase::FactoryBase(const coil::Properties& profile)
     : m_Profile(profile), m_Number(-1)
   {
   }
@@ -52,7 +52,7 @@ namespace RTC
    * @brief Get the component profile
    * @endif
    */
-  Properties& FactoryBase::profile()
+  coil::Properties& FactoryBase::profile()
   {
     return m_Profile;
   }
@@ -76,7 +76,7 @@ namespace RTC
    * @brief Constructor
    * @endif
    */
-  FactoryCXX::FactoryCXX(const Properties& profile,
+  FactoryCXX::FactoryCXX(const coil::Properties& profile,
 			 RtcNewFunc new_func,
 			 RtcDeleteFunc delete_func,
 			 NumberingPolicy* policy)
