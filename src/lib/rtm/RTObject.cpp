@@ -1195,7 +1195,7 @@ namespace RTC
    * @brief [local interface] Set RTC property
    * @endif
    */
-  void RTObject_impl::setProperties(const Properties& prop)
+  void RTObject_impl::setProperties(const coil::Properties& prop)
   {
     m_properties << prop;
     m_profile.instance_name = m_properties["instance_name"].c_str();
@@ -1213,7 +1213,7 @@ namespace RTC
    * @brief [local interface] Get RTC property
    * @endif
    */
-  Properties& RTObject_impl::getProperties()
+  coil::Properties& RTObject_impl::getProperties()
   {
     return m_properties;
   }
