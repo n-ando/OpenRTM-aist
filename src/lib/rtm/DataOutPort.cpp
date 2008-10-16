@@ -70,7 +70,7 @@ namespace RTC
     
     // Pubslihser ¤òÀ¸À®
     PublisherBase* publisher;
-    Properties prop(NVUtil::toProperties(connector_profile.properties));
+    coil::Properties prop(NVUtil::toProperties(connector_profile.properties));
     
     publisher = m_pf.create(s._consumer->clone(), prop);
     
