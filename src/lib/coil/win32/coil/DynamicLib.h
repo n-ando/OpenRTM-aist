@@ -25,6 +25,20 @@
 
 #define COIL_DEFAULT_DYNLIB_MODE DONT_RESOLVE_DLL_REFERENCES
 
+/*!
+ * Test for DLL export.
+ */
+#ifdef TEST_DYNAMIC_LIB
+#  define  DynamicLib_EXPORT __declspec(dllexport)
+#else
+#  define  DynamicLib_EXPORT __declspec(dllimport)
+#endif
+
+extern "C"
+{
+  DynamicLib_EXPORT int ForExternTest(void);
+}
+
 namespace coil
 {
   class DynamicLib
@@ -44,14 +58,15 @@ namespace coil
     virtual int close(void);
     void *symbol (const char* symbol_name);
     const char* error(void) const;
+    static int ForExternTest(void) { return 0xdeadbeef; }
   private:
     std::string m_name;
     int m_mode;
     int m_closeflag;
     HINSTANCE m_handle;
     int m_error;
-  };
+  };  // class DynamicLib
 
-};
+};  // namespace coil
 
 #endif // DynamicLib_h
