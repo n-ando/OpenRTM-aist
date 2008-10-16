@@ -28,7 +28,7 @@ namespace RTC
    * @else
    * @endif
    */
-  ConfigAdmin::ConfigAdmin(RTC::Properties& configsets)
+  ConfigAdmin::ConfigAdmin(coil::Properties& configsets)
     : m_configsets(configsets), m_activeId("default"),
       m_active(true), m_changed(false)
   {
@@ -61,7 +61,7 @@ namespace RTC
   void ConfigAdmin::update(const char* config_set)
   {
     if (m_configsets.hasKey(config_set) == NULL) return;
-    RTC::Properties& prop(*(m_configsets.getNode(config_set)));
+    coil::Properties& prop(*(m_configsets.getNode(config_set)));
     
     for (int i(0), len(m_params.size()); i < len; ++i)
       {
@@ -159,7 +159,7 @@ namespace RTC
    * @brief Get all configuration sets
    * @endif
    */
-  const std::vector<Properties*>& ConfigAdmin::getConfigurationSets()
+  const std::vector<coil::Properties*>& ConfigAdmin::getConfigurationSets()
   {
     return m_configsets.getLeaf();
   }
@@ -171,9 +171,9 @@ namespace RTC
    * @brief Get a configuration set by specified ID
    * @endif
    */
-  const Properties& ConfigAdmin::getConfigurationSet(const char* config_id)
+  const coil::Properties& ConfigAdmin::getConfigurationSet(const char* config_id)
   {
-    Properties* p(m_configsets.getNode(config_id));
+    coil::Properties* p(m_configsets.getNode(config_id));
     if (p == NULL) return m_emptyconf;
     return *p;
   }
@@ -187,12 +187,12 @@ namespace RTC
    */
   bool
   ConfigAdmin::setConfigurationSetValues(const char* config_id,
-					 const RTC::Properties& config_set)
+					 const coil::Properties& config_set)
   {
     if (strcmp(config_set.getName(), config_id) != 0) return false;
     if (!m_configsets.hasKey(config_id))              return false;
     
-    Properties* p(m_configsets.getNode(config_id));
+    coil::Properties* p(m_configsets.getNode(config_id));
     assert(p != NULL);
     *p << config_set;
     
@@ -208,9 +208,9 @@ namespace RTC
    * @brief Get the active configuration set
    * @endif
    */
-  const Properties& ConfigAdmin::getActiveConfigurationSet()
+  const coil::Properties& ConfigAdmin::getActiveConfigurationSet()
   {
-    Properties* p(m_configsets.getNode(m_activeId));
+    coil::Properties* p(m_configsets.getNode(m_activeId));
     if (p == NULL) return m_emptyconf;
     return *p;
   }
@@ -222,7 +222,7 @@ namespace RTC
    * @brief Add the configuration value to the configuration set
    * @endif
    */
-  bool ConfigAdmin::addConfigurationSet(const Properties& configset)
+  bool ConfigAdmin::addConfigurationSet(const coil::Properties& configset)
   {
     if (m_configsets.hasKey(configset.getName())) return false;
     
@@ -231,7 +231,7 @@ namespace RTC
     // Create node
     m_configsets.createNode(node.c_str());
     
-    Properties* p(m_configsets.getNode(node.c_str()));
+    coil::Properties* p(m_configsets.getNode(node.c_str()));
     assert(p != NULL);
     *p << configset;
     m_newConfig.push_back(node);
@@ -256,7 +256,7 @@ namespace RTC
     it = std::find(m_newConfig.begin(), m_newConfig.end(), config_id);
     if (it == m_newConfig.end()) return false;
     
-    Properties* p(m_configsets.getNode(config_id));
+    coil::Properties* p(m_configsets.getNode(config_id));
     if (p != NULL) delete p;
     m_newConfig.erase(it);
     
