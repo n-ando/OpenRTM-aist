@@ -95,8 +95,10 @@ namespace RTC
      * @endif
      */
     template <class DataType, template <class DataType> class Buffer>
+//    DataInPort(const char* name, InPort<DataType, Buffer>& inport,
+//	       Properties& prop)
     DataInPort(const char* name, InPort<DataType, Buffer>& inport,
-	       Properties& prop)
+	       coil::Properties& prop)
       : PortBase(name)
     {
       // PortProfile::properties ¤òÀßÄê
