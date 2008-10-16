@@ -28,7 +28,7 @@
 #include <rtm/OutPort.h>
 #include <rtm/NVUtil.h>
 #include <rtm/PublisherFactory.h>
-#include <rtm/Properties.h>
+#include <coil/Properties.h>
 
 #ifdef RTC_SOCK_DATAPORT
 #include <rtm/OutPortTcpSockProvider.h>
@@ -126,7 +126,7 @@ namespace RTC
      */
     template <class DataType, template <class DataType> class Buffer>
     DataOutPort(const char* name, OutPort<DataType, Buffer>& outport,
-		Properties& prop)
+		coil::Properties& prop)
       : PortBase(name), m_outport(outport)
     {
       // PortProfile::properties ¤òÀßÄê
