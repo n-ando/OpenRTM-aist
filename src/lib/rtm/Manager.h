@@ -281,7 +281,7 @@ namespace RTC
      *
      * @endif
      */
-    Properties& getConfig() { return m_config;}
+    coil::Properties& getConfig() { return m_config;}
     
     /*!
      * @if jp
@@ -509,7 +509,7 @@ namespace RTC
      *
      * @endif
      */
-    bool registerFactory(Properties& profile,
+    bool registerFactory(coil::Properties& profile,
 			 RtcNewFunc new_func,
 			 RtcDeleteFunc delete_func);
     
@@ -1151,7 +1151,7 @@ namespace RTC
      *
      * @endif
      */
-    bool mergeProperty(Properties& prop, const char* file_name);
+    bool mergeProperty(coil::Properties& prop, const char* file_name);
     
     /*!
      * @if jp
@@ -1202,7 +1202,7 @@ namespace RTC
      * @endif
      */
     std::string formatString(const char* naming_format,
-			     Properties& prop);
+			     coil::Properties& prop);
     
     //============================================================
     // protected ÊÑ¿ô
@@ -1278,7 +1278,7 @@ namespace RTC
      * @brief Managaer's configuration Properties
      * @endif
      */
-    Properties m_config;
+    coil::Properties m_config;
     
     /*!
      * @if jp
