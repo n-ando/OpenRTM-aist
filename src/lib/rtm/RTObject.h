@@ -21,7 +21,7 @@
 
 // CORBA header include
 #include "rtm/RTC.h"
-#include "rtm/Properties.h"
+#include "coil/Properties.h"
 #include "rtm_corba/idl/RTCSkel.h"
 #include "rtm_corba/idl/OpenRTMSkel.h"
 #include "rtm/PortBase.h"
@@ -2148,7 +2148,7 @@ namespace RTC
      *
      * @endif
      */
-    void setProperties(const Properties& prop);
+    void setProperties(const coil::Properties& prop);
     
     /*!
      * @if jp
@@ -2171,7 +2171,7 @@ namespace RTC
      *
      * @endif
      */
-    Properties& getProperties();
+    coil::Properties& getProperties();
     
     /*!
      * @if jp
@@ -2612,7 +2612,7 @@ namespace RTC
      * @brief RTC's Property
      * @endif
      */
-    Properties m_properties;
+    coil::Properties m_properties;
     
     /*!
      * @if jp
