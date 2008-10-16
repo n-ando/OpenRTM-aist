@@ -19,7 +19,7 @@
 #ifndef ConfigAdmin_h
 #define ConfigAdmin_h
 
-#include <rtm/Properties.h>
+#include <coil/Properties.h>
 #include <coil/stringutil.h>
 #include <string>
 #include <vector>
@@ -347,7 +347,7 @@ namespace RTC
      *
      * @endif
      */
-    ConfigAdmin(RTC::Properties& prop);
+    ConfigAdmin(coil::Properties& prop);
     
     /*!
      * @if jp
@@ -640,7 +640,7 @@ namespace RTC
      *
      * @endif
      */
-    const std::vector<Properties*>& getConfigurationSets();
+    const std::vector<coil::Properties*>& getConfigurationSets();
     
     /*!
      * @if jp
@@ -669,7 +669,7 @@ namespace RTC
      *
      * @endif
      */
-    const Properties& getConfigurationSet(const char* config_id);
+    const coil::Properties& getConfigurationSet(const char* config_id);
     
     /*!
      * @if jp
@@ -701,7 +701,7 @@ namespace RTC
      * @endif
      */
     bool setConfigurationSetValues(const char* config_id,
-				   const RTC::Properties& configuration_set);
+				   const coil::Properties& configuration_set);
     
     /*!
      * @if jp
@@ -726,7 +726,7 @@ namespace RTC
      *
      * @endif
      */
-    const Properties& getActiveConfigurationSet();
+    const coil::Properties& getActiveConfigurationSet();
     
     /*!
      * @if jp
@@ -751,7 +751,7 @@ namespace RTC
      *
      * @endif
      */
-    bool addConfigurationSet(const Properties& configuration_set);
+    bool addConfigurationSet(const coil::Properties& configuration_set);
     
     /*!
      * @if jp
@@ -825,8 +825,8 @@ namespace RTC
       }
     };
     
-    RTC::Properties& m_configsets;
-    RTC::Properties  m_emptyconf;
+    coil::Properties& m_configsets;
+    coil::Properties  m_emptyconf;
     std::vector<ConfigBase*> m_params;
     std::string m_activeId;
     bool m_active;
