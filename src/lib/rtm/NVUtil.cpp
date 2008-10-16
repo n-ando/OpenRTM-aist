@@ -93,7 +93,8 @@ namespace NVUtil
    * @brief Copy the properties to NVList
    * @endif
    */
-  void copyFromProperties(SDOPackage::NVList& nv, const RTC::Properties& prop)
+//  void copyFromProperties(SDOPackage::NVList& nv, const RTC::Properties& prop)
+  void copyFromProperties(SDOPackage::NVList& nv, const coil::Properties& prop)
   {
     std::vector<std::string> keys;
     keys = prop.propertyNames();
@@ -114,7 +115,8 @@ namespace NVUtil
    * @brief Copy NVList to the Proeprties
    * @endif
    */
-  void copyToProperties(RTC::Properties& prop, const SDOPackage::NVList& nv)
+//  void copyToProperties(RTC::Properties& prop, const SDOPackage::NVList& nv)
+  void copyToProperties(coil::Properties& prop, const SDOPackage::NVList& nv)
   {
     for (CORBA::ULong i(0), len(nv.length()); i < len; ++i)
       {
@@ -147,7 +149,8 @@ namespace NVUtil
 	  m_prop.setProperty(CORBA::string_dup(nv.name), value);
 	};
     }
-    RTC::Properties m_prop;
+//    RTC::Properties m_prop;
+    coil::Properties m_prop;
   };
   
   /*!
@@ -157,7 +160,8 @@ namespace NVUtil
    * @brief Transform NVList to the properties
    * @endif
    */
-  RTC::Properties toProperties(const SDOPackage::NVList& nv)
+//  RTC::Properties toProperties(const SDOPackage::NVList& nv)
+  coil::Properties toProperties(const SDOPackage::NVList& nv)
   {
     to_prop p;
     p = CORBA_SeqUtil::for_each(nv, p);
