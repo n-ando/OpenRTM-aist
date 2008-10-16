@@ -84,7 +84,7 @@ namespace RTC
      * @endif
      */
     PublisherPeriodic(InPortConsumer* consumer,
-		      const Properties& property);
+		      const coil::Properties& property);
     
     /*!
      * @if jp
