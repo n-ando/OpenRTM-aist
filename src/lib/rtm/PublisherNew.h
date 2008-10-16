@@ -84,7 +84,7 @@ namespace RTC
      * @endif
      */
     PublisherNew(InPortConsumer* consumer,
-		 const Properties& property);
+		 const coil::Properties& property);
     
     /*!
      * @if jp
