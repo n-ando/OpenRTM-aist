@@ -17,8 +17,8 @@
  *
  */
 
+#include <coil/Properties.h>
 #include <rtm/PublisherFlush.h>
-#include <rtm/Properties.h>
 #include <rtm/InPortConsumer.h>
 
 namespace RTC
@@ -31,7 +31,7 @@ namespace RTC
    * @endif
    */
   PublisherFlush::PublisherFlush(InPortConsumer* consumer,
-				 const Properties& property)
+				 const coil::Properties& property)
     : m_consumer(consumer)
   {
   }
