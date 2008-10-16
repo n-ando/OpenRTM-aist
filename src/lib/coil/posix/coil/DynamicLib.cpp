@@ -95,3 +95,10 @@ namespace coil
   }
 };
 
+/*!
+ * for unit test.
+ */
+extern "C"
+{
+  int ForExternTest(void) { return coil::DynamicLib::ForExternTest(); }
+}

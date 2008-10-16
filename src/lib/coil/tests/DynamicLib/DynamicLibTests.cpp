@@ -31,19 +31,16 @@
  */
 namespace DynamicLib
 {
-//#if defined COIL_OS_LINUX
-#if 0
-  const char * LibName = "libcoil.so.0";
-  const char * SymbolName = "svc_run";
+#if defined COIL_OS_LINUX
 // #error POSIX.
-
-#elif defined COIL_OS_HPUX
-#     error  HPUX.
+  const char * LibName = "libcoil.so.0";
+//  const char * SymbolName = "svc_run";
+  const char * SymbolName = "ForExternTest";
 
 #else
+// #error WIN32!!
   const char * LibName = "coil.dll";
-  const char * SymbolName = "svc_run";
-//  #error WIN32!!
+  const char * SymbolName = "ForExternTest";
 
 #endif
 
@@ -72,6 +69,7 @@ namespace DynamicLib
      */
     DynamicLibTests()
     {
+
     }
     
     /*!
@@ -86,7 +84,7 @@ namespace DynamicLib
      */
     virtual void setUp()
     {
-    }
+	}
     
     /*!
      * @brief Test finalization

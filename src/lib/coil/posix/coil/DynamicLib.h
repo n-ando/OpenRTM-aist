@@ -25,6 +25,11 @@
 
 #define COIL_DEFAULT_DYNLIB_MODE RTLD_LAZY
 
+extern "C"
+{
+  int ForExternTest(void);
+}
+
 namespace coil
 {
   class DynamicLib
@@ -43,6 +48,7 @@ namespace coil
                      int close_handle_on_destruction = 1);
     virtual int close(void);
     void *symbol (const char* symbol_name);
+    static int ForExternTest(void) { return 0xdeadbeef; }
     const char* error(void) const;
   private:
     std::string m_name;

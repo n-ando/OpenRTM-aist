@@ -16,6 +16,7 @@
  *
  */
 
+#define TEST_DYNAMIC_LIB  1   // Test for DLL export.
 #include <coil/DynamicLib.h>
 
 namespace coil
@@ -122,3 +123,10 @@ namespace coil
   }
 };
 
+/*!
+ * for Testing UnitTest.
+ */
+extern "C"
+{
+  int ForExternTest(void) { return coil::DynamicLib::ForExternTest(); }
+}
