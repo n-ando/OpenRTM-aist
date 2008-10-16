@@ -20,7 +20,7 @@
 #ifndef Factory_h
 #define Factory_h
 
-#include <rtm/Properties.h>
+#include <coil/Properties.h>
 #include <rtm/RTObject.h>
 #include <rtm/NumberingPolicy.h>
 
@@ -137,7 +137,7 @@ namespace RTC
      *
      * @endif
      */
-    FactoryBase(const Properties& profile);
+    FactoryBase(const coil::Properties& profile);
     
     /*!
      * @if jp
@@ -219,7 +219,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual Properties& profile();
+    virtual coil::Properties& profile();
     
     /*!
      * @if jp
@@ -250,7 +250,7 @@ namespace RTC
      * @brief Component profile
      * @endif
      */
-    Properties m_Profile;
+    coil::Properties m_Profile;
     
     /*!
      * @if jp
@@ -320,7 +320,7 @@ namespace RTC
      *
      * @endif
      */
-    FactoryCXX(const Properties& profile,
+    FactoryCXX(const coil::Properties& profile,
 	       RtcNewFunc new_func,
 	       RtcDeleteFunc delete_func,
 	       NumberingPolicy* policy = new DefaultNumberingPolicy());
