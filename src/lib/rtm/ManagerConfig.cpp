@@ -94,7 +94,7 @@ namespace RTC
    * @brief Specify the configuration information to the Property
    * @endif
    */
-  void ManagerConfig::configure(Properties& prop)
+  void ManagerConfig::configure(coil::Properties& prop)
   {
     prop.setDefaults(default_config);
     if (findConfigFile())
@@ -197,7 +197,7 @@ namespace RTC
    * @brief Set system information
    * @endif
    */
-  void ManagerConfig::setSystemInformation(Properties& prop)
+  void ManagerConfig::setSystemInformation(coil::Properties& prop)
   { 
     //
     // Get system information by using ACE_OS::uname (UNIX/Windows)
