@@ -20,7 +20,7 @@
 #ifndef ManagerConfig_h
 #define ManagerConfig_h
 
-#include <rtm/Properties.h>
+#include <coil/Properties.h>
 
 
 namespace RTC
@@ -211,7 +211,7 @@ namespace RTC
      * 
      * @endif
      */
-    void configure(Properties& prop);
+    void configure(coil::Properties& prop);
     
     /*!
      * @if jp
@@ -242,7 +242,7 @@ namespace RTC
      *
      * @endif
      */
-    Properties getConfig() const;
+    coil::Properties getConfig() const;
     
   protected:
     /*!
@@ -341,7 +341,7 @@ namespace RTC
      *
      * @endif
      */
-    void setSystemInformation(Properties& prop);
+    void setSystemInformation(coil::Properties& prop);
     
     /*!
      * @if jp
