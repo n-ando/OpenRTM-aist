@@ -17,9 +17,9 @@
  *
  */
 
+#include <coil/Properties.h>
 #include <rtm/PublisherPeriodic.h>
 #include <rtm/InPortConsumer.h>
-#include <rtm/Properties.h>
 #include <rtm/RTC.h>
 #include <stdlib.h>
 
@@ -33,7 +33,7 @@ namespace RTC
    * @endif
    */
   PublisherPeriodic::PublisherPeriodic(InPortConsumer* consumer,
-				       const Properties& property)
+				       const coil::Properties& property)
     : m_consumer(consumer), m_running(true)
   {
     std::string rate(property.getProperty("dataport.push_rate"));
