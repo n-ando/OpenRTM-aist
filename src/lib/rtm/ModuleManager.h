@@ -30,7 +30,7 @@
 
 // RTC includes
 #include <rtm/Manager.h>
-#include <rtm/Properties.h>
+#include <coil/Properties.h>
 
 
 #define CONFIG_EXT    "manager.modules.config_ext"
@@ -90,7 +90,7 @@ namespace RTC
      *
      * @endif
      */
-    ModuleManager(Properties& prop);
+    ModuleManager(coil::Properties& prop);
     
     /*!
      * @if jp
@@ -613,7 +613,7 @@ namespace RTC
      * @brief Module Manager properties
      * @endif
      */
-    Properties& m_properties;
+    coil::Properties& m_properties;
     
     /*!
      * @if jp
