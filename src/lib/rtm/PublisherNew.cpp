@@ -17,9 +17,9 @@
  *
  */
 
+#include <coil/Properties.h>
 #include <rtm/PublisherNew.h>
 #include <rtm/InPortConsumer.h>
-#include <rtm/Properties.h>
 #include <rtm/RTC.h>
 #include <iostream>
 
@@ -34,7 +34,7 @@ namespace RTC
    * @endif
    */
   PublisherNew::PublisherNew(InPortConsumer* consumer,
-			     const Properties& property)
+			     const coil::Properties& property)
     : m_consumer(consumer), m_running(true), m_data()
   {
     open(0);
