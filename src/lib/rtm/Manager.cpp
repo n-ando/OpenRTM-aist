@@ -18,7 +18,6 @@
 
 #include <rtm/Manager.h>
 #include <rtm/ManagerConfig.h>
-#include <rtm/Properties.h>
 #include <rtm/ModuleManager.h>
 #include <rtm/CorbaNaming.h>
 #include <rtm/CorbaObjectManager.h>
@@ -30,6 +29,7 @@
 #include <rtm/RTCUtil.h>
 #include <fstream>
 #include <iostream>
+#include <coil/Properties.h>
 #include <coil/stringutil.h>
 #include <coil/Signal.h>
 #include <coil/TimeValue.h>
@@ -365,7 +365,7 @@ namespace RTC
    * @brief Register RT-Component Factory
    * @endif
    */
-  bool Manager::registerFactory(Properties& profile,
+  bool Manager::registerFactory(coil::Properties& profile,
 				RtcNewFunc new_func,
 				RtcDeleteFunc delete_func)
   {
@@ -1045,7 +1045,7 @@ namespace RTC
 	try
 	  {
 	    comps[i]->exit();
-	    Properties p(comps[i]->getInstanceName());
+	    coil::Properties p(comps[i]->getInstanceName());
 	    p << comps[i]->getProperties();
 	    rtcout.level(LogStream::RTL_PARANOID) << p;
 	  }
@@ -1096,7 +1096,7 @@ namespace RTC
     std::string name_conf(category + "." + inst_name + ".config_file");
     
     
-    Properties type_prop, name_prop;
+    coil::Properties type_prop, name_prop;
     
     // Load "category.instance_name.config_file"
     if (!m_config[name_conf].empty())
@@ -1123,7 +1123,7 @@ namespace RTC
     //------------------------------------------------------------
     // Format component's name for NameService
     std::string naming_formats;
-    Properties& comp_prop(comp->getProperties());
+    coil::Properties& comp_prop(comp->getProperties());
     
     naming_formats += m_config["naming.formats"];
     naming_formats += ", " + comp_prop["naming.formats"];
@@ -1142,7 +1142,7 @@ namespace RTC
    * @brief Merge property information
    * @endif
    */
-  bool Manager::mergeProperty(Properties& prop, const char* file_name)
+  bool Manager::mergeProperty(coil::Properties& prop, const char* file_name)
   {
     if (file_name == NULL)
       {
@@ -1170,7 +1170,7 @@ namespace RTC
    * @endif
    */
   std::string Manager::formatString(const char* naming_format,
-				    Properties& prop)
+				    coil::Properties& prop)
   {
     std::string name(naming_format), str("");
     std::string::iterator it, it_end;
