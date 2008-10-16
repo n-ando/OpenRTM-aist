@@ -71,7 +71,7 @@ namespace RTC
      * @endif
      */
     PublisherFlush(InPortConsumer* consumer,
-		   const Properties& property);
+		   const coil::Properties& property);
     
     /*!
      * @if jp
