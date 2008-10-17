@@ -32,7 +32,8 @@ LIBS = @LIBS@
 AM_CPPFLAGS=               \
 	-I.                \
 	-I$(top_builddir)  \
-	-I$(includedir)
+	-I$(includedir)    \
+	-I$(top_builddir)/src/lib/
 
 
 AM_LDFLAGS=           \
