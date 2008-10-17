@@ -34,7 +34,6 @@ lib_LTLIBRARIES = libRTC.la
 
 UTIL_SRC =             \
 	NVUtil.cpp     \
-	Properties.cpp \
 	RTCUtil.cpp
 
 MGR_SRC =                      \
