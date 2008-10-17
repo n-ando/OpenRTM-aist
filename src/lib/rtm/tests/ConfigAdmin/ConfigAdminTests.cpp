@@ -204,9 +204,9 @@ namespace ConfigAdmin
 		
   private:
     // helper
-    const RTC::Properties* getPropertiesBy(
+    const coil::Properties* getPropertiesBy(
 					   const std::string& name,
-					   const std::vector<RTC::Properties*>& propertiesSet) const
+					   const std::vector<coil::Properties*>& propertiesSet) const
     {
       for (int i = 0; i < (int) propertiesSet.size(); ++i)
 	{
@@ -255,13 +255,13 @@ namespace ConfigAdmin
      */
     void test_constructor()
     {
-      RTC::Properties configSet("config_id");
+      coil::Properties configSet("config_id");
       configSet.setProperty("config_id.key", "value");
 			
       RTC::ConfigAdmin configAdmin(configSet);
 			
       // 引数で指定したコンフィグレーションセットが、正しく設定されるか？
-      const RTC::Properties& activeConfigSet = configAdmin.getConfigurationSet("config_id");
+      const coil::Properties& activeConfigSet = configAdmin.getConfigurationSet("config_id");
       CPPUNIT_ASSERT_EQUAL(std::string("value"), activeConfigSet.getProperty("key"));
     }
 		
@@ -273,7 +273,7 @@ namespace ConfigAdmin
      */		
     void test_bindParameter()
     {
-      RTC::Properties nullProp;
+      coil::Properties nullProp;
       RTC::ConfigAdmin configAdmin(nullProp);
 			
       // bindParameter()で、正常に変数をバインドできるか？
@@ -294,7 +294,7 @@ namespace ConfigAdmin
      */
     void test_bindParameter_already_exist()
     {
-      RTC::Properties nullProp;
+      coil::Properties nullProp;
       RTC::ConfigAdmin configAdmin(nullProp);
 			
       // まずは、初回のバインドを行う
@@ -323,7 +323,7 @@ namespace ConfigAdmin
      */
     void test_bindParameter_illegal_default_value()
     {
-      RTC::Properties nullProp;
+      coil::Properties nullProp;
       RTC::ConfigAdmin configAdmin(nullProp);
 			
       // 指定のデータ型に変換できないデフォルト値を指定して、意図どおり失敗するか？
@@ -341,15 +341,15 @@ namespace ConfigAdmin
      */
     void test_update()
     {
-      RTC::Properties nullProp;
+      coil::Properties nullProp;
       RTC::ConfigAdmin configAdmin(nullProp);
 			
       // コンフィグレーションセット１を準備する
-      RTC::Properties configSet1("set 1");
+      coil::Properties configSet1("set 1");
       configSet1.setProperty("name", "1.41421356");
 			
       // コンフィグレーションセット２を準備する
-      RTC::Properties configSet2("set 2");
+      coil::Properties configSet2("set 2");
       configSet2.setProperty("name", "1.7320508");
 			
       // 準備した２つのコンフィグレーションセットを追加しておく
@@ -383,11 +383,11 @@ namespace ConfigAdmin
      */
     void test_update_by_inexist_configuration_set()
     {
-      RTC::Properties nullProp;
+      coil::Properties nullProp;
       RTC::ConfigAdmin configAdmin(nullProp);
 			
       // コンフィグレーションセットを準備し、追加しておく
-      RTC::Properties configSet("set");
+      coil::Properties configSet("set");
       configSet.setProperty("name", "1.41421356");
       CPPUNIT_ASSERT_EQUAL(true, configAdmin.addConfigurationSet(configSet));
 			
@@ -412,16 +412,16 @@ namespace ConfigAdmin
      */
     void test_update_with_specified_parameter_name()
     {
-      RTC::Properties nullProp;
+      coil::Properties nullProp;
       RTC::ConfigAdmin configAdmin(nullProp);
 			
       // ２つのパラメータ値を含むコンフィグレーションセットを準備し、追加しておく
-      RTC::Properties configSet1("set 1");
+      coil::Properties configSet1("set 1");
       configSet1.setProperty("name 1", "1.41421356");
       configSet1.setProperty("name 2", "1.7320508");
       CPPUNIT_ASSERT_EQUAL(true, configAdmin.addConfigurationSet(configSet1));
 
-      RTC::Properties configSet2("set 2");
+      coil::Properties configSet2("set 2");
       configSet2.setProperty("name 1", "3.14159");
       configSet2.setProperty("name 2", "2.71828");
       CPPUNIT_ASSERT_EQUAL(true, configAdmin.addConfigurationSet(configSet2));
@@ -454,15 +454,15 @@ namespace ConfigAdmin
      */
     void test_update_by_active_configuration_set()
     {
-      RTC::Properties nullProp;
+      coil::Properties nullProp;
       RTC::ConfigAdmin configAdmin(nullProp);
 			
       // コンフィグレーションセットを準備し、追加しておく
-      RTC::Properties configSet1("set 1");
+      coil::Properties configSet1("set 1");
       configSet1.setProperty("name", "1.41421356");
       CPPUNIT_ASSERT_EQUAL(true, configAdmin.addConfigurationSet(configSet1));
 
-      RTC::Properties configSet2("set 2");
+      coil::Properties configSet2("set 2");
       configSet2.setProperty("name", "1.7320508");
       CPPUNIT_ASSERT_EQUAL(true, configAdmin.addConfigurationSet(configSet2));
 			
@@ -503,7 +503,7 @@ namespace ConfigAdmin
      */
     void test_isExist()
     {
-      RTC::Properties nullProp;
+      coil::Properties nullProp;
       RTC::ConfigAdmin configAdmin(nullProp);
 			
       // 変数をバインドする
@@ -528,7 +528,7 @@ namespace ConfigAdmin
      */
     void test_isChanged_on_addConfigurationSet()
     {
-      RTC::Properties nullProp;
+      coil::Properties nullProp;
       RTC::ConfigAdmin configAdmin(nullProp);
 			
       // update()を呼出してバインド変数と同期を行い、isChanged()が偽となる状態にする
@@ -536,7 +536,7 @@ namespace ConfigAdmin
       CPPUNIT_ASSERT_EQUAL(false, configAdmin.isChanged());
 			
       // addConfigurationSet()を呼出す
-      RTC::Properties configSet("id");
+      coil::Properties configSet("id");
       configSet.setProperty("key", "value");
       CPPUNIT_ASSERT_EQUAL(true, configAdmin.addConfigurationSet(configSet));
 
@@ -551,11 +551,11 @@ namespace ConfigAdmin
      */
     void test_isChanged_on_removeConfigurationSet()
     {
-      RTC::Properties nullProp;
+      coil::Properties nullProp;
       RTC::ConfigAdmin configAdmin(nullProp);
 			
       // addConfigurationSet()を呼出す
-      RTC::Properties configSet("id");
+      coil::Properties configSet("id");
       configSet.setProperty("key", "value");
       CPPUNIT_ASSERT_EQUAL(true, configAdmin.addConfigurationSet(configSet));
 
@@ -576,14 +576,14 @@ namespace ConfigAdmin
      */
     void test_isChanged_on_activateConfigurationSet()
     {
-      RTC::Properties nullProp;
+      coil::Properties nullProp;
       RTC::ConfigAdmin configAdmin(nullProp);
 			
       // コンフィグレーションセットを準備し、追加しておく
-      RTC::Properties configSet1("set 1");
+      coil::Properties configSet1("set 1");
       CPPUNIT_ASSERT_EQUAL(true, configAdmin.addConfigurationSet(configSet1));
 
-      RTC::Properties configSet2("set 2");
+      coil::Properties configSet2("set 2");
       CPPUNIT_ASSERT_EQUAL(true, configAdmin.addConfigurationSet(configSet2));
 			
       // "set 1"のほうをアクティブにする
@@ -610,14 +610,14 @@ namespace ConfigAdmin
      */
     void test_getActiveId()
     {
-      RTC::Properties nullProp;
+      coil::Properties nullProp;
       RTC::ConfigAdmin configAdmin(nullProp);
 			
       // コンフィグレーションセットを準備し、追加しておく
-      RTC::Properties configSet1("set 1");
+      coil::Properties configSet1("set 1");
       CPPUNIT_ASSERT_EQUAL(true, configAdmin.addConfigurationSet(configSet1));
 
-      RTC::Properties configSet2("set 2");
+      coil::Properties configSet2("set 2");
       CPPUNIT_ASSERT_EQUAL(true, configAdmin.addConfigurationSet(configSet2));
 			
       // 初期状態では、アクティブIDは"default"のはず
@@ -640,11 +640,11 @@ namespace ConfigAdmin
      */
     void test_haveConfig()
     {
-      RTC::Properties nullProp;
+      coil::Properties nullProp;
       RTC::ConfigAdmin configAdmin(nullProp);
 			
       // コンフィグレーションセットを準備し、追加しておく
-      RTC::Properties configSet1("id");
+      coil::Properties configSet1("id");
       CPPUNIT_ASSERT_EQUAL(true, configAdmin.addConfigurationSet(configSet1));
 			
       // 存在するコンフィグレーションセットIDを指定した場合に、haveConfig()で正しく真値を得るか？
@@ -662,11 +662,11 @@ namespace ConfigAdmin
      */
     void test_isActive_on_addConfigurationSet()
     {
-      RTC::Properties nullProp;
+      coil::Properties nullProp;
       RTC::ConfigAdmin configAdmin(nullProp);
 			
       // addConfigurationSet()呼出後は、isActive()は正しく偽値を得るか？
-      RTC::Properties configSet("id");
+      coil::Properties configSet("id");
       CPPUNIT_ASSERT_EQUAL(true, configAdmin.addConfigurationSet(configSet));
       CPPUNIT_ASSERT_EQUAL(false, configAdmin.isActive());
 			
@@ -682,11 +682,11 @@ namespace ConfigAdmin
      */
     void test_isActive_on_removeConfigurationSet()
     {
-      RTC::Properties nullProp;
+      coil::Properties nullProp;
       RTC::ConfigAdmin configAdmin(nullProp);
 
       // コンフィグレーションセットを追加してアクティブ化しておく
-      RTC::Properties configSet("id");
+      coil::Properties configSet("id");
       CPPUNIT_ASSERT_EQUAL(true, configAdmin.addConfigurationSet(configSet));
       CPPUNIT_ASSERT_EQUAL(true, configAdmin.activateConfigurationSet("id"));
       CPPUNIT_ASSERT_EQUAL(true, configAdmin.isActive());
@@ -719,27 +719,27 @@ namespace ConfigAdmin
      */
     void test_getConfigurationSets()
     {
-      RTC::Properties nullProp;
+      coil::Properties nullProp;
       RTC::ConfigAdmin configAdmin(nullProp);
 			
       // ２つのパラメータ値を含むコンフィグレーションセットを準備し、追加しておく
-      RTC::Properties configSet1("set 1");
+      coil::Properties configSet1("set 1");
       configSet1.setProperty("name 1", "1.41421356");
       configSet1.setProperty("name 2", "1.7320508");
       CPPUNIT_ASSERT_EQUAL(true, configAdmin.addConfigurationSet(configSet1));
 			
-      RTC::Properties configSet2("set 2");
+      coil::Properties configSet2("set 2");
       configSet2.setProperty("name 1", "3.14159");
       configSet2.setProperty("name 2", "2.71828");
       CPPUNIT_ASSERT_EQUAL(true, configAdmin.addConfigurationSet(configSet2));
 			
       // getConfigurationSets()で登録されている全てのコンフィグレーションセットを取得し、
       // 登録したものと一致していることを確認する
-      std::vector<RTC::Properties*> expectedConfigSets;
+      std::vector<coil::Properties*> expectedConfigSets;
       expectedConfigSets.push_back(&configSet1);
       expectedConfigSets.push_back(&configSet2);
 			
-      const std::vector<RTC::Properties*>& configSets
+      const std::vector<coil::Properties*>& configSets
 	= configAdmin.getConfigurationSets();
 			
       CPPUNIT_ASSERT_EQUAL(
@@ -765,16 +765,16 @@ namespace ConfigAdmin
      */
     void test_addConfigurationSet_and_getConfigurationSet()
     {
-      RTC::Properties nullProp;
+      coil::Properties nullProp;
       RTC::ConfigAdmin configAdmin(nullProp);
 			
       // addConfigurationSet()で、コンフィグレーションセットを追加できるか？
-      RTC::Properties configSet("id");
+      coil::Properties configSet("id");
       configSet.setProperty("key", "value");
       configAdmin.addConfigurationSet(configSet);
 			
       // getConfigurationSet()で、追加したコンフィグレーションセットを正しく取得できるか？
-      const RTC::Properties& configSetRet = configAdmin.getConfigurationSet("id");
+      const coil::Properties& configSetRet = configAdmin.getConfigurationSet("id");
       CPPUNIT_ASSERT_EQUAL(std::string("value"), configSetRet.getProperty("key"));
     }
 		
@@ -785,20 +785,20 @@ namespace ConfigAdmin
      */
     void test_setConfigurationSetValues()
     {
-      RTC::Properties nullProp;
+      coil::Properties nullProp;
       RTC::ConfigAdmin configAdmin(nullProp);
 			
-      RTC::Properties configSet1("id");
+      coil::Properties configSet1("id");
       configSet1.setProperty("name 1", "1.41421356");
       CPPUNIT_ASSERT_EQUAL(true, configAdmin.addConfigurationSet(configSet1));
 			
       // 登録済みのコンフィグレーションセットに対して、プロパティを追加する
-      RTC::Properties configSet2("id");
+      coil::Properties configSet2("id");
       configSet2.setProperty("name 2", "1.7320508");
       CPPUNIT_ASSERT_EQUAL(true, configAdmin.setConfigurationSetValues("id", configSet2));
 			
       // 当該コンフィグレーションセットを取得して、プロパティが意図どおり追加されていることを確認する
-      const RTC::Properties& configSetRet = configAdmin.getConfigurationSet("id");
+      const coil::Properties& configSetRet = configAdmin.getConfigurationSet("id");
       CPPUNIT_ASSERT_EQUAL(std::string("1.41421356"), configSetRet.getProperty("name 1"));
       CPPUNIT_ASSERT_EQUAL(std::string("1.7320508"), configSetRet.getProperty("name 2"));
     }
@@ -811,20 +811,20 @@ namespace ConfigAdmin
      */
     void test_setConfigurationSetValues_with_inexist_configuration_set()
     {
-      RTC::Properties nullProp;
+      coil::Properties nullProp;
       RTC::ConfigAdmin configAdmin(nullProp);
 			
-      RTC::Properties configSet1("id");
+      coil::Properties configSet1("id");
       configSet1.setProperty("name 1", "1.41421356");
       CPPUNIT_ASSERT_EQUAL(true, configAdmin.addConfigurationSet(configSet1));
 			
       // 存在しないコンフィグレーションセットに対してプロパティ追加を試みて、意図どおり失敗するか？
-      RTC::Properties configSet2("inexist id");
+      coil::Properties configSet2("inexist id");
       configSet2.setProperty("name 2", "1.7320508");
       CPPUNIT_ASSERT_EQUAL(false, configAdmin.setConfigurationSetValues("inexist id", configSet2));
 			
       // 失敗後に、登録済みのコンフィグレーションセットが影響を受けていないか？
-      const RTC::Properties& configSetRet = configAdmin.getConfigurationSet("id");
+      const coil::Properties& configSetRet = configAdmin.getConfigurationSet("id");
       CPPUNIT_ASSERT_EQUAL(std::string("1.41421356"), configSetRet.getProperty("name 1"));
       CPPUNIT_ASSERT_EQUAL(std::string(""), configSetRet.getProperty("name 2"));
     }
@@ -836,29 +836,29 @@ namespace ConfigAdmin
      */
     void test_getActiveConfigurationSet()
     {
-      RTC::Properties nullProp;
+      coil::Properties nullProp;
       RTC::ConfigAdmin configAdmin(nullProp);
 			
       // コンフィグレーションセットを準備し、追加しておく
-      RTC::Properties configSet1("set 1");
+      coil::Properties configSet1("set 1");
       configSet1.setProperty("name 1", "1.41421356");
       configSet1.setProperty("name 2", "1.7320508");
       CPPUNIT_ASSERT_EQUAL(true, configAdmin.addConfigurationSet(configSet1));
 			
-      RTC::Properties configSet2("set 2");
+      coil::Properties configSet2("set 2");
       configSet2.setProperty("name 1", "3.14159");
       configSet2.setProperty("name 2", "2.71828");
       CPPUNIT_ASSERT_EQUAL(true, configAdmin.addConfigurationSet(configSet2));
 			
       // "set 1"をアクティブ化した後、アクティブコンフィグレーションセットとして正しく取得できるか？
       CPPUNIT_ASSERT_EQUAL(true, configAdmin.activateConfigurationSet("set 1"));
-      const RTC::Properties& activeConfigSet1 = configAdmin.getActiveConfigurationSet();
+      const coil::Properties& activeConfigSet1 = configAdmin.getActiveConfigurationSet();
       CPPUNIT_ASSERT_EQUAL(std::string("1.41421356"), activeConfigSet1.getProperty("name 1"));
       CPPUNIT_ASSERT_EQUAL(std::string("1.7320508"), activeConfigSet1.getProperty("name 2"));
 
       // "set 2"をアクティブ化した後、アクティブコンフィグレーションセットとして正しく取得できるか？
       CPPUNIT_ASSERT_EQUAL(true, configAdmin.activateConfigurationSet("set 2"));
-      const RTC::Properties& activeConfigSet2 = configAdmin.getActiveConfigurationSet();
+      const coil::Properties& activeConfigSet2 = configAdmin.getActiveConfigurationSet();
       CPPUNIT_ASSERT_EQUAL(std::string("3.14159"), activeConfigSet2.getProperty("name 1"));
       CPPUNIT_ASSERT_EQUAL(std::string("2.71828"), activeConfigSet2.getProperty("name 2"));
     }
@@ -870,11 +870,11 @@ namespace ConfigAdmin
      */
     void test_removeConfigurationSet()
     {
-      RTC::Properties nullProp;
+      coil::Properties nullProp;
       RTC::ConfigAdmin configAdmin(nullProp);
 			
       // コンフィグレーションセットを追加しておく
-      RTC::Properties configSet("id");
+      coil::Properties configSet("id");
       configSet.setProperty("key", "value");
       CPPUNIT_ASSERT_EQUAL(true, configAdmin.addConfigurationSet(configSet));
       CPPUNIT_ASSERT_EQUAL(true, configAdmin.haveConfig("id"));
@@ -893,11 +893,11 @@ namespace ConfigAdmin
      */
     void test_removeConfigurationSet_with_inexist_configuration_id()
     {
-      RTC::Properties nullProp;
+      coil::Properties nullProp;
       RTC::ConfigAdmin configAdmin(nullProp);
 			
       // コンフィグレーションセットを追加しておく
-      RTC::Properties configSet("id");
+      coil::Properties configSet("id");
       configSet.setProperty("key", "value");
       CPPUNIT_ASSERT_EQUAL(true, configAdmin.addConfigurationSet(configSet));
       CPPUNIT_ASSERT_EQUAL(true, configAdmin.haveConfig("id"));
