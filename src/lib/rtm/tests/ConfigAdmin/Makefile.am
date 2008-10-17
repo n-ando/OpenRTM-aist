@@ -25,7 +25,9 @@ LIBS = @LIBS@
 AM_CPPFLAGS = \
 	 -I. \
 	-I$(top_builddir) \
-	-I$(includedir)
+	-I$(includedir)   \
+	-I$(top_builddir)/src/lib/coil/include/ \
+	-I$(top_builddir)/src/lib/
 
 
 AM_LDFLAGS = \
@@ -37,9 +39,9 @@ noinst_PROGRAMS = ConfigAdminTests
 
 nodist_ConfigAdminTests_SOURCES = \
 	../TestRunner.cpp \
-	$(top_builddir)/rtm/Properties.cpp \
-	$(top_builddir)/rtm/StringUtil.cpp \
-	$(top_builddir)/rtm/ConfigAdmin.cpp \
+	$(top_builddir)/src/lib/coil/common/Properties.cpp \
+	$(top_builddir)/src/lib/coil/common/stringutil.cpp \
+	$(top_builddir)/src/lib/rtm/ConfigAdmin.cpp \
 	ConfigAdminTests.cpp
 
 ConfigAdminTests_LDFLAGS = -L$(libdir)
