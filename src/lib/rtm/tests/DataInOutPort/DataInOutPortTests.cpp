@@ -40,7 +40,7 @@
 #include <rtm/OutPort.h>
 #include <rtm/DataInPort.h>
 #include <rtm/InPort.h>
-#include <rtm/Properties.h>
+#include <coil/Properties.h>
 
 /*!
  * @class DataInOutPortTests class
@@ -70,12 +70,12 @@ namespace DataInOutPort
     RTC::OutPort<RTC::TimedFloat> m_outport;
     RTC::TimedFloat m_ofloat;
     RTC::DataOutPort* m_doutport;
-    RTC::Port_var m_oportref;
+    RTC::PortService_var m_oportref;
 
     RTC::InPort<RTC::TimedFloat> m_inport;
     RTC::TimedFloat m_ifloat;
     RTC::DataInPort* m_dinport;
-    RTC::Port_var m_iportref;
+    RTC::PortService_var m_iportref;
 
     HogeCovnert<RTC::TimedFloat>* m_conv;
     CORBA::ORB_ptr m_pORB;
@@ -99,7 +99,7 @@ namespace DataInOutPort
 		    m_pORB->resolve_initial_references("RootPOA"));
       m_pPOA->the_POAManager()->activate();
 
-			RTC::Properties dummy;
+			coil::Properties dummy;
       m_doutport = new RTC::DataOutPort("DataOutPort", m_outport, dummy);
       m_oportref = m_doutport->get_port_profile()->port_ref;
 
