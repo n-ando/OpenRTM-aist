@@ -304,7 +304,7 @@ namespace PortBase
       // (1) オブジェクト参照経由で、get_port_profile()に正しくアクセスできるか？
       // get_port_profile()はCORBAインタフェースなので、オブジェクト参照経由でアクセスし、
       // CORBAインタフェースとして機能していることを確認する
-      const RTC::Port_ptr portRef = m_pPortBase->getPortRef();
+      const RTC::PortService_ptr portRef = m_pPortBase->getPortRef();
       const RTC::PortProfile* pPortProfile = portRef->get_port_profile();
 			
       // (2) PortProfile.nameを正しく取得できるか？
@@ -442,7 +442,7 @@ namespace PortBase
       // (1) オブジェクト参照経由で、get_connector_profiles()に正しくアクセスできるか？
       // get_connector_profiles()はCORBAインタフェースなので、オブジェクト参照経由でアクセスし、
       // CORBAインタフェースとして機能していることを確認する
-      const RTC::Port_ptr portRef = m_pPortBase->getPortRef();
+      const RTC::PortService_ptr portRef = m_pPortBase->getPortRef();
       const RTC::ConnectorProfileList* pConnProfList = portRef->get_connector_profiles();
 
       // ConnectorProfileList内のConnectorProfileのチェック
@@ -485,7 +485,7 @@ namespace PortBase
       // (1) オブジェクト参照経由で、get_connector_profile()に正しくアクセスできるか？
       // get_connector_profile()はCORBAインタフェースなので、オブジェクト参照経由でアクセスし、
       // CORBAインタフェースとして機能していることを確認する
-      const RTC::Port_ptr portRef = m_pPortBase->getPortRef();
+      const RTC::PortService_ptr portRef = m_pPortBase->getPortRef();
       const RTC::ConnectorProfile* pConnProfile = portRef->get_connector_profile("connect_id0");
 
       // (2) ConnectorProfile.nameを正しく取得できるか？
@@ -525,7 +525,7 @@ namespace PortBase
       // (1) オブジェクト参照経由で、connect()に正しくアクセスできるか？
       // connect()はCORBAインタフェースなので、オブジェクト参照経由でアクセスし、
       // CORBAインタフェースとして機能していることを確認する
-      RTC::Port_ptr portRef = m_pPortBase->getPortRef();
+      RTC::PortService_ptr portRef = m_pPortBase->getPortRef();
 			
       // 接続時に必要となるConnectorProfileを構築する
       RTC::ConnectorProfile connProfile;
@@ -563,7 +563,7 @@ namespace PortBase
       // (1) オブジェクト参照経由で、disconnect()に正しくアクセスできるか？
       // disconnect()はCORBAインタフェースなので、オブジェクト参照経由でアクセスし、
       // CORBAインタフェースとして機能していることを確認する
-      RTC::Port_ptr portRef = m_pPortBase->getPortRef();
+      RTC::PortService_ptr portRef = m_pPortBase->getPortRef();
 			
       // 接続時に必要となるConnectorProfileを構築する
       RTC::ConnectorProfile connProfile;
@@ -692,8 +692,8 @@ namespace PortBase
       // setPortRef()を用いて、PortBaseオブジェクト参照を正しく設定できるか？
       // (getPortRef()を用いて、Portインタフェースのオブジェクト参照を取得し、
       // 取得した参照が、あらかじめ設定した参照と一致することを確認する)
-      RTC::Port_var port = m_pPortBase->_this();
-      RTC::Port_ptr portRef = port._retn();
+      RTC::PortService_var port = m_pPortBase->_this();
+      RTC::PortService_ptr portRef = port._retn();
       m_pPortBase->setPortRef(portRef);
 
       CPPUNIT_ASSERT_EQUAL(portRef, m_pPortBase->getPortRef());
