@@ -293,7 +293,7 @@ namespace NVUtil
       string value = "port-type-value";
       map<string, string> mProp;
       mProp[name] = value;
-      RTC::Properties prop(mProp);
+      coil::Properties prop(mProp);
       
       // (2）copy()にてPropertiesオブジェクトをnvlistにコピー
       SDOPackage::NVList nvlist;
@@ -331,7 +331,7 @@ namespace NVUtil
       nvlist[1].value <<= value2.c_str();
 			
       // (2) RTC::Propertiesへ変換する
-      RTC::Properties prop = toProperties(nvlist);
+      coil::Properties prop = toProperties(nvlist);
 			
       // (3) 正しく変換されていることを確認する
       string propValue1 = prop.getProperty(name1);
@@ -363,7 +363,7 @@ namespace NVUtil
       nvlist[1].value <<= value2.c_str();
 
       // (2) RTC::Propertiesへコピーする
-      RTC::Properties prop;
+      coil::Properties prop;
       copyToProperties(prop, nvlist);
     	
       // (3) 値を比較して、正しくコピーされていることを確認する
