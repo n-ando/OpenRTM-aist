@@ -32,42 +32,47 @@ LIBS = @LIBS@
 AM_CPPFLAGS =                     \
 	 -I.                      \
 	-I$(top_builddir)         \
-	-I$(top_builddir)/rtm/idl \
-	-I$(includedir)           \
-	-DORB_IS_OMNIORB
+	-I$(top_builddir)/src/lib/ \
+	-I$(top_builddir)/src/lib/rtm \
+	-I$(top_builddir)/src/lib/rtm_corba \
+	-I$(top_builddir)/src/lib/rtm_corba/idl \
+	-I$(top_builddir)/src/lib/coil/include \
+	-I$(includedir)
+#	-DORB_IS_OMNIORB
 
 AM_LDFLAGS =              \
 	-L.               \
-	-L$(top_builddir)
+	-L$(top_builddir) \
+	-L$(top_builddir)/src/lib/coil/lib
 
 IDL_SOURCES = \
-	$(top_srcdir)/rtm/idl/SDOPackage.idl    \
-	$(top_srcdir)/rtm/idl/RTC.idl           \
-	$(top_srcdir)/rtm/idl/BasicDataType.idl \
-	$(top_srcdir)/rtm/idl/DataPort.idl
+	$(top_srcdir)/src/lib/rtm_corba/idl/SDOPackage.idl    \
+	$(top_srcdir)/src/lib/rtm_corba/idl/RTC.idl           \
+	$(top_srcdir)/src/lib/rtm_corba/idl/BasicDataType.idl \
+	$(top_srcdir)/src/lib/rtm_corba/idl/DataPort.idl
 
 noinst_PROGRAMS = DataInOutPortTests
 
 nodist_DataInOutPortTests_SOURCES =                 \
 	../TestRunner.cpp                           \
 	$(IDL_SOURCES:.idl=Skel.cpp)                \
-	$(top_srcdir)/rtm/StringUtil.cpp            \
-	$(top_srcdir)/rtm/Properties.cpp            \
-	$(top_srcdir)/rtm/NVUtil.cpp                \
-	$(top_srcdir)/rtm/PortBase.cpp              \
-	$(top_srcdir)/rtm/DataInPort.cpp            \
-	$(top_srcdir)/rtm/OutPortBase.cpp           \
-	$(top_srcdir)/rtm/DataOutPort.cpp           \
-	$(top_srcdir)/rtm/InPortProvider.cpp        \
-	$(top_srcdir)/rtm/OutPortProvider.cpp       \
-	$(top_srcdir)/rtm/PublisherFactory.cpp      \
-	$(top_srcdir)/rtm/PublisherNew.cpp          \
-	$(top_srcdir)/rtm/PublisherPeriodic.cpp     \
-	$(top_srcdir)/rtm/PublisherFlush.cpp        \
+	$(top_srcdir)/src/lib/coil/common/stringutil.cpp            \
+	$(top_srcdir)/src/lib/coil/common/Properties.cpp            \
+	$(top_srcdir)/src/lib/rtm/NVUtil.cpp                \
+	$(top_srcdir)/src/lib/rtm/PortBase.cpp              \
+	$(top_srcdir)/src/lib/rtm/DataInPort.cpp            \
+	$(top_srcdir)/src/lib/rtm/OutPortBase.cpp           \
+	$(top_srcdir)/src/lib/rtm/DataOutPort.cpp           \
+	$(top_srcdir)/src/lib/rtm/InPortProvider.cpp        \
+	$(top_srcdir)/src/lib/rtm/OutPortProvider.cpp       \
+	$(top_srcdir)/src/lib/rtm/PublisherFactory.cpp      \
+	$(top_srcdir)/src/lib/rtm/PublisherNew.cpp          \
+	$(top_srcdir)/src/lib/rtm/PublisherPeriodic.cpp     \
+	$(top_srcdir)/src/lib/rtm/PublisherFlush.cpp        \
 	DataInOutPortTests.cpp
 
 DataInOutPortTests_LDFLAGS = -L$(libdir)
-DataInOutPortTests_LDADD   = -lcppunit
+DataInOutPortTests_LDADD   = -lcppunit -lcoil -luuid
 
 # Extra sources included distribution
 EXTRA_DIST =               \
