@@ -32,30 +32,38 @@ LIBS = @LIBS@
 AM_CPPFLAGS =                     \
 	-I.                       \
 	-I$(top_builddir)         \
-	-I$(top_builddir)/rtm/idl \
+	-I$(top_builddir)/src/lib/ \
+	-I$(top_builddir)/src/lib/rtm_corba \
+	-I$(top_builddir)/src/lib/rtm_corba/idl \
+	-I$(top_builddir)/src/lib/coil/include \
+	-I$(top_builddir)/src/lib/rtm \
 	-I$(includedir)
 
 
 
 AM_LDFLAGS =              \
 	-L.               \
-	-L$(top_builddir)
+	-L$(top_builddir) \
+        -L$(top_builddir)/src/lib/coil/lib/ 
 
 
 IDL_SOURCES =                                \
-	$(top_srcdir)/rtm/idl/RTC.idl        \
-	$(top_srcdir)/rtm/idl/SDOPackage.idl 
+	$(top_srcdir)/src/lib/rtm_corba/idl/RTC.idl        \
+	$(top_srcdir)/src/lib/rtm_corba/idl/SDOPackage.idl 
+
+
 
 noinst_PROGRAMS = PortBaseTests
 
 nodist_PortBaseTests_SOURCES =           \
 	../TestRunner.cpp                \
 	$(IDL_SOURCES:.idl=Skel.cpp)     \
-	$(top_builddir)/rtm/PortBase.cpp \
+	$(top_builddir)/src/lib/rtm/PortBase.cpp \
 	PortBaseTests.cpp
 
+ 
 PortBaseTests_LDFLAGS = -L$(libdir)
-PortBaseTests_LDADD   = -lcppunit
+PortBaseTests_LDADD   = -lcppunit -lcoil -luuid
 
 EXTRA_DIST =          \
 	PortBaseTests.cpp
