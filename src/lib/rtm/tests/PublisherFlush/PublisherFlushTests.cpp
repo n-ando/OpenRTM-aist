@@ -36,7 +36,7 @@
 #include <cppunit/extensions/HelperMacros.h>
 #include <cppunit/TestAssert.h>
 
-#include <rtm/Properties.h>
+#include <coil/Properties.h>
 #include <rtm/InPortConsumer.h>
 #include <rtm/PublisherFlush.h>
 
@@ -164,7 +164,7 @@ namespace PublisherFlush
   {
     CPPUNIT_TEST_SUITE(PublisherFlushTests);
 		
-    // CPPUNIT_TEST(test_update_immediacy);
+    CPPUNIT_TEST(test_update_immediacy);
 		
     CPPUNIT_TEST_SUITE_END();
 		
@@ -214,7 +214,7 @@ namespace PublisherFlush
       long sleepTick = 100000; // 0.1 [sec]
 			
       MockConsumer* consumer = new MockConsumer(sleepTick);
-      RTC::Properties prop;
+      coil::Properties prop;
       RTC::PublisherFlush publisher(consumer, prop);
 			
       for (int i = 0; i < 10; i++)
