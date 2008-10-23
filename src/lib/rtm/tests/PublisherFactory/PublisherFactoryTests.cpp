@@ -36,7 +36,7 @@
 #include <cppunit/extensions/TestFactoryRegistry.h>
 #include <cppunit/extensions/HelperMacros.h>
 #include <cppunit/TestAssert.h>
-#include <rtm/Properties.h>
+#include <coil/Properties.h>
 #include <rtm/InPortConsumer.h>
 #include <rtm/PublisherFactory.h>
 #include <rtm/PublisherNew.h>
@@ -131,26 +131,26 @@ namespace PublisherFactory
       NullConsumer consumer;
     	
       // (1) "dataport.subscription_type"を指定しない場合、デフォルトとしてPublisherNewが生成されるか？
-      RTC::Properties propDefault;
+      coil::Properties propDefault;
       RTC::PublisherBase* publisherDefault = factory.create(&consumer, propDefault);
       CPPUNIT_ASSERT(dynamic_cast<RTC::PublisherNew*>(publisherDefault) != 0);
     	
       // (2) "dataport.subscription_type"に"New"を指定した場合、PublisherNewが生成されるか？
-      RTC::Properties propNew;
+      coil::Properties propNew;
       propNew.setProperty("dataport.subscription_type", "New");
       RTC::PublisherBase* publisherNew = factory.create(&consumer, propNew);
       CPPUNIT_ASSERT(dynamic_cast<RTC::PublisherNew*>(publisherNew) != 0);
       publisherNew->release();
     	
       // (3) "dataport.subscription_type"に"Periodic"を指定した場合、PublisherPeriodicが生成されるか？
-      RTC::Properties propPeriodic;
+      coil::Properties propPeriodic;
       propPeriodic.setProperty("dataport.subscription_type", "Periodic");
       RTC::PublisherBase* publisherPeriodic = factory.create(&consumer, propPeriodic);
       CPPUNIT_ASSERT(dynamic_cast<RTC::PublisherPeriodic*>(publisherPeriodic) != 0);
       publisherPeriodic->release();
     	
       // (4) "dataport.subscription_type"に"Flush"を指定した場合、PublisherFlushが生成されるか？
-      RTC::Properties propFlush;
+      coil::Properties propFlush;
       propFlush.setProperty("dataport.subscription_type", "Flush");
       RTC::PublisherBase* publisherFlush = factory.create(&consumer, propFlush);
       CPPUNIT_ASSERT(dynamic_cast<RTC::PublisherFlush*>(publisherFlush) != 0);
