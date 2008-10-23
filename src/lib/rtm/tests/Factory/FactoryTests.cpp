@@ -46,7 +46,7 @@
 
 #include <rtm/Factory.h>
 #include <rtm/Manager.h>
-#include <rtm/Properties.h>
+#include <coil/Properties.h>
 
 
 namespace Tests
@@ -162,7 +162,7 @@ namespace Tests
      */
     void test_create_and_destroy()
     {
-      RTC::Properties properties;
+      coil::Properties properties;
       properties.setProperty("name", "NAME");
 			
       RTC::FactoryCXX factory(
@@ -179,7 +179,7 @@ namespace Tests
       mock->setLogger(&logger);
 			
       // 生成されたコンポーネントには、正しくプロパティが設定されているか？
-      RTC::Properties propertiesRet = rtc->getProperties();
+      coil::Properties propertiesRet = rtc->getProperties();
       CPPUNIT_ASSERT_EQUAL(std::string("NAME"), propertiesRet.getProperty("name"));
 			
       // 正常にコンポーネントを破棄できるか？
@@ -193,14 +193,14 @@ namespace Tests
      */
     void test_profile()
     {
-      RTC::Properties properties;
+      coil::Properties properties;
       properties.setProperty("name", "NAME");
 			
       RTC::FactoryCXX factory(
 			      properties, CreateRTObjectMock, DeleteRTObjectMock);
 			
       // コンストラクタで指定したプロパティを取得できるか？
-      RTC::Properties propertiesRet = factory.profile();
+      coil::Properties propertiesRet = factory.profile();
       CPPUNIT_ASSERT_EQUAL(std::string("NAME"), propertiesRet.getProperty("name"));
     }
 		
@@ -212,7 +212,7 @@ namespace Tests
     void test_number()
     {
 			
-      RTC::Properties properties;
+      coil::Properties properties;
       properties.setProperty("name", "NAME");
 			
       RTC::FactoryCXX factory(
