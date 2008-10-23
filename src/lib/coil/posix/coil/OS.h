@@ -60,9 +60,8 @@ namespace coil
   {
   public:
     GetOpt(int argc, char* const argv[], const char* opt, int flag)
-      : m_argc(argc), m_argv(argv), m_opt(opt), m_flag(flag), optind(1), opterr(1), optopt(0)
+      : optarg(::optarg), optind(1), opterr(1), optopt(0), m_argc(argc), m_argv(argv), m_opt(opt), m_flag(flag)
     {
-      this->optarg = ::optarg;
       ::optind = 1;
     }
 
