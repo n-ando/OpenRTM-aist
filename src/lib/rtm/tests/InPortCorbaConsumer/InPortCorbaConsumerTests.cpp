@@ -19,8 +19,8 @@
 #include <cppunit/TestAssert.h>
 
 #include <rtm/config_rtc.h>
-#include <rtm/idl/BasicDataTypeSkel.h>
-#include <rtm/idl/DataPortSkel.h>
+#include <idl/BasicDataTypeSkel.h>
+#include <idl/DataPortSkel.h>
 #include <rtm/CORBA_SeqUtil.h>
 #include <rtm/RingBuffer.h>
 #include <rtm/InPortCorbaConsumer.h>
