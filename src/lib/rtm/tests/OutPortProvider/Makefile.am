@@ -12,31 +12,36 @@ LIBS = @LIBS@
 AM_CPPFLAGS =                    \
 	 -I.                      \
 	-I$(top_builddir)         \
-	-I$(top_builddir)/rtm/idl \
+	-I$(top_builddir)/src/lib \
+	-I$(top_builddir)/src/lib/rtm_corba/idl \
+	-I$(top_builddir)/src/lib/rtm_corba \
+	-I$(top_builddir)/src/lib/coil/include \
+	-I$(top_builddir)/src/lib/rtm \
 	-I$(includedir)
 
 AM_LDFLAGS =              \
 	-L.               \
-	-L$(top_builddir)
+	-L$(top_builddir) \
+	-L$(top_builddir)/src/lib/coil/lib
 
 
 IDL_SOURCES =                                \
-	$(top_srcdir)/rtm/idl/RTC.idl        \
-	$(top_srcdir)/rtm/idl/SDOPackage.idl 
+	$(top_srcdir)/src/lib/rtm_corba/idl/RTC.idl        \
+	$(top_srcdir)/src/lib/rtm_corba/idl/SDOPackage.idl 
 
 noinst_PROGRAMS = OutPortProviderTests
 
 nodist_OutPortProviderTests_SOURCES =             \
 	../TestRunner.cpp                \
 	$(IDL_SOURCES:.idl=Skel.cpp)     \
-	$(top_srcdir)/rtm/StringUtil.cpp \
-	$(top_srcdir)/rtm/Properties.cpp \
-	$(top_srcdir)/rtm/NVUtil.cpp     \
-	$(top_srcdir)/rtm/OutPortProvider.cpp \
+	$(top_srcdir)/src/lib/coil/common/stringutil.cpp \
+	$(top_srcdir)/src/lib/coil/common/Properties.cpp \
+	$(top_srcdir)/src/lib/rtm/NVUtil.cpp     \
+	$(top_srcdir)/src/lib/rtm/OutPortProvider.cpp \
 	OutPortProviderTests.cpp
 
 OutPortProviderTests_LDFLAGS = -L$(libdir)
-OutPortProviderTests_LDADD   = -lcppunit
+OutPortProviderTests_LDADD   = -lcppunit -lcoil
 
 EXTRA_DIST =        \
 	OutPortProviderTests.cpp
