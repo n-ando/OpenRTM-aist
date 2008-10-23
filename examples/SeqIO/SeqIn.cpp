@@ -348,7 +348,7 @@ extern "C"
  
   void SeqInInit(RTC::Manager* manager)
   {
-    RTC::Properties profile(seqin_spec);
+    coil::Properties profile(seqin_spec);
     manager->registerFactory(profile,
                              RTC::Create<SeqIn>,
                              RTC::Delete<SeqIn>);

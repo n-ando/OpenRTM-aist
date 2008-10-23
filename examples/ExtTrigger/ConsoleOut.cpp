@@ -77,7 +77,7 @@ extern "C"
  
   void ConsoleOutInit(RTC::Manager* manager)
   {
-    RTC::Properties profile(consoleout_spec);
+    coil::Properties profile(consoleout_spec);
     manager->registerFactory(profile,
                              RTC::Create<ConsoleOut>,
                              RTC::Delete<ConsoleOut>);

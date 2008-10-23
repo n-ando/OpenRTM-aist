@@ -205,7 +205,7 @@ extern "C"
  
   void SeqOutInit(RTC::Manager* manager)
   {
-    RTC::Properties profile(seqout_spec);
+    coil::Properties profile(seqout_spec);
     manager->registerFactory(profile,
                              RTC::Create<SeqOut>,
                              RTC::Delete<SeqOut>);

@@ -226,7 +226,7 @@ extern "C"
  
   void ConfigSampleInit(RTC::Manager* manager)
   {
-    RTC::Properties profile(configsample_spec);
+    coil::Properties profile(configsample_spec);
     manager->registerFactory(profile,
                              RTC::Create<ConfigSample>,
                              RTC::Delete<ConfigSample>);

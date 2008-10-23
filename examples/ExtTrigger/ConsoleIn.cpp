@@ -73,7 +73,7 @@ extern "C"
  
   void ConsoleInInit(RTC::Manager* manager)
   {
-    RTC::Properties profile(consolein_spec);
+    coil::Properties profile(consolein_spec);
     manager->registerFactory(profile,
                              RTC::Create<ConsoleIn>,
                              RTC::Delete<ConsoleIn>);

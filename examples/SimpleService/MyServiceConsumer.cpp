@@ -227,7 +227,7 @@ extern "C"
  
   void MyServiceConsumerInit(RTC::Manager* manager)
   {
-    RTC::Properties profile(myserviceconsumer_spec);
+    coil::Properties profile(myserviceconsumer_spec);
     manager->registerFactory(profile,
                              RTC::Create<MyServiceConsumer>,
                              RTC::Delete<MyServiceConsumer>);
