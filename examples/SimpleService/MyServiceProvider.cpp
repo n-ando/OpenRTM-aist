@@ -148,7 +148,7 @@ extern "C"
  
   void MyServiceProviderInit(RTC::Manager* manager)
   {
-    RTC::Properties profile(myserviceprovider_spec);
+    coil::Properties profile(myserviceprovider_spec);
     manager->registerFactory(profile,
                              RTC::Create<MyServiceProvider>,
                              RTC::Delete<MyServiceProvider>);
