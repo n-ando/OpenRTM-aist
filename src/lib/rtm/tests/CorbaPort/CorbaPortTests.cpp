@@ -166,7 +166,7 @@ namespace CorbaPort
       port->registerProvider("MyService (provided)", "Generic (provided)", *pMyServiceImpl);
       port->registerConsumer("MyService (required)", "Generic (required)", *pMyServiceConsumer);
 			
-      RTC::Port_var portRef = port->getPortRef();
+      RTC::PortService_var portRef = port->getPortRef();
       RTC::PortProfile* profile = portRef->get_port_profile();
 
       // ポート名称を正しく取得できるか？
