@@ -26,7 +26,11 @@ LIBS = @LIBS@
 AM_CPPFLAGS = \
 	-I. \
 	-I$(top_builddir) \
-	-I$(top_builddir)/rtm \
+	-I$(top_builddir)/src/lib \
+	-I$(top_builddir)/src/lib/rtm_corba/idl \
+	-I$(top_builddir)/src/lib/rtm_corba \
+	-I$(top_builddir)/src/lib/coil/include \
+	-I$(top_builddir)/src/lib/rtm \
 	-I$(includedir)
 
 AM_LDFLAGS = \
@@ -37,7 +41,7 @@ noinst_PROGRAMS = NumberingPolicyTests
 
 nodist_NumberingPolicyTests_SOURCES = \
 	../TestRunner.cpp \
-	$(top_srcdir)/rtm/NumberingPolicy.cpp \
+	$(top_srcdir)/src/lib/rtm/NumberingPolicy.cpp \
 	NumberingPolicyTests.cpp
 
 NumberingPolicyTests_LDFLAGS = -L$(libdir)
