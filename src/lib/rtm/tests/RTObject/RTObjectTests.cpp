@@ -117,13 +117,13 @@ namespace RTObject
 	
   struct PortFinder
   {
-    PortFinder(const RTC::Port_ptr& port) : m_port(port) {}
-    bool operator()(const RTC::Port_ptr& port)
+    PortFinder(const RTC::PortService_ptr& port) : m_port(port) {}
+    bool operator()(const RTC::PortService_ptr& port)
     {
       return m_port->_is_equivalent(port);
     }
 		
-    const RTC::Port_ptr& m_port;
+    const RTC::PortService_ptr& m_port;
   };
 	
   class SDOSystemElementMock
@@ -350,7 +350,7 @@ namespace RTObject
 			
       // initialize()メソッド呼出しを行い、Alive状態に遷移させる
       CPPUNIT_ASSERT_EQUAL(RTC::RTC_OK, rto->initialize());
-      CPPUNIT_ASSERT_EQUAL(true, rto->is_alive());
+      CPPUNIT_ASSERT_EQUAL(true, rto->is_alive(NULL));
 			
       // Alive状態でinitialize()メソッド呼出しを行った場合、意図どおりのエラーを返すか？
       CPPUNIT_ASSERT_EQUAL(RTC::PRECONDITION_NOT_MET, rto->initialize());
@@ -367,7 +367,7 @@ namespace RTObject
 			
       // initialize()メソッド呼出しを行い、Alive状態に遷移させる
       CPPUNIT_ASSERT_EQUAL(RTC::RTC_OK, rto->initialize());
-      CPPUNIT_ASSERT_EQUAL(true, rto->is_alive());
+      CPPUNIT_ASSERT_EQUAL(true, rto->is_alive(NULL));
 			
       // finalize()呼出しにより、on_finalize()コールバックが呼び出されるか？
       CPPUNIT_ASSERT_EQUAL(0, rto->countLog("on_finalize"));
@@ -375,7 +375,7 @@ namespace RTObject
       CPPUNIT_ASSERT_EQUAL(1, rto->countLog("on_finalize"));
 			
       // finalize()完了後なので、終状態へ遷移している（つまりAlive状態ではない）か？
-      CPPUNIT_ASSERT_EQUAL(false, rto->is_alive());
+      CPPUNIT_ASSERT_EQUAL(false, rto->is_alive(NULL));
     }
 		
     /*!
@@ -393,10 +393,10 @@ namespace RTObject
 
       // initialize()メソッド呼出しを行い、Alive状態に遷移させる
       CPPUNIT_ASSERT_EQUAL(RTC::RTC_OK, rto->initialize());
-      CPPUNIT_ASSERT_EQUAL(true, rto->is_alive());
+      CPPUNIT_ASSERT_EQUAL(true, rto->is_alive(ec->_this()));
 			
       // ExecutionContextに登録しておく
-      CPPUNIT_ASSERT_EQUAL(RTC::RTC_OK, ec->add(rto->_this()));
+      CPPUNIT_ASSERT_EQUAL(RTC::RTC_OK, ec->add_component(rto->_this()));
 			
       // ExecutionContextに登録された状態でfinalize()を呼び出した場合、意図どおりのエラーを返すか？
       CPPUNIT_ASSERT_EQUAL(RTC::PRECONDITION_NOT_MET, rto->finalize());
@@ -440,10 +440,10 @@ namespace RTObject
 
       // initialize()メソッド呼出しを行い、Alive状態に遷移させる
       CPPUNIT_ASSERT_EQUAL(RTC::RTC_OK, rto->initialize());
-      CPPUNIT_ASSERT_EQUAL(true, rto->is_alive());
+      CPPUNIT_ASSERT_EQUAL(true, rto->is_alive(ec->_this()));
 			
       // コンポーネントをExecutionContextに登録してアクティブ化する
-      CPPUNIT_ASSERT_EQUAL(RTC::RTC_OK, ec->add(rto->_this()));
+      CPPUNIT_ASSERT_EQUAL(RTC::RTC_OK, ec->add_component(rto->_this()));
       CPPUNIT_ASSERT_EQUAL(RTC::RTC_OK, ec->activate_component(rto->_this()));
 			
       // exit()呼出しにより、当該コンポーネントがfinalize()されるか？
@@ -452,7 +452,7 @@ namespace RTObject
       CPPUNIT_ASSERT_EQUAL(RTC::ACTIVE_STATE, ec->get_component_state(rto->_this()));
       CPPUNIT_ASSERT_EQUAL(RTC::RTC_OK, rto->exit());
       CPPUNIT_ASSERT_EQUAL(1, rto->countLog("on_finalize"));
-      CPPUNIT_ASSERT_EQUAL(false, rto->is_alive());
+      CPPUNIT_ASSERT_EQUAL(false, rto->is_alive(ec->_this()));
     }
 		
     /*!
@@ -483,11 +483,11 @@ namespace RTObject
 	= new RTC::PeriodicExecutionContext(); // will be deleted automatically
 			
       // ExecutionContextにattachしておく
-      RTC::UniqueId id = rto->attach_executioncontext(ec->_this());
+      RTC::UniqueId id = rto->attach_context(ec->_this());
       CPPUNIT_ASSERT(RTC::UniqueId(-1) != id);
 			
       // 正常にdetachできるか？
-      CPPUNIT_ASSERT_EQUAL(RTC::RTC_OK, rto->detach_executioncontext(id));
+      CPPUNIT_ASSERT_EQUAL(RTC::RTC_OK, rto->detach_context(id));
     }
 		
     /*!
@@ -501,7 +501,7 @@ namespace RTObject
 			
       // 存在しないIDでRTCのdetachを試みた場合、意図どおりのエラーを返すか？
       CPPUNIT_ASSERT_EQUAL(RTC::BAD_PARAMETER,
-			   rto->detach_executioncontext(RTC::UniqueId(1)));
+			   rto->detach_context(RTC::UniqueId(1)));
     }
 		
     /*!
@@ -520,9 +520,9 @@ namespace RTObject
 	= new RTC::PeriodicExecutionContext(); // will be deleted automatically
 			
       // ExecutionContextにattachしておく
-      RTC::UniqueId id1 = rto->attach_executioncontext(ec1->_this());
+      RTC::UniqueId id1 = rto->attach_context(ec1->_this());
       CPPUNIT_ASSERT(RTC::UniqueId(-1) != id1);
-      RTC::UniqueId id2 = rto->attach_executioncontext(ec2->_this());
+      RTC::UniqueId id2 = rto->attach_context(ec2->_this());
       CPPUNIT_ASSERT(RTC::UniqueId(-1) != id2);
       CPPUNIT_ASSERT(id1 != id2);
 			
@@ -549,13 +549,13 @@ namespace RTObject
 	= new RTC::PeriodicExecutionContext(); // will be deleted automatically
 
       // ExecutionContextにattachしておく
-      RTC::UniqueId id1 = rto->attach_executioncontext(ec1->_this());
+      RTC::UniqueId id1 = rto->attach_context(ec1->_this());
       CPPUNIT_ASSERT(RTC::UniqueId(-1) != id1);
-      RTC::UniqueId id2 = rto->attach_executioncontext(ec2->_this());
+      RTC::UniqueId id2 = rto->attach_context(ec2->_this());
       CPPUNIT_ASSERT(RTC::UniqueId(-1) != id2);
 			
       // attachされているExecutionContextをすべて正しく取得できるか？
-      RTC::ExecutionContextList* ecList = rto->get_contexts();
+      RTC::ExecutionContextList* ecList = rto->get_owned_contexts();
       CPPUNIT_ASSERT(ecList != NULL);
       CPPUNIT_ASSERT_EQUAL(CORBA::ULong(2), ecList->length());
       CPPUNIT_ASSERT(! (*ecList)[0]->_is_equivalent((*ecList)[1]));
@@ -575,7 +575,7 @@ namespace RTObject
       RTObjectMock* rto	= new RTObjectMock(m_pORB, m_pPOA); // will be deleted automatically
 			
       // ComponentProfileとして取得されるべき情報をあらかじめ設定しておく
-      RTC::Properties prop;
+      coil::Properties prop;
       prop.setProperty("instance_name", "INSTANCE_NAME");
       prop.setProperty("type_name", "TYPE_NAME");
       prop.setProperty("description", "DESCRIPTION");
@@ -621,7 +621,7 @@ namespace RTObject
       rto->registerPort(*port1);
 			
       // 登録したPort参照をすべて正しく取得できるか？
-      RTC::PortList* portList = rto->get_ports();
+      RTC::PortServiceList* portList = rto->get_ports();
       CPPUNIT_ASSERT(portList != NULL);
       CPPUNIT_ASSERT_EQUAL(CORBA::ULong(2), portList->length());
       CPPUNIT_ASSERT(CORBA::Long(-1)
@@ -646,15 +646,16 @@ namespace RTObject
 	= new RTC::PeriodicExecutionContext(); // will be deleted automatically
 
       // ExecutionContextにattachしておく
-      RTC::UniqueId id1 = rto->attach_executioncontext(ec1->_this());
+      RTC::UniqueId id1 = rto->attach_context(ec1->_this());
       CPPUNIT_ASSERT(RTC::UniqueId(-1) != id1);
-      RTC::UniqueId id2 = rto->attach_executioncontext(ec2->_this());
+      RTC::UniqueId id2 = rto->attach_context(ec2->_this());
       CPPUNIT_ASSERT(RTC::UniqueId(-1) != id2);
 
       // ExecutionContextServiceをすべて正しく取得できるか？
       // (注) RTC::PeriodicExecutionContextはExecutionContextServiceのサブクラスになっている。
       RTC::ExecutionContextServiceList* ecSvcList
-	= rto->get_execution_context_services();
+//	= rto->get_execution_context_services();
+	= rto->get_owned_contexts();
       CPPUNIT_ASSERT(ecSvcList != NULL);
       CPPUNIT_ASSERT(CORBA::Long(-1)
 		     != CORBA_SeqUtil::find(*ecSvcList, ExecutionContextServiceFinder(ec1->_this())));
@@ -703,7 +704,7 @@ namespace RTObject
       RTObjectMock* rto	= new RTObjectMock(m_pORB, m_pPOA); // will be deleted automatically
 				
       // ※ 実装上、type_nameがSDOタイプとして使用されているため、ここで準備設定している
-      RTC::Properties prop;
+      coil::Properties prop;
       prop.setProperty("type_name", "TYPE_NAME");
       rto->setProperties(prop);
 			
