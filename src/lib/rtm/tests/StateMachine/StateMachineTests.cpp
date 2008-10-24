@@ -52,7 +52,7 @@
 #include <cppunit/extensions/HelperMacros.h>
 #include <cppunit/TestAssert.h>
 
-#include <rtm/TimeValue.h>
+#include <coil/TimeValue.h>
 #include <rtm/StateMachine.h>
 
 /*!
