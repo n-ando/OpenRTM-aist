@@ -32,7 +32,11 @@ LIBS = @LIBS@
 AM_CPPFLAGS= \
 	-I. \
 	-I$(top_builddir) \
-	-I$(top_builddir)/rtm/idl \
+	-I$(top_builddir)/src/lib/rtm \
+	-I$(top_builddir)/src/lib/ \
+	-I$(top_builddir)/src/lib/rtm_corba \
+	-I$(top_builddir)/src/lib/rtm_corba/idl \
+	-I$(top_builddir)/src/lib/coil/include \
 	-I$(includedir)
 
 AM_LDFLAGS=               \
