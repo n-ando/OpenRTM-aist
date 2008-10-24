@@ -149,7 +149,7 @@ namespace PortAdmin
       portAdmin.registerPort(*port1);
 			
       // getPortList()で登録されている全Portを取得する
-      RTC::PortList* portList = portAdmin.getPortList();
+      RTC::PortServiceList* portList = portAdmin.getPortServiceList();
 			
       // 取得されたPortが、あらかじめ登録したものと一致するか？
       RTC::PortProfile* portProf0 = (*portList)[0]->get_port_profile();
@@ -185,12 +185,12 @@ namespace PortAdmin
       portAdmin.registerPort(*port1);
 			
       // 登録されているPortの参照を正しく取得できるか？
-      RTC::Port_var portRef0 = portAdmin.getPortRef("port0");
+      RTC::PortService_var portRef0 = portAdmin.getPortRef("port0");
       CPPUNIT_ASSERT(! CORBA::is_nil(portRef0));
       RTC::PortProfile* portProf0 = portRef0->get_port_profile();
       CPPUNIT_ASSERT_EQUAL(std::string("port0"), std::string(portProf0->name));
 
-      RTC::Port_var portRef1 = portAdmin.getPortRef("port1");
+      RTC::PortService_var portRef1 = portAdmin.getPortRef("port1");
       CPPUNIT_ASSERT(! CORBA::is_nil(portRef1));
       RTC::PortProfile* portProf1 = portRef1->get_port_profile();
       CPPUNIT_ASSERT_EQUAL(std::string("port1"), std::string(portProf1->name));
@@ -258,7 +258,7 @@ namespace PortAdmin
       portAdmin.deletePort(*port0);
 			
       // getPortList()にて、登録されている全Portを取得する
-      RTC::PortList* portList = portAdmin.getPortList();
+      RTC::PortServiceList* portList = portAdmin.getPortServiceList();
 			
       // 削除したPortが、取得したPortList内に含まれていないことを確認する
       CPPUNIT_ASSERT_EQUAL(CORBA::ULong(1), portList->length());
@@ -293,7 +293,7 @@ namespace PortAdmin
       portAdmin.deletePortByName("port0");
 			
       // getPortList()にて、登録されている全Portを取得する
-      RTC::PortList* portList = portAdmin.getPortList();
+      RTC::PortServiceList* portList = portAdmin.getPortServiceList();
 			
       // 削除したPortが、取得したPortList内に含まれていないことを確認する
       CPPUNIT_ASSERT_EQUAL(CORBA::ULong(1), portList->length());
@@ -328,7 +328,7 @@ namespace PortAdmin
       portAdmin.finalizePorts();
 			
       // getPortList()にて、登録されている全Portを取得する
-      RTC::PortList* portList = portAdmin.getPortList();
+      RTC::PortServiceList* portList = portAdmin.getPortServiceList();
 			
       // 取得したPortListが空であることを確認する
       CPPUNIT_ASSERT_EQUAL(CORBA::ULong(0), portList->length());
