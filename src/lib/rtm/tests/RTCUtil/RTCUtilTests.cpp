@@ -25,9 +25,9 @@
 #include <cppunit/extensions/HelperMacros.h>
 #include <cppunit/TestAssert.h>
 
-#include <rtm/idl/SDOPackageSkel.h>
-#include <rtm/idl/RTCSkel.h>
-#include <rtm/idl/OpenRTMSkel.h>
+#include <idl/SDOPackageSkel.h>
+#include <idl/RTCSkel.h>
+#include <idl/OpenRTMSkel.h>
 #include <rtm/RTCUtil.h>
 
 /*!
@@ -37,7 +37,7 @@
 namespace Tests
 {
   class DataFlowComponentMock
-    : public virtual POA_RTC::DataFlowComponent,
+    : public virtual POA_OpenRTM::DataFlowComponent,
       public virtual PortableServer::RefCountServantBase
   {
   public:
@@ -60,58 +60,73 @@ namespace Tests
     virtual CORBA::Any* get_status(const char*) { return NULL; }
 		
     // RTC::_impl_DataFlowComponentAction
-    virtual RTC::ReturnCode_t on_execute(RTC::UniqueId) { return RTC::RTC_OK; }
-    virtual RTC::ReturnCode_t on_state_update(RTC::UniqueId) { return RTC::RTC_OK; }
-    virtual RTC::ReturnCode_t on_rate_changed(RTC::UniqueId) { return RTC::RTC_OK; }
-    virtual RTC::UniqueId attach_executioncontext(RTC::_objref_ExecutionContext*) { return RTC::UniqueId(0); }
-    virtual RTC::ReturnCode_t detach_executioncontext(RTC::UniqueId) { return RTC::RTC_OK; }
+    virtual RTC::ReturnCode_t on_execute(RTC::ExecutionContextHandle_t) { return RTC::RTC_OK; }
+    virtual RTC::ReturnCode_t on_state_update(RTC::ExecutionContextHandle_t) { return RTC::RTC_OK; }
+    virtual RTC::ReturnCode_t on_rate_changed(RTC::ExecutionContextHandle_t) { return RTC::RTC_OK; }
+    virtual RTC::ExecutionContextHandle_t attach_context(RTC::_objref_ExecutionContext*) { return RTC::ExecutionContextHandle_t(0); }
+    virtual RTC::ReturnCode_t detach_context(RTC::ExecutionContextHandle_t) { return RTC::RTC_OK; }
     virtual RTC::ReturnCode_t on_initialize() { return RTC::RTC_OK; }
     virtual RTC::ReturnCode_t on_finalize() { return RTC::RTC_OK; }
-    virtual RTC::ReturnCode_t on_startup(RTC::UniqueId) { return RTC::RTC_OK; }
-    virtual RTC::ReturnCode_t on_shutdown(RTC::UniqueId) { return RTC::RTC_OK; }
-    virtual RTC::ReturnCode_t on_activated(RTC::UniqueId) { return RTC::RTC_OK; }
-    virtual RTC::ReturnCode_t on_deactivated(RTC::UniqueId) { return RTC::RTC_OK; }
-    virtual RTC::ReturnCode_t on_aborting(RTC::UniqueId) { return RTC::RTC_OK; }
-    virtual RTC::ReturnCode_t on_error(RTC::UniqueId) { return RTC::RTC_OK; }
-    virtual RTC::ReturnCode_t on_reset(RTC::UniqueId) { return RTC::RTC_OK; }
-		
-    // RTC::_impl_LightweightRTObject
+    virtual RTC::ReturnCode_t on_startup(RTC::ExecutionContextHandle_t) { return RTC::RTC_OK; }
+    virtual RTC::ReturnCode_t on_shutdown(RTC::ExecutionContextHandle_t) { return RTC::RTC_OK; }
+    virtual RTC::ReturnCode_t on_activated(RTC::ExecutionContextHandle_t) { return RTC::RTC_OK; }
+    virtual RTC::ReturnCode_t on_deactivated(RTC::ExecutionContextHandle_t) { return RTC::RTC_OK; }
+    virtual RTC::ReturnCode_t on_aborting(RTC::ExecutionContextHandle_t) { return RTC::RTC_OK; }
+    virtual RTC::ReturnCode_t on_error(RTC::ExecutionContextHandle_t) { return RTC::RTC_OK; }
+    virtual RTC::ReturnCode_t on_reset(RTC::ExecutionContextHandle_t) { return RTC::RTC_OK; }
+    virtual RTC::ExecutionContextList* get_owned_contexts()
+    {
+        return 0;
+    }
+    virtual RTC::ExecutionContextList* get_participating_contexts()
+    {
+        return 0;
+    }
+    virtual RTC::ExecutionContextHandle_t get_context_handle(RTC::_objref_ExecutionContext*)	
+    {
+        return 0;
+    }
+    virtual RTC::ReturnCode_t send_stimulus(const char*, RTC::ExecutionContextHandle_t)
+    {
+        return RTC::RTC_OK;
+    }
+    // RTC::_impl_LightweightRTObjec:t
     virtual RTC::ReturnCode_t initialize() { return RTC::RTC_OK; }
     virtual RTC::ReturnCode_t finalize() { return RTC::RTC_OK; }
     virtual RTC::ReturnCode_t exit() { return RTC::RTC_OK; }
-    virtual CORBA::Boolean is_alive() { return true; }
-    virtual RTC::ExecutionContextList* get_contexts() { return NULL; }
-    virtual RTC::_objref_ExecutionContext* get_context(RTC::UniqueId) { return NULL; }
+    virtual CORBA::Boolean is_alive(RTC::_objref_ExecutionContext*) { return true; }
+//    virtual RTC::ExecutionContextList* get_contexts() { return NULL; }
+    virtual RTC::_objref_ExecutionContext* get_context(RTC::ExecutionContextHandle_t) { return NULL; }
 		
     // RTC::_impl_RTObject
     virtual RTC::ComponentProfile* get_component_profile() { return NULL; }
-    virtual RTC::PortList* get_ports() { return NULL; }
-    virtual RTC::ExecutionContextServiceList* get_execution_context_services() { return NULL; }
+    virtual RTC::PortServiceList* get_ports() { return NULL; }
+//    virtual RTC::ExecutionContextServiceList* get_execution_context_services() { return NULL; }
   };
-	
+
   class FiniteStateMachineComponentMock
-    : public virtual POA_RTC::FiniteStateMachineComponent
+    : public virtual POA_OpenRTM::FiniteStateMachineComponent
   {
     // RTC::_impl_ComponentAction
-    virtual RTC::UniqueId attach_executioncontext(RTC::_objref_ExecutionContext*) { return RTC::UniqueId(0); }
-    virtual RTC::ReturnCode_t detach_executioncontext(RTC::UniqueId) { return RTC::RTC_OK; }
+    virtual RTC::ExecutionContextHandle_t attach_context(RTC::_objref_ExecutionContext*) { return RTC::ExecutionContextHandle_t(0); }
+    virtual RTC::ReturnCode_t detach_context(RTC::ExecutionContextHandle_t) { return RTC::RTC_OK; }
     virtual RTC::ReturnCode_t on_initialize() { return RTC::RTC_OK; }
     virtual RTC::ReturnCode_t on_finalize() { return RTC::RTC_OK; }
-    virtual RTC::ReturnCode_t on_startup(RTC::UniqueId) { return RTC::RTC_OK; }
-    virtual RTC::ReturnCode_t on_shutdown(RTC::UniqueId) { return RTC::RTC_OK; }
-    virtual RTC::ReturnCode_t on_activated(RTC::UniqueId) { return RTC::RTC_OK; }
-    virtual RTC::ReturnCode_t on_deactivated(RTC::UniqueId) { return RTC::RTC_OK; }
-    virtual RTC::ReturnCode_t on_aborting(RTC::UniqueId) { return RTC::RTC_OK; }
-    virtual RTC::ReturnCode_t on_error(RTC::UniqueId) { return RTC::RTC_OK; }
-    virtual RTC::ReturnCode_t on_reset(RTC::UniqueId) { return RTC::RTC_OK; }
+    virtual RTC::ReturnCode_t on_startup(RTC::ExecutionContextHandle_t) { return RTC::RTC_OK; }
+    virtual RTC::ReturnCode_t on_shutdown(RTC::ExecutionContextHandle_t) { return RTC::RTC_OK; }
+    virtual RTC::ReturnCode_t on_activated(RTC::ExecutionContextHandle_t) { return RTC::RTC_OK; }
+    virtual RTC::ReturnCode_t on_deactivated(RTC::ExecutionContextHandle_t) { return RTC::RTC_OK; }
+    virtual RTC::ReturnCode_t on_aborting(RTC::ExecutionContextHandle_t) { return RTC::RTC_OK; }
+    virtual RTC::ReturnCode_t on_error(RTC::ExecutionContextHandle_t) { return RTC::RTC_OK; }
+    virtual RTC::ReturnCode_t on_reset(RTC::ExecutionContextHandle_t) { return RTC::RTC_OK; }
 		
     // RTC::_impl_LightweightRTObject
     virtual RTC::ReturnCode_t initialize() { return RTC::RTC_OK; }
     virtual RTC::ReturnCode_t finalize() { return RTC::RTC_OK; }
     virtual RTC::ReturnCode_t exit() { return RTC::RTC_OK; }
-    virtual CORBA::Boolean is_alive() { return true; }
-    virtual RTC::ExecutionContextList* get_contexts() { return NULL; }
-    virtual RTC::_objref_ExecutionContext* get_context(RTC::UniqueId) { return NULL; }
+    virtual CORBA::Boolean is_alive(RTC::_objref_ExecutionContext*) { return true; }
+//    virtual RTC::ExecutionContextList* get_contexts() { return NULL; }
+    virtual RTC::_objref_ExecutionContext* get_context(RTC::ExecutionContextHandle_t) { return NULL; }
 		
     // SDOPackage::_impl_SDOSystemElement
     virtual SDOPackage::OrganizationList* get_owned_organizations() { return NULL; }
@@ -131,18 +146,46 @@ namespace Tests
 		
     // RTC::_impl_RTObject
     virtual RTC::ComponentProfile* get_component_profile() { return NULL; }
-    virtual RTC::PortList* get_ports() { return NULL; }
-    virtual RTC::ExecutionContextServiceList* get_execution_context_services() { return NULL; }
+    virtual RTC::PortServiceList* get_ports() { return NULL; }
+//    virtual RTC::ExecutionContextServiceList* get_execution_context_services() { return NULL; }
 		
     // RTC::_impl_FsmParticipantAction
-    virtual RTC::ReturnCode_t on_action(RTC::UniqueId) { return RTC::RTC_OK; }
+    virtual RTC::ReturnCode_t on_action(RTC::ExecutionContextHandle_t) { return RTC::RTC_OK; }
+    virtual RTC::ExecutionContextList*get_owned_contexts()
+    {
+      return NULL;
+    }
+    virtual RTC::ExecutionContextList* get_participating_contexts()
+    {
+      return NULL;
+    }
+    virtual RTC::ExecutionContextHandle_t get_context_handle(RTC::_objref_ExecutionContext*)
+    {
+      return 0;
+    }
+
+    virtual RTC::_objref_Mode* get_current_mode_in_context(RTC::_objref_ExecutionContext*)
+    {
+      return NULL;
+    }
+    virtual RTC::_objref_Mode* get_pending_mode_in_context(RTC::_objref_ExecutionContext*)
+    {
+      return NULL;
+    }
+    virtual RTC::ReturnCode_t on_mode_changed(RTC::ExecutionContextHandle_t)
+    {
+      return RTC::RTC_OK;
+    }
   };
-	
   class FsmObjectMock
     : public virtual POA_RTC::FsmObject
   {
     // RTC::_impl_FsmObject
-    virtual RTC::ReturnCode_t stimulate(const char*, RTC::UniqueId) { return RTC::RTC_OK; }
+    virtual RTC::ReturnCode_t stimulate(const char*, RTC::ExecutionContextHandle_t) { return RTC::RTC_OK; }
+    virtual RTC::ReturnCode_t send_stimulus(const char*, RTC::ExecutionContextHandle_t)
+    {
+        return RTC::RTC_OK;
+    }
   };
 	
   class MultiModeObjectMock
@@ -151,13 +194,98 @@ namespace Tests
     // RTC::_impl_ModeCapable
     virtual RTC::_objref_Mode* get_default_mode() { return NULL; }
     virtual RTC::_objref_Mode* get_current_mode() { return NULL; }
-    virtual RTC::_objref_Mode* get_current_mode_in_context(RTC::UniqueId) { return NULL; }
+    virtual RTC::_objref_Mode* get_current_mode_in_context(RTC::_objref_ExecutionContext*) { return NULL; } 
     virtual RTC::_objref_Mode* get_pending_mode() { return NULL; }
-    virtual RTC::_objref_Mode* get_pending_mode_in_context(RTC::UniqueId) { return NULL; }
+    virtual RTC::_objref_Mode* get_pending_mode_in_context(RTC::_objref_ExecutionContext*) { return NULL; }
     virtual RTC::ReturnCode_t set_mode(RTC::_objref_Mode*, CORBA::Boolean) { return RTC::RTC_OK; }
 
     // RTC::_impl_MultiModeComponentAction
-    virtual RTC::ReturnCode_t on_mode_changed(RTC::_objref_LightweightRTObject*, RTC::UniqueId) { return RTC::RTC_OK; }
+    virtual RTC::ReturnCode_t on_mode_changed(RTC::ExecutionContextHandle_t)
+    {
+      return RTC::RTC_OK;
+    }
+
+    virtual RTC::ReturnCode_t send_stimulus(const char*, RTC::ExecutionContextHandle_t)
+    {
+        return RTC::RTC_OK;
+    }
+    virtual RTC::ReturnCode_t on_initialize()
+    {
+        return RTC::RTC_OK;
+    }
+    virtual RTC::ReturnCode_t on_startup(RTC::ExecutionContextHandle_t)
+    {
+        return RTC::RTC_OK;
+    }
+    virtual RTC::ReturnCode_t on_shutdown(RTC::ExecutionContextHandle_t)
+    {
+        return RTC::RTC_OK;
+    }
+    virtual RTC::ReturnCode_t on_activated(RTC::ExecutionContextHandle_t)
+    {
+        return RTC::RTC_OK;
+    }
+    virtual RTC::ReturnCode_t on_deactivated(RTC::ExecutionContextHandle_t)
+    {
+        return RTC::RTC_OK;
+    }
+    virtual RTC::ReturnCode_t on_aborting(RTC::ExecutionContextHandle_t)
+    {
+        return RTC::RTC_OK;
+    }
+    virtual RTC::ReturnCode_t on_error(RTC::ExecutionContextHandle_t)
+    {
+        return RTC::RTC_OK;
+    }
+    virtual RTC::ReturnCode_t on_reset(RTC::ExecutionContextHandle_t)
+    {
+        return RTC::RTC_OK;
+    }
+    virtual RTC::ReturnCode_t on_finalize()
+    {
+        return RTC::RTC_OK;
+    }
+    virtual RTC::ReturnCode_t initialize()
+    {
+        return RTC::RTC_OK;
+    }
+    virtual RTC::ReturnCode_t finalize()
+    {
+        return RTC::RTC_OK;
+    }
+    virtual CORBA::Boolean is_alive(RTC::_objref_ExecutionContext*)
+    {
+        return 0;
+    }
+    virtual RTC::ReturnCode_t exit()
+    {
+        return RTC::RTC_OK;
+    }
+    virtual RTC::ExecutionContextHandle_t attach_context(RTC::_objref_ExecutionContext*) 
+    { 
+      return RTC::ExecutionContextHandle_t(0); 
+    }
+    virtual RTC::ReturnCode_t detach_context(RTC::ExecutionContextHandle_t) 
+    { 
+      return RTC::RTC_OK; 
+    }
+    virtual RTC::_objref_ExecutionContext* get_context(RTC::ExecutionContextHandle_t)
+    {
+      return 0;
+    }
+    virtual RTC::ExecutionContextList* get_owned_contexts()
+    {
+      return NULL;
+    }
+    virtual RTC::ExecutionContextList* get_participating_contexts()
+    {
+      return NULL;
+    }
+    virtual RTC::ExecutionContextHandle_t get_context_handle(RTC::_objref_ExecutionContext*)
+    {
+      return 0;
+    }
+
   };
 	
   class RTCUtilTests
