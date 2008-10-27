@@ -28,8 +28,10 @@ LIBS = @LIBS@
 AM_CPPFLAGS = \
 	-I. \
 	-I$(top_builddir) \
-	-I$(top_builddir)/rtm \
-	-I$(top_builddir)/rtm/idl \
+	-I$(top_builddir)/src/lib \
+	-I$(top_builddir)/src/lib/rtm_corba \
+	-I$(top_builddir)/src/lib/rtm_corba/idl \
+	-I$(top_builddir)/src/lib/coil/include \
 	-I$(includedir)
 
 AM_LDFLAGS = \
@@ -37,16 +39,15 @@ AM_LDFLAGS = \
 	-L$(top_builddir)
 
 IDL_SOURCES = \
-	$(top_srcdir)/rtm/idl/SDOPackage.idl \
-	$(top_srcdir)/rtm/idl/RTC.idl \
-	$(top_srcdir)/rtm/idl/OpenRTM.idl
-
+	$(top_srcdir)/src/lib/rtm_corba/idl/SDOPackage.idl \
+	$(top_srcdir)/src/lib/rtm_corba/idl/RTC.idl \
+	$(top_srcdir)/src/lib/rtm_corba/idl/OpenRTM.idl
 noinst_PROGRAMS = RTCUtilTests
 
 nodist_RTCUtilTests_SOURCES = \
 	../TestRunner.cpp \
 	$(IDL_SOURCES:.idl=Skel.cpp) \
-	$(top_srcdir)/rtm/RTCUtil.cpp \
+	$(top_srcdir)/src/lib/rtm/RTCUtil.cpp \
 	RTCUtilTests.cpp
 
 RTCUtilTests_LDFLAGS = -L$(libdir)
