@@ -21,6 +21,7 @@ COIL_PLATFORM_SRC =    \
 COIL_PLATFORM_H   =    \
 	config_coil.h  \
 	atomic.h       \
+	File.h         \
 	OS.h           \
 	$(COIL_PLATFORM_SRC:.cpp=.h)
 

@@ -8,6 +8,7 @@
 SUBDIRS = \
         Condition  \
         DynamicLib \
+        File       \
         Guard      \
         Listener   \
 	Mutex      \
