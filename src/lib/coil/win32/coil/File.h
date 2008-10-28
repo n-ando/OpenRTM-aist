@@ -19,23 +19,44 @@
 #ifndef COIL_FILE_H
 #define COIL_FILE_H
 
-#include <libgen.h>
+//#include <libgen.h>
 #include <coil/config_coil.h>
 #include <memory>
 
 namespace coil
 {
+  const unsigned int MaxPathLength(1024);
 
+  /*!
+  *  @note like ACE.
+  */
   inline char* dirname(char* path)
   {
-    return ::dirname(path);
+    static char return_dirname[MaxPathLength + 1];
+    const char delimiter('\\');
+    const char *p = std::strrchr(path, delimiter);
+    if (p)
+    {
+      size_t len = p - path + 1;
+      if (len > (sizeof(return_dirname) / sizeof(char)))
+      {
+        len = sizeof(return_dirname) / sizeof(char);
+      }
+      std::strncpy(return_dirname, path, len);
+    } else {
+      return_dirname[0] = '.';
+      return_dirname[1] = '\0';
+    }
+    return return_dirname;
   }
 
   inline char* basename(const char* path)
   {
-    char p[strlen(path)+1];
-    strncpy(p, path, strlen(path));
-    return ::basename(p);
+    const char delimiter('\\');
+    const char *p = std::strrchr(path, delimiter);
+    const char *q = (p) ? p + 1 : path ;
+
+    return (char *)q;
   }
 };
 

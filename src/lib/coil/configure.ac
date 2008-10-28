@@ -512,6 +512,7 @@ AC_OUTPUT([Makefile
 	tests/Makefile
 	tests/Condition/Makefile
 	tests/DynamicLib/Makefile
+	tests/File/Makefile
 	tests/Guard/Makefile
 	tests/Listener/Makefile
 	tests/Mutex/Makefile
