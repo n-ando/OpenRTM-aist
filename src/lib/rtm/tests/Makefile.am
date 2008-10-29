@@ -118,7 +118,6 @@ SUBDIRS = \
 	PeriodicExecutionContext \
 	PortAdmin         \
 	PortBase          \
-	Properties        \
 	PublisherFactory  \
 	PublisherFlush    \
 	PublisherNew      \
