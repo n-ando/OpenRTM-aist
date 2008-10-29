@@ -1,7 +1,7 @@
 // -*- C++ -*-
 /*!
- * @file  MultiModeObjectInterface.h
- * @brief MultiModeObjectInterface class
+ * @file  IMultiModeObject.h
+ * @brief IMultiModeObject class
  * @date  $Date$
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
@@ -17,43 +17,41 @@
  *
  */
 
-#ifndef MultiModeObjectInterface_h
-#define MultiModeObjectInterface_h
+#ifndef RTC_IMULTIMODEOBJECT_H
+#define RTC_IMULTIMODEOBJECT_H
 
-#include <rtm/RTCInterface.h>
-#include <rtm/ModeCapableInterface.h>
-#include <rtm/MultModeComponentActionInterface.h>
+#include <rtc/IRTC.h>
+#include <rtc/IModeCapable.h>
+#include <rtc/IMultModeComponentAction.h>
 
 namespace RTC
 {
-  namespace Interface
+  /*!
+   * @if jp
+   * @class IMultiModeObject
+   * @brief IMultiModeObject クラス
+   * @else
+   * @class IMultiModeObject
+   * @brief IMultiModeObject class
+   * @endif
+   */
+  class IMultiModeObject
+    : public virtual IRTObject,
+      public virtual IModeCapable,
+      public virtual IMultiModeComponentAction
   {
+  public:
     /*!
      * @if jp
-     * @class MultiModeObjectInterface
-     * @brief MultiModeObjectInterface クラス
+     * @brief デストラクタ
      * @else
-     * @class MultiModeObjectInterface
-     * @brief MultiModeObjectInterface class
+     * @brief Destructor
      * @endif
      */
-    class MultiModeObjectInterface
-      : public virtual RTObjectInterface,
-        public virtual ModeCapableInterface,
-        public virtual MultiModeComponentAction
-    {
-    public:
-      /*!
-       * @if jp
-       * @brief デストラクタ
-       * @else
-       * @brief Destructor
-       * @endif
-       */
-      virtual ~MultiModeObjectInterface() {};
-      virtual ReturnCode_t on_mode_changed(ExecutionContextHandle_t ec_handle) = 0;
-    };
-  };   // namespace Interface
+    virtual ~IMultiModeObject() {};
+    virtual ReturnCode_t
+    on_mode_changed(ExecutionContextHandle_t ec_handle) = 0;
+  };
 };     // namespace RTC
-#endif // MultiModeObjectInterface_h
+#endif // RTC_IMULTIMODEOBJECT_H
 
