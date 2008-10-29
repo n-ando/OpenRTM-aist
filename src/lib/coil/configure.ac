@@ -499,6 +499,9 @@ echo ''
 AC_OUTPUT([Makefile
 	build/Makefile
 	common/Makefile
+	include/Makefile
+	include/coil/Makefile
+	lib/Makefile
 	posix/Makefile
 	posix/coil/Makefile
 	win32/Makefile
