@@ -57,8 +57,8 @@ AM_WITH_DMALLOC
 AC_CHECK_HEADERS([nlist.h stdlib.h unistd.h])
 AC_CHECK_FUNCS([uname])
 
-CPPFLAGS="-Wall -fPIC $CPPFLAGS"
-CXXFLAGS="-Wall -fPIC $CXXFLAGS"
+CPPFLAGS="-Wl,-E -Wall -fPIC $CPPFLAGS"
+CXXFLAGS="-Wl,-E -Wall -fPIC $CXXFLAGS"
 SHLIB_SUFFIX=".so"
 
 AC_SEARCH_LIBS(pthread_create, pthread c_r, , 
@@ -1447,7 +1447,6 @@ AC_OUTPUT([Makefile
 	src/lib/rtm/tests/PeriodicExecutionContext/Makefile
 	src/lib/rtm/tests/PortAdmin/Makefile
 	src/lib/rtm/tests/PortBase/Makefile
-	src/lib/rtm/tests/Properties/Makefile
 	src/lib/rtm/tests/PublisherFactory/Makefile
 	src/lib/rtm/tests/PublisherFlush/Makefile
 	src/lib/rtm/tests/PublisherNew/Makefile
