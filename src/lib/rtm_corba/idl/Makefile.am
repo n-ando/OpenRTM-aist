@@ -160,7 +160,7 @@ vc8proj: libRTCSkel.vcproj.yaml
 		--type LIB \
 		--vcversion "8.00" \
 		--version $(RTM_VERSION) \
-		--out $(win32_builddir)/rtm/idl/libRTCSkel_vc8.vcproj \
+		--out $(win32_builddir)/rtm_corba/idl/libRTCSkel_vc8.vcproj \
 		--yaml libRTCSkel.vcproj.yaml \
 		--source $(SKEL_CPP) \
 		--header $(SKEL_H)
@@ -171,7 +171,7 @@ vc9proj: libRTCSkel.vcproj.yaml
 		--type LIB \
 		--vcversion "9.00" \
 		--version $(RTM_VERSION) \
-		--out $(win32_builddir)/rtm/idl/libRTCSkel_vc9.vcproj \
+		--out $(win32_builddir)/rtm_corba/idl/libRTCSkel_vc9.vcproj \
 		--yaml libRTCSkel.vcproj.yaml \
 		--source $(SKEL_CPP) \
 		--header $(SKEL_H)
