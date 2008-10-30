@@ -165,7 +165,8 @@ namespace RTC
 	  (*m_OnWrite)(value);
 	}
       
-      long int timeout = m_writeTimeout;
+//      long int timeout = m_writeTimeout;
+      double timeout = (double)m_writeTimeout / (double)TIMEVALUE_ONE_SECOND_IN_USECS;
       
       coil::TimeValue tm_cur, tm_pre;
       tm_pre = coil::gettimeofday();
@@ -316,7 +317,8 @@ namespace RTC
     {
       if (m_OnRead != NULL) (*m_OnRead)();      
       
-      long int timeout = m_readTimeout;
+//      long int timeout = m_readTimeout;
+      double timeout = (double)m_readTimeout / (double)TIMEVALUE_ONE_SECOND_IN_USECS;
       coil::TimeValue tm_cur, tm_pre;
       tm_pre = coil::gettimeofday();
       
