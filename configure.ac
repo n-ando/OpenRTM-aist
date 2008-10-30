@@ -1501,8 +1501,11 @@ AC_OUTPUT([Makefile
 	win32/OpenRTM-aist/utils/Makefile
 	win32/OpenRTM-aist/utils/rtc-template/Makefile
 	win32/OpenRTM-aist/utils/rtcd/Makefile
+	win32/OpenRTM-aist/coil/Makefile
 	win32/OpenRTM-aist/rtm/Makefile
 	win32/OpenRTM-aist/rtm/idl/Makefile
+	win32/OpenRTM-aist/rtm_corba/Makefile
+	win32/OpenRTM-aist/rtm_corba/idl/Makefile
 	win32/OpenRTM-aist/installer/Makefile
 	win32/OpenRTM-aist/installer/Bitmaps/Makefile
 	])

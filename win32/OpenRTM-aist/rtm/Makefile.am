@@ -14,8 +14,8 @@ clean-local:
 	rm -f *~ *.cpp *.h *.cc *.hh *.sln *.suo *.ncb *.user *.vcproj
 
 src:
-	cp $(top_srcdir)/rtm/*.cpp .
-	cp $(top_srcdir)/rtm/*.h .
+	cp $(top_srcdir)/src/lib/rtm/*.cpp .
+	cp $(top_srcdir)/src/lib/rtm/*.h .
 	qkc -ms *.cpp
 	qkc -ms *.h
 

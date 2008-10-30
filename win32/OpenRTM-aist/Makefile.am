@@ -4,7 +4,7 @@
 ##
 ## $Id$
 ##---------------------------------------------------------------------------
-SUBDIRS = bin etc build docs examples utils rtm installer .
+SUBDIRS = bin etc build docs examples utils coil rtm rtm_corba installer .
 
 
 clean-local:
