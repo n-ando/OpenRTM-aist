@@ -37,7 +37,8 @@
 #include <cppunit/TestAssert.h>
 
 #include <iostream>
-#include <rtm/Properties.h>
+#include <coil/Properties.h>
+#include <coil/Time.h>
 #include <rtm/InPortConsumer.h>
 #include <rtm/PublisherPeriodic.h>
 
@@ -62,7 +63,7 @@ namespace PublisherPeriodic
     virtual void push()
     {
       timeval now;
-      gettimeofday(&now, NULL);
+      coil::gettimeofday(&now, NULL);
 			
       if (! isLastTimeCleared())
 	{
@@ -177,9 +178,9 @@ namespace PublisherPeriodic
   {
     CPPUNIT_TEST_SUITE(PublisherPeriodicTests);
 		
-    // CPPUNIT_TEST(test_destructor);
-    // CPPUNIT_TEST(test_interval_accuracy);
-    // CPPUNIT_TEST(test_release);
+    CPPUNIT_TEST(test_destructor);
+    CPPUNIT_TEST(test_interval_accuracy);
+    CPPUNIT_TEST(test_release);
 		
     CPPUNIT_TEST_SUITE_END();
 		
@@ -204,7 +205,7 @@ namespace PublisherPeriodic
      */
     virtual void setUp()
     {
-      usleep(1000000);
+      coil::usleep(1000000);
     }
     
     /*!
@@ -225,21 +226,21 @@ namespace PublisherPeriodic
 
       { // Publisherのインスタンススコープ開始
 	CounterConsumer* consumer2 = new CounterConsumer(consumer1);
-	RTC::Properties prop;
+	coil::Properties prop;
 	prop.setProperty("dataport.push_rate", "10"); // 10 [Hz]
 	RTC::PublisherPeriodic publisher(consumer2, prop);
 	// 5 [sec]だけ動作させる
-	usleep(5000000);
+	coil::usleep(5000000);
 				
       } // デストラクタを呼び出す（スコープを終了させる）
 			
-      usleep(1000000); // 完全停止するまで待つ
+      coil::usleep(1000000); // 完全停止するまで待つ
 			
       // この時点での呼出回数を記録する
       int countReleased = consumer1->getCount();
 			
       // さらにConsumerがコールバックされ得る時間を与える
-      usleep(5000000); // 5 [sec]
+      coil::usleep(5000000); // 5 [sec]
 			
       // この時点での呼出回数を取得し、先に記録しておいた回数から変化がない
       // （つまり、Publisherの動作が停止している）ことを確認する
@@ -255,22 +256,22 @@ namespace PublisherPeriodic
     void test_release()
     {
       CounterConsumer* consumer = new CounterConsumer();
-      RTC::Properties prop;
+      coil::Properties prop;
       prop.setProperty("dataport.push_rate", "10"); // 10 [Hz]
       RTC::PublisherPeriodic publisher(consumer, prop);
 			
       // 5 [sec]だけ動作させる
-      usleep(5000000);
+      coil::usleep(5000000);
 			
       // Publisherの動作を停止させる
       publisher.release();
-      usleep(1000000); // 完全停止するまで待つ
+      coil::usleep(1000000); // 完全停止するまで待つ
 			
       // この時点での呼出回数を記録する
       int countReleased = consumer->getCount();
 			
       // さらにConsumerがコールバックされ得る時間を与える
-      usleep(5000000); // 5 [sec]
+      coil::usleep(5000000); // 5 [sec]
 			
       // この時点での呼出回数を取得し、先に記録しておいた回数から変化がない
       // （つまり、Publisherの動作が停止している）ことを確認する
@@ -286,16 +287,16 @@ namespace PublisherPeriodic
     void test_interval_accuracy()
     {
       MockConsumer* consumer = new MockConsumer();
-      RTC::Properties prop;
+      coil::Properties prop;
       prop.setProperty("dataport.push_rate", "10"); // 10 [Hz]
       RTC::PublisherPeriodic publisher(consumer, prop);
 			
       // 5 [sec]だけ動作させる
-      usleep(5000000);
+      coil::usleep(5000000);
 			
       // Publisherの動作を停止させる
       publisher.release();
-      usleep(1000000); // 完全停止するまで待つ
+      coil::usleep(1000000); // 完全停止するまで待つ
 			
       // 指定した時間間隔で正しくConsumerがコールバックされているか？
       long permissibleTickMin = static_cast<long>(100000 * 0.9);
