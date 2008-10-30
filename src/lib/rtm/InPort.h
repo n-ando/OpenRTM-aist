@@ -238,11 +238,10 @@ namespace RTC
     {
       if (m_OnWrite != NULL) (*m_OnWrite)(value);      
       
-      long int timeout = m_writeTimeout;
+      double timeout = (double)m_writeTimeout / (double)TIMEVALUE_ONE_SECOND_IN_USECS;
       
       coil::TimeValue tm_cur, tm_pre;
       tm_pre = coil::gettimeofday();
-      
       // blocking and timeout wait
       while (m_writeBlock && this->isFull())
 	{
@@ -261,10 +260,16 @@ namespace RTC
           coil::usleep(TIMEOUT_TICK_USEC);
 	}
       
-      if (this->isFull() && m_OnOverflow != NULL)
+      if (this->isFull())
 	{
-	  (*m_OnOverflow)(value);
-	  return false;
+          //Is the buffer overflow callback object set?
+          if(m_OnOverflow != NULL)
+            {
+              //Call the callback object. 
+              (*m_OnOverflow)(value);
+            }
+          //Return the failure(false). 
+          return false;
 	}
       
       if (m_OnWriteConvert == NULL) 
@@ -325,7 +330,7 @@ namespace RTC
     {
       if (m_OnRead != NULL) (*m_OnRead)();
       
-      long int timeout = m_readTimeout;
+      double timeout = (double)m_readTimeout / (double)TIMEVALUE_ONE_SECOND_IN_USECS;
       
       coil::TimeValue tm_cur, tm_pre;
       tm_pre = coil::gettimeofday();
@@ -348,9 +353,15 @@ namespace RTC
           coil::usleep(TIMEOUT_TICK_USEC);
 	}
       
-      if (this->isEmpty() && m_OnUnderflow != NULL)
+      if (this->isEmpty())
 	{
-	  m_value = (*m_OnUnderflow)();
+          //Is the buffer underflow callback object set?
+          if (m_OnUnderflow != NULL)
+            {
+              //Call the callback object. 
+              m_value = (*m_OnUnderflow)();
+            }
+          //Return the failure(false). 
 	  return m_value;
 	}
       
