@@ -32,7 +32,11 @@ LIBS = @LIBS@
 AM_CPPFLAGS =         \
 	-I.               \
 	-I$(top_builddir) \
-	-I$(top_builddir)/rtm/idl \
+	-I$(top_builddir)/src/lib \
+	-I$(top_builddir)/src/lib/rtm_corba/idl \
+	-I$(top_builddir)/src/lib/rtm_corba \
+	-I$(top_builddir)/src/lib/rtm \
+	-I$(top_builddir)/src/lib/coil/include \
 	-I$(includedir)
 
 AM_LDFLAGS =              \
@@ -44,13 +48,13 @@ noinst_PROGRAMS = PublisherNewTests
 
 nodist_PublisherNewTests_SOURCES =           \
 	../TestRunner.cpp                    \
-	$(top_builddir)/rtm/Properties.cpp   \
-	$(top_builddir)/rtm/PublisherNew.cpp \
-	$(top_builddir)/rtm/StringUtil.cpp   \
+	$(top_builddir)/src/lib/coil/common/Properties.cpp   \
+	$(top_builddir)/src/lib/rtm/PublisherNew.cpp \
+	$(top_builddir)/src/lib/coil/common/stringutil.cpp   \
 	PublisherNewTests.cpp
 
 PublisherNewTests_LDFLAGS = -L$(libdir)
-PublisherNewTests_LDADD   = -lcppunit
+PublisherNewTests_LDADD   = -lcppunit -lcoil
 
 EXTRA_DIST =              \
 	PublisherNewTests.cpp
