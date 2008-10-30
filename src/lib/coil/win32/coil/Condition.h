@@ -51,7 +51,7 @@ namespace coil
   } pthread_cond_t;
 
   
-  int pthread_cond_init (pthread_cond_t *cv)
+  static int pthread_cond_init (pthread_cond_t *cv)
   {
     cv->waiters_count_ = 0;
     cv->was_broadcast_ = 0;
