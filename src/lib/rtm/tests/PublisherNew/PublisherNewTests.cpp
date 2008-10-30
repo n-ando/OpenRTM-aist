@@ -36,9 +36,10 @@
 #include <cppunit/extensions/HelperMacros.h>
 #include <cppunit/TestAssert.h>
 
-#include <rtm/Properties.h>
+#include <coil/Properties.h>
 #include <rtm/InPortConsumer.h>
 #include <rtm/PublisherNew.h>
+#include <coil/Time.h>
 
 
 /*!
@@ -61,10 +62,10 @@ namespace PublisherNew
 		
     virtual void push()
     {
-      usleep(_sleepTick);
+      coil::usleep(_sleepTick);
 			
       timeval now;
-      gettimeofday(&now, NULL);
+      coil::gettimeofday(&now, NULL);
 			
       long delayTick =
 	(now.tv_sec - _delayStartTime.tv_sec) * 1000000
@@ -104,7 +105,7 @@ namespace PublisherNew
     {
       if (_delayStartTime.tv_sec == 0 && _delayStartTime.tv_usec == 0)
 	{
-	  gettimeofday(&_delayStartTime, NULL);
+	  coil::gettimeofday(&_delayStartTime, NULL);
 	}
     }
 		
@@ -159,7 +160,7 @@ namespace PublisherNew
      */
     virtual void setUp()
     {
-      usleep(1000000);
+      coil::usleep(1000000);
     }
 		
     /*!
@@ -182,18 +183,18 @@ namespace PublisherNew
       long intervalTick = sleepTick * 10;
 			
       MockConsumer* consumer = new MockConsumer(sleepTick);
-      RTC::Properties prop;
+      coil::Properties prop;
       RTC::PublisherNew publisher(consumer, prop);
 			
       for (int i = 0; i < 10; i++)
 	{
 	  consumer->setDelayStartTime();
 	  publisher.update();
-	  usleep(intervalTick);
+	  coil::usleep(intervalTick);
 	}
 			
       // Consumer呼出が完了するであろうタイミングまで待つ
-      usleep(5000000); // 5 [sec]
+      coil::usleep(5000000); // 5 [sec]
 			
       // update()呼出からpush()呼出までの時間間隔が、所定時間内に収まっているか？
       // （リアルタイム性が保証されているわけでもなく、仕様上も呼出までの時間を明記しているわけではないので、
@@ -221,18 +222,18 @@ namespace PublisherNew
       long intervalTick = sleepTick / 10;
 			
       MockConsumer* consumer = new MockConsumer(sleepTick);
-      RTC::Properties prop;
+      coil::Properties prop;
       RTC::PublisherNew publisher(consumer, prop);
 			
       for (int i = 0; i < 1000; i++)
 	{
 	  consumer->setDelayStartTime();
 	  publisher.update();
-	  usleep(intervalTick);
+	  coil::usleep(intervalTick);
 	}
 			
       // Consumer呼出が完了するであろうタイミングまで待つ
-      usleep(5000000); // 5 [sec]
+      coil::usleep(5000000); // 5 [sec]
 			
       // update()呼出からpush()呼出までの時間間隔が、所定時間内に収まっているか？
       // （リアルタイム性が保証されているわけでもなく、仕様上も呼出までの時間を明記しているわけではないので、
@@ -255,12 +256,12 @@ namespace PublisherNew
     void test_release()
     {
       MockConsumer* consumer = new MockConsumer(1000000); // 1 [sec]
-      RTC::Properties prop;
+      coil::Properties prop;
       RTC::PublisherNew publisher(consumer, prop);
 			
       // update()を呼出して、Consumerを呼び出させる
       publisher.update();
-      usleep(3000000); // Consumerを呼出す時間を与える
+      coil::usleep(3000000); // Consumerを呼出す時間を与える
       publisher.release();
 			
       CPPUNIT_ASSERT_EQUAL(1, consumer->getCount());
@@ -269,7 +270,7 @@ namespace PublisherNew
       // （実際には、前段のrelease()によりPublisherが停止済みであり、
       // update()呼出は何ら影響を与えないことを予期している。）
       publisher.update();
-      usleep(3000000);
+      coil::usleep(3000000);
 
       // Consumer呼出回数が変わっていないこと、つまりPublisherの動作が停止していることを確認する
       CPPUNIT_ASSERT_EQUAL(1, consumer->getCount());
