@@ -99,7 +99,7 @@ namespace RTC
 #ifdef ARTLinux
 	art_wait();
 #else
-	usleep(m_usec);
+    coil::usleep(m_usec);
 #endif //ARTLinux
       }
     return 0;

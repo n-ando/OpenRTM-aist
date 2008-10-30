@@ -69,7 +69,7 @@ namespace RTC
     m_data._cond.signal();
     m_data._mutex.unlock();
 #ifdef WIN32
-    ACE_OS::thr_yield();
+    ::Sleep(0);
 #else
     pthread_yield();
 #endif
