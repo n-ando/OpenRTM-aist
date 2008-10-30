@@ -52,7 +52,7 @@
 // for Windows DLL export 
 #if defined(WIN32) || defined(_WIN32) || defined(__WIN32__) || defined(__NT__)
 #   define DLL_EXPORT __declspec(dllexport)
-#   define usleep(x) Sleep(x/1000);
+// #   define usleep(x) Sleep(x/1000);
 #   define LINE_MAX 256
 BOOL WINAPI DllMain (HINSTANCE hinstDll, DWORD fdwReason, LPVOID lpvReserved);
 #else 

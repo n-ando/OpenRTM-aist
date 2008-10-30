@@ -19,7 +19,6 @@
 #ifndef COIL_FILE_H
 #define COIL_FILE_H
 
-//#include <libgen.h>
 #include <coil/config_coil.h>
 #include <memory>
 
@@ -33,7 +32,8 @@ namespace coil
   inline char* dirname(char* path)
   {
     static char return_dirname[MaxPathLength + 1];
-    const char delimiter('\\');
+//    const char delimiter('\\');
+    const char delimiter('/');
     const char *p = std::strrchr(path, delimiter);
     if (p)
     {
@@ -52,7 +52,8 @@ namespace coil
 
   inline char* basename(const char* path)
   {
-    const char delimiter('\\');
+//    const char delimiter('\\');
+    const char delimiter('/');
     const char *p = std::strrchr(path, delimiter);
     const char *q = (p) ? p + 1 : path ;
 
