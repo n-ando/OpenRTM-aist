@@ -21,6 +21,7 @@
 
 
 #include <windows.h>
+#include <winsock.h>
 //#include <winsock2.h>
 //#pragma comment(lib, "WS2_32.LIB")
 #include <time.h>
