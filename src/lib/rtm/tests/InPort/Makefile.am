@@ -32,12 +32,16 @@ LIBS = @LIBS@
 AM_CPPFLAGS = \
 	 -I. \
 	-I$(top_builddir) \
-	-I$(top_builddir)/rtm/idl \
+	-I$(top_builddir)/src/lib/ \
+	-I$(top_builddir)/src/lib/rtm_corba \
+	-I$(top_builddir)/src/lib/rtm_corba/idl \
+	-I$(top_builddir)/src/lib/coil/include \
 	-I$(includedir)
 
 AM_LDFLAGS =              \
 	 -L.              \
-	-L$(top_builddir)
+	-L$(top_builddir) \
+	-L$(top_builddir)/src/lib/coil/lib
 
 noinst_PROGRAMS = InPortTests
 
@@ -46,7 +50,7 @@ nodist_InPortTests_SOURCES =     \
 	InPortTests.cpp
 
 InPortTests_LDFLAGS = -L$(libdir)
-InPortTests_LDADD   = -lcppunit
+InPortTests_LDADD   = -lcppunit -lcoil
 
 EXTRA_DIST =        \
 	InPortTests.cpp
