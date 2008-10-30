@@ -211,7 +211,7 @@ namespace RTC
     //
     // Getting current proccess pid by using ACE_OS::getpid() (UNIX/Windows)
     //
-    pid_t pid = coil::getpid();
+    coil::pid_t pid = coil::getpid();
     char pidc[8];
     sprintf(pidc, "%d", pid);
     

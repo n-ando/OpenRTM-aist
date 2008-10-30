@@ -190,7 +190,7 @@ namespace RTC
 	  Guard guard(m_terminate.mutex);
 	  if (m_terminate.waiting > 1) break;
 	}
-	usleep(100000);
+        coil::usleep(100000);
       }
   }
   
