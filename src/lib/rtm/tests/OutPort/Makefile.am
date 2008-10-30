@@ -38,7 +38,11 @@ LIBS = @LIBS@
 AM_CPPFLAGS =             \
 	 -I.              \
 	-I$(top_builddir) \
-	-I$(top_builddir)/rtm/idl \
+	-I$(top_builddir)/src/lib \
+	-I$(top_builddir)/src/lib/rtm_corba/idl \
+	-I$(top_builddir)/src/lib/rtm_corba \
+	-I$(top_builddir)/src/lib/coil/include \
+	-I$(top_builddir)/src/lib/rtm \
 	-I$(includedir)
 
 
@@ -51,11 +55,11 @@ noinst_PROGRAMS = OutPortTests
 
 nodist_OutPortTests_SOURCES =               \
 	../TestRunner.cpp                   \
-	$(top_builddir)/rtm/OutPortBase.cpp \
+	$(top_builddir)/src/lib/rtm/OutPortBase.cpp \
 	OutPortTests.cpp
 
 OutPortTests_LDFLAGS = -L$(libdir)
-OutPortTests_LDADD   = -lcppunit
+OutPortTests_LDADD   = -lcppunit -lcoil
 
 EXTRA_DIST =         \
 	OutPortTests.cpp
