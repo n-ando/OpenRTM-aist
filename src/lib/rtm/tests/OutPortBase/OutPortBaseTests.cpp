@@ -47,6 +47,7 @@ namespace OutPortBase
   public:
     PublisherA(std::string& footPrints) : m_footPrints(footPrints) {};
     virtual ~PublisherA() { 
+//std::cout<<"~PublisherA"<<std::endl;      
       m_footPrints += "a"; 
     }
 
@@ -289,16 +290,30 @@ namespace OutPortBase
       std::string footPrints;
       {
 	OutPortMock outPort("MyOutPort");
+/*
 	outPort.attach("A", new PublisherA(footPrints));
 	outPort.attach("B", new PublisherB(footPrints));
 	outPort.attach("C", new PublisherC(footPrints));
 	outPort.attach("D", new PublisherD(footPrints));
+*/
+        PublisherA *ppuba = new PublisherA(footPrints);
+	outPort.attach("A", ppuba);
+        PublisherB *ppubb = new PublisherB(footPrints);
+	outPort.attach("B", ppubb);
+        PublisherC *ppubc= new PublisherC(footPrints);
+	outPort.attach("C", ppubc);
+        PublisherD *ppubd= new PublisherD(footPrints);
+	outPort.attach("D", ppubd);
 				
 	// この時点でフットプリントは何もないはず
 	CPPUNIT_ASSERT_EQUAL(std::string(""), footPrints);
+        delete ppuba;
+        delete ppubb;
+        delete ppubc;
+        delete ppubd;
       } // destructor呼出し
-			
-      // 各デストラクタが呼び出されているか？
+
+//      // 各デストラクタが呼び出されているか？
       CPPUNIT_ASSERT_EQUAL(std::string("abcd"), footPrints);
     }
     
