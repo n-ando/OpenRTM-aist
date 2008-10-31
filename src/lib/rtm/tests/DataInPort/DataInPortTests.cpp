@@ -35,11 +35,11 @@
 #include <cppunit/extensions/HelperMacros.h>
 #include <cppunit/TestAssert.h>
 
-#include <rtm/idl/BasicDataTypeSkel.h>
-#include <rtm/idl/RTCSkel.h>
+#include <idl/BasicDataTypeSkel.h>
+#include <idl/RTCSkel.h>
+#include <coil/stringutil.h>
 #include <rtm/InPort.h>
 #include <rtm/DataInPort.h>
-#include <rtm/StringUtil.h>
 
 /*!
  * @class DataInPortTests class
@@ -55,7 +55,7 @@ namespace DataInPort
     DataInPortMock(
 		   const char* name,
 		   RTC::InPort<DataType, Buffer>& inport,
-		   RTC::Properties& prop)
+		   coil::Properties& prop)
       : RTC::DataInPort(name, inport, prop)
     {
     }
@@ -103,7 +103,7 @@ namespace DataInPort
     CPPUNIT_TEST_SUITE(DataInPortTests);
     CPPUNIT_TEST(test_get_port_profile);
     CPPUNIT_TEST(test_publishInterfaces_CORBA_Any);
-    CPPUNIT_TEST(test_publishInterfaces_TCP_Any);
+//    CPPUNIT_TEST(test_publishInterfaces_TCP_Any);
     CPPUNIT_TEST(test_subscribeInterfaces_CORBA_Any);
     CPPUNIT_TEST(test_connect);
     CPPUNIT_TEST_SUITE_END();
@@ -135,13 +135,13 @@ namespace DataInPort
     {
       int argc = 0;
       char** argv = 0;
-			
+
       m_pORB = CORBA::ORB_init(argc, argv);
       m_pPOA = PortableServer::POA::_narrow(
 					    m_pORB->resolve_initial_references("RootPOA"));
       m_pPOA->the_POAManager()->activate();
 
-      usleep(100000);
+      coil::usleep(100000);
     }
 		
     /*!
@@ -171,10 +171,11 @@ namespace DataInPort
       RTC::InPort<RTC::TimedFloat>* pInPort =
 	new RTC::InPort<RTC::TimedFloat>("name of InPort", inPortBindValue); // will be deleted automatically
 
-      RTC::Properties dataInPortProps;
+      coil::Properties dataInPortProps;
       RTC::DataInPort* pDataInPort =
 	new RTC::DataInPort("name of DataInPort", *pInPort, dataInPortProps); // will be deleted automatically
 			
+
       // PortProfileを取得する
       RTC::PortProfile* pPortProfile = pDataInPort->get_port_profile();
 			
@@ -199,6 +200,7 @@ namespace DataInPort
       // "dataport.subscription_type"プロパティは正しく取得されるか？
       CPPUNIT_ASSERT_EQUIVALENT("Any",
 				NVUtil::toString(pPortProfile->properties, "dataport.subscription_type"));
+
       delete pDataInPort;
       delete pInPort;
     }
@@ -215,7 +217,7 @@ namespace DataInPort
       RTC::InPort<RTC::TimedFloat>* pInPort =
 	new RTC::InPort<RTC::TimedFloat>("name of InPort", inPortBindValue); // will be deleted automatically
 			
-      RTC::Properties dataInPortProps;
+      coil::Properties dataInPortProps;
       DataInPortMock<RTC::TimedFloat, RTC::RingBuffer>* pDataInPort =
 	new DataInPortMock<RTC::TimedFloat, RTC::RingBuffer>(
 							     "name of DataInPort", *pInPort, dataInPortProps); // will be deleted automatically
@@ -254,7 +256,7 @@ namespace DataInPort
       RTC::InPort<RTC::TimedFloat>* pInPort =
 	new RTC::InPort<RTC::TimedFloat>("name of InPort", inPortBindValue); // will be deleted automatically
 			
-      RTC::Properties dataInPortProps;
+      coil::Properties dataInPortProps;
       DataInPortMock<RTC::TimedFloat, RTC::RingBuffer>* pDataInPort =
 	new DataInPortMock<RTC::TimedFloat, RTC::RingBuffer>(
 							     "name of DataInPort", *pInPort, dataInPortProps); // will be deleted automatically
@@ -290,7 +292,7 @@ namespace DataInPort
       RTC::InPort<RTC::TimedFloat>* pInPort =
 	new RTC::InPort<RTC::TimedFloat>("name of InPort", inPortBindValue); // will be deleted automatically
 			
-      RTC::Properties dataInPortProps;
+      coil::Properties dataInPortProps;
       DataInPortMock<RTC::TimedFloat, RTC::RingBuffer>* pDataInPort =
 	new DataInPortMock<RTC::TimedFloat, RTC::RingBuffer>(
 							     "name of DataInPort", *pInPort, dataInPortProps); // will be deleted automatically
@@ -334,7 +336,7 @@ namespace DataInPort
       RTC::InPort<RTC::TimedFloat>* pInPort =
 	new RTC::InPort<RTC::TimedFloat>("name of InPort", inPortBindValue); // will be deleted automatically
 
-      RTC::Properties dataInPortProps;
+      coil::Properties dataInPortProps;
       DataInPortMock<RTC::TimedFloat, RTC::RingBuffer>* pDataInPort =
 	new DataInPortMock<RTC::TimedFloat, RTC::RingBuffer>(
 							     "name of DataInPort", *pInPort, dataInPortProps); // will be deleted automatically
@@ -384,8 +386,8 @@ namespace DataInPort
 		
     void CPPUNIT_ASSERT_EQUIVALENT(const std::string& lhs, const std::string& rhs)
     {
-      std::vector<std::string> lhsValues = split(lhs, ",");
-      std::vector<std::string> rhsValues = split(rhs, ",");
+      std::vector<std::string> lhsValues = coil::split(lhs, ",");
+      std::vector<std::string> rhsValues = coil::split(rhs, ",");
 			
       // 要素数が異なれば、中身を見るまでもなく同一ではないと判定できる
       if (lhsValues.size() != rhsValues.size())
