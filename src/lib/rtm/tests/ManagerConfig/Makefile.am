@@ -32,25 +32,29 @@ LIBS = @LIBS@
 AM_CPPFLAGS =\
 	-I. \
 	-I$(top_builddir) \
-	-I$(top_builddir)/rtm \
-	-I$(top_builddir)/rtm/idl \
+	-I$(top_builddir)/src/lib \
+	-I$(top_builddir)/src/lib/rtm_corba/idl \
+	-I$(top_builddir)/src/lib/rtm_corba \
+	-I$(top_builddir)/src/lib/coil/include \
+	-I$(top_builddir)/src/lib/rtm \
 	-I$(includedir)
 
 AM_LDFLAGS = \
 	-L. \
-	-L$(top_builddir)
+	-L$(top_builddir) \
+	-L$(top_builddir)/src/lib/coil/lib
 
 noinst_PROGRAMS = ManagerConfigTests
 
 nodist_ManagerConfigTests_SOURCES =\
 	../TestRunner.cpp\
-	$(top_builddir)/rtm/StringUtil.cpp \
-	$(top_builddir)/rtm/Properties.cpp \
-	$(top_builddir)/rtm/ManagerConfig.cpp \
+	$(top_builddir)/src/lib/coil/common/stringutil.cpp \
+	$(top_builddir)/src/lib/coil/common/Properties.cpp \
+	$(top_builddir)/src/lib/rtm/ManagerConfig.cpp \
 	ManagerConfigTests.cpp
 
 ManagerConfigTests_LDFLAGS = -L$(libdir)
-ManagerConfigTests_LDADD   = -lcppunit
+ManagerConfigTests_LDADD   = -lcppunit -lcoil
 
 EXTRA_DIST =               \
 	ManagerConfigTests.cpp \
