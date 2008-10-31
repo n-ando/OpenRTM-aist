@@ -39,6 +39,7 @@ namespace SDOPackage
 #ifdef WIN32
     uuid->~UUID();
 #endif
+    m_dependency = OWN;
   }
   
   /* @if jp
