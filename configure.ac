@@ -1472,6 +1472,9 @@ AC_OUTPUT([Makefile
 	src/lib/doil/ice/Makefile
 	src/lib/doil/ice/tests/Makefile
 	src/lib/doil/ice/tests/IceManager/Makefile
+	src/lib/rtc/Makefile
+	src/lib/rtc/corba/Makefile
+	src/lib/rtc/corba/idl/Makefile
 	utils/Makefile
 	utils/rtm-config/Makefile
 	utils/rtc-template/Makefile

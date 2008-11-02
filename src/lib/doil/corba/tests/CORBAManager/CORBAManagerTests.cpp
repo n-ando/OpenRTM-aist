@@ -34,8 +34,8 @@ class EchoImpl
 public:
   EchoImpl()
   {
-    ++count;
     sprintf(m_name, "EchoSample%d", count);
+    ++count;
   }
   virtual ~EchoImpl()
   {
