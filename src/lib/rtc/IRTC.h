@@ -1,7 +1,7 @@
 // -*- C++ -*-
 /*!
- * @file  RTCInterface.h
- * @brief RTC Interfaces
+ * @file  IRTC.h
+ * @brief RTC interfaces
  * @date  $Date$
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
@@ -17,57 +17,60 @@
  *
  */
 
-#ifndef RTCInterface_h
-#define RTCInterface_h
+#ifndef RTC_IRTC_H
+#define RTC_IRTC_H
 
 #include <vector>
 #include <utility>
 
 namespace RTC
 {
-  /*!
-   * @if jp
-   * @namespace RTC::Interface
-   *
-   * @brief RTC ローカルインターフェース
-   *
-   * RTC ローカルインターフェース定義
-   *
-   * @else
-   *
-   * @namespace RTC::Interface
-   *
-   * @brief RTC Local Interface
-   *
-   * RTC Local Interface Definition
-   *
-   * @endif
-   */
-  namespace Interface
-  {
-    enum ReturnCode_t
-      {
-	RTC_OK,
-	RTC_ERROR,
-	BAD_PARAMETER,
-	UNSUPPORTED,
-	OUT_OF_RESOURCES,
-	PRECONDITION_NOT_MET
-      };
-    
+namespace Local
+{
+  enum ReturnCode_t
+    {
+      RTC_OK,
+      RTC_ERROR,
+      BAD_PARAMETER,
+      UNSUPPORTED,
+      OUT_OF_RESOURCES,
+      PRECONDITION_NOT_MET
+    };
+
+  enum LifeCycleState
+    {
+      CREATED_STATE,
+      INACTIVE_STATE,
+      ACTIVE_STATE,
+      ERROR_STATE
+    };
+  
+  enum ExecutionKind
+    {
+      PERIODIC,
+      EVENT_DRIVEN,
+      OTHER
+    };
+
+    enum PortInterfacePolarity
+    {
+      PROVIDED,
+      REQUIRED
+    };
+
 #define EXECUTION_HANDLE_TYPE_NATIVE long
-    
-    typedef EXECUTION_HANDLE_TYPE_NATIVE ExecutionContextHandle_t;
-    typedef EXECUTION_HANDLE_TYPE_NATIVE ECHandle_t;
-    typedef char * UniqueIdentifier;
-    
-    typedef std::vector<std::pair<std::string, std::string> > NVList;
-    
-    class ExecutionContextInterface;
-    typedef std::vector<ExecutionContextInterface*> ExecutionContextList;
-    
-    struct LightweightRTObjectInterface;
-  };   // namespace Interface
+  
+  typedef EXECUTION_HANDLE_TYPE_NATIVE ExecutionContextHandle_t;
+  typedef EXECUTION_HANDLE_TYPE_NATIVE ECHandle_t;
+  typedef char * UniqueIdentifier;
+  
+  typedef std::vector<std::pair<std::string, std::string> > NVList;
+  
+  class ExecutionContext;
+  typedef std::vector<ExecutionContext*> ExecutionContextList;
+  
+  struct LightweightRTObject;
+};     // namespace Local
 };     // namespace RTC
-#endif // RTCInterface_h
+#endif // RTC_IRTC_H
 

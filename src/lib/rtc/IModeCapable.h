@@ -1,7 +1,7 @@
 // -*- C++ -*-
 /*!
- * @file  ModeCapableInterface.h
- * @brief ModeCapableInterface class
+ * @file  IModeCapable.h
+ * @brief IModeCapable class
  * @date  $Date$
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
@@ -17,44 +17,44 @@
  *
  */
 
-#ifndef ModeCapableInterface_h
-#define ModeCapableInterface_h
+#ifndef RTC_LOCAL_IMODECAPABLE_H
+#define RTC_LOCAL_IMODECAPABLE_H
 
-#include <rtm/RTCInterface.h>
+#include <rtc/IRTC.h>
 
 namespace RTC
 {
-  namespace Interface
+namespace Local
+{
+  class IMode;
+  class IExecutionContext;
+  /*!
+   * @if jp
+   * @class IModeCapable
+   * @brief IModeCapable クラス
+   * @else
+   * @class IModeCapable
+   * @brief IModeCapable class
+   * @endif
+   */
+  class IModeCapable
   {
-    class ModeInterface;
-    class ExecutionContext;
-    /*!
-     * @if jp
-     * @class ModeCapableInterface
-     * @brief ModeCapableInterface クラス
-     * @else
-     * @class ModeCapableInterface
-     * @brief ModeCapableInterface class
-     * @endif
-     */
-    class ModeCapableInterface
-    {
-    public:
-      virtual ~ModeCapableInterface();
-      virtual ModeInterface&
-      get_default_mode() = 0;
-      virtual ModeInterface&
-      get_current_mode() = 0;
-      virtual ModeInterface&
-      get_current_mode_in_context(const ExecutionContextInterface& ec) = 0;
-      virtual ModeInterface&
-      get_pending_mode() = 0;
-      virtual ModeInterface&
-      get_pending_mode_in_context(const ExecutionContextInterface& ec) = 0;
-      virtual ReturnCode_t
-      set_mode(ModeInterface& new_mode, bool immediate) = 0;
-    };
-  };     // namespace Interface
+  public:
+    virtual ~IModeCapable();
+    virtual IMode&
+    get_default_mode() = 0;
+    virtual IMode&
+    get_current_mode() = 0;
+    virtual IMode&
+    get_current_mode_in_context(const IExecutionContext& ec) = 0;
+    virtual IMode&
+    get_pending_mode() = 0;
+    virtual IMode&
+    get_pending_mode_in_context(const IExecutionContext& ec) = 0;
+    virtual ReturnCode_t
+    set_mode(IMode& new_mode, bool immediate) = 0;
+  };
+};     // namespace Local
 };     // namespace RTC
-#endif // ModeCapableInterface_h
+#endif // RTC_LOCAL_IMODECAPABLE_H
 

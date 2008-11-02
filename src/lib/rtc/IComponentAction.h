@@ -1,7 +1,7 @@
 // -*- C++ -*-
 /*!
- * @file  ComponentActionInterface.h
- * @brief ComponentActionInterface interface class
+ * @file  IComponentAction.h
+ * @brief IComponentAction interface class
  * @date  $Date$
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
@@ -17,42 +17,41 @@
  *
  */
 
-#ifndef ComponentActionInterface_h
-#define ComponentActionInterface_h
+#ifndef RTC_LOCAL_ICOMPONENTACTION_H
+#define RTC_LOCAL_ICOMPONENTACTION_H
 
-#include <rtm/RTCInterface.h>
+#include <rtc/IRTC.h>
 
 namespace RTC
 {
-  namespace Interface
+namespace Local
+{
+  /*!
+   * @if jp
+   * @class IComponentAction
+   * @brief IComponentAction インターフェースクラス
+   * @else
+   * @class IComponentAction
+   * @brief IComponentAction interface class
+   * @endif
+   */
+  class IComponentAction
   {
-    /*!
-     * @if jp
-     * @class ComponentActionInterface
-     * @brief ComponentActionInterface インターフェースクラス
-     * @else
-     * @class ComponentActionInterface
-     * @brief ComponentActionInterface interface class
-     * @endif
-     */
-    class ComponentActionInterface
-    {
-    public:
-      virtual ~ComponentActionInterface() {};
-      
-      virtual ReturnCode_t on_initialize() = 0;
-      
-      virtual ReturnCode_t on_finalize() = 0;
-      
-      virtual ReturnCode_t on_startup(ExecutionContextHandle_t ec_handle) = 0;
-      virtual ReturnCode_t on_shutdown(ExecutionContextHandle_t ec_handle) = 0;
-      virtual ReturnCode_t on_activated(ExecutionContextHandle_t ec_handle) = 0;
-      virtual ReturnCode_t on_deactivated(ExecutionContextHandle_t ec_handle) = 0;
-      virtual ReturnCode_t on_aborting(ExecutionContextHandle_t ec_handle) = 0;
-      virtual ReturnCode_t on_error(ExecutionContextHandle_t ec_handle) = 0;
-      virtual ReturnCode_t on_reset(ExecutionContextHandle_t ec_handle) = 0;
-     };
-  };   // namespace Interface
+  public:
+    virtual ~IComponentAction() {};
+    
+    virtual ReturnCode_t on_initialize() = 0;
+    virtual ReturnCode_t on_finalize() = 0;
+    
+    virtual ReturnCode_t on_startup(ExecutionContextHandle_t ec_handle) = 0;
+    virtual ReturnCode_t on_shutdown(ExecutionContextHandle_t ec_handle) = 0;
+    virtual ReturnCode_t on_activated(ExecutionContextHandle_t ec_handle) = 0;
+    virtual ReturnCode_t on_deactivated(ExecutionContextHandle_t ec_handle) = 0;
+    virtual ReturnCode_t on_aborting(ExecutionContextHandle_t ec_handle) = 0;
+    virtual ReturnCode_t on_error(ExecutionContextHandle_t ec_handle) = 0;
+    virtual ReturnCode_t on_reset(ExecutionContextHandle_t ec_handle) = 0;
+  };
+};     // namespace Local
 };     // namespace RTC
-#endif // ComponentActionInterface_h
+#endif // RTC_LOCAL_ICOMPONENTACTION_H
 

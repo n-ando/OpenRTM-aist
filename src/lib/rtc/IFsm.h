@@ -1,7 +1,7 @@
 // -*- C++ -*-
 /*!
- * @file  FsmInterface.h
- * @brief FsmInterface interface class
+ * @file  IFsm.h
+ * @brief IFsm interface class
  * @date  $Date$
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
@@ -17,29 +17,29 @@
  *
  */
 
-#ifndef FsmInterface_h
-#define FsmInterface_h
+#ifndef RTC_LOCAL_IFSM_H
+#define RTC_LOCAL_IFSM_H
  
 namespace RTC
 {
-  namespace Interface
-  {
+namespace Local
+{
     /*!
      * @if jp
-     * @class FsmInterface
-     * @brief FsmInterface インターフェースクラス
+     * @class IFsm
+     * @brief IFsm インターフェースクラス
      * @else
-     * @class FsmInterface
-     * @brief FsmInterface interface class
+     * @class IFsm
+     * @brief IFsm interface class
      * @endif
      */
-    class FsmInterface
+    class IFsm
     {
     public:
-      virtual ~FsmInterface() {};
+      virtual ~IFsm() {};
     };
-  };   // namespace Interface 
+};     // namespace Local
 };     // namespace RTC
-#endif // FsmInterface_h
+#endif // RTC_LOCAL_IFSM_H
   
   

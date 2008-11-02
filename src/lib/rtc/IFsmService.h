@@ -1,7 +1,7 @@
 // -*- C++ -*-
 /*!
- * @file  FsmServiceInterface.h
- * @brief FsmServiceInterface class
+ * @file  IFsmService.h
+ * @brief IFsmService class
  * @date  $Date$
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
@@ -17,48 +17,47 @@
  *
  */
 
-#ifndef FsmServiceInterface_h
-#define FsmServiceInterface_h
+#ifndef RTC_LOCAL_IFSMSERVICE_H
+#define RTC_LOCAL_IFSMSERVICE_H
 
-#include <rtm/RTCInterface.h>
+#include <rtc/IRTC.h>
 
 namespace RTC
 {
-  namespace Interface
+namespace Local
+{
+  class IFsmParticipantAction;
+  
+  struct FsmBehaviorProfile
   {
-    
-    class FsmParticipantActionInterface;
-    
-    struct FsmBehaviorProfile
-    {
-      FsmParticipantActionInterface* comp;
-      UniqueIdentifier id;
-    };
-    
-    typedef std::vector<FsmBehaviorProfile*> FsmBehaviorProfileList;
-    
-    struct FsmProfile
-    {
-      FsmBehaviorProfileList behavior_profiles;
-    };
-    
-    /*!
-     * @if jp
-     * @class FsmServiceInterface
-     * @brief FsmServiceInterface クラス
-     * @else
-     * @class FsmServiceInterface
-     * @brief FsmServiceInterface class
-     * @endif
-     */
-    class FsmServiceInterface
-    {
-    public:
-      virtual ~FsmServiceInterface() {};
-      virtual const FsmProfile& get_fsm_profile() = 0;
-      virtual ReturnCode_t set_fsm_profile(const FsmProfile& fsm_profile) = 0;
-    };
-  };   // namespace Interface
+    IFsmParticipantAction* comp;
+    UniqueIdentifier id;
+  };
+  
+  typedef std::vector<FsmBehaviorProfile*> FsmBehaviorProfileList;
+  
+  struct FsmProfile
+  {
+    FsmBehaviorProfileList behavior_profiles;
+  };
+  
+  /*!
+   * @if jp
+   * @class IFsmService
+   * @brief IFsmService クラス
+   * @else
+   * @class IFsmService
+   * @brief IFsmService class
+   * @endif
+   */
+  class IFsmService
+  {
+  public:
+    virtual ~IFsmService() {};
+    virtual const FsmProfile& get_fsm_profile() = 0;
+    virtual ReturnCode_t set_fsm_profile(const FsmProfile& fsm_profile) = 0;
+  };
+};     // namespace Local
 };     // namespace RTC
-#endif // FsmServiceInterface_h
+#endif // RTC_LOCAL_IFSMSERVICE_H
 

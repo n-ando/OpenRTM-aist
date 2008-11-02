@@ -1,7 +1,7 @@
 // -*- C++ -*-
 /*!
- * @file  ExecutionContextInterface.h
- * @brief ExecutionContextInterface interface class
+ * @file  IExecutionContext.h
+ * @brief IExecutionContext interface class
  * @date  $Date$
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
@@ -17,93 +17,79 @@
  *
  */
 
-#ifndef ExecutionContextInterface_h
-#define ExecutionContextInterface_h
+#ifndef IExeLOCAL_cutionContext_h
+#define IExeLOCAL_cutionContext_h
 
-#include <rtm/RTCInterface.h>
+#include <rtc/IRTC.h>
 
 
 namespace RTC
 {
-  namespace Interface
+namespace Local
+{
+
+  class ILightweightRTObject;
+  class IRTObject;
+  typedef std::vector<IRTObject*> RTCList;
+  
+  struct ExecutionContextProfile
   {
-    enum LifeCycleState
-      {
-	CREATED_STATE,
-	INACTIVE_STATE,
-	ACTIVE_STATE,
-	ERROR_STATE
-      };
+    ExecutionKind kind;
+    double rate;
+    IRTObject* owner;
+    RTCList participants;
+    NVList properties;
+  };
+  
+  /*!
+   * @if jp
+   * @class IExecutionContext
+   * @brief IExecutionContext クラス
+   * @else
+   * @class IExecutionContext
+   * @brief IExecutionContext class
+   * @endif
+   */
+  class IExecutionContext
+  {
+  public:
+    virtual ~IExecutionContext() {};
     
-    enum ExecutionKind
-      {
-	PERIODIC,
-	EVENT_DRIVEN,
-	OTHER
-      };
-
-    class LightweightRTObjectInterface;
-    class RTObjectInterface;
-    typedef std::vector<RTObjectInterface*> RTCList;
-        
-    struct ExecutionContextProfile
-    {
-      ExecutionKind kind;
-      double rate;
-      RTObjectInterface* owner;
-      RTCList participants;
-      NVList properties;
-    };
-   
-    /*!
-     * @if jp
-     * @class ExecutionContextInterface
-     * @brief ExecutionContextInterface クラス
-     * @else
-     * @class ExecutionContextInterface
-     * @brief ExecutionContextInterface class
-     * @endif
-     */
-    class ExecutionContextInterface
-    {
-    public:
-      virtual ~ExecutionContextInterface() {};
-
-      virtual bool is_running() const = 0;
-
-      virtual ReturnCode_t start() = 0;
-
-      virtual ReturnCode_t stop() = 0;
-
-      virtual double get_rate() const = 0;
-
-      virtual ReturnCode_t set_rate(double rate) = 0;
-
-      virtual ReturnCode_t
-      add_component(LightweightRTObjectInterface& comp) = 0;
-
-      virtual ReturnCode_t
-      remove_component(LightweightRTObjectInterface& comp) = 0;
-
-      virtual ReturnCode_t
-      activate_component(LightweightRTObjectInterface& comp) = 0;
-
-      virtual ReturnCode_t
-      deactivate_component(LightweightRTObjectInterface& comp) = 0;
-
-      virtual ReturnCode_t
-      reset_component(LightweightRTObjectInterface& comp) = 0;
-
-      virtual LifeCycleState
-      get_component_state(LightweightRTObjectInterface& comp) = 0;
-
-      virtual ExecutionKind
-      get_kind() const = 0;
-
-      virtual const ExecutionContextProfile&
-      get_profile() const = 0;
-    };
-  };   // namespace Interface
+    virtual bool is_running() const = 0;
+    
+    virtual ReturnCode_t start() = 0;
+    
+    virtual ReturnCode_t stop() = 0;
+    
+    virtual double get_rate() const = 0;
+    
+    virtual ReturnCode_t set_rate(double rate) = 0;
+    
+    virtual ReturnCode_t
+    add_component(ILightweightRTObject& comp) = 0;
+    
+    virtual ReturnCode_t
+    remove_component(ILightweightRTObject& comp) = 0;
+    
+    virtual ReturnCode_t
+    activate_component(ILightweightRTObject& comp) = 0;
+    
+    virtual ReturnCode_t
+    deactivate_component(ILightweightRTObject& comp) = 0;
+    
+    virtual ReturnCode_t
+    reset_component(ILightweightRTObject& comp) = 0;
+    
+    virtual LifeCycleState
+    get_component_state(ILightweightRTObject& comp) = 0;
+    
+    virtual ExecutionKind
+    get_kind() const = 0;
+    
+    virtual const ExecutionContextProfile&
+    get_profile() const = 0;
+  };
+};     // namespace Local
 };     // namespace RTC
-#endif // ExecutionContextInterface_h
+#endif // RTC_LOCAL_IEXECUTIONCONTEXT_H
 

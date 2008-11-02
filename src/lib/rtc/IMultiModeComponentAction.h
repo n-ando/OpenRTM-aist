@@ -1,7 +1,7 @@
 // -*- C++ -*-
 /*!
- * @file  MultiModeComponentActionInterface.h
- * @brief MultiModeComponentActionInterface class
+ * @file  IMultiiModeComponentAction.h
+ * @brief IMultiiModeComponentAction class
  * @date  $Date$
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
@@ -17,38 +17,38 @@
  *
  */
 
-#ifndef MultiModeComponentActionInterface_h
-#define MultiModeComponentActionInterface_h
+#ifndef RTC_LOCAL_IMULTIIMODECOMPONENTACTION_H
+#define RTC_LOCAL_IMULTIIMODECOMPONENTACTION_H
 
-#include <rtm/RTCInterface.h>
+#include <rtc/IRTC.h>
 
 namespace RTC
 {
-  namespace Interface
+namespace Local
+{
+  /*!
+   * @if jp
+   * @class IMultiiModeComponentAction
+   * @brief IMultiiModeComponentAction クラス
+   * @else
+   * @class IMultiiModeComponentAction
+   * @brief IMultiiModeComponentAction class
+   * @endif
+   */
+  class IMultiiModeComponentAction
   {
+  public:
     /*!
      * @if jp
-     * @class MultiModeComponentActionInterface
-     * @brief MultiModeComponentActionInterface クラス
+     * @brief デストラクタ
      * @else
-     * @class MultiModeComponentActionInterface
-     * @brief MultiModeComponentActionInterface class
+     * @brief Destructor
      * @endif
      */
-    class MultiModeComponentActionInterface
-    {
-    public:
-      /*!
-       * @if jp
-       * @brief デストラクタ
-       * @else
-       * @brief Destructor
-       * @endif
-       */
-      virtual ~MultiModeComponentActionInterface() {};
-      virtual ReturnCode_t on_mode_changed(ExecutionContextHandle_t ec_handle) = 0;
-    };
-  };   // namespace Interface
+    virtual ~IMultiiModeComponentAction() {};
+    virtual ReturnCode_t on_mode_changed(ExecutionContextHandle_t ec_handle) = 0;
+  };
+};     // namespace Local
 };     // namespace RTC
-#endif // MultiModeComponentActionInterface_h
+#endif // RTC_LOCAL_IMULTIIMODECOMPONENTACTION_H
 
