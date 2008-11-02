@@ -125,10 +125,11 @@ noinst_LTLIBRARIES = libRTCSkel.la libRTCStub.la
 nodist_libRTCSkel_la_SOURCES = $(SKEL_CPP)
 
 libRTCSkel_la_LIBADD = $(LIBS)
+libRTCSkel_la_LDFLAGS = -rpath `pwd`
 
 nodist_libRTCStub_la_SOURCES = $(STUB_CPP)
-
 libRTCStub_la_LIBADD = $(LIBS)
+libRTCStub_la_LDFLAGS = -rpath `pwd`
 
 .idlSkel.cpp:
 	$(OIDLC) $<

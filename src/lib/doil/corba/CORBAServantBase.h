@@ -19,6 +19,7 @@
 #ifndef DOIL_CORBA_CORBASERVANTBASE_H
 #define DOIL_CORBA_CORBASERVANTBASE_H
 
+#include <string>
 #include <rtm/config_rtc.h>
 #include <doil/ServantBase.h>
 #include <doil/ImplBase.h>
