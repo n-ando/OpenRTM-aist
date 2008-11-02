@@ -1,7 +1,7 @@
 // -*- C++ -*-
 /*!
- * @file  LightweightRTObjectInterface.h
- * @brief LightweightRTObjectInterface interface class
+ * @file  ILightweightRTObject.h
+ * @brief ILightweightRTObject interface class
  * @date  $Date$
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
@@ -17,43 +17,46 @@
  *
  */
 
-#ifndef LightweightRTObjectInterface_h
-#define LightweightRTObjectInterface_h
+#ifndef RTC_LOCAL_ILIGHTWEIGHTRTOBJECT_H
+#define RTC_LOCAL_ILIGHTWEIGHTRTOBJECT_H
 
-#include <rtm/RTCInterface.h>
-#include <rtm/ComponentActionInterface.h>
+#include <doil/ImplBase.h>
+#include <rtc/IRTC.h>
+#include <rtc/IComponentAction.h>
+#include <rtc/IExecutionContext.h>
 
 namespace RTC
 {
-  namespace Interface
-  {
+namespace Local
+{
     /*!
      * @if jp
-     * @class LightweightRTObjectInterface
-     * @brief LightweightRTObjectInterface インターフェースクラス
+     * @class ILightweightRTObject
+     * @brief ILightweightRTObject インターフェースクラス
      * @else
-     * @class LightweightRTObjectInterface
-     * @brief LightweightRTObjectInterface interface class
+     * @class ILightweightRTObject
+     * @brief ILightweightRTObject interface class
      * @endif
      */
-    class LightweightRTObjectInterface
-      : public virtual ComponentActionInterface
+    class ILightweightRTObject
+      : public doil::ImplBase,
+        public virtual IComponentAction
     {
     public:
-      virtual ~LightweightRTObjectInterface() {};
-      virtual bool is_alive(const ExecutionContextInterface& ec) const = 0;
+      virtual ~ILightweightRTObject() {};
+      virtual bool is_alive(const IExecutionContext& ec) const = 0;
       virtual ReturnCode_t initialize() = 0;
       virtual ReturnCode_t finalize() = 0;
       virtual ReturnCode_t exit() = 0;
 
       virtual ExecutionContextHandle_t
-      attach_context(const ExecutionContextInterface& ec) = 0;
+      attach_context(const IExecutionContext& ec) = 0;
       virtual ReturnCode_t detach_context(ExecutionContextHandle_t ec_handle) = 0;
-      virtual ExecutionContextInterface&
+      virtual IExecutionContext&
       get_context(ExecutionContextHandle_t ec_handle) = 0;
       virtual ExecutionContextList& get_owned_contexts() = 0;
       virtual ExecutionContextList& get_participating_contexts() = 0;
     };
-  };   // namespace Interface
+};     // namespace Local
 };     // namespace RTC
-#endif // LightweightRTObjectInterface_h
+#endif // RTC_LOCAL_ILIGHTWEIGHTRTOBJECT_H

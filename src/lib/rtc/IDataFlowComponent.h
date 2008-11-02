@@ -1,7 +1,7 @@
 // -*- C++ -*-
 /*!
- * @file  DataFlowComponentInterface.h
- * @brief DataFlowComponentInterface interface class
+ * @file  IDataFlowComponent.h
+ * @brief IDataFlowComponent interface class
  * @date  $Date$
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
@@ -17,34 +17,34 @@
  *
  */
 
-#ifndef DataFlowComponentInterface_h
-#define DataFlowComponentInterface_h
+#ifndef RTC_LOCAL_IDATAFLOWCOMPONENT_H
+#define RTC_LOCAL_IDATAFLOWCOMPONENT_H
 
-#include <rtm/RTCInterface.h>
-#include <rtm/RTObjectInterface.h>
-#include <rtm/DataFlowComponentActionInterface.h> 
+#include <rtc/IRTC.h>
+#include <rtc/IRTObject.h>
+#include <rtc/IDataFlowComponentAction.h> 
 
 namespace RTC
 {
-  namespace Interface
+namespace Local
+{
+  /*!
+   * @if jp
+   * @class IDataFlowComponent
+   * @brief IDataFlowComponent インターフェースクラス
+   * @else
+   * @class IDataFlowComponent
+   * @brief IDataFlowComponent class
+   * @endif
+   */
+  class IDataFlowComponent
+    : public virtual IRTObject,
+      public virtual IDataFlowComponentAction
   {
-    /*!
-     * @if jp
-     * @class DataFlowComponentInterface
-     * @brief DataFlowComponentInterface インターフェースクラス
-     * @else
-     * @class DataFlowComponentInterface
-     * @brief DataFlowComponentInterface class
-     * @endif
-     */
-    class DataFlowComponentInterface
-      : public virtual RTObjectInterface,
-        public virtual DataFlowComponentActionInterface
-    {
-    public:
-      virtual ~DataFlowComponentInterface() {};
-    };
-  };   // namespace Interface
+  public:
+    virtual ~IDataFlowComponent() {};
+  };
+};     // namespace Local
 };     // namespace RTC
-#endif // DataFlowComponentInterface_h
+#endif // RTC_LOCAL_IDATAFLOWCOMPONENT_H
 

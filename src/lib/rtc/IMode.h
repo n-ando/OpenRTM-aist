@@ -1,7 +1,7 @@
 // -*- C++ -*-
 /*!
- * @file  ModeInterface.h
- * @brief ModeInterface interface class
+ * @file  IMode.h
+ * @brief IMode interface class
  * @date  $Date$
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
@@ -17,30 +17,30 @@
  *
  */
 
-#ifndef ModeInterface_h
-#define ModeInterface_h
+#ifndef RTC_LOCAL_IMODE_H
+#define RTC_LOCAL_IMODE_H
 
-#include <rtm/RTCInterface.h>
+#include <rtc/IRTC.h>
 
 namespace RTC
 {
-  namespace Interface
+namespace Local
+{
+  /*!
+   * @if jp
+   * @class IMode
+   * @brief IMode クラス
+   * @else
+   * @class IMode
+   * @brief IMode class
+   * @endif
+   */
+  class IMode
   {
-    /*!
-     * @if jp
-     * @class ModeInterface
-     * @brief ModeInterface クラス
-     * @else
-     * @class ModeInterface
-     * @brief ModeInterface class
-     * @endif
-     */
-    class ModeInterface
-    {
-    public:
-      virtual ~ModeInterface() {};
-    };
-  };   // namespace Interface
+  public:
+    virtual ~IMode() {};
+  };
+};     // namespace Local
 };     // namespace RTC
-#endif // ModeInterface_h
+#endif // RTC_LOCAL_IMODE_H
 

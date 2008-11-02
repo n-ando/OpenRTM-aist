@@ -1,7 +1,7 @@
 // -*- C++ -*-
 /*!
- * @file  FsmParticipantActionInterface.h
- * @brief FsmParticipantActionInterface class
+ * @file  IFsmParticipantAction.h
+ * @brief IFsmParticipantAction class
  * @date  $Date$
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
@@ -17,37 +17,37 @@
  *
  */
 
-#ifndef FsmParticipantActionInterface_h
-#define FsmParticipantActionInterface_h
+#ifndef RTC_LOCAL_IFSMPARTICIPANTACTION_H
+#define RTC_LOCAL_IFSMPARTICIPANTACTION_H
 
-#include <rtm/RTCInterface.h>
+#include <rtc/IRTC.h>
 
 namespace RTC
 {
-  namespace Interface
+namespace Local
+{
+  /*!
+   * @if jp
+   * @class IFsmParticipantAction
+   * @brief IFsmParticipantAction インターフェースクラス
+   * @else
+   * @class IFsmParticipantAction
+   * @brief IFsmParticipantAction interface class
+   * @endif
+   */
+  class IFsmParticipantAction
   {
+  public:
     /*!
      * @if jp
-     * @class FsmParticipantActionInterface
-     * @brief FsmParticipantActionInterface インターフェースクラス
+     * @brief デストラクタ
      * @else
-     * @class FsmParticipantActionInterface
-     * @brief FsmParticipantActionInterface interface class
+     * @brief Destructor
      * @endif
      */
-    class FsmParticipantActionInterface
-    {
-    public:
-      /*!
-       * @if jp
-       * @brief デストラクタ
-       * @else
-       * @brief Destructor
-       * @endif
-       */
-      virtual ~FsmParticipantActionInterface() {};
-    };
-  };   // namespace Interface
+    virtual ~IFsmParticipantAction() {};
+  };
+};     // namespace Local
 };     // namespace RTC
-#endif // FsmParticipantActionInterface_h
+#endif // RTC_LOCAL_IFSMPARTICIPANTACTION_H
 

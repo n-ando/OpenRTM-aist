@@ -1,7 +1,7 @@
 // -*- C++ -*-
 /*!
- * @file  DataFlowComponentActionInterface.h
- * @brief DataFlowComponentActionInterface interface class
+ * @file  IDataFlowComponentAction.h
+ * @brief IDataFlowComponentAction interface class
  * @date  $Date$
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
@@ -17,33 +17,36 @@
  *
  */
 
-#ifndef DataFlowComponentActionInterface_h
-#define DataFlowComponentActionInterface_h
+#ifndef RTC_LOCAL_IDATAFLOWCOMPONENTACTION_H
+#define RTC_LOCAL_IDATAFLOWCOMPONENTACTION_H
 
-#include <rtm/RTCInterface.h>
+#include <rtc/IRTC.h>
 
 namespace RTC
 {
-  namespace Interface
+namespace Local
+{
+  /*!
+   * @if jp
+   * @class IDataFlowComponentAction
+   * @brief IDataFlowComponentAction インターフェースクラス
+   * @else
+   * @class IDataFlowComponentAction
+   * @brief IDataFlowComponentAction class
+   * @endif
+   */
+  class IDataFlowComponentAction
   {
-    /*!
-     * @if jp
-     * @class DataFlowComponentActionInterface
-     * @brief DataFlowComponentActionInterface インターフェースクラス
-     * @else
-     * @class DataFlowComponentActionInterface
-     * @brief DataFlowComponentActionInterface class
-     * @endif
-     */
-    class DataFlowComponentActionInterface
-    {
-    public:
-      virtual ~DataFlowComponentActionInterface() {};
-      virtual ReturnCode_t on_execute(ExecutionContextHandle_t ec_handle) = 0;
-      virtual ReturnCode_t on_state_update(ExecutionContextHandle_t ec_handle) = 0;
-      virtual ReturnCode_t on_rate_changed(ExecutionContextHandle_t ec_handle) = 0;
-    };
-  };   // namespace Interface
+  public:
+    virtual ~IDataFlowComponentAction() {};
+    virtual ReturnCode_t
+    on_execute(ExecutionContextHandle_t ec_handle) = 0;
+    virtual ReturnCode_t
+    on_state_update(ExecutionContextHandle_t ec_handle) = 0;
+    virtual ReturnCode_t
+    on_rate_changed(ExecutionContextHandle_t ec_handle) = 0;
+  };
+};     // namespace Local
 };     // namespace RTC
-#endif // DataFlowComponentActionInterface_h
+#endif // RTC_LOCAL_IDATAFLOWCOMPONENTACTION_H
 

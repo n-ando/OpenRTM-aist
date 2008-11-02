@@ -21,10 +21,12 @@
 #define DataFlowComponentBase_h
 
 #include <memory>
-#include <rtm/RTCInterface.h>
-#include <rtm/DataFlowComponentInterface.h>
+#include <rtc/IRTC.h>
+#include <rtc/IDataFlowComponent.h>
  
 namespace RTC
+{
+namespace Local
 {
   /*!
    * @if jp
@@ -36,32 +38,31 @@ namespace RTC
    * @endif
    */
   class DataFlowComponentBase
-    : public virtual Interface::DataFlowComponentInterface
+    : public virtual IDataFlowComponent
   {
   public:
-    typedef RTC::Interface::ReturnCode_t ReturnCode_t;
-    typedef RTC::Interface::ExecutionContextHandle_t ExecutionContextHandle_t;
-    typedef RTC::Interface::ComponentProfile ComponentProfile;
-    typedef RTC::Interface::PortServiceList PortServiceList;
-    typedef RTC::Interface::ExecutionContextList ExecutionContextList;
-    typedef RTC::Interface::ExecutionContextInterface ExecutionContextInterface;
+    typedef RTC::Local::ReturnCode_t ReturnCode_t;
+    typedef RTC::Local::ExecutionContextHandle_t ExecutionContextHandle_t;
+    typedef RTC::Local::ComponentProfile ComponentProfile;
+    typedef RTC::Local::PortServiceList PortServiceList;
+    typedef RTC::Local::ExecutionContextList ExecutionContextList;
+    typedef RTC::Local::IExecutionContext IExecutionContext;
 
-    DataFlowComponentBase(Manager* manager);
+    DataFlowComponentBase();
     virtual ~DataFlowComponentBase();
 
     //------------------------------------------------------------
     // RTObject
     //------------------------------------------------------------
-    virtual bool is_alive(ExecutionContextInterface& ec);
+    virtual bool is_alive(IExecutionContext& ec);
     virtual ReturnCode_t initialize();
     virtual ReturnCode_t finalize();
     virtual ReturnCode_t exit();
     virtual const ComponentProfile& get_component_profile();
     virtual PortServiceList& get_ports();
-    virtual ExecutionContextHandle_t attach_context(ExecutionContextInterface& ec);
+    virtual ExecutionContextHandle_t attach_context(IExecutionContext& ec);
     virtual ReturnCode_t detach_context(ExecutionContextHandle_t ec_handle);
-    virtual ExecutionContextInterface&
-    get_context(ExecutionContextHandle_t ec_handle);
+    virtual IExecutionContext& get_context(ExecutionContextHandle_t ec_handle);
     virtual ExecutionContextList& get_owned_contexts() const;
     virtual ExecutionContextList& get_participating_contexts() const;
 
@@ -92,6 +93,7 @@ namespace RTC
     class DataFlowComponentImpl;
     std::auto_ptr<DataFlowComponentImpl> pimpl;
   };
+};     // namespace Local
 };     // namespace RTC
 #endif // DataFlowComponentBase_h
 

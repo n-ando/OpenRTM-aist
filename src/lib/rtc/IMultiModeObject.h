@@ -17,14 +17,16 @@
  *
  */
 
-#ifndef RTC_IMULTIMODEOBJECT_H
-#define RTC_IMULTIMODEOBJECT_H
+#ifndef RTC_LOCAL_IMULTIMODEOBJECT_H
+#define RTC_LOCAL_IMULTIMODEOBJECT_H
 
 #include <rtc/IRTC.h>
 #include <rtc/IModeCapable.h>
 #include <rtc/IMultModeComponentAction.h>
 
 namespace RTC
+{
+namespace Local
 {
   /*!
    * @if jp
@@ -52,6 +54,7 @@ namespace RTC
     virtual ReturnCode_t
     on_mode_changed(ExecutionContextHandle_t ec_handle) = 0;
   };
+};     // namespace Local
 };     // namespace RTC
-#endif // RTC_IMULTIMODEOBJECT_H
+#endif // RTC_LOCAL_IMULTIMODEOBJECT_H
 

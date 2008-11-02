@@ -1,7 +1,7 @@
 // -*- C++ -*-
 /*!
- * @file  RTObjectInterface.h
- * @brief RTObjectInterface interface class
+ * @file  IRTObject.h
+ * @brief IRTObject interface class
  * @date  $Date$
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
@@ -17,57 +17,56 @@
  *
  */
 
-#ifndef RTObjectInterface_h
-#define RTObjectInterface_h
+#ifndef RTC_LOCAL_IRTOBJECT_H
+#define RTC_LOCAL_IRTOBJECT_H
 
 #include <vector>
-#include <rtm/RTCInterface.h>
-#include <rtm/LightweightRTObjectInterface.h>
+#include <rtc/IRTC.h>
+#include <rtc/ILightweightRTObject.h>
 
 namespace RTC
 {
-  namespace Interface
+namespace Local
+{
+  class PortProfile;
+  typedef std::vector<PortProfile*> PortProfileList;
+  
+  class IPortService;
+  typedef std::vector<IPortService*> PortServiceList;
+  
+  class IRTObject;
+  
+  struct ComponentProfile
   {
-    class PortProfile;
-    typedef std::vector<PortProfile*> PortProfileList;
-    
-    class PortService;
-    typedef std::vector<PortService*> PortServiceList;
-    
-    class RTObjectInterface;
-    
-    struct  ComponentProfile
-    {
-      char* instance_name;
-      char* type_name;
-      char* description;
-      char* version;
-      char* vendor;
-      char* category;
-      PortProfileList port_profiles;
-      RTObjectInterface* parent;
-      NVList properties;
-    };
-    
-    /*!
-     * @if jp
-     * @class RTObjectInterface
-     * @brief RTObjectInterface インターフェースクラス
-     * @else
-     * @class RTObjectInterface
-     * @brief RTObjectInterface interface class
-     * @endif
-     */
-    class RTObjectInterface
-      : public virtual LightweightRTObjectInterface
-    //        public SDOPackage::SDO
-    {
-    public:
-      virtual ~RTObjectInterface() {};
-      virtual const ComponentProfile& get_component_profile() = 0;
-      virtual PortServiceList& get_ports() = 0;
-    };
-  };   // namespace Interface
+    char* instance_name;
+    char* type_name;
+    char* description;
+    char* version;
+    char* vendor;
+    char* category;
+    PortProfileList port_profiles;
+    IRTObject* parent;
+    NVList properties;
+  };
+  
+  /*!
+   * @if jp
+   * @class IRTObject
+   * @brief IRTObject インターフェースクラス
+   * @else
+   * @class IRTObject
+   * @brief IRTObject interface class
+   * @endif
+   */
+  class IRTObject
+    : public virtual ILightweightRTObject
+  //        public SDOPackage::SDO
+  {
+  public:
+    virtual ~IRTObject() {};
+    virtual const ComponentProfile& get_component_profile() = 0;
+    virtual PortServiceList& get_ports() = 0;
+  };
+};     // namespace Local
 };     // namespace RTC
-#endif // RTObjectInterface_h
-
+#endif // RTC_LOCAL_IRTOBJECT_H
