@@ -110,7 +110,8 @@ namespace NamingManager
      */
     void test_bindObject_and_unbindObject()
     {
-      const char* name_server = "localhost:9876";
+//      const char* name_server = "localhost:9876";
+      const char* name_server = "localhost:2809";
       RTC::NamingOnCorba noc(m_pORB, name_server);
 
       // バインドするオブジェクトを作成しておく
@@ -258,7 +259,8 @@ namespace NamingManager
 
       // NamingManagerを生成する（本来は、Manager内部から取得したいが...）
       RTC::NamingManager nmgr(m_mgr);
-      const char* name_server = "localhost:9876";
+//      const char* name_server = "localhost:9876";
+      const char* name_server = "localhost:2809";
       nmgr.registerNameServer("corba", name_server);
 			
       // オブジェクトをバインドできるか？
@@ -293,7 +295,8 @@ namespace NamingManager
 
       // NamingManagerを生成する（本来は、Manager内部から取得したいが...）
       RTC::NamingManager nmgr(m_mgr);
-      const char* name_server = "localhost:9876";
+//      const char* name_server = "localhost:9876";
+      const char* name_server = "localhost:2809";
       nmgr.registerNameServer("corba", name_server);
 			
       // オブジェクトを２つバインドしておく
@@ -333,7 +336,8 @@ namespace NamingManager
 
       // NamingManagerを生成する（本来は、Manager内部から取得したいが...）
       RTC::NamingManager nmgr(m_mgr);
-      const char* name_server = "localhost:9876";
+//      const char* name_server = "localhost:9876";
+      const char* name_server = "localhost:2809";
       nmgr.registerNameServer("corba", name_server);
 			
       // オブジェクトを２つバインドしておく
@@ -362,7 +366,8 @@ namespace NamingManager
      */
     void test_update()
     {
-      const char* name_server = "localhost:9876";
+//      const char* name_server = "localhost:9876";
+      const char* name_server = "localhost:2809";
       RTC::NamingManager nmgr(m_mgr);
 
       // バインドするオブジェクトを作成しておく
@@ -375,14 +380,17 @@ namespace NamingManager
       // registerNameServer()呼出前にオブジェクトを登録した場合、
       // この時点では、まだネームサービスにバインドされていないはず
       nmgr.bindObject("id.kind", rto);
+      // Cannot do bind because it is not registered. 
       CPPUNIT_ASSERT(! canResolve(name_server, "id", "kind"));
 			
       // ネームサービスを登録した後で、かつupdate()呼出の前は、
       // やはり、まだネームサービスにバインドされていないはず
       nmgr.registerNameServer("corba", name_server);
+      // Only registered. 
       CPPUNIT_ASSERT(! canResolve(name_server, "id", "kind"));
 			
       // update()呼出後は、正しくネームサービスにバインドされているか？
+      //
       nmgr.update();
       CPPUNIT_ASSERT(canResolve(name_server, "id", "kind"));
       objMgr.deactivate(rto);
