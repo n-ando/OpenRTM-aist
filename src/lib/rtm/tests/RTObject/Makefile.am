@@ -71,7 +71,7 @@ nodist_RTObjectTests_SOURCES = \
 	RTObjectTests.cpp
 
 RTObjectTests_LDFLAGS = -L$(libdir)
-RTObjectTests_LDADD   = -lcppunit
+RTObjectTests_LDADD   = -lcppunit -lcoil -luuid
 
 EXTRA_DIST = \
 	RTObjectTests.cpp
