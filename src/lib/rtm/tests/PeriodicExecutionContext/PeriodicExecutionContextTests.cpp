@@ -67,14 +67,14 @@ namespace PeriodicExecutionContext
     }
 		
     // RTC::_impl_ComponentAction
-    virtual RTC::UniqueId attach_executioncontext(RTC::ExecutionContext_ptr exec_context)
+    virtual RTC::UniqueId attach_context(RTC::ExecutionContext_ptr exec_context)
     {
       m_log.push_back("attach_executioncontext");
       m_execContexts.insert(
 			    std::pair<RTC::UniqueId, RTC::ExecutionContext_ptr>(m_nextUniqueId++, exec_context));
       return m_nextUniqueId;
     }
-    virtual RTC::ReturnCode_t detach_executioncontext(RTC::UniqueId ec_id)
+    virtual RTC::ReturnCode_t detach_context(RTC::UniqueId ec_id)
     {
       m_log.push_back("detach_executioncontext");
       m_execContexts.erase(ec_id);
@@ -142,22 +142,31 @@ namespace PeriodicExecutionContext
       m_log.push_back("exit");
       return RTC::RTC_OK;
     }
-    virtual CORBA::Boolean is_alive()
-    {
+    virtual CORBA::Boolean is_alive(RTC::_objref_ExecutionContext* exec_context)
+    { 
       m_log.push_back("is_alive");
       return CORBA::Boolean(m_alive);
     }
-    virtual RTC::ExecutionContextList* get_contexts()
+    virtual RTC::ExecutionContextList* get_owned_contexts()
     {
       m_log.push_back("get_contexts");
       return 0;
     }
-    virtual RTC::ExecutionContext_ptr get_context(RTC::UniqueId ec_id)
+    virtual RTC::ExecutionContextList* get_participating_contexts()
     {
       m_log.push_back("get_context");
-      return m_execContexts[ec_id];
+      return 0;
+//      return m_execContexts[ec_id];
     }
-    
+
+    virtual RTC::_objref_ExecutionContext* get_context(RTC::ExecutionContextHandle_t)
+    {
+      return 0;
+    }
+    virtual RTC::ExecutionContextHandle_t get_context_handle(RTC::_objref_ExecutionContext*)
+    {
+      return 0;
+    }
   public: // helper methods
     int countLog(std::string line)
     {
@@ -187,7 +196,8 @@ namespace PeriodicExecutionContext
   };
 	
   class DataFlowComponentMock
-    : public virtual POA_RTC::DataFlowComponent,
+//    : public virtual POA_RTC::DataFlowComponent,
+    : public virtual POA_OpenRTM::DataFlowComponent,
       public virtual LightweightRTObjectMock
   {
   public:
@@ -273,11 +283,11 @@ namespace PeriodicExecutionContext
       RTC::ComponentProfile_var prof(new RTC::ComponentProfile());
       return prof._retn();
     }
-    virtual RTC::PortList* get_ports()
+    virtual RTC::PortServiceList* get_ports()
     {
       m_log.push_back("get_ports");
       // dummy
-      RTC::PortList_var ports(new RTC::PortList());
+      RTC::PortServiceList_var ports(new RTC::PortServiceList());
       ports->length(0);
       return ports._retn();
     }
@@ -370,7 +380,7 @@ namespace PeriodicExecutionContext
      */
     virtual void setUp()
     {
-      usleep(100000);
+      coil::usleep(100000);
     }
     
     /*!
@@ -422,7 +432,7 @@ namespace PeriodicExecutionContext
 	= new RTC::PeriodicExecutionContext(); // will be deleted automatically
 				
       // ExecutionContextにRTObjectを登録する
-      CPPUNIT_ASSERT_EQUAL(RTC::RTC_OK, ec->add(rto->_this()));
+      CPPUNIT_ASSERT_EQUAL(RTC::RTC_OK, ec->add_component(rto->_this()));
 			
       // この時点では、まだon_startup()は呼び出されていないはず
       CPPUNIT_ASSERT_EQUAL(0, mock->countLog("on_startup"));
@@ -475,11 +485,11 @@ namespace PeriodicExecutionContext
 	= new RTC::PeriodicExecutionContext(); // will be deleted automatically
 			
       // ExecutionContextにRTObjectを登録する
-      CPPUNIT_ASSERT_EQUAL(RTC::RTC_OK, ec->add(rto->_this()));
+      CPPUNIT_ASSERT_EQUAL(RTC::RTC_OK, ec->add_component(rto->_this()));
 			
       // 非Alive状態にしておく
       mock->setAlive(false);
-      CPPUNIT_ASSERT_EQUAL(CORBA::Boolean(false), rto->is_alive());
+      CPPUNIT_ASSERT_EQUAL(CORBA::Boolean(false), rto->is_alive(NULL));
 			
       // start()呼出しを行い、意図どおりのエラーコードで戻ることを確認する
       // CPPUNIT_ASSERT_EQUAL(RTC::PRECONDITION_NOT_MET, ec->start());
@@ -505,7 +515,7 @@ namespace PeriodicExecutionContext
 	= new RTC::PeriodicExecutionContext(); // will be deleted automatically
 			
       // ExecutionContextにRTObjectを登録する
-      CPPUNIT_ASSERT_EQUAL(RTC::RTC_OK, ec->add(rto->_this()));
+      CPPUNIT_ASSERT_EQUAL(RTC::RTC_OK, ec->add_component(rto->_this()));
 			
       // start()を呼び出す
       CPPUNIT_ASSERT_EQUAL(RTC::RTC_OK, ec->start());
@@ -630,7 +640,7 @@ namespace PeriodicExecutionContext
       CPPUNIT_ASSERT_EQUAL(RTC::PERIODIC, ec->get_kind());
 			
       // ExecutionContextにRTObjectを登録する
-      CPPUNIT_ASSERT_EQUAL(RTC::RTC_OK, ec->add(rto->_this()));
+      CPPUNIT_ASSERT_EQUAL(RTC::RTC_OK, ec->add_component(rto->_this()));
 			
       // この時点では、on_rate_changed()は1回も呼び出されていないはず
       CPPUNIT_ASSERT_EQUAL(0, mock->countLog("on_rate_changed"));
@@ -663,7 +673,7 @@ namespace PeriodicExecutionContext
       CPPUNIT_ASSERT_EQUAL(0, mock->countLog("attach_executioncontext"));
 
       // ExecutionContextにRTObjectを登録する
-      CPPUNIT_ASSERT_EQUAL(RTC::RTC_OK, ec->add(rto->_this()));
+      CPPUNIT_ASSERT_EQUAL(RTC::RTC_OK, ec->add_component(rto->_this()));
 			
       // この時点で、attach_executioncontext()が1回だけ呼び出されているはず
       CPPUNIT_ASSERT_EQUAL(1, mock->countLog("attach_executioncontext"));
@@ -677,6 +687,7 @@ namespace PeriodicExecutionContext
     void test_add_not_with_data_flow_component()
     {
       // RTObjectを生成する
+//      POA_RTC::LightweightRTObject* rto
       POA_RTC::LightweightRTObject* rto
 	= new LightweightRTObjectMock(); // will be deleted automatically
 
@@ -708,13 +719,13 @@ namespace PeriodicExecutionContext
 	= new RTC::PeriodicExecutionContext(); // will be deleted automatically
 			
       // ExecutionContextにRTObjectを登録する
-      CPPUNIT_ASSERT_EQUAL(RTC::RTC_OK, ec->add(rto->_this()));
+      CPPUNIT_ASSERT_EQUAL(RTC::RTC_OK, ec->add_component(rto->_this()));
 
       // この時点では、attach_executioncontext()は1回も呼び出されていないはず
       CPPUNIT_ASSERT_EQUAL(0, mock->countLog("detach_executioncontext"));
 			
       // ExecutionContextへの登録を解除する
-      CPPUNIT_ASSERT_EQUAL(RTC::RTC_OK, ec->remove(rto->_this()));
+      CPPUNIT_ASSERT_EQUAL(RTC::RTC_OK, ec->remove_component(rto->_this()));
 			
       // この時点で、detach_executioncontext()が1回だけ呼び出されているはず
       CPPUNIT_ASSERT_EQUAL(1, mock->countLog("detach_executioncontext"));
@@ -737,7 +748,7 @@ namespace PeriodicExecutionContext
 			
       // まだ登録していないコンポーネントについてExecutionContextからの登録解除を試みて、
       // 意図どおりのエラーコードで戻ることを確認する
-      CPPUNIT_ASSERT_EQUAL(RTC::BAD_PARAMETER, ec->remove(rto->_this()));
+      CPPUNIT_ASSERT_EQUAL(RTC::BAD_PARAMETER, ec->remove_component(rto->_this()));
     }
 		
     /*!
@@ -757,7 +768,7 @@ namespace PeriodicExecutionContext
       CPPUNIT_ASSERT_EQUAL(RTC::RTC_OK, ec->start());
 
       // ExecutionContextにRTObjectを登録する
-      CPPUNIT_ASSERT_EQUAL(RTC::RTC_OK, ec->add(rto->_this()));
+      CPPUNIT_ASSERT_EQUAL(RTC::RTC_OK, ec->add_component(rto->_this()));
 			
       // コンポーネントをActiveにする
       CPPUNIT_ASSERT_EQUAL(RTC::RTC_OK, ec->activate_component(rto->_this()));
@@ -786,20 +797,20 @@ namespace PeriodicExecutionContext
       CPPUNIT_ASSERT_EQUAL(RTC::RTC_OK, ec->start());
 
       // ExecutionContextにRTObjectを登録する
-      CPPUNIT_ASSERT_EQUAL(RTC::RTC_OK, ec->add(rto->_this()));
+      CPPUNIT_ASSERT_EQUAL(RTC::RTC_OK, ec->add_component(rto->_this()));
 			
       // コンポーネントをActiveにする
       CPPUNIT_ASSERT_EQUAL(RTC::RTC_OK, ec->activate_component(rto->_this()));
-      usleep(100000);
+      coil::usleep(100000);
       CPPUNIT_ASSERT_EQUAL(RTC::ACTIVE_STATE, ec->get_component_state(rto->_this()));
 			
       // コンポーネントをInactiveにする
       CPPUNIT_ASSERT_EQUAL(RTC::RTC_OK, ec->deactivate_component(rto->_this()));
-      usleep(100000);
+      coil::usleep(100000);
       CPPUNIT_ASSERT_EQUAL(RTC::INACTIVE_STATE, ec->get_component_state(rto->_this()));
 			
       // remove()が成功することを確認する
-      CPPUNIT_ASSERT_EQUAL(RTC::RTC_OK, ec->remove(rto->_this()));
+      CPPUNIT_ASSERT_EQUAL(RTC::RTC_OK, ec->remove_component(rto->_this()));
       ec->stop();
     }
 		
@@ -822,7 +833,7 @@ namespace PeriodicExecutionContext
       CPPUNIT_ASSERT_EQUAL(RTC::RTC_OK, ec->start());
 
       // ExecutionContextにRTObjectを登録する
-      CPPUNIT_ASSERT_EQUAL(RTC::RTC_OK, ec->add(rto->_this()));
+      CPPUNIT_ASSERT_EQUAL(RTC::RTC_OK, ec->add_component(rto->_this()));
 			
       // この時点では、まだon_activated()は1回も呼び出されていないはず
       CPPUNIT_ASSERT_EQUAL(0, mock->countLog("on_activated"));
@@ -830,7 +841,7 @@ namespace PeriodicExecutionContext
       // コンポーネントをActiveにする
       CPPUNIT_ASSERT_EQUAL(RTC::RTC_OK, ec->activate_component(rto->_this()));
 			
-      usleep(100000);
+      coil::usleep(100000);
       // activate_component()からon_activated()の呼出しは同期呼出であり、
       // この時点で、on_activated()が1回だけ呼び出されているはず
       CPPUNIT_ASSERT_EQUAL(1, mock->countLog("on_activated"));
@@ -883,9 +894,9 @@ namespace PeriodicExecutionContext
 			
       // コンポーネントをError状態にまで遷移させる
       mock->setError(true);
-      CPPUNIT_ASSERT_EQUAL(RTC::RTC_OK, ec->add(rto->_this()));
+      CPPUNIT_ASSERT_EQUAL(RTC::RTC_OK, ec->add_component(rto->_this()));
       CPPUNIT_ASSERT_EQUAL(RTC::RTC_OK, ec->activate_component(rto->_this()));
-      sleep(1); // Error状態へ遷移するまで待つ。本来、このスリープが仕様上必要か否か？
+      coil::sleep(1); // Error状態へ遷移するまで待つ。本来、このスリープが仕様上必要か否か？
       CPPUNIT_ASSERT_EQUAL(RTC::ERROR_STATE, ec->get_component_state(rto->_this()));
 			
       // Error状態でactivate_component()呼出しを行い、意図どおりのエラーコードで戻ることを確認する
@@ -911,11 +922,11 @@ namespace PeriodicExecutionContext
 	= new RTC::PeriodicExecutionContext(); // will be deleted automatically
 			
       // ExecutionContextにRTObjectを登録する
-      CPPUNIT_ASSERT_EQUAL(RTC::RTC_OK, ec->add(rto->_this()));
+      CPPUNIT_ASSERT_EQUAL(RTC::RTC_OK, ec->add_component(rto->_this()));
 			
       // 非Alive状態にしておく
       mock->setAlive(false);
-      CPPUNIT_ASSERT_EQUAL(CORBA::Boolean(false), rto->is_alive());
+      CPPUNIT_ASSERT_EQUAL(CORBA::Boolean(false), rto->is_alive(NULL));
 			
       // activate_component()呼出しを行い、意図どおりのエラーコードで戻ることを確認する
       // CPPUNIT_ASSERT_EQUAL(RTC::BAD_PARAMETER, ec->activate_component(rto->_this()));
@@ -940,11 +951,11 @@ namespace PeriodicExecutionContext
       CPPUNIT_ASSERT_EQUAL(RTC::RTC_OK, ec->start());
 
       // ExecutionContextにRTObjectを登録する
-      CPPUNIT_ASSERT_EQUAL(RTC::RTC_OK, ec->add(rto->_this()));
+      CPPUNIT_ASSERT_EQUAL(RTC::RTC_OK, ec->add_component(rto->_this()));
 			
       // コンポーネントをactivateする
       CPPUNIT_ASSERT_EQUAL(RTC::RTC_OK, ec->activate_component(rto->_this()));
-      usleep(100000);
+      coil::usleep(100000);
       CPPUNIT_ASSERT_EQUAL(RTC::ACTIVE_STATE, ec->get_component_state(rto->_this()));
 
       // この時点では、まだon_activated()は1回も呼び出されていないはず
@@ -952,7 +963,7 @@ namespace PeriodicExecutionContext
 
       // コンポーネントをdeactivateする
       CPPUNIT_ASSERT_EQUAL(RTC::RTC_OK, ec->deactivate_component(rto->_this()));
-      usleep(100000);
+      coil::usleep(100000);
       CPPUNIT_ASSERT_EQUAL(RTC::INACTIVE_STATE, ec->get_component_state(rto->_this()));
 
       // この時点で、on_deactivated()は1回だけ呼び出されているはず
@@ -1002,7 +1013,7 @@ namespace PeriodicExecutionContext
       ec->start();
 			
       // ExecutionContextにRTObjectを登録する
-      CPPUNIT_ASSERT_EQUAL(RTC::RTC_OK, ec->add(rto->_this()));
+      CPPUNIT_ASSERT_EQUAL(RTC::RTC_OK, ec->add_component(rto->_this()));
 			
       // コンポーネントをactivateする
       CPPUNIT_ASSERT_EQUAL(RTC::RTC_OK, ec->activate_component(rto->_this()));
@@ -1011,7 +1022,7 @@ namespace PeriodicExecutionContext
 
       // 非Alive状態にしておく
       mock->setAlive(false);
-      CPPUNIT_ASSERT_EQUAL(CORBA::Boolean(false), rto->is_alive());
+      CPPUNIT_ASSERT_EQUAL(CORBA::Boolean(false), rto->is_alive(NULL));
 
       // 非Alive状態のコンポーネントに対してdeactivateを試みて、意図どおりのエラーコードで戻ることを確認する
       // CPPUNIT_ASSERT_EQUAL(RTC::BAD_PARAMETER, ec->deactivate_component(rto->_this()));
@@ -1037,9 +1048,9 @@ namespace PeriodicExecutionContext
 			
       // コンポーネントをError状態にまで遷移させる
       mock->setError(true);
-      CPPUNIT_ASSERT_EQUAL(RTC::RTC_OK, ec->add(rto->_this()));
+      CPPUNIT_ASSERT_EQUAL(RTC::RTC_OK, ec->add_component(rto->_this()));
       CPPUNIT_ASSERT_EQUAL(RTC::RTC_OK, ec->activate_component(rto->_this()));
-      sleep(1); // Error状態へ遷移するまで待つ。本来、このスリープが仕様上必要か否か？
+      coil::sleep(1); // Error状態へ遷移するまで待つ。本来、このスリープが仕様上必要か否か？
       CPPUNIT_ASSERT_EQUAL(RTC::ERROR_STATE, ec->get_component_state(rto->_this()));
 			
       // この時点では、on_reset()は1回も呼び出されていないはず
@@ -1047,7 +1058,7 @@ namespace PeriodicExecutionContext
 
       // reset_component()を呼出し、成功することを確認する
       CPPUNIT_ASSERT_EQUAL(RTC::RTC_OK, ec->reset_component(rto->_this()));
-      usleep(100000);
+      coil::usleep(100000);
       // この時点で、on_reset()が1回だけ呼び出されているはず
       CPPUNIT_ASSERT_EQUAL(1, mock->countLog("on_reset"));
       ec->stop();
@@ -1070,7 +1081,7 @@ namespace PeriodicExecutionContext
       CPPUNIT_ASSERT_EQUAL(RTC::RTC_OK, ec->start());
 			
       // ExecutionContextにRTObjectを登録する
-      CPPUNIT_ASSERT_EQUAL(RTC::RTC_OK, ec->add(rto->_this()));
+      CPPUNIT_ASSERT_EQUAL(RTC::RTC_OK, ec->add_component(rto->_this()));
 			
       // この状態(Inactive)でreset_component()呼出しを行い、意図どおりのエラーコードで戻ることを確認する
       CPPUNIT_ASSERT_EQUAL(RTC::INACTIVE_STATE, ec->get_component_state(rto->_this()));
@@ -1093,14 +1104,14 @@ namespace PeriodicExecutionContext
 
       // 非Alive状態(Create状態)にしておく
       mock->setAlive(false);
-      CPPUNIT_ASSERT_EQUAL(CORBA::Boolean(false), rto->is_alive());
+      CPPUNIT_ASSERT_EQUAL(CORBA::Boolean(false), rto->is_alive(NULL));
 			
       // ExecutionContextを生成する
       RTC::PeriodicExecutionContext* ec
 	= new RTC::PeriodicExecutionContext(); // will be deleted automatically
 
       // ExecutionContextにRTObjectを登録する
-      CPPUNIT_ASSERT_EQUAL(RTC::RTC_OK, ec->add(rto->_this()));
+      CPPUNIT_ASSERT_EQUAL(RTC::RTC_OK, ec->add_component(rto->_this()));
 			
       // この状態(Created)でreset_component()呼出しを行い、意図どおりのエラーコードで戻ることを確認する
       CPPUNIT_ASSERT_EQUAL(RTC::PRECONDITION_NOT_MET, ec->reset_component(rto->_this()));
