@@ -54,14 +54,14 @@ namespace ExtTrigExecutionContext
     }
 		
     // RTC::_impl_ComponentAction
-    virtual RTC::UniqueId attach_executioncontext(RTC::ExecutionContext_ptr exec_context)
+    virtual RTC::UniqueId attach_context(RTC::ExecutionContext_ptr exec_context)
     {
       m_log.push_back("attach_executioncontext");
       m_execContexts.insert(
 			    std::pair<RTC::UniqueId, RTC::ExecutionContext_ptr>(m_nextUniqueId++, exec_context));
       return m_nextUniqueId;
     }
-    virtual RTC::ReturnCode_t detach_executioncontext(RTC::UniqueId ec_id)
+    virtual RTC::ReturnCode_t detach_context(RTC::UniqueId ec_id)
     {
       m_log.push_back("detach_executioncontext");
       m_execContexts.erase(ec_id);
@@ -129,20 +129,28 @@ namespace ExtTrigExecutionContext
       m_log.push_back("exit");
       return RTC::RTC_OK;
     }
-    virtual CORBA::Boolean is_alive()
+    virtual CORBA::Boolean is_alive(RTC::ExecutionContext_ptr exec_context)
     {
       m_log.push_back("is_alive");
       return CORBA::Boolean(m_alive);
     }
-    virtual RTC::ExecutionContextList* get_contexts()
+    virtual RTC::ExecutionContextList* get_owned_contexts()
     {
       m_log.push_back("get_contexts");
       return 0;
     }
-    virtual RTC::ExecutionContext_ptr get_context(RTC::UniqueId ec_id)
+    virtual RTC::ExecutionContextList* get_participating_contexts()
     {
       m_log.push_back("get_context");
-      return m_execContexts[ec_id];
+      return 0;
+    }
+    virtual RTC::_objref_ExecutionContext* get_context(RTC::ExecutionContextHandle_t)
+    {
+      return 0;
+    }
+    virtual RTC::ExecutionContextHandle_t get_context_handle(RTC::_objref_ExecutionContext*)
+    {
+      return 0;
     }
     
   public: // helper methods
@@ -174,7 +182,8 @@ namespace ExtTrigExecutionContext
   };
 	
   class DataFlowComponentMock
-    : public virtual POA_RTC::DataFlowComponent,
+//    : public virtual POA_RTC::DataFlowComponent,
+    : public virtual POA_OpenRTM::DataFlowComponent,
       public virtual LightweightRTObjectMock
   {
   public:
@@ -260,14 +269,15 @@ namespace ExtTrigExecutionContext
       RTC::ComponentProfile_var prof(new RTC::ComponentProfile());
       return prof._retn();
     }
-    virtual RTC::PortList* get_ports()
+    virtual RTC::PortServiceList* get_ports()
     {
       m_log.push_back("get_ports");
       // dummy
-      RTC::PortList_var ports(new RTC::PortList());
+      RTC::PortServiceList_var ports(new RTC::PortServiceList());
       ports->length(0);
       return ports._retn();
     }
+/*
     virtual RTC::ExecutionContextServiceList* get_execution_context_services()
     {
       m_log.push_back("get_execution_context_services");
@@ -276,7 +286,7 @@ namespace ExtTrigExecutionContext
       ec->length(0);
       return ec._retn();
     }
-
+*/
     // RTC::_impl_DataFlowComponentAction
     virtual RTC::ReturnCode_t on_execute(RTC::UniqueId ec_id)
     {
@@ -352,8 +362,9 @@ namespace ExtTrigExecutionContext
       // ExecutionContextを生成する
       RTC::ExtTrigExecutionContext* ec
 	= new RTC::ExtTrigExecutionContext(); // will be deleted automatically
+
       CPPUNIT_ASSERT_EQUAL(RTC::RTC_OK, ec->start());
-      CPPUNIT_ASSERT_EQUAL(RTC::RTC_OK, ec->add(rto->_this()));
+      CPPUNIT_ASSERT_EQUAL(RTC::RTC_OK, ec->add_component(rto->_this()));
       CPPUNIT_ASSERT_EQUAL(RTC::RTC_OK, ec->activate_component(rto->_this()));
 			
       // tick()呼出を行い、その回数とon_execute()の呼出回数が一致していることを確認する
