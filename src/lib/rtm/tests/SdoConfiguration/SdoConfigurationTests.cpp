@@ -153,7 +153,7 @@ namespace SdoConfiguration
      */
     void test_set_device_profile_and_getDeviceProfile()
     {
-      RTC::Properties cfgAdminProp;
+      coil::Properties cfgAdminProp;
       RTC::ConfigAdmin cfgAdmin(cfgAdminProp);
       SDOPackage::Configuration_impl sdoCfg(cfgAdmin);
 			
@@ -207,7 +207,7 @@ namespace SdoConfiguration
      */
     void test_set_service_profile_and_getServiceProfile()
     {
-      RTC::Properties cfgAdminProp;
+      coil::Properties cfgAdminProp;
       RTC::ConfigAdmin cfgAdmin(cfgAdminProp);
       SDOPackage::Configuration_impl sdoCfg(cfgAdmin);
 			
@@ -254,7 +254,7 @@ namespace SdoConfiguration
      */
     void test_getServiceProfiles()
     {
-      RTC::Properties cfgAdminProp;
+      coil::Properties cfgAdminProp;
       RTC::ConfigAdmin cfgAdmin(cfgAdminProp);
       SDOPackage::Configuration_impl sdoCfg(cfgAdmin);
 			
@@ -345,7 +345,7 @@ namespace SdoConfiguration
     void test_remove_service_profile()
     {
 
-      RTC::Properties cfgAdminProp;
+      coil::Properties cfgAdminProp;
       RTC::ConfigAdmin cfgAdmin(cfgAdminProp);
       SDOPackage::Configuration_impl sdoCfg(cfgAdmin);
 			
@@ -402,7 +402,7 @@ namespace SdoConfiguration
      */
     void test_add_organization_and_getOrganizations()
     {
-      RTC::Properties cfgAdminProp;
+      coil::Properties cfgAdminProp;
       RTC::ConfigAdmin cfgAdmin(cfgAdminProp);
       SDOPackage::Configuration_impl sdoCfg(cfgAdmin);
 			
@@ -466,7 +466,7 @@ namespace SdoConfiguration
      */
     void test_add_configuration_set_and_get_configuration_set()
     {
-      RTC::Properties cfgAdminProp;
+      coil::Properties cfgAdminProp;
       RTC::ConfigAdmin cfgAdmin(cfgAdminProp);
       SDOPackage::Configuration_impl sdoCfg(cfgAdmin);
 			
@@ -497,8 +497,9 @@ namespace SdoConfiguration
       SDOPackage::ConfigurationSet* cfgSetRet0 = sdoCfg.get_configuration_set("ID 0");
       CPPUNIT_ASSERT_EQUAL(std::string("ID 0"),
 			   std::string(cfgSetRet0->id));
-      CPPUNIT_ASSERT_EQUAL(std::string("DESCRIPTION 0"),
-			   std::string(cfgSetRet0->description));
+//Deleted this test, because description was not used.
+//      CPPUNIT_ASSERT_EQUAL(std::string("DESCRIPTION 0"),
+//			   std::string(cfgSetRet0->description));
       CPPUNIT_ASSERT_EQUAL(CORBA::ULong(2),
 			   cfgSetRet0->configuration_data.length());
       CPPUNIT_ASSERT_EQUAL(std::string("NAME 0-0"),
@@ -517,8 +518,9 @@ namespace SdoConfiguration
       SDOPackage::ConfigurationSet* cfgSetRet1 = sdoCfg.get_configuration_set("ID 1");
       CPPUNIT_ASSERT_EQUAL(std::string("ID 1"),
 			   std::string(cfgSetRet1->id));
-      CPPUNIT_ASSERT_EQUAL(std::string("DESCRIPTION 1"),
-			   std::string(cfgSetRet1->description));
+//Deleted this test, because description was not used.
+//      CPPUNIT_ASSERT_EQUAL(std::string("DESCRIPTION 1"),
+//			   std::string(cfgSetRet1->description));
       CPPUNIT_ASSERT_EQUAL(CORBA::ULong(2),
 			   cfgSetRet1->configuration_data.length());
       CPPUNIT_ASSERT_EQUAL(std::string("NAME 1-0"),
@@ -543,7 +545,7 @@ namespace SdoConfiguration
      */
     void test_remove_configuration_set()
     {
-      RTC::Properties cfgAdminProp;
+      coil::Properties cfgAdminProp;
       RTC::ConfigAdmin cfgAdmin(cfgAdminProp);
       SDOPackage::Configuration_impl sdoCfg(cfgAdmin);
 			
@@ -605,7 +607,7 @@ namespace SdoConfiguration
      */
     void test_set_configuration_set_values()
     {
-      RTC::Properties cfgAdminProp;
+      coil::Properties cfgAdminProp;
       RTC::ConfigAdmin cfgAdmin(cfgAdminProp);
       SDOPackage::Configuration_impl sdoCfg(cfgAdmin);
 			
@@ -677,10 +679,11 @@ namespace SdoConfiguration
 		
     void test_activate_configuration_set_and_get_active_configuration_set()
     {
-      RTC::Properties cfgAdminProp;
+
+      coil::Properties cfgAdminProp;
       RTC::ConfigAdmin cfgAdmin(cfgAdminProp);
       SDOPackage::Configuration_impl sdoCfg(cfgAdmin);
-			
+	
       // ConfigurationSetを準備する
       SDOPackage::ConfigurationSet cfgSet0;
       cfgSet0.id = "ID 0";
@@ -710,8 +713,9 @@ namespace SdoConfiguration
       // アクティブなConfigurationSetを取得し、それがアクティブ化したものと一致するか？
       SDOPackage::ConfigurationSet* cfgSetRet0 = sdoCfg.get_configuration_set("ID 0");
       CPPUNIT_ASSERT_EQUAL(std::string("ID 0"), std::string(cfgSetRet0->id));
-      CPPUNIT_ASSERT_EQUAL(std::string("DESCRIPTION 0"),
-			   std::string(cfgSetRet0->description));
+//Deleted this test, because description was not used.
+//      CPPUNIT_ASSERT_EQUAL(std::string("DESCRIPTION 0"),
+//			   std::string(cfgSetRet0->description));
       CPPUNIT_ASSERT_EQUAL(CORBA::ULong(2),
 			   cfgSetRet0->configuration_data.length());
       CPPUNIT_ASSERT_EQUAL(std::string("NAME 0-0"),
@@ -733,8 +737,9 @@ namespace SdoConfiguration
       // アクティブなConfigurationSetを取得し、それがアクティブ化したものと一致するか？
       SDOPackage::ConfigurationSet* cfgSetRet1 = sdoCfg.get_configuration_set("ID 1");
       CPPUNIT_ASSERT_EQUAL(std::string("ID 1"), std::string(cfgSetRet1->id));
-      CPPUNIT_ASSERT_EQUAL(std::string("DESCRIPTION 1"),
-			   std::string(cfgSetRet1->description));
+//Deleted this test, because description was not used.
+//      CPPUNIT_ASSERT_EQUAL(std::string("DESCRIPTION 1"),
+//			   std::string(cfgSetRet1->description));
       CPPUNIT_ASSERT_EQUAL(CORBA::ULong(2),
 			   cfgSetRet1->configuration_data.length());
       CPPUNIT_ASSERT_EQUAL(std::string("NAME 1-0"),
@@ -757,8 +762,9 @@ namespace SdoConfiguration
 	  CPPUNIT_FAIL("Exception not thrown.");
 	}
       catch (SDOPackage::InvalidParameter expected) {}
+
     }
-    
+
   };
 }; // namespace SdoConfiguration
 
