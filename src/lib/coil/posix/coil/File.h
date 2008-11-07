@@ -23,6 +23,7 @@
 #include <coil/config_coil.h>
 #include <memory>
 
+
 namespace coil
 {
 
@@ -31,11 +32,17 @@ namespace coil
     return ::dirname(path);
   }
 
-  inline char* basename(const char* path)
+  inline const char* basename(const char* path)
   {
-    char p[strlen(path)+1];
-    strncpy(p, path, strlen(path));
-    return ::basename(p);
+    const char *cp = strrchr(path,'/');
+    if(cp == 0)
+    {
+       return path;
+    }
+    else
+    {
+       return cp + 1 ;
+    }
   }
 };
 
