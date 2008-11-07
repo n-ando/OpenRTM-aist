@@ -148,6 +148,8 @@ namespace InPortCorbaConsumer
       CORBA::Any readValueAny = inPortAny->getData();
       CORBA::Float* pReadValue = (CORBA::Float*) readValueAny.value();
       CPPUNIT_ASSERT_EQUAL(writeValue, *pReadValue);
+
+      m_pPOA->deactivate_object(inPortAnyId);
       delete inPortAny;
     }
 		
@@ -174,6 +176,8 @@ namespace InPortCorbaConsumer
       CORBA::Any readValueAny = inPortAny->getData();
       CORBA::Float* pReadValue = (CORBA::Float*) readValueAny.value();
       CPPUNIT_ASSERT_EQUAL(writeValue, *pReadValue);
+
+      m_pPOA->deactivate_object(inPortAnyId);
       delete inPortAny;
     }
 		
@@ -199,6 +203,8 @@ namespace InPortCorbaConsumer
       CORBA_SeqUtil::push_back(properties,
 			       NVUtil::newNVAny("dataport.corba_any.inport_ref", inPortAnyRefAny));
       CPPUNIT_ASSERT(consumer.subscribeInterface(properties));
+
+      m_pPOA->deactivate_object(inPortAnyId);
       delete inPortAny;
     }
 		
@@ -228,6 +234,8 @@ namespace InPortCorbaConsumer
       CORBA::Any readValueAny = inPortAny->getData();
       CORBA::Float* pReadValue = (CORBA::Float*) readValueAny.value();
       CPPUNIT_ASSERT_EQUAL(writeValue, *pReadValue);
+
+      m_pPOA->deactivate_object(inPortAnyId);
       delete inPortAny;
     }
 		
@@ -260,6 +268,8 @@ namespace InPortCorbaConsumer
 	CORBA::Any readValueAny = inPortAny->getData();
 	CORBA::Float* pReadValue = (CORBA::Float*) readValueAny.value();
 	CPPUNIT_ASSERT_EQUAL(writeValue, *pReadValue);
+
+        m_pPOA->deactivate_object(inPortAnyId);
 	delete inPortAny;
       }
       catch (...) {}
@@ -291,6 +301,8 @@ namespace InPortCorbaConsumer
       CORBA::Any readValueAny = inPortAny->getData();
       CORBA::Float* pReadValue = (CORBA::Float*) readValueAny.value();
       CPPUNIT_ASSERT_EQUAL(writeValue, *pReadValue);
+
+      m_pPOA->deactivate_object(inPortAnyId);
       delete inPortAny;
     }
 		
