@@ -16,6 +16,15 @@
  *
  */
 
+#ifdef WIN32
+#pragma warning( push )
+#pragma warning( disable : 4267 )
+#pragma warning( disable : 4290 )
+#pragma warning( disable : 4311 )
+#pragma warning( disable : 4312 )
+#endif // WIN32
+
+
 #include <assert.h>
 #include <rtm/RTObject.h>
 #include <rtm/SdoConfiguration.h>
@@ -23,6 +32,10 @@
 #include <rtm/Manager.h>
 #include <coil/stringutil.h>
 #include <iostream>
+
+#ifdef WIN32
+#pragma warning( pop )
+#endif // WIN32
 
 namespace RTC
 {

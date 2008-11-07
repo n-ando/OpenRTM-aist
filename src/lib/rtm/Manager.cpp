@@ -16,6 +16,14 @@
  *
  */
 
+#ifdef WIN32
+#pragma warning( push )
+#pragma warning( disable : 4267 )
+#pragma warning( disable : 4290 )
+#pragma warning( disable : 4311 )
+#pragma warning( disable : 4312 )
+#endif // WIN32
+
 #include <rtm/Manager.h>
 #include <rtm/ManagerConfig.h>
 #include <rtm/ModuleManager.h>
@@ -35,6 +43,10 @@
 #include <coil/TimeValue.h>
 #include <coil/Timer.h>
 #include <coil/OS.h>
+
+#ifdef WIN32
+#pragma warning( pop )
+#endif // WIN32
 
 //static sig_atomic_t g_mgrActive = true;
 extern "C" void handler (int)

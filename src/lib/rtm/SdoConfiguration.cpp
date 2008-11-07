@@ -17,6 +17,14 @@
  *
  */
 
+#ifdef WIN32
+#pragma warning( push )
+#pragma warning( disable : 4267 )
+#pragma warning( disable : 4290 )
+#pragma warning( disable : 4311 )
+#pragma warning( disable : 4312 )
+#endif // WIN32
+
 #include <coil/UUID.h>
 #include "rtm/SdoConfiguration.h"
 #include <rtm/CORBA_SeqUtil.h>
@@ -24,6 +32,10 @@
 #include <memory>
 #include <iostream>
 // ACE
+
+#ifdef WIN32
+#pragma warning( pop )
+#endif // WIN32
 
 namespace SDOPackage
 {
