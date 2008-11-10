@@ -33,15 +33,25 @@
 #endif
 
 #ifdef ORB_IS_OMNIORB
-#undef PACKAGE_BUGREPORT
-#undef PACKAGE_NAME
-#undef PACKAGE_STRING
-#undef PACKAGE_TARNAME
-#undef PACKAGE_VERSION
-#undef PACKAGE_TARNAME
+
+#ifdef WIN32
+#pragma warning( disable : 4267 )
+#pragma warning( disable : 4290 )
+#pragma warning( disable : 4311 )
+#pragma warning( disable : 4312 )
+#endif // WIN32
+
 #include <omniORB4/CORBA.h>
 #include <omnithread.h>
-#endif
+
+#ifdef WIN32
+#pragma warning( default : 4267 )
+#pragma warning( default : 4290 )
+#pragma warning( default : 4311 )
+#pragma warning( default : 4312 )
+#endif // WIN32
+
+#endif // ORB_IS_OMNIORB
 
 #include "rtm_corba/idl/OpenRTMSkel.h"
 

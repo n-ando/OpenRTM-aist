@@ -21,14 +21,6 @@
 #define CorbaNaming_h
 
 #include <rtm/RTC.h>
-#ifdef ORB_IS_OMNIORB
-#undef PACKAGE_BUGREPORT
-#undef PACKAGE_NAME
-#undef PACKAGE_STRING
-#undef PACKAGE_TARNAME
-#undef PACKAGE_VERSION
-#include <omniORB4/CORBA.h>
-#endif
 
 // STL includes
 #include <map>
