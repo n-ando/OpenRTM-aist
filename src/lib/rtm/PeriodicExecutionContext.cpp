@@ -254,7 +254,7 @@ namespace RTC
     
     if (!(it->_sm.m_sm.isIn(INACTIVE_STATE)))
       return RTC::PRECONDITION_NOT_MET;
-    
+	    
     it->_sm.m_sm.goTo(ACTIVE_STATE);
     return RTC::RTC_OK;
   }
@@ -360,7 +360,11 @@ namespace RTC
       {
 	OpenRTM::DataFlowComponent_ptr dfp;
 	dfp = OpenRTM::DataFlowComponent::_narrow(comp);
-	
+        //Check the pointer.
+        if(CORBA::is_nil(dfp))
+          {
+	    return RTC::BAD_PARAMETER;
+          }
 	UniqueId id;
 	id = dfp->attach_context(m_ref);
 	m_comps.push_back(Comp(LightweightRTObject::_duplicate(comp),
