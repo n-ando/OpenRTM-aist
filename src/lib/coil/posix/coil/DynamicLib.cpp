@@ -48,7 +48,7 @@ namespace coil
     if (!rhs.m_name.empty() &&
         open(rhs.m_name.c_str(), rhs.m_mode, rhs.m_closeflag) == 0)
       return;
-    throw std::bad_alloc();
+//    throw std::bad_alloc();
   }
 
   DynamicLib& DynamicLib::operator=(const DynamicLib& rhs)
@@ -79,7 +79,13 @@ namespace coil
   {
     if (m_handle == NULL)
       return -1;
+    if (m_name.empty())
+      {
+        return -1;
+      }
     ::dlclose(m_handle);
+    m_handle = NULL;
+    m_name = "";
     return 0;
   }
 
