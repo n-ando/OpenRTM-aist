@@ -129,7 +129,9 @@ namespace RTC
     for (int i(0), len(m_names.size()); i < len; ++i)
       {
 	if (m_names[i]->ns != NULL)
+        {
 	  m_names[i]->ns->bindObject(name, rtobj);
+        }
       }
     registerCompName(name, rtobj);
   }
@@ -163,6 +165,10 @@ namespace RTC
 		bindCompsTo(nsobj); // rebind all comps to new NS
 	      }
 	  }
+        else
+          {	
+            bindCompsTo(m_names[i]->ns); // 
+          } 
       }
   }
   
@@ -181,7 +187,9 @@ namespace RTC
     for (int i(0), len(m_names.size()); i < len; ++i)
       {
 	if (m_names[i]->ns != NULL)
+        {
 	  m_names[i]->ns->unbindObject(name);
+        }
       }
     unregisterCompName(name);
   }
