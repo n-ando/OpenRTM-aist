@@ -131,6 +131,7 @@ namespace RTC
     {
       if (this == &consumer) return *this;
       m_buffer = consumer.m_buffer;
+      m_var = consumer.m_var;  
     }
     
     /*!
