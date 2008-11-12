@@ -114,6 +114,7 @@ namespace SDOPackage
   Configuration_impl::~Configuration_impl()
   {
   }
+
   
   //============================================================
   // Basic Configuration 
@@ -453,7 +454,9 @@ namespace SDOPackage
       {
 	ConfigurationSet_var config;
 	config = new ConfigurationSet();
+//        config.description = configset["description"];
 	toConfigurationSet(config, configset);
+//std::cout<<"Configuration_impl::get_config.description"<<config.description<<std::endl;
 	return config._retn();
       }
     catch (...)
@@ -543,9 +546,12 @@ namespace SDOPackage
       {
 	Guard gurad(m_config_mutex);
 	const char* config_id(configuration_set.id);
+//	const char* config_value(configuration_set.description);
 //	RTC::Properties config(config_id);
 	coil::Properties config(config_id);
+//	coil::Properties config(config_id,config_value);
 	toProperties(config, configuration_set);
+//        config["description"] = configuration_set.description;
 	return m_configsets.addConfigurationSet(config);
       }
     catch (...)
@@ -599,6 +605,15 @@ namespace SDOPackage
     if (std::string(id).empty())
       throw InvalidParameter("ID is empty.");
     
+    if(m_configsets.activateConfigurationSet(id))
+      {
+        return true;
+      }
+    else
+      {
+	throw InvalidParameter("Configuration::activate_configuration_set()");
+      }
+/*
     try
       {
 	return m_configsets.activateConfigurationSet(id);
@@ -608,6 +623,7 @@ namespace SDOPackage
 	throw InternalError("Configuration::activate_configuration_set()");
 	return false;
       }
+*/
     return false;
   }
   
