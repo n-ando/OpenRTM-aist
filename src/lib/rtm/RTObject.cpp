@@ -284,6 +284,7 @@ namespace RTC
     throw (CORBA::SystemException)
   {
     ReturnCode_t ret;
+    if (m_alive) return RTC::PRECONDITION_NOT_MET;
     ret = on_initialize();
     m_created = false;
     
@@ -310,13 +311,14 @@ namespace RTC
   {
     if (m_created) return RTC::PRECONDITION_NOT_MET;
     
-    for (CORBA::ULong i(0), n(m_execContexts.length()); i < n; ++i)
-      {
-	if (m_execContexts[i]->is_running())
-	  return RTC::PRECONDITION_NOT_MET;
-      }
+    //Return RTC::PRECONDITION_NOT_MET,When the component is registered in ExecutionContext.
+    if(m_execContexts.length())
+    {
+      return RTC::PRECONDITION_NOT_MET;
+    }
     
     ReturnCode_t ret(on_finalize());
+    m_alive = false;
     shutdown();
     return ret;
   }
@@ -475,7 +477,8 @@ namespace RTC
       }
     
     CORBA::release(m_execContexts[ec_id]);
-    m_execContexts[ec_id] = ExecutionContextService::_nil();
+//    m_execContexts[ec_id] = ExecutionContextService::_nil();
+    CORBA_SeqUtil::erase(m_execContexts,ec_id);
     return RTC::RTC_OK;
   }
   
@@ -915,11 +918,19 @@ namespace RTC
       {
 	SDOPackage::DeviceProfile_var dprofile;
 	dprofile = new SDOPackage::DeviceProfile();
-	dprofile->device_type  = CORBA::string_dup(m_profile.category);
-	dprofile->manufacturer = CORBA::string_dup(m_profile.vendor);
-	dprofile->model        = CORBA::string_dup(m_profile.type_name);
-	dprofile->version      = CORBA::string_dup(m_profile.version);
-	dprofile->properties   = m_profile.properties;
+        
+	dprofile->device_type  = m_pSdoConfigImpl->getDeviceProfile().device_type;
+	dprofile->manufacturer = m_pSdoConfigImpl->getDeviceProfile().manufacturer;
+	dprofile->model        = m_pSdoConfigImpl->getDeviceProfile().model;
+	dprofile->version      = m_pSdoConfigImpl->getDeviceProfile().version;
+	dprofile->properties   = m_pSdoConfigImpl->getDeviceProfile().properties;
+
+//	dprofile->device_type  = CORBA::string_dup(m_profile.category);
+//	dprofile->manufacturer = CORBA::string_dup(m_profile.vendor);
+//	dprofile->model        = CORBA::string_dup(m_profile.type_name);
+//	dprofile->version      = CORBA::string_dup(m_profile.version);
+//	dprofile->properties   = m_profile.properties;
+
 	return dprofile._retn();
       }
     catch (...)
@@ -940,6 +951,7 @@ namespace RTC
     throw (CORBA::SystemException, 
 	   SDOPackage::NotAvailable, SDOPackage::InternalError)
   {
+    m_sdoSvcProfiles = m_pSdoConfigImpl->getServiceProfiles();
     try
       {
 	SDOPackage::ServiceProfileList_var sprofiles;
@@ -966,14 +978,18 @@ namespace RTC
 	   SDOPackage::InvalidParameter, SDOPackage::NotAvailable,
 	   SDOPackage::InternalError)
   {
+    m_sdoSvcProfiles = m_pSdoConfigImpl->getServiceProfiles();
     if (!id)
       throw SDOPackage::InvalidParameter("get_service_profile(): Empty name.");
     
+    CORBA::Long index;
+    index = CORBA_SeqUtil::find(m_sdoSvcProfiles, svc_name(id));
+    if(index < 0)
+    {
+      throw SDOPackage::InvalidParameter("get_service_profile(): Name is not found.");
+    }
     try
       {
-	CORBA::Long index;
-	index = CORBA_SeqUtil::find(m_sdoSvcProfiles, svc_name(id));
-	
 	SDOPackage::ServiceProfile_var sprofile;
 	sprofile = new SDOPackage::ServiceProfile(m_sdoSvcProfiles[index]);
 	return sprofile._retn();
@@ -997,14 +1013,18 @@ namespace RTC
 	   SDOPackage::InvalidParameter, SDOPackage::NotAvailable,
 	   SDOPackage::InternalError)
   {
+    m_sdoSvcProfiles = m_pSdoConfigImpl->getServiceProfiles();
     if (!id)
       throw SDOPackage::InvalidParameter("get_service(): Empty name.");
     
+    CORBA::Long index;
+    index = CORBA_SeqUtil::find(m_sdoSvcProfiles, svc_name(id));
+    if (index <0)
+    {
+      throw SDOPackage::InvalidParameter("get_service(): Name is not found.");
+    }
     try
       {
-	CORBA::Long index;
-	index = CORBA_SeqUtil::find(m_sdoSvcProfiles, svc_name(id));
-	
 	SDOPackage::SDOService_var service;
 	service = m_sdoSvcProfiles[index].service;
 	return service._retn();
@@ -1070,6 +1090,7 @@ namespace RTC
     throw (CORBA::SystemException, 
 	   SDOPackage::NotAvailable, SDOPackage::InternalError)
   {
+    m_sdoOrganizations = m_pSdoConfigImpl->getOrganizations();
     try
       {
 	SDOPackage::OrganizationList_var org;
@@ -1308,4 +1329,4 @@ namespace RTC
 	m_pManager->cleanupComponent(this);
       }
   }
-};
+}
