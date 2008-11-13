@@ -37,11 +37,11 @@
 #include <cppunit/extensions/HelperMacros.h>
 #include <cppunit/TestAssert.h>
 
-#include <rtm/idl/BasicDataTypeSkel.h>
-#include <rtm/idl/RTCSkel.h>
+#include <idl/BasicDataTypeSkel.h>
+#include <idl/RTCSkel.h>
+#include <coil/stringutil.h>
 #include <rtm/OutPort.h>
 #include <rtm/DataOutPort.h>
-#include <rtm/StringUtil.h>
 
 /*!
  * @class DataOutPortTests class
@@ -57,7 +57,7 @@ namespace DataOutPort
     DataOutPortMock(
 		    const char* name,
 		    RTC::OutPort<DataType, Buffer>& outport,
-		    RTC::Properties& prop)
+		    coil::Properties& prop)
       : RTC::DataOutPort(name, outport, prop)
     {
     }
@@ -172,7 +172,7 @@ namespace DataOutPort
       RTC::OutPort<RTC::TimedFloat>* pOutPort =
 	new RTC::OutPort<RTC::TimedFloat>("name of OutPort", outPortBindValue); // will be deleted automatically
 			
-      RTC::Properties dataOutPortProps;
+      coil::Properties dataOutPortProps;
       RTC::DataOutPort* pDataOutPort =
 	new RTC::DataOutPort("name of DataOutPort", *pOutPort, dataOutPortProps); // will be deleted automatically
 			
@@ -200,8 +200,8 @@ namespace DataOutPort
       // "dataport.subscription_type"プロパティは正しく取得されるか？
       CPPUNIT_ASSERT_EQUIVALENT("Flush, New, Periodic",
 				NVUtil::toString(pPortProfile->properties, "dataport.subscription_type"));
-      delete pDataOutPort;
-      delete pOutPort;
+//      delete pDataOutPort;
+//      delete pOutPort;
     }
 		
     /*!
@@ -216,7 +216,7 @@ namespace DataOutPort
       RTC::OutPort<RTC::TimedFloat>* pOutPort =
 	new RTC::OutPort<RTC::TimedFloat>("name of OutPort", outPortBindValue); // will be deleted automatically
 			
-      RTC::Properties dataOutPortProps;
+      coil::Properties dataOutPortProps;
       DataOutPortMock<RTC::TimedFloat, RTC::RingBuffer>* pDataOutPort =
 	new DataOutPortMock<RTC::TimedFloat, RTC::RingBuffer>(
 							      "name of DataOutPort", *pOutPort, dataOutPortProps); // will be deleted automatically
@@ -239,8 +239,8 @@ namespace DataOutPort
       NVUtil::find(connProf.properties,
 		   "dataport.corba_any.outport_ref") >>= outPortAnyRef;
       CPPUNIT_ASSERT(! CORBA::is_nil(outPortAnyRef));
-      delete pDataOutPort;
-      delete pOutPort;
+//      delete pDataOutPort;
+//      delete pOutPort;
     }
 
     /*!
@@ -255,7 +255,7 @@ namespace DataOutPort
       RTC::OutPort<RTC::TimedFloat>* pOutPort =
 	new RTC::OutPort<RTC::TimedFloat>("name of OutPort", outPortBindValue); // will be deleted automatically
 			
-      RTC::Properties dataOutPortProps;
+      coil::Properties dataOutPortProps;
       DataOutPortMock<RTC::TimedFloat, RTC::RingBuffer>* pDataOutPort =
 	new DataOutPortMock<RTC::TimedFloat, RTC::RingBuffer>(
 							      "name of DataOutPort", *pOutPort, dataOutPortProps); // will be deleted automatically
@@ -277,8 +277,8 @@ namespace DataOutPort
       CORBA::Long index = NVUtil::find_index(
 					     connProf.properties, "dataport.tcp_any.outport_addr");
       CPPUNIT_ASSERT(index > 0);
-      delete pDataOutPort;
-      delete pOutPort;
+//      delete pDataOutPort;
+//      delete pOutPort;
     }
 
     /*!
@@ -293,7 +293,7 @@ namespace DataOutPort
       RTC::OutPort<RTC::TimedFloat>* pOutPort =
 	new RTC::OutPort<RTC::TimedFloat>("name of OutPort", outPortBindValue); // will be deleted automatically
 			
-      RTC::Properties dataOutPortProps;
+      coil::Properties dataOutPortProps;
       DataOutPortMock<RTC::TimedFloat, RTC::RingBuffer>* pDataOutPort =
 	new DataOutPortMock<RTC::TimedFloat, RTC::RingBuffer>(
 							      "name of DataOutPort", *pOutPort, dataOutPortProps); // will be deleted automatically
@@ -323,8 +323,8 @@ namespace DataOutPort
       value.data = 1.0;
       CPPUNIT_ASSERT(pOutPort->write(value));
       CPPUNIT_ASSERT_EQUAL(1, pInPortAny->getCalledCount());
-      delete pDataOutPort;
-      delete pOutPort;
+//      delete pDataOutPort;
+//      delete pOutPort;
     }
 
     /*!
@@ -339,7 +339,7 @@ namespace DataOutPort
       RTC::OutPort<RTC::TimedFloat>* pOutPort =
 	new RTC::OutPort<RTC::TimedFloat>("name of OutPort", outPortBindValue); // will be deleted automatically
 			
-      RTC::Properties dataOutPortProps;
+      coil::Properties dataOutPortProps;
       DataOutPortMock<RTC::TimedFloat, RTC::RingBuffer>* pDataOutPort =
 	new DataOutPortMock<RTC::TimedFloat, RTC::RingBuffer>(
 							      "name of DataOutPort", *pOutPort, dataOutPortProps); // will be deleted automatically
@@ -377,16 +377,16 @@ namespace DataOutPort
       value.data = 2.0;
       CPPUNIT_ASSERT(pOutPort->write(value));
       CPPUNIT_ASSERT_EQUAL(1, pInPortAny->getCalledCount()); // カウント数が変化していないはず
-      delete pDataOutPort;
-      delete pOutPort;
+//      delete pDataOutPort;
+//      delete pOutPort;
     }
 		
   private:
 		
     void CPPUNIT_ASSERT_EQUIVALENT(const std::string& lhs, const std::string& rhs)
     {
-      std::vector<std::string> lhsValues = split(lhs, ",");
-      std::vector<std::string> rhsValues = split(rhs, ",");
+      std::vector<std::string> lhsValues = coil::split(lhs, ",");
+      std::vector<std::string> rhsValues = coil::split(rhs, ",");
 			
       // 要素数が異なれば、中身を見るまでもなく同一ではないと判定できる
       if (lhsValues.size() != rhsValues.size())
