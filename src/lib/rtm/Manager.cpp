@@ -219,6 +219,10 @@ namespace RTC
     
     try
       {
+        if(CORBA::is_nil(this->getPOAManager()))
+        {
+          return false;
+        }
 	this->getPOAManager()->activate();
 	
 	if (m_initProc != NULL)
@@ -399,8 +403,12 @@ namespace RTC
       {    
 	ECFactoryBase* factory;
 	factory = new ECFactoryCXX(name, new_func, delete_func);
-	m_ecfactory.registerObject(factory);
-	return true;
+//	m_ecfactory.registerObject(factory);
+//	return true;
+	if(m_ecfactory.registerObject(factory))
+        {
+	  return true;
+        }
       }
     catch (...)
       {
@@ -473,8 +481,14 @@ namespace RTC
 	return NULL;
       }
     RTC_TRACE(("RTC initialization succeeded: %s", module_name));
-    bindExecutionContext(comp);
-    
+    if(bindExecutionContext(comp) != true)
+      {
+        RTC_TRACE(("RTC bindExecutionContext failed: %s", module_name));
+        comp->exit();
+        RTC_TRACE(("%s was finalized", module_name));
+        return NULL;
+      }
+    RTC_TRACE(("RTC bindExecutionContext succeeded: %s", module_name));
     //------------------------------------------------------------
     // Bind component to naming service
     registerComponent(comp);
@@ -549,6 +563,10 @@ namespace RTC
       {
 	const char* ectype
 	  = m_config.getProperty("exec_cxt.periodic.type").c_str();
+        if(m_ecfactory.find(ectype) == NULL)
+          {
+            return false;
+          }
 	exec_cxt = m_ecfactory.find(ectype)->create();
 	const char* rate
 	  = m_config.getProperty("exec_cxt.periodic.rate").c_str();
@@ -572,6 +590,10 @@ namespace RTC
       {
 	const char* ectype
 	  = m_config.getProperty("exec_cxt.evdriven.type").c_str();
+        if(m_ecfactory.find(ectype) == NULL)
+          {
+            return false;
+          }
 	exec_cxt = m_ecfactory.find(ectype)->create();
       }
     exec_cxt->add_component(rtobj);
@@ -824,7 +846,6 @@ namespace RTC
 	
 	// ORB initialization
 	m_pORB = CORBA::ORB_init(argc, argv);
-	
 	// Get the RootPOA
 	CORBA::Object_var obj = m_pORB->resolve_initial_references("RootPOA");
 	m_pPOA = PortableServer::POA::_narrow(obj);
@@ -913,7 +934,8 @@ namespace RTC
 	  {
 	    m_pORB->shutdown(true);
 	    RTC_DEBUG(("ORB was shutdown."));
-	    //     m_pORB->destroy();
+            m_pORB->destroy();
+            //CORBA::release(m_pORB);
 	    RTC_DEBUG(("ORB was destroied."));
 	    m_pORB = CORBA::ORB::_nil();
 	  }
