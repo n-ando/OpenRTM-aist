@@ -16,10 +16,11 @@
 #include <cppunit/extensions/TestFactoryRegistry.h>
 #include <cppunit/extensions/HelperMacros.h>
 #include <cppunit/TestAssert.h>
+
 #include <rtm/InPortCorbaProvider.h>
-#include <rtm/idl/BasicDataTypeSkel.h>
+#include <idl/BasicDataTypeSkel.h>
 #include <rtm/RingBuffer.h>
-#include <rtm/StringUtil.h>
+#include <coil/stringutil.h>
 
 /*!
  * @class InPortCorbaProviderTests class
@@ -108,7 +109,7 @@ namespace InPortCorbaProvider
       // "dataport.subscription_type"プロパティを正しく取得できるか？
       CPPUNIT_ASSERT_EQUIVALENT(std::string("Any"),
 				NVUtil::toString(profile, "dataport.subscription_type"));
-      delete provider;
+//      delete provider;
     }
 		
     /*!
@@ -131,7 +132,7 @@ namespace InPortCorbaProvider
       RTC::InPortAnyRef inPortAnyRef;
       NVUtil::find(properties, "dataport.corba_any.inport_ref") >>= inPortAnyRef;
       CPPUNIT_ASSERT(! CORBA::is_nil(inPortAnyRef));
-      delete provider;
+//      delete provider;
     }
 		
     /*!
@@ -153,7 +154,7 @@ namespace InPortCorbaProvider
       // "dataport.corba_any.inport_ref"プロパティは、意図どおり取得されていないか？
       CPPUNIT_ASSERT_EQUAL(CORBA::Long(-1),
 			   NVUtil::find_index(properties, "dataport.corba_any.inport_ref"));
-      delete provider;
+//      delete provider;
     }
 		
     /*!
@@ -178,15 +179,15 @@ namespace InPortCorbaProvider
       RTC::TimedFloat readValue;
       buffer.read(readValue);
       CPPUNIT_ASSERT_EQUAL(putValue.data, readValue.data);
-      delete provider;
+//      delete provider;
     }
 		
   private:
 	
     void CPPUNIT_ASSERT_EQUIVALENT(const std::string& lhs, const std::string& rhs)
     {
-      std::vector<std::string> lhsValues = split(lhs, ",");
-      std::vector<std::string> rhsValues = split(rhs, ",");
+      std::vector<std::string> lhsValues = coil::split(lhs, ",");
+      std::vector<std::string> rhsValues = coil::split(rhs, ",");
 			
       // 要素数が異なれば、中身を見るまでもなく同一ではないと判定できる
       if (lhsValues.size() != rhsValues.size())
