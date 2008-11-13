@@ -94,7 +94,7 @@ namespace OutPortCorbaProvider
       RTC::RingBuffer<RTC::TimedFloat> buffer(10);
       RTC::OutPortCorbaProvider<RTC::TimedFloat>* provider
 	= new RTC::OutPortCorbaProvider<RTC::TimedFloat>(buffer); // will be deleted automatically
-			
+		
       SDOPackage::NVList prop;
       provider->publishInterfaceProfile(prop);
 
@@ -126,7 +126,7 @@ namespace OutPortCorbaProvider
 	CPPUNIT_ASSERT_EQUAL(std::string("Flush, New, Periodic"), std::string(value));
       }
 
-      delete provider;
+//      delete provider;
     }
 		
     /*!
@@ -140,6 +140,7 @@ namespace OutPortCorbaProvider
       RTC::OutPortCorbaProvider<RTC::TimedFloat>* provider
 	= new RTC::OutPortCorbaProvider<RTC::TimedFloat>(buffer); // will be deleted automatically
 			
+      RTC::TimedFloat* readValue = new RTC::TimedFloat;
       for (int i = 0; i < 10; ++i)
 	{
 	  RTC::TimedFloat writeValue;
@@ -147,12 +148,12 @@ namespace OutPortCorbaProvider
 	  buffer.write(writeValue);
 
 	  // バッファに書き込まれた値を、get()メソッドで正しく読み出せるか？			
-	  RTC::TimedFloat* readValue = new RTC::TimedFloat;
+//	  RTC::TimedFloat* readValue = new RTC::TimedFloat;
 	  CORBA::Any_var any = provider->get();
 	  any.in() >>= readValue;
 	  CPPUNIT_ASSERT_EQUAL(writeValue.data, readValue->data);
 	}
-      delete provider;
+//      delete provider;
     }
   };
 }; // namespace OutPortCorbaProvider
