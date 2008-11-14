@@ -110,6 +110,7 @@ namespace Tests
     virtual RTC::ReturnCode_t initialize()
       throw (CORBA::SystemException)
     {
+      RTC::RTObject_impl::initialize();
       if (m_logger != NULL) m_logger->log("initialize");
       return RTC::RTC_OK;
     }
@@ -133,7 +134,7 @@ namespace Tests
     {
     }
 		
-    RTC::UniqueId attach_executioncontext(RTC::ExecutionContext_ptr exec_context)
+    RTC::UniqueId attach_context(RTC::ExecutionContext_ptr exec_context)
       throw (CORBA::SystemException)
     {
       return RTC::RTObject_impl::attach_context(exec_context);
@@ -169,17 +170,17 @@ namespace Tests
     CPPUNIT_TEST(test_getLogbuf);
     CPPUNIT_TEST(test_getConfig);
     CPPUNIT_TEST(test_setModuleInitProc);
-//    CPPUNIT_TEST(test_runManager_no_block);
-//    CPPUNIT_TEST(test_runManager_block);
 
+    CPPUNIT_TEST(test_runManager_no_block);
+    CPPUNIT_TEST(test_runManager_block);
     CPPUNIT_TEST(test_load);
     CPPUNIT_TEST(test_unload);
     CPPUNIT_TEST(test_unloadAll);
     CPPUNIT_TEST(test_registerFactory);
     CPPUNIT_TEST(test_registerECFactory);
     CPPUNIT_TEST(test_getModulesFactories);
-//    CPPUNIT_TEST(test_cleanupComponent);
-//    CPPUNIT_TEST(test_getComponents);
+    CPPUNIT_TEST(test_cleanupComponent);
+    CPPUNIT_TEST(test_getComponents);
 		
     // ※現在、各テスト間の独立性を完全に確保できていないため、下記テストは実施順序を変更しないこと。
     //   また、テスト内容を変更したり、他テストを追加したりする場合は、必ずしもテスト間の独立性が
@@ -187,9 +188,9 @@ namespace Tests
     //   CORBA::ORB::destroy()が失敗する場合があり、次テスト時のCORBA::ORB_init()呼出が
     //   新ORBインスタンスを返さない場合があるため。詳しい原因は現時点では不明。
     //
-//    CPPUNIT_TEST(test_createComponent_DataFlowComponent);
+    CPPUNIT_TEST(test_createComponent_DataFlowComponent);
     //CPPUNIT_TEST(test_createComponent_Non_DataFlowComponent);
-//    CPPUNIT_TEST(test_createComponent_failed_in_bindExecutionContext);
+    CPPUNIT_TEST(test_createComponent_failed_in_bindExecutionContext);
     //CPPUNIT_TEST(test_createComponent_with_illegal_module_name);
 
     CPPUNIT_TEST_SUITE_END();
@@ -482,7 +483,6 @@ namespace Tests
      */
     void test_runManager_no_block()
     {
-std::cout<<"test_runManager_no_block:---"<<std::endl;
       // 初期化を行う
       int argc = 0;
       char* argv[] = {};
@@ -503,7 +503,6 @@ std::cout<<"test_runManager_no_block:---"<<std::endl;
       RTC::DataFlowComponent_ptr rtoRef
 	= RTC::DataFlowComponent::_narrow(poa->id_to_reference(rtoId));
       CPPUNIT_ASSERT(! CORBA::is_nil(rtoRef));
-
       // テスト用にロガーを設定しておく
       Logger logger;
       rto->setLogger(&logger);
@@ -519,11 +518,9 @@ std::cout<<"test_runManager_no_block:---"<<std::endl;
       rtoRef->initialize();
       coil::sleep(3);
       CPPUNIT_ASSERT_EQUAL(1, logger.countLog("initialize"));
-//      m_mgr->shutdown();
-std::cout<<"test_runManager_no_block:30:---"<<std::endl;
+
+      rto->exit();
       m_mgr->terminate();
-      coil::sleep(3);
-std::cout<<"test_runManager_no_block:e:---"<<std::endl;
     }
 		
     /*!
@@ -568,8 +565,8 @@ std::cout<<"test_runManager_no_block:e:---"<<std::endl;
 	coil::sleep(3);
       }
       CPPUNIT_ASSERT_EQUAL(1, logger.countLog("initialize"));
+//m_mgr->terminate();
 //      m_mgr->shutdown();
-      coil::usleep(3000000);
     }
 		
     class InvokerMock
@@ -591,10 +588,11 @@ std::cout<<"test_runManager_no_block:e:---"<<std::endl;
       virtual int svc(void)
       {
 	m_rtoRef->initialize();
-	sleep(1);
+	coil::sleep(1);
 				
 	// ブロックされているrunManager呼出をブロック解除する
-	m_mgr->getORB()->shutdown(true);
+        m_rtoRef->exit();
+        m_mgr->shutdown();
 	m_mgr->join();
 				
 	return 0;
@@ -896,8 +894,9 @@ std::cout<<"test_runManager_no_block:e:---"<<std::endl;
       const char* name_server = "localhost:2809";
       nmgr.registerNameServer("corba", name_server);
       CPPUNIT_ASSERT(canResolve(name_server, "DataFlowComponent0", "rtc"));
+
+      comp->exit();
       m_mgr->terminate();
-      coil::usleep(3000000);
     }
 
     void test_createComponent_Non_DataFlowComponent()
@@ -962,6 +961,7 @@ std::cout<<"test_runManager_no_block:e:---"<<std::endl;
       // コンポーネント生成を試みて、意図どおりNULLで戻るか？
       RTC::RtcBase* comp = m_mgr->createComponent("DataFlowComponentFactory");
       CPPUNIT_ASSERT(comp == NULL);
+
       m_mgr->terminate();
       coil::usleep(3000000);
     }
@@ -1033,10 +1033,9 @@ std::cout<<"test_runManager_no_block:e:---"<<std::endl;
       CPPUNIT_ASSERT(! canResolve(name_server, "DataFlowComponent0", "rtc"));
       CPPUNIT_ASSERT(m_mgr->getComponent("DataFlowComponent0") == NULL);
 
-//m_mgr->getORB()->shutdown(true);
-//m_mgr->shutdown();
+
+      comp->exit();
       m_mgr->terminate();
-      coil::usleep(3000000);
     }
 		
     void test_registerComponent()
@@ -1125,8 +1124,10 @@ std::cout<<"test_runManager_no_block:e:---"<<std::endl;
       comps = m_mgr->getComponents();
       CPPUNIT_ASSERT(std::find(comps.begin(), comps.end(), comp1) == comps.end());
       CPPUNIT_ASSERT(std::find(comps.begin(), comps.end(), comp2) != comps.end());
+
+      comp1->exit();
+      comp2->exit();
       m_mgr->terminate();
-      coil::usleep(3000000);
     }
 		
     void test_getORB()
