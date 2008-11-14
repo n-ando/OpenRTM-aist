@@ -609,6 +609,16 @@ namespace RTC
    * @brief Unregister RT-Components that have been registered to Manager
    * @endif
    */
+//  void Manager::deleteComponent(RtcBase* comp)
+//  {
+//    RTC_TRACE(("Manager::deleteComponent(%s)", comp->getInstanceName()));
+//    RTObject_var rtobj;
+//    rtobj = comp->getObjRef();
+//    for (CORBA::ULong ic(0), len(m_ecs.size()); ic < len; ++ic)
+//      {
+//        m_ecs[ic]->remove_component(rtobj);
+//      }
+//  }
   void Manager::deleteComponent(const char* instance_name)
   {
     RTC_TRACE(("Manager::deleteComponent(%s)", instance_name));
@@ -899,13 +909,24 @@ namespace RTC
   void Manager::shutdownORB()
   {
     RTC_TRACE(("Manager::shutdownORB()"));
-    while (m_pORB->work_pending())
+    if(CORBA::is_nil(m_pORB))
       {
-	RTC_PARANOID(("Pending work still exists."));
-	if (m_pORB->work_pending())
-	  m_pORB->perform_work();
+        return;
       }
-    RTC_DEBUG(("No pending works of ORB. Shutting down POA and ORB."));
+    try
+      {
+      while (m_pORB->work_pending())
+        {
+	  RTC_PARANOID(("Pending work still exists."));
+	  if (m_pORB->work_pending())
+	    m_pORB->perform_work();
+        }
+        RTC_DEBUG(("No pending works of ORB. Shutting down POA and ORB."));
+      }
+    catch(...)
+      { 
+        RTC_ERROR(("Caught SystemException during perform_work."));
+      }
     
     if (!CORBA::is_nil(m_pPOA))
       {
@@ -935,7 +956,7 @@ namespace RTC
 	    m_pORB->shutdown(true);
 	    RTC_DEBUG(("ORB was shutdown."));
             m_pORB->destroy();
-            //CORBA::release(m_pORB);
+//            CORBA::release(m_pORB);
 	    RTC_DEBUG(("ORB was destroied."));
 	    m_pORB = CORBA::ORB::_nil();
 	  }
