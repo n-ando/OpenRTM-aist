@@ -718,6 +718,7 @@ namespace RTC
      * @endif
      */
     void deleteComponent(const char* instance_name);
+//    void deleteComponent(RtcBase* comp);
     
     /*!
      * @if jp
@@ -1546,7 +1547,7 @@ namespace RTC
       virtual int svc(void)
       {
 	m_pORB->run();
-	Manager::instance().shutdown();
+//	Manager::instance().shutdown();
 	return 0;
       }
       
