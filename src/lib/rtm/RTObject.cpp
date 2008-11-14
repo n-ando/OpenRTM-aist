@@ -342,6 +342,10 @@ namespace RTC
 	m_execContexts[0]->stop();
 	m_alive = false;
       }
+    for (CORBA::ULong ic(0), len(m_execContexts.length()); ic < len; ++ic)
+      {
+        m_execContexts[ic]->remove_component(this->_this());
+      }
     ReturnCode_t ret(finalize());
     
     return ret;
