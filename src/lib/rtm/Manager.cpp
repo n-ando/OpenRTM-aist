@@ -955,8 +955,7 @@ namespace RTC
 	  {
 	    m_pORB->shutdown(true);
 	    RTC_DEBUG(("ORB was shutdown."));
-            m_pORB->destroy();
-//            CORBA::release(m_pORB);
+            //m_pORB->destroy();
 	    RTC_DEBUG(("ORB was destroied."));
 	    m_pORB = CORBA::ORB::_nil();
 	  }
