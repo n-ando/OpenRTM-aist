@@ -24,7 +24,19 @@
 #include <CORBA.h>
 #endif
 #ifdef ORB_IS_OMNIORB
+#ifdef WIN32
+#pragma warning( disable : 4267 )
+#pragma warning( disable : 4290 )
+#pragma warning( disable : 4311 )
+#pragma warning( disable : 4312 )
+#endif // WIN32
 #include <omniORB4/CORBA.h>
+#ifdef WIN32
+#pragma warning( default : 4267 )
+#pragma warning( default : 4290 )
+#pragma warning( default : 4311 )
+#pragma warning( default : 4312 )
+#endif // WIN32
 #endif
 #ifdef ORB_IS_ORBACUS
 #include <OB/CORBA.h>

@@ -43,8 +43,20 @@ skel_cpp_temp = """// -*- C++ -*-
 #include "[skel_dir]/[basename].cxx"
 #include "[skel_dir]/[basename]_s.cxx"
 #elif defined ORB_IS_OMNIORB
+#ifdef WIN32
+#pragma warning( disable : 4267 )
+#pragma warning( disable : 4290 )
+#pragma warning( disable : 4311 )
+#pragma warning( disable : 4312 )
+#endif // WIN32
 #include "[skel_dir]/[basename]SK.cc"
 #include "[skel_dir]/[basename]DynSK.cc"
+#ifdef WIN32
+#pragma warning( default : 4267 )
+#pragma warning( default : 4290 )
+#pragma warning( default : 4311 )
+#pragma warning( default : 4312 )
+#endif // WIN32
 #elif defined ORB_IS_MICO
 #include "[skel_dir]/[basename].cc"
 #include "[skel_dir]/[basename]_skel.cc"
@@ -86,7 +98,19 @@ skel_h_temp = """// -*- C++ -*-
 #include "[skel_dir]/[basename]_s.h"
 #include "[skel_dir]/[basename].h"
 #elif defined ORB_IS_OMNIORB
+#ifdef WIN32
+#pragma warning( disable : 4267 )
+#pragma warning( disable : 4290 )
+#pragma warning( disable : 4311 )
+#pragma warning( disable : 4312 )
+#endif // WIN32
 #include "[skel_dir]/[basename].hh"
+#ifdef WIN32
+#pragma warning( default : 4267 )
+#pragma warning( default : 4290 )
+#pragma warning( default : 4311 )
+#pragma warning( default : 4312 )
+#endif // WIN32
 #elif defined ORB_IS_MICO
 #include "[skel_dir]/[basename].h"
 #elif defined ORB_IS_ORBIT2
@@ -119,8 +143,20 @@ stub_cpp_temp = """// -*- C++ -*-
 #elif defined ORB_IS_OE
 #include "[skel_dir]/[basename].cxx"
 #elif defined ORB_IS_OMNIORB
+#ifdef WIN32
+#pragma warning( disable : 4267 )
+#pragma warning( disable : 4290 )
+#pragma warning( disable : 4311 )
+#pragma warning( disable : 4312 )
+#endif // WIN32
 #include "[skel_dir]/[basename]SK.cc"
 #include "[skel_dir]/[basename]DynSK.cc"
+#ifdef WIN32
+#pragma warning( default : 4267 )
+#pragma warning( default : 4290 )
+#pragma warning( default : 4311 )
+#pragma warning( default : 4312 )
+#endif // WIN32
 #elif defined ORB_IS_MICO
 #include "[skel_dir]/[basename].cc"
 #elif defined ORB_IS_ORBIT2
@@ -158,7 +194,19 @@ stub_h_temp = """// -*- C++ -*-
 #elif defined ORB_IS_OE
 #include "[skel_dir]/[basename].h"
 #elif defined ORB_IS_OMNIORB
+#ifdef WIN32
+#pragma warning( disable : 4267 )
+#pragma warning( disable : 4290 )
+#pragma warning( disable : 4311 )
+#pragma warning( disable : 4312 )
+#endif // WIN32
 #include "[skel_dir]/[basename].hh"
+#ifdef WIN32
+#pragma warning( default : 4267 )
+#pragma warning( default : 4290 )
+#pragma warning( default : 4311 )
+#pragma warning( default : 4312 )
+#endif // WIN32
 #elif defined ORB_IS_MICO
 #include "[skel_dir]/[basename].h"
 #elif defined ORB_IS_ORBIT2
