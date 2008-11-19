@@ -54,8 +54,7 @@ namespace [ns]
     virtual ~[iface_name]();
 
 [for op in operations]
-    virtual [op.return.local.ret_type]
-[op.name]([for a in op.args]
+    virtual [op.return.local.ret_type] [op.name]([for a in op.args]
 [if-index a is last][a.local.arg_type] [a.local.arg_name]
 [else][a.local.arg_type] [a.local.arg_name], [endif]
 [endfor]);
