@@ -18,6 +18,7 @@
 
 import string
 import config
+from omniidl_be.cxx import util
 
 class ConfigurationState:
     def __init__(self):
@@ -29,17 +30,19 @@ class ConfigurationState:
             # Relevant omniORB C++ library version
             'Library Version':       'omniORB_4_0',
             # Debug mode
-            'Debug':                 False,
+            'Debug':                 True,
             #
             # generated classes for doil
-            # - Servant
-            # - Adapter
+            # - doil Interface
+            # - CORBA Servant
+            # - CORBA Adapter
             # - Ice slice
             # - Ice servant
             # - Ice adapter
             #
-            'Servant':               False,
-            'Adapter':               False,
+            'Interface':             False,
+            'CORBAServant':          False,
+            'CORBAAdapter':          False,
             'IceSlice':              False,
             'IceServant':            False,
             'IceAdapter':            False,    
@@ -47,6 +50,11 @@ class ConfigurationState:
             # Type mapping
             #
             'MappingFile':           '',
+            'TypeMapping':           None,
+            #
+            # Additional includes
+            #
+            'IncludeHeaders':        [],
             #
             # Servant stuff
             #
@@ -57,7 +65,7 @@ class ConfigurationState:
             # Namespace of servant class
             'ServantNs':             [],
             # servant class header directory
-            'ServantDir':            [],
+            'ServantDir':            '',
             #
             # Adapter stuff
             #
@@ -68,7 +76,7 @@ class ConfigurationState:
             # Namespace of servant class
             'AdapterNs':             [],
             # servant class header directory
-            'AdapterDir':            [],
+            'AdapterDir':            '',
             #
             # Interface stuff
             #
@@ -79,7 +87,7 @@ class ConfigurationState:
             # Namespace of delegated interface class
             'IfaceNs':               [],
             # interface class header directory
-            'IfaceDir':              "",
+            'IfaceDir':              '',
             # Base name of file being processed
             'Basename':              None,
             # Directory name of file being processed

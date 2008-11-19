@@ -1,6 +1,6 @@
 #!/usr/bin/env python
+# -*- coding: shift_jis -*-
 # -*- python -*-
-#
 # @file omniidl_be/doil/servant/__init__.py
 # @brief servant code generator for doil backend
 # @date $Date$
@@ -18,16 +18,12 @@
 
 import os
 
-from omniidl_be.doil.servant import main
-from omniidl_be.doil import util
-
-def run(tree, config):
-    main.__init__(config)
-    try:
-        main.run(tree)
-    except Exception, inst:
-        print dir(inst)
-        import traceback
-        print traceback.print_stack()
-        print "exception", inst.args
-        print inst.message
+from omniidl_be.doil.interface import template
+import omniidl_be.doil.yat as yat
+def generate(dict):
+    for d in dict['interfaces']:
+        t = yat.Template(template.interface_h)
+        f = open(d['iface_h'], "w")
+        text = t.generate(d)
+        f.write(text)
+        f.close()

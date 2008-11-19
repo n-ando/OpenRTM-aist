@@ -22,7 +22,7 @@
 from omniidl import idlast, idlvisitor, idlutil
 
 # module from omniidl_be.cxx
-from omniidl_be.cxx import support, ast
+from omniidl_be.cxx import support, ast, id
 
 # module from omniidl_be.doil
 from omniidl_be.doil import util, config
@@ -31,10 +31,12 @@ import re, sys, os.path
 
 cpp_args = ["-D__OMNIIDL_CXX__"]
 usage_string = """\
-  -Wbm=<mapfile>  Specify type mapping rule file
-  -Wbservant      Generate doil servant class for CORBA
-  -Wbadapter      Generate doil adapter class for CORBA
-  -Wbslice        Generate Ice slice file from CORBA IDL
+  -Wbm=<mapfile>  Specify type mapping rule file (mandatory)
+  -Wbi=<include>  Specify include files
+  -Wbinterface    Generate doil C++ interface header
+  -Wbcorbaservant Generate doil servant class for CORBA
+  -Wbcorbaadapter Generate doil adapter class for CORBA
+  -Wbiceslice     Generate Ice slice file from CORBA IDL
   -Wbiceservant   Generate doil servant class for Ice
   -Wbiceadapter   Generate doil adapter class for Ice
 
@@ -70,12 +72,16 @@ def process_args(args):
             config.state['Debug']                  = True
         elif arg[:2] == "m=":
             config.state['MappingFile']            = arg[2:]
+        elif arg[:2] == "i=":
+            config.state['IncludeHeaders'].append(arg[2:])
         # generator options
-        elif arg == "servant":
-            config.state['Servant']                = True
-        elif arg == "adapter":
-            config.state['Adapter']                = True
-        elif arg == "slice":
+        elif arg == "interface":
+            config.state['Interface']              = True
+        elif arg == "corbaservant":
+            config.state['CORBAServant']           = True
+        elif arg == "corbaadapter":
+            config.state['CORBAAdapter']           = True
+        elif arg == "iceslice":
             config.state['IceSlice']               = True
         elif arg == "iceservant":
             config.state['IceServant']             = True
@@ -134,6 +140,18 @@ def run(tree, args):
     
     process_args(args)
 
+    if config.state['MappingFile'] == '':
+        config.state['TypeMapping'] = {}
+    else:
+#        raise "No mapping file specified.!"
+        import yaml
+        mapping_file = config.state['MappingFile']
+        f = open(mapping_file, "r")
+        mapping = yaml.load(f.read())
+        f.close()
+        config.state['TypeMapping'] = mapping
+
+
     try:
         # Check the input tree only contains stuff we understand
         support.checkIDL(tree)
@@ -141,34 +159,37 @@ def run(tree, args):
         # initialise the handy ast module
         ast.__init__(tree)
 
+        tree.accept(id.WalkTree())
         # Initialise the descriptor generating code
         # currently doil does not use descriptor
         #        descriptor.__init__(tree)
+        from omniidl_be.doil import dictbuilder
+        dict = dictbuilder.run(tree, config.state)
+        import yaml
+        print yaml.dump(dict, default_flow_style=False)
 
-        # CORBA Servant codes
-        if config.state['Servant']:
-            from omniidl_be.doil import servant
-            servant.run(tree, config.state)
+        if config.state['Interface']:
+            from omniidl_be.doil import interface
+            interface.generate(dict)
+        if config.state['CORBAServant']:
+            from omniidl_be.doil import corba
+            corba.generate_servant(dict)
 
-        # CORBA Adapter codes
-        if config.state['Adapter']:
-            from omniidl_be.doil import adapter
-            adapter.run(tree)
-
-        # Ice slice
+        if config.state['CORBAAdapter']:
+            from omniidl_be.doil import corba
+            corba.generate_adapter(dict)
+        return
         if config.state['IceSlice']:
-            from omniidl_be.doil import iceslice
-            iceslice.run(tree)
+            from omniidl_be.doil import ice
+            ice.generate_slice(dict)
 
-        # Ice Servant codes
-        if config.state['IceServant']:
-            from omniidl_be.doil import iceservant
-            iceservant.run(tree)
-
-        # Ice Adapter codes
         if config.state['IceAdapter']:
-            from omniidl_be.doil import iceadapter
-            iceadapter.run(tree)
+            from omniidl_be.doil import ice
+            ice.generate_adapter(dict)
+
+        if config.state['IceServant']:
+            from omniidl_be.doil import ice
+            ice.generate_servant(dict)
 
     except AttributeError, e:
         name = e[0]
@@ -181,8 +202,8 @@ def run(tree, args):
     except SystemExit, e:
         # fatalError function throws SystemExit exception
         # delete all possibly partial output files
-        for file in output.listAllCreatedFiles():
-            os.unlink(file)
+#        for file in output.listAllCreatedFiles():
+#            os.unlink(file)
         
         raise e
     except:
