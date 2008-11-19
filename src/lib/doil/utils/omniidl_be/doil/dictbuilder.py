@@ -29,7 +29,6 @@ from omniidl_be.cxx import ast, id, types, output
 
 # module from omniidl_be/doil
 from omniidl_be.doil import util
-from omniidl_be.doil.servant import template
 
 import omniidl_be.doil.yat as yat
 
