@@ -27,9 +27,12 @@ AM_LDFLAGS= -L.                   \
 
 noinst_PROGRAMS = MutexTests
 
-MutexTests_SOURCES = ../TestRunner.cpp MutexTests.cpp
+MutexTests_SOURCES = ../TestRunner.cpp \
+                     $(top_srcdir)/posix/coil/Task.cpp \
+                     $(top_srcdir)/posix/coil/Mutex.cpp \
+                     MutexTests.cpp
 MutexTests_LDFLAGS = -L$(libdir)
-MutexTests_LDADD   = -lcppunit -lcoil
+MutexTests_LDADD   = -lcppunit
 
 TEST_SRC = $(MutexTests_SOURCES)
 TEST_H   = 

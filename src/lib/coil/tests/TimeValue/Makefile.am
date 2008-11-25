@@ -27,9 +27,11 @@ AM_LDFLAGS= -L.                   \
 
 noinst_PROGRAMS = TimeValueTests
 
-TimeValueTests_SOURCES = ../TestRunner.cpp TimeValueTests.cpp
+TimeValueTests_SOURCES = ../TestRunner.cpp \
+                         $(top_srcdir)/common/TimeValue.cpp \
+                         TimeValueTests.cpp
 TimeValueTests_LDFLAGS = -L$(libdir)
-TimeValueTests_LDADD   = -lcppunit -lcoil
+TimeValueTests_LDADD   = -lcppunit
 
 TEST_SRC = $(TimeValueTests_SOURCES)
 TEST_H   = 
