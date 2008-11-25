@@ -27,9 +27,11 @@ AM_LDFLAGS= -L.                   \
 
 noinst_PROGRAMS = UUIDTests
 
-UUIDTests_SOURCES = ../TestRunner.cpp UUIDTests.cpp
+UUIDTests_SOURCES = ../TestRunner.cpp \
+                    $(top_srcdir)/posix/coil/UUID.cpp \
+                    UUIDTests.cpp
 UUIDTests_LDFLAGS = -L$(libdir)
-UUIDTests_LDADD   = -lcppunit -lcoil -luuid
+UUIDTests_LDADD   = -lcppunit -luuid
 
 TEST_SRC = $(UUIDTests_SOURCES)
 TEST_H   = 

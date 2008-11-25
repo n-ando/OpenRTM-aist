@@ -27,9 +27,10 @@ AM_LDFLAGS= -L.                   \
 
 noinst_PROGRAMS = OSTests
 
-OSTests_SOURCES = ../TestRunner.cpp OSTests.cpp
+OSTests_SOURCES = ../TestRunner.cpp \
+                  OSTests.cpp
 OSTests_LDFLAGS = -L$(libdir)
-OSTests_LDADD   = -lcppunit -lcoil
+OSTests_LDADD   = -lcppunit 
 
 TEST_SRC = $(OSTests_SOURCES)
 TEST_H   = 
