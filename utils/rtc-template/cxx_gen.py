@@ -217,7 +217,7 @@ class [basicInfo.name]
 
 extern "C"
 {
-  void [basicInfo.name]Init(RTC::Manager* manager);
+  DLL_EXPORT void [basicInfo.name]Init(RTC::Manager* manager);
 };
 
 #endif // [u_name]_H
