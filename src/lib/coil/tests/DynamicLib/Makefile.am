@@ -27,9 +27,11 @@ AM_LDFLAGS= -L.                   \
 
 noinst_PROGRAMS = DynamicLibTests
 
-DynamicLibTests_SOURCES = ../TestRunner.cpp DynamicLibTests.cpp
+DynamicLibTests_SOURCES = ../TestRunner.cpp \
+                          $(top_srcdir)/posix/coil/DynamicLib.cpp \
+                          DynamicLibTests.cpp
 DynamicLibTests_LDFLAGS = -L$(libdir)
-DynamicLibTests_LDADD   = -lcppunit -lcoil
+DynamicLibTests_LDADD   = -lcppunit
 
 TEST_SRC = $(DynamicLibTests_SOURCES)
 TEST_H   = 
