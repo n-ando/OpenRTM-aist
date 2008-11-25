@@ -27,9 +27,10 @@ AM_LDFLAGS= -L.                   \
 
 noinst_PROGRAMS = ListenerTests
 
-ListenerTests_SOURCES = ../TestRunner.cpp ListenerTests.cpp
+ListenerTests_SOURCES = ../TestRunner.cpp \
+                        ListenerTests.cpp
 ListenerTests_LDFLAGS = -L$(libdir)
-ListenerTests_LDADD   = -lcppunit -lcoil
+ListenerTests_LDADD   = -lcppunit
 
 TEST_SRC = $(ListenerTests_SOURCES)
 TEST_H   = 

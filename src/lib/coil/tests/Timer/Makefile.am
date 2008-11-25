@@ -27,9 +27,13 @@ AM_LDFLAGS= -L.                   \
 
 noinst_PROGRAMS = TimerTests
 
-TimerTests_SOURCES = ../TestRunner.cpp TimerTests.cpp
+TimerTests_SOURCES = ../TestRunner.cpp \
+                     $(top_srcdir)/common/TimeValue.cpp \
+                     $(top_srcdir)/posix/coil/Task.cpp \
+                     $(top_srcdir)/posix/coil/Timer.cpp \
+                     TimerTests.cpp
 TimerTests_LDFLAGS = -L$(libdir)
-TimerTests_LDADD   = -lcppunit -lcoil
+TimerTests_LDADD   = -lcppunit
 
 TEST_SRC = $(TimerTests_SOURCES)
 TEST_H   = 
