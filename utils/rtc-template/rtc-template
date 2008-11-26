@@ -527,10 +527,10 @@ def CreateConfigurationSet(opts):
 				type    = re.sub("@@", "::", type)
 				default = re.sub("@@", "::", default)
 			except:
-				sys.stderr("Invalid option: " \
-					   + opt \
-					   + "=" \
-					   + arg)
+				sys.stderr.write("Invalid option: " \
+							 + opt \
+							 + "=" \
+							 + arg)
 			tmp = copy.deepcopy(prof)
 			tmp["name"] = name
 			tmp["varname"] = name
@@ -582,10 +582,10 @@ def CreateDataPorts(opts):
 				name    = re.sub("@@", "::", name)
 				type    = re.sub("@@", "::", type)
 			except:
-				sys.stderr("Invalid option: " \
-					   + opt \
-					   + "=" \
-					   + arg)
+				sys.stderr.write("Invalid option: " \
+							 + opt \
+							 + "=" \
+							 + arg)
 			tmp = copy.deepcopy(prof)
 			tmp["name"] = name
 			tmp["portType"] = portType[opt]
