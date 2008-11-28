@@ -33,6 +33,7 @@ cpp_args = ["-D__OMNIIDL_CXX__"]
 usage_string = """\
   -Wbm=<mapfile>  Specify type mapping rule file (mandatory)
   -Wbi=<include>  Specify include files
+  -Wbimplicit     Process included IDLs implicitly
   -Wbinterface    Generate doil C++ interface header
   -Wbcorbaservant Generate doil servant class for CORBA
   -Wbcorbaadapter Generate doil adapter class for CORBA
@@ -75,6 +76,8 @@ def process_args(args):
         elif arg[:2] == "i=":
             config.state['IncludeHeaders'].append(arg[2:])
         # generator options
+        elif arg == "implicit":
+            config.state['ImplicitInclude']        = True
         elif arg == "interface":
             config.state['Interface']              = True
         elif arg == "corbaservant":
@@ -121,9 +124,6 @@ run_before = 0
 
 
 def run(tree, args):
-    print tree
-    print args
-
     """Entrypoint to the doil backend"""
 
     global run_before
@@ -143,7 +143,6 @@ def run(tree, args):
     if config.state['MappingFile'] == '':
         config.state['TypeMapping'] = {}
     else:
-#        raise "No mapping file specified.!"
         import yaml
         mapping_file = config.state['MappingFile']
         f = open(mapping_file, "r")
@@ -165,20 +164,19 @@ def run(tree, args):
         #        descriptor.__init__(tree)
         from omniidl_be.doil import dictbuilder
         dict = dictbuilder.run(tree, config.state)
-        import yaml
-        print yaml.dump(dict, default_flow_style=False)
 
         if config.state['Interface']:
             from omniidl_be.doil import interface
-            interface.generate(dict)
+            interface.generate_interface(dict)
+            interface.generate_types(dict)
         if config.state['CORBAServant']:
             from omniidl_be.doil import corba
             corba.generate_servant(dict)
-
+            corba.generate_types(dict)
         if config.state['CORBAAdapter']:
             from omniidl_be.doil import corba
             corba.generate_adapter(dict)
-        return
+            corba.generate_types(dict)
         if config.state['IceSlice']:
             from omniidl_be.doil import ice
             ice.generate_slice(dict)
@@ -200,11 +198,6 @@ def run(tree, args):
             
         util.fatalError("An AttributeError exception was caught")
     except SystemExit, e:
-        # fatalError function throws SystemExit exception
-        # delete all possibly partial output files
-#        for file in output.listAllCreatedFiles():
-#            os.unlink(file)
-        
         raise e
     except:
         util.fatalError("An internal exception was caught")

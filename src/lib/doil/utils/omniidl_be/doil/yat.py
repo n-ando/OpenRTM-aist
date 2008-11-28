@@ -46,6 +46,7 @@
 #
 # 2. "for" directive:
 #    [for key in list] statement [endfor]
+#    [for-inv key in list] statement [endfor] (inverted)
 #
 #    Iterative evaluation for listed values is performed by "for" statement.
 #    In iteration at each evaluation, the value of the list is assigned to
@@ -59,9 +60,8 @@
 #           {"name": "z", "value": "0.1"}]}
 #
 # template:
-# [for lst in list]
-# [lst],  
-# [endfor]
+# [for lst in list][lst], [endfor]
+# [for-inv lst in list][lst], [endfor]
 # [for lst in listed_dict]
 # [lst.name]: [lst.value]
 # 
@@ -69,6 +69,7 @@
 #
 # result:
 # 1, 2, 3,
+# 3, 2, 1
 # x: 1.0
 # y: 0.2
 # x: 0.1
@@ -114,16 +115,20 @@
 #  Omoro-------!!!!
 #
 #
-# 4. "if" directive: [if key is value] text1 [else] text2 [endif]
-#    If "key" is "value", "text1" appears, otherwise "text2" appears.
+# 4. "if" directive: 
+#       [if key is "string"] text1 [else] text2 [endif]
+#       [if key is 'string'] text1 [else] text2 [endif]
+#       [if key is value] text1 [else] text2 [endif]
+#    If "key" is [value] or "string", "text1" appears,
+#    otherwise "text2" appears.
 #
 # example:
-# dict = {"key1": "a", "key2": "b"}
+# dict = {"key1": "a", "key2": "b", "key3": "a"}
 #
 # template:
-# [if key1 is a]
+# [if key1 is 'a']
 # The key1 is "a".
-# [else]
+# [elif key1 is key3]
 # This key1 is not "a".
 # [endif]
 #
@@ -338,6 +343,9 @@ class Template:
             if args[0] == "for" and args[2] == "in":
                 self.__for_cmd(args)
                 return True
+            elif args[0] == "for-inv" and args[2] == "in":
+                self.__for_inv_cmd(args)
+                return True
             elif args[0] == "if" and args[2] == "is":
                 self.__if_cmd(args)
             elif args[0] == "elif" and args[2] == "is":
@@ -389,10 +397,37 @@ class Template:
         self.__write_cmd(cmd_text)
         self.cmd_cxt.append("for")
 
+    def __for_inv_cmd(self, args):
+        """
+        The following [for] directive
+          [for tmp_key in directive]
+        is converted into the following python command.
+          for i in len(directive):
+              self.dicts.append({tmp_key: ditective[i])
+        and, endfor directive terminate as the following,
+              self.dicts.pop()
+        """
+        key = args[1]
+        directive = args[3]
+        # (key)     : variable string of index variable for [for] block
+        # (key)_list: list value of specified directive
+        # (key)_len : length of the list
+        cmd_text = "%s_list = self.get_list(\"%s\")" % (key, directive)
+        self.__write_cmd(cmd_text)
+        cmd_text = "%s_len = len(%s_list)" % (key, key)
+        self.__write_cmd(cmd_text)
+        cmd_text = "for %s_index in range(len(%s_list))[::-1]:" % (key, key)
+        self.__write_cmd(cmd_text)
+        self.__push_level()
+        cmd_text = "self.push_dict({\"%s\": %s_list[%s_index]})" \
+            % (key, key, key)
+        self.__write_cmd(cmd_text)
+        self.cmd_cxt.append("for-inv")
+
     def __endfor_cmd(self, args):
         try:
             cxt = self.cmd_cxt.pop()
-            if cxt != "for":
+            if cxt != "for" and cxt != "for-inv":
                 raise UnmatchedBlock(self.lineno(), "endfor")
             self.__write_cmd("self.pop_dict()")
             self.__pop_level()
@@ -419,7 +454,12 @@ class Template:
         """
         directive = args[1]
         string = args[3]
-        cmd_text = "if self.get_text(\"%s\") == \"%s\":" % \
+        if string[0] == '"' or string[-1] == "'" \
+                or string[0] == '"' or string[-1] == "'":
+            cmd_text = "if self.get_text(\"%s\") == %s:" % \
+            (directive, string)
+        else:
+            cmd_text = "if self.get_text(\"%s\") == self.get_text(\"%s\"):" % \
             (directive, string)
         self.__write_cmd(cmd_text)
         self.__push_level()
@@ -431,7 +471,12 @@ class Template:
             raise UnmatchedBlock(self.lineno(), "elif")
         directive = args[1]
         string = args[3]
-        cmd_text = "elif self.get_text(\"%s\") == \"%s\":" % \
+        if string[0] == '"' or string[-1] == "'" \
+                or string[0] == '"' or string[-1] == "'":
+            cmd_text = "elif self.get_text(\"%s\") == %s:" % \
+            (directive, string)
+        else:
+            cmd_text = "elif self.get_text(\"%s\") == self.get_text(\"%s\"):" % \
             (directive, string)
         self.__pop_level()
         self.__write_cmd_noindex(cmd_text)
@@ -515,11 +560,14 @@ class Template:
         return
 
     def __endif_cmd(self, args):
-        if self.cmd_cxt[-1] != "if" and self.cmd_cxt[-1] != "if-index" \
-                and self.cmd_cxt[-1] != "if-any":
+        try:
+            if self.cmd_cxt[-1] != "if" and self.cmd_cxt[-1] != "if-index" \
+                    and self.cmd_cxt[-1] != "if-any":
+                raise UnmatchedBlock(self.lineno(), "endif")
+            self.cmd_cxt.pop()
+            self.__pop_level()
+        except:
             raise UnmatchedBlock(self.lineno(), "endif")
-        self.cmd_cxt.pop()
-        self.__pop_level()
         return
     # end of [if] commands
     #------------------------------------------------------------
@@ -538,6 +586,10 @@ class Template:
                     uline = '~'*len(lines[l])
                     print uline
         print "------------------------------------------------------------"
+        if hasattr(e, 'context'):
+            print "Current context:"
+            print e.context
+
     
     def del_nl_after_cmd(self):
         # next text index after command
@@ -602,6 +654,7 @@ class GeneratorBase:
                     temp += s
         lines = temp.split("\n")
         length = len(lines)
+        print "Template text:"
         print "------------------------------------------------------------"
         for i in range(1,10):
             l = e.lineno - 6 + i
@@ -610,7 +663,10 @@ class GeneratorBase:
                 if i == 5:
                     uline = '~'*len(lines[l])
                     print uline
-        print "------------------------------------------------------------"
+        if hasattr(e, 'context'):
+            print "\nCurrent context:"
+            print "------------------------------------------------------------"
+            print e.context
         
     def set_index(self, index):
         self.index = index
@@ -672,6 +728,11 @@ class GeneratorBase:
             dict_value = self.get_dict_value(keys, self.dicts[i])
             if dict_value != None:
                 return dict_value
+
+        # not found
+        keys.pop()
+        if len(keys) != 0:
+            raise NotFound(self.lineno(), keytext, self.get_value(keys[0]))
         raise NotFound(self.lineno(), keytext) 
 
     def get_dict_value(self, keys, dict):
@@ -722,9 +783,15 @@ class UnmatchedData(YATException):
         self.value = "Unmatched data and input: ", description
 
 class NotFound(YATException):
-    def __init__(self, lineno, description):
+    def __init__(self, lineno, description, context = None):
         self.lineno = lineno
-        self.value = "Value not found for: \"" + description + "\""
+        self.value = "Value not found for: \"" + description + "\"\n"
+        if context != None:
+            try:
+                import yaml
+                self.context = yaml.dump(context, default_flow_style = False)
+            except:
+                pass
 
 #------------------------------------------------------------
 # other functions
