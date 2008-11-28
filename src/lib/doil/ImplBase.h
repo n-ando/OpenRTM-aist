@@ -30,5 +30,7 @@ namespace doil
     virtual void incRef() = 0;
     virtual void decRef() = 0;
   };
+
+  typedef ImplBase LocalBase;
 };
 #endif // DOIL_IMPLEBASE_H

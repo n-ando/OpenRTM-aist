@@ -48,6 +48,7 @@ namespace CORBA
     : public doil::IORB
   {
   public:
+    doil::LocalBase* toLocal(::CORBA::Object_ptr& obj);
     /*!
      * @if jp
      * @brief 初期化関数

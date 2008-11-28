@@ -7,7 +7,7 @@
 
 AUTOMAKE_OPTIONS = 1.4
 
-SUBDIRS = . corba ice tests
+SUBDIRS = . utils corba ice tests
 
 AM_CPPFLAGS=-I$(top_srcdir)/src/lib -I$(top_srcdir)/src/lib/rtm_corba -I$(top_srcdir)/src/lib/coil/include
 AM_LDFLAGS=-L$(top_builddir)/src/lib/doil
