@@ -56,6 +56,10 @@ class ConfigurationState:
             #
             'IncludeHeaders':        [],
             #
+            #
+            #
+            'ImplicitInclude':       False,
+            #
             # Servant stuff
             #
             # Suffix of generated servant class

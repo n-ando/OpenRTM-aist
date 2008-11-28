@@ -26,6 +26,7 @@ from omniidl import idlast, idlvisitor, idltype
 
 # module from omniidl_be/cxx
 from omniidl_be.cxx import ast, id, types, output
+import omniidl_be.cxx.id as corba_cxx_id
 
 # module from omniidl_be/doil
 from omniidl_be.doil import util
@@ -43,9 +44,14 @@ def impl_fullname(name):
 # Main code entrypoint
 def run(tree, config):
     # first thing is to build the interface implementations
-    bsi = BuildDictionaryFromAST(config)
+    bsi = BuildDictionaryFromAST(tree, config)
     tree.accept(bsi)
-    return bsi.get_dict()
+    dict = bsi.get_dict()
+#    import yaml
+#    print yaml.dump(dict['tree'], default_flow_style=False)
+    return dict
+
+
 
 
 # Build the interface implementations
@@ -54,10 +60,38 @@ class BuildDictionaryFromAST(idlvisitor.AstVisitor):
     def get_dict(self):
         return self.dict
 
-    def __init__(self, config):
-        self.dict = {}
-        self.dict['interfaces'] = []
+    def __init__(self, tree, config):
+        # configuration parameters from command options
         self.config = config
+
+        # module's namespace stack
+        self.module = []
+
+        # main dictionary
+        self.dict = {}
+        self.dict['tree'] = []
+
+        # idl file name
+        idl_fname = ast.mainFile()
+        self.dict['idl_fname'] = idl_fname
+
+        # included idl files
+        incs = []
+        idl_incs = ast.includes()
+        for inc in idl_incs:
+            d = self.createHeaderInfo(inc)
+            if inc == idl_fname:
+                self.dict.update(d)
+            elif self.config['ImplicitInclude']:
+                # -Wbimplicit option makes process included IDLs
+                d = self.createHeaderInfo(inc)
+                incs.append(d)
+        self.dict['idl_includes'] = incs
+
+        # other includes
+        self.dict['include_h'] = self.config["IncludeHeaders"]
+
+        # type mapping
         self.typemap = self.config['TypeMapping']
         # now configurations can be accessed by self.config["key"]
 
@@ -99,272 +133,515 @@ class BuildDictionaryFromAST(idlvisitor.AstVisitor):
             idltype.tk_abstract_interface : "tk_abstract_interface",
             idltype.tk_local_interface    : "tk_local_interface"
             }
+
         self.corba_primitive = {
-            "CORBA::Short"                : "short",
-            "CORBA::UShort"               : "unsigned short",
-            "CORBA::Long"                 : "long",
-            "CORBA::ULong"                : "unsigned long",
+            "CORBA::Short"                : "short int",
+            "CORBA::UShort"               : "unsigned short int",
+            "CORBA::Long"                 : "int",
+            "CORBA::ULong"                : "unsigned int",
             "CORBA::Float"                : "float",
             "CORBA::Double"               : "double",
             "CORBA::Char"                 : "char",
-            "CORBA::Boolean"              : "bool"
+            "CORBA::Boolean"              : "bool",
+            "char*"                       : "::std::string",
+            "CORBA::Any"                  : "::std::string",
+            "CORBA::TypeCode_ptr"         : "::std::string"
             }
-        self.corba_other = {
-            "char*"                       : "std::string",
-            "CORBA::Any"                  : "std::string"
-            }
-    # Returns the list of all present interfaces (each one will be
-    # implemented)
-    #    def allInterfaces(self):
-    #        print "YYYYYYYYYYYYYYYYYYYY", self.__allInterfaces[:]
-    #        return self.__allInterfaces[:]
 
-    # Tree walking code
-    def visitAST(self, node):
-        for n in node.declarations():
-            if ast.shouldGenerateCodeForDecl(n):
-                n.accept(self)
-
-    # modules can contain interfaces
-    def visitModule(self, node):
-        for n in node.definitions():
-            n.accept(self)
-
-    def visitStruct(self, node):
+    def createHeaderInfo(self, idl_path):
         dict = {}
-        #------------------------------------------------------------
-        # struct name
-        # - name: struct name
-        # - fq_name_d: fully qualified struct name
-        # - scoped_name:
-        name = node.identifier()
-        dict['name'] = id.mapID(name)
-        dict['fq_name_d'] = id.Name(node.scopedName()).fullyQualify()
-        dict['scoped_name'] = node.scopedName()
+        idl_path_list = idl_path.split('/')
+        idl_fname     = idl_path_list[-1]
 
-        # getting environment
+        dict['idl_fname']     = idl_fname
+        dict['idl_fname_path'] = idl_path
+
+        # types.h
+        base_name                   = idl_fname.split('.')[0]
+        inc_guard                   = base_name.upper() + 'TYPES_H'
+        dict['types_h']             = types_h = base_name + 'Types.h'
+        dict['typeconv_h']          = base_name + 'TypeConversion.h'
+        dict['typeconv_cpp']        = base_name + 'TypeConversion.cpp'
+        dict['types_include_guard'] = inc_guard
+        if self.config['IfaceDir'] != "":
+            inc_types_h_path = self.config['IfaceDir'] \
+                + '/' + types_h
+        else:
+            inc_types_h_path = types_h
+        dict['types_h_path'] = inc_types_h_path
+
+        # typeconv.h
+        dict['typeconv_h'] = typeconv_h = base_name + 'TypeConversion.h'
+        dict['typeconv_cpp']            = base_name + 'TypeConversion.cpp'
+        tc_inc_guard                    = base_name.upper() + 'TYPECONVERSION_H'
+        dict['typeconv_include_guard']  = tc_inc_guard
+        if self.config['ServantDir'] != "":
+            inc_typeconv_h_path = self.config['ServantDir'] \
+                + '/' + typeconv_h
+        else:
+            inc_typeconv_h_path = typeconv_h
+        dict['typeconv_h_path'] = inc_typeconv_h_path
+        return dict
+
+
+
+    def createDecl(self, decl_type):
+        """
+        宣言情報の基本ディクショナリの生成
+
+        decl_type:     宣言のタイプ, struct, interface, union など
+        corba:
+          decl_type:     宣言のタイプ, struct, interface, union など
+          corba_ns: []   ネームスペースのリスト
+        local:
+          decl_type:     宣言のタイプ, struct, interface, union など
+          local_ns: []   ローカルインターフェースのネームスペース
+          adapter_ns: [] アダプタのネームスペース
+          servant_ns: [] サーバントのネームスペース
+        """
+        cdict = {'decl_type': decl_type}
+        ldict = {'decl_type': decl_type}
+        cdict['corba_ns'] = self.module
+        ldict['iface_ns'] = self.module + self.config['IfaceNs']
+        ldict['adapter_ns'] = self.module + self.config['AdapterNs']
+        ldict['servant_ns'] = self.module + self.config['ServantNs']
+        return {'decl_type': decl_type, 'corba': cdict, 'local': ldict}
+
+
+    def getType(self, typeobj):
+        """
+        CORBA と Local の型名を取得する
+        """
+        corba_type = typeobj.base()
+        is_primitive = None
+        # if CORBA to Local mapping is specified explicitly
+        if self.typemap.has_key(corba_type):
+            local_type = self.typemap[corba_type]
+
+        # if CORBA type is primitive, string or Any
+        elif self.corba_primitive.has_key(corba_type):
+            local_type = self.corba_primitive[corba_type]
+            if corba_type[:5] == 'CORBA':
+                corba_type = '::' + corba_type
+            tk = self.tk_map[typeobj.kind()]
+            primitive = ["tk_short", "tk_long", "tk_ushort", 
+                         "tk_ulong", "tk_float", "tk_double",
+                         "tk_boolean", "tk_char", "tk_octet"]
+            if primitive.count(tk) > 0:
+                is_primitive = 'YES'
+
+
+        # other case
+        else:
+            corba_scoped_type = corba_type.split('::')
+            corba_ns = corba_scoped_type[:-1]
+            corba_base = corba_scoped_type[-1]
+            local_ns = corba_ns + self.config['IfaceNs']
+            local_scope = string.join(local_ns, '::')
+            if typeobj.objref():
+                corba_base = corba_base[:corba_base.rfind('_ptr')]
+                local_type = local_scope + '::' + \
+                    self.config['IfacePrefix'] + \
+                    corba_base + \
+                    self.config['IfaceSuffix']
+            elif typeobj.sequence():
+                seqType = types.Type(typeobj.type().seqType())
+                # get type of element of sequence
+                (corba_etype, local_etype, eis_primitive) = self.getType(seqType)
+                if seqType.objref():
+                    local_etype = local_etype + '*'
+                local_type = "std::vector< " + local_etype + " >"
+
+            else:
+                local_type = local_scope + '::' + corba_base
+            corba_type = '::' + corba_type
+            local_type = '::' + local_type
+        return (corba_type, local_type, is_primitive)       
+
+
+    def createIdent(self, dict, node):
+        """
+        宣言の識別子に関するディクショナリの生成
+        主に、識別子のIDL、C++、Local名を生成する
+        createDeclで生成したディクショナリとnodeを引数に取る
+
+        corba:
+          idl_name:       宣言のidl上の識別子
+          name:           C++にマッピングされた識別子
+          name_fq:        C++識別子の完全修飾名
+          scoped_name: [] リスト形式の完全修飾名
+        local:
+          idl_name:       宣言のidl上の識別子
+          name:           C++にマッピングされた識別子
+          name_fq:        C++識別子の完全修飾名
+          scoped_name: [] リスト形式の完全修飾名
+
+        """
+        cdict = dict['corba']
+        ldict = dict['local']
+
+        cdict['idl_name'] = idl_name = node.identifier()
+        cdict['name'] = cxx_name = id.mapID(idl_name)
+        ns = node.scopedName()[:-1]
+        cdict['corba_ns'] = ns
+        ldict['iface_ns'] = ns + self.config['IfaceNs']
+        ldict['adapter_ns'] = ns + self.config['AdapterNs']
+        ldict['servant_ns'] = ns + self.config['ServantNs']
+        cxx_fq_name = id.Name(node.scopedName()).fullyQualify()
+        cdict['name_fq'] = '::' + cxx_fq_name
+        cdict['scoped_name'] = node.scopedName()
+
+        iface_ns = '::' + string.join(ldict['iface_ns'], '::')
+
+        if self.typemap.has_key(cxx_fq_name):
+            local_fq_name = self.typemap[cxx_fq_name]
+            local_name = local_fq_name.split('::')[-1]
+        elif self.corba_primitive.has_key(cxx_fq_name):
+            local_fq_name = self.corba_primitive[cxx_fq_name]
+            local_name    = local_fq_name
+        else:
+            local_name = cxx_name
+            local_fq_name = iface_ns + '::' + local_name
+
+        ldict['name'] = local_name
+        ldict['name_fq'] = local_fq_name
+        ldict['scoped_name'] = ldict['iface_ns'] + [local_name]
+        return dict
+
+
+    def createInterfaceIdent(self, dict, node):
+        """
+        インターフェース宣言の識別子に関するディクショナリの生成
+        interface/servant/adapter 名を作成しディクショナリに追加する
+
+        corba:
+          name_poa:            CORBA POAクラス名
+        local:
+          iface_name:          Interfaceの識別子
+          iface_name_fq:       Interfaceの完全修飾名
+          iface_scoped_name:   Interfaceのリスト形式完全修飾名
+          servant_name:        Servantの識別子
+          servant_name_fq:     Servantの完全修飾名
+          servant_scoped_name: Servantのリスト形式完全修飾名
+          adapter_name:        Adapterの識別子
+          adapter_name_fq:     Adapterの完全修飾名
+          adapter_scoped_name: Adapterのリスト形式完全修飾名
+
+        """
+        self.createIdent(dict, node)
+        cdict = dict['corba']
+        ldict = dict['local']
+        cdict['name_poa'] = '::POA_' + cdict['name_fq'].strip(':')
+
+        # set iface_name, servant_name adapter_name
+        name = ldict['name']
+        p = "Prefix"
+        s = "Suffix"
+        n = "Ns"
+        for t in ['Iface', 'Servant', 'Adapter']:
+            key = t.lower() + '_name'
+            local_name = self.config[t + p] + name + self.config[t + s]
+            scoped_name = cdict['corba_ns'] + self.config[t + n] + [local_name]
+            local_fq_name = '::' + string.join(scoped_name, '::')
+            ldict[key] = local_name
+            ldict[key + '_fq'] = local_fq_name
+            ldict[key + '_scoped_name'] = scoped_name
+        return dict
+
+
+    def createInterfaceFileInfo(self, dict, node):
+        """
+        インターフェース関連ファイル名のディクショナリの生成
+
+        local:
+          iface_h:               Interfaceヘッダファイル名
+          iface_cpp:             Interface実装ファイル名
+          iface_h_path:          Interfaceヘッダのインクルードパス
+          iface_include_guard:   Interfaceヘッダののインクルードガード
+          servant_h:             Servantヘッダファイル名
+          servant_cpp:           Servant実装ファイル名
+          servant_h_path:        Servantヘッダのインクルードパス
+          servant_include_guard: Servantヘッダののインクルードガード
+          adapter_h:             Adapterヘッダファイル名
+          adapter_cpp:           Adapter実装ファイル名
+          adapter_h_path:        Adapterヘッダのインクルードパス
+          adapter_include_guard: Adapterヘッダののインクルードガード
+
+        """
+        cdict = dict['corba']
+        ldict = dict['local']
+        ldict['include_h'] = self.config["IncludeHeaders"]
+
+        # set [iface|servant|adapter]_[h|cpp|h_path|include_guard]
+        
+        for t in ['Iface', 'Servant', 'Adapter']:
+            k = t.lower()
+            ldict[k + '_h']   = ldict[k + '_name'] + ".h"
+            ldict[k + '_cpp'] = ldict[k + '_name'] + ".cpp"
+            if self.config[t + 'Dir'] == '':
+                ldict[k + '_h_path'] = ldict[k + '_h']
+            else:
+                ldict[k + '_h_path'] = \
+                    self.config[t + 'Dir'] + '/' + ldict[k + '_h']
+            ns = string.join(map(lambda x: x + '_',
+                                 ldict[k + '_ns']), '')
+            ns = ns.upper()
+            name = ldict[k + '_name'].upper()
+            ldict[k + '_include_guard'] = ns + name + "_H"
+        return dict
+
+
+    def createUnionIdent(self, dict, node):
+        """
+        共用体宣言のの識別子に関するディクショナリの生成
+        
+        corba:
+          idl_name:          宣言のidl上の識別子
+          name:              C++にマッピングされた識別子
+          name_fq:           C++識別子の完全修飾名
+          scoped_name: []    リスト形式の完全修飾名
+          switch_type:       switchの型
+          switch_fq_type:    switchの完全修飾型
+          deref_switch_type: switchの非参照型
+        local:
+          idl_name:          宣言のidl上の識別子
+          name:              C++にマッピングされた識別子
+          name_fq:           C++識別子の完全修飾名
+          scoped_name: []    リスト形式の完全修飾名
+
+        """
+        self.createIdent(dict, node)
+        cdict = dict['corba']
+        ldict = dict['local']
+
+        switchType = types.Type(node.switchType())
+        ast.markDefaultCase(node)
+        hasDefault = ast.defaultCase(node) != None
+
+        (ctype, ltype, is_primitive) = self.getType(switchType)
+        cdict['switch_fq_type'] = ctype
+        cdict['switch_type']    = ctype.split('::')[-1]
+        ldict['switch_fq_type'] = ltype
+        ldict['switch_type']    = ltype.split('::')[-1]
+        return 
+
+
+    def createStructIdent(self, dict, node):
+        return self.createIdent(dict, node)
+
+
+    def createEnumIdent(self, dict, node):
+        return self.createIdent(dict, node)
+
+
+    def createExceptionIdent(self, dict, node):
+        return self.createIdent(dict, node)
+
+
+    def createMembers(self, dict, node):
+        corba_name = dict['corba']['name']
         outer_environment = id.lookup(node)
-        environment = outer_environment.enter(dict['name'])
+        environment = outer_environment.enter(id.mapID(corba_name))
         scope = environment.scope()
 
-        #------------------------------------------------------------
-        # members
         members = []
-        for m in node.members():
+        for member in node.members():
             #------------------------------------------------------------
             # member
             # - type_d: type of a member
             # - decl_d: decralation list
-            memberType = types.Type(m.memberType())
+            memberType = types.Type(member.memberType())
+
+#            self.createType(memberType, environment)
             memtype = memberType.member(environment)
-            print "TYPE: ", memtype
-            for d in m.declarators():
-                mdict = {}
-                # type_d
-                mdict['type_d'] = id.mapID(memtype)
-                # decl_d
-                ident = d.identifier()
-                cxx_id = id.mapID(ident)
-                mdict['decl_d'] = cxx_id
-                # dims_d
-                decl_dims = d.sizes()
-
-                print "decl_dims", decl_dims
-                is_array_declarator = decl_dims != []
-
-                # non-arrays of direct sequences are done via a typedef
-                if not is_array_declarator and memberType.sequence():
-                    pass
-                else:
-                    mdict['dims_d'] = decl_dims
-                members.append(mdict)
+            for decl in member.declarators():
+                m = self.createMember(decl, member, environment)
+                if m != None:
+                    members.append(m)
         dict['members'] = members
-        return
-
-
-    # interfaces cannot be further nested
-    def visitInterface(self, node):
-        self.__allInterfaces.append(node)
-        # listed scope and interface name
-        dict = {}
-        dict = self.createIface(node)
-
-        # build methods corresponding to attributes, operations etc.
-        # attributes[] and operations[] will contain lists of function
-        # signatures eg
-        #   [ char *echoString(const char *mesg) ]
-        #        attributes = []
-        #        operations = []
-        #        virtual_operations = []
-        # we need to consider all callables, including inherited ones
-        # since this implementation class is not inheriting from anywhere
-        # other than the IDL skeleton
-        allInterfaces = [node] + ast.allInherits(node)
-        allCallables = util.fold( map(lambda x:x.callables(), allInterfaces),
-                                  [], lambda x, y: x + y )
-        # declarations[] contains a list of in-class decl signatures
-        # implementations[] contains a list of out of line impl signatures
-        # (typically differ by classname::)
-        #        declarations = []
-        #        implementations = []
-
-        dict['operations'] = []
-        for c in allCallables:
-            if isinstance(c, idlast.Attribute):
-                attrType = types.Type(c.attrType())
-                d_attrType = attrType.deref()
-
-                for i in c.identifiers():
-                    attribname = id.mapID(i)
-                    returnType = attrType.op(types.RET)
-                    inType = attrType.op(types.IN)
-                    attributes.append(returnType + " " + attribname + "()")
-                    # need a set method if not a readonly attribute
-                    if not c.readonly():
-                        args = attribname + "(" + inType + ")"
-                        declarations.append("void " + args)
-                        implementations.append("void " + \
-                                                   dict['servant_name'] + \
-                                                   "::" + args)
-                    declarations.append(returnType + " " + attribname + "()")
-                    implementations.append(returnType + \
-                                               " " + \
-                                               dict['servant_name'] + \
-                                               "::" + attribname + "()")
-            elif isinstance(c, idlast.Operation):
-                # operations
-                op_dict           = self.createOperation(c)
-                op_dict['return'] = self.createReturn(c)
-                op_dict['args']   = self.createArgs(c)
-                dict['operations'].append(op_dict)
-            else:
-                util.fatalError("Internal error generating interface member")
-                raise "No code for interface member: " + repr(c)
-
-        self.dict['interfaces'].append(dict)
-        return
-
-    # ------------------------------------------------------------
-    # インターフェース全体に関する辞書を作成する
-    #
-    # servant_name: サーバントのクラス名
-    # corba_fq_name: CORBAサーバントの完全修飾名
-    # corba_poa_name: CORBAサーバントのPOAの完全修飾名
-    # corba_skel_h: CORBAサーバントのヘッダ
-    # servant_ns: サーバントのnamespaceのリスト
-    # servant_h: サーバントのヘッダファイル名
-    # servant_h_path: サーバントのヘッダのフルパス
-    # servant_cpp: サーバントの実装ファイル名
-    # servant_include_guard: インクルードガード
-    # iface_name: インターフェース名
-    # iface_ns: インターフェースのnamespaceのリスト
-    # iface_h: インターフェースヘッダ名
-    # iface_h_path: インターフェースのヘッダのフルパス
-    # iface_cpp: インターフェースの実装ファイル名
-    # iface_include_guard: インターフェースヘッダのインクルードガード
-    #
-    def createIface(self, node):
-        dict = {}
-        ifname_list = node.scopedName()
-
-        #------------------------------------------------------------
-        # corba header include
-        dict['include_h'] = self.config["IncludeHeaders"]
-
-        #------------------------------------------------------------
-        # servant class name
-        # - corna_iface
-        # - servant_name
-        sname = ifname_list[-1]
-        dict['corba_iface'] = sname
-        dict['servant_name'] = \
-            self.config["ServantPrefix"] + sname + self.config["ServantSuffix"]
-
-        # servant namespace
-        # - servant_ns = []
-        servant_ns_flat = ""
-        dict['servant_ns'] = self.config['ServantNs']
-
-        # servant cpp/header
-        # - servant_h
-        # - servant_cpp
-        # - servant_h_path
-        # - servant_include_guard
-        dict['servant_h'] = dict['servant_name'] + ".h"
-        dict['servant_cpp'] = dict['servant_name'] + ".cpp"
-        if self.config['ServantDir'] == '':
-            dict['servant_h_path'] = dict['servant_h']
-        else:
-            dict['servant_h_path'] = \
-                self.config['ServantDir'] + '/' + dict['servant_h']
-        servant_ns_flat = string.join(map(lambda x: x + '_',
-                                          dict['servant_ns']), '')
-        dict['servant_include_guard'] = \
-            servant_ns_flat.upper() + dict['servant_name'].upper() + "_H"
-
-        # servant fullyquarified name
-        # - corba_fq_name
-        # - corba_poa_name
-        scopedName = id.Name(node.scopedName())
-        dict['corba_fq_name'] = scopedName.fullyQualify()
-        dict['corba_poa_name'] = 'POA_' + dict['corba_fq_name']
-
-        #------------------------------------------------------------
-        # adapter class name
-        # - adapter_name
-        dict['adapter_name'] = \
-            self.config["AdapterPrefix"] + sname + self.config["AdapterSuffix"]
-
-        # adapter namespace
-        # - adapter_ns = []
-        adapter_ns_flat = ""
-        dict['adapter_ns'] = self.config['AdapterNs']
-
-        # adapter cpp/header
-        # - adapter_h
-        # - adapter_cpp
-        # - adapter_h_path
-        # - adapter_include_guard
-        dict['adapter_h'] = dict['adapter_name'] + ".h"
-        dict['adapter_cpp'] = dict['adapter_name'] + ".cpp"
-        if self.config['AdapterDir'] == '':
-            dict['adapter_h_path'] = dict['adapter_h']
-        else:
-            dict['adapter_h_path'] = \
-                self.config['AdapterDir'] + '/' + dict['adapter_h']
-        adapter_ns_flat = string.join(map(lambda x: x + '_',
-                                          dict['adapter_ns']), '')
-        dict['adapter_include_guard'] = \
-            adapter_ns_flat.upper() + dict['adapter_name'].upper() + "_H"
-
-        #------------------------------------------------------------
-        # interface class name
-        # - iface_name
-        dict['iface_name'] = \
-            self.config["IfacePrefix"] + sname + self.config["IfaceSuffix"]
-
-        # interface namespace
-        # - iface_ns
-        dict['iface_ns'] = self.config['IfaceNs']
-
-        # interface header
-        # - iface_h
-        # - iface_cpp
-        # - iface_h_path
-        # - iface_include_guard
-        dict['iface_h'] = dict['iface_name'] + ".h"
-        dict['iface_cpp'] = dict['iface_name'] + ".cpp"
-        if self.config['IfaceDir'] == '':
-            dict['iface_h_path'] = dict['iface_h']
-        else:
-            dict['iface_h_path'] = \
-                self.config['IfaceDir'] + '/' + dict['iface_h']
-        iface_ns_flat = string.join(map(lambda x: x + '_',
-                                        dict['iface_ns']), '')
-        dict['iface_include_guard'] = \
-            iface_ns_flat.upper() + dict['iface_name'].upper() + "_H"
-        
         return dict
+
+
+    def createMember(self, decl, member, env):
+        dict = self.createDecl('member')
+        cdict = dict['corba']
+        ldict = dict['local']
+
+        memberType = types.Type(member.memberType())
+        memtype = memberType.member(env)
+
+        (ctype, ltype, is_primitive) = self.getType(memberType)
+        cdict['base_type'] = ctype
+        cdict['tk'] = self.tk_map[memberType.kind()]
+        ldict['base_type'] = ltype
+        cdict['member_name'] = id.mapID(decl.identifier())
+        cdict['member_dims'] = decl.sizes()
+        ldict['member_name'] = cdict['member_name']
+        ldict['member_dims'] = cdict['member_dims']
+
+        if memberType.objref():
+            corba_mtype = ctype
+            local_mtype = ltype + '*'
+        else:
+            corba_mtype = ctype
+            local_mtype = ltype
+
+        cdict['member_type'] = corba_mtype
+        ldict['member_type'] = local_mtype
+        return dict
+
+
+    def createUnionCases(self, dict, node):
+        cases = []
+        switchType = types.Type(node.switchType())
+        ast.markDefaultCase(node) 
+        outer_environment = id.lookup(node)
+        environment = outer_environment.enter(node.identifier())
+
+        for case in node.cases():
+            c = self.createUnionCase(case, node, switchType, environment)
+            if c != None:
+                cases.append(c)
+        dict['cases'] = cases
+        return dict
+            
+
+    def createUnionCase(self, case, node, switchtype, environment):
+        dict = self.createDecl('union_case')
+        cdict = dict['corba']
+        ldict = dict['local']
+
+        caseType = types.Type(case.caseType())
+        d_caseType = caseType.deref()
+        (corba_ctype, local_ctype, is_primitive) = self.getType(caseType)
+        cdict['case_type'] = corba_ctype
+        ldict['case_type'] = local_ctype
+
+        decl = case.declarator()
+        case_member = id.mapID(decl.identifier())
+        cdict['case_member'] = case_member
+        ldict['case_member'] = case_member
+
+        decl_dims = decl.sizes()
+        full_dims = decl_dims + caseType.dims()
+        is_array = full_dims != []
+        if is_array: raise "array union case type is not supported."
+
+        # ------------------------------------------------------------
+        # generate default discriminator
+        def choose(switchType = switchtype,
+                   values = ast.allCaseLabelValues(node),
+                   environment = environment):
+            switchType = switchType.deref()
+            def min_unused(start, used = values):
+                x = start
+                while x in used:
+                    x = x + 1
+                return x
+            kind = switchType.type().kind()
+            if switchType.integer():
+                (low, high) = ast.integer_type_ranges[kind]
+                s = switchType.literal(min_unused(low+1))
+                return s
+            elif kind == idltype.tk_char:
+                all = map(chr, range(0, 255))
+            elif kind == idltype.tk_boolean:
+                all = [0, 1]
+            elif kind == idltype.tk_enum:
+                all = switchType.type().decl().enumerators()
+            else:
+                util.fatalError("Failed to generate a default union " +\
+                                    "discriminator value")
+            possibles = util.minus(all, values)
+            return switchType.literal(possibles[0], environment)
+        # ------------------------------------------------------------
+
+        labels = case.labels()
+        if labels != []:
+            non_default_labels = filter(lambda x:not x.default(), labels)
+            if non_default_labels == []:
+                # only one label and it's the default
+                label = labels[0]
+                discrimvalue = choose()
+            elif len(non_default_labels) > 1:
+                # oooh, we have a choice. Let's pick the second one.
+                # no-one will be expecting that
+                label = non_default_labels[1]
+            else:
+                # just the one interesting label
+                label = non_default_labels[0]
+
+            if label.default():
+                discrimvalue = choose()
+            else:
+                discrimvalue = switchtype.literal(label.value(),
+                                                      environment)
+        cdict['discriminator'] = discrimvalue
+        ldict['discriminator'] = discrimvalue
+
+        if switchtype.enum():
+            corba_ns = '::' + string.join(cdict['corba_ns'], '::')
+            local_ns = '::' + string.join(ldict['iface_ns'], '::')
+            cdict['discriminator_fq'] = corba_ns + '::' + discrimvalue
+            ldict['discriminator_fq'] = local_ns + '::' + discrimvalue
+        else:
+            cdict['discriminator_fq'] = discrimvalue
+            ldict['discriminator_fq'] = discrimvalue
+        non_default_labels = filter(lambda x:not x.default(), labels)
+        return dict
+
+
+    def createTypedef(self, aliasType, decl, env):
+        """
+        typedef宣言に関するディクショナリの生成
+
+        corba:
+          derived_type:    導出型名
+          derived_fq_type: 完全修飾導出型名
+          deref_type:      非参照型名
+          deref_fq_type:   完全修飾非参型名
+          tk: TypeCode
+        local:
+          derived_type:    導出型名
+          derived_fq_type: 完全修飾導出型名
+          deref_type:      非参照型名
+          deref_fq_type:   完全修飾非参型名
+        """
+
+        dict = self.createDecl('typedef')
+        cdict = dict['corba']
+        ldict = dict['local']
+
+        (cdict['base_type'], ldict['base_type'], is_primitive) = self.getType(aliasType)
+        derivedName = id.mapID(decl.identifier())
+        alias_dims = aliasType.dims()
+        cdict['derived_type'] = derivedName
+        ldict['derived_type'] = derivedName
+
+        corba_ns = '::' + string.join(cdict['corba_ns'], '::')
+        local_ns = '::' + string.join(ldict['iface_ns'], '::')
+        cdict['derived_type_fq'] = corba_ns + '::' + derivedName
+        ldict['derived_type_fq'] = local_ns + '::' + derivedName
+        cdict['tk'] = tk = self.tk_map[aliasType.kind()]
+        primitive = ["tk_short", "tk_long", "tk_ushort", 
+                     "tk_ulong", "tk_float", "tk_double",
+                     "tk_boolean", "tk_char", "tk_octet"]
+        if primitive.count(tk) > 0:
+            cdict['is_primitive'] = 'YES'
+
+        if aliasType.sequence():
+            seqType = types.Type(aliasType.type().seqType())
+            # get type of element of sequence
+            (corba_etype, local_etype, is_primitive) = self.getType(seqType)
+            cdict['element_tk'] = self.tk_map[seqType.kind()]
+            if seqType.objref():
+                cdict['element_type_fq'] = corba_etype
+                ldict['element_type_fq'] = local_etype + '*'
+            else:
+                cdict['element_type_fq'] = corba_etype
+                ldict['element_type_fq'] = local_etype
+        return dict
+
 
     # ------------------------------------------------------------
     # オペレーションに関する辞書を作成する
@@ -374,6 +651,16 @@ class BuildDictionaryFromAST(idlvisitor.AstVisitor):
     def createOperation(self, operation):
         dict = {}
         dict['name'] = id.mapID(operation.identifier())
+        dict['raises'] = []
+        for r in operation.raises():
+            edict = self.createDecl('exception')
+            self.createExceptionIdent(edict, r)
+            dict['raises'].append(edict)
+        return dict
+
+    def createAttribute(self, ident):
+        dict = {}
+        dict['name'] = id.mapID(ident)
         return dict
 
     # ------------------------------------------------------------
@@ -387,80 +674,40 @@ class BuildDictionaryFromAST(idlvisitor.AstVisitor):
     # to_local: to_local変換関数
     #
     def createReturn(self, operation):
-        cdict = {}
-        ldict = {}
+        """
+        corba:
+          base_type:
+          ret_type:
+          decl_type:
+          tk:
+        local:
+          base_type:
+          ret_type:
+          decl_type:
+          tk:
+        """
+        dict = self.createDecl('return')
+        cdict = dict['corba']
+        ldict = dict['local']
 
         retType = types.Type(operation.returnType())
-        cdict['base_type'] = types.Type(operation.returnType()).base()
-        cdict['ret_type'] = types.Type(operation.returnType()).op(types.RET)
-        cdict['tk'] = self.tk_map[retType.kind()]
-        ldict['tk'] = cdict['tk']
-        local_ns   = string.join(self.config['IfaceNs'], '::')
+        (corba_type, local_type, is_primitive) = self.getType(retType)
+        cdict['base_type'] = corba_type
+        ldict['base_type'] = local_type 
+        if is_primitive != None:
+            cdict['is_primitive'] = is_primitive
+        retn_type = types.Type(operation.returnType()).op(types.RET)
+        if retn_type[:5] == 'CORBA':
+            retn_type = '::' + retn_type
+        cdict['retn_type'] = retn_type
 
-        corba_type = cdict['base_type']
-        if retType.typedef():
-            retType = retType.deref()
+        if retType.objref(): local_rtype = local_type + '*'
+        else:                local_rtype = local_type
 
-        # primitive type
-        if retType.is_basic_data_types():
-            if self.typemap.has_key(corba_type):
-                local_type = self.typemap[corba_type]
-            elif self.corba_primitive.has_key(corba_type):
-                local_type = self.corba_primitive[corba_type]
-            else:
-                local_type = local_ns + '::' + corba_type.split('::')[-1]
-            ldict['base_type'] = local_type
-            ldict['ret_type']  = local_type
-            ldict['decl_type'] = local_type
-        # Enum type
-        elif retType.enum():
-            if self.typemap.has_key(corba_type):
-                local_type = self.typemap[corba_type]
-            else:
-                local_type = local_ns + '::' + corba_type.split('::')[-1]
-            ldict['base_type'] = local_type
-            ldict['ret_type']  = local_type
-            ldict['decl_type'] = local_type
-        # Struct type
-        # Sequence type
-        # Union type
-        elif retType.struct() or retType.sequence() or retType.union():
-            if self.typemap.has_key(corba_type):
-                local_type = self.typemap[corba_type]
-            else:
-                local_type = local_ns + '::' + corba_type.split('::')[-1]
-            ldict['base_type'] = local_type
-            ldict['ret_type']  = local_type
-            ldict['decl_type'] = local_type
-        # Object type
-        elif retType.objref():
-            corba_type = corba_type.rstrip('_ptr')
-            if self.typemap.has_key(corba_type):
-                local_type = 'I' + self.typemap[corba_type]
-            else:
-                local_type = local_ns + '::I' + corba_type.split('::')[-1]
-            ldict['base_type'] = local_type
-            ldict['ret_type']  = local_type + '*'
-            ldict['decl_type'] = local_type + '*'
-        # String type
-        # Any type
-        elif retType.any() or retType.string():
-            local_type = "std::string"
-            ldict['base_type'] = local_type
-            ldict['ret_type']  = local_type
-            ldict['decl_type'] = local_type
-        # void type
-        elif retType.void():
-            local_type = "void"
-            ldict['base_type'] = local_type
-            ldict['ret_type']  = local_type
-            ldict['decl_type'] = local_type
-        else:
-            print "UNKNOWN TYPE"
-            print retType.typedef()
-            print retType.deref().sequence()
-        return {'corba': cdict, 'local': ldict}
-        
+        ldict['retn_type'] = local_rtype
+        cdict['tk'] = ldict['tk'] = self.tk_map[retType.kind()]
+        return dict
+
 
     # ------------------------------------------------------------
     # オペレーションの引数に関する辞書を作成する
@@ -472,107 +719,284 @@ class BuildDictionaryFromAST(idlvisitor.AstVisitor):
     # to_doil: to_remote変換関数
     # to_local: to_local変換関数
     #
-    def createArgs(self, operation):
+    def createArgs(self, operation, env):
+        """
+
+        corba:
+          base_type:
+          arg_type:
+          arg_name:
+          var_name:
+          decl_type:
+          direction:
+          tk:
+        local:
+          base_type:
+          arg_type:
+          arg_name:
+          var_name:
+          decl_type:
+          direction:
+          tk:
+
+
+        """
         args = []
         direction = ['in', 'out', 'inout','return']
         for arg in operation.parameters():
             # corba args information
-            cdict = {}
+            dict = self.createDecl('arg')
+            cdict = dict['corba']
+            ldict = dict['local']
+
             paramType = types.Type(arg.paramType())
-            cdict['base_type'] = paramType.base()
-            cdict['arg_type']  = paramType.op(types.direction(arg), use_out = 0)
-            cdict['arg_name']  = id.mapID(arg.identifier())
-            cdict['var_name']  = '_' + cdict['arg_name']
-            cdict['direction'] = direction[arg.direction()]
-            cdict['tk']        = self.tk_map[paramType.kind()]
-            
-            # local args information
-            ldict = {}
-            ldict['arg_name'] = cdict['arg_name']
-            ldict['var_name'] = cdict['var_name']
-            ldict['direction'] = cdict['direction']
-            ldict['tk']        = cdict['tk']
-            corba_type = cdict['base_type']
-            direc = cdict['direction']
-            tk = cdict['tk']
-            local_ns = string.join(self.config['IfaceNs'], '::')
+            (corba_type, local_type, is_primitive) = self.getType(paramType)
 
-            if paramType.typedef():
-                paramType = paramType.deref()
-            # primitive type
-            if paramType.is_basic_data_types():
-                if self.typemap.has_key(corba_type):
-                    local_type = self.typemap[corba_type]
-                elif self.corba_primitive.has_key(corba_type):
-                    local_type = self.corba_primitive[corba_type]
-                else:
-                    local_type = local_ns + '::' + corba_type.split('::')[-1]
-                ldict['base_type'] = local_type
-                if direc == 'in':
-                    ldict['arg_type'] = local_type
-                elif direc == 'out' or direc == 'inout':
-                    ldict['arg_type'] = local_type + '&'
-                ldict['decl_type'] = local_type
-                cdict['decl_type'] = corba_type
-            # Enum type
-            elif paramType.enum():
-                if self.typemap.has_key(corba_type):
-                    local_type = self.typemap[corba_type]
-                else:
-                    local_type = local_ns + '::' + corba_type.split('::')[-1]
-                ldict['base_type'] = local_type
-                if direc == 'in':
-                    ldict['arg_type'] = local_type
-                elif direc == 'out' or direc == 'inout':
-                    ldict['arg_type'] = local_type + '&'
-                ldict['decl_type'] = local_type
-                cdict['decl_type'] = corba_type
-            # Struct type
-            # Sequence type
-            # Union type           
-            elif paramType.struct() or paramType.sequence() \
-                    or paramType.union():
-                if self.typemap.has_key(corba_type):
-                    local_type = self.typemap[corba_type]
-                else:
-                    local_type = local_ns + '::' + corba_type.split('::')[-1]
+            cdict['base_type'] = corba_type
+            ldict['base_type'] = local_type
+            if is_primitive != None:
+                cdict['is_primitive'] = is_primitive
 
-                ldict['base_type'] = local_type
-                if direc == 'in':
-                    ldict['arg_type'] = 'const ' + local_type + '*'
-                elif direc == 'out' or direc == 'inout':
-                    ldict['arg_type'] = local_type + '*'
-                ldict['decl_type'] = local_type
-                cdict['decl_type'] = corba_type + '*'
-            # Object type
-            elif paramType.objref():
-                corba_type = corba_type.rstrip('_ptr')
-                if self.typemap.has_key(corba_type):
-                    local_type = 'I' + self.typemap[corba_type]
-                else:
-                    local_type = local_ns + '::I' + corba_type.split('::')[-1]
-                ldict['base_type'] = local_type
-                if direc == 'in':
-                    ldict['arg_type'] = 'const ' + local_type + '*'
-                elif direc == 'out' or direc == 'inout':
-                    ldict['arg_type'] = local_type + '*'
-                ldict['decl_type'] = local_type + '*'
-                cdict['decl_type'] = corba_type
-            # String type
-            # Any type
-            elif paramType.any() or paramType.string():
-                local_type = "std::string"
-                ldict['base_type'] = local_type
-                if direc == 'in':
-                    ldict['arg_type'] = 'const ' + local_type + '&'
-                elif direc == 'out' or direc == 'inout':
-                    ldict['arg_type'] = local_type + '&'
-                ldict['decl_type'] = local_type
-                cdict['decl_type'] = corba_type
-            else:
-                print "UNKNOWN TYPE"
-                print paramType.typedef()
-                print paramType.deref().sequence()
-            args.append({'corba': cdict, 'local': ldict})
+            arg_name = id.mapID(arg.identifier())
+            cdict['arg_name'] = arg_name
+            ldict['arg_name'] = arg_name
+            cdict['var_name'] = '_' + arg_name
+            ldict['var_name'] = '_' + arg_name
+
+            direction = direction[arg.direction()]
+            cdict['direction'] = direction
+            ldict['direction'] = direction
+
+            cdict['tk'] = ldict['tk'] = self.tk_map[paramType.kind()]
+            arg_type = paramType.op(types.direction(arg), use_out = 0)
+            arg_type = arg_type.replace('CORBA', '::CORBA')
+            cdict['arg_type']  = arg_type
+            out = arg.is_out()
+            self.createArg(dict, paramType, out)
+            args.append(dict)
         return args
+
+    def createArg(self, dict, typeobj, out):
+        (corba_type, local_type, is_primitive) = self.getType(typeobj)
+        cdict = dict['corba']
+        ldict = dict['local']
+        if is_primitive != None:
+            cdict['is_primitive'] = is_primitive
+
+        paramType = typeobj
+        if paramType.typedef():
+            paramType = paramType.deref()
+        # primitive type
+        if paramType.is_basic_data_types():
+            if out: ldict['arg_type'] = local_type + '&'
+            else:   ldict['arg_type'] = local_type
+            ldict['var_type'] = local_type
+            cdict['var_type'] = corba_type
+        # Enum type
+        elif paramType.enum():
+            if out: ldict['arg_type'] = local_type + '&'
+            else:   ldict['arg_type'] = local_type
+            ldict['var_type'] = local_type
+            cdict['var_type'] = corba_type
+        # Struct type
+        # Sequence type
+        # Union type           
+        elif paramType.struct() or paramType.sequence() or \
+                paramType.union():
+            if out: ldict['arg_type'] = local_type + '&'
+            else:   ldict['arg_type'] = 'const '+local_type+'&'
+            ldict['var_type'] = local_type
+            cdict['var_type'] = corba_type + '*'
+        # Object type
+        elif paramType.objref():
+            if out: ldict['arg_type'] = local_type + '*'
+            else:   ldict['arg_type'] = 'const '+local_type+'*'
+            ldict['var_type'] = local_type + '*'
+            cdict['var_type'] = corba_type
+        # String type
+        # Any type
+        elif paramType.any() or paramType.string():
+            if out: ldict['arg_type'] = local_type + '&'
+            else:   ldict['arg_type'] = 'const ' + local_type + '&'
+            ldict['var_type'] = local_type
+            cdict['var_type'] = corba_type
+        else:
+            raise "UNKNOWN TYPE", (
+                self.tk_map[paramType.kind()],
+                paramType.typedef())
+
+
+    #------------------------------------------------------------
+    # AST visitor functions
+    #
+    # Tree walking code
+    def visitAST(self, node):
+        for n in node.declarations():
+            if ast.shouldGenerateCodeForDecl(n):
+                n.accept(self)
+
+    # modules can contain interfaces
+    def visitModule(self, node):
+        module = id.mapID(node.identifier())
+        self.module.append(module)
+        for n in node.definitions():
+            # enter tree inside this module
+            n.accept(self)
+        self.module.pop()
+
+
+    def visitDeclarator(self, node):
+        print "Declarator", id.mapID(node.identifier())
+
+
+    def visitStructForward(self, node):
+        dict = self.createDecl('struct_forward')
+        # set corba/local struct identifier
+        self.createStructIdent(dict, node)
+        # append dicts to tree
+        self.dict['tree'].append(dict)
+        return
+
+
+    def visitUnionForward(self, node):
+        dict = self.createDecl('union_forward')
+        # set corba/local union identifier
+        self.getUnionIdent(dict, node)
+        # append dicts to tree
+        self.dict['tree'].append(dict)
+        return
+
+
+    def visitForward(self, node):
+        dict = self.createDecl('interface_forward')
+        # set corba/local interface identifier
+        self.createInterfaceIdent(dict, node)
+        # append dicts to tree
+        self.dict['tree'].append(dict)
+        return
+
+    def visitException(self, node):
+        dict = self.createDecl('exception')
+        # set corba/local exception identifier
+        self.createExceptionIdent(dict, node)
+        # create members
+        self.createMembers(dict, node)
+        # add to dict
+        self.dict['tree'].append(dict)
+        return
+
+
+    def visitUnion(self, node):
+        dict = self.createDecl('union')
+        # set corba/local union identifier
+        self.createUnionIdent(dict, node)
+        # create union cases
+        self.createUnionCases(dict, node)
+        # add to dict
+        self.dict['tree'].append(dict)
+        return
+
+
+    def visitEnum(self, node):
+        dict = self.createDecl('enum')
+        cdict = dict['corba']
+        ldict = dict['local']
+        self.createEnumIdent(dict, node)
+
+        enumerators = node.enumerators()
+        memberlist = map(lambda x: id.Name(x.scopedName()).simple(),
+                         enumerators)
+        cdict['members'] = memberlist
+        ldict['members'] = memberlist
+        self.dict['tree'].append(dict)
+        return
+
+
+    def visitTypedef(self, node):
+        environment = id.lookup(node)
+        scope = environment.scope()
+        aliasType = types.Type(node.aliasType())
+        aliasTypeID = aliasType.member(environment)
+
+        if node.constrType():
+            node.aliasType().decl().accept(self)
+
+
+        for decl in node.declarators():
+            dict = self.createTypedef(aliasType, decl, environment)
+            self.dict['tree'].append(dict)
+        return
+
+
+    def visitStruct(self, node):
+        dict = self.createDecl('struct')
+        self.createStructIdent(dict, node)
+        self.createMembers(dict, node)
+        self.dict['tree'].append(dict)
+        return       
+
+
+    # interfaces cannot be further nested
+    def visitInterface(self, node):
+        self.__allInterfaces.append(node)
+        # listed scope and interface name
+        dict = self.createDecl('interface')
+        self.createInterfaceIdent(dict, node)
+        self.createInterfaceFileInfo(dict, node)
+
+        dict['inherits'] = []
+        for ihnode in ast.allInherits(node):
+            idict = self.createDecl('inherit')
+            self.createInterfaceIdent(idict, ihnode)
+            self.createInterfaceFileInfo(idict, ihnode)
+            dict['inherits'].append(idict)
+
+        env = id.lookup(node)
+
+        allInterfaces = [node]# + ast.allInherits(node)
+        allCallables = util.fold( map(lambda x:x.callables(), allInterfaces),
+                                  [], lambda x, y: x + y )
+
+        dict['operations'] = []
+        dict['attributes'] = []
+        for c in allCallables:
+            if isinstance(c, idlast.Attribute):
+                attrType = types.Type(c.attrType())
+                d_attrType = attrType.deref()
+                (corba_atype, local_atype, is_primitive) = self.getType(attrType)
+
+                for i in c.identifiers():
+                    ident = id.mapID(i)
+                    returnType = attrType.op(types.RET)
+                    inType = attrType.op(types.IN)
+
+                    adict = createDecl('attribute')
+                    cdict = adict['corba']
+                    ldict = adict['local']
+                    cdict['base_type'] = corba_atype;
+                    ldict['base_type'] = local_atype
+                    cdict['name'] = ident
+                    adict['return'] = self.createReturn(c)
+                    adict['arg'] = {}
+                    self.createArg(adict['arg'], attrType, False)
+
+                    dict['attributes'].append(adict)
+                    if c.readonly():
+                        dict['readonly'] = 'yes'
+                    dict['attributes'].append(gdict)
+
+            elif isinstance(c, idlast.Operation):
+                # operations
+                op_dict           = self.createOperation(c)
+                op_dict['return'] = self.createReturn(c)
+                op_dict['args']   = self.createArgs(c, env)
+                dict['operations'].append(op_dict)
+            else:
+                util.fatalError("Internal error generating interface member")
+                raise "No code for interface member: " + repr(c)
+
+#        self.dict['interfaces'].append(dict)
+        self.dict['tree'].append(dict)
+        return
+
 
