@@ -11,7 +11,7 @@ __init__.py:
 	echo "#!/usr/bin/env python" > createinit.py
 	echo "import sys"            >> createinit.py
 	echo "import omniidl_be"     >> createinit.py
-	echo "path0 = sys.argv[0]"   >> createinit.py
+	echo "path0 = '.'"   >> createinit.py
 	echo "path1 = omniidl_be.__path__[0]" >> createinit.py
 	echo "print \"__path__ = ['%s', '%s']\" % (path0, path1)" >> createinit.py
 	chmod 755 createinit.py
