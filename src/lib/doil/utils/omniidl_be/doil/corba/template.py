@@ -594,13 +594,13 @@ extern "C"
 
 
 
-adapter_h = """
+adapter_h = """\
 // -*- C++ -*-
 /*!
  * @file [local.adapter_h] 
  * @brief [local.adapter_name] CORBA adapter for doil
  * @date $Date$
- * @author This file was automatically generated from [idl_fname]
+ * @author This file was automatically generated from [idl_fname] 
  *         by omniidl/doil backend
  *
  * $Id$
@@ -681,7 +681,7 @@ adapter_cpp = """\
  * @file [local.adapter_cpp] 
  * @brief [local.iface_name] CORBA adapter for doil
  * @date $Date$
- * @author This file was automatically generated form [idl_fname]
+ * @author This file was automatically generated form [idl_fname] 
  *         by omniidl/doil backend
  *
  * $Id$
