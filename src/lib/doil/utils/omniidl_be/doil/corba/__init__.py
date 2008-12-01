@@ -66,18 +66,26 @@ def generate_servant(dict):
             f.close()
 
 def generate_adapter(dict):
-    for d in dict['interfaces']:
-        t = yat.Template(template.adapter_h)
-        f = open(d['adapter_h'], "w")
-        text = t.generate(d)
-        f.write(text)
-        f.close()
+    for d in dict['tree']:
+        if d['corba']['decl_type'] == 'interface':
+            ifdict = {}
+            for key in keys:
+                ifdict[key] = dict[key]
 
-        t = yat.Template(template.adapter_cpp)
-        f = open(d['adapter_cpp'], "w")
-        text = t.generate(d)
-        f.write(text)
-        f.close()
+            ifdict.update(d)
+
+            t = yat.Template(template.adapter_h)
+            text = t.generate(ifdict)
+            fname = d['local']['adapter_h']
+            f = open(fname, "w")
+            f.write(text)
+            f.close()
+
+            t = yat.Template(template.adapter_cpp)
+            fname = d['local']['adapter_cpp']
+            f = open(fname, "w")
+            f.write(text)
+            f.close()
 
 def generate_types(dict):
     decl = []
