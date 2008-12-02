@@ -16,7 +16,7 @@
  *
  */
 #ifndef DOIL_CORBA_CORBAMANAGER_H
-#define DOIL_CORBA_COPBAMANAGER_H
+#define DOIL_CORBA_CORBAMANAGER_H
 
 #include <coil/Properties.h>
 #include <coil/Mutex.h>
