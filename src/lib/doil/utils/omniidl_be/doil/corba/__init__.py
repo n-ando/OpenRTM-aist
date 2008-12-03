@@ -82,6 +82,7 @@ def generate_adapter(dict):
             f.close()
 
             t = yat.Template(template.adapter_cpp)
+            text = t.generate(ifdict)
             fname = d['local']['adapter_cpp']
             f = open(fname, "w")
             f.write(text)
