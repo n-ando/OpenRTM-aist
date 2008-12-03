@@ -763,13 +763,15 @@ class BuildDictionaryFromAST(idlvisitor.AstVisitor):
             cdict['var_name'] = '_' + arg_name
             ldict['var_name'] = '_' + arg_name
 
-            direction = direction[arg.direction()]
-            cdict['direction'] = direction
-            ldict['direction'] = direction
+            direction_val = direction[arg.direction()]
+            cdict['direction'] = direction_val
+            ldict['direction'] = direction_val
 
             cdict['tk'] = ldict['tk'] = self.tk_map[paramType.kind()]
             arg_type = paramType.op(types.direction(arg), use_out = 0)
             arg_type = arg_type.replace('CORBA', '::CORBA')
+            arg_type = arg_type.replace('RTC', '::RTC')
+            arg_type = arg_type.replace('SDOPackage', '::SDOPackage')
             cdict['arg_type']  = arg_type
             out = arg.is_out()
             self.createArg(dict, paramType, out)
