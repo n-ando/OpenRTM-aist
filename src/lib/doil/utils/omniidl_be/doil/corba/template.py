@@ -792,6 +792,11 @@ m_obj->[op.name]
 
     // Generate the return value.
 [if op.return.local.tk is "tk_void"][else]
+[if op.return.local.tk is "tk_objref"]
+    corba_to_local(corba_ret, local_ret);
+[elif op.return.local.tk is "tk_enum"]
+    corba_to_local(corba_ret, local_ret);
+[else]
 [if-any op.return.corba.is_primitive]
     local_ret = corba_ret;
 [else]
@@ -801,8 +806,13 @@ m_obj->[op.name]
     ::CORBA::Any::to_string to_str(ch, ul);
     *corba_ret >>= to_str;  
     local_ret = to_str.val;
+[elif op.return.corba.retn_type is "char*"]
+    local_ret = corba_ret;
+[elif op.return.corba.retn_type is "RTC::ExecutionContextHandle_t"]
+    corba_to_local(corba_ret, local_ret);
 [else]
     corba_to_local(*corba_ret, local_ret);
+[endif]
 [endif]
 [endif]
     return local_ret;
