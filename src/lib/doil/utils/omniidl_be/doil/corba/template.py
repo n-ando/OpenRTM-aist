@@ -691,6 +691,7 @@ adapter_cpp = """\
 #include <doil/corba/CORBAManager.h>
 #include <[local.iface_h_path]>
 #include <[local.adapter_h_path]>
+#include <[typeconv_h_path]>
 
 [for ns in local.adapter_ns]
 namespace [ns] 
@@ -700,11 +701,11 @@ namespace [ns]
    * @brief ctor
    */ 
   [local.adapter_name]::[local.adapter_name](::CORBA::Object_ptr obj)
-   : m_obj(::CORBA::Object::_nil())
+   : m_obj([corba.name_fq]::_nil())
   {
-    m_obj = [local.corba_iface]::_narrow(obj);
-    if ([local.corba_iface]::is_nil(m_obj)) throw std::bad_alloc();
-    m_obj = [local.corba_iface]::duplicate(m_obj);
+    m_obj = [corba.name_fq]::_narrow(obj);
+    if (::CORBA::is_nil(m_obj)) throw std::bad_alloc();
+    m_obj = [corba.name_fq]::_duplicate(m_obj);
   }
 
   /*!
@@ -725,28 +726,86 @@ namespace [ns]
 [if-index a is last][a.local.arg_type] [a.local.arg_name]
 [else][a.local.arg_type] [a.local.arg_name], [endif]
 [endfor])
-  {
-[for a in op.args]
-    [a.corba.decl_type] _[a.corba.arg_name];
+      throw ([for raise in op.raises]
+[if-index raise is first]
+[raise.local.name_fq]
+[else]
+,
+             [raise.local.name_fq]
+[endif]
 [endfor]
-
+)
+  {
+    // Convert Local to CORBA.
+    // (The direction of the argument is 'in' or 'inout'.)
+[for a in op.args]
+[if a.corba.arg_type is "const char*"]
+    [a.corba.arg_type] [a.corba.var_name];
+[else]
+    [a.corba.base_type] [a.corba.var_name];
+[endif]
+[endfor]
 [for a in op.args][if a.local.direction is "out"][else]
-    [a.corba.arg_name] << [a.local.arg_name];
+[if-any a.corba.is_primitive]
+    [a.corba.var_name] = [a.local.arg_name];
+[else]
+[if a.corba.arg_type is "const char*"] 
+    [a.corba.var_name] = [a.local.arg_name].c_str();
+[elif a.corba.arg_type is "const ::CORBA::Any&"]
+    ::CORBA::Any::from_string from_str([a.local.arg_name].c_str(), [a.local.arg_name].length());
+    [a.corba.var_name] <<= from_str;
+[else]
+[if a.local.tk is "tk_objref"]
+    local_to_corba(const_cast< [a.local.var_type] >([a.local.arg_name]), [a.corba.var_name]);
+[else]
+    local_to_corba([a.local.arg_name], [a.corba.var_name]);
+[endif]
+[endif]
+[endif]
 [endif][endfor]
 
+    // Execute the method. 
 [if op.return.local.tk is "tk_void"][else]
-    [op.return.corba.retn_type] _ret;
-    [op.return.local.retn_type] ret;
-    _ret = [endif]
+    [op.return.corba.retn_type] corba_ret;
+    [op.return.local.retn_type] local_ret;
+    corba_ret = [endif]
 m_obj->[op.name]
-([for a in op.args][if-index a is last]_[a.corba.arg_name][else]_[a.corba.argvar_name], [endif][endfor]);
+([for a in op.args][if-index a is last][a.corba.var_name][else][a.corba.var_name], [endif][endfor]);
 
+    // Convert CORBA to Local.
+    // (The direction of the argument is 'out' or 'inout'.)
 [for a in op.args][if a.local.direction is "in"][else]
-    [a.local.arg_name] << [a.corba.var_name];
+[if-any a.corba.is_primitive]
+    [a.local.arg_name] = [a.corba.var_name];
+[else]
+[if a.corba.arg_type is "const ::CORBA::Any&"]
+    const char* ch_[a.local.arg_name];
+    ::CORBA::ULong ul_[a.local.arg_name] = 128;
+    ::CORBA::Any::to_string to_str_[a.local.arg_name](ch_[a.local.arg_name], ul_[a.local.arg_name]);
+    [a.corba.var_name] >>= to_str_[a.local.arg_name];  
+    [a.local.arg_name] = to_str_[a.local.arg_name].val;
+[else]
+    corba_to_local([a.corba.var_name], [a.local.arg_name]);
+[endif]
+[endif]
 [endif][endfor]
+
+    // Generate the return value.
 [if op.return.local.tk is "tk_void"][else]
-    ret << _ret;
-    return ret;
+[if-any op.return.corba.is_primitive]
+    local_ret = corba_ret;
+[else]
+[if op.return.corba.retn_type is "::CORBA::Any*"]
+    const char* ch;
+    ::CORBA::ULong ul = 128;
+    ::CORBA::Any::to_string to_str(ch, ul);
+    *corba_ret >>= to_str;  
+    local_ret = to_str.val;
+[else]
+    corba_to_local(*corba_ret, local_ret);
+[endif]
+[endif]
+    return local_ret;
 [endif]
   }
 [endfor]
@@ -754,15 +813,16 @@ m_obj->[op.name]
 [for ns in local.adapter_ns]
 }; // namespace [ns] 
 [endfor]
-
+/*
 extern "C"
 {
   void [local.adapter_name]CORBAInit(coil::Properties& prop)
   {
     doil::CORBA::CORBAManager& mgr(doil::CORBA::CORBAManager::instance());
     mgr.registerFactory("[local.adapter_name]",
-                        doil::New<[local.adapter_name]>,
-                        doil::Delete<[local.adapter_name]>);
+                        doil::New< [local.adapter_name_fq] >,
+                        doil::Delete< [local.adapter_name_fq] >);
   }
 };
+*/
 """
