@@ -213,6 +213,9 @@ class BuildDictionaryFromAST(idlvisitor.AstVisitor):
         CORBA ‚Æ Local ‚ÌŒ^–¼‚ðŽæ“¾‚·‚é
         """
         corba_type = typeobj.base()
+        # for omniidl4 4.1.1-2
+        if corba_type[:2] == "::":
+            corba_type = corba_type[2:]
         is_primitive = None
         # if CORBA to Local mapping is specified explicitly
         if self.typemap.has_key(corba_type):
