@@ -613,6 +613,9 @@ adapter_h = """\
 #include <doil/ImplBase.h>
 #include <[local.iface_h]>
 #include <[local.adapter_h_path]>
+[for inc in inherits]
+#include <[inc.local.adapter_h]>
+[endfor]
 [for inc in include_h]
 #include <[inc]>
 [endfor]
@@ -624,7 +627,11 @@ namespace [ns]
 [endfor]
 
   class [local.adapter_name] 
-   : public virtual ::doil::LocalBase,
+//   : public virtual ::doil::LocalBase,
+  :  public virtual ::doil::CORBA::CORBAAdapterBase,
+[for inc in inherits]
+     public virtual [inc.local.adapter_name_fq],
+[endfor]
      public virtual [local.iface_name_fq]
 
   {
@@ -701,7 +708,9 @@ namespace [ns]
    * @brief ctor
    */ 
   [local.adapter_name]::[local.adapter_name](::CORBA::Object_ptr obj)
-   : m_obj([corba.name_fq]::_nil())
+   : m_obj([corba.name_fq]::_nil())[for inc in inherits],
+     [inc.local.adapter_name_fq](obj)[endfor]
+
   {
     m_obj = [corba.name_fq]::_narrow(obj);
     if (::CORBA::is_nil(m_obj)) throw std::bad_alloc();
@@ -829,7 +838,7 @@ extern "C"
   void [local.adapter_name]CORBAInit(coil::Properties& prop)
   {
     doil::CORBA::CORBAManager& mgr(doil::CORBA::CORBAManager::instance());
-    mgr.registerFactory("[local.adapter_name]",
+    mgr.registerAdapterFactory("[local.adapter_name]",
                         doil::New< [local.adapter_name_fq] >,
                         doil::Delete< [local.adapter_name_fq] >);
   }
