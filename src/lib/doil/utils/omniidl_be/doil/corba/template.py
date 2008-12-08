@@ -319,7 +319,7 @@ local_to_corba(const [local.name_fq]& _from,
 #------------------------------------------------------------
 # typedef conversion declaration
 typedef_decl_h = """\
-[if corba.tk is "tk_alias"][elif corba.tk is "tk_string"][else]
+[if corba.tk is "tk_alias"][elif corba.tk is "tk_string"][elif corba.tk is "tk_long"][else]
 // typedef corba -> local : [corba.tk] 
 bool
 corba_to_local(const [corba.derived_type_fq]& _from,
@@ -335,7 +335,7 @@ local_to_corba(const [local.derived_type_fq]& _from,
 #------------------------------------------------------------
 # typedef conversion implementation
 typedef_dec_cpp = """\
-[if corba.tk is "tk_alias"][elif corba.tk is "tk_string"][else]
+[if corba.tk is "tk_alias"][elif corba.tk is "tk_string"][elif corba.tk is "tk_long"][else]
 // typedef corba -> local : [corba.tk] 
 bool
 corba_to_local(const [corba.derived_type_fq]& _from,
@@ -418,6 +418,7 @@ servant_h = """\
 
 #include <coil/Properties.h>
 #include <doil/corba/CORBAServantBase.h>
+#include <doil/corba/BasicTypeConversion.h>
 [for inc in include_h]
 #include <[inc]>
 [endfor]
@@ -627,10 +628,9 @@ namespace [ns]
 [endfor]
 
   class [local.adapter_name] 
-//   : public virtual ::doil::LocalBase,
-  :  public virtual ::doil::CORBA::CORBAAdapterBase,
+  : public virtual ::doil::LocalBase,
 [for inc in inherits]
-     public virtual [inc.local.adapter_name_fq],
+    public virtual [inc.local.adapter_name_fq],
 [endfor]
      public virtual [local.iface_name_fq]
 
@@ -658,9 +658,26 @@ namespace [ns]
 
 [endfor]
 
+    const char* id() {return "[corba.idl_name]";}
+    const char* name() {return m_name.c_str();}
+    void incRef()
+    {
+      ++m_refcount;
+    }
+    void decRef()
+    {
+      --m_refcount;
+      if (m_refcount == 0)
+        delete this;
+    }
+
+
   private:
     [corba.name_fq]_ptr m_obj;
+    static int m_refcount;
+    std::string m_name;
   };
+  int [local.adapter_name_fq]::m_refcount = 0;
 
 [for ns in local.adapter_ns]
 }; // namespace [ns] 
@@ -699,6 +716,7 @@ adapter_cpp = """\
 #include <[local.iface_h_path]>
 #include <[local.adapter_h_path]>
 #include <[typeconv_h_path]>
+#include <doil/corba/BasicTypeConversion.h>
 
 [for ns in local.adapter_ns]
 namespace [ns] 
@@ -715,6 +733,7 @@ namespace [ns]
     m_obj = [corba.name_fq]::_narrow(obj);
     if (::CORBA::is_nil(m_obj)) throw std::bad_alloc();
     m_obj = [corba.name_fq]::_duplicate(m_obj);
+    incRef();
   }
 
   /*!
@@ -722,7 +741,8 @@ namespace [ns]
    */ 
   [local.adapter_name]::~[local.adapter_name]()
   {
-    ::CORBA::release(m_obj);
+//    ::CORBA::release(m_obj);
+    decRef();
   }
 
   [for op in operations]
@@ -748,19 +768,13 @@ namespace [ns]
     // Convert Local to CORBA.
     // (The direction of the argument is 'in' or 'inout'.)
 [for a in op.args]
-[if a.corba.arg_type is "const char*"]
-    [a.corba.arg_type] [a.corba.var_name];
-[else]
     [a.corba.base_type] [a.corba.var_name];
-[endif]
 [endfor]
 [for a in op.args][if a.local.direction is "out"][else]
 [if-any a.corba.is_primitive]
     [a.corba.var_name] = [a.local.arg_name];
 [else]
-[if a.corba.arg_type is "const char*"] 
-    [a.corba.var_name] = [a.local.arg_name].c_str();
-[elif a.corba.arg_type is "const ::CORBA::Any&"]
+[if a.corba.arg_type is "const ::CORBA::Any&"]
     ::CORBA::Any::from_string from_str([a.local.arg_name].c_str(), [a.local.arg_name].length());
     [a.corba.var_name] <<= from_str;
 [else]
@@ -832,7 +846,7 @@ m_obj->[op.name]
 [for ns in local.adapter_ns]
 }; // namespace [ns] 
 [endfor]
-/*
+
 extern "C"
 {
   void [local.adapter_name]CORBAInit(coil::Properties& prop)
@@ -843,5 +857,5 @@ extern "C"
                         doil::Delete< [local.adapter_name_fq] >);
   }
 };
-*/
+
 """
