@@ -610,10 +610,12 @@ adapter_h = """\
 #define [local.adapter_include_guard] 
 
 #include <coil/Properties.h>
+#include <coil/Mutex.h>
+#include <coil/Guard.h>
 #include <doil/corba/CORBAManager.h>
 #include <doil/ImplBase.h>
 #include <[local.iface_h]>
-#include <[local.adapter_h_path]>
+//#include <[local.adapter_h_path]>
 [for inc in inherits]
 #include <[inc.local.adapter_h]>
 [endfor]
@@ -632,9 +634,11 @@ namespace [ns]
 [for inc in inherits]
     public virtual [inc.local.adapter_name_fq],
 [endfor]
-     public virtual [local.iface_name_fq]
+    public virtual [local.iface_name_fq]
 
   {
+    typedef coil::Mutex Mutex;
+    typedef coil::Guard<Mutex> Guard;
   public:
     [local.adapter_name](::CORBA::Object_ptr obj);
     virtual ~[local.adapter_name]();
@@ -662,22 +666,23 @@ namespace [ns]
     const char* name() {return m_name.c_str();}
     void incRef()
     {
+      Guard guard(m_refcountMutex);
       ++m_refcount;
     }
     void decRef()
     {
+      Guard guard(m_refcountMutex);
       --m_refcount;
       if (m_refcount == 0)
         delete this;
     }
 
-
   private:
     [corba.name_fq]_ptr m_obj;
-    static int m_refcount;
     std::string m_name;
+    Mutex m_refcountMutex;
+    int m_refcount;
   };
-  int [local.adapter_name_fq]::m_refcount = 0;
 
 [for ns in local.adapter_ns]
 }; // namespace [ns] 
@@ -726,7 +731,8 @@ namespace [ns]
    * @brief ctor
    */ 
   [local.adapter_name]::[local.adapter_name](::CORBA::Object_ptr obj)
-   : m_obj([corba.name_fq]::_nil())[for inc in inherits],
+   : m_obj([corba.name_fq]::_nil()),
+     m_refcount(1)[for inc in inherits],
      [inc.local.adapter_name_fq](obj)[endfor]
 
   {
@@ -774,15 +780,10 @@ namespace [ns]
 [if-any a.corba.is_primitive]
     [a.corba.var_name] = [a.local.arg_name];
 [else]
-[if a.corba.arg_type is "const ::CORBA::Any&"]
-    ::CORBA::Any::from_string from_str([a.local.arg_name].c_str(), [a.local.arg_name].length());
-    [a.corba.var_name] <<= from_str;
-[else]
 [if a.local.tk is "tk_objref"]
     local_to_corba(const_cast< [a.local.var_type] >([a.local.arg_name]), [a.corba.var_name]);
 [else]
     local_to_corba([a.local.arg_name], [a.corba.var_name]);
-[endif]
 [endif]
 [endif]
 [endif][endfor]
@@ -801,15 +802,7 @@ m_obj->[op.name]
 [if-any a.corba.is_primitive]
     [a.local.arg_name] = [a.corba.var_name];
 [else]
-[if a.corba.arg_type is "const ::CORBA::Any&"]
-    const char* ch_[a.local.arg_name];
-    ::CORBA::ULong ul_[a.local.arg_name] = 128;
-    ::CORBA::Any::to_string to_str_[a.local.arg_name](ch_[a.local.arg_name], ul_[a.local.arg_name]);
-    [a.corba.var_name] >>= to_str_[a.local.arg_name];  
-    [a.local.arg_name] = to_str_[a.local.arg_name].val;
-[else]
     corba_to_local([a.corba.var_name], [a.local.arg_name]);
-[endif]
 [endif]
 [endif][endfor]
 
@@ -823,16 +816,10 @@ m_obj->[op.name]
 [if-any op.return.corba.is_primitive]
     local_ret = corba_ret;
 [else]
-[if op.return.corba.retn_type is "::CORBA::Any*"]
-    const char* ch;
-    ::CORBA::ULong ul = 128;
-    ::CORBA::Any::to_string to_str(ch, ul);
-    *corba_ret >>= to_str;  
-    local_ret = to_str.val;
-[elif op.return.corba.retn_type is "char*"]
-    local_ret = corba_ret;
-[elif op.return.corba.retn_type is "RTC::ExecutionContextHandle_t"]
+[if op.return.corba.retn_type is "char*"]
     corba_to_local(corba_ret, local_ret);
+[elif op.return.corba.retn_type is "RTC::ExecutionContextHandle_t"]
+    local_ret = corba_ret;
 [else]
     corba_to_local(*corba_ret, local_ret);
 [endif]
