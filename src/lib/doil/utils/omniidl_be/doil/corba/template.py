@@ -739,7 +739,6 @@ namespace [ns]
     m_obj = [corba.name_fq]::_narrow(obj);
     if (::CORBA::is_nil(m_obj)) throw std::bad_alloc();
     m_obj = [corba.name_fq]::_duplicate(m_obj);
-    incRef();
   }
 
   /*!
@@ -747,8 +746,7 @@ namespace [ns]
    */ 
   [local.adapter_name]::~[local.adapter_name]()
   {
-//    ::CORBA::release(m_obj);
-    decRef();
+    ::CORBA::release(m_obj);
   }
 
   [for op in operations]
