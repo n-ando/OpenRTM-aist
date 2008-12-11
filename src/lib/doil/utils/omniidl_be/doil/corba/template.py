@@ -575,6 +575,10 @@ namespace [ns]
     [op.return.local.retn_type] local_ret;
     [op.return.corba.retn_type] corba_ret;
     local_ret =
+[elif op.return.corba.retn_type is "char*"]
+    [op.return.local.retn_type] local_ret;
+    [op.return.corba.retn_type] corba_ret;
+    local_ret =
 [else]
     [op.return.local.retn_type] local_ret;
     [op.return.corba.retn_type] corba_ret = new [op.return.corba.base_type] ();
@@ -597,6 +601,8 @@ m_impl->[op.name]
     local_to_corba(local_ret, *corba_ret);
 [elif op.return.corba.tk is "tk_alias"]
 [if op.return.corba.retn_type is "::RTC::ExecutionContextHandle_t"]
+    local_to_corba(local_ret, corba_ret);
+[elif op.return.corba.retn_type is "char*"]
     local_to_corba(local_ret, corba_ret);
 [else]
     local_to_corba(local_ret, *corba_ret);
