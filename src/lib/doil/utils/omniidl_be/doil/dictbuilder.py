@@ -702,6 +702,10 @@ class BuildDictionaryFromAST(idlvisitor.AstVisitor):
         retn_type = types.Type(operation.returnType()).op(types.RET)
         if retn_type[:5] == 'CORBA':
             retn_type = '::' + retn_type
+        elif retn_type[:10] == 'SDOPackage':
+            retn_type = '::' + retn_type
+        elif retn_type[:3] == 'RTC':
+            retn_type = '::' + retn_type
         cdict['retn_type'] = retn_type
 
         if retType.objref(): local_rtype = local_type + '*'
