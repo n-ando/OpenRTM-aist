@@ -422,6 +422,9 @@ servant_h = """\
 [for inc in include_h]
 #include <[inc]>
 [endfor]
+[for inc in inherits]
+#include <[inc.local.servant_h]>
+[endfor]
 
 #include <[types_h_path]>
 
@@ -449,6 +452,9 @@ namespace [ns]
 
   class [local.servant_name] 
    : public virtual [corba.name_poa],
+[for inc in inherits]
+     public virtual [inc.local.servant_name_fq],
+[endfor]
      public virtual ::doil::CORBA::CORBAServantBase
   {
   public:
@@ -516,7 +522,8 @@ namespace [ns]
    * @brief ctor
    */ 
   [local.servant_name]::[local.servant_name](doil::ImplBase* impl)
-   : ::doil::CORBA::CORBAServantBase(impl), m_impl(NULL)
+   : ::doil::CORBA::CORBAServantBase(impl), m_impl(NULL)[for inc in inherits],
+     [inc.local.servant_name_fq](impl)[endfor] 
   {
     m_impl = dynamic_cast< [local.iface_name_fq]* >(impl);
     if (m_impl == NULL) throw std::bad_alloc();
@@ -554,7 +561,26 @@ namespace [ns]
 [endif]
 [endif][endfor]
 
-[if op.return.corba.tk is "tk_void"][else]
+[if op.return.corba.tk is "tk_void"]
+[elif op.return.corba.tk is "tk_amy"]
+    [op.return.local.retn_type] local_ret;
+    [op.return.corba.retn_type] corba_ret = new [op.return.corba.base_type] ();
+    local_ret =
+[elif op.return.corba.tk is "tk_struct"]
+    [op.return.local.retn_type] local_ret;
+    [op.return.corba.retn_type] corba_ret = new [op.return.corba.base_type] ();
+    local_ret =
+[elif op.return.corba.tk is "tk_alias"]
+[if op.return.corba.retn_type is "::RTC::ExecutionContextHandle_t"]
+    [op.return.local.retn_type] local_ret;
+    [op.return.corba.retn_type] corba_ret;
+    local_ret =
+[else]
+    [op.return.local.retn_type] local_ret;
+    [op.return.corba.retn_type] corba_ret = new [op.return.corba.base_type] ();
+    local_ret =
+[endif]
+[else]
     [op.return.local.retn_type] local_ret;
     [op.return.corba.retn_type] corba_ret;
     local_ret = [endif]
@@ -564,7 +590,18 @@ m_impl->[op.name]
 [for a in op.args][if a.corba.direction is "in"][else]
     local_to_corba([a.local.var_name], [a.corba.arg_name]);
 [endif][endfor]
-[if op.return.corba.tk is "tk_void"][else]
+[if op.return.corba.tk is "tk_void"]
+[elif op.return.corba.tk is "tk_any"]
+    local_to_corba(local_ret, *corba_ret);
+[elif op.return.corba.tk is "tk_struct"]
+    local_to_corba(local_ret, *corba_ret);
+[elif op.return.corba.tk is "tk_alias"]
+[if op.return.corba.retn_type is "::RTC::ExecutionContextHandle_t"]
+    local_to_corba(local_ret, corba_ret);
+[else]
+    local_to_corba(local_ret, *corba_ret);
+[endif]
+[else]
 [if-any op.return.corba.is_primitive]
     corba_ret = local_ret;
 [else]
@@ -816,7 +853,7 @@ m_obj->[op.name]
 [else]
 [if op.return.corba.retn_type is "char*"]
     corba_to_local(corba_ret, local_ret);
-[elif op.return.corba.retn_type is "RTC::ExecutionContextHandle_t"]
+[elif op.return.corba.retn_type is "::RTC::ExecutionContextHandle_t"]
     local_ret = corba_ret;
 [else]
     corba_to_local(*corba_ret, local_ret);
