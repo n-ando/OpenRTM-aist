@@ -562,7 +562,7 @@ namespace [ns]
 [endif][endfor]
 
 [if op.return.corba.tk is "tk_void"]
-[elif op.return.corba.tk is "tk_amy"]
+[elif op.return.corba.tk is "tk_any"]
     [op.return.local.retn_type] local_ret;
     [op.return.corba.retn_type] corba_ret = new [op.return.corba.base_type] ();
     local_ret =
