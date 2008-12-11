@@ -594,8 +594,8 @@ m_impl->[op.name]
 [for a in op.args][if a.corba.direction is "in"][else]
     local_to_corba([a.local.var_name], [a.corba.arg_name]);
 [endif][endfor]
-[if op.return.corba.tk is "tk_void"]
-[elif op.return.corba.tk is "tk_any"]
+[if op.return.corba.tk is "tk_void"][else]
+[if op.return.corba.tk is "tk_any"]
     local_to_corba(local_ret, *corba_ret);
 [elif op.return.corba.tk is "tk_struct"]
     local_to_corba(local_ret, *corba_ret);
@@ -612,6 +612,7 @@ m_impl->[op.name]
     corba_ret = local_ret;
 [else]
     local_to_corba(local_ret, corba_ret);
+[endif]
 [endif]
     return corba_ret;
 [endif]
