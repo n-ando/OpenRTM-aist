@@ -79,7 +79,24 @@ inline bool local_to_corba(const unsigned char _from, ::CORBA::Octet& _to)
   return true;
 }
 
-inline bool local_to_corba(const std::string& _from, char* _to)
+#if   defined ORB_IS_TAO
+#elif defined ORB_IS_OMNIORB
+inline bool local_to_corba(const std::string& _from, ::CORBA::String_member& _to)
+{
+  _to.out() = ::CORBA::string_dup(_from.c_str());
+  return true;
+}
+
+
+inline bool local_to_corba(const std::string& _from, _CORBA_String_element::_CORBA_String_element _to)
+{
+  _to.out() = ::CORBA::string_dup(_from.c_str());
+  return true;
+}
+#elif defined ORB_IS_MICO
+#elif defined ORB_IS_ORBIT2
+#endif
+inline bool local_to_corba(const ::std::string& _from, char*& _to)
 {
   _to = ::CORBA::string_dup(_from.c_str());
   return true;
@@ -209,6 +226,7 @@ inline bool corba_to_local(const ::CORBA::Boolean _from, bool& _to)
 inline bool corba_to_local(const char* _from, std::string& _to)
 {
   _to = _from;
+  return true;
 }
 
 //  inline bool corba_to_local(char* _from, std::string& _to)
