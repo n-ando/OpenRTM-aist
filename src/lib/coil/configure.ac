@@ -24,6 +24,13 @@ AM_INIT_AUTOMAKE([dist-bzip2 tar-pax])
 AM_CONFIG_HEADER([config_coil.h])
 
 dnl ------------------------------------------------------------
+dnl rename config header's PACKAGE_* definition
+dnl ------------------------------------------------------------
+mv config_coil.h.in config_coil.h.in.org
+sed -e 's/undef PACKAGE/undef COIL_PACKAGE/g' config_coil.h.in.org | sed -e 's/\#undef VERSION .*//g' > config_coil.h.in
+rm -f config_coil.h.in.org
+
+dnl ------------------------------------------------------------
 dnl  Version number
 dnl ------------------------------------------------------------
 major_version=[`echo $VERSION | sed -e 's/\([0-9]\{1,\}\)\.\([0-9]\{1,\}\)\.\([0-9]\{1,\}\)/\1/g'`]
@@ -527,3 +534,6 @@ AC_OUTPUT([Makefile
 	tests/TimeValue/Makefile
 	tests/UUID/Makefile
 	])
+
+
+
