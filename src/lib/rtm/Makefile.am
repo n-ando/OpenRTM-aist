@@ -45,7 +45,8 @@ MGR_SRC =                      \
 	ManagerConfig.cpp      \
 	ModuleManager.cpp      \
 	NamingManager.cpp      \
-	NumberingPolicy.cpp
+	NumberingPolicy.cpp    \
+	ManagerServant.cpp
 
 COMP_SRC =                           \
 	DataFlowComponentBase.cpp    \

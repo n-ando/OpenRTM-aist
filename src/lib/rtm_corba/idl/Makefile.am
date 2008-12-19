@@ -21,6 +21,7 @@ IDL_SOURCES =             \
 	SDOPackage.idl    \
 	RTC.idl           \
 	OpenRTM.idl       \
+	Manager.idl       \
 	BasicDataType.idl \
 	DataPort.idl
 

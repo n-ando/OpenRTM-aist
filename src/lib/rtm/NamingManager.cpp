@@ -45,6 +45,18 @@ namespace RTC
 	;
       }
   }
+  void NamingOnCorba::bindObject(const char* name,
+				 const RTM::ManagerServant* mgr)
+  {
+    try
+      {
+	m_cosnaming.rebindByString(name, mgr->getObjRef(), true);
+      }
+    catch (...)
+      {
+	;
+      }
+  }
   
   /*!
    * @if jp
@@ -134,6 +146,18 @@ namespace RTC
         }
       }
     registerCompName(name, rtobj);
+  }
+  void NamingManager::bindObject(const char* name, 
+				 const RTM::ManagerServant* mgr)
+  {
+    RTC_TRACE(("NamingManager::bindObject(%s)", name));
+    
+    Guard guard(m_namesMutex);
+    for (int i(0), len(m_names.size()); i < len; ++i)
+      {
+	if (m_names[i]->ns != NULL)
+	  m_names[i]->ns->bindObject(name, mgr);
+      }
   }
   
   /*!
