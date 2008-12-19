@@ -22,6 +22,14 @@ AC_INIT(OpenRTM-aist, 0.4.2, n-ando@aist.go.jp, OpenRTM-aist)
 AC_CONFIG_AUX_DIR([.])
 AM_INIT_AUTOMAKE([dist-bzip2 tar-pax])
 AM_CONFIG_HEADER([src/lib/rtm/config_rtc.h])
+
+dnl ------------------------------------------------------------
+dnl rename config header's PACKAGE_* definition
+dnl ------------------------------------------------------------
+mv src/lib/rtm/config_rtc.h.in src/lib/rtm/config_rtc.h.in.org
+sed -e 's/undef PACKAGE/undef RTM_PACKAGE/g' src/lib/rtm/config_rtc.h.in.org | sed -e 's/\#define VERSION .*//g' > src/lib/rtm/config_rtc.h.in
+rm -f src/lib/rtm/config_rtc.h.in.org
+
 AC_CONFIG_SUBDIRS([src/lib/coil])
 
 dnl ------------------------------------------------------------
@@ -1464,6 +1472,8 @@ AC_OUTPUT([Makefile
 	src/lib/rtm_corba/Makefile
 	src/lib/rtm_corba/idl/Makefile
 	src/lib/doil/Makefile
+	src/lib/doil/utils/Makefile
+	src/lib/doil/utils/omniidl_be/Makefile
 	src/lib/doil/tests/Makefile
 	src/lib/doil/tests/ORBManager/Makefile
 	src/lib/doil/corba/Makefile
@@ -1513,9 +1523,4 @@ AC_OUTPUT([Makefile
 	win32/OpenRTM-aist/installer/Bitmaps/Makefile
 	])
 
-dnl ------------------------------------------------------------
-dnl rename config header's PACKAGE_* definition
-dnl ------------------------------------------------------------
-mv src/lib/rtm/config_rtc.h src/lib/rtm/config_rtc.h.org
-sed -e 's/define PACKAGE/define RTMPACKAGE/g' src/lib/rtm/config_rtc.h.org | sed -e 's/\#define VERSION/\/\/ \#define VERSION/g' > src/lib/rtm/config_rtc.h
-rm -f src/lib/rtm/config_rtc.h.org
+
