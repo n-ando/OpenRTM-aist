@@ -27,6 +27,7 @@
 #include <rtm/CorbaNaming.h>
 #include <rtm/RTObject.h>
 #include <rtm/SystemLogger.h>
+#include <rtm/ManagerServant.h>
 
 namespace RTC
 {
@@ -109,6 +110,7 @@ namespace RTC
      * @endif
      */
     virtual void bindObject(const char* name, const RTObject_impl* rtobj) = 0;
+    virtual void bindObject(const char* name, const RTM::ManagerServant* mgr) = 0;
     
     /*!
      * @if jp
@@ -219,6 +221,7 @@ namespace RTC
      * @endif
      */
     virtual void bindObject(const char* name, const RTObject_impl* rtobj);
+    virtual void bindObject(const char* name, const RTM::ManagerServant* mgr);
     
     /*!
      * @if jp
@@ -355,6 +358,7 @@ namespace RTC
      * @endif
      */
     void bindObject(const char* name, const RTObject_impl* rtobj);
+    void bindObject(const char* name, const RTM::ManagerServant* mgr);
     
     /*!
      * @if jp

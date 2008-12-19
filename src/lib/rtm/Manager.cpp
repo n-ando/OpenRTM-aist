@@ -27,6 +27,7 @@
 #include <rtm/ExtTrigExecutionContext.h>
 #include <rtm/OpenHRPExecutionContext.h>
 #include <rtm/RTCUtil.h>
+#include <rtm/ManagerServant.h>
 #include <fstream>
 #include <iostream>
 #include <coil/Properties.h>
@@ -99,6 +100,7 @@ namespace RTC
 	    manager->initNaming();
 	    manager->initExecContext();
 	    manager->initTimer();
+            manager->initManagerServant();
 	  }
       }
     return manager;
@@ -340,7 +342,7 @@ namespace RTC
    * @brief Get a list of loaded modules
    * @endif
    */
-  std::vector<std::string> Manager::getLoadedModules()
+  std::vector<coil::Properties> Manager::getLoadedModules()
   {
     RTC_TRACE(("Manager::getLoadedModules()"));
     return m_module->getLoadedModules();
@@ -353,7 +355,7 @@ namespace RTC
    * @brief Get a list of loadable modules
    * @endif
    */
-  std::vector<std::string> Manager::getLoadableModules()
+std::vector<coil::Properties> Manager::getLoadableModules()
   {    
     RTC_TRACE(("Manager::getLoadableModules()"));
     return m_module->getLoadableModules();
@@ -385,6 +387,17 @@ namespace RTC
       {
 	return false;
       }
+  }
+  
+  std::vector<coil::Properties> Manager::getFactoryProfiles()
+  {
+    std::vector<FactoryBase*> factories(m_factory.getObjects());
+    std::vector<coil::Properties> props;
+    for (int i(0), len(factories.size()); i < len; ++i)
+      {
+        props.push_back(factories[i]->profile());
+      }
+    return props;
   }
   
   /*!
@@ -442,8 +455,27 @@ namespace RTC
    * @brief Create RT-Components
    * @endif
    */
-  RtcBase* Manager::createComponent(const char* module_name)
+  RtcBase* Manager::createComponent(const char* comp_arg)
   {
+    std::string arg(comp_arg);
+    coil::Properties prop;
+    const char* module_name;
+    std::vector<std::string> comp_and_conf(coil::split(arg, "?"));
+
+    if (comp_and_conf.size() == 0) return NULL;
+
+    module_name = comp_and_conf[0].c_str();
+
+    if (comp_and_conf.size() > 1)
+      {
+        std::vector<std::string> conf(coil::split(comp_and_conf[1], "&"));
+        for (int i(0), len(conf.size()); i < len; ++i)
+          {
+            std::vector<std::string> keyval(coil::split(conf[i], "="));
+            prop[keyval[0]] = keyval[1];
+          }
+      }
+
     RTC_TRACE(("Manager::createComponent(%s)", module_name));
     
     //------------------------------------------------------------
@@ -469,7 +501,7 @@ namespace RTC
     // rtc.conf:
     //   [category].[type_name].config_file = file_name
     //   [category].[instance_name].config_file = file_name
-    configureComponent(comp);
+    configureComponent(comp, prop);
     
     //------------------------------------------------------------
     // Component initialization
@@ -622,15 +654,13 @@ namespace RTC
   void Manager::deleteComponent(const char* instance_name)
   {
     RTC_TRACE(("Manager::deleteComponent(%s)", instance_name));
-    //RtcBase* comp;
-    //comp = m_component.find(instance_name);
+    RtcBase* comp;
+    comp = m_compManager.find(instance_name);
+    if (comp == NULL) return;
     
-    //m_naming->unregister(comp);
-    //m_activator->deactivate(comp);
-    
-    //comp->finalize();
-    //m_component->unregisterObject(instance_name);
-    //delete comp;
+    comp->exit();
+    m_compManager.unregisterObject(instance_name);
+    delete comp;
   }
   
   /*!
@@ -1069,6 +1099,44 @@ namespace RTC
   {
     return true;
   }
+
+
+  bool Manager::initManagerServant()
+  {
+    m_mgrservant = new RTM::ManagerServant();
+    coil::Properties prop(*(m_config.getNode("manager")));
+    std::vector<std::string> names(coil::split(prop["naming_formats"], ","));
+
+    for (int i(0), len(names.size()); i < len; ++i)
+      {
+        std::string mgr_name(formatString(names[i].c_str(), prop));
+        m_namingManager->bindObject(mgr_name.c_str(), m_mgrservant);
+      }
+
+    std::ifstream otherref(m_config["manager.refstring_path"].c_str());
+    if (otherref.fail() != 0)
+      {
+        otherref.close();
+        std::ofstream reffile(m_config["manager.refstring_path"].c_str());
+        reffile << m_pORB->object_to_string(m_mgrservant->getObjRef());
+        reffile.close();
+      }
+    else
+      {
+        std::string refstring;
+        otherref >> refstring;
+        otherref.close();
+
+        std::cout << refstring << std::endl;
+        CORBA::Object_ptr obj = m_pORB->string_to_object(refstring.c_str());
+        RTM::Manager_ptr mgr = RTM::Manager::_narrow(obj);
+        //        if (CORBA::is_nil(mgr)) return false;
+        //        mgr->set_child(m_mgrservant->getObjRef());
+        //        m_mgrservant->set_owner(mgr);
+      }
+
+    return true;
+  }
   
   /*!
    * @if jp
@@ -1128,7 +1196,7 @@ namespace RTC
    *
    * @endif
    */
-  void Manager::configureComponent(RtcBase* comp)
+  void Manager::configureComponent(RtcBase* comp, const coil::Properties& prop)
   {
     std::string category(comp->getCategory());
     std::string type_name(comp->getTypeName());
@@ -1161,6 +1229,7 @@ namespace RTC
     // Merge Properties. type_prop is merged properties
     type_prop << name_prop;
     comp->getProperties() << type_prop;
+    comp->getProperties() << prop;
     
     //------------------------------------------------------------
     // Format component's name for NameService

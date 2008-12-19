@@ -31,6 +31,7 @@
 // RTC includes
 #include <rtm/Manager.h>
 #include <coil/Properties.h>
+#include <rtm/ObjectManager.h>
 
 
 #define CONFIG_EXT    "manager.modules.config_ext"
@@ -422,7 +423,7 @@ namespace RTC
      *
      * @endif
      */
-    std::vector<std::string> getLoadedModules();
+    std::vector<coil::Properties> getLoadedModules();
     
     /*!
      * @if jp
@@ -442,7 +443,7 @@ namespace RTC
      *
      * @endif
      */
-    std::vector<std::string> getLoadableModules();
+    std::vector<coil::Properties> getLoadableModules();
     
     /*!
      * @if jp
@@ -567,7 +568,7 @@ namespace RTC
      *
      * @endif
      */
-    bool fileExist(const std::string& filename);
+  bool fileExist(const std::string& filename);
     
     /*!
      * @if jp
@@ -593,8 +594,10 @@ namespace RTC
     std::string getInitFuncName(const std::string& file_path);
     
   protected:
-    struct DLL
+
+    struct DLLEntity
     {
+      coil::Properties properties;
       coil::DynamicLib dll;
     };
     
@@ -602,7 +605,7 @@ namespace RTC
     typedef StringVector::iterator       StringVectorItr;
     typedef StringVector::const_iterator StringVectorConstItr;
     
-    typedef std::map<std::string, DLL> DllMap;
+    typedef std::vector<DLLEntity>    DllMap;
     typedef DllMap::iterator           DllMapItr;
     typedef DllMap::const_iterator     DllMapConstItr;
     
@@ -622,7 +625,19 @@ namespace RTC
      * @brief Module list that has already loaded
      * @endif
      */
-    DllMap m_modules;
+    class DllPred
+    {
+      std::string m_filepath;
+    public:
+      DllPred(const char* filepath) : m_filepath(filepath) {}
+      DllPred(const DLLEntity* dll) : m_filepath(dll->properties["file_path"]) {}
+      bool operator()(DLLEntity* dllentity)
+      {
+        return m_filepath == dllentity->properties.getProperty("file_path");
+      }
+    };
+    //    DllMap m_modules;
+    ObjectManager<const char*, DLLEntity, DllPred> m_modules;
     
     /*!
      * @if jp
@@ -673,7 +688,19 @@ namespace RTC
      * @endif
      */
     std::string m_initFuncPrefix;
-    
+
+
+    class UnloadPred
+    {
+    public:
+      UnloadPred(){}
+      void operator()(DLLEntity* dll)
+      {
+        dll->dll.close();
+        delete dll;
+      }
+    };
+
   };   // class ModuleManager
 };     // namespace RTC  
 

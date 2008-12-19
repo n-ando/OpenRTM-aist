@@ -111,11 +111,16 @@ namespace RTC
     if (file_path == "") throw InvalidArguments("Invalid file name.");
     if (!fileExist(file_path)) throw FileNotFound(file_path.c_str());
     
-    int retval =  m_modules[file_path].dll.open(file_path.c_str());
+    DLLEntity* dll(new DLLEntity());
+
+    int retval =  dll->dll.open(file_path.c_str());
     if (retval != 0)
       {
+        delete dll;
 	throw Error("DLL open failed.");
       }
+    dll->properties["file_path"] = file_path;
+    m_modules.registerObject(dll);
     
     return file_path;
   }
@@ -158,11 +163,12 @@ namespace RTC
    */
   void ModuleManager::unload(const std::string& file_name)
   {
-    if (m_modules.find(file_name) == m_modules.end())
+    DLLEntity* dll(m_modules.find(file_name.c_str()));
+    if (dll == NULL)
       throw NotFound(file_name.c_str());
     
-    m_modules[file_name].dll.close();
-    m_modules.erase(file_name);
+    dll->dll.close();
+    m_modules.unregisterObject(file_name.c_str());
     
     return;
   }
@@ -176,17 +182,14 @@ namespace RTC
    */
   void ModuleManager::unloadAll()
   {
-    DllMapItr it(m_modules.begin());
-    DllMapItr it_end(m_modules.end());
-    
-    // DLL close and clear DLL map
-    while (it != it_end)
+    std::vector<DLLEntity*> dlls(m_modules.getObjects());
+
+    for (int i(0), len(dlls.size()); i < len; ++i)
       {
-	it->second.dll.close();
-	++it;
+        std::string ident(dlls[i]->properties["file_path"]);
+        DLLEntity* dll(m_modules.unregisterObject(ident.c_str()));
+        dll->dll.close();
       }
-    m_modules.clear();
-    
     return;
   }
   
@@ -202,13 +205,14 @@ namespace RTC
     throw (ModuleNotFound, SymbolNotFound)
   {
     // "file_name" should be in modules map.
-    if (m_modules.find(file_name) == m_modules.end())
+    DLLEntity* dll(m_modules.find(file_name.c_str()));
+    if (dll == NULL)
       {
 	throw ModuleNotFound(file_name);
       }
     
     void* func;
-    func = m_modules[file_name].dll.symbol(func_name.c_str());
+    func = dll->dll.symbol(func_name.c_str());
     
     if (!func)
       {
@@ -259,33 +263,30 @@ namespace RTC
    * @brief Get the module list that has been loaded
    * @endif
    */
-  std::vector<std::string> ModuleManager::getLoadedModules()
+  std::vector<coil::Properties> ModuleManager::getLoadedModules()
   {
-    DllMapItr it(m_modules.begin());
-    DllMapItr it_end(m_modules.end());
-    
-    StringVector modules;
-    while (it != it_end)
+    std::vector< DLLEntity* > dlls(m_modules.getObjects());
+    std::vector<coil::Properties> modules;
+    for (int i(0), len(dlls.size()); i < len; ++i)
       {
-	modules.push_back(it->first);
-	++it;
+        modules.push_back(dlls[i]->properties);
       }
-    return modules;
-  }
+           return modules;
+         }
   
-  /*!
+    /*!
    * @if jp
    * @brief ロード可能なモジュールリストを取得する(未実装)
    * @else
    * @brief Get the loadable module list(not implemented)
    * @endif
    */
-  std::vector<std::string> ModuleManager::getLoadableModules()
-  {
-    StringVector modules;
-    
-    return modules;
-  }
+    std::vector<coil::Properties> ModuleManager::getLoadableModules()
+    {
+      std::vector<coil::Properties> prop;
+      
+      return prop;
+    }
   
   /*!
    * @if jp

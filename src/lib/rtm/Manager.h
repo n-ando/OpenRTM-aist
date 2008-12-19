@@ -35,7 +35,10 @@
 #include <rtm/ObjectManager.h>
 #include <rtm/RTObject.h>
 #include <rtm/SystemLogger.h>
-
+namespace RTM
+{
+  class ManagerServant;
+}
 
 namespace coil
 {
@@ -457,7 +460,7 @@ namespace RTC
      *
      * @endif
      */
-    std::vector<std::string> getLoadedModules();
+    std::vector<coil::Properties> getLoadedModules();
     
     /*!
      * @if jp
@@ -478,7 +481,7 @@ namespace RTC
      *
      * @endif
      */
-    std::vector<std::string> getLoadableModules();
+  std::vector<coil::Properties> getLoadableModules();
     
     //============================================================
     // Component Factory Management
@@ -512,7 +515,7 @@ namespace RTC
     bool registerFactory(coil::Properties& profile,
 			 RtcNewFunc new_func,
 			 RtcDeleteFunc delete_func);
-    
+    std::vector<coil::Properties> getFactoryProfiles();
     /*!
      * @if jp
      * @brief ExecutionContext用ファクトリを登録する
@@ -1081,7 +1084,7 @@ namespace RTC
      *
      * @endif
      */
-    void configureComponent(RtcBase* comp);
+    void configureComponent(RtcBase* comp, const coil::Properties& prop);
     
     /*!
      * @if jp
@@ -1126,7 +1129,10 @@ namespace RTC
      * @endif
      */
     bool initTimer();
-    
+
+    bool initManagerServant();
+    RTM::ManagerServant* m_mgrservant;
+
     /*!
      * @if jp
      * @brief プロパティ情報のマージ
