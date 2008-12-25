@@ -700,12 +700,10 @@ class BuildDictionaryFromAST(idlvisitor.AstVisitor):
         if is_primitive != None:
             cdict['is_primitive'] = is_primitive
         retn_type = types.Type(operation.returnType()).op(types.RET)
-        if retn_type[:5] == 'CORBA':
-            retn_type = '::' + retn_type
-        elif retn_type[:10] == 'SDOPackage':
-            retn_type = '::' + retn_type
-        elif retn_type[:3] == 'RTC':
-            retn_type = '::' + retn_type
+        retn_type = retn_type.replace('CORBA', '::CORBA')
+        retn_type = retn_type.replace('RTC', '::RTC')
+        retn_type = retn_type.replace('SDOPackage', '::SDOPackage')
+        retn_type = retn_type.replace('::::', '::')
         cdict['retn_type'] = retn_type
 
         if retType.objref(): local_rtype = local_type + '*'
@@ -713,6 +711,19 @@ class BuildDictionaryFromAST(idlvisitor.AstVisitor):
 
         ldict['retn_type'] = local_rtype
         cdict['tk'] = ldict['tk'] = self.tk_map[retType.kind()]
+
+        if retType.deref().sequence():
+            retType = retType.deref()
+
+        if retType.sequence():
+            seqType = types.Type(retType.type().seqType())
+            # get type of element of sequence
+            (corba_etype, local_etype, is_primitive) = self.getType(seqType)
+            cdict['deref_tk'] = self.tk_map[seqType.kind()]
+        else:
+            derefType = retType.deref()
+            (corba_dtype, local_dtype, is_primitive) = self.getType(derefType)
+            cdict['deref_tk'] = self.tk_map[derefType.kind()]
         return dict
 
 
@@ -779,6 +790,7 @@ class BuildDictionaryFromAST(idlvisitor.AstVisitor):
             arg_type = arg_type.replace('CORBA', '::CORBA')
             arg_type = arg_type.replace('RTC', '::RTC')
             arg_type = arg_type.replace('SDOPackage', '::SDOPackage')
+            arg_type = arg_type.replace('::::', '::')
             cdict['arg_type']  = arg_type
             out = arg.is_out()
             self.createArg(dict, paramType, out)
