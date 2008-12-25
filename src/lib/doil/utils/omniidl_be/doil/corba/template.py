@@ -564,31 +564,35 @@ namespace [ns]
 [if op.return.corba.tk is "tk_void"]
 [elif op.return.corba.tk is "tk_any"]
     [op.return.local.retn_type] local_ret;
-    [op.return.corba.retn_type] corba_ret = new [op.return.corba.base_type] ();
+    [op.return.corba.retn_type] corba_ret = 
+        new [op.return.corba.base_type] ();
     local_ret =
 [elif op.return.corba.tk is "tk_struct"]
     [op.return.local.retn_type] local_ret;
-    [op.return.corba.retn_type] corba_ret = new [op.return.corba.base_type] ();
+    [op.return.corba.retn_type] corba_ret = 
+        new [op.return.corba.base_type] ();
     local_ret =
 [elif op.return.corba.tk is "tk_alias"]
-[if op.return.corba.retn_type is "::RTC::ExecutionContextHandle_t"]
+[if op.return.corba.deref_tk is "tk_long"]
     [op.return.local.retn_type] local_ret;
     [op.return.corba.retn_type] corba_ret;
     local_ret =
-[elif op.return.corba.retn_type is "char*"]
+[elif op.return.corba.deref_tk is "tk_string"]
     [op.return.local.retn_type] local_ret;
     [op.return.corba.retn_type] corba_ret;
     local_ret =
 [else]
     [op.return.local.retn_type] local_ret;
-    [op.return.corba.retn_type] corba_ret = new [op.return.corba.base_type] ();
+    [op.return.corba.retn_type] corba_ret = 
+        new [op.return.corba.base_type] ();
     local_ret =
 [endif]
 [else]
     [op.return.local.retn_type] local_ret;
     [op.return.corba.retn_type] corba_ret;
-    local_ret = [endif]
-m_impl->[op.name]
+    local_ret = 
+[endif]
+        m_impl->[op.name]
 ([for a in op.args][if-index a is last][a.local.var_name][else][a.local.var_name], [endif][endfor]);
 
 [for a in op.args][if a.corba.direction is "in"][else]
@@ -600,9 +604,9 @@ m_impl->[op.name]
 [elif op.return.corba.tk is "tk_struct"]
     local_to_corba(local_ret, *corba_ret);
 [elif op.return.corba.tk is "tk_alias"]
-[if op.return.corba.retn_type is "::RTC::ExecutionContextHandle_t"]
+[if op.return.corba.deref_tk is "tk_long"]
     local_to_corba(local_ret, corba_ret);
-[elif op.return.corba.retn_type is "char*"]
+[elif op.return.corba.deref_tk is "tk_string"]
     local_to_corba(local_ret, corba_ret);
 [else]
     local_to_corba(local_ret, *corba_ret);
@@ -659,7 +663,6 @@ adapter_h = """\
 #include <doil/corba/CORBAManager.h>
 #include <doil/ImplBase.h>
 #include <[local.iface_h]>
-//#include <[local.adapter_h_path]>
 [for inc in inherits]
 #include <[inc.local.adapter_h]>
 [endfor]
@@ -858,13 +861,29 @@ m_obj->[op.name]
 [if-any op.return.corba.is_primitive]
     local_ret = corba_ret;
 [else]
-[if op.return.corba.retn_type is "char*"]
-    corba_to_local(corba_ret, local_ret);
-[elif op.return.corba.retn_type is "::RTC::ExecutionContextHandle_t"]
+[if op.return.corba.deref_tk is "tk_long"]
     local_ret = corba_ret;
+[elif op.return.corba.deref_tk is "tk_string"]
+    corba_to_local(corba_ret, local_ret);
 [else]
     corba_to_local(*corba_ret, local_ret);
 [endif]
+[endif]
+[endif]
+[if op.return.corba.tk is "tk_any"]
+    delete corba_ret; 
+[elif op.return.corba.tk is "tk_struct"]
+    delete corba_ret; 
+[elif op.return.corba.tk is "tk_string"]
+    ::CORBA::string_free(corba_ret); 
+[elif op.return.local.tk is "tk_objref"]
+    ::CORBA::release(corba_ret);
+[elif op.return.corba.tk is "tk_alias"]
+[if op.return.corba.deref_tk is "tk_long"]
+[elif op.return.corba.deref_tk is "tk_string"]
+    ::CORBA::string_free(corba_ret); 
+[else]
+    delete corba_ret; 
 [endif]
 [endif]
     return local_ret;
