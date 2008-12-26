@@ -1270,6 +1270,12 @@ namespace RTC
     return;
   }
   
+  void RTObject_impl::registerPort(PortService_ptr port)
+  {
+    m_portAdmin.registerPort(port);
+    return;
+  }
+  
   /*!
    * @if jp
    * @brief [local interface] Port ¤ÎÅÐÏ¿¤òºï½ü¤¹¤ë
@@ -1278,6 +1284,12 @@ namespace RTC
    * @endif
    */
   void RTObject_impl::deletePort(PortBase& port)
+  {
+    m_portAdmin.deletePort(port);
+    return;
+  }
+
+  void RTObject_impl::deletePort(PortService_ptr port)
   {
     m_portAdmin.deletePort(port);
     return;

@@ -1491,6 +1491,7 @@ AC_OUTPUT([Makefile
 	utils/rtm-skelwrapper/Makefile
 	utils/rtm-naming/Makefile
 	utils/rtcd/Makefile
+	utils/rtm-manager/Makefile
 	etc/Makefile
 	examples/Makefile
 	examples/ConfigSample/Makefile

@@ -2269,6 +2269,7 @@ namespace RTC
      * @endif
      */
     void registerPort(PortBase& port);
+    void registerPort(PortService_ptr port);
     
     /*!
      * @if jp
@@ -2303,8 +2304,6 @@ namespace RTC
       std::string propkey("port.dataport.");
       propkey += name;
       propkey += ".tcp_any";
-      //      std::cout << "key: " << propkey << std::endl;
-      //      std::cout << m_properties;
       m_properties[propkey];
       PortBase* port = new DataInPort(name, inport,
 				      *m_properties.getNode(propkey));
@@ -2344,8 +2343,6 @@ namespace RTC
       std::string propkey("port.dataport.");
       propkey += name;
       propkey += ".tcp_any";
-      //      std::cout << "key: " << propkey << std::endl;
-      //      std::cout << m_properties;
       m_properties[propkey];
       PortBase* port = new DataOutPort(name, outport,
 				       *m_properties.getNode(propkey));
@@ -2372,6 +2369,7 @@ namespace RTC
      * @endif
      */
     void deletePort(PortBase& port);
+    void deletePort(PortService_ptr port);
     
     /*!
      * @if jp

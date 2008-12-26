@@ -65,10 +65,12 @@ namespace SDOPackage
    *
    * @endif
    */
-  class Organization_impl 
+  class Organization_impl
+    : public virtual POA_SDOPackage::Organization,
+      public virtual PortableServer::RefCountServantBase
   {
     typedef coil::Mutex Mutex;
-    typedef coil::Guard<Mutex> Guardl;
+    typedef coil::Guard<Mutex> Guard;
   public:
     /*!
      * @if jp
@@ -85,7 +87,7 @@ namespace SDOPackage
      *
      * @endif
      */
-    Organization_impl();
+    Organization_impl(SDOSystemElement_ptr sdo);
     
     /*!
      * @if jp
@@ -691,8 +693,10 @@ namespace SDOPackage
     
     // end of CORBA interface definition
     //============================================================
-    
+    Organization_ptr getObjRef() {return m_objref;};
+
   protected:
+    Organization_var m_objref;
     /*!
      * @if jp
      * @brief Organization の識別子
@@ -816,8 +820,6 @@ namespace SDOPackage
      */
     SDOPackage::OrganizationProperty m_orgProperty;
     Mutex m_org_mutex;
-    
-    typedef coil::Guard<coil::Mutex> Guard;
     
     /*!
      * @if jp

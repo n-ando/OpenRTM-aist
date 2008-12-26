@@ -30,7 +30,8 @@ namespace SDOPackage
    * @brief Constructor
    * @endif
    */
-  Organization_impl::Organization_impl()
+  Organization_impl::Organization_impl(SDOSystemElement_ptr sdo)
+    : m_varOwner(sdo)
   {
     coil::UUID_Generator uugen;
     uugen.init();
@@ -40,6 +41,7 @@ namespace SDOPackage
     uuid->~UUID();
 #endif
     m_dependency = OWN;
+    m_objref = this->_this();
   }
   
   /* @if jp

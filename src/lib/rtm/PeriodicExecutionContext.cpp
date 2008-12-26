@@ -245,17 +245,21 @@ namespace RTC
   PeriodicExecutionContext::activate_component(LightweightRTObject_ptr comp)
     throw (CORBA::SystemException)
   {
+    std::cout << "##comp num: " << m_comps.size() << std::endl;
     // コンポーネントが参加者リストに無ければ BAD_PARAMETER を返す
     CompItr it;
     it = std::find_if(m_comps.begin(), m_comps.end(),
 		      find_comp(LightweightRTObject::_duplicate(comp)));
-    if (it == m_comps.end())
-      return RTC::BAD_PARAMETER;
-    
+    std::cout << "##0" << std::endl;
+    if (it == m_comps.end()) {
+      std::cout << "comp not found" << std::endl;
+      return RTC::BAD_PARAMETER;}
+    std::cout << "##1" << std::endl;
     if (!(it->_sm.m_sm.isIn(INACTIVE_STATE)))
       return RTC::PRECONDITION_NOT_MET;
-	    
+    std::cout << "##2" << std::endl;
     it->_sm.m_sm.goTo(ACTIVE_STATE);
+    std::cout << "##3" << std::endl;
     return RTC::RTC_OK;
   }
   

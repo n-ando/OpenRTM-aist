@@ -1108,7 +1108,8 @@ namespace RTC
      * @endif
      */
     bool initExecContext();
-    
+    bool initComposite();
+
     /*!
      * @if jp
      * @brief Timer の初期化
