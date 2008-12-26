@@ -37,9 +37,11 @@ usage_string = """\
   -Wbinterface    Generate doil C++ interface header
   -Wbcorbaservant Generate doil servant class for CORBA
   -Wbcorbaadapter Generate doil adapter class for CORBA
+  -Wbcorbaproxy   Generate doil proxy class for CORBA
   -Wbiceslice     Generate Ice slice file from CORBA IDL
   -Wbiceservant   Generate doil servant class for Ice
   -Wbiceadapter   Generate doil adapter class for Ice
+  -Wbiceproxy     Generate doil proxy class for Ice
 
 [ options for servant class ]
   -Wbss=<suffix>  Specify suffix for generated servant files [default Servant]
@@ -52,6 +54,12 @@ usage_string = """\
   -Wbap=<prefix>  Specify prefix for generated adapter class [default None]
   -Wbans=<ns>     Specify namespsace of generated adapter class [default None]
   -Wbadir=<ns>    Specify directory of generated adapter header [default None]
+
+[ options for proxy class ]
+  -Wbps=<suffix>  Specify suffix for generated proxy class [default Proxy]
+  -Wbpp=<prefix>  Specify prefix for generated proxy class [default None]
+  -Wbpns=<ns>     Specify namespsace of generated proxy class [default None]
+  -Wbpdir=<ns>    Specify directory of generated proxy header [default None]
 
 [ options for interface class ]
   -Wbis=<suffix>  Specify suffix for local interface class [default None]
@@ -84,12 +92,16 @@ def process_args(args):
             config.state['CORBAServant']           = True
         elif arg == "corbaadapter":
             config.state['CORBAAdapter']           = True
+        elif arg == "corbaproxy":
+            config.state['CORBAProxy']             = True
         elif arg == "iceslice":
             config.state['IceSlice']               = True
         elif arg == "iceservant":
             config.state['IceServant']             = True
         elif arg == "iceadapter":
             config.state['IceAdapter']             = True
+        elif arg == "iceproxy":
+            config.state['IceProxy']               = True
         # for servant
         elif arg[:3] == "ss=":
             config.state['ServantSuffix']          = arg[3:]
@@ -108,6 +120,15 @@ def process_args(args):
             config.state['AdapterNs']              = arg[4:].split('::')
         elif arg[:5] == "adir=":
             config.state['AdapterDir']             = arg[5:]
+        # for proxy 
+        elif arg[:3] == "ps=":
+            config.state['ProxySuffix']            = arg[3:]
+        elif arg[:3] == "pp=":
+            config.state['ProxyPrefix']            = arg[3:]
+        elif arg[:4] == "pns=":
+            config.state['ProxyNs']                = arg[4:].split('::')
+        elif arg[:5] == "pdir=":
+            config.state['ProxyDir']               = arg[5:]
         # for interface
         elif arg[:3] == "is=":
             config.state['IfaceSuffix']            = arg[3:]
@@ -177,6 +198,10 @@ def run(tree, args):
             from omniidl_be.doil import corba
             corba.generate_adapter(dict)
             corba.generate_types(dict)
+        if config.state['CORBAProxy']:
+            from omniidl_be.doil import corba
+            corba.generate_proxy(dict)
+            corba.generate_types(dict)
         if config.state['IceSlice']:
             from omniidl_be.doil import ice
             ice.generate_slice(dict)
@@ -184,6 +209,10 @@ def run(tree, args):
         if config.state['IceAdapter']:
             from omniidl_be.doil import ice
             ice.generate_adapter(dict)
+
+        if config.state['IceProxy']:
+            from omniidl_be.doil import ice
+            ice.generate_proxy(dict)
 
         if config.state['IceServant']:
             from omniidl_be.doil import ice
