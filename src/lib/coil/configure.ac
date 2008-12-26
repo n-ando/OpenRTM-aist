@@ -27,7 +27,7 @@ dnl ------------------------------------------------------------
 dnl rename config header's PACKAGE_* definition
 dnl ------------------------------------------------------------
 mv config_coil.h.in config_coil.h.in.org
-sed -e 's/undef PACKAGE/undef COIL_PACKAGE/g' config_coil.h.in.org | sed -e 's/\#undef VERSION .*//g' > config_coil.h.in
+sed -e 's/undef PACKAGE/undef COIL_PACKAGE/g' config_coil.h.in.org | sed -e 's/\#undef VERSION.*//g' > config_coil.h.in
 rm -f config_coil.h.in.org
 
 dnl ------------------------------------------------------------
