@@ -204,6 +204,7 @@ class BuildDictionaryFromAST(idlvisitor.AstVisitor):
         cdict['corba_ns'] = self.module
         ldict['iface_ns'] = self.module + self.config['IfaceNs']
         ldict['adapter_ns'] = self.module + self.config['AdapterNs']
+        ldict['proxy_ns'] = self.module + self.config['ProxyNs']
         ldict['servant_ns'] = self.module + self.config['ServantNs']
         return {'decl_type': decl_type, 'corba': cdict, 'local': ldict}
 
@@ -289,6 +290,7 @@ class BuildDictionaryFromAST(idlvisitor.AstVisitor):
         cdict['corba_ns'] = ns
         ldict['iface_ns'] = ns + self.config['IfaceNs']
         ldict['adapter_ns'] = ns + self.config['AdapterNs']
+        ldict['proxy_ns'] = ns + self.config['ProxyNs']
         ldict['servant_ns'] = ns + self.config['ServantNs']
         cxx_fq_name = id.Name(node.scopedName()).fullyQualify()
         cdict['name_fq'] = '::' + cxx_fq_name
@@ -341,7 +343,8 @@ class BuildDictionaryFromAST(idlvisitor.AstVisitor):
         p = "Prefix"
         s = "Suffix"
         n = "Ns"
-        for t in ['Iface', 'Servant', 'Adapter']:
+        for t in ['Iface', 'Servant', 'Adapter', 'Proxy']:
+        #for t in ['Iface', 'Servant', 'Adapter']:
             key = t.lower() + '_name'
             local_name = self.config[t + p] + name + self.config[t + s]
             scoped_name = cdict['corba_ns'] + self.config[t + n] + [local_name]
@@ -377,7 +380,8 @@ class BuildDictionaryFromAST(idlvisitor.AstVisitor):
 
         # set [iface|servant|adapter]_[h|cpp|h_path|include_guard]
         
-        for t in ['Iface', 'Servant', 'Adapter']:
+        for t in ['Iface', 'Servant', 'Adapter', 'Proxy']:
+        #for t in ['Iface', 'Servant', 'Adapter']:
             k = t.lower()
             ldict[k + '_h']   = ldict[k + '_name'] + ".h"
             ldict[k + '_cpp'] = ldict[k + '_name'] + ".cpp"
