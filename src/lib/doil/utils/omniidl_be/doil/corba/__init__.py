@@ -88,6 +88,29 @@ def generate_adapter(dict):
             f.write(text)
             f.close()
 
+def generate_proxy(dict):
+    for d in dict['tree']:
+        if d['corba']['decl_type'] == 'interface':
+            ifdict = {}
+            for key in keys:
+                ifdict[key] = dict[key]
+
+            ifdict.update(d)
+
+            t = yat.Template(template.proxy_h)
+            text = t.generate(ifdict)
+            fname = d['local']['proxy_h']
+            f = open(fname, "w")
+            f.write(text)
+            f.close()
+
+            t = yat.Template(template.proxy_cpp)
+            text = t.generate(ifdict)
+            fname = d['local']['proxy_cpp']
+            f = open(fname, "w")
+            f.write(text)
+            f.close()
+
 def generate_types(dict):
     decl = []
     impl = []

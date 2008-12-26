@@ -907,3 +907,273 @@ extern "C"
 };
 
 """
+
+
+
+
+
+proxy_h = """\
+// -*- C++ -*-
+/*!
+ * @file [local.proxy_h] 
+ * @brief [local.proxy_name] CORBA proxy for doil
+ * @date $Date$
+ * @author This file was automatically generated from [idl_fname] 
+ *         by omniidl/doil backend
+ *
+ * $Id$
+ */
+#ifndef [local.proxy_include_guard] 
+#define [local.proxy_include_guard] 
+
+#include <coil/Properties.h>
+#include <coil/Mutex.h>
+#include <coil/Guard.h>
+#include <doil/corba/CORBAManager.h>
+#include <doil/ImplBase.h>
+#include <[local.iface_h]>
+[for inc in inherits]
+#include <[inc.local.proxy_h]>
+[endfor]
+[for inc in include_h]
+#include <[inc]>
+[endfor]
+
+
+[for ns in local.proxy_ns]
+namespace [ns] 
+{
+[endfor]
+
+  class [local.proxy_name] 
+  : public virtual ::doil::LocalBase,
+[for inc in inherits]
+    public virtual [inc.local.proxy_name_fq],
+[endfor]
+    public virtual [local.iface_name_fq]
+
+  {
+    typedef coil::Mutex Mutex;
+    typedef coil::Guard<Mutex> Guard;
+  public:
+    [local.proxy_name](::CORBA::Object_ptr obj);
+    virtual ~[local.proxy_name]();
+
+[for op in operations]
+    virtual [op.return.local.retn_type] [op.name]
+([for a in op.args]
+[if-index a is last][a.local.arg_type] [a.local.arg_name]
+[else][a.local.arg_type] [a.local.arg_name], [endif]
+[endfor])
+      throw ([for raise in op.raises]
+[if-index raise is first]
+[raise.local.name_fq]
+[else]
+,
+             [raise.local.name_fq]
+[endif]
+[endfor]
+);
+
+
+[endfor]
+
+    const char* id() {return "[corba.idl_name]";}
+    const char* name() {return m_name.c_str();}
+    void incRef()
+    {
+      Guard guard(m_refcountMutex);
+      ++m_refcount;
+    }
+    void decRef()
+    {
+      Guard guard(m_refcountMutex);
+      --m_refcount;
+      if (m_refcount == 0)
+        delete this;
+    }
+
+  private:
+    [corba.name_fq]_ptr m_obj;
+    std::string m_name;
+    Mutex m_refcountMutex;
+    int m_refcount;
+  };
+
+[for ns in local.proxy_ns]
+}; // namespace [ns] 
+[endfor]
+
+#ifndef [local.servant_include_guard] 
+
+
+#endif // [local.servant_include_guard]
+
+
+extern "C"
+{
+  void [local.proxy_name]CORBAInit(coil::Properties& prop);
+};
+
+#endif // [local.proxy_include_guard]
+
+"""
+
+
+proxy_cpp = """\
+// -*- C++ -*-
+/*!
+ * @file [local.proxy_cpp] 
+ * @brief [local.iface_name] CORBA proxy for doil
+ * @date $Date$
+ * @author This file was automatically generated form [idl_fname] 
+ *         by omniidl/doil backend
+ *
+ * $Id$
+ */
+
+#include <doil/ImplBase.h>
+#include <doil/corba/CORBAManager.h>
+#include <[local.iface_h_path]>
+#include <[local.proxy_h_path]>
+#include <[typeconv_h_path]>
+#include <doil/corba/BasicTypeConversion.h>
+
+[for ns in local.proxy_ns]
+namespace [ns] 
+{
+[endfor]
+  /*!
+   * @brief ctor
+   */ 
+  [local.proxy_name]::[local.proxy_name](::CORBA::Object_ptr obj)
+   : m_obj([corba.name_fq]::_nil()),
+     m_refcount(1)[for inc in inherits],
+     [inc.local.proxy_name_fq](obj)[endfor]
+
+  {
+    m_obj = [corba.name_fq]::_narrow(obj);
+    if (::CORBA::is_nil(m_obj)) throw std::bad_alloc();
+    m_obj = [corba.name_fq]::_duplicate(m_obj);
+  }
+
+  /*!
+   * @brief dtor
+   */ 
+  [local.proxy_name]::~[local.proxy_name]()
+  {
+    ::CORBA::release(m_obj);
+  }
+
+  [for op in operations]
+
+  /*!
+   * @brief [op.name] 
+   */ 
+  [op.return.local.retn_type] [local.proxy_name]::[op.name]
+([for a in op.args]
+[if-index a is last][a.local.arg_type] [a.local.arg_name]
+[else][a.local.arg_type] [a.local.arg_name], [endif]
+[endfor])
+      throw ([for raise in op.raises]
+[if-index raise is first]
+[raise.local.name_fq]
+[else]
+,
+             [raise.local.name_fq]
+[endif]
+[endfor]
+)
+  {
+    // Convert Local to CORBA.
+    // (The direction of the argument is 'in' or 'inout'.)
+[for a in op.args]
+    [a.corba.base_type] [a.corba.var_name];
+[endfor]
+[for a in op.args][if a.local.direction is "out"][else]
+[if-any a.corba.is_primitive]
+    [a.corba.var_name] = [a.local.arg_name];
+[else]
+[if a.local.tk is "tk_objref"]
+    local_to_corba(const_cast< [a.local.var_type] >([a.local.arg_name]), [a.corba.var_name]);
+[else]
+    local_to_corba([a.local.arg_name], [a.corba.var_name]);
+[endif]
+[endif]
+[endif][endfor]
+
+    // Execute the method. 
+[if op.return.local.tk is "tk_void"][else]
+    [op.return.corba.retn_type] corba_ret;
+    [op.return.local.retn_type] local_ret;
+    corba_ret = [endif]
+m_obj->[op.name]
+([for a in op.args][if-index a is last][a.corba.var_name][else][a.corba.var_name], [endif][endfor]);
+
+    // Convert CORBA to Local.
+    // (The direction of the argument is 'out' or 'inout'.)
+[for a in op.args][if a.local.direction is "in"][else]
+[if-any a.corba.is_primitive]
+    [a.local.arg_name] = [a.corba.var_name];
+[else]
+    corba_to_local([a.corba.var_name], [a.local.arg_name]);
+[endif]
+[endif][endfor]
+
+    // Generate the return value.
+[if op.return.local.tk is "tk_void"][else]
+[if op.return.local.tk is "tk_objref"]
+    corba_to_local(corba_ret, local_ret);
+[elif op.return.local.tk is "tk_enum"]
+    corba_to_local(corba_ret, local_ret);
+[else]
+[if-any op.return.corba.is_primitive]
+    local_ret = corba_ret;
+[else]
+[if op.return.corba.deref_tk is "tk_long"]
+    local_ret = corba_ret;
+[elif op.return.corba.deref_tk is "tk_string"]
+    corba_to_local(corba_ret, local_ret);
+[else]
+    corba_to_local(*corba_ret, local_ret);
+[endif]
+[endif]
+[endif]
+[if op.return.corba.tk is "tk_any"]
+    delete corba_ret; 
+[elif op.return.corba.tk is "tk_struct"]
+    delete corba_ret; 
+[elif op.return.corba.tk is "tk_string"]
+    ::CORBA::string_free(corba_ret); 
+[elif op.return.local.tk is "tk_objref"]
+    ::CORBA::release(corba_ret);
+[elif op.return.corba.tk is "tk_alias"]
+[if op.return.corba.deref_tk is "tk_long"]
+[elif op.return.corba.deref_tk is "tk_string"]
+    ::CORBA::string_free(corba_ret); 
+[else]
+    delete corba_ret; 
+[endif]
+[endif]
+    return local_ret;
+[endif]
+  }
+[endfor]
+
+[for ns in local.proxy_ns]
+}; // namespace [ns] 
+[endfor]
+
+extern "C"
+{
+  void [local.proxy_name]CORBAInit(coil::Properties& prop)
+  {
+    doil::CORBA::CORBAManager& mgr(doil::CORBA::CORBAManager::instance());
+    mgr.registerProxyFactory("[local.proxy_name]",
+                        doil::New< [local.proxy_name_fq] >,
+                        doil::Delete< [local.proxy_name_fq] >);
+  }
+};
+
+"""
+
