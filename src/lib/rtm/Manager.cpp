@@ -26,6 +26,7 @@
 #include <rtm/PeriodicExecutionContext.h>
 #include <rtm/ExtTrigExecutionContext.h>
 #include <rtm/OpenHRPExecutionContext.h>
+#include <rtm/PeriodicECSharedComposite.h>
 #include <rtm/RTCUtil.h>
 #include <rtm/ManagerServant.h>
 #include <fstream>
@@ -99,6 +100,7 @@ namespace RTC
 	    manager->initORB();
 	    manager->initNaming();
 	    manager->initExecContext();
+	    manager->initComposite();
 	    manager->initTimer();
             manager->initManagerServant();
 	  }
@@ -127,6 +129,7 @@ namespace RTC
 	    manager->initORB();
 	    manager->initNaming();
 	    manager->initExecContext();
+	    manager->initComposite();
 	    manager->initTimer();
 	  }
       }
@@ -505,14 +508,6 @@ std::vector<coil::Properties> Manager::getLoadableModules()
     
     //------------------------------------------------------------
     // Component initialization
-    if (comp->initialize() != RTC::RTC_OK)
-      {
-	RTC_TRACE(("RTC initialization failed: %s", module_name));
-	comp->exit();
-	RTC_TRACE(("%s was finalized", module_name));
-	return NULL;
-      }
-    RTC_TRACE(("RTC initialization succeeded: %s", module_name));
     if(bindExecutionContext(comp) != true)
       {
         RTC_TRACE(("RTC bindExecutionContext failed: %s", module_name));
@@ -521,6 +516,14 @@ std::vector<coil::Properties> Manager::getLoadableModules()
         return NULL;
       }
     RTC_TRACE(("RTC bindExecutionContext succeeded: %s", module_name));
+    if (comp->initialize() != RTC::RTC_OK)
+      {
+	RTC_TRACE(("RTC initialization failed: %s", module_name));
+	comp->exit();
+	RTC_TRACE(("%s was finalized", module_name));
+	return NULL;
+      }
+    RTC_TRACE(("RTC initialization succeeded: %s", module_name));
     //------------------------------------------------------------
     // Bind component to naming service
     registerComponent(comp);
@@ -1085,6 +1088,14 @@ std::vector<coil::Properties> Manager::getLoadableModules()
     PeriodicExecutionContextInit(this);
     ExtTrigExecutionContextInit(this);
     OpenHRPExecutionContextInit(this);
+    return true;
+  }
+
+  bool Manager::initComposite()
+  {
+    RTC_TRACE(("Manager::initComposite()"));
+    PeriodicECSharedCompositeInit(this);
+
     return true;
   }
   

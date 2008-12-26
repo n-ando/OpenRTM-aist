@@ -57,7 +57,8 @@ COMP_SRC =                           \
 	RTObject.cpp                 \
 	ConfigAdmin.cpp              \
 	SdoConfiguration.cpp         \
-	SdoOrganization.cpp
+	SdoOrganization.cpp          \
+	PeriodicECSharedComposite.cpp
 
 PORT_SRC =                    \
 	CorbaPort.cpp         \

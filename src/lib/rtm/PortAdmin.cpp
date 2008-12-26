@@ -94,8 +94,10 @@ namespace RTC
   PortProfileList PortAdmin::getPortProfileList() const
   {
     PortProfileList port_profs;
-    port_prof_collect p(port_profs);
-    m_portServants.for_each(p);
+    //    port_prof_collect p(port_profs);
+    port_prof_collect2 p(port_profs);
+    //    m_portServants.for_each(p);
+    ::CORBA_SeqUtil::for_each(m_portRefs, p);
     return port_profs;
   }
   
@@ -152,6 +154,11 @@ namespace RTC
     m_portServants.registerObject(&port);
   }
   
+  void PortAdmin::registerPort(PortService_ptr port)
+  {
+    CORBA_SeqUtil::push_back(m_portRefs, port);
+  }
+  
   /*!
    * @if jp
    * @brief Port の登録を解除する
@@ -173,6 +180,26 @@ namespace RTC
 	port.setPortRef(RTC::PortService::_nil());
 	
 	m_portServants.unregisterObject(tmp);
+      }
+    catch (...)
+      {
+	;
+      }
+  }
+  void PortAdmin::deletePort(PortService_ptr port)
+  {
+    try
+      {
+        //	port.disconnect_all();
+	// port.shutdown();
+	
+	const char* tmp(port->get_port_profile()->name);
+	CORBA_SeqUtil::erase_if(m_portRefs, find_port_name(tmp));
+	
+        //	m_pPOA->deactivate_object(*m_pPOA->servant_to_id(&port));
+        //	port.setPortRef(RTC::PortService::_nil());
+	
+        //	m_portServants.unregisterObject(tmp);
       }
     catch (...)
       {

@@ -217,6 +217,7 @@ namespace RTC
      * @endif
      */
     void registerPort(PortBase& port);
+    void registerPort(PortService_ptr port);
     
     /*!
      * @if jp
@@ -242,6 +243,7 @@ namespace RTC
      * @endif
      */
     void deletePort(PortBase& port);
+    void deletePort(PortService_ptr port);
     
     /*!
      * @if jp
@@ -326,6 +328,18 @@ namespace RTC
       void operator()(const PortBase* port)
       {
 	CORBA_SeqUtil::push_back(m_p, port->getPortProfile());
+      }
+    private:
+      PortProfileList& m_p;
+    };
+
+    class port_prof_collect2
+    {
+    public:
+      port_prof_collect2(PortProfileList& p) : m_p(p) {}
+      void operator()(const PortService_ptr port)
+      {
+	CORBA_SeqUtil::push_back(m_p, *(port->get_port_profile()));
       }
     private:
       PortProfileList& m_p;
