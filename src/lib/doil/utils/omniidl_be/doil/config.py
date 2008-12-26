@@ -43,9 +43,11 @@ class ConfigurationState:
             'Interface':             False,
             'CORBAServant':          False,
             'CORBAAdapter':          False,
+            'CORBAProxy':            False,
             'IceSlice':              False,
             'IceServant':            False,
             'IceAdapter':            False,    
+            'IceProxy':              False,    
             #
             # Type mapping
             #
@@ -81,6 +83,17 @@ class ConfigurationState:
             'AdapterNs':             [],
             # servant class header directory
             'AdapterDir':            '',
+            #
+            # Proxy stuff
+            #
+            # Suffix of generated proxy class
+            'ProxySuffix':           'Proxy',
+            # Prefix of generated proxy class
+            'ProxyPrefix':           '',
+            # Namespace of proxy class
+            'ProxyNs':               [],
+            # proxy class header directory
+            'ProxyDir':              '',
             #
             # Interface stuff
             #
