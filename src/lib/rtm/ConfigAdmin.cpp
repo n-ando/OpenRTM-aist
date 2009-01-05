@@ -19,6 +19,7 @@
 #include <rtm/ConfigAdmin.h>
 #include <algorithm>
 #include <assert.h>
+#include <string.h>
 
 namespace RTC
 {
