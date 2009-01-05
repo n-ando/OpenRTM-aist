@@ -22,6 +22,8 @@
 
 #include <pthread.h>
 #include <algorithm>
+#include <ctime>
+
 
 namespace coil
 {
