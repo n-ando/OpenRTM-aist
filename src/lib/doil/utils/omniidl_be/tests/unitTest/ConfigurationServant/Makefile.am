@@ -45,12 +45,14 @@ ConfigurationServantTests_SOURCES += $(open_rtm_dir)/doil/ORBManager.cpp
 ConfigurationServantTests_SOURCES += $(open_rtm_dir)/doil/corba/CORBAManager.cpp
 
 ConfigurationServantTests_LDFLAGS = -L$(libdir)
+ConfigurationServantTests_LDFLAGS += -L../stubs
 
 ConfigurationServantTests_LDADD   = -lomniORB4
 ConfigurationServantTests_LDADD  += -lomnithread
 ConfigurationServantTests_LDADD  += -lomniDynamic4
 ConfigurationServantTests_LDADD  += -lcoil
 #ConfigurationServantTests_LDADD  += -lcppunit
+ConfigurationServantTests_LDADD  += -lstubs
 ConfigurationServantTests_LDADD  += $(target_srcdir)/ConfigurationServant.o
 ConfigurationServantTests_LDADD  += $(target_srcdir)/RTCTypeConversion.o
 ConfigurationServantTests_LDADD  += $(target_srcdir)/SDOPackageTypeConversion.o
@@ -70,4 +72,3 @@ clean-local:
 	*~ *core                            \
 	Makefile.old                        \
 	*.cc *.hh *.i *.a *.c *.inl
-
