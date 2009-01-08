@@ -14,6 +14,7 @@ AC_PROG_CC
 # Checks for libraries.
 # FIXME: Replace `main' with a function in `-lcppunit':
 AC_CHECK_LIB([cppunit], [main])
+AC_PROG_RANLIB
 
 # Checks for header files.
 
@@ -46,5 +47,6 @@ AC_CONFIG_FILES([Makefile
                  SDOServant/Makefile
                  SDOServiceServant/Makefile
                  SDOSystemElementServant/Makefile
+                 stubs/Makefile
                  ])
 AC_OUTPUT
