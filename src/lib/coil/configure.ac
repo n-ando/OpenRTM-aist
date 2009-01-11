@@ -22,6 +22,7 @@ AC_INIT(coil, 1.0, n-ando@aist.go.jp, coil)
 AC_CONFIG_AUX_DIR([.])
 AM_INIT_AUTOMAKE([dist-bzip2 tar-pax])
 AM_CONFIG_HEADER([config_coil.h])
+AC_CONFIG_FILES([utils/coil-config/libcoil.pc:utils/coil-config/libcoil.pc.in])
 
 dnl ------------------------------------------------------------
 dnl rename config header's PACKAGE_* definition
@@ -43,6 +44,7 @@ COIL_MAJOR_VERSION=$major_version
 COIL_MINOR_VERSION=$minor_version
 COIL_REVISION_NUM=$revision_num
 COIL_SHORT_VERSION=$short_version
+COIL_DESCRIPTION='Common Operating-system Infrastructure Layer'
 
 AC_DEFINE_UNQUOTED([COIL_VERSION],       "$VERSION",       [COIL version])
 AC_DEFINE_UNQUOTED([COIL_MAJOR_VERSION], "$major_version", [COIL major version])
@@ -76,6 +78,12 @@ dnl  configure arguments definition
 dnl ------------------------------------------------------------
 
 dnl  ACE directory
+AC_ARG_WITH(pkgconfigdir,
+	AC_HELP_STRING([--with-pkgconfigdir],
+	[Use the specified pkgconfig dir (default is libdir/pkgconfig]),
+	[pkgconfigdir=${withval}],
+	[pkgconfigdir='${libdir}/pkgconfig'])
+AC_MSG_NOTICE([pkgconfig directory is ${pkgconfigdir}])
 AC_ARG_WITH(ace,              [  --with-ace                      With ACE])
 AC_ARG_WITH(ace-includes,     [  --with-ace-includes=dir         Find ACE include files installation below dir(without "include")])
 AC_ARG_WITH(ace-lib,          [  --with-ace-lib=dir              Find ACE lib files installation below dir(without "lib"])
@@ -426,6 +434,7 @@ AC_SUBST(LDSO)
 AC_SUBST(SOEXT)
 AC_SUBST(LDSOOPTS)
 AC_SUBST(LDSOLIBS)
+AC_SUBST(pkgconfigdir)
 
 dnl RTM version related options
 AC_SUBST(COIL_VERSION)
@@ -434,6 +443,7 @@ AC_SUBST(COIL_MINOR_VERSION)
 AC_SUBST(COIL_REVISION_NUM)
 AC_SUBST(COIL_SHORT_VERSION)
 AC_SUBST(COIL_PLATFORM)
+AC_SUBST(COIL_DESCRIPTION)
 dnl ORB related options
 AC_SUBST(ORB)
 AC_SUBST(IDLC)
@@ -533,6 +543,8 @@ AC_OUTPUT([Makefile
 	tests/Timer/Makefile
 	tests/TimeValue/Makefile
 	tests/UUID/Makefile
+	utils/Makefile
+	utils/coil-config/Makefile
 	])
 
 
