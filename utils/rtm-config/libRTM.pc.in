@@ -1,0 +1,21 @@
+prefix=@prefix@
+exec_prefix=@exec_prefix@
+libdir=@libdir@
+includedir=@includedir@
+rtm_prefix=@prefix@
+rtm_exec_prefix=@exec_prefix@
+rtm_cxx=@CXX@
+rtm_cflags=@CXXFLAGS@ -I${prefix}/include -I${prefix}/include/rtm/idl
+rtm_libs=@LDFLAGS@ -L${prefix}/lib @LIBS@ -lRTM
+rtm_libdir=@pkglibdir@
+rtm_version=@RTM_VERSION@
+rtm_orb=@ORB@
+rtm_idlc=@IDLC@
+rtm_idlflags=@IDLFLAGS@
+
+Name: @PACKAGE@
+Description: @RTM_DESCRIPTION@
+Version: @RTM_VERSION@
+Requires:
+Libs: ${rtm_libs}
+Cflags: ${rtm_cflags}

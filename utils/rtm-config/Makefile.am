@@ -11,6 +11,9 @@ ORB = @ORB@
 IDLC = @IDLC@
 IDLFLAGS = @IDL_FLAGS@
 
+pkgconfigdir = @pkgconfigdir@
+pkgconfig_DATA = libRTM.pc
+
 bin_SCRIPTS = rtm-config
 
 rtm-config: rtm-config.in
@@ -32,4 +35,6 @@ rtm-config: rtm-config.in
 EXTRA_DIST = rtm-config.in
 
 clean-local:
-	rm -rf rtm-config *~ *core
+	rm -f libRTM.pc
+	rm -f rtm-config
+	rm -rf *~ *core
