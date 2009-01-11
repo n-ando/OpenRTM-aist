@@ -22,6 +22,7 @@ AC_INIT(OpenRTM-aist, 0.4.2, n-ando@aist.go.jp, OpenRTM-aist)
 AC_CONFIG_AUX_DIR([.])
 AM_INIT_AUTOMAKE([dist-bzip2 tar-pax])
 AM_CONFIG_HEADER([src/lib/rtm/config_rtc.h])
+AC_CONFIG_FILES([utils/rtm-config/libRTM.pc:utils/rtm-config/libRTM.pc.in])
 
 dnl ------------------------------------------------------------
 dnl rename config header's PACKAGE_* definition
@@ -45,6 +46,7 @@ RTM_MAJOR_VERSION=$major_version
 RTM_MINOR_VERSION=$minor_version
 RTM_REVISION_NUM=$revision_num
 RTM_SHORT_VERSION=$short_version
+RTM_DESCRIPTION='An OMG RTC compliant middleware for robots.'
 
 AC_DEFINE_UNQUOTED([RTM_VERSION],       "$VERSION",       [RTM version])
 AC_DEFINE_UNQUOTED([RTM_MAJOR_VERSION], "$major_version", [RTM major version])
@@ -78,6 +80,12 @@ dnl  configure arguments definition
 dnl ------------------------------------------------------------
 
 dnl  ACE directory
+AC_ARG_WITH(pkgconfigdir,
+	AC_HELP_STRING([--with-pkgconfigdir],
+	[Use the specified pkgconfig dir (default is libdir/pkgconfig]),
+	[pkgconfigdir=${withval}],
+	[pkgconfigdir='${libdir}/pkgconfig'])
+AC_MSG_NOTICE([pkgconfig directory is ${pkgconfigdir}])
 AC_ARG_WITH(ace-includes,     [  --with-ace-includes=dir         Find ACE include files installation below dir(without "include")])
 AC_ARG_WITH(ace-lib,          [  --with-ace-lib=dir              Find ACE lib files installation below dir(without "lib"])
 
@@ -97,13 +105,14 @@ AC_ARG_WITH(generic-orb,      [  --with-generic-orb              Use other CORBA
 AC_ARG_WITH(generic-orb-lib,  [  --with-generic-orb-lib	=libs    ORB libraries (-l...)])
 
 dnl  Script wrapper selection
-AC_ARG_WITH(python,           [  --with-python=dir               Find Python installation below dir])
-AC_ARG_WITH(ruby,             [  --with-ruby=dir                 Find Ruby installation below dir])
-AC_ARG_WITH(perl,             [  --with-perl=dir                 Find Perl installation below dir])
-AC_ARG_WITH(tcl,              [  --with-tcl=dir                  Find Tcl installation below dir])
-AC_ARG_WITH(euslisp,          [  --with-euslisp=dir              Find EusLisp installation below dir])
+#AC_ARG_WITH(python,           [  --with-python=dir               Find Python installation below dir])
+#AC_ARG_WITH(ruby,             [  --with-ruby=dir                 Find Ruby installation below dir])
+#AC_ARG_WITH(perl,             [  --with-perl=dir                 Find Perl installation below dir])
+#AC_ARG_WITH(tcl,              [  --with-tcl=dir                  Find Tcl installation below dir])
+#AC_ARG_WITH(euslisp,          [  --with-euslisp=dir              Find EusLisp installation below dir])
 
 dnl Additional compile options
+
 AC_ARG_ENABLE(debug,          [  --enable-debug                  Compile using -g])
 AC_ARG_ENABLE(optimize,       [  --disable-optimize              Don't compile using -O])
 AC_ARG_WITH(includes,         [  --with-includes=dirs            Additional include dirs (separated by ':')])
@@ -1342,6 +1351,7 @@ AC_SUBST(LDSO)
 AC_SUBST(SOEXT)
 AC_SUBST(LDSOOPTS)
 AC_SUBST(LDSOLIBS)
+AC_SUBST(pkgconfigdir)
 
 dnl RTM version related options
 AC_SUBST(RTM_VERSION)
@@ -1349,6 +1359,7 @@ AC_SUBST(RTM_MAJOR_VERSION)
 AC_SUBST(RTM_MINOR_VERSION)
 AC_SUBST(RTM_REVISION_NUM)
 AC_SUBST(RTM_SHORT_VERSION)
+AC_SUBST(RTM_DESCRIPTION)
 
 dnl ORB related options
 AC_SUBST(ORB)
