@@ -91,7 +91,13 @@ namespace RTM
 
   RTC::RTObject_ptr ManagerServant::create_component(const char* module_name)
   {
+    std::cout << "Manager::create_component: " << module_name << std::endl;
     RTC::RtcBase* rtc = m_mgr.createComponent(module_name);
+    if (rtc == NULL)
+      {
+        std::cout << "RTC not found: " << module_name << std::endl;
+        return RTC::RTObject::_nil();
+      }
     return rtc->getObjRef();
   }
   
