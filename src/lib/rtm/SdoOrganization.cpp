@@ -285,8 +285,8 @@ namespace SDOPackage
     throw (CORBA::SystemException,
 	   InvalidParameter, NotAvailable, InternalError)
   {
-    if (sdos.length() == 0)
-      throw InvalidParameter("set_members(): SDOList is empty.");
+    if (sdos.length() < 0)
+      throw InvalidParameter("set_members(): number of SDOList is invalid.");
     try
       {
 	m_memberList = sdos;
@@ -310,8 +310,11 @@ namespace SDOPackage
     throw (CORBA::SystemException,
 	   InvalidParameter, NotAvailable, InternalError)
   {
+    if (sdo_list.length() < 0)
+      throw InvalidParameter("set_members(): number of SDOList is invalid.");
     try
       {
+        if (sdo_list.length() == 0) return true;
 	CORBA_SeqUtil::push_back_list(m_memberList, sdo_list);
 	return true;
       }

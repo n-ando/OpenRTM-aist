@@ -408,7 +408,7 @@ namespace RTC
 		       bool (*trans)(VarType&, const char*) = coil::stringTo)
     {
       if (isExist(param_name)) return false;
-      if (!coil::stringTo(var, def_val)) return false;
+      if (!trans(var, def_val)) return false;
       m_params.push_back(new Config<VarType>(param_name, var, def_val, trans));
       return true;
     }

@@ -49,21 +49,139 @@ namespace SDOPackage
   public:
     PeriodicECOrganization(::RTC::RTObject_impl* rtobj);
     virtual ~PeriodicECOrganization();
+
+    /*!
+     * @if jp
+     * 
+     * @brief [CORBA interface] Organizationメンバーを追加する
+     *
+     * Organization が保持するメンバーリストに与えられたSDOListを追加する。
+     * 
+     * @param sdo_list 追加される SDO メンバーのリスト
+     * @return 追加が成功したかどうかがboolで返される
+     *
+     * @else
+     * 
+     * @brief [CORBA interface] Add Organization member
+     *
+     * This operation adds the given SDOList to the existing organization's 
+     * member list
+     * 
+     * @param sdo_list SDO member list to be added
+     * @return boolean will returned if the operation succeed
+     *
+     * @endif
+     */
     virtual ::CORBA::Boolean add_members(const SDOList& sdo_list)
       throw (::CORBA::SystemException,
 	     InvalidParameter, NotAvailable, InternalError);
+
+    /*!
+     * @if jp
+     * 
+     * @brief [CORBA interface] Organizationメンバーをセットする
+     *
+     * Organization が保持するメンバーリストを削除し、与えられた
+     * SDOListを新規にセットする。
+     * 
+     * @param sdo_list 新規にセットされる SDO メンバーのリスト
+     * @return 追加が成功したかどうかがboolで返される
+     *
+     * @else
+     * 
+     * @brief [CORBA interface] Set Organization member
+     *
+     * This operation removes existing member list and sets the given
+     * SDOList to the existing organization's member list
+     * 
+     * @param sdo_list SDO member list to be set
+     * @return boolean will returned if the operation succeed
+     *
+     * @endif
+     */
     virtual ::CORBA::Boolean set_members(const SDOList& sdos)
       throw (::CORBA::SystemException,
 	     InvalidParameter, NotAvailable, InternalError);
+
+    /*!
+     * @if jp
+     * 
+     * @brief [CORBA interface] Organizationメンバーを削除する
+     *
+     * Organization が保持するメンバーリスト内の特定のSDOを削除する。
+     * 
+     * @param id 削除される SDO の ID
+     * @return 追加が成功したかどうかがboolで返される
+     *
+     * @else
+     * 
+     * @brief [CORBA interface] Remove a member of Organization
+     *
+     * This operation removes a SDO from existing member list by specified ID.
+     * 
+     * @param id The ID of the SDO to be removed
+     * @return boolean will returned if the operation succeed
+     *
+     * @endif
+     */
     virtual ::CORBA::Boolean remove_member(const char* id)
       throw (::CORBA::SystemException,
 	     InvalidParameter, NotAvailable, InternalError);
 
   protected:
+    /*!
+     * @if jp
+     * @brief SDOからDFCへの変換
+     * @else
+     * @brief Conversion from SDO to DFC
+     * @endif
+     */
+    bool sdoToDFC(const SDO_ptr sdo, ::OpenRTM::DataFlowComponent_ptr& dfc);
+
+    /*!
+     * @if jp
+     * @brief Owned ExecutionContext を停止させる
+     * @else
+     * @brief Stop Owned ExecutionContexts
+     * @endif
+     */
+    void stopOwnedEC(::OpenRTM::DataFlowComponent_ptr dfc);
+
+    /*!
+     * @if jp
+     * @brief DFC に Organization オブジェクトを与える
+     * @else
+     * @brief Set Organization object to target DFC 
+     * @endif
+     */
+    void setOrganizationToTarget(::OpenRTM::DataFlowComponent_ptr dfc);
+
+    /*!
+     * @if jp
+     * @brief Composite の ExecutionContext を DFC にセットする
+     * @else
+     * @brief Set CompositeRTC's ExecutionContext to the given DFC
+     * @endif
+     */
+    void setCompositeECToTarget(::OpenRTM::DataFlowComponent_ptr dfc);
+
+    /*!
+     * @if jp
+     * @brief ポートを委譲する
+     * @else
+     * @brief Delegate given RTC's ports to the Composite
+     * @endif
+     */
+    void delegatePort(::OpenRTM::DataFlowComponent_ptr dfc);
+
+
+  protected:
     ::RTC::RTObject_impl* m_rtobj;
+    ::RTC::ExecutionContext_ptr m_ec;
     ::RTC::RTCList m_rtcMembers;
 
   private:
+
     class set_member
     {
     public:
@@ -80,50 +198,38 @@ namespace SDOPackage
 
       void operator()(const SDO_ptr sdo)
       {
-        // std::cout << "set_member::operator()(const SDO_ptr sdo)" << std::endl;
         if (::CORBA::is_nil(sdo)) return;
 
-        // std::cout << "operator()" << std::endl;
+        // narrowing: SDO -> RTC (DataFlowComponent)
         ::OpenRTM::DataFlowComponent_var dfc;
         dfc = ::OpenRTM::DataFlowComponent::_narrow(sdo);
         if (::CORBA::is_nil(dfc)) return;
 
-        // std::cout << "DataFlowComp" << std::endl;
-
-        // stop target RTC's ec
+        // stop target RTC's ExecutionContext
         ::RTC::ExecutionContextList_var ecs;
         ecs = dfc->get_owned_contexts();
-
-        // std::cout << "EC: " << ecs->length() << std::endl;
-
         for (::CORBA::ULong i(0), len(ecs->length()); i < len; ++i)
           {
-            // std::cout << "no. " << i << " EC stopped" << std::endl;
             ecs[i]->stop();
           }
 
-        // get configuration object
+        // get given RTC's configuration object
         Configuration_var conf;
         conf = dfc->get_configuration();
         if (::CORBA::is_nil(conf)) return;
-        // std::cout << "getConf" << std::endl;
 
         // set organization to target RTC's conf
         conf->add_organization(m_org);
-        // std::cout << "add_org()" << std::endl;
-
         // set ec to target RTC
         m_ec->add_component(dfc);
-        // std::cout << "add_cmop" << std::endl;
 
-        // port
+        // port delegation
         ::RTC::PortServiceList_var plist = dfc->get_ports();
-        //        ::RTC::ComponentProfile_var prof = m_rtobj->get_component_profile();
-        //        prof->port_profile
-        // std::cout << "port attach,,, no. " << plist->length() << std::endl;
         for (::CORBA::ULong i(0), len(plist->length()); i < len; ++i)
           {
-            // std::cout << "port no.: " << i << std::endl;
+            std::string port_name;
+            ::RTC::PortProfile_var prof = plist[i]->get_port_profile();
+            std::cout << "port name:" << prof->name << std::endl;
             m_rtobj->registerPort(::RTC::PortService::_duplicate(plist[i]));
           }
 
@@ -217,25 +323,6 @@ namespace SDOPackage
     };
   };
 };
-
-template<typename T>
-std::istream& operator>>(std::istream& is, std::vector<T>& v)
-{
-  std::string s;
-  std::vector<std::string> sv;
-  is >> s;
-  sv = coil::split(s ,",");
-  v.resize(sv.size());
-  for (int i(0), len(sv.size()); i < len; ++i)
-    {
-      T tv;
-      if (coil::stringTo(tv, sv[i].c_str()))
-	{
-	  v[i] = tv;
-	}
-    }
-  return is;
-}
 
 
 /*!

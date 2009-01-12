@@ -64,6 +64,7 @@ namespace RTC
       m_created(true), m_alive(false),
       m_properties(default_conf), m_configsets(*(m_properties.getNode("conf")))
   {
+    m_objref = this->_this();
     m_pSdoConfigImpl = new SDOPackage::Configuration_impl(m_configsets);
     m_pSdoConfig = m_pSdoConfigImpl->getObjRef();
   }
@@ -84,6 +85,7 @@ namespace RTC
       m_created(true), m_alive(false),
       m_properties(default_conf), m_configsets(*(m_properties.getNode("conf")))
   {
+    m_objref = this->_this();
     m_pSdoConfigImpl = new SDOPackage::Configuration_impl(m_configsets);
     m_pSdoConfig = m_pSdoConfigImpl->getObjRef();
   }
@@ -577,6 +579,19 @@ namespace RTC
     ReturnCode_t ret(RTC::RTC_ERROR);
     try
       {
+        std::string active_config;
+        active_config = m_properties["active_config"];
+        if (active_config.empty())
+          {
+            m_configsets.update("default");
+          }
+        else
+          {
+            if (m_configsets.haveConfig(active_config.c_str()))
+              m_configsets.update(active_config.c_str());
+            else
+              m_configsets.update("default");
+          }
 	ret = onInitialize();
       }
     catch (...)
@@ -1210,7 +1225,8 @@ namespace RTC
    */
   RTObject_ptr RTObject_impl::getObjRef() const
   {
-    return RTC::RTObject::_duplicate(m_objref);
+    RTObject_ptr obj = RTC::RTObject::_duplicate(m_objref);
+    return obj;
   }
   
   /*!
