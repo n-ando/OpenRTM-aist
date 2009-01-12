@@ -51,7 +51,6 @@ namespace RTC
   class CorbaNaming;
   class ModuleManager;
   class NamingManager;
-  class CorbaObjectManager;
   class Manager;
 
   
@@ -1305,15 +1304,6 @@ namespace RTC
      * @endif
      */
     NamingManager* m_namingManager;
-    
-    /*!
-     * @if jp
-     * @brief CORBA ObjectManager へのポインタ
-     * @else
-     * @brief The pointer to the CORBA ObjectManager
-     * @endif
-     */
-    CorbaObjectManager* m_objManager;
     
     /*!
      * @if jp

@@ -38,7 +38,6 @@ UTIL_SRC =             \
 
 MGR_SRC =                      \
 	CorbaNaming.cpp        \
-	CorbaObjectManager.cpp \
 	Factory.cpp            \
 	ECFactory.cpp          \
 	Manager.cpp            \

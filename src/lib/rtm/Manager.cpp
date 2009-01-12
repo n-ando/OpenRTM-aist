@@ -20,7 +20,6 @@
 #include <rtm/ManagerConfig.h>
 #include <rtm/ModuleManager.h>
 #include <rtm/CorbaNaming.h>
-#include <rtm/CorbaObjectManager.h>
 #include <rtm/NamingManager.h>
 #include <rtm/RTC.h>
 #include <rtm/PeriodicExecutionContext.h>
@@ -899,7 +898,6 @@ std::vector<coil::Properties> Manager::getLoadableModules()
 	  }
 	// Get the POAManager
 	m_pPOAManager = m_pPOA->the_POAManager();
-	m_objManager = new CorbaObjectManager(m_pORB, m_pPOA);
       }
     catch (...)
       {
