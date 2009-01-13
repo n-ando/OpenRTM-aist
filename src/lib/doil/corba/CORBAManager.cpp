@@ -161,6 +161,23 @@ namespace CORBA
     else return ALREADY_EXISTS;
   }
 
+
+  ReturnCode_t CORBAManager::registerProxyFactory(const char* id,
+                                             doil::ProxyNewFunc new_func,
+                                             doil::ProxyDeleteFunc delete_func)
+    throw()
+  {
+    if (id == NULL) return INVALID_ARGS;
+    if (new_func == NULL) return INVALID_ARGS;
+    if (delete_func == NULL) return INVALID_ARGS;
+
+    bool ret;
+    ProxyFactory* factory = new ProxyFactory(id, new_func, delete_func);
+    ret = m_factory_proxy.registerObject(factory);
+    if (ret) return OK;
+    else return ALREADY_EXISTS;
+  }
+
   /*!
    * @if jp
    * @brief オブジェクトをactivateする
@@ -178,9 +195,13 @@ namespace CORBA
     std::cout << "CORBAManager::activateObject: name " << impl->name() << std::endl;
     ServantFactory* factory = m_factory.find(id);
 
+#if 0
+    if (factory != NULL)
+    {
+#else
     // Factory NOT_FOUND
     if (factory == NULL) return NOT_FOUND;
-
+#endif
     // INVALID_ARGS
     try
       {
@@ -206,6 +227,18 @@ namespace CORBA
       {
         return UNKNOWN;
       }
+#if 0
+//
+//for unit tests
+//
+    }
+    else
+    {
+        ProxyFactory* factory_proxy = m_factory_proxy.find(id);
+        if (factory_proxy == NULL) return NOT_FOUND;
+        doil::ServantBase* svt = factory->create(impl);
+    }
+#endif
     return UNKNOWN;
   }
 
