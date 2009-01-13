@@ -23,8 +23,10 @@
 #include <coil/Guard.h>
 #include <doil/IORB.h>
 #include <doil/ServantFactory.h>
+#include <doil/ProxyFactory.h>
 #include <doil/corba/CORBA.h>
 #include <doil/corba/CORBAServantBase.h>
+#include <doil/corba/CORBAProxyBase.h>
 #include <doil/ObjectManager.h>
 
 namespace doil
@@ -48,7 +50,14 @@ namespace CORBA
     : public doil::IORB
   {
   public:
-    doil::LocalBase* toLocal(::CORBA::Object_ptr& obj);
+    //
+    //for unit tests
+    //
+//    doil::LocalBase* toLocal(::CORBA::Object_ptr& obj);
+    doil::LocalBase* toLocal(::CORBA::Object_ptr& obj)
+    {
+        return NULL;
+    }
     /*!
      * @if jp
      * @brief 初期化関数
@@ -122,7 +131,16 @@ namespace CORBA
                     doil::ServantNewFunc new_func,
                     doil::ServantDeleteFunc delete_func)
       throw();
-
+#if 1
+    //
+    //for unit tests
+    //
+    virtual ReturnCode_t
+    registerProxyFactory(const char* id,
+                    doil::ProxyNewFunc new_func,
+                    doil::ProxyDeleteFunc delete_func)
+      throw();
+#endif
     /*!
      * @if jp
      * @brief オブジェクトをactivateする
@@ -580,6 +598,58 @@ namespace CORBA
     // Active object map
     ObjectManager<const char*, Entry, EntryPred> m_map;
 
+
+
+#if 0
+    //
+    // for unit test
+    //
+    // Entry class for active object map
+    class EntryProxy
+    {
+    public:
+      EntryProxy(ImplBase* impl, CORBAProxyBase* proxy,
+            ::CORBA::Object_ptr objref)
+        : impl_(impl), proxy_(proxy), objref_(objref)
+      {
+      }
+      virtual ~EntryProxy()
+      {
+      }
+      ImplBase* impl_;
+      CORBAProxyBase* proxy_;
+      ::CORBA::Object_ptr objref_;
+    };
+
+    //
+    // for unit test
+    //
+    // Predicate class for active object map
+    class EntryPredProxy
+    {
+    public:
+      EntryPredProxy(const char* name)
+        : m_name(name)
+      {
+      }
+      EntryPredProxy(Entry* entry)
+        : m_name(entry->impl_->name())
+      {
+      }
+      bool operator()(Entry* entry)
+      {
+        return m_name == entry->impl_->name();
+      }
+      std::string m_name;
+    };
+    
+    //
+    // for unit test
+    //
+    // Active object map
+    ObjectManager<const char*, EntryProxy, EntryPredProxy> m_map_proxy;
+#endif
+
     // Predicate functor for Factory map
     class FactoryPred
     {
@@ -592,9 +662,31 @@ namespace CORBA
       }
       std::string m_id;
     };
-
     // Servant factory map
     ObjectManager<const char*, ServantFactory, FactoryPred> m_factory;
+
+#if 1
+    //
+    // for unit test
+    //
+    // Predicate functor for Factory map
+    class ProxyFactoryPred
+    {
+    public:
+      ProxyFactoryPred(const char* id) : m_id(id) {}
+      ProxyFactoryPred(ProxyFactory* factory) : m_id(factory->id()) {}
+      bool operator()(ProxyFactory* factory)
+      {
+        return m_id == factory->id();
+      }
+      std::string m_id;
+    };
+    //
+    // for unit test
+    //
+    // Servant factory map
+    ObjectManager<const char*, ProxyFactory, ProxyFactoryPred> m_factory_proxy;
+#endif
   };
 };
 };
