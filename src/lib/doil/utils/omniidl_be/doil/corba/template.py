@@ -930,7 +930,7 @@ proxy_h = """\
 #include <coil/Mutex.h>
 #include <coil/Guard.h>
 #include <doil/corba/CORBAManager.h>
-#include <doil/ImplBase.h>
+#include <doil/corba/CORBAProxyBase.h>
 #include <[local.iface_h]>
 [for inc in inherits]
 #include <[inc.local.proxy_h]>
@@ -946,7 +946,7 @@ namespace [ns]
 [endfor]
 
   class [local.proxy_name] 
-  : public virtual ::doil::LocalBase,
+  : public virtual ::doil::CORBA::CORBAProxyBase,
 [for inc in inherits]
     public virtual [inc.local.proxy_name_fq],
 [endfor]
@@ -995,6 +995,7 @@ namespace [ns]
 
   private:
     [corba.name_fq]_ptr m_obj;
+  private:
     std::string m_name;
     Mutex m_refcountMutex;
     int m_refcount;
@@ -1032,7 +1033,6 @@ proxy_cpp = """\
  * $Id$
  */
 
-#include <doil/ImplBase.h>
 #include <doil/corba/CORBAManager.h>
 #include <[local.iface_h_path]>
 #include <[local.proxy_h_path]>
@@ -1050,6 +1050,8 @@ namespace [ns]
    : m_obj([corba.name_fq]::_nil()),
      m_refcount(1)[for inc in inherits],
      [inc.local.proxy_name_fq](obj)[endfor]
+//   : m_obj([corba.name_fq]::_nil())[for inc in inherits],
+//     [inc.local.proxy_name_fq](obj)[endfor]
 
   {
     m_obj = [corba.name_fq]::_narrow(obj);
@@ -1092,7 +1094,8 @@ namespace [ns]
 [endfor]
 [for a in op.args][if a.local.direction is "out"][else]
 [if-any a.corba.is_primitive]
-    [a.corba.var_name] = [a.local.arg_name];
+//    [a.corba.var_name] = [a.local.arg_name];
+    local_to_corba([a.local.arg_name], [a.corba.var_name]);
 [else]
 [if a.local.tk is "tk_objref"]
     local_to_corba(const_cast< [a.local.var_type] >([a.local.arg_name]), [a.corba.var_name]);
@@ -1114,7 +1117,8 @@ m_obj->[op.name]
     // (The direction of the argument is 'out' or 'inout'.)
 [for a in op.args][if a.local.direction is "in"][else]
 [if-any a.corba.is_primitive]
-    [a.local.arg_name] = [a.corba.var_name];
+//    [a.local.arg_name] = [a.corba.var_name];
+    corba_to_local([a.corba.var_name], [a.local.arg_name]);
 [else]
     corba_to_local([a.corba.var_name], [a.local.arg_name]);
 [endif]
@@ -1128,10 +1132,12 @@ m_obj->[op.name]
     corba_to_local(corba_ret, local_ret);
 [else]
 [if-any op.return.corba.is_primitive]
-    local_ret = corba_ret;
+//    local_ret = corba_ret;
+    corba_to_local(corba_ret, local_ret);
 [else]
 [if op.return.corba.deref_tk is "tk_long"]
-    local_ret = corba_ret;
+//    local_ret = corba_ret;
+    corba_to_local(corba_ret, local_ret);
 [elif op.return.corba.deref_tk is "tk_string"]
     corba_to_local(corba_ret, local_ret);
 [else]
