@@ -25,8 +25,9 @@
 #include <string>
 #include <iostream>
 #include <sstream>
-#include <idl/SDOPackageSkel.h>
+#include <idl/RTCSkel.h>
 #include <ExecutionContextProxy.h>
+#include <ILightweightRTObject.h>
 /*!
  * @class ExecutionContextProxyTests class
  * @brief ExecutionContextProxy test
@@ -60,6 +61,207 @@ namespace ExecutionContextProxy
     std::vector<std::string> m_log;
   };
 
+  /*!
+   * 
+   * 
+   *
+   */
+  class LightweightRTObjectServantMock
+   : public virtual ::POA_RTC::LightweightRTObject,
+     public virtual ::doil::CORBA::CORBAServantBase
+  {
+  public:
+    LightweightRTObjectServantMock(doil::ImplBase* impl)
+     : ::doil::CORBA::CORBAServantBase(impl) 
+    {
+    }
+    virtual ~LightweightRTObjectServantMock()
+    {
+    }
+    virtual ::RTC::ReturnCode_t initialize()
+    {
+    }
+    virtual ::RTC::ReturnCode_t finalize()
+    {
+    }
+    virtual ::CORBA::Boolean is_alive(::RTC::ExecutionContext_ptr exec_context)
+    {
+    }
+    virtual ::RTC::ReturnCode_t exit()
+    {
+    }
+    virtual ::RTC::ExecutionContextHandle_t attach_context(::RTC::ExecutionContext_ptr exec_context)
+    {
+    }
+    virtual ::RTC::ReturnCode_t detach_context(::RTC::ExecutionContextHandle_t exec_handle)
+    {
+    }
+    virtual ::RTC::ExecutionContext_ptr get_context(::RTC::ExecutionContextHandle_t exec_handle)
+    {
+    }
+    virtual ::RTC::ExecutionContextList* get_owned_contexts()
+    {
+    }
+    virtual ::RTC::ExecutionContextList* get_participating_contexts()
+    {
+    }
+    virtual ::RTC::ExecutionContextHandle_t get_context_handle(::RTC::ExecutionContext_ptr cxt)
+    {
+    }
+    virtual ::RTC::ReturnCode_t on_initialize()
+    {
+    }
+    virtual ::RTC::ReturnCode_t on_finalize()
+    {
+    }
+    virtual ::RTC::ReturnCode_t on_startup(::RTC::ExecutionContextHandle_t exec_handle)
+    {
+    }
+    virtual ::RTC::ReturnCode_t on_shutdown(::RTC::ExecutionContextHandle_t exec_handle)
+    {
+    }
+    virtual ::RTC::ReturnCode_t on_activated(::RTC::ExecutionContextHandle_t exec_handle)
+    {
+    }
+    virtual ::RTC::ReturnCode_t on_deactivated(::RTC::ExecutionContextHandle_t exec_handle)
+    {
+    }
+    virtual ::RTC::ReturnCode_t on_aborting(::RTC::ExecutionContextHandle_t exec_handle)
+    {
+    }
+    virtual ::RTC::ReturnCode_t on_error(::RTC::ExecutionContextHandle_t exec_handle)
+    {
+    }
+    virtual ::RTC::ReturnCode_t on_reset(::RTC::ExecutionContextHandle_t exec_handle)
+    {
+    }
+
+
+
+
+  private:
+    ::SDOPackage::Local::ISDOSystemElement* m_impl;
+  };
+  /*!
+   * 
+   * 
+   *
+   */
+  class ILightweightRTObjectMock
+    : public virtual ::RTC::Local::ILightweightRTObject
+  {
+  public:
+    ILightweightRTObjectMock()
+      : m_refcount(0)
+    {}
+    virtual ~ILightweightRTObjectMock(){}
+    const char* id() {return "ILightweightRTObjectMock";}
+    const char* name() {return "ILightweightRTObjectMock";}
+    void incRef()
+    {
+      ++m_refcount;
+    }
+    void decRef()
+    {
+      --m_refcount;
+      if (m_refcount == 0)
+        delete this;
+    }
+    virtual ::RTC::Local::ReturnCode_t initialize()
+      throw ()
+    {
+    }
+    virtual ::RTC::Local::ReturnCode_t finalize()
+      throw ()
+    {
+    }
+    virtual bool is_alive(const ::RTC::Local::IExecutionContext* exec_context)
+      throw ()
+    {
+    }
+
+    virtual ::RTC::Local::ReturnCode_t exit()
+      throw ()
+    {
+    }
+
+    virtual ::RTC::Local::ExecutionContextHandle_t attach_context(const ::RTC::Local::IExecutionContext* exec_context)
+      throw ()
+    {
+    }
+
+    virtual ::RTC::Local::ReturnCode_t detach_context(::RTC::Local::ExecutionContextHandle_t exec_handle)
+      throw ()
+    {
+    }
+
+    virtual ::RTC::Local::IExecutionContext* get_context(::RTC::Local::ExecutionContextHandle_t exec_handle)
+      throw ()
+    {
+    }
+
+    virtual ::RTC::Local::ExecutionContextList get_owned_contexts()
+      throw ()
+    {
+    }
+
+    virtual ::RTC::Local::ExecutionContextList get_participating_contexts()
+      throw ()
+    {
+    }
+
+    virtual ::RTC::Local::ExecutionContextHandle_t get_context_handle(const ::RTC::Local::IExecutionContext* cxt)
+      throw ()
+    {
+    }
+    virtual ::RTC::Local::ReturnCode_t on_initialize()
+      throw ()
+    {
+    }
+
+    virtual ::RTC::Local::ReturnCode_t on_finalize()
+      throw ()
+    {
+    }
+
+    virtual ::RTC::Local::ReturnCode_t on_startup(::RTC::Local::ExecutionContextHandle_t exec_handle)
+      throw ()
+    {
+    }
+
+    virtual ::RTC::Local::ReturnCode_t on_shutdown(::RTC::Local::ExecutionContextHandle_t exec_handle)
+      throw ()
+    {
+    }
+
+    virtual ::RTC::Local::ReturnCode_t on_activated(::RTC::Local::ExecutionContextHandle_t exec_handle)
+      throw ()
+    {
+    }
+
+    virtual ::RTC::Local::ReturnCode_t on_deactivated(::RTC::Local::ExecutionContextHandle_t exec_handle)
+      throw ()
+    {
+    }
+
+    virtual ::RTC::Local::ReturnCode_t on_aborting(::RTC::Local::ExecutionContextHandle_t exec_handle)
+      throw ()
+    {
+    }
+
+    virtual ::RTC::Local::ReturnCode_t on_error(::RTC::Local::ExecutionContextHandle_t exec_handle)
+      throw ()
+    {
+    }
+
+    virtual ::RTC::Local::ReturnCode_t on_reset(::RTC::Local::ExecutionContextHandle_t exec_handle)
+      throw ()
+    {
+    }
+  private:
+    std::string m_name;
+    int m_refcount;
+  };
   /*!
    * 
    * 
@@ -184,16 +386,17 @@ namespace ExecutionContextProxy
     /*! 
      *
      */
-  ::RTC::ReturnCode_t add_component(::RTC::LightweightRTObject_ptr comp)
-  {
-    if (!CORBA::is_nil(comp))
-      {
-//	CORBA_SeqUtil::push_back(m_profile.participants,
-//				 RTC::RTObject::_narrow(comp));
-	return RTC::RTC_OK;
-      }
-    return RTC::BAD_PARAMETER;
-  }
+    ::RTC::ReturnCode_t add_component(::RTC::LightweightRTObject_ptr comp)
+    {
+        if (m_logger != NULL)
+        {
+            m_logger->log("add_component");
+//            ::std::ostringstream os;
+//            os<<rate; 
+//            m_logger->log(os.str());
+        }
+        return RTC::BAD_PARAMETER;
+    }
   
   
     /*! 
@@ -227,6 +430,7 @@ namespace ExecutionContextProxy
 //    CPPUNIT_TEST(test_case0);
     CPPUNIT_TEST(test_get_rate);
     CPPUNIT_TEST(test_set_rate);
+    CPPUNIT_TEST(test_add_component);
     CPPUNIT_TEST_SUITE_END();
   
   private:
@@ -330,6 +534,46 @@ namespace ExecutionContextProxy
       CPPUNIT_ASSERT_EQUAL(1, logger.countLog("set_rate"));
       CPPUNIT_ASSERT_EQUAL(::RTC::Local::BAD_PARAMETER, ret);
       CPPUNIT_ASSERT_EQUAL(1, logger.countLog("2.71828"));
+
+      delete ap;
+      CORBA::release(ref);
+
+    }
+    /*! 
+     *
+     *
+     *
+     */
+    void test_add_component()
+    {
+      doil::CORBA::CORBAManager& 
+                            mgr(doil::CORBA::CORBAManager::instance());
+      std::cout <<"Manager Name==>"<< mgr.name() << std::endl;
+
+
+      ExecutionContextRtmMock* obj = new ExecutionContextRtmMock();
+      ::CORBA::Object_ptr ref = obj->_this();
+      if(::CORBA::is_nil(ref))
+      {
+         std::cout<<"ref is nil.Abort test."<<std::endl;
+         return;
+      }
+      ::RTC::CORBA::ExecutionContextProxy* ap 
+                 = new ::RTC::CORBA::ExecutionContextProxy(ref);
+
+      Logger logger;
+      obj->setLogger(&logger);
+
+      ::RTC::Local::ReturnCode_t ret;
+      ILightweightRTObjectMock* comp = new ILightweightRTObjectMock();
+      mgr.registerFactory(comp->id(), 
+                          doil::New<LightweightRTObjectServantMock>,
+                          doil::Delete<LightweightRTObjectServantMock>);
+      mgr.activateObject(comp);
+      CPPUNIT_ASSERT_EQUAL(0, logger.countLog("add_component"));
+      ret = ap->add_component(comp); 
+      CPPUNIT_ASSERT_EQUAL(1, logger.countLog("add_component"));
+      CPPUNIT_ASSERT_EQUAL(::RTC::Local::BAD_PARAMETER, ret);
 
       delete ap;
       CORBA::release(ref);
