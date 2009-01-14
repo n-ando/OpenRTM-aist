@@ -71,7 +71,7 @@ RTC::ReturnCode_t ConsoleOut::onExecute(RTC::UniqueId ec_id)
       std::cout << "TimeStamp: " << m_in.tm.sec << "[s] ";
       std::cout << m_in.tm.nsec << "[ns]" << std::endl;
     }
-  usleep(1000);
+  coil::usleep(1000);
 
   return RTC::RTC_OK;
 }
