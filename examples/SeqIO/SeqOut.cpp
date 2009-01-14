@@ -157,7 +157,7 @@ RTC::ReturnCode_t SeqOut::onExecute(RTC::UniqueId ec_id)
   m_LongSeqOut.write();
   m_ShortSeqOut.write();
 
-  usleep(10000);
+  coil::usleep(10000);
 
   return RTC::RTC_OK;
 }

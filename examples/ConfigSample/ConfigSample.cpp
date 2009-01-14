@@ -174,11 +174,11 @@ RTC::ReturnCode_t ConfigSample::onExecute(RTC::UniqueId ec_id)
     }
   if (m_int_param0 > 1000 && m_int_param0 < 1000000)
     {
-      usleep(m_int_param0);
+      coil::usleep(m_int_param0);
     }
   else
     {
-      usleep(100000);
+      coil::usleep(100000);
     }
   return RTC::RTC_OK;
 }
