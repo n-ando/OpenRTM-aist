@@ -16,7 +16,7 @@
 #include <iostream>
 #include <vector>
 #include <string>
-#include <rtm_corba/idl/OpenRTMSkel.h>
+#include <rtm/idl/OpenRTMSkel.h>
 #include <rtm/CorbaNaming.h>
 #include <rtm/RTObject.h>
 #include <rtm/NVUtil.h>

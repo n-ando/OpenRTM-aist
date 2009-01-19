@@ -9,20 +9,6 @@
 #
 #------------------------------------------------------------
 
-#
-# $Log: Makefile.am,v $
-# Revision 1.3  2007/01/21 06:52:17  n-ando
-# The include search path option order in AM_CPPFLAGS was changed.
-#
-# Revision 1.2  2007/01/12 14:43:54  n-ando
-# Some fixes for distribution control.
-#
-# Revision 1.1  2006/11/27 08:29:58  n-ando
-# TestSuites are devided into each directory.
-#
-#
-
-
 AUTOMAKE_OPTIONS = 1.9
 
 IDLC = @IDLC@
@@ -33,8 +19,7 @@ AM_CPPFLAGS = \
 	 -I. \
 	-I$(top_builddir) \
 	-I$(top_builddir)/src/lib \
-	-I$(top_builddir)/src/lib/rtm_corba/idl \
-	-I$(top_builddir)/src/lib/rtm_corba \
+	-I$(top_builddir)/src/lib/rtm/idl \
 	-I$(top_builddir)/src/lib/coil/include \
 	-I$(top_builddir)/src/lib/rtm \
 	-I$(includedir)
@@ -45,9 +30,10 @@ AM_LDFLAGS = \
 	-L$(top_builddir)/src/lib/coil/lib
 
 IDL_SOURCES = \
-	$(top_srcdir)/src/lib/rtm_corba/idl/SDOPackage.idl \
-	$(top_srcdir)/src/lib/rtm_corba/idl/RTC.idl \
-	$(top_srcdir)/src/lib/rtm_corba/idl/OpenRTM.idl
+	$(top_srcdir)/src/lib/rtm/idl/SDOPackage.idl \
+	$(top_srcdir)/src/lib/rtm/idl/RTC.idl \
+	$(top_srcdir)/src/lib/rtm/idl/OpenRTM.idl \
+	$(top_srcdir)/src/lib/rtm/idl/Manager.idl
 
 noinst_PROGRAMS = ModuleManagerTests
 
@@ -67,7 +53,6 @@ nodist_ModuleManagerTests_SOURCES = \
 	$(top_srcdir)/src/lib/rtm/ManagerConfig.cpp \
 	$(top_srcdir)/src/lib/rtm/RTCUtil.cpp \
 	$(top_srcdir)/src/lib/coil/common/Timer.cpp \
-	$(top_srcdir)/src/lib/rtm/CorbaObjectManager.cpp \
 	$(top_srcdir)/src/lib/rtm/NumberingPolicy.cpp \
 	$(top_srcdir)/src/lib/rtm/Manager.cpp \
 	$(top_srcdir)/src/lib/rtm/Factory.cpp \
@@ -77,9 +62,12 @@ nodist_ModuleManagerTests_SOURCES = \
 	$(top_srcdir)/src/lib/rtm/OpenHRPExecutionContext.cpp \
 	$(top_srcdir)/src/lib/rtm/RTObject.cpp \
 	$(top_srcdir)/src/lib/coil/posix/coil/DynamicLib.cpp \
+	$(top_srcdir)/src/lib/rtm/ManagerServant.cpp \
+	$(top_srcdir)/src/lib/rtm/PeriodicECSharedComposite.cpp \
+	$(top_srcdir)/src/lib/rtm/SdoOrganization.cpp \
 	ModuleManagerTests.cpp
 
-ModuleManagerTests_LDFLAGS = -L$(libdir)
+ModuleManagerTests_LDFLAGS = -L$(libdir) -L$(AM_LDFLAGS)
 ModuleManagerTests_LDADD   = -lcppunit -lcoil -luuid
 
 EXTRA_DIST = \
@@ -96,6 +84,7 @@ do-test:
 # clean-up
 clean-local:
 	rm -f                               \
+        *.log *.xml                         \
 	*.o *.Po *.gch *.la                 \
 	*Skel.cpp *Skel.h *Stub.cpp *Stub.h \
 	*~ *core                            \

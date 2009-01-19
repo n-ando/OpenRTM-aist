@@ -10,7 +10,7 @@
 #ifndef SEQOUT_H
 #define SEQOUT_H
 
-#include <rtm_corba/idl/BasicDataTypeSkel.h>
+#include <rtm/idl/BasicDataTypeSkel.h>
 #include <rtm/Manager.h>
 #include <rtm/DataFlowComponentBase.h>
 #include <rtm/CorbaPort.h>

@@ -537,5 +537,20 @@ namespace RTC
      */
     virtual DataType operator()() = 0;
   };
+
+  class PublisherBase;
+  class OnConnect
+  {
+    virtual ~OnConnect(){}
+    virtual void operator()(const char* id, PublisherBase* publisher) = 0;
+  };
+
+  class OnDisconnect
+  {
+    virtual ~OnDisconnect(){}
+    virtual void operator()(const char* id) = 0;
+  };
+
+
 };
 #endif // PortCallBack_h

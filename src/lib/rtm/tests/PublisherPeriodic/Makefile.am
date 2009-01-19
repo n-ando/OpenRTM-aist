@@ -33,8 +33,7 @@ AM_CPPFLAGS =         \
 	-I.               \
 	-I$(top_builddir) \
 	-I$(top_builddir)/src/lib/ \
-	-I$(top_builddir)/src/lib/rtm_corba \
-	-I$(top_builddir)/src/lib/rtm_corba/idl \
+	-I$(top_builddir)/src/lib/rtm/idl \
 	-I$(top_builddir)/src/lib/coil/include \
 	-I$(includedir)
 
@@ -54,7 +53,7 @@ nodist_PublisherPeriodicTests_SOURCES =           \
 	$(top_builddir)/src/lib/coil/common/stringutil.cpp        \
 	PublisherPeriodicTests.cpp
 
-PublisherPeriodicTests_LDFLAGS = -L$(libdir)
+PublisherPeriodicTests_LDFLAGS = -L$(libdir) -L$(AM_LDFLAGS)
 PublisherPeriodicTests_LDADD   = -lcppunit -lcoil
 
 EXTRA_DIST =                  \
@@ -71,6 +70,7 @@ do-test:
 # clean-up
 clean-local:
 	rm -f PublisherPeriodicTests        \
+        *.log *.xml                         \
 	*.o *.Po *.gch *.la                 \
 	*Skel.cpp *Skel.h *Stub.cpp *Stub.h \
 	*~ *core                            \

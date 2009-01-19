@@ -778,6 +778,7 @@ namespace PeriodicExecutionContext
       // コンポーネントがActiveのままでremove()を試みて、意図どおりのエラーコードが戻ることを確認する
       // CPPUNIT_ASSERT_EQUAL(RTC::PRECONDITION_NOT_MET, ec->remove(rto->_this()));
       ec->stop();
+
     }
 		
     /*!

@@ -20,7 +20,7 @@
 #ifndef PortAdmin_h
 #define PortAdmin_h
 
-#include <rtm_corba/idl/RTCSkel.h>
+#include <rtm/idl/RTCSkel.h>
 #include <rtm/PortBase.h>
 #include <rtm/ObjectManager.h>
 

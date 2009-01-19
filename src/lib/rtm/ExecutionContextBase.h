@@ -19,8 +19,8 @@
 #ifndef ExecutionContextBase_h
 #define ExecutionContextBase_h
 
-#include <rtm_corba/idl/RTCSkel.h>
-#include <rtm_corba/idl/OpenRTMSkel.h>
+#include <rtm/idl/RTCSkel.h>
+#include <rtm/idl/OpenRTMSkel.h>
 
 namespace RTC
 {

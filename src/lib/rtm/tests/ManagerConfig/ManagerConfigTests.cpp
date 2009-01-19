@@ -62,7 +62,7 @@ namespace ManagerConfig
       return ManagerConfig::findConfigFile();
     }
 		
-    void setSystemInformation(RTC::Properties& prop)
+    void setSystemInformation(coil::Properties& prop)
     {
       ManagerConfig::setSystemInformation(prop);
     }
@@ -134,7 +134,7 @@ namespace ManagerConfig
       mgrCfg.init(argc, argv);
 			
       // 設定されている内容を正しく取得できるか？
-      RTC::Properties properties;
+      coil::Properties properties;
       mgrCfg.configure(properties);
 
       CPPUNIT_ASSERT_EQUAL(std::string("DEFAULT.RTC.COMPONENT.CONF.PATH"),
@@ -198,7 +198,7 @@ namespace ManagerConfig
       mgrCfg.init(0, NULL);
 			
       // 設定されている内容を正しく取得できるか？
-      RTC::Properties properties;
+      coil::Properties properties;
       mgrCfg.configure(properties);
 
       CPPUNIT_ASSERT_EQUAL(std::string("DEFAULT.RTC.COMPONENT.CONF.PATH"),

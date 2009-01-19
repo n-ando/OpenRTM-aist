@@ -13,8 +13,7 @@ AM_CPPFLAGS =                    \
 	 -I.                      \
 	-I$(top_builddir)         \
 	-I$(top_builddir)/src/lib \
-	-I$(top_builddir)/src/lib/rtm_corba/idl \
-	-I$(top_builddir)/src/lib/rtm_corba \
+	-I$(top_builddir)/src/lib/rtm/idl \
 	-I$(top_builddir)/src/lib/coil/include \
 	-I$(top_builddir)/src/lib/rtm \
 	-I$(includedir)
@@ -25,8 +24,8 @@ AM_LDFLAGS =              \
 	-L$(top_builddir)/src/lib/coil/lib
 
 IDL_SOURCES = \
-	$(top_srcdir)/src/lib/rtm_corba/idl/BasicDataType.idl \
-	$(top_srcdir)/src/lib/rtm_corba/idl/DataPort.idl
+	$(top_srcdir)/src/lib/rtm/idl/BasicDataType.idl \
+	$(top_srcdir)/src/lib/rtm/idl/DataPort.idl
 
 noinst_PROGRAMS = OutPortCorbaProviderTests
 
@@ -39,7 +38,7 @@ nodist_OutPortCorbaProviderTests_SOURCES =             \
 	$(top_srcdir)/src/lib/rtm/OutPortProvider.cpp \
 	OutPortCorbaProviderTests.cpp
 
-OutPortCorbaProviderTests_LDFLAGS = -L$(libdir)
+OutPortCorbaProviderTests_LDFLAGS = -L$(libdir) $(AM_LDFLAGS)
 OutPortCorbaProviderTests_LDADD   = -lcppunit -lcoil
 
 EXTRA_DIST =        \
@@ -56,6 +55,7 @@ do-test:
 # clean-up
 clean-local:
 	rm -f                               \
+        *.log *.xml                         \
 	*.o *.Po *.gch *.la                 \
 	*Skel.cpp *Skel.h *Stub.cpp *Stub.h \
 	*~ *core                            \

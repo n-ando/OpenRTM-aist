@@ -231,6 +231,9 @@ namespace RTC
      * @endif
      */
     void notify();
+
+    virtual void onConnect(const char* id, PublisherBase* publisher){};
+    virtual void onDisconnect(const char* id){};
     
   protected:
     /*!

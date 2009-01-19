@@ -34,8 +34,7 @@ AM_CPPFLAGS =                     \
 	-I$(top_builddir)         \
 	-I$(top_builddir)/src/lib/ \
 	-I$(top_builddir)/src/lib/rtm \
-	-I$(top_builddir)/src/lib/rtm_corba \
-	-I$(top_builddir)/src/lib/rtm_corba/idl \
+	-I$(top_builddir)/src/lib/rtm/idl \
 	-I$(top_builddir)/src/lib/coil/include \
 	-I$(includedir)
 #	-DORB_IS_OMNIORB
@@ -46,10 +45,10 @@ AM_LDFLAGS =              \
 	-L$(top_builddir)/src/lib/coil/lib
 
 IDL_SOURCES = \
-	$(top_srcdir)/src/lib/rtm_corba/idl/SDOPackage.idl    \
-	$(top_srcdir)/src/lib/rtm_corba/idl/RTC.idl           \
-	$(top_srcdir)/src/lib/rtm_corba/idl/BasicDataType.idl \
-	$(top_srcdir)/src/lib/rtm_corba/idl/DataPort.idl
+	$(top_srcdir)/src/lib/rtm/idl/SDOPackage.idl    \
+	$(top_srcdir)/src/lib/rtm/idl/RTC.idl           \
+	$(top_srcdir)/src/lib/rtm/idl/BasicDataType.idl \
+	$(top_srcdir)/src/lib/rtm/idl/DataPort.idl
 
 noinst_PROGRAMS = DataInOutPortTests
 
@@ -71,7 +70,7 @@ nodist_DataInOutPortTests_SOURCES =                 \
 	$(top_srcdir)/src/lib/rtm/PublisherFlush.cpp        \
 	DataInOutPortTests.cpp
 
-DataInOutPortTests_LDFLAGS = -L$(libdir)
+DataInOutPortTests_LDFLAGS = -L$(libdir) $(AM_LDFLAGS)
 DataInOutPortTests_LDADD   = -lcppunit -lcoil -luuid
 
 # Extra sources included distribution
@@ -89,6 +88,7 @@ do-test:
 # clean-up
 clean-local:
 	rm -f                               \
+        *.log *.xml                         \
 	*.o *.Po *.gch *.la                 \
 	*Skel.cpp *Skel.h *Stub.cpp *Stub.h \
 	*~ *core                            \

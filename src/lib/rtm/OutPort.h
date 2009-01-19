@@ -636,6 +636,27 @@ namespace RTC
     {
       m_OnUnderflow = on_underflow;
     }    
+
+
+    inline void setOnConnect(OnConnect* on_connect)
+    {
+      m_OnConnect = on_connect;
+    }
+    
+    inline void setOnDisconnect(OnConnect* on_disconnect)
+    {
+      m_OnDisconnect = on_disconnect;
+    }
+    
+    virtual void onConnect(const char* id, PublisherBase* publisher)
+    {
+      std::cout << "onConnect(id = " << id << ")" << std::endl;
+    }
+
+    virtual void onDisconnect(const char* id)
+    {
+      std::cout << "onDisconnect(id = " << id << ")" << std::endl;
+    }
     
   private:
     /*!
@@ -747,6 +768,9 @@ namespace RTC
      */
     OnUnderflow<DataType>* m_OnUnderflow;
     
+    OnConnect* m_OnConnect;
+    OnDisconnect* m_OnDisconnect;
+
     static const long int usec_per_sec = 1000000;
   };
 }; // namespace RTC

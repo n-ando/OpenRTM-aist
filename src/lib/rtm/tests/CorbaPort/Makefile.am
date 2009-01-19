@@ -34,8 +34,7 @@ AM_CPPFLAGS =                     \
 	-I$(top_builddir)         \
 	-I$(top_builddir)/src/lib/ \
 	-I$(top_builddir)/src/lib/rtm \
-	-I$(top_builddir)/src/lib/rtm_corba/ \
-	-I$(top_builddir)/src/lib/rtm_corba/idl \
+	-I$(top_builddir)/src/lib/rtm/idl \
 	-I$(top_builddir)/src/lib/coil/include \
 	-I$(includedir)
 
@@ -56,8 +55,8 @@ noinst_PROGRAMS = CorbaPortTests
 nodist_CorbaPortTests_SOURCES =                  \
 	../TestRunner.cpp                        \
 	$(IDL_SOURCES:.idl=Skel.cpp)             \
-	$(top_srcdir)/src/lib/rtm_corba/idl/SDOPackageSkel.cpp \
-	$(top_srcdir)/src/lib/rtm_corba/idl/RTCSkel.cpp        \
+	$(top_srcdir)/src/lib/rtm/idl/SDOPackageSkel.cpp \
+	$(top_srcdir)/src/lib/rtm/idl/RTCSkel.cpp        \
 	$(top_srcdir)/src/lib/coil/common/stringutil.cpp         \
 	$(top_srcdir)/src/lib/coil/common/Properties.cpp         \
 	$(top_srcdir)/src/lib/rtm/NVUtil.cpp             \
@@ -65,7 +64,7 @@ nodist_CorbaPortTests_SOURCES =                  \
 	$(top_srcdir)/src/lib/rtm/CorbaPort.cpp          \
 	CorbaPortTests.cpp
 
-CorbaPortTests_LDFLAGS = -L$(libdir)
+CorbaPortTests_LDFLAGS = -L$(libdir) $(AM_LDFLAGS)
 CorbaPortTests_LDADD   = -lcppunit -lcoil -luuid
 
 EXTRA_DIST =           \
@@ -82,6 +81,7 @@ do-test:
 # clean-up
 clean-local:
 	rm -f                               \
+        *.log *.xml                         \
 	*.o *.Po *.gch *.la                 \
 	*Skel.cpp *Skel.h *Stub.cpp *Stub.h \
 	*~ *core                            \

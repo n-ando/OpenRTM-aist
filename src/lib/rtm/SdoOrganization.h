@@ -21,7 +21,7 @@
 #define SdoOrganization_h
 
 #include <rtm/RTC.h>
-#include <rtm_corba/idl/SDOPackageSkel.h>
+#include <rtm/idl/SDOPackageSkel.h>
 #include <string>
 #include <coil/Mutex.h>
 #include <coil/Guard.h>

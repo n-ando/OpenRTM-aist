@@ -51,6 +51,7 @@ do-test:
 # clean-up
 clean-local:
 	rm -f                               \
+        *.log *.xml                         \
 	*.o *.Po *.gch *.la                 \
 	*Skel.cpp *Skel.h *Stub.cpp *Stub.h \
 	*~ *core                            \

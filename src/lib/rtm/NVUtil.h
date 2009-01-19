@@ -22,8 +22,7 @@
 
 #include <string>
 #include <iostream>
-#include <rtm_corba/idl/SDOPackageSkel.h>
-//#include <rtm/Properties.h>
+#include <rtm/idl/SDOPackageSkel.h>
 #include <coil/Properties.h>
 
 /*!

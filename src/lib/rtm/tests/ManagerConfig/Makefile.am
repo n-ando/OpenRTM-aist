@@ -9,20 +9,6 @@
 #
 #------------------------------------------------------------
 
-#
-# $Log: Makefile.am,v $
-# Revision 1.3  2007/01/21 06:52:12  n-ando
-# The include search path option order in AM_CPPFLAGS was changed.
-#
-# Revision 1.2  2007/01/12 14:43:47  n-ando
-# Some fixes for distribution control.
-#
-# Revision 1.1  2006/11/27 08:30:00  n-ando
-# TestSuites are devided into each directory.
-#
-#
-
-
 AUTOMAKE_OPTIONS = 1.9
 
 IDLC = @IDLC@
@@ -33,8 +19,7 @@ AM_CPPFLAGS =\
 	-I. \
 	-I$(top_builddir) \
 	-I$(top_builddir)/src/lib \
-	-I$(top_builddir)/src/lib/rtm_corba/idl \
-	-I$(top_builddir)/src/lib/rtm_corba \
+	-I$(top_builddir)/src/lib/rtm/idl \
 	-I$(top_builddir)/src/lib/coil/include \
 	-I$(top_builddir)/src/lib/rtm \
 	-I$(includedir)
@@ -48,12 +33,10 @@ noinst_PROGRAMS = ManagerConfigTests
 
 nodist_ManagerConfigTests_SOURCES =\
 	../TestRunner.cpp\
-	$(top_builddir)/src/lib/coil/common/stringutil.cpp \
-	$(top_builddir)/src/lib/coil/common/Properties.cpp \
 	$(top_builddir)/src/lib/rtm/ManagerConfig.cpp \
 	ManagerConfigTests.cpp
 
-ManagerConfigTests_LDFLAGS = -L$(libdir)
+ManagerConfigTests_LDFLAGS = -L$(libdir) -L$(AM_LDFLAGS)
 ManagerConfigTests_LDADD   = -lcppunit -lcoil
 
 EXTRA_DIST =               \
@@ -71,6 +54,7 @@ do-test:
 # clean-up
 clean-local:
 	rm -f                               \
+        *.log *.xml                         \
 	*.o *.Po *.gch *.la                 \
 	*Skel.cpp *Skel.h *Stub.cpp *Stub.h \
 	*~ *core                            \

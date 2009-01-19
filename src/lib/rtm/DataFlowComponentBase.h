@@ -20,7 +20,7 @@
 #ifndef DataFlowComponentBase_h
 #define DataFlowComponentBase_h
 
-#include <rtm_corba/idl/RTCSkel.h>
+#include <rtm/idl/RTCSkel.h>
 #include <rtm/RTObject.h>
 #include <rtm/PeriodicExecutionContext.h>
 

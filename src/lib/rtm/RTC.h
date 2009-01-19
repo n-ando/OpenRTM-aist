@@ -19,12 +19,12 @@
 #ifndef RTC_h
 #define RTC_h
 
-#include "rtm/config_rtc.h"
+#include <rtm/config_rtc.h>
 
 #ifdef ORB_IS_MICO
 #include <CORBA.h>
 #include <coss/CosNaming.h>
-#include <rtm_corba/idl/RTC.h>
+#include <rtm/idl/RTC.h>
 #endif
 
 #ifdef ORB_IS_TAO
@@ -53,7 +53,7 @@
 
 #endif // ORB_IS_OMNIORB
 
-#include "rtm_corba/idl/OpenRTMSkel.h"
+#include <rtm/idl/OpenRTMSkel.h>
 
 #ifdef RTC_CORBA_CXXMAPPING11
 #define RefCountServantBase ServantBase

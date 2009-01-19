@@ -27,19 +27,20 @@ AM_CPPFLAGS = \
 	-I$(top_builddir) \
 	-I$(top_builddir)/src/lib/ \
 	-I$(top_builddir)/src/lib/rtm/ \
-	-I$(top_builddir)/src/lib/rtm_corba/idl/ \
-	-I$(top_builddir)/src/lib/rtm_corba/ \
+	-I$(top_builddir)/src/lib/rtm/idl/ \
 	-I$(top_builddir)/src/lib/coil/include/ \
 	-I$(includedir)
 
 AM_LDFLAGS = \
 	-L. \
-	-L$(top_builddir)
+	-L$(top_builddir) \
+	-L$(top_builddir)/src/lib/coil/lib
 
 IDL_SOURCES = \
-	$(top_srcdir)/src/lib/rtm_corba/idl/SDOPackage.idl \
-	$(top_srcdir)/src/lib/rtm_corba/idl/RTC.idl \
-	$(top_srcdir)/src/lib/rtm_corba/idl/OpenRTM.idl
+	$(top_srcdir)/src/lib/rtm/idl/SDOPackage.idl \
+	$(top_srcdir)/src/lib/rtm/idl/RTC.idl \
+	$(top_srcdir)/src/lib/rtm/idl/OpenRTM.idl \
+	$(top_srcdir)/src/lib/rtm/idl/Manager.idl
 
 noinst_PROGRAMS = CorbaNamingTests
 
@@ -59,7 +60,6 @@ nodist_CorbaNamingTests_SOURCES = \
 	$(top_srcdir)/src/lib/rtm/ManagerConfig.cpp \
 	$(top_srcdir)/src/lib/rtm/RTCUtil.cpp \
 	$(top_srcdir)/src/lib/coil/common/Timer.cpp \
-	$(top_srcdir)/src/lib/rtm/CorbaObjectManager.cpp \
 	$(top_srcdir)/src/lib/rtm/NumberingPolicy.cpp \
 	$(top_srcdir)/src/lib/rtm/Manager.cpp \
 	$(top_srcdir)/src/lib/rtm/Factory.cpp \
@@ -68,9 +68,12 @@ nodist_CorbaNamingTests_SOURCES = \
 	$(top_srcdir)/src/lib/rtm/PeriodicExecutionContext.cpp \
 	$(top_srcdir)/src/lib/rtm/OpenHRPExecutionContext.cpp \
 	$(top_srcdir)/src/lib/rtm/RTObject.cpp \
+	$(top_srcdir)/src/lib/rtm/ManagerServant.cpp \
+	$(top_srcdir)/src/lib/rtm/PeriodicECSharedComposite.cpp \
+	$(top_srcdir)/src/lib/rtm/SdoOrganization.cpp \
 	CorbaNamingTests.cpp
 
-CorbaNamingTests_LDFLAGS = -L$(libdir)
+CorbaNamingTests_LDFLAGS = -L$(libdir) -L$(top_builddir)/src/lib/coil/lib
 CorbaNamingTests_LDADD   = -lcppunit -lcoil -luuid
 
 EXTRA_DIST = \
@@ -86,6 +89,7 @@ do-test:
 # clean-up
 clean-local:
 	rm -f                               \
+        *.log *.xml                         \
 	*.o *.Po *.gch *.la                 \
 	*Skel.cpp *Skel.h *Stub.cpp *Stub.h \
 	*~ *core                            \

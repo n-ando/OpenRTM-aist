@@ -27,8 +27,27 @@
 
 #include <rtm/RTC.h>
 #include <rtm/RTObject.h>
-#include <rtm/CorbaObjectManager.h>
 #include <rtm/CorbaNaming.h>
+
+namespace RTC
+{
+  class CorbaObjectManager
+  {
+  public:
+    CorbaObjectManager(::CORBA::ORB_ptr orb, ::PortableServer::POA_ptr poa)
+      : m_orb(orb), m_poa(poa)
+    {
+    }
+
+    void activate(::PortableServer::ServantBase* servant)
+    {
+      m_poa->activate_object(servant);
+    }
+  protected:
+    ::CORBA::ORB_ptr m_orb;
+    ::PortableServer::POA_ptr m_poa;
+  };
+};
 
 /*!
  * @class CorbaNamingTests class

@@ -27,9 +27,36 @@
 
 #include <rtm/RTC.h>
 #include <rtm/RTObject.h>
-#include <rtm/CorbaObjectManager.h>
 #include <rtm/NamingManager.h>
 #include <rtm/Manager.h>
+
+namespace RTC
+{
+  class CorbaObjectManager
+  {
+  public:
+    CorbaObjectManager(::CORBA::ORB_ptr orb, ::PortableServer::POA_ptr poa)
+      : m_orb(orb), m_poa(poa)
+    {
+    }
+
+    void activate(::PortableServer::ServantBase* servant)
+    {
+      m_poa->activate_object(servant);
+    }
+
+    void deactivate(::PortableServer::ServantBase* servant)
+    {
+      ::PortableServer::ObjectId_var id;
+      id = m_poa->servant_to_id(servant);
+      m_poa->deactivate_object(id);
+    }
+  protected:
+    ::CORBA::ORB_ptr m_orb;
+    ::PortableServer::POA_ptr m_poa;
+  };
+};
+
 
 /*!
  * @class NamingManagerTests class

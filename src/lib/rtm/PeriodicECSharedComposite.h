@@ -20,8 +20,8 @@
 #ifndef PeriodicECSharedComposite_h
 #define PeriodicECSharedComposite_h
 
-#include <rtm_corba/idl/RTCSkel.h>
-#include <rtm_corba/idl/OpenRTMSkel.h>
+#include <rtm/idl/RTCSkel.h>
+#include <rtm/idl/OpenRTMSkel.h>
 #include <rtm/RTObject.h>
 #include <rtm/PeriodicExecutionContext.h>
 #include <rtm/SdoOrganization.h>
