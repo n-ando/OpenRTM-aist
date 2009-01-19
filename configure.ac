@@ -1431,12 +1431,12 @@ AC_OUTPUT([Makefile
 	src/Makefile
 	src/lib/Makefile
 	src/lib/rtm/Makefile
+	src/lib/rtm/idl/Makefile
 	src/lib/rtm/tests/Makefile
 	src/lib/rtm/tests/CORBA_SeqUtil/Makefile
 	src/lib/rtm/tests/ConfigAdmin/Makefile
 	src/lib/rtm/tests/CorbaConsumer/Makefile
 	src/lib/rtm/tests/CorbaNaming/Makefile
-	src/lib/rtm/tests/CorbaObjectManager/Makefile
 	src/lib/rtm/tests/CorbaPort/Makefile
 	src/lib/rtm/tests/DataInOutPort/Makefile
 	src/lib/rtm/tests/DataInPort/Makefile
@@ -1480,8 +1480,6 @@ AC_OUTPUT([Makefile
 	src/lib/rtm/tests/StringUtil/Makefile
 	src/lib/rtm/tests/TimeValue/Makefile
 	src/lib/rtm/tests/Timer/Makefile
-	src/lib/rtm_corba/Makefile
-	src/lib/rtm_corba/idl/Makefile
 	src/lib/doil/Makefile
 	src/lib/doil/utils/Makefile
 	src/lib/doil/utils/omniidl_be/Makefile
@@ -1529,8 +1527,6 @@ AC_OUTPUT([Makefile
 	win32/OpenRTM-aist/coil/Makefile
 	win32/OpenRTM-aist/rtm/Makefile
 	win32/OpenRTM-aist/rtm/idl/Makefile
-	win32/OpenRTM-aist/rtm_corba/Makefile
-	win32/OpenRTM-aist/rtm_corba/idl/Makefile
 	win32/OpenRTM-aist/installer/Makefile
 	win32/OpenRTM-aist/installer/Bitmaps/Makefile
 	])

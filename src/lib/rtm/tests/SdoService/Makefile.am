@@ -9,20 +9,6 @@
 #
 #------------------------------------------------------------
 
-#
-# $Log: Makefile.am,v $
-# Revision 1.3  2007/01/21 06:53:43  n-ando
-# The include search path option order in AM_CPPFLAGS was changed.
-#
-# Revision 1.2  2007/01/12 14:45:37  n-ando
-# Some fixes for distribution control.
-#
-# Revision 1.1  2006/11/27 08:38:07  n-ando
-# TestSuites are devided into each directory.
-#
-#
-
-
 AUTOMAKE_OPTIONS = 1.9
 
 IDLC = @IDLC@
@@ -33,8 +19,7 @@ AM_CPPFLAGS=              \
 	-I.               \
 	-I$(top_builddir) \
 	-I$(top_builddir)/src/lib/rtm \
-	-I$(top_builddir)/src/lib/rtm_corba \
-	-I$(top_builddir)/src/lib/rtm_corba/idl \
+	-I$(top_builddir)/src/lib/rtm/idl \
 	-I$(top_builddir)/src/lib/coil/include \
 	-I$(includedir)
 
@@ -50,7 +35,7 @@ nodist_SdoServiceTests_SOURCES =     \
 	../TestRunner.cpp            \
 	SdoServiceTests.cpp
 
-SdoServiceTests_LDFLAGS = -L$(libdir)
+SdoServiceTests_LDFLAGS = -L$(libdir) -L$(AM_LDFLAGS)
 SdoServiceTests_LDADD   = -lcppunit
 
 EXTRA_DIST =            \
@@ -67,6 +52,7 @@ do-test:
 # clean-up
 clean-local:
 	rm -f                               \
+        *.log *.xml                         \
 	*.o *.Po *.gch *.la                 \
 	*Skel.cpp *Skel.h *Stub.cpp *Stub.h \
 	*~ *core                            \

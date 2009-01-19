@@ -27,8 +27,7 @@ AM_CPPFLAGS = \
 	-I. \
 	-I$(top_builddir) \
 	-I$(top_builddir)/src/lib \
-	-I$(top_builddir)/src/lib/rtm_corba/idl \
-	-I$(top_builddir)/src/lib/rtm_corba \
+	-I$(top_builddir)/src/lib/rtm/idl \
 	-I$(top_builddir)/src/lib/coil/include \
 	-I$(top_builddir)/src/lib/rtm \
 	-I$(includedir)
@@ -61,6 +60,7 @@ do-test:
 # clean-up
 clean-local:
 	rm -f                               \
+        *.log *.xml                         \
 	*.o *.Po *.gch *.la                 \
 	*Skel.cpp *Skel.h *Stub.cpp *Stub.h \
 	*~ *core                            \

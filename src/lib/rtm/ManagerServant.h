@@ -21,7 +21,7 @@
 #define RTM_MANAGERSERVANT_H
 
 #include <iostream>
-#include <rtm_corba/idl/ManagerSkel.h>
+#include <rtm/idl/ManagerSkel.h>
 #include <rtm/Manager.h>
 
 namespace RTM

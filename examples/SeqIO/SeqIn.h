@@ -10,7 +10,7 @@
 #ifndef SEQIN_H
 #define SEQIN_H
 
-#include <rtm_corba/idl/BasicDataTypeSkel.h>
+#include <rtm/idl/BasicDataTypeSkel.h>
 #include <rtm/Manager.h>
 #include <rtm/DataFlowComponentBase.h>
 #include <rtm/CorbaPort.h>

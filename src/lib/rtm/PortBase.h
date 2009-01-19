@@ -26,7 +26,7 @@
 #include <vector>
 #include <coil/Guard.h>
 #include <coil/Mutex.h>
-#include <rtm_corba/idl/RTCSkel.h>
+#include <rtm/idl/RTCSkel.h>
 #include <rtm/CORBA_SeqUtil.h>
 #include <rtm/NVUtil.h>
 

@@ -9,20 +9,6 @@
 #
 #------------------------------------------------------------
 
-#
-# $Log: Makefile.am,v $
-# Revision 1.3  2007/01/21 06:53:55  n-ando
-# The include search path option order in AM_CPPFLAGS was changed.
-#
-# Revision 1.2  2007/01/12 14:45:50  n-ando
-# Some fixes for distribution control.
-#
-# Revision 1.1  2006/11/27 08:29:56  n-ando
-# TestSuites are devided into each directory.
-#
-#
-
-
 AUTOMAKE_OPTIONS = 1.9
 
 IDLC = @IDLC@
@@ -46,7 +32,7 @@ nodist_StringUtilTests_SOURCES =           \
 	$(top_builddir)/rtm/StringUtil.cpp \
 	StringUtilTests.cpp
 
-StringUtilTests_LDFLAGS = -L$(libdir)
+StringUtilTests_LDFLAGS = -L$(libdir) -L$(AM_LDFLAGS)
 StringUtilTests_LDADD   = -lcppunit
 
 EXTRA_DIST = \
@@ -63,6 +49,7 @@ do-test:
 # clean-up
 clean-local:
 	rm -f                               \
+        *.log *.xml                         \
 	*.o *.Po *.gch *.la                 \
 	*Skel.cpp *Skel.h *Stub.cpp *Stub.h \
 	*~ *core                            \

@@ -47,7 +47,7 @@
 #include <cppunit/TestAssert.h>
 #include <fstream>
 #include <rtm/ModuleManager.h>
-#include <rtm/Properties.h>
+#include <coil/Properties.h>
 
 /*!
  * @class ModuleManagerTests class
@@ -80,9 +80,13 @@ namespace ModuleManager
     RTC::ModuleManager* m_pModMgr;
 		
   private:
-    bool isFound(const std::vector<std::string>& path, const std::string& mod)
+    bool isFound(const std::vector<coil::Properties>& path, const std::string& mod)
     {
-      return ! (path.end() == std::find(path.begin(), path.end(), mod));
+      for (int i(0), len(path.size()); i < len; ++i)
+        {
+          if (mod == path[i]["file_path"]) return true;
+        }
+      return false;
     }
 	
   public:
@@ -122,7 +126,7 @@ namespace ModuleManager
 	  ""
 	};
 			
-      RTC::Properties prop(default_properties);
+      coil::Properties prop(default_properties);
       m_pModMgr = new RTC::ModuleManager(prop);
 			
       // ロードパス上にlibRTC.soが存在することを確認しておく

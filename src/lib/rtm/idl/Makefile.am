@@ -10,8 +10,8 @@ AUTOMAKE_OPTIONS = 1.4
 IDLC = @IDLC@
 IDLFLAGS = @IDL_FLAGS@
 LIBS = @LIBS@
-AM_CPPFLAGS=-I$(top_srcdir)/src/lib -I$(top_srcdir)/src/lib/rtm_corba
-AM_LDFLAGS=-L$(top_builddir)/src/lib/rtm -L$(top_builddir)/src/lib/rtm_corba/idl
+AM_CPPFLAGS=-I$(top_srcdir)/src/lib -I$(top_srcdir)/src/lib/rtm
+AM_LDFLAGS=-L$(top_builddir)/src/lib/rtm -L$(top_builddir)/src/lib/rtm/idl
 
 # Suffix definition of sources and headers of skeletons and stubs 
 SUFFIXES = .idl Skel.cpp Stub.cpp Stub.o Skel.o
@@ -161,22 +161,22 @@ vc8proj: libRTCSkel.vcproj.yaml
 		--type LIB \
 		--vcversion "8.00" \
 		--version $(RTM_VERSION) \
-		--out $(win32_builddir)/rtm_corba/idl/libRTCSkel_vc8.vcproj \
+		--out $(win32_builddir)/rtm/idl/libRTCSkel_vc8.vcproj \
 		--yaml libRTCSkel.vcproj.yaml \
 		--source $(SKEL_CPP) \
 		--header $(SKEL_H)
-	qkc -sm $(win32_builddir)/rtm_corba/idl/libRTCSkel_vc8.vcproj
+	qkc -sm $(win32_builddir)/rtm/idl/libRTCSkel_vc8.vcproj
 
 vc9proj: libRTCSkel.vcproj.yaml
 	$(top_builddir)/build/vcprojtool.py vcproj \
 		--type LIB \
 		--vcversion "9.00" \
 		--version $(RTM_VERSION) \
-		--out $(win32_builddir)/rtm_corba/idl/libRTCSkel_vc9.vcproj \
+		--out $(win32_builddir)/rtm/idl/libRTCSkel_vc9.vcproj \
 		--yaml libRTCSkel.vcproj.yaml \
 		--source $(SKEL_CPP) \
 		--header $(SKEL_H)
-	qkc -sm $(win32_builddir)/rtm_corba/idl/libRTCSkel_vc9.vcproj
+	qkc -sm $(win32_builddir)/rtm/idl/libRTCSkel_vc9.vcproj
 
 #------------------------------------------------------------
 # for wxs file

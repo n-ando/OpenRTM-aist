@@ -25,8 +25,8 @@
 #include <iostream>
 
 #include <rtm/RTC.h>
-#include <rtm_corba/idl/RTCSkel.h>
-#include <rtm_corba/idl/OpenRTMSkel.h>
+#include <rtm/idl/RTCSkel.h>
+#include <rtm/idl/OpenRTMSkel.h>
 #include <rtm/Manager.h>
 #include <rtm/StateMachine.h>
 #include <rtm/ExecutionContextBase.h>

@@ -371,9 +371,9 @@ namespace ExtTrigExecutionContext
       ec->tick();
       for (int tickCalledCount = 0; tickCalledCount < 10; tickCalledCount++)
 	{
-	  sleep(1);
+          usleep(1000);
 	  CPPUNIT_ASSERT_EQUAL(tickCalledCount, mock->countLog("on_execute"));
-	  sleep(1);
+          usleep(1000);
 	  ec->tick();
 	}
     }

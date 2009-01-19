@@ -4,7 +4,6 @@
 #
 #
 
-
 AUTOMAKE_OPTIONS = 1.9
 
 IDLC = @IDLC@
@@ -15,8 +14,8 @@ AM_CPPFLAGS=               \
 	-I.                \
 	-I$(top_builddir)  \
 	-I$(top_builddir)/src/lib/ \
-	-I$(top_builddir)/src/lib/rtm_corba \
-	-I$(top_builddir)/src/lib/rtm_corba/idl \
+	-I$(top_builddir)/src/lib/rtm \
+	-I$(top_builddir)/src/lib/rtm/idl \
 	-I$(top_builddir)/src/lib/coil/include \
 	-I$(includedir)
 
@@ -26,7 +25,7 @@ AM_LDFLAGS=           \
 	-L$(top_builddir)/src/lib/coil/lib
 
 IDL_SOURCES = \
-	$(top_srcdir)/src/lib/rtm_corba/idl/DataPort.idl
+	$(top_srcdir)/src/lib/rtm/idl/DataPort.idl
 
 SUFFIXES = .idl Skel.cpp Stub.cpp Stub.o Skel.o
 .idlSkel.cpp:
@@ -43,7 +42,7 @@ nodist_InPortCorbaConsumerTests_SOURCES = \
 	$(top_srcdir)/src/lib/rtm/NVUtil.cpp \
 	InPortCorbaConsumerTests.cpp
 
-InPortCorbaConsumerTests_LDFLAGS = -L$(libdir)
+InPortCorbaConsumerTests_LDFLAGS = -L$(libdir) $(AM_LDFLAGS)
 InPortCorbaConsumerTests_LDADD   = -lcppunit -lcoil
 
 EXTRA_DIST =               \
@@ -61,6 +60,7 @@ do-test:
 # clean-up
 clean-local:
 	rm -f                               \
+        *.log *.xml                         \
 	*.o *.Po *.gch *.la                 \
 	*Skel.cpp *Skel.h *Stub.cpp *Stub.h \
 	*~ *core                            \

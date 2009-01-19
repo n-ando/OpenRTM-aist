@@ -76,7 +76,7 @@ namespace RTC
     
     // Publisher を OutPort にアタッチ
     m_outport.attach(connector_profile.connector_id, publisher);
-    
+    m_outport.onConnect(connector_profile.connector_id, publisher);
     return RTC::RTC_OK;
   }
   
@@ -93,6 +93,7 @@ namespace RTC
     PublisherBase* publisher;
     publisher = m_outport.detach(connector_profile.connector_id);
     m_pf.destroy(publisher);
+    m_outport.onDisconnect(connector_profile.connector_id);
     return;
   }
 };

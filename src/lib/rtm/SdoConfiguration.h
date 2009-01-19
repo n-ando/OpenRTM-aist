@@ -26,7 +26,7 @@
 #include <coil/Guard.h>
 
 // local includes
-#include <rtm_corba/idl/SDOPackageSkel.h>
+#include <rtm/idl/SDOPackageSkel.h>
 #include <rtm/ConfigAdmin.h>
 #include <string>
 

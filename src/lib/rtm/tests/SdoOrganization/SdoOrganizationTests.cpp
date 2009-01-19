@@ -37,7 +37,8 @@
 #include <cppunit/extensions/TestFactoryRegistry.h>
 #include <cppunit/extensions/HelperMacros.h>
 #include <cppunit/TestAssert.h>
-
+#include <rtm/RTObject.h>
+#include <rtm/Manager.h>
 #include <rtm/SdoOrganization.h>
 
 
@@ -89,7 +90,10 @@ namespace SdoOrganization
      */
     virtual void setUp()
     {
-      m_pOi = new Organization_impl();
+      ::RTC::RTObject_impl* rtobj;
+      ::RTC::Manager& mgr(RTC::Manager::instance());
+      rtobj = new ::RTC::RTObject_impl(&mgr);
+      m_pOi = new Organization_impl(rtobj->getObjRef());
     }
     
     /*!

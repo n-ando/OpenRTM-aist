@@ -9,20 +9,6 @@
 #
 #------------------------------------------------------------
 
-#
-# $Log: Makefile.am,v $
-# Revision 1.3  2007/01/21 06:53:04  n-ando
-# The include search path option order in AM_CPPFLAGS was changed.
-#
-# Revision 1.2  2007/01/12 14:44:55  n-ando
-# Some fixes for distribution control.
-#
-# Revision 1.1  2006/12/18 06:50:53  n-ando
-# The first commitment.
-#
-#
-
-
 AUTOMAKE_OPTIONS = 1.9
 
 IDLC = @IDLC@
@@ -34,8 +20,7 @@ AM_CPPFLAGS =             \
 	-I$(top_builddir) \
 	-I$(top_builddir)         \
 	-I$(top_builddir)/src/lib/ \
-	-I$(top_builddir)/src/lib/rtm_corba \
-	-I$(top_builddir)/src/lib/rtm_corba/idl \
+	-I$(top_builddir)/src/lib/rtm/idl \
 	-I$(top_builddir)/src/lib/coil/include \
 	-I$(top_builddir)/src/lib/rtm \
 	-I$(includedir)
@@ -59,7 +44,7 @@ nodist_PublisherFactoryTests_SOURCES =            \
 	$(top_builddir)/src/lib/rtm/PublisherFlush.cpp    \
 	PublisherFactoryTests.cpp
 
-PublisherFactoryTests_LDFLAGS = -L$(libdir)
+PublisherFactoryTests_LDFLAGS = -L$(libdir) -L$(AM_LDFLAGS)
 PublisherFactoryTests_LDADD   = -lcppunit -lcoil
 
 EXTRA_DIST =                  \
@@ -76,6 +61,7 @@ do-test:
 # clean-up
 clean-local:
 	rm -f PublisherFactoryTests         \
+        *.log *.xml                         \
 	*.o *.Po *.gch *.la                 \
 	*Skel.cpp *Skel.h *Stub.cpp *Stub.h \
 	*~ *core                            \

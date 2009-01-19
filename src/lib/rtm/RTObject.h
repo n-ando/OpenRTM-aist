@@ -20,13 +20,12 @@
 #define RTObject_h
 
 // CORBA header include
-#include "rtm/RTC.h"
-#include "coil/Properties.h"
-#include "rtm_corba/idl/RTCSkel.h"
-#include "rtm_corba/idl/OpenRTMSkel.h"
-#include "rtm/PortBase.h"
-//#include "rtm/ObjectManager.h"
-#include "rtm/PortAdmin.h"
+#include <rtm/RTC.h>
+#include <coil/Properties.h>
+#include <rtm/idl/RTCSkel.h>
+#include <rtm/idl/OpenRTMSkel.h>
+#include <rtm/PortBase.h>
+#include <rtm/PortAdmin.h>
 #include <rtm/DataInPort.h>
 #include <rtm/DataOutPort.h>
 #include <rtm/InPort.h>

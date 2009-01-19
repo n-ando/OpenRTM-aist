@@ -8,10 +8,10 @@
 AUTOMAKE_OPTIONS = 1.4
 
 ARTLIB = @ARTLIB@
-SUBDIRS = . @UNITTEST@
+SUBDIRS = idl . @UNITTEST@
 
-AM_CPPFLAGS=-I$(top_srcdir)/src/lib -I$(top_srcdir)/src/lib/coil/include -I$(top_srcdir)/src/lib/rtm_corba -I$(top_srcdir)/src/lib/rtm_corba/idl
-AM_LDFLAGS=-L$(top_builddir) -L$(top_builddir)/rtm -L$(top_builddir)/src/lib/rtm_corba/idl -L$(top_builddir)/src/lib/coil/lib
+AM_CPPFLAGS=-I$(top_srcdir)/src/lib -I$(top_srcdir)/src/lib/coil/include -I$(top_srcdir)/src/lib/rtm -I$(top_srcdir)/src/lib/rtm/idl
+AM_LDFLAGS=-L$(top_builddir) -L$(top_builddir)/rtm -L$(top_builddir)/src/lib/rtm/idl -L$(top_builddir)/src/lib/coil/lib
 
 # version.h would be generated from configure before lib build process.
 BUILT_SOURCES = version.h
@@ -85,12 +85,12 @@ libRTC_la_SOURCES = \
 
 libRTC_la_LIBADD = \
 	$(top_builddir)/src/lib/coil/lib/libcoil.a \
-	$(top_builddir)/src/lib/rtm_corba/idl/libRTCSkel.la
+	$(top_builddir)/src/lib/rtm/idl/libRTCSkel.la
 
 # $(top_builddir)/rtm/idl/libRTCStub.la $(ARTLIB)
 libRTC_la_LDFLAGS =                 \
 	-no-undefined               \
-	-L$(top_builddir)/src/lib/rtm_corba/idl   \
+	-L$(top_builddir)/src/lib/rtm/idl   \
 	-release $(PACKAGE_VERSION) \
 	-version-info 0:4:0
 

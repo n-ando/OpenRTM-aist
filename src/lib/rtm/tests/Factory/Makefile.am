@@ -9,20 +9,6 @@
 #
 #------------------------------------------------------------
 
-#
-# $Log: Makefile.am,v $
-# Revision 1.3  2007/01/21 06:51:58  n-ando
-# The include search path option order in AM_CPPFLAGS was changed.
-#
-# Revision 1.2  2007/01/12 14:43:33  n-ando
-# Some fixes for distribution control.
-#
-# Revision 1.1  2006/11/27 08:32:07  n-ando
-# TestSuites are devided into each directory.
-#
-#
-
-
 AUTOMAKE_OPTIONS = 1.9
 
 IDLC = @IDLC@
@@ -33,8 +19,7 @@ AM_CPPFLAGS = \
 	-I. \
 	-I$(top_builddir) \
 	-I$(top_builddir)/src/lib \
-	-I$(top_builddir)/src/lib/rtm_corba/idl \
-	-I$(top_builddir)/src/lib/rtm_corba \
+	-I$(top_builddir)/src/lib/rtm/idl \
 	-I$(top_builddir)/src/lib/coil/include \
 	-I$(top_builddir)/src/lib/rtm \
 	-I$(includedir)
@@ -45,9 +30,10 @@ AM_LDFLAGS = \
 	-L$(top_builddir)/src/lib/coil/lib
 
 IDL_SOURCES = \
-	$(top_srcdir)/src/lib/rtm_corba/idl/SDOPackage.idl \
-	$(top_srcdir)/src/lib/rtm_corba/idl/RTC.idl \
-	$(top_srcdir)/src/lib/rtm_corba/idl/OpenRTM.idl
+	$(top_srcdir)/src/lib/rtm/idl/SDOPackage.idl \
+	$(top_srcdir)/src/lib/rtm/idl/RTC.idl \
+	$(top_srcdir)/src/lib/rtm/idl/OpenRTM.idl \
+	$(top_srcdir)/src/lib/rtm/idl/Manager.idl
 
 noinst_PROGRAMS = FactoryTests
 
@@ -66,7 +52,6 @@ nodist_FactoryTests_SOURCES = \
 	$(top_srcdir)/src/lib/rtm/ManagerConfig.cpp \
 	$(top_srcdir)/src/lib/coil/common/stringutil.cpp \
 	$(top_srcdir)/src/lib/coil/common/Timer.cpp \
-	$(top_srcdir)/src/lib/rtm/CorbaObjectManager.cpp \
 	$(top_srcdir)/src/lib/rtm/PeriodicExecutionContext.cpp \
 	$(top_srcdir)/src/lib/rtm/OpenHRPExecutionContext.cpp \
 	$(top_srcdir)/src/lib/rtm/ExtTrigExecutionContext.cpp \
@@ -76,9 +61,12 @@ nodist_FactoryTests_SOURCES = \
 	$(top_srcdir)/src/lib/rtm/CorbaNaming.cpp \
 	$(top_srcdir)/src/lib/rtm/PortBase.cpp \
 	$(top_srcdir)/src/lib/rtm/NVUtil.cpp \
+	$(top_srcdir)/src/lib/rtm/ManagerServant.cpp \
+	$(top_srcdir)/src/lib/rtm/PeriodicECSharedComposite.cpp \
+	$(top_srcdir)/src/lib/rtm/SdoOrganization.cpp \
 	FactoryTests.cpp
 
-FactoryTests_LDFLAGS = -L$(libdir)
+FactoryTests_LDFLAGS = -L$(libdir) $(AM_LDFLAGS)
 FactoryTests_LDADD   = -lcppunit -lcoil -luuid
 
 EXTRA_DIST = \
@@ -94,6 +82,7 @@ do-test:
 # clean-up
 clean-local:
 	rm -f                               \
+        *.log *.xml                         \
 	*.o *.Po *.gch *.la                 \
 	*Skel.cpp *Skel.h *Stub.cpp *Stub.h \
 	*~ *core                            \

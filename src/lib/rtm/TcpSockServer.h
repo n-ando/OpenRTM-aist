@@ -27,7 +27,7 @@
 #include <ace/Event_Handler.h>
 #include <ace/INET_Addr.h>
 #include <ace/SOCK_Stream.h>
-#include <rtm/Task.h>
+#include <coil/Task.h>
 #include <ace/OS.h>
 #include <iostream>
 #include <rtm/BufferBase.h>
@@ -359,7 +359,7 @@ namespace RTC
    */
   template <class DataType>
   class TcpServer
-    : public RTM::Task
+    : public coil::Task
   {
   public:
     /*!

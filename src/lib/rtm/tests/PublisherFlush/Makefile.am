@@ -33,8 +33,8 @@ AM_CPPFLAGS =             \
 	-I.               \
 	-I$(top_builddir) \
 	-I$(top_builddir)/src/lib/ \
-	-I$(top_builddir)/src/lib/rtm_corba/idl \
-	-I$(top_builddir)/src/lib/rtm_corba \
+	-I$(top_builddir)/src/lib/rtm/idl \
+	-I$(top_builddir)/src/lib/rtm \
 	-I$(top_builddir)/src/lib/coil/include \
 	-I$(includedir)
 
@@ -54,7 +54,7 @@ nodist_PublisherFlushTests_SOURCES =           \
 	$(top_builddir)/src/lib/coil/common/stringutil.cpp     \
 	PublisherFlushTests.cpp
 
-PublisherFlushTests_LDFLAGS = -L$(libdir)
+PublisherFlushTests_LDFLAGS = -L$(libdir) -L$(AM_LDFLAGS)
 PublisherFlushTests_LDADD   = -lcppunit -lcoil
 
 EXTRA_DIST =                \
@@ -71,6 +71,7 @@ do-test:
 # clean-up
 clean-local:
 	rm -f PublisherFlushTests           \
+        *.log *.xml                         \
 	*.o *.Po *.gch *.la                 \
 	*Skel.cpp *Skel.h *Stub.cpp *Stub.h \
 	*~ *core                            \

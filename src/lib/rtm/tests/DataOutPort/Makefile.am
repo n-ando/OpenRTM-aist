@@ -9,36 +9,24 @@
 #
 #------------------------------------------------------------
 
-#
-# $Log: Makefile.am,v $
-# Revision 1.3  2007/01/21 06:51:52  n-ando
-# The include search path option order in AM_CPPFLAGS was changed.
-#
-# Revision 1.2  2007/01/12 14:43:27  n-ando
-# Some fixes for distribution control.
-#
-# Revision 1.1  2006/11/27 08:30:18  n-ando
-# TestSuites are devided into each directory.
-#
-#
-
-
 AUTOMAKE_OPTIONS = 1.9
 
 IDLC = @IDLC@
 IDLFLAGS = @IDL_FLAGS@
 LIBS = @LIBS@
 
-AM_CPPFLAGS =                     \
-	-I.                       \
-	-I$(top_builddir)         \
-	-I$(top_builddir)/rtm/idl \
-	-I$(includedir)           \
+AM_CPPFLAGS =                             \
+	-I.                               \
+	-I$(top_builddir)/src/lib         \
+	-I$(top_builddir)/src/lib/rtm/idl \
+	-I$(includedir)                   \
+	-I$(top_builddir)/src/lib/coil/include \
 	-DORB_IS_OMNIORB
 
 AM_LDFLAGS =              \
 	-L.               \
-	-L$(top_builddir)
+	-L$(top_builddir) \
+	-L$(top_builddir)/src/lib/coil/lib
 
 
 SUFFIXES = .idl Skel.cpp Stub.cpp Stub.o Skel.o
@@ -46,32 +34,31 @@ SUFFIXES = .idl Skel.cpp Stub.cpp Stub.o Skel.o
 	$(top_srcdir)/build/makewrapper.py $< rtm/tests
 	$(IDLC) $(IDLFLAGS) $<
 
-IDL_SOURCES =                                   \
-	$(top_srcdir)/rtm/idl/RTC.idl           \
-	$(top_srcdir)/rtm/idl/SDOPackage.idl    \
-	$(top_srcdir)/rtm/idl/DataPort.idl      \
-	$(top_srcdir)/rtm/idl/BasicDataType.idl
+IDL_SOURCES =             \
+	$(top_srcdir)/src/lib/rtm/idl/RTC.idl           \
+	$(top_srcdir)/src/lib/rtm/idl/SDOPackage.idl    \
+	$(top_srcdir)/src/lib/rtm/idl/DataPort.idl      \
+	$(top_srcdir)/src/lib/rtm/idl/BasicDataType.idl
 
 noinst_PROGRAMS = DataOutPortTests
 
 nodist_DataOutPortTests_SOURCES =               \
 	../TestRunner.cpp                       \
 	$(IDL_SOURCES:.idl=Skel.cpp)            \
-	$(top_srcdir)/rtm/StringUtil.cpp        \
-	$(top_srcdir)/rtm/Properties.cpp        \
-	$(top_srcdir)/rtm/NVUtil.cpp            \
-	$(top_srcdir)/rtm/PortBase.cpp          \
-	$(top_srcdir)/rtm/OutPortBase.cpp       \
-	$(top_srcdir)/rtm/OutPortProvider.cpp   \
-	$(top_srcdir)/rtm/DataOutPort.cpp       \
-	$(top_srcdir)/rtm/PublisherFactory.cpp  \
-	$(top_srcdir)/rtm/PublisherNew.cpp      \
-	$(top_srcdir)/rtm/PublisherPeriodic.cpp \
-	$(top_srcdir)/rtm/PublisherFlush.cpp    \
+	$(top_srcdir)/src/lib/rtm/Properties.cpp        \
+	$(top_srcdir)/src/lib/rtm/NVUtil.cpp            \
+	$(top_srcdir)/src/lib/rtm/PortBase.cpp          \
+	$(top_srcdir)/src/lib/rtm/OutPortBase.cpp       \
+	$(top_srcdir)/src/lib/rtm/OutPortProvider.cpp   \
+	$(top_srcdir)/src/lib/rtm/DataOutPort.cpp       \
+	$(top_srcdir)/src/lib/rtm/PublisherFactory.cpp  \
+	$(top_srcdir)/src/lib/rtm/PublisherNew.cpp      \
+	$(top_srcdir)/src/lib/rtm/PublisherPeriodic.cpp \
+	$(top_srcdir)/src/lib/rtm/PublisherFlush.cpp    \
 	DataOutPortTests.cpp
 
-DataOutPortTests_LDFLAGS = -L$(libdir)
-DataOutPortTests_LDADD   = -lcppunit
+DataOutPortTests_LDFLAGS = -L$(libdir) $(AM_LDFLAGS)
+DataOutPortTests_LDADD   = -lcppunit -lcoil
 
 EXTRA_DIST =             \
 	DataOutPortTests.cpp
@@ -86,6 +73,7 @@ do-test:
 # clean-up
 clean-local:
 	rm -f                               \
+        *.log *.xml                         \
 	*.o *.Po *.gch *.la                 \
 	*Skel.cpp *Skel.h *Stub.cpp *Stub.h \
 	*~ *core                            \

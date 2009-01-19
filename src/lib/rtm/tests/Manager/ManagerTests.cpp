@@ -310,21 +310,26 @@ namespace Tests
     bool canResolve(const char* name_server, const char* id, const char* kind)
     {
       CosNaming::NamingContext_var nc = getRootContext(name_server);
-			
+      if (CORBA::is_nil(nc)) return false;
       CosNaming::Name name;
       name.length(1);
       name[0].id = id;
       name[0].kind = kind;
 			
-      CORBA::Object_ptr obj;
+      CORBA::Object_var obj;
       try
 	{
-	  obj = nc->resolve(name);
+      	  obj = nc->resolve(name);
 	}
       catch (CosNaming::NamingContext::NotFound e)
 	{
 	  return false;
 	}
+      catch (...)
+        {
+          std::cout << "nameserver->resolve() failed" << std::endl;
+          return false;
+        }
       return !CORBA::is_nil(obj);
     }
 	
@@ -1104,7 +1109,7 @@ shutdown_ORB(m_mgr);
       CPPUNIT_ASSERT_EQUAL(
 			   std::string("DataFlowComponent0"), // ※末尾の0はNumberingPolicyにより付加される
 			   std::string(comp->getInstanceName()));
-			
+
       // コンポーネントに、意図どおりExecutionContextがアタッチされているか？
       RTC::ExecutionContextList* ecList = comp->get_owned_contexts();
       CPPUNIT_ASSERT(ecList != NULL);
@@ -1113,14 +1118,15 @@ shutdown_ORB(m_mgr);
       // cleanupComponent()により、正しく登録解除されるか？
       // - 登録したコンポーネントが、ネームサービスから正しく登録解除されるか？
       // - 登録したコンポーネントが、Managerから正しく登録解除されるか？
-      CPPUNIT_ASSERT(canResolve(name_server, "DataFlowComponent0", "rtc"));
+      CPPUNIT_ASSERT(!canResolve(name_server, "DataFlowComponent0", "rtc"));
       CPPUNIT_ASSERT_EQUAL(comp, m_mgr->getComponent("DataFlowComponent0"));
+
       m_mgr->cleanupComponent(comp);
       CPPUNIT_ASSERT(! canResolve(name_server, "DataFlowComponent0", "rtc"));
       CPPUNIT_ASSERT(m_mgr->getComponent("DataFlowComponent0") == NULL);
 
-
       comp->exit();
+      usleep(10000);
       m_mgr->terminate();
 
     }

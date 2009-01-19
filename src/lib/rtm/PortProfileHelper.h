@@ -21,14 +21,14 @@
 
 
 // RTC header include
-#include "rtm/RTC.h"
-#include "rtm/Util.h"
+#include <rtm/RTC.h>
+#include <rtm/Util.h>
 
 // ACE includes
 #include <coil/Mutex.h>
 
 // CORBA header include
-#include "rtm_corba/idl/RTCSkel.h"
+#include <rtm/idl/RTCSkel.h>
 
 
 

@@ -177,7 +177,7 @@ namespace DynamicLib
 
       char * p = (char *)dl1->symbol("HogeHoge");
 //      std::cout << "Error : " << dl1->error() << "." << std::endl ;
-      CPPUNIT_ASSERT_EQUAL(0, (int)p);
+      CPPUNIT_ASSERT(0 == p);
 
       dl1->close();
       delete dl1;
