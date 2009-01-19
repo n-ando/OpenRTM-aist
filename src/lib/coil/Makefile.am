@@ -12,7 +12,7 @@ if COIL_PLATFORM_POSIX
 PLATFORM = posix
 endif
 
-SUBDIRS = $(PLATFORM) @UNITTEST@ include lib build common utils win32
+SUBDIRS = $(PLATFORM) include lib build common utils win32 @UNITTEST@
 DIST_SUBDIR = posix ace
 
 clean-local:

@@ -17,9 +17,9 @@
 AUTOMAKE_OPTIONS = 1.9
 
 AM_CPPFLAGS= -I.                  \
-	-I$(includedir)           \
 	-I$(top_builddir)         \
-	-I$(top_srcdir)/include
+	-I$(top_srcdir)/include   \
+	-I$(includedir)
 
 AM_LDFLAGS= -L.                   \
 	-L$(top_builddir)
