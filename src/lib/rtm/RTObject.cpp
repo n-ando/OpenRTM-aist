@@ -61,7 +61,7 @@ namespace RTC
       m_pORB(CORBA::ORB::_duplicate(manager->getORB())),
       m_pPOA(PortableServer::POA::_duplicate(manager->getPOA())),
       m_portAdmin(manager->getORB(), manager->getPOA()),
-      m_created(true), m_alive(false),
+      m_created(true), //m_alive(false),
       m_properties(default_conf), m_configsets(*(m_properties.getNode("conf")))
   {
     m_objref = this->_this();
@@ -82,7 +82,7 @@ namespace RTC
       m_pORB(CORBA::ORB::_duplicate(orb)),
       m_pPOA(PortableServer::POA::_duplicate(poa)),
       m_portAdmin(orb, poa),
-      m_created(true), m_alive(false),
+      m_created(true), //m_alive(false),
       m_properties(default_conf), m_configsets(*(m_properties.getNode("conf")))
   {
     m_objref = this->_this();
@@ -285,19 +285,22 @@ namespace RTC
   ReturnCode_t RTObject_impl::initialize()
     throw (CORBA::SystemException)
   {
+    // at least one EC must be attached
+    if (m_ecMine.length() == 0) return RTC::PRECONDITION_NOT_MET;
+
     ReturnCode_t ret;
-    if (m_alive) return RTC::PRECONDITION_NOT_MET;
     ret = on_initialize();
+    if (ret != RTC::RTC_OK) return ret;
+
     m_created = false;
-    
-    if (ret == RTC::RTC_OK)
+
+    // -- entering alive state --
+    for (::CORBA::ULong i(0), len(m_ecMine.length()); i < len; ++i)
       {
-	if (m_execContexts.length() > 0)
-	  {
-	    m_execContexts[0]->start();
-	  }
-	m_alive = true;
+        m_ecMine[i]->start();
       }
+
+    // ret must be RTC_OK
     return ret;
   }
   
@@ -313,14 +316,15 @@ namespace RTC
   {
     if (m_created) return RTC::PRECONDITION_NOT_MET;
     
-    //Return RTC::PRECONDITION_NOT_MET,When the component is registered in ExecutionContext.
-    if(m_execContexts.length())
+    // Return RTC::PRECONDITION_NOT_MET,
+    // When the component is registered in ExecutionContext.
+    if(m_ecMine.length() != 0 || m_ecOther.length() != 0)
     {
       return RTC::PRECONDITION_NOT_MET;
     }
     
     ReturnCode_t ret(on_finalize());
-    m_alive = false;
+
     shutdown();
     return ret;
   }
@@ -337,19 +341,31 @@ namespace RTC
   ReturnCode_t RTObject_impl::exit()
     throw (CORBA::SystemException)
   {
-    CORBA_SeqUtil::for_each(m_execContexts,
+    if (m_created) return RTC::PRECONDITION_NOT_MET;
+
+    // deactivate myself on owned EC
+    CORBA_SeqUtil::for_each(m_ecMine,
 	    deactivate_comps(RTC::LightweightRTObject::_duplicate(m_objref)));
-    if (m_execContexts.length() > 0)
+    // deactivate myself on other EC
+    CORBA_SeqUtil::for_each(m_ecOther,
+	    deactivate_comps(RTC::LightweightRTObject::_duplicate(m_objref)));
+
+    // stop and detach myself from owned EC
+    for (CORBA::ULong ic(0), len(m_ecMine.length()); ic < len; ++ic)
       {
-	m_execContexts[0]->stop();
-	m_alive = false;
+        m_ecMine[ic]->stop();
+        m_ecMine[ic]->remove_component(this->_this());
       }
-    for (CORBA::ULong ic(0), len(m_execContexts.length()); ic < len; ++ic)
+
+    // detach myself from other EC
+    for (CORBA::ULong ic(0), len(m_ecOther.length()); ic < len; ++ic)
       {
-        m_execContexts[ic]->remove_component(this->_this());
+        m_ecOther[ic]->stop();
+        m_ecOther[ic]->remove_component(this->_this());
       }
+
     ReturnCode_t ret(finalize());
-    
+
     return ret;
   }
   
@@ -363,8 +379,18 @@ namespace RTC
   CORBA::Boolean RTObject_impl::is_alive(ExecutionContext_ptr exec_context)
     throw (CORBA::SystemException)
   {
-    // ### not implemented ###
-    return m_alive;
+    for (::CORBA::ULong i(0), len(m_ecMine.length()); i < len; ++i)
+      {
+        if (exec_context->_is_equivalent(m_ecMine[i]))
+          return true;
+      }
+
+    for (::CORBA::ULong i(0), len(m_ecOther.length()); i < len; ++i)
+      {
+        if (exec_context->_is_equivalent(m_ecOther[i]))
+          return true;
+      }
+    return false;
   }
   
   /*!
@@ -377,11 +403,28 @@ namespace RTC
   ExecutionContext_ptr RTObject_impl::get_context(UniqueId ec_id)
     throw (CORBA::SystemException)
   {
-    if (((CORBA::Long)ec_id) > ((CORBA::Long)m_execContexts.length() - 1))
+    // owned EC
+    if (ec_id < ECOTHER_OFFSET)
       {
-	return ExecutionContext::_nil();
+        if ((::CORBA::ULong)ec_id < m_ecMine.length())
+          {
+            return ExecutionContext::_duplicate(m_ecMine[ec_id]);
+          }
+        else
+          {
+            return ExecutionContext::_nil();
+          }
       }
-    return ExecutionContext::_duplicate(m_execContexts[ec_id]);
+
+    // participating EC
+    ::CORBA::ULong index(ec_id - ECOTHER_OFFSET);
+
+    if (index < m_ecOther.length())
+      {
+        return ExecutionContext::_duplicate(m_ecOther[index]);
+      }
+
+    return ExecutionContext::_nil();
   }
     
   /*!
@@ -397,7 +440,7 @@ namespace RTC
     ExecutionContextList_var execlist;
     execlist = new ExecutionContextList();
     
-    CORBA_SeqUtil::for_each(m_execContexts, ec_copy(execlist));
+    CORBA_SeqUtil::for_each(m_ecMine, ec_copy(execlist));
     
     return execlist._retn();
   }
@@ -415,8 +458,7 @@ namespace RTC
     ExecutionContextList_var execlist;
     execlist = new ExecutionContextList();
     
-    // ### not implemented ###
-    //    CORBA_SeqUtil::for_each(m_execContexts, ec_copy(execlist));
+    CORBA_SeqUtil::for_each(m_ecOther, ec_copy(execlist));
     
     return execlist._retn();
   }
@@ -433,9 +475,15 @@ namespace RTC
   RTObject_impl::get_context_handle(ExecutionContext_ptr cxt)
     throw (CORBA::SystemException)
   {
+    // ec_id 0 : owned context
+    // ec_id 1-: participating context
+    if (cxt->_is_equivalent(m_ecMine[0]))
+      {
+        return (ExecutionContextHandle_t)0;
+      }
     CORBA::Long num;
-    num = CORBA_SeqUtil::find(m_execContexts, ec_find(cxt));
-    return (ExecutionContextHandle_t)num;
+    num = CORBA_SeqUtil::find(m_ecOther, ec_find(cxt));
+    return (ExecutionContextHandle_t)(num + 1);
   }
 
 
@@ -449,6 +497,10 @@ namespace RTC
   UniqueId RTObject_impl::attach_context(ExecutionContext_ptr exec_context)
     throw (CORBA::SystemException)
   {
+    // ID: 0 - (offset-1) : owned ec
+    // ID: offset -       : participating ec
+    // owned       ec index = ID
+    // participate ec index = ID - offset
     ExecutionContextService_var ecs;
     ecs = ExecutionContextService::_narrow(exec_context);
     if (CORBA::is_nil(ecs))
@@ -456,12 +508,54 @@ namespace RTC
 	return -1;
       }
     
+    // if m_ecOther has nil element, insert attached ec to there.
+    for (::CORBA::ULong i(0), len(m_ecOther.length()); i < len; ++i)
+      {
+        if (::CORBA::is_nil(m_ecOther[i]))
+          {
+            m_ecOther[i] = ExecutionContextService::_duplicate(ecs);
+            return i + ECOTHER_OFFSET;
+          }
+      }
+
+    // no space in the list, push back ec to the last.
     CORBA_SeqUtil::
-      push_back(m_execContexts, ExecutionContextService::_duplicate(ecs));
+      push_back(m_ecOther, ExecutionContextService::_duplicate(ecs));
     
-    return m_execContexts.length() - 1;
+    return (m_ecOther.length() - 1) + ECOTHER_OFFSET;
   }
   
+  UniqueId
+  RTObject_impl::bindContext(ExecutionContext_ptr exec_context)
+  {
+    // ID: 0 - (offset-1) : owned ec
+    // ID: offset -       : participating ec
+    // owned       ec index = ID
+    // participate ec index = ID - offset
+    ExecutionContextService_var ecs;
+    ecs = ExecutionContextService::_narrow(exec_context);
+    if (CORBA::is_nil(ecs))
+      {
+	return -1;
+      }
+    
+    // if m_ecMine has nil element, insert attached ec to there.
+    for (::CORBA::ULong i(0), len(m_ecMine.length()); i < len; ++i)
+      {
+        if (::CORBA::is_nil(m_ecMine[i]))
+          {
+            m_ecMine[i] = ExecutionContextService::_duplicate(ecs);
+            return i + ECOTHER_OFFSET;
+          }
+      }
+
+    // no space in the list, push back ec to the last.
+    CORBA_SeqUtil::
+      push_back(m_ecMine, ExecutionContextService::_duplicate(ecs));
+    
+    return (m_ecMine.length() - 1) + ECOTHER_OFFSET;
+  }
+
   /*!
    * @if jp
    * @brief [CORBA interface] ExecutionContextをdetachする
@@ -472,19 +566,27 @@ namespace RTC
   ReturnCode_t RTObject_impl::detach_context(UniqueId ec_id)
     throw (CORBA::SystemException)
   {
-    if (((CORBA::Long)ec_id) > ((CORBA::Long)m_execContexts.length() - 1))
+    ::CORBA::ULong len(m_ecOther.length());
+
+    // ID: 0 - (offset-1) : owned ec
+    // ID: offset -       : participating ec
+    // owned       ec index = ID
+    // participate ec index = ID - offset
+    if ((CORBA::ULong)ec_id < ECOTHER_OFFSET || 
+        (CORBA::ULong)(ec_id - ECOTHER_OFFSET) > len)
+      {
+	return RTC::BAD_PARAMETER;
+      }
+    ::CORBA::ULong index(ec_id - ECOTHER_OFFSET);
+
+    if (CORBA::is_nil(m_ecOther[index]))
       {
 	return RTC::BAD_PARAMETER;
       }
     
-    if (CORBA::is_nil(m_execContexts[ec_id]))
-      {
-	return RTC::BAD_PARAMETER;
-      }
-    
-    CORBA::release(m_execContexts[ec_id]);
-//    m_execContexts[ec_id] = ExecutionContextService::_nil();
-    CORBA_SeqUtil::erase(m_execContexts,ec_id);
+    CORBA::release(m_ecOther[index]);
+    CORBA_SeqUtil::erase(m_ecOther, index);
+
     return RTC::RTC_OK;
   }
   
@@ -539,29 +641,6 @@ namespace RTC
     return 0;
   }
   
-  /*!
-   * @if jp
-   * @brief [RTObject CORBA interface] ExecutionContextAdmin を取得する
-   * @else
-   * @brief [RTCObject CORBA interface] Get ExecutionContextAdmin
-   * @endif
-   */
-//  ExecutionContextServiceList* RTObject_impl::get_execution_context_services()
-//    throw (CORBA::SystemException)
-//  {
-//    try
-//      {
-//	ExecutionContextServiceList_var exec_context;
-//	exec_context = new ExecutionContextServiceList(m_execContexts);
-//	return exec_context._retn();
-//      }
-//    catch (...)
-//      {
-//	; // This operation throws no exception.
-//      }
-//    assert(false);
-//    return 0;
-//  }
   
   //============================================================
   // RTC::ComponentAction

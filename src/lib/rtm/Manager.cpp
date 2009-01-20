@@ -225,19 +225,21 @@ namespace RTC
       {
         if(CORBA::is_nil(this->getPOAManager()))
         {
+          RTC_ERROR(("Could not get POA manager."));
           return false;
         }
 	this->getPOAManager()->activate();
-	
-	if (m_initProc != NULL)
-	  m_initProc(this);
+        RTC_TRACE(("POA Manager activated."));
       }
     catch (...)
       {
+        RTC_ERROR(("POA Manager activatatin failed."));
 	return false;
       }
 
-    std::vector<std::string> mods(coil::split(m_config["manager.modules.preload"], ","));
+    std::vector<std::string> mods;
+    mods = coil::split(m_config["manager.modules.preload"], ",");
+
     for (int i(0), len(mods.size()); i < len; ++i)
       {
 	std::string basename(coil::split(mods[i], ".").operator[](0));
@@ -248,22 +250,29 @@ namespace RTC
 	  }
 	catch (ModuleManager::Error& e)
 	  {
-	    RTC_ERROR(("Error: %s", e.reason.c_str()));
+	    RTC_ERROR(("Module load error: %s", e.reason.c_str()));
 	  }
 	catch (ModuleManager::NotFound& e)
 	  {
-	    RTC_ERROR(("NotFount: %s", e.name.c_str()));
+	    RTC_ERROR(("Module not found: %s", e.name.c_str()));
 	  }
 	catch (...)
 	  {
 	    RTC_ERROR(("Unknown Exception"));
 	  }
       }
-    std::vector<std::string> comp(coil::split(m_config["manager.components.precreate"], ","));
+    std::vector<std::string> comp;
+    comp = coil::split(m_config["manager.components.precreate"], ",");
     for (int i(0), len(comp.size()); i < len; ++i)
       {
 	this->createComponent(comp[i].c_str());
       }
+
+    if (m_initProc != NULL)
+      {
+        m_initProc(this);
+      }
+
     return true;
   }
   
@@ -630,7 +639,7 @@ std::vector<coil::Properties> Manager::getLoadableModules()
           }
 	exec_cxt = m_ecfactory.find(ectype)->create();
       }
-    exec_cxt->add_component(rtobj);
+    exec_cxt->bindComponent(comp);
     exec_cxt->start();
     m_ecs.push_back(exec_cxt);
     return true;
