@@ -32,6 +32,7 @@
 #include <rtm/OutPort.h>
 #include <rtm/ConfigAdmin.h>
 
+#define ECOTHER_OFFSET 1000
 
 namespace SDOPackage
 {
@@ -855,6 +856,8 @@ namespace RTC
      */
     UniqueId attach_context(ExecutionContext_ptr exec_context)
       throw (CORBA::SystemException);
+
+    UniqueId bindContext(ExecutionContext_ptr exec_context);
     
     /*!
      * @if jp
@@ -2577,12 +2580,21 @@ namespace RTC
     
     /*!
      * @if jp
-     * @brief ExecutionContextService のリスト
+     * @brief 自分がownerのExecutionContextService のリスト
      * @else
-     * @brief List of ExecutionContextService
+     * @brief List of owned ExecutionContextService
      * @endif
      */
-    ExecutionContextServiceList m_execContexts;
+    ExecutionContextServiceList m_ecMine;
+    
+    /*!
+     * @if jp
+     * @brief 参加しているExecutionContextService のリスト
+     * @else
+     * @brief List of participating ExecutionContextService
+     * @endif
+     */
+    ExecutionContextServiceList m_ecOther;
     
     /*!
      * @if jp
@@ -2600,7 +2612,7 @@ namespace RTC
      * @brief Alive Status Flag
      * @endif
      */
-    bool m_alive;
+    //    bool m_alive;
     
     /*!
      * @if jp

@@ -554,6 +554,8 @@ namespace RTC
      */
     virtual ReturnCode_t add_component(LightweightRTObject_ptr comp)
       throw (CORBA::SystemException);
+
+    virtual RTC::ReturnCode_t bindComponent(RtcBase* rtc);
     
     /*!
      * @if jp

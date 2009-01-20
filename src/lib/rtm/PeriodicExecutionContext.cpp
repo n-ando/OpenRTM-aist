@@ -383,6 +383,21 @@ namespace RTC
       }
     return RTC::RTC_OK;
   }
+
+  RTC::ReturnCode_t PeriodicExecutionContext::bindComponent(RtcBase* rtc)
+  {
+    if (rtc == NULL) return RTC::BAD_PARAMETER;
+
+    LightweightRTObject_var comp = rtc->getObjRef();
+    OpenRTM::DataFlowComponent_ptr dfp;
+    dfp = OpenRTM::DataFlowComponent::_narrow(comp);
+
+    UniqueId id = rtc->bindContext(m_ref);
+    m_comps.push_back(Comp(LightweightRTObject::_duplicate(comp),
+                           OpenRTM::DataFlowComponent::_duplicate(dfp),
+                           id));
+    return RTC::RTC_OK;
+  }
   
   /*!
    * @if jp

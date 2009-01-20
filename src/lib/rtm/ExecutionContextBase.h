@@ -21,6 +21,7 @@
 
 #include <rtm/idl/RTCSkel.h>
 #include <rtm/idl/OpenRTMSkel.h>
+#include <rtm/Factory.h>
 
 namespace RTC
 {
@@ -79,6 +80,9 @@ namespace RTC
     virtual void tick()
       throw (CORBA::SystemException)
     {};
+
+    virtual RTC::ReturnCode_t bindComponent(RtcBase* rtc) = 0;
+
   };
 };
 #endif // ExecutionContextBase_h
