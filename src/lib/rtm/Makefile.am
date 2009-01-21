@@ -188,4 +188,4 @@ EXTRA_DIST = \
 	$(rtmheader_HEADERS) \
 	libRTC.vcproj.yaml
 
-DIST_SUBDIRS = tests
+DIST_SUBDIRS = idl tests
