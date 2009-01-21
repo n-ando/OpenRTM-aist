@@ -67,8 +67,9 @@ AM_WITH_DMALLOC
 AC_CHECK_HEADERS([nlist.h stdlib.h unistd.h])
 AC_CHECK_FUNCS([uname])
 
-CPPFLAGS="-Wl,-E -Wall -fPIC $CPPFLAGS"
-CXXFLAGS="-Wl,-E -Wall -fPIC $CXXFLAGS"
+CPPFLAGS="-Wall -fPIC $CPPFLAGS"
+CXXFLAGS="-Wall -fPIC $CXXFLAGS"
+LDFLAGS="-export-dynamic $LDFLAGS"
 SHLIB_SUFFIX=".so"
 
 AC_SEARCH_LIBS(pthread_create, pthread c_r, , 
