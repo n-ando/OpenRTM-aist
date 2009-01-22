@@ -510,10 +510,6 @@ namespace ManagerServant
         ::RTC::RTObject_ptr outobj;
         outobj = pman->create_component("DummyModule2");
         CPPUNIT_ASSERT(!::CORBA::is_nil(outobj));
-
-        inobj->exit();
-        outobj->exit();
-
     }
     /*! 
      * @brief tests for delete_components()
@@ -536,8 +532,6 @@ namespace ManagerServant
                                ".//.libs/DummyModule2.so"));
 
         ::RTC::RTObject_ptr inobj;
-        inobj = pman->create_component("DummyModule1AA");
-        CPPUNIT_ASSERT(::CORBA::is_nil(inobj));
         inobj = pman->create_component("DummyModule1");
         CPPUNIT_ASSERT(!::CORBA::is_nil(inobj));
 
@@ -592,14 +586,28 @@ namespace ManagerServant
         ::RTC::RTCList rtclist(*list);
         delete list;
 
-        CPPUNIT_ASSERT_EQUAL((::CORBA::ULong)2,
-                             rtclist.length());
-        CPPUNIT_ASSERT(inobj == rtclist[0]);
-        CPPUNIT_ASSERT(outobj == rtclist[1]);
-        
-        inobj->exit();
-        outobj->exit();
+        ::CORBA::ULong len(rtclist.length());
+        bool bflag;
+        bflag = false;
+        for (::CORBA::ULong ic = 0; ic < len; ++ic)
+        {
+            if( rtclist[ic] == inobj )
+            {
+                bflag = true;
+            }
+        }
+        CPPUNIT_ASSERT_EQUAL( bflag,true );
 
+        bflag = false;
+        for (::CORBA::ULong ic = 0; ic < len; ++ic)
+        {
+            if( rtclist[ic] == outobj )
+            {
+                bflag = true;
+            }
+        }
+        CPPUNIT_ASSERT_EQUAL( bflag,true );
+        
     }
     /*! 
      * @brief tests for get_component_profiles()
@@ -636,36 +644,61 @@ namespace ManagerServant
         ::RTC::ComponentProfileList profiles(*list);
         delete list;
         
-        CPPUNIT_ASSERT_EQUAL((::CORBA::ULong)2,
-                             profiles.length());
-//        CPPUNIT_ASSERT_EQUAL(::std::string("DummyModule1"),
-//                             ::std::string(profiles[0].instance_name));
-        CPPUNIT_ASSERT_EQUAL(::std::string("DummyModule1"),
-                             ::std::string(profiles[0].type_name));
-        CPPUNIT_ASSERT_EQUAL(::std::string("Console input component"),
-                             ::std::string(profiles[0].description));
-        CPPUNIT_ASSERT_EQUAL(::std::string("1.0"),
-                             ::std::string(profiles[0].version));
-        CPPUNIT_ASSERT_EQUAL(::std::string("Noriaki Ando, AIST"),
-                             ::std::string(profiles[0].vendor));
-        CPPUNIT_ASSERT_EQUAL(::std::string("example"),
-                             ::std::string(profiles[0].category));
+        //Execute the functions
+        ::RTC::RTCList *plist;
+        plist = pman->get_components();
+        CPPUNIT_ASSERT(plist != NULL);
+        ::RTC::RTCList rtclist(*plist);
+        delete plist;
 
-//        CPPUNIT_ASSERT_EQUAL(::std::string("DummyModule2"),
-//                             ::std::string(profiles[0].instance_name));
-        CPPUNIT_ASSERT_EQUAL(::std::string("DummyModule2"),
-                             ::std::string(profiles[1].type_name));
-        CPPUNIT_ASSERT_EQUAL(::std::string("Console output component"),
-                             ::std::string(profiles[1].description));
-        CPPUNIT_ASSERT_EQUAL(::std::string("1.0"),
-                             ::std::string(profiles[1].version));
-        CPPUNIT_ASSERT_EQUAL(::std::string("Noriaki Ando, AIST"),
-                             ::std::string(profiles[1].vendor));
-        CPPUNIT_ASSERT_EQUAL(::std::string("example"),
-                             ::std::string(profiles[1].category));
+        ::CORBA::ULong len(rtclist.length());
+        bool bflag;
+        bflag = false;
+        for (::CORBA::ULong ic = 0; ic < len; ++ic)
+        {
+            if( rtclist[ic] == inobj )
+            {
+                bflag = true;
+                ::std::string str(profiles[ic].instance_name);
+                CPPUNIT_ASSERT(str.find("DummyModule1") != ::std::string::npos);
+                CPPUNIT_ASSERT_EQUAL(::std::string("DummyModule1"),
+                                     ::std::string(profiles[ic].type_name));
+                CPPUNIT_ASSERT_EQUAL(::std::string("Console input component"),
+                                     ::std::string(profiles[ic].description));
+                CPPUNIT_ASSERT_EQUAL(::std::string("1.0"),
+                                     ::std::string(profiles[ic].version));
+                CPPUNIT_ASSERT_EQUAL(::std::string("Noriaki Ando, AIST"),
+                                     ::std::string(profiles[ic].vendor));
+                CPPUNIT_ASSERT_EQUAL(::std::string("example"),
+                                     ::std::string(profiles[ic].category));
+                break;
+            }
+        }
+        CPPUNIT_ASSERT_EQUAL( bflag,true );
 
-        inobj->exit();
-        outobj->exit();
+        bflag = false;
+        for (::CORBA::ULong ic = 0; ic < len; ++ic)
+        {
+            if( rtclist[ic] == outobj )
+            {
+                bflag = true;
+                ::std::string str(profiles[ic].instance_name);
+                CPPUNIT_ASSERT(str.find("DummyModule2") != ::std::string::npos);
+                CPPUNIT_ASSERT_EQUAL(::std::string("DummyModule2"),
+                                     ::std::string(profiles[ic].type_name));
+                CPPUNIT_ASSERT_EQUAL(::std::string("Console output component"),
+                                     ::std::string(profiles[ic].description));
+                CPPUNIT_ASSERT_EQUAL(::std::string("1.0"),
+                                     ::std::string(profiles[ic].version));
+                CPPUNIT_ASSERT_EQUAL(::std::string("Noriaki Ando, AIST"),
+                                     ::std::string(profiles[ic].vendor));
+                CPPUNIT_ASSERT_EQUAL(::std::string("example"),
+                                     ::std::string(profiles[ic].category));
+                break;
+            }
+        }
+        CPPUNIT_ASSERT_EQUAL( bflag,true );
+
         
 
     }
@@ -941,12 +974,21 @@ namespace ManagerServant
      */
     void test_shutdown()
     {
+
         ::RTM::ManagerServant *pman = new ::RTM::ManagerServant();
-        ::RTC::ReturnCode_t ret;
-        ret = pman->shutdown();
-        CPPUNIT_ASSERT_EQUAL(::RTC::RTC_OK, ret);
-        ::coil::usleep(100);
-        delete pman;
+
+        try
+        {
+            ::RTC::ReturnCode_t retcode;
+            retcode = pman->shutdown();
+            CPPUNIT_ASSERT_EQUAL(::RTC::RTC_OK, retcode);
+            ::coil::sleep(3);
+            delete pman;
+        }
+        catch(...)
+        {
+	    CPPUNIT_FAIL("Exception thrown.");
+        }
     }
     /*! 
      * @brief tests for restart()
