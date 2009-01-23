@@ -13,7 +13,7 @@ PLATFORM = posix
 endif
 
 SUBDIRS = $(PLATFORM) include lib build common utils win32 @UNITTEST@
-DIST_SUBDIR = posix ace
+DIST_SUBDIRS = $(SUBDIRS) posix ace tests
 
 clean-local:
 	rm -f config_coil.h

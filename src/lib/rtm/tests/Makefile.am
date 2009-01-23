@@ -51,6 +51,10 @@ SUBDIRS = \
 	SdoService  \
 	StateMachine
 
+DIST_SUBDIRS = $(SUBDIRS)
+DIST_SUBDIRS += InPortTcpSockConsumer
+DIST_SUBDIRS += InPortTcpSockProvider
+
 IDLC = @IDLC@
 IDLFLAGS = @IDL_FLAGS@
 LIBS = @LIBS@

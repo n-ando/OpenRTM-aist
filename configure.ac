@@ -1478,23 +1478,6 @@ AC_OUTPUT([Makefile
 	src/lib/rtm/tests/SdoOrganization/Makefile
 	src/lib/rtm/tests/SdoService/Makefile
 	src/lib/rtm/tests/StateMachine/Makefile
-	src/lib/rtm/tests/StringUtil/Makefile
-	src/lib/rtm/tests/TimeValue/Makefile
-	src/lib/rtm/tests/Timer/Makefile
-	src/lib/doil/Makefile
-	src/lib/doil/utils/Makefile
-	src/lib/doil/utils/omniidl_be/Makefile
-	src/lib/doil/tests/Makefile
-	src/lib/doil/tests/ORBManager/Makefile
-	src/lib/doil/corba/Makefile
-	src/lib/doil/corba/tests/Makefile
-	src/lib/doil/corba/tests/CORBAManager/Makefile
-	src/lib/doil/ice/Makefile
-	src/lib/doil/ice/tests/Makefile
-	src/lib/doil/ice/tests/IceManager/Makefile
-	src/lib/rtc/Makefile
-	src/lib/rtc/corba/Makefile
-	src/lib/rtc/corba/idl/Makefile
 	utils/Makefile
 	utils/rtm-config/Makefile
 	utils/rtc-template/Makefile

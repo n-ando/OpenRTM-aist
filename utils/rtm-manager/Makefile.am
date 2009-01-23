@@ -44,3 +44,5 @@ clean-local:
 	rm -f *.idl
 	rm -f *~
 
+EXTRA_DIST = rtm-manager NSHelper.py
+
