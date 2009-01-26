@@ -32,7 +32,7 @@ nodist_StringUtilTests_SOURCES =           \
 	$(top_builddir)/rtm/StringUtil.cpp \
 	StringUtilTests.cpp
 
-StringUtilTests_LDFLAGS = -L$(libdir) -L$(AM_LDFLAGS)
+StringUtilTests_LDFLAGS = -L$(libdir) $(AM_LDFLAGS)
 StringUtilTests_LDADD   = -lcppunit
 
 EXTRA_DIST = \
