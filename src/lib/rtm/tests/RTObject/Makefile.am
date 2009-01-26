@@ -73,7 +73,7 @@ nodist_RTObjectTests_SOURCES = \
 	$(top_srcdir)/src/lib/rtm/SdoOrganization.cpp \
 	RTObjectTests.cpp
 
-RTObjectTests_LDFLAGS = -L$(libdir) -L$(AM_LDFLAGS)
+RTObjectTests_LDFLAGS = -L$(libdir) $(AM_LDFLAGS)
 RTObjectTests_LDADD   = -lcppunit -lcoil -luuid
 
 EXTRA_DIST = \
