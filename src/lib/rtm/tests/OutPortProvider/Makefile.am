@@ -39,7 +39,7 @@ nodist_OutPortProviderTests_SOURCES =             \
 	$(top_srcdir)/src/lib/rtm/OutPortProvider.cpp \
 	OutPortProviderTests.cpp
 
-OutPortProviderTests_LDFLAGS = -L$(libdir) -L$(AM_LDFLAGS)
+OutPortProviderTests_LDFLAGS = -L$(libdir) $(AM_LDFLAGS)
 OutPortProviderTests_LDADD   = -lcppunit -lcoil
 
 EXTRA_DIST =        \
