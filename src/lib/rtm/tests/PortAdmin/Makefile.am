@@ -43,7 +43,7 @@ nodist_PortAdminTests_SOURCES =           \
 	$(top_builddir)/src/lib/rtm/PortAdmin.cpp \
 	PortAdminTests.cpp
 
-PortAdminTests_LDFLAGS = -L$(libdir) -L$(AM_LDFLAGS)
+PortAdminTests_LDFLAGS = -L$(libdir) $(AM_LDFLAGS)
 PortAdminTests_LDADD   = -lcppunit -lcoil -luuid
 
 EXTRA_DIST =           \
