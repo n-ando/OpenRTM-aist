@@ -39,7 +39,7 @@ nodist_InPortProviderTests_SOURCES =             \
 	$(top_srcdir)/src/lib/rtm/InPortProvider.cpp \
 	InPortProviderTests.cpp
 
-InPortProviderTests_LDFLAGS = -L$(libdir) -L$(AM_LDFLAGS)
+InPortProviderTests_LDFLAGS = -L$(libdir) $(AM_LDFLAGS)
 InPortProviderTests_LDADD   = -lcppunit -lcoil
 
 EXTRA_DIST =        \
