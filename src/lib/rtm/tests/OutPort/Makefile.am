@@ -58,7 +58,7 @@ nodist_OutPortTests_SOURCES =               \
 	$(top_builddir)/src/lib/rtm/OutPortBase.cpp \
 	OutPortTests.cpp
 
-OutPortTests_LDFLAGS = -L$(libdir) -L$(AM_LDFLAGS)
+OutPortTests_LDFLAGS = -L$(libdir) $(AM_LDFLAGS)
 OutPortTests_LDADD   = -lcppunit -lcoil
 
 EXTRA_DIST =         \
