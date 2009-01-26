@@ -1487,6 +1487,7 @@ AC_OUTPUT([Makefile
 	utils/rtm-manager/Makefile
 	etc/Makefile
 	examples/Makefile
+	examples/Composite/Makefile
 	examples/ConfigSample/Makefile
 	examples/SimpleIO/Makefile
 	examples/SeqIO/Makefile
@@ -1500,6 +1501,7 @@ AC_OUTPUT([Makefile
 	win32/OpenRTM-aist/docs/Makefile
 	win32/OpenRTM-aist/build/Makefile
 	win32/OpenRTM-aist/examples/Makefile
+	win32/OpenRTM-aist/examples/Composite/Makefile
 	win32/OpenRTM-aist/examples/ConfigSample/Makefile
 	win32/OpenRTM-aist/examples/SimpleIO/Makefile
 	win32/OpenRTM-aist/examples/SeqIO/Makefile
