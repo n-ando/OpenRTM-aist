@@ -49,7 +49,7 @@ nodist_StateMachineTests_SOURCES =     \
 	../TestRunner.cpp              \
 	StateMachineTests.cpp
 
-StateMachineTests_LDFLAGS = -L$(libdir) -L$(AM_LDFLAGS)
+StateMachineTests_LDFLAGS = -L$(libdir) $(AM_LDFLAGS)
 StateMachineTests_LDADD   = -lcppunit
 
 EXTRA_DIST = \
