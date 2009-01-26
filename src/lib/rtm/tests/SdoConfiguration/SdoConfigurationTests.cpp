@@ -505,13 +505,13 @@ namespace SdoConfiguration
       CPPUNIT_ASSERT_EQUAL(std::string("NAME 0-0"),
 			   std::string(cfgSetRet0->configuration_data[0].name));
       {
-	char* value; cfgSetRet0->configuration_data[0].value >>= value;
+	const char* value; cfgSetRet0->configuration_data[0].value >>= value;
 	CPPUNIT_ASSERT_EQUAL(std::string("3.14159"), std::string(value));
       }
       CPPUNIT_ASSERT_EQUAL(std::string("NAME 0-1"),
 			   std::string(cfgSetRet0->configuration_data[1].name));
       {
-	char* value; cfgSetRet0->configuration_data[1].value >>= value;
+	const char* value; cfgSetRet0->configuration_data[1].value >>= value;
 	CPPUNIT_ASSERT_EQUAL(std::string("2.71828"), std::string(value));
       }
 
@@ -526,13 +526,13 @@ namespace SdoConfiguration
       CPPUNIT_ASSERT_EQUAL(std::string("NAME 1-0"),
 			   std::string(cfgSetRet1->configuration_data[0].name));
       {
-	char* value; cfgSetRet1->configuration_data[0].value >>= value;
+	const char* value; cfgSetRet1->configuration_data[0].value >>= value;
 	CPPUNIT_ASSERT_EQUAL(std::string("1.41421356"), std::string(value));
       }
       CPPUNIT_ASSERT_EQUAL(std::string("NAME 1-1"),
 			   std::string(cfgSetRet1->configuration_data[1].name));
       {
-	char* value; cfgSetRet1->configuration_data[1].value >>= value;
+	const char* value; cfgSetRet1->configuration_data[1].value >>= value;
 	CPPUNIT_ASSERT_EQUAL(std::string("1.7320508"), std::string(value));
       }
     }
@@ -657,13 +657,13 @@ namespace SdoConfiguration
       CPPUNIT_ASSERT_EQUAL(std::string("NAME 1-0 M"),
 			   std::string(cfgSetRet->configuration_data[0].name));
       {
-	char* value; cfgSetRet->configuration_data[0].value >>= value;
+	const char* value; cfgSetRet->configuration_data[0].value >>= value;
 	CPPUNIT_ASSERT_EQUAL(std::string("2.23620679"), std::string(value));
       }
       CPPUNIT_ASSERT_EQUAL(std::string("NAME 1-1 M"),
 			   std::string(cfgSetRet->configuration_data[1].name));
       {
-	char* value; cfgSetRet->configuration_data[1].value >>= value;
+	const char* value; cfgSetRet->configuration_data[1].value >>= value;
 	CPPUNIT_ASSERT_EQUAL(std::string("2.44948974"), std::string(value));
       }
 			
@@ -721,13 +721,13 @@ namespace SdoConfiguration
       CPPUNIT_ASSERT_EQUAL(std::string("NAME 0-0"),
 			   std::string(cfgSetRet0->configuration_data[0].name));
       {
-	char* value; cfgSetRet0->configuration_data[0].value >>= value;
+	const char* value; cfgSetRet0->configuration_data[0].value >>= value;
 	CPPUNIT_ASSERT_EQUAL(std::string("3.14159"), std::string(value));
       }
       CPPUNIT_ASSERT_EQUAL(std::string("NAME 0-1"),
 			   std::string(cfgSetRet0->configuration_data[1].name));
       {
-	char* value; cfgSetRet0->configuration_data[1].value >>= value;
+	const char* value; cfgSetRet0->configuration_data[1].value >>= value;
 	CPPUNIT_ASSERT_EQUAL(std::string("2.71828"), std::string(value));
       }
 
@@ -745,13 +745,13 @@ namespace SdoConfiguration
       CPPUNIT_ASSERT_EQUAL(std::string("NAME 1-0"),
 			   std::string(cfgSetRet1->configuration_data[0].name));
       {
-	char* value; cfgSetRet1->configuration_data[0].value >>= value;
+	const char* value; cfgSetRet1->configuration_data[0].value >>= value;
 	CPPUNIT_ASSERT_EQUAL(std::string("1.41421356"), std::string(value));
       }
       CPPUNIT_ASSERT_EQUAL(std::string("NAME 1-1"),
 			   std::string(cfgSetRet1->configuration_data[1].name));
       {
-	char* value; cfgSetRet1->configuration_data[1].value >>= value;
+	const char* value; cfgSetRet1->configuration_data[1].value >>= value;
 	CPPUNIT_ASSERT_EQUAL(std::string("1.7320508"), std::string(value));
       }
 			
