@@ -41,7 +41,7 @@ nodist_SdoOrganizationTests_SOURCES =              \
 #	(IDL_SOURCES:.idl=Skel.cpp)               \
 #	(top_builddir)/src/lib/rtm/SdoOrganization.cpp    
 
-SdoOrganizationTests_LDFLAGS = -L$(libdir) -L$(AM_LDFLAGS)
+SdoOrganizationTests_LDFLAGS = -L$(libdir) $(AM_LDFLAGS)
 SdoOrganizationTests_LDADD   = -lcppunit -lRTC -lcoil -luuid
 
 EXTRA_DIST =                 \
