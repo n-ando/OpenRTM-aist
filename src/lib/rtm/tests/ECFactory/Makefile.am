@@ -11,7 +11,7 @@ IDLC = @IDLC@
 IDLFLAGS = @IDL_FLAGS@
 LIBS = @LIBS@
 
-AM_CPPFLAGS = \
+AM_CPPFLAGS =  \
 	-I. \
 	-I$(top_builddir) \
 	-I$(top_builddir)/src/lib \
@@ -20,13 +20,13 @@ AM_CPPFLAGS = \
 	-I$(top_builddir)/src/lib/coil/include \
 	-I$(includedir)
 
-AM_LDFLAGS = \
-	-L. \
+AM_LDFLAGS =              \
+	-L.               \
 	-L$(top_builddir) \
 	-L$(top_builddir)/src/lib/coil/lib
 
 
-IDL_SOURCES = \
+IDL_SOURCES =  \
 	$(top_srcdir)/src/lib/rtm/idl/SDOPackage.idl \
 	$(top_srcdir)/src/lib/rtm/idl/RTC.idl \
 	$(top_srcdir)/src/lib/rtm/idl/OpenRTM.idl \
@@ -34,8 +34,8 @@ IDL_SOURCES = \
 
 noinst_PROGRAMS = ECFactoryTests
 
-nodist_ECFactoryTests_SOURCES = \
-	../TestRunner.cpp \
+nodist_ECFactoryTests_SOURCES =     \
+	../TestRunner.cpp      \
 	$(IDL_SOURCES:.idl=Skel.cpp) \
 	$(top_srcdir)/src/lib/rtm/NVUtil.cpp \
 	$(top_srcdir)/src/lib/coil/common/stringutil.cpp \
@@ -63,7 +63,8 @@ nodist_ECFactoryTests_SOURCES = \
 	$(top_srcdir)/src/lib/rtm/SdoOrganization.cpp \
 	ECFactoryTests.cpp
 
-ECFactoryTests_LDFLAGS = -L$(libdir) -L$(AM_LDFLAGS)
+#ECFactoryTests_LDFLAGS = -L$(libdir) $(AM_LDFLAGS)
+ECFactoryTests_LDFLAGS = -L$(libdir) $(AM_LDFLAGS)
 ECFactoryTests_LDADD   = -lcppunit -lcoil -luuid
 
 EXTRA_DIST = \
