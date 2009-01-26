@@ -215,7 +215,7 @@ namespace NVUtil
     	
       // (3) newNV()にセットしたvalueと、取得したNameValue.valueを比較する
       //    	CORBA::String_var nvValue;
-      char* nvValue;
+      const char* nvValue;
       nv.value >>= nvValue;
       CPPUNIT_ASSERT_EQUAL(string("Hello, world!"), string(nvValue));
     }
