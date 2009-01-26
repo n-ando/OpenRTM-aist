@@ -36,7 +36,7 @@ nodist_ManagerConfigTests_SOURCES =\
 	$(top_builddir)/src/lib/rtm/ManagerConfig.cpp \
 	ManagerConfigTests.cpp
 
-ManagerConfigTests_LDFLAGS = -L$(libdir) -L$(AM_LDFLAGS)
+ManagerConfigTests_LDFLAGS = -L$(libdir) $(AM_LDFLAGS)
 ManagerConfigTests_LDADD   = -lcppunit -lcoil
 
 EXTRA_DIST =               \
