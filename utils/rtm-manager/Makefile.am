@@ -35,6 +35,7 @@ $(IDLS):
 	$(IDLC) $(IDLFLAGS) $<
 
 EXTRA_DIST = $(IDLS:.idl=_idl.py)
+EXTRA_DIST += rtm-manager NSHelper.py
 
 clean-local:
 	rm -rf OpenRTM RTC RTM SDOPackage
@@ -44,5 +45,4 @@ clean-local:
 	rm -f *.idl
 	rm -f *~
 
-EXTRA_DIST = rtm-manager NSHelper.py
 
