@@ -4,7 +4,7 @@
 ##
 ## $Id$
 ##---------------------------------------------------------------------------
-SUBDIRS = ConfigSample SimpleIO SeqIO SimpleService USBCamera .
+SUBDIRS = Composite ConfigSample SimpleIO SeqIO SimpleService USBCamera .
 
 wxs:
 	cp example.yaml	../installer/
