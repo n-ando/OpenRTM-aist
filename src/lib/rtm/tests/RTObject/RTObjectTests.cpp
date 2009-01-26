@@ -111,7 +111,7 @@ namespace RTObject
 	
   class SDOServiceMock
     : public POA_SDOPackage::SDOService,
-      public PortableServer::RefCountServantBase
+      public virtual PortableServer::RefCountServantBase
   {
   };
 	
@@ -128,13 +128,13 @@ namespace RTObject
 	
   class SDOSystemElementMock
     : public POA_SDOPackage::SDOSystemElement,
-      public PortableServer::RefCountServantBase
+      public virtual PortableServer::RefCountServantBase
   {
   };
 	
   class OrganizationMock
     : public POA_SDOPackage::Organization,
-      public PortableServer::RefCountServantBase
+      public virtual PortableServer::RefCountServantBase
   {
   public:
     OrganizationMock(const char* id) : m_id(id)
