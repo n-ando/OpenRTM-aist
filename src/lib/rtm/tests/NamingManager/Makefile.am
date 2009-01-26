@@ -65,7 +65,7 @@ nodist_NamingManagerTests_SOURCES = \
 	$(top_srcdir)/src/lib/rtm/SdoOrganization.cpp \
 	NamingManagerTests.cpp
 
-NamingManagerTests_LDFLAGS = -L$(libdir) -L$(AM_LDFLAGS)
+NamingManagerTests_LDFLAGS = -L$(libdir) $(AM_LDFLAGS)
 NamingManagerTests_LDADD   = -lcppunit -lcoil -luuid
 
 EXTRA_DIST = \
