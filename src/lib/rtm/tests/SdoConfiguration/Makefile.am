@@ -46,7 +46,7 @@ nodist_SdoConfigurationTests_SOURCES = \
 	$(top_builddir)/src/lib/rtm/SdoConfiguration.cpp \
 	SdoConfigurationTests.cpp
 
-SdoConfigurationTests_LDFLAGS = -L$(libdir) -L$(AM_LDFLAGS)
+SdoConfigurationTests_LDFLAGS = -L$(libdir) $(AM_LDFLAGS)
 SdoConfigurationTests_LDADD   = -lcppunit -lcoil -luuid
 
 EXTRA_DIST =                  \
