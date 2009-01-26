@@ -43,7 +43,7 @@ nodist_InPortTcpSockConsumerTests_SOURCES = \
 	$(top_srcdir)/src/lib/rtm/NVUtil.cpp \
 	InPortTcpSockConsumerTests.cpp
 
-InPortTcpSockConsumerTests_LDFLAGS = -L$(libdir) -L$(AM_LDFLAGS)
+InPortTcpSockConsumerTests_LDFLAGS = -L$(libdir) $(AM_LDFLAGS)
 InPortTcpSockConsumerTests_LDADD   = -lcppunit -lcoil -lACE
 
 EXTRA_DIST =               \
