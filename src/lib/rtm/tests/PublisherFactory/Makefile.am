@@ -44,7 +44,7 @@ nodist_PublisherFactoryTests_SOURCES =            \
 	$(top_builddir)/src/lib/rtm/PublisherFlush.cpp    \
 	PublisherFactoryTests.cpp
 
-PublisherFactoryTests_LDFLAGS = -L$(libdir) -L$(AM_LDFLAGS)
+PublisherFactoryTests_LDFLAGS = -L$(libdir) $(AM_LDFLAGS)
 PublisherFactoryTests_LDADD   = -lcppunit -lcoil
 
 EXTRA_DIST =                  \
