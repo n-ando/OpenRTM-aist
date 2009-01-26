@@ -61,7 +61,7 @@ nodist_PortBaseTests_SOURCES =           \
 	PortBaseTests.cpp
 
 
-PortBaseTests_LDFLAGS = -L$(libdir) -L$(AM_LDFLAGS)
+PortBaseTests_LDFLAGS = -L$(libdir) $(AM_LDFLAGS)
 PortBaseTests_LDADD   = -lcppunit -lcoil -luuid
 
 EXTRA_DIST =          \
