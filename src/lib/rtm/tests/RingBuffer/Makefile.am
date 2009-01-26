@@ -49,7 +49,7 @@ nodist_RingBufferTests_SOURCES =     \
 	../TestRunner.cpp            \
 	RingBufferTests.cpp
 
-RingBufferTests_LDFLAGS = -L$(libdir) -L$(AM_LDFLAGS)
+RingBufferTests_LDFLAGS = -L$(libdir) $(AM_LDFLAGS)
 RingBufferTests_LDADD   = -lcppunit
 
 EXTRA_DIST =            \
