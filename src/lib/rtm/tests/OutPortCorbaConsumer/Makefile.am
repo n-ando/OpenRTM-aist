@@ -44,7 +44,7 @@ nodist_OutPortCorbaConsumerTests_SOURCES = \
 	$(top_srcdir)/src/lib/rtm/NVUtil.cpp \
 	OutPortCorbaConsumerTests.cpp
 
-OutPortCorbaConsumerTests_LDFLAGS = -L$(libdir) -L$(AM_LDFLAGS)
+OutPortCorbaConsumerTests_LDFLAGS = -L$(libdir) $(AM_LDFLAGS)
 OutPortCorbaConsumerTests_LDADD   = -lcppunit -lcoil
 
 EXTRA_DIST =               \
