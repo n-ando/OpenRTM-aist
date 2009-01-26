@@ -53,7 +53,7 @@ nodist_PublisherNewTests_SOURCES =           \
 	$(top_builddir)/src/lib/coil/common/stringutil.cpp   \
 	PublisherNewTests.cpp
 
-PublisherNewTests_LDFLAGS = -L$(libdir) -L$(AM_LDFLAGS)
+PublisherNewTests_LDFLAGS = -L$(libdir) $(AM_LDFLAGS)
 PublisherNewTests_LDADD   = -lcppunit -lcoil
 
 EXTRA_DIST =              \
