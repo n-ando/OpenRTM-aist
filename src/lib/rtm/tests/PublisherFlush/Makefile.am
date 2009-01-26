@@ -54,7 +54,7 @@ nodist_PublisherFlushTests_SOURCES =           \
 	$(top_builddir)/src/lib/coil/common/stringutil.cpp     \
 	PublisherFlushTests.cpp
 
-PublisherFlushTests_LDFLAGS = -L$(libdir) -L$(AM_LDFLAGS)
+PublisherFlushTests_LDFLAGS = -L$(libdir) $(AM_LDFLAGS)
 PublisherFlushTests_LDADD   = -lcppunit -lcoil
 
 EXTRA_DIST =                \
