@@ -65,7 +65,7 @@ nodist_ManagerTests_SOURCES = \
 	$(top_srcdir)/src/lib/rtm/SdoOrganization.cpp \
 	ManagerTests.cpp
 
-ManagerTests_LDFLAGS = -L$(libdir) -L$(AM_LDFLAGS)
+ManagerTests_LDFLAGS = -L$(libdir) $(AM_LDFLAGS)
 ManagerTests_LDADD   = -lcppunit -lcoil -luuid
 
 EXTRA_DIST = \
