@@ -67,7 +67,7 @@ nodist_PeriodicExecutionContextTests_SOURCES = \
 	$(top_srcdir)/src/lib/rtm/SdoOrganization.cpp \
 	PeriodicExecutionContextTests.cpp
 
-PeriodicExecutionContextTests_LDFLAGS = -L$(libdir) -L$(AM_LDFLAGS)
+PeriodicExecutionContextTests_LDFLAGS = -L$(libdir) $(AM_LDFLAGS)
 PeriodicExecutionContextTests_LDADD   = -lcppunit -lcoil -luuid
 
 EXTRA_DIST = \
