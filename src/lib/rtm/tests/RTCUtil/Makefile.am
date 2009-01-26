@@ -50,7 +50,7 @@ nodist_RTCUtilTests_SOURCES = \
 	$(top_srcdir)/src/lib/rtm/RTCUtil.cpp \
 	RTCUtilTests.cpp
 
-RTCUtilTests_LDFLAGS = -L$(libdir) -L$(AM_LDFLAGS)
+RTCUtilTests_LDFLAGS = -L$(libdir) $(AM_LDFLAGS)
 RTCUtilTests_LDADD   = -lcppunit
 
 EXTRA_DIST = \
