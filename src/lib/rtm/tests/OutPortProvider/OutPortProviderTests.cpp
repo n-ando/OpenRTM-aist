@@ -112,28 +112,28 @@ namespace OutPortProvider
 
       // dataport.data_typeプロパティを正しく取得できるか？
       {
-	char* value;
+	const char* value;
 	NVUtil::find(prop, "dataport.data_type") >>= value;
 	CPPUNIT_ASSERT_EQUAL(std::string("DATA_TYPE"), std::string(value));
       }
 			
       // dataport.interface_typeプロパティを正しく取得できるか？
       {
-	char* value;
+	const char* value;
 	NVUtil::find(prop, "dataport.interface_type") >>= value;
 	CPPUNIT_ASSERT_EQUAL(std::string("INTERFACE_TYPE"), std::string(value));
       }
 			
       // dataport.dataflow_typeプロパティを正しく取得できるか？
       {
-	char* value;
+	const char* value;
 	NVUtil::find(prop, "dataport.dataflow_type") >>= value;
 	CPPUNIT_ASSERT_EQUAL(std::string("DATA_FLOW_TYPE"), std::string(value));
       }
 			
       // dataport.subscription_typeプロパティを正しく取得できるか？
       {
-	char* value;
+	const char* value;
 	NVUtil::find(prop, "dataport.subscription_type") >>= value;
 	CPPUNIT_ASSERT_EQUAL(std::string("SUBSCRIPTION_TYPE"), std::string(value));
       }
@@ -183,11 +183,11 @@ namespace OutPortProvider
       CPPUNIT_ASSERT(CORBA::Long(-1) != index1);
       CPPUNIT_ASSERT(CORBA::Long(-1) != index2);
 			
-      char* value1;
+      const char* value1;
       prop[index1].value >>= value1;
       CPPUNIT_ASSERT_EQUAL(std::string("PROPERTY_VALUE1"), std::string(value1));
 
-      char* value2;			
+      const char* value2;			
       prop[index2].value >>= value2;
       CPPUNIT_ASSERT_EQUAL(std::string("PROPERTY_VALUE2"), std::string(value2));
     }
