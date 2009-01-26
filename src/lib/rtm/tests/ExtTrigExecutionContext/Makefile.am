@@ -72,7 +72,7 @@ nodist_ExtTrigExecutionContextTests_SOURCES = \
 	$(top_srcdir)/src/lib/rtm/SdoOrganization.cpp \
 	ExtTrigExecutionContextTests.cpp
 
-ExtTrigExecutionContextTests_LDFLAGS = -L$(libdir) -L$(AM_LDFLAGS)
+ExtTrigExecutionContextTests_LDFLAGS = -L$(libdir) $(AM_LDFLAGS)
 ExtTrigExecutionContextTests_LDADD   = -lcppunit -lcoil -luuid
 
 EXTRA_DIST = \
