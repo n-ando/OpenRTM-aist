@@ -35,7 +35,7 @@ nodist_InPortTests_SOURCES =     \
 	../TestRunner.cpp        \
 	InPortTests.cpp
 
-InPortTests_LDFLAGS = -L$(libdir) -L$(AM_LDFLAGS)
+InPortTests_LDFLAGS = -L$(libdir) $(AM_LDFLAGS)
 InPortTests_LDADD   = -lcppunit -lcoil
 
 EXTRA_DIST =        \
