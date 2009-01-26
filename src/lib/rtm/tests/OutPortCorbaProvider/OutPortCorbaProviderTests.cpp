@@ -100,28 +100,28 @@ namespace OutPortCorbaProvider
 
       // dataport.data_typeプロパティを正しく取得できるか？
       {
-	char* value;
+	const char* value;
 	NVUtil::find(prop, "dataport.data_type") >>= value;
 	CPPUNIT_ASSERT_EQUAL(std::string("TimedFloat"), std::string(value));
       }
 			
       // dataport.interface_typeプロパティを正しく取得できるか？
       {
-	char* value;
+	const char* value;
 	NVUtil::find(prop, "dataport.interface_type") >>= value;
 	CPPUNIT_ASSERT_EQUAL(std::string("CORBA_Any"), std::string(value));
       }
 			
       // dataport.dataflow_typeプロパティを正しく取得できるか？
       {
-	char* value;
+	const char* value;
 	NVUtil::find(prop, "dataport.dataflow_type") >>= value;
 	CPPUNIT_ASSERT_EQUAL(std::string("Push, Pull"), std::string(value));
       }
 			
       // dataport.subscription_typeプロパティを正しく取得できるか？
       {
-	char* value;
+	const char* value;
 	NVUtil::find(prop, "dataport.subscription_type") >>= value;
 	CPPUNIT_ASSERT_EQUAL(std::string("Flush, New, Periodic"), std::string(value));
       }
