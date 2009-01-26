@@ -35,7 +35,7 @@ nodist_SdoServiceTests_SOURCES =     \
 	../TestRunner.cpp            \
 	SdoServiceTests.cpp
 
-SdoServiceTests_LDFLAGS = -L$(libdir) -L$(AM_LDFLAGS)
+SdoServiceTests_LDFLAGS = -L$(libdir) $(AM_LDFLAGS)
 SdoServiceTests_LDADD   = -lcppunit
 
 EXTRA_DIST =            \
