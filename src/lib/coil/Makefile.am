@@ -7,13 +7,15 @@
 
 if COIL_PLATFORM_ACE
 PLATFORM = ace
+NO_PLATFORM = posix
 endif
 if COIL_PLATFORM_POSIX
 PLATFORM = posix
+NO_PLATFORM = ace
 endif
 
 SUBDIRS = $(PLATFORM) include lib build common utils win32 @UNITTEST@
-DIST_SUBDIRS = $(SUBDIRS) tests
+DIST_SUBDIRS = $(SUBDIRS) $(NO_PLATFORM) tests
 
 clean-local:
 	rm -f config_coil.h
