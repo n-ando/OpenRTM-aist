@@ -56,7 +56,7 @@ namespace coil
           }
       }
     line = s.str();
-    return line.size();
+    return static_cast<int>(line.size());
   }
   
   /*!
@@ -387,7 +387,7 @@ namespace coil
     if (sv.size() == 0) return "";
     
     std::string str;
-    for (int i(0), len(sv.size() - 1); i < len; ++i)
+    for (size_t i(0), len(sv.size() - 1); i < len; ++i)
       {
         str += sv[i] + ", ";
       }
@@ -404,15 +404,15 @@ namespace coil
   char** toArgv(const std::vector<std::string>& args)
   {
     char** argv;
-    int argc(args.size());
+    size_t argc(args.size());
     
     argv = new char*[argc];
     
-    for (int i(0); i < argc; ++i)
+    for (size_t i(0); i < argc; ++i)
       {
-        int sz(args[i].size());
+        size_t sz(args[i].size());
         argv[i] = new char[sz + 1];
-        args[i].copy(argv[i], sz);
+        strncpy(argv[i], args[i].c_str(), sz);
         argv[i][sz] = '\0';
       }
     return argv;
