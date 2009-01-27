@@ -22,7 +22,7 @@ namespace coil
 {
   /*!
    * @if jp
-   * @brief ƒRƒ“ƒXƒgƒ‰ƒNƒ^
+   * @brief ¥³¥ó¥¹¥È¥é¥¯¥¿
    * @else
    * @brief Constructor
    * @endif
@@ -52,7 +52,7 @@ namespace coil
   
   /*!
    * @if jp
-   * @brief ŽžŠÔŒ¸ŽZ
+   * @brief »þ´Ö¸º»»
    * @else
    * @brief Time subtraction
    * @endif
@@ -62,12 +62,12 @@ namespace coil
     TimeValue res;
     if (m_sec >= tm.m_sec) // +
       {
-        if (m_usec >= tm.m_usec) // ŒJ‚è‰º‚ª‚è–³‚µ
+        if (m_usec >= tm.m_usec) // ·«¤ê²¼¤¬¤êÌµ¤·
           {
             res.m_sec  = m_sec  - tm.m_sec;  // -
             res.m_usec = m_usec - tm.m_usec; // +
           }
-        else // m_usec < tm.m_usec ŒJ‚è‰º‚ª‚è—L‚è
+        else // m_usec < tm.m_usec ·«¤ê²¼¤¬¤êÍ­¤ê
           {
             res.m_sec  = m_sec  - tm.m_sec - 1;
             res.m_usec = (m_usec + 1000000) - tm.m_usec;
@@ -75,12 +75,12 @@ namespace coil
       }
     else // m_sec < tm.m_sec // -
       {
-          if (tm.m_usec >= m_usec) // ŒJ‚è‰º‚ª‚è–³‚µ
+          if (tm.m_usec >= m_usec) // ·«¤ê²¼¤¬¤êÌµ¤·
             {
               res.m_sec  = - (tm.m_sec  - m_sec); // +
               res.m_usec = - (tm.m_usec - m_usec);  // +
             }
-          else // tm.m_usec < m_usec ŒJ‚è‰º‚ª‚è—L‚è
+          else // tm.m_usec < m_usec ·«¤ê²¼¤¬¤êÍ­¤ê
             {
               res.m_sec  = - (tm.m_sec - m_sec  - 1);
               res.m_usec = - (tm.m_usec + 1000000) + m_usec;
@@ -92,7 +92,7 @@ namespace coil
   
   /*!
    * @if jp
-   * @brief ŽžŠÔ‰ÁŽZ
+   * @brief »þ´Ö²Ã»»
    * @else
    * @brief Time addition
    * @endif
@@ -113,7 +113,7 @@ namespace coil
   
   /*!
    * @if jp
-   * @brief doubleŒ^¨ŽžŠÔŒ^•ÏŠ·
+   * @brief double·¿¢ª»þ´Ö·¿ÊÑ´¹
    * @else
    * @brief Convert double type into time type
    * @endif
@@ -138,7 +138,7 @@ namespace coil
   
   /*!
    * @if jp
-   * @brief ŽžŠÔŒ^¨doubleŒ^•ÏŠ·
+   * @brief »þ´Ö·¿¢ªdouble·¿ÊÑ´¹
    * @else
    * @brief Convert time type into double type
    * @endif
@@ -150,7 +150,7 @@ namespace coil
   
   /*!
    * @if jp
-   * @brief •„†”»’è
+   * @brief Éä¹æÈ½Äê
    * @else
    * @brief Sign judgment
    * @endif
@@ -166,7 +166,7 @@ namespace coil
   
   /*!
    * @if jp
-   * @brief ³‹K‰»
+   * @brief Àµµ¬²½
    * @else
    * @brief Normalize
    * @endif

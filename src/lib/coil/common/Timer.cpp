@@ -23,7 +23,7 @@ namespace coil
 {
   /*!
    * @if jp
-   * @brief ƒRƒ“ƒXƒgƒ‰ƒNƒ^
+   * @brief ¥³¥ó¥¹¥È¥é¥¯¥¿
    * @else
    * @brief Constructor
    * @endif
@@ -35,7 +35,7 @@ namespace coil
   
   /*!
    * @if jp
-   * @brief ƒfƒXƒgƒ‰ƒNƒ^
+   * @brief ¥Ç¥¹¥È¥é¥¯¥¿
    * @else
    * @brief Destructor
    * @endif
@@ -48,7 +48,7 @@ namespace coil
   
   /*!
    * @if jp
-   * @brief Timer —pƒXƒŒƒbƒh¶¬
+   * @brief Timer ÍÑ¥¹¥ì¥Ã¥ÉÀ¸À®
    * @else
    * @brief Generate thread for Timer
    * @endif
@@ -61,7 +61,7 @@ namespace coil
   
   /*!
    * @if jp
-   * @brief Timer —pƒXƒŒƒbƒhÀsŠÖ”
+   * @brief Timer ÍÑ¥¹¥ì¥Ã¥É¼Â¹Ô´Ø¿ô
    * @else
    * @brief Thread execution function for Timer
    * @endif
@@ -82,7 +82,7 @@ namespace coil
   //============================================================
   /*!
    * @if jp
-   * @brief Timer ƒ^ƒXƒNŠJn
+   * @brief Timer ¥¿¥¹¥¯³«»Ï
    * @else
    * @brief Start Timer task
    * @endif
@@ -99,7 +99,7 @@ namespace coil
   
   /*!
    * @if jp
-   * @brief Timer ƒ^ƒXƒN’â~
+   * @brief Timer ¥¿¥¹¥¯Ää»ß
    * @else
    * @brief Stop Timer tast
    * @endif
@@ -112,7 +112,7 @@ namespace coil
   
   /*!
    * @if jp
-   * @brief Timer ƒ^ƒXƒNÀs
+   * @brief Timer ¥¿¥¹¥¯¼Â¹Ô
    * @else
    * @brief Invoke Timer task
    * @endif
@@ -132,7 +132,7 @@ namespace coil
   
   /*!
    * @if jp
-   * @brief ƒŠƒXƒi[“o˜^
+   * @brief ¥ê¥¹¥Ê¡¼ÅĞÏ¿
    * @else
    * @brief Register listener
    * @endif
@@ -156,7 +156,7 @@ namespace coil
   
   /*!
    * @if jp
-   * @brief ƒŠƒXƒi[“o˜^‰ğœ
+   * @brief ¥ê¥¹¥Ê¡¼ÅĞÏ¿²ò½ü
    * @else
    * @brief Unregister listener
    * @endif

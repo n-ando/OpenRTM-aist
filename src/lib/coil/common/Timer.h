@@ -33,9 +33,9 @@ namespace coil
   /*!
    * @if jp
    * @class Timer
-   * @brief TimerƒNƒ‰ƒX
+   * @brief Timer¥¯¥é¥¹
    * 
-   * “o˜^‚³‚ê‚½ƒŠƒXƒi[‚ÌƒR[ƒ‹ƒoƒbƒNŠÖ”‚ğAİ’è‚³‚ê‚½üŠú‚Å’èŠú“I‚ÉŒÄ‚Ño‚·B
+   * ÅĞÏ¿¤µ¤ì¤¿¥ê¥¹¥Ê¡¼¤Î¥³¡¼¥ë¥Ğ¥Ã¥¯´Ø¿ô¤ò¡¢ÀßÄê¤µ¤ì¤¿¼ş´ü¤ÇÄê´üÅª¤Ë¸Æ¤Ó½Ğ¤¹¡£
    *
    * @since 0.4.0
    *
@@ -58,11 +58,11 @@ namespace coil
   public:
     /*!
      * @if jp
-     * @brief ƒRƒ“ƒXƒgƒ‰ƒNƒ^
+     * @brief ¥³¥ó¥¹¥È¥é¥¯¥¿
      * 
-     * ƒRƒ“ƒXƒgƒ‰ƒNƒ^
+     * ¥³¥ó¥¹¥È¥é¥¯¥¿
      *
-     * @param interval ƒ^ƒCƒ}‹N“®üŠú
+     * @param interval ¥¿¥¤¥Şµ¯Æ°¼ş´ü
      *
      * @else
      * @brief Constructor
@@ -77,9 +77,9 @@ namespace coil
     
     /*!
      * @if jp
-     * @brief ƒfƒXƒgƒ‰ƒNƒ^
+     * @brief ¥Ç¥¹¥È¥é¥¯¥¿
      * 
-     * ƒfƒXƒgƒ‰ƒNƒ^
+     * ¥Ç¥¹¥È¥é¥¯¥¿
      *
      * @else
      * @brief Destructor
@@ -95,14 +95,14 @@ namespace coil
     //============================================================
     /*!
      * @if jp
-     * @brief Timer —pƒXƒŒƒbƒh¶¬
+     * @brief Timer ÍÑ¥¹¥ì¥Ã¥ÉÀ¸À®
      *
-     * Timer —p‚Ì“à•”ƒXƒŒƒbƒh‚ğ¶¬‚µ‹N“®‚·‚éB
-     * ‚±‚ê‚Í ACE_Task ƒT[ƒrƒXƒNƒ‰ƒXƒƒ\ƒbƒh‚ÌƒI[ƒo[ƒ‰ƒCƒhB
+     * Timer ÍÑ¤ÎÆâÉô¥¹¥ì¥Ã¥É¤òÀ¸À®¤·µ¯Æ°¤¹¤ë¡£
+     * ¤³¤ì¤Ï ACE_Task ¥µ¡¼¥Ó¥¹¥¯¥é¥¹¥á¥½¥Ã¥É¤Î¥ª¡¼¥Ğ¡¼¥é¥¤¥É¡£
      *
-     * @param args ’Êí‚Í0
+     * @param args ÄÌ¾ï¤Ï0
      *
-     * @return ¶¬ˆ—ÀsŒ‹‰Ê
+     * @return À¸À®½èÍı¼Â¹Ô·ë²Ì
      *
      * @else
      * @brief Create thread for Timer
@@ -120,12 +120,12 @@ namespace coil
     
     /*!
      * @if jp
-     * @brief Timer —p‚ÌƒXƒŒƒbƒhÀsŠÖ”
+     * @brief Timer ÍÑ¤Î¥¹¥ì¥Ã¥É¼Â¹Ô´Ø¿ô
      *
-     * Timer —p‚ÌƒXƒŒƒbƒhÀsŠÖ”B
-     * “o˜^‚³‚ê‚½ƒŠƒXƒi[‚ÌƒR[ƒ‹ƒoƒbƒNŠÖ”‚ğŒÄ‚Ño‚·B
+     * Timer ÍÑ¤Î¥¹¥ì¥Ã¥É¼Â¹Ô´Ø¿ô¡£
+     * ÅĞÏ¿¤µ¤ì¤¿¥ê¥¹¥Ê¡¼¤Î¥³¡¼¥ë¥Ğ¥Ã¥¯´Ø¿ô¤ò¸Æ¤Ó½Ğ¤¹¡£
      *
-     * @return ÀsŒ‹‰Ê
+     * @return ¼Â¹Ô·ë²Ì
      *
      * @else
      * @brief Thread execution function for Timer
@@ -144,9 +144,9 @@ namespace coil
     //============================================================
     /*!
      * @if jp
-     * @brief Timer ƒ^ƒXƒNŠJn
+     * @brief Timer ¥¿¥¹¥¯³«»Ï
      *
-     * Timer —pV‹KƒXƒŒƒbƒh‚ğ¶¬‚µAˆ—‚ğŠJn‚·‚éB
+     * Timer ÍÑ¿·µ¬¥¹¥ì¥Ã¥É¤òÀ¸À®¤·¡¢½èÍı¤ò³«»Ï¤¹¤ë¡£
      *
      * @else
      * @brief Start Timer task
@@ -159,9 +159,9 @@ namespace coil
     
     /*!
      * @if jp
-     * @brief Timer ƒ^ƒXƒN’â~
+     * @brief Timer ¥¿¥¹¥¯Ää»ß
      *
-     * Timer ƒ^ƒXƒN‚ğ’â~‚·‚éB
+     * Timer ¥¿¥¹¥¯¤òÄä»ß¤¹¤ë¡£
      *
      * @else
      * @brief Stop Timer task
@@ -174,11 +174,11 @@ namespace coil
     
     /*!
      * @if jp
-     * @brief Timer ƒ^ƒXƒNÀs
+     * @brief Timer ¥¿¥¹¥¯¼Â¹Ô
      *
-     * “o˜^‚³‚ê‚½ŠeƒŠƒXƒi‚Ì‹N“®‘Ò‚¿ŠÔ‚©‚çƒ^ƒCƒ}‹N“®üŠú‚ğŒ¸Z‚·‚éB
-     * ‹N“®‘Ò‚¿ŠÔ‚ªƒ[ƒ‚Æ‚È‚Á‚½ƒŠƒXƒi‚ª‘¶İ‚·‚éê‡‚ÍA
-     * ƒR[ƒ‹ƒoƒbƒNŠÖ”‚ğŒÄ‚Ño‚·B
+     * ÅĞÏ¿¤µ¤ì¤¿³Æ¥ê¥¹¥Ê¤Îµ¯Æ°ÂÔ¤Á»ş´Ö¤«¤é¥¿¥¤¥Şµ¯Æ°¼ş´ü¤ò¸º»»¤¹¤ë¡£
+     * µ¯Æ°ÂÔ¤Á»ş´Ö¤¬¥¼¥í¤È¤Ê¤Ã¤¿¥ê¥¹¥Ê¤¬Â¸ºß¤¹¤ë¾ì¹ç¤Ï¡¢
+     * ¥³¡¼¥ë¥Ğ¥Ã¥¯´Ø¿ô¤ò¸Æ¤Ó½Ğ¤¹¡£
      *
      * @else
      * @brief Invoke Timer task
@@ -194,17 +194,17 @@ namespace coil
     
     /*!
      * @if jp
-     * @brief ƒŠƒXƒi[“o˜^
+     * @brief ¥ê¥¹¥Ê¡¼ÅĞÏ¿
      *
-     * –{ Timer ‚©‚ç‹N“®‚·‚éƒR[ƒ‹ƒoƒbƒNŠÖ”—p‚ÌƒŠƒXƒi[‚ğ‹N“®üŠú‚ğw’è‚µ‚Ä
-     * “o˜^‚·‚éB
-     * “¯ˆêƒŠƒXƒi[‚ªŠù‚É“o˜^Ï‚İ‚Ìê‡‚ÍAƒŠƒXƒi[‚Ì‹N“®üŠú‚ğw’è‚µ‚½’l‚É
-     * XV‚·‚éB
+     * ËÜ Timer ¤«¤éµ¯Æ°¤¹¤ë¥³¡¼¥ë¥Ğ¥Ã¥¯´Ø¿ôÍÑ¤Î¥ê¥¹¥Ê¡¼¤òµ¯Æ°¼ş´ü¤ò»ØÄê¤·¤Æ
+     * ÅĞÏ¿¤¹¤ë¡£
+     * Æ±°ì¥ê¥¹¥Ê¡¼¤¬´û¤ËÅĞÏ¿ºÑ¤ß¤Î¾ì¹ç¤Ï¡¢¥ê¥¹¥Ê¡¼¤Îµ¯Æ°¼ş´ü¤ò»ØÄê¤·¤¿ÃÍ¤Ë
+     * ¹¹¿·¤¹¤ë¡£
      *
-     * @param listener “o˜^‘ÎÛƒŠƒXƒi[
-     * @param tm ƒŠƒXƒi[‹N“®üŠú
+     * @param listener ÅĞÏ¿ÂĞ¾İ¥ê¥¹¥Ê¡¼
+     * @param tm ¥ê¥¹¥Ê¡¼µ¯Æ°¼ş´ü
      *
-     * @return “o˜^ƒŠƒXƒi[ID
+     * @return ÅĞÏ¿¥ê¥¹¥Ê¡¼ID
      *
      * @else
      * @brief Register listener
@@ -226,16 +226,16 @@ namespace coil
     
     /*!
      * @if jp
-     * @brief ƒŠƒXƒi[“o˜^
+     * @brief ¥ê¥¹¥Ê¡¼ÅĞÏ¿
      *
-     * ƒR[ƒ‹ƒoƒbƒN‘ÎÛƒIƒuƒWƒFƒNƒgAƒR[ƒ‹ƒoƒbƒN‘ÎÛƒƒ\ƒbƒh‚¨‚æ‚Ñ‹N“®üŠú‚ğ
-     * w’è‚µ‚ÄƒŠƒXƒi[‚ğ“o˜^‚·‚éB
+     * ¥³¡¼¥ë¥Ğ¥Ã¥¯ÂĞ¾İ¥ª¥Ö¥¸¥§¥¯¥È¡¢¥³¡¼¥ë¥Ğ¥Ã¥¯ÂĞ¾İ¥á¥½¥Ã¥É¤ª¤è¤Óµ¯Æ°¼ş´ü¤ò
+     * »ØÄê¤·¤Æ¥ê¥¹¥Ê¡¼¤òÅĞÏ¿¤¹¤ë¡£
      *
-     * @param obj ƒR[ƒ‹ƒoƒbƒN‘ÎÛƒIƒuƒWƒFƒNƒg
-     * @param cbf ƒR[ƒ‹ƒoƒbƒN‘ÎÛƒƒ\ƒbƒh
-     * @param tm ƒŠƒXƒi[‹N“®üŠú
+     * @param obj ¥³¡¼¥ë¥Ğ¥Ã¥¯ÂĞ¾İ¥ª¥Ö¥¸¥§¥¯¥È
+     * @param cbf ¥³¡¼¥ë¥Ğ¥Ã¥¯ÂĞ¾İ¥á¥½¥Ã¥É
+     * @param tm ¥ê¥¹¥Ê¡¼µ¯Æ°¼ş´ü
      *
-     * @return “o˜^ƒŠƒXƒi[ID
+     * @return ÅĞÏ¿¥ê¥¹¥Ê¡¼ID
      *
      * @else
      * @brief Register listener
@@ -261,14 +261,14 @@ namespace coil
     
     /*!
      * @if jp
-     * @brief ƒŠƒXƒi[“o˜^
+     * @brief ¥ê¥¹¥Ê¡¼ÅĞÏ¿
      *
-     * ƒR[ƒ‹ƒoƒbƒN‘ÎÛƒƒ\ƒbƒh‚Æ‹N“®üŠú‚ğw’è‚µ‚ÄƒŠƒXƒi[‚ğ“o˜^‚·‚éB
+     * ¥³¡¼¥ë¥Ğ¥Ã¥¯ÂĞ¾İ¥á¥½¥Ã¥É¤Èµ¯Æ°¼ş´ü¤ò»ØÄê¤·¤Æ¥ê¥¹¥Ê¡¼¤òÅĞÏ¿¤¹¤ë¡£
      *
-     * @param cbf ƒR[ƒ‹ƒoƒbƒN‘ÎÛƒƒ\ƒbƒh
-     * @param tm ƒŠƒXƒi[‹N“®üŠú
+     * @param cbf ¥³¡¼¥ë¥Ğ¥Ã¥¯ÂĞ¾İ¥á¥½¥Ã¥É
+     * @param tm ¥ê¥¹¥Ê¡¼µ¯Æ°¼ş´ü
      *
-     * @return “o˜^ƒŠƒXƒi[ID
+     * @return ÅĞÏ¿¥ê¥¹¥Ê¡¼ID
      *
      * @else
      * @brief Register listener
@@ -290,14 +290,14 @@ namespace coil
     
     /*!
      * @if jp
-     * @brief ƒŠƒXƒi[“o˜^‰ğœ
+     * @brief ¥ê¥¹¥Ê¡¼ÅĞÏ¿²ò½ü
      *
-     * w’è‚µ‚½ID‚ÌƒŠƒXƒi[‚Ì“o˜^‚ğ‰ğœ‚·‚éB
-     * w’è‚µ‚½ID‚ÌƒŠƒXƒi[‚ª–¢“o˜^‚Ìê‡Afalse ‚ğ•Ô‚·B
+     * »ØÄê¤·¤¿ID¤Î¥ê¥¹¥Ê¡¼¤ÎÅĞÏ¿¤ò²ò½ü¤¹¤ë¡£
+     * »ØÄê¤·¤¿ID¤Î¥ê¥¹¥Ê¡¼¤¬Ì¤ÅĞÏ¿¤Î¾ì¹ç¡¢false ¤òÊÖ¤¹¡£
      *
-     * @param id “o˜^‰ğœ‘ÎÛƒŠƒXƒi[ID
+     * @param id ÅĞÏ¿²ò½üÂĞ¾İ¥ê¥¹¥Ê¡¼ID
      *
-     * @return “o˜^‰ğœŒ‹‰Ê
+     * @return ÅĞÏ¿²ò½ü·ë²Ì
      *
      * @else
      * @brief Unregister listener
