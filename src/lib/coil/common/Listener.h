@@ -23,9 +23,9 @@
 /*!
  * @if jp
  * @class ListenerBase
- * @brief ListenerBase ƒNƒ‰ƒX
+ * @brief ListenerBase ¥¯¥é¥¹
  *
- * ƒ^ƒCƒ}[‚É“o˜^‚·‚éƒŠƒXƒi[—p’ŠÛƒCƒ“ƒ^[ƒtƒF[ƒXƒNƒ‰ƒXB
+ * ¥¿¥¤¥Ş¡¼¤ËÅĞÏ¿¤¹¤ë¥ê¥¹¥Ê¡¼ÍÑÃê¾İ¥¤¥ó¥¿¡¼¥Õ¥§¡¼¥¹¥¯¥é¥¹¡£
  *
  * @since 0.4.0
  *
@@ -45,9 +45,9 @@ class ListenerBase
 public:
   /*!
    * @if jp
-   * @brief ƒfƒXƒgƒ‰ƒNƒ^
+   * @brief ¥Ç¥¹¥È¥é¥¯¥¿
    *
-   * ƒfƒXƒgƒ‰ƒNƒ^
+   * ¥Ç¥¹¥È¥é¥¯¥¿
    *
    * @else
    * @brief Destructor
@@ -60,9 +60,9 @@ public:
   
   /*!
    * @if jp
-   * @brief ƒR[ƒ‹ƒoƒbƒNˆ—
+   * @brief ¥³¡¼¥ë¥Ğ¥Ã¥¯½èÍı
    *
-   * ƒR[ƒ‹ƒoƒbƒNˆ——pƒˆ‰¼‘zŠÖ”
+   * ¥³¡¼¥ë¥Ğ¥Ã¥¯½èÍıÍÑ½ã¿è²¾ÁÛ´Ø¿ô
    *
    * @else
    * @brief Callback
@@ -77,9 +77,9 @@ public:
 /*!
  * @if jp
  * @class ListenerObject
- * @brief ListenerObject ƒNƒ‰ƒX
+ * @brief ListenerObject ¥¯¥é¥¹
  *
- * ƒ^ƒCƒ}[‚É“o˜^‚·‚éƒŠƒXƒi[—pŠî’êƒNƒ‰ƒXB
+ * ¥¿¥¤¥Ş¡¼¤ËÅĞÏ¿¤¹¤ë¥ê¥¹¥Ê¡¼ÍÑ´ğÄì¥¯¥é¥¹¡£
  *
  * @since 0.4.0
  *
@@ -101,12 +101,12 @@ class ListenerObject
 public:
   /*!
    * @if jp
-   * @brief ƒRƒ“ƒXƒgƒ‰ƒNƒ^
+   * @brief ¥³¥ó¥¹¥È¥é¥¯¥¿
    *
-   * ƒRƒ“ƒXƒgƒ‰ƒNƒ^
+   * ¥³¥ó¥¹¥È¥é¥¯¥¿
    *
-   * @param obj ƒŠƒXƒi[ƒIƒuƒWƒFƒNƒg
-   * @param cbf ƒR[ƒ‹ƒoƒbƒN—pŠÖ”
+   * @param obj ¥ê¥¹¥Ê¡¼¥ª¥Ö¥¸¥§¥¯¥È
+   * @param cbf ¥³¡¼¥ë¥Ğ¥Ã¥¯ÍÑ´Ø¿ô
    *
    * @else
    * @brief Constructor
@@ -125,9 +125,9 @@ public:
   
   /*!
    * @if jp
-   * @brief ƒfƒXƒgƒ‰ƒNƒ^
+   * @brief ¥Ç¥¹¥È¥é¥¯¥¿
    *
-   * ƒfƒXƒgƒ‰ƒNƒ^
+   * ¥Ç¥¹¥È¥é¥¯¥¿
    *
    * @else
    * @brief Destructor
@@ -142,9 +142,9 @@ public:
   
   /*!
    * @if jp
-   * @brief ƒR[ƒ‹ƒoƒbƒN—pˆ—
+   * @brief ¥³¡¼¥ë¥Ğ¥Ã¥¯ÍÑ½èÍı
    *
-   * ƒR[ƒ‹ƒoƒbƒNˆ——pŠÖ”
+   * ¥³¡¼¥ë¥Ğ¥Ã¥¯½èÍıÍÑ´Ø¿ô
    *
    * @else
    * @brief Callback
@@ -166,9 +166,9 @@ private:
 /*!
  * @if jp
  * @class ListenerFunc
- * @brief ListenerFunc ƒNƒ‰ƒX
+ * @brief ListenerFunc ¥¯¥é¥¹
  *
- * ƒR[ƒ‹ƒoƒbƒN—pƒIƒuƒWƒFƒNƒgB
+ * ¥³¡¼¥ë¥Ğ¥Ã¥¯ÍÑ¥ª¥Ö¥¸¥§¥¯¥È¡£
  *
  * @since 0.4.0
  *
@@ -189,11 +189,11 @@ class ListenerFunc
 public:
   /*!
    * @if jp
-   * @brief ƒRƒ“ƒXƒgƒ‰ƒNƒ^
+   * @brief ¥³¥ó¥¹¥È¥é¥¯¥¿
    *
-   * ƒRƒ“ƒXƒgƒ‰ƒNƒ^
+   * ¥³¥ó¥¹¥È¥é¥¯¥¿
    *
-   * @param cbf ƒR[ƒ‹ƒoƒbƒN—pŠÖ”
+   * @param cbf ¥³¡¼¥ë¥Ğ¥Ã¥¯ÍÑ´Ø¿ô
    *
    * @else
    * @brief Constructor
@@ -211,9 +211,9 @@ public:
   
   /*!
    * @if jp
-   * @brief ƒfƒXƒgƒ‰ƒNƒ^
+   * @brief ¥Ç¥¹¥È¥é¥¯¥¿
    *
-   * ƒfƒXƒgƒ‰ƒNƒ^
+   * ¥Ç¥¹¥È¥é¥¯¥¿
    *
    * @else
    * @brief Destructor
@@ -226,9 +226,9 @@ public:
   
   /*!
    * @if jp
-   * @brief ƒR[ƒ‹ƒoƒbƒNˆ—
+   * @brief ¥³¡¼¥ë¥Ğ¥Ã¥¯½èÍı
    *
-   * ƒR[ƒ‹ƒoƒbƒNˆ——pŠÖ”
+   * ¥³¡¼¥ë¥Ğ¥Ã¥¯½èÍıÍÑ´Ø¿ô
    *
    * @else
    * @brief Callback

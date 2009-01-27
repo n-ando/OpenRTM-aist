@@ -30,13 +30,13 @@ namespace coil
     /*!
      * @if jp
      *
-     * @brief 僐儞僗僩儔僋僞
+     * @brief コンストラクタ
      * 
-     * 僐儞僗僩儔僋僞
-     * 巜掕偝傟偨昩丆儅僀僋儘昩偱弶婜壔偡傞丅
+     * コンストラクタ
+     * 回年された擅·マイクロ擅で介袋步する。
      *
-     * @param sec 昩(僨僼僅儖僩抣:僛儘)
-     * @param usec 儅僀僋儘昩(僨僼僅儖僩抣:僛儘)
+     * @param sec 擅(デフォルト猛:ゼロ)
+     * @param usec マイクロ擅(デフォルト猛:ゼロ)
      * 
      * @else
      *
@@ -59,13 +59,13 @@ namespace coil
     /*!
      * @if jp
      *
-     * @brief 帪娫尭嶼
+     * @brief 箕粗负换
      * 
-     * 愝掕偝傟偨帪娫偐傜堷悢偱梌偊傜傟偨帪娫傪尭嶼偡傞丅
+     * 肋年された箕粗から苞眶で涂えられた箕粗を负换する。
      *
-     * @param tm 尭嶼帪娫
+     * @param tm 负换箕粗
      * 
-     * @return 尭嶼寢壥
+     * @return 负换冯蔡
      * 
      * @else
      *
@@ -85,13 +85,13 @@ namespace coil
     /*!
      * @if jp
      *
-     * @brief 帪娫壛嶼
+     * @brief 箕粗裁换
      * 
-     * 愝掕偝傟偨帪娫偵堷悢偱梌偊傜傟偨帪娫傪壛嶼偡傞丅
+     * 肋年された箕粗に苞眶で涂えられた箕粗を裁换する。
      *
-     * @param tm 壛嶼帪娫
+     * @param tm 裁换箕粗
      * 
-     * @return 壛嶼寢壥
+     * @return 裁换冯蔡
      * 
      * @else
      *
@@ -110,13 +110,13 @@ namespace coil
     /*!
      * @if jp
      *
-     * @brief double宆仺帪娫宆曄姺
+     * @brief double房ⅹ箕粗房恃垂
      * 
-     * 堷悢偱梌偊傜傟偨double宆傪帪娫宆偵曄姺偡傞丅
+     * 苞眶で涂えられたdouble房を箕粗房に恃垂する。
      *
-     * @param time 曄姺尦抣
+     * @param time 恃垂傅猛
      * 
-     * @return 曄姺寢壥
+     * @return 恃垂冯蔡
      * 
      * @else
      *
@@ -135,11 +135,11 @@ namespace coil
     /*!
      * @if jp
      *
-     * @brief 帪娫宆仺double宆曄姺
+     * @brief 箕粗房ⅹdouble房恃垂
      * 
-     * 曐帩偟偰偄傞撪梕傪double宆偵曄姺偡傞丅
+     * 瘦积している柒推をdouble房に恃垂する。
      *
-     * @return double宆曄姺寢壥
+     * @return double房恃垂冯蔡
      * 
      * @else
      *
@@ -156,11 +156,11 @@ namespace coil
     /*!
      * @if jp
      * 
-     * @brief 晞崋敾掕
+     * @brief 射规冉年
      * 
-     * 曐帩偟偰偄傞撪梕偺晞崋傪敾掕偡傞丅
+     * 瘦积している柒推の射规を冉年する。
      * 
-     * @return 惓側傜偽1傪丄晧側傜偽-1傪丄0側傜偽0
+     * @return 赖ならば1を、砷ならば-1を、0ならば0
      * 
      * @else
      *  
@@ -179,9 +179,9 @@ namespace coil
     /*!
      * @if jp
      * 
-     * @brief 惓婯壔
+     * @brief 赖惮步
      * 
-     * 抣偺昞尰傪惓弨宍幃偵惓婯壔偡傞丅
+     * 猛の山附を赖洁妨及に赖惮步する。
      * 
      * @else
      * 

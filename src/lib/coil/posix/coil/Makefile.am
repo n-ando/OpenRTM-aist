@@ -51,11 +51,9 @@ $(COIL_COMMON_SRC):
 	cp $(top_srcdir)/config_coil.h .
 	cp $(top_srcdir)/common/*.cpp .
 	cp $(top_srcdir)/common/*.h .
-	qkc -eu *.cpp *.h
 
 $(COIL_COMMON_H):
 	cp $(top_srcdir)/common/*.h .
-	qkc -eu *.cpp *.h
 
 
 coilheaderdir = $(prefix)/include/coil

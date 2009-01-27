@@ -22,13 +22,13 @@ namespace coil
   /*!
    * @if jp
    * @class NonCopyable
-   * @brief ƒRƒs[‹Ö~ƒ~ƒbƒNƒXƒCƒ“
+   * @brief ¥³¥Ô¡¼¶Ø»ß¥ß¥Ã¥¯¥¹¥¤¥ó
    * 
-   * ‘ÎÛƒNƒ‰ƒX‚ÌƒIƒuƒWƒFƒNƒg‚ÌƒRƒs[‚ğ‹Ö~‚·‚éBƒRƒs[‚ğ‹Ö~‚µ‚½‚¢ƒNƒ‰
-   * ƒX‚Å‚ÍANonCopyable‚ğprivateŒp³‚·‚é‚±‚Æ‚ÅƒIƒuƒWƒFƒNƒg‚ÌƒRƒs[‚ğ‹Ö
-   * ~‚·‚é‚±‚Æ‚ª‚Å‚«‚éB
+   * ÂĞ¾İ¥¯¥é¥¹¤Î¥ª¥Ö¥¸¥§¥¯¥È¤Î¥³¥Ô¡¼¤ò¶Ø»ß¤¹¤ë¡£¥³¥Ô¡¼¤ò¶Ø»ß¤·¤¿¤¤¥¯¥é
+   * ¥¹¤Ç¤Ï¡¢NonCopyable¤òprivate·Ñ¾µ¤¹¤ë¤³¤È¤Ç¥ª¥Ö¥¸¥§¥¯¥È¤Î¥³¥Ô¡¼¤ò¶Ø
+   * »ß¤¹¤ë¤³¤È¤¬¤Ç¤­¤ë¡£
    *
-   * -—á:
+   * -Îã:
    * class CopyProhibitedClass : private NonCopyable {};
    *
    * @else
@@ -59,15 +59,15 @@ namespace coil
   /*!
    * @if jp
    * @class NonCopyableCRTP
-   * @brief ƒRƒs[‹Ö~ƒ~ƒbƒNƒXƒCƒ“(CRTP”Å)
+   * @brief ¥³¥Ô¡¼¶Ø»ß¥ß¥Ã¥¯¥¹¥¤¥ó(CRTPÈÇ)
    * 
-   * ‘ÎÛƒNƒ‰ƒX‚ÌƒIƒuƒWƒFƒNƒg‚ÌƒRƒs[‚ğ‹Ö~‚·‚éBƒRƒs[‚ğ‹Ö~‚µ‚½‚¢ƒNƒ‰
-   * ƒX‚Å‚ÍANonCopyable‚ğprivateŒp³‚·‚é‚±‚Æ‚ÅƒIƒuƒWƒFƒNƒg‚ÌƒRƒs[‚ğ‹Ö
-   * ~‚·‚é‚±‚Æ‚ª‚Å‚«‚éB‚±‚ÌCRTP (Curiously Recursive Template
-   * Pattern) ”Å‚ÍA‹ó‚ÌŠî’êƒNƒ‰ƒX‚É‘Î‚·‚éÅ“K‰» (Empty Base
-   * Optimization) ‚ğs‚í‚¹‚½‚¢ê‡‚É—˜—p‚·‚éB
+   * ÂĞ¾İ¥¯¥é¥¹¤Î¥ª¥Ö¥¸¥§¥¯¥È¤Î¥³¥Ô¡¼¤ò¶Ø»ß¤¹¤ë¡£¥³¥Ô¡¼¤ò¶Ø»ß¤·¤¿¤¤¥¯¥é
+   * ¥¹¤Ç¤Ï¡¢NonCopyable¤òprivate·Ñ¾µ¤¹¤ë¤³¤È¤Ç¥ª¥Ö¥¸¥§¥¯¥È¤Î¥³¥Ô¡¼¤ò¶Ø
+   * »ß¤¹¤ë¤³¤È¤¬¤Ç¤­¤ë¡£¤³¤ÎCRTP (Curiously Recursive Template
+   * Pattern) ÈÇ¤Ï¡¢¶õ¤Î´ğÄì¥¯¥é¥¹¤ËÂĞ¤¹¤ëºÇÅ¬²½ (Empty Base
+   * Optimization) ¤ò¹Ô¤ï¤»¤¿¤¤¾ì¹ç¤ËÍøÍÑ¤¹¤ë¡£
    *
-   * -—á:
+   * -Îã:
    * struct A : NonCopyableCRTP<A> {};
    * struct B : NonCopyableCRTP<B> {};
    * struct C: A, B {};
@@ -80,7 +80,7 @@ namespace coil
    * This mix-in class prevents objects of a class from being
    * copy-constructed or assigned to each other. User can prohibit the
    * class copying by inheriting from NonCopyable class as a private
-   * base class.@The CRTP (Curiously Recursive Template Pattern)
+   * base class.¡¡The CRTP (Curiously Recursive Template Pattern)
    * version would be used for empty base optimization for
    * multipe-inherited.
    *
