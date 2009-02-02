@@ -7,13 +7,15 @@
 
 COIL_COMMON_SRC =      \
 	TimeValue.cpp  \
-	Timer.cpp
+	Timer.cpp      \
+	TimeMeasure.cpp
 COIL_COMMON_H   =      \
 	Guard.h        \
 	Listener.h     \
 	NonCopyable.h  \
 	TimeValue.h    \
-	Timer.h
+	Timer.h        \
+	TimeMeasure.h
 
 EXTRA_DIST =               \
 	$(COIL_COMMON_SRC) \
