@@ -18,7 +18,8 @@ SUBDIRS = \
         Time       \
 	Timer      \
 	TimeValue  \
-	UUID
+	UUID       \
+	TimeMeasure
 
 
 clean-local:
