@@ -38,6 +38,10 @@ namespace coil
     : m_count(0), m_countMax(buflen + 1), m_recurred(false)
   {
     m_record.reserve(m_countMax);
+    for (int i(0); i < m_countMax; ++i)
+      {
+        m_record.push_back(TimeValue(0, 0));
+      }
   }
   
   
@@ -59,7 +63,7 @@ namespace coil
     
     //	long long interval;
     //	interval = m_EndTime - m_BeginTime; // [ns]
-    m_record[m_count % m_countMax] = m_end - m_begin;
+    m_record.at(m_count % m_countMax) = m_end - m_begin;
     ++m_count;
     if (m_count > m_countMax)
       {
@@ -75,15 +79,15 @@ namespace coil
     m_recurred = false;
   }
   
-  int TimeMeasure::getCount() const
+  unsigned long int TimeMeasure::count() const
   {
-    return m_count;
+    return m_recurred ? m_record.size() : m_count;
   }
 
   //============================================================
   // Get total statistics
   //============================================================
-  void TimeMeasure::getStatistics(double &max_interval,
+  bool TimeMeasure::getStatistics(double &max_interval,
                                   double &min_interval,
                                   double &mean_interval,
                                   double &stddev)
@@ -93,20 +97,24 @@ namespace coil
 
     double sum = 0;
     double sq_sum = 0;
-    long int len = m_recurred ? m_record.size() : m_count;
+    unsigned long int len(count());
 
-    for (long int i(0); i < len; ++i)
+    if (len == 0) return false;
+
+    for (unsigned long int i(0); i < len; ++i)
       {
         double trecord(m_record[i]);
         sum += trecord;
         sq_sum += trecord * trecord;
         
-        if      (trecord > max_interval) max_interval = trecord;
-        else if (trecord < min_interval) min_interval = trecord;
+        if (trecord > max_interval) max_interval = trecord;
+        if (trecord < min_interval) min_interval = trecord;
       }
     
     mean_interval = sum / m_count;
     stddev = sqrt(sq_sum / m_count - (mean_interval * mean_interval));
+
+    return true;
   }
 
 }; // namespace coil
