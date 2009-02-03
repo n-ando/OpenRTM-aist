@@ -65,14 +65,14 @@ namespace coil
      * @brief Get number of time measurement buffer.
      *
      */
-    int getCount() const;
+    unsigned long int count() const;
     
     /*!
      * @brief Get total statistics.
      * Get total statistics
      * max_interval, min_interval, mean_interval [ns]
      */
-    void getStatistics(double &max_interval,
+    bool getStatistics(double &max_interval,
                        double &min_interval,
                        double &mean_interval,
                        double &stddev);
