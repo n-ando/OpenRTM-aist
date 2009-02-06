@@ -5,21 +5,22 @@
 ## $Id$
 ##---------------------------------------------------------------------------
 
-SUBDIRS = \
-        Condition  \
-        DynamicLib \
-        File       \
-        Guard      \
-        Listener   \
-	Mutex      \
-        OS         \
-        Signal     \
-	Task       \
-        Time       \
-	Timer      \
-	TimeValue  \
-	UUID       \
-	TimeMeasure
+SUBDIRS =            \
+        Condition    \
+        DynamicLib   \
+        File         \
+        Guard        \
+        Listener     \
+	Mutex        \
+        OS           \
+        Signal       \
+	Task         \
+        Time         \
+	Timer        \
+	TimeValue    \
+	UUID         \
+	TimeMeasure  \
+	AsyncInvoker
 
 
 clean-local:

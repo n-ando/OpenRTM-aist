@@ -17,6 +17,7 @@
 #include <rtm/DataInPort.h>
 #include <rtm/DataOutPort.h>
 #include <iostream>
+#include <coil/Async.h>
 
 // Service implementation headers
 // <rtc-template block="service_impl_h">
@@ -116,7 +117,34 @@ class MyServiceConsumer
   
   // </rtc-template>
 
+  class set_value_functor
+  {
+  public:
+    set_value_functor(CORBA::Float val) : m_val(val) {}
+
+    void operator()(RTC::CorbaConsumer<MyService>* obj)
+    {
+      (*obj)->set_value(m_val);
+    }
+    CORBA::Float m_val;
+  };
+
+  class echo_functor
+  {
+  public:
+    echo_functor(std::string msg, std::string& result)
+      : m_msg(msg), m_result(result) {}
+    void operator()(RTC::CorbaConsumer<MyService>* obj)
+    {
+      m_result = (*obj)->echo(m_msg.c_str());
+    }
+    std::string m_msg;
+    std::string& m_result;
+  };
  private:
+  coil::Async* async_set_value;
+  coil::Async* async_echo;
+  std::string m_result;
   int dummy;
 
   template <class T>
@@ -130,7 +158,6 @@ class MyServiceConsumer
     }
     int m_cnt;
   };
-
 
 };
 

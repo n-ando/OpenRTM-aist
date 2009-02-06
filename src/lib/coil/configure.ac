@@ -544,6 +544,7 @@ AC_OUTPUT([Makefile
 	tests/TimeValue/Makefile
 	tests/UUID/Makefile
 	tests/TimeMeasure/Makefile
+	tests/AsyncInvoker/Makefile
 	utils/Makefile
 	utils/coil-config/Makefile
 	])
