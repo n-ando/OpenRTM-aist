@@ -241,7 +241,8 @@ namespace coil
    * @endif
    */
   std::vector<std::string> split(const std::string& input,
-                                 const std::string& delimiter);
+                                 const std::string& delimiter,
+                                 bool ignore_empty = false);
   
   /*!
    * @if jp
