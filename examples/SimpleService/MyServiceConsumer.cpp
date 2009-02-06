@@ -11,6 +11,8 @@
 #include <rtm/CORBA_SeqUtil.h>
 #include <vector>
 #include <stdlib.h>
+#include <coil/Async.h>
+#include <functional>
 
 // Module specification
 // <rtc-template block="module_spec">
@@ -35,6 +37,7 @@ MyServiceConsumer::MyServiceConsumer(RTC::Manager* manager)
     // <rtc-template block="initializer">
     m_MyServicePort("MyService"),
     // </rtc-template>
+    async_set_value(0), async_echo(0),
 	dummy(0)
 {
   // Registration: InPort/OutPort/Service
@@ -132,26 +135,40 @@ RTC::ReturnCode_t MyServiceConsumer::onExecute(RTC::UniqueId ec_id)
 	  argv.push_back(args);
 	}
       
-      /*
-      std::cout << "command: " << argv[0] << std::endl;
-      if (argv.size() > 1)
-	std::cout << "arg    : " << argv[1] << std::endl;
-      */
+      if (async_echo != 0 && async_echo->finished())
+        {
+          std::cout << "echo() finished: " <<  m_result << std::endl;
+          delete async_echo;
+          async_echo = 0;
+        }
       
       if (argv[0] == "echo" && argv.size() > 1)
 	{
-	  char* retmsg;
-	  retmsg = m_myservice0->echo(argv[1].c_str());
-	  std::cout << "echo return: " << retmsg << std::endl;
+          if (async_echo == 0)
+            {
+              // char* retmsg;
+              // retmsg = m_myservice0->echo(argv[1].c_str());
+              async_echo = 
+                coil::AsyncInvoker(&m_myservice0,
+                                   echo_functor(argv[1], m_result));
+              async_echo->invoke();
+              // std::cout << "echo return: " << retmsg << std::endl;
+            }
+          else
+            {
+              std::cout << "set_value() still invoking" << std::endl;
+            }
 	  return RTC::RTC_OK;
 	}
       
       if (argv[0] == "set_value" && argv.size() > 1)
 	{
-	  CORBA::Float val(atof(argv[1].c_str()));
-	  m_myservice0->set_value(val);
-	  std::cout << "Set remote value: " << val << std::endl;
-	  return RTC::RTC_OK;
+          CORBA::Float val(atof(argv[1].c_str()));
+          coil::AsyncInvoker(&m_myservice0, set_value_functor(val),
+                             true)->invoke();
+          std::cout << "Set remote value: " << val << std::endl;
+
+          return RTC::RTC_OK;
 	}
       
       if (argv[0] == "get_value")

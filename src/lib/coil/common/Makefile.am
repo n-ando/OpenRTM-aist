@@ -5,17 +5,23 @@
 ## $Id$
 ##---------------------------------------------------------------------------
 
-COIL_COMMON_SRC =      \
-	TimeValue.cpp  \
-	Timer.cpp      \
-	TimeMeasure.cpp
-COIL_COMMON_H   =      \
-	Guard.h        \
-	Listener.h     \
-	NonCopyable.h  \
-	TimeValue.h    \
-	Timer.h        \
-	TimeMeasure.h
+COIL_COMMON_SRC =       \
+	Properties.cpp  \
+	TimeValue.cpp   \
+	TimeMeasure.cpp \
+	Timer.cpp       \
+	stringutil.cpp
+COIL_COMMON_H   =       \
+	Async.h         \
+	Listener.h      \
+	TimeMeasure.h   \
+	memory.h        \
+	NonCopyable.h   \
+	TimeValue.h     \
+	stringutil.h    \
+	Guard.h         \
+	Properties.h    \
+	Timer.h
 
 EXTRA_DIST =               \
 	$(COIL_COMMON_SRC) \
