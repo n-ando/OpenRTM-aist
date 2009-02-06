@@ -224,7 +224,8 @@ namespace coil
    * @endif
    */
   std::vector<std::string> split(const std::string& input,
-                                 const std::string& delimiter)
+                                 const std::string& delimiter,
+                                 bool ignore_empty)
   {
     typedef std::string::size_type size;
     std::vector<std::string> results;
@@ -245,7 +246,7 @@ namespace coil
             std::string substr(input.substr(pre_pos));
             eraseHeadBlank(substr);
             eraseTailBlank(substr);
-            if (!substr.empty()) results.push_back(substr);
+            if (!(substr.empty() && ignore_empty)) results.push_back(substr);
             break;
           }
         /*
@@ -261,7 +262,7 @@ namespace coil
             std::string substr(input.substr(pre_pos, substr_size));
             eraseHeadBlank(substr);
             eraseTailBlank(substr);
-            if (!substr.empty()) results.push_back(substr);
+            if (!(substr.empty() && ignore_empty)) results.push_back(substr);
           }
         begin_pos = found_pos + delim_size;
         pre_pos   = found_pos + delim_size;
