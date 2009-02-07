@@ -508,6 +508,7 @@ namespace RTC
      * @endif
      */
     void registerCompName(const char* name, const RTObject_impl* rtobj);
+    void registerMgrName(const char* name, const RTM::ManagerServant* mgr);
     
     /*!
      * @if jp
@@ -529,6 +530,7 @@ namespace RTC
      * @endif
      */
     void unregisterCompName(const char* name);
+    void unregisterMgrName(const char* name);
     
   protected:
     // Name Servers' method/name and object
@@ -575,6 +577,14 @@ namespace RTC
       std::string name;
       const RTObject_impl* rtobj;
     };
+    struct Mgr
+    {
+      Mgr(const char* n, const RTM::ManagerServant* obj)
+	: name(n), mgr(obj)
+      {}
+      std::string name;
+      const RTM::ManagerServant* mgr;
+    };
     /*!
      * @if jp
      * @brief コンポーネントリスト
@@ -584,6 +594,8 @@ namespace RTC
      */
     std::vector<Comps*> m_compNames;
     Mutex m_compNamesMutex;
+    std::vector<Mgr*> m_mgrNames;
+    Mutex m_mgrNamesMutex;
     
     /*!
      * @if jp

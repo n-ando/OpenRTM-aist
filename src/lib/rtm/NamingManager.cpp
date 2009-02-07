@@ -158,6 +158,7 @@ namespace RTC
 	if (m_names[i]->ns != NULL)
 	  m_names[i]->ns->bindObject(name, mgr);
       }
+    registerMgrName(name, mgr);
   }
   
   /*!
@@ -216,6 +217,7 @@ namespace RTC
         }
       }
     unregisterCompName(name);
+    unregisterMgrName(name);
   }
   
   /*!
@@ -228,11 +230,20 @@ namespace RTC
   void NamingManager::unbindAll()
   {
     RTC_TRACE(("NamingManager::unbindAll(): %d names.", m_compNames.size()));
-    Guard guard(m_compNamesMutex);
-    for (int i(0), len(m_compNames.size()); i < len; ++i)
-      {
-	unbindObject(m_compNames[i]->name.c_str());
-      }
+    {
+      Guard guard(m_compNamesMutex);
+      for (int i(0), len(m_compNames.size()); i < len; ++i)
+        {
+          unbindObject(m_compNames[i]->name.c_str());
+        }
+    }
+    {
+      Guard guard(m_mgrNamesMutex);
+      for (int i(0), len(m_mgrNames.size()); i < len; ++i)
+        {
+          unbindObject(m_mgrNames[i]->name.c_str());
+        }
+    }
   }
   
   /*!
@@ -325,6 +336,20 @@ namespace RTC
     m_compNames.push_back(new Comps(name, rtobj));
     return;
   }
+  void NamingManager::registerMgrName(const char* name,
+                                      const RTM::ManagerServant* mgr)
+  {
+    for (int i(0), len(m_mgrNames.size()); i < len; ++i)
+      {
+	if (m_mgrNames[i]->name == name)
+	  {
+	    m_mgrNames[i]->mgr = mgr;
+	    return;
+	  }
+      }
+    m_mgrNames.push_back(new Mgr(name, mgr));
+    return;
+  }
   
   /*!
    * @if jp
@@ -341,6 +366,19 @@ namespace RTC
 	if (m_compNames[i]->name == name)
 	  {
 	    m_compNames.erase(it);
+	    return;
+	  }
+      }
+    return;
+  }
+  void NamingManager::unregisterMgrName(const char* name)
+  {
+    std::vector<Mgr*>::iterator it(m_mgrNames.begin());
+    for (int i(0), len(m_mgrNames.size()); i < len; ++i, ++it)
+      {
+	if (m_mgrNames[i]->name == name)
+	  {
+	    m_mgrNames.erase(it);
 	    return;
 	  }
       }
