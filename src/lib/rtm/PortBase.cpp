@@ -215,6 +215,7 @@ namespace RTC
     index = findConnProfileIndex(connector_id);
     ConnectorProfile prof(m_profile.connector_profiles[index]);
     RTC::PortService_ptr p;
+    if (prof.ports.length() < 1) return RTC::PRECONDITION_NOT_MET;
     p = prof.ports[(CORBA::ULong)0];
     return p->notify_disconnect(connector_id);
   }
