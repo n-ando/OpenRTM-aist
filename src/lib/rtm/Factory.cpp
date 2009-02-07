@@ -126,8 +126,15 @@ namespace RTC
    */
   void FactoryCXX::destroy(RtcBase* comp)
   {
-    --m_Number;
-    m_policy->onDelete(comp);
-    m_Delete(comp);
+    try
+      {
+        --m_Number;
+        m_policy->onDelete(comp);
+        m_Delete(comp);
+      }
+    catch (...)
+      {
+        
+      }
   }
 };
