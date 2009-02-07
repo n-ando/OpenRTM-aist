@@ -318,7 +318,8 @@ namespace RTC
     
     // Return RTC::PRECONDITION_NOT_MET,
     // When the component is registered in ExecutionContext.
-    if(m_ecMine.length() != 0 || m_ecOther.length() != 0)
+    // m_ecMine.length() != 0 || 
+    if(m_ecOther.length() != 0)
     {
       return RTC::PRECONDITION_NOT_MET;
     }
@@ -353,14 +354,14 @@ namespace RTC
     // stop and detach myself from owned EC
     for (CORBA::ULong ic(0), len(m_ecMine.length()); ic < len; ++ic)
       {
-        m_ecMine[ic]->stop();
-        m_ecMine[ic]->remove_component(this->_this());
+        //        m_ecMine[ic]->stop();
+        //        m_ecMine[ic]->remove_component(this->_this());
       }
 
     // detach myself from other EC
     for (CORBA::ULong ic(0), len(m_ecOther.length()); ic < len; ++ic)
       {
-        m_ecOther[ic]->stop();
+        //        m_ecOther[ic]->stop();
         m_ecOther[ic]->remove_component(this->_this());
       }
 
@@ -607,7 +608,19 @@ namespace RTC
     try
       {
 	ComponentProfile_var profile
-	  = new ComponentProfile(m_profile);
+	  = new ComponentProfile();
+        profile->instance_name = 
+          CORBA::string_dup(m_properties["instance_name"].c_str());
+        profile->type_name     = 
+          CORBA::string_dup(m_properties["type_name"].c_str());
+        profile->description   = 
+          CORBA::string_dup(m_properties["description"].c_str());
+        profile->version       = 
+          CORBA::string_dup(m_properties["version"].c_str());
+        profile->vendor        = 
+          CORBA::string_dup(m_properties["vendor"].c_str());
+        profile->category      = 
+          CORBA::string_dup(m_properties["category"].c_str());
 	profile->port_profiles = m_portAdmin.getPortProfileList();
 	return profile._retn();
       }
@@ -1015,20 +1028,13 @@ namespace RTC
     try
       {
 	SDOPackage::DeviceProfile_var dprofile;
-	dprofile = new SDOPackage::DeviceProfile();
+	dprofile = new SDOPackage::DeviceProfile(m_pSdoConfigImpl->getDeviceProfile());
         
-	dprofile->device_type  = m_pSdoConfigImpl->getDeviceProfile().device_type;
-	dprofile->manufacturer = m_pSdoConfigImpl->getDeviceProfile().manufacturer;
-	dprofile->model        = m_pSdoConfigImpl->getDeviceProfile().model;
-	dprofile->version      = m_pSdoConfigImpl->getDeviceProfile().version;
-	dprofile->properties   = m_pSdoConfigImpl->getDeviceProfile().properties;
-
-//	dprofile->device_type  = CORBA::string_dup(m_profile.category);
-//	dprofile->manufacturer = CORBA::string_dup(m_profile.vendor);
-//	dprofile->model        = CORBA::string_dup(m_profile.type_name);
-//	dprofile->version      = CORBA::string_dup(m_profile.version);
-//	dprofile->properties   = m_profile.properties;
-
+//	dprofile->device_type  = m_pSdoConfigImpl->getDeviceProfile().device_type;
+//	dprofile->manufacturer = m_pSdoConfigImpl->getDeviceProfile().manufacturer;
+//	dprofile->model        = m_pSdoConfigImpl->getDeviceProfile().model;
+//	dprofile->version      = m_pSdoConfigImpl->getDeviceProfile().version;
+//	dprofile->properties   = m_pSdoConfigImpl->getDeviceProfile().properties;
 	return dprofile._retn();
       }
     catch (...)
