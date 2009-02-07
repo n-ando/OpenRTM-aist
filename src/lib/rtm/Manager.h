@@ -573,12 +573,39 @@ namespace RTC
      *
      * 指定したRTコンポーネントのインスタンスを登録されたFactory経由
      * で生成する。
+     *
+     * 生成されるコンポーネントの各種プロファイルは以下の優先順位で
+     * 設定される。
+     *
+     * -# createComponent() の引数で与えられたプロファイル
+     * -# rtc.confで指定された外部ファイルで与えられたプロファイル
+     * --# category.instance_name.config_file
+     * --# category.component_type.config_file
+     * -# コードに埋め込まれたプロファイル 
+     *
      * インスタンス生成が成功した場合、併せて以下の処理を実行する。
      *  - 外部ファイルで設定したコンフィギュレーション情報の読み込み，設定
      *  - ExecutionContextのバインド，動作開始
      *  - ネーミングサービスへの登録
      *
-     * @param module_name 生成対象RTコンポーネント名称
+     * @param comp_args 生成対象RTコンポーネントIDおよびコンフィギュレー
+     * ション引数。フォーマットは大きく分けて "id" と "configuration" 
+     * 部分が存在する。
+     *
+     * comp_args:     [id]?[configuration]
+     *                id は必須、configurationはオプション
+     * id:            RTC:[vendor]:[category]:[implementation_id]:[version]
+     *                RTC は固定かつ必須
+     *                vendor, category, version はオプション
+     *                implementation_id は必須
+     *                オプションを省略する場合でも ":" は省略不可
+     * configuration: [key0]=[value0]&[key1]=[value1]&[key2]=[value2].....
+     *                RTCが持つPropertiesの値をすべて上書きすることができる。
+     *                key=value の形式で記述し、"&" で区切る
+     *
+     * 例えば、
+     * RTC:jp.go.aist:example:ConfigSample:1.0?conf.default.str_param0=munya
+     * RTC::example:ConfigSample:?conf.default.int_param0=100
      *
      * @return 生成したRTコンポーネントのインスタンス
      *
@@ -598,7 +625,7 @@ namespace RTC
      *
      * @endif
      */
-    RtcBase* createComponent(const char* module_name);
+    RtcBase* createComponent(const char* comp_args);
     
     /*!
      * @if jp
@@ -1060,7 +1087,41 @@ namespace RTC
      * @endif
      */
     void shutdownComponents();
-    
+
+
+    /*!
+     * @if jp
+     * @brief 引数文字列からコンポーネント型名・プロパティを抽出する
+     *
+     * 文字列からコンポーネント型とコンポーネントのプロパティを抽出する。
+     * 与えられる文字列のフォーマットは
+     * [RTC type]?[key(0)]=[val(0)]&[key(1)]=[val(1)]...[key(n)]=[val(n)]
+     * 
+     * @return comp_arg にコンポーネント型が含まれていない場合false
+     * @param comp_arg  処理すべき文字列
+     * @param comp_type 抽出されたコンポーネントの型名
+     * @param comp_prop 抽出されたコンポーネントのプロパティ
+     *
+     * @else
+     * @brief Extracting component type/properties from the given string
+     *
+     * This operation extracts component type name and its properties
+     * from the figen character string.
+     * The given string formats is the following.
+     * [RTC type]?[key(0)]=[val(0)]&[key(1)]=[val(1)]...[key(n)]=[val(n)]
+     * 
+     * @return comp_arg false will returned if no component type in arg
+     * @param comp_arg  character string to be processed
+     * @param comp_type extracted component type name
+     * @param comp_prop extracted component's properties
+     *
+     * @endif
+     */
+    bool procComponentArgs(const char* comp_arg,
+                           coil::Properties& comp_id,
+                           coil::Properties& comp_conf);
+
+
     /*!
      * @if jp
      * @brief RTコンポーネントのコンフィギュレーション処理
@@ -1375,16 +1436,50 @@ namespace RTC
     // コンポーネントファクトリ
     //============================================================
     // コンポーネントファクトリへ渡す述語クラス
-    struct FactoryPredicate
+    class FactoryPredicate
     {
-      FactoryPredicate(const char* name) : m_name(name){};
+    public:
+      FactoryPredicate(const char* imple_id)
+        : m_vendor(""), m_category(""), m_impleid(imple_id), m_version("")
+      {
+      }
+      FactoryPredicate(const coil::Properties& prop)
+        : m_vendor(prop["vendor"]),
+          m_category(prop["category"]),
+          m_impleid(prop["implementation_id"]),
+          m_version(prop["version"])
+      {
+      }
       FactoryPredicate(FactoryBase* factory)
-	: m_name(factory->profile()["implementation_id"]) {};
+	: m_vendor(factory->profile()["vendor"]),
+          m_category(factory->profile()["category"]),
+          m_impleid(factory->profile()["implementation_id"]),
+          m_version(factory->profile()["version"])
+      {
+      }
       bool operator()(FactoryBase* factory)
       {
-	return m_name == factory->profile()["implementation_id"];
+        // implementation_id must not be empty
+        if (m_impleid.empty()) return false;
+
+        const coil::Properties& prop(factory->profile());
+
+        if (m_impleid != prop["implementation_id"])
+          return false;
+        if (!m_vendor.empty()   && m_vendor != prop["vendor"])
+          return false;
+        if (!m_category.empty() && m_category != prop["category"])
+          return false;
+        if (!m_version.empty()  && m_version != prop["version"])
+          return false;
+          
+        return true;
       }
-      std::string m_name;
+    private:
+      std::string m_vendor;
+      std::string m_category;
+      std::string m_impleid;
+      std::string m_version;
     };
     
     /*!
@@ -1394,7 +1489,7 @@ namespace RTC
      * @brief ComponentFactory
      * @endif
      */
-    typedef ObjectManager<const char*, FactoryBase,
+    typedef ObjectManager<const coil::Properties, FactoryBase,
 			  FactoryPredicate> FactoryManager;
 
     /*!

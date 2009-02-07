@@ -466,46 +466,40 @@ std::vector<coil::Properties> Manager::getLoadableModules()
    * @brief Create RT-Components
    * @endif
    */
-  RtcBase* Manager::createComponent(const char* comp_arg)
+  RtcBase* Manager::createComponent(const char* comp_args)
   {
-    std::string arg(comp_arg);
-    coil::Properties prop;
-    const char* module_name;
-    std::vector<std::string> comp_and_conf(coil::split(arg, "?"));
+    RTC_TRACE(("Manager::createComponent(%s)", comp_args));
 
-    if (comp_and_conf.size() == 0) return NULL;
+    //------------------------------------------------------------
+    // extract "comp_type" and "comp_prop" from comp_arg
+    coil::Properties comp_prop, comp_id;
+    if (!procComponentArgs(comp_args, comp_id, comp_prop)) return NULL;
 
-    module_name = comp_and_conf[0].c_str();
 
-    if (comp_and_conf.size() > 1)
-      {
-        std::vector<std::string> conf(coil::split(comp_and_conf[1], "&"));
-        for (int i(0), len(conf.size()); i < len; ++i)
-          {
-            std::vector<std::string> keyval(coil::split(conf[i], "="));
-            prop[keyval[0]] = keyval[1];
-          }
-      }
-
-    RTC_TRACE(("Manager::createComponent(%s)", module_name));
-    
     //------------------------------------------------------------
     // Create Component
-    RtcBase* comp;
-    FactoryBase* factory(m_factory.find(module_name));
+    FactoryBase* factory(m_factory.find(comp_id));
     if (factory == NULL)
       {
-	RTC_ERROR(("Factory not found: %s", module_name));
+	RTC_ERROR(("Factory not found: %s",
+                   comp_id["implementation_id"].c_str()));
 	return NULL;
       }
+
+    coil::Properties prop;
+    prop = factory->profile();
+    prop << comp_prop;
+
+    RtcBase* comp;
     comp = factory->create(this);
     if (comp == NULL)
       {
-	RTC_ERROR(("RTC creation failed: %s", module_name));
+	RTC_ERROR(("RTC creation failed: %s",
+                   comp_id["implementaion_id"].c_str()));
 	return NULL;
       }
-    RTC_TRACE(("RTC created: %s", module_name));
-    
+    RTC_TRACE(("RTC created: %s", comp_id["implementaion_id"].c_str()));
+
     //------------------------------------------------------------
     // Load configuration file specified in "rtc.conf"
     //
@@ -513,25 +507,31 @@ std::vector<coil::Properties> Manager::getLoadableModules()
     //   [category].[type_name].config_file = file_name
     //   [category].[instance_name].config_file = file_name
     configureComponent(comp, prop);
+
+    comp->setProperties(prop);
     
     //------------------------------------------------------------
     // Component initialization
     if(bindExecutionContext(comp) != true)
       {
-        RTC_TRACE(("RTC bindExecutionContext failed: %s", module_name));
+        RTC_TRACE(("RTC bindExecutionContext failed: %s",
+                   comp_id["implementaion_id"].c_str()));
         comp->exit();
-        RTC_TRACE(("%s was finalized", module_name));
+        RTC_TRACE(("%s was finalized", comp_id["implementaion_id"].c_str()));
         return NULL;
       }
-    RTC_TRACE(("RTC bindExecutionContext succeeded: %s", module_name));
+    RTC_TRACE(("RTC bindExecutionContext succeeded: %s",
+               comp_id["implementaion_id"].c_str()));
     if (comp->initialize() != RTC::RTC_OK)
       {
-	RTC_TRACE(("RTC initialization failed: %s", module_name));
+	RTC_TRACE(("RTC initialization failed: %s",
+                   comp_id["implementaion_id"].c_str()));
 	comp->exit();
-	RTC_TRACE(("%s was finalized", module_name));
+	RTC_TRACE(("%s was finalized", comp_id["implementaion_id"].c_str()));
 	return NULL;
       }
-    RTC_TRACE(("RTC initialization succeeded: %s", module_name));
+    RTC_TRACE(("RTC initialization succeeded: %s",
+               comp_id["implementaion_id"].c_str()));
     //------------------------------------------------------------
     // Bind component to naming service
     registerComponent(comp);
@@ -1205,6 +1205,74 @@ std::vector<coil::Properties> Manager::getLoadableModules()
   {
     RTC_TRACE(("Manager::shutdownComponents()"));
     unregisterComponent(comp);
+  }
+  
+  /*!
+   * @if jp
+   * @brief createComponentの引数を処理する
+   * @else
+   *
+   * @endif
+   */
+  bool Manager::procComponentArgs(const char* comp_arg,
+                                  coil::Properties& comp_id,
+                                  coil::Properties& comp_conf)
+  {
+    std::vector<std::string> id_and_conf(coil::split(comp_arg, "?"));
+    // arg should be "id?[conf]". id is mandatory, conf is optional
+    if (id_and_conf.size() != 1 && id_and_conf.size() != 2)
+      {
+        RTC_ERROR(("args devided into %d", id_and_conf.size()));
+        RTC_ERROR(("Invalid arguments. Two or more '?' in arg : %s", comp_arg));
+        return false;
+      }
+    if (id_and_conf[0].find(":") == std::string::npos)
+      {
+        id_and_conf[0].insert(0, "RTC:::");
+        id_and_conf[0] += ":";
+      }
+    std::cout << "ID: " << id_and_conf[0] << std::endl;
+    std::vector<std::string> id(coil::split(id_and_conf[0], ":"));
+    std::cout << "id.size(): " << id.size() << std::endl;
+
+    // id should be devided into 1 or 5 elements
+    // RTC:[vendor]:[category]:impl_id:[version] => 5
+    if (id.size() != 5) 
+      {
+        RTC_ERROR(("Invalid RTC id format.: %s", id_and_conf[0].c_str()));
+        return false;
+      }
+
+    const char* prof[] = {
+      "RTC",
+      "vendor",
+      "category",
+      "implementation_id",
+      "version"
+    };
+
+    if (id[0] != prof[0])
+      {
+        RTC_ERROR(("Invalid id type: %s", id[0].c_str()));
+        return false;
+      }
+    for (int i(1); i < 5; ++i)
+      {
+        comp_id[prof[i]] = id[i];
+        RTC_TRACE(("RTC basic propfile %s: %s", prof[i], id[i].c_str()));
+      }
+
+    if (id_and_conf.size() == 2)
+      {
+        std::vector<std::string> conf(coil::split(id_and_conf[1], "&"));
+        for (int i(0), len(conf.size()); i < len; ++i)
+          {
+            std::vector<std::string> keyval(coil::split(conf[i], "="));
+            comp_conf[keyval[0]] = keyval[1];
+            RTC_TRACE(("RTC property %s: %s", keyval[0].c_str(), keyval[1].c_str()));
+          }
+      }
+    return true;
   }
   
   /*!
