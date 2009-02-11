@@ -626,6 +626,7 @@ namespace RTC
      * @endif
      */
     RtcBase* createComponent(const char* comp_args);
+    ExecutionContextBase* createContext(const char* ec_args);
     
     /*!
      * @if jp
@@ -695,32 +696,6 @@ namespace RTC
      */
     bool unregisterComponent(RtcBase* comp);
     
-    /*!
-     * @if jp
-     * @brief RTコンポーネントにExecutionContextをバインドする
-     *
-     * 指定したRTコンポーネントにExecutionContextをバインドする。
-     * バインドするExecutionContextの型はプロパティ・ファイルの
-     * "exec_cxt.periodic.type"属性によって指定する。
-     *
-     * @param comp バインド対象RTコンポーネントのインスタンス
-     *
-     * @return バインド処理結果(バインド成功:true、失敗:false)
-     *
-     * @else
-     * @brief Bind ExecutionContext to RT-Component
-     *
-     * Bind ExecutionContext to specified RT-Component.
-     * Specify the type of bound ExecutionContext according to
-     * "exec_cxt.periodic.type" attribute in property file.
-     *
-     * @param comp Target RT-Component's instance for the bind
-     *
-     * @return Binding result (Successful:true, Failed:false)
-     *
-     * @endif
-     */
-    bool bindExecutionContext(RtcBase* comp);
     
     /*!
      * @if jp
@@ -1120,7 +1095,9 @@ namespace RTC
     bool procComponentArgs(const char* comp_arg,
                            coil::Properties& comp_id,
                            coil::Properties& comp_conf);
-
+    bool procContextArgs(const char* ec_args,
+                         std::string& ec_id,
+                         coil::Properties& ec_conf);
 
     /*!
      * @if jp

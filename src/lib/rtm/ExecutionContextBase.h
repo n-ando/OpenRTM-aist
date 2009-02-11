@@ -82,7 +82,7 @@ namespace RTC
     {};
 
     virtual RTC::ReturnCode_t bindComponent(RtcBase* rtc) = 0;
-
+    virtual RTC::ExecutionContextService_ptr getObjRef() = 0;
   };
 };
 #endif // ExecutionContextBase_h
