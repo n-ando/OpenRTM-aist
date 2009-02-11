@@ -122,7 +122,6 @@ rtmheader_HEADERS = \
 	PublisherBase.h              \
 	RTC.h                        \
 	RingBuffer.h                 \
-	SdoService.h                 \
 	StateMachine.h               \
 	SystemLogger.h               \
 	config_rtc.h
