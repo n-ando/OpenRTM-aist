@@ -76,11 +76,17 @@ namespace coil
     return 0;
   }
 
+  void Task::reset()
+  {
+    m_count = 0;
+  }
+
   void* Task::svc_run(void* args)
   {
     Task* t = (coil::Task*)args;
     int status;
     status = t->svc();
+    t->reset();
     return 0;
   }
 };
