@@ -21,6 +21,7 @@
 #include <rtm/SdoOrganization.h>
 #include <rtm/CORBA_SeqUtil.h>
 #include <memory>
+#include <iostream>
 
 namespace SDOPackage
 {
@@ -129,7 +130,7 @@ namespace SDOPackage
    */
   CORBA::Boolean
   Organization_impl::
-  set_organization_property(const OrganizationProperty& organization_property)
+  add_organization_property(const OrganizationProperty& organization_property)
     throw (CORBA::SystemException,
 	   InvalidParameter, NotAvailable, InternalError)
   {
@@ -336,14 +337,27 @@ namespace SDOPackage
     throw (CORBA::SystemException,
 	   InvalidParameter, NotAvailable, InternalError)
   {
+    for (CORBA::ULong i(0), len(m_memberList.length()); i < len; ++i)
+      {
+        std::cout << "given: " << id << std::endl;
+        std::cout << "ID: " << m_memberList[i]->get_sdo_id() << std::endl;
+      }
+
+
     if (std::string(id).empty())
-      throw InvalidParameter("remove_member(): Enpty name.");
+      {
+        std::cout << "remove_member(): Enpty name." << std::endl;
+        throw InvalidParameter("remove_member(): Enpty name.");
+      }
     
     CORBA::Long index;
     index = CORBA_SeqUtil::find(m_memberList, sdo_id(id));
     
     if (index < 0)
-      throw InvalidParameter("remove_member(): Not found.");
+      {
+        std::cout << "remove_member(): Not found." << std::endl;
+        throw InvalidParameter("remove_member(): Not found.");
+      }
     
     try
       {
@@ -352,6 +366,7 @@ namespace SDOPackage
       }
     catch (...)
       {
+        std::cout << "hatena?" << std::endl;
 	throw InternalError("remove_member(): Not found.");
       }
     return false;

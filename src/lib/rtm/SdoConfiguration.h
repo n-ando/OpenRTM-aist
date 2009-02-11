@@ -282,7 +282,7 @@ namespace SDOPackage
      *                          completely due to some internal error.
      * @endif
      */
-    virtual CORBA::Boolean set_service_profile(const ServiceProfile& sProfile)
+    virtual CORBA::Boolean add_service_profile(const ServiceProfile& sProfile)
       throw (CORBA::SystemException,
 	     InvalidParameter, NotAvailable, InternalError);
     
@@ -807,8 +807,7 @@ namespace SDOPackage
      * @endif
      */
     virtual CORBA::Boolean
-    set_configuration_set_values(const char* config_id,
-				 const ConfigurationSet& configuration_set)
+    set_configuration_set_values(const ConfigurationSet& configuration_set)
       throw (CORBA::SystemException,
 	     InvalidParameter, NotAvailable, InternalError);
     

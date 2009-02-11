@@ -21,6 +21,7 @@
 #include "rtm/SdoConfiguration.h"
 #include <rtm/CORBA_SeqUtil.h>
 #include <rtm/NVUtil.h>
+#include <rtm/ExecutionContextBase.h>
 #include <memory>
 #include <iostream>
 // ACE
@@ -152,7 +153,7 @@ namespace SDOPackage
    * @endif
    */
   CORBA::Boolean
-  Configuration_impl::set_service_profile(const ServiceProfile& sProfile)
+  Configuration_impl::add_service_profile(const ServiceProfile& sProfile)
     throw (CORBA::SystemException,
 	   InvalidParameter, NotAvailable, InternalError)
   {
@@ -476,19 +477,18 @@ namespace SDOPackage
    */
   CORBA::Boolean
   Configuration_impl::
-  set_configuration_set_values(const char* id,
-			       const ConfigurationSet& configuration_set)
+  set_configuration_set_values(const ConfigurationSet& configuration_set)
     throw (CORBA::SystemException,
 	   InvalidParameter, NotAvailable, InternalError)
   {
-    if (std::string(id).empty()) throw InvalidParameter("ID is empty.");
+    std::string id(configuration_set.id);
+    if (id.empty()) throw InvalidParameter("ID is empty.");
     
     try
       {
-//	RTC::Properties conf(id);
-	coil::Properties conf(id);
+        coil::Properties conf(id.c_str());
 	toProperties(conf, configuration_set);
-	return m_configsets.setConfigurationSetValues(id, conf);
+	return m_configsets.setConfigurationSetValues(id.c_str(), conf);
       }
     catch (...)
       {
