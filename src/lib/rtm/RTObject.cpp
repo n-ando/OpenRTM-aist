@@ -285,16 +285,32 @@ namespace RTC
   ReturnCode_t RTObject_impl::initialize()
     throw (CORBA::SystemException)
   {
-    // at least one EC must be attached
-    if (m_ecMine.length() == 0) return RTC::PRECONDITION_NOT_MET;
-
     ReturnCode_t ret;
     ret = on_initialize();
     if (ret != RTC::RTC_OK) return ret;
-
     m_created = false;
 
+    std::string ec_args;
+
+    ec_args += m_properties["exec_cxt.periodic.type"];
+    ec_args += "?";
+    ec_args += "rate=" + m_properties["exec_cxt.periodic.rate"];
+    std::cout << "ec_args: " << ec_args << std::endl;
+    RTC::ExecutionContextBase* ec;
+    ec = RTC::Manager::instance().createContext(ec_args.c_str());
+    if (ec == NULL) return RTC::RTC_ERROR;
+
+    ec->set_rate(atof(m_properties["exec_cxt.periodic.rate"].c_str()));
+    m_eclist.push_back(ec);
+    ExecutionContextService_var ecv;
+    ecv = ec->getObjRef();
+    if (CORBA::is_nil(ecv)) return RTC::RTC_ERROR;
+    CORBA_SeqUtil::push_back(m_ecMine,
+                             RTC::ExecutionContextService::_duplicate(ecv));
+    ec->bindComponent(this);
     // -- entering alive state --
+    // at least one EC must be attached
+    if (m_ecMine.length() == 0) return RTC::PRECONDITION_NOT_MET;
     for (::CORBA::ULong i(0), len(m_ecMine.length()); i < len; ++i)
       {
         m_ecMine[i]->start();
@@ -951,7 +967,8 @@ namespace RTC
    * @endif
    */
   SDOPackage::OrganizationList* RTObject_impl::get_owned_organizations()
-    throw (CORBA::SystemException, SDOPackage::NotAvailable)
+    throw (CORBA::SystemException,
+           SDOPackage::NotAvailable, SDOPackage::InternalError)
   {
     try
       {
@@ -1420,6 +1437,16 @@ namespace RTC
   {
     m_portAdmin.finalizePorts();
   }
+
+  void RTObject_impl::finalizeContexts()
+  {
+    for (int i(0), len(m_eclist.size()); i < len; ++i)
+      {
+        m_eclist[i]->stop();
+        m_pPOA->deactivate_object(*m_pPOA->servant_to_id(m_eclist[i]));
+        delete m_eclist[i];
+      }
+  }
   
   /*!
    * @if jp
@@ -1433,6 +1460,7 @@ namespace RTC
     try
       {
 	finalizePorts();
+        finalizeContexts();
 	m_pPOA->deactivate_object(*m_pPOA->servant_to_id(m_pSdoConfigImpl));
 	m_pPOA->deactivate_object(*m_pPOA->servant_to_id(this));
       }

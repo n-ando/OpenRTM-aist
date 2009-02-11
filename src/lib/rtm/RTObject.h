@@ -42,6 +42,7 @@ namespace SDOPackage
 namespace RTC
 {
   class Manager;
+  class ExecutionContextBase;
   typedef ExecutionContextHandle_t UniqueId;
 
   /*!
@@ -1442,7 +1443,8 @@ namespace RTC
      * @endif
      */
     virtual SDOPackage::OrganizationList* get_owned_organizations()
-      throw (CORBA::SystemException, SDOPackage::NotAvailable);
+      throw (CORBA::SystemException,
+             SDOPackage::NotAvailable, SDOPackage::InternalError);
     
     //============================================================
     // SDOPackage::SDO
@@ -2411,7 +2413,7 @@ namespace RTC
      * @endif
      */
     void finalizePorts();
-    
+    void finalizeContexts();
     /*
       template <class DataType>
       void registerInPort(BufferBase<DataType>& buffer)
@@ -2586,6 +2588,7 @@ namespace RTC
      * @endif
      */
     ExecutionContextServiceList m_ecMine;
+    std::vector<ExecutionContextBase*> m_eclist;
     
     /*!
      * @if jp

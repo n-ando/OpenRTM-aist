@@ -490,6 +490,27 @@ std::vector<coil::Properties> Manager::getLoadableModules()
     prop = factory->profile();
     prop << comp_prop;
 
+    const char* inherit_prop[] = {
+      "exec_cxt.periodic.type",
+      "exec_cxt.periodic.rate",
+      "exec_cxt.evdriven.type",
+      "naming.formats",
+      "logger.enable",
+      "logger.log_level",
+      "naming.enable",
+      "naming.type",
+      "naming.formats",
+      ""
+    };
+
+    for (int i(0); inherit_prop[i][0] != '\0'; ++i)
+      {
+        std::cout << inherit_prop[i] << std::endl;
+        //        if (prop.hasKey() == NULL) continue;
+        prop[inherit_prop[i]] = m_config[inherit_prop[i]];
+      }
+
+      
     RtcBase* comp;
     comp = factory->create(this);
     if (comp == NULL)
@@ -512,16 +533,6 @@ std::vector<coil::Properties> Manager::getLoadableModules()
     
     //------------------------------------------------------------
     // Component initialization
-    if(bindExecutionContext(comp) != true)
-      {
-        RTC_TRACE(("RTC bindExecutionContext failed: %s",
-                   comp_id["implementaion_id"].c_str()));
-        comp->exit();
-        RTC_TRACE(("%s was finalized", comp_id["implementaion_id"].c_str()));
-        return NULL;
-      }
-    RTC_TRACE(("RTC bindExecutionContext succeeded: %s",
-               comp_id["implementaion_id"].c_str()));
     if (comp->initialize() != RTC::RTC_OK)
       {
 	RTC_TRACE(("RTC initialization failed: %s",
@@ -584,65 +595,27 @@ std::vector<coil::Properties> Manager::getLoadableModules()
     return true;
   }
   
-  /*!
-   * @if jp
-   * @brief RTコンポーネントにExecutionContextをバインドする
-   * @else
-   * @brief Bind ExecutionContext to RT-Component
-   * @endif
-   */
-  bool Manager::bindExecutionContext(RtcBase* comp)
+
+  ExecutionContextBase* Manager::createContext(const char* ec_args)
   {
-    RTC_TRACE(("Manager::bindExecutionContext()"));
+    RTC_TRACE(("Manager::createContext()"));
     RTC_TRACE(("ExecutionContext type: %s", 
 	       m_config.getProperty("exec_cxt.periodic.type").c_str()));
-    
-    RTObject_var rtobj;
-    rtobj = comp->getObjRef();
-    
-    ExecutionContextBase* exec_cxt;
-    
-    if (RTC_Utils::isDataFlowComponent(rtobj))
+
+    std::string ec_id;
+    coil::Properties ec_prop;
+    if (!procContextArgs(ec_args, ec_id, ec_prop)) return NULL;
+
+    ECFactoryBase* factory(m_ecfactory.find(ec_id.c_str()));
+    if (factory == NULL)
       {
-	const char* ectype
-	  = m_config.getProperty("exec_cxt.periodic.type").c_str();
-        if(m_ecfactory.find(ectype) == NULL)
-          {
-            return false;
-          }
-	exec_cxt = m_ecfactory.find(ectype)->create();
-	const char* rate
-	  = m_config.getProperty("exec_cxt.periodic.rate").c_str();
-	exec_cxt->set_rate(atof(rate));
+        RTC_ERROR(("Factory not found: %s", ec_id.c_str()));
+        return NULL;
       }
-    /*
-      else if (isDataFlowComposite(rtobj))
-      {
-      }
-      else if (isFsmParticipant(rtobj))
-      {
-      }      
-      else if (isFsm(rtobj))
-      {
-      }      
-      else if (isMultiModeObject(rtobj))
-      {
-      }
-    */
-    else
-      {
-	const char* ectype
-	  = m_config.getProperty("exec_cxt.evdriven.type").c_str();
-        if(m_ecfactory.find(ectype) == NULL)
-          {
-            return false;
-          }
-	exec_cxt = m_ecfactory.find(ectype)->create();
-      }
-    exec_cxt->bindComponent(comp);
-    exec_cxt->start();
-    m_ecs.push_back(exec_cxt);
-    return true;
+
+    ExecutionContextBase* ec;
+    ec = factory->create();
+    return ec;
   }
   
   /*!
@@ -652,16 +625,6 @@ std::vector<coil::Properties> Manager::getLoadableModules()
    * @brief Unregister RT-Components that have been registered to Manager
    * @endif
    */
-//  void Manager::deleteComponent(RtcBase* comp)
-//  {
-//    RTC_TRACE(("Manager::deleteComponent(%s)", comp->getInstanceName()));
-//    RTObject_var rtobj;
-//    rtobj = comp->getObjRef();
-//    for (CORBA::ULong ic(0), len(m_ecs.size()); ic < len; ++ic)
-//      {
-//        m_ecs[ic]->remove_component(rtobj);
-//      }
-//  }
   void Manager::deleteComponent(const char* instance_name)
   {
     RTC_TRACE(("Manager::deleteComponent(%s)", instance_name));
@@ -1222,7 +1185,6 @@ std::vector<coil::Properties> Manager::getLoadableModules()
     // arg should be "id?[conf]". id is mandatory, conf is optional
     if (id_and_conf.size() != 1 && id_and_conf.size() != 2)
       {
-        RTC_ERROR(("args devided into %d", id_and_conf.size()));
         RTC_ERROR(("Invalid arguments. Two or more '?' in arg : %s", comp_arg));
         return false;
       }
@@ -1231,9 +1193,7 @@ std::vector<coil::Properties> Manager::getLoadableModules()
         id_and_conf[0].insert(0, "RTC:::");
         id_and_conf[0] += ":";
       }
-    std::cout << "ID: " << id_and_conf[0] << std::endl;
     std::vector<std::string> id(coil::split(id_and_conf[0], ":"));
-    std::cout << "id.size(): " << id.size() << std::endl;
 
     // id should be devided into 1 or 5 elements
     // RTC:[vendor]:[category]:impl_id:[version] => 5
@@ -1243,13 +1203,10 @@ std::vector<coil::Properties> Manager::getLoadableModules()
         return false;
       }
 
-    const char* prof[] = {
-      "RTC",
-      "vendor",
-      "category",
-      "implementation_id",
-      "version"
-    };
+    const char* prof[] =
+      {
+        "RTC", "vendor", "category", "implementation_id", "version"
+      };
 
     if (id[0] != prof[0])
       {
@@ -1270,6 +1227,36 @@ std::vector<coil::Properties> Manager::getLoadableModules()
             std::vector<std::string> keyval(coil::split(conf[i], "="));
             comp_conf[keyval[0]] = keyval[1];
             RTC_TRACE(("RTC property %s: %s", keyval[0].c_str(), keyval[1].c_str()));
+          }
+      }
+    return true;
+  }
+
+  bool Manager::procContextArgs(const char* ec_args,
+                                std::string& ec_id,
+                                coil::Properties& ec_conf)
+  {
+    std::vector<std::string> id_and_conf(coil::split(ec_args, "?"));
+    if (id_and_conf.size() != 1 && id_and_conf.size() != 2)
+      {
+        RTC_ERROR(("Invalid arguments. Two or more '?' in arg : %s", ec_args));
+        return false;
+      }
+    if (id_and_conf[0].empty())
+      {
+        RTC_ERROR(("Empty ExecutionContext's name"));
+        return false;
+      }
+    ec_id =id_and_conf[0];
+    
+    if (id_and_conf.size() == 2)
+      {
+        std::vector<std::string> conf(coil::split(id_and_conf[1], "&"));
+        for (int i(0), len(conf.size()); i < len; ++i)
+          {
+            std::vector<std::string> k(coil::split(conf[i], "="));
+            ec_conf[k[0]] = k[1];
+            RTC_TRACE(("EC property %s: %s", k[0].c_str(), k[1].c_str()));
           }
       }
     return true;
