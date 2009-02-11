@@ -1,5 +1,5 @@
 //Platform Independent Model (PIM) and Platform Specific Model (PSM)
-//for Super Distributed Objects (SDO) Specification, v1.0 - OMG IDL Summary File
+//for Super Distributed Objects (SDO) Specification, v1.1 - OMG IDL Summary File
 //Object Management Group, Inc.
 //Copyright (c) 2003, Fraunhofer FOKUS
 //Copyright (c) 2003, Hitachi, Ltd.
@@ -21,6 +21,10 @@
 //their own code, or use it for documentation purposes. Having the code lines 
 //available electronically means there is less likelihood of a transcription 
 //error. 
+//
+// ver 1.0  formal/2004-11-02
+// ver 1.1  (RTF report: dtc/2008-03-05)
+//
 //SDOPackage.idl
 
 #ifndef    _SDO_PACKAGE_IDL_
@@ -54,15 +58,15 @@ module SDOPackage
   typedef sequence<SDO>          SDOList;
   typedef sequence<Organization> OrganizationList;
   typedef string                 UniqueIdentifier;
-  
+
   struct NameValue
   {
     string name;
     any value;
   };
-  
+
   typedef sequence<NameValue>   NVList;
-  
+
   enum NumericType
   {
     SHORT_TYPE,
@@ -70,7 +74,7 @@ module SDOPackage
     FLOAT_TYPE,
     DOUBLE_TYPE
   };
-  
+
   union Numeric switch (NumericType)
   {
   case SHORT_TYPE:  short short_value;
@@ -78,12 +82,12 @@ module SDOPackage
   case FLOAT_TYPE: float float_value;
   case DOUBLE_TYPE: double double_value;
   };
-  
+
   struct EnumerationType
   {
     StringList enumerated_values;
   };
-  
+
   struct RangeType
   {
     Numeric min;
@@ -91,7 +95,7 @@ module SDOPackage
     boolean min_inclusive;
     boolean max_inclusive;
   };
-  
+
   struct IntervalType
   {
     Numeric min;
@@ -100,39 +104,38 @@ module SDOPackage
     boolean max_inclusive;
     Numeric step;
   };
-  
+
   enum ComplexDataType
   {
     ENUMERATION, RANGE, INTERVAL
   };
-  
+
   union AllowedValues switch (ComplexDataType)
   {
-  case ENUMERATION: 	EnumerationType allowed_enum;
-  case INTERVAL: 		IntervalType allowed_interval;
-  case RANGE: 		RangeType   allowed_range;
+  case ENUMERATION:    EnumerationType allowed_enum;
+  case INTERVAL:       IntervalType allowed_interval;
+  case RANGE:          RangeType   allowed_range;
   };
-  
+
   struct Parameter
   {
     string         name;
-    TypeCode  type;
-    AllowedValues allowed_values;
+    TypeCode       type;
+    AllowedValues  allowed_values;
   };
-  
+
   typedef sequence<Parameter> ParameterList;
   struct OrganizationProperty
   {
     NVList properties;
   };
-  
   enum DependencyType
   {
     OWN,
     OWNED,
     NO_DEPENDENCY
   };
-  
+
   struct DeviceProfile
   {
     string device_type;
@@ -141,7 +144,7 @@ module SDOPackage
     string version;
     NVList properties;
   };
-  
+
   struct ServiceProfile
   {
     string id;
@@ -149,7 +152,7 @@ module SDOPackage
     NVList properties;
     SDOService service;
   };
-  
+
   typedef sequence <ServiceProfile> ServiceProfileList;
   struct ConfigurationSet
   {
@@ -157,22 +160,22 @@ module SDOPackage
     string description;
     NVList configuration_data;
   };
-  
+
   typedef sequence<ConfigurationSet> ConfigurationSetList;
-  
+
+
   /** ------- Exceptions -------*/
-  exception NotAvailable		     exception_body;
+  exception NotAvailable             exception_body;
   exception InterfaceNotImplemented  exception_body;
-  exception InvalidParameter		 exception_body;
-  exception InternalError		     exception_body;
+  exception InvalidParameter         exception_body;
+  exception InternalError            exception_body;
   
   /** ------- Interfaces -------*/
   interface SDOSystemElement
   {
     OrganizationList get_owned_organizations()
-      raises (NotAvailable);
+      raises (NotAvailable,InternalError);
   };
-  
   interface SDO : SDOSystemElement
   {
     UniqueIdentifier get_sdo_id()
@@ -195,17 +198,18 @@ module SDOPackage
       raises (NotAvailable, InternalError);
     NVList get_status_list ()
       raises (NotAvailable, InternalError);
-    any get_status (in string name)
+    any get_status (in string nme)
       raises (InvalidParameter, NotAvailable, InternalError);
   };
-  
+
+
   interface Configuration
   {
     boolean set_device_profile (in DeviceProfile dProfile)
       raises (InvalidParameter, NotAvailable, InternalError);
-    boolean set_service_profile (in ServiceProfile sProfile)
+    boolean add_service_profile (in ServiceProfile sProfile)
       raises (InvalidParameter, NotAvailable, InternalError);
-    boolean add_organization (in Organization org)
+    boolean add_organization (in Organization organization_object)
       raises (InvalidParameter, NotAvailable, InternalError);
     boolean remove_service_profile (in UniqueIdentifier id)
       raises (InvalidParameter, NotAvailable, InternalError);
@@ -224,8 +228,7 @@ module SDOPackage
       raises (NotAvailable, InternalError);
     ConfigurationSet get_configuration_set (in UniqueIdentifier config_id)
       raises (NotAvailable, InternalError);
-    boolean set_configuration_set_values (in UniqueIdentifier config_id,
-                                          in ConfigurationSet configuration_set)
+    boolean set_configuration_set_values (in ConfigurationSet configuration_set)
       raises (InvalidParameter, NotAvailable, InternalError);
     ConfigurationSet get_active_configuration_set ()
       raises (NotAvailable, InternalError);
@@ -236,7 +239,8 @@ module SDOPackage
     boolean activate_configuration_set (in UniqueIdentifier config_id)
       raises (InvalidParameter, NotAvailable, InternalError);
   };
-  
+
+
 #ifdef USE_MONITORING
   interface Monitoring : CosNotifyComm::StructuredPushConsumer,
     CosNotifyComm::StructuredPushSupplier
@@ -251,7 +255,7 @@ module SDOPackage
 #else
   interface Monitoring {};
 #endif
-  
+
   interface SDOService {};
   
   interface Organization
@@ -262,10 +266,10 @@ module SDOPackage
       raises (NotAvailable, InternalError);
     any get_organization_property_value (in string name)
       raises (InvalidParameter, NotAvailable, InternalError);
-    boolean set_organization_property (in OrganizationProperty organization_property)
+    boolean add_organization_property (in OrganizationProperty organization_property)
       raises (InvalidParameter, NotAvailable, InternalError);
     boolean set_organization_property_value (in string name,
-                                             in any value )
+                                             in any value)
       raises (InvalidParameter, NotAvailable, InternalError);
     boolean remove_organization_property ( in string name )
       raises (InvalidParameter, NotAvailable, InternalError);
