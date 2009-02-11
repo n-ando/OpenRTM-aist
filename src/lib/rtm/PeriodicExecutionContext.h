@@ -21,6 +21,8 @@
 #define PeriodicExecutionContext_h
 
 #include <coil/Task.h>
+#include <coil/Mutex.h>
+#include <coil/Condition.h>
 #include <vector>
 #include <iostream>
 
@@ -139,7 +141,7 @@ namespace RTC
      *
      * @endif
      */
-    ExecutionContextService_ptr getRef() {return m_ref;}
+    virtual ExecutionContextService_ptr getObjRef() {return m_ref;}
     
     /*!
      * @if jp
@@ -1464,7 +1466,7 @@ namespace RTC
      * true: running, false: stopped
      * @endif
      */
-    bool m_state;
+    bool m_running;
 
     /*!
      * @if jp
@@ -1473,7 +1475,17 @@ namespace RTC
      * @brief The thread running flag of ExecutionContext
      * @endif
      */
-    bool m_running;
+    bool m_svc;
+
+    struct Worker
+    {
+      Worker() : cond_(mutex_), running_(false) {};
+      coil::Mutex mutex_;
+      coil::Condition<coil::Mutex> cond_;
+      bool running_;
+    };
+    // A condition variable for external triggered worker
+    Worker m_worker;
     
     /*!
      * @if jp

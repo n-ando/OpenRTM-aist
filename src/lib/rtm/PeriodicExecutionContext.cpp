@@ -33,7 +33,7 @@ namespace RTC
    */
   PeriodicExecutionContext::
   PeriodicExecutionContext()
-    : m_state(false), m_running(false), m_nowait(false)
+    : m_running(false), m_svc(true), m_nowait(false)
   {
     m_profile.kind = PERIODIC;
     m_profile.rate = 0.0;
@@ -51,7 +51,7 @@ namespace RTC
   PeriodicExecutionContext::
   PeriodicExecutionContext(OpenRTM::DataFlowComponent_ptr owner,
 			   double rate)
-    : m_state(false), m_running(false), m_nowait(false)
+    : m_running(false), m_svc(true), m_nowait(false)
   {
     m_profile.kind = PERIODIC;
     m_profile.rate = rate;
@@ -70,7 +70,13 @@ namespace RTC
    */
   PeriodicExecutionContext::~PeriodicExecutionContext()
   {
-    ;
+    m_worker.mutex_.lock();
+    m_worker.running_ = true;
+    m_worker.cond_.signal();
+    m_worker.mutex_.unlock();
+    m_svc = false;
+    wait();
+    std::cout << "PeriodicExecutionContext::~PeriodicExecutionContext()" << std::endl;
   }
   
   /*------------------------------------------------------------
@@ -107,15 +113,22 @@ namespace RTC
   int PeriodicExecutionContext::svc(void)
   {
     //    RTC_TRACE(("RtcBase::svc()"));
-    do
+    do 
       {
-        coil::TimeValue tv(0, m_usec); // (s, us)
-	std::for_each(m_comps.begin(), m_comps.end(), invoke_worker());
-	while (!m_running) {coil::sleep(tv);}
-	if (!m_nowait) coil::sleep(tv);
-      } while (m_running);
-    //    forceExit();
-    //    finalize();
+        m_worker.mutex_.lock();
+	while (!m_worker.running_)
+	  {
+	    m_worker.cond_.wait();
+	  }
+	if (m_worker.running_)
+	  {
+	    std::for_each(m_comps.begin(), m_comps.end(), invoke_worker());
+	  }
+	m_worker.mutex_.unlock();
+        coil::TimeValue tv(0, m_usec);
+        if (!m_nowait) coil::sleep(tv);
+      } while (m_svc);
+
     return 0;
   }
   
@@ -150,7 +163,7 @@ namespace RTC
   CORBA::Boolean PeriodicExecutionContext::is_running()
     throw (CORBA::SystemException)
   {
-    return m_state;
+    return m_running;
   }
   
   /*!
@@ -163,14 +176,20 @@ namespace RTC
   ReturnCode_t PeriodicExecutionContext::start()
     throw (CORBA::SystemException)
   {
-    if (m_state) return RTC::PRECONDITION_NOT_MET;
+    if (m_running) return RTC::PRECONDITION_NOT_MET;
     
     // invoke ComponentAction::on_startup for each comps.
     std::for_each(m_comps.begin(), m_comps.end(), invoke_on_startup());
     
     // change EC thread state
-    m_state = true;
     m_running = true;
+    {
+      m_worker.mutex_.lock();
+      m_worker.running_ = true;
+      m_worker.cond_.signal();
+      m_worker.mutex_.unlock();
+    }
+    
     this->open(0);
     
     return RTC::RTC_OK;
@@ -190,13 +209,14 @@ namespace RTC
     
     // stop thread
     m_running = false;
-
+    {
+      m_worker.mutex_.lock();
+      m_worker.running_ = false;
+      m_worker.mutex_.unlock();
+    }
     // invoke on_shutdown for each comps.
     std::for_each(m_comps.begin(), m_comps.end(), invoke_on_shutdown());
-    
-    // change EC thread state
-    m_state = false;
-    
+   
     return RTC::RTC_OK;
   }
   
@@ -245,21 +265,17 @@ namespace RTC
   PeriodicExecutionContext::activate_component(LightweightRTObject_ptr comp)
     throw (CORBA::SystemException)
   {
-    std::cout << "##comp num: " << m_comps.size() << std::endl;
-    // コンポーネントが参加者リストに無ければ BAD_PARAMETER を返す
     CompItr it;
     it = std::find_if(m_comps.begin(), m_comps.end(),
 		      find_comp(LightweightRTObject::_duplicate(comp)));
-    std::cout << "##0" << std::endl;
-    if (it == m_comps.end()) {
-      std::cout << "comp not found" << std::endl;
-      return RTC::BAD_PARAMETER;}
-    std::cout << "##1" << std::endl;
+
+    if (it == m_comps.end())
+      return RTC::BAD_PARAMETER;
+
     if (!(it->_sm.m_sm.isIn(INACTIVE_STATE)))
-      return RTC::PRECONDITION_NOT_MET;
-    std::cout << "##2" << std::endl;
+        return RTC::PRECONDITION_NOT_MET;
+
     it->_sm.m_sm.goTo(ACTIVE_STATE);
-    std::cout << "##3" << std::endl;
     return RTC::RTC_OK;
   }
   
@@ -327,7 +343,6 @@ namespace RTC
 		      find_comp(RTC::LightweightRTObject::_duplicate(comp)));
     if (it == m_comps.end())
       {
-	// ### return RTC::UNKNOWN_STATE ### 
 	return RTC::CREATED_STATE;
       }
     

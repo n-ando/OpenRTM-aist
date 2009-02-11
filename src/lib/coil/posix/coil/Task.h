@@ -35,6 +35,7 @@ namespace coil
     virtual int wait(void);
     virtual int suspend(void);
     virtual int resume(void);
+    virtual void reset();
     static void* svc_run(void* args = 0);
   private:
     int m_count;
