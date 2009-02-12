@@ -194,12 +194,12 @@ namespace SDOPackage
 	   InvalidParameter, NotAvailable, InternalError)
   {
     if (std::string(name).empty())
-      throw InvalidParameter("set_organization_property_value(): Enpty name.");
+      throw InvalidParameter("remove_organization_property(): Enpty name.");
     
     CORBA::Long index;
     index = CORBA_SeqUtil::find(m_orgProperty.properties,nv_name(name));
     if (index < 0)
-      throw InvalidParameter("set_organization_property_value(): Not found.");
+      throw InvalidParameter("remove_organization_property(): Not found.");
     
     try
       {
