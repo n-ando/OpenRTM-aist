@@ -22,6 +22,7 @@ AC_INIT(coil, 1.0, n-ando@aist.go.jp, coil)
 AC_CONFIG_AUX_DIR([.])
 AM_INIT_AUTOMAKE([dist-bzip2 tar-pax])
 AM_CONFIG_HEADER([posix/coil/config_coil.h])
+AM_CONFIG_HEADER([ace/coil/config_coil.h])
 AC_CONFIG_FILES([utils/coil-config/libcoil.pc:utils/coil-config/libcoil.pc.in])
 
 dnl ------------------------------------------------------------

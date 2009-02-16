@@ -19,7 +19,6 @@ COIL_PLATFORM_SRC =    \
 
 # posix API dependent headers
 COIL_PLATFORM_H   =    \
-	config_coil.h  \
 	atomic.h       \
 	OS.h           \
 	$(COIL_PLATFORM_SRC:.cpp=.h)
@@ -43,11 +42,7 @@ COIL_SRC = $(COIL_COMMON_SRC) $(COIL_PLATFORM_SRC)
 COIL_H   = $(COIL_COMMON_H) $(COIL_PLATFORM_H)
 COIL_ALL = $(COIL_SRC) $(COIL_H)
 
-config_coil.h:
-	cp $(top_srcdir)/config_coil.h .
-
 $(COIL_COMMON_SRC):
-	cp $(top_srcdir)/config_coil.h .
 	cp $(top_srcdir)/common/*.cpp .
 	cp $(top_srcdir)/common/*.h .
 	qkc -ms *.cpp *.h
@@ -64,7 +59,6 @@ coilheader_HEADERS = $(COIL_H)
 lib_LTLIBRARIES = libcoil.la
 
 libcoil_la_SOURCES =          \
-	config_coil.h         \
 	$(COIL_ALL)
 
 clean-local:
