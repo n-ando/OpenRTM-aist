@@ -20,6 +20,7 @@
 #include <algorithm>
 #include <iostream>
 #include <coil/stringutil.h>
+#include <string.h>
 
 namespace coil
 {
