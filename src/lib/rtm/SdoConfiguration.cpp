@@ -488,7 +488,7 @@ namespace SDOPackage
       {
         coil::Properties conf(id.c_str());
 	toProperties(conf, configuration_set);
-	return m_configsets.setConfigurationSetValues(id.c_str(), conf);
+	return m_configsets.setConfigurationSetValues(conf);
       }
     catch (...)
       {

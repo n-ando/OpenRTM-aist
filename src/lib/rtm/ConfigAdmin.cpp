@@ -31,7 +31,10 @@ namespace RTC
    */
   ConfigAdmin::ConfigAdmin(coil::Properties& configsets)
     : m_configsets(configsets), m_activeId("default"),
-      m_active(true), m_changed(false)
+      m_active(true), m_changed(false),
+      m_updateCb(0), m_updateParamCb(0),
+      m_setConfigSetCb(0), m_addConfigSetCb(0),
+      m_removeConfigSetCb(0), m_activateSetCb(0)
   {
   }
   
@@ -49,6 +52,12 @@ namespace RTC
 	if (m_params[i] != NULL) delete m_params[i];
       }
     m_params.clear();
+    setOnUpdate(0);
+    setOnUpdateParam(0);
+    setOnSetConfigurationSet(0);
+    setOnAddConfigurationSet(0);
+    setOnRemoveConfigurationSet(0);
+    setOnActivateSet(0);
   }
   
   
@@ -69,6 +78,7 @@ namespace RTC
 	if (prop.hasKey(m_params[i]->name) != NULL)
 	  {
 	    m_params[i]->update(prop[m_params[i]->name].c_str());
+            onUpdate(config_set);
 	  }
       }
   }
@@ -110,6 +120,7 @@ namespace RTC
     if (it != m_params.end())
       {
 	(*it)->update(m_configsets[key].c_str());
+        onUpdateParam(config_set, config_param);
 	return;
       }
   }
@@ -187,18 +198,16 @@ namespace RTC
    * @endif
    */
   bool
-  ConfigAdmin::setConfigurationSetValues(const char* config_id,
-					 const coil::Properties& config_set)
+  ConfigAdmin::setConfigurationSetValues(const coil::Properties& config_set)
   {
-    if (strcmp(config_set.getName(), config_id) != 0) return false;
-    if (!m_configsets.hasKey(config_id))              return false;
+    if (config_set.getName() == '\0') return false;
     
-    coil::Properties* p(m_configsets.getNode(config_id));
+    coil::Properties* p(m_configsets.getNode(config_set.getName()));
     assert(p != NULL);
     *p << config_set;
-    
     m_changed = true;
     m_active = false;
+    onSetConfigurationSet(config_set);
     return true;
   }
   
@@ -223,22 +232,24 @@ namespace RTC
    * @brief Add the configuration value to the configuration set
    * @endif
    */
-  bool ConfigAdmin::addConfigurationSet(const coil::Properties& configset)
+  bool ConfigAdmin::addConfigurationSet(const coil::Properties& config_set)
   {
-    if (m_configsets.hasKey(configset.getName())) return false;
+    if (config_set.getName() == '\0') return false;
+    if (m_configsets.hasKey(config_set.getName())) return false;
     
-    std::string node(configset.getName());
+    std::string node(config_set.getName());
     
     // Create node
     m_configsets.createNode(node.c_str());
     
     coil::Properties* p(m_configsets.getNode(node.c_str()));
     assert(p != NULL);
-    *p << configset;
+    *p << config_set;
     m_newConfig.push_back(node);
     
     m_changed = true;
     m_active = false;
+    onAddConfigurationSet(config_set);
     return true;
   }
   
@@ -263,7 +274,7 @@ namespace RTC
     
     m_changed = true;
     m_active = false;
-    
+    onRemoveConfigurationSet(config_id);
     return true;
   }
   
@@ -281,6 +292,76 @@ namespace RTC
     m_activeId = config_id;
     m_active = true;
     m_changed = true;
+    onActivateSet(config_id);
     return true;
   }
+
+  void ConfigAdmin::setOnUpdate(OnUpdateCallback* cb)
+  {
+    if (m_updateCb != 0) delete m_updateCb;
+    m_updateCb = cb;
+  }
+
+  void ConfigAdmin::setOnUpdateParam(OnUpdateParamCallback* cb)
+  {
+    if (m_updateParamCb != 0) delete m_updateParamCb;
+    m_updateParamCb = cb;
+  }
+
+  void ConfigAdmin::setOnSetConfigurationSet(OnSetConfigurationSetCallback* cb)
+  {
+    if (m_setConfigSetCb != 0) delete m_setConfigSetCb;
+    m_setConfigSetCb = cb;
+  }
+
+  void ConfigAdmin::setOnAddConfigurationSet(OnAddConfigurationAddCallback* cb)
+  {
+    if (m_addConfigSetCb != 0) delete m_addConfigSetCb;
+    m_addConfigSetCb = cb;
+  }
+
+  void ConfigAdmin::setOnRemoveConfigurationSet(OnRemoveConfigurationSetCallback* cb)
+  {
+    if (m_removeConfigSetCb != 0) delete m_removeConfigSetCb;
+    m_removeConfigSetCb = cb;
+  }
+
+  void ConfigAdmin::setOnActivateSet(OnActivateSetCallback* cb)
+  {
+    if (m_activateSetCb != 0) delete m_activateSetCb;
+    m_activateSetCb = cb;
+  }
+
+  void ConfigAdmin::onUpdate(const char* config_set)
+  {
+    if (m_updateCb != 0)
+      (*m_updateCb)(config_set);
+  }
+  void ConfigAdmin::onUpdateParam(const char* config_set, const char* config_param)
+  {
+    if (m_updateParamCb != 0)
+      (*m_updateParamCb)(config_set, config_param);
+  }
+  void ConfigAdmin::onSetConfigurationSet(const coil::Properties& config_set)
+  {
+    if (m_setConfigSetCb != 0)
+      (*m_setConfigSetCb)(config_set);
+  }
+  void ConfigAdmin::onAddConfigurationSet(const coil::Properties& config_set)
+  {
+    if (m_addConfigSetCb != 0)
+      (*m_addConfigSetCb)(config_set);
+  }
+  void ConfigAdmin::onRemoveConfigurationSet(const char* config_id)
+  {
+    if (m_removeConfigSetCb != 0)
+      (*m_removeConfigSetCb)(config_id);
+  }
+  void ConfigAdmin::onActivateSet(const char* config_id)
+  {
+    if (m_activateSetCb != 0)
+      (*m_activateSetCb)(config_id);
+  }
+  
+
 }; // namespace RTC

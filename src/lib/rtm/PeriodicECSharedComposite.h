@@ -46,6 +46,8 @@ namespace SDOPackage
   class PeriodicECOrganization
     : public Organization_impl
   {
+    typedef std::vector<std::string> PortList;
+
   public:
     PeriodicECOrganization(::RTC::RTObject_impl* rtobj);
     virtual ~PeriodicECOrganization();
@@ -129,7 +131,7 @@ namespace SDOPackage
 	     InvalidParameter, NotAvailable, InternalError);
 
     void removeAllMembers();
-
+    void updateDelegatedPorts();
   protected:
     class Member;
     /*!
@@ -202,7 +204,7 @@ namespace SDOPackage
      * @brief Delegate given RTC's ports to the Composite
      * @endif
      */
-    void delegatePort(Member& member);
+    void delegatePort(Member& member, PortList& portlist);
 
     /*!
      * @if jp
@@ -211,7 +213,10 @@ namespace SDOPackage
      * @brief Remove delegated participatns's ports from the composite
      * @endif
      */
-    void removePort(Member& member);
+    void removePort(Member& member, PortList& portlist);
+
+
+    void updateExportedPortsList();
 
   protected:
     ::RTC::RTObject_impl* m_rtobj;
@@ -271,7 +276,15 @@ namespace SDOPackage
 
     std::vector<Member> m_rtcMembers;
     typedef std::vector<Member>::iterator MemIt;
+    PortList m_expPorts;
 
+    void print(PortList p)
+    {
+      for (int i(0), len(p.size()); i < len; ++i)
+        {
+          std::cout << p[i] << std::endl;
+        }
+    }
   };
 };
 
