@@ -41,6 +41,48 @@
  */
 namespace RTC
 {
+  class OnUpdateCallback
+  {
+  public:
+    virtual ~OnUpdateCallback(){};
+    virtual void operator()(const char* config_set) = 0;
+  };
+
+  class OnUpdateParamCallback
+  {
+  public:
+    virtual ~OnUpdateParamCallback(){};
+    virtual void operator()(const char* config_set, const char* config_param) = 0;
+  };
+
+  class OnSetConfigurationSetCallback
+  {
+  public:
+    virtual ~OnSetConfigurationSetCallback(){};
+    virtual void operator()(const coil::Properties& config_set) = 0;
+  };
+
+  class OnAddConfigurationAddCallback
+  {
+  public:
+    virtual ~OnAddConfigurationAddCallback(){};
+    virtual void operator()(const coil::Properties& config_set) = 0;
+  };
+
+  class OnRemoveConfigurationSetCallback
+  {
+  public:
+    virtual ~OnRemoveConfigurationSetCallback(){};
+    virtual void operator()(const char* config_set) = 0;
+  };
+
+  class OnActivateSetCallback
+  {
+  public:
+    virtual ~OnActivateSetCallback(){};
+    virtual void operator()(const char* config_id) = 0;
+  };
+
   //============================================================
   // ConfigBase class
   //============================================================
@@ -700,8 +742,7 @@ namespace RTC
      *
      * @endif
      */
-    bool setConfigurationSetValues(const char* config_id,
-				   const coil::Properties& configuration_set);
+    bool setConfigurationSetValues(const coil::Properties& configuration_set);
     
     /*!
      * @if jp
@@ -810,6 +851,21 @@ namespace RTC
      * @endif
      */
     bool activateConfigurationSet(const char* config_id);
+
+    void setOnUpdate(OnUpdateCallback* cb);
+    void setOnUpdateParam(OnUpdateParamCallback* cb);
+    void setOnSetConfigurationSet(OnSetConfigurationSetCallback* cb);
+    void setOnAddConfigurationSet(OnAddConfigurationAddCallback* cb);
+    void setOnRemoveConfigurationSet(OnRemoveConfigurationSetCallback* cb);
+    void setOnActivateSet(OnActivateSetCallback* cb);
+
+  protected:
+    void onUpdate(const char* config_set);
+    void onUpdateParam(const char* config_set, const char* config_param);
+    void onSetConfigurationSet(const coil::Properties& config_set);
+    void onAddConfigurationSet(const coil::Properties& config_set);
+    void onRemoveConfigurationSet(const char* config_id);
+    void onActivateSet(const char* config_id);
     
   private:
     ConfigAdmin(const ConfigAdmin& ca) : m_configsets(ca.m_configsets) {};
@@ -832,6 +888,15 @@ namespace RTC
     bool m_active;
     bool m_changed;
     std::vector<std::string> m_newConfig;
+
+    OnUpdateCallback*                 m_updateCb;
+    OnUpdateParamCallback*            m_updateParamCb;
+    OnSetConfigurationSetCallback*    m_setConfigSetCb;
+    OnAddConfigurationAddCallback*    m_addConfigSetCb;
+    OnRemoveConfigurationSetCallback* m_removeConfigSetCb;
+    OnActivateSetCallback*            m_activateSetCb;
+
+
   };
 }; // namespace RTC
 #endif // ConfigAdmin_h

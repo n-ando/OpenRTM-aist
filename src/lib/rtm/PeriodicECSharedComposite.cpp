@@ -65,6 +65,7 @@ namespace SDOPackage
     throw (CORBA::SystemException,
            InvalidParameter, NotAvailable, InternalError)
   {
+    updateExportedPortsList();
     for (::CORBA::ULong i(0), len(sdo_list.length()); i < len; ++i)
       {
         const SDO_ptr sdo  = sdo_list[i];
@@ -75,7 +76,7 @@ namespace SDOPackage
         stopOwnedEC(member);
         addOrganizationToTarget(member);
         addParticipantToEC(member);
-        delegatePort(member);
+        delegatePort(member, m_expPorts);
         m_rtcMembers.push_back(member);
       }
 
@@ -97,6 +98,8 @@ namespace SDOPackage
            InvalidParameter, NotAvailable, InternalError)
   {
     m_rtcMembers.clear();
+    m_expPorts.clear();
+    updateExportedPortsList();
 
     for (::CORBA::ULong i(0), len(sdo_list.length()); i < len; ++i)
       {
@@ -108,7 +111,7 @@ namespace SDOPackage
         stopOwnedEC(member);
         addOrganizationToTarget(member);
         addParticipantToEC(member);
-        delegatePort(member);
+        delegatePort(member, m_expPorts);
         m_rtcMembers.push_back(member);
       }
 
@@ -135,7 +138,7 @@ namespace SDOPackage
         Member& member(*it);
         if (strncmp(id, member.profile_->instance_name, strlen(id))) continue;
         
-        removePort(member);
+        removePort(member, m_expPorts);
         removeParticipantFromEC(member);
         removeOrganizationFromTarget(member);
         startOwnedEC(member);
@@ -151,12 +154,13 @@ namespace SDOPackage
   
   void PeriodicECOrganization::removeAllMembers()
   {
+    updateExportedPortsList();
     MemIt it(m_rtcMembers.begin());
     MemIt it_end(m_rtcMembers.end());
     while (it != it_end)
       {
         Member& member(*it);
-        removePort(member);
+        removePort(member, m_expPorts);
         removeParticipantFromEC(member);
         removeOrganizationFromTarget(member);
         startOwnedEC(member);
@@ -314,27 +318,26 @@ namespace SDOPackage
    * @endif
    */
   void
-  PeriodicECOrganization::delegatePort(Member& member)
+  PeriodicECOrganization::delegatePort(Member& member,
+                                       PortList& portlist)
   {
-    std::string exported_ports = m_rtobj->getProperties()["exported_ports"];
-      
-    // get comp's/ports's profile
-    ::RTC::ComponentProfile_var cprof;
-    cprof = new ::RTC::ComponentProfile(member.profile_);
-    ::RTC::PortProfileList& plist(cprof->port_profiles);
-
+    print(portlist);
+    std::string comp_name(member.profile_->instance_name);
+    ::RTC::PortProfileList& plist(member.profile_->port_profiles);
+    
     // port delegation
     for (::CORBA::ULong i(0), len(plist.length()); i < len; ++i)
       {
         // port name -> comp_name.port_name
-        std::string port_name(cprof->instance_name);
+        std::string port_name(comp_name);
         port_name += "."; port_name += plist[i].name;
 
-        std::string::size_type pos = exported_ports.find(port_name);
-        if (pos == exported_ports.npos) continue;
+        std::vector<std::string>::iterator pos = 
+          std::find(m_expPorts.begin(), m_expPorts.end(), port_name);
+        if (pos == m_expPorts.end()) continue;
 
         m_rtobj->registerPort(
-                        ::RTC::PortService::_duplicate(plist[i].port_ref));
+                              ::RTC::PortService::_duplicate(plist[i].port_ref));
 
       }
   }
@@ -346,30 +349,67 @@ namespace SDOPackage
    * @brief Remove delegated participatns's ports from the composite
    * @endif
    */
-  void PeriodicECOrganization::removePort(Member& member)
+  void PeriodicECOrganization::removePort(Member& member,
+                                          PortList& portlist)
   {
-    std::string exported_ports = m_rtobj->getProperties()["exported_ports"];
-    
-    // get comp's/ports's profile
-    ::RTC::ComponentProfile_var cprof;
-    cprof = new ::RTC::ComponentProfile(member.profile_);
-    ::RTC::PortProfileList& plist(cprof->port_profiles);
-    
+    print(portlist);
+    std::string comp_name(member.profile_->instance_name);
+    ::RTC::PortProfileList& plist(member.profile_->port_profiles);
+
     // port delegation
     for (::CORBA::ULong i(0), len(plist.length()); i < len; ++i)
       {
         // port name -> comp_name.port_name
-        std::string port_name(cprof->instance_name);
+        std::string port_name(comp_name);
         port_name += "."; port_name += plist[i].name;
         
-        std::string::size_type pos = exported_ports.find(port_name);
-        if (pos == exported_ports.npos) continue;
-        
+        std::vector<std::string>::iterator pos = 
+          std::find(m_expPorts.begin(), m_expPorts.end(), port_name);
+        if (pos == m_expPorts.end()) 
+          {
+            continue;
+          }
+        else
+          {
+            m_expPorts.erase(pos);
+          }
         m_rtobj->deletePort(
                             ::RTC::PortService::_duplicate(plist[i].port_ref));
         
       }
    }
+
+  void PeriodicECOrganization::updateExportedPortsList()
+  {
+    m_expPorts = coil::split(m_rtobj->getProperties()["conf.default.exported_ports"], ",");
+  }
+
+
+  void PeriodicECOrganization::updateDelegatedPorts()
+  {
+    std::vector<std::string>& oldPorts(m_expPorts);
+    std::vector<std::string>
+      newPorts(coil::split(m_rtobj->getProperties()["conf.default.exported_ports"], ","));
+
+    std::vector<std::string> removedPorts; // oldPorts - interPorts
+    std::vector<std::string> createdPorts;   // newPorts - interPorts
+
+    set_difference(oldPorts.begin(), oldPorts.end(),
+    		   newPorts.begin(), newPorts.end(),
+    		   std::back_inserter(removedPorts));
+    set_difference(newPorts.begin(), newPorts.end(),
+    		   oldPorts.begin(), oldPorts.end(),
+    		   std::back_inserter(createdPorts));
+
+    for (int i(0), len(m_rtcMembers.size()); i < len; ++i)
+      {
+        removePort(m_rtcMembers[i], removedPorts);
+        delegatePort(m_rtcMembers[i], createdPorts);
+      }
+
+    m_expPorts = newPorts;
+  }
+
 };
 
 
@@ -385,6 +425,35 @@ bool stringToStrVec(std::vector<std::string>& v, const char* is)
 
 namespace RTC
 {
+  class setCallback
+    : public OnSetConfigurationSetCallback
+  {
+  public:
+    setCallback(::SDOPackage::PeriodicECOrganization* org) : m_org(org) {}
+    virtual ~setCallback(){};
+    virtual void operator()(const coil::Properties& config_set)
+    {
+      m_org->updateDelegatedPorts();
+    }
+  private:
+    ::SDOPackage::PeriodicECOrganization* m_org;
+  };
+
+
+  class addCallback
+    : public OnAddConfigurationAddCallback
+  {
+  public:
+    addCallback(::SDOPackage::PeriodicECOrganization* org) : m_org(org) {}
+    virtual ~addCallback(){};
+    virtual void operator()(const coil::Properties& config_set)
+    {
+      m_org->updateDelegatedPorts();
+    }
+  private:
+    ::SDOPackage::PeriodicECOrganization* m_org;
+  };
+
   /*!
    * @if jp
    * @brief コンストラクタ
@@ -401,6 +470,9 @@ namespace RTC
     ::CORBA_SeqUtil::push_back(m_sdoOwnedOrganizations,
                                ::SDOPackage::Organization::_duplicate(m_org->getObjRef()));
     bindParameter("members", m_members, "", stringToStrVec);
+
+    m_configsets.setOnSetConfigurationSet(new setCallback(m_org));
+    m_configsets.setOnAddConfigurationSet(new addCallback(m_org));
 
   }
 
