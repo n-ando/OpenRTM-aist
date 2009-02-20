@@ -22,6 +22,7 @@ EXTRA_DIST =                       \
 	pkg_install_debian.sh      \
 	pkg_install_fedora.sh      \
 	pkg_install_freebsd.sh     \
+	pkg_install_ubuntu.sh      \
 	pkg_install_vine.sh        \
 	setuptest.py               \
 	uuid.py
