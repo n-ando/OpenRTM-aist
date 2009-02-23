@@ -43,7 +43,8 @@ COIL_COMMON_H   =       \
 	stringutil.h    \
 	Guard.h         \
 	Properties.h    \
-	Timer.h
+	Timer.h         \
+	Logger.h
 
 # coil all sources and headers
 COIL_SRC = $(COIL_COMMON_SRC) $(COIL_PLATFORM_SRC)

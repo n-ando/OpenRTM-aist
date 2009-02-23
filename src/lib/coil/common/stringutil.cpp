@@ -19,6 +19,10 @@
 
 #include <algorithm>
 #include <iostream>
+#include <cstring>
+#include <stdio.h>
+#include <stdarg.h>
+#include <limits.h>
 #include <coil/stringutil.h>
 #include <string.h>
 
@@ -419,5 +423,20 @@ namespace coil
       }
     return argv;
   }
-  
+
+  std::string sprintf(char const * __restrict fmt, ...)
+  {
+    char str[LINE_MAX];
+    va_list ap;
+    
+    va_start(ap, fmt);
+#ifdef WIN32
+    _vsnprintf(str, LINE_MAX - 1, fmt, ap);
+#else
+    vsnprintf(str, LINE_MAX - 1, fmt, ap);
+#endif
+    va_end(ap);
+    return std::string(str);
+  }
+
 }; // namespace coil
