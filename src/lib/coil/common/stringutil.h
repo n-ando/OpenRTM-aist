@@ -472,6 +472,9 @@ namespace coil
    * @endif
    */
   char** toArgv(const std::vector<std::string>& args); 
+
+
+  std::string sprintf(char const * __restrict fmt, ...);
   
 }; // namepsace coil
 #endif // COIL_STRINGUTIL_H
