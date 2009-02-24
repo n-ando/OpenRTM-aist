@@ -43,6 +43,7 @@ do-test:
 
 # clean-up
 clean-local:
+	rm -f *.log
 	rm -f *.o *.Po *.gch *.la
 	rm -f *~ *core
 	rm -f *.xml
