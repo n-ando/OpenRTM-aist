@@ -11,6 +11,7 @@ SUBDIRS =            \
         File         \
         Guard        \
         Listener     \
+        Logger       \
 	Mutex        \
         OS           \
         Signal       \
