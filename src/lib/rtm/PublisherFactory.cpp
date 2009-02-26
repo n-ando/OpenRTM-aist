@@ -66,7 +66,9 @@ namespace RTC
    */
   void PublisherFactory::destroy(PublisherBase* publisher)
   {
-    publisher->release();
-    delete publisher;
+    if (publisher != NULL) {
+      publisher->release();
+      delete publisher;
+    }
   }
 }; // namespace RTC
