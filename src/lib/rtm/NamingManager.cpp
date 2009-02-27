@@ -88,13 +88,8 @@ namespace RTC
    * @endif
    */
   NamingManager::NamingManager(Manager* manager)
-    :m_manager(manager), 
-     m_MedLogbuf(manager->getMedLogbuf()), rtcout(m_MedLogbuf)
+    :m_manager(manager), rtclog("NamingManager")
   {
-    m_MedLogbuf.setSuffix("naming_svc");
-    rtcout.setLogLevel(manager->getConfig()["logger.log_level"]);
-    rtcout.setLogLock(coil::toBool(manager->getConfig()["logger.stream_lock"],
-			     "enable", "disable", false));
   }
   
   /*!

@@ -541,12 +541,14 @@ namespace RTC
   class PublisherBase;
   class OnConnect
   {
+  public:
     virtual ~OnConnect(){}
     virtual void operator()(const char* id, PublisherBase* publisher) = 0;
   };
 
   class OnDisconnect
   {
+  public:
     virtual ~OnDisconnect(){}
     virtual void operator()(const char* id) = 0;
   };

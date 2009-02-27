@@ -33,6 +33,7 @@ namespace RTC
   ExtTrigExecutionContext::ExtTrigExecutionContext()
     : PeriodicExecutionContext()
   {
+    rtclog.setName("exttrig_ec");
   }
   
   /*!
@@ -56,6 +57,7 @@ namespace RTC
   void ExtTrigExecutionContext::tick()
     throw (CORBA::SystemException)
   {
+    RTC_TRACE(("tick()"));
     m_worker._mutex.lock();
     m_worker._called = true;
     m_worker._cond.signal();
@@ -72,6 +74,7 @@ namespace RTC
    */
   int ExtTrigExecutionContext::svc(void)
   {
+    RTC_TRACE(("svc()"));
     do
       {
 	m_worker._mutex.lock();

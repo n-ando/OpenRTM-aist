@@ -22,7 +22,7 @@ namespace RTC
 {
   
   ExecutionContextBase::ExecutionContextBase(RTObject_ptr owner)
-    : m_running(false)
+    : rtclog("exec_cxt"), m_running(false)
   {
     m_profile.kind = OTHER;
     m_profile.rate = 0.0;
@@ -39,6 +39,7 @@ namespace RTC
    */
   CORBA::Boolean ExecutionContextBase::is_running()
   {
+    RTC_TRACE(("is_running()"));
     return m_running;
   }
   
@@ -52,6 +53,7 @@ namespace RTC
    */
   ReturnCode_t ExecutionContextBase::start()
   {
+    RTC_TRACE(("start()"));
     return RTC::RTC_OK;
   }
   
@@ -65,6 +67,7 @@ namespace RTC
    */
   ReturnCode_t ExecutionContextBase::stop()
   {
+    RTC_TRACE(("stop()"));
     return RTC::RTC_OK;
   }
   
@@ -78,6 +81,7 @@ namespace RTC
    */
   CORBA::Double ExecutionContextBase::get_rate()
   {
+    RTC_TRACE(("get_rate()"));
     return m_profile.rate;
   }
   
@@ -91,6 +95,7 @@ namespace RTC
    */
   ReturnCode_t ExecutionContextBase::set_rate(CORBA::Double rate)
   {
+    RTC_TRACE(("set_rate(%f)", rate));
     if (rate > 0.0)
       {
 	m_profile.rate = rate;
@@ -110,6 +115,7 @@ namespace RTC
   ReturnCode_t
   ExecutionContextBase::activate_component(LightweightRTObject_ptr comp)
   {
+    RTC_TRACE(("activate_component()"));
     return RTC::RTC_OK;
   }
   
@@ -124,6 +130,7 @@ namespace RTC
   ReturnCode_t
   ExecutionContextBase::deactivate_component(LightweightRTObject_ptr comp)
   {
+    RTC_TRACE(("deactivate_component()"));
     return RTC::RTC_OK;
   }
   
@@ -138,6 +145,7 @@ namespace RTC
   ReturnCode_t
   ExecutionContextBase::reset_component(LightweightRTObject_ptr comp)
   {
+    RTC_TRACE(("reset_component()"));
     return RTC::RTC_OK;
   }
   
@@ -152,6 +160,7 @@ namespace RTC
   LifeCycleState
   ExecutionContextBase::get_component_state(LightweightRTObject_ptr comp)
   {
+    RTC_TRACE(("get_component_state()"));
     return RTC::INACTIVE_STATE;
   }
   
@@ -165,6 +174,7 @@ namespace RTC
    */
   ExecutionKind ExecutionContextBase::get_kind()
   {
+    RTC_TRACE(("get_kind()"));
     return m_profile.kind;
   }
   
@@ -179,6 +189,7 @@ namespace RTC
   ReturnCode_t
   ExecutionContextBase::add_component(LightweightRTObject_ptr comp)
   {
+    RTC_TRACE(("add_component()"));
     if (!CORBA::is_nil(comp))
       {
 	CORBA_SeqUtil::push_back(m_profile.participants,
@@ -199,6 +210,7 @@ namespace RTC
   ReturnCode_t
   ExecutionContextBase::remove_component(LightweightRTObject_ptr comp)
   {
+    RTC_TRACE(("remove_component()"));
     CORBA::ULong index;
     index = CORBA_SeqUtil::find(m_profile.participants,
 		find_objref<RTObject_ptr>(RTC::RTObject::_narrow(comp)));
@@ -221,6 +233,7 @@ namespace RTC
    */
   ExecutionContextProfile* ExecutionContextBase::get_profile()
   {
+    RTC_TRACE(("get_profile()"));
     ExecutionContextProfile_var p;
     p = new ExecutionContextProfile(m_profile);
     return p._retn();

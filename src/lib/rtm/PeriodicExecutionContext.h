@@ -1457,6 +1457,8 @@ namespace RTC
     std::vector<Comp> m_comps;
     typedef std::vector<Comp>::iterator CompItr;
     
+    Logger rtclog;
+
     /*!
      * @if jp
      * @brief ExecutionContext の実行状態
