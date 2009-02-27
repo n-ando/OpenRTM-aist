@@ -22,6 +22,10 @@
 
 #include <limits.h>
 #include <iostream>
+#include <fstream>
+#include <vector>
+#include <string>
+
 #include <coil/Mutex.h>
 #include <coil/Guard.h>
 
@@ -113,9 +117,9 @@ namespace coil
      *
      * @endif
      */
-    void addStream(streambuf_type* stream)
+    void addStream(streambuf_type* stream, bool cleanup = false)
     {
-      m_streams.push_back(Stream(stream));
+      m_streams.push_back(Stream(stream, cleanup));
     }
 
     /*!
@@ -144,15 +148,25 @@ namespace coil
     {
       for (int i(0), len(m_streams.size()); i < len; ++i)
         {
-          m_streams[i].stream_ == stream;
-          m_streams.erase(i);
-          return true;
+          if (m_streams[i].stream_ == stream)
+            {
+              m_streams.erase(i);
+              return true;
+            }
         }
       return false;
     }
 
 
-
+    std::vector<streambuf_type*> getBuffers()
+    {
+      std::vector<streambuf_type*> buffs;
+      for (int i(0), len(m_streams.size()); i < len; ++i)
+        {
+          buffs.push_back(m_streams[i].stream_);
+        }
+      return buffs;
+    }
    
   protected:
     /*!
@@ -297,24 +311,41 @@ namespace coil
 
     struct Stream
     {
-      Stream(streambuf_type* stream)
-        : stream_(stream)
+      Stream(streambuf_type* stream, bool cleanup = false)
+        : stream_(stream), cleanup_(cleanup)
       {
       }
-      virtual ~Stream() {}
+
+      virtual ~Stream()
+      {
+      }
+
       Stream(const Stream& x)
+        : stream_(x.stream_)
       {
-        stream_ = x.stream_;
       }
-      Stream& operator=(Stream& x)
+
+      Stream& operator=(const Stream& x)
       {
-        streambuf_type* tmp(x.stream_);
-        x.stream_ = stream_;
-        stream_ = tmp;
+        Stream tmp(x);
+        tmp.swap(*this);
         return *this;
       }
-      Mutex mutex_;
+
+      void swap(Stream& x)
+      {
+        streambuf_type* stream = x.stream_;
+        bool cleanup = x.cleanup_;
+
+        x.stream_ = this->stream_;
+        x.cleanup_ = this->cleanup_; 
+
+        this->stream_ = stream;
+        this->cleanup_ = cleanup;
+      }
+      mutable Mutex mutex_;
       streambuf_type* stream_;
+      bool cleanup_;
     };
     std::vector<Stream> m_streams;
     Mutex m_mutex;
@@ -322,7 +353,15 @@ namespace coil
   };
 
 
-
+  /*!
+   * @if jp
+   * @class log_stream クラス
+   *
+   * @else
+   * @class log_stream class
+   *
+   * @endif
+   */
   template <typename _CharT, typename _Traits=std::char_traits<_CharT> >
   class log_stream
     : public std::basic_ostream<_CharT, _Traits>
@@ -335,6 +374,7 @@ namespace coil
     typedef std::basic_streambuf<char_type, traits_type> streambuf_type;
     typedef coil::Mutex Mutex;
     typedef coil::Guard<Mutex> Guard;
+
     /*!
      * @if jp
      *
@@ -343,6 +383,9 @@ namespace coil
      * コンストラクタ
      *
      * @param streambuf basic_streambuf 型オブジェクト
+     * @param levelmin ログレベルの最小値
+     * @param levelmax ログレベルの最大値
+     * @param デフォルトのログレベル
      *
      * @else
      *
@@ -351,38 +394,42 @@ namespace coil
      * Constructor
      *
      * @param streambuf basic_streambuf type object
+     * @param levelmin minimum value for log level
+     * @param levelmax maximum value for log level
+     * @param level default log level
      *
      * @endif
      */
-    log_stream(streambuf_type* sb, int level = 0)
+    log_stream(streambuf_type* sb, int levelmin, int levelmax, int level)
       : ostream_type(sb),
-        m_loglevel(level), m_lock(false), m_prefix("")
+        m_minLevel(levelmin), m_maxLevel(levelmax), m_logLevel(level),
+        m_lockEnable(false) 
     {
+      if (m_minLevel >= m_maxLevel) throw std::bad_alloc();
       this->init(sb);
     }
-    
+
     /*!
      * @if jp
      *
-     * @brief デストラクタ
+     * @brief メッセージのヘッダ追加関数
      *
-     * デストラクタ。
+     * サブクラスにおいてこの関数をオーバーライドし、
+     * ログメッセージに適当な時刻などのヘッダを追加する。
      *
      * @else
      *
-     * @brief Destructor
+     * @brief Message header appender function
      *
-     * Destructor
+     * Subclasses of this class should override this operation, and
+     * this function should be defined to append some header to the
+     * log messages.
      *
      * @endif
      */
-    ~log_stream()
+    virtual void header(int level)
     {
-    }
-    
-    virtual std::string& prefix(std::string& prefix, int level)
-    {
-      return prefix;
+      return;
     }
 
     /*!
@@ -404,9 +451,38 @@ namespace coil
      *
      * @endif
      */
-    void setLevel(int level)
+    bool setLevel(int level)
     {
-      m_loglevel = level;
+      if (m_minLevel <= level && level <= m_maxLevel)
+        {
+          m_logLevel = level;
+          return true;
+        }
+      return false;
+    }
+
+    /*!
+     * @if jp
+     *
+     * @brief ログレベル取得
+     *
+     * ログレベルを所得する。
+     *
+     * @return ログレベル
+     *
+     * @else
+     *
+     * @brief Get the log level
+     *
+     * Get the log level.
+     *
+     * @return Log level
+     *
+     * @endif
+     */
+    int getLevel() const
+    {
+      return m_logLevel;
     }
     
     /*!
@@ -426,7 +502,7 @@ namespace coil
      */
     void enableLock()
     {
-      m_lock = true;
+      m_lockEnable = true;
     }
     
     /*!
@@ -446,7 +522,7 @@ namespace coil
      */
     void disableLock()
     {
-      m_lock = false;
+      m_lockEnable = false;
     }
     
     /*!
@@ -480,11 +556,11 @@ namespace coil
      *
      * @endif
      */
-    ostream_type& log(int level)
+    ostream_type& level(int level)
     {
-      if (m_loglevel >= level)
+      if (m_minLevel <= level && level <= m_logLevel)
 	{
-          *this << prefix(m_prefix, level);
+          header(level);
 	  return *this;
 	}
       else
@@ -493,6 +569,12 @@ namespace coil
 	}
     }
     
+    bool isValid(int level) const
+    {
+      return m_minLevel <= level && level <= m_logLevel;
+    }
+
+
     /*!
      * @if jp
      *
@@ -508,7 +590,7 @@ namespace coil
      */
     inline void lock()
     {
-      if (m_lock) m_mutex.lock();
+      if (m_lockEnable) m_mutex.lock();
     }
     
     /*!
@@ -524,24 +606,23 @@ namespace coil
      *
      * @endif
      */
-    inline void release()
+    inline void unlock()
     {
-      if (m_lock) m_mutex.unlock();
+      if (m_lockEnable) m_mutex.unlock();
     }
-    
 
     
   protected:
+    ~log_stream(){};
     log_stream();
     log_stream(const log_stream& x);
     log_stream& operator=(const log_stream& x);
 
   private:
-    int m_loglevel;
-    bool m_lock;
-    std::string m_prefix;
+    int m_minLevel, m_maxLevel;
+    int m_logLevel;
+    bool m_lockEnable;
     Mutex m_mutex;
-    std::ofstream m_dummy;
 
     /*!
      * @if jp
@@ -550,7 +631,7 @@ namespace coil
      * @brief Dummy log
      * @endif
      */
-
+    std::ofstream m_dummy;
   };
 
 
