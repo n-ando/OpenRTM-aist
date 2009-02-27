@@ -45,11 +45,11 @@ namespace RTC
    * @brief Virtual destructor
    * @endif
    */
-  ConfigAdmin::~ConfigAdmin()
+  ConfigAdmin::~ConfigAdmin(void)
   {
     for (int i(0), len(m_params.size()); i < len; ++i)
       {
-	if (m_params[i] != NULL) delete m_params[i];
+	if (m_params[i] != NULL) { delete m_params[i]; }
       }
     m_params.clear();
     setOnUpdate(0);
@@ -92,7 +92,7 @@ namespace RTC
    *        (Active configuration set)
    * @endif
    */
-  void ConfigAdmin::update()
+  void ConfigAdmin::update(void)
   {
     if (m_changed && m_active)
       {
@@ -111,6 +111,7 @@ namespace RTC
    */
   void ConfigAdmin::update(const char* config_set, const char* config_param)
   {
+    if ((config_set == 0) || (config_param == 0)) return;
     std::string key(config_set);
     key += "."; key += config_param;
     
@@ -171,7 +172,7 @@ namespace RTC
    * @brief Get all configuration sets
    * @endif
    */
-  const std::vector<coil::Properties*>& ConfigAdmin::getConfigurationSets()
+  const std::vector<coil::Properties*>& ConfigAdmin::getConfigurationSets(void)
   {
     return m_configsets.getLeaf();
   }
@@ -203,7 +204,7 @@ namespace RTC
     if (config_set.getName() == '\0') return false;
     
     coil::Properties* p(m_configsets.getNode(config_set.getName()));
-    assert(p != NULL);
+    assert(p != 0);
     *p << config_set;
     m_changed = true;
     m_active = false;
@@ -218,7 +219,7 @@ namespace RTC
    * @brief Get the active configuration set
    * @endif
    */
-  const coil::Properties& ConfigAdmin::getActiveConfigurationSet()
+  const coil::Properties& ConfigAdmin::getActiveConfigurationSet(void)
   {
     coil::Properties* p(m_configsets.getNode(m_activeId));
     if (p == NULL) return m_emptyconf;
@@ -243,7 +244,7 @@ namespace RTC
     m_configsets.createNode(node.c_str());
     
     coil::Properties* p(m_configsets.getNode(node.c_str()));
-    assert(p != NULL);
+    assert(p != 0);
     *p << config_set;
     m_newConfig.push_back(node);
     
