@@ -134,11 +134,11 @@ libRTCStub_la_LIBADD = $(LIBS)
 .idlSkel.cpp:
 	$(OIDLC) $<
 	$(IDLC) $(IDLFLAGS) $<
-	$(top_srcdir)/build/makewrapper.py $< idl
+	$(top_srcdir)/build/makewrapper.py $<
 .idlStub.cpp:
 	$(OIDLC) $<
 	$(IDLC) $(IDLFLAGS) $<
-	$(top_srcdir)/build/makewrapper.py $< idl
+	$(top_srcdir)/build/makewrapper.py $<
 #------------------------------------------------------------
 
 
