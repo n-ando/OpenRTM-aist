@@ -31,6 +31,7 @@
 #include <rtm/InPort.h>
 #include <rtm/OutPort.h>
 #include <rtm/ConfigAdmin.h>
+#include <rtm/SystemLogger.h>
 
 #define ECOTHER_OFFSET 1000
 
@@ -1935,7 +1936,11 @@ namespace RTC
      * 
      * @endif
      */
-    const char* getInstanceName() {return m_profile.instance_name;}
+    const char* getInstanceName()
+    {
+      RTC_TRACE(("getInstanceName()"));
+      return m_profile.instance_name;
+    }
     
     /*!
      * @if jp
@@ -1977,7 +1982,11 @@ namespace RTC
      * 
      * @endif
      */
-    const char* getTypeName() {return m_profile.type_name;}
+    const char* getTypeName()
+    {
+      RTC_TRACE(("getTypeName()"));
+      return m_profile.type_name;
+    }
     
     /*!
      * @if jp
@@ -1998,7 +2007,11 @@ namespace RTC
      * 
      * @endif
      */
-    const char* getDescription() { return m_profile.description;}
+    const char* getDescription()
+    {
+      RTC_TRACE(("getDescription()"));
+      return m_profile.description;
+    }
     
     /*!
      * @if jp
@@ -2020,7 +2033,11 @@ namespace RTC
      * 
      * @endif
      */
-    const char* getVersion() {return m_profile.version;}
+    const char* getVersion()
+    {
+      RTC_TRACE(("getVersion()"));
+      return m_profile.version;
+    }
     
     /*!
      * @if jp
@@ -2041,7 +2058,11 @@ namespace RTC
      * 
      * @endif
      */
-    const char* getVendor() {return m_profile.vendor;}
+    const char* getVendor()
+    {
+      RTC_TRACE(("getVendor()"));
+      return m_profile.vendor;
+    }
     
     /*!
      * @if jp
@@ -2062,7 +2083,11 @@ namespace RTC
      * 
      * @endif
      */
-    const char* getCategory() {return m_profile.category;}
+    const char* getCategory()
+    {
+      RTC_TRACE(("getCategory()"));
+      return m_profile.category;
+    }
     
     /*!
      * @if jp
@@ -2214,6 +2239,7 @@ namespace RTC
 		       const char* def_val,
 		       bool (*trans)(VarType&, const char*) = coil::stringTo)
     {
+      RTC_TRACE(("bindParameter(%s (default: %s))", param_name, def_val));
       m_configsets.bindParameter(param_name, var, def_val, trans);
       return true;
     }
@@ -2305,6 +2331,7 @@ namespace RTC
     void registerInPort(const char* name,
 			InPort<DataType, Buffer>& inport)
     {
+      RTC_TRACE(("registerInPort(%s)", name));
       std::string propkey("port.dataport.");
       propkey += name;
       propkey += ".tcp_any";
@@ -2344,6 +2371,7 @@ namespace RTC
     void registerOutPort(const char* name,
 			 OutPort<DataType, Buffer>& outport)
     {
+      RTC_TRACE(("registerOutPort(%s)", name));
       std::string propkey("port.dataport.");
       propkey += name;
       propkey += ".tcp_any";
@@ -2449,6 +2477,7 @@ namespace RTC
     void shutdown();
     
   protected:
+    mutable Logger rtclog;
     /*!
      * @if jp
      * @brief マネージャオブジェクト

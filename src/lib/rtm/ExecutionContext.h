@@ -20,6 +20,7 @@
 #define ExecutionContext_h
 
 #include <rtm/idl/RTCSkel.h>
+#include <rtm/SystemLogger.h>
 
 namespace RTC
 {
@@ -138,7 +139,6 @@ namespace RTC
      * @brief Constructor
      * @endif
      */
-    ExecutionContextBase() {};
     ExecutionContextBase(RTObject_ptr owner);
 
 
@@ -695,6 +695,7 @@ namespace RTC
 
 
   protected:
+    Logger rtclog;
     ExecutionContextProfile m_profile;
     CORBA::Boolean m_running;
 

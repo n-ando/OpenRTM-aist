@@ -28,6 +28,7 @@
 // local includes
 #include <rtm/idl/SDOPackageSkel.h>
 #include <rtm/ConfigAdmin.h>
+#include <rtm/SystemLogger.h>
 #include <string>
 
 // SdoConfiguration with SeqEx 159120
@@ -1024,6 +1025,7 @@ namespace SDOPackage
     const OrganizationList getOrganizations();
     
   protected:
+    ::RTC::Logger rtclog;
     /*!
      * @if jp
      *

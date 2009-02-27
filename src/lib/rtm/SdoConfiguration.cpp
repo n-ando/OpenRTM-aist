@@ -101,7 +101,7 @@ namespace SDOPackage
    * @endif
    */
   Configuration_impl::Configuration_impl(RTC::ConfigAdmin& configsets)
-    : m_configsets(configsets)
+    : rtclog("sdo_config"), m_configsets(configsets)
   {
     m_objref = this->_this();
   }
@@ -131,6 +131,7 @@ namespace SDOPackage
     throw (CORBA::SystemException,
 	   InvalidParameter, NotAvailable, InternalError)
   {
+    RTC_TRACE(("set_device_profile()"));
     try
       {
 	Guard gurad(m_dprofile_mutex);
@@ -157,6 +158,7 @@ namespace SDOPackage
     throw (CORBA::SystemException,
 	   InvalidParameter, NotAvailable, InternalError)
   {
+    RTC_TRACE(("add_service_profile()"));
     // SDO specification defines that InvalidParameter() exception
     // is thrown when sProfile is null.
     // But sProfile is reference and it becomes never null.
@@ -203,9 +205,11 @@ namespace SDOPackage
     throw (CORBA::SystemException,
 	   InvalidParameter, NotAvailable, InternalError)
   {
+    RTC_TRACE(("add_organization()"));
     try
       {
-	CORBA_SeqUtil::push_back(m_organizations, org);
+	CORBA_SeqUtil::push_back(m_organizations,
+                                 ::SDOPackage::Organization::_duplicate(org));
       }
     catch (...)
       {
@@ -228,6 +232,7 @@ namespace SDOPackage
     throw (CORBA::SystemException,
 	   InvalidParameter, NotAvailable, InternalError)
   {
+    RTC_TRACE(("remove_service_profile(%s)", id));
     try
       {
 	CORBA_SeqUtil::erase_if(m_serviceProfiles, service_id(id));
@@ -253,6 +258,7 @@ namespace SDOPackage
     throw (CORBA::SystemException,
 	   InvalidParameter, NotAvailable, InternalError)
   {
+    RTC_TRACE(("remove_organization(%s)", organization_id));
     try
       {
 	Guard gurad(m_org_mutex);
@@ -282,6 +288,7 @@ namespace SDOPackage
     throw (CORBA::SystemException,
 	   NotAvailable, InternalError)
   {
+    RTC_TRACE(("get_configuration_parameters()"));
     try
       {
 	Guard gaurd(m_params_mutex);
@@ -310,6 +317,7 @@ namespace SDOPackage
     throw (CORBA::SystemException,
 	   NotAvailable, InternalError)
   {
+    RTC_TRACE(("get_configuration_parameter_values()"));
     Guard guard(m_config_mutex);
     NVList_var nvlist;
     nvlist = new NVList((CORBA::ULong)0);
@@ -337,6 +345,7 @@ namespace SDOPackage
     throw (CORBA::SystemException,
 	   InvalidParameter, NotAvailable, InternalError)
   {
+    RTC_TRACE(("get_configuration_parameter_value(%s)", name));
     if (std::string(name).empty()) throw InvalidParameter("Name is empty.");
     
     //    CORBA::Long index;
@@ -369,6 +378,7 @@ namespace SDOPackage
     throw (CORBA::SystemException,
 	   InvalidParameter, NotAvailable, InternalError)
   {
+    RTC_TRACE(("set_configuration_parameter(%s, value)", name));
     /*
       if (name == "") throw InvalidParameter("Name is empty.");
       
@@ -397,6 +407,7 @@ namespace SDOPackage
     throw (CORBA::SystemException,
 	   NotAvailable, InternalError)
   {
+    RTC_TRACE(("get_configuration_sets()"));
     try
       {
 	Guard guard(m_config_mutex);
@@ -434,6 +445,7 @@ namespace SDOPackage
     throw (CORBA::SystemException,
 	   NotAvailable, InternalError)
   {
+    RTC_TRACE(("get_configuration_set(%s)", id));
     if (std::string(id).empty()) throw InternalError("ID is empty");
     // Originally getConfigurationSet raises InvalidParameter according to the 
     // SDO specification. However, SDO's IDL lacks InvalidParameter.
@@ -481,6 +493,7 @@ namespace SDOPackage
     throw (CORBA::SystemException,
 	   InvalidParameter, NotAvailable, InternalError)
   {
+    RTC_TRACE(("set_configuration_set_values()"));
     std::string id(configuration_set.id);
     if (id.empty()) throw InvalidParameter("ID is empty.");
     
@@ -509,6 +522,7 @@ namespace SDOPackage
     throw (CORBA::SystemException,
 	   NotAvailable, InternalError)
   {
+    RTC_TRACE(("get_active_configuration_set()"));
     // activeなConfigurationSetは無い
     if (!m_configsets.isActive()) throw NotAvailable();    
     
@@ -542,6 +556,7 @@ namespace SDOPackage
     throw (CORBA::SystemException,
 	   InvalidParameter, NotAvailable, InternalError)
   {
+    RTC_TRACE(("add_configuration_set()"));
     try
       {
 	Guard gurad(m_config_mutex);
@@ -574,6 +589,7 @@ namespace SDOPackage
     throw (CORBA::SystemException,
 	   InvalidParameter, NotAvailable, InternalError)
   {
+    RTC_TRACE(("remove_configuration_set(%s)", id));
     if (std::string(id).empty())
       throw InvalidParameter("ID is empty.");
     
@@ -602,6 +618,7 @@ namespace SDOPackage
     throw (CORBA::SystemException,
 	   InvalidParameter, NotAvailable, InternalError)
   {
+    RTC_TRACE(("activate_configuration_set(%s)", id));
     if (std::string(id).empty())
       throw InvalidParameter("ID is empty.");
     

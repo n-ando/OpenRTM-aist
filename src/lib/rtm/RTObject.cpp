@@ -115,6 +115,7 @@ namespace RTC
   // former rtc_init_entry() 
   ReturnCode_t RTObject_impl::onInitialize()
   {
+    RTC_TRACE(("onInitialize()"));
     return RTC::RTC_OK;
   }
   
@@ -129,6 +130,7 @@ namespace RTC
   // former rtc_exiting_entry()
   ReturnCode_t RTObject_impl::onFinalize()
   {
+    RTC_TRACE(("onFinalize()"));
     return RTC::RTC_OK;
   }
   
@@ -143,6 +145,7 @@ namespace RTC
   // former rtc_starting_entry()
   ReturnCode_t RTObject_impl::onStartup(RTC::UniqueId ec_id)
   {
+    RTC_TRACE(("onStartup(%d)", ec_id));
     return RTC::RTC_OK;
   }
   
@@ -157,6 +160,7 @@ namespace RTC
   // former rtc_stopping_entry()
   ReturnCode_t RTObject_impl::onShutdown(RTC::UniqueId ec_id)
   {
+    RTC_TRACE(("onShutdown(%d)", ec_id));
     return RTC::RTC_OK;
   }
   
@@ -171,6 +175,7 @@ namespace RTC
   // former rtc_active_entry()
   ReturnCode_t RTObject_impl::onActivated(RTC::UniqueId ec_id)
   {
+    RTC_TRACE(("onActivated(%d)", ec_id));
     return RTC::RTC_OK;
   }
   
@@ -185,6 +190,7 @@ namespace RTC
   // former rtc_active_exit()
   ReturnCode_t RTObject_impl::onDeactivated(RTC::UniqueId ec_id)
   {
+    RTC_TRACE(("onDeactivated(%d)", ec_id));
     return RTC::RTC_OK;
   }
   
@@ -199,6 +205,7 @@ namespace RTC
   // former rtc_active_do()
   ReturnCode_t RTObject_impl::onExecute(RTC::UniqueId ec_id)
   {
+    RTC_TRACE(("onExecute(%d)", ec_id));
     return RTC::RTC_OK;
   }
   
@@ -213,6 +220,7 @@ namespace RTC
   // former rtc_aborting_entry()
   ReturnCode_t RTObject_impl::onAborting(RTC::UniqueId ec_id)
   {
+    RTC_TRACE(("onAborting(%d)", ec_id));
     return RTC::RTC_OK;
   }
   
@@ -227,6 +235,7 @@ namespace RTC
   // former rtc_error_do()
   ReturnCode_t RTObject_impl::onError(RTC::UniqueId ec_id)
   {
+    RTC_TRACE(("onError(%d)", ec_id));
     return RTC::RTC_OK;
   }
   
@@ -241,6 +250,7 @@ namespace RTC
   // This is same but different the former rtc_init_entry()
   ReturnCode_t RTObject_impl::onReset(RTC::UniqueId ec_id)
   {
+    RTC_TRACE(("onReset(%d)", ec_id));
     return RTC::RTC_OK;
   }
   
@@ -255,6 +265,7 @@ namespace RTC
   // no corresponding operation exists in OpenRTm-aist-0.2.0
   ReturnCode_t RTObject_impl::onStateUpdate(RTC::UniqueId ec_id)
   {
+    RTC_TRACE(("onStateUpdate(%d)", ec_id));
     return RTC::RTC_OK;
   }
   
@@ -269,6 +280,7 @@ namespace RTC
   // no corresponding operation exists in OpenRTm-aist-0.2.0
   ReturnCode_t RTObject_impl::onRateChanged(RTC::UniqueId ec_id)
   {
+    RTC_TRACE(("onRatechanged(%d)", ec_id));
     return RTC::RTC_OK;
   }
   
@@ -285,6 +297,7 @@ namespace RTC
   ReturnCode_t RTObject_impl::initialize()
     throw (CORBA::SystemException)
   {
+    RTC_TRACE(("initialize()"));
     ReturnCode_t ret;
     ret = on_initialize();
     if (ret != RTC::RTC_OK) return ret;
@@ -330,6 +343,7 @@ namespace RTC
   ReturnCode_t RTObject_impl::finalize()
     throw (CORBA::SystemException)
   {
+    RTC_TRACE(("finalize()"));
     if (m_created) return RTC::PRECONDITION_NOT_MET;
     
     // Return RTC::PRECONDITION_NOT_MET,
@@ -358,6 +372,7 @@ namespace RTC
   ReturnCode_t RTObject_impl::exit()
     throw (CORBA::SystemException)
   {
+    RTC_TRACE(("exit()"));
     if (m_created) return RTC::PRECONDITION_NOT_MET;
 
     // deactivate myself on owned EC
@@ -396,6 +411,7 @@ namespace RTC
   CORBA::Boolean RTObject_impl::is_alive(ExecutionContext_ptr exec_context)
     throw (CORBA::SystemException)
   {
+    RTC_TRACE(("is_alive()"));
     for (::CORBA::ULong i(0), len(m_ecMine.length()); i < len; ++i)
       {
         if (exec_context->_is_equivalent(m_ecMine[i]))
@@ -420,6 +436,7 @@ namespace RTC
   ExecutionContext_ptr RTObject_impl::get_context(UniqueId ec_id)
     throw (CORBA::SystemException)
   {
+    RTC_TRACE(("get_context(%d)", ec_id));
     // owned EC
     if (ec_id < ECOTHER_OFFSET)
       {
@@ -454,6 +471,7 @@ namespace RTC
   ExecutionContextList* RTObject_impl::get_owned_contexts()
     throw (CORBA::SystemException)
   {
+    RTC_TRACE(("get_owned_context()"));
     ExecutionContextList_var execlist;
     execlist = new ExecutionContextList();
     
@@ -472,6 +490,7 @@ namespace RTC
   ExecutionContextList* RTObject_impl::get_participating_contexts()
     throw (CORBA::SystemException)
   {
+    RTC_TRACE(("get_participating_contexts()"));
     ExecutionContextList_var execlist;
     execlist = new ExecutionContextList();
     
@@ -492,6 +511,7 @@ namespace RTC
   RTObject_impl::get_context_handle(ExecutionContext_ptr cxt)
     throw (CORBA::SystemException)
   {
+    RTC_TRACE(("get_context_handle()"));
     // ec_id 0 : owned context
     // ec_id 1-: participating context
     if (cxt->_is_equivalent(m_ecMine[0]))
@@ -514,6 +534,7 @@ namespace RTC
   UniqueId RTObject_impl::attach_context(ExecutionContext_ptr exec_context)
     throw (CORBA::SystemException)
   {
+    RTC_TRACE(("attach_context()"));
     // ID: 0 - (offset-1) : owned ec
     // ID: offset -       : participating ec
     // owned       ec index = ID
@@ -545,6 +566,7 @@ namespace RTC
   UniqueId
   RTObject_impl::bindContext(ExecutionContext_ptr exec_context)
   {
+    RTC_TRACE(("bindContext()"));
     // ID: 0 - (offset-1) : owned ec
     // ID: offset -       : participating ec
     // owned       ec index = ID
@@ -583,6 +605,7 @@ namespace RTC
   ReturnCode_t RTObject_impl::detach_context(UniqueId ec_id)
     throw (CORBA::SystemException)
   {
+    RTC_TRACE(("detach_context(%d)", ec_id));
     ::CORBA::ULong len(m_ecOther.length());
 
     // ID: 0 - (offset-1) : owned ec
@@ -601,7 +624,6 @@ namespace RTC
 	return RTC::BAD_PARAMETER;
       }
     
-    CORBA::release(m_ecOther[index]);
     CORBA_SeqUtil::erase(m_ecOther, index);
 
     return RTC::RTC_OK;
@@ -621,6 +643,7 @@ namespace RTC
   ComponentProfile* RTObject_impl::get_component_profile()
     throw (CORBA::SystemException)
   {
+    RTC_TRACE(("get_component_profile()"));
     try
       {
 	ComponentProfile_var profile
@@ -658,6 +681,7 @@ namespace RTC
   PortServiceList* RTObject_impl::get_ports()
     throw (CORBA::SystemException)
   {
+    RTC_TRACE(("get_ports()"));
     try
       {
 	return m_portAdmin.getPortServiceList();
@@ -684,6 +708,7 @@ namespace RTC
   ReturnCode_t RTObject_impl::on_initialize()
     throw (CORBA::SystemException)
   {
+    RTC_TRACE(("on_initialize()"));
     ReturnCode_t ret(RTC::RTC_ERROR);
     try
       {
@@ -719,6 +744,7 @@ namespace RTC
   ReturnCode_t RTObject_impl::on_finalize()
     throw (CORBA::SystemException)
   {
+    RTC_TRACE(("on_finalize()"));
     ReturnCode_t ret(RTC::RTC_ERROR);
     try
       {
@@ -741,6 +767,7 @@ namespace RTC
   ReturnCode_t RTObject_impl::on_startup(UniqueId ec_id)
     throw (CORBA::SystemException)
   {
+    RTC_TRACE(("on_startup(%d)", ec_id));
     ReturnCode_t ret(RTC::RTC_ERROR);
     try
       {
@@ -763,6 +790,7 @@ namespace RTC
   ReturnCode_t RTObject_impl::on_shutdown(UniqueId ec_id)
     throw (CORBA::SystemException)
   {
+    RTC_TRACE(("on_shutdown(%d)", ec_id));
     ReturnCode_t ret(RTC::RTC_ERROR);
     try
       {
@@ -785,6 +813,7 @@ namespace RTC
   ReturnCode_t RTObject_impl::on_activated(UniqueId ec_id)
     throw (CORBA::SystemException)
   {
+    RTC_TRACE(("on_activated(%d)", ec_id));
     ReturnCode_t ret(RTC::RTC_ERROR);
     try
       {
@@ -808,6 +837,7 @@ namespace RTC
   ReturnCode_t RTObject_impl::on_deactivated(UniqueId ec_id)
     throw (CORBA::SystemException)
   {
+    RTC_TRACE(("on_deactivated(%d)", ec_id));
     ReturnCode_t ret(RTC::RTC_ERROR);
     try
       {
@@ -830,6 +860,7 @@ namespace RTC
   ReturnCode_t RTObject_impl::on_aborting(UniqueId ec_id)
     throw (CORBA::SystemException)
   {
+    RTC_TRACE(("on_aborting(%d)", ec_id));
     ReturnCode_t ret(RTC::RTC_ERROR);
     try
       {
@@ -852,6 +883,7 @@ namespace RTC
   ReturnCode_t RTObject_impl::on_error(UniqueId ec_id)
     throw (CORBA::SystemException)
   {
+    RTC_TRACE(("on_error(%d)", ec_id));
     ReturnCode_t ret(RTC::RTC_ERROR);
     try
       {
@@ -875,6 +907,7 @@ namespace RTC
   ReturnCode_t RTObject_impl::on_reset(UniqueId ec_id)
     throw (CORBA::SystemException)
   {
+    RTC_TRACE(("on_reset(%d)", ec_id));
     ReturnCode_t ret(RTC::RTC_ERROR);
     try
       {
@@ -898,6 +931,7 @@ namespace RTC
   ReturnCode_t RTObject_impl::on_execute(UniqueId ec_id)
     throw (CORBA::SystemException)
   {
+    RTC_TRACE(("on_execute(%d)", ec_id));
     ReturnCode_t ret(RTC::RTC_ERROR);
     try
       {
@@ -921,6 +955,7 @@ namespace RTC
   ReturnCode_t RTObject_impl::on_state_update(UniqueId ec_id)
     throw (CORBA::SystemException)
   {
+    RTC_TRACE(("on_state_update(%d)", ec_id));
     ReturnCode_t ret(RTC::RTC_ERROR);
     try
       {
@@ -944,6 +979,7 @@ namespace RTC
   ReturnCode_t RTObject_impl::on_rate_changed(UniqueId ec_id)
     throw (CORBA::SystemException)
   {
+    RTC_TRACE(("on_rate_changed(%d)", ec_id));
     ReturnCode_t ret(RTC::RTC_ERROR);
     try
       {
@@ -970,6 +1006,7 @@ namespace RTC
     throw (CORBA::SystemException,
            SDOPackage::NotAvailable, SDOPackage::InternalError)
   {
+    RTC_TRACE(("get_owned_organizations()"));
     try
       {
 	SDOPackage::OrganizationList_var org_list;
@@ -995,6 +1032,7 @@ namespace RTC
     throw (CORBA::SystemException, 
 	   SDOPackage::NotAvailable, SDOPackage::InternalError)
   {
+    RTC_TRACE(("get_sdo_id()"));
     try
       {
 	CORBA::String_var sdo_id;
@@ -1018,6 +1056,7 @@ namespace RTC
     throw (CORBA::SystemException, 
 	   SDOPackage::NotAvailable, SDOPackage::InternalError)
   {
+    RTC_TRACE(("get_sdo_type()"));
     try
       {
 	CORBA::String_var sdo_type;
@@ -1042,6 +1081,7 @@ namespace RTC
     throw (CORBA::SystemException, 
 	   SDOPackage::NotAvailable, SDOPackage::InternalError)
   {
+    RTC_TRACE(("get_device_profile()"));
     try
       {
 	SDOPackage::DeviceProfile_var dprofile;
@@ -1072,6 +1112,7 @@ namespace RTC
     throw (CORBA::SystemException, 
 	   SDOPackage::NotAvailable, SDOPackage::InternalError)
   {
+    RTC_TRACE(("get_service_profiles()"));
     m_sdoSvcProfiles = m_pSdoConfigImpl->getServiceProfiles();
     try
       {
@@ -1099,6 +1140,7 @@ namespace RTC
 	   SDOPackage::InvalidParameter, SDOPackage::NotAvailable,
 	   SDOPackage::InternalError)
   {
+    RTC_TRACE(("get_service_profile(%s))", id));
     m_sdoSvcProfiles = m_pSdoConfigImpl->getServiceProfiles();
     if (!id)
       throw SDOPackage::InvalidParameter("get_service_profile(): Empty name.");
@@ -1134,6 +1176,7 @@ namespace RTC
 	   SDOPackage::InvalidParameter, SDOPackage::NotAvailable,
 	   SDOPackage::InternalError)
   {
+    RTC_TRACE(("get_sdo_service(%s))", id));
     m_sdoSvcProfiles = m_pSdoConfigImpl->getServiceProfiles();
     if (!id)
       throw SDOPackage::InvalidParameter("get_service(): Empty name.");
@@ -1169,6 +1212,7 @@ namespace RTC
 	   SDOPackage::InterfaceNotImplemented, SDOPackage::NotAvailable,
 	   SDOPackage::InternalError)
   {
+    RTC_TRACE(("get_configuration()"));
     if (m_pSdoConfig == NULL)
       throw SDOPackage::InterfaceNotImplemented();
     try
@@ -1196,6 +1240,7 @@ namespace RTC
 	   SDOPackage::InterfaceNotImplemented, SDOPackage::NotAvailable,
 	   SDOPackage::InternalError)
   {
+    RTC_TRACE(("get_monitoring()"));
     throw SDOPackage::InterfaceNotImplemented();
     return SDOPackage::Monitoring::_nil();
   }
@@ -1211,6 +1256,7 @@ namespace RTC
     throw (CORBA::SystemException, 
 	   SDOPackage::NotAvailable, SDOPackage::InternalError)
   {
+    RTC_TRACE(("get_organizations()"));
     m_sdoOrganizations = m_pSdoConfigImpl->getOrganizations();
     try
       {
@@ -1236,6 +1282,7 @@ namespace RTC
     throw (CORBA::SystemException, 
 	   SDOPackage::NotAvailable, SDOPackage::InternalError)
   {
+    RTC_TRACE(("get_status_list()"));
     try
       {
 	NVList_var status;
@@ -1261,6 +1308,7 @@ namespace RTC
 	   SDOPackage::InvalidParameter, SDOPackage::NotAvailable,
 	   SDOPackage::InternalError)
   {
+    RTC_TRACE(("get_status(%s)", name));
     CORBA::Long index;
     index = CORBA_SeqUtil::find(m_sdoStatus, nv_name(name));
     if (index < 0)
@@ -1290,6 +1338,9 @@ namespace RTC
    */
   void RTObject_impl::setInstanceName(const char* instance_name)
   {
+    rtclog.setName(instance_name);
+    RTC_TRACE(("setInstanceName(%s)", instance_name));
+
     m_properties["instance_name"] = instance_name;
     m_profile.instance_name = m_properties["instance_name"].c_str();
   }
@@ -1303,6 +1354,7 @@ namespace RTC
    */
   std::vector<std::string> RTObject_impl::getNamingNames()
   {
+    RTC_TRACE(("getNamingNames()"));
     return coil::split(m_properties["naming.names"], ",");
   }
   
@@ -1315,6 +1367,7 @@ namespace RTC
    */
   void RTObject_impl::setObjRef(const RTObject_ptr rtobj)
   {
+    RTC_TRACE(("setObjRef()"));
     m_objref = rtobj;
   }
   
@@ -1327,6 +1380,8 @@ namespace RTC
    */
   RTObject_ptr RTObject_impl::getObjRef() const
   {
+    RTC_TRACE(("getObjRef()"));
+
     RTObject_ptr obj = RTC::RTObject::_duplicate(m_objref);
     return obj;
   }
@@ -1340,6 +1395,7 @@ namespace RTC
    */
   void RTObject_impl::setProperties(const coil::Properties& prop)
   {
+    RTC_TRACE(("setProperties()"));
     m_properties << prop;
     m_profile.instance_name = m_properties["instance_name"].c_str();
     m_profile.type_name     = m_properties["type_name"].c_str();
@@ -1358,6 +1414,7 @@ namespace RTC
    */
   coil::Properties& RTObject_impl::getProperties()
   {
+    RTC_TRACE(("getProperties()"));
     return m_properties;
   }
   
@@ -1370,6 +1427,7 @@ namespace RTC
    */
   void RTObject_impl::updateParameters(const char* config_set)
   {
+    RTC_TRACE(("updateParameters(%s)", config_set));
     m_configsets.update(config_set);
     return;
   }
@@ -1383,6 +1441,7 @@ namespace RTC
    */
   void RTObject_impl::registerPort(PortBase& port)
   {
+    RTC_TRACE(("registerPort(PortBase&)"));
     m_portAdmin.registerPort(port);
     port.setOwner(this->getObjRef());
     return;
@@ -1390,6 +1449,7 @@ namespace RTC
   
   void RTObject_impl::registerPort(PortService_ptr port)
   {
+    RTC_TRACE(("registerPort(PortService_ptr)"));
     m_portAdmin.registerPort(port);
     return;
   }
@@ -1403,12 +1463,14 @@ namespace RTC
    */
   void RTObject_impl::deletePort(PortBase& port)
   {
+    RTC_TRACE(("deletePort(PortBase&)"));
     m_portAdmin.deletePort(port);
     return;
   }
 
   void RTObject_impl::deletePort(PortService_ptr port)
   {
+    RTC_TRACE(("deletePort(PortService_pt)"));
     m_portAdmin.deletePort(port);
     return;
   }
@@ -1422,6 +1484,7 @@ namespace RTC
    */
   void RTObject_impl::deletePortByName(const char* port_name)
   {
+    RTC_TRACE(("deletePortByName(%s)", port_name));
     m_portAdmin.deletePortByName(port_name);
     return;
   }
@@ -1435,11 +1498,13 @@ namespace RTC
    */
   void RTObject_impl::finalizePorts()
   {
+    RTC_TRACE(("finalizePorts()"));
     m_portAdmin.finalizePorts();
   }
 
   void RTObject_impl::finalizeContexts()
   {
+    RTC_TRACE(("finalizeContexts()"));
     for (int i(0), len(m_eclist.size()); i < len; ++i)
       {
         m_eclist[i]->stop();
@@ -1457,6 +1522,7 @@ namespace RTC
    */
   void RTObject_impl::shutdown()
   {
+    RTC_TRACE(("shutdown()"));
     try
       {
 	finalizePorts();

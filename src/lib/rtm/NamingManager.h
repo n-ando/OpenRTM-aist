@@ -608,21 +608,12 @@ namespace RTC
     
     /*!
      * @if jp
-     * @brief ロガー仲介バッファ
-     * @else
-     * @brief Logger mediation buffer
-     * @endif
-     */
-    MedLogbuf m_MedLogbuf;
-    
-    /*!
-     * @if jp
      * @brief ロガーストリーム
      * @else
      * @brief Logger stream
      * @endif
      */
-    LogStream rtcout;
+    Logger rtclog;
   }; // class NamingManager
 }; // namespace RTC
 

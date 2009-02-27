@@ -33,8 +33,9 @@ namespace RTC
    */
   PeriodicExecutionContext::
   PeriodicExecutionContext()
-    : m_running(false), m_svc(true), m_nowait(false)
+    : rtclog("periodic_ec"), m_running(false), m_svc(true), m_nowait(false)
   {
+    RTC_TRACE(("PeriodicExecutionContext()"));
     m_profile.kind = PERIODIC;
     m_profile.rate = 0.0;
     m_usec = (long int)0;
@@ -51,8 +52,9 @@ namespace RTC
   PeriodicExecutionContext::
   PeriodicExecutionContext(OpenRTM::DataFlowComponent_ptr owner,
 			   double rate)
-    : m_running(false), m_svc(true), m_nowait(false)
+    : rtclog("periodic_ec"), m_running(false), m_svc(true), m_nowait(false)
   {
+    RTC_TRACE(("PeriodicExecutionContext(owner, rate)"));
     m_profile.kind = PERIODIC;
     m_profile.rate = rate;
     if (rate == 0) rate = 0.0000001;
@@ -70,6 +72,7 @@ namespace RTC
    */
   PeriodicExecutionContext::~PeriodicExecutionContext()
   {
+    RTC_TRACE(("~PeriodicExecutionContext()"));
     m_worker.mutex_.lock();
     m_worker.running_ = true;
     m_worker.cond_.signal();
@@ -92,9 +95,7 @@ namespace RTC
    */
   int PeriodicExecutionContext::open(void *args)
   {
-    //    RTC_TRACE(("RtcBase::open()"));
-    //    Guard guard_next(m_NextState._mutex);
-    //    m_NextState._state = RTC_INITIALIZING;
+    RTC_TRACE(("open()"));
     activate();
     return 0;
   }
@@ -112,7 +113,7 @@ namespace RTC
    */
   int PeriodicExecutionContext::svc(void)
   {
-    //    RTC_TRACE(("RtcBase::svc()"));
+    RTC_TRACE(("svc()"));
     do 
       {
         m_worker.mutex_.lock();
@@ -141,7 +142,7 @@ namespace RTC
    */
   int PeriodicExecutionContext::close(unsigned long flags)
   {
-    //    RTC_TRACE(("RtcBase::close()"));
+    RTC_TRACE(("close()"));
     
     // At this point, this component have to be finished.
     // Current state and Next state should be RTC_EXITING.
@@ -163,6 +164,7 @@ namespace RTC
   CORBA::Boolean PeriodicExecutionContext::is_running()
     throw (CORBA::SystemException)
   {
+    RTC_TRACE(("is_running()"));
     return m_running;
   }
   
@@ -176,6 +178,7 @@ namespace RTC
   ReturnCode_t PeriodicExecutionContext::start()
     throw (CORBA::SystemException)
   {
+    RTC_TRACE(("start()"));
     if (m_running) return RTC::PRECONDITION_NOT_MET;
     
     // invoke ComponentAction::on_startup for each comps.
@@ -205,6 +208,7 @@ namespace RTC
   ReturnCode_t PeriodicExecutionContext::stop()
     throw (CORBA::SystemException)
   {
+    RTC_TRACE(("stop()"));
     if (!m_running) return RTC::PRECONDITION_NOT_MET;
     
     // stop thread
@@ -230,6 +234,7 @@ namespace RTC
   CORBA::Double PeriodicExecutionContext::get_rate()
     throw (CORBA::SystemException)
   {
+    RTC_TRACE(("get_rate()"));
     return m_profile.rate;
   }
   
@@ -243,6 +248,7 @@ namespace RTC
   ReturnCode_t PeriodicExecutionContext::set_rate(CORBA::Double rate)
     throw (CORBA::SystemException)
   {
+    RTC_TRACE(("set_rate(%f)", rate));
     if (rate > 0.0)
       {
 	m_profile.rate = rate;
@@ -265,6 +271,7 @@ namespace RTC
   PeriodicExecutionContext::activate_component(LightweightRTObject_ptr comp)
     throw (CORBA::SystemException)
   {
+    RTC_TRACE(("activate_component()"));
     CompItr it;
     it = std::find_if(m_comps.begin(), m_comps.end(),
 		      find_comp(LightweightRTObject::_duplicate(comp)));
@@ -290,6 +297,7 @@ namespace RTC
   PeriodicExecutionContext::deactivate_component(LightweightRTObject_ptr comp)
     throw (CORBA::SystemException)
   {
+    RTC_TRACE(("deactivate_component()"));
     CompItr it;
     it = std::find_if(m_comps.begin(), m_comps.end(),
 		      find_comp(RTC::LightweightRTObject::_duplicate(comp)));
@@ -314,6 +322,7 @@ namespace RTC
   PeriodicExecutionContext::reset_component(LightweightRTObject_ptr comp)
     throw (CORBA::SystemException)
   {
+    RTC_TRACE(("reset_component()"));
     CompItr it;
     it = std::find_if(m_comps.begin(), m_comps.end(),
 		      find_comp(RTC::LightweightRTObject::_duplicate(comp)));
@@ -338,6 +347,7 @@ namespace RTC
   PeriodicExecutionContext::get_component_state(LightweightRTObject_ptr comp)
     throw (CORBA::SystemException)
   {
+    RTC_TRACE(("get_component_state()"));
     CompItr it;
     it = std::find_if(m_comps.begin(), m_comps.end(),
 		      find_comp(RTC::LightweightRTObject::_duplicate(comp)));
@@ -359,6 +369,7 @@ namespace RTC
   ExecutionKind PeriodicExecutionContext::get_kind()
     throw (CORBA::SystemException)
   {
+    RTC_TRACE(("get_kind()"));
     return m_profile.kind;
   }
   
@@ -373,6 +384,7 @@ namespace RTC
   PeriodicExecutionContext::add_component(LightweightRTObject_ptr comp)
     throw (CORBA::SystemException)
   {
+    RTC_TRACE(("add_component()"));
     if (CORBA::is_nil(comp)) return RTC::BAD_PARAMETER;
     
     try
@@ -401,6 +413,7 @@ namespace RTC
 
   RTC::ReturnCode_t PeriodicExecutionContext::bindComponent(RtcBase* rtc)
   {
+    RTC_TRACE(("bindComponent()"));
     if (rtc == NULL) return RTC::BAD_PARAMETER;
 
     LightweightRTObject_var comp = rtc->getObjRef();
@@ -425,6 +438,7 @@ namespace RTC
   PeriodicExecutionContext::remove_component(LightweightRTObject_ptr comp)
     throw (CORBA::SystemException)
   {
+    RTC_TRACE(("remove_component()"));
     CompItr it;
     it = std::find_if(m_comps.begin(), m_comps.end(),
 		      find_comp(RTC::LightweightRTObject::_duplicate(comp)));
@@ -452,6 +466,7 @@ namespace RTC
   ExecutionContextProfile* PeriodicExecutionContext::get_profile()
     throw (CORBA::SystemException)
   {
+    RTC_TRACE(("get_profile()"));
     ExecutionContextProfile_var p;
     p = new ExecutionContextProfile(m_profile);
     return p._retn();
