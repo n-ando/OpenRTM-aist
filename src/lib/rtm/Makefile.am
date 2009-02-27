@@ -45,7 +45,8 @@ MGR_SRC =                      \
 	ModuleManager.cpp      \
 	NamingManager.cpp      \
 	NumberingPolicy.cpp    \
-	ManagerServant.cpp
+	ManagerServant.cpp     \
+	SystemLogger.cpp
 
 COMP_SRC =                           \
 	DataFlowComponentBase.cpp    \
@@ -84,7 +85,7 @@ libRTC_la_SOURCES = \
 
 
 libRTC_la_LIBADD = \
-	$(top_builddir)/src/lib/coil/lib/libcoil.a \
+	$(top_builddir)/src/lib/coil/lib/libcoil.la \
 	$(top_builddir)/src/lib/rtm/idl/libRTCSkel.la
 
 # $(top_builddir)/rtm/idl/libRTCStub.la $(ARTLIB)

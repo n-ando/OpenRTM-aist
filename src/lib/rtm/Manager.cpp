@@ -37,6 +37,11 @@
 #include <coil/Timer.h>
 #include <coil/OS.h>
 
+#if defined(minor)
+#undef minor
+#endif
+
+
 //static sig_atomic_t g_mgrActive = true;
 extern "C" void handler (int)
 {
@@ -57,7 +62,7 @@ namespace RTC
    */
   Manager::Manager()
     : m_initProc(NULL),
-      m_Logbuf(), m_MedLogbuf(m_Logbuf), rtcout(m_MedLogbuf),
+      m_logStreamBuf(), rtclog(&m_logStreamBuf),
       m_runner(NULL), m_terminator(NULL)
   {
     new coil::SignalAction((coil::SignalHandler) handler, SIGINT);
@@ -72,7 +77,7 @@ namespace RTC
    */
   Manager::Manager(const Manager& manager)
     : m_initProc(NULL),
-      m_Logbuf(), m_MedLogbuf(m_Logbuf), rtcout(m_MedLogbuf),
+      m_logStreamBuf(), rtclog(&m_logStreamBuf),
       m_runner(NULL), m_terminator(NULL)
   {
     new coil::SignalAction((coil::SignalHandler) handler, SIGINT);
@@ -475,6 +480,7 @@ std::vector<coil::Properties> Manager::getLoadableModules()
     coil::Properties comp_prop, comp_id;
     if (!procComponentArgs(comp_args, comp_id, comp_prop)) return NULL;
 
+    comp_prop["conf.default.exported_ports"] = comp_prop["exported_ports"];
 
     //------------------------------------------------------------
     // Create Component
@@ -509,7 +515,6 @@ std::vector<coil::Properties> Manager::getLoadableModules()
         //        if (prop.hasKey() == NULL) continue;
         prop[inherit_prop[i]] = m_config[inherit_prop[i]];
       }
-
       
     RtcBase* comp;
     comp = factory->create(this);
@@ -775,48 +780,64 @@ std::vector<coil::Properties> Manager::getLoadableModules()
    */
   bool Manager::initLogger()
   {
-    rtcout.setLogLevel("SILENT");
+    std::cout << "init logger" << std::endl;
+    rtclog.setLevel("SILENT");
+    rtclog.setName("manager");
     
-    if (coil::toBool(m_config["logger.enable"], "YES", "NO", true))
+    if (!coil::toBool(m_config["logger.enable"], "YES", "NO", true))
       {
-	std::string logfile(m_config["logger.file_name"]);
-	if (logfile == "") logfile = "./rtc.log";
-	
-	// Open logfile
-	m_Logbuf.open(logfile.c_str(), std::ios::out | std::ios::app);
-	
-	if (!m_Logbuf.is_open())
-	  {
-	    std::cerr << "Error: cannot open logfile: "
-		      << logfile << std::endl;
-	    return false;
-	  }
-	
-	// Set suffix for log entry haeader.
-	m_MedLogbuf.setSuffix(m_config["manager.name"]);
-	
-	// Set date format for log entry header
-	m_MedLogbuf.setDateFmt(m_config["logger.date_format"]);
-	
-	// Loglevel was set from configuration file.
-	rtcout.setLogLevel(m_config["logger.log_level"]);
-	
-	// Log stream mutex locking mode
-	rtcout.setLogLock(coil::toBool(m_config["logger.stream_lock"],
-				 "enable", "disable", false));
-	
-	RTC_INFO(("%s", m_config["openrtm.version"].c_str()));
-	RTC_INFO(("Copyright (C) 2003-2007"));
-	RTC_INFO(("  Noriaki Ando"));
-	RTC_INFO(("  Task-intelligence Research Group,"));
-	RTC_INFO(("  Intelligent Systems Research Institute, AIST"));
-	RTC_INFO(("Manager starting."));
-	RTC_INFO(("Starting local logging."));
+        return true;
       }
-    else
+
+    std::vector<std::string> logouts;
+    logouts = coil::split(m_config["logger.file_name"], ",");
+    std::cout << "number of file_name: " << logouts.size() << std::endl;
+    for (int i(0), len(logouts.size()); i < len; ++i)
       {
-    	m_config["logger.log_level"] = "SILENT";
+        std::string logfile(logouts[i]);
+        std::cout << i << ": " << logfile << std::endl;
+        if (logfile == "") continue;
+	
+        // Open logfile
+        if (logfile == "STDOUT" || logfile == "stdout")
+          {
+            m_logStreamBuf.addStream(std::cout.rdbuf());
+            continue;
+          }
+        
+        std::filebuf* of = new std::filebuf();
+        of->open(logfile.c_str(), std::ios::out | std::ios::app);
+
+        if (!of->is_open())
+          {
+            std::cerr << "Error: cannot open logfile: "
+                      << logfile << std::endl;
+            delete of;
+            continue;
+          }
+        m_logStreamBuf.addStream(of, true);
       }
+	
+
+    // Set date format for log entry header
+    rtclog.setDateFormat(m_config["logger.date_format"].c_str());
+    
+    // Loglevel was set from configuration file.
+    rtclog.setLevel(m_config["logger.log_level"].c_str());
+	
+    // Log stream mutex locking mode
+    coil::toBool(m_config["logger.stream_lock"],
+                 "enable", "disable", false) ? 
+      rtclog.enableLock() : rtclog.disableLock();
+                 
+	
+    RTC_INFO(("%s", m_config["openrtm.version"].c_str()));
+    RTC_INFO(("Copyright (C) 2003-2007"));
+    RTC_INFO(("  Noriaki Ando"));
+    RTC_INFO(("  Task-intelligence Research Group,"));
+    RTC_INFO(("  Intelligent Systems Research Institute, AIST"));
+    RTC_INFO(("Manager starting."));
+    RTC_INFO(("Starting local logging."));
 
     return true;;
   }
@@ -831,9 +852,14 @@ std::vector<coil::Properties> Manager::getLoadableModules()
   void Manager::shutdownLogger()
   {
     RTC_TRACE(("Manager::shutdownLogger()"));
-    rtcout.flush();
-    if (m_Logbuf.is_open())
-      m_Logbuf.close();
+    rtclog.flush();
+
+    for (int i(0), len(m_logfiles.size()); i < len; ++i)
+      {
+        m_logfiles[i]->close();
+        //        m_logStreamBuf.removeStream(m_logfiles[i]->rdbuf());
+        delete m_logfiles[i];
+      }
   }
   
   //============================================================
@@ -944,7 +970,8 @@ std::vector<coil::Properties> Manager::getLoadableModules()
 	  }
 	catch (CORBA::SystemException& ex)
 	  {
-	    RTC_ERROR(("Caught SystemException during root POA destruction"));
+	    RTC_ERROR(("Exception cought during root POA destruction"));
+	    RTC_ERROR(("CORBA::SystemException(minor=%d)", ex.minor()));
 	  }
 	catch (...)
 	  {
@@ -964,8 +991,8 @@ std::vector<coil::Properties> Manager::getLoadableModules()
 	  }
 	catch (CORBA::SystemException& ex)
 	  {
-	    ex;
-	    RTC_ERROR(("Caught CORBA::SystemException during ORB shutdown"));
+	    RTC_ERROR(("Exception caught during ORB shutdown"));
+            RTC_ERROR(("CORBA::SystemException(minodor=%d)", ex.minor()));
 	  }
 	catch (...)
 	  {
@@ -1138,7 +1165,7 @@ std::vector<coil::Properties> Manager::getLoadableModules()
 	    comps[i]->exit();
 	    coil::Properties p(comps[i]->getInstanceName());
 	    p << comps[i]->getProperties();
-	    rtcout.level(LogStream::RTL_PARANOID) << p;
+	    rtclog.level(Logger::RTL_PARANOID) << p;
 	  }
 	catch (...)
 	  {
