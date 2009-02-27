@@ -118,7 +118,7 @@ namespace RTC
       
     timer = time(NULL);
     date = localtime(&timer);
-    strftime(buf, maxsize, m_dateFormat.c_str(), date);
+    strftime(buf, sizeof(buf), m_dateFormat.c_str(), date);
 
     return std::string(buf);
   }
