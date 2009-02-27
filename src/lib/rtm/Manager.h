@@ -263,8 +263,8 @@ namespace RTC
      *
      * @endif
      */
-    Logbuf& getLogbuf() {return m_Logbuf;}
-    MedLogbuf& getMedLogbuf() {return m_MedLogbuf;}
+    LogStreamBuf& getLogStreamBuf() {return m_logStreamBuf;}
+    std::string& getLogLevel() {return m_config["logger.log_level"];}
     
     /*!
      * @if jp
@@ -1362,16 +1362,7 @@ namespace RTC
      * @brief Logger buffer
      * @endif
      */
-    Logbuf m_Logbuf;
-    
-    /*!
-     * @if jp
-     * @brief ロガー仲介バッファ
-     * @else
-     * @brief Logger mediation buffer
-     * @endif
-     */
-    MedLogbuf m_MedLogbuf;
+    LogStreamBuf m_logStreamBuf;
     
     /*!
      * @if jp
@@ -1380,7 +1371,9 @@ namespace RTC
      * @brief Logger stream
      * @endif
      */
-    LogStream rtcout;
+    Logger rtclog;
+
+    std::vector<std::ofstream*> m_logfiles;
     
     //============================================================
     // コンポーネントマネージャ
