@@ -241,7 +241,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual ~Properties();
+    virtual ~Properties(void);
     
     //============================================================
     // public functions

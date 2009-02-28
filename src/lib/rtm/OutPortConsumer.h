@@ -87,7 +87,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual ~OutPortConsumer(){};
+    virtual ~OutPortConsumer(void){};
     
     /*!
      * @if jp

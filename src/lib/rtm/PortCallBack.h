@@ -67,7 +67,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual ~OnWrite(){}
+    virtual ~OnWrite(void){}
     
     /*!
      * @if jp
@@ -133,7 +133,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual ~OnWriteConvert(){}
+    virtual ~OnWriteConvert(void){}
     
     /*!
      * @if jp
@@ -201,7 +201,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual ~OnRead(){}
+    virtual ~OnRead(void){}
     
     /*!
      * @if jp
@@ -263,7 +263,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual ~OnReadConvert(){}
+    virtual ~OnReadConvert(void){}
     
     /*!
      * @if jp
@@ -323,7 +323,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual ~OnOverflow(){}
+    virtual ~OnOverflow(void){}
     
     /*!
      * @if jp
@@ -388,7 +388,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual ~OnUnderflow(){}
+    virtual ~OnUnderflow(void){}
     
     /*!
      * @if jp
@@ -451,7 +451,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual ~OnWriteTimeout(){}
+    virtual ~OnWriteTimeout(void){}
     
     /*!
      * @if jp
@@ -514,7 +514,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual ~OnReadTimeout(){}
+    virtual ~OnReadTimeout(void){}
     
     /*!
      * @if jp
@@ -542,14 +542,14 @@ namespace RTC
   class OnConnect
   {
   public:
-    virtual ~OnConnect(){}
+    virtual ~OnConnect(void){}
     virtual void operator()(const char* id, PublisherBase* publisher) = 0;
   };
 
   class OnDisconnect
   {
   public:
-    virtual ~OnDisconnect(){}
+    virtual ~OnDisconnect(void){}
     virtual void operator()(const char* id) = 0;
   };
 

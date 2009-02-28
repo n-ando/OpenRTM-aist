@@ -70,7 +70,8 @@ namespace RTC
    */
   void ConfigAdmin::update(const char* config_set)
   {
-    if (m_configsets.hasKey(config_set) == NULL) return;
+    if (m_configsets.hasKey(config_set) == NULL) { return; }
+
     coil::Properties& prop(*(m_configsets.getNode(config_set)));
     
     for (int i(0), len(m_params.size()); i < len; ++i)
@@ -111,7 +112,8 @@ namespace RTC
    */
   void ConfigAdmin::update(const char* config_set, const char* config_param)
   {
-    if ((config_set == 0) || (config_param == 0)) return;
+    if ((config_set == 0) || (config_param == 0)) { return; }
+
     std::string key(config_set);
     key += "."; key += config_param;
     
@@ -187,7 +189,7 @@ namespace RTC
   const coil::Properties& ConfigAdmin::getConfigurationSet(const char* config_id)
   {
     coil::Properties* p(m_configsets.getNode(config_id));
-    if (p == NULL) return m_emptyconf;
+    if (p == NULL) { return m_emptyconf; }
     return *p;
   }
   
@@ -201,10 +203,10 @@ namespace RTC
   bool
   ConfigAdmin::setConfigurationSetValues(const coil::Properties& config_set)
   {
-    if (config_set.getName() == '\0') return false;
+    if (config_set.getName() == '\0') { return false; }
     
     coil::Properties* p(m_configsets.getNode(config_set.getName()));
-    assert(p != 0);
+    if (p == 0) { return false; }
     *p << config_set;
     m_changed = true;
     m_active = false;
@@ -222,7 +224,7 @@ namespace RTC
   const coil::Properties& ConfigAdmin::getActiveConfigurationSet(void)
   {
     coil::Properties* p(m_configsets.getNode(m_activeId));
-    if (p == NULL) return m_emptyconf;
+    if (p == 0) { return m_emptyconf; }
     return *p;
   }
   
@@ -235,16 +237,16 @@ namespace RTC
    */
   bool ConfigAdmin::addConfigurationSet(const coil::Properties& config_set)
   {
-    if (config_set.getName() == '\0') return false;
-    if (m_configsets.hasKey(config_set.getName())) return false;
+    if (config_set.getName() == '\0') { return false; }
+    if (m_configsets.hasKey(config_set.getName())) { return false; }
     
     std::string node(config_set.getName());
     
     // Create node
-    m_configsets.createNode(node.c_str());
+    if (!m_configsets.createNode(node.c_str())) { return false; }
     
     coil::Properties* p(m_configsets.getNode(node.c_str()));
-    assert(p != 0);
+    if (p == 0) { return false; }
     *p << config_set;
     m_newConfig.push_back(node);
     
@@ -267,10 +269,10 @@ namespace RTC
     
     std::vector<std::string>::iterator it;
     it = std::find(m_newConfig.begin(), m_newConfig.end(), config_id);
-    if (it == m_newConfig.end()) return false;
+    if (it == m_newConfig.end()) { return false; }
     
     coil::Properties* p(m_configsets.getNode(config_id));
-    if (p != NULL) delete p;
+    if (p != NULL) { delete p; }
     m_newConfig.erase(it);
     
     m_changed = true;
@@ -288,8 +290,8 @@ namespace RTC
    */
   bool ConfigAdmin::activateConfigurationSet(const char* config_id)
   {
-    if (config_id == NULL) return false;
-    if (!m_configsets.hasKey(config_id)) return false;
+    if (config_id == NULL) { return false; }
+    if (!m_configsets.hasKey(config_id)) { return false; }
     m_activeId = config_id;
     m_active = true;
     m_changed = true;
@@ -299,69 +301,81 @@ namespace RTC
 
   void ConfigAdmin::setOnUpdate(OnUpdateCallback* cb)
   {
-    if (m_updateCb != 0) delete m_updateCb;
+    if (m_updateCb != 0) { delete m_updateCb; }
     m_updateCb = cb;
   }
 
   void ConfigAdmin::setOnUpdateParam(OnUpdateParamCallback* cb)
   {
-    if (m_updateParamCb != 0) delete m_updateParamCb;
+    if (m_updateParamCb != 0) { delete m_updateParamCb; }
     m_updateParamCb = cb;
   }
 
   void ConfigAdmin::setOnSetConfigurationSet(OnSetConfigurationSetCallback* cb)
   {
-    if (m_setConfigSetCb != 0) delete m_setConfigSetCb;
+    if (m_setConfigSetCb != 0) { delete m_setConfigSetCb; }
     m_setConfigSetCb = cb;
   }
 
   void ConfigAdmin::setOnAddConfigurationSet(OnAddConfigurationAddCallback* cb)
   {
-    if (m_addConfigSetCb != 0) delete m_addConfigSetCb;
+    if (m_addConfigSetCb != 0) { delete m_addConfigSetCb; }
     m_addConfigSetCb = cb;
   }
 
   void ConfigAdmin::setOnRemoveConfigurationSet(OnRemoveConfigurationSetCallback* cb)
   {
-    if (m_removeConfigSetCb != 0) delete m_removeConfigSetCb;
+    if (m_removeConfigSetCb != 0) { delete m_removeConfigSetCb; }
     m_removeConfigSetCb = cb;
   }
 
   void ConfigAdmin::setOnActivateSet(OnActivateSetCallback* cb)
   {
-    if (m_activateSetCb != 0) delete m_activateSetCb;
+    if (m_activateSetCb != 0) { delete m_activateSetCb; }
     m_activateSetCb = cb;
   }
 
   void ConfigAdmin::onUpdate(const char* config_set)
   {
     if (m_updateCb != 0)
-      (*m_updateCb)(config_set);
+      {
+        (*m_updateCb)(config_set);
+      }
   }
   void ConfigAdmin::onUpdateParam(const char* config_set, const char* config_param)
   {
     if (m_updateParamCb != 0)
-      (*m_updateParamCb)(config_set, config_param);
+      {
+        (*m_updateParamCb)(config_set, config_param);
+      }
   }
   void ConfigAdmin::onSetConfigurationSet(const coil::Properties& config_set)
   {
     if (m_setConfigSetCb != 0)
-      (*m_setConfigSetCb)(config_set);
+      {
+        (*m_setConfigSetCb)(config_set);
+      }
   }
   void ConfigAdmin::onAddConfigurationSet(const coil::Properties& config_set)
   {
     if (m_addConfigSetCb != 0)
-      (*m_addConfigSetCb)(config_set);
+      {
+        (*m_addConfigSetCb)(config_set);
+      }
   }
   void ConfigAdmin::onRemoveConfigurationSet(const char* config_id)
   {
     if (m_removeConfigSetCb != 0)
-      (*m_removeConfigSetCb)(config_id);
+      {
+        (*m_removeConfigSetCb)(config_id);
+      }
   }
   void ConfigAdmin::onActivateSet(const char* config_id)
   {
     if (m_activateSetCb != 0)
-      (*m_activateSetCb)(config_id);
+      {
+        (*m_activateSetCb)(config_id);
+      }
   }
   
 

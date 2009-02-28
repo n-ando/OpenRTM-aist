@@ -131,7 +131,7 @@ namespace RTC
      * 
      * @endif
      */
-    virtual ~CorbaNaming(){};
+    virtual ~CorbaNaming(void){};
     
     /*!
      * @if jp

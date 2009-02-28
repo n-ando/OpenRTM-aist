@@ -99,7 +99,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual ~PublisherNew();
+    virtual ~PublisherNew(void);
     
     /*!
      * @if jp

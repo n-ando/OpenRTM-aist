@@ -168,7 +168,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual ~PortBase();
+    virtual ~PortBase(void);
     
     /*!
      * @if jp

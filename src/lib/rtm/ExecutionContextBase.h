@@ -62,7 +62,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual ~ExecutionContextBase(){};
+    virtual ~ExecutionContextBase(void){};
     
     /*!
      * @if jp

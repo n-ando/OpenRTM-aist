@@ -93,7 +93,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual ~OutPortCorbaConsumer(){} 
+    virtual ~OutPortCorbaConsumer(void){} 
     
     /*!
      * @if jp

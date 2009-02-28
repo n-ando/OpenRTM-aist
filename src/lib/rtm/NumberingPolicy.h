@@ -75,7 +75,7 @@ public:
    *
    * @endif
    */
-  virtual ~NumberingPolicy(){};
+  virtual ~NumberingPolicy(void){};
   
   /*!
    * @if jp
@@ -178,7 +178,7 @@ public:
    *
    * @endif
    */
-  virtual ~DefaultNumberingPolicy(){};
+  virtual ~DefaultNumberingPolicy(void){};
   
   /*!
    * @if jp

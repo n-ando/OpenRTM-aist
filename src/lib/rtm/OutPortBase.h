@@ -98,7 +98,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual ~OutPortBase();
+    virtual ~OutPortBase(void);
     
     /*!
      * @if jp

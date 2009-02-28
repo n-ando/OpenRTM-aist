@@ -101,7 +101,6 @@ rtmheaderdir = $(prefix)/include/rtm
 rtmheader_HEADERS = \
 	$(libRTC_la_SOURCES:.cpp=.h) \
 	BufferBase.h                 \
-	CORBA_SeqEx.h                \
 	CORBA_SeqUtil.h              \
 	CorbaConsumer.h              \
 	DefaultConfiguration.h       \

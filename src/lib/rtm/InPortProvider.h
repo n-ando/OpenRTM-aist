@@ -75,7 +75,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual ~InPortProvider();
+    virtual ~InPortProvider(void);
     
     /*!
      * @if jp

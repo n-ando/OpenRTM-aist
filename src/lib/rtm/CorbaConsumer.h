@@ -162,7 +162,7 @@ namespace RTC
      * 
      * @endif
      */
-    virtual ~CorbaConsumerBase(){};
+    virtual ~CorbaConsumerBase(void){};
     
     /*!
      * @if jp
@@ -376,7 +376,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual ~CorbaConsumer()
+    virtual ~CorbaConsumer(void)
     {
     };
     

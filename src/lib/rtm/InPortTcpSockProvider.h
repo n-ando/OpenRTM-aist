@@ -123,7 +123,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual ~InPortTcpSockProvider()
+    virtual ~InPortTcpSockProvider(void)
     {
     }
     

@@ -147,7 +147,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual ~InPortCorbaConsumer()
+    virtual ~InPortCorbaConsumer(void)
     {}
     
     /*!

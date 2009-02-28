@@ -150,7 +150,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual ~InPortCorbaProvider()
+    virtual ~InPortCorbaProvider(void)
     {
     }
     

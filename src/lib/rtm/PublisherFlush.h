@@ -88,7 +88,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual ~PublisherFlush();
+    virtual ~PublisherFlush(void);
     
     /*!
      * @if jp

@@ -158,7 +158,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual ~InPortTcpSockConsumer()
+    virtual ~InPortTcpSockConsumer(void)
     {}
     
     /*!
