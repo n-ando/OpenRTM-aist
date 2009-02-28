@@ -101,7 +101,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual ~BufferBase()
+    virtual ~BufferBase(void)
     {
     };
     
@@ -124,7 +124,7 @@ namespace RTC
      * 
      * @endif
      */
-    virtual long int length() const = 0;
+    virtual long int length(void) const = 0;
     
     /*!
      * @if jp
@@ -195,7 +195,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual bool isFull() const = 0;
+    virtual bool isFull(void) const = 0;
     
     /*!
      * @if jp
@@ -216,7 +216,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual bool isEmpty() const = 0;
+    virtual bool isEmpty(void) const = 0;
     
   protected:
     /*!
@@ -259,7 +259,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual const DataType& get() = 0;
+    virtual const DataType& get(void) = 0;
     
     /*!
      * @if jp
@@ -281,7 +281,7 @@ namespace RTC
      * 
      * @endif
      */
-    virtual DataType& getRef() = 0;
+    virtual DataType& getRef(void) = 0;
   };
   
   /*!
@@ -356,7 +356,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual ~NullBuffer()
+    virtual ~NullBuffer(void)
     {
     }
     
@@ -379,7 +379,7 @@ namespace RTC
      * 
      * @endif
      */
-    virtual long int length() const
+    virtual long int length(void) const
     {
       return 1;
     }
@@ -461,7 +461,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual bool isFull() const
+    virtual bool isFull(void) const
     {
       return false;
     }
@@ -485,7 +485,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual bool isEmpty() const
+    virtual bool isEmpty(void) const
     {
       return false;
     }
@@ -534,7 +534,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual const DataType& get()
+    virtual const DataType& get(void)
     {
       return m_data;
     }
@@ -561,7 +561,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual DataType& getRef()
+    virtual DataType& getRef(void)
     {
       return m_data;
     }
