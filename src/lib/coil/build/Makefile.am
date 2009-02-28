@@ -10,4 +10,11 @@ clean-local:
 	rm -f *.pyc
 
 EXTRA_DIST =                   \
-	makedeffile.py
+	autogen                \
+	setuptest.py           \
+	vcprojtool.py          \
+	makedeffile.py         \
+	slntool.py             \
+	yat.py                 \
+	platform.sh            \
+	uuid.py
