@@ -79,7 +79,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual ~PublisherFactory(){};
+    virtual ~PublisherFactory(void){};
     
     /*!
      * @if jp

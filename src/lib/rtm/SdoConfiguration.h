@@ -187,7 +187,7 @@ namespace SDOPackage
      
      * @endif
      */
-    virtual ~Configuration_impl();
+    virtual ~Configuration_impl(void);
     
     //============================================================
     //

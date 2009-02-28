@@ -134,7 +134,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual ~DataInPort();
+    virtual ~DataInPort(void);
     
   protected:
     /*!

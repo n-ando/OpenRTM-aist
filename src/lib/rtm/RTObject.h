@@ -138,7 +138,7 @@ namespace RTC
      * 
      * @endif
      */
-    virtual ~RTObject_impl();
+    virtual ~RTObject_impl(void);
     
   protected:
     //============================================================

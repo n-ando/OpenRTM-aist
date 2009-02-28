@@ -109,7 +109,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual ~OutPortCorbaProvider()
+    virtual ~OutPortCorbaProvider(void)
     {}
     
     /*!

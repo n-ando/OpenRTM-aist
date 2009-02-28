@@ -23,8 +23,8 @@ namespace RTC
   {
   public:
     OpenHRPExecutionContext();
-    virtual ~OpenHRPExecutionContext();
-    virtual void tick()
+    virtual ~OpenHRPExecutionContext(void);
+    virtual void tick(void)
       throw (CORBA::SystemException);
     virtual int svc(void);
 

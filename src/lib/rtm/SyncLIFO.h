@@ -47,7 +47,7 @@ namespace RTC
 	}
     }
     
-    virtual ~SyncLIFO()
+    virtual ~SyncLIFO(void)
     {
       if (m_buffer_org == NULL)
 	{

@@ -102,7 +102,7 @@ namespace RTC
      * @brief Destructor
      * @endif
      */
-    virtual ~OutPortTcpSockProvider()
+    virtual ~OutPortTcpSockProvider(void)
     {}
     
     /*

@@ -163,7 +163,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual ~CorbaPort();
+    virtual ~CorbaPort(void);
     
     /*!
      * @if jp

@@ -95,7 +95,7 @@ namespace RTC
      * @brief Destructor
      * @endif
      */
-    virtual ~OutPortProvider(){};
+    virtual ~OutPortProvider(void){};
     
     /*!
      * @if jp

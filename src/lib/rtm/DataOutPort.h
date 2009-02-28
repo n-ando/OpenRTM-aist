@@ -158,7 +158,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual ~DataOutPort();
+    virtual ~DataOutPort(void);
     
   protected:
     /*!

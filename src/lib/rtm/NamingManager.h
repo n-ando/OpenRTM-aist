@@ -89,7 +89,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual ~NamingBase() {};
+    virtual ~NamingBase(void) {};
     
     /*!
      * @if jp
@@ -195,7 +195,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual ~NamingOnCorba(){};
+    virtual ~NamingOnCorba(void){};
     
     /*!
      * @if jp
@@ -309,7 +309,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual ~NamingManager();
+    virtual ~NamingManager(void);
     
     /*!
      * @if jp

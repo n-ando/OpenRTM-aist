@@ -33,7 +33,7 @@ namespace RTM
   public:
     // standard constructor
     ManagerServant();
-    virtual ~ManagerServant();
+    virtual ~ManagerServant(void);
     
     RTC::ReturnCode_t load_module(const char* pathname, const char* initfunc);
     RTC::ReturnCode_t unload_module(const char* pathname);

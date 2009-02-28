@@ -104,7 +104,7 @@ namespace RTC
      *
      * @endif
      */
-    ~ModuleManager();
+    ~ModuleManager(void);
     
     /*!
      * @if jp

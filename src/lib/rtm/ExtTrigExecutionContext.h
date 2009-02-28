@@ -86,7 +86,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual ~ExtTrigExecutionContext();
+    virtual ~ExtTrigExecutionContext(void);
     
     /*!
      * @if jp

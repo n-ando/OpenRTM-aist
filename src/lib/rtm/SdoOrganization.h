@@ -104,7 +104,7 @@ namespace SDOPackage
      *
      * @endif
      */
-    virtual ~Organization_impl();
+    virtual ~Organization_impl(void);
     
     //============================================================
     //

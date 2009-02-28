@@ -104,7 +104,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual ~TcpAcceptor()
+    virtual ~TcpAcceptor(void)
     {
     }
     
@@ -193,7 +193,7 @@ namespace RTC
      *
      * @endif
      */
-    unsigned short get_port_number() const
+    unsigned short get_port_number(void) const
     {
       return m_addr.get_port_number();
     }
@@ -403,7 +403,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual ~TcpServer()
+    virtual ~TcpServer(void)
     {
     }
     
@@ -433,7 +433,7 @@ namespace RTC
      *
      * @endif
      */
-    int start()
+    int start(void)
     {
       // open socket and acceptor
       if (m_acceptor.open(m_addr, &m_reactor) == -1)
@@ -530,7 +530,7 @@ namespace RTC
      *
      * @endif
      */
-    void run()
+    void run(void)
     {
       while (m_running)
 	{
@@ -559,7 +559,7 @@ namespace RTC
      *
      * @endif
      */
-    unsigned short getPortNumber()
+    unsigned short getPortNumber(void)
     {
       return m_port;
     }
@@ -583,7 +583,7 @@ namespace RTC
      *
      * @endif
      */
-    const char* getHostName()
+    const char* getHostName(void)
     {
       return m_addr.get_host_name();
     }
@@ -670,7 +670,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual ~TcpHandler()
+    virtual ~TcpHandler(void)
     {
       if (!m_pRecvBuffer)
 	delete[] m_pRecvBuffer;
@@ -758,7 +758,7 @@ namespace RTC
      *
      * @endif
      */
-    operator ACE_SOCK_Stream &()
+    operator ACE_SOCK_Stream &(void)
     {
       return this->m_clientStream;
     }

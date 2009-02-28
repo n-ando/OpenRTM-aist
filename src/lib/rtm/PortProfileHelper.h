@@ -60,7 +60,7 @@ namespace RTC
 
   public:
     PortProfileHelper();
-    virtual ~PortProfileHelper();
+    virtual ~PortProfileHelper(void);
 
 
     /*!

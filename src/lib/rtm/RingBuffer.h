@@ -130,7 +130,7 @@ namespace RTC
      * 
      * @endif
      */
-    virtual ~RingBuffer(){};
+    virtual ~RingBuffer(void){};
     
     /*!
      * @if jp

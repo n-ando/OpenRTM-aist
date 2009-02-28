@@ -160,7 +160,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual ~InPort(){};
+    virtual ~InPort(void){};
     
     /*!
      * @if jp

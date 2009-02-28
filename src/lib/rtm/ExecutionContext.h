@@ -149,7 +149,7 @@ namespace RTC
      * @brief Destructor
      * @endif
      */
-    virtual ~ExecutionContextBase() {};
+    virtual ~ExecutionContextBase(void) {};
 
     //============================================================
     // ExecutionContext interfaces

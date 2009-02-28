@@ -50,7 +50,7 @@ namespace SDOPackage
 
   public:
     PeriodicECOrganization(::RTC::RTObject_impl* rtobj);
-    virtual ~PeriodicECOrganization();
+    virtual ~PeriodicECOrganization(void);
 
     /*!
      * @if jp
@@ -130,8 +130,8 @@ namespace SDOPackage
       throw (::CORBA::SystemException,
 	     InvalidParameter, NotAvailable, InternalError);
 
-    void removeAllMembers();
-    void updateDelegatedPorts();
+    void removeAllMembers(void);
+    void updateDelegatedPorts(void);
   protected:
     class Member;
     /*!
@@ -216,7 +216,7 @@ namespace SDOPackage
     void removePort(Member& member, PortList& portlist);
 
 
-    void updateExportedPortsList();
+    void updateExportedPortsList(void);
 
   protected:
     ::RTC::RTObject_impl* m_rtobj;
@@ -232,7 +232,7 @@ namespace SDOPackage
           config_(rtobj->get_configuration())
       {}
 
-      virtual ~Member(){}
+      virtual ~Member(void){}
       
       Member(const Member& x)
         : rtobj_(RTC::RTObject::_duplicate(x.rtobj_)),
@@ -365,7 +365,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual ~PeriodicECSharedComposite();
+    virtual ~PeriodicECSharedComposite(void);
     
     /*!
      * @if jp
@@ -382,11 +382,11 @@ namespace RTC
      *
      * @endif
      */
-    virtual ReturnCode_t onInitialize();
+    virtual ReturnCode_t onInitialize(void);
     virtual ReturnCode_t onActivated(RTC::UniqueId exec_handle);
     virtual ReturnCode_t onDeactivated(RTC::UniqueId exec_handle);
     virtual ReturnCode_t onReset(RTC::UniqueId exec_handle);
-    virtual ReturnCode_t onFinalize();
+    virtual ReturnCode_t onFinalize(void);
     
   protected:
     std::vector<std::string> m_members;

@@ -157,7 +157,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual ~ManagerConfig();
+    virtual ~ManagerConfig(void);
     
     /*!
      * @if jp

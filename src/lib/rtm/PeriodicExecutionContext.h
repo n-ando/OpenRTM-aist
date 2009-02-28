@@ -120,7 +120,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual ~PeriodicExecutionContext();
+    virtual ~PeriodicExecutionContext(void);
     
     /*!
      * @if jp
@@ -141,7 +141,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual ExecutionContextService_ptr getObjRef() {return m_ref;}
+    virtual ExecutionContextService_ptr getObjRef(void) {return m_ref;}
     
     /*!
      * @if jp
@@ -245,7 +245,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual CORBA::Boolean is_running()
+    virtual CORBA::Boolean is_running(void)
       throw (CORBA::SystemException);
     
     /*!
@@ -276,7 +276,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual ReturnCode_t start()
+    virtual ReturnCode_t start(void)
       throw (CORBA::SystemException);
     
     /*!
@@ -306,7 +306,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual ReturnCode_t stop()
+    virtual ReturnCode_t stop(void)
       throw (CORBA::SystemException);
     
     /*!
@@ -328,7 +328,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual CORBA::Double get_rate()
+    virtual CORBA::Double get_rate(void)
       throw (CORBA::SystemException);
     
     /*!
@@ -519,7 +519,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual ExecutionKind get_kind()
+    virtual ExecutionKind get_kind(void)
       throw (CORBA::SystemException);
     
     /*!
@@ -611,7 +611,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual ExecutionContextProfile* get_profile()
+    virtual ExecutionContextProfile* get_profile(void)
       throw (CORBA::SystemException);
     
   protected:
@@ -703,7 +703,7 @@ namespace RTC
        *
        * @endif
        */
-      virtual ~DFPBase(){}
+      virtual ~DFPBase(void){}
       
       /*!
        * @if jp
@@ -721,7 +721,7 @@ namespace RTC
        *
        * @endif
        */
-      virtual void on_startup() = 0;
+      virtual void on_startup(void) = 0;
       
       /*!
        * @if jp
@@ -739,7 +739,7 @@ namespace RTC
        *
        * @endif
        */
-      virtual void on_shutdown() = 0;
+      virtual void on_shutdown(void) = 0;
       
       /*!
        * @if jp
@@ -937,7 +937,7 @@ namespace RTC
        *
        * @endif
        */
-      virtual void on_rate_changed() = 0;
+      virtual void on_rate_changed(void) = 0;
       
       /*!
        * @if jp
@@ -957,7 +957,7 @@ namespace RTC
        *
        * @endif
        */
-      virtual void worker() {return m_sm.worker();}
+      virtual void worker(void) {return m_sm.worker();}
       
       /*!
        * @if jp
@@ -976,7 +976,7 @@ namespace RTC
        *
        * @endif
        */
-      virtual ExecContextState get_state(){ return m_sm.getState();}
+      virtual ExecContextState get_state(void){ return m_sm.getState();}
       
       /*!
        * @if jp
@@ -1069,7 +1069,7 @@ namespace RTC
        *
        * @endif
        */
-      void on_startup()
+      void on_startup(void)
       {
 	m_obj->on_startup(ec_id);
       }
@@ -1089,7 +1089,7 @@ namespace RTC
        *
        * @endif
        */
-      void on_shutdown()
+      void on_shutdown(void)
       {
 	m_obj->on_shutdown(ec_id);
       }
@@ -1314,7 +1314,7 @@ namespace RTC
        *
        * @endif
        */
-      void on_rate_changed()
+      void on_rate_changed(void)
       {
 	m_obj->on_rate_changed(ec_id);
       }
@@ -1352,7 +1352,7 @@ namespace RTC
 	: _ref(ref), _sm(dfp, id)
       {
       }
-      ~Comp()
+      ~Comp(void)
       {
       }
       Comp(const Comp& comp)
