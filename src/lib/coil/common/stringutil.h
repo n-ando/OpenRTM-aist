@@ -388,14 +388,12 @@ namespace coil
   template <typename To>
   bool stringTo(To& val, const char* str)
   {
+    if (str == 0) { return false; }
+
     std::stringstream s;
-    try {
-      return (s << str && s >> val);
-    }
-    catch (...)
-      {
-        return false;
-      }
+    if ((s << str).fail()) { return false; }
+    if ((s >> val).fail()) { return false; }
+    return true;
   }
   
   /*!

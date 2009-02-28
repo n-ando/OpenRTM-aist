@@ -242,7 +242,7 @@ namespace coil
      *
      * @endif
      */
-    virtual ~Properties();
+    virtual ~Properties(void);
     
     //============================================================
     // public functions
@@ -265,7 +265,7 @@ namespace coil
      *
      * @endif
      */
-    inline const char* getName() const          {return name.c_str();}
+    inline const char* getName(void) const          {return name.c_str();}
     
     /*!
      * @if jp
@@ -284,7 +284,7 @@ namespace coil
      *
      * @endif
      */
-    inline const char* getValue() const         {return value.c_str();}
+    inline const char* getValue(void) const         {return value.c_str();}
     
     /*!
      * @if jp
@@ -303,7 +303,7 @@ namespace coil
      *
      * @endif
      */
-    inline const char* getDefaultValue() const {return default_value.c_str();}
+    inline const char* getDefaultValue(void) const {return default_value.c_str();}
     
     /*!
      * @if jp
@@ -322,7 +322,7 @@ namespace coil
      *
      * @endif
      */
-    inline const std::vector<Properties*>& getLeaf() const {return leaf;}
+    inline const std::vector<Properties*>& getLeaf(void) const {return leaf;}
     
     /*!
      * @if jp
@@ -341,7 +341,7 @@ namespace coil
      *
      * @endif
      */
-    inline const Properties* getRoot() const    {return root;}
+    inline const Properties* getRoot(void) const    {return root;}
     
     /*!
      * @if jp
@@ -872,7 +872,7 @@ namespace coil
      *
      * @endif
      */
-    std::vector<std::string> propertyNames() const;
+    std::vector<std::string> propertyNames(void) const;
     
     /*!
      * @if jp
@@ -891,7 +891,7 @@ namespace coil
      *
      * @endif
      */
-    int size() const;
+    int size(void) const;
     
     /*!
      * @if jp
@@ -944,8 +944,12 @@ namespace coil
      */
     bool createNode(const char* key)
     {
+      if (key == 0) { return false; }
       Properties* p(getNode(key));
-      if (p != NULL) return false;
+      if (p != 0) 
+        {
+          return false;
+        }
       (*this)[key] = "";
       return true;
     }
@@ -1007,7 +1011,7 @@ namespace coil
      * @brief Clear the children
      * @endif
      */
-    void clear();
+    void clear(void);
     
     /*!
      * @if jp
