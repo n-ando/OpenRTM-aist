@@ -49,7 +49,7 @@ namespace SDOPackage
       m_rtobj(rtobj),
       m_ec(::RTC::ExecutionContext::_nil())
   {
-    rtclog.setLevel("PARANOID");
+    //    rtclog.setLevel("PARANOID");
   }
 
   PeriodicECOrganization::~PeriodicECOrganization()
