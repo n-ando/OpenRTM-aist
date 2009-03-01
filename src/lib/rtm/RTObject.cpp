@@ -318,14 +318,14 @@ namespace RTC
     ExecutionContextService_var ecv;
     ecv = ec->getObjRef();
     if (CORBA::is_nil(ecv)) return RTC::RTC_ERROR;
-    CORBA_SeqUtil::push_back(m_ecMine,
-                             RTC::ExecutionContextService::_duplicate(ecv));
+
     ec->bindComponent(this);
     // -- entering alive state --
     // at least one EC must be attached
     if (m_ecMine.length() == 0) return RTC::PRECONDITION_NOT_MET;
     for (::CORBA::ULong i(0), len(m_ecMine.length()); i < len; ++i)
       {
+        RTC_DEBUG(("EC[%d] starting.", i));
         m_ecMine[i]->start();
       }
 
@@ -584,7 +584,7 @@ namespace RTC
         if (::CORBA::is_nil(m_ecMine[i]))
           {
             m_ecMine[i] = ExecutionContextService::_duplicate(ecs);
-            return i + ECOTHER_OFFSET;
+            return i;
           }
       }
 
@@ -592,7 +592,7 @@ namespace RTC
     CORBA_SeqUtil::
       push_back(m_ecMine, ExecutionContextService::_duplicate(ecs));
     
-    return (m_ecMine.length() - 1) + ECOTHER_OFFSET;
+    return (m_ecMine.length() - 1);
   }
 
   /*!

@@ -44,9 +44,12 @@ static const char* periodicecsharedcomposite_spec[] =
 namespace SDOPackage
 {
   PeriodicECOrganization::PeriodicECOrganization(::RTC::RTObject_impl* rtobj)
-    : Organization_impl(rtobj->getObjRef()), m_rtobj(rtobj),
+    : Organization_impl(rtobj->getObjRef()),
+      rtclog("organization"),
+      m_rtobj(rtobj),
       m_ec(::RTC::ExecutionContext::_nil())
   {
+    rtclog.setLevel("PARANOID");
   }
 
   PeriodicECOrganization::~PeriodicECOrganization()
@@ -65,6 +68,7 @@ namespace SDOPackage
     throw (CORBA::SystemException,
            InvalidParameter, NotAvailable, InternalError)
   {
+    RTC_DEBUG(("add_members()"));
     updateExportedPortsList();
     for (::CORBA::ULong i(0), len(sdo_list.length()); i < len; ++i)
       {
@@ -76,7 +80,7 @@ namespace SDOPackage
         stopOwnedEC(member);
         addOrganizationToTarget(member);
         addParticipantToEC(member);
-        delegatePort(member, m_expPorts);
+        addPort(member, m_expPorts);
         m_rtcMembers.push_back(member);
       }
 
@@ -97,8 +101,8 @@ namespace SDOPackage
     throw (CORBA::SystemException,
            InvalidParameter, NotAvailable, InternalError)
   {
-    m_rtcMembers.clear();
-    m_expPorts.clear();
+    RTC_DEBUG(("set_members()"));
+    removeAllMembers();
     updateExportedPortsList();
 
     for (::CORBA::ULong i(0), len(sdo_list.length()); i < len; ++i)
@@ -111,7 +115,7 @@ namespace SDOPackage
         stopOwnedEC(member);
         addOrganizationToTarget(member);
         addParticipantToEC(member);
-        delegatePort(member, m_expPorts);
+        addPort(member, m_expPorts);
         m_rtcMembers.push_back(member);
       }
 
@@ -132,6 +136,7 @@ namespace SDOPackage
     throw (CORBA::SystemException,
            InvalidParameter, NotAvailable, InternalError)
   {
+    RTC_DEBUG(("remove_member(id = %s)", id));
     for (MemIt it(m_rtcMembers.begin()), it_end(m_rtcMembers.end());
          it != it_end; ++it)
       {
@@ -154,6 +159,7 @@ namespace SDOPackage
   
   void PeriodicECOrganization::removeAllMembers()
   {
+    RTC_TRACE(("removeAllMembers()"));
     updateExportedPortsList();
     MemIt it(m_rtcMembers.begin());
     MemIt it_end(m_rtcMembers.end());
@@ -168,6 +174,7 @@ namespace SDOPackage
         ++it;
      }
     m_rtcMembers.clear();
+    m_expPorts.clear();
   }
 
   /*!
@@ -318,10 +325,12 @@ namespace SDOPackage
    * @endif
    */
   void
-  PeriodicECOrganization::delegatePort(Member& member,
-                                       PortList& portlist)
+  PeriodicECOrganization::addPort(Member& member,
+                                  PortList& portlist)
   {
-    print(portlist);
+    RTC_TRACE(("addPort(%s)", ::coil::flatten(portlist).c_str()));
+    if (portlist.size() == 0) { return; }
+
     std::string comp_name(member.profile_->instance_name);
     ::RTC::PortProfileList& plist(member.profile_->port_profiles);
     
@@ -332,12 +341,27 @@ namespace SDOPackage
         std::string port_name(comp_name);
         port_name += "."; port_name += plist[i].name;
 
-        std::vector<std::string>::iterator pos = 
-          std::find(m_expPorts.begin(), m_expPorts.end(), port_name);
-        if (pos == m_expPorts.end()) continue;
+        RTC_DEBUG(("port_name: %s is in %s?",
+                   port_name.c_str(),
+                   ::coil::flatten(portlist).c_str()));
 
-        m_rtobj->registerPort(
-                              ::RTC::PortService::_duplicate(plist[i].port_ref));
+        std::vector<std::string>::iterator pos = 
+          std::find(portlist.begin(), portlist.end(), port_name);
+        if (pos == m_expPorts.end()) 
+          {
+            RTC_DEBUG(("Not found: %s is in %s?",
+                       port_name.c_str(),
+                       ::coil::flatten(portlist).c_str()));
+            continue;
+          }
+
+        RTC_DEBUG(("Found: %s is in %s",
+                   port_name.c_str(),
+                   ::coil::flatten(portlist).c_str()));
+
+        m_rtobj->registerPort(::RTC::PortService::_duplicate(plist[i].port_ref));
+
+        RTC_DEBUG(("Port %s was delegated.", port_name.c_str()));
 
       }
   }
@@ -352,7 +376,9 @@ namespace SDOPackage
   void PeriodicECOrganization::removePort(Member& member,
                                           PortList& portlist)
   {
-    print(portlist);
+    RTC_TRACE(("removePort(%s)", coil::flatten(portlist).c_str()));
+    if (portlist.size() == 0) { return; }
+
     std::string comp_name(member.profile_->instance_name);
     ::RTC::PortProfileList& plist(member.profile_->port_profiles);
 
@@ -362,26 +388,35 @@ namespace SDOPackage
         // port name -> comp_name.port_name
         std::string port_name(comp_name);
         port_name += "."; port_name += plist[i].name;
-        
+
+        RTC_DEBUG(("port_name: %s is in %s?",
+                   port_name.c_str(),
+                   ::coil::flatten(portlist).c_str()));
+
         std::vector<std::string>::iterator pos = 
-          std::find(m_expPorts.begin(), m_expPorts.end(), port_name);
-        if (pos == m_expPorts.end()) 
+          std::find(portlist.begin(), portlist.end(), port_name);
+        if (pos == portlist.end()) 
           {
+            RTC_DEBUG(("Not found: %s is in %s?",
+                       port_name.c_str(),
+                       ::coil::flatten(portlist).c_str()));
             continue;
           }
-        else
-          {
-            m_expPorts.erase(pos);
-          }
-        m_rtobj->deletePort(
-                            ::RTC::PortService::_duplicate(plist[i].port_ref));
-        
+
+        RTC_DEBUG(("Found: %s is in %s",
+                   port_name.c_str(),
+                   ::coil::flatten(portlist).c_str()));
+
+        m_rtobj->deletePort(::RTC::PortService::_duplicate(plist[i].port_ref));
+
+        RTC_DEBUG(("Port %s was deleted.", port_name.c_str()));
       }
    }
 
   void PeriodicECOrganization::updateExportedPortsList()
   {
-    m_expPorts = coil::split(m_rtobj->getProperties()["conf.default.exported_ports"], ",");
+    std::string plist(m_rtobj->getProperties()["conf.default.exported_ports"]);
+    m_expPorts = ::coil::split(plist, ",");
   }
 
 
@@ -401,18 +436,21 @@ namespace SDOPackage
     		   oldPorts.begin(), oldPorts.end(),
     		   std::back_inserter(createdPorts));
 
+    RTC_VERBOSE(("old    ports: %s", ::coil::flatten(oldPorts).c_str()));
+    RTC_VERBOSE(("new    ports: %s", ::coil::flatten(newPorts).c_str()));
+    RTC_VERBOSE(("remove ports: %s", ::coil::flatten(removedPorts).c_str()));
+    RTC_VERBOSE(("add    ports: %s", ::coil::flatten(createdPorts).c_str()));
+
     for (int i(0), len(m_rtcMembers.size()); i < len; ++i)
       {
         removePort(m_rtcMembers[i], removedPorts);
-        delegatePort(m_rtcMembers[i], createdPorts);
+        addPort(m_rtcMembers[i], createdPorts);
       }
 
     m_expPorts = newPorts;
   }
 
 };
-
-
 
 
 
@@ -486,6 +524,7 @@ namespace RTC
    */
   PeriodicECSharedComposite::~PeriodicECSharedComposite()
   {
+    RTC_TRACE(("~PeriodicECSharedComposite()"));
   }
 
 
@@ -498,6 +537,7 @@ namespace RTC
    */
   ReturnCode_t PeriodicECSharedComposite::onInitialize()
   {
+    RTC_TRACE(("onInitialize()"));
     ::RTC::Manager& mgr(::RTC::Manager::instance());
 
     std::vector<RtcBase*> comps = mgr.getComponents();
@@ -540,6 +580,7 @@ namespace RTC
    */
   ReturnCode_t PeriodicECSharedComposite::onActivated(RTC::UniqueId exec_handle)
   {
+    RTC_TRACE(("onActivated(%d)", exec_handle));
     ::RTC::ExecutionContextList_var ecs = get_owned_contexts();
     ::SDOPackage::SDOList_var sdos = m_org->get_members();
 
@@ -548,7 +589,8 @@ namespace RTC
         ::RTC::RTObject_var rtc = ::RTC::RTObject::_narrow(sdos[i]);
         ecs[0]->activate_component(rtc);
       }
-    std::cout << "num of mem:" << m_members.size() << std::endl;
+    RTC_DEBUG(("%d member RTC%s activated.", sdos->length(),
+               sdos->length() == 1 ? " was" : "s were"));
     return ::RTC::RTC_OK;
   }
 
@@ -561,6 +603,7 @@ namespace RTC
    */
   ReturnCode_t PeriodicECSharedComposite::onDeactivated(RTC::UniqueId exec_handle)
   {
+    RTC_TRACE(("onDeactivated(%d)", exec_handle));
     ::RTC::ExecutionContextList_var ecs = get_owned_contexts();
     ::SDOPackage::SDOList_var sdos = m_org->get_members();
 
@@ -580,6 +623,7 @@ namespace RTC
    * @endif
    */  ReturnCode_t PeriodicECSharedComposite::onReset(RTC::UniqueId exec_handle)
   {
+    RTC_TRACE(("onReset(%d)", exec_handle));
     ::RTC::ExecutionContextList_var ecs = get_owned_contexts();
     ::SDOPackage::SDOList_var sdos = m_org->get_members();
 
@@ -600,7 +644,7 @@ namespace RTC
    */
   ReturnCode_t PeriodicECSharedComposite::onFinalize()
   {
-    std::cout << "onFinalize" << std::endl;
+    RTC_TRACE(("onFinalize()"));
     m_org->removeAllMembers();
     std::cout << "onFinalize done" << std::endl;
     return RTC::RTC_OK;

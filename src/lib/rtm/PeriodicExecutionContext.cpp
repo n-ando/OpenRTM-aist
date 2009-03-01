@@ -421,6 +421,13 @@ namespace RTC
     dfp = OpenRTM::DataFlowComponent::_narrow(comp);
 
     UniqueId id = rtc->bindContext(m_ref);
+    if (id < 0 || id > ECOTHER_OFFSET) 
+      {
+        // id should be owned context id < ECOTHER_OFFSET
+        RTC_ERROR(("bindContext returns invalid id: %d", id));
+        return RTC::RTC_ERROR;
+      }
+    RTC_DEBUG(("bindContext returns id = %d", id));
     m_comps.push_back(Comp(LightweightRTObject::_duplicate(comp),
                            OpenRTM::DataFlowComponent::_duplicate(dfp),
                            id));
