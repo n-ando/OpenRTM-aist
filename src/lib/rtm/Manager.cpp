@@ -511,8 +511,6 @@ std::vector<coil::Properties> Manager::getLoadableModules()
 
     for (int i(0); inherit_prop[i][0] != '\0'; ++i)
       {
-        std::cout << inherit_prop[i] << std::endl;
-        //        if (prop.hasKey() == NULL) continue;
         prop[inherit_prop[i]] = m_config[inherit_prop[i]];
       }
       

@@ -132,6 +132,7 @@ namespace SDOPackage
 
     void removeAllMembers(void);
     void updateDelegatedPorts(void);
+
   protected:
     class Member;
     /*!
@@ -204,7 +205,7 @@ namespace SDOPackage
      * @brief Delegate given RTC's ports to the Composite
      * @endif
      */
-    void delegatePort(Member& member, PortList& portlist);
+    void addPort(Member& member, PortList& portlist);
 
     /*!
      * @if jp
@@ -219,6 +220,7 @@ namespace SDOPackage
     void updateExportedPortsList(void);
 
   protected:
+    RTC::Logger rtclog;
     ::RTC::RTObject_impl* m_rtobj;
     ::RTC::ExecutionContext_ptr m_ec;
 
@@ -277,7 +279,7 @@ namespace SDOPackage
     std::vector<Member> m_rtcMembers;
     typedef std::vector<Member>::iterator MemIt;
     PortList m_expPorts;
-
+    
     void print(PortList p)
     {
       for (int i(0), len(p.size()); i < len; ++i)
