@@ -144,6 +144,9 @@ namespace SDOPackage
         if (strncmp(id, member.profile_->instance_name, strlen(id))) continue;
         
         removePort(member, m_expPorts);
+        m_rtobj->getProperties()["conf.default.exported_ports"] =
+          ::coil::flatten(m_expPorts);
+
         removeParticipantFromEC(member);
         removeOrganizationFromTarget(member);
         startOwnedEC(member);
@@ -408,7 +411,8 @@ namespace SDOPackage
                    ::coil::flatten(portlist).c_str()));
 
         m_rtobj->deletePort(::RTC::PortService::_duplicate(plist[i].port_ref));
-
+        portlist.erase(pos);
+        
         RTC_DEBUG(("Port %s was deleted.", port_name.c_str()));
       }
    }
