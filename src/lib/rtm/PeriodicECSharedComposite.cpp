@@ -49,7 +49,6 @@ namespace SDOPackage
       m_rtobj(rtobj),
       m_ec(::RTC::ExecutionContext::_nil())
   {
-    //    rtclog.setLevel("PARANOID");
   }
 
   PeriodicECOrganization::~PeriodicECOrganization()
@@ -350,7 +349,7 @@ namespace SDOPackage
 
         std::vector<std::string>::iterator pos = 
           std::find(portlist.begin(), portlist.end(), port_name);
-        if (pos == m_expPorts.end()) 
+        if (pos == portlist.end()) 
           {
             RTC_DEBUG(("Not found: %s is in %s?",
                        port_name.c_str(),
