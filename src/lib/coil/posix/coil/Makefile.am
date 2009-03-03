@@ -5,7 +5,7 @@
 ## $Id$
 ##---------------------------------------------------------------------------
 
-AM_CPPFLAGS=-I../
+AM_CPPFLAGS=-I../ -I../../include
 
 # posix API dependent sources
 COIL_PLATFORM_SRC =    \
@@ -63,7 +63,8 @@ coilheaderdir = $(prefix)/include/coil
 
 coilheader_HEADERS = $(COIL_H)
 
-lib_LTLIBRARIES = libcoil.la
+#lib_LTLIBRARIES = libcoil.la
+noinst_LTLIBRARIES = libcoil.la
 
 libcoil_la_SOURCES =          \
 	$(COIL_ALL)

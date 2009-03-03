@@ -21,16 +21,21 @@ AC_PREREQ(2.59)
 AC_INIT(coil, 1.0, n-ando@aist.go.jp, coil)
 AC_CONFIG_AUX_DIR([.])
 AM_INIT_AUTOMAKE([dist-bzip2 tar-pax])
-AM_CONFIG_HEADER([posix/coil/config_coil.h])
+AM_CONFIG_HEADER([include/coil/config_coil.h])
 AC_CONFIG_FILES([utils/coil-config/libcoil.pc:utils/coil-config/libcoil.pc.in])
 
 dnl ------------------------------------------------------------
 dnl rename config header's PACKAGE_* definition
 dnl ------------------------------------------------------------
-mv posix/coil/config_coil.h.in posix/coil/config_coil.h.in.org
-sed -e 's/undef PACKAGE/undef COIL_PACKAGE/g' posix/coil/config_coil.h.in.org | sed -e 's/\#undef VERSION.*//g' > posix/coil/config_coil.h.in
-rm -f posix/coil/config_coil.h.in.org
-cp posix/coil/config_coil.h.in ace/coil/config_coil.h.in
+configdir="include/coil"
+#mv posix/coil/config_coil.h.in posix/coil/config_coil.h.in.org
+#sed -e 's/undef PACKAGE/undef COIL_PACKAGE/g' posix/coil/config_coil.h.in.org | sed -e 's/\#undef VERSION.*//g' > posix/coil/config_coil.h.in
+#rm -f posix/coil/config_coil.h.in.org
+#cp posix/coil/config_coil.h.in ace/coil/config_coil.h.in
+
+mv ${configdir}/config_coil.h.in ${configdir}/config_coil.h.in.org
+sed -e 's/undef PACKAGE/undef COIL_PACKAGE/g' ${configdir}/config_coil.h.in.org | sed -e 's/\#undef VERSION.*//g' > ${configdir}/config_coil.h.in
+rm -f ${configdir}/config_coil.h.in.org
 
 dnl ------------------------------------------------------------
 dnl  Version number

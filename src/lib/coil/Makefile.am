@@ -14,7 +14,7 @@ PLATFORM = posix
 NO_PLATFORM = ace
 endif
 
-SUBDIRS = $(PLATFORM) include lib build common utils win32 @UNITTEST@
+SUBDIRS = include $(PLATFORM) lib build common utils win32 @UNITTEST@
 DIST_SUBDIRS = $(SUBDIRS) $(NO_PLATFORM) tests
 
 clean-local:

@@ -13,11 +13,16 @@ PLATFORM = posix
 endif
 
 all-local:
+#	rm -rf .libs
+#	mkdir .libs
+#	cp $(top_srcdir)/$(PLATFORM)/coil/.libs/*.so* ./.libs/
+#	cp $(top_srcdir)/$(PLATFORM)/coil/.libs/*.a ./.libs/
+#	cp $(top_srcdir)/$(PLATFORM)/coil/*.la .
+
 	rm -rf .libs
-	mkdir .libs
-	cp $(top_srcdir)/$(PLATFORM)/coil/.libs/*.so* ./.libs/
-	cp $(top_srcdir)/$(PLATFORM)/coil/.libs/*.a ./.libs/
-	cp $(top_srcdir)/$(PLATFORM)/coil/*.la .
+	rm -f libcoil.la
+	ln -s $(top_srcdir)/$(PLATFORM)/coil/.libs .
+	ln -s $(top_srcdir)/$(PLATFORM)/coil/libcoil.la .
 
 clean-local:
 	rm -f *~
