@@ -5,7 +5,7 @@
 ## $Id$
 ##---------------------------------------------------------------------------
 
-AM_CPPFLAGS=-I../
+AM_CPPFLAGS=-I../ -I../../include
 
 # posix API dependent sources
 COIL_PLATFORM_SRC =    \
