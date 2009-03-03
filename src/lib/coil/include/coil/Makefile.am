@@ -12,8 +12,9 @@ if COIL_PLATFORM_POSIX
 PLATFORM = posix
 endif
 
-all:
+all-local:
 	cp $(top_srcdir)/$(PLATFORM)/coil/*.h .
+	cp $(top_srcdir)/common/*.h .
 
 clean-local:
 	rm -f *.h
