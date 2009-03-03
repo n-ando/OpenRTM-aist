@@ -12,7 +12,7 @@ if COIL_PLATFORM_POSIX
 PLATFORM = posix
 endif
 
-all:
+all-local:
 	rm -rf .libs
 	mkdir .libs
 	cp $(top_srcdir)/$(PLATFORM)/coil/.libs/*.so* ./.libs/

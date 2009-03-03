@@ -41,7 +41,7 @@ SWIG_WRAP = RTM_wrap.cpp
 PYMODULES = RTM_wrap.so
 
 
-all: $(PYMODULES)
+all-local: $(PYMODULES)
 
 _wrap.cpp_wrap.o:
 	$(CXX) $(WRAPPER_CXXFLAGS) -o $@ $<
