@@ -22,6 +22,7 @@
 
 #include <rtm/RTC.h>
 #include <rtm/idl/SDOPackageSkel.h>
+#include <rtm/SystemLogger.h>
 #include <string>
 #include <coil/Mutex.h>
 #include <coil/Guard.h>
@@ -696,6 +697,7 @@ namespace SDOPackage
     Organization_ptr getObjRef() {return m_objref;};
 
   protected:
+    ::RTC::Logger rtclog;
     Organization_var m_objref;
     /*!
      * @if jp
@@ -850,8 +852,8 @@ namespace SDOPackage
       sdo_id(const char* id) : m_id(id) {};
       bool operator()(const SDO_ptr sdo)
       {
-	std::string id(sdo->get_sdo_id());
-	return m_id == id;
+        CORBA::String_var id(sdo->get_sdo_id());
+	return m_id == (const char*)id;
       }
       std::string m_id;
     };

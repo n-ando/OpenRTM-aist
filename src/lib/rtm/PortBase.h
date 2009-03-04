@@ -29,6 +29,7 @@
 #include <rtm/idl/RTCSkel.h>
 #include <rtm/CORBA_SeqUtil.h>
 #include <rtm/NVUtil.h>
+#include <rtm/SystemLogger.h>
 
 #include <iostream>
 namespace RTC
@@ -1261,6 +1262,7 @@ namespace RTC
     }
     
   protected:
+    mutable Logger rtclog;
     /*!
      * @if jp
      * @brief Port ¤Î PortProfile

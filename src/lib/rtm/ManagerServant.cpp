@@ -126,7 +126,8 @@ namespace RTM
     cprofs->length(rtcs.size());
     for (int i(0), len(rtcs.size()); i < len; ++i)
       {
-        (*cprofs)[(CORBA::Long)i] = *(rtcs[i]->get_component_profile());
+        ::RTC::ComponentProfile_var prof = rtcs[i]->get_component_profile();
+        (*cprofs)[(CORBA::Long)i] = prof;
       }
     return cprofs;
   }

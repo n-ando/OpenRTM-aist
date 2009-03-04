@@ -36,6 +36,7 @@ namespace RTC
    * @endif
    */
   PortBase::PortBase(const char* name)
+    : rtclog(name)
   {
     m_profile.name = CORBA::string_dup(name);
     m_objref = RTC::PortService::_duplicate(this->_this());
@@ -64,6 +65,7 @@ namespace RTC
   PortProfile* PortBase::get_port_profile()
     throw (CORBA::SystemException)
   {
+    RTC_TRACE(("get_port_profile()"));
     Guard gaurd(m_profile_mutex);
     PortProfile_var prof;
     prof = new PortProfile(m_profile);
@@ -79,6 +81,7 @@ namespace RTC
    */
   const PortProfile& PortBase::getPortProfile() const
   {
+    RTC_TRACE(("getPortProfile()"));
     return m_profile;
   }
   
@@ -92,6 +95,7 @@ namespace RTC
   ConnectorProfileList* PortBase::get_connector_profiles()
     throw (CORBA::SystemException)
   {
+    RTC_TRACE(("get_connector_profiles()"));
     Guard gaurd(m_profile_mutex);
     ConnectorProfileList_var conn_prof;
     conn_prof = new ConnectorProfileList(m_profile.connector_profiles);
@@ -108,6 +112,7 @@ namespace RTC
   ConnectorProfile* PortBase::get_connector_profile(const char* connector_id)
     throw (CORBA::SystemException)
   {
+    RTC_TRACE(("get_connector_profile(%s)", connector_id));
     Guard gaurd(m_profile_mutex);
     CORBA::Long index;
     index = CORBA_SeqUtil::find(m_profile.connector_profiles,
@@ -133,6 +138,7 @@ namespace RTC
   ReturnCode_t PortBase::connect(ConnectorProfile& connector_profile)
     throw (CORBA::SystemException)
   {
+    RTC_TRACE(("connect()"));
     if (isEmptyId(connector_profile))
       {
 	// "connector_id" stores UUID which is generated at the initial Port
@@ -163,6 +169,7 @@ namespace RTC
   ReturnCode_t PortBase::notify_connect(ConnectorProfile& connector_profile)
     throw (CORBA::SystemException)
   {
+    RTC_TRACE(("notify_connect()"));
     // publish owned interface information to the ConnectorProfile
     ReturnCode_t retval;
     retval = publishInterfaces(connector_profile);
@@ -206,6 +213,7 @@ namespace RTC
   ReturnCode_t PortBase::disconnect(const char* connector_id)
     throw (CORBA::SystemException)
   {
+    RTC_TRACE(("disconnect(%s)", connector_id));
     // find connector_profile
     if (!isExistingConnId(connector_id)) 
       {
@@ -230,6 +238,7 @@ namespace RTC
   ReturnCode_t PortBase::notify_disconnect(const char* connector_id)
     throw (CORBA::SystemException)
   {
+    RTC_TRACE(("notify_disconnect(%s)", connector_id));
     // The Port of which the reference is stored in the beginning of
     // ConnectorProfile's PortServiceList is master Port.
     // The master Port has the responsibility of disconnecting all Ports.
@@ -265,6 +274,7 @@ namespace RTC
   ReturnCode_t PortBase::disconnect_all()
     throw (CORBA::SystemException)
   {
+    RTC_TRACE(("disconnect_all()"));
     Guard gaurd(m_profile_mutex);
     // disconnect all connections
     disconnect_all_func f;
@@ -288,8 +298,10 @@ namespace RTC
    */
   void PortBase::setName(const char* name)
   {
+    RTC_TRACE(("setName(%s)", name));
     Guard guard(m_profile_mutex);
     m_profile.name = CORBA::string_dup(name);
+    rtclog.setName(name);
   }
   
   /*!
@@ -301,6 +313,7 @@ namespace RTC
    */
   const PortProfile& PortBase::getProfile() const
   {
+    RTC_TRACE(("getProfile()"));
     Guard guard(m_profile_mutex);
     return m_profile;
   }
@@ -314,6 +327,7 @@ namespace RTC
    */
   void PortBase::setPortRef(PortService_ptr port_ref)
   {
+    RTC_TRACE(("setPortRef()"));
     Guard gurad(m_profile_mutex);
     m_profile.port_ref = port_ref;
   }
@@ -327,6 +341,7 @@ namespace RTC
    */
   PortService_ptr PortBase::getPortRef()
   {
+    RTC_TRACE(("getPortRef()"));
     Guard gurad(m_profile_mutex);
     return m_profile.port_ref;
   }
@@ -340,6 +355,7 @@ namespace RTC
    */
   void PortBase::setOwner(RTObject_ptr owner)
   {
+    RTC_TRACE(("setOwner()"));
     Guard gurad(m_profile_mutex); 
     m_profile.owner = owner;
   }
