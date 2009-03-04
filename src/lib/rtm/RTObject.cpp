@@ -660,7 +660,7 @@ namespace RTC
           CORBA::string_dup(m_properties["vendor"].c_str());
         profile->category      = 
           CORBA::string_dup(m_properties["category"].c_str());
-	profile->port_profiles = m_portAdmin.getPortProfileList();
+        profile->port_profiles = m_portAdmin.getPortProfileList();
 	return profile._retn();
       }
     catch (...)
