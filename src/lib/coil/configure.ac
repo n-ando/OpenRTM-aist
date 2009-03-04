@@ -28,11 +28,6 @@ dnl ------------------------------------------------------------
 dnl rename config header's PACKAGE_* definition
 dnl ------------------------------------------------------------
 configdir="include/coil"
-#mv posix/coil/config_coil.h.in posix/coil/config_coil.h.in.org
-#sed -e 's/undef PACKAGE/undef COIL_PACKAGE/g' posix/coil/config_coil.h.in.org | sed -e 's/\#undef VERSION.*//g' > posix/coil/config_coil.h.in
-#rm -f posix/coil/config_coil.h.in.org
-#cp posix/coil/config_coil.h.in ace/coil/config_coil.h.in
-
 mv ${configdir}/config_coil.h.in ${configdir}/config_coil.h.in.org
 sed -e 's/undef PACKAGE/undef COIL_PACKAGE/g' ${configdir}/config_coil.h.in.org | sed -e 's/\#undef VERSION.*//g' > ${configdir}/config_coil.h.in
 rm -f ${configdir}/config_coil.h.in.org
