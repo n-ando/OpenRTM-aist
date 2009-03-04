@@ -339,7 +339,9 @@ namespace RTC
       port_prof_collect2(PortProfileList& p) : m_p(p) {}
       void operator()(const PortService_ptr port)
       {
-	CORBA_SeqUtil::push_back(m_p, *(port->get_port_profile()));
+        PortProfile* pp(port->get_port_profile());
+	CORBA_SeqUtil::push_back(m_p, *(pp));
+        delete pp;
       }
     private:
       PortProfileList& m_p;
