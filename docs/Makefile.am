@@ -84,7 +84,13 @@ install-idl-reference-en:
 	  done \
 	fi
 
-install-data-local: install-class-reference install-class-reference-en install-idl-reference install-idl-reference-en
+#install-data-local: install-class-reference install-class-reference-en install-idl-reference install-idl-reference-en
+
+install-data-local: generate-refs install-refs
+
+generate-refs: ClassReference ClassReference-en IDLReference IDLReference-en
+
+install-refs: install-class-reference install-class-reference-en install-idl-reference install-idl-reference-en
 
 clean-local:
 	rm -f Makefile.old *~
