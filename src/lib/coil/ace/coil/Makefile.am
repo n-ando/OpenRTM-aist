@@ -54,7 +54,7 @@ $(COIL_COMMON_H):
 
 coilheaderdir = $(prefix)/include/coil
 
-coilheader_HEADERS = $(COIL_H)
+coilheader_HEADERS = $(COIL_H) $(top_srcdir)/include/coil/config_coil.h
 
 lib_LTLIBRARIES = libcoil.la
 
