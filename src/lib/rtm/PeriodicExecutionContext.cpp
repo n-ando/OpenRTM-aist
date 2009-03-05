@@ -79,7 +79,6 @@ namespace RTC
     m_worker.mutex_.unlock();
     m_svc = false;
     wait();
-    std::cout << "PeriodicExecutionContext::~PeriodicExecutionContext()" << std::endl;
   }
   
   /*------------------------------------------------------------

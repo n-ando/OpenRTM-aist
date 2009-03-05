@@ -101,6 +101,7 @@ namespace RTC
   ReturnCode_t
   DataInPort::publishInterfaces(ConnectorProfile& connector_profile)
   {    
+    RTC_TRACE(("DataInPort::publishInterfaces()"));
     if (m_dummy.size() != 1)
       {
 	std::cerr << "Memory access violation was detected." << std::endl;
@@ -123,6 +124,7 @@ namespace RTC
   ReturnCode_t
   DataInPort::subscribeInterfaces(const ConnectorProfile& connector_profile)
   {
+    RTC_TRACE(("DataInPort::subscribeInterfaces()"));
     std::for_each(m_consumers.begin(), m_consumers.end(),
 		  subscribe(connector_profile.properties));
     return RTC::RTC_OK;
@@ -138,6 +140,7 @@ namespace RTC
   void
   DataInPort::unsubscribeInterfaces(const ConnectorProfile& connector_profile)
   {
+    RTC_TRACE(("DataInPort::unsubscribeInterfaces()"));
     std::for_each(m_consumers.begin(), m_consumers.end(),
 		  unsubscribe(connector_profile.properties));
   }
