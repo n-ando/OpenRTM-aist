@@ -122,8 +122,8 @@ namespace RTC
      * @endif
      */
     CorbaConsumerBase(const CorbaConsumerBase& x)
+      : m_objref(CORBA::Object::_duplicate(x.m_objref))
     {
-      m_objref = x.m_objref;
     }
     
     /*!
@@ -147,8 +147,31 @@ namespace RTC
      */
     CorbaConsumerBase& operator=(const CorbaConsumerBase& x)
     {
-      m_objref = x.m_objref;
+      CorbaConsumerBase tmp(x);
+      tmp.swap(*this);
       return *this;
+    }
+
+    /*!
+     * @if jp
+     *
+     * @brief swap関数
+     *
+     * @param x 代入元
+     *
+     * @else
+     *
+     * @brief swap function
+     *
+     * @param x Copy source.
+     *
+     * @endif
+     */
+    void swap(CorbaConsumerBase& x)
+    {
+      CORBA::Object_var tmpref = x.m_objref;
+      x.m_objref = this->m_objref;
+      this->m_objref = tmpref;
     }
     
     /*!
@@ -162,7 +185,10 @@ namespace RTC
      * 
      * @endif
      */
-    virtual ~CorbaConsumerBase(void){};
+    virtual ~CorbaConsumerBase(void)
+    {
+      releaseObject();
+    };
     
     /*!
      * @if jp
@@ -189,7 +215,17 @@ namespace RTC
      *
      * @endif
      */
-    virtual bool setObject(CORBA::Object_ptr obj)
+    virtual bool setObject(CORBA::Object_var& obj)
+    {
+      if (CORBA::is_nil(obj))
+	{
+	  return false;
+	}
+      m_objref = obj;
+      return true;
+    }
+    
+    virtual bool setObject(CORBA::Object_ptr& obj)
     {
       if (CORBA::is_nil(obj))
 	{
@@ -337,8 +373,8 @@ namespace RTC
      * @endif
      */
     CorbaConsumer(const CorbaConsumer& x)
+      : m_var(ObjectType::_duplicate(x.m_var))
     {
-      m_var = x.m_var;
     }
     
     /*!
@@ -362,7 +398,18 @@ namespace RTC
      */
     CorbaConsumer& operator=(const CorbaConsumer& x)
     {
-      m_var = x.m_var;
+      CorbaConsumer tmp(x);
+      tmp.swap(*this);
+      return *this;
+    }
+
+    void swap(const CorbaConsumer& x)
+    {
+      CorbaConsumerBase::swap(x);
+      ObjectTypeVar tmpref = x.m_var;
+      x.m_var = this->m_var;
+      this->m_var = tmpref;
+      
     }
     
     /*!
@@ -378,6 +425,7 @@ namespace RTC
      */
     virtual ~CorbaConsumer(void)
     {
+      releaseObject();
     };
     
     /*!
@@ -407,7 +455,19 @@ namespace RTC
      *
      * @endif
      */
-    virtual bool setObject(CORBA::Object_ptr obj)
+    virtual bool setObject(CORBA::Object_var& obj)
+    {
+      if (CorbaConsumerBase::setObject(obj))
+	{
+	  m_var = ObjectType::_narrow(m_objref);
+	  if (!CORBA::is_nil(m_var))
+	    return true;
+	}
+      releaseObject();
+      return false; // object is nil
+    }
+    
+    virtual bool setObject(CORBA::Object_ptr& obj)
     {
       if (CorbaConsumerBase::setObject(obj))
 	{
@@ -415,6 +475,7 @@ namespace RTC
 	  if (!CORBA::is_nil(m_var))
 	    return true;
 	}
+      releaseObject();
       return false; // object is nil
     }
     
