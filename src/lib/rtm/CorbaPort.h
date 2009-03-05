@@ -200,7 +200,7 @@ namespace RTC
      * @endif
      */
     bool registerProvider(const char* instance_name, const char* type_name,
-			  PortableServer::RefCountServantBase& provider);
+                          PortableServer::RefCountServantBase& provider);
     
     /*!
      * @if jp
@@ -243,7 +243,7 @@ namespace RTC
      * @endif
      */
     bool registerConsumer(const char* instance_name, const char* type_name,
-			  CorbaConsumerBase& consumer);
+                          CorbaConsumerBase& consumer);
     
   protected:
     /*!
@@ -463,21 +463,21 @@ namespace RTC
     struct Consumer
     {
       Consumer(const char* _instance_name, const char* _type_name,
-	       CorbaConsumerBase& _cons)
-	: name(std::string("port.")
-	       + _type_name
-	       + std::string(".")
-	       + _instance_name),
-	  consumer(_cons)
+               CorbaConsumerBase& _cons)
+        : name(std::string("port.")
+               + _type_name
+               + std::string(".")
+               + _instance_name),
+          consumer(_cons)
       {}
       Consumer(const Consumer& cons)
-	: name(cons.name), consumer(cons.consumer)
-      {	
+        : name(cons.name), consumer(cons.consumer)
+      {        
       }
       Consumer operator=(const Consumer& _cons)
       {
-	Consumer cons(_cons);
-	return cons;
+        Consumer cons(_cons);
+        return cons;
       }
       std::string name;
       CorbaConsumerBase& consumer;
@@ -497,25 +497,25 @@ namespace RTC
     struct subscribe
     {
       subscribe(std::vector<Consumer>& cons)
-	: m_cons(cons), m_len(cons.size())
+        : m_cons(cons), m_len(cons.size())
       {
       }
       
       void operator()(const SDOPackage::NameValue& nv)
       {
-	for (CORBA::ULong i = 0; i < m_len; ++i)
-	  {
-	    std::string name(nv.name);
-	    if (m_cons[i].name == name)
-	      {
-		CORBA::Object_var obj;
-		CORBA::Any::to_object to_obj(obj.inout());
-		if (nv.value >>= to_obj)
-		  {
-		    m_cons[i].consumer.setObject(obj);
-		  }
-	      }
-	  }
+        for (CORBA::ULong i = 0; i < m_len; ++i)
+          {
+            std::string name(nv.name);
+            if (m_cons[i].name == name)
+              {
+                CORBA::Object_var obj;
+                CORBA::Any::to_object to_obj(obj.inout());
+                if (nv.value >>= to_obj)
+                  {
+                    m_cons[i].consumer.setObject(obj);
+                  }
+              }
+          }
       }
       std::vector<Consumer> m_cons;
       CORBA::ULong m_len;
@@ -531,20 +531,20 @@ namespace RTC
     struct unsubscribe
     {
       unsubscribe(std::vector<Consumer>& cons)
-	: m_cons(cons), m_len(cons.size())
+        : m_cons(cons), m_len(cons.size())
       {
       }
       
       void operator()(const SDOPackage::NameValue& nv)
       {
-	for (CORBA::ULong i = 0; i < m_len; ++i)
-	  {
-	    std::string name(nv.name);
-	    if (m_cons[i].name == name)
-	      {
-		m_cons[i].consumer.releaseObject();
-	      }
-	  }
+        for (CORBA::ULong i = 0; i < m_len; ++i)
+          {
+            std::string name(nv.name);
+            if (m_cons[i].name == name)
+              {
+                m_cons[i].consumer.releaseObject();
+              }
+          }
       }
       std::vector<Consumer> m_cons;
       CORBA::ULong m_len;
