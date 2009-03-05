@@ -49,6 +49,7 @@ namespace RTC
   ReturnCode_t
   DataOutPort::publishInterfaces(ConnectorProfile& connector_profile)
   {
+    RTC_TRACE(("DataOutPort::publishInterfaces()"));
     std::for_each(m_providers.begin(), m_providers.end(),
 		  publish(connector_profile.properties));
     return RTC::RTC_OK;
@@ -64,6 +65,7 @@ namespace RTC
   ReturnCode_t
   DataOutPort::subscribeInterfaces(const ConnectorProfile& connector_profile)
   {
+    RTC_TRACE(("DataOutPort::subscribeInterfaces()"));
     subscribe s(connector_profile);
     s = std::for_each(m_consumers.begin(), m_consumers.end(), s);
     if (s._consumer == NULL) return RTC::RTC_OK;
@@ -90,6 +92,7 @@ namespace RTC
   void
   DataOutPort::unsubscribeInterfaces(const ConnectorProfile& connector_profile)
   {
+    RTC_TRACE(("DataOutPort::unsubscribeInterfaces()"));
     PublisherBase* publisher;
     publisher = m_outport.detach(connector_profile.connector_id);
     m_pf.destroy(publisher);

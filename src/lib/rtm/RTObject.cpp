@@ -308,7 +308,7 @@ namespace RTC
     ec_args += m_properties["exec_cxt.periodic.type"];
     ec_args += "?";
     ec_args += "rate=" + m_properties["exec_cxt.periodic.rate"];
-    std::cout << "ec_args: " << ec_args << std::endl;
+
     RTC::ExecutionContextBase* ec;
     ec = RTC::Manager::instance().createContext(ec_args.c_str());
     if (ec == NULL) return RTC::RTC_ERROR;

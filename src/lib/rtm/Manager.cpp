@@ -778,7 +778,6 @@ std::vector<coil::Properties> Manager::getLoadableModules()
    */
   bool Manager::initLogger()
   {
-    std::cout << "init logger" << std::endl;
     rtclog.setLevel("SILENT");
     rtclog.setName("manager");
     
@@ -789,11 +788,10 @@ std::vector<coil::Properties> Manager::getLoadableModules()
 
     std::vector<std::string> logouts;
     logouts = coil::split(m_config["logger.file_name"], ",");
-    std::cout << "number of file_name: " << logouts.size() << std::endl;
+
     for (int i(0), len(logouts.size()); i < len; ++i)
       {
         std::string logfile(logouts[i]);
-        std::cout << i << ": " << logfile << std::endl;
         if (logfile == "") continue;
 	
         // Open logfile
@@ -1133,7 +1131,6 @@ std::vector<coil::Properties> Manager::getLoadableModules()
         otherref >> refstring;
         otherref.close();
 
-        std::cout << refstring << std::endl;
         CORBA::Object_ptr obj = m_pORB->string_to_object(refstring.c_str());
         RTM::Manager_ptr mgr = RTM::Manager::_narrow(obj);
         //        if (CORBA::is_nil(mgr)) return false;

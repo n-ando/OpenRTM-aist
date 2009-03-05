@@ -189,16 +189,20 @@ namespace RTC
       }
     
     // update ConnectorProfile
+    RTC_PARANOID(("%d connectors are existing",
+                  m_profile.connector_profiles.length()));
     CORBA::Long index;
     index = findConnProfileIndex(connector_profile.connector_id);
     if (index < 0)
       {
-	CORBA_SeqUtil::push_back(m_profile.connector_profiles,
+        CORBA_SeqUtil::push_back(m_profile.connector_profiles,
 				 connector_profile);
+        RTC_PARANOID(("New connector_id. Push backed."));
       }
     else
       {
 	m_profile.connector_profiles[index] = connector_profile;
+        RTC_PARANOID(("Existing connector_id. Updated."));
       }
     return retval;
   }
@@ -277,13 +281,23 @@ namespace RTC
     RTC_TRACE(("disconnect_all()"));
     Guard gaurd(m_profile_mutex);
     // disconnect all connections
-    disconnect_all_func f;
+    //    disconnect_all_func f;
     
     // Call disconnect() for each ConnectorProfile.
-    f = CORBA_SeqUtil::for_each(m_profile.connector_profiles,
-				disconnect_all_func(this));
+    //    f = CORBA_SeqUtil::for_each(m_profile.connector_profiles,
+    //				disconnect_all_func(this));
+    ::RTC::ConnectorProfileList& plist(m_profile.connector_profiles);
+    RTC::ReturnCode_t retcode(::RTC::RTC_OK);
+    CORBA::ULong len(plist.length());
+    RTC_DEBUG(("disconnecting %d connections.", len));
+    for (CORBA::ULong i(0); i < len; ++i)
+      {
+        ReturnCode_t tmpret;
+        tmpret =this->disconnect(plist[i].connector_id);
+        if (tmpret != RTC::RTC_OK) retcode = tmpret;
+      }
     
-    return f.return_code;
+    return retcode;
   }
   
   //============================================================
