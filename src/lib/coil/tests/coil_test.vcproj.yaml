@@ -29,7 +29,7 @@ Configurations:
       - Key: Optimization
         Value: 0
       - Key: PreprocessorDefinitions
-        Value: "WIN32;_DEBUG;_CONSOLE;__WIN32__;__x86__;_WIN32_WINNT=0x0400;__NT__;__OSVERSION__=4;_CRT_SECURE_NO_DEPRECATE"
+        Value: "WIN32;_DEBUG;_CONSOLE;__WIN32__;__x86__;_WIN32_WINNT=0x0500;__NT__;__OSVERSION__=4;_CRT_SECURE_NO_DEPRECATE"
       - Key: MinimalRebuild
         Value: "true"
       - Key: BasicRuntimeChecks
@@ -75,7 +75,7 @@ Configurations:
           start /MIN /WAIT $(ProjectName).exe --xml $(ProjectDir)\$(ProjectName).$(ConfigurationName).xml --xsl default.xsl
     VCCLCompilerTool:
       - Key: PreprocessorDefinitions
-        Value: "WIN32;NDEBUG;_CONSOLE;__WIN32__;__x86__;_WIN32_WINNT=0x0400;__NT__;__OSVERSION__=4;_CRT_SECURE_NO_DEPRECATE"
+        Value: "WIN32;NDEBUG;_CONSOLE;__WIN32__;__x86__;_WIN32_WINNT=0x0500;__NT__;__OSVERSION__=4;_CRT_SECURE_NO_DEPRECATE"
       - Key: RuntimeLibrary
         Value: "2"
       - Key: UsePrecompiledHeader
