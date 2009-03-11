@@ -20,12 +20,22 @@
 #define COIL_OS_H
 
 
+#ifdef WINVER
+#undef WINVER
+#endif
+#define WINVER 0x0500
+
+#ifdef _WIN32_WINNT
+#undef _WIN32_WINNT
+#endif
+#define _WIN32_WINNT 0x0500
 
 #include <windows.h>
 #include <string.h>
 #include <stdio.h>
 #include <process.h>
 #include <stdlib.h>
+#include <winbase.h>
 
 extern "C"
 {
