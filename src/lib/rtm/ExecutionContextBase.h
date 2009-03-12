@@ -23,6 +23,10 @@
 #include <rtm/idl/OpenRTMSkel.h>
 #include <rtm/Factory.h>
 
+#ifdef WIN32
+#pragma warning( disable : 4290 )
+#endif
+
 namespace RTC
 {
   /*!
@@ -83,6 +87,11 @@ namespace RTC
 
     virtual RTC::ReturnCode_t bindComponent(RtcBase* rtc) = 0;
     virtual RTC::ExecutionContextService_ptr getObjRef() = 0;
-  };
-};
+  };  // class ExecutionContextBase
+};  // namespace RTC
+
+#ifdef WIN32
+#pragma warning( default : 4290 )
+#endif
+
 #endif // ExecutionContextBase_h

@@ -28,6 +28,10 @@
 #include <rtm/Manager.h>
 #include <rtm/PeriodicExecutionContext.h>
 
+#ifdef WIN32
+#pragma warning( disable : 4290 )
+#endif
+
 namespace RTC
 {
   /*!
@@ -136,8 +140,13 @@ namespace RTC
     };
     // A condition variable for external triggered worker
     Worker m_worker;
-  };
-};
+  };  // class ExtTrigExecutionContext
+};  // namespace RTC
+
+#ifdef WIN32
+#pragma warning( default : 4290 )
+#endif
+
 
 extern "C"
 {

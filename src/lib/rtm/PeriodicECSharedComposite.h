@@ -41,6 +41,11 @@
  *
  * @endif
  */
+
+#ifdef WIN32
+#pragma warning( disable : 4290 )
+#endif
+
 namespace SDOPackage
 {
   class PeriodicECOrganization
@@ -397,8 +402,13 @@ namespace RTC
     PeriodicExecutionContext* m_pec;
     ExecutionContextService_var m_ecref;
     SDOPackage::PeriodicECOrganization* m_org;
-  };
+  };  // class PeriodicECOrganization
 }; // namespace RTC
+
+#ifdef WIN32
+#pragma warning( default : 4290 )
+#endif
+
 
 extern "C"
 {

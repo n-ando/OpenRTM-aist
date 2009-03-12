@@ -2,7 +2,7 @@
 <VisualStudioPropertySheet
 	ProjectType="Visual C++"
 	Version="8.00"
-	Name="OpenRTM-aist-0.4"
+	Name="OpenRTM-aist-1.0"
 	>
 	<Tool
 		Name="VCCLCompilerTool"
@@ -35,11 +35,11 @@
 	/>
 	<UserMacro
 		Name="rtm_dllver"
-		Value="042"
+		Value="100"
 	/>
 	<UserMacro
 		Name="rtm_version"
-		Value="0.4.2"
+		Value="1.0.0"
 	/>
 	<!-- ACE macros -->
 	<UserMacro

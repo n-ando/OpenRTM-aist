@@ -25,6 +25,10 @@
 #include <rtm/OutPortProvider.h>
 #include <rtm/CORBA_SeqUtil.h>
 
+#ifdef WIN32
+#pragma warning( disable : 4290 )
+#endif
+
 namespace RTC
 {
   /*!
@@ -142,6 +146,11 @@ namespace RTC
     BufferBase<DataType>& m_buffer;
     OutPortAny_var m_objref;
     CORBA::Any m_tmp;
-  };
+  };  // class OutPortCorbaProvider
 };     // namespace RTC
+
+#ifdef WIN32
+#pragma warning( default : 4290 )
+#endif
+
 #endif // OutPortCorbaProvider_h

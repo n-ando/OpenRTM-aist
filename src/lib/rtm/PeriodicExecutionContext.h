@@ -35,6 +35,11 @@
 
 // ACE
 #define NUM_OF_LIFECYCLESTATE 4
+
+#ifdef WIN32
+#pragma warning( disable : 4290 )
+#endif
+
 namespace RTC
 {
   /*!
@@ -1527,6 +1532,11 @@ namespace RTC
     bool m_nowait;
   }; // class PeriodicExecutionContext
 }; // namespace RTC
+
+#ifdef WIN32
+#pragma warning( default : 4290 )
+#endif
+
 
 extern "C"
 {

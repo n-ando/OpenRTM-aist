@@ -467,7 +467,7 @@ namespace RTC
       return false; // object is nil
     }
     
-    virtual bool setObject(CORBA::Object_ptr& obj)
+    virtual bool setObject(CORBA::Object_ptr obj)
     {
       if (CorbaConsumerBase::setObject(obj))
 	{
