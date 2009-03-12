@@ -41,6 +41,11 @@
  *
  * @endif
  */
+
+#ifdef WIN32
+#pragma warning( disable : 4290 )
+#endif
+
 namespace SDOPackage
 {
   /*!
@@ -838,7 +843,7 @@ namespace SDOPackage
 	return m_name == std::string(nv.name);
       }
       std::string m_name;
-    };
+    };  // struct nv_name
     
     /*!
      * @if jp
@@ -856,8 +861,12 @@ namespace SDOPackage
 	return m_id == (const char*)id;
       }
       std::string m_id;
-    };
-  };
-};
+    };  // struct sdo_id
+  };  // class Organization_impl
+};  // namespace SDOPackage
+
+#ifdef WIN32
+#pragma warning( default : 4290 )
+#endif
 
 #endif // namespace SDOPackage

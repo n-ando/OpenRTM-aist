@@ -32,6 +32,11 @@
 #include <rtm/SystemLogger.h>
 
 #include <iostream>
+
+#ifdef WIN32
+#pragma warning( disable : 4290 )
+#endif
+
 namespace RTC
 {
   /*!
@@ -1301,7 +1306,7 @@ namespace RTC
 	return m_name == std::string(prof.instance_name);
       }
       std::string m_name;
-    };
+    };  // struct if_name
     
     /*!
      * @if jp
@@ -1318,7 +1323,7 @@ namespace RTC
 	return m_id == std::string(cprof.connector_id);
       }
       std::string m_id;
-    };
+    };  // struct find_conn_id
     
     /*!
      * @if jp
@@ -1335,7 +1340,7 @@ namespace RTC
 	return m_port->_is_equivalent(port_ref);
       }
       PortService_ptr m_port;
-    };
+    };  // struct find_port_ref
     
     /*!
      * @if jp
@@ -1365,7 +1370,7 @@ namespace RTC
 	      }
 	  }
       }
-    };
+    };  // struct connect_func
     
     /*!
      * @if jp
@@ -1395,7 +1400,7 @@ namespace RTC
 	      }
 	  }
       }
-    };
+    };  // struct disconnect_func
     
     /*!
      * @if jp
@@ -1421,7 +1426,7 @@ namespace RTC
 	    return_code = retval;
 	  }
       }
-    };
+    };  // struct disconnect_all_func
     
     /*!
      * @if jp
@@ -1443,7 +1448,12 @@ namespace RTC
       }
       std::string m_name;
       PortInterfacePolarity m_pol;
-    };
-  };
-};
+    };  // struct find_interface
+  };  // class PortBase
+};  // namespace RTC
+
+#ifdef WIN32
+#pragma warning( default : 4290 )
+#endif
+
 #endif // PortBase_h

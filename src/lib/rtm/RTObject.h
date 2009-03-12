@@ -40,6 +40,10 @@ namespace SDOPackage
   class Configuration_impl;
 };
 
+#ifdef WIN32
+#pragma warning( disable : 4290 )
+#endif
+
 namespace RTC
 {
   class Manager;
@@ -2541,7 +2545,7 @@ namespace RTC
 	return m_id == std::string(prof.id);
       }
       std::string m_id;
-    };
+    };  // struct svc_name
     
     /*!
      * @if jp
@@ -2682,7 +2686,7 @@ namespace RTC
 	return m_name == std::string(nv.name);
       }
       std::string m_name;
-    };
+    };  // struct nv_name
     
     /*!
      * @if jp
@@ -2702,7 +2706,7 @@ namespace RTC
 	CORBA_SeqUtil::push_back(m_eclist, ExecutionContext::_duplicate(ecs));
       }
       ExecutionContextList& m_eclist;
-    };
+    };  // struct ec_copy
 
     struct ec_find
     {
@@ -2725,7 +2729,7 @@ namespace RTC
 	return false;
       }
       ExecutionContext_ptr m_ec;
-    };
+    };  // struct ec_find
     //    ExecutionContextAdminList m_execContextList;
     
     /*!
@@ -2746,7 +2750,12 @@ namespace RTC
 	ec->deactivate_component(RTC::LightweightRTObject::_duplicate(m_comp));
       }
       LightweightRTObject_var m_comp;
-    };
-  };
-};
+    };  // struct deactivate_comps
+  };  // class RTObject_impl
+};  // namespace RTC
+
+#ifdef WIN32
+#pragma warning( default : 4290 )
+#endif
+
 #endif // RTObject

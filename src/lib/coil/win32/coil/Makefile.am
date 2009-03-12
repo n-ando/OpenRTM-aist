@@ -19,6 +19,7 @@ COIL_PLATFORM_SRC =    \
 COIL_PLATFORM_H =      \
 	config_coil.h  \
 	atomic.h       \
+	File.h         \
 	OS.h           \
 	$(COIL_PLATFORM_SRC:.cpp=.h)
 
@@ -41,7 +42,8 @@ COIL_COMMON_H   =       \
 	stringutil.h    \
 	Guard.h         \
 	Properties.h    \
-	Timer.h
+	Timer.h         \
+	Logger.h
 
 # coil all sources and headers
 COIL_SRC = $(COIL_COMMON_SRC) $(COIL_PLATFORM_SRC)

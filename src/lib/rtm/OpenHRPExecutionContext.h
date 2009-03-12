@@ -16,6 +16,10 @@
 #	define DLL_EXPORT 
 #endif /* Windows */
 
+#ifdef WIN32
+#pragma warning( disable : 4290 )
+#endif
+
 namespace RTC
 {
   class OpenHRPExecutionContext
@@ -29,8 +33,13 @@ namespace RTC
     virtual int svc(void);
 
   private:
-  };
-};
+  };  // class OpenHRPExecutionContext
+};  // namespace RTC
+
+#ifdef WIN32
+#pragma warning( default : 4290 )
+#endif
+
 
 extern "C"
 {

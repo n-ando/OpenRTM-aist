@@ -29,6 +29,9 @@
 #include <coil/Mutex.h>
 #include <coil/Guard.h>
 
+#ifndef LINE_MAX
+#define LINE_MAX  1024
+#endif
 
 #define BUFFER_LEN LINE_MAX
 
