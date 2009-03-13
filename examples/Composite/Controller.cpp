@@ -29,9 +29,8 @@ static const char* controller_spec[] =
 Controller::Controller(RTC::Manager* manager)
     // <rtc-template block="initializer">
   : RTC::DataFlowComponentBase(manager),
-    m_outOut("out", m_out),
-    m_inIn("in", m_in)
-
+    m_inIn("in", m_in),
+    m_outOut("out", m_out)
     // </rtc-template>
 {
   // Registration: InPort/OutPort/Service
