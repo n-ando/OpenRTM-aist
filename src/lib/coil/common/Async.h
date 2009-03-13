@@ -55,8 +55,13 @@ namespace coil
         Guard<Mutex> guard(m_mutex);
         m_finished = true;
       }
-      if (m_autodelete) delete this;
+      
       return 0;
+    }
+    virtual void finalize()
+    {
+      Task::finalize();
+      if (m_autodelete) delete this;
     }
     virtual void invoke()
     {
@@ -86,14 +91,12 @@ namespace coil
     }
     virtual ~Async_ref_t()
     {
-      std::cout << "Async_t deleted" << std::endl;
     }
     
     virtual int svc()
     {
       m_func(m_obj);
       m_finished = true;
-      if (m_autodelete) delete this;
       return 0;
     }
     virtual void invoke()
@@ -103,6 +106,11 @@ namespace coil
     virtual bool finished()
     {
       return m_finished;
+    }
+    virtual void finalize()
+    {
+      Task::finalize();
+      if (m_autodelete) delete this;
     }
   private:
     Object* m_obj;

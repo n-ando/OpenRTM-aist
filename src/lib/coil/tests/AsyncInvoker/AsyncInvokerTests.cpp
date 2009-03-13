@@ -163,12 +163,23 @@ namespace AsyncInvoker
 
     void test_memfun_oneway()
     {
-      A a;
-      coil::AsyncInvoker(&a, std::mem_fun(&A::hoge), true)->invoke();
-      
-      CPPUNIT_ASSERT(a.hoge_invoked() == false);
-      sleep(3);
-      CPPUNIT_ASSERT(a.hoge_invoked() == true);
+      {
+        A a;
+        coil::AsyncInvoker(&a, std::mem_fun(&A::hoge), true)->invoke();
+        
+        CPPUNIT_ASSERT(a.hoge_invoked() == false);
+        sleep(3);
+        CPPUNIT_ASSERT(a.hoge_invoked() == true);
+      }
+
+      {
+        A a;
+        coil::AsyncInvoker(&a, std::mem_fun(&A::hoge), true)->invoke();
+        
+        CPPUNIT_ASSERT(a.hoge_invoked() == false);
+        sleep(3);
+        CPPUNIT_ASSERT(a.hoge_invoked() == true);
+      }
     }
 
     void test_bind2nd()
