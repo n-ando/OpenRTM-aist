@@ -52,6 +52,21 @@ namespace RTC
 {
   Manager* Manager::manager = NULL;
   coil::Mutex Manager::mutex;
+
+  Manager::InstanceName::InstanceName(RTObject_impl* comp)
+    : m_name(comp->getInstanceName())
+  {}
+  Manager::InstanceName::InstanceName(const char* name)
+    : m_name(name)
+  {}
+  Manager::InstanceName::InstanceName(const std::string name)
+    : m_name(name)
+  {}
+  bool Manager::InstanceName::operator()(RTObject_impl* comp)
+  {
+    return m_name == comp->getInstanceName();
+  }
+
   
   /*!
    * @if jp
@@ -471,7 +486,7 @@ std::vector<coil::Properties> Manager::getLoadableModules()
    * @brief Create RT-Components
    * @endif
    */
-  RtcBase* Manager::createComponent(const char* comp_args)
+  RTObject_impl* Manager::createComponent(const char* comp_args)
   {
     RTC_TRACE(("Manager::createComponent(%s)", comp_args));
 
@@ -514,7 +529,7 @@ std::vector<coil::Properties> Manager::getLoadableModules()
         prop[inherit_prop[i]] = m_config[inherit_prop[i]];
       }
       
-    RtcBase* comp;
+    RTObject_impl* comp;
     comp = factory->create(this);
     if (comp == NULL)
       {
@@ -559,7 +574,7 @@ std::vector<coil::Properties> Manager::getLoadableModules()
    * @brief Register RT-Component directly without Factory
    * @endif
    */
-  bool Manager::registerComponent(RtcBase* comp)
+  bool Manager::registerComponent(RTObject_impl* comp)
   {
     RTC_TRACE(("Manager::registerComponent(%s)", comp->getInstanceName()));
     // ### NamingManager のみで代用可能
@@ -582,7 +597,7 @@ std::vector<coil::Properties> Manager::getLoadableModules()
    * @brief Unregister RT-Components
    * @endif
    */
-  bool Manager::unregisterComponent(RtcBase* comp)
+  bool Manager::unregisterComponent(RTObject_impl* comp)
   {
     RTC_TRACE(("Manager::unregisterComponent(%s)", comp->getInstanceName()));
     // ### NamingManager のみで代用可能
@@ -631,7 +646,7 @@ std::vector<coil::Properties> Manager::getLoadableModules()
   void Manager::deleteComponent(const char* instance_name)
   {
     RTC_TRACE(("Manager::deleteComponent(%s)", instance_name));
-    RtcBase* comp;
+    RTObject_impl* comp;
     comp = m_compManager.find(instance_name);
     if (comp == NULL) return;
     
@@ -647,7 +662,7 @@ std::vector<coil::Properties> Manager::getLoadableModules()
    * @brief Get RT-Component's pointer
    * @endif
    */
-  RtcBase* Manager::getComponent(const char* instance_name)
+  RTObject_impl* Manager::getComponent(const char* instance_name)
   {
     RTC_TRACE(("Manager::getComponent(%s)", instance_name));
     return m_compManager.find(instance_name);
@@ -660,7 +675,7 @@ std::vector<coil::Properties> Manager::getLoadableModules()
    * @brief Get all RT-Components registered in the Manager
    * @endif
    */
-  std::vector<RtcBase*> Manager::getComponents()
+  std::vector<RTObject_impl*> Manager::getComponents()
   {
     RTC_TRACE(("Manager::getComponents()"));
     return m_compManager.getObjects();
@@ -1186,7 +1201,7 @@ std::vector<coil::Properties> Manager::getLoadableModules()
    * @brief Unregister RT-Components
    * @endif
    */
-  void Manager::cleanupComponent(RtcBase* comp)
+  void Manager::cleanupComponent(RTObject_impl* comp)
   {
     RTC_TRACE(("Manager::shutdownComponents()"));
     unregisterComponent(comp);
@@ -1291,7 +1306,7 @@ std::vector<coil::Properties> Manager::getLoadableModules()
    *
    * @endif
    */
-  void Manager::configureComponent(RtcBase* comp, const coil::Properties& prop)
+  void Manager::configureComponent(RTObject_impl* comp, const coil::Properties& prop)
   {
     std::string category(comp->getCategory());
     std::string type_name(comp->getTypeName());

@@ -354,20 +354,32 @@ namespace NVUtil
    * @brief Print information configured in NVList as a string type
    * @endif
    */
-  void dump(SDOPackage::NVList& nv)
+  std::ostream& dump_to_stream(std::ostream& out, const SDOPackage::NVList& nv)
   {
     for (CORBA::ULong i(0), n(nv.length()); i < n; ++i)
       {
 	const char* str_value;
 	if (nv[i].value >>= str_value)
 	  {
-	    std::cout << nv[i].name << ": " << str_value << std::endl;
+	    out << nv[i].name << ": " << str_value << std::endl;
 	  }
 	else
 	  {
-	    std::cout << nv[i].name << ": not a string value" << std::endl;
+	    out << nv[i].name << ": not a string value" << std::endl;
 	  }
       }
+    return out;
   }
-  
+
+  void dump(const SDOPackage::NVList& nv)
+  {
+    dump_to_stream(std::cout, nv);
+  }
+
+  std::string toString(const SDOPackage::NVList& nv)
+  {
+    std::stringstream s;
+    dump_to_stream(s, nv);
+    return s.str();
+  }
 };

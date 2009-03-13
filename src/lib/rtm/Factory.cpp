@@ -18,10 +18,10 @@
  */
 
 #include <rtm/Factory.h>
+#include <rtm/RTObject.h>
 
 namespace RTC 
 {
-  
   /*!
    * @if jp
    * @brief コンストラクタ
@@ -94,11 +94,11 @@ namespace RTC
    * @brief Create RT-Components
    * @endif
    */
-  RtcBase* FactoryCXX::create(Manager* mgr)
+  RTObject_impl* FactoryCXX::create(Manager* mgr)
   {
     try
       {
-	RtcBase* rtobj(m_New(mgr));
+	RTObject_impl* rtobj(m_New(mgr));
 	if (rtobj == 0) return NULL;
 	
 	++m_Number;
@@ -124,7 +124,7 @@ namespace RTC
    * @brief Destroy RT-Components
    * @endif
    */
-  void FactoryCXX::destroy(RtcBase* comp)
+  void FactoryCXX::destroy(RTObject_impl* comp)
   {
     try
       {

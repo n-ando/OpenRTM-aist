@@ -17,8 +17,10 @@
  *
  */
 
+#include <coil/Time.h>
 #include <coil/TimeValue.h>
 #include <rtm/PeriodicExecutionContext.h>
+#include <rtm/RTObject.h>
 #include <algorithm>
 #include <iostream>
 
@@ -395,7 +397,7 @@ namespace RTC
           {
 	    return RTC::BAD_PARAMETER;
           }
-	UniqueId id;
+	ExecutionContextHandle_t id;
 	id = dfp->attach_context(m_ref);
 	m_comps.push_back(Comp(LightweightRTObject::_duplicate(comp),
 			       OpenRTM::DataFlowComponent::_duplicate(dfp),
@@ -410,7 +412,7 @@ namespace RTC
     return RTC::RTC_OK;
   }
 
-  RTC::ReturnCode_t PeriodicExecutionContext::bindComponent(RtcBase* rtc)
+  RTC::ReturnCode_t PeriodicExecutionContext::bindComponent(RTObject_impl* rtc)
   {
     RTC_TRACE(("bindComponent()"));
     if (rtc == NULL) return RTC::BAD_PARAMETER;
@@ -419,7 +421,7 @@ namespace RTC
     OpenRTM::DataFlowComponent_ptr dfp;
     dfp = OpenRTM::DataFlowComponent::_narrow(comp);
 
-    UniqueId id = rtc->bindContext(m_ref);
+    ExecutionContextHandle_t id = rtc->bindContext(m_ref);
     if (id < 0 || id > ECOTHER_OFFSET) 
       {
         // id should be owned context id < ECOTHER_OFFSET

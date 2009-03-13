@@ -72,10 +72,14 @@ namespace SDOPackage
     for (::CORBA::ULong i(0), len(sdo_list.length()); i < len; ++i)
       {
         const SDO_ptr sdo  = sdo_list[i];
-        ::OpenRTM::DataFlowComponent_ptr dfc;
-        if (!sdoToDFC(sdo, dfc)) continue;
+        //        ::OpenRTM::DataFlowComponent_ptr dfc;
+        //        if (!sdoToDFC(sdo, dfc)) continue;
+        ::RTC::RTObject_var dfc;
+        dfc = ::RTC::RTObject::_narrow(sdo);
+        if (CORBA::is_nil(dfc)) { continue; }
 
-        Member member(::OpenRTM::DataFlowComponent::_duplicate(dfc));
+        //        Member member(::OpenRTM::DataFlowComponent::_duplicate(dfc));
+        Member member(dfc);
         stopOwnedEC(member);
         addOrganizationToTarget(member);
         addParticipantToEC(member);
@@ -100,22 +104,32 @@ namespace SDOPackage
     throw (CORBA::SystemException,
            InvalidParameter, NotAvailable, InternalError)
   {
+
     RTC_DEBUG(("set_members()"));
     removeAllMembers();
     updateExportedPortsList();
 
     for (::CORBA::ULong i(0), len(sdo_list.length()); i < len; ++i)
       {
-        const SDO_ptr sdo  = sdo_list[i];
-        ::OpenRTM::DataFlowComponent_ptr dfc;
-        if (!sdoToDFC(sdo, dfc)) continue;
-
-        Member member(::OpenRTM::DataFlowComponent::_duplicate(dfc));
-        stopOwnedEC(member);
-        addOrganizationToTarget(member);
-        addParticipantToEC(member);
-        addPort(member, m_expPorts);
-        m_rtcMembers.push_back(member);
+        
+        const SDO_var sdo  = sdo_list[i];
+        ::RTC::RTObject_var dfc;
+        dfc = ::RTC::RTObject::_narrow(sdo);
+        if (CORBA::is_nil(dfc)) { continue; }
+        //        if (!sdoToDFC(sdo, dfc)) continue;
+        //        CORBA::release(sdo);
+        //        CORBA::release(dfc);
+        //        Member member(::OpenRTM::DataFlowComponent::_duplicate(dfc));
+        //        Member member(dfc);
+        //        RTC::ComponentProfile_var p;
+        //        p = dfc->get_component_profile();
+        //        delete p;
+//        stopOwnedEC(member);
+//        addOrganizationToTarget(member);
+//        addParticipantToEC(member);
+//        addPort(member, m_expPorts);
+        
+        //        m_rtcMembers.push_back(member);
       }
 
     CORBA::Boolean result;
@@ -188,7 +202,7 @@ namespace SDOPackage
    */
   bool
   PeriodicECOrganization::sdoToDFC(const SDO_ptr sdo,
-                                   ::OpenRTM::DataFlowComponent_ptr& dfc)
+                                   ::OpenRTM::DataFlowComponent_var& dfc)
   {
     if (::CORBA::is_nil(sdo)) return false;
     
@@ -543,7 +557,7 @@ namespace RTC
     RTC_TRACE(("onInitialize()"));
     ::RTC::Manager& mgr(::RTC::Manager::instance());
 
-    std::vector<RtcBase*> comps = mgr.getComponents();
+    std::vector<RTObject_impl*> comps = mgr.getComponents();
     for (int i(0), len(comps.size()); i < len; ++i)
       {
         std::cout << comps[i]->getInstanceName() << std::endl;
@@ -552,7 +566,7 @@ namespace RTC
     ::SDOPackage::SDOList sdos;
     for (int i(0), len(m_members.size()); i < len; ++i)
       {
-        RtcBase* rtc = mgr.getComponent(m_members[i].c_str());
+        RTObject_impl* rtc = mgr.getComponent(m_members[i].c_str());
         if (rtc == NULL) {
           continue;
         }

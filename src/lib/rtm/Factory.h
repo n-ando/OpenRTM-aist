@@ -21,17 +21,17 @@
 #define Factory_h
 
 #include <coil/Properties.h>
-#include <rtm/RTObject.h>
+//#include <rtm/RTObject.h>
 #include <rtm/NumberingPolicy.h>
 
 
 namespace RTC 
 {
-  typedef RTObject_impl RtcBase;
+  class RTObject_impl;
   class Manager;
   
-  typedef RtcBase* (*RtcNewFunc)(Manager* manager);
-  typedef void (*RtcDeleteFunc)(RtcBase* rtc);
+  typedef RTObject_impl* (*RtcNewFunc)(Manager* manager);
+  typedef void (*RtcDeleteFunc)(RTObject_impl* rtc);
   
   /*!
    * @if jp
@@ -62,7 +62,7 @@ namespace RTC
    * @endif
    */
   template <class _New>
-  RtcBase* Create(Manager* manager)
+  RTObject_impl* Create(Manager* manager)
   {
     return new _New(manager);
   }
@@ -89,7 +89,7 @@ namespace RTC
    * @endif
    */
   template <class _Delete>
-  void Delete(RtcBase* rtc)
+  void Delete(RTObject_impl* rtc)
   {
     delete rtc;
   }
@@ -177,7 +177,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual RtcBase* create(Manager* mgr) = 0;
+    virtual RTObject_impl* create(Manager* mgr) = 0;
     
     /*!
      * @if jp
@@ -198,7 +198,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual void destroy(RtcBase* comp) = 0;
+    virtual void destroy(RTObject_impl* comp) = 0;
     
     /*!
      * @if jp
@@ -348,7 +348,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual RtcBase* create(Manager* mgr);
+    virtual RTObject_impl* create(Manager* mgr);
     
     /*!
      * @if jp
@@ -369,7 +369,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual void destroy(RtcBase* comp);
+    virtual void destroy(RTObject_impl* comp);
     
   protected:
     /*!

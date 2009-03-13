@@ -546,6 +546,12 @@ namespace NVUtil
    *
    * @endif
    */
-  void dump(SDOPackage::NVList& nv);
+  std::ostream& dump(std::ostream& out, const SDOPackage::NVList& nv);
+
+  void dump(const SDOPackage::NVList& nv);
+
+  std::string toString(const SDOPackage::NVList& nv);
+  
+
 };
 #endif // NVUtil_h

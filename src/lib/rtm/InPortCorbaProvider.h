@@ -24,6 +24,7 @@
 #include <rtm/BufferBase.h>
 #include <rtm/InPortProvider.h>
 #include <rtm/CORBA_SeqUtil.h>
+#include <rtm/Manager.h>
 
 #ifdef WIN32
 #pragma warning( disable : 4290 )
@@ -89,7 +90,7 @@ namespace RTC
      * @endif
      */
     InPortCorbaProvider(BufferBase<DataType>& buffer)
-      : m_buffer(buffer)
+      : InPortProvider(), m_buffer(buffer)
     {
       CORBA::Any any_var;
       DataType   tmp_var;
@@ -103,42 +104,17 @@ namespace RTC
       
       // ConnectorProfile setting
       m_objref = this->_this();
-      //      CORBA_SeqUtil::push_back(m_properties,
-      //	       NVUtil::newNV("dataport.corba_any.inport_ref",
-      //		     RTC::InPortAny::_duplicate(m_objref)));
-    }
-    
-    /*!
-     * @if jp
-     * @brief Interface情報を公開する
-     *
-     * Interface情報を公開する。
-     *
-     * @param prop Interface情報を受け取るプロパティ
-     *
-     * @else
-     * @brief Publish interface information
-     *
-     * Publish interface information.
-     *
-     * @param prop Properties to receive interface information
-     *
-     * @endif
-     */
-    void publishInterface(SDOPackage::NVList& prop)
-    {
-      if (!NVUtil::isStringValue(prop,
-				 "dataport.interface_type",
-				 "CORBA_Any"))
-	{
-	  return;
-	}
-      SDOPackage::NVList nv(m_properties);
-      CORBA_SeqUtil::push_back(nv,
-			       NVUtil::newNV("dataport.corba_any.inport_ref",
-					     RTC::InPortAny::_duplicate(m_objref)));
-      
-      NVUtil::append(prop, nv);
+
+      // set InPort's reference
+      CORBA::ORB_ptr orb = ::RTC::Manager::instance().getORB();
+      CORBA_SeqUtil::
+        push_back(m_properties,
+                  NVUtil::newNV("dataport.corba_any.inport_ior",
+                                orb->object_to_string(m_objref.in())));
+      CORBA_SeqUtil::
+        push_back(m_properties,
+                  NVUtil::newNV("dataport.corba_any.inport_ref",
+                                RTC::InPortAny::_duplicate(m_objref)));
     }
     
     /*!
@@ -178,6 +154,7 @@ namespace RTC
     virtual void put(const CORBA::Any& data)
       throw (CORBA::SystemException)
     {
+      RTC_PARANOID(("put()"));
       const DataType* tmp;
       if (data >>= tmp)
 	{

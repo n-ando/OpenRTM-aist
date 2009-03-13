@@ -196,7 +196,8 @@ namespace RTC
      * @brief CORBAオブジェクトをセットする
      *
      * 与えられたオブジェクトリファレンスは、ConsumerBase オブジェクト内に
-     * CORBA::Object_var 型として保持される。 
+     * CORBA::Object_var 型として保持される。
+     * _var 型変数を引数に渡す場合は var.in() を渡すこと。 
      *
      * @param obj CORBA オブジェクトのリファレンス
      *
@@ -215,17 +216,8 @@ namespace RTC
      *
      * @endif
      */
-    virtual bool setObject(CORBA::Object_var& obj)
-    {
-      if (CORBA::is_nil(obj))
-	{
-	  return false;
-	}
-      m_objref = obj;
-      return true;
-    }
-    
-    virtual bool setObject(CORBA::Object_ptr& obj)
+
+    virtual bool setObject(CORBA::Object_ptr obj)
     {
       if (CORBA::is_nil(obj))
 	{
@@ -241,7 +233,9 @@ namespace RTC
      * @brief CORBAオブジェクトを取得する
      *
      * ConsumerBase オブジェクト内に CORBA::Object_var 型として保持されている
-     * オブジェクトリファレンスを取得する。 
+     * オブジェクトリファレンスを取得する。
+     * 呼び出し側はvar型変数で受けるか、使用後CORBA::release()を呼び出して
+     * 参照カウントをデクリメントすること。 
      *
      * @return obj CORBA オブジェクトのリファレンス
      *
@@ -258,7 +252,7 @@ namespace RTC
      */
     virtual CORBA::Object_ptr getObject()
     {
-      return m_objref;
+      return CORBA::Object::_duplicate(m_objref);
     }
     
     /*!
@@ -435,8 +429,9 @@ namespace RTC
      * ConsumerBase のオーバーライド。CORBA::Object_var にオブジェクトをセット
      * するとともに、templateパラメータの型で narrow したオブジェクトを
      * メンバ変数に保持する。
+     * _var 型変数を引数に渡す場合は var.in() を渡すこと。 
      *
-     * @param obj CORBA Objecct
+     * @param [in] obj CORBA Objecct
      *
      * @return オブジェクト設定結果
      *         設定対象オブジェクトが null の場合は false が返ってくる
@@ -455,30 +450,26 @@ namespace RTC
      *
      * @endif
      */
-    virtual bool setObject(CORBA::Object_var& obj)
-    {
-      if (CorbaConsumerBase::setObject(obj))
-	{
-	  m_var = ObjectType::_narrow(m_objref);
-	  if (!CORBA::is_nil(m_var))
-	    return true;
-	}
-      releaseObject();
-      return false; // object is nil
-    }
-    
     virtual bool setObject(CORBA::Object_ptr obj)
     {
-      if (CorbaConsumerBase::setObject(obj))
-	{
-	  m_var = ObjectType::_duplicate(ObjectType::_narrow(m_objref));
-	  if (!CORBA::is_nil(m_var))
-	    return true;
-	}
-      releaseObject();
-      return false; // object is nil
+      if (!CorbaConsumerBase::setObject(obj))
+        {
+          releaseObject();
+          return false; // object is nil
+        }
+
+      ObjectTypePtr ptr = ObjectType::_narrow(m_objref);
+ 
+      if (CORBA::is_nil(ptr))
+        {
+          releaseObject();
+          return false;
+        }
+
+      m_var = ObjectType::_duplicate(ptr);
+      return true;
     }
-    
+
     /*!
      * @if jp
      * @brief ObjectType 型のオブジェクトのリファレンスを取得
@@ -505,7 +496,7 @@ namespace RTC
      */
     inline ObjectTypePtr _ptr()
     {
-      return m_var;
+      return m_var.inout();
     }
     
     /*!
@@ -534,7 +525,7 @@ namespace RTC
      */
     inline ObjectTypePtr operator->()
     {
-      return m_var;
+      return m_var.inout();
     }
     
     /*!
