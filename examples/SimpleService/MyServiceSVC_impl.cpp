@@ -7,6 +7,7 @@
 
 #include "MyServiceSVC_impl.h"
 #include <rtm/CORBA_SeqUtil.h>
+#include <coil/Time.h>
 #include <iostream>
 
 template <class T>
@@ -48,7 +49,7 @@ char* MyServiceSVC_impl::echo(const char* msg)
   for (int i(0); i < 10; ++i)
     {
       std::cout << "Message: " << msg << std::endl;
-      sleep(1);
+      coil::sleep(1);
     }
   std::cout << "MyService::echo() was finished" << std::endl;
 
@@ -78,7 +79,7 @@ void MyServiceSVC_impl::set_value(CORBA::Float value)
     {
       std::cout << "Input value: " << value;
       std::cout << ", Current value: " << m_value << std::endl;
-      sleep(1);
+      coil::sleep(1);
     }
   std::cout << "MyService::set_value() was finished" << std::endl;
 
