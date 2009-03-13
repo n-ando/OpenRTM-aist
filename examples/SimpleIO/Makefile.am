@@ -32,7 +32,8 @@ ConsoleOut_la_FLAGS   = -L$(top_builddir)/src/lib/rtm/.lib
 ConsoleOut_la_LIBADD  = $(top_builddir)/src/lib/rtm/libRTC.la
 
 # Standalone RTCs
-example_PROGRAMS = ConsoleInComp ConsoleOutComp ConnectorComp
+example_PROGRAMS = ConsoleInComp ConsoleOutComp
+noinst_PROGRAMS = ConnectorComp
 example_DATA = rtc.conf consin.conf consout.conf
 
 ConsoleInComp_SOURCES = ConsoleInComp.cpp 
