@@ -33,8 +33,8 @@
 #include <rtm/Factory.h>
 #include <rtm/ECFactory.h>
 #include <rtm/ObjectManager.h>
-#include <rtm/RTObject.h>
 #include <rtm/SystemLogger.h>
+
 namespace RTM
 {
   class ManagerServant;
@@ -52,8 +52,9 @@ namespace RTC
   class ModuleManager;
   class NamingManager;
   class Manager;
+  class RTObject_impl;
+  typedef RTObject_impl RtcBase;
 
-  
   typedef void (*ModuleInitProc)(Manager* manager);  
   
   /*!
@@ -625,7 +626,7 @@ namespace RTC
      *
      * @endif
      */
-    RtcBase* createComponent(const char* comp_args);
+    RTObject_impl* createComponent(const char* comp_args);
     ExecutionContextBase* createContext(const char* ec_args);
     
     /*!
@@ -646,7 +647,7 @@ namespace RTC
      *
      * @endif
      */
-    void cleanupComponent(RtcBase* comp);
+    void cleanupComponent(RTObject_impl* comp);
     
     /*!
      * @if jp
@@ -671,7 +672,7 @@ namespace RTC
      *
      * @endif
      */
-    bool registerComponent(RtcBase* comp);
+    bool registerComponent(RTObject_impl* comp);
     
     /*!
      * @if jp
@@ -694,7 +695,7 @@ namespace RTC
      *
      * @endif
      */
-    bool unregisterComponent(RtcBase* comp);
+    bool unregisterComponent(RTObject_impl* comp);
     
     
     /*!
@@ -722,7 +723,7 @@ namespace RTC
      * @endif
      */
     void deleteComponent(const char* instance_name);
-//    void deleteComponent(RtcBase* comp);
+//    void deleteComponent(RTObject_impl* comp);
     
     /*!
      * @if jp
@@ -747,7 +748,7 @@ namespace RTC
      *
      * @endif
      */
-    RtcBase* getComponent(const char* instance_name);
+    RTObject_impl* getComponent(const char* instance_name);
     
     /*!
      * @if jp
@@ -766,7 +767,7 @@ namespace RTC
      *
      * @endif
      */
-    std::vector<RtcBase*> getComponents();
+    std::vector<RTObject_impl*> getComponents();
     
     //============================================================
     // CORBA 関連
@@ -1121,7 +1122,7 @@ namespace RTC
      *
      * @endif
      */
-    void configureComponent(RtcBase* comp, const coil::Properties& prop);
+    void configureComponent(RTObject_impl* comp, const coil::Properties& prop);
     
     /*!
      * @if jp
@@ -1381,17 +1382,14 @@ namespace RTC
     // ObjectManager へ渡す述語クラス
     struct InstanceName
     {
-      InstanceName(RtcBase* comp) : m_name(comp->getInstanceName()) {};
-      InstanceName(const char* name) : m_name(name) {};
-      InstanceName(const std::string name) : m_name(name) {};
-      bool operator()(RtcBase* comp)
-      {
-	return m_name == comp->getInstanceName();
-      }
+      InstanceName(RTObject_impl* comp);
+      InstanceName(const char* name);
+      InstanceName(const std::string name);
+      bool operator()(RTObject_impl* comp);
       std::string m_name;
     };
     
-    typedef ObjectManager<std::string, RtcBase, InstanceName> ComponentManager;
+    typedef ObjectManager<std::string, RTObject_impl, InstanceName> ComponentManager;
 
     /*!
      * @if jp

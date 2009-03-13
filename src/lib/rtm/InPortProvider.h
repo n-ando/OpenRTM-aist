@@ -21,6 +21,7 @@
 #define InPortProvider_h
 
 #include <rtm/NVUtil.h>
+#include <rtm/SystemLogger.h>
 #include <string>
 
 namespace RTC
@@ -60,7 +61,7 @@ namespace RTC
      *
      * @endif
      */
-    //    InPortProvider();
+    InPortProvider();
     
     /*!
      * @if jp
@@ -201,6 +202,9 @@ namespace RTC
      */
     SDOPackage::NVList m_properties;
     
+  protected:
+    mutable Logger rtclog;
+
   private:
     std::string m_dataType;
     std::string m_interfaceType;

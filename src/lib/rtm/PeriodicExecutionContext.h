@@ -562,7 +562,7 @@ namespace RTC
     virtual ReturnCode_t add_component(LightweightRTObject_ptr comp)
       throw (CORBA::SystemException);
 
-    virtual RTC::ReturnCode_t bindComponent(RtcBase* rtc);
+    virtual RTC::ReturnCode_t bindComponent(RTObject_impl* rtc);
     
     /*!
      * @if jp
@@ -990,7 +990,7 @@ namespace RTC
        * @brief ID of participating ExecutionContext
        * @endif
        */
-      UniqueId ec_id;
+      ExecutionContextHandle_t ec_id;
       
       /*!
        * @if jp
@@ -1353,7 +1353,7 @@ namespace RTC
     struct Comp
     {
       Comp(LightweightRTObject_ptr ref, OpenRTM::DataFlowComponent_ptr dfp,
-	   UniqueId id)
+	   ExecutionContextHandle_t id)
 	: _ref(ref), _sm(dfp, id)
       {
       }

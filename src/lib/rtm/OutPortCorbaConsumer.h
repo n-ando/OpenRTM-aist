@@ -20,6 +20,7 @@
 #ifndef OutPortCorbaConsumer_h
 #define OutPortCorbaConsumer_h
 
+#include <rtm/Manager.h>
 #include <rtm/idl/DataPortSkel.h>
 #include <rtm/BufferBase.h>
 #include <rtm/CorbaConsumer.h>
@@ -187,13 +188,19 @@ namespace RTC
       index = NVUtil::find_index(properties,
 				 "dataport.corba_any.outport_ref");
       if (index < 0) return false;
+
+      if (NVUtil::isString(properties,
+                           "dataport.corba_any.outport_ref"))
+        {
+          char* ior;
+          properties[index].value >>= ior;
+          std::cout << "OutPOrt ref: " << ior << std::endl;
+          CORBA::ORB_ptr orb = ::RTC::Manager::instance().getORB();
+          CORBA::Object_var var = orb->string_to_object(ior);
+          setObject(var.in());
+          return true;
+        }
       
-      CORBA::Object_ptr obj;
-      if (properties[index].value >>= CORBA::Any::to_object(obj))
-	{
-	  setObject(obj);
-	  return true;
-	}
       return false;
     }
     
@@ -221,12 +228,16 @@ namespace RTC
 				 "dataport.corba_any.outport_ref");
       if (index < 0) return;
       
-      CORBA::Object_ptr obj;
-      if (properties[index].value >>= CORBA::Any::to_object(obj))
-	{
-	  if (getObject()->_is_equivalent(obj))
-	    releaseObject();
-	}
+      char* ior;
+      if (properties[index].value >>= ior)
+        {
+          CORBA::ORB_ptr orb = RTC::Manager::instance().getORB();
+          CORBA::Object_var var = orb->string_to_object(ior);
+          if (_ptr()->_is_equivalent(var))
+            {
+              releaseObject();
+            }
+        }
     }
     
   private:

@@ -27,6 +27,7 @@
 #include <coil/Guard.h>
 #include <coil/stringutil.h>
 
+
 namespace RTC
 {
   typedef ::coil::LogStreamBuffer LogStreamBuf;
@@ -252,6 +253,14 @@ namespace RTC
       rtclog.unlock();                                      \
     }
 
+#define RTC_LOG_STR(LV, str)			            \
+  if (rtclog.isValid(LV))                                   \
+    {                                                       \
+      rtclog.lock();                                        \
+      rtclog.level(LV) << str << std::endl;  \
+      rtclog.unlock();                                      \
+    }
+
    /*!
    * @if jp
    *
@@ -272,6 +281,7 @@ namespace RTC
    * @endif
    */
 #define RTC_FATAL(fmt) RTC_LOG(::RTC::Logger::RTL_FATAL, fmt)
+#define RTC_FATAL_STR(str) RTC_LOG_STR(::RTC::Logger::RTL_FATAL, str)
  
   /*!
    * @if jp
@@ -293,6 +303,7 @@ namespace RTC
    * @endif
    */
 #define RTC_ERROR(fmt) RTC_LOG(::RTC::Logger::RTL_ERROR, fmt)
+#define RTC_ERROR_STR(str) RTC_LOG_STR(::RTC::Logger::RTL_ERROR, str)
   
   /*!
    * @if jp
@@ -314,6 +325,7 @@ namespace RTC
    * @endif
    */
 #define RTC_WARN(fmt) RTC_LOG(::RTC::Logger::RTL_WARN, fmt)
+#define RTC_WARN_STR(str) RTC_LOG_STR(::RTC::Logger::RTL_WARN, str)
   
   /*!
    * @if jp
@@ -335,6 +347,7 @@ namespace RTC
    * @endif
    */
 #define RTC_INFO(fmt) RTC_LOG(::RTC::Logger::RTL_INFO, fmt)
+#define RTC_INFO_STR(str) RTC_LOG_STR(::RTC::Logger::RTL_INFO, str)
 
   /*!
    * @if jp
@@ -356,6 +369,7 @@ namespace RTC
    * @endif
    */
 #define RTC_DEBUG(fmt) RTC_LOG(::RTC::Logger::RTL_DEBUG, fmt)
+#define RTC_DEBUG_STR(str) RTC_LOG_STR(::RTC::Logger::RTL_DEBUG, str)
   
   /*!
    * @if jp
@@ -376,13 +390,9 @@ namespace RTC
    *
    * @endif
    */
-#define RTC_TRACE(fmt) \
-  if (rtclog.isValid(::RTC::Logger::RTL_TRACE))             \
-    {                                                       \
-      rtclog.lock();                                        \
-      rtclog.level(::RTC::Logger::RTL_TRACE) << ::coil::sprintf fmt << std::endl; \
-      rtclog.unlock();                                      \
-    }
+#define RTC_TRACE(fmt) RTC_LOG(::RTC::Logger::RTL_DEBUG, fmt)
+#define RTC_TRACE_STR(str) RTC_LOG_STR(::RTC::Logger::RTL_DEBUG, str)
+
 
   /*!
    * @if jp
@@ -404,6 +414,7 @@ namespace RTC
    * @endif
    */
 #define RTC_VERBOSE(fmt) RTC_LOG(::RTC::Logger::RTL_VERBOSE, fmt)
+#define RTC_VERBOSE_STR(str) RTC_LOG_STR(::RTC::Logger::RTL_VERBOSE, str)
   
   /*!
    * @if jp
@@ -425,16 +436,25 @@ namespace RTC
    * @endif
    */
 #define RTC_PARANOID(fmt) RTC_LOG(::RTC::Logger::RTL_VERBOSE, fmt)
+#define RTC_PARANOID_STR(str) RTC_LOG_STR(::RTC::Logger::RTL_VERBOSE, str)
   
 #else
 #define RTC_ERROR(fmt)
+#define RTC_ERROR_STR(str)
 #define RTC_WARN(fmt)
+#define RTC_WARN_STR(str)
 #define RTC_NORMAL(fmt)
+#define RTC_NORMAL_STR(str)
 #define RTC_INFO(fmt)
+#define RTC_INFO_STR(str)
 #define RTC_DEBUG(fmt)
+#define RTC_DEBUG_STR(str)
 #define RTC_TRACE(fmt)
+#define RTC_TRACE_STR(str)
 #define RTC_VERBOSE(fmt)
+#define RTC_VERBOSE_STR(str)
 #define RTC_PARANOID(fmt)
+#define RTC_PARANOID_STR(str)
 #endif
   
 }; // namespace RTC

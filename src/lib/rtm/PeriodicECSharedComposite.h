@@ -147,7 +147,7 @@ namespace SDOPackage
      * @brief Conversion from SDO to DFC
      * @endif
      */
-    bool sdoToDFC(const SDO_ptr sdo, ::OpenRTM::DataFlowComponent_ptr& dfc);
+    bool sdoToDFC(const SDO_ptr sdo, ::OpenRTM::DataFlowComponent_var& dfc);
 
     /*!
      * @if jp
@@ -237,10 +237,13 @@ namespace SDOPackage
           profile_(rtobj->get_component_profile()),
           eclist_(rtobj->get_owned_contexts()),
           config_(rtobj->get_configuration())
-      {}
+      {
+      }
 
-      virtual ~Member(void){}
-      
+      virtual ~Member(void)
+      {
+      }
+
       Member(const Member& x)
         : rtobj_(RTC::RTObject::_duplicate(x.rtobj_)),
           profile_(new RTC::ComponentProfile(x.profile_)),
@@ -273,12 +276,11 @@ namespace SDOPackage
         this->eclist_ = eclist;
         this->config_ = config;
       }
-      
+
       RTC::RTObject_var rtobj_;
       RTC::ComponentProfile_var profile_;
       RTC::ExecutionContextList_var eclist_;
       SDOPackage::Configuration_var config_;
-
     };
 
     std::vector<Member> m_rtcMembers;

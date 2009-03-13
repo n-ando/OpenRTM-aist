@@ -19,10 +19,21 @@
 
 #include <rtm/RTC.h>
 #include <rtm/InPortProvider.h>
-#include <iostream>
 
 namespace RTC
 {
+  /*!
+   * @if jp
+   * @brief コンストラクタ
+   * @else
+   * @brief Destructor
+   * @endif
+   */
+  InPortProvider::InPortProvider()
+    : rtclog("InPortProvier")
+  {
+  }
+  
   /*!
    * @if jp
    * @brief デストラクタ
@@ -43,6 +54,7 @@ namespace RTC
    */
   void InPortProvider::publishInterfaceProfile(SDOPackage::NVList& prop)
   {
+    RTC_TRACE(("publishInterfaceProfile()"));
     NVUtil::appendStringValue(prop, "dataport.data_type",
 			      m_dataType.c_str());
     NVUtil::appendStringValue(prop, "dataport.interface_type",
@@ -62,6 +74,8 @@ namespace RTC
    */
   void InPortProvider::publishInterface(SDOPackage::NVList& prop)
   {
+    RTC_TRACE(("publishInterface()"));
+    RTC_DEBUG_STR((NVUtil::toString(prop)));
     if (!NVUtil::isStringValue(prop,
 			       "dataport.interface_type",
 			       m_interfaceType.c_str()))
@@ -70,6 +84,7 @@ namespace RTC
       }
     
     NVUtil::append(prop, m_properties);
+    //    NVUtil::dump(m_properties);
   }
   
   /*!
@@ -81,6 +96,7 @@ namespace RTC
    */
   void InPortProvider::setDataType(const char* data_type)
   {
+    RTC_TRACE(("setDataType(%s)", data_type));
     m_dataType = data_type;
   }
   
@@ -93,6 +109,7 @@ namespace RTC
    */
   void InPortProvider::setInterfaceType(const char* interface_type)
   {
+    RTC_TRACE(("setInterfaceType(%s)", interface_type));
     m_interfaceType = interface_type;
   }
   
@@ -105,6 +122,7 @@ namespace RTC
    */
   void InPortProvider::setDataFlowType(const char* dataflow_type)
   {
+    RTC_TRACE(("setDataFlowType(%s)", dataflow_type));
     m_dataflowType = dataflow_type;
   }
   
@@ -117,6 +135,7 @@ namespace RTC
    */
   void InPortProvider::setSubscriptionType(const char* subs_type)
   {
+    RTC_TRACE(("setSubscriptionType(%s)", subs_type));
     m_subscriptionType = subs_type;
   }
 }; // namespace RTC

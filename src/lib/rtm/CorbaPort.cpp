@@ -17,11 +17,12 @@
  *
  */
 
+#include <rtm/SystemLogger.h>
 #include <rtm/CorbaPort.h>
 #include <rtm/CORBA_SeqUtil.h>
 #include <rtm/NVUtil.h>
-#include <string.h>
-#include <iostream>
+#include <rtm/Manager.h>
+#include <string>
 
 namespace RTC
 {
@@ -61,6 +62,9 @@ namespace RTC
 			      const char* type_name,
 			      PortableServer::RefCountServantBase& provider)
   {
+    RTC_TRACE(("registerProvider(instance=%s, type_name=%s)",
+               instance_name, type_name));
+
     if (!appendInterface(instance_name, type_name, RTC::PROVIDED))
       {
 	return false;
@@ -78,8 +82,10 @@ namespace RTC
     key.append(".");key.append(type_name);
     key.append(".");key.append(instance_name);
     
+    CORBA::ORB_ptr orb = Manager::instance().getORB();
+    CORBA::String_var ior = orb->object_to_string(obj);
     CORBA_SeqUtil::
-      push_back(m_providers, NVUtil::newNV(key.c_str(), obj));
+      push_back(m_providers, NVUtil::newNV(key.c_str(), ior));
     
     return true;
   };
@@ -96,6 +102,8 @@ namespace RTC
 			      const char* type_name,
 			      CorbaConsumerBase& consumer)
   {
+    RTC_TRACE(("registerConsumer()"));
+
     if (!appendInterface(instance_name, type_name, RTC::REQUIRED))
       {
 	return false;
@@ -120,8 +128,12 @@ namespace RTC
   ReturnCode_t
   CorbaPort::publishInterfaces(ConnectorProfile& connector_profile)
   {
+    RTC_TRACE(("publishInterfaces()"));
+
     CORBA_SeqUtil::push_back_list(connector_profile.properties,
 				  m_providers);
+    RTC_DEBUG_STR((NVUtil::toString(m_providers)));
+
     return RTC::RTC_OK;
   }
   
@@ -135,9 +147,42 @@ namespace RTC
   ReturnCode_t
   CorbaPort::subscribeInterfaces(const ConnectorProfile& connector_profile)
   {
+    RTC_TRACE(("subscribeInterfaces()"));
+
     const NVList& nv(connector_profile.properties);
     
-    CORBA_SeqUtil::for_each(nv, subscribe(m_consumers));
+    RTC_DEBUG_STR((NVUtil::toString(nv)));
+
+    CORBA::ORB_ptr orb = ::RTC::Manager::instance().getORB();
+
+    for (int i(0), len(m_consumers.size()); i < len; ++i)
+      {
+        CORBA::Long index;
+        index = NVUtil::find_index(nv, m_consumers[i].name.c_str());
+        if (index < 0) { continue; }
+
+        char* ior;
+        if (!(nv[index].value >>= ior))
+          {
+            RTC_WARN(("Cannot extract IOR string"));
+            continue;
+          }
+
+        CORBA::Object_var obj = orb->string_to_object(ior);
+        if (CORBA::is_nil(obj))
+          {
+            RTC_ERROR(("Extracted object is nul reference"));
+            continue;
+          }
+        
+        bool result = m_consumers[i].consumer.setObject(obj.in());
+        if (!result)
+          {
+            RTC_ERROR(("Cannot narrow reference"));
+            continue;
+          }
+      }
+
     return RTC::RTC_OK;
   }
   
@@ -151,7 +196,11 @@ namespace RTC
   void
   CorbaPort::unsubscribeInterfaces(const ConnectorProfile& connector_profile)
   {
+    RTC_TRACE(("unsubscribeInterfaces()"));
+
     const NVList& nv(connector_profile.properties);
+
+    RTC_DEBUG_STR((NVUtil::toString(nv)));
     
     CORBA_SeqUtil::for_each(nv, unsubscribe(m_consumers));
   }

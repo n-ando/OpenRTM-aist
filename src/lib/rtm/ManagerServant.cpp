@@ -19,6 +19,7 @@
 #include <rtm/Manager.h>
 #include <rtm/ManagerServant.h>
 #include <rtm/NVUtil.h>
+#include <rtm/RTObject.h>
 
 namespace RTM
 {
@@ -92,7 +93,7 @@ namespace RTM
   RTC::RTObject_ptr ManagerServant::create_component(const char* module_name)
   {
     std::cout << "Manager::create_component: " << module_name << std::endl;
-    RTC::RtcBase* rtc = m_mgr.createComponent(module_name);
+    RTC::RTObject_impl* rtc = m_mgr.createComponent(module_name);
     if (rtc == NULL)
       {
         std::cout << "RTC not found: " << module_name << std::endl;
@@ -109,7 +110,7 @@ namespace RTM
   
   RTC::RTCList* ManagerServant::get_components()
   {
-    std::vector<RTC::RtcBase*> rtcs = m_mgr.getComponents();
+    std::vector<RTC::RTObject_impl*> rtcs = m_mgr.getComponents();
     ::RTC::RTCList* crtcs = new ::RTC::RTCList();
     crtcs->length((CORBA::Long)rtcs.size());
     for (int i(0), len(rtcs.size()); i < len; ++i)
@@ -122,7 +123,7 @@ namespace RTM
   RTC::ComponentProfileList* ManagerServant::get_component_profiles()
   {
     ::RTC::ComponentProfileList* cprofs = new ::RTC::ComponentProfileList();
-    std::vector<RTC::RtcBase*> rtcs = m_mgr.getComponents();
+    std::vector<RTC::RTObject_impl*> rtcs = m_mgr.getComponents();
     cprofs->length(rtcs.size());
     for (int i(0), len(rtcs.size()); i < len; ++i)
       {

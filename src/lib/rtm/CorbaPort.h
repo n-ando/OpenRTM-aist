@@ -487,42 +487,6 @@ namespace RTC
     // functors
     /*!
      * @if jp
-     * @brief ConnectorProfile と Consuemr の比較をしオブジェクト参照を
-     *        セットするための Functor
-     * @else
-     * @brief Functor to compare ConnectorProfile and Consuemr, to set object 
-     *        reference
-     * @endif
-     */
-    struct subscribe
-    {
-      subscribe(std::vector<Consumer>& cons)
-        : m_cons(cons), m_len(cons.size())
-      {
-      }
-      
-      void operator()(const SDOPackage::NameValue& nv)
-      {
-        for (CORBA::ULong i = 0; i < m_len; ++i)
-          {
-            std::string name(nv.name);
-            if (m_cons[i].name == name)
-              {
-                CORBA::Object_var obj;
-                CORBA::Any::to_object to_obj(obj.inout());
-                if (nv.value >>= to_obj)
-                  {
-                    m_cons[i].consumer.setObject(obj);
-                  }
-              }
-          }
-      }
-      std::vector<Consumer> m_cons;
-      CORBA::ULong m_len;
-    };
-    
-    /*!
-     * @if jp
      * @brief Consumer のオブジェクトを解放するための Functor
      * @else
      * @brief Functor to release Consumer's object

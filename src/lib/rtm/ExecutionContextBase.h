@@ -85,7 +85,7 @@ namespace RTC
       throw (CORBA::SystemException)
     {};
 
-    virtual RTC::ReturnCode_t bindComponent(RtcBase* rtc) = 0;
+    virtual RTC::ReturnCode_t bindComponent(RTObject_impl* rtc) = 0;
     virtual RTC::ExecutionContextService_ptr getObjRef() = 0;
   };  // class ExecutionContextBase
 };  // namespace RTC

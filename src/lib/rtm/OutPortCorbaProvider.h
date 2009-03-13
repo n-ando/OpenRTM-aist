@@ -24,6 +24,7 @@
 #include <rtm/BufferBase.h>
 #include <rtm/OutPortProvider.h>
 #include <rtm/CORBA_SeqUtil.h>
+#include <rtm/Manager.h>
 
 #ifdef WIN32
 #pragma warning( disable : 4290 )
@@ -95,9 +96,18 @@ namespace RTC
       
       // ConnectorProfile setting
       m_objref = this->_this();
-      CORBA_SeqUtil::push_back(m_properties,
-			       NVUtil::newNV("dataport.corba_any.outport_ref",
-					     m_objref));
+
+      // set outPort's reference
+      CORBA::ORB_ptr orb = ::RTC::Manager::instance().getORB();
+      CORBA_SeqUtil::
+        push_back(m_properties,
+                  NVUtil::newNV("dataport.corba_any.outport_ior",
+                                orb->object_to_string(m_objref.in())));
+      CORBA_SeqUtil::
+        push_back(m_properties,
+                  NVUtil::newNV("dataport.corba_any.outport_ref",
+                                RTC::OutPortAny::_duplicate(m_objref)));
+      
     }
     
     /*!
@@ -114,7 +124,8 @@ namespace RTC
      * @endif
      */
     virtual ~OutPortCorbaProvider(void)
-    {}
+    {
+    }
     
     /*!
      * @if jp
