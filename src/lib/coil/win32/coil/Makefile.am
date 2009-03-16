@@ -34,16 +34,16 @@ COIL_COMMON_SRC =       \
 # coil common headers
 COIL_COMMON_H   =       \
 	Async.h         \
-	Listener.h      \
-	TimeMeasure.h   \
-	memory.h        \
-	NonCopyable.h   \
-	TimeValue.h     \
-	stringutil.h    \
 	Guard.h         \
+	Listener.h      \
+	Logger.h        \
+	NonCopyable.h   \
 	Properties.h    \
+	TimeMeasure.h   \
+	TimeValue.h     \
 	Timer.h         \
-	Logger.h
+	memory.h        \
+	stringutil.h 
 
 # coil all sources and headers
 COIL_SRC = $(COIL_COMMON_SRC) $(COIL_PLATFORM_SRC)

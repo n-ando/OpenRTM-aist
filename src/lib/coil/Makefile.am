@@ -14,8 +14,8 @@ PLATFORM = posix
 NO_PLATFORM = ace
 endif
 
-SUBDIRS = include $(PLATFORM) lib build common utils win32 @UNITTEST@
-DIST_SUBDIRS = $(SUBDIRS) $(NO_PLATFORM) tests
+SUBDIRS = include $(PLATFORM) lib build common utils @UNITTEST@
+DIST_SUBDIRS = $(SUBDIRS) $(NO_PLATFORM) win32 tests
 
 clean-local:
 	rm -f config_coil.h

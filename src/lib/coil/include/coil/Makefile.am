@@ -17,5 +17,7 @@ all-local:
 	cp $(top_srcdir)/common/*.h .
 
 clean-local:
+	mv config_coil.h config_coil_tmp
 	rm -f *.h
+	mv config_coil_tmp config_coil.h
 	rm -f *~
