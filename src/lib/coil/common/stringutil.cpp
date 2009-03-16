@@ -426,6 +426,9 @@ namespace coil
 
   std::string sprintf(char const * __restrict fmt, ...)
   {
+#ifndef LINE_MAX
+#define LINE_MAX 1024
+#endif
     char str[LINE_MAX];
     va_list ap;
     

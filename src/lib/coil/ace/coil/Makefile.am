@@ -62,7 +62,6 @@ libcoil_la_SOURCES =          \
 	$(COIL_ALL)
 
 clean-local:
-	rm -f config_coil.h
 	rm -f *~
 	rm -f *.o *.lo *.loT
 	rm -f $(COIL_COMMON_SRC) $(COIL_COMMON_H)
