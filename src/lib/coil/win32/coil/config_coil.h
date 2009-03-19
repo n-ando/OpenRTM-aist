@@ -113,7 +113,9 @@
 #define STDC_HEADERS 1
 
 /* Version number of package */
+#if 0
 #define VERSION "1.0"
+#endif
 
 /* compiled with ACE */
 /* #undef WITH_ACE */
