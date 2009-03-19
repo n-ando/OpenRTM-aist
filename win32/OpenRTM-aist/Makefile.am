@@ -11,7 +11,7 @@ clean-local:
 	rm -f *~ *.sln *.yaml *.ncb *.suo *.user
 
 
-sln: OpenRTM-aist_vc8.sln OpenRTM-aist_vc9.sln
+sln: OpenRTM-aist_vc8.sln OpenRTM-aist_vc9.sln coil_distbuild.vsprops
 
 OpenRTM-aist_vc8.sln: OpenRTM-aist.sln.dep
 	$(top_srcdir)/build/slntool.py     \
@@ -29,6 +29,9 @@ OpenRTM-aist_vc9.sln:
 		`find ./ -name '*_vc9.vcproj' \! -name 'USB*.vcproj'`
 	qkc -ms OpenRTM-aist_vc9.sln
 
+coil_distbuild.vsprops:
+	cp $(top_srcdir)/src/lib/coil/win32/coil_distbuild.vsprops .
+
 dist-hook: clean-local sln
 
 EXTRA_DIST =                          \
@@ -38,6 +41,7 @@ EXTRA_DIST =                          \
 	RunAtFirst.py                 \
 	autobuild_vc8.bat             \
 	autobuild_vc9.bat             \
-	rtm_distbuild.vsprops
+	rtm_distbuild.vsprops         \
+	coil_distbuild.vsprops
 
 

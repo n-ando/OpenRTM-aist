@@ -20,21 +20,27 @@ COIL_PLATFORM_SRC =    \
 # posix API dependent headers
 COIL_PLATFORM_H   =    \
 	atomic.h       \
+	File.h         \
 	OS.h           \
 	$(COIL_PLATFORM_SRC:.cpp=.h)
 
 # coil common source
-COIL_COMMON_SRC =      \
-	stringutil.cpp \
-	Properties.cpp \
-	TimeValue.cpp  \
+COIL_COMMON_SRC =       \
+	stringutil.cpp  \
+	Properties.cpp  \
+	TimeValue.cpp   \
+	TimeMeasure.cpp \
 	Timer.cpp
 
 # coil common headers
 COIL_COMMON_H =        \
+	Async.h        \
+	Listener.h     \
+	memory.h       \
 	Guard.h        \
 	NonCopyable.h  \
 	Listener.h     \
+	Logger.h       \
 	$(COIL_COMMON_SRC:.cpp=.h)
 
 # coil all sources and headers
@@ -56,7 +62,7 @@ coilheaderdir = $(prefix)/include/coil
 
 coilheader_HEADERS = $(COIL_H) $(top_srcdir)/include/coil/config_coil.h
 
-lib_LTLIBRARIES = libcoil.la
+noinst_LTLIBRARIES = libcoil.la
 
 libcoil_la_SOURCES =          \
 	$(COIL_ALL)
@@ -71,10 +77,7 @@ clean-local:
 	chmod 644 *.cpp *.h
 
 EXTRA_DIST =                \
-	$(COIL_ALL)         \
-	libcoil_vc8.vcproj  \
-	libcoil_vc9.vcproj  \
-	libcoil.vcproj.yaml
+	$(COIL_ALL)
 
 #------------------------------------------------------------
 # vcproj file build rules
