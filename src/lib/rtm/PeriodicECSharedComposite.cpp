@@ -68,18 +68,16 @@ namespace SDOPackage
            InvalidParameter, NotAvailable, InternalError)
   {
     RTC_DEBUG(("add_members()"));
+
     updateExportedPortsList();
+
     for (::CORBA::ULong i(0), len(sdo_list.length()); i < len; ++i)
       {
-        const SDO_ptr sdo  = sdo_list[i];
-        //        ::OpenRTM::DataFlowComponent_ptr dfc;
-        //        if (!sdoToDFC(sdo, dfc)) continue;
-        ::RTC::RTObject_var dfc;
-        dfc = ::RTC::RTObject::_narrow(sdo);
-        if (CORBA::is_nil(dfc)) { continue; }
+        const SDO_var sdo(sdo_list[i]);
+        ::OpenRTM::DataFlowComponent_var dfc;
+        if (!sdoToDFC(sdo.in(), dfc.out())) { continue; }
 
-        //        Member member(::OpenRTM::DataFlowComponent::_duplicate(dfc));
-        Member member(dfc);
+        Member member(dfc.in());
         stopOwnedEC(member);
         addOrganizationToTarget(member);
         addParticipantToEC(member);
@@ -106,30 +104,22 @@ namespace SDOPackage
   {
 
     RTC_DEBUG(("set_members()"));
+
     removeAllMembers();
     updateExportedPortsList();
 
     for (::CORBA::ULong i(0), len(sdo_list.length()); i < len; ++i)
       {
-        
         const SDO_var sdo  = sdo_list[i];
-        ::RTC::RTObject_var dfc;
-        dfc = ::RTC::RTObject::_narrow(sdo);
-        if (CORBA::is_nil(dfc)) { continue; }
-        //        if (!sdoToDFC(sdo, dfc)) continue;
-        //        CORBA::release(sdo);
-        //        CORBA::release(dfc);
-        //        Member member(::OpenRTM::DataFlowComponent::_duplicate(dfc));
-        //        Member member(dfc);
-        //        RTC::ComponentProfile_var p;
-        //        p = dfc->get_component_profile();
-        //        delete p;
+        ::OpenRTM::DataFlowComponent_var dfc;
+        if (!sdoToDFC(sdo.in(), dfc.out())) { continue; }
+
+        Member member(dfc.in());
 //        stopOwnedEC(member);
 //        addOrganizationToTarget(member);
 //        addParticipantToEC(member);
 //        addPort(member, m_expPorts);
-        
-        //        m_rtcMembers.push_back(member);
+        m_rtcMembers.push_back(member);
       }
 
     CORBA::Boolean result;
@@ -182,11 +172,11 @@ namespace SDOPackage
     while (it != it_end)
       {
         Member& member(*it);
-        removePort(member, m_expPorts);
-        removeParticipantFromEC(member);
-        removeOrganizationFromTarget(member);
-        startOwnedEC(member);
-        ::SDOPackage::Organization_impl::remove_member(member.profile_->instance_name); 
+//        removePort(member, m_expPorts);
+//        removeParticipantFromEC(member);
+//        removeOrganizationFromTarget(member);
+//        startOwnedEC(member);
+//        ::SDOPackage::Organization_impl::remove_member(member.profile_->instance_name); 
         ++it;
      }
     m_rtcMembers.clear();
@@ -202,7 +192,7 @@ namespace SDOPackage
    */
   bool
   PeriodicECOrganization::sdoToDFC(const SDO_ptr sdo,
-                                   ::OpenRTM::DataFlowComponent_var& dfc)
+                                   ::OpenRTM::DataFlowComponent_ptr& dfc)
   {
     if (::CORBA::is_nil(sdo)) return false;
     
@@ -222,8 +212,7 @@ namespace SDOPackage
   void PeriodicECOrganization::stopOwnedEC(Member& member)
   {
     // stop target RTC's ExecutionContext
-    ::RTC::ExecutionContextList_var ecs;
-    ecs = new ::RTC::ExecutionContextList(member.eclist_);
+    ::RTC::ExecutionContextList_var ecs(member.eclist_);
     for (::CORBA::ULong i(0), len(ecs->length()); i < len; ++i)
       {
         ecs[i]->stop();
@@ -241,8 +230,7 @@ namespace SDOPackage
   void PeriodicECOrganization::startOwnedEC(Member& member)
   {
     // start target RTC's ExecutionContext
-    ::RTC::ExecutionContextList_var ecs;
-    ecs = new ::RTC::ExecutionContextList(member.eclist_);
+    ::RTC::ExecutionContextList_var ecs(member.eclist_);
     for (::CORBA::ULong i(0), len(ecs->length()); i < len; ++i)
       {
         ecs[i]->start();
@@ -260,7 +248,7 @@ namespace SDOPackage
   void PeriodicECOrganization::addOrganizationToTarget(Member& member)
   {
     // get given RTC's configuration object
-    Configuration_ptr conf(member.config_);
+    Configuration_var conf(member.config_.in());
     if (::CORBA::is_nil(conf)) return;
     
     // set organization to target RTC's conf
@@ -277,11 +265,10 @@ namespace SDOPackage
   void PeriodicECOrganization::removeOrganizationFromTarget(Member& member)
   {
     // get given RTC's configuration object
-    Configuration_ptr conf(member.config_);
-    if (::CORBA::is_nil(conf)) return;
+    if (::CORBA::is_nil(member.config_)) { return; }
     
     // set organization to target RTC's conf
-    conf->remove_organization(CORBA::string_dup(m_pId));
+    member.config_->remove_organization(CORBA::string_dup(m_pId));
   }
 
   /*!
@@ -295,10 +282,10 @@ namespace SDOPackage
   {
     if (::CORBA::is_nil(m_ec))
       {
-        ::RTC::ExecutionContextList_var ecs = m_rtobj->get_owned_contexts();
+        ::RTC::ExecutionContextList_var ecs(m_rtobj->get_owned_contexts());
         if (ecs->length() > 0)
           {
-            m_ec = ::RTC::ExecutionContext::_duplicate(ecs[0]);
+            m_ec = ecs[0];
           }
         else
           {
@@ -306,7 +293,7 @@ namespace SDOPackage
           }
       }
     // set ec to target RTC
-    m_ec->add_component(RTC::RTObject::_duplicate(member.rtobj_));
+    m_ec->add_component(member.rtobj_.in());
   }
 
   /*!
@@ -320,17 +307,17 @@ namespace SDOPackage
   { 
     if (::CORBA::is_nil(m_ec))
       {
-        ::RTC::ExecutionContextList_var ecs = m_rtobj->get_owned_contexts();
+        ::RTC::ExecutionContextList_var ecs(m_rtobj->get_owned_contexts());
         if (ecs->length() > 0)
           {
-            m_ec = ::RTC::ExecutionContext::_duplicate(ecs[0]);
+            m_ec = ecs[0];
           }
         else
           {
             return;
           }
       }
-    m_ec->remove_component(RTC::RTObject::_duplicate(member.rtobj_));
+    m_ec->remove_component(member.rtobj_.in());
   }
 
   /*!
@@ -598,13 +585,13 @@ namespace RTC
   ReturnCode_t PeriodicECSharedComposite::onActivated(RTC::UniqueId exec_handle)
   {
     RTC_TRACE(("onActivated(%d)", exec_handle));
-    ::RTC::ExecutionContextList_var ecs = get_owned_contexts();
-    ::SDOPackage::SDOList_var sdos = m_org->get_members();
+    ::RTC::ExecutionContextList_var ecs(get_owned_contexts());
+    ::SDOPackage::SDOList_var sdos(m_org->get_members());
 
     for (::CORBA::ULong i(0), len(sdos->length()); i < len; ++i)
       {
-        ::RTC::RTObject_var rtc = ::RTC::RTObject::_narrow(sdos[i]);
-        ecs[0]->activate_component(rtc);
+        ::RTC::RTObject_var rtc(::RTC::RTObject::_narrow(sdos[i]));
+        ecs[0]->activate_component(rtc.in());
       }
     RTC_DEBUG(("%d member RTC%s activated.", sdos->length(),
                sdos->length() == 1 ? " was" : "s were"));
@@ -621,13 +608,13 @@ namespace RTC
   ReturnCode_t PeriodicECSharedComposite::onDeactivated(RTC::UniqueId exec_handle)
   {
     RTC_TRACE(("onDeactivated(%d)", exec_handle));
-    ::RTC::ExecutionContextList_var ecs = get_owned_contexts();
-    ::SDOPackage::SDOList_var sdos = m_org->get_members();
+    ::RTC::ExecutionContextList_var ecs(get_owned_contexts());
+    ::SDOPackage::SDOList_var sdos(m_org->get_members());
 
     for (::CORBA::ULong i(0), len(sdos->length()); i < len; ++i)
       {
-        ::RTC::RTObject_var rtc = ::RTC::RTObject::_narrow(sdos[i]);
-        ecs[0]->deactivate_component(rtc);
+        ::RTC::RTObject_var rtc(::RTC::RTObject::_narrow(sdos[i]));
+        ecs[0]->deactivate_component(rtc.in());
       }
     return ::RTC::RTC_OK;
   }
@@ -641,13 +628,13 @@ namespace RTC
    */  ReturnCode_t PeriodicECSharedComposite::onReset(RTC::UniqueId exec_handle)
   {
     RTC_TRACE(("onReset(%d)", exec_handle));
-    ::RTC::ExecutionContextList_var ecs = get_owned_contexts();
-    ::SDOPackage::SDOList_var sdos = m_org->get_members();
+    ::RTC::ExecutionContextList_var ecs(get_owned_contexts());
+    ::SDOPackage::SDOList_var sdos(m_org->get_members());
 
     for (::CORBA::ULong i(0), len(sdos->length()); i < len; ++i)
       {
-        ::RTC::RTObject_var rtc = ::RTC::RTObject::_narrow(sdos[i]);
-        ecs[0]->reset_component(rtc);
+        ::RTC::RTObject_var rtc(::RTC::RTObject::_narrow(sdos[i]));
+        ecs[0]->reset_component(rtc.in());
       }
     return ::RTC::RTC_OK;
   }
