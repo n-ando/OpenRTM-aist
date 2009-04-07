@@ -161,7 +161,7 @@ namespace RTC
         index = NVUtil::find_index(nv, m_consumers[i].name.c_str());
         if (index < 0) { continue; }
 
-        char* ior;
+        const char* ior;
         if (!(nv[index].value >>= ior))
           {
             RTC_WARN(("Cannot extract IOR string"));
