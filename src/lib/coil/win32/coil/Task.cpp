@@ -78,6 +78,16 @@ namespace coil
     return 0;
   }
 
+  void Task::reset()
+  {
+    m_count = 0;
+  }
+
+  void Task::finalize()
+  {
+    reset();
+  }
+ 
   unsigned int WINAPI Task::svc_run(void* args)
   {
     Task* t = (coil::Task*)args;
