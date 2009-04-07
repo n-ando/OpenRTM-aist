@@ -192,7 +192,7 @@ namespace RTC
       if (NVUtil::isString(properties,
                            "dataport.corba_any.outport_ref"))
         {
-          char* ior;
+          const char* ior;
           properties[index].value >>= ior;
           std::cout << "OutPOrt ref: " << ior << std::endl;
           CORBA::ORB_ptr orb = ::RTC::Manager::instance().getORB();
@@ -228,7 +228,7 @@ namespace RTC
 				 "dataport.corba_any.outport_ref");
       if (index < 0) return;
       
-      char* ior;
+      const char* ior;
       if (properties[index].value >>= ior)
         {
           CORBA::ORB_ptr orb = RTC::Manager::instance().getORB();
