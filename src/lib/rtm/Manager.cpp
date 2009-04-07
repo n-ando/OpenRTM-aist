@@ -547,7 +547,7 @@ std::vector<coil::Properties> Manager::getLoadableModules()
     //   [category].[instance_name].config_file = file_name
     configureComponent(comp, prop);
 
-    comp->setProperties(prop);
+    // comp->setProperties(prop);
     
     //------------------------------------------------------------
     // Component initialization
@@ -1337,9 +1337,9 @@ std::vector<coil::Properties> Manager::getLoadableModules()
 	  }
       }
     // Merge Properties. type_prop is merged properties
+    comp->getProperties() << prop;
     type_prop << name_prop;
     comp->getProperties() << type_prop;
-    comp->getProperties() << prop;
     
     //------------------------------------------------------------
     // Format component's name for NameService
