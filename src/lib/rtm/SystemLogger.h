@@ -22,6 +22,7 @@
 #include <rtm/config_rtc.h>
 
 // COIL
+#include <coil/Time.h>
 #include <coil/Logger.h>
 #include <coil/Mutex.h>
 #include <coil/Guard.h>
