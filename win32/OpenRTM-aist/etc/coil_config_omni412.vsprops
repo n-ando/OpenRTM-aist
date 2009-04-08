@@ -34,11 +34,11 @@
 		Value="%RTM_ROOT%"
 	/>
 	<UserMacro
-		Name="rtm_dllver"
+		Name="coil_dllver"
 		Value="100"
 	/>
 	<UserMacro
-		Name="rtm_version"
+		Name="coil_version"
 		Value="1.0.0"
 	/>
 	<!-- ACE macros -->

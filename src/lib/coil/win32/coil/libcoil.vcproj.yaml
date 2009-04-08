@@ -98,7 +98,7 @@ Configurations:
           set PATH=%PATH%;$(coil_path)
           cd "$(OutDir)"
           start /wait cmd /c makedeffile.py coil_static.lib $(TargetName) $(coil_version) $(TargetName).def
-          move coil$(coildllver).def ..\\
+          move coil$(coil_dllver).def ..\\
     VCLinkerTool:
       - Key: AdditionalDependencies
         Value: "$(coil_depend_lib)"
