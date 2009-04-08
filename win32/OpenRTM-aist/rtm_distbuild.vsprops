@@ -10,10 +10,10 @@
 	/>
 	<UserMacro
 		Name="rtm_depend_libd"
-		Value="coild.lib libRTCSkeld.lib $(omni_libd) advapi32.lib ws2_32.lib mswsock.lib"
+		Value="$(coil_libd) libRTCSkeld.lib $(omni_libd) advapi32.lib ws2_32.lib mswsock.lib"
 	/>
 	<UserMacro
 		Name="rtm_depend_lib"
-		Value="coil.lib libRTCSkel.lib $(omni_lib) advapi32.lib ws2_32.lib mswsock.lib"
+		Value="$(coil_lib) libRTCSkel.lib $(omni_lib) advapi32.lib ws2_32.lib mswsock.lib"
 	/>
 </VisualStudioPropertySheet>
