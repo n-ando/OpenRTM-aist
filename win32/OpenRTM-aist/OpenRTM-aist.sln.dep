@@ -1,4 +1,5 @@
 libRTC: libRTCSkel
+libRTC: libcoil
 rtcd: libRTC
 ConfigSampleComp: libRTC
 ConfigSample: libRTC
@@ -14,3 +15,9 @@ MyServiceProviderComp: libRTC
 MyServiceProvider: libRTC
 MyServiceConsumerComp: libRTC
 MyServiceConsumer: libRTC
+Motor: libRTC
+MotorComp: libRTC
+Controller: libRTC
+ControllerComp: libRTC
+Sensor: libRTC
+SensorComp: libRTC
