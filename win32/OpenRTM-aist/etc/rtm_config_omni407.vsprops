@@ -40,6 +40,10 @@
 		Name="rtm_version"
 		Value="1.0.0"
 	/>
+	<UserMacro
+		Name="coil_dllver"
+		Value="100"
+	/>
 	<!-- ACE macros -->
 	<UserMacro
 		Name="ace_includes"
@@ -103,4 +107,14 @@
 		Name="rtm_idlflags"
 		Value="-bcxx -Wba -nf"
 	/>
+	<!-- coil macros -->
+	<UserMacro
+		Name="coil_lib"
+		Value="coil$(coil_dllver).lib"
+	/>
+	<UserMacro
+		Name="coil_libd"
+		Value="coil$(coil_dllver)d.lib"
+	/>
+
 </VisualStudioPropertySheet>

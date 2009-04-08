@@ -41,6 +41,10 @@
 		Name="rtm_version"
 		Value="1.0.0"
 	/>
+	<UserMacro
+		Name="coil_dllver"
+		Value="100"
+	/>
 	<!-- ACE macros -->
 	<UserMacro
 		Name="ace_includes"
