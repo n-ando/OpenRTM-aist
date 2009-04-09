@@ -27,10 +27,6 @@
 #include <rtm/ModuleManager.h>
 #include <coil/stringutil.h>
 
-#ifdef WIN32
-#pragma warning( pop )
-#endif // WIN32
-
 namespace RTC
 {
   

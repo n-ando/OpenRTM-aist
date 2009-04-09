@@ -38,7 +38,7 @@ namespace coil
     : m_count(0), m_countMax(buflen + 1), m_recurred(false)
   {
     m_record.reserve(m_countMax);
-    for (int i(0); i < m_countMax; ++i)
+    for (unsigned long i(0); i < m_countMax; ++i)
       {
         m_record.push_back(TimeValue(0, 0));
       }
