@@ -124,7 +124,7 @@ RTC::ReturnCode_t USBCameraMonitor::onDeactivated(RTC::UniqueId ec_id)
 
 RTC::ReturnCode_t USBCameraMonitor::onExecute(RTC::UniqueId ec_id)
 {
-	static ACE_Time_Value tm_pre;
+	static coil::TimeValue tm_pre;
 	static int count = 0;
 
   if (m_inIn.isNew())
@@ -149,9 +149,9 @@ RTC::ReturnCode_t USBCameraMonitor::onExecute(RTC::UniqueId ec_id)
  	if (count > 120)
 	{
 		count = 0;
-		ACE_Time_Value tm;
-		tm = ACE_OS::gettimeofday();
-		std::cout << 120*1000/(tm - tm_pre).msec() << " [FPS]" << std::endl;
+		coil::TimeValue tm;
+		tm = coil::gettimeofday();
+		std::cout << 120*1000*1000/(tm - tm_pre).usec() << " [FPS]" << std::endl;
 		tm_pre = tm;
 	}
 	++count;
@@ -209,7 +209,7 @@ extern "C"
  
   void USBCameraMonitorInit(RTC::Manager* manager)
   {
-    RTC::Properties profile(usbcameramonitor_spec);
+    coil::Properties profile(usbcameramonitor_spec);
     manager->registerFactory(profile,
                              RTC::Create<USBCameraMonitor>,
                              RTC::Delete<USBCameraMonitor>);

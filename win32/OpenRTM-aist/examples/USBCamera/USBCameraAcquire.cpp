@@ -107,7 +107,7 @@ RTC::ReturnCode_t USBCameraAcquire::onDeactivated(RTC::UniqueId ec_id)
 
 RTC::ReturnCode_t USBCameraAcquire::onExecute(RTC::UniqueId ec_id)
 {
-  static ACE_Time_Value tm_pre;
+  static coil::TimeValue tm_pre;
   static int count = 0;
   IplImage* cam_frame = NULL;
   
@@ -136,9 +136,9 @@ RTC::ReturnCode_t USBCameraAcquire::onExecute(RTC::UniqueId ec_id)
   if (count > 120)
     {
       count = 0;
-      ACE_Time_Value tm;
-      tm = ACE_OS::gettimeofday();
-      std::cout << 120*1000/(tm - tm_pre).msec() << " [FPS]" << std::endl;
+      coil::TimeValue tm;
+      tm = coil::gettimeofday();
+      std::cout << 120*1000*1000/(tm - tm_pre).usec() << " [FPS]" << std::endl;
       tm_pre = tm;
     }
   ++count;
@@ -190,7 +190,7 @@ extern "C"
   
   void USBCameraAcquireInit(RTC::Manager* manager)
   {
-    RTC::Properties profile(usbcameraacquire_spec);
+    coil::Properties profile(usbcameraacquire_spec);
     manager->registerFactory(profile,
                              RTC::Create<USBCameraAcquire>,
                              RTC::Delete<USBCameraAcquire>);
