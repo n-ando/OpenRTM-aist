@@ -623,7 +623,7 @@ Configurations:
         Value: "4"
     VCLinkerTool:
       - Key: AdditionalDependencies
-        Value: "$(rtm_libd)"
+        Value: "$(rtm_libd) $(coil_libd)"
       - Key: OutputFile
         Value: "$(OutDir)\\\\__PROJECT_NAME__.exe"
       - Key: LinkIncremental
@@ -670,7 +670,7 @@ Configurations:
         Value: "3"
     VCLinkerTool:
       - Key: AdditionalDependencies
-        Value: "$(rtm_lib)"
+        Value: "$(rtm_lib) $(coil_lib)"
       - Key: OutputFile
         Value: "$(OutDir)\\\\__PROJECT_NAME__.exe"
       - Key: LinkIncremental
@@ -732,7 +732,7 @@ Configurations:
         Value: "4"
     VCLinkerTool:
       - Key: AdditionalDependencies
-        Value: "$(rtm_libd)"
+        Value: "$(rtm_libd) $(coil_libd)"
 #      - Key: OutputFile
 #        Value: "$(OutDir)\\\\__PROJECT_NAME__.dll"
 #      - Key: Version
@@ -783,7 +783,7 @@ Configurations:
         Value: "3"
     VCLinkerTool:
       - Key: AdditionalDependencies
-        Value: "$(rtm_lib)"
+        Value: "$(rtm_lib) $(coil_lib)"
 #      - Key: OutputFile
 #        Value: "$(OutDir)\\\\__PROJECT_NAME__.dll"
       - Key: LinkIncremental
