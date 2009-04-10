@@ -1,5 +1,5 @@
-libRTC: libRTCSkel
 libRTC: libcoil
+libRTC: libRTCSkel
 rtcd: libRTC
 ConfigSampleComp: libRTC
 ConfigSample: libRTC

@@ -21,9 +21,8 @@
 @rem copy property sheet
 @rem ============================================================
 copy   etc\rtm_config_omni407.vsprops rtm_config.vsprops
-copy   etc\coil_config_omni407.vsprops coil_config.vsprops
 copy   etc\rtm_config_omni407.vsprops examples\USBCamera\rtm_config.vsprops
-copy   etc\coil_config_omni407.vsprops examples\USBCamera\coil_config.vsprops
+copy   coil_config.vsprops examples\USBCamera\coil_config.vsprops
 
 @rem ============================================================
 @rem build OpenRTM-aist
