@@ -211,7 +211,7 @@
 	  <Environment Id='UpdatePath2' Name='PATH' Action='create'
 		       System='yes' Part='all'
 		       Value='[rtc_template]' />
-	  <Environment Id='RTM_ROOT' Name='RTM_ROOT' Action='create'
+	  <Environment Id='RTM_ROOT' Name='RTM_ROOT' Action='set'
 		       System='yes' Part='all' Value='[Version]' />
 	</Component>
       </Directory>
