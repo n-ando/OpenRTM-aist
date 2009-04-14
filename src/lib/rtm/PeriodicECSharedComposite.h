@@ -233,63 +233,64 @@ namespace SDOPackage
     {
     public:
       Member(RTC::RTObject_ptr rtobj)
-//        : rtobj_(rtobj),
-//          profile_(rtobj->get_component_profile()),
-//          eclist_(rtobj->get_owned_contexts()),
-//          config_(rtobj->get_configuration())
+      //        : rtobj_(rtobj),
+      //          profile_(rtobj->get_component_profile()),
+      //          eclist_(rtobj->get_owned_contexts()),
+      //          config_(rtobj->get_configuration())
       {
-//        rtobj_   = RTC::RTObject::_duplicate(rtobj);
-//        profile_ = rtobj->get_component_profile();
-//        eclist_  = rtobj->get_owned_contexts();
-//        config_  = rtobj->get_configuration();
+        rtobj_   = RTC::RTObject::_duplicate(rtobj);
+	profile_ = rtobj->get_component_profile();
+	eclist_  = rtobj->get_owned_contexts();
+	config_  = rtobj->get_configuration();
       }
 
       virtual ~Member(void)
       {
+	/*
         rtobj_.out();
         profile_.out();
         eclist_.out();
         config_.out();
+	*/
       }
 
-      //      Member(const Member& x)
-//        : rtobj_(x.rtobj_),
-//          profile_(x.profile_),
-//          eclist_(x.eclist_),
-//          config_(x.config_)
-//      {
-//        rtobj_   = x.rtobj_;
-//        profile_ = x.profile_;
-//        eclist_  = x.eclist_;
-//        config_  = x.config_;
-//        std::cout << "copy ctor" << std::endl;
-//      }
+      Member(const Member& x)
+      //        : rtobj_(x.rtobj_),
+      //          profile_(x.profile_),
+      //          eclist_(x.eclist_),
+      //          config_(x.config_)
+      {
+        rtobj_   = x.rtobj_;
+        profile_ = x.profile_;
+        eclist_  = x.eclist_;
+        config_  = x.config_;
+      }
 
-//      Member& operator=(const Member& x)
-//      {
+      Member& operator=(const Member& x)
+      {
 //        std::cout << "####################op=" << std::endl;
-//        Member tmp(x);
-//        tmp.swap(*this);
-//        return *this;
-//      }
+        Member tmp(x);
+        tmp.swap(*this);
+        return *this;
+      }
 //
-//      void swap(Member& x)
-//      {
-//        RTC::RTObject_var rtobj(x.rtobj_);
-//        RTC::ComponentProfile_var profile(x.profile_);
-//        RTC::ExecutionContextList_var eclist(x.eclist_);
-//        SDOPackage::Configuration_var config(x.config_);
-//
-//        x.rtobj_ = this->rtobj_;
-//        x.profile_ = this->profile_;
-//        x.eclist_ = this->eclist_;
-//        x.config_ = this->config_;
-//
-//        this->rtobj_ = rtobj;
-//        this->profile_ = profile;
-//        this->eclist_ = eclist;
-//        this->config_ = config;
-//      }
+      void swap(Member& x)
+      {
+        RTC::RTObject_var rtobj(x.rtobj_);
+        RTC::ComponentProfile_var profile(x.profile_);
+        RTC::ExecutionContextList_var eclist(x.eclist_);
+        SDOPackage::Configuration_var config(x.config_);
+
+        x.rtobj_ = this->rtobj_;
+        x.profile_ = this->profile_;
+        x.eclist_ = this->eclist_;
+        x.config_ = this->config_;
+
+        this->rtobj_ = rtobj;
+        this->profile_ = profile;
+        this->eclist_ = eclist;
+        this->config_ = config;
+      }
 
       RTC::RTObject_var rtobj_;
       RTC::ComponentProfile_var profile_;
