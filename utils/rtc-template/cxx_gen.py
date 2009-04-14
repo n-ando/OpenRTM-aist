@@ -281,7 +281,7 @@ extern "C"
  
   void [basicInfo.name]Init(RTC::Manager* manager)
   {
-    RTC::Properties profile([l_name]_spec);
+    coil::Properties profile([l_name]_spec);
     manager->registerFactory(profile,
                              RTC::Create<[basicInfo.name]>,
                              RTC::Delete<[basicInfo.name]>);
