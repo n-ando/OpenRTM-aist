@@ -81,6 +81,16 @@
 		</Component>
 	      </Directory><!--end of idl-->
 	    </Directory><!--end of rtm-->
+	    <!-- coil -->
+	    <Directory Id="coil" Name="coil">
+	      <Component Id="COILs" Guid="{% COILs.GUID %}">
+		{% for file in COILs.Files %}
+		<File Id="{% file.Id %}" Name="{% file.ShortName %}"
+		      LongName="{% file.Name %}" DiskId="1" Compressed="yes"
+		      Source="{% file.Source %}"/>
+		{% endfor %}
+	      </Component>
+	    </Directory><!--end of coil-->
 	    
 	    <!-- doc -->
 	    <Directory Id="doc" Name="doc">
@@ -229,6 +239,7 @@
     
     <Feature Id="Devel" Level="1" Title="Development Environment">
       <ComponentRef Id="Bin"/>
+      <ComponentRef Id="COILs"/>
       <ComponentRef Id="Etc"/>
       <ComponentRef Id="Headers"/>
       <ComponentRef Id="IDLs"/>

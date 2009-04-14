@@ -66,6 +66,7 @@ clean-local:
 	rm -f *.vcproj
 	rm -f *.user
 	rm -f *.def
+	rm -f *.lst
 	rm -rf Release Debug
 
 EXTRA_DIST =                \
@@ -73,6 +74,13 @@ EXTRA_DIST =                \
 	libcoil_vc8.vcproj  \
 	libcoil_vc9.vcproj  \
 	libcoil.vcproj.yaml
+
+#------------------------------------------------------------
+# File list for deb/ports packages
+#------------------------------------------------------------
+lst:
+	echo $(COIL_SRC) > src.lst
+	echo $(COIL_H) > header.lst
 
 #------------------------------------------------------------
 # vcproj file build rules
@@ -102,3 +110,16 @@ libcoil_vc9.vcproj: libcoil.vcproj.yaml $(COIL_ALL)
 		--source $(COIL_SRC) \
 		--header $(COIL_H)
 	qkc -sm $(win32_builddir)/libcoil_vc9.vcproj
+
+#------------------------------------------------------------
+# for wxs file
+#------------------------------------------------------------
+wxs:
+	$(top_srcdir)/../../../build/makewxs.py flist \
+		-c COILs \
+		-o $(top_srcdir)/../../../win32/OpenRTM-aist/installer/coils.yaml \
+		-p ..\\coil \
+		$(COIL_H) $(COIL_SRC)
+
+dist-hook: lst vcproj wxs
+
