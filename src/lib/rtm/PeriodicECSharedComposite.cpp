@@ -45,7 +45,7 @@ namespace SDOPackage
 {
   PeriodicECOrganization::PeriodicECOrganization(::RTC::RTObject_impl* rtobj)
     : Organization_impl(rtobj->getObjRef()),
-      rtclog("organization"),
+      rtclog("PeriodicECOrganization"),
       m_rtobj(rtobj),
       m_ec(::RTC::ExecutionContext::_nil())
   {
@@ -104,21 +104,24 @@ namespace SDOPackage
   {
 
     RTC_DEBUG(("set_members()"));
-
+    std::cout << "set_member 0" << std::endl;
     removeAllMembers();
+    std::cout << "set_member 1" << std::endl;
     updateExportedPortsList();
 
     for (::CORBA::ULong i(0), len(sdo_list.length()); i < len; ++i)
       {
         const SDO_var sdo  = sdo_list[i];
         ::OpenRTM::DataFlowComponent_var dfc;
-        if (!sdoToDFC(sdo.in(), dfc.out())) { continue; }
+	if (!sdoToDFC(sdo.in(), dfc.out())) { continue; }
 
-        Member member(dfc.in());
-//        stopOwnedEC(member);
-//        addOrganizationToTarget(member);
-//        addParticipantToEC(member);
-//        addPort(member, m_expPorts);
+	Member member(dfc.in());
+
+
+        stopOwnedEC(member);
+        addOrganizationToTarget(member);
+        addParticipantToEC(member);
+        addPort(member, m_expPorts);
         m_rtcMembers.push_back(member);
       }
 
@@ -172,11 +175,11 @@ namespace SDOPackage
     while (it != it_end)
       {
         Member& member(*it);
-//        removePort(member, m_expPorts);
-//        removeParticipantFromEC(member);
-//        removeOrganizationFromTarget(member);
-//        startOwnedEC(member);
-//        ::SDOPackage::Organization_impl::remove_member(member.profile_->instance_name); 
+        removePort(member, m_expPorts);
+        removeParticipantFromEC(member);
+        removeOrganizationFromTarget(member);
+        startOwnedEC(member);
+        ::SDOPackage::Organization_impl::remove_member(member.profile_->instance_name); 
         ++it;
      }
     m_rtcMembers.clear();
@@ -248,7 +251,8 @@ namespace SDOPackage
   void PeriodicECOrganization::addOrganizationToTarget(Member& member)
   {
     // get given RTC's configuration object
-    Configuration_var conf(member.config_.in());
+    //    Configuration_var conf(member.config_.in());
+    Configuration_var conf(member.config_);
     if (::CORBA::is_nil(conf)) return;
     
     // set organization to target RTC's conf
@@ -293,7 +297,7 @@ namespace SDOPackage
           }
       }
     // set ec to target RTC
-    m_ec->add_component(member.rtobj_.in());
+    m_ec->add_component(member.rtobj_);
   }
 
   /*!
@@ -305,6 +309,7 @@ namespace SDOPackage
    */
   void PeriodicECOrganization::removeParticipantFromEC(Member& member)
   { 
+    std::cout << "removeParticipantFromEC 0" << std::endl;
     if (::CORBA::is_nil(m_ec))
       {
         ::RTC::ExecutionContextList_var ecs(m_rtobj->get_owned_contexts());
@@ -314,9 +319,11 @@ namespace SDOPackage
           }
         else
           {
+	    std::cout << "removeParticipantFromEC return" << std::endl;
             return;
           }
       }
+    std::cout << "removeParticipantFromEC 1" << std::endl;
     m_ec->remove_component(member.rtobj_.in());
   }
 
