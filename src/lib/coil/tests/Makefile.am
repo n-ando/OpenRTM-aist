@@ -6,6 +6,7 @@
 ##---------------------------------------------------------------------------
 
 SUBDIRS =            \
+	stringutil   \
         Condition    \
         DynamicLib   \
         File         \
@@ -22,6 +23,8 @@ SUBDIRS =            \
 	UUID         \
 	TimeMeasure  \
 	AsyncInvoker
+
+
 
 
 clean-local:
