@@ -531,6 +531,7 @@ AC_OUTPUT([Makefile
 	ace/build/Makefile
 	ace/coil/Makefile
 	tests/Makefile
+	tests/stringutil/Makefile
 	tests/Condition/Makefile
 	tests/DynamicLib/Makefile
 	tests/File/Makefile
