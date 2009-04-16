@@ -28,6 +28,44 @@ namespace coil
 {
   /*!
    * @if jp
+   * @brief 大文字への変換
+   *
+   * 与えられた文字列を大文字に変換
+   *
+   * @param str 入力文字列
+   *
+   * @else
+   * @brief Uppercase String Transformation
+   *
+   * This function transforms a given string to uppercase letters
+   * 
+   * @param str The input string
+   *
+   * @endif
+   */
+  void toUpper(std::string& str);
+
+  /*!
+   * @if jp
+   * @brief 小文字への変換
+   *
+   * 与えられた文字列を小文字に変換
+   *
+   * @param str 入力文字列
+   *
+   * @else
+   * @brief Lowercase String Transformation
+   *
+   * This function transforms a given string to lowercase letters
+   * 
+   * @param str The input string
+   *
+   * @endif
+   */
+  void toLower(std::string& str);
+
+  /*!
+   * @if jp
    * @brief 入力ストリームから1行読み込む
    *
    * 入力ストリームから1行読み込む。

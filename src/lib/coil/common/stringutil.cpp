@@ -25,10 +25,37 @@
 #include <limits.h>
 #include <coil/stringutil.h>
 #include <string.h>
+#include <cctype>
+#include <cstdio>
 
 namespace coil
 {
-  
+  /*!
+   * @if jp
+   * @brief 大文字への変換
+   * @else
+   * @brief Uppercase String Transformation
+   * @endif
+   */
+  void toUpper(std::string& str)
+  {
+    std::transform(str.begin(), str.end(), str.begin(),
+                   (int (*)(int))std::toupper); 
+  }
+
+  /*!
+   * @if jp
+   * @brief 小文字への変換
+   * @else
+   * @brief Lowercase String Transformation
+   * @endif
+   */
+  void toLower(std::string& str)
+  {
+    std::transform(str.begin(), str.end(), str.begin(),
+                   (int (*)(int))std::tolower); 
+  }
+
   /*!
    * @if jp
    * @brief 入力ストリームから1行読み込む
