@@ -164,6 +164,15 @@ vc8proj:
 		--source Sensor.cpp                          \
 		--header Sensor.h
 	qkc -sm $(win32_builddir)/SensorDll_vc8.vcproj
+	$(top_builddir)/build/vcprojtool.py vcproj           \
+		--type EXE                                   \
+		--vcversion "8.00"                           \
+		--projectname "Composite"                    \
+		--version $(RTM_VERSION)                     \
+		--out $(win32_builddir)/Composite_vc8.vcproj \
+		--yaml ../rtc.vcproj.yaml                    \
+		--source Composite.cpp
+	qkc -sm $(win32_builddir)/Composite_vc8.vcproj
 
 vc9proj:
 	$(top_builddir)/build/vcprojtool.py vcproj           \
@@ -228,6 +237,15 @@ vc9proj:
 		--source Sensor.cpp                          \
 		--header Sensor.h
 	qkc -sm $(win32_builddir)/SensorDll_vc9.vcproj
+	$(top_builddir)/build/vcprojtool.py vcproj           \
+		--type EXE                                   \
+		--vcversion "9.00"                           \
+		--projectname "Composite"                    \
+		--version $(RTM_VERSION)                     \
+		--out $(win32_builddir)/Composite_vc9.vcproj \
+		--yaml ../rtc.vcproj.yaml                    \
+		--source Composite.cpp
+	qkc -sm $(win32_builddir)/Composite_vc9.vcproj
 
 dist-hook: lst vcproj
 

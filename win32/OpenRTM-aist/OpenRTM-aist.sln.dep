@@ -21,3 +21,4 @@ Controller: libRTC
 ControllerComp: libRTC
 Sensor: libRTC
 SensorComp: libRTC
+Composite: libRTC
