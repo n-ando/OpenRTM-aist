@@ -23,7 +23,8 @@
 #include <string>
 #include <map>
 #include <algorithm>
-#include <iostream>
+#include <vector>
+#include <coil/Singleton.h>
 
 namespace coil
 {
@@ -72,6 +73,22 @@ namespace coil
     {
       if (m_creators.count(id) == 0) { return false; }
       return true;
+    }
+
+    std::vector<Identifier> getIdentifiers()
+    {
+      std::vector<Identifier> idlist;
+      idlist.reserve(m_creators.size());
+
+      FactoryMapIt it(m_creators.begin());
+      FactoryMapIt it_end(m_creators.end());
+
+      while (it != it_end)
+        {
+          idlist.push_back(it->first);
+          ++it;
+        }
+      return idlist;
     }
 
     ReturnCode addFactory(const Identifier& id,
@@ -133,5 +150,31 @@ namespace coil
     };
     FactoryMap m_creators;
   };
+
+
+
+  template <
+    class AbstractClass,
+    typename Identifier = std::string,
+    typename Compare = std::less<Identifier>,
+    typename Creator = AbstractClass* (*)(),
+    typename Destructor = void (*)(AbstractClass*&)
+    >
+  class GlobalFactory
+    : public Factory<AbstractClass, Identifier, Compare, Creator, Destructor>,
+      public coil::Singleton<GlobalFactory<AbstractClass,
+                                           Identifier,
+                                           Compare,
+                                           Creator,
+                                           Destructor> >
+  {
+  public:
+
+  private:
+    GlobalFactory(){}
+    ~GlobalFactory(){}
+    friend class Singleton<GlobalFactory>;
+  };
+
 }; // namespace coil
 #endif // COIL_FACTORY_H

@@ -27,8 +27,16 @@ AM_LDFLAGS= -L.                   \
 noinst_PROGRAMS = FactoryTests
 
 FactoryTests_SOURCES = ../TestRunner.cpp FactoryTests.cpp
-FactoryTests_LDFLAGS = -L../../lib -L$(libdir)
+FactoryTests_LDFLAGS = -L../../lib/.libs -L$(libdir)
 FactoryTests_LDADD   = -lcppunit -lcoil
+
+noinst_LTLIBRARIES = libPluginC.la
+
+libPluginC_la_SOURCES = \
+	PluginC.cpp
+
+libPluginC_la_LDFLAGS = \
+	-rpath `pwd`
 
 TEST_SRC = $(FactoryTests_SOURCES)
 TEST_H   = 
