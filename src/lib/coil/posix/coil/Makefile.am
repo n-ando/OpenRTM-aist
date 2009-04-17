@@ -44,7 +44,9 @@ COIL_COMMON_H   =       \
 	Guard.h         \
 	Properties.h    \
 	Timer.h         \
-	Logger.h
+	Logger.h        \
+	Singleton.h     \
+	Factory.h
 
 # coil all sources and headers
 COIL_SRC = $(COIL_COMMON_SRC) $(COIL_PLATFORM_SRC)

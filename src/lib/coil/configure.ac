@@ -534,12 +534,14 @@ AC_OUTPUT([Makefile
 	tests/stringutil/Makefile
 	tests/Condition/Makefile
 	tests/DynamicLib/Makefile
+	tests/Factory/Makefile
 	tests/File/Makefile
 	tests/Guard/Makefile
 	tests/Listener/Makefile
 	tests/Mutex/Makefile
 	tests/OS/Makefile
 	tests/Signal/Makefile
+	tests/Singleton/Makefile
 	tests/Task/Makefile
 	tests/Time/Makefile
 	tests/Timer/Makefile
