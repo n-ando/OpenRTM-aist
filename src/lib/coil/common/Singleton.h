@@ -27,25 +27,25 @@ namespace coil
 {
   /*!
    * @if jp
-   * @class Singleton 僋儔僗僥儞僾儗乕僩
+   * @class Singleton クラステンプレ〖ト
    *
-   * 偙偺僥儞僾儗乕僩偼丄擟堄偺僋儔僗傪 Singleton 偵偡傞僥儞僾儗乕僩偱偁傞丅
-   * 埲壓偺傛偆偵偟偰巊梡偡傞丅
+   * このテンプレ〖トは、扦罢のクラスを Singleton にするテンプレ〖トである。
+   * 笆布のようにして蝗脱する。
    *
    * class A { // };
    * typedef coil::Singleton<A> A_;
    *
-   * 擟堄偺応強偱
+   * 扦罢の眷疥で
    *
-   * A& a(A_:instance()); // a 偼 A 偺桞堦偺僀儞僗僞儞僗偑擖傞
+   * A& a(A_:instance()); // a は A の停办のインスタンスが掐る
    *
-   * 偨偩偟丄A帺懱偺僐儞僗僩儔僋僞偼巊梡偱偒傞偺偱丄摨堦偺僜乕僗偱丄
+   * ただし、A极挛のコンストラクタは蝗脱できるので、票办のソ〖スで、
    *
    * A* a = new A();
    *
-   * 偺傛偆偵偡傞偙偲傕偱偒傞偨傔丄拲堄偑昁梫偱偁傞丅
-   * 懳徾偲偡傞僋儔僗傪 new 偡傞偙偲傪嬛巭偡傞偨傔偵偼丄埲壓偺傛偆偵丄
-   * 懳徾僋儔僗偱 Singelton 傪宲彸 (CRTP) 偟 friend 愰尵偡傞昁梫偑偁傞丅
+   * のようにすることもできるため、庙罢が涩妥である。
+   * 滦据とするクラスを new することを敦贿するためには、笆布のように、
+   * 滦据クラスで Singelton を费镜 (CRTP) し friend 离咐する涩妥がある。
    *
    * class A
    *  : public coil::Singleton<A>
@@ -57,10 +57,10 @@ namespace coil
    *   friend class coil::Singelton<A>;
    * };
    *
-   * 偙偆偡傞偙偲偱丄
+   * こうすることで、
    *
-   * A* a = new A(); // 偼嬛巭偝傟傞
-   * A& a(A::instance()); // 偑桞堦偺僀儞僗僞儞僗傪摼傞桞堦偺曽朄
+   * A* a = new A(); // は敦贿される
+   * A& a(A::instance()); // が停办のインスタンスを评る停办の数恕
    *
    * @else
    * @class Singleton class template
@@ -102,21 +102,20 @@ namespace coil
   class Singleton
   {
   public:
+    typedef SingletonClass* SingletonClassPtr;
     static SingletonClass& instance()
     {
-      static coil::Mutex mutex;
-      static SingletonClass* instance_(0);
 
       // DLC pattern
-      if (!instance_)
+      if (!m_instance)
       {
-        coil::Guard<coil::Mutex> guard(mutex);
-	if (!instance_)
+        coil::Guard<coil::Mutex> guard(m_mutex);
+	if (!m_instance)
 	  {
-	    instance_ = new SingletonClass();
+	    m_instance = new SingletonClass();
 	  }
       }
-      return *instance_;
+      return *m_instance;
     }
 
   protected:
@@ -124,7 +123,18 @@ namespace coil
     ~Singleton(){};
     Singleton(const Singleton& x);
     Singleton& operator=(const Singleton& x);
+
+  protected:
+    static coil::Mutex m_mutex;
+    static SingletonClass* m_instance;
   };
+
+  template <class SingletonClass>
+  typename Singleton<SingletonClass>::SingletonClassPtr
+  Singleton<SingletonClass>::m_instance;
+
+  template <class SingletonClass>
+  typename coil::Mutex Singleton<SingletonClass>::m_mutex;
 }; // namepsace coil
 
 #endif // COIL_SINGLETON_H
