@@ -22,7 +22,9 @@ COIL_COMMON_H   =       \
 	Guard.h         \
 	Properties.h    \
 	Timer.h         \
-	Logger.h
+	Logger.h        \
+	Singleton.h     \
+	Factory.h
 
 EXTRA_DIST =               \
 	$(COIL_COMMON_SRC) \

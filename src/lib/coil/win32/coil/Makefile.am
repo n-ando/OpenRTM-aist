@@ -35,10 +35,12 @@ COIL_COMMON_SRC =       \
 COIL_COMMON_H   =       \
 	Async.h         \
 	Guard.h         \
+	Factory.h       \
 	Listener.h      \
 	Logger.h        \
 	NonCopyable.h   \
 	Properties.h    \
+	Singleton.h     \
 	TimeMeasure.h   \
 	TimeValue.h     \
 	Timer.h         \
