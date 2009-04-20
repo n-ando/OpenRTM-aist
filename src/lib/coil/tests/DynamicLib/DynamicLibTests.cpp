@@ -195,9 +195,16 @@ namespace DynamicLib
       int result = dl1->open(LibName, COIL_DEFAULT_DYNLIB_MODE, 1);
       CPPUNIT_ASSERT_EQUAL(0, result);
 
-      char * p = (char *)dl1->symbol(SymbolName);
-//      if (!p) std::cout << "error() : " << dl1->error() << "." << std::endl ;
-      CPPUNIT_ASSERT(p);
+      typedef int (*exec)();
+
+      exec func = NULL;
+      func = (exec)dl1->symbol(SymbolName);
+
+      CPPUNIT_ASSERT(func);
+
+      int ic = func();
+
+      CPPUNIT_ASSERT_EQUAL((int)0xdeadbeef, ic);
 
       dl1->close();
       delete dl1;

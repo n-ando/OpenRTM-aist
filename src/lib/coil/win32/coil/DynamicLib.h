@@ -20,10 +20,11 @@
 #define COIL_DYNAMICLIB_H
 
 #include <windows.h>
+#include <iostream>
 #include <string>
 #include <coil/config_coil.h>
 
-#define COIL_DEFAULT_DYNLIB_MODE DONT_RESOLVE_DLL_REFERENCES
+#define COIL_DEFAULT_DYNLIB_MODE LOAD_WITH_ALTERED_SEARCH_PATH
 
 /*!
  * Test for DLL export.
@@ -58,7 +59,10 @@ namespace coil
     virtual int close(void);
     void *symbol (const char* symbol_name);
     const char* error(void) const;
-    static int ForExternTest(void) { return 0xdeadbeef; }
+    static int ForExternTest(void) { 
+        std::cout<<"ForExternTest"<<std::endl;
+        return 0xdeadbeef; 
+    }
   private:
     std::string m_name;
     int m_mode;
