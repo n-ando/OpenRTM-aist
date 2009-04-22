@@ -11,6 +11,7 @@ WINLIBS = libRTCSkel.lib \
 	RTC$(VER).lib \
 	RTC$(VER)d.lib \
 	RTC$(VER).dll \
+	RTC$(VER)d.dll \
 	coild.dll \
 	coil.lib \
 	coild.lib \
