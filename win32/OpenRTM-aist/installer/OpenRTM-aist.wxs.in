@@ -206,13 +206,13 @@
 
 	<Component Id="ENV" Guid="C41EB819-D5E6-11DC-A98E-0090CC744077">
 	  <Environment Id='UpdatePath' Name='PATH' Action='create'
-		       System='yes' Part='last'
+		       System='no' Part='last'
 		       Value='[bin]' />
 	  <Environment Id='UpdatePath2' Name='PATH' Action='create'
-		       System='yes' Part='all'
+		       System='no' Part='all'
 		       Value='[rtc_template]' />
 	  <Environment Id='RTM_ROOT' Name='RTM_ROOT' Action='set'
-		       System='yes' Part='all' Value='[Version]' />
+		       System='no' Part='all' Value='[Version]' />
 	</Component>
       </Directory>
 
