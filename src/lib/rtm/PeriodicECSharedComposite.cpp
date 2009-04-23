@@ -143,11 +143,14 @@ namespace SDOPackage
            InvalidParameter, NotAvailable, InternalError)
   {
     RTC_DEBUG(("remove_member(id = %s)", id));
-    for (MemIt it(m_rtcMembers.begin()), it_end(m_rtcMembers.end());
-         it != it_end; ++it)
+    for (MemIt it(m_rtcMembers.begin()); it != m_rtcMembers.end();)
       {
         Member& member(*it);
-        if (strncmp(id, member.profile_->instance_name, strlen(id))) continue;
+        if (strncmp(id, member.profile_->instance_name, strlen(id))) 
+          {
+            ++it;
+            continue;
+          }
         
         removePort(member, m_expPorts);
         m_rtobj->getProperties()["conf.default.exported_ports"] =
@@ -157,7 +160,6 @@ namespace SDOPackage
         removeOrganizationFromTarget(member);
         startOwnedEC(member);
         it = m_rtcMembers.erase(it);
-        --it;
       }
 
     CORBA::Boolean result;
