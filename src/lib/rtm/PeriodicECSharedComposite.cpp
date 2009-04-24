@@ -436,8 +436,10 @@ namespace SDOPackage
   void PeriodicECOrganization::updateDelegatedPorts()
   {
     std::vector<std::string>& oldPorts(m_expPorts);
+    std::sort(oldPorts.begin(),oldPorts.end());
     std::vector<std::string>
       newPorts(coil::split(m_rtobj->getProperties()["conf.default.exported_ports"], ","));
+    std::sort(newPorts.begin(),newPorts.end());
 
     std::vector<std::string> removedPorts; // oldPorts - interPorts
     std::vector<std::string> createdPorts;   // newPorts - interPorts
