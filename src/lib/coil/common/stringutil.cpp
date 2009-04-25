@@ -226,6 +226,32 @@ namespace coil
            !isEscaped(str, str.size() - 1))
       str.erase(str.size() - 1, 1);
   }
+
+  /*!
+   * @if jp
+   * @brief 文字列の先頭・末尾の空白文字を削除する
+   * @else
+   * @brief Erase the head blank and the tail blank characters of string
+   * @endif
+   */
+  void eraseBothEndsBlank(std::string& str)
+  {
+    eraseHeadBlank(str);
+    eraseTailBlank(str);
+  }
+
+  /*!
+   * @if jp
+   * @brief 文字列のを正規化する
+   * @else
+   * @brief Erase the head/tail blank and replace upper case to lower case
+   * @endif
+   */
+  void normalize(std::string& str)
+  {
+    eraseBothEndsBlank(str);
+    toLower(str);
+  }
   
   /*!
    * @if jp
@@ -255,12 +281,12 @@ namespace coil
    * @brief Split string by delimiter
    * @endif
    */
-  std::vector<std::string> split(const std::string& input,
-                                 const std::string& delimiter,
-                                 bool ignore_empty)
+  vstring split(const std::string& input,
+                const std::string& delimiter,
+                bool ignore_empty)
   {
     typedef std::string::size_type size;
-    std::vector<std::string> results;
+    vstring results;
     size delim_size = delimiter.size();
     size found_pos(0), begin_pos(0), pre_pos(0), substr_size(0);
     
@@ -393,7 +419,7 @@ namespace coil
       if (std::find(str.begin(), str.end(), s) == str.end())
         return str.push_back(s);
     }
-    std::vector<std::string> str;
+    vstring str;
   };
   
   /*!
@@ -403,7 +429,7 @@ namespace coil
    * @brief Eliminate duplication from the given string list
    * @endif
    */
-  std::vector<std::string> unique_sv(std::vector<std::string> sv)
+  vstring unique_sv(vstring sv)
   {
     return std::for_each(sv.begin(), sv.end(), unique_strvec()).str;
   }
@@ -415,7 +441,7 @@ namespace coil
    * @brief Create CSV file from the given string list
    * @endif
    */
-  std::string flatten(std::vector<std::string> sv)
+  std::string flatten(vstring sv)
   {
     if (sv.size() == 0) return "";
     
@@ -434,7 +460,7 @@ namespace coil
    * @brief Convert the given string list into the argument list
    * @endif
    */
-  char** toArgv(const std::vector<std::string>& args)
+  char** toArgv(const vstring& args)
   {
     char** argv;
     size_t argc(args.size());
