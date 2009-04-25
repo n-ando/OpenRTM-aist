@@ -25,7 +25,29 @@
 
 #include <coil/Condition.h>
 #include <coil/Mutex.h>
+#include <coil/Guard.h>
 #include <coil/Task.h>
+#include <coil/Async.h>
+#include <coil/Time.h>
+#include <coil/TimeValue.h>
+
+typedef coil::Guard<coil::Mutex> Guard;
+
+class A
+{
+public:
+  A(coil::Condition<coil::Mutex>& cond, coil::Mutex& mutex)
+    : m_cond(cond), m_mutex(mutex) {}
+  void signal(int usec)
+  {
+    coil::usleep(usec);
+    m_mutex.lock();
+    m_cond.signal();
+    m_mutex.unlock();
+  }
+  coil::Condition<coil::Mutex>& m_cond;
+  coil::Mutex& m_mutex;
+};
 
 /*!
  * @class ConditionTests class
@@ -33,36 +55,40 @@
  */
 namespace Condition
 {
-  static int ConditionStatus;
 
 /*!
- *  @brief Œ±—pƒ^ƒXƒNB‹N“®‚·‚é‚Æwait‚µ‚ÄA‹N‚±‚³‚ê‚é‚Æ¶¬‚É“n‚³‚ê‚½’l‚ğConditionStatus‚É‰ÁZ‚·‚éB
+ *  @brief »î¸³ÍÑ¥¿¥¹¥¯¡£µ¯Æ°¤¹¤ë¤Èwait¤·¤Æ¡¢µ¯¤³¤µ¤ì¤ë¤ÈÀ¸À®»ş¤ËÅÏ¤µ¤ì¤¿ÃÍ¤òConditionStatus¤Ë²Ã»»¤¹¤ë¡£
  */
   class ConditionCheckTask : public coil::Task
   {
   public:
     ConditionCheckTask() : id(0) { }
-    ConditionCheckTask(coil::Mutex & aMutex, coil::Condition<coil::Mutex> & aCondition, int anId)
-        : mutex(&aMutex), cond(&aCondition), id(anId) {
-//        std::cout << "Task(" << id << ") created." << std::endl;
-        }
-    ~ConditionCheckTask() { };
+    ConditionCheckTask(coil::Mutex & aMutex,
+                       coil::Condition<coil::Mutex> & aCondition, int anId)
+      : mutex(&aMutex), cond(&aCondition), id(anId)
+    {
+      //        std::cout << "Task(" << id << ") created." << std::endl;
+    }
+
+    virtual ~ConditionCheckTask()
+    {
+    };
+
     virtual int svc()
     {
-//      std::cout << "Ready to Add " << id << " to ConditionStatus(" << ConditionStatus << ")" << std::endl;
-      mutex->lock();
+      Guard guard(*mutex);
+      //      mutex->lock();
       cond->wait();
       ConditionStatus += id;
-      mutex->unlock();
-//      std::cout << "Added " << id << " to ConditionStatus(" << ConditionStatus << ")" << std::endl;
+      //      mutex->unlock();
       return ConditionStatus;
     }
     /*!
-     *  @brief Œ‹‰Êî•ñ‚ÌConditionStatus‚ğƒNƒŠƒA‚·‚é
+     *  @brief ·ë²Ì¾ğÊó¤ÎConditionStatus¤ò¥¯¥ê¥¢¤¹¤ë
      */
     static void resteStatus() { ConditionStatus =  0; }
     /*!
-     *  @brief Œ‹‰Êî•ñ‚ÌConditionStatus‚ÌŒ»İ’l‚ğ•Ô‚·
+     *  @brief ·ë²Ì¾ğÊó¤ÎConditionStatus¤Î¸½ºßÃÍ¤òÊÖ¤¹
      */
     static int getStatus() { return ConditionStatus; }
   private:
@@ -70,8 +96,12 @@ namespace Condition
     coil::Mutex * mutex;
     coil::Condition<coil::Mutex> * cond;
     int id;
+    static int ConditionStatus;
   };  // class ConditionCheckTask
 
+  int ConditionCheckTask::ConditionStatus(0);
+
+  
   class ConditionTests
    : public CppUnit::TestFixture
   {
@@ -137,20 +167,34 @@ namespace Condition
       cct1.activate();
       cct2.activate();
 
+      coil::usleep(10000); // give cpu time to tasks
+
       CPPUNIT_ASSERT_EQUAL(0x00, ConditionCheckTask::getStatus());
 
-      mu1.lock();
-      cond1.signal();
-      mu1.unlock();
+      {
+        Guard guard(mu1);
+        //      mu1.lock();
+        cond1.signal();
+        //        mu1.unlock();
+      }
 
-      mu1.lock();
-      cond1.signal();
-      mu1.unlock();
+      coil::usleep(10000); // give cpu time to tasks
 
-      mu2.lock();
-      cond2.wait(1);
-      mu2.unlock();
+      CPPUNIT_ASSERT_EQUAL(id1, ConditionCheckTask::getStatus());
+
+      {
+        Guard guard(mu1);
+        //        mu1.lock();
+        cond1.signal();
+        //      mu1.unlock();
+      }
+
+      coil::usleep(10000); // give cpu time to tasks
+
       CPPUNIT_ASSERT_EQUAL(id1 + id2, ConditionCheckTask::getStatus());
+
+      //      cct1.wait();
+      //      cct2.wait();
     }
 
     /*!
@@ -179,19 +223,27 @@ namespace Condition
 
       CPPUNIT_ASSERT_EQUAL(0, ConditionCheckTask::getStatus());
 
-      mu2.lock();
-      cond2.wait(0, 300000000);
-      mu2.unlock();
+      {
+        Guard guard(mu2);
+        // mu2.lock();
+        cond2.wait(1);
+        // mu2.unlock();
+      }
 
-      mu->lock();
-      cd.broadcast();
-      mu->unlock();
+      {
+        Guard guard(*mu);
+        // mu->lock();
+        cd.broadcast();
+        // mu->unlock();
+      }
 
-      mu2.lock();
-      cond2.wait(1);
-      mu2.unlock();
+      {
+        Guard guard(mu2);
+        // mu2.lock();
+        cond2.wait(1);
+        // mu2.unlock();
+      }
 
-//      std::cout << "Status is : " << ConditionCheckTask::getStatus() << std::endl;
       CPPUNIT_ASSERT_EQUAL(0x3f, ConditionCheckTask::getStatus());
 
       CPPUNIT_ASSERT(true);
@@ -204,13 +256,39 @@ namespace Condition
     {
       int waitSec(2);
       coil::Condition<coil::Mutex> cd(*mu);
-//      std::cout << "Before wait " << waitSec << " sec." << std::endl << std::flush;
-      mu->lock();
-      int result = cd.wait(waitSec);
-      mu->unlock();
-//      std::cout << " After wait (result:" << result << ")" << std::endl;
-      
-      CPPUNIT_ASSERT(true);
+      //      std::cout << "Before wait " << waitSec << " sec." << std::endl << std::flush;
+      bool result;
+      {
+        Guard guard(*mu);
+        // mu->lock();
+        result = cd.wait(waitSec);
+        // mu->unlock();
+      }
+
+      // result = false (timeout)
+      //      if (result) { std::cout << "signaled..ERROR" << std::endl; }
+      //      else        { std::cout << "timeout...OK" << std::endl;  }
+      CPPUNIT_ASSERT(!result);
+
+
+      A a(cd, *mu);
+      coil::Async*
+        invoker(coil::AsyncInvoker(&a,
+                                   std::bind2nd(std::mem_fun(&A::signal),
+                                                1000000)));
+      invoker->invoke();
+      {
+        Guard guard(*mu);
+        // mu->lock();
+        result = cd.wait(waitSec);
+        // mu->unlock();
+      }
+      invoker->wait();
+
+      // result = true (signal)
+      //      if (result) { std::cout << "signaled..OK" << std::endl; }
+      //      else        { std::cout << "timeout...ERROR" << std::endl;  }
+      CPPUNIT_ASSERT(result);
     }
 
   };

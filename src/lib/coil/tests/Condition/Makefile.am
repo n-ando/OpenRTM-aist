@@ -21,18 +21,16 @@ AM_CPPFLAGS= -I.                  \
 	-I$(top_srcdir)/include   \
 	-I$(includedir)
 
-AM_LDFLAGS= -L.                   \
+AM_LDFLAGS= -L../../lib/.libs     \
 	-L$(top_builddir)
 
 
 noinst_PROGRAMS = ConditionTests
 
 ConditionTests_SOURCES = ../TestRunner.cpp \
-                         $(top_srcdir)/posix/coil/Task.cpp \
-                         $(top_srcdir)/posix/coil/Condition.cpp \
                          ConditionTests.cpp
-ConditionTests_LDFLAGS = -L$(libdir)
-ConditionTests_LDADD   = -lcppunit
+ConditionTests_LDFLAGS = -L../../lib/.libs -L$(libdir)
+ConditionTests_LDADD   = -lcppunit -lcoil
 
 TEST_SRC = $(ConditionTests_SOURCES)
 TEST_H   = 
