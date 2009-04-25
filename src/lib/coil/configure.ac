@@ -532,6 +532,7 @@ AC_OUTPUT([Makefile
 	ace/coil/Makefile
 	tests/Makefile
 	tests/stringutil/Makefile
+	tests/Properties/Makefile
 	tests/Condition/Makefile
 	tests/DynamicLib/Makefile
 	tests/Factory/Makefile
