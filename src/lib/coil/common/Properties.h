@@ -898,6 +898,7 @@ namespace coil
      * @brief ノードを取得する
      *
      * 指定したキーを持つノードを取得する。
+     * 存在しないキー、および空文字の場合 0 を返す。
      *
      * @param key 取得対象ノードのキー
      *
@@ -914,7 +915,30 @@ namespace coil
      *
      * @endif
      */
-    Properties* getNode(const std::string& key) const;
+    Properties* const findNode(const std::string& key) const;
+    /*!
+     * @if jp
+     * @brief ノードを取得する
+     *
+     * 指定したキーを持つノードを取得する。
+     * 存在しないキー、および空文字の場合 0 を返す。
+     *
+     * @param key 取得対象ノードのキー
+     *
+     * @return 対象ノード
+     *
+     * @else
+     * @brief Get node of properties
+     *
+     * Get node with specified key.
+     *
+     * @param key Target node key for getting
+     *
+     * @return Target node
+     *
+     * @endif
+     */
+    Properties& getNode(const std::string& key);
     
     /*!
      * @if jp
@@ -942,17 +966,7 @@ namespace coil
      *
      * @endif
      */
-    bool createNode(const char* key)
-    {
-      if (key == 0) { return false; }
-      Properties* p(getNode(key));
-      if (p != 0) 
-        {
-          return false;
-        }
-      (*this)[key] = "";
-      return true;
-    }
+    bool createNode(const std::string& key);
     
     /*!
      * @if jp

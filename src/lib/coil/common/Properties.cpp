@@ -86,8 +86,8 @@ namespace coil
     keys = prop.propertyNames();
     for (size_t i(0), len(keys.size()); i < len; ++i)
       {
-	Properties* node(NULL);
-	if ((node = prop.getNode(keys[i])) != NULL)
+	const Properties* node(NULL);
+	if ((node = prop.findNode(keys[i])) != NULL)
 	  {
 	    setDefault(keys[i],  node->default_value);
 	    setProperty(keys[i], node->value);
@@ -113,8 +113,8 @@ namespace coil
     keys = prop.propertyNames();
     for (size_t i(0), len(keys.size()); i < len; ++i)
       {
-	Properties* node(NULL);
-	if ((node = prop.getNode(keys[i])) != NULL)
+	const Properties* node(prop.findNode(keys[i]));
+	if (node != 0)
 	  {
 	    setDefault(keys[i],  node->default_value);
 	    setProperty(keys[i], node->value);
@@ -202,9 +202,9 @@ namespace coil
   std::string& Properties::operator[](const std::string& key)
   {
     setProperty(key, getProperty(key));
-    Properties* prop = getNode(key);
+    Properties& prop(getNode(key));
     
-    return prop->value;
+    return prop.value;
   }
   
   /*!
@@ -431,19 +431,58 @@ namespace coil
   
   /*!
    * @if jp
+   * @brief ノードを検索する
+   * @else
+   * @brief Find node of properties
+   * @endif
+   */
+  Properties* const Properties::findNode(const std::string& key) const
+  {
+    if (key.empty()) { return 0; }
+    std::vector<std::string> keys;
+    //    std::string value;
+    split(key, '.', keys);
+    return _getNode(keys, 0, this);
+  }
+  
+  /*!
+   * @if jp
    * @brief ノードを取得する
    * @else
    * @brief Get node of properties
    * @endif
    */
-  Properties* Properties::getNode(const std::string& key) const
+  Properties& Properties::getNode(const std::string& key)
   {
-    std::vector<std::string> keys;
-    std::string value;
-    split(key, '.', keys);
-    return _getNode(keys, 0, this);
+    if (key.empty()) { return *this; }
+    Properties* const leaf(findNode(key));
+    if (leaf != 0)
+      {
+        return *leaf;
+      }
+    this->createNode(key);
+    return *findNode(key);
   }
-  
+
+/*!
+ * @if jp
+ * @brief 新規ノードを生成する
+ * @else
+ * @brief Create newly node of Properties
+ * @endif
+ */
+  bool Properties::createNode(const std::string& key)
+  {
+    if (key.empty()) { return false; }
+    
+    if (findNode(key) != 0) 
+      {
+        return false;
+      }
+    (*this)[key] = "";
+    return true;
+  }
+
   /*!
    * @if jp
    * @brief ノードを削除する
