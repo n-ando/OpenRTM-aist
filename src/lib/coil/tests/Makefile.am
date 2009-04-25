@@ -7,6 +7,7 @@
 
 SUBDIRS =            \
 	stringutil   \
+	Properties   \
         Condition    \
         DynamicLib   \
         File         \

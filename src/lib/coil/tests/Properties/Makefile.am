@@ -65,8 +65,10 @@ all: do-test
 
 # do tests
 do-test:
-	./PropertiesTests --xml propertiestests.xml \
-	--xsl default.xml
+	./PropertiesTests
+
+# --xml propertiestests.xml \
+#	--xsl default.xml
 
 # clean-up
 clean-local:
