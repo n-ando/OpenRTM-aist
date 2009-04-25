@@ -26,6 +26,8 @@
 
 namespace coil
 {
+  typedef std::vector<std::string> vstring;
+
   /*!
    * @if jp
    * @brief 大文字への変換
@@ -222,14 +224,60 @@ namespace coil
    * @else
    * @brief Erase the tail blank characters of string
    *
-   * Erase the blank characters that exist at the tail of the given string.
-   * Space ' 'and tab '\\t' are supported as the blank character.
+   * Erase the blank characters that exist at the tail of the given
+   * string.  Space ' 'and tab '\\t' are supported as the blank
+   * character.
    *
    * @param str The target tail blank characters of string for the erase
    *
    * @endif
    */
   void eraseTailBlank(std::string& str);
+
+  /*!
+   * @if jp
+   * @brief 文字列の先頭・末尾の空白文字を削除する
+   *
+   * 与えられた文字列の先頭および末尾に存在する空白文字を削除する。
+   * 空白文字として扱うのは' '(スペース)と'\\t'(タブ)。
+   *
+   * @param str 先頭末尾空白文字削除処理文字列
+   *
+   * @else
+   * @brief Erase the head blank and the tail blank characters of string
+   *
+   * Erase the head blank characters and the blank characters that
+   * exist at the tail of the given string.  Space ' 'and tab '\\t'
+   * are supported as the blank character.
+   *
+   * @param str The target tail blank characters of string for the erase
+   *
+   * @endif
+   */
+  void eraseBothEndsBlank(std::string& str);
+
+  /*!
+   * @if jp
+   * @brief 文字列のを正規化する
+   *
+   * 与えられた文字列の先頭および末尾に存在する空白文字を削除し、
+   * 英字をすべて小文字に変換する。
+   *
+   * @param str 処理対象文字列
+   *
+   * @else
+   * @brief Erase the head/tail blank and replace upper case to lower case
+   *
+   * Erase the head blank characters and the blank characters that
+   * exist at the tail of the given string.  Space ' 'and tab '\\t'
+   * are supported as the blank character.
+   * And all upper case cahracters are converted into lower case.
+   *
+   * @param str The target string for the erase
+   *
+   * @endif
+   */
+  void normalize(std::string& str);
   
   /*!
    * @if jp
@@ -278,9 +326,9 @@ namespace coil
    *
    * @endif
    */
-  std::vector<std::string> split(const std::string& input,
-                                 const std::string& delimiter,
-                                 bool ignore_empty = false);
+  vstring split(const std::string& input,
+                const std::string& delimiter,
+                bool ignore_empty = false);
   
   /*!
    * @if jp
@@ -456,7 +504,7 @@ namespace coil
    *
    * @endif
    */
-  std::vector<std::string> unique_sv(std::vector<std::string> sv);
+  vstring unique_sv(vstring sv);
   
   /*!
    * @if jp
@@ -482,7 +530,7 @@ namespace coil
    *
    * @endif
    */
-  std::string flatten(std::vector<std::string> sv);
+  std::string flatten(vstring sv);
   
   /*!
    * @if jp
@@ -507,7 +555,7 @@ namespace coil
    *
    * @endif
    */
-  char** toArgv(const std::vector<std::string>& args); 
+  char** toArgv(const vstring& args); 
 
 
   std::string sprintf(char const * __restrict fmt, ...);
