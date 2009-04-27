@@ -364,6 +364,18 @@ namespace coil
     else
       return default_value;
   }
+
+  bool includes(std::string& list, std::string value, bool ignore_case = true)
+  {
+    if (ignore_case) { toLower(value); }
+    vstring v(split(list, ","));
+    for (int i(0), len(v.size()); i < len; ++i)
+      {
+        if (ignore_case) { toLower(v[i]); }
+        if (v[i] == value) return true;
+      }
+    return false;
+  }
   
   /*!
    * @if jp
