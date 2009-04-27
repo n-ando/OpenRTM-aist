@@ -26,6 +26,7 @@ COIL_PLATFORM_H   =    \
 
 # coil common source
 COIL_COMMON_SRC =       \
+	PeriodicTask.cpp\
 	Properties.cpp  \
 	TimeValue.cpp   \
 	TimeMeasure.cpp \
@@ -42,6 +43,7 @@ COIL_COMMON_H   =       \
 	TimeValue.h     \
 	stringutil.h    \
 	Guard.h         \
+	PeriodicTask.h  \
 	Properties.h    \
 	Timer.h         \
 	Logger.h        \
