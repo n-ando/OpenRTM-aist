@@ -35,7 +35,7 @@ namespace coil
     return ::sleep(seconds);
   }
 
-  inline int sleep(TimeValue& interval)
+  inline int sleep(TimeValue interval)
   {
     timeval tv;
     tv.tv_sec = interval.sec();
