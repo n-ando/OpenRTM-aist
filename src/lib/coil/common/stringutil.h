@@ -360,6 +360,30 @@ namespace coil
    */
   bool toBool(std::string str, std::string yes, std::string no, 
               bool default_value = true);
+  /*!
+   * @if jp
+   * @brief 文字列リスト中にある文字列が含まれるかどうか
+   * 
+   * 第1引数にカンマ区切りのリストを、第2引数に探索対象文字列を指定し、
+   * その文字列が第1引数の中に含まれるかを判断する。
+   *
+   * @param list 対象リスト
+   * @param value 探索文字列
+   * @return true: 含まれる、false: 含まれない
+   *
+   * @else
+   * @brief Include if a string is included in string list
+   * 
+   * if the second argument is included in the comma separated string
+   * list of the first argument, This operation returns "true value".
+   *
+   * @param list The target comma separated string
+   * @param value The searched string
+   * @return true: included, false: not included
+   *
+   * @endif
+   */
+  bool includes(std::string list, std::string value);
   
   /*!
    * @if jp
