@@ -1123,7 +1123,7 @@ std::vector<coil::Properties> Manager::getLoadableModules()
   bool Manager::initManagerServant()
   {
     m_mgrservant = new RTM::ManagerServant();
-    coil::Properties prop(*(m_config.getNode("manager")));
+    coil::Properties& prop(m_config.getNode("manager"));
     std::vector<std::string> names(coil::split(prop["naming_formats"], ","));
 
     for (int i(0), len(names.size()); i < len; ++i)

@@ -137,7 +137,7 @@ namespace RTM
   {
     RTM::ManagerProfile* prof = new RTM::ManagerProfile();
     NVUtil::copyFromProperties(prof->properties,
-                               *(m_mgr.getConfig().getNode("manager")));
+                               m_mgr.getConfig().getNode("manager"));
     return prof;
   }
   
