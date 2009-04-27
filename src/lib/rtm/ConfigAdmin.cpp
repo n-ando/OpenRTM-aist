@@ -72,7 +72,7 @@ namespace RTC
   {
     if (m_configsets.hasKey(config_set) == NULL) { return; }
 
-    coil::Properties& prop(*(m_configsets.getNode(config_set)));
+    coil::Properties& prop(m_configsets.getNode(config_set));
     
     for (int i(0), len(m_params.size()); i < len; ++i)
       {
@@ -188,8 +188,8 @@ namespace RTC
    */
   const coil::Properties& ConfigAdmin::getConfigurationSet(const char* config_id)
   {
-    coil::Properties* p(m_configsets.getNode(config_id));
-    if (p == NULL) { return m_emptyconf; }
+    coil::Properties* p(m_configsets.findNode(config_id));
+    if (p == 0) { return m_emptyconf; }
     return *p;
   }
   
@@ -203,11 +203,12 @@ namespace RTC
   bool
   ConfigAdmin::setConfigurationSetValues(const coil::Properties& config_set)
   {
-    if (config_set.getName() == '\0') { return false; }
+    std::string node(config_set.getName());
+    if (node.empty()) { return false; }
     
-    coil::Properties* p(m_configsets.getNode(config_set.getName()));
-    if (p == 0) { return false; }
-    *p << config_set;
+    coil::Properties& p(m_configsets.getNode(config_set.getName()));
+
+    p << config_set;
     m_changed = true;
     m_active = false;
     onSetConfigurationSet(config_set);
@@ -223,9 +224,9 @@ namespace RTC
    */
   const coil::Properties& ConfigAdmin::getActiveConfigurationSet(void)
   {
-    coil::Properties* p(m_configsets.getNode(m_activeId));
-    if (p == 0) { return m_emptyconf; }
-    return *p;
+    coil::Properties& p(m_configsets.getNode(m_activeId));
+
+    return p;
   }
   
   /*!
@@ -237,17 +238,12 @@ namespace RTC
    */
   bool ConfigAdmin::addConfigurationSet(const coil::Properties& config_set)
   {
-    if (config_set.getName() == '\0') { return false; }
-    if (m_configsets.hasKey(config_set.getName())) { return false; }
-    
     std::string node(config_set.getName());
+    if (node.empty()) { return false; }
+    if (m_configsets.hasKey(node.c_str()) == 0) { return false; }
     
-    // Create node
-    if (!m_configsets.createNode(node.c_str())) { return false; }
-    
-    coil::Properties* p(m_configsets.getNode(node.c_str()));
-    if (p == 0) { return false; }
-    *p << config_set;
+    coil::Properties& p(m_configsets.getNode(node));
+    p << config_set;
     m_newConfig.push_back(node);
     
     m_changed = true;
@@ -271,7 +267,7 @@ namespace RTC
     it = std::find(m_newConfig.begin(), m_newConfig.end(), config_id);
     if (it == m_newConfig.end()) { return false; }
     
-    coil::Properties* p(m_configsets.getNode(config_id));
+    coil::Properties* p(m_configsets.removeNode(config_id));
     if (p != NULL) { delete p; }
     m_newConfig.erase(it);
     
@@ -291,7 +287,7 @@ namespace RTC
   bool ConfigAdmin::activateConfigurationSet(const char* config_id)
   {
     if (config_id == NULL) { return false; }
-    if (!m_configsets.hasKey(config_id)) { return false; }
+    if (m_configsets.hasKey(config_id) == 0) { return false; }
     m_activeId = config_id;
     m_active = true;
     m_changed = true;
