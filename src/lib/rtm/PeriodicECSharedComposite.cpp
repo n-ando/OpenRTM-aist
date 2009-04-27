@@ -104,9 +104,7 @@ namespace SDOPackage
   {
 
     RTC_DEBUG(("set_members()"));
-    std::cout << "set_member 0" << std::endl;
     removeAllMembers();
-    std::cout << "set_member 1" << std::endl;
     updateExportedPortsList();
 
     for (::CORBA::ULong i(0), len(sdo_list.length()); i < len; ++i)
@@ -311,7 +309,6 @@ namespace SDOPackage
    */
   void PeriodicECOrganization::removeParticipantFromEC(Member& member)
   { 
-    std::cout << "removeParticipantFromEC 0" << std::endl;
     if (::CORBA::is_nil(m_ec))
       {
         ::RTC::ExecutionContextList_var ecs(m_rtobj->get_owned_contexts());
@@ -325,7 +322,6 @@ namespace SDOPackage
             return;
           }
       }
-    std::cout << "removeParticipantFromEC 1" << std::endl;
     m_ec->remove_component(member.rtobj_.in());
   }
 
