@@ -35,7 +35,9 @@ namespace coil
   // Time statictics object
   //============================================================
   TimeMeasure::TimeMeasure(int buflen)
-    : m_count(0), m_countMax(buflen + 1), m_recurred(false)
+    : m_begin(0.0), m_interval(0.0),
+      m_count(0), m_countMax(buflen + 1),
+      m_recurred(false)
   {
     m_record.reserve(m_countMax);
     for (unsigned long i(0); i < m_countMax; ++i)
@@ -59,24 +61,28 @@ namespace coil
   //============================================================
   void TimeMeasure::tack()
   {
-    m_end = gettimeofday(); // [TimeValue]
-    
-    //	long long interval;
-    //	interval = m_EndTime - m_BeginTime; // [ns]
-    m_record.at(m_count % m_countMax) = m_end - m_begin;
+    if (m_begin.sec() == 0) { return; }
+
+    m_interval = gettimeofday() - m_begin;
+    m_record.at(m_count) = m_interval;
     ++m_count;
-    if (m_count > m_countMax)
+    if (m_count == m_countMax)
       {
         m_count = 0;
         m_recurred = true;
       }
   }
   
-  
+  coil::TimeValue& TimeMeasure::interval()
+  {
+    return m_interval;
+  }
+
   void TimeMeasure::reset()
   {
     m_count = 0;
     m_recurred = false;
+    m_begin = 0.0;
   }
   
   unsigned long int TimeMeasure::count() const
@@ -111,10 +117,18 @@ namespace coil
         if (trecord < min_interval) min_interval = trecord;
       }
     
-    mean_interval = sum / m_count;
-    stddev = sqrt(sq_sum / m_count - (mean_interval * mean_interval));
+    mean_interval = sum / len;
+    stddev = sqrt(sq_sum / len - (mean_interval * mean_interval));
 
     return true;
+  }
+
+  TimeMeasure::Statistics TimeMeasure::getStatistics()
+  {
+    Statistics s;
+    getStatistics(s.max_interval, s.min_interval,
+                  s.mean_interval, s.std_deviation);
+    return s;
   }
 
 }; // namespace coil

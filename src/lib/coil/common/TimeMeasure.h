@@ -36,6 +36,13 @@ namespace coil
   class TimeMeasure
   {
   public:
+    struct Statistics
+    {
+      double max_interval;
+      double min_interval;
+      double mean_interval;
+      double std_deviation;
+    };
     /*!
      * @brief Time statictics object for profiling.
      * 
@@ -56,7 +63,9 @@ namespace coil
      * End of time measurement for time statistics
      */
     void tack();
-    
+
+    coil::TimeValue& interval();
+
     void reset();
     
     /*!
@@ -77,10 +86,12 @@ namespace coil
                        double &mean_interval,
                        double &stddev);
     
+    Statistics getStatistics();
+
   private:
     std::vector<coil::TimeValue> m_record;
     coil::TimeValue m_begin;
-    coil::TimeValue m_end;
+    coil::TimeValue m_interval;
 
     unsigned long int m_count;
     const unsigned long int m_countMax;
