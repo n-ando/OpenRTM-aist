@@ -2341,7 +2341,7 @@ namespace RTC
       propkey += ".tcp_any";
       m_properties[propkey];
       PortBase* port = new DataInPort(name, inport,
-				      *m_properties.getNode(propkey));
+				      m_properties.getNode(propkey));
       registerPort(*port);
     }
     
@@ -2381,7 +2381,7 @@ namespace RTC
       propkey += ".tcp_any";
       m_properties[propkey];
       PortBase* port = new DataOutPort(name, outport,
-				       *m_properties.getNode(propkey));
+				       m_properties.getNode(propkey));
       registerPort(*port);
     }
     
