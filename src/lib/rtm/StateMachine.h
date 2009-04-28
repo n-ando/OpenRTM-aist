@@ -298,6 +298,17 @@ namespace RTC_Utils
       m_transit = NULL;
     };
     
+
+    virtual ~StateMachine()
+    {
+      delete m_entry;
+      delete m_predo;
+      delete m_do;
+      delete m_postdo;
+      delete m_exit;
+    };
+
+
     /*!
      * @if jp
      * @brief NOP関数を登録する
