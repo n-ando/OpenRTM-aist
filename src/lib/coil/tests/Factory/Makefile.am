@@ -38,7 +38,8 @@ libPluginC_la_SOURCES = \
 libPluginC_la_LDFLAGS = \
 	-rpath `pwd`
 
-TEST_SRC = $(FactoryTests_SOURCES)
+TEST_SRC = $(FactoryTests_SOURCES) \
+           $(top_srcdir)/win32/coil/DynamicLib.cpp 
 TEST_H   = 
 
 # all
@@ -62,7 +63,9 @@ clean-local:
 #------------------------------------------------------------
 win32_builddir = .
 
-vcproj: Factory_vc8.vcproj Factory_vc9.vcproj
+vcproj: Factory_vc8.vcproj Factory_vc9.vcproj Factory_libPluginC_vc8.vcproj Factory_libPluginC_vc9.vcproj 
+
+
 
 Factory_vc8.vcproj:
 	$(top_builddir)/build/vcprojtool.py vcproj \
@@ -87,5 +90,31 @@ Factory_vc9.vcproj:
 		--source $(TEST_SRC)
 #		--header $(TEST_H)
 	qkc -sm $(win32_builddir)/Factory_vc9.vcproj
+
+Factory_libPluginC_vc8.vcproj:
+	$(top_builddir)/build/vcprojtool.py vcproj \
+		--projectname FactoryTest_libPluginC \
+		--type DLL \
+		--vcversion "8.00" \
+		--version $(COIL_VERSION) \
+		--out $(win32_builddir)/Factory_libPluginC_vc8.vcproj \
+		--yaml ../coil_test_dll.vcproj.yaml \
+		--source $(libPluginC_la_SOURCES)
+#		--header $(TEST_H)
+	qkc -sm $(win32_builddir)/Factory_libPluginC_vc8.vcproj
+
+
+Factory_libPluginC_vc9.vcproj:
+	$(top_builddir)/build/vcprojtool.py vcproj \
+		--projectname FactoryTest_libPluginC  \
+		--type DLL \
+		--vcversion "9.00" \
+		--version $(COIL_VERSION) \
+		--out $(win32_builddir)/Factory_libPluginC_vc9.vcproj \
+		--yaml ../coil_test_dll.vcproj.yaml \
+		--source $(libPluginC_la_SOURCES)
+#		--header $(TEST_H)
+	qkc -sm $(win32_builddir)/Factory_libPluginC_vc9.vcproj
+
 
 

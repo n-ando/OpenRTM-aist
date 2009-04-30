@@ -10,6 +10,7 @@ SUBDIRS =            \
 	Properties   \
         Condition    \
         DynamicLib   \
+        Factory      \
         File         \
         Guard        \
         Listener     \
@@ -17,6 +18,7 @@ SUBDIRS =            \
 	Mutex        \
         OS           \
         Signal       \
+        Singleton    \
 	Task         \
         Time         \
 	Timer        \

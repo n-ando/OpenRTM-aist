@@ -30,7 +30,9 @@ SingletonTests_SOURCES = ../TestRunner.cpp SingletonTests.cpp
 SingletonTests_LDFLAGS = -L../../lib -L$(libdir)
 SingletonTests_LDADD   = -lcppunit -lcoil
 
-TEST_SRC = $(SingletonTests_SOURCES)
+TEST_SRC = $(SingletonTests_SOURCES) \
+           $(top_srcdir)/win32/coil/Task.cpp 
+           
 TEST_H   = 
 
 # all
