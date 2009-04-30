@@ -30,6 +30,12 @@
 
 #include "MyFactory.h"
 
+#if defined(WIN32) || defined(_WIN32) || defined(__WIN32__) || defined(__NT__)
+  const char * LibName = "FactoryTest_libPluginC.dll";
+#else 
+  const char * LibName = "./.libs/libPluginC.so";
+#endif /* Windows */
+
 //class Base
 //{
 //public:
@@ -147,7 +153,7 @@ namespace Factory
                            coil::Destructor<Base, B>);
 
       coil::DynamicLib dl;
-      if (dl.open("./.libs/libPluginC.so") < 0)
+      if (dl.open(LibName) < 0)
         {
           std::cout << "dl.open error" << std::endl;
         }
