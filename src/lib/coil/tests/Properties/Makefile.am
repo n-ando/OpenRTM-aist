@@ -59,6 +59,8 @@ EXTRA_DIST =                   \
 	splitKeyValueTest.data \
 	store-test.data
 
+TEST_SRC = $(nodist_PropertiesTests_SOURCES)
+TEST_H   = 
 
 # all
 all: do-test
@@ -78,4 +80,39 @@ clean-local:
 	*Skel.cpp *Skel.h *Stub.cpp *Stub.h \
 	*~ *core                            \
 	Makefile.old                        \
+	rm -f *.vcproj                      \
 	*.cc *.hh *.i *.a *.c *.inl
+
+#------------------------------------------------------------
+# vcproj file build rules
+#------------------------------------------------------------
+win32_builddir = .
+
+vcproj: Properties_vc8.vcproj Properties_vc9.vcproj
+
+Properties_vc8.vcproj:
+	$(top_builddir)/build/vcprojtool.py vcproj \
+		--projectname PropertiesTaskTest \
+		--type EXE \
+		--vcversion "8.00" \
+		--version $(COIL_VERSION) \
+		--out $(win32_builddir)/Properties_vc8.vcproj \
+		--yaml ../coil_test.vcproj.yaml \
+		--source $(TEST_SRC)
+#		--header $(TEST_H)
+	qkc -sm $(win32_builddir)/Properties_vc8.vcproj
+
+Properties_vc9.vcproj:
+	$(top_builddir)/build/vcprojtool.py vcproj \
+		--projectname PropertiesTest \
+		--type EXE \
+		--vcversion "9.00" \
+		--version $(COIL_VERSION) \
+		--out $(win32_builddir)/Properties_vc9.vcproj \
+		--yaml ../coil_test.vcproj.yaml \
+		--source $(TEST_SRC)
+#		--header $(TEST_H)
+	qkc -sm $(win32_builddir)/Properties_vc9.vcproj
+
+
+

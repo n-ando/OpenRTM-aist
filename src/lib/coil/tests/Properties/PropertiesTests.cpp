@@ -40,6 +40,7 @@
 #include <cppunit/TestAssert.h>
 #include <fstream>
 #include <coil/Properties.h>
+#include <algorithm>
 
 /*!
  * @class PropertiesTests class
@@ -189,11 +190,11 @@ namespace Properties
       defaults["rtc.openrtm.vendor"] = "AIST TaskIntelligence";
       defaults["rtc.openrtm.version"] = "0.4.0";
 			
-      // mapによるデフォルト値指定でPropertiesオブジェクトを生成する
+      /* mapによるデフォルト値指定でPropertiesオブジェクトを生成する    */
       coil::Properties prop(defaults);
 			
-      // 各プロパティのデフォルト値および通常値がいずれも、コンストラク
-      // タで指定した値で取得されることを確認する
+      /* 各プロパティのデフォルト値および通常値がいずれも、コンストラク */
+      /* タで指定した値で取得されることを確認する                       */
       map<string, string>::iterator it;
       it = defaults.begin();
       for (; it != defaults.end(); ++it) {
@@ -234,8 +235,8 @@ namespace Properties
       };
 			
       coil::Properties prop(defaults);
-      // 各プロパティのデフォルト値および通常値がいずれも、コンストラク
-      // タで指定した値で取得されることを確認する
+      /* 各プロパティのデフォルト値および通常値がいずれも、コンストラク */
+      /* タで指定した値で取得されることを確認する                       */
       for (int i = 0; defaults[i] != ""; i += 2) {
 	string key = defaults[i];
 	string value = defaults[i + 1];
@@ -265,27 +266,27 @@ namespace Properties
      */
     void test_substitute()
     {
-      // 代入元となるPropertiesを作成する
+      /* 代入元となるPropertiesを作成する */
       coil::Properties propSrc;
 			
-      // (1) デフォルト値、通常値のいずれも設定されている場合
+      /* (1) デフォルト値、通常値のいずれも設定されている場合 */
       string key1 = "key1";
       string key1DefaultValue = "key1-default-value";
       string key1Value = "key1-value";
       propSrc.setDefault(key1, key1DefaultValue);
       propSrc.setProperty(key1, key1Value);
 			
-      // (2) デフォルト値のみ設定されており、通常値が設定されていない場合
+      /* (2) デフォルト値のみ設定されており、通常値が設定されていない場合 */
       string key2 = "key2";
       string key2DefaultValue = "key2-default-value";
       propSrc.setDefault(key2, key2DefaultValue);
 			
-      // (3) デフォルト値が設定されていないが、通常値が設定されている場合
+      /* (3) デフォルト値が設定されていないが、通常値が設定されている場合 */
       string key3 = "key3";
       string key3Value = "key3-value";
       propSrc.setProperty(key3, key3Value);
 			
-      // 代入を行い、それぞれの場合で、正しく代入されたことを確認する
+      /* 代入を行い、それぞれの場合で、正しく代入されたことを確認する */
       coil::Properties prop;
       prop = propSrc;
 			
@@ -571,7 +572,7 @@ namespace Properties
         }
       inFile.close();
 			
-      // ファイルに書き込まれた内容と期待値を比較する
+      /* ファイルに書き込まれた内容と期待値を比較する */
       sort(expectedLines.begin(), expectedLines.end());
       sort(storedLines.begin(), storedLines.end());
       CPPUNIT_ASSERT_EQUAL(expectedLines.size(), storedLines.size());
@@ -592,13 +593,13 @@ namespace Properties
      */
     void test_load()
     {
-      // プロパティリストをファイルからPropertiesオブジェクトへ読み込む
+      /* プロパティリストをファイルからPropertiesオブジェクトへ読み込む */
       coil::Properties prop;
       std::ifstream ifl("defaults.conf");
       prop.load(ifl);
       ifl.close();
 			
-      // 期待値と比較して、正しく読み込まれたことを確認する
+      /* 期待値と比較して、正しく読み込まれたことを確認する */
       map<string, string>::iterator expected;
       for (expected = DEFAULTS_CONF.begin();
            expected != DEFAULTS_CONF.end(); expected++) {
@@ -624,7 +625,7 @@ namespace Properties
      */
     void test_store()
     {
-      // テスト用のプロパティを設定する
+      /* テスト用のプロパティを設定する */
       coil::Properties prop;
       prop.setProperty("rtc.component.conf.path",
                        "C:\\Program\\ Files\\OpenRTM-aist");
@@ -650,7 +651,7 @@ namespace Properties
       prop.store(outFile, "stored data");
       outFile.close();
 			
-      // 比較のための期待値を準備する
+      /* 比較のための期待値を準備する */
       vector<string> expectedLines;
       expectedLines.push_back("# stored data");
       expectedLines.push_back("rtc.component.conf.path: C:\\\\Program\\\\ Files\\\\OpenRTM-aist");
@@ -670,7 +671,7 @@ namespace Properties
       expectedLines.push_back("rtc.openrtm.version: 0.4.0");
       expectedLines.push_back("hello: \\tHello\\t");
 			
-      // 出力されたファイルの中身を１行づつ読み込む
+      /* 出力されたファイルの中身を１行づつ読み込む */
       vector<string> storedLines;
       std::ifstream inFile("stored.conf");
       string str;
@@ -679,7 +680,7 @@ namespace Properties
       }
       inFile.close();
 			
-      // ファイルに書き込まれた内容と期待値を比較する
+      /* ファイルに書き込まれた内容と期待値を比較する */
       sort(expectedLines.begin(), expectedLines.end());
       sort(storedLines.begin(), storedLines.end());
       CPPUNIT_ASSERT_EQUAL(expectedLines.size(), storedLines.size());
@@ -709,17 +710,17 @@ namespace Properties
     {
       coil::Properties prop;
 			
-      // (1) 通常のプロパティ値とデフォルト値の両方を設定する
+      /* (1) 通常のプロパティ値とデフォルト値の両方を設定する */
       prop.setProperty("property_01", "value_01");
       prop.setDefault("property_01", "default_01");
 			
-      // (2) 通常のプロパティ値のみを設定する
+      /* (2) 通常のプロパティ値のみを設定する */
       prop.setProperty("property_02", "value_02");
 			
-      // (3) デフォルト値のみを設定する
+      /* (3) デフォルト値のみを設定する */
       prop.setDefault("property_03", "default_03");
 			
-      // (1),(2),(3)いずれの場合についてもキー名が取得されることを確認する
+      /* (1),(2),(3)いずれの場合についてもキー名が取得されることを確認する */
       vector<string> keys = prop.propertyNames();
       CPPUNIT_ASSERT_EQUAL(3, (int) keys.size());
       CPPUNIT_ASSERT(find(keys.begin(), keys.end(), "property_01")
@@ -873,7 +874,7 @@ namespace Properties
      */
     void test_streamInput()
     {
-      // 入力元となるPropertiesの１つ目を作成する
+      /* 入力元となるPropertiesの１つ目を作成する */
       coil::Properties propA;
 			
       string keyA1 = "keyA1";
@@ -890,7 +891,7 @@ namespace Properties
       string keyA3Value = "keyA3-value";
       propA.setProperty(keyA3, keyA3Value);
 			
-      // 入力元となるPropertiesの２つ目を作成する
+      /* 入力元となるPropertiesの２つ目を作成する */
       coil::Properties propB;
 			
       string keyB1 = "keyB1";
@@ -914,12 +915,12 @@ namespace Properties
       propA.setProperty(keyCommon, keyCommonValueA);
       propB.setProperty(keyCommon, keyCommonValueB);
 
-      // propBをpropAに入力する
+      /* propBをpropAに入力する */
       propA << propB;
 			
-      // 正しくマージされたことを確認する
-      // (1) 入力前から設定されており、共通キーでないものは、もとのまま
-      // であることを確認する
+      /* 正しくマージされたことを確認する */
+      /* (1) 入力前から設定されており、共通キーでないものは、もとのまま */
+      /* であることを確認する                                           */
       CPPUNIT_ASSERT_EQUAL(keyA1DefaultValue, propA.getDefault(keyA1));
       CPPUNIT_ASSERT_EQUAL(keyA1Value, propA.getProperty(keyA1));
       CPPUNIT_ASSERT_EQUAL(keyA2DefaultValue, propA.getDefault(keyA2));
@@ -927,7 +928,7 @@ namespace Properties
       CPPUNIT_ASSERT_EQUAL(EMPTY_STRING, propA.getDefault(keyA3));
       CPPUNIT_ASSERT_EQUAL(keyA3Value, propA.getProperty(keyA3));
 
-      // (2) 通常値は入力され、デフォルト値は入力されないことを確認する
+      /* (2) 通常値は入力され、デフォルト値は入力されないことを確認する */
       CPPUNIT_ASSERT_EQUAL(EMPTY_STRING, propA.getDefault(keyB1));
       CPPUNIT_ASSERT_EQUAL(keyB1Value, propA.getProperty(keyB1));
       CPPUNIT_ASSERT_EQUAL(EMPTY_STRING, propA.getDefault(keyB2));
@@ -935,7 +936,7 @@ namespace Properties
       CPPUNIT_ASSERT_EQUAL(EMPTY_STRING, propA.getDefault(keyB3));
       CPPUNIT_ASSERT_EQUAL(keyB3Value, propA.getProperty(keyB3));
 			
-      // (3) 共通キー名について、入力した値で上書きされていることを確認する
+      /* (3) 共通キー名について、入力した値で上書きされていることを確認する */
       CPPUNIT_ASSERT_EQUAL(keyCommonValueB, propA.getProperty(keyCommon));
     }
 
@@ -976,8 +977,8 @@ namespace Properties
       P prop;
       prop.splitKeyValue_protected(keyAndValue, key, value);
 			
-      // キーと値が、余分な空白文字が除去されたうえで分離されていること
-      // を確認する
+      /* キーと値が、余分な空白文字が除去されたうえで分離されていること */
+      /* を確認する                                                     */
       string expectedKey("property_name");
       CPPUNIT_ASSERT_EQUAL(expectedKey, key);
 
