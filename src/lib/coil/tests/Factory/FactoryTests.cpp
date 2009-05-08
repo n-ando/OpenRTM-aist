@@ -17,6 +17,7 @@
 #ifndef Factory_cpp
 #define Factory_cpp
 
+#define LIBRARY_EXPORTS
 #include <string>
 
 #include <cppunit/ui/text/TestRunner.h>
@@ -145,10 +146,10 @@ namespace Factory
     {
       std::string Astr("A");
       std::string Bstr("B");
-      g_factory::instance().addFactory("A",
+      MyFactory::instance().addFactory("A",
                            coil::Creator<Base, A>,
                            coil::Destructor<Base, A>);
-      g_factory::instance().addFactory("B",
+      MyFactory::instance().addFactory("B",
                            coil::Creator<Base, B>,
                            coil::Destructor<Base, B>);
 
@@ -166,7 +167,7 @@ namespace Factory
         }
       (*init_func)();
 
-      if (g_factory::instance().hasFactory("C"))
+      if (MyFactory::instance().hasFactory("C"))
         {
           std::cout << "Factory C exists" << std::endl;
         }
@@ -175,34 +176,34 @@ namespace Factory
           std::cout << "Factory C does not exist" << std::endl;
         }
 
-      std::vector<std::string> ids(g_factory::instance().getIdentifiers());
+      std::vector<std::string> ids(MyFactory::instance().getIdentifiers());
       std::cout << "IDs -> ";
       for (int i(0), len(ids.size()); i < len; ++i)
         {
           std::cout << ids[i] << ", ";
         }
-      g_factory& g(g_factory::instance());
+      MyFactory& g(MyFactory::instance());
       for (int i(0); i < 1000; ++i)
         {
-          Base* a = g_factory::instance().createObject("A");
+          Base* a = MyFactory::instance().createObject("A");
           CPPUNIT_ASSERT(a->name() == "A");
 
-          Base* b = g_factory::instance().createObject("B");
+          Base* b = MyFactory::instance().createObject("B");
           CPPUNIT_ASSERT(b->name() == "B");
                     
-          Base* c = g_factory::instance().createObject("C");
+          Base* c = MyFactory::instance().createObject("C");
           CPPUNIT_ASSERT(c->name() == "C");
 
-          g_factory::instance().deleteObject(a);
+          MyFactory::instance().deleteObject(a);
           CPPUNIT_ASSERT(a == 0);
 
-          g_factory::instance().deleteObject(b);
+          MyFactory::instance().deleteObject(b);
           CPPUNIT_ASSERT(b == 0);
 
-          g_factory::instance().deleteObject(c);
+          MyFactory::instance().deleteObject(c);
           CPPUNIT_ASSERT(c == 0);
 
-          CPPUNIT_ASSERT(&g == &g_factory::instance());
+          CPPUNIT_ASSERT(&g == &MyFactory::instance());
         }
     }
   };
