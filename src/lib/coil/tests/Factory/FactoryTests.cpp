@@ -78,6 +78,7 @@ namespace Factory
     CPPUNIT_TEST_SUITE(FactoryTests);
     CPPUNIT_TEST(test_case0);
     CPPUNIT_TEST(test_case1);
+    CPPUNIT_TEST(test_case2);
     CPPUNIT_TEST_SUITE_END();
   
   private:
@@ -205,6 +206,55 @@ namespace Factory
 
           CPPUNIT_ASSERT(&g == &MyFactory::instance());
         }
+    }
+
+    /*!
+     *
+     */
+    void test_case2()
+    {
+      std::string Astr("A");
+      std::string Bstr("B");
+      MyFactory::instance().addFactory("A",
+                           coil::Creator<Base, A>,
+                           coil::Destructor<Base, A>);
+      //Factory A exists//
+      CPPUNIT_ASSERT(MyFactory::instance().hasFactory("A"));
+
+      MyFactory::instance().addFactory("B",
+                           coil::Creator<Base, B>,
+                           coil::Destructor<Base, B>);
+      //Factory B exists//
+      CPPUNIT_ASSERT(MyFactory::instance().hasFactory("B"));
+
+      coil::DynamicLib dl;
+      if (dl.open(LibName) < 0)
+        {
+          std::cout << "dl.open error" << std::endl;
+        }
+
+      typedef void (*InitFunc)();
+      InitFunc init_func = (InitFunc)dl.symbol("PluginCInit");
+      if (init_func == NULL)
+        {
+          std::cout << "synbol is NULL" << std::endl;
+        }
+      (*init_func)();
+
+      //Factory C exists//
+      CPPUNIT_ASSERT(MyFactory::instance().hasFactory("C"));
+
+      std::vector<std::string> ids(MyFactory::instance().getIdentifiers());
+      for (int i(0), len(ids.size()); i < len; ++i)
+        {
+          MyFactory::ReturnCode ret;
+          ret = MyFactory::instance().removeFactory(ids[i]);
+          CPPUNIT_ASSERT(ret == MyFactory::FACTORY_OK);
+          CPPUNIT_ASSERT(!MyFactory::instance().hasFactory(ids[i]));
+          ret = MyFactory::instance().removeFactory(ids[i]);
+          CPPUNIT_ASSERT(ret == MyFactory::NOT_FOUND);
+        }
+
     }
   };
 }; // namespace Factory
