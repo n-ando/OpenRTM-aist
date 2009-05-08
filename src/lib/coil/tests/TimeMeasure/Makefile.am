@@ -30,7 +30,11 @@ TimeMeasureTests_SOURCES = ../TestRunner.cpp TimeMeasureTests.cpp
 TimeMeasureTests_LDFLAGS = -L$(libdir) -L$(top_srcdir)/lib
 TimeMeasureTests_LDADD   = -lcppunit -lcoil
 
-TEST_SRC = $(TimeMeasureTests_SOURCES)
+TEST_SRC = $(TimeMeasureTests_SOURCES) \
+	$(top_srcdir)/common/TimeMeasure.cpp \
+	$(top_srcdir)/win32/coil/Time.cpp \
+	$(top_srcdir)/common/TimeValue.cpp
+
 TEST_H   = 
 
 # all
