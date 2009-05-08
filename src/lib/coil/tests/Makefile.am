@@ -17,6 +17,7 @@ SUBDIRS =            \
         Logger       \
 	Mutex        \
         OS           \
+        PeriodicTask \
         Signal       \
         Singleton    \
 	Task         \

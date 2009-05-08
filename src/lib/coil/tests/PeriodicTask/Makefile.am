@@ -30,7 +30,12 @@ PeriodicTaskTests_SOURCES = ../TestRunner.cpp PeriodicTaskTests.cpp
 PeriodicTaskTests_LDFLAGS = -L../../lib -L$(libdir)
 PeriodicTaskTests_LDADD   = -lcppunit -lcoil
 
-TEST_SRC = $(PeriodicTaskTests_SOURCES)
+TEST_SRC = $(PeriodicTaskTests_SOURCES) \
+           $(top_srcdir)/common/PeriodicTask.cpp \
+           $(top_srcdir)/common/TimeValue.cpp \
+           $(top_srcdir)/win32/coil/Task.cpp \
+           $(top_srcdir)/common/TimeMeasure.cpp 
+
 TEST_H   = 
 
 # all
