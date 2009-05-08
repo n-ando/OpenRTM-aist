@@ -104,7 +104,7 @@ namespace coil
 
     ReturnCode removeFactory(const Identifier& id)
     {
-      if (m_creators.count(id) != 0) { return NOT_FOUND; }
+      if (m_creators.count(id) == 0) { return NOT_FOUND; }
 
       m_creators.erase(id);
       return FACTORY_OK;
