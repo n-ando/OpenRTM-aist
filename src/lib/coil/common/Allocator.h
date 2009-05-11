@@ -21,6 +21,7 @@
 #define COIL_ALLOCATOR_H
 
 #include <stddef.h>
+#include <new>
 #include <coil/Singleton.h>
 
 namespace coil
