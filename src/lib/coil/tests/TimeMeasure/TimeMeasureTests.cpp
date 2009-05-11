@@ -22,6 +22,7 @@
 #include <cppunit/extensions/TestFactoryRegistry.h>
 #include <cppunit/extensions/HelperMacros.h>
 #include <cppunit/TestAssert.h>
+#include <coil/Time.h>
 #include <coil/TimeMeasure.h>
 #include <math.h>
 /*!
@@ -80,7 +81,7 @@ namespace TimeMeasure
       CPPUNIT_ASSERT(tm.count() == 0);
 
       const unsigned long int count0(10);
-      for (u_int i(0); i < count0; ++i)
+      for (unsigned int i(0); i < count0; ++i)
         {
           tm.tick();
           tm.tack();
@@ -92,7 +93,7 @@ namespace TimeMeasure
       CPPUNIT_ASSERT(tm.count() == 0);
 
       const unsigned long int count1(53);
-      for (u_int i(0); i < count1; ++i)
+      for (unsigned int i(0); i < count1; ++i)
         {
           tm.tick();
           tm.tack();
@@ -124,16 +125,16 @@ namespace TimeMeasure
       }
 
       {
-        const u_int count(1024);
+        const unsigned int count(1024);
         coil::TimeMeasure tm1(count);
 
-        for (u_int i(0); i < count; ++i)
+        for (unsigned int i(0); i < count; ++i)
           {
             CPPUNIT_ASSERT(tm1.count() == i);
             tm1.tick();
             tm1.tack();
           }
-        for (u_int i(0); i < count; ++i)
+        for (unsigned int i(0); i < count; ++i)
           {
             tm1.tick();
             tm1.tack();
@@ -151,7 +152,7 @@ namespace TimeMeasure
       for (int i(0); i < 10; ++i)
         {
           tm.tick();
-          usleep((int)(wait * 1000000));
+          coil::usleep((int)(wait * 1000000));
           tm.tack();
         }
       double maxi, mini, mean, stdev;
@@ -174,7 +175,7 @@ namespace TimeMeasure
       for (int i(0); i < 1; ++i)
         {
           tm.tick();
-          sleep(1);
+          coil::sleep(1);
           tm.tack();
         }
       double maxi, mini, mean, stdev;
