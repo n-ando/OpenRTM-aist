@@ -17,14 +17,6 @@
  *
  */
 
-#ifndef COIL_FACTORY_H
-#define COIL_FACTORY_H
-
-#include <string>
-#include <map>
-#include <algorithm>
-#include <vector>
-#include <coil/Singleton.h>
 #include <coil/PeriodicTask.h>
 #include <coil/Time.h>
 
@@ -345,4 +337,4 @@ namespace coil
   }
 
 }; // namespace coil
-#endif // COIL_FACTORY_H
+

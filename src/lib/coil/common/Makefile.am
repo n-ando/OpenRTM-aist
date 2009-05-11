@@ -6,6 +6,7 @@
 ##---------------------------------------------------------------------------
 
 COIL_COMMON_SRC =       \
+	Allocator.cpp   \
 	PeriodicTask.cpp\
 	Properties.cpp  \
 	TimeValue.cpp   \
@@ -13,6 +14,7 @@ COIL_COMMON_SRC =       \
 	Timer.cpp       \
 	stringutil.cpp
 COIL_COMMON_H   =       \
+	Allocator.h     \
 	Async.h         \
 	Listener.h      \
 	TimeMeasure.h   \
@@ -21,8 +23,9 @@ COIL_COMMON_H   =       \
 	TimeValue.h     \
 	stringutil.h    \
 	Guard.h         \
-	PeriodicTask.h  \
+	periodicTask.h  \
 	Properties.h    \
+	Plugin.h        \
 	Timer.h         \
 	Logger.h        \
 	Singleton.h     \

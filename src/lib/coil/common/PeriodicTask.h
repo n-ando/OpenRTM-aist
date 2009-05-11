@@ -20,16 +20,20 @@
 #ifndef COIL_PERIODICTASK_H
 #define COIL_PERIODICTASK_H
 
-#include <string>
 #include <map>
-#include <algorithm>
+#include <string>
 #include <vector>
+#include <algorithm>
+
+
+#include <coil/Factory.h>
 #include <coil/Task.h>
 #include <coil/Mutex.h>
 #include <coil/Guard.h>
 #include <coil/Condition.h>
 #include <coil/TimeValue.h>
 #include <coil/TimeMeasure.h>
+
 
 namespace coil
 {
@@ -347,5 +351,8 @@ namespace coil
     coil::TimeMeasure m_periodTime;
 
   };
+
+  typedef coil::GlobalFactory<PeriodicTask> PeriodicTaskFactory;
 }; // namespace coil
+
 #endif // COIL_PERIODICTASK_H
