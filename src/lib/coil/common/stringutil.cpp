@@ -365,7 +365,7 @@ namespace coil
       return default_value;
   }
 
-  bool includes(std::string& list, std::string value, bool ignore_case = true)
+  bool includes(std::string& list, std::string value, bool ignore_case)
   {
     if (ignore_case) { toLower(value); }
     vstring v(split(list, ","));
