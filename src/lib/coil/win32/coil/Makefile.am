@@ -25,6 +25,7 @@ COIL_PLATFORM_H =      \
 
 # coil common source
 COIL_COMMON_SRC =       \
+	Allocator.cpp	\
 	PeriodicTask.cpp\
 	Properties.cpp  \
 	TimeValue.cpp   \
@@ -34,6 +35,7 @@ COIL_COMMON_SRC =       \
 
 # coil common headers
 COIL_COMMON_H   =       \
+	Allocator.h 	\
 	Async.h         \
 	Guard.h         \
 	Factory.h       \
