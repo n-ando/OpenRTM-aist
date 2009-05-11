@@ -98,32 +98,11 @@ namespace coil
    *
    * @endif
    */
-// for Windows DLL export
-#if defined(WIN32) || defined(_WIN32) || defined(__WIN32__) || defined(__NT__)
-#   define DLL_EXPORT __declspec(dllexport)
-#   define DLL_IMPORT __declspec(dllimport)
-#   ifndef LIBRARY_EXPORTS
-#      define SINGLETON_INSTANCE
-#   endif
-#else 
-#   define DLL_EXPORT
-#   define DLL_IMPORT
-#endif /* Windows */
-
-#ifdef LIBRARY_EXPORTS
-#   define SINGLETON_EXPORT DLL_EXPORT
-#else
-#   define SINGLETON_EXPORT DLL_IMPORT
-#endif
-
   template <class SingletonClass>
-  class SINGLETON_EXPORT Singleton
+  class Singleton
   {
   public:
     typedef SingletonClass* SingletonClassPtr;
-#ifdef SINGLETON_INSTANCE
-    static SingletonClass& instance();
-#else
     static SingletonClass& instance()
     {
 
@@ -138,7 +117,7 @@ namespace coil
       }
       return *m_instance;
     }
-#endif
+
   protected:
     Singleton(){};
     ~Singleton(){};
