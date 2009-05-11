@@ -43,7 +43,7 @@ inline unsigned int sleep(unsigned int seconds)
   }
 
 //static short m_time_DLLinit_count = 0;
-  inline int sleep(TimeValue& interval)
+  inline int sleep(TimeValue interval)
   {
     struct timeval tv;
     WSADATA wsa;
