@@ -383,7 +383,7 @@ namespace coil
    *
    * @endif
    */
-  bool includes(std::string list, std::string value);
+  bool includes(std::string list, std::string value, bool ignore_case = true);
   
   /*!
    * @if jp
