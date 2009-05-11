@@ -1,11 +1,11 @@
 #include "MyFactory.h"
 
 
-// for Windows DLL export 
+// for Windows DLL export
 #if defined(WIN32) || defined(_WIN32) || defined(__WIN32__) || defined(__NT__)
 #   define DLL_EXPORT __declspec(dllexport)
 #else 
-#   define DLL_EXPORT 
+#   define DLL_EXPORT
 #endif /* Windows */
 
 
