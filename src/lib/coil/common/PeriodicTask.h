@@ -322,8 +322,9 @@ namespace coil
     // suspend flag
     struct suspend_t
     {
-      suspend_t(bool sus) : suspend(sus), mutex(), cond(mutex) {}
+      suspend_t(bool sus) : suspend(sus), signal(false), mutex(), cond(mutex) {}
       bool suspend;
+      bool signal;
       coil::Mutex mutex;
       coil::Condition<coil::Mutex> cond;
     };
