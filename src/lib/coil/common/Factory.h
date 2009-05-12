@@ -26,6 +26,21 @@
 #include <vector>
 #include <coil/Singleton.h>
 
+// for Windows DLL export
+#if defined(WIN32) || defined(_WIN32) || defined(__WIN32__) || defined(__NT__)
+#   ifdef LIBRARY_EXPORTS
+#      define EXTERN
+#      define DLL_PLUGIN __declspec(dllexport)
+#   else
+#      define EXTERN extern
+#      define DLL_PLUGIN __declspec(dllimport)
+#   endif
+#else 
+#   define DLL_PLUGIN
+#   define EXTERN
+#endif /* Windows */
+
+
 namespace coil
 {
   template <class AbstractClass, class ConcreteClass>

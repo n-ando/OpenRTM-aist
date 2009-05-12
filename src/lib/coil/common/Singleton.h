@@ -121,6 +121,8 @@ namespace coil
   protected:
     Singleton(){};
     ~Singleton(){};
+
+  private:
     Singleton(const Singleton& x);
     Singleton& operator=(const Singleton& x);
 
