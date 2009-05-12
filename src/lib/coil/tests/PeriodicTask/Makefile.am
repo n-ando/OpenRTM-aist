@@ -16,7 +16,7 @@
 
 AUTOMAKE_OPTIONS = 1.9
 
-AM_CPPFLAGS= -I../../include      \
+AM_CPPFLAGS= -I../../include     \
 	-I$(includedir)           \
 	-I$(top_builddir)
 
@@ -26,12 +26,12 @@ AM_LDFLAGS= -L.                   \
 
 noinst_PROGRAMS = PeriodicTaskTests
 
-PeriodicTaskTests_SOURCES = ../TestRunner.cpp PeriodicTaskTests.cpp
+PeriodicTaskTests_SOURCES = ../TestRunner.cpp PeriodicTaskTests.cpp \
+           $(top_srcdir)/common/PeriodicTask.cpp
 PeriodicTaskTests_LDFLAGS = -L../../lib -L$(libdir)
 PeriodicTaskTests_LDADD   = -lcppunit -lcoil
 
 TEST_SRC = $(PeriodicTaskTests_SOURCES) \
-           $(top_srcdir)/common/PeriodicTask.cpp \
            $(top_srcdir)/common/TimeValue.cpp \
            $(top_srcdir)/win32/coil/Task.cpp \
            $(top_srcdir)/common/TimeMeasure.cpp 
