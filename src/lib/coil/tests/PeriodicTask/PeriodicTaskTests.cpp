@@ -26,7 +26,34 @@
 #include <coil/Time.h>
 #include <coil/PeriodicTask.h>
 
+#include <sstream>
 
+  class Logger
+  {
+  public:
+    void log(const std::string& msg)
+    {
+      m_log.push_back(msg);
+    }
+		
+    int countLog(const std::string& msg)
+    {
+      int count = 0;
+      for (int i = 0; i < (int) m_log.size(); ++i)
+	{
+	  if (m_log[i] == msg) ++count;
+	}
+      return count;
+    }
+		
+    void clearLog()
+    {
+        m_log.clear();
+    }
+  private:
+    std::vector<std::string> m_log;
+  };
+	
 class A
 {
 public:
@@ -38,7 +65,24 @@ public:
     coil::sleep(coil::TimeValue(0, 10000));
     return 0;
   }
+    int mysvc2()
+    {
+      if (m_logger != NULL) 
+      {
+          m_logger->log("mysvc2");
+      }
+      return 0;
+    }
+
+    static void setLogger(Logger* logger)
+    {
+      m_logger = logger;
+    }
+
+private:
+    static Logger* m_logger;
 };
+  Logger* A::m_logger = NULL;
 
 /*!
  * @class PeriodicTaskTests class
@@ -51,6 +95,9 @@ namespace PeriodicTask
   {
     CPPUNIT_TEST_SUITE(PeriodicTaskTests);
     CPPUNIT_TEST(test_case0);
+    CPPUNIT_TEST(test_setTask);
+    CPPUNIT_TEST(test_setPeriodic);
+    CPPUNIT_TEST(test_signal);
     CPPUNIT_TEST_SUITE_END();
   
   private:
@@ -125,12 +172,136 @@ namespace PeriodicTask
               p.resume();
               std::cout << "resumed: " << i << std::endl;
             }
+          else if (i == 3)
+            {
+              std::cout << "signal: " << i << std::endl;
+              p.signal();
+              coil::usleep(200000);
+              p.signal();
+              coil::usleep(200000);
+            }
 
         }
 
       p.finalize();
      
       
+
+    }
+    /*!
+     *
+     */
+    void test_setTask()
+    {
+
+      A a;
+      coil::PeriodicTask p;
+      CPPUNIT_ASSERT(p.setTask(&a, &A::mysvc2));
+
+      Logger logger;
+      a.setLogger(&logger);
+
+      CPPUNIT_ASSERT_EQUAL(0, logger.countLog("mysvc2"));
+      p.activate();
+      coil::usleep(5);
+      p.finalize();
+      coil::usleep(5);
+      CPPUNIT_ASSERT(1<logger.countLog("mysvc2"));
+
+
+    }
+    /*!
+     *
+     */
+    void test_setPeriodic()
+    {
+      std::ostringstream ss;
+      A a;
+      coil::PeriodicTask p;
+
+      Logger logger;
+      a.setLogger(&logger);
+
+      p.setTask(&a, &A::mysvc2);
+      p.setPeriod(0.05);
+
+      CPPUNIT_ASSERT_EQUAL(0, logger.countLog("mysvc2"));
+      p.activate();
+      coil::usleep(100000);
+      p.suspend();
+      coil::usleep(50000);
+
+//      std::cout<<logger.countLog("mysvc2")<<std::endl;
+      CPPUNIT_ASSERT(4>logger.countLog("mysvc2"));
+      CPPUNIT_ASSERT(0<logger.countLog("mysvc2"));
+
+      logger.clearLog();
+
+      p.setPeriod(0.01);
+      CPPUNIT_ASSERT_EQUAL(0, logger.countLog("mysvc2"));
+      p.resume();
+      coil::usleep(100000);
+      p.suspend();
+      coil::usleep(10000);
+//      std::cout<<logger.countLog("mysvc2")<<std::endl;
+      CPPUNIT_ASSERT(12>logger.countLog("mysvc2"));
+      CPPUNIT_ASSERT(8<logger.countLog("mysvc2"));
+
+      logger.clearLog();
+
+      coil::TimeValue tm(0,50000);
+      p.setPeriod(tm);
+      CPPUNIT_ASSERT_EQUAL(0, logger.countLog("mysvc2"));
+      p.resume();
+      coil::usleep(100000);
+      p.finalize();
+      coil::usleep(50000);
+//      std::cout<<logger.countLog("mysvc2")<<std::endl;
+      CPPUNIT_ASSERT(4>logger.countLog("mysvc2"));
+      CPPUNIT_ASSERT(0<logger.countLog("mysvc2"));
+
+    }
+    /*!
+     *
+     */
+    void test_signal()
+    {
+      A a;
+      coil::PeriodicTask p;
+
+      Logger logger;
+      a.setLogger(&logger);
+
+      p.setTask(&a, &A::mysvc2);
+      p.setPeriod(0.05);
+
+      CPPUNIT_ASSERT_EQUAL(0, logger.countLog("mysvc2"));
+      p.activate();
+      coil::usleep(200000);
+      p.suspend();
+
+      int count;
+      count = logger.countLog("mysvc2");
+      coil::usleep(200000);
+      CPPUNIT_ASSERT(count == logger.countLog("mysvc2"));
+
+      p.signal();
+      coil::usleep(200000);
+      CPPUNIT_ASSERT(count+1 == logger.countLog("mysvc2"));
+      p.signal();
+      coil::usleep(200000);
+      CPPUNIT_ASSERT(count+2 == logger.countLog("mysvc2"));
+
+      logger.clearLog();
+      p.resume();
+      coil::usleep(200000);
+      p.suspend();
+      coil::usleep(200000);
+      CPPUNIT_ASSERT(6>logger.countLog("mysvc2"));
+      CPPUNIT_ASSERT(2<logger.countLog("mysvc2"));
+
+      p.finalize();
+      coil::usleep(200000);
 
     }
   };
