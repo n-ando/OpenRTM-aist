@@ -81,8 +81,8 @@ namespace coil
   void PeriodicTask::finalize()
   {
     Guard gaurd(m_alive.mutex);
-    m_alive.value = false;
     this->signal();
+    m_alive.value = false;
   }
 
   /*!
@@ -134,6 +134,7 @@ namespace coil
   {
     if (!m_alive.value) { return; }
     Guard gaurd(m_suspend.mutex);
+    m_suspend.signal = true;
     m_suspend.cond.signal();
   }
 
@@ -297,6 +298,10 @@ namespace coil
         while (m_suspend.suspend)
           {
             m_suspend.cond.wait();
+            if(m_suspend.signal) {
+                m_suspend.signal = false;
+                break;
+            }
           }
       }
     return 0;
@@ -337,4 +342,3 @@ namespace coil
   }
 
 }; // namespace coil
-
