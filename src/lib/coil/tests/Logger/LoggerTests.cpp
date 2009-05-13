@@ -27,6 +27,7 @@
 #include <coil/Task.h>
 #include <coil/TimeMeasure.h>
 #include <coil/stringutil.h>
+#include <coil/Time.h>
 #include <string>
 
 class LogCreator
@@ -49,7 +50,7 @@ public:
         tm.tick();
         m_out << coil::sprintf("%s %03d %6.2f", m_name.c_str(), i, r) << std::endl;
         tm.tack();
-        usleep((int)r);
+        coil::usleep((int)r);
       }
 
     double max, min, mean, stddev;
@@ -67,13 +68,12 @@ private:
   std::basic_ostream<char> m_out;
 };
 
-
 enum LogLevel
   {
-    SILENT,
-    INFO,
-    ERROR,
-    PARANOID
+    SILENT_LEVEL,
+    INFO_LEVEL,
+    ERROR_LEVEL,
+    PARANOID_LEVEL
   };
 
 class LogOut
@@ -83,8 +83,8 @@ class LogOut
 
 public:
   LogOut(::coil::LogStream::streambuf_type* streambuf)
-    : ::coil::LogStream(streambuf, "test",
-                        SILENT, PARANOID, SILENT)
+    : ::coil::LogStream(streambuf, /* "test", */
+                        SILENT_LEVEL, PARANOID_LEVEL, SILENT_LEVEL)
   {
   }
   virtual ~LogOut(){}
@@ -230,26 +230,26 @@ namespace Logger
       logbuf.addStream(std::cout.rdbuf());
 
       LogOut log(&logbuf);
-      log.setLevel(PARANOID);
+      log.setLevel(PARANOID_LEVEL);
       std::cout << std::endl;
-      log.level(SILENT) << coil::sprintf("This is silent message.") << std::endl;
-      log.level(INFO) << coil::sprintf("This is info message.") << std::endl;
-      log.level(ERROR) << coil::sprintf("This is error message.") << std::endl;
-      log.level(PARANOID) << coil::sprintf("This is paranoid message.") << std::endl;
+      log.level(SILENT_LEVEL) << coil::sprintf("This is silent message.") << std::endl;
+      log.level(INFO_LEVEL) << coil::sprintf("This is info message.") << std::endl;
+      log.level(ERROR_LEVEL) << coil::sprintf("This is error message.") << std::endl;
+      log.level(PARANOID_LEVEL) << coil::sprintf("This is paranoid message.") << std::endl;
 
       std::cout << std::endl;
-      log.setLevel(INFO);
-      log.level(SILENT) << coil::sprintf("This is silent message.") << std::endl;
-      log.level(INFO) << coil::sprintf("This is info message.") << std::endl;
-      log.level(ERROR) << coil::sprintf("This is error message.") << std::endl;
-      log.level(PARANOID) << coil::sprintf("This is paranoid message.") << std::endl;
+      log.setLevel(INFO_LEVEL);
+      log.level(SILENT_LEVEL) << coil::sprintf("This is silent message.") << std::endl;
+      log.level(INFO_LEVEL) << coil::sprintf("This is info message.") << std::endl;
+      log.level(ERROR_LEVEL) << coil::sprintf("This is error message.") << std::endl;
+      log.level(PARANOID_LEVEL) << coil::sprintf("This is paranoid message.") << std::endl;
 
       std::cout << std::endl;
-      log.setLevel(SILENT);
-      log.level(SILENT) << coil::sprintf("This is silent message.") << std::endl;
-      log.level(INFO) << coil::sprintf("This is info message.") << std::endl;
-      log.level(ERROR) << coil::sprintf("This is error message.") << std::endl;
-      log.level(PARANOID) << coil::sprintf("This is paranoid message.") << std::endl;
+      log.setLevel(SILENT_LEVEL);
+      log.level(SILENT_LEVEL) << coil::sprintf("This is silent message.") << std::endl;
+      log.level(INFO_LEVEL) << coil::sprintf("This is info message.") << std::endl;
+      log.level(ERROR_LEVEL) << coil::sprintf("This is error message.") << std::endl;
+      log.level(PARANOID_LEVEL) << coil::sprintf("This is paranoid message.") << std::endl;
 
     }
 
