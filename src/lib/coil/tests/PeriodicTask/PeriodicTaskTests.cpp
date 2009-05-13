@@ -27,6 +27,7 @@
 #include <coil/PeriodicTask.h>
 
 #include <sstream>
+#include <math.h>
 
   class Logger
   {
@@ -65,12 +66,23 @@ public:
     coil::sleep(coil::TimeValue(0, 10000));
     return 0;
   }
+
     int mysvc2()
     {
       if (m_logger != NULL) 
       {
           m_logger->log("mysvc2");
       }
+      return 0;
+    }
+
+    int mysvc3()
+    {
+      if (m_logger != NULL) 
+      {
+          m_logger->log("mysvc3");
+      }
+      coil::sleep(coil::TimeValue(0, 30000));
       return 0;
     }
 
@@ -94,10 +106,12 @@ namespace PeriodicTask
    : public CppUnit::TestFixture
   {
     CPPUNIT_TEST_SUITE(PeriodicTaskTests);
-    CPPUNIT_TEST(test_case0);
+//    CPPUNIT_TEST(test_case0);
     CPPUNIT_TEST(test_setTask);
     CPPUNIT_TEST(test_setPeriodic);
     CPPUNIT_TEST(test_signal);
+    CPPUNIT_TEST(test_executionMeasure);
+    CPPUNIT_TEST(test_periodicMeasure);
     CPPUNIT_TEST_SUITE_END();
   
   private:
@@ -189,6 +203,7 @@ namespace PeriodicTask
 
     }
     /*!
+     *@brief setTaskテスト
      *
      */
     void test_setTask()
@@ -211,6 +226,7 @@ namespace PeriodicTask
 
     }
     /*!
+     *@brief setPeriodicテスト
      *
      */
     void test_setPeriodic()
@@ -262,6 +278,7 @@ namespace PeriodicTask
 
     }
     /*!
+     *@brief signal,suspend,resume,finalizeテスト
      *
      */
     void test_signal()
@@ -303,6 +320,148 @@ namespace PeriodicTask
       p.finalize();
       coil::usleep(200000);
 
+    }
+    /*!
+     *@brief executionMeasureテスト
+     * 実行周期は50ms,svcの実行時間は30ms。
+     */
+    void test_executionMeasure()
+    {
+      const double wait(0.03); // [s]
+      A a;
+      coil::PeriodicTask p;
+      p.setTask(&a, &A::mysvc3);
+
+      Logger logger;
+      a.setLogger(&logger);
+
+      p.setPeriod(0.05);
+      p.executionMeasure(true);
+
+      /* 回数(executionMeasureConut)がデフォルト(10)の場合 */
+      p.activate();
+
+      coil::usleep(600000);
+
+      p.suspend();
+      coil::usleep(50000);
+      coil::TimeMeasure::Statistics estat = p.getExecStat();
+      /*
+      std::cout << "estat max:  " << estat.max_interval << std::endl;
+      std::cout << "estat min:  " << estat.min_interval << std::endl;
+      std::cout << "estat mean: " << estat.mean_interval << std::endl;
+      std::cout << "estat sdev: " << estat.std_deviation << std::endl;
+      */
+      CPPUNIT_ASSERT(estat.max_interval < (wait + 0.030));
+      CPPUNIT_ASSERT(estat.min_interval > (wait - 0.010));
+      CPPUNIT_ASSERT(fabs(estat.mean_interval - wait) < 0.03);
+      CPPUNIT_ASSERT(estat.std_deviation < (wait / 5.0));
+
+
+
+      /* 回数(executionMeasureConut)5の場合 */
+      p.executionMeasureCount(5);
+      p.resume();
+      coil::usleep(300000);
+      p.suspend();
+      coil::usleep(50000);
+      estat = p.getExecStat();
+      /*
+      std::cout << "estat max:  " << estat.max_interval << std::endl;
+      std::cout << "estat min:  " << estat.min_interval << std::endl;
+      std::cout << "estat mean: " << estat.mean_interval << std::endl;
+      std::cout << "estat sdev: " << estat.std_deviation << std::endl;
+      */
+      CPPUNIT_ASSERT(estat.max_interval < (wait + 0.030));
+      CPPUNIT_ASSERT(estat.min_interval > (wait - 0.010));
+      CPPUNIT_ASSERT(fabs(estat.mean_interval - wait) < 0.03);
+      CPPUNIT_ASSERT(estat.std_deviation < (wait / 5.0));
+
+
+      /* 実行回数が回数(executionMeasureConut)に満たない場合 */
+      p.executionMeasureCount(10);
+      p.resume();
+      coil::usleep(300000);
+      p.suspend();
+      coil::usleep(50000);
+      p.finalize();
+      coil::TimeMeasure::Statistics estat2 = p.getExecStat();
+      /* 回数(periodicMeasureConut)に満たないため、前回と同じ値を返す。*/
+      CPPUNIT_ASSERT(estat.max_interval == estat2.max_interval);
+      CPPUNIT_ASSERT(estat.min_interval == estat2.min_interval);
+      CPPUNIT_ASSERT(estat.mean_interval == estat2.mean_interval);
+      CPPUNIT_ASSERT(estat.std_deviation == estat2.std_deviation);
+    }
+    /*!
+     *@brief periodicMeasureテスト
+     * 実行周期は50ms,svcの実行時間は30ms。
+     */
+    void test_periodicMeasure()
+    {
+      const double wait(0.05); // [s]
+      A a;
+      coil::PeriodicTask p;
+      p.setTask(&a, &A::mysvc3);
+
+      Logger logger;
+      a.setLogger(&logger);
+
+      p.setPeriod(0.05);
+      p.periodicMeasure(true);
+
+      /* 回数(periodicMeasureConut)がデフォルト(10)の場合 */
+      p.activate();
+
+      coil::usleep(600000);
+
+      p.suspend();
+      coil::usleep(50000);
+      coil::TimeMeasure::Statistics pstat = p.getPeriodStat();
+      /*
+      std::cout << "pstat max:  " << pstat.max_interval << std::endl;
+      std::cout << "pstat min:  " << pstat.min_interval << std::endl;
+      std::cout << "pstat mean: " << pstat.mean_interval << std::endl;
+      std::cout << "pstat sdev: " << pstat.std_deviation << std::endl;
+      */
+      CPPUNIT_ASSERT(pstat.max_interval < (wait + 0.030));
+      CPPUNIT_ASSERT(pstat.min_interval > (wait - 0.010));
+      CPPUNIT_ASSERT(fabs(pstat.mean_interval - wait) < 0.03);
+      CPPUNIT_ASSERT(pstat.std_deviation < (wait / 5.0));
+
+
+
+      /* 回数(periodicMeasureConut)5の場合 */
+      p.periodicMeasureCount(5);
+      p.resume();
+      coil::usleep(300000);
+      p.suspend();
+      coil::usleep(50000);
+      pstat = p.getPeriodStat();
+      /*
+      std::cout << "pstat max:  " << pstat.max_interval << std::endl;
+      std::cout << "pstat min:  " << pstat.min_interval << std::endl;
+      std::cout << "pstat mean: " << pstat.mean_interval << std::endl;
+      std::cout << "pstat sdev: " << pstat.std_deviation << std::endl;
+      */
+      CPPUNIT_ASSERT(pstat.max_interval < (wait + 0.030));
+      CPPUNIT_ASSERT(pstat.min_interval > (wait - 0.010));
+      CPPUNIT_ASSERT(fabs(pstat.mean_interval - wait) < 0.03);
+      CPPUNIT_ASSERT(pstat.std_deviation < (wait / 5.0));
+
+
+      /* 実行回数が回数(periodicMeasureConut)に満たない場合 */
+      p.periodicMeasureCount(10);
+      p.resume();
+      coil::usleep(300000);
+      p.suspend();
+      coil::usleep(50000);
+      p.finalize();
+      coil::TimeMeasure::Statistics pstat2 = p.getPeriodStat();
+      /* 回数(periodicMeasureConut)に満たないため、前回と同じ値を返す。*/
+      CPPUNIT_ASSERT(pstat.max_interval == pstat2.max_interval);
+      CPPUNIT_ASSERT(pstat.min_interval == pstat2.min_interval);
+      CPPUNIT_ASSERT(pstat.mean_interval == pstat2.mean_interval);
+      CPPUNIT_ASSERT(pstat.std_deviation == pstat2.std_deviation);
     }
   };
 }; // namespace PeriodicTask
