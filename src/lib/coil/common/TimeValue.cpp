@@ -62,12 +62,12 @@ namespace coil
     TimeValue res;
     if (m_sec >= tm.m_sec) // +
       {
-        if (m_usec >= tm.m_usec) // 繰り下がり無し
+        if (m_usec >= tm.m_usec) /* 繰り下がり無し */
           {
             res.m_sec  = m_sec  - tm.m_sec;  // -
             res.m_usec = m_usec - tm.m_usec; // +
           }
-        else // m_usec < tm.m_usec 繰り下がり有り
+        else /* m_usec < tm.m_usec 繰り下がり有り */
           {
             res.m_sec  = m_sec  - tm.m_sec - 1;
             res.m_usec = (m_usec + 1000000) - tm.m_usec;
@@ -75,12 +75,12 @@ namespace coil
       }
     else // m_sec < tm.m_sec // -
       {
-          if (tm.m_usec >= m_usec) // 繰り下がり無し
+          if (tm.m_usec >= m_usec) /* 繰り下がり無し */
             {
               res.m_sec  = - (tm.m_sec  - m_sec); // +
               res.m_usec = - (tm.m_usec - m_usec);  // +
             }
-          else // tm.m_usec < m_usec 繰り下がり有り
+          else /* tm.m_usec < m_usec 繰り下がり有り */
             {
               res.m_sec  = - (tm.m_sec - m_sec  - 1);
               res.m_usec = - (tm.m_usec + 1000000) + m_usec;
