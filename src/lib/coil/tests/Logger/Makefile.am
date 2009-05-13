@@ -30,7 +30,12 @@ LoggerTests_SOURCES = ../TestRunner.cpp LoggerTests.cpp
 LoggerTests_LDFLAGS = -L../../lib -L$(libdir)
 LoggerTests_LDADD   = -lcppunit -lcoil
 
-TEST_SRC = $(LoggerTests_SOURCES)
+TEST_SRC = $(LoggerTests_SOURCES) \
+           $(top_srcdir)/common/stringutil.cpp \
+           $(top_srcdir)/common/TimeValue.cpp \
+           $(top_srcdir)/common/TimeMeasure.cpp \
+           $(top_srcdir)/win32/coil/Task.cpp
+	
 TEST_H   = 
 
 # all
@@ -39,7 +44,7 @@ all: do-test
 # do tests
 do-test:
 	./LoggerTests
-	diff3 *.log
+	diff3 log?.log
 
 # clean-up
 clean-local:
