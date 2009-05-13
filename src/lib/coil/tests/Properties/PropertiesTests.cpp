@@ -57,12 +57,13 @@ namespace Properties
   {
     CPPUNIT_TEST_SUITE(PropertiesTests);
 		
-    CPPUNIT_TEST(test_ctor_char_char);
     CPPUNIT_TEST(test_ctor_map);
-    CPPUNIT_TEST(test_ctor_char);
-    CPPUNIT_TEST(test_copy_ctor);
+    CPPUNIT_TEST(test_Properties_key_value);
+    CPPUNIT_TEST(test_Properties_char);
+    CPPUNIT_TEST(test_Properties_copy);
+    CPPUNIT_TEST(test_Properties_destructor);
     CPPUNIT_TEST(test_substitute);
-    CPPUNIT_TEST(test_dtor);
+    CPPUNIT_TEST(test_Properties_destructor);
 
     CPPUNIT_TEST(test_getName);
     CPPUNIT_TEST(test_getValue);
@@ -71,12 +72,8 @@ namespace Properties
     CPPUNIT_TEST(test_getRoot);
 
     CPPUNIT_TEST(test_getProperty);
-    CPPUNIT_TEST(test_getPropertyDefault);
-    CPPUNIT_TEST(test_opbrace_rhs);
-    CPPUNIT_TEST(test_opbrace_lhs);
     CPPUNIT_TEST(test_getDefault);   
     CPPUNIT_TEST(test_setProperty);
-    CPPUNIT_TEST(test_setDefault);
     CPPUNIT_TEST(test_setDefaults);
 
     CPPUNIT_TEST(test_list);
@@ -92,7 +89,6 @@ namespace Properties
     CPPUNIT_TEST(test_hasKey);
     CPPUNIT_TEST(test_clear);
     CPPUNIT_TEST(test_streamInput);
-
     CPPUNIT_TEST(test_splitKeyValue);
 
 
@@ -155,13 +151,39 @@ namespace Properties
     { 
     }
 
-    /*!
-     * @brief Properties(const char*, const char*)コンストラクタのテスト
-     */
-    void test_ctor_char_char()
-    {
-    }
 		
+    /*!
+     * @brief Properties(const char* key = "", const char* value = "")コンストラクタのテスト
+     * 
+     * <ul>
+     * <li>keyとvalueで指定した値が正しく取得されるか？</li>
+     * </ul>
+     */
+    void test_Properties_key_value()
+    {
+      // key,valueによるデフォルト値指定でPropertiesオブジェクトを生成する
+      string value("test");
+
+      // プロパティの名称と値が、コンストラクタで指定した値で取得されることを確認する
+      // (1) キーを階層化しないでテスト
+      string key0("manager");
+      coil::Properties prop0(key0.c_str(),value.c_str());
+      string retkey(prop0.getName());
+      CPPUNIT_ASSERT_EQUAL(key0, retkey);
+      string retval(prop0.getValue());
+      CPPUNIT_ASSERT_EQUAL(value, retval);
+
+
+      // (2) キーを階層化してテスト
+      string key1("manager.test.test");
+      coil::Properties prop1(key1.c_str(),value.c_str());
+			
+      retkey = prop1.getName();
+      CPPUNIT_ASSERT_EQUAL(key1, retkey);
+      retval = prop1.getValue();
+      CPPUNIT_ASSERT_EQUAL(value, retval);
+    }
+
     /*!
      * @brief Properties(std::map<string, string>&)コンストラクタのテスト
      * 
@@ -205,15 +227,8 @@ namespace Properties
       }
     }
 		
-    /*!
-     * @brief Properties(const char*[])コンストラクタのテスト
-     * 
-     * <ul>
-     * <li>std::mapで指定したデフォルト値が、デフォルト値として正しく取
-     * 得されるか？</li>
-     * </ul>
-     */		
-    void test_ctor_char()
+
+    void test_Properties_char()
     {
       const char* defaults[] = {
 	"rtc.component.conf.path", "C:\\Program\\ Files\\OpenRTM-aist",
@@ -233,10 +248,9 @@ namespace Properties
 	"rtc.openrtm.version", "0.4.0",
 	""
       };
-			
+      
       coil::Properties prop(defaults);
-      /* 各プロパティのデフォルト値および通常値がいずれも、コンストラク */
-      /* タで指定した値で取得されることを確認する                       */
+      // 各プロパティのデフォルト値および通常値がいずれも、コンストラクタで指定した値で取得されることを確認する
       for (int i = 0; defaults[i] != ""; i += 2) {
 	string key = defaults[i];
 	string value = defaults[i + 1];
@@ -244,12 +258,87 @@ namespace Properties
 	CPPUNIT_ASSERT_EQUAL(value, prop.getProperty(key));
       }
     }
+		
+    /*!
+     * @brief Properties(const Properties& prop)コピーコンストラクタのテスト
+     * 
+     * <ul>
+     * <li>propで指定したデフォルト値が、コピーオブジェクトから正しく取得されるか？</li>
+     * </ul>
+     */
+    void test_Properties_copy()
+    {
+      map<string, string> defaults;
+      defaults["rtc.component.conf.path"] = "C:\\Program\\ Files\\OpenRTM-aist";
+      defaults["rtc.manager.arch"] = "i386";
+      defaults["rtc.manager.debug.level"] = "PARANOID";
+      defaults["rtc.manager.language"] = "C++";
+      defaults["rtc.manager.nameserver"] = "zonu.a02.aist.go.jp";
+      defaults["rtc.manager.opening_message"] = "Hello World";
+      defaults["rtc.manager.orb.name"] = "omniORB";
+      defaults["rtc.manager.orb.options"] = "IIOPAddrPort, -ORBendPoint, giop:tcp:";
+      defaults["rtc.manager.os.name"] = "FreeBSD";
+      defaults["rtc.manager.os.release"] = "6.1-RELEASE";
+      defaults["rtc.manager.subsystems"] = "Camera, Manipulator, Force Sensor";
+      defaults["rtc.openrtm.author"] = "Noriaki Ando";
+      defaults["rtc.openrtm.release"] = "aist";
+      defaults["rtc.openrtm.vendor"] = "AIST TaskIntelligence";
+      defaults["rtc.openrtm.version"] = "0.4.0";
+			
+      // mapによるデフォルト値指定でPropertiesオブジェクトを生成する
+      coil::Properties prop(defaults);
+      coil::Properties cprop(prop);
+
+
+      // 各プロパティのデフォルト値および通常値がいずれも、コンストラクタで指定した値で取得されることを確認する
+      for (map<string, string>::iterator it = defaults.begin(); it != defaults.end(); it++) {
+	string key = it->first;
+	string value = it->second;
+	CPPUNIT_ASSERT_EQUAL(value, cprop.getDefault(key));
+	CPPUNIT_ASSERT_EQUAL(value, cprop.getProperty(key));
+      }
+    }
+
 
     /*!
-     * @brief copy ctro test
+     * @brief ~Properties(void)デストラクタのテスト
+     * 
+     * <ul>
+     * <li>デストラクタによりオブジェクトからデータが正しく削除されるか？</li>
+     * </ul>
      */
-    void test_copy_ctor()
+    void test_Properties_destructor()
     {
+      map<string, string> defaults;
+      defaults["rtc.component.conf.path"] = "C:\\Program\\ Files\\OpenRTM-aist";
+      defaults["rtc.manager.arch"] = "i386";
+      defaults["rtc.manager.debug.level"] = "PARANOID";
+      defaults["rtc.manager.language"] = "C++";
+      defaults["rtc.manager.nameserver"] = "zonu.a02.aist.go.jp";
+      defaults["rtc.manager.opening_message"] = "Hello World";
+      defaults["rtc.manager.orb.name"] = "omniORB";
+      defaults["rtc.manager.orb.options"] = "IIOPAddrPort, -ORBendPoint, giop:tcp:";
+      defaults["rtc.manager.os.name"] = "FreeBSD";
+      defaults["rtc.manager.os.release"] = "6.1-RELEASE";
+      defaults["rtc.manager.subsystems"] = "Camera, Manipulator, Force Sensor";
+      defaults["rtc.openrtm.author"] = "Noriaki Ando";
+      defaults["rtc.openrtm.release"] = "aist";
+      defaults["rtc.openrtm.vendor"] = "AIST TaskIntelligence";
+      defaults["rtc.openrtm.version"] = "0.4.0";
+			
+      // mapによるデフォルト値指定でPropertiesオブジェクトを生成する
+      coil::Properties prop(defaults);
+      std::vector<coil::Properties*> leaf0(prop.getNode("rtc")->getLeaf());
+      CPPUNIT_ASSERT(leaf0.size() == 3);
+
+      // rtc.managerノードを削除する
+      delete prop.getNode("rtc.manager");
+
+      // rtcノードからmanagerが削除されている事を確認する。
+      std::vector<coil::Properties*> leaf1(prop.getNode("rtc")->getLeaf());
+      CPPUNIT_ASSERT(leaf1.size() == 2);
+      std::string getval(prop.getNode("rtc.manager")->getValue());
+      CPPUNIT_ASSERT("" == getval);
     }
 
     /*!
@@ -298,60 +387,6 @@ namespace Properties
       CPPUNIT_ASSERT_EQUAL(key3Value, prop.getProperty(key3));
     }
 
-    /*!
-     * @brief dtor test
-     *
-     * ノード以下、すべての要素が削除されるかのテスト
-     */
-    void test_dtor()
-    {
-    }
-
-    /*!
-     * @brief getName test
-     *
-     * ノードが保持する名称を取得するテスト
-     */
-    void test_getName()
-    {
-    }
-    
-    /*!
-     * @brief getValue test
-     *
-     * ノードが保持する値を取得するテスト
-     */		
-    void test_getValue()
-    {
-    }
-
-    /*!
-     * @brief getDefaultValue test
-     *
-     * ノードが保持するデフォルト値を取得するテスト
-     */		
-    void test_getDefaultValue()
-    {
-    }
-	
-
-    /*!
-     * @brief getLeaf test
-     *
-     * ノードが保持する子要素を取得するテスト
-     */		
-    void test_getLeaf()
-    {
-    }
-
-    /*!
-     * @brief getLeaf test
-     *
-     * ノードが保持する親要素を取得するテスト
-     */		
-    void test_getRoot()
-    {
-    }
 
     /*!
      * @brief getProperty()メソッドのテスト
@@ -397,26 +432,6 @@ namespace Properties
       CPPUNIT_ASSERT_EQUAL(expected_4, prop.getProperty("property_4"));
     }
 
-    /*!
-     * @brief getProperty(key, default) のテスト
-     */
-    void test_getPropertyDefault()
-    {
-    }
-
-    /*!
-     * @brief operator[] (右辺値) のテスト
-     */
-    void test_opbrace_rhs()
-    {
-    }
-
-    /*!
-     * @brief operator[] (左辺値) のテスト
-     */
-    void test_opbrace_lhs()
-    {
-    }
 
     /*!
      * @brief getDefault()のテスト
@@ -500,13 +515,6 @@ namespace Properties
       CPPUNIT_ASSERT_EQUAL(newValue, prop.getProperty(key));
     }
 
-    void test_setDefault()
-    {
-    }
-
-    void test_setDefaults()
-    {
-    }
 
     /*!
      * @brief list()メソッドのテスト
@@ -731,55 +739,474 @@ namespace Properties
                      != keys.end());
     }
 
+
+    /*!
+     * @brief getName(void)メソッドのテスト
+     * 
+     * <ul>
+     * <li>コンストラクタで指定したプロパティの名称が正しく取得されるか？</li>
+     * </ul>
+     */
+    void test_getName()
+    {
+
+      string value("test");
+
+      // (1) キーを階層化していない場合
+      // key,valueによるデフォルト値指定でPropertiesオブジェクトを生成する
+      string key0("manager");
+      coil::Properties prop0(key0.c_str(),value.c_str());
+      string retkey(prop0.getName());
+      CPPUNIT_ASSERT_EQUAL(key0, retkey);
+
+      // (1) キーを階層化した場合
+      // key,valueによるデフォルト値指定でPropertiesオブジェクトを生成する
+      string key1("manager.hoge");
+      coil::Properties prop1(key1.c_str(),value.c_str());
+      retkey= prop1.getName();
+      CPPUNIT_ASSERT_EQUAL(key1, retkey);
+    }
+
+    /*!
+     * @brief getValue(void)メソッドのテスト
+     * 
+     * <ul>
+     * <li>コンストラクタで指定したプロパティの値が正しく取得されるか？</li>
+     * </ul>
+     */
+    void test_getValue()
+    {
+      // key,valueによるデフォルト値指定でPropertiesオブジェクトを生成する
+      string key("manager");
+      string value("test.test");
+      coil::Properties prop(key.c_str(),value.c_str());
+			
+      // コンストラクタで指定したプロパティの値が取得されることを確認する
+      string retval(prop.getValue());
+      CPPUNIT_ASSERT_EQUAL(value, retval);
+    }
+
+    /*!
+     * @brief getDefaultValue(void)メソッドのテスト
+     * 
+     * <ul>
+     * <li>setDefaultで指定したプロパティの値が正しく取得されるか？</li>
+     * </ul>
+     */
+    void test_getDefaultValue()
+    {
+      coil::Properties prop;
+
+      string key("property_1");
+      string value("default_1");
+      // デフォルト値を設定する
+      prop.setDefault(key.c_str(), value.c_str());
+
+      // デフォルト値を取得する
+      string retval(prop.getNode(key.c_str())->getDefaultValue());
+      CPPUNIT_ASSERT_EQUAL(value, retval);
+    }
+
+    /*!
+     * @brief getLeaf(void)メソッドのテスト
+     * 
+     * <ul>
+     * <li>getLeafで子要素が正しく取得されるか？</li>
+     * </ul>
+     */
+    void test_getLeaf()
+    {
+      map<string, string> defaults;
+      defaults["rtc.component.conf.path"] = "C:\\Program\\ Files\\OpenRTM-aist";
+      defaults["rtc.manager.arch"] = "i386";
+      defaults["rtc.manager.debug.level"] = "PARANOID";
+      defaults["rtc.manager.language"] = "C++";
+      defaults["rtc.manager.nameserver"] = "zonu.a02.aist.go.jp";
+      defaults["rtc.manager.opening_message"] = "Hello World";
+      defaults["rtc.manager.orb.name"] = "omniORB";
+      defaults["rtc.manager.orb.options"] = "IIOPAddrPort, -ORBendPoint, giop:tcp:";
+      defaults["rtc.manager.os.name"] = "FreeBSD";
+      defaults["rtc.manager.os.release"] = "6.1-RELEASE";
+      defaults["rtc.manager.subsystems"] = "Camera, Manipulator, Force Sensor";
+      defaults["rtc.openrtm.author"] = "Noriaki Ando";
+      defaults["rtc.openrtm.release"] = "aist";
+      defaults["rtc.openrtm.vendor"] = "AIST TaskIntelligence";
+      defaults["rtc.openrtm.version"] = "0.4.0";
+			
+      // mapによるデフォルト値指定でPropertiesオブジェクトを生成する
+      coil::Properties prop(defaults);
+
+      // getLeaf()で子要素を取得
+      std::vector<coil::Properties*> leaf(prop.getNode("rtc")->getLeaf());
+      CPPUNIT_ASSERT(leaf[1]->getProperty("arch") == "i386");
+      CPPUNIT_ASSERT(leaf[1]->getProperty("debug.level") == "PARANOID");
+    }
+
+    /*!
+     * @brief getRoot(void)メソッドのテスト
+     * 
+     * <ul>
+     * <li>getRootでルート要素が正しく取得されるか？</li>
+     * </ul>
+     */
+    void test_getRoot()
+    {
+      map<string, string> defaults;
+      defaults["rtc.component.conf.path"] = "C:\\Program\\ Files\\OpenRTM-aist";
+      defaults["rtc.manager.arch"] = "i386";
+      defaults["rtc.manager.debug.level"] = "PARANOID";
+      defaults["rtc.manager.language"] = "C++";
+      defaults["rtc.manager.nameserver"] = "zonu.a02.aist.go.jp";
+      defaults["rtc.manager.opening_message"] = "Hello World";
+      defaults["rtc.manager.orb.name"] = "omniORB";
+      defaults["rtc.manager.orb.options"] = "IIOPAddrPort, -ORBendPoint, giop:tcp:";
+      defaults["rtc.manager.os.name"] = "FreeBSD";
+      defaults["rtc.manager.os.release"] = "6.1-RELEASE";
+      defaults["rtc.manager.subsystems"] = "Camera, Manipulator, Force Sensor";
+      defaults["rtc.openrtm.author"] = "Noriaki Ando";
+      defaults["rtc.openrtm.release"] = "aist";
+      defaults["rtc.openrtm.vendor"] = "AIST TaskIntelligence";
+      defaults["rtc.openrtm.version"] = "0.4.0";
+			
+      // mapによるデフォルト値指定でPropertiesオブジェクトを生成する
+      coil::Properties prop(defaults);
+
+      // getLeaf()でルート要素を取得
+      const coil::Properties* root(prop.getNode("rtc.manager.os")->getRoot());
+      CPPUNIT_ASSERT(root->getProperty("arch") == "i386");
+      CPPUNIT_ASSERT(root->getProperty("debug.level") == "PARANOID");
+    }
+
+    /*!
+     * @brief operator[]()メソッドのテスト
+     * 
+     * <ul>
+     * <li>指定されたキーを持つプロパティを、プロパティリストから探せるか？</li>
+     * </ul>
+     */
+    void test_operator()
+    {
+      map<string, string> defaults;
+      defaults["rtc.component.conf.path"] = "C:\\Program\\ Files\\OpenRTM-aist";
+      defaults["rtc.manager.arch"] = "i386";
+      defaults["rtc.manager.debug.level"] = "PARANOID";
+      defaults["rtc.manager.language"] = "C++";
+      defaults["rtc.manager.nameserver"] = "zonu.a02.aist.go.jp";
+      defaults["rtc.manager.opening_message"] = "Hello World";
+      defaults["rtc.manager.orb.name"] = "omniORB";
+      defaults["rtc.manager.orb.options"] = "IIOPAddrPort, -ORBendPoint, giop:tcp:";
+      defaults["rtc.manager.os.name"] = "FreeBSD";
+      defaults["rtc.manager.os.release"] = "6.1-RELEASE";
+      defaults["rtc.manager.subsystems"] = "Camera, Manipulator, Force Sensor";
+      defaults["rtc.openrtm.author"] = "Noriaki Ando";
+      defaults["rtc.openrtm.release"] = "aist";
+      defaults["rtc.openrtm.vendor"] = "AIST TaskIntelligence";
+      defaults["rtc.openrtm.version"] = "0.4.0";
+			
+      //  const std::string& 
+      //     Properties::operator[](const std::string& key) const
+      //  のテスト
+      const coil::Properties prop0(defaults);
+      const string& retval0(prop0["rtc.manager.arch"]);
+      CPPUNIT_ASSERT(retval0 == "i386");
+
+      //  std::string& 
+      //     Properties::operator[](const std::string& key)
+      //  のテスト
+      coil::Properties prop1(defaults);
+      string retval1(prop1["rtc.manager.arch"]);
+      CPPUNIT_ASSERT(retval1 == "i386");
+      
+    }
+
+    /*!
+     * @brief setDefaults()メソッドのテスト
+     * 
+     * <ul>
+     * <li>デフォルト値を登録し、その値が正しく取得できるか？</li>
+     * </ul>
+     */
+    void test_setDefaults()
+    {
+      const char* defaults[] = {
+	"rtc.component.conf.path", "C:\\Program\\ Files\\OpenRTM-aist",
+	"rtc.manager.arch", "i386",
+	"rtc.manager.debug.level", "PARANOID",
+	"rtc.manager.language", "C++",
+	"rtc.manager.nameserver", "zonu.a02.aist.go.jp",
+	"rtc.manager.opening_message", "Hello World",
+	"rtc.manager.orb.name", "omniORB",
+	"rtc.manager.orb.options", "IIOPAddrPort, -ORBendPoint, giop:tcp:",
+	"rtc.manager.os.name", "FreeBSD",
+	"rtc.manager.os.release", "6.1-RELEASE",
+	"rtc.manager.subsystems", "Camera, Manipulator, Force Sensor",
+	"rtc.openrtm.author", "Noriaki Ando",
+	"rtc.openrtm.release", "aist",
+	"rtc.openrtm.vendor", "AIST TaskIntelligence",
+	"rtc.openrtm.version", "0.4.0",
+	""
+      };
+      
+      coil::Properties prop;
+      prop.setDefaults(defaults);
+
+      // 各プロパティのデフォルト値がsetDefaultsで指定した値で取得されることを確認する
+      for (int i = 0; defaults[i] != ""; i += 2) {
+	string key = defaults[i];
+	string value = defaults[i + 1];
+	CPPUNIT_ASSERT_EQUAL(value, prop.getDefault(key));
+      }
+    }
+
+    /*!
+     * @brief size()メソッドのテスト
+     * 
+     * <ul>
+     * <li>プロパティの数が正しく取得できるか？</li>
+     * </ul>
+     */
     void test_size()
     {
+      map<string, string> defaults;
+      defaults["rtc.component.conf.path"] = "C:\\Program\\ Files\\OpenRTM-aist";
+      defaults["rtc.manager.arch"] = "i386";
+      defaults["rtc.manager.debug.level"] = "PARANOID";
+      defaults["rtc.manager.language"] = "C++";
+      defaults["rtc.manager.nameserver"] = "zonu.a02.aist.go.jp";
+      defaults["rtc.manager.opening_message"] = "Hello World";
+      defaults["rtc.manager.orb.name"] = "omniORB";
+      defaults["rtc.manager.orb.options"] = "IIOPAddrPort, -ORBendPoint, giop:tcp:";
+      defaults["rtc.manager.os.name"] = "FreeBSD";
+      defaults["rtc.manager.os.release"] = "6.1-RELEASE";
+      defaults["rtc.manager.subsystems"] = "Camera, Manipulator, Force Sensor";
+      defaults["rtc.openrtm.author"] = "Noriaki Ando";
+      defaults["rtc.openrtm.release"] = "aist";
+      defaults["rtc.openrtm.vendor"] = "AIST TaskIntelligence";
+      defaults["rtc.openrtm.version"] = "0.4.0";
+			
+      coil::Properties prop(defaults);
+
+      // (1) コンストラクタ引数にて指定したプロパティの数が正しく取得できるか？
+      CPPUNIT_ASSERT(15 == prop.size());
+
+      // (2) 新たに追加後のプロパティの数が正しく取得できるか？
+      string key = "key";
+      string newValue = "new-value";
+      prop.setProperty(key, newValue);
+      CPPUNIT_ASSERT(16 == prop.size());
     }
 
+    /*!
+     * @brief findNode()メソッドのテスト
+     * 
+     * <ul>
+     * <li>キーで指定したノードが正しく検索できるか？</li>
+     * </ul>
+     */
     void test_findNode()
     {
-      coil::Properties prop;
-      const char* text0 = "Hello, World!";
+      map<string, string> defaults;
+      defaults["rtc.component.conf.path"] = "C:\\Program\\ Files\\OpenRTM-aist";
+      defaults["rtc.manager.arch"] = "i386";
+      defaults["rtc.manager.debug.level"] = "PARANOID";
+      defaults["rtc.manager.language"] = "C++";
+      defaults["rtc.manager.nameserver"] = "zonu.a02.aist.go.jp";
+      defaults["rtc.manager.opening_message"] = "Hello World";
+      defaults["rtc.manager.orb.name"] = "omniORB";
+      defaults["rtc.manager.orb.options"] = "IIOPAddrPort, -ORBendPoint, giop:tcp:";
+      defaults["rtc.manager.os.name"] = "FreeBSD";
+      defaults["rtc.manager.os.release"] = "6.1-RELEASE";
+      defaults["rtc.manager.subsystems"] = "Camera, Manipulator, Force Sensor";
+      defaults["rtc.openrtm.author"] = "Noriaki Ando";
+      defaults["rtc.openrtm.release"] = "aist";
+      defaults["rtc.openrtm.vendor"] = "AIST TaskIntelligence";
+      defaults["rtc.openrtm.version"] = "0.4.0";
+			
+      // mapによるデフォルト値指定でPropertiesオブジェクトを生成する
+      coil::Properties prop(defaults);
 
+      // (1) 存在するノードを指定しノードを取得
+      CPPUNIT_ASSERT(prop.findNode("rtc.manager")->getProperty("arch") == "i386");
+      CPPUNIT_ASSERT(prop.findNode("rtc.manager")->getProperty("debug.level") == "PARANOID");
+      CPPUNIT_ASSERT(prop.findNode("rtc.manager") != NULL);
 
-      prop["a0.b0.c0"] = text0;
-
-      CPPUNIT_ASSERT(prop.findNode("a0.b0") != 0);
-      CPPUNIT_ASSERT(prop.findNode("a0")    != 0);
-      CPPUNIT_ASSERT(prop.findNode("")      == 0);
-
-      coil::Properties* prop1(prop.findNode("a0.b1"));
-      CPPUNIT_ASSERT(prop1 == 0);
-
-      coil::Properties p;
-      p["a0"] = "hoge";
-
-      CPPUNIT_ASSERT(p["a0"] == "hoge");
-
-      p["a0.b0"] = "dara";
-
-      CPPUNIT_ASSERT( p["a0.b0"] == "dara");
-      CPPUNIT_ASSERT(p["a0"] == "hoge");
-      return;      
+      // (2) 存在しないノードを指定しノードを取得
+      CPPUNIT_ASSERT(prop.findNode("manager") == NULL);
+      CPPUNIT_ASSERT(prop.findNode("rtc.MANAGER") == NULL);
     }
 
+    /*!
+     * @brief getNode()メソッドのテスト
+     * 
+     * <ul>
+     * <li>キーで指定したノードが正しく取得できるか？</li>
+     * </ul>
+     */
     void test_getNode()
     {
-      coil::Properties prop;
-      const char* text0 = "Hello, World!";
-      const char* text1 = "Hello World!";
+      map<string, string> defaults;
+      defaults["rtc.component.conf.path"] = "C:\\Program\\ Files\\OpenRTM-aist";
+      defaults["rtc.manager.arch"] = "i386";
+      defaults["rtc.manager.debug.level"] = "PARANOID";
+      defaults["rtc.manager.language"] = "C++";
+      defaults["rtc.manager.nameserver"] = "zonu.a02.aist.go.jp";
+      defaults["rtc.manager.opening_message"] = "Hello World";
+      defaults["rtc.manager.orb.name"] = "omniORB";
+      defaults["rtc.manager.orb.options"] = "IIOPAddrPort, -ORBendPoint, giop:tcp:";
+      defaults["rtc.manager.os.name"] = "FreeBSD";
+      defaults["rtc.manager.os.release"] = "6.1-RELEASE";
+      defaults["rtc.manager.subsystems"] = "Camera, Manipulator, Force Sensor";
+      defaults["rtc.openrtm.author"] = "Noriaki Ando";
+      defaults["rtc.openrtm.release"] = "aist";
+      defaults["rtc.openrtm.vendor"] = "AIST TaskIntelligence";
+      defaults["rtc.openrtm.version"] = "0.4.0";
+			
+      // mapによるデフォルト値指定でPropertiesオブジェクトを生成する
+      coil::Properties prop(defaults);
 
-      prop["a0.b0.c0"] = text0;
+      // (1) 既に存在するノードを取得
+      CPPUNIT_ASSERT(prop.getNode("rtc.manager")->getProperty("arch") == "i386");
+      CPPUNIT_ASSERT(prop.getNode("rtc.manager")->getProperty("debug.level") == "PARANOID");
 
-      CPPUNIT_ASSERT(prop.getNode("a0.b0")["c0"] == text0);
-      CPPUNIT_ASSERT(prop.getNode("a0")["b0.c0"] == text0);
-      CPPUNIT_ASSERT(prop.getNode("")["a0.b0.c0"] == text0);
-      //      return;
-      coil::Properties& prop1(prop.getNode("a0.b1"));
-      // now node "a0.b1" is created
-      prop1["c1"] = text1; // a0.b1.c1 = text1
-
-      CPPUNIT_ASSERT(prop["a0.b1.c1"] == text1);
+      // (2) 存在しないノードを取得
+      std::string getval(prop.getNode("manager")->getValue());
+      CPPUNIT_ASSERT(getval == "");
+      CPPUNIT_ASSERT(prop.getNode("rtc.manager") != NULL);
     }
+
+    /*!
+     * @brief removeNode()メソッドのテスト
+     * 
+     * <ul>
+     * <li>指定したノードが正しく削除できるか？</li>
+     * </ul>
+     */
+    void test_removeNode()
+    {
+      map<string, string> defaults;
+      defaults["rtc.component.conf.path"] = "C:\\Program\\ Files\\OpenRTM-aist";
+      defaults["rtc.manager.arch"] = "i386";
+      defaults["rtc.manager.debug.level"] = "PARANOID";
+      defaults["rtc.manager.language"] = "C++";
+      defaults["rtc.manager.nameserver"] = "zonu.a02.aist.go.jp";
+      defaults["rtc.manager.opening_message"] = "Hello World";
+      defaults["rtc.manager.orb.name"] = "omniORB";
+      defaults["rtc.manager.orb.options"] = "IIOPAddrPort, -ORBendPoint, giop:tcp:";
+      defaults["rtc.manager.os.name"] = "FreeBSD";
+      defaults["rtc.manager.os.release"] = "6.1-RELEASE";
+      defaults["rtc.manager.subsystems"] = "Camera, Manipulator, Force Sensor";
+      defaults["rtc.openrtm.author"] = "Noriaki Ando";
+      defaults["rtc.openrtm.release"] = "aist";
+      defaults["rtc.openrtm.vendor"] = "AIST TaskIntelligence";
+      defaults["rtc.openrtm.version"] = "0.4.0";
+			
+      // mapによるデフォルト値指定でPropertiesオブジェクトを生成する
+      coil::Properties prop(defaults);
+
+      // "rtc.manager"のように指定した場合、削除できない。
+      CPPUNIT_ASSERT(prop.removeNode("rtc.manager") == NULL);
+
+      // "rtc.manager"ノードの削除
+      CPPUNIT_ASSERT(prop.getNode("rtc")->removeNode("manager") != NULL);
+
+      // (1) 削除したノードを検索
+      CPPUNIT_ASSERT(prop.findNode("rtc.manager") == NULL);
+
+      // (2) 削除したノードを取得
+      std::string getval0(prop.getNode("rtc.manager")->getValue());
+      CPPUNIT_ASSERT(getval0 == "");
+    }
+
+    /*!
+     * @brief hasKey()メソッドのテスト
+     * 
+     * <ul>
+     * <li>子ノードにkeyがあるかどうか？</li>
+     * </ul>
+     */
+    void test_hasKey()
+    {
+      map<string, string> defaults;
+      defaults["rtc.component.conf.path"] = "C:\\Program\\ Files\\OpenRTM-aist";
+      defaults["rtc.manager.arch"] = "i386";
+      defaults["rtc.manager.debug.level"] = "PARANOID";
+      defaults["rtc.manager.language"] = "C++";
+      defaults["rtc.manager.nameserver"] = "zonu.a02.aist.go.jp";
+      defaults["rtc.manager.opening_message"] = "Hello World";
+      defaults["rtc.manager.orb.name"] = "omniORB";
+      defaults["rtc.manager.orb.options"] = "IIOPAddrPort, -ORBendPoint, giop:tcp:";
+      defaults["rtc.manager.os.name"] = "FreeBSD";
+      defaults["rtc.manager.os.release"] = "6.1-RELEASE";
+      defaults["rtc.manager.subsystems"] = "Camera, Manipulator, Force Sensor";
+      defaults["rtc.openrtm.author"] = "Noriaki Ando";
+      defaults["rtc.openrtm.release"] = "aist";
+      defaults["rtc.openrtm.vendor"] = "AIST TaskIntelligence";
+      defaults["rtc.openrtm.version"] = "0.4.0";
+			
+      // mapによるデフォルト値指定でPropertiesオブジェクトを生成する
+      coil::Properties prop(defaults);
+
+      // (1) 存在するキーでテスト
+      CPPUNIT_ASSERT(prop.hasKey("rtc") != NULL);
+
+      // (2) 存在しないキーでテスト
+      CPPUNIT_ASSERT(prop.hasKey("hoge") == NULL);
+
+      // (3) 存在するキーでテスト
+      CPPUNIT_ASSERT(prop.getNode("rtc")->hasKey("manager") != NULL);
+
+      // (4) 存在しないキーでテスト
+      CPPUNIT_ASSERT(prop.getNode("rtc")->hasKey("hoge") == NULL);
+    }
+
+    /*!
+     * @brief clear()メソッドのテスト
+     * 
+     * <ul>
+     * <li>子ノードがすべて削除されるかどうか？</li>
+     * </ul>
+     */
+    void test_clear()
+    {
+      map<string, string> defaults;
+      defaults["rtc.component.conf.path"] = "C:\\Program\\ Files\\OpenRTM-aist";
+      defaults["rtc.manager.arch"] = "i386";
+      defaults["rtc.manager.debug.level"] = "PARANOID";
+      defaults["rtc.manager.language"] = "C++";
+      defaults["rtc.manager.nameserver"] = "zonu.a02.aist.go.jp";
+      defaults["rtc.manager.opening_message"] = "Hello World";
+      defaults["rtc.manager.orb.name"] = "omniORB";
+      defaults["rtc.manager.orb.options"] = "IIOPAddrPort, -ORBendPoint, giop:tcp:";
+      defaults["rtc.manager.os.name"] = "FreeBSD";
+      defaults["rtc.manager.os.release"] = "6.1-RELEASE";
+      defaults["rtc.manager.subsystems"] = "Camera, Manipulator, Force Sensor";
+      defaults["rtc.openrtm.author"] = "Noriaki Ando";
+      defaults["rtc.openrtm.release"] = "aist";
+      defaults["rtc.openrtm.vendor"] = "AIST TaskIntelligence";
+      defaults["rtc.openrtm.version"] = "0.4.0";
+			
+      // mapによるデフォルト値指定でPropertiesオブジェクトを生成する
+      coil::Properties prop(defaults);
+
+      prop.getNode("rtc.manager.os")->clear();
+
+      // (1) "rtc.manager.os"以下のノードが削除されているか？
+      CPPUNIT_ASSERT(prop.findNode("rtc.manager.os.name") == NULL);
+      CPPUNIT_ASSERT(prop.findNode("rtc.manager.os.release") == NULL);
+      
+      // (2) "rtc.manager.os"以外のノードは削除されていないか？
+      CPPUNIT_ASSERT(prop.findNode("rtc.manager.arch") != NULL);
+      CPPUNIT_ASSERT(prop.findNode("rtc.manager.orb") != NULL);
+
+      // (3) すべてのノードが削除されているか？
+      prop.clear();
+      CPPUNIT_ASSERT(prop.findNode("rtc.manager.os") == NULL);
+      CPPUNIT_ASSERT(prop.findNode("rtc.manager") == NULL);
+      CPPUNIT_ASSERT(prop.findNode("rtc.openrtm") == NULL);
+      CPPUNIT_ASSERT(prop.findNode("rtc.component") == NULL);
+      CPPUNIT_ASSERT(prop.findNode("rtc") == NULL);
+    }
+
 
     /*!
      * @brief createNode()のテスト
@@ -836,26 +1263,6 @@ namespace Properties
       CPPUNIT_ASSERT(prop.createNode(keyNonExist.c_str()));
     }
 
-    /*!
-     * @brief removeNode
-     */
-    void test_removeNode()
-    {
-    }
-
-    /*!
-     * @brief hasKey
-     */
-    void test_hasKey()
-    {
-    }
-
-    /*!
-     * @brief clear
-     */
-    void test_clear()
-    {
-    }
 
     /*!
      * @brief <<演算子のテスト
