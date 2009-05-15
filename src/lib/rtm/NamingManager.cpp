@@ -88,7 +88,7 @@ namespace RTC
    * @endif
    */
   NamingManager::NamingManager(Manager* manager)
-    :m_manager(manager), rtclog("NamingManager")
+    :m_manager(manager), rtclog("NamingManager"), m_autoupdate(false)
   {
   }
   
@@ -168,7 +168,8 @@ namespace RTC
     RTC_TRACE(("NamingManager::update()"));
     
     Guard guard(m_namesMutex);
-    
+    bool rebind(coil::toBool(m_manager->getConfig()["naming.update.rebind"],
+                             "YES", "NO", false));
     for (int i(0), len(m_names.size()); i < len; ++i)
       {
 	if (m_names[i]->ns == NULL) // if ns==NULL
@@ -187,7 +188,10 @@ namespace RTC
 	  }
         else
           {	
-            bindCompsTo(m_names[i]->ns); // 
+            if (rebind)
+              {
+                bindCompsTo(m_names[i]->ns);
+              } 
           } 
       }
   }
