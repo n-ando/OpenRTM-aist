@@ -46,7 +46,6 @@ COIL_COMMON_H   =       \
 	stringutil.h    \
 	Guard.h         \
 	PeriodicTask.h  \
-	Plugin.h        \
 	Properties.h    \
 	Timer.h         \
 	Logger.h        \
