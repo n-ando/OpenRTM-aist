@@ -32,6 +32,9 @@ OpenRTM-aist_vc9.sln:
 coil_distbuild.vsprops:
 	cp $(top_srcdir)/src/lib/coil/win32/coil_distbuild.vsprops .
 
+coil_config.vsprops:
+	cp $(top_srcdir)/src/lib/coil/win32/coil_config.vsprops .
+
 dist-hook: clean-local sln
 
 EXTRA_DIST =                          \
@@ -42,6 +45,7 @@ EXTRA_DIST =                          \
 	autobuild_vc8.bat             \
 	autobuild_vc9.bat             \
 	rtm_distbuild.vsprops         \
-	coil_distbuild.vsprops
+	coil_distbuild.vsprops        \
+	coil_config.vsprops
 
 
