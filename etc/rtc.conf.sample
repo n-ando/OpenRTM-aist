@@ -112,11 +112,14 @@ naming.formats: %h.host/%n.rtc
 # Auto update to Naming Server
 #
 naming.update.enable: YES
-
 #
 # Update interval [s] for auto update
 #
 naming.update.interval: 10.0
+#
+# Rebind references in auto update
+#
+naming.update.rebind: NO
 
 # End of Naming configuration section
 #------------------------------------------------------------
