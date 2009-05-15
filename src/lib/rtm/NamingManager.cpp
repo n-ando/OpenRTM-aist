@@ -88,7 +88,7 @@ namespace RTC
    * @endif
    */
   NamingManager::NamingManager(Manager* manager)
-    :m_manager(manager), rtclog("NamingManager"), m_autoupdate(false)
+    :m_manager(manager), rtclog("NamingManager")
   {
   }
   
