@@ -49,9 +49,9 @@ RTM_SHORT_VERSION=$short_version
 RTM_DESCRIPTION='An OMG RTC compliant middleware for robots.'
 
 AC_DEFINE_UNQUOTED([RTM_VERSION],       "$VERSION",       [RTM version])
-AC_DEFINE_UNQUOTED([RTM_MAJOR_VERSION], "$major_version", [RTM major version])
-AC_DEFINE_UNQUOTED([RTM_MINOR_VERSION], "$minor_version", [RTM minor version])
-AC_DEFINE_UNQUOTED([RTM_REVISION_NUM],  "$revision_num",  [RTM revision numver])
+AC_DEFINE_UNQUOTED([RTM_MAJOR_VERSION], $major_version, [RTM major version])
+AC_DEFINE_UNQUOTED([RTM_MINOR_VERSION], $minor_version, [RTM minor version])
+AC_DEFINE_UNQUOTED([RTM_REVISION_NUM],  $revision_num,  [RTM revision numver])
 AC_DEFINE_UNQUOTED([RTM_SHORT_VERSION], "$short_version", [RTM short version])
 
 dnl ------------------------------------------------------------
