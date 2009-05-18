@@ -124,7 +124,6 @@ class ConfigSample
   // </rtc-template>
 
  private:
-  int dummy;
 
 };
 

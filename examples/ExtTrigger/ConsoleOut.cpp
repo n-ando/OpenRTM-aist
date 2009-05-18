@@ -30,10 +30,9 @@ static const char* consoleout_spec[] =
 ConsoleOut::ConsoleOut(RTC::Manager* manager)
   : RTC::DataFlowComponentBase(manager),
     // <rtc-template block="initializer">
-    m_inIn("in", m_in),
+    m_inIn("in", m_in)
     
     // </rtc-template>
-	dummy(0)
 {
   // Registration: InPort/OutPort/Service
   // <rtc-template block="registration">

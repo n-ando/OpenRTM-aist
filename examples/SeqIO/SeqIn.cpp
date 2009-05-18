@@ -38,10 +38,9 @@ SeqIn::SeqIn(RTC::Manager* manager)
     m_ShortSeqIn("ShortSeq", m_ShortSeq),
     m_LongSeqIn("LongSeq", m_LongSeq),
     m_FloatSeqIn("FloatSeq", m_FloatSeq),
-    m_DoubleSeqIn("DoubleSeq", m_DoubleSeq),
+    m_DoubleSeqIn("DoubleSeq", m_DoubleSeq)
     
     // </rtc-template>
-	dummy(0)
 {
   // Registration: InPort/OutPort/Service
   // <rtc-template block="registration">

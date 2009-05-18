@@ -145,7 +145,6 @@ class MyServiceConsumer
   coil::Async* async_set_value;
   coil::Async* async_echo;
   std::string m_result;
-  int dummy;
 
   template <class T>
   struct seq_print

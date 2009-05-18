@@ -129,7 +129,6 @@ class SeqIn
   // </rtc-template>
 
  private:
-  int dummy;
 
 };
 

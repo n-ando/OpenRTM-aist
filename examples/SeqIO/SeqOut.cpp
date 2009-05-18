@@ -38,10 +38,9 @@ SeqOut::SeqOut(RTC::Manager* manager)
     m_ShortSeqOut("ShortSeq", m_ShortSeq),
     m_LongSeqOut("LongSeq", m_LongSeq),
     m_FloatSeqOut("FloatSeq", m_FloatSeq),
-    m_DoubleSeqOut("DoubleSeq", m_DoubleSeq),
+    m_DoubleSeqOut("DoubleSeq", m_DoubleSeq)
     
     // </rtc-template>
-	dummy(0)
 {
   // Registration: InPort/OutPort/Service
   // <rtc-template block="registration">

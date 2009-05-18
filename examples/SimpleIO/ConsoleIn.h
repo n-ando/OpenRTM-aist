@@ -115,7 +115,6 @@ class ConsoleIn
   // </rtc-template>
 
  private:
-  int dummy;
 
 };
 
