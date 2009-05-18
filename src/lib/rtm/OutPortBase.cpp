@@ -20,7 +20,6 @@
 #include <iostream>
 #include <algorithm>
 #include <functional>
-#include <boost/functional.hpp>
 #include <coil/stringutil.h>
 
 #include <rtm/ConnectorBase.h>
