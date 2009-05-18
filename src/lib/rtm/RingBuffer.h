@@ -20,13 +20,19 @@
 #ifndef RingBuffer_h
 #define RingBuffer_h
 
-#include <rtm/RTC.h>
-
 #include <vector>
 #include <algorithm>
+#include <iostream>
+
+#include <coil/TimeValue.h>
+#include <coil/Mutex.h>
 #include <coil/Guard.h>
+#include <coil/Condition.h>
+#include <coil/stringutil.h>
+
 #include <rtm/BufferBase.h>
 
+#define RINGBUFFER_DEFAULT_LENGTH 8
 /*!
  * @if jp
  * @namespace RTC
@@ -83,6 +89,10 @@ namespace RTC
     : public BufferBase<DataType>
   {
   public:
+    BUFFERSTATUS_ENUM
+    
+    typedef coil::Guard<coil::Mutex> Guard;
+    
     /*!
      * @if jp
      *
@@ -90,7 +100,6 @@ namespace RTC
      * 
      * コンストラクタ
      * 指定されたバッファ長でバッファを初期化する。
-     * ただし、指定された長さが２未満の場合、長さ２でバッファを初期化する。
      *
      * @param length バッファ長
      * 
@@ -107,12 +116,15 @@ namespace RTC
      * 
      * @endif
      */
-    RingBuffer(long int length)
-      : m_length(length < 2 ? 2 : length),
-	m_oldPtr(0),
-	m_newPtr(length < 2 ? 1 : length - 1)
+    RingBuffer(long int length = RINGBUFFER_DEFAULT_LENGTH)
+      : m_overwrite(true), m_readback(true),
+        m_timedwrite(false), m_timedread(false),
+        m_wtimeout(1, 0), m_rtimeout(1, 0),
+        m_length(length),
+        m_wpos(0), m_rpos(0), m_fillcount(0),
+        m_buffer(m_length)
     {
-      m_buffer.resize(m_length);
+      this->reset();
     }
     
     /*!
@@ -130,35 +142,54 @@ namespace RTC
      * 
      * @endif
      */
-    virtual ~RingBuffer(void){};
+    virtual ~RingBuffer(void)
+    {
+    }
     
     /*!
      * @if jp
+     * @brief バッファの設定
      *
-     * @brief 初期化
-     * 
-     * バッファの初期化を実行する。
-     * 指定された値をバッファ全体に格納する。
+     * coil::Properties で与えられるプロパティにより、
+     * バッファの設定を初期化する。
+     * 使用できるオプションと意味は以下の通り
      *
-     * @param data 初期化用データ
-     * 
+     * - buffer.length:
+     *     バッファの長さ。自然数以外の数値が指定されても無視される。す
+     *     でにバッファが使用状態でも、長さが再設定されたのち、すべての
+     *     ポインタが初期化される。
+     *
+     * - buffer.write.full_policy:
+     *     上書きするかどうかのポリシー。
+     *     overwrite (上書き), do_nothing (何もしない), block (ブロックする)
+     *     block を指定した場合、次の timeout 値を指定すれば、指定時間後
+     *     書き込み不可能であればタイムアウトする。
+     *     デフォルトは  overwrite (上書き)。
+     *
+     * - buffer.write.timeout:
+     *     タイムアウト時間を [sec] で指定する。デフォルトは 1.0 [sec]。
+     *     1 sec -> 1.0, 1 ms -> 0.001, タイムアウトしない -> 0.0
+     *
+     * - buffer.read.empty_policy:
+     *     バッファが空のときの読み出しポリシー。
+     *     readback (最後の要素), do_nothing (何もしない), block (ブロックする)
+     *     block を指定した場合、次の timeout 値を指定すれば、指定時間後
+     *     読み出し不可能であればタイムアウトする。
+     *     デフォルトは readback (最後の要素)。
+     *
+     * - buffer.read.timeout:
+     *     タイムアウト時間 [sec] で指定する。デフォルトは 1.0 [sec]。
+     *     1sec -> 1.0, 1ms -> 0.001, タイムアウトしない -> 0.0
+     *
      * @else
      *
-     * @brief Initialize the buffer
-     * 
-     * Initialize the buffer.
-     * Store the specified value to eitire buffer.
-     *
-     * @param data Data for initialization
-     * 
      * @endif
      */
-    void init(DataType& data)
+    virtual void init(const coil::Properties& prop)
     {
-      for (long int i = 0; i < m_length; ++i)
-	{
-	  put(data);
-	}
+      initLength(prop);
+      initWritePolicy(prop);
+      initReadPolicy(prop);
     }
     
     /*!
@@ -181,9 +212,181 @@ namespace RTC
      *
      * @endif
      */
-    virtual long int length() const
+    virtual size_t length(void) const
     {
+      Guard guard(m_posmutex);
       return m_length;
+    }
+    
+    /*!
+     * @if jp
+     *
+     * @brief バッファの長さをセットする
+     * 
+     * バッファ長を設定する。設定不可な場合はNOT_SUPPORTEDが返る。
+     * この実装では BUFFER_OK しか返さない。
+     * 
+     * @return BUFFER_OK: 正常終了
+     *         NOT_SUPPORTED: バッファ長変更不可
+     *         BUFFER_ERROR: 異常終了
+     * 
+     * @else
+     *
+     * @brief Get the buffer length
+     *
+     * Pure virtual function to get the buffer length.
+     *
+     * @return buffer length
+     * 
+     * @endif
+     */
+    virtual ReturnCode length(size_t n)
+    {
+      m_buffer.resize(n);
+      m_length = n;
+      this->reset();
+      return BUFFER_OK;
+    }
+    
+    /*!
+     * @if jp
+     *
+     * @brief バッファの状態をリセットする
+     * 
+     * バッファの読み出しポインタと書き込みポインタの位置をリセットする。
+     * この実装では BUFFER_OK しか返さない。
+     * 
+     * @return BUFFER_OK: 正常終了
+     *         NOT_SUPPORTED: リセット不可能
+     *         BUFFER_ERROR: 異常終了
+     * 
+     * @else
+     *
+     * @brief Get the buffer length
+     *
+     * Pure virtual function to get the buffer length.
+     *
+     * @return buffer length
+     * 
+     * @endif
+     */ 
+    virtual ReturnCode reset()
+    {
+      Guard guard(m_posmutex);
+      m_fillcount = 0;
+      m_wpos = 0;
+      m_rpos = 0;
+      return BUFFER_OK;
+    }
+    
+    
+    
+    //----------------------------------------------------------------------
+    /*!
+     * @if jp
+     *
+     * @brief バッファの現在の書込み要素のポインタ
+     * 
+     * バッファの現在の書込み要素のポインタまたは、n個先のポインタを返す
+     * 
+     * @param  n 書込みポインタ + n の位置のポインタ 
+     * @return 書込み位置のポインタ
+     * 
+     * @else
+     *
+     * @brief Get the buffer length
+     *
+     * Pure virtual function to get the buffer length.
+     *
+     * @return buffer length
+     * 
+     * @endif
+     */ 
+    virtual DataType* wptr(long int n = 0) 
+    {
+      Guard guard(m_posmutex);
+      return &m_buffer[(m_wpos + n) % m_length];
+    }
+    
+    /*!
+     * @if jp
+     *
+     * @brief 書込みポインタを進める
+     * 
+     * 現在の書き込み位置のポインタを n 個進める。
+     * 書き込み可能な要素数以上の数値を指定した場合、PRECONDITION_NOT_MET
+     * を返す。
+     * 
+     * @param  n 書込みポインタ + n の位置のポインタ 
+     * @return BUFFER_OK:            正常終了
+     *         PRECONDITION_NOT_MET: n > writable()
+     * 
+     * @else
+     *
+     * @brief Get the buffer length
+     *
+     * Pure virtual function to get the buffer length.
+     *
+     * @return buffer length
+     * 
+     * @endif
+     */ 
+    virtual ReturnCode advanceWptr(long int n = 1)
+    {
+      // n > 0 :
+      //     n satisfies n <= writable elements
+      //                 n <= m_length - m_fillcout
+      // n < 0 : -n = n'
+      //     n satisfies n'<= readable elements
+      //                 n'<= m_fillcount
+      //                 n >= - m_fillcount
+//      std::cout << "advance n   " << n std::endl;
+//      std::cout << "advance len-fill " << m_length std::endl;
+//      std::cout << "advance n   " << n std::endl;
+//      std::cout << "advance n   " << n std::endl;
+
+      if (n > 0 && n > (m_length - m_fillcount) || n < 0 && n < -m_fillcount)
+        {
+          return PRECONDITION_NOT_MET;
+        }
+
+      Guard guard(m_posmutex);
+      m_wpos = (m_wpos + n) % m_length;
+      m_fillcount += n;
+      return BufferStatus::BUFFER_OK;
+    }
+    /*!
+     * @if jp
+     *
+     * @brief バッファにデータを書き込む
+     * 
+     * バッファにデータを書き込む。書き込みポインタの位置は変更されない。
+     * この実装では常に BUFFER_OK を返す。
+     * 
+     * @param value 書き込み対象データ
+     *
+     * @return BUFFER_OK: 正常終了
+     *         BUFFER_ERROR: 異常終了
+     * 
+     * @else
+     *
+     * @brief Write data into the buffer
+     *
+     * Pure virtual function to write data into the buffer.
+     * Always BUFFER_OK will be returned in this implementation.
+     *
+     * @param value Target data to write.
+     *
+     * @return BUFFER_OK:    Successful
+     *         BUFFER_ERROR: Failed
+     *
+     * @endif
+     */
+    virtual ReturnCode put(const DataType& value)
+    {
+      Guard guard(m_posmutex);
+      m_buffer[m_wpos] = value;
+      return BUFFER_OK;
     }
     
     /*!
@@ -192,28 +395,256 @@ namespace RTC
      * @brief バッファに書き込む
      * 
      * 引数で与えられたデータをバッファに書き込む。
+     *
+     * 第2引数(sec)、第3引数(nsec)が指定されていない場合、バッファフル
+     * 時の書込みモード (overwrite, do_nothing, block) は init() で設定
+     * されたモードに従う。
+     *
+     * 第2引数(sec) に引数が指定された場合は、init() で設定されたモード
+     * に関わらず、block モードとなり、バッファがフル状態であれば指定時
+     * 間まち、タイムアウトする。第3引数(nsec)は指定されない場合0として
+     * 扱われる。タイムアウト待ち中に、読み出しスレッド側でバッファから
+     * 読み出せば、ブロッキングは解除されデータが書き込まれる。
+     *
+     * 書き込み時にバッファが空(empty)状態で、別のスレッドがblockモード
+     * で読み出し待ちをしている場合、signalを発行して読み出し側のブロッ
+     * キングが解除される。
      * 
      * @param value 書き込み対象データ
-     *
-     * @return データ書き込み結果(常にtrue:書き込み成功を返す)
+     * @param sec   タイムアウト時間 sec  (default -1: 無効)
+     * @param nsec  タイムアウト時間 nsec (default 0)
+     * @return BUFFER_OK            正常終了
+     *         BUFFER_FULL          バッファがフル状態
+     *         TIMEOUT              書込みがタイムアウトした
+     *         PRECONDITION_NOT_MET 設定異常
      * 
      * @else
      *
      * @brief Write data into the buffer
      * 
      * Write data which is given argument into the buffer.
-     * 
+     *
      * @param value Target data for writing
      *
      * @return Writing result (Always true: writing success is returned)
      * 
      * @endif
      */
-    virtual bool write(const DataType& value)
+    virtual ReturnCode write(const DataType& value,
+                             long int sec = -1, long int nsec = 0)
     {
+      Guard guard(m_full.mutex);
+      
+      if (full())
+        {
+          
+          bool timedwrite(m_timedwrite);
+          bool overwrite(m_overwrite);
+
+          if (!(sec < 0)) // if second arg is set -> block mode
+            {
+              timedwrite = true;
+              overwrite  = false;
+            }
+
+          if (overwrite && !timedwrite)       // "overwrite" mode
+            {
+              advanceRptr();
+            }
+          else if (!overwrite && !timedwrite) // "do_notiong" mode
+            {
+              return BUFFER_FULL;
+            }
+          else if (!overwrite && timedwrite)  // "block" mode
+            {
+              if (sec < 0)
+                {
+                  sec = m_wtimeout.sec();
+                  nsec = m_wtimeout.usec() * 1000;
+                }
+              //  true: signaled, false: timeout
+              if (!m_full.cond.wait(sec, nsec))
+                {
+                  return TIMEOUT;
+                }
+            }
+          else                                    // unknown condition
+            {
+              return PRECONDITION_NOT_MET;
+            }
+        }
+      
+      bool empty_(empty());
+      
       put(value);
-      return true;
+      std::cout << toString(advanceWptr()) << std::endl;
+      
+      if (empty_)
+        {
+          Guard eguard(m_empty.mutex);
+          m_empty.cond.signal();
+        }
+      
+      return BUFFER_OK;
     }
+    
+    /*!
+     * @if jp
+     *
+     * @brief バッファに書込み可能な要素数
+     * 
+     * バッファに書込み可能な要素数を返す。
+     * 
+     * @return 書き込み可能な要素数
+     * 
+     * @else
+     *
+     * @brief Write data into the buffer
+     *
+     * Pure virtual function to write data into the buffer.
+     *
+     * @param value Target data to write.
+     *
+     * @return Result of having written in data (true:Successful, false:Failed)
+     *
+     * @endif
+     */
+    virtual size_t writable() const
+    {
+      Guard guard(m_posmutex);
+      return m_length - m_fillcount;
+    }
+    
+    /*!
+     * @if jp
+     *
+     * @brief バッファfullチェック
+     * 
+     * バッファfullチェック用純粋仮想関数
+     *
+     * @return fullチェック結果(true:バッファfull，false:バッファ空きあり)
+     * 
+     * @else
+     *
+     * @brief Check on whether the buffer is full.
+     *
+     * Pure virtual function to check on whether the buffer is full.
+     *
+     * @return True if the buffer is full, else false.
+     *
+     * @endif
+     */
+    virtual bool full(void) const
+    {
+      Guard guard(m_posmutex);
+      return m_length == m_fillcount;
+    }
+    
+    //----------------------------------------------------------------------
+    /*!
+     * @if jp
+     *
+     * @brief バッファの現在の読み出し要素のポインタ
+     * 
+     * バッファの現在の読み出し要素のポインタまたは、n個先のポインタを返す
+     * 
+     * @param  n 読み出しポインタ + n の位置のポインタ 
+     * @return 読み出し位置のポインタ
+     * 
+     * @else
+     *
+     * @brief Get the buffer length
+     *
+     * Pure virtual function to get the buffer length.
+     *
+     * @return buffer length
+     * 
+     * @endif
+     */ 
+    virtual DataType* rptr(long int n = 0)
+    {
+      Guard guard(m_posmutex);
+      return &(m_buffer[(m_rpos + n) % m_length]);
+    }
+    
+    /*!
+     * @if jp
+     *
+     * @brief 読み出しポインタを進める
+     * 
+     * 現在の読み出し位置のポインタを n 個進める。
+     * 
+     * @param  n 読み出しポインタ + n の位置のポインタ 
+     * @return BUFFER_OK: 正常終了
+     *         BUFFER_ERROR: 異常終了
+     * 
+     * @else
+     *
+     * @brief Get the buffer length
+     *
+     * Pure virtual function to get the buffer length.
+     *
+     * @return buffer length
+     * 
+     * @endif
+     */ 
+    virtual ReturnCode advanceRptr(long int n = 1)
+    {
+      // n > 0 :
+      //     n satisfies n <= readable elements
+      //                 n <= m_fillcout 
+      // n < 0 : -n = n'
+      //     n satisfies n'<= m_length - m_fillcount
+      //                 n >= m_fillcount - m_length
+      if ((n > 0 && n > m_fillcount) || (n < 0 && n < (m_fillcount - m_length)))
+        {
+          return PRECONDITION_NOT_MET;
+        }
+
+      Guard guard(m_posmutex);
+      m_rpos = (m_rpos + n) % m_length;
+      m_fillcount -= n;
+      return BUFFER_OK;
+    }
+    
+    /*!
+     * @if jp
+     *
+     * @brief バッファからデータを読み出す
+     * 
+     * バッファからデータを読みだす。読み出しポインタの位置は変更されない。
+     * 
+     * @param value 読み出しデータ
+     *
+     * @return BUFFER_OK: 正常終了
+     *         BUFFER_ERROR: 異常終了
+     * 
+     * @else
+     *
+     * @brief Write data into the buffer
+     *
+     * Pure virtual function to write data into the buffer.
+     *
+     * @param value Target data to write.
+     *
+     * @return Result of having written in data (true:Successful, false:Failed)
+     *
+     * @endif
+     */
+    virtual ReturnCode get(DataType& value)
+    {
+      Guard gaurd(m_posmutex);
+      value = m_buffer[m_rpos];
+      return BUFFER_OK;
+    }
+    
+    
+    virtual DataType& get()
+    {
+      Guard gaurd(m_posmutex);
+      return m_buffer[m_rpos];
+    }
+    
     
     /*!
      * @if jp
@@ -221,10 +652,28 @@ namespace RTC
      * @brief バッファから読み出す
      * 
      * バッファに格納されたデータを読み出す。
-     * 
-     * @param value 読み出したデータ
      *
-     * @return データ読み出し結果(常に true:読み出し成功 を返す)
+     * 第2引数(sec)、第3引数(nsec)が指定されていない場合、バッファ空状
+     * 態での読み出しモード (readback, do_nothing, block) は init() で設
+     * 定されたモードに従う。
+     *
+     * 第2引数(sec) に引数が指定された場合は、init() で設定されたモード
+     * に関わらず、block モードとなり、バッファが空状態であれば指定時間
+     * 待ち、タイムアウトする。第3引数(nsec)は指定されない場合0として扱
+     * われる。タイムアウト待ち中に、書込みスレッド側でバッファへ書込み
+     * があれば、ブロッキングは解除されデータが読みだされる。
+     *
+     * 読み出し時にバッファが空(empty)状態で、別のスレッドがblockモード
+     * で書込み待ちをしている場合、signalを発行して書込み側のブロッキン
+     * グが解除される。
+     * 
+     * @param value 読み出し対象データ
+     * @param sec   タイムアウト時間 sec  (default -1: 無効)
+     * @param nsec  タイムアウト時間 nsec (default 0)
+     * @return BUFFER_OK            正常終了
+     *         BUFFER_EMPTY         バッファがフル状態
+     *         TIMEOUT              書込みがタイムアウトした
+     *         PRECONDITION_NOT_MET 設定異常
      * 
      * @else
      *
@@ -238,237 +687,210 @@ namespace RTC
      * 
      * @endif
      */
-    virtual bool read(DataType& value)
+    virtual ReturnCode read(DataType& value,
+                            long int sec = -1, long int nsec = 0)
     {
-      value = get();
-      return true;
+      Guard gaurd(m_empty.mutex);
+      
+      if (empty())
+        {
+          bool timedread(m_timedread);
+          bool readback(m_readback);
+
+          if (!(sec < 0)) // if second arg is set -> block mode
+            {
+              timedread = true;
+              readback  = false;
+              sec = m_rtimeout.sec();
+              nsec = m_rtimeout.usec() * 1000;
+            }
+
+          if (readback && !timedread)       // "readback" mode
+            {
+              advanceRptr(-1);
+            }
+          else if (!readback && !timedread) // "do_notiong" mode
+            {
+              return BUFFER_EMPTY;
+            }
+          else if (!readback && timedread)  // "block" mode
+            {
+              //  true: signaled, false: timeout
+              if (!m_empty.cond.wait(sec, nsec))
+                {
+                  return TIMEOUT;
+                }
+            }
+          else                                    // unknown condition
+            {
+              return PRECONDITION_NOT_MET;
+            }
+        }
+      
+      bool full_(full());
+      
+      get(value);
+      advanceRptr();
+
+      if (full_)
+        {
+          Guard fguard(m_full.mutex);
+          m_full.cond.signal();
+        }
+      
+      return BUFFER_OK;
     }
     
     /*!
      * @if jp
      *
-     * @brief バッファが満杯であるか確認する
+     * @brief バッファから読み出し可能な要素数
      * 
-     * バッファ満杯を確認する。(常にfalseを返す。)
+     * バッファから読み出し可能な要素数を返す。
+     * 
+     * @return 読み出し可能な要素数
      *
-     * @return 満杯確認結果(常にfalse)
+     * @return BUFFER_OK: 正常終了
+     *         BUFFER_ERROR: 異常終了
      * 
      * @else
      *
-     * @brief Check whether the buffer is full.
-     * 
-     * Check whether the buffer is full (Always return false)
+     * @brief Write data into the buffer
      *
-     * @return Full check result (Always false)
-     * 
+     * Pure virtual function to write data into the buffer.
+     *
+     * @param value Target data to write.
+     *
+     * @return Result of having written in data (true:Successful, false:Failed)
+     *
      * @endif
      */
-    virtual bool isFull() const
+    virtual size_t readable() const
     {
-      return false;
+      Guard guard(m_posmutex);
+      return m_fillcount;
     }
     
     /*!
      * @if jp
      *
-     * @brief バッファが空であるか確認する
+     * @brief バッファemptyチェック
      * 
-     * バッファ空を確認する。
-     * 
-     * 注)現在の実装では，現在のバッファ位置に格納されたデータが読み出されたか
-     * どうかを返す。( true:データ読み出し済，false:データ未読み出し)
+     * バッファemptyチェック用純粋仮想関数
      *
-     * @return 空確認結果
+     * @return emptyチェック結果(true:バッファempty，false:バッファデータあり)
      * 
      * @else
      *
-     * @brief Check whether the buffer is empty
-     * 
-     * Check whether the buffer is empty.
-     * 
-     * Note: In the current implementation, return whether the data which was
-     *       stored at a current buffer's position was readout.
-     *       (true:it has already readout data，false:it does not readout data)
+     * @brief Check on whether the buffer is empty.
      *
-     * @return Empty check result
-     * 
-     * @endif
-     */
-    virtual bool isEmpty() const
-    {
-      return !(this->isNew());
-    }
-    
-    /*!
-     * @if jp
+     * Pure virtual function to check on whether the buffer is empty.
      *
-     * @brief 最新データか確認する
-     * 
-     * 現在のバッファ位置に格納されているデータが最新データか確認する。
-     *
-     * @return 最新データ確認結果
-     *           ( true:最新データ．データはまだ読み出されていない
-     *            false:過去のデータ．データは既に読み出されている)
-     * 
-     * @else
-     *
-     * @brief Check whether the data is newest
-     * 
-     * Check whether the data stored at a current buffer position is newest.
-     *
-     * @return Newest data check result
-     *         ( true:Newest data. Data has not been readout yet.
-     *          false:Past data．Data has already been readout.)
-     * 
-     * @endif
-     */
-    bool isNew() const
-    {
-      return m_buffer[m_newPtr].isNew();
-    }
-    
-  protected:
-    /*!
-     * @if jp
-     *
-     * @brief バッファにデータを格納する
-     * 
-     * 引数で与えられたデータをバッファに格納する。
-     * 
-     * 注)現在の実装ではデータを格納すると同時に、データの読み出し位置を
-     * 格納したデータ位置に設定している。このため、常に直近に格納したデータを
-     * 取得する形となっている。
-     * 
-     * @param data 格納対象データ
-     * 
-     * @else
-     *
-     * @brief Store data into the buffer
-     * 
-     * Store data given by argument into the buffer.
-     * 
-     * Note: In the current implementation, the data position is set the
-     *       readout position of data at the same time of storing data
-     *       Therefore, the latest stored data is always got.
-     * 
-     * @param data Target data for the store
-     * 
-     * @endif
-     */
-    virtual void put(const DataType& data)
-    {
-      m_buffer[m_oldPtr].write(data);
-      //      Guard guard(m_Mutex);
-      m_newPtr = m_oldPtr;
-      m_oldPtr = (++m_oldPtr) % m_length;
-    }
-    
-    /*!
-     * @if jp
-     *
-     * @brief バッファからデータを取得する
-     * 
-     * バッファに格納されたデータを取得する。
-     *
-     * @return 取得データ
-     * 
-     * @else
-     *
-     * @brief Get data from the buffer
-     * 
-     * Get data stored into the buffer.
-     *
-     * @return Data got from buffer
-     * 
-     * @endif
-     */
-    virtual const DataType& get()
-    {
-      return m_buffer[m_newPtr].read();
-    }
-    
-    /*!
-     * @if jp
-     *
-     * @brief 次に書き込むバッファへの参照を取得する
-     * 
-     * 書き込みバッファへの参照を取得する。
-     * 
-     * @return 次の書き込み対象バッファへの参照
-     *
-     * @else
-     *
-     * @brief Get the buffer's reference to be written the next
-     * 
-     * Get the reference to the buffer that will be written.
-     * 
-     * @return The buffer's reference to be written the next
+     * @return True if the buffer is empty, else false.
      *
      * @endif
      */
-    virtual DataType& getRef()
+    virtual bool empty(void) const
     {
-      return m_buffer[m_newPtr].data;
+      Guard guard(m_posmutex);
+      return m_fillcount == 0;
     }
     
   private:
-    long int m_length;
-    long int m_oldPtr;
-    long int m_newPtr;
-    
-    /*!
-     * @if jp
-     * @class Data
-     * @brief バッファ配列
-     * 
-     * バッファデータ格納用配列クラス。
-     *
-     * @param D バッファに格納するデータの型
-     *
-     * @since 0.4.0
-     *
-     * @else
-     * @brief Buffer array
-     * 
-     * This is an array class for storing buffer's data.
-     *
-     * @param D Data type to store into the buffer
-     *
-     * @since 0.4.0
-     *
-     * @endif
-     */
-    template <class D>
-    class Data
+    inline void initLength(const coil::Properties& prop)
     {
-    public:
-      Data() : data(), is_new(false){;}
-      inline Data& operator=(const D& other)
-      {
-	this->data = other;
-	this->is_new = true;
-	return *this;
-      }
-      inline void write(const D& other)
-      {
-	this->is_new = true;
-	this->data = other;
-      }
-      inline D& read()
-      {
-	this->is_new = false;
-	return this->data;
-      }
-      inline bool isNew() const
-      {
-	return is_new;
-      }
-      D    data;
-      bool is_new;
+      if (!prop["length"].empty())
+        {
+          size_t n;
+          if (coil::stringTo(n, prop["length"].c_str()))
+            {
+              if (n > 0)
+                {
+                  this->length(n);
+                }
+            }
+        }
+    }
+    
+    inline void initWritePolicy(const coil::Properties& prop)
+    {
+      std::string policy(prop["write.full_policy"]);
+      coil::normalize(policy);
+      if (policy == "overwrite")
+        {
+          m_overwrite = true;
+          m_timedwrite = false;
+        }
+      else if (policy == "do_nothing")
+        {
+          m_overwrite = false;
+          m_timedwrite = false;
+        }
+      else if (policy == "block")
+        {
+          m_overwrite = false;
+          m_timedwrite = true;
+          
+          double tm;
+          if (coil::stringTo(tm, prop["write.timeout"].c_str()))
+            {
+              if (!(tm < 0))
+                {
+                  m_wtimeout = tm;
+                }
+            }
+        }
+    }
+    
+    inline void initReadPolicy(const coil::Properties& prop)
+    {
+      std::string policy(prop["read.empty_policy"]);
+      if (policy == "readback")
+        {
+          m_readback = true;
+          m_timedread = false;
+        }
+      else if (policy == "do_nothing")
+        {
+          m_readback = false;
+          m_timedread = false;
+        }
+      else if (policy == "block")
+        {
+          m_readback = false;
+          m_timedread = true;
+          double tm;
+          if (coil::stringTo(tm, prop["read.timeout"].c_str()))
+            {
+              m_rtimeout = tm;
+            }
+        }
+    }
+    
+  private:
+    bool m_overwrite;
+    bool m_readback;
+    bool m_timedwrite;
+    bool m_timedread;
+    coil::TimeValue m_wtimeout;
+    coil::TimeValue m_rtimeout;
+    
+    size_t m_length;
+    size_t m_wpos;
+    size_t m_rpos;
+    size_t m_fillcount;
+    std::vector<DataType> m_buffer;
+    
+    struct condition
+    {
+      condition() : cond(mutex) {}
+      coil::Condition<coil::Mutex> cond;
+      coil::Mutex mutex;
     };
     
-    std::vector<Data<DataType> > m_buffer;
-    
+    mutable coil::Mutex m_posmutex;
+    condition m_empty;
+    condition m_full;
   };
 }; // namespace RTC
 

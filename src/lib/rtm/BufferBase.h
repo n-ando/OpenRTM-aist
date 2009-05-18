@@ -17,8 +17,12 @@
  * $Id$
  */
 
-#ifndef BufferBase_h
-#define BufferBase_h
+#ifndef RTC_BUFFERBASE_H
+#define RTC_BUFFERBASE_H
+
+#include <stddef.h>
+#include <coil/Properties.h>
+#include <rtm/BufferStatus.h>
 
 /*!
  * @if jp
@@ -46,15 +50,25 @@ namespace RTC
    * \<DataType\>としてバッファ内で保持するデータ型を指定する。
    *
    * publicインターフェースとして以下のものを提供する。
-   * - write(): バッファに書き込む
-   * - read(): バッファから読み出す
-   * - length(): バッファ長を返す
-   * - isFull(): バッファが満杯である
-   * - isEmpty(): バッファが空である
+   * - length(): バッファの長さを返す
+   * - length(n): バッファ長をnにセットする
+   * - reset(): バッファのポインタをリセットする
    *
-   * protectedインターフェースとして以下のものを提供する。
-   * - put(): バッファにデータを書き込む
-   * - get(): バッファからデータを読み出す
+   * 書込み関連
+   * - wptr(n=0): 現在の書き込み対象の要素のn個先のポインタを返す。
+   * - advanceWptr(n=1): 書込みポインタをn進める。
+   * - put(): 現在の書き込み位置に書き込む、ポインタは進めない。
+   * - write(): バッファに書き込む。ポインタは1つすすむ。
+   * - writable(): 書込み可能な要素数を返す。
+   * - full(): バッファがフル状態。
+   *
+   * 読み出し関連
+   * - rptr(n=0): 現在の読み出し対象のn個先のポインタを返す。
+   * - advanceRptr(n=1): 読み出しポインタをn進める。
+   * - get(): 現在の読み出し位置から読む。ポインタは進めない。
+   * - read(): バッファから読み出す。ポインタは1つすすむ。
+   * - readable(): 読み出し可能要素数を返す。
+   * - empty(): バッファが空状態。
    *
    * @param DataType バッファに格納するデータ型
    *
@@ -88,8 +102,11 @@ namespace RTC
    */
   template <class DataType>
   class BufferBase
+    : public BufferStatus
   {
   public:
+    BUFFERSTATUS_ENUM
+
     /*!
      * @if jp
      *
@@ -105,6 +122,8 @@ namespace RTC
     {
     };
     
+    virtual void init(const coil::Properties& prop) = 0;
+
     /*!
      * @if jp
      *
@@ -124,18 +143,112 @@ namespace RTC
      * 
      * @endif
      */
-    virtual long int length(void) const = 0;
-    
+    virtual size_t length(void) const = 0;
+
+    /*!
+     * @if jp
+     *
+     * @brief バッファの長さをセットする
+     * 
+     * バッファ長を設定する。設定不可な場合はNOT_SUPPORTEDが返る。
+     * 
+     * @return BUFFER_OK: 正常終了
+     *         NOT_SUPPORTED: バッファ長変更不可
+     *         BUFFER_ERROR: 異常終了
+     * 
+     * @else
+     *
+     * @brief Get the buffer length
+     *
+     * Pure virtual function to get the buffer length.
+     *
+     * @return buffer length
+     * 
+     * @endif
+     */    
+    virtual ReturnCode length(size_t n) = 0;
+
+    /*!
+     * @if jp
+     *
+     * @brief バッファの状態をリセットする
+     * 
+     * バッファの読み出しポインタと書き込みポインタの位置をリセットする。
+     * 
+     * @return BUFFER_OK: 正常終了
+     *         NOT_SUPPORTED: バッファ長変更不可
+     *         BUFFER_ERROR: 異常終了
+     * 
+     * @else
+     *
+     * @brief Get the buffer length
+     *
+     * Pure virtual function to get the buffer length.
+     *
+     * @return buffer length
+     * 
+     * @endif
+     */ 
+    virtual ReturnCode reset() = 0;
+
+
+    //----------------------------------------------------------------------
+    /*!
+     * @if jp
+     *
+     * @brief バッファの現在の書込み要素のポインタ
+     * 
+     * バッファの現在の書込み要素のポインタまたは、n個先のポインタを返す
+     * 
+     * @param  n 書込みポインタ + n の位置のポインタ 
+     * @return 書込み位置のポインタ
+     * 
+     * @else
+     *
+     * @brief Get the buffer length
+     *
+     * Pure virtual function to get the buffer length.
+     *
+     * @return buffer length
+     * 
+     * @endif
+     */ 
+    virtual DataType* wptr(long int n = 0) = 0;
+
+    /*!
+     * @if jp
+     *
+     * @brief 書込みポインタを進める
+     * 
+     * 現在の書き込み位置のポインタを n 個進める。
+     * 
+     * @param  n 書込みポインタ + n の位置のポインタ 
+     * @return BUFFER_OK: 正常終了
+     *         BUFFER_ERROR: 異常終了
+     * 
+     * @else
+     *
+     * @brief Get the buffer length
+     *
+     * Pure virtual function to get the buffer length.
+     *
+     * @return buffer length
+     * 
+     * @endif
+     */ 
+    virtual ReturnCode advanceWptr(long int n = 1) = 0;
+
     /*!
      * @if jp
      *
      * @brief バッファにデータを書き込む
      * 
-     * バッファにデータを書き込むための純粋仮想関数
+     * バッファにデータを書き込む。書き込みポインタの位置は変更されない。
      * 
      * @param value 書き込み対象データ
      *
-     * @return データ書き込み結果(true:書き込み成功，false:書き込み失敗)
+     * @return BUFFER_OK: 正常終了
+     *         BUFFER_ERROR: 異常終了
      * 
      * @else
      *
@@ -149,8 +262,155 @@ namespace RTC
      *
      * @endif
      */
-    virtual bool write(const DataType& value) = 0;
-    
+    virtual ReturnCode put(const DataType& value) = 0;
+
+    /*!
+     * @if jp
+     *
+     * @brief バッファにデータを書き込む
+     * 
+     * バッファにデータを書き込む。書き込みポインタの位置は1つすすむ。
+     * 
+     * @param value 書き込み対象データ
+     *
+     * @return BUFFER_OK: 正常終了
+     *         BUFFER_ERROR: 異常終了
+     * 
+     * @else
+     *
+     * @brief Write data into the buffer
+     *
+     * Pure virtual function to write data into the buffer.
+     *
+     * @param value Target data to write.
+     *
+     * @return Result of having written in data (true:Successful, false:Failed)
+     *
+     * @endif
+     */
+    virtual ReturnCode write(const DataType& value,
+                             long int sec = -1, long int nsec = -1) = 0;
+
+    /*!
+     * @if jp
+     *
+     * @brief バッファに書込み可能な要素数
+     * 
+     * バッファに書込み可能な要素数を返す。
+     * 
+     * @return 書き込み可能な要素数
+     *
+     * @return BUFFER_OK: 正常終了
+     *         BUFFER_ERROR: 異常終了
+     * 
+     * @else
+     *
+     * @brief Write data into the buffer
+     *
+     * Pure virtual function to write data into the buffer.
+     *
+     * @param value Target data to write.
+     *
+     * @return Result of having written in data (true:Successful, false:Failed)
+     *
+     * @endif
+     */
+    virtual size_t writable() const = 0;
+
+    /*!
+     * @if jp
+     *
+     * @brief バッファfullチェック
+     * 
+     * バッファfullチェック用純粋仮想関数
+     *
+     * @return fullチェック結果(true:バッファfull，false:バッファ空きあり)
+     * 
+     * @else
+     *
+     * @brief Check on whether the buffer is full.
+     *
+     * Pure virtual function to check on whether the buffer is full.
+     *
+     * @return True if the buffer is full, else false.
+     *
+     * @endif
+     */
+    virtual bool full(void) const = 0;
+
+    //----------------------------------------------------------------------
+    /*!
+     * @if jp
+     *
+     * @brief バッファの現在の読み出し要素のポインタ
+     * 
+     * バッファの現在の読み出し要素のポインタまたは、n個先のポインタを返す
+     * 
+     * @param  n 読み出しポインタ + n の位置のポインタ 
+     * @return 読み出し位置のポインタ
+     * 
+     * @else
+     *
+     * @brief Get the buffer length
+     *
+     * Pure virtual function to get the buffer length.
+     *
+     * @return buffer length
+     * 
+     * @endif
+     */ 
+    virtual DataType* rptr(long int n = 0) = 0;
+
+    /*!
+     * @if jp
+     *
+     * @brief 読み出しポインタを進める
+     * 
+     * 現在の読み出し位置のポインタを n 個進める。
+     * 
+     * @param  n 読み出しポインタ + n の位置のポインタ 
+     * @return BUFFER_OK: 正常終了
+     *         BUFFER_ERROR: 異常終了
+     * 
+     * @else
+     *
+     * @brief Get the buffer length
+     *
+     * Pure virtual function to get the buffer length.
+     *
+     * @return buffer length
+     * 
+     * @endif
+     */ 
+    virtual ReturnCode advanceRptr(long int n = 1) = 0;
+
+    /*!
+     * @if jp
+     *
+     * @brief バッファからデータを読み出す
+     * 
+     * バッファからデータを読みだす。読み出しポインタの位置は変更されない。
+     * 
+     * @param value 読み出しデータ
+     *
+     * @return BUFFER_OK: 正常終了
+     *         BUFFER_ERROR: 異常終了
+     * 
+     * @else
+     *
+     * @brief Write data into the buffer
+     *
+     * Pure virtual function to write data into the buffer.
+     *
+     * @param value Target data to write.
+     *
+     * @return Result of having written in data (true:Successful, false:Failed)
+     *
+     * @endif
+     */
+    virtual ReturnCode get(DataType& value) = 0;
+    virtual DataType&  get() = 0;
+
     /*!
      * @if jp
      *
@@ -174,29 +434,35 @@ namespace RTC
      *
      * @endif
      */
-    virtual bool read(DataType& value) = 0;
+    virtual ReturnCode read(DataType& value,
+                            long int sec = -1, long int nsec = -1) = 0;
     
     /*!
      * @if jp
      *
-     * @brief バッファfullチェック
+     * @brief バッファから読み出し可能な要素数
      * 
-     * バッファfullチェック用純粋仮想関数
+     * バッファから読み出し可能な要素数を返す。
+     * 
+     * @return 読み出し可能な要素数
      *
-     * @return fullチェック結果(true:バッファfull，false:バッファ空きあり)
+     * @return BUFFER_OK: 正常終了
+     *         BUFFER_ERROR: 異常終了
      * 
      * @else
      *
-     * @brief Check on whether the buffer is full.
+     * @brief Write data into the buffer
      *
-     * Pure virtual function to check on whether the buffer is full.
+     * Pure virtual function to write data into the buffer.
      *
-     * @return True if the buffer is full, else false.
+     * @param value Target data to write.
+     *
+     * @return Result of having written in data (true:Successful, false:Failed)
      *
      * @endif
      */
-    virtual bool isFull(void) const = 0;
-    
+    virtual size_t readable() const = 0;
+
     /*!
      * @if jp
      *
@@ -216,72 +482,8 @@ namespace RTC
      *
      * @endif
      */
-    virtual bool isEmpty(void) const = 0;
-    
-  protected:
-    /*!
-     * @if jp
-     *
-     * @brief バッファにデータを格納する
-     * 
-     * バッファへのデータ格納用純粋仮想関数
-     * 
-     * @param data 対象データ
-     * 
-     * @else
-     *
-     * @brief Store data into the buffer
-     *
-     * Pure virtual function to store data into the buffer.
-     *
-     * @param data Target data
-     * 
-     * @endif
-     */
-    virtual void put(const DataType& data) = 0;
-    
-    /*!
-     * @if jp
-     *
-     * @brief バッファからデータを取得する
-     * 
-     * バッファに格納されたデータ取得用純粋仮想関数
-     *
-     * @return 取得データ
-     * 
-     * @else
-     *
-     * @brief Get data from the buffer
-     *
-     * Pure virtual function to get data from the buffer.
-     *
-     * @return Data got from buffer.
-     *
-     * @endif
-     */
-    virtual const DataType& get(void) = 0;
-    
-    /*!
-     * @if jp
-     *
-     * @brief 次に書き込むバッファへの参照を取得する
-     * 
-     * 書き込みバッファへの参照取得用純粋仮想関数
-     *
-     * @return 次の書き込み対象バッファへの参照
-     * 
-     * @else
-     *
-     * @brief Get the buffer's reference to be written the next
-     *
-     * Pure virtual function to get the buffer's reference to be written 
-     * the next.
-     *
-     * @return Reference to be written the next
-     * 
-     * @endif
-     */
-    virtual DataType& getRef(void) = 0;
+    virtual bool empty(void) const = 0;
+
   };
   
   /*!
