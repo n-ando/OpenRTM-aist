@@ -267,7 +267,7 @@ hint: <dir>/( ACE_wrappers/ace/lib lib cxx/lib ) will be searched.)
 	ace_version=[`grep ACE_VERSION $ace_ACE_h_dir/ace/Version.h | sed 's/.*\"\(.*\)\"/\1/' | sed 's/ //g'`]
 
 	case $ace_version in
-	[5.6.1|5.5.*|5.4.*|5.3.*|5.5|5.4|5.3)]
+	[5.6.1|5.6|5.5.*|5.4.*|5.3.*|5.5|5.4|5.3)]
 		AC_DEFINE([ACE_5_6_1_OR_EARLIER], [TRUE], [ACE version 5.6.1 or earlier])
 		;;
 	# ACE 5.6.2 or later signature of UUID_Generator::generateUUID
