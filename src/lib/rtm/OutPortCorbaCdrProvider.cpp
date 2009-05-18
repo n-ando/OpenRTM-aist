@@ -119,7 +119,7 @@ namespace RTC
       {
         int len(cdr.bufSize());
         data->length(len);
-        cdr.get_octet_array(&(data[0]), len);
+        cdr.get_octet_array(&((*data)[0]), len);
         return ::OpenRTM::PortStatus(ret);
       }
     return ::OpenRTM::PortStatus(ret);
