@@ -122,9 +122,9 @@ namespace RTC
     void init();
     
   private:
-    OpenRTM::DataFlowComponent_var m_ref;
-    PeriodicExecutionContext* m_pec;
-    ExecutionContextService_var m_ecref;
+    //    OpenRTM::DataFlowComponent_var m_ref;
+    //    PeriodicExecutionContext* m_pec;
+    //    ExecutionContextService_var m_ecref;
   };
 }; // namespace RTC
 #endif // DataFlowComponentBase_h
