@@ -36,6 +36,7 @@
 #include <coil/TimeValue.h>
 #include <coil/Timer.h>
 #include <coil/OS.h>
+#include <rtm/FactoryInit.h>
 
 #if defined(minor)
 #undef minor
@@ -118,6 +119,7 @@ namespace RTC
 	    manager->initLogger();
 	    manager->initORB();
 	    manager->initNaming();
+            manager->initFactories();
 	    manager->initExecContext();
 	    manager->initComposite();
 	    manager->initTimer();
@@ -147,6 +149,7 @@ namespace RTC
 	    manager->initLogger();
 	    manager->initORB();
 	    manager->initNaming();
+            manager->initFactories();
 	    manager->initExecContext();
 	    manager->initComposite();
 	    manager->initTimer();
@@ -1107,6 +1110,13 @@ std::vector<coil::Properties> Manager::getLoadableModules()
     return true;
   }
   
+  bool Manager::initFactories()
+  {
+    RTC_TRACE(("Manager::initFactories()"));
+    FactoryInit();
+    return true;
+  }
+
   /*!
    * @if jp
    * @brief Timer の初期化
