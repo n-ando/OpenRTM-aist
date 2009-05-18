@@ -20,6 +20,7 @@
 #define CORBA_SeqUtil_h
 
 #include <rtm/RTC.h>
+#include <rtm/Manager.h>
 
 /*!
  * @if jp
@@ -406,6 +407,19 @@ namespace CORBA_SeqUtil
     seq.length(0);
   }
   // End of CORBA sequence helper functions
-  
+
+
+  template <class CorbaRefSequence>
+  coil::vstring refToVstring(const CorbaRefSequence& objlist)
+  {
+    coil::vstring iorlist;
+    CORBA::ORB_ptr orb = ::RTC::Manager::instance().getORB();
+
+    for (CORBA::ULong i(0), len(objlist.length()); i < len; ++i)
+      {
+        iorlist.push_back(orb->object_to_string(objlist[i].in()));
+      }
+    return iorlist;
+  }
 }; // namespace CORBA_SeqUtil
 #endif // CORBA_SeqUtil.h
