@@ -198,6 +198,24 @@ namespace coil
   {
     return for_each(str.begin(), str.end(), unescape_functor()).str;
   }
+
+  void eraseBlank(std::string& str)
+  {
+    std::string::iterator it(str.begin());
+
+    while (it != str.end())
+      {
+        if (*it == ' ' || *it == '\t')
+          {
+            it = str.erase(it);
+          }
+        else
+          {
+            ++it;
+          }
+      }
+
+  }
   
   /*!
    * @if jp
@@ -365,7 +383,7 @@ namespace coil
       return default_value;
   }
 
-  bool includes(std::string& list, std::string value, bool ignore_case)
+  bool includes(const std::string& list, std::string value, bool ignore_case)
   {
     if (ignore_case) { toLower(value); }
     vstring v(split(list, ","));
