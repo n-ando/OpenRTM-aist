@@ -391,8 +391,8 @@ namespace RTC
    *
    * @endif
    */
-#define RTC_TRACE(fmt) RTC_LOG(::RTC::Logger::RTL_DEBUG, fmt)
-#define RTC_TRACE_STR(str) RTC_LOG_STR(::RTC::Logger::RTL_DEBUG, str)
+#define RTC_TRACE(fmt) RTC_LOG(::RTC::Logger::RTL_TRACE, fmt)
+#define RTC_TRACE_STR(str) RTC_LOG_STR(::RTC::Logger::RTL_TRACE, str)
 
 
   /*!
@@ -436,8 +436,8 @@ namespace RTC
    *
    * @endif
    */
-#define RTC_PARANOID(fmt) RTC_LOG(::RTC::Logger::RTL_VERBOSE, fmt)
-#define RTC_PARANOID_STR(str) RTC_LOG_STR(::RTC::Logger::RTL_VERBOSE, str)
+#define RTC_PARANOID(fmt) RTC_LOG(::RTC::Logger::RTL_PARANOID, fmt)
+#define RTC_PARANOID_STR(str) RTC_LOG_STR(::RTC::Logger::RTL_PARANOID, str)
   
 #else
 #define RTC_ERROR(fmt)
