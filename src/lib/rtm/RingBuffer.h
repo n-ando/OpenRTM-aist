@@ -31,6 +31,7 @@
 #include <coil/stringutil.h>
 
 #include <rtm/BufferBase.h>
+#include <rtm/BufferStatus.h>
 
 #define RINGBUFFER_DEFAULT_LENGTH 8
 /*!
@@ -90,9 +91,7 @@ namespace RTC
   {
   public:
     BUFFERSTATUS_ENUM
-    
     typedef coil::Guard<coil::Mutex> Guard;
-    
     /*!
      * @if jp
      *
@@ -245,7 +244,7 @@ namespace RTC
       m_buffer.resize(n);
       m_length = n;
       this->reset();
-      return BUFFER_OK;
+      return ::RTC::BufferStatus::BUFFER_OK; //BUFFER_OK;
     }
     
     /*!
@@ -276,7 +275,7 @@ namespace RTC
       m_fillcount = 0;
       m_wpos = 0;
       m_rpos = 0;
-      return BUFFER_OK;
+      return ::RTC::BufferStatus::BUFFER_OK;
     }
     
     
@@ -347,13 +346,13 @@ namespace RTC
 
       if (n > 0 && n > (m_length - m_fillcount) || n < 0 && n < -m_fillcount)
         {
-          return PRECONDITION_NOT_MET;
+          return ::RTC::BufferStatus::PRECONDITION_NOT_MET;
         }
 
       Guard guard(m_posmutex);
       m_wpos = (m_wpos + n) % m_length;
       m_fillcount += n;
-      return BufferStatus::BUFFER_OK;
+      return ::RTC::BufferStatus::BUFFER_OK;
     }
     /*!
      * @if jp
@@ -386,7 +385,7 @@ namespace RTC
     {
       Guard guard(m_posmutex);
       m_buffer[m_wpos] = value;
-      return BUFFER_OK;
+      return ::RTC::BufferStatus::BUFFER_OK;
     }
     
     /*!
@@ -453,7 +452,7 @@ namespace RTC
             }
           else if (!overwrite && !timedwrite) // "do_notiong" mode
             {
-              return BUFFER_FULL;
+              return ::RTC::BufferStatus::BUFFER_FULL;
             }
           else if (!overwrite && timedwrite)  // "block" mode
             {
@@ -465,12 +464,12 @@ namespace RTC
               //  true: signaled, false: timeout
               if (!m_full.cond.wait(sec, nsec))
                 {
-                  return TIMEOUT;
+                  return ::RTC::BufferStatus::TIMEOUT;
                 }
             }
           else                                    // unknown condition
             {
-              return PRECONDITION_NOT_MET;
+              return ::RTC::BufferStatus::PRECONDITION_NOT_MET;
             }
         }
       
@@ -485,7 +484,7 @@ namespace RTC
           m_empty.cond.signal();
         }
       
-      return BUFFER_OK;
+      return ::RTC::BufferStatus::BUFFER_OK;
     }
     
     /*!
@@ -598,13 +597,13 @@ namespace RTC
       //                 n >= m_fillcount - m_length
       if ((n > 0 && n > m_fillcount) || (n < 0 && n < (m_fillcount - m_length)))
         {
-          return PRECONDITION_NOT_MET;
+          return ::RTC::BufferStatus::PRECONDITION_NOT_MET;
         }
 
       Guard guard(m_posmutex);
       m_rpos = (m_rpos + n) % m_length;
       m_fillcount -= n;
-      return BUFFER_OK;
+      return ::RTC::BufferStatus::BUFFER_OK;
     }
     
     /*!
@@ -635,7 +634,7 @@ namespace RTC
     {
       Guard gaurd(m_posmutex);
       value = m_buffer[m_rpos];
-      return BUFFER_OK;
+      return ::RTC::BufferStatus::BUFFER_OK;
     }
     
     
@@ -711,19 +710,19 @@ namespace RTC
             }
           else if (!readback && !timedread) // "do_notiong" mode
             {
-              return BUFFER_EMPTY;
+              return ::RTC::BufferStatus::BUFFER_EMPTY;
             }
           else if (!readback && timedread)  // "block" mode
             {
               //  true: signaled, false: timeout
               if (!m_empty.cond.wait(sec, nsec))
                 {
-                  return TIMEOUT;
+                  return ::RTC::BufferStatus::TIMEOUT;
                 }
             }
           else                                    // unknown condition
             {
-              return PRECONDITION_NOT_MET;
+              return ::RTC::BufferStatus::PRECONDITION_NOT_MET;
             }
         }
       
@@ -738,7 +737,7 @@ namespace RTC
           m_full.cond.signal();
         }
       
-      return BUFFER_OK;
+      return ::RTC::BufferStatus::BUFFER_OK;
     }
     
     /*!
