@@ -819,6 +819,7 @@ namespace RTC
       {
 	m_configsets.update();
 	ret = onActivated(ec_id);
+        m_portAdmin.activatePorts();
       }
     catch (...)
       {
@@ -841,6 +842,7 @@ namespace RTC
     ReturnCode_t ret(RTC::RTC_ERROR);
     try
       {
+        m_portAdmin.deactivatePorts();
 	ret = onDeactivated(ec_id);
       }
     catch (...)
@@ -1452,6 +1454,52 @@ namespace RTC
     RTC_TRACE(("registerPort(PortService_ptr)"));
     m_portAdmin.registerPort(port);
     return;
+  }
+
+  /*!
+   * @if jp
+   * @brief [local interface] DataInPort ¤òÅÐÏ¿¤¹¤ë
+   * @else
+   * @brief [local interface] Register DataInPort
+   * @endif
+   */
+  void RTObject_impl::registerInPort(const char* name,
+                                     InPortBase& inport)
+  {
+    RTC_TRACE(("registerInPort(%s)", name));
+    if (m_properties.hasKey("port.inport"))
+      {
+        inport.properties() << m_properties.getNode("port.inport");
+      }
+
+    std::string propkey("port.inport.");
+    propkey += name;
+    if (m_properties.hasKey(propkey.c_str()))
+      {
+        inport.properties() << m_properties.getNode(propkey);
+      }
+
+    inport.init();
+    registerPort(inport);
+  }
+
+  /*!
+   * @if jp
+   * @brief [local interface] DataOutPort ¤òÅÐÏ¿¤¹¤ë
+   * @else
+   * @brief [local interface] Register DataOutPort
+   * @endif
+   */
+  void RTObject_impl::registerOutPort(const char* name, OutPortBase& outport)
+  {
+    RTC_TRACE(("registerOutPort(%s)", name));
+    
+    std::string propkey("port.outport.");
+    propkey += name;
+    m_properties.getNode(propkey) << m_properties.getNode("port.outport");
+    
+    outport.properties() << m_properties.getNode(propkey);
+    registerPort(outport);
   }
   
   /*!
