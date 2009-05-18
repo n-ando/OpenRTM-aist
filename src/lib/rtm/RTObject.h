@@ -20,16 +20,17 @@
 #define RTObject_h
 
 // CORBA header include
-#include <rtm/RTC.h>
 #include <coil/Properties.h>
+
+#include <rtm/RTC.h>
 #include <rtm/idl/RTCSkel.h>
 #include <rtm/idl/OpenRTMSkel.h>
 #include <rtm/PortBase.h>
 #include <rtm/PortAdmin.h>
-#include <rtm/DataInPort.h>
-#include <rtm/DataOutPort.h>
-#include <rtm/InPort.h>
-#include <rtm/OutPort.h>
+#include <rtm/InPortBase.h>
+#include <rtm/OutPortBase.h>
+//#include <rtm/InPort.h>
+//#include <rtm/OutPort.h>
 #include <rtm/ConfigAdmin.h>
 #include <rtm/SystemLogger.h>
 
@@ -2331,19 +2332,7 @@ namespace RTC
      *
      * @endif
      */
-    template <class DataType, template <class DataType> class Buffer>
-    void registerInPort(const char* name,
-			InPort<DataType, Buffer>& inport)
-    {
-      RTC_TRACE(("registerInPort(%s)", name));
-      std::string propkey("port.dataport.");
-      propkey += name;
-      propkey += ".tcp_any";
-      m_properties[propkey];
-      PortBase* port = new DataInPort(name, inport,
-				      m_properties.getNode(propkey));
-      registerPort(*port);
-    }
+    void registerInPort(const char* name, InPortBase& inport);
     
     /*!
      * @if jp
@@ -2371,19 +2360,7 @@ namespace RTC
      *
      * @endif
      */
-    template <class DataType, template <class DataType> class Buffer>
-    void registerOutPort(const char* name,
-			 OutPort<DataType, Buffer>& outport)
-    {
-      RTC_TRACE(("registerOutPort(%s)", name));
-      std::string propkey("port.dataport.");
-      propkey += name;
-      propkey += ".tcp_any";
-      m_properties[propkey];
-      PortBase* port = new DataOutPort(name, outport,
-				       m_properties.getNode(propkey));
-      registerPort(*port);
-    }
+    void registerOutPort(const char* name, OutPortBase& outport);
     
     /*!
      * @if jp
