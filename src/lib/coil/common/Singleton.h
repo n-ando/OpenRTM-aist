@@ -103,6 +103,7 @@ namespace coil
   {
   public:
     typedef SingletonClass* SingletonClassPtr;
+    typedef ::coil::Mutex Mutex;
     static SingletonClass& instance()
     {
 
@@ -134,9 +135,10 @@ namespace coil
   template <class SingletonClass>
   typename Singleton<SingletonClass>::SingletonClassPtr
   Singleton<SingletonClass>::m_instance;
-
+  
   template <class SingletonClass>
-  typename coil::Mutex Singleton<SingletonClass>::m_mutex;
+  typename Singleton<SingletonClass>::Mutex
+  Singleton<SingletonClass>::m_mutex;
 }; // namepsace coil
 
 #endif // COIL_SINGLETON_H
