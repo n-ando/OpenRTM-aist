@@ -592,6 +592,42 @@ namespace RTC
     //============================================================
     /*!
      * @if jp
+     *
+     * @brief Port の全てのインターフェースを activates する
+     *
+     * Port に登録されている全てのインターフェースを activate する。
+     *
+     * @else
+     *
+     * @brief Activate all Port interfaces
+     *
+     * This operation activate all interfaces that is registered in the
+     * ports.
+     *
+     * @endif
+     */
+    virtual void activateInterfaces() = 0;
+
+    /*!
+     * @if jp
+     *
+     * @brief 全ての Port のインターフェースを deactivates する
+     *
+     * Port に登録されている全てのインターフェースを deactivate する。
+     *
+     * @else
+     *
+     * @brief Deactivate all Port interfaces
+     *
+     * This operation deactivate all interfaces that is registered in the
+     * ports.
+     *
+     * @endif
+     */
+    virtual void deactivateInterfaces() = 0;
+
+    /*!
+     * @if jp
      * @brief Port の名前を設定する
      *
      * Port の名前を設定する。この名前は Port が保持する PortProfile.name
@@ -696,7 +732,7 @@ namespace RTC
      * @endif
      */
     void setOwner(RTObject_ptr owner);
-    
+
     //============================================================
     // protected operations
     //============================================================
@@ -1264,6 +1300,11 @@ namespace RTC
     {
       CORBA_SeqUtil::push_back(m_profile.properties,
 			       NVUtil::newNV(key, value));
+    }
+
+    void appendProperty(const char* key, const char* value)
+    {
+      NVUtil::appendStringValue(m_profile.properties, key, value);
     }
     
   protected:

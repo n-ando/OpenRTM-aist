@@ -19,6 +19,7 @@
 
 #include <coil/Properties.h>
 #include <rtm/RTC.h>
+#include <rtm/PublisherBase.h>
 #include <rtm/PublisherFlush.h>
 #include <rtm/InPortConsumer.h>
 
@@ -31,9 +32,8 @@ namespace RTC
    * @brief Constructor
    * @endif
    */
-  PublisherFlush::PublisherFlush(InPortConsumer* consumer,
-				 const coil::Properties& property)
-    : m_consumer(consumer)
+  PublisherFlush::PublisherFlush()
+    : m_consumer(0), m_active(false)
   {
   }
 
@@ -46,19 +46,98 @@ namespace RTC
    */
   PublisherFlush::~PublisherFlush()
   {
-    delete m_consumer;
+    // "consumer" should be deleted in the Connector
+    m_consumer = 0;
   }
   
   /*!
    * @if jp
-   * @brief Observer関数
+   * @brief 初期化
    * @else
-   * @brief Observer function
+   * @brief initialization
    * @endif
    */
-  void PublisherFlush::update()
+  PublisherBase::ReturnCode PublisherFlush::init(coil::Properties& prop)
   {
-    m_consumer->push();
-    return;
+    return PORT_OK;
   }
+
+  /*!
+   * @if jp
+   * @brief InPortコンシューマのセット
+   * @else
+   * @brief Store InPort consumer
+   * @endif
+   */
+  PublisherBase::ReturnCode PublisherFlush::setConsumer(InPortConsumer* consumer)
+  {
+    if (consumer == 0) { return INVALID_ARGS; }
+    if (m_consumer != 0) { delete m_consumer; }
+    m_consumer = consumer;
+    return PORT_OK;
+  }
+
+  /*!
+   * @if jp
+   * @brief バッファのセット
+   * @else
+   * @brief Setting buffer pointer
+   * @endif
+   */
+  PublisherBase::ReturnCode PublisherFlush::setBuffer(CdrBufferBase* buffer)
+  {
+    return PORT_ERROR;
+  }
+
+  PublisherBase::ReturnCode PublisherFlush::write(const cdrMemoryStream& data,
+                                                  unsigned long sec,
+                                                  unsigned long usec)
+  {
+    //    if (!m_active) { return PRECONDITION_NOT_MET; }
+
+    m_consumer->put(data);
+
+    return PORT_OK;
+  }
+
+  bool PublisherFlush::isActive()
+  {
+    return m_active;
+  }
+
+  PublisherBase::ReturnCode PublisherFlush::activate()
+  {
+    if ( m_active) { return PRECONDITION_NOT_MET; }
+
+    m_active = true;
+
+    return PORT_OK;
+  }
+
+  PublisherBase::ReturnCode PublisherFlush::deactivate()
+  {
+    if (!m_active) { return PRECONDITION_NOT_MET; }
+
+    m_active = false;
+
+    return PORT_OK;
+  }
+ 
+
+
 }; // namespace RTC
+
+
+extern "C"
+{
+  void PublisherFlushInit()
+  {
+    ::RTC::PublisherFactory::
+      instance().addFactory("flush",
+                            ::coil::Creator< ::RTC::PublisherBase,
+                                             ::RTC::PublisherFlush>,
+                            ::coil::Destructor< ::RTC::PublisherBase,
+                                                ::RTC::PublisherFlush>);
+  }
+};
+

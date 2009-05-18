@@ -19,17 +19,23 @@
 
 #ifndef PublisherPeriodic_h
 #define PublisherPeriodic_h
-
 #include <rtm/RTC.h>
-
 #include <coil/Task.h>
-
+#include <coil/Mutex.h>
+#include <coil/PeriodicTask.h>
+#include <coil/Condition.h>
 #include <rtm/PublisherBase.h>
+#include <rtm/CdrBufferBase.h>
+#include <rtm/SystemLogger.h>
+
+namespace coil
+{
+  class Properties;
+};
 
 namespace RTC
 {
   class InPortConsumer;
-  class Properties;
   /*!
    * @if jp
    * @class PublisherPeriodic
@@ -48,12 +54,14 @@ namespace RTC
    * @endif
    */
   class PublisherPeriodic
-    : public PublisherBase,
-      public coil::Task
+    : public PublisherBase
   {
-    //    class InPortConsumer;
-    
-  public:
+  public: 
+    typedef coil::Mutex Mutex;
+    typedef coil::Condition<Mutex> Condition;
+    typedef coil::Guard<coil::Mutex> Guard;
+    DATAPORTSTATUS_ENUM
+
     /*!
      * @if jp
      * @brief コンストラクタ
@@ -83,8 +91,7 @@ namespace RTC
      *
      * @endif
      */
-    PublisherPeriodic(InPortConsumer* consumer,
-		      const coil::Properties& property);
+    PublisherPeriodic();
     
     /*!
      * @if jp
@@ -103,18 +110,20 @@ namespace RTC
     
     /*!
      * @if jp
-     * @brief Observer関数
-     *
-     * 本 Publisher では何も実行しない。
-     *
+     * @brief 初期化
      * @else
-     * @brief Observer function
-     *
-     * Execute nothing in this Publisher.
-     *
+     * @brief initialization
      * @endif
      */
-    virtual void update();
+    virtual ReturnCode init(coil::Properties& prop);
+    virtual ReturnCode setConsumer(InPortConsumer* consumer);
+    virtual ReturnCode setBuffer(CdrBufferBase* buffer);
+    virtual ReturnCode write(const cdrMemoryStream& data,
+                             unsigned long sec,
+                             unsigned long usec);
+    virtual bool isActive();
+    virtual ReturnCode activate();
+    virtual ReturnCode deactivate();
     
     /*!
      * @if jp
@@ -131,48 +140,51 @@ namespace RTC
      */
     virtual int svc(void);
     
-    /*!
-     * @if jp
-     * @brief タスク開始
-     *
-     * ACE_Task::open() のオーバーライド
-     *
-     * @else
-     * @brief Start task
-     *
-     * ACE_Task::open() override function.
-     *
-     * @endif
-     */
-    virtual int open(void *args);
-    
-    /*!
-     * @if jp
-     * @brief タスク終了関数
-     *
-     * ACE_Task::release() のオーバーライド
-     * 駆動フラグをfalseに設定し、本 Publisher の駆動を停止する。
-     * ただし、最大１回コンシューマの送出処理が呼び出される場合がある。
-     *
-     * @else
-     * @brief Task terminate function
-     *
-     * ACE_Task::release() override function.
-     * Set driven flag to false, and terminate the operation of this Publisher.
-     * However, the consumer's sending process may be invoked once or less.
-     *
-     *
-     * @endif
-     */
-    virtual void release();
-    
   protected:
+    enum Policy
+      {
+        ALL,
+        FIFO,
+        SKIP,
+        NEW
+      };
+
+    /*!
+     * @brief push "all" policy
+     */
+    ReturnCode pushAll();
+    /*!
+     * @brief push "fifo" policy
+     */
+    ReturnCode pushFifo();
+    /*!
+     * @brief push "skip" policy
+     */
+    ReturnCode pushSkip();
+    /*!
+     * @brief push "new" policy
+     */
+    ReturnCode pushNew();
+
+    ReturnCode convertReturn(BufferStatus::Enum status);
     
   private:
+    Logger rtclog;
     InPortConsumer* m_consumer;
-    bool m_running;
-    unsigned int m_usec;
+    CdrBufferBase* m_buffer;
+    coil::PeriodicTaskBase* m_task;
+    ReturnCode m_retcode;
+    Mutex m_retmutex;
+    Policy m_pushPolicy;
+    int m_skipn;
+    bool m_active;
   };
 };     // namespace RTC
+
+extern "C"
+{
+  void DLL_EXPORT PublisherPeriodicInit();
+};
+
 #endif // PublisherPeriodic_h
 

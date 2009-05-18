@@ -20,12 +20,17 @@
 #ifndef PublisherFlush_h
 #define PublisherFlush_h
 
+#include <coil/Condition.h>
 #include <rtm/PublisherBase.h>
+
+namespace coil
+{
+  class Properties;
+};
 
 namespace RTC
 {
   class InPortConsumer;
-  class Properties;
   /*!
    * @if jp
    * @class PublisherFlush
@@ -50,6 +55,11 @@ namespace RTC
     : public PublisherBase
   {
   public:
+    typedef coil::Mutex Mutex;
+    typedef coil::Condition<Mutex> Condition;
+    typedef coil::Guard<coil::Mutex> Guard;
+    DATAPORTSTATUS_ENUM
+
     /*!
      * @if jp
      * @brief コンストラクタ
@@ -70,8 +80,7 @@ namespace RTC
      *
      * @endif
      */
-    PublisherFlush(InPortConsumer* consumer,
-		   const coil::Properties& property);
+    PublisherFlush();
     
     /*!
      * @if jp
@@ -89,29 +98,40 @@ namespace RTC
      * @endif
      */
     virtual ~PublisherFlush(void);
-    
+
     /*!
      * @if jp
-     * @brief Observer関数
-     *
-     * 送出タイミング時に呼び出す。
-     * 即座に同一スレッドにてコンシューマの送出処理が呼び出される。
-     *
+     * @brief 初期化
      * @else
-     * @brief Observer function
-     *
-     * This is invoked at the send timing.
-     * Immediately, the Consumer's sending process is invoked in the same thread.
-     *
+     * @brief initialization
      * @endif
      */
-    virtual void update();
+    virtual ReturnCode init(coil::Properties& prop);
+
+    virtual ReturnCode setConsumer(InPortConsumer* consumer);
+    virtual ReturnCode setBuffer(CdrBufferBase* buffer);
+    virtual ReturnCode write(const cdrMemoryStream& data,
+                             unsigned long sec,
+                             unsigned long usec);
+    virtual bool isActive();
+    virtual ReturnCode activate();
+    virtual ReturnCode deactivate();
+
   protected:
     
   private:
     InPortConsumer* m_consumer;
-    
+    ReturnCode m_retcode;
+    Mutex m_retmutex;
+    bool m_active;
   };
+
 };     // namespace RTC
+
+extern "C"
+{
+  void DLL_EXPORT PublisherFlushInit();
+};
+
 #endif // PublisherFlush_h
 

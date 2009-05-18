@@ -17,11 +17,15 @@
  *
  */
 
-#ifndef OutPortProvider_h
-#define OutPortProvider_h
+#ifndef RTC_OUTPORTPROVIDER_H
+#define RTC_OUTPORTPROVIDER_H
 
-#include <rtm/NVUtil.h>
 #include <string>
+
+#include <coil/Factory.h>
+#include <rtm/BufferBase.h>
+#include <rtm/NVUtil.h>
+#include <rtm/DataPortStatus.h>
 
 namespace RTC
 {
@@ -83,8 +87,10 @@ namespace RTC
    * @endif
    */
   class OutPortProvider
+    : public DataPortStatus
   {
   public:
+    DATAPORTSTATUS_ENUM
     /*!
      * @if jp
      * @brief デストラクタ
@@ -95,7 +101,63 @@ namespace RTC
      * @brief Destructor
      * @endif
      */
-    virtual ~OutPortProvider(void){};
+    virtual ~OutPortProvider(void);
+
+    /*!
+     * @if jp
+     * @brief 設定初期化
+     *
+     * InPortConsumerの各種設定を行う。実装クラスでは、与えられた
+     * Propertiesから必要な情報を取得して各種設定を行う。この init() 関
+     * 数は、OutPortProvider生成直後および、接続時にそれぞれ呼ばれる可
+     * 能性がある。したがって、この関数は複数回呼ばれることを想定して記
+     * 述されるべきである。
+     * 
+     * @param prop 設定情報
+     *
+     * @else
+     *
+     * @brief Initializing configuration
+     *
+     * This operation would be called to configure in initialization.
+     * In the concrete class, configuration should be performed
+     * getting appropriate information from the given Properties data.
+     * This function might be called right after instantiation and
+     * connection sequence respectivly.  Therefore, this function
+     * should be implemented assuming multiple call.
+     *
+     * @param prop Configuration information
+     *
+     * @endif
+     */
+    virtual void init(coil::Properties& prop);
+
+    /*!
+     * @if jp
+     * @brief バッファをセットする
+     *
+     * OutPortProviderがデータを取り出すバッファをセットする。
+     * すでにセットされたバッファがある場合、以前のバッファへの
+     * ポインタに対して上書きされる。
+     * OutPortProviderはバッファの所有権を仮定していないので、
+     * バッファの削除はユーザの責任で行わなければならない。
+     *
+     * @param buffer OutPortProviderがデータを取り出すバッファへのポインタ
+     *
+     * @else
+     * @brief Setting outside buffer's pointer
+     *
+     * A pointer to a buffer from which OutPortProvider retrieve data.
+     * If already buffer is set, previous buffer's pointer will be
+     * overwritten by the given pointer to a buffer.  Since
+     * OutPortProvider does not assume ownership of the buffer
+     * pointer, destructor of the buffer should be done by user.
+     * 
+     * @param buffer A pointer to a data buffer to be used by OutPortProvider
+     *
+     * @endif
+     */
+    virtual void setBuffer(BufferBase<cdrMemoryStream>* buffer);
     
     /*!
      * @if jp
@@ -126,28 +188,28 @@ namespace RTC
      * @if jp
      * @brief Interface情報を公開する
      *
-     * Interface情報を公開する
-     * 引数で指定するプロパティ情報内の NameValue オブジェクトの
-     * dataport.interface_type 値を調べ、当該ポートに設定されていなければ
-     * NameValue に情報を追加する。
-     * すでに同一インターフェースが登録済みの場合は何も行わない。
+     * Interface情報を公開する。引数で指定するプロパティ情報内の
+     * NameValue オブジェクトのdataport.interface_type 値を調べ、当該ポー
+     * トに設定されていなければNameValue に情報を追加する。すでに同一イ
+     * ンターフェースが登録済みの場合は何も行わない。
      *
      * @param properties Interface情報を受け取るプロパティ
      *
      * @else
      * @brief Publish interface information
      *
-     * Publish interface information.
-     * Check the dataport.interface_type value of the NameValue object specified 
-     * by an argument in the property information, and add the information to the
-     * NameValue if this port is not specified.
-     * This does not do anything if the same interface is already subscribed.
+     * Publish interface information.  Check the
+     * dataport.interface_type value of the NameValue object specified
+     * by an argument in the property information, and add the
+     * information to the NameValue if this port is not specified.
+     * This does not do anything if the same interface is already
+     * subscribed.
      *
      * @param properties Properties to receive interface information
      *
      * @endif
      */
-    virtual void publishInterface(SDOPackage::NVList& properties);
+    virtual bool publishInterface(SDOPackage::NVList& properties);
     
   protected:
     /*!
@@ -245,6 +307,7 @@ namespace RTC
      */
     void setSubscriptionType(const char* subs_type);
     
+  protected:
     /*!
      * @if jp
      * @brief ポートプロファイルを保持するプロパティ
@@ -260,6 +323,51 @@ namespace RTC
     std::string m_interfaceType;
     std::string m_dataflowType;
     std::string m_subscriptionType;
+
+
+  public:
+    // functors
+    /*!
+     * @if jp
+     * @brief インターフェースプロファイルを公開するたのファンクタ
+     * @else
+     * @brief Functor to publish interface profile
+     * @endif
+     */
+    struct publishInterfaceProfileFunc
+    {
+      publishInterfaceProfileFunc(SDOPackage::NVList& prop) : m_prop(prop) {}
+      void operator()(OutPortProvider* provider)
+      {
+	provider->publishInterfaceProfile(m_prop);
+      }
+      SDOPackage::NVList& m_prop;
+    };
+
+    /*!
+     * @if jp
+     * @brief インターフェースプロファイルを公開するたのファンクタ
+     * @else
+     * @brief Functor to publish interface profile
+     * @endif
+     */
+    struct publishInterfaceFunc
+    {
+      publishInterfaceFunc(SDOPackage::NVList& prop)
+        : m_prop(prop), provider_(0) {}
+      void operator()(OutPortProvider* provider)
+      {
+	if (provider->publishInterface(m_prop))
+          {
+            provider_ = provider;
+          }
+      }
+      SDOPackage::NVList& m_prop;
+      OutPortProvider* provider_;
+    };
   };
+
+  typedef ::coil::GlobalFactory<OutPortProvider> OutPortProviderFactory;
+
 }; // namespace RTC
-#endif // OutPortProvider_h
+#endif // RTC_OUTPORTPROVIDER_H

@@ -5,7 +5,7 @@
  * @date  $Date: 2007-12-31 03:08:03 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
- * Copyright (C) 2006-2008
+ * Copyright (C) 2006-2009
  *     Noriaki Ando
  *     Task-intelligence Research Group,
  *     Intelligent Systems Research Institute,
@@ -55,14 +55,10 @@ namespace RTC
   void InPortProvider::publishInterfaceProfile(SDOPackage::NVList& prop)
   {
     RTC_TRACE(("publishInterfaceProfile()"));
-    NVUtil::appendStringValue(prop, "dataport.data_type",
-			      m_dataType.c_str());
+
     NVUtil::appendStringValue(prop, "dataport.interface_type",
 			      m_interfaceType.c_str());
-    NVUtil::appendStringValue(prop, "dataport.dataflow_type",
-			      m_dataflowType.c_str());
-    NVUtil::appendStringValue(prop, "dataport.subscription_type",
-			      m_subscriptionType.c_str());
+    NVUtil::append(prop, m_properties);
   }
   
   /*!
@@ -72,7 +68,7 @@ namespace RTC
    * @brief Publish Interface information
    * @endif
    */
-  void InPortProvider::publishInterface(SDOPackage::NVList& prop)
+  bool InPortProvider::publishInterface(SDOPackage::NVList& prop)
   {
     RTC_TRACE(("publishInterface()"));
     RTC_DEBUG_STR((NVUtil::toString(prop)));
@@ -80,25 +76,16 @@ namespace RTC
 			       "dataport.interface_type",
 			       m_interfaceType.c_str()))
       {
-	return;
+	return false;
       }
     
     NVUtil::append(prop, m_properties);
     //    NVUtil::dump(m_properties);
+    return true;
   }
-  
-  /*!
-   * @if jp
-   * @brief データタイプを設定する
-   * @else
-   * @brief Set the data tape
-   * @endif
-   */
-  void InPortProvider::setDataType(const char* data_type)
-  {
-    RTC_TRACE(("setDataType(%s)", data_type));
-    m_dataType = data_type;
-  }
+
+  //----------------------------------------------------------------------
+  // protected functions
   
   /*!
    * @if jp

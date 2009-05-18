@@ -16,13 +16,17 @@
  * $Id$
  *
  */
-
+#include <rtm/RTC.h>
 #include <coil/Properties.h>
 #include <coil/Time.h>
+#include <coil/stringutil.h>
 #include <rtm/PublisherPeriodic.h>
 #include <rtm/InPortConsumer.h>
 #include <rtm/RTC.h>
 #include <stdlib.h>
+#include <rtm/idl/DataPortSkel.h>
+#include <rtm/PeriodicTaskFactory.h>
+#include <rtm/SystemLogger.h>
 
 namespace RTC
 {
@@ -33,24 +37,12 @@ namespace RTC
    * @brief Constructor
    * @endif
    */
-  PublisherPeriodic::PublisherPeriodic(InPortConsumer* consumer,
-				       const coil::Properties& property)
-    : m_consumer(consumer), m_running(true)
+  PublisherPeriodic::PublisherPeriodic()
+    : rtclog("PublisherPeriodic"),
+      m_consumer(0), m_buffer(0), m_task(0),
+      m_retcode(PORT_OK), m_pushPolicy(NEW),
+      m_skipn(10), m_active(false)
   {
-    std::string rate(property.getProperty("dataport.push_rate"));
-    double hz;
-    
-    if (rate != "")
-      {
-	hz = atof(rate.c_str());
-	if (hz == 0) hz = 1000.0;
-      }
-    else
-      {
-	hz = 1000.0;
-      }
-    m_usec = static_cast<unsigned int>(1000000.0/hz);
-    open(0);
   }
   
 
@@ -63,24 +55,177 @@ namespace RTC
    */
   PublisherPeriodic::~PublisherPeriodic()
   {
-    m_running = 0;
-    wait();
-    delete m_consumer;
+    RTC_TRACE(("~PublisherPeriodic()"));
+    if (m_task != 0)
+      {
+        m_task->finalize();
+        RTC_PARANOID(("task finalized."));
+        //        m_task->wait();
+        RTC::PeriodicTaskFactory::instance().deleteObject(m_task);
+        RTC_PARANOID(("task deleted."));
+      }
+
+    // "consumer" should be deleted in the Connector
+    m_consumer = 0;
+    // "buffer"   should be deleted in the Connector
+    m_buffer = 0;
   }
-  
+
+  /*!
+   * @if jp
+   * @brief 初期化
+   * @else
+   * @brief initialization
+   * @endif
+   */
+  PublisherBase::ReturnCode PublisherPeriodic::init(coil::Properties& prop)
+  {
+    RTC_TRACE(("init()"));
+    rtclog.level(::RTC::Logger::RTL_PARANOID) << prop;
+
+    // creating Task object 
+    RTC::PeriodicTaskFactory& factory(RTC::PeriodicTaskFactory::instance());
+    m_task = factory.createObject(prop.getProperty("thread_type", "default"));
+    if (m_task == 0)
+      {
+        RTC_ERROR(("Task creation failed: %s",
+                   prop.getProperty("thread_type", "default").c_str()));
+        return INVALID_ARGS;
+      }
+    RTC_PARANOID(("Task creation succeeded."));
+
+    // setting task function
+    m_task->setTask(this, &PublisherPeriodic::svc);
+
+    // Task execution rate
+    std::string rate(prop["push_rate"]);
+    double hz;
+    if (rate != "")
+      {
+	hz = atof(rate.c_str());
+	if (hz == 0) hz = 1000.0;
+        RTC_DEBUG(("Task period %f [Hz]", hz));
+      }
+    else
+      {
+	hz = 1000.0;
+      }
+    m_task->setPeriod(1.0/hz);
+    
+    // Measurement setting
+    coil::Properties& mprop(prop.getNode("measurement"));
+
+    m_task->executionMeasure(coil::toBool(mprop["exec_time"],
+                                    "enable", "disable", true));
+    
+    int ecount;
+    if (coil::stringTo(ecount, mprop["exec_count"].c_str()))
+      {
+        m_task->executionMeasureCount(ecount);
+      }
+
+    m_task->periodicMeasure(coil::toBool(mprop["period_time"],
+                                   "enable", "disable", true));
+    int pcount;
+    if (coil::stringTo(pcount, mprop["period_count"].c_str()))
+      {
+        m_task->periodicMeasureCount(pcount);
+      }
+
+
+    // Start task in suspended mode
+    m_task->suspend();
+    m_task->activate();
+    return PORT_OK;
+  }
   
   /*!
    * @if jp
-   * @brief Observer関数
+   * @brief InPortコンシューマのセット
    * @else
-   * @brief Observer function
+   * @brief Store InPort consumer
    * @endif
    */
-  void PublisherPeriodic::update()
+  PublisherBase::ReturnCode
+  PublisherPeriodic::setConsumer(InPortConsumer* consumer)
   {
+    RTC_TRACE(("setConsumer()"));
+
+    if (consumer == 0)
+      {
+        RTC_ERROR(("setConsumer(consumer = 0): invalid argument."));
+        return INVALID_ARGS;
+      }
+    m_consumer = consumer;
+    return PORT_OK;
   }
-  
-  
+
+  /*!
+   * @if jp
+   * @brief バッファのセット
+   * @else
+   * @brief Setting buffer pointer
+   * @endif
+   */
+  PublisherBase::ReturnCode PublisherPeriodic::setBuffer(CdrBufferBase* buffer)
+  {
+    RTC_TRACE(("setBuffer()"));
+
+    if (buffer == 0)
+      {
+        RTC_ERROR(("setBuffer(buffer == 0): invalid argument"));
+        return INVALID_ARGS;
+      }
+    m_buffer = buffer;
+    return PORT_OK;
+  }
+
+  PublisherBase::ReturnCode
+  PublisherPeriodic::write(const cdrMemoryStream& data,
+                           unsigned long sec,
+                           unsigned long usec)
+  {
+    RTC_PARANOID(("write()"));
+
+    if (m_retcode == CONNECTION_LOST)
+      {
+        RTC_DEBUG(("write(): connection lost."));
+        return m_retcode;
+      }
+
+    if (m_retcode == BUFFER_FULL)
+      {
+        RTC_DEBUG(("write(): InPort buffer is full."));
+        return BUFFER_FULL;
+      }
+
+    CdrBufferBase::ReturnCode ret(m_buffer->write(data, sec, usec));
+    RTC_DEBUG(("%s = write()", CdrBufferBase::toString(ret)));
+
+    // if publisher is deactivated, send data once.
+    m_task->signal();
+
+    return convertReturn(ret);
+  }
+
+  bool PublisherPeriodic::isActive()
+  {
+    return m_active;
+  }
+
+  PublisherBase::ReturnCode PublisherPeriodic::activate()
+  {
+    m_active = true;
+    m_task->resume();
+    return PORT_OK;
+  }
+
+  PublisherBase::ReturnCode PublisherPeriodic::deactivate()
+  {
+    m_active = false;
+    m_task->suspend();
+    return PORT_OK;
+  }
   /*!
    * @if jp
    * @brief スレッド実行関数
@@ -90,48 +235,162 @@ namespace RTC
    */
   int PublisherPeriodic::svc(void)
   {
-    
-#ifdef ARTLinux
-    art_enter( ART_PRIO_MAX, ART_TASK_PERIODIC, m_usec );
-#endif // ARTLinux
-    while (m_running)
+    Guard guard(m_retmutex);
+    switch (m_pushPolicy)
       {
-	m_consumer->push();
-#ifdef ARTLinux
-	art_wait();
-#else
-    coil::usleep(m_usec);
-#endif //ARTLinux
+      case ALL:
+        m_retcode = pushAll();
+        break;
+      case FIFO:
+        m_retcode = pushFifo();
+        break;
+      case SKIP:
+        m_retcode = pushSkip();
+        break;
+      case NEW:
+        m_retcode = pushNew();
+        break;
+      default:
+        m_retcode = pushNew();
+        break;
       }
     return 0;
   }
   
-  
   /*!
-   * @if jp
-   * @brief タスク開始
-   * @else
-   * @brief Start task
-   * @endif
+   * @brief push all policy
    */
-  int PublisherPeriodic::open(void *args)
+  PublisherBase::ReturnCode PublisherPeriodic::pushAll()
   {
-    m_running = true;
-    this->activate();
-    return 0;
+    try
+      {
+        while (m_buffer->readable() > 0)
+          {
+            const cdrMemoryStream& cdr(m_buffer->get());
+            ReturnCode ret(m_consumer->put(cdr));
+            
+            if (ret == SEND_FULL)
+              {
+                return SEND_FULL;
+              }
+            
+            m_buffer->advanceRptr();
+          }
+      }
+    catch (...)
+      {
+        return CONNECTION_LOST;
+      }
+    return PORT_ERROR;
   }
-  
-  
+
   /*!
-   * @if jp
-   * @brief タスク終了関数
-   * @else
-   * @brief Task terminate function
-   * @endif
+   * @brief push "fifo" policy
    */
-  void PublisherPeriodic::release()
+  PublisherBase::ReturnCode PublisherPeriodic::pushFifo()
   {
-    m_running = false;
+    try
+      {
+        const cdrMemoryStream& cdr(m_buffer->get());
+        ReturnCode ret(m_consumer->put(cdr));
+        
+        if (ret == SEND_FULL)
+          {
+            return SEND_FULL;
+          }
+        
+        m_buffer->advanceRptr();
+        
+        return ret;
+      }
+    catch (...)
+      {
+        return CONNECTION_LOST;
+      }
+    return PORT_ERROR;
+  }
+
+  /*!
+   * @brief push "skip" policy
+   */
+  PublisherBase::ReturnCode PublisherPeriodic::pushSkip()
+  {
+    try
+      {
+        const cdrMemoryStream& cdr(m_buffer->get());
+        ReturnCode ret(m_consumer->put(cdr));
+   
+        m_buffer->advanceRptr(m_skipn);
+        
+        return ret;
+      }
+    catch (...)
+      {
+        return CONNECTION_LOST;
+      }
+    return PORT_ERROR;
+  }
+
+   /*!
+    * @brief push "new" policy
+    */
+  PublisherBase::ReturnCode PublisherPeriodic::pushNew()
+  {
+    try
+      {
+        m_buffer->advanceRptr(m_buffer->readable() - 1);
+        
+        const cdrMemoryStream& cdr(m_buffer->get());
+        ReturnCode ret(m_consumer->put(cdr));
+
+        if (ret == SEND_FULL)
+          {
+            return SEND_FULL;
+          }
+        
+        m_buffer->advanceRptr();
+        return ret;
+      }
+    catch (...)
+      {
+        return CONNECTION_LOST;
+      }
+    return PORT_ERROR;
+  }
+
+  PublisherBase::ReturnCode
+  PublisherPeriodic::convertReturn(BufferStatus::Enum status)
+  {
+    switch (status)
+      {
+      case BufferStatus::BUFFER_OK:
+        return PORT_OK;
+        break;
+      case BufferStatus::BUFFER_EMPTY:
+        return BUFFER_EMPTY;
+        break;
+      case BufferStatus::TIMEOUT:
+        return BUFFER_TIMEOUT;
+        break;
+      case BufferStatus::PRECONDITION_NOT_MET:
+        return PRECONDITION_NOT_MET;
+        break;
+      default:
+        return PORT_ERROR;
+      }
   }
 
 }; // namespace RTC
+
+extern "C"
+{
+  void PublisherPeriodicInit()
+  {
+    ::RTC::PublisherFactory::
+      instance().addFactory("periodic",
+                            ::coil::Creator< ::RTC::PublisherBase,
+                                             ::RTC::PublisherPeriodic>,
+                            ::coil::Destructor< ::RTC::PublisherBase,
+                                                ::RTC::PublisherPeriodic>);
+  }
+};

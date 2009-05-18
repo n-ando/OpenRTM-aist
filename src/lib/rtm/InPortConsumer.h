@@ -20,8 +20,20 @@
 #ifndef InPortConsumer_h
 #define InPortConsumer_h
 
-#include <rtm/NVUtil.h>
-#include <rtm/CorbaConsumer.h>
+#include <coil/Factory.h>
+#include <rtm/DataPortStatus.h>
+
+namespace coil
+{
+  class Properties;
+};
+
+namespace SDOPackage
+{
+  class NVList;
+};
+
+class cdrMemoryStream;
 
 namespace RTC
 {
@@ -59,8 +71,10 @@ namespace RTC
    *
    */
   class InPortConsumer
+    : public DataPortStatus
   {
   public:
+    DATAPORTSTATUS_ENUM
     /*!
      * @if jp
      * @brief コンストラクタ
@@ -90,7 +104,23 @@ namespace RTC
      * @endif
      */
     virtual ~InPortConsumer(void){};
-    
+
+    /*!
+     * @if jp
+     * @brief 設定初期化
+     *
+     * InPortConsumerの各種設定を行う
+     *
+     * @else
+     * @brief Initializing configuration
+     *
+     * This operation would be called to configure this consumer
+     * in initialization.
+     *
+     * @endif
+     */
+    virtual void init(coil::Properties& prop) = 0;
+
     /*!
      * @if jp
      * @brief 接続先へのデータ送信
@@ -104,27 +134,33 @@ namespace RTC
      *
      * @endif
      */
-    virtual void push() = 0;
-    
+    virtual ReturnCode put(const cdrMemoryStream& data) = 0;
+
     /*!
      * @if jp
-     * @brief 当該ポートのコピー
+     * @brief InterfaceProfile情報を公開する
      *
-     * 当該ポートのコピーを生成するための純粋仮想関数。
+     * InterfaceProfile情報を公開する。
+     * 引数で指定するプロパティ情報内の NameValue オブジェクトの
+     * dataport.interface_type 値を調べ、当該ポートに設定されている
+     * インターフェースタイプと一致する場合のみ情報を取得する。
      *
-     * @return 複製された InPortConsumer オブジェクト
+     * @param properties InterfaceProfile情報を受け取るプロパティ
      *
      * @else
-     * @brief Clone this port
+     * @brief Publish InterfaceProfile information
      *
-     * Pure virtual function to generate this clone port.
+     * Publish interfaceProfile information.
+     * Check the dataport.interface_type value of the NameValue object 
+     * specified by an argument in property information and get information
+     * only when the interface type of the specified port is matched.
      *
-     * @return The clone InPortConsumer object
+     * @param properties Properties to get InterfaceProfile information
      *
      * @endif
      */
-    virtual InPortConsumer* clone() const = 0;
-    
+    virtual void publishInterfaceProfile(SDOPackage::NVList& properties) = 0;
+
     /*!
      * @if jp
      * @brief データ送出通知受け取りへの登録
@@ -169,10 +205,46 @@ namespace RTC
      */
     virtual void unsubscribeInterface(const SDOPackage::NVList& properties) = 0;
     
-  protected:
-    
-  private:
-    
+    /*!
+     * @if jp
+     * @brief インターフェースプロファイルを公開するたのファンクタ
+     * @else
+     * @brief Functor to publish interface profile
+     * @endif
+     */
+    struct publishInterfaceProfileFunc
+    {
+      publishInterfaceProfileFunc(SDOPackage::NVList& prop) : m_prop(prop) {}
+      void operator()(InPortConsumer* consumer)
+      {
+        consumer->publishInterfaceProfile(m_prop);
+      }
+      SDOPackage::NVList& m_prop;
+    };
+
+    /*!
+     * @if jp
+     * @brief インターフェースプロファイルを公開するたのファンクタ
+     * @else
+     * @brief Functor to publish interface profile
+     * @endif
+     */
+    struct subscribeInterfaceFunc
+    {
+      subscribeInterfaceFunc(SDOPackage::NVList& prop) : m_prop(prop) {}
+      bool operator()(InPortConsumer* consumer)
+      {
+        return consumer->subscribeInterface(m_prop);
+      }
+      SDOPackage::NVList& m_prop;
+    };
+
+  
   };
+
+  typedef ::coil::GlobalFactory<InPortConsumer> InPortConsumerFactory;
 };     // namespace RTC
+
+template class ::coil::GlobalFactory<RTC::InPortConsumer>;
+
 #endif // InPortConsumer_h

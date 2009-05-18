@@ -65,7 +65,7 @@ namespace RTC
   PortProfile* PortBase::get_port_profile()
     throw (CORBA::SystemException)
   {
-    RTC_TRACE(("get_port_profile()"));
+    //    RTC_TRACE(("get_port_profile()"));
     Guard gaurd(m_profile_mutex);
     PortProfile_var prof;
     prof = new PortProfile(m_profile);
@@ -150,7 +150,13 @@ namespace RTC
       {
 	RTC::PortService_ptr p;
 	p = connector_profile.ports[(CORBA::ULong)0];
-	return p->notify_connect(connector_profile);
+	ReturnCode_t ret = p->notify_connect(connector_profile);
+        if (ret != RTC::RTC_OK)
+          {
+            RTC_ERROR(("Connection failed. cleanup."));
+            disconnect(connector_profile.connector_id);
+          }
+        return ret;
       }
     catch (...)
       {
@@ -169,34 +175,31 @@ namespace RTC
   ReturnCode_t PortBase::notify_connect(ConnectorProfile& connector_profile)
     throw (CORBA::SystemException)
   {
+
     RTC_TRACE(("notify_connect()"));
+
     // publish owned interface information to the ConnectorProfile
-    ReturnCode_t retval;
+    ReturnCode_t retval(RTC::RTC_OK);
     retval = publishInterfaces(connector_profile);
     if (retval != RTC::RTC_OK) return retval;
-    
+
     // call notify_connect() of the next Port
     retval = connectNext(connector_profile);
     if (retval != RTC::RTC_OK) return retval;
-    
+
     // subscribe interface from the ConnectorProfile's information
     retval = subscribeInterfaces(connector_profile);
-    if (retval != RTC::RTC_OK)
-      {
-	// cleanup this connection for downstream ports
-	notify_disconnect(connector_profile.connector_id);
-	return retval;
-      }
-    
-    // update ConnectorProfile
+
     RTC_PARANOID(("%d connectors are existing",
                   m_profile.connector_profiles.length()));
+
     CORBA::Long index;
     index = findConnProfileIndex(connector_profile.connector_id);
+
     if (index < 0)
       {
         CORBA_SeqUtil::push_back(m_profile.connector_profiles,
-				 connector_profile);
+                                 connector_profile);
         RTC_PARANOID(("New connector_id. Push backed."));
       }
     else

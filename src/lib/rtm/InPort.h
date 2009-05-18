@@ -23,16 +23,17 @@
 #include <string>
 #include <vector>
 #include <iostream>
-#include <rtm/BufferBase.h>
-#include <rtm/RingBuffer.h>
-#include <rtm/PortCallBack.h>
-#include <rtm/RTC.h>
+
 #include <coil/TimeValue.h>
 #include <coil/Time.h>
 #include <coil/OS.h>
 
-#define TIMEOUT_TICK_USEC 10
-#define USEC_PER_SEC 1000000
+#include <rtm/RTC.h>
+#include <rtm/Typename.h>
+#include <rtm/InPortBase.h>
+#include <rtm/CdrBufferBase.h>
+#include <rtm/PortCallBack.h>
+#include <rtm/InPortConnector.h>
 
 namespace RTC
 {
@@ -74,12 +75,12 @@ namespace RTC
    *
    * @endif
    */
-  template <class DataType,
-	    template <class DataType> class Buffer = RingBuffer >
+  template <class DataType>
   class InPort
-    : public Buffer<DataType>
+    : public InPortBase
   {
   public:
+    DATAPORTSTATUS_ENUM
     /*!
      * @if jp
      *
@@ -135,15 +136,15 @@ namespace RTC
 	   int bufsize=64, 
 	   bool read_block = false, bool write_block = false,
 	   int read_timeout = 0, int write_timeout = 0)
-      : Buffer<DataType>(bufsize),
-	m_name(name), m_value(value),
+      :	InPortBase(name, toTypename<DataType>()),
+        m_name(name), m_value(value),
 	m_readBlock(read_block),   m_readTimeout(read_timeout),
 	m_writeBlock(write_block), m_writeTimeout(write_timeout),
 	m_OnWrite(NULL), m_OnWriteConvert(NULL),
 	m_OnRead(NULL),  m_OnReadConvert(NULL),
 	m_OnOverflow(NULL), m_OnUnderflow(NULL)
     {
-    };
+    }
     
     /*!
      * @if jp
@@ -161,7 +162,7 @@ namespace RTC
      * @endif
      */
     virtual ~InPort(void){};
-    
+
     /*!
      * @if jp
      *
@@ -186,110 +187,81 @@ namespace RTC
       return m_name.c_str();
     }
     
-    /*!
-     * @if jp
-     *
-     * @brief DataPort に値を書き込む
-     *
-     * DataPort に値を書き込む。
-     *
-     * - コールバックファンクタ OnWrite がセットされている場合、
-     *   InPort が保持するバッファに書き込む前に OnWrite が呼ばれる。
-     * - InPort が保持するバッファがオーバーフローを検出できるバッファであり、
-     *   かつ、書き込む際にバッファがオーバーフローを検出した場合、
-     *   コールバックファンクタ OnOverflow が呼ばれる。
-     * - コールバックファンクタ OnWriteConvert がセットされている場合、
-     *   バッファ書き込み時に、OnWriteConvert の operator() の戻り値が
-     *   バッファに書き込まれる。
-     * - setWriteTimeout() により書き込み時のタイムアウトが設定されている場合、
-     *   タイムアウト時間だけバッファフル状態が解除するのを待ち、
-     *   OnOverflowがセットされていればこれを呼び出して戻る。
-     *
-     * @param value 書込対象データ
-     *
-     * @return 書込処理結果(書込成功:true、書込失敗:false)
-     *
-     * @else
-     *
-     * @brief  Write the value to DataPort
-     *
-     * Write the value to DataPort
-     *
-     * - When callback functor OnWrite is already set, OnWrite will be
-     *   invoked before writing into the buffer held by InPort.
-     * - When the buffer held by InPort can detect the overflow,
-     *   and when it detected the overflow at writing, callback functor
-     *   OnOverflow will be invoked.
-     * - When callback functor OnWriteConvert is set, the return value of
-     *   operator() of OnWriteConvert will be written into the buffer 
-     *   at the writing.
-     * - When timeout of writing time is already set by setWriteTimeout(),
-     *   it will wait for only timeout time until the state of the buffer full
-     *   is reset, if OnOverflow is already set this will be invoked to 
-     *   return.
-     *
-     * @param value The target data for the writing
-     *
-     * @return Writing result (Successful:true, Failed:false)
-     *
-     * @endif
-     */
-    bool write(const DataType& value)
+    virtual bool isNew()
     {
-      if (m_OnWrite != NULL) (*m_OnWrite)(value);      
-      
-      double timeout = (double)m_writeTimeout / (double)TIMEVALUE_ONE_SECOND_IN_USECS;
-      
-      coil::TimeValue tm_cur, tm_pre;
-      tm_pre = coil::gettimeofday();
-      // blocking and timeout wait
-      while (m_writeBlock && this->isFull())
-	{
-	  if (m_writeTimeout < 0) 
-	    {
-              coil::usleep(TIMEOUT_TICK_USEC);
-	      continue;
-	    }
-	  
-	  // timeout wait
-	  tm_cur = coil::gettimeofday();
-	  timeout -= (double)(tm_cur - tm_pre);
-	  if (timeout < 0) break;
-	  
-	  tm_pre = tm_cur;
-          coil::usleep(TIMEOUT_TICK_USEC);
-	}
-      
-      if (this->isFull())
-	{
-          //Is the buffer overflow callback object set?
-          if(m_OnOverflow != NULL)
-            {
-              //Call the callback object. 
-              (*m_OnOverflow)(value);
-            }
-          //Return the failure(false). 
+      if (m_connectors.size() == 0)
+        {
+          std::cout << "no connectors" << std::endl;
           return false;
-	}
-      
-      if (m_OnWriteConvert == NULL) 
-	{
-	  this->put(value);
-	}
+        }
+      int r(m_connectors[0]->getBuffer()->readable());
+      //      std::cout << "readable: " << m_connectors[0]->getBuffer()->readable() << std::endl;
+      //      std::cout << "writable: " << m_connectors[0]->getBuffer()->writable() << std::endl;
+      //      sleep(1);
+      if (r > 0)
+        {
+          std::cout << "readable: " << r << std::endl;
+          return true;
+        }
       else
-	{
-	  this->put((*m_OnWriteConvert)(value));
-	}
-      return true;
+        {
+          return false;
+        }
+
+      return m_connectors[0]->getBuffer()->readable() > 0;
     }
-    
+
+    virtual bool isEmpty()
+    {
+      if (m_connectors.size() == 0)
+        {
+          return true;
+        }
+      return m_connectors[0]->getBuffer()->empty();
+    }
+
     /*!
      * @if jp
      *
      * @brief DataPort から値を読み出す
      *
-     * DataPort から値を読み出す
+     * InPortに書き込まれたデータを読みだす。接続数が0、またはバッファに
+     * データが書き込まれていない状態で読みだした場合の戻り値は不定である。
+     * バッファが空の状態のとき、
+     * 事前に設定されたモード (readback, do_nothing, block) に応じて、
+     * 以下のような動作をする。
      *
+     * - readback: 最後の値を読みなおす。データは常に
+     *
+
+     * 事前にタイムアウトが設定されて
+     * この関数を利用する際には、isNew(), isEmpty() と併用し、事前に
+     * バッファ空状態をチェックした上で利用することが望ましい。
+     * バッファが空の状態では、InPortにバインドされた変数の値が返されるため、
+     * 前回正常読み出し時の値が返される。
+     * 
+     * 
+     *
+     * 各コールバック関数は以下のように呼び出される。
+     * - OnRead: read() 関数が呼ばれる際に必ず呼ばれる。
+     * 
+     * - OnReadConvert: データの読み出しが成功した場合、読みだしたデータを
+     *       引数としてOnReadConvertが呼び出され、戻り値をread()が戻り値
+     *       として返す。
+     *
+     * - OnEmpty: バッファが空のためデータの読み出しに失敗した場合呼び出される。
+     *        OnEmpty の戻り値を read() の戻り値として返す。
+     *
+     * - OnBufferTimeout: データフロー型がPush型の場合に、読み出し
+     *        タイムアウトのためにデータの読み出しに失敗した場合に呼ばれる。
+     *
+     * - OnRecvTimeout: データフロー型がPull型の場合に、読み出しタイムアウト
+     *        のためにデータ読み出しに失敗した場合に呼ばれる。
+     *
+     * - OnReadError: 上記以外の理由で読みだしに失敗した場合に呼ばれる。
+     *        理由としては、バッファ設定の不整合、例外の発生などが考えられる
+     *        が通常は起こりえないためバグの可能性がある。
+
      * - コールバックファンクタ OnRead がセットされている場合、
      *   DataPort が保持するバッファから読み出す前に OnRead が呼ばれる。
      * - DataPort が保持するバッファがアンダーフローを検出できるバッファで、
@@ -328,54 +300,46 @@ namespace RTC
      */
     DataType read()
     {
-      if (m_OnRead != NULL) (*m_OnRead)();
-      
-      double timeout = (double)m_readTimeout / (double)TIMEVALUE_ONE_SECOND_IN_USECS;
-      
-      coil::TimeValue tm_cur, tm_pre;
-      tm_pre = coil::gettimeofday();
-      
-      // blocking and timeout wait
-      while (m_readBlock && this->isEmpty())
-	{
-	  if (m_readTimeout < 0)
-	    {
-              coil::usleep(TIMEOUT_TICK_USEC);
-	      continue;
-	    }
-	  
-	  // timeout wait
-	  tm_cur = coil::gettimeofday();
-	  timeout -= (double)(tm_cur - tm_pre);
-	  if (timeout < 0) break;
-	  
-	  tm_pre = tm_cur;
-          coil::usleep(TIMEOUT_TICK_USEC);
-	}
-      
-      if (this->isEmpty())
-	{
-          //Is the buffer underflow callback object set?
-          if (m_OnUnderflow != NULL)
+      std::cout << "read()" << std::endl;
+      if (m_OnRead != NULL) 
+        {
+          (*m_OnRead)();
+        }
+
+      if (m_connectors.size() == 0)
+        {
+          return m_value;
+        }
+
+      cdrMemoryStream cdr;
+
+      ReturnCode ret(m_connectors[0]->read(cdr));
+      if (ret == PORT_OK)
+        {
+          m_value <<= cdr;
+          if (m_OnReadConvert == 0) 
             {
-              //Call the callback object. 
-              m_value = (*m_OnUnderflow)();
+              return m_value;
             }
-          //Return the failure(false). 
-	  return m_value;
-	}
-      
-      if (m_OnReadConvert == NULL) 
-	{
-	  m_value = this->get();
-	  return m_value;
-	}
-      else
-	{
-	  m_value = (*m_OnReadConvert)(this->get());
-	  return m_value;
-	}
-      // never comes here
+          m_value = (*m_OnReadConvert)(m_value);
+          return m_value;
+        }
+      else if (ret == BUFFER_EMPTY)
+        {
+//          if (m_OnEmpty != 0)
+//            {
+//              return (*m_OnEmpty)();
+//            }
+          return m_value;
+        }
+      else if (ret == BUFFER_TIMEOUT)
+        {
+//          if (m_OnBufferTimeOut != 0)
+//            {
+//              return (*m_OnBufferTimeout)();
+//            }
+          
+        }
       return m_value;
     }
     
@@ -730,6 +694,7 @@ namespace RTC
     }
     
   private:
+    std::string m_typename;
     /*!
      * @if jp
      * @brief ポート名
@@ -816,6 +781,8 @@ namespace RTC
      * @endif
      */
     OnUnderflow<DataType>* m_OnUnderflow;
+
+    
   };
 }; // End of namesepace RTM
 

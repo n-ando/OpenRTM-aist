@@ -32,20 +32,22 @@ lib_LTLIBRARIES = libRTC.la
 #	PortProfileHelper.cpp
 #	ObjectManager.cpp
 
-UTIL_SRC =             \
-	NVUtil.cpp     \
-	RTCUtil.cpp
+UTIL_SRC =               \
+	NVUtil.cpp       \
+	RTCUtil.cpp      \
+	DefaultPeriodicTask.cpp
 
-MGR_SRC =                      \
-	CorbaNaming.cpp        \
-	Factory.cpp            \
-	ECFactory.cpp          \
-	Manager.cpp            \
-	ManagerConfig.cpp      \
-	ModuleManager.cpp      \
-	NamingManager.cpp      \
-	NumberingPolicy.cpp    \
-	ManagerServant.cpp     \
+MGR_SRC =                            \
+	FactoryInit.cpp              \
+	CorbaNaming.cpp              \
+	Factory.cpp                  \
+	ECFactory.cpp                \
+	Manager.cpp                  \
+	ManagerConfig.cpp            \
+	ModuleManager.cpp            \
+	NamingManager.cpp            \
+	NumberingPolicy.cpp          \
+	ManagerServant.cpp           \
 	SystemLogger.cpp
 
 COMP_SRC =                           \
@@ -60,18 +62,27 @@ COMP_SRC =                           \
 	SdoOrganization.cpp          \
 	PeriodicECSharedComposite.cpp
 
-PORT_SRC =                    \
-	CorbaPort.cpp         \
-	DataInPort.cpp        \
-	DataOutPort.cpp       \
-	InPortProvider.cpp    \
-	OutPortBase.cpp       \
-	OutPortProvider.cpp   \
-	PortBase.cpp          \
-	PublisherFactory.cpp  \
-	PublisherFlush.cpp    \
-	PublisherNew.cpp      \
-	PublisherPeriodic.cpp
+PORT_SRC =                           \
+	InPortConnector.cpp          \
+	OutPortConnector.cpp         \
+	OutPortPullConnector.cpp     \
+	OutPortPushConnector.cpp     \
+	InPortPullConnector.cpp      \
+	InPortPushConnector.cpp      \
+	CorbaPort.cpp                \
+	InPortBase.cpp               \
+	InPortProvider.cpp           \
+	OutPortBase.cpp              \
+	OutPortProvider.cpp          \
+	PortBase.cpp                 \
+	PublisherFlush.cpp           \
+	PublisherNew.cpp             \
+	PublisherPeriodic.cpp        \
+	CdrRingBuffer.cpp            \
+	InPortCorbaCdrProvider.cpp   \
+	OutPortCorbaCdrConsumer.cpp  \
+	OutPortCorbaCdrProvider.cpp  \
+	InPortCorbaCdrConsumer.cpp
 
 
 RTC_SRC = \
