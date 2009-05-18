@@ -20,8 +20,6 @@
 #include <assert.h>
 #include <coil/UUID.h>
 #include <rtm/PortBase.h>
-#include <memory>
-#include <iostream>
 
 namespace RTC
 {
