@@ -89,7 +89,7 @@ class ConsoleOut
   // DataInPort declaration
   // <rtc-template block="inport_declare">
   TimedLong m_in;
-  InPort<TimedLong, RTC::RingBuffer> m_inIn;
+  InPort<TimedLong> m_inIn;
   
   // </rtc-template>
 
