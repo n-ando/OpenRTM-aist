@@ -49,8 +49,8 @@ nodist_RingBufferTests_SOURCES =     \
 	../TestRunner.cpp            \
 	RingBufferTests.cpp
 
-RingBufferTests_LDFLAGS = -L$(libdir) $(AM_LDFLAGS)
-RingBufferTests_LDADD   = -lcppunit
+RingBufferTests_LDFLAGS = -L../../ -L$(libdir) $(AM_LDFLAGS)
+RingBufferTests_LDADD   = -lcppunit -lRTC
 
 EXTRA_DIST =            \
 	RingBufferTests.cpp
@@ -60,8 +60,10 @@ all: do-test
 
 # do tests
 do-test:
-	./RingBufferTests --xml ringbuffertests.xml \
-	--xsl default.xsl
+	./RingBufferTests
+
+#	./RingBufferTests --xml ringbuffertests.xml \
+#	--xsl default.xsl
 
 # clean-up
 clean-local:
