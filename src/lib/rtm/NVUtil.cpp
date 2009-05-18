@@ -324,7 +324,7 @@ namespace NVUtil
 	values = coil::split(tmp_str, ",");
 	if (values.end() == std::find(values.begin(), values.end(), value))
 	  {
-	    tmp_str.append(", ");
+	    tmp_str.append(",");
 	    tmp_str.append(value);
 	    nv[index].value <<= tmp_str.c_str();
 	  }
