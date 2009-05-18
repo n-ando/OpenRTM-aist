@@ -71,7 +71,14 @@ BOOL WINAPI DllMain (HINSTANCE hinstDll, DWORD fdwReason, LPVOID lpvReserved);
 #endif /* Windows */
 
 
+//#if defined(COMPAT_OPENRTM_0_4)
+#include <coil/Properties.h>
 
+namespace RTC
+{
+  typedef coil::Properties Properties;
+};
 
+//#endif // COMPAT_OPENRTM_0_4
 
 #endif // RTC_h
