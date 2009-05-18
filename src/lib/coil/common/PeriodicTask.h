@@ -25,42 +25,39 @@
 #include <vector>
 #include <algorithm>
 
-
-#include <coil/Factory.h>
-#include <coil/Task.h>
 #include <coil/Mutex.h>
 #include <coil/Guard.h>
 #include <coil/Condition.h>
 #include <coil/TimeValue.h>
 #include <coil/TimeMeasure.h>
-
+#include <coil/PeriodicTaskBase.h>
 
 namespace coil
 {
-  class TaskFuncBase
-  {
-  public:
-    virtual ~TaskFuncBase() {}
-    virtual int operator()() = 0;
-  };
-
-  template <typename T, typename F = int (*)()>
-  class TaskFunc
-    : public TaskFuncBase
-  {
-  public:
-    TaskFunc(T* obj, F func)
-      : m_obj(obj), m_func(func)
-    {
-    }
-    virtual ~TaskFunc() {}
-    virtual int operator()()
-    {
-      return (m_obj->*m_func)();
-    }
-    T* m_obj;
-    F m_func;
-  };
+//  class TaskFuncBase
+//  {
+//  public:
+//    virtual ~TaskFuncBase() {}
+//    virtual int operator()() = 0;
+//  };
+//
+//  template <typename T, typename F = int (*)()>
+//  class TaskFunc
+//    : public TaskFuncBase
+//  {
+//  public:
+//    TaskFunc(T* obj, F func)
+//      : m_obj(obj), m_func(func)
+//    {
+//    }
+//    virtual ~TaskFunc() {}
+//    virtual int operator()()
+//    {
+//      return (m_obj->*m_func)();
+//    }
+//    T* m_obj;
+//    F m_func;
+//  };
 
   /*!
    * @if jp
@@ -85,7 +82,7 @@ namespace coil
    * @endif
    */
   class PeriodicTask
-    : coil::Task
+    : public coil::PeriodicTaskBase
   {
   public:
     typedef coil::Guard<coil::Mutex> Guard;
@@ -353,7 +350,6 @@ namespace coil
 
   };
 
-  typedef coil::GlobalFactory<PeriodicTask> PeriodicTaskFactory;
 }; // namespace coil
 
 #endif // COIL_PERIODICTASK_H
