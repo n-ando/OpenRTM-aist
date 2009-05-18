@@ -111,31 +111,38 @@ rtmheaderdir = $(prefix)/include/rtm
 
 rtmheader_HEADERS = \
 	$(libRTC_la_SOURCES:.cpp=.h) \
-	BufferBase.h                 \
-	CORBA_SeqUtil.h              \
-	CorbaConsumer.h              \
-	DefaultConfiguration.h       \
-	ExecutionContextBase.h       \
-	InPort.h                     \
-	InPortConsumer.h             \
-	InPortCorbaConsumer.h        \
-	InPortCorbaProvider.h        \
-	InPortTcpSockConsumer.h      \
-	InPortTcpSockProvider.h      \
-	TcpSockServer.h              \
-	ObjectManager.h              \
-	OutPort.h                    \
-	OutPortConsumer.h            \
-	OutPortCorbaConsumer.h       \
-	OutPortCorbaProvider.h       \
-	OutPortTcpSockProvider.h     \
-	PortCallBack.h               \
-	PublisherBase.h              \
-	RTC.h                        \
-	RingBuffer.h                 \
-	StateMachine.h               \
-	SystemLogger.h               \
-	config_rtc.h
+	BufferBase.h 		\
+	BufferStatus.h 		\
+	CORBA_SeqUtil.h 	\
+	CdrBufferBase.h 	\
+	ConnectorBase.h 	\
+	CorbaConsumer.h 	\
+	DataInPort.h 		\
+	DataOutPort.h 		\
+	DataPortStatus.h 	\
+	DefaultConfiguration.h 	\
+	ExecutionContextBase.h 	\
+	InPort.h 		\
+	InPortConsumer.h 	\
+	InPortCorbaConsumer.h 	\
+	InPortCorbaProvider.h 	\
+	InPortTcpSockConsumer.h \
+	InPortTcpSockProvider.h \
+	ObjectManager.h 	\
+	OutPort.h 		\
+	OutPortConsumer.h 	\
+	OutPortCorbaConsumer.h 	\
+	OutPortTcpSockProvider.h\
+	PeriodicTaskFactory.h 	\
+	PortCallBack.h 		\
+	PublisherBase.h 	\
+	RTC.h 			\
+	RingBuffer.h 		\
+	StateMachine.h 		\
+	SyncFIFO.h 		\
+	SyncLIFO.h 		\
+	TcpSockServer.h 	\
+	Typename.h
 
 
 #------------------------------------------------------------

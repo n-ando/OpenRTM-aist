@@ -75,9 +75,6 @@ namespace RTC
     CORBA::Object_ptr obj;
     obj = _default_POA()->id_to_reference(oid);
     
-    //Provider prov(instance_name, type_name, m_pPOA->id_to_reference(oid));
-    //m_providers.push_back(prov);
-    
     std::string key("port");
     key.append(".");key.append(type_name);
     key.append(".");key.append(instance_name);
@@ -86,7 +83,7 @@ namespace RTC
     CORBA::String_var ior = orb->object_to_string(obj);
     CORBA_SeqUtil::
       push_back(m_providers, NVUtil::newNV(key.c_str(), ior));
-    
+    m_servants.push_back(&provider);
     return true;
   };
   
@@ -113,6 +110,41 @@ namespace RTC
     m_consumers.push_back(cons);
     
     return true;
+  }
+
+  //============================================================
+  // Local operations
+  //============================================================
+  /*!
+   * @if jp
+   * @brief Port の全てのインターフェースを activates する
+   * @else
+   * @brief Activate all Port interfaces
+   * @endif
+   */
+  void CorbaPort::activateInterfaces()
+  {
+    for (int i(0), len(m_servants.size()); i < len; ++i)
+      {
+        _default_POA()->activate_object(m_servants[i]);
+      }
+  }
+  
+  /*!
+   * @if jp
+   * @brief 全ての Port のインターフェースを deactivates する
+   * @else
+   * @brief Deactivate all Port interfaces
+   * @endif
+   */
+  void CorbaPort::deactivateInterfaces()
+  {
+    for (int i(0), len(m_servants.size()); i < len; ++i)
+      {
+        PortableServer::ObjectId_var oid;
+        oid = _default_POA()->servant_to_id(m_servants[i]);
+        _default_POA()->deactivate_object(oid);
+      }
   }
   
   //============================================================
