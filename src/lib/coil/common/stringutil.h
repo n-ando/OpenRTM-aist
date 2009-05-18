@@ -190,7 +190,28 @@ namespace coil
    * @endif
    */
   std::string unescape(const std::string str);
-  
+
+  /*!
+   * @if jp
+   * @brief 文字列の空白文字を削除する
+   *
+   * 与えられた文字列の空白文字を削除する。
+   * 空白文字として扱うのは' '(スペース)と'\\t'(タブ)。
+   *
+   * @param str 空白文字削除処理文字列
+   *
+   * @else
+   * @brief Erase blank characters of string
+   *
+   * Erase blank characters that exist at the head of the given string.
+   * Space ' 'and tab '\\t' are supported as the blank character.
+   *
+   * @param str The target blank characters of string for the erase
+   *
+   * @endif
+   */
+  void eraseBlank(std::string& str);
+
   /*!
    * @if jp
    * @brief 文字列の先頭の空白文字を削除する
@@ -383,7 +404,7 @@ namespace coil
    *
    * @endif
    */
-  bool includes(std::string list, std::string value, bool ignore_case = true);
+  bool includes(const std::string& list, std::string value, bool ignore_case = true);
   
   /*!
    * @if jp
