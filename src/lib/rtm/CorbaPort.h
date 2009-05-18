@@ -442,7 +442,46 @@ namespace RTC
      */
     virtual void
     unsubscribeInterfaces(const ConnectorProfile& connector_profile);
-    
+
+    //============================================================
+    // Local operations
+    //============================================================
+    /*!
+     * @if jp
+     *
+     * @brief Port の全てのインターフェースを activates する
+     *
+     * Port に登録されている全てのインターフェースを activate する。
+     *
+     * @else
+     *
+     * @brief Activate all Port interfaces
+     *
+     * This operation activate all interfaces that is registered in the
+     * ports.
+     *
+     * @endif
+     */
+    virtual void activateInterfaces();
+
+    /*!
+     * @if jp
+     *
+     * @brief 全ての Port のインターフェースを deactivates する
+     *
+     * Port に登録されている全てのインターフェースを deactivate する。
+     *
+     * @else
+     *
+     * @brief Deactivate all Port interfaces
+     *
+     * This operation deactivate all interfaces that is registered in the
+     * ports.
+     *
+     * @endif
+     */
+    virtual void deactivateInterfaces();
+
   private:
     /*!
      * @if jp
@@ -452,6 +491,7 @@ namespace RTC
      * @endif
      */
     NVList m_providers;
+    std::vector<PortableServer::RefCountServantBase*> m_servants;
     
     /*!
      * @if jp
