@@ -45,6 +45,7 @@ COIL_COMMON_H   =       \
 	TimeValue.h     \
 	stringutil.h    \
 	Guard.h         \
+	PeriodicTaskBase.h  \
 	PeriodicTask.h  \
 	Properties.h    \
 	Timer.h         \
