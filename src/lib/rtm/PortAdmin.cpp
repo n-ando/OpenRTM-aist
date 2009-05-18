@@ -220,7 +220,41 @@ namespace RTC
     PortBase& p(*m_portServants.find(port_name));
     deletePort(p);
   }
-  
+
+  /*!
+   * @if jp
+   * @brief 全ての Port のインターフェースを activates する
+   * @else
+   * @brief Activate all Port interfaces
+   * @endif
+   */
+  void PortAdmin::activatePorts()
+  {
+    std::vector<PortBase*> ports;
+    ports = m_portServants.getObjects();
+    for (int i(0), len(ports.size()); i < len; ++i)
+      {
+        ports[i]->activateInterfaces();
+      }
+  }
+
+  /*!
+   * @if jp
+   * @brief 全ての Port のインターフェースを deactivates する
+   * @else
+   * @brief Deactivate all Port interfaces
+   * @endif
+   */
+  void PortAdmin::deactivatePorts()
+  {
+    std::vector<PortBase*> ports;
+    ports = m_portServants.getObjects();
+    for (int i(0), len(ports.size()); i < len; ++i)
+      {
+        ports[i]->deactivateInterfaces();
+      }
+  }
+
   /*!
    * @if jp
    * @brief 全ての Port をdeactivateし登録を削除する

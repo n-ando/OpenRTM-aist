@@ -5,7 +5,7 @@
  * @date  $Date: 2007-12-31 03:08:05 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
- * Copyright (C) 2006-2008
+ * Copyright (C) 2006-2009
  *     Noriaki Ando
  *     Task-intelligence Research Group,
  *     Intelligent Systems Research Institute,
@@ -24,6 +24,25 @@ namespace RTC
 {
   /*!
    * @if jp
+   * @brief デストラクタ
+   * @else
+   * @brief Destructor
+   * @endif
+   */
+  OutPortProvider::~OutPortProvider(void)
+  {
+  }
+
+  void OutPortProvider::init(coil::Properties& prop)
+  {
+  }
+
+  void OutPortProvider::setBuffer(BufferBase<cdrMemoryStream>* buffer)
+  {
+  }
+
+  /*!
+   * @if jp
    * @brief InterfaceProfile情報を公開する
    * @else
    * @brief Publish InterfaceProfile information
@@ -31,14 +50,9 @@ namespace RTC
    */
   void OutPortProvider::publishInterfaceProfile(SDOPackage::NVList& prop)
   {
-    NVUtil::appendStringValue(prop, "dataport.data_type",
-			      m_dataType.c_str());
     NVUtil::appendStringValue(prop, "dataport.interface_type",
 			      m_interfaceType.c_str());
-    NVUtil::appendStringValue(prop, "dataport.dataflow_type",
-			      m_dataflowType.c_str());
-    NVUtil::appendStringValue(prop, "dataport.subscription_type",
-			      m_subscriptionType.c_str());
+    NVUtil::append(prop, m_properties);
   }
   
   /*!
@@ -48,16 +62,17 @@ namespace RTC
    * @brief Publish interface information
    * @endif
    */
-  void OutPortProvider::publishInterface(SDOPackage::NVList& prop)
+  bool OutPortProvider::publishInterface(SDOPackage::NVList& prop)
   {
     if (!NVUtil::isStringValue(prop,
 			       "dataport.interface_type",
 			       m_interfaceType.c_str()))
       {
-	return;
+	return false;
       }
     
     NVUtil::append(prop, m_properties);
+    return true;
   }
   
   /*!

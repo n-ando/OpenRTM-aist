@@ -269,7 +269,47 @@ namespace RTC
      * @endif
      */
     void deletePortByName(const char* port_name);
-    
+
+    /*!
+     * @if jp
+     *
+     * @brief 全ての Port のインターフェースを activates する
+     *
+     * 登録されている全ての Port のインターフェースに対して、
+     * activate する。
+     * この関数は、ComponentAction の on_activate() 内で呼ばれる。
+     *
+     * @else
+     *
+     * @brief Activate all Port interfaces
+     *
+     * This operation activate all interfaces that is registered in the
+     * ports.
+     *
+     * @endif
+     */
+    void activatePorts();
+
+    /*!
+     * @if jp
+     *
+     * @brief 全ての Port のインターフェースを deactivates する
+     *
+     * 登録されている全ての Port のインターフェースに対して、
+     * deactivate する。
+     * この関数は、ComponentAction の on_deactivate() 内で呼ばれる。
+     *
+     * @else
+     *
+     * @brief Deactivate all Port interfaces
+     *
+     * This operation deactivate all interfaces that is registered in the
+     * ports.
+     *
+     * @endif
+     */
+    void deactivatePorts();
+
     /*!
      * @if jp
      *

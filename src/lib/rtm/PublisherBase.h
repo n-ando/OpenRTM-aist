@@ -20,8 +20,20 @@
 #ifndef PublisherBase_h
 #define PublisherBase_h
 
+#include <coil/Properties.h>
+#include <coil/Factory.h>
+#include <rtm/RTC.h>
+#include <rtm/CdrBufferBase.h>
+#include <rtm/DataPortStatus.h>
+
+namespace coil
+{
+  class Properties;
+}
 namespace RTC
 {
+  class InPortConsumer;
+
   /*!
    * @if jp
    *
@@ -47,26 +59,10 @@ namespace RTC
    * @endif
    */
   class PublisherBase
+    : public DataPortStatus
   {
   public:
-    /*!
-     * @if jp
-     *
-     * @brief 送出タイミングを通知する。
-     *
-     * 送出を待つオブジェクトに、送出タイミングを通知するための純粋仮想関数。
-     * 
-     * @else
-     *
-     * @brief Notify the data send timing
-     *
-     * Pure virtual function to notify the send timing to the object 
-     * that waits for the send.
-     * 
-     * @endif
-     */
-    virtual void update() = 0;
-    
+    DATAPORTSTATUS_ENUM
     /*!
      * @if jp
      *
@@ -79,7 +75,48 @@ namespace RTC
      * @endif
      */
     virtual ~PublisherBase(void){};
+
+    /*!
+     * @if jp
+     * @brief 設定初期化
+     *
+     * InPortConsumerの各種設定を行う。実装クラスでは、与えられた
+     * Propertiesから必要な情報を取得して各種設定を行う。この init() 関
+     * 数は、OutPortProvider生成直後および、接続時にそれぞれ呼ばれる可
+     * 能性がある。したがって、この関数は複数回呼ばれることを想定して記
+     * 述されるべきである。
+     * 
+     * @param prop 設定情報
+     *
+     * @else
+     *
+     * @brief Initializing configuration
+     *
+     * This operation would be called to configure in initialization.
+     * In the concrete class, configuration should be performed
+     * getting appropriate information from the given Properties data.
+     * This function might be called right after instantiation and
+     * connection sequence respectivly.  Therefore, this function
+     * should be implemented assuming multiple call.
+     *
+     * @param prop Configuration information
+     *
+     * @endif
+     */
+    virtual ReturnCode init(coil::Properties& prop) = 0;
+    virtual ReturnCode setConsumer(InPortConsumer* consumer) = 0;
+    virtual ReturnCode setBuffer(BufferBase<cdrMemoryStream>* buffer) = 0;
+    virtual ReturnCode write(const cdrMemoryStream& data,
+                             unsigned long sec,
+                             unsigned long usec) = 0;
+
+    virtual bool isActive() = 0;
+    virtual ReturnCode activate() = 0;
+    virtual ReturnCode deactivate() = 0;
+
+
     
+
     /*!
      * @if jp
      *
@@ -100,5 +137,8 @@ namespace RTC
      */
     virtual void release(){}
   };
+
+  typedef coil::GlobalFactory<PublisherBase> PublisherFactory;
+
 };
 #endif // PublisherBase_h

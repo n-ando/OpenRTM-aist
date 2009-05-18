@@ -20,9 +20,14 @@
 #ifndef InPortProvider_h
 #define InPortProvider_h
 
+#include <string>
+
+#include <coil/Factory.h>
+
+#include <rtm/BufferBase.h>
 #include <rtm/NVUtil.h>
 #include <rtm/SystemLogger.h>
-#include <string>
+#include <rtm/DataPortStatus.h>
 
 namespace RTC
 {
@@ -46,8 +51,10 @@ namespace RTC
    * @endif
    */
   class InPortProvider
+    : public DataPortStatus
   {
   public:
+    DATAPORTSTATUS_ENUM
     /*!
      * @if jp
      * @brief コンストラクタ
@@ -77,6 +84,39 @@ namespace RTC
      * @endif
      */
     virtual ~InPortProvider(void);
+
+    /*!
+     * @if jp
+     * @brief 設定初期化
+     *
+     * InPortConsumerの各種設定を行う
+     *
+     * @else
+     * @brief Initializing configuration
+     *
+     * This operation would be called to configure this consumer
+     * in initialization.
+     *
+     * @endif
+     */
+    virtual void init(coil::Properties& prop) = 0;
+
+    /*!
+     * @if jp
+     * @brief バッファを設定する
+     *
+     * バッファを設定する。InPortConsumerは外部から到着した
+     * データをこのバッファに対して書き込む
+     *
+     * @else
+     * @brief Initializing configuration
+     *
+     * This operation would be called to configure this consumer
+     * in initialization.
+     *
+     * @endif
+     */
+    virtual void setBuffer(BufferBase<cdrMemoryStream>* buffer) = 0;
     
     /*!
      * @if jp
@@ -114,28 +154,9 @@ namespace RTC
      *
      * @endif
      */
-    virtual void publishInterface(SDOPackage::NVList& properties);
+    virtual bool publishInterface(SDOPackage::NVList& properties);
     
   protected:
-    /*!
-     * @if jp
-     * @brief データタイプを設定する
-     *
-     * データタイプを設定する。
-     *
-     * @param data_type 設定対象データタイプ
-     *
-     * @else
-     * @brief Set the data type
-     *
-     * Set the data type.
-     *
-     * @param data_type The target data type for set
-     *
-     * @endif
-     */
-    void setDataType(const char* data_type);
-    
     /*!
      * @if jp
      * @brief インタフェースタイプを設定する
@@ -192,7 +213,9 @@ namespace RTC
      * @endif
      */
     void setSubscriptionType(const char* subs_type);
-    
+
+
+  protected:
     /*!
      * @if jp
      * @brief ポートプロファイルを保持するプロパティ
@@ -201,15 +224,58 @@ namespace RTC
      * @endif
      */
     SDOPackage::NVList m_properties;
-    
-  protected:
     mutable Logger rtclog;
 
   private:
-    std::string m_dataType;
     std::string m_interfaceType;
     std::string m_dataflowType;
     std::string m_subscriptionType;
+
+  public:
+    // functors
+    /*!
+     * @if jp
+     * @brief インターフェースプロファイルを公開するたのファンクタ
+     * @else
+     * @brief Functor to publish interface profile
+     * @endif
+     */
+    struct publishInterfaceProfileFunc
+    {
+      publishInterfaceProfileFunc(SDOPackage::NVList& prop) : m_prop(prop) {}
+      void operator()(InPortProvider* provider)
+      {
+	provider->publishInterfaceProfile(m_prop);
+      }
+      SDOPackage::NVList& m_prop;
+    };
+
+    /*!
+     * @if jp
+     * @brief インターフェースプロファイルを公開するたのファンクタ
+     * @else
+     * @brief Functor to publish interface profile
+     * @endif
+     */
+    struct publishInterfaceFunc
+    {
+      publishInterfaceFunc(SDOPackage::NVList& prop)
+        : m_prop(prop), provider_(0) {}
+      void operator()(InPortProvider* provider)
+      {
+	if (provider->publishInterface(m_prop))
+          {
+            provider_ = provider;
+          }
+      }
+      SDOPackage::NVList& m_prop;
+      InPortProvider* provider_;
+    };
+
+
   };
+
+  typedef ::coil::GlobalFactory<InPortProvider> InPortProviderFactory;
+
 };     // namespace RTC
 #endif // InPortProvider_h

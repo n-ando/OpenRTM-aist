@@ -20,15 +20,19 @@
 #ifndef OutPort_h
 #define OutPort_h
 
-#include <rtm/BufferBase.h>
-#include <rtm/RingBuffer.h>
-#include <rtm/OutPortBase.h>
-#include <rtm/PortCallBack.h>
-#include <rtm/RTC.h>
 #include <iostream>
+
 #include <coil/TimeValue.h>
 #include <coil/Time.h>
+#include <coil/TimeMeasure.h>
 #include <coil/OS.h>
+
+#include <rtm/RTC.h>
+#include <rtm/Typename.h>
+#include <rtm/OutPortBase.h>
+#include <rtm/CdrBufferBase.h>
+#include <rtm/PortCallBack.h>
+#include <rtm/OutPortConnector.h>
 
 namespace RTC
 {
@@ -56,11 +60,9 @@ namespace RTC
    *
    * @endif
    */
-  template <class DataType,
-	    template <class DataType> class Buffer = RingBuffer >
+  template <class DataType>
   class OutPort
-    : public OutPortBase,
-      public Buffer<DataType>
+    : public OutPortBase
   {
   public:
     /*!
@@ -86,9 +88,8 @@ namespace RTC
      *
      * @endif
      */
-    OutPort(const char* name, DataType& value, long int length = 8)
-      : OutPortBase(name), Buffer<DataType>(length),
-	m_value(value),
+    OutPort(const char* name, DataType& value)
+      : OutPortBase(name, toTypename<DataType>()), m_value(value),
 	m_timeoutTick(1000), // timeout tick: 1ms
 	m_readBlock(false), m_readTimeout(0),
 	m_writeBlock(false), m_writeTimeout(0),
@@ -164,50 +165,38 @@ namespace RTC
 	{
 	  (*m_OnWrite)(value);
 	}
-      
-//      long int timeout = m_writeTimeout;
-      double timeout = (double)m_writeTimeout / (double)TIMEVALUE_ONE_SECOND_IN_USECS;
-      
-      coil::TimeValue tm_cur, tm_pre;
-      tm_pre = coil::gettimeofday();
-      
-      // blocking and timeout wait
-      long int count(0);
-      while (m_writeBlock && this->isFull())
-	{
-	  if (m_writeTimeout < 0) 
-	    {
-              coil::usleep(m_timeoutTick);
-	      continue;
-	    }
-	  
-	  // timeout wait
-	  tm_cur = coil::gettimeofday();
-          timeout -= (double)(tm_cur - tm_pre);
-	  if (timeout < 0) break;
-	  
-	  tm_pre = tm_cur;
-          coil::usleep(m_timeoutTick);
-	  ++count;
-	}
-      
-      if (this->isFull())
-	{
-	  if (m_OnOverflow != NULL)
-	    (*m_OnOverflow)(value);
-	  return false;
-	}
-      
-      if (m_OnWriteConvert == NULL) 
-	{
-	  this->put(value);
-	}
+
+      // check number of connectors
+      size_t conn_size(m_connectors.size());
+      if (!(conn_size > 0)) { return true; }
+        
+      // data -> (conversion) -> CDR stream
+      m_cdr.rewindPtrs();
+      if (m_OnWriteConvert != NULL)
+        {
+          ((*m_OnWriteConvert)(value)) >>= m_cdr;
+        }
       else
-	{
-	  this->put((*m_OnWriteConvert)(value));
-	}
-      notify();
-      return true;
+        {
+          value >>= m_cdr;
+        }
+
+      //------------------------------
+      double min_, max_, mean_, stddev_;
+      m_cdrtime.getStatistics(min_, max_, mean_, stddev_);
+      std::cout << min_ << " ";
+      std::cout << max_ << " ";
+      std::cout << mean_ << " ";
+      std::cout << stddev_ << " " << std::endl;
+      std::cout << "size: " << m_cdr.bufSize() << std::endl;
+      //------------------------------
+
+      bool result(true);
+      for (int i(0), len(conn_size); i < len; ++i)
+        {
+          if (!m_connectors[i]->write(m_cdr)) { result = false; }
+        }
+      return result;
     }
     
     /*!
@@ -657,8 +646,44 @@ namespace RTC
     {
       std::cout << "onDisconnect(id = " << id << ")" << std::endl;
     }
-    
+
+
+
+    struct subscribe
+    {
+      subscribe(const ConnectorProfile& prof)
+	: m_prof(&prof), _consumer(NULL) 
+      {
+      }
+      
+      subscribe(const subscribe& subs)
+	: m_prof(subs.m_prof),
+	  _consumer(subs._consumer)
+      {
+      }
+      
+      subscribe& operator=(const subscribe& subs)
+      {
+	if (this == &subs) return *this;
+	m_prof = subs.m_prof;
+	_consumer = subs._consumer;
+	return *this;
+      }
+      
+      void operator()(InPortConsumer* cons)
+      {
+	if (cons->subscribeInterface(m_prof->properties))
+	  {
+	    _consumer = cons;
+	  }
+      }
+      const ConnectorProfile* m_prof;
+      InPortConsumer* _consumer;
+    };
+
+
   private:
+    std::string m_typename;
     /*!
      * @if jp
      * @brief バインドされる T 型の変数への参照
@@ -771,7 +796,13 @@ namespace RTC
     OnConnect* m_OnConnect;
     OnDisconnect* m_OnDisconnect;
 
+
+    std::vector<OutPortProvider*> m_providers;
+    std::vector<InPortConsumer*> m_consumers;
+    //    std::vector<ConnectorBase*> m_connectors;
+    coil::TimeMeasure m_cdrtime;
     static const long int usec_per_sec = 1000000;
+    cdrMemoryStream m_cdr;
   };
 }; // namespace RTC
 

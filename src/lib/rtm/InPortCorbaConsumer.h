@@ -265,12 +265,12 @@ namespace RTC
       RTC_TRACE(("subscribeInterface()"));
       RTC_DEBUG_STR((NVUtil::toString(properties)));
 
-      if (!NVUtil::isStringValue(properties,
-				 "dataport.dataflow_type",
-				 "Push"))
-	{
-	  return false;
-	}
+//      if (!NVUtil::isStringValue(properties,
+//				 "dataport.dataflow_type",
+//				 "Push"))
+//	{
+//	  return false;
+//	}
 
        // getting InPort's ref from IOR string
       if (subscribeFromIor(properties)) { return true; }

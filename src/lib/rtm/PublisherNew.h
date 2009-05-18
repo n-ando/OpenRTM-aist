@@ -20,17 +20,24 @@
 #ifndef PublisherNew_h
 #define PublisherNew_h
 
-#include <rtm/RTC.h>
-
 #include <coil/Task.h>
 #include <coil/Mutex.h>
 #include <coil/Condition.h>
+#include <coil/PeriodicTask.h>
+
+#include <rtm/RTC.h>
 #include <rtm/PublisherBase.h>
+#include <rtm/CdrBufferBase.h>
+#include <rtm/DataPortStatus.h>
+
+namespace coil
+{
+  class Properties;
+};
 
 namespace RTC
 {
   class InPortConsumer;
-  class Properties;
   /*!
    * @if jp
    * @class PublisherNew
@@ -55,13 +62,16 @@ namespace RTC
    *
    * @endif
    */
+
   class PublisherNew
-    : public PublisherBase,
-      public coil::Task
+    : public PublisherBase
   {
+  public:
     typedef coil::Mutex Mutex;
     typedef coil::Condition<Mutex> Condition;
-  public:
+    typedef coil::Guard<coil::Mutex> Guard;
+    DATAPORTSTATUS_ENUM
+    
     /*!
      * @if jp
      * @brief コンストラクタ
@@ -83,8 +93,7 @@ namespace RTC
      *                 control information.(Unused in this Publisher)
      * @endif
      */
-    PublisherNew(InPortConsumer* consumer,
-		 const coil::Properties& property);
+    PublisherNew();
     
     /*!
      * @if jp
@@ -100,25 +109,23 @@ namespace RTC
      * @endif
      */
     virtual ~PublisherNew(void);
-    
+
     /*!
      * @if jp
-     * @brief Observer関数
-     *
-     * 送出タイミング時に呼び出す。
-     * ブロックしている当該Publisherの駆動が開始され、コンシューマへの送出処理が
-     * 行われる。
-     *
+     * @brief 初期化
      * @else
-     * @brief Observer function
-     *
-     * Invoke at send timing.
-     * Start this Publisher's control that has been blocked and do the send
-     * processing to Consumer.
-     *
+     * @brief initialization
      * @endif
      */
-    virtual void update();
+    virtual ReturnCode init(coil::Properties& prop);
+    virtual ReturnCode setConsumer(InPortConsumer* consumer);
+    virtual ReturnCode setBuffer(CdrBufferBase* buffer);
+    virtual ReturnCode write(const cdrMemoryStream& data,
+                     unsigned long sec,
+                     unsigned long usec);
+    virtual bool isActive();
+    virtual ReturnCode activate();
+    virtual ReturnCode deactivate();
     
     /*!
      * @if jp
@@ -164,7 +171,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual int open(void *args);
+    //    virtual int open(void *args);
     
     /*!
      * @if jp
@@ -179,33 +186,56 @@ namespace RTC
      * @brief Task terminate function
      *
      * ACE_Task::release() override function.
-     * Set driven flag to false, and terminate this Publisher's operation.
+     * Set 2driven flag to false, and terminate this Publisher's operation.
      * However, if the driven thread is blocked, Consumer's send
      * processing may be invoked maximum once.
      *
      * @endif
      */
-    virtual void release();
+    //    virtual void release();
     
   protected:
+    enum Policy
+      {
+        ALL,
+        FIFO,
+        SKIP,
+        NEW
+      };
+
+    /*!
+     * @brief push "all" policy
+     */
+    ReturnCode pushAll();
+    /*!
+     * @brief push "fifo" policy
+     */
+    ReturnCode pushFifo();
+    /*!
+     * @brief push "skip" policy
+     */
+    ReturnCode pushSkip();
+    /*!
+     * @brief push "new" policy
+     */
+    ReturnCode pushNew();
     
   private:
     InPortConsumer* m_consumer;
-    bool m_running;
-    unsigned long m_usec;
-    
-    // NewData condition struct
-    struct NewData
-    {
-      NewData() : _cond(_mutex), _updated(false) {};
-      Mutex _mutex;
-      Condition _cond;
-      bool _updated;
-    };
-    
-    // A condition variable for data update notification 
-    NewData m_data;
+    CdrBufferBase* m_buffer;
+    coil::PeriodicTaskBase* m_task;
+    ReturnCode m_retcode;
+    Mutex m_retmutex;
+    Policy m_pushPolicy;
+    int m_skipn;
+    bool m_active;
   };
 };     // namespace RTC
+
+extern "C"
+{
+  void DLL_EXPORT PublisherNewInit();
+};
+
 #endif // PublisherNew_h
 
