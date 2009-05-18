@@ -129,7 +129,6 @@ class SeqOut
   // </rtc-template>
 
  private:
-  int dummy;
 
 };
 

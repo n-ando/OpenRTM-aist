@@ -47,11 +47,10 @@ char ticktack()
 
 
 ConfigSample::ConfigSample(RTC::Manager* manager)
-  : RTC::DataFlowComponentBase(manager),
+  : RTC::DataFlowComponentBase(manager)
     // <rtc-template block="initializer">
     
     // </rtc-template>
-	dummy(0)
 {
   // Registration: InPort/OutPort/Service
   // <rtc-template block="registration">

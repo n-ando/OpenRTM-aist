@@ -31,9 +31,8 @@ static const char* consolein_spec[] =
 ConsoleIn::ConsoleIn(RTC::Manager* manager)
   : RTC::DataFlowComponentBase(manager),
     // <rtc-template block="initializer">
-    m_outOut("out", m_out),
+    m_outOut("out", m_out)
     // </rtc-template>
-	dummy(0)
 {
   // Registration: InPort/OutPort/Service
   // <rtc-template block="registration">
@@ -78,7 +77,7 @@ extern "C"
  
   void ConsoleInInit(RTC::Manager* manager)
   {
-    coil::Properties profile(consolein_spec);
+    RTC::Properties profile(consolein_spec);
     manager->registerFactory(profile,
                              RTC::Create<ConsoleIn>,
                              RTC::Delete<ConsoleIn>);

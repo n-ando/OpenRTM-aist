@@ -115,7 +115,6 @@ class ConsoleOut
   // </rtc-template>
 
  private:
-  int dummy;
 
 };
 

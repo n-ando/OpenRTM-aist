@@ -30,9 +30,8 @@ static const char* myserviceprovider_spec[] =
 MyServiceProvider::MyServiceProvider(RTC::Manager* manager)
   : RTC::DataFlowComponentBase(manager),
     // <rtc-template block="initializer">
-    m_MyServicePort("MyService"),
+    m_MyServicePort("MyService")
     // </rtc-template>
-	dummy(0)
 {
   // Registration: InPort/OutPort/Service
   // <rtc-template block="registration">

@@ -116,7 +116,6 @@ class MyServiceProvider
   // </rtc-template>
 
  private:
-  int dummy;
 
 };
 
