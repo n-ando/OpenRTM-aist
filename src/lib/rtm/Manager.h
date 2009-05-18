@@ -47,7 +47,7 @@ namespace coil
 
 namespace RTC
 {
-  class Properties;
+//  class Properties;
   class CorbaNaming;
   class ModuleManager;
   class NamingManager;
@@ -1147,6 +1147,7 @@ namespace RTC
      */
     bool initExecContext();
     bool initComposite();
+    bool initFactories();
 
     /*!
      * @if jp
