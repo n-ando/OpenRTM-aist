@@ -265,10 +265,11 @@ namespace coil
    * @brief Erase the head/tail blank and replace upper case to lower case
    * @endif
    */
-  void normalize(std::string& str)
+  std::string normalize(std::string& str)
   {
     eraseBothEndsBlank(str);
     toLower(str);
+    return str;
   }
   
   /*!
@@ -383,16 +384,23 @@ namespace coil
       return default_value;
   }
 
-  bool includes(const std::string& list, std::string value, bool ignore_case)
+  bool includes(const vstring& list, std::string value, bool ignore_case)
   {
     if (ignore_case) { toLower(value); }
-    vstring v(split(list, ","));
-    for (int i(0), len(v.size()); i < len; ++i)
+
+    for (int i(0), len(list.size()); i < len; ++i)
       {
-        if (ignore_case) { toLower(v[i]); }
-        if (v[i] == value) return true;
+        std::string str(list[i]);
+        if (ignore_case) { toLower(str); }
+        if (str == value) return true;
       }
     return false;
+  }
+
+  bool includes(const std::string& list, std::string value, bool ignore_case)
+  {
+    vstring vlist(split(list, ","));
+    return includes(vlist, value, ignore_case);
   }
   
   /*!
