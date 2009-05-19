@@ -69,7 +69,8 @@ namespace RTC
    * @brief Store InPort consumer
    * @endif
    */
-  PublisherBase::ReturnCode PublisherFlush::setConsumer(InPortConsumer* consumer)
+  PublisherBase::ReturnCode
+  PublisherFlush::setConsumer(InPortConsumer* consumer)
   {
     if (consumer == 0) { return INVALID_ARGS; }
     if (m_consumer != 0) { delete m_consumer; }

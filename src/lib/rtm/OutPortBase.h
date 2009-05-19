@@ -744,36 +744,50 @@ namespace RTC
 
     /*!
      * @if jp
+     * @brief OutPort provider の生成
+     * @else
+     * @brief OutPort provider creation
+     * @endif
+     */
+    OutPortProvider* createProvider(ConnectorProfile& cprof,
+                                    coil::Properties& prop);
+    /*!
+     * @if jp
      * @brief InPort consumer の生成
      * @else
      * @brief InPort consumer creation
      * @endif
      */
-    InPortConsumer* createConsumer(std::string& iface_type);
-
+    InPortConsumer* createConsumer(const ConnectorProfile& cprof,
+                                   coil::Properties& prop);
+    
     /*!
      * @if jp
-     * @brief Publisher の生成
+     * @brief OutPortPushConnector の生成
      * @else
-     * @brief Publihser creation
+     * @brief OutPortPushConnector creation
      * @endif
      */
-    //    PublisherBase* createPublisher(std::string& pub_type);
-
+    OutPortConnector* createConnector(const ConnectorProfile& cprof,
+                                      coil::Properties& prop,
+                                      InPortConsumer* consumer);
     /*!
      * @if jp
-     * @brief Buffer の生成
+     * @brief OutPortPullConnector の生成
      * @else
-     * @brief Buffer creation
+     * @brief OutPortPullConnector creation
      * @endif
      */
-    //    CdrBufferBase* createBuffer(std::string& buf_type);
+    OutPortConnector* createConnector(const ConnectorProfile& cprof,
+                                      coil::Properties& prop,
+                                      OutPortProvider* provider);
 
-  protected:
+    protected:
     coil::Properties m_properties;
     std::string m_name;
     std::vector<OutPortConnector*> m_connectors;
     std::vector<InPortConsumer*> m_consumers;
+    coil::vstring m_providerTypes;
     coil::vstring m_consumerTypes;
     std::vector<OutPortProvider*> m_providers;
     

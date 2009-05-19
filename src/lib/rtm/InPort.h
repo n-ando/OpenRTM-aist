@@ -186,38 +186,92 @@ namespace RTC
     {
       return m_name.c_str();
     }
+
     
+    /*!
+     * @if jp
+     *
+     * @brief 最新データが存在するか確認する
+     * 
+     * InPortに未読の最新データが到着しているかをbool値で返す。
+     * InPortが未接続の場合、および接続コネクタのバッファがEmpty
+     * の場合にはfalseを返す。
+     *
+     * @return true 未読の最新データが存在する
+     *         false 未接続またはバッファにデータが存在しない。
+     * 
+     * @else
+     *
+     * @brief Check whether the data is newest
+     * 
+     * Check whether the data stored at a current buffer position is newest.
+     *
+     * @return Newest data check result
+     *         ( true:Newest data. Data has not been readout yet.
+     *          false:Past data．Data has already been readout.)
+     * 
+     * @endif
+     */
     virtual bool isNew()
     {
+      RTC_TRACE(("isNew()"));
       if (m_connectors.size() == 0)
         {
-          std::cout << "no connectors" << std::endl;
+          RTC_DEBUG(("no connectors"));
           return false;
         }
       int r(m_connectors[0]->getBuffer()->readable());
-      //      std::cout << "readable: " << m_connectors[0]->getBuffer()->readable() << std::endl;
-      //      std::cout << "writable: " << m_connectors[0]->getBuffer()->writable() << std::endl;
-      //      sleep(1);
       if (r > 0)
         {
-          std::cout << "readable: " << r << std::endl;
+          RTC_DEBUG(("isNew() = true, readable data: %d", r));
           return true;
         }
-      else
-        {
-          return false;
-        }
-
-      return m_connectors[0]->getBuffer()->readable() > 0;
+      
+      RTC_DEBUG(("isNew() = false, no readable data"));
+      return false;
     }
 
+    /*!
+     * @if jp
+     *
+     * @brief バッファが空かどうか確認する
+     * 
+     * InPortのバッファが空かどうかを bool 値で返す。
+     * 空の場合は true, 未読データがある場合は false を返す。
+     *
+     * @return true  バッファは空
+     *         false バッファに未読データがある
+     * 
+     * @else
+     *
+     * @brief Check whether the data is newest
+     * 
+     * Check whether the data stored at a current buffer position is newest.
+     *
+     * @return Newest data check result
+     *         ( true:Newest data. Data has not been readout yet.
+     *          false:Past data．Data has already been readout.)
+     * 
+     * @endif
+     */
     virtual bool isEmpty()
     {
+      RTC_TRACE(("isEmpty()"));
+
       if (m_connectors.size() == 0)
         {
+          RTC_DEBUG(("no connectors"));
           return true;
         }
-      return m_connectors[0]->getBuffer()->empty();
+      int r(m_connectors[0]->getBuffer()->readable());
+      if (r == 0)
+        {
+          RTC_DEBUG(("isEmpty() = true, buffer is empty"));
+          return true;
+        }
+      
+      RTC_DEBUG(("isEmpty() = false, data exists in the buffer"));
+      return false;
     }
 
     /*!
@@ -231,16 +285,24 @@ namespace RTC
      * 事前に設定されたモード (readback, do_nothing, block) に応じて、
      * 以下のような動作をする。
      *
-     * - readback: 最後の値を読みなおす。データは常に
+     * - readback: 最後の値を読みなおす。
      *
-
-     * 事前にタイムアウトが設定されて
-     * この関数を利用する際には、isNew(), isEmpty() と併用し、事前に
-     * バッファ空状態をチェックした上で利用することが望ましい。
-     * バッファが空の状態では、InPortにバインドされた変数の値が返されるため、
-     * 前回正常読み出し時の値が返される。
+     * - do_nothing: 何もしない
+     *
+     * - block: ブロックする。タイムアウトが設定されている場合は、
+     *       タイムアウトするまで待つ。
+     *
+     * バッファが空の状態では、InPortにバインドされた変数の値が返される。
+     * したがって、初回読み出し時には不定値を返す可能性がある。
+     * この関数を利用する際には、
+     *
+     * - isNew(), isEmpty() と併用し、事前にバッファ状態をチェックする。
      * 
+     * - 初回読み出し時に不定値を返さないようにバインド変数を事前に初期化する
      * 
+     * - ReturnCode read(DataType& data) 関数の利用を検討する。
+     *
+     * ことが望ましい。
      *
      * 各コールバック関数は以下のように呼び出される。
      * - OnRead: read() 関数が呼ばれる際に必ず呼ばれる。
@@ -261,18 +323,6 @@ namespace RTC
      * - OnReadError: 上記以外の理由で読みだしに失敗した場合に呼ばれる。
      *        理由としては、バッファ設定の不整合、例外の発生などが考えられる
      *        が通常は起こりえないためバグの可能性がある。
-
-     * - コールバックファンクタ OnRead がセットされている場合、
-     *   DataPort が保持するバッファから読み出す前に OnRead が呼ばれる。
-     * - DataPort が保持するバッファがアンダーフローを検出できるバッファで、
-     *   かつ、読み出す際にバッファがアンダーフローを検出した場合、
-     *   コールバックファンクタ OnUnderflow が呼ばれる。
-     * - コールバックファンクタ OnReadConvert がセットされている場合、
-     *   バッファ書き込み時に、OnReadConvert の operator() の戻り値が
-     *   read()の戻り値となる。
-     * - setReadTimeout() により読み出し時のタイムアウトが設定されている場合、
-     *   バッファアンダーフロー状態が解除されるまでタイムアウト時間だけ待ち、
-     *   OnUnderflowがセットされていればこれを呼び出して戻る
      *
      * @return 読み出したデータ
      *
@@ -300,14 +350,17 @@ namespace RTC
      */
     DataType read()
     {
-      std::cout << "read()" << std::endl;
+      RTC_TRACE(("DataType read()"))
+
       if (m_OnRead != NULL) 
         {
           (*m_OnRead)();
+          RTC_TRACE(("OnRead called"))
         }
 
       if (m_connectors.size() == 0)
         {
+          RTC_DEBUG(("no connectors"));
           return m_value;
         }
 
@@ -316,57 +369,28 @@ namespace RTC
       ReturnCode ret(m_connectors[0]->read(cdr));
       if (ret == PORT_OK)
         {
+          RTC_DEBUG(("data read succeeded"));
           m_value <<= cdr;
-          if (m_OnReadConvert == 0) 
+          if (m_OnReadConvert != 0) 
             {
+              m_value = (*m_OnReadConvert)(m_value);
+              RTC_DEBUG(("OnReadConvert called"));
               return m_value;
             }
-          m_value = (*m_OnReadConvert)(m_value);
           return m_value;
         }
       else if (ret == BUFFER_EMPTY)
         {
-//          if (m_OnEmpty != 0)
-//            {
-//              return (*m_OnEmpty)();
-//            }
+          RTC_WARN(("buffer empty"));
           return m_value;
         }
       else if (ret == BUFFER_TIMEOUT)
         {
-//          if (m_OnBufferTimeOut != 0)
-//            {
-//              return (*m_OnBufferTimeout)();
-//            }
-          
+          RTC_WARN(("buffer read timeout"));
+          return m_value;
         }
+      RTC_ERROR(("unknown retern value from buffer.read()"));
       return m_value;
-    }
-    
-    /*!
-     * @if jp
-     *
-     * @brief InPort 内のリングバッファの値を初期化
-     *
-     * InPort 内のリングバッファの値を指定した値で初期化する。
-     * (現状ではコメントアウト)
-     *
-     * @param value 初期化対象データ
-     *
-     * @else
-     *
-     * @brief Initialize the ring buffer value in InPort
-     *
-     * Initialize the ring buffer in InPort by specified value.
-     * (Currently, commented out)
-     *
-     * @param value The target initialization data
-     *
-     * @endif
-     */
-    virtual void init(DataType& value)
-    {
-      //      m_buffer.init(value);
     }
     
     /*!
@@ -391,17 +415,9 @@ namespace RTC
      *
      * @endif
      */
-    void update()
+    virtual void update()
     {
-      try
-	{
-	  m_value = this->get();
-	}
-      catch (...)
-	{
-	  if (m_OnUnderflow != NULL) (*m_OnUnderflow)();
-	}
-      return;
+      this->read();
     };
     
     /*!
@@ -427,31 +443,6 @@ namespace RTC
     void operator>>(DataType& rhs)
     {
       rhs = read();
-      return;
-    }
-    
-    /*!
-     * @if jp
-     *
-     * @brief T 型のデータを DataPort へ書き込み
-     *
-     * 設定された T 型のデータをDataPortに書き込む。
-     *
-     * @param value DaraPort へ書き込む T 型変数
-     *
-     * @else
-     *
-     * @brief Write the type-T data to DataPort
-     *
-     * Write the given type-T data to DataPort.
-     *
-     * @param value The type-T variable to write to DaraPort
-     *
-     * @endif
-     */
-    void operator<<(DataType& value)
-    {
-      write(value);
       return;
     }
     
@@ -712,15 +703,6 @@ namespace RTC
      * @endif
      */
     DataType& m_value;
-    
-    /*!
-     * @if jp
-     * @brief バッファ
-     * @else
-     * @brief Buffer
-     * @endif
-     */
-    //    Buffer<DataType> m_buffer;
     
     bool m_readBlock;
     long int m_readTimeout;

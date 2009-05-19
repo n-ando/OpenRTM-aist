@@ -29,6 +29,7 @@
 #include <rtm/PublisherBase.h>
 #include <rtm/CdrBufferBase.h>
 #include <rtm/DataPortStatus.h>
+#include <rtm/SystemLogger.h>
 
 namespace coil
 {
@@ -219,8 +220,11 @@ namespace RTC
      * @brief push "new" policy
      */
     ReturnCode pushNew();
+
+    ReturnCode convertReturn(BufferStatus::Enum status);
     
   private:
+    Logger rtclog;
     InPortConsumer* m_consumer;
     CdrBufferBase* m_buffer;
     coil::PeriodicTaskBase* m_task;

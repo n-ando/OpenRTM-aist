@@ -33,7 +33,7 @@ namespace RTC
                                            InPortProvider* provider,
                                            CdrBufferBase* buffer)
     : InPortConnector(profile, buffer),
-      m_provider(provider)
+      m_provider(provider), m_deleteBuffer(buffer == 0 ? true : false)
   {
     rtclog.setLevel("PARANOID");
 
@@ -116,7 +116,7 @@ namespace RTC
     m_provider = 0;
 
     // delete buffer
-    if (m_buffer != 0)
+    if (m_buffer != 0 && m_deleteBuffer == true)
       {
         CdrBufferFactory& bfactory(CdrBufferFactory::instance());
         bfactory.deleteObject(m_buffer);

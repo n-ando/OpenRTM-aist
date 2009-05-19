@@ -25,7 +25,8 @@ namespace RTC
   OutPortPullConnector::OutPortPullConnector(Profile profile,
                                              OutPortProvider* provider,
                                              CdrBufferBase* buffer)
-    : OutPortConnector(profile, buffer), m_provider(provider)
+    : OutPortConnector(profile),
+      m_provider(provider), m_buffer(buffer)
   {
   }
 
@@ -49,5 +50,24 @@ namespace RTC
     
     return PORT_OK;
   }
+
+  /*!
+   * @if jp
+   * @brief Buffer を所得する
+   *
+   * Connector が保持している Buffer を返す
+   *
+   * @else
+   * @brief Getting Buffer
+   *
+   * This operation returns this connector's buffer
+   *
+   * @endif
+   */
+  CdrBufferBase* OutPortPullConnector::getBuffer()
+  {
+    return m_buffer;
+  }
+
 };
 

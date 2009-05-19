@@ -31,8 +31,8 @@ namespace RTC
   OutPortPushConnector::OutPortPushConnector(Profile profile, 
                                              InPortConsumer* consumer,
                                              CdrBufferBase* buffer)
-    : OutPortConnector(profile, buffer),
-      m_consumer(consumer), m_publisher(0)
+    : OutPortConnector(profile),
+      m_consumer(consumer), m_publisher(0), m_buffer(buffer)
   {
     rtclog.setLevel("PARANOID");
 
@@ -40,7 +40,7 @@ namespace RTC
     m_publisher = createPublisher(profile);
     if (m_buffer == 0)
       {
-        m_buffer    = createBuffer(profile);
+        m_buffer = createBuffer(profile);
       }
     if (m_publisher == 0 || m_buffer == 0) { throw std::bad_alloc(); }
 
@@ -91,9 +91,11 @@ namespace RTC
    */
   ConnectorBase::ReturnCode OutPortPushConnector::disconnect()
   {
+    RTC_TRACE(("disconnect()"));
     // delete publisher
     if (m_publisher != 0)
       {
+        RTC_DEBUG(("delete publisher"));
         PublisherFactory& pfactory(PublisherFactory::instance());
         pfactory.deleteObject(m_publisher);
       }
@@ -102,6 +104,7 @@ namespace RTC
     // delete consumer
     if (m_consumer != 0)
       {
+        RTC_DEBUG(("delete consumer"));
         InPortConsumerFactory& cfactory(InPortConsumerFactory::instance());
         cfactory.deleteObject(m_consumer);
       }
@@ -110,11 +113,12 @@ namespace RTC
     // delete buffer
     if (m_buffer != 0)
       {
+        RTC_DEBUG(("delete buffer"));
         CdrBufferFactory& bfactory(CdrBufferFactory::instance());
         bfactory.deleteObject(m_buffer);
       }
     m_buffer = 0;
-
+    RTC_TRACE(("disconnect() done"));
     return PORT_OK;
   }
 
@@ -126,6 +130,24 @@ namespace RTC
     void OutPortPushConnector::deactivate()
     {
       m_publisher->deactivate();
+    }
+
+    /*!
+     * @if jp
+     * @brief Buffer を所得する
+     *
+     * Connector が保持している Buffer を返す
+     *
+     * @else
+     * @brief Getting Buffer
+     *
+     * This operation returns this connector's buffer
+     *
+     * @endif
+     */
+    CdrBufferBase* OutPortPushConnector::getBuffer()
+    {
+      return m_buffer;
     }
 
   /*!

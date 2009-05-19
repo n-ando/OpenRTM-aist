@@ -41,8 +41,9 @@ namespace RTC
     : rtclog("PublisherPeriodic"),
       m_consumer(0), m_buffer(0), m_task(0),
       m_retcode(PORT_OK), m_pushPolicy(NEW),
-      m_skipn(10), m_active(false)
+      m_skipn(10), m_active(false), m_readback(false)
   {
+    rtclog.setLevel("PARANOID");
   }
   
 
@@ -58,9 +59,10 @@ namespace RTC
     RTC_TRACE(("~PublisherPeriodic()"));
     if (m_task != 0)
       {
+        m_task->resume();
         m_task->finalize();
         RTC_PARANOID(("task finalized."));
-        //        m_task->wait();
+
         RTC::PeriodicTaskFactory::instance().deleteObject(m_task);
         RTC_PARANOID(("task deleted."));
       }
@@ -83,8 +85,11 @@ namespace RTC
     RTC_TRACE(("init()"));
     rtclog.level(::RTC::Logger::RTL_PARANOID) << prop;
 
-    // creating Task object 
     RTC::PeriodicTaskFactory& factory(RTC::PeriodicTaskFactory::instance());
+
+    coil::vstring th = factory.getIdentifiers();
+    RTC_DEBUG(("available task types: %s", coil::flatten(th).c_str()));
+
     m_task = factory.createObject(prop.getProperty("thread_type", "default"));
     if (m_task == 0)
       {
@@ -136,6 +141,7 @@ namespace RTC
     // Start task in suspended mode
     m_task->suspend();
     m_task->activate();
+    m_task->suspend();
     return PORT_OK;
   }
   
@@ -202,9 +208,6 @@ namespace RTC
     CdrBufferBase::ReturnCode ret(m_buffer->write(data, sec, usec));
     RTC_DEBUG(("%s = write()", CdrBufferBase::toString(ret)));
 
-    // if publisher is deactivated, send data once.
-    m_task->signal();
-
     return convertReturn(ret);
   }
 
@@ -262,52 +265,32 @@ namespace RTC
    */
   PublisherBase::ReturnCode PublisherPeriodic::pushAll()
   {
-    try
+    RTC_TRACE(("pushAll()"));
+
+    while (m_buffer->readable() > 0)
       {
-        while (m_buffer->readable() > 0)
+        const cdrMemoryStream& cdr(m_buffer->get());
+        ReturnCode ret(m_consumer->put(cdr));
+
+        if (ret != PORT_OK)
           {
-            const cdrMemoryStream& cdr(m_buffer->get());
-            ReturnCode ret(m_consumer->put(cdr));
-            
-            if (ret == SEND_FULL)
-              {
-                return SEND_FULL;
-              }
-            
-            m_buffer->advanceRptr();
+            return ret;
           }
+        m_buffer->advanceRptr();
       }
-    catch (...)
-      {
-        return CONNECTION_LOST;
-      }
-    return PORT_ERROR;
-  }
+   }
 
   /*!
    * @brief push "fifo" policy
    */
   PublisherBase::ReturnCode PublisherPeriodic::pushFifo()
   {
-    try
-      {
-        const cdrMemoryStream& cdr(m_buffer->get());
-        ReturnCode ret(m_consumer->put(cdr));
-        
-        if (ret == SEND_FULL)
-          {
-            return SEND_FULL;
-          }
-        
-        m_buffer->advanceRptr();
-        
-        return ret;
-      }
-    catch (...)
-      {
-        return CONNECTION_LOST;
-      }
-    return PORT_ERROR;
+    RTC_TRACE(("pushFifo()"));
+    const cdrMemoryStream& cdr(m_buffer->get());
+    ReturnCode ret(m_consumer->put(cdr));
+    m_buffer->advanceRptr();
+    
+    return ret;
   }
 
   /*!
@@ -315,20 +298,44 @@ namespace RTC
    */
   PublisherBase::ReturnCode PublisherPeriodic::pushSkip()
   {
-    try
+    static int leftskip; // 残りのスキップ数
+
+    RTC_TRACE(("pushSkip()"));
+    int preskip(m_buffer->readable() - leftskip);
+
+    if (preskip < 0)
       {
-        const cdrMemoryStream& cdr(m_buffer->get());
-        ReturnCode ret(m_consumer->put(cdr));
-   
+        m_buffer->advanceRptr(m_buffer->readable());
+        leftskip = -preskip;
+        // this causes empty() == true
+      }
+    else
+      {
+        m_buffer->advanceRptr(preskip);
+      }
+
+    if (m_buffer->empty())
+      {
+        RTC_DEBUG(("buffer empty"));
+        return BUFFER_EMPTY;
+      }
+    
+    const cdrMemoryStream& cdr(m_buffer->get());
+    ReturnCode ret(m_consumer->put(cdr));
+    
+    int postskip(m_skipn - m_buffer->readable());
+
+    if (postskip < 0)
+      {
+        leftskip = -postskip;
+        m_buffer->advanceRptr(m_buffer->readable());
+      }
+    else
+      {
         m_buffer->advanceRptr(m_skipn);
-        
-        return ret;
       }
-    catch (...)
-      {
-        return CONNECTION_LOST;
-      }
-    return PORT_ERROR;
+    
+    return ret;
   }
 
    /*!
@@ -336,26 +343,22 @@ namespace RTC
     */
   PublisherBase::ReturnCode PublisherPeriodic::pushNew()
   {
-    try
-      {
-        m_buffer->advanceRptr(m_buffer->readable() - 1);
-        
-        const cdrMemoryStream& cdr(m_buffer->get());
-        ReturnCode ret(m_consumer->put(cdr));
+    RTC_TRACE(("pushNew()"));
 
-        if (ret == SEND_FULL)
-          {
-            return SEND_FULL;
-          }
-        
-        m_buffer->advanceRptr();
-        return ret;
-      }
-    catch (...)
+    if (m_buffer->empty() && !m_readback)
       {
-        return CONNECTION_LOST;
+        RTC_DEBUG(("buffer empty"));
+        return BUFFER_EMPTY;
       }
-    return PORT_ERROR;
+    
+    m_buffer->advanceRptr(m_buffer->readable() - 1);
+    
+    const cdrMemoryStream& cdr(m_buffer->get());
+    ReturnCode ret(m_consumer->put(cdr));
+    RTC_DEBUG(("%s = consumer.put()", DataPortStatus::toString(ret)));
+
+    m_buffer->advanceRptr();
+    return ret;
   }
 
   PublisherBase::ReturnCode

@@ -339,11 +339,6 @@ namespace RTC
       //     n satisfies n'<= readable elements
       //                 n'<= m_fillcount
       //                 n >= - m_fillcount
-//      std::cout << "advance n   " << n std::endl;
-//      std::cout << "advance len-fill " << m_length std::endl;
-//      std::cout << "advance n   " << n std::endl;
-//      std::cout << "advance n   " << n std::endl;
-
       if (n > 0 && n > (m_length - m_fillcount) || n < 0 && n < -m_fillcount)
         {
           return ::RTC::BufferStatus::PRECONDITION_NOT_MET;
@@ -476,14 +471,13 @@ namespace RTC
       bool empty_(empty());
       
       put(value);
-      std::cout << toString(advanceWptr()) << std::endl;
       
       if (empty_)
         {
           Guard eguard(m_empty.mutex);
           m_empty.cond.signal();
         }
-      
+      advanceWptr(1);
       return ::RTC::BufferStatus::BUFFER_OK;
     }
     

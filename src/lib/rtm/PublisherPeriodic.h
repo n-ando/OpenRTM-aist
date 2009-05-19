@@ -19,11 +19,13 @@
 
 #ifndef PublisherPeriodic_h
 #define PublisherPeriodic_h
-#include <rtm/RTC.h>
+
 #include <coil/Task.h>
 #include <coil/Mutex.h>
-#include <coil/PeriodicTask.h>
 #include <coil/Condition.h>
+#include <coil/PeriodicTask.h>
+
+#include <rtm/RTC.h>
 #include <rtm/PublisherBase.h>
 #include <rtm/CdrBufferBase.h>
 #include <rtm/SystemLogger.h>
@@ -178,6 +180,7 @@ namespace RTC
     Policy m_pushPolicy;
     int m_skipn;
     bool m_active;
+    bool m_readback;
   };
 };     // namespace RTC
 

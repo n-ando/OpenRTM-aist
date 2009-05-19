@@ -30,12 +30,16 @@ namespace RTC
    * @endif
    */
   InPortPullConnector::InPortPullConnector(Profile profile,
-                                           OutPortConsumer* consumer)
-    : InPortConnector(profile, 0), m_consumer(consumer)
+                                           OutPortConsumer* consumer,
+                                           CdrBufferBase* buffer)
+    : InPortConnector(profile, buffer), m_consumer(consumer)
   {
     rtclog.setLevel("PARANOID");
 
-    m_buffer = createBuffer(m_profile);
+    if (buffer == 0)
+      {
+        m_buffer = createBuffer(m_profile);
+      }
     if (m_buffer == 0)
       {
         throw std::bad_alloc();

@@ -39,10 +39,12 @@ namespace RTC
    * @endif
    */
   PublisherNew::PublisherNew()
-    : m_consumer(0), m_buffer(0), m_task(0),
+    : rtclog("PublisherPeriodic"),
+      m_consumer(0), m_buffer(0), m_task(0),
       m_retcode(PORT_OK), m_pushPolicy(NEW),
       m_skipn(10), m_active(false)
   {
+    rtclog.setLevel("PARANOID");
   }
 
   /*!
@@ -54,12 +56,14 @@ namespace RTC
    */
   PublisherNew::~PublisherNew()
   {
+    RTC_TRACE(("~PublisherNew()"));
     if (m_task != 0)
       {
         m_task->resume();
         m_task->finalize();
-        //        m_task->wait();
+
         RTC::PeriodicTaskFactory::instance().deleteObject(m_task);
+        RTC_PARANOID(("task deleted."));
       }
 
     // "consumer" should be deleted in the Connector
@@ -77,22 +81,26 @@ namespace RTC
    */
   PublisherBase::ReturnCode PublisherNew::init(coil::Properties& prop)
   {
+    RTC_TRACE(("init()"));
+    rtclog.level(::RTC::Logger::RTL_PARANOID) << prop;
+    
     RTC::PeriodicTaskFactory& factory(RTC::PeriodicTaskFactory::instance());
+
     coil::vstring th = factory.getIdentifiers();
-    std::cout << "vstring.size: " << th.size() << std::endl;
-    for (int i(0); i < th.size(); ++i)
-      {
-        std::cout << "thread type: " << th[i] << std::endl;
-      }
+    RTC_DEBUG(("available task types: %s", coil::flatten(th).c_str()));
+
     m_task = factory.createObject(prop.getProperty("thread_type", "default"));
     if (m_task == 0)
       {
-        std::cout << "PeriodicTask creation failed" << std::endl;
+        RTC_ERROR(("Task creation failed: %s",
+                   prop.getProperty("thread_type", "default").c_str()));
         return INVALID_ARGS;
       }
+    RTC_PARANOID(("Task creation succeeded."));
 
     coil::Properties& mprop(prop.getNode("measurement"));
 
+    // setting task function
     m_task->setTask(this, &PublisherNew::svc);
     m_task->setPeriod(0.0);
     m_task->executionMeasure(coil::toBool(mprop["exec_time"],
@@ -127,8 +135,13 @@ namespace RTC
    */
   PublisherBase::ReturnCode PublisherNew::setConsumer(InPortConsumer* consumer)
   {
-    if (consumer == 0) { return INVALID_ARGS; }
-    if (m_consumer != 0) { delete m_consumer; }
+    RTC_TRACE(("setConsumer()"));
+    
+    if (consumer == 0)
+      {
+        RTC_ERROR(("setConsumer(consumer = 0): invalid argument."));
+        return INVALID_ARGS;
+      }
     m_consumer = consumer;
     return PORT_OK;
   }
@@ -142,8 +155,13 @@ namespace RTC
    */
   PublisherBase::ReturnCode PublisherNew::setBuffer(CdrBufferBase* buffer)
   {
-    if (buffer == 0) { return INVALID_ARGS; }
-    if (m_buffer != 0) { delete m_buffer; }
+    RTC_TRACE(("setBuffer()"));
+
+    if (buffer == 0)
+      {
+        RTC_ERROR(("setBuffer(buffer == 0): invalid argument"));
+        return INVALID_ARGS;
+      }
     m_buffer = buffer;
     return PORT_OK;
   }
@@ -152,18 +170,29 @@ namespace RTC
                                                 unsigned long sec,
                                                 unsigned long usec)
   {
-    std::cout << 0 << std::endl;
-    if (m_retcode == CONNECTION_LOST) { return m_retcode; }
-    std::cout << 1 << std::endl;
+    RTC_PARANOID(("write()"));
+    if (m_retcode == CONNECTION_LOST)
+      {
+        RTC_DEBUG(("write(): connection lost."));
+        return m_retcode;
+      }
+
+    if (m_retcode == BUFFER_FULL)
+      {
+        RTC_DEBUG(("write(): InPort buffer is full."));
+        return BUFFER_FULL;
+      }
+
     // why?
     //    if (m_retcode == BUFFER_FULL) { return BUFFER_FULL; }
     assert(m_buffer != 0);
-    std::cout << 2 << std::endl;
+
     CdrBufferBase::ReturnCode ret(m_buffer->write(data, sec, usec));
-    std::cout << 3 << std::endl;
+
     m_task->signal();
-    std::cout << 4 << std::endl;
-    return (RTC::PublisherBase::ReturnCode)ret;
+    RTC_DEBUG(("%s = write()", CdrBufferBase::toString(ret)));
+
+    return convertReturn(ret);
   }
 
   bool PublisherNew::isActive()
@@ -220,6 +249,7 @@ namespace RTC
    */
   PublisherNew::ReturnCode PublisherNew::pushAll()
   {
+    RTC_TRACE(("pushAll()"));
     try
       {
         while (m_buffer->readable() > 0)
@@ -247,6 +277,7 @@ namespace RTC
    */
   PublisherNew::ReturnCode PublisherNew::pushFifo()
   {
+    RTC_TRACE(("pushFifo()"));
     try
       {
         cdrMemoryStream& cdr(m_buffer->get());
@@ -273,6 +304,7 @@ namespace RTC
    */
   PublisherNew::ReturnCode PublisherNew::pushSkip()
   {
+    RTC_TRACE(("pushSkip()"));
     try
       {
         cdrMemoryStream& cdr(m_buffer->get());
@@ -321,6 +353,27 @@ namespace RTC
     return PORT_ERROR;
   }
 
+  PublisherBase::ReturnCode
+  PublisherNew::convertReturn(BufferStatus::Enum status)
+  {
+    switch (status)
+      {
+      case BufferStatus::BUFFER_OK:
+        return PORT_OK;
+        break;
+      case BufferStatus::BUFFER_EMPTY:
+        return BUFFER_EMPTY;
+        break;
+      case BufferStatus::TIMEOUT:
+        return BUFFER_TIMEOUT;
+        break;
+      case BufferStatus::PRECONDITION_NOT_MET:
+        return PRECONDITION_NOT_MET;
+        break;
+      default:
+        return PORT_ERROR;
+      }
+  }
 }; // namespace RTC
 
 extern "C"
