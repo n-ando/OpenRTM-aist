@@ -361,44 +361,46 @@ namespace RTC
   {
     RTC_TRACE(("publishInterfaces()"));
 
-    NVList& nv(cprof.properties);
-    std::string val(NVUtil::toString(nv, "dataport.dataflow_type"));
+    // prop: [port.outport].
+    coil::Properties prop(m_properties);
+    {
+      coil::Properties conn_prop;
+      NVUtil::copyToProperties(conn_prop, cprof.properties);
+      prop << conn_prop.getNode("dataport"); // marge ConnectorProfile
+    }
 
-    if (val.empty()) { return RTC::BAD_PARAMETER; }
-    coil::eraseBothEndsBlank(val);
-    coil::toLower(val);
+    /*
+     * ここで, ConnectorProfile からの properties がマージされたため、
+     * prop["dataflow_type"]: データフロータイプ
+     * prop["interface_type"]: インターフェースタイプ
+     * などがアクセス可能になる。
+     */
+    std::string dflow_type(prop["dataflow_type"]);
+    coil::normalize(dflow_type);
 
-    RTC_PARANOID(("publish dataflow_type: %s", val.c_str()));
-
-    if (val == "push")
+    if (dflow_type == "push")
       {
-        RTC_PARANOID(("dataflow_type = push .... do nothing here"));
-
+        RTC_PARANOID(("dataflow_type = push .... do nothing"));
         return RTC::RTC_OK;
       }
-    else if (val == "pull")
+    else if (dflow_type == "pull")
       {
         RTC_PARANOID(("dataflow_type = pull .... create PullConnector"));
 
-        OutPortProvider::publishInterfaceFunc pubif(nv);
-        std::for_each(m_providers.begin(), m_providers.end(), pubif);
-        
-        if (pubif.provider_ == 0)
+        OutPortProvider* provider(createProvider(cprof, prop));
+        if (provider == 0)
           {
-            RTC_ERROR(("no interface to be published"));
-            return RTC::UNSUPPORTED;
+            return RTC::BAD_PARAMETER;
+          }
+        
+        // create InPortPushConnector
+        OutPortConnector* connector(createConnector(cprof, prop, provider));
+        if (connector == 0)
+          {
+            return RTC::RTC_ERROR;
           }
 
-        //        ConnectorBase* connector;
-        ConnectorBase::Profile profile(cprof.connector_id,
-                                       cprof.name,
-                                       CORBA_SeqUtil::refToVstring(cprof.ports),
-                                       NVUtil::toProperties(cprof.properties));
-                                       
-        //        connector = new PullConnector(profile, pubif.provider_);
-        //        if (connector == NULL) { return false; }
-        //        m_connectors.push_back(connector);
-
+        RTC_DEBUG(("publishInterface() successfully finished."));
         return RTC::RTC_OK;
       }
 
@@ -418,69 +420,47 @@ namespace RTC
   {
     RTC_TRACE(("subscribeInterfaces()"));
 
-    coil::Properties conn_prop;
-    NVUtil::copyToProperties(conn_prop, cprof.properties);
-
     // prop: [port.outport].
     coil::Properties prop(m_properties);
-    prop << conn_prop.getNode("dataport"); // marge ConnectorProfile
+    {
+      coil::Properties conn_prop;
+      NVUtil::copyToProperties(conn_prop, cprof.properties);
+      prop << conn_prop.getNode("dataport"); // marge ConnectorProfile
+    }
 
-    // getting dataflow type
-    std::string& dflow_type(conn_prop["dataport.dataflow_type"]);
-    std::string& iface_type(conn_prop["dataport.interface_type"]);
-
+    /*
+     * ここで, ConnectorProfile からの properties がマージされたため、
+     * prop["dataflow_type"]: データフロータイプ
+     * prop["interface_type"]: インターフェースタイプ
+     * などがアクセス可能になる。
+     */
+    std::string& dflow_type(prop["dataflow_type"]);
     coil::normalize(dflow_type);
-    coil::normalize(iface_type);
-
-    RTC_PARANOID(("dataflow_type: %s", dflow_type.c_str()));
-    RTC_PARANOID(("interface_type: %s", iface_type.c_str()));
 
     if (dflow_type == "push")
       {
         RTC_PARANOID(("dataflow_type = push .... create PushConnector"));
 
         // interface
-        InPortConsumer* consumer(createConsumer(iface_type));
+        InPortConsumer* consumer(createConsumer(cprof, prop));
         if (consumer == 0)
           {
-            RTC_ERROR(("consumer creation failed"));
-            return RTC::BAD_PARAMETER;
-          }
-        consumer->init(prop.getNode("consumer"));
-        if (!consumer->subscribeInterface(cprof.properties))
-          {
-            RTC_ERROR(("no interface to be matched available consumers"));
-            delete consumer;
             return RTC::BAD_PARAMETER;
           }
 
-        // connector creation
-        OutPortConnector* connector;
-        ConnectorBase::Profile profile(cprof.name,
-                                       cprof.connector_id,
-                                       CORBA_SeqUtil::refToVstring(cprof.ports),
-                                       prop);
-
-        try
+        // create OutPortPushConnector
+        OutPortConnector* connector(createConnector(cprof, prop, consumer));
+        if (connector == 0)
           {
-            connector = new OutPortPushConnector(profile, consumer);
-            RTC_TRACE(("PushConnector created"));
-
-            m_connectors.push_back(connector);
-
-            RTC_PARANOID(("current connectors: %d", m_connectors.size()));
-            return RTC::RTC_OK;
-          }
-        catch (std::bad_alloc& e)
-          {
-            RTC_ERROR(("PushConnector creation failed"));
             return RTC::RTC_ERROR;
           }
+
+        RTC_DEBUG(("publishInterface() successfully finished."));
+        return RTC::RTC_OK;
       }
     else if (dflow_type == "pull")
       {
         RTC_PARANOID(("dataflow_type = pull .... do nothing"));
-
         return RTC::RTC_OK;
       }
 
@@ -535,52 +515,41 @@ namespace RTC
    */
   void OutPortBase::initProviders()
   {
+    RTC_TRACE(("initProviders()"));
+
     // create OutPort providers
     OutPortProviderFactory& factory(OutPortProviderFactory::instance());
     coil::vstring provider_types(factory.getIdentifiers());
-
     RTC_PARANOID(("available OutPortProviders: %s",
                   coil::flatten(provider_types).c_str()));
 
-    // OutPortProvider supports "pull" dataflow type
-    if (provider_types.size() > 0)
-      {
-        RTC_PARANOID(("dataflow_type pull is supported"));
-        appendProperty("dataport.dataflow_type", "pull");
-      }
-
 #ifndef RTC_NO_DATAPORTIF_ACTIVATION_OPTION
-    if (m_properties.hasKey("provider_types"))
+    if (m_properties.hasKey("provider_types") &&
+        coil::normalize(m_properties["provider_types"]) != "all")
       {
         coil::vstring temp_types(provider_types);
         provider_types.clear();
         coil::vstring
           active_types(coil::split(m_properties["provider_types"], ","));
 
+        std::sort(temp_types.begin(), temp_types.end());
+        std::sort(active_types.begin(), active_types.end());
         std::set_intersection(temp_types.begin(), temp_types.end(),
                               active_types.begin(), active_types.end(),
                               std::back_inserter(provider_types));
       }
 #endif
-    
-    m_providers.reserve(provider_types.size());
-    for (int i(0), len(provider_types.size()); i < len; ++i)
+
+    // OutPortProvider supports "pull" dataflow type
+    if (provider_types.size() > 0)
       {
-        std::cout << "provider: " << i << ", " << provider_types[i] << std::endl;
-        OutPortProvider* provider = factory.createObject(provider_types[i]);
-        if (provider != 0)
-          {
-            provider->publishInterfaceProfile(m_profile.properties);
-            m_providers.push_back(provider);
-            RTC_TRACE(("provider creation succeeded: %s",
-                       provider_types[i].c_str()));
-          }
-        else
-          {
-            RTC_ERROR(("provider creation failed: %s",
-                       provider_types[i].c_str()));
-          }
+        RTC_DEBUG(("dataflow_type pull is supported"));
+        appendProperty("dataport.dataflow_type", "push");
+        appendProperty("dataport.interface_type",
+                       coil::flatten(provider_types).c_str());
       }
+
+    m_providerTypes = provider_types;
   }
 
   /*!
@@ -592,54 +561,89 @@ namespace RTC
    */
   void OutPortBase::initConsumers()
   {
+    RTC_TRACE(("initConsumers()"));
+
     // create InPort consumers
     InPortConsumerFactory& factory(InPortConsumerFactory::instance());
     coil::vstring consumer_types(factory.getIdentifiers());
-
     RTC_PARANOID(("available InPortConsumer: %s",
                   coil::flatten(consumer_types).c_str()));
 
-    // InPortConsumer supports "push" dataflow type
-    if (consumer_types.size() > 0)
-      {
-        RTC_PARANOID(("dataflow_type push is supported"));
-        appendProperty("dataport.dataflow_type", "push");
-      }
-    
 #ifndef RTC_NO_DATAPORTIF_ACTIVATION_OPTION
-    if (m_properties.hasKey("consumer_types"))
+    if (m_properties.hasKey("consumer_types") &&
+        coil::normalize(m_properties["consumer_types"]) != "all")
       {
+        RTC_DEBUG(("allowed consumers: %s",
+                   m_properties["consumer_types"].c_str()));
+
         coil::vstring temp_types(consumer_types);
         consumer_types.clear();
         coil::vstring
           active_types(coil::split(m_properties["consumer_types"], ","));
 
+        std::sort(temp_types.begin(), temp_types.end());
+        std::sort(active_types.begin(), active_types.end());
         std::set_intersection(temp_types.begin(), temp_types.end(),
                               active_types.begin(), active_types.end(),
                               std::back_inserter(consumer_types));
       }
 #endif
     
-    m_consumerTypes = consumer_types;
-
-    m_consumers.reserve(consumer_types.size());
-    for (int i(0), len(consumer_types.size()); i < len; ++i)
+    // InPortConsumer supports "push" dataflow type
+    if (consumer_types.size() > 0)
       {
-        InPortConsumer* consumer = factory.createObject(consumer_types[i]);
-        if (consumer != 0)
-          {
-            RTC_TRACE(("consumer creation succeeded: %s",
-                       consumer_types[i].c_str()));
-            //            consumer->publishInterfaceProfile(m_profile.properties);
-            m_consumers.push_back(consumer);
-          }
-        else
-          {
-            RTC_ERROR(("consumer creation failed: %s",
-                       consumer_types[i].c_str()));
-          }
+        RTC_PARANOID(("dataflow_type push is supported"));
+        appendProperty("dataport.dataflow_type", "push");
+        appendProperty("dataport.interface_type",
+                       coil::flatten(consumer_types).c_str());
       }
+    
+    m_consumerTypes = consumer_types;
   }
+
+  /*!
+   * @if jp
+   * @brief OutPort provider の生成
+   * @else
+   * @brief OutPort provider creation
+   * @endif
+   */
+  OutPortProvider*
+  OutPortBase::createProvider(ConnectorProfile& cprof, coil::Properties& prop)
+  {
+    if (!prop["interface_type"].empty() &&
+        !coil::includes((coil::vstring)m_providerTypes, prop["interface_type"]))
+      {
+        RTC_ERROR(("no provider found"));
+        RTC_DEBUG(("interface_type:  %s", prop["interface_type"].c_str()));
+        RTC_DEBUG(("interface_types: %s",
+                   coil::flatten(m_providerTypes).c_str()));
+        return 0;
+      }
+    
+    RTC_DEBUG(("interface_type: %s", prop["interface_type"].c_str()));
+    OutPortProvider* provider;
+    provider = OutPortProviderFactory::
+      instance().createObject(prop["interface_type"].c_str());
+    
+    if (provider != 0)
+      {
+        RTC_ERROR(("provider created"));
+        provider->init(prop.getNode("provider"));
+
+        if (!provider->publishInterface(cprof.properties))
+          {
+            RTC_ERROR(("publishing interface information error"));
+            OutPortProviderFactory::instance().deleteObject(provider);
+            return 0;
+          }
+        return provider;
+      }
+
+    RTC_ERROR(("provider creation failed"));
+    return 0;
+  }
+
 
   /*!
    * @if jp
@@ -648,57 +652,123 @@ namespace RTC
    * @brief InPort consumer creation
    * @endif
    */
-  InPortConsumer* OutPortBase::createConsumer(std::string& iface_type)
+  InPortConsumer* OutPortBase::createConsumer(const ConnectorProfile& cprof,
+                                              coil::Properties& prop)
   {
-    const std::string& iface_types(m_properties["interface.types"]);
-
-    if (!iface_types.empty() && !coil::includes(iface_types, iface_type))
+    if (!prop["interface_type"].empty() &&
+        !coil::includes((coil::vstring)m_consumerTypes, prop["interface_type"]))
       {
+        RTC_ERROR(("no consumer found"));
+        RTC_DEBUG(("interface_type:  %s", prop["interface_type"].c_str()));
+        RTC_DEBUG(("interface_types: %s",
+                   coil::flatten(m_consumerTypes).c_str()));
         return 0;
       }
+    
+    RTC_DEBUG(("interface_type: %s", prop["interface_type"].c_str()));
+    InPortConsumer* consumer;
+    consumer = InPortConsumerFactory::
+      instance().createObject(prop["interface_type"].c_str());
+    
+    if (consumer != 0)
+      {
+        RTC_DEBUG(("consumer created"));
+        consumer->init(prop.getNode("consumer"));
 
-    coil::normalize(iface_type);
-    return InPortConsumerFactory::instance().createObject(iface_type);
+        if (!consumer->subscribeInterface(cprof.properties))
+          {
+            RTC_ERROR(("interface subscription failed."));
+            InPortConsumerFactory::instance().deleteObject(consumer);
+            return 0;
+          }
+
+        return consumer;
+      }
+
+    RTC_ERROR(("consumer creation failed"));
+    return 0; 
   }
 
   /*!
    * @if jp
-   * @brief Publisher の生成
+   * @brief OutPortPushConnector の生成
    * @else
-   * @brief Publihser creation
+   * @brief OutPortPushConnector creation
    * @endif
    */
-//  PublisherBase* OutPortBase::createPublisher(std::string& pub_type)
-//  {
-//    const std::string& pub_types(m_properties["publisher.types"]);
-//
-//    if (!pub_types.empty() && !coil::includes(pub_types, pub_type))
-//      {
-//        return 0;
-//      }
-//
-//    coil::normalize(pub_type);
-//    return PublisherFactory::instance().createObject(pub_type);
-//  }
+  OutPortConnector*
+  OutPortBase::createConnector(const ConnectorProfile& cprof,
+                               coil::Properties& prop,
+                               InPortConsumer* consumer)
+  {
+    ConnectorBase::Profile profile(cprof.name,
+                                   cprof.connector_id,
+                                   CORBA_SeqUtil::refToVstring(cprof.ports),
+                                   prop); 
+    OutPortConnector* connector(0);
+    try
+      {
+        connector = new OutPortPushConnector(profile, consumer);
+
+        if (connector == 0)
+          {
+            RTC_ERROR(("old compiler? new returned 0;"));
+            return 0;
+          }
+        RTC_TRACE(("OutPortPushConnector created"));
+
+        m_connectors.push_back(connector);
+        RTC_PARANOID(("connector push backed: %d", m_connectors.size()));
+        return connector;
+      }
+    catch (std::bad_alloc& e)
+      {
+        RTC_ERROR(("OutPortPushConnector creation failed"));
+        return 0;
+      }
+    RTC_FATAL(("never comes here: createConnector()"));
+    return 0;
+  }
 
   /*!
    * @if jp
-   * @brief Buffer の生成
+   * @brief OutPortPullConnector の生成
    * @else
-   * @brief Buffer creation
+   * @brief OutPortPullConnector creation
    * @endif
    */
-//  CdrBufferBase* OutPortBase::createBuffer(std::string& buf_type)
-//  {
-//    const std::string& buf_types(m_properties["buffer.types"]);
-//
-//    if (!buf_types.empty() && !coil::includes(buf_types, buf_type))
-//      {
-//        return 0;
-//      }
-//
-//    coil::normalize(buf_type);
-//    return CdrBufferFactory::instance().createObject(buf_type);
-//  }
+  OutPortConnector*
+  OutPortBase::createConnector(const ConnectorProfile& cprof,
+                               coil::Properties& prop,
+                               OutPortProvider* provider)
+  {
+    ConnectorBase::Profile profile(cprof.name,
+                                   cprof.connector_id,
+                                   CORBA_SeqUtil::refToVstring(cprof.ports),
+                                   prop); 
+    OutPortConnector* connector(0);
+    try
+      {
+        connector = new OutPortPullConnector(profile, provider);
+
+        if (connector == 0)
+          {
+            RTC_ERROR(("old compiler? new returned 0;"));
+            return 0;
+          }
+        RTC_TRACE(("OutPortPushConnector created"));
+
+        m_connectors.push_back(connector);
+        RTC_PARANOID(("connector push backed: %d", m_connectors.size()));
+        return connector;
+      }
+    catch (std::bad_alloc& e)
+      {
+        RTC_ERROR(("OutPortPullConnector creation failed"));
+        return 0;
+      }
+    RTC_FATAL(("never comes here: createConnector()"));
+    return 0;
+  }
 
 }; // end of namespace RTM

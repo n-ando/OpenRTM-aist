@@ -58,6 +58,9 @@ namespace RTC
    */
   InPortCorbaCdrProvider::~InPortCorbaCdrProvider(void)
   {
+    PortableServer::ObjectId_var oid;
+    oid = _default_POA()->servant_to_id(this);
+    _default_POA()->deactivate_object(oid);
   }
 
   void InPortCorbaCdrProvider::init(coil::Properties& prop)

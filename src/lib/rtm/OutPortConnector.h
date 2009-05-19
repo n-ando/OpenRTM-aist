@@ -58,8 +58,7 @@ namespace RTC
      * @brief Constructor
      * @endif
      */
-    OutPortConnector(ConnectorBase::Profile& profile,
-                     CdrBufferBase* buffer);
+    OutPortConnector(ConnectorBase::Profile& profile);
 
     /*!
      * @if jp
@@ -131,7 +130,7 @@ namespace RTC
 
     /*!
      * @if jp
-     * @brief Buffer を所得する
+     * @brief Buffer を取得する
      *
      * Connector が保持している Buffer を返す
      *
@@ -142,7 +141,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual CdrBufferBase* getBuffer();
+    virtual CdrBufferBase* getBuffer() = 0;
 
     /*!
      * @if jp
@@ -162,7 +161,6 @@ namespace RTC
   protected:
     Logger rtclog;
     Profile m_profile;
-    CdrBufferBase* m_buffer;
   };
 }; // namespace RTC
 

@@ -133,6 +133,7 @@ namespace RTC
      * @endif
      */
     InPortProvider* m_provider;
+    bool m_deleteBuffer;
   };
 }; // namespace RTC
 

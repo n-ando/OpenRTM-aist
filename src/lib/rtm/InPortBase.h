@@ -68,6 +68,9 @@ namespace RTC
   {
   public:
     DATAPORTSTATUS_ENUM
+
+    typedef std::vector<InPortConnector*> ConnectorList;
+
     /*!
      * @if jp
      * @brief コンストラクタ
@@ -257,32 +260,66 @@ namespace RTC
     /*!
      * @if jp
      * @brief InPort provider の生成
+     *
+     * InPortProvider を生成し、情報を ConnectorProfile に公開する。
+     * 生成に失敗した場合 0 を返す。
+     *
      * @else
      * @brief InPort provider creation
      * @endif
      */
-    InPortProvider* createProvider(const std::string& iface_type);
-    
+    InPortProvider*
+    createProvider(ConnectorProfile& cprof, coil::Properties& prop);
+
     /*!
      * @if jp
-     * @brief InPort provider の削除
+     * @brief OutPort consumer の生成
+     *
+     * OutPortConsumer を生成する。
+     * 生成に失敗した場合 0 を返す。
+     *
      * @else
-     * @brief InPort provider deletion
+     * @brief InPort provider creation
      * @endif
      */
-    void deleteProvider(InPortProvider* provider);
-    
+    OutPortConsumer*
+    createConsumer(const ConnectorProfile& cprof, coil::Properties& prop);
+
+    /*!
+     * @if jp
+     * @brief InPortPushConnector の生成
+     *
+     * Connector を生成し、生成が成功すれば m_connectors に保存する。
+     * 生成に失敗した場合 0 を返す。
+     *
+     * @else
+     * @brief InPortPushConnector creation
+     * @endif
+     */
+    InPortConnector*
+    createConnector(ConnectorProfile& cprof, coil::Properties& prop,
+                    InPortProvider* provider);
+    /*!
+     * @if jp
+     * @brief InPortPullConnector の生成
+     *
+     * Connector を生成し、生成が成功すれば m_connectors に保存する。
+     * 生成に失敗した場合 0 を返す。
+     *
+     * @else
+     * @brief InPortPullConnector creation
+     * @endif
+     */
+    InPortConnector*
+    createConnector(const ConnectorProfile& cprof, coil::Properties& prop,
+                    OutPortConsumer* consumer);
   protected:
     bool m_singlebuffer;
     CdrBufferBase* m_thebuffer;
-
     coil::Properties m_properties;
-    std::vector<InPortProvider*> m_providers;
-    std::vector<OutPortConsumer*> m_consumers;
-    std::vector<InPortConnector*> m_connectors;
+    coil::vstring m_providerTypes;
     coil::vstring m_consumerTypes;
-
-
+    ConnectorList m_connectors;
   };
 }; // namespace RTC
 

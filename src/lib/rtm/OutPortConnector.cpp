@@ -28,9 +28,8 @@ namespace RTC
    * @brief Constructor
    * @endif
    */
-  OutPortConnector::OutPortConnector(ConnectorBase::Profile& profile,
-                                     CdrBufferBase* buffer)
-    : rtclog("OutPortConnector"), m_profile(profile), m_buffer(buffer)
+  OutPortConnector::OutPortConnector(ConnectorBase::Profile& profile)
+    : rtclog("OutPortConnector"), m_profile(profile)
   {
   }
 
@@ -100,25 +99,5 @@ namespace RTC
     RTC_TRACE(("name() = %s", profile().name.c_str()));
     return profile().name.c_str();
   }
-
-  /*!
-   * @if jp
-   * @brief Buffer を所得する
-   *
-   * Connector が保持している Buffer を返す
-   *
-   * @else
-   * @brief Getting Buffer
-   *
-   * This operation returns this connector's buffer
-   *
-   * @endif
-   */
-  CdrBufferBase* OutPortConnector::getBuffer()
-  {
-    return m_buffer;
-  }
-
-
 
 }; // namespace RTC

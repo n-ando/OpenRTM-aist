@@ -61,7 +61,8 @@ namespace RTC
      * @endif
      */
     InPortPullConnector(Profile profile,
-                        OutPortConsumer* consumer);
+                        OutPortConsumer* consumer,
+                        CdrBufferBase* buffer = 0);
 
     /*!
      * @if jp
