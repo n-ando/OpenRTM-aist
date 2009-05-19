@@ -298,7 +298,7 @@ namespace coil
    *
    * @endif
    */
-  void normalize(std::string& str);
+  std::string normalize(std::string& str);
   
   /*!
    * @if jp
@@ -404,7 +404,10 @@ namespace coil
    *
    * @endif
    */
-  bool includes(const std::string& list, std::string value, bool ignore_case = true);
+  bool includes(const vstring& list, std::string value,
+                bool ignore_case = true);
+  bool includes(const std::string& list, std::string value,
+                bool ignore_case = true);
   
   /*!
    * @if jp
