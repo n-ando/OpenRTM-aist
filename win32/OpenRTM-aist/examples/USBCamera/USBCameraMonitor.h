@@ -96,7 +96,7 @@ class USBCameraMonitor
   // DataInPort declaration
   // <rtc-template block="inport_declare">
   TimedOctetSeq m_in;
-  InPort<TimedOctetSeq, RTC::RingBuffer> m_inIn;
+  InPort<TimedOctetSeq> m_inIn;
   // </rtc-template>
 
 

@@ -44,7 +44,7 @@ USBCameraMonitor::USBCameraMonitor(RTC::Manager* manager)
   
 	/* RTM-Win-113 add 20070404 SEC)T.Shimoji */
 	m_in.data = 0;
-  m_inIn.write(m_in);
+//  m_inIn.write(m_in);
 
 
   // Set OutPort buffer
