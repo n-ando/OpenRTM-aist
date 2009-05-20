@@ -87,7 +87,6 @@ namespace RTC
       : m_buffer(buffer), m_prop(prop), m_byteswap(true)
     {
       m_byteswap = toBool(m_prop["byteswap"], "YES", "NO", true);
-      std::cout << "byteswap: " << m_byteswap << std::endl;
     }
     
     /*!

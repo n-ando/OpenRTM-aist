@@ -121,7 +121,7 @@ namespace RTC
       {
         const char* ior;
         properties[index].value >>= ior;
-        std::cout << "OutPort ref: " << ior << std::endl;
+
         CORBA::ORB_ptr orb = ::RTC::Manager::instance().getORB();
         CORBA::Object_var var = orb->string_to_object(ior);
         setObject(var.in());

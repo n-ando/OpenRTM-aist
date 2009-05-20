@@ -323,33 +323,23 @@ namespace RTC
     */
   PublisherNew::ReturnCode PublisherNew::pushNew()
   {
-    std::cout << "pushNew()" << std::endl;
     try
       {
-        std::cout << "00" << std::endl;
         m_buffer->advanceRptr(m_buffer->readable() - 1);
-        std::cout << "01" << std::endl;
         
         cdrMemoryStream& cdr(m_buffer->get());
-        std::cout << "02" << std::endl;
         ReturnCode ret(m_consumer->put(cdr));
-        std::cout << "03" << std::endl;
-        if (ret == SEND_FULL)
+
+        if (ret == PORT_OK)
           {
-        std::cout << "04" << std::endl;
-            return SEND_FULL;
+            m_buffer->advanceRptr();
           }
-        std::cout << "05" << std::endl;
-        m_buffer->advanceRptr();
-        std::cout << "06" << std::endl;
         return ret;
       }
     catch (...)
       {
-        std::cout << "07" << std::endl;
         return CONNECTION_LOST;
       }
-        std::cout << "08" << std::endl;
     return PORT_ERROR;
   }
 
