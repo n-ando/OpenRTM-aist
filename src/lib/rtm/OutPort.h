@@ -159,7 +159,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual bool write(const DataType& value)
+    virtual bool write(DataType& value)
     {
       if (m_OnWrite != NULL)
 	{
@@ -170,6 +170,11 @@ namespace RTC
       size_t conn_size(m_connectors.size());
       if (!(conn_size > 0)) { return true; }
         
+      // set timestamp
+      coil::TimeValue tm(coil::gettimeofday());
+      value.tm.sec  = tm.sec();
+      value.tm.nsec = tm.usec() * 1000;
+
       // data -> (conversion) -> CDR stream
       m_cdr.rewindPtrs();
       if (m_OnWriteConvert != NULL)
@@ -180,16 +185,6 @@ namespace RTC
         {
           value >>= m_cdr;
         }
-
-      //------------------------------
-      double min_, max_, mean_, stddev_;
-      m_cdrtime.getStatistics(min_, max_, mean_, stddev_);
-      std::cout << min_ << " ";
-      std::cout << max_ << " ";
-      std::cout << mean_ << " ";
-      std::cout << stddev_ << " " << std::endl;
-      std::cout << "size: " << m_cdr.bufSize() << std::endl;
-      //------------------------------
 
       bool result(true);
       for (int i(0), len(conn_size); i < len; ++i)
