@@ -65,7 +65,6 @@ RTC::ReturnCode_t ConsoleIn::onExecute(RTC::UniqueId ec_id)
   std::cout << "Please input number: ";
   std::cin >> m_out.data;
   if (m_out.data == 666) return RTC::RTC_ERROR;
-  std::cout << "Sending to subscriber: " << m_out.data << std::endl;
   m_outOut.write();
 
   return RTC::RTC_OK;
