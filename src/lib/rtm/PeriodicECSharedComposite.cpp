@@ -312,15 +312,12 @@ namespace SDOPackage
     if (::CORBA::is_nil(m_ec))
       {
         ::RTC::ExecutionContextList_var ecs(m_rtobj->get_owned_contexts());
-        if (ecs->length() > 0)
+        if (ecs->length() == 0)
           {
-            m_ec = ecs[0];
-          }
-        else
-          {
-	    std::cout << "removeParticipantFromEC return" << std::endl;
+            RTC_FATAL(("no owned EC"));
             return;
           }
+        m_ec = ecs[0];
       }
     m_ec->remove_component(member.rtobj_.in());
   }
@@ -552,10 +549,6 @@ namespace RTC
     ::RTC::Manager& mgr(::RTC::Manager::instance());
 
     std::vector<RTObject_impl*> comps = mgr.getComponents();
-    for (int i(0), len(comps.size()); i < len; ++i)
-      {
-        std::cout << comps[i]->getInstanceName() << std::endl;
-      }
 
     ::SDOPackage::SDOList sdos;
     for (int i(0), len(m_members.size()); i < len; ++i)
@@ -657,7 +650,7 @@ namespace RTC
   {
     RTC_TRACE(("onFinalize()"));
     m_org->removeAllMembers();
-    std::cout << "onFinalize done" << std::endl;
+    RTC_PARANOID(("onFinalize() done"));
     return RTC::RTC_OK;
   }
 
