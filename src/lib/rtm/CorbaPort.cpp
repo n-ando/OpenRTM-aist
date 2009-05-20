@@ -126,7 +126,13 @@ namespace RTC
   {
     for (int i(0), len(m_servants.size()); i < len; ++i)
       {
-        _default_POA()->activate_object(m_servants[i]);
+        try
+          {
+            _default_POA()->activate_object(m_servants[i]);
+          }
+        catch(const ::PortableServer::POA::ServantAlreadyActive &)
+          {
+          }
       }
   }
   
