@@ -104,13 +104,9 @@ namespace RTC
 
     RTC_PARANOID(("converted CDR data size: %d", cdr.bufSize()));
     BufferStatus::Enum ret = m_buffer->write(cdr);
-    std::cout << "return = " << BufferStatus::toString(ret) << std::endl;
 
     ::RTC::TimedLong val;
     val <<= cdr;
-    std::cout << "received data: " << val.data << std::endl;
-    std::cout << "readable: " << m_buffer->readable() << std::endl;
-    std::cout << "writable: " << m_buffer->writable() << std::endl;
 
     return ::OpenRTM::PORT_OK;
   }

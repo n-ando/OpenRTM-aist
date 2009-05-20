@@ -50,11 +50,9 @@ namespace SDOPackage
    * @endif
    */
   void 
-//  toProperties(RTC::Properties& prop, const SDOPackage::ConfigurationSet& conf)
   toProperties(coil::Properties& prop, const SDOPackage::ConfigurationSet& conf)
   {
     NVUtil::copyToProperties(prop, conf.configuration_data);
-    //    prop["description"] = conf.description;
   }
   
   /*!
@@ -78,9 +76,6 @@ namespace SDOPackage
    * 
    * @endif
    */
-//  void
-//  toConfigurationSet(SDOPackage::ConfigurationSet& conf,
-//		     const RTC::Properties& prop)
   void
   toConfigurationSet(SDOPackage::ConfigurationSet& conf,
 		     const coil::Properties& prop)
@@ -415,7 +410,6 @@ namespace SDOPackage
 	ConfigurationSetList_var config_sets;
 	config_sets = new ConfigurationSetList((CORBA::ULong)0);
 	
-//	std::vector<RTC::Properties*> cf(m_configsets.getConfigurationSets());
 	std::vector<coil::Properties*> cf(m_configsets.getConfigurationSets());
 	config_sets->length(cf.size());
 	for (CORBA::ULong i(0), len(cf.size()); i < len; ++i)
@@ -452,31 +446,37 @@ namespace SDOPackage
     
     Guard guard(m_config_mutex);
     
-    try {
-      if (!m_configsets.haveConfig(id))
-	throw InvalidParameter("No such ConfigurationSet");
-    }
-    catch(...) {
-      // throw InvalidParameter("No such ConfigurationSet");
-    }
+    try
+      {
+        if (!m_configsets.haveConfig(id))
+          {
+            RTC_ERROR(("No such ConfigurationSet"));
+            throw InvalidParameter("No such ConfigurationSet");
+          }
+      }
+    catch(...)
+      {
+        RTC_ERROR(("Unknown exception"));
+        throw InternalError("Unknown exception");
+      }
     
-//    const RTC::Properties& configset(m_configsets.getConfigurationSet(id));
     const coil::Properties& configset(m_configsets.getConfigurationSet(id));
     
     try
       {
 	ConfigurationSet_var config;
 	config = new ConfigurationSet();
-//        config.description = configset["description"];
 	toConfigurationSet(config, configset);
-//std::cout<<"Configuration_impl::get_config.description"<<config.description<<std::endl;
+
 	return config._retn();
       }
     catch (...)
       {
 	throw InternalError("Configuration::get_configuration_set()");
       }
+
     // never reach here
+    RTC_FATAL(("never reach here"));
     return new ConfigurationSet();
   }
   

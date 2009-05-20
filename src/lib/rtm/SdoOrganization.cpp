@@ -349,16 +349,10 @@ namespace SDOPackage
 	   InvalidParameter, NotAvailable, InternalError)
   {
     RTC_TRACE(("remove_member(%s)", id));
-    for (CORBA::ULong i(0), len(m_memberList.length()); i < len; ++i)
-      {
-        std::cout << "given: " << id << std::endl;
-        std::cout << "ID: " << m_memberList[i]->get_sdo_id() << std::endl;
-      }
-
 
     if (std::string(id).empty())
       {
-        std::cout << "remove_member(): Enpty name." << std::endl;
+        RTC_ERROR(("remove_member(): Enpty name."));
         throw InvalidParameter("remove_member(): Enpty name.");
       }
     
@@ -367,7 +361,7 @@ namespace SDOPackage
     
     if (index < 0)
       {
-        std::cout << "remove_member(): Not found." << std::endl;
+        RTC_ERROR(("remove_member(): Not found."));
         throw InvalidParameter("remove_member(): Not found.");
       }
     
@@ -378,7 +372,7 @@ namespace SDOPackage
       }
     catch (...)
       {
-        std::cout << "hatena?" << std::endl;
+        RTC_ERROR(("unknown exception"));
 	throw InternalError("remove_member(): Not found.");
       }
     return false;
