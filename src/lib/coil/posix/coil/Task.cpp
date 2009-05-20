@@ -61,8 +61,11 @@ namespace coil
 
   int Task::wait(void)
   {
-    void* retval;
-    ::pthread_join(m_thread, &retval);
+    if (m_count > 0)
+      {
+        void* retval;
+        ::pthread_join(m_thread, &retval);
+      }
     return 0;
   }
 

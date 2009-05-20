@@ -63,8 +63,11 @@ namespace coil
 
   int Task::wait(void)
   {
-    DWORD retval;
+    if (m_count > 0)
+      {
+        DWORD retval;
 	retval = ::WaitForSingleObject(m_thread, INFINITE);
+      }
     return 0;
   }
 
