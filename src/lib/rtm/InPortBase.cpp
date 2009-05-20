@@ -280,19 +280,27 @@ namespace RTC
   void
   InPortBase::unsubscribeInterfaces(const ConnectorProfile& connector_profile)
   {
-    RTC_TRACE(("InPortBase::unsubscribeInterfaces()"));
+    RTC_TRACE(("unsubscribeInterfaces()"));
+
     std::string id(connector_profile.connector_id);
+    RTC_PARANOID(("connector_id: %s", id.c_str()));
 
     ConnectorList::iterator it(m_connectors.begin());
+
     while (it != m_connectors.end())
       {
         if (id == (*it)->id())
           {
-            (*it)->disconnect();
+            // Connector's dtor must call disconnect()
             delete *it;
             m_connectors.erase(it);
+            RTC_TRACE(("delete connector: %s", id.c_str()));
+            return;
           }
+        ++it;
       }
+    RTC_ERROR(("specified connector not found: %s", id.c_str()));
+    return;
   }
 
   /*!
@@ -384,6 +392,7 @@ namespace RTC
     // OutPortConsumer supports "pull" dataflow type
     if (consumer_types.size() > 0)
       {
+        RTC_PARANOID(("dataflow_type pull is supported"));
         appendProperty("dataport.dataflow_type", "pull");
         appendProperty("dataport.interface_type",
                        coil::flatten(consumer_types).c_str());
