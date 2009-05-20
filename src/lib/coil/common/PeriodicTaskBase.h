@@ -62,7 +62,7 @@ namespace coil
     virtual int suspend(void) = 0;
     virtual int resume(void) = 0;
     virtual void signal() = 0;
-    virtual bool setTask(TaskFuncBase* func) = 0;
+    virtual bool setTask(TaskFuncBase* func, bool delete_in_dtor = true) = 0;
 
     template <class O, class F>
     bool setTask(O* obj, F fun)

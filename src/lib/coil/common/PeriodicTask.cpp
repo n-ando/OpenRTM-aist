@@ -30,7 +30,8 @@ namespace coil
    * @endif
    */
   PeriodicTask::PeriodicTask()
-    : m_period(0.0), m_nowait(false), 
+    : m_period(0.0), m_nowait(false),
+      m_func(0), m_deleteInDtor(true),
       m_alive(false), m_suspend(false),
       m_execCount(0), m_execCountMax(10),
       m_periodCount(0), m_periodCountMax(10)
@@ -48,7 +49,7 @@ namespace coil
   {
     finalize();
     wait();
-    if (m_func != 0)
+    if (m_func != 0 && m_deleteInDtor)
       {
         delete m_func;
       }
@@ -67,8 +68,8 @@ namespace coil
     if (m_func == 0)   { return; }
     if (m_alive.value) { return; }
 
-    Task::activate();
     m_alive.value = true;
+    Task::activate();
   }
 
   /*!
@@ -81,8 +82,11 @@ namespace coil
   void PeriodicTask::finalize()
   {
     Guard gaurd(m_alive.mutex);
-    this->signal();
     m_alive.value = false;
+
+    Guard suspend_gaurd(m_suspend.mutex);
+    m_suspend.suspend = false;
+    m_suspend.cond.signal();
   }
 
   /*!
@@ -94,9 +98,6 @@ namespace coil
    */
   int PeriodicTask::suspend(void)
   {
-    Guard guard(m_alive.mutex);
-    if (!m_alive.value) { return -1; }
-
     Guard gaurd(m_suspend.mutex);
     m_suspend.suspend = true;
     return 0;
@@ -111,9 +112,6 @@ namespace coil
    */
   int PeriodicTask::resume(void)
   {
-    Guard guard(m_alive.mutex);
-    if (!m_alive.value) { return -1; }
-
     m_periodTime.reset();
     m_execTime.reset();
 
@@ -132,9 +130,7 @@ namespace coil
    */
   void PeriodicTask::signal(void)
   {
-    if (!m_alive.value) { return; }
     Guard gaurd(m_suspend.mutex);
-    m_suspend.signal = true;
     m_suspend.cond.signal();
   }
 
@@ -145,9 +141,10 @@ namespace coil
    * @brief Setting task execution function
    * @endif
    */
-  bool PeriodicTask::setTask(TaskFuncBase* func)
+  bool PeriodicTask::setTask(TaskFuncBase* func, bool delete_in_dtor)
   {
     if (func == 0) { return false; }
+    m_deleteInDtor = delete_in_dtor;
     m_func = func;
     return true;
   }
@@ -277,32 +274,32 @@ namespace coil
    */
   int PeriodicTask::svc()
   {
-    while (m_alive.value)
+    while (m_alive.value) // needs lock?
       {
-        if (m_periodMeasure)
-          {
-            m_periodTime.tack();
-            m_periodTime.tick();
-          }
+        if (m_periodMeasure) { m_periodTime.tack(); }
+        { // wait if suspended
+          Guard suspend_gaurd(m_suspend.mutex);
+          if (m_suspend.suspend)
+            {
+              m_suspend.cond.wait();
+              // break if finalized
+              if (!m_alive.value)
+                {
+                  return 0;
+                }
+            }
+        }
+        if (m_periodMeasure) { m_periodTime.tick(); }
 
+        // task execution
         if (m_execMeasure) { m_execTime.tick(); }
         (*m_func)();
         if (m_execMeasure) { m_execTime.tack(); }
 
-
+        // wait for next period
         updateExecStat();
         sleep();
         updatePeriodStat();
-
-        Guard gaurd(m_suspend.mutex);
-        while (m_suspend.suspend)
-          {
-            m_suspend.cond.wait();
-            if(m_suspend.signal) {
-                m_suspend.signal = false;
-                break;
-            }
-          }
       }
     return 0;
   }
@@ -342,3 +339,4 @@ namespace coil
   }
 
 }; // namespace coil
+

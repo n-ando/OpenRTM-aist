@@ -34,31 +34,6 @@
 
 namespace coil
 {
-//  class TaskFuncBase
-//  {
-//  public:
-//    virtual ~TaskFuncBase() {}
-//    virtual int operator()() = 0;
-//  };
-//
-//  template <typename T, typename F = int (*)()>
-//  class TaskFunc
-//    : public TaskFuncBase
-//  {
-//  public:
-//    TaskFunc(T* obj, F func)
-//      : m_obj(obj), m_func(func)
-//    {
-//    }
-//    virtual ~TaskFunc() {}
-//    virtual int operator()()
-//    {
-//      return (m_obj->*m_func)();
-//    }
-//    T* m_obj;
-//    F m_func;
-//  };
-
   /*!
    * @if jp
    * @class 周期タスクスレッド実行クラス
@@ -202,7 +177,7 @@ namespace coil
      *
      * @endif
      */
-    virtual bool setTask(TaskFuncBase* func);
+    virtual bool setTask(TaskFuncBase* func, bool delete_in_dtor = true);
 
     template <class O, class F>
     bool setTask(O* obj, F fun)
@@ -305,6 +280,7 @@ namespace coil
     coil::TimeValue m_period;
     bool m_nowait;
     TaskFuncBase* m_func;
+    bool m_deleteInDtor;
 
     // alive flag
     class alive_t
@@ -319,9 +295,8 @@ namespace coil
     // suspend flag
     struct suspend_t
     {
-      suspend_t(bool sus) : suspend(sus), signal(false), mutex(), cond(mutex) {}
+      suspend_t(bool sus) : suspend(sus), mutex(), cond(mutex) {}
       bool suspend;
-      bool signal;
       coil::Mutex mutex;
       coil::Condition<coil::Mutex> cond;
     };
