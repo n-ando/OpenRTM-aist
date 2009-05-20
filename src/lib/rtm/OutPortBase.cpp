@@ -483,19 +483,15 @@ namespace RTC
     std::string id(connector_profile.connector_id);
     RTC_PARANOID(("connector_id: %s", id.c_str()));
 
-    std::vector<OutPortConnector*>::iterator it, it_end;
-    it     = m_connectors.begin();
-    it_end = m_connectors.end();
+    ConnectorList::iterator it(m_connectors.begin());
 
-    while (it != it_end)
+    while (it != m_connectors.end())
       {
         if (id == (*it)->id())
           {
-            m_connectors.erase(it);
-            if (*it == 0) { RTC_FATAL(("hmm.. *it should not be 0")); }
-
             // Connector's dtor must call disconnect()
             delete *it;
+            m_connectors.erase(it);
             RTC_TRACE(("delete connector: %s", id.c_str()));
             return;
           }
@@ -504,7 +500,6 @@ namespace RTC
     RTC_ERROR(("specified connector not found: %s", id.c_str()));
     return;
   }
-
 
   /*!
    * @if jp
@@ -527,6 +522,9 @@ namespace RTC
     if (m_properties.hasKey("provider_types") &&
         coil::normalize(m_properties["provider_types"]) != "all")
       {
+        RTC_DEBUG(("allowed providers: %s",
+                   m_properties["provider_types"].c_str()));
+
         coil::vstring temp_types(provider_types);
         provider_types.clear();
         coil::vstring
