@@ -229,7 +229,7 @@ Configurations:
       - Key: Optimization
         Value: 0
       - Key: PreprocessorDefinitions
-        Value: "WIN32;_DEBUG;_CONSOLE;__WIN32__;__x86__;_WIN32_WINNT=0x0500;__NT__;__OSVERSION__=4"
+        Value: "WIN32;_DEBUG;_CONSOLE;__WIN32__;__x86__;_WIN32_WINNT=0x0400;__NT__;__OSVERSION__=4"
       - Key: MinimalRebuild
         Value: "true"
       - Key: BasicRuntimeChecks
@@ -287,7 +287,7 @@ Configurations:
 #    VCMIDLTool:
     VCCLCompilerTool:
       - Key: PreprocessorDefinitions
-        Value: "WIN32;NDEBUG;_CONSOLE;__WIN32__;__x86__;_WIN32_WINNT=0x0500;__NT__;__OSVERSION__=4"
+        Value: "WIN32;NDEBUG;_CONSOLE;__WIN32__;__x86__;_WIN32_WINNT=0x0400;__NT__;__OSVERSION__=4"
       - Key: RuntimeLibrary
         Value: "2"
       - Key: UsePrecompiledHeader
@@ -352,7 +352,7 @@ Configurations:
       - Key: Optimization
         Value: "0"
       - Key: PreprocessorDefinitions
-        Value: "WIN32;_DEBUG;_WINDOWS;_USRDLL;__WIN32__;__NT__;__OSVERSION__=4;__x86__;_WIN32_WINNT=0x0500;_CRT_SECURE_NO_DEPRECATE"
+        Value: "WIN32;_DEBUG;_WINDOWS;_USRDLL;__WIN32__;__NT__;__OSVERSION__=4;__x86__;_WIN32_WINNT=0x0400;_CRT_SECURE_NO_DEPRECATE"
       - Key: MinimalRebuild
         Value: "true"
       - Key: BasicRuntimeChecks
@@ -420,7 +420,7 @@ Configurations:
 #    VCMIDLTool:
     VCCLCompilerTool:
       - Key: PreprocessorDefinitions
-        Value: "WIN32;NDEBUG;_WINDOWS;_USRDLL;__WIN32__;__NT__;__OSVERSION__=4;__x86__;_WIN32_WINNT=0x0500;_CRT_SECURE_NO_DEPRECATE"
+        Value: "WIN32;NDEBUG;_WINDOWS;_USRDLL;__WIN32__;__NT__;__OSVERSION__=4;__x86__;_WIN32_WINNT=0x0400;_CRT_SECURE_NO_DEPRECATE"
       - Key:         RuntimeLibrary
         Value: "2"
       - Key:         UsePrecompiledHeader
@@ -502,7 +502,7 @@ Configurations:
       - Key: Optimization
         Value: "0"
       - Key: PreprocessorDefinitions
-        Value: "WIN32;_DEBUG;_LIB;__WIN32__;__NT__;__OSVERSION__=4;__x86__;_WIN32_WINNT=0x0500;_CRT_SECURE_NO_DEPRECATE"
+        Value: "WIN32;_DEBUG;_LIB;__WIN32__;__NT__;__OSVERSION__=4;__x86__;_WIN32_WINNT=0x0400;_CRT_SECURE_NO_DEPRECATE"
       - Key: MinimalRebuild
         Value: "true"
       - Key: BasicRuntimeChecks
@@ -552,7 +552,7 @@ Configurations:
 #    VCMIDLTool:
     VCCLCompilerTool:
       - Key: PreprocessorDefinitions
-        Value: "WIN32;NDEBUG;_LIB;__WIN32__;__NT__;__OSVERSION__=4;__x86__;_WIN32_WINNT=0x0500;_CRT_SECURE_NO_DEPRECATE"
+        Value: "WIN32;NDEBUG;_LIB;__WIN32__;__NT__;__OSVERSION__=4;__x86__;_WIN32_WINNT=0x0400;_CRT_SECURE_NO_DEPRECATE"
       - Key: RuntimeLibrary
         Value: "2"
       - Key: UsePrecompiledHeader
@@ -606,7 +606,7 @@ Configurations:
       - Key: Optimization
         Value: 0
       - Key: PreprocessorDefinitions
-        Value: "USE_stub_in_nt_dll;WIN32;_DEBUG;_CONSOLE;__WIN32__;__x86__;_WIN32_WINNT=0x0500;__NT__;__OSVERSION__=4;_CRT_SECURE_NO_DEPRECATE"
+        Value: "USE_stub_in_nt_dll;WIN32;_DEBUG;_CONSOLE;__WIN32__;__x86__;_WIN32_WINNT=0x0400;__NT__;__OSVERSION__=4;_CRT_SECURE_NO_DEPRECATE"
       - Key: MinimalRebuild
         Value: "true"
       - Key: BasicRuntimeChecks
@@ -623,7 +623,7 @@ Configurations:
         Value: "4"
     VCLinkerTool:
       - Key: AdditionalDependencies
-        Value: "$(rtm_libd) $(coil_libd)"
+        Value: "$(rtm_libd)"
       - Key: OutputFile
         Value: "$(OutDir)\\\\__PROJECT_NAME__.exe"
       - Key: LinkIncremental
@@ -657,7 +657,7 @@ Configurations:
           copy "$(OutDir)\\\\__PROJECT_NAME__.exe" "$(SolutionDir)\\\\components"
     VCCLCompilerTool:
       - Key: PreprocessorDefinitions
-        Value: "USE_stub_in_nt_dll;WIN32;NDEBUG;_CONSOLE;__WIN32__;__x86__;_WIN32_WINNT=0x0500;__NT__;__OSVERSION__=4;_CRT_SECURE_NO_DEPRECATE"
+        Value: "USE_stub_in_nt_dll;WIN32;NDEBUG;_CONSOLE;__WIN32__;__x86__;_WIN32_WINNT=0x0400;__NT__;__OSVERSION__=4;_CRT_SECURE_NO_DEPRECATE"
       - Key: RuntimeLibrary
         Value: "2"
       - Key: UsePrecompiledHeader
@@ -670,7 +670,7 @@ Configurations:
         Value: "3"
     VCLinkerTool:
       - Key: AdditionalDependencies
-        Value: "$(rtm_lib) $(coil_lib)"
+        Value: "$(rtm_lib)"
       - Key: OutputFile
         Value: "$(OutDir)\\\\__PROJECT_NAME__.exe"
       - Key: LinkIncremental
@@ -715,7 +715,7 @@ Configurations:
       - Key: Optimization
         Value: "0"
       - Key: PreprocessorDefinitions
-        Value: "USE_stub_in_nt_dll;WIN32;_DEBUG;_WINDOWS;_USRDLL;__WIN32__;__NT__;__OSVERSION__=4;__x86__;_WIN32_WINNT=0x0500;_CRT_SECURE_NO_DEPRECATE"
+        Value: "USE_stub_in_nt_dll;WIN32;_DEBUG;_WINDOWS;_USRDLL;__WIN32__;__NT__;__OSVERSION__=4;__x86__;_WIN32_WINNT=0x0400;_CRT_SECURE_NO_DEPRECATE"
       - Key: MinimalRebuild
         Value: "true"
       - Key: BasicRuntimeChecks
@@ -732,7 +732,7 @@ Configurations:
         Value: "4"
     VCLinkerTool:
       - Key: AdditionalDependencies
-        Value: "$(rtm_libd) $(coil_libd)"
+        Value: "$(rtm_libd)"
 #      - Key: OutputFile
 #        Value: "$(OutDir)\\\\__PROJECT_NAME__.dll"
 #      - Key: Version
@@ -770,7 +770,7 @@ Configurations:
           copy "$(OutDir)\\\\__PROJECT_NAME__.dll" "$(SolutionDir)\\\\components"
     VCCLCompilerTool:
       - Key: PreprocessorDefinitions
-        Value: "USE_stub_in_nt_dll;WIN32;NDEBUG;_WINDOWS;_USRDLL;__WIN32__;__NT__;__OSVERSION__=4;__x86__;_WIN32_WINNT=0x0500;_CRT_SECURE_NO_DEPRECATE"
+        Value: "USE_stub_in_nt_dll;WIN32;NDEBUG;_WINDOWS;_USRDLL;__WIN32__;__NT__;__OSVERSION__=4;__x86__;_WIN32_WINNT=0x0400;_CRT_SECURE_NO_DEPRECATE"
       - Key:         RuntimeLibrary
         Value: "2"
       - Key:         UsePrecompiledHeader
@@ -783,7 +783,7 @@ Configurations:
         Value: "3"
     VCLinkerTool:
       - Key: AdditionalDependencies
-        Value: "$(rtm_lib) $(coil_lib)"
+        Value: "$(rtm_lib)"
 #      - Key: OutputFile
 #        Value: "$(OutDir)\\\\__PROJECT_NAME__.dll"
       - Key: LinkIncremental
