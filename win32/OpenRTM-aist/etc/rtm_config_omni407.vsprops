@@ -7,6 +7,7 @@
 	<Tool
 		Name="VCCLCompilerTool"
 		AdditionalIncludeDirectories="$(omni_includes);$(rtm_includes)"
+		PreprocessorDefinitions="_WIN32_WINNT=0x0500"
 	/>
 	<Tool
 		Name="VCLinkerTool"
@@ -80,11 +81,11 @@
 	/>
 	<UserMacro
 		Name="rtm_libd"
-		Value="RTC$(rtm_dllver)d.lib $(omni_libd) advapi32.lib ws2_32.lib mswsock.lib $(user_libd)"
+		Value="RTC$(rtm_dllver)d.lib $(coil_libd) $(omni_libd) advapi32.lib ws2_32.lib mswsock.lib $(user_libd)"
 	/>
 	<UserMacro
 		Name="rtm_lib"
-		Value="RTC$(rtm_dllver).lib $(omni_lib) advapi32.lib ws2_32.lib mswsock.lib $(user_lib)"
+		Value="RTC$(rtm_dllver).lib $(coil_lib) $(omni_lib) advapi32.lib ws2_32.lib mswsock.lib $(user_lib)"
 	/>
 	<UserMacro
 		Name="rtm_idlc"
