@@ -142,7 +142,8 @@ rtmheader_HEADERS = \
 	SyncFIFO.h 		\
 	SyncLIFO.h 		\
 	TcpSockServer.h 	\
-	Typename.h
+	Typename.h              \
+	config_rtc.h
 
 
 #------------------------------------------------------------
