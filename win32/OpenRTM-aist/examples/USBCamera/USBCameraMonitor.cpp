@@ -25,6 +25,9 @@ static const char* usbcameramonitor_spec[] =
     "max_instance",      "10",
     "language",          "C++",
     "lang_type",         "compile",
+    // Configuration variables
+    "conf.default.image_height", "240",
+    "conf.default.image_width", "320",
     ""
   };
 // </rtc-template>
@@ -63,13 +66,12 @@ USBCameraMonitor::~USBCameraMonitor()
 }
 
 
-/*
 RTC::ReturnCode_t USBCameraMonitor::onInitialize()
 {
-  //return RTC::OK;
+  bindParameter("image_height", m_img_height, "240");
+  bindParameter("image_width", m_img_width, "320");
   return RTC::RTC_OK;
 }
-*/
 
 /*
 RTC::ReturnCode_t USBCameraMonitor::onFinalize()
@@ -98,7 +100,7 @@ RTC::ReturnCode_t USBCameraMonitor::onShutdown(RTC::UniqueId ec_id)
 
 RTC::ReturnCode_t USBCameraMonitor::onActivated(RTC::UniqueId ec_id)
 {
-    m_img=cvCreateImage(cvSize(320,240),IPL_DEPTH_8U,3);
+    m_img=cvCreateImage(cvSize(m_img_width,m_img_height),IPL_DEPTH_8U,3);
 
 	//画像表示用ウィンドウの作成
 	cvNamedWindow("CaptureImage", CV_WINDOW_AUTOSIZE);
@@ -115,9 +117,10 @@ RTC::ReturnCode_t USBCameraMonitor::onActivated(RTC::UniqueId ec_id)
 
 RTC::ReturnCode_t USBCameraMonitor::onDeactivated(RTC::UniqueId ec_id)
 {
+  cvReleaseImage(&m_image);
   //表示ウィンドウの消去
-	cvDestroyWindow("CaptureImage");
-	return RTC::RTC_OK;
+  cvDestroyWindow("CaptureImage");
+  return RTC::RTC_OK;
 }
 
 
