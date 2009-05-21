@@ -117,7 +117,7 @@ RTC::ReturnCode_t USBCameraMonitor::onActivated(RTC::UniqueId ec_id)
 
 RTC::ReturnCode_t USBCameraMonitor::onDeactivated(RTC::UniqueId ec_id)
 {
-  cvReleaseImage(&m_image);
+  cvReleaseImage(&m_img);
   //表示ウィンドウの消去
   cvDestroyWindow("CaptureImage");
   return RTC::RTC_OK;
