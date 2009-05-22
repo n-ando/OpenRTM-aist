@@ -133,14 +133,16 @@ RTC::ReturnCode_t USBCameraAcquire::onExecute(RTC::UniqueId ec_id)
   
   m_outOut.write();
   
-  if (count > 120)
+  if (count > 100)
     {
       count = 0;
       coil::TimeValue tm;
       tm = coil::gettimeofday();
-      double dbc=(double)(tm - tm_pre);
-      std::cout << 120.0/dbc << " [FPS]" << std::endl;
-//      std::cout << 120*1000*1000/(tm - tm_pre).usec() << " [FPS]" << std::endl;
+      double sec(tm - tm_pre);
+      if (sec > 1.0)
+        {
+          std::cout << 100/sec << " [FPS]" << std::endl;
+        }
       tm_pre = tm;
     }
   ++count;
