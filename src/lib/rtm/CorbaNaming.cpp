@@ -231,7 +231,7 @@ namespace RTC
 		  }
 		catch (AlreadyBound& e)
 		  {
-		    e;
+		    (void)(e);
 		    cxt = CosNaming::
 		      NamingContextExt::
 		      _narrow(cxt->resolve(subName(name, i, i)));
@@ -647,7 +647,7 @@ namespace RTC
       }
     catch (AlreadyBound& e)
       {
-	e;
+	(void)(e);
 	return context->resolve(name);
       }
     return CORBA::Object::_nil();

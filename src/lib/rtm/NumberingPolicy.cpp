@@ -44,7 +44,7 @@ std::string DefaultNumberingPolicy::onCreate(void* obj)
     }
   catch (ObjectNotFound& e)
     {
-      e;
+      (void)(e);
       m_objects.push_back(obj);
       return coil::otos((int)(m_objects.size() - 1));
     }

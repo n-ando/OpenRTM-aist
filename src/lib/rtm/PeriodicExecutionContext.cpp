@@ -406,7 +406,7 @@ namespace RTC
       }
     catch (CORBA::Exception& e)
       {
-	e;
+	(void)(e);
 	return RTC::BAD_PARAMETER;
       }
     return RTC::RTC_OK;
