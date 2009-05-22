@@ -161,11 +161,13 @@ namespace Properties
      */
     void test_Properties_key_value()
     {
-      // key,valueによるデフォルト値指定でPropertiesオブジェクトを生成する
+      /* key,valueによるデフォルト値指定でPropertiesオブジェクトを生成する */
       string value("test");
 
+      /*
       // プロパティの名称と値が、コンストラクタで指定した値で取得されることを確認する
       // (1) キーを階層化しないでテスト
+      */
       string key0("manager");
       coil::Properties prop0(key0.c_str(),value.c_str());
       string retkey(prop0.getName());
@@ -174,7 +176,9 @@ namespace Properties
       CPPUNIT_ASSERT_EQUAL(value, retval);
 
 
+      /*
       // (2) キーを階層化してテスト
+      */
       string key1("manager.test.test");
       coil::Properties prop1(key1.c_str(),value.c_str());
 			
@@ -250,7 +254,9 @@ namespace Properties
       };
       
       coil::Properties prop(defaults);
+      /*
       // 各プロパティのデフォルト値および通常値がいずれも、コンストラクタで指定した値で取得されることを確認する
+      */
       for (int i = 0; defaults[i] != ""; i += 2) {
 	string key = defaults[i];
 	string value = defaults[i + 1];
@@ -285,12 +291,12 @@ namespace Properties
       defaults["rtc.openrtm.vendor"] = "AIST TaskIntelligence";
       defaults["rtc.openrtm.version"] = "0.4.0";
 			
-      // mapによるデフォルト値指定でPropertiesオブジェクトを生成する
+      /* mapによるデフォルト値指定でPropertiesオブジェクトを生成する */
       coil::Properties prop(defaults);
       coil::Properties cprop(prop);
 
 
-      // 各プロパティのデフォルト値および通常値がいずれも、コンストラクタで指定した値で取得されることを確認する
+      /* 各プロパティのデフォルト値および通常値がいずれも、コンストラクタで指定した値で取得されることを確認する */
       for (map<string, string>::iterator it = defaults.begin(); it != defaults.end(); it++) {
 	string key = it->first;
 	string value = it->second;
@@ -326,18 +332,18 @@ namespace Properties
       defaults["rtc.openrtm.vendor"] = "AIST TaskIntelligence";
       defaults["rtc.openrtm.version"] = "0.4.0";
 			
-      // mapによるデフォルト値指定でPropertiesオブジェクトを生成する
+      /* mapによるデフォルト値指定でPropertiesオブジェクトを生成する */
       coil::Properties prop(defaults);
-      std::vector<coil::Properties*> leaf0(prop.getNode("rtc")->getLeaf());
+      std::vector<coil::Properties*> leaf0(prop.getNode("rtc").getLeaf());
       CPPUNIT_ASSERT(leaf0.size() == 3);
 
-      // rtc.managerノードを削除する
-      delete prop.getNode("rtc.manager");
+      /* rtc.managerノードを削除する */
+      delete &prop.getNode("rtc.manager");
 
-      // rtcノードからmanagerが削除されている事を確認する。
-      std::vector<coil::Properties*> leaf1(prop.getNode("rtc")->getLeaf());
+      /* rtcノードからmanagerが削除されている事を確認する。*/
+      std::vector<coil::Properties*> leaf1(prop.getNode("rtc").getLeaf());
       CPPUNIT_ASSERT(leaf1.size() == 2);
-      std::string getval(prop.getNode("rtc.manager")->getValue());
+      std::string getval(prop.getNode("rtc.manager").getValue());
       CPPUNIT_ASSERT("" == getval);
     }
 
@@ -411,23 +417,23 @@ namespace Properties
       prop.setDefault("property_2", "default_2");
       prop.setProperty("property_3", "value_3");
 			
-      // (1) デフォルト値が設定されており、かつ通常の値も設定されている
-      // 場合に、プロパティ値として正しく通常の値が取得されるか？
+      /* (1) デフォルト値が設定されており、かつ通常の値も設定されている */
+      /* 場合に、プロパティ値として正しく通常の値が取得されるか？       */
       string expected_1 = "value_1";
       CPPUNIT_ASSERT_EQUAL(expected_1, prop.getProperty("property_1"));
 			
-      // (2) デフォルト値が設定されているが、通常の値は設定されていない
-      // 場合に、プロパティ値として正しくデフォルト値が取得されるか？
+      /* (2) デフォルト値が設定されているが、通常の値は設定されていない */
+      /*/ 場合に、プロパティ値として正しくデフォルト値が取得されるか？  */
       string expected_2 = "default_2";
       CPPUNIT_ASSERT_EQUAL(expected_2, prop.getProperty("property_2"));
 			
-      // (3) デフォルト値は設定されていないが、通常の値は設定されている
-      // 場合に、プロパティ値として正しく通常の値が取得されるか？
+      /* (3) デフォルト値は設定されていないが、通常の値は設定されている */
+      /* 場合に、プロパティ値として正しく通常の値が取得されるか？       */
       string expected_3 = "value_3";
       CPPUNIT_ASSERT_EQUAL(expected_3, prop.getProperty("property_3"));
 			
-      // (4) デフォルト値、通常の値のいずれも設定されていない場合に、プ
-      // ロパティ値として正しく空文字列が取得されるか？
+      /* (4) デフォルト値、通常の値のいずれも設定されていない場合に、プ */
+      /* ロパティ値として正しく空文字列が取得されるか？                 */
       string expected_4 = "";
       CPPUNIT_ASSERT_EQUAL(expected_4, prop.getProperty("property_4"));
     }
@@ -470,20 +476,20 @@ namespace Properties
       string key3Value = "key3-value";
       prop.setProperty(key3, key3Value);
 			
-      // (1) デフォルト値が設定されており、かつ通常の値も設定されている
-      // 場合に、正しく設定されているデフォルト値を取得できるか？
+      /* (1) デフォルト値が設定されており、かつ通常の値も設定されている */
+      /* 場合に、正しく設定されているデフォルト値を取得できるか？       */
       CPPUNIT_ASSERT_EQUAL(key1DefaultValue, prop.getDefault(key1));
 			
-      // (2) デフォルト値が設定されているが、通常の値は設定されていない
-      // 場合に、正しく設定されているデフォルト値を取得できるか？
+      /* (2) デフォルト値が設定されているが、通常の値は設定されていない */
+      /* 場合に、正しく設定されているデフォルト値を取得できるか？       */
       CPPUNIT_ASSERT_EQUAL(key2DefaultValue, prop.getDefault(key2));
 			
-      // (3) デフォルト値は設定されていないが、通常の値は設定されている
-      // 場合に、デフォルト値として空文字列が取得されるか？
+      /* (3) デフォルト値は設定されていないが、通常の値は設定されている */
+      /* 場合に、デフォルト値として空文字列が取得されるか？             */
       CPPUNIT_ASSERT_EQUAL(EMPTY_STRING, prop.getDefault(key3));
 			
-      // (4) デフォルト値、通常の値のいずれも設定されていない場合に、デ
-      // フォルト値として空文字列が取得されるか？
+      /* (4) デフォルト値、通常の値のいずれも設定されていない場合に、デ */
+      /* フォルト値として空文字列が取得されるか？                       */
       string keyNonExist = "key-non-exist";
       CPPUNIT_ASSERT_EQUAL(EMPTY_STRING, prop.getDefault(keyNonExist));
     }
@@ -505,13 +511,13 @@ namespace Properties
       coil::Properties prop;
       prop.setProperty(key, oldValue);
 			
-      // (1) 設定時に指定した値が、正しく設定されるか？
+      /* (1) 設定時に指定した値が、正しく設定されるか？ */
       CPPUNIT_ASSERT_EQUAL(oldValue, prop.getProperty(key));
 
-      // (2) 設定時の戻り値として、元の設定値が正しく取得されるか？
+      /* (2) 設定時の戻り値として、元の設定値が正しく取得されるか？ */
       CPPUNIT_ASSERT_EQUAL(oldValue, prop.setProperty(key, newValue));
 
-      // (1) 設定時に指定した値が、正しく設定されるか？（その２）
+      /* (1) 設定時に指定した値が、正しく設定されるか？（その２） */
       CPPUNIT_ASSERT_EQUAL(newValue, prop.getProperty(key));
     }
 
@@ -752,15 +758,15 @@ namespace Properties
 
       string value("test");
 
-      // (1) キーを階層化していない場合
-      // key,valueによるデフォルト値指定でPropertiesオブジェクトを生成する
+      /* (1) キーを階層化していない場合 */
+      /* key,valueによるデフォルト値指定でPropertiesオブジェクトを生成する */
       string key0("manager");
       coil::Properties prop0(key0.c_str(),value.c_str());
       string retkey(prop0.getName());
       CPPUNIT_ASSERT_EQUAL(key0, retkey);
 
-      // (1) キーを階層化した場合
-      // key,valueによるデフォルト値指定でPropertiesオブジェクトを生成する
+      /* (1) キーを階層化した場合 */
+      /* key,valueによるデフォルト値指定でPropertiesオブジェクトを生成する */
       string key1("manager.hoge");
       coil::Properties prop1(key1.c_str(),value.c_str());
       retkey= prop1.getName();
@@ -776,12 +782,12 @@ namespace Properties
      */
     void test_getValue()
     {
-      // key,valueによるデフォルト値指定でPropertiesオブジェクトを生成する
+      /* key,valueによるデフォルト値指定でPropertiesオブジェクトを生成する */
       string key("manager");
       string value("test.test");
       coil::Properties prop(key.c_str(),value.c_str());
 			
-      // コンストラクタで指定したプロパティの値が取得されることを確認する
+      /* コンストラクタで指定したプロパティの値が取得されることを確認する */
       string retval(prop.getValue());
       CPPUNIT_ASSERT_EQUAL(value, retval);
     }
@@ -799,11 +805,11 @@ namespace Properties
 
       string key("property_1");
       string value("default_1");
-      // デフォルト値を設定する
+      /* デフォルト値を設定する */
       prop.setDefault(key.c_str(), value.c_str());
 
-      // デフォルト値を取得する
-      string retval(prop.getNode(key.c_str())->getDefaultValue());
+      /* デフォルト値を取得する */
+      string retval(prop.getNode(key.c_str()).getDefaultValue());
       CPPUNIT_ASSERT_EQUAL(value, retval);
     }
 
@@ -833,11 +839,11 @@ namespace Properties
       defaults["rtc.openrtm.vendor"] = "AIST TaskIntelligence";
       defaults["rtc.openrtm.version"] = "0.4.0";
 			
-      // mapによるデフォルト値指定でPropertiesオブジェクトを生成する
+      /* mapによるデフォルト値指定でPropertiesオブジェクトを生成する */
       coil::Properties prop(defaults);
 
-      // getLeaf()で子要素を取得
-      std::vector<coil::Properties*> leaf(prop.getNode("rtc")->getLeaf());
+      /* getLeaf()で子要素を取得 */
+      std::vector<coil::Properties*> leaf(prop.getNode("rtc").getLeaf());
       CPPUNIT_ASSERT(leaf[1]->getProperty("arch") == "i386");
       CPPUNIT_ASSERT(leaf[1]->getProperty("debug.level") == "PARANOID");
     }
@@ -868,11 +874,11 @@ namespace Properties
       defaults["rtc.openrtm.vendor"] = "AIST TaskIntelligence";
       defaults["rtc.openrtm.version"] = "0.4.0";
 			
-      // mapによるデフォルト値指定でPropertiesオブジェクトを生成する
+      /* mapによるデフォルト値指定でPropertiesオブジェクトを生成する */
       coil::Properties prop(defaults);
 
-      // getLeaf()でルート要素を取得
-      const coil::Properties* root(prop.getNode("rtc.manager.os")->getRoot());
+      /* getLeaf()でルート要素を取得 */
+      const coil::Properties* root(prop.getNode("rtc.manager.os").getRoot());
       CPPUNIT_ASSERT(root->getProperty("arch") == "i386");
       CPPUNIT_ASSERT(root->getProperty("debug.level") == "PARANOID");
     }
@@ -950,7 +956,9 @@ namespace Properties
       coil::Properties prop;
       prop.setDefaults(defaults);
 
+      /*
       // 各プロパティのデフォルト値がsetDefaultsで指定した値で取得されることを確認する
+      */
       for (int i = 0; defaults[i] != ""; i += 2) {
 	string key = defaults[i];
 	string value = defaults[i + 1];
@@ -986,10 +994,10 @@ namespace Properties
 			
       coil::Properties prop(defaults);
 
-      // (1) コンストラクタ引数にて指定したプロパティの数が正しく取得できるか？
+      /* (1) コンストラクタ引数にて指定したプロパティの数が正しく取得できるか？ */
       CPPUNIT_ASSERT(15 == prop.size());
 
-      // (2) 新たに追加後のプロパティの数が正しく取得できるか？
+      /* (2) 新たに追加後のプロパティの数が正しく取得できるか？ */
       string key = "key";
       string newValue = "new-value";
       prop.setProperty(key, newValue);
@@ -1022,15 +1030,15 @@ namespace Properties
       defaults["rtc.openrtm.vendor"] = "AIST TaskIntelligence";
       defaults["rtc.openrtm.version"] = "0.4.0";
 			
-      // mapによるデフォルト値指定でPropertiesオブジェクトを生成する
+      /* mapによるデフォルト値指定でPropertiesオブジェクトを生成する */
       coil::Properties prop(defaults);
 
-      // (1) 存在するノードを指定しノードを取得
+      /* (1) 存在するノードを指定しノードを取得 */
       CPPUNIT_ASSERT(prop.findNode("rtc.manager")->getProperty("arch") == "i386");
       CPPUNIT_ASSERT(prop.findNode("rtc.manager")->getProperty("debug.level") == "PARANOID");
       CPPUNIT_ASSERT(prop.findNode("rtc.manager") != NULL);
 
-      // (2) 存在しないノードを指定しノードを取得
+      /* (2) 存在しないノードを指定しノードを取得 */
       CPPUNIT_ASSERT(prop.findNode("manager") == NULL);
       CPPUNIT_ASSERT(prop.findNode("rtc.MANAGER") == NULL);
     }
@@ -1061,17 +1069,17 @@ namespace Properties
       defaults["rtc.openrtm.vendor"] = "AIST TaskIntelligence";
       defaults["rtc.openrtm.version"] = "0.4.0";
 			
-      // mapによるデフォルト値指定でPropertiesオブジェクトを生成する
+      /* mapによるデフォルト値指定でPropertiesオブジェクトを生成する */
       coil::Properties prop(defaults);
 
-      // (1) 既に存在するノードを取得
-      CPPUNIT_ASSERT(prop.getNode("rtc.manager")->getProperty("arch") == "i386");
-      CPPUNIT_ASSERT(prop.getNode("rtc.manager")->getProperty("debug.level") == "PARANOID");
+      /* (1) 既に存在するノードを取得 */
+      CPPUNIT_ASSERT(prop.getNode("rtc.manager").getProperty("arch") == "i386");
+      CPPUNIT_ASSERT(prop.getNode("rtc.manager").getProperty("debug.level") == "PARANOID");
 
-      // (2) 存在しないノードを取得
-      std::string getval(prop.getNode("manager")->getValue());
+      /* (2) 存在しないノードを取得 */
+      std::string getval(prop.getNode("manager").getValue());
       CPPUNIT_ASSERT(getval == "");
-      CPPUNIT_ASSERT(prop.getNode("rtc.manager") != NULL);
+//      CPPUNIT_ASSERT(prop.getNode("rtc.manager") != NULL);
     }
 
     /*!
@@ -1100,20 +1108,20 @@ namespace Properties
       defaults["rtc.openrtm.vendor"] = "AIST TaskIntelligence";
       defaults["rtc.openrtm.version"] = "0.4.0";
 			
-      // mapによるデフォルト値指定でPropertiesオブジェクトを生成する
+      /* mapによるデフォルト値指定でPropertiesオブジェクトを生成する */
       coil::Properties prop(defaults);
 
-      // "rtc.manager"のように指定した場合、削除できない。
+      /* "rtc.manager"のように指定した場合、削除できない。 */
       CPPUNIT_ASSERT(prop.removeNode("rtc.manager") == NULL);
 
-      // "rtc.manager"ノードの削除
-      CPPUNIT_ASSERT(prop.getNode("rtc")->removeNode("manager") != NULL);
+      /* "rtc.manager"ノードの削除 */
+      CPPUNIT_ASSERT(prop.getNode("rtc").removeNode("manager") != NULL);
 
-      // (1) 削除したノードを検索
+      /* (1) 削除したノードを検索 */
       CPPUNIT_ASSERT(prop.findNode("rtc.manager") == NULL);
 
-      // (2) 削除したノードを取得
-      std::string getval0(prop.getNode("rtc.manager")->getValue());
+      /* (2) 削除したノードを取得 */
+      std::string getval0(prop.getNode("rtc.manager").getValue());
       CPPUNIT_ASSERT(getval0 == "");
     }
 
@@ -1143,20 +1151,20 @@ namespace Properties
       defaults["rtc.openrtm.vendor"] = "AIST TaskIntelligence";
       defaults["rtc.openrtm.version"] = "0.4.0";
 			
-      // mapによるデフォルト値指定でPropertiesオブジェクトを生成する
+      /* mapによるデフォルト値指定でPropertiesオブジェクトを生成する */
       coil::Properties prop(defaults);
 
-      // (1) 存在するキーでテスト
+      /* (1) 存在するキーでテスト */
       CPPUNIT_ASSERT(prop.hasKey("rtc") != NULL);
 
-      // (2) 存在しないキーでテスト
+      /* (2) 存在しないキーでテスト */
       CPPUNIT_ASSERT(prop.hasKey("hoge") == NULL);
 
-      // (3) 存在するキーでテスト
-      CPPUNIT_ASSERT(prop.getNode("rtc")->hasKey("manager") != NULL);
+      /* (3) 存在するキーでテスト */
+      CPPUNIT_ASSERT(prop.getNode("rtc").hasKey("manager") != NULL);
 
-      // (4) 存在しないキーでテスト
-      CPPUNIT_ASSERT(prop.getNode("rtc")->hasKey("hoge") == NULL);
+      /* (4) 存在しないキーでテスト */
+      CPPUNIT_ASSERT(prop.getNode("rtc").hasKey("hoge") == NULL);
     }
 
     /*!
@@ -1185,20 +1193,20 @@ namespace Properties
       defaults["rtc.openrtm.vendor"] = "AIST TaskIntelligence";
       defaults["rtc.openrtm.version"] = "0.4.0";
 			
-      // mapによるデフォルト値指定でPropertiesオブジェクトを生成する
+      /* mapによるデフォルト値指定でPropertiesオブジェクトを生成する */
       coil::Properties prop(defaults);
 
-      prop.getNode("rtc.manager.os")->clear();
+      prop.getNode("rtc.manager.os").clear();
 
-      // (1) "rtc.manager.os"以下のノードが削除されているか？
+      /* (1) "rtc.manager.os"以下のノードが削除されているか？ */
       CPPUNIT_ASSERT(prop.findNode("rtc.manager.os.name") == NULL);
       CPPUNIT_ASSERT(prop.findNode("rtc.manager.os.release") == NULL);
       
-      // (2) "rtc.manager.os"以外のノードは削除されていないか？
+      /* (2) "rtc.manager.os"以外のノードは削除されていないか？ */
       CPPUNIT_ASSERT(prop.findNode("rtc.manager.arch") != NULL);
       CPPUNIT_ASSERT(prop.findNode("rtc.manager.orb") != NULL);
 
-      // (3) すべてのノードが削除されているか？
+      /* (3) すべてのノードが削除されているか？ */
       prop.clear();
       CPPUNIT_ASSERT(prop.findNode("rtc.manager.os") == NULL);
       CPPUNIT_ASSERT(prop.findNode("rtc.manager") == NULL);
@@ -1245,20 +1253,28 @@ namespace Properties
       string key3Value = "key3-value";
       prop.setProperty(key3, key3Value);
 			
+      /*
       // (1) デフォルト値が設定されており、かつ通常の値も設定されている
       // 場合に、当該キー名の新規ノード作成が、意図どおり失敗するか？
+      */
       CPPUNIT_ASSERT(! prop.createNode(key1.c_str()));
 			
+      /*
       // (2) デフォルト値が設定されているが、通常の値は設定されていない
       // 場合に、当該キー名の新規ノード作成が、意図どおり失敗するか？
+      */
       CPPUNIT_ASSERT(! prop.createNode(key2.c_str()));
 			
+      /*
       // (3) デフォルト値は設定されていないが、通常の値は設定されている
       // 場合に、当該キー名の新規ノード作成が、意図どおり失敗するか？
+      */
       CPPUNIT_ASSERT(! prop.createNode(key3.c_str()));
 			
+      /*
       // (4) デフォルト値、通常の値のいずれも設定されていない場合に、新
       // 規ノード作成が成功するか？
+      */
       string keyNonExist = "key-non-exist";
       CPPUNIT_ASSERT(prop.createNode(keyNonExist.c_str()));
     }
@@ -1315,7 +1331,9 @@ namespace Properties
       string keyB3Value = "keyB3-value";
       propB.setProperty(keyB3, keyB3Value);
 			
+      /*
       // ２つのPropertiesに、共通するキー名で互いに異なる値を設定しておく
+      */
       string keyCommon = "keyCommon";
       string keyCommonValueA = "keyCommon-value-A";
       string keyCommonValueB = "keyCommon-value-B";
