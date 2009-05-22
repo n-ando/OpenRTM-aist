@@ -29,6 +29,7 @@ ConfigSample_la_LIBADD  = $(top_builddir)/src/lib/rtm/libRTC.la
 
 # Standalone RTCs
 example_PROGRAMS = ConfigSampleComp
+example_DATA     = configsample.conf
 
 ConfigSampleComp_SOURCES = ConfigSampleComp.cpp 
 ConfigSampleComp_LDFLAGS = -L$(top_builddir)/src/lib/rtm/.libs
