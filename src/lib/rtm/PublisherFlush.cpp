@@ -96,9 +96,7 @@ namespace RTC
   {
     //    if (!m_active) { return PRECONDITION_NOT_MET; }
 
-    m_consumer->put(data);
-
-    return PORT_OK;
+    return m_consumer->put(data);
   }
 
   bool PublisherFlush::isActive()

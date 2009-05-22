@@ -339,7 +339,8 @@ namespace RTC
       //     n satisfies n'<= readable elements
       //                 n'<= m_fillcount
       //                 n >= - m_fillcount
-      if (n > 0 && n > (m_length - m_fillcount) || n < 0 && n < -m_fillcount)
+      if (n > 0 && n > static_cast<long int>(m_length - m_fillcount) ||
+          n < 0 && n < static_cast<long int>(-m_fillcount))
         {
           return ::RTC::BufferStatus::PRECONDITION_NOT_MET;
         }
@@ -589,7 +590,8 @@ namespace RTC
       // n < 0 : -n = n'
       //     n satisfies n'<= m_length - m_fillcount
       //                 n >= m_fillcount - m_length
-      if ((n > 0 && n > m_fillcount) || (n < 0 && n < (m_fillcount - m_length)))
+      if ((n > 0 && n > static_cast<long int>(m_fillcount)) ||
+          (n < 0 && n < static_cast<long int>(m_fillcount - m_length)))
         {
           return ::RTC::BufferStatus::PRECONDITION_NOT_MET;
         }

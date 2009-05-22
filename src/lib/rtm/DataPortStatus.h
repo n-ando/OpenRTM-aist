@@ -39,7 +39,6 @@ namespace RTC
         INVALID_ARGS,
         PRECONDITION_NOT_MET,
         CONNECTION_LOST,
-        CORBA_ERROR,
         UNKNOWN_ERROR
       };
 
@@ -58,7 +57,6 @@ namespace RTC
         "INVALID_ARGS",
         "PRECONDITION_NOT_MET",
         "CONNECTION_LOST",
-        "CORBA_ERROR",
         "UNKNOWN_ERROR"
       };
       return str[status];
@@ -80,7 +78,7 @@ namespace RTC
   using ::RTC::DataPortStatus::INVALID_ARGS;            \
   using ::RTC::DataPortStatus::PRECONDITION_NOT_MET;    \
   using ::RTC::DataPortStatus::CONNECTION_LOST;         \
-  using ::RTC::DataPortStatus::CORBA_ERROR;
+  using ::RTC::DataPortStatus::UNKNOWN_ERROR;
 
 
 #endif // RTC_DATAPORTSTATUS_H
