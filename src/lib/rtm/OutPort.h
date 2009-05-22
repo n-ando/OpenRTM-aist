@@ -191,7 +191,6 @@ namespace RTC
         {
           ReturnCode ret;
           ret = m_connectors[i]->write(m_cdr);
-          std::cout << "####" << DataPortStatus::toString(ret) << std::endl;
           if (ret != PORT_OK)
             {
               result = false;
