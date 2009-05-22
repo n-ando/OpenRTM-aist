@@ -28,6 +28,7 @@
 #include <cppunit/TestAssert.h>
 
 #include <coil/Async.h>
+#include <coil/Time.h>
 
 class A
 {
@@ -41,7 +42,7 @@ public:
     for (int i(0); i < 4; ++i)
       {
         std::cout << "," << std::flush;
-        usleep(500000);
+        coil::usleep(500000);
       }
     m_hoge = true;
   }
@@ -53,7 +54,7 @@ public:
     for (int i(0); i < 4; ++i)
       {
         std::cout << "," << std::flush;
-        usleep(500000);
+        coil::usleep(500000);
       }
     m_munya = true;
   }
@@ -65,7 +66,7 @@ public:
     for (int i(0); i < 4; ++i)
       {
         std::cout << "," << std::flush;
-        usleep(500000);
+        coil::usleep(500000);
       }
     m_addone = true;
     return val + 1;
@@ -168,7 +169,7 @@ namespace AsyncInvoker
         coil::AsyncInvoker(&a, std::mem_fun(&A::hoge), true)->invoke();
         
         CPPUNIT_ASSERT(a.hoge_invoked() == false);
-        sleep(3);
+        coil::sleep(3);
         CPPUNIT_ASSERT(a.hoge_invoked() == true);
       }
 
@@ -177,7 +178,7 @@ namespace AsyncInvoker
         coil::AsyncInvoker(&a, std::mem_fun(&A::hoge), true)->invoke();
         
         CPPUNIT_ASSERT(a.hoge_invoked() == false);
-        sleep(3);
+        coil::sleep(3);
         CPPUNIT_ASSERT(a.hoge_invoked() == true);
       }
     }
@@ -204,7 +205,7 @@ namespace AsyncInvoker
                          true)->invoke();
       
       CPPUNIT_ASSERT(a.munya_invoked() == false);
-      sleep(3);
+      coil::sleep(3);
       CPPUNIT_ASSERT(a.munya_invoked() == true);
     }
 
@@ -230,7 +231,7 @@ namespace AsyncInvoker
       coil::AsyncInvoker(&a, &aof)->invoke();
 
       CPPUNIT_ASSERT(a.add_one_invoked() == false);
-      sleep(3);
+      coil::sleep(3);
       CPPUNIT_ASSERT(a.add_one_invoked() == true);
       CPPUNIT_ASSERT(aof.get_ret() == (val + 1));
     }
