@@ -287,7 +287,7 @@ namespace coil
     {
       if (this->pbase())
         {
-          //          Guard guard(m_mutex);
+          Guard guard(m_mutex);
           if (this->pptr() > this->epptr() || this->pptr() < this->pbase())
             return -1;
 
