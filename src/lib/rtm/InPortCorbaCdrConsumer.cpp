@@ -80,7 +80,7 @@ namespace RTC
       }
     catch (...)
       {
-        return CORBA_ERROR;
+        return CONNECTION_LOST;
       }
     return UNKNOWN_ERROR;
   }

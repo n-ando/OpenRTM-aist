@@ -95,7 +95,7 @@ namespace RTC
     if (m_buffer->full())
       {
         RTC_WARN(("buffer full"));
-        //        return ::OpenRTM::BUFFER_FULL;
+        return ::OpenRTM::BUFFER_FULL;
       }
 
     RTC_PARANOID(("received data size: %d", data.length()))
@@ -105,10 +105,27 @@ namespace RTC
     RTC_PARANOID(("converted CDR data size: %d", cdr.bufSize()));
     BufferStatus::Enum ret = m_buffer->write(cdr);
 
-    ::RTC::TimedLong val;
-    val <<= cdr;
-
-    return ::OpenRTM::PORT_OK;
+    switch(ret)
+      {
+      case BufferStatus::BUFFER_OK:
+        return ::OpenRTM::PORT_OK;
+        break;
+      case BufferStatus::BUFFER_ERROR:
+        return ::OpenRTM::PORT_ERROR;
+        break;
+      case BufferStatus::BUFFER_FULL:
+        return ::OpenRTM::BUFFER_FULL;
+        break;
+      case BufferStatus::BUFFER_EMPTY:
+        return ::OpenRTM::BUFFER_EMPTY;
+        break;
+      case BufferStatus::TIMEOUT:
+        return ::OpenRTM::BUFFER_TIMEOUT;
+        break;
+      default:
+        return ::OpenRTM::UNKNOWN_ERROR;
+      }
+    return ::OpenRTM::UNKNOWN_ERROR;
   }
 };     // namespace RTC
 

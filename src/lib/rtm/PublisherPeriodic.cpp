@@ -207,7 +207,7 @@ namespace RTC
 
     CdrBufferBase::ReturnCode ret(m_buffer->write(data, sec, usec));
     RTC_DEBUG(("%s = write()", CdrBufferBase::toString(ret)));
-
+    m_task->resume();
     return convertReturn(ret);
   }
 
@@ -278,6 +278,7 @@ namespace RTC
           }
         m_buffer->advanceRptr();
       }
+    return PORT_OK;
    }
 
   /*!

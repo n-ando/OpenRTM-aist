@@ -187,9 +187,19 @@ namespace RTC
         }
 
       bool result(true);
-      for (int i(0), len(conn_size); i < len; ++i)
+      for (size_t i(0), len(conn_size); i < len; ++i)
         {
-          if (!m_connectors[i]->write(m_cdr)) { result = false; }
+          ReturnCode ret;
+          ret = m_connectors[i]->write(m_cdr);
+          std::cout << "####" << DataPortStatus::toString(ret) << std::endl;
+          if (ret != PORT_OK)
+            {
+              result = false;
+              if (ret == CONNECTION_LOST)
+                {
+                  disconnect(m_connectors[i]->id());
+                }
+            }
         }
       return result;
     }

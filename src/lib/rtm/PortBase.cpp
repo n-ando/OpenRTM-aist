@@ -281,14 +281,13 @@ namespace RTC
     throw (CORBA::SystemException)
   {
     RTC_TRACE(("disconnect_all()"));
-    Guard gaurd(m_profile_mutex);
-    // disconnect all connections
-    //    disconnect_all_func f;
-    
-    // Call disconnect() for each ConnectorProfile.
-    //    f = CORBA_SeqUtil::for_each(m_profile.connector_profiles,
-    //				disconnect_all_func(this));
-    ::RTC::ConnectorProfileList& plist(m_profile.connector_profiles);
+
+    ::RTC::ConnectorProfileList plist;
+    {
+      Guard gaurd(m_profile_mutex);
+      plist = m_profile.connector_profiles;
+    }
+
     RTC::ReturnCode_t retcode(::RTC::RTC_OK);
     CORBA::ULong len(plist.length());
     RTC_DEBUG(("disconnecting %d connections.", len));
@@ -410,19 +409,33 @@ namespace RTC
    * @brief Call notify_disconnect() for the next Port
    * @endif
    */
-  ReturnCode_t PortBase::disconnectNext(ConnectorProfile& connector_profile)
+  ReturnCode_t PortBase::disconnectNext(ConnectorProfile& cprof)
   {
     CORBA::Long index;
-    index = CORBA_SeqUtil::find(connector_profile.ports,
+    index = CORBA_SeqUtil::find(cprof.ports,
 				find_port_ref(m_profile.port_ref));
-    if (index < 0) return RTC::BAD_PARAMETER;
-    
-    if (++index < static_cast<CORBA::Long>(connector_profile.ports.length()))
+    if (index < 0)
       {
-	RTC::PortService_ptr p;
-	p = connector_profile.ports[index];
-	return p->notify_disconnect(connector_profile.connector_id);
+        return RTC::BAD_PARAMETER;
       }
+    
+    CORBA::Long len = static_cast<CORBA::Long>(cprof.ports.length());
+    
+    ++index;
+    try
+      {
+        if (index < len)
+          {
+            RTC::PortService_var p;
+            p = cprof.ports[index];
+            return p->notify_disconnect(cprof.connector_id);
+          }
+      } 
+    catch (...)
+      {
+        return RTC::RTC_ERROR;
+      }
+        
     return RTC::RTC_OK;
   }
   
