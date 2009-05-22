@@ -30,7 +30,9 @@ AsyncInvokerTests_SOURCES = ../TestRunner.cpp AsyncInvokerTests.cpp
 AsyncInvokerTests_LDFLAGS = -L../../lib -L$(libdir) 
 AsyncInvokerTests_LDADD   = -lcppunit -lcoil
 
-TEST_SRC = $(AsyncInvokerTests_SOURCES)
+TEST_SRC = $(AsyncInvokerTests_SOURCES) \
+           $(top_srcdir)/win32/coil/Task.cpp
+
 TEST_H   = 
 
 # all
