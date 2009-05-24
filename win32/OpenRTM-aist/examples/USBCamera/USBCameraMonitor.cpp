@@ -102,7 +102,7 @@ RTC::ReturnCode_t USBCameraMonitor::onActivated(RTC::UniqueId ec_id)
 {
   m_img=cvCreateImage(cvSize(m_img_width,m_img_height),IPL_DEPTH_8U,3);
   
-  //²èÁüÉ½¼¨ÍÑ¥¦¥£¥ó¥É¥¦¤ÎºîÀ®
+  //‰æ‘œ•\¦—pƒEƒBƒ“ƒhƒE‚Ìì¬
   cvNamedWindow("CaptureImage", CV_WINDOW_AUTOSIZE);
   
   std::cout << "m_img->nChannels :" << m_img->nChannels << std::endl;
@@ -117,7 +117,7 @@ RTC::ReturnCode_t USBCameraMonitor::onActivated(RTC::UniqueId ec_id)
 RTC::ReturnCode_t USBCameraMonitor::onDeactivated(RTC::UniqueId ec_id)
 {
   cvReleaseImage(&m_img);
-  //É½¼¨¥¦¥£¥ó¥É¥¦¤Î¾Ãµî
+  //•\¦ƒEƒBƒ“ƒhƒE‚ÌÁ‹
   cvDestroyWindow("CaptureImage");
   return RTC::RTC_OK;
 }
@@ -142,7 +142,7 @@ RTC::ReturnCode_t USBCameraMonitor::onExecute(RTC::UniqueId ec_id)
   
   memcpy(m_img->imageData,(void *)&(m_in.data[0]),m_in.data.length());
   
-  //²èÁüÉ½¼¨
+  //‰æ‘œ•\¦
   cvShowImage("CaptureImage", m_img);
   
   cvWaitKey(1);

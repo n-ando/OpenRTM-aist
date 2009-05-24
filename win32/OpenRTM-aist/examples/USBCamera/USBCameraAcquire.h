@@ -124,7 +124,7 @@ protected:
 private:
   int dummy;
   
-  CvCapture* m_capture;	//¥«¥á¥éÍÑ¥á¥â¥ê
+  CvCapture* m_capture;	//ƒJƒƒ‰—pƒƒ‚ƒŠ
 };
 
 
