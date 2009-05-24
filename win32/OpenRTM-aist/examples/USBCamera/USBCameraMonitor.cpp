@@ -66,12 +66,12 @@ USBCameraMonitor::~USBCameraMonitor()
 }
 
 
-  RTC::ReturnCode_t USBCameraMonitor::onInitialize()
-  {
+RTC::ReturnCode_t USBCameraMonitor::onInitialize()
+{
   bindParameter("image_height", m_img_height, "240");
   bindParameter("image_width", m_img_width, "320");
   return RTC::RTC_OK;
-  }
+}
 
 /*
   RTC::ReturnCode_t USBCameraMonitor::onFinalize()
@@ -101,14 +101,14 @@ USBCameraMonitor::~USBCameraMonitor()
 RTC::ReturnCode_t USBCameraMonitor::onActivated(RTC::UniqueId ec_id)
 {
   m_img=cvCreateImage(cvSize(m_img_width,m_img_height),IPL_DEPTH_8U,3);
-
-  //âÊëúï\é¶ópÉEÉBÉìÉhÉEÇÃçÏê¨
+  
+  //≤Ë¡¸…Ωº®Õ—•¶•£•Û•…•¶§Œ∫Ó¿Æ
   cvNamedWindow("CaptureImage", CV_WINDOW_AUTOSIZE);
-
+  
   std::cout << "m_img->nChannels :" << m_img->nChannels << std::endl;
   std::cout << "m_img->width :" << m_img->width << std::endl;
   std::cout << "m_img->height :" << m_img->height << std::endl;
-
+  
   return RTC::RTC_OK;
 }
 
@@ -117,7 +117,7 @@ RTC::ReturnCode_t USBCameraMonitor::onActivated(RTC::UniqueId ec_id)
 RTC::ReturnCode_t USBCameraMonitor::onDeactivated(RTC::UniqueId ec_id)
 {
   cvReleaseImage(&m_img);
-  //ï\é¶ÉEÉBÉìÉhÉEÇÃè¡ãé
+  //…Ωº®•¶•£•Û•…•¶§Œæ√µÓ
   cvDestroyWindow("CaptureImage");
   return RTC::RTC_OK;
 }
@@ -129,32 +129,36 @@ RTC::ReturnCode_t USBCameraMonitor::onExecute(RTC::UniqueId ec_id)
   static coil::TimeValue tm_pre;
   static int count = 0;
   
-  if (m_inIn.isNew())
+  if (!m_inIn.isNew())
     {
-      m_inIn.read();
-      if (m_in.data.length() > 0) {
-        memcpy(m_img->imageData,(void *)&(m_in.data[0]),m_in.data.length());
-      }
-      
-      //âÊëúï\é¶
-      cvShowImage("CaptureImage", m_img);
-      
-      cvWaitKey(1);
-      if (count > 100)
-	{
-          count = 0;
-          coil::TimeValue tm;
-          tm = coil::gettimeofday();
-          double sec(tm_pre -tm);
-          if (sec > 1.0)
-            {
-              std::cout << 100.0/sec << " [FPS]" << std::endl;
-            }
-          tm_pre = tm;
-	}
-      ++count;
+      return RTC::RTC_OK;
     }
   
+  m_inIn.read();
+  if (!(m_in.data.length() > 0))
+    {
+      return RTC::RTC_OK;
+    }
+  
+  memcpy(m_img->imageData,(void *)&(m_in.data[0]),m_in.data.length());
+  
+  //≤Ë¡¸…Ωº®
+  cvShowImage("CaptureImage", m_img);
+  
+  cvWaitKey(1);
+  if (count > 100)
+    {
+      count = 0;
+      coil::TimeValue tm;
+      tm = coil::gettimeofday();
+      double sec(tm - tm_pre);
+      if (sec > 1.0 && sec < 1000.0)
+        {
+          std::cout << 100.0/sec << " [FPS]" << std::endl;
+        }
+      tm_pre = tm;
+    }
+  ++count;
   
   return RTC::RTC_OK;
 }
