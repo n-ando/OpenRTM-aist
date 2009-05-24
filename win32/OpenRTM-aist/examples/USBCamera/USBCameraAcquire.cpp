@@ -86,9 +86,9 @@ RTC::ReturnCode_t USBCameraAcquire::onFinalize()
 
 RTC::ReturnCode_t USBCameraAcquire::onActivated(RTC::UniqueId ec_id)
 {
-  //ƒJƒƒ‰ƒfƒoƒCƒX‚Ì’Tõ
+  //¥«¥á¥é¥Ç¥Ğ¥¤¥¹¤ÎÃµº÷
   if(NULL==(m_capture = cvCreateCameraCapture(CV_CAP_ANY))){
-    cout<<"ƒJƒƒ‰‚ª‚İ‚Â‚©‚è‚Ü‚¹‚ñ"<<endl;
+    cout<<"¥«¥á¥é¤¬¤ß¤Ä¤«¤ê¤Ş¤»¤ó"<<endl;
     return RTC::RTC_ERROR;
   }
   return RTC::RTC_OK;
@@ -98,7 +98,7 @@ RTC::ReturnCode_t USBCameraAcquire::onActivated(RTC::UniqueId ec_id)
 
 RTC::ReturnCode_t USBCameraAcquire::onDeactivated(RTC::UniqueId ec_id)
 {
-  //ƒJƒƒ‰—pƒƒ‚ƒŠ‚Ì‰ğ•ú
+  //¥«¥á¥éÍÑ¥á¥â¥ê¤Î²òÊü
   cvReleaseCapture(&m_capture);
   return RTC::RTC_OK;
 }
@@ -114,7 +114,7 @@ RTC::ReturnCode_t USBCameraAcquire::onExecute(RTC::UniqueId ec_id)
   cam_frame = cvQueryFrame(m_capture);
   if(NULL == cam_frame)
     {
-      std::cout << "‰æ‘œ‚ªƒLƒƒƒvƒ`ƒƒ‚Å‚«‚Ü‚¹‚ñ!!" << std::endl;
+      std::cout << "²èÁü¤¬¥­¥ã¥×¥Á¥ã¤Ç¤­¤Ş¤»¤ó!!" << std::endl;
       return RTC::RTC_ERROR;
     }
   
@@ -139,7 +139,7 @@ RTC::ReturnCode_t USBCameraAcquire::onExecute(RTC::UniqueId ec_id)
       coil::TimeValue tm;
       tm = coil::gettimeofday();
       double sec(tm - tm_pre);
-      if (sec > 1.0)
+      if (sec > 1.0 && sec < 1000.0)
         {
           std::cout << 100/sec << " [FPS]" << std::endl;
         }
