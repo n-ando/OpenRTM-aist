@@ -46,6 +46,7 @@ namespace Task
 //    CPPUNIT_TEST(test_case0);
     CPPUNIT_TEST(test_open_close);
     CPPUNIT_TEST(test_activate);
+    CPPUNIT_TEST(test_activate2);
     CPPUNIT_TEST(test_wait);
     CPPUNIT_TEST(test_suspend);
     CPPUNIT_TEST(test_resume);
@@ -110,10 +111,10 @@ namespace Task
                 for(;;)
                 {  
                   if(m_statflag != true)
-				  {
+		  {
                     break;
-				  }
-				  m_threadcnt[m_tasknumber-1]++;
+		  }
+		  m_threadcnt[m_tasknumber-1]++;
                 }
                 break;
             case 1:
@@ -185,9 +186,48 @@ namespace Task
             sprintf(cstr, "counter:%d ", m_tasknumber);
             //Check that a thread start.
             CPPUNIT_ASSERT_MESSAGE(cstr , (m_tasknumber == 1) );
+        }
+        m_statflag = false;
+        wait();
+
+    }
+    /*!
+     * @brief activate()
+     *
+     * This function tests the Task::activate function.
+     */
+    void test_activate2()
+    {
+        
+        time_t tmstart, tmend;
+		char cstr[256];
+        short ic;
+        if ( m_statflag == true )
+        {
+            m_statflag = false;
+        }
+        m_threadcmd = 0;
+        m_tasknumber = 0;
+        //Start 10 threads. & Check that 10 thread start.
+        for (ic=0; ic<10; ic++)
+        {
+            //Start a thread. 
+            activate();
+            time(&tmstart);
+            for(;;)
+            {
+              time(&tmend);
+              if(difftime(tmend,tmstart)>=1.0)
+              {
+                break;
+              }
+	    }
+            sprintf(cstr, "m_tasknumber:%d (ic+1):%d", m_tasknumber,ic+1);
+            //Check that a thread start.
+            CPPUNIT_ASSERT_MESSAGE(cstr , (m_tasknumber == ic+1) );
             m_statflag = false;
             wait();
-		}
+        }
 
     }
     /*
@@ -196,6 +236,7 @@ namespace Task
     */
     void test_wait()
     {
+        wait(); //If Segmentation fault is not caused, it is OK.
         m_threadcmd = 1;        
         activate();
         wait();
