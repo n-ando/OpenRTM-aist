@@ -96,6 +96,7 @@ namespace coil
     Task* t = (coil::Task*)args;
     int status;
     status = t->svc();
+    t->finalize();
     return 0;
   }
 };
