@@ -346,16 +346,23 @@ namespace PeriodicTask
       p.suspend();
       coil::usleep(50000);
       coil::TimeMeasure::Statistics estat = p.getExecStat();
-      /*
+      /*      
       std::cout << "estat max:  " << estat.max_interval << std::endl;
       std::cout << "estat min:  " << estat.min_interval << std::endl;
       std::cout << "estat mean: " << estat.mean_interval << std::endl;
       std::cout << "estat sdev: " << estat.std_deviation << std::endl;
       */
-      CPPUNIT_ASSERT(estat.max_interval < (wait + 0.030));
-      CPPUNIT_ASSERT(estat.min_interval > (wait - 0.010));
-      CPPUNIT_ASSERT(fabs(estat.mean_interval - wait) < 0.03);
-      CPPUNIT_ASSERT(estat.std_deviation < (wait / 5.0));
+      std::ostringstream ss;
+      ss << "wait:  " << wait << std::endl;
+      ss << "estat max:  " << estat.max_interval << std::endl;
+      ss << "estat min:  " << estat.min_interval << std::endl;
+      ss << "estat mean: " << estat.mean_interval << std::endl;
+      ss << "estat sdev: " << estat.std_deviation << std::endl;
+      
+      CPPUNIT_ASSERT_MESSAGE(ss.str(),estat.max_interval < (wait + 0.030));
+      CPPUNIT_ASSERT_MESSAGE(ss.str(),estat.min_interval > (wait - 0.015));
+      CPPUNIT_ASSERT_MESSAGE(ss.str(),fabs(estat.mean_interval - wait) < 0.03);
+      CPPUNIT_ASSERT_MESSAGE(ss.str(),estat.std_deviation < (wait / 5.0));
 
 
 
@@ -372,11 +379,17 @@ namespace PeriodicTask
       std::cout << "estat mean: " << estat.mean_interval << std::endl;
       std::cout << "estat sdev: " << estat.std_deviation << std::endl;
       */
-      CPPUNIT_ASSERT(estat.max_interval < (wait + 0.030));
-      CPPUNIT_ASSERT(estat.min_interval > (wait - 0.010));
-      CPPUNIT_ASSERT(fabs(estat.mean_interval - wait) < 0.03);
-      CPPUNIT_ASSERT(estat.std_deviation < (wait / 5.0));
+      ss.str("");;
+      ss << "wait:  " << wait << std::endl;
+      ss << "estat max:  " << estat.max_interval << std::endl;
+      ss << "estat min:  " << estat.min_interval << std::endl;
+      ss << "estat mean: " << estat.mean_interval << std::endl;
+      ss << "estat sdev: " << estat.std_deviation << std::endl;
 
+      CPPUNIT_ASSERT_MESSAGE(ss.str(),estat.max_interval < (wait + 0.030));
+      CPPUNIT_ASSERT_MESSAGE(ss.str(),estat.min_interval > (wait - 0.015));
+      CPPUNIT_ASSERT_MESSAGE(ss.str(),fabs(estat.mean_interval - wait) < 0.03);
+      CPPUNIT_ASSERT_MESSAGE(ss.str(),estat.std_deviation < (wait / 5.0));
 
       /* 実行回数が回数(executionMeasureConut)に満たない場合 */
       p.executionMeasureCount(10);
