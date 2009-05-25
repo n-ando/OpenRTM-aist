@@ -27,13 +27,15 @@ AM_LDFLAGS= -L.                   \
 
 noinst_PROGRAMS = TaskTests
 
-TaskTests_SOURCES = ../TestRunner.cpp \
-                    $(top_srcdir)/posix/coil/Task.cpp \
+TaskTests_COMMON_SOURCES = ../TestRunner.cpp \
                     TaskTests.cpp
+TaskTests_SOURCES = $(TaskTests_COMMON_SOURCES) \
+                    $(top_srcdir)/posix/coil/Task.cpp 
 TaskTests_LDFLAGS = -L$(libdir)
 TaskTests_LDADD   = -lcppunit 
 
-TEST_SRC = $(TaskTests_SOURCES)
+TEST_SRC = $(TaskTests_COMMON_SOURCES) \
+	$(top_srcdir)/win32/coil/Task.cpp 
 TEST_H   = 
 
 # all
