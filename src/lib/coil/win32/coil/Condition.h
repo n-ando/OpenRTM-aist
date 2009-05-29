@@ -153,14 +153,14 @@ namespace coil
       // This call atomically signals the <waiters_done_> event and
       // waits until it can acquire the <external_mutex>.  This is
       // required to ensure fairness.
-      result = SignalObjectAndWait (cv->waiters_done_, external_mutex->mutex_, INFINITE, FALSE);
+      DWORD result = SignalObjectAndWait (cv->waiters_done_, external_mutex->mutex_, INFINITE, FALSE);
 //      std::cout << "result " << result << std::endl;
     } else {
       // Always regain the external mutex since that's the guarantee we
       // give to our callers. 
       ::WaitForSingleObject (external_mutex->mutex_, 0);
     }
-  return 0;
+  return result;
   }
 
   int pthread_cond_signal (pthread_cond_t *cv)
