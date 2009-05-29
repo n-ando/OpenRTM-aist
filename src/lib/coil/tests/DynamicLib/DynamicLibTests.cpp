@@ -31,16 +31,20 @@
  */
 namespace DynamicLib
 {
-#if defined COIL_OS_LINUX
-// #error POSIX.
-  const char * LibName = "libcoil.so.0";
-//  const char * SymbolName = "svc_run";
+#if defined(WIN32) || defined(_WIN32) || defined(__WIN32__) || defined(__NT__)
+// #error WIN32!!
+  const char * LibName = "DynamicLibTestDll.dll";
+//  const char * LibName = "coil.dll";
   const char * SymbolName = "ForExternTest";
 
 #else
-// #error WIN32!!
-  const char * LibName = "coil.dll";
+// #error POSIX.
+//  const char * LibName = "libPluginC.so";
+  const char * LibName = ".libs/libDynamicLib.so";
+//  const char * LibName = "libcoil.so.0";
+//  const char * SymbolName = "svc_run";
   const char * SymbolName = "ForExternTest";
+//  const char * SymbolName = "PluginCInit";
 
 #endif
 
@@ -96,11 +100,11 @@ namespace DynamicLib
     /* test case */
 
      /*!
-     * @brief ƒRƒ“ƒXƒgƒ‰ƒNƒ^‚»‚Ì‚P
+     * @brief ¥³¥ó¥¹¥È¥é¥¯¥¿¤½¤Î£±
      */
 	void test_DynamicLib_1()
 	{
-	  // —áŠO‚ª‹N‚«‚È‚¯‚ê‚Î‚n‚j‚Æ‚·‚é
+	  /* Îã³°¤¬µ¯¤­¤Ê¤±¤ì¤Ð£Ï£Ë¤È¤¹¤ë */
       coil::DynamicLib * dl1 = new coil::DynamicLib(1);
       int result = dl1->open(LibName, COIL_DEFAULT_DYNLIB_MODE, 1);
       CPPUNIT_ASSERT_EQUAL(0, result);
@@ -108,33 +112,33 @@ namespace DynamicLib
 	}
 
      /*!
-     * @brief ƒRƒ“ƒXƒgƒ‰ƒNƒ^‚»‚Ì‚Q
+     * @brief ¥³¥ó¥¹¥È¥é¥¯¥¿¤½¤Î£²
      */
 	void test_DynamicLib_2()
 	{
-	  // —áŠO‚ª‹N‚«‚È‚¯‚ê‚Î‚n‚j‚Æ‚·‚é
+	  /* Îã³°¤¬µ¯¤­¤Ê¤±¤ì¤Ð£Ï£Ë¤È¤¹¤ë */
       coil::DynamicLib * dl1 = new coil::DynamicLib(LibName, COIL_DEFAULT_DYNLIB_MODE, 1);
 	  delete dl1;
 	}
 
      /*!
-     * @brief ƒRƒ“ƒXƒgƒ‰ƒNƒ^‚»‚Ì‚R
+     * @brief ¥³¥ó¥¹¥È¥é¥¯¥¿¤½¤Î£³
      */
 	void test_DynamicLib_3()
 	{
-	  // —áŠO‚ª‹N‚«‚È‚¯‚ê‚Î‚n‚j‚Æ‚·‚é
+	  /* Îã³°¤¬µ¯¤­¤Ê¤±¤ì¤Ð£Ï£Ë¤È¤¹¤ë */
 	  coil::DynamicLib dl1(LibName, COIL_DEFAULT_DYNLIB_MODE, 1);
-      coil::DynamicLib dl2(dl1);   // <--- ‚±‚±‚ÅAstd::bad_alloc‚É—Ž‚¿‚é Kz.080930 © fix 081006.
+      coil::DynamicLib dl2(dl1);   // <--- ¤³¤³¤Ç¡¢std::bad_alloc¤ËÍî¤Á¤ë Kz.080930 ¢« fix 081006.
 	}
 
      /*!
-     * @brief ƒRƒ“ƒXƒgƒ‰ƒNƒ^‚»‚Ì‚S
+     * @brief ¥³¥ó¥¹¥È¥é¥¯¥¿¤½¤Î£´
      */
 	void test_DynamicLib_4()
 	{
-	  // —áŠO‚ª‹N‚«‚È‚¯‚ê‚Î‚n‚j‚Æ‚·‚é
+	  /* Îã³°¤¬µ¯¤­¤Ê¤±¤ì¤Ð£Ï£Ë¤È¤¹¤ë */
       coil::DynamicLib * dl1 = new coil::DynamicLib(LibName, COIL_DEFAULT_DYNLIB_MODE, 1);
-       coil::DynamicLib dl2 = *dl1;   // <--- ‚±‚±‚ÅAstd::bad_alloc‚É—Ž‚¿‚é Kz.080930 © fix 081006.
+       coil::DynamicLib dl2 = *dl1;   // <--- ¤³¤³¤Ç¡¢std::bad_alloc¤ËÍî¤Á¤ë Kz.080930 ¢« fix 081006.
 	  delete dl1;
 	}
 
@@ -165,7 +169,7 @@ namespace DynamicLib
 
      /*!
      * @brief do symbol
-     * note ‘¶Ý‚µ‚È‚¢ƒVƒ“ƒ{ƒ‹‚ð“Ç‚Ýo‚·B
+     * note Â¸ºß¤·¤Ê¤¤¥·¥ó¥Ü¥ë¤òÆÉ¤ß½Ð¤¹¡£
      */
 	void test_DynamicLib_symbol_failure()
 	{
@@ -185,7 +189,7 @@ namespace DynamicLib
 
      /*!
      * @brief do symbol
-     * note ‘¶Ý‚·‚éƒVƒ“ƒ{ƒ‹‚ð“Ç‚Ýo‚·B
+     * note Â¸ºß¤¹¤ë¥·¥ó¥Ü¥ë¤òÆÉ¤ß½Ð¤¹¡£
      */
 	void test_DynamicLib_symbol()
 	{
@@ -212,19 +216,19 @@ namespace DynamicLib
 
      /*!
      * @brief do error
-     * note ƒGƒ‰[”­¶Žž‚Éerror()‚ª”ñ‚O‚ð•Ô‚·‚±‚Æ
+     * note ¥¨¥é¡¼È¯À¸»þ¤Ëerror()¤¬Èó£°¤òÊÖ¤¹¤³¤È
      */
 	void test_DynamicLib_error()
 	{
-//      coil::DynamicLib * dl1 = new coil::DynamicLib(1);  // «‚Ç‚¿‚ç‚Å‚à—áŠO‚Í‹N‚«‚È‚¢
+//      coil::DynamicLib * dl1 = new coil::DynamicLib(1);  // ¢­¤É¤Á¤é¤Ç¤âÎã³°¤Ïµ¯¤­¤Ê¤¤
       coil::DynamicLib * dl1 = new coil::DynamicLib(LibName, COIL_DEFAULT_DYNLIB_MODE, 1);
       dl1->error();
 
       dl1->open(LibName, COIL_DEFAULT_DYNLIB_MODE, 1);
-      CPPUNIT_ASSERT(!dl1->error());    // ³íŽž‚É‚Í‚O‚ð•Ô‚·
+      CPPUNIT_ASSERT(!dl1->error());    // Àµ¾ï»þ¤Ë¤Ï£°¤òÊÖ¤¹
 
       dl1->symbol("HogeHogeHoge");
-      CPPUNIT_ASSERT(dl1->error());    // ”ñ³íŽž‚É‚Í”ñ‚O‚ð•Ô‚·
+      CPPUNIT_ASSERT(dl1->error());    // ÈóÀµ¾ï»þ¤Ë¤ÏÈó£°¤òÊÖ¤¹
 //      std::cout << "error() : " << err2 << "." << std::endl;
 
       dl1->close();
