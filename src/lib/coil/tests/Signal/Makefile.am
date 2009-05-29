@@ -27,13 +27,15 @@ AM_LDFLAGS= -L.                   \
 
 noinst_PROGRAMS = SignalTests
 
-SignalTests_SOURCES = ../TestRunner.cpp \
-                      $(top_srcdir)/posix/coil/Signal.cpp \
-                      SignalTests.cpp
+SignalTests_COMMON_SOURCES = ../TestRunner.cpp \
+                             SignalTests.cpp
+SignalTests_SOURCES = $(SignalTests_COMMON_SOURCES) \
+                      $(top_srcdir)/posix/coil/Signal.cpp
 SignalTests_LDFLAGS = -L$(libdir)
 SignalTests_LDADD   = -lcppunit
 
-TEST_SRC = $(SignalTests_SOURCES)
+TEST_SRC = $(SignalTests_COMMON_SOURCES) \
+           $(top_srcdir)/win32/coil/Signal.cpp
 TEST_H   = 
 
 # all

@@ -27,13 +27,15 @@ AM_LDFLAGS= -L.                   \
 
 noinst_PROGRAMS = GuardTests
 
-GuardTests_SOURCES = ../TestRunner.cpp \
-                     $(top_srcdir)/posix/coil/Task.cpp \
-                     GuardTests.cpp
+GuardTests_COMMON_SOURCES = ../TestRunner.cpp \
+                             GuardTests.cpp
+GuardTests_SOURCES = $(GuardTests_COMMON_SOURCES) \
+                     $(top_srcdir)/posix/coil/Task.cpp 
 GuardTests_LDFLAGS = -L$(libdir)
 GuardTests_LDADD   = -lcppunit
 
-TEST_SRC = $(GuardTests_SOURCES)
+TEST_SRC = $(GuardTests_COMMON_SOURCES) \
+           $(top_srcdir)/win32/coil/Task.cpp
 TEST_H   = 
 
 # all

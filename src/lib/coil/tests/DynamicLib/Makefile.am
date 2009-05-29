@@ -27,13 +27,25 @@ AM_LDFLAGS= -L.                   \
 
 noinst_PROGRAMS = DynamicLibTests
 
-DynamicLibTests_SOURCES = ../TestRunner.cpp \
-                          $(top_srcdir)/posix/coil/DynamicLib.cpp \
-                          DynamicLibTests.cpp
-DynamicLibTests_LDFLAGS = -L$(libdir)
+DynamicLibTests_COMMON_SOURCES = ../TestRunner.cpp \
+                                 DynamicLibTests.cpp
+DynamicLibTests_SOURCES = $(DynamicLibTests_COMMON_SOURCES) \
+                          $(top_srcdir)/posix/coil/DynamicLib.cpp
+DynamicLibTests_LDFLAGS = -L$(libdir) -L../../lib/.libs -L$(libdir)
 DynamicLibTests_LDADD   = -lcppunit
 
-TEST_SRC = $(DynamicLibTests_SOURCES)
+noinst_LTLIBRARIES = libDynamicLib.la
+
+libDynamicLib_la_SOURCES = \
+	libDll.h \
+	libDll.cpp
+
+libDynamicLib_la_LDFLAGS = \
+	-rpath `pwd`
+#	-module
+
+TEST_SRC = $(DynamicLibTests_COMMON_SOURCES) \
+           $(top_srcdir)/win32/coil/DynamicLib.cpp
 TEST_H   = 
 
 # all
@@ -57,7 +69,7 @@ clean-local:
 #------------------------------------------------------------
 win32_builddir = .
 
-vcproj: DynamicLib_vc8.vcproj DynamicLib_vc9.vcproj
+vcproj: DynamicLib_vc8.vcproj DynamicLib_vc9.vcproj DynamicLib_libDynamicLib_vc8.vcproj DynamicLib_libDynamicLib_vc9.vcproj
 
 DynamicLib_vc8.vcproj:
 	$(top_builddir)/build/vcprojtool.py vcproj \
@@ -82,5 +94,30 @@ DynamicLib_vc9.vcproj:
 		--source $(TEST_SRC)
 #		--header $(TEST_H)
 	qkc -sm $(win32_builddir)/DynamicLib_vc9.vcproj
+
+DynamicLib_libDynamicLib_vc8.vcproj:
+	$(top_builddir)/build/vcprojtool.py vcproj \
+		--projectname DynamicLibTestDll \
+		--type DLL \
+		--vcversion "8.00" \
+		--version $(COIL_VERSION) \
+		--out $(win32_builddir)/DynamicLib_libDynamicLib_vc8.vcproj \
+		--yaml ../coil_test_dll.vcproj.yaml \
+		--source $(libDynamicLib_la_SOURCES)
+#		--header $(TEST_H)
+	qkc -sm $(win32_builddir)/DynamicLib_libDynamicLib_vc8.vcproj
+
+
+DynamicLib_libDynamicLib_vc9.vcproj:
+	$(top_builddir)/build/vcprojtool.py vcproj \
+		--projectname DynamicLibTestDll  \
+		--type DLL \
+		--vcversion "9.00" \
+		--version $(COIL_VERSION) \
+		--out $(win32_builddir)/DynamicLib_libDynamicLib_vc9.vcproj \
+		--yaml ../coil_test_dll.vcproj.yaml \
+		--source $(libDynamicLib_la_SOURCES)
+#		--header $(TEST_H)
+	qkc -sm $(win32_builddir)/DynamicLib_libDynamicLib_vc9.vcproj
 
 
