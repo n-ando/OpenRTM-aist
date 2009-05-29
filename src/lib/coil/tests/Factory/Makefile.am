@@ -98,7 +98,7 @@ Factory_libPluginC_vc8.vcproj:
 		--vcversion "8.00" \
 		--version $(COIL_VERSION) \
 		--out $(win32_builddir)/Factory_libPluginC_vc8.vcproj \
-		--yaml ../coil_test_dll.vcproj.yaml \
+		--yaml ./coil_test_dll.vcproj.yaml \
 		--source $(libPluginC_la_SOURCES)
 #		--header $(TEST_H)
 	qkc -sm $(win32_builddir)/Factory_libPluginC_vc8.vcproj
@@ -111,7 +111,7 @@ Factory_libPluginC_vc9.vcproj:
 		--vcversion "9.00" \
 		--version $(COIL_VERSION) \
 		--out $(win32_builddir)/Factory_libPluginC_vc9.vcproj \
-		--yaml ../coil_test_dll.vcproj.yaml \
+		--yaml ./coil_test_dll.vcproj.yaml \
 		--source $(libPluginC_la_SOURCES)
 #		--header $(TEST_H)
 	qkc -sm $(win32_builddir)/Factory_libPluginC_vc9.vcproj

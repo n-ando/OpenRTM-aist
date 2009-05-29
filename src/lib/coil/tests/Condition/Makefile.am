@@ -27,12 +27,15 @@ AM_LDFLAGS= -L../../lib/.libs     \
 
 noinst_PROGRAMS = ConditionTests
 
-ConditionTests_SOURCES = ../TestRunner.cpp \
-                         ConditionTests.cpp
+ConditionTests_COMMON_SOURCES = ../TestRunner.cpp \
+                                ConditionTests.cpp
+ConditionTests_SOURCES = $(ConditionTests_COMMON_SOURCES)
 ConditionTests_LDFLAGS = -L../../lib/.libs -L$(libdir)
 ConditionTests_LDADD   = -lcppunit -lcoil
 
-TEST_SRC = $(ConditionTests_SOURCES)
+TEST_SRC = $(ConditionTests_COMMON_SOURCES) \
+	$(top_srcdir)/win32/coil/Task.cpp 
+
 TEST_H   = 
 
 # all
