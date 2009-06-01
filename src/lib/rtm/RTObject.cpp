@@ -298,11 +298,6 @@ namespace RTC
     throw (CORBA::SystemException)
   {
     RTC_TRACE(("initialize()"));
-    ReturnCode_t ret;
-    ret = on_initialize();
-    if (ret != RTC::RTC_OK) return ret;
-    m_created = false;
-
     std::string ec_args;
 
     ec_args += m_properties["exec_cxt.periodic.type"];
@@ -318,6 +313,11 @@ namespace RTC
     ExecutionContextService_var ecv;
     ecv = ec->getObjRef();
     if (CORBA::is_nil(ecv)) return RTC::RTC_ERROR;
+
+    ReturnCode_t ret;
+    ret = on_initialize();
+    if (ret != RTC::RTC_OK) return ret;
+    m_created = false;
 
     ec->bindComponent(this);
     // -- entering alive state --
