@@ -27,22 +27,20 @@
 namespace coil
 {
 
-  inline char* dirname(char* path)
+  inline std::string dirname(char* path)
   {
-    return ::dirname(path);
+    char path_name[strlen(path)+1];
+    strcpy(path_name, path);
+    std::string dir_name = ::dirname(path);
+    return dir_name;
   }
 
-  inline const char* basename(const char* path)
+  inline std::string basename(const char* path)
   {
-    const char *cp = strrchr(path,'/');
-    if(cp == 0)
-    {
-       return path;
-    }
-    else
-    {
-       return cp + 1 ;
-    }
+    char path_name[strlen(path)+1];
+    strcpy(path_name, path);
+    std::string base_name = ::basename(path_name);
+    return base_name;
   }
 };
 
