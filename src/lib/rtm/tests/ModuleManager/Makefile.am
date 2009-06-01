@@ -22,7 +22,8 @@ AM_CPPFLAGS = \
 	-I$(top_builddir)/src/lib/rtm/idl \
 	-I$(top_builddir)/src/lib/coil/include \
 	-I$(top_builddir)/src/lib/rtm \
-	-I$(includedir)
+	-I$(includedir) \
+	-I$(top_builddir)/src/lib/coil/posix
 
 AM_LDFLAGS = \
 	 -L. \
@@ -33,7 +34,9 @@ IDL_SOURCES = \
 	$(top_srcdir)/src/lib/rtm/idl/SDOPackage.idl \
 	$(top_srcdir)/src/lib/rtm/idl/RTC.idl \
 	$(top_srcdir)/src/lib/rtm/idl/OpenRTM.idl \
-	$(top_srcdir)/src/lib/rtm/idl/Manager.idl
+	$(top_srcdir)/src/lib/rtm/idl/Manager.idl \
+	$(top_srcdir)/src/lib/rtm/idl/BasicDataType.idl \
+	$(top_srcdir)/src/lib/rtm/idl/DataPort.idl
 
 noinst_PROGRAMS = ModuleManagerTests
 
@@ -65,6 +68,27 @@ nodist_ModuleManagerTests_SOURCES = \
 	$(top_srcdir)/src/lib/rtm/ManagerServant.cpp \
 	$(top_srcdir)/src/lib/rtm/PeriodicECSharedComposite.cpp \
 	$(top_srcdir)/src/lib/rtm/SdoOrganization.cpp \
+	$(top_srcdir)/src/lib/rtm/SystemLogger.cpp \
+	$(top_srcdir)/src/lib/rtm/FactoryInit.cpp \
+	$(top_srcdir)/src/lib/rtm/InPortCorbaCdrProvider.cpp \
+	$(top_srcdir)/src/lib/rtm/InPortCorbaCdrConsumer.cpp \
+	$(top_srcdir)/src/lib/rtm/OutPortCorbaCdrConsumer.cpp \
+	$(top_srcdir)/src/lib/rtm/OutPortCorbaCdrProvider.cpp \
+	$(top_srcdir)/src/lib/rtm/InPortBase.cpp \
+	$(top_srcdir)/src/lib/rtm/OutPortBase.cpp \
+	$(top_srcdir)/src/lib/rtm/CdrRingBuffer.cpp \
+	$(top_srcdir)/src/lib/rtm/DefaultPeriodicTask.cpp \
+	$(top_srcdir)/src/lib/rtm/PublisherFlush.cpp \
+	$(top_srcdir)/src/lib/rtm/PublisherNew.cpp \
+	$(top_srcdir)/src/lib/rtm/PublisherPeriodic.cpp \
+	$(top_srcdir)/src/lib/rtm/InPortProvider.cpp \
+	$(top_srcdir)/src/lib/rtm/OutPortProvider.cpp \
+	$(top_srcdir)/src/lib/rtm/InPortPullConnector.cpp \
+	$(top_srcdir)/src/lib/rtm/InPortPushConnector.cpp \
+	$(top_srcdir)/src/lib/rtm/InPortConnector.cpp \
+	$(top_srcdir)/src/lib/rtm/OutPortPullConnector.cpp \
+	$(top_srcdir)/src/lib/rtm/OutPortPushConnector.cpp \
+	$(top_srcdir)/src/lib/rtm/OutPortConnector.cpp \
 	ModuleManagerTests.cpp
 
 ModuleManagerTests_LDFLAGS = -L$(libdir) $(AM_LDFLAGS)
