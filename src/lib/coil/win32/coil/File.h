@@ -29,35 +29,96 @@ namespace coil
   /*!
   *  @note like ACE.
   */
-  inline char* dirname(char* path)
+  inline std::string dirname(char* path)
   {
-    static char return_dirname[MaxPathLength + 1];
-//    const char delimiter('\\');
+    char return_dirname[MaxPathLength + 1];
+
+    size_t len = strlen(path);
+    if (len > (sizeof(return_dirname) / sizeof(char)))
+    {
+      len = sizeof(return_dirname) / sizeof(char);
+    }
+    std::strncpy(return_dirname, path, len);
+    return_dirname[len] = '\0';
+
     const char delimiter('/');
-    const char *p = std::strrchr(path, delimiter);
+    char *p = std::strrchr(return_dirname, delimiter);
+
+    std::string dir_name;
     if (p)
     {
-      size_t len = p - path + 1;
-      if (len > (sizeof(return_dirname) / sizeof(char)))
+      if(p != return_dirname)
       {
-        len = sizeof(return_dirname) / sizeof(char);
+        if(*(p+1) == '\0')
+        {
+           *p = '\0';
+           dir_name = dirname(return_dirname);
+        }
+        else
+        {
+           *p = '\0';
+           dir_name = return_dirname;
+        }
       }
-      std::strncpy(return_dirname, path, len);
-    } else {
-      return_dirname[0] = '.';
-      return_dirname[1] = '\0';
+      else 
+      {
+        *(p+1) = '\0';
+        dir_name = return_dirname;
+      }
     }
-    return return_dirname;
+    else
+    {
+      dir_name = ".";
+    }
+    return dir_name;
   }
 
-  inline char* basename(const char* path)
+  inline std::string basename(const char* path)
   {
-//    const char delimiter('\\');
-    const char delimiter('/');
-    const char *p = std::strrchr(path, delimiter);
-    const char *q = (p) ? p + 1 : path ;
+    char p[MaxPathLength + 1];
 
-    return (char *)q;
+    size_t len = strlen(path);
+    if (len > (sizeof(p) / sizeof(char)))
+    {
+      len = sizeof(p) / sizeof(char);
+    }
+    std::strncpy(p, path, len);
+    p[len] = '\0';
+
+    const char delimiter('/');
+    char *pdelimiter = std::strrchr(p, delimiter);
+
+    std::string base_name(p);
+    if (pdelimiter)
+    {
+      if(pdelimiter != p)
+      {
+        if(*(pdelimiter+1) == '\0')
+        {
+          *pdelimiter = '\0';
+          base_name = basename(p);
+        }
+        else
+        {
+          pdelimiter++;
+          base_name = pdelimiter;
+        }
+      }
+      else
+      {
+        if(*(pdelimiter+1) != '\0')
+        {
+          pdelimiter++;
+          base_name = pdelimiter;
+        }
+        else
+        {
+          base_name = pdelimiter;
+        }
+
+      }
+    }
+    return base_name;
   }
 };
 
