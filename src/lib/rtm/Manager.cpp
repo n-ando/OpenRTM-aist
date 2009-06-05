@@ -1185,7 +1185,9 @@ std::vector<coil::Properties> Manager::getLoadableModules()
 	    comps[i]->exit();
 	    coil::Properties p(comps[i]->getInstanceName());
 	    p << comps[i]->getProperties();
+            rtclog.lock();
 	    rtclog.level(Logger::RTL_PARANOID) << p;
+            rtclog.unlock();
 	  }
 	catch (...)
 	  {

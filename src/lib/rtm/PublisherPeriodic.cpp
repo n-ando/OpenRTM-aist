@@ -83,7 +83,9 @@ namespace RTC
   PublisherBase::ReturnCode PublisherPeriodic::init(coil::Properties& prop)
   {
     RTC_TRACE(("init()"));
+    rtclog.lock();
     rtclog.level(::RTC::Logger::RTL_PARANOID) << prop;
+    rtclog.unlock();
 
     RTC::PeriodicTaskFactory& factory(RTC::PeriodicTaskFactory::instance());
 

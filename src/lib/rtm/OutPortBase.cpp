@@ -135,11 +135,15 @@ namespace RTC
     RTC_TRACE(("init()"));
 
     RTC_PARANOID(("given properties:"));
+    rtclog.lock();
     rtclog.level(Logger::RTL_PARANOID) << prop;
+    rtclog.unlock();
     m_properties << prop;
 
     RTC_PARANOID(("updated properties:"));
+    rtclog.lock();
     rtclog.level(Logger::RTL_PARANOID) << m_properties;
+    rtclog.unlock();
 
     configure();
 
