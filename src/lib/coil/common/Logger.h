@@ -237,18 +237,20 @@ namespace coil
           // Add extra character to buffer if not EOF
           if (!traits_type::eq_int_type(c, traits_type::eof()))
             {
+              this->pbump(-1);
               *(this->pptr()) = traits_type::to_char_type(c);
               this->pbump(1);
             }
           // Number of characters to write to file
-          int bytes_to_write = this->pptr() - this->pbase();
+          int bytes_to_write = this->pptr() - this->gptr();
           // Overflow doesn't fail if nothing is to be written
           if (bytes_to_write > 0)
             {
-              if (sputn(this->pbase(), bytes_to_write) != bytes_to_write)
+              if (sputn(this->gptr(), bytes_to_write) != bytes_to_write)
                 return traits_type::eof();
               // Reset next pointer to point to pbase on success
-              this->pbump(-bytes_to_write);
+              this->pbump(this->pbase() - this->pptr());
+              this->gbump(this->pbase() - this->gptr());
             }
         }
       // Write extra character to file if not EOF
@@ -291,14 +293,20 @@ namespace coil
           if (this->pptr() > this->epptr() || this->pptr() < this->pbase())
             return -1;
 
-          int bytes_to_write = this->pptr() - this->pbase();
+          int bytes_to_write;
+          bytes_to_write = this->pptr() - this->gptr();
           if (bytes_to_write > 0)
             {
-              if (sputn(this->pbase(), bytes_to_write) != bytes_to_write)
+              if (sputn(this->gptr(), bytes_to_write) != bytes_to_write)
                 {
                   return -1;
                 }
-              this->pbump(-bytes_to_write);
+              this->gbump(bytes_to_write);
+              if (this->gptr() >= this->pptr())
+                {
+                  this->pbump(this->pbase() - this->pptr());
+                  this->gbump(this->pbase() - this->gptr());
+                }
             }
         }
       else
