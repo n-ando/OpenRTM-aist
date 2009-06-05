@@ -795,7 +795,7 @@ namespace ConfigAdmin
       // 登録済みのコンフィグレーションセットに対して、プロパティを追加する
       coil::Properties configSet2("id");
       configSet2.setProperty("name 2", "1.7320508");
-      CPPUNIT_ASSERT_EQUAL(true, configAdmin.setConfigurationSetValues("id", configSet2));
+      CPPUNIT_ASSERT_EQUAL(true, configAdmin.setConfigurationSetValues(configSet2));
 			
       // 当該コンフィグレーションセットを取得して、プロパティが意図どおり追加されていることを確認する
       const coil::Properties& configSetRet = configAdmin.getConfigurationSet("id");
@@ -821,7 +821,7 @@ namespace ConfigAdmin
       // 存在しないコンフィグレーションセットに対してプロパティ追加を試みて、意図どおり失敗するか？
       coil::Properties configSet2("inexist id");
       configSet2.setProperty("name 2", "1.7320508");
-      CPPUNIT_ASSERT_EQUAL(false, configAdmin.setConfigurationSetValues("inexist id", configSet2));
+      CPPUNIT_ASSERT_EQUAL(false, configAdmin.setConfigurationSetValues(configSet2));
 			
       // 失敗後に、登録済みのコンフィグレーションセットが影響を受けていないか？
       const coil::Properties& configSetRet = configAdmin.getConfigurationSet("id");
