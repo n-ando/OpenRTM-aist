@@ -193,6 +193,7 @@ namespace coil
      */
     virtual std::streamsize xsputn(const char_type* s, std::streamsize n)
     {
+      stream_sputn();
       for (int i(0), len(m_streams.size()); i < len; ++i)
         {
           Guard gaurd(m_streams[i].mutex_);
@@ -201,6 +202,72 @@ namespace coil
       return n;
     }
 
+    /*!
+     * @if jp
+     *
+     * @brief ストリームへ出力する。
+     *
+     * @return 出力した文字数 
+     *
+     * @else
+     *
+     * @brief Write the stream buffer in stream.  
+     *
+     * @return The number of characters written.
+     *
+     * @endif
+     */
+    virtual std::streamsize stream_sputn()
+    {
+      int bytes_to_write;
+      bytes_to_write = this->pptr() - this->gptr();
+      if (bytes_to_write > 0)
+        {
+          for (int i(0), len(m_streams.size()); i < len; ++i)
+            {
+              Guard gaurd(m_streams[i].mutex_);
+              m_streams[i].stream_->sputn(this->gptr(), bytes_to_write);
+            }
+          this->gbump(bytes_to_write);
+          if (this->gptr() >= this->pptr())
+            {
+              this->pbump(this->pbase() - this->pptr());
+              this->gbump(this->pbase() - this->gptr());
+            }
+        }
+      return bytes_to_write;
+    }
+
+    /*!
+     * @if jp
+     *
+     * @brief ストリームへ出力する。
+     *
+     * @param s 入力文字列へのポインタ
+     * @param n 入力文字数
+     * @return 入力文字列のサイズ
+     *
+     * @else
+     *
+     * @brief Writes up to n characters from the array pointed by s 
+     *        to the output sequence controlled by the stream buffer.
+     *
+     * @param s a pointer to input characters
+     * @param n number of input characters
+     * @return The number of characters written.
+     *
+     * @endif
+     */
+    virtual std::streamsize stream_sputn(const char_type* s, std::streamsize n)
+    {
+      
+      for (int i(0), len(m_streams.size()); i < len; ++i)
+        {
+          Guard gaurd(m_streams[i].mutex_);
+          m_streams[i].stream_->sputn(s, n);
+        }
+      return n;
+    }
     /*!
      * @if jp
      *
@@ -246,7 +313,7 @@ namespace coil
           // Overflow doesn't fail if nothing is to be written
           if (bytes_to_write > 0)
             {
-              if (sputn(this->gptr(), bytes_to_write) != bytes_to_write)
+              if (stream_sputn(this->gptr(), bytes_to_write) != bytes_to_write)
                 return traits_type::eof();
               // Reset next pointer to point to pbase on success
               this->pbump(this->pbase() - this->pptr());
@@ -259,7 +326,7 @@ namespace coil
           // Impromptu char buffer (allows "unbuffered" output)
           char_type last_char = traits_type::to_char_type(c);
           // If gzipped file won't accept this character, fail
-          if (sputn(&last_char, 1) != 1)
+          if (stream_sputn(&last_char, 1) != 1)
             return traits_type::eof();
         }
       // If you got here, you have succeeded (even if c was EOF)
@@ -297,7 +364,7 @@ namespace coil
           bytes_to_write = this->pptr() - this->gptr();
           if (bytes_to_write > 0)
             {
-              if (sputn(this->gptr(), bytes_to_write) != bytes_to_write)
+              if (stream_sputn(this->gptr(), bytes_to_write) != bytes_to_write)
                 {
                   return -1;
                 }

@@ -23,12 +23,16 @@
 #include <cppunit/extensions/HelperMacros.h>
 #include <cppunit/TestAssert.h>
 
+#include <string>
+#include <map>
+#include <iostream>
+
 #include <coil/Logger.h>
 #include <coil/Task.h>
 #include <coil/TimeMeasure.h>
 #include <coil/stringutil.h>
 #include <coil/Time.h>
-#include <string>
+#include <coil/Properties.h>
 
 #include <coil/Mutex.h>
 #include <coil/Guard.h>
@@ -163,6 +167,23 @@ protected:
   std::string m_dateFormat;
 };
 
+class LogOut2
+  : public coil::LogStream
+{
+
+  
+public:
+  LogOut2(::coil::LogStream::streambuf_type* streambuf)
+    : ::coil::LogStream(streambuf, /* "test", */
+                        SILENT_LEVEL, PARANOID_LEVEL, SILENT_LEVEL)
+  {
+  }
+  virtual ~LogOut2(){}
+
+
+protected:
+};
+
 #define RTC_LOG(LV, fmt)			           \
   if (m_out.isValid(LV))                                   \
     {                                                      \
@@ -240,8 +261,10 @@ namespace Logger
   {
     CPPUNIT_TEST_SUITE(LoggerTests);
     CPPUNIT_TEST(test_log_streambuf);
+    CPPUNIT_TEST(test_log_streambuf2);
     CPPUNIT_TEST(test_log_stream);
     CPPUNIT_TEST(test_log_stream2);
+    CPPUNIT_TEST(test_log_stream_properties);
     CPPUNIT_TEST_SUITE_END();
   
   private:
@@ -332,6 +355,24 @@ namespace Logger
         }
     }
 
+    void test_log_streambuf2()
+    {
+      coil::LogStreamBuffer logger;
+      std::stringstream s0;
+      logger.addStream(std::cout.rdbuf());
+      logger.addStream(s0.rdbuf());
+
+      std::basic_ostream<char> out(&logger);
+      std::string str("::");
+      int ic(2);
+      out <<"Logger"<<str<<"test_log_streambuf"<<ic<<std::endl;
+      std::ostringstream os,osm;
+      os <<"Logger"<<str<<"test_log_streambuf"<<ic<<std::endl;
+      osm <<"s0.str():"<<s0.str()<<" os.str():"<<"Logger"<<str<<"test_log_streambuf"<<ic<<std::endl;
+      CPPUNIT_ASSERT_MESSAGE(osm.str(),s0.str() == os.str());
+       
+    }
+
     void test_log_stream()
     {
       coil::LogStreamBuffer logbuf;
@@ -415,6 +456,37 @@ namespace Logger
           CPPUNIT_ASSERT(len == s.size());
         }
     }
+
+    void test_log_stream_properties()
+    {
+      std::map<std::string, std::string> defaults;
+      defaults["rtc.component.conf.path"] = "C:\\Program\\ Files\\OpenRTM-aist";
+      defaults["rtc.manager.arch"] = "i386";
+      defaults["rtc.manager.nameserver"] = "zonu.a02.aist.go.jp";
+      defaults["rtc.manager.opening_message"] = "Hello World";
+
+      coil::Properties prop(defaults);
+
+      coil::LogStreamBuffer logbuf;
+      std::stringstream s0;
+      logbuf.addStream(s0.rdbuf());
+      logbuf.addStream(std::cout.rdbuf());
+
+      LogOut2 log(&logbuf);
+      log.setLevel(PARANOID_LEVEL);
+
+      log.level(PARANOID_LEVEL) << prop; 
+
+      std::ostringstream os,osm;
+      os << prop;
+      osm<<"---s0.str---"<<std::endl;
+      osm<<s0.str()<<std::endl;
+      osm<<"---os.str---"<<std::endl;
+      osm<<os.str()<<std::endl;
+      CPPUNIT_ASSERT_MESSAGE(osm.str(),s0.str() == os.str());
+
+    }
+
   };
 }; // namespace Logger
 

@@ -34,6 +34,7 @@ TEST_SRC = $(LoggerTests_SOURCES) \
            $(top_srcdir)/common/stringutil.cpp \
            $(top_srcdir)/common/TimeValue.cpp \
            $(top_srcdir)/common/TimeMeasure.cpp \
+           $(top_srcdir)/common/Properties.cpp \
            $(top_srcdir)/win32/coil/Task.cpp
 	
 TEST_H   = 
@@ -44,7 +45,8 @@ all: do-test
 # do tests
 do-test:
 	./LoggerTests
-	diff3 log?.log
+	diff3 log[0-2].log 
+	diff3 log[4-6].log 
 
 # clean-up
 clean-local:
