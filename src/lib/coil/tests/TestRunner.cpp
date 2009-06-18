@@ -28,6 +28,7 @@
  */
 
 #include <string>
+#include <cstdlib>
 #include <fstream>
 #include <cppunit/ui/text/TestRunner.h>
 #include <cppunit/XmlOutputter.h>
