@@ -64,13 +64,18 @@ namespace RingBuffer
   {
     CPPUNIT_TEST_SUITE(RingBufferTests);
 		
-//    CPPUNIT_TEST(test_length);
-//    CPPUNIT_TEST(test_isFull);
-//    CPPUNIT_TEST(test_isEmpty);
-//    CPPUNIT_TEST(test_init);
+    CPPUNIT_TEST(test_length);
+    CPPUNIT_TEST(test_isFull);
+    CPPUNIT_TEST(test_isEmpty);
+    CPPUNIT_TEST(test_init);
     CPPUNIT_TEST(test_write_read);
-//    CPPUNIT_TEST(test_write_read_with_small_length);
-//    CPPUNIT_TEST(test_isNew);
+    CPPUNIT_TEST(test_write_read_with_small_length);
+    CPPUNIT_TEST(test_isNew);
+    CPPUNIT_TEST(test_reset);
+    CPPUNIT_TEST(test_wptr_put);
+    CPPUNIT_TEST(test_advanceWptr);
+    CPPUNIT_TEST(test_rptr_get);
+    CPPUNIT_TEST(test_advanceRptr);
 		
     CPPUNIT_TEST_SUITE_END();
 		
@@ -114,6 +119,10 @@ namespace RingBuffer
     {
       RTC::RingBuffer<int> buff(123);
       CPPUNIT_ASSERT(buff.length() == 123);
+
+      size_t len(456);
+      buff.length(len);
+      CPPUNIT_ASSERT(buff.length() == len);
     }
 
     /*!
@@ -139,10 +148,10 @@ namespace RingBuffer
       CPPUNIT_ASSERT_EQUAL(false, buff.empty());			
 			
       // (2) 最後にデータが読み取られた後、新しいデータが書き込みされて
-      // いない場合、空と判定されるか？
+      // いない場合、空ではないと判定されるか？
       int readValue;
-      CPPUNIT_ASSERT_EQUAL(RTC::BufferBase<int>::BUFFER_OK, buff.read(readValue));
-      CPPUNIT_ASSERT_EQUAL(true, buff.empty());
+      CPPUNIT_ASSERT_EQUAL(::RTC::BufferStatus::BUFFER_OK, buff.read(readValue));
+      CPPUNIT_ASSERT_EQUAL(false, buff.empty());
 			
       // (3) 最後にデータが読み取られた後、新しいデータが書き込みされた
       // 場合、空ではないと判定されるか？
@@ -189,7 +198,7 @@ namespace RingBuffer
      * @brief isFull()メソッドのテスト
      * 
      * - バッファが空の場合、フル判定は偽となるか？
-     * - 全バッファにデータが書き込まれている状態でも、フル判定は偽となるか？
+     * - 全バッファにデータが書き込まれている状態で、フル判定は真となるか？
      * - バッファに幾分データが書き込まれている状態で、フル判定は偽となるか？
      */
     void test_isFull()
@@ -199,14 +208,14 @@ namespace RingBuffer
       RTC::RingBuffer<int> buff1(length1);
       CPPUNIT_ASSERT_EQUAL(false, buff1.full());
 			
-      // (2) 全バッファにデータが書き込まれている状態でも、フル判定は偽
+      // (2) 全バッファにデータが書き込まれている状態で、フル判定は真
       // となるか？
       int length2 = 10;
       RTC::RingBuffer<int> buff2(length2);
       for (int i = 0; i < length2; i++) {
 	buff2.write(i);
       }
-      CPPUNIT_ASSERT_EQUAL(false, buff2.full());
+      CPPUNIT_ASSERT_EQUAL(true, buff2.full());
 			
       // (3) バッファに幾分データが書き込まれている状態で、フル判定は偽
       // となるか？
@@ -405,30 +414,62 @@ namespace RingBuffer
       // フル状態にする
       long int length2 = 2;
       RTC::RingBuffer<int> buff2(length2);
+      coil::Properties prop;
+      prop["write.full_policy"] = "overwrite";
+      buff2.init(prop);
+
       for (int i = 0; i < length2; i++) {
 	buff2.write(i + 123);
       }
 			
       // １データ書込・読出を行う
-      for (int writeValue = 0; writeValue < 100; writeValue++) {
+//      for (int writeValue = 0; writeValue < 100; writeValue++) {
+//	// 書込み
+//	buff2.write(writeValue);
+//				
+//	// 読出し
+//	int readValue;
+//	buff2.read(readValue);
+//				
+//	// 書き込んだデータを正しく読み出せたか？
+//	CPPUNIT_ASSERT_EQUAL(writeValue+1+123, readValue);
+//     }
+
 	// 書込み
-	buff2.write(writeValue);
+        /* policyがoverwriteでfull状態で書き込むと、古いデータを上書きし、読み込み側のポインタをインクリメントする。*/
+	buff2.write(0);
 				
+        CPPUNIT_ASSERT_EQUAL(true, buff2.full());
 	// 読出し
 	int readValue;
+        /* 読み出して読み込み側のポインタをインクメントするためfull状態ではなくなる */
 	buff2.read(readValue);
-				
+
+        CPPUNIT_ASSERT_EQUAL(false, buff2.full());
 	// 書き込んだデータを正しく読み出せたか？
-	CPPUNIT_ASSERT_EQUAL(writeValue, readValue);
-      }
+	CPPUNIT_ASSERT_EQUAL(1+123, readValue);
 			
       // (3) バッファに幾分データが書き込まれている状態で１データ書込・読出を行い、書き込んだデータを正しく読み出せるか？
       long int length3 = 2;
       RTC::RingBuffer<int> buff3(length3);
+      coil::Properties prop3;
+      prop3["write.full_policy"] = "overwrite";
+      buff3.init(prop3);
+
       for (int i = 0; i < 1; i++) {
 	buff3.write(i + 123);
       }
-			
+      {	
+	// 書込み
+	buff3.write(-1);
+				
+	// 読出し
+	int readValue;
+	buff3.read(readValue);
+				
+	// 書き込んだデータを正しく読み出せたか？
+	CPPUNIT_ASSERT_EQUAL(123, readValue);
+      }
       // １データ書込・読出を行う
       for (int writeValue = 0; writeValue < 100; writeValue++) {
 	// 書込み
@@ -439,7 +480,7 @@ namespace RingBuffer
 	buff3.read(readValue);
 				
 	// 書き込んだデータを正しく読み出せたか？
-	CPPUNIT_ASSERT_EQUAL(writeValue, readValue);
+	CPPUNIT_ASSERT_EQUAL(writeValue-1, readValue);
       }
     }
 		
@@ -497,10 +538,170 @@ namespace RingBuffer
 	// になるか？
 	int readValue;
 	buff3.read(readValue);
-	CPPUNIT_ASSERT_EQUAL(true, buff3.empty());
+	CPPUNIT_ASSERT_EQUAL(false, buff3.empty());
       }
     }
-		
+    /*!
+     * @brief reset()メソッドのテスト
+     * 
+     */
+    void test_reset()
+    {
+      int idata[10] = {123,456,789,321,654,987,1234,3456,5678,7890};
+      RTC::RingBuffer<int> buff(10);
+
+      for(int ic(0);ic<8;++ic)
+      {
+          buff.put(idata[ic]);
+          buff.advanceWptr();
+      }
+      buff.advanceRptr(3);
+      CPPUNIT_ASSERT_EQUAL(buff.get(), idata[3]);
+      CPPUNIT_ASSERT_EQUAL(buff.readable(), (size_t)5);
+
+      buff.reset();
+      CPPUNIT_ASSERT(buff.empty());
+      CPPUNIT_ASSERT_EQUAL(buff.get(), idata[0]);
+      buff.put(idata[9]);
+      CPPUNIT_ASSERT_EQUAL(buff.get(), idata[9]);
+      CPPUNIT_ASSERT_EQUAL(buff.readable(), (size_t)0);
+      
+    }	
+    /*!
+     * @brief wptr(),put()メソッドのテスト
+     * 
+     */
+    void test_wptr_put()
+    {
+      int idata[10] = {123,456,789,321,654,987,1234,3456,5678,7890};
+      RTC::RingBuffer<int> buff(10);
+      for(int ic(0);ic<10;++ic)
+      {
+          buff.put(idata[ic]);
+          buff.advanceWptr();
+      }
+      buff.reset();
+      for(int ic(0);ic<10;++ic)
+      {
+          CPPUNIT_ASSERT_EQUAL(idata[ic],*buff.wptr(ic));
+      }
+      for(int ic(0);ic<10;++ic)
+      {
+          CPPUNIT_ASSERT_EQUAL(idata[(-ic+10)%10],*buff.wptr(-ic));
+      }
+      buff.advanceWptr(5);
+      for(int ic(0);ic<10;++ic)
+      {
+          CPPUNIT_ASSERT_EQUAL(idata[(5+ic)%10],*buff.wptr(ic));
+      }
+      for(int ic(0);ic<10;++ic)
+      {
+          CPPUNIT_ASSERT_EQUAL(idata[(5-ic+10)%10],*buff.wptr(-ic));
+      }
+        
+    }
+    /*!
+     * @brief advanceWptr()メソッドのテスト
+     * 
+     */
+    void test_advanceWptr()
+    {
+        int idata[10] = {123,456,789,321,654,987,1234,3456,5678,7890};
+        RTC::RingBuffer<int> buff(10);
+        CPPUNIT_ASSERT_EQUAL(buff.advanceWptr(-5),::RTC::BufferStatus::PRECONDITION_NOT_MET);
+        CPPUNIT_ASSERT_EQUAL(buff.advanceWptr(5),::RTC::BufferStatus::BUFFER_OK);
+        CPPUNIT_ASSERT_EQUAL(buff.advanceWptr(8),::RTC::BufferStatus::PRECONDITION_NOT_MET);
+        CPPUNIT_ASSERT_EQUAL(buff.advanceWptr(-5),::RTC::BufferStatus::BUFFER_OK);
+        buff.reset();
+        for(int ic(0);ic<10;++ic)
+        {
+            buff.put(idata[ic]);
+            buff.advanceWptr();
+        }
+        buff.reset();
+        CPPUNIT_ASSERT_EQUAL(buff.advanceWptr(5),::RTC::BufferStatus::BUFFER_OK);
+        buff.advanceRptr(5);
+        CPPUNIT_ASSERT_EQUAL(buff.advanceWptr(-5),::RTC::BufferStatus::PRECONDITION_NOT_MET);
+        CPPUNIT_ASSERT_EQUAL(buff.advanceWptr(8),::RTC::BufferStatus::BUFFER_OK);
+        CPPUNIT_ASSERT_EQUAL(idata[3],*buff.wptr());
+        CPPUNIT_ASSERT_EQUAL((size_t)8,buff.readable());
+        CPPUNIT_ASSERT_EQUAL(buff.advanceWptr(-5),::RTC::BufferStatus::BUFFER_OK);
+        CPPUNIT_ASSERT_EQUAL(idata[8],*buff.wptr());
+        CPPUNIT_ASSERT_EQUAL((size_t)3,buff.readable());
+    }
+    /*!
+     * @brief rptr(),get()メソッドのテスト
+     * 
+     */
+    void test_rptr_get()
+    {
+        int idata[10] = {123,456,789,321,654,987,1234,3456,5678,7890};
+        RTC::RingBuffer<int> buff(10);
+        for(int ic(0);ic<10;++ic)
+        {  
+            buff.put(idata[ic]);
+            buff.advanceWptr();
+        }
+        buff.reset();
+        for(int ic(0);ic<10;++ic)
+        {
+            CPPUNIT_ASSERT_EQUAL(idata[ic],*buff.rptr(ic));
+        }
+        for(int ic(0);ic<10;++ic)
+        { 
+            CPPUNIT_ASSERT_EQUAL(idata[(-ic+10)%10],*buff.rptr(-ic));
+        }
+        buff.advanceWptr(5);
+        buff.advanceRptr(5);
+        for(int ic(0);ic<10;++ic)
+        {
+            CPPUNIT_ASSERT_EQUAL(idata[(5+ic)%10],*buff.rptr(ic));
+        }
+        for(int ic(0);ic<10;++ic)
+        {
+            CPPUNIT_ASSERT_EQUAL(idata[(5-ic+10)%10],*buff.rptr(-ic));
+        }
+        buff.reset();
+        buff.advanceWptr(10);
+        for(int ic(0);ic<10;++ic)
+        {
+            CPPUNIT_ASSERT_EQUAL(idata[ic],buff.get());
+            int ret;
+            buff.get(ret);
+            CPPUNIT_ASSERT_EQUAL(idata[ic],ret);
+            buff.advanceRptr();
+        }
+    }
+    /*!
+     * @brief advanceRptr()メソッドのテスト
+     * 
+     */
+    void test_advanceRptr()
+    {
+        int idata[10] = {123,456,789,321,654,987,1234,3456,5678,7890};
+        RTC::RingBuffer<int> buff(10);
+        buff.advanceWptr(5);
+        CPPUNIT_ASSERT_EQUAL(buff.advanceRptr(-6),::RTC::BufferStatus::PRECONDITION_NOT_MET);
+        CPPUNIT_ASSERT_EQUAL(buff.advanceRptr(5),::RTC::BufferStatus::BUFFER_OK);
+        CPPUNIT_ASSERT_EQUAL(buff.advanceRptr(8),::RTC::BufferStatus::PRECONDITION_NOT_MET);
+        CPPUNIT_ASSERT_EQUAL(buff.advanceRptr(-5),::RTC::BufferStatus::BUFFER_OK);
+        buff.reset();
+        buff.advanceWptr(5);
+        buff.advanceRptr(5);
+        for(int ic(0);ic<10;++ic)
+        {
+            buff.put(idata[ic]);
+            buff.advanceWptr();
+        }
+        CPPUNIT_ASSERT_EQUAL(buff.advanceRptr(-6),::RTC::BufferStatus::PRECONDITION_NOT_MET);
+        CPPUNIT_ASSERT_EQUAL(buff.advanceRptr(8),::RTC::BufferStatus::BUFFER_OK);
+        CPPUNIT_ASSERT_EQUAL(idata[8],*buff.rptr());
+        CPPUNIT_ASSERT_EQUAL((size_t)8,buff.writable());
+        CPPUNIT_ASSERT_EQUAL(buff.advanceRptr(-5),::RTC::BufferStatus::BUFFER_OK);
+        CPPUNIT_ASSERT_EQUAL(idata[3],*buff.rptr());
+        CPPUNIT_ASSERT_EQUAL((size_t)3,buff.writable());
+    }
+
   };
 }; // namespace RingBuffer
 
