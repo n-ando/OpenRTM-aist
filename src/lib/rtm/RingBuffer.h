@@ -304,7 +304,7 @@ namespace RTC
     virtual DataType* wptr(long int n = 0) 
     {
       Guard guard(m_posmutex);
-      return &m_buffer[(m_wpos + n) % m_length];
+      return &m_buffer[(m_wpos + n + m_length) % m_length];
     }
     
     /*!
@@ -346,7 +346,7 @@ namespace RTC
         }
 
       Guard guard(m_posmutex);
-      m_wpos = (m_wpos + n) % m_length;
+      m_wpos = (m_wpos + n + m_length) % m_length;
       m_fillcount += n;
       return ::RTC::BufferStatus::BUFFER_OK;
     }
@@ -558,7 +558,7 @@ namespace RTC
     virtual DataType* rptr(long int n = 0)
     {
       Guard guard(m_posmutex);
-      return &(m_buffer[(m_rpos + n) % m_length]);
+      return &(m_buffer[(m_rpos + n + m_length) % m_length]);
     }
     
     /*!
@@ -597,7 +597,7 @@ namespace RTC
         }
 
       Guard guard(m_posmutex);
-      m_rpos = (m_rpos + n) % m_length;
+      m_rpos = (m_rpos + n + m_length) % m_length;
       m_fillcount -= n;
       return ::RTC::BufferStatus::BUFFER_OK;
     }
