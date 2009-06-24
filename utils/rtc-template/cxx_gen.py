@@ -247,10 +247,6 @@ comp_soruce = """// -*- C++ -*-
     // <rtc-template block="initializer">
     // </rtc-template>
 {
-  // Registration: InPort/OutPort/Service
-  // <rtc-template block="registration">
-  // </rtc-template>
-
 }
 
 [basicInfo.name]::~[basicInfo.name]()
@@ -260,6 +256,10 @@ comp_soruce = """// -*- C++ -*-
 
 RTC::ReturnCode_t [basicInfo.name]::onInitialize()
 {
+  // Registration: InPort/OutPort/Service
+  // <rtc-template block="registration">
+  // </rtc-template>
+
   // <rtc-template block="bind_config">
   // </rtc-template>
   return RTC::RTC_OK;
