@@ -1496,7 +1496,7 @@ namespace RTC
     
     std::string propkey("port.outport.");
     propkey += name;
-    m_properties.getNode(propkey) << m_properties.getNode("port.outport");
+    m_properties.getNode(propkey) << m_properties.getNode("port.outport.dataport");
     
     outport.properties() << m_properties.getNode(propkey);
     registerPort(outport);
