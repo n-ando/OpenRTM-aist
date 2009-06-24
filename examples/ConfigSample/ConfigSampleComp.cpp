@@ -28,7 +28,7 @@ void MyModuleInit(RTC::Manager* manager)
 
   // Get the component's object reference
   RTC::RTObject_var rtobj;
-  rtobj = RTC::RTObject::_narrow(manager->getPOA()->servant_to_reference(comp));
+  rtobj = RTC::RTObject::_narrow(comp->_default_POA()->servant_to_reference(comp));
 
   RTC::ExecutionContextList_var ecs;
   ecs = rtobj->get_owned_contexts();
