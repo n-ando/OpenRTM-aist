@@ -19,6 +19,7 @@
 #include <cppunit/extensions/HelperMacros.h>
 #include <cppunit/TestAssert.h>
 #include <rtm/InPortProvider.h>
+#include <rtm/BufferBase.h>
 
 /*!
  * @class InPortProviderTests class
@@ -37,7 +38,6 @@ namespace InPortProvider
 		       const std::string& subscriptionType,
 		       const std::map<std::string, std::string>& properties)
     {
-      setDataType(dataType.c_str());
       setInterfaceType(interfaceType.c_str());
       setDataFlowType(dataFlowType.c_str());
       setSubscriptionType(subscriptionType.c_str());
@@ -50,6 +50,12 @@ namespace InPortProvider
 	  NVUtil::appendStringValue(m_properties, key, value);
 	}
     }
+    virtual void init(coil::Properties& prop)
+      {
+      }
+    virtual void setBuffer(RTC::BufferBase<cdrMemoryStream>* buffer) 
+      {
+      }
   };
 	
   int g_argc;
@@ -123,21 +129,13 @@ namespace InPortProvider
       SDOPackage::NVList profile;
       provider->publishInterfaceProfile(profile);
 			
-      // "dataport.data_type"を正しく取得できるか？
-      CPPUNIT_ASSERT_EQUAL(std::string("DATA_TYPE"),
-			   NVUtil::toString(profile, "dataport.data_type"));
-			
       // "dataport.interface_type"を正しく取得できるか？
       CPPUNIT_ASSERT_EQUAL(std::string("INTERFACE_TYPE"),
 			   NVUtil::toString(profile, "dataport.interface_type"));
 			
-      // "dataport.dataflow_type"を正しく取得できるか？
-      CPPUNIT_ASSERT_EQUAL(std::string("DATA_FLOW_TYPE"),
-			   NVUtil::toString(profile, "dataport.dataflow_type"));
-			
-      // "dataport.subscription_type"を正しく取得できるか？
-      CPPUNIT_ASSERT_EQUAL(std::string("SUBSCRIPTION_TYPE"),
-			   NVUtil::toString(profile, "dataport.subscription_type"));
+      // プロパティを正しく取得できるか？
+      CPPUNIT_ASSERT_EQUAL(std::string("VALUE1"), NVUtil::toString(profile, "KEY1"));
+      CPPUNIT_ASSERT_EQUAL(std::string("VALUE2"), NVUtil::toString(profile, "KEY2"));
     }
 		
     /*!
@@ -159,7 +157,7 @@ namespace InPortProvider
 			
       SDOPackage::NVList props;
       NVUtil::appendStringValue(props, "dataport.interface_type", "INTERFACE_TYPE");
-      provider->publishInterface(props);
+      CPPUNIT_ASSERT_EQUAL(true,provider->publishInterface(props));
 			
       // プロパティを正しく取得できるか？
       CPPUNIT_ASSERT_EQUAL(std::string("VALUE1"), NVUtil::toString(props, "KEY1"));
@@ -186,7 +184,7 @@ namespace InPortProvider
 			
       SDOPackage::NVList props;
       NVUtil::appendStringValue(props, "dataport.interface_type", "UNMATCHED_INTERFACE_TYPE");
-      provider->publishInterface(props);
+      CPPUNIT_ASSERT_EQUAL(false,provider->publishInterface(props));
 			
       // （意図どおり）プロパティを取得できないか？
       CPPUNIT_ASSERT_EQUAL(std::string(""), NVUtil::toString(props, "KEY1"));
