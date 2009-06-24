@@ -42,6 +42,16 @@ SeqOut::SeqOut(RTC::Manager* manager)
     
     // </rtc-template>
 {
+}
+
+SeqOut::~SeqOut()
+{
+}
+
+
+
+RTC::ReturnCode_t SeqOut::onInitialize()
+{
   // Registration: InPort/OutPort/Service
   // <rtc-template block="registration">
   // Set InPort buffers
@@ -68,19 +78,10 @@ SeqOut::SeqOut(RTC::Manager* manager)
   m_FloatSeq.data.length(10);
   m_LongSeq.data.length(10);
   m_ShortSeq.data.length(10);
-}
 
-SeqOut::~SeqOut()
-{
-}
-
-
-/*
-RTC::ReturnCode_t SeqOut::onInitialize()
-{
   return RTC::RTC_OK;
 }
-*/
+
 
 /*
 RTC::ReturnCode_t SeqOut::onFinalize()

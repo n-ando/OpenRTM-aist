@@ -33,6 +33,15 @@ Controller::Controller(RTC::Manager* manager)
     m_outOut("out", m_out)
     // </rtc-template>
 {
+}
+
+Controller::~Controller()
+{
+}
+
+
+RTC::ReturnCode_t Controller::onInitialize()
+{
   // Registration: InPort/OutPort/Service
   // <rtc-template block="registration">
   // Set InPort buffers
@@ -49,15 +58,6 @@ Controller::Controller(RTC::Manager* manager)
 
   // </rtc-template>
 
-}
-
-Controller::~Controller()
-{
-}
-
-
-RTC::ReturnCode_t Controller::onInitialize()
-{
   // <rtc-template block="bind_config">
   // Bind variables and configuration variable
 

@@ -39,6 +39,15 @@ MyServiceConsumer::MyServiceConsumer(RTC::Manager* manager)
     // </rtc-template>
     async_set_value(0), async_echo(0)
 {
+}
+
+MyServiceConsumer::~MyServiceConsumer()
+{
+}
+
+
+RTC::ReturnCode_t MyServiceConsumer::onInitialize()
+{
   // Registration: InPort/OutPort/Service
   // <rtc-template block="registration">
   // Set InPort buffers
@@ -55,19 +64,8 @@ MyServiceConsumer::MyServiceConsumer(RTC::Manager* manager)
   
   // </rtc-template>
 
-}
-
-MyServiceConsumer::~MyServiceConsumer()
-{
-}
-
-
-/*
-RTC::ReturnCode_t MyServiceConsumer::onInitialize()
-{
   return RTC::RTC_OK;
 }
-*/
 
 /*
 RTC::ReturnCode_t MyServiceConsumer::onFinalize()

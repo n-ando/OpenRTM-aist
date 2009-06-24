@@ -34,6 +34,15 @@ Sensor::Sensor(RTC::Manager* manager)
 
     // </rtc-template>
 {
+}
+
+Sensor::~Sensor()
+{
+}
+
+
+RTC::ReturnCode_t Sensor::onInitialize()
+{
   // Registration: InPort/OutPort/Service
   // <rtc-template block="registration">
   // Set InPort buffers
@@ -50,15 +59,6 @@ Sensor::Sensor(RTC::Manager* manager)
 
   // </rtc-template>
 
-}
-
-Sensor::~Sensor()
-{
-}
-
-
-RTC::ReturnCode_t Sensor::onInitialize()
-{
   // <rtc-template block="bind_config">
   // Bind variables and configuration variable
 
