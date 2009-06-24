@@ -41,7 +41,7 @@ class MyServiceConsumer
 
   // The initialize action (on CREATED->ALIVE transition)
   // formaer rtc_init_entry() 
-  // virtual RTC::ReturnCode_t onInitialize();
+  virtual RTC::ReturnCode_t onInitialize();
 
   // The finalize action (on ALIVE->END transition)
   // formaer rtc_exiting_entry()
@@ -124,7 +124,29 @@ class MyServiceConsumer
 
     void operator()(RTC::CorbaConsumer<MyService>* obj)
     {
-      (*obj)->set_value(m_val);
+      try
+        {
+          if( CORBA::is_nil((*obj).operator->()) )
+            {
+              std::cout << "No service connected." << std::endl;
+            }
+          else
+            {
+              (*obj)->set_value(m_val);
+            }
+        }
+      catch (const CORBA::INV_OBJREF &)
+        {
+        }
+      catch (const CORBA::OBJECT_NOT_EXIST &)
+        {
+        }
+      catch (const CORBA::OBJ_ADAPTER &)
+        {
+        }
+      catch (...)
+        {
+        }
     }
     CORBA::Float m_val;
   };
@@ -136,7 +158,29 @@ class MyServiceConsumer
       : m_msg(msg), m_result(result) {}
     void operator()(RTC::CorbaConsumer<MyService>* obj)
     {
-      m_result = (*obj)->echo(m_msg.c_str());
+      try
+        {
+          if( CORBA::is_nil((*obj).operator->()) )
+            {
+              std::cout << "No service connected." << std::endl;
+            }
+          else
+            {
+              m_result = (*obj)->echo(m_msg.c_str());
+            }
+        }
+      catch (const CORBA::INV_OBJREF &)
+        {
+        }
+      catch (const CORBA::OBJECT_NOT_EXIST &)
+        {
+        }
+      catch (const CORBA::OBJ_ADAPTER &)
+        {
+        }
+      catch (...)
+        {
+        }
     }
     std::string m_msg;
     std::string& m_result;
