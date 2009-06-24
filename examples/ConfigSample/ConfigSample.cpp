@@ -52,6 +52,15 @@ ConfigSample::ConfigSample(RTC::Manager* manager)
     
     // </rtc-template>
 {
+}
+
+ConfigSample::~ConfigSample()
+{
+}
+
+
+RTC::ReturnCode_t ConfigSample::onInitialize()
+{
   // Registration: InPort/OutPort/Service
   // <rtc-template block="registration">
   // Set InPort buffers
@@ -66,15 +75,6 @@ ConfigSample::ConfigSample(RTC::Manager* manager)
   
   // </rtc-template>
 
-}
-
-ConfigSample::~ConfigSample()
-{
-}
-
-
-RTC::ReturnCode_t ConfigSample::onInitialize()
-{
   // <rtc-template block="bind_config">
   // Bind variables and configuration variable
   bindParameter("int_param0", m_int_param0, "0");

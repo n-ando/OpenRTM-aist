@@ -36,6 +36,15 @@ Motor::Motor(RTC::Manager* manager)
 
     // </rtc-template>
 {
+}
+
+Motor::~Motor()
+{
+}
+
+
+RTC::ReturnCode_t Motor::onInitialize()
+{
   // Registration: InPort/OutPort/Service
   // <rtc-template block="registration">
   // Set InPort buffers
@@ -52,15 +61,6 @@ Motor::Motor(RTC::Manager* manager)
 
   // </rtc-template>
 
-}
-
-Motor::~Motor()
-{
-}
-
-
-RTC::ReturnCode_t Motor::onInitialize()
-{
   // <rtc-template block="bind_config">
   // Bind variables and configuration variable
   bindParameter("motor_id", m_motor_id, "0");

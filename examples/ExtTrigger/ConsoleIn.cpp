@@ -34,6 +34,15 @@ ConsoleIn::ConsoleIn(RTC::Manager* manager)
     m_outOut("out", m_out)
     // </rtc-template>
 {
+}
+
+ConsoleIn::~ConsoleIn()
+{
+}
+
+
+RTC::ReturnCode_t ConsoleIn::onInitialize()
+{
   // Registration: InPort/OutPort/Service
   // <rtc-template block="registration">
   // Set InPort buffers
@@ -49,12 +58,8 @@ ConsoleIn::ConsoleIn(RTC::Manager* manager)
   
   // </rtc-template>
 
+  return RTC::RTC_OK;
 }
-
-ConsoleIn::~ConsoleIn()
-{
-}
-
 
 RTC::ReturnCode_t ConsoleIn::onExecute(RTC::UniqueId ec_id)
 {

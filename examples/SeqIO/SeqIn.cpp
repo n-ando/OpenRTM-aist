@@ -42,6 +42,16 @@ SeqIn::SeqIn(RTC::Manager* manager)
     
     // </rtc-template>
 {
+}
+
+SeqIn::~SeqIn()
+{
+}
+
+
+
+RTC::ReturnCode_t SeqIn::onInitialize()
+{
   // Registration: InPort/OutPort/Service
   // <rtc-template block="registration">
   // Set InPort buffers
@@ -64,19 +74,9 @@ SeqIn::SeqIn(RTC::Manager* manager)
   
   // </rtc-template>
 
-}
-
-SeqIn::~SeqIn()
-{
-}
-
-
-/*
-RTC::ReturnCode_t SeqIn::onInitialize()
-{
   return RTC::RTC_OK;
 }
-*/
+
 
 /*
 RTC::ReturnCode_t SeqIn::onFinalize()
