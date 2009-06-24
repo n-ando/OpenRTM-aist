@@ -29,14 +29,27 @@ using namespace RTC;
 void usage()
 {
   std::cout << std::endl;
-  std::cout << "usage: ConnectorComp [options]" << std::endl;
+  std::cout << "usage: ConnectorComp [options].." << std::endl;
   std::cout << std::endl;
   std::cout << "  --flush         ";
-  std::cout << ": Set subscription type Flush" << std::endl;
+  std::cout << ": Set subscription type flush" << std::endl;
   std::cout << "  --new           ";
-  std::cout << ": Set subscription type New" << std::endl;
+  std::cout << ": Set subscription type new" << std::endl;
   std::cout << "  --periodic [Hz] ";
-  std::cout << ": Set subscription type Periodic" << std::endl;	
+  std::cout << ": Set subscription type periodic" << std::endl;
+  std::cout << "  --policy [any]  ";
+  std::cout << ": Set push policy ALL or FIFO or SKIP or NEW" << std::endl;
+  std::cout << "  --skip [n]      ";
+  std::cout << ": Set skip count 0..n" << std::endl;
+  std::cout << std::endl;
+  std::cout << "exsample:" << std::endl;
+  std::cout << "  ConnectorComp --flush" << std::endl;
+  std::cout << "  ConnectorComp --new" << std::endl;
+  std::cout << "  ConnectorComp --new --policy ALL" << std::endl;
+  std::cout << "  ConnectorComp --new --policy SKIP --skip 100" << std::endl;
+  std::cout << "  ConnectorComp --periodic 10" << std::endl;
+  std::cout << "  ConnectorComp --periodic 10 --policy FIFO" << std::endl;
+  std::cout << "  ConnectorComp --periodic 10 --policy NEW" << std::endl;
   std::cout << std::endl;
 }
 
@@ -47,14 +60,21 @@ int main (int argc, char** argv)
 
   std::string subs_type;
   std::string period;
+  std::string push_policy;
+  std::string skip_count;
+  if (argc < 2)
+    {
+      usage();
+    }
+
   for (int i = 1; i < argc; ++i)
     {
       std::string arg(argv[i]);
-      if (arg == "--flush")         subs_type = "Flush";
-      else if (arg == "--new")      subs_type = "New";
+      if (arg == "--flush")         subs_type = "flush";
+      else if (arg == "--new")      subs_type = "new";
       else if (arg == "--periodic")
 	{
-	  subs_type = "Periodic";
+	  subs_type = "periodic";
 	  if (++i < argc) period = argv[i];
 	  else            period = "1.0";
 	}
@@ -63,15 +83,27 @@ int main (int argc, char** argv)
 	  usage();
 	  exit(1);
 	}
+      else if (arg == "--policy")
+	{
+	  if (++i < argc) push_policy = argv[i];
+	  else            push_policy = "NEW";
+	}
+      else if (arg == "--skip")
+	{
+	  if (++i < argc) skip_count = argv[i];
+	  else            skip_count = "0";
+	}
       else
 	{
-	  subs_type = "Flush";
+	  subs_type = "flush";
 	}
     }
   
   std::cout << "Subscription Type: " << subs_type << std::endl;
   if (period != "")
     std::cout << "Period: " << period << " [Hz]" << std::endl;
+  std::cout << "push policy: " << push_policy << std::endl;
+  std::cout << "skip count: " << skip_count << std::endl;
 
 
   CORBA::ORB_var orb = CORBA::ORB_init(_argc, _argv);
@@ -113,17 +145,31 @@ int main (int argc, char** argv)
   prof.ports[1] = pout[(CORBA::ULong)0];
   CORBA_SeqUtil::push_back(prof.properties,
 			   NVUtil::newNV("dataport.interface_type",
-					 "CORBA_Any"));
+					 "corba_cdr"));
   CORBA_SeqUtil::push_back(prof.properties,
 			   NVUtil::newNV("dataport.dataflow_type",
-					 "Push"));
-  CORBA_SeqUtil::push_back(prof.properties,
+					 "push"));
+  if (subs_type != "")
+    CORBA_SeqUtil::push_back(prof.properties,
 			   NVUtil::newNV("dataport.subscription_type",
 					 subs_type.c_str()));
+  else
+    CORBA_SeqUtil::push_back(prof.properties,
+			   NVUtil::newNV("dataport.subscription_type",
+					 "flush"));
   if (period != "")
-  CORBA_SeqUtil::push_back(prof.properties,
-			   NVUtil::newNV("dataport.push_interval",
+    CORBA_SeqUtil::push_back(prof.properties,
+			   NVUtil::newNV("dataport.push_rate",
 					 period.c_str()));
+  if (push_policy != "")
+    CORBA_SeqUtil::push_back(prof.properties,
+			   NVUtil::newNV("dataport.push_policy",
+					 push_policy.c_str()));
+  if (skip_count != "")
+    CORBA_SeqUtil::push_back(prof.properties,
+			   NVUtil::newNV("dataport.skip_count",
+					 skip_count.c_str()));
+
   ReturnCode_t ret;
   ret = pin[(CORBA::ULong)0]->connect(prof);
   assert(ret == RTC::RTC_OK);
