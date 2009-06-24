@@ -70,10 +70,11 @@ namespace RTC
 	return false;
       }
     
-    PortableServer::ObjectId_var oid;
-    oid = _default_POA()->activate_object(&provider);
+    PortableServer::ObjectId_var oid = 
+        PortableServer::string_to_ObjectId(instance_name);
+    Manager::instance().getPOA()->activate_object_with_id(oid, &provider);
     CORBA::Object_ptr obj;
-    obj = _default_POA()->id_to_reference(oid);
+    obj = Manager::instance().getPOA()->id_to_reference(oid);
     
     std::string key("port");
     key.append(".");key.append(type_name);
@@ -84,6 +85,9 @@ namespace RTC
     CORBA_SeqUtil::
       push_back(m_providers, NVUtil::newNV(key.c_str(), ior));
     m_servants.push_back(&provider);
+
+    std::string name(instance_name);
+    m_instance_name.push_back(name);
     return true;
   };
   
@@ -128,9 +132,14 @@ namespace RTC
       {
         try
           {
-            _default_POA()->activate_object(m_servants[i]);
+            PortableServer::ObjectId_var oid = 
+                PortableServer::string_to_ObjectId(m_instance_name[i].c_str());
+            Manager::instance().getPOA()->activate_object_with_id(oid, m_servants[i]);
           }
         catch(const ::PortableServer::POA::ServantAlreadyActive &)
+          {
+          }
+        catch(const ::PortableServer::POA::ObjectAlreadyActive &)
           {
           }
       }
@@ -147,9 +156,9 @@ namespace RTC
   {
     for (int i(0), len(m_servants.size()); i < len; ++i)
       {
-        PortableServer::ObjectId_var oid;
-        oid = _default_POA()->servant_to_id(m_servants[i]);
-        _default_POA()->deactivate_object(oid);
+        PortableServer::ObjectId_var oid = 
+            PortableServer::string_to_ObjectId(m_instance_name[i].c_str());
+        Manager::instance().getPOA()->deactivate_object(oid);
       }
   }
   

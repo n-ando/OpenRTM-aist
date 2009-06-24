@@ -492,6 +492,7 @@ namespace RTC
      */
     NVList m_providers;
     std::vector<PortableServer::RefCountServantBase*> m_servants;
+    std::vector<std::string> m_instance_name;
     
     /*!
      * @if jp
