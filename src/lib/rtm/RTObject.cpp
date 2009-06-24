@@ -314,15 +314,16 @@ namespace RTC
     ecv = ec->getObjRef();
     if (CORBA::is_nil(ecv)) return RTC::RTC_ERROR;
 
+    ec->bindComponent(this);
+    // -- entering alive state --
+    // at least one EC must be attached
+    if (m_ecMine.length() == 0) return RTC::PRECONDITION_NOT_MET;
+
     ReturnCode_t ret;
     ret = on_initialize();
     if (ret != RTC::RTC_OK) return ret;
     m_created = false;
 
-    ec->bindComponent(this);
-    // -- entering alive state --
-    // at least one EC must be attached
-    if (m_ecMine.length() == 0) return RTC::PRECONDITION_NOT_MET;
     for (::CORBA::ULong i(0), len(m_ecMine.length()); i < len; ++i)
       {
         RTC_DEBUG(("EC[%d] starting.", i));
