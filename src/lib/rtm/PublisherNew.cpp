@@ -39,10 +39,10 @@ namespace RTC
    * @endif
    */
   PublisherNew::PublisherNew()
-    : rtclog("PublisherPeriodic"),
+    : rtclog("PublisherNew"),
       m_consumer(0), m_buffer(0), m_task(0),
       m_retcode(PORT_OK), m_pushPolicy(NEW),
-      m_skipn(10), m_active(false)
+      m_skipn(0), m_active(false)
   {
     rtclog.setLevel("PARANOID");
   }
@@ -86,6 +86,48 @@ namespace RTC
     rtclog.level(::RTC::Logger::RTL_PARANOID) << prop;
     rtclog.unlock();
     
+    // push_policy default: NEW
+    std::string push_policy = prop.getProperty("push_policy", "NEW");
+    RTC_DEBUG(("push_policy: %s", push_policy.c_str()));
+
+    // skip_count default: 0
+    std::string skip_count = prop.getProperty("skip_count", "0");
+    RTC_DEBUG(("skip_count: %s", skip_count.c_str()));
+
+    coil::normalize(push_policy);
+    if (push_policy == "all") 
+      {
+        m_pushPolicy = ALL;
+      }
+    else if (push_policy == "fifo")
+      {
+        m_pushPolicy = FIFO;
+      }
+    else if (push_policy == "skip")
+      {
+        m_pushPolicy = SKIP;
+      }
+    else if (push_policy == "new")
+      {
+        m_pushPolicy = NEW;
+      }
+    else
+      {
+        RTC_ERROR(("invalid push_policy value: %s", push_policy.c_str()));
+        m_pushPolicy = NEW;     // default push policy
+      }
+
+    if (!coil::stringTo(m_skipn, skip_count.c_str()))
+      {
+        RTC_ERROR(("invalid skip_count value: %s", skip_count.c_str()));
+        m_skipn = 0;           // default skip count
+      }
+    if (m_skipn < 0)
+      {
+        RTC_ERROR(("invalid skip_count value: %d", m_skipn));
+        m_skipn = 0;           // default skip count
+      }
+
     RTC::PeriodicTaskFactory& factory(RTC::PeriodicTaskFactory::instance());
 
     coil::vstring th = factory.getIdentifiers();
@@ -182,11 +224,11 @@ namespace RTC
     if (m_retcode == BUFFER_FULL)
       {
         RTC_DEBUG(("write(): InPort buffer is full."));
+        CdrBufferBase::ReturnCode ret(m_buffer->write(data, sec, usec));
+        m_task->signal();
         return BUFFER_FULL;
       }
 
-    // why?
-    //    if (m_retcode == BUFFER_FULL) { return BUFFER_FULL; }
     assert(m_buffer != 0);
 
     CdrBufferBase::ReturnCode ret(m_buffer->write(data, sec, usec));
@@ -263,9 +305,14 @@ namespace RTC
               {
                 return SEND_FULL;
               }
+            else if (ret != PORT_OK)
+              {
+                return ret;
+              }
             
             m_buffer->advanceRptr();
           }
+        return PORT_OK;
       }
     catch (...)
       {
@@ -289,6 +336,10 @@ namespace RTC
           {
             return SEND_FULL;
           }
+        else if (ret != PORT_OK)
+          {
+            return ret;
+          }
         
         m_buffer->advanceRptr();
         
@@ -306,25 +357,59 @@ namespace RTC
    */
   PublisherNew::ReturnCode PublisherNew::pushSkip()
   {
+    static int leftskip;  // 残りのスキップ数
+
     RTC_TRACE(("pushSkip()"));
     try
       {
-        cdrMemoryStream& cdr(m_buffer->get());
-        m_buffer->advanceRptr(m_skipn);
-        return m_consumer->put(cdr);
+        ReturnCode ret(PORT_OK);
+        int preskip(m_buffer->readable() + leftskip);
+        int loopcnt(preskip/(m_skipn +1));
+        int postskip(m_skipn - leftskip);
+        for (int i(0); i < loopcnt; ++i)
+          {
+            m_buffer->advanceRptr(postskip);
+
+            const cdrMemoryStream& cdr(m_buffer->get());
+            ret = m_consumer->put(cdr);
+            if (ret != PORT_OK)
+              {
+                m_buffer->advanceRptr(-postskip);  // 読み出しポインタを戻す
+                return ret;
+              }
+            postskip = m_skipn +1;
+          }
+        m_buffer->advanceRptr(m_buffer->readable());
+        if (loopcnt == 0)
+          {  // Not put
+            leftskip = preskip % (m_skipn +1);
+          }
+        else
+          {
+          if ( m_retcode != PORT_OK )  // 前回の結果
+            {  // put Error after 
+              leftskip = 0;
+            }
+          else
+            {  // put OK after
+              leftskip = preskip % (m_skipn +1);
+            }
+          }
+        return ret;
       }
     catch (...)
       {
         return CONNECTION_LOST;
       }
     return PORT_ERROR;
-  }
+}
 
    /*!
     * @brief push "new" policy
     */
   PublisherNew::ReturnCode PublisherNew::pushNew()
   {
+    RTC_TRACE(("pushNew()"));
     try
       {
         m_buffer->advanceRptr(m_buffer->readable() - 1);

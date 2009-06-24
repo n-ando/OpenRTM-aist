@@ -41,7 +41,7 @@ namespace RTC
     : rtclog("PublisherPeriodic"),
       m_consumer(0), m_buffer(0), m_task(0),
       m_retcode(PORT_OK), m_pushPolicy(NEW),
-      m_skipn(10), m_active(false), m_readback(false)
+      m_skipn(0), m_active(false), m_readback(false)
   {
     rtclog.setLevel("PARANOID");
   }
@@ -86,6 +86,48 @@ namespace RTC
     rtclog.lock();
     rtclog.level(::RTC::Logger::RTL_PARANOID) << prop;
     rtclog.unlock();
+
+    // push_policy default: NEW
+    std::string push_policy = prop.getProperty("push_policy", "NEW");
+    RTC_DEBUG(("push_policy: %s", push_policy.c_str()));
+
+    // skip_count default: 0
+    std::string skip_count = prop.getProperty("skip_count", "0");
+    RTC_DEBUG(("skip_count: %s", skip_count.c_str()));
+
+    coil::normalize(push_policy);
+    if (push_policy == "all") 
+      {
+        m_pushPolicy = ALL;
+      }
+    else if (push_policy == "fifo")
+      {
+        m_pushPolicy = FIFO;
+      }
+    else if (push_policy == "skip")
+      {
+        m_pushPolicy = SKIP;
+      }
+    else if (push_policy == "new")
+      {
+        m_pushPolicy = NEW;
+      }
+    else
+      {
+        RTC_ERROR(("invalid push_policy value: %s", push_policy.c_str()));
+        m_pushPolicy = NEW;     // default push policy
+      }
+
+    if (!coil::stringTo(m_skipn, skip_count.c_str()))
+      {
+        RTC_ERROR(("invalid skip_count value: %s", skip_count.c_str()));
+        m_skipn = 0;           // default skip count
+      }
+    if (m_skipn < 0)
+      {
+        RTC_ERROR(("invalid skip_count value: %d", m_skipn));
+        m_skipn = 0;           // default skip count
+      }
 
     RTC::PeriodicTaskFactory& factory(RTC::PeriodicTaskFactory::instance());
 
@@ -276,6 +318,7 @@ namespace RTC
 
         if (ret != PORT_OK)
           {
+            RTC_DEBUG(("%s = consumer.put()", DataPortStatus::toString(ret)));
             return ret;
           }
         m_buffer->advanceRptr();
@@ -289,8 +332,18 @@ namespace RTC
   PublisherBase::ReturnCode PublisherPeriodic::pushFifo()
   {
     RTC_TRACE(("pushFifo()"));
+    if (m_buffer->empty() && !m_readback)
+      {
+        RTC_DEBUG(("buffer empty"));
+        return BUFFER_EMPTY;
+      }
     const cdrMemoryStream& cdr(m_buffer->get());
     ReturnCode ret(m_consumer->put(cdr));
+    if (ret != PORT_OK)
+      {
+        RTC_DEBUG(("%s = consumer.put()", DataPortStatus::toString(ret)));
+        return ret;
+      }
     m_buffer->advanceRptr();
     
     return ret;
@@ -304,40 +357,33 @@ namespace RTC
     static int leftskip; // 残りのスキップ数
 
     RTC_TRACE(("pushSkip()"));
-    int preskip(m_buffer->readable() - leftskip);
 
-    if (preskip < 0)
-      {
-        m_buffer->advanceRptr(m_buffer->readable());
-        leftskip = -preskip;
-        // this causes empty() == true
-      }
-    else
-      {
-        m_buffer->advanceRptr(preskip);
-      }
-
-    if (m_buffer->empty())
+    if (m_buffer->empty() && !m_readback)
       {
         RTC_DEBUG(("buffer empty"));
         return BUFFER_EMPTY;
       }
-    
-    const cdrMemoryStream& cdr(m_buffer->get());
-    ReturnCode ret(m_consumer->put(cdr));
-    
-    int postskip(m_skipn - m_buffer->readable());
 
-    if (postskip < 0)
+    ReturnCode ret(PORT_OK);
+    int preskip(m_buffer->readable() + leftskip);
+    int loopcnt(preskip/(m_skipn +1));
+    int postskip(m_skipn - leftskip);
+    for (int i(0); i < loopcnt; ++i)
       {
-        leftskip = -postskip;
-        m_buffer->advanceRptr(m_buffer->readable());
+        m_buffer->advanceRptr(postskip);
+        const cdrMemoryStream& cdr(m_buffer->get());
+        ret = m_consumer->put(cdr);
+        if (ret != PORT_OK)
+          {
+            m_buffer->advanceRptr(-postskip);  // 読み出しポインタを戻す
+            RTC_DEBUG(("%s = consumer.put()", DataPortStatus::toString(ret)));
+            return ret;
+          }
+        postskip = m_skipn +1;
       }
-    else
-      {
-        m_buffer->advanceRptr(m_skipn);
-      }
-    
+
+    m_buffer->advanceRptr(m_buffer->readable());
+    leftskip = preskip % (m_skipn +1);
     return ret;
   }
 
