@@ -1,5 +1,5 @@
-/*! -*- C++ -*-
- *
+// -*- C++ -*-
+/*!
  * @file InPortPushConnector.cpp
  * @brief InPortPush type connector class
  * @date $Date$

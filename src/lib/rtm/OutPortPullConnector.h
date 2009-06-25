@@ -1,5 +1,5 @@
-/*! -*- C++ -*-
- *
+// -*- C++ -*-
+/*!
  * @file OutPortPullConnector.h
  * @brief OutPortPull type connector class
  * @date $Date$

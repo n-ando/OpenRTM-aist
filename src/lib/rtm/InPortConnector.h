@@ -1,5 +1,5 @@
-/*! -*- C++ -*-
- *
+// -*- C++ -*-
+/*!
  * @file InPortConnector.h
  * @brief InPortConnector base class
  * @date $Date$

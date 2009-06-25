@@ -1,5 +1,5 @@
-/*! -*- C++ -*-
- *
+// -*- C++ -*-
+/*!
  * @file ConnectorBase.h
  * @brief Connector base class
  * @date $Date$
