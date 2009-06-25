@@ -1,5 +1,5 @@
-/*! -*- C++ -*-
- *
+// -*- C++ -*-
+/*!
  * @file OutPortPushConnector.h
  * @brief Push type connector class
  * @date $Date$

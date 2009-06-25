@@ -1,5 +1,5 @@
-/*! -*- C++ -*-
- *
+// -*- C++ -*-
+/*!
  * @file OutPortBase.cpp
  * @brief Output porty base class
  * @date $Date: 2007-12-31 03:08:05 $
