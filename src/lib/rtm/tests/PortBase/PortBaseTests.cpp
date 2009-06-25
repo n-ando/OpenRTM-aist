@@ -113,6 +113,12 @@ namespace PortBase
     {
       _unsubscribeIfsTimes.push_back(getNow());
     }
+    virtual void activateInterfaces()
+    {
+    }
+    virtual void deactivateInterfaces()
+    {
+    }
 	
   private:
 	
@@ -180,6 +186,8 @@ namespace PortBase
     CPPUNIT_TEST(test_setPortRef);
     CPPUNIT_TEST(test_getPortRef);
     CPPUNIT_TEST(test_getUUID);
+    CPPUNIT_TEST(test_disconnect_all);
+    CPPUNIT_TEST(test_setOwner);
 		
     CPPUNIT_TEST_SUITE_END();
 		
@@ -187,6 +195,8 @@ namespace PortBase
 	
     CORBA::ORB_ptr m_orb;
     RTC::PortBase* m_pPortBase;
+    RTC::PortBase* m_pPortBase_2;
+    RTC::PortBase* m_pPortBase_3;
 
   public:
 	
@@ -272,6 +282,8 @@ namespace PortBase
 
       // PortBaseのインスタンスを生成する
       m_pPortBase = new PortBaseMock(portProfile);
+      m_pPortBase_2 = new PortBaseMock(portProfile);
+      m_pPortBase_3 = new PortBaseMock(portProfile);
 
       // POAを活性化する			
       PortableServer::POAManager_var poaMgr = poa->the_POAManager();
@@ -587,6 +599,33 @@ namespace PortBase
     void test_disconnect_all()
     {
       // TODO 未テスト
+      RTC::PortService_ptr portRef_1 = m_pPortBase->getPortRef();
+      RTC::PortService_ptr portRef_2 = m_pPortBase_2->getPortRef();
+      RTC::PortService_ptr portRef_3 = m_pPortBase_3->getPortRef();
+
+      RTC::ConnectorProfile connProfile;
+      connProfile.name = "ConnectorProfile-name";
+      connProfile.connector_id = "connect_id0";
+      connProfile.ports.length(3);
+      connProfile.ports[0] = portRef_1;
+      connProfile.ports[1] = portRef_2;
+      connProfile.ports[2] = portRef_3;
+      
+      const PortBaseMock* pPortBaseMock_1 = dynamic_cast<const PortBaseMock*>(m_pPortBase);
+      CPPUNIT_ASSERT(pPortBaseMock_1 != 0);
+      CPPUNIT_ASSERT_EQUAL(0, (int) pPortBaseMock_1->getNotifyDisconnectTimes().size());
+      const PortBaseMock* pPortBaseMock_2 = dynamic_cast<const PortBaseMock*>(m_pPortBase_2);
+      CPPUNIT_ASSERT(pPortBaseMock_2 != 0);
+      CPPUNIT_ASSERT_EQUAL(0, (int) pPortBaseMock_2->getNotifyDisconnectTimes().size());
+      const PortBaseMock* pPortBaseMock_3 = dynamic_cast<const PortBaseMock*>(m_pPortBase_3);
+      CPPUNIT_ASSERT(pPortBaseMock_3 != 0);
+      CPPUNIT_ASSERT_EQUAL(0, (int) pPortBaseMock_3->getNotifyDisconnectTimes().size());
+      CPPUNIT_ASSERT_EQUAL(RTC::RTC_OK, portRef_1->connect(connProfile));
+      CPPUNIT_ASSERT_EQUAL(RTC::RTC_OK, portRef_1->disconnect_all());
+      CPPUNIT_ASSERT_EQUAL(1, (int) pPortBaseMock_1->getNotifyDisconnectTimes().size());
+      CPPUNIT_ASSERT_EQUAL(1, (int) pPortBaseMock_2->getNotifyDisconnectTimes().size());
+      CPPUNIT_ASSERT_EQUAL(1, (int) pPortBaseMock_3->getNotifyDisconnectTimes().size());
+
     }
 		
     /*!
@@ -723,7 +762,23 @@ namespace PortBase
       CPPUNIT_ASSERT(uuid.length() > 0);
       //std::cout << std::endl << "uuid: " << uuid << std::endl;
     }
-		
+    /*!
+     * @brief setOwner()メソッドのテスト
+     * 
+     */
+    void test_setOwner()
+    {
+        PortableServer::POA_ptr poa = PortableServer::POA::_narrow(
+								 m_orb->resolve_initial_references("RootPOA"));
+        RTC::RTObject_impl* obj = new RTC::RTObject_impl(m_orb,poa);
+        RTC::RTObject_ptr owner = obj->getObjRef();
+        RTC::PortProfile  portprofile = m_pPortBase->getProfile();
+        CPPUNIT_ASSERT(CORBA::is_nil(portprofile.owner));
+        m_pPortBase->setOwner(owner);
+        portprofile = m_pPortBase->getProfile();
+        CPPUNIT_ASSERT(!CORBA::is_nil(portprofile.owner));
+//        delete obj;
+    }
   };
 }; // namespace PortBase
 
