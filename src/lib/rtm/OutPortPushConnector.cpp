@@ -18,6 +18,7 @@
  */
 
 #include <rtm/OutPortPushConnector.h>
+#include <coil/stringutil.h>
 
 namespace RTC
 {
@@ -162,6 +163,7 @@ namespace RTC
     std::string pub_type;
     pub_type = profile.properties.getProperty("subscription_type",
                                               "flush");
+    coil::normalize(pub_type);
     return PublisherFactory::instance().createObject(pub_type);
   }
   
