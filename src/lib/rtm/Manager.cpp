@@ -498,7 +498,8 @@ std::vector<coil::Properties> Manager::getLoadableModules()
     coil::Properties comp_prop, comp_id;
     if (!procComponentArgs(comp_args, comp_id, comp_prop)) return NULL;
 
-    comp_prop["conf.default.exported_ports"] = comp_prop["exported_ports"];
+    if (!comp_prop["exported_ports"].empty())
+      comp_prop["conf.default.exported_ports"] = comp_prop["exported_ports"];
 
     //------------------------------------------------------------
     // Create Component
@@ -652,10 +653,25 @@ std::vector<coil::Properties> Manager::getLoadableModules()
     RTObject_impl* comp;
     comp = m_compManager.find(instance_name);
     if (comp == NULL) return;
+
+    coil::Properties comp_id;
+    comp_id["vendor"] = comp->getProperties().getProperty("vendor");
+    comp_id["category"] = comp->getProperties().getProperty("category");
+    comp_id["implementation_id"] = comp->getProperties().getProperty("implementation_id");
+    comp_id["version"] = comp->getProperties().getProperty("version");
+
+    FactoryBase* factory(m_factory.find(comp_id));
     
-    comp->exit();
-    m_compManager.unregisterObject(instance_name);
-    delete comp;
+    ReturnCode_t ret = comp->exit();
+
+    if (factory == NULL)
+      {
+	return;
+      }
+    else
+      {
+	factory->destroy(comp);
+      } 
   }
   
   /*!

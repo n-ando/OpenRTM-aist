@@ -85,6 +85,8 @@ namespace RTC
       m_Delete(delete_func),
       m_policy(policy)
   {
+    if (m_policy == NULL)
+      throw std::bad_alloc();
   }
   
   /*!
