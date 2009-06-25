@@ -368,7 +368,7 @@ namespace RTC
      * -- Newの場合: SubscriberNewを生成する。<BR>
      * -- Periodicの場合: SubscriberPeriodicを生成する。
      *
-     * - [dataport.push_interval]<BR>
+     * - [dataport.push_rate]<BR>
      * -- dataport.subscription_type=Periodicの場合周期を設定する。
      *
      * 6. 上記の処理のうち一つでもエラーであれば、エラーリターンする。
