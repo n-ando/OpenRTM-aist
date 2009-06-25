@@ -711,7 +711,7 @@ namespace SDOPackage
      * @brief The identifier of the Organization.
      * @endif
      */
-    char* m_pId;
+    const char* m_pId;
     
     /*!
      * @if jp
