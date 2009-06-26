@@ -40,9 +40,15 @@ namespace OutPortProvider
       setDataFlowType(dataFlowType.c_str());
       setSubscriptionType(subscriptionType.c_str());
 			
+    }
+
+    void setDummydataInProperties(void)
+    {
       NVUtil::appendStringValue(m_properties, "PROPERTY_NAME1", "PROPERTY_VALUE1");
       NVUtil::appendStringValue(m_properties, "PROPERTY_NAME2", "PROPERTY_VALUE2");
     }
+
+
   };
 	
   int g_argc;
@@ -53,6 +59,7 @@ namespace OutPortProvider
   {
     CPPUNIT_TEST_SUITE(OutPortProviderTests);
     CPPUNIT_TEST(test_publishInterfaceProfile);
+    CPPUNIT_TEST(test_publishInterfaceProfile2);
     CPPUNIT_TEST(test_publishInterface);
     CPPUNIT_TEST_SUITE_END();
 		
@@ -95,10 +102,10 @@ namespace OutPortProvider
     /*!
      * @brief publishInterfaceProfile()メソッドのテスト。
      * 
-     * - dataport.data_typeプロパティを正しく取得できるか？
      * - dataport.interface_typeプロパティを正しく取得できるか？
-     * - dataport.dataflow_typeプロパティを正しく取得できるか？
-     * - dataport.subscription_typeプロパティを正しく取得できるか？
+     * - dataport.data_typeプロパティは空か？
+     * - dataport.dataflow_typeプロパティは空か？
+     * - dataport.subscription_typeプロパティは空か？
      */
     void test_publishInterfaceProfile()
     {
@@ -110,11 +117,18 @@ namespace OutPortProvider
       SDOPackage::NVList prop;
       provider->publishInterfaceProfile(prop);
 
-      // dataport.data_typeプロパティを正しく取得できるか？
+      // dataport.data_typeプロパティは空か？
       {
 	const char* value;
-	NVUtil::find(prop, "dataport.data_type") >>= value;
-	CPPUNIT_ASSERT_EQUAL(std::string("DATA_TYPE"), std::string(value));
+        try {
+            NVUtil::find(prop, "dataport.data_type") >>= value;
+	    CPPUNIT_FAIL("dataport.data_type fialure.");
+        }
+        catch(std::string ex) {
+        }
+        catch(...) {
+	    CPPUNIT_FAIL("dataport.data_type failure.");
+        }
       }
 			
       // dataport.interface_typeプロパティを正しく取得できるか？
@@ -124,18 +138,32 @@ namespace OutPortProvider
 	CPPUNIT_ASSERT_EQUAL(std::string("INTERFACE_TYPE"), std::string(value));
       }
 			
-      // dataport.dataflow_typeプロパティを正しく取得できるか？
+      // dataport.dataflow_typeプロパティは空か？
       {
 	const char* value;
-	NVUtil::find(prop, "dataport.dataflow_type") >>= value;
-	CPPUNIT_ASSERT_EQUAL(std::string("DATA_FLOW_TYPE"), std::string(value));
+        try {
+            NVUtil::find(prop, "dataport.dataflow_type") >>= value;
+	    CPPUNIT_FAIL("dataport.dataflow_type failure.");
+        }
+        catch(std::string ex) {
+        }
+        catch(...) {
+	    CPPUNIT_FAIL("dataport.dataflow_type failure.");
+        }
       }
 			
-      // dataport.subscription_typeプロパティを正しく取得できるか？
+      // dataport.subscription_typeプロパティは空か？
       {
 	const char* value;
-	NVUtil::find(prop, "dataport.subscription_type") >>= value;
-	CPPUNIT_ASSERT_EQUAL(std::string("SUBSCRIPTION_TYPE"), std::string(value));
+        try {
+            NVUtil::find(prop, "dataport.subscription_type") >>= value;
+	    CPPUNIT_FAIL("dataport.subscription_type failure.");
+        }
+        catch(std::string ex) {
+        }
+        catch(...) {
+	    CPPUNIT_FAIL("dataport.subscription_type failure.");
+        }
       }
     }
 
@@ -149,7 +177,7 @@ namespace OutPortProvider
      */
     void test_publishInterface()
     {
-      std::auto_ptr<RTC::OutPortProvider> provider(
+      std::auto_ptr<OutPortProviderMock> provider(
 						   new OutPortProviderMock(
 									   "PORT_TYPE", "DATA_TYPE", "INTERFACE_TYPE",
 									   "DATA_FLOW_TYPE", "SUBSCRIPTION_TYPE"));
@@ -167,6 +195,9 @@ namespace OutPortProvider
 	      prop_dummy[i].value <<= "DUMMY";
 	    }
 	}
+
+      //m_propertiesへ"PROPERTY_NAME1",”PROPERTY_NAME2”を設定
+      provider->setDummydataInProperties();
 			
       provider->publishInterface(prop_dummy);
 			
@@ -190,6 +221,38 @@ namespace OutPortProvider
       const char* value2;			
       prop[index2].value >>= value2;
       CPPUNIT_ASSERT_EQUAL(std::string("PROPERTY_VALUE2"), std::string(value2));
+    }
+    /*!
+     * @brief publishInterfaceProfile()メソッドのテスト
+     * 
+     * - publishInterfaceProfileメソッドでm_propertiesを読み込んでいることを確認する。
+     */
+    void test_publishInterfaceProfile2()
+    {
+      std::auto_ptr<OutPortProviderMock> provider(
+						   new OutPortProviderMock(
+									   "PORT_TYPE", "DATA_TYPE", "INTERFACE_TYPE",
+									   "DATA_FLOW_TYPE", "SUBSCRIPTION_TYPE"));
+			
+      //m_propertiesへ"PROPERTY_NAME1",”PROPERTY_NAME2”を設定
+      provider->setDummydataInProperties();
+
+      SDOPackage::NVList prop;
+      provider->publishInterfaceProfile(prop);
+      // インタフェース情報が取得されることを確認する
+      CORBA::Long index1 = NVUtil::find_index(prop, "PROPERTY_NAME1");
+      CORBA::Long index2 = NVUtil::find_index(prop, "PROPERTY_NAME2");
+      CPPUNIT_ASSERT(CORBA::Long(-1) != index1);
+      CPPUNIT_ASSERT(CORBA::Long(-1) != index2);
+			
+      const char* value1;
+      prop[index1].value >>= value1;
+      CPPUNIT_ASSERT_EQUAL(std::string("PROPERTY_VALUE1"), std::string(value1));
+
+      const char* value2;			
+      prop[index2].value >>= value2;
+      CPPUNIT_ASSERT_EQUAL(std::string("PROPERTY_VALUE2"), std::string(value2));
+
     }
 
   };
