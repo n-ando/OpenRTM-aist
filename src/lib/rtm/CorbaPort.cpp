@@ -72,7 +72,18 @@ namespace RTC
     
     PortableServer::ObjectId_var oid = 
         PortableServer::string_to_ObjectId(instance_name);
-    Manager::instance().getPOA()->activate_object_with_id(oid, &provider);
+    try
+      {
+        Manager::instance().getPOA()->activate_object_with_id(oid, &provider);
+      }
+    catch(const ::PortableServer::POA::ServantAlreadyActive &)
+      {
+	return false;
+      }
+    catch(const ::PortableServer::POA::ObjectAlreadyActive &)
+      {
+      }
+
     CORBA::Object_ptr obj;
     obj = Manager::instance().getPOA()->id_to_reference(oid);
     
