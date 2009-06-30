@@ -113,11 +113,11 @@ namespace RTC
   {
     CORBA::Long index;
     index = NVUtil::find_index(properties,
-                               "dataport.corba_cdr.outport_ref");
+                               "dataport.corba_cdr.outport_ior");
     if (index < 0) return false;
     
     if (NVUtil::isString(properties,
-                         "dataport.corba_cdr.outport_ref"))
+                         "dataport.corba_cdr.outport_ior"))
       {
         const char* ior;
         properties[index].value >>= ior;
