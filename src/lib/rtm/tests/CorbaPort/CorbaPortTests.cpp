@@ -82,6 +82,42 @@ private:
 
 
 /*!
+ * @class CorbaPortMock class
+ *
+ */
+class CorbaPortMock
+ : public RTC::CorbaPort
+{
+  public:
+    /*!
+     *
+     */
+    CorbaPortMock(const char* name)
+    : RTC::CorbaPort(name)
+    {
+    }
+    /*!
+     *
+     */
+    virtual ~CorbaPortMock(void)
+    {
+    }
+    /*!
+     *
+     */
+    void deactivateInterfaces_public()
+    {
+        deactivateInterfaces();
+    }
+    /*!
+     *
+     */
+    void activateInterfaces_public()
+    {
+        activateInterfaces();
+    }
+};
+/*!
  * @class CorbaPortTests class
  * @brief CorbaPort test
  */
@@ -94,6 +130,8 @@ namespace CorbaPort
     CPPUNIT_TEST(test_get_port_profile);
     CPPUNIT_TEST(test_connect);
     CPPUNIT_TEST(test_disconnect);
+    CPPUNIT_TEST(test_registerProvider);
+    CPPUNIT_TEST(test_activateInterfaces_deactivateInterfaces);
     CPPUNIT_TEST_SUITE_END();
 		
   private:
@@ -269,9 +307,9 @@ namespace CorbaPort
       RTC::CorbaConsumer<MyService>* pMyServiceConsumerB
 	= new RTC::CorbaConsumer<MyService>(); // will be deleted automatically
 			
-      RTC::CorbaPort* port0 = new RTC::CorbaPort("name of port0");
-      port0->registerProvider("MyServiceA", "Generic", *pMyServiceImplA);
-      port0->registerConsumer("MyServiceB", "Generic", *pMyServiceConsumerB);
+      RTC::CorbaPort* port0 = new RTC::CorbaPort("name of port0-1");
+      port0->registerProvider("MyServiceA-1", "Generic", *pMyServiceImplA);
+      port0->registerConsumer("MyServiceB-1", "Generic", *pMyServiceConsumerB);
 
       // ポート1を構成する
       MyService_impl* pMyServiceImplB
@@ -279,14 +317,14 @@ namespace CorbaPort
       RTC::CorbaConsumer<MyService>* pMyServiceConsumerA
 	= new RTC::CorbaConsumer<MyService>(); // will be deleted automatically
 			
-      RTC::CorbaPort* port1 = new RTC::CorbaPort("name of port1");
-      port1->registerProvider("MyServiceB", "Generic", *pMyServiceImplB);
-      port1->registerConsumer("MyServiceA", "Generic", *pMyServiceConsumerA);
+      RTC::CorbaPort* port1 = new RTC::CorbaPort("name of port1-1");
+      port1->registerProvider("MyServiceB-1", "Generic", *pMyServiceImplB);
+      port1->registerConsumer("MyServiceA-1", "Generic", *pMyServiceConsumerA);
 			
       // 接続プロファイルを構成する
       RTC::ConnectorProfile connProfile;
-      connProfile.connector_id = "";
-      connProfile.name = CORBA::string_dup("name of connector profile");
+      connProfile.connector_id = "id1";
+      connProfile.name = CORBA::string_dup("name of connector profile-1");
       connProfile.ports.length(2);
       connProfile.ports[0] = port0->getPortRef();
       connProfile.ports[1] = port1->getPortRef();
@@ -314,6 +352,122 @@ namespace CorbaPort
 	{
 	  // Properly disconnected.
 	}
+
+    }
+    /*!
+     * @brief registerProvider()メソッドのテスト
+     * 
+     */
+    void test_registerProvider(void)
+    {
+      MyService_impl* pImpl0
+	= new MyService_impl();
+
+      MyService_impl* pImpl1
+	= new MyService_impl();
+			
+      MyService_impl* pImpl2
+	= new MyService_impl();
+			
+      CorbaPortMock* port0 = new CorbaPortMock("name of port");
+      bool ret;
+      ret = port0->registerProvider("registerProvider", "Generic", *pImpl0);
+      CPPUNIT_ASSERT_EQUAL(true,ret);
+
+      //既に登録してあるインスタンス名とオブジェクトを登録した場合、falseを返す。
+      ret = port0->registerProvider("registerProvider0", "Generic", *pImpl0);
+      CPPUNIT_ASSERT_EQUAL(false,ret);
+
+      //既に登録してあるインスタンス名を登録した場合、falseを返す。
+      ret = port0->registerProvider("registerProvider0", "Generic", *pImpl1);
+      CPPUNIT_ASSERT_EQUAL(false,ret);
+     
+      //既に登録してあるオブジェクトを登録した場合、falseを返す。
+      //   falseを返すが登録される。
+      ret = port0->registerProvider("registerProvider1", "Generic", *pImpl0);
+      CPPUNIT_ASSERT_EQUAL(false,ret);
+
+      //登録してないインスタンス名とオブジェクトを登録した場合、trueを返す。
+      ret = port0->registerProvider("registerProvider2", "Generic", *pImpl1);
+      CPPUNIT_ASSERT_EQUAL(true,ret);
+
+      port0->deactivateInterfaces_public();
+
+    }
+    /*!
+     * @brief registerProvider()メソッドのテスト
+     * 
+     */
+    void test_activateInterfaces_deactivateInterfaces(void)
+    {
+      // ポート0を構成する
+      MyService_impl* pMyServiceImplA
+	= new MyService_impl(); // will be deleted automatically
+      RTC::CorbaConsumer<MyService>* pMyServiceConsumerB
+	= new RTC::CorbaConsumer<MyService>(); // will be deleted automatically
+			
+      CorbaPortMock* port0 = new CorbaPortMock("name of port0");
+      port0->registerProvider("MyServiceAA", "Generic", *pMyServiceImplA);
+      port0->registerConsumer("MyServiceBB", "Generic", *pMyServiceConsumerB);
+
+      // ポート1を構成する
+      MyService_impl* pMyServiceImplB
+	= new MyService_impl(); // will be deleted automatically
+      RTC::CorbaConsumer<MyService>* pMyServiceConsumerA
+	= new RTC::CorbaConsumer<MyService>(); // will be deleted automatically
+			
+      CorbaPortMock* port1 = new CorbaPortMock("name of port1");
+      port1->registerProvider("MyServiceBB", "Generic", *pMyServiceImplB);
+      port1->registerConsumer("MyServiceAA", "Generic", *pMyServiceConsumerA);
+			
+      // 接続プロファイルを構成する
+      RTC::ConnectorProfile connProfile;
+      connProfile.connector_id = "";
+      connProfile.name = CORBA::string_dup("name of connector profile");
+      connProfile.ports.length(2);
+      connProfile.ports[0] = port0->getPortRef();
+      connProfile.ports[1] = port1->getPortRef();
+
+      // 接続する
+      port0->getPortRef()->connect(connProfile);
+
+      // ポート1のコンシューマ側からメソッドを呼び出すと、ポート0のプロバイダ側が意図どおり呼び出されるか？
+      CPPUNIT_ASSERT(! pMyServiceImplA->is_hello_world_called());
+      (*pMyServiceConsumerA)->hello_world();
+      CPPUNIT_ASSERT(pMyServiceImplA->is_hello_world_called());
+			
+      // 切断する
+      port0->getPortRef()->disconnect(connProfile.connector_id);
+
+      //全てdeactivate obujectする
+      port0->deactivateInterfaces_public();
+      port1->deactivateInterfaces_public();
+
+      port0->getPortRef()->connect(connProfile);
+
+      //deactivate object が実行されてたため、エラーとなる。
+      try
+      {
+         (*pMyServiceConsumerA)->hello_world();
+	  CPPUNIT_FAIL("Couldn't catch no exceptions. Disconnection failed.");
+      }
+      catch(...)
+      {
+      }
+			
+      // 切断する
+      port0->getPortRef()->disconnect(connProfile.connector_id);
+
+      port0->activateInterfaces_public();
+      port1->activateInterfaces_public();
+
+      port0->getPortRef()->connect(connProfile);
+
+      //activate object が実行されてたため、正常に動作する 。
+      (*pMyServiceConsumerA)->hello_world();
+
+      // 切断する
+      port0->getPortRef()->disconnect(connProfile.connector_id);
     }
     
   };

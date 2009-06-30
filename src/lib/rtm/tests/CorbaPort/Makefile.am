@@ -48,20 +48,63 @@ SUFFIXES = .idl Skel.cpp Stub.cpp Skel.o Stub.o
 	$(top_srcdir)/build/makewrapper.py $< rtm/tests/CorbaPort
 	$(IDLC) $(IDLFLAGS) $<
 
-IDL_SOURCES = MyService.idl
+IDL_SOURCES = MyService.idl \
+	$(top_srcdir)/src/lib/rtm/idl/SDOPackage.idl \
+	$(top_srcdir)/src/lib/rtm/idl/RTC.idl \
+	$(top_srcdir)/src/lib/rtm/idl/OpenRTM.idl \
+	$(top_srcdir)/src/lib/rtm/idl/Manager.idl \
+	$(top_srcdir)/src/lib/rtm/idl/BasicDataType.idl \
+	$(top_srcdir)/src/lib/rtm/idl/DataPort.idl
 
 noinst_PROGRAMS = CorbaPortTests
 
 nodist_CorbaPortTests_SOURCES =                  \
 	../TestRunner.cpp                        \
 	$(IDL_SOURCES:.idl=Skel.cpp)             \
-	$(top_srcdir)/src/lib/rtm/idl/SDOPackageSkel.cpp \
-	$(top_srcdir)/src/lib/rtm/idl/RTCSkel.cpp        \
 	$(top_srcdir)/src/lib/coil/common/stringutil.cpp         \
 	$(top_srcdir)/src/lib/coil/common/Properties.cpp         \
 	$(top_srcdir)/src/lib/rtm/NVUtil.cpp             \
 	$(top_srcdir)/src/lib/rtm/PortBase.cpp           \
 	$(top_srcdir)/src/lib/rtm/CorbaPort.cpp          \
+	$(top_srcdir)/src/lib/rtm/SystemLogger.cpp \
+	$(top_srcdir)/src/lib/rtm/NumberingPolicy.cpp \
+	$(top_srcdir)/src/lib/rtm/Manager.cpp \
+	$(top_srcdir)/src/lib/rtm/ModuleManager.cpp \
+	$(top_srcdir)/src/lib/rtm/ManagerConfig.cpp \
+	$(top_srcdir)/src/lib/rtm/RTObject.cpp \
+	$(top_srcdir)/src/lib/rtm/ConfigAdmin.cpp \
+	$(top_srcdir)/src/lib/rtm/Factory.cpp \
+	$(top_srcdir)/src/lib/rtm/ECFactory.cpp \
+	$(top_srcdir)/src/lib/rtm/ManagerServant.cpp \
+	$(top_srcdir)/src/lib/rtm/NamingManager.cpp \
+	$(top_srcdir)/src/lib/rtm/FactoryInit.cpp \
+	$(top_srcdir)/src/lib/rtm/PeriodicECSharedComposite.cpp \
+	$(top_srcdir)/src/lib/rtm/ExtTrigExecutionContext.cpp \
+	$(top_srcdir)/src/lib/rtm/PeriodicExecutionContext.cpp \
+	$(top_srcdir)/src/lib/rtm/OpenHRPExecutionContext.cpp \
+	$(top_srcdir)/src/lib/rtm/PortAdmin.cpp \
+	$(top_srcdir)/src/lib/rtm/SdoConfiguration.cpp \
+	$(top_srcdir)/src/lib/rtm/SdoOrganization.cpp  \
+	$(top_srcdir)/src/lib/rtm/CorbaNaming.cpp \
+	$(top_srcdir)/src/lib/rtm/CdrRingBuffer.cpp            \
+	$(top_srcdir)/src/lib/rtm/DefaultPeriodicTask.cpp      \
+	$(top_srcdir)/src/lib/rtm/PublisherFlush.cpp           \
+	$(top_srcdir)/src/lib/rtm/PublisherNew.cpp             \
+	$(top_srcdir)/src/lib/rtm/PublisherPeriodic.cpp        \
+	$(top_srcdir)/src/lib/rtm/InPortCorbaCdrProvider.cpp   \
+	$(top_srcdir)/src/lib/rtm/InPortCorbaCdrConsumer.cpp   \
+	$(top_srcdir)/src/lib/rtm/OutPortCorbaCdrConsumer.cpp  \
+	$(top_srcdir)/src/lib/rtm/OutPortCorbaCdrProvider.cpp  \
+	$(top_srcdir)/src/lib/rtm/OutPortBase.cpp                \
+	$(top_srcdir)/src/lib/rtm/OutPortProvider.cpp            \
+	$(top_srcdir)/src/lib/rtm/OutPortConnector.cpp           \
+	$(top_srcdir)/src/lib/rtm/OutPortPullConnector.cpp       \
+	$(top_srcdir)/src/lib/rtm/OutPortPushConnector.cpp       \
+	$(top_srcdir)/src/lib/rtm/InPortBase.cpp                 \
+	$(top_srcdir)/src/lib/rtm/InPortProvider.cpp             \
+	$(top_srcdir)/src/lib/rtm/InPortConnector.cpp            \
+	$(top_srcdir)/src/lib/rtm/InPortPullConnector.cpp        \
+	$(top_srcdir)/src/lib/rtm/InPortPushConnector.cpp        \
 	CorbaPortTests.cpp
 
 CorbaPortTests_LDFLAGS = -L$(libdir) $(AM_LDFLAGS)
