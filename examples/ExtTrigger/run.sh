@@ -44,11 +44,11 @@ echo 'logger.log_level: TRACE' >> ./rtc.conf
 echo 'exec_cxt.periodic.type: ExtTrigExecutionContext' >> ./rtc.conf
 echo 'exec_cxt.periodic.rate: 1000' >> ./rtc.conf
 
-$term -e ./ConsoleInComp &
-$term -e ./ConsoleOutComp &
+$term -e ./ConsoleInCompExt &
+$term -e ./ConsoleOutCompExt &
 
 sleep 5
-./ConnectorComp 
+./ConnectorCompExt 
 
 #sleep 10
 #nspid=`ps -ax | grep 9876 | awk '{print $1}'`
