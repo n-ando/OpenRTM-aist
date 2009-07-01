@@ -35,7 +35,8 @@ namespace RTC
     find_port_name(const char* name) : m_name(name) {};
     bool operator()(const PortService_ptr& p)
     {
-      std::string name(p->get_port_profile()->name);
+      PortProfile_var prof(p->get_port_profile());
+      std::string name(prof->name);
       return m_name == name;
     }
     const std::string m_name;
@@ -66,7 +67,7 @@ namespace RTC
    * @endif
    */
   PortAdmin::PortAdmin(CORBA::ORB_ptr orb, PortableServer::POA_ptr poa)
-    : m_pORB(orb), m_pPOA(poa)
+    : m_pORB(CORBA::ORB::_duplicate(orb)), m_pPOA(PortableServer::POA::_duplicate(poa))
   {
   }
   
@@ -114,7 +115,7 @@ namespace RTC
     index = CORBA_SeqUtil::find(m_portRefs, find_port_name(port_name));
     if (index >= 0) 
       {//throw NotFound(port_name);
-	return RTC::PortService::_duplicate(m_portRefs[index]);
+	return m_portRefs[index];
       }
     return RTC::PortService::_nil();
   }
@@ -148,7 +149,7 @@ namespace RTC
     //port.setPortRef(port.getRef());
     
     // Store Port's ref to PortServiceList
-    CORBA_SeqUtil::push_back(m_portRefs, port.getPortRef());
+    CORBA_SeqUtil::push_back(m_portRefs, RTC::PortService::_duplicate(port.getPortRef()));
     
     // Store Port servant
     m_portServants.registerObject(&port);
@@ -193,7 +194,8 @@ namespace RTC
         //	port.disconnect_all();
 	// port.shutdown();
 	
-	const char* tmp(port->get_port_profile()->name);
+	PortProfile_var prof(port->get_port_profile());
+	const char* tmp(prof->name);
 	CORBA_SeqUtil::erase_if(m_portRefs, find_port_name(tmp));
 	
         //	m_pPOA->deactivate_object(*m_pPOA->servant_to_id(&port));

@@ -116,7 +116,10 @@ namespace RTC
 	throw Error("DLL open failed.");
       }
     dll->properties["file_path"] = file_path;
-    m_modules.registerObject(dll);
+    bool ret = m_modules.registerObject(dll);
+    if (!ret) {
+      delete dll;
+    }
     
     return file_path;
   }
@@ -166,6 +169,10 @@ namespace RTC
     dll->dll.close();
     m_modules.unregisterObject(file_name.c_str());
     
+    if (dll != NULL) {
+      delete dll;
+    }
+
     return;
   }
   

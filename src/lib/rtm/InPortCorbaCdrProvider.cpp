@@ -47,7 +47,7 @@ namespace RTC
     CORBA_SeqUtil::
       push_back(m_properties,
                 NVUtil::newNV("dataport.corba_cdr.inport_ref",
-                              ::OpenRTM::InPortCdr::_duplicate(m_objref)));
+                              m_objref));
   }
   
   /*!

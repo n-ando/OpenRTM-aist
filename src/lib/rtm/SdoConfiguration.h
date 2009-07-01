@@ -1220,8 +1220,8 @@ namespace SDOPackage
       org_id(const char* id) : m_id(id) {};
       bool operator()(const Organization_ptr& o)
       {
-	std::string id(o->get_organization_id());
-	return m_id == id;
+	CORBA::String_var id(o->get_organization_id());
+	return m_id == (const char *)id;
       }
       const std::string m_id;
     };

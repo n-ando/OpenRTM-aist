@@ -1354,7 +1354,8 @@ namespace RTC
     {
       Comp(LightweightRTObject_ptr ref, OpenRTM::DataFlowComponent_ptr dfp,
 	   ExecutionContextHandle_t id)
-	: _ref(ref), _sm(dfp, id)
+	: _ref(LightweightRTObject::_duplicate(ref)),
+	  _sm(OpenRTM::DataFlowComponent::_duplicate(dfp), id)
       {
       }
       ~Comp(void)
@@ -1385,7 +1386,7 @@ namespace RTC
     struct find_comp
     {
       LightweightRTObject_var m_comp;
-      find_comp(LightweightRTObject_ptr comp) : m_comp(comp) {}
+      find_comp(LightweightRTObject_ptr comp) : m_comp(LightweightRTObject::_duplicate(comp)) {}
       bool operator()(Comp& comp)
       {
 	return comp._ref->_is_equivalent(m_comp);

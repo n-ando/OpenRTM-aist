@@ -59,7 +59,7 @@ namespace RTM
 
   private:
     ::RTC::Manager& m_mgr;
-    ::RTM::Manager_ptr m_objref;
+    ::RTM::Manager_var m_objref;
   };
 }; // namespace RTM
 #endif // RTM_MANAGERSERVANT_H

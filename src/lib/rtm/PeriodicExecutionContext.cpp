@@ -275,7 +275,7 @@ namespace RTC
     RTC_TRACE(("activate_component()"));
     CompItr it;
     it = std::find_if(m_comps.begin(), m_comps.end(),
-		      find_comp(LightweightRTObject::_duplicate(comp)));
+		      find_comp(comp));
 
     if (it == m_comps.end())
       return RTC::BAD_PARAMETER;
@@ -301,7 +301,7 @@ namespace RTC
     RTC_TRACE(("deactivate_component()"));
     CompItr it;
     it = std::find_if(m_comps.begin(), m_comps.end(),
-		      find_comp(RTC::LightweightRTObject::_duplicate(comp)));
+		      find_comp(comp));
     if (it == m_comps.end())
       return RTC::BAD_PARAMETER;
     
@@ -326,7 +326,7 @@ namespace RTC
     RTC_TRACE(("reset_component()"));
     CompItr it;
     it = std::find_if(m_comps.begin(), m_comps.end(),
-		      find_comp(RTC::LightweightRTObject::_duplicate(comp)));
+		      find_comp(comp));
     if (it == m_comps.end())
       return RTC::BAD_PARAMETER;
     
@@ -390,7 +390,7 @@ namespace RTC
     
     try
       {
-	OpenRTM::DataFlowComponent_ptr dfp;
+	OpenRTM::DataFlowComponent_var dfp;
 	dfp = OpenRTM::DataFlowComponent::_narrow(comp);
         //Check the pointer.
         if(CORBA::is_nil(dfp))
@@ -399,9 +399,7 @@ namespace RTC
           }
 	ExecutionContextHandle_t id;
 	id = dfp->attach_context(m_ref);
-	m_comps.push_back(Comp(LightweightRTObject::_duplicate(comp),
-			       OpenRTM::DataFlowComponent::_duplicate(dfp),
-			       id));
+	m_comps.push_back(Comp(comp,dfp,id));
 	return RTC::RTC_OK;
       }
     catch (CORBA::Exception& e)
@@ -417,8 +415,8 @@ namespace RTC
     RTC_TRACE(("bindComponent()"));
     if (rtc == NULL) return RTC::BAD_PARAMETER;
 
-    LightweightRTObject_var comp = rtc->getObjRef();
-    OpenRTM::DataFlowComponent_ptr dfp;
+    LightweightRTObject_var comp = RTC::RTObject::_duplicate(rtc->getObjRef());
+    OpenRTM::DataFlowComponent_var dfp;
     dfp = OpenRTM::DataFlowComponent::_narrow(comp);
 
     ExecutionContextHandle_t id = rtc->bindContext(m_ref);
@@ -429,9 +427,7 @@ namespace RTC
         return RTC::RTC_ERROR;
       }
     RTC_DEBUG(("bindContext returns id = %d", id));
-    m_comps.push_back(Comp(LightweightRTObject::_duplicate(comp),
-                           OpenRTM::DataFlowComponent::_duplicate(dfp),
-                           id));
+    m_comps.push_back(Comp(comp,dfp,id));
     return RTC::RTC_OK;
   }
   
@@ -449,7 +445,7 @@ namespace RTC
     RTC_TRACE(("remove_component()"));
     CompItr it;
     it = std::find_if(m_comps.begin(), m_comps.end(),
-		      find_comp(RTC::LightweightRTObject::_duplicate(comp)));
+		      find_comp(comp));
     if (it == m_comps.end())
       return RTC::BAD_PARAMETER;
     

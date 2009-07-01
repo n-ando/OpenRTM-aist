@@ -256,7 +256,7 @@ namespace SDOPackage
     if (::CORBA::is_nil(conf)) return;
     
     // set organization to target RTC's conf
-    conf->add_organization(::SDOPackage::Organization::_duplicate(m_objref));
+    conf->add_organization(m_objref);
   }
 
   /*!
@@ -272,7 +272,7 @@ namespace SDOPackage
     if (::CORBA::is_nil(member.config_)) { return; }
     
     // set organization to target RTC's conf
-    member.config_->remove_organization(CORBA::string_dup(m_pId));
+    member.config_->remove_organization(m_pId);
   }
 
   /*!
@@ -297,7 +297,7 @@ namespace SDOPackage
           }
       }
     // set ec to target RTC
-    m_ec->add_component(member.rtobj_);
+    m_ec->add_component(member.rtobj_.in());
   }
 
   /*!
@@ -364,7 +364,7 @@ namespace SDOPackage
                    port_name.c_str(),
                    ::coil::flatten(portlist).c_str()));
 
-        m_rtobj->registerPort(::RTC::PortService::_duplicate(plist[i].port_ref));
+        m_rtobj->registerPort(plist[i].port_ref);
 
         RTC_DEBUG(("Port %s was delegated.", port_name.c_str()));
 
@@ -412,7 +412,7 @@ namespace SDOPackage
                    port_name.c_str(),
                    ::coil::flatten(portlist).c_str()));
 
-        m_rtobj->deletePort(::RTC::PortService::_duplicate(plist[i].port_ref));
+        m_rtobj->deletePort(plist[i].port_ref);
         portlist.erase(pos);
         
         RTC_DEBUG(("Port %s was deleted.", port_name.c_str()));
@@ -558,7 +558,7 @@ namespace RTC
           continue;
         }
 
-        ::SDOPackage::SDO_ptr sdo;
+        ::SDOPackage::SDO_var sdo;
         sdo = ::SDOPackage::SDO::_duplicate(rtc->getObjRef());
         if (::CORBA::is_nil(sdo)) continue;
 

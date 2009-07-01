@@ -325,6 +325,11 @@ namespace RTC
 	       RtcDeleteFunc delete_func,
 	       NumberingPolicy* policy = new DefaultNumberingPolicy());
     
+    virtual ~FactoryCXX()
+    {
+      delete m_policy;
+    }
+
     /*!
      * @if jp
      *

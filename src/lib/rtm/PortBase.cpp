@@ -372,7 +372,7 @@ namespace RTC
   {
     RTC_TRACE(("setOwner()"));
     Guard gurad(m_profile_mutex); 
-    m_profile.owner = owner;
+    m_profile.owner = RTC::RTObject::_duplicate(owner);
   }
   
   //============================================================

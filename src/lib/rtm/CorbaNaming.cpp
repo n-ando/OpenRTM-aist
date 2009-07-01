@@ -546,10 +546,10 @@ namespace RTC
     CORBA::ULong slen = 0;
     slen = getNameLength(name);
     
-    char* string_name = CORBA::string_alloc(slen);
-    nameToString(name, string_name, slen);
+    CORBA::String_var string_name = CORBA::string_alloc(slen);
+    nameToString(name, (char*)string_name, slen);
     
-    return string_name;
+    return string_name._retn();
   }
   
   /*!
@@ -574,8 +574,7 @@ namespace RTC
     if (!(nc_length > 0)) throw InvalidName();
     
     // Name components are allocated
-    CosNaming::Name*    namep = new CosNaming::Name;
-    CosNaming::Name_var name(namep);
+    CosNaming::Name_var    name = new CosNaming::Name();
     name->length(nc_length);
     
     // Insert id and kind to name components

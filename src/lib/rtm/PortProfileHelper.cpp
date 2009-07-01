@@ -45,9 +45,9 @@ namespace RTC
 
     m_name         = profile.name;
     m_ifProfiles   = profile.interfaces;
-    m_portRef      = profile.port_ref;
+    m_portRef      = RTC::PortService::_duplicate(profile.port_ref);
     m_connProfiles = profile.connector_profiles;
-    m_owner        = profile.owner;
+    m_owner        = RTC::RTObject::_duplicate(profile.owner);
     m_properties   = profile.properties;
 
     return;
@@ -183,7 +183,7 @@ namespace RTC
   {
     Guard guard(m_mutex);
 
-    m_portRef = port;
+    m_portRef = RTC::PortService::_duplicate(port);
   }
 
 
@@ -309,7 +309,7 @@ namespace RTC
   {
     Guard guard(m_mutex);
 
-    m_owner = owner;
+    m_owner = RTC::RTObject::_duplicate(owner);
   }
 
 

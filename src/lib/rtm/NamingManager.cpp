@@ -364,6 +364,7 @@ namespace RTC
       {
 	if (m_compNames[i]->name == name)
 	  {
+	    delete m_compNames[i];
 	    m_compNames.erase(it);
 	    return;
 	  }
@@ -377,6 +378,7 @@ namespace RTC
       {
 	if (m_mgrNames[i]->name == name)
 	  {
+	    delete m_mgrNames[i];
 	    m_mgrNames.erase(it);
 	    return;
 	  }

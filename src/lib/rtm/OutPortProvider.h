@@ -25,6 +25,7 @@
 #include <coil/Factory.h>
 #include <rtm/BufferBase.h>
 #include <rtm/NVUtil.h>
+#include <rtm/SystemLogger.h>
 #include <rtm/DataPortStatus.h>
 
 namespace RTC
@@ -316,6 +317,7 @@ namespace RTC
      * @endif
      */
     SDOPackage::NVList m_properties;
+    mutable Logger rtclog;
     
   private:
     std::string m_portType;

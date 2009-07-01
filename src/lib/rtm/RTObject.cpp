@@ -66,7 +66,7 @@ namespace RTC
   {
     m_objref = this->_this();
     m_pSdoConfigImpl = new SDOPackage::Configuration_impl(m_configsets);
-    m_pSdoConfig = m_pSdoConfigImpl->getObjRef();
+    m_pSdoConfig = SDOPackage::Configuration::_duplicate(m_pSdoConfigImpl->getObjRef());
   }
   
   /*!
@@ -87,7 +87,7 @@ namespace RTC
   {
     m_objref = this->_this();
     m_pSdoConfigImpl = new SDOPackage::Configuration_impl(m_configsets);
-    m_pSdoConfig = m_pSdoConfigImpl->getObjRef();
+    m_pSdoConfig = SDOPackage::Configuration::_duplicate(m_pSdoConfigImpl->getObjRef());
   }
   
   /*!
@@ -99,6 +99,7 @@ namespace RTC
    */
   RTObject_impl::~RTObject_impl()
   {
+    m_pSdoConfigImpl->_remove_ref();
   }
   
   //============================================================
@@ -311,7 +312,7 @@ namespace RTC
     ec->set_rate(atof(m_properties["exec_cxt.periodic.rate"].c_str()));
     m_eclist.push_back(ec);
     ExecutionContextService_var ecv;
-    ecv = ec->getObjRef();
+    ecv = RTC::ExecutionContextService::_duplicate(ec->getObjRef());
     if (CORBA::is_nil(ecv)) return RTC::RTC_ERROR;
 
     ec->bindComponent(this);
@@ -378,10 +379,10 @@ namespace RTC
 
     // deactivate myself on owned EC
     CORBA_SeqUtil::for_each(m_ecMine,
-	    deactivate_comps(RTC::LightweightRTObject::_duplicate(m_objref)));
+			    deactivate_comps(m_objref));
     // deactivate myself on other EC
     CORBA_SeqUtil::for_each(m_ecOther,
-	    deactivate_comps(RTC::LightweightRTObject::_duplicate(m_objref)));
+			    deactivate_comps(m_objref));
 
     // stop and detach myself from owned EC
     for (CORBA::ULong ic(0), len(m_ecMine.length()); ic < len; ++ic)
@@ -394,7 +395,8 @@ namespace RTC
     for (CORBA::ULong ic(0), len(m_ecOther.length()); ic < len; ++ic)
       {
         //        m_ecOther[ic]->stop();
-        m_ecOther[ic]->remove_component(this->_this());
+	RTC::LightweightRTObject_var comp(this->_this());
+        m_ecOther[ic]->remove_component(comp.in());
       }
 
     ReturnCode_t ret(finalize());
@@ -1371,7 +1373,7 @@ namespace RTC
   void RTObject_impl::setObjRef(const RTObject_ptr rtobj)
   {
     RTC_TRACE(("setObjRef()"));
-    m_objref = rtobj;
+    m_objref = RTC::RTObject::_duplicate(rtobj);
   }
   
   /*!
@@ -1385,8 +1387,7 @@ namespace RTC
   {
     RTC_TRACE(("getObjRef()"));
 
-    RTObject_ptr obj = RTC::RTObject::_duplicate(m_objref);
-    return obj;
+    return m_objref;
   }
   
   /*!

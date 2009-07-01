@@ -113,7 +113,7 @@ namespace RTM
     crtcs->length((CORBA::Long)rtcs.size());
     for (int i(0), len(rtcs.size()); i < len; ++i)
       {
-        (*crtcs)[(CORBA::Long)i] = rtcs[i]->getObjRef();
+        (*crtcs)[(CORBA::Long)i] = RTC::RTObject::_duplicate(rtcs[i]->getObjRef());
       }
     return crtcs;
   }
@@ -198,6 +198,6 @@ namespace RTM
   
   RTM::Manager_ptr ManagerServant::getObjRef() const
   {
-    return RTM::Manager::_duplicate(m_objref);
+    return m_objref;
   }
 };
