@@ -434,7 +434,7 @@ namespace RTC
      * -- For New: Create SubscriberNew.<BR>
      * -- For Periodic: Create SubscriberPeriodic.
      *
-     * - [dataport.push_interval]<BR>
+     * - [dataport.push_rate]<BR>
      * -- For dataport.subscription_type=Periodic, the cycle is set.
      *
      * 6. If error occurs in one of the above processings, return error.
@@ -1484,8 +1484,8 @@ namespace RTC
       
       bool operator()(const PortInterfaceProfile& prof)
       {
-	std::string name(CORBA::string_dup(prof.instance_name));
-	return ((m_name == name) && (m_pol == prof.polarity));
+	CORBA::String_var name(CORBA::string_dup(prof.instance_name));
+	return ((m_name == (const char *)name) && (m_pol == prof.polarity));
       }
       std::string m_name;
       PortInterfacePolarity m_pol;

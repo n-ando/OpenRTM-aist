@@ -410,15 +410,20 @@ std::vector<coil::Properties> Manager::getLoadableModules()
 				RtcDeleteFunc delete_func)
   {
     RTC_TRACE(("Manager::registerFactory(%s)", profile["type_name"].c_str()));
+    FactoryBase* factory;
+    factory = new FactoryCXX(profile, new_func, delete_func);
     try
       {    
-	FactoryBase* factory;
-	factory = new FactoryCXX(profile, new_func, delete_func);
-	m_factory.registerObject(factory);
+	bool ret = m_factory.registerObject(factory);
+	if (!ret) {
+	  delete factory;
+	  return false;
+	}
 	return true;
       }
     catch (...)
       {
+	delete factory;
 	return false;
       }
   }
@@ -1103,6 +1108,7 @@ std::vector<coil::Properties> Manager::getLoadableModules()
   {
     RTC_TRACE(("Manager::shutdownNaming()"));
     m_namingManager->unbindAll();
+    delete m_namingManager;
   }
   
   //============================================================
@@ -1169,7 +1175,8 @@ std::vector<coil::Properties> Manager::getLoadableModules()
       {
         otherref.close();
         std::ofstream reffile(m_config["manager.refstring_path"].c_str());
-        reffile << m_pORB->object_to_string(m_mgrservant->getObjRef());
+	RTM::Manager_var mgr_v(RTM::Manager::_duplicate(m_mgrservant->getObjRef()));
+	reffile << m_pORB->object_to_string(mgr_v);
         reffile.close();
       }
     else
@@ -1178,8 +1185,8 @@ std::vector<coil::Properties> Manager::getLoadableModules()
         otherref >> refstring;
         otherref.close();
 
-        CORBA::Object_ptr obj = m_pORB->string_to_object(refstring.c_str());
-        RTM::Manager_ptr mgr = RTM::Manager::_narrow(obj);
+        CORBA::Object_var obj = m_pORB->string_to_object(refstring.c_str());
+        RTM::Manager_var mgr = RTM::Manager::_narrow(obj);
         //        if (CORBA::is_nil(mgr)) return false;
         //        mgr->set_child(m_mgrservant->getObjRef());
         //        m_mgrservant->set_owner(mgr);

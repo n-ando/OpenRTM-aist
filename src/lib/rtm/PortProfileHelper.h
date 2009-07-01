@@ -538,7 +538,7 @@ namespace RTC
     IfProfiles m_ifProfiles;
 
     // PortProfile.port_ref
-    PortService_ptr m_portRef;
+    PortService_var m_portRef;
 
     // PortProfile.connector_profile
     typedef SequenceEx<ConnectorProfileList,
@@ -547,7 +547,7 @@ namespace RTC
     ConnProfiles m_connProfiles ;
 
     // PortProfile.owner
-    RTObject_ptr m_owner;
+    RTObject_var m_owner;
 
     // PortProfile.properties
     NVList m_properties;

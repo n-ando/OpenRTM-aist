@@ -32,7 +32,7 @@ namespace SDOPackage
    * @endif
    */
   Organization_impl::Organization_impl(SDOSystemElement_ptr sdo)
-    : rtclog("organization"), m_varOwner(sdo)
+    : rtclog("organization"), m_varOwner(SDOSystemElement::_duplicate(sdo))
   {
     coil::UUID_Generator uugen;
     uugen.init();
@@ -250,7 +250,7 @@ namespace SDOPackage
       throw InvalidParameter("set_owner()");
     try
       {
-	m_varOwner = sdo;
+	m_varOwner = SDOSystemElement::_duplicate(sdo);
 	return true;
       }
     catch (...)

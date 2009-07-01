@@ -227,7 +227,7 @@ namespace SDOPackage
   protected:
     RTC::Logger rtclog;
     ::RTC::RTObject_impl* m_rtobj;
-    ::RTC::ExecutionContext_ptr m_ec;
+    ::RTC::ExecutionContext_var m_ec;
 
     class Member
     {

@@ -34,6 +34,8 @@ namespace RTC
    */
   OutPortCorbaCdrProvider::OutPortCorbaCdrProvider(void)
   {
+    rtclog.setLevel("PARANOID");
+    // PortProfile setting
     setInterfaceType("corba_cdr");
     
     // ConnectorProfile setting
@@ -48,7 +50,7 @@ namespace RTC
     CORBA_SeqUtil::
       push_back(m_properties,
                 NVUtil::newNV("dataport.corba_cdr.outport_ref",
-                              ::OpenRTM::OutPortCdr::_duplicate(m_objref)));
+                              m_objref));
     
   }
   
@@ -102,6 +104,8 @@ namespace RTC
   ::OpenRTM::PortStatus
   OutPortCorbaCdrProvider::get(::OpenRTM::CdrData_out data)
   {
+    RTC_PARANOID(("get()"));
+
     if (m_buffer == 0)
       {
         return ::OpenRTM::UNKNOWN_ERROR;
@@ -118,6 +122,7 @@ namespace RTC
     if (ret == 0)
       {
         int len(cdr.bufSize());
+        RTC_PARANOID(("converted CDR data size: %d",len));
         data->length(len);
         cdr.get_octet_array(&((*data)[0]), len);
         return ::OpenRTM::PortStatus(ret);

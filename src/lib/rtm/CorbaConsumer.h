@@ -252,7 +252,7 @@ namespace RTC
      */
     virtual CORBA::Object_ptr getObject()
     {
-      return CORBA::Object::_duplicate(m_objref);
+      return m_objref;
     }
     
     /*!
@@ -458,15 +458,15 @@ namespace RTC
           return false; // object is nil
         }
 
-      ObjectTypePtr ptr = ObjectType::_narrow(m_objref);
+      ObjectTypeVar var = ObjectType::_narrow(m_objref);
  
-      if (CORBA::is_nil(ptr))
+      if (CORBA::is_nil(var))
         {
           releaseObject();
           return false;
         }
 
-      m_var = ObjectType::_duplicate(ptr);
+      m_var = var;
       return true;
     }
 

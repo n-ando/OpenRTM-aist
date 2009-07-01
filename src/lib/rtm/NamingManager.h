@@ -547,6 +547,11 @@ namespace RTC
 	: method(meth), nsname(name), ns(naming)
       {
       }
+
+      ~Names() {
+	delete ns;
+      }
+
       std::string method;
       std::string nsname;
       NamingBase* ns;

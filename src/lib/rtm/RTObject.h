@@ -2579,7 +2579,7 @@ namespace RTC
      * @brief Object reference
      * @endif
      */
-    RTObject_ptr m_objref;
+    RTObject_var m_objref;
     
     /*!
      * @if jp
@@ -2695,7 +2695,7 @@ namespace RTC
       {
 	try
 	  {
-	    ExecutionContext_ptr ec;
+	    ExecutionContext_var ec;
 	    ec = ExecutionContext::_narrow(ecs);
 	    return m_ec->_is_equivalent(ec);
 	  }
@@ -2705,7 +2705,8 @@ namespace RTC
 	  }
 	return false;
       }
-      ExecutionContext_ptr m_ec;
+      ExecutionContext_var m_ec;
+
     };  // struct ec_find
     //    ExecutionContextAdminList m_execContextList;
     
@@ -2719,7 +2720,7 @@ namespace RTC
     struct deactivate_comps
     {
       deactivate_comps(LightweightRTObject_ptr comp)
-	: m_comp(comp)
+	: m_comp(RTC::LightweightRTObject::_duplicate(comp))
       {
       }
       void operator()(ExecutionContextService_ptr ec)
