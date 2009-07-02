@@ -2688,7 +2688,7 @@ namespace RTC
     struct ec_find
     {
       ec_find(ExecutionContext_ptr& ec)
-	: m_ec(ec)
+	: m_ec(ExecutionContext::_duplicate(ec))
       {
       }
       bool operator()(ExecutionContextService_ptr ecs)
