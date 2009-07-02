@@ -33,6 +33,7 @@ namespace RTC
    * @endif
    */
   OutPortCorbaCdrProvider::OutPortCorbaCdrProvider(void)
+   : m_buffer(0) 
   {
     rtclog.setLevel("PARANOID");
     // PortProfile setting
@@ -106,6 +107,7 @@ namespace RTC
   {
     RTC_PARANOID(("get()"));
 
+    data = new ::OpenRTM::CdrData();
     if (m_buffer == 0)
       {
         return ::OpenRTM::UNKNOWN_ERROR;
