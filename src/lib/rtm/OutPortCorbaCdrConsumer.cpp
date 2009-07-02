@@ -78,14 +78,13 @@ namespace RTC
   OutPortConsumer::ReturnCode
   OutPortCorbaCdrConsumer::get(cdrMemoryStream& data)
   {
-    ::OpenRTM::CdrData* cdr_data;
+    ::OpenRTM::CdrData_var cdr_data;
     try
       {
-        ::OpenRTM::PortStatus ret(_ptr()->get(cdr_data));
-
+        ::OpenRTM::PortStatus ret(_ptr()->get(cdr_data.out()));
         if (ret == ::OpenRTM::PORT_OK)
           {
-            data.put_octet_array(&((*cdr_data)[0]), cdr_data->length());
+            data.put_octet_array(&(cdr_data[0]), (int)cdr_data->length());
             m_buffer->put(data);
             m_buffer->advanceWptr();
             m_buffer->advanceRptr();
@@ -143,7 +142,7 @@ namespace RTC
   {
     CORBA::Long index;
     index = NVUtil::find_index(properties,
-                               "dataport.corba_cdr.outport_ref");
+                               "dataport.corba_cdr.outport_ior");
     if (index < 0) return;
     
     const char* ior;
