@@ -239,7 +239,7 @@ namespace RTC
     RTC_TRACE(("unsubscribeFromIor()"));
     CORBA::Long index;
     index = NVUtil::find_index(properties,
-                               "dataport.corba_any.inport_ior");
+                               "dataport.corba_cdr.inport_ior");
     if (index < 0)
       {
         RTC_ERROR(("inport_ior not found"));
@@ -278,7 +278,7 @@ namespace RTC
     RTC_TRACE(("unsubscribeFromRef()"));
     CORBA::Long index;
     index = NVUtil::find_index(properties,
-                               "dataport.corba_any.inport_ref");
+                               "dataport.corba_cdr.inport_ref");
     if (index < 0) { return false; }
     
     CORBA::Object_var obj;
