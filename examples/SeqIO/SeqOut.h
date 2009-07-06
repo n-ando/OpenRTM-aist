@@ -128,6 +128,11 @@ class SeqOut
   
   // </rtc-template>
 
+  // Configuration variable declaration
+  // <rtc-template block="config_declare">
+  std::string m_data_type;
+  // </rtc-template>
+
  private:
 
 };

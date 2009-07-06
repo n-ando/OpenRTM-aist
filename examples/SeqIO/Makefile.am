@@ -33,6 +33,7 @@ SeqOut_la_LIBADD  = $(top_builddir)/src/lib/rtm/libRTC.la
 
 # Standalone RTCs
 example_PROGRAMS = SeqInComp SeqOutComp
+example_DATA = rtc.conf component.conf
 
 SeqInComp_SOURCES = SeqInComp.cpp 
 SeqInComp_LDFLAGS = -L$(top_builddir)/src/lib/rtm/.libs
@@ -54,7 +55,8 @@ EXTRA_DIST =            \
 	README.SeqIn    \
 	README.SeqOut   \
 	gen.sh          \
-	rtc.conf
+	rtc.conf        \
+	component.conf
 
 ALL_SRC =              \
 	SeqInComp.cpp  \

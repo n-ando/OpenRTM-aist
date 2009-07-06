@@ -22,6 +22,7 @@
 #include <rtm/CORBA_SeqUtil.h>
 #include <rtm/CorbaConsumer.h>
 #include <assert.h>
+#include <coil/stringutil.h>
 
 
 using namespace RTC;
@@ -70,6 +71,7 @@ int main (int argc, char** argv)
   for (int i = 1; i < argc; ++i)
     {
       std::string arg(argv[i]);
+      coil::normalize(arg);
       if (arg == "--flush")         subs_type = "flush";
       else if (arg == "--new")      subs_type = "new";
       else if (arg == "--periodic")
@@ -85,8 +87,13 @@ int main (int argc, char** argv)
 	}
       else if (arg == "--policy")
 	{
-	  if (++i < argc) push_policy = argv[i];
-	  else            push_policy = "NEW";
+	  if (++i < argc)
+	    {
+	      std::string arg2(argv[i]);
+	      coil::normalize(arg2);
+	      push_policy = arg2;
+	    }
+	  else            push_policy = "new";
 	}
       else if (arg == "--skip")
 	{
@@ -157,17 +164,17 @@ int main (int argc, char** argv)
     CORBA_SeqUtil::push_back(prof.properties,
 			   NVUtil::newNV("dataport.subscription_type",
 					 "flush"));
-  if (period != "")
+  if (subs_type == "periodic" && period != "")
     CORBA_SeqUtil::push_back(prof.properties,
-			   NVUtil::newNV("dataport.push_rate",
+			   NVUtil::newNV("dataport.publisher.push_rate",
 					 period.c_str()));
   if (push_policy != "")
     CORBA_SeqUtil::push_back(prof.properties,
-			   NVUtil::newNV("dataport.push_policy",
+			   NVUtil::newNV("dataport.publisher.push_policy",
 					 push_policy.c_str()));
-  if (skip_count != "")
+  if (push_policy == "skip" && skip_count != "")
     CORBA_SeqUtil::push_back(prof.properties,
-			   NVUtil::newNV("dataport.skip_count",
+			   NVUtil::newNV("dataport.publisher.skip_count",
 					 skip_count.c_str()));
 
   ReturnCode_t ret;

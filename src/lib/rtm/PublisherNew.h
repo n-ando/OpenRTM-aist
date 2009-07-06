@@ -233,6 +233,7 @@ namespace RTC
     Policy m_pushPolicy;
     int m_skipn;
     bool m_active;
+    int m_leftskip;
   };
 };     // namespace RTC
 

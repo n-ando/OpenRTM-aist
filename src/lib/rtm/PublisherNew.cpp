@@ -42,7 +42,7 @@ namespace RTC
     : rtclog("PublisherNew"),
       m_consumer(0), m_buffer(0), m_task(0),
       m_retcode(PORT_OK), m_pushPolicy(NEW),
-      m_skipn(0), m_active(false)
+      m_skipn(0), m_active(false), m_leftskip(0)
   {
     rtclog.setLevel("PARANOID");
   }
@@ -87,11 +87,11 @@ namespace RTC
     rtclog.unlock();
     
     // push_policy default: NEW
-    std::string push_policy = prop.getProperty("push_policy", "NEW");
+    std::string push_policy = prop.getProperty("publisher.push_policy", "new");
     RTC_DEBUG(("push_policy: %s", push_policy.c_str()));
 
     // skip_count default: 0
-    std::string skip_count = prop.getProperty("skip_count", "0");
+    std::string skip_count = prop.getProperty("publisher.skip_count", "0");
     RTC_DEBUG(("skip_count: %s", skip_count.c_str()));
 
     coil::normalize(push_policy);
@@ -357,15 +357,13 @@ namespace RTC
    */
   PublisherNew::ReturnCode PublisherNew::pushSkip()
   {
-    static int leftskip;  // 残りのスキップ数
-
     RTC_TRACE(("pushSkip()"));
     try
       {
         ReturnCode ret(PORT_OK);
-        int preskip(m_buffer->readable() + leftskip);
+        int preskip(m_buffer->readable() + m_leftskip);
         int loopcnt(preskip/(m_skipn +1));
-        int postskip(m_skipn - leftskip);
+        int postskip(m_skipn - m_leftskip);
         for (int i(0); i < loopcnt; ++i)
           {
             m_buffer->advanceRptr(postskip);
@@ -374,7 +372,7 @@ namespace RTC
             ret = m_consumer->put(cdr);
             if (ret != PORT_OK)
               {
-                m_buffer->advanceRptr(-postskip);  // 読み出しポインタを戻す
+                m_buffer->advanceRptr(-postskip);
                 return ret;
               }
             postskip = m_skipn +1;
@@ -382,17 +380,17 @@ namespace RTC
         m_buffer->advanceRptr(m_buffer->readable());
         if (loopcnt == 0)
           {  // Not put
-            leftskip = preskip % (m_skipn +1);
+            m_leftskip = preskip % (m_skipn +1);
           }
         else
           {
-          if ( m_retcode != PORT_OK )  // 前回の結果
+          if ( m_retcode != PORT_OK )
             {  // put Error after 
-              leftskip = 0;
+              m_leftskip = 0;
             }
           else
             {  // put OK after
-              leftskip = preskip % (m_skipn +1);
+              m_leftskip = preskip % (m_skipn +1);
             }
           }
         return ret;
