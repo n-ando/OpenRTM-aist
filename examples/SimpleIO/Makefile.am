@@ -34,7 +34,7 @@ ConsoleOut_la_LIBADD  = $(top_builddir)/src/lib/rtm/libRTC.la
 # Standalone RTCs
 example_PROGRAMS = ConsoleInComp ConsoleOutComp
 noinst_PROGRAMS = ConnectorComp
-example_DATA = rtc.conf consin.conf consout.conf
+example_DATA = rtc.conf consin.conf consout.conf component.conf rtc.conf.org
 
 ConsoleInComp_SOURCES = ConsoleInComp.cpp 
 ConsoleInComp_LDFLAGS = -L$(top_builddir)/src/lib/rtm/.libs
@@ -63,7 +63,9 @@ EXTRA_DIST =                \
 	README.ConsoleOut   \
 	rtc.conf            \
 	consin.conf         \
-	consout.conf
+	consout.conf        \
+	component.conf      \
+	rtc.conf.org
 
 ALL_SRC =                  \
 	ConsoleInComp.cpp  \

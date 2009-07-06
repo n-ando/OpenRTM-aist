@@ -14,7 +14,8 @@ rtc-template -bcxx \
     --inport=ShortSeq:TimedShortSeq \
     --inport=LongSeq:TimedLongSeq \
     --inport=FloatSeq:TimedFloatSeq \
-    --inport=DoubleSeq:TimedDoubleSeq
+    --inport=DoubleSeq:TimedDoubleSeq \
+    --config="data_type:std::string:random"
 
 rtc-template -bcxx \
     --module-name=SeqOut --module-type='SequenceOutComponent' \

@@ -69,7 +69,7 @@ namespace RTC
      * @brief コンストラクタ
      *
      * コンストラクタ
-     * 送出処理の呼び出し間隔を、Propertyオブジェクトのdataport.push_rateメンバ
+     * 送出処理の呼び出し間隔を、Propertyオブジェクトのdataport.publisher.push_rateメンバ
      * に設定しておく必要がある。送出間隔は、Hz単位の浮動小数文字列で指定。
      * たとえば、1000.0Hzの場合は、「1000.0」を設定。
      * 上記プロパティが未設定の場合は、「1000Hz」を設定。
@@ -82,7 +82,7 @@ namespace RTC
      *
      * Constructor.
      * The intervals of invoking send processing needs to be set in
-     * dataport.push_rate of Property object. The interval is specified by
+     * dataport.publisher.push_rate of Property object. The interval is specified by
      * floating point string in Hz.
      * For example, "1000.0" is set for 1000.0Hz.
      * If the above property is unset, "1000Hz" will be set.
@@ -181,6 +181,7 @@ namespace RTC
     int m_skipn;
     bool m_active;
     bool m_readback;
+    int m_leftskip;
   };
 };     // namespace RTC
 
