@@ -51,8 +51,6 @@ dummylib_LTLIBRARIES = DummyLib.la
 DummyLib_la_SOURCES = \
 	$(IDL_SOURCES:.idl=Skel.cpp)                             \
 	$(top_builddir)/src/lib/rtm/NVUtil.cpp                   \
-	$(top_builddir)/src/lib/coil/common/stringutil.cpp       \
-	$(top_builddir)/src/lib/coil/common/Properties.cpp       \
 	$(top_builddir)/src/lib/rtm/CorbaNaming.cpp              \
 	$(top_builddir)/src/lib/rtm/NamingManager.cpp            \
 	$(top_builddir)/src/lib/rtm/PortBase.cpp                 \
@@ -63,7 +61,6 @@ DummyLib_la_SOURCES = \
 	$(top_builddir)/src/lib/rtm/ModuleManager.cpp            \
 	$(top_builddir)/src/lib/rtm/ManagerConfig.cpp            \
 	$(top_builddir)/src/lib/rtm/RTCUtil.cpp                  \
-	$(top_builddir)/src/lib/coil/common/Timer.cpp            \
 	$(top_builddir)/src/lib/rtm/NumberingPolicy.cpp          \
 	$(top_builddir)/src/lib/rtm/Factory.cpp                  \
 	$(top_builddir)/src/lib/rtm/ECFactory.cpp                \
@@ -73,8 +70,30 @@ DummyLib_la_SOURCES = \
 	$(top_builddir)/src/lib/rtm/PeriodicECSharedComposite.cpp\
 	$(top_builddir)/src/lib/rtm/RTObject.cpp                 \
 	$(top_builddir)/src/lib/rtm/Manager.cpp                  \
+	$(top_srcdir)/src/lib/rtm/SystemLogger.cpp               \
+	$(top_srcdir)/src/lib/rtm/FactoryInit.cpp                  \
+	$(top_srcdir)/src/lib/rtm/CdrRingBuffer.cpp                \
+	$(top_srcdir)/src/lib/rtm/DefaultPeriodicTask.cpp          \
+	$(top_srcdir)/src/lib/rtm/PublisherFlush.cpp               \
+	$(top_srcdir)/src/lib/rtm/PublisherNew.cpp                 \
+	$(top_srcdir)/src/lib/rtm/PublisherPeriodic.cpp            \
+	$(top_srcdir)/src/lib/rtm/InPortCorbaCdrProvider.cpp       \
+	$(top_srcdir)/src/lib/rtm/InPortCorbaCdrConsumer.cpp       \
+	$(top_srcdir)/src/lib/rtm/OutPortCorbaCdrConsumer.cpp      \
+	$(top_srcdir)/src/lib/rtm/OutPortCorbaCdrProvider.cpp      \
+	$(top_srcdir)/src/lib/rtm/OutPortBase.cpp                \
+	$(top_srcdir)/src/lib/rtm/OutPortProvider.cpp            \
+	$(top_srcdir)/src/lib/rtm/OutPortConnector.cpp           \
+	$(top_srcdir)/src/lib/rtm/OutPortPullConnector.cpp       \
+	$(top_srcdir)/src/lib/rtm/OutPortPushConnector.cpp       \
+	$(top_srcdir)/src/lib/rtm/InPortBase.cpp                 \ 
+	$(top_srcdir)/src/lib/rtm/InPortProvider.cpp             \
+	$(top_srcdir)/src/lib/rtm/InPortConnector.cpp            \
+	$(top_srcdir)/src/lib/rtm/InPortPullConnector.cpp        \
+	$(top_srcdir)/src/lib/rtm/InPortPushConnector.cpp        \
         $(top_builddir)/src/lib/rtm/ManagerServant.cpp
-DummyLib_la_LDFLAGS = -module
+DummyLib_la_LDFLAGS = -module \ 
+        -L$(top_builddir)/src/lib/coil/lib
 DummyLib_la_LIBADD   =                            \
 	-lomniORB4                                \
 	-lomnithread                              \
@@ -88,7 +107,8 @@ noinst_PROGRAMS = ManagerServantTests
 nodist_ManagerServantTests_SOURCES =                             \
         ../TestRunner.cpp                                        \
         ManagerServantTests.cpp
-ManagerServantTests_LDFLAGS = -L$(libdir)
+ManagerServantTests_LDFLAGS = -L$(libdir) \ 
+        -L$(top_builddir)/src/lib/coil/lib
 ManagerServantTests_LDADD   =                      \
          -lcppunit                                 \
          -lomniORB4                                \
@@ -111,7 +131,8 @@ socomp_LTLIBRARIES = DummyModule1.la DummyModule2.la
 nodist_DummyModule1_la_SOURCES = DummyModule1.h \
 	$(top_builddir)/src/lib/rtm/DataFlowComponentBase.cpp    \
                        DummyModule1.cpp 
-DummyModule1_la_LDFLAGS = -module 
+DummyModule1_la_LDFLAGS = -module \ 
+        -L$(top_builddir)/src/lib/coil/lib
 DummyModule1_la_LIBADD  = \
          -lomniORB4                                \
          -lomnithread                              \
@@ -123,7 +144,8 @@ DummyModule1_la_LIBADD  = \
 nodist_DummyModule2_la_SOURCES = DummyModule2.h \
 	$(top_builddir)/src/lib/rtm/DataFlowComponentBase.cpp    \
                         DummyModule2.cpp
-DummyModule2_la_LDFLAGS = -module
+DummyModule2_la_LDFLAGS = -module \
+        -L$(top_builddir)/src/lib/coil/lib
 DummyModule2_la_LIBADD  = \
 	-lomniORB4                                \
 	-lomnithread                              \
