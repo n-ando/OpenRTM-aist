@@ -42,7 +42,13 @@ namespace RTC
 
     void activate(::PortableServer::ServantBase* servant)
     {
-      m_poa->activate_object(servant);
+      try 
+        {
+          m_poa->activate_object(servant);
+        }
+      catch(const ::PortableServer::POA::ServantAlreadyActive &)
+        {
+        }
     }
 
     void deactivate(::PortableServer::ServantBase* servant)
@@ -418,6 +424,11 @@ namespace NamingManager
 			
       // update()呼出後は、正しくネームサービスにバインドされているか？
       //
+      m_mgr->getConfig()["naming.update.rebind"] = "NO";
+      nmgr.update();
+      CPPUNIT_ASSERT(! canResolve(name_server, "id", "kind"));
+
+      m_mgr->getConfig()["naming.update.rebind"] = "YES";
       nmgr.update();
       CPPUNIT_ASSERT(canResolve(name_server, "id", "kind"));
       objMgr.deactivate(rto);
