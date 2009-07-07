@@ -96,15 +96,21 @@ namespace RTObject
     : public RTC::PortBase
   {
   protected:
-    virtual RTC::ReturnCode_t publishInterfaces(RTC::ConnectorProfile&)
+    virtual RTC::ReturnCode_t publishInterfaces(RTC::ConnectorProfile& connector_profile)
     {
       return RTC::RTC_OK;
     }
-    virtual RTC::ReturnCode_t subscribeInterfaces(const RTC::ConnectorProfile&)
+    virtual RTC::ReturnCode_t subscribeInterfaces(const RTC::ConnectorProfile& connector_profile)
     {
       return RTC::RTC_OK;
     }
-    virtual void unsubscribeInterfaces(const RTC::ConnectorProfile&)
+    virtual void unsubscribeInterfaces(const RTC::ConnectorProfile& connector_profile)
+    {
+    }
+    virtual void activateInterfaces()
+    {
+    }
+    virtual void deactivateInterfaces()
     {
     }
   };
@@ -156,7 +162,7 @@ namespace RTObject
       return NULL;
     }
 		
-    virtual CORBA::Boolean set_organization_property(const SDOPackage::OrganizationProperty& organization_property)
+    virtual CORBA::Boolean add_organization_property(const SDOPackage::OrganizationProperty& organization_property)
     {
       return false;
     }
@@ -335,6 +341,10 @@ namespace RTObject
 			
       // initialize()メソッド呼出により、on_initialize()コールバックが呼び出されるか？
       CPPUNIT_ASSERT_EQUAL(0, rto->countLog("on_initialize"));
+      coil::Properties prop;
+      prop.setProperty("exec_cxt.periodic.type","PeriodicExecutionContext");
+      prop.setProperty("exec_cxt.periodic.rate","1000");
+      rto->setProperties(prop);
       CPPUNIT_ASSERT_EQUAL(RTC::RTC_OK, rto->initialize());
       CPPUNIT_ASSERT_EQUAL(1, rto->countLog("on_initialize"));
     }
@@ -346,14 +356,23 @@ namespace RTObject
      */
     void test_initialize_in_Alive()
     {
+std::cout<<"IN  test_initialize_in_Alive()"<<std::endl;
       RTObjectMock* rto	= new RTObjectMock(m_pORB, m_pPOA); // will be deleted automatically
 			
       // initialize()メソッド呼出しを行い、Alive状態に遷移させる
+      coil::Properties prop;
+      prop.setProperty("exec_cxt.periodic.type","PeriodicExecutionContext");
+      prop.setProperty("exec_cxt.periodic.rate","1000");
+      rto->setProperties(prop);
       CPPUNIT_ASSERT_EQUAL(RTC::RTC_OK, rto->initialize());
-      CPPUNIT_ASSERT_EQUAL(true, rto->is_alive(NULL));
+
+      RTC::ExecutionContext_ptr ec;
+      ec = rto->get_context(0);
+      CPPUNIT_ASSERT_EQUAL(true, rto->is_alive(ec));
 			
       // Alive状態でinitialize()メソッド呼出しを行った場合、意図どおりのエラーを返すか？
       CPPUNIT_ASSERT_EQUAL(RTC::PRECONDITION_NOT_MET, rto->initialize());
+std::cout<<"OUT test_initialize_in_Alive()"<<std::endl;
     }
 		
     /*!
@@ -363,11 +382,18 @@ namespace RTObject
      */
     void test_finalize_invoking_on_finalize()
     {
+std::cout<<"IN  test_finalize_invoking_on_finalize()"<<std::endl;
       RTObjectMock* rto	= new RTObjectMock(m_pORB, m_pPOA); // will be deleted automatically
 			
       // initialize()メソッド呼出しを行い、Alive状態に遷移させる
+      coil::Properties prop;
+      prop.setProperty("exec_cxt.periodic.type","PeriodicExecutionContext");
+      prop.setProperty("exec_cxt.periodic.rate","1000");
+      rto->setProperties(prop);
       CPPUNIT_ASSERT_EQUAL(RTC::RTC_OK, rto->initialize());
-      CPPUNIT_ASSERT_EQUAL(true, rto->is_alive(NULL));
+      RTC::ExecutionContext_ptr ec;
+      ec = rto->get_context(0);
+      CPPUNIT_ASSERT_EQUAL(true, rto->is_alive(ec));
 			
       // finalize()呼出しにより、on_finalize()コールバックが呼び出されるか？
       CPPUNIT_ASSERT_EQUAL(0, rto->countLog("on_finalize"));
@@ -375,7 +401,8 @@ namespace RTObject
       CPPUNIT_ASSERT_EQUAL(1, rto->countLog("on_finalize"));
 			
       // finalize()完了後なので、終状態へ遷移している（つまりAlive状態ではない）か？
-      CPPUNIT_ASSERT_EQUAL(false, rto->is_alive(NULL));
+      CPPUNIT_ASSERT_EQUAL(false, rto->is_alive(ec));
+std::cout<<"OUT test_finalize_invoking_on_finalize()"<<std::endl;
     }
 		
     /*!
@@ -388,12 +415,19 @@ namespace RTObject
       RTObjectMock* rto	= new RTObjectMock(m_pORB, m_pPOA); // will be deleted automatically
 			
       // ExecutionContextを生成する
-      RTC::PeriodicExecutionContext* ec
-	= new RTC::PeriodicExecutionContext(); // will be deleted automatically
+//      RTC::PeriodicExecutionContext* ec
+//	= new RTC::PeriodicExecutionContext(); // will be deleted automatically
 
       // initialize()メソッド呼出しを行い、Alive状態に遷移させる
+      coil::Properties prop;
+      prop.setProperty("exec_cxt.periodic.type","PeriodicExecutionContext");
+      prop.setProperty("exec_cxt.periodic.rate","1000");
+      rto->setProperties(prop);
       CPPUNIT_ASSERT_EQUAL(RTC::RTC_OK, rto->initialize());
-      CPPUNIT_ASSERT_EQUAL(true, rto->is_alive(ec->_this()));
+
+      RTC::ExecutionContext_ptr ec;
+      ec = rto->get_context(0);
+      CPPUNIT_ASSERT_EQUAL(true, rto->is_alive(ec));
 			
       // ExecutionContextに登録しておく
       CPPUNIT_ASSERT_EQUAL(RTC::RTC_OK, ec->add_component(rto->_this()));
@@ -431,16 +465,24 @@ namespace RTObject
      */
     void test_exit()
     {
+std::cout<<"IN test_exit()"<<std::endl;
       RTObjectMock* rto	= new RTObjectMock(m_pORB, m_pPOA); // will be deleted automatically
       rto->setObjRef(rto->_this());
 			
       // ExecutionContextを生成する
-      RTC::PeriodicExecutionContext* ec
-	= new RTC::PeriodicExecutionContext(); // will be deleted automatically
+//      RTC::PeriodicExecutionContext* ec
+//	= new RTC::PeriodicExecutionContext(); // will be deleted automatically
 
       // initialize()メソッド呼出しを行い、Alive状態に遷移させる
+      coil::Properties prop;
+      prop.setProperty("exec_cxt.periodic.type","PeriodicExecutionContext");
+      prop.setProperty("exec_cxt.periodic.rate","1000");
+      rto->setProperties(prop);
       CPPUNIT_ASSERT_EQUAL(RTC::RTC_OK, rto->initialize());
-      CPPUNIT_ASSERT_EQUAL(true, rto->is_alive(ec->_this()));
+
+      RTC::ExecutionContext_ptr ec;
+      ec = rto->get_context(0);
+      CPPUNIT_ASSERT_EQUAL(true, rto->is_alive(ec));
 			
       // コンポーネントをExecutionContextに登録してアクティブ化する
       CPPUNIT_ASSERT_EQUAL(RTC::RTC_OK, ec->add_component(rto->_this()));
@@ -459,7 +501,9 @@ namespace RTObject
       ec->remove_component(rto->_this());
       CPPUNIT_ASSERT_EQUAL(RTC::RTC_OK, rto->exit());
       CPPUNIT_ASSERT_EQUAL(1, rto->countLog("on_finalize"));
-      CPPUNIT_ASSERT_EQUAL(false, rto->is_alive(ec->_this()));
+      CPPUNIT_ASSERT_EQUAL(false, rto->is_alive(ec));
+std::cout<<"OUT test_exit()"<<std::endl;
+
     }
 
     /*!
@@ -539,8 +583,8 @@ namespace RTObject
       RTC::ExecutionContext_ptr ecPtr2 = rto->get_context(id2);
       CPPUNIT_ASSERT(ecPtr2->_is_equivalent(ec2->_this()));
 
-      rto->detach_context(id1);
       rto->detach_context(id2);
+      rto->detach_context(id1);
     }
 		
     /*!
@@ -565,7 +609,8 @@ namespace RTObject
       CPPUNIT_ASSERT(RTC::UniqueId(-1) != id2);
 			
       // attachされているExecutionContextをすべて正しく取得できるか？
-      RTC::ExecutionContextList* ecList = rto->get_owned_contexts();
+//      RTC::ExecutionContextList* ecList = rto->get_owned_contexts();
+      RTC::ExecutionContextList* ecList = rto->get_participating_contexts();
       CPPUNIT_ASSERT(ecList != NULL);
       CPPUNIT_ASSERT_EQUAL(CORBA::ULong(2), ecList->length());
       CPPUNIT_ASSERT(! (*ecList)[0]->_is_equivalent((*ecList)[1]));
@@ -575,8 +620,8 @@ namespace RTObject
 		     || (*ecList)[1]->_is_equivalent(ec2->_this()));
 
 
-      rto->detach_context(id1);
       rto->detach_context(id2);
+      rto->detach_context(id1);
 
     }
 		
@@ -915,8 +960,8 @@ namespace RTObject
       // Configurationインタフェースを取得し、ServiceProfileを設定する
       SDOPackage::Configuration_ptr cfg = rto->get_configuration();
       CPPUNIT_ASSERT(! CORBA::is_nil(cfg));
-      cfg->set_service_profile(svcProf1);
-      cfg->set_service_profile(svcProf2);
+      cfg->add_service_profile(svcProf1);
+      cfg->add_service_profile(svcProf2);
 			
       // get_service_profile()を用いてServiceProfileを取得して、正しく設定されたことを確認する
       SDOPackage::ServiceProfile* svcProfRet1 = rto->get_service_profile("ID 1");
@@ -979,8 +1024,8 @@ namespace RTObject
       // Configurationインタフェースを取得し、ServiceProfileを設定する
       SDOPackage::Configuration_ptr cfg = rto->get_configuration();
       CPPUNIT_ASSERT(! CORBA::is_nil(cfg));
-      cfg->set_service_profile(svcProf1);
-      cfg->set_service_profile(svcProf2);
+      cfg->add_service_profile(svcProf1);
+      cfg->add_service_profile(svcProf2);
 			
       // get_service_profiles()を使ってServiceProfile群を取得して、正しく設定されたことを確認する
       SDOPackage::ServiceProfileList* svcProfList = rto->get_service_profiles();
@@ -1053,8 +1098,8 @@ namespace RTObject
       // Configurationインタフェースを取得し、ServiceProfileを設定する
       SDOPackage::Configuration_ptr cfg = rto->get_configuration();
       CPPUNIT_ASSERT(! CORBA::is_nil(cfg));
-      cfg->set_service_profile(svcProf1);
-      cfg->set_service_profile(svcProf2);
+      cfg->add_service_profile(svcProf1);
+      cfg->add_service_profile(svcProf2);
 			
       // 指定したIDのSDOServiceを正しく取得できるか？
       SDOPackage::SDOService_ptr sdoSvcRet1 = rto->get_sdo_service("ID 1");
@@ -1099,8 +1144,8 @@ namespace RTObject
       // Configurationインタフェースを取得し、ServiceProfileを設定する
       SDOPackage::Configuration_ptr cfg = rto->get_configuration();
       CPPUNIT_ASSERT(! CORBA::is_nil(cfg));
-      cfg->set_service_profile(svcProf1);
-      cfg->set_service_profile(svcProf2);
+      cfg->add_service_profile(svcProf1);
+      cfg->add_service_profile(svcProf2);
       CPPUNIT_ASSERT(rto->get_service_profile("ID 1") != NULL);
       CPPUNIT_ASSERT(rto->get_service_profile("ID 2") != NULL);
 			
