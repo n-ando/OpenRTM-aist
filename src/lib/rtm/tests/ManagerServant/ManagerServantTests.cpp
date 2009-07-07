@@ -717,6 +717,7 @@ namespace ManagerServant
         DATA_STRUCT manager_profile[] =
         {
             {"instance_name",            "manager"},
+            {"name",                     "manager"},
             {"naming_formats",           "%h.host_cxt/%n.mgr"},
             {"pid",                      ""},
             {"refstring_path",           "/var/log/rtcmanager.ref"},
@@ -727,9 +728,9 @@ namespace ManagerServant
             {"modules.init_func_suffix", ""},
             {"modules.init_func_prefix", ""},
             {"os.name",                  "Linux"},
-            {"os.release",               "2.6.22-14-generic"},
+            {"os.release",               ""},
             {"os.version",               ""},
-            {"os.arch",                  "i686"},
+            {"os.arch",                  ""},
             {"os.hostname",              ""},
             {"name",                     ""},
             {"",""},
@@ -775,9 +776,10 @@ namespace ManagerServant
         } DATA_STRUCT;
         DATA_STRUCT config[] =
         {
-            {"config.version",                  "0.4.2"},
-            {"openrtm.version",                 "OpenRTM-aist-0.4.2"},
+            {"config.version",                  "1.0.0"},
+            {"openrtm.version",                 "OpenRTM-aist-1.0.0"},
             {"manager.instance_name",           "manager"},
+            {"manager.name",                    "manager"},
             {"manager.naming_formats",          "%h.host_cxt/%n.mgr"},
             {"manager.pid",                     ""},
             {"manager.refstring_path",          "/var/log/rtcmanager.ref"},
@@ -788,11 +790,10 @@ namespace ManagerServant
             {"manager.modules.init_func_suffix",""},
             {"manager.modules.init_func_prefix",""},
             {"manager.os.name",                 "Linux"},
-            {"manager.os.release",              "2.6.22-14-generic"},
+            {"manager.os.release",              ""},
             {"manager.os.version",              ""},
-            {"manager.os.arch",                 "i686"},
+            {"manager.os.arch",                 ""},
             {"manager.os.hostname",             ""},
-            {"manager.name",                    ""},
             {"os.name",                         ""},
             {"os.release",                      ""},
             {"os.version",                      ""},
