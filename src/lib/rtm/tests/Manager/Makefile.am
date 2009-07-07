@@ -32,16 +32,18 @@ IDL_SOURCES = \
 	$(top_srcdir)/src/lib/rtm/idl/SDOPackage.idl \
 	$(top_srcdir)/src/lib/rtm/idl/RTC.idl \
 	$(top_srcdir)/src/lib/rtm/idl/OpenRTM.idl \
-	$(top_srcdir)/src/lib/rtm/idl/Manager.idl
+	$(top_srcdir)/src/lib/rtm/idl/Manager.idl \
+	$(top_srcdir)/src/lib/rtm/idl/BasicDataType.idl \
+	$(top_srcdir)/src/lib/rtm/idl/DataPort.idl
 
-noinst_PROGRAMS = ManagerTests
-
-nodist_ManagerTests_SOURCES = \
-	../TestRunner.cpp \
+#
+#
+#
+dummylibdir  = $(pkgdatadir)/src/lib/rtm/tests/Manager
+dummylib_LTLIBRARIES = DummyLib.la
+DummyLib_la_SOURCES = \
 	$(IDL_SOURCES:.idl=Skel.cpp) \
 	$(top_srcdir)/src/lib/rtm/NVUtil.cpp \
-	$(top_srcdir)/src/lib/coil/common/stringutil.cpp \
-	$(top_srcdir)/src/lib/coil/common/Properties.cpp \
 	$(top_srcdir)/src/lib/rtm/CorbaNaming.cpp \
 	$(top_srcdir)/src/lib/rtm/NamingManager.cpp \
 	$(top_srcdir)/src/lib/rtm/PortBase.cpp \
@@ -51,7 +53,6 @@ nodist_ManagerTests_SOURCES = \
 	$(top_srcdir)/src/lib/rtm/ModuleManager.cpp \
 	$(top_srcdir)/src/lib/rtm/ManagerConfig.cpp \
 	$(top_srcdir)/src/lib/rtm/RTCUtil.cpp \
-	$(top_srcdir)/src/lib/coil/common/Timer.cpp \
 	$(top_srcdir)/src/lib/rtm/NumberingPolicy.cpp \
 	$(top_srcdir)/src/lib/rtm/Factory.cpp \
 	$(top_srcdir)/src/lib/rtm/ECFactory.cpp \
@@ -63,10 +64,91 @@ nodist_ManagerTests_SOURCES = \
 	$(top_srcdir)/src/lib/rtm/ManagerServant.cpp \
 	$(top_srcdir)/src/lib/rtm/PeriodicECSharedComposite.cpp \
 	$(top_srcdir)/src/lib/rtm/SdoOrganization.cpp \
-	ManagerTests.cpp
+	$(top_srcdir)/src/lib/rtm/SystemLogger.cpp \
+	$(top_srcdir)/src/lib/rtm/OutPortBase.cpp \
+	$(top_srcdir)/src/lib/rtm/OutPortProvider.cpp \
+	$(top_srcdir)/src/lib/rtm/OutPortConnector.cpp \
+	$(top_srcdir)/src/lib/rtm/OutPortPullConnector.cpp \
+	$(top_srcdir)/src/lib/rtm/OutPortPushConnector.cpp \
+	$(top_srcdir)/src/lib/rtm/InPortBase.cpp \
+	$(top_srcdir)/src/lib/rtm/InPortProvider.cpp \
+	$(top_srcdir)/src/lib/rtm/InPortConnector.cpp \
+	$(top_srcdir)/src/lib/rtm/InPortPullConnector.cpp \
+	$(top_srcdir)/src/lib/rtm/InPortPushConnector.cpp \
+	$(top_srcdir)/src/lib/rtm/FactoryInit.cpp \
+	$(top_srcdir)/src/lib/rtm/CdrRingBuffer.cpp \
+	$(top_srcdir)/src/lib/rtm/DefaultPeriodicTask.cpp \
+	$(top_srcdir)/src/lib/rtm/PublisherFlush.cpp \
+	$(top_srcdir)/src/lib/rtm/PublisherNew.cpp \
+	$(top_srcdir)/src/lib/rtm/PublisherPeriodic.cpp \
+	$(top_srcdir)/src/lib/rtm/InPortCorbaCdrProvider.cpp \
+	$(top_srcdir)/src/lib/rtm/InPortCorbaCdrConsumer.cpp \
+	$(top_srcdir)/src/lib/rtm/OutPortCorbaCdrConsumer.cpp \
+	$(top_srcdir)/src/lib/rtm/OutPortCorbaCdrProvider.cpp 
+DummyLib_la_LDFLAGS = -module \ 
+        -L$(top_builddir)/src/lib/coil/lib
+DummyLib_la_LIBADD   =                            \
+	-lomniORB4                                \
+	-lomnithread                              \
+	-lomniDynamic4                            \
+	-lcoil                                    \
+	-luuid
 
-ManagerTests_LDFLAGS = -L$(libdir) $(AM_LDFLAGS)
-ManagerTests_LDADD   = -lcppunit -lcoil -luuid
+#
+#
+#
+noinst_PROGRAMS = ManagerTests
+
+nodist_ManagerTests_SOURCES = \
+	../TestRunner.cpp \
+	ManagerTests.cpp
+ManagerTests_LDFLAGS = -L$(libdir) $(AM_LDFLAGS) \
+        -L$(top_builddir)/src/lib/coil/lib
+ManagerTests_LDADD   = \ 
+         -lcppunit                                 \
+         -lomniORB4                                \
+         -lomnithread                              \
+         -lomniDynamic4                            \
+	-lcoil                                    \
+         -luuid                                    \
+	$(top_builddir)/src/lib/rtm/tests/Manager/.libs/DummyLib.la
+
+
+
+#
+#
+#
+socompdir  = $(pkgdatadir)/src/lib/rtm/tests/Manager
+
+# Loadable RTCs
+#socomp_LTLIBRARIES = ConsoleIn.la ConsoleOut.la
+socomp_LTLIBRARIES = DummyModule.la  DummyModule2.la  
+
+nodist_DummyModule_la_SOURCES = DummyModule.h \
+				DummyModule.cpp
+DummyModule_la_LDFLAGS = -module \ 
+	-L$(top_builddir)/src/lib/coil/lib
+DummyModule_la_LIBADD  = \
+	-lomniORB4                                \
+	-lomnithread                              \
+	-lomniDynamic4                            \
+ 	-lcoil                                    \
+	-luuid                                    \
+	$(top_builddir)/src/lib/rtm/tests/Manager/.libs/DummyLib.la
+
+nodist_DummyModule2_la_SOURCES = DummyModule2.h \
+				DummyModule2.cpp
+DummyModule2_la_LDFLAGS = -module \ 
+	-L$(top_builddir)/src/lib/coil/lib
+DummyModule2_la_LIBADD  = \
+	-lomniORB4                                \
+	-lomnithread                              \
+	-lomniDynamic4                            \
+ 	-lcoil                                    \
+	-luuid                                    \
+	$(top_builddir)/src/lib/rtm/tests/Manager/.libs/DummyLib.la
+
+
 
 EXTRA_DIST = \
 	ManagerTests.cpp
