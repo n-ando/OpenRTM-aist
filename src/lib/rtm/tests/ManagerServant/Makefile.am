@@ -86,13 +86,13 @@ DummyLib_la_SOURCES = \
 	$(top_srcdir)/src/lib/rtm/OutPortConnector.cpp           \
 	$(top_srcdir)/src/lib/rtm/OutPortPullConnector.cpp       \
 	$(top_srcdir)/src/lib/rtm/OutPortPushConnector.cpp       \
-	$(top_srcdir)/src/lib/rtm/InPortBase.cpp                 \ 
+	$(top_srcdir)/src/lib/rtm/InPortBase.cpp                 \
 	$(top_srcdir)/src/lib/rtm/InPortProvider.cpp             \
 	$(top_srcdir)/src/lib/rtm/InPortConnector.cpp            \
 	$(top_srcdir)/src/lib/rtm/InPortPullConnector.cpp        \
 	$(top_srcdir)/src/lib/rtm/InPortPushConnector.cpp        \
         $(top_builddir)/src/lib/rtm/ManagerServant.cpp
-DummyLib_la_LDFLAGS = -module \ 
+DummyLib_la_LDFLAGS = -module \
         -L$(top_builddir)/src/lib/coil/lib
 DummyLib_la_LIBADD   =                            \
 	-lomniORB4                                \
@@ -107,7 +107,7 @@ noinst_PROGRAMS = ManagerServantTests
 nodist_ManagerServantTests_SOURCES =                             \
         ../TestRunner.cpp                                        \
         ManagerServantTests.cpp
-ManagerServantTests_LDFLAGS = -L$(libdir) \ 
+ManagerServantTests_LDFLAGS = -L$(libdir) \
         -L$(top_builddir)/src/lib/coil/lib
 ManagerServantTests_LDADD   =                      \
          -lcppunit                                 \
@@ -131,7 +131,7 @@ socomp_LTLIBRARIES = DummyModule1.la DummyModule2.la
 nodist_DummyModule1_la_SOURCES = DummyModule1.h \
 	$(top_builddir)/src/lib/rtm/DataFlowComponentBase.cpp    \
                        DummyModule1.cpp 
-DummyModule1_la_LDFLAGS = -module \ 
+DummyModule1_la_LDFLAGS = -module \
         -L$(top_builddir)/src/lib/coil/lib
 DummyModule1_la_LIBADD  = \
          -lomniORB4                                \

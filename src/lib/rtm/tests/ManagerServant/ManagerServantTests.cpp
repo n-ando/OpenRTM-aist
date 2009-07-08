@@ -115,7 +115,7 @@ namespace ManagerServant
      */
     bool isFound(const ::RTM::ModuleProfileList* list, const std::string& mod)
     {
-        char *pch;
+        const char *pch;
         for (CORBA::ULong ic = 0; ic < list->length(); ++ic)
         {
             if( (*list)[ic].properties[0].value >>= pch )
@@ -322,7 +322,7 @@ namespace ManagerServant
         CPPUNIT_ASSERT_EQUAL((::CORBA::ULong)2, modlist.length());
         CPPUNIT_ASSERT_EQUAL(::std::string("file_path"), 
                              ::std::string(modlist[0].properties[0].name));
-        char* ch;
+        const char* ch;
         if( modlist[0].properties[0].value >>= ch )
         {
             CPPUNIT_ASSERT_EQUAL(::std::string(".//.libs/DummyModule1.so"), 
@@ -433,7 +433,7 @@ namespace ManagerServant
             CPPUNIT_ASSERT_EQUAL(composite_spec[ic].name,
                            ::std::string(profiles[0].properties[ic].name));
              
-            char* ch;
+            const char* ch;
             if( profiles[0].properties[ic].value >>= ch )
             {
                 CPPUNIT_ASSERT_EQUAL(composite_spec[ic].value, 
@@ -451,7 +451,7 @@ namespace ManagerServant
             CPPUNIT_ASSERT_EQUAL(consolein_spec[ic].name,
                            ::std::string(profiles[1].properties[ic].name));
              
-            char* ch;
+            const char* ch;
             if( profiles[1].properties[ic].value >>= ch )
             {
                 CPPUNIT_ASSERT_EQUAL(consolein_spec[ic].value, 
@@ -469,7 +469,7 @@ namespace ManagerServant
             CPPUNIT_ASSERT_EQUAL(consoleout_spec[ic].name,
                            ::std::string(profiles[2].properties[ic].name));
              
-            char* ch;
+            const char* ch;
             if( profiles[2].properties[ic].value >>= ch )
             {
                 CPPUNIT_ASSERT_EQUAL(consoleout_spec[ic].value, 
@@ -750,7 +750,7 @@ namespace ManagerServant
         {
             CPPUNIT_ASSERT_EQUAL(manager_profile[ic].name,
                                ::std::string(profile.properties[ic].name));
-            char* ch;
+            const char* ch;
             if( profile.properties[ic].value >>= ch )
             {
                 if(!manager_profile[ic].value.empty())
@@ -845,7 +845,7 @@ namespace ManagerServant
         {
             CPPUNIT_ASSERT_EQUAL(config[ic].name,
                                ::std::string(conf[ic].name));
-            char* ch;
+            const char* ch;
             if( conf[ic].value >>= ch )
             {
                 if(!config[ic].value.empty())
@@ -905,7 +905,7 @@ namespace ManagerServant
             {
                 CPPUNIT_ASSERT_EQUAL(config[ic].name,
                                      ::std::string(conf[ic].name));
-                char* ch;
+                const char* ch;
                 if( conf[ic].value >>= ch )
                 {
                     if(!config[ic].value.empty())
