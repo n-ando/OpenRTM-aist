@@ -240,7 +240,7 @@ namespace RTC
   {
     std::string node(config_set.getName());
     if (node.empty()) { return false; }
-    if (m_configsets.hasKey(node.c_str()) == 0) { return false; }
+    if (m_configsets.hasKey(node.c_str()) != 0) { return false; }
     
     coil::Properties& p(m_configsets.getNode(node));
     p << config_set;
