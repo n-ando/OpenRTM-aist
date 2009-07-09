@@ -14,17 +14,19 @@ SUBDIRS = \
 	CorbaNaming \
 	CorbaPort         \
 	DataInOutPort     \
-	DataInPort        \
-	DataOutPort       \
 	ECFactory \
 	ExtTrigExecutionContext \
 	Factory           \
 	InPort            \
+	InPortBase \
+	InPortConnector \
+	InPortCorbaCdrProvider \
 	InPortCorbaConsumer \
 	InPortCorbaProvider \
 	InPortProvider \
 	Manager  \
 	ManagerConfig     \
+	ManagerServant \
 	ModuleManager     \
 	NVUtil            \
 	NamingManager \
@@ -33,13 +35,14 @@ SUBDIRS = \
 	ObjectManager     \
 	OutPort           \
 	OutPortBase       \
+	OutPortConnector \
+	OutPortCorbaCdrConsumer \
 	OutPortCorbaConsumer \
 	OutPortCorbaProvider \
 	OutPortProvider   \
 	PeriodicExecutionContext \
 	PortAdmin         \
 	PortBase          \
-	PublisherFactory  \
 	PublisherFlush    \
 	PublisherNew      \
 	PublisherPeriodic \

@@ -1438,16 +1438,14 @@ AC_OUTPUT([Makefile
 	src/lib/rtm/tests/ConfigAdmin/Makefile
 	src/lib/rtm/tests/CorbaConsumer/Makefile
 	src/lib/rtm/tests/CorbaNaming/Makefile
-	src/lib/rtm/tests/CorbaObjectManager/Makefile
 	src/lib/rtm/tests/CorbaPort/Makefile
 	src/lib/rtm/tests/DataInOutPort/Makefile
-	src/lib/rtm/tests/DataInPort/Makefile
-	src/lib/rtm/tests/DataOutPort/Makefile
 	src/lib/rtm/tests/ECFactory/Makefile
 	src/lib/rtm/tests/ExtTrigExecutionContext/Makefile
 	src/lib/rtm/tests/Factory/Makefile
 	src/lib/rtm/tests/InPort/Makefile
 	src/lib/rtm/tests/InPortBase/Makefile
+	src/lib/rtm/tests/InPortCorbaCdrConsumer/Makefile
 	src/lib/rtm/tests/InPortCorbaCdrProvider/Makefile
 	src/lib/rtm/tests/InPortConnector/Makefile
 	src/lib/rtm/tests/InPortCorbaConsumer/Makefile
@@ -1468,13 +1466,13 @@ AC_OUTPUT([Makefile
 	src/lib/rtm/tests/OutPortBase/Makefile
 	src/lib/rtm/tests/OutPortConnector/Makefile
 	src/lib/rtm/tests/OutPortCorbaCdrConsumer/Makefile
+	src/lib/rtm/tests/OutPortCorbaCdrProvider/Makefile
 	src/lib/rtm/tests/OutPortCorbaConsumer/Makefile
 	src/lib/rtm/tests/OutPortCorbaProvider/Makefile
 	src/lib/rtm/tests/OutPortProvider/Makefile
 	src/lib/rtm/tests/PeriodicExecutionContext/Makefile
 	src/lib/rtm/tests/PortAdmin/Makefile
 	src/lib/rtm/tests/PortBase/Makefile
-	src/lib/rtm/tests/PublisherFactory/Makefile
 	src/lib/rtm/tests/PublisherFlush/Makefile
 	src/lib/rtm/tests/PublisherNew/Makefile
 	src/lib/rtm/tests/PublisherPeriodic/Makefile

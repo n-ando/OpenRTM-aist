@@ -48,7 +48,7 @@ IDL_SOURCES =                                                   \
 
 dummylibdir  = $(pkgdatadir)/src/lib/rtm/tests/ManagerServant
 dummylib_LTLIBRARIES = DummyLib.la
-DummyLib_la_SOURCES = \
+nodist_DummyLib_la_SOURCES = \
 	$(IDL_SOURCES:.idl=Skel.cpp)                             \
 	$(top_builddir)/src/lib/rtm/NVUtil.cpp                   \
 	$(top_builddir)/src/lib/rtm/CorbaNaming.cpp              \
@@ -154,8 +154,12 @@ DummyModule2_la_LIBADD  = \
 	-luuid                                    \
 	$(top_builddir)/src/lib/rtm/tests/ManagerServant/.libs/DummyLib.la
 
-
-
+EXTRA_DIST = \
+	ManagerServantTests.cpp \
+	DummyModule1.h \
+	DummyModule1.cpp \
+	DummyModule2.h \
+	DummyModule2.cpp
 
 
 # all
