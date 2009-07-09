@@ -41,7 +41,7 @@ IDL_SOURCES = \
 #
 dummylibdir  = $(pkgdatadir)/src/lib/rtm/tests/Manager
 dummylib_LTLIBRARIES = DummyLib.la
-DummyLib_la_SOURCES = \
+nodist_DummyLib_la_SOURCES = \
 	$(IDL_SOURCES:.idl=Skel.cpp) \
 	$(top_srcdir)/src/lib/rtm/NVUtil.cpp \
 	$(top_srcdir)/src/lib/rtm/CorbaNaming.cpp \
@@ -85,7 +85,7 @@ DummyLib_la_SOURCES = \
 	$(top_srcdir)/src/lib/rtm/InPortCorbaCdrConsumer.cpp \
 	$(top_srcdir)/src/lib/rtm/OutPortCorbaCdrConsumer.cpp \
 	$(top_srcdir)/src/lib/rtm/OutPortCorbaCdrProvider.cpp 
-DummyLib_la_LDFLAGS = -module \ 
+DummyLib_la_LDFLAGS = -module \
         -L$(top_builddir)/src/lib/coil/lib
 DummyLib_la_LIBADD   =                            \
 	-lomniORB4                                \
@@ -104,7 +104,7 @@ nodist_ManagerTests_SOURCES = \
 	ManagerTests.cpp
 ManagerTests_LDFLAGS = -L$(libdir) $(AM_LDFLAGS) \
         -L$(top_builddir)/src/lib/coil/lib
-ManagerTests_LDADD   = \ 
+ManagerTests_LDADD   = \
          -lcppunit                                 \
          -lomniORB4                                \
          -lomnithread                              \
@@ -126,7 +126,7 @@ socomp_LTLIBRARIES = DummyModule.la  DummyModule2.la
 
 nodist_DummyModule_la_SOURCES = DummyModule.h \
 				DummyModule.cpp
-DummyModule_la_LDFLAGS = -module \ 
+DummyModule_la_LDFLAGS = -module \
 	-L$(top_builddir)/src/lib/coil/lib
 DummyModule_la_LIBADD  = \
 	-lomniORB4                                \
@@ -138,7 +138,7 @@ DummyModule_la_LIBADD  = \
 
 nodist_DummyModule2_la_SOURCES = DummyModule2.h \
 				DummyModule2.cpp
-DummyModule2_la_LDFLAGS = -module \ 
+DummyModule2_la_LDFLAGS = -module \
 	-L$(top_builddir)/src/lib/coil/lib
 DummyModule2_la_LIBADD  = \
 	-lomniORB4                                \
@@ -151,7 +151,17 @@ DummyModule2_la_LIBADD  = \
 
 
 EXTRA_DIST = \
-	ManagerTests.cpp
+	ManagerTests.cpp \
+	DummyModule.h \
+	DummyModule.cpp \
+	DummyModule2.h \
+	DummyModule2.cpp \
+	fixture1.conf \
+	fixture2.conf \
+	fixture3.conf \
+	fixture4.conf
+
+
 
 # all
 all: do-test
