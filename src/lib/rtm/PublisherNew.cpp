@@ -215,6 +215,9 @@ namespace RTC
                                                 unsigned long usec)
   {
     RTC_PARANOID(("write()"));
+    if (!m_active) { return PRECONDITION_NOT_MET; }
+    if (m_consumer == 0) { return PRECONDITION_NOT_MET; }
+    if (m_buffer == 0) { return PRECONDITION_NOT_MET; }
     if (m_retcode == CONNECTION_LOST)
       {
         RTC_DEBUG(("write(): connection lost."));
