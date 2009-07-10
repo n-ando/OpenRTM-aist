@@ -83,6 +83,7 @@ namespace ManagerServant
   {
     CPPUNIT_TEST_SUITE(ManagerServantTests);
 
+//    CPPUNIT_TEST(test_get_loadable_modules);  //未実装関数でありテスト中止。
 //    CPPUNIT_TEST(test_case0);
     CPPUNIT_TEST(test_load_module);
 //    CPPUNIT_TEST(test_unload_module);
@@ -96,20 +97,22 @@ namespace ManagerServant
     CPPUNIT_TEST(test_get_configuration);
     CPPUNIT_TEST(test_set_configuration);
     CPPUNIT_TEST(test_get_owner);
-//    CPPUNIT_TEST(test_set_owner);
-//    CPPUNIT_TEST(test_get_child);
-//    CPPUNIT_TEST(test_set_child);
-//    CPPUNIT_TEST(test_fork);
+    CPPUNIT_TEST(test_set_owner);
+    CPPUNIT_TEST(test_get_child);
+    CPPUNIT_TEST(test_set_child);
+    CPPUNIT_TEST(test_fork);
     CPPUNIT_TEST(test_shutdown);
-//    CPPUNIT_TEST(test_restart);
-//    CPPUNIT_TEST(test_get_service);
-//    CPPUNIT_TEST(test_getObjRef);
+    CPPUNIT_TEST(test_restart);
+    CPPUNIT_TEST(test_get_service);
+    CPPUNIT_TEST(test_getObjRef);
 
     CPPUNIT_TEST_SUITE_END();
   
   private:
     CORBA::ORB_ptr m_pORB;
     PortableServer::POA_ptr m_pPOA;
+    RTM::Manager_ptr m_objref;
+
     /*!
      *
      */
@@ -932,42 +935,6 @@ namespace ManagerServant
 
     }
     /*! 
-     * @brief tests for set_owner()
-     *
-     *
-     *
-     */
-    void test_set_owner()
-    {
-    }
-    /*! 
-     * @brief tests for set_child()
-     *
-     *
-     *
-     */
-    void test_set_child()
-    {
-    }
-    /*! 
-     * @brief tests for get_child()
-     *
-     *
-     *
-     */
-    void test_get_child()
-    {
-    }
-    /*! 
-     * @brief tests for fork()
-     *
-     *
-     *
-     */
-    void test_fork()
-    {
-    }
-    /*! 
      * @brief tests for shutdown()
      *
      *
@@ -991,6 +958,135 @@ namespace ManagerServant
 	    CPPUNIT_FAIL("Exception thrown.");
         }
     }
+    /* test case */
+    void test_case0()
+    {
+    }
+
+    /*! 
+     * @brief tests for get_loadable_modules()
+     *
+     *
+     *
+     */
+    void test_get_loadable_modules()
+    {
+        //ModuleManager::getLoadableModules()が未実装であり、テスト項目から除外。
+
+        ::RTM::ManagerServant *pman = new ::RTM::ManagerServant();
+
+        //ロード可能なモジュールリストを取得する
+        ::RTC::ReturnCode_t ret;
+        try
+        {
+            ret = pman->load_module(".libs/DummyModule1.so","DummyModule1Init");
+            CPPUNIT_ASSERT_EQUAL(::RTC::RTC_OK, ret);
+            CPPUNIT_ASSERT(isFound(pman->get_loadable_modules(), 
+                                   ".//.libs/DummyModule1.so"));
+        }
+        catch(...)
+        {
+	    CPPUNIT_FAIL("Exception thrown.");
+        }
+
+        //
+        try
+        {
+            ret = pman->load_module(".libs/DummyModule2.so","DummyModule2Init");
+            CPPUNIT_ASSERT_EQUAL(::RTC::RTC_OK, ret);
+            CPPUNIT_ASSERT(isFound(pman->get_loadable_modules(), 
+                                   ".//.libs/DummyModule2.so"));
+        }
+        catch(...)
+        {
+	    CPPUNIT_FAIL("Exception thrown.");
+        }
+
+        //Execute the function
+        ::RTM::ModuleProfileList* list;
+        list = pman->get_loadable_modules();
+        ::RTM::ModuleProfileList modlist(*list);
+        delete list;
+
+        //Check returns(ModuleProfileList).
+        CPPUNIT_ASSERT_EQUAL((::CORBA::ULong)2, modlist.length());
+        CPPUNIT_ASSERT_EQUAL(::std::string("file_path"), 
+                             ::std::string(modlist[0].properties[0].name));
+        const char* ch;
+        if( modlist[0].properties[0].value >>= ch )
+        {
+            CPPUNIT_ASSERT_EQUAL(::std::string(".//.libs/DummyModule1.so"), 
+                                 ::std::string(ch));
+        }
+        else
+        {
+            CPPUNIT_FAIL( "ModuleProfileList is illegal." );
+        }
+
+        CPPUNIT_ASSERT_EQUAL(::std::string("file_path"), 
+                             ::std::string(modlist[1].properties[0].name));
+
+        if( modlist[1].properties[0].value >>= ch )
+        {
+            CPPUNIT_ASSERT_EQUAL(::std::string(".//.libs/DummyModule2.so"), 
+                                 ::std::string(ch));
+        }
+        else
+        {
+            CPPUNIT_FAIL( "ModuleProfileList is illegal." );
+        }
+    }
+
+    /*! 
+     * @brief tests for set_owner()
+     *
+     *
+     *
+     */
+    void test_set_owner()
+    {
+      ::RTM::ManagerServant *pman = new ::RTM::ManagerServant();
+      m_objref = pman->getObjRef();
+      CPPUNIT_ASSERT(CORBA::is_nil(pman->set_owner(m_objref)));
+    }
+
+    /*! 
+     * @brief tests for set_child()
+     *
+     *
+     *
+     */
+    void test_set_child()
+    {
+      ::RTM::ManagerServant *pman = new ::RTM::ManagerServant();
+      m_objref = pman->getObjRef();
+      CPPUNIT_ASSERT(CORBA::is_nil(pman->set_child(m_objref)));
+    }
+
+    /*! 
+     * @brief tests for get_child()
+     *
+     *
+     *
+     */
+    void test_get_child()
+    {
+      ::RTM::ManagerServant *pman = new ::RTM::ManagerServant();
+      CPPUNIT_ASSERT(CORBA::is_nil(pman->get_child()));
+    }
+
+    /*! 
+     * @brief tests for fork()
+     *
+     *
+     *
+     */
+    void test_fork()
+    {
+      ::RTM::ManagerServant *pman = new ::RTM::ManagerServant();
+      CPPUNIT_ASSERT(pman->fork() == ::RTC::RTC_OK);
+    }
+
     /*! 
      * @brief tests for restart()
      *
@@ -999,7 +1095,10 @@ namespace ManagerServant
      */
     void test_restart()
     {
+      ::RTM::ManagerServant *pman = new ::RTM::ManagerServant();
+      CPPUNIT_ASSERT(pman->restart() == ::RTC::RTC_OK);
     }
+
     /*! 
      * @brief tests for get_service()
      *
@@ -1008,7 +1107,11 @@ namespace ManagerServant
      */
     void test_get_service()
     {
+      std::string name("service0");
+      ::RTM::ManagerServant *pman = new ::RTM::ManagerServant();
+      CPPUNIT_ASSERT(CORBA::is_nil(pman->get_service(name.c_str())));
     }
+
     /*! 
      * @brief tests for getObjRef()
      *
@@ -1017,11 +1120,11 @@ namespace ManagerServant
      */
     void test_getObjRef()
     {
+      ::RTM::ManagerServant *pman = new ::RTM::ManagerServant();
+      m_objref = pman->getObjRef();
+      CPPUNIT_ASSERT(! CORBA::is_nil(m_objref));
     }
-    /* test case */
-    void test_case0()
-    {
-    }
+
   };
 }; // namespace ManagerServant
 
