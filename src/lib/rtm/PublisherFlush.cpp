@@ -72,8 +72,10 @@ namespace RTC
   PublisherBase::ReturnCode
   PublisherFlush::setConsumer(InPortConsumer* consumer)
   {
-    if (consumer == 0) { return INVALID_ARGS; }
-    if (m_consumer != 0) { delete m_consumer; }
+    if (consumer == 0)
+      {
+        return INVALID_ARGS;
+      }
     m_consumer = consumer;
     return PORT_OK;
   }
@@ -94,7 +96,8 @@ namespace RTC
                                                   unsigned long sec,
                                                   unsigned long usec)
   {
-    //    if (!m_active) { return PRECONDITION_NOT_MET; }
+    if (!m_active) { return PRECONDITION_NOT_MET; }
+    if (m_consumer == 0) { return PRECONDITION_NOT_MET; }
 
     return m_consumer->put(data);
   }
@@ -106,7 +109,7 @@ namespace RTC
 
   PublisherBase::ReturnCode PublisherFlush::activate()
   {
-    if ( m_active) { return PRECONDITION_NOT_MET; }
+//    if ( m_active) { return PRECONDITION_NOT_MET; }
 
     m_active = true;
 
@@ -115,7 +118,7 @@ namespace RTC
 
   PublisherBase::ReturnCode PublisherFlush::deactivate()
   {
-    if (!m_active) { return PRECONDITION_NOT_MET; }
+//    if (!m_active) { return PRECONDITION_NOT_MET; }
 
     m_active = false;
 
