@@ -152,7 +152,7 @@ namespace RTC
     if (rate != "")
       {
 	hz = atof(rate.c_str());
-	if (hz == 0) hz = 1000.0;
+	if (hz <= 0) hz = 1000.0;
         RTC_DEBUG(("Task period %f [Hz]", hz));
       }
     else
@@ -237,6 +237,8 @@ namespace RTC
   {
     RTC_PARANOID(("write()"));
 
+    if (m_consumer == 0) { return PRECONDITION_NOT_MET; }
+    if (m_buffer == 0) { return PRECONDITION_NOT_MET; }
     if (m_retcode == CONNECTION_LOST)
       {
         RTC_DEBUG(("write(): connection lost."));
@@ -246,6 +248,7 @@ namespace RTC
     if (m_retcode == BUFFER_FULL)
       {
         RTC_DEBUG(("write(): InPort buffer is full."));
+        m_buffer->write(data, sec, usec);
         return BUFFER_FULL;
       }
 
@@ -262,6 +265,8 @@ namespace RTC
 
   PublisherBase::ReturnCode PublisherPeriodic::activate()
   {
+    if (m_task == 0) { return PRECONDITION_NOT_MET; }
+    if (m_buffer == 0) { return PRECONDITION_NOT_MET; }
     m_active = true;
     m_task->resume();
     return PORT_OK;
@@ -269,6 +274,7 @@ namespace RTC
 
   PublisherBase::ReturnCode PublisherPeriodic::deactivate()
   {
+    if (m_task == 0) { return PRECONDITION_NOT_MET; }
     m_active = false;
     m_task->suspend();
     return PORT_OK;
