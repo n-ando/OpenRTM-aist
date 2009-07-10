@@ -36,9 +36,9 @@
 #include <cppunit/extensions/HelperMacros.h>
 #include <cppunit/TestAssert.h>
 
-#include <coil/Properties.h>
-#include <rtm/InPortConsumer.h>
+#include <rtm/InPortCorbaCdrConsumer.h>
 #include <rtm/PublisherFlush.h>
+#include <rtm/CdrRingBuffer.h>
 
 #include <sys/time.h>
 /*!
@@ -47,116 +47,80 @@
  */
 namespace PublisherFlush
 {
-  class MockConsumer : public RTC::InPortConsumer
+  /*!
+   * 
+   * 
+   */
+  class InPortCorbaCdrConsumerMock
+    : public RTC::InPortCorbaCdrConsumer
   {
   public:
-	
-    MockConsumer(long sleepTick = 0L)
-      : RTC::InPortConsumer(), _sleepTick(sleepTick), _count(0)
-    {
-      resetDelayStartTime();
-    }
-		
-    virtual ~MockConsumer() {}
-		
-    virtual void push()
-    {
-      timeval now;
-      gettimeofday(&now, NULL);
-			
-      long delayTick =
-	(now.tv_sec - _delayStartTime.tv_sec) * 1000000
-	+ (now.tv_usec - _delayStartTime.tv_usec);
-			
-      _delayTicks.push_back(delayTick);
-			
-      resetDelayStartTime();
+      /*!
+       * 
+       * 
+       */
+      InPortCorbaCdrConsumerMock(void)
+      {
+          m_buffer = new RTC::CdrRingBuffer();
+      }
+      /*!
+       * 
+       * 
+       */
+      virtual ~InPortCorbaCdrConsumerMock()
+      {
+      }
+      /*!
+       * 
+       * 
+       */
+      virtual ReturnCode put(const cdrMemoryStream& data)
+      {
+          if (m_buffer->full())
+          {
+std::cout<<"    BUFFER_FULL:"<<RTC::PublisherFlush::BUFFER_FULL<<std::endl;
+               return RTC::PublisherFlush::BUFFER_FULL;
+           }
 
-      usleep(_sleepTick);
-      _count++;
 
-      setReturnStartTime();
-    }
-		
-    virtual RTC::InPortConsumer* clone() const
-    {
-      MockConsumer* clone = new MockConsumer();
-      clone->_sleepTick = _sleepTick;
-      return clone;
-    }
+           RTC::BufferStatus::Enum ret = m_buffer->write(data);
 
-    virtual bool subscribeInterface(const SDOPackage::NVList&)
-    {
-      return true;
-    }
-		
-    virtual void unsubscribeInterface(const SDOPackage::NVList&)
-    {
-      return;
-    }
-		
-    virtual void setDelayStartTime()
-    {
-      if (_delayStartTime.tv_sec == 0 && _delayStartTime.tv_usec == 0)
-	{
-	  gettimeofday(&_delayStartTime, NULL);
-	}
-    }
-		
-    virtual void recordReturnTick()
-    {
-      timeval now;
-      gettimeofday(&now, NULL);
-			
-      long returnTick =
-	(now.tv_sec - _returnStartTime.tv_sec) * 1000000
-	+ (now.tv_usec - _returnStartTime.tv_usec);
-			
-      _returnTicks.push_back(returnTick);
-    }
-		
-    virtual const std::vector<long>& getDelayTicks()
-    {
-      return _delayTicks;
-    }
-		
-    virtual const std::vector<long>& getReturnTicks()
-    {
-      return _returnTicks;
-    }
-		
-    virtual int getCount() const
-    {
-      return _count;
-    }
-		
-  protected:
-	
-    long _sleepTick;
-    timeval _delayStartTime;
-    timeval _returnStartTime;
-    std::vector<long> _delayTicks;
-    std::vector<long> _returnTicks;
-    int _count;
-	
-  protected:
+           switch(ret)
+           {
+               case RTC::BufferStatus::BUFFER_OK:
+                   return RTC::PublisherFlush::PORT_OK;
+                   break;
+               case RTC::BufferStatus::BUFFER_ERROR:
+                   return RTC::PublisherFlush::PORT_ERROR;
+                   break;
+               case RTC::BufferStatus::BUFFER_FULL:
+                   return RTC::PublisherFlush::BUFFER_FULL;
+                   break;
+               case RTC::BufferStatus::BUFFER_EMPTY:
+                   return RTC::PublisherFlush::BUFFER_EMPTY;
+                   break;
+               case RTC::BufferStatus::TIMEOUT:
+                   return RTC::PublisherFlush::BUFFER_TIMEOUT;
+                   break;
+               default:
+                   return RTC::PublisherFlush::UNKNOWN_ERROR;
+           }
+           return RTC::PublisherFlush::UNKNOWN_ERROR;
+      }
+      /*!
+       * 
+       * 
+       */
+      cdrMemoryStream get_m_put_data(void)
+      {
+          cdrMemoryStream cdr;
+          m_buffer->read(cdr);
 
-    virtual void resetDelayStartTime()
-    {
-      _delayStartTime.tv_sec = 0;
-      _delayStartTime.tv_usec = 0;
-    }
-		
-    virtual void setReturnStartTime()
-    {
-      gettimeofday(&_returnStartTime, NULL);
-    }
-		
-    virtual void resetReturnStartTime()
-    {
-      _returnStartTime.tv_sec = 0;
-      _returnStartTime.tv_usec = 0;
-    }
+          return cdr;
+      }
+  private:
+       RTC::CdrBufferBase* m_buffer;
+       ::OpenRTM::CdrData  m_put_data;
   };
 
   class PublisherFlushTests
@@ -164,7 +128,10 @@ namespace PublisherFlush
   {
     CPPUNIT_TEST_SUITE(PublisherFlushTests);
 		
-    CPPUNIT_TEST(test_update_immediacy);
+    CPPUNIT_TEST(test_setConsumer);
+    CPPUNIT_TEST(test_activate_deactivate_isActive);
+    CPPUNIT_TEST(test_write);
+//    CPPUNIT_TEST(test_update_immediacy);
 		
     CPPUNIT_TEST_SUITE_END();
 		
@@ -198,9 +165,160 @@ namespace PublisherFlush
      */
     virtual void tearDown()
     { 
-      sleep(1);
+//      sleep(1);
     }
 		
+    /*!
+     * @brief setConsumer()メソッドのテスト
+     * 
+     */
+    void test_setConsumer(void)
+    {
+        RTC::InPortCorbaCdrConsumer *consumer0 
+                                    = new RTC::InPortCorbaCdrConsumer();
+        RTC::InPortCorbaCdrConsumer *consumer1 
+                                     = new RTC::InPortCorbaCdrConsumer();
+        RTC::PublisherFlush publisher;
+
+        //NULLを渡した場合INVALID_ARGSとなることを確認する。
+        CPPUNIT_ASSERT_EQUAL(RTC::PublisherFlush::INVALID_ARGS, 
+                             publisher.setConsumer(NULL));
+
+        //
+        CPPUNIT_ASSERT_EQUAL(RTC::PublisherFlush::PORT_OK, 
+                             publisher.setConsumer(consumer0));
+
+        //
+        CPPUNIT_ASSERT_EQUAL(RTC::PublisherFlush::PORT_OK, 
+                             publisher.setConsumer(consumer1));
+
+        delete consumer0;
+        delete consumer1;
+ 
+    }
+    /*!
+     * @brief activate(),deactivate(),isActiveメソッドのテスト
+     * 
+     */
+    void test_activate_deactivate_isActive(void)
+    {
+        RTC::InPortCorbaCdrConsumer *consumer 
+                                    = new RTC::InPortCorbaCdrConsumer();
+        RTC::PublisherFlush publisher;
+        publisher.setConsumer(consumer);
+
+        CPPUNIT_ASSERT_EQUAL(false, 
+                             publisher.isActive());
+        
+        CPPUNIT_ASSERT_EQUAL(RTC::PublisherFlush::PORT_OK, 
+                             publisher.activate());
+
+        CPPUNIT_ASSERT_EQUAL(true, 
+                             publisher.isActive());
+        
+        //既に activate されている場合は 
+        //activateすると
+        //PORT_OK を返すことを確認する。
+        CPPUNIT_ASSERT_EQUAL(RTC::PublisherFlush::PORT_OK, 
+                             publisher.activate());
+
+        CPPUNIT_ASSERT_EQUAL(true, 
+                             publisher.isActive());
+        
+        CPPUNIT_ASSERT_EQUAL(RTC::PublisherFlush::PORT_OK, 
+                             publisher.deactivate());
+
+        CPPUNIT_ASSERT_EQUAL(false, 
+                             publisher.isActive());
+        
+        //activate されていない状態で、
+        //deactivateすると
+        //PORT_OK を返すことを確認する。
+        CPPUNIT_ASSERT_EQUAL(RTC::PublisherFlush::PORT_OK, 
+                             publisher.deactivate());
+        
+        CPPUNIT_ASSERT_EQUAL(false, 
+                             publisher.isActive());
+        
+        delete consumer;
+    }
+    /*!
+     * @brief write()メソッドのテスト
+     * 
+     */
+    void test_write(void)
+    {
+        InPortCorbaCdrConsumerMock *consumer 
+                                    = new InPortCorbaCdrConsumerMock();
+
+        RTC::PublisherFlush publisher;
+
+        //Consumerを設定しない状態でwriteをコール
+        {
+        cdrMemoryStream cdr;
+        12345 >>= cdr;
+        CPPUNIT_ASSERT_EQUAL(RTC::PublisherFlush::PRECONDITION_NOT_MET, 
+                             publisher.write(cdr,0,0));
+        }
+
+        publisher.setConsumer(consumer);
+
+        //activateする前にwriteをコール
+        {
+        cdrMemoryStream cdr;
+        12345 >>= cdr;
+        CPPUNIT_ASSERT_EQUAL(RTC::PublisherFlush::PRECONDITION_NOT_MET, 
+                             publisher.write(cdr,0,0));
+        }
+        publisher.activate();
+
+        CORBA::Long testdata[8] = { 123,279,3106,31611,125563,
+                                    125563,846459,2071690107, };
+
+        for(int icc(0);icc<8;++icc)
+        {
+            cdrMemoryStream cdr;
+            testdata[icc] >>= cdr;
+
+            CPPUNIT_ASSERT_EQUAL(RTC::PublisherFlush::PORT_OK,
+                                 publisher.write(cdr,0,0));
+
+        }
+
+        //full の状態でコール(full)
+        {
+        cdrMemoryStream cdr;
+        12345 >>= cdr;
+        CPPUNIT_ASSERT_EQUAL(RTC::PublisherFlush::BUFFER_FULL,
+                                 publisher.write(cdr,0,0));
+        }
+
+        for(int icc(0);icc<8;++icc)
+        {
+            cdrMemoryStream data;
+            data = consumer->get_m_put_data();
+            CORBA::ULong inlen = data.bufSize();
+            CPPUNIT_ASSERT_EQUAL(4,(int)inlen);
+
+            CORBA::Octet oct[8];
+            data.get_octet_array (oct, (int)inlen);
+            long lval(0);
+            for(int ic(0);ic<(int)inlen;++ic)
+            {
+                lval = lval+(int)(oct[ic]<<(ic*8));
+            }
+            CPPUNIT_ASSERT_EQUAL((long)testdata[icc],lval);
+        }
+
+        //deactivateしてからwriteをコール
+        publisher.deactivate();
+        {
+        cdrMemoryStream cdr;
+        12345 >>= cdr;
+        CPPUNIT_ASSERT_EQUAL(RTC::PublisherFlush::PRECONDITION_NOT_MET, 
+                             publisher.write(cdr,0,0));
+        }
+    }
     /*!
      * @brief update()メソッド呼出周辺の即時性のテスト
      * 
@@ -209,6 +327,7 @@ namespace PublisherFlush
      * 
      * @attention リアルタイム性が保証されているわけでもなく、仕様上も呼出までの時間を明記しているわけではないので、ここでの所定時間はテスト作成者の主観によるものに過ぎない。
      */
+/*
     void test_update_immediacy()
     {
       long sleepTick = 100000; // 0.1 [sec]
@@ -238,6 +357,7 @@ namespace PublisherFlush
 	  CPPUNIT_ASSERT(returnTicks[i] < permissibleReturnTick);
 	}
     }
+*/
 		
   };
 }; // namespace PublisherFlush
