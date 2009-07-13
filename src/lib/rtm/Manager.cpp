@@ -923,13 +923,7 @@ std::vector<coil::Properties> Manager::getLoadableModules()
 	m_pORB = CORBA::ORB_init(argc, argv);
 	// Get the RootPOA
 	CORBA::Object_var obj = m_pORB->resolve_initial_references("RootPOA");
-	PortableServer::POA_var rootPOA = PortableServer::POA::_narrow(obj);
-	CORBA::PolicyList policies;
-	policies.length(2);
-	policies[(CORBA::ULong)0] = rootPOA->create_lifespan_policy(PortableServer::PERSISTENT);
-	policies[(CORBA::ULong)1] = rootPOA->create_id_assignment_policy(PortableServer::USER_ID);
-	PortableServer::POAManager_var rootManager = rootPOA->the_POAManager();
-	m_pPOA = rootPOA->create_POA("persistent", rootManager, policies);
+	m_pPOA = PortableServer::POA::_narrow(obj);
 	if (CORBA::is_nil(m_pPOA))
 	  {
 	    RTC_ERROR(("Could not resolve RootPOA."));
