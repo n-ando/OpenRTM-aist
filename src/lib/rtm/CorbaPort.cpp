@@ -70,8 +70,7 @@ namespace RTC
 	return false;
       }
     
-    PortableServer::ObjectId_var oid = 
-        PortableServer::string_to_ObjectId(instance_name);
+    PortableServer::ObjectId_var oid = Manager::instance().getPOA()->servant_to_id(&provider);
     try
       {
         Manager::instance().getPOA()->activate_object_with_id(oid, &provider);
@@ -95,10 +94,7 @@ namespace RTC
     CORBA::String_var ior = orb->object_to_string(obj);
     CORBA_SeqUtil::
       push_back(m_providers, NVUtil::newNV(key.c_str(), ior));
-    m_servants.push_back(&provider);
-
-    std::string name(instance_name);
-    m_instance_name.push_back(name);
+    m_servants.insert(std::pair<std::string, ProviderInfo>(instance_name,ProviderInfo(&provider,oid)));
     return true;
   };
   
@@ -139,13 +135,12 @@ namespace RTC
    */
   void CorbaPort::activateInterfaces()
   {
-    for (int i(0), len(m_servants.size()); i < len; ++i)
+    ServantMap::iterator it = m_servants.begin();
+    while(it != m_servants.end())
       {
         try
           {
-            PortableServer::ObjectId_var oid = 
-                PortableServer::string_to_ObjectId(m_instance_name[i].c_str());
-            Manager::instance().getPOA()->activate_object_with_id(oid, m_servants[i]);
+            Manager::instance().getPOA()->activate_object_with_id(it->second.oid, it->second.servant);
           }
         catch(const ::PortableServer::POA::ServantAlreadyActive &)
           {
@@ -153,6 +148,7 @@ namespace RTC
         catch(const ::PortableServer::POA::ObjectAlreadyActive &)
           {
           }
+	it++;
       }
   }
   
@@ -165,11 +161,11 @@ namespace RTC
    */
   void CorbaPort::deactivateInterfaces()
   {
-    for (int i(0), len(m_servants.size()); i < len; ++i)
+    ServantMap::iterator it = m_servants.begin();
+    while(it != m_servants.end())
       {
-        PortableServer::ObjectId_var oid = 
-            PortableServer::string_to_ObjectId(m_instance_name[i].c_str());
-        Manager::instance().getPOA()->deactivate_object(oid);
+        Manager::instance().getPOA()->deactivate_object(it->second.oid);
+	it++;
       }
   }
   

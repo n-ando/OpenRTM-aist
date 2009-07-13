@@ -491,9 +491,37 @@ namespace RTC
      * @endif
      */
     NVList m_providers;
-    std::vector<PortableServer::RefCountServantBase*> m_servants;
-    std::vector<std::string> m_instance_name;
-    
+
+    /*!
+     * @if jp
+     * @brief Providerの情報を格納する構造体
+     * @else
+     * @brief The structure to be stored Provider's information.
+     * @endif
+     */
+    struct ProviderInfo
+    {
+      ProviderInfo(PortableServer::RefCountServantBase* _servant, PortableServer::ObjectId_var _objectid)
+	: servant(_servant),
+	  oid(_objectid)
+      {}
+
+      ProviderInfo(const ProviderInfo& pinfo)
+	: servant(pinfo.servant),
+	  oid(pinfo.oid)
+      {}
+	  
+      ProviderInfo operator=(const ProviderInfo& _pinfo)
+      {
+        ProviderInfo pinfo(_pinfo);
+        return pinfo;
+      }
+      PortableServer::RefCountServantBase* servant;
+      PortableServer::ObjectId_var oid;
+    };
+    typedef std::map<std::string, ProviderInfo> ServantMap;
+    ServantMap m_servants;
+
     /*!
      * @if jp
      * @brief Consumer の情報を格納する構造体
