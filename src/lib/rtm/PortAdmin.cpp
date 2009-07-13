@@ -157,7 +157,7 @@ namespace RTC
   
   void PortAdmin::registerPort(PortService_ptr port)
   {
-    CORBA_SeqUtil::push_back(m_portRefs, port);
+    CORBA_SeqUtil::push_back(m_portRefs, RTC::PortService::_duplicate(port));
   }
   
   /*!
