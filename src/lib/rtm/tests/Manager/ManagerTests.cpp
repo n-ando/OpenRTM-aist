@@ -39,6 +39,18 @@
 #include <rtm/ExtTrigExecutionContext.h>
 #include <rtm/NamingManager.h>
 
+#include <rtm/CdrRingBuffer.h>
+#include <rtm/DefaultPeriodicTask.h>
+#include <rtm/PeriodicTaskFactory.h>
+#include <rtm/PublisherFlush.h>
+#include <rtm/PublisherNew.h>
+#include <rtm/PublisherPeriodic.h>
+#include <rtm/InPortCorbaCdrProvider.h>
+#include <rtm/InPortCorbaCdrConsumer.h>
+#include <rtm/OutPortCorbaCdrConsumer.h>
+#include <rtm/OutPortCorbaCdrProvider.h>
+#include <rtm/PeriodicECSharedComposite.h>
+
 /*!
  * @class ManagerTests class
  * @brief Manager test
@@ -142,6 +154,27 @@ namespace Tests
   };
 	
 	
+  // protected: 関数のテスト用
+  class ManagerTestMock : public RTC::Manager
+  {
+  public:
+    // コンストラクト
+    ManagerTestMock() : RTC::Manager() {}
+    virtual ~ManagerTestMock(void) {}
+
+    // Manager::procContextArgs は、protected: の為ここへ定義。
+    bool procContextArgs(const char* ec_args, 
+                               std::string& ec_id,
+                               coil::Properties& ec_conf)
+    {
+      bool bret = RTC::Manager::procContextArgs(ec_args, ec_id, ec_conf);
+//      if (bret) std::cout << "Manager::procContextArgs() bret:true" << std::endl;
+//      else      std::cout << "Manager::procContextArgs() bret:false" << std::endl;
+      return bret;
+    }
+  };
+	
+	
   class ModuleMock
   {
   public:
@@ -225,7 +258,9 @@ namespace Tests
   {
     CPPUNIT_TEST_SUITE(ManagerTests);
 	  
-
+    CPPUNIT_TEST(test_initFactories);
+    CPPUNIT_TEST(test_initComposite);
+    CPPUNIT_TEST(test_procContextArgs);
     CPPUNIT_TEST(test_init_without_arguments);
     CPPUNIT_TEST(test_instance);
     CPPUNIT_TEST(test_instance_without_init);
@@ -254,8 +289,6 @@ namespace Tests
     CPPUNIT_TEST(test_registerECFactory);
     CPPUNIT_TEST(test_getModulesFactories);
 
-
-
 //  Manager::init() function returns error, 
 //  when Manager::init() function is executed 
 //  after terminate() function is executed.
@@ -279,10 +312,12 @@ namespace Tests
 //    CPPUNIT_TEST(test_createComponent_failed_in_bindExecutionContext);
     //CPPUNIT_TEST(test_createComponent_with_illegal_module_name);
 
+
     CPPUNIT_TEST_SUITE_END();
 	
   private:
     RTC::Manager* m_mgr;
+
 	
   private:
     bool isFound(const std::vector<std::string>& list, const std::string& target)
@@ -529,7 +564,7 @@ namespace Tests
 			
       // confファイルで指定した各種設定を、getConfig()を通じて正しく取得できるか？
       coil::Properties& properties = m_mgr->getConfig();
-      CPPUNIT_ASSERT_EQUAL(std::string("YES"),
+      CPPUNIT_ASSERT_EQUAL(std::string("yes"),
 			   properties.getProperty("logger.enable"));
       CPPUNIT_ASSERT_EQUAL(std::string("fixture2.log"),
 			   properties.getProperty("logger.file_name"));
@@ -739,7 +774,7 @@ std::cout<<"OUT test_runManager_block"<<std::endl;
       // Managerとは別に、確認用にモジュールへのシンボルを取得しておく
       typedef int (*FUNC_GETINITPROCCOUNT)();
       typedef void (*FUNC_RESETINITPROCCOUNT)();
-      coil::DynamicLib loader("./DummyModule.so");
+      coil::DynamicLib loader("./.libs/DummyModule.so");
 
       FUNC_GETINITPROCCOUNT pGetInitProcCount
 	= (FUNC_GETINITPROCCOUNT) loader.symbol("getInitProcCount");
@@ -754,7 +789,7 @@ std::cout<<"OUT test_runManager_block"<<std::endl;
       // モジュールロードにより、指定した初期化関数が呼び出されるか？
       CPPUNIT_ASSERT_EQUAL(0, (*pGetInitProcCount)());
       // std::string moduleName = m_mgr->load("DummyModule.so", "InitProc");
-      m_mgr->load("DummyModule.so", "InitProc");
+      m_mgr->load("./.libs/DummyModule.so", "InitProc");
       // CPPUNIT_ASSERT(isFound(m_mgr->getLoadedModules(), moduleName));
       // CPPUNIT_ASSERT_EQUAL(1, (*pGetInitProcCount)());
 
@@ -777,7 +812,7 @@ std::cout<<"OUT test_runManager_block"<<std::endl;
       // Managerとは別に、確認用にモジュールへのシンボルを取得しておく
       typedef int (*FUNC_GETINITPROCCOUNT)();
       typedef void (*FUNC_RESETINITPROCCOUNT)();
-      coil::DynamicLib loader("./DummyModule.so");
+      coil::DynamicLib loader("./.libs/DummyModule.so");
 			
       FUNC_GETINITPROCCOUNT pGetInitProcCount
 	= (FUNC_GETINITPROCCOUNT) loader.symbol("getInitProcCount");
@@ -791,7 +826,7 @@ std::cout<<"OUT test_runManager_block"<<std::endl;
 			
       // いったんloadしておく
       CPPUNIT_ASSERT_EQUAL(0, (*pGetInitProcCount)());
-      m_mgr->load("DummyModule.so", "InitProc");
+      m_mgr->load("./.libs/DummyModule.so", "InitProc");
       // std::string moduleName = m_mgr->load("DummyModule.so", "InitProc");
       // CPPUNIT_ASSERT(isFound(m_mgr->getLoadedModules(), moduleName));
       // CPPUNIT_ASSERT_EQUAL(1, (*pGetInitProcCount)());
@@ -821,8 +856,8 @@ std::cout<<"OUT test_runManager_block"<<std::endl;
       typedef int (*FUNC_GETINITPROCCOUNT)();
       typedef void (*FUNC_RESETINITPROCCOUNT)();
 			
-      coil::DynamicLib loader1("./DummyModule.so");
-      coil::DynamicLib loader2("./DummyModule2.so");
+      coil::DynamicLib loader1("./.libs/DummyModule.so");
+      coil::DynamicLib loader2("./.libs/DummyModule2.so");
 			
       FUNC_GETINITPROCCOUNT pGetInitProcCount1
 	= (FUNC_GETINITPROCCOUNT) loader1.symbol("getInitProcCount");
@@ -849,8 +884,8 @@ std::cout<<"OUT test_runManager_block"<<std::endl;
 
       // std::string moduleName1 = m_mgr->load("DummyModule.so", "InitProc");
       // std::string moduleName2 = m_mgr->load("DummyModule2.so", "InitProc");
-      m_mgr->load("DummyModule.so", "InitProc");
-      m_mgr->load("DummyModule2.so", "InitProc");
+      m_mgr->load("./.libs/DummyModule.so", "InitProc");
+      m_mgr->load("./.libs/DummyModule2.so", "InitProc");
 
       // CPPUNIT_ASSERT(isFound(m_mgr->getLoadedModules(), moduleName1));
       // CPPUNIT_ASSERT(isFound(m_mgr->getLoadedModules(), moduleName2));
@@ -1264,6 +1299,105 @@ std::cout<<"OUT test_runManager_block"<<std::endl;
     void test_getPOAManager()
     {
       // 他テスト内で使用されているので、ここではテスト省略する
+    }
+		
+    /*!
+     * @brief initFactories()メソッドのテスト
+     * 
+     * - init()実行後、initFactories()の実行結果としてFactoryMapに正しく登録されているか？
+     */
+    void test_initFactories()
+    {
+      // init()の中でinitFactories()が実行される
+      m_mgr = RTC::Manager::init(0, NULL);
+      CPPUNIT_ASSERT(m_mgr != NULL);
+
+      // initFactories()の実行結果としてFactoryMapに正しく登録されているか？
+      bool bret = RTC::CdrBufferFactory::instance().hasFactory("ring_buffer");
+      CPPUNIT_ASSERT(bret);
+
+      bret = RTC::PeriodicTaskFactory::instance().hasFactory("default");
+      CPPUNIT_ASSERT(bret);
+
+      bret = RTC::PublisherFactory::instance().hasFactory("flush");
+      CPPUNIT_ASSERT(bret);
+
+      bret = RTC::PublisherFactory::instance().hasFactory("new");
+      CPPUNIT_ASSERT(bret);
+
+      bret = RTC::PublisherFactory::instance().hasFactory("periodic");
+      CPPUNIT_ASSERT(bret);
+
+      RTC::InPortProviderFactory& factory1(RTC::InPortProviderFactory::instance());
+      bret = factory1.hasFactory("corba_cdr");
+      CPPUNIT_ASSERT(bret);
+
+      RTC::InPortConsumerFactory& factory2(RTC::InPortConsumerFactory::instance());
+      bret = factory2.hasFactory("corba_cdr");
+      CPPUNIT_ASSERT(bret);
+
+      RTC::OutPortConsumerFactory& factory3(RTC::OutPortConsumerFactory::instance());
+      bret = factory3.hasFactory("corba_cdr");
+      CPPUNIT_ASSERT(bret);
+
+      RTC::OutPortProviderFactory& factory4(RTC::OutPortProviderFactory::instance());
+      bret = factory4.hasFactory("corba_cdr");
+      CPPUNIT_ASSERT(bret);
+    }
+		
+    /*!
+     * @brief initComposite()メソッドのテスト
+     * 
+     * - init()実行後、initComposite()の実行結果としてFactoryManagerに正しく登録されているか？
+     */
+    void test_initComposite()
+    {
+      // init()の中でinitComposite()が実行される
+      m_mgr = RTC::Manager::init(0, NULL);
+      CPPUNIT_ASSERT(m_mgr != NULL);
+
+      // initComposite()の実行結果としてFactoryManagerに正しく登録されているか？
+      // "implementation_id"には, "PeriodicECSharedComposite"が設定されている
+      CPPUNIT_ASSERT(isFound(m_mgr->getModulesFactories(), "PeriodicECSharedComposite"));
+    }
+		
+    /*!
+     * @brief procContextArgs()メソッドのテスト
+     * 
+     * - 引数ec_argsにより戻り値true・falseが正しく返却されるか？
+     */
+    void test_procContextArgs()
+    {
+      std::string ec_args;
+      std::string ec_id;
+      coil::Properties ec_prop;
+
+      // インスタンス生成
+      ManagerTestMock* man = new ManagerTestMock();
+
+      // falseを返すケース1：ec_args.size=0
+      ec_args = "";
+      bool bret = man->procContextArgs(ec_args.c_str(), ec_id, ec_prop);
+      CPPUNIT_ASSERT(!bret);
+
+      // falseを返すケース2：ec_args.size=3
+      ec_args = "periodic?rate=1000?policy=skip";
+      bret = man->procContextArgs(ec_args.c_str(), ec_id, ec_prop);
+      CPPUNIT_ASSERT(!bret);
+
+      // falseを返すケース3：ec_args[0].empty
+      ec_args = "?rate=1000";
+      bret = man->procContextArgs(ec_args.c_str(), ec_id, ec_prop);
+      CPPUNIT_ASSERT(!bret);
+
+      // trueを返すケース4：ec_args.size=2
+      ec_args = "periodic?rate=1000";
+      bret = man->procContextArgs(ec_args.c_str(), ec_id, ec_prop);
+      CPPUNIT_ASSERT(bret);
+      std::string chk_val("periodic");
+      CPPUNIT_ASSERT_EQUAL(chk_val, ec_id);
+      chk_val = "1000";
+      CPPUNIT_ASSERT_EQUAL(chk_val, ec_prop["rate"]);
     }
 		
   };
