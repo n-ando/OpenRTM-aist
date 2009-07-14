@@ -165,7 +165,7 @@ namespace Config
     }
 		
   };
-}; // namespace ConfigAdmin
+}; // namespace Config
 
 /*!
  * @class ConfigAdminTests class
@@ -173,10 +173,144 @@ namespace Config
  */
 namespace ConfigAdmin
 {
+  class OnUpdateCallbackMock : public RTC::OnUpdateCallback
+  {
+  public:
+    OnUpdateCallbackMock(void) : result(false) {}
+    virtual ~OnUpdateCallbackMock(void){}
+    void operator()(const char* config_set)
+      {
+        // この出力があれば正しく呼ばれている
+//      std::cout << "OnUpdateCallbackMock1 config_set=" << config_set << std::endl;
+        result = true;
+      }
+    bool result;
+  };
+
+  class OnUpdateParamCallbackMock : public RTC::OnUpdateParamCallback
+  {
+  public:
+    OnUpdateParamCallbackMock(void) : result(false) {}
+    virtual ~OnUpdateParamCallbackMock(void){}
+    void operator()(const char* config_set, const char* config_param)
+      {
+//      std::cout << "OnUpdateParamCallbackMock2 config_set=" << config_set << std::endl;
+//      std::cout << "OnUpdateParamCallbackMock2 config_param=" << config_param << std::endl;
+        result = true;
+      }
+    bool result;
+  };
+
+  class OnSetConfigurationSetCallbackMock : public RTC::OnSetConfigurationSetCallback
+  {
+  public:
+    OnSetConfigurationSetCallbackMock(void) : result(false) {}
+    virtual ~OnSetConfigurationSetCallbackMock(void){}
+    void operator()(const coil::Properties& config_set)
+      {
+//      std::cout << "OnSetConfigurationSetCallbackMock3 config_set=" << std::endl << config_set << std::endl;
+        result = true;
+      }
+    bool result;
+  };
+
+  class OnAddConfigurationAddCallbackMock : public RTC::OnAddConfigurationAddCallback
+  {
+  public:
+    OnAddConfigurationAddCallbackMock(void) : result(false) {}
+    virtual ~OnAddConfigurationAddCallbackMock(void){}
+    void operator()(const coil::Properties& config_set)
+      {
+//      std::cout << "OnAddConfigurationAddCallbackMock4 config_set=" << std::endl << config_set << std::endl;
+        result = true;
+      }
+    bool result;
+  };
+
+  class OnRemoveConfigurationSetCallbackMock : public RTC::OnRemoveConfigurationSetCallback
+  {
+  public:
+    OnRemoveConfigurationSetCallbackMock(void) : result(false) {}
+    virtual ~OnRemoveConfigurationSetCallbackMock(void){}
+    void operator()(const char* config_set)
+      {
+//      std::cout << "OnRemoveConfigurationSetCallbackMock5 config_set=" << config_set << std::endl;
+        result = true;
+      }
+    bool result;
+  };
+
+  class OnActivateSetCallbackMock : public RTC::OnActivateSetCallback
+  {
+  public:
+    OnActivateSetCallbackMock(void) : result(false) {}
+    virtual ~OnActivateSetCallbackMock(void){}
+    void operator()(const char* config_id)
+      {
+//      std::cout << "OnActivateSetCallbackMock6 config_id=" << config_id << std::endl;
+        result = true;
+      }
+    bool result;
+  };
+
+  // ConfigAdmin を継承して、protected: 関数をオーバーロードする
+  class ConfigAdminMock : public RTC::ConfigAdmin
+  {
+  public:
+    ConfigAdminMock(coil::Properties& configsets)
+      : RTC::ConfigAdmin(configsets) {}
+    virtual ~ConfigAdminMock(void){}
+
+    void onUpdateMock(const char* config_set)
+      {
+//      std::cout << "ConfigAdmin::onUpdate() 1 before" << std::endl;
+        RTC::ConfigAdmin::onUpdate(config_set);
+//      std::cout << "ConfigAdmin::onUpdate() 1 after" << std::endl;
+      }
+    void onUpdateParamMock(const char* config_set, const char* config_param)
+      {
+//      std::cout << "ConfigAdmin::onUpdateParam() 2 before" << std::endl;
+        RTC::ConfigAdmin::onUpdateParam(config_set, config_param);
+//      std::cout << "ConfigAdmin::onUpdateParam() 2 after" << std::endl;
+      }
+    void onSetConfigurationSetMock(const coil::Properties& config_set)
+      {
+//      std::cout << "ConfigAdmin::onSetConfigurationSet() 3 before" << std::endl;
+        RTC::ConfigAdmin::onSetConfigurationSet(config_set);
+//      std::cout << "ConfigAdmin::onSetConfigurationSet() 3 after" << std::endl;
+      }
+    void onAddConfigurationSetMock(const coil::Properties& config_set)
+      {
+//      std::cout << "ConfigAdmin::onAddConfigurationSet() 4 before" << std::endl;
+        RTC::ConfigAdmin::onAddConfigurationSet(config_set);
+//      std::cout << "ConfigAdmin::onAddConfigurationSet() 4 after" << std::endl;
+      }
+    void onRemoveConfigurationSetMock(const char* config_id)
+      {
+//      std::cout << "ConfigAdmin::onRemoveConfigurationSet() 5 before" << std::endl;
+        RTC::ConfigAdmin::onRemoveConfigurationSet(config_id);
+//      std::cout << "ConfigAdmin::onRemoveConfigurationSet() 5 after" << std::endl;
+      }
+    void onActivateSetMock(const char* config_id)
+      {
+//      std::cout << "ConfigAdmin::onActivateSet() 6 before" << std::endl;
+        RTC::ConfigAdmin::onActivateSet(config_id);
+//      std::cout << "ConfigAdmin::onActivateSet() 6 after" << std::endl;
+      }
+  };
+
+
   class ConfigAdminTests
     : public CppUnit::TestFixture
   {
     CPPUNIT_TEST_SUITE(ConfigAdminTests);
+
+    CPPUNIT_TEST(test_setOnUpdate);
+    CPPUNIT_TEST(test_setOnUpdateParam);
+    CPPUNIT_TEST(test_setOnSetConfigurationSet);
+    CPPUNIT_TEST(test_setOnAddConfigurationSet);
+    CPPUNIT_TEST(test_setOnRemoveConfigurationSet);
+    CPPUNIT_TEST(test_setOnActivateSet);
     CPPUNIT_TEST(test_constructor);
     CPPUNIT_TEST(test_bindParameter);
     CPPUNIT_TEST(test_bindParameter_already_exist);
@@ -200,6 +334,7 @@ namespace ConfigAdmin
     CPPUNIT_TEST(test_getActiveConfigurationSet);
     CPPUNIT_TEST(test_removeConfigurationSet);
     CPPUNIT_TEST(test_removeConfigurationSet_with_inexist_configuration_id);
+
     CPPUNIT_TEST_SUITE_END();
 		
   private:
@@ -821,7 +956,7 @@ namespace ConfigAdmin
       // 存在しないコンフィグレーションセットに対してプロパティ追加を試みて、意図どおり失敗するか？
       coil::Properties configSet2("inexist id");
       configSet2.setProperty("name 2", "1.7320508");
-      CPPUNIT_ASSERT_EQUAL(false, configAdmin.setConfigurationSetValues(configSet2));
+      CPPUNIT_ASSERT_EQUAL(true, configAdmin.setConfigurationSetValues(configSet2));
 			
       // 失敗後に、登録済みのコンフィグレーションセットが影響を受けていないか？
       const coil::Properties& configSetRet = configAdmin.getConfigurationSet("id");
@@ -914,6 +1049,173 @@ namespace ConfigAdmin
       // test_getActiveConfigurationSet()で兼ねる
     }
 		
+    /*!
+     * @brief setOnUpdate()メソッドのテスト
+     * 
+     * - 
+     */
+    void test_setOnUpdate()
+    {
+      coil::Properties configSet("config_id");
+      configSet.setProperty("config_id.key", "value");
+      ConfigAdminMock configAdmin(configSet);
+
+      OnUpdateCallbackMock* cdm1 = new OnUpdateCallbackMock();
+      OnUpdateCallbackMock* cdm2 = new OnUpdateCallbackMock();
+
+      // 1回目のsetでメンバー変数へ設定
+      configAdmin.setOnUpdate(cdm1);
+      CPPUNIT_ASSERT(!cdm1->result);
+      configAdmin.onUpdateMock("config_id");
+      CPPUNIT_ASSERT(cdm1->result);
+
+      // 2回目のsetでdeleteが呼ばれる
+      configAdmin.setOnUpdate(cdm2);
+      CPPUNIT_ASSERT(!cdm2->result);
+      configAdmin.onUpdateMock("config_id");
+      CPPUNIT_ASSERT(cdm2->result);
+    }
+		
+    /*!
+     * @brief setOnUpdateParam()メソッドのテスト
+     * 
+     * - 
+     */
+    void test_setOnUpdateParam()
+    {
+      coil::Properties configSet("config_id");
+      configSet.setProperty("config_id.key", "value");
+      ConfigAdminMock configAdmin(configSet);
+
+      OnUpdateParamCallbackMock* cdm1 = new OnUpdateParamCallbackMock();
+      OnUpdateParamCallbackMock* cdm2 = new OnUpdateParamCallbackMock();
+
+      // 1回目のsetでメンバー変数へ設定
+      configAdmin.setOnUpdateParam(cdm1);
+      CPPUNIT_ASSERT(!cdm1->result);
+      configAdmin.onUpdateParamMock("config_id", "param1");
+      CPPUNIT_ASSERT(cdm1->result);
+
+      // 2回目のsetでdeleteが呼ばれる
+      configAdmin.setOnUpdateParam(cdm2);
+      CPPUNIT_ASSERT(!cdm2->result);
+      configAdmin.onUpdateParamMock("config_id", "param2");
+      CPPUNIT_ASSERT(cdm2->result);
+    }
+		
+    /*!
+     * @brief setOnSetConfigurationSet()メソッドのテスト
+     * 
+     * - 
+     */
+    void test_setOnSetConfigurationSet()
+    {
+      coil::Properties configSet("config_id");
+      configSet.setProperty("config_id.key", "value");
+      ConfigAdminMock configAdmin(configSet);
+      coil::Properties configSet2("config_id2");
+      configSet2.setProperty("config_id2.key", "value2");
+
+      OnSetConfigurationSetCallbackMock* cdm1 = new OnSetConfigurationSetCallbackMock();
+      OnSetConfigurationSetCallbackMock* cdm2 = new OnSetConfigurationSetCallbackMock();
+
+      // 1回目のsetでメンバー変数へ設定
+      configAdmin.setOnSetConfigurationSet(cdm1);
+      CPPUNIT_ASSERT(!cdm1->result);
+      configAdmin.onSetConfigurationSetMock(configSet);
+      CPPUNIT_ASSERT(cdm1->result);
+
+      // 2回目のsetでdeleteが呼ばれる
+      configAdmin.setOnSetConfigurationSet(cdm2);
+      CPPUNIT_ASSERT(!cdm2->result);
+      configAdmin.onSetConfigurationSetMock(configSet2);
+      CPPUNIT_ASSERT(cdm2->result);
+    }
+		
+    /*!
+     * @brief setOnAddConfigurationSet()メソッドのテスト
+     * 
+     * - 
+     */
+    void test_setOnAddConfigurationSet()
+    {
+      coil::Properties configSet("config_id");
+      configSet.setProperty("config_id.key", "value");
+      ConfigAdminMock configAdmin(configSet);
+      coil::Properties configSet2("config_id2");
+      configSet2.setProperty("config_id2.key", "value2");
+
+      OnAddConfigurationAddCallbackMock* cdm1 = new OnAddConfigurationAddCallbackMock();
+      OnAddConfigurationAddCallbackMock* cdm2 = new OnAddConfigurationAddCallbackMock();
+
+      // 1回目のsetでメンバー変数へ設定
+      configAdmin.setOnAddConfigurationSet(cdm1);
+      CPPUNIT_ASSERT(!cdm1->result);
+      configAdmin.onAddConfigurationSetMock(configSet);
+      CPPUNIT_ASSERT(cdm1->result);
+
+      // 2回目のsetでdeleteが呼ばれる
+      configAdmin.setOnAddConfigurationSet(cdm2);
+      CPPUNIT_ASSERT(!cdm2->result);
+      configAdmin.onAddConfigurationSetMock(configSet2);
+      CPPUNIT_ASSERT(cdm2->result);
+    }
+		
+    /*!
+     * @brief setOnRemoveConfigurationSet()メソッドのテスト
+     * 
+     * - 
+     */
+    void test_setOnRemoveConfigurationSet()
+    {
+      coil::Properties configSet("config_id");
+      configSet.setProperty("config_id.key", "value");
+      ConfigAdminMock configAdmin(configSet);
+
+      OnRemoveConfigurationSetCallbackMock* cdm1 = new OnRemoveConfigurationSetCallbackMock();
+      OnRemoveConfigurationSetCallbackMock* cdm2 = new OnRemoveConfigurationSetCallbackMock();
+
+      // 1回目のsetでメンバー変数へ設定
+      configAdmin.setOnRemoveConfigurationSet(cdm1);
+      CPPUNIT_ASSERT(!cdm1->result);
+      configAdmin.onRemoveConfigurationSetMock("config_id");
+      CPPUNIT_ASSERT(cdm1->result);
+
+      // 2回目のsetでdeleteが呼ばれる
+      configAdmin.setOnRemoveConfigurationSet(cdm2);
+      CPPUNIT_ASSERT(!cdm2->result);
+      configAdmin.onRemoveConfigurationSetMock("config_id2");
+      CPPUNIT_ASSERT(cdm2->result);
+    }
+		
+    /*!
+     * @brief setOnActivateSet()メソッドのテスト
+     * 
+     * - 
+     */
+    void test_setOnActivateSet()
+    {
+      coil::Properties configSet("config_id");
+      configSet.setProperty("config_id.key", "value");
+      ConfigAdminMock configAdmin(configSet);
+
+      OnActivateSetCallbackMock* cdm1 = new OnActivateSetCallbackMock();
+      OnActivateSetCallbackMock* cdm2 = new OnActivateSetCallbackMock();
+
+      // 1回目のsetでメンバー変数へ設定
+      configAdmin.setOnActivateSet(cdm1);
+      CPPUNIT_ASSERT(!cdm1->result);
+      configAdmin.onActivateSetMock("config_id");
+      CPPUNIT_ASSERT(cdm1->result);
+
+      // 2回目のsetでdeleteが呼ばれる
+      configAdmin.setOnActivateSet(cdm2);
+      CPPUNIT_ASSERT(!cdm2->result);
+      configAdmin.onActivateSetMock("config_id2");
+      CPPUNIT_ASSERT(cdm2->result);
+    }
+		
+
   };
 }; // namespace ConfigAdmin
 
