@@ -34,10 +34,11 @@ namespace coil
 		m_Security_attr.nLength = sizeof(SECURITY_ATTRIBUTES);
 		m_Security_attr.lpSecurityDescriptor = NULL;
 		m_Security_attr.bInheritHandle = TRUE;
-        const char * const mutex_name = "3ce37c45-706a-4f80-b02d-9dcbbe6a2d66";
+		//        const char * const mutex_name = "3ce37c45-706a-4f80-b02d-9dcbbe6a2d66";
 		mutex_ = ::CreateMutex( &m_Security_attr,
 		                          FALSE,
-                                mutex_name );
+                                NULL );
+		//                                mutex_name );
     }
 
     ~Mutex()
