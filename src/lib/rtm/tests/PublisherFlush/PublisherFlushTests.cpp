@@ -78,7 +78,6 @@ namespace PublisherFlush
       {
           if (m_buffer->full())
           {
-std::cout<<"    BUFFER_FULL:"<<RTC::PublisherFlush::BUFFER_FULL<<std::endl;
                return RTC::PublisherFlush::BUFFER_FULL;
            }
 
@@ -266,8 +265,8 @@ std::cout<<"    BUFFER_FULL:"<<RTC::PublisherFlush::BUFFER_FULL<<std::endl;
         //activateする前にwriteをコール
         {
         cdrMemoryStream cdr;
-        12345 >>= cdr;
-        CPPUNIT_ASSERT_EQUAL(RTC::PublisherFlush::PRECONDITION_NOT_MET, 
+        123 >>= cdr;
+        CPPUNIT_ASSERT_EQUAL(RTC::PublisherFlush::PORT_OK,
                              publisher.write(cdr,0,0));
         }
         publisher.activate();
@@ -275,10 +274,10 @@ std::cout<<"    BUFFER_FULL:"<<RTC::PublisherFlush::BUFFER_FULL<<std::endl;
         CORBA::Long testdata[8] = { 123,279,3106,31611,125563,
                                     125563,846459,2071690107, };
 
-        for(int icc(0);icc<8;++icc)
+        for(int icc(0);icc<7;++icc)
         {
             cdrMemoryStream cdr;
-            testdata[icc] >>= cdr;
+            testdata[icc+1] >>= cdr;
 
             CPPUNIT_ASSERT_EQUAL(RTC::PublisherFlush::PORT_OK,
                                  publisher.write(cdr,0,0));
@@ -315,7 +314,7 @@ std::cout<<"    BUFFER_FULL:"<<RTC::PublisherFlush::BUFFER_FULL<<std::endl;
         {
         cdrMemoryStream cdr;
         12345 >>= cdr;
-        CPPUNIT_ASSERT_EQUAL(RTC::PublisherFlush::PRECONDITION_NOT_MET, 
+        CPPUNIT_ASSERT_EQUAL(RTC::PublisherFlush::PORT_OK,
                              publisher.write(cdr,0,0));
         }
     }

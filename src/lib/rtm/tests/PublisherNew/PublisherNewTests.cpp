@@ -1274,7 +1274,7 @@ namespace PublisherNew
         {
         cdrMemoryStream cdr;
         123 >>= cdr;
-        CPPUNIT_ASSERT_EQUAL(RTC::PublisherNew::PRECONDITION_NOT_MET,
+        CPPUNIT_ASSERT_EQUAL(RTC::PublisherNew::PORT_OK,
                                  publisher.write(cdr,0,0));
         coil::usleep(10000);
         }
