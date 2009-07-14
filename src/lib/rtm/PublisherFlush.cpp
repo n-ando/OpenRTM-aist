@@ -96,7 +96,6 @@ namespace RTC
                                                   unsigned long sec,
                                                   unsigned long usec)
   {
-    if (!m_active) { return PRECONDITION_NOT_MET; }
     if (m_consumer == 0) { return PRECONDITION_NOT_MET; }
 
     return m_consumer->put(data);
