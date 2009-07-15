@@ -70,11 +70,45 @@ namespace RTC
  */
 namespace NamingManager
 {
+  // protected: 関数のテスト用
+  class NamingManagerMock : public RTC::NamingManager
+  {
+  public:
+    // コンストラクタ
+    NamingManagerMock(RTC::Manager* manager)
+      : RTC::NamingManager(manager) {}
+    virtual ~NamingManagerMock(void) {}
+
+    // NamingManager::registerMgrName は、protected: の為ここへ定義。
+    void registerMgrName(const char* name,
+                         const RTM::ManagerServant* mgr)
+    {
+//    std::cout << "registerMgrName() in name=" << name << std::endl;
+      RTC::NamingManager::registerMgrName(name, mgr);
+      mgrNames = RTC::NamingManager::m_mgrNames;
+//    std::cout << "registerMgrName() out" << std::endl;
+    }
+
+    // NamingManager::unregisterMgrName は、protected: の為ここへ定義。
+    void unregisterMgrName(const char* name)
+    {
+//    std::cout << "unregisterMgrName() in name=" << name << std::endl;
+      RTC::NamingManager::unregisterMgrName(name);
+      mgrNames = RTC::NamingManager::m_mgrNames;
+//    std::cout << "unregisterMgrName() out" << std::endl;
+    }
+
+    std::vector<RTC::NamingManager::Mgr*> mgrNames;
+  };
+
   class NamingOnCorbaTests
     : public CppUnit::TestFixture
   {
     CPPUNIT_TEST_SUITE(NamingOnCorbaTests);
+
     CPPUNIT_TEST(test_bindObject_and_unbindObject);
+    CPPUNIT_TEST(test_bindObject_and_unbindObject3);
+
     CPPUNIT_TEST_SUITE_END();
 	
   private:
@@ -177,17 +211,64 @@ namespace NamingManager
       catch (CosNaming::NamingContext::NotFound expected) {}
       objMgr.deactivate(rto);
     }
-				
+
+    /*!
+     * @brief bindObject()メソッドとunbindObject()メソッドのテスト
+     * 
+     * - 引数ManagerServantで、オブジェクトを正しくバインドできるか？
+     * - オブジェクトを正しくアンバインドできるか？
+     */
+    void test_bindObject_and_unbindObject3()
+    {
+//      const char* name_server = "localhost:9876";
+      const char* name_server = "localhost:2809";
+      RTC::NamingOnCorba noc(m_pORB, name_server);
+
+      // バインドするオブジェクトを作成しておく
+      RTC::CorbaObjectManager objMgr(m_pORB, m_pPOA);
+      RTM::ManagerServant* mgrs = new RTM::ManagerServant();
+      objMgr.activate(mgrs);
+      CPPUNIT_ASSERT(! CORBA::is_nil(mgrs->getObjRef()));
+
+      // オブジェクトをバインドできるか？
+      noc.bindObject("id.kind", mgrs);
+
+      // バインドしたオブジェクトを正しくresolveできるか？
+      CosNaming::NamingContext_var nc = getRootContext(name_server);
+      CosNaming::Name name;
+      name.length(1);
+      name[0].id = "id";
+      name[0].kind = "kind";
+      CORBA::Object_ptr obj = nc->resolve(name);
+      CPPUNIT_ASSERT(! CORBA::is_nil(obj));
+
+      // バインドしたオブジェクトをアンバインドできるか？
+      noc.unbindObject("id.kind");
+
+      // アンバインドしたオブジェクトのresolveが意図どおり失敗するか？
+      try
+	{
+	  nc->resolve(name);
+	  CPPUNIT_FAIL("Exception not thrown.");
+	}
+      catch (CosNaming::NamingContext::NotFound expected) {}
+      objMgr.deactivate(mgrs);
+    }
+
   };
 	
   class NamingManagerTests
     : public CppUnit::TestFixture
   {
     CPPUNIT_TEST_SUITE(NamingManagerTests);
+
+    CPPUNIT_TEST(test_registerMgrName_and_unregisterMgrName);
+    CPPUNIT_TEST(test_bindObject_and_unbindObject2);
     CPPUNIT_TEST(test_bindObject_and_unbindObject);
     CPPUNIT_TEST(test_unbindAll);
     CPPUNIT_TEST(test_getObjects);
     CPPUNIT_TEST(test_update);
+
     CPPUNIT_TEST_SUITE_END();
 	
   private:
@@ -433,7 +514,160 @@ namespace NamingManager
       CPPUNIT_ASSERT(canResolve(name_server, "id", "kind"));
       objMgr.deactivate(rto);
     }
-		
+
+    /*!
+     * @brief registerMgrName()メソッドとunregisterMgrName()メソッドのテスト
+     * 
+     * - 引数ManagerServantで、マネージャーサーバントを正しく設定できるか？
+     */
+    void test_registerMgrName_and_unregisterMgrName()
+    {
+      // サーバント作成
+      RTC::CorbaObjectManager objMgr(m_pORB, m_pPOA);
+      RTM::ManagerServant* mgrs1 = new RTM::ManagerServant();
+      RTM::ManagerServant* mgrs2 = new RTM::ManagerServant();
+      RTM::ManagerServant* mgrs3 = new RTM::ManagerServant();
+      objMgr.activate(mgrs1);
+      objMgr.activate(mgrs2);
+      objMgr.activate(mgrs3);
+      NamingManagerMock nmm(m_mgr);
+
+      // マネージャーサーバントの設定
+      nmm.registerMgrName("id.kind", mgrs1);    // 初回設定
+
+      // 初回設定が登録されているか？
+      bool bret(false);
+      for (int i(0), len(nmm.mgrNames.size()); i < len; ++i)
+        {
+          if (nmm.mgrNames[i]->name == "id.kind")
+            {
+              if (nmm.mgrNames[i]->mgr == mgrs1)
+                {
+                  bret = true;
+                }
+            }
+        }
+      CPPUNIT_ASSERT(bret);
+
+      nmm.registerMgrName("id.kind", mgrs2);   // 上書設定
+
+      // 上書設定が登録されているか？
+      bret = false;
+      for (int i(0), len(nmm.mgrNames.size()); i < len; ++i)
+        {
+          if (nmm.mgrNames[i]->name == "id.kind")
+            {
+              if (nmm.mgrNames[i]->mgr == mgrs2)
+                {
+                  bret = true;
+                }
+            }
+        }
+      CPPUNIT_ASSERT(bret);
+
+      nmm.registerMgrName("id2.kind2", mgrs3);   // 追加設定
+
+      // 追加設定が登録されているか？
+      bret = false;
+      for (int i(0), len(nmm.mgrNames.size()); i < len; ++i)
+        {
+          if (nmm.mgrNames[i]->name == "id2.kind2")
+            {
+              if (nmm.mgrNames[i]->mgr == mgrs3)
+                {
+                  bret = true;
+                }
+            }
+        }
+      CPPUNIT_ASSERT(bret);
+
+      // マネージャーサーバントの設定解除
+      nmm.unregisterMgrName("id2.kind2");
+
+      // 追加設定のnameが削除されているか？
+      bret = false;
+      for (int i(0), len(nmm.mgrNames.size()); i < len; ++i)
+        {
+          if (nmm.mgrNames[i]->name == "id2.kind2")
+            {
+              bret = true;
+            }
+        }
+      CPPUNIT_ASSERT(!bret);
+
+      // 追加設定のmgrが削除されているか？
+      bret = false;
+      for (int i(0), len(nmm.mgrNames.size()); i < len; ++i)
+        {
+          if (nmm.mgrNames[i]->mgr == mgrs3)
+            {
+              bret = true;
+            }
+        }
+      CPPUNIT_ASSERT(!bret);
+
+      // マネージャーサーバントの設定解除
+      nmm.unregisterMgrName("id.kind");
+
+      // 初回・上書設定のnameが削除されているか？
+      bret = false;
+      for (int i(0), len(nmm.mgrNames.size()); i < len; ++i)
+        {
+          if (nmm.mgrNames[i]->name == "id.kind")
+            {
+              bret = true;
+            }
+        }
+      CPPUNIT_ASSERT(!bret);
+
+      // 初回・上書設定のmgrが削除されているか？
+      bret = false;
+      for (int i(0), len(nmm.mgrNames.size()); i < len; ++i)
+        {
+          if ((nmm.mgrNames[i]->mgr == mgrs1) || (nmm.mgrNames[i]->mgr == mgrs2))
+            {
+              bret = true;
+            }
+        }
+      CPPUNIT_ASSERT(!bret);
+      objMgr.deactivate(mgrs3);
+      objMgr.deactivate(mgrs2);
+      objMgr.deactivate(mgrs1);
+    }
+
+    /*!
+     * @brief bindObject()メソッドとunbindObject()メソッドのテスト
+     * 
+     * - 引数ManagerServantで、オブジェクトを正しくバインドできるか？
+     * - オブジェクトを正しくアンバインドできるか？
+     */
+    void test_bindObject_and_unbindObject2()
+    {
+      // バインドするオブジェクトを作成しておく
+      RTC::CorbaObjectManager objMgr(m_pORB, m_pPOA);
+
+      RTM::ManagerServant* mgrs = new RTM::ManagerServant();
+      objMgr.activate(mgrs);
+      CPPUNIT_ASSERT(! CORBA::is_nil(mgrs->getObjRef()));
+
+      // NamingManagerを生成する（本来は、Manager内部から取得したいが...）
+      RTC::NamingManager nmgr(m_mgr);
+//      const char* name_server = "localhost:9876";
+      const char* name_server = "localhost:2809";
+      nmgr.registerNameServer("corba", name_server);
+
+      // オブジェクトをバインドできるか？
+      nmgr.bindObject("id.kind", mgrs);
+      CPPUNIT_ASSERT(canResolve(name_server, "id", "kind"));
+
+      // バインドしたオブジェクトをアンバインドできるか？
+      nmgr.unbindObject("id.kind");
+
+      // アンバインドしたオブジェクトのresolveが意図どおり失敗するか？
+      CPPUNIT_ASSERT(! canResolve(name_server, "id", "kind"));
+      objMgr.deactivate(mgrs);
+    }
+
   };
 }; // namespace NamingManager
 
