@@ -29,16 +29,20 @@ namespace coil
   class Mutex
   {
   public:
-    Mutex()
+    Mutex(const char * const name = 0)
     {
+        SECURITY_DESCRIPTOR sd_buffer;
+        ::InitializeSecurityDescriptor(&sd_buffer, 
+                                       SECURITY_DESCRIPTOR_REVISION);
+        ::SetSecurityDescriptorDacl (&sd_buffer, TRUE, 0, FALSE);
 		m_Security_attr.nLength = sizeof(SECURITY_ATTRIBUTES);
-		m_Security_attr.lpSecurityDescriptor = NULL;
+		m_Security_attr.lpSecurityDescriptor = &sd_buffer;
 		m_Security_attr.bInheritHandle = TRUE;
-		//        const char * const mutex_name = "3ce37c45-706a-4f80-b02d-9dcbbe6a2d66";
-		mutex_ = ::CreateMutex( &m_Security_attr,
-		                          FALSE,
-                                NULL );
-		//                                mutex_name );
+		mutex_ = ::CreateMutexA( &m_Security_attr,
+		                         FALSE,
+                                         name );
+
+
     }
 
     ~Mutex()
@@ -74,7 +78,7 @@ namespace coil
     {
 		::ReleaseMutex(mutex_);
     }
-    pthread_mutex_t mutex_;
+    HANDLE mutex_;
     
   private:
     SECURITY_ATTRIBUTES m_Security_attr;

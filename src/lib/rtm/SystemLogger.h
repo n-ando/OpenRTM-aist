@@ -249,8 +249,9 @@ namespace RTC
 #define RTC_LOG(LV, fmt)			            \
   if (rtclog.isValid(LV))                                   \
     {                                                       \
+      std::string str = ::coil::sprintf fmt;                \
       rtclog.lock();                                        \
-      rtclog.level(LV) << ::coil::sprintf fmt << std::endl; \
+      rtclog.level(LV) << str << std::endl; \
       rtclog.unlock();                                      \
     }
 
