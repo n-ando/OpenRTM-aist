@@ -1561,6 +1561,10 @@ namespace RTC
         m_pPOA->deactivate_object(*m_pPOA->servant_to_id(m_eclist[i]));
         delete m_eclist[i];
       }
+    if (!m_eclist.empty())
+      {
+        m_eclist.clear();
+      }
   }
   
   /*!
