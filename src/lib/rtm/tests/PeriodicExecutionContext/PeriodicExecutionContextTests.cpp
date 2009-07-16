@@ -41,6 +41,7 @@
 #include <rtm/idl/RTCSkel.h>
 #include <rtm/PeriodicExecutionContext.h>
 #include <rtm/CORBA_SeqUtil.h>
+#include <rtm/RTObject.h>
 
 /*!
  * @class PeriodicExecutionContextTests class
