@@ -226,7 +226,7 @@ namespace SdoConfiguration
       }
 			
       // ServiceProfileを設定する
-      CPPUNIT_ASSERT_EQUAL(CORBA::Boolean(true), sdoCfg.set_service_profile(svcProf));
+      CPPUNIT_ASSERT_EQUAL(CORBA::Boolean(true), sdoCfg.add_service_profile(svcProf));
 			
       // getServiceProfile()でServiceProfileを取得し、設定したものと一致しているか確認する
       const SDOPackage::ServiceProfile svcProfRet = sdoCfg.getServiceProfile("ID");
@@ -286,8 +286,8 @@ namespace SdoConfiguration
       }
 			
       // ServiceProfileを設定する
-      CPPUNIT_ASSERT_EQUAL(CORBA::Boolean(true), sdoCfg.set_service_profile(svcProf0));
-      CPPUNIT_ASSERT_EQUAL(CORBA::Boolean(true), sdoCfg.set_service_profile(svcProf1));
+      CPPUNIT_ASSERT_EQUAL(CORBA::Boolean(true), sdoCfg.add_service_profile(svcProf0));
+      CPPUNIT_ASSERT_EQUAL(CORBA::Boolean(true), sdoCfg.add_service_profile(svcProf1));
 			
       // getServiceProfiles()で設定されているServiceProfile群を取得する
       const SDOPackage::ServiceProfileList svcProfList = sdoCfg.getServiceProfiles();
@@ -377,8 +377,8 @@ namespace SdoConfiguration
       }
 			
       // ServiceProfileを設定する
-      CPPUNIT_ASSERT_EQUAL(CORBA::Boolean(true), sdoCfg.set_service_profile(svcProf0));
-      CPPUNIT_ASSERT_EQUAL(CORBA::Boolean(true), sdoCfg.set_service_profile(svcProf1));
+      CPPUNIT_ASSERT_EQUAL(CORBA::Boolean(true), sdoCfg.add_service_profile(svcProf0));
+      CPPUNIT_ASSERT_EQUAL(CORBA::Boolean(true), sdoCfg.add_service_profile(svcProf1));
 			
       // 設定したServiceProfileのうち、片方を登録解除する
       CPPUNIT_ASSERT_EQUAL(CORBA::Boolean(true), sdoCfg.remove_service_profile("ID 0"));
@@ -645,7 +645,7 @@ namespace SdoConfiguration
 			
       // 登録したConfigurationSetのうち片方を、set_configuration_set_values()で更新する
       CPPUNIT_ASSERT_EQUAL(CORBA::Boolean(true),
-			   sdoCfg.set_configuration_set_values("ID 1", cfgSet1_Modified));
+			   sdoCfg.set_configuration_set_values(cfgSet1_Modified));
 			
       // 更新したConfigurationSetを、正しく取得できるか？
       SDOPackage::ConfigurationSet* cfgSetRet = sdoCfg.get_configuration_set("ID 1");
