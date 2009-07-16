@@ -37,6 +37,16 @@
 #include <coil/Mutex.h>
 #include <coil/Guard.h>
 
+namespace coil 
+{
+};
+
+/*!
+ * @class LoggerTests class
+ * @brief Logger test
+ */
+namespace Logger
+{
 class LogCreator
   : public coil::Task
 {
@@ -63,6 +73,7 @@ public:
         coil::usleep((int)r);
       }
 
+#if 0
     double max, min, mean, stddev;
     tm.getStatistics(max, min, mean, stddev);
     std::cout << m_name << std::endl;
@@ -70,14 +81,18 @@ public:
     printf("min   : %04.2f [us]\n", min * 1000000);
     printf("mean  : %04.2f [us]\n", mean * 1000000);
     printf("stddev: %04.2f [us]\n", stddev * 1000000);
+#endif
     return 0;
   }
 
 private:
   std::string m_name;
   std::basic_ostream<char> m_out;
-  coil::Mutex m_mutex;
+//  coil::Mutex m_mutex;
+public:
+  static coil::Mutex m_mutex;
 };
+coil::Mutex LogCreator::m_mutex;
 
 enum LogLevel
   {
@@ -184,6 +199,8 @@ public:
 protected:
 };
 
+
+
 #define RTC_LOG(LV, fmt)			           \
   if (m_out.isValid(LV))                                   \
     {                                                      \
@@ -193,6 +210,7 @@ protected:
     }
 
 #define RTC_TRACE(fmt) RTC_LOG(TRACE_LEVEL, fmt)
+
 
 class LogOutCreator
   : public coil::Task
@@ -226,6 +244,7 @@ public:
         coil::usleep((int)r);
       }
 
+#if 0
     double max, min, mean, stddev;
     tm.getStatistics(max, min, mean, stddev);
     std::cout << m_name << std::endl;
@@ -233,6 +252,7 @@ public:
     printf("min   : %04.2f [us]\n", min * 1000000);
     printf("mean  : %04.2f [us]\n", mean * 1000000);
     printf("stddev: %04.2f [us]\n", stddev * 1000000);
+#endif
     return 0;
   }
 
@@ -254,8 +274,6 @@ private:
  * @class LoggerTests class
  * @brief Logger test
  */
-namespace Logger
-{
   class LoggerTests
    : public CppUnit::TestFixture
   {
@@ -359,7 +377,7 @@ namespace Logger
     {
       coil::LogStreamBuffer logger;
       std::stringstream s0;
-      logger.addStream(std::cout.rdbuf());
+//      logger.addStream(std::cout.rdbuf());
       logger.addStream(s0.rdbuf());
 
       std::basic_ostream<char> out(&logger);
@@ -378,24 +396,24 @@ namespace Logger
       coil::LogStreamBuffer logbuf;
       std::stringstream s0;
       logbuf.addStream(s0.rdbuf());
-      logbuf.addStream(std::cout.rdbuf());
+//      logbuf.addStream(std::cout.rdbuf());
 
       LogOut log(&logbuf);
       log.setLevel(PARANOID_LEVEL);
-      std::cout << std::endl;
+//      std::cout << std::endl;
       log.level(SILENT_LEVEL) << coil::sprintf("This is silent message.") << std::endl;
       log.level(INFO_LEVEL) << coil::sprintf("This is info message.") << std::endl;
       log.level(ERROR_LEVEL) << coil::sprintf("This is error message.") << std::endl;
       log.level(PARANOID_LEVEL) << coil::sprintf("This is paranoid message.") << std::endl;
 
-      std::cout << std::endl;
+//      std::cout << std::endl;
       log.setLevel(INFO_LEVEL);
       log.level(SILENT_LEVEL) << coil::sprintf("This is silent message.") << std::endl;
       log.level(INFO_LEVEL) << coil::sprintf("This is info message.") << std::endl;
       log.level(ERROR_LEVEL) << coil::sprintf("This is error message.") << std::endl;
       log.level(PARANOID_LEVEL) << coil::sprintf("This is paranoid message.") << std::endl;
 
-      std::cout << std::endl;
+//      std::cout << std::endl;
       log.setLevel(SILENT_LEVEL);
       log.level(SILENT_LEVEL) << coil::sprintf("This is silent message.") << std::endl;
       log.level(INFO_LEVEL) << coil::sprintf("This is info message.") << std::endl;
@@ -470,7 +488,7 @@ namespace Logger
       coil::LogStreamBuffer logbuf;
       std::stringstream s0;
       logbuf.addStream(s0.rdbuf());
-      logbuf.addStream(std::cout.rdbuf());
+//      logbuf.addStream(std::cout.rdbuf());
 
       LogOut2 log(&logbuf);
       log.setLevel(PARANOID_LEVEL);

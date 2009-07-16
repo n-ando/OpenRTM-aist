@@ -480,8 +480,7 @@ namespace coil
      */
     log_stream(streambuf_type* sb, int levelmin, int levelmax, int level)
       : ostream_type(sb),
-        m_minLevel(levelmin), m_maxLevel(levelmax), m_logLevel(level),
-        m_lockEnable(false) 
+        m_minLevel(levelmin), m_maxLevel(levelmax), m_logLevel(level)
     {
       if (m_minLevel >= m_maxLevel) throw std::bad_alloc();
       this->init(sb);
@@ -699,8 +698,6 @@ namespace coil
   private:
     int m_minLevel, m_maxLevel;
     int m_logLevel;
-    bool m_lockEnable;
-    Mutex m_mutex;
 
     /*!
      * @if jp
@@ -710,8 +707,16 @@ namespace coil
      * @endif
      */
     std::ofstream m_dummy;
+  public:
+    static bool m_lockEnable;
+    static Mutex m_mutex;
   };
 
+  template <typename _CharT, typename _Traits >
+  bool log_stream<_CharT,_Traits >::m_lockEnable = true;
+
+  template <typename _CharT, typename _Traits >
+  coil::Mutex log_stream<_CharT,_Traits>::m_mutex("Mutex for Logger.");
 
   typedef log_streambuf<char> LogStreamBuffer;
   typedef log_stream<char> LogStream;
