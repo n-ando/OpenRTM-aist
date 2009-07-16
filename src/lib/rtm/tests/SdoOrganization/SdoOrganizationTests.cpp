@@ -139,10 +139,11 @@ namespace SdoOrganization
 	
 	
 	// 空のOrganizationPropertyをセットする。 OK.
-	ret = m_pOi->set_organization_property(set_prop);
+	ret = m_pOi->add_organization_property(set_prop);
 	
 	
 	nv.name = "hoge";
+        str = "hoge"; 
 	ft = 11.111;
 	nv.value <<= ft;
 	
@@ -151,7 +152,7 @@ namespace SdoOrganization
 	
 	set_prop.properties = nvList;
 	// プロパティのセット
-	ret = m_pOi->set_organization_property(set_prop);
+	ret = m_pOi->add_organization_property(set_prop);
 	
 	// プロパティの取得 length 1のプロパティリストを持つOrganizationPropertyが返される。
 	get_prop = m_pOi->get_organization_property();
@@ -172,7 +173,7 @@ namespace SdoOrganization
 	
 	set_prop.properties = nvList;
 	// プロパティのセット
-	ret = m_pOi->set_organization_property(set_prop);
+	ret = m_pOi->add_organization_property(set_prop);
 	
 	// プロパティの取得
 	get_prop = m_pOi->get_organization_property();
@@ -229,7 +230,7 @@ namespace SdoOrganization
 	set_prop.properties = nvList;
 	
 	cout << "set in" << endl;
-	ret = m_pOi->set_organization_property(set_prop);
+	ret = m_pOi->add_organization_property(set_prop);
 	cout << "set out" << endl;
 	
 	get_prop = m_pOi->get_organization_property();
@@ -282,7 +283,7 @@ namespace SdoOrganization
     }
     
     
-    /* tests for */
+    /*n tests for */
     void test_set_get_organization_property_value() {
       //    OrganizationProperty set_prop;
       //    CORBA::Boolean ret;
@@ -313,7 +314,7 @@ namespace SdoOrganization
 	nvList[1] = nv;
 	//    nvList[0] = nv;
 	//    set_prop.properties = nvList;
-	//    ret = m_pOi->set_organization_property(set_prop);
+	//    ret = m_pOi->add_organization_property(set_prop);
 	
 	cout << "float" << endl;
 	nv.name = "float";
@@ -331,7 +332,7 @@ namespace SdoOrganization
 	set_prop.properties = nvList;
 	
 	cout << "set in" << endl;
-	ret = m_pOi->set_organization_property(set_prop);
+	ret = m_pOi->add_organization_property(set_prop);
 	cout << "set out" << endl;
       */
       
