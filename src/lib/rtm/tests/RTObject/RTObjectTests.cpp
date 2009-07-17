@@ -192,7 +192,7 @@ namespace RTObject
 		
     virtual char* get_organization_id()
     {
-      return (char*) m_id;
+      return CORBA::string_dup(m_id);
     }
 		
     virtual SDOPackage::OrganizationProperty* get_organization_property()
