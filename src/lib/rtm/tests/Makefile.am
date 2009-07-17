@@ -37,6 +37,7 @@ SUBDIRS = \
 	OutPort           \
 	OutPortBase       \
 	OutPortConnector \
+	OutPortPushConnector \
 	OutPortCorbaCdrConsumer \
 	OutPortCorbaCdrProvider \
 	OutPortCorbaConsumer \
@@ -54,7 +55,8 @@ SUBDIRS = \
 	SdoConfiguration  \
 	SdoOrganization  \
 	SdoService  \
-	StateMachine
+	StateMachine \
+	SystemLogger
 
 DIST_SUBDIRS = $(SUBDIRS)
 DIST_SUBDIRS += InPortTcpSockConsumer
