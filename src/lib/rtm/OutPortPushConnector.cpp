@@ -43,7 +43,8 @@ namespace RTC
       {
         m_buffer = createBuffer(profile);
       }
-    if (m_publisher == 0 || m_buffer == 0) { throw std::bad_alloc(); }
+    if (m_publisher == 0 || m_buffer == 0 || m_consumer == 0) 
+      { throw std::bad_alloc(); }
 
     if (m_publisher->init(profile.properties) != PORT_OK)
       {
