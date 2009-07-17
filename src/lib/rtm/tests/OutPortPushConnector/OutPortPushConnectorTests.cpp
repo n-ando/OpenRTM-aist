@@ -179,6 +179,25 @@ namespace OutPortPushConnector
                                            unsigned long sec,
                                            unsigned long usec)
       {
+          cdrMemoryStream cdr(data);
+          CORBA::ULong inlen = cdr.bufSize();
+
+          CORBA::Octet oct[8];
+          cdr.get_octet_array (oct, (int)inlen);
+          long lval(0);
+          for(int ic(0);ic<(int)inlen;++ic)
+          {
+              lval = lval+(int)(oct[ic]<<(ic*8));
+          }
+          std::stringstream ss;
+          ss << lval;
+          if (m_logger != NULL)
+          {
+              m_logger->log("PublisherFlushMock::write");
+              m_logger->log(ss.str());
+          }
+          logger.log("PublisherFlushMock::write");
+          logger.log(ss.str());
           return PORT_OK;
       }
       /*!
@@ -196,6 +215,11 @@ namespace OutPortPushConnector
        */
       RTC::PublisherBase::ReturnCode activate()
       {
+          if (m_logger != NULL)
+          {
+              m_logger->log("PublisherFlushMock::activate");
+          }
+          logger.log("PublisherFlushMock::activate");
           return PORT_OK;
       }
 
@@ -205,6 +229,11 @@ namespace OutPortPushConnector
        */
       RTC::PublisherBase::ReturnCode deactivate()
       {
+          if (m_logger != NULL)
+          {
+              m_logger->log("PublisherFlushMock::deactivate");
+          }
+          logger.log("PublisherFlushMock::deactivate");
           return PORT_OK;
       }
       /*!
@@ -223,9 +252,9 @@ namespace OutPortPushConnector
       {
           if (m_logger != NULL)
           {
-              m_logger->log("setConsumer");
+              m_logger->log("PublisherFlushMock::setConsumer");
           }
-          logger.log("setConsumer");
+          logger.log("PublisherFlushMock::setConsumer");
           return PORT_OK;
       }
 
@@ -237,7 +266,7 @@ namespace OutPortPushConnector
       {
           if (m_logger != NULL)
           {
-              m_logger->log("setBuffer");
+              m_logger->log("PublisherFlushMock::setBuffer");
               if(buffer == NULL)
               {
                   m_logger->log("buffer NG");
@@ -247,7 +276,7 @@ namespace OutPortPushConnector
                   m_logger->log("buffer OK");
               }
           }
-          logger.log("setBuffer");
+          logger.log("PublisherFlushMock::setBuffer");
           if(buffer == NULL)
           {
               logger.log("buffer NG");
@@ -295,6 +324,25 @@ namespace OutPortPushConnector
                                            unsigned long sec,
                                            unsigned long usec)
       {
+          cdrMemoryStream cdr(data);
+          CORBA::ULong inlen = cdr.bufSize();
+
+          CORBA::Octet oct[8];
+          cdr.get_octet_array (oct, (int)inlen);
+          long lval(0);
+          for(int ic(0);ic<(int)inlen;++ic)
+          {
+              lval = lval+(int)(oct[ic]<<(ic*8));
+          }
+          std::stringstream ss;
+          ss << lval;
+          if (m_logger != NULL)
+          {
+              m_logger->log("PublisherNewMock::write");
+              m_logger->log(ss.str());
+          }
+          logger.log("PublisherNewMock::write");
+          logger.log(ss.str());
           return PORT_OK;
       }
       /*!
@@ -312,6 +360,11 @@ namespace OutPortPushConnector
        */
       RTC::PublisherBase::ReturnCode activate()
       {
+          if (m_logger != NULL)
+          {
+              m_logger->log("PublisherNewMock::activate");
+          }
+          logger.log("PublisherNewMock::activate");
           return PORT_OK;
       }
 
@@ -321,6 +374,11 @@ namespace OutPortPushConnector
        */
       RTC::PublisherBase::ReturnCode deactivate()
       {
+          if (m_logger != NULL)
+          {
+              m_logger->log("PublisherNewMock::deactivate");
+          }
+          logger.log("PublisherNewMock::deactivate");
           return PORT_OK;
       }
 
@@ -341,9 +399,9 @@ namespace OutPortPushConnector
       {
           if (m_logger != NULL)
           {
-              m_logger->log("setConsumer");
+              m_logger->log("PublisherNewMock::setConsumer");
           }
-          logger.log("setConsumer");
+          logger.log("PublisherNewMock::setConsumer");
           return PORT_OK;
       }
 
@@ -355,7 +413,7 @@ namespace OutPortPushConnector
       {
           if (m_logger != NULL)
           {
-              m_logger->log("setBuffer");
+              m_logger->log("PublisherNewMock::setBuffer");
               if(buffer == NULL)
               {
                   m_logger->log("buffer NG");
@@ -365,7 +423,7 @@ namespace OutPortPushConnector
                   m_logger->log("buffer OK");
               }
           }
-          logger.log("setBuffer");
+          logger.log("PublisherNewMock::setBuffer");
           if(buffer == NULL)
           {
               logger.log("buffer NG");
@@ -394,7 +452,14 @@ namespace OutPortPushConnector
     : public CppUnit::TestFixture
   {
     CPPUNIT_TEST_SUITE(OutPortPushConnectorTests);
+
     CPPUNIT_TEST(test_OutPortPushConnector);
+    CPPUNIT_TEST(test_write);
+    CPPUNIT_TEST(test_disconnect_getBuffer);
+    CPPUNIT_TEST(test_activate_deactivate);
+      //createPublisher,createBuffer は OutPortPushConnector の中で
+      //使用されているためテストは省略
+
     CPPUNIT_TEST_SUITE_END();
 		
   private:
@@ -486,21 +551,25 @@ namespace OutPortPushConnector
         CPPUNIT_ASSERT_EQUAL(0, 
                            logger.countLog("InPortCorbaCdrConsumerMock::init"));
         CPPUNIT_ASSERT_EQUAL(0, 
-                             PublisherNewMock::logger.countLog("setBuffer"));
+            PublisherNewMock::logger.countLog("PublisherNewMock::setBuffer"));
         CPPUNIT_ASSERT_EQUAL(0, 
-                             PublisherNewMock::logger.countLog("buffer OK"));
+            PublisherNewMock::logger.countLog("buffer OK"));
         CPPUNIT_ASSERT_EQUAL(0, 
-                             PublisherNewMock::logger.countLog("setConsumer"));
+            PublisherNewMock::logger.countLog("PublisherNewMock::setConsumer"));
         connector = new RTC::OutPortPushConnector(profile_new, consumer);
         CPPUNIT_ASSERT_EQUAL(1, 
                            logger.countLog("InPortCorbaCdrConsumerMock::init"));
         CPPUNIT_ASSERT_EQUAL(1, 
-                             PublisherNewMock::logger.countLog("setBuffer"));
+            PublisherNewMock::logger.countLog("PublisherNewMock::setBuffer"));
         CPPUNIT_ASSERT_EQUAL(1, 
-                             PublisherNewMock::logger.countLog("buffer OK"));
+            PublisherNewMock::logger.countLog("buffer OK"));
+        CPPUNIT_ASSERT_EQUAL(0, 
+            PublisherNewMock::logger.countLog("buffer NG"));
         CPPUNIT_ASSERT_EQUAL(1, 
-                             PublisherNewMock::logger.countLog("setConsumer"));
+            PublisherNewMock::logger.countLog("PublisherNewMock::setConsumer"));
 
+        //consumerはデストラクタでdeleteされる。
+        delete connector;
 
         //subscription_type が未設定の場合は
         //Flush が起動することを確認する。
@@ -520,28 +589,201 @@ namespace OutPortPushConnector
         CPPUNIT_ASSERT_EQUAL(1, 
                            logger.countLog("InPortCorbaCdrConsumerMock::init"));
         CPPUNIT_ASSERT_EQUAL(0, 
-                             PublisherFlushMock::logger.countLog("setBuffer"));
+        PublisherFlushMock::logger.countLog("PublisherFlushMock::setBuffer"));
         CPPUNIT_ASSERT_EQUAL(0, 
-                             PublisherFlushMock::logger.countLog("buffer OK"));
+        PublisherFlushMock::logger.countLog("buffer OK"));
         CPPUNIT_ASSERT_EQUAL(0, 
-                             PublisherFlushMock::logger.countLog("setConsumer"));
+        PublisherFlushMock::logger.countLog("PublisherFlushMock::setConsumer"));
         connector = new RTC::OutPortPushConnector(profile_flush, consumer);
         CPPUNIT_ASSERT_EQUAL(2, 
                            logger.countLog("InPortCorbaCdrConsumerMock::init"));
         CPPUNIT_ASSERT_EQUAL(1, 
-                             PublisherFlushMock::logger.countLog("setBuffer"));
+        PublisherFlushMock::logger.countLog("PublisherFlushMock::setBuffer"));
         CPPUNIT_ASSERT_EQUAL(1, 
-                             PublisherFlushMock::logger.countLog("buffer OK"));
+        PublisherFlushMock::logger.countLog("buffer OK"));
         CPPUNIT_ASSERT_EQUAL(1, 
-                             PublisherFlushMock::logger.countLog("setConsumer"));
+        PublisherFlushMock::logger.countLog("PublisherFlushMock::setConsumer"));
 
         //consumerはデストラクタでdeleteされる。
         delete connector;
         
+
+        //consumer を与えない場合は例外を投げることを確認する。
+        RTC::OutPortConnector* connector_err(0);
+        try {
+            RTC::ConnectorProfile prof_err;
+            // prop: [port.outport].
+            {
+                coil::Properties conn_prop;
+                NVUtil::copyToProperties(conn_prop, prof_err.properties);
+                prop << conn_prop.getNode("dataport"); // marge ConnectorProfile
+            }
+            RTC::ConnectorBase::Profile profile_err(prof_err.name,
+                                    prof_err.connector_id,
+                                    CORBA_SeqUtil::refToVstring(prof_err.ports),
+                                    prop); 
+            connector_err = new RTC::OutPortPushConnector(profile_err, NULL);
+            CPPUNIT_FAIL("The exception was not thrown. ");
+        }
+        catch(std::bad_alloc& e)
+        {
+        }
+        catch(...)
+        {
+            CPPUNIT_FAIL("The exception not intended was thrown .");
+        }
+        delete connector_err;
     }
-		
+    /*!
+     * @brief writeのテスト
+     * 
+     */
+    void test_write()
+    {
+        ::RTC::PublisherFactory::
+        instance().addFactory("new",
+                              ::coil::Creator< ::RTC::PublisherBase,
+                                               PublisherNewMock>,
+                              ::coil::Destructor< ::RTC::PublisherBase,
+                                                  PublisherNewMock>);
+        RTC::ConnectorProfile prof;
+        CORBA_SeqUtil::push_back(prof.properties,
+			       NVUtil::newNV("dataport.interface_type",
+					     "corba_cdr"));
+        CORBA_SeqUtil::push_back(prof.properties,
+			       NVUtil::newNV("dataport.dataflow_type",
+					     "push"));
+        CORBA_SeqUtil::push_back(prof.properties,
+	  		       NVUtil::newNV("dataport.subscription_type",
+					     "new"));
+        // prop: [port.outport].
+        coil::Properties prop;
+        {
+            coil::Properties conn_prop;
+            NVUtil::copyToProperties(conn_prop, prof.properties);
+            prop << conn_prop.getNode("dataport"); // marge ConnectorProfile
+        }
+        InPortCorbaCdrConsumerMock*consumer = new InPortCorbaCdrConsumerMock();
+        Logger logger;
+        consumer->setLogger(&logger);
+        RTC::ConnectorBase::Profile profile_new(prof.name,
+                                   prof.connector_id,
+                                   CORBA_SeqUtil::refToVstring(prof.ports),
+                                   prop); 
+        RTC::OutPortConnector* connector(0);
+        connector = new RTC::OutPortPushConnector(profile_new, consumer);
+        CPPUNIT_ASSERT_EQUAL(0, 
+               PublisherNewMock::logger.countLog("PublisherNewMock::write"));
+        CPPUNIT_ASSERT_EQUAL(0, 
+               PublisherNewMock::logger.countLog("12345"));
+        cdrMemoryStream cdr;
+        12345 >>= cdr;
+        connector->write(cdr);
+        CPPUNIT_ASSERT_EQUAL(1, 
+               PublisherNewMock::logger.countLog("PublisherNewMock::write"));
+        CPPUNIT_ASSERT_EQUAL(1, 
+               PublisherNewMock::logger.countLog("12345"));
+
+        delete connector;
+
+    }
+    /*!
+     * @brief disconnectのテスト
+     * 
+     */
+    void test_disconnect_getBuffer()
+    {
+        ::RTC::PublisherFactory::
+        instance().addFactory("new",
+                              ::coil::Creator< ::RTC::PublisherBase,
+                                               PublisherNewMock>,
+                              ::coil::Destructor< ::RTC::PublisherBase,
+                                                  PublisherNewMock>);
+        RTC::ConnectorProfile prof;
+        CORBA_SeqUtil::push_back(prof.properties,
+			       NVUtil::newNV("dataport.interface_type",
+					     "corba_cdr"));
+        CORBA_SeqUtil::push_back(prof.properties,
+			       NVUtil::newNV("dataport.dataflow_type",
+					     "push"));
+        CORBA_SeqUtil::push_back(prof.properties,
+	  		       NVUtil::newNV("dataport.subscription_type",
+					     "new"));
+        // prop: [port.outport].
+        coil::Properties prop;
+        {
+            coil::Properties conn_prop;
+            NVUtil::copyToProperties(conn_prop, prof.properties);
+            prop << conn_prop.getNode("dataport"); // marge ConnectorProfile
+        }
+        InPortCorbaCdrConsumerMock*consumer = new InPortCorbaCdrConsumerMock();
+        Logger logger;
+        consumer->setLogger(&logger);
+        RTC::ConnectorBase::Profile profile_new(prof.name,
+                                   prof.connector_id,
+                                   CORBA_SeqUtil::refToVstring(prof.ports),
+                                   prop); 
+        RTC::OutPortConnector* connector(0);
+        connector = new RTC::OutPortPushConnector(profile_new, consumer);
+        CPPUNIT_ASSERT(connector->getBuffer());
+        connector->disconnect();
+        CPPUNIT_ASSERT(!connector->getBuffer());
+
+    }
+    /*!
+     * @brief activate のテスト
+     * 
+     */
+    void test_activate_deactivate()
+    {
+        ::RTC::PublisherFactory::
+        instance().addFactory("new",
+                              ::coil::Creator< ::RTC::PublisherBase,
+                                               PublisherNewMock>,
+                              ::coil::Destructor< ::RTC::PublisherBase,
+                                                  PublisherNewMock>);
+        RTC::ConnectorProfile prof;
+        CORBA_SeqUtil::push_back(prof.properties,
+			       NVUtil::newNV("dataport.interface_type",
+					     "corba_cdr"));
+        CORBA_SeqUtil::push_back(prof.properties,
+			       NVUtil::newNV("dataport.dataflow_type",
+					     "push"));
+        CORBA_SeqUtil::push_back(prof.properties,
+	  		       NVUtil::newNV("dataport.subscription_type",
+					     "new"));
+        // prop: [port.outport].
+        coil::Properties prop;
+        {
+            coil::Properties conn_prop;
+            NVUtil::copyToProperties(conn_prop, prof.properties);
+            prop << conn_prop.getNode("dataport"); // marge ConnectorProfile
+        }
+        InPortCorbaCdrConsumerMock*consumer = new InPortCorbaCdrConsumerMock();
+        Logger logger;
+        consumer->setLogger(&logger);
+        RTC::ConnectorBase::Profile profile_new(prof.name,
+                                   prof.connector_id,
+                                   CORBA_SeqUtil::refToVstring(prof.ports),
+                                   prop); 
+        RTC::OutPortConnector* connector(0);
+        connector = new RTC::OutPortPushConnector(profile_new, consumer);
+        CPPUNIT_ASSERT_EQUAL(0, 
+               PublisherNewMock::logger.countLog("PublisherNewMock::activate"));
+        connector->activate();
+        CPPUNIT_ASSERT_EQUAL(1, 
+               PublisherNewMock::logger.countLog("PublisherNewMock::activate"));
+
+        connector = new RTC::OutPortPushConnector(profile_new, consumer);
+        CPPUNIT_ASSERT_EQUAL(0, 
+             PublisherNewMock::logger.countLog("PublisherNewMock::deactivate"));
+        connector->deactivate();
+        CPPUNIT_ASSERT_EQUAL(1, 
+             PublisherNewMock::logger.countLog("PublisherNewMock::deactivate"));
+        delete connector;
+    }
   };
-}; // namespace InPort
+}; // namespace OutPortPushConnector
 
 /*
  * Register test suite
