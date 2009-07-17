@@ -56,6 +56,49 @@ namespace RTObject
       log("on_finalize");
       return RTC::RTObject_impl::on_finalize();
     }
+
+    virtual RTC::UniqueId bindContext(RTC::ExecutionContext_ptr exec_context)
+    {
+      RTC::UniqueId id;
+      id = RTC::RTObject_impl::bindContext(exec_context);
+      ecMine = RTC::RTObject_impl::m_ecMine;
+      return id;
+    }
+    RTC::ExecutionContextServiceList ecMine;
+
+    // protected: m_ecMineの設定
+    void set_ecMine()
+    {
+      RTC::RTObject_impl::m_ecMine = ecMine;
+    }
+
+    // protected: m_ecMineの判定
+    bool chk_ecMine(int id, RTC::ExecutionContext_ptr exec_context)
+    {
+      RTC::ExecutionContextService_var ecs;
+      ecs = RTC::ExecutionContextService::_narrow(exec_context);
+      if (RTC::RTObject_impl::m_ecMine[id] == ecs)
+      {
+//        std::cout << "chk_ecMine() return true" << std::endl;
+        return true;
+      }
+      else
+      {
+//        std::cout << "chk_ecMine() return false" << std::endl;
+        return false;
+      }
+    }
+
+    std::vector<RTC::ExecutionContextBase*> eclist;
+    // protected: m_eclistの取得
+    int get_eclist()
+    {
+      int len(RTC::RTObject_impl::m_eclist.size());
+      eclist = RTC::RTObject_impl::m_eclist;
+//      std::cout << "get_eclist() m_eclist.size()=" << len << std::endl;
+      return len;
+    }
+
 		
   public: // helper for test
     int countLog(std::string line)
@@ -256,6 +299,9 @@ namespace RTObject
     : public CppUnit::TestFixture
   {
     CPPUNIT_TEST_SUITE(RTObjectTests);
+
+    CPPUNIT_TEST(test_finalizeContexts);
+    CPPUNIT_TEST(test_bindContext);
     CPPUNIT_TEST(test_initialize_invoking_on_initialize);
     CPPUNIT_TEST(test_initialize_in_Alive);
     CPPUNIT_TEST(test_finalize_invoking_on_finalize);
@@ -289,6 +335,7 @@ namespace RTObject
     //		CPPUNIT_TEST(test_get_monitoring);
     CPPUNIT_TEST(test_get_status);
     CPPUNIT_TEST(test_get_status_list);
+
     CPPUNIT_TEST_SUITE_END();
 	
   private:
@@ -337,6 +384,7 @@ namespace RTObject
      */
     void test_initialize_invoking_on_initialize()
     {
+//      std::cout<<"IN  test_initialize_invoking_on_initialize()"<<std::endl;
       RTObjectMock* rto	= new RTObjectMock(m_pORB, m_pPOA); // will be deleted automatically
 			
       // initialize()メソッド呼出により、on_initialize()コールバックが呼び出されるか？
@@ -347,16 +395,17 @@ namespace RTObject
       rto->setProperties(prop);
       CPPUNIT_ASSERT_EQUAL(RTC::RTC_OK, rto->initialize());
       CPPUNIT_ASSERT_EQUAL(1, rto->countLog("on_initialize"));
+//      std::cout<<"OUT test_initialize_invoking_on_initialize()"<<std::endl;
     }
 		
     /*!
      * @brief initialize()メソッドのテスト
      * 
-     * - Alive状態の時にinitialize()メソッドを呼出た場合、意図どおりのエラーを返すか？
+     * - Alive状態の時にinitialize()メソッドを呼出た場合、正常に動作するか？
      */
     void test_initialize_in_Alive()
     {
-std::cout<<"IN  test_initialize_in_Alive()"<<std::endl;
+//      std::cout<<"IN  test_initialize_in_Alive()"<<std::endl;
       RTObjectMock* rto	= new RTObjectMock(m_pORB, m_pPOA); // will be deleted automatically
 			
       // initialize()メソッド呼出しを行い、Alive状態に遷移させる
@@ -370,9 +419,9 @@ std::cout<<"IN  test_initialize_in_Alive()"<<std::endl;
       ec = rto->get_context(0);
       CPPUNIT_ASSERT_EQUAL(true, rto->is_alive(ec));
 			
-      // Alive状態でinitialize()メソッド呼出しを行った場合、意図どおりのエラーを返すか？
-      CPPUNIT_ASSERT_EQUAL(RTC::PRECONDITION_NOT_MET, rto->initialize());
-std::cout<<"OUT test_initialize_in_Alive()"<<std::endl;
+      // Alive状態でinitialize()メソッド呼出しを行った場合、正常に動作するか？
+      CPPUNIT_ASSERT_EQUAL(RTC::RTC_OK, rto->initialize());
+//      std::cout<<"OUT test_initialize_in_Alive()"<<std::endl;
     }
 		
     /*!
@@ -382,7 +431,7 @@ std::cout<<"OUT test_initialize_in_Alive()"<<std::endl;
      */
     void test_finalize_invoking_on_finalize()
     {
-std::cout<<"IN  test_finalize_invoking_on_finalize()"<<std::endl;
+//      std::cout<<"IN  test_finalize_invoking_on_finalize()"<<std::endl;
       RTObjectMock* rto	= new RTObjectMock(m_pORB, m_pPOA); // will be deleted automatically
 			
       // initialize()メソッド呼出しを行い、Alive状態に遷移させる
@@ -400,9 +449,8 @@ std::cout<<"IN  test_finalize_invoking_on_finalize()"<<std::endl;
       CPPUNIT_ASSERT_EQUAL(RTC::RTC_OK, rto->finalize());
       CPPUNIT_ASSERT_EQUAL(1, rto->countLog("on_finalize"));
 			
-      // finalize()完了後なので、終状態へ遷移している（つまりAlive状態ではない）か？
-      CPPUNIT_ASSERT_EQUAL(false, rto->is_alive(ec));
-std::cout<<"OUT test_finalize_invoking_on_finalize()"<<std::endl;
+      CPPUNIT_ASSERT_EQUAL(true, rto->is_alive(ec));
+//      std::cout<<"OUT test_finalize_invoking_on_finalize()"<<std::endl;
     }
 		
     /*!
@@ -412,6 +460,7 @@ std::cout<<"OUT test_finalize_invoking_on_finalize()"<<std::endl;
      */
     void test_finalize_participating_in_execution_context()
     {
+//      std::cout<<"IN  test_finalize_participating_in_execution_context()"<<std::endl;
       RTObjectMock* rto	= new RTObjectMock(m_pORB, m_pPOA); // will be deleted automatically
 			
       // ExecutionContextを生成する
@@ -434,6 +483,7 @@ std::cout<<"OUT test_finalize_invoking_on_finalize()"<<std::endl;
 			
       // ExecutionContextに登録された状態でfinalize()を呼び出した場合、意図どおりのエラーを返すか？
       CPPUNIT_ASSERT_EQUAL(RTC::PRECONDITION_NOT_MET, rto->finalize());
+//      std::cout<<"OUT test_finalize_participating_in_execution_context()"<<std::endl;
     }
 		
     /*!
@@ -443,10 +493,12 @@ std::cout<<"OUT test_finalize_invoking_on_finalize()"<<std::endl;
      */
     void test_finalize_in_Created()
     {
+//      std::cout<<"IN  test_finalize_in_Created()"<<std::endl;
       RTObjectMock* rto	= new RTObjectMock(m_pORB, m_pPOA); // will be deleted automatically
 			
       // Created状態でfinalize()を呼出した場合、意図どおりのエラーで返るか？
       CPPUNIT_ASSERT_EQUAL(RTC::PRECONDITION_NOT_MET, rto->finalize());
+//      std::cout<<"OUT test_finalize_in_Created()"<<std::endl;
     }
 		
     /*!
@@ -465,7 +517,7 @@ std::cout<<"OUT test_finalize_invoking_on_finalize()"<<std::endl;
      */
     void test_exit()
     {
-std::cout<<"IN test_exit()"<<std::endl;
+//      std::cout<<"IN  test_exit()"<<std::endl;
       RTObjectMock* rto	= new RTObjectMock(m_pORB, m_pPOA); // will be deleted automatically
       rto->setObjRef(rto->_this());
 			
@@ -501,9 +553,8 @@ std::cout<<"IN test_exit()"<<std::endl;
       ec->remove_component(rto->_this());
       CPPUNIT_ASSERT_EQUAL(RTC::RTC_OK, rto->exit());
       CPPUNIT_ASSERT_EQUAL(1, rto->countLog("on_finalize"));
-      CPPUNIT_ASSERT_EQUAL(false, rto->is_alive(ec));
-std::cout<<"OUT test_exit()"<<std::endl;
-
+      CPPUNIT_ASSERT_EQUAL(true, rto->is_alive(ec));
+//      std::cout<<"OUT test_exit()"<<std::endl;
     }
 
     /*!
@@ -513,11 +564,13 @@ std::cout<<"OUT test_exit()"<<std::endl;
      */
     void test_exit_in_Created()
     {
+//      std::cout<<"IN  test_exit_in_Created()"<<std::endl;
       RTObjectMock* rto	= new RTObjectMock(m_pORB, m_pPOA); // will be deleted automatically
       rto->setObjRef(rto->_this());
 			
       // Create状態でexit()を呼出した場合、意図どおりのエラーを返すか？
       CPPUNIT_ASSERT_EQUAL(RTC::PRECONDITION_NOT_MET, rto->exit());
+//      std::cout<<"OUT test_exit_in_Created()"<<std::endl;
     }
 		
     /*!
@@ -527,6 +580,7 @@ std::cout<<"OUT test_exit()"<<std::endl;
      */
     void test_detach_executioncontext()
     {
+//      std::cout<<"IN  test_detach_executioncontext()"<<std::endl;
       RTObjectMock* rto	= new RTObjectMock(m_pORB, m_pPOA); // will be deleted automatically
 			
       // ExecutionContextを生成する
@@ -539,6 +593,7 @@ std::cout<<"OUT test_exit()"<<std::endl;
 			
       // 正常にdetachできるか？
       CPPUNIT_ASSERT_EQUAL(RTC::RTC_OK, rto->detach_context(id));
+//      std::cout<<"OUT test_detach_executioncontext()"<<std::endl;
     }
 		
     /*!
@@ -548,11 +603,13 @@ std::cout<<"OUT test_exit()"<<std::endl;
      */
     void test_detach_executioncontext_with_illegal_id()
     {
+//      std::cout<<"IN  test_detach_executioncontext_with_illegal_id()"<<std::endl;
       RTObjectMock* rto	= new RTObjectMock(m_pORB, m_pPOA); // will be deleted automatically
 			
       // 存在しないIDでRTCのdetachを試みた場合、意図どおりのエラーを返すか？
       CPPUNIT_ASSERT_EQUAL(RTC::BAD_PARAMETER,
 			   rto->detach_context(RTC::UniqueId(1)));
+//      std::cout<<"OUT test_detach_executioncontext_with_illegal_id()"<<std::endl;
     }
 		
     /*!
@@ -562,6 +619,7 @@ std::cout<<"OUT test_exit()"<<std::endl;
      */
     void test_get_context()
     {
+//      std::cout<<"IN  test_get_context()"<<std::endl;
       RTObjectMock* rto	= new RTObjectMock(m_pORB, m_pPOA); // will be deleted automatically
 			
       // ExecutionContextを生成する
@@ -585,6 +643,7 @@ std::cout<<"OUT test_exit()"<<std::endl;
 
       rto->detach_context(id2);
       rto->detach_context(id1);
+//      std::cout<<"OUT test_get_context()"<<std::endl;
     }
 		
     /*!
@@ -594,6 +653,7 @@ std::cout<<"OUT test_exit()"<<std::endl;
      */
     void test_get_contexts()
     {
+//      std::cout<<"IN  test_get_contexts()"<<std::endl;
       RTObjectMock* rto	= new RTObjectMock(m_pORB, m_pPOA); // will be deleted automatically
 			
       // ExecutionContextを生成する
@@ -623,6 +683,7 @@ std::cout<<"OUT test_exit()"<<std::endl;
       rto->detach_context(id2);
       rto->detach_context(id1);
 
+//      std::cout<<"OUT test_get_contexts()"<<std::endl;
     }
 		
     /*!
@@ -632,6 +693,7 @@ std::cout<<"OUT test_exit()"<<std::endl;
      */
     void test_get_component_profile()
     {
+//      std::cout<<"IN  test_get_component_profile()"<<std::endl;
       RTObjectMock* rto	= new RTObjectMock(m_pORB, m_pPOA); // will be deleted automatically
 			
       // ComponentProfileとして取得されるべき情報をあらかじめ設定しておく
@@ -660,6 +722,7 @@ std::cout<<"OUT test_exit()"<<std::endl;
 			   std::string(compProf->vendor));
       CPPUNIT_ASSERT_EQUAL(std::string("CATEGORY"),
 			   std::string(compProf->category));
+//      std::cout<<"OUT test_get_component_profile()"<<std::endl;
     }
 		
     /*!
@@ -669,6 +732,7 @@ std::cout<<"OUT test_exit()"<<std::endl;
      */
     void test_get_ports()
     {
+//      std::cout<<"IN  test_get_ports()"<<std::endl;
       RTObjectMock* rto	= new RTObjectMock(m_pORB, m_pPOA); // will be deleted automatically
 
       // Portを登録しておく
@@ -688,6 +752,7 @@ std::cout<<"OUT test_exit()"<<std::endl;
 		     != CORBA_SeqUtil::find(*portList, PortFinder(port0->_this())));
       CPPUNIT_ASSERT(CORBA::Long(-1)
 		     != CORBA_SeqUtil::find(*portList, PortFinder(port1->_this())));
+//      std::cout<<"OUT test_get_ports()"<<std::endl;
     }
 		
     /*!
@@ -737,6 +802,7 @@ std::cout<<"OUT test_exit()"<<std::endl;
      */
     void test_get_sdo_id()
     {
+//      std::cout<<"IN  test_get_sdo_id()"<<std::endl;
       RTObjectMock* rto1	= new RTObjectMock(m_pORB, m_pPOA); // will be deleted automatically
       rto1->setInstanceName("INSTANCE_NAME 1");
       RTObjectMock* rto2	= new RTObjectMock(m_pORB, m_pPOA); // will be deleted automatically
@@ -753,6 +819,7 @@ std::cout<<"OUT test_exit()"<<std::endl;
       //      つまり、実装上、SDO IDの一意性はinstance_nameの一意性に基づいている。
       //      仕様上、instance_nameは一意でなければならないので、首尾一貫している。
       CPPUNIT_ASSERT(id1 != id2);
+//      std::cout<<"OUT test_get_sdo_id()"<<std::endl;
     }
 		
     /*!
@@ -762,6 +829,7 @@ std::cout<<"OUT test_exit()"<<std::endl;
      */
     void test_get_sdo_type()
     {
+//      std::cout<<"IN  test_get_sdo_type()"<<std::endl;
       RTObjectMock* rto	= new RTObjectMock(m_pORB, m_pPOA); // will be deleted automatically
 				
       // ※ 実装上、type_nameがSDOタイプとして使用されているため、ここで準備設定している
@@ -772,6 +840,7 @@ std::cout<<"OUT test_exit()"<<std::endl;
       // SDOタイプを取得できるか？
       char* sdoType = rto->get_sdo_type();
       CPPUNIT_ASSERT(sdoType != NULL);
+//      std::cout<<"OUT test_get_sdo_type()"<<std::endl;
     }
 		
     /*!
@@ -802,6 +871,7 @@ std::cout<<"OUT test_exit()"<<std::endl;
      */
     void test_get_service_profile_with_illegal_arguments()
     {
+//      std::cout<<"IN  test_get_service_profile_with_illegal_arguments()"<<std::endl;
       RTObjectMock* rto	= new RTObjectMock(m_pORB, m_pPOA); // will be deleted automatically
 			
       // 引数にNULLを指定した場合、意図どおりの例外がスローされるか？
@@ -835,6 +905,7 @@ std::cout<<"OUT test_exit()"<<std::endl;
 	  // 意図しない例外をキャッチした
 	  CPPUNIT_FAIL("Unexpected exception caught.");
 	}
+//      std::cout<<"OUT test_get_service_profile_with_illegal_arguments()"<<std::endl;
     }
 		
     /*!
@@ -849,6 +920,7 @@ std::cout<<"OUT test_exit()"<<std::endl;
 		
     void test_get_sdo_service_with_illegal_arguments()
     {
+//      std::cout<<"IN  test_get_sdo_service_with_illegal_arguments()"<<std::endl;
       RTObjectMock* rto	= new RTObjectMock(m_pORB, m_pPOA); // will be deleted automatically
 			
       // 引数にNULLを指定した場合、意図どおりの例外がスローされるか？
@@ -882,6 +954,7 @@ std::cout<<"OUT test_exit()"<<std::endl;
 	  // 意図しない例外をキャッチした
 	  CPPUNIT_FAIL("Unexpected exception caught.");
 	}
+//      std::cout<<"OUT test_get_sdo_service_with_illegal_arguments()"<<std::endl;
     }
 		
     /*!
@@ -892,6 +965,7 @@ std::cout<<"OUT test_exit()"<<std::endl;
      */
     void test_get_configuration_and_set_device_profile_and_get_device_profile()
     {
+//      std::cout<<"IN  test_get_configuration_and_set_device_profile_and_get_device_profile()"<<std::endl;
       RTObjectMock* rto	= new RTObjectMock(m_pORB, m_pPOA); // will be deleted automatically
 			
       // DeviceProfileを準備しておく
@@ -924,6 +998,7 @@ std::cout<<"OUT test_exit()"<<std::endl;
 	const char* value; devProfRet->properties[0].value >>= value;
 	CPPUNIT_ASSERT_EQUAL(std::string("PROPERTIES VALUE"), std::string(value));
       }
+//      std::cout<<"OUT test_get_configuration_and_set_device_profile_and_get_device_profile()"<<std::endl;
     }
 		
     /*!
@@ -934,6 +1009,7 @@ std::cout<<"OUT test_exit()"<<std::endl;
      */
     void test_get_configuration_and_set_service_profile_and_get_service_profile()
     {
+//      std::cout<<"IN  test_get_configuration_and_set_service_profile_and_get_service_profile()"<<std::endl;
       RTObjectMock* rto	= new RTObjectMock(m_pORB, m_pPOA); // will be deleted automatically
 
       // SDOServiceを準備する
@@ -989,6 +1065,7 @@ std::cout<<"OUT test_exit()"<<std::endl;
 	const char* value; svcProfRet2->properties[0].value >>= value;
 	CPPUNIT_ASSERT_EQUAL(std::string("2.71828"), std::string(value));
       }
+//      std::cout<<"OUT test_get_configuration_and_set_service_profile_and_get_service_profile()"<<std::endl;
     }
 		
     /*!
@@ -998,6 +1075,7 @@ std::cout<<"OUT test_exit()"<<std::endl;
      */
     void test_get_configuration_and_set_service_profile_and_get_service_profiles()
     {
+//      std::cout<<"IN  test_get_configuration_and_set_service_profile_and_get_service_profiles()"<<std::endl;
       RTObjectMock* rto	= new RTObjectMock(m_pORB, m_pPOA); // will be deleted automatically
 
       // SDOServiceを準備する
@@ -1062,6 +1140,7 @@ std::cout<<"OUT test_exit()"<<std::endl;
 	const char* value; (*svcProfList)[svcProfIdx2].properties[0].value >>= value;
 	CPPUNIT_ASSERT_EQUAL(std::string("2.71828"), std::string(value));
       }
+//      std::cout<<"OUT test_get_configuration_and_set_service_profile_and_get_service_profiles()"<<std::endl;
     }
 		
     /*!
@@ -1072,6 +1151,7 @@ std::cout<<"OUT test_exit()"<<std::endl;
      */
     void test_get_configuration_and_set_service_profile_and_get_sdo_service()
     {
+//      std::cout<<"IN  test_get_configuration_and_set_service_profile_and_get_sdo_service()"<<std::endl;
       RTObjectMock* rto	= new RTObjectMock(m_pORB, m_pPOA); // will be deleted automatically
 
       // SDOServiceを準備する
@@ -1109,6 +1189,7 @@ std::cout<<"OUT test_exit()"<<std::endl;
       SDOPackage::SDOService_ptr sdoSvcRet2 = rto->get_sdo_service("ID 2");
       CPPUNIT_ASSERT(! CORBA::is_nil(sdoSvcRet2));
       CPPUNIT_ASSERT(sdoSvcRet2->_is_equivalent(sdoSvc2->_this()));
+//      std::cout<<"OUT test_get_configuration_and_set_service_profile_and_get_sdo_service()"<<std::endl;
     }
 		
     /*!
@@ -1118,6 +1199,7 @@ std::cout<<"OUT test_exit()"<<std::endl;
      */
     void test_get_configuration_and_remove_service_profile()
     {
+//      std::cout<<"IN  test_get_configuration_and_remove_service_profile()"<<std::endl;
       RTObjectMock* rto	= new RTObjectMock(m_pORB, m_pPOA); // will be deleted automatically
 
       // SDOServiceを準備する
@@ -1158,6 +1240,7 @@ std::cout<<"OUT test_exit()"<<std::endl;
 	}
       catch (SDOPackage::InvalidParameter expected) {}
       CPPUNIT_ASSERT(rto->get_service_profile("ID 2") != NULL);
+//      std::cout<<"OUT test_get_configuration_and_remove_service_profile()"<<std::endl;
     }
 		
     /*!
@@ -1168,6 +1251,7 @@ std::cout<<"OUT test_exit()"<<std::endl;
      */
     void test_get_configuration_and_add_organization_and_get_organizations()
     {
+//      std::cout<<"IN  test_get_configuration_and_add_organization_and_get_organizations()"<<std::endl;
       RTObjectMock* rto	= new RTObjectMock(m_pORB, m_pPOA); // will be deleted automatically
 			
       // Organizationを準備する
@@ -1194,6 +1278,7 @@ std::cout<<"OUT test_exit()"<<std::endl;
       CPPUNIT_ASSERT(CORBA::Long(-1) != orgIdx2);
       CPPUNIT_ASSERT_EQUAL(std::string("ORG 2"),
 			   std::string((*orgList)[orgIdx2]->get_organization_id()));
+//      std::cout<<"OUT test_get_configuration_and_add_organization_and_get_organizations()"<<std::endl;
     }
 		
     /*!
@@ -1203,6 +1288,7 @@ std::cout<<"OUT test_exit()"<<std::endl;
      */
     void test_get_configuration_and_remove_organization()
     {
+//      std::cout<<"IN  test_get_configuration_and_remove_organization()"<<std::endl;
       RTObjectMock* rto	= new RTObjectMock(m_pORB, m_pPOA); // will be deleted automatically
 			
       // Organizationを準備する
@@ -1225,6 +1311,7 @@ std::cout<<"OUT test_exit()"<<std::endl;
       orgList = rto->get_organizations();
       CPPUNIT_ASSERT(orgList != NULL);
       CPPUNIT_ASSERT_EQUAL(CORBA::ULong(1), orgList->length());
+//      std::cout<<"OUT test_get_configuration_and_remove_organization()"<<std::endl;
     }
 		
     /*!
@@ -1242,6 +1329,7 @@ std::cout<<"OUT test_exit()"<<std::endl;
      */
     void test_get_status()
     {
+//      std::cout<<"IN  test_get_status()"<<std::endl;
       RTObjectMock* rto	= new RTObjectMock(m_pORB, m_pPOA); // will be deleted automatically
 			
       // Mockの機能を用いてstatusを設定しておく
@@ -1265,6 +1353,7 @@ std::cout<<"OUT test_exit()"<<std::endl;
 	CORBA::Float value; *valueAnyRet2 >>= value;
 	CPPUNIT_ASSERT_EQUAL(CORBA::Float(2.71828), value);
       }
+//      std::cout<<"OUT test_get_status()"<<std::endl;
     }
 		
     /*!
@@ -1274,6 +1363,7 @@ std::cout<<"OUT test_exit()"<<std::endl;
      */
     void test_get_status_list()
     {
+//      std::cout<<"IN  test_get_status_list()"<<std::endl;
       RTObjectMock* rto	= new RTObjectMock(m_pORB, m_pPOA); // will be deleted automatically
 			
       // Mockの機能を用いてstatusを設定しておく
@@ -1299,6 +1389,86 @@ std::cout<<"OUT test_exit()"<<std::endl;
 	CORBA::Float value; valueAnyRet2 >>= value;
 	CPPUNIT_ASSERT_EQUAL(CORBA::Float(2.71828), value);
       }
+//      std::cout<<"OUT test_get_status_list()"<<std::endl;
+    }
+		
+    /*!
+     * @brief finalizeContexts()メソッドのテスト
+     * 
+     * - 全コンテキストの登録を削除できるか？
+     */
+    void test_finalizeContexts()
+    {
+//      std::cout<<"IN  test_finalizeContexts()"<<std::endl;
+      RTObjectMock* rto	= new RTObjectMock(m_pORB, m_pPOA);
+      coil::Properties prop;
+      prop.setProperty("exec_cxt.periodic.type","PeriodicExecutionContext");
+      prop.setProperty("exec_cxt.periodic.rate","1000");
+      rto->setProperties(prop);
+      // initialize()で、m_eclistへ登録し、m_ecMineをstart
+      CPPUNIT_ASSERT_EQUAL(RTC::RTC_OK, rto->initialize());
+      CPPUNIT_ASSERT_EQUAL(1, rto->get_eclist());
+      CPPUNIT_ASSERT_EQUAL(RTC::RTC_OK, rto->initialize());
+      CPPUNIT_ASSERT_EQUAL(2, rto->get_eclist());
+      CPPUNIT_ASSERT_EQUAL(RTC::RTC_OK, rto->initialize());
+      CPPUNIT_ASSERT_EQUAL(3, rto->get_eclist());
+
+      RTC::ExecutionContext_ptr ec;
+      ec = rto->get_context(0);
+      CPPUNIT_ASSERT_EQUAL(true, rto->is_alive(ec));
+      rto->get_eclist();
+      rto->finalizeContexts();
+
+      // 全コンテキストが削除されたか？
+      CPPUNIT_ASSERT_EQUAL(0, rto->get_eclist());
+//      std::cout<<"OUT test_finalizeContexts()"<<std::endl;
+    }
+		
+    /*!
+     * @brief bindContext()メソッドのテスト
+     * 
+     * - ExecutionContextを正しく設定できるか？
+     */
+    void test_bindContext()
+    {
+//      std::cout<<"IN  test_bindContext()"<<std::endl;
+      RTObjectMock* rto	= new RTObjectMock(m_pORB, m_pPOA);
+      coil::Properties prop;
+      prop.setProperty("exec_cxt.periodic.type","PeriodicExecutionContext");
+      prop.setProperty("exec_cxt.periodic.rate","1000");
+      rto->setProperties(prop);
+
+      RTC::ExecutionContext_ptr ec;
+
+      // nilを設定した場合、-1を返すか？
+      ec = RTC::ExecutionContext::_nil();
+      int id = (int)(rto->bindContext(ec));
+      CPPUNIT_ASSERT_EQUAL(-1, id);
+
+      // m_ecMine 未登録の場合、m_ecMineの番号を返すか？
+      RTC::PeriodicExecutionContext* pec = new RTC::PeriodicExecutionContext();
+      ec = pec->getObjRef();
+      id = (int)(rto->bindContext(ec));
+
+      // [0]に登録されるか？
+      CPPUNIT_ASSERT_EQUAL(0, id);
+
+      // 正しく登録されているか？
+      CPPUNIT_ASSERT(rto->chk_ecMine(id,ec));
+
+      // m_ecMine 登録済みで nil の場合、m_ecMineの番号を返すか？
+      rto->ecMine[0] = RTC::ExecutionContextService::_nil();
+      rto->set_ecMine();
+      RTC::PeriodicExecutionContext* pec2 = new RTC::PeriodicExecutionContext();
+      ec = pec2->getObjRef();
+      id = (int)(rto->bindContext(ec));
+
+      // [0]に登録されるか？
+      CPPUNIT_ASSERT_EQUAL(0, id);
+
+      // 正しく登録されているか？
+      CPPUNIT_ASSERT(rto->chk_ecMine(id,ec));
+//      std::cout<<"OUT test_bindContext()"<<std::endl;
     }
 		
   };
