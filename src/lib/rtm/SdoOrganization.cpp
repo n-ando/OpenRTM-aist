@@ -67,7 +67,8 @@ namespace SDOPackage
 	   InvalidParameter, NotAvailable, InternalError)
   {
     RTC_TRACE(("get_organization_id() = %s", m_pId));
-    return CORBA::string_dup(m_pId);
+    CORBA::String_var oid(CORBA::string_dup(m_pId));
+    return oid._retn();
   }
   
   /*!
