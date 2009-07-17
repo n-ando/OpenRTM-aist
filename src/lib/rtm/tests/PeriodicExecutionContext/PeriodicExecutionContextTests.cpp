@@ -319,10 +319,44 @@ namespace PeriodicExecutionContext
     }
   };
 	
+  class RTObjectMock
+    : public RTC::RTObject_impl
+  {
+  public:
+    RTObjectMock(CORBA::ORB_ptr orb, PortableServer::POA_ptr poa)
+      : RTC::RTObject_impl(orb, poa)
+    {
+    }
+    virtual ~RTObjectMock(void){}
+  };
+
+  class PeriodicExecutionContextMock
+    : public RTC::PeriodicExecutionContext
+  {
+  public:
+    PeriodicExecutionContextMock() : RTC::PeriodicExecutionContext() {}
+    virtual ~PeriodicExecutionContextMock(void){}
+
+    // protected: 変数をここで更新
+    void set_m_ref()
+      {
+        RTC::PeriodicExecutionContext::m_ref = m_refmock;
+      }
+    void clear_m_comps()
+      {
+        if (!RTC::PeriodicExecutionContext::m_comps.empty())
+          {
+            RTC::PeriodicExecutionContext::m_comps.clear();
+          }
+      }
+    RTC::ExecutionContextService_var m_refmock;
+  };
+	
   class PeriodicExecutionContextTests
     : public CppUnit::TestFixture
   {
     CPPUNIT_TEST_SUITE(PeriodicExecutionContextTests);
+
     CPPUNIT_TEST(test_is_running);
     CPPUNIT_TEST(test_start_invoking_on_startup);
     CPPUNIT_TEST(test_start_with_running);
@@ -349,6 +383,8 @@ namespace PeriodicExecutionContext
     CPPUNIT_TEST(test_reset_component_invoking_on_reset);
     CPPUNIT_TEST(test_reset_component_not_in_Error_state);
     CPPUNIT_TEST(test_reset_component_not_in_Alive_state);
+    CPPUNIT_TEST(test_bindComponent);
+
     CPPUNIT_TEST_SUITE_END();
 	
   private:
@@ -1117,6 +1153,45 @@ namespace PeriodicExecutionContext
 			
       // この状態(Created)でreset_component()呼出しを行い、意図どおりのエラーコードで戻ることを確認する
       CPPUNIT_ASSERT_EQUAL(RTC::PRECONDITION_NOT_MET, ec->reset_component(rto->_this()));
+    }
+		
+    /*!
+     * @brief bindComponent()メソッドのテスト
+     * 
+     * - コンポーネントの参加者リストへ正しく登録されるか？
+     */
+    void test_bindComponent()
+    {
+      // RTObjectを生成する
+      RTObjectMock* rto = new RTObjectMock(m_pORB, m_pPOA);
+      coil::Properties prop;
+      prop.setProperty("exec_cxt.periodic.type","PeriodicExecutionContext");
+      prop.setProperty("exec_cxt.periodic.rate","1000");
+      rto->setProperties(prop);
+
+      // ExecutionContextを生成する
+      PeriodicExecutionContextMock* ec = new PeriodicExecutionContextMock();
+
+      // RTC::BAD_PARAMETER を返すか？
+      CPPUNIT_ASSERT_EQUAL(RTC::BAD_PARAMETER, ec->bindComponent(NULL));
+
+      // RTC::RTC_OK を返すか？
+      CPPUNIT_ASSERT_EQUAL(RTC::RTC_OK, ec->bindComponent(rto));
+
+      // 1000件登録後、(id > ECOTHER_OFFSET)判定のRTC::RTC_ERROR を返すか？
+      for (int i = 0; i < 1000; ++i)
+        {
+          ec->bindComponent(rto);
+        }
+      CPPUNIT_ASSERT_EQUAL(RTC::RTC_ERROR, ec->bindComponent(rto));
+
+      // m_ref=_nil()値の場合、(id < 0)判定のRTC::RTC_ERROR を返すか？
+      ec->m_refmock = RTC::ExecutionContextService::_nil();
+      ec->set_m_ref();
+      CPPUNIT_ASSERT_EQUAL(RTC::RTC_ERROR, ec->bindComponent(rto));
+
+      // 登録したコンポーネントの削除
+      ec->clear_m_comps();
     }
 
   };
