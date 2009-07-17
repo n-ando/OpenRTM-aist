@@ -145,6 +145,15 @@ namespace RTC
 	setUUID(connector_profile);
 	assert(!isExistingConnId(connector_profile.connector_id));
       }
+    else
+      {
+	if (isExistingConnId(connector_profile.connector_id))
+	  {
+            RTC_ERROR(("Connection already exists."));
+	    return RTC::PRECONDITION_NOT_MET;
+	  }
+      }
+
     try
       {
 	RTC::PortService_ptr p;
