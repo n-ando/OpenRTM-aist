@@ -37,7 +37,7 @@ namespace SDOPackage
     coil::UUID_Generator uugen;
     uugen.init();
     std::auto_ptr<coil::UUID> uuid(uugen.generateUUID(2,0x01));
-    m_pId = (const char*)uuid->to_string();
+    m_pId = uuid->to_string();
 #ifdef WIN32
     uuid->~UUID();
 #endif
@@ -66,9 +66,8 @@ namespace SDOPackage
     throw (CORBA::SystemException,
 	   InvalidParameter, NotAvailable, InternalError)
   {
-    RTC_TRACE(("get_organization_id() = %s", m_pId));
-    CORBA::String_var oid(CORBA::string_dup(m_pId));
-    return oid._retn();
+    RTC_TRACE(("get_organization_id() = %s", m_pId.c_str()));
+    return CORBA::string_dup(m_pId.c_str());
   }
   
   /*!

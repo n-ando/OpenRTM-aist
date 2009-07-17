@@ -272,7 +272,7 @@ namespace SDOPackage
     if (::CORBA::is_nil(member.config_)) { return; }
     
     // set organization to target RTC's conf
-    member.config_->remove_organization(m_pId);
+    member.config_->remove_organization(m_pId.c_str());
   }
 
   /*!
