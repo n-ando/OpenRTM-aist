@@ -1220,7 +1220,7 @@ namespace SDOPackage
       org_id(const char* id) : m_id(id) {};
       bool operator()(const Organization_ptr& o)
       {
-	CORBA::String_var id(o->get_organization_id());
+	CORBA::String_var id(CORBA::string_dup(o->get_organization_id()));
 	return m_id == (const char *)id;
       }
       const std::string m_id;
