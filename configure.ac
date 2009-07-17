@@ -1465,6 +1465,7 @@ AC_OUTPUT([Makefile
 	src/lib/rtm/tests/OutPort/Makefile
 	src/lib/rtm/tests/OutPortBase/Makefile
 	src/lib/rtm/tests/OutPortConnector/Makefile
+	src/lib/rtm/tests/OutPortPushConnector/Makefile
 	src/lib/rtm/tests/OutPortCorbaCdrConsumer/Makefile
 	src/lib/rtm/tests/OutPortCorbaCdrProvider/Makefile
 	src/lib/rtm/tests/OutPortCorbaConsumer/Makefile
@@ -1483,6 +1484,7 @@ AC_OUTPUT([Makefile
 	src/lib/rtm/tests/SdoOrganization/Makefile
 	src/lib/rtm/tests/SdoService/Makefile
 	src/lib/rtm/tests/StateMachine/Makefile
+	src/lib/rtm/tests/SystemLogger/Makefile
 	utils/Makefile
 	utils/rtm-config/Makefile
 	utils/rtc-template/Makefile
