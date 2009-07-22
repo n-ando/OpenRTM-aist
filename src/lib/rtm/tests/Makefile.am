@@ -21,6 +21,7 @@ SUBDIRS = \
 	InPortBase \
 	InPortConnector \
 	InPortPushConnector \
+	InPortPullConnector \
 	InPortCorbaCdrConsumer \
 	InPortCorbaCdrProvider \
 	InPortCorbaConsumer \
@@ -39,6 +40,7 @@ SUBDIRS = \
 	OutPortBase       \
 	OutPortConnector \
 	OutPortPushConnector \
+	OutPortPullConnector \
 	OutPortCorbaCdrConsumer \
 	OutPortCorbaCdrProvider \
 	OutPortCorbaConsumer \
