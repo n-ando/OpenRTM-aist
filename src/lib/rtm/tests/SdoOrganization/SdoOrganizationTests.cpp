@@ -55,15 +55,16 @@ namespace SdoOrganization
     : public CppUnit::TestFixture
   {
     CPPUNIT_TEST_SUITE(SdoOrganizationTests);
+
     CPPUNIT_TEST(test_get_organization_id);
     CPPUNIT_TEST(test_set_get_organization_property);
     CPPUNIT_TEST(test_set_get_organization_property_value);
     CPPUNIT_TEST(test_remove_organization_property);
     CPPUNIT_TEST(test_set_get_owner);
     CPPUNIT_TEST(test_set_get_members);
-    CPPUNIT_TEST(test_add_members);
-    CPPUNIT_TEST(test_remove_member);
+    CPPUNIT_TEST(test_add_remove_members);
     CPPUNIT_TEST(test_set_get_dependency);
+
     CPPUNIT_TEST_SUITE_END();
     
   private:
@@ -92,6 +93,7 @@ namespace SdoOrganization
     {
       ::RTC::RTObject_impl* rtobj;
       ::RTC::Manager& mgr(RTC::Manager::instance());
+      mgr.activateManager();
       rtobj = new ::RTC::RTObject_impl(&mgr);
       m_pOi = new Organization_impl(rtobj->getObjRef());
     }
@@ -101,18 +103,26 @@ namespace SdoOrganization
      */
     virtual void tearDown()
     {
-      delete m_pOi;
+      m_pOi->_remove_ref();
     }
-    /* tests for char* get_organization_id() */
+
+
+    /*!
+     * @brief get_organization_id()
+     */
     void test_get_organization_id() {
+//      std::cout << "test_get_organization_id IN" << std::endl;
       m_id = m_pOi->get_organization_id();
+      CPPUNIT_ASSERT(m_id != NULL);
+//      std::cout << "test_get_organization_id OUT" << std::endl;
     }
     
     
-    /* tests for OrganizationProperty* get_organization_property()
-     *           CORBA::Boolean set_organization_property(OrganizationProperty& org_property)
+    /*!
+     * @brief set_organization_property() and get_organization_property()
      */
     void test_set_get_organization_property() {
+//      std::cout << "test_set_get_organization_property IN" << std::endl;
       OrganizationProperty_var get_prop;
       OrganizationProperty set_prop;
       CORBA::Boolean ret;
@@ -135,7 +145,7 @@ namespace SdoOrganization
       try {
 	// プロパティの取得 length 0のプロパティが返される。
 	get_prop = m_pOi->get_organization_property();
-	cout << endl << "get property length: " << get_prop->properties.length() << endl;
+//	cout << endl << "get property length: " << get_prop->properties.length() << endl;
 	
 	
 	// 空のOrganizationPropertyをセットする。 OK.
@@ -156,7 +166,7 @@ namespace SdoOrganization
 	
 	// プロパティの取得 length 1のプロパティリストを持つOrganizationPropertyが返される。
 	get_prop = m_pOi->get_organization_property();
-	cout << "get property length: " << get_prop->properties.length() << endl;
+//	cout << "get property length: " << get_prop->properties.length() << endl;
 	
 	str = (get_prop->properties[0]).name;
 	(get_prop->properties[0]).value >>= rft;
@@ -177,7 +187,7 @@ namespace SdoOrganization
 	
 	// プロパティの取得
 	get_prop = m_pOi->get_organization_property();
-	cout << "get property length: " << get_prop->properties.length() << endl;
+//	cout << "get property length: " << get_prop->properties.length() << endl;
 	
 	
 	str = ((get_prop->properties[0]).name);
@@ -188,25 +198,25 @@ namespace SdoOrganization
 	//      nvList.length(5);
 	nvList.length(4);
 	
-	cout << "short" << endl;
+//	cout << "short" << endl;
 	nv.name = "short";
 	st = 1;
 	nv.value <<= st;
 	nvList[0] = nv;
 	
-	cout << "long" << endl;
+//	cout << "long" << endl;
 	nv.name = "long";
 	lg = 2222;
 	nv.value <<= lg;
 	nvList[1] = nv;
 	
-	cout << "float" << endl;
+//	cout << "float" << endl;
 	nv.name = "float";
 	ft = 33.3;
 	nv.value <<= ft;
 	nvList[2] = nv;
 	
-	cout << "double" << endl;
+//	cout << "double" << endl;
 	nv.name = "double";
 	db = 3.3;
 	nv.value <<= db;
@@ -226,15 +236,15 @@ namespace SdoOrganization
 	//      nv.value <<= CORBA::Any::from_string(p,7); // ここでセグメントエラー発生
 	//      nvList[4] = nv;
 	
-	cout << "set_prop.properties" << endl;
+//	cout << "set_prop.properties" << endl;
 	set_prop.properties = nvList;
 	
-	cout << "set in" << endl;
+//	cout << "set in" << endl;
 	ret = m_pOi->add_organization_property(set_prop);
-	cout << "set out" << endl;
+//	cout << "set out" << endl;
 	
 	get_prop = m_pOi->get_organization_property();
-	cout << "get property length: " << get_prop->properties.length() << endl;
+//	cout << "get property length: " << get_prop->properties.length() << endl;
 	
 	str = ((get_prop->properties[0]).name);
 	(get_prop->properties[0]).value >>= rst;
@@ -280,109 +290,112 @@ namespace SdoOrganization
       catch (...) {
 	cout << "othrer exception." << endl;
       }
+//      std::cout << "test_set_get_organization_property OUT" << std::endl;
     }
-    
-    
-    /*n tests for */
+
+    /*!
+     * @brief set_organization_property_value() and get_organization_property_value()
+     */
     void test_set_get_organization_property_value() {
-      //    OrganizationProperty set_prop;
-      //    CORBA::Boolean ret;
-      //    CORBA::Short st;
-      //    CORBA::Long lg;
-      //    CORBA::Float ft;
-      //    CORBA::Double db;
-      //    NVList nvList;
-      //    NameValue nv;
-      //    string str;
+//      std::cout << "test_set_get_organization_property_value IN" << std::endl;
+      OrganizationProperty_var get_prop;
+      OrganizationProperty set_prop;
+      CORBA::Boolean ret;
+      CORBA::Short st;
+//      CORBA::Long lg;
+      CORBA::Float ft;
+//      CORBA::Double db;
+      CORBA::Any any;
       
-      // ※ OrganizationPropertyのpropertiesが複数の要素を持つ場合,正しいvalueが返ってこない。
-      //    propertiesの要素が一つの場合は問題ない。
-      //    nvList.length(4);
-      //    nvList.length(1);
+      CORBA::Short rst;
+//      CORBA::Long rlg;
+      CORBA::Float rft;
+//      CORBA::Double rdb;
+      CORBA::Any* rany;
+
+      NVList nvList;
+      NameValue nv;
+      string str;
       
-      /*
-	cout << "short" << endl;
-	nv.name = "short";
-	st = 123;
-	nv.value <<= st;
-	nvList[0] = nv;
-	
-	cout << "long" << endl;
-	nv.name = "long";
-	lg = 12345;
-	nv.value <<= lg;
-	nvList[1] = nv;
-	//    nvList[0] = nv;
-	//    set_prop.properties = nvList;
-	//    ret = m_pOi->add_organization_property(set_prop);
-	
-	cout << "float" << endl;
-	nv.name = "float";
-	ft = 33.3;
-	nv.value <<= ft;
-	nvList[2] = nv;
-	
-	cout << "double" << endl;
-	nv.name = "double";
-	db = 3.3;
-	nv.value <<= db;
-	nvList[3] = nv;
-	
-	cout << "set_prop.properties" << endl;
-	set_prop.properties = nvList;
-	
-	cout << "set in" << endl;
-	ret = m_pOi->add_organization_property(set_prop);
-	cout << "set out" << endl;
-      */
-      
-      
-      
-      //    CORBA::Any* any;
-      //    CORBA::Double retval;
-      //    CORBA::Short retval;
-      //    any = m_pOi->get_organization_property_value("double");
-      //    (*any) >>= retval;
-      
-      //    cout << "retval: " << retval << endl;
-      
-      // Failure case
-      //    CPPUNIT_ASSERT(db == retval);
-      
-      
-      
-      // OrganizationPropertyをセットしていない状況でset_organization_property_value()を呼び、
-      // get_organization_property_value()を呼ぶとabortする。
-      //    CORBA::Any setval;
-      //    CORBA::Boolean result;
-      //    CORBA::Long relong;
-      //    lg = 12345;
-      //    setval <<= lg;
-      //    result = m_pOi->set_organization_property_value("long", setval);
-      //    if (!result)
-      //      cout << "error: set_organization_property_value." << endl;
-      
-      //    CORBA::Any* any;
-      //    cout << "get in" << endl;
-      //    any = m_pOi->get_organization_property_value("long");    // ここでabortする。
-      //    cout << "get out" << endl;
-      
-      //    (*any) >>= relong;
-      //    cout << "retval: " << relong << endl;
-      
-    }
-    
-    
-    /* tests for */
-    void test_remove_organization_property() {
-      
-      // remove_organization_property()が実装されていない。
       try {
-	CORBA::Boolean result = m_pOi->remove_organization_property("short");
-	if (!result) {
-	  cout << "Couldn't remove name: short" << endl;
-	}
+	// プロパティの取得 length 0のプロパティが返される。
+	get_prop = m_pOi->get_organization_property();
+//	cout << endl << "get property length: " << get_prop->properties.length() << endl;
 	
+	// 空のOrganizationPropertyをセットする。 OK.
+	ret = m_pOi->add_organization_property(set_prop);
+	CPPUNIT_ASSERT(ret);
+	
+	// プロパティの設定時、true が返されるか？
+	ft = 11.111;
+	any <<= ft;
+	ret = m_pOi->set_organization_property_value("hoge1", any);
+	CPPUNIT_ASSERT(ret);
+
+        // プロパティの設定値取得時、 設定値が返されるか？
+	rany = m_pOi->get_organization_property_value("hoge1");
+	(*rany) >>= rft;
+	CPPUNIT_ASSERT_EQUAL(ft, rft);
+
+
+        // プロパティの設定時、true が返されるか？
+	st = 123;
+	any <<= st;
+	ret = m_pOi->set_organization_property_value("hoge2", any);
+	CPPUNIT_ASSERT(ret);
+
+        // プロパティの設定値取得時、 設定値が返されるか？
+	rany = m_pOi->get_organization_property_value("hoge2");
+	(*rany) >>= rst;
+	CPPUNIT_ASSERT_EQUAL(st, rst);
+
+
+        // プロパティの更新時、true が返されるか？
+	st = 456;
+	any <<= st;
+	ret = m_pOi->set_organization_property_value("hoge2", any);
+	CPPUNIT_ASSERT(ret);
+
+        // プロパティの更新値取得時、 設定値が返されるか？
+	rany = m_pOi->get_organization_property_value("hoge2");
+	(*rany) >>= rst;
+	CPPUNIT_ASSERT_EQUAL(st, rst);
+
+        // プロパティの設定時、name 未設定による InvalidParameter が返されるか？
+	short sflg = -1;
+	try {
+	  ret = m_pOi->set_organization_property_value("", any);
+	  sflg = 0;
+	}
+	catch (InvalidParameter ip) {
+//	  cout << "InvalidParameter exception." << endl;
+	  sflg = 1;
+	}
+	CPPUNIT_ASSERT(sflg == 1);
+
+        // プロパティの設定値取得時、name 未設定による InvalidParameter が返されるか？
+	sflg = -1;
+	try {
+	  ret = m_pOi->get_organization_property_value("");
+	  sflg = 0;
+	}
+	catch (InvalidParameter ip) {
+//	  cout << "InvalidParameter exception." << endl;
+	  sflg = 1;
+	}
+	CPPUNIT_ASSERT(sflg == 1);
+
+        // プロパティの設定値取得時、name 未登録による InvalidParameter が返されるか？
+	sflg = -1;
+	try {
+	  ret = m_pOi->get_organization_property_value("hoge99");
+	  sflg = 0;
+	}
+	catch (InvalidParameter ip) {
+//	  cout << "InvalidParameter exception." << endl;
+	  sflg = 1;
+	}
+	CPPUNIT_ASSERT(sflg == 1);
       }
       catch (InvalidParameter ip) {
 	cout << "InvalidParameter exception." << endl;
@@ -396,52 +409,455 @@ namespace SdoOrganization
       catch (...) {
 	cout << "othrer exception." << endl;
       }
+
+//      std::cout << "test_set_get_organization_property_value OUT" << std::endl;
+    }
+
+    /*!
+     * @brief add_organization_property() and remove_organization_property()
+     */
+    void test_remove_organization_property() {
+//      std::cout << "test_remove_organization_property IN" << std::endl;
+      OrganizationProperty set_prop;
+      CORBA::Boolean ret;
+      CORBA::Float ft;
+      NVList nvList;
+      NameValue nv;
+      string str;
+
+      nv.name = "hoge";
+      str = "hoge"; 
+      ft = 11.111;
+      nv.value <<= ft;
+
+      nvList.length(1);
+      nvList[0] = nv;
+
+      set_prop.properties = nvList;
+      // プロパティのセット
+      ret = m_pOi->add_organization_property(set_prop);
+      CPPUNIT_ASSERT(ret);
+
+      // InvalidParameter exceptionを確認
+      short sflg = -1;
+      try {
+	ret = m_pOi->remove_organization_property("short");
+	if (!ret) {
+	  cout << "Couldn't remove name: short" << endl;
+	}
+	sflg = 0;
+      }
+      catch (InvalidParameter ip) {
+//	cout << "InvalidParameter exception." << endl;
+	sflg = 1;
+      }
+      catch (NotAvailable na) {
+	cout << "NotAvailable exception." << endl;
+	sflg = 2;
+      }
+      catch (InternalError ip) {
+	cout << "InternalError exception." << endl;
+	sflg = 3;
+      }
+      catch (...) {
+	cout << "othrer exception." << endl;
+	sflg = 4;
+      }
+      CPPUNIT_ASSERT(sflg == 1);
       
+      // 戻り値:true を確認
+      sflg = -1;
+      try {
+	ret = m_pOi->remove_organization_property("hoge");
+	if (!ret) {
+	  cout << "Couldn't remove name: hoge" << endl;
+	}
+        CPPUNIT_ASSERT(ret);
+        sflg = 0;
+      }
+      catch (InvalidParameter ip) {
+	cout << "InvalidParameter exception." << endl;
+	sflg = 1;
+      }
+      catch (NotAvailable na) {
+	cout << "NotAvailable exception." << endl;
+	sflg = 2;
+      }
+      catch (InternalError ip) {
+	cout << "InternalError exception." << endl;
+	sflg = 3;
+      }
+      catch (...) {
+	cout << "othrer exception." << endl;
+	sflg = 4;
+      }
+      CPPUNIT_ASSERT(sflg == 0);
+//      std::cout << "test_remove_organization_property OUT" << std::endl;
     }
-    
-    
-    /* tests for */
+
+
+    /*!
+     * @brief set_owner() and get_owner()
+     */
     void test_set_get_owner() {
+//      std::cout << "test_set_get_owner IN" << std::endl;
+      CORBA::Boolean ret;
+      SDOPackage::SDOSystemElement_var varOwner;
+      SDOPackage::SDOSystemElement_ptr ptrOwner;
+
+      try {
+	// オーナー取得が行えるか？
+	varOwner = m_pOi->get_owner();
+	CPPUNIT_ASSERT(!::CORBA::is_nil(varOwner));
+
+	// InvalidParameter exceptionを確認
+	short sflg = -1;
+	try {
+	  // オーナー設定時、InvalidParameter が返されるか？
+	  ptrOwner = SDOPackage::SDOSystemElement::_nil();
+	  ret = m_pOi->set_owner(ptrOwner);
+	  CPPUNIT_ASSERT(ret);
+	  sflg = 0;
+	}
+	catch (InvalidParameter ip) {
+//	  cout << "InvalidParameter exception." << endl;
+	  sflg = 1;
+	}
+	catch (NotAvailable na) {
+	  cout << "NotAvailable exception." << endl;
+	  sflg = 2;
+	}
+	catch (InternalError ip) {
+	  cout << "InternalError exception." << endl;
+	  sflg = 3;
+	}
+	catch (...) {
+	  cout << "othrer exception." << endl;
+	  sflg = 4;
+	}
+	CPPUNIT_ASSERT(sflg == 1);
+
+	// 戻り値:true を確認
+	sflg = -1;
+	try {
+	  // オーナー設定時、true が返されるか？
+	  ::RTC::RTObject_impl* rtobj2;
+	  ::RTC::Manager& mgr2(RTC::Manager::instance());
+	  rtobj2 = new ::RTC::RTObject_impl(&mgr2);
+	  ptrOwner = rtobj2->getObjRef();
+
+	  ret = m_pOi->set_owner(ptrOwner);
+	  CPPUNIT_ASSERT(ret);
+	  sflg = 0;
+	}
+	catch (InvalidParameter ip) {
+	  cout << "InvalidParameter exception." << endl;
+	  sflg = 1;
+	}
+	catch (NotAvailable na) {
+	  cout << "NotAvailable exception." << endl;
+	  sflg = 2;
+	}
+	catch (InternalError ip) {
+	  cout << "InternalError exception." << endl;
+	  sflg = 3;
+	}
+	catch (...) {
+	  cout << "othrer exception." << endl;
+	  sflg = 4;
+	}
+	CPPUNIT_ASSERT(sflg == 0);
+      }
+      catch (InvalidParameter ip) {
+	cout << "InvalidParameter exception." << endl;
+      }
+      catch (NotAvailable na) {
+	cout << "NotAvailable exception." << endl;
+      }
+      catch (InternalError ip) {
+	cout << "InternalError exception." << endl;
+      }
+      catch (...) {
+	cout << "othrer exception." << endl;
+      }
+//      std::cout << "test_set_get_owner OUT" << std::endl;
     }
-    
-    
-    /* tests for */
+
+
+    /*!
+     * @brief set_members() and get_members()
+     */
     void test_set_get_members() {
+//      std::cout << "test_set_get_members IN" << std::endl;
+      CORBA::Boolean ret;
+      SDOPackage::SDO_var sdo;
+      SDOPackage::SDOList slist;
+      SDOPackage::SDOList* rslist;
+
+      // SDO のセット時、InvalidParameter を取得できるか？
+      // set_members()に、NULL や 空のリストを渡してもlength()=0となるため
+      // InvalidParameterを返すケースはない。
+      // SDOList のセット時、空のリストを渡して取得できるか？
+      short sflg = -1;
+      try {
+	slist = NULL;
+	ret = m_pOi->set_members(slist);
+	CPPUNIT_ASSERT(ret);
+	sflg = 0;
+      }
+      catch (InvalidParameter ip) {
+        cout << "InvalidParameter exception." << endl;
+        sflg = 1;
+      }
+      catch (NotAvailable na) {
+        cout << "NotAvailable exception." << endl;
+        sflg = 2;
+      }
+      catch (InternalError ip) {
+        cout << "InternalError exception." << endl;
+        sflg = 3;
+      }
+      catch (...) {
+        cout << "othrer exception." << endl;
+        sflg = 4;
+      }
+      CPPUNIT_ASSERT(sflg == 0);
+
+      // 0件のSDOList取得が行えるか？
+      rslist = m_pOi->get_members();
+      CPPUNIT_ASSERT(rslist->length() == 0);
+
+
+      // SDOList のセット時、リストをセットして true を取得できるか？
+      sflg = -1;
+      try {
+	RTC::RTObject_impl* rtobj2;
+	RTC::Manager& mgr2(RTC::Manager::instance());
+	rtobj2 = new ::RTC::RTObject_impl(&mgr2);
+	sdo = SDOPackage::SDO::_duplicate(rtobj2->getObjRef());
+	CORBA_SeqUtil::push_back(slist, sdo);
+	ret = m_pOi->set_members(slist);
+	CPPUNIT_ASSERT(ret);
+	sflg = 0;
+      }
+      catch (InvalidParameter ip) {
+        cout << "InvalidParameter exception." << endl;
+        sflg = 1;
+      }
+      catch (NotAvailable na) {
+        cout << "NotAvailable exception." << endl;
+        sflg = 2;
+      }
+      catch (InternalError ip) {
+        cout << "InternalError exception." << endl;
+        sflg = 3;
+      }
+      catch (...) {
+        cout << "othrer exception." << endl;
+        sflg = 4;
+      }
+      CPPUNIT_ASSERT(sflg == 0);
+
+      // 1件のSDOList取得が行えるか？
+      rslist = m_pOi->get_members();
+      CPPUNIT_ASSERT(rslist->length() == 1);
+//      std::cout << "test_set_get_members OUT" << std::endl;
     }
-    
-    
-    /* tests for */
-    void test_add_members() {
+
+
+    /*!
+     * @brief add_members() and remove_member()
+     */
+    void test_add_remove_members() {
+//      std::cout << "test_add_remove_members IN" << std::endl;
+      CORBA::Boolean ret;
+      SDOPackage::SDO_var sdo;
+      SDOPackage::SDOList slist;
+      SDOPackage::SDOList* rslist;
+      Organization_impl* m_pOi2;
+      std::string str;
+      CORBA::Any any;
+
+      // SDO のセット時、InvalidParameter を取得できるか？
+      // add_members()に、NULL や 空のリストを渡してもlength()=0となるため
+      // InvalidParameterを返すケースはない。
+      // SDOList のセット時、空のリストを渡して true を取得できるか？
+
+      short sflg = -1;
+      try {
+	slist = NULL;
+	ret = m_pOi->add_members(slist);
+	CPPUNIT_ASSERT(ret);
+	sflg = 0;
+      }
+      catch (InvalidParameter ip) {
+        cout << "InvalidParameter exception." << endl;
+        sflg = 1;
+      }
+      catch (NotAvailable na) {
+        cout << "NotAvailable exception." << endl;
+        sflg = 2;
+      }
+      catch (InternalError ip) {
+        cout << "InternalError exception." << endl;
+        sflg = 3;
+      }
+      catch (...) {
+        cout << "othrer exception." << endl;
+        sflg = 4;
+      }
+      CPPUNIT_ASSERT(sflg == 0);
+
+      // SDOList のセット時、リストをセットして true を取得できるか？
+      sflg = -1;
+      try {
+	RTC::RTObject_impl* rtobj2;
+	RTC::Manager& mgr2(RTC::Manager::instance());
+	rtobj2 = new ::RTC::RTObject_impl(&mgr2);
+	m_pOi2 = new Organization_impl(rtobj2->getObjRef());
+	sdo = SDOPackage::SDO::_duplicate(rtobj2->getObjRef());
+	CORBA_SeqUtil::push_back(slist, sdo);
+	rtobj2->setInstanceName("hoge1");
+
+	// SDOメンバーの追加が成功するか？
+	ret = m_pOi2->add_members(slist);
+	CPPUNIT_ASSERT(ret);
+	sflg = 0;
+
+        str = m_pOi2->get_organization_id(); 
+	any <<= str.c_str();
+	ret = m_pOi2->set_organization_property_value("instance_name", any);
+      }
+      catch (InvalidParameter ip) {
+        cout << "InvalidParameter exception." << endl;
+        sflg = 1;
+      }
+      catch (NotAvailable na) {
+        cout << "NotAvailable exception." << endl;
+        sflg = 2;
+      }
+      catch (InternalError ip) {
+        cout << "InternalError exception." << endl;
+        sflg = 3;
+      }
+      catch (...) {
+        cout << "othrer exception." << endl;
+        sflg = 4;
+      }
+      CPPUNIT_ASSERT(sflg == 0);
+
+      // 1件のSDOList取得が行えるか？
+      rslist = m_pOi2->get_members();
+      CPPUNIT_ASSERT(rslist->length() == 1);
+
+      // SDOList削除時、引数未定義でInvalidParameterを取得できるか？
+      sflg = -1;
+      try {
+	ret = m_pOi2->remove_member("");
+	CPPUNIT_ASSERT(ret);
+	sflg = 0;
+      }
+      catch (InvalidParameter ip) {
+//        cout << "InvalidParameter exception." << endl;
+        sflg = 1;
+      }
+      catch (NotAvailable na) {
+        cout << "NotAvailable exception." << endl;
+        sflg = 2;
+      }
+      catch (InternalError ip) {
+        cout << "InternalError exception." << endl;
+        sflg = 3;
+      }
+      catch (...) {
+        cout << "othrer exception." << endl;
+        sflg = 4;
+      }
+      CPPUNIT_ASSERT(sflg == 1);
+
+      // SDOList削除時、引数不正でInvalidParameterを取得できるか？
+      sflg = -1;
+      try {
+	ret = m_pOi2->remove_member("dummy");
+	CPPUNIT_ASSERT(ret);
+	sflg = 0;
+      }
+      catch (InvalidParameter ip) {
+//        cout << "InvalidParameter exception." << endl;
+        sflg = 1;
+      }
+      catch (NotAvailable na) {
+        cout << "NotAvailable exception." << endl;
+        sflg = 2;
+      }
+      catch (InternalError ip) {
+        cout << "InternalError exception." << endl;
+        sflg = 3;
+      }
+      catch (...) {
+        cout << "othrer exception." << endl;
+        sflg = 4;
+      }
+      CPPUNIT_ASSERT(sflg == 1);
+
+      // SDOList削除時、正しい引数で削除できるか？
+      sflg = -1;
+      try {
+	ret = m_pOi2->remove_member("hoge1");
+	CPPUNIT_ASSERT(ret);
+	sflg = 0;
+      }
+      catch (InvalidParameter ip) {
+        cout << "InvalidParameter exception." << endl;
+        sflg = 1;
+      }
+      catch (NotAvailable na) {
+        cout << "NotAvailable exception." << endl;
+        sflg = 2;
+      }
+      catch (InternalError ip) {
+        cout << "InternalError exception." << endl;
+        sflg = 3;
+      }
+      catch (...) {
+        cout << "othrer exception." << endl;
+        sflg = 4;
+      }
+      CPPUNIT_ASSERT(sflg == 0);
+
+      // 0件のSDOList取得が行えるか？
+      rslist = m_pOi2->get_members();
+      CPPUNIT_ASSERT(rslist->length() == 0);
+//      std::cout << "test_add_remove_members OUT" << std::endl;
     }
-    
-    
-    /* tests for */
-    void test_remove_member() {
-    }
-    
-    
-    /* tests for */
+
+
+    /*!
+     * @brief set_dependency() and get_dependency()
+     */
     void test_set_get_dependency() {
+//      std::cout << "test_set_get_dependency IN" << std::endl;
       DependencyType depType;
       
       // Success case.
       // default return value is 0.
       depType = m_pOi->get_dependency();
-      cout << "depType: " << depType << endl;
+//      cout << "depType: " << depType << endl;
       CPPUNIT_ASSERT(depType == 0);
       
       m_pOi->set_dependency(NO_DEPENDENCY);
       // returned value is 2.
       depType = m_pOi->get_dependency();
       CPPUNIT_ASSERT(depType == 2);
-      cout << "depType: " << depType << endl;
+//      cout << "depType: " << depType << endl;
       
       // Failure case.
       //    m_pOi->set_dependency(0); // コンパイルエラー
       //    CPPUNIT_ASSERT(depType == 3);
       //    cout << "depType: " << depType << endl;
+//      std::cout << "test_set_get_dependency OUT" << std::endl;
     }
-    
+
   };
 }; // namespace SdoOrganization
 
