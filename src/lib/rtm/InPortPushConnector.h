@@ -79,17 +79,15 @@ namespace RTC
 
     /*!
      * @if jp
-     * @brief データの書き込み
+     * @brief データの読み出し
      *
-     * Publisherに対してデータを書き込み、これにより対応するInPortへ
-     * データが転送される。
+     * バッファからデータを読み出す
      *
      * @else
      *
-     * @brief Writing data
+     * @brief Reading data
      *
-     * This operation writes data into publisher and then the data
-     * will be transferred to correspondent InPort.
+     * Read data from the buffer.
      *
      * @endif
      */

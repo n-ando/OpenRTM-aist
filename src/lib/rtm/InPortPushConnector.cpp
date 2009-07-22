@@ -42,7 +42,7 @@ namespace RTC
       {
         m_buffer = createBuffer(profile);
       }
-    if (m_buffer == 0) throw std::bad_alloc();
+    if (m_buffer == 0 || m_provider==0) throw std::bad_alloc();
 
     m_provider->init(profile.properties);
     m_provider->setBuffer(m_buffer);
@@ -78,6 +78,10 @@ namespace RTC
      *   TIMEOUT
      *   PRECONDITION_NOT_MET
      */
+    if (m_buffer == 0)
+      {
+        return PRECONDITION_NOT_MET;
+      }
     BufferStatus::Enum ret = m_buffer->read(data, 0, 0);
     switch (ret)
       {
