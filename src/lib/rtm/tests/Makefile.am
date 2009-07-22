@@ -20,6 +20,7 @@ SUBDIRS = \
 	InPort            \
 	InPortBase \
 	InPortConnector \
+	InPortPushConnector \
 	InPortCorbaCdrConsumer \
 	InPortCorbaCdrProvider \
 	InPortCorbaConsumer \
