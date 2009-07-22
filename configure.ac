@@ -1448,6 +1448,7 @@ AC_OUTPUT([Makefile
 	src/lib/rtm/tests/InPortCorbaCdrConsumer/Makefile
 	src/lib/rtm/tests/InPortCorbaCdrProvider/Makefile
 	src/lib/rtm/tests/InPortPushConnector/Makefile
+	src/lib/rtm/tests/InPortPullConnector/Makefile
 	src/lib/rtm/tests/InPortConnector/Makefile
 	src/lib/rtm/tests/InPortCorbaConsumer/Makefile
 	src/lib/rtm/tests/InPortCorbaProvider/Makefile
@@ -1467,6 +1468,7 @@ AC_OUTPUT([Makefile
 	src/lib/rtm/tests/OutPortBase/Makefile
 	src/lib/rtm/tests/OutPortConnector/Makefile
 	src/lib/rtm/tests/OutPortPushConnector/Makefile
+	src/lib/rtm/tests/OutPortPullConnector/Makefile
 	src/lib/rtm/tests/OutPortCorbaCdrConsumer/Makefile
 	src/lib/rtm/tests/OutPortCorbaCdrProvider/Makefile
 	src/lib/rtm/tests/OutPortCorbaConsumer/Makefile
