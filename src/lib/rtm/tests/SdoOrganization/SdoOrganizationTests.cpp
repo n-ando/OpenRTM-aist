@@ -93,7 +93,6 @@ namespace SdoOrganization
     {
       ::RTC::RTObject_impl* rtobj;
       ::RTC::Manager& mgr(RTC::Manager::instance());
-      mgr.activateManager();
       rtobj = new ::RTC::RTObject_impl(&mgr);
       m_pOi = new Organization_impl(rtobj->getObjRef());
     }
@@ -678,6 +677,12 @@ namespace SdoOrganization
       std::string str;
       CORBA::Any any;
 
+      RTC::RTObject_impl* rtobj2;
+      RTC::Manager& mgr2(RTC::Manager::instance());
+      mgr2.activateManager();
+      rtobj2 = new ::RTC::RTObject_impl(&mgr2);
+      m_pOi2 = new Organization_impl(rtobj2->getObjRef());
+
       // SDO のセット時、InvalidParameter を取得できるか？
       // add_members()に、NULL や 空のリストを渡してもlength()=0となるため
       // InvalidParameterを返すケースはない。
@@ -711,10 +716,6 @@ namespace SdoOrganization
       // SDOList のセット時、リストをセットして true を取得できるか？
       sflg = -1;
       try {
-	RTC::RTObject_impl* rtobj2;
-	RTC::Manager& mgr2(RTC::Manager::instance());
-	rtobj2 = new ::RTC::RTObject_impl(&mgr2);
-	m_pOi2 = new Organization_impl(rtobj2->getObjRef());
 	sdo = SDOPackage::SDO::_duplicate(rtobj2->getObjRef());
 	CORBA_SeqUtil::push_back(slist, sdo);
 	rtobj2->setInstanceName("hoge1");
@@ -828,6 +829,13 @@ namespace SdoOrganization
       // 0件のSDOList取得が行えるか？
       rslist = m_pOi2->get_members();
       CPPUNIT_ASSERT(rslist->length() == 0);
+
+      if ( !CORBA::is_nil( mgr2.getPOA()) ) {
+        if ( !CORBA::is_nil(mgr2.getPOAManager()) ) {
+          mgr2.getPOAManager()->deactivate(false, true);
+        }
+      }
+      m_pOi2->_remove_ref();
 //      std::cout << "test_add_remove_members OUT" << std::endl;
     }
 
