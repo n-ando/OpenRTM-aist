@@ -60,6 +60,9 @@
 
 #include <rtm/CORBA_SeqUtil.h>
 #include <rtm/SdoConfiguration.h>
+#include <rtm/RTObject.h>
+#include <rtm/Manager.h>
+#include <rtm/SdoOrganization.h>
 
 /*!
  * @class SdoConfigurationTests class
@@ -69,9 +72,6 @@ namespace SdoConfiguration
 {
   using namespace SDOPackage;
   using namespace std;
-	
-  int g_argc;
-  vector<string> g_argv;
 	
   struct ServiceProfileFinder
   {
@@ -89,23 +89,27 @@ namespace SdoConfiguration
     : public CppUnit::TestFixture
   {
     CPPUNIT_TEST_SUITE(SdoConfigurationTests);
+
     CPPUNIT_TEST(test_set_device_profile_and_getDeviceProfile);
     CPPUNIT_TEST(test_set_service_profile_and_getServiceProfile);
     CPPUNIT_TEST(test_getServiceProfiles);
     CPPUNIT_TEST(test_remove_service_profile);
     CPPUNIT_TEST(test_add_organization_and_getOrganizations);
-    //		CPPUNIT_TEST(test_remove_organization); // 未テストにつきコメントアウトしている
-    //		CPPUNIT_TEST(test_get_configuration_parameters); // 未テストにつきコメントアウトしている
-    //		CPPUNIT_TEST(test_get_configuration_parameter_values); // 未テストにつきコメントアウトしている
-    //		CPPUNIT_TEST(test_get_configuration_parameter_value); // 未テストにつきコメントアウトしている
+    CPPUNIT_TEST(test_remove_organization);
     CPPUNIT_TEST(test_add_configuration_set_and_get_configuration_set);
     CPPUNIT_TEST(test_remove_configuration_set);
+    CPPUNIT_TEST(test_set_configuration_set_values);
     CPPUNIT_TEST(test_activate_configuration_set_and_get_active_configuration_set);
+	//CPPUNIT_TEST(test_get_configuration_parameters);       //未実装のため未テスト
+	//CPPUNIT_TEST(test_get_configuration_parameter_values); //未実装のため未テスト
+	//CPPUNIT_TEST(test_get_configuration_parameter_value);  //未実装のため未テスト
+	//CPPUNIT_TEST(test_set_configuration_parameter);        //未実装のため未テスト
+
     CPPUNIT_TEST_SUITE_END();
 	
   private:
-    CORBA::ORB_ptr          m_orb;
-    PortableServer::POA_ptr m_poa;
+    CORBA::ORB_ptr m_pORB;
+    PortableServer::POA_ptr m_pPOA;
 		
   public:
     /*!
@@ -113,15 +117,12 @@ namespace SdoConfiguration
      */
     SdoConfigurationTests()
     {
-      char* argv[g_argc];
-      for (int i = 0; i < g_argc; i++)
-	{
-	  argv[i] = (char *) g_argv[i].c_str();
-	}
-			
-      m_orb = CORBA::ORB_init(g_argc, argv);
-      m_poa = PortableServer::POA::_narrow(
-					   m_orb->resolve_initial_references("RootPOA"));
+      int argc(0);
+      char** argv(NULL);
+      m_pORB = CORBA::ORB_init(argc, argv);
+      m_pPOA = PortableServer::POA::_narrow(
+		    m_pORB->resolve_initial_references("RootPOA"));
+      m_pPOA->the_POAManager()->activate();
     }
     
     /*!
@@ -153,9 +154,10 @@ namespace SdoConfiguration
      */
     void test_set_device_profile_and_getDeviceProfile()
     {
+//      std::cout << "test_set_device_profile_and_getDeviceProfile() IN" << std::endl;
       coil::Properties cfgAdminProp;
       RTC::ConfigAdmin cfgAdmin(cfgAdminProp);
-      SDOPackage::Configuration_impl sdoCfg(cfgAdmin);
+      SDOPackage::Configuration_impl* sdoCfg = new Configuration_impl(cfgAdmin);
 			
       // DeviceProfileを準備する
       SDOPackage::DeviceProfile devProf;
@@ -174,10 +176,10 @@ namespace SdoConfiguration
       }
 			
       // set_device_profile()を呼出して、準備したDeviceProfileを設定する
-      CPPUNIT_ASSERT_EQUAL(CORBA::Boolean(true), sdoCfg.set_device_profile(devProf));
+      CPPUNIT_ASSERT_EQUAL(CORBA::Boolean(true), sdoCfg->set_device_profile(devProf));
 			
       // getDeviceProfile()で設定されているDeviceProfileを取り出し、設定したものと一致することを確認する
-      const SDOPackage::DeviceProfile devProfRet = sdoCfg.getDeviceProfile();
+      const SDOPackage::DeviceProfile devProfRet = sdoCfg->getDeviceProfile();
       CPPUNIT_ASSERT_EQUAL(std::string("DEVICE_TYPE"),
 			   std::string(devProfRet.device_type));
       CPPUNIT_ASSERT_EQUAL(std::string("MANUFACTURER"),
@@ -198,6 +200,8 @@ namespace SdoConfiguration
 	CORBA::Float value; devProfRet.properties[1].value >>= value;
 	CPPUNIT_ASSERT_EQUAL(CORBA::Float(2.71828), value);
       }
+      sdoCfg->_remove_ref();
+//      std::cout << "test_set_device_profile_and_getDeviceProfile() OUT" << std::endl;
     }
 		
     /*!
@@ -207,9 +211,10 @@ namespace SdoConfiguration
      */
     void test_set_service_profile_and_getServiceProfile()
     {
+//      std::cout << "test_set_service_profile_and_getServiceProfile() IN" << std::endl;
       coil::Properties cfgAdminProp;
       RTC::ConfigAdmin cfgAdmin(cfgAdminProp);
-      SDOPackage::Configuration_impl sdoCfg(cfgAdmin);
+      SDOPackage::Configuration_impl* sdoCfg = new Configuration_impl(cfgAdmin);
 			
       // ServiceProfileを準備する
       SDOPackage::ServiceProfile svcProf;
@@ -226,10 +231,10 @@ namespace SdoConfiguration
       }
 			
       // ServiceProfileを設定する
-      CPPUNIT_ASSERT_EQUAL(CORBA::Boolean(true), sdoCfg.add_service_profile(svcProf));
+      CPPUNIT_ASSERT_EQUAL(CORBA::Boolean(true), sdoCfg->add_service_profile(svcProf));
 			
       // getServiceProfile()でServiceProfileを取得し、設定したものと一致しているか確認する
-      const SDOPackage::ServiceProfile svcProfRet = sdoCfg.getServiceProfile("ID");
+      const SDOPackage::ServiceProfile svcProfRet = sdoCfg->getServiceProfile("ID");
       CPPUNIT_ASSERT_EQUAL(std::string("ID"), std::string(svcProfRet.id));
       CPPUNIT_ASSERT_EQUAL(std::string("INTERFACE_TYPE"),
 			   std::string(svcProfRet.interface_type));
@@ -245,6 +250,8 @@ namespace SdoConfiguration
 	CORBA::Float value; svcProfRet.properties[1].value >>= value;
 	CPPUNIT_ASSERT_EQUAL(CORBA::Float(2.71828), value);
       }
+      sdoCfg->_remove_ref();
+//      std::cout << "test_set_service_profile_and_getServiceProfile() OUT" << std::endl;
     }
 		
     /*!
@@ -254,9 +261,10 @@ namespace SdoConfiguration
      */
     void test_getServiceProfiles()
     {
+//      std::cout << "test_getServiceProfiles() IN" << std::endl;
       coil::Properties cfgAdminProp;
       RTC::ConfigAdmin cfgAdmin(cfgAdminProp);
-      SDOPackage::Configuration_impl sdoCfg(cfgAdmin);
+      SDOPackage::Configuration_impl* sdoCfg = new Configuration_impl(cfgAdmin);
 			
       // ServiceProfileを準備する
       SDOPackage::ServiceProfile svcProf0;
@@ -286,11 +294,11 @@ namespace SdoConfiguration
       }
 			
       // ServiceProfileを設定する
-      CPPUNIT_ASSERT_EQUAL(CORBA::Boolean(true), sdoCfg.add_service_profile(svcProf0));
-      CPPUNIT_ASSERT_EQUAL(CORBA::Boolean(true), sdoCfg.add_service_profile(svcProf1));
+      CPPUNIT_ASSERT_EQUAL(CORBA::Boolean(true), sdoCfg->add_service_profile(svcProf0));
+      CPPUNIT_ASSERT_EQUAL(CORBA::Boolean(true), sdoCfg->add_service_profile(svcProf1));
 			
       // getServiceProfiles()で設定されているServiceProfile群を取得する
-      const SDOPackage::ServiceProfileList svcProfList = sdoCfg.getServiceProfiles();
+      const SDOPackage::ServiceProfileList svcProfList = sdoCfg->getServiceProfiles();
       CPPUNIT_ASSERT_EQUAL(CORBA::ULong(2), svcProfList.length());
 			
       // 設定したServiceProfileと一致しているか？
@@ -335,6 +343,8 @@ namespace SdoConfiguration
 	  CPPUNIT_ASSERT_EQUAL(CORBA::Float(1.7320508), value);
 	}
       }
+      sdoCfg->_remove_ref();
+//      std::cout << "test_getServiceProfiles() OUT" << std::endl;
     }
     
     /*!
@@ -344,10 +354,10 @@ namespace SdoConfiguration
      */
     void test_remove_service_profile()
     {
-
+//      std::cout << "test_remove_service_profile() IN" << std::endl;
       coil::Properties cfgAdminProp;
       RTC::ConfigAdmin cfgAdmin(cfgAdminProp);
-      SDOPackage::Configuration_impl sdoCfg(cfgAdmin);
+      SDOPackage::Configuration_impl* sdoCfg = new Configuration_impl(cfgAdmin);
 			
       // ServiceProfileを準備する
       SDOPackage::ServiceProfile svcProf0;
@@ -377,14 +387,14 @@ namespace SdoConfiguration
       }
 			
       // ServiceProfileを設定する
-      CPPUNIT_ASSERT_EQUAL(CORBA::Boolean(true), sdoCfg.add_service_profile(svcProf0));
-      CPPUNIT_ASSERT_EQUAL(CORBA::Boolean(true), sdoCfg.add_service_profile(svcProf1));
+      CPPUNIT_ASSERT_EQUAL(CORBA::Boolean(true), sdoCfg->add_service_profile(svcProf0));
+      CPPUNIT_ASSERT_EQUAL(CORBA::Boolean(true), sdoCfg->add_service_profile(svcProf1));
 			
       // 設定したServiceProfileのうち、片方を登録解除する
-      CPPUNIT_ASSERT_EQUAL(CORBA::Boolean(true), sdoCfg.remove_service_profile("ID 0"));
+      CPPUNIT_ASSERT_EQUAL(CORBA::Boolean(true), sdoCfg->remove_service_profile("ID 0"));
 			
       // getServiceProfiles()で全ServiceProfileを取得し、登録解除したものが含まれないことを確認する
-      const SDOPackage::ServiceProfileList svcProfList = sdoCfg.getServiceProfiles();
+      const SDOPackage::ServiceProfileList svcProfList = sdoCfg->getServiceProfiles();
       CPPUNIT_ASSERT_EQUAL(CORBA::ULong(1), svcProfList.length());
       CPPUNIT_ASSERT_EQUAL(CORBA::Long(-1),
 			   CORBA_SeqUtil::find(svcProfList, ServiceProfileFinder("ID 0")));
@@ -392,6 +402,9 @@ namespace SdoConfiguration
       // 登録解除していないものは、依然として含まれているか？
       CPPUNIT_ASSERT_EQUAL(CORBA::Long(0),
 			   CORBA_SeqUtil::find(svcProfList, ServiceProfileFinder("ID 1")));
+
+      sdoCfg->_remove_ref();
+//      std::cout << "test_remove_service_profile() OUT" << std::endl;
     }
     
     /* 
@@ -402,27 +415,63 @@ namespace SdoConfiguration
      */
     void test_add_organization_and_getOrganizations()
     {
+//      std::cout << "test_add_organization_and_getOrganizations() IN" << std::endl;
       coil::Properties cfgAdminProp;
       RTC::ConfigAdmin cfgAdmin(cfgAdminProp);
-      SDOPackage::Configuration_impl sdoCfg(cfgAdmin);
+      SDOPackage::Configuration_impl* sdoCfg = new Configuration_impl(cfgAdmin);
 			
       // Organizationを2つ登録する
       SDOPackage::Organization_var org1;
       CPPUNIT_ASSERT_EQUAL(CORBA::Boolean(true),
-			   sdoCfg.add_organization(org1._retn()));
+			   sdoCfg->add_organization(org1._retn()));
 
       SDOPackage::Organization_var org2;
       CPPUNIT_ASSERT_EQUAL(CORBA::Boolean(true),
-			   sdoCfg.add_organization(org2._retn()));
+			   sdoCfg->add_organization(org2._retn()));
       
       // 取得されるOrganizationの数は、意図どおり2つか？
-      SDOPackage::OrganizationList orgList = sdoCfg.getOrganizations();
+      SDOPackage::OrganizationList orgList = sdoCfg->getOrganizations();
       CPPUNIT_ASSERT_EQUAL(CORBA::ULong(2), orgList.length());
+
+      sdoCfg->_remove_ref();
+//      std::cout << "test_add_organization_and_getOrganizations() OUT" << std::endl;
     }
     
+    /*
+     * @brief remove_organization()のテスト
+     * - add_organization()で登録し、remove_organization()で正しく削除できるか？
+     */
     void test_remove_organization()
     {
-      // 未テスト
+//      std::cout << "test_remove_organization() IN" << std::endl;
+      coil::Properties cfgAdminProp;
+      RTC::ConfigAdmin cfgAdmin(cfgAdminProp);
+      SDOPackage::Configuration_impl* sdoCfg = new Configuration_impl(cfgAdmin);
+      RTC::RTObject_impl* rtobj;
+      SDOPackage::Organization_impl* m_pOi;
+      RTC::Manager& mgr(RTC::Manager::instance());
+      rtobj = new ::RTC::RTObject_impl(&mgr);
+      m_pOi = new Organization_impl(rtobj->getObjRef());
+			
+      // Organizationを登録する
+      CPPUNIT_ASSERT_EQUAL(CORBA::Boolean(true),
+			   sdoCfg->add_organization(m_pOi->getObjRef()));
+
+      // organization_idを取得する
+      std::string id(m_pOi->get_organization_id());
+
+      // 登録したOrganizationを削除する
+      CPPUNIT_ASSERT_EQUAL(CORBA::Boolean(true),
+			   sdoCfg->remove_organization(id.c_str()));
+
+      // 取得されるOrganizationの数は、意図どおり0件か？
+      SDOPackage::OrganizationList orgList = sdoCfg->getOrganizations();
+      CPPUNIT_ASSERT_EQUAL(CORBA::ULong(0), orgList.length());
+
+      m_pOi->_remove_ref();
+      rtobj->_remove_ref();
+      sdoCfg->_remove_ref();
+//      std::cout << "test_remove_organization() OUT" << std::endl;
     }
 				
     /*
@@ -432,6 +481,8 @@ namespace SdoConfiguration
     {
       // テスト対象であるSDOPackage::Confirutaion_impl::get_configuration_parameters()が
       // 未実装であるため、本テストも未実装である。
+//      std::cout << "test_get_configuration_parameters() IN" << std::endl;
+//      std::cout << "test_get_configuration_parameters() OUT" << std::endl;
     }
 		
     /*!
@@ -441,6 +492,8 @@ namespace SdoConfiguration
     {
       // テスト対象であるSDOPackage::Confirutaion_impl::get_configuration_parameter_values()が
       // 未実装であるため、本テストも未実装である。
+//      std::cout << "test_get_configuration_parameter_values() IN" << std::endl;
+//      std::cout << "test_get_configuration_parameter_values() OUT" << std::endl;
     }
 		
     /*!
@@ -450,12 +503,19 @@ namespace SdoConfiguration
     {
       // テスト対象であるSDOPackage::Confirutaion_impl::get_configuration_parameter_value()が
       // 未実装であるため、本テストも未実装である。
+//      std::cout << "test_get_configuration_parameter_value() IN" << std::endl;
+//      std::cout << "test_get_configuration_parameter_value() OUT" << std::endl;
     }
 		
+    /*!
+     * @brief set_configuration_parameter()のテスト
+     */
     void test_set_configuration_parameter()
     {
       // テスト対象であるSDOPackage::Confirutaion_impl::set_configuration_parameter()が
       // 未実装であるため、本テストも未実装である。
+//      std::cout << "test_set_configuration_parameter() IN" << std::endl;
+//      std::cout << "test_set_configuration_parameter() OUT" << std::endl;
     }
 		
     /*!
@@ -466,9 +526,10 @@ namespace SdoConfiguration
      */
     void test_add_configuration_set_and_get_configuration_set()
     {
+//      std::cout << "test_add_configuration_set_and_get_configuration_set() IN" << std::endl;
       coil::Properties cfgAdminProp;
       RTC::ConfigAdmin cfgAdmin(cfgAdminProp);
-      SDOPackage::Configuration_impl sdoCfg(cfgAdmin);
+      SDOPackage::Configuration_impl* sdoCfg = new Configuration_impl(cfgAdmin);
 			
       // ConfigurationSetを準備する
       SDOPackage::ConfigurationSet cfgSet0;
@@ -490,11 +551,11 @@ namespace SdoConfiguration
       cfgSet1.configuration_data[1].value <<= "1.7320508";
 			
       // 準備したConfigurationSetを登録する
-      CPPUNIT_ASSERT_EQUAL(CORBA::Boolean(true), sdoCfg.add_configuration_set(cfgSet0));
-      CPPUNIT_ASSERT_EQUAL(CORBA::Boolean(true), sdoCfg.add_configuration_set(cfgSet1));
+      CPPUNIT_ASSERT_EQUAL(CORBA::Boolean(true), sdoCfg->add_configuration_set(cfgSet0));
+      CPPUNIT_ASSERT_EQUAL(CORBA::Boolean(true), sdoCfg->add_configuration_set(cfgSet1));
 			
       // 登録したConfigurationSetを正しく取得できるか？
-      SDOPackage::ConfigurationSet* cfgSetRet0 = sdoCfg.get_configuration_set("ID 0");
+      SDOPackage::ConfigurationSet* cfgSetRet0 = sdoCfg->get_configuration_set("ID 0");
       CPPUNIT_ASSERT_EQUAL(std::string("ID 0"),
 			   std::string(cfgSetRet0->id));
 //Deleted this test, because description was not used.
@@ -515,7 +576,7 @@ namespace SdoConfiguration
 	CPPUNIT_ASSERT_EQUAL(std::string("2.71828"), std::string(value));
       }
 
-      SDOPackage::ConfigurationSet* cfgSetRet1 = sdoCfg.get_configuration_set("ID 1");
+      SDOPackage::ConfigurationSet* cfgSetRet1 = sdoCfg->get_configuration_set("ID 1");
       CPPUNIT_ASSERT_EQUAL(std::string("ID 1"),
 			   std::string(cfgSetRet1->id));
 //Deleted this test, because description was not used.
@@ -535,6 +596,9 @@ namespace SdoConfiguration
 	const char* value; cfgSetRet1->configuration_data[1].value >>= value;
 	CPPUNIT_ASSERT_EQUAL(std::string("1.7320508"), std::string(value));
       }
+
+      sdoCfg->_remove_ref();
+//      std::cout << "test_add_configuration_set_and_get_configuration_set() OUT" << std::endl;
     }
 		
     /*!
@@ -545,9 +609,10 @@ namespace SdoConfiguration
      */
     void test_remove_configuration_set()
     {
+//      std::cout << "test_remove_configuration_set() IN" << std::endl;
       coil::Properties cfgAdminProp;
       RTC::ConfigAdmin cfgAdmin(cfgAdminProp);
-      SDOPackage::Configuration_impl sdoCfg(cfgAdmin);
+      SDOPackage::Configuration_impl* sdoCfg = new Configuration_impl(cfgAdmin);
 			
       // ConfigurationSetを準備する
       SDOPackage::ConfigurationSet cfgSet0;
@@ -569,34 +634,47 @@ namespace SdoConfiguration
       cfgSet1.configuration_data[1].value <<= "1.7320508";
 			
       // 準備したConfigurationSetを登録する
-      CPPUNIT_ASSERT_EQUAL(CORBA::Boolean(true), sdoCfg.add_configuration_set(cfgSet0));
-      CPPUNIT_ASSERT_EQUAL(CORBA::Boolean(true), sdoCfg.add_configuration_set(cfgSet1));
+      CPPUNIT_ASSERT_EQUAL(CORBA::Boolean(true), sdoCfg->add_configuration_set(cfgSet0));
+      CPPUNIT_ASSERT_EQUAL(CORBA::Boolean(true), sdoCfg->add_configuration_set(cfgSet1));
 			
       // 登録したうち、片方のConfigurationSetを登録解除する
-      CPPUNIT_ASSERT_EQUAL(CORBA::Boolean(true), sdoCfg.remove_configuration_set("ID 0"));
+      CPPUNIT_ASSERT_EQUAL(CORBA::Boolean(true), sdoCfg->remove_configuration_set("ID 0"));
 			
       // 登録解除したConfigurationSetを指定して、get_configuration_set()呼出を試みて、
       // 意図どおりに例外がスローされるか？
       try
 	{
-	  sdoCfg.get_configuration_set("ID 0");
+	  sdoCfg->get_configuration_set("ID 0");
 	  CPPUNIT_FAIL("ID 0 was not removed.");
 	}
       catch (SDOPackage::InvalidParameter expected) {}
       catch (...) {}
 			
+      // 空のidを指定して、get_configuration_set()呼出を試みて、
+      // 意図どおりに例外がスローされるか？
+      try
+	{
+	  sdoCfg->get_configuration_set("");
+	  CPPUNIT_FAIL("ID Not set.");
+	}
+      catch (SDOPackage::InvalidParameter expected) {}
+      catch (...) {}
+			
       // 登録解除していないConfigurationSetは、依然として取得できるか？
-      SDOPackage::ConfigurationSet* cfgSetRet = sdoCfg.get_configuration_set("ID 1");
+      SDOPackage::ConfigurationSet* cfgSetRet = sdoCfg->get_configuration_set("ID 1");
       CPPUNIT_ASSERT_EQUAL(std::string("ID 1"), std::string(cfgSetRet->id));
 			
       // 存在しないIDを指定して登録解除を試みた場合に、意図どおりに例外がスローされるか？
       try
 	{
-	  sdoCfg.remove_configuration_set("inexist ID");
+	  sdoCfg->remove_configuration_set("inexist ID");
 	  CPPUNIT_FAIL("Exception not thrown.");
 	}
       catch (SDOPackage::InvalidParameter expected) {}
       catch (...) {}
+
+      sdoCfg->_remove_ref();
+//      std::cout << "test_remove_configuration_set() OUT" << std::endl;
     }
 		
     /*!
@@ -607,9 +685,10 @@ namespace SdoConfiguration
      */
     void test_set_configuration_set_values()
     {
+//      std::cout << "test_set_configuration_set_values() IN" << std::endl;
       coil::Properties cfgAdminProp;
       RTC::ConfigAdmin cfgAdmin(cfgAdminProp);
-      SDOPackage::Configuration_impl sdoCfg(cfgAdmin);
+      SDOPackage::Configuration_impl* sdoCfg = new Configuration_impl(cfgAdmin);
 			
       // ConfigurationSetを準備する
       SDOPackage::ConfigurationSet cfgSet0;
@@ -634,55 +713,64 @@ namespace SdoConfiguration
       cfgSet1_Modified.id = "ID 1";
       cfgSet1_Modified.description = "DESCRIPTION 1 M";
       cfgSet1_Modified.configuration_data.length(2);
-      cfgSet1_Modified.configuration_data[0].name = "NAME 1-0 M";
+      cfgSet1_Modified.configuration_data[0].name = "NAME 1-0";
       cfgSet1_Modified.configuration_data[0].value <<= "2.23620679";
-      cfgSet1_Modified.configuration_data[1].name = "NAME 1-1 M";
+      cfgSet1_Modified.configuration_data[1].name = "NAME 1-1";
       cfgSet1_Modified.configuration_data[1].value <<= "2.44948974";
 
       // 準備したConfigurationSetを登録する
-      CPPUNIT_ASSERT_EQUAL(CORBA::Boolean(true), sdoCfg.add_configuration_set(cfgSet0));
-      CPPUNIT_ASSERT_EQUAL(CORBA::Boolean(true), sdoCfg.add_configuration_set(cfgSet1));
+      CPPUNIT_ASSERT_EQUAL(CORBA::Boolean(true), sdoCfg->add_configuration_set(cfgSet0));
+      CPPUNIT_ASSERT_EQUAL(CORBA::Boolean(true), sdoCfg->add_configuration_set(cfgSet1));
 			
       // 登録したConfigurationSetのうち片方を、set_configuration_set_values()で更新する
       CPPUNIT_ASSERT_EQUAL(CORBA::Boolean(true),
-			   sdoCfg.set_configuration_set_values(cfgSet1_Modified));
+			   sdoCfg->set_configuration_set_values(cfgSet1_Modified));
 			
       // 更新したConfigurationSetを、正しく取得できるか？
-      SDOPackage::ConfigurationSet* cfgSetRet = sdoCfg.get_configuration_set("ID 1");
+      SDOPackage::ConfigurationSet* cfgSetRet = sdoCfg->get_configuration_set("ID 1");
       CPPUNIT_ASSERT_EQUAL(std::string("ID 1"), std::string(cfgSetRet->id));
-      CPPUNIT_ASSERT_EQUAL(std::string("DESCRIPTION 1 M"),
-			   std::string(cfgSetRet->description));
+
+//Deleted this test, because description was not used.
+//      CPPUNIT_ASSERT_EQUAL(std::string("DESCRIPTION 1 M"),
+//			   std::string(cfgSetRet->description));
       CPPUNIT_ASSERT_EQUAL(CORBA::ULong(2),
 			   cfgSetRet->configuration_data.length());
-      CPPUNIT_ASSERT_EQUAL(std::string("NAME 1-0 M"),
-			   std::string(cfgSetRet->configuration_data[0].name));
+
       {
 	const char* value; cfgSetRet->configuration_data[0].value >>= value;
 	CPPUNIT_ASSERT_EQUAL(std::string("2.23620679"), std::string(value));
       }
-      CPPUNIT_ASSERT_EQUAL(std::string("NAME 1-1 M"),
-			   std::string(cfgSetRet->configuration_data[1].name));
       {
 	const char* value; cfgSetRet->configuration_data[1].value >>= value;
 	CPPUNIT_ASSERT_EQUAL(std::string("2.44948974"), std::string(value));
       }
 			
-      // 存在しないIDを指定してset_configuration_set_values()を呼出し、
+      // 空のIDを指定してset_configuration_set_values()を呼出し、
       // 意図どおり例外がスローされるか？
       try
 	{
-	  sdoCfg.get_configuration_set("inexist ID");
+	  cfgSet1_Modified.id = "";
+	  sdoCfg->set_configuration_set_values(cfgSet1_Modified);
 	  CPPUNIT_FAIL("Exception not thrown.");
 	}
-      catch (SDOPackage::InvalidParameter expected) {}
+      catch (SDOPackage::InvalidParameter expected) {
+	}
+
+      sdoCfg->_remove_ref();
+//      std::cout << "test_set_configuration_set_values() OUT" << std::endl;
     }
 		
+    /*!
+     * @brief activate_configuration_set()メソッド、get_active_configuration_set()メソッド、
+     * get_configuration_sets()メソッドのテスト
+     * 
+     */
     void test_activate_configuration_set_and_get_active_configuration_set()
     {
-
+//      std::cout << "test_activate_configuration_set_and_get_active_configuration_set() IN" << std::endl;
       coil::Properties cfgAdminProp;
       RTC::ConfigAdmin cfgAdmin(cfgAdminProp);
-      SDOPackage::Configuration_impl sdoCfg(cfgAdmin);
+      SDOPackage::Configuration_impl* sdoCfg = new Configuration_impl(cfgAdmin);
 	
       // ConfigurationSetを準備する
       SDOPackage::ConfigurationSet cfgSet0;
@@ -704,15 +792,51 @@ namespace SdoConfiguration
       cfgSet1.configuration_data[1].value <<= "1.7320508";
 
       // 準備したConfigurationSetを登録する
-      CPPUNIT_ASSERT_EQUAL(CORBA::Boolean(true), sdoCfg.add_configuration_set(cfgSet0));
-      CPPUNIT_ASSERT_EQUAL(CORBA::Boolean(true), sdoCfg.add_configuration_set(cfgSet1));
+      CPPUNIT_ASSERT_EQUAL(CORBA::Boolean(true), sdoCfg->add_configuration_set(cfgSet0));
+      CPPUNIT_ASSERT_EQUAL(CORBA::Boolean(true), sdoCfg->add_configuration_set(cfgSet1));
 			
+      // ConfigurationSet リストを取得する
+      ConfigurationSetList_var config_sets(sdoCfg->get_configuration_sets());
+
+      // 取得した件数と内容が一致しているか？
+      CPPUNIT_ASSERT(config_sets->length() == 2);
+      CPPUNIT_ASSERT_EQUAL(std::string("ID 0"),
+			   std::string(config_sets[0].id));
+      CPPUNIT_ASSERT_EQUAL(std::string("NAME 0-0"),
+			   std::string(config_sets[0].configuration_data[0].name));
+      {
+	const char* value; config_sets[0].configuration_data[0].value >>= value;
+	CPPUNIT_ASSERT_EQUAL(std::string("3.14159"), std::string(value));
+      }
+      CPPUNIT_ASSERT_EQUAL(std::string("NAME 0-1"),
+			   std::string(config_sets[0].configuration_data[1].name));
+      {
+	const char* value; config_sets[0].configuration_data[1].value >>= value;
+	CPPUNIT_ASSERT_EQUAL(std::string("2.71828"), std::string(value));
+      }
+
+      CPPUNIT_ASSERT_EQUAL(std::string("ID 1"),
+			   std::string(config_sets[1].id));
+      CPPUNIT_ASSERT_EQUAL(std::string("NAME 1-0"),
+			   std::string(config_sets[1].configuration_data[0].name));
+      {
+	const char* value; config_sets[1].configuration_data[0].value >>= value;
+	CPPUNIT_ASSERT_EQUAL(std::string("1.41421356"), std::string(value));
+      }
+      CPPUNIT_ASSERT_EQUAL(std::string("NAME 1-1"),
+			   std::string(config_sets[1].configuration_data[1].name));
+      {
+	const char* value; config_sets[1].configuration_data[1].value >>= value;
+	CPPUNIT_ASSERT_EQUAL(std::string("1.7320508"), std::string(value));
+      }
+
       // "ID 0"のほうをアクティブ化する
-      CPPUNIT_ASSERT_EQUAL(CORBA::Boolean(true), sdoCfg.activate_configuration_set("ID 0"));
+      CPPUNIT_ASSERT_EQUAL(CORBA::Boolean(true), sdoCfg->activate_configuration_set("ID 0"));
 			
       // アクティブなConfigurationSetを取得し、それがアクティブ化したものと一致するか？
-      SDOPackage::ConfigurationSet* cfgSetRet0 = sdoCfg.get_configuration_set("ID 0");
+      SDOPackage::ConfigurationSet* cfgSetRet0 = sdoCfg->get_active_configuration_set();
       CPPUNIT_ASSERT_EQUAL(std::string("ID 0"), std::string(cfgSetRet0->id));
+
 //Deleted this test, because description was not used.
 //      CPPUNIT_ASSERT_EQUAL(std::string("DESCRIPTION 0"),
 //			   std::string(cfgSetRet0->description));
@@ -731,12 +855,13 @@ namespace SdoConfiguration
 	CPPUNIT_ASSERT_EQUAL(std::string("2.71828"), std::string(value));
       }
 
-      // "ID 0"のほうをアクティブ化する
-      CPPUNIT_ASSERT_EQUAL(CORBA::Boolean(true), sdoCfg.activate_configuration_set("ID 0"));
+      // "ID 1"のほうをアクティブ化する
+      CPPUNIT_ASSERT_EQUAL(CORBA::Boolean(true), sdoCfg->activate_configuration_set("ID 1"));
 			
       // アクティブなConfigurationSetを取得し、それがアクティブ化したものと一致するか？
-      SDOPackage::ConfigurationSet* cfgSetRet1 = sdoCfg.get_configuration_set("ID 1");
+      SDOPackage::ConfigurationSet* cfgSetRet1 = sdoCfg->get_active_configuration_set();
       CPPUNIT_ASSERT_EQUAL(std::string("ID 1"), std::string(cfgSetRet1->id));
+
 //Deleted this test, because description was not used.
 //      CPPUNIT_ASSERT_EQUAL(std::string("DESCRIPTION 1"),
 //			   std::string(cfgSetRet1->description));
@@ -758,11 +883,13 @@ namespace SdoConfiguration
       // 存在しないIDを指定してactivate_configuration_set()を呼出し、意図どおりの例外がスローされるか？
       try
 	{
-	  sdoCfg.activate_configuration_set("inexist ID");
+	  sdoCfg->activate_configuration_set("inexist ID");
 	  CPPUNIT_FAIL("Exception not thrown.");
 	}
       catch (SDOPackage::InvalidParameter expected) {}
 
+      sdoCfg->_remove_ref();
+//      std::cout << "test_activate_configuration_set_and_get_active_configuration_set() OUT" << std::endl;
     }
 
   };
