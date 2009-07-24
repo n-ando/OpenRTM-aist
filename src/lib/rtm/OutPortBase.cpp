@@ -630,7 +630,7 @@ namespace RTC
     
     if (provider != 0)
       {
-        RTC_ERROR(("provider created"));
+        RTC_DEBUG(("provider created"));
         provider->init(prop.getNode("provider"));
 
         if (!provider->publishInterface(cprof.properties))
