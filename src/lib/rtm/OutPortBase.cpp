@@ -630,7 +630,7 @@ namespace RTC
     
     if (provider != 0)
       {
-        RTC_DEBUG(("provider created"));
+        RTC_TRACE(("provider created"));
         provider->init(prop.getNode("provider"));
 
         if (!provider->publishInterface(cprof.properties))
@@ -674,7 +674,7 @@ namespace RTC
     
     if (consumer != 0)
       {
-        RTC_DEBUG(("consumer created"));
+        RTC_TRACE(("consumer created"));
         consumer->init(prop.getNode("consumer"));
 
         if (!consumer->subscribeInterface(cprof.properties))
