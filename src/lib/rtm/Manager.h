@@ -1375,7 +1375,7 @@ namespace RTC
      */
     Logger rtclog;
 
-    std::vector<std::ofstream*> m_logfiles;
+    std::vector<std::filebuf*> m_logfiles;
     
     //============================================================
     // コンポーネントマネージャ

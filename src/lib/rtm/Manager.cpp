@@ -851,6 +851,7 @@ std::vector<coil::Properties> Manager::getLoadableModules()
             continue;
           }
         m_logStreamBuf.addStream(of, true);
+        m_logfiles.push_back(of);
       }
 	
 
@@ -894,6 +895,10 @@ std::vector<coil::Properties> Manager::getLoadableModules()
         m_logfiles[i]->close();
         //        m_logStreamBuf.removeStream(m_logfiles[i]->rdbuf());
         delete m_logfiles[i];
+      }
+    if (!m_logfiles.empty())
+      {
+        m_logfiles.clear();
       }
   }
   
