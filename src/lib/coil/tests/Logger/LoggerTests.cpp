@@ -278,11 +278,14 @@ private:
    : public CppUnit::TestFixture
   {
     CPPUNIT_TEST_SUITE(LoggerTests);
+
     CPPUNIT_TEST(test_log_streambuf);
     CPPUNIT_TEST(test_log_streambuf2);
     CPPUNIT_TEST(test_log_stream);
     CPPUNIT_TEST(test_log_stream2);
     CPPUNIT_TEST(test_log_stream_properties);
+    CPPUNIT_TEST(test_log_stream3);
+
     CPPUNIT_TEST_SUITE_END();
   
   private:
@@ -420,6 +423,11 @@ private:
       log.level(ERROR_LEVEL) << coil::sprintf("This is error message.") << std::endl;
       log.level(PARANOID_LEVEL) << coil::sprintf("This is paranoid message.") << std::endl;
 
+      std::ofstream f0("test_log_stream.log");
+      f0 << s0.str() << std::endl;
+      f0.close();
+
+
     }
 
     void test_log_stream2()
@@ -475,6 +483,48 @@ private:
         }
     }
 
+    void test_log_stream3()
+    {
+      //
+      //
+      //
+      coil::LogStreamBuffer logbuf;
+
+      LogOut log(&logbuf);
+      std::filebuf* of = new std::filebuf();
+      of->open("test_log_stream3-1.log", std::ios::out | std::ios::app);
+      logbuf.addStream(of);
+
+      std::filebuf f;
+      f.open("test_log_stream3-2.log", std::ios::out | std::ios::app);
+      logbuf.addStream(&f);
+
+
+      log.setLevel(INFO_LEVEL);
+      log.level(SILENT_LEVEL) << coil::sprintf("This is silent message.") << std::endl;
+      log.level(INFO_LEVEL) << coil::sprintf("This is info message.") << std::endl;
+      log.level(ERROR_LEVEL) << coil::sprintf("This is error message.") << std::endl;
+      log.level(PARANOID_LEVEL) << coil::sprintf("This is paranoid message.") << std::endl;
+
+      CPPUNIT_ASSERT_EQUAL(true, logbuf.removeStream(&f));
+      std::vector< ::coil::LogStream::streambuf_type* > vt;
+      vt =  logbuf.getBuffers();
+      CPPUNIT_ASSERT_EQUAL(1, (int)vt.size());
+      for (int i(0), len(vt.size()); i < len; ++i)
+        {
+          try
+          {
+            CPPUNIT_ASSERT(of==vt[i]);
+            delete vt[i];
+           }
+           catch(...)
+           {
+               CPPUNIT_FAIL( "Exception thrown." );
+           }
+          
+        }
+
+    }
     void test_log_stream_properties()
     {
       std::map<std::string, std::string> defaults;
