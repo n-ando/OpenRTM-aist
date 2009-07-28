@@ -12,7 +12,7 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: SystemLogger.h 845 2008-09-25 11:10:40Z n-ando $
+ * $Id: SystemLogger.cpp 845 2008-09-25 11:10:40Z n-ando $
  *
  */
 
@@ -136,7 +136,7 @@ namespace RTC
     if      (lv == "SILENT")
       return RTL_SILENT;
     else if (lv == "FATAL")
-      return RTL_ERROR;
+      return RTL_FATAL;
     else if (lv == "ERROR")
       return RTL_ERROR;
     else if (lv == "WARN")
