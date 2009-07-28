@@ -41,73 +41,56 @@
  */
 namespace Tests
 {
-  /*!
-   * 
-   * 
-   *
-   */
-  class Logger
+  // protected: 関数のテスト用
+  class LoggerMock : public RTC::Logger
   {
   public:
-    void log(const std::string& msg)
+    // コンストラクタ
+    LoggerMock(RTC::LogStreamBuf* streambuf)
+      : RTC::Logger(streambuf) {}
+    virtual ~LoggerMock(void) {}
+
+
+    void setDateFormat(const char* format)
     {
-      m_log.push_back(msg);
+//      std::cout << "LoggerMock::setDateFormat() IN" << std::endl;
+      RTC::Logger::setDateFormat(format);
+      mock_m_dateFormat = std::string(format);
+//      std::cout << "LoggerMock::setDateFormat() OUT" << std::endl;
     }
-		
-    int countLog(const std::string& msg)
+
+    void setName(const char* name)
     {
-      int count = 0;
-      for (int i = 0; i < (int) m_log.size(); ++i)
-	{
-	  if (m_log[i] == msg) ++count;
-	}
-      return count;
+//      std::cout << "LoggerMock::setName() IN" << std::endl;
+      RTC::Logger::setName(name);
+      mock_m_name = name;
+//      std::cout << "LoggerMock::setName() OUT" << std::endl;
     }
-		
-  private:
-    std::vector<std::string> m_log;
+
+    void header(int level)
+    {
+//      std::cout << "LoggerMock::header() IN" << std::endl;
+      RTC::Logger::header(level);
+//      std::cout << "LoggerMock::header() OUT" << std::endl;
+    }
+
+    std::string getDate(void)
+    {
+//      std::cout << "LoggerMock::getDate() IN" << std::endl;
+      return RTC::Logger::getDate();
+    }
+
+    int strToLevel(const char* level)
+    {
+//      std::cout << "LoggerMock::strToLevel() IN" << std::endl;
+      return RTC::Logger::strToLevel(level);
+    }
+
+    std::string mock_m_name;
+    std::string mock_m_dateFormat;
   };
-  /*!
-   * 
-   * 
-   *
-   */
-  class LogOutCreator
-    : public coil::Task
-  {
-  public:
-    LogOutCreator(const char* name, coil::LogStreamBuffer *streambuf)
-      : m_name(name),
-        rtclog(streambuf)
-    {
-        rtclog.setName(m_name.c_str());
-        rtclog.setDateFormat("%b %d %H:%M:%S");
-        rtclog.setLevel("PARANOID");
-        rtclog.enableLock();
-    }
-    ~LogOutCreator()
-    {
-        rtclog.disableLock();
-    }
-    virtual int svc()
-    {
-      coil::TimeMeasure tm;
-      for (int i(0); i < 100; ++i)
-        {
-          double r(rand() / (double)RAND_MAX * 100.0);
-          tm.tick();
-          std::string str = coil::sprintf("svc() %03d %6.2f",  i, r);
-          RTC_TRACE((str.c_str()));
-          tm.tack();
-          coil::usleep((int)r);
-        }
-      return 0;
-    }
-  private:
-  protected:
-    std::string m_name;
-    RTC::Logger rtclog;
-  };
+
+
   /*!
    * 
    * 
@@ -117,14 +100,29 @@ namespace Tests
     : public CppUnit::TestFixture
   {
     CPPUNIT_TEST_SUITE(SystemLoggerTests);
-    CPPUNIT_TEST(test_case0);
+
+    CPPUNIT_TEST(test_setLevel);
+    CPPUNIT_TEST(test_setDateFormat);
+    CPPUNIT_TEST(test_setName);
+    CPPUNIT_TEST(test_header);
+    CPPUNIT_TEST(test_getDate);
+    CPPUNIT_TEST(test_strToLevel);
+    CPPUNIT_TEST(test_logfile_PARANOID);
+    CPPUNIT_TEST(test_logfile_VERBOSE);
+    CPPUNIT_TEST(test_logfile_TRACE);
+    CPPUNIT_TEST(test_logfile_DEBUG);
+    CPPUNIT_TEST(test_logfile_INFO);
+    CPPUNIT_TEST(test_logfile_WARNING);
+    CPPUNIT_TEST(test_logfile_ERROR);
+    CPPUNIT_TEST(test_logfile_FATAL);
+    CPPUNIT_TEST(test_logfile_SILENT);
+
     CPPUNIT_TEST_SUITE_END();
-	
-	
+
   private:
 
   protected:
-	
+
   public:
     /*!
      * @brief Constructor
@@ -132,14 +130,14 @@ namespace Tests
     SystemLoggerTests()
     {
     }
-		    
+
     /*!
      * @brief Destructor
      */
     virtual ~SystemLoggerTests()
     {
     }
-		  
+
     /*!
      * @brief Test initialization
      */
@@ -147,6 +145,7 @@ namespace Tests
     {
     }
     
+
     /*!
      * @brief Test finalization
      */
@@ -155,27 +154,1015 @@ namespace Tests
     }
 
     /*!
-     *
+     * @brief setLevel()メソッドのテスト
      * 
-     *
+     * - ログレベルの文字列を正しく設定できるか？
      */
-    void test_case0(void)
+    void test_setLevel(void)
     {
+//      std::cout << "test_setLevel() IN" << std::endl;
+      coil::LogStreamBuffer logger;
+      std::stringstream s0;
 
-        coil::LogStreamBuffer logger;
-        std::stringstream s0;
+      logger.addStream(s0.rdbuf());
+      LoggerMock rtclog(&logger);
 
-        logger.addStream(s0.rdbuf());
-        RTC::Logger rtclog(&logger);
-        rtclog.setLevel("PARANOID");
-        rtclog.setName("LoggerTests");
-//        rtclog.setDateFormat("%b %d %H:%M:%S");
-        rtclog.setDateFormat("");
-        rtclog.enableLock();
+      // ログレベル設定で、引数に規定値・規定外を設定して正しく動作するか？
+      CPPUNIT_ASSERT(rtclog.setLevel("SILENT"));  //規定値
+      CPPUNIT_ASSERT(rtclog.setLevel("FATAL"));
+      CPPUNIT_ASSERT(rtclog.setLevel("ERROR"));
+      CPPUNIT_ASSERT(rtclog.setLevel("WARN"));
+      CPPUNIT_ASSERT(rtclog.setLevel("INFO"));
+      CPPUNIT_ASSERT(rtclog.setLevel("DEBUG"));
+      CPPUNIT_ASSERT(rtclog.setLevel("TRACE"));
+      CPPUNIT_ASSERT(rtclog.setLevel("VERBOSE"));
+      CPPUNIT_ASSERT(rtclog.setLevel("PARANOID"));
+      CPPUNIT_ASSERT(rtclog.setLevel("other"));  //規定外
+//      std::cout << "test_setLevel() OUT" << std::endl;
+    }
 
-        RTC_LOG(::RTC::Logger::RTL_DEBUG,("tests"));
-        CPPUNIT_ASSERT_EQUAL(std::string(" DEBUG: LoggerTests: tests\n"),
-                             s0.str());
+    /*!
+     * @brief setDateFormat()メソッドのテスト
+     * 
+     * - ヘッダに付加する日時フォーマットを正しく指定できるか？
+     */
+    void test_setDateFormat(void)
+    {
+//      std::cout << "test_setDateFormat() IN" << std::endl;
+      coil::LogStreamBuffer logger;
+      std::stringstream s0;
+      std::string rstr;
+
+      logger.addStream(s0.rdbuf());
+      LoggerMock rtclog(&logger);
+
+      // ヘッダに付加する日時フォーマットを正しく指定できるか？
+      rtclog.setDateFormat("");
+      rstr = rtclog.getDate();
+      CPPUNIT_ASSERT(rstr.size() == 0);
+      CPPUNIT_ASSERT_EQUAL(std::string(""), rtclog.mock_m_dateFormat);
+
+      rtclog.setDateFormat("%b %d %H:%M:%S");
+      rstr = rtclog.getDate();
+      CPPUNIT_ASSERT(rstr.size() > 0);
+      CPPUNIT_ASSERT_EQUAL(std::string("%b %d %H:%M:%S"), rtclog.mock_m_dateFormat);
+//      std::cout << "test_setDateFormat() OUT" << std::endl;
+    }
+
+    /*!
+     * @brief setName()メソッドのテスト
+     * 
+     * - ヘッダの日時の後に付加する文字列を正しく設定できるか？
+     */
+    void test_setName(void)
+    {
+//      std::cout << "test_setName() IN" << std::endl;
+      coil::LogStreamBuffer logger;
+      std::stringstream s0;
+
+      logger.addStream(s0.rdbuf());
+      LoggerMock rtclog(&logger);
+      rtclog.setDateFormat("");
+      // ヘッダの日時の後に付加する文字列を正しく設定できるか？
+      rtclog.setName("");  		// 付加文字列：なし
+      rtclog.header(rtclog.RTL_DEBUG);
+      CPPUNIT_ASSERT_EQUAL(std::string(""), rtclog.mock_m_name);
+      CPPUNIT_ASSERT_EQUAL(std::string(" DEBUG: : "), s0.str());
+
+      s0.str("");
+      rtclog.setName("TestName");  	// 付加文字列：あり
+      rtclog.header(rtclog.RTL_DEBUG);
+      CPPUNIT_ASSERT_EQUAL(std::string("TestName"), rtclog.mock_m_name);
+      CPPUNIT_ASSERT_EQUAL(std::string(" DEBUG: TestName: "), s0.str());
+//      std::cout << "test_setName() OUT" << std::endl;
+    }
+
+    /*!
+     * @brief header()メソッドのテスト
+     * 
+     * - メッセージのプリフィックス追加を正しく設定できるか？
+     */
+    void test_header(void)
+    {
+//      std::cout << "test_header() IN" << std::endl;
+      coil::LogStreamBuffer logger;
+      std::stringstream s0;
+
+      logger.addStream(s0.rdbuf());
+      LoggerMock rtclog(&logger);
+
+      // メッセージのプリフィックス追加を正しく設定できるか？
+      rtclog.setDateFormat("");
+      rtclog.setName("");
+      rtclog.header(rtclog.RTL_SILENT);
+      CPPUNIT_ASSERT_EQUAL(std::string(" SILENT: : "), s0.str());
+      s0.str("");
+      rtclog.header(rtclog.RTL_FATAL);
+      CPPUNIT_ASSERT_EQUAL(std::string(" FATAL: : "), s0.str());
+      s0.str("");
+      rtclog.header(rtclog.RTL_ERROR);
+      CPPUNIT_ASSERT_EQUAL(std::string(" ERROR: : "), s0.str());
+      s0.str("");
+      rtclog.header(rtclog.RTL_WARN);
+      CPPUNIT_ASSERT_EQUAL(std::string(" WARNING: : "), s0.str());
+      s0.str("");
+      rtclog.header(rtclog.RTL_INFO);
+      CPPUNIT_ASSERT_EQUAL(std::string(" INFO: : "), s0.str());
+      s0.str("");
+      rtclog.header(rtclog.RTL_DEBUG);
+      CPPUNIT_ASSERT_EQUAL(std::string(" DEBUG: : "), s0.str());
+      s0.str("");
+      rtclog.header(rtclog.RTL_TRACE);
+      CPPUNIT_ASSERT_EQUAL(std::string(" TRACE: : "), s0.str());
+      s0.str("");
+      rtclog.header(rtclog.RTL_VERBOSE);
+      CPPUNIT_ASSERT_EQUAL(std::string(" VERBOSE: : "), s0.str());
+      s0.str("");
+      rtclog.header(rtclog.RTL_PARANOID);
+      CPPUNIT_ASSERT_EQUAL(std::string(" PARANOID: : "), s0.str());
+//      std::cout << "test_header() OUT" << std::endl;
+    }
+
+    /*!
+     * @brief getDate()メソッドのテスト
+     * 
+     * - フォーマットされた現在日時文字列を正しく取得できるか？
+     */
+    void test_getDate(void)
+    {
+//      std::cout << "test_getDate() IN" << std::endl;
+      coil::LogStreamBuffer logger;
+      std::stringstream s0;
+      std::string rstr;
+
+      logger.addStream(s0.rdbuf());
+      LoggerMock rtclog(&logger);
+
+      // フォーマットされた現在日時文字列を正しく取得できるか？
+      rtclog.setDateFormat("");
+      rstr = rtclog.getDate();
+      CPPUNIT_ASSERT(rstr.size() == 0);
+
+      rtclog.setDateFormat("%b %d %H:%M:%S");
+      rstr = rtclog.getDate();
+      CPPUNIT_ASSERT(rstr.size() > 0);
+//      std::cout << "test_getDate() OUT" << std::endl;
+    }
+
+    /*!
+     * @brief strToLevel()メソッドのテスト
+     * 
+     * - ログレベルを正しく設定できるか？
+     */
+    void test_strToLevel(void)
+    {
+//      std::cout << "test_strToLevel() IN" << std::endl;
+      coil::LogStreamBuffer logger;
+      std::stringstream s0;
+
+      logger.addStream(s0.rdbuf());
+      LoggerMock rtclog(&logger);
+
+      // ログレベル設定で、引数に規定値・規定外を設定して正しく動作するか？
+      CPPUNIT_ASSERT(rtclog.strToLevel("SILENT") == rtclog.RTL_SILENT);  //規定値
+      CPPUNIT_ASSERT(rtclog.strToLevel("FATAL") == rtclog.RTL_FATAL);
+      CPPUNIT_ASSERT(rtclog.strToLevel("ERROR") == rtclog.RTL_ERROR);
+      CPPUNIT_ASSERT(rtclog.strToLevel("WARN") == rtclog.RTL_WARN);
+      CPPUNIT_ASSERT(rtclog.strToLevel("INFO") == rtclog.RTL_INFO);
+      CPPUNIT_ASSERT(rtclog.strToLevel("DEBUG") == rtclog.RTL_DEBUG);
+      CPPUNIT_ASSERT(rtclog.strToLevel("TRACE") == rtclog.RTL_TRACE);
+      CPPUNIT_ASSERT(rtclog.strToLevel("VERBOSE") == rtclog.RTL_VERBOSE);
+      CPPUNIT_ASSERT(rtclog.strToLevel("PARANOID") == rtclog.RTL_PARANOID);
+      CPPUNIT_ASSERT(rtclog.strToLevel("other") == rtclog.RTL_SILENT);  //規定外
+//      std::cout << "test_strToLevel() OUT" << std::endl;
+    }
+
+    /*!
+     * @brief logfile出力のテスト
+     * 
+     * - ログレベルを PARANOID にした場合のファイル出力が正しく行われるか？
+     */
+    void test_logfile_PARANOID(void)
+    {
+//      std::cout << "test_logfile_PARANOID() IN" << std::endl;
+      coil::LogStreamBuffer logger;
+      std::string logfile("rtcPARANOID.log");
+
+      std::filebuf of;
+      of.open(logfile.c_str(), std::ios::out);
+      if (!of.is_open())
+        {
+          std::cerr << "Error: cannot open logfile: "
+                    << logfile << std::endl;
+        }
+      logger.addStream(&of, true);
+
+      RTC::Logger rtclog(&logger);
+      rtclog.setName("Test");
+      rtclog.setDateFormat("%b %d %H:%M:%S");
+      rtclog.setLevel("PARANOID");
+
+      // 汎用ログ出力マクロ、各種ログ出力マクロで正しくファイル出力されるか？
+      RTC_LOG(    ::RTC::Logger::RTL_PARANOID,("RTL_PARANOID tests %s","fmt"));
+      RTC_LOG_STR(::RTC::Logger::RTL_PARANOID, "RTL_PARANOID tests str");
+      RTC_PARANOID(   ("Macro RTL_PARANOID tests %s","fmt"));
+      RTC_PARANOID_STR("Macro RTL_PARANOID tests str");
+
+      RTC_LOG(    ::RTC::Logger::RTL_VERBOSE,("RTL_VERBOSE tests %s","fmt"));
+      RTC_LOG_STR(::RTC::Logger::RTL_VERBOSE, "RTL_VERBOSE tests str");
+      RTC_VERBOSE(   ("Macro RTL_VERBOSE tests %s","fmt"));
+      RTC_VERBOSE_STR("Macro RTL_VERBOSE tests str");
+
+      RTC_LOG(    ::RTC::Logger::RTL_TRACE,("RTL_TRACE tests %s","fmt"));
+      RTC_LOG_STR(::RTC::Logger::RTL_TRACE, "RTL_TRACE tests str");
+      RTC_TRACE(   ("Macro RTL_TRACE tests %s","fmt"));
+      RTC_TRACE_STR("Macro RTL_TRACE tests str");
+
+      RTC_LOG(    ::RTC::Logger::RTL_DEBUG,("RTL_DEBUG tests %s","fmt"));
+      RTC_LOG_STR(::RTC::Logger::RTL_DEBUG, "RTL_DEBUG tests str");
+      RTC_DEBUG(   ("Macro RTL_DEBUG tests %s","fmt"));
+      RTC_DEBUG_STR("Macro RTL_DEBUG tests str");
+
+      RTC_LOG(    ::RTC::Logger::RTL_INFO,("RTL_INFO tests %s","fmt"));
+      RTC_LOG_STR(::RTC::Logger::RTL_INFO, "RTL_INFO tests str");
+      RTC_INFO(   ("Macro RTL_INFO tests %s","fmt"));
+      RTC_INFO_STR("Macro RTL_INFO tests str");
+
+      RTC_LOG(    ::RTC::Logger::RTL_WARN,("RTL_WARN tests %s","fmt"));
+      RTC_LOG_STR(::RTC::Logger::RTL_WARN, "RTL_WARN tests str");
+      RTC_WARN(   ("Macro RTL_WARN tests %s","fmt"));
+      RTC_WARN_STR("Macro RTL_WARN tests str");
+
+      RTC_LOG(    ::RTC::Logger::RTL_ERROR,("RTL_ERROR tests %s","fmt"));
+      RTC_LOG_STR(::RTC::Logger::RTL_ERROR, "RTL_ERROR tests str");
+      RTC_ERROR(   ("Macro RTL_ERROR tests %s","fmt"));
+      RTC_ERROR_STR("Macro RTL_ERROR tests str");
+
+      RTC_LOG(    ::RTC::Logger::RTL_FATAL,("RTL_FATAL tests %s","fmt"));
+      RTC_LOG_STR(::RTC::Logger::RTL_FATAL, "RTL_FATAL tests str");
+      RTC_FATAL(   ("Macro RTL_FATAL tests %s","fmt"));
+      RTC_FATAL_STR("Macro RTL_FATAL tests str");
+
+      RTC_LOG(    ::RTC::Logger::RTL_SILENT,("RTL_SILENT tests %s","fmt"));
+      RTC_LOG_STR(::RTC::Logger::RTL_SILENT, "RTL_SILENT tests str");
+
+      of.close();
+
+      // ファイル出力があるか？
+      std::string rstr;
+      std::ifstream ifs(logfile.c_str());
+      ifs >> rstr;
+      CPPUNIT_ASSERT(rstr.size() > 0);
+      ifs >> rstr;
+      ifs >> rstr;
+      ifs >> rstr;
+      CPPUNIT_ASSERT_EQUAL(std::string("PARANOID:"), rstr);
+      ifs >> rstr;
+      CPPUNIT_ASSERT_EQUAL(std::string("Test:"), rstr);
+      ifs >> rstr;
+      CPPUNIT_ASSERT_EQUAL(std::string("RTL_PARANOID"), rstr);
+      ifs >> rstr;
+      CPPUNIT_ASSERT_EQUAL(std::string("tests"), rstr);
+      ifs >> rstr;
+      CPPUNIT_ASSERT_EQUAL(std::string("fmt"), rstr);
+
+//      std::cout << "test_logfile_PARANOID() OUT" << std::endl;
+    }
+
+    /*!
+     * @brief logfile出力のテスト
+     * 
+     * - ログレベルを VERBOSE にした場合のファイル出力が正しく行われるか？
+     */
+    void test_logfile_VERBOSE(void)
+    {
+//      std::cout << "test_logfile_VERBOSE() IN" << std::endl;
+      coil::LogStreamBuffer logger;
+      std::string logfile("rtcVERBOSE.log");
+
+      std::filebuf of;
+      of.open(logfile.c_str(), std::ios::out);
+      if (!of.is_open())
+        {
+          std::cerr << "Error: cannot open logfile: "
+                    << logfile << std::endl;
+        }
+      logger.addStream(&of, true);
+
+      RTC::Logger rtclog(&logger);
+      rtclog.setName("Test");
+      rtclog.setDateFormat("%b %d %H:%M:%S");
+      rtclog.setLevel("VERBOSE");
+
+      // 汎用ログ出力マクロ、各種ログ出力マクロで正しくファイル出力されるか？
+      RTC_LOG(    ::RTC::Logger::RTL_PARANOID,("RTL_PARANOID tests %s","fmt"));
+      RTC_LOG_STR(::RTC::Logger::RTL_PARANOID, "RTL_PARANOID tests str");
+      RTC_PARANOID(   ("Macro RTL_PARANOID tests %s","fmt"));
+      RTC_PARANOID_STR("Macro RTL_PARANOID tests str");
+
+      RTC_LOG(    ::RTC::Logger::RTL_VERBOSE,("RTL_VERBOSE tests %s","fmt"));
+      RTC_LOG_STR(::RTC::Logger::RTL_VERBOSE, "RTL_VERBOSE tests str");
+      RTC_VERBOSE(   ("Macro RTL_VERBOSE tests %s","fmt"));
+      RTC_VERBOSE_STR("Macro RTL_VERBOSE tests str");
+
+      RTC_LOG(    ::RTC::Logger::RTL_TRACE,("RTL_TRACE tests %s","fmt"));
+      RTC_LOG_STR(::RTC::Logger::RTL_TRACE, "RTL_TRACE tests str");
+      RTC_TRACE(   ("Macro RTL_TRACE tests %s","fmt"));
+      RTC_TRACE_STR("Macro RTL_TRACE tests str");
+
+      RTC_LOG(    ::RTC::Logger::RTL_DEBUG,("RTL_DEBUG tests %s","fmt"));
+      RTC_LOG_STR(::RTC::Logger::RTL_DEBUG, "RTL_DEBUG tests str");
+      RTC_DEBUG(   ("Macro RTL_DEBUG tests %s","fmt"));
+      RTC_DEBUG_STR("Macro RTL_DEBUG tests str");
+
+      RTC_LOG(    ::RTC::Logger::RTL_INFO,("RTL_INFO tests %s","fmt"));
+      RTC_LOG_STR(::RTC::Logger::RTL_INFO, "RTL_INFO tests str");
+      RTC_INFO(   ("Macro RTL_INFO tests %s","fmt"));
+      RTC_INFO_STR("Macro RTL_INFO tests str");
+
+      RTC_LOG(    ::RTC::Logger::RTL_WARN,("RTL_WARN tests %s","fmt"));
+      RTC_LOG_STR(::RTC::Logger::RTL_WARN, "RTL_WARN tests str");
+      RTC_WARN(   ("Macro RTL_WARN tests %s","fmt"));
+      RTC_WARN_STR("Macro RTL_WARN tests str");
+
+      RTC_LOG(    ::RTC::Logger::RTL_ERROR,("RTL_ERROR tests %s","fmt"));
+      RTC_LOG_STR(::RTC::Logger::RTL_ERROR, "RTL_ERROR tests str");
+      RTC_ERROR(   ("Macro RTL_ERROR tests %s","fmt"));
+      RTC_ERROR_STR("Macro RTL_ERROR tests str");
+
+      RTC_LOG(    ::RTC::Logger::RTL_FATAL,("RTL_FATAL tests %s","fmt"));
+      RTC_LOG_STR(::RTC::Logger::RTL_FATAL, "RTL_FATAL tests str");
+      RTC_FATAL(   ("Macro RTL_FATAL tests %s","fmt"));
+      RTC_FATAL_STR("Macro RTL_FATAL tests str");
+
+      RTC_LOG(    ::RTC::Logger::RTL_SILENT,("RTL_SILENT tests %s","fmt"));
+      RTC_LOG_STR(::RTC::Logger::RTL_SILENT, "RTL_SILENT tests str");
+
+      of.close();
+
+      // ファイル出力があるか？
+      std::string rstr;
+      std::ifstream ifs(logfile.c_str());
+      ifs >> rstr;
+      CPPUNIT_ASSERT(rstr.size() > 0);
+      ifs >> rstr;
+      ifs >> rstr;
+      ifs >> rstr;
+      CPPUNIT_ASSERT_EQUAL(std::string("VERBOSE:"), rstr);
+      ifs >> rstr;
+      CPPUNIT_ASSERT_EQUAL(std::string("Test:"), rstr);
+      ifs >> rstr;
+      CPPUNIT_ASSERT_EQUAL(std::string("RTL_VERBOSE"), rstr);
+      ifs >> rstr;
+      CPPUNIT_ASSERT_EQUAL(std::string("tests"), rstr);
+      ifs >> rstr;
+      CPPUNIT_ASSERT_EQUAL(std::string("fmt"), rstr);
+
+//      std::cout << "test_logfile_VERBOSE() OUT" << std::endl;
+    }
+
+    /*!
+     * @brief logfile出力のテスト
+     * 
+     * - ログレベルを TRACE にした場合のファイル出力が正しく行われるか？
+     */
+    void test_logfile_TRACE(void)
+    {
+//      std::cout << "test_logfile_TRACE() IN" << std::endl;
+      coil::LogStreamBuffer logger;
+      std::string logfile("rtcTRACE.log");
+
+      std::filebuf of;
+      of.open(logfile.c_str(), std::ios::out);
+      if (!of.is_open())
+        {
+          std::cerr << "Error: cannot open logfile: "
+                    << logfile << std::endl;
+        }
+      logger.addStream(&of, true);
+
+      RTC::Logger rtclog(&logger);
+      rtclog.setName("Test");
+      rtclog.setDateFormat("%b %d %H:%M:%S");
+      rtclog.setLevel("TRACE");
+
+      // 汎用ログ出力マクロ、各種ログ出力マクロで正しくファイル出力されるか？
+      RTC_LOG(    ::RTC::Logger::RTL_PARANOID,("RTL_PARANOID tests %s","fmt"));
+      RTC_LOG_STR(::RTC::Logger::RTL_PARANOID, "RTL_PARANOID tests str");
+      RTC_PARANOID(   ("Macro RTL_PARANOID tests %s","fmt"));
+      RTC_PARANOID_STR("Macro RTL_PARANOID tests str");
+
+      RTC_LOG(    ::RTC::Logger::RTL_VERBOSE,("RTL_VERBOSE tests %s","fmt"));
+      RTC_LOG_STR(::RTC::Logger::RTL_VERBOSE, "RTL_VERBOSE tests str");
+      RTC_VERBOSE(   ("Macro RTL_VERBOSE tests %s","fmt"));
+      RTC_VERBOSE_STR("Macro RTL_VERBOSE tests str");
+
+      RTC_LOG(    ::RTC::Logger::RTL_TRACE,("RTL_TRACE tests %s","fmt"));
+      RTC_LOG_STR(::RTC::Logger::RTL_TRACE, "RTL_TRACE tests str");
+      RTC_TRACE(   ("Macro RTL_TRACE tests %s","fmt"));
+      RTC_TRACE_STR("Macro RTL_TRACE tests str");
+
+      RTC_LOG(    ::RTC::Logger::RTL_DEBUG,("RTL_DEBUG tests %s","fmt"));
+      RTC_LOG_STR(::RTC::Logger::RTL_DEBUG, "RTL_DEBUG tests str");
+      RTC_DEBUG(   ("Macro RTL_DEBUG tests %s","fmt"));
+      RTC_DEBUG_STR("Macro RTL_DEBUG tests str");
+
+      RTC_LOG(    ::RTC::Logger::RTL_INFO,("RTL_INFO tests %s","fmt"));
+      RTC_LOG_STR(::RTC::Logger::RTL_INFO, "RTL_INFO tests str");
+      RTC_INFO(   ("Macro RTL_INFO tests %s","fmt"));
+      RTC_INFO_STR("Macro RTL_INFO tests str");
+
+      RTC_LOG(    ::RTC::Logger::RTL_WARN,("RTL_WARN tests %s","fmt"));
+      RTC_LOG_STR(::RTC::Logger::RTL_WARN, "RTL_WARN tests str");
+      RTC_WARN(   ("Macro RTL_WARN tests %s","fmt"));
+      RTC_WARN_STR("Macro RTL_WARN tests str");
+
+      RTC_LOG(    ::RTC::Logger::RTL_ERROR,("RTL_ERROR tests %s","fmt"));
+      RTC_LOG_STR(::RTC::Logger::RTL_ERROR, "RTL_ERROR tests str");
+      RTC_ERROR(   ("Macro RTL_ERROR tests %s","fmt"));
+      RTC_ERROR_STR("Macro RTL_ERROR tests str");
+
+      RTC_LOG(    ::RTC::Logger::RTL_FATAL,("RTL_FATAL tests %s","fmt"));
+      RTC_LOG_STR(::RTC::Logger::RTL_FATAL, "RTL_FATAL tests str");
+      RTC_FATAL(   ("Macro RTL_FATAL tests %s","fmt"));
+      RTC_FATAL_STR("Macro RTL_FATAL tests str");
+
+      RTC_LOG(    ::RTC::Logger::RTL_SILENT,("RTL_SILENT tests %s","fmt"));
+      RTC_LOG_STR(::RTC::Logger::RTL_SILENT, "RTL_SILENT tests str");
+
+      of.close();
+
+      // ファイル出力があるか？
+      std::string rstr;
+      std::ifstream ifs(logfile.c_str());
+      ifs >> rstr;
+      CPPUNIT_ASSERT(rstr.size() > 0);
+      ifs >> rstr;
+      ifs >> rstr;
+      ifs >> rstr;
+      CPPUNIT_ASSERT_EQUAL(std::string("TRACE:"), rstr);
+      ifs >> rstr;
+      CPPUNIT_ASSERT_EQUAL(std::string("Test:"), rstr);
+      ifs >> rstr;
+      CPPUNIT_ASSERT_EQUAL(std::string("RTL_TRACE"), rstr);
+      ifs >> rstr;
+      CPPUNIT_ASSERT_EQUAL(std::string("tests"), rstr);
+      ifs >> rstr;
+      CPPUNIT_ASSERT_EQUAL(std::string("fmt"), rstr);
+
+//      std::cout << "test_logfile_TRACE() OUT" << std::endl;
+    }
+
+    /*!
+     * @brief logfile出力のテスト
+     * 
+     * - ログレベルを DEBUG にした場合のファイル出力が正しく行われるか？
+     */
+    void test_logfile_DEBUG(void)
+    {
+//      std::cout << "test_logfile_DEBUG() IN" << std::endl;
+      coil::LogStreamBuffer logger;
+      std::string logfile("rtcDEBUG.log");
+
+      std::filebuf of;
+      of.open(logfile.c_str(), std::ios::out);
+      if (!of.is_open())
+        {
+          std::cerr << "Error: cannot open logfile: "
+                    << logfile << std::endl;
+        }
+      logger.addStream(&of, true);
+
+      RTC::Logger rtclog(&logger);
+      rtclog.setName("Test");
+      rtclog.setDateFormat("%b %d %H:%M:%S");
+      rtclog.setLevel("DEBUG");
+
+      // 汎用ログ出力マクロ、各種ログ出力マクロで正しくファイル出力されるか？
+      RTC_LOG(    ::RTC::Logger::RTL_PARANOID,("RTL_PARANOID tests %s","fmt"));
+      RTC_LOG_STR(::RTC::Logger::RTL_PARANOID, "RTL_PARANOID tests str");
+      RTC_PARANOID(   ("Macro RTL_PARANOID tests %s","fmt"));
+      RTC_PARANOID_STR("Macro RTL_PARANOID tests str");
+
+      RTC_LOG(    ::RTC::Logger::RTL_VERBOSE,("RTL_VERBOSE tests %s","fmt"));
+      RTC_LOG_STR(::RTC::Logger::RTL_VERBOSE, "RTL_VERBOSE tests str");
+      RTC_VERBOSE(   ("Macro RTL_VERBOSE tests %s","fmt"));
+      RTC_VERBOSE_STR("Macro RTL_VERBOSE tests str");
+
+      RTC_LOG(    ::RTC::Logger::RTL_TRACE,("RTL_TRACE tests %s","fmt"));
+      RTC_LOG_STR(::RTC::Logger::RTL_TRACE, "RTL_TRACE tests str");
+      RTC_TRACE(   ("Macro RTL_TRACE tests %s","fmt"));
+      RTC_TRACE_STR("Macro RTL_TRACE tests str");
+
+      RTC_LOG(    ::RTC::Logger::RTL_DEBUG,("RTL_DEBUG tests %s","fmt"));
+      RTC_LOG_STR(::RTC::Logger::RTL_DEBUG, "RTL_DEBUG tests str");
+      RTC_DEBUG(   ("Macro RTL_DEBUG tests %s","fmt"));
+      RTC_DEBUG_STR("Macro RTL_DEBUG tests str");
+
+      RTC_LOG(    ::RTC::Logger::RTL_INFO,("RTL_INFO tests %s","fmt"));
+      RTC_LOG_STR(::RTC::Logger::RTL_INFO, "RTL_INFO tests str");
+      RTC_INFO(   ("Macro RTL_INFO tests %s","fmt"));
+      RTC_INFO_STR("Macro RTL_INFO tests str");
+
+      RTC_LOG(    ::RTC::Logger::RTL_WARN,("RTL_WARN tests %s","fmt"));
+      RTC_LOG_STR(::RTC::Logger::RTL_WARN, "RTL_WARN tests str");
+      RTC_WARN(   ("Macro RTL_WARN tests %s","fmt"));
+      RTC_WARN_STR("Macro RTL_WARN tests str");
+
+      RTC_LOG(    ::RTC::Logger::RTL_ERROR,("RTL_ERROR tests %s","fmt"));
+      RTC_LOG_STR(::RTC::Logger::RTL_ERROR, "RTL_ERROR tests str");
+      RTC_ERROR(   ("Macro RTL_ERROR tests %s","fmt"));
+      RTC_ERROR_STR("Macro RTL_ERROR tests str");
+
+      RTC_LOG(    ::RTC::Logger::RTL_FATAL,("RTL_FATAL tests %s","fmt"));
+      RTC_LOG_STR(::RTC::Logger::RTL_FATAL, "RTL_FATAL tests str");
+      RTC_FATAL(   ("Macro RTL_FATAL tests %s","fmt"));
+      RTC_FATAL_STR("Macro RTL_FATAL tests str");
+
+      RTC_LOG(    ::RTC::Logger::RTL_SILENT,("RTL_SILENT tests %s","fmt"));
+      RTC_LOG_STR(::RTC::Logger::RTL_SILENT, "RTL_SILENT tests str");
+
+      of.close();
+
+      // ファイル出力があるか？
+      std::string rstr;
+      std::ifstream ifs(logfile.c_str());
+      ifs >> rstr;
+      CPPUNIT_ASSERT(rstr.size() > 0);
+      ifs >> rstr;
+      ifs >> rstr;
+      ifs >> rstr;
+      CPPUNIT_ASSERT_EQUAL(std::string("DEBUG:"), rstr);
+      ifs >> rstr;
+      CPPUNIT_ASSERT_EQUAL(std::string("Test:"), rstr);
+      ifs >> rstr;
+      CPPUNIT_ASSERT_EQUAL(std::string("RTL_DEBUG"), rstr);
+      ifs >> rstr;
+      CPPUNIT_ASSERT_EQUAL(std::string("tests"), rstr);
+      ifs >> rstr;
+      CPPUNIT_ASSERT_EQUAL(std::string("fmt"), rstr);
+
+//      std::cout << "test_logfile_DEBUG() OUT" << std::endl;
+    }
+
+    /*!
+     * @brief logfile出力のテスト
+     * 
+     * - ログレベルを INFO にした場合のファイル出力が正しく行われるか？
+     */
+    void test_logfile_INFO(void)
+    {
+//      std::cout << "test_logfile_INFO() IN" << std::endl;
+      coil::LogStreamBuffer logger;
+      std::string logfile("rtcINFO.log");
+
+      std::filebuf of;
+      of.open(logfile.c_str(), std::ios::out);
+      if (!of.is_open())
+        {
+          std::cerr << "Error: cannot open logfile: "
+                    << logfile << std::endl;
+        }
+      logger.addStream(&of, true);
+
+      RTC::Logger rtclog(&logger);
+      rtclog.setName("Test");
+      rtclog.setDateFormat("%b %d %H:%M:%S");
+      rtclog.setLevel("INFO");
+
+      // 汎用ログ出力マクロ、各種ログ出力マクロで正しくファイル出力されるか？
+      RTC_LOG(    ::RTC::Logger::RTL_PARANOID,("RTL_PARANOID tests %s","fmt"));
+      RTC_LOG_STR(::RTC::Logger::RTL_PARANOID, "RTL_PARANOID tests str");
+      RTC_PARANOID(   ("Macro RTL_PARANOID tests %s","fmt"));
+      RTC_PARANOID_STR("Macro RTL_PARANOID tests str");
+
+      RTC_LOG(    ::RTC::Logger::RTL_VERBOSE,("RTL_VERBOSE tests %s","fmt"));
+      RTC_LOG_STR(::RTC::Logger::RTL_VERBOSE, "RTL_VERBOSE tests str");
+      RTC_VERBOSE(   ("Macro RTL_VERBOSE tests %s","fmt"));
+      RTC_VERBOSE_STR("Macro RTL_VERBOSE tests str");
+
+      RTC_LOG(    ::RTC::Logger::RTL_TRACE,("RTL_TRACE tests %s","fmt"));
+      RTC_LOG_STR(::RTC::Logger::RTL_TRACE, "RTL_TRACE tests str");
+      RTC_TRACE(   ("Macro RTL_TRACE tests %s","fmt"));
+      RTC_TRACE_STR("Macro RTL_TRACE tests str");
+
+      RTC_LOG(    ::RTC::Logger::RTL_DEBUG,("RTL_DEBUG tests %s","fmt"));
+      RTC_LOG_STR(::RTC::Logger::RTL_DEBUG, "RTL_DEBUG tests str");
+      RTC_DEBUG(   ("Macro RTL_DEBUG tests %s","fmt"));
+      RTC_DEBUG_STR("Macro RTL_DEBUG tests str");
+
+      RTC_LOG(    ::RTC::Logger::RTL_INFO,("RTL_INFO tests %s","fmt"));
+      RTC_LOG_STR(::RTC::Logger::RTL_INFO, "RTL_INFO tests str");
+      RTC_INFO(   ("Macro RTL_INFO tests %s","fmt"));
+      RTC_INFO_STR("Macro RTL_INFO tests str");
+
+      RTC_LOG(    ::RTC::Logger::RTL_WARN,("RTL_WARN tests %s","fmt"));
+      RTC_LOG_STR(::RTC::Logger::RTL_WARN, "RTL_WARN tests str");
+      RTC_WARN(   ("Macro RTL_WARN tests %s","fmt"));
+      RTC_WARN_STR("Macro RTL_WARN tests str");
+
+      RTC_LOG(    ::RTC::Logger::RTL_ERROR,("RTL_ERROR tests %s","fmt"));
+      RTC_LOG_STR(::RTC::Logger::RTL_ERROR, "RTL_ERROR tests str");
+      RTC_ERROR(   ("Macro RTL_ERROR tests %s","fmt"));
+      RTC_ERROR_STR("Macro RTL_ERROR tests str");
+
+      RTC_LOG(    ::RTC::Logger::RTL_FATAL,("RTL_FATAL tests %s","fmt"));
+      RTC_LOG_STR(::RTC::Logger::RTL_FATAL, "RTL_FATAL tests str");
+      RTC_FATAL(   ("Macro RTL_FATAL tests %s","fmt"));
+      RTC_FATAL_STR("Macro RTL_FATAL tests str");
+
+      RTC_LOG(    ::RTC::Logger::RTL_SILENT,("RTL_SILENT tests %s","fmt"));
+      RTC_LOG_STR(::RTC::Logger::RTL_SILENT, "RTL_SILENT tests str");
+
+      of.close();
+
+      // ファイル出力があるか？
+      std::string rstr;
+      std::ifstream ifs(logfile.c_str());
+      ifs >> rstr;
+      CPPUNIT_ASSERT(rstr.size() > 0);
+      ifs >> rstr;
+      ifs >> rstr;
+      ifs >> rstr;
+      CPPUNIT_ASSERT_EQUAL(std::string("INFO:"), rstr);
+      ifs >> rstr;
+      CPPUNIT_ASSERT_EQUAL(std::string("Test:"), rstr);
+      ifs >> rstr;
+      CPPUNIT_ASSERT_EQUAL(std::string("RTL_INFO"), rstr);
+      ifs >> rstr;
+      CPPUNIT_ASSERT_EQUAL(std::string("tests"), rstr);
+      ifs >> rstr;
+      CPPUNIT_ASSERT_EQUAL(std::string("fmt"), rstr);
+
+//      std::cout << "test_logfile_INFO() OUT" << std::endl;
+    }
+
+    /*!
+     * @brief logfile出力のテスト
+     * 
+     * - ログレベルを WARNING にした場合のファイル出力が正しく行われるか？
+     */
+    void test_logfile_WARNING(void)
+    {
+//      std::cout << "test_logfile_WARNING() IN" << std::endl;
+      coil::LogStreamBuffer logger;
+      std::string logfile("rtcWARNING.log");
+
+      std::filebuf of;
+      of.open(logfile.c_str(), std::ios::out);
+      if (!of.is_open())
+        {
+          std::cerr << "Error: cannot open logfile: "
+                    << logfile << std::endl;
+        }
+      logger.addStream(&of, true);
+
+      RTC::Logger rtclog(&logger);
+      rtclog.setName("Test");
+      rtclog.setDateFormat("%b %d %H:%M:%S");
+      rtclog.setLevel("WARN");
+
+      // 汎用ログ出力マクロ、各種ログ出力マクロで正しくファイル出力されるか？
+      RTC_LOG(    ::RTC::Logger::RTL_PARANOID,("RTL_PARANOID tests %s","fmt"));
+      RTC_LOG_STR(::RTC::Logger::RTL_PARANOID, "RTL_PARANOID tests str");
+      RTC_PARANOID(   ("Macro RTL_PARANOID tests %s","fmt"));
+      RTC_PARANOID_STR("Macro RTL_PARANOID tests str");
+
+      RTC_LOG(    ::RTC::Logger::RTL_VERBOSE,("RTL_VERBOSE tests %s","fmt"));
+      RTC_LOG_STR(::RTC::Logger::RTL_VERBOSE, "RTL_VERBOSE tests str");
+      RTC_VERBOSE(   ("Macro RTL_VERBOSE tests %s","fmt"));
+      RTC_VERBOSE_STR("Macro RTL_VERBOSE tests str");
+
+      RTC_LOG(    ::RTC::Logger::RTL_TRACE,("RTL_TRACE tests %s","fmt"));
+      RTC_LOG_STR(::RTC::Logger::RTL_TRACE, "RTL_TRACE tests str");
+      RTC_TRACE(   ("Macro RTL_TRACE tests %s","fmt"));
+      RTC_TRACE_STR("Macro RTL_TRACE tests str");
+
+      RTC_LOG(    ::RTC::Logger::RTL_DEBUG,("RTL_DEBUG tests %s","fmt"));
+      RTC_LOG_STR(::RTC::Logger::RTL_DEBUG, "RTL_DEBUG tests str");
+      RTC_DEBUG(   ("Macro RTL_DEBUG tests %s","fmt"));
+      RTC_DEBUG_STR("Macro RTL_DEBUG tests str");
+
+      RTC_LOG(    ::RTC::Logger::RTL_INFO,("RTL_INFO tests %s","fmt"));
+      RTC_LOG_STR(::RTC::Logger::RTL_INFO, "RTL_INFO tests str");
+      RTC_INFO(   ("Macro RTL_INFO tests %s","fmt"));
+      RTC_INFO_STR("Macro RTL_INFO tests str");
+
+      RTC_LOG(    ::RTC::Logger::RTL_WARN,("RTL_WARN tests %s","fmt"));
+      RTC_LOG_STR(::RTC::Logger::RTL_WARN, "RTL_WARN tests str");
+      RTC_WARN(   ("Macro RTL_WARN tests %s","fmt"));
+      RTC_WARN_STR("Macro RTL_WARN tests str");
+
+      RTC_LOG(    ::RTC::Logger::RTL_ERROR,("RTL_ERROR tests %s","fmt"));
+      RTC_LOG_STR(::RTC::Logger::RTL_ERROR, "RTL_ERROR tests str");
+      RTC_ERROR(   ("Macro RTL_ERROR tests %s","fmt"));
+      RTC_ERROR_STR("Macro RTL_ERROR tests str");
+
+      RTC_LOG(    ::RTC::Logger::RTL_FATAL,("RTL_FATAL tests %s","fmt"));
+      RTC_LOG_STR(::RTC::Logger::RTL_FATAL, "RTL_FATAL tests str");
+      RTC_FATAL(   ("Macro RTL_FATAL tests %s","fmt"));
+      RTC_FATAL_STR("Macro RTL_FATAL tests str");
+
+      RTC_LOG(    ::RTC::Logger::RTL_SILENT,("RTL_SILENT tests %s","fmt"));
+      RTC_LOG_STR(::RTC::Logger::RTL_SILENT, "RTL_SILENT tests str");
+
+      of.close();
+
+      // ファイル出力があるか？
+      std::string rstr;
+      std::ifstream ifs(logfile.c_str());
+      ifs >> rstr;
+      CPPUNIT_ASSERT(rstr.size() > 0);
+      ifs >> rstr;
+      ifs >> rstr;
+      ifs >> rstr;
+      CPPUNIT_ASSERT_EQUAL(std::string("WARNING:"), rstr);
+      ifs >> rstr;
+      CPPUNIT_ASSERT_EQUAL(std::string("Test:"), rstr);
+      ifs >> rstr;
+      CPPUNIT_ASSERT_EQUAL(std::string("RTL_WARN"), rstr);
+      ifs >> rstr;
+      CPPUNIT_ASSERT_EQUAL(std::string("tests"), rstr);
+      ifs >> rstr;
+      CPPUNIT_ASSERT_EQUAL(std::string("fmt"), rstr);
+
+//      std::cout << "test_logfile_WARNING() OUT" << std::endl;
+    }
+
+    /*!
+     * @brief logfile出力のテスト
+     * 
+     * - ログレベルを ERROR にした場合のファイル出力が正しく行われるか？
+     */
+    void test_logfile_ERROR(void)
+    {
+//      std::cout << "test_logfile_ERROR() IN" << std::endl;
+      coil::LogStreamBuffer logger;
+      std::string logfile("rtcERROR.log");
+
+      std::filebuf of;
+      of.open(logfile.c_str(), std::ios::out);
+      if (!of.is_open())
+        {
+          std::cerr << "Error: cannot open logfile: "
+                    << logfile << std::endl;
+        }
+      logger.addStream(&of, true);
+
+      RTC::Logger rtclog(&logger);
+      rtclog.setName("Test");
+      rtclog.setDateFormat("%b %d %H:%M:%S");
+      rtclog.setLevel("ERROR");
+
+      // 汎用ログ出力マクロ、各種ログ出力マクロで正しくファイル出力されるか？
+      RTC_LOG(    ::RTC::Logger::RTL_PARANOID,("RTL_PARANOID tests %s","fmt"));
+      RTC_LOG_STR(::RTC::Logger::RTL_PARANOID, "RTL_PARANOID tests str");
+      RTC_PARANOID(   ("Macro RTL_PARANOID tests %s","fmt"));
+      RTC_PARANOID_STR("Macro RTL_PARANOID tests str");
+
+      RTC_LOG(    ::RTC::Logger::RTL_VERBOSE,("RTL_VERBOSE tests %s","fmt"));
+      RTC_LOG_STR(::RTC::Logger::RTL_VERBOSE, "RTL_VERBOSE tests str");
+      RTC_VERBOSE(   ("Macro RTL_VERBOSE tests %s","fmt"));
+      RTC_VERBOSE_STR("Macro RTL_VERBOSE tests str");
+
+      RTC_LOG(    ::RTC::Logger::RTL_TRACE,("RTL_TRACE tests %s","fmt"));
+      RTC_LOG_STR(::RTC::Logger::RTL_TRACE, "RTL_TRACE tests str");
+      RTC_TRACE(   ("Macro RTL_TRACE tests %s","fmt"));
+      RTC_TRACE_STR("Macro RTL_TRACE tests str");
+
+      RTC_LOG(    ::RTC::Logger::RTL_DEBUG,("RTL_DEBUG tests %s","fmt"));
+      RTC_LOG_STR(::RTC::Logger::RTL_DEBUG, "RTL_DEBUG tests str");
+      RTC_DEBUG(   ("Macro RTL_DEBUG tests %s","fmt"));
+      RTC_DEBUG_STR("Macro RTL_DEBUG tests str");
+
+      RTC_LOG(    ::RTC::Logger::RTL_INFO,("RTL_INFO tests %s","fmt"));
+      RTC_LOG_STR(::RTC::Logger::RTL_INFO, "RTL_INFO tests str");
+      RTC_INFO(   ("Macro RTL_INFO tests %s","fmt"));
+      RTC_INFO_STR("Macro RTL_INFO tests str");
+
+      RTC_LOG(    ::RTC::Logger::RTL_WARN,("RTL_WARN tests %s","fmt"));
+      RTC_LOG_STR(::RTC::Logger::RTL_WARN, "RTL_WARN tests str");
+      RTC_WARN(   ("Macro RTL_WARN tests %s","fmt"));
+      RTC_WARN_STR("Macro RTL_WARN tests str");
+
+      RTC_LOG(    ::RTC::Logger::RTL_ERROR,("RTL_ERROR tests %s","fmt"));
+      RTC_LOG_STR(::RTC::Logger::RTL_ERROR, "RTL_ERROR tests str");
+      RTC_ERROR(   ("Macro RTL_ERROR tests %s","fmt"));
+      RTC_ERROR_STR("Macro RTL_ERROR tests str");
+
+      RTC_LOG(    ::RTC::Logger::RTL_FATAL,("RTL_FATAL tests %s","fmt"));
+      RTC_LOG_STR(::RTC::Logger::RTL_FATAL, "RTL_FATAL tests str");
+      RTC_FATAL(   ("Macro RTL_FATAL tests %s","fmt"));
+      RTC_FATAL_STR("Macro RTL_FATAL tests str");
+
+      RTC_LOG(    ::RTC::Logger::RTL_SILENT,("RTL_SILENT tests %s","fmt"));
+      RTC_LOG_STR(::RTC::Logger::RTL_SILENT, "RTL_SILENT tests str");
+
+      of.close();
+
+      // ファイル出力があるか？
+      std::string rstr;
+      std::ifstream ifs(logfile.c_str());
+      ifs >> rstr;
+      CPPUNIT_ASSERT(rstr.size() > 0);
+      ifs >> rstr;
+      ifs >> rstr;
+      ifs >> rstr;
+      CPPUNIT_ASSERT_EQUAL(std::string("ERROR:"), rstr);
+      ifs >> rstr;
+      CPPUNIT_ASSERT_EQUAL(std::string("Test:"), rstr);
+      ifs >> rstr;
+      CPPUNIT_ASSERT_EQUAL(std::string("RTL_ERROR"), rstr);
+      ifs >> rstr;
+      CPPUNIT_ASSERT_EQUAL(std::string("tests"), rstr);
+      ifs >> rstr;
+      CPPUNIT_ASSERT_EQUAL(std::string("fmt"), rstr);
+
+//      std::cout << "test_logfile_ERROR() OUT" << std::endl;
+    }
+
+    /*!
+     * @brief logfile出力のテスト
+     * 
+     * - ログレベルを FATAL にした場合のファイル出力が正しく行われるか？
+     */
+    void test_logfile_FATAL(void)
+    {
+//      std::cout << "test_logfile_FATAL() IN" << std::endl;
+      coil::LogStreamBuffer logger;
+      std::string logfile("rtcFATAL.log");
+
+      std::filebuf of;
+      of.open(logfile.c_str(), std::ios::out);
+      if (!of.is_open())
+        {
+          std::cerr << "Error: cannot open logfile: "
+                    << logfile << std::endl;
+        }
+      logger.addStream(&of, true);
+
+      RTC::Logger rtclog(&logger);
+      rtclog.setName("Test");
+      rtclog.setDateFormat("%b %d %H:%M:%S");
+      rtclog.setLevel("FATAL");
+
+      // 汎用ログ出力マクロ、各種ログ出力マクロで正しくファイル出力されるか？
+      RTC_LOG(    ::RTC::Logger::RTL_PARANOID,("RTL_PARANOID tests %s","fmt"));
+      RTC_LOG_STR(::RTC::Logger::RTL_PARANOID, "RTL_PARANOID tests str");
+      RTC_PARANOID(   ("Macro RTL_PARANOID tests %s","fmt"));
+      RTC_PARANOID_STR("Macro RTL_PARANOID tests str");
+
+      RTC_LOG(    ::RTC::Logger::RTL_VERBOSE,("RTL_VERBOSE tests %s","fmt"));
+      RTC_LOG_STR(::RTC::Logger::RTL_VERBOSE, "RTL_VERBOSE tests str");
+      RTC_VERBOSE(   ("Macro RTL_VERBOSE tests %s","fmt"));
+      RTC_VERBOSE_STR("Macro RTL_VERBOSE tests str");
+
+      RTC_LOG(    ::RTC::Logger::RTL_TRACE,("RTL_TRACE tests %s","fmt"));
+      RTC_LOG_STR(::RTC::Logger::RTL_TRACE, "RTL_TRACE tests str");
+      RTC_TRACE(   ("Macro RTL_TRACE tests %s","fmt"));
+      RTC_TRACE_STR("Macro RTL_TRACE tests str");
+
+      RTC_LOG(    ::RTC::Logger::RTL_DEBUG,("RTL_DEBUG tests %s","fmt"));
+      RTC_LOG_STR(::RTC::Logger::RTL_DEBUG, "RTL_DEBUG tests str");
+      RTC_DEBUG(   ("Macro RTL_DEBUG tests %s","fmt"));
+      RTC_DEBUG_STR("Macro RTL_DEBUG tests str");
+
+      RTC_LOG(    ::RTC::Logger::RTL_INFO,("RTL_INFO tests %s","fmt"));
+      RTC_LOG_STR(::RTC::Logger::RTL_INFO, "RTL_INFO tests str");
+      RTC_INFO(   ("Macro RTL_INFO tests %s","fmt"));
+      RTC_INFO_STR("Macro RTL_INFO tests str");
+
+      RTC_LOG(    ::RTC::Logger::RTL_WARN,("RTL_WARN tests %s","fmt"));
+      RTC_LOG_STR(::RTC::Logger::RTL_WARN, "RTL_WARN tests str");
+      RTC_WARN(   ("Macro RTL_WARN tests %s","fmt"));
+      RTC_WARN_STR("Macro RTL_WARN tests str");
+
+      RTC_LOG(    ::RTC::Logger::RTL_ERROR,("RTL_ERROR tests %s","fmt"));
+      RTC_LOG_STR(::RTC::Logger::RTL_ERROR, "RTL_ERROR tests str");
+      RTC_ERROR(   ("Macro RTL_ERROR tests %s","fmt"));
+      RTC_ERROR_STR("Macro RTL_ERROR tests str");
+
+      RTC_LOG(    ::RTC::Logger::RTL_FATAL,("RTL_FATAL tests %s","fmt"));
+      RTC_LOG_STR(::RTC::Logger::RTL_FATAL, "RTL_FATAL tests str");
+      RTC_FATAL(   ("Macro RTL_FATAL tests %s","fmt"));
+      RTC_FATAL_STR("Macro RTL_FATAL tests str");
+
+      RTC_LOG(    ::RTC::Logger::RTL_SILENT,("RTL_SILENT tests %s","fmt"));
+      RTC_LOG_STR(::RTC::Logger::RTL_SILENT, "RTL_SILENT tests str");
+
+      of.close();
+
+      // ファイル出力があるか？
+      std::string rstr;
+      std::ifstream ifs(logfile.c_str());
+      ifs >> rstr;
+      CPPUNIT_ASSERT(rstr.size() > 0);
+      ifs >> rstr;
+      ifs >> rstr;
+      ifs >> rstr;
+      CPPUNIT_ASSERT_EQUAL(std::string("FATAL:"), rstr);
+      ifs >> rstr;
+      CPPUNIT_ASSERT_EQUAL(std::string("Test:"), rstr);
+      ifs >> rstr;
+      CPPUNIT_ASSERT_EQUAL(std::string("RTL_FATAL"), rstr);
+      ifs >> rstr;
+      CPPUNIT_ASSERT_EQUAL(std::string("tests"), rstr);
+      ifs >> rstr;
+      CPPUNIT_ASSERT_EQUAL(std::string("fmt"), rstr);
+
+//      std::cout << "test_logfile_FATAL() OUT" << std::endl;
+    }
+
+    /*!
+     * @brief logfile出力のテスト
+     * 
+     * - ログレベルを SILENT にした場合のファイル出力が正しく行われるか？
+     */
+    void test_logfile_SILENT(void)
+    {
+//      std::cout << "test_logfile_SILENT() IN" << std::endl;
+      coil::LogStreamBuffer logger;
+      std::string logfile("rtcSILENT.log");
+
+      std::filebuf of;
+      of.open(logfile.c_str(), std::ios::out);
+      if (!of.is_open())
+        {
+          std::cerr << "Error: cannot open logfile: "
+                    << logfile << std::endl;
+        }
+      logger.addStream(&of, true);
+
+      RTC::Logger rtclog(&logger);
+      rtclog.setName("Test");
+      rtclog.setDateFormat("%b %d %H:%M:%S");
+      rtclog.setLevel("SILENT");
+
+      // 汎用ログ出力マクロ、各種ログ出力マクロで正しくファイル出力されるか？
+      RTC_LOG(    ::RTC::Logger::RTL_PARANOID,("RTL_PARANOID tests %s","fmt"));
+      RTC_LOG_STR(::RTC::Logger::RTL_PARANOID, "RTL_PARANOID tests str");
+      RTC_PARANOID(   ("Macro RTL_PARANOID tests %s","fmt"));
+      RTC_PARANOID_STR("Macro RTL_PARANOID tests str");
+
+      RTC_LOG(    ::RTC::Logger::RTL_VERBOSE,("RTL_VERBOSE tests %s","fmt"));
+      RTC_LOG_STR(::RTC::Logger::RTL_VERBOSE, "RTL_VERBOSE tests str");
+      RTC_VERBOSE(   ("Macro RTL_VERBOSE tests %s","fmt"));
+      RTC_VERBOSE_STR("Macro RTL_VERBOSE tests str");
+
+      RTC_LOG(    ::RTC::Logger::RTL_TRACE,("RTL_TRACE tests %s","fmt"));
+      RTC_LOG_STR(::RTC::Logger::RTL_TRACE, "RTL_TRACE tests str");
+      RTC_TRACE(   ("Macro RTL_TRACE tests %s","fmt"));
+      RTC_TRACE_STR("Macro RTL_TRACE tests str");
+
+      RTC_LOG(    ::RTC::Logger::RTL_DEBUG,("RTL_DEBUG tests %s","fmt"));
+      RTC_LOG_STR(::RTC::Logger::RTL_DEBUG, "RTL_DEBUG tests str");
+      RTC_DEBUG(   ("Macro RTL_DEBUG tests %s","fmt"));
+      RTC_DEBUG_STR("Macro RTL_DEBUG tests str");
+
+      RTC_LOG(    ::RTC::Logger::RTL_INFO,("RTL_INFO tests %s","fmt"));
+      RTC_LOG_STR(::RTC::Logger::RTL_INFO, "RTL_INFO tests str");
+      RTC_INFO(   ("Macro RTL_INFO tests %s","fmt"));
+      RTC_INFO_STR("Macro RTL_INFO tests str");
+
+      RTC_LOG(    ::RTC::Logger::RTL_WARN,("RTL_WARN tests %s","fmt"));
+      RTC_LOG_STR(::RTC::Logger::RTL_WARN, "RTL_WARN tests str");
+      RTC_WARN(   ("Macro RTL_WARN tests %s","fmt"));
+      RTC_WARN_STR("Macro RTL_WARN tests str");
+
+      RTC_LOG(    ::RTC::Logger::RTL_ERROR,("RTL_ERROR tests %s","fmt"));
+      RTC_LOG_STR(::RTC::Logger::RTL_ERROR, "RTL_ERROR tests str");
+      RTC_ERROR(   ("Macro RTL_ERROR tests %s","fmt"));
+      RTC_ERROR_STR("Macro RTL_ERROR tests str");
+
+      RTC_LOG(    ::RTC::Logger::RTL_FATAL,("RTL_FATAL tests %s","fmt"));
+      RTC_LOG_STR(::RTC::Logger::RTL_FATAL, "RTL_FATAL tests str");
+      RTC_FATAL(   ("Macro RTL_FATAL tests %s","fmt"));
+      RTC_FATAL_STR("Macro RTL_FATAL tests str");
+
+      RTC_LOG(    ::RTC::Logger::RTL_SILENT,("RTL_SILENT tests %s","fmt"));
+      RTC_LOG_STR(::RTC::Logger::RTL_SILENT, "RTL_SILENT tests str");
+
+      of.close();
+
+      // ファイル出力があるか？
+      std::string rstr;
+      std::ifstream ifs(logfile.c_str());
+      ifs >> rstr;
+      CPPUNIT_ASSERT(rstr.size() > 0);
+      ifs >> rstr;
+      ifs >> rstr;
+      ifs >> rstr;
+      CPPUNIT_ASSERT_EQUAL(std::string("SILENT:"), rstr);
+      ifs >> rstr;
+      CPPUNIT_ASSERT_EQUAL(std::string("Test:"), rstr);
+      ifs >> rstr;
+      CPPUNIT_ASSERT_EQUAL(std::string("RTL_SILENT"), rstr);
+      ifs >> rstr;
+      CPPUNIT_ASSERT_EQUAL(std::string("tests"), rstr);
+      ifs >> rstr;
+      CPPUNIT_ASSERT_EQUAL(std::string("fmt"), rstr);
+
+//      std::cout << "test_logfile_SILENT() OUT" << std::endl;
     }
 
   };
