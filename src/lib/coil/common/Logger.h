@@ -149,14 +149,15 @@ namespace coil
      */
     bool removeStream(streambuf_type* stream)
     {
-      for (int i(0), len(m_streams.size()); i < len; ++i)
-        {
-          if (m_streams[i].stream_ == stream)
+      std::vector<coil::log_streambuf<char>::Stream>::iterator it;
+      for( it = m_streams.begin(); it != m_streams.end(); it++ )
+      {
+          if (it->stream_ == stream)
             {
-              m_streams.erase(i);
+              m_streams.erase(it);
               return true;
             }
-        }
+      }
       return false;
     }
 
@@ -265,6 +266,7 @@ namespace coil
         {
           Guard gaurd(m_streams[i].mutex_);
           m_streams[i].stream_->sputn(s, n);
+          m_streams[i].stream_->pubsync();
         }
       return n;
     }
