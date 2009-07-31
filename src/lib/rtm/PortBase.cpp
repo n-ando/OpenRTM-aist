@@ -5,7 +5,7 @@
  * @date $Date: 2008-01-14 10:19:42 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
- * Copyright (C) 2006-2008
+ * Copyright (C) 2006-2009
  *     Noriaki Ando
  *     Task-intelligence Research Group,
  *     Intelligent Systems Research Institute,
@@ -18,9 +18,9 @@
  */
 
 #include <assert.h>
+#include <memory>
 #include <coil/UUID.h>
 #include <rtm/PortBase.h>
-#include <memory>
 
 namespace RTC
 {
@@ -37,8 +37,8 @@ namespace RTC
   PortBase::PortBase(const char* name)
     : rtclog(name)
   {
+    m_objref = this->_this();
     m_profile.name = CORBA::string_dup(name);
-    m_objref = RTC::PortService::_duplicate(this->_this());
     m_profile.port_ref = m_objref;
     m_profile.owner = RTC::RTObject::_nil();
   }
@@ -52,6 +52,16 @@ namespace RTC
    */
   PortBase::~PortBase()
   {
+    RTC_TRACE(("~PortBase()"));
+    try
+      {
+        PortableServer::ObjectId_var oid = _default_POA()->servant_to_id(this);
+        _default_POA()->deactivate_object(oid);
+      }
+    catch (...)
+      {
+        RTC_WARN(("Unknown exception caught."));
+      }
   }
   
   /*!
@@ -64,7 +74,7 @@ namespace RTC
   PortProfile* PortBase::get_port_profile()
     throw (CORBA::SystemException)
   {
-    //    RTC_TRACE(("get_port_profile()"));
+    RTC_TRACE(("get_port_profile()"));
     Guard gaurd(m_profile_mutex);
     PortProfile_var prof;
     prof = new PortProfile(m_profile);
@@ -140,6 +150,7 @@ namespace RTC
     RTC_TRACE(("connect()"));
     if (isEmptyId(connector_profile))
       {
+        Guard gurad(m_profile_mutex);
 	// "connector_id" stores UUID which is generated at the initial Port
 	// in connection process.
 	setUUID(connector_profile);
@@ -147,6 +158,7 @@ namespace RTC
       }
     else
       {
+        Guard gurad(m_profile_mutex);
 	if (isExistingConnId(connector_profile.connector_id))
 	  {
             RTC_ERROR(("Connection already exists."));
@@ -183,27 +195,36 @@ namespace RTC
   ReturnCode_t PortBase::notify_connect(ConnectorProfile& connector_profile)
     throw (CORBA::SystemException)
   {
-
     RTC_TRACE(("notify_connect()"));
 
+    ReturnCode_t retval[] = {RTC::RTC_OK, RTC::RTC_OK, RTC::RTC_OK};
+
     // publish owned interface information to the ConnectorProfile
-    ReturnCode_t retval(RTC::RTC_OK);
-    retval = publishInterfaces(connector_profile);
-    if (retval != RTC::RTC_OK) return retval;
+    retval[0] = publishInterfaces(connector_profile);
+    if (retval[0] != RTC::RTC_OK)
+      {
+        RTC_ERROR(("publishInterfaces() in notify_connect() failed."));
+      }
 
     // call notify_connect() of the next Port
-    retval = connectNext(connector_profile);
-    if (retval != RTC::RTC_OK) return retval;
+    retval[1] = connectNext(connector_profile);
+    if (retval[1] != RTC::RTC_OK)
+      {
+        RTC_ERROR(("connectNext() in notify_connect() failed."));
+      }
 
     // subscribe interface from the ConnectorProfile's information
-    retval = subscribeInterfaces(connector_profile);
+    retval[2] = subscribeInterfaces(connector_profile);
+    if (retval[2] != RTC::RTC_OK) 
+      {
+        RTC_ERROR(("subscribeInterfaces() in notify_connect() failed."));
+      }
 
     RTC_PARANOID(("%d connectors are existing",
                   m_profile.connector_profiles.length()));
 
-    CORBA::Long index;
-    index = findConnProfileIndex(connector_profile.connector_id);
-
+    Guard gurad(m_profile_mutex);
+    CORBA::Long index(findConnProfileIndex(connector_profile.connector_id));
     if (index < 0)
       {
         CORBA_SeqUtil::push_back(m_profile.connector_profiles,
@@ -215,7 +236,15 @@ namespace RTC
 	m_profile.connector_profiles[index] = connector_profile;
         RTC_PARANOID(("Existing connector_id. Updated."));
       }
-    return retval;
+
+    for (int i(0), len(sizeof(retval)/sizeof(ReturnCode_t)); i < len; ++i)
+      {
+        if (retval[i] != RTC::RTC_OK)
+          {
+            return retval[i];
+          }
+      }
+    return RTC::RTC_OK;
   }
   
   /*!
@@ -229,18 +258,46 @@ namespace RTC
     throw (CORBA::SystemException)
   {
     RTC_TRACE(("disconnect(%s)", connector_id));
-    // find connector_profile
-    if (!isExistingConnId(connector_id)) 
+
+    CORBA::Long index(findConnProfileIndex(connector_id));
+    if (index < 0)
       {
+        RTC_ERROR(("Invalid connector id: %s", connector_id));
 	return RTC::BAD_PARAMETER;
       }
-    CORBA::Long index;
-    index = findConnProfileIndex(connector_id);
-    ConnectorProfile prof(m_profile.connector_profiles[index]);
-    RTC::PortService_ptr p;
-    if (prof.ports.length() < 1) return RTC::PRECONDITION_NOT_MET;
-    p = prof.ports[(CORBA::ULong)0];
-    return p->notify_disconnect(connector_id);
+
+    ConnectorProfile prof;
+    { // lock and copy profile
+      Guard guard(m_profile_mutex);
+      prof = m_profile.connector_profiles[index];
+    }
+
+    if (prof.ports.length() < 1)
+      {
+        RTC_FATAL(("ConnectorProfile has empty port list."));
+        return RTC::PRECONDITION_NOT_MET;
+      }
+
+    for (CORBA::ULong i(0), len(prof.ports.length()); i < len; ++i)
+      {
+        RTC::PortService_var p(prof.ports[i]);
+        try
+          {
+            return p->notify_disconnect(connector_id);
+          }
+        catch (CORBA::SystemException &e)
+          {
+            RTC_WARN(("Exception caught: minor code(%d).", e.minor()));;
+            continue;
+          }
+        catch (...)
+          {
+            RTC_WARN(("Unknown exception caught."));;
+            continue;
+          }
+      }
+    RTC_ERROR(("notify_disconnect() for all ports failed."));
+    return RTC::RTC_ERROR;
   }
   
   /*!
@@ -254,24 +311,19 @@ namespace RTC
     throw (CORBA::SystemException)
   {
     RTC_TRACE(("notify_disconnect(%s)", connector_id));
-    // The Port of which the reference is stored in the beginning of
-    // ConnectorProfile's PortServiceList is master Port.
-    // The master Port has the responsibility of disconnecting all Ports.
-    // The slave Ports have only responsibility of deleting its own
-    // ConnectorProfile.
-    
+    Guard gaurd(m_profile_mutex);
+
     // find connector_profile
-    if (!isExistingConnId(connector_id)) 
+    CORBA::Long index(findConnProfileIndex(connector_id));
+    if (index < 0) 
       {
+        RTC_ERROR(("Invalid connector id: %s", connector_id));
 	return RTC::BAD_PARAMETER;
       }
-    CORBA::Long index;
-    index = findConnProfileIndex(connector_id);
     
-    ConnectorProfile prof(m_profile.connector_profiles[index]);
-    
-    ReturnCode_t retval;
-    retval = disconnectNext(prof);
+    ConnectorProfile& prof(m_profile.connector_profiles[(CORBA::ULong)index]);
+    ReturnCode_t retval(disconnectNext(prof));
+
     unsubscribeInterfaces(prof);
     
     CORBA_SeqUtil::erase(m_profile.connector_profiles, index);
@@ -420,7 +472,7 @@ namespace RTC
    */
   ReturnCode_t PortBase::disconnectNext(ConnectorProfile& cprof)
   {
-    CORBA::Long index;
+    CORBA::ULong index;
     index = CORBA_SeqUtil::find(cprof.ports,
 				find_port_ref(m_profile.port_ref));
     if (index < 0)
@@ -428,21 +480,27 @@ namespace RTC
         return RTC::BAD_PARAMETER;
       }
     
-    CORBA::Long len = static_cast<CORBA::Long>(cprof.ports.length());
+    CORBA::ULong len = cprof.ports.length();
     
     ++index;
-    try
+    for (CORBA::ULong i(index); i < len; ++i)
       {
-        if (index < len)
+        RTC::PortService_var p;
+        p = cprof.ports[i];
+        try
           {
-            RTC::PortService_var p;
-            p = cprof.ports[index];
             return p->notify_disconnect(cprof.connector_id);
           }
-      } 
-    catch (...)
-      {
-        return RTC::RTC_ERROR;
+        catch (CORBA::SystemException& e)
+          {
+            RTC_WARN(("Exception caught: minor code.", e.minor()));
+            continue;
+          } 
+        catch (...)
+          {
+            RTC_WARN(("Unknown exception caught."));
+            continue;
+          }
       }
         
     return RTC::RTC_OK;
@@ -568,8 +626,6 @@ namespace RTC
    */
   bool PortBase::eraseConnectorProfile(const char* id)
   {
-    Guard gruad(m_profile_mutex);
-    
     CORBA::Long index;
     index = CORBA_SeqUtil::find(m_profile.connector_profiles,
 				find_conn_id(id));
