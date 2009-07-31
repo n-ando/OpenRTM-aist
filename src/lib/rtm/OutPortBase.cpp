@@ -720,7 +720,7 @@ namespace RTC
         RTC_TRACE(("OutPortPushConnector created"));
 
         m_connectors.push_back(connector);
-        RTC_PARANOID(("connector push backed: %d", m_connectors.size()));
+        RTC_PARANOID(("connector pushback done: size = %d", m_connectors.size()));
         return connector;
       }
     catch (std::bad_alloc& e)
@@ -761,7 +761,7 @@ namespace RTC
         RTC_TRACE(("OutPortPushConnector created"));
 
         m_connectors.push_back(connector);
-        RTC_PARANOID(("connector push backed: %d", m_connectors.size()));
+        RTC_PARANOID(("connector pushback done: size = %d", m_connectors.size()));
         return connector;
       }
     catch (std::bad_alloc& e)
