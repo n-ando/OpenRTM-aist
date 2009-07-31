@@ -510,7 +510,7 @@ namespace RTC
   PeriodicECSharedComposite::PeriodicECSharedComposite(Manager* manager)
     : RTObject_impl(manager)
   {
-    m_ref = OpenRTM::DataFlowComponent::_duplicate(this->_this());
+    m_ref = this->_this();
     m_objref = RTC::RTObject::_duplicate(m_ref);
     m_org = new SDOPackage::PeriodicECOrganization(this);
     ::CORBA_SeqUtil::push_back(m_sdoOwnedOrganizations,
