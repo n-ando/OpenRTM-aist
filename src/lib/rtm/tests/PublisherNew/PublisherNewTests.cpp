@@ -1200,7 +1200,7 @@ namespace PublisherNew
 
         }
 
-
+        coil::usleep(10000);
         //provider 側のバッファから取得
         //
         int len = consumer->get_m_put_data_len() -1;
