@@ -4,7 +4,7 @@
  * @brief  SystemLogger test class
  * @date   $Date: 2008/05/12 03:58:45 $
  *
- * $Id: SystemLoggerTests.cpp,v 1.2 2008/05/12 03:58:45 arafune Exp $
+ * $Id$
  *
  */
 
@@ -34,6 +34,7 @@
 
 #include <rtm/SystemLogger.h>
 #include <coil/TimeMeasure.h>
+#include <rtm/Manager.h>
 
 /*!
  * @class SystemLoggerTests class
@@ -86,6 +87,17 @@ namespace Tests
       return RTC::Logger::strToLevel(level);
     }
 
+    // デッドロック確認用
+    std::string test_string(void)
+    {
+//      std::cout << "LoggerMock::test_string() IN" << std::endl;
+      this->lock();
+      this->level(RTC::Logger::RTL_TRACE) << "RTC_TRACE2 test_string()" << std::endl;
+      this->unlock();
+//      std::cout << "LoggerMock::test_string() OUT" << std::endl;
+      return std::string("TestString");
+    }
+
     std::string mock_m_name;
     std::string mock_m_dateFormat;
   };
@@ -116,6 +128,8 @@ namespace Tests
     CPPUNIT_TEST(test_logfile_ERROR);
     CPPUNIT_TEST(test_logfile_FATAL);
     CPPUNIT_TEST(test_logfile_SILENT);
+    CPPUNIT_TEST(test_constract_name);
+    CPPUNIT_TEST(test_deadlock);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -1163,6 +1177,131 @@ namespace Tests
       CPPUNIT_ASSERT_EQUAL(std::string("fmt"), rstr);
 
 //      std::cout << "test_logfile_SILENT() OUT" << std::endl;
+    }
+
+    /*!
+     * @brief コンストラクタログレベルのテスト
+     * 
+     * - コンストラクタ（name)の場合、Managerの設定ログレベル(INFO)で動作するか？
+     */
+    void test_constract_name(void)
+    {
+//      std::cout << "test_constract_name() IN" << std::endl;
+      RTC::Manager* m_mgr;
+      m_mgr = RTC::Manager::init(0, NULL);
+      CPPUNIT_ASSERT(m_mgr != NULL);
+
+      RTC::Logger rtclog("TestName");
+      std::string log_level = m_mgr->getLogLevel();
+      CPPUNIT_ASSERT_EQUAL(std::string("INFO"), log_level);
+
+      coil::Properties m_config = m_mgr->getConfig();
+      std::vector<std::string> logouts = coil::split(m_config["logger.file_name"], ",");
+
+      // 汎用ログ出力マクロ、各種ログ出力マクロでファイル出力
+      RTC_LOG(    ::RTC::Logger::RTL_PARANOID,("RTL_PARANOID tests %s","fmt"));
+      RTC_LOG_STR(::RTC::Logger::RTL_PARANOID, "RTL_PARANOID tests str");
+      RTC_PARANOID(   ("Macro RTL_PARANOID tests %s","fmt"));
+      RTC_PARANOID_STR("Macro RTL_PARANOID tests str");
+
+      RTC_LOG(    ::RTC::Logger::RTL_VERBOSE,("RTL_VERBOSE tests %s","fmt"));
+      RTC_LOG_STR(::RTC::Logger::RTL_VERBOSE, "RTL_VERBOSE tests str");
+      RTC_VERBOSE(   ("Macro RTL_VERBOSE tests %s","fmt"));
+      RTC_VERBOSE_STR("Macro RTL_VERBOSE tests str");
+
+      RTC_LOG(    ::RTC::Logger::RTL_TRACE,("RTL_TRACE tests %s","fmt"));
+      RTC_LOG_STR(::RTC::Logger::RTL_TRACE, "RTL_TRACE tests str");
+      RTC_TRACE(   ("Macro RTL_TRACE tests %s","fmt"));
+      RTC_TRACE_STR("Macro RTL_TRACE tests str");
+
+      RTC_LOG(    ::RTC::Logger::RTL_DEBUG,("RTL_DEBUG tests %s","fmt"));
+      RTC_LOG_STR(::RTC::Logger::RTL_DEBUG, "RTL_DEBUG tests str");
+      RTC_DEBUG(   ("Macro RTL_DEBUG tests %s","fmt"));
+      RTC_DEBUG_STR("Macro RTL_DEBUG tests str");
+
+      RTC_LOG(    ::RTC::Logger::RTL_INFO,("RTL_INFO tests %s","fmt"));
+      RTC_LOG_STR(::RTC::Logger::RTL_INFO, "RTL_INFO tests str");
+      RTC_INFO(   ("Macro RTL_INFO tests %s","fmt"));
+      RTC_INFO_STR("Macro RTL_INFO tests str");
+
+      RTC_LOG(    ::RTC::Logger::RTL_WARN,("RTL_WARN tests %s","fmt"));
+      RTC_LOG_STR(::RTC::Logger::RTL_WARN, "RTL_WARN tests str");
+      RTC_WARN(   ("Macro RTL_WARN tests %s","fmt"));
+      RTC_WARN_STR("Macro RTL_WARN tests str");
+
+      RTC_LOG(    ::RTC::Logger::RTL_ERROR,("RTL_ERROR tests %s","fmt"));
+      RTC_LOG_STR(::RTC::Logger::RTL_ERROR, "RTL_ERROR tests str");
+      RTC_ERROR(   ("Macro RTL_ERROR tests %s","fmt"));
+      RTC_ERROR_STR("Macro RTL_ERROR tests str");
+
+      RTC_LOG(    ::RTC::Logger::RTL_FATAL,("RTL_FATAL tests %s","fmt"));
+      RTC_LOG_STR(::RTC::Logger::RTL_FATAL, "RTL_FATAL tests str");
+      RTC_FATAL(   ("Macro RTL_FATAL tests %s","fmt"));
+      RTC_FATAL_STR("Macro RTL_FATAL tests str");
+
+      RTC_LOG(    ::RTC::Logger::RTL_SILENT,("RTL_SILENT tests %s","fmt"));
+      RTC_LOG_STR(::RTC::Logger::RTL_SILENT, "RTL_SILENT tests str");
+
+      m_mgr->terminate();
+
+      // rtc*.log ファイルが作成され、４列目のログレベルが INFO以下か？
+      // INFO WARNING ERROR FATAL SILENT だけが記録されているか？
+      // Aug 03 14:03:09 INFO: manager: OpenRTM-aist-1.0.0
+      // [0] 1  2        3     4        5
+      std::string rstr;
+      std::vector<std::string> vstr;
+      bool bret;
+      std::ifstream ifs(logouts[0].c_str());
+      while(getline(ifs, rstr))
+        {
+          if(rstr.size() == 0) break;
+          vstr = coil::split(rstr, " ");
+          // ログレベル判定
+          bret = false;
+          if( (vstr[3] == "INFO:") || (vstr[3] == "WARNING:") || (vstr[3] == "ERROR:") ||
+              (vstr[3] == "FATAL:") || (vstr[3] == "SILENT:") )
+              bret = true;
+          CPPUNIT_ASSERT(bret);
+
+          // name判定
+          bret = false;
+          if( (vstr[4] == "manager:") || (vstr[4] == "TestName:") )
+              bret = true;
+          CPPUNIT_ASSERT(bret);
+        }
+//      std::cout << "test_constract_name() OUT" << std::endl;
+    }
+
+    /*!
+     * @brief ログ出力のデッドロックテスト
+     * 
+     * - RTC_LOG出力時、引数の関数内でログ出力がある場合にデッドロックしないか？
+     */
+    void test_deadlock(void)
+    {
+//      std::cout << "test_deadlock() IN" << std::endl;
+      coil::LogStreamBuffer logger;
+      std::stringstream s0;
+
+      logger.addStream(s0.rdbuf());
+      LoggerMock rtclog(&logger);
+      rtclog.setName("Test");
+      rtclog.setDateFormat("");
+      rtclog.setLevel("TRACE");
+      s0.str("");
+      // ロックモード設定
+      rtclog.enableLock();
+      RTC_TRACE(("RTC_TRACE1 %s", rtclog.test_string().c_str()));
+
+      std::string rstr;
+      getline(s0, rstr);
+      CPPUNIT_ASSERT_EQUAL(std::string(" TRACE: Test: RTC_TRACE2 test_string()"), rstr);
+      getline(s0, rstr);
+      CPPUNIT_ASSERT_EQUAL(std::string(" TRACE: Test: RTC_TRACE1 TestString"), rstr);
+
+      // ロックモード解除
+      rtclog.disableLock();
+//      std::cout << "test_deadlock() OUT" << std::endl;
     }
 
   };
