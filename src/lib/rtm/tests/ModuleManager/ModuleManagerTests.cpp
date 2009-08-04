@@ -115,7 +115,7 @@ namespace ModuleManager
 	  "manager.modules.config_path", "/etc/rtc",
 	  "manager.modules.detect_loadable", "Yes",
 	  "manager.modules.load_path",
-	  "/usr/lib, /usr/local/lib, /usr/local/lib/rtc",
+	  "/usr/lib, /usr/local/lib, /usr/local/lib/rtc, ../../.libs/",
 	  "manager.modules.init_func_suffix", "Init",
 	  "manager.modules.init_func_prefix", "",
 	  "manager.modules.abs_path_allowed", "Yes",
