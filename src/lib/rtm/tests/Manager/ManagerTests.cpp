@@ -4,7 +4,7 @@
  * @brief  Manager test class
  * @date   $Date: 2008/05/12 03:58:45 $
  *
- * $Id: ManagerTests.cpp,v 1.2 2008/05/12 03:58:45 arafune Exp $
+ * $Id$
  *
  */
 
@@ -172,6 +172,7 @@ namespace Tests
 //      else      std::cout << "Manager::procContextArgs() bret:false" << std::endl;
       return bret;
     }
+
   };
 	
 	
@@ -257,7 +258,13 @@ namespace Tests
     : public CppUnit::TestFixture
   {
     CPPUNIT_TEST_SUITE(ManagerTests);
-	  
+
+//    CPPUNIT_TEST(test_deleteComponent); // 結果はOK。exit()を実行しているのでコメントにしておく。
+    CPPUNIT_TEST(test_getLogLevel);
+    CPPUNIT_TEST(test_getLoadedModules);
+    CPPUNIT_TEST(test_getFactoryProfiles);
+    CPPUNIT_TEST(test_createContext);
+    CPPUNIT_TEST(test_init2);
     CPPUNIT_TEST(test_initFactories);
     CPPUNIT_TEST(test_initComposite);
     CPPUNIT_TEST(test_procContextArgs);
@@ -311,7 +318,6 @@ namespace Tests
     //CPPUNIT_TEST(test_createComponent_Non_DataFlowComponent);
 //    CPPUNIT_TEST(test_createComponent_failed_in_bindExecutionContext);
     //CPPUNIT_TEST(test_createComponent_with_illegal_module_name);
-
 
     CPPUNIT_TEST_SUITE_END();
 	
@@ -673,7 +679,7 @@ shutdown_ORB(m_mgr);
       int argc = 0;
       char* argv[] = {};
 			
-std::cout<<"IN test_runManager_block"<<std::endl;
+	//std::cout<<"IN test_runManager_block"<<std::endl;
       m_mgr = RTC::Manager::init(argc, argv);
       CPPUNIT_ASSERT(m_mgr != NULL);
 			
@@ -694,7 +700,7 @@ std::cout<<"IN test_runManager_block"<<std::endl;
         }
       catch(const ::PortableServer::POA::ServantAlreadyActive &)
         {
-std::cout<<"    ServantAlreadyActive"<<std::endl;
+	//std::cout<<"    ServantAlreadyActive"<<std::endl;
           rtoId = poa->servant_to_id(rto);
         }
 			
@@ -711,13 +717,13 @@ std::cout<<"    ServantAlreadyActive"<<std::endl;
       CPPUNIT_ASSERT_EQUAL(0, logger.countLog("initialize"));
       {
 	InvokerMock invoker(rtoRef, m_mgr);
-std::cout<<"    block"<<std::endl;
+	//std::cout<<"    block"<<std::endl;
 	m_mgr->runManager(false); // true:非ブロッキング，false:ブロッキング
-std::cout<<"    sleep3"<<std::endl;
+	//std::cout<<"    sleep3"<<std::endl;
 	coil::sleep(3);
       }
       CPPUNIT_ASSERT_EQUAL(1, logger.countLog("initialize"));
-std::cout<<"OUT test_runManager_block"<<std::endl;
+	//std::cout<<"OUT test_runManager_block"<<std::endl;
     }
 		
     class InvokerMock
@@ -897,11 +903,6 @@ std::cout<<"OUT test_runManager_block"<<std::endl;
       m_mgr->unloadAll();
       // CPPUNIT_ASSERT(! isFound(m_mgr->getLoadedModules(), moduleName1));
       // CPPUNIT_ASSERT(! isFound(m_mgr->getLoadedModules(), moduleName2));
-    }
-		
-    void test_getLoadedModules()
-    {
-      // 他テスト内で使用されているので省略する
     }
 		
     void test_getLoadableModules()
@@ -1194,11 +1195,6 @@ std::cout<<"OUT test_runManager_block"<<std::endl;
 
     }
 		
-    void test_registerComponent()
-    {
-      // Manager::createComponent()内で使用されているので、ここではテスト省略する
-    }
-		
     void test_unregisterComponent()
     {
       // Manager::cleanupComponent()内で使用されているので、ここではテスト省略する
@@ -1207,11 +1203,6 @@ std::cout<<"OUT test_runManager_block"<<std::endl;
     void test_bindExecutionContext()
     {
       // Manager::createComponent()内で使用されているので、ここではテスト省略する
-    }
-		
-    void test_deleteComponent()
-    {
-      // Manager側が未実装につきテストも未実装
     }
 		
     void test_getComponent()
@@ -1398,6 +1389,210 @@ std::cout<<"OUT test_runManager_block"<<std::endl;
       CPPUNIT_ASSERT_EQUAL(chk_val, ec_id);
       chk_val = "1000";
       CPPUNIT_ASSERT_EQUAL(chk_val, ec_prop["rate"]);
+    }
+		
+    /*!
+     * @brief getLogLevel()メソッドのテスト
+     * 
+     * - log_levelが正しく返却されるか？
+     */
+    void test_getLogLevel()
+    {
+      m_mgr = RTC::Manager::init(0, NULL);
+      CPPUNIT_ASSERT(m_mgr != NULL);
+      std::string log_level = m_mgr->getLogLevel();
+      CPPUNIT_ASSERT_EQUAL(std::string("INFO"), log_level);
+    }
+		
+    /*!
+     * @brief getLoadedModules()メソッドのテスト
+     * 
+     * - ロード済みのモジュールリストを正しく取得できるか？
+     */
+    void test_getLoadedModules()
+    {
+      int argc = 3;
+      char* argv[] = { "ManagerTests","-f","fixture3.conf" };
+			
+      m_mgr = RTC::Manager::init(argc, argv);
+      CPPUNIT_ASSERT(m_mgr != NULL);
+
+      // Managerとは別に、確認用にモジュールへのシンボルを取得しておく
+      typedef int (*FUNC_GETINITPROCCOUNT)();
+      typedef void (*FUNC_RESETINITPROCCOUNT)();
+      coil::DynamicLib loader("./.libs/DummyModule.so");
+
+      FUNC_GETINITPROCCOUNT pGetInitProcCount
+	= (FUNC_GETINITPROCCOUNT) loader.symbol("getInitProcCount");
+      CPPUNIT_ASSERT(pGetInitProcCount != NULL);
+			
+      FUNC_RESETINITPROCCOUNT pResetInitProcCount
+	= (FUNC_RESETINITPROCCOUNT) loader.symbol("resetInitProcCount");
+      CPPUNIT_ASSERT(pResetInitProcCount != NULL);
+			
+      (*pResetInitProcCount)(); // カウンタクリア
+			
+      CPPUNIT_ASSERT_EQUAL(0, (*pGetInitProcCount)());
+      m_mgr->load("./.libs/DummyModule.so", "InitProc");
+
+      // ロード済みのモジュールリストを正しく取得できるか？
+      std::vector<coil::Properties> props = m_mgr->getLoadedModules();
+      // std::cout << "props.size()=" << props.size() << std::endl;
+      CPPUNIT_ASSERT(props.size() > 0);
+
+      // std::cout << "props=\n" << props[0] << std::endl;
+      // std::cout << "props=\n" << props[0].getProperty("file_path") << std::endl;
+      CPPUNIT_ASSERT_EQUAL(std::string(".//./.libs/DummyModule.so"),
+			   props[0].getProperty("file_path"));
+    }
+		
+    /*!
+     * @brief getFactoryProfiles()メソッドのテスト
+     * 
+     * - RTコンポーネント用ファクトリをリストを正しく取得できるか？
+     */
+    void test_getFactoryProfiles()
+    {
+      m_mgr = RTC::Manager::init(0, NULL);
+      CPPUNIT_ASSERT(m_mgr != NULL);
+
+      // Factoryを正常に登録できるか？
+      coil::Properties properties;
+      properties.setProperty("implementation_id", "ID");
+
+      CPPUNIT_ASSERT(! isFound(m_mgr->getModulesFactories(), "ID"));
+      CPPUNIT_ASSERT(m_mgr->registerFactory(
+		    properties, CreateDataFlowComponentMock, DeleteDataFlowComponentMock));
+      CPPUNIT_ASSERT(isFound(m_mgr->getModulesFactories(), "ID"));
+
+      std::vector<coil::Properties> props = m_mgr->getFactoryProfiles();
+      // std::cout << "props.size()=" << props.size() << std::endl;
+      CPPUNIT_ASSERT(props.size() > 0);
+
+      // std::cout << "props[0]=\n" << props[0] << std::endl;
+      // std::cout << "props[1]=\n" << props[1] << std::endl;
+      // std::cout << "props=\n" << props[0].getProperty("implementation_id") << std::endl;
+      CPPUNIT_ASSERT_EQUAL(std::string("PeriodicECSharedComposite"),
+			   props[0].getProperty("implementation_id"));
+      CPPUNIT_ASSERT_EQUAL(std::string("ID"),
+			   props[1].getProperty("implementation_id"));
+    }
+		
+    /*!
+     * @brief createContext()メソッドのテスト
+     * 
+     * - ExecutionContextBaseを正しく取得できるか？
+     */
+    void test_createContext()
+    {
+      RTC::ExecutionContextBase* ec;
+      std::string ec_args;
+
+      m_mgr = RTC::Manager::init(0, NULL);
+      CPPUNIT_ASSERT(m_mgr != NULL);
+
+      // return NULL check
+      ec_args = "";
+      ec = m_mgr->createContext(ec_args.c_str());
+      // if(ec == NULL ) std::cout << "ec == NULL" << std::endl;
+      // else		std::cout << "ec != NULL" << std::endl;
+      CPPUNIT_ASSERT(ec == NULL);
+
+      // return NULL check (Factory not found)
+      ec_args = "periodic?rate=1000";
+      ec = m_mgr->createContext(ec_args.c_str());
+      // if(ec == NULL ) std::cout << "ec == NULL" << std::endl;
+      // else		std::cout << "ec != NULL" << std::endl;
+      CPPUNIT_ASSERT(ec == NULL);
+
+      // return any check
+      m_mgr->registerECFactory("PeriodicEC", 
+			RTC::ECCreate<RTC::PeriodicExecutionContext>, 
+			RTC::ECDelete<RTC::PeriodicExecutionContext>);
+      ec_args = "PeriodicEC?rate=1000";
+      ec = m_mgr->createContext(ec_args.c_str());
+      // if(ec == NULL ) std::cout << "ec == NULL" << std::endl;
+      // else		std::cout << "ec != NULL" << std::endl;
+      CPPUNIT_ASSERT(ec != NULL);
+    }
+		
+    /*!
+     * @brief deleteComponent()メソッドのテスト
+     * 
+     * - RTコンポーネントの削除が正しくできるか？
+     */
+    void test_deleteComponent()
+    {
+      int argc = 3;
+      char* argv[] = { "ManagerTests","-f","fixture4.conf" };
+
+      m_mgr = RTC::Manager::init(argc, argv);
+      CPPUNIT_ASSERT(m_mgr != NULL);
+      CPPUNIT_ASSERT(! CORBA::is_nil(m_mgr->getORB()));
+      CPPUNIT_ASSERT(! CORBA::is_nil(m_mgr->getPOA()));
+      CPPUNIT_ASSERT(! CORBA::is_nil(m_mgr->getPOAManager()));
+
+      // 非ブロッキングモードでマネージャを作動させる
+      CPPUNIT_ASSERT(m_mgr->activateManager());
+      m_mgr->runManager(true); // true:非ブロッキング，false:ブロッキング
+
+      // Factoryを登録しておく
+      coil::Properties properties;
+      properties.setProperty("implementation_id", "DataFlowComponentFactory");
+      properties.setProperty("type_name", "DataFlowComponent");
+      CPPUNIT_ASSERT(m_mgr->registerFactory(
+		    properties, CreateDataFlowComponentMock, DeleteDataFlowComponentMock));
+
+      // ECFactoryを登録しておく
+      CPPUNIT_ASSERT(m_mgr->registerECFactory(
+		      "PeriodicEC",
+		      RTC::ECCreate<RTC::PeriodicExecutionContext>,
+		      RTC::ECDelete<RTC::PeriodicExecutionContext>));
+
+      // 正しくコンポーネントを生成できるか？
+      RTC::RtcBase* comp = m_mgr->createComponent("DataFlowComponentFactory");
+      CPPUNIT_ASSERT(comp != NULL);
+      CPPUNIT_ASSERT(dynamic_cast<DataFlowComponentMock*>(comp) != NULL);
+      CPPUNIT_ASSERT(! CORBA::is_nil(comp->_this()));
+      CPPUNIT_ASSERT_EQUAL(
+	   std::string("DataFlowComponent0"),
+	   std::string(comp->getInstanceName()));
+
+      CPPUNIT_ASSERT(m_mgr->getComponent("DataFlowComponent0") != NULL);
+      std::vector<RTC::RTObject_impl*> comps = m_mgr->getComponents();
+      CPPUNIT_ASSERT(comps.size() > 0);
+
+      // 正しくコンポーネントを削除できるか？
+      m_mgr->deleteComponent("DataFlowComponent0");
+      CPPUNIT_ASSERT(m_mgr->getComponent("DataFlowComponent0") == NULL);
+
+      // deleteComponent()でexit()を実行しているため、これ以降のテストはできません。
+    }
+		
+    /*!
+     * @brief init()、shutdown()から呼ばれるprotected関数のテスト
+     * 
+     * - protected関数が正しく動作しているか？
+     */
+    void test_init2()
+    {
+      // Manager::init()よりprotected関数が使用されているので、ここではテスト省略する
+      //   initManager()
+      //   initLogger()
+      //   initORB()
+      //   initNaming()
+      //   initFactories()
+      //   initExecContext()
+      //   initComposite()
+      //   initTimer()
+      //   initManagerServant()
+
+      // Manager::shutdown()よりprotected関数が使用されているので、ここではテスト省略する
+      //    shutdownComponents();
+      //    shutdownNaming();
+      //    shutdownORB();
+      //    shutdownManager();
+      //    shutdownLogger();
     }
 		
   };
