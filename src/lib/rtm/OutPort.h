@@ -21,6 +21,7 @@
 #define OutPort_h
 
 #include <iostream>
+#include <string>
 
 #include <coil/TimeValue.h>
 #include <coil/Time.h>
@@ -259,106 +260,6 @@ namespace RTC
       return write(value);
     }
     
-    /*!
-     * @if jp
-     *
-     * @brief データ読み出し
-     *
-     * DataPort から値を読み出す
-     *
-     * - コールバックファンクタ OnRead がセットされている場合、
-     *   DataPort が保持するバッファから読み出す前に OnRead が呼ばれる。
-     * - DataPort が保持するバッファがアンダーフローを検出できるバッファで、
-     *   かつ、読み出す際にバッファがアンダーフローを検出した場合、
-     *   コールバックファンクタ OnUnderflow が呼ばれる。
-     * - コールバックファンクタ OnReadConvert がセットされている場合、
-     *   バッファ書き込み時に、OnReadConvert の operator() の戻り値が
-     *   read()の戻り値となる。
-     * - setReadTimeout() により読み出し時のタイムアウトが設定されている場合、
-     *   バッファアンダーフロー状態が解除されるまでタイムアウト時間だけ待ち、
-     *   OnUnderflow がセットされていればこれを呼び出して戻る
-     *
-     * @param value 読み出したデータ
-     *
-     * @return 読み出し処理実行結果(読み出し成功:true、読み出し失敗:false)
-     *
-     * @else
-     *
-     * @brief Readout the data
-     *
-     * Readout the value from DataPort
-     *
-     * - When Callback functor OnRead is already set, OnRead will be invoked
-     *   before reading from the buffer held by DataPort.
-     * - When the buffer held by DataPort can detect the underflow,
-     *   and when it detected the underflow at reading, callback functor
-     *   OnUnderflow will be invoked.
-     * - When callback functor OnReadConvert is already set, the return value of
-     *   operator() of OnReadConvert will be the return value of read().
-     * - When timeout at the time of reading is already set by setReadTimeout(),
-     *   it waits for only timeout period until the state of the buffer underflow
-     *   is released, and if OnUnderflow is already set, this will be invoked to
-     *   return.
-     *
-     * @param value Readout data
-     *
-     * @return Readout result (Successful:true, Failed:false)
-     *
-     * @endif
-     */
-    bool read(DataType& value)
-    {
-      if (m_OnRead != NULL) (*m_OnRead)();      
-      
-//      long int timeout = m_readTimeout;
-      double timeout = (double)m_readTimeout / (double)TIMEVALUE_ONE_SECOND_IN_USECS;
-      coil::TimeValue tm_cur, tm_pre;
-      tm_pre = coil::gettimeofday();
-      
-      // blocking and timeout wait
-      while (m_readBlock && this->isEmpty())
-	{
-	  if (m_readTimeout < 0)
-	    {
-              coil::usleep(m_timeoutTick);
-	      continue;
-	    }
-	  
-	  // timeout wait
-	  tm_cur = coil::gettimeofday();
-	  timeout -= (double)(tm_cur - tm_pre);
-	  if (timeout < 0) break;
-	  
-	  tm_pre = tm_cur;
-          coil::usleep(m_timeoutTick);
-	}
-      
-      if (this->isEmpty())
-	{
-	  if (m_OnUnderflow != NULL)
-	    {
-	      value = (*m_OnUnderflow)();
-	      return false;
-	    }
-	  else
-	    {
-	      return false;
-	    }
-	}
-      
-      if (m_OnReadConvert == NULL) 
-	{
-	  value = this->get();
-	  return true;
-	}
-      else
-	{
-	  value = (*m_OnReadConvert)(this->get());
-	  return true;
-	}
-      // never comes here
-      return false;
-    }
     
     /*!
      * @if jp
