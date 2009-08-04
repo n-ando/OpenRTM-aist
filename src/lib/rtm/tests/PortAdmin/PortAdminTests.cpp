@@ -68,6 +68,41 @@ namespace PortAdmin
   int g_argc;
   std::vector<std::string> g_argv;
 	
+  /*!
+   * 
+   * 
+   *
+   */
+  class Logger
+  {
+  public:
+    void log(const std::string& msg)
+    {
+      m_log.push_back(msg);
+    }
+
+    int countLog(const std::string& msg)
+    {
+      int count = 0;
+      for (int i = 0; i < (int) m_log.size(); ++i)
+        {
+          if (m_log[i] == msg) ++count;
+        }
+      return count;
+    }
+		
+    void clearLog(void)
+    {
+        m_log.clear();
+    }
+  private:
+    std::vector<std::string> m_log;
+  };
+  /*!
+   * 
+   * 
+   *
+   */
   class PortMock
     : public RTC::PortBase
   {
@@ -83,6 +118,32 @@ namespace PortAdmin
     virtual void unsubscribeInterfaces(const RTC::ConnectorProfile&)
     {
     }
+    virtual void activateInterfaces()
+    {
+          if (m_logger != NULL)
+          {
+              m_logger->log("PortMock::activateInterfaces");
+          }
+    }
+    virtual void deactivateInterfaces()
+    {
+          if (m_logger != NULL)
+          {
+              m_logger->log("PortMock::deactivateInterfaces");
+          }
+    }
+  public:
+      /*!
+       *
+       *
+       */
+      void setLogger(Logger* logger)
+      {
+          m_logger = logger;
+      }
+  private:
+    Logger* m_logger;
+
   };
 	
   class PortAdminTests
@@ -96,6 +157,8 @@ namespace PortAdmin
     CPPUNIT_TEST(test_deletePort);
     CPPUNIT_TEST(test_deletePortByName);
     CPPUNIT_TEST(test_finalizePorts);
+    CPPUNIT_TEST(test_activatePorts);
+    CPPUNIT_TEST(test_deactivatePorts);
     CPPUNIT_TEST_SUITE_END();
 	
   private:
@@ -340,6 +403,49 @@ namespace PortAdmin
       CPPUNIT_ASSERT(CORBA::is_nil(portProf1.port_ref));
       delete port1;
       delete port0;
+    }
+    /*!
+     * 
+     *
+     *
+     */
+    void test_activatePorts(void)
+    {
+      RTC::PortAdmin portAdmin(m_orb, m_poa);
+
+      Logger logger;
+			
+      // Portを登録しておく
+      PortMock* port0 = new PortMock();
+      port0->setName("port0");
+      port0->setLogger(&logger);
+      portAdmin.registerPort(*port0);
+
+      PortMock* port1 = new PortMock();
+      port1->setName("port1");
+      port1->setLogger(&logger);
+      portAdmin.registerPort(*port1);
+
+      CPPUNIT_ASSERT_EQUAL(0,logger.countLog("PortMock::activateInterfaces"));
+      portAdmin.activatePorts();
+      CPPUNIT_ASSERT_EQUAL(2,logger.countLog("PortMock::activateInterfaces"));
+
+      CPPUNIT_ASSERT_EQUAL(0,logger.countLog("PortMock::deactivateInterfaces"));
+      portAdmin.deactivatePorts();
+      CPPUNIT_ASSERT_EQUAL(2,logger.countLog("PortMock::deactivateInterfaces"));
+
+      m_poa->deactivate_object(*m_poa->servant_to_id(port0));
+      m_poa->deactivate_object(*m_poa->servant_to_id(port1));
+      delete port1;
+      delete port0;
+    }
+    /*!
+     * 
+     *
+     *
+     */
+    void test_deactivatePorts(void)
+    {
     }
 		
   };
