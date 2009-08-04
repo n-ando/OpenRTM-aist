@@ -1,7 +1,7 @@
 // -*- C++ -*-
 /*!
- * @file  OutPortCorbaProvider.h
- * @brief OutPortCorbaProvider class
+ * @file  OutPortCorbaCdrProvider.h
+ * @brief OutPortCorbaCdrProvider class
  * @date  $Date: 2008-01-14 07:52:40 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
@@ -13,7 +13,7 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: OutPortCorbaProvider.h 1244 2009-03-13 07:25:42Z n-ando $
+ * $Id: OutPortCorbaCdrProvider.h 1244 2009-03-13 07:25:42Z n-ando $
  *
  */
 

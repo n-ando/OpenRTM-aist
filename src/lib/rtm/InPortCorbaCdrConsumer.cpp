@@ -1,7 +1,7 @@
 // -*- C++ -*-
 /*!
- * @file  InPortCorbaConsumer.h
- * @brief InPortCorbaConsumer class
+ * @file  InPortCorbaCdrConsumer.h
+ * @brief InPortCorbaCdrConsumer class
  * @date  $Date: 2007-12-31 03:08:03 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
@@ -13,7 +13,7 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: InPortCorbaConsumer.h 1255 2009-04-07 01:09:47Z kurihara $
+ * $Id: InPortCorbaCdrConsumer.h 1255 2009-04-07 01:09:47Z kurihara $
  *
  */
 
