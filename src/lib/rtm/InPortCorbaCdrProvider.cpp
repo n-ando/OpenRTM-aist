@@ -13,7 +13,7 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: InPortCorbaProvider.h 1244 2009-03-13 07:25:42Z n-ando $
+ * $Id: InPortCorbaCdrProvider.h 1244 2009-03-13 07:25:42Z n-ando $
  *
  */
 
