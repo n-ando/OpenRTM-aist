@@ -1468,7 +1468,6 @@ AC_OUTPUT([Makefile
 	src/lib/rtm/tests/OutPortPullConnector/Makefile
 	src/lib/rtm/tests/OutPortCorbaCdrConsumer/Makefile
 	src/lib/rtm/tests/OutPortCorbaCdrProvider/Makefile
-	src/lib/rtm/tests/OutPortCorbaProvider/Makefile
 	src/lib/rtm/tests/OutPortProvider/Makefile
 	src/lib/rtm/tests/PeriodicExecutionContext/Makefile
 	src/lib/rtm/tests/PortAdmin/Makefile
