@@ -20,6 +20,7 @@ AM_CPPFLAGS=              \
 	-I$(top_builddir) \
 	-I$(includedir) \
 	-I$(top_builddir)/src/lib/rtm/idl/ \
+	-I$(top_builddir)/src/lib/coil/include \
 	-I$(top_builddir)/src/lib/rtmd/ \
 	-I$(top_builddir)/src/lib/
 
