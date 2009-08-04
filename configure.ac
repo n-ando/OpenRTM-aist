@@ -1450,8 +1450,6 @@ AC_OUTPUT([Makefile
 	src/lib/rtm/tests/InPortPushConnector/Makefile
 	src/lib/rtm/tests/InPortPullConnector/Makefile
 	src/lib/rtm/tests/InPortConnector/Makefile
-	src/lib/rtm/tests/InPortCorbaConsumer/Makefile
-	src/lib/rtm/tests/InPortCorbaProvider/Makefile
 	src/lib/rtm/tests/InPortProvider/Makefile
 	src/lib/rtm/tests/InPortTcpSockConsumer/Makefile
 	src/lib/rtm/tests/InPortTcpSockProvider/Makefile
@@ -1461,7 +1459,6 @@ AC_OUTPUT([Makefile
 	src/lib/rtm/tests/ModuleManager/Makefile
 	src/lib/rtm/tests/NVUtil/Makefile
 	src/lib/rtm/tests/NamingManager/Makefile
-	src/lib/rtm/tests/NullBuffer/Makefile
 	src/lib/rtm/tests/NumberingPolicy/Makefile
 	src/lib/rtm/tests/ObjectManager/Makefile
 	src/lib/rtm/tests/OutPort/Makefile
@@ -1471,7 +1468,6 @@ AC_OUTPUT([Makefile
 	src/lib/rtm/tests/OutPortPullConnector/Makefile
 	src/lib/rtm/tests/OutPortCorbaCdrConsumer/Makefile
 	src/lib/rtm/tests/OutPortCorbaCdrProvider/Makefile
-	src/lib/rtm/tests/OutPortCorbaConsumer/Makefile
 	src/lib/rtm/tests/OutPortCorbaProvider/Makefile
 	src/lib/rtm/tests/OutPortProvider/Makefile
 	src/lib/rtm/tests/PeriodicExecutionContext/Makefile
