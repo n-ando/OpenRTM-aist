@@ -69,12 +69,12 @@ namespace DataInOutPort
   private:
     RTC::OutPort<RTC::TimedFloat> m_outport;
     RTC::TimedFloat m_ofloat;
-    RTC::DataOutPort* m_doutport;
+//    RTC::DataOutPort* m_doutport;
     RTC::PortService_var m_oportref;
 
     RTC::InPort<RTC::TimedFloat> m_inport;
     RTC::TimedFloat m_ifloat;
-    RTC::DataInPort* m_dinport;
+//    RTC::DataInPort* m_dinport;
     RTC::PortService_var m_iportref;
 
     HogeCovnert<RTC::TimedFloat>* m_conv;
@@ -100,11 +100,14 @@ namespace DataInOutPort
       m_pPOA->the_POAManager()->activate();
 
 			coil::Properties dummy;
-      m_doutport = new RTC::DataOutPort("DataOutPort", m_outport, dummy);
-      m_oportref = m_doutport->get_port_profile()->port_ref;
+      m_inport.init();
+//      m_doutport = new RTC::DataOutPort("DataOutPort", m_outport, dummy);
+//      m_oportref = m_doutport->get_port_profile()->port_ref;
+      m_oportref = m_outport.get_port_profile()->port_ref;
 
-      m_dinport = new RTC::DataInPort("DataInPort", m_inport, dummy);
-      m_iportref = m_dinport->get_port_profile()->port_ref;
+//      m_dinport = new RTC::DataInPort("DataInPort", m_inport, dummy);
+//      m_iportref = m_dinport->get_port_profile()->port_ref;
+      m_iportref = m_inport.get_port_profile()->port_ref;
 
     }
     
@@ -139,22 +142,25 @@ namespace DataInOutPort
       prof.ports.length(2);
       prof.ports[0] = m_oportref;
       prof.ports[1] = m_iportref;
+
       CORBA_SeqUtil::push_back(prof.properties,
 			       NVUtil::newNV("dataport.interface_type",
-					     "CORBA_Any"));
+					     "corba_cdr"));
+
       CORBA_SeqUtil::push_back(prof.properties,
 			       NVUtil::newNV("dataport.dataflow_type",
-					     "Push"));
+					     "push"));
       CORBA_SeqUtil::push_back(prof.properties,
 			       NVUtil::newNV("dataport.subscription_type",
-					     "New"));
-      m_dinport->connect(prof);
+					     "new"));
+      RTC::ReturnCode_t ret= m_inport.connect(prof);
+      CPPUNIT_ASSERT(ret == RTC::RTC_OK);
       
       RTC::ConnectorProfileList* iprof;
-      iprof = m_dinport->get_connector_profiles();
+      iprof = m_inport.get_connector_profiles();
 
       RTC::ConnectorProfileList* oprof;
-      oprof = m_doutport->get_connector_profiles();
+      oprof = m_outport.get_connector_profiles();
 
 #ifdef DEBUG
       std::cout << "Returned  connector ID"
@@ -185,6 +191,9 @@ namespace DataInOutPort
 #endif
 	  CPPUNIT_ASSERT(m_ofloat.data == m_ifloat.data);
 	}
+
+	m_pPOA->deactivate_object(*m_pPOA->servant_to_id(&m_inport));
+	m_pPOA->deactivate_object(*m_pPOA->servant_to_id(&m_outport));
 
     }
   };
