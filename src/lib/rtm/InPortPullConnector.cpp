@@ -40,7 +40,7 @@ namespace RTC
       {
         m_buffer = createBuffer(m_profile);
       }
-    if (m_buffer == 0)
+    if (m_buffer == 0 || m_consumer==0)
       {
         throw std::bad_alloc();
         return;
