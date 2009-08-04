@@ -13,7 +13,7 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: InPortCorbaProvider.h 1244 2009-03-13 07:25:42Z n-ando $
+ * $Id: InPortCorbaCdrProvider.h 1244 2009-03-13 07:25:42Z n-ando $
  *
  */
 
@@ -34,8 +34,8 @@ namespace RTC
 {
   /*!
    * @if jp
-   * @class InPortCorbaProvider
-   * @brief InPortCorbaProvider クラス
+   * @class InPortCorbaCdrProvider
+   * @brief InPortCorbaCdrProvider クラス
    *
    * 通信手段に CORBA を利用した入力ポートプロバイダーの実装クラス。
    *
@@ -44,8 +44,8 @@ namespace RTC
    * @since 0.4.0
    *
    * @else
-   * @class InPortCorbaProvider
-   * @brief InPortCorbaProvider class
+   * @class InPortCorbaCdrProvider
+   * @brief InPortCorbaCdrProvider class
    *
    * This is an implementation class of the input port Provider 
    * that uses CORBA for means of communication.
@@ -131,7 +131,7 @@ namespace RTC
   private:
     BufferBase<cdrMemoryStream>* m_buffer;
     ::OpenRTM::InPortCdr_var m_objref;
-  };  // class InPortCorbaProvider
+  };  // class InPortCorCdrbaProvider
 };     // namespace RTC
 
 #ifdef WIN32
@@ -143,5 +143,5 @@ extern "C"
   void InPortCorbaCdrProviderInit(void);
 };
 
-#endif // InPortCorbaProvider_h
+#endif // InPortCorbaCdrProvider_h
 
