@@ -26,6 +26,7 @@
 #include <cppunit/TestAssert.h>
 
 #include <rtm/idl/RTCSkel.h>
+#include <rtm/RTObject.h>
 #include <rtm/ExtTrigExecutionContext.h>
 #include <rtm/CORBA_SeqUtil.h>
 
