@@ -499,7 +499,7 @@ namespace NVUtil
       string name5 = name1;
       string value5 = "english";
       CPPUNIT_ASSERT(appendStringValue(nvlist, name5.c_str(), value5.c_str()));
-      string expectedValueLanguage = "japanese, english";
+      string expectedValueLanguage = "japanese,english";
       CPPUNIT_ASSERT_EQUAL(expectedValueLanguage, toString(nvlist, name5.c_str()));
 			
       // (4) 既存の名称・値と全く同一のNameValueを追加しようとしたときに、意図どおり何も追加せずに終了するか？
@@ -512,7 +512,7 @@ namespace NVUtil
       string name7 = name3;
       string value7 = "coke, beer";
       CPPUNIT_ASSERT(appendStringValue(nvlist, name7.c_str(), value7.c_str()));
-      string expectedValueDrink = "coffee, coke, coke, beer";
+      string expectedValueDrink = "coffee, coke,coke, beer";
       CPPUNIT_ASSERT_EQUAL(expectedValueDrink, toString(nvlist, name7.c_str()));
     }
 
