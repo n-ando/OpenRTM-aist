@@ -44,6 +44,7 @@
 #include <cppunit/extensions/HelperMacros.h>
 #include <cppunit/TestAssert.h>
 
+#include <rtm/RTObject.h>
 #include <rtm/Factory.h>
 #include <rtm/Manager.h>
 #include <coil/Properties.h>
