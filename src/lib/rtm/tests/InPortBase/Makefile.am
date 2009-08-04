@@ -5,7 +5,7 @@
 # @date   $Date: 2007/01/21 06:52:04 $
 # @author Noriaki Ando <n-ando@aist.go.jp>
 #
-# $Id: Makefile.am 1173 2009-01-26 06:16:33Z openrtm $
+# $Id$
 #
 #------------------------------------------------------------
 
@@ -82,8 +82,9 @@ nodist_InPortBaseTests_SOURCES =     \
 	$(top_srcdir)/src/lib/rtm/InPortProvider.cpp             \
 	$(top_srcdir)/src/lib/rtm/InPortConnector.cpp            \
 	$(top_srcdir)/src/lib/rtm/InPortPullConnector.cpp        \
-	$(top_srcdir)/src/lib/rtm/InPortPushConnector.cpp        \
 	InPortBaseTests.cpp
+
+#	$(top_srcdir)/src/lib/rtm/InPortPushConnector.cpp        
 
 InPortBaseTests_LDFLAGS = -L$(libdir) $(AM_LDFLAGS)
 InPortBaseTests_LDADD   = -lcppunit -lcoil
