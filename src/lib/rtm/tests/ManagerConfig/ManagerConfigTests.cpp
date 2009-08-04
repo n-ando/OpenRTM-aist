@@ -126,10 +126,10 @@ namespace ManagerConfig
     void test_init_and_configure()
     {
       ManagerConfigMock mgrCfg;
-      CPPUNIT_ASSERT(mgrCfg.fileExist("./test.conf"));
+      CPPUNIT_ASSERT(mgrCfg.fileExist("./rtc.conf"));
 
       // コマンド引数の-fオプションで指定したファイルで正しく初期化できるか？
-      char* argv[] = { "command", "-f", "./test.conf" };
+      char* argv[] = { "command", "-f", "./rtc.conf" };
       int argc = sizeof(argv) / sizeof(char*);
       mgrCfg.init(argc, argv);
 			
