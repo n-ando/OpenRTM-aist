@@ -58,9 +58,17 @@ namespace RTC
         PortableServer::ObjectId_var oid = _default_POA()->servant_to_id(this);
         _default_POA()->deactivate_object(oid);
       }
+    catch (PortableServer::POA::ServantNotActive &e)
+      {
+        RTC_ERROR(("%s", e._name()));
+      }
+    catch (PortableServer::POA::WrongPolicy &e)
+      {
+        RTC_ERROR(("%s", e._name()));
+      }
     catch (...)
       {
-        RTC_WARN(("Unknown exception caught."));
+        RTC_ERROR(("Unknown exception caught."));
       }
   }
   
@@ -123,9 +131,8 @@ namespace RTC
   {
     RTC_TRACE(("get_connector_profile(%s)", connector_id));
     Guard gaurd(m_profile_mutex);
-    CORBA::Long index;
-    index = CORBA_SeqUtil::find(m_profile.connector_profiles,
-				PortBase::find_conn_id(connector_id));
+    CORBA::Long index(findConnProfileIndex(connector_id));
+
     if (index < 0)
       {
 	ConnectorProfile_var conn_prof;
@@ -503,7 +510,7 @@ namespace RTC
           }
       }
         
-    return RTC::RTC_OK;
+    return RTC::RTC_ERROR;
   }
   
   //============================================================
