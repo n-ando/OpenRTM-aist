@@ -877,9 +877,9 @@ namespace PublisherPeriodic
             CPPUNIT_ASSERT_EQUAL(RTC::PublisherPeriodic::PORT_OK,
                                  publisher.write(cdr,0,0));
 
+        coil::usleep(10000);
         }
 
-        coil::usleep(80000);
         //provider 側のバッファ full の状態でコール(full)
         {
         cdrMemoryStream cdr;
