@@ -758,7 +758,7 @@ namespace RTC
             RTC_ERROR(("old compiler? new returned 0;"));
             return 0;
           }
-        RTC_TRACE(("OutPortPushConnector created"));
+        RTC_TRACE(("OutPortPullConnector created"));
 
         m_connectors.push_back(connector);
         RTC_PARANOID(("connector pushback done: size = %d", m_connectors.size()));
