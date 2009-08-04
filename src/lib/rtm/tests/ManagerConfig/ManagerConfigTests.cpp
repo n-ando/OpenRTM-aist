@@ -129,7 +129,7 @@ namespace ManagerConfig
       CPPUNIT_ASSERT(mgrCfg.fileExist("./test.conf"));
 
       // コマンド引数の-fオプションで指定したファイルで正しく初期化できるか？
-      char* argv[] = { "command", "-f ./test.conf" };
+      char* argv[] = { "command", "-f", "./test.conf" };
       int argc = sizeof(argv) / sizeof(char*);
       mgrCfg.init(argc, argv);
 			
