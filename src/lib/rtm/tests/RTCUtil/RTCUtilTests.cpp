@@ -4,7 +4,7 @@
  * @brief  RTCUtil test class
  * @date   $Date: 2008/05/02 11:29:13 $
  *
- * $Id: RTCUtilTests.cpp,v 1.1 2008/05/02 11:29:13 arafune Exp $
+ * $Id$
  *
  */
 
@@ -104,6 +104,7 @@ namespace Tests
 //    virtual RTC::ExecutionContextServiceList* get_execution_context_services() { return NULL; }
   };
 
+/*
   class FiniteStateMachineComponentMock
     : public virtual POA_OpenRTM::FiniteStateMachineComponent
   {
@@ -177,6 +178,7 @@ namespace Tests
       return RTC::RTC_OK;
     }
   };
+*/
   class FsmObjectMock
     : public virtual POA_RTC::FsmObject
   {
@@ -294,22 +296,22 @@ namespace Tests
     CPPUNIT_TEST_SUITE(RTCUtilTests);
 		
     CPPUNIT_TEST(test_isDataFlowComponent_DataFlowComponent);
-    CPPUNIT_TEST(test_isDataFlowComponent_FiniteStateMachineComponent);
+//    CPPUNIT_TEST(test_isDataFlowComponent_FiniteStateMachineComponent);
     CPPUNIT_TEST(test_isDataFlowComponent_FsmObject);
     CPPUNIT_TEST(test_isDataFlowComponent_MultiModeObject);
 
     CPPUNIT_TEST(test_isFsmParticipant_DataFlowComponent);
-    CPPUNIT_TEST(test_isFsmParticipant_FiniteStateMachineComponent);
+//    CPPUNIT_TEST(test_isFsmParticipant_FiniteStateMachineComponent);
     CPPUNIT_TEST(test_isFsmParticipant_FsmObject);
     CPPUNIT_TEST(test_isFsmParticipant_MultiModeObject);
 
     CPPUNIT_TEST(test_isFsmObject_DataFlowComponent);
-    CPPUNIT_TEST(test_isFsmObject_FiniteStateMachineComponent);
+//    CPPUNIT_TEST(test_isFsmObject_FiniteStateMachineComponent);
     CPPUNIT_TEST(test_isFsmObject_FsmObject);
     CPPUNIT_TEST(test_isFsmObject_MultiModeObject);
 		
     CPPUNIT_TEST(test_isMultiModeObject_DataFlowComponent);
-    CPPUNIT_TEST(test_isMultiModeObject_FiniteStateMachineComponent);
+//    CPPUNIT_TEST(test_isMultiModeObject_FiniteStateMachineComponent);
     CPPUNIT_TEST(test_isMultiModeObject_FsmObject);
     CPPUNIT_TEST(test_isMultiModeObject_MultiModeObject);
 		
@@ -363,6 +365,7 @@ namespace Tests
       CPPUNIT_ASSERT(RTC_Utils::isDataFlowComponent(ref));
     }
 		
+/*
     void test_isDataFlowComponent_FiniteStateMachineComponent()
     {
       FiniteStateMachineComponentMock* obj = new FiniteStateMachineComponentMock();
@@ -371,6 +374,7 @@ namespace Tests
 			
       CPPUNIT_ASSERT(! RTC_Utils::isDataFlowComponent(ref));
     }
+*/
 		
     void test_isDataFlowComponent_FsmObject()
     {
@@ -400,6 +404,7 @@ namespace Tests
       CPPUNIT_ASSERT(! RTC_Utils::isFsmParticipant(ref));
     }
 		
+/*
     void test_isFsmParticipant_FiniteStateMachineComponent()
     {
       FiniteStateMachineComponentMock* obj = new FiniteStateMachineComponentMock();
@@ -408,6 +413,7 @@ namespace Tests
 			
       CPPUNIT_ASSERT(RTC_Utils::isFsmParticipant(ref));
     }
+*/
 		
     void test_isFsmParticipant_FsmObject()
     {
@@ -437,6 +443,7 @@ namespace Tests
       CPPUNIT_ASSERT(! RTC_Utils::isFsmObject(ref));
     }
 		
+/*
     void test_isFsmObject_FiniteStateMachineComponent()
     {
       FiniteStateMachineComponentMock* obj = new FiniteStateMachineComponentMock();
@@ -445,6 +452,7 @@ namespace Tests
 			
       CPPUNIT_ASSERT(! RTC_Utils::isFsmObject(ref));
     }
+*/
 		
     void test_isFsmObject_FsmObject()
     {
@@ -474,6 +482,7 @@ namespace Tests
       CPPUNIT_ASSERT(! RTC_Utils::isMultiModeObject(ref));
     }
 
+/*
     void test_isMultiModeObject_FiniteStateMachineComponent()
     {
       FiniteStateMachineComponentMock* obj = new FiniteStateMachineComponentMock();
@@ -482,6 +491,7 @@ namespace Tests
 			
       CPPUNIT_ASSERT(! RTC_Utils::isMultiModeObject(ref));
     }
+*/
 
     void test_isMultiModeObject_FsmObject()
     {
