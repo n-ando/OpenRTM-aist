@@ -4,7 +4,7 @@
  * @brief  CorbaNaming test class
  * @date   $Date: 2008/04/29 09:54:28 $
  *
- * $Id: CorbaNamingTests.cpp,v 1.1 2008/04/29 09:54:28 arafune Exp $
+ * $Id$
  *
  */
 
@@ -41,7 +41,13 @@ namespace RTC
 
     void activate(::PortableServer::ServantBase* servant)
     {
-      m_poa->activate_object(servant);
+      try
+        {
+          m_poa->activate_object(servant);
+        }
+      catch(const ::PortableServer::POA::ServantAlreadyActive &)
+        {
+        }
     }
   protected:
     ::CORBA::ORB_ptr m_orb;
@@ -600,6 +606,7 @@ namespace CorbaNaming
       nc->bind(m_pNaming->toName("id.kind"), rto->getObjRef());
       CORBA::Object_ptr obj = resolveRecursive("id-lv0.kind-lv0/id.kind");
       CPPUNIT_ASSERT(! CORBA::is_nil(obj));
+
     }
 		
     void test_destroy()
