@@ -24,8 +24,6 @@ SUBDIRS = \
 	InPortPullConnector \
 	InPortCorbaCdrConsumer \
 	InPortCorbaCdrProvider \
-	InPortCorbaConsumer \
-	InPortCorbaProvider \
 	InPortProvider \
 	Manager  \
 	ManagerConfig     \
@@ -33,7 +31,6 @@ SUBDIRS = \
 	ModuleManager     \
 	NVUtil            \
 	NamingManager \
-	NullBuffer        \
 	NumberingPolicy \
 	ObjectManager     \
 	OutPort           \
@@ -43,8 +40,6 @@ SUBDIRS = \
 	OutPortPullConnector \
 	OutPortCorbaCdrConsumer \
 	OutPortCorbaCdrProvider \
-	OutPortCorbaConsumer \
-	OutPortCorbaProvider \
 	OutPortProvider   \
 	PeriodicExecutionContext \
 	PortAdmin         \

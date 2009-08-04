@@ -124,14 +124,11 @@ rtmheader_HEADERS = \
 	ExecutionContextBase.h 	\
 	InPort.h 		\
 	InPortConsumer.h 	\
-	InPortCorbaConsumer.h 	\
-	InPortCorbaProvider.h 	\
 	InPortTcpSockConsumer.h \
 	InPortTcpSockProvider.h \
 	ObjectManager.h 	\
 	OutPort.h 		\
 	OutPortConsumer.h 	\
-	OutPortCorbaConsumer.h 	\
 	OutPortTcpSockProvider.h\
 	PeriodicTaskFactory.h 	\
 	PortCallBack.h 		\
