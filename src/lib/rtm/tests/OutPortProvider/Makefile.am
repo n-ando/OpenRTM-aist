@@ -26,7 +26,11 @@ AM_LDFLAGS =              \
 
 IDL_SOURCES =                                \
 	$(top_srcdir)/src/lib/rtm/idl/RTC.idl        \
-	$(top_srcdir)/src/lib/rtm/idl/SDOPackage.idl 
+	$(top_srcdir)/src/lib/rtm/idl/SDOPackage.idl \
+	$(top_srcdir)/src/lib/rtm/idl/OpenRTM.idl \
+	$(top_srcdir)/src/lib/rtm/idl/Manager.idl \
+	$(top_srcdir)/src/lib/rtm/idl/BasicDataType.idl \
+	$(top_srcdir)/src/lib/rtm/idl/DataPort.idl
 
 noinst_PROGRAMS = OutPortProviderTests
 

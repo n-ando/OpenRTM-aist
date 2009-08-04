@@ -21,6 +21,99 @@
  * @class OutPortProviderTests class
  * @brief OutPortProvider test
  */
+/*
+ *
+ *
+ * Mock RTC
+ *
+ *
+ */
+namespace RTC
+{
+ /*!
+  *
+  * Mock SystemLogger
+  *
+  *
+  *
+  */
+  LogStreamBuf m_logStreamBuf;
+  const char* Logger::m_levelString[] =
+    {
+      " SILENT: ",
+      " FATAL: ",
+      " ERROR: ",
+      " WARNING: ",
+      " INFO: ",
+      " DEBUG: ",
+      " TRACE: ",
+      " VERBOSE: ",
+      " PARANOID: "
+    };
+
+  Logger::Logger(const char* name)
+    : ::coil::LogStream(&m_logStreamBuf, 0, 8, 0)
+  {
+  }
+
+  Logger::Logger(LogStreamBuf* streambuf)
+    : ::coil::LogStream(&m_logStreamBuf, 0, 8, 0)
+  {
+  }
+
+  Logger::~Logger(void)
+  {
+  }
+
+  /*!
+   */
+  bool Logger::setLevel(const char* level)
+  {
+    return true; 
+  }
+
+  /*!
+   */
+  void Logger::setDateFormat(const char* format)
+  {
+  }
+
+  /*!
+   */
+  void Logger::setName(const char* name)
+  {
+  }
+
+  /*!
+   */
+  void Logger::header(int level)
+  {
+  }
+
+  /*!
+   */
+  std::string Logger::getDate(void)
+  {
+    const int maxsize = 256;
+    char buf[maxsize];
+
+    return std::string(buf);
+  }
+
+  /*!
+   */
+  int Logger::strToLevel(const char* level)
+  {
+      return 0;
+  }
+};
+/*
+ *
+ *
+ *
+ *
+ *
+ */
 namespace OutPortProvider
 {
   class OutPortProviderMock
