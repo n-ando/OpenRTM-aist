@@ -350,8 +350,8 @@ namespace RTC
   {
     RTC_TRACE(("get_component_state()"));
     CompItr it;
-    it = std::find_if(m_comps.begin(), m_comps.end(),
-		      find_comp(RTC::LightweightRTObject::_duplicate(comp)));
+    it = std::find_if(m_comps.begin(), m_comps.end(), find_comp(comp));
+
     if (it == m_comps.end())
       {
 	return RTC::CREATED_STATE;
