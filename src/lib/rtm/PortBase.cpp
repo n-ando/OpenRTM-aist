@@ -486,11 +486,15 @@ namespace RTC
       {
         return RTC::BAD_PARAMETER;
       }
+    if (index == cprof.ports.length() - 1)
+      {
+        return RTC::RTC_OK;
+      }
     
     CORBA::ULong len = cprof.ports.length();
     
     ++index;
-    for (CORBA::ULong i(index); i < len; ++i)
+    for (CORBA::ULong i(index); i < 4len; ++i)
       {
         RTC::PortService_var p;
         p = cprof.ports[i];
