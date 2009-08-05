@@ -366,12 +366,10 @@ namespace CorbaPort
       MyService_impl* pImpl1
 	= new MyService_impl();
 			
-      MyService_impl* pImpl2
-	= new MyService_impl();
 			
       CorbaPortMock* port0 = new CorbaPortMock("name of port");
       bool ret;
-      ret = port0->registerProvider("registerProvider", "Generic", *pImpl0);
+      ret = port0->registerProvider("registerProvider0", "Generic", *pImpl0);
       CPPUNIT_ASSERT_EQUAL(true,ret);
 
       //既に登録してあるインスタンス名とオブジェクトを登録した場合、falseを返す。
@@ -382,10 +380,10 @@ namespace CorbaPort
       ret = port0->registerProvider("registerProvider0", "Generic", *pImpl1);
       CPPUNIT_ASSERT_EQUAL(false,ret);
      
-      //既に登録してあるオブジェクトを登録した場合、falseを返す。
+      //別なインスタンス名で既に登録してあるオブジェクトを登録した場合、trueを返す。
       //   falseを返すが登録される。
       ret = port0->registerProvider("registerProvider1", "Generic", *pImpl0);
-      CPPUNIT_ASSERT_EQUAL(false,ret);
+      CPPUNIT_ASSERT_EQUAL(true,ret);
 
       //登録してないインスタンス名とオブジェクトを登録した場合、trueを返す。
       ret = port0->registerProvider("registerProvider2", "Generic", *pImpl1);
