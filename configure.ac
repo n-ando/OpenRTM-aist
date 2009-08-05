@@ -1497,6 +1497,7 @@ AC_OUTPUT([Makefile
 	examples/SeqIO/Makefile
 	examples/SimpleService/Makefile
 	examples/ExtTrigger/Makefile
+	examples/tests/Makefile
 	docs/Makefile
 	win32/Makefile
 	win32/OpenRTM-aist/Makefile
