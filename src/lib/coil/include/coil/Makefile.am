@@ -21,3 +21,5 @@ clean-local:
 	rm -f *.h
 	mv config_coil_tmp config_coil.h
 	rm -f *~
+
+dist-hook: all-local
