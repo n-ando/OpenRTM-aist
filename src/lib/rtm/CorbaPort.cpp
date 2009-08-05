@@ -164,7 +164,13 @@ namespace RTC
     ServantMap::iterator it = m_servants.begin();
     while(it != m_servants.end())
       {
-        Manager::instance().getPOA()->deactivate_object(it->second.oid);
+        try
+          {
+            Manager::instance().getPOA()->deactivate_object(it->second.oid);
+          }
+        catch(const ::PortableServer::POA::ObjectNotActive&)
+          {
+          }
 	it++;
       }
   }
