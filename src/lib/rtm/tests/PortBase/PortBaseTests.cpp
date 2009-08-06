@@ -64,6 +64,13 @@
  * @class PortBaseTests class
  * @brief PortBase test
  */
+/*
+ *
+ *
+ *
+ *
+ *
+ */
 namespace PortBase
 {
   class PortBaseMock : public RTC::PortBase
@@ -73,6 +80,8 @@ namespace PortBase
     PortBaseMock(const RTC::PortProfile& profile)
     {
       this->m_profile = profile;
+      this->m_profile.connector_profiles[0].ports.length(1);
+      this->m_profile.connector_profiles[0].ports[0] = this->m_objref;
       this->m_profile.port_ref = this->m_objref;
     }
 
@@ -93,6 +102,10 @@ namespace PortBase
     {
       _notifyDisconnectTimes.push_back(getNow());
       return PortBase::notify_disconnect(connector_id);
+    }
+    void erase_m_profile(void) 
+    {
+      CORBA_SeqUtil::erase(this->m_profile.connector_profiles, 0);
     }
 		
   protected:
@@ -316,8 +329,7 @@ namespace PortBase
       // (1) オブジェクト参照経由で、get_port_profile()に正しくアクセスできるか？
       // get_port_profile()はCORBAインタフェースなので、オブジェクト参照経由でアクセスし、
       // CORBAインタフェースとして機能していることを確認する
-      const RTC::PortService_ptr portRef = m_pPortBase->getPortRef();
-      const RTC::PortProfile* pPortProfile = portRef->get_port_profile();
+      const RTC::PortService_ptr portRef = m_pPortBase->getPortRef(); const RTC::PortProfile* pPortProfile = portRef->get_port_profile();
 			
       // (2) PortProfile.nameを正しく取得できるか？
       CPPUNIT_ASSERT_EQUAL(
@@ -542,7 +554,7 @@ namespace PortBase
       // 接続時に必要となるConnectorProfileを構築する
       RTC::ConnectorProfile connProfile;
       connProfile.name = "ConnectorProfile-name";
-      connProfile.connector_id = "connect_id0";
+      connProfile.connector_id = "connect_id1";
       connProfile.ports.length(1);
       connProfile.ports[0] = portRef;
 
@@ -580,7 +592,7 @@ namespace PortBase
       // 接続時に必要となるConnectorProfileを構築する
       RTC::ConnectorProfile connProfile;
       connProfile.name = "ConnectorProfile-name";
-      connProfile.connector_id = "connect_id0";
+      connProfile.connector_id = "connect_id2";
       connProfile.ports.length(1);
       connProfile.ports[0] = portRef;
 
@@ -603,9 +615,19 @@ namespace PortBase
       RTC::PortService_ptr portRef_2 = m_pPortBase_2->getPortRef();
       RTC::PortService_ptr portRef_3 = m_pPortBase_3->getPortRef();
 
+      // ここでは、  setUp() の PortBaseMockのコンストラクタ内で
+      // テストの為設定されている connect_id0 は不要なため削除する
+      // connect_id0 は
+      //  get_port_profile(),getPortProfile(),get_connector_profiles() 
+      // のテストで使用している
+      PortBaseMock* pPBMock
+                 = dynamic_cast<PortBaseMock*>(m_pPortBase);
+      pPBMock->erase_m_profile();
+
+
       RTC::ConnectorProfile connProfile;
       connProfile.name = "ConnectorProfile-name";
-      connProfile.connector_id = "connect_id0";
+      connProfile.connector_id = "connect_id3";
       connProfile.ports.length(3);
       connProfile.ports[0] = portRef_1;
       connProfile.ports[1] = portRef_2;
