@@ -89,6 +89,8 @@ namespace NVUtil
     CPPUNIT_TEST(test_toString);
     CPPUNIT_TEST(test_appendStringValue);
     CPPUNIT_TEST(test_append);
+    CPPUNIT_TEST(test_dump);
+    CPPUNIT_TEST(test_toStringNV);
     CPPUNIT_TEST_SUITE_END();
 
   private:
@@ -560,7 +562,86 @@ namespace NVUtil
       CPPUNIT_ASSERT_EQUAL(valueB1, toString(nvlistA, nameB1.c_str()));
       CPPUNIT_ASSERT_EQUAL(valueB2, toString(nvlistA, nameB2.c_str()));
     }
-		
+    void test_dump()
+    { 
+      SDOPackage::NVList nvlistC;
+      nvlistC.length(3);
+			
+      string nameC1 = "nameC1";
+      string valueC1 = "valueC1";
+      nvlistC[0].name = nameC1.c_str();
+      nvlistC[0].value <<= valueC1.c_str();
+			
+      string nameC2 = "nameC2";
+      string valueC2 = "valueC2";
+      nvlistC[1].name = nameC2.c_str();
+      nvlistC[1].value <<= valueC2.c_str();
+
+      string nameC3 = "harumi";
+      string valueC3 = "miyamoto";
+      nvlistC[2].name = nameC3.c_str();
+      nvlistC[2].value <<= valueC3.c_str();
+     
+
+      dump(nvlistC);
+      //      CPPUNIT_ASSERT("nameC1: valueC1\nnameC2: valueC2\nharumi: miyamoto" == dump(nvlistC));
+      //CPPUNIT_ASSERT_EQUAL(strC,dump(nvlistC));
+
+      //CPPUNIT_ASSERT_EQUAL(strC, toString(strC2,dump(nvlistC)));
+    }	
+
+    // std::string toString(const SDOPackage::NVList& nv);のテストです。
+    void test_toStringNV()
+    {
+      SDOPackage::NVList nvlistD;
+      nvlistD.length(2);
+			
+      string nameD1 = "nameD1";
+      string valueD1 = "valueD1";
+      nvlistD[0].name = nameD1.c_str();
+      nvlistD[0].value <<= valueD1.c_str();
+			
+      string nameD2 = "nameD2";
+      string valueD2 = "valueD2";
+      nvlistD[1].name = nameD2.c_str();
+      nvlistD[1].value <<= valueD2.c_str();
+ 
+      string strD ="\n\nnameD1: valueD1\nnameD2: valueD2";
+//      std::cout << strD << std::endl;
+
+      SDOPackage::NVList nvlistE;
+      nvlistE.length(2);
+			
+      // (1) NVList要素のnameに"short",valueにshort型のデータをセット。
+      string nameE1 = "short";
+      CORBA::Short valueE1 = 1;
+      nvlistE[0].name = nameE1.c_str();
+      nvlistE[0].value <<= valueE1;
+			
+      // (2) NVList要素のnameに"string",valueにstring型のデータをセット。
+      string nameE2 = "string";
+      string valueE2 = "test";
+      nvlistE[1].name = nameE2.c_str();
+      nvlistE[1].value <<= valueE2.c_str();
+      			
+      // (3) ストリング以外のデータがセットされたときのメッセージを確認。
+
+      std::string empty = "short: not a string value\nstring: test\n";
+      std::string str_nvlistE = toString(nvlistE);
+      /*
+      if (empty == str_nvlistE)
+	{
+	  std::cout << "OKK";
+	}
+      else 
+	{
+	  std::cout << "not match !!" << std::endl;
+	}
+      */  
+      CPPUNIT_ASSERT(toString(nvlistE) == empty);
+
+
+    }	
   };
 }; // namespace NVUtil
 
