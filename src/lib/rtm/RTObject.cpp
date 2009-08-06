@@ -353,7 +353,15 @@ namespace RTC
     // m_ecMine.length() != 0 || 
     if(m_ecOther.length() != 0)
     {
-      return RTC::PRECONDITION_NOT_MET;
+
+        for (CORBA::ULong ic(0), len(m_ecOther.length()); ic < len; ++ic)
+          {
+            if(! CORBA::is_nil(m_ecOther[ic]))
+              {
+                return RTC::PRECONDITION_NOT_MET;
+              }
+          }
+        CORBA_SeqUtil::clear(m_ecOther);
     }
     
     ReturnCode_t ret(on_finalize());
@@ -396,7 +404,10 @@ namespace RTC
       {
         //        m_ecOther[ic]->stop();
 	RTC::LightweightRTObject_var comp(this->_this());
-        m_ecOther[ic]->remove_component(comp.in());
+        if (! ::CORBA::is_nil(m_ecOther[ic]))
+          {
+            m_ecOther[ic]->remove_component(comp.in());
+          }
       }
 
     ReturnCode_t ret(finalize());
@@ -423,8 +434,11 @@ namespace RTC
 
     for (::CORBA::ULong i(0), len(m_ecOther.length()); i < len; ++i)
       {
-        if (exec_context->_is_equivalent(m_ecOther[i]))
-          return true;
+        if (! ::CORBA::is_nil(m_ecOther[i]))
+          {
+            if (exec_context->_is_equivalent(m_ecOther[i]))
+                return true;
+          }
       }
     return false;
   }
@@ -458,7 +472,10 @@ namespace RTC
 
     if (index < m_ecOther.length())
       {
-        return ExecutionContext::_duplicate(m_ecOther[index]);
+        if (! ::CORBA::is_nil(m_ecOther[index]))
+          {
+            return ExecutionContext::_duplicate(m_ecOther[index]);
+          }
       }
 
     return ExecutionContext::_nil();
@@ -627,7 +644,7 @@ namespace RTC
 	return RTC::BAD_PARAMETER;
       }
     
-    CORBA_SeqUtil::erase(m_ecOther, index);
+    m_ecOther[index] = ::RTC::ExecutionContextService::_nil();
 
     return RTC::RTC_OK;
   }

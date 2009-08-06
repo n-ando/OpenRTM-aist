@@ -2680,7 +2680,10 @@ namespace RTC
       }
       void operator()(ExecutionContextService_ptr ecs)
       {
-	CORBA_SeqUtil::push_back(m_eclist, ExecutionContext::_duplicate(ecs));
+        if (!::CORBA::is_nil(ecs))
+          {
+	    CORBA_SeqUtil::push_back(m_eclist, ExecutionContext::_duplicate(ecs));
+          }
       }
       ExecutionContextList& m_eclist;
     };  // struct ec_copy
@@ -2695,9 +2698,12 @@ namespace RTC
       {
 	try
 	  {
-	    ExecutionContext_var ec;
-	    ec = ExecutionContext::_narrow(ecs);
-	    return m_ec->_is_equivalent(ec);
+            if (!::CORBA::is_nil(ecs))
+              {
+  	        ExecutionContext_var ec;
+	        ec = ExecutionContext::_narrow(ecs);
+	        return m_ec->_is_equivalent(ec);
+              }
 	  }
 	catch (...)
 	  {
@@ -2725,7 +2731,10 @@ namespace RTC
       }
       void operator()(ExecutionContextService_ptr ec)
       {
-	ec->deactivate_component(RTC::LightweightRTObject::_duplicate(m_comp));
+        if (!::CORBA::is_nil(ec))
+          {
+	    ec->deactivate_component(RTC::LightweightRTObject::_duplicate(m_comp));
+          }
       }
       LightweightRTObject_var m_comp;
     };  // struct deactivate_comps
