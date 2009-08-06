@@ -280,7 +280,10 @@ namespace NVUtil
     const char* str_value;
     try
       {
-	find(nv, name) >>= str_value;
+	if(!(find(nv, name) >>= str_value))
+          {
+	    str_value = "";
+          }
       }
     catch (...)
       {
