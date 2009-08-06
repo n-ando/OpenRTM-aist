@@ -29,15 +29,15 @@
 
 /*!
  * @if jp
- * @namespace SDOPacakge
+ * @namespace SDOPackage
  *
- * @brief SDO
+ * @brief SDO パッケージ
  *
  * @else
  *
  * @namespace SDOPackage
  *
- * @brief SDO
+ * @brief SDO Package
  *
  * @endif
  */
