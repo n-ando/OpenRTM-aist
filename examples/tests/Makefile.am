@@ -51,14 +51,6 @@ TESTS_SOURCES = \
 	CorbaNaming.py
 
 
-IDL_SOURCES =       \
-	BasicDataType.idl \
-	DataPort.idl \
-	Manager.idl \
-	OpenRTM.idl \
-	RTC.idl \
-	SDOPackage.idl
-
 py_stub: $(PY_STUBS)
 
 dist-hook: py_stub
