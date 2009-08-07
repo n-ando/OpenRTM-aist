@@ -54,9 +54,9 @@ def print_file_and_cons(out_data, out_flag=0):
 ## memory leak check
 def leak_check(rss_start, rss_end):
     if rss_start != rss_end:
-        fodat = "  result: memory leak found !!!"
+        fodat = "  result: memory leak was found !!!"
     else:
-        fodat = "  result: memory leak not found."
+        fodat = "  result: memory leak was not found."
     print_file_and_cons(fodat)
     return
 
