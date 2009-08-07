@@ -8,7 +8,7 @@
 
 AUTOMAKE_OPTIONS = 1.4
 
-SUBDIRS = Composite ConfigSample SimpleIO SeqIO SimpleService ExtTrigger
+SUBDIRS = Composite ConfigSample SimpleIO SeqIO SimpleService ExtTrigger tests
 
 EXTRA_DIST =               \
 	rtc.vcproj.yaml    \
