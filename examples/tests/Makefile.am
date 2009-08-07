@@ -46,7 +46,10 @@ TESTS_SOURCES = \
 	RTCTest.py \
 	SDOPackageTest.py \
 	ServiceProfileSDOPackageTest.py \
-	SetMemberSDOPackageTest.py
+	SetMemberSDOPackageTest.py \
+	rtc_handle.py \
+	CorbaNaming.py
+
 
 IDL_SOURCES =       \
 	BasicDataType.idl \
@@ -61,16 +64,25 @@ py_stub: $(PY_STUBS)
 dist-hook: py_stub
 
 EXTRA_DIST =           \
-	$(TESTS_SOURCES)   \
-	$(PY_STUBS)        \
-	OpenRTM            \
-	OpenRTM__POA       \
-	RTC                \
-	RTC__POA           \
-	RTM                \
-	RTM_POA            \
-	SDOPackage         \
-	SDOPackage__POA
+	$(TESTS_SOURCES) \
+	AddRemoveMemberSDOPackageTest.sh \
+	AddRemoveOrganizationSDOPackageTest.sh \
+	AddRemoveRTCTest.sh \
+	AttachDetachRTCTest.sh \
+	ConfigurationSDOPackageTest.sh \
+	ConnectRTCTest.sh \
+	CreateDeleteRTCTest.sh \
+	DataPortTest.sh \
+	ManagerTest.sh \
+	OrganizationSDOPackageTest.sh \
+	RTCTest.sh \
+	SDOPackageTest.sh \
+	ServiceProfileSDOPackageTest.sh \
+	SetMemberSDOPackageTest.sh \
+	run.sh \
+	setup.sh \
+	rtc.conf
+
 
 
 # all
