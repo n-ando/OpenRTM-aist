@@ -23,6 +23,7 @@ AC_CONFIG_AUX_DIR([.])
 AM_INIT_AUTOMAKE([dist-bzip2 tar-pax])
 AM_CONFIG_HEADER([src/lib/rtm/config_rtc.h])
 AC_CONFIG_FILES([utils/rtm-config/libRTM.pc:utils/rtm-config/libRTM.pc.in])
+AC_CONFIG_FILES([utils/rtc-template/cxx_cmake_gen.py:utils/rtc-template/cxx_cmake_gen.py.in])
 
 dnl ------------------------------------------------------------
 dnl rename config header's PACKAGE_* definition
@@ -124,7 +125,13 @@ AC_ARG_ENABLE(sockdataport,   [  --with-sockdataport             With Socket Dat
 AC_ARG_ENABLE(artlinux,       [  --with-rdtsc                    With Read Time Stamp Counter])
 AC_ARG_ENABLE(unittest,       [  --enable-test                   Enable UnitTest With CppUnit])
 
-
+dnl CMake modules directory
+AC_ARG_WITH(cmakemodulesdir,
+	AC_HELP_STRING([--with-cmakemodulesdir],
+	[Use the specified directory for CMake modules (default is prefix/share/cmake/Modules]),
+	[cmakemodulesdir=${withval}],
+	[cmakemodulesdir=${datadir}'/cmake/Modules'])
+AC_MSG_NOTICE([cmakemodulesdir directory is ${cmakemodulesdir}])
 
 
 dnl ------------------------------------------------------------
@@ -1353,6 +1360,7 @@ AC_SUBST(SOEXT)
 AC_SUBST(LDSOOPTS)
 AC_SUBST(LDSOLIBS)
 AC_SUBST(pkgconfigdir)
+AC_SUBST(cmakemodulesdir)
 
 dnl RTM version related options
 AC_SUBST(RTM_VERSION)

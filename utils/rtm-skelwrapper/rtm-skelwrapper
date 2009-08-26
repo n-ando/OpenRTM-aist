@@ -30,6 +30,7 @@ import skel_wrapper
 opt_args_fmt = ["help",
 		"idl-file=",
 		"include-dir=",
+		"output-dir=",
 		"skel-suffix=",
 		"stub-suffix="]
 
@@ -54,13 +55,14 @@ Options:
     [--idl-file[=IDL_file]]               IDL file name
     [--skel-suffix[=suffix]]              Suffix of server skelton files
     [--stub-suffix[=suffix]]              Suffix of client stub files
-    [--include-dir[=dir] ot -I]           include prefix in #include
+    [--include-dir[=dir] or -I]           include prefix in #include
+    [--output-dir[=dir] or -O]            output directory for generated files
 """
 
 
 def main():
 	try:
-		opts, args = getopt.getopt(sys.argv[1:], "f:I:h", opt_args_fmt)
+		opts, args = getopt.getopt(sys.argv[1:], "f:I:O:h", opt_args_fmt)
 	except getopt.GetoptError:
 		print "Error: Invalid options.", getopt.GetoptError
 		usage()
@@ -71,6 +73,7 @@ def main():
 		sys.exit(-1)
 
 	include_dir = "rtm/idl/"
+	output_dir = ""
 	skel_suffix = "Skel"
 	stub_suffix = "Stub"
 	idl_file    = None
@@ -84,6 +87,9 @@ def main():
 
 		if opt in ("-I", "--include-dir"):
 			include_dir = arg
+
+		if opt in ("-O", "--output-dir"):
+			output_dir = arg
 
 		if opt in ("--skel-suffix"):
 			skel_suffix = arg
@@ -100,7 +106,7 @@ def main():
 	import skel_wrapper
 
 	s = skel_wrapper.skel_wrapper(idl_file, skel_suffix, stub_suffix,
-				      include_dir, config_inc)
+				      include_dir, output_dir, config_inc)
 	s.generate()
 
 

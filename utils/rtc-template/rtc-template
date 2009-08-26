@@ -815,7 +815,7 @@ class BackendLoader:
 
 	def usage_available(self):
 		print "The following backends are available."
-		space = 10
+		space = 15
 		for key in self.backends:
 			desc = self.backends[key].mod.description()			
 			print "    -b" + key + ("." * (space - len(key))) + desc

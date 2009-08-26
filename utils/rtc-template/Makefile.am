@@ -18,6 +18,13 @@ slntool.py:
 
 rtc-template: 
 
+cmakemodulesdir = @cmakemodulesdir@
+cmakemodules_DATA = \
+	CompileIDL.cmake \
+	MakeOrbSourceNames.cmake \
+	OpenRTM.cmake \
+	FindOmniORB4.cmake
+
 pyhelperdir = $(pkglibdir)/py_helper
 
 pyhelper_SCRIPTS =       \
@@ -27,13 +34,13 @@ pyhelper_SCRIPTS =       \
 	profile_gen.py   \
 	gen_base.py      \
 	cxx_gen.py       \
+	cxx_cmake_gen.py \
 	cxx_svc_impl.py  \
 	vcproj_gen.py    \
 	python_gen.py    \
 	slntool.py       \
 	vcprojtool.py    \
 	test-template.py
-
 
 EXTRA_DIST =             \
 	rtc-template     \
@@ -43,12 +50,17 @@ EXTRA_DIST =             \
 	profile_gen.py   \
 	gen_base.py      \
 	cxx_gen.py       \
+	cxx_cmake_gen.py \
 	cxx_svc_impl.py  \
 	vcproj_gen.py    \
 	python_gen.py    \
 	slntool.py       \
 	vcprojtool.py    \
-	test-template.py
+	test-template.py \
+	CompileIDL.cmake \
+	MakeOrbSourceNames.cmake \
+	OpenRTM.cmake \
+	FindOmniORB4.cmake
 
 
 clean-local:

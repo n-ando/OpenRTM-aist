@@ -20,6 +20,7 @@ import yat
 import re
 import sys
 import os
+import os.path
 import time
 
 
@@ -197,17 +198,22 @@ config_inc = """
 
 class skel_wrapper:
 	def __init__(self, idl_fname, skel_suffix = "Skel", stub_suffix = "Stub",
-				 include_dir = "", config_inc = ""):
+				 include_dir = "", output_dir = "", config_inc = ""):
 		self.data = {}
 		self.data["include_dir"] = include_dir
 		self.data["idl_fname"] = idl_fname
 		m = re.search("\.[iI][dD][lL]$", idl_fname)
 		if m:
-			basename = idl_fname.replace(m.group(0), "")
+			basename = os.path.split(idl_fname.replace(m.group(0), ""))[1]
 		else:
 			sys.stderr.write("Invalid IDL file name specified.\n")
 			sys.exit(1)
-			
+		if output_dir != "":
+			if not os.path.isdir(output_dir):
+				sys.stderr.write("Specified output directory does not exist.")
+				sys.exit(1)
+		self.output_dir = output_dir
+
 		self.data["basename"] = basename
 		self.data["skel_h"]   = basename + skel_suffix + ".h"
 		self.data["skel_cpp"] = basename + skel_suffix + ".cpp"
@@ -218,13 +224,13 @@ class skel_wrapper:
 		stub_h_guard = self.data["stub_h"].replace(".","_").upper()
 		self.data["skel_h_inc_guard"] = skel_h_guard
 		self.data["stub_h_inc_guard"] = stub_h_guard
-		
+
 		self.data["date"] = time.ctime()
 		self.data["config_inc"] = config_inc
 		return
 
 	def print_skel_h(self):
-		f = file(self.data["skel_h"], "w")
+		f = file(os.path.join(self.output_dir, self.data["skel_h"]), "w")
 		t = yat.Template(skel_h)
 		text=t.generate(self.data)
 		f.write(text)
@@ -233,7 +239,7 @@ class skel_wrapper:
 		return
 
 	def print_skel_cpp(self):
-		f = file(self.data["skel_cpp"], "w")
+		f = file(os.path.join(self.output_dir, self.data["skel_cpp"]), "w")
 		t = yat.Template(skel_cpp)
 		text=t.generate(self.data)
                 f.write(text)
@@ -242,7 +248,7 @@ class skel_wrapper:
 		return
 
 	def print_stub_h(self):
-		f = file(self.data["stub_h"], "w")
+		f = file(os.path.join(self.output_dir, self.data["stub_h"]), "w")
 		t = yat.Template(stub_h)
 		text=t.generate(self.data)
                 f.write(text)
@@ -251,7 +257,7 @@ class skel_wrapper:
 		return
 
 	def print_stub_cpp(self):
-		f = file(self.data["stub_cpp"], "w")
+		f = file(os.path.join(self.output_dir, self.data["stub_cpp"]), "w")
 		t = yat.Template(stub_cpp)
 		text=t.generate(self.data)
                 f.write(text)
