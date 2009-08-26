@@ -23,7 +23,9 @@ IDL_SOURCES =             \
 	OpenRTM.idl       \
 	Manager.idl       \
 	BasicDataType.idl \
-	DataPort.idl
+	DataPort.idl      \
+	ExtendedDataTypes.idl \
+	InterfaceDataTypes.idl
 
 SKEL_H   = $(IDL_SOURCES:.idl=Skel.h)
 SKEL_CPP = $(IDL_SOURCES:.idl=Skel.cpp)
@@ -114,7 +116,26 @@ rtmheaderdir = $(prefix)/include/rtm
 idldir =       $(rtmheaderdir)/idl
 rtmskeldir =   $(rtmheaderdir)/idl
 
-idl_DATA = $(IDL_SOURCES)
+idl_DATA = $(IDL_SOURCES) \
+	ActArray.idl \
+	Bumper.idl \
+	DIO.idl \
+	Fiducial.idl \
+	Gripper.idl \
+	INS.idl \
+	Limb.idl \
+	Multicamera.idl \
+	Paths.idl \
+	Position.idl \
+	RFID.idl \
+	AIO.idl \
+	Camera.idl \
+	GPS.idl \
+	IMU.idl \
+	Map.idl \
+	PanTilt.idl \
+	PointCloud.idl \
+	Ranger.idl
 
 nodist_rtmskel_HEADERS = $(ALL_SRC)
 
