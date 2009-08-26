@@ -1175,7 +1175,8 @@ std::vector<coil::Properties> Manager::getLoadableModules()
         otherref.close();
         std::ofstream reffile(m_config["manager.refstring_path"].c_str());
 	RTM::Manager_var mgr_v(RTM::Manager::_duplicate(m_mgrservant->getObjRef()));
-	reffile << m_pORB->object_to_string(mgr_v);
+        CORBA::String_var str_var = m_pORB->object_to_string(mgr_v);
+	reffile << str_var;
         reffile.close();
       }
     else
