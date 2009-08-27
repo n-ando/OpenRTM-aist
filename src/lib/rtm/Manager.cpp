@@ -1226,7 +1226,8 @@ std::vector<coil::Properties> Manager::getLoadableModules()
     for (CORBA::ULong i(0), len(m_ecs.size()); i < len; ++i)
       {
 	try{
-	  m_pPOA->deactivate_object(*m_pPOA->servant_to_id(m_ecs[i]));
+          PortableServer::ObjectId_var oid = m_pPOA->servant_to_id(m_ecs[i]);
+	  m_pPOA->deactivate_object(oid);
 	}
 	catch (...)
 	  {

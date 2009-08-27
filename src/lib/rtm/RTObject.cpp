@@ -1575,7 +1575,8 @@ namespace RTC
     for (int i(0), len(m_eclist.size()); i < len; ++i)
       {
         m_eclist[i]->stop();
-        m_pPOA->deactivate_object(*m_pPOA->servant_to_id(m_eclist[i]));
+        PortableServer::ObjectId_var oid = m_pPOA->servant_to_id(m_eclist[i]);
+	m_pPOA->deactivate_object(oid);
         delete m_eclist[i];
       }
     if (!m_eclist.empty())
@@ -1598,8 +1599,10 @@ namespace RTC
       {
 	finalizePorts();
         finalizeContexts();
-	m_pPOA->deactivate_object(*m_pPOA->servant_to_id(m_pSdoConfigImpl));
-	m_pPOA->deactivate_object(*m_pPOA->servant_to_id(this));
+        PortableServer::ObjectId_var oid1 = m_pPOA->servant_to_id(m_pSdoConfigImpl);
+        PortableServer::ObjectId_var oid2 = m_pPOA->servant_to_id(this);
+	m_pPOA->deactivate_object(oid1);
+	m_pPOA->deactivate_object(oid2);
       }
     catch (...)
       {
