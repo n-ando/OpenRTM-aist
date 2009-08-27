@@ -86,10 +86,10 @@ conprof = RTC.ConnectorProfile("connector0", "123", [consin_ports[0],consout_por
 
 ##--------------------------------------------------------------------
 # Connector Porfile: corba_cdr, push, periodic <<<  In -> Out
-#conprof = RTC.ConnectorProfile("connector0", "123", [consin_ports[0],consout_ports[0]], [SDOPackage.NameValue("dataport.interface_type",any.to_any("corba_cdr")),SDOPackage.NameValue("dataport.dataflow_type",any.to_any("push")),SDOPackage.NameValue("dataport.subscription_type",any.to_any("periodic")),SDOPackage.NameValue("dataport.push_rate",any.to_any(2000))])
+#conprof = RTC.ConnectorProfile("connector0", "123", [consin_ports[0],consout_ports[0]], [SDOPackage.NameValue("dataport.interface_type",any.to_any("corba_cdr")),SDOPackage.NameValue("dataport.dataflow_type",any.to_any("push")),SDOPackage.NameValue("dataport.subscription_type",any.to_any("periodic")),SDOPackage.NameValue("dataport.publisher.push_rate",any.to_any(2000))])
 
 # Connector Porfile: corba_cdr, push, periodic <<<  Out -> In
-#conprof = RTC.ConnectorProfile("connector0", "123", [consout_ports[0],consin_ports[0]], [SDOPackage.NameValue("dataport.interface_type",any.to_any("corba_cdr")),SDOPackage.NameValue("dataport.dataflow_type",any.to_any("push")),SDOPackage.NameValue("dataport.subscription_type",any.to_any("periodic")),SDOPackage.NameValue("dataport.push_rate",any.to_any(2000))])
+#conprof = RTC.ConnectorProfile("connector0", "123", [consout_ports[0],consin_ports[0]], [SDOPackage.NameValue("dataport.interface_type",any.to_any("corba_cdr")),SDOPackage.NameValue("dataport.dataflow_type",any.to_any("push")),SDOPackage.NameValue("dataport.subscription_type",any.to_any("periodic")),SDOPackage.NameValue("dataport.publisher.push_rate",any.to_any(2000))])
 
 ##--------------------------------------------------------------------
 #print "ConnectorProfile=\n",conprof

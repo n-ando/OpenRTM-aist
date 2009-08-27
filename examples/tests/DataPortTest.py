@@ -91,10 +91,10 @@ conprof = RTC.ConnectorProfile("connector0", "123", [consin_ports[0],consout_por
 
 ##--------------------------------------------------------------------
 # Connector Porfile: corba_cdr, push, periodic <<<  In -> Out
-#conprof = RTC.ConnectorProfile("connector0", "123", [consin_ports[0],consout_ports[0]], [SDOPackage.NameValue("dataport.interface_type",any.to_any("corba_cdr")),SDOPackage.NameValue("dataport.dataflow_type",any.to_any("push")),SDOPackage.NameValue("dataport.subscription_type",any.to_any("periodic")),SDOPackage.NameValue("dataport.push_rate",any.to_any(2000))])
+#conprof = RTC.ConnectorProfile("connector0", "123", [consin_ports[0],consout_ports[0]], [SDOPackage.NameValue("dataport.interface_type",any.to_any("corba_cdr")),SDOPackage.NameValue("dataport.dataflow_type",any.to_any("push")),SDOPackage.NameValue("dataport.subscription_type",any.to_any("periodic"))])
 
 # Connector Porfile: corba_cdr, push, periodic <<<  Out -> In
-#conprof = RTC.ConnectorProfile("connector0", "123", [consout_ports[0],consin_ports[0]], [SDOPackage.NameValue("dataport.interface_type",any.to_any("corba_cdr")),SDOPackage.NameValue("dataport.dataflow_type",any.to_any("push")),SDOPackage.NameValue("dataport.subscription_type",any.to_any("periodic")),SDOPackage.NameValue("dataport.push_rate",any.to_any(2000))])
+#conprof = RTC.ConnectorProfile("connector0", "123", [consout_ports[0],consin_ports[0]], [SDOPackage.NameValue("dataport.interface_type",any.to_any("corba_cdr")),SDOPackage.NameValue("dataport.dataflow_type",any.to_any("push")),SDOPackage.NameValue("dataport.subscription_type",any.to_any("periodic"))])
 
 ##--------------------------------------------------------------------
 #print "ConnectorProfile=\n",conprof
@@ -121,7 +121,7 @@ for i in range(loop_cnt):
     # print "   conprof0.properties=",conprof0.properties
     # print "   prop[0]=",conprof0.properties[0].value		#corba_cdr
     # print "   prop[1]=",conprof0.properties[1].value		#push
-    # print "   prop[2]=",conprof0.properties[2].value		#flush
+    # print "   prop[2]=",conprof0.properties[2].value		#flush,new,periodic
     # print "   prop[3]=",conprof0.properties[3].value  		#IOR:
     # print "   prop[4]=",conprof0.properties[4].value  		#InportCdr
     ior = any.from_any(conprof0.properties[3].value, keep_structs=True)
@@ -172,7 +172,7 @@ leak_check(rssStart, rssEnd)
 ##    # print "   conprof10.properties=",conprof10.properties
 ##    # print "   prop[0]=",conprof10.properties[0].value		#corba_cdr
 ##    # print "   prop[1]=",conprof10.properties[1].value		#pull
-##    # print "   prop[2]=",conprof10.properties[2].value		#flush
+##    # print "   prop[2]=",conprof10.properties[2].value		#flush,new,periodic
 ##    # print "   prop[3]=",conprof10.properties[3].value  		#IOR:
 ##    # print "   prop[4]=",conprof10.properties[4].value  		#OutportCdr
 ##    ior10 = any.from_any(conprof10.properties[3].value, keep_structs=True)
