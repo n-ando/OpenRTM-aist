@@ -83,8 +83,7 @@ namespace RTC
       {
       }
 
-    CORBA::Object_ptr obj;
-    obj = Manager::instance().getPOA()->id_to_reference(oid);
+    CORBA::Object_var obj = Manager::instance().getPOA()->id_to_reference(oid);
     
     std::string key("port");
     key.append(".");key.append(type_name);
