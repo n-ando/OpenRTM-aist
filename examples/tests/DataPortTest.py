@@ -138,6 +138,7 @@ for i in range(loop_cnt):
     #  else:
     #    fodat = "     put() ret=" + str(ret1) + "  count=%d" % (i+1)
     #    print_file_and_cons(fodat)
+    time.sleep(0.1)
     ret2 = consin_ports[0].disconnect(conprof.connector_id)    # set used
     #if ret2 != RTC.RTC_OK:
     #    fodat = "     disconnect() error ret=" + str(ret2)
@@ -191,6 +192,7 @@ leak_check(rssStart, rssEnd)
 ##    else:
 ##        value12 = cdrUnmarshal(any.to_any(123).typecode(),data1[0],1)
 ##        #print "   data1=",value12
+##    time.sleep(0.1)
 ##    ret12 = consin_ports[0].disconnect(conprof2.connector_id)    # set used
 ##    if ret12 != RTC.RTC_OK:
 ##        fodat = "     disconnect() error ret=" + str(ret12)
