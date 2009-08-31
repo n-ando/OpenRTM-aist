@@ -1,11 +1,11 @@
 #!/usr/bin/env python
-# -*- coding: utf-8 -*-
+# -*- coding: euc-jp -*-
 #
 ## ConfigurationSDOPackageTest.py
 ##
-## уГбуГвуГкуГ╝уГкуГ╝уВпуГБуВзуГГуВп
-## SDOPackage.idlуБзхоЪч╛йуБХуВМуБжуБДуВЛуВкуГЪуГмуГ╝уВ╖уГзуГ│
-## ConfigurationуБлщЦвуБЩуВЛуВкуГЪуГмуГ╝уВ╖уГзуГ│
+## есетеъб╝еъб╝епе┴езе├еп
+## SDOPackage.idlд╟─ъ╡┴д╡дьд╞дддыеке┌еьб╝е╖ечеє
+## Configurationд╦┤╪д╣дыеке┌еьб╝е╖ечеє
 #
 # $Id$
 #
