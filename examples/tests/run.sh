@@ -1,6 +1,6 @@
-#! /bin/bash
+#!/bin/sh
 
-# run.sh : å…¨ã¦ã®ãƒ¡ãƒ¢ãƒªãƒ¼ãƒªãƒ¼ã‚¯ãƒã‚§ãƒƒã‚¯ã‚¹ã‚¯ãƒªãƒ—ãƒˆã‚’å®Ÿè¡Œã™ã‚‹
+# run.sh : Á´¤Æ¤Î¥á¥â¥ê¡¼¥ê¡¼¥¯¥Á¥§¥Ã¥¯¥¹¥¯¥ê¥×¥È¤ò¼Â¹Ô¤¹¤ë
 
 # Naming service start check
 nspid=`ps -af | grep '/omniNames -start 9898' | awk '{print $1}'`

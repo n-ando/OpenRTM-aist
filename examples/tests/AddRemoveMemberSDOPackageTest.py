@@ -1,11 +1,11 @@
 #!/usr/bin/env python
-# -*- coding: utf-8 -*-
+# -*- coding: euc-jp -*-
 #
 ## AddRemoveMemberSDOPackageTest.py
 ##
-## уГбуГвуГкуГ╝уГкуГ╝уВпуГБуВзуГГуВп
-## SDOPackage.idlуБзхоЪч╛йуБХуВМуБжуБДуВЛуВкуГЪуГмуГ╝уВ╖уГзуГ│
-## OrganizationуБоMemberуБош┐╜хКауБихЙКщЩдуБлщЦвуБЩуВЛуВкуГЪуГмуГ╝уВ╖уГзуГ│
+## есетеъб╝еъб╝епе┴езе├еп
+## SDOPackage.idlд╟─ъ╡┴д╡дьд╞дддыеке┌еьб╝е╖ечеє
+## Organizationд╬Memberд╬─╔▓├д╚║я╜№д╦┤╪д╣дыеке┌еьб╝е╖ечеє
 #
 # $Id$
 #
