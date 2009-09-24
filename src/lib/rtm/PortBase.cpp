@@ -21,7 +21,7 @@
 #include <memory>
 #include <coil/UUID.h>
 #include <rtm/PortBase.h>
-#include <rtm/PortCallBack.h>
+#include <rtm/PortCallback.h>
 
 namespace RTC
 {

@@ -32,7 +32,7 @@
 #include <rtm/Typename.h>
 #include <rtm/OutPortBase.h>
 #include <rtm/CdrBufferBase.h>
-#include <rtm/PortCallBack.h>
+#include <rtm/PortCallback.h>
 #include <rtm/OutPortConnector.h>
 
 namespace RTC

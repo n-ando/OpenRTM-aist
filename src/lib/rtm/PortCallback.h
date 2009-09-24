@@ -1,7 +1,7 @@
 // -*- C++ -*-
 /*!
- * @file PortCallBack.h
- * @brief PortCallBack class
+ * @file PortCallback.h
+ * @brief PortCallback class
  * @date $Date: 2007-12-31 03:08:05 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
@@ -17,8 +17,8 @@
  *
  */
 
-#ifndef PortCallBack_h
-#define PortCallBack_h
+#ifndef RTC_PORTCALLBACK_H
+#define RTC_PORTCALLBACK_H
 
 namespace RTC
 {
@@ -577,4 +577,4 @@ namespace RTC
 
 
 };
-#endif // PortCallBack_h
+#endif // RTC_PORTCALLBACK_H
