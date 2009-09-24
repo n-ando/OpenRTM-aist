@@ -26,11 +26,77 @@ namespace RTC
   // callback functor base classes
   /*!
    * @if jp
+   * @class ConnectCallback
+   * @brief connect/notify_connect() 時のコールバック抽象クラス
+   *
+   * Portに対してconnect/notify_connect() 等が呼び出される時に呼び出される
+   * コールバックファンクタ。引数に RTC::ConnectorProfile を取る。
+   *
+   * @param profile ConnectorProfile
+   *
+   * @since 1.0.0
+   *
+   * @else
+   * @class ConnectCallback
+   * @brief Callback functor abstract for connect/notify_connect() funcs
+   *
+   * This is the interface for callback functor for connect/notify_connect()
+   * invocation in Port. Argument is RTC::ConnectorProfile that is given
+   * these functions.
+   *
+   * @param profile ConnectorProfile
+   *
+   * @since 1.0.0
+   *
+   * @endif
+   */
+  class ConnectionCallback
+  {
+  public:
+    virtual ~ConnectionCallback(void){}
+    virtual void operator()(RTC::ConnectorProfile& profile) = 0;
+  };
+
+  /*!
+   * @if jp
+   * @class DisconnectCallback
+   * @brief disconnect/notify_disconnect() 時のコールバック抽象クラス
+   *
+   * Portに対してdisconnect/notify_disconnect() 等が呼び出される時に呼び出される
+   * コールバックファンクタ。引数に接続IDを取る。
+   *
+   * @param connector_id Connector ID
+   *
+   * @since 1.0.0
+   *
+   * @else
+   * @class DisconnectCallback
+   * @brief Callback functor abstract for disconnect/notify_disconnect() funcs
+   *
+   * This is the interface for callback functor for 
+   * disconnect/notify_disconnect() invocation in Port.
+   * Argument is connector ID is given these functions.
+   *
+   * @param connector_id Connector ID
+   *
+   * @since 1.0.0
+   *
+   * @endif
+   */
+  class DisconnectCallback
+  {
+  public:
+    virtual ~DisconnectCallback(void){}
+    virtual void operator()(const char* connector_id) = 0;
+  };
+
+  /*!
+   * @if jp
    * @class OnWrite
    * @brief write() 時のコールバック抽象クラス
    *
-   * DataPortのバッファにデータがwrite()される直前に呼び出されるコールバック用
-   * インターフェース。
+   * OutPortに対してデータがwrite()される直前に呼び出されるコールバック用
+   * ファンクタ。
    *
    * @param DataType バッファに書き込むデータ型
    *
@@ -50,31 +116,17 @@ namespace RTC
    * @endif
    */
   template <class DataType>
-  struct OnWrite
+  class OnWrite
   {
-    /*!
-     * @if jp
-     *
-     * @brief デストラクタ
-     *
-     * デストラクタ
-     *
-     * @else
-     *
-     * @brief Destructor
-     *
-     * Destructor
-     *
-     * @endif
-     */
+  public:
     virtual ~OnWrite(void){}
     
     /*!
      * @if jp
      *
-     * @brief コールバックメソッド
+     * @brief コールバック関数
      *
-     * バッファにデータが書き込まれる直前に呼び出されるコールバックメソッド
+     * バッファにデータが書き込まれる直前に呼び出されるコールバック関数
      *
      * @param value バッファに書き込まれるデータ
      *
@@ -118,21 +170,6 @@ namespace RTC
   template <class DataType>
   struct OnWriteConvert
   {
-    /*!
-     * @if jp
-     *
-     * @brief デストラクタ
-     *
-     * デストラクタ
-     *
-     * @else
-     *
-     * @brief Destructor
-     *
-     * Destructor
-     *
-     * @endif
-     */
     virtual ~OnWriteConvert(void){}
     
     /*!
@@ -536,21 +573,6 @@ namespace RTC
      * @endif
      */
     virtual DataType operator()() = 0;
-  };
-
-  class PublisherBase;
-  class OnConnect
-  {
-  public:
-    virtual ~OnConnect(void){}
-    virtual void operator()(const char* id, PublisherBase* publisher) = 0;
-  };
-
-  class OnDisconnect
-  {
-  public:
-    virtual ~OnDisconnect(void){}
-    virtual void operator()(const char* id) = 0;
   };
 
 
