@@ -36,7 +36,7 @@ namespace RTC
       m_consumer(consumer), m_publisher(0), m_buffer(buffer)
   {
     rtclog.setLevel("PARANOID");
-
+    
     // publisher/buffer creation. This may throw std::bad_alloc;
     m_publisher = createPublisher(profile);
     if (m_buffer == 0)
@@ -45,17 +45,17 @@ namespace RTC
       }
     if (m_publisher == 0 || m_buffer == 0 || m_consumer == 0) 
       { throw std::bad_alloc(); }
-
+    
     if (m_publisher->init(profile.properties) != PORT_OK)
       {
         throw std::bad_alloc();
       }
     m_consumer->init(profile.properties);
-
+    
     m_publisher->setConsumer(m_consumer);
     m_publisher->setBuffer(m_buffer);
   }
-
+  
   /*!
    * @if jp
    * @brief デストラクタ
@@ -67,7 +67,7 @@ namespace RTC
   {
     disconnect();
   }
-
+  
   /*!
    * @if jp
    * @brief データの書き込み
@@ -80,10 +80,10 @@ namespace RTC
   {
     RTC_TRACE(("write()"));
     RTC_PARANOID(("data size = %d bytes", data.bufSize()));
-
+    
     return m_publisher->write(data, 0, 0);
   }
-
+  
   /*!
    * @if jp
    * @brief 接続解除
@@ -111,7 +111,7 @@ namespace RTC
         cfactory.deleteObject(m_consumer);
       }
     m_consumer = 0;
-
+    
     // delete buffer
     if (m_buffer != 0)
       {
@@ -123,35 +123,35 @@ namespace RTC
     RTC_TRACE(("disconnect() done"));
     return PORT_OK;
   }
-
-    void OutPortPushConnector::activate()
-    {
-      m_publisher->activate();
-    }
-
-    void OutPortPushConnector::deactivate()
-    {
-      m_publisher->deactivate();
-    }
-
-    /*!
-     * @if jp
-     * @brief Buffer を所得する
-     *
-     * Connector が保持している Buffer を返す
-     *
-     * @else
-     * @brief Getting Buffer
-     *
-     * This operation returns this connector's buffer
-     *
-     * @endif
-     */
-    CdrBufferBase* OutPortPushConnector::getBuffer()
-    {
-      return m_buffer;
-    }
-
+  
+  void OutPortPushConnector::activate()
+  {
+    m_publisher->activate();
+  }
+  
+  void OutPortPushConnector::deactivate()
+  {
+    m_publisher->deactivate();
+  }
+  
+  /*!
+   * @if jp
+   * @brief Buffer を所得する
+   *
+   * Connector が保持している Buffer を返す
+   *
+   * @else
+   * @brief Getting Buffer
+   *
+   * This operation returns this connector's buffer
+   *
+   * @endif
+   */
+  CdrBufferBase* OutPortPushConnector::getBuffer()
+  {
+    return m_buffer;
+  }
+  
   /*!
    * @if jp
    * @brief Publisherの生成
@@ -182,6 +182,6 @@ namespace RTC
                                               "ring_buffer");
     return CdrBufferFactory::instance().createObject(buf_type);
   }
-
+  
 };
 
