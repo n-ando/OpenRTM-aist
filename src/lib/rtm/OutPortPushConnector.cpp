@@ -123,12 +123,30 @@ namespace RTC
     RTC_TRACE(("disconnect() done"));
     return PORT_OK;
   }
-  
+
+  /*!
+   * @if jp
+   * @brief アクティブ化
+   * このコネクタをアクティブ化する
+   * @else
+   * @brief Connector activation
+   * This operation activates this connector
+   * @endif
+   */
   void OutPortPushConnector::activate()
   {
     m_publisher->activate();
   }
-  
+
+  /*!
+   * @if jp
+   * @brief 非アクティブ化
+   * このコネクタを非アクティブ化する
+   * @else
+   * @brief Connector deactivation
+   * This operation deactivates this connector
+   * @endif
+   */
   void OutPortPushConnector::deactivate()
   {
     m_publisher->deactivate();

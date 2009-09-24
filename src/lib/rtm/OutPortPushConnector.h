@@ -129,21 +129,6 @@ namespace RTC
 
     /*!
      * @if jp
-     * @brief Buffer を取得する
-     *
-     * Connector が保持している Buffer を返す
-     *
-     * @else
-     * @brief Getting Buffer
-     *
-     * This operation returns this connector's buffer
-     *
-     * @endif
-     */
-    virtual CdrBufferBase* getBuffer();
-
-    /*!
-     * @if jp
      * @brief 非アクティブ化
      *
      * このコネクタを非アクティブ化する
@@ -157,7 +142,22 @@ namespace RTC
      * @endif
      */
     virtual void deactivate();
-    
+
+    /*!
+     * @if jp
+     * @brief Buffer を取得する
+     *
+     * Connector が保持している Buffer を返す
+     *
+     * @else
+     * @brief Getting Buffer
+     *
+     * This operation returns this connector's buffer
+     *
+     * @endif
+     */
+    virtual CdrBufferBase* getBuffer();
+
   protected:
     /*!
      * @if jp
