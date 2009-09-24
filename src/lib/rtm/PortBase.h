@@ -39,6 +39,8 @@
 
 namespace RTC
 {
+  class ConnectionCallback;
+
   /*!
    * @if jp
    * @class PortBase
@@ -962,6 +964,248 @@ namespace RTC
     void setOwner(RTObject_ptr owner);
 
     //============================================================
+    // callbacks
+    //============================================================
+    /*!
+     * @if jp
+     *
+     * @brief インターフェースを公開する際に呼ばれるコールバックをセットする
+     *
+     * このオペレーションは、このポートが接続時に、ポート自身が持つサー
+     * ビスインターフェース情報を公開するタイミングで呼ばれるコールバッ
+     * クファンクタをセットする。
+     *
+     * コールバックファンクタの所有権は、呼び出し側にあり、オブジェクト
+     * が必要なくなった時に解体するのは呼び出し側の責任である。
+     *
+     * このコールバックファンクタは、PortBaseクラスの仮想関数である
+     * publishInterfaces() が呼ばれたあとに、同じ引数 ConnectorProfile と
+     * ともに呼び出される。このコールバックを利用して、
+     * publishInterfaces() が公開した ConnectorProfile を変更することが可
+     * 能であるが、接続関係の不整合を招かないよう、ConnectorProfile の
+     * 変更には注意を要する。
+     *
+     * @param on_publish ConnectionCallback のサブクラスオブジェクトのポインタ
+     *
+     * @else
+     *
+     * @brief Setting callback called on publish interfaces
+     *
+     * This operation sets a functor that is called after publishing
+     * interfaces process when connecting between ports.
+     *
+     * Since the ownership of the callback functor object is owned by
+     * the caller, it has the responsibility of object destruction.
+     * 
+     * The callback functor is called after calling
+     * publishInterfaces() that is virtual member function of the
+     * PortBase class with an argument of ConnectorProfile type that
+     * is same as the argument of publishInterfaces() function.
+     * Although by using this functor, you can modify the ConnectorProfile
+     * published by publishInterfaces() function, the modification
+     * should be done carefully for fear of causing connection
+     * inconsistency.
+     *
+     * @param on_publish a pointer to ConnectionCallback's subclasses
+     *
+     * @endif
+     */
+    void setOnPublishInterfaces(ConnectionCallback* on_publish);
+
+    /*!
+     * @if jp
+     *
+     * @brief インターフェースを取得する際に呼ばれるコールバックをセットする
+     *
+     * このオペレーションは、このポートが接続時に、相手のポートが持つサー
+     * ビスインターフェース情報を取得するタイミングで呼ばれるコールバッ
+     * クファンクタをセットする。
+     *
+     * コールバックファンクタの所有権は、呼び出し側にあり、オブジェクト
+     * が必要なくなった時に解体するのは呼び出し側の責任である。
+     *
+     * このコールバックファンクタは、PortBaseクラスの仮想関数である
+     * subscribeInterfaces() が呼ばれる前に、同じ引数 ConnectorProfile と
+     * ともに呼び出される。このコールバックを利用して、
+     * subscribeInterfaces() に与える ConnectorProfile を変更することが可
+     * 能であるが、接続関係の不整合を招かないよう、ConnectorProfile の
+     * 変更には注意を要する。
+     *
+     * @param on_subscribe ConnectionCallback のサブクラスオブジェクトのポインタ
+     *
+     * @else
+     *
+     * @brief Setting callback called on publish interfaces
+     *
+     * This operation sets a functor that is called before subscribing
+     * interfaces process when connecting between ports.
+     *
+     * Since the ownership of the callback functor object is owned by
+     * the caller, it has the responsibility of object destruction.
+     * 
+     * The callback functor is called before calling
+     * subscribeInterfaces() that is virtual member function of the
+     * PortBase class with an argument of ConnectorProfile type that
+     * is same as the argument of subscribeInterfaces() function.
+     * Although by using this functor, you can modify ConnectorProfile
+     * argument for subscribeInterfaces() function, the modification
+     * should be done carefully for fear of causing connection
+     * inconsistency.
+     *
+     * @param on_subscribe a pointer to ConnectionCallback's subclasses
+     *
+     * @endif
+     */
+    void setOnSubscribeInterfaces(ConnectionCallback* on_subscribe);
+
+    /*!
+     * @if jp
+     *
+     * @brief 接続完了時に呼ばれるコールバックをセットする
+     *
+     * このオペレーションは、このポートが接続完了時に呼ばれる、コールバッ
+     * クファンクタをセットする。
+     *
+     * コールバックファンクタの所有権は、呼び出し側にあり、オブジェクト
+     * が必要なくなった時に解体するのは呼び出し側の責任である。
+     *
+     * このコールバックファンクタは、ポートの接続実行関数である
+     * notify_connect() の終了直前に、接続処理が正常終了する際に限って
+     * 呼び出されるコールバックである。接続処理の過程でエラーが発生した
+     * 場合には呼び出されない。
+     * 
+     * このコールバックファンクタは notify_connect() が out パラメータ
+     * として返すのと同じ引数 ConnectorProfile とともに呼び出されるので、
+     * この接続において公開されたすべてのインターフェース情報を得ること
+     * ができる。このコールバックを利用して、notify_connect() が返す
+     * ConnectorProfile を変更することが可能であるが、接続関係の不整合
+     * を招かないよう、ConnectorProfile の変更には注意を要する。
+     *
+     * @param on_subscribe ConnectionCallback のサブクラスオブジェクトのポインタ
+     *
+     * @else
+     *
+     * @brief Setting callback called on connection established
+     *
+     * This operation sets a functor that is called when connection
+     * between ports established.
+     *
+     * Since the ownership of the callback functor object is owned by
+     * the caller, it has the responsibility of object destruction.
+     * 
+     * The callback functor is called only when notify_connect()
+     * function successfully returns. In case of error, the functor
+     * will not be called.
+     *
+     * Since this functor is called with ConnectorProfile argument
+     * that is same as out-parameter of notify_connect() function, you
+     * can get all the information of published interfaces of related
+     * ports in the connection.  Although by using this functor, you
+     * can modify ConnectorProfile argument for out-paramter of
+     * notify_connect(), the modification should be done carefully for
+     * fear of causing connection inconsistency.
+     *
+     * @param on_subscribe a pointer to ConnectionCallback's subclasses
+     *
+     * @endif
+     */
+    void setOnConnected(ConnectionCallback* on_connected);
+
+    /*!
+     * @if jp
+     *
+     * @brief インターフェースを解放する際に呼ばれるコールバックをセットする
+     *
+     * このオペレーションは、このポートが接続時に、相手のポートが持つサー
+     * ビスインターフェース情報を解放するタイミングで呼ばれるコールバッ
+     * クファンクタをセットする。
+     *
+     * コールバックファンクタの所有権は、呼び出し側にあり、オブジェクト
+     * が必要なくなった時に解体するのは呼び出し側の責任である。
+     *
+     * このコールバックファンクタは、PortBaseクラスの仮想関数である
+     * unsubscribeInterfaces() が呼ばれる前に、同じ引数 ConnectorProfile と
+     * ともに呼び出される。このコールバックを利用して、
+     * unsubscribeInterfaces() に与える ConnectorProfile を変更することが可
+     * 能であるが、接続関係の不整合を招かないよう、ConnectorProfile の
+     * 変更には注意を要する。
+     *
+     * @param on_unsubscribe ConnectionCallback のサブクラスオブジェク
+     * トのポインタ
+     *
+     * @else
+     *
+     * @brief Setting callback called on unsubscribe interfaces
+     *
+     * This operation sets a functor that is called before unsubscribing
+     * interfaces process when disconnecting between ports.
+     *
+     * Since the ownership of the callback functor object is owned by
+     * the caller, it has the responsibility of object destruction.
+     * 
+     * The callback functor is called before calling
+     * unsubscribeInterfaces() that is virtual member function of the
+     * PortBase class with an argument of ConnectorProfile type that
+     * is same as the argument of unsubscribeInterfaces() function.
+     * Although by using this functor, you can modify ConnectorProfile
+     * argument for unsubscribeInterfaces() function, the modification
+     * should be done carefully for fear of causing connection
+     * inconsistency.
+     *
+     * @param on_unsubscribe a pointer to ConnectionCallback's subclasses
+     *
+     * @endif
+     */
+    void setOnUnsubscribeInterfaces(ConnectionCallback* on_subscribe);
+
+    /*!
+     * @if jp
+     *
+     * @brief 接続解除に呼ばれるコールバックをセットする
+     *
+     * このオペレーションは、このポートの接続解除時に呼ばれる、コールバッ
+     * クファンクタをセットする。
+     *
+     * コールバックファンクタの所有権は、呼び出し側にあり、オブジェクト
+     * が必要なくなった時に解体するのは呼び出し側の責任である。
+     *
+     * このコールバックファンクタは、ポートの接続解除実行関数である
+     * notify_disconnect() の終了直前に、呼び出されるコールバックである。
+     * 
+     * このコールバックファンクタは接続に対応する ConnectorProfile とと
+     * もに呼び出される。この ConnectorProfile はこのファンクタ呼出し後
+     * に破棄されるので、変更がほかに影響を与えることはない。
+     *
+     * @param on_disconnected ConnectionCallback のサブクラスオブジェク
+     * トのポインタ
+     *
+     * @else
+     *
+     * @brief Setting callback called on disconnected
+     *
+     * This operation sets a functor that is called when connection
+     * between ports is destructed.
+     *
+     * Since the ownership of the callback functor object is owned by
+     * the caller, it has the responsibility of object destruction.
+     * 
+     * The callback functor is called just before notify_disconnect()
+     * that is disconnection execution function returns.
+     *
+     * This functor is called with argument of corresponding
+     * ConnectorProfile.  Since this ConnectorProfile will be
+     * destructed after calling this functor, modifications never
+     * affect others.
+     *
+     * @param on_disconnected a pointer to ConnectionCallback's subclasses
+     *
+     * @endif
+     */
+    void setOnDisconnected(ConnectionCallback* on_disconnected);
+
+    void setOnConnectionLost(ConnectionCallback* on_connection_lost);
+
+    //============================================================
     // protected operations
     //============================================================
   protected:
@@ -1556,7 +1800,22 @@ namespace RTC
     RTC::PortService_var m_objref;
     mutable coil::Mutex m_profile_mutex;
     typedef coil::Guard<coil::Mutex> Guard;
-    
+
+    /*!
+     * @if jp
+     * @brief Callback functor オブジェクト
+     * @else
+     * @brief Callback functor objects
+     * @endif
+     */
+    ConnectionCallback* m_onPublishInterfaces;
+    ConnectionCallback* m_onSubscribeInterfaces;
+    ConnectionCallback* m_onConnected;
+    ConnectionCallback* m_onUnsubscribeInterfaces;
+    ConnectionCallback* m_onDisconnected;
+    ConnectionCallback* m_onConnectionLost;
+
+
     //============================================================
     // Functor
     //============================================================
