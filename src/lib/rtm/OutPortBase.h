@@ -38,6 +38,14 @@ namespace RTC
   class PublisherBase;
   class ConnectorBase;
   class OutPortConnector;
+
+  class BufferCallback;
+  class BufferReadCallback;
+  class ConnectCallback;
+  class DisconnectCallback;
+  class SendCallback;
+  class SenderCallback;
+  class ReceiverCallback;
   /*!
    * @if jp
    *
@@ -586,6 +594,51 @@ namespace RTC
      * @endif
      */
     virtual void deactivateInterfaces();
+
+
+    // OnBuffer系コールバック (バッファに起因するイベントによりコールされる)
+    void setOnBufferWrite(BufferCallback* on_buffer_write);
+
+    void setOnBufferFull(BufferCallback* on_buffer_full);
+
+    void setOnBufferWriteTimeout(BufferCallback* on_buffer_write_timeout);
+
+    void setOnBufferOverwrite(BufferCallback* on_buffer_overwrite);
+
+
+    void setOnBufferRead(BufferCallback* on_buffer_read);
+
+    void setOnBufferEmpty(BufferReadCallback* on_buffer_empty);
+
+    void setOnBufferReadTimeout(BufferReadCallback* on_buffer_read_timeout);
+
+
+    // OnConnect系コールバック (接続に起因するイベントによりコールされる)
+    //    void setOnConnect(ConnectCallback* on_connect);
+
+    //    void setOnDisconnect(DisconnectCallback* on_disconnect);
+
+    //    void setOnConnectionLost(DisconnectCallback* on_connection_lost);
+
+
+    // OnPush系コールバック (送信、送信完了時にコールされる)
+    void setOnPush(SendCallback* on_send);
+
+    void setOnPushed(SendCallback* on_send);
+
+
+    // OnSender系コールバック (送信側に起因するイベントによりコールされる)
+    void setOnSenderTimeout(SenderCallback* on_sender_timeout);
+
+    void setOnSenderError(SenderCallback* on_sender_error);
+
+    // OnReceiver系コールバック (受信側に起因するイベントによりコールされる)
+    void setOnReceiverFull(ReceiverCallback* on_receiver_timeout);
+
+    void setOnReceiverTimeout(ReceiverCallback* on_receiver_timeout);
+
+    void setOnReceiverError(ReceiverCallback* on_receiver_error);
+
 
   protected:
     /*!
