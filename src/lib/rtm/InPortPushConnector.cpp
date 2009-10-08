@@ -35,8 +35,6 @@ namespace RTC
     : InPortConnector(profile, buffer),
       m_provider(provider), m_deleteBuffer(buffer == 0 ? true : false)
   {
-    rtclog.setLevel("PARANOID");
-
     // publisher/buffer creation. This may throw std::bad_alloc;
     if (m_buffer == 0)
       {
