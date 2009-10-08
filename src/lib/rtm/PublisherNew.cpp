@@ -44,7 +44,6 @@ namespace RTC
       m_retcode(PORT_OK), m_pushPolicy(NEW),
       m_skipn(0), m_active(false), m_leftskip(0)
   {
-    rtclog.setLevel("PARANOID");
   }
 
   /*!

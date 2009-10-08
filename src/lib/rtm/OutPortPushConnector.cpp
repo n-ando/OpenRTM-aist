@@ -35,8 +35,6 @@ namespace RTC
     : OutPortConnector(profile),
       m_consumer(consumer), m_publisher(0), m_buffer(buffer)
   {
-    rtclog.setLevel("PARANOID");
-    
     // publisher/buffer creation. This may throw std::bad_alloc;
     m_publisher = createPublisher(profile);
     if (m_buffer == 0)

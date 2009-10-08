@@ -31,7 +31,6 @@ namespace RTC
   InPortCorbaCdrProvider::InPortCorbaCdrProvider(void)
    : m_buffer(0) 
   {
-    rtclog.setLevel("PARANOID");
     // PortProfile setting
     setInterfaceType("corba_cdr");
     

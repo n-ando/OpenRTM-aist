@@ -82,7 +82,6 @@ namespace RTC
     InPortCorbaConsumer(BufferBase<DataType>& buffer)
       : rtclog("InPortCorbaConsumer"), m_buffer(buffer)
     {
-      rtclog.setLevel("PARANOID");
     }
     
     /*!
@@ -106,7 +105,6 @@ namespace RTC
       : CorbaConsumer<RTC::InPortAny>(consumer),
         rtclog("InPortCorbaConsumer"), m_buffer(consumer.m_buffer)
     {
-      rtclog.setLevel("PARANOID");
     }
     
     /*!

@@ -33,7 +33,6 @@ namespace RTC
   InPortCorbaCdrConsumer::InPortCorbaCdrConsumer(void)
     : rtclog("InPortCorbaCdrConsumer")
   {
-    rtclog.setLevel("PARANOID");
   }
   
   /*!

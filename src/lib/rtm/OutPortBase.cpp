@@ -80,8 +80,6 @@ namespace RTC
   OutPortBase::OutPortBase(const char* name, const char* data_type)
     : PortBase(name), m_name(name)
   {
-    rtclog.setLevel("PARANOID");
-
     RTC_PARANOID(("Port name: %s", name));
 
     RTC_PARANOID(("setting port.port_type: DataOutPort"));

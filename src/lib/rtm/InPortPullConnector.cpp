@@ -34,8 +34,6 @@ namespace RTC
                                            CdrBufferBase* buffer)
     : InPortConnector(profile, buffer), m_consumer(consumer)
   {
-    rtclog.setLevel("PARANOID");
-
     if (buffer == 0)
       {
         m_buffer = createBuffer(m_profile);
