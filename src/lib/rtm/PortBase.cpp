@@ -21,6 +21,7 @@
 #include <memory>
 #include <coil/UUID.h>
 #include <rtm/PortBase.h>
+#include <rtm/PortCallback.h>
 
 namespace RTC
 {
@@ -35,7 +36,13 @@ namespace RTC
    * @endif
    */
   PortBase::PortBase(const char* name)
-    : rtclog(name)
+    : rtclog(name),
+      m_onPublishInterfaces(0),
+      m_onSubscribeInterfaces(0),
+      m_onConnected(0),
+      m_onUnsubscribeInterfaces(0),
+      m_onDisconnected(0),
+      m_onConnectionLost(0)
   {
     m_objref = this->_this();
     m_profile.name = CORBA::string_dup(name);
@@ -91,7 +98,7 @@ namespace RTC
   
   /*!
    * @if jp
-   * @brief PortProfile を取得する。
+   * @brief [Local interface] PortProfile を取得する。
    * @else
    * @brief Get the PortProfile of the Port
    * @endif
@@ -212,7 +219,11 @@ namespace RTC
       {
         RTC_ERROR(("publishInterfaces() in notify_connect() failed."));
       }
-
+    if (m_onPublishInterfaces != 0)
+      {
+        (*m_onPublishInterfaces)(connector_profile);
+      }
+    
     // call notify_connect() of the next Port
     retval[1] = connectNext(connector_profile);
     if (retval[1] != RTC::RTC_OK)
@@ -221,6 +232,10 @@ namespace RTC
       }
 
     // subscribe interface from the ConnectorProfile's information
+    if (m_onSubscribeInterfaces != 0)
+      {
+        (*m_onSubscribeInterfaces)(connector_profile);
+      }
     retval[2] = subscribeInterfaces(connector_profile);
     if (retval[2] != RTC::RTC_OK) 
       {
@@ -251,6 +266,13 @@ namespace RTC
             return retval[i];
           }
       }
+
+    // connection established without errors
+    if (m_onConnected != 0)
+      {
+        (*m_onConnected)(connector_profile);
+      }
+
     return RTC::RTC_OK;
   }
   
@@ -331,10 +353,19 @@ namespace RTC
     ConnectorProfile& prof(m_profile.connector_profiles[(CORBA::ULong)index]);
     ReturnCode_t retval(disconnectNext(prof));
 
+    if (m_onUnsubscribeInterfaces != 0)
+      {
+        (*m_onUnsubscribeInterfaces)(prof);
+      }
     unsubscribeInterfaces(prof);
-    
+ 
+    if (m_onDisconnected != 0)
+      {
+        (*m_onDisconnected)(prof);
+      }
+   
     CORBA_SeqUtil::erase(m_profile.connector_profiles, index);
-    
+
     return retval;
   }
   
@@ -442,7 +473,38 @@ namespace RTC
     Guard gurad(m_profile_mutex); 
     m_profile.owner = RTC::RTObject::_duplicate(owner);
   }
+
+  // OnConnect系コールバック (接続に起因するイベントによりコールされる)
+  void PortBase::setOnPublishInterfaces(ConnectionCallback* on_publish)
+  {
+    m_onPublishInterfaces = on_publish;
+  }
+
+  void PortBase::setOnSubscribeInterfaces(ConnectionCallback* on_subscribe)
+  {
+    m_onSubscribeInterfaces = on_subscribe;
+  }
+
+  void PortBase::setOnConnected(ConnectionCallback* on_connected)
+  {
+    m_onConnected = on_connected;
+  }
   
+  void PortBase::setOnUnsubscribeInterfaces(ConnectionCallback* on_unsubscribe)
+  {
+    m_onUnsubscribeInterfaces = on_unsubscribe;
+  }
+
+  void PortBase::setOnDisconnected(ConnectionCallback* on_disconnected)
+  {
+    m_onDisconnected = on_disconnected;
+  }
+  
+  void PortBase::setOnConnectionLost(ConnectionCallback* on_connection_lost)
+  {
+    m_onConnectionLost = on_connection_lost;
+  }  
+
   //============================================================
   // protected operations
   //============================================================

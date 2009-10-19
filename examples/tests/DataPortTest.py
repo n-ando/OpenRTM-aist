@@ -1,11 +1,11 @@
 #!/usr/bin/env python
-# -*- coding: utf-8 -*-
+# -*- coding: euc-jp -*-
 #
 ## DataPortTest.py
 ##
-## „É°„É¢„É™„Éº„É™„Éº„ÇØ„ÉÅ„Çß„ÉÉ„ÇØ
-## DataPort.idl„ÅßÂÆöÁæ©„Åï„Çå„Å¶„ÅÑ„Çã„Ç™„Éö„É¨„Éº„Ç∑„Éß„É≥
-## „Éá„Éº„Çø„Éù„Éº„Éà„Å´Èñ¢„Åô„Çã„Ç™„Éö„É¨„Éº„Ç∑„Éß„É≥
+## •·•‚•Í°º•Í°º•Ø•¡•ß•√•Ø
+## DataPort.idl§«ƒÍµ¡§µ§Ï§∆§§§Î•™•⁄•Ï°º•∑•Á•Û
+## •«°º•ø•›°º•»§À¥ÿ§π§Î•™•⁄•Ï°º•∑•Á•Û
 #
 # $Id$
 #
@@ -91,10 +91,10 @@ conprof = RTC.ConnectorProfile("connector0", "123", [consin_ports[0],consout_por
 
 ##--------------------------------------------------------------------
 # Connector Porfile: corba_cdr, push, periodic <<<  In -> Out
-#conprof = RTC.ConnectorProfile("connector0", "123", [consin_ports[0],consout_ports[0]], [SDOPackage.NameValue("dataport.interface_type",any.to_any("corba_cdr")),SDOPackage.NameValue("dataport.dataflow_type",any.to_any("push")),SDOPackage.NameValue("dataport.subscription_type",any.to_any("periodic")),SDOPackage.NameValue("dataport.push_rate",any.to_any(2000))])
+#conprof = RTC.ConnectorProfile("connector0", "123", [consin_ports[0],consout_ports[0]], [SDOPackage.NameValue("dataport.interface_type",any.to_any("corba_cdr")),SDOPackage.NameValue("dataport.dataflow_type",any.to_any("push")),SDOPackage.NameValue("dataport.subscription_type",any.to_any("periodic"))])
 
 # Connector Porfile: corba_cdr, push, periodic <<<  Out -> In
-#conprof = RTC.ConnectorProfile("connector0", "123", [consout_ports[0],consin_ports[0]], [SDOPackage.NameValue("dataport.interface_type",any.to_any("corba_cdr")),SDOPackage.NameValue("dataport.dataflow_type",any.to_any("push")),SDOPackage.NameValue("dataport.subscription_type",any.to_any("periodic")),SDOPackage.NameValue("dataport.push_rate",any.to_any(2000))])
+#conprof = RTC.ConnectorProfile("connector0", "123", [consout_ports[0],consin_ports[0]], [SDOPackage.NameValue("dataport.interface_type",any.to_any("corba_cdr")),SDOPackage.NameValue("dataport.dataflow_type",any.to_any("push")),SDOPackage.NameValue("dataport.subscription_type",any.to_any("periodic"))])
 
 ##--------------------------------------------------------------------
 #print "ConnectorProfile=\n",conprof
@@ -111,7 +111,7 @@ fodat = "put()"
 print_file_and_cons(fodat)
 
 for i in range(loop_cnt):
-    # DataflowType:pushÊé•Á∂ö
+    # DataflowType:push¿‹¬≥
     # InportCdr::put(in CdrData data)
     ret0,conprof0 = consin_ports[0].connect(conprof)
     # print "   connect() ret=",ret0
@@ -121,7 +121,7 @@ for i in range(loop_cnt):
     # print "   conprof0.properties=",conprof0.properties
     # print "   prop[0]=",conprof0.properties[0].value		#corba_cdr
     # print "   prop[1]=",conprof0.properties[1].value		#push
-    # print "   prop[2]=",conprof0.properties[2].value		#flush
+    # print "   prop[2]=",conprof0.properties[2].value		#flush,new,periodic
     # print "   prop[3]=",conprof0.properties[3].value  		#IOR:
     # print "   prop[4]=",conprof0.properties[4].value  		#InportCdr
     ior = any.from_any(conprof0.properties[3].value, keep_structs=True)
@@ -132,12 +132,13 @@ for i in range(loop_cnt):
     ret1 = inportcdr.put(data0)
     # print "   put() ret=" + str(ret1)
     #if ret1 != OpenRTM.PORT_OK:
-    #  if ret1 == OpenRTM.BUFFER_FULL:		#9‰ª∂ÁõÆ„Åã„ÇâBUFFER_FULL„Å´„Å™„Çã
+    #  if ret1 == OpenRTM.BUFFER_FULL:		#9∑ÔÃ‹§´§ÈBUFFER_FULL§À§ §Î
     #    fodat = "     put() ret=BUFFER_FULL  count=%d" % (i+1)
     #    print_file_and_cons(fodat)
     #  else:
     #    fodat = "     put() ret=" + str(ret1) + "  count=%d" % (i+1)
     #    print_file_and_cons(fodat)
+    time.sleep(0.1)
     ret2 = consin_ports[0].disconnect(conprof.connector_id)    # set used
     #if ret2 != RTC.RTC_OK:
     #    fodat = "     disconnect() error ret=" + str(ret2)
@@ -162,8 +163,8 @@ leak_check(rssStart, rssEnd)
 ##print_file_and_cons(fodat)
 ##
 ##for i in range(loop_cnt):
-##    # DataflowType:pullÊé•Á∂ö
-##    # OutportCdr::get(out CdrData data)  		# DataflowType:pull Êú™ÂÆüË£Ö„ÅÆ„Åü„ÇÅ‰∏≠Ê≠¢
+##    # DataflowType:pull¿‹¬≥
+##    # OutportCdr::get(out CdrData data)  		# DataflowType:pull Ã§º¬¡ı§Œ§ø§·√Êªﬂ
 ##    ret10,conprof10 = consout_ports[0].connect(conprof2)
 ##    # print "   connect() ret=",ret10
 ##    if ret10 != RTC.RTC_OK:
@@ -172,7 +173,7 @@ leak_check(rssStart, rssEnd)
 ##    # print "   conprof10.properties=",conprof10.properties
 ##    # print "   prop[0]=",conprof10.properties[0].value		#corba_cdr
 ##    # print "   prop[1]=",conprof10.properties[1].value		#pull
-##    # print "   prop[2]=",conprof10.properties[2].value		#flush
+##    # print "   prop[2]=",conprof10.properties[2].value		#flush,new,periodic
 ##    # print "   prop[3]=",conprof10.properties[3].value  		#IOR:
 ##    # print "   prop[4]=",conprof10.properties[4].value  		#OutportCdr
 ##    ior10 = any.from_any(conprof10.properties[3].value, keep_structs=True)
@@ -191,6 +192,7 @@ leak_check(rssStart, rssEnd)
 ##    else:
 ##        value12 = cdrUnmarshal(any.to_any(123).typecode(),data1[0],1)
 ##        #print "   data1=",value12
+##    time.sleep(0.1)
 ##    ret12 = consin_ports[0].disconnect(conprof2.connector_id)    # set used
 ##    if ret12 != RTC.RTC_OK:
 ##        fodat = "     disconnect() error ret=" + str(ret12)

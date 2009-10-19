@@ -131,7 +131,7 @@ rtmheader_HEADERS = \
 	OutPortConsumer.h 	\
 	OutPortTcpSockProvider.h\
 	PeriodicTaskFactory.h 	\
-	PortCallBack.h 		\
+	PortCallback.h 		\
 	PublisherBase.h 	\
 	RTC.h 			\
 	RingBuffer.h 		\

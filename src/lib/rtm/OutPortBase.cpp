@@ -80,8 +80,6 @@ namespace RTC
   OutPortBase::OutPortBase(const char* name, const char* data_type)
     : PortBase(name), m_name(name)
   {
-    rtclog.setLevel("PARANOID");
-
     RTC_PARANOID(("Port name: %s", name));
 
     RTC_PARANOID(("setting port.port_type: DataOutPort"));
@@ -337,6 +335,46 @@ namespace RTC
       }
   }
   
+
+    // OnBuffer系コールバック (バッファに起因するイベントによりコールされる)
+    void OutPortBase::setOnBufferWrite(BufferCallback* on_buffer_write)
+    {
+      ;
+    }
+
+  void OutPortBase::setOnBufferFull(BufferCallback* on_buffer_full){;}
+
+  void OutPortBase::setOnBufferWriteTimeout(BufferCallback* on_buffer_write_timeout){;}
+
+    void OutPortBase::setOnBufferOverwrite(BufferCallback* on_buffer_overwrite){;}
+
+
+    void OutPortBase::setOnBufferRead(BufferCallback* on_buffer_read){;}
+
+    void OutPortBase::setOnBufferEmpty(BufferReadCallback* on_buffer_empty){;}
+
+    void OutPortBase::setOnBufferReadTimeout(BufferReadCallback* on_buffer_read_timeout){;}
+
+
+    // OnPush系コールバック (送信、送信完了時にコールされる)
+    void OutPortBase::setOnPush(SendCallback* on_send){;}
+
+    void OutPortBase::setOnPushed(SendCallback* on_send){;}
+
+
+    // OnSender系コールバック (送信側に起因するイベントによりコールされる)
+    void OutPortBase::setOnSenderTimeout(SenderCallback* on_sender_timeout){;}
+
+    void OutPortBase::setOnSenderError(SenderCallback* on_sender_error){;}
+
+    // OnReceiver系コールバック (受信側に起因するイベントによりコールされる)
+    void OutPortBase::setOnReceiverFull(ReceiverCallback* on_receiver_timeout){;}
+
+    void OutPortBase::setOnReceiverTimeout(ReceiverCallback* on_receiver_timeout){;}
+
+    void OutPortBase::setOnReceiverError(ReceiverCallback* on_receiver_error){;}
+
+
 
   //======================================================================
   // protected member functions

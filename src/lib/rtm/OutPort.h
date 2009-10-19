@@ -5,7 +5,7 @@
  * @date $Date: 2007-12-31 03:08:05 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
- * Copyright (C) 2006-2008
+ * Copyright (C) 2006-2009
  *     Noriaki Ando
  *     Task-intelligence Research Group,
  *     Intelligent Systems Research Institute,
@@ -32,7 +32,7 @@
 #include <rtm/Typename.h>
 #include <rtm/OutPortBase.h>
 #include <rtm/CdrBufferBase.h>
-#include <rtm/PortCallBack.h>
+#include <rtm/PortCallback.h>
 #include <rtm/OutPortConnector.h>
 
 namespace RTC
@@ -45,7 +45,132 @@ namespace RTC
    * @brief OutPort テンプレートクラス
    * 
    * OutPort テンプレートクラス、テンプレートの引数として、OutPortが
-   * 扱うデータ型 DataType, OutPortのバッファ型 BufferType をとる。
+   * 扱うデータ型 DataType をとる。
+   *
+   *
+   *
+   * OnWrite系コールバック (書込みに起因するイベントによりコールされる)
+   *
+   * - void OnWrite<DataType>::operator()(const DataType): 
+   *     OutPort::write() を呼び出し書き込みを行う際にコールされる。
+   *
+   * - DataType OnWriteConvert<DataType>::operator()(const DataType): 
+   *     OutPort::write() を呼び出し、データをバッファに書き込む前に呼ばれ
+   *     データの変換を行う。operator()()の戻り値がシリアライズされバッファに
+   *     書き込まれる。
+   *
+   *
+   * OnBuffer系コールバック (バッファに起因するイベントによりコールされる)
+   *
+   * 2種類のコールバックファンクタのシグニチャ
+   * BufferCallback::operator()(ConnectorId, cdrStream)
+   * BufferReadCallback::operator()(ConnectorId)
+   *
+   * - void OnBufferWrite::operator()(ConnectorId, cdrStream):
+   *     BufferBase::write() コール時に単純に呼び出されるコールバック。
+   *     引数にはwrite()されるシリアライズ済みのデータが与えられる。        
+   *   
+   * - void OnBufferFull::operator()(ConnectorId, cdrStream):
+   *     BufferBase::write() コール時に、バッファがいっぱいの場合に
+   *     呼び出されるコールバック。コネクタのIDおよび書き込めなかったデータ
+   *     が引数に与えられる。
+   *
+   * - void OnBufferWriteTimeout::operator()(ConnectorId, cdrStream):
+   *     ConnectorBase::write() コール時に、バッファがいっぱいで書込みが
+   *     タイムアウトした場合に呼び出されるコールバック。コネクタのID
+   *     および書き込めなかったデータが引数に与えられる。
+   *
+   * - void OnBufferOverwrite::operator()(ConnectorId, cdrStream):
+   *     BufferBase::write() コール時に、バッファが上書きモードに設定
+   *     されており、バッファがいっぱいの場合に呼び出されるコールバック。
+   *     コネクタのIDが引数に与えられる。
+   *
+   *
+   * - void OnBufferRead::operator()(ConnectorId, cdrStream):
+   *     BufferBase::read() コール時に単純に呼び出されるコールバック。
+   *     引数には read() で返されるシリアライズ済みのデータが与えられる。
+   *
+   * - void OnBufferEmpty::operator()(ConnectorId): 
+   *     コネクタがバッファを読みだす際に、バッファが空の場合に呼び出される。
+   *     コネクタのIDが引数に与えられる。
+   *
+   * - void OnBufferReadTimeout::operator()(ConnectorId):
+   *     コネクタがバッファを読みだす際に、バッファが空でかつ、読み出しが
+   *     タイムアウトした場合に呼び出されるコールバック。コネクタのID
+   *     が引数に与えられる。
+   *
+   *
+   * OnConnect系コールバック (接続に起因するイベントによりコールされる)
+   *
+   * 2種類のコールバックファンクタのシグニチャ
+   * ConnectCallback::operator()(ConnectorProfile)
+   * DisconnectCallback::operator()(ConnectorId)
+   * 
+   * - void OnConnect::operator()(ConnectorProfile):
+   *     ポートの接続時に呼び出されるコールバック。引数にConnectorProfile
+   *     が与えられる。
+   *
+   * - void OnDisconnect::operator()(ConnectorId):
+   *     ポートの接続切断時に呼び出されるコールバック。引数にコネクタID
+   *     が与えられる。  
+   *
+   * - void OnConnectionLost::operator()(ConnectorId):
+   *     ポートの接続がロストした場合に呼び出されるコールバック。
+   *     引数にコネクタIDが与えられる。OutPortは、相手側InPortとの
+   *     接続をロストした場合、接続を強制的に切断するので、
+   *     引き続き OnDisconnect コールバックが呼び出される。
+   *
+
+   *
+   *
+   * - void OnSend:operator()(ConnectorId, cdrStream):
+   *     データがInPortに対して送られる際に呼び出されるコールバック。
+   *     引数にコネクタIDが与えられる。
+   *
+   * - void OnReceived::operator()(ConnectorId, cdrStream):
+   *     データの送信および受信が完了した際に呼び出されるコールバック。
+   *     引数には、コネクタIDが与えられる。
+   *
+
+   *
+   *
+   * OnSender系コールバック (送信側に起因するイベントによりコールされる)
+   *   以下は、パブリッシャが存在する接続、すなわち dataflow type = push 
+   *   のときのみ有効。
+   *
+   * - void OnSenderTimeout::operator()(ConnectorId, cdrStream):
+   *     データがInPortに対して送られたが、送信がタイムアウトした際に
+   *     呼び出されるコールバック。引数にコネクタIDが与えられる。
+   *     InPortのプロバイダおよびコンシューマが対応している場合に限り有効。
+   *
+   * - void OnSenderError::operator()(ConnectorId, cdrStream):
+   *     データがInPortに対して送られたが、何らかのエラーをInPort側が
+   *     返した場合に呼び出されるコールバック。
+   *     引数には、コネクタIDが与えられる。
+   *
+   *
+   * OnReceiver系コールバック (受信側に起因するイベントによりコールされる)
+   *   以下は、パブリッシャが存在する接続、すなわち dataflow type = push 
+   *   のときのみ有効。
+   * 
+   * - void OnReceiverFull::operator()(ConnectorId, cdrStream):
+   *     データがInPortに送られるものの、InPort側のバッファがいっぱいの場合に
+   *     これを通知するために呼ばれるコールバック。
+   *     引数には、コネクタIDが与えられる。
+   *
+   * - void OnReceiverTimeout::operator()(ConnectorId, cdrStream):
+   *     データがInPortに送られるものの、InPort側のバッファがいっぱいで
+   *     タイムアウトした場合にこれを通知するために呼ばれるコールバック。
+   *     引数には、コネクタIDが与えられる。
+   *
+   * - void OnReceiverError::operator()(ConnectorId, cdrStream):
+   *     データがInPortに送られるものの、InPort側で何らかのエラーを返した
+   *     場合に呼び出されるコールバック。
+   *     引数には、コネクタIDが与えられる。
+   *
+   *
+   *
+   *
    *
    * @since 0.2.0
    *
@@ -91,12 +216,12 @@ namespace RTC
      */
     OutPort(const char* name, DataType& value)
       : OutPortBase(name, toTypename<DataType>()), m_value(value),
-	m_timeoutTick(1000), // timeout tick: 1ms
-	m_readBlock(false), m_readTimeout(0),
-	m_writeBlock(false), m_writeTimeout(0),
-	m_OnWrite(NULL), m_OnWriteConvert(NULL),
-	m_OnRead(NULL),  m_OnReadConvert(NULL),
-	m_OnOverflow(NULL), m_OnUnderflow(NULL)
+        //	m_timeoutTick(1000), // timeout tick: 1ms
+        //	m_readBlock(false), m_readTimeout(0),
+        //	m_writeBlock(false), m_writeTimeout(0),
+	m_onWrite(0), m_onWriteConvert(0)
+        //	m_OnRead(NULL),  m_OnReadConvert(NULL),
+        //	m_OnOverflow(NULL), m_OnUnderflow(NULL)
     {
     }
     
@@ -162,9 +287,9 @@ namespace RTC
      */
     virtual bool write(DataType& value)
     {
-      if (m_OnWrite != NULL)
+      if (m_onWrite != NULL)
 	{
-	  (*m_OnWrite)(value);
+	  (*m_onWrite)(value);
 	}
 
       // check number of connectors
@@ -178,9 +303,9 @@ namespace RTC
 
       // data -> (conversion) -> CDR stream
       m_cdr.rewindPtrs();
-      if (m_OnWriteConvert != NULL)
+      if (m_onWriteConvert != NULL)
         {
-          ((*m_OnWriteConvert)(value)) >>= m_cdr;
+          ((*m_onWriteConvert)(value)) >>= m_cdr;
         }
       else
         {
@@ -284,10 +409,10 @@ namespace RTC
      *
      * @endif
      */
-    void setReadBlock(bool block)
-    {
-      m_readBlock = block;
-    }
+//    void setReadBlock(bool block)
+//    {
+//      m_readBlock = block;
+//    }
     
     /*!
      * @if jp
@@ -313,10 +438,10 @@ namespace RTC
      *
      * @endif
      */
-    void setWriteBlock(bool block)
-    {
-      m_writeBlock = block;
-    }
+//    void setWriteBlock(bool block)
+//    {
+//      m_writeBlock = block;
+//    }
     
     /*!
      * @if jp
@@ -341,10 +466,10 @@ namespace RTC
      *
      * @endif
      */
-    void setReadTimeout(long int timeout)
-    {
-      m_readTimeout = timeout;
-    }
+//    void setReadTimeout(long int timeout)
+//    {
+//      m_readTimeout = timeout;
+//    }
     
     /*!
      * @if jp
@@ -367,17 +492,22 @@ namespace RTC
      *
      * @endif
      */
-    void setWriteTimeout(long int timeout)
-    {
-      m_writeTimeout = timeout;
-    }
+//    void setWriteTimeout(long int timeout)
+//    {
+//      m_writeTimeout = timeout;
+//    }
     
     /*!
      * @if jp
      *
      * @brief OnWrite コールバックの設定
      *
-     * データ書き込み直前に呼ばれる OnWrite コールバックファンクタを設定する。
+     * write() 呼び出し時に、各コネクタに対してデータを書き込む直前に呼
+     * ばれる OnWrite コールバックファンクタを設定する。この関数により
+     * 設定されたファンクタオブジェクトの所有権は、呼び出し側が持つ。し
+     * たがっ const て、このファンクタオブジェクトの解体責任は呼び出し側にある。
+     * ファンクタの設定を解除する場合には引数に 0 を渡すことで、コール
+     * バックが無効となる。
      *
      * @param on_write OnWrite コールバックファンクタ
      *
@@ -385,7 +515,12 @@ namespace RTC
      *
      * @brief Set OnWrite callback
      *
-     * Set OnWrite callback functor invoked immediately before data is written.
+     * This operation sets the OnWrite callback functor that is called
+     * just before write() operation call.  The ownership of the
+     * functor object is owned by caller of this operation.  Therefore
+     * caller have to destruct the callback functor object by itself.
+     * Giving 0 as an argument for this operation, callback will be
+     * disabled.
      *
      * @param on_write OnWrite callback functor
      *
@@ -393,7 +528,7 @@ namespace RTC
      */
     inline void setOnWrite(OnWrite<DataType>* on_write)
     {
-      m_OnWrite = on_write;
+      m_onWrite = on_write;
     }
     
     /*!
@@ -401,10 +536,17 @@ namespace RTC
      *
      * @brief OnWriteConvert コールバックの設定
      *
-     * データ書き込み時に呼ばれる OnWriteConvert コールバックファンクタを設定
-     * する。
-     * このコールバック関数の処理結果が書き込まれる。
-     * このため書き込みデータのフィルタリングが可能となる。
+     * write() 呼び出し時に、各コネクタに対してデータを書き込み直前に呼
+     * ばれ、データ変換を行う OnWriteConvert コールバックファンクタを設
+     * 定する。引数に直近で書き込まれたデータが与えられ、戻り値に実際に
+     * コネクタまたはバッファに書き込まれるデータを返すファンクタを設定
+     * する。この関数により設定されたファンクタオブジェクトの所有権は、
+     * 呼び出し側が持つ。したがっ const て、このファンクタオブジェクト
+     * の解体責任は呼び出し側にある。ファンクタの設定を解除する場合には
+     * 引数に 0 を渡すことで、コールバックが無効となる。 データ書き込み
+     * 時に呼ばれる OnWriteConvert コールバックファンクタを設定する。こ
+     * のコールバック関数の処理結果が書き込まれる。このため書き込みデー
+     * タのフィルタリングが可能となる。
      *
      * @param on_wconvert OnWriteConvert コールバックファンクタ
      *
@@ -412,9 +554,14 @@ namespace RTC
      *
      * @brief Set OnWriteConvert callback
      *
-     * Set OnWriteConvert callback functor invoked when data is written.
-     * The processing result of this callback function is written.
-     * Therefore, filtering of the writing data will be possible.
+     * This operation sets the OnWriteConvert callback functor that
+     * converts given data and is called just before write() operation
+     * call. A recent data is given to argument and return data will
+     * be written into connector or its buffer. The ownership of the
+     * functor object is owned by caller of this operation.  Therefore
+     * caller have to destruct the callback functor object by itself.
+     * Giving 0 as an argument for this operation, callback will be
+     * disabled.
      *
      * @param on_wconvert OnWriteConvert callback functor
      *
@@ -422,171 +569,9 @@ namespace RTC
      */
     inline void setOnWriteConvert(OnWriteConvert<DataType>* on_wconvert)
     {
-      m_OnWriteConvert = on_wconvert;
+      m_onWriteConvert = on_wconvert;
     }
     
-    /*!
-     * @if jp
-     *
-     * @brief OnOverflow コールバックの設定
-     *
-     * バッファフルによりデータ書き込みができない場合に呼び出される OnOverflow
-     * コールバックファンクタを設定する。
-     *
-     * @param on_overflow OnOverflow コールバックファンクタ
-     *
-     * @else
-     *
-     * @brief Set OnOverflow callback
-     *
-     * Set OnOverflow callback functor, which is invoked when data cannot be
-     * written because of the buffer full.
-     *
-     * @param on_overflow OnOverflow callback functor
-     *
-     * @endif
-     */
-    inline void setOnOverflow(OnOverflow<DataType>* on_overflow)
-    {
-      m_OnOverflow = on_overflow;
-    }
-    
-    /*!
-     * @if jp
-     *
-     * @brief OnRead コールバックの設定
-     *
-     * データ読み出し直前に呼び出される OnRead コールバックファンクタを設定
-     * する。
-     *
-     * @param on_read OnRead コールバックファンクタ
-     *
-     * @else
-     *
-     * @brief Set OnRead callback
-     *
-     * Set OnWrite callback functor invoked immediately before data is readout.
-     *
-     * @param on_read OnRead callback functor
-     *
-     * @endif
-     */
-    inline void setOnRead(OnRead<DataType>* on_read)
-    {
-      m_OnRead = on_read;
-    }
-    
-    /*!
-     * @if jp
-     *
-     * @brief OnReadConvert コールバックの設定
-     *
-     * データ読み出し時に呼ばれる OnReadConvert コールバックファンクタを設定
-     * する。
-     * このコールバック関数の処理結果が読み込まれる。
-     * このため読み込みデータのフィルタリングが可能となる。
-     *
-     * @param on_rconvert OnReadConvert コールバックファンクタ
-     *
-     * @else
-     *
-     * @brief Set OnReadConvert callback
-     *
-     * Set OnReadConvert callback functor invoked when data is readout.
-     * The processing result of this callback function is readout.
-     * Therefore, filtering of the read data will be possible.
-     *
-     * @param on_rconvert OnReadConvert callback functor
-     *
-     * @endif
-     */
-    inline void setOnReadConvert(OnReadConvert<DataType>* on_rconvert)
-    {
-      m_OnReadConvert = on_rconvert;
-    }
-    
-    /*!
-     * @if jp
-     *
-     * @brief OnUnderflow コールバックの設定
-     *
-     * バッファエンプティにより読み出せるデータがない場合に呼び出される
-     * コールバックファンクタ OnUnderflow を設定する。
-     *
-     * @param on_underflow OnUnderflow コールバックファンクタ
-     *
-     * @else
-     *
-     * @brief Set OnUnderflow callback
-     *
-     * Set OnUnderflow callback functor, which is invoked when data cannot be
-     * readout because of the buffer empty.
-     *
-     * @param on_underflow OnUnderflow callback functor
-     *
-     * @endif
-     */
-    inline void setOnUnderflow(OnUnderflow<DataType>* on_underflow)
-    {
-      m_OnUnderflow = on_underflow;
-    }    
-
-
-    inline void setOnConnect(OnConnect* on_connect)
-    {
-      m_OnConnect = on_connect;
-    }
-    
-    inline void setOnDisconnect(OnConnect* on_disconnect)
-    {
-      m_OnDisconnect = on_disconnect;
-    }
-    
-    virtual void onConnect(const char* id, PublisherBase* publisher)
-    {
-      std::cout << "onConnect(id = " << id << ")" << std::endl;
-    }
-
-    virtual void onDisconnect(const char* id)
-    {
-      std::cout << "onDisconnect(id = " << id << ")" << std::endl;
-    }
-
-
-
-    struct subscribe
-    {
-      subscribe(const ConnectorProfile& prof)
-	: m_prof(&prof), _consumer(NULL) 
-      {
-      }
-      
-      subscribe(const subscribe& subs)
-	: m_prof(subs.m_prof),
-	  _consumer(subs._consumer)
-      {
-      }
-      
-      subscribe& operator=(const subscribe& subs)
-      {
-	if (this == &subs) return *this;
-	m_prof = subs.m_prof;
-	_consumer = subs._consumer;
-	return *this;
-      }
-      
-      void operator()(InPortConsumer* cons)
-      {
-	if (cons->subscribeInterface(m_prof->properties))
-	  {
-	    _consumer = cons;
-	  }
-      }
-      const ConnectorProfile* m_prof;
-      InPortConsumer* _consumer;
-    };
-
-
   private:
     std::string m_typename;
     /*!
@@ -605,7 +590,7 @@ namespace RTC
      * @brief Polling cycle of time-out [usec]
      * @endif
      */
-    long int m_timeoutTick;
+    //    long int m_timeoutTick;
     
     /*!
      * @if jp
@@ -614,7 +599,7 @@ namespace RTC
      * @brief Flag of read()'s blocking/non-blocking mode
      * @endif
      */
-    bool m_readBlock;
+    //    bool m_readBlock;
     
     /*!
      * @if jp
@@ -623,7 +608,7 @@ namespace RTC
      * @brief Timeout of read() [usec]
      * @endif
      */
-    long int m_readTimeout;
+    //    long int m_readTimeout;
     
     /*!
      * @if jp
@@ -632,7 +617,7 @@ namespace RTC
      * @brief Flag of write()'s blocking/non-blocking mode
      * @endif
      */
-    bool m_writeBlock;
+    //    bool m_writeBlock;
     
     /*!
      * @if jp
@@ -641,7 +626,7 @@ namespace RTC
      * @brief Timeout of write() [usec]
      * @endif
      */
-    long int m_writeTimeout;
+    //    long int m_writeTimeout;
     
     /*!
      * @if jp
@@ -650,7 +635,7 @@ namespace RTC
      * @brief Pointer to OnWrite callback functor
      * @endif
      */
-    OnWrite<DataType>* m_OnWrite;
+    OnWrite<DataType>* m_onWrite;
     
     /*!
      * @if jp
@@ -659,52 +644,9 @@ namespace RTC
      * @brief Pointer to OnWriteConvert callback functor
      * @endif
      */
-    OnWriteConvert<DataType>* m_OnWriteConvert;
-    
-    /*!
-     * @if jp
-     * @brief OnRead コールバックファンクタへのポインタ
-     * @else
-     * @brief Pointer to OnRead callback functor
-     * @endif
-     */
-    OnRead<DataType>* m_OnRead;
-    
-    /*!
-     * @if jp
-     * @brief OnReadConvert コールバックファンクタへのポインタ
-     * @else
-     * @brief Pointer to OnReadConvert callback functor
-     * @endif
-     */
-    OnReadConvert<DataType>* m_OnReadConvert;
-    
-    /*!
-     * @if jp
-     * @brief OnOverflow コールバックファンクタへのポインタ
-     * @else
-     * @brief Pointer to OnOverflow callback functor
-     * @endif
-     */
-    OnOverflow<DataType>* m_OnOverflow;
-    
-    /*!
-     * @if jp
-     * @brief OnUnderflow コールバックファンクタへのポインタ
-     * @else
-     * @brief Pointer to OnUnderflow callback functor
-     *
-     * @endif
-     */
-    OnUnderflow<DataType>* m_OnUnderflow;
-    
-    OnConnect* m_OnConnect;
-    OnDisconnect* m_OnDisconnect;
+    OnWriteConvert<DataType>* m_onWriteConvert;
 
 
-    std::vector<OutPortProvider*> m_providers;
-    std::vector<InPortConsumer*> m_consumers;
-    //    std::vector<ConnectorBase*> m_connectors;
     coil::TimeMeasure m_cdrtime;
     static const long int usec_per_sec = 1000000;
     cdrMemoryStream m_cdr;

@@ -1,11 +1,11 @@
 #!/usr/bin/env python
-# -*- coding: utf-8 -*-
+# -*- coding: euc-jp -*-
 #
 ## AddRemoveOrganizationSDOPackageTest.py
 ##
-## уГбуГвуГкуГ╝уГкуГ╝уВпуГБуВзуГГуВп
-## SDOPackage.idlуБзхоЪч╛йуБХуВМуБжуБДуВЛуВкуГЪуГмуГ╝уВ╖уГзуГ│
-## OrganizationуБош┐╜хКауБихЙКщЩдуБлщЦвуБЩуВЛуВкуГЪуГмуГ╝уВ╖уГзуГ│
+## есетеъб╝еъб╝епе┴езе├еп
+## SDOPackage.idlд╟─ъ╡┴д╡дьд╞дддыеке┌еьб╝е╖ечеє
+## Organizationд╬─╔▓├д╚║я╜№д╦┤╪д╣дыеке┌еьб╝е╖ечеє
 #
 # $Id$
 #

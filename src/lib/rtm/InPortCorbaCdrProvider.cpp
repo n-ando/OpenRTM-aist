@@ -31,7 +31,6 @@ namespace RTC
   InPortCorbaCdrProvider::InPortCorbaCdrProvider(void)
    : m_buffer(0) 
   {
-    rtclog.setLevel("PARANOID");
     // PortProfile setting
     setInterfaceType("corba_cdr");
     
@@ -40,14 +39,13 @@ namespace RTC
     
     // set InPort's reference
     CORBA::ORB_ptr orb = ::RTC::Manager::instance().getORB();
+    CORBA::String_var ior = orb->object_to_string(m_objref.in());
     CORBA_SeqUtil::
       push_back(m_properties,
-                NVUtil::newNV("dataport.corba_cdr.inport_ior",
-                              orb->object_to_string(m_objref.in())));
+                NVUtil::newNV("dataport.corba_cdr.inport_ior", ior));
     CORBA_SeqUtil::
       push_back(m_properties,
-                NVUtil::newNV("dataport.corba_cdr.inport_ref",
-                              m_objref));
+                NVUtil::newNV("dataport.corba_cdr.inport_ref", m_objref));
   }
   
   /*!
