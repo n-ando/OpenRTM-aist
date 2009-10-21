@@ -35,6 +35,15 @@
 #include <rtm/PortCallback.h>
 #include <rtm/OutPortConnector.h>
 
+template <class DataType>
+void setTimestamp(DataType& data)
+{
+      // set timestamp
+      coil::TimeValue tm(coil::gettimeofday());
+      data.tm.sec  = tm.sec();
+      data.tm.nsec = tm.usec() * 1000;
+}
+
 namespace RTC
 {
   /*!
@@ -63,8 +72,8 @@ namespace RTC
    * OnBuffer系コールバック (バッファに起因するイベントによりコールされる)
    *
    * 2種類のコールバックファンクタのシグニチャ
-   * BufferCallback::operator()(ConnectorId, cdrStream)
-   * BufferReadCallback::operator()(ConnectorId)
+   * ConnectorDataCallback::operator()(ConnectorId, const cdrStream&)
+   * ConnectorCallback::operator()(ConnectorId)
    *
    * - void OnBufferWrite::operator()(ConnectorId, cdrStream):
    *     BufferBase::write() コール時に単純に呼び出されるコールバック。
@@ -102,9 +111,8 @@ namespace RTC
    *
    * OnConnect系コールバック (接続に起因するイベントによりコールされる)
    *
-   * 2種類のコールバックファンクタのシグニチャ
-   * ConnectCallback::operator()(ConnectorProfile)
-   * DisconnectCallback::operator()(ConnectorId)
+   * 1種類のコールバックファンクタのシグニチャ
+   * ConnectionCallback::operator()(ConnectorProfile)
    * 
    * - void OnConnect::operator()(ConnectorProfile):
    *     ポートの接続時に呼び出されるコールバック。引数にConnectorProfile
@@ -296,11 +304,6 @@ namespace RTC
       size_t conn_size(m_connectors.size());
       if (!(conn_size > 0)) { return true; }
         
-      // set timestamp
-      coil::TimeValue tm(coil::gettimeofday());
-      value.tm.sec  = tm.sec();
-      value.tm.nsec = tm.usec() * 1000;
-
       // data -> (conversion) -> CDR stream
       m_cdr.rewindPtrs();
       if (m_onWriteConvert != NULL)
@@ -317,13 +320,19 @@ namespace RTC
         {
           ReturnCode ret;
           ret = m_connectors[i]->write(m_cdr);
-          if (ret != PORT_OK)
+          if (ret == PORT_OK) { continue; }
+
+          result = false;
+          const char* id(m_connectors[i]->profile().id.c_str());
+          RTC::ConnectorProfile prof(findConnProfile(id));
+
+          if (ret == CONNECTION_LOST)
             {
-              result = false;
-              if (ret == CONNECTION_LOST)
+              if (m_onConnectionLost != 0)
                 {
-                  disconnect(m_connectors[i]->id());
+                  (*m_onConnectionLost)(prof);
                 }
+              disconnect(m_connectors[i]->id());
             }
         }
       return result;
@@ -384,118 +393,6 @@ namespace RTC
     {
       return write(value);
     }
-    
-    
-    /*!
-     * @if jp
-     *
-     * @brief データ読み出し処理のブロックモードの設定
-     *
-     * 読み出し処理に対してブロックモードを設定する。
-     * ブロックモードを指定した場合、読み出せるデータを受信するかタイムアウト
-     * が発生するまで、read() メソッドの呼びだしがブロックされる。
-     *
-     * @param block ブロックモードフラグ
-     *
-     * @else
-     *
-     * @brief Set blocking mode of the data read processing
-     *
-     * Set the blocking mode for the readout.
-     * When the block mode is specified, the invoke of read() method is
-     * blocked until the readout data is received or timeout occurs.
-     *
-     * @param block Flag of blocking mode
-     *
-     * @endif
-     */
-//    void setReadBlock(bool block)
-//    {
-//      m_readBlock = block;
-//    }
-    
-    /*!
-     * @if jp
-     *
-     * @brief データ書き込み処理のブロックモードの設定
-     *
-     * 書き込み処理に対してブロックモードを設定する。
-     * ブロックモードを指定した場合、バッファに書き込む領域ができるか
-     * タイムアウトが発生するまで write() メソッドの呼びだしがブロックされる。
-     *
-     * @param block ブロックモードフラグ
-     *
-     * @else
-     *
-     * @brief Set blocking mode of the data writing processing
-     *
-     * Set the blocking mode for the writing.
-     * When the block mode is specified, the invoke of write() method is
-     * blocked until the area written into the buffer can be used or timeout
-     * occurs.
-     *
-     * @param block Flag of blocking mode
-     *
-     * @endif
-     */
-//    void setWriteBlock(bool block)
-//    {
-//      m_writeBlock = block;
-//    }
-    
-    /*!
-     * @if jp
-     *
-     * @brief 読み出し処理のタイムアウト時間の設定
-     * 
-     * read() のタイムアウト時間を usec で設定する。
-     * read() はブロックモードでなければならない。
-     *
-     * @param timeout タイムアウト時間 [usec]
-     *
-     * @else
-     *
-     * @brief Set timeout of the data read processing
-     * 
-     * Set the timeout period of read() with usec.
-     * read() must be a block mode.
-     *
-     * @param timeout Timeout period[usec]
-     *
-     * @else
-     *
-     * @endif
-     */
-//    void setReadTimeout(long int timeout)
-//    {
-//      m_readTimeout = timeout;
-//    }
-    
-    /*!
-     * @if jp
-     *
-     * @brief 書き込み処理のタイムアウト時間の設定
-     * 
-     * write() のタイムアウト時間を usec で設定する。
-     * write() はブロックモードでなければならない。
-     *
-     * @param timeout タイムアウト時間 [usec]
-     *
-     * @else
-     *
-     * @brief Set timeout of the data writing processing
-     * 
-     * Set the timeout period of write() with usec.
-     * write() must be a block mode.
-     *
-     * @param timeout Timeout period[usec]
-     *
-     * @endif
-     */
-//    void setWriteTimeout(long int timeout)
-//    {
-//      m_writeTimeout = timeout;
-//    }
     
     /*!
      * @if jp
@@ -585,51 +482,6 @@ namespace RTC
     
     /*!
      * @if jp
-     * @brief タイムアウトのポーリング周期 [usec]
-     * @else
-     * @brief Polling cycle of time-out [usec]
-     * @endif
-     */
-    //    long int m_timeoutTick;
-    
-    /*!
-     * @if jp
-     * @brief 読み込み処理時のブロック・非ブロックモードフラグ
-     * @else
-     * @brief Flag of read()'s blocking/non-blocking mode
-     * @endif
-     */
-    //    bool m_readBlock;
-    
-    /*!
-     * @if jp
-     * @brief 読み込み処理のタイムアウト時間 [usec]
-     * @else
-     * @brief Timeout of read() [usec]
-     * @endif
-     */
-    //    long int m_readTimeout;
-    
-    /*!
-     * @if jp
-     * @brief 書き込み処理時のブロック・非ブロックモードフラグ
-     * @else
-     * @brief Flag of write()'s blocking/non-blocking mode
-     * @endif
-     */
-    //    bool m_writeBlock;
-    
-    /*!
-     * @if jp
-     * @brief 書き込み処理のタイムアウト時間 [usec]
-     * @else
-     * @brief Timeout of write() [usec]
-     * @endif
-     */
-    //    long int m_writeTimeout;
-    
-    /*!
-     * @if jp
      * @brief OnWrite コールバックファンクタへのポインタ
      * @else
      * @brief Pointer to OnWrite callback functor
@@ -645,7 +497,6 @@ namespace RTC
      * @endif
      */
     OnWriteConvert<DataType>* m_onWriteConvert;
-
 
     coil::TimeMeasure m_cdrtime;
     static const long int usec_per_sec = 1000000;
