@@ -22,6 +22,7 @@
 #include <rtm/PublisherBase.h>
 #include <rtm/PublisherFlush.h>
 #include <rtm/InPortConsumer.h>
+#include <rtm/ConnectorListener.h>
 
 namespace RTC
 {
@@ -33,7 +34,8 @@ namespace RTC
    * @endif
    */
   PublisherFlush::PublisherFlush()
-    : m_consumer(0), m_active(false)
+    : rtclog("PublisherFlush"),
+      m_consumer(0), m_active(false)
   {
   }
 
@@ -46,6 +48,7 @@ namespace RTC
    */
   PublisherFlush::~PublisherFlush()
   {
+    RTC_TRACE(("~PublisherFlush()"));
     // "consumer" should be deleted in the Connector
     m_consumer = 0;
   }
@@ -59,6 +62,7 @@ namespace RTC
    */
   PublisherBase::ReturnCode PublisherFlush::init(coil::Properties& prop)
   {
+    RTC_TRACE(("init()"));
     return PORT_OK;
   }
 
@@ -72,6 +76,8 @@ namespace RTC
   PublisherBase::ReturnCode
   PublisherFlush::setConsumer(InPortConsumer* consumer)
   {
+    RTC_TRACE(("setConsumer()"));
+    
     if (consumer == 0)
       {
         return INVALID_ARGS;
@@ -89,17 +95,75 @@ namespace RTC
    */
   PublisherBase::ReturnCode PublisherFlush::setBuffer(CdrBufferBase* buffer)
   {
+    RTC_TRACE(("setBuffer()"));
+
     return PORT_ERROR;
+  }
+
+  /*!
+   * @if jp
+   * @brief リスナのセット
+   * @else
+   * @brief Setting buffer pointer
+   * @endif
+   */ 
+  ::RTC::DataPortStatus::Enum
+  PublisherFlush::setListener(ConnectorInfo& info,
+                              RTC::ConnectorListeners* listeners)
+  {
+    RTC_TRACE(("setListeners()"));
+
+    if (listeners == 0)
+      {
+        RTC_ERROR(("setListeners(listeners == 0): invalid argument"));
+        return INVALID_ARGS;
+      }
+
+    m_profile = info;
+    m_listeners = listeners;
+
+    return PORT_OK;
   }
 
   PublisherBase::ReturnCode PublisherFlush::write(const cdrMemoryStream& data,
                                                   unsigned long sec,
                                                   unsigned long usec)
   {
-    if (m_consumer == 0) { return PRECONDITION_NOT_MET; }
+    RTC_PARANOID(("write()"));
 
-    return m_consumer->put(data);
+    if (m_consumer == 0) { return PRECONDITION_NOT_MET; }
+    if (m_listeners == 0) { return PRECONDITION_NOT_MET; }
+
+    m_listeners->connectorData_[ON_SEND].notify(m_profile, data);
+
+    PublisherBase::ReturnCode ret(m_consumer->put(data));
+
+    m_listeners->connectorData_[ON_RECEIVED].notify(m_profile, data);
+
+    switch(ret)
+      {
+      case SEND_TIMEOUT:
+        m_listeners->
+          connectorData_[ON_SENDER_TIMEOUT].notify(m_profile, data);
+        break;
+      case PORT_ERROR:
+        m_listeners->
+          connectorData_[ON_RECEIVER_ERROR].notify(m_profile, data);
+        break;
+      case SEND_FULL:
+        m_listeners->
+          connectorData_[ON_RECEIVER_FULL].notify(m_profile, data);
+        break;
+      case RECV_TIMEOUT:
+        m_listeners->
+          connectorData_[ON_RECEIVER_TIMEOUT].notify(m_profile, data);
+        break;
+      default:
+        break;
+      }
+    return ret;
   }
+
 
   bool PublisherFlush::isActive()
   {

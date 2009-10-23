@@ -22,6 +22,8 @@
 
 #include <coil/Condition.h>
 #include <rtm/PublisherBase.h>
+#include <rtm/SystemLogger.h>
+#include <rtm/ConnectorBase.h>
 
 namespace coil
 {
@@ -31,6 +33,7 @@ namespace coil
 namespace RTC
 {
   class InPortConsumer;
+
   /*!
    * @if jp
    * @class PublisherFlush
@@ -58,6 +61,7 @@ namespace RTC
     typedef coil::Mutex Mutex;
     typedef coil::Condition<Mutex> Condition;
     typedef coil::Guard<coil::Mutex> Guard;
+
     DATAPORTSTATUS_ENUM
 
     /*!
@@ -110,6 +114,9 @@ namespace RTC
 
     virtual ReturnCode setConsumer(InPortConsumer* consumer);
     virtual ReturnCode setBuffer(CdrBufferBase* buffer);
+    virtual ::RTC::DataPortStatus::Enum
+    setListener(ConnectorInfo& profile,
+                RTC::ConnectorListeners* listeners);
     virtual ReturnCode write(const cdrMemoryStream& data,
                              unsigned long sec,
                              unsigned long usec);
@@ -120,7 +127,10 @@ namespace RTC
   protected:
     
   private:
+    Logger rtclog;
     InPortConsumer* m_consumer;
+    ConnectorInfo m_profile;
+    ConnectorListeners* m_listeners;
     ReturnCode m_retcode;
     Mutex m_retmutex;
     bool m_active;

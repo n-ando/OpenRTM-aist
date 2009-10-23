@@ -58,7 +58,7 @@ namespace RTC
      * @brief Constructor
      * @endif
      */
-    OutPortConnector(ConnectorBase::Profile& profile);
+    OutPortConnector(ConnectorInfo& info);
 
     /*!
      * @if jp
@@ -81,7 +81,7 @@ namespace RTC
      *
      * @endif
      */
-    const Profile& profile();
+    const ConnectorInfo& profile();
 
     /*!
      * @if jp
@@ -160,7 +160,7 @@ namespace RTC
 
   protected:
     Logger rtclog;
-    Profile m_profile;
+    ConnectorInfo m_profile;
   };
 }; // namespace RTC
 

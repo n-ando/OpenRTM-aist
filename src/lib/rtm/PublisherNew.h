@@ -30,6 +30,7 @@
 #include <rtm/CdrBufferBase.h>
 #include <rtm/DataPortStatus.h>
 #include <rtm/SystemLogger.h>
+#include <rtm/ConnectorBase.h>
 
 namespace coil
 {
@@ -121,6 +122,8 @@ namespace RTC
     virtual ReturnCode init(coil::Properties& prop);
     virtual ReturnCode setConsumer(InPortConsumer* consumer);
     virtual ReturnCode setBuffer(CdrBufferBase* buffer);
+    virtual ReturnCode setListener(ConnectorInfo& info,
+                                   ConnectorListeners* listeners);
     virtual ReturnCode write(const cdrMemoryStream& data,
                      unsigned long sec,
                      unsigned long usec);
@@ -227,6 +230,8 @@ namespace RTC
     Logger rtclog;
     InPortConsumer* m_consumer;
     CdrBufferBase* m_buffer;
+    ConnectorInfo m_profile;
+    ConnectorListeners* m_listeners;
     coil::PeriodicTaskBase* m_task;
     ReturnCode m_retcode;
     Mutex m_retmutex;

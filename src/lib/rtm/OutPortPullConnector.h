@@ -57,7 +57,7 @@ namespace RTC
      *
      * @endif
      */
-    OutPortPullConnector(Profile profile,
+    OutPortPullConnector(ConnectorInfo info,
                          OutPortProvider* provider,
                          CdrBufferBase* buffer = 0);
 

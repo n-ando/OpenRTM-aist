@@ -229,6 +229,29 @@ namespace RTC
     return PORT_OK;
   }
 
+  /*!
+   * @if jp
+   * @brief リスナのセット
+   * @else
+   * @brief Setting buffer pointer
+   * @endif
+   */
+  PublisherBase::ReturnCode
+  PublisherPeriodic::setListener(ConnectorInfo& info,
+                                 ConnectorListeners* listeners)
+  {
+    RTC_TRACE(("setListeners()"));
+
+    if (listeners == 0)
+      {
+        RTC_ERROR(("setListeners(listeners == 0): invalid argument"));
+        return INVALID_ARGS;
+      }
+    m_profile = info;
+    m_listeners = listeners;
+    return PORT_OK;
+  }
+
   PublisherBase::ReturnCode
   PublisherPeriodic::write(const cdrMemoryStream& data,
                            unsigned long sec,

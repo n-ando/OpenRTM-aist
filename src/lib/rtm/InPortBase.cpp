@@ -500,10 +500,10 @@ namespace RTC
   InPortBase::createConnector(ConnectorProfile& cprof, coil::Properties& prop,
                               InPortProvider* provider)
   {
-    ConnectorBase::Profile profile(cprof.name,
-                                   cprof.connector_id,
-                                   CORBA_SeqUtil::refToVstring(cprof.ports),
-                                   prop); 
+    ConnectorInfo profile(cprof.name,
+                          cprof.connector_id,
+                          CORBA_SeqUtil::refToVstring(cprof.ports),
+                          prop); 
     InPortConnector* connector(0);
     try
       {
@@ -549,10 +549,10 @@ namespace RTC
                               coil::Properties& prop,
                               OutPortConsumer* consumer)
   {
-    ConnectorBase::Profile profile(cprof.name,
-                                   cprof.connector_id,
-                                   CORBA_SeqUtil::refToVstring(cprof.ports),
-                                   prop); 
+    ConnectorInfo profile(cprof.name,
+                          cprof.connector_id,
+                          CORBA_SeqUtil::refToVstring(cprof.ports),
+                          prop); 
     InPortConnector* connector(0);
     try
       {
