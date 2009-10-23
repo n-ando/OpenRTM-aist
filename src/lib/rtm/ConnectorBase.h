@@ -30,6 +30,30 @@
 
 namespace RTC
 {
+  class ConnectorInfo
+  {
+  public:
+    ConnectorInfo(const char* name_, const char* id_,
+                  coil::vstring ports_, coil::Properties properties_)
+      : name(name_), id(id_)
+      , ports(ports_), properties(properties_)
+    {
+    }
+    ConnectorInfo()
+    {
+    }
+    std::string name;
+    std::string id;
+    coil::vstring ports;
+    coil::Properties properties;
+  };
+
+  typedef std::vector<ConnectorInfo> ConnectorInfoList;
+
+  class ConnectorBase;
+  typedef std::vector<ConnectorBase*> ConnectorList;
+  
+
   /*!
    * @if jp
    * @class ConnectorBase
@@ -76,22 +100,8 @@ namespace RTC
      *
      * @endif
      */
-    struct Profile
-    {
-      Profile(const char* name_, const char* id_,
-              coil::vstring ports_, coil::Properties properties_)
-        : name(name_), id(id_)
-        , ports(ports_), properties(properties_)
-      {
-      }
-      std::string name;
-      std::string id;
-      coil::vstring ports;
-      coil::Properties properties;
-    };
 
-    typedef std::vector<Profile> ProfileList;
-    typedef std::vector<ConnectorBase*> ConnectorList;
+
 
     /*!
      * @if jp
@@ -115,7 +125,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual const Profile& profile() = 0;
+    virtual const ConnectorInfo& profile() = 0;
 
     /*!
      * @if jp

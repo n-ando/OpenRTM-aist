@@ -28,6 +28,7 @@
 #include <rtm/InPortConsumer.h>
 #include <rtm/PeriodicTaskFactory.h>
 #include <rtm/idl/DataPortSkel.h>
+#include <rtm/ConnectorListener.h>
 
 namespace RTC
 {
@@ -209,6 +210,29 @@ namespace RTC
     return PORT_OK;
   }
 
+  /*!
+   * @if jp
+   * @brief リスナのセット
+   * @else
+   * @brief Setting buffer pointer
+   * @endif
+   */
+  PublisherBase::ReturnCode
+  PublisherNew::setListener(ConnectorInfo& info,
+                            ConnectorListeners* listeners)
+  {
+    RTC_TRACE(("setListeners()"));
+
+    if (listeners == 0)
+      {
+        RTC_ERROR(("setListeners(listeners == 0): invalid argument"));
+        return INVALID_ARGS;
+      }
+    m_profile = info;
+    m_listeners = listeners;
+    return PORT_OK;
+  }
+
   PublisherBase::ReturnCode PublisherNew::write(const cdrMemoryStream& data,
                                                 unsigned long sec,
                                                 unsigned long usec)
@@ -216,6 +240,7 @@ namespace RTC
     RTC_PARANOID(("write()"));
     if (m_consumer == 0) { return PRECONDITION_NOT_MET; }
     if (m_buffer == 0) { return PRECONDITION_NOT_MET; }
+    if (m_listeners == 0) { return PRECONDITION_NOT_MET; }
     if (m_retcode == CONNECTION_LOST)
       {
         RTC_DEBUG(("write(): connection lost."));

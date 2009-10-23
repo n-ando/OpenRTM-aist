@@ -29,20 +29,20 @@ namespace RTC
    * @brief Constructor
    * @endif
    */
-  InPortPushConnector::InPortPushConnector(Profile profile, 
+  InPortPushConnector::InPortPushConnector(ConnectorInfo info, 
                                            InPortProvider* provider,
                                            CdrBufferBase* buffer)
-    : InPortConnector(profile, buffer),
+    : InPortConnector(info, buffer),
       m_provider(provider), m_deleteBuffer(buffer == 0 ? true : false)
   {
     // publisher/buffer creation. This may throw std::bad_alloc;
     if (m_buffer == 0)
       {
-        m_buffer = createBuffer(profile);
+        m_buffer = createBuffer(info);
       }
     if (m_buffer == 0 || m_provider==0) throw std::bad_alloc();
 
-    m_provider->init(profile.properties);
+    m_provider->init(info.properties);
     m_provider->setBuffer(m_buffer);
   }
 
@@ -135,10 +135,10 @@ namespace RTC
    * @brief create buffer
    * @endif
    */
-  CdrBufferBase* InPortPushConnector::createBuffer(Profile& profile)
+  CdrBufferBase* InPortPushConnector::createBuffer(ConnectorInfo& info)
   {
     std::string buf_type;
-    buf_type = profile.properties.getProperty("buffer_type",
+    buf_type = info.properties.getProperty("buffer_type",
                                               "ring_buffer");
     return CdrBufferFactory::instance().createObject(buf_type);
   }

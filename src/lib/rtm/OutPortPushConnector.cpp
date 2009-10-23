@@ -17,8 +17,10 @@
  *
  */
 
-#include <rtm/OutPortPushConnector.h>
 #include <coil/stringutil.h>
+
+#include <rtm/OutPortPushConnector.h>
+#include <rtm/ConnectorListener.h>
 
 namespace RTC
 {
@@ -29,29 +31,32 @@ namespace RTC
    * @brief Constructor
    * @endif
    */
-  OutPortPushConnector::OutPortPushConnector(Profile profile, 
+  OutPortPushConnector::OutPortPushConnector(ConnectorInfo info, 
                                              InPortConsumer* consumer,
+                                             ConnectorListeners& listeners,
                                              CdrBufferBase* buffer)
-    : OutPortConnector(profile),
-      m_consumer(consumer), m_publisher(0), m_buffer(buffer)
+    : OutPortConnector(info),
+      m_consumer(consumer), m_publisher(0),
+      m_listeners(listeners), m_buffer(buffer)
   {
     // publisher/buffer creation. This may throw std::bad_alloc;
-    m_publisher = createPublisher(profile);
+    m_publisher = createPublisher(info);
     if (m_buffer == 0)
       {
-        m_buffer = createBuffer(profile);
+        m_buffer = createBuffer(info);
       }
     if (m_publisher == 0 || m_buffer == 0 || m_consumer == 0) 
       { throw std::bad_alloc(); }
     
-    if (m_publisher->init(profile.properties) != PORT_OK)
+    if (m_publisher->init(info.properties) != PORT_OK)
       {
         throw std::bad_alloc();
       }
-    m_consumer->init(profile.properties);
+    m_consumer->init(info.properties);
     
     m_publisher->setConsumer(m_consumer);
     m_publisher->setBuffer(m_buffer);
+    m_publisher->setListener(m_profile, &m_listeners);
   }
   
   /*!
@@ -175,10 +180,10 @@ namespace RTC
    * @brief create publisher
    * @endif
    */
-  PublisherBase* OutPortPushConnector::createPublisher(Profile& profile)
+  PublisherBase* OutPortPushConnector::createPublisher(ConnectorInfo& info)
   {
     std::string pub_type;
-    pub_type = profile.properties.getProperty("subscription_type",
+    pub_type = info.properties.getProperty("subscription_type",
                                               "flush");
     coil::normalize(pub_type);
     return PublisherFactory::instance().createObject(pub_type);
@@ -191,10 +196,10 @@ namespace RTC
    * @brief create buffer
    * @endif
    */
-  CdrBufferBase* OutPortPushConnector::createBuffer(Profile& profile)
+  CdrBufferBase* OutPortPushConnector::createBuffer(ConnectorInfo& info)
   {
     std::string buf_type;
-    buf_type = profile.properties.getProperty("buffer_type",
+    buf_type = info.properties.getProperty("buffer_type",
                                               "ring_buffer");
     return CdrBufferFactory::instance().createObject(buf_type);
   }

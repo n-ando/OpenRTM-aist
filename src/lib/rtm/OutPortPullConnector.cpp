@@ -22,10 +22,10 @@
 
 namespace RTC
 {
-  OutPortPullConnector::OutPortPullConnector(Profile profile,
+  OutPortPullConnector::OutPortPullConnector(ConnectorInfo info,
                                              OutPortProvider* provider,
                                              CdrBufferBase* buffer)
-    : OutPortConnector(profile),
+    : OutPortConnector(info),
       m_provider(provider), m_buffer(buffer)
   {
   }

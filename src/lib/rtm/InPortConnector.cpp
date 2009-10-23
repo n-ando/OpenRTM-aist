@@ -28,9 +28,9 @@ namespace RTC
    * @brief Constructor
    * @endif
    */
-  InPortConnector::InPortConnector(InPortConnector::Profile& profile,
+  InPortConnector::InPortConnector(ConnectorInfo& info,
                                    CdrBufferBase* buffer)
-    : rtclog("InPortConnector"), m_profile(profile), m_buffer(buffer)
+    : rtclog("InPortConnector"), m_profile(info), m_buffer(buffer)
   {
   }
 
@@ -47,18 +47,18 @@ namespace RTC
 
   /*!
    * @if jp
-   * @brief Profile 取得
+   * @brief ConnectorInfo 取得
    *
-   * Connector Profile を取得する
+   * Connector ConnectorInfo を取得する
    *
    * @else
-   * @brief Getting Profile
+   * @brief Getting ConnectorInfo
    *
-   * This operation returns Connector Profile
+   * This operation returns Connector ConnectorInfo
    *
    * @endif
    */
-  const InPortConnector::Profile& InPortConnector::profile()
+  const ConnectorInfo& InPortConnector::profile()
   {
     RTC_TRACE(("profile()"));
     return m_profile;

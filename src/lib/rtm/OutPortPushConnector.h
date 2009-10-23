@@ -26,6 +26,8 @@
 
 namespace RTC
 {
+  class ConnectorListeners;
+
   class OutPortPushConnector
     : public OutPortConnector
   {
@@ -55,8 +57,9 @@ namespace RTC
      *
      * @endif
      */
-    OutPortPushConnector(Profile profile,
+    OutPortPushConnector(ConnectorInfo info,
                          InPortConsumer* consumer,
+                         ConnectorListeners& listeners,
                          CdrBufferBase* buffer = 0);
 
     /*!
@@ -166,7 +169,7 @@ namespace RTC
      * @brief create publisher
      * @endif
      */
-    virtual PublisherBase* createPublisher(Profile& profile);
+    virtual PublisherBase* createPublisher(ConnectorInfo& info);
 
     /*!
      * @if jp
@@ -175,14 +178,14 @@ namespace RTC
      * @brief create buffer
      * @endif
      */
-    virtual CdrBufferBase* createBuffer(Profile& profile);
+    virtual CdrBufferBase* createBuffer(ConnectorInfo& info);
 
   private:
     /*!
      * @if jp
      * @brief InPortConsumer へのポインタ
      * @else
-     * @brief the pointer to the InPortConsumer
+     * @brief A pointer to an InPortConsumer
      * @endif
      */
     InPortConsumer* m_consumer;
@@ -191,16 +194,25 @@ namespace RTC
      * @if jp
      * @brief Publisher へのポインタ
      * @else
-     * @brief the pointer to the publisher
+     * @brief A pointer to a publisher
      * @endif
      */
     PublisherBase* m_publisher;
 
     /*!
      * @if jp
+     * @brief ConnectorListenrs への参照
+     * @else
+     * @brief A reference to a ConnectorListener
+     * @endif
+     */
+    ConnectorListeners& m_listeners;
+
+    /*!
+     * @if jp
      * @brief Buffer へのポインタ
      * @else
-     * @brief the pointer to the buffer
+     * @brief A pointer to a buffer
      * @endif
      */
     CdrBufferBase* m_buffer;

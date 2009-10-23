@@ -69,6 +69,7 @@ PORT_SRC =                           \
 	OutPortPushConnector.cpp     \
 	InPortPullConnector.cpp      \
 	InPortPushConnector.cpp      \
+	ConnectorListener.cpp        \
 	CorbaPort.cpp                \
 	InPortBase.cpp               \
 	InPortProvider.cpp           \

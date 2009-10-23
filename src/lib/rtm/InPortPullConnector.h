@@ -60,7 +60,7 @@ namespace RTC
      * @brief Constructor
      * @endif
      */
-    InPortPullConnector(Profile profile,
+    InPortPullConnector(ConnectorInfo info,
                         OutPortConsumer* consumer,
                         CdrBufferBase* buffer = 0);
 
@@ -106,7 +106,7 @@ namespace RTC
     virtual void activate(){}; // do nothing
     virtual void deactivate(){}; // do nothing
   protected:
-    CdrBufferBase* createBuffer(Profile& profile);
+    CdrBufferBase* createBuffer(ConnectorInfo& info);
     
   private:
     OutPortConsumer* m_consumer;

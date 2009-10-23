@@ -29,10 +29,10 @@ namespace RTC
    * @brief Constructor
    * @endif
    */
-  InPortPullConnector::InPortPullConnector(Profile profile,
+  InPortPullConnector::InPortPullConnector(ConnectorInfo info,
                                            OutPortConsumer* consumer,
                                            CdrBufferBase* buffer)
-    : InPortConnector(profile, buffer), m_consumer(consumer)
+    : InPortConnector(info, buffer), m_consumer(consumer)
   {
     if (buffer == 0)
       {
@@ -111,10 +111,10 @@ namespace RTC
    * @brief create buffer
    * @endif
    */
-  CdrBufferBase* InPortPullConnector::createBuffer(Profile& profile)
+  CdrBufferBase* InPortPullConnector::createBuffer(ConnectorInfo& info)
   {
     std::string buf_type;
-    buf_type = profile.properties.getProperty("buffer_type",
+    buf_type = info.properties.getProperty("buffer_type",
                                               "ring_buffer");
     return CdrBufferFactory::instance().createObject(buf_type);
   }

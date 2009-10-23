@@ -42,7 +42,7 @@ namespace RTC
      * したがって、InPortPushConnector 削除時には、InPortConsumerも同時に
      * 解体・削除される。
      *
-     * @param profile ConnectorProfile
+     * @param info ConnectorInfo
      * @param consumer InPortConsumer
      *
      * @else
@@ -52,12 +52,12 @@ namespace RTC
      * Therefore, InPortConsumer will be deleted when InPortPushConnector
      * is destructed.
      *
-     * @param profile ConnectorProfile
+     * @param info ConnectorInfo
      * @param consumer InPortConsumer
      *
      * @endif
      */
-    InPortPushConnector(Profile profile, InPortProvider* provider,
+    InPortPushConnector(ConnectorInfo info, InPortProvider* provider,
                         CdrBufferBase* buffer = 0);
 
     /*!
@@ -120,7 +120,7 @@ namespace RTC
      * @brief create buffer
      * @endif
      */
-    virtual CdrBufferBase* createBuffer(Profile& profile);
+    virtual CdrBufferBase* createBuffer(ConnectorInfo& info);
 
   private:
     /*!

@@ -234,11 +234,7 @@ namespace RTC
 	   int read_timeout = 0, int write_timeout = 0)
       :	InPortBase(name, toTypename<DataType>()),
         m_name(name), m_value(value),
-	m_readBlock(read_block),   m_readTimeout(read_timeout),
-	m_writeBlock(write_block), m_writeTimeout(write_timeout),
-	m_OnWrite(NULL), m_OnWriteConvert(NULL),
-	m_OnRead(NULL),  m_OnReadConvert(NULL),
-	m_OnOverflow(NULL), m_OnUnderflow(NULL)
+	m_OnRead(NULL),  m_OnReadConvert(NULL)
     {
     }
     
@@ -542,138 +538,6 @@ namespace RTC
       return;
     }
     
-    /***
-     * @if jp
-     *
-     * @brief 未読の新しいデータ数を取得する
-     *
-     * @else
-     *
-     * @brief Get number of new unread data
-     *
-     * @endif
-     */
-    /*
-      virtual int getNewDataLen()
-      {
-      return m_buffer->new_data_len();
-      }
-    */
-    
-    /***
-     * @if jp
-     *
-     * @brief 未読の新しいデータを取得する
-     *
-     * @else
-     *
-     * @brief Get new unread data
-     *
-     * @endif
-     */
-    /*
-      virtual std::vector<T> getNewList()
-      {
-      return m_buffer.get_new_list();
-      }
-    */
-    
-    /***
-     * @if jp
-     *
-     * @brief 未読の新しいデータを逆順(新->古)で取得する
-     *
-     * @else
-     *
-     * @brief Get new unread data backwards by date (new->old)
-     *
-     * @endif
-     */
-    /*
-      virtual std::vector<T> getNewListReverse()
-      {
-      return m_buffer.get_new_rlist();
-      }
-    */
-    
-    /*!
-     * @if jp
-     *
-     * @brief InPort バッファへデータ入力時のコールバックの設定
-     *
-     * InPort が持つバッファにデータがputされたときに呼ばれるコールバック
-     * オブジェクトを設定する。設定されるコールバックオブジェクトは
-     * InPort<DataType>::OnPutクラスを継承し、引数 const DataType& 、
-     * 戻り値 void の operator() 関数が実装されている必要がある。
-     *
-     * struct MyOnPutCallback : public InPort<DataType> {<br>
-     *   void operator()(const DataType data) {<br>
-     *     処理<br>
-     *   }<br>
-     * };<br>
-     * のようにコールバックオブジェクトを実装し、<br>
-     * <br> 
-     * m_inport.setOnPut(new MyOnPutCallback());<br>
-     * のようにコールバックオブジェクトをセットする。
-     *
-     * @param on_write OnWrite&lt;DataType&gt;型のオブジェクト
-     *
-     * @else
-     *
-     * @brief Set callback for inputting data into the InPort buffer.
-     *
-     * Set the callback object invoked when data was put in the InPort's buffer.
-     * The callback object which was set inherits InPort<DataType>::OnPut class,
-     * and the method operator(), which has the argument "const DataType&"
-     * and the return value "void", need to be implemented.
-     *
-     * Callback object should be implemented as follow:<br>
-     * struct MyOnPutCallback : public InPort<DataType> {<br>
-     *   void operator()(const DataType data) {<br>
-     *     Operation<br>
-     *   }<br>
-     * };<br>
-     * and should be set as follow:
-     * <br> 
-     * m_inport.setOnPut(new MyOnPutCallback());<br>
-     *
-     * @param on_write OnWrite&lt;DataType&gt; type object
-     *
-     * @endif
-     */
-    inline void setOnWrite(OnWrite<DataType>* on_write)
-    {
-      m_OnWrite = on_write;
-    }
-    
-    /*!
-     * @if jp
-     *
-     * @brief InPort バッファへデータ書き込み時のコールバックの設定
-     *
-     * InPort が持つバッファにデータ書き込まれる時に呼ばれるコールバック
-     * オブジェクトを設定する。バッファにはコールバックオブジェクトの
-     * 戻り値が設定される。
-     * 
-     * @param on_wconvert OnWriteConvert&lt;DataType&gt;型のオブジェクト
-     *
-     * @else
-     *
-     * @brief Set callback when data is written into the InPort buffer
-     *
-     * Set the callback object that is invoked when data is written into 
-     * the InPort's buffer. The return value of the callback object is set to
-     * the buffer.
-     * 
-     * @param on_wconvert OnWriteConvert&lt;DataType&gt; type object
-     *
-     * @endif
-     */
-    inline void setOnWriteConvert(OnWriteConvert<DataType>* on_wconvert)
-    {
-      m_OnWriteConvert = on_wconvert;
-    }
-    
     /*!
      * @if jp
      *
@@ -728,58 +592,6 @@ namespace RTC
       m_OnReadConvert = on_rconvert;
     }
     
-    /*!
-     * @if jp
-     *
-     * @brief InPort バッファへバッファオーバーフロー時のコールバックの設定
-     *
-     * InPort が持つバッファでバッファオーバーフローが検出された際に呼び出される
-     * コールバックオブジェクトを設定する。
-     * 
-     * @param on_overflow OnOverflow&lt;DataType&gt;型のオブジェクト
-     *
-     * @else
-     *
-     * @brief Set callback when the InPort buffer occurs overflow
-     *
-     * Set the callback object that is invoked when the buffer overflow was
-     * detected in the InPort's buffer.
-     * 
-     * @param on_overflow OnOverflow&lt;DataType&gt; type object
-     *
-     * @endif
-     */
-    inline void setOnOverflow(OnOverflow<DataType>* on_overflow)
-    {
-      m_OnOverflow = on_overflow;
-    }
-    
-    /*!
-     * @if jp
-     *
-     * @brief InPort バッファへバッファアンダーフロー時のコールバックの設定
-     *
-     * InPort が持つバッファでバッファアンダーフローが検出された際に呼び出される
-     * コールバックオブジェクトを設定する。
-     * 
-     * @param on_underflow OnUnderflow&lt;DataType&gt;型のオブジェクト
-     *
-     * @else
-     *
-     * @brief Set callback when the InPort buffer occurs underflow.
-     *
-     * Set the callback object that is invoked when the buffer underflow was
-     * detected in the InPort's buffer.
-     * 
-     * @param on_underflow OnUnderflow&lt;DataType&gt; type object
-     *
-     * @endif
-     */
-    inline void setOnUnderflow(OnUnderflow<DataType>* on_underflow)
-    {
-      m_OnUnderflow = on_underflow;
-    }
-    
   private:
     std::string m_typename;
     /*!
@@ -800,29 +612,6 @@ namespace RTC
      */
     DataType& m_value;
     
-    bool m_readBlock;
-    long int m_readTimeout;
-    bool m_writeBlock;
-    long int m_writeTimeout;
-    
-    /*!
-     * @if jp
-     * @brief OnWrite コールバックファンクタへのポインタ
-     * @else
-     * @brief Pointer to OnWrite callback functor
-     * @endif
-     */
-    OnWrite<DataType>* m_OnWrite;
-    
-    /*!
-     * @if jp
-     * @brief OnWriteConvert コールバックファンクタへのポインタ
-     * @else
-     * @brief Pointer to OnWriteConvert callback functor
-     * @endif
-     */
-    OnWriteConvert<DataType>* m_OnWriteConvert;
-    
     /*!
      * @if jp
      * @brief OnRead コールバックファンクタへのポインタ
@@ -840,27 +629,7 @@ namespace RTC
      * @endif
      */
     OnReadConvert<DataType>* m_OnReadConvert;
-    
-    /*!
-     * @if jp
-     * @brief OnOverflow コールバックファンクタへのポインタ
-     * @else
-     * @brief Pointer to OnOverflow callback functor
-     * @endif
-     */
-    OnOverflow<DataType>* m_OnOverflow;
-    
-    /*!
-     * @if jp
-     * @brief OnUnderflow コールバックファンクタへのポインタ
-     * @else
-     * @brief Pointer to OnUnderflow callback functor
-     *
-     * @endif
-     */
-    OnUnderflow<DataType>* m_OnUnderflow;
-
-    
+   
   };
 }; // End of namesepace RTM
 

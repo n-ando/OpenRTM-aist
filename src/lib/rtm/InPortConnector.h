@@ -56,7 +56,7 @@ namespace RTC
      * @brief Constructor
      * @endif
      */
-    InPortConnector(ConnectorBase::Profile& profile,
+    InPortConnector(ConnectorInfo& info,
                     CdrBufferBase* buffer);
 
     /*!
@@ -70,18 +70,18 @@ namespace RTC
 
    /*!
      * @if jp
-     * @brief Profile 取得
+     * @brief ConnectorInfo 取得
      *
-     * Connector Profile を取得する
+     * Connector ConnectorInfo を取得する
      *
      * @else
-     * @brief Getting Profile
+     * @brief Getting ConnectorInfo
      *
-     * This operation returns Connector Profile
+     * This operation returns ConnectorInfo
      *
      * @endif
      */
-    virtual const Profile& profile();
+    virtual const ConnectorInfo& profile();
     /*!
      * @if jp
      * @brief Connector ID 取得
@@ -159,7 +159,7 @@ namespace RTC
 
   protected:
     Logger rtclog;
-    Profile m_profile;
+    ConnectorInfo m_profile;
     CdrBufferBase* m_buffer;
   };
 }; // namespace RTC

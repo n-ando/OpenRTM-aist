@@ -29,6 +29,7 @@
 #include <rtm/PublisherBase.h>
 #include <rtm/CdrBufferBase.h>
 #include <rtm/SystemLogger.h>
+#include <rtm/ConnectorBase.h>
 
 namespace coil
 {
@@ -68,11 +69,11 @@ namespace RTC
      * @if jp
      * @brief コンストラクタ
      *
-     * コンストラクタ
-     * 送出処理の呼び出し間隔を、Propertyオブジェクトのdataport.publisher.push_rateメンバ
-     * に設定しておく必要がある。送出間隔は、Hz単位の浮動小数文字列で指定。
-     * たとえば、1000.0Hzの場合は、「1000.0」を設定。
-     * 上記プロパティが未設定の場合は、「1000Hz」を設定。
+     * 送出処理の呼び出し間隔を、Propertyオブジェクトの
+     * dataport.publisher.push_rateメンバに設定しておく必要がある。送出
+     * 間隔は、Hz単位の浮動小数文字列で指定。たとえば、1000.0Hzの場合は、
+     * 「1000.0」を設定。上記プロパティが未設定の場合は、「1000Hz」を設
+     * 定。
      *
      * @param consumer データ送出を待つコンシューマ
      * @param property 本Publisherの駆動制御情報を設定したPropertyオブジェクト
@@ -80,10 +81,9 @@ namespace RTC
      * @else
      * @brief Constructor
      *
-     * Constructor.
      * The intervals of invoking send processing needs to be set in
-     * dataport.publisher.push_rate of Property object. The interval is specified by
-     * floating point string in Hz.
+     * dataport.publisher.push_rate of Property object. The interval
+     * is specified by floating point string in Hz.
      * For example, "1000.0" is set for 1000.0Hz.
      * If the above property is unset, "1000Hz" will be set.
      *
@@ -120,6 +120,8 @@ namespace RTC
     virtual ReturnCode init(coil::Properties& prop);
     virtual ReturnCode setConsumer(InPortConsumer* consumer);
     virtual ReturnCode setBuffer(CdrBufferBase* buffer);
+    virtual ReturnCode setListener(ConnectorInfo& info,
+                                   ConnectorListeners* listeners);
     virtual ReturnCode write(const cdrMemoryStream& data,
                              unsigned long sec,
                              unsigned long usec);
@@ -174,6 +176,8 @@ namespace RTC
     Logger rtclog;
     InPortConsumer* m_consumer;
     CdrBufferBase* m_buffer;
+    ConnectorInfo m_profile;
+    ConnectorListeners* m_listeners;
     coil::PeriodicTaskBase* m_task;
     ReturnCode m_retcode;
     Mutex m_retmutex;

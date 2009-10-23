@@ -193,10 +193,10 @@ namespace RTC
    * @brief ConnectorProfile list
    * @endif
    */
-  ConnectorBase::ProfileList OutPortBase::getConnectorProfiles()
+  ConnectorInfoList OutPortBase::getConnectorProfiles()
   {
     RTC_TRACE(("getConnectorProfiles(): size = %d", m_connectors.size()));
-    ConnectorBase::ProfileList profs;
+    ConnectorInfoList profs;
     for (int i(0), len(m_connectors.size()); i < len; ++i)
       {
         profs.push_back(m_connectors[i]->profile());
@@ -248,7 +248,7 @@ namespace RTC
    * @endif
    */
   bool OutPortBase::getConnectorProfileById(const char* id,
-                               ConnectorBase::Profile& prof)
+                                            ConnectorInfo& prof)
   {
     RTC_TRACE(("getConnectorProfileById(id = %s)", id));
 
@@ -272,7 +272,7 @@ namespace RTC
    * @endif
    */
   bool OutPortBase::getConnectorProfileByName(const char* name,
-                                 ConnectorBase::Profile& prof)
+                                              ConnectorInfo& prof)
   {
     RTC_TRACE(("getConnectorProfileById(id = %s)", name));
 
@@ -360,7 +360,7 @@ namespace RTC
 
     if (type < CONNECTOR_DATA_LISTENER_NUM)
       {
-        m_connectorDataListeners[type].addListener(listener, autoclean);
+        m_listeners.connectorData_[type].addListener(listener, autoclean);
       }
   }
 
@@ -372,7 +372,7 @@ namespace RTC
 
     if (type < CONNECTOR_DATA_LISTENER_NUM)
       {
-        m_connectorDataListeners[type].removeListener(listener);
+        m_listeners.connectorData_[type].removeListener(listener);
       }
   }
   
@@ -393,7 +393,7 @@ namespace RTC
 
     if (type < CONNECTOR_LISTENER_NUM)
       {
-        m_connectorListeners[type].addListener(listener, autoclean);
+        m_listeners.connector_[type].addListener(listener, autoclean);
       }
   }
   
@@ -404,7 +404,7 @@ namespace RTC
 
     if (type < CONNECTOR_LISTENER_NUM)
       {
-        m_connectorListeners[type].removeListener(listener);
+        m_listeners.connector_[type].removeListener(listener);
       }
   }
 
@@ -774,14 +774,14 @@ namespace RTC
                                coil::Properties& prop,
                                InPortConsumer* consumer)
   {
-    ConnectorBase::Profile profile(cprof.name,
-                                   cprof.connector_id,
-                                   CORBA_SeqUtil::refToVstring(cprof.ports),
-                                   prop); 
+    ConnectorInfo profile(cprof.name,
+                          cprof.connector_id,
+                          CORBA_SeqUtil::refToVstring(cprof.ports),
+                          prop); 
     OutPortConnector* connector(0);
     try
       {
-        connector = new OutPortPushConnector(profile, consumer);
+        connector = new OutPortPushConnector(profile, consumer, m_listeners);
 
         if (connector == 0)
           {
@@ -815,10 +815,10 @@ namespace RTC
                                coil::Properties& prop,
                                OutPortProvider* provider)
   {
-    ConnectorBase::Profile profile(cprof.name,
-                                   cprof.connector_id,
-                                   CORBA_SeqUtil::refToVstring(cprof.ports),
-                                   prop); 
+    ConnectorInfo profile(cprof.name,
+                          cprof.connector_id,
+                          CORBA_SeqUtil::refToVstring(cprof.ports),
+                          prop); 
     OutPortConnector* connector(0);
     try
       {

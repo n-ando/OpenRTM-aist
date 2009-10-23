@@ -28,8 +28,8 @@ namespace RTC
    * @brief Constructor
    * @endif
    */
-  OutPortConnector::OutPortConnector(ConnectorBase::Profile& profile)
-    : rtclog("OutPortConnector"), m_profile(profile)
+  OutPortConnector::OutPortConnector(ConnectorInfo& info)
+    : rtclog("OutPortConnector"), m_profile(info)
   {
   }
 
@@ -45,18 +45,18 @@ namespace RTC
   }
   /*!
    * @if jp
-   * @brief Profile 取得
+   * @brief ConnectorInfo 取得
    *
-   * Connector Profile を取得する
+   * Connector ConnectorInfo を取得する
    *
    * @else
-   * @brief Getting Profile
+   * @brief Getting ConnectorInfo
    *
-   * This operation returns Connector Profile
+   * This operation returns ConnectorInfo
    *
    * @endif
    */
-  const ConnectorBase::Profile& OutPortConnector::profile()
+  const ConnectorInfo& OutPortConnector::profile()
   {
     RTC_TRACE(("profile()"));
     return m_profile;

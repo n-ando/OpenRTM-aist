@@ -32,7 +32,7 @@
 #include <rtm/ConnectorBase.h>
 #include <rtm/CdrBufferBase.h>
 #include <rtm/SystemLogger.h>
-#include <rtm/PortCallback.h>
+#include <rtm/ConnectorListener.h>
 
 namespace RTC
 {
@@ -363,7 +363,7 @@ namespace RTC
      *
      * @endif
      */
-    ConnectorBase::ProfileList getConnectorProfiles();
+    ConnectorInfoList getConnectorProfiles();
 
     /*!
      * @if jp
@@ -428,7 +428,7 @@ namespace RTC
      * @endif
      */
     bool getConnectorProfileById(const char* id,
-                                 ConnectorBase::Profile& prof);
+                                 ConnectorInfo& prof);
 
     /*!
      * @if jp
@@ -453,7 +453,7 @@ namespace RTC
      * @endif
      */
     bool getConnectorProfileByName(const char* name,
-                                   ConnectorBase::Profile& prof);
+                                   ConnectorInfo& prof);
 
     /*!
      * @if jp
@@ -701,8 +701,8 @@ namespace RTC
      *
      * 設定できるリスナのタイプは
      *
-     * - OnBufferEmpty:       バッファが空の場合
-     * - OnBufferReadTimeout: バッファが空でタイムアウトした場合
+     * - ON_BUFFER_EMPTY:       バッファが空の場合
+     * - ON_BUFFER_READTIMEOUT: バッファが空でタイムアウトした場合
      *
      * リスナは以下のシグニチャを持つ operator() を実装している必要がある。
      *
@@ -980,121 +980,8 @@ namespace RTC
     coil::vstring m_consumerTypes;
     std::vector<OutPortProvider*> m_providers;
 
-
-    class ConnectorDataListenerHolder
-    {
-      typedef std::pair<ConnectorDataListener*, bool> Entry;
-    public:
-      ConnectorDataListenerHolder()
-      {
-      }
-
-      virtual ~ConnectorDataListenerHolder()
-      {
-        for (int i(0), len(m_listeners.size()); i < len; ++i)
-          {
-            if (m_listeners[i].second)
-              {
-                delete m_listeners[i].first;
-              }
-          }
-      }
-
-      void addListener(ConnectorDataListener* listener, bool autoclean)
-      {
-        m_listeners.push_back(Entry(listener, autoclean));
-      }
-
-      void removeListener(ConnectorDataListener* listener)
-      {
-        std::vector<Entry>::iterator it(m_listeners.begin());
-        for (; it != m_listeners.end(); ++it)
-          {
-            if ((*it).first == listener)
-              {
-                if ((*it).second)
-                  {
-                    delete (*it).first;
-                  }
-                m_listeners.erase(it);
-                return;
-              }
-          }
-                  
-      }
-
-      void notify(const ConnectorProfile& profile,
-                  const cdrStream& cdrdata)
-      {
-        for (int i(0), len(m_listeners.size()); i < len; ++i)
-          {
-            m_listeners[i].first->operator()(profile, cdrdata);
-          }
-      }
-      
-    private:
-      std::vector<Entry> m_listeners;
-    };
-
-    class ConnectorListenerHolder
-    {
-      typedef std::pair<ConnectorListener*, bool> Entry;
-    public:
-      ConnectorListenerHolder()
-      {
-      }
-
-      virtual ~ConnectorListenerHolder()
-      {
-        for (int i(0), len(m_listeners.size()); i < len; ++i)
-          {
-            if (m_listeners[i].second)
-              {
-                delete m_listeners[i].first;
-              }
-          }
-      }
-
-      void addListener(ConnectorListener* listener, bool autoclean)
-      {
-        m_listeners.push_back(Entry(listener, autoclean));
-      }
-
-      void removeListener(ConnectorListener* listener)
-      {
-        std::vector<Entry>::iterator it(m_listeners.begin());
-
-        for (; it != m_listeners.end(); ++it)
-          {
-            if ((*it).first == listener)
-              {
-                if ((*it).second)
-                  {
-                    delete (*it).first;
-                  }
-                m_listeners.erase(it);
-                return;
-              }
-          }
-                  
-      }
-
-      void notify(const ConnectorProfile& profile)
-      {
-        for (int i(0), len(m_listeners.size()); i < len; ++i)
-          {
-            m_listeners[i].first->operator()(profile);
-          }
-      }
-      
-    private:
-      std::vector<Entry> m_listeners;
-    };
-
-    ConnectorDataListenerHolder
-    m_connectorDataListeners[CONNECTOR_DATA_LISTENER_NUM];
-    ConnectorListenerHolder m_connectorListeners[CONNECTOR_LISTENER_NUM];
-    
+    ConnectorListeners m_listeners;
+   
     /*!
      * @if jp
      * @brief provider を削除するための Functor

@@ -33,6 +33,8 @@ namespace coil
 namespace RTC
 {
   class InPortConsumer;
+  class ConnectorListeners;
+  class ConnectorInfo;
 
   /*!
    * @if jp
@@ -106,6 +108,8 @@ namespace RTC
     virtual ReturnCode init(coil::Properties& prop) = 0;
     virtual ReturnCode setConsumer(InPortConsumer* consumer) = 0;
     virtual ReturnCode setBuffer(BufferBase<cdrMemoryStream>* buffer) = 0;
+    virtual ReturnCode setListener(ConnectorInfo& info,
+                                   ConnectorListeners* listeners) = 0;
     virtual ReturnCode write(const cdrMemoryStream& data,
                              unsigned long sec,
                              unsigned long usec) = 0;
