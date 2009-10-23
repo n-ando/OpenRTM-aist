@@ -314,6 +314,8 @@ namespace RTC
    */
   void OutPortBase::activateInterfaces()
   {
+    RTC_TRACE(("activateInterfaces()"));
+
     for (int i(0), len(m_connectors.size()); i < len; ++i)
       {
         m_connectors[i]->activate();
@@ -329,6 +331,8 @@ namespace RTC
    */
   void OutPortBase::deactivateInterfaces()
   {
+    RTC_TRACE(("deactivateInterfaces()"));
+
     for (int i(0), len(m_connectors.size()); i < len; ++i)
       {
         m_connectors[i]->deactivate();
@@ -336,44 +340,73 @@ namespace RTC
   }
   
 
-    // OnBuffer系コールバック (バッファに起因するイベントによりコールされる)
-    void OutPortBase::setOnBufferWrite(BufferCallback* on_buffer_write)
-    {
-      ;
-    }
+  /*!
+   * @if jp
+   * @brief ConnectorDataListener リスナを追加する
+   *
+   * バッファ書き込みまたは読み出しイベントに関連する各種リスナを設定する。
+   *
+   * @else
+   * @brief Adding BufferDataListener type listener
+   *
+   * @endif
+   */
+  void OutPortBase::
+  addConnectorDataListener(ConnectorDataListenerType type,
+                           ConnectorDataListener* listener,
+                           bool autoclean)
+  {
+    RTC_TRACE(("addConnectorDataListener()"));
 
-  void OutPortBase::setOnBufferFull(BufferCallback* on_buffer_full){;}
+    if (type < CONNECTOR_DATA_LISTENER_NUM)
+      {
+        m_connectorDataListeners[type].addListener(listener, autoclean);
+      }
+  }
 
-  void OutPortBase::setOnBufferWriteTimeout(BufferCallback* on_buffer_write_timeout){;}
+  void OutPortBase::
+  removeConnectorDataListener(ConnectorDataListenerType type,
+                              ConnectorDataListener* listener)
+  {
+    RTC_TRACE(("removeConnectorDataListener()"));
 
-    void OutPortBase::setOnBufferOverwrite(BufferCallback* on_buffer_overwrite){;}
+    if (type < CONNECTOR_DATA_LISTENER_NUM)
+      {
+        m_connectorDataListeners[type].removeListener(listener);
+      }
+  }
+  
+  /*!
+   * @if jp
+   * @brief ConnectorListener リスナを追加する
+   *
+   * @else
+   * @brief Adding ConnectorListener type listener
+   *
+   * @endif
+   */
+  void OutPortBase::addConnectorListener(ConnectorListenerType type,
+                                         ConnectorListener* listener,
+                                         bool autoclean)
+  {
+    RTC_TRACE(("addConnectorListener()"));
 
+    if (type < CONNECTOR_LISTENER_NUM)
+      {
+        m_connectorListeners[type].addListener(listener, autoclean);
+      }
+  }
+  
+  void OutPortBase::removeConnectorListener(ConnectorListenerType type,
+                                            ConnectorListener* listener)
+  {
+    RTC_TRACE(("removeConnectorListener()"));
 
-    void OutPortBase::setOnBufferRead(BufferCallback* on_buffer_read){;}
-
-    void OutPortBase::setOnBufferEmpty(BufferReadCallback* on_buffer_empty){;}
-
-    void OutPortBase::setOnBufferReadTimeout(BufferReadCallback* on_buffer_read_timeout){;}
-
-
-    // OnPush系コールバック (送信、送信完了時にコールされる)
-    void OutPortBase::setOnPush(SendCallback* on_send){;}
-
-    void OutPortBase::setOnPushed(SendCallback* on_send){;}
-
-
-    // OnSender系コールバック (送信側に起因するイベントによりコールされる)
-    void OutPortBase::setOnSenderTimeout(SenderCallback* on_sender_timeout){;}
-
-    void OutPortBase::setOnSenderError(SenderCallback* on_sender_error){;}
-
-    // OnReceiver系コールバック (受信側に起因するイベントによりコールされる)
-    void OutPortBase::setOnReceiverFull(ReceiverCallback* on_receiver_timeout){;}
-
-    void OutPortBase::setOnReceiverTimeout(ReceiverCallback* on_receiver_timeout){;}
-
-    void OutPortBase::setOnReceiverError(ReceiverCallback* on_receiver_error){;}
-
+    if (type < CONNECTOR_LISTENER_NUM)
+      {
+        m_connectorListeners[type].removeListener(listener);
+      }
+  }
 
 
   //======================================================================

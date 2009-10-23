@@ -20,8 +20,111 @@
 #ifndef RTC_PORTCALLBACK_H
 #define RTC_PORTCALLBACK_H
 
+class cdrStream;
+
 namespace RTC
 {
+  class ConnectorProfile;
+
+  //------------------------------------------------------------
+
+  enum ConnectorDataListenerType
+    {
+      ON_BUFFER_WRITE = 0, 
+      ON_BUFFER_FULL, 
+      ON_BUFFER_WRITETIMEOUT, 
+      ON_BUFFER_WRITEOVERWRITE, 
+      ON_BUFFER_READ, 
+      ON_SEND, 
+      ON_RECEIVED,
+      ON_SENDER_TIMEOUT, 
+      ON_SENDER_ERROR, 
+      ON_RECEIVER_FULL, 
+      ON_RECEIVER_TIMEOUT, 
+      ON_RECEIVER_ERROR,
+      CONNECTOR_DATA_LISTENER_NUM
+    };
+
+
+  class ConnectorDataListener
+  {
+  public:
+    virtual ~ConnectorDataListener(){}
+    virtual void operator()(const ConnectorProfile& profile,
+                            const cdrStream& data) = 0;
+  };
+
+  template <class DataType>
+  class ConnectorDataListenerT
+    : public ConnectorDataListener
+  {
+  public:
+    virtual ~ConnectorDataListenerT(){}
+    virtual void operator()(const ConnectorProfile& profile,
+                            const cdrStream& cdrdata)
+    {
+      DataType data;
+      cdrdata >>= data;
+      this->operator()(profile, data);
+    }
+
+    virtual void operator()(const ConnectorProfile& profile,
+                            const DataType& data) = 0;
+                            
+  };
+
+
+  //------------------------------------------------------------
+  enum ConnectorListenerType
+    {
+      ON_BUFFER_EMPTY = 0,
+      ON_BUFFER_READ_TIMEOUT,
+      CONNECTOR_LISTENER_NUM
+    };
+
+  class ConnectorListener
+  {
+  public:
+    virtual ~ConnectorListener(){}
+    virtual void operator()(const ConnectorProfile& profile) = 0;
+  };
+
+  template <class CallbackType, class CallbackArg>
+  class CallbackHolder
+  {
+  public:
+    void notify(CallbackArg& arg)
+    {
+      for (int i(0), len(m_callbacks.size()); i < len; ++i)
+        {
+          m_callbacks[i](arg);
+        }
+    }
+
+    void addCallback(CallbackType* callback)
+    {
+      m_callbacks.push_back(callback);
+    }
+
+    void removeCallback(CallbackType* callback)
+    {
+      for (int i(0), len(m_callbacks.size()); i < len; ++i)
+        {
+          if (m_callbacks[i] == callback)
+            {
+              m_callbacks.erase(i);
+              return;
+            }
+        }
+    }
+    
+  private:
+    std::vector<CallbackType> m_callbacks;
+
+  };
+
+
+
   //============================================================
   // callback functor base classes
   /*!
@@ -321,260 +424,6 @@ namespace RTC
     virtual DataType operator()(const DataType& value) = 0;
   };
   
-  /*!
-   * @if jp
-   * @class OnOverflow
-   * @brief バッファオーバーフロー時のコールバック抽象クラス
-   *
-   * InPort/OutPortのバッファにデータがput()される時、バッファオーバーフローが
-   * 生じた場合に呼ばれるコールバックメソッド。
-   *
-   * @since 0.4.0
-   *
-   * @else
-   * @class OnOverflow
-   * @brief Callback abstract class when the buffer overflow occurs
-   *
-   * This is the callback method invoked when data is done put()
-   * into the InPort/OutPort's buffer or when the buffer overflow occurs.
-   *
-   * @since 0.4.0
-   *
-   * @endif
-   */
-  template <class DataType>
-  struct OnOverflow
-  {
-    /*!
-     * @if jp
-     *
-     * @brief デストラクタ
-     *
-     * デストラクタ
-     *
-     * @else
-     *
-     * @brief Destructor
-     *
-     * Destructor
-     *
-     * @endif
-     */
-    virtual ~OnOverflow(void){}
-    
-    /*!
-     * @if jp
-     *
-     * @brief コールバックメソッド
-     *
-     * バッファオーバーフロー時に呼び出されるコールバックメソッド
-     *
-     * @param value バッファへ書き込むデータ
-     *
-     * @else
-     *
-     * @brief Callback method
-     *
-     * This is the callback method invoked when the buffer overflow occurs.
-     *
-     * @param value Data that is written into the buffer
-     *
-     * @endif
-     */
-    virtual void operator()(const DataType& value) = 0;
-  };
-  
-  /*!
-   * @if jp
-   * @class OnUnderflow
-   * @brief Underflow 時のコールバック抽象クラス
-   *
-   * @since 0.4.0
-   *
-   * InPort/OutPortのバッファにデータがread()される時に、読み出すべきデータが
-   * ない場合に呼び出されるコールバックインタフェース。
-   * このコールバックの戻り値がread()の戻り値となる。
-   *
-   * @else
-   * @class OnUnderflow
-   * @brief Callback abstract class on underflow
-   *
-   * @since 0.4.0
-   *
-   * This is the interface for callback invoked when data is done read()
-   * into the InPort/OutPort's buffer and the readout data does not exist.
-   * The return value of this callback will be the return value of read().
-   *
-   * @endif
-   */
-  template <class DataType>
-  struct OnUnderflow
-  {
-    /*!
-     * @if jp
-     *
-     * @brief デストラクタ
-     *
-     * デストラクタ
-     *
-     * @else
-     *
-     * @brief Destructor
-     *
-     * Destructor
-     *
-     * @endif
-     */
-    virtual ~OnUnderflow(void){}
-    
-    /*!
-     * @if jp
-     *
-     * @brief コールバックメソッド
-     *
-     * バッファアンダーフロー時に呼び出されるコールバックメソッド
-     *
-     * @return 代替となる読み出しデータ
-     *
-     * @else
-     *
-     * @brief Callback method
-     *
-     * This is the callback method invoked when the buffer underflow occurs.
-     *
-     * @return Substituted readout data
-     *
-     * @endif
-     */
-    virtual DataType operator()() = 0;
-  };
-  
-  /*!
-   * @if jp
-   * @class OnWriteTimeout
-   * @brief タイムアウト時のコールバック抽象クラス
-   *
-   * InPort/OutPortのバッファにデータをwrite()する際に、タイムアウトが発生した
-   * 時に呼び出されるコールバックインタフェース。
-   *
-   * @since 0.4.0
-   *
-   * @else
-   * @class OnWriteTimeout
-   * @brief Callback abstract class on timeout
-   *
-   * This is the interface for callback invoked when data is done write()
-   * into the InPort/OutPort's buffer and the timeout occurred.
-   *
-   * @since 0.4.0
-   *
-   * @endif
-   */
-  template <class DataType>
-  struct OnWriteTimeout
-  {
-    /*!
-     * @if jp
-     *
-     * @brief デストラクタ
-     *
-     * デストラクタ
-     *
-     * @else
-     *
-     * @brief Destructor
-     *
-     * Destructor
-     *
-     * @endif
-     */
-    virtual ~OnWriteTimeout(void){}
-    
-    /*!
-     * @if jp
-     *
-     * @brief コールバックメソッド
-     *
-     * タイムアウト発生時に呼び出されるコールバックメソッド
-     *
-     * @param value バッファへ書き込むデータ
-     *
-     * @else
-     *
-     * @brief Callback method
-     *
-     * This is the callback method invoked when the timeout occurs.
-     *
-     * @param value Data that is written into the buffer
-     *
-     * @endif
-     */
-    virtual void operator()(const DataType& value) = 0;
-  };
-  
-  /*!
-   * @if jp
-   * @class OnReadTimeout
-   * @brief タイムアウト時のコールバック抽象クラス
-   *
-   * InPort/OutPortのバッファにデータをread()する際に、タイムアウトが発生した
-   * 時に呼び出されるコールバックインタフェース。
-   *
-   * @since 0.4.0
-   *
-   * @else
-   * @class OnReadTimeout
-   * @brief OnReadTimeout abstract class
-   *
-   * This is the interface for callback invoked when data is done read()
-   * into the InPort/OutPort's buffer and the timeout occurred.
-   *
-   * @since 0.4.0
-   *
-   * @endif
-   */
-  template <class DataType>
-  struct OnReadTimeout
-  {
-    /*!
-     * @if jp
-     *
-     * @brief デストラクタ
-     *
-     * デストラクタ
-     *
-     * @else
-     *
-     * @brief Destructor
-     *
-     * Destructor
-     *
-     * @endif
-     */
-    virtual ~OnReadTimeout(void){}
-    
-    /*!
-     * @if jp
-     *
-     * @brief コールバックメソッド
-     *
-     * タイムアウト発生時に呼び出されるコールバックメソッド
-     *
-     * @return 代替となる読み出しデータ
-     *
-     * @else
-     *
-     * @brief Callback method
-     *
-     * This is the callback method invoked when the timeout occurs.
-     *
-     * @return Substituted readout data
-     *
-     * @endif
-     */
-    virtual DataType operator()() = 0;
-  };
-
 
 };
 #endif // RTC_PORTCALLBACK_H
