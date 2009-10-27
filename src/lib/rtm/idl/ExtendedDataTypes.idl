@@ -21,11 +21,11 @@
 
 module RTC {
     /*!
-     * @struct RGB
+     * @struct RGBColour
      * @brief Red/green/blue colour specification, with values between 0.0 for
      * none and 1.0 for full.
      */
-    struct RGB
+    struct RGBColour
     {
         double r;
         double g;
@@ -426,13 +426,13 @@ module RTC {
     //------------------------------------------------------------
 
     /*!
-     * @struct TimedRGB
-     * @brief Time-stamped version of RGB.
+     * @struct TimedRGBColour
+     * @brief Time-stamped version of RGBColour.
      */
-    struct TimedRGB
+    struct TimedRGBColour
     {
         Time tm;
-        RGB data;
+        RGBColour data;
     };
 
     /*!

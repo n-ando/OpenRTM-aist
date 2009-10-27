@@ -361,12 +361,25 @@ module RTC {
     //------------------------------------------------------------
 
     /*!
-     * @enum GripperState
+     * @enum GripperStatus
+     * @brief Describes the status of a gripper.
      */
-    enum GripperState {GRIPPER_STATE_OPEN,
-                       GRIPPER_STATE_CLOSED,
-                       GRIPPER_STATE_MOVING,
-                       GRIPPER_STATE_UNKNOWN};
+    enum GripperStatus {GRIPPER_STATE_OPEN,
+                        GRIPPER_STATE_CLOSED,
+                        GRIPPER_STATE_MOVING,
+                        GRIPPER_STATE_UNKNOWN};
+
+    /*!
+     * @struct GripperState
+     * @brief State of a gripper.
+     */
+    struct GripperState
+    {
+        /// Time stamp.
+        Time tm;
+        /// Status of the gripper.
+        GripperStatus status;
+    };
 
     /*!
      * @struct GripperGeometry
@@ -557,6 +570,10 @@ module RTC {
         /// Covariance matrix of the position.
         PointCovariance2D covariance;
     };
+    /*!
+     * @typedef PointFeatureList
+     */
+    typedef sequence<PointFeature> PointFeatureList;
 
     /*!
      * @struct PoseFeature
@@ -571,6 +588,10 @@ module RTC {
         /// Covariance matrix of the pose.
         Covariance2D covariance;
     };
+    /*!
+     * @typedef PoseFeatureList
+     */
+    typedef sequence<PoseFeature> PoseFeatureList;
 
     /*!
      * @struct LineFeature
@@ -595,6 +616,26 @@ module RTC {
         /// True if the end point of the line has been sighted (i.e. it is inside seen space).
         boolean endSighted;
     };
+    /*!
+     * @typedef LineFeatureList
+     */
+    typedef sequence<LineFeature> LineFeatureList;
+
+    /*!
+     * @struct Features
+     * Set of features in a map.
+     */
+    struct Features
+    {
+        /// Time stamp.
+        Time tm;
+        /// Point features.
+        PointFeatureList pointFeatures;
+        /// Pose features.
+        PoseFeatureLise poseFeatures;
+        /// Line features.
+        LineFeatureList lineFeatures;
+    };
 
     //------------------------------------------------------------
     // Multicamera
@@ -604,6 +645,17 @@ module RTC {
      * @typedef MulticameraImageList
      */
     typedef sequence<CameraImage> MulticameraImageList;
+    /*!
+     * @struct MulticameraImages
+     * @brief Images from a set of cameras.
+     */
+    struct MultiCameraImages
+    {
+        /// Time stamp.
+        Time tm;
+        /// Image list.
+        MulticameraImageList images;
+    };
 
     /*!
      * @typedef MulticameraInfoList
@@ -744,6 +796,8 @@ module RTC {
      */
     struct PanTiltAngles
     {
+        /// Time stamp.
+        Time tm;
         /// Pan value in radians.
         double pan;
         /// Tilt value in radians.
@@ -756,6 +810,8 @@ module RTC {
      */
     struct PanTiltState
     {
+        /// Time stamp.
+        Time tm;
         /// Pan and tilt angles.
         PanTiltAngles angles;
         /// Speed at which the pan-tilt unit is changing its pan angle in radians per second.
@@ -823,6 +879,8 @@ module RTC {
      */
     struct RangeData
     {
+        /// Time stamp.
+        Time tm;
         /// Range values in metres.
         RangeList ranges;
         /// Geometry of the ranger at the time the scan data was measured.
@@ -842,6 +900,8 @@ module RTC {
      */
     struct IntensityData
     {
+        /// Time stamp.
+        Time tm;
         /// Intensity values normalised to between 0 and 1.
         IntensityList ranges;
         /// Geometry of the ranger at the time the scan data was measured.
