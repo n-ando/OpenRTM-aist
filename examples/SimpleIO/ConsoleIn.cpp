@@ -58,6 +58,29 @@ ConsoleIn::~ConsoleIn()
 RTC::ReturnCode_t ConsoleIn::onInitialize()
 {
   registerOutPort("out", m_outOut);
+
+  m_outOut.addConnectorDataListener(ON_BUFFER_WRITE,
+                                    new DataListener("ON_BUFFER_WRITE"));
+  m_outOut.addConnectorDataListener(ON_BUFFER_FULL, 
+                                    new DataListener("ON_BUFFER_FULL"));
+  m_outOut.addConnectorDataListener(ON_BUFFER_WRITE_TIMEOUT, 
+                                    new DataListener("ON_BUFFER_WRITE_TIMEOUT"));
+  m_outOut.addConnectorDataListener(ON_BUFFER_OVERWRITE, 
+                                    new DataListener("ON_BUFFER_OVERWRITE"));
+  m_outOut.addConnectorDataListener(ON_BUFFER_READ, 
+                                    new DataListener("ON_BUFFER_READ"));
+  m_outOut.addConnectorDataListener(ON_SEND, 
+                                    new DataListener("ON_SEND"));
+  m_outOut.addConnectorDataListener(ON_RECEIVED,
+                                    new DataListener("ON_RECEIVED"));
+  m_outOut.addConnectorDataListener(ON_RECEIVER_FULL, 
+                                    new DataListener("ON_RECEIVER_FULL"));
+  m_outOut.addConnectorDataListener(ON_RECEIVER_TIMEOUT, 
+                                    new DataListener("ON_RECEIVER_TIMEOUT"));
+  m_outOut.addConnectorDataListener(ON_RECEIVER_ERROR,
+                                    new DataListener("ON_RECEIVER_ERROR"));
+
+
   return RTC::RTC_OK;
 }
 RTC::ReturnCode_t ConsoleIn::onExecute(RTC::UniqueId ec_id)

@@ -118,11 +118,30 @@ namespace RTC
      * @brief 接続先へのデータ送信
      *
      * 接続先のポートへデータを送信するための純粋仮想関数。
+     * 
+     * この関数は、以下のリターンコードを返す。
+     *
+     * - PORT_OK:       正常終了。
+     * - PORT_ERROR:    データ送信の過程で何らかのエラーが発生した。
+     * - SEND_FULL:     データを送信したが、相手側バッファがフルだった。
+     * - SEND_TIMEOUT:  データを送信したが、相手側バッファがタイムアウトした。
+     * - UNKNOWN_ERROR: 原因不明のエラー
+     *
+     * @param data 送信するデータ
+     * @return リターンコード
      *
      * @else
      * @brief Send data to the destination port
      *
      * Pure virtual function to send data to the destination port.
+     *
+     * This function might the following return codes
+     *
+     * - PORT_OK:       Normal return
+     * - PORT_ERROR:    Error occurred in data transfer process
+     * - SEND_FULL:     Buffer full although OutPort tried to send data
+     * - SEND_TIMEOUT:  Timeout although OutPort tried to send data
+     * - UNKNOWN_ERROR: Unknown error
      *
      * @endif
      */
@@ -258,6 +277,15 @@ namespace RTC
     bool unsubscribeFromRef(const SDOPackage::NVList& properties);
     
   private:
+    /*!
+     * @if jp
+     * @brief リターンコード変換
+     * @else
+     * @brief Return codes conversion
+     * @endif
+     */
+    InPortConsumer::ReturnCode convertReturnCode(OpenRTM::PortStatus ret);
+
     mutable Logger rtclog;
     coil::Properties m_properties;
   };

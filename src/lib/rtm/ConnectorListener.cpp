@@ -91,7 +91,7 @@ namespace RTC
 
     
   void ConnectorDataListenerHolder::notify(const ConnectorInfo& info,
-                                           const cdrStream& cdrdata)
+                                           const cdrMemoryStream& cdrdata)
   {
     for (int i(0), len(m_listeners.size()); i < len; ++i)
       {

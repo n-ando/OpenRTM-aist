@@ -3,7 +3,7 @@
  *
  * @file BufferStatus.h
  * @brief Buffer status enum definition
- * @date $Date: 2007-12-31 03:06:12 $
+ * @date $Date$
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
  * Copyright (C) 2009
@@ -14,7 +14,7 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: BufferBase.h 1226 2009-02-28 02:31:22Z n-ando $
+ * $Id$
  */
 
 #ifndef RTC_BUFFERSTATUS_H
@@ -22,9 +22,63 @@
 
 namespace RTC
 {
+  /*!
+   * @if jp
+   * @class BufferStatus mixin class
+   *
+   * このクラスは、enum定義されたリターンコードを、バッファ関連サブクラ
+   * スで共通利用するための mixin クラスである。このリターンコードを使
+   * 用するクラスでは、BufferStatus クラスをpublic 継承し、下に define
+   * してある BUFFERSTATUS_ENUM をクラス内に記述することで利用可能とな
+   * る。これにより、enum を ReturnCode_t 型として typedef し、以後
+   * ReturnCode_t を利用できるようにするとともに、名前空間に enum 定義
+   * された各識別子を当該クラス名前空間内に導入する。
+   *
+   * @else
+   * @class BufferStatus mixin class
+   *
+   * This is a mixin class to provide enumed return codes that are
+   * commonly utilised in buffer realted sub-classes. To use this
+   * class, sub-class should inherit this class as a public super
+   * class, and declare BUFFERSTATUS_ENUM defined below. Consequently,
+   * ReturnCode_t type that is typedefed by this macro can be used in
+   * the sub-class, and enumed identifiers are imported to the class's
+   * namespace.
+   *
+   * @endif
+   */
   class BufferStatus
   {
   public:
+    /*!
+     * @if jp
+     * brief DataPortStatus リターンコード
+     *
+     * データポート関連のクラスで共通のリターンコード
+     *
+     * - BUFFER_OK:            正常終了
+     * - BUFFER_ERROR:         バッファエラー
+     * - BUFFER_FULL:          バッファフル
+     * - BUFFER_EMPTY:         バッファエンプティ
+     * - NOT_SUPPORTED:        未サポート機能
+     * - TIMEOUT:              タイムアウト
+     * - PRECONDITION_NOT_MET: 事前条件を満たしていない
+     *
+     * @else
+     * @brief DataPortStatus return codes
+     *
+     * Common return codes for buffer classes.
+     *
+     * - BUFFER_OK:            Normal return
+     * - BUFFER_ERROR:         Buffer error
+     * - BUFFER_FULL:          Buffer full
+     * - BUFFER_EMPTY:         Buffer empty
+     * - NOT_SUPPORTED:        Not supported function
+     * - TIMEOUT:              Timeout
+     * - PRECONDITION_NOT_MET: Precodition not met
+     *
+     * @endif
+     */
     enum Enum
       {
         BUFFER_OK = 0,
