@@ -120,7 +120,7 @@ namespace RTC
     if (!coil::stringTo(m_skipn, skip_count.c_str()))
       {
         RTC_ERROR(("invalid skip_count value: %s", skip_count.c_str()));
-        m_skipn = 0;           // default skip count
+        m_skipn = 0;           // desfault skip count
       }
     if (m_skipn < 0)
       {
@@ -153,10 +153,23 @@ namespace RTC
 	hz = atof(rate.c_str());
 	if (hz <= 0) hz = 1000.0;
         RTC_DEBUG(("Task period %f [Hz]", hz));
+        RTC_DEBUG(("Task period %f [s]", 1.0/hz));
       }
     else
       {
-	hz = 1000.0;
+        // for 0.4 compatibility
+        std::string rate(prop["push_rate"]);
+        if (rate != "")
+          {
+            hz = atof(rate.c_str());
+            if (hz <= 0) hz = 1000.0;
+            RTC_DEBUG(("Task period %f [Hz]", hz));
+            RTC_DEBUG(("Task period %f [s]", 1.0/hz));
+          }
+        else
+          {
+            hz = 1000.0;
+          }
       }
     m_task->setPeriod(1.0/hz);
     
@@ -274,10 +287,11 @@ namespace RTC
         return BUFFER_FULL;
       }
 
+    onBufferWrite(data);
     CdrBufferBase::ReturnCode ret(m_buffer->write(data, sec, usec));
     RTC_DEBUG(("%s = write()", CdrBufferBase::toString(ret)));
     m_task->resume();
-    return convertReturn(ret);
+    return convertReturn(ret, data);
   }
 
   bool PublisherPeriodic::isActive()
@@ -329,6 +343,7 @@ namespace RTC
         m_retcode = pushNew();
         break;
       }
+    std::cout << "." << std::flush;
     return 0;
   }
   
@@ -338,18 +353,24 @@ namespace RTC
   PublisherBase::ReturnCode PublisherPeriodic::pushAll()
   {
     RTC_TRACE(("pushAll()"));
+    if (bufferIsEmpty()) { return BUFFER_EMPTY; }
 
     while (m_buffer->readable() > 0)
       {
         const cdrMemoryStream& cdr(m_buffer->get());
-        ReturnCode ret(m_consumer->put(cdr));
+        onBufferRead(cdr);
 
+        onSend(cdr);
+        ReturnCode ret(m_consumer->put(cdr));
         if (ret != PORT_OK)
           {
             RTC_DEBUG(("%s = consumer.put()", DataPortStatus::toString(ret)));
-            return ret;
+            return invokeListener(ret, cdr);
           }
+        onReceived(cdr);
+
         m_buffer->advanceRptr();
+
       }
     return PORT_OK;
    }
@@ -360,21 +381,24 @@ namespace RTC
   PublisherBase::ReturnCode PublisherPeriodic::pushFifo()
   {
     RTC_TRACE(("pushFifo()"));
-    if (m_buffer->empty() && !m_readback)
-      {
-        RTC_DEBUG(("buffer empty"));
-        return BUFFER_EMPTY;
-      }
+    if (bufferIsEmpty()) { return BUFFER_EMPTY; }
+
     const cdrMemoryStream& cdr(m_buffer->get());
+    onBufferRead(cdr);
+
+    onSend(cdr);
     ReturnCode ret(m_consumer->put(cdr));
+    
     if (ret != PORT_OK)
       {
         RTC_DEBUG(("%s = consumer.put()", DataPortStatus::toString(ret)));
-        return ret;
+        return invokeListener(ret, cdr);
       }
+    onReceived(cdr);
+
     m_buffer->advanceRptr();
     
-    return ret;
+    return PORT_OK;
   }
 
   /*!
@@ -383,12 +407,7 @@ namespace RTC
   PublisherBase::ReturnCode PublisherPeriodic::pushSkip()
   {
     RTC_TRACE(("pushSkip()"));
-
-    if (m_buffer->empty() && !m_readback)
-      {
-        RTC_DEBUG(("buffer empty"));
-        return BUFFER_EMPTY;
-      }
+    if (bufferIsEmpty()) { return BUFFER_EMPTY; }
 
     ReturnCode ret(PORT_OK);
     int preskip(m_buffer->readable() + m_leftskip);
@@ -397,19 +416,25 @@ namespace RTC
     for (int i(0); i < loopcnt; ++i)
       {
         m_buffer->advanceRptr(postskip);
+
         const cdrMemoryStream& cdr(m_buffer->get());
+        onBufferRead(cdr);
+
+        onSend(cdr);
         ret = m_consumer->put(cdr);
         if (ret != PORT_OK)
           {
             m_buffer->advanceRptr(-postskip);
             RTC_DEBUG(("%s = consumer.put()", DataPortStatus::toString(ret)));
-            return ret;
+            return invokeListener(ret, cdr);
           }
-        postskip = m_skipn +1;
+        onReceived(cdr);
+        postskip = m_skipn + 1;
       }
 
     m_buffer->advanceRptr(m_buffer->readable());
     m_leftskip = preskip % (m_skipn +1);
+
     return ret;
   }
 
@@ -419,41 +444,99 @@ namespace RTC
   PublisherBase::ReturnCode PublisherPeriodic::pushNew()
   {
     RTC_TRACE(("pushNew()"));
-
-    if (m_buffer->empty() && !m_readback)
-      {
-        RTC_DEBUG(("buffer empty"));
-        return BUFFER_EMPTY;
-      }
+    if (bufferIsEmpty()) { return BUFFER_EMPTY; }
     
     m_buffer->advanceRptr(m_buffer->readable() - 1);
     
     const cdrMemoryStream& cdr(m_buffer->get());
+    onBufferRead(cdr);
+
+    onSend(cdr);
     ReturnCode ret(m_consumer->put(cdr));
-    RTC_DEBUG(("%s = consumer.put()", DataPortStatus::toString(ret)));
+    if (ret != PORT_OK)
+      {
+        RTC_DEBUG(("%s = consumer.put()", DataPortStatus::toString(ret)));
+        return invokeListener(ret, cdr);
+      }
+    onReceived(cdr);
 
     m_buffer->advanceRptr();
-    return ret;
+
+    return PORT_OK;
   }
 
   PublisherBase::ReturnCode
-  PublisherPeriodic::convertReturn(BufferStatus::Enum status)
+  PublisherPeriodic::convertReturn(BufferStatus::Enum status,
+                                   const cdrMemoryStream& data)
   {
+    /*
+     * BufferStatus -> DataPortStatus
+     *
+     * BUFFER_OK     -> PORT_OK
+     * BUFFER_ERROR  -> BUFFER_ERROR
+     * BUFFER_FULL   -> BUFFER_FULL
+     * NOT_SUPPORTED -> PORT_ERROR
+     * TIMEOUT       -> BUFFER_TIMEOUT
+     * PRECONDITION_NOT_MET -> PRECONDITION_NOT_MET
+     */
     switch (status)
       {
       case BufferStatus::BUFFER_OK:
-        return PORT_OK;
-        break;
-      case BufferStatus::BUFFER_EMPTY:
-        return BUFFER_EMPTY;
-        break;
+        // no callback
+        return DataPortStatus::PORT_OK;
+      case BufferStatus::BUFFER_ERROR:
+        // no callback
+        return DataPortStatus::BUFFER_ERROR;
+      case BufferStatus::BUFFER_FULL:
+        onBufferFull(data);
+        return DataPortStatus::BUFFER_FULL;
+      case BufferStatus::NOT_SUPPORTED:
+        // no callback
+        return DataPortStatus::PORT_ERROR;
       case BufferStatus::TIMEOUT:
-        return BUFFER_TIMEOUT;
-        break;
+        onBufferWriteTimeout(data);
+        return DataPortStatus::BUFFER_TIMEOUT;
       case BufferStatus::PRECONDITION_NOT_MET:
-        return PRECONDITION_NOT_MET;
-        break;
+        // no callback
+        return DataPortStatus::PRECONDITION_NOT_MET;
       default:
+        // no callback
+        return DataPortStatus::PORT_ERROR;
+      }
+    return DataPortStatus::PORT_ERROR;
+  }
+
+  PublisherPeriodic::ReturnCode
+  PublisherPeriodic::invokeListener(DataPortStatus::Enum status,
+                                    const cdrMemoryStream& data)
+  {
+    // ret:
+    // PORT_OK, PORT_ERROR, SEND_FULL, SEND_TIMEOUT, CONNECTION_LOST,
+    // UNKNOWN_ERROR
+    switch (status)
+      {
+      case PORT_ERROR:
+        onReceiverError(data);
+        return PORT_ERROR;
+        
+      case SEND_FULL:
+        onReceiverFull(data);
+        return SEND_FULL;
+        
+      case SEND_TIMEOUT:
+        onReceiverTimeout(data);
+        return SEND_TIMEOUT;
+        
+      case CONNECTION_LOST:
+        onReceiverError(data);
+        return CONNECTION_LOST;
+        
+      case UNKNOWN_ERROR:
+        onReceiverError(data);
+        return UNKNOWN_ERROR;
+        
+      default:
+        onReceiverError(data);
         return PORT_ERROR;
       }
   }

@@ -134,32 +134,37 @@ namespace RTC
     if (m_consumer == 0) { return PRECONDITION_NOT_MET; }
     if (m_listeners == 0) { return PRECONDITION_NOT_MET; }
 
-    m_listeners->connectorData_[ON_SEND].notify(m_profile, data);
-
-    PublisherBase::ReturnCode ret(m_consumer->put(data));
-
-    m_listeners->connectorData_[ON_RECEIVED].notify(m_profile, data);
-
-    switch(ret)
+    if (m_retcode == CONNECTION_LOST)
       {
-      case SEND_TIMEOUT:
-        m_listeners->
-          connectorData_[ON_SENDER_TIMEOUT].notify(m_profile, data);
-        break;
+        RTC_DEBUG(("write(): connection lost."));
+        return m_retcode;
+      }
+
+    onSend(data);
+    ReturnCode ret(m_consumer->put(data));
+    // consumer::put() returns
+    //  {PORT_OK, PORT_ERROR, SEND_FULL, SEND_TIMEOUT, UNKNOWN_ERROR}
+
+    switch (ret)
+      {
+      case PORT_OK:
+        onReceived(data);
+        return ret;
       case PORT_ERROR:
-        m_listeners->
-          connectorData_[ON_RECEIVER_ERROR].notify(m_profile, data);
-        break;
+        onReceiverError(data);
+        return ret;
       case SEND_FULL:
-        m_listeners->
-          connectorData_[ON_RECEIVER_FULL].notify(m_profile, data);
-        break;
-      case RECV_TIMEOUT:
-        m_listeners->
-          connectorData_[ON_RECEIVER_TIMEOUT].notify(m_profile, data);
-        break;
+        onReceiverFull(data);
+        return ret;
+      case SEND_TIMEOUT:
+        onReceiverTimeout(data);
+        return ret;
+      case UNKNOWN_ERROR:
+        onReceiverError(data);
+        return ret;
       default:
-        break;
+        onReceiverError(data);
+        return ret;
       }
     return ret;
   }

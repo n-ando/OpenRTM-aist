@@ -22,8 +22,9 @@
 
 #include <vector>
 #include <utility>
+#include <rtm/RTC.h>
 
-class cdrStream;
+class cdrMemoryStream;
 
 namespace RTC
 {
@@ -35,13 +36,11 @@ namespace RTC
    *
    * - ON_BUFFER_WRITE:          バッファ書き込み時
    * - ON_BUFFER_FULL:           バッファフル時
-   * - ON_BUFFER_WRITETIMEOUT:   バッファ書き込みタイムアウト時
-   * - ON_BUFFER_WRITEOVERWRITE: バッファ上書き時
+   * - ON_BUFFER_WRITE_TIMEOUT:  バッファ書き込みタイムアウト時
+   * - ON_BUFFER_OVERWRITE:      バッファ上書き時
    * - ON_BUFFER_READ:           バッファ読み出し時
    * - ON_SEND:                  InProtへの送信時
    * - ON_RECEIVED:              InProtへの送信完了時
-   * - ON_SENDER_TIMEOUT:        OutPort側タイムアウト時
-   * - ON_SENDER_ERROR:          OutPort側エラー時
    * - ON_RECEIVER_FULL:         InProt側バッファフル時
    * - ON_RECEIVER_TIMEOUT:      InProt側バッファタイムアウト時
    * - ON_RECEIVER_ERROR:        InProt側エラー時
@@ -51,13 +50,11 @@ namespace RTC
    * 
    * - ON_BUFFER_WRITE:          At the time of buffer write
    * - ON_BUFFER_FULL:           At the time of buffer full
-   * - ON_BUFFER_WRITETIMEOUT:   At the time of buffer write timeout
-   * - ON_BUFFER_WRITEOVERWRITE: At the time of buffer overwrite
+   * - ON_BUFFER_WRITE_TIMEOUT:  At the time of buffer write timeout
+   * - ON_BUFFER_OVERWRITE:      At the time of buffer overwrite
    * - ON_BUFFER_READ:           At the time of buffer read
    * - ON_SEND:                  At the time of sending to InPort
    * - ON_RECEIVED:              At the time of finishing sending to InPort
-   * - ON_SENDER_TIMEOUT:        At the time of timeout of OutPort
-   * - ON_SENDER_ERROR:          At the time of error of OutPort
    * - ON_RECEIVER_FULL:         At the time of bufferfull of InPort
    * - ON_RECEIVER_TIMEOUT:      At the time of timeout of InPort
    * - ON_RECEIVER_ERROR:        At the time of error of InPort
@@ -68,13 +65,11 @@ namespace RTC
     {
       ON_BUFFER_WRITE = 0, 
       ON_BUFFER_FULL, 
-      ON_BUFFER_WRITETIMEOUT, 
-      ON_BUFFER_WRITEOVERWRITE, 
+      ON_BUFFER_WRITE_TIMEOUT, 
+      ON_BUFFER_OVERWRITE, 
       ON_BUFFER_READ, 
       ON_SEND, 
       ON_RECEIVED,
-      ON_SENDER_TIMEOUT, 
-      ON_SENDER_ERROR, 
       ON_RECEIVER_FULL, 
       ON_RECEIVER_TIMEOUT, 
       ON_RECEIVER_ERROR,
@@ -102,7 +97,7 @@ namespace RTC
   public:
     virtual ~ConnectorDataListener();
     virtual void operator()(const ConnectorInfo& info,
-                            const cdrStream& data) = 0;
+                            const cdrMemoryStream& data) = 0;
   };
 
   /*!
@@ -112,7 +107,7 @@ namespace RTC
    * データポートの Connector において発生する各種イベントに対するコー
    * ルバックを実現するリスナクラスの基底クラス。
    * 
-   * このクラスは、operator()() の第2引数に cdrStream 型ではなく、
+   * このクラスは、operator()() の第2引数に cdrMemoryStream 型ではなく、
    * 実際にデータポートで使用される変数型をテンプレート引数として
    * 渡すことができる。
    *
@@ -125,7 +120,7 @@ namespace RTC
    *
    * This class template can have practical data types that are used
    * as typed variable for DataPort as an argument of template instead
-   * of cdrStream.
+   * of cdrMemoryStream.
    *
    * @endif
    */
@@ -136,10 +131,11 @@ namespace RTC
   public:
     virtual ~ConnectorDataListenerT(){}
     virtual void operator()(const ConnectorInfo& info,
-                            const cdrStream& cdrdata)
+                            const cdrMemoryStream& cdrdata)
     {
       DataType data;
-      cdrdata >>= data;
+      cdrMemoryStream cdr(cdrdata.bufPtr(), cdrdata.bufSize());
+      data <<= cdr;
       this->operator()(info, data);
     }
 
@@ -155,12 +151,18 @@ namespace RTC
    *  
    * - ON_BUFFER_EMPTY:       バッファが空の場合
    * - ON_BUFFER_READTIMEOUT: バッファが空でタイムアウトした場合
+   * - ON_SENDER_EMPTY:       OUtPort側バッファが空
+   * - ON_SENDER_TIMEOUT:     OutPort側タイムアウト時
+   * - ON_SENDER_ERROR:       OutPort側エラー時
    *
    * @else
    * @brief The types of ConnectorListener
    * 
    * - ON_BUFFER_EMPTY:       At the time of buffer empty
    * - ON_BUFFER_READTIMEOUT: At the time of buffer read timeout
+   * - ON_BUFFER_EMPTY:       At the time of empty of OutPort
+   * - ON_SENDER_TIMEOUT:     At the time of timeout of OutPort
+   * - ON_SENDER_ERROR:       At the time of error of OutPort
    *
    * @endif
    */
@@ -168,6 +170,9 @@ namespace RTC
     {
       ON_BUFFER_EMPTY = 0,
       ON_BUFFER_READ_TIMEOUT,
+      ON_SENDER_EMPTY, 
+      ON_SENDER_TIMEOUT, 
+      ON_SENDER_ERROR, 
       CONNECTOR_LISTENER_NUM
     };
 
@@ -220,7 +225,7 @@ namespace RTC
     void removeListener(ConnectorDataListener* listener);
     
     void notify(const ConnectorInfo& info,
-                const cdrStream& cdrdata);
+                const cdrMemoryStream& cdrdata);
     
   private:
     std::vector<Entry> m_listeners;

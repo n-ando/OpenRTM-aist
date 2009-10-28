@@ -600,8 +600,8 @@ namespace RTC
      *
      * - ON_BUFFER_WRITE:          バッファ書き込み時
      * - ON_BUFFER_FULL:           バッファフル時
-     * - ON_BUFFER_WRITETIMEOUT:   バッファ書き込みタイムアウト時
-     * - ON_BUFFER_WRITEOVERWRITE: バッファ上書き時
+     * - ON_BUFFER_WRITE_TIMEOUT:  バッファ書き込みタイムアウト時
+     * - ON_BUFFER_OVERWRITE:      バッファ上書き時
      * - ON_BUFFER_READ:           バッファ読み出し時
      * - ON_SEND:                  InProtへの送信時
      * - ON_RECEIVED:              InProtへの送信完了時
@@ -636,8 +636,8 @@ namespace RTC
      *
      * - ON_BUFFER_WRITE:          At the time of buffer write
      * - ON_BUFFER_FULL:           At the time of buffer full
-     * - ON_BUFFER_WRITETIMEOUT:   At the time of buffer write timeout
-     * - ON_BUFFER_WRITEOVERWRITE: At the time of buffer overwrite
+     * - ON_BUFFER_WRITE_TIMEOUT:  At the time of buffer write timeout
+     * - ON_BUFFER_OVERWRITE:      At the time of buffer overwrite
      * - ON_BUFFER_READ:           At the time of buffer read
      * - ON_SEND:                  At the time of sending to InPort
      * - ON_RECEIVED:              At the time of finishing sending to InPort
