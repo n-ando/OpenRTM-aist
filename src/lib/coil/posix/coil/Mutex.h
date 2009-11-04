@@ -29,18 +29,7 @@ namespace coil
   public:
     Mutex(const char * const name = 0)
     {
-      if(name != 0 )
-      {
-        pthread_mutexattr_t mattr;
-        int ret;
-        ret = pthread_mutexattr_init(&mattr);
-        ret = pthread_mutexattr_setpshared(&mattr, PTHREAD_PROCESS_SHARED);
-        ::pthread_mutex_init(&mutex_, &mattr);
-      }
-      else
-      {
-        ::pthread_mutex_init(&mutex_, 0);
-      }
+      ::pthread_mutex_init(&mutex_, 0);
     }
 
     ~Mutex()
