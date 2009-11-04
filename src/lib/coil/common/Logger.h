@@ -385,10 +385,7 @@ namespace coil
       return 0;
     }
 
-  private:
-    log_streambuf(const log_streambuf& x);
-    log_streambuf& operator=(const log_streambuf& x);
-
+  public:
     struct Stream
     {
       Stream(streambuf_type* stream, bool cleanup = false)
@@ -427,6 +424,11 @@ namespace coil
       streambuf_type* stream_;
       bool cleanup_;
     };
+
+  private:
+    log_streambuf(const log_streambuf& x);
+    log_streambuf& operator=(const log_streambuf& x);
+
     std::vector<Stream> m_streams;
     Mutex m_mutex;
     char m_buf[BUFFER_LEN];
