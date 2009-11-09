@@ -56,14 +56,14 @@ char* MyServiceSVC_impl::echo(const char* msg)
   return CORBA::string_dup(msg);
 }
 
-EchoList* MyServiceSVC_impl::get_echo_history()
+SimpleService::EchoList* MyServiceSVC_impl::get_echo_history()
   throw (CORBA::SystemException)
 {
   std::cout << "MyService::get_echo_history() was called." << std::endl;
   CORBA_SeqUtil::for_each(m_echoList, seq_print<const char*>());
   
-  EchoList_var el;
-  el = new EchoList(m_echoList);
+  SimpleService::EchoList_var el;
+  el = new SimpleService::EchoList(m_echoList);
   return el._retn();
 }
 
@@ -95,14 +95,14 @@ CORBA::Float MyServiceSVC_impl::get_value()
   return m_value;
 }
 
-ValueList* MyServiceSVC_impl::get_value_history()
+SimpleService::ValueList* MyServiceSVC_impl::get_value_history()
   throw (CORBA::SystemException)
 {
   std::cout << "MyService::get_value_history() was called." << std::endl;
   CORBA_SeqUtil::for_each(m_valueList, seq_print<CORBA::Float>());
 
-  ValueList_var vl;
-  vl = new ValueList(m_valueList);
+  SimpleService::ValueList_var vl;
+  vl = new SimpleService::ValueList(m_valueList);
   return vl._retn();
 }
 

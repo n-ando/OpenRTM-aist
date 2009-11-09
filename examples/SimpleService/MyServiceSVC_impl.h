@@ -14,7 +14,7 @@
  * Example class implementing IDL interface MyService
  */
 class MyServiceSVC_impl
- : public virtual POA_MyService,
+  : public virtual POA_SimpleService::MyService,
    public virtual PortableServer::RefCountServantBase
 {
  private:
@@ -30,19 +30,19 @@ class MyServiceSVC_impl
    // attributes and operations
    char* echo(const char* msg)
      throw (CORBA::SystemException);
-   EchoList* get_echo_history()
+  SimpleService::EchoList* get_echo_history()
      throw (CORBA::SystemException);
    void set_value(CORBA::Float value)
      throw (CORBA::SystemException);
    CORBA::Float get_value()
      throw (CORBA::SystemException);
-   ValueList* get_value_history()
+  SimpleService::ValueList* get_value_history()
      throw (CORBA::SystemException);
 
 private:
   CORBA::Float m_value;
-  EchoList m_echoList;
-  ValueList m_valueList;
+  SimpleService::EchoList m_echoList;
+  SimpleService::ValueList m_valueList;
 };
 
 

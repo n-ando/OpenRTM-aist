@@ -1,3 +1,4 @@
+module SimpleService {
 typedef sequence<string> EchoList;
 typedef sequence<float> ValueList;
 interface MyService
@@ -7,4 +8,5 @@ interface MyService
   void set_value(in float value);
   float get_value();
   ValueList get_value_history();
+};
 };
