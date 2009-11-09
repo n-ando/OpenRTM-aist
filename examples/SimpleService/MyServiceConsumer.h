@@ -113,7 +113,7 @@ class MyServiceConsumer
 
   // Consumer declaration
   // <rtc-template block="consumer_declare">
-  RTC::CorbaConsumer<MyService> m_myservice0;
+  RTC::CorbaConsumer<SimpleService::MyService> m_myservice0;
   
   // </rtc-template>
 
@@ -122,7 +122,7 @@ class MyServiceConsumer
   public:
     set_value_functor(CORBA::Float val) : m_val(val) {}
 
-    void operator()(RTC::CorbaConsumer<MyService>* obj)
+    void operator()(RTC::CorbaConsumer<SimpleService::MyService>* obj)
     {
       try
         {
@@ -156,7 +156,7 @@ class MyServiceConsumer
   public:
     echo_functor(std::string msg, std::string& result)
       : m_msg(msg), m_result(result) {}
-    void operator()(RTC::CorbaConsumer<MyService>* obj)
+    void operator()(RTC::CorbaConsumer<SimpleService::MyService>* obj)
     {
       try
         {
