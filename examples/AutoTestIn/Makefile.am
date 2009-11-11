@@ -1,0 +1,168 @@
+## -*- Makefile -*-
+##---------------------------------------------------------------------------
+## Makefile.am for AutoTestIn components
+##
+## $Id: Makefile.am 1135 2009-01-19 16:11:02Z n-ando $
+##---------------------------------------------------------------------------
+
+AUTOMAKE_OPTIONS = 1.9
+
+IDLC = @IDLC@
+IDLFLAGS = @IDL_FLAGS@
+LIBS = @LIBS@
+
+AM_CPPFLAGS=-I$(top_srcdir)/src/lib -I$(top_srcdir)/src/lib/coil/include -I$(top_srcdir)/src/lib/rtm/idl
+AM_LDFLAGS=-L$(top_builddir) -L$(top_builddir)/src/lib/rtm -L$(top_builddir)/src/lib/rtm/idl
+
+#------------------------------------------------------------
+# Some rules for IDL compile
+#------------------------------------------------------------
+SUFFIXES = .o .so .idl Skel.cpp Skel.o
+
+WRAPPER  = $(top_builddir)/utils/rtm-skelwrapper/rtm-skelwrapper
+WRAPPER_FLAGS = --include-dir="" --skel-suffix=Skel
+
+.idlSkel.cpp:
+	echo $(PROVIDER_OBJ)
+	$(IDLC) $(IDLFLAGS) $<
+	PYTHONPATH=$(top_srcdir)/build:$(PYTHONPATH) \
+	PATH=$(top_srcdir)/utils/rtm-config:$(PATH)  \
+	$(WRAPPER) $(WRAPPER_FLAGS) --idl-file=$<
+
+
+#------------------------------------------------------------
+# Source list
+#------------------------------------------------------------
+IDL_SOURCES = AutoTestService.idl
+
+PROVIDER_DIST_SRC   = AutoTestServiceSVC_impl.cpp AutoTestIn.cpp
+PROVIDER_NODIST_SRC = $(IDL_SOURCES:.idl=Skel.cpp)
+PROVIDER_SRC        = $(PROVIDER_DIST_SRC) $(PROVIDER_NODIST_SRC)
+
+PROVIDER_DIST_H     = $(PROVIDER_DIST_SRC:.cpp=.h)
+PROVIDER_NODIST_H   = $(PROVIDER_NODIST_SRC:.cpp=.h)
+PROVIDER_H          = $(PROVIDER_DIST_H) $(PROVIDER_NODIST_H)
+PROVIDER_COMP_SRC   = $(PROVIDER_SRC) AutoTestInComp.cpp
+
+#------------------------------------------------------------
+# Object list
+#------------------------------------------------------------
+PROVIDER_OBJ=$(PROVIDER_DIST_SRC:.cpp=.o)
+
+#------------------------------------------------------------
+# Targets
+#------------------------------------------------------------
+# Targets directories
+exampledir = $(pkgdatadir)/examples
+socompdir  = $(exampledir)/rtcs
+sourcedir  = $(exampledir)/src/AutoTestIn
+
+# Loadable RTCs
+noinst_LTLIBRARIES = libAutoTestServiceSkel.la
+nodist_libAutoTestServiceSkel_la_SOURCES = $(PROVIDER_NODIST_SRC)
+
+socomp_LTLIBRARIES = AutoTestIn.la
+
+dist_AutoTestIn_la_SOURCES = $(PROVIDER_DIST_SRC) $(PROVIDER_DIST_H) 
+AutoTestIn_la_LDFLAGS = -module
+AutoTestIn_la_FLAGS   = -L$(top_builddir)/src/lib/rtm/.libs -L.
+AutoTestIn_la_LIBADD  = $(top_builddir)/src/lib/rtm/libRTC.la -lAutoTestServiceSkel
+
+# Standalone RTCs
+example_PROGRAMS = AutoTestInComp
+AutoTestInComp_SOURCES = AutoTestInComp.cpp
+AutoTestInComp_LDFLAGS = -L$(top_builddir)/src/lib/rtm/.libs
+AutoTestInComp_LDADD   = .libs/AutoTestIn.a \
+	$(top_builddir)/src/lib/rtm/libRTC.la
+
+
+# Example sources
+source_DATA = $(ALL_SRC) $(EXTRA_DIST)
+
+#------------------------------------------------------------
+# Extra distributed files
+#------------------------------------------------------------
+EXTRA_DIST =                       \
+	$(IDL_SOURCES)             \
+	Makefile.AutoTestIn \
+	README.AutoTestIn   \
+	rtc.conf
+
+ALL_SRC =                    \
+	$(IDL_SOURCES)       \
+        $(PROVIDER_COMP_SRC)
+
+#------------------------------------------------------------
+# File list for deb/ports packages
+#------------------------------------------------------------
+lst:
+	echo $(ALL_SRC) > src.lst
+	echo $(EXTRA_DIST) > other.lst
+
+#------------------------------------------------------------
+# Visual Studio Project
+#------------------------------------------------------------
+win32_builddir=$(top_builddir)/win32/OpenRTM-aist/examples/AutoTestIn
+
+vcproj: vc8proj vc9proj
+
+vc8proj: 
+	$(top_builddir)/build/vcprojtool.py vcproj                   \
+		--type EXE                                           \
+		--vcversion "8.00"                                   \
+		--projectname "AutoTestInComp"                \
+		--version $(RTM_VERSION)                             \
+		--out $(win32_builddir)/AutoTestIn_vc8.vcproj \
+		--yaml ../rtc.vcproj.yaml                            \
+		--source $(PROVIDER_COMP_SRC)                        \
+		--header $(PROVIDER_H)
+	qkc -sm $(win32_builddir)/AutoTestIn_vc8.vcproj
+	$(top_builddir)/build/vcprojtool.py vcproj                      \
+		--type DLL                                              \
+		--vcversion "8.00"                                      \
+		--projectname "AutoTestIn"                       \
+		--version $(RTM_VERSION)                                \
+		--out $(win32_builddir)/AutoTestInDll_vc8.vcproj \
+		--yaml ../rtcdll.vcproj.yaml                            \
+		--source $(PROVIDER_SRC)                                \
+		--header $(PROVIDER_H)
+	qkc -sm $(win32_builddir)/AutoTestInDll_vc8.vcproj
+
+vc9proj: 
+	$(top_builddir)/build/vcprojtool.py vcproj                   \
+		--type EXE                                           \
+		--vcversion "9.00"                                   \
+		--projectname "AutoTestInComp"                \
+		--version $(RTM_VERSION)                             \
+		--out $(win32_builddir)/AutoTestIn_vc9.vcproj \
+		--yaml ../rtc.vcproj.yaml                            \
+		--source $(PROVIDER_COMP_SRC)                        \
+		--header $(PROVIDER_H)
+	qkc -sm $(win32_builddir)/AutoTestIn_vc9.vcproj
+	$(top_builddir)/build/vcprojtool.py vcproj                      \
+		--type DLL                                              \
+		--vcversion "9.00"                                      \
+		--projectname "AutoTestIn"                       \
+		--version $(RTM_VERSION)                                \
+		--out $(win32_builddir)/AutoTestInDll_vc9.vcproj \
+		--yaml ../rtcdll.vcproj.yaml                            \
+		--source $(PROVIDER_SRC)                                \
+		--header $(PROVIDER_H)
+	qkc -sm $(win32_builddir)/AutoTestInDll_vc9.vcproj
+
+dist-hook: lst vcproj
+
+
+clean_objs:
+	rm -f $(OBJS)
+
+clean_skelstub:
+	rm -f *Skel.h *Skel.cpp
+	rm -f *Stub.h *Stub.cpp
+	rm -f *.hh *SK.cc
+	rm -f *C.cpp *C.h *S.cpp *S.h *_T.cpp *_T.h *.inl
+
+clean-local: clean_objs clean_skelstub
+	rm -f \
+	*.bak *.rpo *.sym lib*.*_pure_* *.lst \
+	Makefile.old *core *~ *loT
