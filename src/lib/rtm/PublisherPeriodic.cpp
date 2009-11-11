@@ -343,7 +343,6 @@ namespace RTC
         m_retcode = pushNew();
         break;
       }
-    std::cout << "." << std::flush;
     return 0;
   }
   
