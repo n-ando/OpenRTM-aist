@@ -147,6 +147,74 @@ namespace RTC
       }
   }
 
+  /*!
+   * @if jp
+   * @brief ConnectorDataListener リスナを追加する
+   *
+   * バッファ書き込みまたは読み出しイベントに関連する各種リスナを設定する。
+   *
+   * @else
+   * @brief Adding BufferDataListener type listener
+   *
+   * @endif
+   */
+  void InPortBase::
+  addConnectorDataListener(ConnectorDataListenerType type,
+                           ConnectorDataListener* listener,
+                           bool autoclean)
+  {
+    RTC_TRACE(("addConnectorDataListener()"));
+
+    if (type < CONNECTOR_DATA_LISTENER_NUM)
+      {
+        m_listeners.connectorData_[type].addListener(listener, autoclean);
+      }
+  }
+
+  void InPortBase::
+  removeConnectorDataListener(ConnectorDataListenerType type,
+                              ConnectorDataListener* listener)
+  {
+    RTC_TRACE(("removeConnectorDataListener()"));
+
+    if (type < CONNECTOR_DATA_LISTENER_NUM)
+      {
+        m_listeners.connectorData_[type].removeListener(listener);
+      }
+  }
+  
+  /*!
+   * @if jp
+   * @brief ConnectorListener リスナを追加する
+   *
+   * @else
+   * @brief Adding ConnectorListener type listener
+   *
+   * @endif
+   */
+  void InPortBase::addConnectorListener(ConnectorListenerType type,
+                                         ConnectorListener* listener,
+                                         bool autoclean)
+  {
+    RTC_TRACE(("addConnectorListener()"));
+
+    if (type < CONNECTOR_LISTENER_NUM)
+      {
+        m_listeners.connector_[type].addListener(listener, autoclean);
+      }
+  }
+  
+  void InPortBase::removeConnectorListener(ConnectorListenerType type,
+                                            ConnectorListener* listener)
+  {
+    RTC_TRACE(("removeConnectorListener()"));
+
+    if (type < CONNECTOR_LISTENER_NUM)
+      {
+        m_listeners.connector_[type].removeListener(listener);
+      }
+  }
+
   //============================================================
   // protected interfaces
   //============================================================
@@ -510,11 +578,14 @@ namespace RTC
         if (m_singlebuffer)
           {
             connector = new InPortPushConnector(profile, provider,
+                                                m_listeners,
                                                 m_thebuffer);
           }
         else
           {
-            connector = new InPortPushConnector(profile, provider);
+            connector = new InPortPushConnector(profile, 
+                                                provider,
+                                                m_listeners);
           }
 
         if (connector == 0)
@@ -559,11 +630,12 @@ namespace RTC
         if (m_singlebuffer)
           {
             connector = new InPortPullConnector(profile, consumer,
+                                                m_listeners,
                                                 m_thebuffer);
           }
         else
           {
-            connector = new InPortPullConnector(profile, consumer);
+            connector = new InPortPullConnector(profile, consumer, m_listeners);
           }
 
         if (connector == 0)

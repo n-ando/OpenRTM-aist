@@ -31,8 +31,10 @@ namespace RTC
    */
   InPortPullConnector::InPortPullConnector(ConnectorInfo info,
                                            OutPortConsumer* consumer,
+                                           ConnectorListeners& listeners,
                                            CdrBufferBase* buffer)
-    : InPortConnector(info, buffer), m_consumer(consumer)
+    : InPortConnector(info, buffer), m_consumer(consumer),
+      m_listeners(listeners)
   {
     if (buffer == 0)
       {
@@ -44,6 +46,7 @@ namespace RTC
         return;
       }
     m_consumer->setBuffer(m_buffer);
+    m_consumer->setListener(info, &m_listeners);
   }
   
   /*!

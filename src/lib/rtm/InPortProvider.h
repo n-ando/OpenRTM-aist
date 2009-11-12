@@ -17,8 +17,8 @@
  *
  */
 
-#ifndef InPortProvider_h
-#define InPortProvider_h
+#ifndef RTC_INPORTPROVIDER_H
+#define RTC_INPORTPROVIDER_H
 
 #include <string>
 
@@ -31,6 +31,9 @@
 
 namespace RTC
 {
+  class ConnectorListeners;
+  class ConnectorInfo;
+
   /*!
    * @if jp
    * @class InPortProvider
@@ -117,6 +120,9 @@ namespace RTC
      * @endif
      */
     virtual void setBuffer(BufferBase<cdrMemoryStream>* buffer) = 0;
+
+    virtual void setListener(ConnectorInfo& info,
+                             ConnectorListeners* listeners) = 0;
     
     /*!
      * @if jp
@@ -278,4 +284,4 @@ namespace RTC
   typedef ::coil::GlobalFactory<InPortProvider> InPortProviderFactory;
 
 };     // namespace RTC
-#endif // InPortProvider_h
+#endif // RTC_INPORTPROVIDER_H

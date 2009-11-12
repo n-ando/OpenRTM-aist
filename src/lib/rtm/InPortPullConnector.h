@@ -28,6 +28,7 @@
 namespace RTC
 {
   class OutPortConsumer;
+  class ConnectorListeners;
 
   /*!
    * @if jp
@@ -62,6 +63,7 @@ namespace RTC
      */
     InPortPullConnector(ConnectorInfo info,
                         OutPortConsumer* consumer,
+                        ConnectorListeners& listeners,
                         CdrBufferBase* buffer = 0);
 
     /*!
@@ -109,7 +111,23 @@ namespace RTC
     CdrBufferBase* createBuffer(ConnectorInfo& info);
     
   private:
+    /*!
+     * @if jp
+     * @brief OutPortConsumer へのポインタ
+     * @else
+     * @brief the pointer to the OutPortConsumer
+     * @endif
+     */
     OutPortConsumer* m_consumer;
+    
+    /*!
+     * @if jp
+     * @brief ConnectorListenrs への参照
+     * @else
+     * @brief A reference to a ConnectorListener
+     * @endif
+     */
+    ConnectorListeners& m_listeners;
   };
 }; // namespace RTC
 

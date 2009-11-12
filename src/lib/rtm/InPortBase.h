@@ -23,6 +23,7 @@
 #include <rtm/PortBase.h>
 #include <rtm/DataPortStatus.h>
 #include <rtm/CdrBufferBase.h>
+#include <rtm/ConnectorListener.h>
 
 /*!
  * @if jp
@@ -151,6 +152,187 @@ namespace RTC
      * @endif
      */
     virtual void deactivateInterfaces();
+
+    /*!
+     * @if jp
+     * @brief ConnectorDataListener リスナを追加する
+     *
+     * バッファ書き込みまたは読み出しイベントに関連する各種リスナを設定する。
+     *
+     * 設定できるリスナのタイプとコールバックイベントは以下の通り
+     *
+     * - ON_BUFFER_WRITE:          バッファ書き込み時
+     * - ON_BUFFER_FULL:           バッファフル時
+     * - ON_BUFFER_WRITE_TIMEOUT:  バッファ書き込みタイムアウト時
+     * - ON_BUFFER_OVERWRITE:      バッファ上書き時
+     * - ON_BUFFER_READ:           バッファ読み出し時
+     * - ON_SEND:                  InProtへの送信時
+     * - ON_RECEIVED:              InProtへの送信完了時
+     * - ON_SEND_ERTIMEOUT:        OutPort側タイムアウト時
+     * - ON_SEND_ERERROR:          OutPort側エラー時
+     * - ON_RECEIVER_FULL:         InProt側バッファフル時
+     * - ON_RECEIVER_TIMEOUT:      InProt側バッファタイムアウト時
+     * - ON_RECEIVER_ERROR:        InProt側エラー時
+     *
+     * リスナは ConnectorDataListener を継承し、以下のシグニチャを持つ
+     * operator() を実装している必要がある。
+     *
+     * ConnectorDataListener::
+     *         operator()(const ConnectorProfile&, const cdrStream&)
+     *
+     * デフォルトでは、この関数に与えたリスナオブジェクトの所有権は
+     * OutPortに移り、OutPort解体時もしくは、
+     * removeConnectorDataListener() により削除時に自動的に解体される。
+     * リスナオブジェクトの所有権を呼び出し側で維持したい場合は、第3引
+     * 数に false を指定し、自動的な解体を抑制することができる。
+     *
+     * @param listener_type リスナタイプ
+     * @param listener リスナオブジェクトへのポインタ
+     * @param autoclean リスナオブジェクトの自動的解体を行うかどうかのフラグ
+     *
+     * @else
+     * @brief Adding BufferDataListener type listener
+     *
+     * This operation adds certain listeners related to buffer writing and
+     * reading events.
+     * The following listener types are available.
+     *
+     * - ON_BUFFER_WRITE:          At the time of buffer write
+     * - ON_BUFFER_FULL:           At the time of buffer full
+     * - ON_BUFFER_WRITE_TIMEOUT:  At the time of buffer write timeout
+     * - ON_BUFFER_OVERWRITE:      At the time of buffer overwrite
+     * - ON_BUFFER_READ:           At the time of buffer read
+     * - ON_SEND:                  At the time of sending to InPort
+     * - ON_RECEIVED:              At the time of finishing sending to InPort
+     * - ON_SENDER_TIMEOUT:        At the time of timeout of OutPort
+     * - ON_SENDER_ERROR:          At the time of error of OutPort
+     * - ON_RECEIVER_FULL:         At the time of bufferfull of InPort
+     * - ON_RECEIVER_TIMEOUT:      At the time of timeout of InPort
+     * - ON_RECEIVER_ERROR:        At the time of error of InPort
+     *
+     * Listeners should have the following function operator().
+     *
+     * ConnectorDataListener::
+     *         operator()(const ConnectorProfile&, const cdrStream&)
+     *
+     * The ownership of the given listener object is transferred to
+     * this OutPort object in default.  The given listener object will
+     * be destroied automatically in the OutPort's dtor or if the
+     * listener is deleted by removeConnectorDataListener() function.
+     * If you want to keep ownership of the listener object, give
+     * "false" value to 3rd argument to inhibit automatic destruction.
+     *
+     * @param listener_type A listener type
+     * @param listener A pointer to a listener object
+     * @param autoclean A flag for automatic listener destruction
+     *
+     * @endif
+     */
+    void addConnectorDataListener(ConnectorDataListenerType listener_type,
+                                  ConnectorDataListener* listener,
+                                  bool autoclean = true);
+
+
+    /*!
+     * @if jp
+     * @brief ConnectorDataListener リスナを削除する
+     *
+     * 設定した各種リスナを削除する。
+     * 
+     * @param listener_type リスナタイプ
+     * @param listener リスナオブジェクトへのポインタ
+     *
+     * @else
+     * @brief Removing BufferDataListener type listener
+     *
+     * This operation removes a specified listener.
+     *     
+     * @param listener_type A listener type
+     * @param listener A pointer to a listener object
+     *
+     * @endif
+     */
+    void removeConnectorDataListener(ConnectorDataListenerType listener_type,
+                                     ConnectorDataListener* listener);
+    
+
+    /*!
+     * @if jp
+     * @brief ConnectorListener リスナを追加する
+     *
+     * バッファ書き込みまたは読み出しイベントに関連する各種リスナを設定する。
+     *
+     * 設定できるリスナのタイプは
+     *
+     * - ON_BUFFER_EMPTY:       バッファが空の場合
+     * - ON_BUFFER_READTIMEOUT: バッファが空でタイムアウトした場合
+     *
+     * リスナは以下のシグニチャを持つ operator() を実装している必要がある。
+     *
+     * ConnectorListener::operator()(const ConnectorProfile&)
+     *
+     * デフォルトでは、この関数に与えたリスナオブジェクトの所有権は
+     * OutPortに移り、OutPort解体時もしくは、
+     * removeConnectorListener() により削除時に自動的に解体される。
+     * リスナオブジェクトの所有権を呼び出し側で維持したい場合は、第3引
+     * 数に false を指定し、自動的な解体を抑制することができる。
+     *
+     * @param listener_type リスナタイプ
+     * @param listener リスナオブジェクトへのポインタ
+     * @param autoclean リスナオブジェクトの自動的解体を行うかどうかのフラグ
+     *
+     * @else
+     * @brief Adding ConnectorListener type listener
+     *
+     * This operation adds certain listeners related to buffer writing and
+     * reading events.
+     * The following listener types are available.
+     *
+     * - ON_BUFFER_EMPTY:       At the time of buffer empty
+     * - ON_BUFFER_READTIMEOUT: At the time of buffer read timeout
+     *
+     * Listeners should have the following function operator().
+     *
+     * ConnectorListener::operator()(const ConnectorProfile&)
+     *  
+     * The ownership of the given listener object is transferred to
+     * this OutPort object in default.  The given listener object will
+     * be destroied automatically in the OutPort's dtor or if the
+     * listener is deleted by removeConnectorListener() function.
+     * If you want to keep ownership of the listener object, give
+     * "false" value to 3rd argument to inhibit automatic destruction.
+     *
+     * @param listener_type A listener type
+     * @param listener A pointer to a listener object
+     * @param autoclean A flag for automatic listener destruction
+     *
+     * @endif
+     */
+    void addConnectorListener(ConnectorListenerType callback_type,
+                              ConnectorListener* listener,
+                              bool autoclean = true);
+
+    /*!
+     * @if jp
+     * @brief ConnectorDataListener リスナを削除する
+     *
+     * 設定した各種リスナを削除する。
+     * 
+     * @param listener_type リスナタイプ
+     * @param listener リスナオブジェクトへのポインタ
+     *
+     * @else
+     * @brief Removing BufferDataListener type listener
+     *
+     * This operation removes a specified listener.
+     *     
+     * @param listener_type A listener type
+     * @param listener A pointer to a listener object
+     *
+     * @endif
+     */
+    void removeConnectorListener(ConnectorListenerType callback_type,
+                                 ConnectorListener* listener);
 
   protected:
     /*!
@@ -313,6 +495,7 @@ namespace RTC
     InPortConnector*
     createConnector(const ConnectorProfile& cprof, coil::Properties& prop,
                     OutPortConsumer* consumer);
+
   protected:
     bool m_singlebuffer;
     CdrBufferBase* m_thebuffer;
@@ -320,6 +503,8 @@ namespace RTC
     coil::vstring m_providerTypes;
     coil::vstring m_consumerTypes;
     ConnectorList m_connectors;
+
+    ConnectorListeners m_listeners;
   };
 }; // namespace RTC
 
