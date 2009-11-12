@@ -364,6 +364,15 @@ namespace RTC
       }
   }
 
+  /*!
+   * @if jp
+   * @brief ConnectorDataListener リスナを削除する
+   *
+   * @else
+   * @brief Removing ConnectorDataListener type listener
+   *
+   * @endif
+   */
   void OutPortBase::
   removeConnectorDataListener(ConnectorDataListenerType type,
                               ConnectorDataListener* listener)
@@ -397,6 +406,15 @@ namespace RTC
       }
   }
   
+  /*!
+   * @if jp
+   * @brief ConnectorListener リスナを削除する
+   *
+   * @else
+   * @brief Removing ConnectorListener type listener
+   *
+   * @endif
+   */
   void OutPortBase::removeConnectorListener(ConnectorListenerType type,
                                             ConnectorListener* listener)
   {
