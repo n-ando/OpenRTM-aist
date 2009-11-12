@@ -224,12 +224,7 @@ namespace RTC
      */
     OutPort(const char* name, DataType& value)
       : OutPortBase(name, toTypename<DataType>()), m_value(value),
-        //	m_timeoutTick(1000), // timeout tick: 1ms
-        //	m_readBlock(false), m_readTimeout(0),
-        //	m_writeBlock(false), m_writeTimeout(0),
 	m_onWrite(0), m_onWriteConvert(0)
-        //	m_OnRead(NULL),  m_OnReadConvert(NULL),
-        //	m_OnOverflow(NULL), m_OnUnderflow(NULL)
     {
     }
     
@@ -316,10 +311,11 @@ namespace RTC
         }
 
       bool result(true);
+      m_status.resize(conn_size);
       for (size_t i(0), len(conn_size); i < len; ++i)
         {
-          ReturnCode ret;
-          ret = m_connectors[i]->write(m_cdr);
+          ReturnCode ret(m_connectors[i]->write(m_cdr));
+          m_status[i] = ret;
           if (ret == PORT_OK) { continue; }
 
           result = false;
@@ -393,7 +389,78 @@ namespace RTC
     {
       return write(value);
     }
-    
+
+    /*!
+     * @if jp
+     *
+     * @brief 特定のコネクタへの書き込みステータスを得る
+     *
+     * OutPort は接続ごとに Connector と呼ばれる仮想データチャネルを持
+     * つ。write() 関数はこれら Connector に対してデータを書き込むが、
+     * 各 Connector は書き込みごとにステータスを返す。write() 関数では、
+     * すべての Connector が正常終了したときのみ true を返し、それ以外
+     * では false を返却する。この関数は write() が false の場合ステー
+     * タスを調べるのに使用することができる。
+     * 
+     * @param index Connector の index
+     * @return ステータス
+     *
+     * @else
+     *
+     * @brief Getting specified connector's writing status
+     *
+     * An OutPort has Connectors that are virtual data stream channel
+     * for each connection.  "write()" function write into these
+     * Connectors, and each Connector returns writing-status.  write()
+     * function will return a true value if all Connectors return
+     * normal status, and a false value will be returned if at least
+     * one Connector failed.  This function can be used to inspect
+     * each return status
+     *
+     * @param index Connector index
+     * @return Writing status
+     *
+     * @endif
+     */
+    DataPortStatus::Enum getStatus(int index)
+    {
+      return m_status[index];
+    }
+    /*!
+     * @if jp
+     *
+     * @brief 特定のコネクタへの書き込みステータスリストを得る
+     *
+     * OutPort は接続ごとに Connector と呼ばれる仮想データチャネルを持
+     * つ。write() 関数はこれら Connector に対してデータを書き込むが、
+     * 各 Connector は書き込みごとにステータスを返す。write() 関数では、
+     * すべての Connector が正常終了したときのみ true を返し、それ以外
+     * では false を返却する。この関数は write() が false の場合ステー
+     * タスを調べるのに使用することができる。
+     * 
+     * @return ステータスリスト
+     *
+     * @else
+     *
+     * @brief Getting specified connector's writing status list
+     *
+     * An OutPort has Connectors that are virtual data stream channel
+     * for each connection.  "write()" function write into these
+     * Connectors, and each Connector returns writing-status.  write()
+     * function will return a true value if all Connectors return
+     * normal status, and a false value will be returned if at least
+     * one Connector failed.  This function can be used to inspect
+     * each return status
+     *
+     * @return Writing status list
+     *
+     * @endif
+     */
+    DataPortStatusList getStatusList()
+    {
+      return m_status;
+    }
+
     /*!
      * @if jp
      *
@@ -499,8 +566,9 @@ namespace RTC
     OnWriteConvert<DataType>* m_onWriteConvert;
 
     coil::TimeMeasure m_cdrtime;
-    static const long int usec_per_sec = 1000000;
+
     cdrMemoryStream m_cdr;
+    DataPortStatusList m_status;
   };
 }; // namespace RTC
 
