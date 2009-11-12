@@ -19,6 +19,7 @@
 
 #include <rtm/InPortCorbaCdrProvider.h>
 #include <rtm/idl/BasicDataTypeSkel.h>
+
 namespace RTC
 {
   /*!
@@ -72,6 +73,12 @@ namespace RTC
     m_buffer = buffer;
   }
 
+  void InPortCorbaCdrProvider::setListener(ConnectorInfo& info,
+                                           ConnectorListeners* listeners)
+  {
+    m_profile = info;
+    m_listeners = listeners;
+  }
 
   /*!
    * @if jp
@@ -88,13 +95,10 @@ namespace RTC
 
     if (m_buffer == 0)
       {
+        cdrMemoryStream cdr;
+        cdr.put_octet_array(&(data[0]), data.length());
+        onReceiverError(cdr);
         return ::OpenRTM::PORT_ERROR;
-      }
-
-    if (m_buffer->full())
-      {
-        RTC_WARN(("buffer full"));
-        return ::OpenRTM::BUFFER_FULL;
       }
 
     RTC_PARANOID(("received data size: %d", data.length()))
@@ -102,30 +106,65 @@ namespace RTC
     cdr.put_octet_array(&(data[0]), data.length());
 
     RTC_PARANOID(("converted CDR data size: %d", cdr.bufSize()));
+    onReceived(cdr);
     BufferStatus::Enum ret = m_buffer->write(cdr);
 
-    switch(ret)
+    return convertReturn(ret, cdr);
+  }
+
+  /*!
+   * @if jp
+   * @brief リターンコード変換
+   * @else
+   * @brief Return codes conversion
+   * @endif
+   */
+  ::OpenRTM::PortStatus
+  InPortCorbaCdrProvider::convertReturn(BufferStatus::Enum status,
+                                        const cdrMemoryStream& data)
+  {
+    switch(status)
       {
       case BufferStatus::BUFFER_OK:
+        onBufferWrite(data);
         return ::OpenRTM::PORT_OK;
         break;
+
       case BufferStatus::BUFFER_ERROR:
+        onReceiverError(data);
         return ::OpenRTM::PORT_ERROR;
         break;
+
       case BufferStatus::BUFFER_FULL:
+        onBufferFull(data);
+        onReceiverFull(data);
         return ::OpenRTM::BUFFER_FULL;
         break;
+
       case BufferStatus::BUFFER_EMPTY:
+        // never come here
         return ::OpenRTM::BUFFER_EMPTY;
         break;
+
+      case BufferStatus::PRECONDITION_NOT_MET:
+        onReceiverError(data);
+        return ::OpenRTM::PORT_ERROR;
+        break;
+
       case BufferStatus::TIMEOUT:
+        onBufferWriteTimeout(data);
+        onReceiverTimeout(data);
         return ::OpenRTM::BUFFER_TIMEOUT;
         break;
+
       default:
         return ::OpenRTM::UNKNOWN_ERROR;
       }
+
+    onReceiverError(data);
     return ::OpenRTM::UNKNOWN_ERROR;
   }
+
 };     // namespace RTC
 
 

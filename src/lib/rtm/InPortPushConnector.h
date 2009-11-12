@@ -57,7 +57,9 @@ namespace RTC
      *
      * @endif
      */
-    InPortPushConnector(ConnectorInfo info, InPortProvider* provider,
+    InPortPushConnector(ConnectorInfo info,
+                        InPortProvider* provider,
+                        ConnectorListeners& listeners,
                         CdrBufferBase* buffer = 0);
 
     /*!
@@ -131,6 +133,16 @@ namespace RTC
      * @endif
      */
     InPortProvider* m_provider;
+
+    /*!
+     * @if jp
+     * @brief ConnectorListenrs への参照
+     * @else
+     * @brief A reference to a ConnectorListener
+     * @endif
+     */
+    ConnectorListeners& m_listeners;
+
     bool m_deleteBuffer;
   };
 }; // namespace RTC

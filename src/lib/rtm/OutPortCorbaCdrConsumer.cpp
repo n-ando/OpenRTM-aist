@@ -68,6 +68,13 @@ namespace RTC
     m_buffer = buffer;
   }
 
+  void OutPortCorbaCdrConsumer::setListener(ConnectorInfo& info,
+                                            ConnectorListeners* listeners)
+  {
+    m_listeners = listeners;
+    m_profile = info;
+  }
+
   /*!
    * @if jp
    * @brief データを読み出す
@@ -84,14 +91,24 @@ namespace RTC
         ::OpenRTM::PortStatus ret(_ptr()->get(cdr_data.out()));
         if (ret == ::OpenRTM::PORT_OK)
           {
+
             data.put_octet_array(&(cdr_data[0]), (int)cdr_data->length());
+
+            onReceived(data);
+            onBufferWrite(data);
+
+            if (m_buffer->full())
+              {
+                onBufferFull(data);
+                onReceiverFull(data);
+              }
             m_buffer->put(data);
             m_buffer->advanceWptr();
             m_buffer->advanceRptr();
 
             return PORT_OK;
           }
-        return ReturnCode(ret);
+        return convertReturn(ret, data);
       }
     catch (...)
       {
@@ -156,6 +173,60 @@ namespace RTC
           }
       }
   }
+
+  /*!
+   * @if jp
+   * @brief リターンコード変換 (DataPortStatus -> BufferStatus)
+   * @else
+   * @brief Return codes conversion
+   * @endif
+   */
+  OutPortConsumer::ReturnCode
+  OutPortCorbaCdrConsumer::convertReturn(::OpenRTM::PortStatus status,
+                                         const cdrMemoryStream& data)
+  {
+    switch(status)
+      {
+      case ::OpenRTM::PORT_OK:
+        // never comes here
+        return PORT_OK;
+        break;
+        
+      case ::OpenRTM::PORT_ERROR:
+        onSenderError();
+        return PORT_ERROR;
+        break;
+
+      case ::OpenRTM::BUFFER_FULL:
+        // never comes here
+        return BUFFER_FULL;
+        break;
+
+      case ::OpenRTM::BUFFER_EMPTY:
+        onSenderEmpty();
+        return BUFFER_EMPTY;
+        break;
+
+      case ::OpenRTM::BUFFER_TIMEOUT:
+        onSenderTimeout();
+        return BUFFER_TIMEOUT;
+        break;
+
+      case ::OpenRTM::UNKNOWN_ERROR:
+        onSenderError();
+        return UNKNOWN_ERROR;
+        break;
+
+      default:
+        onSenderError();
+        return UNKNOWN_ERROR;
+      }
+
+    onSenderError();
+    return UNKNOWN_ERROR;
+  }
+
+
 };     // namespace RTC
 
 extern "C"

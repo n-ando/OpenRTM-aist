@@ -36,6 +36,9 @@ namespace coil
 
 namespace RTC
 {
+  class ConnectorListeners;
+  class ConnectorInfo;
+
   /*!
    * @if jp
    *
@@ -143,6 +146,8 @@ namespace RTC
      * @endif
      */
     virtual void setBuffer(CdrBufferBase* buffer) = 0;
+    virtual void setListener(ConnectorInfo& info,
+                             ConnectorListeners* listeners) = 0;
 
     /*!
      * @if jp

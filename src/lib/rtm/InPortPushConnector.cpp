@@ -31,9 +31,12 @@ namespace RTC
    */
   InPortPushConnector::InPortPushConnector(ConnectorInfo info, 
                                            InPortProvider* provider,
+                                           ConnectorListeners& listeners,
                                            CdrBufferBase* buffer)
     : InPortConnector(info, buffer),
-      m_provider(provider), m_deleteBuffer(buffer == 0 ? true : false)
+      m_provider(provider), 
+      m_listeners(listeners), 
+      m_deleteBuffer(buffer == 0 ? true : false)
   {
     // publisher/buffer creation. This may throw std::bad_alloc;
     if (m_buffer == 0)
@@ -44,6 +47,7 @@ namespace RTC
 
     m_provider->init(info.properties);
     m_provider->setBuffer(m_buffer);
+    m_provider->setListener(info, &m_listeners);
   }
 
   /*!
