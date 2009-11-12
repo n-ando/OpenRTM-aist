@@ -17,8 +17,8 @@
  *
  */
 
-#ifndef ManagerConfig_h
-#define ManagerConfig_h
+#ifndef RTC_MANAGERCONFIG_H
+#define RTC_MANAGERCONFIG_H
 
 #include <coil/Properties.h>
 
@@ -376,4 +376,4 @@ namespace RTC
     std::string m_configFile;
   };
 }; // namespace RTC  
-#endif // ManagerConfig_h
+#endif // RTC_MANAGERCONFIG_H

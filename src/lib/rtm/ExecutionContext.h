@@ -16,8 +16,8 @@
  *
  */
 
-#ifndef ExecutionContext_h
-#define ExecutionContext_h
+#ifndef RTC_EXECUTIONCONTEXT_H
+#define RTC_EXECUTIONCONTEXT_H
 
 #include <rtm/idl/RTCSkel.h>
 #include <rtm/SystemLogger.h>
@@ -724,4 +724,4 @@ namespace RTC
 
 }; // namespace RTC
 
-#endif // ExecutionContext_h 
+#endif // RTC_EXECUTIONCONTEXT_H 

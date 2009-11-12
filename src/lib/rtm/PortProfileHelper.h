@@ -16,8 +16,8 @@
  *
  */
 
-#ifndef PortProfileHelper_h
-#define PortProfilehelper_h
+#ifndef RTC_PORTPROFILEHELPER_H
+#define RTC_PORTPROFILEHELPER_H
 
 
 // RTC header include
@@ -594,4 +594,4 @@ namespace RTC
 
   };   // class PortProfileHelper
 };     // namespace RTC
-#endif // PortProfileHelper_h
+#endif // RTC_PORTPROFILEHELPER_H

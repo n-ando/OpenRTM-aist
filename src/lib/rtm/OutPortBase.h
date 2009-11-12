@@ -17,8 +17,8 @@
  *
  */
 
-#ifndef OutPortBase_h
-#define OutPortBase_h
+#ifndef RTC_OUTPORTBASE_H
+#define RTC_OUTPORTBASE_H
 
 #include <vector>
 #include <string>
@@ -1001,4 +1001,4 @@ namespace RTC
     struct connector_cleanup;
   };
 }; // End of namespace RTM
-#endif // RtcOutPortBase_h
+#endif // RTC_RTCOUTPORTBASE_H

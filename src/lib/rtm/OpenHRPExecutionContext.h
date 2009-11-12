@@ -1,6 +1,24 @@
 // -*- C++ -*-
-#ifndef OpenHRPExecutionContext_h
-#define OpenHRPExecutionContext_h
+/*!
+ * @file  OpenHRPExecutionContext.h
+ * @brief Execution context for OpenHRP3
+ * @date  $Date: 2008-01-14 07:49:59 $
+ * @author Noriaki Ando <n-ando@aist.go.jp>
+ *
+ * Copyright (C) 2006-2008
+ *     Noriaki Ando
+ *     Task-intelligence Research Group,
+ *     Intelligent Systems Research Institute,
+ *     National Institute of
+ *         Advanced Industrial Science and Technology (AIST), Japan
+ *     All rights reserved.
+ *
+ * $Id$
+ *
+ */
+
+#ifndef RTC_OPENHRPEXECUTIONCONTEXT_H
+#define RTC_OPENHRPEXECUTIONCONTEXT_H
 
 #include <rtm/RTC.h>
 
@@ -46,5 +64,5 @@ extern "C"
   DLL_EXPORT void OpenHRPExecutionContextInit(RTC::Manager* manager);
 };
 
-#endif // OpenHRPExecutionContext_h
+#endif // RTC_OPENHRPEXECUTIONCONTEXT_H
 

@@ -16,8 +16,8 @@
  *
  */
 
-#ifndef ExecutionContextBase_h
-#define ExecutionContextBase_h
+#ifndef RTC_EXECUTIONCONTEXTBASE_H
+#define RTC_EXECUTIONCONTEXTBASE_H
 
 #include <rtm/idl/RTCSkel.h>
 #include <rtm/idl/OpenRTMSkel.h>
@@ -94,4 +94,4 @@ namespace RTC
 #pragma warning( default : 4290 )
 #endif
 
-#endif // ExecutionContextBase_h
+#endif // RTC_EXECUTIONCONTEXTBASE_H

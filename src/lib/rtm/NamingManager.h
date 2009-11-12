@@ -16,8 +16,8 @@
  *
  */
 
-#ifndef NamingManager_h
-#define NamingManager_h
+#ifndef RTC_NAMINGMANAGER_H
+#define RTC_NAMINGMANAGER_H
 
 #include <rtm/RTC.h>
 
@@ -622,4 +622,4 @@ namespace RTC
   }; // class NamingManager
 }; // namespace RTC
 
-#endif // NamingManager_h
+#endif // RTC_NAMINGMANAGER_H

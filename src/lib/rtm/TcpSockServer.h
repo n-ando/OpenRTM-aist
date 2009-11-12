@@ -17,8 +17,8 @@
  *
  */
 
-#ifndef TcpSockServer_h
-#define TcpSockServer_h
+#ifndef RTC_TCPSOCKSERVER_H
+#define RTC_TCPSOCKSERVER_H
 
 #define RAWTCP_DEFAULT_BUFFER_SIZE 128
 
@@ -976,4 +976,4 @@ namespace RTC
     DataType m_data;
   };
 }; // namespace RTC
-#endif // TcpSockServer_h
+#endif // RTC_TCPSOCKSERVER_H

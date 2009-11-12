@@ -16,8 +16,8 @@
  *
  */
 
-#ifndef SystemLogger_h
-#define SystemLogger_h
+#ifndef RTC_SYSTEMLOGGER_H
+#define RTC_SYSTEMLOGGER_H
 
 #include <rtm/config_rtc.h>
 
@@ -461,4 +461,4 @@ namespace RTC
   
 }; // namespace RTC
 
-#endif  // SystemLogger_h
+#endif  // RTC_SYSTEMLOGGER_H

@@ -17,8 +17,8 @@
  *
  */
 
-#ifndef DataFlowComponentBase_h
-#define DataFlowComponentBase_h
+#ifndef RTC_DATAFLOWCOMPONENTBASE_H
+#define RTC_DATAFLOWCOMPONENTBASE_H
 
 #include <rtm/idl/RTCSkel.h>
 #include <rtm/RTObject.h>
@@ -127,4 +127,4 @@ namespace RTC
     //    ExecutionContextService_var m_ecref;
   };
 }; // namespace RTC
-#endif // DataFlowComponentBase_h
+#endif // RTC_DATAFLOWCOMPONENTBASE_H

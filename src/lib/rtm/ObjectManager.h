@@ -16,8 +16,8 @@
  *
  */
 
-#ifndef ObjectManager_h
-#define ObjectManager_h
+#ifndef RTC_OBJECTMANAGER_H
+#define RTC_OBJECTMANAGER_H
 
 #include <rtm/RTC.h>
 
@@ -287,4 +287,4 @@ protected:
    */
   Objects m_objects;
 };
-#endif // ObjectManager_h
+#endif // RTC_OBJECTMANAGER_H

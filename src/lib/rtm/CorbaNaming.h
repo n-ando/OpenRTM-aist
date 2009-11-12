@@ -17,8 +17,8 @@
  *
  */
 
-#ifndef CorbaNaming_h
-#define CorbaNaming_h
+#ifndef RTC_CORBANAMING_H
+#define RTC_CORBANAMING_H
 
 #include <rtm/RTC.h>
 
@@ -1612,4 +1612,4 @@ namespace RTC
 #pragma warning( default : 4290 )
 #endif
 
-#endif // end of __Naming_h__
+#endif // end of RTC_CORBANAMING_H

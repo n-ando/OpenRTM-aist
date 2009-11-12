@@ -16,8 +16,8 @@
  *
  */
 
-#ifndef ConfigAdmin_h
-#define ConfigAdmin_h
+#ifndef RTC_CONFIGADMIN_H
+#define RTC_CONFIGADMIN_H
 
 #include <coil/Properties.h>
 #include <coil/stringutil.h>
@@ -901,4 +901,4 @@ namespace RTC
 
   };
 }; // namespace RTC
-#endif // ConfigAdmin_h
+#endif // RTC_CONFIGADMIN_H

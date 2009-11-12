@@ -17,8 +17,8 @@
  *
  */
 
-#ifndef SyncFIFO_h
-#define SyncFIFO_h
+#ifndef RTC_SYNCFIFO_H
+#define RTC_SYNCFIFO_H
 
 #include <iostream>
 #include <vector>
@@ -298,4 +298,4 @@ namespace RTC
   }; // class SyncFIFO
 };
 
-#endif // SyncFIFO_h
+#endif // RTC_SYNCFIFO_H

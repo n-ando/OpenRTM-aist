@@ -17,8 +17,8 @@
  *
  */
 
-#ifndef InPortCorbaProvider_h
-#define InPortCorbaProvider_h
+#ifndef RTC_INPORTCORBAPROVIDER_H
+#define RTC_INPORTCORBAPROVIDER_H
 
 #include <rtm/idl/DataPortSkel.h>
 #include <rtm/BufferBase.h>
@@ -172,5 +172,5 @@ namespace RTC
 #pragma warning( default : 4290 )
 #endif
 
-#endif // InPortCorbaProvider_h
+#endif // RTC_INPORTCORBAPROVIDER_H
 

@@ -5,7 +5,7 @@
  * @date  $Date: 2007-12-31 03:08:06 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
- * Copyright (C) 2006-2008
+ * Copyright (C) 2006-2009
  *     Noriaki Ando
  *     Task-intelligence Research Group,
  *     Intelligent Systems Research Institute,
@@ -17,8 +17,8 @@
  *
  */
 
-#ifndef PublisherNew_h
-#define PublisherNew_h
+#ifndef RTC_PUBLISHERNEW_H
+#define RTC_PUBLISHERNEW_H
 
 #include <coil/Task.h>
 #include <coil/Mutex.h>
@@ -126,8 +126,8 @@ namespace RTC
     virtual ReturnCode setListener(ConnectorInfo& info,
                                    ConnectorListeners* listeners);
     virtual ReturnCode write(const cdrMemoryStream& data,
-                     unsigned long sec,
-                     unsigned long usec);
+                             unsigned long sec,
+                             unsigned long usec);
     virtual bool isActive();
     virtual ReturnCode activate();
     virtual ReturnCode deactivate();
@@ -233,7 +233,8 @@ namespace RTC
      *
      *
      */
-    ReturnCode convertReturn(BufferStatus::Enum status, const cdrMemoryStream& data);
+    ReturnCode convertReturn(BufferStatus::Enum status,
+                             const cdrMemoryStream& data);
 
     ReturnCode invokeListener(DataPortStatus::Enum status,
                               const cdrMemoryStream& data);
@@ -356,5 +357,5 @@ extern "C"
   void DLL_EXPORT PublisherNewInit();
 };
 
-#endif // PublisherNew_h
+#endif // RTC_PUBLISHERNEW_H
 
