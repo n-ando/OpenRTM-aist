@@ -20,6 +20,8 @@
 #ifndef RTC_DATAPORTSTATUS_H
 #define RTC_DATAPORTSTATUS_H
 
+#include <vector>
+
 namespace RTC
 {
   /*!
@@ -175,6 +177,9 @@ namespace RTC
       return str[status];
     }
   };
+  
+  typedef std::vector<DataPortStatus::Enum> DataPortStatusList;
+
 };
 
 #define DATAPORTSTATUS_ENUM \
@@ -192,6 +197,5 @@ namespace RTC
   using ::RTC::DataPortStatus::PRECONDITION_NOT_MET;    \
   using ::RTC::DataPortStatus::CONNECTION_LOST;         \
   using ::RTC::DataPortStatus::UNKNOWN_ERROR;
-
 
 #endif // RTC_DATAPORTSTATUS_H
