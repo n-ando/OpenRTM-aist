@@ -17,8 +17,8 @@
  *
  */
 
-#ifndef CorbaPort_h
-#define CorbaPort_h
+#ifndef RTC_CORBAPORT_H
+#define RTC_CORBAPORT_H
 
 #include <rtm/PortBase.h>
 #include <rtm/CorbaConsumer.h>
@@ -584,4 +584,4 @@ namespace RTC
     };
   };
 };
-#endif // CorbaPort_h
+#endif // RTC_CORBAPORT_H

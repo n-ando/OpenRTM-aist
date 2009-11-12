@@ -17,8 +17,8 @@
  *
  */
 
-#ifndef NumberingPolicy_h
-#define NumberingPolicy_h
+#ifndef RTC_NUMBERINGPOLICY_H
+#define RTC_NUMBERINGPOLICY_H
 
 #include <string>
 #include <vector>
@@ -262,4 +262,4 @@ private:
   int m_num;
   std::vector<void*> m_objects;
 };
-#endif // NumberingPolicy_h
+#endif // RTC_NUMBERINGPOLICY_H

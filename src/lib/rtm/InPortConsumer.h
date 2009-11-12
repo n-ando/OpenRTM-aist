@@ -17,8 +17,8 @@
  *
  */
 
-#ifndef InPortConsumer_h
-#define InPortConsumer_h
+#ifndef RTC_INPORTCONSUMER_H
+#define RTC_INPORTCONSUMER_H
 
 #include <coil/Factory.h>
 #include <rtm/DataPortStatus.h>
@@ -253,4 +253,4 @@ namespace RTC
 
 template class ::coil::GlobalFactory<RTC::InPortConsumer>;
 
-#endif // InPortConsumer_h
+#endif // RTC_INPORTCONSUMER_H

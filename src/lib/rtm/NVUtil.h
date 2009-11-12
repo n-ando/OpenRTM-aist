@@ -17,8 +17,8 @@
  *
  */
 
-#ifndef NVUtil_h
-#define NVUtil_h
+#ifndef NVUTIL_NVUTIL_H
+#define NVUTIL_NVUTIL_H
 
 #include <string>
 #include <iostream>
@@ -554,4 +554,4 @@ namespace NVUtil
   
 
 };
-#endif // NVUtil_h
+#endif // NVUTIL_NVUTIL_H

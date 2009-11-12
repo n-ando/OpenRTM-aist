@@ -16,8 +16,8 @@
  *
  */
 
-#ifndef CORBA_SeqUtil_h
-#define CORBA_SeqUtil_h
+#ifndef CORBA_SEQUTIL_H
+#define CORBA_SEQUTIL_H
 
 #include <rtm/RTC.h>
 #include <rtm/Manager.h>
@@ -423,4 +423,4 @@ namespace CORBA_SeqUtil
     return iorlist;
   }
 }; // namespace CORBA_SeqUtil
-#endif // CORBA_SeqUtil.h
+#endif // CORBA_SEQUTIL_H

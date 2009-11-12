@@ -17,8 +17,8 @@
  *
  */
 
-#ifndef PortBase_h
-#define PortBase_h
+#ifndef RTC_PORTBASE_H
+#define RTC_PORTBASE_H
 
 #include <rtm/RTC.h>
 
@@ -1881,4 +1881,4 @@ namespace RTC
 #pragma warning( default : 4290 )
 #endif
 
-#endif // PortBase_h
+#endif // RTC_PORTBASE_H

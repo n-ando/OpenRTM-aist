@@ -17,8 +17,8 @@
  *
  */
 
-#ifndef Manager_h
-#define Manager_h
+#ifndef RTC_MANAGER_H
+#define RTC_MANAGER_H
 
 #include <rtm/RTC.h>
 
@@ -1775,4 +1775,4 @@ namespace RTC
   }; // class Manager
 }; // namespace RTC
 
-#endif // Manager_h
+#endif // RTC_MANAGER_H

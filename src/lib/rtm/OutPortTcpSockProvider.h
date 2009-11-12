@@ -17,8 +17,8 @@
  *
  */
 
-#ifndef OutPortTcpSockProvider_h
-#define OutPortTcpSockProvider_h
+#ifndef RTC_OUTPORTTCPSOCKPROVIDER_H
+#define RTC_OUTPORTTCPSOCKPROVIDER_H
 
 #include <rtm/BufferBase.h>
 #include <rtm/OutPortProvider.h>
@@ -121,4 +121,4 @@ namespace RTC
     //    OutPortAny_var m_objref;
   };
 };     // namespace RTC
-#endif // OutPortTcpSockProvider_h
+#endif // RTC_OUTPORTTCPSOCKPROVIDER_H

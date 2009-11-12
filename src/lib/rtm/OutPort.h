@@ -17,8 +17,8 @@
  *
  */
 
-#ifndef OutPort_h
-#define OutPort_h
+#ifndef RTC_OUTPORT_H
+#define RTC_OUTPORT_H
 
 #include <iostream>
 #include <string>
@@ -572,4 +572,4 @@ namespace RTC
   };
 }; // namespace RTC
 
-#endif // OutPort_h
+#endif // RTC_OUTPORT_H

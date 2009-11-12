@@ -17,8 +17,8 @@
  *
  */
 
-#ifndef ECFactory_h
-#define ECFactory_h
+#ifndef RTC_ECFACTORY_H
+#define RTC_ECFACTORY_H
 
 #include <rtm/ExecutionContextBase.h>
 #include <string>
@@ -358,4 +358,4 @@ namespace RTC
     ECDeleteFunc m_Delete;
   };
 };
-#endif // ECFactory_h
+#endif // RTC_ECFACTORY_H

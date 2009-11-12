@@ -17,8 +17,8 @@
  *
  */
 
-#ifndef Factory_h
-#define Factory_h
+#ifndef RTC_FACTORY_H
+#define RTC_FACTORY_H
 
 #include <coil/Properties.h>
 //#include <rtm/RTObject.h>
@@ -405,4 +405,4 @@ namespace RTC
     NumberingPolicy* m_policy;
   };
 };
-#endif // Factory_h
+#endif // RTC_FACTORY_H

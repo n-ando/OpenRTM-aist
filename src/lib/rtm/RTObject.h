@@ -16,8 +16,8 @@
  *
  */
 
-#ifndef RTObject_h
-#define RTObject_h
+#ifndef RTC_RTOBJECT_H
+#define RTC_RTOBJECT_H
 
 // CORBA header include
 #include <coil/Properties.h>
@@ -2745,4 +2745,4 @@ namespace RTC
 #pragma warning( default : 4290 )
 #endif
 
-#endif // RTObject
+#endif // RTC_RTOBJECT

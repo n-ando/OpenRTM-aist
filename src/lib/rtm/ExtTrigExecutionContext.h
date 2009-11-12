@@ -16,8 +16,8 @@
  *
  */
 
-#ifndef ExtTrigExecutionContext_h
-#define ExtTrigExecutionContext_h
+#ifndef RTC_EXTTRIGEXECUTIONCONTEXT_H
+#define RTC_EXTTRIGEXECUTIONCONTEXT_H
 
 #include <rtm/RTC.h>
 
@@ -168,4 +168,4 @@ extern "C"
   void ExtTrigExecutionContextInit(RTC::Manager* manager);
 };
 
-#endif // ExtTrigExecutionContext_h
+#endif // RTC_EXTTRIGEXECUTIONCONTEXT_H

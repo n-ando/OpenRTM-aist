@@ -17,8 +17,9 @@
  *
  */
 
-#ifndef Consumer_h
-#define Consumer_h
+#ifndef RTC_CORBACONSUMER_H
+#define RTC_CORBACONSUMER_H
+
 #include <iostream>
 #ifdef ORB_IS_MICO
 #include <CORBA.h>
@@ -562,4 +563,4 @@ namespace RTC
     ObjectTypeVar m_var;
   };
 }; // namespace RTC
-#endif // Consumer_h
+#endif // RTC_CORBACONSUMER_H

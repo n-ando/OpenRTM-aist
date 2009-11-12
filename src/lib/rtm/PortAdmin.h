@@ -17,8 +17,8 @@
  *
  */
 
-#ifndef PortAdmin_h
-#define PortAdmin_h
+#ifndef RTC_PORTADMIN_H
+#define RTC_PORTADMIN_H
 
 #include <rtm/idl/RTCSkel.h>
 #include <rtm/PortBase.h>
@@ -395,4 +395,4 @@ namespace RTC
     
   };
 };     // namespace RTC
-#endif // PortAdmin_h
+#endif // RTC_PORTADMIN_H

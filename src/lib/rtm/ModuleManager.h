@@ -17,8 +17,8 @@
  *
  */
 
-#ifndef ModuleManager_h
-#define ModuleManager_h
+#ifndef RTC_MODULEMANAGER_H
+#define RTC_MODULEMANAGER_H
 
 // STL includes
 #include <string>
@@ -712,4 +712,4 @@ namespace RTC
 #pragma warning( default : 4290 )
 #endif
 
-#endif // ModuleManager_h
+#endif // RTC_MODULEMANAGER_H

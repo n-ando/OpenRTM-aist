@@ -17,8 +17,8 @@
  *
  */
 
-#ifndef PeriodicExecutionContext_h
-#define PeriodicExecutionContext_h
+#ifndef RTC_PERIODICEXECUTIONCONTEXT_H
+#define RTC_PERIODICEXECUTIONCONTEXT_H
 
 #include <coil/Task.h>
 #include <coil/Mutex.h>
@@ -1544,4 +1544,4 @@ extern "C"
   void PeriodicExecutionContextInit(RTC::Manager* manager);
 };
 
-#endif
+#endif // RTC_PERIODICEXECUTIONCONTEXT_H

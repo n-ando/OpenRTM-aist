@@ -16,8 +16,8 @@
  *
  */
 
-#ifndef StateMachine_h
-#define StateMachine_h
+#ifndef RTC_STATEMACHINE_H
+#define RTC_STATEMACHINE_H
 
 #include <rtm/RTC.h>
 #include <coil/Mutex.h>
@@ -856,4 +856,4 @@ namespace RTC_Utils
   };
 }; // namespace RTC_Utils
 
-#endif // StateMachine_h
+#endif // RTC_STATEMACHINE_H

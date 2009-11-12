@@ -16,8 +16,8 @@
  *
  */
 
-#ifndef RTC_h
-#define RTC_h
+#ifndef RTC_H
+#define RTC_H
 
 #include <rtm/config_rtc.h>
 
@@ -81,4 +81,4 @@ namespace RTC
 
 //#endif // COMPAT_OPENRTM_0_4
 
-#endif // RTC_h
+#endif // RTC_H

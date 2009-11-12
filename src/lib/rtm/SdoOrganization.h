@@ -17,8 +17,8 @@
  *
  */
 
-#ifndef SdoOrganization_h
-#define SdoOrganization_h
+#ifndef RTC_SDOORGANIZATION_H
+#define RTC_SDOORGANIZATION_H
 
 #include <rtm/RTC.h>
 #include <rtm/idl/SDOPackageSkel.h>
@@ -869,4 +869,4 @@ namespace SDOPackage
 #pragma warning( default : 4290 )
 #endif
 
-#endif // namespace SDOPackage
+#endif // RTC_NAMESPACE SDOPACKAGE

@@ -17,8 +17,8 @@
  *
  */
 
-#ifndef PublisherBase_h
-#define PublisherBase_h
+#ifndef RTC_PUBLISHERBASE_H
+#define RTC_PUBLISHERBASE_H
 
 #include <coil/Properties.h>
 #include <coil/Factory.h>
@@ -145,4 +145,4 @@ namespace RTC
   typedef coil::GlobalFactory<PublisherBase> PublisherFactory;
 
 };
-#endif // PublisherBase_h
+#endif // RTC_PUBLISHERBASE_H

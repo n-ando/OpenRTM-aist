@@ -17,8 +17,8 @@
  *
  */
 
-#ifndef InPortTcpSockProvider_h
-#define InPortTcpSockProvider_h
+#ifndef RTC_INPORTTCPSOCKPROVIDER_H
+#define RTC_INPORTTCPSOCKPROVIDER_H
 
 #include <rtm/BufferBase.h>
 #include <rtm/InPortProvider.h>
@@ -162,4 +162,4 @@ namespace RTC
     Properties& m_prop;
   };
 };     // namespace RTC
-#endif // InPortTcpSockProvider_h
+#endif // RTC_INPORTTCPSOCKPROVIDER_H

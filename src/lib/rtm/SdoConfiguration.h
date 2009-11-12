@@ -17,8 +17,8 @@
  *
  */
 
-#ifndef SdoConfiguration_h
-#define SdoConfiguration_h
+#ifndef RTC_SDOCONFIGURATION_H
+#define RTC_SDOCONFIGURATION_H
 
 // CORBA header include
 #include <rtm/RTC.h>
@@ -1250,4 +1250,4 @@ namespace SDOPackage
 #pragma warning( default : 4290 )
 #endif
 
-#endif // SdoConfiguration_h
+#endif // RTC_SDOCONFIGURATION_H

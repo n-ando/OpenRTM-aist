@@ -17,8 +17,8 @@
  *
  */
 
-#ifndef InPortCorbaConsumer_h
-#define InPortCorbaConsumer_h
+#ifndef RTC_INPORTCORBACONSUMER_H
+#define RTC_INPORTCORBACONSUMER_H
 
 #include <rtm/idl/DataPortSkel.h>
 #include <rtm/BufferBase.h>
@@ -487,4 +487,4 @@ namespace RTC
     BufferBase<DataType>& m_buffer;
   };
 };     // namespace RTC
-#endif // InPortCorbaConsumer_h
+#endif // RTC_INPORTCORBACONSUMER_H

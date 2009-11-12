@@ -17,8 +17,8 @@
  *
  */
 
-#ifndef InPortTcpSockConsumer_h
-#define InPortTcpSockConsumer_h
+#ifndef RTC_INPORTTCPSOCKCONSUMER_H
+#define RTC_INPORTTCPSOCKCONSUMER_H
 
 #include <rtm/BufferBase.h>
 #include <rtm/InPortConsumer.h>
@@ -325,4 +325,4 @@ namespace RTC
     ACE_INET_Addr m_addr;
   };
 };     // namespace RTC
-#endif // InPortTcpSockConsumer_h
+#endif // RTC_INPORTTCPSOCKCONSUMER_H

@@ -17,8 +17,8 @@
  *
  */
 
-#ifndef PublisherPeriodic_h
-#define PublisherPeriodic_h
+#ifndef RTC_PUBLISHERPERIODIC_H
+#define RTC_PUBLISHERPERIODIC_H
 
 #include <coil/Task.h>
 #include <coil/Mutex.h>
@@ -315,5 +315,5 @@ extern "C"
   void DLL_EXPORT PublisherPeriodicInit();
 };
 
-#endif // PublisherPeriodic_h
+#endif // RTC_PUBLISHERPERIODIC_H
 

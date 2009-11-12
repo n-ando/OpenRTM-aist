@@ -17,8 +17,8 @@
  *
  */
 
-#ifndef RingBuffer_h
-#define RingBuffer_h
+#ifndef RTC_RINGBUFFER_H
+#define RTC_RINGBUFFER_H
 
 #include <vector>
 #include <algorithm>
@@ -889,4 +889,4 @@ namespace RTC
   };
 }; // namespace RTC
 
-#endif // RingBuffer_h
+#endif // RTC_RINGBUFFER_H

@@ -17,8 +17,8 @@
  *
  */
 
-#ifndef PublisherFlush_h
-#define PublisherFlush_h
+#ifndef RTC_PUBLISHERFLUSH_H
+#define RTC_PUBLISHERFLUSH_H
 
 #include <coil/Condition.h>
 #include <rtm/PublisherBase.h>
@@ -240,5 +240,5 @@ extern "C"
   void DLL_EXPORT PublisherFlushInit();
 };
 
-#endif // PublisherFlush_h
+#endif // RTC_PUBLISHERFLUSH_H
 

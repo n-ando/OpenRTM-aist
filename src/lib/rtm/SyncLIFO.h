@@ -17,8 +17,8 @@
  *
  */
 
-#ifndef SyncLIFO_h
-#define SyncLIFO_h
+#ifndef RTC_SYNCLIFO_H
+#define RTC_SYNCLIFO_H
 
 #include <iostream>
 #include <vector>
@@ -285,4 +285,4 @@ namespace RTC
   }; // class SyncLIFO
 };
 
-#endif // SyncLIFO_h
+#endif // RTC_SYNCLIFO_H
