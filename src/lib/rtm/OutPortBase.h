@@ -971,7 +971,7 @@ namespace RTC
                                       coil::Properties& prop,
                                       OutPortProvider* provider);
 
-    protected:
+  protected:
     coil::Properties m_properties;
     std::string m_name;
     std::vector<OutPortConnector*> m_connectors;
