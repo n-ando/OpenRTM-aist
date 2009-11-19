@@ -1780,6 +1780,9 @@ namespace RTC
     }
     
   protected:
+    void updateConnectors();
+    bool checkPorts(::RTC::PortServiceList& ports);
+
     mutable Logger rtclog;
     /*!
      * @if jp

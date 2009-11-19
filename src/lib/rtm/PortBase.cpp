@@ -90,6 +90,8 @@ namespace RTC
     throw (CORBA::SystemException)
   {
     RTC_TRACE(("get_port_profile()"));
+
+    updateConnectors();
     Guard gaurd(m_profile_mutex);
     PortProfile_var prof;
     prof = new PortProfile(m_profile);
@@ -106,6 +108,7 @@ namespace RTC
   const PortProfile& PortBase::getPortProfile() const
   {
     RTC_TRACE(("getPortProfile()"));
+
     return m_profile;
   }
   
@@ -120,6 +123,9 @@ namespace RTC
     throw (CORBA::SystemException)
   {
     RTC_TRACE(("get_connector_profiles()"));
+
+    updateConnectors();
+
     Guard gaurd(m_profile_mutex);
     ConnectorProfileList_var conn_prof;
     conn_prof = new ConnectorProfileList(m_profile.connector_profiles);
@@ -137,6 +143,9 @@ namespace RTC
     throw (CORBA::SystemException)
   {
     RTC_TRACE(("get_connector_profile(%s)", connector_id));
+
+    updateConnectors();
+
     Guard gaurd(m_profile_mutex);
     CORBA::Long index(findConnProfileIndex(connector_id));
 
@@ -752,5 +761,52 @@ namespace RTC
     CORBA_SeqUtil::erase(m_profile.interfaces, index);
     return true;
   }
+
+  void PortBase::updateConnectors()
+  {
+    std::vector<std::string> connector_ids;
+    {
+      Guard guard(m_profile_mutex);
+      ConnectorProfileList& clist(m_profile.connector_profiles);
+
+      for (CORBA::ULong i(0); i < clist.length(); ++i)
+        {
+          if (!checkPorts(clist[i].ports))
+            {
+              const char* id(clist[i].connector_id);
+              connector_ids.push_back(id);
+              RTC_WARN(("Dead connection: %s", id));
+            }
+        }
+    }
+    std::vector<std::string>::iterator it, it_end;
+
+    for (std::vector<std::string>::iterator it(connector_ids.begin());
+         it != connector_ids.end(); ++it)
+      {
+        this->disconnect((*it).c_str());
+      }
+  }
   
+
+  bool PortBase::checkPorts(::RTC::PortServiceList& ports)
+  {
+    for (CORBA::ULong i(0), len(ports.length()); i < len; ++i)
+      {
+        try
+          {
+            if (ports[i]->_non_existent())
+              {
+                RTC_WARN(("Dead Port reference detected."));
+                return false;
+              }
+          }
+        catch (...)
+          {
+            return false;
+          }
+      }
+    return true;
+  }
+
 }; // namespace RTC
