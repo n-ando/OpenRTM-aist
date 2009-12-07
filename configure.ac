@@ -121,7 +121,6 @@ AC_ARG_WITH(libs,             [  --with-libs=dirs                Additional lib 
 AC_ARG_ENABLE(gcc2option,     [  --with-gcc2                     Compile with gcc2])
 AC_ARG_ENABLE(artlinux,       [  --with-artlinux                 With ART-Linux])
 AC_ARG_ENABLE(sockdataport,   [  --with-sockdataport             With Socket DataPort])
-AC_ARG_ENABLE(artlinux,       [  --with-rdtsc                    With Read Time Stamp Counter])
 AC_ARG_ENABLE(unittest,       [  --enable-test                   Enable UnitTest With CppUnit])
 
 
@@ -140,29 +139,37 @@ fi
 case $system in
 [FreeBSD*)]
 	AC_DEFINE([RTM_OS_FREEBSD], [TRUE], [OS is FreeBSD])
+	os="freebsd"
 	;;	
 [Linux*)]
 	AC_DEFINE([RTM_OS_LINUX], [TRUE], [OS is Linux])
 	AC_DEFINE([_REENTRANT], [TRUE], [Multi Thread Support])
 	LDFLAGS="$LDFLAGS -luuid -ldl"
+	os="linux"
 	;;	
 [HP-UX*)]
 	AC_DEFINE([RTM_OS_HPUX], [TRUE], [OS is HP-UX])
+	os="hp-ux"
 	;;	
 [SunOS*)]
 	AC_DEFINE([RTM_OS_SUNOS], [TRUE], [OS is SunOS])
+	os="sunos"
 	;;	
 [IRIX*)]
 	AC_DEFINE([RTM_OS_IRIX], [TRUE], [OS is IRIX])
+	os="irix"
 	;;	
 [OSF1*)]
 	AC_DEFINE([RTM_OS_OSF1], [TRUE], [OS is OSF1])
+	os="osf1"
 	;;	
 [Darwin*)]
 	AC_DEFINE([RTM_OS_DARWIN], [TRUE], [OS is Max OS X])
+	os="darwin"
 	;;	
 [QNX*)]
 	AC_DEFINE([RTM_OS_QNX], [TRUE], [OS is QNX])
+	os="qnx"
 	;;	
 *)
 	echo "Unkonown system"
@@ -1267,9 +1274,7 @@ dnl ------------------------------------------------------------
 dnl ARTLinux setup
 dnl
 dnl ------------------------------------------------------------
-have_artlinux=no
-
-if test "x$with_artlinux" != "x" ; then
+if test "x$os" = "xlinux" ; then
 	AC_MSG_CHECKING(for art_task.h)
 	FP_FIND_FILE(art_task.h,
 		$with_artlinux $more_incs $base_incs $base_dirs /usr/src/linux/include,
@@ -1292,12 +1297,11 @@ if test "x$with_artlinux" != "x" ; then
 			have_artlinux=yes
 		fi
 	fi
-	AC_DEFINE([RTM_OS_ARTLINUX], [TRUE], [ARTLinux is enable])
+	AC_DEFINE([ARTLINUX], [TRUE], [ARTLinux is avaiable])
 	ARTLIB="$art_syscalls_o_dir/art_syscalls.o"
 	echo $ARTLIB
 	echo 'RTM is compiled with ARTLinux'
 fi
-
 
 dnl ------------------------------------------------------------
 dnl RDTSC (Read Time Stamp Counter) for measure high resolution time
@@ -1483,6 +1487,9 @@ AC_OUTPUT([Makefile
 	src/lib/rtm/tests/SdoService/Makefile
 	src/lib/rtm/tests/StateMachine/Makefile
 	src/lib/rtm/tests/SystemLogger/Makefile
+	src/ext/Makefile
+	src/ext/artlinux/Makefile
+	src/ext/artlinux/art_ec/Makefile
 	utils/Makefile
 	utils/rtm-config/Makefile
 	utils/rtc-template/Makefile

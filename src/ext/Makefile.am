@@ -1,8 +1,13 @@
 ## -*- Makefile -*-
 ##---------------------------------------------------------------------------
-## Makefile.am for libOpenRTM_CORBA
+## Makefile.am for external libraries
 ##
 ## $Id$
 ##---------------------------------------------------------------------------
 
-SUBDIRS = lib ext
+AUTOMAKE_OPTIONS = 1.4
+
+SUBDIRS = artlinux
+
+##DIST_SUBDIRS = artlinux
+
