@@ -180,7 +180,7 @@ def get_slnyaml(depfile, projfiles):
         """
         d0  < d1: return -1 
         d0 == d1: return  0 
-        d0  < d1: return  1 
+        d0  > d1: return  1 
         """
         d0_depends = d0.has_key("Depend")
         d1_depends = d1.has_key("Depend")
@@ -200,6 +200,10 @@ def get_slnyaml(depfile, projfiles):
             elif d0_in_dep and not d1_in_dep:
                 return 1
             else:
+                if depdict[d0["Name"]].count(d1["Name"]) > 0:
+                    return 1
+                elif depdict[d1["Name"]].count(d0["Name"]) > 0:
+                    return -1
                 return 0
         else:
             return 0
@@ -253,7 +257,6 @@ def main(argv):
     depfile = res[1]
     outfile = res[2]
     flist   = res[3]
-
     sln_text = gen_solution(version, get_slnyaml(depfile, flist))
 
     if outfile == None:
