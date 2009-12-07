@@ -148,7 +148,7 @@ vc9proj:
 		--header $(CONSUMER_H)
 	qkc -sm $(win32_builddir)/AutoTestOutDll_vc9.vcproj
 
-dist-hook: lst vcproj
+dist-hook:
 
 
 clean_objs:

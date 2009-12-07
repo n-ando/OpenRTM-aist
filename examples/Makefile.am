@@ -14,4 +14,4 @@ EXTRA_DIST =               \
 	rtc.vcproj.yaml    \
 	rtcdll.vcproj.yaml
 
-DIST_SUBDIRS = Composite ConfigSample SimpleIO SeqIO SimpleService ExtTrigger tests
+DIST_SUBDIRS = Composite ConfigSample SimpleIO SeqIO SimpleService ExtTrigger AutoTestIn AutoTestOut tests
