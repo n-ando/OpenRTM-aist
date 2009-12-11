@@ -25,8 +25,6 @@
 
 #include <rtm/RTC.h>
 
-#include <ace/Task.h>
-#include <ace/Synch.h>
 
 #include <rtm/Manager.h>
 #include <rtm/PeriodicExecutionContext.h>
