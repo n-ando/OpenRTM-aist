@@ -28,6 +28,7 @@
 #include <rtm/NVUtil.h>
 #include <rtm/SystemLogger.h>
 #include <rtm/DataPortStatus.h>
+#include <rtm/InPortConnector.h>
 
 namespace RTC
 {
@@ -123,7 +124,9 @@ namespace RTC
 
     virtual void setListener(ConnectorInfo& info,
                              ConnectorListeners* listeners) = 0;
-    
+
+    virtual void setConnector(InPortConnector* connector) = 0;
+
     /*!
      * @if jp
      * @brief InterfaceProfile情報を公開する

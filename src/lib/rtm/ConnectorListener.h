@@ -23,6 +23,8 @@
 #include <vector>
 #include <utility>
 #include <rtm/RTC.h>
+#include <iostream>
+#include <rtm/ConnectorBase.h>
 
 class cdrMemoryStream;
 
@@ -135,6 +137,19 @@ namespace RTC
     {
       DataType data;
       cdrMemoryStream cdr(cdrdata.bufPtr(), cdrdata.bufSize());
+
+    // endian type check
+    std::string endian_type(info.properties.getProperty("serializer.cdr.endian", "little"));
+    coil::normalize(endian_type);
+    std::vector<std::string> endian(coil::split(endian_type, ","));
+    if (endian[0] == "little")
+      {
+        cdr.setByteSwapFlag(true);
+      }
+    else if (endian[0] == "big")
+      {
+        cdr.setByteSwapFlag(false);
+      }
       data <<= cdr;
       this->operator()(info, data);
     }

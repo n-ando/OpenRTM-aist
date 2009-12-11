@@ -30,7 +30,7 @@ namespace RTC
    */
   InPortConnector::InPortConnector(ConnectorInfo& info,
                                    CdrBufferBase* buffer)
-    : rtclog("InPortConnector"), m_profile(info), m_buffer(buffer)
+    : rtclog("InPortConnector"), m_profile(info), m_buffer(buffer), m_endian("little")
   {
   }
 
@@ -119,4 +119,40 @@ namespace RTC
   {
     return m_buffer;
   }
+
+  /*!
+   * @if jp
+   * @brief endianタイプ設定
+   *
+   * endianタイプを設定する
+   *
+   * @else
+   * @brief Setting an endian type
+   *
+   * This operation set this connector's endian type
+   *
+   * @endif
+   */
+  void InPortConnector::setEndian(const std::string endian_type)
+  {
+    RTC_TRACE(("setEndian() = %s", endian_type.c_str()));
+    m_endian = endian_type;
+  }
+
+  /*!
+   * @if jp
+   * @brief endian 設定がlittleか否か返す
+   * @else
+   * @brief return it whether endian setting is little
+   * @endif
+   */
+  bool InPortConnector::isLittleEndian()
+  {
+    if(m_endian == "little")
+      {
+        return true;
+      }
+    return false;
+  }
+
 }; // namespace RTC

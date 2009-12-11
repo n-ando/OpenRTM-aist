@@ -290,31 +290,34 @@ namespace RTC
      */
     virtual bool write(DataType& value)
     {
+      RTC_TRACE(("DataType write()"))
+
       if (m_onWrite != NULL)
-	{
-	  (*m_onWrite)(value);
-	}
+        {
+          (*m_onWrite)(value);
+          RTC_TRACE(("OnWrite called"))
+        }
 
       // check number of connectors
       size_t conn_size(m_connectors.size());
       if (!(conn_size > 0)) { return true; }
         
-      // data -> (conversion) -> CDR stream
-      m_cdr.rewindPtrs();
-      if (m_onWriteConvert != NULL)
-        {
-          ((*m_onWriteConvert)(value)) >>= m_cdr;
-        }
-      else
-        {
-          value >>= m_cdr;
-        }
-
       bool result(true);
       m_status.resize(conn_size);
+
       for (size_t i(0), len(conn_size); i < len; ++i)
         {
-          ReturnCode ret(m_connectors[i]->write(m_cdr));
+          ReturnCode ret;
+          if (m_onWriteConvert != NULL)
+            {
+              RTC_DEBUG(("m_connectors.OnWriteConvert called"));
+              ret = m_connectors[i]->write(((*m_onWriteConvert)(value)));
+            }
+          else
+            {
+              RTC_DEBUG(("m_connectors.write called"));
+              ret = m_connectors[i]->write(value);
+            }
           m_status[i] = ret;
           if (ret == PORT_OK) { continue; }
 
@@ -324,6 +327,7 @@ namespace RTC
 
           if (ret == CONNECTION_LOST)
             {
+              RTC_WARN(("connection_lost id: %s", m_connectors[i]->profile().id.c_str()));
               if (m_onConnectionLost != 0)
                 {
                   (*m_onConnectionLost)(prof);
@@ -567,7 +571,6 @@ namespace RTC
 
     coil::TimeMeasure m_cdrtime;
 
-    cdrMemoryStream m_cdr;
     DataPortStatusList m_status;
   };
 }; // namespace RTC

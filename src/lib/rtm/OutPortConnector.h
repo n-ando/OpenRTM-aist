@@ -1,7 +1,7 @@
 // -*- C++ -*-
 /*!
- * @file ConnectorBase.h
- * @brief Connector base class
+ * @file OutPortConnector.h
+ * @brief OutPortConnector class
  * @date $Date$
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
@@ -22,6 +22,7 @@
 
 #include <rtm/SystemLogger.h>
 #include <rtm/ConnectorBase.h>
+#include <iostream>
 
 namespace RTC
 {
@@ -158,9 +159,69 @@ namespace RTC
      */
     virtual ReturnCode write(const cdrMemoryStream& data) = 0;
 
+    /*!
+     * @if jp
+     * @brief endianタイプ設定
+     *
+     * endianタイプを設定する
+     *
+     * @else
+     * @brief Setting an endian type
+     *
+     * This operation set this connector's endian type
+     *
+     * @endif
+     */
+    virtual void setEndian(const std::string endian_type);
+
+    /*!
+     * @if jp
+     * @brief endian 設定がlittleか否か返す
+     *
+     * endian 設定がlittleか否か返す。
+     *
+     * @return m_endian がlittleの場合true、以外はfalse を返す。
+     *
+     * @else
+     * @brief 
+     *
+     * return it whether endian setting is little.
+     *
+     *@return Return true in the case of "little", false other than it.
+     *
+     * @endif
+     */
+    virtual bool isLittleEndian();
+
+    /*!
+     * @if jp
+     * @brief データ型の変換テンプレート
+     *
+     * Timed* から CdrMemoryStream に変換する。
+     *
+     * @else
+     * @brief The conversion template of the data type
+     *
+     * This is convert it from Timed* into CdrStream.
+     *
+     * @endif
+     */
+    template <class DataType>
+    ReturnCode write(const DataType& data)
+    {
+      m_cdr.rewindPtrs();
+      RTC_TRACE(("connector endian: %s", isLittleEndian() ? "little":"big"));
+      m_cdr.setByteSwapFlag(isLittleEndian());
+      data >>= m_cdr;
+      return write(m_cdr);
+    }
+
   protected:
     Logger rtclog;
     ConnectorInfo m_profile;
+    std::string m_endian;
+    cdrMemoryStream m_cdr;
+
   };
 }; // namespace RTC
 

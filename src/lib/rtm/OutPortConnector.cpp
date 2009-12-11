@@ -1,7 +1,7 @@
 // -*- C++ -*-
 /*!
- * @file ConnectorBase.h
- * @brief Connector base class
+ * @file OutPortConnector.cpp
+ * @brief OutPortConnector class
  * @date $Date$
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
@@ -29,7 +29,7 @@ namespace RTC
    * @endif
    */
   OutPortConnector::OutPortConnector(ConnectorInfo& info)
-    : rtclog("OutPortConnector"), m_profile(info)
+    : rtclog("OutPortConnector"), m_profile(info), m_endian("little")
   {
   }
 
@@ -98,6 +98,41 @@ namespace RTC
   {
     RTC_TRACE(("name() = %s", profile().name.c_str()));
     return profile().name.c_str();
+  }
+
+  /*!
+   * @if jp
+   * @brief endianタイプ設定
+   *
+   * endianタイプを設定する
+   *
+   * @else
+   * @brief Setting an endian type
+   *
+   * This operation set this connector's endian type
+   *
+   * @endif
+   */
+  void OutPortConnector::setEndian(const std::string endian_type)
+  {
+    RTC_TRACE(("setEndian() = %s", endian_type.c_str()));
+    m_endian = endian_type;
+  }
+
+  /*!
+   * @if jp
+   * @brief endian 設定がlittleか否か返す
+   * @else
+   * @brief return it whether endian setting is little
+   * @endif
+   */
+  bool OutPortConnector::isLittleEndian()
+  {
+    if(m_endian == "little")
+      {
+        return true;
+      }
+    return false;
   }
 
 }; // namespace RTC

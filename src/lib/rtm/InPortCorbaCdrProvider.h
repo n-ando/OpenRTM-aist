@@ -111,6 +111,8 @@ namespace RTC
     virtual void setBuffer(BufferBase<cdrMemoryStream>* buffer);
     virtual void setListener(ConnectorInfo& info,
                              ConnectorListeners* listeners);
+    virtual void setConnector(InPortConnector* connector);
+
     /*!
      * @if jp
      * @brief [CORBA interface] バッファにデータを書き込む
@@ -243,12 +245,12 @@ namespace RTC
 
 
   private:
-
-
     BufferBase<cdrMemoryStream>* m_buffer;
     ::OpenRTM::InPortCdr_var m_objref;
     ConnectorListeners* m_listeners;
     ConnectorInfo m_profile;
+    InPortConnector* m_connector;
+
   };  // class InPortCorCdrbaProvider
 };     // namespace RTC
 

@@ -1,6 +1,6 @@
 // -*- C++ -*-
 /*!
- * @file  InPortCorbaCdrProvider.h
+ * @file  InPortCorbaCdrProvider.cpp
  * @brief InPortCorbaCdrProvider class
  * @date  $Date: 2008-01-14 07:49:59 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
@@ -13,12 +13,13 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: InPortCorbaCdrProvider.h 1244 2009-03-13 07:25:42Z n-ando $
+ * $Id: InPortCorbaCdrProvider.cpp 1244 2009-03-13 07:25:42Z n-ando $
  *
  */
 
 #include <rtm/InPortCorbaCdrProvider.h>
 #include <rtm/idl/BasicDataTypeSkel.h>
+#include <iostream>
 
 namespace RTC
 {
@@ -80,6 +81,11 @@ namespace RTC
     m_listeners = listeners;
   }
 
+  void InPortCorbaCdrProvider::setConnector(InPortConnector* connector)
+  {
+    m_connector = connector;
+  }
+
   /*!
    * @if jp
    * @brief バッファにデータを書き込む
@@ -103,6 +109,10 @@ namespace RTC
 
     RTC_PARANOID(("received data size: %d", data.length()))
     cdrMemoryStream cdr;
+    // set endian type
+    bool endian_type = m_connector->isLittleEndian();
+    RTC_TRACE(("connector endian: %s", endian_type ? "little":"big"));
+    cdr.setByteSwapFlag(endian_type);
     cdr.put_octet_array(&(data[0]), data.length());
 
     RTC_PARANOID(("converted CDR data size: %d", cdr.bufSize()));

@@ -25,6 +25,7 @@
 #include <rtm/OutPortProvider.h>
 #include <rtm/CORBA_SeqUtil.h>
 #include <rtm/Manager.h>
+#include <rtm/ConnectorBase.h>
 
 #ifdef WIN32
 #pragma warning( disable : 4290 )
@@ -152,7 +153,9 @@ namespace RTC
      * @endif
      */
     virtual void setBuffer(BufferBase<cdrMemoryStream>* buffer);
-    
+
+    virtual void setConnector(OutPortConnector* connector);
+
     /*!
      * @if jp
      * @brief [CORBA interface] バッファからデータを取得する
@@ -176,6 +179,8 @@ namespace RTC
   private:
     BufferBase<cdrMemoryStream>* m_buffer;
     ::OpenRTM::OutPortCdr_var m_objref;
+    OutPortConnector* m_connector;
+
   };  // class OutPortCorbaCdrProvider
 };     // namespace RTC
 

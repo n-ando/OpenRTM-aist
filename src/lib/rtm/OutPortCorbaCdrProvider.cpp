@@ -1,6 +1,6 @@
 // -*- C++ -*-
 /*!
- * @file  OutPortCorbaCdrProvider.h
+ * @file  OutPortCorbaCdrProvider.cpp
  * @brief OutPortCorbaCdrProvider class
  * @date  $Date: 2008-01-14 07:52:40 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
@@ -13,7 +13,7 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: OutPortCorbaCdrProvider.h 1244 2009-03-13 07:25:42Z n-ando $
+ * $Id: OutPortCorbaCdrProvider.cpp 1244 2009-03-13 07:25:42Z n-ando $
  *
  */
 
@@ -94,6 +94,18 @@ namespace RTC
 
   /*!
    * @if jp
+   * @brief コネクタをセットする
+   * @else
+   * @brief Setting outside connector's pointer
+   * @endif
+   */
+  void OutPortCorbaCdrProvider::setConnector(OutPortConnector* connector)
+  {
+    m_connector = connector;
+  }
+
+  /*!
+   * @if jp
    * @brief [CORBA interface] バッファからデータを取得する
    * @else
    * @brief [CORBA interface] Get data from the buffer
@@ -122,6 +134,10 @@ namespace RTC
       {
         int len(cdr.bufSize());
         RTC_PARANOID(("converted CDR data size: %d",len));
+        // set endian type
+        bool endian_type = m_connector->isLittleEndian();
+        RTC_TRACE(("connector endian: %s", endian_type ? "little":"big"));
+        cdr.setByteSwapFlag(endian_type);
         data->length(len);
         cdr.get_octet_array(&((*data)[0]), len);
         return ::OpenRTM::PortStatus(ret);

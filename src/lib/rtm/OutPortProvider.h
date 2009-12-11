@@ -27,6 +27,7 @@
 #include <rtm/NVUtil.h>
 #include <rtm/SystemLogger.h>
 #include <rtm/DataPortStatus.h>
+#include <rtm/OutPortConnector.h>
 
 namespace RTC
 {
@@ -159,7 +160,9 @@ namespace RTC
      * @endif
      */
     virtual void setBuffer(BufferBase<cdrMemoryStream>* buffer);
-    
+
+    virtual void setConnector(OutPortConnector* connector) = 0;
+
     /*!
      * @if jp
      * @brief InterfaceProfile情報を公開する

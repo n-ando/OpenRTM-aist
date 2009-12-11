@@ -1,4 +1,4 @@
-// -*- C++ -*-
+	// -*- C++ -*-
 /*!
  * @file PortBase.cpp
  * @brief RTC's Port base class
@@ -193,6 +193,10 @@ namespace RTC
       {
 	RTC::PortService_ptr p;
 	p = connector_profile.ports[(CORBA::ULong)0];
+	// endian infomation set
+	CORBA_SeqUtil::push_back(connector_profile.properties,
+		NVUtil::newNV("dataport.serializer.cdr.endian", "little,big"));
+
 	ReturnCode_t ret = p->notify_connect(connector_profile);
         if (ret != RTC::RTC_OK)
           {

@@ -39,7 +39,7 @@ namespace RTC
    * @endif
    */
   InPortBase::InPortBase(const char* name, const char* data_type)
-    : PortBase(name), m_singlebuffer(true), m_thebuffer(0)
+    : PortBase(name), m_singlebuffer(true), m_thebuffer(0), m_endian("little")
   {
     // PortProfile::properties を設定
     addProperty("port.port_type", "DataInPort");
@@ -265,6 +265,9 @@ namespace RTC
             return RTC::RTC_ERROR;
           }
 
+        // connector set
+        provider->setConnector(connector);
+
         RTC_DEBUG(("publishInterface() successfully finished."));
         return RTC::RTC_OK;
       }
@@ -298,6 +301,35 @@ namespace RTC
       prop << conn_prop.getNode("dataport"); // marge ConnectorProfile
     }
 
+    // old version check
+    if(prop.hasKey("serializer") == NULL)
+      {
+        m_endian = "little";
+      }
+    else
+      {
+        // endian type check
+        std::string endian_type(prop.getProperty("serializer.cdr.endian", ""));
+        RTC_DEBUG(("endian_type: %s", endian_type.c_str()));
+        coil::normalize(endian_type);
+        std::vector<std::string> endian(coil::split(endian_type, ","));
+        if( endian.empty() )
+          {
+            RTC_ERROR(("unsupported endian"));
+            return RTC::UNSUPPORTED;
+          }
+        if(endian[0] == "little" || endian[0] == "big")
+          {
+            m_endian = endian[0];
+          }
+        else
+          {
+            RTC_ERROR(("unsupported endian"));
+            return RTC::UNSUPPORTED;
+          }
+      }
+    RTC_TRACE(("endian: %s", m_endian.c_str()));
+
     /*
      * ここで, ConnectorProfile からの properties がマージされたため、
      * prop["dataflow_type"]: データフロータイプ
@@ -310,7 +342,20 @@ namespace RTC
     if (dflow_type == "push")
       {
         RTC_DEBUG(("dataflow_type = push .... do nothing"));
-        return RTC::RTC_OK;
+
+        // endian type set
+        std::string sid(cprof.connector_id);
+        RTC_DEBUG(("cprof.connector_id: %s", sid.c_str()));
+        for (int i(0), len(m_connectors.size()); i < len; ++i)
+          {
+            if (sid == m_connectors[i]->id())
+              {
+                m_connectors[i]->setEndian(m_endian);
+                return RTC::RTC_OK;
+              }
+          }
+        RTC_ERROR(("specified connector not found: %s", sid.c_str()));
+        return RTC::RTC_ERROR;
       }
     else if (dflow_type == "pull")
       {
@@ -330,7 +375,7 @@ namespace RTC
             return RTC::RTC_ERROR;
           }
 
-        RTC_DEBUG(("publishInterface() successfully finished."));
+        RTC_DEBUG(("subscribeInterfaces() successfully finished."));
         return RTC::RTC_OK;
       }
 
@@ -645,6 +690,8 @@ namespace RTC
           }
         RTC_TRACE(("InPortPushConnector created"));
 
+        // endian type set
+        connector->setEndian(m_endian);
         m_connectors.push_back(connector);
         RTC_PARANOID(("connector push backed: %d", m_connectors.size()));
         return connector;
@@ -657,4 +704,21 @@ namespace RTC
     RTC_FATAL(("never comes here: createConnector()"));
     return 0;
   }
+
+  /*!
+   * @if jp
+   * @brief endian 設定がlittleか否か返す
+   * @else
+   * @brief return it whether endian setting is little
+   * @endif
+   */
+  bool InPortBase::isLittleEndian()
+  {
+    if(m_endian == "little")
+      {
+        return true;
+      }
+    return false;
+  }
+
 };
