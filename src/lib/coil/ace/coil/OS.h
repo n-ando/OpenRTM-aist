@@ -35,6 +35,7 @@ namespace coil
     return ACE_OS::uname(name);
   }
 
+  typedef ::pid_t pid_t;
   inline pid_t getpid()
   {
     return ACE_OS::getpid();
