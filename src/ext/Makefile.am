@@ -7,7 +7,7 @@
 
 AUTOMAKE_OPTIONS = 1.4
 
-SUBDIRS = artlinux
+SUBDIRS = @ARTLINUX@
 
-##DIST_SUBDIRS = artlinux
+DIST_SUBDIRS = artlinux
 
