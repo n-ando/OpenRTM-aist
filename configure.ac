@@ -433,7 +433,7 @@ if test "x$orb_to_use" = "x" ; then
 fi
 
 echo 'ORB: '$orb_to_use
-echo 'RTMiddleware will be compiled with '$orb_to_use
+echo 'OpenRTM-aist will be compiled with '$orb_to_use
 
 
 dnl ============================================================
@@ -1296,11 +1296,11 @@ if test "x$os" = "xlinux" ; then
 			AC_MSG_RESULT(found in $art_syscalls_o_dir)
 			have_artlinux=yes
 		fi
+		AC_DEFINE([ARTLINUX], [TRUE], [ARTLinux is avaiable])
+		ARTLINUX="artlinux"
+		ARTLIB="$art_syscalls_o_dir/art_syscalls.o"
+		echo 'RTM is compiled with ARTLinux'
 	fi
-	AC_DEFINE([ARTLINUX], [TRUE], [ARTLinux is avaiable])
-	ARTLIB="$art_syscalls_o_dir/art_syscalls.o"
-	echo $ARTLIB
-	echo 'RTM is compiled with ARTLinux'
 fi
 
 dnl ------------------------------------------------------------
@@ -1376,6 +1376,7 @@ dnl Wrapper code subdirectory
 AC_SUBST(WRAPPERS)
 AC_SUBST(PYTHON_FLAGS)
 dnl ARTLinux lib
+AC_SUBST(ARTLINUX)
 AC_SUBST(ARTLIB)
 AC_SUBST(UNITTEST)
 dnl ------------------------------------------------------------
