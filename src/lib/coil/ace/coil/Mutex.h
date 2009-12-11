@@ -36,7 +36,7 @@ namespace coil
   class Mutex
   {
   public:
-    Mutex()
+    Mutex(const char* naem = 0)
     {
       ACE_OS::thread_mutex_init(&mutex_, 0);
     }
