@@ -129,7 +129,7 @@ namespace RTC
 
     /*!
      * @if jp
-     * @brief Buffer を所得する
+     * @brief Buffer を取得する
      *
      * Connector が保持している Buffer を返す
      *
@@ -157,10 +157,45 @@ namespace RTC
      */
     virtual ReturnCode read(cdrMemoryStream& data) = 0;
 
+    /*!
+     * @if jp
+     * @brief endianタイプ設定
+     *
+     * endianタイプを設定する
+     *
+     * @else
+     * @brief Setting an endian type
+     *
+     * This operation set this connector's endian type
+     *
+     * @endif
+     */
+    virtual void setEndian(const std::string endian_type);
+
+    /*!
+     * @if jp
+     * @brief endian 設定がlittleか否か返す
+     *
+     * endian 設定がlittleか否か返す。
+     *
+     * @return m_endian がlittleの場合true、以外はfalse を返す。
+     *
+     * @else
+     * @brief
+     *
+     * return it whether endian setting is little.
+     *
+     *@return Return true in the case of "little", false other than it.
+     *
+     * @endif
+     */
+    virtual bool isLittleEndian();
+
   protected:
     Logger rtclog;
     ConnectorInfo m_profile;
     CdrBufferBase* m_buffer;
+    std::string m_endian;
   };
 }; // namespace RTC
 
