@@ -41,7 +41,7 @@ char ticktack()
 {
   static int i(0);
   const char* c = "/-\\|";
-  i = (++i) % 4;
+  i = (i + 1) % 4;
   return c[i];
 }
 
