@@ -23,7 +23,6 @@
 #include <vector>
 #include <utility>
 #include <rtm/RTC.h>
-#include <iostream>
 #include <rtm/ConnectorBase.h>
 
 class cdrMemoryStream;

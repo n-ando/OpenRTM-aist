@@ -42,6 +42,8 @@ void usage()
   std::cout << ": Set push policy ALL or FIFO or SKIP or NEW" << std::endl;
   std::cout << "  --skip [n]      ";
   std::cout << ": Set skip count 0..n" << std::endl;
+  std::cout << "  --endian *      ";
+  std::cout << ": Set endian type Little or Big" << std::endl;
   std::cout << std::endl;
   std::cout << "exsample:" << std::endl;
   std::cout << "  ConnectorComp --flush" << std::endl;
@@ -51,6 +53,7 @@ void usage()
   std::cout << "  ConnectorComp --periodic 10" << std::endl;
   std::cout << "  ConnectorComp --periodic 10 --policy FIFO" << std::endl;
   std::cout << "  ConnectorComp --periodic 10 --policy NEW" << std::endl;
+  std::cout << "  ConnectorComp --flush --endian Little" << std::endl;
   std::cout << std::endl;
 }
 
@@ -59,10 +62,11 @@ int main (int argc, char** argv)
   int _argc(0);
   char** _argv(0);
 
-  std::string subs_type;
+  std::string subs_type("flush");
   std::string period;
   std::string push_policy;
   std::string skip_count;
+  std::string endian;
   if (argc < 2)
     {
       usage();
@@ -100,18 +104,27 @@ int main (int argc, char** argv)
 	  if (++i < argc) skip_count = argv[i];
 	  else            skip_count = "0";
 	}
-      else
+
+      if (arg == "--endian")
 	{
-	  subs_type = "flush";
+	  if (++i < argc)
+	    {
+	      std::string arg2(argv[i]);
+	      coil::normalize(arg2);
+	      endian = arg2;
+	    }
+	  else            endian = "";
 	}
     }
   
   std::cout << "Subscription Type: " << subs_type << std::endl;
   if (period != "")
-    std::cout << "Period: " << period << " [Hz]" << std::endl;
-  std::cout << "push policy: " << push_policy << std::endl;
-  std::cout << "skip count: " << skip_count << std::endl;
-
+    std::cout << "           Period: " << period << " [Hz]" << std::endl;
+  std::cout << "      push policy: " << push_policy << std::endl;
+  std::cout << "       skip count: " << skip_count << std::endl;
+  if (endian != "")
+    std::cout << "           endian: " << endian << std::endl;
+  std::cout << std::endl;
 
   CORBA::ORB_var orb = CORBA::ORB_init(_argc, _argv);
   CorbaNaming naming(orb, "localhost:9876");
@@ -176,6 +189,10 @@ int main (int argc, char** argv)
     CORBA_SeqUtil::push_back(prof.properties,
 			   NVUtil::newNV("dataport.publisher.skip_count",
 					 skip_count.c_str()));
+  if (endian != "")
+  CORBA_SeqUtil::push_back(prof.properties,
+			   NVUtil::newNV("dataport.serializer.cdr.endian",
+					 endian.c_str()));
 
   ReturnCode_t ret;
   ret = pin[(CORBA::ULong)0]->connect(prof);
@@ -187,4 +204,3 @@ int main (int argc, char** argv)
   orb->destroy();
   exit(1);
 }
-

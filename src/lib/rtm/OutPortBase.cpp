@@ -78,7 +78,7 @@ namespace RTC
    * @endif
    */
   OutPortBase::OutPortBase(const char* name, const char* data_type)
-    : PortBase(name), m_name(name), m_endian("little")
+    : PortBase(name), m_name(name), m_littleEndian(true)
   {
     RTC_PARANOID(("Port name: %s", name));
 
@@ -527,7 +527,7 @@ namespace RTC
     // old version check
     if(prop.hasKey("serializer") == NULL)
       {
-        m_endian = "little";
+        m_littleEndian = true;
       }
     else
       {
@@ -541,9 +541,13 @@ namespace RTC
             RTC_ERROR(("unsupported endian"));
             return RTC::UNSUPPORTED;
           }
-        if(endian[0] == "little" || endian[0] == "big")
+        if(endian[0] == "little")
           {
-            m_endian = endian[0];
+            m_littleEndian = true;
+          }
+        else if(endian[0] == "big")
+          {
+            m_littleEndian = false;
           }
         else
           {
@@ -551,7 +555,7 @@ namespace RTC
             return RTC::UNSUPPORTED;
           }
       }
-    RTC_TRACE(("endian: %s", m_endian.c_str()));
+    RTC_TRACE(("endian: %s", m_littleEndian ? "little":"big"));
 
     /*
      * ここで, ConnectorProfile からの properties がマージされたため、
@@ -594,7 +598,7 @@ namespace RTC
           {
             if (sid == m_connectors[i]->id())
               {
-                m_connectors[i]->setEndian(m_endian);
+                m_connectors[i]->setEndian(m_littleEndian);
                 return RTC::RTC_OK;
               }
           }
@@ -854,7 +858,7 @@ namespace RTC
         RTC_TRACE(("OutPortPushConnector created"));
 
         // endian type set
-        connector->setEndian(m_endian);
+        connector->setEndian(m_littleEndian);
         m_connectors.push_back(connector);
         RTC_PARANOID(("connector pushback done: size = %d", m_connectors.size()));
         return connector;
@@ -918,11 +922,7 @@ namespace RTC
    */
   bool OutPortBase::isLittleEndian()
   {
-    if(m_endian == "little")
-      {
-        return true;
-      }
-    return false;
+    return m_littleEndian;
   }
 
 }; // end of namespace RTM

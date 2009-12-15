@@ -170,22 +170,22 @@ namespace RTC
      *
      * @endif
      */
-    virtual void setEndian(const std::string endian_type);
+    virtual void setEndian(const bool endian_type);
 
     /*!
      * @if jp
-     * @brief endian 設定がlittleか否か返す
+     * @brief endian 設定を返す
      *
-     * endian 設定がlittleか否か返す。
+     * endian 設定のbool値を返す。
      *
-     * @return m_endian がlittleの場合true、以外はfalse を返す。
+     * @return m_littleEndian がlittleの場合true、bigの場合false を返す。
      *
      * @else
      * @brief
      *
-     * return it whether endian setting is little.
+     * return it whether endian setting.
      *
-     *@return Return true in the case of "little", false other than it.
+     *@return Return true in the case of "little", false in "big" than it.
      *
      * @endif
      */
@@ -195,7 +195,7 @@ namespace RTC
     Logger rtclog;
     ConnectorInfo m_profile;
     CdrBufferBase* m_buffer;
-    std::string m_endian;
+    bool m_littleEndian;
   };
 }; // namespace RTC
 

@@ -29,7 +29,7 @@ namespace RTC
    * @endif
    */
   OutPortConnector::OutPortConnector(ConnectorInfo& info)
-    : rtclog("OutPortConnector"), m_profile(info), m_endian("little")
+    : rtclog("OutPortConnector"), m_profile(info), m_littleEndian(true)
   {
   }
 
@@ -113,10 +113,10 @@ namespace RTC
    *
    * @endif
    */
-  void OutPortConnector::setEndian(const std::string endian_type)
+  void OutPortConnector::setEndian(const bool endian_type)
   {
-    RTC_TRACE(("setEndian() = %s", endian_type.c_str()));
-    m_endian = endian_type;
+    RTC_TRACE(("setEndian() = %s", endian_type ? "little":"big"));
+    m_littleEndian = endian_type;
   }
 
   /*!
@@ -128,11 +128,7 @@ namespace RTC
    */
   bool OutPortConnector::isLittleEndian()
   {
-    if(m_endian == "little")
-      {
-        return true;
-      }
-    return false;
+    return m_littleEndian;
   }
 
 }; // namespace RTC
