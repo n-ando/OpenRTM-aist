@@ -19,7 +19,6 @@
 
 #include <rtm/InPortCorbaCdrProvider.h>
 #include <rtm/idl/BasicDataTypeSkel.h>
-#include <iostream>
 
 namespace RTC
 {

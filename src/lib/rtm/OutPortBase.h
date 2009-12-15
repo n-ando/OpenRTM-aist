@@ -773,18 +773,18 @@ namespace RTC
 
     /*!
      * @if jp
-     * @brief endian 設定がlittleか否か返す
+     * @brief endian 設定を返す
      *
-     * endian 設定がlittleか否か返す。
+     * endian 設定のbool値を返す。
      *
-     * @return m_endian がlittleの場合true、以外はfalse を返す。
+     * @return m_littleEndian がlittleの場合true、bigの場合false を返す。
      *
      * @else
      * @brief
      *
-     * return it whether endian setting is little.
+     * return it whether endian setting.
      *
-     *@return Return true in the case of "little", false other than it.
+     *@return Return true in the case of "little", false in "big" than it.
      *
      * @endif
      */
@@ -998,7 +998,7 @@ namespace RTC
     coil::vstring m_providerTypes;
     coil::vstring m_consumerTypes;
     std::vector<OutPortProvider*> m_providers;
-    std::string m_endian;
+    bool m_littleEndian;
 
     ConnectorListeners m_listeners;
    

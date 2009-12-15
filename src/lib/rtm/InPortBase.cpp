@@ -39,7 +39,7 @@ namespace RTC
    * @endif
    */
   InPortBase::InPortBase(const char* name, const char* data_type)
-    : PortBase(name), m_singlebuffer(true), m_thebuffer(0), m_endian("little")
+    : PortBase(name), m_singlebuffer(true), m_thebuffer(0), m_littleEndian(true)
   {
     // PortProfile::properties を設定
     addProperty("port.port_type", "DataInPort");
@@ -304,7 +304,7 @@ namespace RTC
     // old version check
     if(prop.hasKey("serializer") == NULL)
       {
-        m_endian = "little";
+        m_littleEndian = true;
       }
     else
       {
@@ -318,9 +318,13 @@ namespace RTC
             RTC_ERROR(("unsupported endian"));
             return RTC::UNSUPPORTED;
           }
-        if(endian[0] == "little" || endian[0] == "big")
+        if(endian[0] == "little")
           {
-            m_endian = endian[0];
+            m_littleEndian = true;
+          }
+        else if(endian[0] == "big")
+          {
+            m_littleEndian = false;
           }
         else
           {
@@ -328,7 +332,7 @@ namespace RTC
             return RTC::UNSUPPORTED;
           }
       }
-    RTC_TRACE(("endian: %s", m_endian.c_str()));
+    RTC_TRACE(("endian: %s", m_littleEndian ? "little":"big"));
 
     /*
      * ここで, ConnectorProfile からの properties がマージされたため、
@@ -350,7 +354,7 @@ namespace RTC
           {
             if (sid == m_connectors[i]->id())
               {
-                m_connectors[i]->setEndian(m_endian);
+                m_connectors[i]->setEndian(m_littleEndian);
                 return RTC::RTC_OK;
               }
           }
@@ -691,7 +695,7 @@ namespace RTC
         RTC_TRACE(("InPortPushConnector created"));
 
         // endian type set
-        connector->setEndian(m_endian);
+        connector->setEndian(m_littleEndian);
         m_connectors.push_back(connector);
         RTC_PARANOID(("connector push backed: %d", m_connectors.size()));
         return connector;
@@ -714,11 +718,7 @@ namespace RTC
    */
   bool InPortBase::isLittleEndian()
   {
-    if(m_endian == "little")
-      {
-        return true;
-      }
-    return false;
+    return m_littleEndian;
   }
 
 };
