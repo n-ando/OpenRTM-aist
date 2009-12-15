@@ -84,6 +84,218 @@ namespace RTC
    * 他のコンポーネントの Service をコンポーネント内で利用可能にすることが
    * できる。
    *
+   * PortInterfaceProfile は Port に所属するプロバイダもしくはコンシュー
+   * マインターフェースについての情報を記述するためのプロファイルである。
+   * 接続を行うツール等は、これらの情報に基づき ConnectorProfile を適切
+   * に生成し、接続を構成する Port のうち任意の一つに対して引数に
+   * ConnectorProfile を与えて Port::connect() を呼び出す必要がある。
+   *
+   * なお、PortInterfaceProfile のインスタンス名 "*" は特殊なインスタン
+   * スを表す。
+   *
+   * PROVIDEDすなわちプロバイダのインスタンス名が "*" の場合は、接続開
+   * 始時点ではインスタンスが存在せず、コンシューマの要求に応じて動的に
+   * インスタンスを生成するタイプのプロバイダであることを表す。したがっ
+   * て、接続開始時点ではインスタンス名は存在しないが、接続シーケンス中
+   * のインターフェースを公開するプロセスにおいて、プロバイダは生成した
+   * インスタンスに対応した記述子を COnnectorProfile に適正に設定するも
+   * のとする。
+   *
+   * REQUIREDすなわちコンシューマのインスタンス名が "*" の場合は、一つ
+   * のコンシューマが複数のプロバイダと接続可能なタイプのコンシューマで
+   * あることを示す。(未実装)
+   *
+   * 以下は、Port間のインターフェースを接続するために ConnectorProfile に
+   * マッピングを記述するためのルールを示す。
+   *
+   * Portに付属するインターフェースの指定子のフォーマットを以下のように
+   * 定める。インターフェースに関するプロパティが以下の場合
+   *
+   * - RTCインスタンス名:              rtc_iname
+   * - ポート名:                       port_name
+   * - インターフェース極性:           if_polarity
+   * - インターフェース型名:           if_tname
+   * - インターフェースインスタンス名: if_iname
+   * 
+   * インターフェースの指定子を以下の文字列名称で指定するものとする。
+   *
+   * <rtc_iname>.port.<port_name>.<if_polarity>.<if_tname>.<if_iname>
+   *
+   * PROVIDED(提供)型すなわちプロバイダのインタフェースのプロパティが以
+   * 下の場合、
+   *
+   * - rtc_iname   = MyComp0
+   * - port_name   = myservice
+   * - if_polarity = provided
+   * - if_tname    = echo_interface
+   * - if_iname    = echo_interface2
+   *
+   * インターフェース指定子は
+   *
+   * MyComp0.port.myservice.provided.echo_interface.echo_interface2
+   *
+   * のように記述される。また、同様にREQUIRED(要求)型すなわちコンシュー
+   * マのインターフェースのプロパティが以下の場合、
+   *
+   * - rtc_iname   = YourComp0
+   * - port_name   = yourservice
+   * - if_polarity = required
+   * - if_tname    = hoge_interface
+   * - if_iname    = hoge_interface1
+   *
+   * インターフェース指定子は、
+   * 
+   * YourComp0.port.myservice.required.hoge_interface.hoge_inteface1
+   *
+   * のように記述することができる。
+   * 
+   * なお、ここで動的生成インターフェースのインスタンスのための特殊なタ
+   * イプのインスタンス名記述子
+   *
+   * - <type_name>*: 動的生成型インスタンス名記述子
+   * - <type_name>+: インクリメンタル生成型インスタンス名記述子
+   *
+   * を定義する。動的生成インターフェースとは、接続時にインスタンスが生
+   * 成されるタイプのインターフェースである。(未実装)
+   *
+   * 動的生成型インスタンス名記述子 "<type_name>*" では、インターフェー
+   * スのインスタンスは、コンシューマからの要求が1つ以上存在する場合、
+   * インスタンスを1つ新規に生成して、各コンシューマに接続される。すな
+   * わち、<type_name>* の記述子を持ってプロバイダを要求する n 個のコン
+   * シューマが存在する場合、これらからの要求(オペレーションコール)を1
+   * つのプロバイダにより処理する関係を構築する(下図)。
+   *
+   * consumer0 ]---<
+   * consumer1 ]---<  O----[ provider0
+   * consumer2 ]---<
+   *  
+   * これに対し、インクリメンタル生成型インスタンス名記述子
+   * "<type_name>+" では、インターフェースのインスタンスは、コンシュー
+   * マからの要求が n 個存在する場合、n 個のインスタンスを動的に生成し
+   * て、各コンシューマに静つ属する。すなわち、<type_name>* の記述子を
+   * 持ってプロバイダを要求する n 個のコンシューマが存在する場合、これ
+   * らからの要求(オペレーションコール)を、対応するそれぞれのプロバイダ
+   * により処理する関係を構築する(下図)。
+   *
+   * consumer0 ]---<  O----[ provider0
+   * consumer1 ]---<  O----[ provider1
+   * consumer2 ]---<  O----[ provider2
+   *
+   *
+   * 接続に際して、ツール等から ConnectorProfile::properties に適切なイ
+   * ンターフェースマッピング指定を記述することで、相互の提供/要求イン
+   * ターフェースを自由に接続することができる。ただし、接続に関わるRTC
+   * の中に、異なるインスタンスでありながら、同一のインスタンス名が存在
+   * する場合、インターフェース記述子の一意性が保証できないので、この方
+   * 法による接続性は保証されない。
+   *
+   * ここでインターフェース記述子を簡単のために <if_desc0>,
+   * <if_desc1>, ...  とする。また、ConnectorProfile::properties の
+   * NVListの key と value を key: value のように記述するものとする。
+   *
+   * いま、2つのコンポーネントのサービスポートを接続する場合を考える。
+   * それぞれのコンポーネントのサービスポートが以下の場合、
+   *
+   * - rtc_iname: MyComp0
+   *   port_name: mycomp_service
+   *   interfaces:
+   *   - if_polarity: provided
+   *     if_iname: echo0
+   *     if_tname: Echo
+   *   - if_polarity: required
+   *     if_iname: add0
+   *     if_tname: add
+   *
+   * - rtc_iname: YourComp0
+   *   port_name: yourcomp_service
+   *   interfaces:
+   *   - if_polarity: required
+   *     if_iname: echo9
+   *     if_tname: Echo
+   *   - if_polarity: provided
+   *     if_iname: add9
+   *     if_tname: add
+   *
+   *      MyComp0                                 YourComp0
+   *     _______ mycomp_service   yourcomp_service ______
+   *            |                                 |
+   *          |~~~|---O echo0         echo9 >---|~~~|
+   *          |   |---< add0          add9  O---|   |
+   *           ~T~                               ~T~
+   *            |                                 |
+   *
+   * MyComp0 の echo0 (プロバイダ) と YourComp0 の echo9 (コンシューマ)、
+   * MyComp0 の add0 (コンシューマ) と YourComp0 の echo9 (プロバイダ)
+   * をそれぞれ対にして接続させるものと仮定する。この場合、
+   * ConnectorProfile は以下のように設定する。
+   * 
+   * ConnectorProfile:
+   *   name: 任意のコネクタ名
+   *   connector_id: 空文字
+   *   ports[]: mycomp_service の参照, yourcomp_service の参照
+   *   properties:
+   *     <add0>: <add9>
+   *     <echo9>: <echo0>
+   *
+   * ただし、それぞれ
+   * 
+   * <add0> は MyComp0.port.mycomp_service.required.add.add0
+   * <add9> は YourComp0.port.yourcomp_service.provided.add.add9
+   * <echo0> は MyComp0.port.mycomp_service.provided.echo.echo0
+   * <echo9> は YourComp0.port.yourcomp_service.required.echo.echo9
+   *
+   * である。接続プロセスにおいて、各ポートのプロバイダおよびコンシュー
+   * マは、それぞれ以下の作業を、CorbaPort::publishInterfaces(),
+   * Corba::PortsubscribeInterfaces() 仮想関数において行う。
+   *
+   * プロバイダは、publishInterfaces() 関数において、自分のインターフェー
+   * ス記述子をキーとし、値にIORの文字列表記したものを
+   * ConnectorProfile::properties に設定する。前提として、このインター
+   * フェース記述子は今行おうとしているコネクタにおいては一意であるため、
+   * 同じキーは1つしか存在してはいけない。
+   *
+   * [この部分の記述は未実装の機能] なお、動的生成インターフェースにつ
+   * いては、以下の手続きに従い処理することとなる。publishInterface()
+   * 関数において、動的生成インスタンス名記述子 "<type_name>*" または、
+   * インクリメンタル生成型インスタンス名記述子 "<type_name>+" が存在す
+   * るかどうかを走査する。動的生成インスタンス名記述子 "<type_name>*"
+   * が存在する場合、プロバイダのインスタンスを1つ生成し、そのインター
+   * フェース指定子を key に、IOR文字列を value に設定するとともに、動
+   * 的生成インスタンス名記述子 "<type_name>*" を value に含むすべての
+   * value 上のインターフェース指定子を、ここで生成したインターフェース
+   * 指定子に置き換える。インクリメンタル生成型インスタンス名記述子
+   * "<type_name>+" が存在する場合、インスタンス名記述子の数だけプロバ
+   * イダのインスタンスを生成し、それぞれのインターフェース指定子を
+   * key に、IOR文字列を value に設定するとともに、インクリメンタル生成
+   * 型インスタンス名記述子 "<type_name>+" を value 含むすべての value
+   * 上のインターフェース指定子に対して順に、ここで生成したそれぞれのイ
+   * ンターフェース指定子に置き換える。
+   *
+   * プロバイダは subscribeInterfaces() では特に操作は行わない。
+   *
+   * コンシューマは、publishInterfaces() においては特に操作を行わない。
+   *
+   * 一方、subscribeInterfaces() では、自分の記述子を key とする
+   * key-value ペア が存在するかどうか調べ、もし存在すれば、その value
+   * に設定されたプロバイダのインターフェース指定子で指定される参照を、
+   * さらに ConnectorProfile::properties から探し、それをコンシューマの
+   * 接続先として設定する。なお、意図的にコンシューマにプロバイダの参照
+   * を設定しない場合は、予約文字列 "nil" を設定するものとする。
+   *
+   * コンシューマは、もし自分の記述子が存在しない場合、またはプロバイダ
+   * の参照が Connector::properties に存在しない場合、コンシューマは、
+   * 自分のインスタンス名および型名と同一のプロバイダを探し、その参照を
+   * 自分自身に設定する。これは、OpenRTM-aist-0.4 との互換性を保持する
+   * ためのルールであり、1.0以降では推奨されない。
+   *
+   * プロバイダ対コンシューマの対応は一対一である必要はなく、プロバイダ 1
+   * に対して、コンシューマ n、またはコンシューマ 1 に対してプロバイダ n の
+   * ケースも許される。プロバイダ 1 に対して、コンシューマ n のケー
+   * スでは、あるプロバイダの指定子が、複数のコンシューマに対して、上記
+   * の方法で指定されることにより、実現される。一方、コンシューマ 1 に対
+   * してプロバイダ n のケースでは、コンシューマ指定子の key に対して、複数
+   * のプロバイダの指定子がカンマ区切りで列挙される形式となるものとする。
+   *
    * @since 0.4.0
    *
    * @else
