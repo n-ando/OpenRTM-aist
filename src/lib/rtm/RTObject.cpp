@@ -1463,8 +1463,8 @@ namespace RTC
   void RTObject_impl::registerPort(PortBase& port)
   {
     RTC_TRACE(("registerPort(PortBase&)"));
-    m_portAdmin.registerPort(port);
     port.setOwner(this->getObjRef());
+    m_portAdmin.registerPort(port);
     return;
   }
   

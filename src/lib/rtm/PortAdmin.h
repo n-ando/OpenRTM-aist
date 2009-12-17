@@ -388,6 +388,7 @@ namespace RTC
     };
     
     struct find_port_name;
+    struct find_port;
     struct del_port;
     
     // サーバントを直接格納するオブジェクトマネージャ

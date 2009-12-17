@@ -41,6 +41,18 @@ namespace RTC
     }
     const std::string m_name;
   };
+
+  struct PortAdmin::find_port
+  {
+    find_port(const PortService_ptr& p) : m_port(p) {};
+    bool operator()(const PortService_ptr& p)
+    {
+      return m_port->_is_equivalent(p);
+    }
+    const PortService_ptr m_port;
+  };
+
+
   
   /*!
    * @if jp
@@ -193,12 +205,13 @@ namespace RTC
   {
     try
       {
-        //	port.disconnect_all();
+        // port.disconnect_all();
 	// port.shutdown();
 	
-	PortProfile_var prof(port->get_port_profile());
-	const char* tmp(prof->name);
-	CORBA_SeqUtil::erase_if(m_portRefs, find_port_name(tmp));
+        //	PortProfile_var prof(port->get_port_profile());
+        //	const char* tmp(prof->name);
+        //	CORBA_SeqUtil::erase_if(m_portRefs, find_port_name(tmp));
+	CORBA_SeqUtil::erase_if(m_portRefs, find_port(port));
 	
         //	PortableServer::ObjectId_var oid = m_pPOA->servant_to_id(&port);
 	//	m_pPOA->deactivate_object(oid);
