@@ -23,6 +23,7 @@
 #include <rtm/PortBase.h>
 #include <rtm/CorbaConsumer.h>
 #include <rtm/NVUtil.h>
+#include <list>
 
 /*!
  * @if jp
@@ -45,17 +46,19 @@ namespace RTC
    * @class CorbaPort
    * @brief RT コンポーネント CORBA provider/consumer 用 Port
    *
-   * CorbaPort は RT コンポーネントにおいて、ユーザ定義の CORBA オブジェクト
-   * サービスおよびコンシューマを提供する Port 実装である。
+   * CorbaPort は RT コンポーネントにおいて、ユーザ定義の CORBA オブジェ
+   * クトサービスおよびコンシューマを提供する Port 実装である。
+   *
    * <p>
-   * RT コンポーネントは、Port を介してユーザが定義した CORBA サービスを提供
-   * することができ、これを RT Service (Provider) と呼ぶ。
-   * また、他の RT コンポーネントのサービスを利用するための CORBA オブジェクト
-   * のプレースホルダを提供することができ、これを RT Service Consumer と呼ぶ。
+   * RT コンポーネントは、Port を介してユーザが定義した CORBA サービス
+   * を提供することができ、これを RT Service (Provider) と呼ぶ。また、
+   * 他の RT コンポーネントのサービスを利用するための CORBA オブジェク
+   * トのプレースホルダを提供することができ、これを RT Service
+   * Consumer と呼ぶ。
    * <p>
-   * CorbaPort は任意の数の Provider および Consumer を管理することができ、
-   * Port 同士を接続する際に対応する Provider と Consumer を適切に関連付ける
-   * ことができる。
+   * CorbaPort は任意の数の Provider および Consumer を管理することがで
+   * き、Port 同士を接続する際に対応する Provider と Consumer を適切に
+   * 関連付けることができる。
    * <p>
    * CorbaPort は通常以下のように利用される。
    *
@@ -78,11 +81,11 @@ namespace RTC
    * m_cons1->my_service_function(); // MyService の関数をコール
    * </pre>
    *
-   * このように、提供したい Service Provider を registerProvider() で登録
-   * することにより、他のコンポーネントから利用可能にし、他方、
-   * 利用したい Service Consumer を registerConsumer() で登録することにより
-   * 他のコンポーネントの Service をコンポーネント内で利用可能にすることが
-   * できる。
+   * このように、提供したい Service Provider を registerProvider() で登
+   * 録することにより、他のコンポーネントから利用可能にし、他方、利用し
+   * たい Service Consumer を registerConsumer() で登録することにより他
+   * のコンポーネントの Service をコンポーネント内で利用可能にすること
+   * ができる。
    *
    * PortInterfaceProfile は Port に所属するプロバイダもしくはコンシュー
    * マインターフェースについての情報を記述するためのプロファイルである。
@@ -288,13 +291,14 @@ namespace RTC
    * 自分自身に設定する。これは、OpenRTM-aist-0.4 との互換性を保持する
    * ためのルールであり、1.0以降では推奨されない。
    *
-   * プロバイダ対コンシューマの対応は一対一である必要はなく、プロバイダ 1
-   * に対して、コンシューマ n、またはコンシューマ 1 に対してプロバイダ n の
-   * ケースも許される。プロバイダ 1 に対して、コンシューマ n のケー
-   * スでは、あるプロバイダの指定子が、複数のコンシューマに対して、上記
-   * の方法で指定されることにより、実現される。一方、コンシューマ 1 に対
-   * してプロバイダ n のケースでは、コンシューマ指定子の key に対して、複数
-   * のプロバイダの指定子がカンマ区切りで列挙される形式となるものとする。
+   * プロバイダ対コンシューマの対応は一対一である必要はなく、プロバイダ
+   * 1 に対して、コンシューマ n、またはコンシューマ 1 に対してプロバイ
+   * ダ n のケースも許される。プロバイダ 1 に対して、コンシューマ n の
+   * ケースでは、あるプロバイダの指定子が、複数のコンシューマに対して、
+   * 上記の方法で指定されることにより、実現される。一方、コンシューマ
+   * 1 に対してプロバイダ n のケースでは、コンシューマ指定子の key に対
+   * して、複数のプロバイダの指定子がカンマ区切りで列挙される形式となる
+   * ものとする。
    *
    * @since 0.4.0
    *
@@ -697,42 +701,95 @@ namespace RTC
   private:
     /*!
      * @if jp
-     * @brief Provider の情報を格納する NVList
+     * @class CorbaProviderHolder
+     * CORBA Provider のホルダクラス
      * @else
-     * @brief NVList to be stored Providers' information
+     * @class CorbaProviderHolder
+     * CORBA Provider holder class
      * @endif
      */
-    NVList m_providers;
+    class CorbaProviderHolder
+    {
+    public:
+      CorbaProviderHolder(const char* type_name,
+                          const char* instance_name,
+                          PortableServer::RefCountServantBase* servant)
+        : m_typeName(type_name),
+          m_instanceName(instance_name),
+          m_servant(servant),
+          m_ior()
+      {  
+        m_oid = Manager::instance().getPOA()->servant_to_id(m_servant);
+        try
+          {
+            Manager::instance().
+              getPOA()->activate_object_with_id(m_oid, m_servant);
+          }
+        catch(const ::PortableServer::POA::ServantAlreadyActive &)
+          {
+            ;
+          }
+        catch(const ::PortableServer::POA::ObjectAlreadyActive &)
+          {
+            ;
+          }
+        CORBA::Object_var obj;
+        obj = Manager::instance().getPOA()->id_to_reference(m_oid);
+        CORBA::ORB_ptr orb = Manager::instance().getORB();
+        CORBA::String_var ior_var = orb->object_to_string(obj);
+        m_ior = ior_var;
+        deactivate();
+      }
+
+      std::string instanceName() { return m_instanceName; }
+      std::string typeName() { return m_typeName; }
+      std::string ior() { return m_ior; }
+      std::string descriptor() { return m_typeName + "." + m_instanceName; }
+
+      void activate()
+      {
+        try
+          {
+            Manager::instance().
+              getPOA()->activate_object_with_id(m_oid, m_servant);
+          }
+        catch(const ::PortableServer::POA::ServantAlreadyActive &)
+          {
+            ; // do nothing
+          }
+        catch(const ::PortableServer::POA::ObjectAlreadyActive &)
+          {
+            ; // do nothing
+          }
+      }
+      void deactivate()
+      {
+        try
+          {
+            Manager::instance().getPOA()->deactivate_object(m_oid);
+          }
+        catch(const ::PortableServer::POA::ObjectNotActive&)
+          {
+            ; // do nothing
+          }
+      }
+    private:
+      std::string m_typeName;
+      std::string m_instanceName;
+      PortableServer::RefCountServantBase* m_servant;
+      PortableServer::ObjectId_var m_oid;
+      std::string m_ior;
+    };
 
     /*!
      * @if jp
-     * @brief Providerの情報を格納する構造体
+     * @brief Provider の情報を格納する vector
      * @else
-     * @brief The structure to be stored Provider's information.
+     * @brief vector to stored Providers' information
      * @endif
      */
-    struct ProviderInfo
-    {
-      ProviderInfo(PortableServer::RefCountServantBase* _servant, PortableServer::ObjectId_var _objectid)
-	: servant(_servant),
-	  oid(_objectid)
-      {}
-
-      ProviderInfo(const ProviderInfo& pinfo)
-	: servant(pinfo.servant),
-	  oid(pinfo.oid)
-      {}
-	  
-      ProviderInfo operator=(const ProviderInfo& _pinfo)
-      {
-        ProviderInfo pinfo(_pinfo);
-        return pinfo;
-      }
-      PortableServer::RefCountServantBase* servant;
-      PortableServer::ObjectId_var oid;
-    };
-    typedef std::map<std::string, ProviderInfo> ServantMap;
-    ServantMap m_servants;
+    typedef std::vector<CorbaProvider> CorbaProviderList;
+    CorbaProviderList m_providers;
 
     /*!
      * @if jp

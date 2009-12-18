@@ -65,35 +65,24 @@ namespace RTC
     RTC_TRACE(("registerProvider(instance=%s, type_name=%s)",
                instance_name, type_name));
 
-    if (!appendInterface(instance_name, type_name, RTC::PROVIDED))
-      {
-	return false;
-      }
-    
-    PortableServer::ObjectId_var oid = Manager::instance().getPOA()->servant_to_id(&provider);
     try
       {
-        Manager::instance().getPOA()->activate_object_with_id(oid, &provider);
+        m_providers.push_back(CorbaProviderHolder(type_name,
+                                                  instance_name,
+                                                  &provider));
       }
-    catch(const ::PortableServer::POA::ServantAlreadyActive &)
+    catch (...)
       {
-	return false;
-      }
-    catch(const ::PortableServer::POA::ObjectAlreadyActive &)
-      {
+        RTC_ERROR(("appending provider interface failed"));
+        return false;
       }
 
-    CORBA::Object_var obj = Manager::instance().getPOA()->id_to_reference(oid);
+    if (!appendInterface(instance_name, type_name, RTC::PROVIDED))
+      {
+        RTC_ERROR(("appending provider interface failed"));
+	return false;
+      }
     
-    std::string key("port");
-    key.append(".");key.append(type_name);
-    key.append(".");key.append(instance_name);
-    
-    CORBA::ORB_ptr orb = Manager::instance().getORB();
-    CORBA::String_var ior = orb->object_to_string(obj);
-    CORBA_SeqUtil::
-      push_back(m_providers, NVUtil::newNV(key.c_str(), ior));
-    m_servants.insert(std::pair<std::string, ProviderInfo>(instance_name,ProviderInfo(&provider,oid)));
     return true;
   };
   
@@ -125,6 +114,7 @@ namespace RTC
   //============================================================
   // Local operations
   //============================================================
+
   /*!
    * @if jp
    * @brief Port の全てのインターフェースを activates する
@@ -134,20 +124,11 @@ namespace RTC
    */
   void CorbaPort::activateInterfaces()
   {
-    ServantMap::iterator it = m_servants.begin();
-    while(it != m_servants.end())
+    CorbaProviderList::iterator it(m_providers.begin());
+    while(it != m_providers.end())
       {
-        try
-          {
-            Manager::instance().getPOA()->activate_object_with_id(it->second.oid, it->second.servant);
-          }
-        catch(const ::PortableServer::POA::ServantAlreadyActive &)
-          {
-          }
-        catch(const ::PortableServer::POA::ObjectAlreadyActive &)
-          {
-          }
-	it++;
+        it->activate();
+	++it;
       }
   }
   
@@ -160,17 +141,11 @@ namespace RTC
    */
   void CorbaPort::deactivateInterfaces()
   {
-    ServantMap::iterator it = m_servants.begin();
-    while(it != m_servants.end())
+    CorbaProviderList::iterator it(m_providers.begin());
+    while(it != m_providers.end())
       {
-        try
-          {
-            Manager::instance().getPOA()->deactivate_object(it->second.oid);
-          }
-        catch(const ::PortableServer::POA::ObjectNotActive&)
-          {
-          }
-	it++;
+        it->deactivate();
+	++it;
       }
   }
   
@@ -189,9 +164,32 @@ namespace RTC
   {
     RTC_TRACE(("publishInterfaces()"));
 
-    CORBA_SeqUtil::push_back_list(connector_profile.properties,
-				  m_providers);
-    RTC_DEBUG_STR((NVUtil::toString(m_providers)));
+    NVList properties;
+    CorbaProviderList::iterator it(m_providers.begin());
+    while (it != m_providers.end())
+      {
+        // new version descriptor
+        // <comp_iname>.port.<port_name>.provider.<type_name>.<instance_name>
+        std::string newdesc;
+        newdesc = m_ownerInstanceName + ".port." + (const char*)m_profile.name
+          + ".provider." + it->descriptor();
+        CORBA_SeqUtil::
+          push_back(properties,
+                    NVUtil::newNV(newdesc.c_str(), it->ior().c_str()));
+
+        // old version descriptor
+        // port.<type_name>.<instance_name>
+        std::string olddesc;
+        olddesc += "port." + it->descriptor();
+        CORBA_SeqUtil::
+          push_back(properties,
+                    NVUtil::newNV(olddesc.c_str(), it->ior().c_str()));
+        ++it;
+      }
+
+    CORBA_SeqUtil::push_back_list(connector_profile.properties, properties);
+    
+    RTC_DEBUG_STR((NVUtil::toString(properties)));                         
 
     return RTC::RTC_OK;
   }
@@ -209,13 +207,14 @@ namespace RTC
     RTC_TRACE(("subscribeInterfaces()"));
 
     const NVList& nv(connector_profile.properties);
-    
+    std::cout << NVUtil::toString(nv) << std::endl;
     RTC_DEBUG_STR((NVUtil::toString(nv)));
 
     CORBA::ORB_ptr orb = ::RTC::Manager::instance().getORB();
 
     for (int i(0), len(m_consumers.size()); i < len; ++i)
       {
+        std::cout << "find if: " << m_consumers[i].name << std::endl;
         CORBA::Long index;
         index = NVUtil::find_index(nv, m_consumers[i].name.c_str());
         if (index < 0) { continue; }
