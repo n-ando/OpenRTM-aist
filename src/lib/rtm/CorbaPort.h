@@ -699,6 +699,11 @@ namespace RTC
     virtual void deactivateInterfaces();
 
   private:
+    class CorbaConsumerHolder;
+    virtual bool findProvider(const NVList& nv, CorbaConsumerHolder& cons);
+    virtual bool findProviderOld(const NVList&nv, CorbaConsumerHolder& cons);
+
+  private:
     /*!
      * @if jp
      * @class CorbaProviderHolder
@@ -788,7 +793,7 @@ namespace RTC
      * @brief vector to stored Providers' information
      * @endif
      */
-    typedef std::vector<CorbaProvider> CorbaProviderList;
+    typedef std::vector<CorbaProviderHolder> CorbaProviderList;
     CorbaProviderList m_providers;
 
     /*!
@@ -798,29 +803,44 @@ namespace RTC
      * @brief The structure to be stored Consumer information.
      * @endif
      */
-    struct Consumer
+    class CorbaConsumerHolder
     {
-      Consumer(const char* _instance_name, const char* _type_name,
-               CorbaConsumerBase& _cons)
-        : name(std::string("port.")
-               + _type_name
-               + std::string(".")
-               + _instance_name),
-          consumer(_cons)
-      {}
-      Consumer(const Consumer& cons)
-        : name(cons.name), consumer(cons.consumer)
-      {        
-      }
-      Consumer operator=(const Consumer& _cons)
+    public:
+      CorbaConsumerHolder(const char* type_name,
+                          const char* instance_name,
+                          CorbaConsumerBase* consumer)
+        : m_typeName(type_name),
+          m_instanceName(instance_name),
+          m_consumer(consumer)
       {
-        Consumer cons(_cons);
-        return cons;
       }
-      std::string name;
-      CorbaConsumerBase& consumer;
+      std::string instanceName() { return m_instanceName; }
+      std::string typeName() { return m_typeName; }
+      std::string descriptor() { return m_typeName + "." + m_instanceName; }
+
+      bool setObject(const char* ior)
+      {
+        CORBA::ORB_ptr orb = ::RTC::Manager::instance().getORB();
+        CORBA::Object_var obj = orb->string_to_object(ior);
+        if (CORBA::is_nil(obj))
+          {
+            return false;
+          }
+
+        return m_consumer->setObject(obj.in());
+      }
+      void releaseObject()
+      {
+        m_consumer->releaseObject();
+      }
+
+    private:
+      std::string m_typeName;
+      std::string m_instanceName;
+      CorbaConsumerBase* m_consumer;
     };
-    std::vector<Consumer> m_consumers;
+    typedef std::vector<CorbaConsumerHolder> CorbaConsumerList;
+    CorbaConsumerList m_consumers;
     
     // functors
     /*!
@@ -832,24 +852,24 @@ namespace RTC
      */
     struct unsubscribe
     {
-      unsubscribe(std::vector<Consumer>& cons)
-        : m_cons(cons), m_len(cons.size())
+      unsubscribe(CorbaConsumerList& consumers)
+        : m_consumers(consumers)
       {
       }
       
       void operator()(const SDOPackage::NameValue& nv)
       {
-        for (CORBA::ULong i = 0; i < m_len; ++i)
+        for (CorbaConsumerList::iterator it(m_consumers.begin());
+             it != m_consumers.end(); ++it)
           {
             std::string name(nv.name);
-            if (m_cons[i].name == name)
+            if (it->descriptor() == (const char*)nv.name)
               {
-                m_cons[i].consumer.releaseObject();
+                it->releaseObject();
               }
           }
       }
-      std::vector<Consumer> m_cons;
-      CORBA::ULong m_len;
+      CorbaConsumerList& m_consumers;
     };
   };
 };
