@@ -298,6 +298,20 @@ namespace SDOPackage
       }
     // set ec to target RTC
     m_ec->add_component(member.rtobj_.in());
+
+    OrganizationList_var orglist = member.rtobj_->get_organizations();
+    for (CORBA::ULong i(0); i < orglist->length(); ++i)
+      {
+        SDOList_var sdos = orglist[i]->get_members();
+        for (CORBA::ULong j(0); j < sdos->length(); ++j)
+          {
+            ::OpenRTM::DataFlowComponent_var dfc;
+            if (!sdoToDFC(sdos[j].in(), dfc.out())) { continue; }
+            m_ec->add_component(dfc.in());
+          }
+      }
+
+
   }
 
   /*!
@@ -320,6 +334,18 @@ namespace SDOPackage
         m_ec = ecs[0];
       }
     m_ec->remove_component(member.rtobj_.in());
+
+    OrganizationList_var orglist = member.rtobj_->get_organizations();
+    for (CORBA::ULong i(0); i < orglist->length(); ++i)
+      {
+        SDOList_var sdos = orglist[i]->get_members();
+        for (CORBA::ULong j(0); j < sdos->length(); ++j)
+          {
+            ::OpenRTM::DataFlowComponent_var dfc;
+            if (!sdoToDFC(sdos[j].in(), dfc.out())) { continue; }
+            m_ec->remove_component(dfc.in());
+          }
+      }
   }
 
   /*!
