@@ -632,7 +632,7 @@ module RTC {
         /// Point features.
         PointFeatureList pointFeatures;
         /// Pose features.
-        PoseFeatureLise poseFeatures;
+        PoseFeatureList poseFeatures;
         /// Line features.
         LineFeatureList lineFeatures;
     };
@@ -766,7 +766,7 @@ module RTC {
         /// The position of the point.
         Point3D point;
         /// The colour of the point, if any.
-        RGB colour;
+        RGBColour colour;
     };
 
     /*!
