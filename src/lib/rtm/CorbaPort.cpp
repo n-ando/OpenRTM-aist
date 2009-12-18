@@ -105,8 +105,9 @@ namespace RTC
 	return false;
       }
     
-    Consumer cons(instance_name, type_name, consumer);
-    m_consumers.push_back(cons);
+    m_consumers.push_back(CorbaConsumerHolder(type_name,
+                                              instance_name,
+                                              &consumer));
     
     return true;
   }
@@ -168,6 +169,7 @@ namespace RTC
     CorbaProviderList::iterator it(m_providers.begin());
     while (it != m_providers.end())
       {
+        //------------------------------------------------------------
         // new version descriptor
         // <comp_iname>.port.<port_name>.provider.<type_name>.<instance_name>
         std::string newdesc;
@@ -177,6 +179,7 @@ namespace RTC
           push_back(properties,
                     NVUtil::newNV(newdesc.c_str(), it->ior().c_str()));
 
+        //------------------------------------------------------------
         // old version descriptor
         // port.<type_name>.<instance_name>
         std::string olddesc;
@@ -207,39 +210,16 @@ namespace RTC
     RTC_TRACE(("subscribeInterfaces()"));
 
     const NVList& nv(connector_profile.properties);
-    std::cout << NVUtil::toString(nv) << std::endl;
     RTC_DEBUG_STR((NVUtil::toString(nv)));
 
-    CORBA::ORB_ptr orb = ::RTC::Manager::instance().getORB();
-
-    for (int i(0), len(m_consumers.size()); i < len; ++i)
+    for (CorbaConsumerList::iterator it(m_consumers.begin());
+         it != m_consumers.end(); ++it)
       {
-        std::cout << "find if: " << m_consumers[i].name << std::endl;
-        CORBA::Long index;
-        index = NVUtil::find_index(nv, m_consumers[i].name.c_str());
-        if (index < 0) { continue; }
-
-        const char* ior;
-        if (!(nv[index].value >>= ior))
-          {
-            RTC_WARN(("Cannot extract IOR string"));
-            continue;
-          }
-
-        CORBA::Object_var obj = orb->string_to_object(ior);
-        if (CORBA::is_nil(obj))
-          {
-            RTC_ERROR(("Extracted object is nul reference"));
-            continue;
-          }
-        
-        bool result = m_consumers[i].consumer.setObject(obj.in());
-        if (!result)
-          {
-            RTC_ERROR(("Cannot narrow reference"));
-            continue;
-          }
+        if (findProvider(nv, *it)) { continue; }
+        findProviderOld(nv, *it);
       }
+
+    RTC_TRACE(("subscribeInterfaces() successfully finished."));
 
     return RTC::RTC_OK;
   }
@@ -261,6 +241,75 @@ namespace RTC
     RTC_DEBUG_STR((NVUtil::toString(nv)));
     
     CORBA_SeqUtil::for_each(nv, unsubscribe(m_consumers));
+  }
+  
+
+  bool CorbaPort::findProvider(const NVList& nv, CorbaConsumerHolder& cons)
+  {
+    // new consumer interface descriptor
+    std::string newdesc;
+    newdesc = m_ownerInstanceName + ".port." + (const char*)m_profile.name
+      + ".consumer." + cons.descriptor();
+
+    // find a NameValue of the consumer
+    CORBA::Long cons_index(NVUtil::find_index(nv, newdesc.c_str()));
+    if (cons_index < 0) { return false; }
+
+    const char* provider;
+    if (!(nv[cons_index].value >>= provider))
+      {
+        RTC_WARN(("Cannot extract Provider interface descriptor"));
+        return false;
+      }
+
+    // find a NameValue of the provider
+    CORBA::Long prov_index(NVUtil::find_index(nv, provider));
+    if (prov_index < 0) { return false; }
+
+    const char* ior;
+    if (!(nv[prov_index].value >>= ior))
+      {
+        RTC_WARN(("Cannot extract Provider IOR string"));
+        return false;
+      }
+
+    // set IOR to the consumer
+    if (!cons.setObject(ior))
+      {
+        RTC_ERROR(("Cannot narrow reference"));
+        return false;
+      }
+    RTC_ERROR(("interface matched with new descriptor: %s", newdesc.c_str()));
+
+    return true;
+  }
+
+  bool CorbaPort::findProviderOld(const NVList&nv, CorbaConsumerHolder& cons)
+  {
+    // old consumer interface descriptor
+    std::string olddesc("port."); olddesc += cons.descriptor();
+
+    // find a NameValue of the provider same as olddesc
+    CORBA::Long index(NVUtil::find_index(nv, olddesc.c_str()));
+    if (index < 0) { return false; }
+
+    const char* ior;
+    if (!(nv[index].value >>= ior))
+      {
+        RTC_WARN(("Cannot extract Provider IOR string"));
+        return false;
+      }
+
+    // set IOR to the consumer
+    if (!cons.setObject(ior))
+      {
+        RTC_ERROR(("Cannot narrow reference"));
+        return false;
+      }
+
+    RTC_ERROR(("interface matched with old descriptor: %s", olddesc.c_str()));
+
+    return true;
   }
   
 };
