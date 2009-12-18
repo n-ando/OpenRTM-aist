@@ -1804,6 +1804,8 @@ namespace RTC
     mutable coil::Mutex m_profile_mutex;
     typedef coil::Guard<coil::Mutex> Guard;
 
+    std::string m_ownerInstanceName;
+    
     /*!
      * @if jp
      * @brief Callback functor オブジェクト

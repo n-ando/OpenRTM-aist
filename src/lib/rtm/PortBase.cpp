@@ -37,6 +37,7 @@ namespace RTC
    */
   PortBase::PortBase(const char* name)
     : rtclog(name),
+      m_ownerInstanceName("unknown"),
       m_onPublishInterfaces(0),
       m_onSubscribeInterfaces(0),
       m_onConnected(0),
@@ -490,9 +491,12 @@ namespace RTC
    */
   void PortBase::setOwner(RTObject_ptr owner)
   {
-    RTC_TRACE(("setOwner()"));
     Guard gurad(m_profile_mutex); 
     m_profile.owner = RTC::RTObject::_duplicate(owner);
+    RTC::ComponentProfile_var prof = 
+          m_profile.owner->get_component_profile();
+    m_ownerInstanceName = prof->instance_name;
+    RTC_TRACE(("setOwner(%s)", m_ownerInstanceName.c_str()));
   }
 
   // OnConnect系コールバック (接続に起因するイベントによりコールされる)
