@@ -5,7 +5,7 @@
  * @date  $Date: 2007-12-31 03:08:02 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
- * Copyright (C) 2006-2008
+ * Copyright (C) 2006-2009
  *     Noriaki Ando
  *     Task-intelligence Research Group,
  *     Intelligent Systems Research Institute,
@@ -101,7 +101,7 @@ namespace RTC
    * インスタンスを生成するタイプのプロバイダであることを表す。したがっ
    * て、接続開始時点ではインスタンス名は存在しないが、接続シーケンス中
    * のインターフェースを公開するプロセスにおいて、プロバイダは生成した
-   * インスタンスに対応した記述子を COnnectorProfile に適正に設定するも
+   * インスタンスに対応した記述子を ConnectorProfile に適正に設定するも
    * のとする。
    *
    * REQUIREDすなわちコンシューマのインスタンス名が "*" の場合は、一つ
@@ -161,24 +161,23 @@ namespace RTC
    * を定義する。動的生成インターフェースとは、接続時にインスタンスが生
    * 成されるタイプのインターフェースである。(未実装)
    *
-   * 動的生成型インスタンス名記述子 "<type_name>*" では、インターフェー
-   * スのインスタンスは、コンシューマからの要求が1つ以上存在する場合、
-   * インスタンスを1つ新規に生成して、各コンシューマに接続される。すな
-   * わち、<type_name>* の記述子を持ってプロバイダを要求する n 個のコン
-   * シューマが存在する場合、これらからの要求(オペレーションコール)を1
-   * つのプロバイダにより処理する関係を構築する(下図)。
+   * コンシューマが要求するプロバイダインターフェース記述子に動的生成型
+   * インスタンス名記述子 "<type_name>*" が指定された場合、プロバイダは
+   * インスタンスを1つ新規に生成する。"<type_name>*" の記述子によりプロバ
+   * イダを要求する n 個のコンシューマが存在する場合、これらからの要求
+   * (オペレーションコール)を1 つのプロバイダにより処理する関係を構築す
+   * る(下図)。
    *
    * consumer0 ]---<
    * consumer1 ]---<  O----[ provider0
    * consumer2 ]---<
    *  
-   * これに対し、インクリメンタル生成型インスタンス名記述子
-   * "<type_name>+" では、インターフェースのインスタンスは、コンシュー
-   * マからの要求が n 個存在する場合、n 個のインスタンスを動的に生成し
-   * て、各コンシューマに静つ属する。すなわち、<type_name>* の記述子を
-   * 持ってプロバイダを要求する n 個のコンシューマが存在する場合、これ
-   * らからの要求(オペレーションコール)を、対応するそれぞれのプロバイダ
-   * により処理する関係を構築する(下図)。
+   * これに対し、コンシューマが要求するプロバイダインターフェース記述子
+   * にインクリメンタル生成型インスタンス名記述子 "<type_name>+" が指定
+   * された場合、記述子 "<type_name>+" の数だけプロバイダのインスタン
+   * スが動的に生成される。すなわち、"<type_name>+" の記述子によりプロバ
+   * イダを要求する n 個のコンシューマが存在する場合、n 個のプロバイダ
+   * がそれぞれの要求を処理する以下のような関係が構築される。
    *
    * consumer0 ]---<  O----[ provider0
    * consumer1 ]---<  O----[ provider1
@@ -186,11 +185,11 @@ namespace RTC
    *
    *
    * 接続に際して、ツール等から ConnectorProfile::properties に適切なイ
-   * ンターフェースマッピング指定を記述することで、相互の提供/要求イン
-   * ターフェースを自由に接続することができる。ただし、接続に関わるRTC
-   * の中に、異なるインスタンスでありながら、同一のインスタンス名が存在
-   * する場合、インターフェース記述子の一意性が保証できないので、この方
-   * 法による接続性は保証されない。
+   * ンターフェースマッピング指定を記述することで、相互のプロバイダ/コ
+   * ンシューマインターフェースを自由に接続することができる。ただし、接
+   * 続に関わる RTC の中に、異なるインスタンスでありながら、同一のインス
+   * タンス名が存在する場合、インターフェース記述子の一意性が保証できな
+   * いので、この方法による接続性は保証されない。
    *
    * ここでインターフェース記述子を簡単のために <if_desc0>,
    * <if_desc1>, ...  とする。また、ConnectorProfile::properties の
@@ -249,7 +248,7 @@ namespace RTC
    *
    * である。接続プロセスにおいて、各ポートのプロバイダおよびコンシュー
    * マは、それぞれ以下の作業を、CorbaPort::publishInterfaces(),
-   * Corba::PortsubscribeInterfaces() 仮想関数において行う。
+   * CorbaPort::PortsubscribeInterfaces() 仮想関数において行う。
    *
    * プロバイダは、publishInterfaces() 関数において、自分のインターフェー
    * ス記述子をキーとし、値にIORの文字列表記したものを
@@ -266,13 +265,15 @@ namespace RTC
    * フェース指定子を key に、IOR文字列を value に設定するとともに、動
    * 的生成インスタンス名記述子 "<type_name>*" を value に含むすべての
    * value 上のインターフェース指定子を、ここで生成したインターフェース
-   * 指定子に置き換える。インクリメンタル生成型インスタンス名記述子
-   * "<type_name>+" が存在する場合、インスタンス名記述子の数だけプロバ
-   * イダのインスタンスを生成し、それぞれのインターフェース指定子を
-   * key に、IOR文字列を value に設定するとともに、インクリメンタル生成
-   * 型インスタンス名記述子 "<type_name>+" を value 含むすべての value
-   * 上のインターフェース指定子に対して順に、ここで生成したそれぞれのイ
-   * ンターフェース指定子に置き換える。
+   * 指定子に置き換える。
+   * 
+   * インクリメンタル生成型インスタンス名記述子"<type_name>+" が存在す
+   * る場合、インスタンス名記述子の数だけプロバイダのインスタンスを生成
+   * し、それぞれのインターフェース指定子をkey に、IOR文字列を value に
+   * 設定するとともに、インクリメンタル生成型インスタンス名記述子
+   * "<type_name>+" を value 含むすべての value 上のインターフェース指
+   * 定子に対して順に、ここで生成したそれぞれのインターフェース指定子に
+   * 置き換える。
    *
    * プロバイダは subscribeInterfaces() では特に操作は行わない。
    *
@@ -283,7 +284,8 @@ namespace RTC
    * に設定されたプロバイダのインターフェース指定子で指定される参照を、
    * さらに ConnectorProfile::properties から探し、それをコンシューマの
    * 接続先として設定する。なお、意図的にコンシューマにプロバイダの参照
-   * を設定しない場合は、予約文字列 "nil" を設定するものとする。
+   * を設定しない場合は、予約文字列 "nil" または "null" を設定するもの
+   * とする。
    *
    * コンシューマは、もし自分の記述子が存在しない場合、またはプロバイダ
    * の参照が Connector::properties に存在しない場合、コンシューマは、
@@ -299,6 +301,17 @@ namespace RTC
    * 1 に対してプロバイダ n のケースでは、コンシューマ指定子の key に対
    * して、複数のプロバイダの指定子がカンマ区切りで列挙される形式となる
    * ものとする。
+   *
+   * なお、インターフェースの対応関係の厳密さを指定するオプションとして、
+   * 以下のオプションを指定することができる。
+   *
+   * port.connection.strictness: strict, best_effort 
+   *
+   * strict: すべてのコンシューマに指定した参照が存在し、かつナローイン
+   *         グにも成功しコンシューマに適切にセットできた場合にのみ Port
+   *         間の接続を確立する。
+   * best_effort: ナローイング等に失敗した場合でも、エラーを返すことな
+   *         く Port 間の接続を確立する。
    *
    * @since 0.4.0
    *
@@ -339,10 +352,244 @@ namespace RTC
    * m_cons1->my_service_function(); // call a MyService's function
    * </pre>
    *
-   * Registering Service Provider by registerProvider(), it can be used from
-   * other RT-Components.
-   * Registering Service Consumer by registerConsumer(), other RT-Component's
-   * services can be used through the consumer object.
+   * Registering Service Provider by registerProvider(), it can be
+   * used from other RT-Components.  Registering Service Consumer by
+   * registerConsumer(), other RT-Component's services can be used
+   * through the consumer object.
+   *
+   * PortInterfaceProfile is a one of the profile information to store
+   * Provider interface and Consumer interface information. Tools or
+   * other RTCs should call one of the Port::connect() with an
+   * appropriate ConnectorProfile.
+   *
+   * In addition, the instance name "*" declares a special type of instance.
+   *
+   * When the name of the PROVIDED type interface that is the provider
+   * interface is "*", Provider interface's instance does not exist at
+   * the beginning of connection sequence.  The instances will be
+   * created dynamically according to the consumer interface
+   * requirement at the connection sequence.  Although the instance
+   * name does not exist at the beginning of connection sequence, the
+   * created providers shall publish its references to the
+   * ConnectorProfile with interface descriptor adequately in the
+   * interface publisher phase of the connection sequence.
+   *
+   * If REQUIRED interface name that is Consumer interface name is
+   * "*", it shows that one Consumer interface is able to connect with
+   * multiple Provider interfaces. (This feature is not implemented.)
+   * 
+   * The following describes the rules that specify interface
+   * connection between ports.
+   *
+   * The descriptor format of interfaces associated with Ports is
+   * declared as follows. Now some of interface properties are assumed
+   * as the followings.
+   *
+   * - RTC instance name:              rtc_iname
+   * - Port name:                      port_name
+   * - Interface polarity:             if_polarity
+   * - Interface type name:            if_tname
+   * - INterface instance name:        if_iname
+   *
+   * The interface descriptors shall be declared as follows.
+   *
+   * <rtc_iname>.port.<port_name>.<if_polarity>.<if_tname>.<if_iname>
+   *
+   * When PROVIDED that is Provider interface properties are the followings,
+   *
+   * - rtc_iname   = MyComp0
+   * - port_name   = myservice
+   * - if_polarity = provided
+   * - if_tname    = echo_interface
+   * - if_iname    = echo_interface2
+   * the interface descriptor is here.
+   *
+   * MyComp0.port.myservice.provided.echo_interface.echo_interface2
+   *
+   * And, when REQUIRED that is Consumer interfaces properties are the
+   * followings,
+   *
+   * - rtc_iname   = YourComp0
+   * - port_name   = yourservice
+   * - if_polarity = required
+   * - if_tname    = hoge_interface
+   * - if_iname    = hoge_interface1
+   *
+   * interface descriptor is as follows. 
+   *
+   * YourComp0.port.myservice.required.hoge_interface.hoge_inteface1
+   *
+   * Specific instance name descriptors that are dynamically generated
+   * at the connection time are defined here.
+   *
+   * - <type_name>*: "Dynamically generated" instance descriptor.
+   * - <type_name>+: "Incrementally generated" instance descriptor.
+   *
+   * When the "Dynamically generated" instance descriptor:
+   * "<type_name>*" is specified as interface descriptor that is
+   * required by consumers, the provider will generate a instance. If
+   * n consumers who demand a provider by the "<type_name>" descriptor
+   * exist, the following relation which processes the call from these
+   * consumers by one provider will be established.
+   *
+   * consumer0 ]---<
+   * consumer1 ]---<  O----[ provider0
+   * consumer2 ]---<
+   *  
+   * On the other hand, when incremental generated type instance name
+   * descriptor "<type_name>+" is specified as the provider interface
+   * descriptor whom consumers demand, provider's instances are
+   * dynamically generated for the number of the descriptors
+   * "<type_name>+". When n consumers who demand a provider by the
+   * descriptor "<type_name>+" exist the following relations in which
+   * n providers process each call from the consumers will be
+   * established.
+   *
+   * consumer0 ]---<  O----[ provider0
+   * consumer1 ]---<  O----[ provider1
+   * consumer2 ]---<  O----[ provider2
+   *
+   *
+   * Describing the appropriate interface mapping specification in the
+   * ConnectorProfile::properties, selective connections between
+   * providers/consumers interface can be established at the time of
+   * connection. However, when different RTC instances of the same
+   * instance name exist in a connection, since an interface
+   * descriptor uniqueness cannot be guaranteed, this connection
+   * mapping rules cannot be used.
+   *
+   * Here, assume that an interface descriptor is given as <if_desc0>,
+   * <if_desc1>, .... And assume that the key and the value of NVList
+   * in ConnectorProfile::properties are given as "key: value".
+   *
+   * Now the case where the service ports of two components are
+   * connected is considered. When the service port of each component
+   * is the following,
+   * 
+   * - rtc_iname: MyComp0
+   *   port_name: mycomp_service
+   *   interfaces:
+   *   - if_polarity: provided
+   *     if_iname: echo0
+   *     if_tname: Echo
+   *   - if_polarity: required
+   *     if_iname: add0
+   *     if_tname: add
+   *
+   * - rtc_iname: YourComp0
+   *   port_name: yourcomp_service
+   *   interfaces:
+   *   - if_polarity: required
+   *     if_iname: echo9
+   *     if_tname: Echo
+   *   - if_polarity: provided
+   *     if_iname: add9
+   *     if_tname: add
+   *
+   *      MyComp0                                 YourComp0
+   *     _______ mycomp_service   yourcomp_service ______
+   *            |                                 |
+   *          |~~~|---O echo0         echo9 >---|~~~|
+   *          |   |---< add0          add9  O---|   |
+   *           ~T~                               ~T~
+   *            |                                 |
+   *
+   * Assume that connection between echo0 (provider) of MyComp0
+   * component and echo9 (consumer) of YourComp0 component, and add0
+   * (consumer) of MyComp0 and add0 (provider) of YourComp0 is
+   * established.  In this case, ConnectorProfile is set up as
+   * follows.
+   * 
+   * ConnectorProfile:
+   *   name: any connector name
+   *   connector_id: empty string
+   *   ports[]: mycomp_service's reference, yourcomp_service's reference
+   *   properties:
+   *     <add0>: <add9>
+   *     <echo9>: <echo0>
+   *
+   * Please note that <add0>, <add9>, <echo0> and <echo9> are the following.
+   * 
+   * <add0> is MyComp0.port.mycomp_service.required.add.add0
+   * <add9> is YourComp0.port.yourcomp_service.provided.add.add9
+   * <echo0> is MyComp0.port.mycomp_service.provided.echo.echo0
+   * <echo9> is YourComp0.port.yourcomp_service.required.echo.echo9
+   *
+   * In the connection process, the provider and the consumer of each
+   * port carries out the following process respectively in the
+   * virtual functions such as CorbaPort::publishInterfaces() and
+   * CorbaPort::subscribeInerfaces().
+   * 
+   * A provider sets its IOR string as a value and its interface
+   * descriptor as a key in the ConnectorProfile::properties in a
+   * publishInterfaces() function. Since this interface descriptor's
+   * uniqueness is guaranteed in the current connector, the key of
+   * NameValue in the ConnectorProfile::properties is unique.
+   *
+   *
+   * [This functionalities are not implemented] The dynamically
+   * generated provider is processed according to the following
+   * procedure. The publishInterface() function scans dynamic instance
+   * descriptors such as "<type_name>*" and "<type_name>+" in the
+   * ConnectorProfile::properties. When the dynamic generation
+   * instance descriptor "<tupe_name>*" exists, one instance of
+   * provider is generated, and its descriptor and its IOR string are
+   * set to ConnectorProfile::properties as the key and the value
+   * respectively. Simultaneously, in the
+   * ConnectorProfile::properties, all the instance descriptor with
+   * the dynamic generation instance name "<type_name>*" will be
+   * replaced with newly generated instance descriptor.
+   *
+   * When the incremental dynamic generation instance descriptor
+   * exists, providers are generated for the number of the
+   * descriptors, and its descriptor and its IOR string are set to
+   * ConnectorProfile::properties as the key and the value
+   * respectively. Simultaneously, in the
+   * ConnectorProfile::properties, all the instance descriptor with
+   * the dynamic generation instance name "<type_name>+" will be
+   * replaced with newly generated instance descriptor.
+   *
+   * The providers do not perform particular operation in
+   * subscribeInterfaces() function.
+   *
+   *
+   * The consumers do not perform particular operation in
+   * publisherInterfaces() function.
+   *
+   * On the other hand, a consumer searches a key-value pair with the
+   * key of consumer interface descriptor, and if the pair exists, it
+   * obtains provider's descriptor from the value. The consumer
+   * searches again a key-value pair with the key of provider
+   * interface descriptor, and it obtains provider's reference and the
+   * reference is set as the consumer's service object. In addition,
+   * reserved string "nil" or "null" are used not to set specific
+   * provider.
+   *
+   * If consumer's interface descriptors does not exists in the
+   * ConnectorProfile::properties, the consumer searches a provider
+   * with same type name and instance name, and its reference is set
+   * to the consumer. This rule is for only backward compatibility,
+   * and it is not recommended from version 1.0.
+   *
+   * The correspondence of a provider versus a consumer does not need
+   * to be one to one, and the case of one provider to n-consumers and
+   * the case of m-providers to one consumer are allowed. The one
+   * provider to n-consumers case can be realized by the above
+   * mentioned methods. The one consumer to m-provider case can be
+   * specified to set the consumer descriptor and comma-separated
+   * provider descriptors into the key and the value respectively.
+   *
+   * The following option is available to specify the strictness of
+   * interfaces connection.
+   *
+   * port.connection.strictness: strict, best_effort
+   *
+   * strict: The connection is established, if only all the specified
+   *         consumers are set appropriate references and narrowed
+   *         successfully.  
+   * best_effort: The connection is established without any errors,
+   *         even if appropriate reference does not exist or reference
+   *         narrowing fails.
    *
    * @since 0.4.0
    *
@@ -424,13 +671,12 @@ namespace RTC
      * @brief Consumer を登録する
      *
      * この Port が要求するサービスのプレースホルダであるコンシューマ
-     * (Consumer) を登録する。
-     * Consumer が関連付けられるサービスのインスタンス名およびタイプ名として、
-     * 引数に instance_name, type_name および Consumer 自身を与えることにより、
-     * 内部でこれらが関連付けられる。
-     * Port 間の接続 (connect) 時 には、同一の instance_name, type_name を持つ
-     * サービスが他の Port から提供 (Provide) されている場合、そのサービスの
-     * オブジェクト参照が自動的に Consumer にセットされる。
+     * (Consumer) を登録する。Consumer が関連付けられるサービスのインス
+     * タンス名およびタイプ名として、引数に instance_name, type_name お
+     * よび Consumer 自身を与えることにより、内部でこれらが関連付けられ
+     * る。Port 間の接続 (connect) 時 には、subscribeInterfaces() で述
+     * べられているルールに基づき、Provider Interface の参照が自動的に
+     * Consumer にセットされる。
      *
      * @param instance_name Consumer が要求するサービスのインスタンス名
      * @param type_name Consumer が要求するサービスのタイプ名
@@ -442,13 +688,15 @@ namespace RTC
      *
      * @brief Register the consumer
      *
-     * This operation registers a consumer, which is a service placeholder
-     * this port requires. These are associated internally by specified 
-     * instance_name, type_name and Consumer itself to the argument as
-     * service's instance name and its type name associated with Consumer.
-     * If the service with the same instance_name and type_name is provided
-     * by the other port when connecting between ports, its service object
-     * reference will be set automatically.
+     * This operation registers a consumer, which is a service
+     * placeholder this port requires. These are associated internally
+     * with specified instance_name, type_name and Consumer itself to
+     * the argument as service's instance name and its type name
+     * associated with Consumer.  The service Provider interface'
+     * references will be set automatically to the Consumer Interface
+     * object when connections are established, according to the rules
+     * that are described at the subscribeInterface() function's
+     * documentation.
      *
      * @param instance_name Instance name of the service Consumer requires
      * @param type_name Type name of the service Consumer requires
@@ -465,86 +713,80 @@ namespace RTC
     /*!
      * @if jp
      *
-     * @brief Interface 情報を公開する
+     * @brief Provider Interface 情報を公開する
      *
-     * この Portが所有する Provider に関する情報を ConnectorProfile::properties
-     * に代入する。
-     * 代入する情報は、NVListの name と value として以下のものが格納される。
+     * この Port が所有する Provider インターフェースに関する情報を
+     * ConnectorProfile::properties に代入し他の Port に対して公開する。
+     * 今、RTCのインスタンス名等の情報が以下の通りであるとして、
      *
-     * - port.<type_name>.<instance_name>: <CORBA::Object_ptr>
+     * - RTCインスタンス名:              rtc_iname
+     * - ポート名:                       port_name
+     * - インターフェース極性:           if_polarity
+     * - インターフェース型名:           if_tname
+     * - インターフェースインスタンス名: if_iname
      *
-     * ここで、
-     * - <type_name>: PortInterfaceProfile::type_name
-     * - <instance_name>: PortInterfaceProfile::instance_name
+     * NameValue 型の ConnectorProfile::properties の name と value として
+     * 以下のものが格納される。
      *
-     * である。
-     * ConnectorProfile::properties では、これらを .(ドット)表記で、
-     * NameValue のキーとしている。したがって、
+     * - name
+     *   <rtc_iname>.port.<port_name>.provided.<if_tname>.<if_iname>
+     * - value
+     *   Provider インターフェースの IOR 文字列 
+     * 
+     * なお、旧バージョンとの互換性のため以下の表記の NameValue も同時
+     * に格納されるが、将来のバージョンでは削除される可能性がある。
+     * 
+     * - name
+     *   port.<if_tname>.<if_iname>
+     * - value
+     *   Provider インターフェースの IOR 文字列
      *
-     * <pre>
-     *  PortInterfaceProfile
-     *  {
-     *    instance_name = "PA10_0";
-     *    type_name     = "Manipulator";
-     *    polarity      = PROVIDED;
-     *  }
-     *</pre>
-     *
-     * ならば、
-     *
-     * <pre>
-     * NameValue = { "port.Manipulator.PA10_0": <Object reference> }
-     * </pre>
-     *
-     * といった値が ConnectorProfile::properties に格納され、他のポートに対して
+     * これらの値は ConnectorProfile::properties に格納され、他のポートに対して
      * 伝達される。他の Port でこのインターフェースを使用する Consumer が
      * 存在すれば、ConnectorProfile からこのキーからオブジェクトリファレンスを
      * 取得し何らかの形で使用される。
      *
      * @param connector_profile コネクタプロファイル
-     *
      * @return ReturnCode_t 型のリターンコード
      *
      * @else
      *
-     * @brief Publish interface information
+     * @brief Publish information about interfaces
      *
-     * Assign information associated with Provider owned by this Port
-     * to ConnectorProfile::properties.
-     * In assignment information, the following is stored as NVList name and 
-     * its value.
+     * This operation publishes Provider interfaces information, which
+     * is owned by this port, to the other Ports via
+     * ConnectorProfile::properties.
+     * Now it is assumed RTC instance name and other information is as follows,
      *
-     * - port.<type_name>.<instance_name>: <CORBA::Object_ptr>
+     * - RTC instance name:              rtc_iname
+     * - Port name:                      port_name
+     * - Interface polarity:             if_polarity
+     * - Interface type name:            if_tname
+     * - Interface instance name:        if_iname
      *
-     * Here,
-     * - <type_name>: PortInterfaceProfile::type_name
-     * - <instance_name>: PortInterfaceProfile::instance_name<br>
-     * <br>
-     * In ConnectorProfile::properties, these are keys of NameValue written 
-     * with .(dot) notation. Therefore,
+     * the following values are stored as the "name" and the "value"
+     * of the NameValue typee element in ConnectorProfile::properties.
      *
-     * <pre>
-     *  PortInterfaceProfile
-     *  {
-     *    instance_name = "PA10_0";
-     *    type_name     = "Manipulator";
-     *    polarity      = PROVIDED;
-     *  }
-     *</pre>
+     * - name
+     *   <rtc_iname>.port.<port_name>.provided.<if_tname>.<if_iname>
+     * - value
+     *   IOR string value of interface reference
+     * 
+     * In addition, although the following NameValue values are also
+     * stored for the backward compatibility, this will be deleted in
+     * the future version.
      *
-     * so,
+     * - name
+     *   port.<if_tname>.<if_iname>
+     * - value
+     *   IOR string value of interface reference
      *
-     * <pre>
-     * NameValue = { "port.Manipulator.PA10_0": <Object reference> }
-     * </pre>
-     *
-     * The above value is set to ConnectorProfile::properties and sent to other
-     * ports. If Consumer that uses this interface in other Port exists,
-     * the object references will be got and use from the key of 
-     * ConnectorProfile.
+     * These values are stored in the ConnectorProfile::properties and
+     * are propagated to the other Ports. If the Consumer interface
+     * exists that requires this Provider interface, it will retrieve
+     * reference from the ConnectorProfile and utilize it.
      *
      * @param connector_profile Connector profile
-     *
      * @return The return code of ReturnCode_t type
      *
      * @endif
@@ -555,13 +797,62 @@ namespace RTC
     /*!
      * @if jp
      *
-     * @brief Interface に接続する
+     * @brief Provider Interface 情報を取得する
      *
-     * この Portが所有する Consumer に適合する Provider に関する情報を
-     * ConnectorProfile::properties から抽出し Consumer にオブジェクト参照
-     * をセットする。
+     * この Portが所有する Consumer Interface に適合する Provider
+     * Interface に関する情報をConnectorProfile::properties から抽出し
+     * Consumer Interface にオブジェクト参照をセットする。
      *
-     * 今、Consumer が
+     * 今、RTC のインスタンス名や Consumer Interface 等の情報が以下のと
+     * おりであると仮定すると、
+     *
+     * - RTCインスタンス名:              rtc_iname
+     * - ポート名:                       port_name
+     * - インターフェース極性:           if_polarity
+     * - インターフェース型名:           if_tname
+     * - インターフェースインスタンス名: if_iname
+     *
+     * この Consumer Interface を表すインターフェース指定子は以下のよう
+     * に表される。
+     *
+     * <rtc_iname>.port.<port_name>.required.<if_tname>.<if_iname>
+     *
+     * この関数は、まず引数 ConnectorProfile::properties に上記インター
+     * フェース指定子をキーとして格納されている Provider Interface 指定
+     * 子を探し出す。さらに、その Provider Interface 指定子をキーとして
+     * 格納されている Provider Interface の参照を表す IOR 文字列を取得
+     * し、Consumer Interface にセットする。
+     *
+     * 今、仮に、Provider を prov(n), その参照をIOR(n) さらに Consumer
+     * をcons(n) のように記述し、これらすべてのインターフェースの型が同
+     * 一であり、ConnectorProfile に以下の値が設定されているとする。
+     *
+     * <pre>
+     * ConnectorProfile::properties =
+     * {
+     *   prov0: IOR0,
+     *   prov1: IOR1,
+     *   prov2: IOR2,
+     *   cons0: prov2,
+     *   cons1: prov1,
+     *   cons2: prov0
+     * }
+     * </pre>
+     *
+     * このとき、cons(0..2) にはそれぞれ、参照が以下のようにセットされる。
+     *
+     * <pre>
+     *   cons0 = IOR2
+     *   cons1 = IOR1
+     *   cons2 = IOR0
+     * </pre>
+     *
+     * なお、旧バージョンとの互換性のため、
+     * ConnectorProfile::properties に Consumer Interface をキーとした
+     * 値がセットされていない場合でも、次のルールが適用される。
+     *
+     * 今、仮に Consumer Interface が
+     *
      * <pre>
      *  PortInterfaceProfile
      *  {
@@ -570,7 +861,9 @@ namespace RTC
      *    polarity      = REQUIRED;
      *  }
      *</pre>
+     *
      * として登録されていれば、他の Port の
+     *
      * <pre>
      *  PortInterfaceProfile
      *  {
@@ -579,17 +872,18 @@ namespace RTC
      *    polarity      = PROVIDED;
      *  }
      * </pre> 
+     *
      * として登録されている Serivce Provider のオブジェクト参照を探し、
-     * Consumer にセットする。
-     * 実際には、ConnectorProfile::properties に
+     * Consumer にセットする。実際には、ConnectorProfile::properties に
+     *
      * <pre>
      * NameValue = { "port.Manipulator.PA10_0": <Object reference> }
      * </pre>
+     *
      * として登録されている NameValue を探し、そのオブジェクト参照を
      * Consumer にセットする。
      *
      * @param connector_profile コネクタプロファイル
-     *
      * @return ReturnCode_t 型のリターンコード
      *
      * @else
