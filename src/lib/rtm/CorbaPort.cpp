@@ -5,7 +5,7 @@
  * @date  $Date: 2007-12-31 03:08:02 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
- * Copyright (C) 2006-2008
+ * Copyright (C) 2006-2009
  *     Noriaki Ando
  *     Task-intelligence Research Group,
  *     Intelligent Systems Research Institute,
@@ -212,11 +212,34 @@ namespace RTC
     const NVList& nv(connector_profile.properties);
     RTC_DEBUG_STR((NVUtil::toString(nv)));
 
+    bool strict(false); // default is "best_effort"
+    CORBA::Long index(NVUtil::find_index(nv, "port.connection.strictness"));
+    if (index >=  0)
+      {
+        const char* strictness;
+        nv[index].value >>= strictness;
+        if (std::string("best_effort") == strictness) { strict = false; }
+        else if (std::string("strict") == strictness) { strict = true; }
+        RTC_DEBUG(("Connetion strictness is: %s",
+                   strict ? "strict" : "best_effort"))
+      }
+
     for (CorbaConsumerList::iterator it(m_consumers.begin());
          it != m_consumers.end(); ++it)
       {
-        if (findProvider(nv, *it)) { continue; }
-        findProviderOld(nv, *it);
+        bool res0(findProvider(nv, *it));
+        if (res0) { continue; }
+
+        bool res1(findProviderOld(nv, *it));
+        if (res1) { continue; }
+
+        // never come here without error
+        // if strict connection option is set, error is returned.
+        if (strict)
+          {
+            RTC_ERROR(("subscribeInterfaces() failed."));
+            return RTC::RTC_ERROR; 
+          }
       }
 
     RTC_TRACE(("subscribeInterfaces() successfully finished."));
@@ -272,7 +295,12 @@ namespace RTC
         RTC_WARN(("Cannot extract Provider IOR string"));
         return false;
       }
-
+ 
+    // if ior string is "null" or "nil", ignore it.
+    if (std::string("null") == ior) { return true; }
+    if (std::string("nil")  == ior) { return true; }
+    // IOR should be started by "IOR:"
+    if (std::string("IOR:").compare(0, 4, ior, 4) != 0) { return false; }
     // set IOR to the consumer
     if (!cons.setObject(ior))
       {
