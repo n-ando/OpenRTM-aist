@@ -32,8 +32,14 @@ void usage()
   std::cout << std::endl;
   std::cout << "usage: ConnectorComp [options].." << std::endl;
   std::cout << std::endl;
+  std::cout << "  --port *        ";
+  std::cout << ": Set port no 2809 (default:9876)" << std::endl;
+  std::cout << "  --origin *      ";
+  std::cout << ": Set origin of connection OUT (default:IN)" << std::endl;
+  std::cout << "                  : Set origin OUT ,     ConsoleOut -> ConsoleIn" << std::endl;
+  std::cout << "                  :  default connection, ConsoleIn  -> ConsoleOut" << std::endl;
   std::cout << "  --flush         ";
-  std::cout << ": Set subscription type flush" << std::endl;
+  std::cout << ": Set subscription type flush (default:flush)" << std::endl;
   std::cout << "  --new           ";
   std::cout << ": Set subscription type new" << std::endl;
   std::cout << "  --periodic [Hz] ";
@@ -46,6 +52,7 @@ void usage()
   std::cout << ": Set endian type Little or Big" << std::endl;
   std::cout << std::endl;
   std::cout << "exsample:" << std::endl;
+  std::cout << "  ConnectorComp --port 2809 --origin OUT" << std::endl;
   std::cout << "  ConnectorComp --flush" << std::endl;
   std::cout << "  ConnectorComp --new" << std::endl;
   std::cout << "  ConnectorComp --new --policy ALL" << std::endl;
@@ -67,6 +74,9 @@ int main (int argc, char** argv)
   std::string push_policy;
   std::string skip_count;
   std::string endian;
+  std::string port_no("9876");
+  std::string connect_origin("in");
+
   if (argc < 2)
     {
       usage();
@@ -115,23 +125,50 @@ int main (int argc, char** argv)
 	    }
 	  else            endian = "";
 	}
+      if (arg == "--port")
+	{
+	  if (++i < argc)
+	    {
+	      port_no = argv[i];
+	    }
+	}
+      if (arg == "--origin")
+	{
+	  if (++i < argc)
+	    {
+	      std::string arg2(argv[i]);
+	      coil::normalize(arg2);
+	      connect_origin = arg2;
+	    }
+	}
     }
   
-  std::cout << "Subscription Type: " << subs_type << std::endl;
-  if (period != "")
-    std::cout << "           Period: " << period << " [Hz]" << std::endl;
-  std::cout << "      push policy: " << push_policy << std::endl;
-  std::cout << "       skip count: " << skip_count << std::endl;
-  if (endian != "")
-    std::cout << "           endian: " << endian << std::endl;
-  std::cout << std::endl;
-
   CORBA::ORB_var orb = CORBA::ORB_init(_argc, _argv);
-  CorbaNaming naming(orb, "localhost:9876");
+  std::string name_server("localhost:");
+  name_server.append(port_no);
+  CorbaNaming naming(orb, name_server.c_str());
 
   CorbaConsumer<RTObject> conin, conout;
   PortServiceList_var pin;
   PortServiceList_var pout;
+
+  // option dump
+  std::cout << "      Name Server: " << name_server << std::endl;
+  std::cout << "Subscription Type: " << subs_type << std::endl;
+  if (period != "")
+    std::cout << "           Period: " << period << " [Hz]" << std::endl;
+
+  std::cout << "      push policy: " << push_policy << std::endl;
+  std::cout << "       skip count: " << skip_count << std::endl;
+
+  if (endian != "")
+    std::cout << "           endian: " << endian << std::endl;
+
+  if (connect_origin == "in")
+    std::cout << "          connect: ConsoleIn -> ConsoleOut" << std::endl;
+  else
+    std::cout << "          connect: ConsoleOut -> ConsoleIn" << std::endl;
+  std::cout << std::endl;
 
   // find ConsoleIn0 component
   conin.setObject(naming.resolve("ConsoleIn0.rtc"));
@@ -195,7 +232,11 @@ int main (int argc, char** argv)
 					 endian.c_str()));
 
   ReturnCode_t ret;
-  ret = pin[(CORBA::ULong)0]->connect(prof);
+  if (connect_origin == "in")
+    ret = pin[(CORBA::ULong)0]->connect(prof);
+  else
+    ret = pout[(CORBA::ULong)0]->connect(prof);
+
   assert(ret == RTC::RTC_OK);
 
   std::cout << "Connector ID: " << prof.connector_id << std::endl;

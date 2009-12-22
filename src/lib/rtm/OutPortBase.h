@@ -790,6 +790,35 @@ namespace RTC
      */
     bool isLittleEndian();
 
+    /*!
+     * @if jp
+     *
+     * @brief [CORBA interface] Port の接続を行う
+     *
+     * 与えられた ConnectoionProfile の情報に基づき、Port間の接続を確立
+     * する。この関数は主にアプリケーションプログラムやツールから呼び出
+     * すことを前提としている。
+     * 
+     * @param connector_profile ConnectorProfile
+     * @return ReturnCode_t 型のリターンコード
+     *
+     * @else
+     *
+     * @brief [CORBA interface] Connect the Port
+     *
+     * This operation establishes connection according to the given
+     * ConnectionProfile inforamtion. This function is premised on
+     * calling from mainly application program or tools.
+     *
+     * @param connector_profile The ConnectorProfile.
+     * @return ReturnCode_t The return code of ReturnCode_t type.
+     *
+     * @endif
+     */
+    virtual ReturnCode_t
+    connect(ConnectorProfile& connector_profile)
+      throw (CORBA::SystemException);
+
 
   protected:
     /*!
