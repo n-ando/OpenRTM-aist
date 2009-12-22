@@ -21,25 +21,8 @@
 #ifndef DataInPort_idl
 #define DataInPort_idl
 
-module RTC
-{
-  interface InPortAny
-  {
-    void put(in any data);
-  };
-
-
-  interface OutPortAny
-  {
-    any get();
-  };
-
-};
-
-
 module OpenRTM
 {
-  
   enum PortStatus
   {
     PORT_OK,
