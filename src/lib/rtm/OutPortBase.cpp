@@ -426,6 +426,43 @@ namespace RTC
       }
   }
 
+  /*!
+   * @if jp
+   * @brief endian 設定がlittleか否か返す
+   * @else
+   * @brief return it whether endian setting is little
+   * @endif
+   */
+  bool OutPortBase::isLittleEndian()
+  {
+    return m_littleEndian;
+  }
+
+  /*!
+   * @if jp
+   * @brief [CORBA interface] Port の接続を行う
+   * @else
+   * @brief [CORBA interface] Connect the Port
+   * @endif
+   */
+  ReturnCode_t OutPortBase::connect(ConnectorProfile& connector_profile)
+    throw (CORBA::SystemException)
+  {
+    RTC_TRACE(("OutPortBase::connect()"));
+
+    // endian infomation check
+    CORBA::Long index(NVUtil::find_index(connector_profile.properties,
+                                       "dataport.serializer.cdr.endian"));
+    if (index < 0)
+      {
+        RTC_TRACE(("ConnectorProfile dataport.serializer.cdr.endian set."));
+        // endian infomation set
+        CORBA_SeqUtil::push_back(connector_profile.properties,
+            NVUtil::newNV("dataport.serializer.cdr.endian", "little,big"));
+      }
+    return PortBase::connect(connector_profile);
+  }
+
 
   //======================================================================
   // protected member functions
@@ -911,18 +948,6 @@ namespace RTC
       }
     RTC_FATAL(("never comes here: createConnector()"));
     return 0;
-  }
-
-  /*!
-   * @if jp
-   * @brief endian 設定がlittleか否か返す
-   * @else
-   * @brief return it whether endian setting is little
-   * @endif
-   */
-  bool OutPortBase::isLittleEndian()
-  {
-    return m_littleEndian;
   }
 
 }; // end of namespace RTM

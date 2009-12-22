@@ -194,18 +194,6 @@ namespace RTC
       {
 	RTC::PortService_ptr p;
 	p = connector_profile.ports[(CORBA::ULong)0];
-	// endian infomation check
-        coil::Properties conn_prop;
-        NVUtil::copyToProperties(conn_prop, connector_profile.properties);
-        CORBA::Long index(NVUtil::find_index(connector_profile.properties,
-                                       "dataport.serializer.cdr.endian"));
-        if (index < 0)
-          {
-	    RTC_TRACE(("ConnectorProfile dataport.serializer.cdr.endian set."));
-	    // endian infomation set
-	    CORBA_SeqUtil::push_back(connector_profile.properties,
-		NVUtil::newNV("dataport.serializer.cdr.endian", "little,big"));
-	  }
 	ReturnCode_t ret = p->notify_connect(connector_profile);
         if (ret != RTC::RTC_OK)
           {
