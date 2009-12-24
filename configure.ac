@@ -1499,8 +1499,7 @@ AC_OUTPUT([Makefile
 	utils/rtcd/Makefile
 	etc/Makefile
 	examples/Makefile
-	examples/AutoTestIn/Makefile
-	examples/AutoTestOut/Makefile
+	examples/AutoTest/Makefile
 	examples/Composite/Makefile
 	examples/ConfigSample/Makefile
 	examples/SimpleIO/Makefile
