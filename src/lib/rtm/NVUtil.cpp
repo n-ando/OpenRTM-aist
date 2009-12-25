@@ -25,12 +25,11 @@
 #pragma warning( disable : 4312 )
 #endif // WIN32
 
+#include <map>
+#include <algorithm>
 #include <coil/stringutil.h>
 #include <rtm/NVUtil.h>
 #include <rtm/CORBA_SeqUtil.h>
-#include <string>
-#include <map>
-#include <algorithm>
 
 #ifdef WIN32
 #pragma warning( pop )
@@ -105,7 +104,6 @@ namespace NVUtil
    * @brief Copy the properties to NVList
    * @endif
    */
-//  void copyFromProperties(SDOPackage::NVList& nv, const RTC::Properties& prop)
   void copyFromProperties(SDOPackage::NVList& nv, const coil::Properties& prop)
   {
     std::vector<std::string> keys;
@@ -127,7 +125,6 @@ namespace NVUtil
    * @brief Copy NVList to the Proeprties
    * @endif
    */
-//  void copyToProperties(RTC::Properties& prop, const SDOPackage::NVList& nv)
   void copyToProperties(coil::Properties& prop, const SDOPackage::NVList& nv)
   {
     for (CORBA::ULong i(0), len(nv.length()); i < len; ++i)
@@ -161,7 +158,6 @@ namespace NVUtil
 	  m_prop.setProperty(CORBA::string_dup(nv.name), value);
 	};
     }
-//    RTC::Properties m_prop;
     coil::Properties m_prop;
   };
   
@@ -172,7 +168,6 @@ namespace NVUtil
    * @brief Transform NVList to the properties
    * @endif
    */
-//  RTC::Properties toProperties(const SDOPackage::NVList& nv)
   coil::Properties toProperties(const SDOPackage::NVList& nv)
   {
     to_prop p;

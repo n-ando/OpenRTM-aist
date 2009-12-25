@@ -22,8 +22,8 @@
 
 #include <string>
 #include <iostream>
-#include <rtm/idl/SDOPackageSkel.h>
 #include <coil/Properties.h>
+#include <rtm/idl/SDOPackageSkel.h>
 
 /*!
  * @if jp
@@ -248,7 +248,6 @@ namespace NVUtil
    *
    * @endif
    */
-//  void copyFromProperties(SDOPackage::NVList& nv, const RTC::Properties& prop);
   void copyFromProperties(SDOPackage::NVList& nv, const coil::Properties& prop);
   
   /*!
@@ -272,7 +271,6 @@ namespace NVUtil
    *
    * @endif
    */
-//  void copyToProperties(RTC::Properties& prop, const SDOPackage::NVList& nv);
   void copyToProperties(coil::Properties& prop, const SDOPackage::NVList& nv);
   
   /*!
@@ -298,7 +296,6 @@ namespace NVUtil
    *
    * @endif
    */
-//  RTC::Properties toProperties(const SDOPackage::NVList& nv);
   coil::Properties toProperties(const SDOPackage::NVList& nv);
   
   /*!
