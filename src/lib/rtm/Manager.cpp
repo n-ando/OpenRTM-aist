@@ -284,16 +284,17 @@ namespace RTC
 	    RTC_ERROR(("Unknown Exception"));
 	  }
       }
+
+    if (m_initProc != NULL)
+      {
+        m_initProc(this);
+      }
+
     std::vector<std::string> comp;
     comp = coil::split(m_config["manager.components.precreate"], ",");
     for (int i(0), len(comp.size()); i < len; ++i)
       {
 	this->createComponent(comp[i].c_str());
-      }
-
-    if (m_initProc != NULL)
-      {
-        m_initProc(this);
       }
 
     return true;
