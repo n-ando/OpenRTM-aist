@@ -732,20 +732,18 @@ namespace RTC
     ReturnCode_t ret(RTC::RTC_ERROR);
     try
       {
-        std::string active_config;
-        active_config = m_properties["active_config"];
-        if (active_config.empty())
+	ret = onInitialize();
+        std::string active_set;
+        active_set = m_properties.getProperty("configuration.active_config",
+                                              "default");
+        if (m_configsets.haveConfig(active_set.c_str()))
           {
-            m_configsets.update("default");
+            m_configsets.update(active_set.c_str());
           }
         else
           {
-            if (m_configsets.haveConfig(active_config.c_str()))
-              m_configsets.update(active_config.c_str());
-            else
-              m_configsets.update("default");
+            m_configsets.update("default");
           }
-	ret = onInitialize();
       }
     catch (...)
       {
