@@ -459,6 +459,14 @@ namespace coil
     }
     vstring str;
   };
+
+  template<>
+  bool stringTo<std::string>(std::string& val, const char* str)
+  {
+    if (str == 0) { return false; }
+    val = str;
+    return true;
+  }
   
   /*!
    * @if jp
