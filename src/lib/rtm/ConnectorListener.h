@@ -165,7 +165,7 @@ namespace RTC
    *  
    * - ON_BUFFER_EMPTY:       バッファが空の場合
    * - ON_BUFFER_READTIMEOUT: バッファが空でタイムアウトした場合
-   * - ON_SENDER_EMPTY:       OUtPort側バッファが空
+   * - ON_SENDER_EMPTY:       OutPort側バッファが空
    * - ON_SENDER_TIMEOUT:     OutPort側タイムアウト時
    * - ON_SENDER_ERROR:       OutPort側エラー時
    *

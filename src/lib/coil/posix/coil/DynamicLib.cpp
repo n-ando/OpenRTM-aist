@@ -89,7 +89,7 @@ namespace coil
     return 0;
   }
 
-  void* DynamicLib::symbol (const char* symbol_name)
+  void* DynamicLib::symbol(const char* symbol_name)
   {
     if (m_handle == NULL) return NULL;
     return ::dlsym(m_handle, symbol_name);
