@@ -530,6 +530,9 @@ namespace coil
     return true;
   }
   
+  template<>
+  bool stringTo<std::string>(std::string& val, const char* str);
+
   /*!
    * @if jp
    * @brief 与えられた文字列リストから重複を削除
