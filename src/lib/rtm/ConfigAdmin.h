@@ -5,7 +5,7 @@
  * @date $Date: 2007-12-31 03:08:02 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
- * Copyright (C) 2007-2008
+ * Copyright (C) 2007-2009
  *     Task-intelligence Research Group,
  *     Intelligent Systems Research Institute,
  *     National Institute of
@@ -91,8 +91,8 @@ namespace RTC
    * @class ConfigBase
    * @brief ConfigBase 抽象クラス
    * 
-   * 各種コンフィギュレーション情報を保持するための抽象クラス。
-   * 具象コンフィギュレーションクラスは、以下の純粋仮想関数の実装を提供しなけれ
+   * 各種コンフィギュレーション情報を保持するための抽象クラス。具象コン
+   * フィギュレーションクラスは、以下の純粋仮想関数の実装を提供しなけれ
    * ばならない。
    *
    * publicインターフェースとして以下のものを提供する。
@@ -164,8 +164,8 @@ namespace RTC
      *
      * @brief コンフィギュレーションパラメータ値更新用純粋仮想関数
      * 
-     * コンフィギュレーション設定値でコンフィギュレーションパラメータを更新する
-     * ための純粋仮想関数。
+     * コンフィギュレーション設定値でコンフィギュレーションパラメータを
+     * 更新するための純粋仮想関数。
      *
      * @param val パラメータ値の文字列表現
      *
@@ -215,7 +215,8 @@ namespace RTC
    * 
    * コンフィギュレーションパラメータの情報を保持するクラス。
    * \<VarType\>としてコンフィギュレーションのデータ型を指定する。
-   * \<TransFunc\>として設定されたデータ型を文字列に変換する変換関数を指定する。
+   * \<TransFunc\>として設定されたデータ型を文字列に変換する変換関数を
+   * 指定する。
    *
    * @param VarType コンフィギュレーションパラメータ格納用変数
    * @param TransFunc 格納したデータ型を文字列に変換する変換関数
@@ -353,6 +354,67 @@ namespace RTC
    * @brief ConfigAdmin クラス
    * 
    * 各種コンフィギュレーション情報を管理するクラス。
+   * 用語を以下のように定義する。
+   *
+   * - コンフィギュレーション: コンポーネントの設定情報。
+   *
+   * - (コンフィギュレーション)パラメータ： key-value からなる設定情報。
+   *   coil::Properties 変数として扱われ、key、value 共に文字列として保
+   *   持される。key をコンフィギュレーションパラメータ名、value をコン
+   *   フィギュレーションパラメータ値と呼ぶ。
+   *
+   * - コンフィギュレーションセット： コンフィギュレーションパラメータ
+   *   のリストで、名前 (ID) によって区別される。IDをコンフィギュレーショ
+   *   ンセットIDと呼ぶ。
+   *
+   * - (コンフィギュレーション)パラメータ変数：コンフィギュレーションパ
+   *   ラメータをRTCのアクティビティ内で実際に利用する際に参照される変
+   *   数。パラメータごとに固有の型を持つ。
+   *
+   * - アクティブ(コンフィギュレーション)セット：現在有効なコンフィギュ
+   *   レーションセットのことであり、唯一つ存在する。原則として、アクティ
+   *   ブコンフィギュレーションセットのパラメータがコンフィギュレーショ
+   *   ンパラメータ変数に反映される。
+   *
+   * このクラスでは、コンフィギュレーションのための以下の2つの情報を保
+   * 持している。
+   *
+   * -# コンフィギュレーションセットのリスト
+   * -# パラメータ変数のリスト
+   *
+   * 基本的には、(1) のコンフィギュレーションセットのリストのうち一つを、
+   * (2) のパラメータ変数へ反映させる、のが本クラスの目的である。通常、
+   * パラメータ変数の変更操作は、コンフィギュレーションセットの変更とパ
+   * ラメータ変数への反映の2段階で行われる。
+   *
+   * コンフィギュレーションセットのリストの操作には、以下の関数を用いる。
+   *
+   * - getConfigurationSets()
+   * - getConfigurationSet()
+   * - setConfigurationSetValues()
+   * - getActiveConfigurationSet()
+   * - addConfigurationSet()
+   * - removeConfigurationSet()
+   * - activateConfigurationSet()
+   *
+   * これらの関数により、コンフィギュレーションセットの変更、追加、削除、
+   * 取得、アクティブ化を行う。これらの操作により変更されたコンフィギュ
+   * レーションセットを、RTCのアクティビティから使用するパラメータ変数
+   * に反映させるには、以下の update() 関数を用いる。
+   *
+   * - update(void)
+   * - update(const char* config_set)
+   * - update(const char* config_set, const char* config_param)
+   *
+   * コンフィギュレーション操作をフックするためにコールバックファンクタ
+   * を与えることができる。フックできる操作は以下の通り。
+   *
+   * - ON_UPDATE                   : update() コール時
+   * - ON_UPDATE_PARAM             : update(param) コール時
+   * - ON_SET_CONFIGURATIONSET     : setConfigurationSet() コール時
+   * - ON_ADD_CONFIGURATIONSET     : addConfigurationSet() コール時
+   * - ON_REMOVE_CONFIGURATIONSET  : removeConfigurationSet() コール時
+   * - ON_ACTIVATE_CONFIGURATIONSET: activateConfigurationSet() コール時
    *
    * @since 0.4.0
    *
@@ -361,6 +423,71 @@ namespace RTC
    * @brief ConfigAdmin class
    * 
    * Class to manage various configuration information.
+   * Now terms for this class are defined as follows.
+   *
+   * - Configurations: The configuration information for the RTCs.
+   *
+   * - (Configuration) parameters: Configuration information that
+   *   consists of a key-value pair. The "key" and the "value" are
+   *   both stored as character string values in a coil::Properties
+   *   variable in this class. The "key" is called the "configuration
+   *   parameter name", and the "value" is called the "configuration
+   *   parameter value".
+   *
+   * - Configuration-sets: This is a list of configuration parameters,
+   *   and it is distinguished by name (ID). The ID is called
+   *   configuration-set ID.
+   *
+   * - (Configuration) parameter variables: The variables to be
+   *   referred when configuration parameters are actually used within
+   *   the activity of an RTC. Each variable has each type.
+   *
+   * - Active (configuration) set: This is the only configuration-set
+   *   that is currently active. The parameter values of the active
+   *    configuration-set are substituted into configuration variables
+   *   in principle.
+   *
+   * The following two configuration informations are stored in this class.
+   *
+   * -# A list of configuration-set
+   * -# A list of configuration parameter variables
+   *
+   * Basically, the purpose of this class is to set one of the
+   * configuration-set in the list of (1) into parameter variables of
+   * (2). Usually, configuration parameter variables manipulation is
+   * performed with two-phases of configuration-set setting and
+   * parameter variables setting.
+   *
+   * The configuration-set manipulations are performed by the
+   * following functions.
+   *
+   * - getConfigurationSets()
+   * - getConfigurationSet()
+   * - setConfigurationSetValues()
+   * - getActiveConfigurationSet()
+   * - addConfigurationSet()
+   * - removeConfigurationSet()
+   * - activateConfigurationSet()
+   *
+   * Modification, addition, deletion, acquisition and activation of
+   * configuration-set are performed by these functions. In order to
+   * reflect configuration-set, which is manipulated by these
+   * functions, on parameter variables that are used from RTC
+   * activities, the following update() functions are used .
+   *
+   * - update(void)
+   * - update(const char* config_set)
+   * - update(const char* config_set, const char* config_param)
+   *
+   * Callback functors can be given to hook configuration
+   * operation. Operations to be hooked are as follows.
+   *
+   * - ON_UPDATE                   : when update() is called
+   * - ON_UPDATE_PARAM             : when update(param) is called
+   * - ON_SET_CONFIGURATIONSET     : when setConfigurationSet() is called
+   * - ON_ADD_CONFIGURATIONSET     : when addConfigurationSet() is called
+   * - ON_REMOVE_CONFIGURATIONSET  : when removeConfigurationSet() is called
+   * - ON_ACTIVATE_CONFIGURATIONSET: when activateConfigurationSet() is called
    *
    * @since 0.4.0
    *
