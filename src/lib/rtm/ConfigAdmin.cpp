@@ -5,7 +5,7 @@
  * @date $Date: 2007-12-31 03:08:02 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
- * Copyright (C) 2007-2008
+ * Copyright (C) 2007-2009
  *     Task-intelligence Research Group,
  *     Intelligent Systems Research Institute,
  *     National Institute of
@@ -170,7 +170,8 @@ namespace RTC
    * @brief Get a configuration set by specified ID
    * @endif
    */
-  const coil::Properties& ConfigAdmin::getConfigurationSet(const char* config_id)
+  const coil::Properties&
+  ConfigAdmin::getConfigurationSet(const char* config_id)
   {
     coil::Properties* p(m_configsets.findNode(config_id));
     if (p == 0) { return m_emptyconf; }
@@ -308,7 +309,8 @@ namespace RTC
     m_addConfigSetCb = cb;
   }
 
-  void ConfigAdmin::setOnRemoveConfigurationSet(OnRemoveConfigurationSetCallback* cb)
+  void
+  ConfigAdmin::setOnRemoveConfigurationSet(OnRemoveConfigurationSetCallback* cb)
   {
     if (m_removeConfigSetCb != 0) { delete m_removeConfigSetCb; }
     m_removeConfigSetCb = cb;
@@ -327,7 +329,8 @@ namespace RTC
         (*m_updateCb)(config_set);
       }
   }
-  void ConfigAdmin::onUpdateParam(const char* config_set, const char* config_param)
+  void
+  ConfigAdmin::onUpdateParam(const char* config_set, const char* config_param)
   {
     if (m_updateParamCb != 0)
       {
