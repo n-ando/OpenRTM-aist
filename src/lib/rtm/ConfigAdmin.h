@@ -455,16 +455,48 @@ namespace RTC
       m_params.push_back(new Config<VarType>(param_name, var, def_val, trans));
       return true;
     }
-    
+        
+    /*!
+     * @if jp
+     *
+     * @brief コンフィギュレーションパラメータの更新
+     *        (アクティブコンフィギュレーションセット)
+     * 
+     * コンフィギュレーションセットが更新されている場合に、現在アクティ
+     * ブになっているコンフィギュレーションに設定した値で、コンフィギュ
+     * レーションパラメータの値を更新する。この処理での更新は、アクティ
+     * ブとなっているコンフィギュレーションセットが存在している場合、前
+     * 回の更新からコンフィギュレーションセットの内容が更新されている場
+     * 合のみ実行される。
+     *
+     * @else
+     *
+     * @brief Update the values of configuration parameters
+     *        (Active configuration set)
+     * 
+     * When configuration set is updated, update the configuration
+     * parameter value to the value that is set to the current active
+     * configuration.  This update will be executed, only when an
+     * active configuration set exists and the content of the
+     * configuration set has been updated from the last update.
+     *
+     * @endif
+     */
+    void update(void);
+
     /*!
      * @if jp
      *
      * @brief コンフィギュレーションパラメータの更新(ID指定)
      * 
-     * 指定したIDのコンフィギュレーションセットに設定した値で、
-     * コンフィギュレーションパラメータの値を更新する
-     * 指定したIDのコンフィギュレーションセットが存在しない場合は、
-     * 何もせずに終了する。
+     * コンフィギュレーション変数の値を、指定したIDを持つコンフィギュレー
+     * ションセットの値で更新する。これにより、アクティブなコンフィギュ
+     * レーションセットは変更されない。したがって、アクティブコンフィギュ
+     * レーションセットとパラメータ変数の間に矛盾が発生する可能性がある
+     * ので注意が必要である。
+     *
+     * 指定したIDのコンフィギュレーションセットが存在しない場合は、何も
+     * せずに終了する。
      *
      * @param config_set 設定対象のコンフィギュレーションセットID
      * 
@@ -472,10 +504,15 @@ namespace RTC
      *
      * @brief Update configuration parameter (By ID)
      * 
-     * Update comfiguration parameter value by the value that 
-     * set to a configuration set of specified ID.
-     * Exit without doing anthing if a configuration set of specified ID 
-     * does not exist.
+     * This operation updates configuration variables by the
+     * configuration-set with specified ID. This operation does not
+     * change current active configuration-set. Since this operation
+     * causes inconsistency between current active configuration set
+     * and actual values of configuration variables, user should
+     * carefully use it.
+     *
+     * This operation ends without doing anything, if the
+     * configuration-set does not exist.
      *
      * @param config_set The target configuration set's ID to setup
      *
@@ -488,23 +525,35 @@ namespace RTC
      *
      * @brief コンフィギュレーションパラメータの更新(名称指定)
      * 
-     * 指定したパスのコンフィギュレーションに設定した値で、
-     * コンフィギュレーションパラメータの値を更新する
+     * 特定のコンフィギュレーション変数の値を、指定したIDを持つコンフィ
+     * ギュレーションセットの値で更新する。これにより、アクティブなコン
+     * フィギュレーションセットは変更されない。したがって、アクティブコ
+     * ンフィギュレーションセットとパラメータ変数の間に矛盾が発生する可
+     * 能性があるので注意が必要である。
      *
-     * @param config_set コンフィギュレーション名称。「.」区切りで最後の要素を
-     *                   除いた名前
-     * @param config_param コンフィギュレーションセットの最後の要素名
+     * 指定したIDのコンフィギュレーションセットや、指定した名称のパラメー
+     * タが存在しない場合は、何もせずに終了する。
+     *
+     * @param config_set コンフィギュレーションID
+     * @param config_param コンフィギュレーションパラメータ名
      * 
      * @else
      *
      * @brief Update the values of configuration parameters (By name)
      * 
-     * Update the configuration value by the value that set to a configuration
-     * set value of specified name.
+     * This operation updates a configuration variable by the
+     * specified configuration parameter in the
+     * configuration-set. This operation does not change current
+     * active configuration-set. Since this operation causes
+     * inconsistency between current active configuration set and
+     * actual values of configuration variables, user should carefully
+     * use it.
      *
-     * @param config_set configuration name. Name that each separates 
-     *        by each comma(.) and excludes the last element.
-     * @param config_param Last element name of configuration set
+     * This operation ends without doing anything, if the
+     * configuration-set or the configuration parameter do not exist.
+     *
+     * @param config_set configuration-set ID.
+     * @param config_param configuration parameter name.
      *
      * @endif
      */
@@ -513,37 +562,11 @@ namespace RTC
     /*!
      * @if jp
      *
-     * @brief コンフィギュレーションパラメータの更新
-     *        (アクティブコンフィギュレーションセット)
-     * 
-     * コンフィギュレーションセットが更新されている場合に、
-     * 現在アクティブになっているコンフィギュレーションに設定した値で、
-     * コンフィギュレーションパラメータの値を更新する。
-     * この処理での更新は、アクティブとなっているコンフィギュレーションセットが
-     * 存在している場合、前回の更新からコンフィギュレーションセットの内容が
-     * 更新されている場合のみ実行される。
-     *
-     * @else
-     *
-     * @brief Update the values of configuration parameters
-     *        (Active configuration set)
-     * 
-     * When configuration set is updated, update the configuration parameter 
-     * value to the value that is set to the current active configuration.
-     * This update will be executed, only when an active configuration set 
-     * exists and the content of the configuration set has been updated from 
-     * the last update.
-     *
-     * @endif
-     */
-    void update(void);
-    
-    /*!
-     * @if jp
-     *
      * @brief コンフィギュレーションパラメータの存在確認
      * 
-     * 指定した名称を持つコンフィギュレーションパラメータが存在するか確認する。
+     * 指定した名称を持つコンフィギュレーションパラメータ変数が存在する
+     * か確認する。ここで存在確認を行うパラメータ変数とは、
+     * bindParameter() によって登録される、変数を持つパラメータである。
      *
      * @param name コンフィギュレーションパラメータ名称。
      *
@@ -801,8 +824,20 @@ namespace RTC
      * @brief コンフィギュレーションセットの削除
      * 
      * 指定したIDのコンフィギュレーションセットを削除する。
+     *
      * 指定したIDのコンフィギュレーションセットが存在しない場合は、
-     * falseを返す。
+     * falseを返す。削除可能なコンフィギュレーションセットは、
+     * addConfigruationSet() によって追加したコンフィギュレーションセッ
+     * トのみであり、デフォルトコンフィギュレーションセット、コンポーネ
+     * ント起動時にファイルから読み込まれるコンフィギュレーションセット
+     * は削除することができない。
+     *
+     * また、指定したコンフィギュレーションセットが現在アクティブである
+     * 場合には、いかなるコンフィギュレーションセットでも削除できない。
+     *
+     * この関数により実際にコンフィギュレーションセットが削除された場合、
+     * setOnRemoveConfigurationSet() でセットされたコールバック関数が呼
+     * び出される。
      *
      * @param config_id 削除対象コンフィギュレーションセットのID
      *
@@ -812,9 +847,24 @@ namespace RTC
      *
      * @brief Remove the configuration set
      * 
-     * Remove the configuration set of specified ID
-     * Return empty configuration set, if a configuration set of
-     * specified ID doesn't exist.
+     * Remove the configuration set of specified ID Return empty
+     * configuration set, if a configuration set of specified ID
+     * doesn't exist.
+     *
+     * The configuration-sets that can be removed by this function are
+     * only configuration-sets newly added by the
+     * addConfigurationSet() function. The configuration that can be
+     * removed by this function is only newly added configuration-set
+     * by addConfigurationSet() function.  The "default"
+     * configuration-set and configurationi-sets that is loaded from
+     * configuration file cannot be removed.
+     *
+     * If the specified configuration is active currently, any
+     * configurations are not deleted.
+     *
+     * Callback functions that are set by
+     * addOnRemovedConfigurationSet() will be called if a
+     * configuration-set is deleted actually by this function.
      *
      * @param config_id ID of the target configuration set for remove
      *
