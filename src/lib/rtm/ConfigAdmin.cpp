@@ -60,30 +60,7 @@ namespace RTC
     setOnActivateSet(0);
   }
   
-  
-  /*!
-   * @if jp
-   * @brief コンフィギュレーションパラメータの更新(ID指定)
-   * @else
-   * @brief Update configuration parameter (By ID)
-   * @endif
-   */
-  void ConfigAdmin::update(const char* config_set)
-  {
-    if (m_configsets.hasKey(config_set) == NULL) { return; }
 
-    coil::Properties& prop(m_configsets.getNode(config_set));
-    
-    for (int i(0), len(m_params.size()); i < len; ++i)
-      {
-	if (prop.hasKey(m_params[i]->name) != NULL)
-	  {
-	    m_params[i]->update(prop[m_params[i]->name].c_str());
-            onUpdate(config_set);
-	  }
-      }
-  }
-  
   /*!
    * @if jp
    * @brief コンフィギュレーションパラメータの更新
@@ -102,7 +79,32 @@ namespace RTC
       }
     return;
   }
-  
+
+
+  /*!
+   * @if jp
+   * @brief コンフィギュレーションパラメータの更新(ID指定)
+   * @else
+   * @brief Update configuration parameter (By ID)
+   * @endif
+   */
+  void ConfigAdmin::update(const char* config_set)
+  {
+    if (m_configsets.hasKey(config_set) == NULL) { return; }
+    
+    coil::Properties& prop(m_configsets.getNode(config_set));
+    
+    for (int i(0), len(m_params.size()); i < len; ++i)
+      {
+	if (prop.hasKey(m_params[i]->name) != NULL)
+	  {
+	    m_params[i]->update(prop[m_params[i]->name].c_str());
+            onUpdate(config_set);
+	  }
+      }
+  }
+
+
   /*!
    * @if jp
    * @brief コンフィギュレーションパラメータの更新(名称指定)
@@ -127,7 +129,8 @@ namespace RTC
 	return;
       }
   }
-  
+
+
   /*!
    * @if jp
    * @brief コンフィギュレーションパラメータの存在確認
@@ -147,25 +150,6 @@ namespace RTC
     return false;
   }
   
-  //  const std::vector<Properties*>*
-  //  ConfigAdmin::getConfigurationParameterValues()
-  //  {
-  //    return new std::vector<Properties*>();
-  //  }
-  //
-  //
-  //  const Properties*
-  //  ConfigAdmin::getConfigurationParameterValue(const char* name)
-  //  {
-  //    return NULL;
-  //  }
-  //
-  //
-  //  bool ConfigAdmin::setConfigurationParameter(const char* name,
-  //					      const char* value)
-  //  {
-  //    return true;
-  //  }
   
   /*!
    * @if jp
@@ -261,8 +245,10 @@ namespace RTC
    */
   bool ConfigAdmin::removeConfigurationSet(const char* config_id)
   {
-    //    if (strcmp(config_id, "default") == 0) return false;
-    
+    if (strcmp(config_id, "default") == 0) return false;
+    if (m_activeId == config_id) return false;
+
+    // removeable config-set is only config-sets newly added
     std::vector<std::string>::iterator it;
     it = std::find(m_newConfig.begin(), m_newConfig.end(), config_id);
     if (it == m_newConfig.end()) { return false; }
@@ -287,6 +273,9 @@ namespace RTC
   bool ConfigAdmin::activateConfigurationSet(const char* config_id)
   {
     if (config_id == NULL) { return false; }
+    // '_<conf_name>' is special configuration set name
+    if (config_id[0] == '_') { return false; }
+
     if (m_configsets.hasKey(config_id) == 0) { return false; }
     m_activeId = config_id;
     m_active = true;
