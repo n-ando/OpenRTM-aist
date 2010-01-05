@@ -49,6 +49,7 @@ namespace RTC
    * @endif
    */
   ManagerConfig::ManagerConfig()
+    : m_isMaster(false)
   {
   }
   
@@ -60,6 +61,7 @@ namespace RTC
    * @endif
    */
   ManagerConfig::ManagerConfig(int argc, char** argv)
+    : m_isMaster(false)
   {
     init(argc, argv);
   }
@@ -107,6 +109,7 @@ namespace RTC
 	  }
       }
     setSystemInformation(prop);
+    if (m_isMaster) { prop["manager.is_master"] = "YES"; }
   }
   
   /*!
@@ -139,7 +142,7 @@ namespace RTC
 	    break;
 	    // Use default configuration settings
 	  case 'd': 
-	    //	    m_DebugMode = true;
+            m_isMaster = true;
 	    break;
 	  default:
 	    ;

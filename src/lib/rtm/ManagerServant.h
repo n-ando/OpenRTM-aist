@@ -60,6 +60,7 @@ namespace RTM
   private:
     ::RTC::Manager& m_mgr;
     ::RTM::Manager_var m_objref;
+    ::RTM::Manager_var m_owner;
   };
 }; // namespace RTM
 #endif // RTM_MANAGERSERVANT_H

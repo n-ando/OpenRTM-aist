@@ -16,18 +16,24 @@
 #------------------------------------------------------------
 # Configuration version (optional) 
 #
-config.version: 0.4
+config.version: 1.0
 
 #------------------------------------------------------------
 # OpenRTM-aist version (optional)
 #
-openrtm.version: 0.4.2
+openrtm.version: 1.0.0
 
 #------------------------------------------------------------
 # The name of manager (default = manager)
 #
 manager.name: manager
 
+#------------------------------------------------------------
+# Master manager
+# - ismaster: this process is master manager
+# - master_location: master manager's location
+manager.is_master: YES
+corba.master_manager: localhost:2810
 
 #============================================================
 # CORBA configuration
