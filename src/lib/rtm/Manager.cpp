@@ -956,9 +956,33 @@ std::vector<coil::Properties> Manager::getLoadableModules()
   std::string Manager::createORBOptions()
   {
     std::string opt(m_config["corba.args"]);
+    RTC_DEBUG(("corba.args: %s", opt.c_str()));
+
     std::string corba(m_config["corba.id"]);
+    RTC_DEBUG(("corba.id: %s", opt.c_str()));
+
     std::string endpoint(m_config["corba.endpoint"]);
-    
+    RTC_DEBUG(("corba.endpoint: %s", opt.c_str()));
+
+    RTC_DEBUG(("manager.is_master: %s",
+               m_config["manager.is_master"].c_str()));
+
+    // If this process has master manager,
+    // corba.endpoint is overwridden by master manager port number.
+    if (coil::toBool(m_config["manager.is_master"], "YES", "NO", false))
+      {
+        std::string mm(m_config.getProperty("corba.master_manager", ":2810"));
+        coil::vstring mmm(coil::split(mm, ":"));
+        if (mmm.size() == 2)
+          {
+            endpoint = std::string(":") + mmm[1];
+          }
+        else
+          {
+            endpoint = ":2810";
+          }
+      }
+
     if (!endpoint.empty())
       {
 	if (!opt.empty()) opt += " ";
@@ -966,6 +990,7 @@ std::vector<coil::Properties> Manager::getLoadableModules()
 	else if (corba == "TAO")  opt = "-ORBEndPoint iiop://" + endpoint;
 	else if (corba == "MICO") opt = "-ORBIIOPAddr inet:" + endpoint;
       }
+    RTC_PARANOID(("ORB options: %s", opt.c_str()));
     return opt;
   }
   

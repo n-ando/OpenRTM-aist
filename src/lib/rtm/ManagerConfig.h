@@ -374,6 +374,7 @@ namespace RTC
      * @endif
      */
     std::string m_configFile;
+    bool m_isMaster;
   };
 }; // namespace RTC  
 #endif // RTC_MANAGERCONFIG_H

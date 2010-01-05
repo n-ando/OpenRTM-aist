@@ -29,8 +29,41 @@ namespace RTM
   ManagerServant::ManagerServant()
     : m_mgr(::RTC::Manager::instance())
   {
-    m_objref = this->_this();
+    coil::Properties config(m_mgr.getConfig());    
+    if (coil::toBool(config["manager.is_master"], "YES", "NO", true))
+      {
+        // this is master manager
+        CORBA::Object_var obj;
+        obj = m_mgr.getORB()->resolve_initial_references("omniINSPOA");
+        PortableServer::POA_ptr poa = PortableServer::POA::_narrow(obj);
+        poa->the_POAManager()->activate();
+        PortableServer::ObjectId_var id; 
+        id = PortableServer::string_to_ObjectId(config["manager.name"].c_str());
+        poa->activate_object_with_id(id.in(), this);
+        CORBA::Object_var mgrobj = poa->id_to_reference(id);
+        m_objref = ::RTM::Manager::_narrow(mgrobj);
+      }
+    else
+      {
+        // this is slave manager
+        try
+          {
+            std::string mgrloc("corbaloc:iiop:");
+            mgrloc += config["corba.master_manager"]
+              + "/" + config["manager.name"];
+
+            CORBA::Object_var mobj;
+            mobj = m_mgr.getORB()->string_to_object(mgrloc.c_str());
+            m_owner = ::RTM::Manager::_narrow(mobj);
+            m_objref = this->_this();
+            m_owner->set_child(m_objref.in());
+          }
+        catch(CORBA::OBJECT_NOT_EXIST& e)
+          {
+          }
+      }
   }
+
   ManagerServant::~ManagerServant()
   {
   }
