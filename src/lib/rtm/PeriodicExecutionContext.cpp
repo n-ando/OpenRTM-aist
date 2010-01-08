@@ -40,8 +40,10 @@ namespace RTC
     RTC_TRACE(("PeriodicExecutionContext()"));
     m_profile.kind = PERIODIC;
     m_profile.rate = 0.0;
-    m_usec = (long int)0;
+    m_period = (double)0.0;
     m_ref = this->_this();
+    RTC_DEBUG(("Actual rate: %d [sec], %d [usec]",
+               m_period.sec(), m_period.usec()));
   }
   
   /*!
@@ -60,9 +62,11 @@ namespace RTC
     m_profile.kind = PERIODIC;
     m_profile.rate = rate;
     if (rate == 0) rate = 0.0000001;
-    m_usec = (long int)(1000000/rate);
-    if (m_usec == 0) m_nowait = true;
+    m_period = coil::TimeValue(1.0/rate);
+    if (m_period == 0.0) m_nowait = true;
     m_ref = this->_this();
+    RTC_DEBUG(("Actual rate: %d [sec], %d [usec]",
+               m_period.sec(), m_period.usec()));
   }
   
   /*!
@@ -127,8 +131,7 @@ namespace RTC
 	    std::for_each(m_comps.begin(), m_comps.end(), invoke_worker());
 	  }
 	m_worker.mutex_.unlock();
-        coil::TimeValue tv(0, m_usec);
-        if (!m_nowait) coil::sleep(tv);
+        if (!m_nowait) { coil::sleep(m_period); }
       } while (m_svc);
 
     return 0;
@@ -253,9 +256,11 @@ namespace RTC
     if (rate > 0.0)
       {
 	m_profile.rate = rate;
-	m_usec = (long int)(1000000/rate);
-	if (m_usec == 0) m_nowait = true;
+	m_period = coil::TimeValue(1.0/rate);
+	if (m_period == 0.0) { m_nowait = true; }
 	std::for_each(m_comps.begin(), m_comps.end(), invoke_on_rate_changed());
+        RTC_DEBUG(("Actual rate: %d [sec], %d [usec]",
+                   m_period.sec(), m_period.usec()));
 	return RTC::RTC_OK;
       }
     return RTC::BAD_PARAMETER;
