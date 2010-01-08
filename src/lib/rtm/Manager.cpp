@@ -959,10 +959,10 @@ std::vector<coil::Properties> Manager::getLoadableModules()
     RTC_DEBUG(("corba.args: %s", opt.c_str()));
 
     std::string corba(m_config["corba.id"]);
-    RTC_DEBUG(("corba.id: %s", opt.c_str()));
+    RTC_DEBUG(("corba.id: %s", corba.c_str()));
 
     std::string endpoint(m_config["corba.endpoint"]);
-    RTC_DEBUG(("corba.endpoint: %s", opt.c_str()));
+    RTC_DEBUG(("corba.endpoint: %s", endpoint.c_str()));
 
     RTC_DEBUG(("manager.is_master: %s",
                m_config["manager.is_master"].c_str()));
