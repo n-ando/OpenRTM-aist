@@ -82,122 +82,19 @@ namespace RTC
   PublisherBase::ReturnCode PublisherPeriodic::init(coil::Properties& prop)
   {
     RTC_TRACE(("init()"));
-    rtclog.lock();
-    rtclog.level(::RTC::Logger::RTL_PARANOID) << prop;
-    rtclog.unlock();
+    RTC_DEBUG_STR((prop));
 
-    // push_policy default: NEW
-    std::string push_policy = prop.getProperty("publisher.push_policy", "new");
-    RTC_DEBUG(("push_policy: %s", push_policy.c_str()));
-
-    // skip_count default: 0
-    std::string skip_count = prop.getProperty("publisher.skip_count", "0");
-    RTC_DEBUG(("skip_count: %s", skip_count.c_str()));
-
-    coil::normalize(push_policy);
-    if (push_policy == "all") 
+    setPushPolicy(prop);
+    if (!createTask(prop))
       {
-        m_pushPolicy = ALL;
-      }
-    else if (push_policy == "fifo")
-      {
-        m_pushPolicy = FIFO;
-      }
-    else if (push_policy == "skip")
-      {
-        m_pushPolicy = SKIP;
-      }
-    else if (push_policy == "new")
-      {
-        m_pushPolicy = NEW;
-      }
-    else
-      {
-        RTC_ERROR(("invalid push_policy value: %s", push_policy.c_str()));
-        m_pushPolicy = NEW;     // default push policy
-      }
-
-    if (!coil::stringTo(m_skipn, skip_count.c_str()))
-      {
-        RTC_ERROR(("invalid skip_count value: %s", skip_count.c_str()));
-        m_skipn = 0;           // desfault skip count
-      }
-    if (m_skipn < 0)
-      {
-        RTC_ERROR(("invalid skip_count value: %d", m_skipn));
-        m_skipn = 0;           // default skip count
-      }
-
-    RTC::PeriodicTaskFactory& factory(RTC::PeriodicTaskFactory::instance());
-
-    coil::vstring th = factory.getIdentifiers();
-    RTC_DEBUG(("available task types: %s", coil::flatten(th).c_str()));
-
-    m_task = factory.createObject(prop.getProperty("thread_type", "default"));
-    if (m_task == 0)
-      {
-        RTC_ERROR(("Task creation failed: %s",
-                   prop.getProperty("thread_type", "default").c_str()));
         return INVALID_ARGS;
       }
-    RTC_PARANOID(("Task creation succeeded."));
-
-    // setting task function
-    m_task->setTask(this, &PublisherPeriodic::svc);
-
-    // Task execution rate
-    std::string rate(prop["publisher.push_rate"]);
-    double hz;
-    if (rate != "")
-      {
-	hz = atof(rate.c_str());
-	if (hz <= 0) hz = 1000.0;
-        RTC_DEBUG(("Task period %f [Hz]", hz));
-        RTC_DEBUG(("Task period %f [s]", 1.0/hz));
-      }
-    else
-      {
-        // for 0.4 compatibility
-        std::string rate(prop["push_rate"]);
-        if (rate != "")
-          {
-            hz = atof(rate.c_str());
-            if (hz <= 0) hz = 1000.0;
-            RTC_DEBUG(("Task period %f [Hz]", hz));
-            RTC_DEBUG(("Task period %f [s]", 1.0/hz));
-          }
-        else
-          {
-            hz = 1000.0;
-          }
-      }
-    m_task->setPeriod(1.0/hz);
-    
-    // Measurement setting
-    coil::Properties& mprop(prop.getNode("measurement"));
-
-    m_task->executionMeasure(coil::toBool(mprop["exec_time"],
-                                    "enable", "disable", true));
-    
-    int ecount;
-    if (coil::stringTo(ecount, mprop["exec_count"].c_str()))
-      {
-        m_task->executionMeasureCount(ecount);
-      }
-
-    m_task->periodicMeasure(coil::toBool(mprop["period_time"],
-                                   "enable", "disable", true));
-    int pcount;
-    if (coil::stringTo(pcount, mprop["period_count"].c_str()))
-      {
-        m_task->periodicMeasureCount(pcount);
-      }
+    return PORT_OK;
 
 
-    // Start task in suspended mode
-    m_task->suspend();
-    m_task->activate();
-    m_task->suspend();
+
+
+
     return PORT_OK;
   }
   
@@ -462,6 +359,113 @@ namespace RTC
     m_buffer->advanceRptr();
 
     return PORT_OK;
+  }
+
+  /*!
+   * @if jp
+   * @brief PushPolicy の設定
+   * @else
+   * @brief Setting PushPolicy
+   * @endif
+   */
+  void PublisherPeriodic::setPushPolicy(const coil::Properties& prop)
+  {
+    // push_policy default: NEW
+    std::string push_policy = prop.getProperty("publisher.push_policy", "new");
+    RTC_DEBUG(("push_policy: %s", push_policy.c_str()));
+
+    coil::normalize(push_policy);
+    if      (push_policy == "all")  { m_pushPolicy = ALL;  }
+    else if (push_policy == "fifo") { m_pushPolicy = FIFO; }
+    else if (push_policy == "skip") { m_pushPolicy = SKIP; }
+    else if (push_policy == "new")  { m_pushPolicy = NEW;  }
+    else
+      {
+        RTC_ERROR(("invalid push_policy value: %s", push_policy.c_str()));
+        m_pushPolicy = NEW;     // default push policy
+      }
+
+    // skip_count default: 0
+    std::string skip_count = prop.getProperty("publisher.skip_count", "0");
+    RTC_DEBUG(("skip_count: %s", skip_count.c_str()));
+
+    if (!coil::stringTo(m_skipn, skip_count.c_str()))
+      {
+        RTC_ERROR(("invalid skip_count value: %s", skip_count.c_str()));
+        m_skipn = 0;           // desfault skip count
+      }
+    if (m_skipn < 0)
+      {
+        RTC_ERROR(("invalid skip_count value: %d", m_skipn));
+        m_skipn = 0;           // default skip count
+      }
+  }
+
+  /*!
+   * @if jp
+   * @brief Task の設定
+   * @else
+   * @brief Setting Task
+   * @endif
+   */
+  bool PublisherPeriodic::createTask(const coil::Properties& prop)
+  {
+    RTC::PeriodicTaskFactory& factory(RTC::PeriodicTaskFactory::instance());
+
+    // Creating and setting task object
+    coil::vstring th = factory.getIdentifiers();
+    RTC_DEBUG(("available task types: %s", coil::flatten(th).c_str()));
+
+    m_task = factory.createObject(prop.getProperty("thread_type", "default"));
+    if (m_task == 0)
+      {
+        RTC_ERROR(("Task creation failed: %s",
+                   prop.getProperty("thread_type", "default").c_str()));
+        return INVALID_ARGS;
+      }
+    m_task->setTask(this, &PublisherPeriodic::svc);
+    RTC_PARANOID(("Task creation succeeded."));
+
+    // Extracting publisher's period time
+    double hz;
+    if (!coil::stringTo(hz, prop["publisher.push_rate"].c_str()) &&
+        !coil::stringTo(hz, prop["push_rate"].c_str())) // for 0.4 compatibility
+      {
+        RTC_ERROR(("publisher.push_rate/push_rate were not found."));
+        return false;
+      }
+
+    if (hz <= 0)
+      {
+        RTC_ERROR(("invalid period: %f [s]", hz));
+        return false;
+      }
+    m_task->setPeriod(1.0/hz);
+    
+    // Setting task measurement function
+    m_task->executionMeasure(coil::toBool(prop["measurement.exec_time"],
+                                          "enable", "disable", true));
+    
+    int ecount;
+    if (coil::stringTo(ecount, prop["measurement.exec_count"].c_str()))
+      {
+        m_task->executionMeasureCount(ecount);
+      }
+
+    m_task->periodicMeasure(coil::toBool(prop["measurement.period_time"],
+                                   "enable", "disable", true));
+    int pcount;
+    if (coil::stringTo(pcount, prop["measurement.period_count"].c_str()))
+      {
+        m_task->periodicMeasureCount(pcount);
+      }
+
+    // Start task in suspended mode
+    m_task->suspend();
+    m_task->activate();
+    m_task->suspend();
+
+    return true;
   }
 
   PublisherBase::ReturnCode

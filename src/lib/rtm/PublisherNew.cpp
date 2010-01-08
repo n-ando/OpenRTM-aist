@@ -82,91 +82,13 @@ namespace RTC
   PublisherBase::ReturnCode PublisherNew::init(coil::Properties& prop)
   {
     RTC_TRACE(("init()"));
-    rtclog.lock();
-    rtclog.level(::RTC::Logger::RTL_PARANOID) << prop;
-    rtclog.unlock();
+    RTC_DEBUG_STR((prop));
     
-    // push_policy default: NEW
-    std::string push_policy = prop.getProperty("publisher.push_policy", "new");
-    RTC_DEBUG(("push_policy: %s", push_policy.c_str()));
-
-    // skip_count default: 0
-    std::string skip_count = prop.getProperty("publisher.skip_count", "0");
-    RTC_DEBUG(("skip_count: %s", skip_count.c_str()));
-
-    coil::normalize(push_policy);
-    if (push_policy == "all") 
+    setPushPolicy(prop);
+    if (!createTask(prop))
       {
-        m_pushPolicy = ALL;
-      }
-    else if (push_policy == "fifo")
-      {
-        m_pushPolicy = FIFO;
-      }
-    else if (push_policy == "skip")
-      {
-        m_pushPolicy = SKIP;
-      }
-    else if (push_policy == "new")
-      {
-        m_pushPolicy = NEW;
-      }
-    else
-      {
-        RTC_ERROR(("invalid push_policy value: %s", push_policy.c_str()));
-        m_pushPolicy = NEW;     // default push policy
-      }
-
-    if (!coil::stringTo(m_skipn, skip_count.c_str()))
-      {
-        RTC_ERROR(("invalid skip_count value: %s", skip_count.c_str()));
-        m_skipn = 0;           // default skip count
-      }
-    if (m_skipn < 0)
-      {
-        RTC_ERROR(("invalid skip_count value: %d", m_skipn));
-        m_skipn = 0;           // default skip count
-      }
-
-    RTC::PeriodicTaskFactory& factory(RTC::PeriodicTaskFactory::instance());
-
-    coil::vstring th = factory.getIdentifiers();
-    RTC_DEBUG(("available task types: %s", coil::flatten(th).c_str()));
-
-    m_task = factory.createObject(prop.getProperty("thread_type", "default"));
-    if (m_task == 0)
-      {
-        RTC_ERROR(("Task creation failed: %s",
-                   prop.getProperty("thread_type", "default").c_str()));
         return INVALID_ARGS;
       }
-    RTC_PARANOID(("Task creation succeeded."));
-
-    coil::Properties& mprop(prop.getNode("measurement"));
-
-    // setting task function
-    m_task->setTask(this, &PublisherNew::svc);
-    m_task->setPeriod(0.0);
-    m_task->executionMeasure(coil::toBool(mprop["exec_time"],
-                                    "enable", "disable", true));
-    
-    int ecount;
-    if (coil::stringTo(ecount, mprop["exec_count"].c_str()))
-      {
-        m_task->executionMeasureCount(ecount);
-      }
-
-    m_task->periodicMeasure(coil::toBool(mprop["period_time"],
-                                   "enable", "disable", true));
-    int pcount;
-    if (coil::stringTo(pcount, mprop["period_count"].c_str()))
-      {
-        m_task->periodicMeasureCount(pcount);
-      }
-
-    m_task->suspend();
-    m_task->activate();
-    m_task->suspend();
     return PORT_OK;
   }
 
@@ -316,6 +238,97 @@ namespace RTC
       }
     return 0;
   }
+
+  /*!
+   * @if jp
+   * @brief PushPolicy の設定
+   * @else
+   * @brief Setting PushPolicy
+   * @endif
+   */
+  void PublisherNew::setPushPolicy(const coil::Properties& prop)
+  {
+    // push_policy default: NEW
+    std::string push_policy = prop.getProperty("publisher.push_policy", "new");
+    RTC_DEBUG(("push_policy: %s", push_policy.c_str()));
+
+    coil::normalize(push_policy);
+    if      (push_policy == "all")  { m_pushPolicy = ALL;  }
+    else if (push_policy == "fifo") { m_pushPolicy = FIFO; }
+    else if (push_policy == "skip") { m_pushPolicy = SKIP; }
+    else if (push_policy == "new")  { m_pushPolicy = NEW;  }
+    else
+      {
+        RTC_ERROR(("invalid push_policy value: %s", push_policy.c_str()));
+        m_pushPolicy = NEW;     // default push policy
+      }
+
+    // skip_count default: 0
+    std::string skip_count = prop.getProperty("publisher.skip_count", "0");
+    RTC_DEBUG(("skip_count: %s", skip_count.c_str()));
+
+    if (!coil::stringTo(m_skipn, skip_count.c_str()))
+      {
+        RTC_ERROR(("invalid skip_count value: %s", skip_count.c_str()));
+        m_skipn = 0;           // default skip count
+      }
+    if (m_skipn < 0)
+      {
+        RTC_ERROR(("invalid skip_count value: %d", m_skipn));
+        m_skipn = 0;           // default skip count
+      }
+  }
+
+  /*!
+   * @if jp
+   * @brief Task の設定
+   * @else
+   * @brief Setting Task
+   * @endif
+   */
+  bool PublisherNew::createTask(const coil::Properties& prop)
+  {
+    RTC::PeriodicTaskFactory& factory(RTC::PeriodicTaskFactory::instance());
+    coil::vstring th = factory.getIdentifiers();
+    RTC_DEBUG(("available task types: %s", coil::flatten(th).c_str()));
+
+    m_task = factory.createObject(prop.getProperty("thread_type", "default"));
+    if (m_task == 0)
+      {
+        RTC_ERROR(("Task creation failed: %s",
+                   prop.getProperty("thread_type", "default").c_str()));
+        return false;
+      }
+    RTC_PARANOID(("Task creation succeeded."));
+
+    // setting task function
+    m_task->setTask(this, &PublisherNew::svc);
+    m_task->setPeriod(0.0);
+    m_task->executionMeasure(coil::toBool(prop["measurement.exec_time"],
+                                    "enable", "disable", true));
+    
+    int ecount;
+    if (coil::stringTo(ecount, prop["measurement.exec_count"].c_str()))
+      {
+        m_task->executionMeasureCount(ecount);
+      }
+
+    m_task->periodicMeasure(coil::toBool(prop["measurement.period_time"],
+                                   "enable", "disable", true));
+    int pcount;
+    if (coil::stringTo(pcount, prop["measurement.period_count"].c_str()))
+      {
+        m_task->periodicMeasureCount(pcount);
+      }
+
+    // Start task in suspended mode
+    m_task->suspend();
+    m_task->activate();
+    m_task->suspend();
+
+    return true;
+  }
+
 
   /*!
    * @brief push all policy
