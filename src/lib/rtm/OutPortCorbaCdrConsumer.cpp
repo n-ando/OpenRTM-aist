@@ -32,6 +32,7 @@ namespace RTC
    */
   OutPortCorbaCdrConsumer::OutPortCorbaCdrConsumer()
   {
+    rtclog.setName("OutPortCorbaCdrConsumer");
   }
     
   /*!
@@ -54,6 +55,7 @@ namespace RTC
    */
   void OutPortCorbaCdrConsumer::init(coil::Properties& prop)
   {
+    RTC_TRACE(("OutPortCorbaCdrConsumer::init()"));
   }
 
   /*!
@@ -65,12 +67,14 @@ namespace RTC
    */
   void OutPortCorbaCdrConsumer::setBuffer(CdrBufferBase* buffer)
   {
+    RTC_TRACE(("OutPortCorbaCdrConsumer::setBuffer()"));
     m_buffer = buffer;
   }
 
   void OutPortCorbaCdrConsumer::setListener(ConnectorInfo& info,
                                             ConnectorListeners* listeners)
   {
+    RTC_TRACE(("OutPortCorbaCdrConsumer::setListener()"));
     m_listeners = listeners;
     m_profile = info;
   }
@@ -85,20 +89,25 @@ namespace RTC
   OutPortConsumer::ReturnCode
   OutPortCorbaCdrConsumer::get(cdrMemoryStream& data)
   {
+    RTC_TRACE(("OutPortCorbaCdrConsumer::get()"));
     ::OpenRTM::CdrData_var cdr_data;
+
     try
       {
         ::OpenRTM::PortStatus ret(_ptr()->get(cdr_data.out()));
+
         if (ret == ::OpenRTM::PORT_OK)
           {
-
+            RTC_DEBUG(("get() successful"));
             data.put_octet_array(&(cdr_data[0]), (int)cdr_data->length());
+            RTC_PARANOID(("CDR data length: %d", cdr_data->length()));
 
             onReceived(data);
             onBufferWrite(data);
 
             if (m_buffer->full())
               {
+                RTC_INFO(("InPort buffer is full."));
                 onBufferFull(data);
                 onReceiverFull(data);
               }
@@ -112,8 +121,10 @@ namespace RTC
       }
     catch (...)
       {
+        RTC_WARN(("Exception caought from OutPort::get()."));
         return CONNECTION_LOST;
       }
+    RTC_ERROR(("OutPortCorbaCdrConsumer::get(): Never comes here."));
     return UNKNOWN_ERROR;
   }
     
@@ -127,21 +138,35 @@ namespace RTC
   bool OutPortCorbaCdrConsumer::
   subscribeInterface(const SDOPackage::NVList& properties)
   {
+    RTC_TRACE(("OutPortCorbaCdrConsumer::subscribeInterface()"));
     CORBA::Long index;
     index = NVUtil::find_index(properties,
                                "dataport.corba_cdr.outport_ior");
-    if (index < 0) return false;
+    if (index < 0)
+      {
+        RTC_DEBUG(("dataport.corba_cdr.outport_ior not found."));
+        return false;
+      }
     
     if (NVUtil::isString(properties,
                          "dataport.corba_cdr.outport_ior"))
       {
+        RTC_DEBUG(("dataport.corba_cdr.outport_ior found."));
         const char* ior;
         properties[index].value >>= ior;
 
         CORBA::ORB_ptr orb = ::RTC::Manager::instance().getORB();
         CORBA::Object_var var = orb->string_to_object(ior);
-        setObject(var.in());
-        return true;
+        bool ret(setObject(var.in()));
+        if (ret)
+          {
+            RTC_DEBUG(("CorbaConsumer was set successfully."));
+          }
+        else
+          {
+            RTC_ERROR(("Invalid object reference."))
+          }
+        return ret;
       }
     
     return false;
@@ -157,20 +182,29 @@ namespace RTC
   void OutPortCorbaCdrConsumer::
   unsubscribeInterface(const SDOPackage::NVList& properties)
   {
+    RTC_TRACE(("OutPortCorbaCdrConsumer::unsubscribeInterface()"));
     CORBA::Long index;
     index = NVUtil::find_index(properties,
                                "dataport.corba_cdr.outport_ior");
-    if (index < 0) return;
+    if (index < 0)
+      {
+        RTC_DEBUG(("dataport.corba_cdr.outport_ior not found."));
+        return;
+      }
     
     const char* ior;
     if (properties[index].value >>= ior)
       {
+        RTC_DEBUG(("dataport.corba_cdr.outport_ior found."));
         CORBA::ORB_ptr orb = RTC::Manager::instance().getORB();
         CORBA::Object_var var = orb->string_to_object(ior);
         if (_ptr()->_is_equivalent(var))
           {
             releaseObject();
+            RTC_DEBUG(("CorbaConsumer's reference was released."));
+            return;
           }
+        RTC_ERROR(("hmm. Inconsistent object reference."));
       }
   }
 

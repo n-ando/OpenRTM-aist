@@ -876,7 +876,26 @@ namespace RTC
      * @endif
      */
     void setName(const char* name);
-    
+
+     /*!
+     * @if jp
+     * @brief Port の名前を取得する
+     *
+     * Port の名前を取得する。
+     *
+     * @return Port の名前
+     *
+     * @else
+     * @brief Get the name of this Port
+     *
+     * This operation returns the name of this Port.
+     *
+     * @return The name of this Port.
+     *
+     * @endif
+     */
+   const char* getName() const;
+
     /*!
      * @if jp
      * @brief PortProfileを取得する

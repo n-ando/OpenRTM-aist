@@ -303,7 +303,7 @@ namespace RTC
      *
      * @endif
      */
-    const char* name() const;
+    //    const char* name() const;
 
     /*!
      * @if jp
@@ -412,6 +412,50 @@ namespace RTC
      * 現在所有しているコネクタをIDで取得する。
      *
      * @param id Connector ID
+     * @return コネクタへのポインタ
+     *
+     * @else
+     *
+     * @brief Getting ConnectorProfile by ID
+     *
+     * This operation returns Connector specified by ID.
+     *
+     * @param id Connector ID
+     * @return A pointer to connector
+     *
+     * @endif
+     */
+    OutPortConnector* getConnectorById(const char* id);
+
+     /*!
+     * @if jp
+     * @brief ConnectorProfileを名前で取得
+     *
+     * 現在所有しているコネクタを名前で取得する。
+     *
+     * @param name Connector name
+     * @return コネクタへのポインタ
+     *
+     * @else
+     *
+     * @brief Getting Connector by name
+     *
+     * This operation returns Connector specified by name.
+     *
+     * @param id Connector ID
+     * @return A pointer to connector
+     *
+     * @endif
+     */
+   OutPortConnector* getConnectorByName(const char* name);
+
+    /*!
+     * @if jp
+     * @brief ConnectorProfileをIDで取得
+     *
+     * 現在所有しているコネクタをIDで取得する。
+     *
+     * @param id Connector ID
      * @param prof ConnectorProfile
      * @return false 指定したIDがない
      *
@@ -455,103 +499,6 @@ namespace RTC
     bool getConnectorProfileByName(const char* name,
                                    ConnectorInfo& prof);
 
-    /*!
-     * @if jp
-     * @brief インターフェースプロファイルを公開する
-     *
-     * 現在 OutPort が所有しているインターフェースのプロファイルを
-     * DataOutPortに対して公開するためのオペレーション。
-     * DataOutPortから呼ばれることを意図している
-     *
-     * @param properties IFプロファイルを書き込むNVList
-     *
-     * @else
-     *
-     * @brief Publish interface profile
-     *
-     * This operation publish interface profiles of this OutPort
-     * to DataOutPort. This operation should be called from DataOutPort.
-     *
-     * @param properties itnerface profile
-     *
-     * @endif
-     */
-    bool publishInterfaceProfiles(SDOPackage::NVList& properties);
-
-    /*!
-     * @if jp
-     * @brief Interface情報を公開する
-     *
-     * Interface情報を公開する。
-     *
-     * @param connector_profile Interface情報を書き込むコネクタプロファイル
-     *
-     * @else
-     * @brief Publish interface information
-     *
-     * Publish interface information.
-     *
-     * @param connector_profile The connector profile in which
-     *                          interface information is written
-     *
-     * @endif
-     */
-    //    bool publishInterfaces(ConnectorProfile& connector_profile);
-
-    /*!
-     * @if jp
-     * @brief Interface情報を取得する
-     *
-     * コネクタプロファイルで与えられた情報から、インターフェース情報を
-     * 取得する。
-     *
-     * @param connector_profile インターフェース情報を取得するコネクタ
-     *                          プロファイル
-     *
-     * @return 登録処理結果
-     *
-     * @else
-     * @brief Subscribe interface
-     *
-     * This operation subscribe provided interface in the ConnectorProfile.
-     *
-     * @param connector_profile The ConnectorProfile that includes
-     *                          provided interface information
-     *
-     * @return Subscription result
-     *
-     * @endif
-     */
-    //    bool subscribeInterfaces(const ConnectorProfile& connector_profile);
-
-    /*!
-     * @if jp
-     * @brief 登録されているInterface情報を解除する
-     *
-     * 接続を開場するために、登録済みのコネクタプロファイルを解除する。
-     * 取得する。
-     *
-     * @param connector_profile インターフェース情報を解除するコネクタ
-     *                          プロファイル
-     *
-     * @return 登録処理結果
-     *
-     * @else
-     * @brief Unsubscribe interface
-     *
-     * This operation unsubscribe provided interface in the ConnectorProfile.
-     *
-     * @param connector_profile The ConnectorProfile of unsubscribed connection
-     *
-     * @return Subscription result
-     *
-     * @endif
-     */
-    //    bool unsubscribeInterfaces(const ConnectorProfile& connector_profile);
-
-
-    virtual void onConnect(const char* id, PublisherBase* publisher){};
-    virtual void onDisconnect(const char* id){};
     
     /*!
      * @if jp
@@ -979,6 +926,8 @@ namespace RTC
      */
     void initConsumers();
 
+    bool checkEndian(const coil::Properties& prop, bool& littleEndian);
+
     /*!
      * @if jp
      * @brief OutPort provider の生成
@@ -1021,14 +970,10 @@ namespace RTC
 
   protected:
     coil::Properties m_properties;
-    std::string m_name;
     std::vector<OutPortConnector*> m_connectors;
-    std::vector<InPortConsumer*> m_consumers;
     coil::vstring m_providerTypes;
     coil::vstring m_consumerTypes;
-    std::vector<OutPortProvider*> m_providers;
     bool m_littleEndian;
-
     ConnectorListeners m_listeners;
    
     /*!

@@ -18,7 +18,10 @@
  */
 
 #include <rtm/InPortCorbaCdrProvider.h>
-#include <rtm/idl/BasicDataTypeSkel.h>
+
+#ifdef WIN32
+#pragma warning( disable : 4290 )
+#endif
 
 namespace RTC
 {
@@ -96,7 +99,7 @@ namespace RTC
   InPortCorbaCdrProvider::put(const ::OpenRTM::CdrData& data)
     throw (CORBA::SystemException)
   {
-    RTC_PARANOID(("put()"));
+    RTC_PARANOID(("InPortCorbaCdrProvider::put()"));
 
     if (m_buffer == 0)
       {

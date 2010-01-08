@@ -55,18 +55,15 @@ namespace RTC
   /*!
    * @if jp
    * @brief デストラクタ
-   *
-   * デストラクタ
-   *
    * @else
    * @brief Destructor
-   *
-   * Destructor
-   *
    * @endif
    */
   OutPortCorbaCdrProvider::~OutPortCorbaCdrProvider(void)
   {
+    PortableServer::ObjectId_var oid;
+    oid = _default_POA()->servant_to_id(this);
+    _default_POA()->deactivate_object(oid);
   }
   
   /*!
@@ -87,11 +84,16 @@ namespace RTC
    * @brief Setting outside buffer's pointer
    * @endif
    */
-  void OutPortCorbaCdrProvider::setBuffer(BufferBase<cdrMemoryStream>* buffer)
+  void OutPortCorbaCdrProvider::setBuffer(CdrBufferBase* buffer)
   {
     m_buffer = buffer;
   }
-
+  void OutPortCorbaCdrProvider::setListener(ConnectorInfo& info,
+                                            ConnectorListeners* listeners)
+  {
+    m_profile = info;
+    m_listeners = listeners;
+  }
   /*!
    * @if jp
    * @brief コネクタをセットする
@@ -113,36 +115,84 @@ namespace RTC
    */
   ::OpenRTM::PortStatus
   OutPortCorbaCdrProvider::get(::OpenRTM::CdrData_out data)
+    throw (CORBA::SystemException)
   {
-    RTC_PARANOID(("get()"));
-
+    RTC_PARANOID(("OutPortCorbaCdrProvider::get()"));
+    // at least the output "data" area should be allocated
     data = new ::OpenRTM::CdrData();
+
     if (m_buffer == 0)
       {
+        onSenderError();
         return ::OpenRTM::UNKNOWN_ERROR;
       }
 
-    if (m_buffer->empty())
-      {
-        return ::OpenRTM::BUFFER_EMPTY;
-      }
-
     cdrMemoryStream cdr;
-
-    BufferBase<cdrMemoryStream>::ReturnCode ret(m_buffer->read(cdr));
-    if (ret == 0)
+    CdrBufferBase::ReturnCode ret(m_buffer->read(cdr));
+    
+    if (ret == CdrBufferBase::BUFFER_OK)
       {
-        int len(cdr.bufSize());
-        RTC_PARANOID(("converted CDR data size: %d",len));
-        // set endian type
-        bool endian_type = m_connector->isLittleEndian();
-        RTC_TRACE(("connector endian: %s", endian_type ? "little":"big"));
-        cdr.setByteSwapFlag(endian_type);
+        CORBA::ULong len((CORBA::ULong)cdr.bufSize());
+        RTC_PARANOID(("converted CDR data size: %d", len));
+
         data->length(len);
         cdr.get_octet_array(&((*data)[0]), len);
-        return ::OpenRTM::PortStatus(ret);
       }
-    return ::OpenRTM::PortStatus(ret);
+
+    return convertReturn(ret, cdr);
+  }
+  /*!
+   * @if jp
+   * @brief リターンコード変換
+   * @else
+   * @brief Return codes conversion
+   * @endif
+   */
+  ::OpenRTM::PortStatus
+  OutPortCorbaCdrProvider::convertReturn(BufferStatus::Enum status,
+                                        const cdrMemoryStream& data)
+  {
+    switch(status)
+      {
+      case BufferStatus::BUFFER_OK:
+        onBufferRead(data);
+        onSend(data);
+        return ::OpenRTM::PORT_OK;
+        break;
+
+      case BufferStatus::BUFFER_ERROR:
+        onSenderError();
+        return ::OpenRTM::PORT_ERROR;
+        break;
+
+      case BufferStatus::BUFFER_FULL:
+        // never come here
+        return ::OpenRTM::BUFFER_FULL;
+        break;
+
+      case BufferStatus::BUFFER_EMPTY:
+        onBufferEmpty();
+        onSenderEmpty();
+        return ::OpenRTM::BUFFER_EMPTY;
+        break;
+
+      case BufferStatus::PRECONDITION_NOT_MET:
+        onSenderError();
+        return ::OpenRTM::PORT_ERROR;
+        break;
+
+      case BufferStatus::TIMEOUT:
+        onBufferReadTimeout();
+        onSenderTimeout();
+        return ::OpenRTM::BUFFER_TIMEOUT;
+        break;
+
+      default:
+        return ::OpenRTM::UNKNOWN_ERROR;
+      }
+
+    onSenderError();
+    return ::OpenRTM::UNKNOWN_ERROR;
   }
 
 };     // namespace RTC

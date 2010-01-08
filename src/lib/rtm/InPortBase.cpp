@@ -41,12 +41,18 @@ namespace RTC
   InPortBase::InPortBase(const char* name, const char* data_type)
     : PortBase(name), m_singlebuffer(true), m_thebuffer(0), m_littleEndian(true)
   {
+    RTC_DEBUG(("Port name: %s", name));
+
     // PortProfile::properties を設定
+    RTC_DEBUG(("setting port.port_type: DataIntPort"));
     addProperty("port.port_type", "DataInPort");
+
+    RTC_DEBUG(("setting dataport.data_type: %s", data_type));
     addProperty("dataport.data_type", data_type);
+
     addProperty("dataport.subscription_type", "Any");
   }
-
+  
   /*!
    * @if jp
    * @brief デストラクタ
@@ -57,7 +63,7 @@ namespace RTC
   InPortBase::~InPortBase()
   {
     RTC_TRACE(("~InPortBase()"));
-
+    
     if (m_connectors.size() != 0)
       {
         RTC_ERROR(("connector.size should be 0 in InPortBase's dtor."));
@@ -67,7 +73,7 @@ namespace RTC
             delete m_connectors[i];
           }
       }
-
+    
     if (m_thebuffer != 0)
       {
         CdrBufferFactory::instance().deleteObject(m_thebuffer);
@@ -76,13 +82,20 @@ namespace RTC
             RTC_ERROR(("Although singlebuffer flag is true, the buffer != 0"));
           }
       }
-
+    
   }
 
-  void InPortBase::init()
+  /*!
+   * @if jp
+   * @brief プロパティの初期化
+   * @else
+   * @brief Initializing properties
+   * @endif
+   */
+  void InPortBase::init(coil::Properties& prop)
   {
     RTC_TRACE(("init()"));
-
+    m_properties << prop;
     if (m_singlebuffer)
       {
         RTC_DEBUG(("single buffer mode."));
@@ -96,16 +109,147 @@ namespace RTC
       {
         RTC_DEBUG(("multi buffer mode."));
       }
+
     initProviders();
     initConsumers();
   }
-
+  
+  /*!
+   * @if jp
+   * @brief プロパティを取得する
+   * @else
+   * @brief Get properties
+   * @endif
+   */
   coil::Properties& InPortBase::properties()
   {
     RTC_TRACE(("properties()"));
     
     return m_properties;
   }
+
+  /*!
+   * @if jp
+   * @brief ConnectorId を取得
+   * @else
+   * @brief ConnectorId list
+   * @endif
+   */
+  coil::vstring InPortBase::getConnectorIds()
+  {
+    coil::vstring ids;
+    for (int i(0), len(m_connectors.size()); i < len; ++i)
+      {
+        ids.push_back(m_connectors[i]->id());
+      }
+    RTC_TRACE(("getConnectorIds(): %s", coil::flatten(ids).c_str()));
+    return ids;
+  }
+
+  /*!
+   * @if jp
+   * @brief Connectorの名前を取得
+   * @else
+   * @brief Connector name list
+   * @endif
+   */
+  coil::vstring InPortBase::getConnectorNames()
+  {
+    coil::vstring names;
+    for (int i(0), len(m_connectors.size()); i < len; ++i)
+      {
+        names.push_back(m_connectors[i]->name());
+      }
+    RTC_TRACE(("getConnectorNames(): %s", coil::flatten(names).c_str()));
+    return names;
+  }
+
+  /*!
+   * @if jp
+   * @brief ConnectorをIDで取得
+   * @else
+   * @brief Getting Connector by ID
+   * @endif
+   */
+  InPortConnector* InPortBase::getConnectorById(const char* id)
+  {
+    RTC_TRACE(("getConnectorById(id = %s)", id));
+
+    std::string sid(id);
+    for (int i(0), len(m_connectors.size()); i < len; ++i)
+      {
+        if (sid  == m_connectors[i]->id())
+          {
+            return m_connectors[i];
+          }
+      }
+    RTC_WARN(("ConnectorProfile with the id(%d) not found.", id));
+    return 0;
+  }
+
+  /*!
+   * @if jp
+   * @brief Connectorを名前で取得
+   * @else
+   * @brief Getting ConnectorProfile by name
+   * @endif
+   */
+  InPortConnector* InPortBase::getConnectorByName(const char* name)
+  {
+    RTC_TRACE(("getConnectorByName(id = %s)", name));
+
+    std::string sname(name);
+    for (int i(0), len(m_connectors.size()); i < len; ++i)
+      {
+        if (sname  == m_connectors[i]->name())
+          {
+            return m_connectors[i];
+          }
+      }
+    RTC_WARN(("ConnectorProfile with the name(%d) not found.", name));
+    return 0;
+  }
+
+  /*!
+   * @if jp
+   * @brief ConnectorProfileをIDで取得
+   * @else
+   * @brief Getting ConnectorProfile by name
+   * @endif
+   */
+  bool InPortBase::getConnectorProfileById(const char* id,
+                                            ConnectorInfo& prof)
+  {
+    RTC_TRACE(("getConnectorProfileById(id = %s)", id));
+    InPortConnector* conn(getConnectorById(id));
+    if (conn == 0)
+      {
+        return false;
+      }
+    prof = conn->profile();
+    return true;
+  }
+
+  /*!
+   * @if jp
+   * @brief ConnectorProfileを名前で取得
+   * @else
+   * @brief Getting ConnectorProfile by name
+   * @endif
+   */
+  bool InPortBase::getConnectorProfileByName(const char* name,
+                                              ConnectorInfo& prof)
+  {
+    RTC_TRACE(("getConnectorProfileById(id = %s)", name));
+    InPortConnector* conn(getConnectorById(name));
+    if (conn == 0)
+      {
+        return false;
+      }
+    prof = conn->profile();
+    return true;
+  }
+
 
   /*!
    * @if jp
@@ -117,7 +261,7 @@ namespace RTC
   void InPortBase::activateInterfaces()
   {
     RTC_TRACE(("activateInterfaces()"));
-
+    
     for (int i(0), len(m_connectors.size()); i < len; ++i)
       {
         m_connectors[i]->activate();
@@ -274,6 +418,8 @@ namespace RTC
       NVUtil::copyToProperties(conn_prop, cprof.properties);
       prop << conn_prop.getNode("dataport"); // marge ConnectorProfile
     }
+    RTC_DEBUG(("ConnectorProfile::properties are as follows."));
+    RTC_DEBUG_STR((prop));
 
     /*
      * ここで, ConnectorProfile からの properties がマージされたため、
@@ -292,6 +438,7 @@ namespace RTC
         InPortProvider* provider(createProvider(cprof, prop));
         if (provider == 0)
           {
+            RTC_ERROR(("InPort provider creation failed."));
             return RTC::BAD_PARAMETER;
           }
 
@@ -299,6 +446,7 @@ namespace RTC
         InPortConnector* connector(createConnector(cprof, prop, provider));
         if (connector == 0)
           {
+            RTC_ERROR(("PushConnector creation failed."));
             return RTC::RTC_ERROR;
           }
 
@@ -314,7 +462,7 @@ namespace RTC
         return RTC::RTC_OK;
       }
 
-    RTC_ERROR(("unsupported dataflow_type"));
+    RTC_ERROR(("unsupported dataflow_type: %s", dflow_type.c_str()));
     return RTC::BAD_PARAMETER;
   }
   
@@ -325,8 +473,7 @@ namespace RTC
    * @brief Subscribe to the interface
    * @endif
    */
-  ReturnCode_t
-  InPortBase::subscribeInterfaces(const ConnectorProfile& cprof)
+  ReturnCode_t InPortBase::subscribeInterfaces(const ConnectorProfile& cprof)
   {
     RTC_TRACE(("subscribeInterfaces()"));
 
@@ -337,39 +484,16 @@ namespace RTC
       NVUtil::copyToProperties(conn_prop, cprof.properties);
       prop << conn_prop.getNode("dataport"); // marge ConnectorProfile
     }
+    RTC_DEBUG(("ConnectorProfile::properties are as follows."));
+    RTC_DEBUG_STR((prop));
 
-    // old version check
-    if(prop.hasKey("serializer") == NULL)
+    bool littleEndian; // true: little, false: big
+    if (!checkEndian(prop, littleEndian))
       {
-        m_littleEndian = true;
+        RTC_ERROR(("unsupported endian"));
+        return RTC::UNSUPPORTED;
       }
-    else
-      {
-        // endian type check
-        std::string endian_type(prop.getProperty("serializer.cdr.endian", ""));
-        RTC_DEBUG(("endian_type: %s", endian_type.c_str()));
-        coil::normalize(endian_type);
-        std::vector<std::string> endian(coil::split(endian_type, ","));
-        if( endian.empty() )
-          {
-            RTC_ERROR(("unsupported endian"));
-            return RTC::UNSUPPORTED;
-          }
-        if(endian[0] == "little")
-          {
-            m_littleEndian = true;
-          }
-        else if(endian[0] == "big")
-          {
-            m_littleEndian = false;
-          }
-        else
-          {
-            RTC_ERROR(("unsupported endian"));
-            return RTC::UNSUPPORTED;
-          }
-      }
-    RTC_TRACE(("endian: %s", m_littleEndian ? "little":"big"));
+    RTC_TRACE(("endian: %s", littleEndian ? "little" : "big"));
 
     /*
      * ここで, ConnectorProfile からの properties がマージされたため、
@@ -382,25 +506,24 @@ namespace RTC
 
     if (dflow_type == "push")
       {
-        RTC_DEBUG(("dataflow_type = push .... do nothing"));
+        RTC_DEBUG(("dataflow_type is push."));
 
-        // endian type set
-        std::string sid(cprof.connector_id);
-        RTC_DEBUG(("cprof.connector_id: %s", sid.c_str()));
-        for (int i(0), len(m_connectors.size()); i < len; ++i)
+        // setting endian type
+        InPortConnector* conn(getConnectorById(cprof.connector_id));
+        if (conn == 0)
           {
-            if (sid == m_connectors[i]->id())
-              {
-                m_connectors[i]->setEndian(m_littleEndian);
-                return RTC::RTC_OK;
-              }
+            RTC_ERROR(("specified connector not found: %s",
+                       (const char*)cprof.connector_id));
+            return RTC::RTC_ERROR;
           }
-        RTC_ERROR(("specified connector not found: %s", sid.c_str()));
-        return RTC::RTC_ERROR;
+        conn->setEndian(littleEndian);
+
+        RTC_DEBUG(("subscribeInterfaces() successfully finished."));
+        return RTC::RTC_OK;
       }
     else if (dflow_type == "pull")
       {
-        RTC_DEBUG(("dataflow_type = pull .... create PullConnector"));
+        RTC_DEBUG(("dataflow_type is pull."));
 
         // create OutPortConsumer
         OutPortConsumer* consumer(createConsumer(cprof, prop));
@@ -420,7 +543,7 @@ namespace RTC
         return RTC::RTC_OK;
       }
 
-    RTC_ERROR(("unsupported dataflow_type"));
+    RTC_ERROR(("unsupported dataflow_type: %s", dflow_type.c_str()));
     return RTC::BAD_PARAMETER;
   }
   
@@ -554,6 +677,45 @@ namespace RTC
 
     m_consumerTypes = consumer_types;
   }
+
+  /*!
+   * @if jp
+   * @brief シリアライザのエンディアンをチェックする
+   * @else
+   * @brief Checking endian flag of serializer
+   * @endif
+   */
+  bool InPortBase::checkEndian(const coil::Properties& prop,
+                               bool& littleEndian)
+  {
+        // old version check
+    if(prop.hasKey("serializer") == NULL)
+      {
+        littleEndian = true;
+        return true;
+      }
+
+    // endian type check
+    std::string endian_type(prop.getProperty("serializer.cdr.endian", ""));
+    RTC_DEBUG(("endian_type: %s", endian_type.c_str()));
+    coil::normalize(endian_type);
+    std::vector<std::string> endian(coil::split(endian_type, ","));
+
+    if(endian.empty()) { return false; }
+    if(endian[0] == "little")
+      {
+        littleEndian = true;
+        return true;
+      }
+    else if(endian[0] == "big")
+      {
+        littleEndian = false;
+        return true;
+      }
+    return false;
+  }
+
+
 
   /*!
    * @if jp

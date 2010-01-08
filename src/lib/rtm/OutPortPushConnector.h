@@ -179,6 +179,10 @@ namespace RTC
      * @endif
      */
     virtual CdrBufferBase* createBuffer(ConnectorInfo& info);
+    
+    void onConnect();
+    
+    void onDisconnect();
 
   private:
     /*!
