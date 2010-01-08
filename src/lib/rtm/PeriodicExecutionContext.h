@@ -1511,7 +1511,7 @@ namespace RTC
      * @brief Execution cycle of ExecutionContext
      * @endif
      */
-    long int m_usec;
+    coil::TimeValue m_period;
     
     /*!
      * @if jp
