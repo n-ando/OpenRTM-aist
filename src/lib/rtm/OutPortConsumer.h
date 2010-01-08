@@ -229,6 +229,9 @@ namespace RTC
      */
     virtual void unsubscribeInterface(const SDOPackage::NVList& properties) = 0;
 
+  protected:
+    mutable Logger rtclog;
+
     /*!
      * @if jp
      * @brief Interface¿‹¬≥Õ—Functor
