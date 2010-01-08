@@ -209,6 +209,24 @@ namespace RTC
       };
 
     /*!
+     * @if jp
+     * @brief PushPolicy の設定
+     * @else
+     * @brief Setting PushPolicy
+     * @endif
+     */
+    void setPushPolicy(const coil::Properties& prop);
+
+    /*!
+     * @if jp
+     * @brief Task の設定
+     * @else
+     * @brief Setting Task
+     * @endif
+     */
+    bool createTask(const coil::Properties& prop);
+
+    /*!
      * @brief push "all" policy
      */
     ReturnCode pushAll();
