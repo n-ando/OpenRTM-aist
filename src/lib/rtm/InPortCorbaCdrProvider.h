@@ -17,8 +17,8 @@
  *
  */
 
-#ifndef RTC_INPORTCORBAPROVIDER_H
-#define RTC_INPORTCORBAPROVIDER_H
+#ifndef RTC_INPORTCORBACDRPROVIDER_H
+#define RTC_INPORTCORBACDRPROVIDER_H
 
 #include <rtm/idl/DataPortSkel.h>
 #include <rtm/BufferBase.h>
@@ -245,7 +245,7 @@ namespace RTC
 
 
   private:
-    BufferBase<cdrMemoryStream>* m_buffer;
+    CdrBufferBase* m_buffer;
     ::OpenRTM::InPortCdr_var m_objref;
     ConnectorListeners* m_listeners;
     ConnectorInfo m_profile;
@@ -254,14 +254,14 @@ namespace RTC
   };  // class InPortCorCdrbaProvider
 };     // namespace RTC
 
-#ifdef WIN32
-#pragma warning( default : 4290 )
-#endif
-
 extern "C"
 {
   void InPortCorbaCdrProviderInit(void);
 };
 
-#endif // InPortCorbaCdrProvider_h
+#ifdef WIN32
+#pragma warning( default : 4290 )
+#endif
+
+#endif // RTC_INPORTCORBACDRPROVIDER_H
 

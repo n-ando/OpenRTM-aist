@@ -57,6 +57,8 @@ namespace RTC
     m_publisher->setConsumer(m_consumer);
     m_publisher->setBuffer(m_buffer);
     m_publisher->setListener(m_profile, &m_listeners);
+
+    onConnect();
   }
   
   /*!
@@ -68,6 +70,7 @@ namespace RTC
    */
   OutPortPushConnector::~OutPortPushConnector()
   {
+    onDisconnect();
     disconnect();
   }
   
@@ -203,6 +206,29 @@ namespace RTC
                                               "ring_buffer");
     return CdrBufferFactory::instance().createObject(buf_type);
   }
-  
+
+  /*!
+   * @if jp
+   * @brief 接続確立時にコールバックを呼ぶ
+   * @else
+   * @brief Invoke callback when connection is established
+   * @endif
+   */
+  void OutPortPushConnector::onConnect()
+  {
+    m_listeners.connector_[ON_CONNECT].notify(m_profile);
+  }
+
+  /*!
+   * @if jp
+   * @brief 接続切断時にコールバックを呼ぶ
+   * @else
+   * @brief Invoke callback when connection is destroied
+   * @endif
+   */
+  void OutPortPushConnector::onDisconnect()
+  {
+    m_listeners.connector_[ON_CONNECT].notify(m_profile);
+  }
 };
 

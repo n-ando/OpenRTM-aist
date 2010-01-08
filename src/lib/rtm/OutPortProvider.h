@@ -31,6 +31,7 @@
 
 namespace RTC
 {
+  class ConnectorListeners;
   /*!
    * @if jp
    *
@@ -159,7 +160,10 @@ namespace RTC
      *
      * @endif
      */
-    virtual void setBuffer(BufferBase<cdrMemoryStream>* buffer);
+    virtual void setBuffer(CdrBufferBase* buffer) = 0;
+
+    virtual void setListener(ConnectorInfo& info,
+                             ConnectorListeners* listeners) = 0;
 
     virtual void setConnector(OutPortConnector* connector) = 0;
 

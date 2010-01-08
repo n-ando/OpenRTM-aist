@@ -19,6 +19,7 @@
 
 #include <rtm/InPortPullConnector.h>
 #include <rtm/OutPortConsumer.h>
+#include <rtm/ConnectorListener.h>
 
 namespace RTC
 {
@@ -40,13 +41,15 @@ namespace RTC
       {
         m_buffer = createBuffer(m_profile);
       }
-    if (m_buffer == 0 || m_consumer==0)
+    if (m_buffer == 0 || m_consumer == 0)
       {
         throw std::bad_alloc();
         return;
       }
     m_consumer->setBuffer(m_buffer);
     m_consumer->setListener(info, &m_listeners);
+
+    onConnect();
   }
   
   /*!
@@ -58,6 +61,7 @@ namespace RTC
    */
   InPortPullConnector::~InPortPullConnector()
   {
+    onDisconnect();
     disconnect();
   }
   
@@ -77,12 +81,12 @@ namespace RTC
   ConnectorBase::ReturnCode
   InPortPullConnector::read(cdrMemoryStream& data)
   {
-    if (m_buffer == 0)
+    RTC_TRACE(("InPortPullConnector::read()"));
+    if (m_consumer == 0)
       {
         return PORT_ERROR;
       }
-    m_buffer->write(data);
-    return PORT_OK;
+    return m_consumer->get(data);
   }
   
   /*!
@@ -120,6 +124,30 @@ namespace RTC
     buf_type = info.properties.getProperty("buffer_type",
                                               "ring_buffer");
     return CdrBufferFactory::instance().createObject(buf_type);
+  }
+
+  /*!
+   * @if jp
+   * @brief 接続確立時にコールバックを呼ぶ
+   * @else
+   * @brief Invoke callback when connection is established
+   * @endif
+   */
+  void InPortPullConnector::onConnect()
+  {
+    m_listeners.connector_[ON_CONNECT].notify(m_profile);
+  }
+
+  /*!
+   * @if jp
+   * @brief 接続切断時にコールバックを呼ぶ
+   * @else
+   * @brief Invoke callback when connection is destroied
+   * @endif
+   */
+  void InPortPullConnector::onDisconnect()
+  {
+    m_listeners.connector_[ON_CONNECT].notify(m_profile);
   }
 };
 

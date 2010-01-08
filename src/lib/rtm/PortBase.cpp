@@ -427,6 +427,20 @@ namespace RTC
     m_profile.name = CORBA::string_dup(name);
     rtclog.setName(name);
   }
+
+  /*!
+   * @if jp
+   * @brief Port の名前を取得する
+   * @else
+   * @brief Get the name of this Port
+   * @return The name of this Port.
+   * @endif
+   */
+  const char* PortBase::getName() const
+  {
+    RTC_TRACE(("name() = ", m_profile.name));
+    return m_profile.name;
+  }
   
   /*!
    * @if jp

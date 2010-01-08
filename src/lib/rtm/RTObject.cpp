@@ -1077,9 +1077,9 @@ namespace RTC
 	   SDOPackage::NotAvailable, SDOPackage::InternalError)
   {
     RTC_TRACE(("get_sdo_type()"));
+    CORBA::String_var sdo_type;
     try
       {
-	CORBA::String_var sdo_type;
 	sdo_type = CORBA::string_dup(m_profile.description);
 	return sdo_type._retn();
       }
@@ -1087,7 +1087,8 @@ namespace RTC
       {
 	throw SDOPackage::InternalError("get_sdo_type()");
       }
-    return "";
+    sdo_type = "";
+    return sdo_type._retn();
   }
   
   /*!
@@ -1484,19 +1485,13 @@ namespace RTC
                                      InPortBase& inport)
   {
     RTC_TRACE(("registerInPort(%s)", name));
-    if (m_properties.hasKey("port.inport"))
-      {
-        inport.properties() << m_properties.getNode("port.inport");
-      }
 
     std::string propkey("port.inport.");
     propkey += name;
-    if (m_properties.hasKey(propkey.c_str()))
-      {
-        inport.properties() << m_properties.getNode(propkey);
-      }
+    m_properties.getNode(propkey)
+      << m_properties.getNode("port.inport.dataport");
 
-    inport.init();
+    inport.init(m_properties.getNode(propkey));
     registerPort(inport);
   }
 
@@ -1513,9 +1508,10 @@ namespace RTC
     
     std::string propkey("port.outport.");
     propkey += name;
-    m_properties.getNode(propkey) << m_properties.getNode("port.outport.dataport");
+    m_properties.getNode(propkey) 
+      << m_properties.getNode("port.outport.dataport");
     
-    outport.properties() << m_properties.getNode(propkey);
+    outport.init(m_properties.getNode(propkey));
     registerPort(outport);
   }
   

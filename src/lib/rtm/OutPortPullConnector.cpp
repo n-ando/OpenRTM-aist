@@ -24,14 +24,32 @@ namespace RTC
 {
   OutPortPullConnector::OutPortPullConnector(ConnectorInfo info,
                                              OutPortProvider* provider,
+                                             ConnectorListeners& listeners,
                                              CdrBufferBase* buffer)
     : OutPortConnector(info),
-      m_provider(provider), m_buffer(buffer)
+      m_provider(provider),
+      m_listeners(listeners),
+      m_buffer(buffer)
   {
+    // create buffer
+    if (m_buffer == 0)
+      {
+        m_buffer = createBuffer(info);
+      }
+
+    if (m_provider == 0 || m_buffer == 0) { throw std::bad_alloc(); }
+
+    m_provider->setBuffer(m_buffer);
+    m_provider->setConnector(this);
+    //    m_provider->init(m_profile /* , m_listeners */);
+    m_provider->setListener(info, &m_listeners);
+
+    onConnect();
   }
 
   OutPortPullConnector::~OutPortPullConnector()
   {
+    onDisconnect();
     disconnect();
   }
   
@@ -45,6 +63,7 @@ namespace RTC
   ConnectorBase::ReturnCode OutPortPullConnector::disconnect()
   {
     // delete provider
+
     //    OutPortProviderFactory& factory(OutPortProviderFactory::instance());
     //    factory.deleteObject(m_buffer);
     
@@ -68,6 +87,44 @@ namespace RTC
   {
     return m_buffer;
   }
+  
+  /*!
+   * @if jp
+   * @brief Bufferの生成
+   * @else
+   * @brief create buffer
+   * @endif
+   */
+  CdrBufferBase* OutPortPullConnector::createBuffer(ConnectorInfo& info)
+  {
+    std::string buf_type;
+    buf_type = info.properties.getProperty("buffer_type",
+                                              "ring_buffer");
+    return CdrBufferFactory::instance().createObject(buf_type);
+  }
 
+  /*!
+   * @if jp
+   * @brief 接続確立時にコールバックを呼ぶ
+   * @else
+   * @brief Invoke callback when connection is established
+   * @endif
+   */
+  void OutPortPullConnector::onConnect()
+  {
+    m_listeners.connector_[ON_CONNECT].notify(m_profile);
+  }
+
+  /*!
+   * @if jp
+   * @brief 接続切断時にコールバックを呼ぶ
+   * @else
+   * @brief Invoke callback when connection is destroied
+   * @endif
+   */
+  void OutPortPullConnector::onDisconnect()
+  {
+    m_listeners.connector_[ON_CONNECT].notify(m_profile);
+  }
 };
 

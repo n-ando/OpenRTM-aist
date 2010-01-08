@@ -21,6 +21,7 @@
 #define RTC_OUTPORTPULLCONNECTOR_H
 
 #include <rtm/OutPortConnector.h>
+#include <rtm/ConnectorListener.h>
 
 namespace RTC
 {
@@ -59,6 +60,7 @@ namespace RTC
      */
     OutPortPullConnector(ConnectorInfo info,
                          OutPortProvider* provider,
+                         ConnectorListeners& listeners,
                          CdrBufferBase* buffer = 0);
 
     /*!
@@ -159,6 +161,34 @@ namespace RTC
      * @endif
      */
     virtual void deactivate(){}; // do nothing
+
+    /*!
+     * @if jp
+     * @brief Bufferの生成
+     * @else
+     * @brief create buffer
+     * @endif
+     */
+    CdrBufferBase* createBuffer(ConnectorInfo& info);
+
+    /*!
+     * @if jp
+     * @brief 接続確立時にコールバックを呼ぶ
+     * @else
+     * @brief Invoke callback when connection is established
+     * @endif
+     */
+    void onConnect();
+
+    /*!
+     * @if jp
+     * @brief 接続切断時にコールバックを呼ぶ
+     * @else
+     * @brief Invoke callback when connection is destroied
+     * @endif
+     */
+    void onDisconnect();
+
   protected:
 
     /*!
@@ -169,6 +199,15 @@ namespace RTC
      * @endif
      */
     OutPortProvider* m_provider;
+
+    /*!
+     * @if jp
+     * @brief ConnectorListenrs への参照
+     * @else
+     * @brief A reference to a ConnectorListener
+     * @endif
+     */
+    ConnectorListeners& m_listeners;
 
     /*!
      * @if jp

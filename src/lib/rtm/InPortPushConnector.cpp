@@ -19,6 +19,7 @@
 
 #include <rtm/InPortPushConnector.h>
 #include <rtm/InPortProvider.h>
+#include <rtm/ConnectorListener.h>
 
 namespace RTC
 {
@@ -48,6 +49,8 @@ namespace RTC
     m_provider->init(info.properties);
     m_provider->setBuffer(m_buffer);
     m_provider->setListener(info, &m_listeners);
+
+    onConnect();
   }
 
   /*!
@@ -59,6 +62,7 @@ namespace RTC
    */
   InPortPushConnector::~InPortPushConnector()
   {
+    onDisconnect();
     disconnect();
   }
 
@@ -145,6 +149,30 @@ namespace RTC
     buf_type = info.properties.getProperty("buffer_type",
                                               "ring_buffer");
     return CdrBufferFactory::instance().createObject(buf_type);
+  }
+
+  /*!
+   * @if jp
+   * @brief 接続確立時にコールバックを呼ぶ
+   * @else
+   * @brief Invoke callback when connection is established
+   * @endif
+   */
+  void InPortPushConnector::onConnect()
+  {
+    m_listeners.connector_[ON_CONNECT].notify(m_profile);
+  }
+
+  /*!
+   * @if jp
+   * @brief 接続切断時にコールバックを呼ぶ
+   * @else
+   * @brief Invoke callback when connection is destroied
+   * @endif
+   */
+  void InPortPushConnector::onDisconnect()
+  {
+    m_listeners.connector_[ON_CONNECT].notify(m_profile);
   }
 
 };

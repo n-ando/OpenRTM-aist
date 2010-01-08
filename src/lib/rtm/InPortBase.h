@@ -112,10 +112,199 @@ namespace RTC
      * @endif
      */
     virtual ~InPortBase(void);
-    
+
+    /*!
+     * @if jp
+     * @brief プロパティの初期化
+     * @else
+     * @brief Initializing properties
+     * @endif
+     */
+    void init(coil::Properties& prop);
+
+    /*!
+     * @if jp
+     * @brief プロパティを取得する
+     * @else
+     * @brief Get properties
+     * @endif
+     */
     coil::Properties& properties();
 
-    void init();
+    /*!
+     * @if jp
+     * @brief Connector を取得
+     *
+     * 現在所有しているコネクタを取得する。
+     *
+     * @return connector のリスト
+     *
+     * @else
+     *
+     * @brief Connector list
+     *
+     * This operation returns connector list
+     *
+     * @return connector list
+     *
+     * @endif
+     */
+    const std::vector<InPortConnector*>& connectors();
+
+    /*!
+     * @if jp
+     * @brief ConnectorProfile を取得
+     *
+     * 現在所有しているコネクタのProfileを取得する。
+     *
+     * @return ConnectorProfile のリスト
+     *
+     * @else
+     *
+     * @brief ConnectorProfile list
+     *
+     * This operation returns ConnectorProfile list
+     *
+     * @return connector list
+     *
+     * @endif
+     */
+    ConnectorInfoList getConnectorProfiles();
+
+    /*!
+     * @if jp
+     * @brief ConnectorId を取得
+     *
+     * 現在所有しているコネクタのIDを取得する。
+     *
+     * @return ConnectorId のリスト
+     *
+     * @else
+     *
+     * @brief ConnectorId list
+     *
+     * This operation returns ConnectorId list
+     *
+     * @return connector list
+     *
+     * @endif
+     */
+    coil::vstring getConnectorIds();
+
+    /*!
+     * @if jp
+     * @brief Connectorの名前を取得
+     *
+     * 現在所有しているコネクタの名前を取得する。
+     *
+     * @return Connector名のリスト
+     *
+     * @else
+     *
+     * @brief Connector name list
+     *
+     * This operation returns Connector name list
+     *
+     * @return connector name list
+     *
+     * @endif
+     */
+    coil::vstring getConnectorNames();
+
+    /*!
+     * @if jp
+     * @brief ConnectorProfileをIDで取得
+     *
+     * 現在所有しているコネクタをIDで取得する。
+     *
+     * @param id Connector ID
+     * @return コネクタへのポインタ
+     *
+     * @else
+     *
+     * @brief Getting ConnectorProfile by ID
+     *
+     * This operation returns Connector specified by ID.
+     *
+     * @param id Connector ID
+     * @return A pointer to connector
+     *
+     * @endif
+     */
+    InPortConnector* getConnectorById(const char* id);
+
+     /*!
+     * @if jp
+     * @brief ConnectorProfileを名前で取得
+     *
+     * 現在所有しているコネクタを名前で取得する。
+     *
+     * @param name Connector name
+     * @return コネクタへのポインタ
+     *
+     * @else
+     *
+     * @brief Getting Connector by name
+     *
+     * This operation returns Connector specified by name.
+     *
+     * @param id Connector ID
+     * @return A pointer to connector
+     *
+     * @endif
+     */
+   InPortConnector* getConnectorByName(const char* name);
+
+    /*!
+     * @if jp
+     * @brief ConnectorProfileをIDで取得
+     *
+     * 現在所有しているコネクタをIDで取得する。
+     *
+     * @param id Connector ID
+     * @param prof ConnectorProfile
+     * @return false 指定したIDがない
+     *
+     * @else
+     *
+     * @brief Getting ConnectorProfile by name
+     *
+     * This operation returns ConnectorProfile specified by name
+     *
+     * @param id Connector ID
+     * @param prof ConnectorProfile
+     * @return false　specified ID does not exist
+     *
+     * @endif
+     */
+    bool getConnectorProfileById(const char* id,
+                                 ConnectorInfo& prof);
+
+    /*!
+     * @if jp
+     * @brief ConnectorProfileを名前で取得
+     *
+     * 現在所有しているコネクタを名前で取得する。
+     *
+     * @param name Connector name
+     * @param prof ConnectorProfile
+     * @return false 指定した名前がない
+     *
+     * @else
+     *
+     * @brief Getting ConnectorProfile by name
+     *
+     * This operation returns ConnectorProfile specified by name
+     *
+     * @param id Connector ID
+     * @param prof ConnectorProfile
+     * @return false specified name does not exist
+     *
+     * @endif
+     */
+    bool getConnectorProfileByName(const char* name,
+                                   ConnectorInfo& prof);
+
 
     /*!
      * @if jp
@@ -487,6 +676,28 @@ namespace RTC
      * @endif
      */
     void initConsumers();
+
+    /*!
+     * @if jp
+     * @brief シリアライザのエンディアンをチェックする
+     *
+     * 与えられたプロパティに設定されている、データのシリアライザのエン
+     * ディアン指定をチェックする。正しいエンディアン指定がなされていれ
+     * ば、true を返し、引数 littleEndian に、設定値がリトルエンディア
+     * ンであれば true が、ビッグエンディアンであれば false が返される。
+     *
+     * @else
+     *
+     * @brief Checking endian flag of serializer
+     *
+     * This operation checks endian flag of data serializer that is
+     * specified properties. If valid specification is found, this
+     * operation returns true and set argument littleEndian. True
+     * means little endian, false means big endian.
+     *
+     * @endif
+     */
+    bool checkEndian(const coil::Properties& prop, bool& littleEndian);
 
     /*!
      * @if jp

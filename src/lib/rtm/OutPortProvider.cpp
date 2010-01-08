@@ -37,9 +37,6 @@ namespace RTC
   {
   }
 
-  void OutPortProvider::setBuffer(BufferBase<cdrMemoryStream>* buffer)
-  {
-  }
 
   /*!
    * @if jp

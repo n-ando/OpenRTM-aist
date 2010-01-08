@@ -25,6 +25,7 @@
 #include <rtm/OutPortProvider.h>
 #include <rtm/CORBA_SeqUtil.h>
 #include <rtm/Manager.h>
+#include <rtm/ConnectorListener.h>
 #include <rtm/ConnectorBase.h>
 
 #ifdef WIN32
@@ -152,8 +153,9 @@ namespace RTC
      *
      * @endif
      */
-    virtual void setBuffer(BufferBase<cdrMemoryStream>* buffer);
-
+    virtual void setBuffer(CdrBufferBase* buffer);
+    virtual void setListener(ConnectorInfo& info,
+                             ConnectorListeners* listeners);
     virtual void setConnector(OutPortConnector* connector);
 
     /*!
@@ -173,12 +175,123 @@ namespace RTC
      *
      * @endif
      */
-    virtual ::OpenRTM::PortStatus get(::OpenRTM::CdrData_out data);
+    virtual ::OpenRTM::PortStatus get(::OpenRTM::CdrData_out data)
+      throw (CORBA::SystemException);
 
     
   private:
-    BufferBase<cdrMemoryStream>* m_buffer;
+    /*!
+     * @if jp
+     * @brief リターンコード変換
+     * @else
+     * @brief Return codes conversion
+     * @endif
+     */
+    ::OpenRTM::PortStatus convertReturn(BufferStatus::Enum status,
+                                        const cdrMemoryStream& data);
+
+    
+    /*!
+     * @brief Connector data listener functions
+     */
+//    inline void onBufferWrite(const cdrMemoryStream& data)
+//    {
+//      m_listeners->
+//        connectorData_[ON_BUFFER_WRITE].notify(m_profile, data);
+//    }
+//
+//    inline void onBufferFull(const cdrMemoryStream& data)
+//    {
+//      m_listeners->
+//        connectorData_[ON_BUFFER_FULL].notify(m_profile, data);
+//    }
+//
+//    inline void onBufferWriteTimeout(const cdrMemoryStream& data)
+//    {
+//      m_listeners->
+//        connectorData_[ON_BUFFER_WRITE_TIMEOUT].notify(m_profile, data);
+//    }
+//
+//    inline void onBufferWriteOverwrite(const cdrMemoryStream& data)
+//    {
+//      m_listeners->
+//        connectorData_[ON_BUFFER_OVERWRITE].notify(m_profile, data);
+//    }
+
+    inline void onBufferRead(const cdrMemoryStream& data)
+    {
+      m_listeners->
+        connectorData_[ON_BUFFER_READ].notify(m_profile, data);
+    }
+
+    inline void onSend(const cdrMemoryStream& data)
+    {
+      m_listeners->
+        connectorData_[ON_SEND].notify(m_profile, data);
+    }
+
+//    inline void onReceived(const cdrMemoryStream& data)
+//    {
+//      m_listeners->
+//        connectorData_[ON_RECEIVED].notify(m_profile, data);
+//    }
+//
+//    inline void onReceiverFull(const cdrMemoryStream& data)
+//    {
+//      m_listeners->
+//        connectorData_[ON_RECEIVER_FULL].notify(m_profile, data);
+//    }
+//
+//    inline void onReceiverTimeout(const cdrMemoryStream& data)
+//    {
+//      m_listeners->
+//        connectorData_[ON_RECEIVER_TIMEOUT].notify(m_profile, data);
+//    }
+//
+//    inline void onReceiverError(const cdrMemoryStream& data)
+//    {
+//      m_listeners->
+//        connectorData_[ON_RECEIVER_ERROR].notify(m_profile, data);
+//    }
+
+    /*!
+     * @brief Connector listener functions
+     */
+    inline void onBufferEmpty()
+    {
+      m_listeners->
+        connector_[ON_BUFFER_EMPTY].notify(m_profile);
+    }
+
+    inline void onBufferReadTimeout()
+    {
+      m_listeners->
+        connector_[ON_BUFFER_READ_TIMEOUT].notify(m_profile);
+    }
+
+    inline void onSenderEmpty()
+    {
+      m_listeners->
+        connector_[ON_SENDER_EMPTY].notify(m_profile);
+    }
+
+    inline void onSenderTimeout()
+    {
+      m_listeners->
+        connector_[ON_SENDER_TIMEOUT].notify(m_profile);
+    }
+
+    inline void onSenderError()
+    {
+      m_listeners->
+        connector_[ON_SENDER_ERROR].notify(m_profile);
+    }
+    
+  private:
+    CdrBufferBase* m_buffer;
     ::OpenRTM::OutPortCdr_var m_objref;
+    ConnectorListeners* m_listeners;
+    ConnectorInfo m_profile;
     OutPortConnector* m_connector;
 
   };  // class OutPortCorbaCdrProvider
