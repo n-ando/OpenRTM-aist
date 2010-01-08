@@ -179,9 +179,23 @@ namespace RTC
      * @endif
      */
     virtual CdrBufferBase* createBuffer(ConnectorInfo& info);
-    
+
+    /*!
+     * @if jp
+     * @brief 接続確立時にコールバックを呼ぶ
+     * @else
+     * @brief Invoke callback when connection is established
+     * @endif
+     */
     void onConnect();
-    
+
+    /*!
+     * @if jp
+     * @brief 接続切断時にコールバックを呼ぶ
+     * @else
+     * @brief Invoke callback when connection is destroied
+     * @endif
+     */
     void onDisconnect();
 
   private:
