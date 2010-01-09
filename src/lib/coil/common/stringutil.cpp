@@ -539,7 +539,7 @@ namespace coil
     char** argv;
     size_t argc(args.size());
     
-    argv = new char*[argc];
+    argv = new char*[argc + 1];
     
     for (size_t i(0); i < argc; ++i)
       {
@@ -548,6 +548,7 @@ namespace coil
         strncpy(argv[i], args[i].c_str(), sz);
         argv[i][sz] = '\0';
       }
+    argv[argc] = NULL;
     return argv;
   }
 
