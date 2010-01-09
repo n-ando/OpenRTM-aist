@@ -30,6 +30,48 @@ namespace coil
 
   /*!
    * @if jp
+   * @brief string から wstring への変換
+   *
+   * 与えられた string 文字列を wstring 文字列に変換
+   *
+   * @param str std::string 型の入力文字列
+   * @return std::wstring 型の出力文字列
+   *
+   * @else
+   * @brief string to wstring conversion
+   *
+   * This function convert from a string to a wstring.
+   * 
+   * @param str The input std::string type string
+   * @return Converted std::wstring type string
+   *
+   * @endif
+   */
+  std::wstring string2wstring(std::string str);
+
+  /*!
+   * @if jp
+   * @brief wstring から string への変換
+   *
+   * 与えられた wstring 文字列を string 文字列に変換
+   *
+   * @param str std::wstring 型の入力文字列
+   * @return std::string 型の出力文字列
+   *
+   * @else
+   * @brief wstring to string conversion
+   *
+   * This function convert from a wstring to a string.
+   * 
+   * @param str The input std::wstring type string
+   * @return Converted std::string type string
+   *
+   * @endif
+   */
+  std::string wstring2string(std::wstring wstr);
+
+  /*!
+   * @if jp
    * @brief 大文字への変換
    *
    * 与えられた文字列を大文字に変換

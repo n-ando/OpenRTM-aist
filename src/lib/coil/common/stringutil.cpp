@@ -32,6 +32,34 @@ namespace coil
 {
   /*!
    * @if jp
+   * @brief string から wstring への変換
+   * @else
+   * @brief string to wstring conversion
+   * @endif
+   */
+  std::wstring string2wstring(std::string str)
+  {
+    std::wstring wstr(str.length(), L' ');
+    std::copy(str.begin(),str.end(),wstr.begin());
+    return wstr;
+  }
+
+  /*!
+   * @if jp
+   * @brief wstring から string への変換
+   * @else
+   * @brief wstring to string conversion
+   * @endif
+   */
+  std::string wstring2string(std::wstring wstr)
+  {
+    std::string str(wstr.length(), ' ');
+    std::copy(wstr.begin(), wstr.end(), str.begin());
+    return str;
+  }
+
+  /*!
+   * @if jp
    * @brief 大文字への変換
    * @else
    * @brief Uppercase String Transformation
