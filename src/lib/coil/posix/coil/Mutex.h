@@ -1,7 +1,7 @@
 // -*- C++ -*-
 /*!
  * @file  MutexPosix.h
- * @brief RT-Middleware Service interface
+ * @brief coil POSIX mutex class
  * @date  $Date$
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
