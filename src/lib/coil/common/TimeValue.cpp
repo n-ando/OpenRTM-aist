@@ -46,7 +46,8 @@ namespace coil
         dbHalfAdj = -0.5;
     }
     m_sec = (long int)timeval;
-    m_usec = (long)((timeval - (double)m_sec)*TIMEVALUE_ONE_SECOND_IN_USECS + dbHalfAdj );
+    m_usec = (long)((timeval - (double)m_sec)
+                    * TIMEVALUE_ONE_SECOND_IN_USECS + dbHalfAdj );
     normalize();
   }
   
