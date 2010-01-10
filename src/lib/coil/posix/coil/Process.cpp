@@ -1,7 +1,7 @@
 // -*- C++ -*-
 /*!
  * @file  Process.h
- * @brief dleware Service interface
+ * @brief Process handling functions
  * @date  $Date$
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
@@ -23,6 +23,7 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <libgen.h>
+#include <signal.h>
 #include <coil/stringutil.h>
 
 namespace coil
@@ -37,6 +38,7 @@ namespace coil
    */
   int launch_shell(std::string command)
   {
+    signal(SIGCHLD, SIG_IGN);
     pid_t pid;
     pid = fork();
     
