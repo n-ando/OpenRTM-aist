@@ -11,6 +11,7 @@ COIL_PLATFORM_SRC =    \
 	DynamicLib.cpp \
 	Mutex.cpp      \
 	Process.cpp    \
+	Routing.cpp    \
 	Signal.cpp     \
 	Task.cpp       \
 	Time.cpp       \
