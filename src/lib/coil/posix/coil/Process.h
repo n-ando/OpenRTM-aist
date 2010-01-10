@@ -1,7 +1,7 @@
 // -*- C++ -*-
 /*!
  * @file  Process.h
- * @brief dleware Service interface
+ * @brief Process handling functions
  * @date  $Date$
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
