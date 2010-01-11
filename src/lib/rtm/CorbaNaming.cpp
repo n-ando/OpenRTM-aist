@@ -83,6 +83,20 @@ namespace RTC
     m_rootContext = CosNaming::NamingContextExt::_narrow(obj);
     if (CORBA::is_nil(m_rootContext)) throw std::bad_alloc();
   }
+
+  bool CorbaNaming::isAlive()
+  {
+    try
+      {
+        if (m_rootContext->_non_existent()) { return false; }
+        return true;
+      }
+    catch (...)
+      {
+        return false;
+      }
+    return false;
+  }
   
   /*!
    * @if jp
