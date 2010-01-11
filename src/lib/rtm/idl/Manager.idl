@@ -42,30 +42,409 @@ module RTM
     NVList properties;
   };
 
+  interface Manager;
+  typedef sequence<Manager> ManagerList;
+
   interface Manager
   {
-    // module ŠÖ˜A
+    // module ´ØÏ¢
+    /*!
+     * @if jp
+     * @brief ¥â¥¸¥å¡¼¥ë¤ò¥í¡¼¥É¤¹¤ë
+     *
+     * Åö³º¥Þ¥Í¡¼¥¸¥ã¤Ë»ØÄê¤µ¤ì¤¿¥â¥¸¥å¡¼¥ë¤ò¥í¡¼¥É¤·¡¢»ØÄê¤µ¤ì¤¿½é´ü²½
+     * ´Ø¿ô¤Ç½é´ü²½¤ò¹Ô¤¦¡£
+     *
+     * @param pathname ¥â¥¸¥å¡¼¥ë¤Ø¤Î¥Ñ¥¹
+     * @param initfunc ¥â¥¸¥å¡¼¥ë¤Î½é´ü²½´Ø¿ô
+     * @return ¥ê¥¿¡¼¥ó¥³¡¼¥É
+     *
+     * @else
+     * @brief Loading a module
+     *
+     * This operation loads a specified loadable module¡¢and perform
+     * initialization with the specified function.
+     *
+     * @param pathname A path to a loading module.
+     * @param initfunc Module initialization function.
+     * @return The return code.
+     *
+     * @endig
+     */
     RTC::ReturnCode_t load_module(in string pathname, in string initfunc);
+
+    /*!
+     * @if jp
+     * @brief ¥â¥¸¥å¡¼¥ë¤ò¥¢¥ó¥í¡¼¥É¤¹¤ë
+     *
+     * Åö³º¥Þ¥Í¡¼¥¸¥ã¤Ë»ØÄê¤µ¤ì¤¿¥â¥¸¥å¡¼¥ë¤ò¥¢¥ó¥í¡¼¥É¤¹¤ë¡£
+     *
+     * @param pathname ¥â¥¸¥å¡¼¥ë¤Ø¤Î¥Ñ¥¹
+     * @return ¥ê¥¿¡¼¥ó¥³¡¼¥É
+     *
+     * @else
+     * @brief Unloading a module
+     *
+     * This operation unloads a specified loadable module.
+     *
+     * @param pathname A path to a loading module.
+     * @return The return code.
+     *
+     * @endig
+     */
     RTC::ReturnCode_t unload_module(in string pathname);
+
+    /*!
+     * @if jp
+     * @brief ¥í¡¼¥É²ÄÇ½¤Ê¥â¥¸¥å¡¼¥ë¤Î¥×¥í¥Õ¥¡¥¤¥ë¤ò¼èÆÀ¤¹¤ë
+     *
+     * ¥í¡¼¥É²ÄÇ½¤Ê¥â¥¸¥å¡¼¥ë¤Î¥×¥í¥Õ¥¡¥¤¥ë¤ò¼èÆÀ¤¹¤ë¡£
+     *
+     * @return ¥â¥¸¥å¡¼¥ë¥×¥í¥Õ¥¡¥¤¥ë
+     *
+     * @else
+     * @brief Getting loadable module profiles
+     *
+     * This operation returns loadable module profiles.
+     *
+     * @return A module profile list.
+     *
+     * @endig
+     */
     ModuleProfileList get_loadable_modules();
+
+    /*!
+     * @if jp
+     * @brief ¥í¡¼¥ÉºÑ¤ß¤Î¥â¥¸¥å¡¼¥ë¤Î¥×¥í¥Õ¥¡¥¤¥ë¤ò¼èÆÀ¤¹¤ë
+     *
+     * ¥í¡¼¥ÉºÑ¤ß¤Î¥â¥¸¥å¡¼¥ë¤Î¥×¥í¥Õ¥¡¥¤¥ë¤ò¼èÆÀ¤¹¤ë¡£
+     *
+     * @return ¥â¥¸¥å¡¼¥ë¥×¥í¥Õ¥¡¥¤¥ë
+     *
+     * @else
+     * @brief Getting loaded module profiles
+     *
+     * This operation returns loaded module profiles.
+     *
+     * @return A module profile list.
+     *
+     * @endig
+     */
     ModuleProfileList get_loaded_modules();
     
-    // component ŠÖ˜A
+    // component ´ØÏ¢
+    /*!
+     * @if jp
+     * @brief ¥³¥ó¥Ý¡¼¥Í¥ó¥È¥Õ¥¡¥¯¥È¥ê¤Î¥×¥í¥Õ¥¡¥¤¥ë¤ò¼èÆÀ¤¹¤ë
+     *
+     * ¥í¡¼¥ÉºÑ¤ß¤Î¥â¥¸¥å¡¼¥ë¤Î¤¦¤Á¡¢RT¥³¥ó¥Ý¡¼¥Í¥ó¥È¤Î¥â¥¸¥å¡¼¥ë¤¬»ý¤Ä
+     * ¥Õ¥¡¥¯¥È¥ê¤Î¥×¥í¥Õ¥¡¥¤¥ë¤Î¥ê¥¹¥È¤ò¼èÆÀ¤¹¤ë¡£
+     *
+     * @return ¥³¥ó¥Ý¡¼¥Í¥ó¥È¥Õ¥¡¥¯¥È¥ê¤Î¥×¥í¥Õ¥¡¥¤¥ë¥ê¥¹¥È
+     *
+     * @else
+     * @brief Getting component factory profiles
+     *
+     * This operation returns component factory profiles from loaded
+     * RT-Component module factory profiles.
+     *
+     * @return An RT-Component factory profile list.
+     *
+     * @endig
+     */
     ModuleProfileList get_factory_profiles();
+
+    /*!
+     * @if jp
+     * @brief ¥³¥ó¥Ý¡¼¥Í¥ó¥È¤òÀ¸À®¤¹¤ë
+     *
+     * °ú¿ô¤Ë»ØÄê¤µ¤ì¤¿¥³¥ó¥Ý¡¼¥Í¥ó¥È¤òÀ¸À®¤¹¤ë¡£
+     *
+     * @return À¸À®¤µ¤ì¤¿RT¥³¥ó¥Ý¡¼¥Í¥ó¥È
+     *
+     * @else
+     * @brief Creating an RT-Component
+     *
+     * This operation creates RT-Component according to the string
+     * argument.
+     *
+     * @return A created RT-Component
+     *
+     * @endig
+     */
     RTC::RTObject create_component(in string module_name);
+
+    /*!
+     * @if jp
+     * @brief ¥³¥ó¥Ý¡¼¥Í¥ó¥È¤òºï½ü¤¹¤ë
+     *
+     * °ú¿ô¤Ë»ØÄê¤µ¤ì¤¿¥³¥ó¥Ý¡¼¥Í¥ó¥È¤òºï½ü¤¹¤ë¡£
+     *
+     * @return ¥ê¥¿¡¼¥ó¥³¡¼¥É
+     *
+     * @else
+     * @brief Deleting an RT-Component
+     *
+     * This operation delete an RT-Component according to the string
+     * argument.
+     *
+     * @return Return code
+     *
+     * @endig
+     */
     RTC::ReturnCode_t delete_component(in string instance_name);
+
+    /*!
+     * @if jp
+     * @brief µ¯Æ°Ãæ¤Î¥³¥ó¥Ý¡¼¥Í¥ó¥È¤Î¥ê¥¹¥È¤ò¼èÆÀ¤¹¤ë
+     *
+     * ¸½ºßÅö³º¥Þ¥Í¡¼¥¸¥ã¾å¤Çµ¯Æ°Ãæ¤Î¥³¥ó¥Ý¡¼¥Í¥ó¥È¤Î¥ê¥¹¥È¤òÊÖ¤¹¡£
+     *
+     * @return RT¥³¥ó¥Ý¡¼¥Í¥ó¥È¤Î¥ê¥¹¥È
+     *
+     * @else
+     * @brief Getting RT-Component list running on this manager
+     *
+     * This operation returns RT-Component list running on this manager.
+     *
+     * @return A list of RT-Components
+     *
+     * @endig
+     */
     RTC::RTCList get_components();
+
+    /*!
+     * @if jp
+     * @brief µ¯Æ°Ãæ¤Î¥³¥ó¥Ý¡¼¥Í¥ó¥È¥×¥í¥Õ¥¡¥¤¥ë¤Î¥ê¥¹¥È¤ò¼èÆÀ¤¹¤ë
+     *
+     * ¸½ºßÅö³º¥Þ¥Í¡¼¥¸¥ã¾å¤Çµ¯Æ°Ãæ¤Î¥³¥ó¥Ý¡¼¥Í¥ó¥È¤Î¥×¥í¥Õ¥¡¥¤¥ë¤Î¥ê¥¹
+     * ¥È¤òÊÖ¤¹¡£
+     *
+     * @return RT¥³¥ó¥Ý¡¼¥Í¥ó¥È¥×¥í¥Õ¥¡¥¤¥ë¤Î¥ê¥¹¥È
+     *
+     * @else
+     * @brief Getting RT-Component's profile list running on this manager
+     *
+     * This operation returns RT-Component's profile list running on
+     * this manager.
+     *
+     * @return A list of RT-Components' profiles
+     *
+     * @endig
+     */
     RTC::ComponentProfileList get_component_profiles();
 
-    // manager Šî–{
+    // manager ´ðËÜ
+    /*!
+     * @if jp
+     * @brief ¥Þ¥Í¡¼¥¸¥ã¤Î¥×¥í¥Õ¥¡¥¤¥ë¤ò¼èÆÀ¤¹¤ë
+     *
+     * ¸½ºßÅö³º¥Þ¥Í¡¼¥¸¥ã¤Î¥×¥í¥Õ¥¡¥¤¥ë¤ò¼èÆÀ¤¹¤ë¡£
+     *
+     * @return ¥Þ¥Í¡¼¥¸¥ã¥×¥í¥Õ¥¡¥¤¥ë
+     *
+     * @else
+     * @brief Getting this manager's profile.
+     *
+     * This operation returns this manager's profile.
+     *
+     * @return Manager's profile
+     *
+     * @endig
+     */
     ManagerProfile get_profile();
+
+    /*!
+     * @if jp
+     * @brief ¥Þ¥Í¡¼¥¸¥ã¤Î¥³¥ó¥Õ¥£¥®¥å¥ì¡¼¥·¥ç¥ó¤ò¼èÆÀ¤¹¤ë
+     *
+     * ¸½ºßÅö³º¥Þ¥Í¡¼¥¸¥ã¤Î¥³¥ó¥Õ¥£¥®¥å¥ì¡¼¥·¥ç¥ó¤ò¼èÆÀ¤¹¤ë¡£
+     *
+     * @return ¥Þ¥Í¡¼¥¸¥ã¥³¥ó¥Õ¥£¥®¥å¥ì¡¼¥·¥ç¥ó
+     *
+     * @else
+     * @brief Getting this manager's configuration.
+     *
+     * This operation returns this manager's configuration.
+     *
+     * @return Manager's configuration
+     *
+     * @endig
+     */
     NVList get_configuration();
+
+    /*!
+     * @if jp
+     * @brief ¥Þ¥Í¡¼¥¸¥ã¤Î¥³¥ó¥Õ¥£¥®¥å¥ì¡¼¥·¥ç¥ó¤òÀßÄê¤¹¤ë
+     *
+     * ¸½ºßÅö³º¥Þ¥Í¡¼¥¸¥ã¤Î¥³¥ó¥Õ¥£¥®¥å¥ì¡¼¥·¥ç¥ó¤òÀßÄê¤¹¤ë¡£
+     *
+     * @param name ¥»¥Ã¥È¤¹¤ë¥³¥ó¥Õ¥£¥®¥å¥ì¡¼¥·¥ç¥ó¤Î¥­¡¼Ì¾
+     * @param value ¥»¥Ã¥È¤¹¤ë¥³¥ó¥Õ¥£¥®¥å¥ì¡¼¥·¥ç¥ó¤ÎÃÍ
+     * @return ¥ê¥¿¡¼¥ó¥³¡¼¥É
+     *
+     * @else
+     * @brief Setting manager's configuration
+     *
+     * This operation sets managers configuration.
+     *  
+     * @param name A configuration key name to be set
+     * @param value A configuration value to be set
+     * @return Return code
+     *
+     * @endig
+     */
     RTC::ReturnCode_t set_configuration(in string name, in string value);
 
-    Manager get_owner();
-    Manager set_owner(in Manager mgr);
-    Manager get_child();
-    Manager set_child(in Manager mgr);
+    /*!
+     * @if jp
+     * @brief ¥Þ¥Í¡¼¥¸¥ã¤¬¥Þ¥¹¥¿¡¼¤«¤É¤¦¤«
+     *
+     * ¤³¤Î´Ø¿ô¤Ï¥Þ¥Í¡¼¥¸¥ã¤¬¥Þ¥¹¥¿¡¼¤«¤É¤¦¤«¤òÊÖ¤¹¡£True¤Ê¤é¤Ð¡¢Åö³º¥Þ
+     * ¥Í¡¼¥¸¥ã¤Ï¥Þ¥¹¥¿¡¼¤Ç¤¢¤ê¡¢¤½¤ì°Ê³°¤Ï False ¤òÊÖ¤¹¡£
+     *
+     * @return ¥Þ¥¹¥¿¡¼¥Þ¥Í¡¼¥¸¥ã¤«¤É¤¦¤«¤ÎboolÃÍ
+     *
+     * @else
+     * @brief Whether this manager is master or not
+     *
+     * It returns "True" if this manager is a master, and it returns
+     * "False" in other cases.
+     *  
+     * @return A boolean value that means it is master or not.
+     *
+     * @endig
+     */
+    boolean is_master();
+
+    /*!
+     * @if jp
+     * @brief ¥Þ¥¹¥¿¡¼¥Þ¥Í¡¼¥¸¥ã¤Î¼èÆÀ
+     *
+     * ¤³¤Î¥Þ¥Í¡¼¥¸¥ã¤¬¥¹¥ì¡¼¥Ö¥Þ¥Í¡¼¥¸¥ã¤Î¾ì¹ç¡¢¥Þ¥¹¥¿¡¼¤È¤Ê¤Ã¤Æ¤¤¤ë¥Þ
+     * ¥Í¡¼¥¸¥ã¤Î¥ê¥¹¥È¤òÊÖ¤¹¡£¤³¤Î¥Þ¥Í¡¼¥¸¥ã¤¬¥Þ¥¹¥¿¡¼¤Î¾ì¹ç¡¢¶õ¤Î¥ê¥¹
+     * ¥È¤¬ÊÖ¤ë¡£
+     *
+     * @return ¥Þ¥¹¥¿¡¼¥Þ¥Í¡¼¥¸¥ã¤Î¥ê¥¹¥È
+     *
+     * @else
+     * @brief Getting master managers
+     *
+     * This operation returns master manager list if this manager is
+     * slave. If this manager is master, an empty sequence would be
+     * returned.
+     *  
+     * @return Master manager list
+     *
+     * @endig
+     */
+    ManagerList get_master_managers();
+
+    /*!
+     * @if jp
+     * @brief ¥Þ¥¹¥¿¡¼¥Þ¥Í¡¼¥¸¥ã¤ÎÄÉ²Ã
+     *
+     * ¤³¤Î¥Þ¥Í¡¼¥¸¥ã¤Î¥Þ¥¹¥¿¤È¤·¤Æ¥Þ¥Í¡¼¥¸¥ã¤ò°ì¤ÄÄÉ²Ã¤¹¤ë¡£
+     *
+     * @param mgr ¥Þ¥¹¥¿¡¼¥Þ¥Í¡¼¥¸¥ã
+     * @return ReturnCode_t
+     *
+     * @else
+     * @brief Getting a master manager
+     *
+     * This operation add a master manager to this manager.
+     *  
+     * @param mgr A master manager
+     * @return ReturnCode_t
+     *
+     * @endig
+     */
+    RTC::ReturnCode_t add_master_manager(in Manager mgr);
+
+    /*!
+     * @if jp
+     * @brief ¥Þ¥¹¥¿¡¼¥Þ¥Í¡¼¥¸¥ã¤Îºï½ü
+     *
+     * ¤³¤Î¥Þ¥Í¡¼¥¸¥ã¤¬ÊÝ»ý¤¹¤ë¥Þ¥¹¥¿¤Î¤¦¤Á¡¢»ØÄê¤µ¤ì¤¿¤â¤Î¤òºï½ü¤¹¤ë¡£
+     *
+     * @param mgr ¥Þ¥¹¥¿¡¼¥Þ¥Í¡¼¥¸¥ã
+     * @return ReturnCode_t
+     *
+     * @else
+     * @brief Removing a master manager
+     *
+     * This operation removes a master manager from this manager.
+     * 
+     * @param mgr A master manager
+     * @return ReturnCode_t 
+     *
+     * @endig
+     */
+    RTC::ReturnCode_t remove_master_manager(in Manager mgr);
+
+    /*!
+     * @if jp
+     * @brief ¥¹¥ì¡¼¥Ö¥Þ¥Í¡¼¥¸¥ã¤Î¼èÆÀ
+     *
+     * ¤³¤Î¥Þ¥Í¡¼¥¸¥ã¤¬¥¹¥ì¡¼¥Ö¥Þ¥Í¡¼¥¸¥ã¤Î¾ì¹ç¡¢¥¹¥ì¡¼¥Ö¤È¤Ê¤Ã¤Æ¤¤¤ë¥Þ
+     * ¥Í¡¼¥¸¥ã¤Î¥ê¥¹¥È¤òÊÖ¤¹¡£¤³¤Î¥Þ¥Í¡¼¥¸¥ã¤¬¥¹¥ì¡¼¥Ö¤Î¾ì¹ç¡¢¶õ¤Î¥ê¥¹
+     * ¥È¤¬ÊÖ¤ë¡£
+     *
+     * @return ¥¹¥ì¡¼¥Ö¥Þ¥Í¡¼¥¸¥ã¤Î¥ê¥¹¥È
+     *
+     * @else
+     * @brief Getting slave managers
+     *
+     * This operation returns slave manager list if this manager is
+     * slave. If this manager is slave, an empty sequence would be
+     * returned.
+     *  
+     * @return Slave manager list
+     *
+     * @endig
+     */
+    ManagerList get_slave_managers();
+    /*!
+     * @if jp
+     * @brief ¥¹¥ì¡¼¥Ö¥Þ¥Í¡¼¥¸¥ã¤ÎÄÉ²Ã
+     *
+     * ¤³¤Î¥Þ¥Í¡¼¥¸¥ã¤Î¥Þ¥¹¥¿¤È¤·¤Æ¥Þ¥Í¡¼¥¸¥ã¤ò°ì¤ÄÄÉ²Ã¤¹¤ë¡£
+     *
+     * @param mgr ¥¹¥ì¡¼¥Ö¥Þ¥Í¡¼¥¸¥ã
+     * @return ReturnCode_t
+     *
+     * @else
+     * @brief Getting a slave manager
+     *
+     * This operation add a slave manager to this manager.
+     *  
+     * @param mgr A slave manager
+     * @return ReturnCode_t
+     *
+     * @endig
+     */
+    RTC::ReturnCode_t add_slave_manager(in Manager mgr);
+
+    /*!
+     * @if jp
+     * @brief ¥¹¥ì¡¼¥Ö¥Þ¥Í¡¼¥¸¥ã¤Îºï½ü
+     *
+     * ¤³¤Î¥Þ¥Í¡¼¥¸¥ã¤¬ÊÝ»ý¤¹¤ë¥Þ¥¹¥¿¤Î¤¦¤Á¡¢»ØÄê¤µ¤ì¤¿¤â¤Î¤òºï½ü¤¹¤ë¡£
+     *
+     * @param mgr ¥¹¥ì¡¼¥Ö¥Þ¥Í¡¼¥¸¥ã
+     * @return ReturnCode_t
+     *
+     * @else
+     * @brief Removing a slave manager
+     *
+     * This operation removes a slave manager from this manager.
+     * 
+     * @param mgr A slave manager
+     * @return ReturnCode_t 
+     *
+     * @endig
+     */
+    RTC::ReturnCode_t remove_slave_manager(in Manager mgr);
 
     RTC::ReturnCode_t fork();
     RTC::ReturnCode_t shutdown();
