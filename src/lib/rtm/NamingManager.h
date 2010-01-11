@@ -130,6 +130,8 @@ namespace RTC
      * @endif
      */
     virtual void unbindObject(const char* name) = 0;
+
+    virtual bool isAlive() = 0;
   };
   
   /*!
@@ -180,9 +182,7 @@ namespace RTC
      *
      * @endif
      */
-    NamingOnCorba(CORBA::ORB_ptr orb, const char* names)
-      : m_cosnaming(orb, names)
-    {};
+    NamingOnCorba(CORBA::ORB_ptr orb, const char* names);
     
     /*!
      * @if jp
@@ -244,8 +244,12 @@ namespace RTC
      */
     virtual void unbindObject(const char* name);
     
+    virtual bool isAlive();
+
   private:
+    Logger rtclog;
     CorbaNaming m_cosnaming;
+    std::string m_endpoint;
     std::map<std::string, RTObject_impl*> m_names;
   };
   
@@ -531,6 +535,9 @@ namespace RTC
      */
     void unregisterCompName(const char* name);
     void unregisterMgrName(const char* name);
+
+    class Names;
+    void retryConnection(Names* ns);
     
   protected:
     // Name Servers' method/name and object
