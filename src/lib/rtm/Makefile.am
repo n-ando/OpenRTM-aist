@@ -32,9 +32,10 @@ lib_LTLIBRARIES = libRTC.la
 #	PortProfileHelper.cpp
 #	ObjectManager.cpp
 
-UTIL_SRC =               \
-	NVUtil.cpp       \
-	RTCUtil.cpp      \
+UTIL_SRC =                \
+	CORBA_IORUtil.cpp \
+	NVUtil.cpp        \
+	RTCUtil.cpp       \
 	DefaultPeriodicTask.cpp
 
 MGR_SRC =                            \
