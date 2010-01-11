@@ -61,9 +61,7 @@ namespace CORBA_IORUtil
    * @brief Extracts information from IOR string and returns formatted string
    * @endif
    */
-  std::string formatIORinfo(std::string& iorstr);
-
-
+  std::string formatIORinfo(const char* iorstr);
 
 }; // namespace CORBA_IORUtil
 #endif // CORBA_IORUTIL_H
