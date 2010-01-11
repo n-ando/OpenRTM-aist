@@ -209,11 +209,11 @@ namespace CORBA_IORUtil
    * @brief Extracts information from IOR string and returns formatted string
    * @endif
    */
-  std::string formatIORinfo(std::string& iorstr)
+  std::string formatIORinfo(const char* iorstr)
   {
     std::stringstream retstr;
     IOP::IOR ior;
-    toIOR(iorstr.c_str(),  ior);
+    toIOR(iorstr, ior);
 
     if (ior.profiles.length() == 0 && strlen(ior.type_id) == 0)
       {
@@ -312,7 +312,7 @@ namespace CORBA_IORUtil
     
     if(get_poa_info(key, poas, is_transient, id))
       {
-        sstr << "POA(" << (char*)poas[0];
+        sstr << "       POA(" << (char*)poas[0];
         for(unsigned i(1); i < poas.length(); ++i)
           {
             sstr << '/' << (char*)poas[i];
