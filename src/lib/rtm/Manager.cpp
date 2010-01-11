@@ -37,6 +37,7 @@
 #include <coil/Timer.h>
 #include <coil/OS.h>
 #include <rtm/FactoryInit.h>
+#include <rtm/CORBA_IORUtil.h>
 
 #if defined(minor)
 #undef minor
@@ -1084,7 +1085,10 @@ std::vector<coil::Properties> Manager::getLoadableModules()
     m_namingManager = new NamingManager(this);
     
     // If NameService is disabled, return immediately
-    if (!coil::toBool(m_config["naming.enable"], "YES", "NO", true)) return true;
+    if (!coil::toBool(m_config["naming.enable"], "YES", "NO", true))
+      {
+        return true;
+      }
     
     // NameServer registration for each method and servers
     std::vector<std::string> meth(coil::split(m_config["naming.type"], ","));
@@ -1189,10 +1193,13 @@ std::vector<coil::Properties> Manager::getLoadableModules()
     coil::Properties& prop(m_config.getNode("manager"));
     std::vector<std::string> names(coil::split(prop["naming_formats"], ","));
 
-    for (int i(0), len(names.size()); i < len; ++i)
+    if (coil::toBool(prop["is_master"], "YES", "NO", true))
       {
-        std::string mgr_name(formatString(names[i].c_str(), prop));
-        m_namingManager->bindObject(mgr_name.c_str(), m_mgrservant);
+        for (int i(0), len(names.size()); i < len; ++i)
+          {
+            std::string mgr_name(formatString(names[i].c_str(), prop));
+            m_namingManager->bindObject(mgr_name.c_str(), m_mgrservant);
+          }
       }
 
     std::ifstream otherref(m_config["manager.refstring_path"].c_str());
@@ -1200,7 +1207,8 @@ std::vector<coil::Properties> Manager::getLoadableModules()
       {
         otherref.close();
         std::ofstream reffile(m_config["manager.refstring_path"].c_str());
-	RTM::Manager_var mgr_v(RTM::Manager::_duplicate(m_mgrservant->getObjRef()));
+	RTM::Manager_var mgr_v(RTM::Manager::
+                               _duplicate(m_mgrservant->getObjRef()));
         CORBA::String_var str_var = m_pORB->object_to_string(mgr_v);
 	reffile << str_var;
         reffile.close();
@@ -1331,7 +1339,8 @@ std::vector<coil::Properties> Manager::getLoadableModules()
           {
             std::vector<std::string> keyval(coil::split(conf[i], "="));
             comp_conf[keyval[0]] = keyval[1];
-            RTC_TRACE(("RTC property %s: %s", keyval[0].c_str(), keyval[1].c_str()));
+            RTC_TRACE(("RTC property %s: %s",
+                       keyval[0].c_str(), keyval[1].c_str()));
           }
       }
     return true;
@@ -1374,7 +1383,8 @@ std::vector<coil::Properties> Manager::getLoadableModules()
    *
    * @endif
    */
-  void Manager::configureComponent(RTObject_impl* comp, const coil::Properties& prop)
+  void Manager::configureComponent(RTObject_impl* comp,
+                                   const coil::Properties& prop)
   {
     std::string category(comp->getCategory());
     std::string type_name(comp->getTypeName());
@@ -1416,7 +1426,8 @@ std::vector<coil::Properties> Manager::getLoadableModules()
     
     naming_formats += m_config["naming.formats"];
     naming_formats += ", " + comp_prop["naming.formats"];
-    naming_formats = coil::flatten(coil::unique_sv(coil::split(naming_formats, ",")));
+    naming_formats = coil::flatten(coil::unique_sv(coil::split(naming_formats,
+                                                               ",")));
     
     std::string naming_names;
     naming_names = formatString(naming_formats.c_str(), comp->getProperties());
