@@ -23,6 +23,7 @@
 #include <iostream>
 #include <rtm/idl/ManagerSkel.h>
 #include <rtm/Manager.h>
+#include <rtm/SystemLogger.h>
 
 namespace RTM
 {
@@ -34,23 +35,411 @@ namespace RTM
     // standard constructor
     ManagerServant();
     virtual ~ManagerServant(void);
-    
+
+    /*!
+     * @if jp
+     * @brief モジュールをロードする
+     *
+     * 当該マネージャに指定されたモジュールをロードし、指定された初期化
+     * 関数で初期化を行う。
+     *
+     * @param pathname モジュールへのパス
+     * @param initfunc モジュールの初期化関数
+     * @return リターンコード
+     *
+     * @else
+     * @brief Loading a module
+     *
+     * This operation loads a specified loadable module、and perform
+     * initialization with the specified function.
+     *
+     * @param pathname A path to a loading module.
+     * @param initfunc Module initialization function.
+     * @return The return code.
+     *
+     * @endig
+     */
     RTC::ReturnCode_t load_module(const char* pathname, const char* initfunc);
+
+    /*!
+     * @if jp
+     * @brief モジュールをアンロードする
+     *
+     * 当該マネージャに指定されたモジュールをアンロードする。
+     *
+     * @param pathname モジュールへのパス
+     * @return リターンコード
+     *
+     * @else
+     * @brief Unloading a module
+     *
+     * This operation unloads a specified loadable module.
+     *
+     * @param pathname A path to a loading module.
+     * @return The return code.
+     *
+     * @endig
+     */
     RTC::ReturnCode_t unload_module(const char* pathname);
+
+    /*!
+     * @if jp
+     * @brief ロード可能なモジュールのプロファイルを取得する
+     *
+     * ロード可能なモジュールのプロファイルを取得する。
+     *
+     * @return モジュールプロファイル
+     *
+     * @else
+     * @brief Getting loadable module profiles
+     *
+     * This operation returns loadable module profiles.
+     *
+     * @return A module profile list.
+     *
+     * @endig
+     */
     RTM::ModuleProfileList* get_loadable_modules();
+
+    /*!
+     * @if jp
+     * @brief ロード済みのモジュールのプロファイルを取得する
+     *
+     * ロード済みのモジュールのプロファイルを取得する。
+     *
+     * @return モジュールプロファイル
+     *
+     * @else
+     * @brief Getting loaded module profiles
+     *
+     * This operation returns loaded module profiles.
+     *
+     * @return A module profile list.
+     *
+     * @endig
+     */
     RTM::ModuleProfileList* get_loaded_modules();
+
+    // component 関連
+    /*!
+     * @if jp
+     * @brief コンポーネントファクトリのプロファイルを取得する
+     *
+     * ロード済みのモジュールのうち、RTコンポーネントのモジュールが持つ
+     * ファクトリのプロファイルのリストを取得する。
+     *
+     * @return コンポーネントファクトリのプロファイルリスト
+     *
+     * @else
+     * @brief Getting component factory profiles
+     *
+     * This operation returns component factory profiles from loaded
+     * RT-Component module factory profiles.
+     *
+     * @return An RT-Component factory profile list.
+     *
+     * @endig
+     */
     RTM::ModuleProfileList* get_factory_profiles();
+
+    /*!
+     * @if jp
+     * @brief コンポーネントを生成する
+     *
+     * 引数に指定されたコンポーネントを生成する。
+     *
+     * @return 生成されたRTコンポーネント
+     *
+     * @else
+     * @brief Creating an RT-Component
+     *
+     * This operation creates RT-Component according to the string
+     * argument.
+     *
+     * @return A created RT-Component
+     *
+     * @endig
+     */
     RTC::RTObject_ptr create_component(const char* module_name);
+
+    /*!
+     * @if jp
+     * @brief コンポーネントを削除する
+     *
+     * 引数に指定されたコンポーネントを削除する。
+     *
+     * @return リターンコード
+     *
+     * @else
+     * @brief Deleting an RT-Component
+     *
+     * This operation delete an RT-Component according to the string
+     * argument.
+     *
+     * @return Return code
+     *
+     * @endig
+     */
     RTC::ReturnCode_t delete_component(const char* instance_name);
+
+    /*!
+     * @if jp
+     * @brief 起動中のコンポーネントのリストを取得する
+     *
+     * 現在当該マネージャ上で起動中のコンポーネントのリストを返す。
+     *
+     * @return RTコンポーネントのリスト
+     *
+     * @else
+     * @brief Getting RT-Component list running on this manager
+     *
+     * This operation returns RT-Component list running on this manager.
+     *
+     * @return A list of RT-Components
+     *
+     * @endig
+     */
     RTC::RTCList* get_components();
+
+    /*!
+     * @if jp
+     * @brief 起動中のコンポーネントプロファイルのリストを取得する
+     *
+     * 現在当該マネージャ上で起動中のコンポーネントのプロファイルのリス
+     * トを返す。
+     *
+     * @return RTコンポーネントプロファイルのリスト
+     *
+     * @else
+     * @brief Getting RT-Component's profile list running on this manager
+     *
+     * This operation returns RT-Component's profile list running on
+     * this manager.
+     *
+     * @return A list of RT-Components' profiles
+     *
+     * @endig
+     */
     RTC::ComponentProfileList* get_component_profiles();
+
+    // manager 基本
+    /*!
+     * @if jp
+     * @brief マネージャのプロファイルを取得する
+     *
+     * 現在当該マネージャのプロファイルを取得する。
+     *
+     * @return マネージャプロファイル
+     *
+     * @else
+     * @brief Getting this manager's profile.
+     *
+     * This operation returns this manager's profile.
+     *
+     * @return Manager's profile
+     *
+     * @endig
+     */
     RTM::ManagerProfile* get_profile();
+
+    /*!
+     * @if jp
+     * @brief マネージャのコンフィギュレーションを取得する
+     *
+     * 現在当該マネージャのコンフィギュレーションを取得する。
+     *
+     * @return マネージャコンフィギュレーション
+     *
+     * @else
+     * @brief Getting this manager's configuration.
+     *
+     * This operation returns this manager's configuration.
+     *
+     * @return Manager's configuration
+     *
+     * @endig
+     */
     RTM::NVList* get_configuration();
+
+    /*!
+     * @if jp
+     * @brief マネージャのコンフィギュレーションを設定する
+     *
+     * 現在当該マネージャのコンフィギュレーションを設定する。
+     *
+     * @param name セットするコンフィギュレーションのキー名
+     * @param value セットするコンフィギュレーションの値
+     * @return リターンコード
+     *
+     * @else
+     * @brief Setting manager's configuration
+     *
+     * This operation sets managers configuration.
+     *  
+     * @param name A configuration key name to be set
+     * @param value A configuration value to be set
+     * @return Return code
+     *
+     * @endig
+     */
     RTC::ReturnCode_t set_configuration(const char* name, const char* value);
-    RTM::Manager_ptr get_owner();
-    RTM::Manager_ptr set_owner(RTM::Manager_ptr mgr);
-    RTM::Manager_ptr get_child();
-    RTM::Manager_ptr set_child(RTM::Manager_ptr mgr);
+
+    /*!
+     * @if jp
+     * @brief マネージャがマスターかどうか
+     *
+     * この関数はマネージャがマスターかどうかを返す。Trueならば、当該マ
+     * ネージャはマスターであり、それ以外は False を返す。
+     *
+     * @return マスターマネージャかどうかのbool値
+     *
+     * @else
+     * @brief Whether this manager is master or not
+     *
+     * It returns "True" if this manager is a master, and it returns
+     * "False" in other cases.
+     *  
+     * @return A boolean value that means it is master or not.
+     *
+     * @endig
+     */
+    bool is_master();
+
+    /*!
+     * @if jp
+     * @brief マスターマネージャの取得
+     *
+     * このマネージャがスレーブマネージャの場合、マスターとなっているマ
+     * ネージャのリストを返す。このマネージャがマスターの場合、空のリス
+     * トが返る。
+     *
+     * @return マスターマネージャのリスト
+     *
+     * @else
+     * @brief Getting master managers
+     *
+     * This operation returns master manager list if this manager is
+     * slave. If this manager is master, an empty sequence would be
+     * returned.
+     *  
+     * @return Master manager list
+     *
+     * @endig
+     */
+    RTM::ManagerList* get_master_managers();
+
+    /*!
+     * @if jp
+     * @brief マスターマネージャの追加
+     *
+     * このマネージャのマスタとしてマネージャを一つ追加する。戻り値には、
+     * 当該マネージャ上で追加されたマスターマネージャを識別するユニーク
+     * なIDが返される。このマネージャがマスタの場合、当該IDで指定された
+     * マスターマネージャを返す。IDで指定されたマスターマネージャがない
+     * 場合、nilオブジェクトが返る。
+     *
+     * @return マスターマネージャ
+     *
+     * @else
+     * @brief Getting a master manager
+     *
+     * This operation returns a master manager with specified id. If
+     * the manager with the specified id does not exist, nil object
+     * reference would be returned.
+     *  
+     * @return A master manager
+     *
+     * @endig
+     */
+    RTC::ReturnCode_t add_master_manager(RTM::Manager_ptr mgr);
+
+    /*!
+     * @if jp
+     * @brief マスターマネージャの削除
+     *
+     * このマネージャが保持するマスタのうち、指定されたものを削除する。
+     *
+     * @param mgr マスターマネージャ
+     * @return ReturnCode_t
+     *
+     * @else
+     * @brief Removing a master manager
+     *
+     * This operation removes a master manager from this manager.
+     * 
+     * @param mgr A master manager
+     * @return ReturnCode_t 
+     *
+     * @endig
+     */
+    RTC::ReturnCode_t remove_master_manager(RTM::Manager_ptr mgr);
+
+    /*!
+     * @if jp
+     * @brief スレーブマネージャの取得
+     *
+     * このマネージャがスレーブマネージャの場合、スレーブとなっているマ
+     * ネージャのリストを返す。このマネージャがスレーブの場合、空のリス
+     * トが返る。
+     *
+     * @return スレーブマネージャのリスト
+     *
+     * @else
+     * @brief Getting slave managers
+     *
+     * This operation returns slave manager list if this manager is
+     * slave. If this manager is slave, an empty sequence would be
+     * returned.
+     *  
+     * @return Slave manager list
+     *
+     * @endig
+     */
+    RTM::ManagerList* get_slave_managers();
+
+    /*!
+     * @if jp
+     * @brief スレーブマネージャの追加
+     *
+     * このマネージャのマスタとしてマネージャを一つ追加する。
+     *
+     * @param mgr スレーブマネージャ
+     * @return ReturnCode_t
+     *
+     * @else
+     * @brief Getting a slave manager
+     *
+     * This operation add a slave manager to this manager.
+     *  
+     * @param mgr A slave manager
+     * @return ReturnCode_t
+     *
+     * @endig
+     */
+    RTC::ReturnCode_t add_slave_manager(RTM::Manager_ptr mgr);
+
+    /*!
+     * @if jp
+     * @brief スレーブマネージャの削除
+     *
+     * このマネージャが保持するマスタのうち、指定されたものを削除する。
+     *
+     * @param mgr スレーブマネージャ
+     * @return ReturnCode_t
+     *
+     * @else
+     * @brief Removing a slave manager
+     *
+     * This operation removes a slave manager from this manager.
+     * 
+     * @param mgr A slave manager
+     * @return ReturnCode_t 
+     *
+     * @endig
+     */
+    RTC::ReturnCode_t remove_slave_manager(RTM::Manager_ptr mgr);
+
+
     RTC::ReturnCode_t fork();
     RTC::ReturnCode_t shutdown();
     RTC::ReturnCode_t restart();
@@ -58,9 +447,27 @@ namespace RTM
     RTM::Manager_ptr getObjRef() const;
 
   private:
+    ::RTC::Logger rtclog;
     ::RTC::Manager& m_mgr;
     ::RTM::Manager_var m_objref;
-    ::RTM::Manager_var m_owner;
+
+    ::RTM::ManagerList m_masters;
+    ::RTM::ManagerList m_slaves;
+
+    CORBA::Boolean m_isMaster;
+
+    class is_equiv
+    {
+      RTM::Manager_var m_mgr;
+    public:
+      is_equiv(RTM::Manager_ptr mgr)
+        : m_mgr(RTM::Manager::_duplicate(mgr)) {}
+      bool operator()(RTM::Manager_ptr mgr)
+      {
+        return m_mgr->_is_equivalent(mgr);
+      }
+    };
+
   };
 }; // namespace RTM
 #endif // RTM_MANAGERSERVANT_H
