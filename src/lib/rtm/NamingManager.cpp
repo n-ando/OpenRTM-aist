@@ -17,15 +17,43 @@
  *
  */
 
-#include <rtm/NamingManager.h>
-#include <rtm/Manager.h>
-#include <coil/stringutil.h>
 #include <functional>
 #include <algorithm>
 #include <iostream>
 
+#include <coil/Routing.h>
+#include <coil/stringutil.h>
+
+#include <rtm/NamingManager.h>
+#include <rtm/Manager.h>
+#include <rtm/CORBA_IORUtil.h>
+
 namespace RTC
 {
+  /*!
+   * @if jp
+   * @brief コンストラクタ
+   * @else
+   * @brief Constructor
+   * @endif
+   */
+  NamingOnCorba::NamingOnCorba(CORBA::ORB_ptr orb, const char* names)
+    : m_cosnaming(orb, names), m_endpoint("")
+  {
+    rtclog.setName("NamingOnCorba");
+    coil::vstring host_port(coil::split(names, ":"));
+    if (coil::dest_to_endpoint(host_port[0], m_endpoint))
+      {
+        RTC_INFO(("Endpoint for the CORBA naming service (%s) is %s.",
+                  host_port[0].c_str(),
+                  m_endpoint.c_str()));
+      }
+    else
+      {
+        RTC_WARN(("No endpoint for the CORBA naming service (%s) was found.",
+                  host_port[0].c_str()));
+      }
+  }
   /*!
    * @if jp
    * @brief 指定した CORBA オブジェクトのNamingServiceへバインド
@@ -36,25 +64,56 @@ namespace RTC
   void NamingOnCorba::bindObject(const char* name,
 				 const RTObject_impl* rtobj)
   {
-    try
+    RTC_TRACE(("bindObject(name = %s, rtobj)", name));
+
+    if (!m_endpoint.empty())
       {
-	m_cosnaming.rebindByString(name, rtobj->getObjRef(), true);
+        CORBA::Object_var obj(RTObject::_duplicate(rtobj->getObjRef()));
+        CORBA::String_var ior;
+        ior = RTC::Manager::instance().getORB()->object_to_string(obj.in());
+        std::string iorstr((const char*)ior);
+
+        RTC_DEBUG(("Original IOR information:\n %s",
+                   CORBA_IORUtil::formatIORinfo(iorstr.c_str()).c_str()));
+        CORBA_IORUtil::replaceEndpoint(iorstr, m_endpoint);
+        CORBA::Object_var newobj = RTC::Manager::instance().
+          getORB()->string_to_object(iorstr.c_str());
+
+        RTC_DEBUG(("Modified IOR information]\n %s",
+                   CORBA_IORUtil::formatIORinfo(iorstr.c_str()).c_str()));
+        m_cosnaming.rebindByString(name, newobj.in(), true);
       }
-    catch (...)
+    else
       {
-	;
+        m_cosnaming.rebindByString(name, rtobj->getObjRef(), true);
       }
   }
+
   void NamingOnCorba::bindObject(const char* name,
 				 const RTM::ManagerServant* mgr)
   {
-    try
+    RTC_TRACE(("bindObject(name = %s, mgr)", name));
+
+    if (!m_endpoint.empty())
       {
-	m_cosnaming.rebindByString(name, mgr->getObjRef(), true);
+        CORBA::Object_var obj(RTM::Manager::_duplicate(mgr->getObjRef()));
+        CORBA::String_var ior;
+        ior = RTC::Manager::instance().getORB()->object_to_string(obj.in());
+        std::string iorstr((const char*)ior);
+
+        RTC_DEBUG(("Original IOR information:\n %s",
+                   CORBA_IORUtil::formatIORinfo(iorstr.c_str()).c_str()));
+        CORBA_IORUtil::replaceEndpoint(iorstr, m_endpoint);
+        CORBA::Object_var newobj = RTC::Manager::instance().
+          getORB()->string_to_object(iorstr.c_str());
+
+        RTC_DEBUG(("Modified IOR information]\n %s",
+                   CORBA_IORUtil::formatIORinfo(iorstr.c_str()).c_str()));
+        m_cosnaming.rebindByString(name, newobj.in(), true);
       }
-    catch (...)
+    else
       {
-	;
+        m_cosnaming.rebindByString(name, mgr->getObjRef(), true);
       }
   }
   
@@ -67,15 +126,16 @@ namespace RTC
    */
   void NamingOnCorba::unbindObject(const char* name)
   {
-    try
-      {
-	m_cosnaming.unbind(name);
-      }
-    catch (...)
-      {
-	;
-      }
+    RTC_TRACE(("unbindObject(name  = %s)", name));
+    m_cosnaming.unbind(name);
   }
+
+  bool NamingOnCorba::isAlive()
+  {
+    RTC_TRACE(("isAlive()"));
+    return m_cosnaming.isAlive();
+  }
+
   
   //============================================================
   // NamingManager
@@ -113,10 +173,12 @@ namespace RTC
   void NamingManager::registerNameServer(const char* method,
 					 const char* name_server)
   {
-    RTC_TRACE(("NamingManager::registerNameServer(%s, %s)",		\
+    RTC_TRACE(("NamingManager::registerNameServer(%s, %s)",
 	       method, name_server));
     NamingBase* name;
     name = createNamingObj(method, name_server);
+
+    Guard guard(m_namesMutex);
     m_names.push_back(new Names(method, name_server, name));
   }
   
@@ -135,10 +197,18 @@ namespace RTC
     Guard guard(m_namesMutex);
     for (int i(0), len(m_names.size()); i < len; ++i)
       {
-	if (m_names[i]->ns != NULL)
-        {
-	  m_names[i]->ns->bindObject(name, rtobj);
-        }
+	if (m_names[i]->ns != 0)
+          {
+            try
+              {
+                m_names[i]->ns->bindObject(name, rtobj);
+              }
+            catch (...)
+              {
+                delete m_names[i]->ns;
+                m_names[i]->ns = 0;
+              }
+          }
       }
     registerCompName(name, rtobj);
   }
@@ -150,8 +220,18 @@ namespace RTC
     Guard guard(m_namesMutex);
     for (int i(0), len(m_names.size()); i < len; ++i)
       {
-	if (m_names[i]->ns != NULL)
-	  m_names[i]->ns->bindObject(name, mgr);
+	if (m_names[i]->ns != 0)
+          {
+            try
+              {
+                m_names[i]->ns->bindObject(name, mgr);
+              }
+            catch (...)
+              {
+                delete m_names[i]->ns;
+                m_names[i]->ns = 0;
+              }
+          }
       }
     registerMgrName(name, mgr);
   }
@@ -166,31 +246,40 @@ namespace RTC
   void NamingManager::update()
   {
     RTC_TRACE(("NamingManager::update()"));
-    
+
     Guard guard(m_namesMutex);
     bool rebind(coil::toBool(m_manager->getConfig()["naming.update.rebind"],
                              "YES", "NO", false));
     for (int i(0), len(m_names.size()); i < len; ++i)
       {
-	if (m_names[i]->ns == NULL) // if ns==NULL
-	  { // recreate NamingObj
-	    NamingBase* nsobj;
-	    nsobj = createNamingObj(m_names[i]->method.c_str(),
-				    m_names[i]->nsname.c_str());
-	    if (nsobj != NULL) // if succeed
-	      {
-		RTC_INFO(("New name server found: %s/%s",		\
-			  m_names[i]->method.c_str(),			\
-			  m_names[i]->nsname.c_str()));
-		m_names[i]->ns = nsobj;
-		bindCompsTo(nsobj); // rebind all comps to new NS
-	      }
+	if (m_names[i]->ns == 0) // if ns==NULL
+	  {
+            RTC_DEBUG(("Retrying connection to %s/%s",
+                       m_names[i]->method.c_str(),
+                       m_names[i]->nsname.c_str()));
+            retryConnection(m_names[i]);
 	  }
         else
           {	
-            if (rebind)
+            try
               {
-                bindCompsTo(m_names[i]->ns);
+                if (rebind) { bindCompsTo(m_names[i]->ns); }
+                if (!m_names[i]->ns->isAlive())
+                  {
+                    RTC_INFO(("Name server: %s (%s) disappeared.",
+                              m_names[i]->nsname.c_str(),
+                              m_names[i]->method.c_str()));  
+                    delete m_names[i]->ns;
+                    m_names[i]->ns = 0;
+                  }
+              }
+            catch (...)
+              {
+                RTC_INFO(("Name server: %s (%s) disappeared.",
+                          m_names[i]->nsname.c_str(),
+                          m_names[i]->method.c_str()));
+                delete m_names[i]->ns;
+                m_names[i]->ns = 0;
               } 
           } 
       }
@@ -277,13 +366,17 @@ namespace RTC
   NamingBase* NamingManager::createNamingObj(const char* method,
 					     const char* name_server)
   {
+    RTC_TRACE(("createNamingObj(method = %s, nameserver = %s",
+               method, name_server));
     std::string m(method);
     if (m == "corba")
       {
 	try
 	  {
 	    NamingBase* name;
-	    name = new NamingOnCorba(m_manager->getORB(), name_server);
+            CORBA::ORB_var orb;
+            orb = CORBA::ORB::_duplicate(m_manager->getORB());
+	    name = new NamingOnCorba(orb.in(), name_server);
 	    if (name == NULL) return NULL;
 	    RTC_INFO(("NameServer connection succeeded: %s/%s",		\
 		      method, name_server));
@@ -384,5 +477,41 @@ namespace RTC
 	  }
       }
     return;
+  }
+
+  void NamingManager::retryConnection(Names* ns)
+  {
+    // recreate NamingObj
+    NamingBase* nsobj(0);
+    try
+      {
+        nsobj = createNamingObj(ns->method.c_str(),
+                                ns->nsname.c_str());
+        if (nsobj != 0) // if succeed
+          {
+            RTC_INFO(("Connected to a name server: %s/%s",
+                      ns->method.c_str(), ns->nsname.c_str()));
+            ns->ns = nsobj;
+            bindCompsTo(nsobj); // rebind all comps to new NS
+            return;
+          }
+        else
+          {
+            RTC_DEBUG(("Name service: %s/%s still not available.",
+                       ns->method.c_str(),
+                       ns->nsname.c_str()));
+          }
+      }
+    catch (...)
+      {
+        RTC_DEBUG(("Name server: %s/%s disappeared again.",
+                   ns->method.c_str(),
+                   ns->nsname.c_str()));
+        if (nsobj != 0)
+          {
+            delete ns->ns;
+            ns->ns = 0;
+          } 
+      }
   }
 }; // namespace RTC
