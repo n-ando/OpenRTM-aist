@@ -79,7 +79,7 @@ namespace RTC
         CORBA::Object_var newobj = RTC::Manager::instance().
           getORB()->string_to_object(iorstr.c_str());
 
-        RTC_DEBUG(("Modified IOR information]\n %s",
+        RTC_DEBUG(("Modified IOR information:\n %s",
                    CORBA_IORUtil::formatIORinfo(iorstr.c_str()).c_str()));
         m_cosnaming.rebindByString(name, newobj.in(), true);
       }
