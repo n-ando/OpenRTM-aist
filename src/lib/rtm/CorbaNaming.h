@@ -158,6 +158,8 @@ namespace RTC
      * @endif
      */
     void init(const char* name_server);
+
+    bool isAlive();
     
     typedef CORBA::SystemException SystemException;
     typedef CosNaming::NamingContext::NotFound      NotFound;
