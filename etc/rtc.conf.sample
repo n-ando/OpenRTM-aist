@@ -39,7 +39,10 @@ corba.master_manager: localhost:2810
 # CORBA configuration
 #============================================================
 #
-# ORB specific command line options given to ORB_init()
+# CORBA ORB's arguments
+#
+# ORB specific command line options given to ORB_init().
+# See your ORB documentation.
 #
 # Example:
 #   corba.args: -ORBInitialHost myhost -ORBInitialPort 8888
@@ -63,6 +66,19 @@ corba.args:
 corba.endpoint:
 
 #
+# Multiple endpoint options (experimental)
+#
+# Multiple endpoint addresses and ports can be specified using this option.
+#
+# Example:
+#   corba.endpoints: 192.168.1.10:1111, 192.168.10.11:2222
+#   corba.endpoints: 192.168.1.10, 192.168.10.11
+#   corba.endpoints: all
+#
+corba.endpoints:
+
+
+#
 # CORBA name server setting
 #
 # Multiple name servers can be specified separating by comma.
@@ -75,6 +91,20 @@ corba.endpoint:
 #
 corba.nameservers: localhost
 
+#
+# IOR host address replacement by guessed endpoint from routing (experimental)
+#
+# This option replaces a host address with an endpoint that is guessed
+# by route information to nameserver's address. This option may be
+# effective for CORBA implementation that does not supports IOR's
+# multiple profile or alternate IIOP address. However, since other
+# object references that are obtained from RT-Components or other are
+# not modified by this rule, other RTCs that are connected to this RTC
+# have to also support IOR multiple profile feature.  When this option
+# is used, corba.endpoints option should also be specified with
+# multiple endpoints.
+#
+corba.nameservice.replace_endpoint: NO
 
 #============================================================
 # Naming configurations

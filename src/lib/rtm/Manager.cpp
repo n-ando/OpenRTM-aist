@@ -669,7 +669,7 @@ std::vector<coil::Properties> Manager::getLoadableModules()
 
     FactoryBase* factory(m_factory.find(comp_id));
     
-    ReturnCode_t ret = comp->exit();
+    comp->exit();
 
     if (factory == NULL)
       {
@@ -959,41 +959,76 @@ std::vector<coil::Properties> Manager::getLoadableModules()
     std::string opt(m_config["corba.args"]);
     RTC_DEBUG(("corba.args: %s", opt.c_str()));
 
-    std::string corba(m_config["corba.id"]);
-    RTC_DEBUG(("corba.id: %s", corba.c_str()));
+    RTC_DEBUG_STR((m_config));
 
-    std::string endpoint(m_config["corba.endpoint"]);
-    RTC_DEBUG(("corba.endpoint: %s", endpoint.c_str()));
+    coil::vstring endpoints;
+    createORBEndpoints(endpoints);
+    createORBEndpointOption(opt, endpoints);
 
-    RTC_DEBUG(("manager.is_master: %s",
-               m_config["manager.is_master"].c_str()));
+    RTC_PARANOID(("ORB options: %s", opt.c_str()));
+    return opt;
+  }
+
+  void Manager::createORBEndpoints(coil::vstring& endpoints)
+  {
+    // corba.endpoint is obsolete
+    // corba.endpoints with comma separated values are acceptable
+    if (!m_config.hasKey("corba.endpoints"))
+      {
+        endpoints = coil::split(m_config["corba.endpoints"], ",");
+        RTC_DEBUG(("corba.endpoints: %s", m_config["corba.endpoints"].c_str()));
+      }
+    else if (!m_config.hasKey("corba.endpoint"))
+      {
+        endpoints = coil::split(m_config["corba.endpoint"], ",");
+        RTC_DEBUG(("corba.endpoints: %s", m_config["corba.endpoint"].c_str()));
+      }
 
     // If this process has master manager,
-    // corba.endpoint is overwridden by master manager port number.
+    // master manager's endpoint inserted at the top of endpoints
+    RTC_DEBUG(("manager.is_master: %s",
+               m_config["manager.is_master"].c_str()));
     if (coil::toBool(m_config["manager.is_master"], "YES", "NO", false))
       {
         std::string mm(m_config.getProperty("corba.master_manager", ":2810"));
         coil::vstring mmm(coil::split(mm, ":"));
         if (mmm.size() == 2)
           {
-            endpoint = std::string(":") + mmm[1];
+            endpoints.insert(endpoints.begin(), std::string(":") + mmm[1]);
           }
         else
           {
-            endpoint = ":2810";
+            endpoints.insert(endpoints.begin(), ":2810");
           }
       }
-
-    if (!endpoint.empty())
-      {
-	if (!opt.empty()) opt += " ";
-	if (corba == "omniORB")   opt = "-ORBendPoint giop:tcp:" + endpoint;
-	else if (corba == "TAO")  opt = "-ORBEndPoint iiop://" + endpoint;
-	else if (corba == "MICO") opt = "-ORBIIOPAddr inet:" + endpoint;
-      }
-    RTC_PARANOID(("ORB options: %s", opt.c_str()));
-    return opt;
   }
+
+  void Manager::createORBEndpointOption(std::string& opt,
+                                        coil::vstring& endpoints)
+  {
+    std::string corba(m_config["corba.id"]);
+    RTC_DEBUG(("corba.id: %s", corba.c_str()));
+
+    for (size_t i(0); i < endpoints.size(); ++i)
+      {
+        std::string& endpoint(endpoints[i]);
+        if (endpoint.find(":") == std::string::npos) { endpoint += ":"; }
+
+	if (corba == "omniORB")
+          {
+            opt += " -ORBendPoint giop:tcp:" + endpoint;
+          }
+	else if (corba == "TAO")
+          {
+            opt += "-ORBEndPoint iiop://" + endpoint;
+          }
+	else if (corba == "MICO")
+          {
+            opt += "-ORBIIOPAddr inet:" + endpoint;
+          }
+      }
+  }
+
   
   /*!
    * @if jp

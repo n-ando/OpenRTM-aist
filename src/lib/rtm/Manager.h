@@ -970,7 +970,11 @@ namespace RTC
      * @endif
      */
     std::string createORBOptions();
+
+    void createORBEndpoints(coil::vstring& endpoints);
     
+    void createORBEndpointOption(std::string& opt, coil::vstring& endpoint);
+
     /*!
      * @if jp
      * @brief ORB の終了処理
