@@ -307,24 +307,30 @@ namespace RTC
                            ConnectorDataListener* listener,
                            bool autoclean)
   {
-    RTC_TRACE(("addConnectorDataListener()"));
-
     if (type < CONNECTOR_DATA_LISTENER_NUM)
       {
+        RTC_TRACE(("addConnectorDataListener(%s)",
+                   ConnectorDataListener::toString(type)));
         m_listeners.connectorData_[type].addListener(listener, autoclean);
+        return;
       }
+    RTC_ERROR(("addConnectorDataListener(): Invalid listener type."));
+    return;
   }
 
   void InPortBase::
   removeConnectorDataListener(ConnectorDataListenerType type,
                               ConnectorDataListener* listener)
   {
-    RTC_TRACE(("removeConnectorDataListener()"));
-
     if (type < CONNECTOR_DATA_LISTENER_NUM)
       {
+        RTC_TRACE(("removeConnectorDataListener(%s)",
+                   ConnectorDataListener::toString(type)));
         m_listeners.connectorData_[type].removeListener(listener);
+        return;
       }
+    RTC_ERROR(("removeConnectorDataListener(): Invalid listener type."));
+    return;
   }
   
   /*!
@@ -340,23 +346,28 @@ namespace RTC
                                          ConnectorListener* listener,
                                          bool autoclean)
   {
-    RTC_TRACE(("addConnectorListener()"));
-
     if (type < CONNECTOR_LISTENER_NUM)
       {
+        RTC_TRACE(("removeConnectorDataListener(%s)",
+                   ConnectorListener::toString(type)));
         m_listeners.connector_[type].addListener(listener, autoclean);
+        return;
       }
+    RTC_ERROR(("addConnectorListener(): Invalid listener type."));
+    return;
   }
   
   void InPortBase::removeConnectorListener(ConnectorListenerType type,
                                             ConnectorListener* listener)
   {
-    RTC_TRACE(("removeConnectorListener()"));
-
     if (type < CONNECTOR_LISTENER_NUM)
       {
+        RTC_TRACE(("removeConnectorListener(%s)",
+                   ConnectorListener::toString(type)));
         m_listeners.connector_[type].removeListener(listener);
+        return;
       }
+    RTC_ERROR(("removeConnectorListener(): Invalid listener type."));
   }
 
   /*!
