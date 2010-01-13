@@ -438,7 +438,7 @@ namespace RTC
    */
   const char* PortBase::getName() const
   {
-    RTC_TRACE(("name() = ", m_profile.name));
+    RTC_TRACE(("getName() = %s", m_profile.name));
     return m_profile.name;
   }
   
