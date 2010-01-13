@@ -96,6 +96,26 @@ namespace RTC
   class ConnectorDataListener
   {
   public:
+    static const char* toString(ConnectorDataListenerType type)
+    {
+      static const char* typeString[] =
+        {
+          "ON_BUFFER_WRITE",
+          "ON_BUFFER_FULL",
+          "ON_BUFFER_WRITE_TIMEOUT",
+          "ON_BUFFER_OVERWRITE",
+          "ON_BUFFER_READ", 
+          "ON_SEND", 
+          "ON_RECEIVED",
+          "ON_RECEIVER_FULL", 
+          "ON_RECEIVER_TIMEOUT", 
+          "ON_RECEIVER_ERROR",
+          "CONNECTOR_DATA_LISTENER_NUM"
+        };
+      if (type < CONNECTOR_DATA_LISTENER_NUM) { return typeString[type]; }
+      return "";
+    }
+
     virtual ~ConnectorDataListener();
     virtual void operator()(const ConnectorInfo& info,
                             const cdrMemoryStream& data) = 0;
@@ -217,6 +237,23 @@ namespace RTC
   class ConnectorListener
   {
   public:
+    static const char* toString(ConnectorListenerType type)
+    { 
+      static const char* typeStr[] =
+        {
+          "ON_BUFFER_EMPTY",
+          "ON_BUFFER_READ_TIMEOUT",
+          "ON_SENDER_EMPTY", 
+          "ON_SENDER_TIMEOUT", 
+          "ON_SENDER_ERROR", 
+          "ON_CONNECT",
+          "ON_DISCONNECT",
+          "CONNECTOR_LISTENER_NUM"
+        };
+      if (type < CONNECTOR_LISTENER_NUM) { return typeStr[type]; }
+      return "";
+    }
+
     virtual ~ConnectorListener();
     virtual void operator()(const ConnectorInfo& info) = 0;
   };
