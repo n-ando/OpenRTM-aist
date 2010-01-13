@@ -870,9 +870,8 @@ std::vector<coil::Properties> Manager::getLoadableModules()
                  
 	
     RTC_INFO(("%s", m_config["openrtm.version"].c_str()));
-    RTC_INFO(("Copyright (C) 2003-2007"));
+    RTC_INFO(("Copyright (C) 2003-2010"));
     RTC_INFO(("  Noriaki Ando"));
-    RTC_INFO(("  Task-intelligence Research Group,"));
     RTC_INFO(("  Intelligent Systems Research Institute, AIST"));
     RTC_INFO(("Manager starting."));
     RTC_INFO(("Starting local logging."));
@@ -1012,11 +1011,28 @@ std::vector<coil::Properties> Manager::getLoadableModules()
     for (size_t i(0); i < endpoints.size(); ++i)
       {
         std::string& endpoint(endpoints[i]);
+        RTC_DEBUG(("Endpoint is : %s", endpoint.c_str()));
         if (endpoint.find(":") == std::string::npos) { endpoint += ":"; }
 
 	if (corba == "omniORB")
           {
-            opt += " -ORBendPoint giop:tcp:" + endpoint;
+            coil::normalize(endpoint);
+            if (coil::normalize(endpoint) == "all:")
+              {
+#ifdef ORB_IS_OMNIORB
+#ifdef RTC_CORBA_CXXMAPPING11
+                // omniORB 4.1 or later
+                opt += " -ORBendPointPublish all(addr)";
+#else
+                // omniORB 4.0
+                opt += " -ORBendPointPublishAllIFs 1";
+#endif // RTC_CORBA_CXXMAPPING1
+#endif // ORB_IS_OMNIORB
+              }
+            else
+              {
+                opt += " -ORBendPoint giop:tcp:" + endpoint;
+              }
           }
 	else if (corba == "TAO")
           {
