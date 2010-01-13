@@ -46,7 +46,9 @@ namespace RTC
       m_onConnectionLost(0)
   {
     m_objref = this->_this();
-    m_profile.name = CORBA::string_dup(name);
+    std::string portname(m_ownerInstanceName);
+    portname += name;
+    m_profile.name = CORBA::string_dup(portname.c_str());
     m_profile.port_ref = m_objref;
     m_profile.owner = RTC::RTObject::_nil();
   }
@@ -438,7 +440,7 @@ namespace RTC
    */
   const char* PortBase::getName() const
   {
-    RTC_TRACE(("getName() = %s", m_profile.name));
+    RTC_TRACE(("getName() = %s", (const char*)m_profile.name));
     return m_profile.name;
   }
   
@@ -497,8 +499,14 @@ namespace RTC
     m_profile.owner = RTC::RTObject::_duplicate(owner);
     RTC::ComponentProfile_var prof = 
           m_profile.owner->get_component_profile();
+
     m_ownerInstanceName = prof->instance_name;
     RTC_TRACE(("setOwner(%s)", m_ownerInstanceName.c_str()));
+
+    std::string portname((const char*)m_profile.name);
+    coil::vstring p(coil::split(portname, "."));
+    portname = m_ownerInstanceName + p.back();
+    m_profile.name = CORBA::string_dup(portname.c_str());
   }
 
   // OnConnect系コールバック (接続に起因するイベントによりコールされる)
