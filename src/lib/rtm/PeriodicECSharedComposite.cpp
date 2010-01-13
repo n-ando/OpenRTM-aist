@@ -572,6 +572,19 @@ namespace RTC
   ReturnCode_t PeriodicECSharedComposite::onInitialize()
   {
     RTC_TRACE(("onInitialize()"));
+
+    std::string active_set;
+    active_set = m_properties.getProperty("configuration.active_config",
+                                              "default");
+    if (m_configsets.haveConfig(active_set.c_str()))
+      {
+        m_configsets.update(active_set.c_str());
+      }
+    else
+      {
+        m_configsets.update("default");
+      }
+
     ::RTC::Manager& mgr(::RTC::Manager::instance());
 
     std::vector<RTObject_impl*> comps = mgr.getComponents();
