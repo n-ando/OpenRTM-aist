@@ -38,9 +38,16 @@ namespace RTC
    * @endif
    */
   NamingOnCorba::NamingOnCorba(CORBA::ORB_ptr orb, const char* names)
-    : m_cosnaming(orb, names), m_endpoint("")
+    : m_cosnaming(orb, names), m_endpoint(""),
+      m_replaceEndpoint(false)
   {
     rtclog.setName("NamingOnCorba");
+    coil::Properties& prop(Manager::instance().getConfig());
+    m_replaceEndpoint = 
+      coil::toBool(prop["corba.nameservice.replace_endpoint"].c_str(),
+                   "YES", "NO", true);
+
+
     coil::vstring host_port(coil::split(names, ":"));
     if (coil::dest_to_endpoint(host_port[0], m_endpoint))
       {
@@ -65,8 +72,8 @@ namespace RTC
 				 const RTObject_impl* rtobj)
   {
     RTC_TRACE(("bindObject(name = %s, rtobj)", name));
-
-    if (!m_endpoint.empty())
+#ifdef ORB_IS_OMNIORB
+    if (!m_endpoint.empty() && m_replaceEndpoint)
       {
         CORBA::Object_var obj(RTObject::_duplicate(rtobj->getObjRef()));
         CORBA::String_var ior;
@@ -85,16 +92,19 @@ namespace RTC
       }
     else
       {
+#endif // ORB_IS_OMNIORB
         m_cosnaming.rebindByString(name, rtobj->getObjRef(), true);
+#ifdef ORB_IS_OMNIORB
       }
+#endif // ORB_IS_OMNIORB
   }
 
   void NamingOnCorba::bindObject(const char* name,
 				 const RTM::ManagerServant* mgr)
   {
     RTC_TRACE(("bindObject(name = %s, mgr)", name));
-
-    if (!m_endpoint.empty())
+#ifdef ORB_IS_OMNIORB
+    if (!m_endpoint.empty() && m_replaceEndpoint)
       {
         CORBA::Object_var obj(RTM::Manager::_duplicate(mgr->getObjRef()));
         CORBA::String_var ior;
@@ -113,8 +123,11 @@ namespace RTC
       }
     else
       {
+#endif // ORB_IS_OMNIORB
         m_cosnaming.rebindByString(name, mgr->getObjRef(), true);
+#ifdef ORB_IS_OMNIORB
       }
+#endif // ORB_IS_OMNIORB
   }
   
   /*!

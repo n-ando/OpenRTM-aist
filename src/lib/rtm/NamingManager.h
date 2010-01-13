@@ -250,6 +250,7 @@ namespace RTC
     Logger rtclog;
     CorbaNaming m_cosnaming;
     std::string m_endpoint;
+    bool m_replaceEndpoint;
     std::map<std::string, RTObject_impl*> m_names;
   };
   
