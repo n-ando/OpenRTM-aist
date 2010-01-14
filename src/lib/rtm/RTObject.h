@@ -29,6 +29,7 @@
 #include <rtm/PortAdmin.h>
 #include <rtm/InPortBase.h>
 #include <rtm/OutPortBase.h>
+#include <rtm/CorbaPort.h>
 //#include <rtm/InPort.h>
 //#include <rtm/OutPort.h>
 #include <rtm/ConfigAdmin.h>
@@ -2361,6 +2362,31 @@ namespace RTC
      * @endif
      */
     void registerOutPort(const char* name, OutPortBase& outport);
+    
+    /*!
+     * @if jp
+     * 
+     * @brief [local interface] CorbaPort ¤òÅÐÏ¿¤¹¤ë
+     *
+     * RTC ¤¬ÊÝ»ý¤¹¤ë CorbaPort¤òÅÐÏ¿¤¹¤ë¡£
+     * 
+     * @param name port Ì¾¾Î
+     * @param corbaport ÅÐÏ¿ÂÐ¾Ý CorbaPort
+     *
+     * @else
+     * 
+     * @brief [local interface] Register CorbaPort
+     *
+     * This operation registers CorbaPort held by this RTC.
+     * Set "port.corbaport" and "tcp_any" to property of Port, and then
+     * create instances of CorbaPort and register it.
+     * 
+     * @param name Port name
+     * @param corbaport CorbaPort which is registered to the RTC
+     *
+     * @endif
+     */
+    void registerCorbaPort(const char* name, CorbaPort& outport);
     
     /*!
      * @if jp

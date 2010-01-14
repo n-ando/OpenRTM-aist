@@ -630,6 +630,22 @@ namespace RTC
     
     /*!
      * @if jp
+     * @brief プロパティの初期化
+     *
+     * OutPortのプロパティを初期化する
+     *
+     * @else
+     *
+     * @brief Initializing properties
+     *
+     * This operation initializes outport's properties
+     *
+     * @endif
+     */
+    void init(coil::Properties& prop);
+
+    /*!
+     * @if jp
      *
      * @brief Provider を登録する
      *
@@ -992,6 +1008,9 @@ namespace RTC
      */
     virtual void deactivateInterfaces();
 
+  protected:
+    coil::Properties m_properties;
+    
   private:
     class CorbaConsumerHolder;
     virtual bool findProvider(const NVList& nv, CorbaConsumerHolder& cons);

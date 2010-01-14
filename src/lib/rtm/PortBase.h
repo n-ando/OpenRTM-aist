@@ -1458,6 +1458,23 @@ namespace RTC
      */
     virtual void
     unsubscribeInterfaces(const ConnectorProfile& connector_profile) = 0;
+
+    /*! @if jp
+     *
+     * @brief 接続の最大数を設定する。
+     *
+     * @param limit_value 最大数
+     *
+     * @else
+     *
+     * @brief Set the maximum number of connections
+     *
+     *
+     * @param limit_value The maximum number of connections
+     *
+     * @endif
+     */
+    virtual void setConnectionLimit(int limit_value);
     
     //============================================================
     // protected utility functions
@@ -1824,6 +1841,15 @@ namespace RTC
     typedef coil::Guard<coil::Mutex> Guard;
 
     std::string m_ownerInstanceName;
+
+    /*!
+     * @if jp
+     * @brief Port の接続の最大数
+     * @else
+     * @brief The maximum number of connections
+     * @endif
+     */
+    int m_connectionLimit;
     
     /*!
      * @if jp

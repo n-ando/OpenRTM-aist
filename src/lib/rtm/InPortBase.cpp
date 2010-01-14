@@ -112,6 +112,16 @@ namespace RTC
 
     initProviders();
     initConsumers();
+    int num;
+    if (!coil::stringTo(num, 
+                        m_properties.getProperty("connection.max").c_str()))
+      {
+        RTC_ERROR(("invalid connection.max value: %s", 
+                   m_properties.getProperty("connection.max").c_str()));
+        num = 0;
+      }
+
+    setConnectionLimit(num);
   }
   
   /*!

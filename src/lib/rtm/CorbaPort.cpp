@@ -49,6 +49,36 @@ namespace RTC
   CorbaPort::~CorbaPort()
   {
   }
+
+  /*!
+   * @if jp
+   * @brief プロパティの初期化
+   * @else
+   * @brief Initializing properties
+   * @endif
+   */
+  void CorbaPort::init(coil::Properties& prop)
+  {
+    RTC_TRACE(("init()"));
+    RTC_PARANOID(("given properties:"));
+    RTC_DEBUG_STR((prop));
+
+    m_properties << prop;
+
+    RTC_PARANOID(("updated properties:"));
+    RTC_DEBUG_STR((m_properties));
+
+    int num;
+    if (!coil::stringTo(num, 
+                        m_properties.getProperty("connection.max").c_str()))
+      {
+        RTC_ERROR(("invalid connection.max value: %s", 
+                   m_properties.getProperty("connection.max").c_str()));
+        num = 0;
+      }
+
+    setConnectionLimit(num);
+  }
   
   /*!
    * @if jp
