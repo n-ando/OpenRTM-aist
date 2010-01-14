@@ -501,6 +501,29 @@ namespace SDOPackage
       {
         coil::Properties conf(id.c_str());
 	toProperties(conf, configuration_set);
+
+	//----------------------------------------------------------------------------
+	// Because the format of port-name had been changed from <port_name> 
+	// to <instance_name>.<port_name>, the following processing was added. 
+	// (since r1648)
+
+	std::vector<std::string> 
+	  exported_ports(coil::split(conf["exported_ports"], ","));
+	std::string exported_ports_str("");
+        for (int i(0), len(exported_ports.size()); i < len; ++i)
+          {
+            std::vector<std::string> keyval(coil::split(exported_ports[i], "."));
+	    if (keyval.size() > 2)
+	      exported_ports_str += (keyval[0] + "." + keyval.back());
+	    else
+	      exported_ports_str += exported_ports[i];
+
+	    if ( i != (int)(exported_ports.size()-1) )
+	      exported_ports_str += ",";
+          }
+	conf["exported_ports"] = exported_ports_str;
+	//---------------------------------------------------------------------------
+
 	return m_configsets.setConfigurationSetValues(conf);
       }
     catch (...)
