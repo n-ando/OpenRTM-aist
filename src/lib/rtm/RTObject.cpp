@@ -1517,6 +1517,26 @@ namespace RTC
   
   /*!
    * @if jp
+   * @brief CorbaPort ¤òÅÐÏ¿¤¹¤ë
+   * @else
+   * @brief Register CorbaPort
+   * @endif
+   */
+  void RTObject_impl::registerCorbaPort(const char* name, CorbaPort& corbaport)
+  {
+    RTC_TRACE(("registerCorbaPort(%s)", name));
+    
+    std::string propkey("port.corbaport.");
+    propkey += name;
+    m_properties.getNode(propkey) 
+      << m_properties.getNode("port.corba");
+    
+    corbaport.init(m_properties.getNode(propkey));
+    registerPort(corbaport);
+  }
+  
+  /*!
+   * @if jp
    * @brief [local interface] Port ¤ÎÅÐÏ¿¤òºï½ü¤¹¤ë
    * @else
    * @brief [local interface] Unregister Port

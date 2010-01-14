@@ -43,7 +43,8 @@ namespace RTC
       m_onConnected(0),
       m_onUnsubscribeInterfaces(0),
       m_onDisconnected(0),
-      m_onConnectionLost(0)
+      m_onConnectionLost(0),
+      m_connectionLimit(0)
   {
     m_objref = this->_this();
     // Now Port name is <instance_name>.<port_name>. r1648
@@ -226,6 +227,18 @@ namespace RTC
   {
     RTC_TRACE(("notify_connect()"));
 
+    if(m_connectionLimit!=0)
+      {
+        if(m_connectionLimit<=m_profile.connector_profiles.length())
+          {
+            RTC_PARANOID(("Connected number has reached the limitation."));
+            RTC_PARANOID(("Can connect the port up to %d ports.",
+                      m_connectionLimit));
+            RTC_PARANOID(("%d connectors are existing",
+                      m_profile.connector_profiles.length()));
+            return RTC::RTC_ERROR;  
+          }
+      }
     ReturnCode_t retval[] = {RTC::RTC_OK, RTC::RTC_OK, RTC::RTC_OK};
 
     // publish owned interface information to the ConnectorProfile
@@ -616,6 +629,17 @@ namespace RTC
       }
         
     return RTC::RTC_ERROR;
+  }
+  /*!
+   * @if jp
+   * @brief 接続の最大数を設定する。
+   * @else
+   * @brief Set the maximum number of connections
+   * @endif
+   */
+  void PortBase::setConnectionLimit(int limit_value)
+  {
+    m_connectionLimit = limit_value;
   }
   
   //============================================================
