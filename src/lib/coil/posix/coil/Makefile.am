@@ -5,7 +5,8 @@
 ## $Id$
 ##---------------------------------------------------------------------------
 
-AM_CPPFLAGS=-I../ -I../../include
+AM_CPPFLAGS=-I.. -I$(top_srcdir)/include
+DEFAULT_INCLUDES=
 
 # posix API dependent sources
 COIL_PLATFORM_SRC =    \
