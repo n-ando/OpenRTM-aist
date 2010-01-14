@@ -69,12 +69,12 @@ AC_CHECK_FUNCS([uname])
 
 CPPFLAGS="-Wall -fPIC $CPPFLAGS"
 CXXFLAGS="-Wall -fPIC $CXXFLAGS"
-LDFLAGS="-export-dynamic $LDFLAGS"
-SHLIB_SUFFIX=".so"
 
 AC_SEARCH_LIBS(pthread_create, pthread c_r, , 
 	AC_MSG_ERROR([** thread library is needed **])) 
 
+LDFLAGS="-export-dynamic $LDFLAGS"
+SHLIB_SUFFIX=".so"
 
 dnl ------------------------------------------------------------
 dnl  configure arguments definition
@@ -165,6 +165,7 @@ case $system in
 	;;	
 [Darwin*)]
 	AC_DEFINE([RTM_OS_DARWIN], [TRUE], [OS is Max OS X])
+	SHLIB_SUFFIX=".dylib"
 	os="darwin"
 	;;	
 [QNX*)]
@@ -1002,12 +1003,12 @@ if test "x$have_omniorb" = "xyes" ; then
 	dnl ------------------------------------------------------------
 	AC_MSG_CHECKING(for libomniORB4.so)
 	dnl  libomniORB4.so -> %libomniORB4_so $libomniORB4_so_dir
-	FP_FIND_FILE(libomniORB4.so,$with_omniorb/lib $more_libs $base_libs $base_dirs,lib cxx/lib)
-	if test "x$libomniORB4_so_dir" = "x" ; then
+	FP_FIND_FILE(libomniORB4${SHLIB_SUFFIX},$with_omniorb/lib $more_libs $base_libs $base_dirs,lib cxx/lib, omniorb_lib)
+	if test "x$omniorb_lib_dir" = "x" ; then
 		AC_MSG_RESULT(not found)
 		AC_MSG_ERROR(use --with-omniorb to locate libomniORB4.so)
 	else
-		AC_MSG_RESULT(found in $libomniORB4_so_dir)
+		AC_MSG_RESULT(found in $omniorb_lib_dir)
 	fi
 
 	dnl ------------------------------------------------------------
@@ -1042,7 +1043,7 @@ if test "x$have_omniorb" = "xyes" ; then
 	dnl  Check omniORB version
 	dnl ------------------------------------------------------------
 	AC_MSG_CHECKING(omniORB version)
-	omniorb_version=[`strings $libomniORB4_so_dir/libomniORB4.so 2>&1 | grep 'omniORB version' | sed 's/^.*version //'`]
+	omniorb_version=[`strings $omniorb_lib_dir/libomniORB4${SHLIB_SUFFIX} 2>&1 | grep 'omniORB version' | sed 's/^.*version //'`]
 	if test "x$omniorb_version" = "x" ; then
 		omniorb_version=unknown
 	fi
@@ -1068,7 +1069,7 @@ if test "x$have_omniorb" = "xyes" ; then
 	dnl  Compiler/Linker options
 	CPPFLAGS="-I$omniORB4_CORBA_h_dir $CPPFLAGS"
 	CXXFLAGS="-I$omniORB4_CORBA_h_dir $CXXFLAGS"
-	LDFLAGS="-L$libomniORB4_so_dir $LDFLAGS"
+	LDFLAGS="-L$omniorb_lib_dir $LDFLAGS"
 	LIBS="$LIBS -lomniORB4 -lomnithread -lomniDynamic4"
 	LDSOLIBS="$LDSOLIBS -lomniORB4 -lomnithread -lomniDynamic4"
 	AC_DEFINE([ORB_IS_OMNIORB], [TRUE], [ORB is omniORB])

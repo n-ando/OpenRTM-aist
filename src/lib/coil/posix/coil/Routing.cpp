@@ -54,14 +54,14 @@ namespace coil
     //  struct hostent ipaddr;
     //  ipaddr = gethostbyname(dest_addr.c_str());
     
-#ifdef COIL_OS_FREEBSD
+#if defined(COIL_OS_FREEBSD) || defined(COIL_OS_DARWIN)
     std::string cmd("route get ");
     const char* match_str = "interface";
     const char* delimiter = ":";
     int ifname_pos(1);
     cmd += dest_addr;
-#endif // COIL_OS_IS_FREEBSD
-#ifdef COIL_OS_LINUX    
+#endif // COIL_OS_IS_FREEBSD || COIL_OS_DARWIN
+#ifdef COIL_OS_LINUX
     std::string cmd("ip route get ");
     const char* match_str = "dev ";
     const char* delimiter = " ";
