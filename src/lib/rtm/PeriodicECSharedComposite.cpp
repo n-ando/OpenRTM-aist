@@ -368,9 +368,7 @@ namespace SDOPackage
     // port delegation
     for (::CORBA::ULong i(0), len(plist.length()); i < len; ++i)
       {
-        // port name -> comp_name.port_name
-        std::string port_name(comp_name);
-        port_name += "."; port_name += plist[i].name;
+        std::string port_name(plist[i].name);
 
         RTC_DEBUG(("port_name: %s is in %s?",
                    port_name.c_str(),
@@ -390,7 +388,7 @@ namespace SDOPackage
                    port_name.c_str(),
                    ::coil::flatten(portlist).c_str()));
 
-        m_rtobj->registerPort(plist[i].port_ref);
+        m_rtobj->addPort(plist[i].port_ref);
 
         RTC_DEBUG(("Port %s was delegated.", port_name.c_str()));
 
@@ -438,7 +436,7 @@ namespace SDOPackage
                    port_name.c_str(),
                    ::coil::flatten(portlist).c_str()));
 
-        m_rtobj->deletePort(plist[i].port_ref);
+        m_rtobj->removePort(plist[i].port_ref);
         portlist.erase(pos);
         
         RTC_DEBUG(("Port %s was deleted.", port_name.c_str()));

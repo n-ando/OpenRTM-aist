@@ -1,4 +1,4 @@
-	// -*- C++ -*-
+// -*- C++ -*-
 /*!
  * @file PortBase.cpp
  * @brief RTC's Port base class
@@ -46,8 +46,11 @@ namespace RTC
       m_onConnectionLost(0)
   {
     m_objref = this->_this();
+    // Now Port name is <instance_name>.<port_name>. r1648
     std::string portname(m_ownerInstanceName);
+    portname += ".";
     portname += name;
+
     m_profile.name = CORBA::string_dup(portname.c_str());
     m_profile.port_ref = m_objref;
     m_profile.owner = RTC::RTObject::_nil();
@@ -505,7 +508,8 @@ namespace RTC
 
     std::string portname((const char*)m_profile.name);
     coil::vstring p(coil::split(portname, "."));
-    portname = m_ownerInstanceName + p.back();
+    // Now Port name is <instance_name>.<port_name>. r1648
+    portname = m_ownerInstanceName +"."+ p.back();
     m_profile.name = CORBA::string_dup(portname.c_str());
   }
 

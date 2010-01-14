@@ -505,8 +505,32 @@ std::vector<coil::Properties> Manager::getLoadableModules()
     coil::Properties comp_prop, comp_id;
     if (!procComponentArgs(comp_args, comp_id, comp_prop)) return NULL;
 
+    //----------------------------------------------------------------------------
+    // Because the format of port-name had been changed from <port_name> 
+    // to <instance_name>.<port_name>, the following processing was added. 
+    // (since r1648)
+
     if (!comp_prop["exported_ports"].empty())
-      comp_prop["conf.default.exported_ports"] = comp_prop["exported_ports"];
+      {
+	std::vector<std::string> 
+	  exported_ports(coil::split(comp_prop["exported_ports"], ","));
+
+	std::string exported_ports_str("");
+        for (int i(0), len(exported_ports.size()); i < len; ++i)
+          {
+            std::vector<std::string> keyval(coil::split(exported_ports[i], "."));
+	    if (keyval.size() > 2)
+	      exported_ports_str += (keyval[0] + "." + keyval.back());
+	    else
+	      exported_ports_str += exported_ports[i];
+	    
+	    if ( i != (int)(exported_ports.size()-1) )
+	      exported_ports_str += ",";
+          }
+	comp_prop["exported_ports"] = exported_ports_str;
+	comp_prop["conf.default.exported_ports"] = comp_prop["exported_ports"];
+      }
+    //---------------------------------------------------------------------------
 
     //------------------------------------------------------------
     // Create Component
