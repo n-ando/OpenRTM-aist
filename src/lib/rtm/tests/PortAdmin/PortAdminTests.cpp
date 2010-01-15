@@ -145,7 +145,7 @@ namespace PortAdmin
     Logger* m_logger;
 
   };
-	
+
   class PortAdminTests
     : public CppUnit::TestFixture
   {
@@ -153,8 +153,8 @@ namespace PortAdmin
     CPPUNIT_TEST(test_getPortList);
     CPPUNIT_TEST(test_getPortRef);
     CPPUNIT_TEST(test_getPort);
-    CPPUNIT_TEST(test_registerPort);
-    CPPUNIT_TEST(test_deletePort);
+    CPPUNIT_TEST(test_addPort);
+    CPPUNIT_TEST(test_removePort);
     CPPUNIT_TEST(test_deletePortByName);
     CPPUNIT_TEST(test_finalizePorts);
     CPPUNIT_TEST(test_activatePorts);
@@ -205,11 +205,11 @@ namespace PortAdmin
       // Portを登録しておく
       PortMock* port0 = new PortMock();
       port0->setName("port0");
-      portAdmin.registerPort(*port0);
+      CPPUNIT_ASSERT_EQUAL(true, portAdmin.addPort(*port0));
 
       PortMock* port1 = new PortMock();
       port1->setName("port1");
-      portAdmin.registerPort(*port1);
+      CPPUNIT_ASSERT_EQUAL(true, portAdmin.addPort(*port1));
 			
       // getPortList()で登録されている全Portを取得する
       RTC::PortServiceList* portList = portAdmin.getPortServiceList();
@@ -222,8 +222,8 @@ namespace PortAdmin
       RTC::PortProfile* portProf1 = (*portList)[1]->get_port_profile();
       CPPUNIT_ASSERT(portProf1 != NULL);
       CPPUNIT_ASSERT_EQUAL(std::string("port1"), std::string(portProf1->name));
-      portAdmin.deletePort(*port1);
-      portAdmin.deletePort(*port0);
+      portAdmin.removePort(*port1);
+      portAdmin.removePort(*port0);
       delete port1;
       delete port0;
     }
@@ -241,11 +241,11 @@ namespace PortAdmin
       // Portを登録しておく
       PortMock* port0 = new PortMock();
       port0->setName("port0");
-      portAdmin.registerPort(*port0);
+      CPPUNIT_ASSERT_EQUAL(true, portAdmin.addPort(*port0));
 
       PortMock* port1 = new PortMock();
       port1->setName("port1");
-      portAdmin.registerPort(*port1);
+      CPPUNIT_ASSERT_EQUAL(true, portAdmin.addPort(*port1));
 			
       // 登録されているPortの参照を正しく取得できるか？
       RTC::PortService_var portRef0 = portAdmin.getPortRef("port0");
@@ -260,6 +260,8 @@ namespace PortAdmin
 			
       // 登録されていないPortの名称を指定した場合、意図どおりnil参照が得られるか？
       CPPUNIT_ASSERT(CORBA::is_nil(portAdmin.getPortRef("inexist")));
+      delete port1;
+      delete port0;
     }
 		
     /*!
@@ -274,11 +276,11 @@ namespace PortAdmin
       // Portを登録しておく
       PortMock* port0 = new PortMock();
       port0->setName("port0");
-      portAdmin.registerPort(*port0);
+      CPPUNIT_ASSERT_EQUAL(true, portAdmin.addPort(*port0));
 
       PortMock* port1 = new PortMock();
       port1->setName("port1");
-      portAdmin.registerPort(*port1);
+      CPPUNIT_ASSERT_EQUAL(true, portAdmin.addPort(*port1));
 
       // ポート名称を指定して、登録されているPortオブジェクトを正しく取得できるか？
       RTC::PortBase* portRet0 = portAdmin.getPort("port0");
@@ -288,37 +290,56 @@ namespace PortAdmin
       RTC::PortBase* portRet1 = portAdmin.getPort("port1");
       RTC::PortProfile* portProf1 = portRet1->get_port_profile();
       CPPUNIT_ASSERT_EQUAL(std::string("port1"), std::string(portProf1->name));
+      delete port1;
+      delete port0;
     }
 		
     /*!
-     * @brief registerPort()メソッドのテスト
+     * @brief addPort()メソッドのテスト
      */
-    void test_registerPort()
-    {
-      // 他テストにてテストされている
-    }
-		
-    /*!
-     * @brief deletePort()のテスト
-     * 
-     * - Portを正しく削除できるか？
-     * - 削除したPortのProfileのリファレンスがnilになっているか？
-     */
-    void test_deletePort()
+    void test_addPort()
     {
       RTC::PortAdmin portAdmin(m_orb, m_poa);
 			
       // Portを登録しておく
       PortMock* port0 = new PortMock();
       port0->setName("port0");
-      portAdmin.registerPort(*port0);
+      // test for addPort(PortBase&)
+      CPPUNIT_ASSERT_EQUAL(true, portAdmin.addPort(*port0));
+      CPPUNIT_ASSERT_EQUAL(false, portAdmin.addPort(*port0));
+
+      PortMock* port1 = new PortMock();
+      port0->setName("port1");
+      // test for addPort(PortService_ptr)
+      CPPUNIT_ASSERT_EQUAL(true, portAdmin.addPort(port1->getPortRef()));
+      CPPUNIT_ASSERT_EQUAL(false, portAdmin.addPort(port1->getPortRef()));
+      delete port1;
+      delete port0;
+    }
+
+		
+    /*!
+     * @brief removePort()のテスト
+     * 
+     * - Portを正しく削除できるか？
+     * - 削除したPortのProfileのリファレンスがnilになっているか？
+     */
+    void test_removePort()
+    {
+      RTC::PortAdmin portAdmin(m_orb, m_poa);
+			
+      // Portを登録しておく
+      PortMock* port0 = new PortMock();
+      port0->setName("port0");
+      portAdmin.addPort(*port0);
 
       PortMock* port1 = new PortMock();
       port1->setName("port1");
-      portAdmin.registerPort(*port1);
+      portAdmin.addPort(*port1);
 
       // 登録されているうち、１つのPortを削除する
-      portAdmin.deletePort(*port0);
+      CPPUNIT_ASSERT_EQUAL(true, portAdmin.removePort(*port0));
+      CPPUNIT_ASSERT_EQUAL(false, portAdmin.removePort(*port0));
 			
       // getPortList()にて、登録されている全Portを取得する
       RTC::PortServiceList* portList = portAdmin.getPortServiceList();
@@ -331,6 +352,8 @@ namespace PortAdmin
       // 削除したPortのProfileのリファレンスがnilになっているか？
       const RTC::PortProfile& portProf0 = port0->getProfile();
       CPPUNIT_ASSERT(CORBA::is_nil(portProf0.port_ref));
+      delete port1;
+      delete port0;
     }
 		
     /*!
@@ -346,11 +369,11 @@ namespace PortAdmin
       // Portを登録しておく
       PortMock* port0 = new PortMock();
       port0->setName("port0");
-      portAdmin.registerPort(*port0);
+      portAdmin.addPort(*port0);
 
       PortMock* port1 = new PortMock();
       port1->setName("port1");
-      portAdmin.registerPort(*port1);
+      portAdmin.addPort(*port1);
 
       // 登録されているうち、１つのPortを削除する
       portAdmin.deletePortByName("port0");
@@ -366,6 +389,8 @@ namespace PortAdmin
       // 削除したPortのProfileのリファレンスがnilになっているか？
       const RTC::PortProfile& portProf0 = port0->getProfile();
       CPPUNIT_ASSERT(CORBA::is_nil(portProf0.port_ref));
+      delete port1;
+      delete port0;
     }
 		
     /*!
@@ -381,11 +406,11 @@ namespace PortAdmin
       // Portを登録しておく
       PortMock* port0 = new PortMock();
       port0->setName("port0");
-      portAdmin.registerPort(*port0);
+      portAdmin.addPort(*port0);
 
       PortMock* port1 = new PortMock();
       port1->setName("port1");
-      portAdmin.registerPort(*port1);
+      portAdmin.addPort(*port1);
 
       // finalizePorts()を呼出す
       portAdmin.finalizePorts();
@@ -419,12 +444,12 @@ namespace PortAdmin
       PortMock* port0 = new PortMock();
       port0->setName("port0");
       port0->setLogger(&logger);
-      portAdmin.registerPort(*port0);
+      portAdmin.addPort(*port0);
 
       PortMock* port1 = new PortMock();
       port1->setName("port1");
       port1->setLogger(&logger);
-      portAdmin.registerPort(*port1);
+      portAdmin.addPort(*port1);
 
       CPPUNIT_ASSERT_EQUAL(0,logger.countLog("PortMock::activateInterfaces"));
       portAdmin.activatePorts();

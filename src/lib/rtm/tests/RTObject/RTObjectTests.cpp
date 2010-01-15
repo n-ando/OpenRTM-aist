@@ -157,6 +157,28 @@ namespace RTObject
     {
     }
   };
+
+  class InPortMock
+    : public RTC::InPortBase
+  {
+  public:
+    InPortMock(const char* name, const char* data_type)
+      :RTC::InPortBase(name, data_type)
+    {
+      return;
+    }
+  };
+	
+  class OutPortMock
+    : public RTC::OutPortBase
+  {
+  public:
+    OutPortMock(const char* name, const char* data_type)
+      : OutPortBase(name, data_type)
+    {
+      return;
+    }
+  };
 	
   class SDOServiceMock
     : public POA_SDOPackage::SDOService,
@@ -302,6 +324,7 @@ namespace RTObject
 
     CPPUNIT_TEST(test_finalizeContexts);
     CPPUNIT_TEST(test_bindContext);
+    CPPUNIT_TEST(test_add_removePort);
     CPPUNIT_TEST(test_initialize_invoking_on_initialize);
     CPPUNIT_TEST(test_initialize_in_Alive);
     CPPUNIT_TEST(test_finalize_invoking_on_finalize);
@@ -395,6 +418,8 @@ namespace RTObject
       rto->setProperties(prop);
       CPPUNIT_ASSERT_EQUAL(RTC::RTC_OK, rto->initialize());
       CPPUNIT_ASSERT_EQUAL(1, rto->countLog("on_initialize"));
+      rto->exit();
+      delete rto;
 //      std::cout<<"OUT test_initialize_invoking_on_initialize()"<<std::endl;
     }
 		
@@ -421,6 +446,8 @@ namespace RTObject
 			
       // Alive状態でinitialize()メソッド呼出しを行った場合、正常に動作するか？
       CPPUNIT_ASSERT_EQUAL(RTC::RTC_OK, rto->initialize());
+      //      rto->exit();
+      //      delete rto;
 //      std::cout<<"OUT test_initialize_in_Alive()"<<std::endl;
     }
 		
@@ -450,6 +477,7 @@ namespace RTObject
       CPPUNIT_ASSERT_EQUAL(1, rto->countLog("on_finalize"));
 			
       CPPUNIT_ASSERT_EQUAL(true, rto->is_alive(ec));
+      // delete rto;
 //      std::cout<<"OUT test_finalize_invoking_on_finalize()"<<std::endl;
     }
 		
@@ -483,6 +511,9 @@ namespace RTObject
 			
       // ExecutionContextに登録された状態でfinalize()を呼び出した場合、意図どおりのエラーを返すか？
       CPPUNIT_ASSERT_EQUAL(RTC::PRECONDITION_NOT_MET, rto->finalize());
+
+      //      rto->exit();
+      //      delete rto;
 //      std::cout<<"OUT test_finalize_participating_in_execution_context()"<<std::endl;
     }
 		
@@ -498,6 +529,8 @@ namespace RTObject
 			
       // Created状態でfinalize()を呼出した場合、意図どおりのエラーで返るか？
       CPPUNIT_ASSERT_EQUAL(RTC::PRECONDITION_NOT_MET, rto->finalize());
+      // rto->exit();
+      // delete rto;
 //      std::cout<<"OUT test_finalize_in_Created()"<<std::endl;
     }
 		
@@ -554,6 +587,8 @@ namespace RTObject
       CPPUNIT_ASSERT_EQUAL(RTC::RTC_OK, rto->exit());
       CPPUNIT_ASSERT_EQUAL(1, rto->countLog("on_finalize"));
       CPPUNIT_ASSERT_EQUAL(true, rto->is_alive(ec));
+      // rto->exit();
+      // delete rto;
 //      std::cout<<"OUT test_exit()"<<std::endl;
     }
 
@@ -570,6 +605,8 @@ namespace RTObject
 			
       // Create状態でexit()を呼出した場合、意図どおりのエラーを返すか？
       CPPUNIT_ASSERT_EQUAL(RTC::PRECONDITION_NOT_MET, rto->exit());
+      // rto->exit();
+      // delete rto;
 //      std::cout<<"OUT test_exit_in_Created()"<<std::endl;
     }
 		
@@ -593,6 +630,8 @@ namespace RTObject
 			
       // 正常にdetachできるか？
       CPPUNIT_ASSERT_EQUAL(RTC::RTC_OK, rto->detach_context(id));
+      // rto->exit();
+      // delete rto;
 //      std::cout<<"OUT test_detach_executioncontext()"<<std::endl;
     }
 		
@@ -609,6 +648,8 @@ namespace RTObject
       // 存在しないIDでRTCのdetachを試みた場合、意図どおりのエラーを返すか？
       CPPUNIT_ASSERT_EQUAL(RTC::BAD_PARAMETER,
 			   rto->detach_context(RTC::UniqueId(1)));
+      // rto->exit();
+      // delete rto;
 //      std::cout<<"OUT test_detach_executioncontext_with_illegal_id()"<<std::endl;
     }
 		
@@ -643,6 +684,12 @@ namespace RTObject
 
       rto->detach_context(id2);
       rto->detach_context(id1);
+      /**
+      delete ec2;
+      delete ec1;
+      rto->exit();
+      delete rto;
+      */
 //      std::cout<<"OUT test_get_context()"<<std::endl;
     }
 		
@@ -683,6 +730,12 @@ namespace RTObject
       rto->detach_context(id2);
       rto->detach_context(id1);
 
+      /**
+      delete ec2;
+      delete ec1;
+      rto->exit();
+      delete rto;
+      */
 //      std::cout<<"OUT test_get_contexts()"<<std::endl;
     }
 		
@@ -722,9 +775,90 @@ namespace RTObject
 			   std::string(compProf->vendor));
       CPPUNIT_ASSERT_EQUAL(std::string("CATEGORY"),
 			   std::string(compProf->category));
+      /**
+      rto->exit();
+      delete rto;
+      */
+      
 //      std::cout<<"OUT test_get_component_profile()"<<std::endl;
     }
 		
+    /*!
+     * @brief add[In/Out]Port(),addPort()メソッドのテスト
+     * 
+     * - Portを正しく登録できるか？
+     * - 既に登録済みのポートと同じポート名のPortを登録しようとした場合に失敗するか？
+     * - 登録済みのPortを正しく削除できるか？
+     */
+    void test_add_removePort()
+    {
+//      std::cout<<"IN  test_get_ports()"<<std::endl;
+      RTObjectMock* rto	= new RTObjectMock(m_pORB, m_pPOA); // will be deleted automatically
+
+      PortMock* port0 = new PortMock();
+      port0->setName("port0");
+      // Portを正しく登録できるか？
+      CPPUNIT_ASSERT_EQUAL(true, rto->addPort(*port0));
+      // 既に登録済みのポートと同じポート名のPortを登録しようとした場合に失敗するか？
+      // PortBase::updateConnectors()内、Guard guard(m_profile_mutex);でロックされ、
+      // 処理が戻ってこない。(デッドロック???)
+      // CPPUNIT_ASSERT_EQUAL(false, rto->addPort(*port0));
+
+      PortMock* port1 = new PortMock();
+      port1->setName("port1");
+      CPPUNIT_ASSERT_EQUAL(true, rto->addPort(*port1));
+			
+      // 登録したPort参照をすべて正しく取得できるか？
+      RTC::PortServiceList* portList = rto->get_ports();
+      CPPUNIT_ASSERT(portList != NULL);
+      CPPUNIT_ASSERT_EQUAL(CORBA::ULong(2), portList->length());
+
+      // 登録済みのPortを正しく削除できるか？
+      CPPUNIT_ASSERT_EQUAL(true, rto->removePort(*port1));
+      CPPUNIT_ASSERT_EQUAL(true, rto->removePort(*port0));
+
+
+      InPortMock*  inport0  = new InPortMock("in","TimedLong");
+      OutPortMock* outport0 = new OutPortMock("out","TimedLong");
+      // InPort, OutPortを正しく登録できるか？
+      CPPUNIT_ASSERT_EQUAL(true, rto->addInPort("in",*inport0));
+      CPPUNIT_ASSERT_EQUAL(true, rto->addOutPort("out", *outport0));
+      // 既に登録済みのポートと同じポート名のPortを登録しようとした場合に失敗するか？
+      // PortBase::updateConnectors()内、Guard guard(m_profile_mutex);でロックされ、
+      // 処理が戻ってこない。(デッドロック???)
+      // CPPUNIT_ASSERT_EQUAL(false, rto->addInPort("in",*inport0));
+      // CPPUNIT_ASSERT_EQUAL(false, rto->addOutPort("out", *outport0));
+
+      // 登録したPort参照をすべて正しく取得できるか？
+      portList = rto->get_ports();
+      CPPUNIT_ASSERT(portList != NULL);
+      CPPUNIT_ASSERT_EQUAL(CORBA::ULong(2), portList->length());
+
+      // 登録済みのPortを正しく削除できるか？
+      CPPUNIT_ASSERT_EQUAL(true, rto->removeInPort(*inport0));
+      CPPUNIT_ASSERT_EQUAL(true, rto->removeOutPort(*outport0));
+
+      portList = rto->get_ports();
+      CPPUNIT_ASSERT(portList != NULL);
+      CPPUNIT_ASSERT_EQUAL(CORBA::ULong(0), portList->length());
+
+      delete outport0;
+      delete inport0;
+      delete port1;
+      delete port0;
+      rto->exit();
+
+      // The following error occurs when "delete rto" is called. 
+      // 
+      // omniORB: ERROR -- A servant has been deleted that is still activated.
+      // id: root<9> (active)
+      //
+      //      delete rto;
+
+//      std::cout<<"OUT test_get_ports()"<<std::endl;
+    }
+
+
     /*!
      * @brief get_ports()メソッドのテスト
      * 
@@ -738,11 +872,11 @@ namespace RTObject
       // Portを登録しておく
       PortMock* port0 = new PortMock();
       port0->setName("port0");
-      rto->registerPort(*port0);
+      rto->addPort(*port0);
 
       PortMock* port1 = new PortMock();
       port1->setName("port1");
-      rto->registerPort(*port1);
+      rto->addPort(*port1);
 			
       // 登録したPort参照をすべて正しく取得できるか？
       RTC::PortServiceList* portList = rto->get_ports();
@@ -752,6 +886,12 @@ namespace RTObject
 		     != CORBA_SeqUtil::find(*portList, PortFinder(port0->_this())));
       CPPUNIT_ASSERT(CORBA::Long(-1)
 		     != CORBA_SeqUtil::find(*portList, PortFinder(port1->_this())));
+      /**
+      delete port1;
+      delete port0;
+      rto->exit();
+      delete rto;
+      */
 //      std::cout<<"OUT test_get_ports()"<<std::endl;
     }
 		
@@ -819,6 +959,13 @@ namespace RTObject
       //      つまり、実装上、SDO IDの一意性はinstance_nameの一意性に基づいている。
       //      仕様上、instance_nameは一意でなければならないので、首尾一貫している。
       CPPUNIT_ASSERT(id1 != id2);
+
+      /**
+      rto2->exit();
+      rto1->exit();
+      delete rto2;
+      delete rto1;
+      */
 //      std::cout<<"OUT test_get_sdo_id()"<<std::endl;
     }
 		
@@ -840,6 +987,10 @@ namespace RTObject
       // SDOタイプを取得できるか？
       char* sdoType = rto->get_sdo_type();
       CPPUNIT_ASSERT(sdoType != NULL);
+      /**
+      rto->exit();
+      delete rto;
+      */
 //      std::cout<<"OUT test_get_sdo_type()"<<std::endl;
     }
 		
@@ -905,6 +1056,10 @@ namespace RTObject
 	  // 意図しない例外をキャッチした
 	  CPPUNIT_FAIL("Unexpected exception caught.");
 	}
+      /**
+      rto->exit();
+      delete rto;
+      */
 //      std::cout<<"OUT test_get_service_profile_with_illegal_arguments()"<<std::endl;
     }
 		
@@ -998,6 +1153,10 @@ namespace RTObject
 	const char* value; devProfRet->properties[0].value >>= value;
 	CPPUNIT_ASSERT_EQUAL(std::string("PROPERTIES VALUE"), std::string(value));
       }
+      /**
+      rto->exit();
+      delete rto;
+      */
 //      std::cout<<"OUT test_get_configuration_and_set_device_profile_and_get_device_profile()"<<std::endl;
     }
 		
@@ -1065,6 +1224,13 @@ namespace RTObject
 	const char* value; svcProfRet2->properties[0].value >>= value;
 	CPPUNIT_ASSERT_EQUAL(std::string("2.71828"), std::string(value));
       }
+
+      /**
+      delete sdoSvc2;
+      delete sdoSvc1;
+      rto->exit();
+      delete rto;
+      */
 //      std::cout<<"OUT test_get_configuration_and_set_service_profile_and_get_service_profile()"<<std::endl;
     }
 		
@@ -1140,6 +1306,13 @@ namespace RTObject
 	const char* value; (*svcProfList)[svcProfIdx2].properties[0].value >>= value;
 	CPPUNIT_ASSERT_EQUAL(std::string("2.71828"), std::string(value));
       }
+      
+      /**
+      delete sdoSvc2;
+      delete sdoSvc1;
+      rto->exit();
+      delete rto;
+      */
 //      std::cout<<"OUT test_get_configuration_and_set_service_profile_and_get_service_profiles()"<<std::endl;
     }
 		
@@ -1189,6 +1362,13 @@ namespace RTObject
       SDOPackage::SDOService_ptr sdoSvcRet2 = rto->get_sdo_service("ID 2");
       CPPUNIT_ASSERT(! CORBA::is_nil(sdoSvcRet2));
       CPPUNIT_ASSERT(sdoSvcRet2->_is_equivalent(sdoSvc2->_this()));
+
+      /**
+      delete sdoSvc2;
+      delete sdoSvc1;
+      rto->exit();
+      delete rto;
+      */
 //      std::cout<<"OUT test_get_configuration_and_set_service_profile_and_get_sdo_service()"<<std::endl;
     }
 		
@@ -1240,6 +1420,13 @@ namespace RTObject
 	}
       catch (SDOPackage::InvalidParameter expected) {}
       CPPUNIT_ASSERT(rto->get_service_profile("ID 2") != NULL);
+
+      /**
+      delete sdoSvc2;
+      delete sdoSvc1;
+      rto->exit();
+      delete rto;
+      */
 //      std::cout<<"OUT test_get_configuration_and_remove_service_profile()"<<std::endl;
     }
 		
@@ -1278,6 +1465,12 @@ namespace RTObject
       CPPUNIT_ASSERT(CORBA::Long(-1) != orgIdx2);
       CPPUNIT_ASSERT_EQUAL(std::string("ORG 2"),
 			   std::string((*orgList)[orgIdx2]->get_organization_id()));
+      /**
+      delete org2;
+      delete org1;
+      rto->exit();
+      delete rto;
+      */
 //      std::cout<<"OUT test_get_configuration_and_add_organization_and_get_organizations()"<<std::endl;
     }
 		
@@ -1311,6 +1504,13 @@ namespace RTObject
       orgList = rto->get_organizations();
       CPPUNIT_ASSERT(orgList != NULL);
       CPPUNIT_ASSERT_EQUAL(CORBA::ULong(1), orgList->length());
+
+      /**
+      delete org2;
+      delete org1;
+      rto->exit();
+      delete rto;
+      */
 //      std::cout<<"OUT test_get_configuration_and_remove_organization()"<<std::endl;
     }
 		
@@ -1353,6 +1553,11 @@ namespace RTObject
 	CORBA::Float value; *valueAnyRet2 >>= value;
 	CPPUNIT_ASSERT_EQUAL(CORBA::Float(2.71828), value);
       }
+      
+      /**
+      rto->exit();
+      delete rto;
+      */
 //      std::cout<<"OUT test_get_status()"<<std::endl;
     }
 		
@@ -1389,6 +1594,11 @@ namespace RTObject
 	CORBA::Float value; valueAnyRet2 >>= value;
 	CPPUNIT_ASSERT_EQUAL(CORBA::Float(2.71828), value);
       }
+
+      /**
+      rto->exit();
+      delete rto;
+      */
 //      std::cout<<"OUT test_get_status_list()"<<std::endl;
     }
 		
@@ -1421,6 +1631,8 @@ namespace RTObject
 
       // 全コンテキストが削除されたか？
       CPPUNIT_ASSERT_EQUAL(0, rto->get_eclist());
+      //      RTC::ReturnCode_t ret = rto->exit();
+      //      delete rto;
 //      std::cout<<"OUT test_finalizeContexts()"<<std::endl;
     }
 		
@@ -1468,6 +1680,10 @@ namespace RTObject
 
       // 正しく登録されているか？
       CPPUNIT_ASSERT(rto->chk_ecMine(id,ec));
+      // rto->exit();
+      // delete pec;
+      // delete pec2;
+      // delete rto;
 //      std::cout<<"OUT test_bindContext()"<<std::endl;
     }
 		

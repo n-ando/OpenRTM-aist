@@ -2287,6 +2287,7 @@ namespace RTC
      * ¥ª¥Ö¥¸¥§¥¯¥È»²¾È¤¬¥ê¥¹¥ÈÆâ¤ËÊÝÂ¸¤µ¤ì¤ë¡£
      * 
      * @param port RTC ¤ËÅÐÏ¿¤¹¤ë Port
+     * @return ÅÐÏ¿·ë²Ì(ÅÐÏ¿À®¸ù:true¡¤ÅÐÏ¿¼ºÇÔ:false)
      *
      * @else
      *
@@ -2301,16 +2302,17 @@ namespace RTC
      * and the object reference would be stored in lists in RTC.
      *
      * @param port Port which is registered to the RTC
+     * @return Register result (Successful:true, Failed:false)
      *
      * @endif
      */
+    bool addPort(PortBase& port);
+    bool addPort(PortService_ptr port);
+    bool addPort(CorbaPort& port);
     void registerPort(PortBase& port);
-    void addPort(PortBase& port);
     void registerPort(PortService_ptr port);
-    void addPort(PortService_ptr port);
-    
     void registerPort(CorbaPort& port);
-    void addPort(CorbaPort& port);
+
     /*!
      * @if jp
      * 
@@ -2323,6 +2325,7 @@ namespace RTC
      * 
      * @param name port Ì¾¾Î
      * @param inport ÅÐÏ¿ÂÐ¾Ý DataInPort
+     * @return ÅÐÏ¿·ë²Ì(ÅÐÏ¿À®¸ù:true¡¤ÅÐÏ¿¼ºÇÔ:false)
      *
      * @else
      * 
@@ -2334,9 +2337,11 @@ namespace RTC
      * 
      * @param name Port name
      * @param inport DataInPort which is registered to the RTC
+     * @return Register result (Successful:true, Failed:false)
      *
      * @endif
      */
+    bool addInPort(const char* name, InPortBase& inport);
     void registerInPort(const char* name, InPortBase& inport);
     
     /*!
@@ -2351,6 +2356,7 @@ namespace RTC
      * 
      * @param name port Ì¾¾Î
      * @param outport ÅÐÏ¿ÂÐ¾Ý DataOutPort
+     * @return ÅÐÏ¿·ë²Ì(ÅÐÏ¿À®¸ù:true¡¤ÅÐÏ¿¼ºÇÔ:false)
      *
      * @else
      * 
@@ -2362,11 +2368,59 @@ namespace RTC
      * 
      * @param name Port name
      * @param outport DataOutPort which is registered to the RTC
+     * @return Register result (Successful:true, Failed:false)
      *
      * @endif
      */
+    bool addOutPort(const char* name, OutPortBase& outport);
     void registerOutPort(const char* name, OutPortBase& outport);
     
+    /*!
+     * @if jp
+     * 
+     * @brief [local interface] InPort ¤ÎÅÐÏ¿¤òºï½ü¤¹¤ë
+     *
+     * RTC ¤¬ÊÝ»ý¤¹¤ëInPort¤ÎÅÐÏ¿¤òºï½ü¤¹¤ë¡£
+     * 
+     * @param port ºï½üÂÐ¾Ý Port
+     * @return ºï½ü·ë²Ì(ºï½üÀ®¸ù:true¡¤ºï½ü¼ºÇÔ:false)
+     *
+     * @else
+     *
+     * @brief [local interface] Unregister InPort
+     *
+     * This operation unregisters a InPort held by this RTC.
+     *
+     * @param port Port which is unregistered
+     * @return Unregister result (Successful:true, Failed:false)
+     *
+     * @endif
+     */
+    bool removeInPort(InPortBase& port);
+
+    /*!
+     * @if jp
+     * 
+     * @brief [local interface] OutPort ¤ÎÅÐÏ¿¤òºï½ü¤¹¤ë
+     *
+     * RTC ¤¬ÊÝ»ý¤¹¤ëOutPort¤ÎÅÐÏ¿¤òºï½ü¤¹¤ë¡£
+     * 
+     * @param port ºï½üÂÐ¾Ý Port
+     * @return ºï½ü·ë²Ì(ºï½üÀ®¸ù:true¡¤ºï½ü¼ºÇÔ:false)
+     *
+     * @else
+     *
+     * @brief [local interface] Unregister OutPort
+     *
+     * This operation unregisters a OutPort held by this RTC.
+     *
+     * @param port Port which is unregistered
+     * @return Unregister result (Successful:true, Failed:false)
+     *
+     * @endif
+     */
+    bool removeOutPort(OutPortBase& port);
+
     /*!
      * @if jp
      * 
@@ -2375,6 +2429,7 @@ namespace RTC
      * RTC ¤¬ÊÝ»ý¤¹¤ëPort¤ÎÅÐÏ¿¤òºï½ü¤¹¤ë¡£
      * 
      * @param port ºï½üÂÐ¾Ý Port
+     * @return ºï½ü·ë²Ì(ºï½üÀ®¸ù:true¡¤ºï½ü¼ºÇÔ:false)
      *
      * @else
      *
@@ -2383,15 +2438,16 @@ namespace RTC
      * This operation unregisters a Port held by this RTC.
      *
      * @param port Port which is unregistered
+     * @return Unregister result (Successful:true, Failed:false)
      *
      * @endif
      */
+    bool removePort(PortBase& port);
+    bool removePort(PortService_ptr port);
+    bool removePort(CorbaPort& port);
     void deletePort(PortBase& port);
-    void removePort(PortBase& port);
     void deletePort(PortService_ptr port);
-    void removePort(PortService_ptr port);
     void deletePort(CorbaPort& port);
-    void removePort(CorbaPort& port);
     
     /*!
      * @if jp
