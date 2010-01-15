@@ -8,7 +8,7 @@
 AUTOMAKE_OPTIONS = 1.4
 
 AM_CPPFLAGS=-I$(top_srcdir) -I$(top_srcdir)/src/lib -I$(top_srcdir)/src/lib/coil/include -I$(top_srcdir)/src/lib/rtm/idl
-AM_LDFLAGS=-L$(top_builddir) -L$(top_buiddir)/rtm -L$(top_builddir)/rtm/idl
+AM_LDFLAGS=-L$(top_builddir) -L$(top_buiddir)/src/lib/rtm -L$(top_builddir)/src/lib/rtm/idl
 
 bin_PROGRAMS = rtcd
 
@@ -67,3 +67,4 @@ clean-local:
 	rm -rf rtcd *.o *~ *core .libs *.lst
 
 EXTRA_DIST = rtcd.yaml
+

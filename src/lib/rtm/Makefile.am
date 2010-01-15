@@ -11,7 +11,7 @@ ARTLIB = @ARTLIB@
 SUBDIRS = idl . @UNITTEST@
 
 AM_CPPFLAGS=-I$(top_srcdir)/src/lib -I$(top_srcdir)/src/lib/coil/include -I$(top_srcdir)/src/lib/rtm -I$(top_srcdir)/src/lib/rtm/idl
-AM_LDFLAGS=-L$(top_builddir) -L$(top_builddir)/rtm -L$(top_builddir)/src/lib/rtm/idl -L$(top_builddir)/src/lib/coil/lib
+AM_LDFLAGS=-L$(top_builddir) -L$(top_builddir)/src/lib/rtm -L$(top_builddir)/src/lib/rtm/idl -L$(top_builddir)/src/lib/coil/lib
 
 # version.h would be generated from configure before lib build process.
 BUILT_SOURCES = version.h
