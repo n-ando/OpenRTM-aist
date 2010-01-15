@@ -31,10 +31,16 @@ namespace coil
    */
   int launch_shell(std::string command)
   {
-    // std::string -> LPTSTR
+#ifdef UNICODE
+	// std::string -> LPTSTR
     std::wstring wcommand = string2wstring(command);
     LPTSTR lpcommand = new TCHAR[wcommand.size() + 1];
     _tcscpy(lpcommand, wcommand.c_str());
+#else
+	// std::string -> LPTSTR
+    LPTSTR lpcommand = new TCHAR[command.size() + 1];
+    _tcscpy(lpcommand, command.c_str());
+#endif // UNICODE
 
     STARTUPINFO si;
     ZeroMemory( &si, sizeof(si) );
@@ -55,4 +61,4 @@ namespace coil
     return 0;
   }
 }; // namespace coil
-#endif // COIL_PROCESS_H
+
