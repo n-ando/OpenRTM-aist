@@ -44,7 +44,7 @@ namespace RTC
       m_onUnsubscribeInterfaces(0),
       m_onDisconnected(0),
       m_onConnectionLost(0),
-      m_connectionLimit(0)
+      m_connectionLimit(-1)
   {
     m_objref = this->_this();
     // Now Port name is <instance_name>.<port_name>. r1648
@@ -226,8 +226,11 @@ namespace RTC
     throw (CORBA::SystemException)
   {
     RTC_TRACE(("notify_connect()"));
+    ReturnCode_t retval[] = {RTC::RTC_OK, RTC::RTC_OK, 
+                             RTC::RTC_OK, RTC::RTC_OK};
+    int retval_index(0);
 
-    if(m_connectionLimit!=0)
+    if(!(m_connectionLimit < 0))
       {
         if(m_connectionLimit<=m_profile.connector_profiles.length())
           {
@@ -236,14 +239,14 @@ namespace RTC
                       m_connectionLimit));
             RTC_PARANOID(("%d connectors are existing",
                       m_profile.connector_profiles.length()));
-            return RTC::RTC_ERROR;  
+            retval[retval_index] = RTC::RTC_ERROR;
           }
       }
-    ReturnCode_t retval[] = {RTC::RTC_OK, RTC::RTC_OK, RTC::RTC_OK};
 
     // publish owned interface information to the ConnectorProfile
-    retval[0] = publishInterfaces(connector_profile);
-    if (retval[0] != RTC::RTC_OK)
+    retval_index++;
+    retval[retval_index] = publishInterfaces(connector_profile);
+    if (retval[retval_index] != RTC::RTC_OK)
       {
         RTC_ERROR(("publishInterfaces() in notify_connect() failed."));
       }
@@ -253,8 +256,9 @@ namespace RTC
       }
     
     // call notify_connect() of the next Port
-    retval[1] = connectNext(connector_profile);
-    if (retval[1] != RTC::RTC_OK)
+    retval_index++;
+    retval[retval_index] = connectNext(connector_profile);
+    if (retval[retval_index] != RTC::RTC_OK)
       {
         RTC_ERROR(("connectNext() in notify_connect() failed."));
       }
@@ -264,8 +268,9 @@ namespace RTC
       {
         (*m_onSubscribeInterfaces)(connector_profile);
       }
-    retval[2] = subscribeInterfaces(connector_profile);
-    if (retval[2] != RTC::RTC_OK) 
+    retval_index++;
+    retval[retval_index] = subscribeInterfaces(connector_profile);
+    if (retval[retval_index] != RTC::RTC_OK) 
       {
         RTC_ERROR(("subscribeInterfaces() in notify_connect() failed."));
       }
