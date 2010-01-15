@@ -60,14 +60,14 @@ RTC::ReturnCode_t SeqOut::onInitialize()
   // Set InPort buffers
   
   // Set OutPort buffer
-  registerOutPort("Short", m_ShortOut);
-  registerOutPort("Long", m_LongOut);
-  registerOutPort("Float", m_FloatOut);
-  registerOutPort("Double", m_DoubleOut);
-  registerOutPort("ShortSeq", m_ShortSeqOut);
-  registerOutPort("LongSeq", m_LongSeqOut);
-  registerOutPort("FloatSeq", m_FloatSeqOut);
-  registerOutPort("DoubleSeq", m_DoubleSeqOut);
+  addOutPort("Short", m_ShortOut);
+  addOutPort("Long", m_LongOut);
+  addOutPort("Float", m_FloatOut);
+  addOutPort("Double", m_DoubleOut);
+  addOutPort("ShortSeq", m_ShortSeqOut);
+  addOutPort("LongSeq", m_LongSeqOut);
+  addOutPort("FloatSeq", m_FloatSeqOut);
+  addOutPort("DoubleSeq", m_DoubleSeqOut);
   
   // Set service provider to Ports
   

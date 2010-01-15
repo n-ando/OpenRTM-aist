@@ -57,7 +57,7 @@ ConsoleIn::~ConsoleIn()
 
 RTC::ReturnCode_t ConsoleIn::onInitialize()
 {
-  registerOutPort("out", m_outOut);
+  addOutPort("out", m_outOut);
 
   m_outOut.addConnectorDataListener(ON_BUFFER_WRITE,
                                     new DataListener("ON_BUFFER_WRITE"));
