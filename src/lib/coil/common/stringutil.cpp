@@ -416,7 +416,7 @@ namespace coil
   {
     if (ignore_case) { toLower(value); }
 
-    for (int i(0), len(list.size()); i < len; ++i)
+    for (int i(0), len(static_cast<int>(list.size())); i < len; ++i)
       {
         std::string str(list[i]);
         if (ignore_case) { toLower(str); }
