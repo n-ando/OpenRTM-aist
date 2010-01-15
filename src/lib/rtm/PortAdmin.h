@@ -23,6 +23,7 @@
 #include <rtm/idl/RTCSkel.h>
 #include <rtm/PortBase.h>
 #include <rtm/ObjectManager.h>
+#include <rtm/SystemLogger.h>
 
 namespace RTC
 {
@@ -93,7 +94,7 @@ namespace RTC
      *
      * @brief Port リストの取得
      *
-     * registerPort() により登録された Port の リストを取得する。
+     * addPort() により登録された Port の リストを取得する。
      *
      * @return Port リスト
      *
@@ -102,7 +103,7 @@ namespace RTC
      * @brief Get PortServiceList
      *
      * This operation returns the pointer to the PortServiceList of Ports registered
-     * by registerPort().
+     * by addPort().
      *
      * @return The pointer points PortServiceList
      *
@@ -115,7 +116,7 @@ namespace RTC
      *
      * @brief PorProfile リストの取得
      *
-     * registerPort() により登録された Port の Profile リストを取得する。
+     * addPort() により登録された Port の Profile リストを取得する。
      *
      * @return PortProfile リスト
      *
@@ -124,7 +125,7 @@ namespace RTC
      * @brief Get PorProfileList
      *
      * This operation gets the Profile list of Ports registered by 
-     * registerPort().
+     * addPort().
      *
      * @return The pointer points PortProfile list
      *
@@ -138,7 +139,7 @@ namespace RTC
      * @brief Port のオブジェクト参照の取得
      *
      * port_name で指定した Port のオブジェクト参照を返す。
-     * port_name で指定する Port はあらかじめ registerPort() で登録されてい
+     * port_name で指定する Port はあらかじめ addPort() で登録されてい
      * なければならない。
      *
      * @param port_name 参照を返すPortの名前
@@ -152,7 +153,7 @@ namespace RTC
      * This operation returns the reference of Port object specified
      * by port_name.
      * The port specified by port_name must be already registered in 
-     * registerPort().
+     * addPort().
      *
      * @param port_name The name of Port to be returned the reference.
      *
@@ -168,7 +169,7 @@ namespace RTC
      * @brief Port のサーバントのポインタの取得
      *
      * port_name で指定した Port のサーバントのポインタを返す。
-     * port_name で指定する Port はあらかじめ registerPort() で登録されてい
+     * port_name で指定する Port はあらかじめ addPort() で登録されてい
      * なければならない。
      *
      * @param port_name 参照を返すPortの名前
@@ -180,9 +181,9 @@ namespace RTC
      * @brief Get pointer to the Port's servant
      *
      * This operation returns the pointer to the PortBase servant registered
-     * by registerPort().
+     * by addPort().
      * The port specified by port_name must be already registered in 
-     * registerPort().
+     * addPort().
      *
      * @param port_name The name of Port to be returned the servant pointer.
      *
@@ -202,6 +203,7 @@ namespace RTC
      * activate され、そのオブジェクト参照はPortのProfileにセットされる。
      *
      * @param port Port サーバント
+     * @return 登録結果(登録成功:true，登録失敗:false)
      *
      * @else
      *
@@ -213,9 +215,12 @@ namespace RTC
      * to the Port's profile.
      *
      * @param port The Port's servant.
+     * @return Register result (Successful:true, Failed:false)
      *
      * @endif
      */
+    bool addPort(PortBase& port);
+    bool addPort(PortService_ptr port);
     void registerPort(PortBase& port);
     void registerPort(PortService_ptr port);
     
@@ -229,6 +234,7 @@ namespace RTC
      * nil値が代入される。
      *
      * @param port Port サーバント
+     * @return 削除結果(削除成功:true，削除失敗:false)
      *
      * @else
      *
@@ -239,9 +245,12 @@ namespace RTC
      * reference in the Port's profile is set to nil.
      *
      * @param port The Port's servant.
+     * @return Unregister result (Successful:true, Failed:false)
      *
      * @endif
      */
+    bool removePort(PortBase& port);
+    bool removePort(PortService_ptr port);
     void deletePort(PortBase& port);
     void deletePort(PortService_ptr port);
     
@@ -339,6 +348,7 @@ namespace RTC
     // Portのオブジェクトリファレンスのリスト. PortServiceList
     PortServiceList m_portRefs;
     
+    mutable Logger rtclog;
     
     template <class T>
     class comp_op

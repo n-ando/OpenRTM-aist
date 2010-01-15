@@ -44,6 +44,7 @@ nodist_PortAdminTests_SOURCES =           \
 	../TestRunner.cpp                 \
 	$(IDL_SOURCES:.idl=Skel.cpp)      \
 	$(top_srcdir)/src/lib/rtm/NVUtil.cpp \
+	$(top_srcdir)/src/lib/rtm/CORBA_IORUtil.cpp \
 	$(top_srcdir)/src/lib/coil/common/Properties.cpp \
 	$(top_builddir)/src/lib/rtm/PortBase.cpp  \
 	$(top_builddir)/src/lib/rtm/PortAdmin.cpp \
@@ -59,6 +60,7 @@ nodist_PortAdminTests_SOURCES =           \
 	$(top_srcdir)/src/lib/rtm/FactoryInit.cpp              \
 	$(top_srcdir)/src/lib/rtm/CdrRingBuffer.cpp            \
 	$(top_srcdir)/src/lib/rtm/DefaultPeriodicTask.cpp      \
+	$(top_srcdir)/src/lib/rtm/ConnectorListener.cpp      \
 	$(top_srcdir)/src/lib/rtm/PublisherFlush.cpp           \
 	$(top_srcdir)/src/lib/rtm/PublisherNew.cpp             \
 	$(top_srcdir)/src/lib/rtm/PublisherPeriodic.cpp        \

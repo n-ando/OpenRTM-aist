@@ -1461,33 +1461,37 @@ namespace RTC
    */
   void RTObject_impl::registerPort(PortBase& port)
   {
-    addPort(port);
+    RTC_TRACE(("registerPort(PortBase&)"));
+    if (!addPort(port))
+      RTC_ERROR(("addPort(PortBase&) failed."));
   }
-  void RTObject_impl::addPort(PortBase& port)
+  bool RTObject_impl::addPort(PortBase& port)
   {
     RTC_TRACE(("addPort(PortBase&)"));
     port.setOwner(this->getObjRef());
-    m_portAdmin.registerPort(port);
-    return;
+    return m_portAdmin.addPort(port);
   }
   
   void RTObject_impl::registerPort(PortService_ptr port)
   {
-    addPort(port);
+    RTC_TRACE(("registerPort(PortBase&)"));
+    if (!addPort(port))
+      RTC_ERROR(("addPort(PortBase&) failed."));
   }
-  void RTObject_impl::addPort(PortService_ptr port)
+  bool RTObject_impl::addPort(PortService_ptr port)
   {
     RTC_TRACE(("addPort(PortService_ptr)"));
-    m_portAdmin.registerPort(port);
-    return;
+    return m_portAdmin.addPort(port);
   }
 
   void RTObject_impl::registerPort(CorbaPort& port)
   {
-    addPort(port);
+    RTC_TRACE(("registerPort(CorbaPort&)"));
+    if (!addPort(port))
+      RTC_ERROR(("addPort(CorbaPort&) failed."));
   }
 
-  void RTObject_impl::addPort(CorbaPort& port)
+  bool RTObject_impl::addPort(CorbaPort& port)
   {
     RTC_TRACE(("addPort(CrobaPort)"));
     std::string propkey("port.corbaport.");
@@ -1495,8 +1499,7 @@ namespace RTC
       << m_properties.getNode("port.corba");
     
     port.init(m_properties.getNode(propkey));
-    addPort((PortBase&)port);
-    return;
+    return addPort((PortBase&)port);
   }
 
   /*!
@@ -1506,10 +1509,10 @@ namespace RTC
    * @brief [local interface] Register DataInPort
    * @endif
    */
-  void RTObject_impl::registerInPort(const char* name,
-                                     InPortBase& inport)
+  bool RTObject_impl::addInPort(const char* name,
+				InPortBase& inport)
   {
-    RTC_TRACE(("registerInPort(%s)", name));
+    RTC_TRACE(("addInPort(%s)", name));
 
     std::string propkey("port.inport.");
     propkey += name;
@@ -1517,7 +1520,16 @@ namespace RTC
       << m_properties.getNode("port.inport.dataport");
 
     inport.init(m_properties.getNode(propkey));
-    addPort(inport);
+    return addPort(inport);
+  }
+
+  void RTObject_impl::registerInPort(const char* name,
+                                     InPortBase& inport)
+  {
+    RTC_TRACE(("registerInPort(%s)", name));
+
+    if (!addInPort(name, inport))
+      RTC_ERROR(("addInPort(%s) failed.", name));
   }
 
   /*!
@@ -1527,9 +1539,10 @@ namespace RTC
    * @brief [local interface] Register DataOutPort
    * @endif
    */
-  void RTObject_impl::registerOutPort(const char* name, OutPortBase& outport)
+  bool RTObject_impl::addOutPort(const char* name,
+				 OutPortBase& outport)
   {
-    RTC_TRACE(("registerOutPort(%s)", name));
+    RTC_TRACE(("addOutPort(%s)", name));
     
     std::string propkey("port.outport.");
     propkey += name;
@@ -1537,10 +1550,47 @@ namespace RTC
       << m_properties.getNode("port.outport.dataport");
     
     outport.init(m_properties.getNode(propkey));
-    addPort(outport);
+    return addPort(outport);
   }
   
+  void RTObject_impl::registerOutPort(const char* name,
+				      OutPortBase& outport)
+  {
+    RTC_TRACE(("registerOutPort(%s)", name));
+
+    if (!addOutPort(name, outport))
+      RTC_ERROR(("addOutPort(%s) failed.", name));
+
+  }
   
+  /*!
+   * @if jp
+   * @brief [local interface] DataInPort を削除する
+   * @else
+   * @brief [local interface] Unregister DataInPort
+   * @endif
+   */
+  bool RTObject_impl::removeInPort(InPortBase& inport)
+  {
+    RTC_TRACE(("removeInPort()"));
+    
+    return removePort(inport);
+  }
+
+  /*!
+   * @if jp
+   * @brief [local interface] DataOutPort を削除する
+   * @else
+   * @brief [local interface] Unregister DataOutPort
+   * @endif
+   */
+  bool RTObject_impl::removeOutPort(OutPortBase& outport)
+  {
+    RTC_TRACE(("removeOutPort()"));
+    
+    return removePort(outport);
+  }
+
   /*!
    * @if jp
    * @brief [local interface] Port の登録を削除する
@@ -1548,36 +1598,41 @@ namespace RTC
    * @brief [local interface] Unregister Port
    * @endif
    */
-  void RTObject_impl::deletePort(PortBase& port)
-  {
-    removePort(port);
-  }
-  void RTObject_impl::removePort(PortBase& port)
+  bool RTObject_impl::removePort(PortBase& port)
   {
     RTC_TRACE(("removePort(PortBase&)"));
-    m_portAdmin.deletePort(port);
-    return;
+    return m_portAdmin.removePort(port);
   }
-
-  void RTObject_impl::deletePort(PortService_ptr port)
-  {
-    removePort(port);
-  }
-  void RTObject_impl::removePort(PortService_ptr port)
+  bool RTObject_impl::removePort(PortService_ptr port)
   {
     RTC_TRACE(("removePort(PortService_pt)"));
-    m_portAdmin.deletePort(port);
-    return;
+    return m_portAdmin.removePort(port);
   }
-  
-  void RTObject_impl::deletePort(CorbaPort& port)
-  {
-    removePort(port);
-  }
-  void RTObject_impl::removePort(CorbaPort& port)
+  bool RTObject_impl::removePort(CorbaPort& port)
   {
     RTC_TRACE(("removePort(PortBase&)"));
-    m_portAdmin.deletePort((PortBase&)port);
+    return m_portAdmin.removePort((PortBase&)port);
+  }
+
+  void RTObject_impl::deletePort(PortBase& port)
+  {
+    RTC_TRACE(("deletePort(PortBase&)"));
+    if (!removePort(port))
+      RTC_ERROR(("removePort(PortBase&) failed."));
+    return;
+  }
+  void RTObject_impl::deletePort(PortService_ptr port)
+  {
+    RTC_TRACE(("deletePort(PortService_pt)"));
+    if (!removePort(port))
+      RTC_ERROR(("removePort(PortService_pt) failed."));
+    return;
+  }
+  void RTObject_impl::deletePort(CorbaPort& port)
+  {
+    RTC_TRACE(("deletePort(CorbaPort)"));
+    if (!removePort(port))
+      RTC_ERROR(("removePort(CorbaPort) failed."));
     return;
   }
 
