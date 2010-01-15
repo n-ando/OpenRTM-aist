@@ -57,7 +57,7 @@ ConsoleOut::~ConsoleOut()
 
 RTC::ReturnCode_t ConsoleOut::onInitialize()
 {
-  registerInPort("in", m_inIn);
+  addInPort("in", m_inIn);
   return RTC::RTC_OK;
 }
 

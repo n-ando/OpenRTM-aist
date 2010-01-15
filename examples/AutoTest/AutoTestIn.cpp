@@ -58,8 +58,8 @@ RTC::ReturnCode_t AutoTestIn::onInitialize()
   // Registration: InPort/OutPort/Service
   // <rtc-template block="registration">
   // Set InPort buffers
-  registerInPort("in", m_inIn);
-  registerInPort("seqin", m_seqinIn);
+  addInPort("in", m_inIn);
+  addInPort("seqin", m_seqinIn);
   
   // Set OutPort buffer
   
@@ -69,7 +69,7 @@ RTC::ReturnCode_t AutoTestIn::onInitialize()
   // Set service consumers to Ports
   
   // Set CORBA Service Ports
-  registerPort(m_MyServicePort);
+  addPort(m_MyServicePort);
   
   // </rtc-template>
 

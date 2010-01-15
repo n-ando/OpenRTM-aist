@@ -578,12 +578,12 @@ initializer = """  : RTC::DataFlowComponentBase(manager)[if-any port_init],
 registration = \
 """  // Set InPort buffers
 [for inport in dataPorts][if inport.portType is DataInPort]
-  registerInPort("[inport.name]", m_[inport.name]In);
+  addInPort("[inport.name]", m_[inport.name]In);
 [endif][endfor]
 
   // Set OutPort buffer
 [for outport in dataPorts][if outport.portType is DataOutPort]
-  registerOutPort("[outport.name]", m_[outport.name]Out);
+  addOutPort("[outport.name]", m_[outport.name]Out);
 [endif][endfor]
 
   // Set service provider to Ports
@@ -602,7 +602,7 @@ registration = \
 
   // Set CORBA Service Ports
 [for corbaport in servicePorts]
-  registerPort(m_[corbaport.name]Port);
+  addPort(m_[corbaport.name]Port);
 [endfor]"""
 
 bind_config = \

@@ -54,7 +54,7 @@ RTC::ReturnCode_t MyServiceProvider::onInitialize()
   // Set service consumers to Ports
   
   // Set CORBA Service Ports
-  registerPort(m_MyServicePort);
+  addPort(m_MyServicePort);
   
   // </rtc-template>
 

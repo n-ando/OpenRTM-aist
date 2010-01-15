@@ -46,10 +46,10 @@ RTC::ReturnCode_t Sensor::onInitialize()
   // Registration: InPort/OutPort/Service
   // <rtc-template block="registration">
   // Set InPort buffers
-  registerInPort("in", m_inIn);
+  addInPort("in", m_inIn);
 
   // Set OutPort buffer
-  registerOutPort("out", m_outOut);
+  addOutPort("out", m_outOut);
 
   // Set service provider to Ports
 

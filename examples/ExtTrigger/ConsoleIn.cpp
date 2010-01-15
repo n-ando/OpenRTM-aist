@@ -48,7 +48,7 @@ RTC::ReturnCode_t ConsoleIn::onInitialize()
   // Set InPort buffers
   
   // Set OutPort buffer
-  registerOutPort("out", m_outOut);
+  addOutPort("out", m_outOut);
   
   // Set service provider to Ports
   

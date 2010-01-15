@@ -63,8 +63,8 @@ RTC::ReturnCode_t AutoTestOut::onInitialize()
   // Set InPort buffers
   
   // Set OutPort buffer
-  registerOutPort("out", m_outOut);
-  registerOutPort("seqout", m_seqoutOut);
+  addOutPort("out", m_outOut);
+  addOutPort("seqout", m_seqoutOut);
   m_seqout.data.length(5);
   // Set service provider to Ports
   
@@ -72,7 +72,7 @@ RTC::ReturnCode_t AutoTestOut::onInitialize()
   m_MyServicePort.registerConsumer("myservice0", "MyService", m_myservice0);
   
   // Set CORBA Service Ports
-  registerPort(m_MyServicePort);
+  addPort(m_MyServicePort);
   
   // </rtc-template>
 

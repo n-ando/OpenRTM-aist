@@ -60,7 +60,7 @@ RTC::ReturnCode_t MyServiceConsumer::onInitialize()
   m_MyServicePort.registerConsumer("myservice0", "MyService", m_myservice0);
   
   // Set CORBA Service Ports
-  registerPort(m_MyServicePort);
+  addPort(m_MyServicePort);
   
   // </rtc-template>
 
