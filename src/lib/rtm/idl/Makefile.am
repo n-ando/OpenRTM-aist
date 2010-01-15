@@ -7,6 +7,8 @@
 
 AUTOMAKE_OPTIONS = 1.4
 
+SUBDIRS = device_interfaces
+
 IDLC = @IDLC@
 IDLFLAGS = @IDL_FLAGS@
 LIBS = @LIBS@
@@ -18,12 +20,14 @@ SUFFIXES = .idl Skel.cpp Stub.cpp Stub.o Skel.o
 
 # RTM idl sources
 IDL_SOURCES =             \
-	SDOPackage.idl    \
-	RTC.idl           \
-	OpenRTM.idl       \
-	Manager.idl       \
-	BasicDataType.idl \
-	DataPort.idl
+	SDOPackage.idl        \
+	RTC.idl               \
+	OpenRTM.idl           \
+	Manager.idl           \
+	BasicDataType.idl     \
+	DataPort.idl          \
+	ExtendedDataTypes.idl \
+	InterfaceDataTypes.idl
 
 SKEL_H   = $(IDL_SOURCES:.idl=Skel.h)
 SKEL_CPP = $(IDL_SOURCES:.idl=Skel.cpp)
@@ -199,5 +203,5 @@ EXTRA_DIST = \
 	$(IDL_SOURCES) \
 	libRTCSkel.vcproj.yaml
 
-
+DIST_SUBDIRS = device_interfaces
 

@@ -1439,6 +1439,7 @@ AC_OUTPUT([Makefile
 	src/lib/Makefile
 	src/lib/rtm/Makefile
 	src/lib/rtm/idl/Makefile
+	src/lib/rtm/idl/device_interfaces/Makefile
 	src/lib/rtm/tests/Makefile
 	src/lib/rtm/tests/CORBA_SeqUtil/Makefile
 	src/lib/rtm/tests/ConfigAdmin/Makefile
@@ -1507,6 +1508,7 @@ AC_OUTPUT([Makefile
 	examples/SeqIO/Makefile
 	examples/SimpleService/Makefile
 	examples/ExtTrigger/Makefile
+	examples/Templates/Makefile
 	examples/tests/Makefile
 	docs/Makefile
 	win32/Makefile

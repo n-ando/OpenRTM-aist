@@ -7,7 +7,7 @@
 
 AUTOMAKE_OPTIONS = 1.4
 
-SUBDIRS = build src utils examples etc docs win32
+SUBDIRS = build src utils examples etc win32
 
 EXTRA_DIST =        \
 	README      \
