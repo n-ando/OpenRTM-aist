@@ -2305,8 +2305,12 @@ namespace RTC
      * @endif
      */
     void registerPort(PortBase& port);
+    void addPort(PortBase& port);
     void registerPort(PortService_ptr port);
+    void addPort(PortService_ptr port);
     
+    void registerPort(CorbaPort& port);
+    void addPort(CorbaPort& port);
     /*!
      * @if jp
      * 
@@ -2366,31 +2370,6 @@ namespace RTC
     /*!
      * @if jp
      * 
-     * @brief [local interface] CorbaPort を登録する
-     *
-     * RTC が保持する CorbaPortを登録する。
-     * 
-     * @param name port 名称
-     * @param corbaport 登録対象 CorbaPort
-     *
-     * @else
-     * 
-     * @brief [local interface] Register CorbaPort
-     *
-     * This operation registers CorbaPort held by this RTC.
-     * Set "port.corbaport" and "tcp_any" to property of Port, and then
-     * create instances of CorbaPort and register it.
-     * 
-     * @param name Port name
-     * @param corbaport CorbaPort which is registered to the RTC
-     *
-     * @endif
-     */
-    void registerCorbaPort(const char* name, CorbaPort& outport);
-    
-    /*!
-     * @if jp
-     * 
      * @brief [local interface] Port の登録を削除する
      *
      * RTC が保持するPortの登録を削除する。
@@ -2408,7 +2387,11 @@ namespace RTC
      * @endif
      */
     void deletePort(PortBase& port);
+    void removePort(PortBase& port);
     void deletePort(PortService_ptr port);
+    void removePort(PortService_ptr port);
+    void deletePort(CorbaPort& port);
+    void removePort(CorbaPort& port);
     
     /*!
      * @if jp
