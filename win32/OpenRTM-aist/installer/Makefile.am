@@ -5,7 +5,8 @@
 ## $Id$
 ##---------------------------------------------------------------------------
 clean-local:
-	rm -rf *.yaml *.wxs *.wixobj *.msi *~ autowix.cmd
+	rm -rf *.yaml *.wxs *~ autowix.cmd
+	rm -rf *.wixobj *.wixpdb *.mst *.msi 
 
 wxs:
 	sed -e 's/__VERSION__/$(VERSION)/g' OpenRTM-aist.wxs.yaml.in > OpenRTM-aist.wxs.yaml.1
@@ -20,10 +21,13 @@ wxs:
 dist-hook: wxs
 
 EXTRA_DIST =                     \
+	WiLangId.vbs             \
+	WiSubStg.vbs             \
 	OpenRTM-aist.wxs.in      \
 	OpenRTM-aist.wxs.yaml.in \
 	autowix.cmd.in           \
-	wixui_ja-jp.wxl          \
-	License.rtf
+	License.rtf              \
+	langs.txt                \
+	crean.cmd
 
 DIST_SUBDIRS = Bitmaps
