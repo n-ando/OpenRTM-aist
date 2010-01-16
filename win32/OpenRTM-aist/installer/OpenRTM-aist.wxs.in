@@ -259,9 +259,6 @@
     <WixVariable Id="WixUIDialogBmp" Value="Bitmaps/dlgbmp.bmp" />
 
     <UIRef Id="WixUI_Mondo" />
-    <!--UIRef Id="WixUI_ErrorProgressText" /-->
-    <!--UIRef Id="WixUI_InstallDir" /-->
-    <!--Property Id="WIXUI_INSTALLDIR" Value="INSTALLLOCATION" /-->
     <Property Id="WIXUI_INSTALLDIR" Value="INSTALLLOCATION" />
   </Product>
 </Wix>
