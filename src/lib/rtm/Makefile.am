@@ -189,7 +189,7 @@ wxs:
 		-c Headers \
 		-o $(win32_builddir)installer/headers.yaml \
 		-p ..\\rtm \
-		$(rtmheader_HEADERS) $(RTC_SRC)
+		*.h
 
 
 
