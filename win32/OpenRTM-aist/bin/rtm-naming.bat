@@ -3,7 +3,7 @@
 set cosnames="omninames"
 set orb="omniORB"
 set port=%1
-set OMNIORB_USEHOSTNAME=localhost
+rem set OMNIORB_USEHOSTNAME=localhost
 set PATH=%PATH%;%OMNI_ROOT%\bin\x86_win32
 
 if NOT DEFINED port set port=2809
