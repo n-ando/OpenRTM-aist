@@ -29,8 +29,7 @@
 @rem Supported languages
 @rem   supported languages have to be specified
 @rem ------------------------------------------------------------
-set LANGUAGES=(ja-jp de-de fr-fr hu-hu es-es it-it)
-set LANGUAGES=(ja-jp de-de)
+set LANGUAGES=(ja-jp de-de es-es fr-fr hu-hu it-it)
 
 
 
