@@ -10,9 +10,9 @@ clean-local:
 	rm -rf *.vcproj *.user *.ncb *.suo
 
 src:
-	cp $(top_srcdir)/examples/SeqIO/*.cpp .
-	cp $(top_srcdir)/examples/SeqIO/*.h .
-	cp $(top_srcdir)/examples/SeqIO/rtc.conf .
+	cp -p $(top_srcdir)/examples/SeqIO/*.cpp .
+	cp -p $(top_srcdir)/examples/SeqIO/*.h .
+	cp -p $(top_srcdir)/examples/SeqIO/rtc.conf .
 	qkc -ms *.cpp
 	qkc -ms *.h
 

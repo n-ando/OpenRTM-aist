@@ -8,4 +8,4 @@ clean-local:
 	rm -rf *~ *.py
 
 dist-hook: clean-local
-	cp $(top_srcdir)/build/*.py .
+	cp -p $(top_srcdir)/build/*.py .

@@ -10,11 +10,11 @@ AUTOMAKE_OPTIONS = 1.9
 bin_SCRIPTS = rtc-template
 
 yat.py:
-	cp $(top_srcdir)/build/yat.py .
+	cp -p $(top_srcdir)/build/yat.py .
 vcprojtool.py:
-	cp $(top_srcdir)/build/vcprojtool.py .
+	cp -p $(top_srcdir)/build/vcprojtool.py .
 slntool.py:
-	cp $(top_srcdir)/build/slntool.py .
+	cp -p $(top_srcdir)/build/slntool.py .
 
 rtc-template: 
 

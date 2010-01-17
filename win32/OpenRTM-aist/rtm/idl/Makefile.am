@@ -9,7 +9,7 @@ clean-local:
 	rm -f *~ *.idl *.cpp *.h *.cc *.hh *.sln *.suo *.ncb *.user *.vcproj
 
 src:
-	cp $(top_srcdir)/src/lib/rtm/idl/*.idl .
+	cp -p $(top_srcdir)/src/lib/rtm/idl/*.idl .
 	qkc -ms *.idl
 
 

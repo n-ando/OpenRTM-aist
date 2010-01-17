@@ -10,9 +10,9 @@ clean-local:
 	rm -rf *.vcproj *.user *.ncb *.suo
 
 src:
-	cp $(top_srcdir)/examples/Composite/*.cpp .
-	cp $(top_srcdir)/examples/Composite/*.h .
-	cp $(top_srcdir)/examples/Composite/*.conf .
+	cp -p $(top_srcdir)/examples/Composite/*.cpp .
+	cp -p $(top_srcdir)/examples/Composite/*.h .
+	cp -p $(top_srcdir)/examples/Composite/*.conf .
 	qkc -ms *.cpp
 	qkc -ms *.h
 	qkc -ms *.conf

@@ -26,10 +26,10 @@ managerhelper_SCRIPTS = \
 	$(IDLS:.idl=_idl.py)
 
 $(IDLS):
-	cp $(top_srcdir)/src/lib/rtm/idl/SDOPackage.idl .
-	cp $(top_srcdir)/src/lib/rtm/idl/RTC.idl .
-	cp $(top_srcdir)/src/lib/rtm/idl/OpenRTM.idl .
-	cp $(top_srcdir)/src/lib/rtm/idl/Manager.idl .
+	cp -p $(top_srcdir)/src/lib/rtm/idl/SDOPackage.idl .
+	cp -p $(top_srcdir)/src/lib/rtm/idl/RTC.idl .
+	cp -p $(top_srcdir)/src/lib/rtm/idl/OpenRTM.idl .
+	cp -p $(top_srcdir)/src/lib/rtm/idl/Manager.idl .
 
 .idl_idl.py:
 	$(IDLC) $(IDLFLAGS) $<

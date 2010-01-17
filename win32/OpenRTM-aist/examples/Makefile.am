@@ -7,7 +7,7 @@
 SUBDIRS = Composite ConfigSample SimpleIO SeqIO SimpleService USBCamera .
 
 wxs:
-	cp example.yaml	../installer/
+	cp -p example.yaml ../installer/
 
 clean-local:
 	rm -f *~

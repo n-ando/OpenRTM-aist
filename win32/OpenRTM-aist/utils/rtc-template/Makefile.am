@@ -9,8 +9,8 @@ clean-local:
 	rm -rf *~ *core *.pyc *.py
 
 src:
-	cp $(top_srcdir)/utils/rtc-template/rtc-template rtc-template.py
-	cp $(top_srcdir)/utils/rtc-template/*.py .
+	cp -p $(top_srcdir)/utils/rtc-template/rtc-template rtc-template.py
+	cp -p $(top_srcdir)/utils/rtc-template/*.py .
 
 wxs: src
 	$(top_srcdir)/build/makewxs.py flist \

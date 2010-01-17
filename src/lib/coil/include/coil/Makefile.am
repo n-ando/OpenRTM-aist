@@ -13,8 +13,8 @@ PLATFORM = posix
 endif
 
 all-local:
-	cp $(top_srcdir)/$(PLATFORM)/coil/*.h .
-	cp $(top_srcdir)/common/*.h .
+	cp -p $(top_srcdir)/$(PLATFORM)/coil/*.h .
+	cp -p $(top_srcdir)/common/*.h .
 
 clean-local:
 	mv config_coil.h config_coil_tmp

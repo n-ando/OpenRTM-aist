@@ -6,16 +6,16 @@
 ##---------------------------------------------------------------------------
 
 ClassReference:
-	cp -r $(top_srcdir)/docs/ClassReference .
+	cp -p -r $(top_srcdir)/docs/ClassReference .
 
 ClassReference-en:
-	cp -r $(top_srcdir)/docs/ClassReference-en .
+	cp -p -r $(top_srcdir)/docs/ClassReference-en .
 
 IDLReference:
-	cp -r $(top_srcdir)/docs/IDLReference .
+	cp -p -r $(top_srcdir)/docs/IDLReference .
 
 IDLReference-en:
-	cp -r $(top_srcdir)/docs/IDLReference-en .
+	cp -p -r $(top_srcdir)/docs/IDLReference-en .
 
 wxs:
 	$(top_srcdir)/build/makewxs.py flist \
