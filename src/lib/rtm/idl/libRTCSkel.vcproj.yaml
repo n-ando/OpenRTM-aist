@@ -21,8 +21,8 @@ Configurations:
           makewrapper.py OpenRTM.idl
           makewrapper.py RTC.idl
           makewrapper.py SDOPackage.idl
-	  makewrapper.py ExtendedDataTypes.idl
-	  makewrapper.py InterfaceDataTypes.idl
+          makewrapper.py ExtendedDataTypes.idl
+          makewrapper.py InterfaceDataTypes.idl
           omniidl -bcxx -Wba -nf BasicDataType.idl
           omniidl -bcxx -Wba -nf DataPort.idl
           omniidl -bcxx -Wba -nf Manager.idl
@@ -30,7 +30,7 @@ Configurations:
           omniidl -bcxx -Wba -nf RTC.idl
           omniidl -bcxx -Wba -nf SDOPackage.idl
           omniidl -bcxx -Wba -nf ExtendedDataTypes.idl
-	  omniidl -bcxx -Wba -nf InterfaceDataTypes.idl&#x0D;&#x0A;
+          omniidl -bcxx -Wba -nf InterfaceDataTypes.idl&#x0D;&#x0A;
     VCCLCompilerTool:
       - Key: Optimization
         Value: "0"
@@ -75,8 +75,8 @@ Configurations:
           makewrapper.py OpenRTM.idl
           makewrapper.py RTC.idl
           makewrapper.py SDOPackage.idl
-	  makewrapper.py ExtendedDataTypes.idl
-	  makewrapper.py InterfaceDataTypes.idl
+          makewrapper.py ExtendedDataTypes.idl
+          makewrapper.py InterfaceDataTypes.idl
           omniidl -bcxx -Wba -nf BasicDataType.idl
           omniidl -bcxx -Wba -nf DataPort.idl
           omniidl -bcxx -Wba -nf Manager.idl
@@ -84,7 +84,7 @@ Configurations:
           omniidl -bcxx -Wba -nf RTC.idl
           omniidl -bcxx -Wba -nf SDOPackage.idl
           omniidl -bcxx -Wba -nf ExtendedDataTypes.idl
-	  omniidl -bcxx -Wba -nf InterfaceDataTypes.idl&#x0D;&#x0A;
+          omniidl -bcxx -Wba -nf InterfaceDataTypes.idl&#x0D;&#x0A;
     VCCLCompilerTool:
       - Key: PreprocessorDefinitions
         Value: "WIN32;NDEBUG;_LIB;__WIN32__;__NT__;__OSVERSION__=4;__x86__;_WIN32_WINNT=0x0400;_CRT_SECURE_NO_DEPRECATE"
