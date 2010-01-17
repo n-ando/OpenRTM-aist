@@ -22,7 +22,7 @@ AC_INIT(OpenRTM-aist, 1.0.0, n-ando@aist.go.jp, OpenRTM-aist)
 AC_CONFIG_AUX_DIR([.])
 AM_INIT_AUTOMAKE([dist-bzip2 tar-pax])
 AM_CONFIG_HEADER([src/lib/rtm/config_rtc.h])
-AC_CONFIG_FILES([utils/rtm-config/libRTM.pc:utils/rtm-config/libRTM.pc.in])
+AC_CONFIG_FILES([utils/rtm-config/openrtm-aist.pc:utils/rtm-config/openrtm-aist.pc.in])
 
 dnl ------------------------------------------------------------
 dnl rename config header's PACKAGE_* definition
