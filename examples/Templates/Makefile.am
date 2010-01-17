@@ -56,3 +56,5 @@ template_DATA = $(TEMPLATES)
 lst:
 	echo $(TEMPLATES) > templates.lst
 
+EXTRA_DIST = $(TEMPLATES)
+
