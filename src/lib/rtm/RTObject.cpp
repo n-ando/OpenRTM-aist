@@ -99,6 +99,7 @@ namespace RTC
    */
   RTObject_impl::~RTObject_impl()
   {
+    RTC_TRACE(("~RTObject_impl()"));
     m_pSdoConfigImpl->_remove_ref();
   }
   

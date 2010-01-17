@@ -38,7 +38,7 @@ namespace RTC
    * @endif
    */
   ModuleManager::ModuleManager(coil::Properties& prop)
-    : m_properties(prop)
+    : rtclog("ModuleManager"), m_properties(prop)
   {
     m_configPath      = coil::split(prop[CONFIG_PATH], ",");
     for_each(m_configPath.begin(), m_configPath.end(), coil::eraseHeadBlank);
@@ -71,6 +71,7 @@ namespace RTC
    */
   std::string ModuleManager::load(const std::string& file_name)
   {
+    RTC_TRACE(("load(fname = %s)", file_name.c_str()));
     if (file_name == "") throw InvalidArguments("Invalid file name.");
     
     if (coil::isURL(file_name))
@@ -134,6 +135,8 @@ namespace RTC
   std::string ModuleManager::load(const std::string& file_name,
 				  const std::string& init_func)
   {
+    RTC_TRACE(("load(fname = %s, init_func = %s)",
+               file_name.c_str(), init_func.c_str()));
     std::string name;
     name = load(file_name);
     

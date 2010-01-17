@@ -598,6 +598,7 @@ namespace RTC
     std::string getInitFuncName(const std::string& file_path);
     
   protected:
+    Logger rtclog;
 
     struct DLLEntity
     {
