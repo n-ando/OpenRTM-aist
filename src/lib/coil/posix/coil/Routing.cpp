@@ -18,6 +18,9 @@
  */
 
 #include <stdio.h>
+#include <netdb.h>      // gethostbyname
+#include <arpa/inet.h>  // inet_ntoa
+#include <netinet/in.h> // sockaddr_in
 
 #include <coil/Routing.h>
 #include <coil/stringutil.h>
@@ -51,22 +54,32 @@ namespace coil
    */
   bool find_dest_ifname(std::string dest_addr, std::string& dest_if)
   {
-    //  struct hostent ipaddr;
-    //  ipaddr = gethostbyname(dest_addr.c_str());
+    // This logic should be replaced by direct retrieving using
+    // routing interface like AFROUTE or sysctl.
+    struct ::hostent *hostent;
+    struct ::sockaddr_in addr;
     
-#if defined(COIL_OS_FREEBSD) || defined(COIL_OS_DARWIN)
-    std::string cmd("route get ");
+    hostent = gethostbyname(dest_addr.c_str());
+    addr.sin_addr.s_addr = **(unsigned int **)(hostent->h_addr_list);
+    dest_addr = inet_ntoa(addr.sin_addr);
+    
+#ifdef COIL_OS_FREEBSD
+    std::string cmd("PATH=/bin:/sbin:/usr/bin:/usr/sbin "
+                    "route get ");
     const char* match_str = "interface";
     const char* delimiter = ":";
-    int ifname_pos(1);
+    size_t ifname_pos(1);
     cmd += dest_addr;
-#endif // COIL_OS_IS_FREEBSD || COIL_OS_DARWIN
-#ifdef COIL_OS_LINUX
-    std::string cmd("ip route get ");
+    cmd += " 2> /dev/null";
+#endif // COIL_OS_IS_FREEBSD
+#ifdef COIL_OS_LINUX    
+    std::string cmd("PATH=/bin:/sbin:/usr/bin:/usr/sbin "
+                    "ip route get ");
     const char* match_str = "dev ";
     const char* delimiter = " ";
-    int ifname_pos(2);
+    size_t ifname_pos(2);
     cmd += dest_addr;
+    cmd += " 2> /dev/null";
 #endif // COIL_OS_IS_LINUX    
     
     FILE* fp;
@@ -74,7 +87,7 @@ namespace coil
       {
         return false;
       }
-    
+
     do
       {
         char str[512];
@@ -85,12 +98,25 @@ namespace coil
         
         line.erase(line.end() - 1);
         coil::vstring vs(coil::split(line, delimiter));
-        if (vs.size() == 2)
+
+#ifdef COIL_OS_FREEBSD
+        if (vs.size() > ifname_pos)
           {
             dest_if = vs[ifname_pos];
             pclose(fp);
             return true;
           }
+#endif // COIL_OS_FREEBSD
+#ifdef COIL_OS_LINUX
+        for (int i(0); i < vs.size(); ++i)
+          {
+            if (vs[i] == "dev")
+              {
+                dest_if = vs[i + 1];
+                return true;
+              }
+          }
+#endif
       } while (!feof(fp));
     pclose(fp);
     return false;
@@ -107,6 +133,7 @@ namespace coil
   {
     std::string cmd("ifconfig ");
     cmd += ifname;
+    cmd += " 2> /dev/null";
     
     FILE* fp;
     if ((fp = popen(cmd.c_str(), "r")) == NULL)
