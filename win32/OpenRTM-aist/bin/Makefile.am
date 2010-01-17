@@ -22,9 +22,9 @@ clean-local:
 	rm -rf *~ *.py
 
 copy_scripts:
-	cp $(top_srcdir)/build/*.py .
-	cp $(top_srcdir)/utils/rtm-skelwrapper/*.py .
-	cp $(top_srcdir)/utils/rtm-skelwrapper/rtm-skelwrapper rtm-skelwrapper.py
+	cp -p $(top_srcdir)/build/*.py .
+	cp -p $(top_srcdir)/utils/rtm-skelwrapper/*.py .
+	cp -p $(top_srcdir)/utils/rtm-skelwrapper/rtm-skelwrapper rtm-skelwrapper.py
 wxs:
 	$(top_srcdir)/build/makewxs.py flist \
 		-c Libs \

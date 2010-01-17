@@ -9,10 +9,10 @@ clean-local:
 	rm -f *.conf.*
 
 rtc.conf.sample:
-	cp $(top_srcdir)/etc/rtc.conf.sample .
+	cp -p $(top_srcdir)/etc/rtc.conf.sample .
 
 wxs:
-	cp etc.yaml ../installer/etc.yaml
+	cp -p etc.yaml ../installer/etc.yaml
 
 dist-hook: clean-local rtc.conf.sample wxs
 

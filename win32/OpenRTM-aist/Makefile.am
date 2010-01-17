@@ -30,10 +30,10 @@ OpenRTM-aist_vc9.sln:
 	qkc -ms OpenRTM-aist_vc9.sln
 
 coil_distbuild.vsprops:
-	cp $(top_srcdir)/src/lib/coil/win32/coil_distbuild.vsprops .
+	cp -p $(top_srcdir)/src/lib/coil/win32/coil_distbuild.vsprops .
 
 coil_config.vsprops:
-	cp $(top_srcdir)/src/lib/coil/win32/coil_config.vsprops .
+	cp -p $(top_srcdir)/src/lib/coil/win32/coil_config.vsprops .
 
 dist-hook: clean-local sln
 

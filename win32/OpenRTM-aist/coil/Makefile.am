@@ -9,9 +9,9 @@ clean-local:
 	rm -f *~ *.idl *.cpp *.h *.cc *.hh *.sln *.suo *.ncb *.user *.vcproj
 
 src:
-	cp $(top_srcdir)/src/lib/coil/win32/coil/*.cpp .
-	cp $(top_srcdir)/src/lib/coil/win32/coil/*.h .
-	cp $(top_srcdir)/src/lib/coil/win32/coil/*.vcproj .
+	cp -p $(top_srcdir)/src/lib/coil/win32/coil/*.cpp .
+	cp -p $(top_srcdir)/src/lib/coil/win32/coil/*.h .
+	cp -p $(top_srcdir)/src/lib/coil/win32/coil/*.vcproj .
 
 
 dist-hook: src

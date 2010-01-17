@@ -49,12 +49,12 @@ COIL_H   = $(COIL_COMMON_H) $(COIL_PLATFORM_H)
 COIL_ALL = $(COIL_SRC) $(COIL_H)
 
 $(COIL_COMMON_SRC):
-	cp $(top_srcdir)/common/*.cpp .
-	cp $(top_srcdir)/common/*.h .
+	cp -p $(top_srcdir)/common/*.cpp .
+	cp -p $(top_srcdir)/common/*.h .
 	qkc -ms *.cpp *.h
 
 $(COIL_COMMON_H):
-	cp $(top_srcdir)/common/*.h .
+	cp -p $(top_srcdir)/common/*.h .
 	qkc -ms *.cpp *.h
 
 

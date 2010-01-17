@@ -62,19 +62,19 @@ COIL_H   = $(COIL_COMMON_H) $(COIL_PLATFORM_H)
 COIL_ALL = $(COIL_SRC) $(COIL_H)
 
 $(COIL_COMMON_SRC):
-	cp $(top_srcdir)/common/*.cpp .
-	cp $(top_srcdir)/common/*.h .
+	cp -p $(top_srcdir)/common/*.cpp .
+	cp -p $(top_srcdir)/common/*.h .
 
 $(COIL_COMMON_H):
-	cp $(top_srcdir)/common/*.h .
+	cp -p $(top_srcdir)/common/*.h .
 
 
 coilheaderdir = $(prefix)/include/coil
 
 coilheader_HEADERS = $(COIL_H) $(top_srcdir)/include/coil/config_coil.h
 
-#lib_LTLIBRARIES = libcoil.la
-noinst_LTLIBRARIES = libcoil.la
+lib_LTLIBRARIES = libcoil.la
+#noinst_LTLIBRARIES = libcoil.la
 
 libcoil_la_SOURCES =          \
 	$(COIL_ALL)

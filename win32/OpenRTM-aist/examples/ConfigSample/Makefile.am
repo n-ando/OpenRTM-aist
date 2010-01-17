@@ -10,9 +10,9 @@ clean-local:
 	rm -rf *.vcproj *.user *.ncb *.suo
 
 src:
-	cp $(top_srcdir)/examples/ConfigSample/*.cpp .
-	cp $(top_srcdir)/examples/ConfigSample/*.h .
-	cp $(top_srcdir)/examples/ConfigSample/*.conf .
+	cp -p $(top_srcdir)/examples/ConfigSample/*.cpp .
+	cp -p $(top_srcdir)/examples/ConfigSample/*.h .
+	cp -p $(top_srcdir)/examples/ConfigSample/*.conf .
 	qkc -ms *.cpp
 	qkc -ms *.h
 	qkc -ms *.conf

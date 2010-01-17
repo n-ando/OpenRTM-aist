@@ -6,7 +6,7 @@
 ##---------------------------------------------------------------------------
 
 makedeffile.py:
-	cp $(top_srcdir)/build/makedeffile.py .
+	cp -p $(top_srcdir)/build/makedeffile.py .
 
 clean-local:
 	rm -f makedeffile.py

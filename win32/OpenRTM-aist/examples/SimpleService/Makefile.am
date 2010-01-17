@@ -10,10 +10,10 @@ clean-local:
 	rm -rf *.vcproj *.user *.ncb *.suo
 
 src:
-	cp $(top_srcdir)/examples/SimpleService/*.cpp .
-	cp $(top_srcdir)/examples/SimpleService/*.h .
-	cp $(top_srcdir)/examples/SimpleService/*.idl .
-	cp $(top_srcdir)/examples/SimpleService/rtc.conf .
+	cp -p $(top_srcdir)/examples/SimpleService/*.cpp .
+	cp -p $(top_srcdir)/examples/SimpleService/*.h .
+	cp -p $(top_srcdir)/examples/SimpleService/*.idl .
+	cp -p $(top_srcdir)/examples/SimpleService/rtc.conf .
 	qkc -ms *.cpp
 	qkc -ms *.h
 	qkc -ms *.idl

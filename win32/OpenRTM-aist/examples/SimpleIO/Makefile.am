@@ -10,9 +10,9 @@ clean-local:
 	rm -rf *.vcproj *.user *.ncb *.suo
 
 src:
-	cp $(top_srcdir)/examples/SimpleIO/*.cpp .
-	cp $(top_srcdir)/examples/SimpleIO/*.h .
-	cp $(top_srcdir)/examples/SimpleIO/rtc.conf .
+	cp -p $(top_srcdir)/examples/SimpleIO/*.cpp .
+	cp -p $(top_srcdir)/examples/SimpleIO/*.h .
+	cp -p $(top_srcdir)/examples/SimpleIO/rtc.conf .
 	qkc -ms *.cpp
 	qkc -ms *.h
 
