@@ -20,8 +20,8 @@
 @rem ============================================================
 @rem copy property sheet
 @rem ============================================================
-copy   etc\rtm_config_omni412.vsprops rtm_config.vsprops
-copy   etc\rtm_config_omni412.vsprops examples\USBCamera\rtm_config.vsprops
+copy   etc\rtm_config_omni414.vsprops rtm_config.vsprops
+copy   etc\rtm_config_omni414.vsprops examples\USBCamera\rtm_config.vsprops
 copy   coil_config.vsprops examples\USBCamera\coil_config.vsprops
 
 @rem ============================================================
