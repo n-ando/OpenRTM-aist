@@ -16,7 +16,10 @@ clean-local:
 src:
 	cp -p $(top_srcdir)/src/lib/rtm/*.cpp .
 	cp -p $(top_srcdir)/src/lib/rtm/*.h .
+	cp -p config_rtc.h.in config_rtc.h
 	qkc -ms *.cpp
 	qkc -ms *.h
 
 dist-hook: src
+
+EXTRA_DIST = config_rtc.h.in
