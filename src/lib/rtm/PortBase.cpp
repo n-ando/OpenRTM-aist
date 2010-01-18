@@ -226,27 +226,11 @@ namespace RTC
     throw (CORBA::SystemException)
   {
     RTC_TRACE(("notify_connect()"));
-    ReturnCode_t retval[] = {RTC::RTC_OK, RTC::RTC_OK, 
-                             RTC::RTC_OK, RTC::RTC_OK};
-    int retval_index(0);
-
-    if(!(m_connectionLimit < 0))
-      {
-        if(m_connectionLimit<=m_profile.connector_profiles.length())
-          {
-            RTC_PARANOID(("Connected number has reached the limitation."));
-            RTC_PARANOID(("Can connect the port up to %d ports.",
-                      m_connectionLimit));
-            RTC_PARANOID(("%d connectors are existing",
-                      m_profile.connector_profiles.length()));
-            retval[retval_index] = RTC::RTC_ERROR;
-          }
-      }
+    ReturnCode_t retval[] = {RTC::RTC_OK, RTC::RTC_OK, RTC::RTC_OK};
 
     // publish owned interface information to the ConnectorProfile
-    retval_index++;
-    retval[retval_index] = publishInterfaces(connector_profile);
-    if (retval[retval_index] != RTC::RTC_OK)
+    retval[0] = publishInterfaces(connector_profile);
+    if (retval[0] != RTC::RTC_OK)
       {
         RTC_ERROR(("publishInterfaces() in notify_connect() failed."));
       }
@@ -256,9 +240,8 @@ namespace RTC
       }
     
     // call notify_connect() of the next Port
-    retval_index++;
-    retval[retval_index] = connectNext(connector_profile);
-    if (retval[retval_index] != RTC::RTC_OK)
+    retval[1] = connectNext(connector_profile);
+    if (retval[1] != RTC::RTC_OK)
       {
         RTC_ERROR(("connectNext() in notify_connect() failed."));
       }
@@ -268,9 +251,8 @@ namespace RTC
       {
         (*m_onSubscribeInterfaces)(connector_profile);
       }
-    retval_index++;
-    retval[retval_index] = subscribeInterfaces(connector_profile);
-    if (retval[retval_index] != RTC::RTC_OK) 
+    retval[2] = subscribeInterfaces(connector_profile);
+    if (retval[2] != RTC::RTC_OK) 
       {
         RTC_ERROR(("subscribeInterfaces() in notify_connect() failed."));
       }
@@ -308,7 +290,31 @@ namespace RTC
 
     return RTC::RTC_OK;
   }
-  
+ 
+  /*!
+   * @if jp
+   * @brief Interface情報を公開する
+   * @else
+   * @brief Publish interface information
+   * @endif
+   */
+  ReturnCode_t PortBase::_publishInterfaces(void)
+  {
+    if(!(m_connectionLimit < 0))
+      {
+        if(m_connectionLimit<=m_profile.connector_profiles.length())
+          {
+            RTC_PARANOID(("Connected number has reached the limitation."));
+            RTC_PARANOID(("Can connect the port up to %d ports.",
+                      m_connectionLimit));
+            RTC_PARANOID(("%d connectors are existing",
+                      m_profile.connector_profiles.length()));
+            return RTC::RTC_ERROR;
+          }
+      }
+    return RTC::RTC_OK;
+  }
+
   /*!
    * @if jp
    * @brief [CORBA interface] Port の接続を解除する
