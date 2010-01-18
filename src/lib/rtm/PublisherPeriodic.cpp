@@ -39,7 +39,7 @@ namespace RTC
    */
   PublisherPeriodic::PublisherPeriodic()
     : rtclog("PublisherPeriodic"),
-      m_consumer(0), m_buffer(0), m_task(0),
+      m_consumer(0), m_buffer(0), m_task(0), m_listeners(0),
       m_retcode(PORT_OK), m_pushPolicy(NEW),
       m_skipn(0), m_active(false), m_readback(false), m_leftskip(0)
   {
@@ -171,6 +171,8 @@ namespace RTC
 
     if (m_consumer == 0) { return PRECONDITION_NOT_MET; }
     if (m_buffer == 0) { return PRECONDITION_NOT_MET; }
+    if (m_listeners == 0) { return PRECONDITION_NOT_MET; }
+
     if (m_retcode == CONNECTION_LOST)
       {
         RTC_DEBUG(("write(): connection lost."));
