@@ -194,6 +194,12 @@ namespace RTC
   {
     RTC_TRACE(("publishInterfaces()"));
 
+    ReturnCode_t returnvalue = _publishInterfaces();
+    if(returnvalue!=RTC::RTC_OK)
+      {
+        return returnvalue;
+      }
+
     NVList properties;
     CorbaProviderList::iterator it(m_providers.begin());
     while (it != m_providers.end())
