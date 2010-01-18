@@ -9,7 +9,7 @@
            Manufacturer="{% Product.Manufacturer %}"
            UpgradeCode="{% Product.UpgradeCode %}">
 
-    <Package Id="12313145-2154-3565-4355-542553254666" 
+    <Package Id="*" 
              Keywords="Installer"
              Description="{% Package.Description %}"
              InstallerVersion="{% Package.InstallerVersion %}"
@@ -17,7 +17,7 @@
              Compressed="{% Package.Compressed %}"
 	     SummaryCodepage='$(var.codepage)' />
     <!-- メディア -->    
-    <Media Id="1" Cabinet="Sedodream.cab" EmbedCab="yes"/>
+    <Media Id="1" Cabinet="OpenRTM-aist.cab" EmbedCab="yes"/>
 
     <!-- フォルダ構成 -->
     <Directory Id="TARGETDIR" Name="SourceDir">
@@ -40,9 +40,9 @@
 		      Name="{% file.Name %}" DiskId="1"
 		      Source="{% file.Source %}">
 		  {% if file.Name is rtm-naming.bat %}
-		  <Shortcut Id="{% file.Id %}" Directory="ExpMenuFolder"
+		  <Shortcut Id="{% file.Id %}" Directory="ToolsMenuFolder"
 			    Name="Start Naming Service"
-			    Show="normal" WorkingDirectory="examples"/>
+			    Show="normal" WorkingDirectory="tools"/>
 		  {% endif %}
 		</File>
 		{% endfor %}
@@ -196,7 +196,9 @@
 			      Name="{% file.Name %}"
 			      Show="normal"
 			      WorkingDirectory="CXXexamples"
-			      Icon="RTC.ico" IconIndex="0"{% if-any file.Arguments %} Arguments='{% file.Arguments %}'{% endif %}> 
+			      Icon="RTC.ico" IconIndex="0"
+			      {% if-any file.Arguments %}
+			      Arguments='{% file.Arguments %}'{% endif %}> 
 		      {% if file.Name is ConsoleInComp.exe %}
 		      <Icon Id="RTC.ico" SourceFile="Bitmaps\RTC.ico"/>
 		      {% endif %}
@@ -210,9 +212,12 @@
 	  </Directory>
 	</Directory><!--end of OpenRTM-aist-->
 
-	<!--Component Id="ENV" Guid="C41EB819-D5E6-11DC-A98E-0090CC744077">
+	<?if $(env.INCLUDE_OMNIORB) = YES ?>
+	<Directory Id="omniORB" Name="omniORB">
+	<?include omniORB_inc.wxs ?>
+	</Directory>
+	<?endif ?>
 
-	</Component-->
       </Directory>
 
       <!-- システムフォルダ -->
@@ -225,7 +230,11 @@
 	<Directory Id="AppMenuFolder"
 		   Name="{% Product.Name %}">
 	  <Directory Id="CxxMenuFolder" Name="C++">
-	    <Directory Id="ExpMenuFolder" Name="examples">
+	    <Directory Id="ToolsMenuFolder" Name="tools">
+	    </Directory>
+	    <Directory Id="Components" Name="components">
+	      <Directory Id="ExpMenuFolder" Name="examples">
+	      </Directory>
 	    </Directory>
 	    <Directory Id="DocMenuFolder" Name="documents">
 	    </Directory>
@@ -238,6 +247,12 @@
       <ComponentRef Id="Bin"/>
       <ComponentRef Id="COILs"/>
       <ComponentRef Id="Etc"/>
+
+      <?if $(env.INCLUDE_OMNIORB) = YES ?>
+      <ComponentRef Id="Omni"/>
+      <ComponentRef Id="OmniBinScripts"/>
+      <ComponentRef Id="OmniBinX86_win32"/>
+      <?endif ?>
     </Feature>
     <Feature Id="Samples" Level="1" Title="Samples">
       <ComponentRef Id="Examples"/>
@@ -246,6 +261,26 @@
       <ComponentRef Id="Headers"/>
       <ComponentRef Id="IDLs"/>
       <ComponentRef Id="RtcTemplate"/>
+
+      <?if $(env.INCLUDE_OMNIORB) = YES ?>
+      <ComponentRef Id="OmniIdl"/>
+      <ComponentRef Id="OmniIdlCos"/>
+      <ComponentRef Id="OmniInclude"/>
+      <ComponentRef Id="OmniIncludeCos"/>
+      <ComponentRef Id="OmniIncludeOmniorb4"/>
+      <ComponentRef Id="OmniIncludeOmniorb4Internal"/>
+      <ComponentRef Id="OmniIncludeOmnithread"/>
+      <ComponentRef Id="OmniIncludeOmnivms"/>
+      <ComponentRef Id="OmniIncludePython1_5"/>
+      <ComponentRef Id="OmniLibPythonOmniidl"/>
+      <ComponentRef Id="OmniLibPythonOmniidl_be"/>
+      <ComponentRef Id="OmniLibPythonOmniidl_beCxx"/>
+      <ComponentRef Id="OmniLibPythonOmniidl_beCxxDynskel"/>
+      <ComponentRef Id="OmniLibPythonOmniidl_beCxxHeader"/>
+      <ComponentRef Id="OmniLibPythonOmniidl_beCxxImpl"/>
+      <ComponentRef Id="OmniLibPythonOmniidl_beCxxSkel"/>
+      <ComponentRef Id="OmniLibX86_win32"/>
+      <?endif ?>
     </Feature>
     <Feature Id="Docs" Level="1" Title="Documents">
       <ComponentRef Id="Classref_jp"/>
