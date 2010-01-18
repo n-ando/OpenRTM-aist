@@ -1476,6 +1476,27 @@ namespace RTC
      */
     virtual void setConnectionLimit(int limit_value);
     
+    /*!
+     * @if jp
+     * @brief Interface情報を公開する
+     *
+     * Interface情報を公開する。
+     *
+     *  dataport.dataflow_type
+     *
+     * @return ReturnCode_t 型のリターンコード
+     *
+     * @else
+     * @brief Publish interface information
+     *
+     * Publish interface information.
+     *
+     *
+     * @return The return code of ReturnCode_t type
+     *
+     * @endif
+     */
+    virtual ReturnCode_t _publishInterfaces(void);
     //============================================================
     // protected utility functions
     //============================================================

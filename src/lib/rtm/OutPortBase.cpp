@@ -512,6 +512,12 @@ namespace RTC
   {
     RTC_TRACE(("publishInterfaces()"));
 
+    ReturnCode_t returnvalue = _publishInterfaces();
+    if(returnvalue!=RTC::RTC_OK)
+      {
+        return returnvalue;
+      }
+
     // prop: [port.outport].
     coil::Properties prop(m_properties);
     {
