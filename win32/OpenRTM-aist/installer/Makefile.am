@@ -25,6 +25,8 @@ EXTRA_DIST =                     \
 	WiSubStg.vbs             \
 	OpenRTM-aist.wxs.in      \
 	OpenRTM-aist.wxs.yaml.in \
+	omniORB_inc.wxs.in       \
+	omniwxs.py               \
 	autowix.cmd.in           \
 	License.rtf              \
 	langs.txt                \
