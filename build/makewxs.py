@@ -66,7 +66,11 @@ class file_list:
         return out
 
     def to_shortname(self, fname):
-        name, ext = fname.rsplit(".", 1)
+        try:
+            name, ext = fname.rsplit(".", 1)
+        except:
+            name = fname
+            ext  = ""
         if name != None and len(name) > 8:
             short_name = name[:5] + self.sn_num(name[:5])
         else:
@@ -75,6 +79,8 @@ class file_list:
             short_ext = ext[:3]
         else:
             short_ext = ext
+        if short_ext == "":
+            return short_name
         return short_name + "." + short_ext
 
     def id(self):
