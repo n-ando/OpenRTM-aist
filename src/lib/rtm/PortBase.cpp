@@ -516,19 +516,21 @@ namespace RTC
    */
   void PortBase::setOwner(RTObject_ptr owner)
   {
-    Guard gurad(m_profile_mutex); 
-    m_profile.owner = RTC::RTObject::_duplicate(owner);
-    RTC::ComponentProfile_var prof = 
-          m_profile.owner->get_component_profile();
+    RTC::ComponentProfile_var prof = owner->get_component_profile();
 
     m_ownerInstanceName = prof->instance_name;
     RTC_TRACE(("setOwner(%s)", m_ownerInstanceName.c_str()));
 
-    std::string portname((const char*)m_profile.name);
-    coil::vstring p(coil::split(portname, "."));
-    // Now Port name is <instance_name>.<port_name>. r1648
-    portname = m_ownerInstanceName +"."+ p.back();
-    m_profile.name = CORBA::string_dup(portname.c_str());
+    {
+      Guard gurad(m_profile_mutex); 
+      std::string portname((const char*)m_profile.name);
+      coil::vstring p(coil::split(portname, "."));
+      // Now Port name is <instance_name>.<port_name>. r1648
+      portname = m_ownerInstanceName +"."+ p.back();
+
+      m_profile.owner = RTC::RTObject::_duplicate(owner);
+      m_profile.name = CORBA::string_dup(portname.c_str());
+    }
   }
 
   // OnConnect系コールバック (接続に起因するイベントによりコールされる)
