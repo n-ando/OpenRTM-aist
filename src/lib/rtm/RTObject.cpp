@@ -23,7 +23,8 @@
 #include <rtm/Manager.h>
 #include <coil/stringutil.h>
 #include <iostream>
-
+#include <typeinfo>
+o
 namespace RTC
 {
   /*!
@@ -62,7 +63,9 @@ namespace RTC
       m_pPOA(PortableServer::POA::_duplicate(manager->getPOA())),
       m_portAdmin(manager->getORB(), manager->getPOA()),
       m_created(true), //m_alive(false),
-      m_properties(default_conf), m_configsets(m_properties.getNode("conf"))
+      m_properties(default_conf), m_configsets(m_properties.getNode("conf")),
+      m_readAll(false),m_writeAll(false),
+      m_readAllCompletion(false),m_writeAllCompletion(false)
   {
     m_objref = this->_this();
     m_pSdoConfigImpl = new SDOPackage::Configuration_impl(m_configsets);
@@ -956,7 +959,11 @@ namespace RTC
     ReturnCode_t ret(RTC::RTC_ERROR);
     try
       {
+	if (m_readAll)
+	  readAll();
 	ret = onExecute(ec_id);
+	if (m_writeAll)
+	  writeAll();
       }
     catch (...)
       {
@@ -1651,6 +1658,168 @@ namespace RTC
     return;
   }
   
+  /*!
+   * @if jp
+   * @brief 全 InPort のデータを読み込む。
+   * @return 読み込み結果(全ポートの読み込み成功:true，失敗:false)
+   * @else
+   * @brief Readout the value from All InPorts.
+   * @return result (Successful:true, Failed:false) 
+  * @endif
+   */
+  bool RTObject_impl::readAll()
+  {
+    RTC_TRACE(("readAll()"));
+    PortProfileList pprofiles;
+    pprofiles = m_portAdmin.getPortProfileList();
+    std::vector<InPortBase*> inports; 
+
+    for (::CORBA::ULong i(0), len(pprofiles.length()); i < len; ++i)
+      {
+	if (NVUtil::isStringValue(pprofiles[i].properties,
+				  "port.port_type","DataInPort"))
+	  {
+	    try
+	      {
+		InPortBase* ip = dynamic_cast<InPortBase*>(m_portAdmin.getPort(pprofiles[i].name));
+	      
+		if (ip != 0)
+		  inports.push_back(ip);
+	      }
+	    catch ( const std::bad_cast& e )
+	      {
+		RTC_ERROR(("failed dynamic_cast to InPortBase in readAll()."));
+	      }
+	  }
+      }
+    bool ret(true);
+    std::vector<InPortBase*>::iterator it(inports.begin());
+    while(it != inports.end())
+      {
+	if (!((*it)->read()))
+	  {
+	    RTC_DEBUG(("The error occurred in readAll()."));
+	    ret = false;
+	    if (!m_readAllCompletion)
+	      return false;
+	  }
+	++it;
+      }
+
+    return ret;
+  }
+
+  /*!
+   * @if jp
+   * @brief 全 OutPort のwrite()メソッドをコールする。
+   * @return 読み込み結果(全ポートへの書き込み成功:true，失敗:false)
+   * @else
+   * @brief The write() method of all OutPort is called. 
+   * @return result (Successful:true, Failed:false)
+   * @endif
+   */
+  bool RTObject_impl::writeAll()
+  {
+    RTC_TRACE(("writeAll()"));
+    PortProfileList pprofiles;
+    pprofiles = m_portAdmin.getPortProfileList();
+    std::vector<OutPortBase*> outports; 
+
+    for (::CORBA::ULong i(0), len(pprofiles.length()); i < len; ++i)
+      {
+	if (NVUtil::isStringValue(pprofiles[i].properties,
+				  "port.port_type","DataOutPort"))
+	  {
+	    try
+	      {
+		OutPortBase* op = dynamic_cast<OutPortBase*>(m_portAdmin.getPort(pprofiles[i].name));
+	      
+		if (op != 0)
+		  outports.push_back(op);
+	      }
+	    catch ( const std::bad_cast& e )
+	      {
+		RTC_ERROR(("failed dynamic_cast to OutPortBase in writeAll()."));
+	      }
+	  }
+      }
+
+    bool ret(true);
+    std::vector<OutPortBase*>::iterator it(outports.begin());
+    while(it != outports.end())
+      {
+	if (!((*it)->write()))
+	  {
+	    RTC_DEBUG(("The error occurred in writeAll()."));
+	    ret = false;
+	    if (!m_readAllCompletion)
+	      return false;
+	  }
+	++it;
+      }
+    return ret;
+  }
+
+  /*!
+   * @if jp
+   *
+   * @brief onExecute()実行前でのreadAll()メソッドの呼出を有効または無効にする。
+   *
+   * このメソッドをパラメータをtrueとして呼ぶ事により、onExecute()実行前に
+   * readAll()が呼出されるようになる。
+   * パラメータがfalseの場合は、readAll()呼出を無効にする。
+   *
+   * @param read(default:true) 
+   *        (readAll()メソッド呼出あり:true, readAll()メソッド呼出なし:false)
+   *
+   * @else
+   *
+   * @brief Set whether to execute the readAll() method. 
+   *
+   * Set whether to execute the readAll() method. 
+   *
+   * @param read(default:true)
+   *        (readAll() is called:true, readAll() isn't called:false)
+   * @param completion(default:false)
+   *
+   * @endif
+   */
+  void RTObject_impl::setReadAll(bool read, bool completion)
+  {
+    m_readAll = read;
+    m_readAllCompletion = completion;
+  }
+
+  /*!
+   * @if jp
+   *
+   * @brief onExecute()実行後にwriteAll()メソッドの呼出を有効または無効にする。
+   *
+   * このメソッドをパラメータをtrueとして呼ぶ事により、onExecute()実行後に
+   * writeAll()が呼出されるようになる。
+   * パラメータがfalseの場合は、writeAll()呼出を無効にする。
+   *
+   * @param write(default:true) 
+   *        (writeAll()メソッド呼出あり:true, writeAll()メソッド呼出なし:false)
+   *
+   * @else
+   *
+   * @brief Set whether to execute the writeAll() method. 
+   *
+   * Set whether to execute the writeAll() method. 
+   *
+   * @param write(default:true)
+   *        (writeAll() is called:true, writeAll() isn't called:false)
+   * @param completion(default:false)
+   *
+   * @endif
+   */
+  void RTObject_impl::setWriteAll(bool write, bool completion)
+  {
+    m_writeAll = write;
+    m_writeAllCompletion = completion;
+  }
+
   /*!
    * @if jp
    * @brief 全 Port の登録を削除する

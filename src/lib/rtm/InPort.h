@@ -416,7 +416,7 @@ namespace RTC
      *        理由としては、バッファ設定の不整合、例外の発生などが考えられる
      *        が通常は起こりえないためバグの可能性がある。
      *
-     * @return 読み出したデータ
+     * @return 読み出し結果(読み出し成功:true, 読み出し失敗:false)
      *
      * @else
      *
@@ -436,11 +436,11 @@ namespace RTC
      *   is reset, and if OnUnderflow is already set, this will be invoked to 
      *   return.
      *
-     * @return Readout data
+     * @return Readout result (Successful:true, Failed:false)
      *
      * @endif
      */
-    DataType read()
+    bool read()
     {
       RTC_TRACE(("DataType read()"))
 
@@ -453,7 +453,7 @@ namespace RTC
       if (m_connectors.size() == 0)
         {
           RTC_DEBUG(("no connectors"));
-          return m_value;
+          return false;
         }
 
       cdrMemoryStream cdr;
@@ -467,24 +467,25 @@ namespace RTC
             {
               m_value = (*m_OnReadConvert)(m_value);
               RTC_DEBUG(("OnReadConvert called"));
-              return m_value;
+              return true;
             }
-          return m_value;
+          return true;
         }
       else if (ret == BUFFER_EMPTY)
         {
           RTC_WARN(("buffer empty"));
-          return m_value;
+          return false;
         }
       else if (ret == BUFFER_TIMEOUT)
         {
           RTC_WARN(("buffer read timeout"));
-          return m_value;
+          return false;
         }
       RTC_ERROR(("unknown retern value from buffer.read()"));
-      return m_value;
+      return false;
     }
     
+
     /*!
      * @if jp
      *
@@ -534,7 +535,8 @@ namespace RTC
      */
     void operator>>(DataType& rhs)
     {
-      rhs = read();
+      this->read();
+      rhs = m_value;
       return;
     }
     
