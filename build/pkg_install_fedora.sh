@@ -16,9 +16,8 @@
 # パッケージリスト
 #---------------------------------------
 omni="omniORB omniORB-devel omniORB-doc omniORB-servers omniORB-utils omniORB-bootscripts"
-ace="ace ace-devel"
 openrtm="OpenRTM-aist OpenRTM-aist-devel OpenRTM-aist-doc OpenRTM-aist-example PyYAML"
-packages="gcc-c++ $omni $ace $openrtm"
+packages="gcc-c++ $omni $openrtm"
 
 
 #----------------------------------------
@@ -79,20 +78,55 @@ create_repo() {
 #----------------------------------------
 # パッケージインストール関数
 #----------------------------------------
+#install_packages () {
+#    for p in $*; do
+#	ins=`rpm -qa $p`
+#	rpm -qa $p	
+#	if test "x$ins" = "x"; then
+#	    echo "Now installing: " $p
+#	    echo"haru yum install---" $p
+#	    echo "done."
+#	    echo ""
+#	else
+#	    echo $p "is already installed."
+#	    echo ""
+#	fi
+#    done
+#}
+
 install_packages () {
     for p in $*; do
-	ins=`rpm -qa $p`
-	if test "x$ins" = "x"; then
-	    echo "Now installing: " $p
-	    yum install $p
-	    echo "done."
-	    echo ""
+	if test "x$p" = "x0.4.2" || test "x$p" = "x0.4.2" ; then
+	    :
 	else
-	    echo $p "is already installed."
-	    echo ""
+	    if echo "$p" | grep -q '=0.4.2' ; then
+		str=`echo "$p" |sed 's/=0.4.2//'`
+	    else 
+		str="$p"
+	    fi
+
+	    ins=`rpm -qa $str`
+
+	    if test "x$ins" = "x"; then
+		echo "Now installing: " $p
+		yum install $p
+		echo "done."
+		echo ""
+	    else  
+		if echo "$ins" |grep -q '0.4.2-0' ; then
+			yum install $p
+			echo "done." 
+			echo ""
+	       else 
+ 		    echo $ins
+		    echo $str "is already installed."
+		    echo ""
+		fi
+	    fi
 	fi
     done
 }
+
 
 #------------------------------------------------------------
 # リストを逆順にする
