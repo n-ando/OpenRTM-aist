@@ -37,7 +37,7 @@ namespace RTC
    *
    * @else
    * @class OutPortConnector
-   * @brief I£ÓPortConnector base class
+   * @brief OutPortConnector base class
    *
    * The base class to derive subclasses for OutPort's Push/Pull Connectors
    *
