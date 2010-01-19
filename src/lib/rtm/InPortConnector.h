@@ -36,7 +36,7 @@ namespace RTC
    *
    * @else
    * @class InPortConnector
-   * @brief I£ÓPortConnector base class
+   * @brief InPortConnector base class
    *
    * The base class to derive subclasses for InPort's Push/Pull Connectors
    *
