@@ -6,8 +6,10 @@
 ##---------------------------------------------------------------------------
 clean-local:
 	rm -rf Debug Release
-	rm -rf *~ *.cpp *.h *.idl rtc.conf
+	rm -rf *~ *.cpp *.h *.hh *.cc *.idl rtc.conf
 	rm -rf *.vcproj *.user *.ncb *.suo
+	rm -rf MyServiceProvider MyServiceProviderComp
+	rm -rf MyServiceConsumer MyServiceConsumerComp
 
 src:
 	cp -p $(top_srcdir)/examples/SimpleService/*.cpp .

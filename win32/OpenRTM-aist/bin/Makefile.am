@@ -18,7 +18,7 @@ WINLIBS = libRTCSkel.lib \
 	coild.dll
 
 clean-local:
-	rm -f *~ *.dll *.lib
+	rm -f *~ *.dll *.lib *.exe
 	rm -rf *~ *.py
 
 copy_scripts:
