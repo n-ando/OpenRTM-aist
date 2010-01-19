@@ -2473,6 +2473,119 @@ namespace RTC
     /*!
      * @if jp
      *
+     * @brief 全 InPort のデータを読み込む。
+     *
+     * RTC が保持する全ての InPort のデータを読み込む。
+     *
+     * @return 読み込み結果(全ポートの読み込み成功:true，失敗:false)
+     *
+     * @else
+     *
+     * @brief Readout the value from All InPorts.
+     *
+     * This operation read the value from all InPort
+     * registered in the RTC.
+     *
+     * @return result (Successful:true, Failed:false)
+     *
+     * @endif
+     */
+    bool readAll();
+
+    /*!
+     * @if jp
+     *
+     * @brief 全 OutPort のwrite()メソッドをコールする。
+     *
+     * RTC が保持する全ての OutPort のwrite()メソッドをコールする。
+     *
+     * @return 読み込み結果(全ポートへの書き込み成功:true，失敗:false)
+     *
+     * @else
+     *
+     * @brief The write() method of all OutPort is called. 
+     *
+     * This operation call the write() method of all OutPort
+     * registered in the RTC.
+     *
+     * @return result (Successful:true, Failed:false)
+     *
+     * @endif
+     */
+    bool writeAll();
+
+    /*!
+     * @if jp
+     *
+     * @brief onExecute()実行前でのreadAll()メソッドの呼出を有効または無効にする。
+     *
+     * このメソッドをパラメータをtrueとして呼ぶ事により、onExecute()実行前に
+     * readAll()が呼出されるようになる。
+     * パラメータがfalseの場合は、readAll()呼出を無効にする。
+     *
+     * @param read(default:true) 
+     *        (readAll()メソッド呼出あり:true, readAll()メソッド呼出なし:false)
+     *
+     * @param completion(default:false) 
+     *    readAll()にて、どれかの一つのInPortのread()が失敗しても全てのInPortのread()を呼び出す:true,
+     *    readAll()にて、どれかの一つのInPortのread()が失敗した場合、すぐにfalseで抜ける:false
+     *
+     * @else
+     *
+     * @brief Set whether to execute the readAll() method. 
+     *
+     * Set whether to execute the readAll() method. 
+     *
+     * @param read(default:true)
+     *        (readAll() is called:true, readAll() isn't called:false)
+     *
+     * @param completion(default:false)
+     *     All InPort::read() calls are completed.:true,
+     *     If one InPort::read() is False, return false.:false
+     *
+     * @param completion(default:false)
+     *
+     * @endif
+     */
+    void setReadAll(bool read=true, bool completion=false);
+
+    /*!
+     * @if jp
+     *
+     * @brief onExecute()実行後にwriteAll()メソッドの呼出を有効または無効にする。
+     *
+     * このメソッドをパラメータをtrueとして呼ぶ事により、onExecute()実行後に
+     * writeAll()が呼出されるようになる。
+     * パラメータがfalseの場合は、writeAll()呼出を無効にする。
+     *
+     * @param write(default:true) 
+     *        (writeAll()メソッド呼出あり:true, writeAll()メソッド呼出なし:false)
+     *
+     * @param completion(default:false) 
+     *    writeAll()にて、どれかの一つのOutPortのwrite()が失敗しても全てのOutPortのwrite()を呼び出しを行う:true,
+     *    writeAll()にて、どれかの一つのOutPortのwrite()が失敗した場合、すぐにfalseで抜ける:false
+     *
+     * @else
+     *
+     * @brief Set whether to execute the writeAll() method. 
+     *
+     * Set whether to execute the writeAll() method. 
+     *
+     * @param write(default:true)
+     *        (writeAll() is called:true, writeAll() isn't called:false)
+     *
+     * @param completion(default:false)
+     *     All OutPort::write() calls are completed.:true,
+     *     If one OutPort::write() is False, return false.:false
+     *
+     * @endif
+     */
+    void setWriteAll(bool write=true, bool completion=false);
+
+
+    /*!
+     * @if jp
+     *
      * @brief 全 Port の登録を削除する
      *
      * RTC が保持する全ての Port を削除する。
@@ -2710,6 +2823,28 @@ namespace RTC
      */
     ConfigAdmin m_configsets;
     
+
+    /*!
+     * @if jp
+     * @brief readAll()呼出用のフラグ
+     * @else
+     * @brief flag for readAll()
+     * @endif
+     */
+    bool m_readAll;
+
+    /*!
+     * @if jp
+     * @brief writeAll()呼出用のフラグ
+     * @else
+     * @brief flag for writeAll()
+     * @endif
+     */
+    bool m_writeAll;
+
+    bool m_readAllCompletion;
+    bool m_writeAllCompletion;
+
     //------------------------------------------------------------
     // Functor
     //------------------------------------------------------------
