@@ -12,12 +12,11 @@
 # パッケージリスト
 #---------------------------------------
 omni="libomniorb4 libomniorb4-dev omniidl4 omniorb4-nameserver"
-ace="libace libace-dev"
 openrtm="openrtm-aist openrtm-aist-doc openrtm-aist-dev openrtm-aist-example"
 pyyaml="python-support python-yaml"
 devel="gcc g++ make uuid-dev"
-packages="$devel $omni $ace $pyyaml $openrtm"
-u_packages="$omni $ace $openrtm "
+packages="$devel $omni $pyyaml $openrtm"
+u_packages="$omni $openrtm "
 
 #---------------------------------------
 # ロケールの言語確認
