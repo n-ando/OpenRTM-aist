@@ -8,6 +8,7 @@ clean-local:
 	rm -rf Debug Release
 	rm -rf *~ *.cpp *.h *.idl rtc.conf
 	rm -rf *.vcproj *.user *.ncb *.suo
+	rm -rf ConsoleIn ConsoleInComp ConsoleOut ConsoleOutComp
 
 src:
 	cp -p $(top_srcdir)/examples/SimpleIO/*.cpp .

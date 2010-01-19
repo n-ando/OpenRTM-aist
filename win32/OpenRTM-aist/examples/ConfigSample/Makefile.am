@@ -8,6 +8,7 @@ clean-local:
 	rm -rf Debug Release
 	rm -rf *~ *.cpp *.h *.idl *.conf
 	rm -rf *.vcproj *.user *.ncb *.suo
+	rm -rf ConfigSample ConfigSampleComp
 
 src:
 	cp -p $(top_srcdir)/examples/ConfigSample/*.cpp .

@@ -9,6 +9,7 @@ SUBDIRS = bin etc build docs examples utils coil rtm installer .
 
 clean-local:
 	rm -f *~ *.sln *.yaml *.ncb *.suo *.user
+	rm -rf components
 
 
 sln: OpenRTM-aist_vc8.sln OpenRTM-aist_vc9.sln coil_distbuild.vsprops

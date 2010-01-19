@@ -11,7 +11,8 @@ RTM_SHORT_VERSION = @RTM_SHORT_VERSION@
 
 clean-local:
 	rm -rf Debug Release
-	rm -f *~ *.cpp *.h *.cc *.hh *.sln *.suo *.ncb *.user *.vcproj
+	rm -f *~ *.cpp *.h *.cc *.hh
+	rm -f *.sln *.suo *.ncb *.user *.vcproj *.def
 
 src:
 	cp -p $(top_srcdir)/src/lib/rtm/*.cpp .
