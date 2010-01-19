@@ -171,7 +171,7 @@ namespace RTC
         return m_retcode;
       }
 
-    if (m_retcode == BUFFER_FULL)
+    if (m_retcode == SEND_FULL)
       {
         RTC_DEBUG(("write(): InPort buffer is full."));
         m_buffer->write(data, sec, usec);
