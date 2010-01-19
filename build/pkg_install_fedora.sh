@@ -78,22 +78,6 @@ create_repo() {
 #----------------------------------------
 # パッケージインストール関数
 #----------------------------------------
-#install_packages () {
-#    for p in $*; do
-#	ins=`rpm -qa $p`
-#	rpm -qa $p	
-#	if test "x$ins" = "x"; then
-#	    echo "Now installing: " $p
-#	    echo"haru yum install---" $p
-#	    echo "done."
-#	    echo ""
-#	else
-#	    echo $p "is already installed."
-#	    echo ""
-#	fi
-#    done
-#}
-
 install_packages () {
     for p in $*; do
 	if test "x$p" = "x0.4.2" || test "x$p" = "x0.4.2" ; then
