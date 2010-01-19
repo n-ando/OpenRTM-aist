@@ -287,6 +287,30 @@ namespace RTC
 
     /*!
      * @if jp
+     *
+     * @brief データ書き込み
+     *
+     * ポートへデータを書き込む。
+     * バインドされた変数に設定された値をポートに書き込む。
+     *
+     * @return 書き込み処理結果(書き込み成功:true、書き込み失敗:false)
+     *
+     * @else
+     *
+     * @brief Write data
+     *
+     * Write data to the port.
+     * Write the value, which was set to the bound variable, to the port.
+     *
+     * @return Writing result (Successful:true, Failed:false)
+     *
+     * @endif
+     */
+    virtual bool write() = 0;
+
+
+    /*!
+     * @if jp
      * @brief OutPort名称の取得
      *
      * OutPortの名称を取得する。

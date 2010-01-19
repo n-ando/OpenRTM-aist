@@ -124,6 +124,15 @@ namespace RTC
 
     /*!
      * @if jp
+     * @brief RTObject_impl::readAll()から呼ばれる仮想関数
+     * @else
+     * @brief It is a virtual method that is called from RTObject_impl::readAll().
+     * @endif
+     */
+    virtual bool read() = 0;
+
+    /*!
+     * @if jp
      * @brief プロパティを取得する
      * @else
      * @brief Get properties
