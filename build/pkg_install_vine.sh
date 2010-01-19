@@ -23,10 +23,9 @@ openrtm_repo="rpm     http://www.openrtm.org/pub/Linux/Vine/apt $vinever/\$(ARCH
 # パッケージリスト
 #---------------------------------------
 omni="omniORB omniORB-devel omniORB-servers omniORB-doc"
-ace="ace ace-devel"
 openrtm="OpenRTM-aist OpenRTM-aist-devel OpenRTM-aist-doc OpenRTM-aist-example PyYAML"
 libuuid="e2fsprogs e2fsprogs-devel"
-packages="$libuuid $omni $ace $openrtm"
+packages="$libuuid $omni $openrtm"
 
 
 
@@ -69,18 +68,37 @@ update_source_list () {
 #----------------------------------------
 install_packages () {
     for p in $*; do
-	ins=`rpm -qa $p`
-	if test "x$ins" = "x"; then
-	    echo "Now installing: " $p
-	    apt-get install $p
-	    echo "done."
-	    echo ""
+	if test "x$p" = "x0.4.2" ; then
+	    :
 	else
-	    echo $p "is already installed."
-	    echo ""
+	    if echo "$p" | grep -q '=0.4.2' ; then
+		str=`echo "$p" |sed 's/=0.4.2//'`
+	    else 
+		str="$p"
+	    fi
+
+	    ins=`rpm -qa $str`
+
+	    if test "x$ins" = "x"; then
+		echo "Now installing: " $p
+		apt-get install $p
+		echo "done."
+		echo ""
+	    else  
+		if echo "$ins" |grep -q '0.4.2-0' ; then
+			apt-get install $p
+			echo "done." 
+			echo ""
+	       else 
+ 		    echo $ins
+		    echo $str "is already installed."
+		    echo ""
+		fi
+	    fi
 	fi
     done
 }
+
 
 #------------------------------------------------------------
 # リストを逆順にする
