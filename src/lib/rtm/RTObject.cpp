@@ -1673,6 +1673,7 @@ namespace RTC
     PortProfileList pprofiles;
     pprofiles = m_portAdmin.getPortProfileList();
     std::vector<InPortBase*> inports; 
+    bool ret(true);
 
     for (::CORBA::ULong i(0), len(pprofiles.length()); i < len; ++i)
       {
@@ -1683,27 +1684,19 @@ namespace RTC
 	      {
 		InPortBase* ip = dynamic_cast<InPortBase*>(m_portAdmin.getPort(pprofiles[i].name));
 	      
-		if (ip != 0)
-		  inports.push_back(ip);
+		if (!(ip != 0 && ip->read()))
+		  {
+		    RTC_DEBUG(("The error occurred in readAll()."));
+		    ret = false;
+		    if (!m_readAllCompletion)
+		      return false;
+		  }
 	      }
 	    catch ( const std::bad_cast& e )
 	      {
 		RTC_ERROR(("failed dynamic_cast to InPortBase in readAll()."));
 	      }
 	  }
-      }
-    bool ret(true);
-    std::vector<InPortBase*>::iterator it(inports.begin());
-    while(it != inports.end())
-      {
-	if (!((*it)->read()))
-	  {
-	    RTC_DEBUG(("The error occurred in readAll()."));
-	    ret = false;
-	    if (!m_readAllCompletion)
-	      return false;
-	  }
-	++it;
       }
 
     return ret;
@@ -1752,7 +1745,7 @@ namespace RTC
 	  {
 	    RTC_DEBUG(("The error occurred in writeAll()."));
 	    ret = false;
-	    if (!m_readAllCompletion)
+	    if (!m_writeAllCompletion)
 	      return false;
 	  }
 	++it;
