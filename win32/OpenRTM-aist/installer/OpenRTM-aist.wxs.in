@@ -17,7 +17,7 @@
              Compressed="{% Package.Compressed %}"
 	     SummaryCodepage='$(var.codepage)' />
     <!-- メディア -->    
-    <Media Id="1" Cabinet="OpenRTM-aist.cab" EmbedCab="yes"/>
+    <Media Id="1" Cabinet="OpenRTM.cab" EmbedCab="yes"/>
 
     <!-- フォルダ構成 -->
     <Directory Id="TARGETDIR" Name="SourceDir">
@@ -31,9 +31,9 @@
 	    <Directory Id="bin" Name="bin">
 	      <Component Id="Bin" Guid="{% Bin.GUID %}">
 		<Environment Id='RTM_ROOT' Name='RTM_ROOT' Action='set'
-			     System='no' Part='all' Value='[Version]' />
+			     System='yes' Part='all' Value='[Version]' />
 		<Environment Id='UpdatePath' Name='PATH' Action='set'
-			     System='no' Part='last'
+			     System='yes' Part='last'
 			     Value='[bin]' />
 		{% for file in Bin.Files %}
 		<File Id="{% file.Id %}"
@@ -172,7 +172,7 @@
 			 Name="rtc-template">
 		<Component Id="RtcTemplate" Guid="{% RtcTemplate.GUID %}">
 		  <Environment Id='UpdatePath2' Name='PATH' Action='set'
-			       System='no' Part='all'
+			       System='yes' Part='last'
 			       Value='[rtc_template]' />
 	      	  {% for file in RtcTemplate.Files %}
 		  <File Id="{% file.Id %}"
@@ -212,11 +212,17 @@
 	  </Directory>
 	</Directory><!--end of OpenRTM-aist-->
 
+	<!-- omniORB components -->
 	<?if $(env.INCLUDE_OMNIORB) = YES ?>
-	<Directory Id="omniORB" Name="omniORB">
 	<?include omniORB_inc.wxs ?>
-	</Directory>
 	<?endif ?>
+	<!-- end of omniORB -->
+
+	<!-- rtmtools components -->
+	<?if $(env.INCLUDE_OPENRTP) = YES ?>
+	<?include OpenRTP_inc.wxs ?>
+	<?endif ?>
+	<!-- end of rtmtools -->
 
       </Directory>
 
@@ -242,52 +248,82 @@
 	</Directory>
       </Directory>
     </Directory>
-    
-    <Feature Id="Runtime" Level="1" Title="Runtime Environment">
-      <ComponentRef Id="Bin"/>
-      <ComponentRef Id="COILs"/>
-      <ComponentRef Id="Etc"/>
 
-      <?if $(env.INCLUDE_OMNIORB) = YES ?>
-      <ComponentRef Id="Omni"/>
-      <ComponentRef Id="OmniBinScripts"/>
-      <ComponentRef Id="OmniBinX86_win32"/>
-      <?endif ?>
-    </Feature>
-    <Feature Id="Samples" Level="1" Title="Samples">
-      <ComponentRef Id="Examples"/>
-    </Feature>
-    <Feature Id="Devel" Level="1" Title="Development Environment">
-      <ComponentRef Id="Headers"/>
-      <ComponentRef Id="IDLs"/>
-      <ComponentRef Id="RtcTemplate"/>
 
-      <?if $(env.INCLUDE_OMNIORB) = YES ?>
-      <ComponentRef Id="OmniIdl"/>
-      <ComponentRef Id="OmniIdlCos"/>
-      <ComponentRef Id="OmniInclude"/>
-      <ComponentRef Id="OmniIncludeCos"/>
-      <ComponentRef Id="OmniIncludeOmniorb4"/>
-      <ComponentRef Id="OmniIncludeOmniorb4Internal"/>
-      <ComponentRef Id="OmniIncludeOmnithread"/>
-      <ComponentRef Id="OmniIncludeOmnivms"/>
-      <ComponentRef Id="OmniIncludePython1_5"/>
-      <ComponentRef Id="OmniLibPythonOmniidl"/>
-      <ComponentRef Id="OmniLibPythonOmniidl_be"/>
-      <ComponentRef Id="OmniLibPythonOmniidl_beCxx"/>
-      <ComponentRef Id="OmniLibPythonOmniidl_beCxxDynskel"/>
-      <ComponentRef Id="OmniLibPythonOmniidl_beCxxHeader"/>
-      <ComponentRef Id="OmniLibPythonOmniidl_beCxxImpl"/>
-      <ComponentRef Id="OmniLibPythonOmniidl_beCxxSkel"/>
-      <ComponentRef Id="OmniLibX86_win32"/>
-      <?endif ?>
+    <!-- OpenRTM-aist -->
+    <Feature Id="OpenRTM" Level="1" Title="OpenRTM-aist (C++)">
+      <!-- runtime -->
+      <Feature Id="Runtime" Level="1" Title="Runtime Environment">
+	<ComponentRef Id="Bin"/>
+	<ComponentRef Id="COILs"/>
+	<ComponentRef Id="Etc"/>
+      </Feature>
+      <!-- devel -->
+      <Feature Id="Devel" Level="1" Title="Development Environment">
+	<ComponentRef Id="Headers"/>
+	<ComponentRef Id="IDLs"/>
+	<ComponentRef Id="RtcTemplate"/>
+      </Feature>
+      <!-- examples -->
+      <Feature Id="Examples" Level="1" Title="Examples">
+	<ComponentRef Id="Examples"/>
+      </Feature>
+      <!-- documents -->
+      <Feature Id="Docs" Level="1" Title="Documents">
+	<Feature Id="Docs_en" Level="1" Title="Class reference (English)">
+	  <ComponentRef Id="Classref_en"/>
+	  <ComponentRef Id="IDLref_en"/>
+	</Feature>
+	<Feature Id="Docs_jp" Level="1" Title="Class reference (Japanese)">
+	  <ComponentRef Id="Classref_jp"/>
+	  <ComponentRef Id="IDLref_jp"/>
+	</Feature>
+      </Feature>
     </Feature>
-    <Feature Id="Docs" Level="1" Title="Documents">
-      <ComponentRef Id="Classref_jp"/>
-      <ComponentRef Id="Classref_en"/>
-      <ComponentRef Id="IDLref_jp"/>
-      <ComponentRef Id="IDLref_en"/>
+
+    <!-- OpenRTP tools -->
+    <?if $(env.INCLUDE_OPENRTP) = YES ?>
+    <Feature Id="OpenRTP" Level="1" Title="OpenRT Platform Tool Chain">
+      <!-- rtse rcp -->
+      <Feature Id="RTSystemEditor" Level="1" Title="RTSystemEditor">
+	<ComponentRef Id="Openrtp"/>
+	<ComponentRef Id="OpenrtpConfiguration"/>
+	<ComponentRef Id="OpenrtpPlugins"/>
+      </Feature>
     </Feature>
+    <?endif ?>
+
+    <!-- omniORB -->
+    <?if $(env.INCLUDE_OMNIORB) = YES ?>
+    <Feature Id="omniORB" Level="1" Title="omniORB">
+      <Feature Id="omniORBRuntime" Level="1"
+	       Title="Runtime Environment">
+	<ComponentRef Id="Omni"/>
+	<ComponentRef Id="OmniBinScripts"/>
+	<ComponentRef Id="OmniBinX86_win32"/>
+      </Feature>
+      <Feature Id="omniORBDevel" Level="1"
+	       Title="Development Environment">
+	<ComponentRef Id="OmniIdl"/>
+	<ComponentRef Id="OmniIdlCos"/>
+	<ComponentRef Id="OmniInclude"/>
+	<ComponentRef Id="OmniIncludeCos"/>
+	<ComponentRef Id="OmniIncludeOmniorb4"/>
+	<ComponentRef Id="OmniIncludeOmniorb4Internal"/>
+	<ComponentRef Id="OmniIncludeOmnithread"/>
+	<ComponentRef Id="OmniIncludeOmnivms"/>
+	<ComponentRef Id="OmniIncludePython1_5"/>
+	<ComponentRef Id="OmniLibPythonOmniidl"/>
+	<ComponentRef Id="OmniLibPythonOmniidl_be"/>
+	<ComponentRef Id="OmniLibPythonOmniidl_beCxx"/>
+	<ComponentRef Id="OmniLibPythonOmniidl_beCxxDynskel"/>
+	<ComponentRef Id="OmniLibPythonOmniidl_beCxxHeader"/>
+	<ComponentRef Id="OmniLibPythonOmniidl_beCxxImpl"/>
+	<ComponentRef Id="OmniLibPythonOmniidl_beCxxSkel"/>
+	<ComponentRef Id="OmniLibX86_win32"/>
+      </Feature>
+    </Feature>
+    <?endif ?>
 
     <WixVariable Id="WixUILicenseRtf" Value="License.rtf" />
     <WixVariable Id="WixUIBannerBmp" Value="Bitmaps/bannrbmp.bmp" />
