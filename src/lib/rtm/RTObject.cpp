@@ -24,7 +24,7 @@
 #include <coil/stringutil.h>
 #include <iostream>
 #include <typeinfo>
-o
+
 namespace RTC
 {
   /*!
