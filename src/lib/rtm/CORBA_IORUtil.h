@@ -19,8 +19,22 @@
 #define CORBA_IORUTIL_H
 
 #include <rtm/RTC.h>
-//#include <rtm/Manager.h>
 
+/*!
+ * @if jp
+ * @namespace CORBA_IORUtil
+ *
+ * @brief CORBA IOR ヘルパー関数
+ *
+ *
+ * @else
+ *
+ * @namespace CORBA_SeqUtil
+ *
+ * @brief CORBA IOR helper functions
+ *
+ * @endif
+ */
 namespace CORBA_IORUtil
 {
   /*!

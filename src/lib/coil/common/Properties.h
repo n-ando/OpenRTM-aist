@@ -27,6 +27,21 @@
 #include <climits>
 
 
+/*!
+ * @if jp
+ * @namespace coil 
+ *
+ * @brief Common Object Interface Layer
+ *
+ *
+ * @else
+ * @namespace coil
+ *
+ * @brief Common Object Interface Layer
+ *
+ *
+ * @endif
+ */
 namespace coil
 {
   /*!
