@@ -25,6 +25,7 @@ namespace RTC
   /*!
    * @if jp
    * @class BufferStatus mixin class
+   * @brief BufferStatus mixin クラス
    *
    * このクラスは、enum定義されたリターンコードを、バッファ関連サブクラ
    * スで共通利用するための mixin クラスである。このリターンコードを使
@@ -36,6 +37,7 @@ namespace RTC
    *
    * @else
    * @class BufferStatus mixin class
+   * @brief BufferStatus mixin class
    *
    * This is a mixin class to provide enumed return codes that are
    * commonly utilised in buffer realted sub-classes. To use this
@@ -52,7 +54,7 @@ namespace RTC
   public:
     /*!
      * @if jp
-     * brief DataPortStatus リターンコード
+     * @brief DataPortStatus リターンコード
      *
      * データポート関連のクラスで共通のリターンコード
      *
@@ -90,6 +92,29 @@ namespace RTC
         PRECONDITION_NOT_MET
       };
 
+    /*!
+     * @if jp
+     *
+     * @brief DataPortStatus リターンコードを文字列に変換
+     *
+     * DataPortStatus リターンコードを文字列に変換する
+     *
+     * @param status 変換対象 DataPortStatus リターンコード
+     *
+     * @return 文字列変換結果
+     *
+     * @else
+     *
+     * @brief Convert DataPortStatus into the string.
+     *
+     * Convert DataPortStatus into the string.
+     *
+     * @param status The target DataPortStatus for transformation
+     *
+     * @return Trnasformation result of string representation
+     *
+     * @endif
+     */
     static const char* toString(Enum status)
     {
       const char* str[] = {
