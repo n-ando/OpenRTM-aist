@@ -48,6 +48,7 @@ nodist_InPortTests_SOURCES =     \
 	$(top_srcdir)/src/lib/rtm/InPortBase.cpp                 \
 	$(top_srcdir)/src/lib/rtm/InPortConnector.cpp            \
 	$(top_srcdir)/src/lib/rtm/InPortPullConnector.cpp        \
+	$(top_srcdir)/src/lib/rtm/ConnectorListener.cpp      \
 	InPortTests.cpp
 
 
