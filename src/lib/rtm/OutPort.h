@@ -300,7 +300,7 @@ namespace RTC
 
       // check number of connectors
       size_t conn_size(m_connectors.size());
-      if (!(conn_size > 0)) { return true; }
+      if (!(conn_size > 0)) { return false; }
         
       bool result(true);
       m_status.resize(conn_size);
