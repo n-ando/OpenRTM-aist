@@ -98,6 +98,29 @@ namespace RTC
   class ConnectorDataListener
   {
   public:
+    /*!
+     * @if jp
+     *
+     * @brief ConnectorDataListenerType を文字列に変換
+     *
+     * ConnectorDataListenerType を文字列に変換する
+     *
+     * @param type 変換対象 ConnectorDataListenerType
+     *
+     * @return 文字列変換結果
+     *
+     * @else
+     *
+     * @brief Convert ConnectorDataListenerType into the string.
+     *
+     * Convert ConnectorDataListenerType into the string.
+     *
+     * @param type The target ConnectorDataListenerType for transformation
+     *
+     * @return Trnasformation result of string representation
+     *
+     * @endif
+     */
     static const char* toString(ConnectorDataListenerType type)
     {
       static const char* typeString[] =
@@ -118,7 +141,26 @@ namespace RTC
       return "";
     }
 
+    /*!
+     * @if jp
+     * @brief デストラクタ
+     * @else
+     * @brief Destructor
+     * @endif
+     */
     virtual ~ConnectorDataListener();
+
+    /*!
+     * @if jp
+     *
+     * @brief 仮想コールバックメソッド
+     *
+     * @else
+     *
+     * @brief Virtual Callback method
+     *
+     * @endif
+     */
     virtual void operator()(const ConnectorInfo& info,
                             const cdrMemoryStream& data) = 0;
   };
@@ -154,7 +196,26 @@ namespace RTC
     : public ConnectorDataListener
   {
   public:
+    /*!
+     * @if jp
+     * @brief デストラクタ
+     * @else
+     * @brief Destructor
+     * @endif
+     */
     virtual ~ConnectorDataListenerT(){}
+
+    /*!
+     * @if jp
+     *
+     * @brief コールバックメソッド
+     *
+     * @else
+     *
+     * @brief Callback method
+     *
+     * @endif
+     */
     virtual void operator()(const ConnectorInfo& info,
                             const cdrMemoryStream& cdrdata)
     {
@@ -179,6 +240,17 @@ namespace RTC
       this->operator()(info, data);
     }
 
+    /*!
+     * @if jp
+     *
+     * @brief 仮想コールバックメソッド
+     *
+     * @else
+     *
+     * @brief Virtual Callback method
+     *
+     * @endif
+     */
     virtual void operator()(const ConnectorInfo& info,
                             const DataType& data) = 0;
                             
@@ -243,6 +315,29 @@ namespace RTC
   class ConnectorListener
   {
   public:
+    /*!
+     * @if jp
+     *
+     * @brief ConnectorListenerType を文字列に変換
+     *
+     * ConnectorListenerType を文字列に変換する
+     *
+     * @param type 変換対象 ConnectorListenerType
+     *
+     * @return 文字列変換結果
+     *
+     * @else
+     *
+     * @brief Convert ConnectorListenerType into the string.
+     *
+     * Convert ConnectorListenerType into the string.
+     *
+     * @param type The target ConnectorListenerType for transformation
+     *
+     * @return Trnasformation result of string representation
+     *
+     * @endif
+     */
     static const char* toString(ConnectorListenerType type)
     { 
       static const char* typeStr[] =
@@ -260,7 +355,26 @@ namespace RTC
       return "";
     }
 
+    /*!
+     * @if jp
+     * @brief デストラクタ
+     * @else
+     * @brief Destructor
+     * @endif
+     */
     virtual ~ConnectorListener();
+
+    /*!
+     * @if jp
+     *
+     * @brief 仮想コールバックメソッド
+     *
+     * @else
+     *
+     * @brief Virtual Callback method
+     *
+     * @endif
+     */
     virtual void operator()(const ConnectorInfo& info) = 0;
   };
 
@@ -284,13 +398,60 @@ namespace RTC
   {
     typedef std::pair<ConnectorDataListener*, bool> Entry;
   public:
+    /*!
+     * @if jp
+     * @brief コンストラクタ
+     * @else
+     * @brief Constructor
+     * @endif
+     */
     ConnectorDataListenerHolder();
+    /*!
+     * @if jp
+     * @brief デストラクタ
+     * @else
+     * @brief Destructor
+     * @endif
+     */
     virtual ~ConnectorDataListenerHolder();
     
+    /*!
+     * @if jp
+     *
+     * @brief リスナーの追加
+     *
+     * @else
+     *
+     * @brief Add the listener.
+     *
+     * @endif
+     */
     void addListener(ConnectorDataListener* listener, bool autoclean);
     
+    /*!
+     * @if jp
+     *
+     * @brief リスナーの削除
+     *
+     * @else
+     *
+     * @brief Remove the listener. 
+     *
+     * @endif
+     */
     void removeListener(ConnectorDataListener* listener);
     
+    /*!
+     * @if jp
+     *
+     * @brief リスナーへ通知する
+     *
+     * @else
+     *
+     * @brief Notify listeners. 
+     *
+     * @endif
+     */
     void notify(const ConnectorInfo& info,
                 const cdrMemoryStream& cdrdata);
     
@@ -318,14 +479,61 @@ namespace RTC
   {
     typedef std::pair<ConnectorListener*, bool> Entry;
   public:
+    /*!
+     * @if jp
+     * @brief コンストラクタ
+     * @else
+     * @brief Constructor
+     * @endif
+     */
     ConnectorListenerHolder();
     
+    /*!
+     * @if jp
+     * @brief デストラクタ
+     * @else
+     * @brief Destructor
+     * @endif
+     */
     virtual ~ConnectorListenerHolder();
     
+    /*!
+     * @if jp
+     *
+     * @brief リスナーの追加
+     *
+     * @else
+     *
+     * @brief Add the listener.
+     *
+     * @endif
+     */
     void addListener(ConnectorListener* listener, bool autoclean);
     
+    /*!
+     * @if jp
+     *
+     * @brief リスナーの削除
+     *
+     * @else
+     *
+     * @brief Remove the listener. 
+     *
+     * @endif
+     */
     void removeListener(ConnectorListener* listener);
 
+    /*!
+     * @if jp
+     *
+     * @brief リスナーへ通知する
+     *
+     * @else
+     *
+     * @brief Notify listeners. 
+     *
+     * @endif
+     */
     void notify(const ConnectorInfo& info);
       
   private:
@@ -348,7 +556,25 @@ namespace RTC
   class ConnectorListeners
   {
   public:
+    /*!
+     * @if jp
+     * @brief ConnectorDataListenerTypeリスナ配列
+     * ConnectorDataListenerTypeリスナを格納
+     * @else
+     * @brief ConnectorDataListenerType listener array
+     * The ConnectorDataListenerType listener is stored.
+     * @endif
+     */
     ConnectorDataListenerHolder connectorData_[CONNECTOR_DATA_LISTENER_NUM];
+    /*!
+     * @if jp
+     * @brief ConnectorListenerTypeリスナ配列
+     * ConnectorListenerTypeリスナを格納
+     * @else
+     * @brief ConnectorListenerType listener array
+     * The ConnectorListenerType listener is stored. 
+     * @endif
+     */
     ConnectorListenerHolder connector_[CONNECTOR_LISTENER_NUM];
   }
 ;
