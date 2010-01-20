@@ -40,10 +40,11 @@ data = [
     ("src",                               "GNUmakefile")
 ]
 
-#data = [("",                     omni_files)]
+import os
+base_dir = os.getenv("OMNI_ROOT")
+if base_dir == "":
+    base_dir="C:\\Program Files\\omniORB-4.1.4\\"
 
-base_dir="C:\\Program Files\\omniORB-4.1.4\\"
-#base_dir="C:/Program Files/omniORB-4.1.4/"
 
 def path_to_dir_id(path, prefix):
     # path = "bin/x86_win32" prefix = "omni"
@@ -74,7 +75,6 @@ for (path, files) in data:
 
     # full path to target directory
     full_path = base_dir + path
-#    print "Full path: " + full_path
 
     import glob
     flist = []
@@ -91,7 +91,7 @@ for (path, files) in data:
 
 
 cmd = ["wxs",
-       "-o", "omniORB.wxs",
-       "-i", "omniORB.wxs.in"]
+       "-o", "omniORB_inc.wxs",
+       "-i", "omniORB_inc.wxs.in"]
 cmd += glob.glob("*.yaml")
 makewxs.main(cmd)

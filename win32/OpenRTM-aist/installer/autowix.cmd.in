@@ -45,6 +45,34 @@ if "x%WIX%" == "x" (
 )
 
 @rem ------------------------------------------------------------
+@rem Generate omniORB's wxs file
+@rem ------------------------------------------------------------
+if "x%OMNI_ROOT%" == "x" (
+   set INCLUDE_OMNIORB=NO
+) ELSE (
+   set INCLUDE_OMNIORB=YES
+}
+
+if not exist omniORB_inc.wxs (
+   set PYTHONPATH=../bin;%PYTHONPATH%
+   echo Generating omniORB_inc.wxs......
+   omniwxs.py
+)
+
+@rem ------------------------------------------------------------
+@rem RTSystemEditor
+@rem ------------------------------------------------------------
+if "x%RTSERCP_DIR%" == "x" (
+   set INCLUDE_OPENRTP=NO
+) else (
+  if exist %RTSERCP_DIR%\rtse.exe (
+     set INCLUDE_OPENRTP=YES
+  ) else (
+   set INCLUDE_OPENRTP=NO
+  )
+)
+
+@rem ------------------------------------------------------------
 @rem Import Language-Country, Language codes, Codepages
 @rem from langs.txt
 @rem http://www.tramontana.co.hu/wix/lesson2.php#2.4
