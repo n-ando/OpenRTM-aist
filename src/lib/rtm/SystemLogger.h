@@ -34,6 +34,17 @@ namespace RTC
   typedef ::coil::LogStreamBuffer LogStreamBuf;
   typedef ::coil::LogStream LogStream;
 
+  /*!
+   * @if jp
+   * @class Logger
+   * @brief Logger епеще╣
+   *
+   * @else
+   * @class Logger
+   * @brief Logger class
+   *
+   * @endif
+   */
   class Logger
     : public coil::LogStream
   {

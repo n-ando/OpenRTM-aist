@@ -31,7 +31,7 @@ namespace RTC
   // callback functor base classes
   /*!
    * @if jp
-   * @class ConnectCallback
+   * @class ConnectionCallback
    * @brief connect/notify_connect() 時のコールバック抽象クラス
    *
    * Portに対してconnect/notify_connect() 等が呼び出される時に呼び出される
@@ -42,7 +42,7 @@ namespace RTC
    * @since 1.0.0
    *
    * @else
-   * @class ConnectCallback
+   * @class ConnectionCallback
    * @brief Callback functor abstract for connect/notify_connect() funcs
    *
    * This is the interface for callback functor for connect/notify_connect()

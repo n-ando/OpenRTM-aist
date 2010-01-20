@@ -41,45 +41,267 @@
  */
 namespace RTC
 {
+  /*!
+   * @if jp
+   * @class OnUpdateCallback
+   * @brief OnUpdate コールバック抽象クラス
+   *
+   * @else
+   * @class OnUpdateCallback
+   * @brief Callback functor abstract for OnUpdate
+   *
+   * @endif
+   */
   class OnUpdateCallback
   {
   public:
+    /*!
+     * @if jp
+     *
+     * @brief 仮想デストラクタ
+     *
+     * 仮想デストラクタ。
+     *
+     * @else
+     *
+     * @brief Virtual destructor
+     *
+     * Virtual Destructor
+     *
+     * @endif
+     */
     virtual ~OnUpdateCallback(void){};
+    /*!
+     * @if jp
+     *
+     * @brief 仮想コールバックメソッド
+     *
+     * @else
+     *
+     * @brief Virtual Callback method
+     *
+     * @endif
+     */
     virtual void operator()(const char* config_set) = 0;
   };
 
+  /*!
+   * @if jp
+   * @class OnUpdateParamCallback
+   * @brief OnUpdateParam コールバック抽象クラス
+   *
+   * @else
+   * @class OnUpdateParamCallback
+   * @brief Callback functor abstract for OnUpdateParam
+   *
+   * @endif
+   */
   class OnUpdateParamCallback
   {
   public:
+    /*!
+     * @if jp
+     *
+     * @brief 仮想デストラクタ
+     *
+     * 仮想デストラクタ。
+     *
+     * @else
+     *
+     * @brief Virtual destructor
+     *
+     * Virtual Destructor
+     *
+     * @endif
+     */
     virtual ~OnUpdateParamCallback(void){};
+    /*!
+     * @if jp
+     *
+     * @brief 仮想コールバックメソッド
+     *
+     * @else
+     *
+     * @brief Virtual Callback method
+     *
+     * @endif
+     */
     virtual void operator()(const char* config_set, const char* config_param) = 0;
   };
 
+  /*!
+   * @if jp
+   * @class OnSetConfigurationSetCallback
+   * @brief OnSetConfigurationSet コールバック抽象クラス
+   *
+   * @else
+   * @class OnSetConfigurationSetCallback
+   * @brief Callback functor abstract for OnSetConfigurationSet
+   *
+   * @endif
+   */
   class OnSetConfigurationSetCallback
   {
   public:
+    /*!
+     * @if jp
+     *
+     * @brief 仮想デストラクタ
+     *
+     * 仮想デストラクタ。
+     *
+     * @else
+     *
+     * @brief Virtual destructor
+     *
+     * Virtual Destructor
+     *
+     * @endif
+     */
     virtual ~OnSetConfigurationSetCallback(void){};
+    /*!
+     * @if jp
+     *
+     * @brief 仮想コールバックメソッド
+     *
+     * @else
+     *
+     * @brief Virtual Callback method
+     *
+     * @endif
+     */
     virtual void operator()(const coil::Properties& config_set) = 0;
   };
 
+  /*!
+   * @if jp
+   * @class OnAddConfigurationAddCallback
+   * @brief OnAddConfigurationAdd コールバック抽象クラス
+   *
+   * @else
+   * @class OnAddConfigurationAddCallback
+   * @brief callback functor abstract for OnAddConfigurationAdd
+   *
+   * @endif
+   */
   class OnAddConfigurationAddCallback
   {
   public:
+    /*!
+     * @if jp
+     *
+     * @brief 仮想デストラクタ
+     *
+     * 仮想デストラクタ。
+     *
+     * @else
+     *
+     * @brief Virtual destructor
+     *
+     * Virtual Destructor
+     *
+     * @endif
+     */
     virtual ~OnAddConfigurationAddCallback(void){};
+    /*!
+     * @if jp
+     *
+     * @brief 仮想コールバックメソッド
+     *
+     * @else
+     *
+     * @brief Virtual Callback method
+     *
+     * @endif
+     */
     virtual void operator()(const coil::Properties& config_set) = 0;
   };
 
+  /*!
+   * @if jp
+   * @class OnRemoveConfigurationSetCallback
+   * @brief OnRemoveConfigurationSet コールバック抽象クラス
+   *
+   * @else
+   * @class OnRemoveConfigurationSetCallback
+   * @brief Callback functor abstract for OnRemoveConfigurationSet
+   *
+   * @endif
+   */
   class OnRemoveConfigurationSetCallback
   {
   public:
+    /*!
+     * @if jp
+     *
+     * @brief 仮想デストラクタ
+     *
+     * 仮想デストラクタ。
+     *
+     * @else
+     *
+     * @brief Virtual destructor
+     *
+     * Virtual Destructor
+     *
+     * @endif
+     */
     virtual ~OnRemoveConfigurationSetCallback(void){};
+    /*!
+     * @if jp
+     *
+     * @brief 仮想コールバックメソッド
+     *
+     * @else
+     *
+     * @brief Virtual Callback method
+     *
+     * @endif
+     */
     virtual void operator()(const char* config_set) = 0;
   };
 
+  /*!
+   * @if jp
+   * @class OnActivateSetCallback
+   * @brief OnActivateSet コールバック抽象クラス
+   *
+   * @else
+   * @class OnActivateSetCallback
+   * @brief Callback functor abstract for OnActivateSet
+   *
+   * @endif
+   */
   class OnActivateSetCallback
   {
   public:
+    /*!
+     * @if jp
+     *
+     * @brief 仮想デストラクタ
+     *
+     * 仮想デストラクタ。
+     *
+     * @else
+     *
+     * @brief Virtual destructor
+     *
+     * Virtual Destructor
+     *
+     * @endif
+     */
     virtual ~OnActivateSetCallback(void){};
+    /*!
+     * @if jp
+     *
+     * @brief 仮想コールバックメソッド
+     *
+     * @else
+     *
+     * @brief Virtual Callback method
+     *
+     * @endif
+     */
     virtual void operator()(const char* config_id) = 0;
   };
 
