@@ -1252,6 +1252,24 @@ namespace RTC
      */
     bool activateConfigurationSet(const char* config_id);
 
+    /*!
+     * @if jp
+     *
+     * @brief OnUpdate のコールバックの設定
+     *
+     * OnUpdate で呼ばれるコールバックのオブジェクトを設定する。
+     * 
+     * @param cb OnUpdateCallback型のオブジェクト
+     *
+     * @else
+     *
+     * @brief Set callback that is called by OnUpdate. 
+     *
+     * 
+     * @param cb OnUpdateCallback type object
+     *
+     * @endif
+     */
     void setOnUpdate(OnUpdateCallback* cb);
     void setOnUpdateParam(OnUpdateParamCallback* cb);
     void setOnSetConfigurationSet(OnSetConfigurationSetCallback* cb);
