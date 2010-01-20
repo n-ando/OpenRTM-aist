@@ -25,6 +25,21 @@
 #include <rtm/Manager.h>
 #include <rtm/SystemLogger.h>
 
+/*!
+ * @if jp
+ * @namespace RTM
+ *
+ * @brief RTCマネージャ
+ *
+ *
+ * @else
+ * @namespace RTM
+ *
+ * @brief RTCManager
+ *
+ *
+ * @endif
+ */
 namespace RTM
 {
   class ManagerServant

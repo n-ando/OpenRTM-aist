@@ -25,7 +25,7 @@
 
 /*!
  * @if jp
- * @namespace RTC
+ * @namespace RTC_Utils
  *
  * @brief RTコンポーネント用ユーティリティ関数
  *
@@ -37,7 +37,7 @@
  * - isMultiModeObject
  *
  * @else
- * @namespace RTC
+ * @namespace RTC_Utils
  *
  * @brief Utility functions for RT-Component
  *
