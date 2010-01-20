@@ -135,6 +135,10 @@ namespace RTC
         CORBA::ULong len((CORBA::ULong)cdr.bufSize());
         RTC_PARANOID(("converted CDR data size: %d", len));
 
+	if (len == (CORBA::ULong)0) {
+	  RTC_ERROR(("buffer is empty."));
+	  return ::OpenRTM::BUFFER_EMPTY;
+	}
         data->length(len);
         cdr.get_octet_array(&((*data)[0]), len);
       }
