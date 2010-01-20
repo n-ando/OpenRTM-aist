@@ -43,18 +43,86 @@ namespace RTC
   class ConnectorInfo
   {
   public:
+    /*!
+     * @if jp
+     *
+     * @brief コンストラクタ
+     * 
+     * コンストラクタ
+     *
+     * @param name_ 接続名前
+     * @param id_ 接続ID
+     * @param ports_ 接続ポートIOR
+     * @param properties_ プロパティ
+     * 
+     * @else
+     *
+     * @brief Constructor
+     * 
+     * Constructor
+     *
+     * @param name_ connection name
+     * @param id_ connection ID
+     * @param ports_ connection Ports
+     * @param properties_ connection properties
+     *
+     * @endif
+     */
     ConnectorInfo(const char* name_, const char* id_,
                   coil::vstring ports_, coil::Properties properties_)
       : name(name_), id(id_)
       , ports(ports_), properties(properties_)
     {
     }
+    /*!
+     * @if jp
+     *
+     * @brief コンストラクタ
+     * 
+     * コンストラクタ
+     *
+     * @else
+     *
+     * @brief Constructor
+     * 
+     * Constructor
+     *
+     * @endif
+     */
     ConnectorInfo()
     {
     }
+    /*!
+     * @if jp
+     * @brief  接続名前
+     * @else
+     * @brief  Connection name
+     * @endif
+     */
     std::string name;
+    /*!
+     * @if jp
+     * @brief  接続ID
+     * @else
+     * @brief  ConnectionID 
+     * @endif
+     */
     std::string id;
+    /*!
+     * @if jp
+     * @brief  接続ポートIOR
+     * @else
+     * @brief  Connection ports
+     * @endif
+     */
     coil::vstring ports;
+    /*!
+     * @if jp
+     * @brief  プロパティ
+     * @else
+     * @brief  Connection properties 
+     * @endif
+     */
     coil::Properties properties;
   };
 
