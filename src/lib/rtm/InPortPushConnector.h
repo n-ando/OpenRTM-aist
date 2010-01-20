@@ -28,6 +28,19 @@ namespace RTC
 {
   class InPortProvider;
 
+  /*!
+   * @if jp
+   * @class InPortPushConnector
+   * @brief InPortPushConnector епеще╣
+   *
+   *
+   * @else
+   * @class InPortPushConnector
+   * @brief InPortPushConnector class
+   *
+   *
+   * @endif
+   */
   class InPortPushConnector
     : public InPortConnector
   {

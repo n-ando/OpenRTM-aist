@@ -27,6 +27,7 @@ namespace RTC
   /*!
    * @if jp
    * @class DataPortStatus mixin class
+   * @brief DataPortStatus mixin クラス
    *
    * このクラスは、enum定義されたリターンコードを、データポート関連のサ
    * ブクラスで共通利用するための mixin クラスである。このリターンコー
@@ -38,6 +39,7 @@ namespace RTC
    *
    * @else
    * @class DataPortStatus mixin class
+   * @brief DataPortStatus mixin class
    *
    * This is a mixin class to provide enumed return codes that are
    * commonly utilised in data port related sub-classes. To use this

@@ -80,12 +80,14 @@ namespace RTC
   /*!
    * @if jp
    * @class ConnectorDataListener クラス
+   * @brief ConnectorDataListener クラス
    *
    * データポートの Connector において発生する各種イベントに対するコー
    * ルバックを実現するリスナクラスの基底クラス。
    *
    * @else
    * @class ConnectorDataListener class
+   * @brief ConnectorDataListener class
    *
    * This class is abstract base class for listener classes that
    * provides callbacks for various events in the data port's
@@ -124,6 +126,7 @@ namespace RTC
   /*!
    * @if jp
    * @class ConnectorDataListenerT クラス
+   * @brief ConnectorDataListenerT クラス
    *
    * データポートの Connector において発生する各種イベントに対するコー
    * ルバックを実現するリスナクラスの基底クラス。
@@ -134,6 +137,7 @@ namespace RTC
    *
    * @else
    * @class ConnectorDataListenerT class
+   * @brief ConnectorDataListenerT class
    *
    * This class is abstract base class for listener classes that
    * provides callbacks for various events in the data port's
@@ -221,12 +225,14 @@ namespace RTC
   /*!
    * @if jp
    * @class ConnectorListener クラス
+   * @brief ConnectorListener クラス
    *
    * データポートの Connector において発生する各種イベントに対するコー
    * ルバックを実現するリスナクラスの基底クラス。
    *
    * @else
    * @class ConnectorListener class
+   * @brief ConnectorListener class
    *
    * This class is abstract base class for listener classes that
    * provides callbacks for various events in the data port's
@@ -261,12 +267,14 @@ namespace RTC
 
   /*!
    * @if jp
-   * @class ConnectorDataListener ホルダクラス
+   * @class ConnectorDataListenerHolder
+   * @brief ConnectorDataListener ホルダクラス
    *
    * 複数の ConnectorDataListener を保持し管理するクラス。
    *
    * @else
-   * @class ConnectorDataListener holder class
+   * @class ConnectorDataListenerHolder
+   * @brief ConnectorDataListener holder class
    *
    * This class manages one ore more instances of ConnectorDataListener class.
    *
@@ -293,12 +301,14 @@ namespace RTC
 
   /*!
    * @if jp
-   * @class ConnectorListener ホルダクラス
+   * @class ConnectorListenerHolder 
+   * @brief ConnectorListener ホルダクラス
    *
    * 複数の ConnectorListener を保持し管理するクラス。
    *
    * @else
-   * @class ConnectorListener holder class
+   * @class ConnectorListenerHolder
+   * @brief ConnectorListener holder class
    *
    * This class manages one ore more instances of ConnectorListener class.
    *
@@ -322,6 +332,19 @@ namespace RTC
     std::vector<Entry> m_listeners;
   };
   
+  /*!
+   * @if jp
+   * @class ConnectorListeners
+   * @brief ConnectorListeners クラス
+   *
+   *
+   * @else
+   * @class ConnectorListeners
+   * @brief ConnectorListeners class
+   *
+   *
+   * @endif
+   */
   class ConnectorListeners
   {
   public:

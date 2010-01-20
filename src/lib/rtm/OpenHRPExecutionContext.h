@@ -40,6 +40,19 @@
 
 namespace RTC
 {
+  /*!
+   * @if jp
+   * @class OpenHRPExecutionContext
+   * @brief OpenHRPExecutionContext епеще╣
+   *
+   *
+   * @else
+   * @class OpenHRPExecutionContext
+   * @brief OpenHRPExecutionContext class
+   *
+   *
+   * @endif
+   */
   class OpenHRPExecutionContext
     : public virtual PeriodicExecutionContext
   {

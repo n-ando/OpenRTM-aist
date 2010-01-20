@@ -30,6 +30,16 @@
 
 namespace RTC
 {
+  /*!
+   * @if jp
+   * @class ConnectorInfo クラス
+   * @brief ConnectorInfo クラス
+   *
+   * @class ConnectorInfo class
+   * @brief ConnectorInfo class
+   *
+   * @endif
+   */
   class ConnectorInfo
   {
   public:
