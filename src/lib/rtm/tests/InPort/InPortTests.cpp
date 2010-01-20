@@ -69,8 +69,10 @@
 #include <coil/Logger.h>
 #include <rtm/SystemLogger.h>
 #include <rtm/Manager.h>
-#include <rtm/PortCallBack.h>
+#include <rtm/PortCallback.h>
 #include <rtm/InPortPushConnector.h>
+#include <rtm/ConnectorBase.h>
+#include <rtm/OutPortConnector.h>
 
 #define WTIMEOUT_USEC 1000000
 #define USEC_PER_SEC 1000000
@@ -141,7 +143,8 @@ namespace InPort
                             coil::Properties& prop,
                             RTC::InPortProvider* provider)
       {
-         return RTC::InPort<DataType>::createConnector(cprof, prop, provider);
+	// return RTC::InPort<DataType>::createConnector(cprof, prop, provider);
+         return RTC::InPortBase::createConnector(cprof, prop, provider);
       }
       /*!
        * 
@@ -222,129 +225,139 @@ namespace InPort
   {
 
   public:
-      InPortCorbaCdrProviderMock(void)
-       {
-          m_logger = NULL;
-          // PortProfile setting
-          setInterfaceType("corba_cdr");
+    InPortCorbaCdrProviderMock(void)
+    {
+      m_logger = NULL;
+      // PortProfile setting
+      setInterfaceType("corba_cdr");
     
-          // ConnectorProfile setting
-          m_objref = this->_this();
-    
-          // set InPort's reference
-	  std::vector<std::string> args(coil::split("-ORBendPoint giop:tcp:2809", " "));
-	  // TAO's ORB_init needs argv[0] as command name.
-	  args.insert(args.begin(), "manager");
-	  char** argv = coil::toArgv(args);
-	  int argc(args.size());
-	
-	  // ORB initialization
-	  CORBA::ORB_ptr orb = CORBA::ORB_init(argc, argv);
+      // ConnectorProfile setting
+      m_objref = this->_this();
+      
+      // set InPort's reference
+      std::vector<std::string> args(coil::split("-ORBendPoint giop:tcp:2809", " "));
+      // TAO's ORB_init needs argv[0] as command name.
+      args.insert(args.begin(), "manager");
+      char** argv = coil::toArgv(args);
+      int argc(args.size());
+      
+      // ORB initialization
+      CORBA::ORB_ptr orb = CORBA::ORB_init(argc, argv);
+      
+      CORBA_SeqUtil::
+	push_back(m_properties,
+		  NVUtil::newNV("dataport.corba_cdr.inport_ior",
+				orb->object_to_string(m_objref.in())));
+      CORBA_SeqUtil::
+	push_back(m_properties,
+		  NVUtil::newNV("dataport.corba_cdr.inport_ref",
+				m_objref));
+    }
+    virtual ~InPortCorbaCdrProviderMock(void)
+    {
+      PortableServer::ObjectId_var oid;
+      oid = _default_POA()->servant_to_id(this);
+      _default_POA()->deactivate_object(oid);
+    }
+    /*!
+     *
+     *
+     */
+    void setBuffer(RTC::BufferBase<cdrMemoryStream>* buffer)
+    {
+      if (m_logger != NULL)
+	{
+	  m_logger->log("InPortCorbaCdrProviderMock::setBuffer");
+	}
+    }
 
-          CORBA_SeqUtil::
-              push_back(m_properties,
-                NVUtil::newNV("dataport.corba_cdr.inport_ior",
-                              orb->object_to_string(m_objref.in())));
-          CORBA_SeqUtil::
-              push_back(m_properties,
-                NVUtil::newNV("dataport.corba_cdr.inport_ref",
-                              m_objref));
-       }
-      virtual ~InPortCorbaCdrProviderMock(void)
-      {
-          PortableServer::ObjectId_var oid;
-          oid = _default_POA()->servant_to_id(this);
-          _default_POA()->deactivate_object(oid);
-      }
-      /*!
-       *
-       *
-       */
-      void setBuffer(RTC::BufferBase<cdrMemoryStream>* buffer)
-      {
-          if (m_logger != NULL)
-          {
-              m_logger->log("InPortCorbaCdrProviderMock::setBuffer");
-          }
-      }
-      /*!
-       *
-       *
-       */
-      ::OpenRTM::PortStatus put(const ::OpenRTM::CdrData& data)
-         throw (CORBA::SystemException)
-      {
-          return ::OpenRTM::PORT_OK;
-      }
-      /*!
-       *
-       *
-       */
-      void init(coil::Properties& prop)
-      {
-          if (m_logger != NULL)
-          {
-              m_logger->log("InPortCorbaCdrProviderMock::init");
-          }
-      }
-      /*!
-       *
-       *
-       */
-      RTC::InPortConsumer::ReturnCode put(const cdrMemoryStream& data)
-      {
-          return RTC::InPortConsumer::PORT_OK;
-      }
-      /*!
-       *
-       *
-       */
-      void publishInterfaceProfile(SDOPackage::NVList& properties)
-      {
-          return;
-      }
+    void setListener(RTC::ConnectorInfo& info,
+		     RTC::ConnectorListeners* listeners)
+    {
+      // m_profile = info;
+      // m_listeners = listeners;
+    }
+    void setConnector(RTC::InPortConnector* connector)
+    {
+      // m_connector = connector;
+    }
+    /*!
+     *
+     *
+     */
+    ::OpenRTM::PortStatus put(const ::OpenRTM::CdrData& data)
+      throw (CORBA::SystemException)
+    {
+      return ::OpenRTM::PORT_OK;
+    }
+    /*!
+     *
+     *
+     */
+    void init(coil::Properties& prop)
+    {
+      if (m_logger != NULL)
+	{
+	  m_logger->log("InPortCorbaCdrProviderMock::init");
+	}
+    }
+    /*!
+     *
+     *
+     */
+    RTC::InPortConsumer::ReturnCode put(const cdrMemoryStream& data)
+    {
+      return RTC::InPortConsumer::PORT_OK;
+    }
+    /*!
+     *
+     *
+     */
+    void publishInterfaceProfile(SDOPackage::NVList& properties)
+    {
+      return;
+    }
 
-      /*!
-       *
-       *
-       */
-      bool subscribeInterface(const SDOPackage::NVList& properties)
-      {
+    /*!
+     *
+     *
+     */
+    bool subscribeInterface(const SDOPackage::NVList& properties)
+    {
+      return true;;
+    }
+  
+    /*!
+     *
+     *
+     */
+    void unsubscribeInterface(const SDOPackage::NVList& properties)
+    {
+    }
     
-          return true;;
-      }
   
-      /*!
-       *
-       *
-       */
-      void unsubscribeInterface(const SDOPackage::NVList& properties)
-      {
-      }
-  
-  
-      /*!
-       *
-       *
-       */
+    /*!
+     *
+     *
+     */
 /*
       bool publishInterface(SDOPackage::NVList& prop)
       {
           return true;
       }
 */
-      /*!
-       *
-       *
-       */
-      void setLogger(Logger* logger)
-      {
-          m_logger = logger;
-      }
+    /*!
+     *
+     *
+     */
+    void setLogger(Logger* logger)
+    {
+      m_logger = logger;
+    }
   private:
     Logger* m_logger;
     ::OpenRTM::InPortCdr_var m_objref;
-
+    
   };
   class OutPortCorbaCdrConsumerMock
     : public RTC::OutPortConsumer,
@@ -370,6 +383,17 @@ namespace InPort
               m_logger->log("OutPortCorbaCdrConsumerMock::setBuffer");
           }
       }
+    void setListener(RTC::ConnectorInfo& info,
+		     RTC::ConnectorListeners* listeners)
+    {
+      // m_profile = info;
+      // m_listeners = listeners;
+    }
+    void setConnector(RTC::OutPortConnector* connector)
+    {
+      // m_connector = connector;
+    }
+
       /*!
        *
        *
@@ -654,7 +678,7 @@ namespace RTC
   /*!
    * Global variable for test
    */
-  InPort::Logger RTC_logger;
+  ::InPort::Logger RTC_logger;
   ConnectorBase::ReturnCode InPortPushConnector_read_return_value;
   int InPortPushConnector_read;
   /*!
@@ -666,10 +690,12 @@ namespace RTC
    *
    *
    */
-  InPortPushConnector::InPortPushConnector(ConnectorBase::Profile profile, 
+  InPortPushConnector::InPortPushConnector(ConnectorInfo profile, 
                                            InPortProvider* provider,
+					   ConnectorListeners& listeners,
                                            CdrBufferBase* buffer)
-    : InPortConnector(profile, buffer)
+    : InPortConnector(profile, buffer),
+      m_listeners(listeners)
   {
 
       InPortPushConnector_read = 0;
@@ -714,7 +740,7 @@ namespace RTC
    *
    *
    */
-  CdrBufferBase* InPortPushConnector::createBuffer(Profile& profile)
+  CdrBufferBase* InPortPushConnector::createBuffer(ConnectorInfo& profile)
   {
       return new ::InPort::CdrRingBufferMock();
   }
@@ -1109,6 +1135,7 @@ namespace InPort
     DataType m_value;
   };
 
+  /*
   template <class DataType>
   class OnOverflowMock
     : public RTC::OnOverflow<DataType>
@@ -1120,7 +1147,8 @@ namespace InPort
     }
     DataType m_value;
   };
-
+  */
+  /*
   class OnWriteConvertMock
     : public RTC::OnWriteConvert<double>
   {
@@ -1133,6 +1161,7 @@ namespace InPort
     }
     double m_amplitude;
   };
+  */
 
   /*!
    * 
@@ -1263,7 +1292,8 @@ namespace InPort
     {
         RTC::TimedLong tl;
         InPortMock<RTC::TimedLong> inport("test_name0",tl);
-        inport.init();
+        coil::Properties prop_;
+        inport.init(prop_);
 
         //no connectors
         CPPUNIT_ASSERT_EQUAL(false, inport.isNew());
@@ -1300,7 +1330,8 @@ namespace InPort
     {
         RTC::TimedLong tl;
         InPortMock<RTC::TimedLong> inport("test_name0",tl);
-        inport.init();
+        coil::Properties prop_;
+        inport.init(prop_);
 
         //no connectors
         CPPUNIT_ASSERT_EQUAL(true, inport.isEmpty());
@@ -1332,7 +1363,7 @@ namespace InPort
 	m_pPOA->deactivate_object(*m_pPOA->servant_to_id(&inport));
     }
     /*!
-     * @brief read(),setOnRead(),setOnReadConvert()メソッドのテスト
+     * @brief read(),operator>>(DataType&),setOnRead(),setOnReadConvert()メソッドのテスト
      * 
      */
     void test_read(void)
@@ -1340,18 +1371,20 @@ namespace InPort
         RTC::TimedLong tl;
         tl.data = 123;
         InPortMock<RTC::TimedLong> inport("test_read0",tl);
-        inport.init();
+        coil::Properties prop_;
+        inport.init(prop_);
 
         OnReadMock<RTC::TimedLong> onRead;
         Logger logger;
         onRead.setLogger(&logger);
         inport.setOnRead(&onRead);
 
-        RTC::TimedLong ret;
+        bool ret;
         CPPUNIT_ASSERT_EQUAL(0,logger.countLog("OnReadMock::operator"));
         ret = inport.read();
         //no connectors
-        CPPUNIT_ASSERT_EQUAL(123, ret.data);
+        CPPUNIT_ASSERT_EQUAL(false, ret);
+        CPPUNIT_ASSERT_EQUAL((CORBA::Long)123, tl.data);
         CPPUNIT_ASSERT_EQUAL(1,logger.countLog("OnReadMock::operator"));
 
         RTC::ConnectorProfile prof;
@@ -1368,12 +1401,17 @@ namespace InPort
 
         RTC::InPortPushConnector_read_return_value 
                                            = RTC::ConnectorBase::PORT_OK;
+        RTC::TimedLong tl_;
+	inport.operator>>(tl_);
+        CPPUNIT_ASSERT_EQUAL((CORBA::Long)777, tl_.data);
+
         int logcount;
         CPPUNIT_ASSERT_EQUAL(0,logger.countLog("OnReadConvertMock::operator"));
         logcount = ::RTC::RTC_logger.countLog("InPortPushConnector::read");
         ret = inport.read();
         //data read succeeded
-        CPPUNIT_ASSERT_EQUAL(777, ret.data);
+        CPPUNIT_ASSERT_EQUAL(true, ret);
+        CPPUNIT_ASSERT_EQUAL((CORBA::Long)777, tl.data);
         CPPUNIT_ASSERT_EQUAL(logcount+1,
                      ::RTC::RTC_logger.countLog("InPortPushConnector::read"));
         CPPUNIT_ASSERT_EQUAL(0,logger.countLog("OnReadConvertMock::operator"));
@@ -1383,7 +1421,8 @@ namespace InPort
         logcount = ::RTC::RTC_logger.countLog("InPortPushConnector::read");
         ret = inport.read();
         //data read succeeded
-        CPPUNIT_ASSERT_EQUAL(777, ret.data);
+        CPPUNIT_ASSERT_EQUAL(true, ret);
+        CPPUNIT_ASSERT_EQUAL((CORBA::Long)777, tl.data);
         CPPUNIT_ASSERT_EQUAL(logcount+1,
                      ::RTC::RTC_logger.countLog("InPortPushConnector::read"));
         CPPUNIT_ASSERT_EQUAL(1,logger.countLog("OnReadConvertMock::operator"));
@@ -1398,7 +1437,8 @@ namespace InPort
         logcount = ::RTC::RTC_logger.countLog("InPortPushConnector::read");
         ret = inport.read();
         //data read succeeded
-        CPPUNIT_ASSERT_EQUAL(777, ret.data);
+        CPPUNIT_ASSERT_EQUAL(true, ret);
+        CPPUNIT_ASSERT_EQUAL((CORBA::Long)777, tl.data);
         CPPUNIT_ASSERT_EQUAL(logcount+1,
                      ::RTC::RTC_logger.countLog("InPortPushConnector::read"));
         //
@@ -1408,8 +1448,9 @@ namespace InPort
                                            = RTC::ConnectorBase::BUFFER_EMPTY;
         logcount = ::RTC::RTC_logger.countLog("InPortPushConnector::read");
         ret = inport.read();
-        //data read succeeded
-        CPPUNIT_ASSERT_EQUAL(777, ret.data);
+        //data read failed, because InPortPushConnectorMock::read() return BUFFER_EMPTY.
+        CPPUNIT_ASSERT_EQUAL(false, ret);
+        CPPUNIT_ASSERT_EQUAL((CORBA::Long)777, tl.data);
         CPPUNIT_ASSERT_EQUAL(logcount+1,
                      ::RTC::RTC_logger.countLog("InPortPushConnector::read"));
 
@@ -1420,8 +1461,9 @@ namespace InPort
                                            = RTC::ConnectorBase::BUFFER_TIMEOUT;
         logcount = ::RTC::RTC_logger.countLog("InPortPushConnector::read");
         ret = inport.read();
-        //data read succeeded
-        CPPUNIT_ASSERT_EQUAL(777, ret.data);
+        //data read failed, because InPortPushConnectorMock::read() return BUFFER_TIMEOUT
+        CPPUNIT_ASSERT_EQUAL(false, ret);
+        CPPUNIT_ASSERT_EQUAL((CORBA::Long)777, tl.data);
         CPPUNIT_ASSERT_EQUAL(logcount+1,
                      ::RTC::RTC_logger.countLog("InPortPushConnector::read"));
 
@@ -1432,8 +1474,9 @@ namespace InPort
                                            = RTC::ConnectorBase::UNKNOWN_ERROR;
         logcount = ::RTC::RTC_logger.countLog("InPortPushConnector::read");
         ret = inport.read();
-        //data read succeeded
-        CPPUNIT_ASSERT_EQUAL(777, ret.data);
+        //data read failed, because InPortPushConnectorMock::read() return UNKNOWN_ERROR
+        CPPUNIT_ASSERT_EQUAL(false, ret);
+        CPPUNIT_ASSERT_EQUAL((CORBA::Long)777, tl.data);
         CPPUNIT_ASSERT_EQUAL(logcount+1,
                      ::RTC::RTC_logger.countLog("InPortPushConnector::read"));
 
