@@ -265,7 +265,36 @@ namespace RTC
      */
     virtual CdrBufferBase* getBuffer() = 0;
 
+    /*!
+     * @if jp
+     * @brief アクティブ化
+     *
+     * このコネクタをアクティブ化する
+     *
+     * @else
+     *
+     * @brief Connector activation
+     *
+     * This operation activates this connector
+     *
+     * @endif
+     */
     virtual void activate() = 0;
+
+    /*!
+     * @if jp
+     * @brief 非アクティブ化
+     *
+     * このコネクタを非アクティブ化する
+     *
+     * @else
+     *
+     * @brief Connector deactivation
+     *
+     * This operation deactivates this connector
+     *
+     * @endif
+     */
     virtual void deactivate() = 0;
 
   private:
