@@ -1264,25 +1264,235 @@ namespace RTC
      * @else
      *
      * @brief Set callback that is called by OnUpdate. 
-     *
      * 
      * @param cb OnUpdateCallback type object
      *
      * @endif
      */
     void setOnUpdate(OnUpdateCallback* cb);
+
+    /*!
+     * @if jp
+     *
+     * @brief OnUpdateParam のコールバックの設定
+     *
+     * OnUpdateParam で呼ばれるコールバックのオブジェクトを設定する。
+     * 
+     * @param cb OnUpdateParamCallback型のオブジェクト
+     *
+     * @else
+     *
+     * @brief Set callback that is called by OnUpdateParam. 
+     * 
+     * @param cb OnUpdateParamCallback type object
+     *
+     * @endif
+     */
     void setOnUpdateParam(OnUpdateParamCallback* cb);
+
+    /*!
+     * @if jp
+     *
+     * @brief OnSetConfigurationSet のコールバックの設定
+     *
+     * OnSetConfigurationSet で呼ばれるコールバックのオブジェクトを設定する。
+     * 
+     * @param cb OnSetConfigurationSetCallback型のオブジェクト
+     *
+     * @else
+     *
+     * @brief Set callback that is called by OnSetConfiguration. 
+     * 
+     * @param cb OnSetConfigurationSetCallback type object
+     *
+     * @endif
+     */
     void setOnSetConfigurationSet(OnSetConfigurationSetCallback* cb);
+
+    /*!
+     * @if jp
+     *
+     * @brief OnAddConfigurationSet のコールバックの設定
+     *
+     * OnAddConfigurationSet で呼ばれるコールバックのオブジェクトを設定する。
+     * 
+     * @param cb OnAddConfigurationAddCallback型のオブジェクト
+     *
+     * @else
+     *
+     * @brief Set callback that is called by OnSetConfiguration. 
+     * 
+     * @param cb OnSetConfigurationSetCallback type object
+     *
+     * @endif
+     */
     void setOnAddConfigurationSet(OnAddConfigurationAddCallback* cb);
+
+    /*!
+     * @if jp
+     *
+     * @brief OnRemoveConfigurationSet のコールバックの設定
+     *
+     * OnRemoveConfiguration で呼ばれるコールバックのオブジェクトを設定する。
+     * 
+     * @param cb OnRemoveConfigurationSetCallback型のオブジェクト
+     *
+     * @else
+     *
+     * @brief Set callback that is called by OnRemoveConfigurationSet. 
+     * 
+     * @param cb OnRemoveConfigurationSetCallback type object
+     *
+     * @endif
+     */
     void setOnRemoveConfigurationSet(OnRemoveConfigurationSetCallback* cb);
+
+    /*!
+     * @if jp
+     *
+     * @brief OnActivateSet のコールバックの設定
+     *
+     * OnActivateSet で呼ばれるコールバックのオブジェクトを設定する。
+     * 
+     * @param cb OnActivateSetCallback型のオブジェクト
+     *
+     * @else
+     *
+     * @brief Set callback that is called by OnActivateSet. 
+     * 
+     * @param cb OnActivateSetCallback type object
+     *
+     * @endif
+     */
     void setOnActivateSet(OnActivateSetCallback* cb);
 
   protected:
+    /*!
+     * @if jp
+     *
+     * @brief コンフィギュレーションパラメータの更新(ID指定)時にコールされる
+     *
+     * 設定されてるコールバックオブジェクトを呼び出す。
+     *
+     * @param config_set 設定対象のコンフィギュレーションセットID
+     *
+     * @else
+     *
+     * @brief When the configuration parameter is updated, it is called. 
+     *
+     * Call the set callback object.
+     * 
+     * @param config_set The target configuration set's ID to setup
+     *
+     * @endif
+     */
     void onUpdate(const char* config_set);
+
+    /*!
+     * @if jp
+     *
+     * @brief コンフィギュレーションパラメータの更新(名称指定)時にコールされる
+     *
+     * 設定されてるコールバックオブジェクトを呼び出す。
+     *
+     * @param config_set コンフィギュレーションID
+     * @param config_param コンフィギュレーションパラメータ名
+     *
+     * @else
+     *
+     * @brief When the configuration parameter is updated, it is called. 
+     *
+     * Call the set callback object.
+     * 
+     * @param config_set configuration-set ID.
+     * @param config_param configuration parameter name.
+     *
+     * @endif
+     */
     void onUpdateParam(const char* config_set, const char* config_param);
+
+    /*!
+     * @if jp
+     *
+     * @brief 指定したプロパティのコンフィギュレーションセットへの追加された時にコールされる
+     *
+     * 設定されてるコールバックオブジェクトを呼び出す。
+     *
+     * @param configuration_set プロパティ
+     *
+     * @else
+     *
+     * @brief When the property is added to the configuration set, this function is called. 
+     *
+     * Call the set callback object.
+     * 
+     * @param configuration_set property
+     *
+     * @endif
+     */
     void onSetConfigurationSet(const coil::Properties& config_set);
+
+    /*!
+     * @if jp
+     *
+     * @brief コンフィギュレーションセットに設定値が追加されたときにコールされる。
+     *
+     * 設定されてるコールバックオブジェクトを呼び出す。
+     *
+     * @param configuration_set プロパティ
+     *
+     * @else
+     *
+     * @brief When a set value is added to the configuration set, this function is called.
+     *
+     * Call the set callback object.
+     * 
+     * @param configuration_set property
+     *
+     * @endif
+     */
     void onAddConfigurationSet(const coil::Properties& config_set);
+
+    /*!
+     * @if jp
+     *
+     * @brief コンフィギュレーションセットが削除されているときにコールされる。
+     *
+     * 設定されてるコールバックオブジェクトを呼び出す。
+     *
+     * @param config_id プロパティ
+     *
+     * @else
+     *
+     * @brief When the configuration set has been deleted, this function is called. 
+     *
+     * Call the set callback object.
+     * 
+     * @param config_id property
+     *
+     * @endif
+     */
     void onRemoveConfigurationSet(const char* config_id);
+
+    /*!
+     * @if jp
+     *
+     * @brief コンフィギュレーションセットがアクティブ化されたときにコールされる。
+     *
+     * 設定されてるコールバックオブジェクトを呼び出す。
+     *
+     * @param config_id プロパティ
+     *
+     * @else
+     *
+     * @brief When the configuration set is made active, this function is called.
+     *
+     * Call the set callback object.
+     * 
+     * @param config_id property
+     *
+     * @endif
+     */
     void onActivateSet(const char* config_id);
     
   private:
