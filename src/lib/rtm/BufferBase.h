@@ -122,6 +122,17 @@ namespace RTC
     {
     };
     
+    /*!
+     * @if jp
+     *
+     * @brief バッファの設定
+     *
+     * @else
+     *
+     * @brief Set the buffer
+     *
+     * @endif
+     */
     virtual void init(const coil::Properties& prop) = 0;
 
     /*!
@@ -158,11 +169,14 @@ namespace RTC
      * 
      * @else
      *
-     * @brief Get the buffer length
+     * @brief Set the buffer length
      *
-     * Pure virtual function to get the buffer length.
+     * Pure virtual function to set the buffer length.
      *
-     * @return buffer length
+     * @return BUFFER_OK: Successful
+     *         NOT_SUPPORTED: The buffer length cannot be set.
+     *         BUFFER_ERROR: Failed
+     *         
      * 
      * @endif
      */    
@@ -176,16 +190,18 @@ namespace RTC
      * バッファの読み出しポインタと書き込みポインタの位置をリセットする。
      * 
      * @return BUFFER_OK: 正常終了
-     *         NOT_SUPPORTED: バッファ長変更不可
+     *         NOT_SUPPORTED: リセット不可能
      *         BUFFER_ERROR: 異常終了
      * 
      * @else
      *
-     * @brief Get the buffer length
+     * @brief Reset the buffer status
      *
-     * Pure virtual function to get the buffer length.
+     * Pure virtual function to reset the buffer status.
      *
-     * @return buffer length
+     * @return BUFFER_OK: Successful
+     *         NOT_SUPPORTED: The buffer status cannot be reset.
+     *         BUFFER_ERROR: Failed
      * 
      * @endif
      */ 
@@ -205,11 +221,12 @@ namespace RTC
      * 
      * @else
      *
-     * @brief Get the buffer length
+     * @brief Get the writing pointer
      *
-     * Pure virtual function to get the buffer length.
+     * Pure virtual function to get the writing pointer.
      *
-     * @return buffer length
+     * @param writeing pinter or n previous pointer
+     * @return writing pointer
      * 
      * @endif
      */ 
@@ -228,11 +245,12 @@ namespace RTC
      * 
      * @else
      *
-     * @brief Get the buffer length
+     * @brief Forward n writing pointers.
      *
-     * Pure virtual function to get the buffer length.
+     * Pure virtual function to forward n writing pointers.
      *
-     * @return buffer length
+     * @return BUFFER_OK: Successful
+     *         BUFFER_ERROR: Failed
      * 
      * @endif
      */ 
@@ -258,7 +276,8 @@ namespace RTC
      *
      * @param value Target data to write.
      *
-     * @return Result of having written in data (true:Successful, false:Failed)
+     * @return BUFFER_OK: Successful
+     *         BUFFER_ERROR: Failed
      *
      * @endif
      */
@@ -284,7 +303,8 @@ namespace RTC
      *
      * @param value Target data to write.
      *
-     * @return Result of having written in data (true:Successful, false:Failed)
+     * @return BUFFER_OK: Successful
+     *         BUFFER_ERROR: Failed
      *
      * @endif
      */
@@ -300,18 +320,15 @@ namespace RTC
      * 
      * @return 書き込み可能な要素数
      *
-     * @return BUFFER_OK: 正常終了
-     *         BUFFER_ERROR: 異常終了
      * 
      * @else
      *
-     * @brief Write data into the buffer
+     * @brief Get a writable number. 
      *
-     * Pure virtual function to write data into the buffer.
+     * Pure virtual function to get a writable number.
      *
-     * @param value Target data to write.
+     * @return value writable number
      *
-     * @return Result of having written in data (true:Successful, false:Failed)
      *
      * @endif
      */
@@ -351,11 +368,11 @@ namespace RTC
      * 
      * @else
      *
-     * @brief Get the buffer length
+     * @brief Get the reading pointer
      *
-     * Pure virtual function to get the buffer length.
+     * Pure virtual function to get the reading pointer.
      *
-     * @return buffer length
+     * @return reading pointer
      * 
      * @endif
      */ 
@@ -374,11 +391,12 @@ namespace RTC
      * 
      * @else
      *
-     * @brief Get the buffer length
+     * @brief Forward n reading pointers.
      *
-     * Pure virtual function to get the buffer length.
+     * Pure virtual function to forward n reading pointers.
      *
-     * @return buffer length
+     * @return BUFFER_OK: Successful
+     *         BUFFER_ERROR: Failed
      * 
      * @endif
      */ 
@@ -398,17 +416,38 @@ namespace RTC
      * 
      * @else
      *
-     * @brief Write data into the buffer
+     * @brief Read data from the buffer
      *
-     * Pure virtual function to write data into the buffer.
+     * Pure virtual function to read data form the buffer.
      *
-     * @param value Target data to write.
+     * @param value Data to read.
      *
-     * @return Result of having written in data (true:Successful, false:Failed)
+     * @return BUFFER_OK: Successful
+     *         BUFFER_ERROR: Failed
      *
      * @endif
      */
     virtual ReturnCode get(DataType& value) = 0;
+
+    /*!
+     * @if jp
+     *
+     * @brief バッファからデータを読み出す
+     * 
+     * バッファからデータを読みだす。読み出しポインタの位置は変更されない。
+     * 
+     * @return 読み出しデータ
+     * 
+     * @else
+     *
+     * @brief Read data from the buffer
+     *
+     * Pure virtual function to read data from the buffer.
+     *
+     * @return Data got from buffer.
+     *
+     * @endif
+     */
     virtual DataType&  get() = 0;
 
     /*!
@@ -446,18 +485,15 @@ namespace RTC
      * 
      * @return 読み出し可能な要素数
      *
-     * @return BUFFER_OK: 正常終了
-     *         BUFFER_ERROR: 異常終了
      * 
      * @else
      *
      * @brief Write data into the buffer
      *
-     * Pure virtual function to write data into the buffer.
+     * Pure virtual function to get a reading number.
      *
-     * @param value Target data to write.
      *
-     * @return Result of having written in data (true:Successful, false:Failed)
+     * @return readable number
      *
      * @endif
      */
