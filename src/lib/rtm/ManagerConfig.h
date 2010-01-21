@@ -374,6 +374,20 @@ namespace RTC
      * @endif
      */
     std::string m_configFile;
+
+    /*!
+     * @if jp
+     * @brief Manager マスタフラグ
+     *
+     * true:マスタ,false:スレーブ
+     *
+     * @else
+     * @brief Manager master flag
+     *
+     * true:master,false:slave
+     *
+     * @endif
+     */
     bool m_isMaster;
   };
 }; // namespace RTC  
