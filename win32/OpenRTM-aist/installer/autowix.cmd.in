@@ -31,9 +31,6 @@
 @rem ------------------------------------------------------------
 set LANGUAGES=(ja-jp de-de es-es fr-fr hu-hu it-it)
 
-
-
-
 echo off
 @rem ------------------------------------------------------------
 @rem Checking WiX
@@ -45,32 +42,54 @@ if "x%WIX%" == "x" (
 )
 
 @rem ------------------------------------------------------------
+@rem Generate RTSystemEditor wxs file
+@rem
+@rem RTSystemEditorRCP.exe should be under RTSE_ROOT\rtse.exe
+@rem
+@rem ------------------------------------------------------------
+if "x%RTSE_ROOT%" == "x" (
+   echo Envrionment variable "RTSE_ROOT" is not set. Abort.
+   goto END
+)
+if not exist "%RTSE_ROOT%\RTSystemEditorRCP.exe" (
+   echo rtse.exe does not found. Abort
+   goto END
+)
+set INCLUDE_RTSE=YES
+set INCLUDE_OPENRTP=YES
+
+if not exist OpenRTP_inc.wxs (
+   cd OpenRTP
+   set TMP_PYTHONPATH=%PYTHONPATH%
+   set PYTHONPATH=../../bin;%PYTHONPATH%
+   echo Generating OpenRTP_inc.wxs......
+   openrtpwxs.py
+   set PYTHONPATH=%TMP_PYTHONPATH%
+   copy OpenRTP_inc.wxs ..
+   cd ..
+)
+
+
+@rem ------------------------------------------------------------
 @rem Generate omniORB's wxs file
 @rem ------------------------------------------------------------
 if "x%OMNI_ROOT%" == "x" (
-   set INCLUDE_OMNIORB=NO
-) ELSE (
-   set INCLUDE_OMNIORB=YES
-}
+   echo Environment Variable "OMNI_EOOR" is not set. Abort.
+   goto END
+)
+set INCLUDE_OMNIORB=YES
 
 if not exist omniORB_inc.wxs (
-   set PYTHONPATH=../bin;%PYTHONPATH%
+   cd omniORB
+   set TMP_PYTHONPATH=%PYTHONPATH%
+   set PYTHONPATH=../../bin;%PYTHONPATH%
    echo Generating omniORB_inc.wxs......
    omniwxs.py
+   set PYTHONPATH=%TMP_PYTHONPATH%
+   copy omniORB_inc.wxs ..
+   cd ..
 )
 
-@rem ------------------------------------------------------------
-@rem RTSystemEditor
-@rem ------------------------------------------------------------
-if "x%RTSERCP_DIR%" == "x" (
-   set INCLUDE_OPENRTP=NO
-) else (
-  if exist %RTSERCP_DIR%\rtse.exe (
-     set INCLUDE_OPENRTP=YES
-  ) else (
-   set INCLUDE_OPENRTP=NO
-  )
-)
 
 @rem ------------------------------------------------------------
 @rem Import Language-Country, Language codes, Codepages

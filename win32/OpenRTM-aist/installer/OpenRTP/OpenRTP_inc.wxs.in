@@ -22,10 +22,11 @@
 	  </File>
 	  {% endfor %}
         </Component>
+      </Directory>
 
       <!-- plugins -->
       <Directory Id="openrtp_plugins" Name="plugins">
-        <Component Id="OpenrtpPlugins" Guid="{% OpenrtmPlugins.GUID %}">
+        <Component Id="OpenrtpPlugins" Guid="{% OpenrtpPlugins.GUID %}">
 	  {% for file in OpenrtpPlugins.Files %}
 	  <File Id="{% file.Id %}" Name="{% file.Name %}"
 		DiskId="1" Source="{% file.Source %}">

@@ -17,12 +17,17 @@
 rpc_files = ".eclipseproduct openrtp.exe startup.jar"
 
 data = [
-    ("/",                                 rpc_files),
+    ("",                                  rpc_files),
     ("configuration",                     "*.ini"),
     ("plugins",                           "*.jar"),
 ]
 
-base_dir="C:\\Program Files\\OpenRTP\\"
+import os
+base_dir=os.getenv("RTSE_ROOT")
+if base_dir == None:
+    base_dir="C:\\distribution\\OpenRTP\\RTSystemEditor"
+else:
+    base_dir += "\\"
 
 def path_to_dir_id(path, prefix):
     # path = "bin/x86_win32" prefix = "omni"
@@ -49,16 +54,15 @@ for (path, files) in data:
     # wxs directory name
     dir_name = path_to_dir_id(path, "openrtp")
 
-#    path = path.replace("/", "\\")
+    path = path.replace("/", "\\")
 
     # full path to target directory
-    full_path = base_dir + path
-#    print "Full path: " + full_path
+    full_path = base_dir + "\\" + path
 
     import glob
     flist = []
     for f in files.split(" "):
-        flist += glob.glob(full_path + "/" + f)
+        flist += glob.glob(full_path + "\\" + f)
 
     cmd = ["flist",
            "-c", comp_name,

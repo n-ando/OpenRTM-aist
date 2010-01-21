@@ -17,7 +17,7 @@
 omni_files = "COPYING CREDITS THIS_IS_OMNIORB_4_1_4 COPYING.LIB update.log COPYING.PYTHON sample.reg README.FIRST.txt README.win32.txt ReleaseNotes.txt"
 
 data = [
-    ("/",                                 omni_files),
+    ("",                                 omni_files),
     ("bin/scripts",                       "*.py"),
     ("bin/x86_win32",                     "*.dll *.exe"),
     ("idl",                               "*.idl"),
@@ -42,9 +42,10 @@ data = [
 
 import os
 base_dir = os.getenv("OMNI_ROOT")
-if base_dir == "":
+if base_dir == None:
     base_dir="C:\\Program Files\\omniORB-4.1.4\\"
-
+else:
+    base_dir += "\\"
 
 def path_to_dir_id(path, prefix):
     # path = "bin/x86_win32" prefix = "omni"
@@ -71,15 +72,15 @@ for (path, files) in data:
     # wxs directory name
     dir_name = path_to_dir_id(path, "omni")
 
-#    path = path.replace("/", "\\")
+    path = path.replace("/", "\\")
 
     # full path to target directory
-    full_path = base_dir + path
+    full_path = base_dir + "\\\\" + path
 
     import glob
     flist = []
     for f in files.split(" "):
-        flist += glob.glob(full_path + "/" + f)
+        flist += glob.glob(full_path + "\\" + f)
 
     cmd = ["flist",
            "-c", comp_name,
