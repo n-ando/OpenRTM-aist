@@ -42,6 +42,8 @@ data = [
 
 import os
 base_dir = os.getenv("OMNI_ROOT")
+base_dir = base_dir.replace("\"", "")
+
 if base_dir == None:
     base_dir="C:\\Program Files\\omniORB-4.1.4\\"
 else:
