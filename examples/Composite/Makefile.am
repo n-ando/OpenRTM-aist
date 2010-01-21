@@ -53,7 +53,7 @@ MotorComp_SOURCES = MotorComp.cpp
 MotorComp_LDFLAGS = -L$(top_builddir)/src/lib/rtm/.libs
 MotorComp_LDADD   = Motor.o \
 	$(top_builddir)/src/lib/rtm/libRTC.la \
-	$(top_builddir)/src/lib/coil/lib/libcoil.la Motor.o
+	$(top_builddir)/src/lib/coil/lib/libcoil.la
 
 SensorComp_SOURCES = SensorComp.cpp 
 SensorComp_LDFLAGS = -L$(top_builddir)/src/lib/rtm/.libs
