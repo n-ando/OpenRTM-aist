@@ -82,24 +82,30 @@ socomp_LTLIBRARIES = AutoTestIn.la AutoTestOut.la
 dist_AutoTestIn_la_SOURCES = $(PROVIDER_DIST_SRC) $(PROVIDER_DIST_H) 
 AutoTestIn_la_LDFLAGS = -module
 AutoTestIn_la_FLAGS   = -L$(top_builddir)/src/lib/rtm/.libs -L.
-AutoTestIn_la_LIBADD  = $(top_builddir)/src/lib/rtm/libRTC.la -lAutoTestServiceSkel
+AutoTestIn_la_LIBADD  = -lAutoTestServiceSkel \
+	$(top_builddir)/src/lib/rtm/libRTC.la \
+	$(top_builddir)/src/lib/coil/lib/libcoil.la
 
 dist_AutoTestOut_la_SOURCES = $(CONSUMER_DIST_SRC) $(CONSUMER_DIST_H)
 AutoTestOut_la_LDFLAGS = -module
 AutoTestOut_la_FLAGS   = -L$(top_builddir)/src/lib/rtm/.libs
-AutoTestOut_la_LIBADD  = $(top_builddir)/src/lib/rtm/libRTC.la -lAutoTestServiceStub
+AutoTestOut_la_LIBADD  = -lAutoTestServiceStub \
+	$(top_builddir)/src/lib/rtm/libRTC.la \
+	$(top_builddir)/src/lib/coil/lib/libcoil.la
 
 # Standalone RTCs
 example_PROGRAMS = AutoTestInComp AutoTestOutComp
 AutoTestInComp_SOURCES = AutoTestInComp.cpp
 AutoTestInComp_LDFLAGS = -L$(top_builddir)/src/lib/rtm/.libs
 AutoTestInComp_LDADD   = .libs/AutoTestIn.a \
-	$(top_builddir)/src/lib/rtm/libRTC.la
+	$(top_builddir)/src/lib/rtm/libRTC.la \
+	$(top_builddir)/src/lib/coil/lib/libcoil.la
 
 AutoTestOutComp_SOURCES = AutoTestOutComp.cpp
 AutoTestOutComp_LDFLAGS = -L$(top_builddir)/src/lib/rtm/.libs
 AutoTestOutComp_LDADD   = .libs/AutoTestOut.a \
-	$(top_builddir)/src/lib/rtm/libRTC.la
+	$(top_builddir)/src/lib/rtm/libRTC.la \
+	$(top_builddir)/src/lib/coil/lib/libcoil.la
 
 # Example sources
 source_DATA = $(ALL_SRC) $(EXTRA_DIST)

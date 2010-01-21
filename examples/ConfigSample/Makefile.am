@@ -24,7 +24,8 @@ socomp_LTLIBRARIES = ConfigSample.la
 ConfigSample_la_SOURCES = ConfigSample.cpp ConfigSample.h
 ConfigSample_la_LDFLAGS = -module
 ConfigSample_la_FLAGS   = -L$(top_builddir)/src/lib/rtm/.lib
-ConfigSample_la_LIBADD  = $(top_builddir)/src/lib/rtm/libRTC.la
+ConfigSample_la_LIBADD  = $(top_builddir)/src/lib/rtm/libRTC.la \
+	$(top_builddir)/src/lib/coil/lib/libcoil.la
 
 
 # Standalone RTCs
@@ -33,8 +34,10 @@ example_DATA     = configsample.conf
 
 ConfigSampleComp_SOURCES = ConfigSampleComp.cpp 
 ConfigSampleComp_LDFLAGS = -L$(top_builddir)/src/lib/rtm/.libs
-ConfigSampleComp_LDADD   = $(top_builddir)/src/lib/rtm/libRTC.la ConfigSample.o
-#$(top_builddir)/src/lib/coil/libcoil.la 
+ConfigSampleComp_LDADD   = ConfigSample.o \
+	$(top_builddir)/src/lib/rtm/libRTC.la \
+	$(top_builddir)/src/lib/coil/lib/libcoil.la
+
 # Example sources
 source_DATA = $(ALL_SRC) $(EXTRA_DIST)
 

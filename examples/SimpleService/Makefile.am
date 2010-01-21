@@ -82,24 +82,29 @@ socomp_LTLIBRARIES = MyServiceProvider.la MyServiceConsumer.la
 dist_MyServiceProvider_la_SOURCES = $(PROVIDER_DIST_SRC) $(PROVIDER_DIST_H) 
 MyServiceProvider_la_LDFLAGS = -module
 MyServiceProvider_la_FLAGS   = -L$(top_builddir)/src/lib/rtm/.libs -L.
-MyServiceProvider_la_LIBADD  = $(top_builddir)/src/lib/rtm/libRTC.la -lMyServiceSkel
+MyServiceProvider_la_LIBADD  = $(top_builddir)/src/lib/rtm/libRTC.la \
+	$(top_builddir)/src/lib/coil/lib/libcoil.la -lMyServiceSkel
 
 dist_MyServiceConsumer_la_SOURCES = $(CONSUMER_DIST_SRC) $(CONSUMER_DIST_H)
 MyServiceConsumer_la_LDFLAGS = -module
 MyServiceConsumer_la_FLAGS   = -L$(top_builddir)/src/lib/rtm/.libs
-MyServiceConsumer_la_LIBADD  = $(top_builddir)/src/lib/rtm/libRTC.la -lMyServiceStub
+MyServiceConsumer_la_LIBADD  =  -lMyServiceStub \
+	$(top_builddir)/src/lib/rtm/libRTC.la \
+	$(top_builddir)/src/lib/coil/lib/libcoil.la
 
 # Standalone RTCs
 example_PROGRAMS = MyServiceProviderComp MyServiceConsumerComp
 MyServiceProviderComp_SOURCES = MyServiceProviderComp.cpp
 MyServiceProviderComp_LDFLAGS = -L$(top_builddir)/src/lib/rtm/.libs
 MyServiceProviderComp_LDADD   = .libs/MyServiceProvider.a \
-	$(top_builddir)/src/lib/rtm/libRTC.la
+	$(top_builddir)/src/lib/rtm/libRTC.la \
+	$(top_builddir)/src/lib/coil/lib/libcoil.la
 
 MyServiceConsumerComp_SOURCES = MyServiceConsumerComp.cpp
 MyServiceConsumerComp_LDFLAGS = -L$(top_builddir)/src/lib/rtm/.libs
 MyServiceConsumerComp_LDADD   = .libs/MyServiceConsumer.a \
-	$(top_builddir)/src/lib/rtm/libRTC.la
+	$(top_builddir)/src/lib/rtm/libRTC.la \
+	$(top_builddir)/src/lib/coil/lib/libcoil.la
 
 
 # Example sources

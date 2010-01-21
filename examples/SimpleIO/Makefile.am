@@ -24,12 +24,14 @@ socomp_LTLIBRARIES = ConsoleIn.la ConsoleOut.la
 ConsoleIn_la_SOURCES = ConsoleIn.cpp ConsoleIn.h
 ConsoleIn_la_LDFLAGS = -module
 ConsoleIn_la_FLAGS   = -L$(top_builddir)/src/lib/rtm/.lib
-ConsoleIn_la_LIBADD  = $(top_builddir)/src/lib/rtm/libRTC.la
+ConsoleIn_la_LIBADD  = $(top_builddir)/src/lib/rtm/libRTC.la \
+	$(top_builddir)/src/lib/coil/lib/libcoil.la
 
 ConsoleOut_la_SOURCES = ConsoleOut.cpp ConsoleOut.h
 ConsoleOut_la_LDFLAGS = -module
 ConsoleOut_la_FLAGS   = -L$(top_builddir)/src/lib/rtm/.lib
-ConsoleOut_la_LIBADD  = $(top_builddir)/src/lib/rtm/libRTC.la
+ConsoleOut_la_LIBADD  = $(top_builddir)/src/lib/rtm/libRTC.la \
+	$(top_builddir)/src/lib/coil/lib/libcoil.la
 
 # Standalone RTCs
 example_PROGRAMS = ConsoleInComp ConsoleOutComp
@@ -38,15 +40,20 @@ example_DATA = rtc.conf consin.conf consout.conf component.conf rtc.conf.org
 
 ConsoleInComp_SOURCES = ConsoleInComp.cpp 
 ConsoleInComp_LDFLAGS = -L$(top_builddir)/src/lib/rtm/.libs
-ConsoleInComp_LDADD   = $(top_builddir)/src/lib/rtm/libRTC.la ConsoleIn.o
+ConsoleInComp_LDADD   =  ConsoleIn.o \
+	$(top_builddir)/src/lib/rtm/libRTC.la \
+	$(top_builddir)/src/lib/coil/lib/libcoil.la
 
 ConsoleOutComp_SOURCES = ConsoleOutComp.cpp 
 ConsoleOutComp_LDFLAGS = -L$(top_builddir)/src/lib/rtm/.libs
-ConsoleOutComp_LDADD   = $(top_builddir)/src/lib/rtm/libRTC.la ConsoleOut.o
+ConsoleOutComp_LDADD   =  ConsoleOut.o \
+	$(top_builddir)/src/lib/rtm/libRTC.la \
+	$(top_builddir)/src/lib/coil/lib/libcoil.la
 
 ConnectorComp_SOURCES = ConnectorComp.cpp
 ConnectorComp_LDFLAGS = -L$(top_builddir)/src/lib/rtm/.libs
-ConnectorComp_LDADD   = $(top_builddir)/src/lib/rtm/libRTC.la
+ConnectorComp_LDADD   = $(top_builddir)/src/lib/rtm/libRTC.la \
+	$(top_builddir)/src/lib/coil/lib/libcoil.la
 
 # Example sources
 source_DATA = $(ALL_SRC) $(EXTRA_DIST)

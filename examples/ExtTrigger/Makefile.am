@@ -23,15 +23,18 @@ example_PROGRAMS = ConsoleInCompExt ConsoleOutCompExt ConnectorCompExt
 example_DATA = rtc.conf rtc.conf.org
 
 ConsoleInCompExt_SOURCES = ConsoleInComp.cpp ConsoleIn.cpp ConsoleIn.h
-ConsoleInCompExt_LDADD   = $(top_builddir)/src/lib/rtm/libRTC.la 
+ConsoleInCompExt_LDADD   = $(top_builddir)/src/lib/rtm/libRTC.la \
+	$(top_builddir)/src/lib/coil/lib/libcoil.la
 ConsoleInCompExt_LDFLAGS = -L$(top_builddir)/src/lib/rtm/.libs
 
 ConsoleOutCompExt_SOURCES = ConsoleOutComp.cpp ConsoleOut.cpp ConsoleOut.h
-ConsoleOutCompExt_LDADD   = $(top_builddir)/src/lib/rtm/libRTC.la
+ConsoleOutCompExt_LDADD   = $(top_builddir)/src/lib/rtm/libRTC.la \
+	$(top_builddir)/src/lib/coil/lib/libcoil.la
 ConsoleOutCompExt_LDFLAGS = -L$(top_builddir)/src/lib/rtm/.libs
 
 ConnectorCompExt_SOURCES = ConnectorComp.cpp
-ConnectorCompExt_LDADD   = $(top_builddir)/src/lib/rtm/libRTC.la
+ConnectorCompExt_LDADD   = $(top_builddir)/src/lib/rtm/libRTC.la \
+	$(top_builddir)/src/lib/coil/lib/libcoil.la
 ConnectorCompExt_LDFLAGS = -L$(top_builddir)/src/lib/rtm/.libs
 
 # Example sources

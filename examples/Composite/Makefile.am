@@ -24,17 +24,20 @@ socomp_LTLIBRARIES = Controller.la Motor.la Sensor.la
 Controller_la_SOURCES = Controller.cpp Controller.h
 Controller_la_LDFLAGS = -module
 Controller_la_FLAGS   = -L$(top_builddir)/src/lib/rtm/.lib
-Controller_la_LIBADD  = $(top_builddir)/src/lib/rtm/libRTC.la
+Controller_la_LIBADD  = $(top_builddir)/src/lib/rtm/libRTC.la \
+	$(top_builddir)/src/lib/coil/lib/libcoil.la
 
 Motor_la_SOURCES = Motor.cpp Motor.h
 Motor_la_LDFLAGS = -module
 Motor_la_FLAGS   = -L$(top_builddir)/src/lib/rtm/.lib
-Motor_la_LIBADD  = $(top_builddir)/src/lib/rtm/libRTC.la
+Motor_la_LIBADD  = $(top_builddir)/src/lib/rtm/libRTC.la \
+	$(top_builddir)/src/lib/coil/lib/libcoil.la
 
 Sensor_la_SOURCES = Sensor.cpp Sensor.h
 Sensor_la_LDFLAGS = -module
 Sensor_la_FLAGS   = -L$(top_builddir)/src/lib/rtm/.lib
-Sensor_la_LIBADD  = $(top_builddir)/src/lib/rtm/libRTC.la
+Sensor_la_LIBADD  = $(top_builddir)/src/lib/rtm/libRTC.la \
+	$(top_builddir)/src/lib/coil/lib/libcoil.la
 
 # Standalone RTCs
 example_PROGRAMS = ControllerComp MotorComp SensorComp Composite
@@ -42,19 +45,26 @@ example_DATA = rtc.conf composite.conf
 
 ControllerComp_SOURCES = ControllerComp.cpp 
 ControllerComp_LDFLAGS = -L$(top_builddir)/src/lib/rtm/.libs
-ControllerComp_LDADD   = $(top_builddir)/src/lib/rtm/libRTC.la Controller.o
+ControllerComp_LDADD   =  Controller.o \
+	$(top_builddir)/src/lib/rtm/libRTC.la \
+	$(top_builddir)/src/lib/coil/lib/libcoil.la
 
 MotorComp_SOURCES = MotorComp.cpp 
 MotorComp_LDFLAGS = -L$(top_builddir)/src/lib/rtm/.libs
-MotorComp_LDADD   = $(top_builddir)/src/lib/rtm/libRTC.la Motor.o
+MotorComp_LDADD   = Motor.o \
+	$(top_builddir)/src/lib/rtm/libRTC.la \
+	$(top_builddir)/src/lib/coil/lib/libcoil.la Motor.o
 
 SensorComp_SOURCES = SensorComp.cpp 
 SensorComp_LDFLAGS = -L$(top_builddir)/src/lib/rtm/.libs
-SensorComp_LDADD   = $(top_builddir)/src/lib/rtm/libRTC.la Sensor.o
+SensorComp_LDADD   =  Sensor.o \
+	$(top_builddir)/src/lib/rtm/libRTC.la \
+	$(top_builddir)/src/lib/coil/lib/libcoil.la
 
 Composite_SOURCES = Composite.cpp
 Composite_LDFLAGS = -L$(top_builddir)/src/lib/rtm/.libs
-Composite_LDADD   = $(top_builddir)/src/lib/rtm/libRTC.la
+Composite_LDADD   = $(top_builddir)/src/lib/rtm/libRTC.la \
+	$(top_builddir)/src/lib/coil/lib/libcoil.la
 
 # Example sources
 source_DATA = $(ALL_SRC) $(EXTRA_DIST)
@@ -63,28 +73,28 @@ source_DATA = $(ALL_SRC) $(EXTRA_DIST)
 # Extra distributed files
 #------------------------------------------------------------
 EXTRA_DIST =                \
-	gen_motor.sh              \
-	gen_sensor.sh              \
-	gen_controller.sh              \
-	Makefile.Controller  \
-	Makefile.Motor  \
-	Makefile.Sensor  \
-	README.Controller    \
-	README.Motor    \
-	README.Sensor    \
+	gen_motor.sh        \
+	gen_sensor.sh       \
+	gen_controller.sh   \
+	Makefile.Controller \
+	Makefile.Motor      \
+	Makefile.Sensor     \
+	README.Controller   \
+	README.Motor        \
+	README.Sensor       \
 	rtc.conf            \
 	composite.conf
 
 ALL_SRC =                  \
-	ControllerComp.cpp  \
-	Controller.cpp      \
-	Controller.h        \
-	MotorComp.cpp  \
-	Motor.cpp      \
-	Motor.h        \
-	SensorComp.cpp  \
-	Sensor.cpp      \
-	Sensor.h        \
+	ControllerComp.cpp \
+	Controller.cpp     \
+	Controller.h       \
+	MotorComp.cpp      \
+	Motor.cpp          \
+	Motor.h            \
+	SensorComp.cpp     \
+	Sensor.cpp         \
+	Sensor.h           \
 	Composite.cpp
 
 #------------------------------------------------------------
