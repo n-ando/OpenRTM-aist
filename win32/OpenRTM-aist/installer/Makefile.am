@@ -30,9 +30,9 @@ EXTRA_DIST =                       \
 	langs.txt                  \
 	crean.cmd                  \
 	omniORB/omniORB_inc.wxs.in \
-	omniORB/omniORB_inc.wxs    \
 	omniORB/omniwxs.py         \
 	OpenRTP/OpenRTP_inc.wxs.in \
+	OpenRTP/OpenRTP_inc.wxs    \
 	OpenRTP/openrtpwxs.py
 
 DIST_SUBDIRS = Bitmaps
