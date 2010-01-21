@@ -24,12 +24,14 @@ socomp_LTLIBRARIES = SeqIn.la SeqOut.la
 SeqIn_la_SOURCES = SeqIn.cpp SeqIn.h
 SeqIn_la_LDFLAGS = -module
 SeqIn_la_FLAGS   = -L$(top_builddir)/src/lib/rtm/.lib
-SeqIn_la_LIBADD  = $(top_builddir)/src/lib/rtm/libRTC.la
+SeqIn_la_LIBADD  = $(top_builddir)/src/lib/rtm/libRTC.la \
+	$(top_builddir)/src/lib/coil/lib/libcoil.la
 
 SeqOut_la_SOURCES = SeqOut.cpp SeqOut.h
 SeqOut_la_LDFLAGS = -module
 SeqOut_la_FLAGS   = -L$(top_builddir)/src/lib/rtm/.lib
-SeqOut_la_LIBADD  = $(top_builddir)/src/lib/rtm/libRTC.la
+SeqOut_la_LIBADD  = $(top_builddir)/src/lib/rtm/libRTC.la \
+	$(top_builddir)/src/lib/coil/lib/libcoil.la
 
 # Standalone RTCs
 example_PROGRAMS = SeqInComp SeqOutComp
@@ -37,11 +39,15 @@ example_DATA = rtc.conf component.conf
 
 SeqInComp_SOURCES = SeqInComp.cpp 
 SeqInComp_LDFLAGS = -L$(top_builddir)/src/lib/rtm/.libs
-SeqInComp_LDADD = $(top_builddir)/src/lib/rtm/libRTC.la SeqIn.o
+SeqInComp_LDADD = SeqIn.o \
+	$(top_builddir)/src/lib/rtm/libRTC.la \
+	$(top_builddir)/src/lib/coil/lib/libcoil.la
 
 SeqOutComp_SOURCES = SeqOutComp.cpp 
 SeqOutComp_LDFLAGS = -L$(top_builddir)/src/lib/rtm/.libs
-SeqOutComp_LDADD = $(top_builddir)/src/lib/rtm/libRTC.la SeqOut.o
+SeqOutComp_LDADD =  SeqOut.o \
+	$(top_builddir)/src/lib/rtm/libRTC.la \
+	$(top_builddir)/src/lib/coil/lib/libcoil.la
 
 # Example sources
 source_DATA = $(ALL_SRC) $(EXTRA_DIST)

@@ -12,20 +12,26 @@ AM_LDFLAGS=-L$(top_builddir) -L$(top_builddir)/rtm -L$(top_builddir)/rtm/idl
 
 noinst_LTLIBRARIES = libStringIn.la libStringOut.la
 libStringIn_la_SOURCES = StringIn.cpp StringIn.h
-libStringIn_la_LIBADD = $(top_builddir)/rtm/libRTC.la
+libStringIn_la_LIBADD = $(top_builddir)/rtm/libRTC.la \
+	$(top_builddir)/src/lib/coil/lib/libcoil.la
 libStringIn_la_FLAGS = -L$(top_builddir)/rtm/.lib
 
 libStringOut_la_SOURCES = StringOut.cpp StringOut.h
-libStringOut_la_LIBADD = $(top_builddir)/rtm/libRTC.la
+libStringOut_la_LIBADD = $(top_builddir)/rtm/libRTC.la \
+	$(top_builddir)/src/lib/coil/lib/libcoil.la
 libStringOut_la_FLAGS = -L$(top_builddir)/rtm/.lib
 
 noinst_PROGRAMS = StringInComp StringOutComp
 StringInComp_SOURCES = StringInComp.cpp 
-StringInComp_LDADD = $(top_builddir)/rtm/libRTC.la StringIn.o
+StringInComp_LDADD =  StringIn.o \
+	$(top_builddir)/rtm/libRTC.la \
+	$(top_builddir)/src/lib/coil/lib/libcoil.la
 StringInComp_LDFLAGS = -L$(top_builddir)/rtm/.libs
 
 StringOutComp_SOURCES = StringOutComp.cpp 
-StringOutComp_LDADD = $(top_builddir)/rtm/libRTC.la StringOut.o
+StringOutComp_LDADD =  StringOut.o \
+	$(top_builddir)/rtm/libRTC.la \
+	$(top_builddir)/src/lib/coil/lib/libcoil.la
 StringOutComp_LDFLAGS = -L$(top_builddir)/rtm/.libs
 
 EXTRA_DIST = \

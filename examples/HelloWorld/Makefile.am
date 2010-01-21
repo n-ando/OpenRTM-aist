@@ -12,12 +12,15 @@ AM_LDFLAGS=-L$(top_builddir) -L$(top_builddir)/rtm -L$(top_builddir)/rtm/idl
 
 noinst_LTLIBRARIES = libHelloRTWorld.la
 libHelloRTWorld_la_SOURCES = HelloRTWorld.cpp HelloRTWorld.h
-libHelloRTWorld_la_LIBADD = $(top_builddir)/rtm/libRTC.la
+libHelloRTWorld_la_LIBADD = $(top_builddir)/rtm/libRTC.la \
+	$(top_builddir)/src/lib/coil/lib/libcoil.la
 libHelloRTWorld_la_FLAGS = -L$(top_builddir)/rtm/.lib
 
 noinst_PROGRAMS = HelloRTWorldComp
 HelloRTWorldComp_SOURCES = HelloRTWorldComp.cpp 
-HelloRTWorldComp_LDADD = $(top_builddir)/rtm/libRTC.la HelloRTWorld.o
+HelloRTWorldComp_LDADD = HelloRTWorld.o \
+	$(top_builddir)/rtm/libRTC.la \
+	$(top_builddir)/src/lib/coil/lib/libcoil.la
 HelloRTWorldComp_LDFLAGS = -L$(top_builddir)/rtm/.libs
 
 EXTRA_DIST = run.sh
