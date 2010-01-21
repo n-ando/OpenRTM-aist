@@ -766,14 +766,78 @@ namespace RTC
                     OutPortConsumer* consumer);
 
   protected:
+    /*!
+     * @if jp
+     * @brief バッファモード
+     *
+     * true:single buffer mode.
+     * false:multi buffer mode.
+     *
+     * @else
+     * @brief Buffer mode
+     *
+     * true:single buffer mode.
+     * false:multi buffer mode.
+     *
+     * @endif
+     */
     bool m_singlebuffer;
+    /*!
+     * @if jp
+     * @brief バッファ
+     * @else
+     * @brief Buffer
+     * @endif
+     */
     CdrBufferBase* m_thebuffer;
+    /*!
+     * @if jp
+     * @brief プロパティ
+     * @else
+     * @brief Properties
+     * @endif
+     */
     coil::Properties m_properties;
+    /*!
+     * @if jp
+     * @brief 利用可能provider
+     * @else
+     * @brief Available providers
+     * @endif
+     */
     coil::vstring m_providerTypes;
+    /*!
+     * @if jp
+     * @brief 利用可能consumer
+     * @else
+     * @brief Available consumers
+     * @endif
+     */
     coil::vstring m_consumerTypes;
+    /*!
+     * @if jp
+     * @brief 接続リスト
+     * @else
+     * @brief Connection list
+     * @endif
+     */
     ConnectorList m_connectors;
+    /*!
+     * @if jp
+     * @brief 接続エンディアン 
+     * @else
+     * @brief Connected Endian
+     * @endif
+     */
     bool m_littleEndian;
 
+    /*!
+     * @if jp
+     * @brief ConnectorDataListener リスナ
+     * @else
+     * @brief ConnectorDataListener listener
+     * @endif
+     */
     ConnectorListeners m_listeners;
   };
 }; // namespace RTC
