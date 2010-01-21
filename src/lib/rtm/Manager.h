@@ -265,6 +265,24 @@ namespace RTC
      * @endif
      */
     LogStreamBuf& getLogStreamBuf() {return m_logStreamBuf;}
+
+    /*!
+     * @if jp
+     * @brief コンフィグレーションのログレベルの取得
+     *
+     * コンフィグレーションのログレベルを取得する。
+     *
+     * @return コンフィギュレーションのログレベル
+     *
+     * @else
+     * @brief Get the log level of the configuration.
+     *
+     * Get the log level of the configuration.
+     *
+     * @return Log level of Manager's configuration
+     *
+     * @endif
+     */
     std::string& getLogLevel() {return m_config["logger.log_level"];}
     
     /*!
@@ -515,7 +533,26 @@ namespace RTC
     bool registerFactory(coil::Properties& profile,
 			 RtcNewFunc new_func,
 			 RtcDeleteFunc delete_func);
+
+    /*!
+     * @if jp
+     * @brief ファクトリのプロファイルを取得
+     *
+     * ファクトリのプロファイルを取得する。
+     *
+     * @return ファクトリのプロファイル
+     *
+     * @else
+     * @brief Get profiles of factories. 
+     *
+     * Get profiles of factories. 
+     *
+     * @return profiles of factories
+     *
+     * @endif
+     */
     std::vector<coil::Properties> getFactoryProfiles();
+
     /*!
      * @if jp
      * @brief ExecutionContext用ファクトリを登録する
@@ -627,6 +664,19 @@ namespace RTC
      * @endif
      */
     RTObject_impl* createComponent(const char* comp_args);
+    /*!
+     * @if jp
+     * @brief Contextを生成する
+     *
+     * @return 生成したConetextのインスタンス
+     *
+     * @else
+     * @brief Create Context
+     *
+     * @return Created Context's instances
+     *
+     * @endif
+     */
     ExecutionContextBase* createContext(const char* ec_args);
     
     /*!
@@ -723,7 +773,6 @@ namespace RTC
      * @endif
      */
     void deleteComponent(const char* instance_name);
-//    void deleteComponent(RTObject_impl* comp);
     
     /*!
      * @if jp
@@ -971,8 +1020,38 @@ namespace RTC
      */
     std::string createORBOptions();
 
+    /*!
+     * @if jp
+     * @brief エンドポイントの生成
+     *
+     * コンフィグレーションからエンドポイントを生成する。
+     *
+     * @param endpoints エンドポイントリスト
+     *
+     * @else
+     * @brief Create Endpoints
+     *
+     * Create Endpoints from the configuration.
+     * 
+     * @param endpoints Endpoints list
+     *
+     * @endif
+     */
     void createORBEndpoints(coil::vstring& endpoints);
     
+    /*!
+     * @if jp
+     * @brief ORB の Endpoint のコマンドラインオプション作成
+     * @param opt コマンドラインオプション
+     * @param endpoint エンドポイントリスト
+     *
+     * @else
+     * @brief Create a command optional line of Endpoint of ORB.
+     * @param opt ORB options
+     * @param endpoint Endpoints list
+     *
+     * @endif
+     */
     void createORBEndpointOption(std::string& opt, coil::vstring& endpoint);
 
     /*!
@@ -1150,7 +1229,45 @@ namespace RTC
      * @endif
      */
     bool initExecContext();
+
+    /*!
+     * @if jp
+     * @brief PeriodicECSharedComposite の初期化
+     *
+     * @return PeriodicECSharedComposite 初期化処理実行結果
+     *         (初期化成功:true、初期化失敗:false)
+     *
+     * @else
+     * @brief PeriodicECSharedComposite initialization
+     *
+     * @return PeriodicECSharedComposite initialization result
+     *          (Successful:true, Failed:false)
+     *
+     * @endif
+     */
     bool initComposite();
+
+    /*!
+     * @if jp
+     * @brief ファクトリの初期化
+     *
+     * バッファ、スレッド、パブリッシャ、プロバイダ、コンシューマの
+     * ファクトリを初期化する。
+     *
+     * @return ファクトリ初期化処理実行結果
+     *         (初期化成功:true、初期化失敗:false)
+     *
+     * @else
+     * @brief Factories initialization
+     *
+     * Initialize buffer factories, thread factories, publisher factories, 
+     * provider factories, and consumer factories. 
+     *
+     * @return PeriodicECSharedComposite initialization result
+     *          (Successful:true, Failed:false)
+     *
+     * @endif
+     */
     bool initFactories();
 
     /*!
@@ -1174,7 +1291,28 @@ namespace RTC
      */
     bool initTimer();
 
+    /*!
+     * @if jp
+     * @brief ManagerServant の初期化
+     *
+     * @return Timer 初期化処理実行結果(初期化成功:true、初期化失敗:false)
+     *
+     * @else
+     * @brief ManagerServant initialization
+     *
+     * @return Timer Initialization result (Successful:true, Failed:false)
+     *
+     * @endif
+     */
     bool initManagerServant();
+
+    /*!
+     * @if jp
+     * @brief ManagerServant へのポインタ
+     * @else
+     * @brief The pointer to the ManagerServant
+     * @endif
+     */
     RTM::ManagerServant* m_mgrservant;
 
     /*!
@@ -1379,6 +1517,13 @@ namespace RTC
      */
     Logger rtclog;
 
+    /*!
+     * @if jp
+     * @brief ログ出力ファイル
+     * @else
+     * @brief Files for log output
+     * @endif
+     */
     std::vector<std::filebuf*> m_logfiles;
     
     //============================================================
@@ -1644,6 +1789,13 @@ namespace RTC
     private:
       CORBA::ORB_ptr m_pORB;
     };
+    /*!
+     * @if jp
+     * @brief ORB ヘルパークラスへのポインタ
+     * @else
+     * @brief The pointer to ORB helper class
+     * @endif
+     */
     OrbRunner* m_runner;
     
     //------------------------------------------------------------
@@ -1763,9 +1915,9 @@ namespace RTC
     
     /*!
      * @if jp
-     * @brief Terminator
+     * @brief ORB 終了用ヘルパークラスへのポインタ
      * @else
-     * @brief Terminator
+     * @brief The pointer to ORB termination helper class.
      * @endif
      */
     Terminator* m_terminator;
@@ -1775,6 +1927,19 @@ namespace RTC
       int waiting;
       Mutex mutex;
     };
+    /*!
+     * @if jp
+     * @brief マネージャ終了処理用同期フラグ
+     *
+     * マネージャ終了の待ち合せ処理で同期を取るためのフラグ。
+     *
+     * @else
+     * @brief Synchronous flag for manager termination
+     *
+     * Flag used to take synchronization by join(). 
+     * 
+     * @endif
+     */
     Term m_terminate;
   }; // class Manager
 }; // namespace RTC
