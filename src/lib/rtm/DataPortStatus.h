@@ -158,6 +158,29 @@ namespace RTC
         UNKNOWN_ERROR
       };
 
+    /*!
+     * @if jp
+     *
+     * @brief DataPortStatus リターンコードを文字列に変換
+     *
+     * DataPortStatus リターンコードを文字列に変換する
+     *
+     * @param status 変換対象 DataPortStatus リターンコード
+     *
+     * @return 文字列変換結果
+     *
+     * @else
+     *
+     * @brief Convert DataPortStatus into the string.
+     *
+     * Convert DataPortStatus into the string.
+     *
+     * @param status The target DataPortStatus for transformation
+     *
+     * @return Trnasformation result of string representation
+     *
+     * @endif
+     */
     static const char* toString(DataPortStatus::Enum status)
     {
       const char* str[] = {

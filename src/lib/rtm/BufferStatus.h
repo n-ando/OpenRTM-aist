@@ -54,9 +54,9 @@ namespace RTC
   public:
     /*!
      * @if jp
-     * @brief DataPortStatus リターンコード
+     * @brief BufferStatus リターンコード
      *
-     * データポート関連のクラスで共通のリターンコード
+     * バッファ関連のクラスで共通のリターンコード
      *
      * - BUFFER_OK:            正常終了
      * - BUFFER_ERROR:         バッファエラー
@@ -95,21 +95,21 @@ namespace RTC
     /*!
      * @if jp
      *
-     * @brief DataPortStatus リターンコードを文字列に変換
+     * @brief BufferStatus リターンコードを文字列に変換
      *
-     * DataPortStatus リターンコードを文字列に変換する
+     * BufferStatus リターンコードを文字列に変換する
      *
-     * @param status 変換対象 DataPortStatus リターンコード
+     * @param status 変換対象 BufferStatus リターンコード
      *
      * @return 文字列変換結果
      *
      * @else
      *
-     * @brief Convert DataPortStatus into the string.
+     * @brief Convert BufferStatus into the string.
      *
-     * Convert DataPortStatus into the string.
+     * Convert BufferStatus into the string.
      *
-     * @param status The target DataPortStatus for transformation
+     * @param status The target BufferStatus for transformation
      *
      * @return Trnasformation result of string representation
      *
