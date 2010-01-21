@@ -32,8 +32,6 @@ Configurations:
         Value: "0"
       - Key: WarningLevel
         Value: "3"
-      - Key: Detect64BitPortabilityProblems
-        Value: "false"
       - Key: DebugInformationFormat
         Value: "4"
     VCLibrarianTool:
@@ -66,8 +64,6 @@ Configurations:
         Value: "0"
       - Key: WarningLevel
         Value: "3"
-      - Key: Detect64BitPortabilityProblems
-        Value: "false"
       - Key: DebugInformationFormat
         Value: "3"
     VCLibrarianTool:
