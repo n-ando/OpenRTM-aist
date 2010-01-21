@@ -66,6 +66,9 @@ nodist_PublisherFlushTests_SOURCES =           \
 	$(top_srcdir)/src/lib/rtm/ManagerConfig.cpp                \
 	$(top_srcdir)/src/lib/rtm/ManagerServant.cpp               \
 	$(top_srcdir)/src/lib/rtm/CorbaNaming.cpp                  \
+	$(top_srcdir)/src/lib/rtm/CorbaPort.cpp          \
+	$(top_srcdir)/src/lib/rtm/ConnectorListener.cpp  \
+	$(top_srcdir)/src/lib/rtm/CORBA_IORUtil.cpp      \
 	$(top_srcdir)/src/lib/rtm/NamingManager.cpp                \
 	$(top_srcdir)/src/lib/rtm/ExtTrigExecutionContext.cpp      \
 	$(top_srcdir)/src/lib/rtm/PeriodicExecutionContext.cpp     \

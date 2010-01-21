@@ -61,6 +61,9 @@ nodist_FactoryTests_SOURCES = \
 	$(top_srcdir)/src/lib/rtm/ConfigAdmin.cpp \
 	$(top_srcdir)/src/lib/rtm/SdoConfiguration.cpp \
 	$(top_srcdir)/src/lib/rtm/CorbaNaming.cpp \
+	$(top_srcdir)/src/lib/rtm/CorbaPort.cpp          \
+	$(top_srcdir)/src/lib/rtm/ConnectorListener.cpp  \
+	$(top_srcdir)/src/lib/rtm/CORBA_IORUtil.cpp      \
 	$(top_srcdir)/src/lib/rtm/PortBase.cpp \
 	$(top_srcdir)/src/lib/rtm/NVUtil.cpp \
 	$(top_srcdir)/src/lib/rtm/ManagerServant.cpp \

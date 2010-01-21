@@ -49,6 +49,9 @@ nodist_DummyLib_la_SOURCES = \
 	$(top_srcdir)/src/lib/rtm/PortBase.cpp \
 	$(top_srcdir)/src/lib/rtm/PortAdmin.cpp \
 	$(top_srcdir)/src/lib/rtm/ConfigAdmin.cpp \
+	$(top_srcdir)/src/lib/rtm/CorbaPort.cpp          \
+	$(top_srcdir)/src/lib/rtm/ConnectorListener.cpp  \
+	$(top_srcdir)/src/lib/rtm/CORBA_IORUtil.cpp      \
 	$(top_srcdir)/src/lib/rtm/SdoConfiguration.cpp \
 	$(top_srcdir)/src/lib/rtm/ModuleManager.cpp \
 	$(top_srcdir)/src/lib/rtm/ManagerConfig.cpp \
