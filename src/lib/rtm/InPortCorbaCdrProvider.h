@@ -107,10 +107,55 @@ namespace RTC
      */
     virtual ~InPortCorbaCdrProvider(void);
 
+    /*!
+     * @if jp
+     * @brief 設定初期化
+     *
+     * InPortConsumerの各種設定を行う
+     *
+     * @else
+     * @brief Initializing configuration
+     *
+     * This operation would be called to configure this consumer
+     * in initialization.
+     *
+     * @endif
+     */
     virtual void init(coil::Properties& prop);
+
+    /*!
+     * @if jp
+     * @brief バッファを設定する
+     *
+     * バッファを設定する。InPortConsumerは外部から到着した
+     * データをこのバッファに対して書き込む
+     *
+     * @else
+     * @brief Initializing configuration
+     *
+     * This operation would be called to configure this consumer
+     * in initialization.
+     *
+     * @endif
+     */
     virtual void setBuffer(BufferBase<cdrMemoryStream>* buffer);
+
+    /*!
+     * @if jp
+     * @brief リスナを設定する。
+     * @else
+     * @brief Set the listener. 
+     * @endif
+     */
     virtual void setListener(ConnectorInfo& info,
                              ConnectorListeners* listeners);
+    /*!
+     * @if jp
+     * @brief Connectorを設定する。
+     * @else
+     * @brief set Connector
+     * @endif
+     */
     virtual void setConnector(InPortConnector* connector);
 
     /*!
