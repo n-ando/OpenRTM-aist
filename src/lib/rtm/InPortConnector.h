@@ -192,9 +192,37 @@ namespace RTC
     virtual bool isLittleEndian();
 
   protected:
+    /*!
+     * @if jp
+     * @brief ロガーストリーム
+     * @else
+     * @brief Logger stream
+     * @endif
+     */
     Logger rtclog;
+    /*!
+     * @if jp
+     * @brief ConnectorInfo
+     * @else
+     * @brief ConnectorInfo 
+     * @endif
+     */
     ConnectorInfo m_profile;
+    /*!
+     * @if jp
+     * @brief Connector が保持している Buffer
+     * @else
+     * @brief Connector's buffer
+     * @endif
+     */
     CdrBufferBase* m_buffer;
+    /*!
+     * @if jp
+     * @brief 接続エンディアン 
+     * @else
+     * @brief Connected Endian
+     * @endif
+     */
     bool m_littleEndian;
   };
 }; // namespace RTC
