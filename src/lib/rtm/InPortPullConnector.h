@@ -33,7 +33,7 @@ namespace RTC
   /*!
    * @if jp
    * @class InPortPullConnector
-   * @brief InPortPullConnector 基底クラス
+   * @brief InPortPullConnector クラス
    *
    * InPort の Push 型データフローのための Connector
    *
