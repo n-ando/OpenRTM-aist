@@ -85,7 +85,34 @@ namespace RTC
       throw (CORBA::SystemException)
     {};
 
+    /*!
+     * @if jp
+     * @brief コンポーネントをバインドする。
+     *
+     * コンポーネントをバインドする。
+     *
+     * @else
+     * @brief Bind the component.
+     *
+     * Bind the component.
+     *
+     * @endif
+     */
     virtual RTC::ReturnCode_t bindComponent(RTObject_impl* rtc) = 0;
+
+    /*!
+     * @if jp
+     * @brief オブジェクトのリファレンスを取得する。
+     *
+     * オブジェクトのリファレンスを取得する。
+     *
+     * @else
+     * @brief Get the reference of the object. 
+     *
+     * Get the reference of the object.
+     *
+     * @endif
+     */
     virtual RTC::ExecutionContextService_ptr getObjRef() = 0;
   };  // class ExecutionContextBase
 };  // namespace RTC
