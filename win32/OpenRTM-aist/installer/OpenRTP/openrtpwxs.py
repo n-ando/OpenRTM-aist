@@ -14,16 +14,16 @@
 # $Id$
 #
 
-rpc_files = ".eclipseproduct openrtp.exe startup.jar"
-
 data = [
-    ("",                                  rpc_files),
-    ("configuration",                     "*.ini"),
+    ("",                                  "* .eclipseproduct"),
+    ("configuration",                     "*.ini *.jar"),
     ("plugins",                           "*.jar"),
 ]
 
 import os
 base_dir=os.getenv("RTSE_ROOT")
+base_dir = base_dir.replace("\"", "")
+
 if base_dir == None:
     base_dir="C:\\distribution\\OpenRTP\\RTSystemEditor"
 else:

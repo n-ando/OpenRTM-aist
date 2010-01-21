@@ -9,6 +9,11 @@
 	{% for file in Openrtp.Files %}
 	<File Id="{% file.Id %}" Name="{% file.Name %}"
 	      DiskId="1" Source="{% file.Source %}">
+	  {% if file.Name is RTSystemEditorRCP.exe %}
+	  <Shortcut Id="{% file.Id %}" Directory="ToolsMenuFolder"
+		    Name="RTSystemEditor"
+		    Show="normal" WorkingDirectory="tools"/>
+	  {% endif %}
 	</File>
 	{% endfor %}
       </Component>
