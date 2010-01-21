@@ -5,7 +5,7 @@
  * @date $Date: 2007-12-31 03:08:04 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
- * Copyright (C) 2008
+ * Copyright (C) 2008-2010
  *     Noriaki Ando
  *     Task-intelligence Research Group,
  *     Intelligent Systems Research Institute,
@@ -21,6 +21,8 @@
 #define RTM_MANAGERSERVANT_H
 
 #include <iostream>
+#include <coil/Mutex.h>
+#include <coil/Guard.h>
 #include <rtm/idl/ManagerSkel.h>
 #include <rtm/Manager.h>
 #include <rtm/SystemLogger.h>
@@ -462,12 +464,15 @@ namespace RTM
     RTM::Manager_ptr getObjRef() const;
 
   private:
+    typedef coil::Guard<coil::Mutex> Guard;
     ::RTC::Logger rtclog;
     ::RTC::Manager& m_mgr;
     ::RTM::Manager_var m_objref;
 
     ::RTM::ManagerList m_masters;
+    ::coil::Mutex m_masterMutex;
     ::RTM::ManagerList m_slaves;
+    ::coil::Mutex m_slaveMutex;
 
     CORBA::Boolean m_isMaster;
 
