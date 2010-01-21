@@ -3,7 +3,7 @@
 @rem @date $Date: 2008-03-06 06:55:42 $
 @rem @author Norkai Ando <n-ando@aist.go.jp>
 @rem
-@rem Copyright (C) 2008
+@rem Copyright (C) 2008-2010
 @rem     Noriaki Ando
 @rem     Task-intelligence Research Group,
 @rem     Intelligent Systems Research Institute,
@@ -14,8 +14,15 @@
 @rem $Id: autobuild_vc8.bat 726 2008-05-14 03:05:42Z n-ando $
 @rem
 
+@rem ------------------------------------------------------------
+@rem Notice:
+@rem   omniORB should be under the following OMNI_ROOT directory.
+@rem   RTSE should be under the following OMNI_ROOT directory.
+@rem ------------------------------------------------------------
 @set RTM_ROOT=%~dp0
 @set PATH="C:\Program Files\Microsoft Visual Studio 9.0\VC\vcpackages";%PATH%
+@set OMNI_ROOT=C:\distribution\omniORB-4.1.4_vc9
+@set RTSE_ROOT=C:\distribution\OpenRTP\RTSystemEditor
 
 @rem ============================================================
 @rem copy property sheet
@@ -28,12 +35,12 @@ copy   coil_config.vsprops examples\USBCamera\coil_config.vsprops
 @rem build OpenRTM-aist
 @rem ============================================================
 
-vcbuild /rebuild OpenRTM-aist_vc9.sln
+vcbuild /M2 /rebuild OpenRTM-aist_vc9.sln
 
 @rem ============================================================
 @rem build USBCamera examples
 @rem ============================================================
-vcbuild /rebuild examples\USBCamera\USBCamera_vc9.sln
+vcbuild /M2 /rebuild examples\USBCamera\USBCamera_vc9.sln
 
 cd installer
 call autowix.cmd
