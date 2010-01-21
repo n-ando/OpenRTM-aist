@@ -286,9 +286,24 @@
     <Feature Id="OpenRTP" Level="1" Title="OpenRT Platform Tool Chain">
       <!-- rtse rcp -->
       <Feature Id="RTSystemEditor" Level="1" Title="RTSystemEditor">
-	<ComponentRef Id="Openrtp"/>
-	<ComponentRef Id="OpenrtpConfiguration"/>
-	<ComponentRef Id="OpenrtpPlugins"/>
+	<ComponentRef Id="RTSystemEditor" />
+	<ComponentRef Id="configuration" />
+	<ComponentRef Id="org.eclipse.core.runtime" />
+	<ComponentRef Id="_.manager" />
+	<ComponentRef Id="org.eclipse.osgi" />
+	<ComponentRef Id="_.manager_1" />
+	<ComponentRef Id="lib" />
+	<ComponentRef Id="_.cp" />
+	<ComponentRef Id="org.eclipse.update" />
+	<ComponentRef Id="plugins" />
+	<ComponentRef Id="org.eclipse.core.runtime.compatibility.registry_3.2.1.R32x_v20060907" />
+	<ComponentRef Id="META_INF" />
+	<ComponentRef Id="org.eclipse.jdt.junit.runtime.nl1_3.2.1.v200609270227" />
+	<ComponentRef Id="META_INF_1" />
+	<ComponentRef Id="org.eclipse.jdt.junit.runtime_3.2.1.r321_v20060721" />
+	<ComponentRef Id="META_INF_2" />
+	<ComponentRef Id="org.junit_3.8.1" />
+	<ComponentRef Id="META_INF_3" />
       </Feature>
     </Feature>
     <?endif ?>

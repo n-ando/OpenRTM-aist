@@ -60,11 +60,11 @@ set INCLUDE_OPENRTP=YES
 
 if not exist OpenRTP_inc.wxs (
    cd OpenRTP
-   set TMP_PYTHONPATH=%PYTHONPATH%
-   set PYTHONPATH=../../bin;%PYTHONPATH%
-   echo Generating OpenRTP_inc.wxs......
-   openrtpwxs.py
-   set PYTHONPATH=%TMP_PYTHONPATH%
+rem set TMP_PYTHONPATH=%PYTHONPATH%
+rem set PYTHONPATH=../../bin;%PYTHONPATH%
+rem echo Generating OpenRTP_inc.wxs......
+rem openrtpwxs.py
+rem set PYTHONPATH=%TMP_PYTHONPATH%
    copy OpenRTP_inc.wxs ..
    cd ..
 )
