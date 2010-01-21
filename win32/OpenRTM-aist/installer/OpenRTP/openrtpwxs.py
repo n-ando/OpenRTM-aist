@@ -15,18 +15,18 @@
 #
 
 data = [
-    ("",                                  "* .eclipseproduct"),
+    ("",                                  "*.jar *.exe .eclipseproduct"),
     ("configuration",                     "*.ini *.jar"),
     ("plugins",                           "*.jar"),
 ]
 
 import os
 base_dir=os.getenv("RTSE_ROOT")
-base_dir = base_dir.replace("\"", "")
 
 if base_dir == None:
     base_dir="C:\\distribution\\OpenRTP\\RTSystemEditor"
 else:
+    base_dir = base_dir.replace("\"", "")
     base_dir += "\\"
 
 def path_to_dir_id(path, prefix):
