@@ -2931,7 +2931,7 @@ namespace RTC
       }
       void operator()(ExecutionContextService_ptr ec)
       {
-        if (!::CORBA::is_nil(ec))
+        if (!::CORBA::is_nil(ec) && !ec->_non_existent())
           {
 	    ec->deactivate_component(RTC::LightweightRTObject::_duplicate(m_comp));
           }
