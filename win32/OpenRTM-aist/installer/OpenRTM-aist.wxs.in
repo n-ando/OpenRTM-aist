@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">   
-  <?define ProductName = "{% Product.Name %}-{% Product.Version %}"?>
-  <Product Name="{% Product.Name %}-{% Product.Version %}" 
+  <?define ProductName = "{% Product.Name %}-{% Product.Version %} for $(env.VC_VERSION)"?>
+  <Product Name="{% Product.Name %}-{% Product.Version %} for $(env.VC_VERSION)" 
            Id="{% Product.Id %}"
            Language='$(var.language)'
 	   Codepage='$(var.codepage)'

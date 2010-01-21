@@ -23,6 +23,7 @@
 @set PATH="C:\Program Files\Microsoft Visual Studio 9.0\VC\vcpackages";%PATH%
 @set OMNI_ROOT=C:\distribution\omniORB-4.1.4_vc9
 @set RTSE_ROOT=C:\distribution\OpenRTP\RTSystemEditor
+@set VC_VERSION=Visual C++ 2008
 
 @rem ============================================================
 @rem copy property sheet
