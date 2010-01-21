@@ -125,7 +125,36 @@ namespace RTC
      */
     virtual ReturnCode disconnect();
 
+    /*!
+     * @if jp
+     * @brief アクティブ化
+     *
+     * このコネクタをアクティブ化する
+     *
+     * @else
+     *
+     * @brief Connector activation
+     *
+     * This operation activates this connector
+     *
+     * @endif
+     */
     virtual void activate(){}; // do nothing
+
+    /*!
+     * @if jp
+     * @brief 非アクティブ化
+     *
+     * このコネクタを非アクティブ化する
+     *
+     * @else
+     *
+     * @brief Connector deactivation
+     *
+     * This operation deactivates this connector
+     *
+     * @endif
+     */
     virtual void deactivate(){}; // do nothing
   protected:
     /*!
