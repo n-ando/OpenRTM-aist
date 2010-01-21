@@ -78,6 +78,7 @@ static const char* default_config[] =
     "manager.modules.abs_path_allowed",   "YES",
     "manager.is_master",                  "NO",
     "manager.name",                       "manager",
+    "manager.command",                    "rtcd",
 
     ""
   };

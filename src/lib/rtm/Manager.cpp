@@ -338,8 +338,24 @@ namespace RTC
    */
   void Manager::load(const char* fname, const char* initfunc)
   {
-    RTC_TRACE(("Manager::load()"));
-    m_module->load(fname, initfunc);
+    RTC_TRACE(("Manager::load(fname = %s, initfunc = %s)",
+               fname, initfunc));
+    std::string file_name(fname);
+    std::string init_func(initfunc);
+    try
+      {
+        if (init_func.empty())
+          {
+            coil::vstring mod(coil::split(fname, "."));
+            init_func = mod[0] + "Init";
+          }
+        std::string path(m_module->load(file_name, init_func));
+        RTC_DEBUG(("module path: %s", path.c_str()));
+      }
+    catch (...)
+      {
+        RTC_ERROR(("module load error."));
+      }
     return;
   }
   
@@ -505,12 +521,12 @@ std::vector<coil::Properties> Manager::getLoadableModules()
     coil::Properties comp_prop, comp_id;
     if (!procComponentArgs(comp_args, comp_id, comp_prop)) return NULL;
 
-    //----------------------------------------------------------------------------
+    //------------------------------------------------------------
     // Because the format of port-name had been changed from <port_name> 
     // to <instance_name>.<port_name>, the following processing was added. 
     // (since r1648)
 
-    if (!comp_prop["exported_ports"].empty())
+    if (comp_prop.findNode("exported_ports") != 0)
       {
 	std::vector<std::string> 
 	  exported_ports(coil::split(comp_prop["exported_ports"], ","));
@@ -530,7 +546,7 @@ std::vector<coil::Properties> Manager::getLoadableModules()
 	comp_prop["exported_ports"] = exported_ports_str;
 	comp_prop["conf.default.exported_ports"] = comp_prop["exported_ports"];
       }
-    //---------------------------------------------------------------------------
+    //------------------------------------------------------------
 
     //------------------------------------------------------------
     // Create Component
