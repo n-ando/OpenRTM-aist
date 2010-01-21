@@ -598,8 +598,22 @@ namespace RTC
     std::string getInitFuncName(const std::string& file_path);
     
   protected:
+    /*!
+     * @if jp
+     * @brief ロガーストリーム
+     * @else
+     * @brief Logger stream
+     * @endif
+     */
     Logger rtclog;
 
+    /*!
+     * @if jp
+     * @brief DLL管理用構造体
+     * @else
+     * @brief Structure for DLL management
+     * @endif
+     */
     struct DLLEntity
     {
       coil::Properties properties;
@@ -641,6 +655,13 @@ namespace RTC
         return m_filepath == dllentity->properties.getProperty("file_path");
       }
     };
+    /*!
+     * @if jp
+     * @brief ロード済みモジュールリスト
+     * @else
+     * @brief Module list that has already loaded
+     * @endif
+     */
     //    DllMap m_modules;
     ObjectManager<const char*, DLLEntity, DllPred> m_modules;
     
@@ -693,7 +714,6 @@ namespace RTC
      * @endif
      */
     std::string m_initFuncPrefix;
-
 
     class UnloadPred
     {
