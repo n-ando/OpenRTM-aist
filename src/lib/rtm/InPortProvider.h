@@ -122,9 +122,23 @@ namespace RTC
      */
     virtual void setBuffer(BufferBase<cdrMemoryStream>* buffer) = 0;
 
+    /*!
+     * @if jp
+     * @brief リスナを設定する。
+     * @else
+     * @brief Set the listener. 
+     * @endif
+     */
     virtual void setListener(ConnectorInfo& info,
                              ConnectorListeners* listeners) = 0;
 
+    /*!
+     * @if jp
+     * @brief Connectorを設定する。
+     * @else
+     * @brief set Connector
+     * @endif
+     */
     virtual void setConnector(InPortConnector* connector) = 0;
 
     /*!
@@ -233,6 +247,14 @@ namespace RTC
      * @endif
      */
     SDOPackage::NVList m_properties;
+
+    /*!
+     * @if jp
+     * @brief ロガーストリーム
+     * @else
+     * @brief Logger stream
+     * @endif
+     */
     mutable Logger rtclog;
 
   private:
