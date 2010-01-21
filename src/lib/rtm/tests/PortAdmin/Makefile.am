@@ -52,6 +52,7 @@ nodist_PortAdminTests_SOURCES =           \
 	$(top_srcdir)/src/lib/rtm/Manager.cpp         \
 	$(top_srcdir)/src/lib/rtm/NamingManager.cpp   \
 	$(top_srcdir)/src/lib/rtm/CorbaNaming.cpp     \
+	$(top_srcdir)/src/lib/rtm/CorbaPort.cpp     \
 	$(top_srcdir)/src/lib/rtm/ManagerConfig.cpp   \
 	$(top_srcdir)/src/lib/rtm/ModuleManager.cpp   \
 	$(top_srcdir)/src/lib/rtm/ManagerServant.cpp  \
@@ -60,7 +61,7 @@ nodist_PortAdminTests_SOURCES =           \
 	$(top_srcdir)/src/lib/rtm/FactoryInit.cpp              \
 	$(top_srcdir)/src/lib/rtm/CdrRingBuffer.cpp            \
 	$(top_srcdir)/src/lib/rtm/DefaultPeriodicTask.cpp      \
-	$(top_srcdir)/src/lib/rtm/ConnectorListener.cpp      \
+	$(top_srcdir)/src/lib/rtm/ConnectorListener.cpp        \
 	$(top_srcdir)/src/lib/rtm/PublisherFlush.cpp           \
 	$(top_srcdir)/src/lib/rtm/PublisherNew.cpp             \
 	$(top_srcdir)/src/lib/rtm/PublisherPeriodic.cpp        \

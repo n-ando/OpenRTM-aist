@@ -49,6 +49,9 @@ nodist_SdoConfigurationTests_SOURCES = \
 	$(top_builddir)/src/lib/coil/common/Properties.cpp \
 	$(top_builddir)/src/lib/rtm/ConfigAdmin.cpp \
 	$(top_builddir)/src/lib/rtm/SdoConfiguration.cpp \
+	$(top_srcdir)/src/lib/rtm/CorbaPort.cpp          \
+	$(top_srcdir)/src/lib/rtm/ConnectorListener.cpp  \
+	$(top_srcdir)/src/lib/rtm/CORBA_IORUtil.cpp      \
 	$(top_srcdir)/src/lib/rtm/SystemLogger.cpp           \
 	$(top_srcdir)/src/lib/rtm/Manager.cpp               \
 	$(top_srcdir)/src/lib/rtm/FactoryInit.cpp              \

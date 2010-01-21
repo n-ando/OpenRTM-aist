@@ -40,13 +40,43 @@
 #include <rtm/PublisherFlush.h>
 #include <rtm/CdrRingBuffer.h>
 
+#include <rtm/idl/BasicDataTypeSkel.h>
+#include <rtm/ConnectorListener.h>
+
 #include <sys/time.h>
 /*!
  * @class PublisherFlushTests class
  * @brief PublisherFlush test
  */
+
 namespace PublisherFlush
 {
+
+  int m_OnCheck = 0;
+
+  /*!
+   * 
+   */
+  class DataListener
+    : public RTC::ConnectorDataListenerT<RTC::TimedLong>
+  {
+  public:
+    DataListener(const char* name) : m_name(name) {}
+    virtual ~DataListener()
+    {
+    }
+
+    virtual void operator()(const RTC::ConnectorInfo& info,
+                            const RTC::TimedLong& data)
+    {
+      std::cout << "------------------------------" << std::endl;
+      std::cout << "Listener: " << m_name << std::endl;
+      std::cout << "    Data: " << data.data << std::endl;
+      std::cout << "------------------------------" << std::endl;
+    };
+    std::string m_name;
+  };
+
   /*!
    * 
    * 
@@ -78,14 +108,16 @@ namespace PublisherFlush
       {
           if (m_buffer->full())
           {
-               return RTC::PublisherFlush::BUFFER_FULL;
+               return RTC::PublisherFlush::SEND_FULL;
            }
 
 
            RTC::BufferStatus::Enum ret = m_buffer->write(data);
 
-           switch(ret)
-           {
+          //Listener check
+          if(m_OnCheck == 0) {
+            switch(ret)
+            {
                case RTC::BufferStatus::BUFFER_OK:
                    return RTC::PublisherFlush::PORT_OK;
                    break;
@@ -93,18 +125,36 @@ namespace PublisherFlush
                    return RTC::PublisherFlush::PORT_ERROR;
                    break;
                case RTC::BufferStatus::BUFFER_FULL:
-                   return RTC::PublisherFlush::BUFFER_FULL;
+                   return RTC::PublisherFlush::SEND_FULL;
                    break;
                case RTC::BufferStatus::BUFFER_EMPTY:
                    return RTC::PublisherFlush::BUFFER_EMPTY;
                    break;
                case RTC::BufferStatus::TIMEOUT:
-                   return RTC::PublisherFlush::BUFFER_TIMEOUT;
+                   return RTC::PublisherFlush::SEND_TIMEOUT;
                    break;
                default:
                    return RTC::PublisherFlush::UNKNOWN_ERROR;
-           }
-           return RTC::PublisherFlush::UNKNOWN_ERROR;
+            }
+            return RTC::PublisherFlush::UNKNOWN_ERROR;
+          }
+          else if(m_OnCheck == 1) {
+               return RTC::PublisherFlush::PORT_OK;
+          }
+          else if(m_OnCheck == 2) {
+               return RTC::PublisherFlush::PORT_ERROR;
+          }
+          else if(m_OnCheck == 3) {
+               return RTC::PublisherFlush::SEND_FULL;
+          }
+          else if(m_OnCheck == 4) {
+               return RTC::PublisherFlush::SEND_TIMEOUT;
+          }
+          else if(m_OnCheck == 5) {
+               return RTC::PublisherFlush::UNKNOWN_ERROR;
+          }
+
+
       }
       /*!
        * 
@@ -137,6 +187,7 @@ namespace PublisherFlush
   private:
 		
   public:
+    RTC::ConnectorListeners m_listeners;
 	
     /*!
      * @brief Constructor
@@ -252,10 +303,45 @@ namespace PublisherFlush
 
         RTC::PublisherFlush publisher;
 
+        //ConnectorInfo
+        coil::Properties prop;
+        coil::vstring ports;
+        RTC::ConnectorInfo info("name", "id", ports, prop);
+
+        //ConnectorListeners
+        m_listeners.connectorData_[RTC::ON_BUFFER_WRITE].addListener(
+                                   new DataListener("ON_BUFFER_WRITE"), true);
+        m_listeners.connectorData_[RTC::ON_BUFFER_FULL].addListener(
+                                   new DataListener("ON_BUFFER_FULL"), true);
+        m_listeners.connectorData_[RTC::ON_BUFFER_WRITE_TIMEOUT].addListener(
+                                   new DataListener("ON_BUFFER_WRITE_TIMEOUT"), true);
+        m_listeners.connectorData_[RTC::ON_BUFFER_OVERWRITE].addListener(
+                                   new DataListener("ON_BUFFER_OVERWRITE"), true);
+        m_listeners.connectorData_[RTC::ON_BUFFER_READ].addListener(
+                                   new DataListener("ON_BUFFER_READ"), true);
+        m_listeners.connectorData_[RTC::ON_SEND].addListener(
+                                   new DataListener("ON_SEND"), true);
+        m_listeners.connectorData_[RTC::ON_RECEIVED].addListener(
+                                   new DataListener("ON_RECEIVED"), true);
+        m_listeners.connectorData_[RTC::ON_RECEIVER_FULL].addListener(
+                                   new DataListener("ON_RECEIVER_FULL"), true);
+        m_listeners.connectorData_[RTC::ON_RECEIVER_TIMEOUT].addListener(
+                                   new DataListener("ON_RECEIVER_TIMEOUT"), true);
+        m_listeners.connectorData_[RTC::ON_RECEIVER_ERROR].addListener(
+                                   new DataListener("ON_RECEIVER_ERROR"), true);
+
+        // setListener
+        CPPUNIT_ASSERT_EQUAL(RTC::DataPortStatus::INVALID_ARGS, 
+                             publisher.setListener(info, 0));
+        CPPUNIT_ASSERT_EQUAL(RTC::DataPortStatus::PORT_OK, 
+                             publisher.setListener(info, &m_listeners));
+
         //Consumerを設定しない状態でwriteをコール
         {
         cdrMemoryStream cdr;
-        12345 >>= cdr;
+        RTC::TimedLong td;
+        td.data = 12345;
+        td >>= cdr;
         CPPUNIT_ASSERT_EQUAL(RTC::PublisherFlush::PRECONDITION_NOT_MET, 
                              publisher.write(cdr,0,0));
         }
@@ -265,19 +351,24 @@ namespace PublisherFlush
         //activateする前にwriteをコール
         {
         cdrMemoryStream cdr;
-        123 >>= cdr;
+        RTC::TimedLong td;
+        td.data = 123;
+        td >>= cdr;
+
         CPPUNIT_ASSERT_EQUAL(RTC::PublisherFlush::PORT_OK,
                              publisher.write(cdr,0,0));
         }
         publisher.activate();
 
         CORBA::Long testdata[8] = { 123,279,3106,31611,125563,
-                                    125563,846459,2071690107, };
+                                    125563,846459,2071690107 };
 
         for(int icc(0);icc<7;++icc)
         {
             cdrMemoryStream cdr;
-            testdata[icc+1] >>= cdr;
+            RTC::TimedLong td;
+            td.data = testdata[icc+1];
+            td >>= cdr;
 
             CPPUNIT_ASSERT_EQUAL(RTC::PublisherFlush::PORT_OK,
                                  publisher.write(cdr,0,0));
@@ -287,8 +378,10 @@ namespace PublisherFlush
         //full の状態でコール(full)
         {
         cdrMemoryStream cdr;
-        12345 >>= cdr;
-        CPPUNIT_ASSERT_EQUAL(RTC::PublisherFlush::BUFFER_FULL,
+        RTC::TimedLong td;
+        td.data = 12345;
+        td >>= cdr;
+        CPPUNIT_ASSERT_EQUAL(RTC::PublisherFlush::SEND_FULL,
                                  publisher.write(cdr,0,0));
         }
 
@@ -297,27 +390,43 @@ namespace PublisherFlush
             cdrMemoryStream data;
             data = consumer->get_m_put_data();
             CORBA::ULong inlen = data.bufSize();
-            CPPUNIT_ASSERT_EQUAL(4,(int)inlen);
+            CPPUNIT_ASSERT_EQUAL(12,(int)inlen);
 
-            CORBA::Octet oct[8];
-            data.get_octet_array (oct, (int)inlen);
-            long lval(0);
-            for(int ic(0);ic<(int)inlen;++ic)
-            {
-                lval = lval+(int)(oct[ic]<<(ic*8));
-            }
-            CPPUNIT_ASSERT_EQUAL((long)testdata[icc],lval);
+            RTC::TimedLong rtd;
+            rtd <<= data;
+
+            CPPUNIT_ASSERT_EQUAL((long)testdata[icc], rtd.data);
         }
 
         //deactivateしてからwriteをコール
         publisher.deactivate();
         {
         cdrMemoryStream cdr;
-        12345 >>= cdr;
+        RTC::TimedLong td;
+        td.data = 12345;
+        td >>= cdr;
         CPPUNIT_ASSERT_EQUAL(RTC::PublisherFlush::PORT_OK,
                              publisher.write(cdr,0,0));
         }
+
+        //Listener callback check
+        cdrMemoryStream cdr;
+        RTC::TimedLong td;
+        td.data = 777;
+        td >>= cdr;
+        m_OnCheck = 1;  // PORT_OK:onReceived()
+        publisher.write(cdr,0,0);
+        m_OnCheck = 2;  // PORT_ERROR:onReceiverError()
+        publisher.write(cdr,0,0);
+        m_OnCheck = 3;  // SEND_FULL:onReceiverFull()
+        publisher.write(cdr,0,0);
+        m_OnCheck = 4;  // SEND_TIMEOUT:onReceiverTimeout()
+        publisher.write(cdr,0,0);
+        m_OnCheck = 5;  // UNKNOWN_ERROR:onReceiverError()
+        publisher.write(cdr,0,0);
+
     }
+
     /*!
      * @brief update()メソッド呼出周辺の即時性のテスト
      * 

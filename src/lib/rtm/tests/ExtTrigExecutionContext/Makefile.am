@@ -53,6 +53,9 @@ nodist_ExtTrigExecutionContextTests_SOURCES = \
 	$(top_srcdir)/src/lib/coil/common/Properties.cpp \
 	$(top_srcdir)/src/lib/rtm/RTObject.cpp \
 	$(top_srcdir)/src/lib/rtm/CorbaNaming.cpp \
+	$(top_srcdir)/src/lib/rtm/CorbaPort.cpp          \
+	$(top_srcdir)/src/lib/rtm/ConnectorListener.cpp  \
+	$(top_srcdir)/src/lib/rtm/CORBA_IORUtil.cpp      \
 	$(top_srcdir)/src/lib/rtm/NamingManager.cpp \
 	$(top_srcdir)/src/lib/rtm/PortBase.cpp \
 	$(top_srcdir)/src/lib/rtm/PortAdmin.cpp \

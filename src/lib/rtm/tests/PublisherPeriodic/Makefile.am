@@ -77,6 +77,9 @@ nodist_PublisherPeriodicTests_SOURCES =           \
 	$(top_builddir)/src/lib/rtm/OpenHRPExecutionContext.cpp    \
 	$(top_builddir)/src/lib/rtm/PeriodicECSharedComposite.cpp  \
 	$(top_builddir)/src/lib/rtm/NamingManager.cpp \
+	$(top_builddir)/src/lib/rtm/CorbaPort.cpp          \
+	$(top_builddir)/src/lib/rtm/ConnectorListener.cpp  \
+	$(top_builddir)/src/lib/rtm/CORBA_IORUtil.cpp      \
 	$(top_builddir)/src/lib/rtm/RTObject.cpp \
 	$(top_builddir)/src/lib/rtm/NumberingPolicy.cpp \
 	$(top_builddir)/src/lib/rtm/Factory.cpp         \
