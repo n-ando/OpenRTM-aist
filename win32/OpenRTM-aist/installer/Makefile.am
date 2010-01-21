@@ -20,16 +20,18 @@ wxs:
 
 dist-hook: wxs
 
-EXTRA_DIST =                     \
-	WiLangId.vbs             \
-	WiSubStg.vbs             \
-	OpenRTM-aist.wxs.in      \
-	OpenRTM-aist.wxs.yaml.in \
-	omniORB_inc.wxs.in       \
-	omniwxs.py               \
-	autowix.cmd.in           \
-	License.rtf              \
-	langs.txt                \
-	crean.cmd
+EXTRA_DIST =                       \
+	WiLangId.vbs               \
+	WiSubStg.vbs               \
+	OpenRTM-aist.wxs.in        \
+	OpenRTM-aist.wxs.yaml.in   \
+	autowix.cmd.in             \
+	License.rtf                \
+	langs.txt                  \
+	crean.cmd                  \
+	omniORB/omniORB_inc.wxs.in \
+	omniORB/omniwxs.py         \
+	OpenRTP/OpenRTP_inc.wxs.in \
+	OpenRTP/openrtpwxs.py
 
 DIST_SUBDIRS = Bitmaps
