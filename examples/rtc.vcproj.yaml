@@ -40,8 +40,6 @@ Configurations:
         Value: "0"
       - Key: WarningLevel
         Value: "3"
-      - Key: Detect64BitPortabilityProblems
-        Value: "true"
       - Key: DebugInformationFormat
         Value: "4"
     VCLinkerTool:
@@ -87,8 +85,6 @@ Configurations:
         Value: "0"
       - Key: WarningLevel
         Value: "3"
-      - Key: Detect64BitPortabilityProblems
-        Value: "true"
       - Key: DebugInformationFormat
         Value: "3"
     VCLinkerTool:
