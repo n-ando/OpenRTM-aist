@@ -57,10 +57,44 @@ namespace RTC
     : public virtual PeriodicExecutionContext
   {
   public:
+    /*!
+     * @if jp
+     * @brief コンストラクタ
+     * @else
+     * @brief Constructor
+     * @endif
+     */
     OpenHRPExecutionContext();
+    /*!
+     * @if jp
+     * @brief デストラクタ
+     * @else
+     * @brief Destructor 
+     * @endif
+     */
     virtual ~OpenHRPExecutionContext(void);
+    /*!
+     * @if jp
+     * @brief ExecutionContextの処理を進める
+     *
+     * ExecutionContextの処理を１周期分進める。
+     *
+     * @else
+     * @brief Proceed with tick of ExecutionContext
+     *
+     * Proceed with tick of ExecutionContext for one period.
+     *
+     * @endif
+     */
     virtual void tick(void)
       throw (CORBA::SystemException);
+    /*!
+     * @if jp
+     * @brief ExecutionContext のスレッド実行フラグ
+     * @else
+     * @brief The thread running flag of ExecutionContext
+     * @endif
+     */
     virtual int svc(void);
 
   private:
