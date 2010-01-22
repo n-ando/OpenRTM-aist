@@ -993,11 +993,53 @@ namespace RTC
                                       OutPortProvider* provider);
 
   protected:
+    /*!
+     * @if jp
+     * @brief プロパティ
+     * @else
+     * @brief Properties
+     * @endif
+     */
     coil::Properties m_properties;
+    /*!
+     * @if jp
+     * @brief 接続リスト
+     * @else
+     * @brief Connection list
+     * @endif
+     */
     std::vector<OutPortConnector*> m_connectors;
+    /*!
+     * @if jp
+     * @brief 利用可能provider
+     * @else
+     * @brief Available providers
+     * @endif
+     */
     coil::vstring m_providerTypes;
+    /*!
+     * @if jp
+     * @brief 利用可能consumer
+     * @else
+     * @brief Available consumers
+     * @endif
+     */
     coil::vstring m_consumerTypes;
+    /*!
+     * @if jp
+     * @brief 接続エンディアン 
+     * @else
+     * @brief Connected Endian
+     * @endif
+     */
     bool m_littleEndian;
+    /*!
+     * @if jp
+     * @brief ConnectorDataListener リスナ
+     * @else
+     * @brief ConnectorDataListener listener
+     * @endif
+     */
     ConnectorListeners m_listeners;
    
     /*!
