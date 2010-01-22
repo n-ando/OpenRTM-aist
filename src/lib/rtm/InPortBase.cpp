@@ -307,7 +307,7 @@ namespace RTC
    * バッファ書き込みまたは読み出しイベントに関連する各種リスナを設定する。
    *
    * @else
-   * @brief Adding BufferDataListener type listener
+   * @brief Adding ConnectorDataListener type listener
    *
    * @endif
    */
