@@ -216,9 +216,37 @@ namespace RTC
     }
 
   protected:
+    /*!
+     * @if jp
+     * @brief ロガーストリーム
+     * @else
+     * @brief Logger stream
+     * @endif
+     */
     Logger rtclog;
+    /*!
+     * @if jp
+     * @brief Port の PortProfile
+     * @else
+     * @brief PortProfile of the Port
+     * @endif
+     */
     ConnectorInfo m_profile;
+    /*!
+     * @if jp
+     * @brief 接続エンディアン 
+     * @else
+     * @brief Connected Endian
+     * @endif
+     */
     bool m_littleEndian;
+    /*!
+     * @if jp
+     * @brief cdrストリーム
+     * @else
+     * @brief CDR stream
+     * @endif
+     */
     cdrMemoryStream m_cdr;
 
   };
