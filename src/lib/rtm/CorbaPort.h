@@ -168,9 +168,11 @@ namespace RTC
    * (オペレーションコール)を1 つのプロバイダにより処理する関係を構築す
    * る(下図)。
    *
+   * <pre>
    * consumer0 ]---<
    * consumer1 ]---<  O----[ provider0
    * consumer2 ]---<
+   * </pre>
    *  
    * これに対し、コンシューマが要求するプロバイダインターフェース記述子
    * にインクリメンタル生成型インスタンス名記述子 "<type_name>+" が指定
@@ -179,9 +181,11 @@ namespace RTC
    * イダを要求する n 個のコンシューマが存在する場合、n 個のプロバイダ
    * がそれぞれの要求を処理する以下のような関係が構築される。
    *
+   * <pre>
    * consumer0 ]---<  O----[ provider0
    * consumer1 ]---<  O----[ provider1
    * consumer2 ]---<  O----[ provider2
+   * </pre>
    *
    *
    * 接続に際して、ツール等から ConnectorProfile::properties に適切なイ
@@ -198,26 +202,27 @@ namespace RTC
    * いま、2つのコンポーネントのサービスポートを接続する場合を考える。
    * それぞれのコンポーネントのサービスポートが以下の場合、
    *
-   * - rtc_iname: MyComp0
-   *   port_name: mycomp_service
+   * - rtc_iname: MyComp0        <br>
+   *   port_name: mycomp_service <br>
    *   interfaces:
-   *   - if_polarity: provided
-   *     if_iname: echo0
+   *   - if_polarity: provided   <br>
+   *     if_iname: echo0         <br>
    *     if_tname: Echo
-   *   - if_polarity: required
-   *     if_iname: add0
+   *   - if_polarity: required   <br>
+   *     if_iname: add0          <br>
    *     if_tname: add
    *
-   * - rtc_iname: YourComp0
-   *   port_name: yourcomp_service
+   * - rtc_iname: YourComp0        <br>
+   *   port_name: yourcomp_service <br>
    *   interfaces:
-   *   - if_polarity: required
-   *     if_iname: echo9
+   *   - if_polarity: required     <br>
+   *     if_iname: echo9           <br>
    *     if_tname: Echo
-   *   - if_polarity: provided
-   *     if_iname: add9
+   *   - if_polarity: provided     <br>
+   *     if_iname: add9            <br>
    *     if_tname: add
    *
+   * <pre>
    *      MyComp0                                 YourComp0
    *     _______ mycomp_service   yourcomp_service ______
    *            |                                 |
@@ -225,12 +230,14 @@ namespace RTC
    *          |   |---< add0          add9  O---|   |
    *           ~T~                               ~T~
    *            |                                 |
+   * </pre>
    *
    * MyComp0 の echo0 (プロバイダ) と YourComp0 の echo9 (コンシューマ)、
    * MyComp0 の add0 (コンシューマ) と YourComp0 の echo9 (プロバイダ)
    * をそれぞれ対にして接続させるものと仮定する。この場合、
    * ConnectorProfile は以下のように設定する。
    * 
+   * <pre>
    * ConnectorProfile:
    *   name: 任意のコネクタ名
    *   connector_id: 空文字
@@ -238,13 +245,16 @@ namespace RTC
    *   properties:
    *     <add0>: <add9>
    *     <echo9>: <echo0>
+   * </pre>
    *
    * ただし、それぞれ
    * 
+   * <pre>
    * <add0> は MyComp0.port.mycomp_service.required.add.add0
    * <add9> は YourComp0.port.yourcomp_service.provided.add.add9
    * <echo0> は MyComp0.port.mycomp_service.provided.echo.echo0
    * <echo9> は YourComp0.port.yourcomp_service.required.echo.echo9
+   * </pre>
    *
    * である。接続プロセスにおいて、各ポートのプロバイダおよびコンシュー
    * マは、それぞれ以下の作業を、CorbaPort::publishInterfaces(),
@@ -310,6 +320,7 @@ namespace RTC
    * strict: すべてのコンシューマに指定した参照が存在し、かつナローイン
    *         グにも成功しコンシューマに適切にセットできた場合にのみ Port
    *         間の接続を確立する。
+   *
    * best_effort: ナローイング等に失敗した場合でも、エラーを返すことな
    *         く Port 間の接続を確立する。
    *
@@ -432,9 +443,11 @@ namespace RTC
    * exist, the following relation which processes the call from these
    * consumers by one provider will be established.
    *
+   * <pre>
    * consumer0 ]---<
    * consumer1 ]---<  O----[ provider0
    * consumer2 ]---<
+   * </pre>
    *  
    * On the other hand, when incremental generated type instance name
    * descriptor "<type_name>+" is specified as the provider interface
@@ -445,9 +458,11 @@ namespace RTC
    * n providers process each call from the consumers will be
    * established.
    *
+   * <pre>
    * consumer0 ]---<  O----[ provider0
    * consumer1 ]---<  O----[ provider1
    * consumer2 ]---<  O----[ provider2
+   * </pre>
    *
    *
    * Describing the appropriate interface mapping specification in the
@@ -466,26 +481,28 @@ namespace RTC
    * connected is considered. When the service port of each component
    * is the following,
    * 
-   * - rtc_iname: MyComp0
-   *   port_name: mycomp_service
+   * - rtc_iname: MyComp0          <br>
+   *   port_name: mycomp_service   <br>
    *   interfaces:
-   *   - if_polarity: provided
-   *     if_iname: echo0
+   *   - if_polarity: provided     <br>
+   *     if_iname: echo0           <br>
    *     if_tname: Echo
-   *   - if_polarity: required
-   *     if_iname: add0
+   *   - if_polarity: required     <br>
+   *     if_iname: add0            <br>
    *     if_tname: add
    *
-   * - rtc_iname: YourComp0
-   *   port_name: yourcomp_service
+   * - rtc_iname: YourComp0        <br>
+   *   port_name: yourcomp_service <br>
    *   interfaces:
-   *   - if_polarity: required
-   *     if_iname: echo9
+   *   - if_polarity: required     <br>
+   *     if_iname: echo9           <br>
    *     if_tname: Echo
-   *   - if_polarity: provided
-   *     if_iname: add9
+   *   - if_polarity: provided     <br>
+   *     if_iname: add9            <br>
    *     if_tname: add
    *
+   *
+   * <pre>
    *      MyComp0                                 YourComp0
    *     _______ mycomp_service   yourcomp_service ______
    *            |                                 |
@@ -493,6 +510,9 @@ namespace RTC
    *          |   |---< add0          add9  O---|   |
    *           ~T~                               ~T~
    *            |                                 |
+   * </pre>
+   * 
+   *
    *
    * Assume that connection between echo0 (provider) of MyComp0
    * component and echo9 (consumer) of YourComp0 component, and add0
@@ -500,6 +520,7 @@ namespace RTC
    * established.  In this case, ConnectorProfile is set up as
    * follows.
    * 
+   * <pre>
    * ConnectorProfile:
    *   name: any connector name
    *   connector_id: empty string
@@ -507,13 +528,16 @@ namespace RTC
    *   properties:
    *     <add0>: <add9>
    *     <echo9>: <echo0>
+   * </pre>
    *
    * Please note that <add0>, <add9>, <echo0> and <echo9> are the following.
    * 
+   * <pre>
    * <add0> is MyComp0.port.mycomp_service.required.add.add0
    * <add9> is YourComp0.port.yourcomp_service.provided.add.add9
    * <echo0> is MyComp0.port.mycomp_service.provided.echo.echo0
    * <echo9> is YourComp0.port.yourcomp_service.required.echo.echo9
+   * </pre>
    *
    * In the connection process, the provider and the consumer of each
    * port carries out the following process respectively in the
@@ -587,6 +611,7 @@ namespace RTC
    * strict: The connection is established, if only all the specified
    *         consumers are set appropriate references and narrowed
    *         successfully.  
+   *
    * best_effort: The connection is established without any errors,
    *         even if appropriate reference does not exist or reference
    *         narrowing fails.
@@ -876,7 +901,7 @@ namespace RTC
      *    type_name     = "Manipulator";
      *    polarity      = REQUIRED;
      *  }
-     *</pre>
+     * </pre>
      *
      * として登録されていれば、他の Port の
      *
@@ -917,7 +942,7 @@ namespace RTC
      *    type_name     = "Manipulator";
      *    polarity      = REQUIRED;
      *  }
-     *</pre>
+     * </pre>
      * Find the object reference of Serivce Provider that is registered as
      * the following of other ports:
      * <pre>
@@ -1009,6 +1034,13 @@ namespace RTC
     virtual void deactivateInterfaces();
 
   protected:
+    /*!
+     * @if jp
+     * @brief プロパティ
+     * @else
+     * @brief Properties
+     * @endif
+     */
     coil::Properties m_properties;
     
   private:
@@ -1020,10 +1052,16 @@ namespace RTC
     /*!
      * @if jp
      * @class CorbaProviderHolder
+     * @brief Provider の情報を格納する構造体
+     *
      * CORBA Provider のホルダクラス
+     *
      * @else
      * @class CorbaProviderHolder
+     * @brief The structure to be stored Provider information.
+     *
      * CORBA Provider holder class
+     *
      * @endif
      */
     class CorbaProviderHolder
