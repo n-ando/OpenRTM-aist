@@ -55,44 +55,29 @@ namespace RTM
         RTC_TRACE(("This manager is slave."));
         // this is slave manager
 
-        for (int i(0); i < 3; ++i)
+        try
           {
-            try
-              {
-                std::string mgrloc("corbaloc:iiop:");
-                mgrloc += config["corba.master_manager"]
-                  + "/" + config["manager.name"];
+            std::string mgrloc("corbaloc:iiop:");
+            mgrloc += config["corba.master_manager"]
+              + "/" + config["manager.name"];
                 
-                CORBA::Object_var mobj;
-                mobj = m_mgr.getORB()->string_to_object(mgrloc.c_str());
-                RTM::Manager_var owner = ::RTM::Manager::_narrow(mobj);
-                add_master_manager(owner);
-                m_objref = this->_this();
-                owner->add_slave_manager(m_objref.in());
-                return;
-              }
-            catch(CORBA::SystemException& e)
-              {
-                RTC_DEBUG(("CORBA SystemException cought (CORBA::%s)",
-                           e._name()));
-
-                if (coil::toBool(config["manager.lanuch_fron_slave"],
-                                 "YES", "NO", true))
-                  {
-                    coil::launch_shell("rtcd -d");
-                    coil::sleep(1);
-                    continue;
-                  }
-                else
-                  {
-                    RTC_INFO(("No master manager found. This is standalone mode."));
-                    return;
-                  }
-              }
-            catch (...)
-              {
-                RTC_ERROR(("Unknown exception cought."));
-              }
+            CORBA::Object_var mobj;
+            mobj = m_mgr.getORB()->string_to_object(mgrloc.c_str());
+            RTM::Manager_var owner = ::RTM::Manager::_narrow(mobj);
+            add_master_manager(owner);
+            m_objref = this->_this();
+            owner->add_slave_manager(m_objref.in());
+            return;
+          }
+        catch(CORBA::SystemException& e)
+          {
+            RTC_DEBUG(("CORBA SystemException cought (CORBA::%s)", e._name()));
+            RTC_INFO(("No master manager found. This is standalone mode."));
+            return;
+          }
+        catch (...)
+          {
+            RTC_ERROR(("Unknown exception cought."));
           }
       }
   }
