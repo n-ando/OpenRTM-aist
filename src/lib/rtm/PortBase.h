@@ -1222,6 +1222,30 @@ namespace RTC
      */
     void setOnDisconnected(ConnectionCallback* on_disconnected);
 
+    /*!
+     * @if jp
+     * @brief ポートの接続がロストした場合に呼び出されるコールバックをセットする
+     *
+     * このオペレーションは、このポートの接続がロストした場合に呼ばれる、
+     * コールバックファンクタをセットする。
+     *
+     * InPortは、相手側OutPortとの
+     * 接続をロストした場合、接続を強制的に切断するので、
+     * 引き続き OnDisconnect コールバックが呼び出される。
+     *
+     * @param on_connection_lost ConnectionCallback のサブクラスオブジェク
+     * トのポインタ
+     *
+     * @else
+     * @brief Setting callback called on connection lost
+     *
+     * This operation sets a functor that is called when connection
+     * of this port does lost. 
+     *
+     * @param on_connection_lost a pointer to ConnectionCallback's subclasses
+     *
+     * @endif
+     */
     void setOnConnectionLost(ConnectionCallback* on_connection_lost);
 
     //============================================================
@@ -1831,15 +1855,71 @@ namespace RTC
 			       NVUtil::newNV(key, value));
     }
 
+    /*!
+     * @if jp
+     *
+     * @brief PortProfile の properties に NameValue 値を要素に追加する
+     *
+     * PortProfile の properties に NameValue 値を要素に追加する。
+     *
+     * @param key properties の name
+     * @param value properties の value
+     *
+     * @else
+     *
+     * @brief Append NameValue data to PortProfile's properties
+     *
+     * Append NameValue data to PortProfile's properties.
+     *
+     * @param key The name of properties
+     * @param value The value of properties
+     *
+     * @endif
+     */
     void appendProperty(const char* key, const char* value)
     {
       NVUtil::appendStringValue(m_profile.properties, key, value);
     }
     
   protected:
+    /*!
+     * @if jp
+     *
+     * @brief 存在しないポートをdisconnectする。
+     *
+     * @else
+     *
+     * @brief Disconnect ports that doesn't exist. 
+     *
+     * @endif
+     */
     void updateConnectors();
+    /*!
+     * @if jp
+     *
+     * @brief ポートの存在を確認する。
+     *
+     * @param ports 確認するポート
+     * @return true:存在する,false:存在しない
+     *
+     * @else
+     *
+     * @brief Existence of ports
+     *
+     * @param ports Checked ports
+     * @return true:existent,false:non existent
+     *
+     * @endif
+     */
     bool checkPorts(::RTC::PortServiceList& ports);
 
+    /*!
+     * @if jp
+     * @brief ロガーストリーム
+     * @else
+     * @brief Logger stream
+     * @endif
+     */
     mutable Logger rtclog;
     /*!
      * @if jp
@@ -1858,9 +1938,23 @@ namespace RTC
      * @endif
      */
     RTC::PortService_var m_objref;
+    /*!
+     * @if jp
+     * @brief PortProfile の mutex
+     * @else
+     * @brief Mutex of PortProfile
+     * @endif
+     */
     mutable coil::Mutex m_profile_mutex;
     typedef coil::Guard<coil::Mutex> Guard;
 
+    /*!
+     * @if jp
+     * @brief インスタンス名
+     * @else
+     * @brief Instance name
+     * @endif
+     */
     std::string m_ownerInstanceName;
 
     /*!
@@ -1875,15 +1969,90 @@ namespace RTC
     /*!
      * @if jp
      * @brief Callback functor オブジェクト
+     *
+     * インターフェースを公開する際に呼ばれるコールバックオブジェクト
+     *
      * @else
      * @brief Callback functor objects
+     *
+     * This is callback objedct that is called when the interface is opened 
+     * to the public.
+     *
      * @endif
      */
     ConnectionCallback* m_onPublishInterfaces;
+    /*!
+     * @if jp
+     * @brief Callback functor オブジェクト
+     *
+     * インターフェースを取得する際に呼ばれるコールバックオブジェクト
+     *
+     * @else
+     * @brief Callback functor objects
+     *
+     * This is callback objedct that is called when the interface is got.
+     *
+     * @endif
+     */
     ConnectionCallback* m_onSubscribeInterfaces;
+    /*!
+     * @if jp
+     * @brief Callback functor オブジェクト
+     *
+     * 接続完了時に呼ばれるコールバックオブジェクト
+     *
+     * @else
+     * @brief Callback functor objects
+     *
+     * This is a callback object that is called 
+     * when the connection is completed. 
+     *
+     * @endif
+     */
     ConnectionCallback* m_onConnected;
+    /*!
+     * @if jp
+     * @brief Callback functor オブジェクト
+     *
+     * インターフェースを解放する際に呼ばれるコールバックオブジェクト
+     *
+     * @else
+     * @brief Callback functor objects
+     *
+     * This is a callback object that is called when the interface is released. 
+     *
+     * @endif
+     */
     ConnectionCallback* m_onUnsubscribeInterfaces;
+    /*!
+     * @if jp
+     * @brief Callback functor オブジェクト
+     *
+     * 接続解除に呼ばれるコールバックオブジェクト
+     *
+     * @else
+     * @brief Callback functor objects
+     *
+     * This is a callback object that is called in connected release. 
+     *
+     * @endif
+     */
     ConnectionCallback* m_onDisconnected;
+
+    /*!
+     * @if jp
+     * @brief Callback functor オブジェクト
+     *
+     * ポートの接続がロストした場合に呼び出されるコールバックオブジェクト
+     *
+     * @else
+     * @brief Callback functor objects
+     *
+     * This is a callback object called when the connection of the port does 
+     * lost. 
+     *
+     * @endif
+     */
     ConnectionCallback* m_onConnectionLost;
 
 
