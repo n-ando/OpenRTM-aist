@@ -69,12 +69,10 @@ namespace DataInOutPort
   private:
     RTC::OutPort<RTC::TimedFloat> m_outport;
     RTC::TimedFloat m_ofloat;
-//    RTC::DataOutPort* m_doutport;
     RTC::PortService_var m_oportref;
 
     RTC::InPort<RTC::TimedFloat> m_inport;
     RTC::TimedFloat m_ifloat;
-//    RTC::DataInPort* m_dinport;
     RTC::PortService_var m_iportref;
 
     HogeCovnert<RTC::TimedFloat>* m_conv;
@@ -90,7 +88,6 @@ namespace DataInOutPort
 	m_inport("fin", m_ifloat)
     {
       m_conv = new HogeCovnert<RTC::TimedFloat>();
-      //      m_inport.setOnReadConvert(m_conv);
 
       int argc(0);
       char** argv(NULL);
@@ -99,14 +96,10 @@ namespace DataInOutPort
 		    m_pORB->resolve_initial_references("RootPOA"));
       m_pPOA->the_POAManager()->activate();
 
-			coil::Properties dummy;
-      m_inport.init();
-//      m_doutport = new RTC::DataOutPort("DataOutPort", m_outport, dummy);
-//      m_oportref = m_doutport->get_port_profile()->port_ref;
+      coil::Properties dummy;
+      m_inport.init(dummy);
+      m_outport.init(dummy);
       m_oportref = m_outport.get_port_profile()->port_ref;
-
-//      m_dinport = new RTC::DataInPort("DataInPort", m_inport, dummy);
-//      m_iportref = m_dinport->get_port_profile()->port_ref;
       m_iportref = m_inport.get_port_profile()->port_ref;
 
     }

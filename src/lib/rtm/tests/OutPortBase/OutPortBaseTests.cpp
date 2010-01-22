@@ -69,7 +69,6 @@ namespace OutPortBase
   public:
     PublisherA(std::string& footPrints) : m_footPrints(footPrints) {};
     virtual ~PublisherA() { 
-//std::cout<<"~PublisherA"<<std::endl;      
       m_footPrints += "a"; 
     }
 
@@ -453,6 +452,16 @@ namespace OutPortBase
       {
           return m_connectors;
       }
+      /*!
+       * 
+       * 
+       */
+
+      bool write()
+      {
+          return true;
+      }
+
      
   };
   /*!
@@ -483,6 +492,14 @@ namespace OutPortBase
      {
         return subscribeInterfaces(connector_profile);
      } 
+    /*!
+     * 
+     */
+     bool read()
+     {
+        return true;
+     }
+
   };
   /*!
    * 
@@ -548,7 +565,27 @@ namespace OutPortBase
       {
       }
   
-  
+      bool subscribeFromIor(const SDOPackage::NVList& properties)
+      {
+    
+          return true;;
+      }
+      bool subscribeFromRef(const SDOPackage::NVList& properties)
+      {
+    
+          return true;;
+      }
+      bool unsubscribeFromIor(const SDOPackage::NVList& properties)
+      {
+    
+          return true;;
+      }
+      bool unsubscribeFromRef(const SDOPackage::NVList& properties)
+      {
+    
+          return true;;
+      }
+    
       /*!
        *
        *
@@ -592,6 +629,30 @@ namespace OutPortBase
               m_logger->log("OutPortCorbaCdrProviderMock::init");
           }
       }
+
+      /*!
+       *
+       *
+       */
+      void setBuffer(RTC::CdrBufferBase* buffer)
+      {
+        if (m_logger != NULL)
+  	{
+  	  m_logger->log("OutPortCorbaCdrProviderMock::setBuffer");
+  	}
+      }
+  
+      void setListener(RTC::ConnectorInfo& info,
+  		     RTC::ConnectorListeners* listeners)
+      {
+        // m_profile = info;
+        // m_listeners = listeners;
+      }
+      void setConnector(RTC::OutPortConnector* connector)
+      {
+        // m_connector = connector;
+      }
+
       /*!
        *
        *
@@ -850,13 +911,13 @@ namespace OutPortBase
         }
 
         {
-            OutPortBaseMock outport("OutPortBaseTest", 
+            OutPortBaseMock outPort("OutPortBaseTest", 
                                     toTypename<RTC::TimedFloat>());
 
             RTC::PortAdmin portAdmin(m_pORB,m_pPOA);
-            portAdmin.registerPort(outport); 
+            portAdmin.registerPort(outPort); 
         
-            RTC::PortProfile profile = outport.getPortProfile();
+            RTC::PortProfile profile = outPort.getPortProfile();
             coil::Properties prop = NVUtil::toProperties(profile.properties);
             CPPUNIT_ASSERT_EQUAL(std::string("DataOutPort"), 
                                  prop["port.port_type"] );
@@ -865,7 +926,7 @@ namespace OutPortBase
             CPPUNIT_ASSERT_EQUAL(std::string(""),
                                  prop["dataport.subscription_type"]);
 
-            portAdmin.deletePort(outport);
+            portAdmin.deletePort(outPort);
         }
         ::RTC::PublisherFactory::
         instance().addFactory("flush",
@@ -874,13 +935,13 @@ namespace OutPortBase
                               ::coil::Destructor< ::RTC::PublisherBase,
                                                   ::RTC::PublisherFlush>);
         {
-            OutPortBaseMock outport("OutPortBaseTest", 
+            OutPortBaseMock outPort("OutPortBaseTest", 
                                     toTypename<RTC::TimedFloat>());
 
             RTC::PortAdmin portAdmin(m_pORB,m_pPOA);
-            portAdmin.registerPort(outport); 
+            portAdmin.registerPort(outPort); 
         
-            RTC::PortProfile profile = outport.getPortProfile();
+            RTC::PortProfile profile = outPort.getPortProfile();
             coil::Properties prop = NVUtil::toProperties(profile.properties);
             CPPUNIT_ASSERT_EQUAL(std::string("DataOutPort"), 
                                  prop["port.port_type"] );
@@ -889,7 +950,7 @@ namespace OutPortBase
             CPPUNIT_ASSERT_EQUAL(std::string("flush"),
                                  prop["dataport.subscription_type"]);
 
-            portAdmin.deletePort(outport);
+            portAdmin.deletePort(outPort);
         }
 
         ::RTC::PublisherFactory::
@@ -899,13 +960,13 @@ namespace OutPortBase
                               ::coil::Destructor< ::RTC::PublisherBase,
                                                   ::RTC::PublisherNew>);
         {
-            OutPortBaseMock outport("OutPortBaseTest", 
+            OutPortBaseMock outPort("OutPortBaseTest", 
                                     toTypename<RTC::TimedFloat>());
 
             RTC::PortAdmin portAdmin(m_pORB,m_pPOA);
-            portAdmin.registerPort(outport); 
+            portAdmin.registerPort(outPort); 
         
-            RTC::PortProfile profile = outport.getPortProfile();
+            RTC::PortProfile profile = outPort.getPortProfile();
             coil::Properties prop = NVUtil::toProperties(profile.properties);
             CPPUNIT_ASSERT_EQUAL(std::string("DataOutPort"), 
                                  prop["port.port_type"] );
@@ -914,7 +975,7 @@ namespace OutPortBase
             CPPUNIT_ASSERT_EQUAL(std::string("flush,new"),
                                  prop["dataport.subscription_type"]);
 
-            portAdmin.deletePort(outport);
+            portAdmin.deletePort(outPort);
         }
         ::RTC::PublisherFactory::
         instance().addFactory("periodic",
@@ -923,13 +984,13 @@ namespace OutPortBase
                               ::coil::Destructor< ::RTC::PublisherBase,
                                                   ::RTC::PublisherPeriodic>);
         {
-            OutPortBaseMock outport("OutPortBaseTest", 
+            OutPortBaseMock outPort("OutPortBaseTest", 
                                     toTypename<RTC::TimedFloat>());
 
             RTC::PortAdmin portAdmin(m_pORB,m_pPOA);
-            portAdmin.registerPort(outport); 
+            portAdmin.registerPort(outPort); 
         
-            RTC::PortProfile profile = outport.getPortProfile();
+            RTC::PortProfile profile = outPort.getPortProfile();
             coil::Properties prop = NVUtil::toProperties(profile.properties);
             CPPUNIT_ASSERT_EQUAL(std::string("DataOutPort"), 
                                  prop["port.port_type"] );
@@ -938,7 +999,7 @@ namespace OutPortBase
             CPPUNIT_ASSERT_EQUAL(std::string("flush,new,periodic"),
                                  prop["dataport.subscription_type"]);
 
-            portAdmin.deletePort(outport);
+            portAdmin.deletePort(outPort);
         }
     }
     /*!
@@ -959,11 +1020,11 @@ namespace OutPortBase
             RTC::OutPortProviderFactory::instance().removeFactory("corba_cdr");
         }
 
-        OutPortBaseMock outport("OutPortBaseTest", 
+        OutPortBaseMock outPort("OutPortBaseTest", 
                                 toTypename<RTC::TimedFloat>());
 
         RTC::PortAdmin portAdmin(m_pORB,m_pPOA);
-        portAdmin.registerPort(outport); 
+        portAdmin.registerPort(outPort); 
 
         //"corba_cdr" に InPortCorbaCdrConsumerMock を登録する。
         RTC::InPortConsumerFactory::instance().
@@ -980,19 +1041,19 @@ namespace OutPortBase
                    ::coil::Destructor< ::RTC::OutPortProvider, 
                                        OutPortCorbaCdrProviderMock>);
 
-        RTC::PortProfile profile = outport.getPortProfile();
+        RTC::PortProfile profile = outPort.getPortProfile();
         coil::Properties prop = NVUtil::toProperties(profile.properties);
         CPPUNIT_ASSERT_EQUAL(std::string(""),
                              prop["dataport.dataflow_type"]);
         CPPUNIT_ASSERT_EQUAL(std::string(""),
                              prop["dataport.interface_type"]);
 
-        coil::vstring cstr = outport.get_m_consumerTypes();
+        coil::vstring cstr = outPort.get_m_consumerTypes();
         CPPUNIT_ASSERT_EQUAL((size_t)0, cstr.size());
 
-        outport.initConsumers_public();
+        outPort.initConsumers_public();
 
-        profile = outport.getPortProfile();
+        profile = outPort.getPortProfile();
         prop = NVUtil::toProperties(profile.properties);
 
         //getPortProfileのpropertiesに以下が追加される
@@ -1002,12 +1063,12 @@ namespace OutPortBase
                              prop["dataport.interface_type"]);
  
         //ProviderTypes,ConsumerTypesが取得される
-        cstr = outport.get_m_consumerTypes();
+        cstr = outPort.get_m_consumerTypes();
         CPPUNIT_ASSERT((size_t)0!= cstr.size());
         CPPUNIT_ASSERT_EQUAL(std::string("corba_cdr"),
                              cstr[0]);
 
-        portAdmin.deletePort(outport);
+        portAdmin.deletePort(outPort);
     }
     /*!
      * @brief initConsumers()メソッドのテスト
@@ -1027,11 +1088,11 @@ namespace OutPortBase
             RTC::OutPortProviderFactory::instance().removeFactory("corba_cdr");
         }
 
-        OutPortBaseMock outport("OutPortBaseTest", 
+        OutPortBaseMock outPort("OutPortBaseTest", 
                                 toTypename<RTC::TimedFloat>());
 
         RTC::PortAdmin portAdmin(m_pORB,m_pPOA);
-        portAdmin.registerPort(outport); 
+        portAdmin.registerPort(outPort); 
 
         //"corba_cdr" に OutPortCorbaCdrProviderMock を登録する。
         RTC::OutPortProviderFactory::instance().
@@ -1041,19 +1102,19 @@ namespace OutPortBase
                    ::coil::Destructor< ::RTC::OutPortProvider, 
                                        OutPortCorbaCdrProviderMock>);
 
-        RTC::PortProfile profile = outport.getPortProfile();
+        RTC::PortProfile profile = outPort.getPortProfile();
         coil::Properties prop = NVUtil::toProperties(profile.properties);
         CPPUNIT_ASSERT_EQUAL(std::string(""),
                              prop["dataport.dataflow_type"]);
         CPPUNIT_ASSERT_EQUAL(std::string(""),
                              prop["dataport.interface_type"]);
 
-        coil::vstring cstr = outport.get_m_consumerTypes();
+        coil::vstring cstr = outPort.get_m_consumerTypes();
         CPPUNIT_ASSERT_EQUAL((size_t)0, cstr.size());
 
-        outport.initConsumers_public();
+        outPort.initConsumers_public();
 
-        profile = outport.getPortProfile();
+        profile = outPort.getPortProfile();
         prop = NVUtil::toProperties(profile.properties);
 
         //getPortProfileのpropertiesに以下が追加される
@@ -1063,10 +1124,10 @@ namespace OutPortBase
                              prop["dataport.interface_type"]);
  
         //ProviderTypes,ConsumerTypesが取得される
-        cstr = outport.get_m_consumerTypes();
+        cstr = outPort.get_m_consumerTypes();
         CPPUNIT_ASSERT((size_t)0== cstr.size());
 
-        portAdmin.deletePort(outport);
+        portAdmin.deletePort(outPort);
     }
     /*!
      * @brief initProviders()メソッドのテスト
@@ -1086,11 +1147,11 @@ namespace OutPortBase
             RTC::OutPortProviderFactory::instance().removeFactory("corba_cdr");
         }
 
-        OutPortBaseMock outport("OutPortBaseTest", 
+        OutPortBaseMock outPort("OutPortBaseTest", 
                                 toTypename<RTC::TimedFloat>());
 
         RTC::PortAdmin portAdmin(m_pORB,m_pPOA);
-        portAdmin.registerPort(outport); 
+        portAdmin.registerPort(outPort); 
 
         //"corba_cdr" に InPortCorbaCdrConsumerMock を登録する。
         RTC::InPortConsumerFactory::instance().
@@ -1107,34 +1168,34 @@ namespace OutPortBase
                    ::coil::Destructor< ::RTC::OutPortProvider, 
                                        OutPortCorbaCdrProviderMock>);
 
-        RTC::PortProfile profile = outport.getPortProfile();
+        RTC::PortProfile profile = outPort.getPortProfile();
         coil::Properties prop = NVUtil::toProperties(profile.properties);
         CPPUNIT_ASSERT_EQUAL(std::string(""),
                              prop["dataport.dataflow_type"]);
         CPPUNIT_ASSERT_EQUAL(std::string(""),
                              prop["dataport.interface_type"]);
 
-        coil::vstring cstr = outport.get_m_providerTypes();
+        coil::vstring cstr = outPort.get_m_providerTypes();
         CPPUNIT_ASSERT_EQUAL((size_t)0, cstr.size());
 
-        outport.initProviders_public();
+        outPort.initProviders_public();
 
-        profile = outport.getPortProfile();
+        profile = outPort.getPortProfile();
         prop = NVUtil::toProperties(profile.properties);
 
         //getPortProfileのpropertiesに以下が追加される
-        CPPUNIT_ASSERT_EQUAL(std::string("push"),
+        CPPUNIT_ASSERT_EQUAL(std::string("pull"),
                              prop["dataport.dataflow_type"]);
         CPPUNIT_ASSERT_EQUAL(std::string("corba_cdr"),
                              prop["dataport.interface_type"]);
  
         //ProviderTypes,ConsumerTypesが取得される
-        cstr = outport.get_m_providerTypes();
+        cstr = outPort.get_m_providerTypes();
         CPPUNIT_ASSERT((size_t)0!= cstr.size());
         CPPUNIT_ASSERT_EQUAL(std::string("corba_cdr"),
                              cstr[0]);
 
-        portAdmin.deletePort(outport);
+        portAdmin.deletePort(outPort);
     }
     /*!
      * @brief initProviders()メソッドのテスト
@@ -1154,11 +1215,11 @@ namespace OutPortBase
             RTC::OutPortProviderFactory::instance().removeFactory("corba_cdr");
         }
 
-        OutPortBaseMock outport("OutPortBaseTest", 
+        OutPortBaseMock outPort("OutPortBaseTest", 
                                 toTypename<RTC::TimedFloat>());
 
         RTC::PortAdmin portAdmin(m_pORB,m_pPOA);
-        portAdmin.registerPort(outport); 
+        portAdmin.registerPort(outPort); 
 
         //"corba_cdr" に InPortCorbaCdrConsumerMock を登録する。
         RTC::InPortConsumerFactory::instance().
@@ -1168,19 +1229,19 @@ namespace OutPortBase
                    ::coil::Destructor< ::RTC::InPortConsumer, 
                                        InPortCorbaCdrConsumerMock>);
 
-        RTC::PortProfile profile = outport.getPortProfile();
+        RTC::PortProfile profile = outPort.getPortProfile();
         coil::Properties prop = NVUtil::toProperties(profile.properties);
         CPPUNIT_ASSERT_EQUAL(std::string(""),
                              prop["dataport.dataflow_type"]);
         CPPUNIT_ASSERT_EQUAL(std::string(""),
                              prop["dataport.interface_type"]);
 
-        coil::vstring cstr = outport.get_m_providerTypes();
+        coil::vstring cstr = outPort.get_m_providerTypes();
         CPPUNIT_ASSERT_EQUAL((size_t)0, cstr.size());
 
-        outport.initProviders_public();
+        outPort.initProviders_public();
 
-        profile = outport.getPortProfile();
+        profile = outPort.getPortProfile();
         prop = NVUtil::toProperties(profile.properties);
 
         //getPortProfileのpropertiesに以下が追加される
@@ -1190,10 +1251,10 @@ namespace OutPortBase
                              prop["dataport.interface_type"]);
  
         //ProviderTypes,ConsumerTypesが取得される
-        cstr = outport.get_m_providerTypes();
+        cstr = outPort.get_m_providerTypes();
         CPPUNIT_ASSERT((size_t)0== cstr.size());
 
-        portAdmin.deletePort(outport);
+        portAdmin.deletePort(outPort);
     }
     /*!
      * @brief init(),properties()メソッドのテスト
@@ -1247,7 +1308,7 @@ namespace OutPortBase
         RTC::PortAdmin portAdmin(m_pORB,m_pPOA);
         portAdmin.registerPort(outPort); 
 
-        CPPUNIT_ASSERT_EQUAL(std::string("Hello, World!"), std::string(outPort.name()));
+        CPPUNIT_ASSERT_EQUAL(std::string("unknown.Hello, World!"), std::string(outPort.getName()));
         portAdmin.deletePort(outPort);
     }
 		
@@ -1280,7 +1341,13 @@ namespace OutPortBase
                                  "flush"));
         inprof.connector_id = "id0";
         inprof.name = CORBA::string_dup("bar");
-        inPort.init();
+
+        coil::Properties dummy;
+        inPort.init(dummy);
+        outPort.init(dummy);
+//        inPort.init(inprof.properties);
+//        outPort.init(inprof.properties);
+
         inPort.publishInterfaces_public(inprof);
 
         std::string vstrid[10] = {"id0","id1","id2","id3","id4",
@@ -1319,7 +1386,7 @@ namespace OutPortBase
                                                    vstrsubscription[ic].c_str()));
             CORBA_SeqUtil::push_back(prof.properties,
                                      NVUtil::newNV("dataport.corba_cdr.inport_ior",
-                                                   NVUtil::toString(inprof.properties,"dataport.corba_cdr.inport_ior").c_str()));
+                                     NVUtil::toString(inprof.properties,"dataport.corba_cdr.inport_ior").c_str()));
             prof.connector_id = vstrid[ic].c_str();
             prof.name = CORBA::string_dup(vstrname[ic].c_str());
 
@@ -1343,7 +1410,7 @@ namespace OutPortBase
         //
         //getConnectorProfiles()
         //
-        RTC::ConnectorBase::ProfileList list = outPort.getConnectorProfiles();
+        RTC::ConnectorInfoList list = outPort.getConnectorProfiles();
         CPPUNIT_ASSERT_EQUAL((size_t)10, list.size());
         for(int ic(0);ic<10;++ic)
         {
@@ -1386,11 +1453,7 @@ namespace OutPortBase
         for(int ic(0);ic<10;++ic)
         {
 
-            coil::vstring vstr;
-            coil::Properties prop;
-            
-            RTC::ConnectorBase::Profile prof("test","id",
-                                                vstr,prop);
+            RTC::ConnectorInfo prof;
             bool ret = outPort.getConnectorProfileById(vstrid[ic].c_str(),prof);
             CPPUNIT_ASSERT(ret);
             CPPUNIT_ASSERT_EQUAL(vstrinterface[ic],
@@ -1401,11 +1464,7 @@ namespace OutPortBase
                                  prof.properties["subscription_type"]);
         }
         {
-            coil::vstring vstr;
-            coil::Properties prop;
-            
-            RTC::ConnectorBase::Profile prof("test","id",
-                                             vstr,prop);
+            RTC::ConnectorInfo prof;
             bool ret = outPort.getConnectorProfileById("foo",prof);
             CPPUNIT_ASSERT(!ret);
             ret = outPort.getConnectorProfileById("bar",prof);
@@ -1413,15 +1472,11 @@ namespace OutPortBase
         }
 
         //
-        //getConnectorProfileByiName()
+        //getConnectorProfileByName()
         //
         for(int ic(0);ic<10;++ic)
         {
-            coil::vstring vstr;
-            coil::Properties prop;
-            
-            RTC::ConnectorBase::Profile prof("test","id",
-                                                vstr,prop);
+            RTC::ConnectorInfo prof;
             bool ret = outPort.getConnectorProfileByName(vstrname[ic].c_str(),
                                                          prof);
             CPPUNIT_ASSERT(ret);
@@ -1433,11 +1488,7 @@ namespace OutPortBase
                                  prof.properties["subscription_type"]);
         }
         {
-            coil::vstring vstr;
-            coil::Properties prop;
-            
-            RTC::ConnectorBase::Profile prof("test","id",
-                                             vstr,prop);
+            RTC::ConnectorInfo prof;
             bool ret = outPort.getConnectorProfileByName("foo",prof);
             CPPUNIT_ASSERT(!ret);
             ret = outPort.getConnectorProfileByName("bar",prof);
@@ -1445,16 +1496,16 @@ namespace OutPortBase
         }
 
         //
-        //publishInterfaceProfiles()
+        //publishInterfaces()
         //
         {
-            SDOPackage::NVList properties;
-            bool ret = outPort.publishInterfaceProfiles(properties);
+            RTC::ConnectorProfile outprof;
+            bool ret = outPort.publishInterfaces_public(outprof);
             CPPUNIT_ASSERT(ret);
             {
                 const char* value;
                 try {
-                    NVUtil::find(properties, "dataport.data_type") >>= value;
+                    NVUtil::find(outprof.properties, "dataport.data_type") >>= value;
 	            CPPUNIT_FAIL("dataport.data_type fialure.");
                 }
                 catch(std::string ex) {
@@ -1512,9 +1563,11 @@ namespace OutPortBase
                                  "flush"));
         inprof.connector_id = "id0";
         inprof.name = CORBA::string_dup("bar");
-        inPort.init();
+        coil::Properties dummy;
+        inPort.init(dummy);
+        outPort.init(dummy);
         inPort.publishInterfaces_public(inprof);
-//std::cout<<NVUtil::toString(inprof.properties)<<std::endl;
+        //std::cout<<NVUtil::toString(inprof.properties)<<std::endl;
 
         std::string vstrid[10] = {"id0","id1","id2","id3","id4",
                                   "id5","id6","id7","id8","id9"};
@@ -1550,7 +1603,7 @@ namespace OutPortBase
                                                    vstrsubscription[ic].c_str()));
             CORBA_SeqUtil::push_back(prof.properties,
                                      NVUtil::newNV("dataport.corba_cdr.inport_ior",
-                                                   NVUtil::toString(inprof.properties,"dataport.corba_cdr.inport_ior").c_str()));
+                                     NVUtil::toString(inprof.properties,"dataport.corba_cdr.inport_ior").c_str()));
             prof.connector_id = vstrid[ic].c_str();
             prof.name = CORBA::string_dup(vstrname[ic].c_str());
 
@@ -1607,16 +1660,16 @@ namespace OutPortBase
                                        InPortCorbaCdrConsumerMock>);
 
 
-        OutPortBaseMock outport("OutPortBaseTest", 
+        OutPortBaseMock outPort("OutPortBaseTest", 
                                 toTypename<RTC::TimedFloat>());
 
         RTC::PortAdmin portAdmin(m_pORB,m_pPOA);
-        portAdmin.registerPort(outport); 
+        portAdmin.registerPort(outPort); 
         RTC::ConnectorProfile prof;
         prof.connector_id = "id0";
         prof.name = CORBA::string_dup("OutPortBaseTest0");
         prof.ports.length(1);
-        prof.ports[0] = outport.get_port_profile()->port_ref;
+        prof.ports[0] = outPort.get_port_profile()->port_ref;
         CORBA_SeqUtil::push_back(prof.properties,
                                  NVUtil::newNV("dataport.interface_type",
                                  "corba_cdr"));
@@ -1626,19 +1679,22 @@ namespace OutPortBase
         CORBA_SeqUtil::push_back(prof.properties,
                                  NVUtil::newNV("dataport.subscription_type",
                                  "new"));
+        coil::Properties dummy;
+        outPort.init(dummy);
+
         RTC::ReturnCode_t retcode;
-        CPPUNIT_ASSERT_EQUAL(0,(int)outport.get_m_connectors().size());
-        retcode = outport.publishInterfaces_public(prof);
-        CPPUNIT_ASSERT_EQUAL(1,(int)outport.get_m_connectors().size());
+        CPPUNIT_ASSERT_EQUAL(0,(int)outPort.get_m_connectors().size());
+        retcode = outPort.publishInterfaces_public(prof);
+        CPPUNIT_ASSERT_EQUAL(1,(int)outPort.get_m_connectors().size());
         CPPUNIT_ASSERT_EQUAL(RTC::RTC_OK,retcode);
 
         prof.connector_id = "id1";
         prof.name = CORBA::string_dup("OutPortBaseTest1");
-        retcode = outport.publishInterfaces_public(prof);
-        CPPUNIT_ASSERT_EQUAL(2,(int)outport.get_m_connectors().size());
+        retcode = outPort.publishInterfaces_public(prof);
+        CPPUNIT_ASSERT_EQUAL(2,(int)outPort.get_m_connectors().size());
         CPPUNIT_ASSERT_EQUAL(RTC::RTC_OK,retcode);
 
-        portAdmin.deletePort(outport);
+        portAdmin.deletePort(outPort);
     }
     /*!
      * @brief publishInterfaces()メソッドのテスト
@@ -1677,16 +1733,16 @@ namespace OutPortBase
                                        InPortCorbaCdrConsumerMock>);
 
 
-        OutPortBaseMock outport("OutPortBaseTest", 
+        OutPortBaseMock outPort("OutPortBaseTest", 
                                 toTypename<RTC::TimedFloat>());
 
         RTC::PortAdmin portAdmin(m_pORB,m_pPOA);
-        portAdmin.registerPort(outport); 
+        portAdmin.registerPort(outPort); 
         RTC::ConnectorProfile prof;
         prof.connector_id = "id0";
         prof.name = CORBA::string_dup("OutPortBaseTest0");
         prof.ports.length(1);
-        prof.ports[0] = outport.get_port_profile()->port_ref;
+        prof.ports[0] = outPort.get_port_profile()->port_ref;
         CORBA_SeqUtil::push_back(prof.properties,
                                  NVUtil::newNV("dataport.interface_type",
                                  "corba_cdr"));
@@ -1696,14 +1752,17 @@ namespace OutPortBase
         CORBA_SeqUtil::push_back(prof.properties,
                                  NVUtil::newNV("dataport.subscription_type",
                                  "new"));
+        coil::Properties dummy;
+        outPort.init(dummy);
+
         RTC::ReturnCode_t retcode;
-        CPPUNIT_ASSERT_EQUAL(0,(int)outport.get_m_connectors().size());
-        retcode = outport.publishInterfaces_public(prof);
-        CPPUNIT_ASSERT_EQUAL(0,(int)outport.get_m_connectors().size());
+        CPPUNIT_ASSERT_EQUAL(0,(int)outPort.get_m_connectors().size());
+        retcode = outPort.publishInterfaces_public(prof);
+        CPPUNIT_ASSERT_EQUAL(0,(int)outPort.get_m_connectors().size());
         CPPUNIT_ASSERT_EQUAL(RTC::RTC_OK,retcode);
 
 
-        portAdmin.deletePort(outport);
+        portAdmin.deletePort(outPort);
     }
     /*!
      * @brief publishInterfaces()メソッドのテスト
@@ -1742,16 +1801,16 @@ namespace OutPortBase
                                        InPortCorbaCdrConsumerMock>);
 
 
-        OutPortBaseMock outport("OutPortBaseTest", 
+        OutPortBaseMock outPort("OutPortBaseTest", 
                                 toTypename<RTC::TimedFloat>());
 
         RTC::PortAdmin portAdmin(m_pORB,m_pPOA);
-        portAdmin.registerPort(outport); 
+        portAdmin.registerPort(outPort); 
         RTC::ConnectorProfile prof;
         prof.connector_id = "id0";
         prof.name = CORBA::string_dup("OutPortBaseTest0");
         prof.ports.length(1);
-        prof.ports[0] = outport.get_port_profile()->port_ref;
+        prof.ports[0] = outPort.get_port_profile()->port_ref;
         CORBA_SeqUtil::push_back(prof.properties,
                                  NVUtil::newNV("dataport.interface_type",
                                  "corba_cdr"));
@@ -1761,14 +1820,17 @@ namespace OutPortBase
         CORBA_SeqUtil::push_back(prof.properties,
                                  NVUtil::newNV("dataport.subscription_type",
                                  "new"));
+        coil::Properties dummy;
+        outPort.init(dummy);
+
         RTC::ReturnCode_t retcode;
-        CPPUNIT_ASSERT_EQUAL(0,(int)outport.get_m_connectors().size());
-        retcode = outport.publishInterfaces_public(prof);
-        CPPUNIT_ASSERT_EQUAL(0,(int)outport.get_m_connectors().size());
+        CPPUNIT_ASSERT_EQUAL(0,(int)outPort.get_m_connectors().size());
+        retcode = outPort.publishInterfaces_public(prof);
+        CPPUNIT_ASSERT_EQUAL(0,(int)outPort.get_m_connectors().size());
         CPPUNIT_ASSERT_EQUAL(RTC::BAD_PARAMETER,retcode);
 
 
-        portAdmin.deletePort(outport);
+        portAdmin.deletePort(outPort);
     }
     /*!
      * @brief publishInterfaces()メソッドのテスト
@@ -1800,16 +1862,16 @@ namespace OutPortBase
                                        InPortCorbaCdrConsumerMock>);
 
 
-        OutPortBaseMock outport("OutPortBaseTest", 
+        OutPortBaseMock outPort("OutPortBaseTest", 
                                 toTypename<RTC::TimedFloat>());
 
         RTC::PortAdmin portAdmin(m_pORB,m_pPOA);
-        portAdmin.registerPort(outport); 
+        portAdmin.registerPort(outPort); 
         RTC::ConnectorProfile prof;
         prof.connector_id = "id0";
         prof.name = CORBA::string_dup("OutPortBaseTest0");
         prof.ports.length(1);
-        prof.ports[0] = outport.get_port_profile()->port_ref;
+        prof.ports[0] = outPort.get_port_profile()->port_ref;
         CORBA_SeqUtil::push_back(prof.properties,
                                  NVUtil::newNV("dataport.interface_type",
                                  "corba_cdr"));
@@ -1819,14 +1881,17 @@ namespace OutPortBase
         CORBA_SeqUtil::push_back(prof.properties,
                                  NVUtil::newNV("dataport.subscription_type",
                                  "new"));
+        coil::Properties dummy;
+        outPort.init(dummy);
+
         RTC::ReturnCode_t retcode;
-        CPPUNIT_ASSERT_EQUAL(0,(int)outport.get_m_connectors().size());
-        retcode = outport.publishInterfaces_public(prof);
-        CPPUNIT_ASSERT_EQUAL(0,(int)outport.get_m_connectors().size());
+        CPPUNIT_ASSERT_EQUAL(0,(int)outPort.get_m_connectors().size());
+        retcode = outPort.publishInterfaces_public(prof);
+        CPPUNIT_ASSERT_EQUAL(0,(int)outPort.get_m_connectors().size());
         CPPUNIT_ASSERT_EQUAL(RTC::BAD_PARAMETER,retcode);
 
 
-        portAdmin.deletePort(outport);
+        portAdmin.deletePort(outPort);
     }
     /*!
      * @brief publishInterfaces()メソッドのテスト
@@ -1861,16 +1926,16 @@ namespace OutPortBase
                                        InPortCorbaCdrConsumerMock>);
 
 
-        OutPortBaseMock outport("OutPortBaseTest", 
+        OutPortBaseMock outPort("OutPortBaseTest", 
                                 toTypename<RTC::TimedFloat>());
 
         RTC::PortAdmin portAdmin(m_pORB,m_pPOA);
-        portAdmin.registerPort(outport); 
+        portAdmin.registerPort(outPort); 
         RTC::ConnectorProfile prof;
         prof.connector_id = "id0";
         prof.name = CORBA::string_dup("OutPortBaseTest0");
         prof.ports.length(1);
-        prof.ports[0] = outport.get_port_profile()->port_ref;
+        prof.ports[0] = outPort.get_port_profile()->port_ref;
         CORBA_SeqUtil::push_back(prof.properties,
                                  NVUtil::newNV("dataport.interface_type",
                                  "corba_cdr"));
@@ -1883,13 +1948,16 @@ namespace OutPortBase
         CORBA_SeqUtil::push_back(prof.properties,
                                  NVUtil::newNV("dataport.OutPortBaseTests",
                                  "bad_alloc"));
+        coil::Properties dummy;
+        outPort.init(dummy);
+
         RTC::ReturnCode_t retcode;
-        CPPUNIT_ASSERT_EQUAL(0,(int)outport.get_m_connectors().size());
-        retcode = outport.publishInterfaces_public(prof);
-        CPPUNIT_ASSERT_EQUAL(0,(int)outport.get_m_connectors().size());
+        CPPUNIT_ASSERT_EQUAL(0,(int)outPort.get_m_connectors().size());
+        retcode = outPort.publishInterfaces_public(prof);
+        CPPUNIT_ASSERT_EQUAL(0,(int)outPort.get_m_connectors().size());
         CPPUNIT_ASSERT_EQUAL(RTC::RTC_ERROR,retcode);
 
-        portAdmin.deletePort(outport);
+        portAdmin.deletePort(outPort);
     }
     /*!
      * @brief subscribeInterfaces()メソッドのテスト
@@ -1924,17 +1992,17 @@ namespace OutPortBase
                                        InPortCorbaCdrConsumerMock>);
 
 
-        OutPortBaseMock outport("OutPortBaseTest", 
+        OutPortBaseMock outPort("OutPortBaseTest", 
                                 toTypename<RTC::TimedFloat>());
 
         RTC::PortAdmin portAdmin(m_pORB,m_pPOA);
-        portAdmin.registerPort(outport); 
+        portAdmin.registerPort(outPort); 
 
         RTC::ConnectorProfile prof;
         prof.connector_id = "id0";
         prof.name = CORBA::string_dup("OutPortBaseTest0");
         prof.ports.length(1);
-        prof.ports[0] = outport.get_port_profile()->port_ref;
+        prof.ports[0] = outPort.get_port_profile()->port_ref;
         CORBA_SeqUtil::push_back(prof.properties,
                                  NVUtil::newNV("dataport.interface_type",
                                  "corba_cdr"));
@@ -1944,19 +2012,22 @@ namespace OutPortBase
         CORBA_SeqUtil::push_back(prof.properties,
                                  NVUtil::newNV("dataport.subscription_type",
                                  "new"));
+        coil::Properties dummy;
+        outPort.init(dummy);
+
         RTC::ReturnCode_t retcode;
-        CPPUNIT_ASSERT_EQUAL(0,(int)outport.get_m_connectors().size());
-        retcode = outport.subscribeInterfaces_public(prof);
-        CPPUNIT_ASSERT_EQUAL(1,(int)outport.get_m_connectors().size());
+        CPPUNIT_ASSERT_EQUAL(0,(int)outPort.get_m_connectors().size());
+        retcode = outPort.subscribeInterfaces_public(prof);
+        CPPUNIT_ASSERT_EQUAL(1,(int)outPort.get_m_connectors().size());
         CPPUNIT_ASSERT_EQUAL(RTC::RTC_OK,retcode);
 
         prof.connector_id = "id1";
         prof.name = CORBA::string_dup("OutPortBaseTest1");
-        retcode = outport.subscribeInterfaces_public(prof);
-        CPPUNIT_ASSERT_EQUAL(2,(int)outport.get_m_connectors().size());
+        retcode = outPort.subscribeInterfaces_public(prof);
+        CPPUNIT_ASSERT_EQUAL(2,(int)outPort.get_m_connectors().size());
         CPPUNIT_ASSERT_EQUAL(RTC::RTC_OK,retcode);
 
-        portAdmin.deletePort(outport);
+        portAdmin.deletePort(outPort);
     }
     /*!
      * @brief subscribeInterfaces()メソッドのテスト
@@ -1991,17 +2062,17 @@ namespace OutPortBase
                                        InPortCorbaCdrConsumerMock>);
 
 
-        OutPortBaseMock outport("OutPortBaseTest", 
+        OutPortBaseMock outPort("OutPortBaseTest", 
                                 toTypename<RTC::TimedFloat>());
 
         RTC::PortAdmin portAdmin(m_pORB,m_pPOA);
-        portAdmin.registerPort(outport); 
+        portAdmin.registerPort(outPort); 
 
         RTC::ConnectorProfile prof;
         prof.connector_id = "id0";
         prof.name = CORBA::string_dup("OutPortBaseTest0");
         prof.ports.length(1);
-        prof.ports[0] = outport.get_port_profile()->port_ref;
+        prof.ports[0] = outPort.get_port_profile()->port_ref;
         CORBA_SeqUtil::push_back(prof.properties,
                                  NVUtil::newNV("dataport.interface_type",
                                  "corba_cdr"));
@@ -2012,12 +2083,12 @@ namespace OutPortBase
                                  NVUtil::newNV("dataport.subscription_type",
                                  "new"));
         RTC::ReturnCode_t retcode;
-        CPPUNIT_ASSERT_EQUAL(0,(int)outport.get_m_connectors().size());
-        retcode = outport.subscribeInterfaces_public(prof);
-        CPPUNIT_ASSERT_EQUAL(0,(int)outport.get_m_connectors().size());
-        CPPUNIT_ASSERT_EQUAL(RTC::RTC_OK,retcode);
+        CPPUNIT_ASSERT_EQUAL(0,(int)outPort.get_m_connectors().size());
+        retcode = outPort.subscribeInterfaces_public(prof);
+        CPPUNIT_ASSERT_EQUAL(0,(int)outPort.get_m_connectors().size());
+        CPPUNIT_ASSERT_EQUAL(RTC::RTC_ERROR,retcode);
 
-        portAdmin.deletePort(outport);
+        portAdmin.deletePort(outPort);
     }
     /*!
      * @brief subscribeInterfaces()メソッドのテスト
@@ -2052,17 +2123,17 @@ namespace OutPortBase
                                        InPortCorbaCdrConsumerMock>);
 
 
-        OutPortBaseMock outport("OutPortBaseTest", 
+        OutPortBaseMock outPort("OutPortBaseTest", 
                                 toTypename<RTC::TimedFloat>());
 
         RTC::PortAdmin portAdmin(m_pORB,m_pPOA);
-        portAdmin.registerPort(outport); 
+        portAdmin.registerPort(outPort); 
 
         RTC::ConnectorProfile prof;
         prof.connector_id = "id0";
         prof.name = CORBA::string_dup("OutPortBaseTest0");
         prof.ports.length(1);
-        prof.ports[0] = outport.get_port_profile()->port_ref;
+        prof.ports[0] = outPort.get_port_profile()->port_ref;
         CORBA_SeqUtil::push_back(prof.properties,
                                  NVUtil::newNV("dataport.interface_type",
                                  "corba_cdr"));
@@ -2073,12 +2144,12 @@ namespace OutPortBase
                                  NVUtil::newNV("dataport.subscription_type",
                                  "new"));
         RTC::ReturnCode_t retcode;
-        CPPUNIT_ASSERT_EQUAL(0,(int)outport.get_m_connectors().size());
-        retcode = outport.subscribeInterfaces_public(prof);
-        CPPUNIT_ASSERT_EQUAL(0,(int)outport.get_m_connectors().size());
+        CPPUNIT_ASSERT_EQUAL(0,(int)outPort.get_m_connectors().size());
+        retcode = outPort.subscribeInterfaces_public(prof);
+        CPPUNIT_ASSERT_EQUAL(0,(int)outPort.get_m_connectors().size());
         CPPUNIT_ASSERT_EQUAL(RTC::BAD_PARAMETER,retcode);
 
-        portAdmin.deletePort(outport);
+        portAdmin.deletePort(outPort);
     }
     /*!
      * @brief subscribeInterfaces()メソッドのテスト
@@ -2106,17 +2177,17 @@ namespace OutPortBase
         }
 
 
-        OutPortBaseMock outport("OutPortBaseTest", 
+        OutPortBaseMock outPort("OutPortBaseTest", 
                                 toTypename<RTC::TimedFloat>());
 
         RTC::PortAdmin portAdmin(m_pORB,m_pPOA);
-        portAdmin.registerPort(outport); 
+        portAdmin.registerPort(outPort); 
 
         RTC::ConnectorProfile prof;
         prof.connector_id = "id0";
         prof.name = CORBA::string_dup("OutPortBaseTest0");
         prof.ports.length(1);
-        prof.ports[0] = outport.get_port_profile()->port_ref;
+        prof.ports[0] = outPort.get_port_profile()->port_ref;
         CORBA_SeqUtil::push_back(prof.properties,
                                  NVUtil::newNV("dataport.interface_type",
                                  "corba_cdr"));
@@ -2127,12 +2198,12 @@ namespace OutPortBase
                                  NVUtil::newNV("dataport.subscription_type",
                                  "new"));
         RTC::ReturnCode_t retcode;
-        CPPUNIT_ASSERT_EQUAL(0,(int)outport.get_m_connectors().size());
-        retcode = outport.subscribeInterfaces_public(prof);
-        CPPUNIT_ASSERT_EQUAL(0,(int)outport.get_m_connectors().size());
+        CPPUNIT_ASSERT_EQUAL(0,(int)outPort.get_m_connectors().size());
+        retcode = outPort.subscribeInterfaces_public(prof);
+        CPPUNIT_ASSERT_EQUAL(0,(int)outPort.get_m_connectors().size());
         CPPUNIT_ASSERT_EQUAL(RTC::BAD_PARAMETER,retcode);
 
-        portAdmin.deletePort(outport);
+        portAdmin.deletePort(outPort);
     }
     /*!
      * @brief subscribeInterfaces()メソッドのテスト
@@ -2167,17 +2238,17 @@ namespace OutPortBase
                                        InPortCorbaCdrConsumerMock>);
 
 
-        OutPortBaseMock outport("OutPortBaseTest", 
+        OutPortBaseMock outPort("OutPortBaseTest", 
                                 toTypename<RTC::TimedFloat>());
 
         RTC::PortAdmin portAdmin(m_pORB,m_pPOA);
-        portAdmin.registerPort(outport); 
+        portAdmin.registerPort(outPort); 
 
         RTC::ConnectorProfile prof;
         prof.connector_id = "id0";
         prof.name = CORBA::string_dup("OutPortBaseTest0");
         prof.ports.length(1);
-        prof.ports[0] = outport.get_port_profile()->port_ref;
+        prof.ports[0] = outPort.get_port_profile()->port_ref;
         CORBA_SeqUtil::push_back(prof.properties,
                                  NVUtil::newNV("dataport.interface_type",
                                  "corba_cdr"));
@@ -2190,13 +2261,16 @@ namespace OutPortBase
         CORBA_SeqUtil::push_back(prof.properties,
                                  NVUtil::newNV("dataport.OutPortBaseTests",
                                  "bad_alloc"));
+        coil::Properties dummy;
+        outPort.init(dummy);
+
         RTC::ReturnCode_t retcode;
-        CPPUNIT_ASSERT_EQUAL(0,(int)outport.get_m_connectors().size());
-        retcode = outport.subscribeInterfaces_public(prof);
-        CPPUNIT_ASSERT_EQUAL(0,(int)outport.get_m_connectors().size());
+        CPPUNIT_ASSERT_EQUAL(0,(int)outPort.get_m_connectors().size());
+        retcode = outPort.subscribeInterfaces_public(prof);
+        CPPUNIT_ASSERT_EQUAL(0,(int)outPort.get_m_connectors().size());
         CPPUNIT_ASSERT_EQUAL(RTC::RTC_ERROR,retcode);
 
-        portAdmin.deletePort(outport);
+        portAdmin.deletePort(outPort);
     }
     /*!
      * @brief attach()メソッドのテスト
@@ -2209,7 +2283,7 @@ namespace OutPortBase
     {
 			
       std::string footPrints;
-        OutPortBaseMock outport("MyOutPort", toTypename<RTC::TimedDouble>());
+        OutPortBaseMock outPort("MyOutPort", toTypename<RTC::TimedDouble>());
       outPort.attach("A", new PublisherA(footPrints));
       outPort.attach("B", new PublisherB(footPrints));
       outPort.attach("C", new PublisherC(footPrints));
@@ -2228,7 +2302,7 @@ namespace OutPortBase
 /*
     void test_attach_back()
     {
-        OutPortBaseMock outport("MyOutPort", toTypename<RTC::TimedDouble>());
+        OutPortBaseMock outPort("MyOutPort", toTypename<RTC::TimedDouble>());
 			
       std::string footPrints;
       outPort.attach_back("A", new PublisherA(footPrints));
@@ -2249,7 +2323,7 @@ namespace OutPortBase
 /*
     void test_attach_front()
     {
-        OutPortBaseMock outport("MyOutPort", toTypename<RTC::TimedDouble>());
+        OutPortBaseMock outPort("MyOutPort", toTypename<RTC::TimedDouble>());
 			
       std::string footPrints;
       outPort.attach_front("A", new PublisherA(footPrints));
@@ -2271,7 +2345,7 @@ namespace OutPortBase
 /*
     void test_attach_mix()
     {
-        OutPortBaseMock outport("MyOutPort", toTypename<RTC::TimedDouble>());
+        OutPortBaseMock outPort("MyOutPort", toTypename<RTC::TimedDouble>());
 			
       std::string footPrints;
       outPort.attach_back("A", new PublisherA(footPrints)); // A
@@ -2292,7 +2366,7 @@ namespace OutPortBase
 /*
     void test_detach()
     {
-        OutPortBaseMock outport("MyOutPort", toTypename<RTC::TimedDouble>());
+        OutPortBaseMock outPort("MyOutPort", toTypename<RTC::TimedDouble>());
       std::string footPrints;
 			
       // はじめに複数のPublisherを登録しておく
@@ -2338,7 +2412,7 @@ namespace OutPortBase
     {
       std::string footPrints;
       {
-        OutPortBaseMock outport("MyOutPort", toTypename<RTC::TimedDouble>());
+        OutPortBaseMock outPort("MyOutPort", toTypename<RTC::TimedDouble>());
 
 	outPort.attach("A", new PublisherA(footPrints));
 	outPort.attach("B", new PublisherB(footPrints));
@@ -2385,12 +2459,14 @@ namespace RTC
    *
    *
    */
-  OutPortPushConnector::OutPortPushConnector(ConnectorBase::Profile profile, 
+  OutPortPushConnector::OutPortPushConnector(ConnectorInfo info, 
                                              InPortConsumer* consumer,
+                                             ConnectorListeners& listeners,
                                              CdrBufferBase* buffer)
-    : OutPortConnector(profile)
+    : OutPortConnector(info),
+      m_consumer(consumer), m_publisher(0), m_listeners(listeners), m_buffer(buffer)
   {
-      if(profile.properties["OutPortBaseTests"]=="bad_alloc")
+      if(info.properties["OutPortBaseTests"]=="bad_alloc")
       {
           throw std::bad_alloc();
       }
@@ -2447,7 +2523,7 @@ namespace RTC
    *
    *
    */
-  PublisherBase* OutPortPushConnector::createPublisher(Profile& profile)
+  PublisherBase* OutPortPushConnector::createPublisher(ConnectorInfo& info)
   {
       return new PublisherFlush(); 
   }
@@ -2455,7 +2531,7 @@ namespace RTC
    *
    *
    */
-  CdrBufferBase* OutPortPushConnector::createBuffer(Profile& profile)
+  CdrBufferBase* OutPortPushConnector::createBuffer(ConnectorInfo& info)
   {
       return new ::OutPortBase::CdrRingBufferMock();
 
@@ -2469,12 +2545,15 @@ namespace RTC
    *
    *
    */
-  OutPortPullConnector::OutPortPullConnector(Profile profile,
+  OutPortPullConnector::OutPortPullConnector(ConnectorInfo info,
                                              OutPortProvider* provider,
+                                             ConnectorListeners& listeners,
                                              CdrBufferBase* buffer)
-    : OutPortConnector(profile)
+    : OutPortConnector(info), m_provider(provider), m_listeners(listeners),
+      m_buffer(buffer)
+
   {
-      if(profile.properties["OutPortBaseTests"]=="bad_alloc")
+      if(info.properties["OutPortBaseTests"]=="bad_alloc")
       {
           throw std::bad_alloc();
       }

@@ -59,6 +59,9 @@ nodist_DataInOutPortTests_SOURCES =                 \
 	$(IDL_SOURCES:.idl=Skel.cpp)                \
 	$(top_srcdir)/src/lib/coil/common/stringutil.cpp            \
 	$(top_srcdir)/src/lib/coil/common/Properties.cpp            \
+	$(top_srcdir)/src/lib/rtm/CorbaPort.cpp          \
+	$(top_srcdir)/src/lib/rtm/ConnectorListener.cpp  \
+	$(top_srcdir)/src/lib/rtm/CORBA_IORUtil.cpp      \
 	$(top_srcdir)/src/lib/rtm/NVUtil.cpp                \
 	$(top_srcdir)/src/lib/rtm/PortBase.cpp              \
 	$(top_srcdir)/src/lib/rtm/OutPortBase.cpp           \

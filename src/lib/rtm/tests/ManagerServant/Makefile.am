@@ -70,6 +70,9 @@ nodist_DummyLib_la_SOURCES = \
 	$(top_builddir)/src/lib/rtm/PeriodicECSharedComposite.cpp\
 	$(top_builddir)/src/lib/rtm/RTObject.cpp                 \
 	$(top_builddir)/src/lib/rtm/Manager.cpp                  \
+	$(top_srcdir)/src/lib/rtm/CorbaPort.cpp               \
+	$(top_srcdir)/src/lib/rtm/ConnectorListener.cpp       \
+	$(top_srcdir)/src/lib/rtm/CORBA_IORUtil.cpp           \
 	$(top_srcdir)/src/lib/rtm/SystemLogger.cpp               \
 	$(top_srcdir)/src/lib/rtm/FactoryInit.cpp                  \
 	$(top_srcdir)/src/lib/rtm/CdrRingBuffer.cpp                \
@@ -177,9 +180,9 @@ clean-local:
 	rm -f Makefile.old
 	rm -f *.vcproj
 	rm -rf Release Debug
-	rm -rf .deps 
 	rm -f *.log
-	rm -f *.lo
+#	rm -f *.lo
+#	rm -rf .deps 
 
 #------------------------------------------------------------
 # vcproj file build rules
