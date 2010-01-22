@@ -208,7 +208,7 @@ namespace CorbaPort
       RTC::PortProfile* profile = portRef->get_port_profile();
 
       // ポート名称を正しく取得できるか？
-      CPPUNIT_ASSERT_EQUAL(std::string("name of port"), std::string(profile->name));
+      CPPUNIT_ASSERT_EQUAL(std::string("unknown.name of port"), std::string(profile->name));
 			
       // インタフェースプロファイルを取得し、あらかじめ設定しておいた内容と一致することを確認する
       RTC::PortInterfaceProfileList& profiles = profile->interfaces;
@@ -258,7 +258,7 @@ namespace CorbaPort
       RTC::CorbaConsumer<MyService>* pMyServiceConsumerB
 	= new RTC::CorbaConsumer<MyService>(); // will be deleted automatically
 			
-      RTC::CorbaPort* port0 = new RTC::CorbaPort("name of port0");
+      CorbaPortMock* port0 = new CorbaPortMock("name of port0");
       port0->registerProvider("MyServiceA", "Generic", *pMyServiceImplA);
       port0->registerConsumer("MyServiceB", "Generic", *pMyServiceConsumerB);
 
@@ -268,7 +268,7 @@ namespace CorbaPort
       RTC::CorbaConsumer<MyService>* pMyServiceConsumerA
 	= new RTC::CorbaConsumer<MyService>(); // will be deleted automatically
 			
-      RTC::CorbaPort* port1 = new RTC::CorbaPort("name of port1");
+      CorbaPortMock* port1 = new CorbaPortMock("name of port1");
       port1->registerProvider("MyServiceB", "Generic", *pMyServiceImplB);
       port1->registerConsumer("MyServiceA", "Generic", *pMyServiceConsumerA);
 			
@@ -282,6 +282,9 @@ namespace CorbaPort
 
       // 接続する
       port0->getPortRef()->connect(connProfile);
+
+      port0->activateInterfaces_public();
+      port1->activateInterfaces_public();
 
       // ポート1のコンシューマ側からメソッドを呼び出すと、ポート0のプロバイダ側が意図どおり呼び出されるか？
       CPPUNIT_ASSERT(! pMyServiceImplA->is_hello_world_called());
@@ -307,7 +310,7 @@ namespace CorbaPort
       RTC::CorbaConsumer<MyService>* pMyServiceConsumerB
 	= new RTC::CorbaConsumer<MyService>(); // will be deleted automatically
 			
-      RTC::CorbaPort* port0 = new RTC::CorbaPort("name of port0-1");
+      CorbaPortMock* port0 = new CorbaPortMock("name of port0-1");
       port0->registerProvider("MyServiceA-1", "Generic", *pMyServiceImplA);
       port0->registerConsumer("MyServiceB-1", "Generic", *pMyServiceConsumerB);
 
@@ -317,7 +320,7 @@ namespace CorbaPort
       RTC::CorbaConsumer<MyService>* pMyServiceConsumerA
 	= new RTC::CorbaConsumer<MyService>(); // will be deleted automatically
 			
-      RTC::CorbaPort* port1 = new RTC::CorbaPort("name of port1-1");
+      CorbaPortMock* port1 = new CorbaPortMock("name of port1-1");
       port1->registerProvider("MyServiceB-1", "Generic", *pMyServiceImplB);
       port1->registerConsumer("MyServiceA-1", "Generic", *pMyServiceConsumerA);
 			
@@ -331,6 +334,9 @@ namespace CorbaPort
 
       // 接続する
       port0->getPortRef()->connect(connProfile);
+
+      port0->activateInterfaces_public();
+      port1->activateInterfaces_public();
 
       // ポート1のコンシューマ側からメソッドを呼び出すと、ポート0のプロバイダ側が意図どおり呼び出されるか？
       CPPUNIT_ASSERT(! pMyServiceImplA->is_hello_world_called());
@@ -428,6 +434,9 @@ namespace CorbaPort
 
       // 接続する
       port0->getPortRef()->connect(connProfile);
+
+      port0->activateInterfaces_public();
+      port1->activateInterfaces_public();
 
       // ポート1のコンシューマ側からメソッドを呼び出すと、ポート0のプロバイダ側が意図どおり呼び出されるか？
       CPPUNIT_ASSERT(! pMyServiceImplA->is_hello_world_called());

@@ -81,6 +81,7 @@ nodist_OutPortTests_SOURCES =               \
 	$(top_srcdir)/src/lib/rtm/OutPortConnector.cpp \
 	$(top_srcdir)/src/lib/rtm/OutPortPullConnector.cpp \
 	$(top_srcdir)/src/lib/rtm/InPortProvider.cpp \
+	$(top_srcdir)/src/lib/rtm/ConnectorListener.cpp  \
 	OutPortTests.cpp
 
 
