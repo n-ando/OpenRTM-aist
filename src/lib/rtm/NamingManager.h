@@ -110,6 +110,25 @@ namespace RTC
      * @endif
      */
     virtual void bindObject(const char* name, const RTObject_impl* rtobj) = 0;
+
+    /*!
+     * @if jp
+     *
+     * @brief 指定したManagerServantをNamingServiceへバインドする純粋仮想関数
+     *
+     * @param name バインド時の名称
+     * @param rtobj バインド対象ManagerServant
+     *
+     * @else
+     *
+     * @brief Pure virtual function to bind the specified ManagerServants 
+     *        to NamingService
+     *
+     * @param name Names at the binding
+     * @param mgr The target ManagerServants for the binding
+     *
+     * @endif
+     */
     virtual void bindObject(const char* name, const RTM::ManagerServant* mgr) = 0;
     
     /*!
@@ -131,6 +150,21 @@ namespace RTC
      */
     virtual void unbindObject(const char* name) = 0;
 
+    /*!
+     * @if jp
+     *
+     * @brief ネームサーバのルートコンテキストの存在を確認する。
+     * 
+     * @return true:存在する,false:存在しない
+     *
+     * @else
+     *
+     * @brief Existence of route context of Nameserver 
+     * 
+     * @return true:existent,false:non existent
+     *
+     * @endif
+     */
     virtual bool isAlive() = 0;
   };
   
@@ -221,6 +255,23 @@ namespace RTC
      * @endif
      */
     virtual void bindObject(const char* name, const RTObject_impl* rtobj);
+    /*!
+     * @if jp
+     *
+     * @brief 指定したManagerServantをNamingServiceへバインド
+     *
+     * @param name バインド時の名称
+     * @param rtobj バインド対象ManagerServant
+     *
+     * @else
+     *
+     * @brief Bind the specified ManagerServants to NamingService
+     *
+     * @param name Names at the binding
+     * @param mgr The target ManagerServants for the binding
+     *
+     * @endif
+     */
     virtual void bindObject(const char* name, const RTM::ManagerServant* mgr);
     
     /*!
@@ -244,6 +295,21 @@ namespace RTC
      */
     virtual void unbindObject(const char* name);
     
+    /*!
+     * @if jp
+     *
+     * @brief ネームサーバのルートコンテキストの存在を確認する。
+     * 
+     * @return true:存在する,false:存在しない
+     *
+     * @else
+     *
+     * @brief Existence of route context of Nameserver 
+     * 
+     * @return true:existent,false:non existent
+     *
+     * @endif
+     */
     virtual bool isAlive();
 
   private:
@@ -363,6 +429,29 @@ namespace RTC
      * @endif
      */
     void bindObject(const char* name, const RTObject_impl* rtobj);
+    /*!
+     * @if jp
+     *
+     * @brief 指定したManagerServantのNamingServiceへバインド
+     * 
+     * 指定したManagerServantを指定した名称で 
+     * CORBA NamingService へバインドする。
+     * 
+     * @param name バインド時の名称
+     * @param mgr バインド対象ManagerServant
+     *
+     * @else
+     *
+     * @brief Bind the specified ManagerServants to NamingService
+     * 
+     * Bind the specified ManagerServants to CORBA NamingService 
+     * by specified names.
+     * 
+     * @param name Names at the binding
+     * @param mgr The target ManagerServants for the binding
+     *
+     * @endif
+     */
     void bindObject(const char* name, const RTM::ManagerServant* mgr);
     
     /*!
@@ -513,6 +602,28 @@ namespace RTC
      * @endif
      */
     void registerCompName(const char* name, const RTObject_impl* rtobj);
+    /*!
+     * @if jp
+     *
+     * @brief NameServer に登録するManagerServantの設定
+     * 
+     * NameServer に登録するManagerServantを設定する。
+     *
+     * @param name ManagerServantの登録時名称
+     * @param mgr 登録対象ManagerServant
+     * 
+     * @else
+     *
+     * @brief Configure the ManagerServants that will be registered 
+     * to NameServer
+     * 
+     * Configure the ManagerServants that will be registered to NameServer.
+     *
+     * @param name Names of ManagerServants at the registration
+     * @param mgr The target ManagerServants for registration
+     * 
+     * @endif
+     */
     void registerMgrName(const char* name, const RTM::ManagerServant* mgr);
     
     /*!
@@ -535,8 +646,47 @@ namespace RTC
      * @endif
      */
     void unregisterCompName(const char* name);
+    /*!
+     * @if jp
+     *
+     * @brief NameServer に登録するManagerServantの設定解除
+     * 
+     * NameServer に登録するManagerServantの設定を解除する。
+     *
+     * @param name 設定解除対象ManagerServantの名称
+     * 
+     * @else
+     *
+     * @brief Unregister the ManagerServants that will be registered 
+     * to NameServer
+     * 
+     * Unregister the ManagerServants that will be registered to NameServer.
+     *
+     * @param name Names of the target ManagerServants for unregistration
+     * 
+     * @endif
+     */
     void unregisterMgrName(const char* name);
 
+    /*!
+     * @if jp
+     *
+     * @brief コンポネントをリバインドする
+     * 
+     * ネームサーバと接続してコンポネントをリバインドする。
+     *
+     * @param ns NameServer
+     * 
+     * @else
+     *
+     * @brief Rebind the component to NameServer
+     * 
+     * Connect with the NameServer and rebind the component. 
+     *
+     * @param ns NameServer
+     * 
+     * @endif
+     */
     class Names;
     void retryConnection(Names* ns);
     
@@ -572,6 +722,13 @@ namespace RTC
      * @endif
      */
     std::vector<Names*> m_names;
+    /*!
+     * @if jp
+     * @brief NameServer リストのmutex
+     * @else
+     * @brief Mutex of NameServer list
+     * @endif
+     */
     Mutex m_namesMutex;
     
     // Components' name and object
@@ -590,6 +747,13 @@ namespace RTC
       std::string name;
       const RTObject_impl* rtobj;
     };
+    /*!
+     * @if jp
+     * @brief ManagerServant管理用構造体
+     * @else
+     * @brief Structure for ManagerServant management
+     * @endif
+     */
     struct Mgr
     {
       Mgr(const char* n, const RTM::ManagerServant* obj)
@@ -606,8 +770,29 @@ namespace RTC
      * @endif
      */
     std::vector<Comps*> m_compNames;
+    /*!
+     * @if jp
+     * @brief コンポーネントリストのmutex
+     * @else
+     * @brief Mutex of Component list
+     * @endif
+     */
     Mutex m_compNamesMutex;
+    /*!
+     * @if jp
+     * @brief ManagerServantリスト
+     * @else
+     * @brief ManagerServant list
+     * @endif
+     */
     std::vector<Mgr*> m_mgrNames;
+    /*!
+     * @if jp
+     * @brief ManagerServantリストのmutex
+     * @else
+     * @brief Mutex of ManagerServant list
+     * @endif
+     */
     Mutex m_mgrNamesMutex;
     
     /*!
