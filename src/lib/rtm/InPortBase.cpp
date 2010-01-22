@@ -192,7 +192,7 @@ namespace RTC
             return m_connectors[i];
           }
       }
-    RTC_WARN(("ConnectorProfile with the id(%d) not found.", id));
+    RTC_WARN(("ConnectorProfile with the id(%s) not found.", id));
     return 0;
   }
 
@@ -205,7 +205,7 @@ namespace RTC
    */
   InPortConnector* InPortBase::getConnectorByName(const char* name)
   {
-    RTC_TRACE(("getConnectorByName(id = %s)", name));
+    RTC_TRACE(("getConnectorByName(name = %s)", name));
 
     std::string sname(name);
     for (int i(0), len(m_connectors.size()); i < len; ++i)
@@ -215,7 +215,7 @@ namespace RTC
             return m_connectors[i];
           }
       }
-    RTC_WARN(("ConnectorProfile with the name(%d) not found.", name));
+    RTC_WARN(("ConnectorProfile with the name(%s) not found.", name));
     return 0;
   }
 
@@ -249,8 +249,8 @@ namespace RTC
   bool InPortBase::getConnectorProfileByName(const char* name,
                                               ConnectorInfo& prof)
   {
-    RTC_TRACE(("getConnectorProfileById(id = %s)", name));
-    InPortConnector* conn(getConnectorById(name));
+    RTC_TRACE(("getConnectorProfileByName(name = %s)", name));
+    InPortConnector* conn(getConnectorByName(name));
     if (conn == 0)
       {
         return false;
