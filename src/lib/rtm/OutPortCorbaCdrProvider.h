@@ -154,8 +154,22 @@ namespace RTC
      * @endif
      */
     virtual void setBuffer(CdrBufferBase* buffer);
+    /*!
+     * @if jp
+     * @brief リスナを設定する。
+     * @else
+     * @brief Set the listener. 
+     * @endif
+     */
     virtual void setListener(ConnectorInfo& info,
                              ConnectorListeners* listeners);
+    /*!
+     * @if jp
+     * @brief Connectorを設定する。
+     * @else
+     * @brief set Connector
+     * @endif
+     */
     virtual void setConnector(OutPortConnector* connector);
 
     /*!
