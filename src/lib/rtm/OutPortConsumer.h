@@ -146,6 +146,13 @@ namespace RTC
      * @endif
      */
     virtual void setBuffer(CdrBufferBase* buffer) = 0;
+    /*!
+     * @if jp
+     * @brief リスナを設定する。
+     * @else
+     * @brief Set the listener. 
+     * @endif
+     */
     virtual void setListener(ConnectorInfo& info,
                              ConnectorListeners* listeners) = 0;
 
@@ -230,6 +237,13 @@ namespace RTC
     virtual void unsubscribeInterface(const SDOPackage::NVList& properties) = 0;
 
   protected:
+    /*!
+     * @if jp
+     * @brief ロガーストリーム
+     * @else
+     * @brief Logger stream
+     * @endif
+     */
     mutable Logger rtclog;
 
     /*!
