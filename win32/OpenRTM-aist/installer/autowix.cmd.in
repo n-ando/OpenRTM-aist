@@ -44,7 +44,7 @@ if "x%WIX%" == "x" (
 @rem ------------------------------------------------------------
 @rem Generate RTSystemEditor wxs file
 @rem
-@rem RTSystemEditorRCP.exe should be under RTSE_ROOT\rtse.exe
+@rem RTSystemEditorRCP.exe should be under %RTSE_ROOT%
 @rem
 @rem ------------------------------------------------------------
 if "x%RTSE_ROOT%" == "x" (
@@ -52,7 +52,7 @@ if "x%RTSE_ROOT%" == "x" (
    goto END
 )
 if not exist "%RTSE_ROOT%\RTSystemEditorRCP.exe" (
-   echo rtse.exe does not found. Abort
+   echo RTSystemEditorRCP.exe does not found. Abort
    goto END
 )
 set INCLUDE_RTSE=YES
