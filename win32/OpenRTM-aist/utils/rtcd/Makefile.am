@@ -1,6 +1,6 @@
 ## -*- Makefile -*-
 ##---------------------------------------------------------------------------
-## Makefile.am for rtcd
+## Makefile.am for rtcprof
 ##
 ## $Id$
 ##---------------------------------------------------------------------------
@@ -8,10 +8,10 @@
 clean-local:
 	rm -rf *~ *core *.cpp *.vcproj *.user *.exe
 	rm -rf rtc.conf
-	rm -rf rtcd
+	rm -rf rtcprof
 
 src:
-	cp -p $(top_srcdir)/utils/rtcd/*.cpp .
+	cp -p $(top_srcdir)/utils/rtcprof/*.cpp .
 	qkc -ms *.cpp
 
 dist-hook: src
