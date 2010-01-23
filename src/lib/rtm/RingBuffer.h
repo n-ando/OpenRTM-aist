@@ -668,7 +668,7 @@ namespace RTC
      * @param sec   タイムアウト時間 sec  (default -1: 無効)
      * @param nsec  タイムアウト時間 nsec (default 0)
      * @return BUFFER_OK            正常終了
-     *         BUFFER_EMPTY         バッファがフル状態
+     *         BUFFER_EMPTY         バッファが空状態
      *         TIMEOUT              書込みがタイムアウトした
      *         PRECONDITION_NOT_MET 設定異常
      * 
