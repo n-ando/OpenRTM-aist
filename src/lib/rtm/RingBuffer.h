@@ -120,7 +120,7 @@ namespace RTC
         m_timedwrite(false), m_timedread(false),
         m_wtimeout(1, 0), m_rtimeout(1, 0),
         m_length(length),
-        m_wpos(0), m_rpos(0), m_fillcount(0),
+        m_wpos(0), m_rpos(0), m_fillcount(0), m_wcount(0),
         m_buffer(m_length)
     {
       this->reset();
@@ -273,6 +273,7 @@ namespace RTC
     {
       Guard guard(m_posmutex);
       m_fillcount = 0;
+      m_wcount = 0;
       m_wpos = 0;
       m_rpos = 0;
       return ::RTC::BufferStatus::BUFFER_OK;
@@ -348,6 +349,7 @@ namespace RTC
       Guard guard(m_posmutex);
       m_wpos = (m_wpos + n + m_length) % m_length;
       m_fillcount += n;
+      m_wcount += n;
       return ::RTC::BufferStatus::BUFFER_OK;
     }
     /*!
@@ -702,6 +704,10 @@ namespace RTC
 
           if (readback && !timedread)       // "readback" mode
             {
+              if (!(m_wcount > 0))
+                {
+                  return ::RTC::BufferStatus::BUFFER_EMPTY;
+                }
               advanceRptr(-1);
             }
           else if (!readback && !timedread) // "do_notiong" mode
@@ -874,6 +880,7 @@ namespace RTC
     size_t m_wpos;
     size_t m_rpos;
     size_t m_fillcount;
+    size_t m_wcount;
     std::vector<DataType> m_buffer;
     
     struct condition
