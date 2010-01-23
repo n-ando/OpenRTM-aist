@@ -4,5 +4,5 @@
 ##
 ## $Id$
 ##---------------------------------------------------------------------------
-SUBDIRS = rtc-template rtcd
+SUBDIRS = rtc-template rtcd rtcprof
 

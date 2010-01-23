@@ -40,7 +40,10 @@ namespace coil
   {
     signal(SIGCHLD, SIG_IGN);
     pid_t pid;
-    pid = fork();
+    if((pid = fork()) < 0 )
+      { // fork failed
+        return -1; 
+      }
     
     if (pid == 0) // I'm child process
       {

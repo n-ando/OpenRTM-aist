@@ -56,5 +56,47 @@ namespace coil
    */
   int launch_shell(std::string command);
 
+
+  class Popen
+  {
+    FILE* m_fd;
+  public:
+    Popen(std::string cmd, std::string mode)
+    {
+      m_fd = _popen(cmd.c_str(), mode.c_str());
+    }
+    virtual ~Popen()
+    {
+      if (m_fd != 0)
+        {
+          _pclose(m_fd);
+        }
+    }
+    bool isEof()
+    {
+      if (feof(m_fd)) { return true; }
+      return false;
+    }
+    std::string getline()
+    {
+      if (m_fd == 0) { return ""; }
+      if (feof(m_fd)) { return ""; }
+      char str[512];
+      fgets(str, 512, m_fd);
+      std::string line(str);
+      return line;
+    }
+  };
 }; // namespace coil
+
+inline FILE* popen(const char* cmd, const char* mode)
+{
+  return _popen(cmd, mode);
+}
+
+inline void pclose(FILE* fd)
+{
+  _pclose(fd);
+}
+
 #endif // COIL_PROCESS_H

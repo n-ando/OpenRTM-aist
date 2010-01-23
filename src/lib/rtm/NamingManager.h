@@ -699,17 +699,19 @@ namespace RTC
      * @brief Structure for NameServer management
      * @endif
      */
-    struct Names
+    class Names
     {
+    public:
       Names(const char* meth, const char* name, NamingBase* naming)
 	: method(meth), nsname(name), ns(naming)
       {
       }
-
-      ~Names() {
-	delete ns;
+      
+      ~Names()
+      {
+        delete ns;
       }
-
+      
       std::string method;
       std::string nsname;
       NamingBase* ns;
