@@ -19,8 +19,9 @@
 #ifndef COIL_FILE_H
 #define COIL_FILE_H
 
+#include <windows.h>
 #include <coil/config_coil.h>
-#include <memory>
+#include <coil/stringutil.h>
 
 namespace coil
 {
@@ -120,6 +121,170 @@ namespace coil
     }
     return base_name;
   }
+
+
+
+  typedef unsigned int ino_t;
+  
+  struct dirent
+  {
+    ino_t          d_ino;
+    char           d_name[_MAX_PATH];
+  };
+
+  typedef struct
+  {
+    HANDLE h;
+    WIN32_FIND_DATAA *fd;
+    BOOL has_next;
+    struct dirent entry;
+  } DIR;
+
+
+  DIR* opendir(const char *name)
+  {
+    if (name == 0) { return 0; }
+    std::string path(name);
+    if (path.empty()) { return 0; }
+
+    // path has at least one or more path characters
+    if (*(path.end() - 1) != '\\' && *(path.end() - 1) != '/')
+      {
+        std::string::size_type pos(path.find("/"));
+        if (pos == std::string::npos) { path.push_back('\\'); } // delim = '\'
+        else                          { path.push_back('/');  } // delim = '/'
+      }
+    path.push_back('*'); // now path is "/dir/dir/../*"
+
+    // fd will be held by DIR structure
+    HANDLE dhandle;
+    WIN32_FIND_DATAA* fd;
+    try
+      {
+        fd = new WIN32_FIND_DATAA();
+        dhandle = FindFirstFileA(path.c_str(), fd);
+        if (dhandle == INVALID_HANDLE_VALUE) { delete fd; return 0; }
+
+      }
+    catch (...)
+      {
+        FindClose(dhandle);
+        return 0;
+      }
+
+    DIR* dir;
+    try
+      {
+        dir = new DIR();
+        dir->h = dhandle;
+        dir->fd = fd;
+        dir->has_next = TRUE;
+      }
+    catch (...)
+      {
+        delete fd;
+        return 0;
+      }
+    return dir;
+  }
+
+
+  dirent* readdir(DIR *dir)
+  {
+    if (dir == 0) { return 0; }
+    if (dir->fd == 0) { return 0;}
+    if (!dir->has_next) { return 0; }
+
+    strcpy_s(dir->entry.d_name, _MAX_PATH, dir->fd->cFileName);
+    dir->has_next = FindNextFileA(dir->h, dir->fd);
+ 
+    return &dir->entry;
+  }
+
+  int closedir(DIR *dir)
+  {
+    if (dir == 0) { return -1; }
+    if (dir->h != 0 && dir->h != INVALID_HANDLE_VALUE)
+      {
+        FindClose(dir->h);
+      }
+    if (dir->fd != 0) { delete dir->fd; }
+    delete dir;
+
+    return 0;
+  }
+
+
+
+  inline coil::vstring filelist(const char* path, const char* glob_str = "")
+  {
+    struct dirent* ent; 
+    coil::vstring flist;
+    bool has_glob(false);
+    std::string pattern;
+
+    if (path == 0) { return flist; }
+    if (glob_str[0] != '\0') { has_glob = true; }
+
+    DIR* dir_ptr(coil::opendir(path));
+    if (dir_ptr == 0) { return flist; }
+    
+    while ((ent = coil::readdir(dir_ptr)) != 0)
+      {
+        bool match(true);
+        if (has_glob)
+          {
+            const char* globc(glob_str);
+            std::string fname(ent->d_name);
+            for (size_t i(0); i < fname.size() && globc != '\0'; ++i, ++globc)
+              {
+                if (*globc == '*')
+                  {
+                    // the last '*' matches every thing
+                    if (globc[1] == '\0') { break; }
+                    // consecutive * or + are skiped, but fname keeps pointer
+                    if (globc[1] == '*' || globc[1] == '+') { --i; continue; }
+
+                    // advance pointer and find normal characters
+                    ++globc;
+                    size_t pos(fname.find(*globc, i));
+                    if (pos == std::string::npos) { match = false; break; }
+                    // matched, and advance i to pos
+                    i = pos;
+                  }
+                else if (*globc == '+')
+                  {
+                    // the last '+' matches last one or more characters
+                    if (globc[1] == '\0' && !(i + 1 < fname.size())) { break; }
+                    // consecutive * or + are skiped, but fname keeps pointer
+                    if (globc[1] == '*' || globc[1] == '+') { --i; continue; }
+
+                    // advance pointer and find normal characters
+                    ++globc;
+                    size_t pos(fname.find(*globc, i + 1));
+                    if (pos == std::string::npos) { match = false; break; }
+                    // matched, and advance i to pos
+                    i = pos;
+                  }
+                else
+                  {
+                    if (fname[i] != *globc) { match = false; }
+                  }
+                
+                // in the last fname character, if glob is not end,
+                // or *, fname is not matched.
+                if (i + 1 == fname.size() && 
+                    globc[1] != '\0' && globc[1] != '*') { match = false; }
+              }
+          }
+        if (match) { flist.push_back(ent->d_name); }
+      }
+    coil::closedir(dir_ptr);
+
+    return flist;
+  }
+
+
 };
 
 #endif // COIL_FILE_H

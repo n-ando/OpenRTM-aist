@@ -110,6 +110,9 @@ namespace RTC
       }
     setSystemInformation(prop);
     if (m_isMaster) { prop["manager.is_master"] = "YES"; }
+
+    // Properties from arguments are marged finally
+    prop << m_argprop;
   }
   
   /*!
@@ -138,10 +141,16 @@ namespace RTC
 	    //	    m_configFile = get_opts.optarg;
 	    break;
 	  case 'o':
-	    //	    m_configFile = get_opts.optarg;
+            {
+              std::string optarg(get_opts.optarg);
+              std::string::size_type pos(optarg.find(":"));
+              if (pos != std::string::npos)
+                {
+                  m_argprop[optarg.substr(0, pos)] = optarg.substr(pos + 1);
+                }
+            }
 	    break;
-	    // Use default configuration settings
-	  case 'd': 
+	  case 'd':
             m_isMaster = true;
 	    break;
 	  default:

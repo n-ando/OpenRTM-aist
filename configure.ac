@@ -1499,6 +1499,7 @@ AC_OUTPUT([Makefile
 	utils/rtm-skelwrapper/Makefile
 	utils/rtm-naming/Makefile
 	utils/rtcd/Makefile
+	utils/rtcprof/Makefile
 	etc/Makefile
 	examples/Makefile
 	examples/AutoTest/Makefile
@@ -1527,6 +1528,7 @@ AC_OUTPUT([Makefile
 	win32/OpenRTM-aist/utils/Makefile
 	win32/OpenRTM-aist/utils/rtc-template/Makefile
 	win32/OpenRTM-aist/utils/rtcd/Makefile
+	win32/OpenRTM-aist/utils/rtcprof/Makefile
 	win32/OpenRTM-aist/coil/Makefile
 	win32/OpenRTM-aist/rtm/Makefile
 	win32/OpenRTM-aist/rtm/idl/Makefile

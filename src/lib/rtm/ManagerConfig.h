@@ -368,6 +368,15 @@ namespace RTC
     
     /*!
      * @if jp
+     * @brief 引数から渡されるプロパティ
+     * @else
+     * @brief configuration properties from arguments
+     * @endif
+     */
+    coil::Properties m_argprop;
+
+    /*!
+     * @if jp
      * @brief Manager コンフィギュレーション・ファイルのパス
      * @else
      * @brief Manager's configuration file path
