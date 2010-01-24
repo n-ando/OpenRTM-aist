@@ -496,6 +496,9 @@ echo ''
 echo ' '$PACKAGE_NAME' will be build with the following options. '
 echo ''
 echo '------------------------------------------------------------'
+echo 'coil platform: ' $COIL_PLATFORM
+echo 'coil system: ' $system
+echo ''
 echo 'CXX: '$CXX
 echo 'CPPFLAGS: '$CPPFLAGS
 echo 'CXXFLAGS: '$CXXFLAGS
@@ -504,12 +507,6 @@ echo 'LD: '$LD
 echo 'LIBS: '$LIBS
 echo 'LDFLAGS: '$LDFLAGS
 echo 'LDSOLIBS: '$LDSOLIBS
-echo ''
-echo 'ORB: '$ORB
-echo 'IDLC: '$IDLC
-echo 'IDL_FLAGS: '$IDL_FLAGS
-echo ''
-echo 'WRAPPERS: '$WRAPPERS
 echo '------------------------------------------------------------'
 echo ''
 

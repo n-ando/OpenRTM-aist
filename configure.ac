@@ -49,9 +49,9 @@ RTM_SHORT_VERSION=$short_version
 RTM_DESCRIPTION='An OMG RTC compliant middleware for robots.'
 
 AC_DEFINE_UNQUOTED([RTM_VERSION],       "$VERSION",       [RTM version])
-AC_DEFINE_UNQUOTED([RTM_MAJOR_VERSION], $major_version, [RTM major version])
-AC_DEFINE_UNQUOTED([RTM_MINOR_VERSION], $minor_version, [RTM minor version])
-AC_DEFINE_UNQUOTED([RTM_REVISION_NUM],  $revision_num,  [RTM revision numver])
+AC_DEFINE_UNQUOTED([RTM_MAJOR_VERSION], $major_version,   [RTM major version])
+AC_DEFINE_UNQUOTED([RTM_MINOR_VERSION], $minor_version,   [RTM minor version])
+AC_DEFINE_UNQUOTED([RTM_REVISION_NUM],  $revision_num,    [RTM revision numver])
 AC_DEFINE_UNQUOTED([RTM_SHORT_VERSION], "$short_version", [RTM short version])
 
 dnl ------------------------------------------------------------
@@ -614,7 +614,8 @@ hint: <dir>/bin will be searched.)
 	dnl ------------------------------------------------------------
 	dnl  Mico setup complete
 	dnl ------------------------------------------------------------
-	IDLC=$idl
+	PATH_NORM($idl)
+	IDLC=$n_path
 	IDL_FLAGS="--c++-skel --poa --no-boa --any"
 	CXXFLAGS="-I$CORBA_h_dir $CXXFLAGS"
 	LDFLAGS="$LDFLAGS -L$mico_lib_dir"
@@ -743,7 +744,8 @@ if test "x$have_orbacus" = "xyes" ; then
 	dnl ------------------------------------------------------------
 	dnl  ORBacus setup complete
 	dnl ------------------------------------------------------------
-	IDLC = $idl
+	PATH_NORM($idl)
+	IDLC = $n_path
 	IDL_FLAGS="--c-suffix .cc"
 	IFRFEED="$irfeed"
 	IFRSERVER="$irserv"
@@ -848,7 +850,8 @@ if test "x$have_orbix" = "xyes" ; then
 	dnl ------------------------------------------------------------
 	dnl  Orbix/E setup complete
 	dnl ------------------------------------------------------------
-	IDLC = $aeidl
+	PATH_NORM($aeidl)
+	IDLC = $n_path
 	IDL_FLAGS="-base:-ccc:-hh -poa:-ccc:-hh"
 	COSNAMES = $enameserv
 	dnl  Compiler/Linker options
@@ -950,7 +953,8 @@ if test "x$have_tao" = "xyes" ; then
 	dnl ------------------------------------------------------------
 	dnl  TAO setup complete
 	dnl ------------------------------------------------------------
-	IDLC=$tao_idl
+	PATH_NORM($tao_idl)
+	IDLC=$n_path
 	IDL_FLAGS="-DTAO_IDL -Ge 0 $tao_include/tao $tao_include"
 	COSNAMES=$Naming_Service
 	CPPFLAGS="$tao_include $CPPFLAGS"
@@ -1036,7 +1040,6 @@ if test "x$have_omniorb" = "xyes" ; then
 		AC_MSG_ERROR(use --with-omniorb to locate omniNames)
 	else
 		AC_MSG_RESULT($omniNames)
-		IDLC=$omniidl
 	fi
 
 	dnl ------------------------------------------------------------
@@ -1062,8 +1065,8 @@ if test "x$have_omniorb" = "xyes" ; then
 	dnl ------------------------------------------------------------
 	dnl  omniORB setup complete
 	dnl ------------------------------------------------------------
-	IDLC=$omniidl	
-#	IDL_FLAGS="-bcxx -Wba -nf -I/usr/local/share/omniORB/idl/ -I/usr/local/share/omniORB/idl/COS"
+	PATH_NORM($omniidl)
+	IDLC=$n_path
 	IDL_FLAGS="-bcxx -Wba -nf"
 	COSNAMES=$omniNames
 	dnl  Compiler/Linker options
@@ -1142,7 +1145,8 @@ if test "x$have_orbit2" = "xyes" ; then
 	dnl ------------------------------------------------------------
 	dnl  ORBit2 setup complete
 	dnl ------------------------------------------------------------
-	IDLC=$orbit_idl_2	
+	PATH_NORM($orbit_idl_2)
+	IDLC=$n_path
 	IDL_FLAGS="--lang cpp -DORBIT2_IDL"
 	COSNAMES=
 	dnl  Compiler/Linker options
@@ -1427,8 +1431,6 @@ echo ''
 echo 'ORB: '$ORB
 echo 'IDLC: '$IDLC
 echo 'IDL_FLAGS: '$IDL_FLAGS
-echo ''
-echo 'WRAPPERS: '$WRAPPERS
 echo '------------------------------------------------------------'
 echo ''
 

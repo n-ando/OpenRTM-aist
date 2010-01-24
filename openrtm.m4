@@ -94,5 +94,42 @@ AC_DEFUN([UNIQUE], [
     done
 ])
 
+dnl----------------------------------------------------------------------
+dnl
+dnl @func PATH_NORM([path])
+dnl @brief normalize path
+dnl
+dnl @param path string
+dnl @return ${n_path} results of normalized path
+dnl
+dnl----------------------------------------------------------------------
+AC_DEFUN([PATH_NORM], [
+    elements=`echo $1 | sed -e 's/\// /g'`
+    head=`echo "$1" | sed '/^\//!d' | sed 's/\(^\/\).*$/\1/'`
+    tail=`echo "$1" | sed '/\/$/!d' | sed 's/.*\(\/\)$/\1/'`
 
-		
+    n_path=''
+    for e in $elements; do
+        if test "$e" = "."; then
+            if test "x$n_path" = "x"; then
+                n_path='./'
+            fi
+        elif test "$e" = ".."; then
+            dirn=`dirname $n_path`
+            if test "$dirn" = "."; then
+                n_path=""
+            else
+                n_path=$dirn
+            fi
+        else
+            if test "x$n_path" = "x"; then
+                n_path=$e
+            else
+                n_path=$n_path/$e
+            fi
+        fi
+    done
+    n_path=$head$n_path$tail
+])
+
+

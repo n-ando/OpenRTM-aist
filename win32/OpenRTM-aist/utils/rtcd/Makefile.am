@@ -11,7 +11,7 @@ clean-local:
 	rm -rf rtcprof
 
 src:
-	cp -p $(top_srcdir)/utils/rtcprof/*.cpp .
+	cp -p $(top_srcdir)/utils/rtcd/*.cpp .
 	qkc -ms *.cpp
 
 dist-hook: src
