@@ -13,7 +13,8 @@ AM_LDFLAGS=-L$(top_builddir) -L$(top_buiddir)/src/lib/rtm -L$(top_builddir)/src/
 bin_PROGRAMS = rtcprof
 
 rtcprof_SOURCES = rtcprof.cpp
-rtcprof_LDADD   = $(top_builddir)/src/lib/rtm/libRTC.la
+rtcprof_LDADD   = $(top_builddir)/src/lib/rtm/libRTC.la \
+	$(top_builddir)/src/lib/coil/lib/libcoil.la
 rtcprof_LDFLAGS = -L$(top_builddir)/src/lib/rtm
 
 #------------------------------------------------------------
