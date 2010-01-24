@@ -30,10 +30,21 @@ manager.name: manager
 
 #------------------------------------------------------------
 # Master manager
-# - ismaster: this process is master manager
-# - master_location: master manager's location
+# - manager.is_master: YES/NO, This process made a master or not.
+# - manager.corba_servant: YES/NO, create manager's corba service or not
+# - corba.master_manager: <host_name>:<port>, master manager's location
 manager.is_master: YES
+manager.corba_servant: YES
 corba.master_manager: localhost:2810
+
+#------------------------------------------------------------
+# Manager auto shutdown options
+# - manager.shutdown_nortcs: YES/NO, 
+#   process will be shutdown in case no rtc exists when rtc is deleted.
+# - manager.shutdown_auto:
+#   process will be shutdown in case no rtc exists on periodic check.
+manager.shutdown_nortcs: YES
+manager.shutdown_auto: YES
 
 #============================================================
 # CORBA configuration

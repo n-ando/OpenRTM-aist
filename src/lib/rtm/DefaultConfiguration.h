@@ -77,6 +77,9 @@ static const char* default_config[] =
     "manager.modules.load_path",          "./",
     "manager.modules.abs_path_allowed",   "YES",
     "manager.is_master",                  "NO",
+    "manager.corba_servant",              "YES",
+    "manager.shutdown_nortcs",            "YES",
+    "manager.shutdown_auto",              "YES",
     "manager.name",                       "manager",
     "manager.command",                    "rtcd",
 

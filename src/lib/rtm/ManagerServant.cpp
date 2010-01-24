@@ -22,6 +22,7 @@
 #include <rtm/NVUtil.h>
 #include <rtm/RTObject.h>
 #include <rtm/CORBA_SeqUtil.h>
+#include <rtm/CORBA_IORUtil.h>
 
 namespace RTM
 {
@@ -33,46 +34,40 @@ namespace RTM
   {
     rtclog.setName("ManagerServant");
     coil::Properties config(m_mgr.getConfig());    
+    
     if (coil::toBool(config["manager.is_master"], "YES", "NO", true))
-      {
+      { // this is master manager
         RTC_TRACE(("This manager is master."));
-        // this is master manager
-        CORBA::Object_var obj;
-        obj = m_mgr.getORB()->resolve_initial_references("omniINSPOA");
-        PortableServer::POA_ptr poa = PortableServer::POA::_narrow(obj);
-        poa->the_POAManager()->activate();
-        PortableServer::ObjectId_var id; 
-        id = PortableServer::string_to_ObjectId(config["manager.name"].c_str());
-        poa->activate_object_with_id(id.in(), this);
-        CORBA::Object_var mgrobj = poa->id_to_reference(id);
-        m_objref = ::RTM::Manager::_narrow(mgrobj);
 
-        RTC_INFO(("Manager CORBA servant was successfully created."));
+        if (!createINSManager())
+          {
+            RTC_WARN(("Manager CORBA servant creation failed."));
+            return;
+            
+          }
+        m_isMaster = true;
+        RTC_WARN(("Manager CORBA servant was successfully created."));
         return;
       }
     else
-      {
+      { // manager is slave
         RTC_TRACE(("This manager is slave."));
-        // this is slave manager
-
         try
           {
-            std::string mgrloc("corbaloc:iiop:");
-            mgrloc += config["corba.master_manager"]
-              + "/" + config["manager.name"];
-                
-            CORBA::Object_var mobj;
-            mobj = m_mgr.getORB()->string_to_object(mgrloc.c_str());
-            RTM::Manager_var owner = ::RTM::Manager::_narrow(mobj);
+            RTM::Manager_var owner;
+            owner = findManager(config["corba.master_manager"].c_str());
+            if (CORBA::is_nil(owner))
+              {
+                RTC_INFO(("Master manager not found"));
+                return;
+              }
+            if (!createINSManager())
+              {
+                RTC_WARN(("Manager CORBA servant creation failed."));
+                return;
+              }
             add_master_manager(owner);
-            m_objref = this->_this();
             owner->add_slave_manager(m_objref.in());
-            return;
-          }
-        catch(CORBA::SystemException& e)
-          {
-            RTC_DEBUG(("CORBA SystemException cought (CORBA::%s)", e._name()));
-            RTC_INFO(("No master manager found. This is standalone mode."));
             return;
           }
         catch (...)
@@ -84,6 +79,38 @@ namespace RTM
   
   ManagerServant::~ManagerServant()
   {
+    Guard guardm(m_masterMutex);
+    for (CORBA::ULong i(0); i < m_masters.length(); ++i)
+      {
+        try
+          {
+            if (CORBA::is_nil(m_masters[i])) { continue; }
+            m_masters[i]
+              ->remove_slave_manager(RTM::Manager::_duplicate(m_objref));
+          }
+        catch (...)
+          {
+            m_masters[i] = RTM::Manager::_nil();
+          }
+      }
+    m_masters.length(0);
+
+    Guard guards(m_slaveMutex);
+    for (CORBA::ULong i(0); i < m_slaves.length(); ++i)
+      {
+        try
+          {
+            if (CORBA::is_nil(m_slaves[i])) { continue; }
+            m_slaves[i]
+              ->remove_master_manager(RTM::Manager::_duplicate(m_objref));
+          }
+        catch (...)
+          {
+            m_slaves[i] = RTM::Manager::_nil();
+          }
+      }
+    m_slaves.length(0);
+
   }
   
   /*!
@@ -97,7 +124,7 @@ namespace RTM
   ManagerServant::load_module(const char* pathname, const char* initfunc)
   {
     RTC_TRACE(("ManagerServant::load_module(%s, %s)", pathname, initfunc));
-    
+
     m_mgr.load(pathname, initfunc);
     
     return ::RTC::RTC_OK;
@@ -271,12 +298,88 @@ namespace RTM
   {
     RTC_TRACE(("create_component(%s)", module_name));
     
-    RTC::RTObject_impl* rtc = m_mgr.createComponent(module_name);
-    if (rtc == NULL)
+    std::string arg(module_name);
+    std::string::size_type pos0(arg.find("&manager="));
+    std::string::size_type pos1(arg.find("?manager="));
+
+    if (pos0 == std::string::npos && pos1 == std::string::npos)
       {
+        if (is_master())
+          {
+            RTC_ERROR(("Master manager cannot create component: %s",
+                       module_name));
+            return RTC::RTObject::_nil();
+          }
+        // create on this manager
+        RTC::RTObject_impl* rtc = m_mgr.createComponent(module_name);
+        if (rtc == NULL)
+          {
+            return RTC::RTObject::_nil();
+          }
+        return rtc->getObjRef();
+      }
+    // create other manager
+
+    // extract manager's location
+    std::string::size_type pos;
+    pos = (pos0 != std::string::npos) ? pos0 : pos1;
+    
+    std::string::size_type endpos;
+    endpos = arg.find('&', pos + 1);
+    std::string mgrstr(arg.substr(pos + 1, endpos - 1 - pos));
+    RTC_VERBOSE(("Manager arg: %s", mgrstr.c_str()));
+    coil::vstring mgrvstr(coil::split(mgrstr, ":"));
+    if (mgrvstr.size() != 2)
+      {
+        RTC_WARN(("Invalid manager name: %s", mgrstr.c_str()));
         return RTC::RTObject::_nil();
       }
-    return rtc->getObjRef();
+    std::string::size_type eqpos(mgrstr.find("="));
+    if (eqpos == std::string::npos)
+      {
+        RTC_WARN(("Invalid argument: %s", module_name));
+        return RTC::RTObject::_nil();
+      }
+    mgrstr.erase(0, eqpos + 1);
+    RTC_DEBUG(("Manager is %s", mgrstr.c_str()))
+
+    // find manager
+    RTM::Manager_var mgrobj = findManager(mgrstr.c_str());
+    if (CORBA::is_nil(mgrobj))
+      {
+        std::string cmd("rtcd -p ");
+        cmd += mgrvstr[1]; // port number
+
+        RTC_DEBUG(("Invoking command: %s.", cmd.c_str()));
+        int ret(coil::launch_shell(cmd.c_str()));
+        if (ret == -1)
+          {
+            RTC_DEBUG(("%s: failed", cmd.c_str()));
+            return RTC::RTObject::_nil();
+          }
+
+        // find manager
+        int count(0);
+        while (CORBA::is_nil(mgrobj))
+          {
+            mgrobj = findManager(mgrstr.c_str());
+            ++count;
+            if (count > 1000) { break; }
+            coil::usleep(10000);
+          }
+      }
+
+    if (CORBA::is_nil(mgrobj))
+      {
+        RTC_WARN(("Manager cannot be found."));
+        return RTC::RTObject::_nil();
+      }
+    
+    // create component on the manager    
+    arg.erase(pos + 1, endpos - pos);
+    RTC_DEBUG(("Creating component on %s",  mgrstr.c_str()));
+    RTC_DEBUG(("arg: %s", arg.c_str()));
+    return mgrobj->create_component(arg.c_str());
   }
   
   /*!
@@ -395,6 +498,7 @@ namespace RTM
    */
   RTM::ManagerProfile* ManagerServant::get_profile()
   {
+    RTC_TRACE(("get_profile()"));
     RTM::ManagerProfile* prof = new RTM::ManagerProfile();
     NVUtil::copyFromProperties(prof->properties,
                                m_mgr.getConfig().getNode("manager"));
@@ -410,6 +514,7 @@ namespace RTM
    */
   RTM::NVList* ManagerServant::get_configuration()
   {
+    RTC_TRACE(("get_configuration()"));
     ::RTC::NVList* nvlist = new ::RTC::NVList();
     NVUtil::copyFromProperties(*nvlist, m_mgr.getConfig());
     return nvlist;
@@ -425,6 +530,7 @@ namespace RTM
   RTC::ReturnCode_t
   ManagerServant::set_configuration(const char* name, const char* value)
   {
+    RTC_TRACE(("set_configuration(name = %s, value = %s)", name, value));
     m_mgr.getConfig().setProperty(name, value);
     return ::RTC::RTC_OK;
   }
@@ -437,6 +543,7 @@ namespace RTM
    */
   CORBA::Boolean ManagerServant::is_master()
   {
+    RTC_TRACE(("is_master(): %s", m_isMaster ? "YES" : "NO"));
     return m_isMaster;
   }
   
@@ -601,4 +708,81 @@ namespace RTM
   {
     return m_objref;
   }
+
+
+  bool ManagerServant::createINSManager()
+  {
+    try
+      {
+        //Ppreparing INS POA
+        CORBA::Object_var obj;
+        obj = m_mgr.getORB()->resolve_initial_references("omniINSPOA");
+        PortableServer::POA_ptr poa = PortableServer::POA::_narrow(obj);
+        poa->the_POAManager()->activate();
+
+        // Create readable object ID
+        coil::Properties config(m_mgr.getConfig());
+        PortableServer::ObjectId_var id; 
+        id = PortableServer::string_to_ObjectId(config["manager.name"].c_str());
+
+        // Object activation
+        poa->activate_object_with_id(id.in(), this);
+        CORBA::Object_var mgrobj = poa->id_to_reference(id);
+
+        // Set m_objref 
+        m_objref = ::RTM::Manager::_narrow(mgrobj);
+
+        CORBA::String_var ior;
+        ior = m_mgr.getORB()->
+          object_to_string(RTM::Manager::_duplicate(m_objref));
+        std::string iorstr((const char*)ior);
+        RTC_DEBUG(("Manager's IOR information:\n %s",
+                   CORBA_IORUtil::formatIORinfo(iorstr.c_str()).c_str()));
+      }
+    catch (...)
+      {
+        return false;
+      }
+    return true;
+  }
+
+
+
+  RTM::Manager_ptr ManagerServant::findManager(const char* host_port)
+  {
+    RTC_TRACE(("findManager(host_port = %s)", host_port));
+    try
+      {
+        coil::Properties config(m_mgr.getConfig());
+        std::string mgrloc("corbaloc:iiop:");
+        mgrloc += host_port;
+        mgrloc += "/" + config["manager.name"];
+
+        RTC_DEBUG(("corbaloc: %s", mgrloc.c_str()));
+
+        CORBA::Object_var mobj;
+        mobj = m_mgr.getORB()->string_to_object(mgrloc.c_str());
+        RTM::Manager_var mgr = ::RTM::Manager::_narrow(mobj);
+
+        CORBA::String_var ior;
+        ior = m_mgr.getORB()->object_to_string(RTM::Manager::_duplicate(mgr));
+        std::string iorstr((const char*)ior);
+        RTC_DEBUG(("Manager's IOR information:\n %s",
+                   CORBA_IORUtil::formatIORinfo(iorstr.c_str()).c_str()));
+     
+        return mgr._retn();
+      }
+    catch(CORBA::SystemException& e)
+      {
+        RTC_DEBUG(("CORBA SystemException cought (CORBA::%s)", e._name()));
+      }
+    catch (...)
+      {
+        RTC_ERROR(("Unknown exception cought."));
+      }
+    return RTM::Manager::_nil();
+  }
+
+  
+
 };

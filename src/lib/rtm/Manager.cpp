@@ -719,6 +719,18 @@ std::vector<coil::Properties> Manager::getLoadableModules()
       {
 	factory->destroy(comp);
       } 
+
+    if (coil::toBool(m_config["manager.shutdown_onrtcs"], "YES", "NO", true) &&
+        !coil::toBool(m_config["manager.is_master"], "YES", "NO", false))
+      {
+        std::vector<RTObject_impl*> comps;
+        comps = getComponents();
+        if (comps.size() == 0)
+          {
+            shutdown();
+          }
+      }
+
   }
   
   /*!
@@ -833,6 +845,18 @@ std::vector<coil::Properties> Manager::getLoadableModules()
 	    m_timer->start();
 	  }
       }
+
+    if (coil::toBool(m_config["manager.shutdown_auto"], "YES", "NO", true) &&
+        !coil::toBool(m_config["manager.is_master"], "YES", "NO", false))
+      {
+        coil::TimeValue tm(10, 0); 
+        if (m_timer != NULL)
+	  {
+	    m_timer->registerListenerObj(this, 
+					 &Manager::shutdownOnNoRtcs, tm);
+	  }
+      }
+
   }
   
   /*!
@@ -845,6 +869,20 @@ std::vector<coil::Properties> Manager::getLoadableModules()
   void Manager::shutdownManager()
   {
     RTC_TRACE(("Manager::shutdownManager()"));
+  }
+
+  void  Manager::shutdownOnNoRtcs()
+  {
+    RTC_TRACE(("Manager::shutdownOnNoRtcs()"));
+    if (coil::toBool(m_config["manager.shutdown_onrtcs"], "YES", "NO", true))
+      {
+        std::vector<RTObject_impl*> comps(getComponents());
+        if (comps.size() == 0)
+          {
+            shutdown();
+          }
+      }
+
   }
   
   //============================================================
@@ -1280,6 +1318,11 @@ std::vector<coil::Properties> Manager::getLoadableModules()
 
   bool Manager::initManagerServant()
   {
+    RTC_TRACE((""));
+    if (!coil::toBool(m_config["manager.corba_servant"], "YES", "NO", true))
+      {
+        return true;
+      }
     m_mgrservant = new RTM::ManagerServant();
     coil::Properties& prop(m_config.getNode("manager"));
     std::vector<std::string> names(coil::split(prop["naming_formats"], ","));
@@ -1386,7 +1429,8 @@ std::vector<coil::Properties> Manager::getLoadableModules()
                                   coil::Properties& comp_conf)
   {
     std::vector<std::string> id_and_conf(coil::split(comp_arg, "?"));
-    // arg should be "id?[conf]". id is mandatory, conf is optional
+    // arg should be "id?key0=value0&key1=value1...".
+    // id is mandatory, conf is optional
     if (id_and_conf.size() != 1 && id_and_conf.size() != 2)
       {
         RTC_ERROR(("Invalid arguments. Two or more '?' in arg : %s", comp_arg));

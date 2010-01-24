@@ -931,7 +931,9 @@ namespace RTC
      * @endif
      */
     void shutdownManager();
-    
+
+    void shutdownOnNoRtcs();
+
     //============================================================
     // Logger initialize and terminator
     //============================================================
@@ -1392,6 +1394,8 @@ namespace RTC
      */
     std::string formatString(const char* naming_format,
 			     coil::Properties& prop);
+
+
     
     //============================================================
     // protected ÊÑ¿ô
