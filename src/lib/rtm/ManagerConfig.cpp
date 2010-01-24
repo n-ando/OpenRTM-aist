@@ -22,6 +22,7 @@
 #include <fstream>
 #include <iostream>
 #include <coil/OS.h>
+#include <coil/stringutil.h>
 #include <rtm/DefaultConfiguration.h>
 
 namespace RTC
@@ -124,7 +125,7 @@ namespace RTC
    */
   void ManagerConfig::parseArgs(int argc, char** argv)
   {
-    coil::GetOpt get_opts(argc, argv, "f:l:o:d", 0);
+    coil::GetOpt get_opts(argc, argv, "af:l:o:p:d", 0);
     int opt;
     
     //  if (argc == 0) return true;
@@ -133,6 +134,11 @@ namespace RTC
       {
 	switch (opt)
 	  {
+          case 'a':
+            {
+              m_argprop["maanger.corba_servant"] = "NO";
+            }
+            break;
 	    // Specify configuration file not default
 	  case 'f':
 	    m_configFile = get_opts.optarg;
@@ -150,6 +156,16 @@ namespace RTC
                 }
             }
 	    break;
+          case 'p': // ORB's port number
+            {
+              int portnum;
+              if (coil::stringTo(portnum, get_opts.optarg))
+                {
+                  std::string arg(":"); arg += get_opts.optarg;
+                  m_argprop["corba.endpoints"]  = arg;
+                }
+            }
+            break;
 	  case 'd':
             m_isMaster = true;
 	    break;

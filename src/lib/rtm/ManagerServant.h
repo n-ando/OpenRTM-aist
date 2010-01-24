@@ -463,6 +463,8 @@ namespace RTM
     CORBA::Object_ptr get_service(const char* name);
     RTM::Manager_ptr getObjRef() const;
 
+    bool createINSManager();
+    RTM::Manager_ptr findManager(const char* host_port);
   private:
     typedef coil::Guard<coil::Mutex> Guard;
     ::RTC::Logger rtclog;
