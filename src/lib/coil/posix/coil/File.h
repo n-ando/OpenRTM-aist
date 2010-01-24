@@ -19,6 +19,7 @@
 #ifndef COIL_FILE_H
 #define COIL_FILE_H
 
+#include <cstring>
 #include <sys/types.h>
 #include <dirent.h>
 #include <libgen.h>
