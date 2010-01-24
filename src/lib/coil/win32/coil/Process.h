@@ -56,6 +56,8 @@ namespace coil
    */
   int launch_shell(std::string command);
 
+  int daemon(int nochdir, int noclose);
+
 
   class Popen
   {

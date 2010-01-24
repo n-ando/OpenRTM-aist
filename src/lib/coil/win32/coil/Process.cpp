@@ -60,5 +60,11 @@ namespace coil
     delete lpcommand;
     return 0;
   }
+
+  int daemon(int nochdir, int noclose)
+  {
+    // not implemented
+    return 0;
+  }
 }; // namespace coil
 
