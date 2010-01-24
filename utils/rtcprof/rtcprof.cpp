@@ -54,7 +54,10 @@ int main(int argc, char* argv[])
   std::string load_path("manager.modules.load_path:");
   load_path += dirname;
   opts.push_back(load_path);
-
+  opts.push_back("-o");
+  opts.push_back("logger.enable:NO");
+  opts.push_back("-o");
+  opts.push_back("manager.corba_servant:NO");
 
   // Manager initialization
   RTC::Manager::init(opts.size(), coil::toArgv(opts));
