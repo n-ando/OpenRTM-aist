@@ -55,5 +55,8 @@ namespace coil
    * @endif
    */
   int launch_shell(std::string command);
+
+  int daemon(int nochdir, int noclose);
+
 }; // namespace coil
 #endif // COIL_PROCESS_H
