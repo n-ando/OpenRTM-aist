@@ -1460,8 +1460,6 @@ AC_OUTPUT([Makefile
 	src/lib/rtm/tests/InPortPullConnector/Makefile
 	src/lib/rtm/tests/InPortConnector/Makefile
 	src/lib/rtm/tests/InPortProvider/Makefile
-	src/lib/rtm/tests/InPortTcpSockConsumer/Makefile
-	src/lib/rtm/tests/InPortTcpSockProvider/Makefile
 	src/lib/rtm/tests/Manager/Makefile
 	src/lib/rtm/tests/ManagerConfig/Makefile
 	src/lib/rtm/tests/ManagerServant/Makefile
