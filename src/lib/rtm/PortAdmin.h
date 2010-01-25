@@ -220,8 +220,82 @@ namespace RTC
      * @endif
      */
     bool addPort(PortBase& port);
+    /*!
+     * @if jp
+     *
+     * @brief Port を登録する
+     *
+     * 引数 port で指定された Port のサーバントを登録する。
+     * 登録された Port のサーバントはコンストラクタで与えられたPOA 上で
+     * activate され、そのオブジェクト参照はPortのProfileにセットされる。
+     *
+     * @param port Port サーバント
+     * @return 登録結果(登録成功:true，登録失敗:false)
+     *
+     * @else
+     *
+     * @brief Regsiter the Port
+     *
+     * This operation registers the Port's servant given by argument.
+     * The given Port's servant will be activated on the POA that is given
+     * to the constructor, and the created object reference is set
+     * to the Port's profile.
+     *
+     * @param port The Port's servant.
+     * @return Register result (Successful:true, Failed:false)
+     *
+     * @endif
+     */
     bool addPort(PortService_ptr port);
+    /*!
+     * @if jp
+     *
+     * @brief Port を登録する
+     *
+     * 引数 port で指定された Port のサーバントを登録する。
+     * 登録された Port のサーバントはコンストラクタで与えられたPOA 上で
+     * activate され、そのオブジェクト参照はPortのProfileにセットされる。
+     *
+     * @param port Port サーバント
+     *
+     * @else
+     *
+     * @brief Regsiter the Port
+     *
+     * This operation registers the Port's servant given by argument.
+     * The given Port's servant will be activated on the POA that is given
+     * to the constructor, and the created object reference is set
+     * to the Port's profile.
+     *
+     * @param port The Port's servant.
+     *
+     * @endif
+     */
     void registerPort(PortBase& port);
+    /*!
+     * @if jp
+     *
+     * @brief Port を登録する
+     *
+     * 引数 port で指定された Port のサーバントを登録する。
+     * 登録された Port のサーバントはコンストラクタで与えられたPOA 上で
+     * activate され、そのオブジェクト参照はPortのProfileにセットされる。
+     *
+     * @param port Port サーバント
+     *
+     * @else
+     *
+     * @brief Regsiter the Port
+     *
+     * This operation registers the Port's servant given by argument.
+     * The given Port's servant will be activated on the POA that is given
+     * to the constructor, and the created object reference is set
+     * to the Port's profile.
+     *
+     * @param port The Port's servant.
+     *
+     * @endif
+     */
     void registerPort(PortService_ptr port);
     
     /*!
@@ -250,8 +324,79 @@ namespace RTC
      * @endif
      */
     bool removePort(PortBase& port);
+    /*!
+     * @if jp
+     *
+     * @brief Port の登録を解除する
+     *
+     * 引数 port で指定された Port の登録を解除する。
+     * 削除時に Port は deactivate され、PortのProfileのリファレンスには、
+     * nil値が代入される。
+     *
+     * @param port Port サーバント
+     * @return 削除結果(削除成功:true，削除失敗:false)
+     *
+     * @else
+     *
+     * @brief Unregister the Port registration
+     *
+     * This operation unregisters the Port registration.
+     * When the Port is unregistered, Port is deactivated, and the object
+     * reference in the Port's profile is set to nil.
+     *
+     * @param port The Port's servant.
+     * @return Unregister result (Successful:true, Failed:false)
+     *
+     * @endif
+     */
     bool removePort(PortService_ptr port);
+    /*!
+     * @if jp
+     *
+     * @brief Port の登録を解除する
+     *
+     * 引数 port で指定された Port の登録を解除する。
+     * 削除時に Port は deactivate され、PortのProfileのリファレンスには、
+     * nil値が代入される。
+     *
+     * @param port Port サーバント
+     *
+     * @else
+     *
+     * @brief Unregister the Port registration
+     *
+     * This operation unregisters the Port registration.
+     * When the Port is unregistered, Port is deactivated, and the object
+     * reference in the Port's profile is set to nil.
+     *
+     * @param port The Port's servant.
+     *
+     * @endif
+     */
     void deletePort(PortBase& port);
+    /*!
+     * @if jp
+     *
+     * @brief Port の登録を解除する
+     *
+     * 引数 port で指定された Port の登録を解除する。
+     * 削除時に Port は deactivate され、PortのProfileのリファレンスには、
+     * nil値が代入される。
+     *
+     * @param port Port サーバント
+     *
+     * @else
+     *
+     * @brief Unregister the Port registration
+     *
+     * This operation unregisters the Port registration.
+     * When the Port is unregistered, Port is deactivated, and the object
+     * reference in the Port's profile is set to nil.
+     *
+     * @param port The Port's servant.
+     *
+     * @endif
+     */
     void deletePort(PortService_ptr port);
     
     /*!
