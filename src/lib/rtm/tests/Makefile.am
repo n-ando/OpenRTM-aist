@@ -57,8 +57,8 @@ SUBDIRS = \
 	SystemLogger
 
 DIST_SUBDIRS = $(SUBDIRS)
-DIST_SUBDIRS += InPortTcpSockConsumer
-DIST_SUBDIRS += InPortTcpSockProvider
+#DIST_SUBDIRS += InPortTcpSockConsumer
+#DIST_SUBDIRS += InPortTcpSockProvider
 
 IDLC = @IDLC@
 IDLFLAGS = @IDL_FLAGS@
