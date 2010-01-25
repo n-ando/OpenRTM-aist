@@ -333,16 +333,29 @@ namespace RTC
     RTC_TRACE(("NamingManager::unbindAll(): %d names.", m_compNames.size()));
     {
       Guard guard(m_compNamesMutex);
+      coil::vstring names;
+      // unbindObject modifiy m_compNames
       for (int i(0), len(m_compNames.size()); i < len; ++i)
         {
-          unbindObject(m_compNames[i]->name.c_str());
+          names.push_back(m_compNames[i]->name);
         }
+      for (size_t i(0); i < names.size(); ++i)
+        {
+          unbindObject(names[i].c_str());
+        }
+
     }
     {
       Guard guard(m_mgrNamesMutex);
+      coil::vstring names;
+      // unbindObject modifiy m_mgrNames
       for (int i(0), len(m_mgrNames.size()); i < len; ++i)
         {
-          unbindObject(m_mgrNames[i]->name.c_str());
+          names.push_back(m_mgrNames[i]->name);
+        }
+      for (size_t i(0); i < names.size(); ++i)
+        {
+          unbindObject(names[i].c_str());
         }
     }
   }

@@ -328,6 +328,7 @@ namespace RTC
               if ((pos = line.find(":")) == std::string::npos ) { continue; }
 
               p[line.substr(0, pos)] = line.substr(pos + 1);
+              coil::eraseBothEndsBlank(p[line.substr(0, pos)]);
             } while (!feof(fd));
           pclose(fd);
           p["module_file_name"] = coil::basename(dlls[i].c_str());
