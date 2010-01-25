@@ -38,13 +38,13 @@ namespace RTC
   PortBase::PortBase(const char* name)
     : rtclog(name),
       m_ownerInstanceName("unknown"),
+      m_connectionLimit(-1),
       m_onPublishInterfaces(0),
       m_onSubscribeInterfaces(0),
       m_onConnected(0),
       m_onUnsubscribeInterfaces(0),
       m_onDisconnected(0),
-      m_onConnectionLost(0),
-      m_connectionLimit(-1)
+      m_onConnectionLost(0)
   {
     m_objref = this->_this();
     // Now Port name is <instance_name>.<port_name>. r1648
@@ -302,7 +302,7 @@ namespace RTC
   {
     if(!(m_connectionLimit < 0))
       {
-        if(m_connectionLimit<=m_profile.connector_profiles.length())
+        if((::CORBA::ULong)m_connectionLimit<=m_profile.connector_profiles.length())
           {
             RTC_PARANOID(("Connected number has reached the limitation."));
             RTC_PARANOID(("Can connect the port up to %d ports.",
