@@ -325,7 +325,7 @@ namespace RTM
           {
             return RTC::RTObject::_nil();
           }
-        return rtc->getObjRef();
+        return RTC::RTObject::_duplicate(rtc->getObjRef());
       }
     // create other manager
 

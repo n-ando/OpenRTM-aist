@@ -40,7 +40,7 @@ namespace coil
    */
   int launch_shell(std::string command)
   {
-
+    signal(SIGCHLD, SIG_IGN);
 
     pid_t pid;
     if((pid = fork()) < 0 )
@@ -50,19 +50,19 @@ namespace coil
     
     if (pid == 0) // I'm child process
       {
-        signal(SIGCHLD, SIG_IGN);
-        signal(SIGALRM, SIG_IGN);
-        signal(SIGHUP , SIG_IGN);
-        signal(SIGPIPE, SIG_IGN);
-        signal(SIGTERM, SIG_IGN);
+        //        signal(SIGCHLD, SIG_IGN);
+        //        signal(SIGALRM, SIG_IGN);
+        //        signal(SIGHUP , SIG_IGN);
+        //        signal(SIGPIPE, SIG_IGN);
+        //        signal(SIGTERM, SIG_IGN);
         setsid();
-        close(0);
-        close(1);
-        close(2);
+        //        close(0);
+        //        close(1);
+        //        close(2);
         //        open("/dev/null", O_RDWR);
         //        dup2(0, 1);
         //        dup2(0, 2);
-        umask(0);
+        //        umask(0);
 
         coil::vstring vstr(::coil::split(command, " "));
         char* const * argv = ::coil::toArgv(vstr);
