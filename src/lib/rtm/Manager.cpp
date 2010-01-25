@@ -43,7 +43,6 @@
 #undef minor
 #endif
 
-
 //static sig_atomic_t g_mgrActive = true;
 extern "C" void handler (int)
 {
@@ -473,12 +472,10 @@ std::vector<coil::Properties> Manager::getLoadableModules()
       {    
 	ECFactoryBase* factory;
 	factory = new ECFactoryCXX(name, new_func, delete_func);
-//	m_ecfactory.registerObject(factory);
-//	return true;
 	if(m_ecfactory.registerObject(factory))
-        {
-	  return true;
-        }
+          {
+            return true;
+          }
       }
     catch (...)
       {
@@ -515,7 +512,6 @@ std::vector<coil::Properties> Manager::getLoadableModules()
   RTObject_impl* Manager::createComponent(const char* comp_args)
   {
     RTC_TRACE(("Manager::createComponent(%s)", comp_args));
-
     //------------------------------------------------------------
     // extract "comp_type" and "comp_prop" from comp_arg
     coil::Properties comp_prop, comp_id;
@@ -528,34 +524,69 @@ std::vector<coil::Properties> Manager::getLoadableModules()
 
     if (comp_prop.findNode("exported_ports") != 0)
       {
-	std::vector<std::string> 
-	  exported_ports(coil::split(comp_prop["exported_ports"], ","));
+        coil::vstring exported_ports;
+        exported_ports = coil::split(comp_prop["exported_ports"], ",");
 
 	std::string exported_ports_str("");
-        for (int i(0), len(exported_ports.size()); i < len; ++i)
+        for (size_t i(0), len(exported_ports.size()); i < len; ++i)
           {
-            std::vector<std::string> keyval(coil::split(exported_ports[i], "."));
+            coil::vstring keyval(coil::split(exported_ports[i], "."));
 	    if (keyval.size() > 2)
-	      exported_ports_str += (keyval[0] + "." + keyval.back());
+              {
+                exported_ports_str += (keyval[0] + "." + keyval.back());
+              }
 	    else
-	      exported_ports_str += exported_ports[i];
+              {
+                exported_ports_str += exported_ports[i];
+              }
 	    
-	    if ( i != (int)(exported_ports.size()-1) )
-	      exported_ports_str += ",";
+	    if (i != exported_ports.size() - 1)
+              {
+                exported_ports_str += ",";
+              }
           }
-	comp_prop["exported_ports"] = exported_ports_str;
-	comp_prop["conf.default.exported_ports"] = comp_prop["exported_ports"];
+
+        comp_prop["exported_ports"] = exported_ports_str;
+        comp_prop["conf.default.exported_ports"] = exported_ports_str;
+ 
       }
     //------------------------------------------------------------
 
     //------------------------------------------------------------
     // Create Component
     FactoryBase* factory(m_factory.find(comp_id));
-    if (factory == NULL)
+    if (factory == 0)
       {
 	RTC_ERROR(("Factory not found: %s",
                    comp_id["implementation_id"].c_str()));
-	return NULL;
+
+        // automatic module loading
+        std::vector<coil::Properties> mp(m_module->getLoadableModules());
+        RTC_INFO(("%d loadable modules found", mp.size()));
+
+        std::vector<coil::Properties>::iterator it;
+        it = std::find_if(mp.begin(), mp.end(), ModulePredicate(comp_id));
+        if (it == mp.end())
+          {
+            RTC_ERROR(("No module for %s in loadable modules list",
+                      comp_id["implementation_id"].c_str()));
+            return 0;
+          }
+        if (it->findNode("module_file_name") == 0)
+          {
+            RTC_ERROR(("Hmm...module_file_name key not found."));
+            return 0;
+          }
+        // module loading
+        RTC_INFO(("Loading module: %s", (*it)["module_file_name"].c_str()))
+        load((*it)["module_file_name"].c_str(), "");
+        factory = m_factory.find(comp_id);
+        if (factory == 0) 
+          {
+            RTC_ERROR(("Factory not found for loaded module: %s",
+                       comp_id["implementation_id"].c_str()));
+            return 0;
+          }
       }
 
     coil::Properties prop;
@@ -661,6 +692,7 @@ std::vector<coil::Properties> Manager::getLoadableModules()
 	RTC_TRACE(("Unbind name: %s", names[i].c_str()));
 	m_namingManager->unbindObject(names[i].c_str());
       }
+
     return true;
   }
   
@@ -694,32 +726,28 @@ std::vector<coil::Properties> Manager::getLoadableModules()
    * @brief Unregister RT-Components that have been registered to Manager
    * @endif
    */
-  void Manager::deleteComponent(const char* instance_name)
+  void Manager::deleteComponent(RTObject_impl* comp)
   {
-    RTC_TRACE(("Manager::deleteComponent(%s)", instance_name));
-    RTObject_impl* comp;
-    comp = m_compManager.find(instance_name);
-    if (comp == NULL) return;
+    RTC_TRACE(("deleteComponent(RTObject*)"));
+    // cleanup from manager's table, and naming serivce
+    unregisterComponent(comp);
 
-    coil::Properties comp_id;
-    comp_id["vendor"] = comp->getProperties().getProperty("vendor");
-    comp_id["category"] = comp->getProperties().getProperty("category");
-    comp_id["implementation_id"] = comp->getProperties().getProperty("implementation_id");
-    comp_id["version"] = comp->getProperties().getProperty("version");
-
+    // find factory
+    coil::Properties& comp_id(comp->getProperties());
     FactoryBase* factory(m_factory.find(comp_id));
-    
-    comp->exit();
-
     if (factory == NULL)
       {
+        RTC_DEBUG(("Factory not found: %s",
+                   comp_id["implementation_id"].c_str()));
 	return;
       }
     else
       {
+        RTC_DEBUG(("Factory found: %s",
+                   comp_id["implementation_id"].c_str()));
 	factory->destroy(comp);
       } 
-
+    
     if (coil::toBool(m_config["manager.shutdown_onrtcs"], "YES", "NO", true) &&
         !coil::toBool(m_config["manager.is_master"], "YES", "NO", false))
       {
@@ -730,7 +758,19 @@ std::vector<coil::Properties> Manager::getLoadableModules()
             shutdown();
           }
       }
+  } 
 
+  void Manager::deleteComponent(const char* instance_name)
+  {
+    RTC_TRACE(("deleteComponent(%s)", instance_name));
+    RTObject_impl* comp;
+    if (comp == 0)
+      {
+        RTC_WARN(("RTC %s was not found in manager.", instance_name));
+        return;
+      }
+    comp = m_compManager.find(instance_name);
+    deleteComponent(comp);
   }
   
   /*!
@@ -856,6 +896,15 @@ std::vector<coil::Properties> Manager::getLoadableModules()
 					 &Manager::shutdownOnNoRtcs, tm);
 	  }
       }
+    
+    {
+      coil::TimeValue tm(1, 0); 
+      if (m_timer != NULL)
+        {
+          m_timer->registerListenerObj(this, 
+                                       &Manager::cleanupComponents, tm);
+        }
+    }
 
   }
   
@@ -1413,8 +1462,27 @@ std::vector<coil::Properties> Manager::getLoadableModules()
    */
   void Manager::cleanupComponent(RTObject_impl* comp)
   {
-    RTC_TRACE(("Manager::shutdownComponents()"));
+    RTC_TRACE(("Manager::cleanupComponent()"));
     unregisterComponent(comp);
+  }
+
+  void Manager::cleanupComponents()
+  {
+    RTC_VERBOSE(("Manager::cleanupComponents()"));
+    Guard guard(m_finalized.mutex);
+    RTC_VERBOSE(("%d components are marked as finalized.",
+               m_finalized.comps.size()));
+    for (size_t i(0); i < m_finalized.comps.size(); ++i)
+      {
+        deleteComponent(m_finalized.comps[i]);
+      }
+  }
+
+  void Manager::notifyFinalized(RTObject_impl* comp)
+  {
+    RTC_TRACE(("Manager::notifyFinalized()"));
+    Guard guard(m_finalized.mutex);
+    m_finalized.comps.push_back(comp);
   }
   
   /*!
@@ -1472,7 +1540,9 @@ std::vector<coil::Properties> Manager::getLoadableModules()
         std::vector<std::string> conf(coil::split(id_and_conf[1], "&"));
         for (int i(0), len(conf.size()); i < len; ++i)
           {
+            if (conf[i].empty()) { continue; }
             std::vector<std::string> keyval(coil::split(conf[i], "="));
+            if (keyval.size() != 2) { continue; }
             comp_conf[keyval[0]] = keyval[1];
             RTC_TRACE(("RTC property %s: %s",
                        keyval[0].c_str(), keyval[1].c_str()));
