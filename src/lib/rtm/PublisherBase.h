@@ -106,16 +106,98 @@ namespace RTC
      * @endif
      */
     virtual ReturnCode init(coil::Properties& prop) = 0;
+    /*!
+     * @if jp
+     * @brief InPortコンシューマのセット
+     * @param consumer InPortコンシューマ
+     * @else
+     * @brief Store InPort consumer
+     * @param consumer InPort consumer
+     * @endif
+     */
     virtual ReturnCode setConsumer(InPortConsumer* consumer) = 0;
+    /*!
+     * @if jp
+     * @brief バッファのセット
+     * @param buffer CDRバッファ
+     * @else
+     * @brief Setting buffer pointer
+     * @param buffer CDR buffer
+     * @endif
+     */
     virtual ReturnCode setBuffer(BufferBase<cdrMemoryStream>* buffer) = 0;
+    /*!
+     * @if jp
+     * @brief リスナを設定する。
+     * @param info ConnectorInfo
+     * @param listeners ConnectorListeners 
+     * @else
+     * @brief Set the listener. 
+     * @param info ConnectorInfo
+     * @param listeners ConnectorListeners 
+     * @endif
+     */
     virtual ReturnCode setListener(ConnectorInfo& info,
                                    ConnectorListeners* listeners) = 0;
+    /*!
+     * @if jp
+     * @brief データを書き込む
+     * @param data 書き込むデータ 
+     * @param sec タイムアウト時間
+     * @param nsec タイムアウト時間
+     * @else
+     * @brief Write data 
+     * @param data Data
+     * @param sec Timeout period
+     * @param nsec Timeout period
+     * @endif
+     */
     virtual ReturnCode write(const cdrMemoryStream& data,
                              unsigned long sec,
                              unsigned long usec) = 0;
 
+    /*!
+     * @if jp
+     *
+     * @brief アクティブ化確認
+     * 
+     * アクティブ化されているか確認する。
+     *
+     * @return 状態確認結果(アクティブ状態:true、非アクティブ状態:false)
+     *
+     * @else
+     *
+     * @brief Confirm to activate
+     * 
+     * Confirm that has been activated.
+     *
+     * @return Result of state confirmation
+     *         (Active state:true, Inactive state:false)
+     *
+     * @endif
+     */
     virtual bool isActive() = 0;
+    /*!
+     * @if jp
+     * @brief アクティブ化
+     *
+     * @else
+     *
+     * @brief activation
+     *
+     * @endif
+     */
     virtual ReturnCode activate() = 0;
+    /*!
+     * @if jp
+     * @brief 非アクティブ化
+     *
+     * @else
+     *
+     * @brief deactivation
+     *
+     * @endif
+     */
     virtual ReturnCode deactivate() = 0;
 
 
