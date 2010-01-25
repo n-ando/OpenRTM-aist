@@ -10,6 +10,9 @@
 #include "SeqIn.h"
 #include <iostream>
 
+// Connector Listener Dump Flag
+extern bool g_Listener_dump_enabled;
+
 // Module specification
 // <rtc-template block="module_spec">
 static const char* seqin_spec[] =
@@ -64,6 +67,41 @@ RTC::ReturnCode_t SeqIn::onInitialize()
   addInPort("FloatSeq", m_FloatSeqIn);
   addInPort("DoubleSeq", m_DoubleSeqIn);
   
+  // check m_LongIn port only
+  m_LongIn.addConnectorDataListener(ON_BUFFER_WRITE,
+                                    new DataListener("ON_BUFFER_WRITE"));
+  m_LongIn.addConnectorDataListener(ON_BUFFER_FULL, 
+                                    new DataListener("ON_BUFFER_FULL"));
+  m_LongIn.addConnectorDataListener(ON_BUFFER_WRITE_TIMEOUT, 
+                                    new DataListener("ON_BUFFER_WRITE_TIMEOUT"));
+  m_LongIn.addConnectorDataListener(ON_BUFFER_OVERWRITE, 
+                                    new DataListener("ON_BUFFER_OVERWRITE"));
+  m_LongIn.addConnectorDataListener(ON_BUFFER_READ, 
+                                    new DataListener("ON_BUFFER_READ"));
+  m_LongIn.addConnectorDataListener(ON_SEND, 
+                                    new DataListener("ON_SEND"));
+  m_LongIn.addConnectorDataListener(ON_RECEIVED,
+                                    new DataListener("ON_RECEIVED"));
+  m_LongIn.addConnectorDataListener(ON_RECEIVER_FULL, 
+                                    new DataListener("ON_RECEIVER_FULL"));
+  m_LongIn.addConnectorDataListener(ON_RECEIVER_TIMEOUT, 
+                                    new DataListener("ON_RECEIVER_TIMEOUT"));
+
+  m_LongIn.addConnectorListener(ON_BUFFER_EMPTY,
+                                    new ConnListener("ON_BUFFER_EMPTY"));
+  m_LongIn.addConnectorListener(ON_BUFFER_READ_TIMEOUT,
+                                    new ConnListener("ON_BUFFER_READ_TIMEOUT"));
+  m_LongIn.addConnectorListener(ON_SENDER_EMPTY,
+                                    new ConnListener("ON_SENDER_EMPTY"));
+  m_LongIn.addConnectorListener(ON_SENDER_TIMEOUT,
+                                    new ConnListener("ON_SENDER_TIMEOUT"));
+  m_LongIn.addConnectorListener(ON_SENDER_ERROR,
+                                    new ConnListener("ON_SENDER_ERROR"));
+  m_LongIn.addConnectorListener(ON_CONNECT,
+                                    new ConnListener("ON_CONNECT"));
+  m_LongIn.addConnectorListener(ON_DISCONNECT,
+                                    new ConnListener("ON_DISCONNECT"));
+
   // Set OutPort buffer
   
   // Set service provider to Ports
@@ -296,9 +334,13 @@ RTC::ReturnCode_t SeqIn::onExecute(RTC::UniqueId ec_id)
       std::cout << std::endl; all_row++;
     }
   
-  for (int i = 0 ; i < all_row; i++)
+  // Connector Listener Dump check
+  if(!g_Listener_dump_enabled)
     {
-      std::cout << "[A\r";
+      for (int i = 0 ; i < all_row; i++)
+        {
+          std::cout << "[A\r";
+        }
     }
 
   return RTC::RTC_OK;
@@ -354,5 +396,3 @@ extern "C"
   }
   
 };
-
-

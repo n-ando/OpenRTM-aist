@@ -58,7 +58,43 @@ ConsoleOut::~ConsoleOut()
 RTC::ReturnCode_t ConsoleOut::onInitialize()
 {
   addInPort("in", m_inIn);
-  return RTC::RTC_OK;
+ 
+  m_inIn.addConnectorDataListener(ON_BUFFER_WRITE,
+                                    new DataListener("ON_BUFFER_WRITE"));
+  m_inIn.addConnectorDataListener(ON_BUFFER_FULL, 
+                                    new DataListener("ON_BUFFER_FULL"));
+  m_inIn.addConnectorDataListener(ON_BUFFER_WRITE_TIMEOUT, 
+                                    new DataListener("ON_BUFFER_WRITE_TIMEOUT"));
+  m_inIn.addConnectorDataListener(ON_BUFFER_OVERWRITE, 
+                                    new DataListener("ON_BUFFER_OVERWRITE"));
+  m_inIn.addConnectorDataListener(ON_BUFFER_READ, 
+                                    new DataListener("ON_BUFFER_READ"));
+  m_inIn.addConnectorDataListener(ON_SEND, 
+                                    new DataListener("ON_SEND"));
+  m_inIn.addConnectorDataListener(ON_RECEIVED,
+                                    new DataListener("ON_RECEIVED"));
+  m_inIn.addConnectorDataListener(ON_RECEIVER_FULL, 
+                                    new DataListener("ON_RECEIVER_FULL"));
+  m_inIn.addConnectorDataListener(ON_RECEIVER_TIMEOUT, 
+                                    new DataListener("ON_RECEIVER_TIMEOUT"));
+
+  m_inIn.addConnectorListener(ON_BUFFER_EMPTY,
+                                    new ConnListener("ON_BUFFER_EMPTY"));
+  m_inIn.addConnectorListener(ON_BUFFER_READ_TIMEOUT,
+                                    new ConnListener("ON_BUFFER_READ_TIMEOUT"));
+  m_inIn.addConnectorListener(ON_SENDER_EMPTY,
+                                    new ConnListener("ON_SENDER_EMPTY"));
+  m_inIn.addConnectorListener(ON_SENDER_TIMEOUT,
+                                    new ConnListener("ON_SENDER_TIMEOUT"));
+  m_inIn.addConnectorListener(ON_SENDER_ERROR,
+                                    new ConnListener("ON_SENDER_ERROR"));
+  m_inIn.addConnectorListener(ON_CONNECT,
+                                    new ConnListener("ON_CONNECT"));
+  m_inIn.addConnectorListener(ON_DISCONNECT,
+                                    new ConnListener("ON_DISCONNECT"));
+
+
+ return RTC::RTC_OK;
 }
 
 RTC::ReturnCode_t ConsoleOut::onExecute(RTC::UniqueId ec_id)

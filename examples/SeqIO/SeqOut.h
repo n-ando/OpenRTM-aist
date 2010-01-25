@@ -29,6 +29,77 @@
 
 using namespace RTC;
 
+// Connector Listener Dump Flag
+extern bool g_Listener_dump_enabled;
+
+class DataListener
+  : public ConnectorDataListenerT<RTC::TimedLong>
+{
+public:
+  DataListener(const char* name) : m_name(name) {}
+  virtual ~DataListener()
+  {
+    // Connector Listener Dump check
+    if(g_Listener_dump_enabled)
+      {
+        std::cout << "dtor of " << m_name << std::endl;
+      }
+  }
+
+  virtual void operator()(const ConnectorInfo& info,
+                          const TimedLong& data)
+  {
+    // Connector Listener Dump check
+    if(g_Listener_dump_enabled)
+      {
+        std::cout << "------------------------------"   << std::endl;
+        std::cout << "Data Listener: " << m_name       << std::endl;
+        std::cout << "Profile::name: " << info.name    << std::endl;
+        std::cout << "Profile::id:   " << info.id      << std::endl;
+//        std::cout << "Profile::properties: "            << std::endl;
+//        std::cout << info.properties;
+//        std::cout                                       << std::endl;
+        std::cout << "Data:          " << data.data    << std::endl;
+        std::cout << "------------------------------"   << std::endl;
+      }
+  }
+  std::string m_name;
+};
+
+
+class ConnListener
+  : public ConnectorListener
+{
+public:
+  ConnListener(const char* name) : m_name(name) {}
+  virtual ~ConnListener()
+  {
+    // Connector Listener Dump check
+    if(g_Listener_dump_enabled)
+      {
+        std::cout << "dtor of " << m_name << std::endl;
+      }
+  }
+
+  virtual void operator()(const ConnectorInfo& info)
+  {
+    // Connector Listener Dump check
+    if(g_Listener_dump_enabled)
+      {
+        std::cout << "------------------------------"   << std::endl;
+        std::cout << "Connector Listener: " << m_name       << std::endl;
+        std::cout << "Profile::name:      " << info.name    << std::endl;
+        std::cout << "Profile::id:        " << info.id      << std::endl;
+        std::cout << "Profile::properties: "            << std::endl;
+        std::cout << info.properties;
+        std::cout                                       << std::endl;
+        std::cout << "------------------------------"   << std::endl;
+      }
+  };
+  std::string m_name;
+};
+
+
 class SeqOut
   : public RTC::DataFlowComponentBase
 {
@@ -84,7 +155,6 @@ class SeqOut
   // no corresponding operation exists in OpenRTm-aist-0.2.0
   // virtual RTC::ReturnCode_t onRateChanged(RTC::UniqueId ec_id);
 
-
  protected:
   // DataInPort declaration
   // <rtc-template block="inport_declare">
@@ -131,12 +201,12 @@ class SeqOut
   // Configuration variable declaration
   // <rtc-template block="config_declare">
   std::string m_data_type;
+
   // </rtc-template>
 
  private:
 
 };
-
 
 extern "C"
 {

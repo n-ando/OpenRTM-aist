@@ -10,6 +10,9 @@
 #include "SeqOut.h"
 #include <stdlib.h>
 
+// Connector Listener Dump Flag
+extern bool g_Listener_dump_enabled;
+
 // Module specification
 // <rtc-template block="module_spec">
 static const char* seqout_spec[] =
@@ -25,8 +28,8 @@ static const char* seqout_spec[] =
     "language",          "C++",
     "lang_type",         "compile",
     // Configuration variables
-    "conf.default.data_type", "random",
-    "conf.mode0.data_type", "serial",
+    "conf.default.data_type", "serial",
+    "conf.mode0.data_type", "random",
     ""
   };
 // </rtc-template>
@@ -69,6 +72,41 @@ RTC::ReturnCode_t SeqOut::onInitialize()
   addOutPort("FloatSeq", m_FloatSeqOut);
   addOutPort("DoubleSeq", m_DoubleSeqOut);
   
+  // check m_LongOut port only
+  m_LongOut.addConnectorDataListener(ON_BUFFER_WRITE,
+                                    new DataListener("ON_BUFFER_WRITE"));
+  m_LongOut.addConnectorDataListener(ON_BUFFER_FULL, 
+                                    new DataListener("ON_BUFFER_FULL"));
+  m_LongOut.addConnectorDataListener(ON_BUFFER_WRITE_TIMEOUT, 
+                                    new DataListener("ON_BUFFER_WRITE_TIMEOUT"));
+  m_LongOut.addConnectorDataListener(ON_BUFFER_OVERWRITE, 
+                                    new DataListener("ON_BUFFER_OVERWRITE"));
+  m_LongOut.addConnectorDataListener(ON_BUFFER_READ, 
+                                    new DataListener("ON_BUFFER_READ"));
+  m_LongOut.addConnectorDataListener(ON_SEND, 
+                                    new DataListener("ON_SEND"));
+  m_LongOut.addConnectorDataListener(ON_RECEIVED,
+                                    new DataListener("ON_RECEIVED"));
+  m_LongOut.addConnectorDataListener(ON_RECEIVER_FULL, 
+                                    new DataListener("ON_RECEIVER_FULL"));
+  m_LongOut.addConnectorDataListener(ON_RECEIVER_TIMEOUT, 
+                                    new DataListener("ON_RECEIVER_TIMEOUT"));
+
+  m_LongOut.addConnectorListener(ON_BUFFER_EMPTY,
+                                    new ConnListener("ON_BUFFER_EMPTY"));
+  m_LongOut.addConnectorListener(ON_BUFFER_READ_TIMEOUT,
+                                    new ConnListener("ON_BUFFER_READ_TIMEOUT"));
+  m_LongOut.addConnectorListener(ON_SENDER_EMPTY,
+                                    new ConnListener("ON_SENDER_EMPTY"));
+  m_LongOut.addConnectorListener(ON_SENDER_TIMEOUT,
+                                    new ConnListener("ON_SENDER_TIMEOUT"));
+  m_LongOut.addConnectorListener(ON_SENDER_ERROR,
+                                    new ConnListener("ON_SENDER_ERROR"));
+  m_LongOut.addConnectorListener(ON_CONNECT,
+                                    new ConnListener("ON_CONNECT"));
+  m_LongOut.addConnectorListener(ON_DISCONNECT,
+                                    new ConnListener("ON_DISCONNECT"));
+
   // Set service provider to Ports
   
   // Set service consumers to Ports
@@ -236,7 +274,12 @@ RTC::ReturnCode_t SeqOut::onExecute(RTC::UniqueId ec_id)
     {
       std::cout << std::endl << "write data type : random" << std::endl;
     }
-  std::cout << "[A\r[A\r[A\r[A\r[A\r[A\r[A\r[A\r[A\r[A\r[A\r[A\r[A\r[A\r";
+
+  // Connector Listener Dump check
+  if(!g_Listener_dump_enabled)
+    {
+      std::cout << "[A\r[A\r[A\r[A\r[A\r[A\r[A\r[A\r[A\r[A\r[A\r[A\r[A\r[A\r";
+    }
 
   m_ShortOut.write();
   m_LongOut.write();
@@ -248,7 +291,15 @@ RTC::ReturnCode_t SeqOut::onExecute(RTC::UniqueId ec_id)
   m_FloatSeqOut.write();
   m_DoubleSeqOut.write();
 
-  coil::usleep(200000);
+  // Connector Listener Dump check
+  if(g_Listener_dump_enabled)
+    {
+      coil::usleep(1000000);
+    }
+  else
+    {
+      coil::usleep(200000);
+    }
 
   return RTC::RTC_OK;
 }
@@ -303,5 +354,3 @@ extern "C"
   }
   
 };
-
-
