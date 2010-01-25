@@ -2795,6 +2795,7 @@ namespace RTC
      * @endif
      */
     bool m_created;
+    bool m_exiting;
     
     /*!
      * @if jp

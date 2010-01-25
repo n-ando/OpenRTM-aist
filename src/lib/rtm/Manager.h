@@ -698,7 +698,8 @@ namespace RTC
      * @endif
      */
     void cleanupComponent(RTObject_impl* comp);
-    
+    void cleanupComponents();
+    void notifyFinalized(RTObject_impl* comp);
     /*!
      * @if jp
      * @brief RTコンポーネントを直接 Manager に登録する
@@ -772,7 +773,9 @@ namespace RTC
      *
      * @endif
      */
+    void deleteComponent(RTObject_impl* comp);
     void deleteComponent(const char* instance_name);
+
     
     /*!
      * @if jp
@@ -1155,13 +1158,26 @@ namespace RTC
      * @brief 引数文字列からコンポーネント型名・プロパティを抽出する
      *
      * 文字列からコンポーネント型とコンポーネントのプロパティを抽出する。
-     * 与えられる文字列のフォーマットは
-     * [RTC type]?[key(0)]=[val(0)]&[key(1)]=[val(1)]...[key(n)]=[val(n)]
+     * 与えられる文字列のフォーマットは RTC の ID とコンフィギュレーショ
+     * ンからなる
+     *
+     * [RTC type]?[key(0)]=[val(0)]&[key(1)]=[val(1)]&...&[key(n)]=[val(n)]
+     * 
+     * である。なお、RTC type は implementation_id のみ、もしくは、下記
+     * の RTC ID 形式
+     *
+     * RTC:[vendor]:[category]:[impl_id]:[version]
+     *
+     * を受け付ける。戻り値である、comp_id は、
+     * "vendor", "category", "implementation_id", "version" のキーを持つ
+     * Properties 型のオブジェクトとして返される。
+     * comp_conf には "?" 以下に記述されるコンポーネントに与えるプロパティ
+     * が Properties 型のオブジェクトとして返される。
      * 
      * @return comp_arg にコンポーネント型が含まれていない場合false
      * @param comp_arg  処理すべき文字列
-     * @param comp_type 抽出されたコンポーネントの型名
-     * @param comp_prop 抽出されたコンポーネントのプロパティ
+     * @param comp_id 抽出されたコンポーネントの型名
+     * @param comp_conf 抽出されたコンポーネントのプロパティ
      *
      * @else
      * @brief Extracting component type/properties from the given string
@@ -1169,7 +1185,13 @@ namespace RTC
      * This operation extracts component type name and its properties
      * from the figen character string.
      * The given string formats is the following.
+     *
      * [RTC type]?[key(0)]=[val(0)]&[key(1)]=[val(1)]...[key(n)]=[val(n)]
+     *
+     * Returned value "comp_id" has keys of "vendor", "category",
+     * "implementation_id", "version", and returned as Properties type
+     * object. "comp_conf" is returned as Properties type object
+     * includeing component properties to be given to component.
      * 
      * @return comp_arg false will returned if no component type in arg
      * @param comp_arg  character string to be processed
@@ -1604,6 +1626,30 @@ namespace RTC
       std::string m_version;
     };
     
+    class ModulePredicate
+    {
+      coil::Properties& m_prop;
+    public:
+      ModulePredicate(coil::Properties& prop)
+      : m_prop(prop)
+      {
+      }
+      bool operator()(coil::Properties& prop)
+      {
+        if (m_prop["implementation_id"] != prop["implementation_id"])
+          {
+            return false;
+          }
+        if (!m_prop["vendor"].empty() &&
+            m_prop["vendor"] != prop["vendor"])     { return false; }
+        if (!m_prop["category"].empty() &&
+            m_prop["category"] != prop["category"]) { return false; }
+        if (!m_prop["version"].empty() && 
+            m_prop["version"] != prop["version"])   { return false; }
+        return true;
+      }
+    };
+
     /*!
      * @if jp
      * @brief コンポーネントファクトリ
@@ -1945,6 +1991,15 @@ namespace RTC
      * @endif
      */
     Term m_terminate;
+
+    struct Finalized
+    {
+      Mutex mutex;
+      std::vector<RTObject_impl*> comps;
+    };
+    Finalized m_finalized;
+
+
   }; // class Manager
 }; // namespace RTC
 

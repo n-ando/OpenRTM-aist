@@ -62,7 +62,7 @@ namespace RTC
       m_pORB(CORBA::ORB::_duplicate(manager->getORB())),
       m_pPOA(PortableServer::POA::_duplicate(manager->getPOA())),
       m_portAdmin(manager->getORB(), manager->getPOA()),
-      m_created(true), //m_alive(false),
+      m_created(true), m_exiting(false),
       m_properties(default_conf), m_configsets(m_properties.getNode("conf")),
       m_readAll(false),m_writeAll(false),
       m_readAllCompletion(false),m_writeAllCompletion(false)
@@ -85,7 +85,7 @@ namespace RTC
       m_pORB(CORBA::ORB::_duplicate(orb)),
       m_pPOA(PortableServer::POA::_duplicate(poa)),
       m_portAdmin(orb, poa),
-      m_created(true), //m_alive(false),
+      m_created(true), m_exiting(false),
       m_properties(default_conf), m_configsets(m_properties.getNode("conf"))
   {
     m_objref = this->_this();
@@ -351,7 +351,7 @@ namespace RTC
   {
     RTC_TRACE(("finalize()"));
     if (m_created) return RTC::PRECONDITION_NOT_MET;
-    
+    if (!m_exiting) return RTC::PRECONDITION_NOT_MET;
     // Return RTC::PRECONDITION_NOT_MET,
     // When the component is registered in ExecutionContext.
     // m_ecMine.length() != 0 || 
@@ -413,7 +413,7 @@ namespace RTC
             m_ecOther[ic]->remove_component(comp.in());
           }
       }
-
+    m_exiting = true;
     ReturnCode_t ret(finalize());
 
     return ret;
@@ -1682,7 +1682,9 @@ namespace RTC
 	  {
 	    try
 	      {
-		InPortBase* ip = dynamic_cast<InPortBase*>(m_portAdmin.getPort(pprofiles[i].name));
+		InPortBase* ip = 
+                  dynamic_cast<InPortBase*>
+                  (m_portAdmin.getPort(pprofiles[i].name));
 	      
 		if (!(ip != 0 && ip->read()))
 		  {
@@ -1725,7 +1727,9 @@ namespace RTC
 	  {
 	    try
 	      {
-		OutPortBase* op = dynamic_cast<OutPortBase*>(m_portAdmin.getPort(pprofiles[i].name));
+		OutPortBase* op = 
+                  dynamic_cast<OutPortBase*>
+                  (m_portAdmin.getPort(pprofiles[i].name));
 	      
 		if (op != 0)
 		  outports.push_back(op);
@@ -1856,8 +1860,10 @@ namespace RTC
       {
 	finalizePorts();
         finalizeContexts();
-        PortableServer::ObjectId_var oid1 = m_pPOA->servant_to_id(m_pSdoConfigImpl);
-        PortableServer::ObjectId_var oid2 = m_pPOA->servant_to_id(this);
+        PortableServer::ObjectId_var oid1;
+        oid1 = m_pPOA->servant_to_id(m_pSdoConfigImpl);
+        PortableServer::ObjectId_var oid2;
+        oid2 = m_pPOA->servant_to_id(this);
 	m_pPOA->deactivate_object(oid1);
 	m_pPOA->deactivate_object(oid2);
       }
@@ -1868,7 +1874,8 @@ namespace RTC
     
     if (m_pManager != NULL)
       {
-	m_pManager->cleanupComponent(this);
+        RTC_DEBUG(("Cleanup on Manager"));
+        m_pManager->notifyFinalized(this);
       }
   }
 }
