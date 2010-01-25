@@ -172,7 +172,7 @@ namespace RTC
    */
   void InPortPushConnector::onDisconnect()
   {
-    m_listeners.connector_[ON_CONNECT].notify(m_profile);
+    m_listeners.connector_[ON_DISCONNECT].notify(m_profile);
   }
 
 };
