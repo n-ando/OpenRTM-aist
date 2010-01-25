@@ -59,7 +59,35 @@ namespace RTC
     typedef coil::Mutex Mutex;
 
   public:
+    /*!
+     * @if jp
+     * @brief コンストラクタ
+     *
+     * コンストラクタ
+     *
+     * @else
+     * @brief Constructor
+     *
+     * Constructor
+     *
+     * @endif
+     */
     PortProfileHelper();
+    /*!
+     * @if jp
+     *
+     * @brief デストラクタ
+     *
+     * デストラクタ
+     *
+     * @else
+     *
+     * @brief Destructor
+     *
+     * Destructor
+     *
+     * @endif
+     */
     virtual ~PortProfileHelper(void);
 
 
