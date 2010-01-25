@@ -126,21 +126,15 @@ rtmheader_HEADERS = \
 	ExecutionContextBase.h 	\
 	InPort.h 		\
 	InPortConsumer.h 	\
-	InPortTcpSockConsumer.h \
-	InPortTcpSockProvider.h \
 	ObjectManager.h 	\
 	OutPort.h 		\
 	OutPortConsumer.h 	\
-	OutPortTcpSockProvider.h\
 	PeriodicTaskFactory.h 	\
 	PortCallback.h 		\
 	PublisherBase.h 	\
 	RTC.h 			\
 	RingBuffer.h 		\
 	StateMachine.h 		\
-	SyncFIFO.h 		\
-	SyncLIFO.h 		\
-	TcpSockServer.h 	\
 	Typename.h              \
 	config_rtc.h
 
