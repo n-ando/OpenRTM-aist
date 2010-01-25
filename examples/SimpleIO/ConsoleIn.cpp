@@ -77,8 +77,21 @@ RTC::ReturnCode_t ConsoleIn::onInitialize()
                                     new DataListener("ON_RECEIVER_FULL"));
   m_outOut.addConnectorDataListener(ON_RECEIVER_TIMEOUT, 
                                     new DataListener("ON_RECEIVER_TIMEOUT"));
-  m_outOut.addConnectorDataListener(ON_RECEIVER_ERROR,
-                                    new DataListener("ON_RECEIVER_ERROR"));
+
+  m_outOut.addConnectorListener(ON_BUFFER_EMPTY,
+                                    new ConnListener("ON_BUFFER_EMPTY"));
+  m_outOut.addConnectorListener(ON_BUFFER_READ_TIMEOUT,
+                                    new ConnListener("ON_BUFFER_READ_TIMEOUT"));
+  m_outOut.addConnectorListener(ON_SENDER_EMPTY,
+                                    new ConnListener("ON_SENDER_EMPTY"));
+  m_outOut.addConnectorListener(ON_SENDER_TIMEOUT,
+                                    new ConnListener("ON_SENDER_TIMEOUT"));
+  m_outOut.addConnectorListener(ON_SENDER_ERROR,
+                                    new ConnListener("ON_SENDER_ERROR"));
+  m_outOut.addConnectorListener(ON_CONNECT,
+                                    new ConnListener("ON_CONNECT"));
+  m_outOut.addConnectorListener(ON_DISCONNECT,
+                                    new ConnListener("ON_DISCONNECT"));
 
 
   return RTC::RTC_OK;

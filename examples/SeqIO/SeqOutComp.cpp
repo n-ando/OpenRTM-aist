@@ -12,6 +12,8 @@
 #include <string>
 #include "SeqOut.h"
 
+// Connector Listener Dump Flag : default OFF
+bool g_Listener_dump_enabled = false;
 
 void MyModuleInit(RTC::Manager* manager)
 {
@@ -67,6 +69,22 @@ void MyModuleInit(RTC::Manager* manager)
 
 int main (int argc, char** argv)
 {
+  // check parameter
+  if(argc > 1)
+    {
+      for (int i = 1; i < argc; ++i)
+        {
+          std::string arg(argv[i]);
+          coil::normalize(arg);
+          if (arg == "-listener")
+            {
+              // Connector Listener Dump Flag ON
+              g_Listener_dump_enabled = true;
+              std::cout << "Connector Listener Callback Dump start (Port: TimedLong)" << std::endl;
+            }
+        }
+    }
+
   RTC::Manager* manager;
   manager = RTC::Manager::init(argc, argv);
 
