@@ -58,7 +58,41 @@ namespace RTC
   class ConnectionCallback
   {
   public:
+    /*!
+     * @if jp
+     * @brief デストラクタ
+     *
+     * デストラクタ
+     *
+     * @else
+     * @brief Destructor
+     *
+     * Destructor
+     *
+     * @endif
+     */
     virtual ~ConnectionCallback(void){}
+    /*!
+     * @if jp
+     *
+     * @brief コールバック関数
+     *
+     * connect/notify_connect() 等が呼び出される時に呼び出される
+     * コールバック関数
+     *
+     * @param profile ConnectorProfile
+     *
+     * @else
+     *
+     * @brief Callback method
+     *
+     * This is the callback method invoked when connect/notify_connect()
+     * invocation in Port.
+     *
+     * @param profile ConnectorProfile
+     *
+     * @endif
+     */
     virtual void operator()(RTC::ConnectorProfile& profile) = 0;
   };
 
@@ -91,7 +125,41 @@ namespace RTC
   class DisconnectCallback
   {
   public:
+    /*!
+     * @if jp
+     * @brief デストラクタ
+     *
+     * デストラクタ
+     *
+     * @else
+     * @brief Destructor
+     *
+     * Destructor
+     *
+     * @endif
+     */
     virtual ~DisconnectCallback(void){}
+    /*!
+     * @if jp
+     *
+     * @brief コールバック関数
+     *
+     * disconnect/notify_disconnect() 等が呼び出される時に呼び出される
+     * コールバック関数
+     *
+     * @param connector_id Connector ID
+     *
+     * @else
+     *
+     * @brief Callback method
+     *
+     * This is the callback method invoked when disconnect/notify_disconnect()
+     * invocation in Port.
+     *
+     * @param connector_id Connector ID
+     *
+     * @endif
+     */
     virtual void operator()(const char* connector_id) = 0;
   };
 
@@ -124,6 +192,19 @@ namespace RTC
   class OnWrite
   {
   public:
+    /*!
+     * @if jp
+     * @brief デストラクタ
+     *
+     * デストラクタ
+     *
+     * @else
+     * @brief Destructor
+     *
+     * Destructor
+     *
+     * @endif
+     */
     virtual ~OnWrite(void){}
     
     /*!
@@ -175,6 +256,19 @@ namespace RTC
   template <class DataType>
   struct OnWriteConvert
   {
+    /*!
+     * @if jp
+     * @brief デストラクタ
+     *
+     * デストラクタ
+     *
+     * @else
+     * @brief Destructor
+     *
+     * Destructor
+     *
+     * @endif
+     */
     virtual ~OnWriteConvert(void){}
     
     /*!
