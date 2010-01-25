@@ -616,10 +616,10 @@ std::vector<coil::Properties> Manager::getLoadableModules()
     if (comp == NULL)
       {
 	RTC_ERROR(("RTC creation failed: %s",
-                   comp_id["implementaion_id"].c_str()));
+                   comp_id["implementation_id"].c_str()));
 	return NULL;
       }
-    RTC_TRACE(("RTC created: %s", comp_id["implementaion_id"].c_str()));
+    RTC_TRACE(("RTC created: %s", comp_id["implementation_id"].c_str()));
 
     //------------------------------------------------------------
     // Load configuration file specified in "rtc.conf"
@@ -636,13 +636,13 @@ std::vector<coil::Properties> Manager::getLoadableModules()
     if (comp->initialize() != RTC::RTC_OK)
       {
 	RTC_TRACE(("RTC initialization failed: %s",
-                   comp_id["implementaion_id"].c_str()));
+                   comp_id["implementation_id"].c_str()));
 	comp->exit();
-	RTC_TRACE(("%s was finalized", comp_id["implementaion_id"].c_str()));
+	RTC_TRACE(("%s was finalized", comp_id["implementation_id"].c_str()));
 	return NULL;
       }
     RTC_TRACE(("RTC initialization succeeded: %s",
-               comp_id["implementaion_id"].c_str()));
+               comp_id["implementation_id"].c_str()));
     //------------------------------------------------------------
     // Bind component to naming service
     registerComponent(comp);
