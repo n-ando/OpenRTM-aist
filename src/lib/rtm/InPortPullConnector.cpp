@@ -46,6 +46,7 @@ namespace RTC
         throw std::bad_alloc();
         return;
       }
+    m_buffer->init(info.properties.getNode("buffer"));
     m_consumer->setBuffer(m_buffer);
     m_consumer->setListener(info, &m_listeners);
 

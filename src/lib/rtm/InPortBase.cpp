@@ -443,6 +443,13 @@ namespace RTC
       coil::Properties conn_prop;
       NVUtil::copyToProperties(conn_prop, cprof.properties);
       prop << conn_prop.getNode("dataport"); // marge ConnectorProfile
+      /*
+       * marge ConnectorProfile for buffer property.
+       * e.g.
+       *  prof[buffer.write.full_policy]
+       *       << cprof[dataport.inport.buffer.write.full_policy]
+       */
+      prop << conn_prop.getNode("dataport.inport");
     }
     RTC_DEBUG(("ConnectorProfile::properties are as follows."));
     RTC_DEBUG_STR((prop));
@@ -509,6 +516,13 @@ namespace RTC
       coil::Properties conn_prop;
       NVUtil::copyToProperties(conn_prop, cprof.properties);
       prop << conn_prop.getNode("dataport"); // marge ConnectorProfile
+      /*
+       * marge ConnectorProfile for buffer property.
+       * e.g.
+       *  prof[buffer.write.full_policy]
+       *       << cprof[dataport.inport.buffer.write.full_policy]
+       */
+      prop << conn_prop.getNode("dataport.inport");
     }
     RTC_DEBUG(("ConnectorProfile::properties are as follows."));
     RTC_DEBUG_STR((prop));
