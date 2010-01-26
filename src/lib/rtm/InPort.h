@@ -442,12 +442,12 @@ namespace RTC
      */
     bool read()
     {
-      RTC_TRACE(("DataType read()"))
+      RTC_TRACE(("DataType read()"));
 
       if (m_OnRead != NULL) 
         {
           (*m_OnRead)();
-          RTC_TRACE(("OnRead called"))
+          RTC_TRACE(("OnRead called"));
         }
 
       if (m_connectors.size() == 0)
