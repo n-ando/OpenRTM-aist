@@ -448,7 +448,7 @@ namespace RTC
             {
               advanceRptr();
             }
-          else if (!overwrite && !timedwrite) // "do_notiong" mode
+          else if (!overwrite && !timedwrite) // "do_nothing" mode
             {
               return ::RTC::BufferStatus::BUFFER_FULL;
             }
@@ -710,12 +710,17 @@ namespace RTC
                 }
               advanceRptr(-1);
             }
-          else if (!readback && !timedread) // "do_notiong" mode
+          else if (!readback && !timedread) // "do_nothing" mode
             {
               return ::RTC::BufferStatus::BUFFER_EMPTY;
             }
           else if (!readback && timedread)  // "block" mode
             {
+              if (sec < 0)
+                {
+                  sec = m_rtimeout.sec();
+                  nsec = m_rtimeout.usec() * 1000;
+                }
               //  true: signaled, false: timeout
               if (!m_empty.cond.wait(sec, nsec))
                 {
