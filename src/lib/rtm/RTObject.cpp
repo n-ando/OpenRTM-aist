@@ -1527,8 +1527,16 @@ namespace RTC
     m_properties.getNode(propkey)
       << m_properties.getNode("port.inport.dataport");
 
+    bool ret(addPort(inport));
+    
+    if (!ret) {
+      RTC_ERROR(("addInPort() failed."));
+      return ret;
+    }
+
     inport.init(m_properties.getNode(propkey));
-    return addPort(inport);
+    m_inports.push_back(&inport);
+    return ret;
   }
 
   void RTObject_impl::registerInPort(const char* name,
@@ -1557,8 +1565,16 @@ namespace RTC
     m_properties.getNode(propkey) 
       << m_properties.getNode("port.outport.dataport");
     
+    bool ret(addPort(outport));
+    
+    if (!ret) {
+      RTC_ERROR(("addOutPort() failed."));
+      return ret;
+    }
+
     outport.init(m_properties.getNode(propkey));
-    return addPort(outport);
+    m_outports.push_back(&outport);
+    return ret;
   }
   
   void RTObject_impl::registerOutPort(const char* name,
@@ -1581,8 +1597,25 @@ namespace RTC
   bool RTObject_impl::removeInPort(InPortBase& inport)
   {
     RTC_TRACE(("removeInPort()"));
-    
-    return removePort(inport);
+    bool ret(removePort(inport));
+
+    std::vector<InPortBase*>::iterator it = m_inports.begin();
+
+    if (ret)
+      {
+	while (it != m_inports.end())
+	  {
+	    if ( (*it) == &inport )
+	      {
+		m_inports.erase(it);
+		std::cout << "removeInPort erase port found." << std::endl;
+		return true;
+	      }
+	    ++it;
+	  }
+      }
+
+    return false;
   }
 
   /*!
@@ -1595,8 +1628,25 @@ namespace RTC
   bool RTObject_impl::removeOutPort(OutPortBase& outport)
   {
     RTC_TRACE(("removeOutPort()"));
-    
-    return removePort(outport);
+
+    bool ret(removePort(outport));
+
+    if (ret)
+      {
+	std::vector<OutPortBase*>::iterator it = m_outports.begin();
+	while (it != m_outports.end())
+	  {
+	    if ( (*it) == &outport )
+	      {
+		m_outports.erase(it);
+		std::cout << "removeOutPort erase port found." << std::endl;
+		return true;
+	      }
+	    ++it;
+	  }
+      }
+
+    return false;
   }
 
   /*!
@@ -1670,35 +1720,21 @@ namespace RTC
   bool RTObject_impl::readAll()
   {
     RTC_TRACE(("readAll()"));
-    PortProfileList pprofiles;
-    pprofiles = m_portAdmin.getPortProfileList();
-    std::vector<InPortBase*> inports; 
+    std::vector<InPortBase*>::iterator it     = m_inports.begin(); 
+    std::vector<InPortBase*>::iterator it_end = m_inports.end(); 
     bool ret(true);
 
-    for (::CORBA::ULong i(0), len(pprofiles.length()); i < len; ++i)
+    while( it != it_end )
       {
-	if (NVUtil::isStringValue(pprofiles[i].properties,
-				  "port.port_type","DataInPort"))
+
+	if (!((*it)->read()))
 	  {
-	    try
-	      {
-		InPortBase* ip = 
-                  dynamic_cast<InPortBase*>
-                  (m_portAdmin.getPort(pprofiles[i].name));
-	      
-		if (!(ip != 0 && ip->read()))
-		  {
-		    RTC_DEBUG(("The error occurred in readAll()."));
-		    ret = false;
-		    if (!m_readAllCompletion)
-		      return false;
-		  }
-	      }
-	    catch ( const std::bad_cast& e )
-	      {
-		RTC_ERROR(("failed dynamic_cast to InPortBase in readAll()."));
-	      }
+	    RTC_DEBUG(("The error occurred in readAll()."));
+	    ret = false;
+	    if (!m_readAllCompletion)
+	      return false;
 	  }
+	++it;
       }
 
     return ret;
@@ -1716,34 +1752,12 @@ namespace RTC
   bool RTObject_impl::writeAll()
   {
     RTC_TRACE(("writeAll()"));
-    PortProfileList pprofiles;
-    pprofiles = m_portAdmin.getPortProfileList();
-    std::vector<OutPortBase*> outports; 
-
-    for (::CORBA::ULong i(0), len(pprofiles.length()); i < len; ++i)
-      {
-	if (NVUtil::isStringValue(pprofiles[i].properties,
-				  "port.port_type","DataOutPort"))
-	  {
-	    try
-	      {
-		OutPortBase* op = 
-                  dynamic_cast<OutPortBase*>
-                  (m_portAdmin.getPort(pprofiles[i].name));
-	      
-		if (op != 0)
-		  outports.push_back(op);
-	      }
-	    catch ( const std::bad_cast& e )
-	      {
-		RTC_ERROR(("failed dynamic_cast to OutPortBase in writeAll()."));
-	      }
-	  }
-      }
+    std::vector<OutPortBase*>::iterator it     = m_outports.begin(); 
+    std::vector<OutPortBase*>::iterator it_end = m_outports.end(); 
 
     bool ret(true);
-    std::vector<OutPortBase*>::iterator it(outports.begin());
-    while(it != outports.end())
+
+    while( it != it_end )
       {
 	if (!((*it)->write()))
 	  {

@@ -2767,6 +2767,24 @@ namespace RTC
      * @endif
      */
     PortAdmin m_portAdmin;
+
+    /*!
+     * @if jp
+     * @brief InPortBase* のリスト
+     * @else
+     * @brief List of InPortBase*
+     * @endif
+     */
+    std::vector<InPortBase*> m_inports;
+
+    /*!
+     * @if jp
+     * @brief OutPortBase* のリスト
+     * @else
+     * @brief List of OutPortBase*
+     * @endif
+     */
+    std::vector<OutPortBase*> m_outports;
     
     /*!
      * @if jp
