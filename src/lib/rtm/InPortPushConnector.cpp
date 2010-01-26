@@ -46,6 +46,7 @@ namespace RTC
       }
     if (m_buffer == 0 || m_provider==0) throw std::bad_alloc();
 
+    m_buffer->init(info.properties.getNode("buffer"));
     m_provider->init(info.properties);
     m_provider->setBuffer(m_buffer);
     m_provider->setListener(info, &m_listeners);
@@ -88,7 +89,7 @@ namespace RTC
       {
         return PRECONDITION_NOT_MET;
       }
-    BufferStatus::Enum ret = m_buffer->read(data, 0, 0);
+    BufferStatus::Enum ret = m_buffer->read(data);
     switch (ret)
       {
       case BufferStatus::BUFFER_OK:

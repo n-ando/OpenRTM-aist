@@ -39,6 +39,7 @@ namespace RTC
 
     if (m_provider == 0 || m_buffer == 0) { throw std::bad_alloc(); }
 
+    m_buffer->init(info.properties.getNode("buffer"));
     m_provider->setBuffer(m_buffer);
     m_provider->setConnector(this);
     //    m_provider->init(m_profile /* , m_listeners */);
