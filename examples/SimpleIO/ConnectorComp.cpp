@@ -50,6 +50,14 @@ void usage()
   std::cout << ": Set skip count 0..n" << std::endl;
   std::cout << "  --endian *      ";
   std::cout << ": Set endian type Little or Big" << std::endl;
+  std::cout << "  --buffer : Set buffer configuration" << std::endl;
+  std::cout << "  --buffer \"[inport|outport].buffer.[length|[read_write_[policy|timeout]]\" value" << std::endl;
+  std::cout << "    policy:  [write.full_policy,read.empty_policy]" << std::endl;
+  std::cout << "    timeout: [write.timeout,read.timeout]" << std::endl;
+  std::cout << "    value:  " << std::endl;
+  std::cout << "       full_policy:  [overwrite, do_nothing, block]" << std::endl;
+  std::cout << "       empty_policy: [readback,  do_nothing, block]" << std::endl;
+  std::cout << "       timeout: sec (e.g. 1.0)" << std::endl;
   std::cout << std::endl;
   std::cout << "exsample:" << std::endl;
   std::cout << "  ConnectorComp --port 2809 --origin OUT" << std::endl;
@@ -61,6 +69,7 @@ void usage()
   std::cout << "  ConnectorComp --periodic 10 --policy FIFO" << std::endl;
   std::cout << "  ConnectorComp --periodic 10 --policy NEW" << std::endl;
   std::cout << "  ConnectorComp --flush --endian Little" << std::endl;
+  std::cout << "  ConnectorComp --buffer inport.buffer.read.empty_policy do_nothing" << std::endl;
   std::cout << std::endl;
 }
 
@@ -76,6 +85,7 @@ int main (int argc, char** argv)
   std::string endian;
   std::string port_no("9876");
   std::string connect_origin("in");
+  std::map<std::string, std::string> buffer_prop;
 
   if (argc < 2)
     {
@@ -141,6 +151,19 @@ int main (int argc, char** argv)
 	      connect_origin = arg2;
 	    }
 	}
+      std::cout << "deb 0" << std::endl;
+      if (arg == "--buffer")
+	{
+	  if (++i < argc)
+	    {
+	      std::string key(argv[i]);
+	      key = coil::normalize(key);
+	      std::string val(argv[++i]);
+	      val = coil::normalize(val);
+	      buffer_prop.insert(std::pair< std::string, std::string >(key,val));
+	    }
+	}
+      std::cout << "deb 1" << std::endl;
     }
   
   CORBA::ORB_var orb = CORBA::ORB_init(_argc, _argv);
@@ -165,13 +188,15 @@ int main (int argc, char** argv)
     std::cout << "           endian: " << endian << std::endl;
 
   if (connect_origin == "in")
-    std::cout << "          connect: ConsoleIn -> ConsoleOut" << std::endl;
+   std::cout << "          connect: ConsoleIn -> ConsoleOut" << std::endl;
   else
     std::cout << "          connect: ConsoleOut -> ConsoleIn" << std::endl;
   std::cout << std::endl;
 
+  std::cout << "deb 2-0" << std::endl;
   // find ConsoleIn0 component
   conin.setObject(naming.resolve("ConsoleIn0.rtc"));
+  std::cout << "deb 2-1" << std::endl;
 
   // get ports
   pin = conin->get_ports();
@@ -230,6 +255,21 @@ int main (int argc, char** argv)
   CORBA_SeqUtil::push_back(prof.properties,
 			   NVUtil::newNV("dataport.serializer.cdr.endian",
 					 endian.c_str()));
+
+  std::cout << "deb 2" << std::endl;
+  std::map<std::string, std::string>::iterator it=buffer_prop.begin();
+  std::cout << "deb 3" << std::endl;
+  while (it != buffer_prop.end()) {
+    std::string key("dataport.");
+    key += it->first;
+    CORBA_SeqUtil::push_back(prof.properties,
+			     NVUtil::newNV(key.c_str(),
+					   it->second.c_str()));
+    std::cout << "buffer_prop.key: " << key << std::endl;
+    std::cout << "buffer_prop.val: " << it->second << std::endl;
+    ++it;
+  }
+  std::cout << "deb 4" << std::endl;
 
   ReturnCode_t ret;
   if (connect_origin == "in")
