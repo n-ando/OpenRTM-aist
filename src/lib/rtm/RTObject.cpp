@@ -1842,6 +1842,8 @@ namespace RTC
   {
     RTC_TRACE(("finalizePorts()"));
     m_portAdmin.finalizePorts();
+    m_inports.clear();
+    m_outports.clear();
   }
 
   void RTObject_impl::finalizeContexts()
