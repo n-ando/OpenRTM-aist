@@ -48,7 +48,8 @@ EXTRA_DIST =             \
 	python_gen.py    \
 	slntool.py       \
 	vcprojtool.py    \
-	test-template.py
+	test-template.py \
+	autotest.sh
 
 
 clean-local:
