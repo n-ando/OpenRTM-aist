@@ -116,6 +116,7 @@ RTC::ReturnCode_t AutoTestOut::onActivated(RTC::UniqueId ec_id)
 RTC::ReturnCode_t AutoTestOut::onDeactivated(RTC::UniqueId ec_id)
 {
   fin.close();
+  //  fin.clear();
   return RTC::RTC_OK;
 }
 
