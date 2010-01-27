@@ -2307,10 +2307,169 @@ namespace RTC
      * @endif
      */
     bool addPort(PortBase& port);
+    /*!
+     * @if jp
+     * 
+     * @brief [local interface] Port を登録する
+     *
+     * RTC が保持するPortを登録する。
+     * Port を外部からアクセス可能にするためには、このオペレーションにより
+     * 登録されていなければならない。登録される Port はこの RTC 内部において
+     * PortProfile.name により区別される。したがって、Port は RTC 内において、
+     * ユニークな PortProfile.name を持たなければならない。
+     * 登録された Port は内部で適切にアクティブ化された後、その参照と
+     * オブジェクト参照がリスト内に保存される。
+     * 
+     * @param port RTC に登録する Port
+     * @return 登録結果(登録成功:true，登録失敗:false)
+     *
+     * @else
+     *
+     * @brief [local interface] Register Port
+     *
+     * This operation registers a Port held by this RTC.
+     * In order to enable access to the Port from outside of RTC, the Port
+     * must be registered by this operation. The Port that is registered by
+     * this operation would be identified by PortProfile.name in the inside of
+     * RTC. Therefore, the Port should have unique PortProfile.name in the RTC.
+     * The registering Port would be activated properly, and the reference
+     * and the object reference would be stored in lists in RTC.
+     *
+     * @param port Port which is registered to the RTC
+     * @return Register result (Successful:true, Failed:false)
+     *
+     * @endif
+     */
     bool addPort(PortService_ptr port);
+    /*!
+     * @if jp
+     * 
+     * @brief [local interface] Port を登録する
+     *
+     * RTC が保持するPortを登録する。
+     * Port を外部からアクセス可能にするためには、このオペレーションにより
+     * 登録されていなければならない。登録される Port はこの RTC 内部において
+     * PortProfile.name により区別される。したがって、Port は RTC 内において、
+     * ユニークな PortProfile.name を持たなければならない。
+     * 登録された Port は内部で適切にアクティブ化された後、その参照と
+     * オブジェクト参照がリスト内に保存される。
+     * 
+     * @param port RTC に登録する Port
+     * @return 登録結果(登録成功:true，登録失敗:false)
+     *
+     * @else
+     *
+     * @brief [local interface] Register Port
+     *
+     * This operation registers a Port held by this RTC.
+     * In order to enable access to the Port from outside of RTC, the Port
+     * must be registered by this operation. The Port that is registered by
+     * this operation would be identified by PortProfile.name in the inside of
+     * RTC. Therefore, the Port should have unique PortProfile.name in the RTC.
+     * The registering Port would be activated properly, and the reference
+     * and the object reference would be stored in lists in RTC.
+     *
+     * @param port Port which is registered to the RTC
+     * @return Register result (Successful:true, Failed:false)
+     *
+     * @endif
+     */
     bool addPort(CorbaPort& port);
+    /*!
+     * @if jp
+     * 
+     * @brief [local interface] Port を登録する
+     *
+     * RTC が保持するPortを登録する。
+     * Port を外部からアクセス可能にするためには、このオペレーションにより
+     * 登録されていなければならない。登録される Port はこの RTC 内部において
+     * PortProfile.name により区別される。したがって、Port は RTC 内において、
+     * ユニークな PortProfile.name を持たなければならない。
+     * 登録された Port は内部で適切にアクティブ化された後、その参照と
+     * オブジェクト参照がリスト内に保存される。
+     * 
+     * @param port RTC に登録する Port
+     *
+     * @else
+     *
+     * @brief [local interface] Register Port
+     *
+     * This operation registers a Port held by this RTC.
+     * In order to enable access to the Port from outside of RTC, the Port
+     * must be registered by this operation. The Port that is registered by
+     * this operation would be identified by PortProfile.name in the inside of
+     * RTC. Therefore, the Port should have unique PortProfile.name in the RTC.
+     * The registering Port would be activated properly, and the reference
+     * and the object reference would be stored in lists in RTC.
+     *
+     * @param port Port which is registered to the RTC
+     *
+     * @endif
+     */
     void registerPort(PortBase& port);
+    /*!
+     * @if jp
+     * 
+     * @brief [local interface] Port を登録する
+     *
+     * RTC が保持するPortを登録する。
+     * Port を外部からアクセス可能にするためには、このオペレーションにより
+     * 登録されていなければならない。登録される Port はこの RTC 内部において
+     * PortProfile.name により区別される。したがって、Port は RTC 内において、
+     * ユニークな PortProfile.name を持たなければならない。
+     * 登録された Port は内部で適切にアクティブ化された後、その参照と
+     * オブジェクト参照がリスト内に保存される。
+     * 
+     * @param port RTC に登録する Port
+     *
+     * @else
+     *
+     * @brief [local interface] Register Port
+     *
+     * This operation registers a Port held by this RTC.
+     * In order to enable access to the Port from outside of RTC, the Port
+     * must be registered by this operation. The Port that is registered by
+     * this operation would be identified by PortProfile.name in the inside of
+     * RTC. Therefore, the Port should have unique PortProfile.name in the RTC.
+     * The registering Port would be activated properly, and the reference
+     * and the object reference would be stored in lists in RTC.
+     *
+     * @param port Port which is registered to the RTC
+     *
+     * @endif
+     */
     void registerPort(PortService_ptr port);
+    /*!
+     * @if jp
+     * 
+     * @brief [local interface] Port を登録する
+     *
+     * RTC が保持するPortを登録する。
+     * Port を外部からアクセス可能にするためには、このオペレーションにより
+     * 登録されていなければならない。登録される Port はこの RTC 内部において
+     * PortProfile.name により区別される。したがって、Port は RTC 内において、
+     * ユニークな PortProfile.name を持たなければならない。
+     * 登録された Port は内部で適切にアクティブ化された後、その参照と
+     * オブジェクト参照がリスト内に保存される。
+     * 
+     * @param port RTC に登録する Port
+     *
+     * @else
+     *
+     * @brief [local interface] Register Port
+     *
+     * This operation registers a Port held by this RTC.
+     * In order to enable access to the Port from outside of RTC, the Port
+     * must be registered by this operation. The Port that is registered by
+     * this operation would be identified by PortProfile.name in the inside of
+     * RTC. Therefore, the Port should have unique PortProfile.name in the RTC.
+     * The registering Port would be activated properly, and the reference
+     * and the object reference would be stored in lists in RTC.
+     *
+     * @param port Port which is registered to the RTC
+     *
+     * @endif
+     */
     void registerPort(CorbaPort& port);
 
     /*!
@@ -2342,6 +2501,32 @@ namespace RTC
      * @endif
      */
     bool addInPort(const char* name, InPortBase& inport);
+    /*!
+     * @if jp
+     * 
+     * @brief [local interface] DataInPort を登録する
+     *
+     * RTC が保持する DataInPort を登録する。
+     * Port のプロパティにデータポートであること("port.dataport")、
+     * TCPを使用すること("tcp_any")を設定するとともに、 DataInPort の
+     * インスタンスを生成し、登録する。
+     * 
+     * @param name port 名称
+     * @param inport 登録対象 DataInPort
+     *
+     * @else
+     * 
+     * @brief [local interface] Register DataInPort
+     *
+     * This operation registers DataInPort held by this RTC.
+     * Set "port.dataport" and "tcp_any" to property of Port, and
+     * create instances of DataInPort and register it.
+     * 
+     * @param name Port name
+     * @param inport DataInPort which is registered to the RTC
+     *
+     * @endif
+     */
     void registerInPort(const char* name, InPortBase& inport);
     
     /*!
@@ -2373,6 +2558,32 @@ namespace RTC
      * @endif
      */
     bool addOutPort(const char* name, OutPortBase& outport);
+    /*!
+     * @if jp
+     * 
+     * @brief [local interface] DataOutPort を登録する
+     *
+     * RTC が保持する DataOutPortを登録する。
+     * Port のプロパティにデータポートであること("port.dataport")、
+     * TCPを使用すること("tcp_any")を設定するとともに、 DataOutPort の
+     * インスタンスを生成し、登録する。
+     * 
+     * @param name port 名称
+     * @param outport 登録対象 DataOutPort
+     *
+     * @else
+     * 
+     * @brief [local interface] Register DataOutPort
+     *
+     * This operation registers DataOutPor held by this RTC.
+     * Set "port.dataport" and "tcp_any" to property of Port, and then
+     * create instances of DataOutPort and register it.
+     * 
+     * @param name Port name
+     * @param outport DataOutPort which is registered to the RTC
+     *
+     * @endif
+     */
     void registerOutPort(const char* name, OutPortBase& outport);
     
     /*!
@@ -2443,10 +2654,109 @@ namespace RTC
      * @endif
      */
     bool removePort(PortBase& port);
+    /*!
+     * @if jp
+     * 
+     * @brief [local interface] Port の登録を削除する
+     *
+     * RTC が保持するPortの登録を削除する。
+     * 
+     * @param port 削除対象 Port
+     * @return 削除結果(削除成功:true，削除失敗:false)
+     *
+     * @else
+     *
+     * @brief [local interface] Unregister Port
+     *
+     * This operation unregisters a Port held by this RTC.
+     *
+     * @param port Port which is unregistered
+     * @return Unregister result (Successful:true, Failed:false)
+     *
+     * @endif
+     */
     bool removePort(PortService_ptr port);
+    /*!
+     * @if jp
+     * 
+     * @brief [local interface] Port の登録を削除する
+     *
+     * RTC が保持するPortの登録を削除する。
+     * 
+     * @param port 削除対象 Port
+     * @return 削除結果(削除成功:true，削除失敗:false)
+     *
+     * @else
+     *
+     * @brief [local interface] Unregister Port
+     *
+     * This operation unregisters a Port held by this RTC.
+     *
+     * @param port Port which is unregistered
+     * @return Unregister result (Successful:true, Failed:false)
+     *
+     * @endif
+     */
     bool removePort(CorbaPort& port);
+    /*!
+     * @if jp
+     * 
+     * @brief [local interface] Port の登録を削除する
+     *
+     * RTC が保持するPortの登録を削除する。
+     * 
+     * @param port 削除対象 Port
+     *
+     * @else
+     *
+     * @brief [local interface] Unregister Port
+     *
+     * This operation unregisters a Port held by this RTC.
+     *
+     * @param port Port which is unregistered
+     *
+     * @endif
+     */
     void deletePort(PortBase& port);
+    /*!
+     * @if jp
+     * 
+     * @brief [local interface] Port の登録を削除する
+     *
+     * RTC が保持するPortの登録を削除する。
+     * 
+     * @param port 削除対象 Port
+     *
+     * @else
+     *
+     * @brief [local interface] Unregister Port
+     *
+     * This operation unregisters a Port held by this RTC.
+     *
+     * @param port Port which is unregistered
+     *
+     * @endif
+     */
     void deletePort(PortService_ptr port);
+    /*!
+     * @if jp
+     * 
+     * @brief [local interface] Port の登録を削除する
+     *
+     * RTC が保持するPortの登録を削除する。
+     * 
+     * @param port 削除対象 Port
+     *
+     * @else
+     *
+     * @brief [local interface] Unregister Port
+     *
+     * This operation unregisters a Port held by this RTC.
+     *
+     * @param port Port which is unregistered
+     *
+     * @endif
+     */
     void deletePort(CorbaPort& port);
     
     /*!
@@ -2600,7 +2910,19 @@ namespace RTC
      * @endif
      */
     void finalizePorts();
+    /*!
+     * @if jp
+     *
+     * @brief ExecutionContextBaseリストの登録を削除する 
+     *
+     * @else
+     *
+     * @brief The ExecutionContextBase list is deleted. 
+     *
+     * @endif
+     */
     void finalizeContexts();
+
     /*
       template <class DataType>
       void registerInPort(BufferBase<DataType>& buffer)
@@ -2636,6 +2958,13 @@ namespace RTC
     void shutdown();
     
   protected:
+    /*!
+     * @if jp
+     * @brief ロガーストリーム
+     * @else
+     * @brief Logger stream
+     * @endif
+     */
     mutable Logger rtclog;
     /*!
      * @if jp
@@ -2794,6 +3123,14 @@ namespace RTC
      * @endif
      */
     ExecutionContextServiceList m_ecMine;
+    
+    /*!
+     * @if jp
+     * @brief ExecutionContextBase のリスト
+     * @else
+     * @brief List of ExecutionContextBase 
+     * @endif
+     */
     std::vector<ExecutionContextBase*> m_eclist;
     
     /*!
@@ -2813,6 +3150,14 @@ namespace RTC
      * @endif
      */
     bool m_created;
+    
+    /*!
+     * @if jp
+     * @brief RTCの終了状態フラグ
+     * @else
+     * @brief RTC Finalize Status Flag
+     * @endif
+     */
     bool m_exiting;
     
     /*!
@@ -2861,7 +3206,40 @@ namespace RTC
      */
     bool m_writeAll;
 
+    /*!
+     * @if jp
+     * @brief readAll()用のフラグ
+     *
+     * true:readAll()の途中ででエラーが発生しても最後まで実施する。
+     * false:readAll()の途中ででエラーが発生した場合終了。
+     *
+     * @else
+     * @brief flag for readAll()
+     *
+     * true:Even if the error occurs during readAll(), it executes it to the 
+     *      last minute. 
+     * false:End when error occurs during readAll().
+     *
+     * @endif
+     */
     bool m_readAllCompletion;
+
+    /*!
+     * @if jp
+     * @brief writeAll()用のフラグ
+     *
+     * true:writeAll()の途中ででエラーが発生しても最後まで実施する。
+     * false:writeAll()の途中ででエラーが発生した場合終了。
+     *
+     * @else
+     * @brief flag for writeAll()
+     *
+     * true:Even if the error occurs during writeAll(), it executes it to the 
+     *      last minute. 
+     * false:End when error occurs during writeAll().
+     *
+     * @endif
+     */
     bool m_writeAllCompletion;
 
     //------------------------------------------------------------
