@@ -39,9 +39,60 @@ namespace RTC
    * @class Logger
    * @brief Logger クラス
    *
+   * - ログ出力をシリアライズしかつ分配するバッファクラス
+   * - ログをフォーマットするフォーマットクラス
+   * で構成されるロガークラス
+   * 
+   * - バッファクラス
+   *  - マルチスレッド書き込みに対してシリアライズしてバッファリングする
+   *  - 複数の出力先にログを出力できる
+   *  - 出力先の例としては、ファイル、標準出力、リモートのログサーバ等
+   *  - バッファに対してaddStreamで出力先を追加できる
+   * - フォーマットクラス
+   *  - ログレベルを指定して出力できる
+   *  - 書式は、[時間] [ログレベル] [サフィックス] [メッセージ]
+   *  - [時間] [ログレベル] [サフィックス]は自動付加
+   *  - [サフィックス] を指定できる関数を用意
+   *  - ログレベルは以下のとおり
+   *   - RTL_SILENT
+   *   - RTL_FATAL
+   *   - RTL_ERROR
+   *   - RTL_WARN
+   *   - RTL_INFO
+   *   - RTL_DEBUG
+   *   - RTL_TRACE
+   *   - RTL_VERBOSE
+   *   - RTL_PARANOID
+   *  - このフォーマットオブジェクトに対するロック・アンロック機能
+   *
    * @else
    * @class Logger
    * @brief Logger class
+   *
+   * This class is composed of the buffer class and the format class. 
+   * - The buffer class
+   *  - The buffer class serializes to the MultiThreading writing and 
+   *    does buffering.
+   *  - The buffer class can output the log at two or more output destination.
+   *    As the example of the output destination, filing, the standard, 
+   *    the log server etc. 
+   *  - The output destination can be added to the buffer with addStream. 
+   * - The format class
+   *  - The format class can output it by specifying the log level. 
+   *  - The format is [Time] [Loglevel] [Ssuffix] [Message].
+   *  - [Time] [Loglevel] [Suffix] are added by the automatic operation. 
+   *  - [Suffix] can be specified. 
+   *  - Loglevel
+   *   - RTL_SILENT
+   *   - RTL_FATAL
+   *   - RTL_ERROR
+   *   - RTL_WARN
+   *   - RTL_INFO
+   *   - RTL_DEBUG
+   *   - RTL_TRACE
+   *   - RTL_VERBOSE
+   *   - RTL_PARANOID
+   *  - The format class can be locked/unlocked to this format object. 
    *
    * @endif
    */
@@ -62,8 +113,55 @@ namespace RTC
         RTL_PARANOID // 8: (FATAL, ERROR, WARN, INFO, DEBUG, TRACE, VERBOSE, PARA)
       };
  
+    /*!
+     * @if jp
+     * @brief コンストラクタ
+     *
+     * コンストラクタ
+     *
+     * @param name ヘッダの日時の後に付加する文字列
+     *
+     * @else
+     *
+     * @brief Constructor
+     *
+     * Constructor
+     *
+     * @param name suffix of date/time string of header.
+     *
+     * @endif
+     */
     Logger(const char* name = "");
+    /*!
+     * @if jp
+     * @brief コンストラクタ
+     *
+     * コンストラクタ
+     *
+     * @param streambuf LogStream オブジェクト 
+     *
+     * @else
+     *
+     * @brief Constructor
+     *
+     * Constructor
+     *
+     * @param streambuf LogStream object
+     *
+     * @endif
+     */
     Logger(LogStreamBuf* streambuf);
+    /*!
+     * @if jp
+     *
+     * @brief 仮想デストラクタ
+     * 
+     * @else
+     * 
+     * @brief Virtual destructor
+     * 
+     * @endif
+     */
     virtual ~Logger(void);
 
     /*!
