@@ -299,13 +299,6 @@
       <Feature Id="RTSystemEditor" Level="1" Title="RTSystemEditor">
 	<ComponentRef Id="RTSystemEditor" />
 	<ComponentRef Id="configuration" />
-	<ComponentRef Id="org.eclipse.core.runtime" />
-	<ComponentRef Id="_.manager" />
-	<ComponentRef Id="org.eclipse.osgi" />
-	<ComponentRef Id="_.manager_1" />
-	<ComponentRef Id="lib" />
-	<ComponentRef Id="_.cp" />
-	<ComponentRef Id="org.eclipse.update" />
 	<ComponentRef Id="plugins" />
 	<ComponentRef Id="org.eclipse.core.runtime.compatibility.registry_3.2.1.R32x_v20060907" />
 	<ComponentRef Id="META_INF" />

@@ -2,20 +2,18 @@
 <Include xmlns="http://schemas.microsoft.com/wix/2006/wi">
   <Directory Id="OpenRTP" Name="OpenRTP">
     <Directory Id="RTSystemEditor" Name="RTSystemEditor">
-      <Component Id="RTSystemEditor" DiskId="1" Guid="E278E8AD-0F87-4600-8F86-1FF1E4FD8382">
+      <Component Id="RTSystemEditor" DiskId="1" Guid="2748F847-387F-4AB8-AC7C-0557AA4DD742">
         <File Id="_.eclipseproduct" Name=".eclipseproduct" Source="C:\distribution\OpenRTP\RTSystemEditor\.eclipseproduct" />
-        <File Id="RTSystemEditorRCP.exe" Name="RTSystemEditorRCP.exe" Source="C:\distribution\OpenRTP\RTSystemEditor\RTSystemEditorRCP.exe">
-          <Shortcut Id="RTSystemEditor" Name="RTSystemEditor" Directory="ToolsMenuFolder" WorkingDirectory="tools" />
-        </File>
+        <File Id="RTSystemEditorRCP.exe" Name="RTSystemEditorRCP.exe" Source="C:\distribution\OpenRTP\RTSystemEditor\RTSystemEditorRCP.exe" />
         <File Id="startup.jar" Name="startup.jar" Source="C:\distribution\OpenRTP\RTSystemEditor\startup.jar" />
       </Component>
       <Directory Id="configuration" Name="configuration">
-        <Component Id="configuration" DiskId="1" Guid="C7961C0B-98E7-4BB1-9D26-C5B76C6E6B6D">
+        <Component Id="configuration" DiskId="1" Guid="FBF727A3-5CBF-4AAA-B51F-430097A51090">
           <File Id="config.ini" Name="config.ini" Source="C:\distribution\OpenRTP\RTSystemEditor\configuration\config.ini" />
         </Component>
       </Directory>
       <Directory Id="plugins" Name="plugins">
-        <Component Id="plugins" DiskId="1" Guid="398969B6-8EDD-4BA0-B0D1-91662487056C">
+        <Component Id="plugins" DiskId="1" Guid="D96B7838-06D5-4281-93AE-A5A6F694350D">
           <File Id="com.ibm.icu.nl1_3.4.5.v200609270227.jar" Name="com.ibm.icu.nl1_3.4.5.v200609270227.jar" Source="C:\distribution\OpenRTP\RTSystemEditor\plugins\com.ibm.icu.nl1_3.4.5.v200609270227.jar" />
           <File Id="com.ibm.icu_3.4.5.20061213.jar" Name="com.ibm.icu_3.4.5.20061213.jar" Source="C:\distribution\OpenRTP\RTSystemEditor\plugins\com.ibm.icu_3.4.5.20061213.jar" />
           <File Id="jp.go.aist.rtm.nameserviceview.nl1_1.0.0.jar" Name="jp.go.aist.rtm.nameserviceview.nl1_1.0.0.jar" Source="C:\distribution\OpenRTP\RTSystemEditor\plugins\jp.go.aist.rtm.nameserviceview.nl1_1.0.0.jar" />
@@ -60,7 +58,6 @@
           <File Id="org.eclipse.emf.common_2.2.2.v200808252119.jar" Name="org.eclipse.emf.common_2.2.2.v200808252119.jar" Source="C:\distribution\OpenRTP\RTSystemEditor\plugins\org.eclipse.emf.common_2.2.2.v200808252119.jar" />
           <File Id="org.eclipse.emf.ecore.xmi_2.2.5.v200808252119.jar" Name="org.eclipse.emf.ecore.xmi_2.2.5.v200808252119.jar" Source="C:\distribution\OpenRTP\RTSystemEditor\plugins\org.eclipse.emf.ecore.xmi_2.2.5.v200808252119.jar" />
           <File Id="org.eclipse.emf.ecore_2.2.4.v200808252119.jar" Name="org.eclipse.emf.ecore_2.2.4.v200808252119.jar" Source="C:\distribution\OpenRTP\RTSystemEditor\plugins\org.eclipse.emf.ecore_2.2.4.v200808252119.jar" />
-          <File Id="org.eclipse.emf_2.2.0.v200808252119.jar" Name="org.eclipse.emf_2.2.0.v200808252119.jar" Source="C:\distribution\OpenRTP\RTSystemEditor\plugins\org.eclipse.emf_2.2.0.v200808252119.jar" />
           <File Id="org.eclipse.equinox.common.nl1_3.2.0.v200609270227.jar" Name="org.eclipse.equinox.common.nl1_3.2.0.v200609270227.jar" Source="C:\distribution\OpenRTP\RTSystemEditor\plugins\org.eclipse.equinox.common.nl1_3.2.0.v200609270227.jar" />
           <File Id="org.eclipse.equinox.common_3.2.0.v20060603.jar" Name="org.eclipse.equinox.common_3.2.0.v20060603.jar" Source="C:\distribution\OpenRTP\RTSystemEditor\plugins\org.eclipse.equinox.common_3.2.0.v20060603.jar" />
           <File Id="org.eclipse.equinox.preferences.nl1_3.2.1.v200609270227.jar" Name="org.eclipse.equinox.preferences.nl1_3.2.1.v200609270227.jar" Source="C:\distribution\OpenRTP\RTSystemEditor\plugins\org.eclipse.equinox.preferences.nl1_3.2.1.v200609270227.jar" />
@@ -109,20 +106,20 @@
           <File Id="org.eclipse.update.ui_3.2.2.R32x_v20070111.jar" Name="org.eclipse.update.ui_3.2.2.R32x_v20070111.jar" Source="C:\distribution\OpenRTP\RTSystemEditor\plugins\org.eclipse.update.ui_3.2.2.R32x_v20070111.jar" />
         </Component>
         <Directory Id="org.eclipse.core.runtime.compatibility.registry_3.2.1.R32x_v20060907" Name="org.eclipse.core.runtime.compatibility.registry_3.2.1.R32x_v20060907">
-          <Component Id="org.eclipse.core.runtime.compatibility.registry_3.2.1.R32x_v20060907" DiskId="1" Guid="FB30718E-3DD9-407F-921C-E81974467A4A">
+          <Component Id="org.eclipse.core.runtime.compatibility.registry_3.2.1.R32x_v20060907" DiskId="1" Guid="9B406546-ADAC-458F-8868-4D8E286A179F">
             <File Id="about.html" Name="about.html" Source="C:\distribution\OpenRTP\RTSystemEditor\plugins\org.eclipse.core.runtime.compatibility.registry_3.2.1.R32x_v20060907\about.html" />
             <File Id="fragment.properties" Name="fragment.properties" Source="C:\distribution\OpenRTP\RTSystemEditor\plugins\org.eclipse.core.runtime.compatibility.registry_3.2.1.R32x_v20060907\fragment.properties" />
             <File Id="runtime_registry_compatibility.jar" Name="runtime_registry_compatibility.jar" Source="C:\distribution\OpenRTP\RTSystemEditor\plugins\org.eclipse.core.runtime.compatibility.registry_3.2.1.R32x_v20060907\runtime_registry_compatibility.jar" />
           </Component>
           <Directory Id="META_INF" Name="META-INF">
-            <Component Id="META_INF" DiskId="1" Guid="4F0C3246-FC78-463C-9589-85F04E91C52C">
+            <Component Id="META_INF" DiskId="1" Guid="2FC7BBAC-7BE2-43A6-B281-45E5321BA6CD">
               <File Id="eclipse.inf" Name="eclipse.inf" Source="C:\distribution\OpenRTP\RTSystemEditor\plugins\org.eclipse.core.runtime.compatibility.registry_3.2.1.R32x_v20060907\META-INF\eclipse.inf" />
               <File Id="MANIFEST.MF" Name="MANIFEST.MF" Source="C:\distribution\OpenRTP\RTSystemEditor\plugins\org.eclipse.core.runtime.compatibility.registry_3.2.1.R32x_v20060907\META-INF\MANIFEST.MF" />
             </Component>
           </Directory>
         </Directory>
         <Directory Id="org.eclipse.jdt.junit.runtime.nl1_3.2.1.v200609270227" Name="org.eclipse.jdt.junit.runtime.nl1_3.2.1.v200609270227">
-          <Component Id="org.eclipse.jdt.junit.runtime.nl1_3.2.1.v200609270227" DiskId="1" Guid="BEAD1DEB-3152-45EE-A5EE-2D4ABA2DCCD4">
+          <Component Id="org.eclipse.jdt.junit.runtime.nl1_3.2.1.v200609270227" DiskId="1" Guid="F1928B56-E60D-4F13-8284-00E2B99BB2BB">
             <File Id="about.html_1" Name="about.html" Source="C:\distribution\OpenRTP\RTSystemEditor\plugins\org.eclipse.jdt.junit.runtime.nl1_3.2.1.v200609270227\about.html" />
             <File Id="nl1.jar" Name="nl1.jar" Source="C:\distribution\OpenRTP\RTSystemEditor\plugins\org.eclipse.jdt.junit.runtime.nl1_3.2.1.v200609270227\nl1.jar" />
             <File Id="nl_fragment.properties" Name="nl_fragment.properties" Source="C:\distribution\OpenRTP\RTSystemEditor\plugins\org.eclipse.jdt.junit.runtime.nl1_3.2.1.v200609270227\nl_fragment.properties" />
@@ -138,34 +135,34 @@
             <File Id="plugin_zh_TW.properties" Name="plugin_zh_TW.properties" Source="C:\distribution\OpenRTP\RTSystemEditor\plugins\org.eclipse.jdt.junit.runtime.nl1_3.2.1.v200609270227\plugin_zh_TW.properties" />
           </Component>
           <Directory Id="META_INF_1" Name="META-INF">
-            <Component Id="META_INF_1" DiskId="1" Guid="47C01D34-156E-4895-9096-E8EADB62D72A">
+            <Component Id="META_INF_1" DiskId="1" Guid="845976BB-6E57-4504-B0E4-E92063791414">
               <File Id="MANIFEST.MF_1" Name="MANIFEST.MF" Source="C:\distribution\OpenRTP\RTSystemEditor\plugins\org.eclipse.jdt.junit.runtime.nl1_3.2.1.v200609270227\META-INF\MANIFEST.MF" />
             </Component>
           </Directory>
         </Directory>
         <Directory Id="org.eclipse.jdt.junit.runtime_3.2.1.r321_v20060721" Name="org.eclipse.jdt.junit.runtime_3.2.1.r321_v20060721">
-          <Component Id="org.eclipse.jdt.junit.runtime_3.2.1.r321_v20060721" DiskId="1" Guid="DFCD5113-ABD8-4F1D-A5F3-ABC92929DA13">
+          <Component Id="org.eclipse.jdt.junit.runtime_3.2.1.r321_v20060721" DiskId="1" Guid="8C9D2750-2CBE-4624-9765-E6E1C21334EA">
             <File Id="about.html_2" Name="about.html" Source="C:\distribution\OpenRTP\RTSystemEditor\plugins\org.eclipse.jdt.junit.runtime_3.2.1.r321_v20060721\about.html" />
             <File Id="junitruntime.jar" Name="junitruntime.jar" Source="C:\distribution\OpenRTP\RTSystemEditor\plugins\org.eclipse.jdt.junit.runtime_3.2.1.r321_v20060721\junitruntime.jar" />
             <File Id="plugin.properties" Name="plugin.properties" Source="C:\distribution\OpenRTP\RTSystemEditor\plugins\org.eclipse.jdt.junit.runtime_3.2.1.r321_v20060721\plugin.properties" />
             <File Id="plugin.xml" Name="plugin.xml" Source="C:\distribution\OpenRTP\RTSystemEditor\plugins\org.eclipse.jdt.junit.runtime_3.2.1.r321_v20060721\plugin.xml" />
           </Component>
           <Directory Id="META_INF_2" Name="META-INF">
-            <Component Id="META_INF_2" DiskId="1" Guid="12733510-44C4-47AA-980F-D5CF2369CFDE">
+            <Component Id="META_INF_2" DiskId="1" Guid="995CB0A7-44B0-4096-B6FF-9F0DEAF351F1">
               <File Id="eclipse.inf_1" Name="eclipse.inf" Source="C:\distribution\OpenRTP\RTSystemEditor\plugins\org.eclipse.jdt.junit.runtime_3.2.1.r321_v20060721\META-INF\eclipse.inf" />
               <File Id="MANIFEST.MF_2" Name="MANIFEST.MF" Source="C:\distribution\OpenRTP\RTSystemEditor\plugins\org.eclipse.jdt.junit.runtime_3.2.1.r321_v20060721\META-INF\MANIFEST.MF" />
             </Component>
           </Directory>
         </Directory>
         <Directory Id="org.junit_3.8.1" Name="org.junit_3.8.1">
-          <Component Id="org.junit_3.8.1" DiskId="1" Guid="C1D81A35-A009-4F2B-A2F7-55855D1A794C">
+          <Component Id="org.junit_3.8.1" DiskId="1" Guid="83E80B5D-F3C6-4070-B5F5-DBCE74479317">
             <File Id="about.html_3" Name="about.html" Source="C:\distribution\OpenRTP\RTSystemEditor\plugins\org.junit_3.8.1\about.html" />
             <File Id="junit.jar" Name="junit.jar" Source="C:\distribution\OpenRTP\RTSystemEditor\plugins\org.junit_3.8.1\junit.jar" />
             <File Id="plugin.properties_1" Name="plugin.properties" Source="C:\distribution\OpenRTP\RTSystemEditor\plugins\org.junit_3.8.1\plugin.properties" />
             <File Id="plugin.xml_1" Name="plugin.xml" Source="C:\distribution\OpenRTP\RTSystemEditor\plugins\org.junit_3.8.1\plugin.xml" />
           </Component>
           <Directory Id="META_INF_3" Name="META-INF">
-            <Component Id="META_INF_3" DiskId="1" Guid="E16B8CF6-538F-4919-AD6B-081FE661E7E7">
+            <Component Id="META_INF_3" DiskId="1" Guid="4D8D5C2E-9D89-43F1-99BA-58E91902AFEA">
               <File Id="eclipse.inf_2" Name="eclipse.inf" Source="C:\distribution\OpenRTP\RTSystemEditor\plugins\org.junit_3.8.1\META-INF\eclipse.inf" />
               <File Id="MANIFEST.MF_3" Name="MANIFEST.MF" Source="C:\distribution\OpenRTP\RTSystemEditor\plugins\org.junit_3.8.1\META-INF\MANIFEST.MF" />
             </Component>
