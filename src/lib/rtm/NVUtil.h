@@ -31,11 +31,15 @@
  *
  * @brief NameValue 用ユーティリティ
  *
+ * NameValue に対してのユーティリティ関数を提供する。
+ *
  * @else
  *
  * @namespace NVUtil
  *
  * @brief Utility for NameValue
+ *
+ * This class provides the utility function of NameValue. 
  *
  * @endif
  */
@@ -545,8 +549,27 @@ namespace NVUtil
    */
   std::ostream& dump(std::ostream& out, const SDOPackage::NVList& nv);
 
+  /*!
+   * @if jp
+   * @brief NVList に設定されている内容を文字列として標準出力する。
+   * @param nv 出力対象 NVList
+   * @else
+   * @brief Print information configured in NVList as a string type 
+   *        to Standard Outport.
+   * @param nv The target NVList for the print
+   * @endif
+   */
   void dump(const SDOPackage::NVList& nv);
 
+  /*!
+   * @if jp
+   * @brief NVList に設定されている内容を文字列にする
+   * @param nv 出力対象 NVList
+   * @else
+   * @brief Get information configured in NVList as a string type.
+   * @param nv The target NVList for the print
+   * @endif
+   */
   std::string toString(const SDOPackage::NVList& nv);
   
 
