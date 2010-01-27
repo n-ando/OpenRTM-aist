@@ -130,8 +130,7 @@ private:
 
 extern "C"
 {
-  void USBCameraAcquireInit(RTC::Manager* manager);
-  
+  DLL_EXPORT void USBCameraAcquireInit(RTC::Manager* manager);
 };
 
 #endif // USBCAMERAACQUIRE_H
