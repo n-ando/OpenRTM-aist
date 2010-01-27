@@ -23,8 +23,8 @@ if test \! -f ../test-template.py; then
     exit -1
 fi
 python ../test-template.py
-
-build.sh
+chmod 755 build.sh
+sh build.sh
 
 
 
