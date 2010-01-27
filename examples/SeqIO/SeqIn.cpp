@@ -11,7 +11,7 @@
 #include <iostream>
 
 // Connector Listener Dump Flag
-extern bool g_Listener_dump_enabled;
+bool g_Listener_dump_enabled = false;
 
 // Module specification
 // <rtc-template block="module_spec">

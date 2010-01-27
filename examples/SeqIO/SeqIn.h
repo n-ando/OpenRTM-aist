@@ -29,8 +29,6 @@
 
 using namespace RTC;
 
-
-// Connector Listener Dump Flag
 extern bool g_Listener_dump_enabled;
 
 class DataListener

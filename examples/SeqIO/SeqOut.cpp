@@ -11,7 +11,7 @@
 #include <stdlib.h>
 
 // Connector Listener Dump Flag
-extern bool g_Listener_dump_enabled;
+bool g_Listener_dump_enabled = false;
 
 // Module specification
 // <rtc-template block="module_spec">
@@ -122,7 +122,7 @@ RTC::ReturnCode_t SeqOut::onInitialize()
 
   // <rtc-template block="bind_config">
   // Bind variables and configuration variable
-  bindParameter("data_type", m_data_type, "random");
+  bindParameter("data_type", m_data_type, "serial");
   
   // </rtc-template>
 
