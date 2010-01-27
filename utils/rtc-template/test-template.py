@@ -244,6 +244,136 @@ rtc-template -bcxx
 [endfor]
 """
 
+rtm_config = """\
+#!/bin/sh
+
+rtm_prefix="/usr/local"
+rtm_exec_prefix="/usr/local"
+rtm_cxx="g++"
+rtm_cflags="-Wall -fPIC -O2 -I../../../../src/lib -I../../../../src/lib/rtm/idl -I../../../../src/lib/coil/include"
+rtm_libs="-export-dynamic -luuid -ldl -L../../../../src/lib/rtm/.libs -L../../../../src/lib/coil/lib/.libs -lpthread -lomniORB4 -lomnithread -lomniDynamic4 -lRTC -lcoil"
+rtm_libdir=""
+rtm_version="1.0.0"
+rtm_orb="omniORB"
+rtm_idlc="omniidl"
+rtm_idlflags="-bcxx -Wba -nf"
+
+usage()
+{
+        cat <<EOF
+Usage: rtm-config [OPTIONS]
+Options:
+        [--prefix[=DIR]]
+        [--exec-prefix[=DIR]]
+        [--version]
+        [--cxx]
+        [--cflags]
+        [--libs]
+        [--libdir]
+        [--orb]
+        [--idlc]
+        [--idlflags]
+EOF
+        exit $1
+}
+
+if test $# -eq 0; then
+        usage 1 1>&2
+fi
+
+
+while test $# -gt 0; do
+  case "$1" in
+  -*=*) optarg=`echo "$1" | sed 's/[-_a-zA-Z0-9]*=//'` ;;
+  *) optarg= ;;
+  esac
+
+  case $1 in
+    --prefix=*)
+      prefix=$optarg
+      if test $exec_prefix_set = no ; then
+        exec_prefix=$optarg
+      fi
+      ;;
+    --prefix)
+      echo_prefix=yes
+      ;;
+    --exec-prefix=*)
+      rtm_exec_prefix=$optarg
+      exec_prefix_set=yes
+      ;;
+    --exec-prefix)
+      echo_exec_prefix=yes
+      ;;
+    --version)
+      echo $rtm_version
+      ;;
+    --cxx)
+      echo_cxx=yes
+      ;;
+    --cflags)
+      echo_cflags=yes
+      ;;
+    --libs)
+      echo_libs=yes
+      ;;
+    --libdir)
+      echo_libdir=yes
+	  ;;
+    --orb)
+      echo_orb=yes
+      ;;
+    --idlc)
+      echo_idlc=yes
+      ;;
+    --idlflags)
+      echo_idlflags=yes
+      ;;
+    *)
+      usage 1 1>&2
+      ;;
+  esac
+  shift
+done
+
+if test "$echo_prefix" = "yes"; then
+        echo $rtm_prefix
+fi
+
+if test "$echo_exec_prefix" = "yes"; then
+        echo $rtm_exec_prefix
+fi
+
+if test "$echo_cxx" = "yes"; then
+      echo $rtm_cxx
+fi
+
+if test "$echo_cflags" = "yes"; then
+      echo $rtm_cflags
+fi
+
+if test "$echo_libs" = "yes"; then
+      echo $rtm_libs
+fi      
+
+if test "$echo_libdir" = "yes"; then
+      echo $rtm_libdir
+fi      
+
+if test "$echo_orb" = "yes"; then
+      echo $rtm_orb
+fi      
+
+if test "$echo_idlc" = "yes"; then
+      echo $rtm_idlc
+fi      
+
+if test "$echo_idlflags" = "yes"; then
+      echo $rtm_idlflags
+fi      
+
+"""
+
 bat_header = """\
 @set PATH="%RTM_ROOT%\\utils\\rtc-template";%PATH%
 @set PYTHONPATH="%RTM_ROOT%\\utils\\rtc-template"
@@ -259,7 +389,9 @@ rmdir /Q /S [name]Comp
 
 sh_header = """\
 #!/bin/sh
-export PYTHONPATH=../
+export PYTHONPATH=../../:../../py_helper
+export RTM_ROOT=../../../../
+export PATH=./:../../:../../../rtm-skelwrapper:$PATH
 
 rm -rf *.cpp *.h *.hh *.cc *.sln *.vcproj *.vsprops *.yaml
 rm -rf copyprops.bat Makefile.* README.*
@@ -285,6 +417,8 @@ do
 done
 
 echo '#include "VectorConvert.h"' >> [name].h
+
+make -f Makefile.*
 """
 
 build_vc8_bat = """\
@@ -315,7 +449,12 @@ build_sh = """\
 [for proj in projects]
 cd [proj] 
 sh gen.sh
-make -f Makefile.[proj] 
+#make -f Makefile.[proj] 
+if test -f [proj]Comp; then
+  echo [proj]: OK >> ../build_status
+else
+  echo [proj]: NG >> ../build_status
+fi
 cd ..
 [endfor]
 """
@@ -509,6 +648,8 @@ class TestGen:
             fd = open(key, "w")
             fd.write(yat.Template(builds[key]).generate(dict))
             fd.close()
+            os.chmod(key, 0755)
+
         
     def mkdir(self, dirname):
         _mkdir(dirname)
@@ -533,6 +674,7 @@ class TestGen:
         sh_all = head + body + foot
         fd.write(sh_all)
         fd.close()
+        os.chmod(fname, 0755)
         
     def create_gen_bat(self, dict):
         fname = dict["name"] + "/gen.bat"
@@ -547,6 +689,7 @@ class TestGen:
         bat_all.replace("\r\n", "\n").replace("\n", "\r\n")
         fd.write(bat_all)
         fd.close()
+        os.chmod(fname, 0755)
 
     def add_cmark(self, text, mark):
         lines = [t for t in text.split("\n") if t != ""]
@@ -581,11 +724,19 @@ class TestGen:
         fd.write(vector_convert_h)
         fd.close()
 
+    def create_rtmconfig(self, dict):
+        fname = dict["name"] + "/rtm-config"
+        fd = open(fname, "w")
+        fd.write(rtm_config)
+        fd.close()
+        os.chmod(fname, 0755)
+
     def create_gen(self, dict):
         self.create_gen_sh(dict)
         self.create_gen_bat(dict)
         self.create_idl(dict)
         self.create_vecconv(dict)
+        self.create_rtmconfig(dict)
 
     def gen(self):
         for ip in self.ip_num:
