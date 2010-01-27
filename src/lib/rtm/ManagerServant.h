@@ -44,13 +44,54 @@
  */
 namespace RTM
 {
+  /*!
+   * @if jp
+   * @brief ManagerのCORBA化クラス
+   *
+   * ManagerをCORBAサーバント化し、外部からコンポーネントの生成・削除、
+   * システム状態の取得などが行える。
+   *
+   * @else
+   * @brief Manager CORBA class
+   *
+   * This class changes Manager to CORBA Servant.
+   * Generation/deletion of the component, to get the state of the system, 
+   * etc. can be done from the outside. 
+   *
+   * @endif
+   */
   class ManagerServant
     : public virtual POA_RTM::Manager,
       public virtual PortableServer::RefCountServantBase
   {
   public:
+    /*!
+     * @if jp
+     * @brief コンストラクタ
+     *
+     * コンストラクタ
+     *
+     * @else
+     * @brief Constructor
+     *
+     * Constructor
+     *
+     * @endif
+     */
     // standard constructor
     ManagerServant();
+
+    /*!
+     * @if jp
+     *
+     * @brief 仮想デストラクタ
+     * 
+     * @else
+     * 
+     * @brief Virtual destructor
+     * 
+     * @endif
+     */
     virtual ~ManagerServant(void);
 
     /*!
@@ -64,6 +105,7 @@ namespace RTM
      * @param initfunc モジュールの初期化関数
      * @return リターンコード
      *
+    // standard constructor
      * @else
      * @brief Loading a module
      *
@@ -74,7 +116,7 @@ namespace RTM
      * @param initfunc Module initialization function.
      * @return The return code.
      *
-     * @endig
+     * @endif
      */
     RTC::ReturnCode_t load_module(const char* pathname, const char* initfunc);
 
@@ -95,7 +137,7 @@ namespace RTM
      * @param pathname A path to a loading module.
      * @return The return code.
      *
-     * @endig
+     * @endif
      */
     RTC::ReturnCode_t unload_module(const char* pathname);
 
@@ -114,7 +156,7 @@ namespace RTM
      *
      * @return A module profile list.
      *
-     * @endig
+     * @endif
      */
     RTM::ModuleProfileList* get_loadable_modules();
 
@@ -133,7 +175,7 @@ namespace RTM
      *
      * @return A module profile list.
      *
-     * @endig
+     * @endif
      */
     RTM::ModuleProfileList* get_loaded_modules();
 
@@ -155,7 +197,7 @@ namespace RTM
      *
      * @return An RT-Component factory profile list.
      *
-     * @endig
+     * @endif
      */
     RTM::ModuleProfileList* get_factory_profiles();
 
@@ -175,7 +217,7 @@ namespace RTM
      *
      * @return A created RT-Component
      *
-     * @endig
+     * @endif
      */
     RTC::RTObject_ptr create_component(const char* module_name);
 
@@ -195,7 +237,7 @@ namespace RTM
      *
      * @return Return code
      *
-     * @endig
+     * @endif
      */
     RTC::ReturnCode_t delete_component(const char* instance_name);
 
@@ -214,7 +256,7 @@ namespace RTM
      *
      * @return A list of RT-Components
      *
-     * @endig
+     * @endif
      */
     RTC::RTCList* get_components();
 
@@ -235,7 +277,7 @@ namespace RTM
      *
      * @return A list of RT-Components' profiles
      *
-     * @endig
+     * @endif
      */
     RTC::ComponentProfileList* get_component_profiles();
 
@@ -255,7 +297,7 @@ namespace RTM
      *
      * @return Manager's profile
      *
-     * @endig
+     * @endif
      */
     RTM::ManagerProfile* get_profile();
 
@@ -274,7 +316,7 @@ namespace RTM
      *
      * @return Manager's configuration
      *
-     * @endig
+     * @endif
      */
     RTM::NVList* get_configuration();
 
@@ -297,7 +339,7 @@ namespace RTM
      * @param value A configuration value to be set
      * @return Return code
      *
-     * @endig
+     * @endif
      */
     RTC::ReturnCode_t set_configuration(const char* name, const char* value);
 
@@ -318,7 +360,7 @@ namespace RTM
      *  
      * @return A boolean value that means it is master or not.
      *
-     * @endig
+     * @endif
      */
     bool is_master();
 
@@ -341,7 +383,7 @@ namespace RTM
      *  
      * @return Master manager list
      *
-     * @endig
+     * @endif
      */
     RTM::ManagerList* get_master_managers();
 
@@ -366,7 +408,7 @@ namespace RTM
      *  
      * @return A master manager
      *
-     * @endig
+     * @endif
      */
     RTC::ReturnCode_t add_master_manager(RTM::Manager_ptr mgr);
 
@@ -387,7 +429,7 @@ namespace RTM
      * @param mgr A master manager
      * @return ReturnCode_t 
      *
-     * @endig
+     * @endif
      */
     RTC::ReturnCode_t remove_master_manager(RTM::Manager_ptr mgr);
 
@@ -410,7 +452,7 @@ namespace RTM
      *  
      * @return Slave manager list
      *
-     * @endig
+     * @endif
      */
     RTM::ManagerList* get_slave_managers();
 
@@ -431,7 +473,7 @@ namespace RTM
      * @param mgr A slave manager
      * @return ReturnCode_t
      *
-     * @endig
+     * @endif
      */
     RTC::ReturnCode_t add_slave_manager(RTM::Manager_ptr mgr);
 
@@ -452,18 +494,85 @@ namespace RTM
      * @param mgr A slave manager
      * @return ReturnCode_t 
      *
-     * @endig
+     * @endif
      */
     RTC::ReturnCode_t remove_slave_manager(RTM::Manager_ptr mgr);
 
 
+
+    /*!
+     * @if jp
+     * @brief プロセスのコピーを生成する
+     * @return ReturnCode_t
+     * @else
+     * @brief The copy of the process is generated. 
+     * @return ReturnCode_t 
+     * @endif
+     */
     RTC::ReturnCode_t fork();
+    /*!
+     * @if jp
+     * @brief shutdownする
+     * @return ReturnCode_t
+     * @else
+     * @brief This method shutdowns RTC. 
+     * @return ReturnCode_t 
+     * @endif
+     */
     RTC::ReturnCode_t shutdown();
+    /*!
+     * @if jp
+     * @brief 再起動する。
+     * @return ReturnCode_t
+     * @else
+     * @brief This method restarts RTC.  
+     * @return ReturnCode_t 
+     * @endif
+     */
     RTC::ReturnCode_t restart();
+
+    /*!
+     * @if jp
+     * @brief RTCのリファレンスを取得する。
+     * @return RTCのリファレンス
+     * @else
+     * @brief Get the reference of RTC. 
+     * @return RTC reference
+     * @endif
+     */
     CORBA::Object_ptr get_service(const char* name);
+
+    /*!
+     * @if jp
+     * @brief Managerのリファレンスを取得する。
+     * @return Managerのリファレンス
+     * @else
+     * @brief Get the reference of Manager. 
+     * @return Manager reference
+     * @endif
+     */
     RTM::Manager_ptr getObjRef() const;
 
+    /*!
+     * @if jp
+     * @brief INSManagerの生成
+     * @return 
+     * @else 成功:true, 失敗:false
+     * @brief Generate INSManager. 
+     * @return Successful:true, Failed:false
+     * @endif
+     */
     bool createINSManager();
+
+    /*!
+     * @if jp
+     * @brief Managerのリファレンスを検索する。
+     * @return Managerのリファレンス
+     * @else
+     * @brief Find the reference of Manager. 
+     * @return Manager reference
+     * @endif
+     */
     RTM::Manager_ptr findManager(const char* host_port);
   private:
     typedef coil::Guard<coil::Mutex> Guard;
