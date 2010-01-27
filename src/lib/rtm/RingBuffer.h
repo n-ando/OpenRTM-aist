@@ -636,6 +636,23 @@ namespace RTC
     }
     
     
+    /*!
+     * @if jp
+     *
+     * @brief バッファからデータを読み出す
+     * 
+     * バッファからデータを読みだす。読み出しポインタの位置は変更されない。
+     *
+     * @return 読み出しデータ
+     * 
+     * @else
+     *
+     * @brief Reading data from the buffer
+     *
+     * @return Read data
+     *
+     * @endif
+     */
     virtual DataType& get()
     {
       Guard gaurd(m_posmutex);
