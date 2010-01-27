@@ -13,7 +13,7 @@
 #include "SeqOut.h"
 
 // Connector Listener Dump Flag : default OFF
-bool g_Listener_dump_enabled = false;
+extern bool g_Listener_dump_enabled;
 
 void MyModuleInit(RTC::Manager* manager)
 {
