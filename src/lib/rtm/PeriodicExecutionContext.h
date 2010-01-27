@@ -562,6 +562,23 @@ namespace RTC
     virtual ReturnCode_t add_component(LightweightRTObject_ptr comp)
       throw (CORBA::SystemException);
 
+    /*!
+     * @if jp
+     * @brief コンポーネントをバインドする。
+     *
+     * コンポーネントをバインドする。
+     *
+     * @param rtc RTコンポーネント
+     * @return ReturnCode_t 型のリターンコード
+     * @else
+     * @brief Bind the component.
+     *
+     * Bind the component.
+     *
+     * @param rtc RT-Component's instances
+     * @return The return code of ReturnCode_t type
+     * @endif
+     */
     virtual RTC::ReturnCode_t bindComponent(RTObject_impl* rtc);
     
     /*!
@@ -1463,6 +1480,13 @@ namespace RTC
     std::vector<Comp> m_comps;
     typedef std::vector<Comp>::iterator CompItr;
     
+    /*!
+     * @if jp
+     * @brief ロガーストリーム
+     * @else
+     * @brief Logger stream
+     * @endif
+     */
     Logger rtclog;
 
     /*!
@@ -1492,6 +1516,13 @@ namespace RTC
       coil::Condition<coil::Mutex> cond_;
       bool running_;
     };
+    /*!
+     * @if jp
+     * @brief svn用の状態変数 
+     * @else
+     * @brief A condition variable for external triggered worker
+     * @endif
+     */
     // A condition variable for external triggered worker
     Worker m_worker;
     
