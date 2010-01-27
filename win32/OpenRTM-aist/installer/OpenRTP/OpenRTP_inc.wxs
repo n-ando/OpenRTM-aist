@@ -13,69 +13,6 @@
         <Component Id="configuration" DiskId="1" Guid="C7961C0B-98E7-4BB1-9D26-C5B76C6E6B6D">
           <File Id="config.ini" Name="config.ini" Source="C:\distribution\OpenRTP\RTSystemEditor\configuration\config.ini" />
         </Component>
-        <Directory Id="org.eclipse.core.runtime" Name="org.eclipse.core.runtime">
-          <Component Id="org.eclipse.core.runtime" DiskId="1" Guid="53A3CA1B-1A13-4BE0-8951-7C1D5ACE6D3A">
-            <File Id="_.contributions.1" Name=".contributions.1" Source="C:\distribution\OpenRTP\RTSystemEditor\configuration\org.eclipse.core.runtime\.contributions.1" />
-            <File Id="_.contributors.1" Name=".contributors.1" Source="C:\distribution\OpenRTP\RTSystemEditor\configuration\org.eclipse.core.runtime\.contributors.1" />
-            <File Id="_.extraData.1" Name=".extraData.1" Source="C:\distribution\OpenRTP\RTSystemEditor\configuration\org.eclipse.core.runtime\.extraData.1" />
-            <File Id="_.mainData.1" Name=".mainData.1" Source="C:\distribution\OpenRTP\RTSystemEditor\configuration\org.eclipse.core.runtime\.mainData.1" />
-            <File Id="_.namespaces.1" Name=".namespaces.1" Source="C:\distribution\OpenRTP\RTSystemEditor\configuration\org.eclipse.core.runtime\.namespaces.1" />
-            <File Id="_.orphans.1" Name=".orphans.1" Source="C:\distribution\OpenRTP\RTSystemEditor\configuration\org.eclipse.core.runtime\.orphans.1" />
-            <File Id="_.table.1" Name=".table.1" Source="C:\distribution\OpenRTP\RTSystemEditor\configuration\org.eclipse.core.runtime\.table.1" />
-          </Component>
-          <Directory Id="_.manager" Name=".manager">
-            <Component Id="_.manager" DiskId="1" Guid="A7E6C627-0FBF-4C53-A1FF-10116A5B9361">
-              <File Id="_.fileTable.7" Name=".fileTable.7" Source="C:\distribution\OpenRTP\RTSystemEditor\configuration\org.eclipse.core.runtime\.manager\.fileTable.7" />
-              <File Id="_.fileTable.8" Name=".fileTable.8" Source="C:\distribution\OpenRTP\RTSystemEditor\configuration\org.eclipse.core.runtime\.manager\.fileTable.8" />
-              <File Id="_.fileTableLock" Name=".fileTableLock" Source="C:\distribution\OpenRTP\RTSystemEditor\configuration\org.eclipse.core.runtime\.manager\.fileTableLock" />
-            </Component>
-          </Directory>
-        </Directory>
-        <Directory Id="org.eclipse.osgi" Name="org.eclipse.osgi">
-          <Component Id="org.eclipse.osgi" DiskId="1" Guid="F9081483-025E-47CE-B352-C52F52D3A1A5">
-            <File Id="_.bundledata.1" Name=".bundledata.1" Source="C:\distribution\OpenRTP\RTSystemEditor\configuration\org.eclipse.osgi\.bundledata.1" />
-            <File Id="_.lazy.1" Name=".lazy.1" Source="C:\distribution\OpenRTP\RTSystemEditor\configuration\org.eclipse.osgi\.lazy.1" />
-            <File Id="_.state.1" Name=".state.1" Source="C:\distribution\OpenRTP\RTSystemEditor\configuration\org.eclipse.osgi\.state.1" />
-            <File Id="splash.bmp" Name="splash.bmp" Source="C:\distribution\OpenRTP\RTSystemEditor\configuration\org.eclipse.osgi\splash.bmp" />
-          </Component>
-          <Directory Id="_.manager_1" Name=".manager">
-            <Component Id="_.manager_1" DiskId="1" Guid="BE9AE7F0-B5EC-4FA9-9668-FC8AB9B7E8B9">
-              <File Id="_.fileTable.4" Name=".fileTable.4" Source="C:\distribution\OpenRTP\RTSystemEditor\configuration\org.eclipse.osgi\.manager\.fileTable.4" />
-              <File Id="_.fileTable.5" Name=".fileTable.5" Source="C:\distribution\OpenRTP\RTSystemEditor\configuration\org.eclipse.osgi\.manager\.fileTable.5" />
-              <File Id="_.fileTableLock_1" Name=".fileTableLock" Source="C:\distribution\OpenRTP\RTSystemEditor\configuration\org.eclipse.osgi\.manager\.fileTableLock" />
-            </Component>
-          </Directory>
-          <Directory Id="bundles" Name="bundles">
-            <Directory Id="_16" Name="16">
-              <Directory Id="_1" Name="1">
-                <Directory Id="_.cp" Name=".cp">
-                  <Directory Id="lib" Name="lib">
-                    <Component Id="lib" DiskId="1" Guid="05A8E174-3706-4433-B3C0-85CF6028896B">
-                      <File Id="commons_lang_2.2.jar" Name="commons-lang-2.2.jar" Source="C:\distribution\OpenRTP\RTSystemEditor\configuration\org.eclipse.osgi\bundles\16\1\.cp\lib\commons-lang-2.2.jar" />
-                    </Component>
-                  </Directory>
-                </Directory>
-              </Directory>
-            </Directory>
-            <Directory Id="_70" Name="70">
-              <Directory Id="_1_1" Name="1">
-                <Directory Id="_.cp_1" Name=".cp">
-                  <Component Id="_.cp" DiskId="1" Guid="63614D8E-8814-4B50-8DCF-2EEB7DD02FEC">
-                    <File Id="swt_gdip_win32_3236.dll" Name="swt-gdip-win32-3236.dll" Source="C:\distribution\OpenRTP\RTSystemEditor\configuration\org.eclipse.osgi\bundles\70\1\.cp\swt-gdip-win32-3236.dll" />
-                    <File Id="swt_win32_3236.dll" Name="swt-win32-3236.dll" Source="C:\distribution\OpenRTP\RTSystemEditor\configuration\org.eclipse.osgi\bundles\70\1\.cp\swt-win32-3236.dll" />
-                  </Component>
-                </Directory>
-              </Directory>
-            </Directory>
-          </Directory>
-        </Directory>
-        <Directory Id="org.eclipse.update" Name="org.eclipse.update">
-          <Component Id="org.eclipse.update" DiskId="1" Guid="0BAD3C38-FC94-4649-837F-EEFC8906A1E9">
-            <File Id="_.lock" Name=".lock" Source="C:\distribution\OpenRTP\RTSystemEditor\configuration\org.eclipse.update\.lock" />
-            <File Id="last.config.stamp" Name="last.config.stamp" Source="C:\distribution\OpenRTP\RTSystemEditor\configuration\org.eclipse.update\last.config.stamp" />
-            <File Id="platform.xml" Name="platform.xml" Source="C:\distribution\OpenRTP\RTSystemEditor\configuration\org.eclipse.update\platform.xml" />
-          </Component>
-        </Directory>
       </Directory>
       <Directory Id="plugins" Name="plugins">
         <Component Id="plugins" DiskId="1" Guid="398969B6-8EDD-4BA0-B0D1-91662487056C">
