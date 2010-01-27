@@ -27,6 +27,25 @@ namespace RTC
 {
   class OutPortProvider;
 
+  /*!
+   * @if jp
+   * @class OutPortPullConnector
+   * @brief OutPortPullConnector クラス
+   *
+   * OutPort の Pull 型データフローのための Connector
+   *
+   * @since 1.0.0
+   *
+   * @else
+   * @class OutPortPullConnector
+   * @brief OutPortPullConnector base class
+   *
+   * A connector class for pull type dataflow of OutPort
+   *
+   * @since 1.0.0
+   *
+   * @endif
+   */
   class OutPortPullConnector
     : public OutPortConnector
   {

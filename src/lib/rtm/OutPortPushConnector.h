@@ -28,6 +28,19 @@ namespace RTC
 {
   class ConnectorListeners;
 
+  /*!
+   * @if jp
+   * @class OutPortPushConnector
+   * @brief OutPortPushConnector епеще╣
+   *
+   *
+   * @else
+   * @class OutPortPushConnector
+   * @brief OutPortPushConnector class
+   *
+   *
+   * @endif
+   */
   class OutPortPushConnector
     : public OutPortConnector
   {
