@@ -569,8 +569,8 @@ namespace RTC
     InPortConsumer* m_consumer;
     CdrBufferBase* m_buffer;
     ConnectorInfo m_profile;
-    ConnectorListeners* m_listeners;
     coil::PeriodicTaskBase* m_task;
+    ConnectorListeners* m_listeners;
     ReturnCode m_retcode;
     Mutex m_retmutex;
     Policy m_pushPolicy;
