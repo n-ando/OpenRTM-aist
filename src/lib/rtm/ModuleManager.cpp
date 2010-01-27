@@ -295,9 +295,11 @@ namespace RTC
         {
           if (m_loadPath[i].empty()) { continue; }
           std::string& path(m_loadPath[i]);
-
+#ifdef WIN32
+          coil::vstring flist = coil::filelist(path.c_str(), "*.dll");
+#else
           coil::vstring flist = coil::filelist(path.c_str(), "*.so");
-
+#endif // WIN32
           for (size_t j(0); j < flist.size(); ++j)
             {
               if (*(path.end() - 1) != '/') { path += "/"; }

@@ -50,6 +50,17 @@
 		<File Id="{% file.Id %}"
 		      Name="{% file.Name %}" DiskId="1"
 		      Source="{% file.Source %}">
+		  {% if file.Name is rtm-naming.bat %}
+		  <Shortcut Id="{% file.Id %}" Directory="ToolsMenuFolder"
+			    Name="Start RTC daemon"
+			    Show="normal" WorkingDirectory="tools"/>
+		  {% endif %}
+		</File>
+		{% endfor %}
+		{% for file in Rtcprof.Files %}
+		<File Id="{% file.Id %}"
+		      Name="{% file.Name %}" DiskId="1"
+		      Source="{% file.Source %}">
 		</File>
 		{% endfor %}
 	      </Component>
