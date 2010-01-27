@@ -48,13 +48,58 @@
 
 namespace SDOPackage
 {
+  /*!
+   * @if jp
+   * @class PeriodicECOrganization
+   * @brief PeriodicECOrganization クラス
+   *
+   * Organization_imp の実装
+   *
+   * @else
+   * @class PeriodicECOrganization
+   * @brief PeriodicECOrganization class
+   *
+   * Implement of Organization_imp
+   *
+   * @endif
+   */
   class PeriodicECOrganization
     : public Organization_impl
   {
     typedef std::vector<std::string> PortList;
 
   public:
+    /*!
+     * @if jp
+     * @brief コンストラクタ
+     *
+     * コンストラクタ
+     *
+     * @param rtobj オブジェクト
+     *
+     * @else
+     * @brief Constructor
+     *
+     * Constructor
+     *
+     * @param rtobj Object
+     *
+     * @endif
+     */
     PeriodicECOrganization(::RTC::RTObject_impl* rtobj);
+    /*!
+     * @if jp
+     * @brief デストラクタ
+     *
+     * デストラクタ
+     *
+     * @else
+     * @brief Destructor
+     *
+     * Destructor
+     *
+     * @endif
+     */
     virtual ~PeriodicECOrganization(void);
 
     /*!
@@ -135,7 +180,21 @@ namespace SDOPackage
       throw (::CORBA::SystemException,
 	     InvalidParameter, NotAvailable, InternalError);
 
+    /*!
+     * @if jp
+     * @brief Organizationメンバーを削除する
+     * @else
+     * @brief Remove a member of Organization
+     * @endif
+     */
     void removeAllMembers(void);
+    /*!
+     * @if jp
+     * @brief Organizationメンバーを更新/削除する
+     * @else
+     * @brief Update/Remove a member of Organization
+     * @endif
+     */
     void updateDelegatedPorts(void);
 
   protected:
@@ -221,12 +280,41 @@ namespace SDOPackage
      */
     void removePort(Member& member, PortList& portlist);
 
-
+    /*!
+     * @if jp
+     * @brief PortsListを更新する
+     * @else
+     * @brief PortsList is updated. 
+     * @endif
+     */
     void updateExportedPortsList(void);
 
   protected:
+    /*!
+     * @if jp
+     * @brief ロガーストリーム
+     * @else
+     * @brief Logger stream
+     * @endif
+     */
     RTC::Logger rtclog;
+
+    /*!
+     * @if jp
+     * @brief RT オブジェクト
+     * @else
+     * @brief RT Object
+     * @endif
+     */
     ::RTC::RTObject_impl* m_rtobj;
+
+    /*!
+     * @if jp
+     * @brief ExecutionContext オブジェクトリファレンス
+     * @else
+     * @brief ExecutionContext Object reference
+     * @endif
+     */
     ::RTC::ExecutionContext_var m_ec;
 
     class Member
@@ -298,10 +386,32 @@ namespace SDOPackage
       SDOPackage::Configuration_var config_;
     };
 
+    /*!
+     * @if jp
+     * @brief RTCメンバーリスト
+     * @else
+     * @brief Member list
+     * @endif
+     */
     std::vector<Member> m_rtcMembers;
     typedef std::vector<Member>::iterator MemIt;
+
+    /*!
+     * @if jp
+     * @brief Port List
+     * @else
+     * @brief Port List
+     * @endif
+     */
     PortList m_expPorts;
     
+    /*!
+     * @if jp
+     * @brief PortListを標準出力する。
+     * @else
+     * @brief Output PortList to StandardOutput. 
+     * @endif
+     */
     void print(PortList p)
     {
       for (int i(0), len(p.size()); i < len; ++i)
@@ -407,17 +517,155 @@ namespace RTC
      * @endif
      */
     virtual ReturnCode_t onInitialize(void);
+    /*!
+     * @if jp
+     *
+     * @brief 活性化処理用コールバック関数
+     * 
+     * ComponentAction::on_activated が呼ばれた際に実行されるコールバック
+     * 関数。<BR>
+     * 本関数は無条件に RTC::RTC_OK を返すようにダミー実装されているので、
+     * 各コンポーネントの実際の活性化処理は、本関数をオーバーライドして実装する
+     * 必要がある。
+     * 
+     * @param exec_handle 参加している ExecutionContext の ID
+     *
+     * @return ReturnCode_t 型のリターンコード
+     * 
+     * @else
+     *
+     * @brief Callback function to activate
+     * 
+     * This is a callback function that is executed when
+     * ComponentAction::on_activated was invoked.<BR>
+     * As for actual activation of each component, since this function is
+     * dummy-implemented to return RTC::RTC_OK unconditionally, you need to
+     * implement this function by overriding it.
+     * 
+     * @param exec_handle ID of the participant ExecutionContext
+     *
+     * @return The return code of ReturnCode_t type
+     * 
+     * @endif
+     */
     virtual ReturnCode_t onActivated(RTC::UniqueId exec_handle);
+    /*!
+     * @if jp
+     *
+     * @brief 非活性化処理用コールバック関数
+     * 
+     * ComponentAction::on_deactivated が呼ばれた際に実行されるコールバック
+     * 関数。<BR>
+     * 本関数は無条件に RTC::RTC_OK を返すようにダミー実装されているので、
+     * 各コンポーネントの実際の非活性化処理は、本関数をオーバーライドして実装する
+     * 必要がある。
+     * 
+     * @param exec_handle 参加している ExecutionContext の ID
+     *
+     * @return ReturnCode_t 型のリターンコード
+     * 
+     * @else
+     *
+     * @brief Callback function to deactivate
+     * 
+     * This is a callback function that is executed when
+     * ComponentAction::on_deactivated was invoked.<BR>
+     * As for actual deactivation of each component, since this function is
+     * dummy-implemented to return RTC::RTC_OK unconditionally, you need to
+     * implement this function by overriding it.
+     * 
+     * @param exec_handle ID of the participant ExecutionContext
+     *
+     * @return The return code of ReturnCode_t type
+     * 
+     * @endif
+     */
     virtual ReturnCode_t onDeactivated(RTC::UniqueId exec_handle);
+
+    /*!
+     * @if jp
+     *
+     * @brief リセット処理用コールバック関数
+     * 
+     * ComponentAction::on_reset が呼ばれた際に実行されるコールバック関数。<BR>
+     * 本関数は無条件に RTC::RTC_OK を返すようにダミー実装されているので、
+     * 各コンポーネントの実際のリセット処理は、本関数をオーバーライドして実装する
+     * 必要がある。
+     * 
+     * @param exec_handle 参加している ExecutionContext の ID
+     *
+     * @return ReturnCode_t 型のリターンコード
+     * 
+     * @else
+     *
+     * @brief Callback function to reset
+     * 
+     * This is a callback function that is executed when
+     * ComponentAction::on_reset was invoked.<BR>
+     * As for actual reset of each component, since this function is
+     * dummy-implemented to return RTC::RTC_OK unconditionally, you need to
+     * implement this function by overriding it.
+     * 
+     * @param exec_handle ID of the participant ExecutionContext
+     *
+     * @return The return code of ReturnCode_t type
+     * 
+     * @endif
+     */
     virtual ReturnCode_t onReset(RTC::UniqueId exec_handle);
+    /*!
+     * @if jp
+     *
+     * @brief [ComponentAction CORBA interface] RTC の終了
+     *
+     * RTC が破棄される。
+     * RTC 固有の終了処理はここで実行する。
+     * このオペレーション呼び出しの結果として onFinalize() コールバック関数が
+     * 呼び出される。
+     *
+     * @return ReturnCode_t 型のリターンコード
+     *
+     * @else
+     *
+     * @brief [ComponentAction CORBA interface] Finalize RTC
+     *
+     * The RTC is being destroyed.
+     * Any final RTC-specific tear-down logic should be performed here.
+     * As a result of this operation, onFinalize() callback function is called.
+     *
+     * @return The return code of ReturnCode_t type
+     *
+     * @endif
+     */
     virtual ReturnCode_t onFinalize(void);
     
   protected:
+    /*!
+     * @if jp
+     * @brief コンポーネント
+     * @else
+     * @brief Components
+     * @endif
+     */
     std::vector<std::string> m_members;
 
+    /*!
+     * @if jp
+     * @brief オブジェクトのリファレンス
+     * @else
+     * @brief Reference of object
+     * @endif
+     */
     OpenRTM::DataFlowComponent_var m_ref;
-    PeriodicExecutionContext* m_pec;
-    ExecutionContextService_var m_ecref;
+//    PeriodicExecutionContext* m_pec;
+//    ExecutionContextService_var m_ecref;
+    /*!
+     * @if jp
+     * @brief Organizationのリファレンス
+     * @else
+     * @brief Reference of Organization
+     * @endif
+     */
     SDOPackage::PeriodicECOrganization* m_org;
   };  // class PeriodicECOrganization
 }; // namespace RTC
