@@ -119,15 +119,110 @@ namespace RTC
      * @endif
      */
     virtual ReturnCode init(coil::Properties& prop);
+    /*!
+     * @if jp
+     * @brief InPortコンシューマのセット
+     *
+     * @else
+     * @brief Store InPort consumer
+     * @endif
+     */
     virtual ReturnCode setConsumer(InPortConsumer* consumer);
+    /*!
+     * @if jp
+     * @brief バッファのセット
+     * @param buffer CDRバッファ
+     * @return PORT_OK      正常終了
+     *         INVALID_ARGS 不正な引数
+     * @else
+     * @brief Setting buffer pointer
+     * @param buffer CDR buffer
+     * @return PORT_OK      正常終了
+     *         INVALID_ARGS 不正な引数
+     * @endif
+     */
     virtual ReturnCode setBuffer(CdrBufferBase* buffer);
+    /*!
+     * @if jp
+     * @brief リスナを設定する。
+     * @param info ConnectorInfo
+     * @param listeners ConnectorListeners 
+     * @return PORT_OK      正常終了
+     *         INVALID_ARGS 不正な引数
+     * @else
+     * @brief Set the listener. 
+     * @param info ConnectorInfo
+     * @param listeners ConnectorListeners 
+     * @return PORT_OK      Normal return
+     *         INVALID_ARGS Invalid arguments
+     * @endif
+     */
     virtual ReturnCode setListener(ConnectorInfo& info,
                                    ConnectorListeners* listeners);
+    /*!
+     * @if jp
+     * @brief データを書き込む
+     * @param data 書き込むデータ 
+     * @param sec タイムアウト時間
+     * @param nsec タイムアウト時間
+     * @return リターンコード
+     * @else
+     * @brief Write data 
+     * @param data Data
+     * @param sec Timeout period
+     * @param nsec Timeout period
+     * @return Return code
+     * @endif
+     */
     virtual ReturnCode write(const cdrMemoryStream& data,
                              unsigned long sec,
                              unsigned long usec);
+    /*!
+     * @if jp
+     *
+     * @brief アクティブ化確認
+     * 
+     * アクティブ化されているか確認する。
+     *
+     * @return 状態確認結果(アクティブ状態:true、非アクティブ状態:false)
+     *
+     * @else
+     *
+     * @brief Confirm to activate
+     * 
+     * Confirm that has been activated.
+     *
+     * @return Result of state confirmation
+     *         (Active state:true, Inactive state:false)
+     *
+     * @endif
+     */
     virtual bool isActive();
+    /*!
+     * @if jp
+     * @brief アクティブ化
+     * @return リターンコード
+     *
+     * @else
+     *
+     * @brief activation
+     * @return Return code
+     *
+     * @endif
+     */
     virtual ReturnCode activate();
+    /*!
+     * @if jp
+     * @brief 非アクティブ化
+     * @return リターンコード
+     *
+     * @else
+     *
+     * @brief deactivation
+     * @return Return code
+     *
+     * @endif
+     */
     virtual ReturnCode deactivate();
     
     /*!
@@ -199,11 +294,36 @@ namespace RTC
                              const cdrMemoryStream& data);
 
 
+    /*!
+     * @if jp
+     * @brief DataPortStatusに従ってリスナへ通知する関数を呼び出す。
+     * @param status DataPortStatus
+     * @param data cdrMemoryStream
+     * @return リターンコード
+     *
+     * @else
+     * @brief This method calls the function notified the listener 
+     *        according to DataPortStatus.  
+     * @param status DataPortStatus
+     * @param data cdrMemoryStream
+     * @return Return code
+     *
+     * @endif
+     */
     ReturnCode invokeListener(DataPortStatus::Enum status,
                               const cdrMemoryStream& data);
 
     /*!
      * @brief Connector data listener functions
+     */
+    /*!
+     * @if jp
+     * @brief ON_BUFFER_WRITEのリスナへ通知する。 
+     * @param data cdrMemoryStream
+     * @else
+     * @brief This method is notified to listeners of ON_BUFFER_WRITE. 
+     * @param data cdrMemoryStream
+     * @endif
      */
     inline void onBufferWrite(const cdrMemoryStream& data)
     {
@@ -211,12 +331,30 @@ namespace RTC
         connectorData_[ON_BUFFER_WRITE].notify(m_profile, data);
     }
 
+    /*!
+     * @if jp
+     * @brief ON_BUFFER_FULLのリスナへ通知する。 
+     * @param data cdrMemoryStream
+     * @else
+     * @brief This method is notified to listeners of ON_BUFFER_FULL. 
+     * @param data cdrMemoryStream
+     * @endif
+     */
     inline void onBufferFull(const cdrMemoryStream& data)
     {
       m_listeners->
         connectorData_[ON_BUFFER_FULL].notify(m_profile, data);
     }
 
+    /*!
+     * @if jp
+     * @brief ON_BUFFER_WRITE_TIMEOUTのリスナへ通知する。 
+     * @param data cdrMemoryStream
+     * @else
+     * @brief This method is notified to listeners of ON_BUFFER_WRITE_TIMEOUT. 
+     * @param data cdrMemoryStream
+     * @endif
+     */
     inline void onBufferWriteTimeout(const cdrMemoryStream& data)
     {
       m_listeners->
@@ -229,36 +367,90 @@ namespace RTC
 //        connectorData_[ON_BUFFER_OVERWRITE].notify(m_profile, data);
 //    }
 
+    /*!
+     * @if jp
+     * @brief ON_BUFFER_READのリスナへ通知する。 
+     * @param data cdrMemoryStream
+     * @else
+     * @brief This method is notified to listeners of ON_BUFFER_READ.
+     * @param data cdrMemoryStream
+     * @endif
+     */
     inline void onBufferRead(const cdrMemoryStream& data)
     {
       m_listeners->
         connectorData_[ON_BUFFER_READ].notify(m_profile, data);
     }
 
+    /*!
+     * @if jp
+     * @brief ON_SENDのリスナへ通知する。 
+     * @param data cdrMemoryStream
+     * @else
+     * @brief This method is notified to listeners of ON_SEND. 
+     * @param data cdrMemoryStream
+     * @endif
+     */
     inline void onSend(const cdrMemoryStream& data)
     {
       m_listeners->
         connectorData_[ON_SEND].notify(m_profile, data);
     }
 
+    /*!
+     * @if jp
+     * @brief ON_RECEIVEDのリスナへ通知する。 
+     * @param data cdrMemoryStream
+     * @else
+     * @brief This method is notified to listeners of ON_RECEIVED. 
+     * @param data cdrMemoryStream
+     * @endif
+     */
     inline void onReceived(const cdrMemoryStream& data)
     {
       m_listeners->
         connectorData_[ON_RECEIVED].notify(m_profile, data);
     }
 
+    /*!
+     * @if jp
+     * @brief ON_RECEIVER_FULLのリスナへ通知する。 
+     * @param data cdrMemoryStream
+     * @else
+     * @brief This method is notified to listeners of ON_RECEIVER_FULL. 
+     * @param data cdrMemoryStream
+     * @endif
+     */
     inline void onReceiverFull(const cdrMemoryStream& data)
     {
       m_listeners->
         connectorData_[ON_RECEIVER_FULL].notify(m_profile, data);
     }
 
+    /*!
+     * @if jp
+     * @brief ON_RECEIVER_TIMEOUTのリスナへ通知する。 
+     * @param data cdrMemoryStream
+     * @else
+     * @brief This method is notified to listeners of ON_RECEIVER_TIMEOUT. 
+     * @param data cdrMemoryStream
+     * @endif
+     */
     inline void onReceiverTimeout(const cdrMemoryStream& data)
     {
       m_listeners->
         connectorData_[ON_RECEIVER_TIMEOUT].notify(m_profile, data);
     }
 
+    /*!
+     * @if jp
+     * @brief ON_RECEIVER_ERRORのリスナへ通知する。 
+     * @param data cdrMemoryStream
+     * @else
+     * @brief This method is notified to listeners of ON_RECEIVER_ERROR.
+     * @param data cdrMemoryStream
+     * @endif
+     */
     inline void onReceiverError(const cdrMemoryStream& data)
     {
       m_listeners->
@@ -267,6 +459,13 @@ namespace RTC
 
     /*!
      * @brief Connector listener functions
+     */
+    /*!
+     * @if jp
+     * @brief ON_BUFFER_EMPTYのリスナへ通知する。 
+     * @else
+     * @brief This method is notified to listeners of ON_BUFFER_EMPTY.
+     * @endif
      */
     inline void onBufferEmpty()
     {
@@ -280,6 +479,13 @@ namespace RTC
 //        connector_[ON_BUFFER_READ_TIMEOUT].notify(m_profile);
 //    }
 
+    /*!
+     * @if jp
+     * @brief ON_SENDER_EMPTYのリスナへ通知する。 
+     * @else
+     * @brief This method is notified to listeners of ON_SENDER_EMPTY.
+     * @endif
+     */
     inline void onSenderEmpty()
     {
       m_listeners->
@@ -292,6 +498,13 @@ namespace RTC
 //        connector_[ON_SENDER_TIMEOUT].notify(m_profile);
 //    }
 
+    /*!
+     * @if jp
+     * @brief ON_SENDER_ERRORのリスナへ通知する。 
+     * @else
+     * @brief This method is notified to listeners of ON_SENDER_ERROR.
+     * @endif
+     */
     inline void onSenderError()
     {
       m_listeners->
