@@ -10,7 +10,7 @@ Product:
   UpgradeCode: 572C59A1-4637-4624-AD55-FC4533CE4C8B
 Package:
   Description: OpenRTM-aist Installer
-  InstallerVersion: "100"
+  InstallerVersion: "300"
   Languages: "1041"
   Compressed: 'yes'
   SummaryCodepage: "932"
