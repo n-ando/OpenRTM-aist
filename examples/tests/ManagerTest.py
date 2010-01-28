@@ -241,93 +241,93 @@ fodat = "   %05d: %s KB end" % (i+1, rssEnd)
 print_file_and_cons(fodat,1)
 leak_check(rssStart, rssEnd)
 ## -----------------------------------------------------------------------------
-fodat = "get_owner()"
-print_file_and_cons(fodat)
-
-for i in range(loop_cnt):
-    ## Manager::get_owner(); 
-    manager.get_owner()
-
-    if i == 0:
-        rss0 = mem_rss() ; j0 = 0 ; rssStart = rss0
-        fodat = "   %05d: %s KB start" % (1, rss0)
-        print_file_and_cons(fodat,1)
-    rss1 = mem_rss() ; j1 = i
-    if rss0 != rss1:
-        fodat = "   %05d: %s KB -> %d KB. count diff -> %d" % (i+1, rss1,int(rss1)-int(rss0),int(j1)-int(j0) )
-        print_file_and_cons(fodat,1)
-        rss0 = rss1 ; j0 = j1
-
-rssEnd = mem_rss()
-fodat = "   %05d: %s KB end" % (i+1, rssEnd)
-print_file_and_cons(fodat,1)
-leak_check(rssStart, rssEnd)
+##fodat = "get_owner()"
+##print_file_and_cons(fodat)
+##
+##for i in range(loop_cnt):
+##    ## Manager::get_owner(); 
+##    manager.get_owner()
+##
+##    if i == 0:
+##        rss0 = mem_rss() ; j0 = 0 ; rssStart = rss0
+##        fodat = "   %05d: %s KB start" % (1, rss0)
+##        print_file_and_cons(fodat,1)
+##    rss1 = mem_rss() ; j1 = i
+##    if rss0 != rss1:
+##        fodat = "   %05d: %s KB -> %d KB. count diff -> %d" % (i+1, rss1,int(rss1)-int(rss0),int(j1)-int(j0) )
+##        print_file_and_cons(fodat,1)
+##        rss0 = rss1 ; j0 = j1
+##
+##rssEnd = mem_rss()
+##fodat = "   %05d: %s KB end" % (i+1, rssEnd)
+##print_file_and_cons(fodat,1)
+##leak_check(rssStart, rssEnd)
 ## -----------------------------------------------------------------------------
-fodat = "set_owner()"
-print_file_and_cons(fodat)
-
-for i in range(loop_cnt):
-    ## Manager::set_owner(in Manager mgr); 
-    manager.set_owner(manager)
-
-    if i == 0:
-        rss0 = mem_rss() ; j0 = 0 ; rssStart = rss0
-        fodat = "   %05d: %s KB start" % (1, rss0)
-        print_file_and_cons(fodat,1)
-    rss1 = mem_rss() ; j1 = i
-    if rss0 != rss1:
-        fodat = "   %05d: %s KB -> %d KB. count diff -> %d" % (i+1, rss1,int(rss1)-int(rss0),int(j1)-int(j0) )
-        print_file_and_cons(fodat,1)
-        rss0 = rss1 ; j0 = j1
-
-rssEnd = mem_rss()
-fodat = "   %05d: %s KB end" % (i+1, rssEnd)
-print_file_and_cons(fodat,1)
-leak_check(rssStart, rssEnd)
+##fodat = "set_owner()"
+##print_file_and_cons(fodat)
+##
+##for i in range(loop_cnt):
+##    ## Manager::set_owner(in Manager mgr); 
+##    manager.set_owner(manager)
+##
+##    if i == 0:
+##        rss0 = mem_rss() ; j0 = 0 ; rssStart = rss0
+##        fodat = "   %05d: %s KB start" % (1, rss0)
+##        print_file_and_cons(fodat,1)
+##    rss1 = mem_rss() ; j1 = i
+##    if rss0 != rss1:
+##        fodat = "   %05d: %s KB -> %d KB. count diff -> %d" % (i+1, rss1,int(rss1)-int(rss0),int(j1)-int(j0) )
+##        print_file_and_cons(fodat,1)
+##        rss0 = rss1 ; j0 = j1
+##
+##rssEnd = mem_rss()
+##fodat = "   %05d: %s KB end" % (i+1, rssEnd)
+##print_file_and_cons(fodat,1)
+##leak_check(rssStart, rssEnd)
 ## -----------------------------------------------------------------------------
-fodat = "get_child()"
-print_file_and_cons(fodat)
-
-for i in range(loop_cnt):
-    ## Manager::get_child(); 
-    manager.get_child()
-
-    if i == 0:
-        rss0 = mem_rss() ; j0 = 0 ; rssStart = rss0
-        fodat = "   %05d: %s KB start" % (1, rss0)
-        print_file_and_cons(fodat,1)
-    rss1 = mem_rss() ; j1 = i
-    if rss0 != rss1:
-        fodat = "   %05d: %s KB -> %d KB. count diff -> %d" % (i+1, rss1,int(rss1)-int(rss0),int(j1)-int(j0) )
-        print_file_and_cons(fodat,1)
-        rss0 = rss1 ; j0 = j1
-
-rssEnd = mem_rss()
-fodat = "   %05d: %s KB end" % (i+1, rssEnd)
-print_file_and_cons(fodat,1)
-leak_check(rssStart, rssEnd)
+##fodat = "get_child()"
+##print_file_and_cons(fodat)
+##
+##for i in range(loop_cnt):
+##    ## Manager::get_child(); 
+##    manager.get_child()
+##
+##    if i == 0:
+##        rss0 = mem_rss() ; j0 = 0 ; rssStart = rss0
+##        fodat = "   %05d: %s KB start" % (1, rss0)
+##        print_file_and_cons(fodat,1)
+##    rss1 = mem_rss() ; j1 = i
+##    if rss0 != rss1:
+##        fodat = "   %05d: %s KB -> %d KB. count diff -> %d" % (i+1, rss1,int(rss1)-int(rss0),int(j1)-int(j0) )
+##        print_file_and_cons(fodat,1)
+##        rss0 = rss1 ; j0 = j1
+##
+##rssEnd = mem_rss()
+##fodat = "   %05d: %s KB end" % (i+1, rssEnd)
+##print_file_and_cons(fodat,1)
+##leak_check(rssStart, rssEnd)
 ## -----------------------------------------------------------------------------
-fodat = "set_child()"
-print_file_and_cons(fodat)
-
-for i in range(loop_cnt):
-    ## Manager::set_child(in Manager mgr); 
-    manager.set_child(manager)
-
-    if i == 0:
-        rss0 = mem_rss() ; j0 = 0 ; rssStart = rss0
-        fodat = "   %05d: %s KB start" % (1, rss0)
-        print_file_and_cons(fodat,1)
-    rss1 = mem_rss() ; j1 = i
-    if rss0 != rss1:
-        fodat = "   %05d: %s KB -> %d KB. count diff -> %d" % (i+1, rss1,int(rss1)-int(rss0),int(j1)-int(j0) )
-        print_file_and_cons(fodat,1)
-        rss0 = rss1 ; j0 = j1
-
-rssEnd = mem_rss()
-fodat = "   %05d: %s KB end" % (i+1, rssEnd)
-print_file_and_cons(fodat,1)
-leak_check(rssStart, rssEnd)
+##fodat = "set_child()"
+##print_file_and_cons(fodat)
+##
+##for i in range(loop_cnt):
+##    ## Manager::set_child(in Manager mgr); 
+##    manager.set_child(manager)
+##
+##    if i == 0:
+##        rss0 = mem_rss() ; j0 = 0 ; rssStart = rss0
+##        fodat = "   %05d: %s KB start" % (1, rss0)
+##        print_file_and_cons(fodat,1)
+##    rss1 = mem_rss() ; j1 = i
+##    if rss0 != rss1:
+##        fodat = "   %05d: %s KB -> %d KB. count diff -> %d" % (i+1, rss1,int(rss1)-int(rss0),int(j1)-int(j0) )
+##        print_file_and_cons(fodat,1)
+##        rss0 = rss1 ; j0 = j1
+##
+##rssEnd = mem_rss()
+##fodat = "   %05d: %s KB end" % (i+1, rssEnd)
+##print_file_and_cons(fodat,1)
+##leak_check(rssStart, rssEnd)
 ## -----------------------------------------------------------------------------
 fodat = "fork()"
 print_file_and_cons(fodat)

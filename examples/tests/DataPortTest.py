@@ -122,9 +122,10 @@ for i in range(loop_cnt):
     # print "   prop[0]=",conprof0.properties[0].value		#corba_cdr
     # print "   prop[1]=",conprof0.properties[1].value		#push
     # print "   prop[2]=",conprof0.properties[2].value		#flush,new,periodic
-    # print "   prop[3]=",conprof0.properties[3].value  		#IOR:
-    # print "   prop[4]=",conprof0.properties[4].value  		#InportCdr
-    ior = any.from_any(conprof0.properties[3].value, keep_structs=True)
+    # print "   prop[3]=",conprof0.properties[3].value  	#little,big
+    # print "   prop[4]=",conprof0.properties[4].value  	#IOR:
+    # print "   prop[5]=",conprof0.properties[5].value  	#InportCdr
+    ior = any.from_any(conprof0.properties[4].value, keep_structs=True)
     # print "   ior=",ior
     inportobj = env.orb.string_to_object(ior)
     inportcdr = inportobj._narrow(OpenRTM.InPortCdr)
@@ -159,59 +160,59 @@ fodat = "   %05d: %s KB end" % (i+1, rssEnd)
 print_file_and_cons(fodat,1)
 leak_check(rssStart, rssEnd)
 ## -----------------------------------------------------------------------------
-##fodat = "get()"
-##print_file_and_cons(fodat)
-##
-##for i in range(loop_cnt):
-##    # DataflowType:pull接続
-##    # OutportCdr::get(out CdrData data)  		# DataflowType:pull 未実装のため中止
-##    ret10,conprof10 = consout_ports[0].connect(conprof2)
-##    # print "   connect() ret=",ret10
-##    if ret10 != RTC.RTC_OK:
-##        fodat = "     connect() error ret=" + str(ret10)
-##        print_file_and_cons(fodat)
-##    # print "   conprof10.properties=",conprof10.properties
-##    # print "   prop[0]=",conprof10.properties[0].value		#corba_cdr
-##    # print "   prop[1]=",conprof10.properties[1].value		#pull
-##    # print "   prop[2]=",conprof10.properties[2].value		#flush,new,periodic
-##    # print "   prop[3]=",conprof10.properties[3].value  		#IOR:
-##    # print "   prop[4]=",conprof10.properties[4].value  		#OutportCdr
-##    ior10 = any.from_any(conprof10.properties[3].value, keep_structs=True)
-##    # print "   ior10=",ior10
-##
-##    outportobj = env.orb.string_to_object(ior10)
-##    outportcdr = outportobj._narrow(OpenRTM.OutPortCdr)
-##    # data set
-##
-##    ret11,data1 = outportcdr.get()
-##    #ret11 = outportcdr.get(data1)
-##    # print "   get() ret=" + str(ret11)		# UNKNOWN_ERROR
-##    if ret11 != OpenRTM.PORT_OK:
-##        fodat = "     get() ret=" + str(ret11) + "  count=%d" % (i+1)
-##        print_file_and_cons(fodat)
-##    else:
-##        value12 = cdrUnmarshal(any.to_any(123).typecode(),data1[0],1)
-##        #print "   data1=",value12
-##    time.sleep(0.1)
-##    ret12 = consin_ports[0].disconnect(conprof2.connector_id)    # set used
-##    if ret12 != RTC.RTC_OK:
-##        fodat = "     disconnect() error ret=" + str(ret12)
-##        print_file_and_cons(fodat)
-##
-##    if i == 0:
-##        rss0 = mem_rss() ; j0 = 0 ; rssStart = rss0
-##        fodat = "   %05d: %s KB start" % (1, rss0)
-##        print_file_and_cons(fodat,1)
-##    rss1 = mem_rss() ; j1 = i
-##    if rss0 != rss1:
-##        fodat = "   %05d: %s KB -> %d KB. count diff -> %d" % (i+1, rss1,int(rss1)-int(rss0),int(j1)-int(j0) )
-##        print_file_and_cons(fodat,1)
-##        rss0 = rss1 ; j0 = j1
-##
-##rssEnd = mem_rss()
-##fodat = "   %05d: %s KB end" % (i+1, rssEnd)
-##print_file_and_cons(fodat,1)
-##leak_check(rssStart, rssEnd)
+fodat = "get()"
+print_file_and_cons(fodat)
+
+for i in range(loop_cnt):
+    # DataflowType:pull接続
+    # OutportCdr::get(out CdrData data)  
+    ret10,conprof10 = consout_ports[0].connect(conprof2)
+    # print "   connect() ret=",ret10
+    if ret10 != RTC.RTC_OK:
+        fodat = "     connect() error ret=" + str(ret10)
+        print_file_and_cons(fodat)
+    # print "   conprof10.properties=",conprof10.properties
+    # print "   prop[0]=",conprof10.properties[0].value		#corba_cdr
+    # print "   prop[1]=",conprof10.properties[1].value		#pull
+    # print "   prop[2]=",conprof10.properties[2].value		#flush,new,periodic
+    # print "   prop[3]=",conprof10.properties[3].value  		#little,big
+    # print "   prop[4]=",conprof10.properties[4].value  		#IOR:
+    # print "   prop[5]=",conprof10.properties[5].value  		#OutportCdr
+    ior10 = any.from_any(conprof10.properties[4].value, keep_structs=True)
+    # print "   ior10=",ior10
+
+    outportobj = env.orb.string_to_object(ior10)
+    outportcdr = outportobj._narrow(OpenRTM.OutPortCdr)
+    # data set
+
+    ret11,data1 = outportcdr.get()
+    # print "   get() ret=" + str(ret11)		# BUFFER_EMPTY
+    #if ret11 != OpenRTM.PORT_OK:
+    #    fodat = "     get() ret=" + str(ret11) + "  count=%d" % (i+1)
+    #    print_file_and_cons(fodat)
+    #else:
+    #    value12 = cdrUnmarshal(any.to_any(123).typecode(),data1[0],1)
+    #    #print "   data1=",value12
+    time.sleep(0.1)
+    ret12 = consin_ports[0].disconnect(conprof2.connector_id)    # set used
+    #if ret12 != RTC.RTC_OK:
+    #    fodat = "     disconnect() error ret=" + str(ret12)
+    #    print_file_and_cons(fodat)
+
+    if i == 0:
+        rss0 = mem_rss() ; j0 = 0 ; rssStart = rss0
+        fodat = "   %05d: %s KB start" % (1, rss0)
+        print_file_and_cons(fodat,1)
+    rss1 = mem_rss() ; j1 = i
+    if rss0 != rss1:
+        fodat = "   %05d: %s KB -> %d KB. count diff -> %d" % (i+1, rss1,int(rss1)-int(rss0),int(j1)-int(j0) )
+        print_file_and_cons(fodat,1)
+        rss0 = rss1 ; j0 = j1
+
+rssEnd = mem_rss()
+fodat = "   %05d: %s KB end" % (i+1, rssEnd)
+print_file_and_cons(fodat,1)
+leak_check(rssStart, rssEnd)
 ## -----------------------------------------------------------------------------
 
 fodat = "=== " + test_case + " end ==="
