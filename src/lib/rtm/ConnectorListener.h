@@ -210,9 +210,21 @@ namespace RTC
      *
      * @brief コールバックメソッド
      *
+     * データをデータポートで使用される変数型に変換して ConnectorDataListenerT
+     * のコールバックメソッドを呼び出す。
+     *
+     * @param info ConnectorInfo 
+     * @param cdrdata cdrMemoryStream型のデータ
+     *
      * @else
      *
      * @brief Callback method
+     *
+     * This method invokes the callback method of ConnectorDataListenerT. 
+     * Data is converted into the variable type used in DataPort.
+     *
+     * @param info ConnectorInfo 
+     * @param cdrdata Data of cdrMemoryStream type
      *
      * @endif
      */
