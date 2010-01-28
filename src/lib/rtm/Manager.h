@@ -698,8 +698,42 @@ namespace RTC
      * @endif
      */
     void cleanupComponent(RTObject_impl* comp);
+
+    /*!
+     * @if jp
+     * @brief RTコンポーネントの削除する
+     *
+     * notifyFinalized()によって登録されたRTコンポーネントを削除する。
+     *
+     * @else
+     * @brief This method deletes RT-Components. 
+     *
+     * This method deletes RT-Components registered by notifyFinalized(). 
+     *
+     * @endif
+     */
     void cleanupComponents();
+
+    /*!
+     * @if jp
+     * @brief RTコンポーネントの削除する
+     *
+     * 削除するRTコンポーネントを登録する。
+     * 登録されたRTコンポーネントは cleanupComponents() で削除される。
+     *
+     * @param 削除するRTコンポーネント
+     *
+     * @else
+     * @brief This method deletes RT-Components. 
+     *
+     * The deleted RT-Component is registered. The registered RT-Components 
+     * are deleted by cleanupComponents(). 
+     *
+     * @param Deleted RT component
+     * @endif
+     */
     void notifyFinalized(RTObject_impl* comp);
+
     /*!
      * @if jp
      * @brief RTコンポーネントを直接 Manager に登録する
@@ -756,7 +790,29 @@ namespace RTC
      * マネージャに登録されているRTコンポーネントを削除する。
      * 指定されたRTコンポーネントをネーミングサービスから削除し、
      * RTコンポーネント自体を終了させるとともに、インスタンスを解放する。
-     * (現状では未実装)
+     *
+     * @param comp 削除対象RTコンポーネントのインスタンス
+     *
+     * @else
+     * @brief Unregister RT-Components that have been registered to Manager
+     *
+     * Unregister RT-Components that have been registered to manager
+     * Remove specified RT-Component from naming service, terminate itself
+     * and release its instances.
+     *
+     * @param comp Target RT-Component's instances for the unregistration
+     *
+     * @endif
+     */
+    void deleteComponent(RTObject_impl* comp);
+    
+    /*!
+     * @if jp
+     * @brief Manager に登録されているRTコンポーネントを削除する
+     *
+     * マネージャに登録されているRTコンポーネントを削除する。
+     * 指定されたRTコンポーネントをネーミングサービスから削除し、
+     * RTコンポーネント自体を終了させるとともに、インスタンスを解放する。
      *
      * @param instance_name 削除対象RTコンポーネントのインスタンス名
      *
@@ -766,14 +822,12 @@ namespace RTC
      * Unregister RT-Components that have been registered to manager
      * Remove specified RT-Component from naming service, terminate itself
      * and release its instances.
-     * (Currently, not implemented)
      *
      * @param instance_name Target RT-Component's instances for the 
      *                      unregistration
      *
      * @endif
      */
-    void deleteComponent(RTObject_impl* comp);
     void deleteComponent(const char* instance_name);
 
     
@@ -935,6 +989,22 @@ namespace RTC
      */
     void shutdownManager();
 
+    /*!
+     * @if jp
+     * @brief Manager の終了処理
+     *
+     * configuration の "manager.shutdown_onrtcs" YES で、
+     * コンポーネントが登録されていない場合 Manager を終了する。
+     *
+     * @else
+     * @brief Shutdown Manager
+     *
+     * This method shutdowns Manager as follows.
+     * - "Manager.shutdown_onrtcs" of configuration is YES. 
+     * - The component is not registered. 
+     *
+     * @endif
+     */
     void shutdownOnNoRtcs();
 
     //============================================================
@@ -1203,6 +1273,46 @@ namespace RTC
     bool procComponentArgs(const char* comp_arg,
                            coil::Properties& comp_id,
                            coil::Properties& comp_conf);
+    /*!
+     * @if jp
+     * @brief 引数文字列からExecutionContext名・プロパティを抽出する
+     *
+     * 文字列からExecutionContext名とプロパティを抽出する。
+     * 与えられる文字列のフォーマットは RTC の ID とコンフィギュレーショ
+     * ンからなる
+     *
+     * [ExecutionContext名]?[key(0)]=[val(0)]&[key(1)]=[val(1)]&...&[key(n)]=[val(n)]
+     * 
+     * である。
+     *
+     * ec_conf には "?" 以下に記述されるコンポーネントに与えるプロパティ
+     * が Properties 型のオブジェクトとして返される。
+     * 
+     * @return ec_args にExecutionContext名が含まれていない場合false
+     * @param ec_args  処理すべき文字列
+     * @param ec_id 抽出されたExecutionContext名
+     * @param ec_conf 抽出されたExecutionContextのプロパティ
+     *
+     * @else
+     * @brief Extracting ExecutionContext's name/properties from the given 
+     *        string
+     *
+     * This operation extracts ExecutionContext's name and its properties
+     * from the figen character string.
+     * The given string formats is the following.
+     *
+     * [ExecutionContext's name]?[key(0)]=[val(0)]&[key(1)]=[val(1)]...[key(n)]=[val(n)]
+     *
+     * "ec_conf" is returned as Properties type object
+     * includeing component properties to be given to component.
+     * 
+     * @return ec_arg false will returned if no ExecutionContext's name in arg
+     * @param ec_arg  character string to be processed
+     * @param ec_type extracted ExecutionContext's name
+     * @param ec_prop extracted ExecutionContext's properties
+     *
+     * @endif
+     */
     bool procContextArgs(const char* ec_args,
                          std::string& ec_id,
                          coil::Properties& ec_conf);
