@@ -52,6 +52,49 @@
  */
 namespace OutPortPushConnector
 {
+
+  class DataListener
+    : public RTC::ConnectorDataListenerT<RTC::TimedLong>
+  {
+  public:
+    DataListener(const char* name) : m_name(name) {}
+    virtual ~DataListener()
+    {
+      //std::cout << "dtor of " << m_name << std::endl;
+    }
+
+    virtual void operator()(const RTC::ConnectorInfo& info,
+                            const RTC::TimedLong& data)
+    {
+      //std::cout << "------------------------------"   << std::endl;
+      //std::cout << "Data Listener: " << m_name       << std::endl;
+      //std::cout << "Profile::name: " << info.name    << std::endl;
+      //std::cout << "------------------------------"   << std::endl;
+    };
+    std::string m_name;
+  };
+
+
+  class ConnListener
+    : public RTC::ConnectorListener
+  {
+  public:
+    ConnListener(const char* name) : m_name(name) {}
+    virtual ~ConnListener()
+    {
+      //std::cout << "dtor of " << m_name << std::endl;
+    }
+
+    virtual void operator()(const RTC::ConnectorInfo& info)
+    {
+      std::cout << "------------------------------"   << std::endl;
+      std::cout << "Connector Listener: " << m_name       << std::endl;
+      std::cout << "Profile::name:      " << info.name    << std::endl;
+      std::cout << "------------------------------"   << std::endl;
+    };
+    std::string m_name;
+  };
+
   /*!
    * 
    * 
@@ -78,6 +121,7 @@ namespace OutPortPushConnector
   private:
     std::vector<std::string> m_log;
   };
+
   /*!
    * 
    * 
@@ -182,15 +226,10 @@ namespace OutPortPushConnector
           cdrMemoryStream cdr(data);
           CORBA::ULong inlen = cdr.bufSize();
 
-          CORBA::Octet oct[8];
-          cdr.get_octet_array (oct, (int)inlen);
-          long lval(0);
-          for(int ic(0);ic<(int)inlen;++ic)
-          {
-              lval = lval+(int)(oct[ic]<<(ic*8));
-          }
+          RTC::TimedLong td;
+          td <<= cdr;
           std::stringstream ss;
-          ss << lval;
+          ss << td.data;
           if (m_logger != NULL)
           {
               m_logger->log("PublisherFlushMock::write");
@@ -287,6 +326,38 @@ namespace OutPortPushConnector
           }
           return PORT_OK;
       }
+
+      /*!
+       *
+       *
+       */
+      RTC::PublisherBase::ReturnCode setListener(RTC::ConnectorInfo& info,
+                                                 RTC::ConnectorListeners* listeners)
+      {
+          if (m_logger != NULL)
+          {
+              m_logger->log("PublisherFlushMock::setListener");
+              if (listeners == 0)
+              {
+                  m_logger->log("listeners NG");
+              }
+              else
+              {
+                  m_logger->log("listeners OK");
+              }
+          }
+          logger.log("PublisherFlushMock::setListener");
+          if (listeners == 0)
+          {
+              logger.log("listeners NG");
+          }
+          else
+          {
+              logger.log("listeners OK");
+          }
+          return PORT_OK;
+      }
+
       /*!
        *
        *
@@ -299,7 +370,9 @@ namespace OutPortPushConnector
   private:
     Logger* m_logger;
   };
+
   Logger PublisherFlushMock::logger;
+
   /*!
    * 
    * 
@@ -327,15 +400,11 @@ namespace OutPortPushConnector
           cdrMemoryStream cdr(data);
           CORBA::ULong inlen = cdr.bufSize();
 
-          CORBA::Octet oct[8];
-          cdr.get_octet_array (oct, (int)inlen);
-          long lval(0);
-          for(int ic(0);ic<(int)inlen;++ic)
-          {
-              lval = lval+(int)(oct[ic]<<(ic*8));
-          }
+          RTC::TimedLong td;
+          td <<= cdr;
           std::stringstream ss;
-          ss << lval;
+          ss << td.data;
+
           if (m_logger != NULL)
           {
               m_logger->log("PublisherNewMock::write");
@@ -434,6 +503,38 @@ namespace OutPortPushConnector
           }
           return PORT_OK;
       }
+
+      /*!
+       *
+       *
+       */
+      RTC::PublisherBase::ReturnCode setListener(RTC::ConnectorInfo& info,
+                                                 RTC::ConnectorListeners* listeners)
+      {
+          if (m_logger != NULL)
+          {
+              m_logger->log("PublisherNewMock::setListener");
+              if (listeners == 0)
+              {
+                  m_logger->log("listeners NG");
+              }
+              else
+              {
+                  m_logger->log("listeners OK");
+              }
+          }
+          logger.log("PublisherNewMock::setListener");
+          if (listeners == 0)
+          {
+              logger.log("listeners NG");
+          }
+          else
+          {
+              logger.log("listeners OK");
+          }
+          return PORT_OK;
+      }
+
       /*!
        *
        *
@@ -446,6 +547,7 @@ namespace OutPortPushConnector
   private:
     Logger* m_logger;
   };
+
   Logger PublisherNewMock::logger;
 
   class OutPortPushConnectorTests
@@ -457,8 +559,6 @@ namespace OutPortPushConnector
     CPPUNIT_TEST(test_write);
     CPPUNIT_TEST(test_disconnect_getBuffer);
     CPPUNIT_TEST(test_activate_deactivate);
-      //createPublisher,createBuffer は OutPortPushConnector の中で
-      //使用されているためテストは省略
 
     CPPUNIT_TEST_SUITE_END();
 		
@@ -468,6 +568,7 @@ namespace OutPortPushConnector
 
 
   public:
+    RTC::ConnectorListeners m_listeners;
 	
     /*!
      * @brief Constructor
@@ -496,6 +597,43 @@ namespace OutPortPushConnector
      */
     virtual void setUp()
     {
+        //ConnectorDataListeners
+        m_listeners.connectorData_[RTC::ON_BUFFER_WRITE].addListener(
+                                   new DataListener("ON_BUFFER_WRITE"), true);
+        m_listeners.connectorData_[RTC::ON_BUFFER_FULL].addListener(
+                                   new DataListener("ON_BUFFER_FULL"), true);
+        m_listeners.connectorData_[RTC::ON_BUFFER_WRITE_TIMEOUT].addListener(
+                                   new DataListener("ON_BUFFER_WRITE_TIMEOUT"), true);
+        m_listeners.connectorData_[RTC::ON_BUFFER_OVERWRITE].addListener(
+                                   new DataListener("ON_BUFFER_OVERWRITE"), true);
+        m_listeners.connectorData_[RTC::ON_BUFFER_READ].addListener(
+                                   new DataListener("ON_BUFFER_READ"), true);
+        m_listeners.connectorData_[RTC::ON_SEND].addListener(
+                                   new DataListener("ON_SEND"), true);
+        m_listeners.connectorData_[RTC::ON_RECEIVED].addListener(
+                                   new DataListener("ON_RECEIVED"), true);
+        m_listeners.connectorData_[RTC::ON_RECEIVER_FULL].addListener(
+                                   new DataListener("ON_RECEIVER_FULL"), true);
+        m_listeners.connectorData_[RTC::ON_RECEIVER_TIMEOUT].addListener(
+                                   new DataListener("ON_RECEIVER_TIMEOUT"), true);
+        m_listeners.connectorData_[RTC::ON_RECEIVER_ERROR].addListener(
+                                   new DataListener("ON_RECEIVER_ERROR"), true);
+
+        //ConnectorListeners
+        m_listeners.connector_[RTC::ON_BUFFER_EMPTY].addListener(
+                                    new ConnListener("ON_BUFFER_EMPTY"), true);
+        m_listeners.connector_[RTC::ON_BUFFER_READ_TIMEOUT].addListener(
+                                    new ConnListener("ON_BUFFER_READ_TIMEOUT"), true);
+        m_listeners.connector_[RTC::ON_SENDER_EMPTY].addListener(
+                                    new ConnListener("ON_SENDER_EMPTY"), true);
+        m_listeners.connector_[RTC::ON_SENDER_TIMEOUT].addListener(
+                                    new ConnListener("ON_SENDER_TIMEOUT"), true);
+        m_listeners.connector_[RTC::ON_SENDER_ERROR].addListener(
+                                    new ConnListener("ON_SENDER_ERROR"), true);
+        m_listeners.connector_[RTC::ON_CONNECT].addListener(
+                                    new ConnListener("ON_CONNECT"), true);
+        m_listeners.connector_[RTC::ON_DISCONNECT].addListener(
+                                    new ConnListener("ON_DISCONNECT"), true);
     }
 		
     /*!
@@ -506,7 +644,7 @@ namespace OutPortPushConnector
     }
 		
     /*!
-     * @brief Constructorのテスト
+     * @brief Constructor
      * 
      */
     void test_OutPortPushConnector()
@@ -514,15 +652,15 @@ namespace OutPortPushConnector
         ::RTC::PublisherFactory::
         instance().addFactory("flush",
                               ::coil::Creator< ::RTC::PublisherBase,
-                                               PublisherFlushMock>,
+                                                      PublisherFlushMock>,
                               ::coil::Destructor< ::RTC::PublisherBase,
-                                                  PublisherFlushMock>);
+                                                         PublisherFlushMock>);
         ::RTC::PublisherFactory::
         instance().addFactory("new",
                               ::coil::Creator< ::RTC::PublisherBase,
                                                PublisherNewMock>,
                               ::coil::Destructor< ::RTC::PublisherBase,
-                                                  PublisherNewMock>);
+                                               PublisherNewMock>);
         RTC::ConnectorProfile prof;
         CORBA_SeqUtil::push_back(prof.properties,
 			       NVUtil::newNV("dataport.interface_type",
@@ -533,20 +671,19 @@ namespace OutPortPushConnector
         CORBA_SeqUtil::push_back(prof.properties,
 	  		       NVUtil::newNV("dataport.subscription_type",
 					     "new"));
-        // prop: [port.outport].
         coil::Properties prop;
         {
             coil::Properties conn_prop;
             NVUtil::copyToProperties(conn_prop, prof.properties);
             prop << conn_prop.getNode("dataport"); // marge ConnectorProfile
         }
-        InPortCorbaCdrConsumerMock*consumer = new InPortCorbaCdrConsumerMock();
+        InPortCorbaCdrConsumerMock* consumer = new InPortCorbaCdrConsumerMock();
         Logger logger;
         consumer->setLogger(&logger);
-        RTC::ConnectorBase::Profile profile_new(prof.name,
-                                   prof.connector_id,
-                                   CORBA_SeqUtil::refToVstring(prof.ports),
-                                   prop); 
+        RTC::ConnectorInfo profile_new(prof.name,
+                                       prof.connector_id,
+                                       CORBA_SeqUtil::refToVstring(prof.ports),
+                                       prop); 
         RTC::OutPortConnector* connector(0);
         CPPUNIT_ASSERT_EQUAL(0, 
                            logger.countLog("InPortCorbaCdrConsumerMock::init"));
@@ -556,7 +693,7 @@ namespace OutPortPushConnector
             PublisherNewMock::logger.countLog("buffer OK"));
         CPPUNIT_ASSERT_EQUAL(0, 
             PublisherNewMock::logger.countLog("PublisherNewMock::setConsumer"));
-        connector = new RTC::OutPortPushConnector(profile_new, consumer);
+        connector = new RTC::OutPortPushConnector(profile_new, consumer, m_listeners);
         CPPUNIT_ASSERT_EQUAL(1, 
                            logger.countLog("InPortCorbaCdrConsumerMock::init"));
         CPPUNIT_ASSERT_EQUAL(1, 
@@ -568,24 +705,22 @@ namespace OutPortPushConnector
         CPPUNIT_ASSERT_EQUAL(1, 
             PublisherNewMock::logger.countLog("PublisherNewMock::setConsumer"));
 
-        //consumerはデストラクタでdeleteされる。
         delete connector;
 
-        //subscription_type が未設定の場合は
-        //Flush が起動することを確認する。
+        //subscription_type
+        //Flush
         CORBA_SeqUtil::push_back(prof.properties,
 	  		       NVUtil::newNV("dataport.subscription_type",
 					     ""));
-        // prop: [port.outport].
         {
             coil::Properties conn_prop;
             NVUtil::copyToProperties(conn_prop, prof.properties);
             prop << conn_prop.getNode("dataport"); // marge ConnectorProfile
         }
-        RTC::ConnectorBase::Profile profile_flush(prof.name,
-                                   prof.connector_id,
-                                   CORBA_SeqUtil::refToVstring(prof.ports),
-                                   prop); 
+        RTC::ConnectorInfo profile_flush(prof.name,
+                                         prof.connector_id,
+                                         CORBA_SeqUtil::refToVstring(prof.ports),
+                                         prop); 
         CPPUNIT_ASSERT_EQUAL(1, 
                            logger.countLog("InPortCorbaCdrConsumerMock::init"));
         CPPUNIT_ASSERT_EQUAL(0, 
@@ -594,7 +729,7 @@ namespace OutPortPushConnector
         PublisherFlushMock::logger.countLog("buffer OK"));
         CPPUNIT_ASSERT_EQUAL(0, 
         PublisherFlushMock::logger.countLog("PublisherFlushMock::setConsumer"));
-        connector = new RTC::OutPortPushConnector(profile_flush, consumer);
+        connector = new RTC::OutPortPushConnector(profile_flush, consumer, m_listeners);
         CPPUNIT_ASSERT_EQUAL(2, 
                            logger.countLog("InPortCorbaCdrConsumerMock::init"));
         CPPUNIT_ASSERT_EQUAL(1, 
@@ -604,25 +739,24 @@ namespace OutPortPushConnector
         CPPUNIT_ASSERT_EQUAL(1, 
         PublisherFlushMock::logger.countLog("PublisherFlushMock::setConsumer"));
 
-        //consumerはデストラクタでdeleteされる。
+        //consumer
         delete connector;
         
 
-        //consumer を与えない場合は例外を投げることを確認する。
+        //consumer
         RTC::OutPortConnector* connector_err(0);
         try {
             RTC::ConnectorProfile prof_err;
-            // prop: [port.outport].
             {
                 coil::Properties conn_prop;
                 NVUtil::copyToProperties(conn_prop, prof_err.properties);
                 prop << conn_prop.getNode("dataport"); // marge ConnectorProfile
             }
-            RTC::ConnectorBase::Profile profile_err(prof_err.name,
-                                    prof_err.connector_id,
-                                    CORBA_SeqUtil::refToVstring(prof_err.ports),
-                                    prop); 
-            connector_err = new RTC::OutPortPushConnector(profile_err, NULL);
+            RTC::ConnectorInfo profile_err(prof_err.name,
+                                          prof_err.connector_id,
+                                          CORBA_SeqUtil::refToVstring(prof_err.ports),
+                                          prop); 
+            connector_err = new RTC::OutPortPushConnector(profile_err, NULL, m_listeners);
             CPPUNIT_FAIL("The exception was not thrown. ");
         }
         catch(std::bad_alloc& e)
@@ -633,9 +767,10 @@ namespace OutPortPushConnector
             CPPUNIT_FAIL("The exception not intended was thrown .");
         }
         delete connector_err;
+        delete consumer;
     }
     /*!
-     * @brief writeのテスト
+     * @brief write
      * 
      */
     void test_write()
@@ -643,9 +778,9 @@ namespace OutPortPushConnector
         ::RTC::PublisherFactory::
         instance().addFactory("new",
                               ::coil::Creator< ::RTC::PublisherBase,
-                                               PublisherNewMock>,
+                                                      PublisherNewMock>,
                               ::coil::Destructor< ::RTC::PublisherBase,
-                                                  PublisherNewMock>);
+                                                         PublisherNewMock>);
         RTC::ConnectorProfile prof;
         CORBA_SeqUtil::push_back(prof.properties,
 			       NVUtil::newNV("dataport.interface_type",
@@ -656,39 +791,44 @@ namespace OutPortPushConnector
         CORBA_SeqUtil::push_back(prof.properties,
 	  		       NVUtil::newNV("dataport.subscription_type",
 					     "new"));
-        // prop: [port.outport].
         coil::Properties prop;
         {
             coil::Properties conn_prop;
             NVUtil::copyToProperties(conn_prop, prof.properties);
             prop << conn_prop.getNode("dataport"); // marge ConnectorProfile
         }
-        InPortCorbaCdrConsumerMock*consumer = new InPortCorbaCdrConsumerMock();
+        InPortCorbaCdrConsumerMock* consumer = new InPortCorbaCdrConsumerMock();
         Logger logger;
         consumer->setLogger(&logger);
-        RTC::ConnectorBase::Profile profile_new(prof.name,
-                                   prof.connector_id,
-                                   CORBA_SeqUtil::refToVstring(prof.ports),
-                                   prop); 
+        RTC::ConnectorInfo profile_new(prof.name,
+                                       prof.connector_id,
+                                       CORBA_SeqUtil::refToVstring(prof.ports),
+                                       prop); 
         RTC::OutPortConnector* connector(0);
-        connector = new RTC::OutPortPushConnector(profile_new, consumer);
+        connector = new RTC::OutPortPushConnector(profile_new, consumer, m_listeners);
         CPPUNIT_ASSERT_EQUAL(0, 
                PublisherNewMock::logger.countLog("PublisherNewMock::write"));
         CPPUNIT_ASSERT_EQUAL(0, 
                PublisherNewMock::logger.countLog("12345"));
         cdrMemoryStream cdr;
-        12345 >>= cdr;
-        connector->write(cdr);
+        RTC::TimedLong td;
+        td.data = 12345;
+        td >>= cdr;
+
+        RTC::ConnectorBase::ReturnCode ret;
+        ret = connector->write(cdr);
+        CPPUNIT_ASSERT_EQUAL(RTC::DataPortStatus::PORT_OK, ret);
+
         CPPUNIT_ASSERT_EQUAL(1, 
                PublisherNewMock::logger.countLog("PublisherNewMock::write"));
         CPPUNIT_ASSERT_EQUAL(1, 
                PublisherNewMock::logger.countLog("12345"));
 
         delete connector;
-
+        delete consumer;
     }
     /*!
-     * @brief disconnectのテスト
+     * @brief disconnect
      * 
      */
     void test_disconnect_getBuffer()
@@ -696,9 +836,9 @@ namespace OutPortPushConnector
         ::RTC::PublisherFactory::
         instance().addFactory("new",
                               ::coil::Creator< ::RTC::PublisherBase,
-                                               PublisherNewMock>,
+                                                      PublisherNewMock>,
                               ::coil::Destructor< ::RTC::PublisherBase,
-                                                  PublisherNewMock>);
+                                                         PublisherNewMock>);
         RTC::ConnectorProfile prof;
         CORBA_SeqUtil::push_back(prof.properties,
 			       NVUtil::newNV("dataport.interface_type",
@@ -709,29 +849,34 @@ namespace OutPortPushConnector
         CORBA_SeqUtil::push_back(prof.properties,
 	  		       NVUtil::newNV("dataport.subscription_type",
 					     "new"));
-        // prop: [port.outport].
         coil::Properties prop;
         {
             coil::Properties conn_prop;
             NVUtil::copyToProperties(conn_prop, prof.properties);
             prop << conn_prop.getNode("dataport"); // marge ConnectorProfile
         }
-        InPortCorbaCdrConsumerMock*consumer = new InPortCorbaCdrConsumerMock();
+        InPortCorbaCdrConsumerMock* consumer = new InPortCorbaCdrConsumerMock();
         Logger logger;
         consumer->setLogger(&logger);
-        RTC::ConnectorBase::Profile profile_new(prof.name,
-                                   prof.connector_id,
-                                   CORBA_SeqUtil::refToVstring(prof.ports),
-                                   prop); 
+        RTC::ConnectorInfo profile_new(prof.name,
+                                       prof.connector_id,
+                                       CORBA_SeqUtil::refToVstring(prof.ports),
+                                       prop); 
         RTC::OutPortConnector* connector(0);
-        connector = new RTC::OutPortPushConnector(profile_new, consumer);
+        connector = new RTC::OutPortPushConnector(profile_new, consumer, m_listeners);
         CPPUNIT_ASSERT(connector->getBuffer());
-        connector->disconnect();
+
+        RTC::ConnectorBase::ReturnCode ret;
+        ret = connector->disconnect();
+        CPPUNIT_ASSERT_EQUAL(RTC::DataPortStatus::PORT_OK, ret);
+
         CPPUNIT_ASSERT(!connector->getBuffer());
 
+        delete connector;
+        delete consumer;
     }
     /*!
-     * @brief activate のテスト
+     * @brief activate
      * 
      */
     void test_activate_deactivate()
@@ -739,9 +884,9 @@ namespace OutPortPushConnector
         ::RTC::PublisherFactory::
         instance().addFactory("new",
                               ::coil::Creator< ::RTC::PublisherBase,
-                                               PublisherNewMock>,
+                                                      PublisherNewMock>,
                               ::coil::Destructor< ::RTC::PublisherBase,
-                                                  PublisherNewMock>);
+                                                         PublisherNewMock>);
         RTC::ConnectorProfile prof;
         CORBA_SeqUtil::push_back(prof.properties,
 			       NVUtil::newNV("dataport.interface_type",
@@ -752,35 +897,38 @@ namespace OutPortPushConnector
         CORBA_SeqUtil::push_back(prof.properties,
 	  		       NVUtil::newNV("dataport.subscription_type",
 					     "new"));
-        // prop: [port.outport].
         coil::Properties prop;
         {
             coil::Properties conn_prop;
             NVUtil::copyToProperties(conn_prop, prof.properties);
             prop << conn_prop.getNode("dataport"); // marge ConnectorProfile
         }
-        InPortCorbaCdrConsumerMock*consumer = new InPortCorbaCdrConsumerMock();
+        InPortCorbaCdrConsumerMock* consumer = new InPortCorbaCdrConsumerMock();
         Logger logger;
         consumer->setLogger(&logger);
-        RTC::ConnectorBase::Profile profile_new(prof.name,
-                                   prof.connector_id,
-                                   CORBA_SeqUtil::refToVstring(prof.ports),
-                                   prop); 
+        RTC::ConnectorInfo profile_new(prof.name,
+                                       prof.connector_id,
+                                       CORBA_SeqUtil::refToVstring(prof.ports),
+                                       prop); 
         RTC::OutPortConnector* connector(0);
-        connector = new RTC::OutPortPushConnector(profile_new, consumer);
+        connector = new RTC::OutPortPushConnector(profile_new, consumer, m_listeners);
         CPPUNIT_ASSERT_EQUAL(0, 
                PublisherNewMock::logger.countLog("PublisherNewMock::activate"));
         connector->activate();
         CPPUNIT_ASSERT_EQUAL(1, 
                PublisherNewMock::logger.countLog("PublisherNewMock::activate"));
 
-        connector = new RTC::OutPortPushConnector(profile_new, consumer);
+        delete connector;
+        connector = new RTC::OutPortPushConnector(profile_new, consumer, m_listeners);
         CPPUNIT_ASSERT_EQUAL(0, 
              PublisherNewMock::logger.countLog("PublisherNewMock::deactivate"));
+
         connector->deactivate();
         CPPUNIT_ASSERT_EQUAL(1, 
              PublisherNewMock::logger.countLog("PublisherNewMock::deactivate"));
+
         delete connector;
+        delete consumer;
     }
   };
 }; // namespace OutPortPushConnector

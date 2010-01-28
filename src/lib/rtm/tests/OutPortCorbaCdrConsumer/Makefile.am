@@ -83,6 +83,9 @@ nodist_OutPortCorbaCdrConsumerTests_SOURCES =     \
 	$(top_srcdir)/src/lib/rtm/InPortPullConnector.cpp        \
 	$(top_srcdir)/src/lib/rtm/InPortPushConnector.cpp        \
 	$(top_srcdir)/src/lib/rtm/InPortBase.cpp                \
+	$(top_srcdir)/src/lib/rtm/CorbaPort.cpp          \
+	$(top_srcdir)/src/lib/rtm/ConnectorListener.cpp  \
+	$(top_srcdir)/src/lib/rtm/CORBA_IORUtil.cpp      \
 	OutPortCorbaCdrConsumerTests.cpp
 
 OutPortCorbaCdrConsumerTests_LDFLAGS = -L$(libdir) $(AM_LDFLAGS)
