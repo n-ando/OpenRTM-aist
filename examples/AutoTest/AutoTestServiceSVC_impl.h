@@ -40,7 +40,13 @@ public:
   void set_value(CORBA::Float value);
   CORBA::Float get_value();
   AutoTest::ValueList* get_value_history();
-  
+
+  void reset_message()
+  {
+    m_isNew = false;
+    m_msg ="";
+  }
+
   std::string get_echo_message() {
     if (m_isNew) {
       m_isNew = false;

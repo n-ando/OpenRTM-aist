@@ -113,6 +113,7 @@ RTC::ReturnCode_t AutoTestIn::onActivated(RTC::UniqueId ec_id)
 RTC::ReturnCode_t AutoTestIn::onDeactivated(RTC::UniqueId ec_id)
 {
   fout.close();
+  m_myservice0.reset_message();
   return RTC::RTC_OK;
 }
 
