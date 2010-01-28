@@ -608,7 +608,8 @@ std::vector<coil::Properties> Manager::getLoadableModules()
 
     for (int i(0); inherit_prop[i][0] != '\0'; ++i)
       {
-        prop[inherit_prop[i]] = m_config[inherit_prop[i]];
+	if (prop[inherit_prop[i]] == "")
+	  prop[inherit_prop[i]] = m_config[inherit_prop[i]];
       }
       
     RTObject_impl* comp;
