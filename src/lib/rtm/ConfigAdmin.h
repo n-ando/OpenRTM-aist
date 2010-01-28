@@ -76,9 +76,15 @@ namespace RTC
      *
      * @brief 仮想コールバックメソッド
      *
+     * コンフィギュレーションパラメータの更新(ID指定)時に呼び出される
+     * コールバックメソッド
+     *
      * @else
      *
      * @brief Virtual Callback method
+     *
+     * This is the callback method invoked when the update of the 
+     * configuration parameter (ID specification).
      *
      * @endif
      */
@@ -120,9 +126,15 @@ namespace RTC
      *
      * @brief 仮想コールバックメソッド
      *
+     * コンフィギュレーションパラメータの更新(名称指定)時に呼び出される
+     * コールバックメソッド
+     *
      * @else
      *
      * @brief Virtual Callback method
+     *
+     * This is the callback method invoked when the update of the 
+     * configuration parameter (name specification).
      *
      * @endif
      */
@@ -164,9 +176,15 @@ namespace RTC
      *
      * @brief 仮想コールバックメソッド
      *
+     * 指定したプロパティのコンフィギュレーションセットへの追加された時に
+     * コールされるコールバックメソッド
+     *
      * @else
      *
      * @brief Virtual Callback method
+     *
+     * This is the callback method invoked when added to the configuration 
+     * set of the property that specifies it. 
      *
      * @endif
      */
@@ -208,9 +226,15 @@ namespace RTC
      *
      * @brief 仮想コールバックメソッド
      *
+     * コンフィギュレーションセットに設定値が追加されたときにコールされる
+     * コールバックメソッド
+     *
      * @else
      *
      * @brief Virtual Callback method
+     *
+     * This is the callback method invoked when a set value is added to the 
+     * configuration set. 
      *
      * @endif
      */
@@ -252,9 +276,15 @@ namespace RTC
      *
      * @brief 仮想コールバックメソッド
      *
+     * コンフィギュレーションセットが削除されているときにコールされる
+     * コールバックメソッド
+     *
      * @else
      *
      * @brief Virtual Callback method
+     *
+     * This is the callback method invoked when the configuration set has 
+     * been deleted. 
      *
      * @endif
      */
@@ -296,9 +326,15 @@ namespace RTC
      *
      * @brief 仮想コールバックメソッド
      *
+     * コンフィギュレーションセットがアクティブ化されたときにコールされる
+     * コールバックメソッド
+     *
      * @else
      *
      * @brief Virtual Callback method
+     *
+     * This is the callback method invoked when * the configuration set is 
+     * made active.
      *
      * @endif
      */
