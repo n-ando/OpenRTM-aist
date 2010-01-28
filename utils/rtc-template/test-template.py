@@ -246,7 +246,9 @@ rtc-template -bcxx
 
 rtm_config = """\
 #!/bin/sh
-
+#
+# this is for only Linux!!
+#
 rtm_prefix="/usr/local"
 rtm_exec_prefix="/usr/local"
 rtm_cxx="g++"
