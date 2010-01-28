@@ -43,6 +43,7 @@
 
 namespace InPortBase
 {
+
   /*!
    * 
    * 
@@ -73,6 +74,7 @@ namespace InPortBase
   private:
     std::vector<std::string> m_log;
   };
+
   /*!
    * 
    * 
@@ -261,9 +263,11 @@ namespace InPortBase
       Logger* m_logger;
       ::RTC::BufferStatus::Enum m_read_return_value;
   };
+
   template <class DataType>
   Logger RingBufferMock<DataType>::logger;
   typedef RingBufferMock<cdrMemoryStream> CdrRingBufferMock;
+
   /*!
    * 
    * 
@@ -387,11 +391,24 @@ namespace InPortBase
       {
           m_logger = logger;
       }
+
+      void setListener(RTC::ConnectorInfo& info,
+  		     RTC::ConnectorListeners* listeners)
+      {
+        // m_profile = info;
+        // m_listeners = listeners;
+      }
+      void setConnector(RTC::InPortConnector* connector)
+      {
+        // m_connector = connector;
+      }
+
   private:
     Logger* m_logger;
     ::OpenRTM::InPortCdr_var m_objref;
 
   };
+
   /*!
    * 
    * 
@@ -484,7 +501,13 @@ namespace InPortBase
           return PORT_OK;
       }
   
-  
+      void setListener(RTC::ConnectorInfo& info,
+  		       RTC::ConnectorListeners* listeners)
+      {
+        // m_profile = info;
+        // m_listeners = listeners;
+      }
+
       /*!
        *
        *
@@ -497,6 +520,7 @@ namespace InPortBase
     Logger* m_logger;
 
   };
+
   /*!
    * 
    * 
@@ -631,7 +655,23 @@ namespace InPortBase
       {
           return m_properties;
       }
+      /*!
+       * 
+       * 
+       */
+      void init(coil::Properties& prop)
+      {
+          RTC::InPortBase::init(prop);
+      }
+      /*!
+       * 
+       */
+       bool read()
+       {
+          return true;
+       }
   };
+
   class InPortBaseTests
     : public CppUnit::TestFixture
   {
@@ -834,7 +874,8 @@ namespace InPortBase
         CPPUNIT_ASSERT_EQUAL(0,
              CdrRingBufferMock::logger.countLog("RingBufferMock::Constructor"));
 
-        inport.init();
+        coil::Properties dummy;
+        inport.init(dummy);
 
         //m_singlebufferがtrueの場合m_thebufferが取得される
         CPPUNIT_ASSERT(0!=inport.getThebuffer());
@@ -931,7 +972,8 @@ namespace InPortBase
              CdrRingBufferMock::logger.countLog("RingBufferMock::Constructor"));
 
         inport.setMultibuffer();
-        inport.init();
+        coil::Properties dummy;
+        inport.init(dummy);
 
         CPPUNIT_ASSERT(0==inport.getThebuffer());
         CPPUNIT_ASSERT_EQUAL(0,
@@ -1022,7 +1064,8 @@ namespace InPortBase
         CPPUNIT_ASSERT_EQUAL(0,
              CdrRingBufferMock::logger.countLog("RingBufferMock::Constructor"));
 
-        inport.init();
+        coil::Properties dummy;
+        inport.init(dummy);
 
         //m_singlebufferがtrueの場合m_thebufferが取得される
         CPPUNIT_ASSERT(0==inport.getThebuffer());
@@ -1191,7 +1234,7 @@ namespace InPortBase
                              prop["dataport.dataflow_type"]);
         CPPUNIT_ASSERT_EQUAL(std::string(""),
                              prop["dataport.interface_type"]);
- 
+
         //ProviderTypes,ConsumerTypesが取得される
         pstr = inport.getProviderTypes();
         CPPUNIT_ASSERT((size_t)0== pstr.size());
@@ -1337,7 +1380,7 @@ namespace InPortBase
                              prop["dataport.dataflow_type"]);
         CPPUNIT_ASSERT_EQUAL(std::string(""),
                              prop["dataport.interface_type"]);
- 
+
         //ProviderTypes,ConsumerTypesが取得される
         cstr = inport.get_m_consumerTypes();
         CPPUNIT_ASSERT((size_t)0== cstr.size());
@@ -1390,7 +1433,8 @@ namespace InPortBase
                    coil::Destructor<RTC::CdrBufferBase, CdrRingBufferMock>);
 
         InPortBaseMock inport("InPortBaseTest", toTypename<RTC::TimedFloat>());
-        inport.init();
+        coil::Properties dummy;
+        inport.init(dummy);
 
         RTC::PortAdmin portAdmin(m_pORB,m_pPOA);
         portAdmin.registerPort(inport); 
@@ -1465,7 +1509,8 @@ namespace InPortBase
                    coil::Destructor<RTC::CdrBufferBase, CdrRingBufferMock>);
 
         InPortBaseMock inport("InPortBaseTest", toTypename<RTC::TimedFloat>());
-        inport.init();
+        coil::Properties dummy;
+        inport.init(dummy);
 
         RTC::PortAdmin portAdmin(m_pORB,m_pPOA);
         portAdmin.registerPort(inport); 
@@ -1548,7 +1593,8 @@ namespace InPortBase
                    coil::Destructor<RTC::CdrBufferBase, CdrRingBufferMock>);
 
         InPortBaseMock inport("InPortBaseTest", toTypename<RTC::TimedFloat>());
-        inport.init();
+        coil::Properties dummy;
+        inport.init(dummy);
 
         RTC::PortAdmin portAdmin(m_pORB,m_pPOA);
         portAdmin.registerPort(inport); 
@@ -1629,7 +1675,8 @@ namespace InPortBase
                    coil::Destructor<RTC::CdrBufferBase, CdrRingBufferMock>);
 
         InPortBaseMock inport("InPortBaseTest", toTypename<RTC::TimedFloat>());
-        inport.init();
+        coil::Properties dummy;
+        inport.init(dummy);
 
         RTC::PortAdmin portAdmin(m_pORB,m_pPOA);
         portAdmin.registerPort(inport); 
@@ -1703,7 +1750,8 @@ namespace InPortBase
                    coil::Destructor<RTC::CdrBufferBase, CdrRingBufferMock>);
 
         InPortBaseMock inport("InPortBaseTest", toTypename<RTC::TimedFloat>());
-        inport.init();
+        coil::Properties dummy;
+        inport.init(dummy);
 
         RTC::PortAdmin portAdmin(m_pORB,m_pPOA);
         portAdmin.registerPort(inport); 
@@ -1773,7 +1821,8 @@ namespace InPortBase
 
 
         InPortBaseMock inport("InPortBaseTest", toTypename<RTC::TimedFloat>());
-        inport.init();
+        coil::Properties dummy;
+        inport.init(dummy);
 
         RTC::PortAdmin portAdmin(m_pORB,m_pPOA);
         portAdmin.registerPort(inport); 
@@ -1845,7 +1894,8 @@ namespace InPortBase
                    coil::Destructor<RTC::CdrBufferBase, CdrRingBufferMock>);
 
         InPortBaseMock inport("InPortBaseTest", toTypename<RTC::TimedFloat>());
-        inport.init();
+        coil::Properties dummy;
+        inport.init(dummy);
 
         RTC::PortAdmin portAdmin(m_pORB,m_pPOA);
         portAdmin.registerPort(inport); 
@@ -1927,7 +1977,8 @@ namespace InPortBase
                    coil::Destructor<RTC::CdrBufferBase, CdrRingBufferMock>);
 
         InPortBaseMock inport("InPortBaseTest", toTypename<RTC::TimedFloat>());
-        inport.init();
+        coil::Properties dummy;
+        inport.init(dummy);
 
         RTC::PortAdmin portAdmin(m_pORB,m_pPOA);
         portAdmin.registerPort(inport); 
@@ -1949,7 +2000,7 @@ namespace InPortBase
         CPPUNIT_ASSERT_EQUAL(0,(int)inport.get_m_connectors().size());
         retcode = inport.subscribeInterfaces_public(prof);
         CPPUNIT_ASSERT_EQUAL(0,(int)inport.get_m_connectors().size());
-        CPPUNIT_ASSERT_EQUAL(RTC::RTC_OK,retcode);
+        CPPUNIT_ASSERT_EQUAL(RTC::RTC_ERROR,retcode);
 
 
         portAdmin.deletePort(inport);
@@ -2003,7 +2054,8 @@ namespace InPortBase
                    coil::Destructor<RTC::CdrBufferBase, CdrRingBufferMock>);
 
         InPortBaseMock inport("InPortBaseTest", toTypename<RTC::TimedFloat>());
-        inport.init();
+        coil::Properties dummy;
+        inport.init(dummy);
 
         RTC::PortAdmin portAdmin(m_pORB,m_pPOA);
         portAdmin.registerPort(inport); 
@@ -2072,7 +2124,8 @@ namespace InPortBase
                    coil::Destructor<RTC::CdrBufferBase, CdrRingBufferMock>);
 
         InPortBaseMock inport("InPortBaseTest", toTypename<RTC::TimedFloat>());
-        inport.init();
+        coil::Properties dummy;
+        inport.init(dummy);
 
         RTC::PortAdmin portAdmin(m_pORB,m_pPOA);
         portAdmin.registerPort(inport); 
@@ -2141,7 +2194,8 @@ namespace InPortBase
         }
 
         InPortBaseMock inport("InPortBaseTest", toTypename<RTC::TimedFloat>());
-        inport.init();
+        coil::Properties dummy;
+        inport.init(dummy);
 
         RTC::PortAdmin portAdmin(m_pORB,m_pPOA);
         portAdmin.registerPort(inport); 
@@ -2188,6 +2242,7 @@ namespace InPortBase
             
 
         portAdmin.deletePort(inport);
+        delete provider;
     }
     /*!
      * @brief createConnector()メソッドのテスト
@@ -2211,6 +2266,7 @@ namespace InPortBase
             
 
         portAdmin.deletePort(inport);
+        delete provider;
     }
 
     
@@ -2231,12 +2287,17 @@ namespace RTC
    *
    *
    */
-  InPortPushConnector::InPortPushConnector(ConnectorBase::Profile profile, 
+  InPortPushConnector::InPortPushConnector(ConnectorInfo info, 
                                            InPortProvider* provider,
+                                           ConnectorListeners& listeners,
                                            CdrBufferBase* buffer)
-    : InPortConnector(profile, buffer)
+    : InPortConnector(info, buffer),
+      m_provider(provider), 
+      m_listeners(listeners), 
+      m_deleteBuffer(buffer == 0 ? true : false)
+
   {
-      if(profile.properties["InPortBaseTests"]=="bad_alloc")
+      if(info.properties["InPortBaseTests"]=="bad_alloc")
       {
           throw std::bad_alloc();
       }
@@ -2269,10 +2330,11 @@ namespace RTC
    *
    *
    */
-  CdrBufferBase* InPortPushConnector::createBuffer(Profile& profile)
+  CdrBufferBase* InPortPushConnector::createBuffer(ConnectorInfo& info)
   {
       return new ::InPortBase::CdrRingBufferMock();
   }
+
 };
 
 

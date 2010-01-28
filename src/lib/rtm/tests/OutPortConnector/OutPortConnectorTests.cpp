@@ -46,38 +46,67 @@
  * @class OutPortConnectorTests class
  * @brief OutPortConnector test
  */
+
 namespace OutPortConnector
 {
+  class InPortMock
+    : public RTC::InPortBase
+  {
+  public:
+    InPortMock(const char* name, const char* value) 
+     : InPortBase(name, value) {}
+    /*!
+     * 
+     */
+     bool read()
+     {
+        return true;
+     }
+
+  };
+
+  class OutPortMock
+    : public RTC::OutPortBase
+  {
+  public:
+    OutPortMock(const char* name, const char* value) 
+     : OutPortBase(name, value) {}
+    /*!
+     * 
+     */
+     bool write()
+     {
+        return true;
+     }
+
+  };
+
   class OutPortConnectorMock
     : public RTC::OutPortConnector
   {
   public:
-      OutPortConnectorMock(ConnectorBase::Profile& profile)
-        : RTC::OutPortConnector(profile)
+      OutPortConnectorMock(RTC::ConnectorInfo& info)
+        : RTC::OutPortConnector(info)
       {
       }
       virtual ~OutPortConnectorMock()
       {
       }
-      virtual ReturnCode disconnect()
+      ReturnCode disconnect()
       {
           return ::RTC::DataPortStatus::PORT_OK;
       }
-      virtual ReturnCode read(cdrMemoryStream& data)
-      {
-          return ::RTC::DataPortStatus::PORT_OK;
-      }
-      virtual void activate()
+      void activate()
       {
       }
-      virtual void deactivate()
+      void deactivate()
       {
       }
-      virtual RTC::CdrBufferBase* getBuffer()
+      RTC::CdrBufferBase* getBuffer()
       {
           return m_buffer;
       }
-      virtual ReturnCode write(const cdrMemoryStream& data)
+      ReturnCode write(const cdrMemoryStream& data)
       {
           return ::RTC::DataPortStatus::PORT_OK;
       }
@@ -136,17 +165,16 @@ namespace OutPortConnector
     }
 		
     /*!
-     * @brief profile(),id(),name()メソッドのテスト
+     * @brief profile(), id(), name(), setEndian(), isLittleEndian() メソッドのテスト
      * 
      */
     void test_case0()
     {
 
-        RTC::InPortBase inport("OutPortConnectorTest1", toTypename<RTC::TimedFloat>());
+        InPortMock inport("OutPortConnectorTest1", toTypename<RTC::TimedFloat>());
         RTC::PortService_var port_ref1= inport.get_port_profile()->port_ref;
-        RTC::OutPortBase outport("OutPortConnectorTest2", toTypename<RTC::TimedFloat>());
+        OutPortMock outport("OutPortConnectorTest2", toTypename<RTC::TimedFloat>());
         RTC::PortService_var port_ref2= outport.get_port_profile()->port_ref;
-
 
         RTC::PortAdmin portAdmin(m_pORB,m_pPOA);
         portAdmin.registerPort(inport); 
@@ -172,31 +200,33 @@ namespace OutPortConnector
 
         coil::Properties prop;
         NVUtil::copyToProperties(prop, cprof.properties);
-        RTC::ConnectorBase::Profile profile(cprof.name,
-                                       cprof.connector_id,
-                                       CORBA_SeqUtil::refToVstring(cprof.ports),
-                                       prop); 
+        RTC::ConnectorInfo info(cprof.name, cprof.connector_id, 
+                                CORBA_SeqUtil::refToVstring(cprof.ports), prop);
 
-        OutPortConnector::OutPortConnectorMock connector(profile);
-        CPPUNIT_ASSERT_EQUAL(std::string(cprof.connector_id),std::string(connector.id()));
-        CPPUNIT_ASSERT_EQUAL(std::string(cprof.name),std::string(connector.name()));
-        RTC::ConnectorBase::Profile profile2 = connector.profile();
-        CPPUNIT_ASSERT_EQUAL(profile.name,profile2.name);
-        CPPUNIT_ASSERT_EQUAL(profile.id,profile2.id);
-        CPPUNIT_ASSERT(profile.ports==profile2.ports);
-        CPPUNIT_ASSERT_EQUAL(profile.properties.size(),
-                             profile2.properties.size());
-          
-        CPPUNIT_ASSERT_EQUAL(profile.properties["dataport.interface_type"],
-                             profile2.properties["dataport.interface_type"]);
-        CPPUNIT_ASSERT_EQUAL(profile.properties["dataport.dataflow_type"],
-                             profile2.properties["dataport.dataflow_type"]);
-        CPPUNIT_ASSERT_EQUAL(profile.properties["dataport.subscription_type"],
-                             profile2.properties["dataport.subscription_type"]);
+        OutPortConnectorMock connector(info);
+        CPPUNIT_ASSERT_EQUAL(std::string(cprof.connector_id), std::string(connector.id()));
+        CPPUNIT_ASSERT_EQUAL(std::string(cprof.name), std::string(connector.name()));
+        connector.setEndian(false);
+        CPPUNIT_ASSERT(!connector.isLittleEndian());
+        connector.setEndian(true);
+        CPPUNIT_ASSERT(connector.isLittleEndian());
+
+        RTC::ConnectorInfo info2 = connector.profile();
+        CPPUNIT_ASSERT_EQUAL(info.name,info2.name);
+        CPPUNIT_ASSERT_EQUAL(info.id,info2.id);
+        CPPUNIT_ASSERT(info.ports==info2.ports);
+        CPPUNIT_ASSERT_EQUAL(info.properties.size(),
+                             info2.properties.size());
+        CPPUNIT_ASSERT_EQUAL(info.properties["dataport.interface_type"],
+                             info2.properties["dataport.interface_type"]);
+        CPPUNIT_ASSERT_EQUAL(info.properties["dataport.dataflow_type"],
+                             info2.properties["dataport.dataflow_type"]);
+        CPPUNIT_ASSERT_EQUAL(info.properties["dataport.subscription_type"],
+                             info2.properties["dataport.subscription_type"]);
         portAdmin.deletePort(inport);
         portAdmin.deletePort(outport);
     }
-		
+
   };
 }; // namespace InPort
 

@@ -141,6 +141,16 @@ namespace OutPortProvider
       NVUtil::appendStringValue(m_properties, "PROPERTY_NAME2", "PROPERTY_VALUE2");
     }
 
+    void setBuffer(RTC::CdrBufferBase* buffer)
+    {
+    }
+
+    void setListener(RTC::ConnectorInfo& info, RTC::ConnectorListeners* listeners)
+    {
+    }
+    void setConnector(RTC::OutPortConnector* connector)
+    {
+    }
 
   };
 	
@@ -203,10 +213,9 @@ namespace OutPortProvider
     void test_publishInterfaceProfile()
     {
       std::auto_ptr<RTC::OutPortProvider> provider(
-						   new OutPortProviderMock(
-									   "PORT_TYPE", "DATA_TYPE", "INTERFACE_TYPE",
-									   "DATA_FLOW_TYPE", "SUBSCRIPTION_TYPE"));
-			
+          new OutPortProviderMock("PORT_TYPE", "DATA_TYPE", "INTERFACE_TYPE",
+                                      "DATA_FLOW_TYPE", "SUBSCRIPTION_TYPE"));
+
       SDOPackage::NVList prop;
       provider->publishInterfaceProfile(prop);
 
@@ -271,10 +280,9 @@ namespace OutPortProvider
     void test_publishInterface()
     {
       std::auto_ptr<OutPortProviderMock> provider(
-						   new OutPortProviderMock(
-									   "PORT_TYPE", "DATA_TYPE", "INTERFACE_TYPE",
-									   "DATA_FLOW_TYPE", "SUBSCRIPTION_TYPE"));
-			
+          new OutPortProviderMock("PORT_TYPE", "DATA_TYPE", "INTERFACE_TYPE",
+                                  "DATA_FLOW_TYPE", "SUBSCRIPTION_TYPE"));
+
       SDOPackage::NVList prop;
       provider->publishInterfaceProfile(prop);
 			        
@@ -323,10 +331,10 @@ namespace OutPortProvider
     void test_publishInterfaceProfile2()
     {
       std::auto_ptr<OutPortProviderMock> provider(
-						   new OutPortProviderMock(
-									   "PORT_TYPE", "DATA_TYPE", "INTERFACE_TYPE",
-									   "DATA_FLOW_TYPE", "SUBSCRIPTION_TYPE"));
-			
+          new OutPortProviderMock("PORT_TYPE", "DATA_TYPE", "INTERFACE_TYPE",
+                                  "DATA_FLOW_TYPE", "SUBSCRIPTION_TYPE"));
+
+
       //m_properties¤Ø"PROPERTY_NAME1",¡ÉPROPERTY_NAME2¡É¤òÀßÄê
       provider->setDummydataInProperties();
 

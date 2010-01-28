@@ -47,9 +47,9 @@ namespace InPortConnector
     : public RTC::InPortConnector
   {
   public:
-      InPortConnectorMock(ConnectorBase::Profile& profile,
+      InPortConnectorMock(RTC::ConnectorInfo& info,
                           RTC::CdrBufferBase* buffer)
-        : RTC::InPortConnector(profile, buffer)
+        : RTC::InPortConnector(info, buffer)
       {
       }
       virtual ~InPortConnectorMock()
@@ -117,7 +117,7 @@ namespace InPortConnector
     }
 		
     /*!
-     * @brief profile(),id(),name(),getBuffer()メソッドのテスト
+     * @brief profile(),id(),name(),getBuffer()
      * 
      */
     void test_case0()
@@ -140,13 +140,13 @@ namespace InPortConnector
 
         coil::Properties prop;
         NVUtil::copyToProperties(prop, cprof.properties);
-        RTC::ConnectorBase::Profile profile(cprof.name,
+        RTC::ConnectorInfo info(cprof.name,
                                        cprof.connector_id,
                                        CORBA_SeqUtil::refToVstring(cprof.ports),
                                        prop); 
         RTC::CdrBufferBase* m_thebuffer;
         m_thebuffer = RTC::CdrBufferFactory::instance().createObject("ring_buffer");
-        InPortConnector::InPortConnectorMock connector(profile, m_thebuffer);
+        InPortConnector::InPortConnectorMock connector(info, m_thebuffer);
         CPPUNIT_ASSERT_EQUAL(std::string(cprof.connector_id),std::string(connector.id()));
         CPPUNIT_ASSERT_EQUAL(std::string(cprof.name),std::string(connector.name()));
         CPPUNIT_ASSERT_EQUAL(m_thebuffer,connector.getBuffer());

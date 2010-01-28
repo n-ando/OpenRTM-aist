@@ -62,6 +62,9 @@ nodist_OutPortPullConnectorTests_SOURCES =     \
 	$(top_srcdir)/src/lib/rtm/ConfigAdmin.cpp      \
 	$(top_srcdir)/src/lib/rtm/SdoOrganization.cpp  \
 	$(top_srcdir)/src/lib/rtm/SdoConfiguration.cpp \
+	$(top_srcdir)/src/lib/rtm/CorbaPort.cpp          \
+	$(top_srcdir)/src/lib/rtm/ConnectorListener.cpp  \
+	$(top_srcdir)/src/lib/rtm/CORBA_IORUtil.cpp      \
 	$(top_srcdir)/src/lib/rtm/SystemLogger.cpp           \
 	$(top_srcdir)/src/lib/rtm/FactoryInit.cpp              \
 	$(top_srcdir)/src/lib/rtm/CdrRingBuffer.cpp            \
