@@ -44,15 +44,20 @@
 			    Name="Start Naming Service"
 			    Show="normal" WorkingDirectory="tools"/>
 		  {% endif %}
+		  {% if file.Name is rtc.conf %}
+		  <Shortcut Id="{% file.Id %}" Directory="ToolsMenuFolder"
+			    Name="rtc.conf for RTC daemon"
+			    Show="normal" WorkingDirectory="tools"/>
+		  {% endif %}
 		</File>
 		{% endfor %}
 		{% for file in Rtcd.Files %}
 		<File Id="{% file.Id %}"
 		      Name="{% file.Name %}" DiskId="1"
 		      Source="{% file.Source %}">
-		  {% if file.Name is rtm-naming.bat %}
+		  {% if file.Name is rtcd.exe %}
 		  <Shortcut Id="{% file.Id %}" Directory="ToolsMenuFolder"
-			    Name="Start RTC daemon"
+			    Name="Start RTC daemon" Arguments=" -d "
 			    Show="normal" WorkingDirectory="tools"/>
 		  {% endif %}
 		</File>
@@ -202,6 +207,11 @@
 		  <File Id="{% file.Id %}"
 			Name="{% file.Name %}" DiskId="1"
 			Source="{% file.Source %}">
+		    {% if file.Name is rtc.conf %}
+		    <Shortcut Id="{% file.Id %}" Directory="ExpMenuFolder"
+			      Name="rtc.conf for examples"
+			      Show="normal" WorkingDirectory="tools"/>
+		    {% endif %}
 		    {% if-any file.Shortcut %}{% if file.Shortcut is True %}
 		    <Shortcut Id="{% file.Id %}" Directory="ExpMenuFolder"
 			      Name="{% file.Name %}"

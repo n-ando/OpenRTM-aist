@@ -4,7 +4,14 @@
     <Directory Id="RTSystemEditor" Name="RTSystemEditor">
       <Component Id="RTSystemEditor" DiskId="1" Guid="2748F847-387F-4AB8-AC7C-0557AA4DD742">
         <File Id="_.eclipseproduct" Name=".eclipseproduct" Source="C:\distribution\OpenRTP\RTSystemEditor\.eclipseproduct" />
-        <File Id="RTSystemEditorRCP.exe" Name="RTSystemEditorRCP.exe" Source="C:\distribution\OpenRTP\RTSystemEditor\RTSystemEditorRCP.exe" />
+        <File Id="RTSystemEditorRCP.exe"
+	      Name="RTSystemEditorRCP.exe"
+	      Source="C:\distribution\OpenRTP\RTSystemEditor\RTSystemEditorRCP.exe">
+	  <Shortcut Id="RTSystemEditorRCP.exe"
+		    Directory="ToolsMenuFolder"
+		    Name="RT System Editor"
+		    Show="normal" WorkingDirectory="tools"/>
+	</File>
         <File Id="startup.jar" Name="startup.jar" Source="C:\distribution\OpenRTP\RTSystemEditor\startup.jar" />
       </Component>
       <Directory Id="configuration" Name="configuration">
