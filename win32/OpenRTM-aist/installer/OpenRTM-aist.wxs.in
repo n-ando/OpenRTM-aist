@@ -250,7 +250,12 @@
       <!-- システムフォルダ -->
       <Directory Id="SystemFolder"
 		 SourceName="System32">
-
+	<?if $(env.VC_VERSION) = "Visual C++ 2005" ?>
+	<?include VC8msm_inc.wxs ?>
+	<?endif ?>
+	<?if $(env.VC_VERSION) = "Visual C++ 2008" ?>
+	<?include VC9msm_inc.wxs ?>
+	<?endif ?>
       </Directory>
       <!-- プログラムフォルダ -->
       <Directory Id="ProgramMenuFolder">
@@ -353,6 +358,11 @@
       </Feature>
     </Feature>
     <?endif ?>
+    <Feature Id="VCRedist"
+	     Title="$(env.VC_VERSION) Runtime" AllowAdvertise="no" Level="1"> 
+      <MergeRef Id="VCCRTx86.msm"/> 
+      <MergeRef Id="POLVCCRTx86.msm"/>
+    </Feature>
 
     <WixVariable Id="WixUILicenseRtf" Value="License.rtf" />
     <WixVariable Id="WixUIBannerBmp" Value="Bitmaps/bannrbmp.bmp" />
