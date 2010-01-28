@@ -60,7 +60,7 @@ fi
 # リポジトリサーバ
 #---------------------------------------
 create_srclist () {
-    cnames="sarge etch"
+    cnames="sarge etch lenny"
     for c in $cnames; do
 	if test -f "/etc/apt/sources.list"; then
 	    res=`grep $c /etc/apt/sources.list`
