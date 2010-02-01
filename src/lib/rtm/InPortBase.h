@@ -713,6 +713,11 @@ namespace RTC
      * ば、true を返し、引数 littleEndian に、設定値がリトルエンディア
      * ンであれば true が、ビッグエンディアンであれば false が返される。
      *
+     * @param prop チェックするプロパティ
+     * @param littleEndian エンディアン情報（true:little,false:big）
+     * @return true:"serializer"キーが存在しない または 存在していて内容がある。
+,false:"serializer"キーが存在しているが内容が空 または 存在しているが内容が"little","big" 以外。
+     *
      * @else
      *
      * @brief Checking endian flag of serializer
@@ -721,6 +726,12 @@ namespace RTC
      * specified properties. If valid specification is found, this
      * operation returns true and set argument littleEndian. True
      * means little endian, false means big endian.
+     *
+     * @param prop Properties
+     * @param littleEndian Endian Information(true:little,false:big)
+     * @return true:"Serializer" key doesn't exist. or  "Serializer" key exists and there is a content.
+     *
+     *false:There is no content though "Serializer" key exists. or ithe content is not "Little. " though "Serializer" key exists. or The content is not "little" or "big" though "Serializer" key exists.
      *
      * @endif
      */

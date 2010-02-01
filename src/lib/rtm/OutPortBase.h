@@ -56,6 +56,7 @@ namespace RTC
    *
    * - port.outport
    * - port.outport.[name]
+   *
    * ConnectorProfile.properties の場合は
    * - dataport.outport
    *
@@ -85,40 +86,40 @@ namespace RTC
    * - output.throughput.avg_sendtime: [sec]
    * - output.throughput.byte_sec: [bytes/sec]
    *
-   * dataport.dataflow_type
-   * dataport.interface_type
-   * dataport.subscription_type
+   * dataport.dataflow_type <br>
+   * dataport.interface_type <br>
+   * dataport.subscription_type <br>
    *
    * [buffer]
    *
-   * - buffer.type:
-   *     利用可能なバッファのタイプ
+   * - buffer.type: <br>
+   *     利用可能なバッファのタイプ <br>
    *     ConnectorProfile の場合は利用するバッファのタイプ
-   *     無指定の場合はデフォルトの ringbuffer が使用される。
+   *     無指定の場合はデフォルトの ringbuffer が使用される。<br>
    *     ex. ringbuffer, shmbuffer, doublebuffer, etc.
    *     正し、Consumer, Publisher のタイプによっては特定のバッファ型を
    *     要求するがあるための、その場合は指定は無効となる。
    *
-   * - buffer.length:
+   * - buffer.length: <br>
    *     バッファの長さ
    *
-   * - buffer.write.full_policy:
-   *     上書きするかどうかのポリシー
+   * - buffer.write.full_policy: <br>
+   *     上書きするかどうかのポリシー <br>
    *     overwrite (上書き), do_nothing (何もしない), block (ブロックする)
    *     block を指定した場合、次の timeout 値を指定すれば、指定時間後
    *     書き込み不可能であればタイムアウトする。
    *
-   * - buffer.write.timeout:
+   * - buffer.write.timeout: <br>
    *     タイムアウト時間を [sec] で指定する。
    *     1 sec -> 1.0, 1 ms -> 0.001, タイムアウトしない -> 0.0
    *
-   * - buffer.read.empty_policy:
-   *     バッファが空のときの読み出しポリシー
+   * - buffer.read.empty_policy: <br>
+   *     バッファが空のときの読み出しポリシー <br>
    *     last (最後の要素), do_nothing (何もしない), block (ブロックする)
    *     block を指定した場合、次の timeout 値を指定すれば、指定時間後
    *     読み出し不可能であればタイムアウトする。
    *
-   * - buffer.read.timeout:
+   * - buffer.read.timeout: <br>
    *     タイムアウト時間 [sec] で指定する。
    *     1sec -> 1.0, 1ms -> 0.001, タイムアウトしない -> 0.0
    *
@@ -127,25 +128,25 @@ namespace RTC
    *
    * [publihser]
    *
-   * - publisher.types:
-   *      利用可能な Publisher のタイプ
+   * - publisher.types: <br>
+   *      利用可能な Publisher のタイプ <br>
    *      new, periodic, flush, etc..
    *
-   * - publisher.push.policy:
-   *      InPortへデータを送信するポリシー
-   *      all: バッファにたまっているすべて送信
-   *      fifo: バッファをFIFOとみなして送信
-   *      skip: 古いデータから一定数を間引いて送信
-   *      new: 常に新しいデータのみを送信
+   * - publisher.push.policy: <br>
+   *      InPortへデータを送信するポリシー <br>
+   *      - all: バッファにたまっているすべて送信
+   *      - fifo: バッファをFIFOとみなして送信
+   *      - skip: 古いデータから一定数を間引いて送信
+   *      - new: 常に新しいデータのみを送信
    *
-   * - publisher.push.skip_rate:
-   *      push.policy=skip のときのスキップ率
+   * - publisher.push.skip_rate: <br>
+   *      push.policy=skip のときのスキップ率 <br>
    *      n: n要素毎にひとつ送信
    *
    * - publisher.periodic.rate:
    *
-   * - publisher.thread.type:
-   *       Publisher のスレッドのタイプ
+   * - publisher.thread.type: <br>
+   *       Publisher のスレッドのタイプ <br>
    * - publisher.thread.measurement.exec_time: yes/no
    * - publisher.thread.measurement.exec_count: number
    * - publisher.thread.measurement.period_time: yes/no
@@ -153,8 +154,8 @@ namespace RTC
    *
    * [interface]
    *
-   * - interface.types:
-   *     OutPort interfaceのタイプ
+   * - interface.types: <br>
+   *     OutPort interfaceのタイプ <br>
    *     ex. corba_cdr, corba_any, raw_tcp などカンマ区切りで指定。何も
    *     指定しなければ利用可能なすべてのプロバイダが使用される
    *
@@ -172,8 +173,10 @@ namespace RTC
    *    リファレンスがセットされていなければ無視して継続。
    *    (OutPortがconnect() 呼び出しのエントリポイントの場合は、
    *    InPortのオブジェクトリファレンスはセットされていないはずである。)
+   *
    * 3. PortBase::connect() をコール
    *    Portの接続の基本処理が行われる。
+   *
    * 4. 上記2.でInPortのリファレンスが取得できなければ、再度InPortに
    *    関連する connector 情報を取得する。
    *
@@ -181,27 +184,27 @@ namespace RTC
    *    OutPort側の初期化処理を行う。
    *
    * - [dataport.interface_type]
-   * -- CORBA_Any の場合: 
+   *  - CORBA_Any の場合: 
    *    InPortAny を通してデータ交換される。
    *    ConnectorProfile::properties["dataport.corba_any.inport_ref"]に
    *    InPortAny のオブジェクトリファレンスをセットする。
-   * -- RawTCP の場合: Raw TCP socket を通してデータ交換される。
+   *  - RawTCP の場合: Raw TCP socket を通してデータ交換される。
    *    ConnectorProfile::properties["dataport.raw_tcp.server_addr"]
    *    にInPort側のサーバアドレスをセットする。
    *
    * - [dataport.dataflow_type]
-   * -- Pushの場合: Subscriberを生成する。Subscriberのタイプは、
+   *  - Pushの場合: Subscriberを生成する。Subscriberのタイプは、
    *    dataport.subscription_type に設定されている。
-   * -- Pullの場合: InPort側がデータをPull型で取得するため、
+   *  - Pullの場合: InPort側がデータをPull型で取得するため、
    *    特に何もする必要が無い。
    *
    * - [dataport.subscription_type]
-   * -- Onceの場合: SubscriberOnceを生成する。
-   * -- Newの場合: SubscriberNewを生成する。
-   * -- Periodicの場合: SubscriberPeriodicを生成する。
+   *  - Onceの場合: SubscriberOnceを生成する。
+   *  - Newの場合: SubscriberNewを生成する。
+   *  - Periodicの場合: SubscriberPeriodicを生成する。
    *
    * - [dataport.publisher.push_rate]
-   * -- dataport.subscription_type=Periodicの場合周期を設定する。
+   *  - dataport.subscription_type=Periodicの場合周期を設定する。
    *
    * 6. 上記の処理のうち一つでもエラーであれば、エラーリターンする。
    *    正常に処理が行われた場合はRTC::RTC_OKでリターンする。
@@ -239,6 +242,7 @@ namespace RTC
      * コンストラクタ。
      *
      * @param name ポート名
+     * @param data_type データタイプ
      *
      * @else
      * @brief Constructor
@@ -246,6 +250,7 @@ namespace RTC
      * Constructor
      *
      * @param name Port name
+     * @param data_type Data type
      *
      * @endif
      */
@@ -275,11 +280,13 @@ namespace RTC
      *
      * OutPortのプロパティを初期化する
      *
+     * @param prop 設定するプロパティ
      * @else
      *
      * @brief Initializing properties
      *
      * This operation initializes outport's properties
+     * @param prop Property for setting ports
      *
      * @endif
      */
@@ -527,9 +534,9 @@ namespace RTC
     /*!
      * @if jp
      *
-     * @brief InPortを activates する
+     * @brief 全ての Port のインターフェースを activate する
      *
-     * InPortを activate する。
+     * Port に登録されている全てのインターフェースを activate する。
      *
      * @else
      *
@@ -545,7 +552,7 @@ namespace RTC
     /*!
      * @if jp
      *
-     * @brief 全ての Port のインターフェースを deactivates する
+     * @brief 全ての Port のインターフェースを deactivate する
      *
      * Port に登録されている全てのインターフェースを deactivate する。
      *
@@ -950,6 +957,37 @@ namespace RTC
      */
     void initConsumers();
 
+    /*!
+     * @if jp
+     * @brief シリアライザのエンディアンをチェックする
+     *
+     * 与えられたプロパティに設定されている、データのシリアライザのエン
+     * ディアン指定をチェックする。正しいエンディアン指定がなされていれ
+     * ば、true を返し、引数 littleEndian に、設定値がリトルエンディア
+     * ンであれば true が、ビッグエンディアンであれば false が返される。
+     *
+     * @param prop チェックするプロパティ
+     * @param littleEndian エンディアン情報（true:little,false:big）
+     * @return true:"serializer"キーが存在しない または 存在していて内容がある。
+,false:"serializer"キーが存在しているが内容が空 または 存在しているが内容が"little","big" 以外。
+     *
+     * @else
+     *
+     * @brief Checking endian flag of serializer
+     *
+     * This operation checks endian flag of data serializer that is
+     * specified properties. If valid specification is found, this
+     * operation returns true and set argument littleEndian. True
+     * means little endian, false means big endian.
+     *
+     * @param prop Properties
+     * @param littleEndian Endian Information(true:little,false:big)
+     * @return true:"Serializer" key doesn't exist. or  "Serializer" key exists and there is a content.
+     *
+     *false:There is no content though "Serializer" key exists. or ithe content is not "Little. " though "Serializer" key exists. or The content is not "little" or "big" though "Serializer" key exists.
+     *
+     * @endif
+     */
     bool checkEndian(const coil::Properties& prop, bool& littleEndian);
 
     /*!
