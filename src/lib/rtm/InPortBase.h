@@ -79,9 +79,7 @@ namespace RTC
      * コンストラクタ
      *
      * @param name ポート名称
-     * @param inport 当該データ入力ポートに関連付けるInPortオブジェクト
-     *               InPortオブジェクトで扱うデータ型、バッファタイプも指定する
-     * @param prop ポート設定用プロパティ
+     * @param data_type データタイプ
      *
      * @else
      * @brief Constructor
@@ -89,10 +87,7 @@ namespace RTC
      * Constructor
      *
      * @param name Port name
-     * @param inport InPort object that is associated with this data input port.
-     *               Specify also the data type and the buffer type used in 
-     *               the InPort object.
-     * @param prop Property for setting ports
+     * @param data_type Data type
      *
      * @endif
      */
@@ -116,8 +111,16 @@ namespace RTC
     /*!
      * @if jp
      * @brief プロパティの初期化
+     *
+     * 指定されたプロパティで初期化する。
+     *
+     * @param prop 設定するプロパティ
      * @else
      * @brief Initializing properties
+     *
+     * This method initializes the port in the specified property. 
+     *
+     * @param prop Property for setting ports
      * @endif
      */
     void init(coil::Properties& prop);
@@ -125,8 +128,15 @@ namespace RTC
     /*!
      * @if jp
      * @brief RTObject_impl::readAll()から呼ばれる仮想関数
+     *
+     * DataPort からデータを読み出す
+     *
+     * @return true:成功,false:失敗
      * @else
      * @brief It is a virtual method that is called from RTObject_impl::readAll().
+     * This method reads out data from DataPort. 
+     *
+     * @return true:Success,false:Failure
      * @endif
      */
     virtual bool read() = 0;
@@ -134,8 +144,16 @@ namespace RTC
     /*!
      * @if jp
      * @brief プロパティを取得する
+     *
+     * ポートのプロパティを取得する。
+     *
+     * @return プロパティ
      * @else
      * @brief Get properties
+     *
+     * This method gets properties in the port. 
+     *
+     * @return Properties
      * @endif
      */
     coil::Properties& properties();
@@ -320,7 +338,7 @@ namespace RTC
      *
      * @brief InPortを activates する
      *
-     * InPortを activate する。
+     * Port に登録されている全てのインターフェースを activate する。
      *
      * @else
      *
