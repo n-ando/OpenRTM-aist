@@ -415,8 +415,7 @@ namespace SDOPackage
     for (::CORBA::ULong i(0), len(plist.length()); i < len; ++i)
       {
         // port name -> comp_name.port_name
-        std::string port_name(comp_name);
-        port_name += "."; port_name += plist[i].name;
+        std::string port_name(plist[i].name);
 
         RTC_DEBUG(("port_name: %s is in %s?",
                    port_name.c_str(),
