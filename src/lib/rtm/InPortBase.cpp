@@ -152,6 +152,24 @@ namespace RTC
 
   /*!
    * @if jp
+   * @brief ConnectorProfile を取得
+   * @else
+   * @brief ConnectorProfile list
+   * @endif
+   */
+  ConnectorInfoList InPortBase::getConnectorProfiles()
+  {
+    RTC_TRACE(("getConnectorProfiles(): size = %d", m_connectors.size()));
+    ConnectorInfoList profs;
+    for (int i(0), len(m_connectors.size()); i < len; ++i)
+      {
+        profs.push_back(m_connectors[i]->profile());
+      }
+    return profs;
+  }
+
+  /*!
+   * @if jp
    * @brief ConnectorId を取得
    * @else
    * @brief ConnectorId list
