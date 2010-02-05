@@ -139,6 +139,19 @@ namespace RTC
 
   /*!
    * @if jp
+   * @brief Connector を取得
+   * @else
+   * @brief Connector list
+   * @endif
+   */
+  const std::vector<InPortConnector*>& InPortBase::connectors()
+  {
+    RTC_TRACE(("connectors(): size = %d", m_connectors.size()));
+    return m_connectors;
+  }
+
+  /*!
+   * @if jp
    * @brief ConnectorId を取得
    * @else
    * @brief ConnectorId list
