@@ -5,7 +5,7 @@
  * @date  $Date: 2007-12-31 03:08:02 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
- * Copyright (C) 2006-2009
+ * Copyright (C) 2006-2010
  *     Noriaki Ando
  *     Task-intelligence Research Group,
  *     Intelligent Systems Research Institute,
@@ -49,17 +49,14 @@ namespace RTC
    * CorbaPort は RT コンポーネントにおいて、ユーザ定義の CORBA オブジェ
    * クトサービスおよびコンシューマを提供する Port 実装である。
    *
-   * <p>
    * RT コンポーネントは、Port を介してユーザが定義した CORBA サービス
    * を提供することができ、これを RT Service (Provider) と呼ぶ。また、
    * 他の RT コンポーネントのサービスを利用するための CORBA オブジェク
    * トのプレースホルダを提供することができ、これを RT Service
    * Consumer と呼ぶ。
-   * <p>
    * CorbaPort は任意の数の Provider および Consumer を管理することがで
    * き、Port 同士を接続する際に対応する Provider と Consumer を適切に
    * 関連付けることができる。
-   * <p>
    * CorbaPort は通常以下のように利用される。
    *
    * <pre>
@@ -102,7 +99,7 @@ namespace RTC
    * て、接続開始時点ではインスタンス名は存在しないが、接続シーケンス中
    * のインターフェースを公開するプロセスにおいて、プロバイダは生成した
    * インスタンスに対応した記述子を ConnectorProfile に適正に設定するも
-   * のとする。
+   * のとする。(未実装)
    *
    * REQUIREDすなわちコンシューマのインスタンス名が "*" の場合は、一つ
    * のコンシューマが複数のプロバイダと接続可能なタイプのコンシューマで
@@ -287,9 +284,9 @@ namespace RTC
    *
    * プロバイダは subscribeInterfaces() では特に操作は行わない。
    *
-   * コンシューマは、publishInterfaces() においては特に操作を行わない。
+   * コンシューマは、 publishInterfaces() においては特に操作を行わない。
    *
-   * 一方、subscribeInterfaces() では、自分の記述子を key とする
+   * 一方、 subscribeInterfaces() では、自分の記述子を key とする
    * key-value ペア が存在するかどうか調べ、もし存在すれば、その value
    * に設定されたプロバイダのインターフェース指定子で指定される参照を、
    * さらに ConnectorProfile::properties から探し、それをコンシューマの
@@ -628,11 +625,23 @@ namespace RTC
      * @if jp
      * @brief コンストラクタ
      *
+     * コンストラクタでは、引数に与えられた名前を PortBase に対してセッ
+     * トするとともに、PortProfile::properties に対して
+     *
+     * - port.port_type: "CorbaPort"
+     *
+     * をプロパティとして追加する。
+     *
      * @param name Port の名前
      *
      * @else
      *
      * @brief Constructor
+     *
+     * In the ctor, a given name is set into PortBase, and the
+     * following property is added to the PortProfile::properties,
+     *
+     * - port.port_type: "CorbaPort"
      *
      * @param name The name of Port 
      *
@@ -657,13 +666,26 @@ namespace RTC
      * @if jp
      * @brief プロパティの初期化
      *
-     * OutPortのプロパティを初期化する
+     * OutPortのプロパティを初期化する。このポートへの接続数を指定する
+     * プロパティ "connection_limit" が含まれ、適切な数値が設定されてい
+     * る場合、最大接続数としてその数値が設定される。プロパティが設定さ
+     * れていない場合、もしくは適切な値が設定されていない場合には、最大
+     * 接続数は無制限となる。
+     *
+     * @param prop CorbaPort のプロパティ
      *
      * @else
      *
      * @brief Initializing properties
      *
-     * This operation initializes outport's properties
+     * This operation initializes outport's properties. If a property
+     * "connection_limit" is set and appropriate value is set to this
+     * property value, the number of maximum connection is set as this
+     * value. If the property does not exist or invalid value is set
+     * to this property, the maximum number of connection will be set
+     * unlimited.
+     *
+     * @param prop properties of the CorbaPort
      *
      * @endif
      */
@@ -674,10 +696,12 @@ namespace RTC
      *
      * @brief Provider を登録する
      *
-     * この Port において提供したいサーバントをこの Port に対して登録する。
-     * サーバントは、引数で与えられる instance_name, type_name を、
+     * この Port において提供したいサーバントをこの Port に対して登録す
+     * る。サーバントは、引数で与えられる instance_name, type_name を、
      * サーバント自身のインスタンス名およびタイプ名として、サーバントに
-     * 関連付けられる。
+     * 関連付けられる。この関数により、サーバントは CorbaPort 内部に保
+     * 持されるとともに、PortInterfaceProfile にRTC::PROVIDED インター
+     * フェースとして登録される。
      *
      * @param instance_name サーバントのインスタンス名
      * @param type_name サーバントのタイプ名
@@ -689,10 +713,12 @@ namespace RTC
      *
      * @brief Register the provider
      *
-     * This operation registers a servant, which is provided in this Port,
-     * to the Port. The servant is associated with "instance_name" and
-     * "type_name" as the instance name of the servant and as the type name
-     * of the servant.
+     * This operation registers a servant, which is provided in this
+     * Port, to the Port. The servant is associated with
+     * "instance_name" and "type_name" as the instance name of the
+     * servant and as the type name of the servant. A given servant
+     * will be stored in the CorbaPort, and this is registered as
+     * RTC::PROVIDED interface into the PortInterfaceProfile.
      *
      * @param instance_name Instance name of servant
      * @param type_name Type name of the servant
@@ -1045,7 +1071,72 @@ namespace RTC
     
   private:
     class CorbaConsumerHolder;
-    virtual bool findProvider(const NVList& nv, CorbaConsumerHolder& cons);
+    /*!
+     * @if jp
+     * @brief Consumer に合致する Provider を NVList の中から見つける
+     *
+     * NVList 中から CorbaConsumerHolder に保持されている Consumer に合
+     * 致するキーを持つ Provider を見つけ、IOR を抽出しナローイングして
+     * Consumer にセットする。対応するキーが存在しない、IOR が見つから
+     * ない、ナローイングに失敗した場合、false を返す。
+     *
+     * @param nv Provider が含まれている ConnectorProfile::properties の NVList
+     * @param cons Provider と対応する Consumer のホルダ
+     * 
+     * @retrun bool Consumer に対応する Provider が見つからない場合 false
+     *
+     * @else
+     * @brief Find out a provider corresponding to the consumer from NVList
+     *
+     * This function finds out a Provider with the key that is matched
+     * with Cosumer's name in the CorbaConsumerHolder, extracts IOR
+     * and performs narrowing into the Consumer and set it to the
+     * Consumer. False is returned when there is no corresponding key
+     * and IOR and the narrowing failed.
+     *  
+     * @param nv NVlist of ConnectorProfile::properties that includes Provider
+     * @param cons a Consumer holder to be matched with a Provider
+     * 
+     * @return bool false is returned if there is no provider for the consumer
+     *
+     * @endif
+     */
+   virtual bool findProvider(const NVList& nv, CorbaConsumerHolder& cons);
+
+    /*!
+     * @if jp
+     * @brief Consumer に合致する Provider を NVList の中から見つける
+     *
+     * この関数は、古いバージョンの互換性のための関数である。
+     *
+     * NVList 中から CorbaConsumerHolder に保持されている Consumer に合
+     * 致するキーを持つ Provider を見つけ、IOR を抽出しナローイングして
+     * Consumer にセットする。対応するキーが存在しない、IOR が見つから
+     * ない、ナローイングに失敗した場合、false を返す。
+     *  
+     * @param nv Provider が含まれている ConnectorProfile::properties の NVList
+     * @param cons Provider と対応する Consumer のホルダ
+     * 
+     * @retrun bool Consumer に対応する Provider が見つからない場合 false
+     *
+     * @else
+     * @brief Find out a provider corresponding to the consumer from NVList
+     *
+     * This function is for the old version's compatibility.
+     *
+     * This function finds out a Provider with the key that is matched
+     * with Cosumer's name in the CorbaConsumerHolder, extracts IOR
+     * and performs narrowing into the Consumer and set it to the
+     * Consumer. False is returned when there is no corresponding key
+     * and IOR and the narrowing failed.
+     *  
+     * @param nv NVlist of ConnectorProfile::properties that includes Provider
+     * @param cons a Consumer holder to be matched with a Provider
+     * 
+     * @return bool false is returned if there is no provider for the consumer
+     *
+     * @endif
+     */
     virtual bool findProviderOld(const NVList&nv, CorbaConsumerHolder& cons);
 
   private:
