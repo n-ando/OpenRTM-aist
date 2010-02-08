@@ -1608,7 +1608,6 @@ namespace RTC
 	    if ( (*it) == &inport )
 	      {
 		m_inports.erase(it);
-		std::cout << "removeInPort erase port found." << std::endl;
 		return true;
 	      }
 	    ++it;
@@ -1639,7 +1638,6 @@ namespace RTC
 	    if ( (*it) == &outport )
 	      {
 		m_outports.erase(it);
-		std::cout << "removeOutPort erase port found." << std::endl;
 		return true;
 	      }
 	    ++it;
