@@ -5,7 +5,7 @@
  * @date $Date: 2007-12-31 03:08:05 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
- * Copyright (C) 2006-2008
+ * Copyright (C) 2006-2010
  *     Noriaki Ando
  *     Task-intelligence Research Group,
  *     Intelligent Systems Research Institute,
@@ -24,9 +24,6 @@ class cdrStream;
 
 namespace RTC
 {
-
-
-
   //============================================================
   // callback functor base classes
   /*!
@@ -72,6 +69,7 @@ namespace RTC
      * @endif
      */
     virtual ~ConnectionCallback(void){}
+
     /*!
      * @if jp
      *
@@ -96,13 +94,14 @@ namespace RTC
     virtual void operator()(RTC::ConnectorProfile& profile) = 0;
   };
 
+
   /*!
    * @if jp
    * @class DisconnectCallback
    * @brief disconnect/notify_disconnect() 時のコールバック抽象クラス
    *
-   * Portに対してdisconnect/notify_disconnect() 等が呼び出される時に呼び出される
-   * コールバックファンクタ。引数に接続IDを取る。
+   * Portに対してdisconnect/notify_disconnect() 等が呼び出される時に呼
+   * び出されるコールバックファンクタ。引数に接続IDを取る。
    *
    * @param connector_id Connector ID
    *
@@ -112,9 +111,9 @@ namespace RTC
    * @class DisconnectCallback
    * @brief Callback functor abstract for disconnect/notify_disconnect() funcs
    *
-   * This is the interface for callback functor for 
-   * disconnect/notify_disconnect() invocation in Port.
-   * Argument is connector ID is given these functions.
+   * This is the interface for callback functor for
+   * disconnect/notify_disconnect() invocation in Port. Argument is
+   * connector ID is given these functions.
    *
    * @param connector_id Connector ID
    *
@@ -162,6 +161,7 @@ namespace RTC
      */
     virtual void operator()(const char* connector_id) = 0;
   };
+
 
   /*!
    * @if jp
@@ -218,7 +218,7 @@ namespace RTC
      *
      * @else
      *
-     * @brief Callback method
+     * @brief Callback function
      *
      * This is the callback method invoked immediately before data is written
      * into the buffer.
@@ -230,14 +230,15 @@ namespace RTC
     virtual void operator()(const DataType& value) = 0;
   };
   
+
   /*!
    * @if jp
    * @class OnWriteConvert
    * @brief write() 時のデータ変換コールバック抽象クラス
    *
-   * InPort/OutPortのバッファにデータが write()される時に呼び出される
-   * コールバック用インターフェース。
-   * このコールバックの戻り値がバッファに格納される。
+   * OutPortのバッファにデータが write()される時に呼び出されるコールバッ
+   * ク用インターフェース。このコールバックの戻り値がバッファに格納され
+   * る。
    *
    * @since 0.4.0
    *
@@ -245,9 +246,9 @@ namespace RTC
    * @class OnWriteConvert
    * @brief Data convert callback abstract class on write()
    *
-   * This is the interface for callback invoked when data is done write()
-   * into the InPort/OutPort's buffer.
-   * The return value of this callback will be stored in the buffer.
+   * This is the interface for callback invoked when data is done
+   * write() into the OutPort's buffer.  The return value of this
+   * callback will be stored in the buffer.
    *
    * @since 0.4.0
    *
@@ -274,36 +275,35 @@ namespace RTC
     /*!
      * @if jp
      *
-     * @brief コールバックメソッド
+     * @brief コールバック関数
      *
-     * バッファにデータが書き込まれる際に呼び出されるコールバックメソッド
+     * バッファにデータが書き込まれる際に呼び出されるコールバック関数。
      *
      * @param value 変換前データ
-     *
      * @return 変換後データ
      *
      * @else
      *
-     * @brief Callback method
+     * @brief Callback function
      *
-     * This is the callback method invoked when data is written into the
+     * This is the callback function invoked when data is written into the
      * buffer.
      *
-     * @param value Data before the convert
-     *
-     * @return Data after the convert
+     * @param value Data to be converted
+     * @return Converted data
      *
      * @endif
      */
     virtual DataType operator()(const DataType& value) = 0;
   };
   
+
   /*!
    * @if jp
    * @class OnRead
    * @brief read() 時のコールバック抽象クラス
    *
-   * InPort/OutPortのバッファからデータが read()される直線に呼び出される
+   * InPort のバッファからデータが read()される直前に呼び出される
    * コールバック用インターフェース。
    *
    * @since 0.4.0
@@ -313,7 +313,7 @@ namespace RTC
    * @brief Callback abstract class on read()
    *
    * This is the interface for callback invoked immediately before
-   * data is done read() from the InPort/OutPort's buffer.
+   * data is done read() from the InPort's buffer.
    *
    * @since 0.4.0
    *
@@ -344,11 +344,11 @@ namespace RTC
      *
      * @brief コールバックメソッド
      *
-     * バッファからデータが読み出される直前に呼び出されるコールバックメソッド
+     * バッファからデータが読み出される直前に呼び出されるコールバック関数。
      *
      * @else
      *
-     * @brief Callback method
+     * @brief Callback function
      *
      * This is the callback method invoked immediately before data is readout
      * from the buffer.
@@ -363,7 +363,7 @@ namespace RTC
    * @class OnReadConvert
    * @brief read() 時のデータ変換コールバック抽象クラス
    *
-   * InPort/OutPortのバッファからデータが read()される際に呼び出される
+   * InPort のバッファからデータが read()される際に呼び出される
    * コールバック用インターフェース。
    * このコールバックの戻り値がread()の戻り値となる。
    *
@@ -406,14 +406,24 @@ namespace RTC
      *
      * @brief コールバックメソッド
      *
-     * バッファからデータが読み出される際に呼び出されるコールバックメソッド
+     * バッファからデータが読み出される際に呼び出されるコールバック関数
+     * であり、operator()() の戻り値は InPort の read() の戻り値となる、
+     * またはデータ変数に格納される。
+     *
+     * @param value バッファから読みだされたデータ
+     * @return 変換後のデータ。データポート変数にはこの値が格納される。
      *
      * @else
      *
      * @brief Callback method
      *
-     * This is the callback method invoked when data is readout from the
-     * buffer.
+     * This function is the callback function invoked when data is
+     * readout from the buffer, and the return value of operator()()
+     * is used as return value of InPort's read() or it is stored in
+     * the InPort data variable.
+     *
+     * @param value Data that is readout from buffer
+     * @return Converted data. These data are stored in the port's variable.
      *
      * @endif
      */
