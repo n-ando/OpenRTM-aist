@@ -1368,7 +1368,7 @@ std::vector<coil::Properties> Manager::getLoadableModules()
 
   bool Manager::initManagerServant()
   {
-    RTC_TRACE((""));
+    RTC_TRACE(("Manager::initManagerServant()"));
     if (!coil::toBool(m_config["manager.corba_servant"], "YES", "NO", true))
       {
         return true;
