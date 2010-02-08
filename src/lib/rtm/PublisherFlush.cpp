@@ -97,7 +97,7 @@ namespace RTC
   {
     RTC_TRACE(("setBuffer()"));
 
-    return PORT_ERROR;
+    return PORT_OK;
   }
 
   /*!
@@ -125,6 +125,13 @@ namespace RTC
     return PORT_OK;
   }
 
+  /*!
+   * @if jp
+   * @brief データを書き込む
+   * @else
+   * @brief Write data 
+   * @endif
+   */
   PublisherBase::ReturnCode PublisherFlush::write(const cdrMemoryStream& data,
                                                   unsigned long sec,
                                                   unsigned long usec)
@@ -159,6 +166,9 @@ namespace RTC
       case SEND_TIMEOUT:
         onReceiverTimeout(data);
         return ret;
+      case CONNECTION_LOST:
+        onReceiverTimeout(data);
+        return ret;
       case UNKNOWN_ERROR:
         onReceiverError(data);
         return ret;
@@ -169,31 +179,43 @@ namespace RTC
     return ret;
   }
 
-
+  /*!
+   * @if jp
+   * @brief アクティブ化確認
+   * @else
+   * @brief Confirm to activate
+   * @endif
+   */
   bool PublisherFlush::isActive()
   {
     return m_active;
   }
 
+  /*!
+   * @if jp
+   * @brief アクティブ化
+   * @else
+   * @brief activation
+   * @endif
+   */
   PublisherBase::ReturnCode PublisherFlush::activate()
   {
-//    if ( m_active) { return PRECONDITION_NOT_MET; }
-
     m_active = true;
-
     return PORT_OK;
   }
 
+  /*!
+   * @if jp
+   * @brief 非アクティブ化
+   * @else
+   * @brief deactivation
+   * @endif
+   */
   PublisherBase::ReturnCode PublisherFlush::deactivate()
   {
-//    if (!m_active) { return PRECONDITION_NOT_MET; }
-
     m_active = false;
-
     return PORT_OK;
   }
- 
-
 
 }; // namespace RTC
 
