@@ -112,7 +112,7 @@ namespace RTC
      * 
      * 以下のオプションを与えることができる。
      * 
-     * - thread_type: スレッドのタイプ (文字列、デフォルト: default)
+     * - publisher.thread_type: スレッドのタイプ (文字列、デフォルト: default)
      * - publisher.push_rate: Publisherの送信周期 (数値)
      * - publisher.push_policy: Pushポリシー (all, fifo, skip, new)
      * - publisher.skip_count: 上記ポリシが skip のときのスキップ数
@@ -140,7 +140,7 @@ namespace RTC
      *
      * The following options are available.
      * 
-     * - thread_type: Thread type (string, default: default)
+     * - publisher.thread_type: Thread type (string, default: default)
      * - publisher.push_rate: Publisher sending period (numberical)
      * - publisher.push_policy: Push policy (all, fifo, skip, new)
      * - publisher.skip_count: The number of skip count in the "skip" policy
