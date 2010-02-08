@@ -102,10 +102,10 @@ namespace RTC
      * @else
      *
      * @brief Pure virtual function to bind the specified objects 
-     *        to NamingService
+     *        to the NamingService
      *
-     * @param name Names at the binding
-     * @param rtobj The target objects for the binding
+     * @param name The name to be bound to the NamingService
+     * @param rtobj The target objects to be bound to the NamingSerivce
      *
      * @endif
      */
@@ -124,12 +124,13 @@ namespace RTC
      * @brief Pure virtual function to bind the specified ManagerServants 
      *        to NamingService
      *
-     * @param name Names at the binding
-     * @param mgr The target ManagerServants for the binding
+     * @param name The name to be bound to the NamingService
+     * @param rtobj The target objects to be bound to the NamingSerivce
      *
      * @endif
      */
-    virtual void bindObject(const char* name, const RTM::ManagerServant* mgr) = 0;
+    virtual void bindObject(const char* name,
+                            const RTM::ManagerServant* mgr) = 0;
     
     /*!
      * @if jp
@@ -144,7 +145,7 @@ namespace RTC
      * @brief Pure virtual function to unbind the specified objects from 
      *        NamingService
      *
-     * @param name The target objects for the unbinding
+     * @param name The name of the object released from NamingService
      *
      * @endif
      */
@@ -153,21 +154,22 @@ namespace RTC
     /*!
      * @if jp
      *
-     * @brief ネームサーバのルートコンテキストの存在を確認する。
+     * @brief ネームサーバの生存を確認する。
      * 
-     * @return true:存在する,false:存在しない
+     * @return true:生存している, false:生存していない
      *
      * @else
      *
-     * @brief Existence of route context of Nameserver 
+     * @brief Check if the name service is alive
      * 
-     * @return true:existent,false:non existent
+     * @return true: alive, false:non not alive
      *
      * @endif
      */
     virtual bool isAlive() = 0;
   };
   
+
   /*!
    * @if jp
    *
@@ -175,7 +177,7 @@ namespace RTC
    * @brief CORBA 用 NamingServer 管理クラス
    *
    * CORBA 用 NamingServer 管理用クラス。
-   * CORBA コンポーネントのNamingServiceへの登録、解除などを管理する。
+   * CORBA コンポーネントの NamingService への登録、解除などを管理する。
    *
    * @since 0.4.0
    *
@@ -200,7 +202,9 @@ namespace RTC
      *
      * @brief コンストラクタ
      *
-     * コンストラクタ
+     * コンストラクタ。第2引数に与えるネームサービス名は、ネームサービ
+     * スのホスト名とポート番号を ":" で区切ったものである。ポート番号
+     * が省略された場合、2809番ポートが使用される。
      *
      * @param orb ORB
      * @param names NamingServer 名称
@@ -209,7 +213,10 @@ namespace RTC
      *
      * @brief Constructor
      *
-     * Constructor
+     * Constructor. Naming service name that is given at the second
+     * argument is host name and port number hoined with ":". If the
+     * port number is abbreviated, the default port number 2809 is
+     * used.
      *
      * @param orb ORB
      * @param names Name of NamingServer
@@ -298,15 +305,15 @@ namespace RTC
     /*!
      * @if jp
      *
-     * @brief ネームサーバのルートコンテキストの存在を確認する。
+     * @brief ネームサーバの生存を確認する。
      * 
-     * @return true:存在する,false:存在しない
+     * @return true:生存している, false:生存していない
      *
      * @else
      *
-     * @brief Existence of route context of Nameserver 
+     * @brief Check if the name service is alive
      * 
-     * @return true:existent,false:non existent
+     * @return true: alive, false:non not alive
      *
      * @endif
      */
@@ -412,7 +419,8 @@ namespace RTC
      *
      * @brief 指定したオブジェクトのNamingServiceへバインド
      * 
-     * 指定したオブジェクトを指定した名称で CORBA NamingService へバインドする。
+     * 指定したオブジェクトを指定した名称で CORBA NamingService へバイ
+     * ンドする。
      * 
      * @param name バインド時の名称
      * @param rtobj バインド対象オブジェクト
@@ -429,13 +437,14 @@ namespace RTC
      * @endif
      */
     void bindObject(const char* name, const RTObject_impl* rtobj);
+
     /*!
      * @if jp
      *
      * @brief 指定したManagerServantのNamingServiceへバインド
      * 
-     * 指定したManagerServantを指定した名称で 
-     * CORBA NamingService へバインドする。
+     * 指定したManagerServantを指定した名称で CORBA NamingService へバ
+     * インドする。
      * 
      * @param name バインド時の名称
      * @param mgr バインド対象ManagerServant
@@ -602,6 +611,7 @@ namespace RTC
      * @endif
      */
     void registerCompName(const char* name, const RTObject_impl* rtobj);
+
     /*!
      * @if jp
      *
@@ -646,6 +656,7 @@ namespace RTC
      * @endif
      */
     void unregisterCompName(const char* name);
+
     /*!
      * @if jp
      *
