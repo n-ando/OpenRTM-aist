@@ -8,7 +8,7 @@
 	   Version="{% Product.Version %}" 
            Manufacturer="{% Product.Manufacturer %}"
            UpgradeCode="{% Product.UpgradeCode %}">
-
+    <Property Id='USERPROFILEDIR' Value='%USERPROFILE%' />
     <Package Id="*" 
              Keywords="Installer"
              Description="{% Package.Description %}"
@@ -42,12 +42,12 @@
 		  {% if file.Name is rtm-naming.bat %}
 		  <Shortcut Id="{% file.Id %}" Directory="ToolsMenuFolder"
 			    Name="Start Naming Service"
-			    Show="normal" WorkingDirectory="tools"/>
+			    Show="normal" WorkingDirectory="bin"/>
 		  {% endif %}
 		  {% if file.Name is rtc.conf %}
 		  <Shortcut Id="{% file.Id %}" Directory="ToolsMenuFolder"
 			    Name="rtc.conf for RTC daemon"
-			    Show="normal" WorkingDirectory="tools"/>
+			    Show="normal" WorkingDirectory="bin"/>
 		  {% endif %}
 		</File>
 		{% endfor %}
@@ -58,7 +58,7 @@
 		  {% if file.Name is rtcd.exe %}
 		  <Shortcut Id="{% file.Id %}" Directory="ToolsMenuFolder"
 			    Name="Start RTC daemon" Arguments=" -d "
-			    Show="normal" WorkingDirectory="tools"/>
+			    Show="normal" WorkingDirectory="bin"/>
 		  {% endif %}
 		</File>
 		{% endfor %}
@@ -210,7 +210,7 @@
 		    {% if file.Name is rtc.conf %}
 		    <Shortcut Id="{% file.Id %}" Directory="ExpMenuFolder"
 			      Name="rtc.conf for examples"
-			      Show="normal" WorkingDirectory="tools"/>
+			      Show="normal" WorkingDirectory="CXXexamples"/>
 		    {% endif %}
 		    {% if-any file.Shortcut %}{% if file.Shortcut is True %}
 		    <Shortcut Id="{% file.Id %}" Directory="ExpMenuFolder"
@@ -354,6 +354,7 @@
 	<ComponentRef Id="OmniLibPythonOmniidl_beCxxHeader"/>
 	<ComponentRef Id="OmniLibPythonOmniidl_beCxxImpl"/>
 	<ComponentRef Id="OmniLibPythonOmniidl_beCxxSkel"/>
+	<ComponentRef Id="OmniLibPython1_5"/>
 	<ComponentRef Id="OmniLibX86_win32"/>
       </Feature>
     </Feature>

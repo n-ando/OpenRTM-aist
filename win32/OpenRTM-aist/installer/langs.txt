@@ -9,6 +9,7 @@ German,      de-de,     1031,   1252
 Hungarian,   hu-hu,     1038,   1250
 Italian,     it-it,     1040,   1252
 Japanese,    ja-jp,     1041,   932
+Korea,       ko-kr,     1042,   949
 Polish,      pl-pl,     1045,   1250
 Russian,     ru-ru,     1049,   1251
 Spanish,     es-es,     3082,   1252

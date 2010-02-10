@@ -36,6 +36,7 @@ data = [
     ("lib/python/omniidl_be/cxx/header",  "*.py"),
     ("lib/python/omniidl_be/cxx/impl",    "*.py"),
     ("lib/python/omniidl_be/cxx/skel",    "*.py"),
+    ("lib/python1.5",                     "*.py*"),
     ("lib/x86_win32",                     "*.lib"),
     ("src",                               "GNUmakefile")
 ]

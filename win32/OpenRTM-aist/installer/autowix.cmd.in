@@ -29,7 +29,7 @@
 @rem Supported languages
 @rem   supported languages have to be specified
 @rem ------------------------------------------------------------
-set LANGUAGES=(ja-jp de-de es-es fr-fr hu-hu it-it)
+set LANGUAGES=(ja-jp de-de es-es fr-fr hu-hu it-it ko-kr zh-tw)
 
 echo off
 @rem ------------------------------------------------------------
@@ -123,9 +123,15 @@ for %%i in %LANGUAGES% do (
     @rem compile wxs file and link msi
     @rem
     candle.exe %TARGET_WXS% -dlanguage=!LANG[%%i]! -dcodepage=!CODE[%%i]!
-    light.exe -ext WixUIExtension -cultures:!LC[%%i]! ^
-    	      -out %TARGET_FULL%_!LC[%%i]!.msi %TARGET_WIXOBJ%
 
+    if exist WixUI_!LC[%%i]!.wxl (
+       light.exe -ext WixUIExtension -loc WixUI_!LC[%%i]!.wxl ^
+            -out %TARGET_FULL%_!LC[%%i]!.msi %TARGET_WIXOBJ%
+    )
+    if not exist WixUI_!LC[%%i]!.wxl (
+        light.exe -ext WixUIExtension -cultures:!LC[%%i]! ^
+            -out %TARGET_FULL%_!LC[%%i]!.msi %TARGET_WIXOBJ%
+    )
     @rem ------------------------------------------------------------
     @rem creating transformation files
     @rem
