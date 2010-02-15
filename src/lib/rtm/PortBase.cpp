@@ -226,6 +226,7 @@ namespace RTC
     throw (CORBA::SystemException)
   {
     RTC_TRACE(("notify_connect()"));
+    Guard guard(m_connectorsMutex);
     ReturnCode_t retval[] = {RTC::RTC_OK, RTC::RTC_OK, RTC::RTC_OK};
 
     // publish owned interface information to the ConnectorProfile
@@ -379,6 +380,7 @@ namespace RTC
     throw (CORBA::SystemException)
   {
     RTC_TRACE(("notify_disconnect(%s)", connector_id));
+    Guard guard(m_connectorsMutex);
     Guard gaurd(m_profile_mutex);
 
     // find connector_profile

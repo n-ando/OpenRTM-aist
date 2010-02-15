@@ -1946,6 +1946,7 @@ namespace RTC
      * @endif
      */
     mutable coil::Mutex m_profile_mutex;
+    mutable coil::Mutex m_connectorsMutex;
     typedef coil::Guard<coil::Mutex> Guard;
 
     /*!
