@@ -388,7 +388,7 @@ namespace RTC
   {
     if (type < CONNECTOR_LISTENER_NUM)
       {
-        RTC_TRACE(("removeConnectorDataListener(%s)",
+        RTC_TRACE(("addConnectorListener(%s)",
                    ConnectorListener::toString(type)));
         m_listeners.connector_[type].addListener(listener, autoclean);
         return;
