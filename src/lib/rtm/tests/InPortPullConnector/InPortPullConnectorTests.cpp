@@ -482,9 +482,6 @@ namespace InPortPullConnector
         m_pPOA = PortableServer::POA::_narrow(
 		    m_pORB->resolve_initial_references("RootPOA"));
         m_pPOA->the_POAManager()->activate();
-
-
-
     }
 		
     /*!
@@ -546,7 +543,7 @@ namespace InPortPullConnector
     }
 		
     /*!
-     * @brief Constructor
+     * @brief Constructor メソッドテスト
      * 
      */
     void test_InPortPullConnector()
@@ -618,7 +615,7 @@ namespace InPortPullConnector
 
     }
     /*!
-     * @brief read
+     * @brief read メソッドテスト
      * 
      */
     void test_read()
@@ -664,7 +661,7 @@ namespace InPortPullConnector
 
     }
     /*!
-     * @brief disconnect
+     * @brief disconnect メソッドテスト
      * 
      */
     void test_disconnect()

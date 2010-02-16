@@ -45,6 +45,9 @@
 #include <cppunit/TestAssert.h>
 
 #include <rtm/CORBA_SeqUtil.h>
+#include <rtm/NVUtil.h>
+#include <rtm/PortAdmin.h>
+#include <rtm/ConnectorBase.h>
 #include "SeqUtilTestsSkel.h"
 
 /*!
@@ -53,6 +56,57 @@
  */
 namespace CORBA_SeqUtil
 {
+
+  class Logger
+  {
+  public:
+    void log(const std::string& msg)
+    {
+      m_log.push_back(msg);
+    }
+
+    int countLog(const std::string& msg)
+    {
+      int count = 0;
+      for (int i = 0; i < (int) m_log.size(); ++i)
+        {
+          if (m_log[i] == msg) ++count;
+        }
+      return count;
+    }
+		
+    void clearLog(void)
+    {
+        m_log.clear();
+    }
+  private:
+    std::vector<std::string> m_log;
+  };
+
+  class PortMock
+    : public RTC::PortBase
+  {
+  protected:
+    virtual RTC::ReturnCode_t publishInterfaces(RTC::ConnectorProfile&)
+    {
+      return RTC::RTC_OK;
+    }
+    virtual RTC::ReturnCode_t subscribeInterfaces(const RTC::ConnectorProfile&)
+    {
+      return RTC::RTC_OK;
+    }
+    virtual void unsubscribeInterfaces(const RTC::ConnectorProfile&)
+    {
+    }
+    virtual void activateInterfaces()
+    {
+    }
+    virtual void deactivateInterfaces()
+    {
+    }
+  };
+
+
   using namespace std;
   
   class CORBA_SeqUtilTests
@@ -70,6 +124,7 @@ namespace CORBA_SeqUtil
     CPPUNIT_TEST(test_erase);
     CPPUNIT_TEST(test_erase_if);
     CPPUNIT_TEST(test_clear);
+    CPPUNIT_TEST(test_refToVstring);
 
     CPPUNIT_TEST_SUITE_END();
 		
@@ -782,6 +837,54 @@ namespace CORBA_SeqUtil
       // clear()を呼出し、クリアされたこと（要素数０になったこと）を確認する
       CORBA_SeqUtil::clear(nvlist);
       CPPUNIT_ASSERT_EQUAL((CORBA::ULong) 0, nvlist.length());
+    }
+    
+    /*!
+     * @brief refToVstring()メソッドのテスト
+     * 
+     * <ul>
+     * <li>オブジェクトリファレンスの文字列が返されるか？</li>
+     * </ul>
+     */
+    void test_refToVstring()
+    {
+      int argc(0);
+      char** argv(NULL);
+      CORBA::ORB_ptr m_pORB = CORBA::ORB_init(argc, argv);
+      PortableServer::POA_ptr m_pPOA = 
+          PortableServer::POA::_narrow(m_pORB->resolve_initial_references("RootPOA"));
+      m_pPOA->the_POAManager()->activate();
+
+      RTC::PortAdmin portAdmin(m_pORB, m_pPOA);
+      PortMock* port0 = new PortMock();
+      port0->setName("port0");
+      CPPUNIT_ASSERT_EQUAL(true, portAdmin.addPort(*port0));
+
+      RTC::PortService_var portRef0 = portAdmin.getPortRef("port0");
+      RTC::ConnectorProfile cprof;
+      cprof.connector_id = "id";
+      cprof.name = CORBA::string_dup("Test");
+
+      CORBA_SeqUtil::push_back(cprof.properties,
+                               NVUtil::newNV("dataport.interface_type",
+					     "corba_cdr"));
+      CORBA_SeqUtil::push_back(cprof.properties,
+                               NVUtil::newNV("dataport.dataflow_type",
+					     "push"));
+      CORBA_SeqUtil::push_back(cprof.properties,
+                               NVUtil::newNV("dataport.subscription_type",
+					     "flush"));
+      cprof.ports.length(1);
+      cprof.ports[0] = portRef0;
+      coil::vstring str;
+      str = CORBA_SeqUtil::refToVstring(cprof.ports);
+      int len = str.size();
+      int pos = str[0].find("IOR", 0);
+      CPPUNIT_ASSERT_EQUAL(1, len);
+      CPPUNIT_ASSERT(pos != string::npos);
+
+//      delete port0;
+      // PortBase デストラクタで、deactivate_object を実行しています。
     }
     
   };

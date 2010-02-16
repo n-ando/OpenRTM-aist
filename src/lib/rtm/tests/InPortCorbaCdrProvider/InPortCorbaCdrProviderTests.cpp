@@ -125,9 +125,10 @@ namespace InPortCorbaCdrProvider
   private:
     CORBA::ORB_ptr m_pORB;
     PortableServer::POA_ptr m_pPOA;
+    RTC::ConnectorListeners m_listeners;
+    RTC::InPortConnector* connector;
 
   public:
-    RTC::ConnectorListeners m_listeners;
 	
     /*!
      * @brief Constructor
@@ -147,6 +148,7 @@ namespace InPortCorbaCdrProvider
      */
     ~InPortCorbaCdrProviderTests()
     {
+      delete connector;
     }
 		
     /*!
@@ -169,9 +171,6 @@ namespace InPortCorbaCdrProvider
      */
     void test_case0()
     {
-        //
-        //
-        //
         InPortCorbaCdrProviderMock provider;
         CORBA::Long index;
 
@@ -250,11 +249,10 @@ namespace InPortCorbaCdrProvider
         buffer = RTC::CdrBufferFactory::instance().createObject("ring_buffer");
         provider.setBuffer(buffer);
 
-        RTC::InPortConnector* connector;
         connector = new RTC::InPortPushConnector(info, &provider, m_listeners, buffer);
         if (connector == 0)
           {
-            std::cout << "ERROR: PushConnector creation failed." << std::endl;
+            std::cout << "ERROR: Connector creation failed." << std::endl;
           }
         provider.setConnector(connector);
 
@@ -285,10 +283,12 @@ namespace InPortCorbaCdrProvider
         ret = provider.put(data);
         CPPUNIT_ASSERT_EQUAL(::OpenRTM::PORT_OK,ret);
 
+        // delete connector;
+        // ここで delete すると落ちるので、デストラクタで行う。
     }
     
   };
-}; // namespace OutPortBase
+}; // namespace InPortCorbaCdrProvider
 
 /*
  * Register test suite
@@ -377,4 +377,4 @@ int main(int argc, char* argv[])
   return 0; // runner.run() ? 0 : 1;
 }
 #endif // MAIN
-#endif // OutPortBase_cpp
+#endif // InPortCorbaCdrProvider_cpp

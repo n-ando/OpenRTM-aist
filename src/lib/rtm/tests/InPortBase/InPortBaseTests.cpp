@@ -39,10 +39,97 @@
 #include <rtm/CorbaConsumer.h>
 #include <rtm/InPortPushConnector.h>
 #include <rtm/InPortProvider.h>
+#include <rtm/ConnectorListener.h>
+#include <rtm/OutPort.h>
+#include <rtm/OutPortBase.h>
+#include <rtm/InPortCorbaCdrProvider.h>
+#include <rtm/OutPortCorbaCdrConsumer.h>
 
+// ConnectorDataListenerType count
+#define cdl_len 10
+// ConnectorListenerType count
+#define cl_len 7
 
 namespace InPortBase
 {
+
+  // ConnectorDataListenerType
+  static const char* str_cdl[] =
+  {
+    "ON_BUFFER_WRITE",
+    "ON_BUFFER_FULL",
+    "ON_BUFFER_WRITE_TIMEOUT",
+    "ON_BUFFER_OVERWRITE",
+    "ON_BUFFER_READ", 
+    "ON_SEND", 
+    "ON_RECEIVED",
+    "ON_RECEIVER_FULL", 
+    "ON_RECEIVER_TIMEOUT", 
+    "ON_RECEIVER_ERROR"
+  };
+
+  // ConnectorListenerType
+  static const char* str_cl[] =
+  {
+    "ON_BUFFER_EMPTY",
+    "ON_BUFFER_READ_TIMEOUT",
+    "ON_SENDER_EMPTY", 
+    "ON_SENDER_TIMEOUT", 
+    "ON_SENDER_ERROR", 
+    "ON_CONNECT",
+    "ON_DISCONNECT"
+  };
+
+  static int cdl_count;
+  static int cl_count;
+
+  class DataListener
+    : public RTC::ConnectorDataListenerT<RTC::TimedLong>
+  {
+  public:
+    DataListener(const char* name) : m_name(name)
+    {
+      ++cdl_count;
+    }
+    virtual ~DataListener()
+    {
+      --cdl_count;
+    }
+
+    virtual void operator()(const RTC::ConnectorInfo& info,
+                            const RTC::TimedLong& data)
+    {
+      std::cout << "------------------------------"   << std::endl;
+      std::cout << "Data Listener: " << m_name       << std::endl;
+      std::cout << "Profile::name: " << info.name    << std::endl;
+      std::cout << "------------------------------"   << std::endl;
+    };
+    std::string m_name;
+  };
+
+
+  class ConnListener
+    : public RTC::ConnectorListener
+  {
+  public:
+    ConnListener(const char* name) : m_name(name)
+    {
+      ++cl_count;
+    }
+    virtual ~ConnListener()
+    {
+      --cl_count;
+    }
+
+    virtual void operator()(const RTC::ConnectorInfo& info)
+    {
+      std::cout << "------------------------------"   << std::endl;
+      std::cout << "Connector Listener: " << m_name       << std::endl;
+      std::cout << "Profile::name:      " << info.name    << std::endl;
+      std::cout << "------------------------------"   << std::endl;
+    };
+    std::string m_name;
+  };
 
   /*!
    * 
@@ -666,10 +753,25 @@ namespace InPortBase
       /*!
        * 
        */
-       bool read()
-       {
-          return true;
-       }
+      bool read()
+      {
+         return true;
+      }
+  };
+
+  template <class DataType>
+  class OutPortMock
+    : public RTC::OutPort<DataType>
+  {
+  public:
+      OutPortMock(const char* name, DataType& value)
+       : RTC::OutPort<DataType>(name, value)
+      {
+      }
+
+      virtual ~OutPortMock()
+      {
+      }
   };
 
   class InPortBaseTests
@@ -698,11 +800,16 @@ namespace InPortBase
     CPPUNIT_TEST(test_subscribeInterfaces5);//Buffer is deleted.
     CPPUNIT_TEST(test_createConnector);
     CPPUNIT_TEST(test_createConnector2);
+    CPPUNIT_TEST(test_ConnectorListener);
+
     CPPUNIT_TEST_SUITE_END();
 	
   private:
     CORBA::ORB_ptr m_pORB;
     PortableServer::POA_ptr m_pPOA;
+    RTC::ConnectorListeners m_listeners;
+    DataListener *m_datalisteners[cdl_len];
+    ConnListener *m_connlisteners[cl_len];
 
   public:
 	
@@ -767,7 +874,6 @@ namespace InPortBase
         addFactory("ring_buffer",
                    coil::Creator<RTC::CdrBufferBase, CdrRingBufferMock>,
                    coil::Destructor<RTC::CdrBufferBase, CdrRingBufferMock>);
-
     }
 		
     /*!
@@ -783,7 +889,6 @@ namespace InPortBase
      */
     void test_constructor()
     {
-
         InPortBaseMock inport("InPortBaseTest", toTypename<RTC::TimedFloat>());
 
         RTC::PortAdmin portAdmin(m_pORB,m_pPOA);
@@ -1457,12 +1562,69 @@ namespace InPortBase
         prof.name = CORBA::string_dup("InPortBaseTest1");
         inport.publishInterfaces_public(prof);
 
+        // getConnectorProfiles()
+        RTC::ConnectorInfoList cilist = inport.getConnectorProfiles();
+        CPPUNIT_ASSERT(cilist.size() == 2);
+        CPPUNIT_ASSERT_EQUAL(std::string("id0"), std::string(cilist[0].id));
+        CPPUNIT_ASSERT_EQUAL(std::string("InPortBaseTest0"), std::string(cilist[0].name));
+        CPPUNIT_ASSERT_EQUAL((size_t)1, cilist[0].ports.size());
+        CPPUNIT_ASSERT_EQUAL(std::string("id1"), std::string(cilist[1].id));
+        CPPUNIT_ASSERT_EQUAL(std::string("InPortBaseTest1"), std::string(cilist[1].name));
+        CPPUNIT_ASSERT_EQUAL((size_t)1, cilist[1].ports.size());
+
+        // getConnectorIds()
+        coil::vstring ids = inport.getConnectorIds();
+        CPPUNIT_ASSERT(ids.size() == 2);
+        CPPUNIT_ASSERT_EQUAL(std::string("id0"), std::string(ids[0]));
+        CPPUNIT_ASSERT_EQUAL(std::string("id1"), std::string(ids[1]));
+
+        // getConnectorNames()
+        coil::vstring names = inport.getConnectorNames();
+        CPPUNIT_ASSERT_EQUAL(std::string("InPortBaseTest0"), std::string(names[0]));
+        CPPUNIT_ASSERT_EQUAL(std::string("InPortBaseTest1"), std::string(names[1]));
+
+        // getConnectorById()
+        RTC::InPortConnector* ic = inport.getConnectorById("unknown");
+        CPPUNIT_ASSERT(ic == 0);
+        ic = inport.getConnectorById("id0");
+        CPPUNIT_ASSERT(ic != 0);
+        ic = inport.getConnectorById("id1");
+        CPPUNIT_ASSERT(ic != 0);
+
+        // getConnectorByName()
+        ic = inport.getConnectorByName("unknown");
+        CPPUNIT_ASSERT(ic == 0);
+        ic = inport.getConnectorByName("InPortBaseTest0");
+        CPPUNIT_ASSERT(ic != 0);
+        ic = inport.getConnectorByName("InPortBaseTest1");
+        CPPUNIT_ASSERT(ic != 0);
+
+        // getConnectorProfileById()
+        RTC::ConnectorInfo info;
+        bool bret = inport.getConnectorProfileById("unknown", info);
+        CPPUNIT_ASSERT( !bret );
+        bret = inport.getConnectorProfileById("id0", info);
+        CPPUNIT_ASSERT( bret );
+        bret = inport.getConnectorProfileById("id1", info);
+        CPPUNIT_ASSERT( bret );
+
+        // getConnectorProfileByName()
+        bret = inport.getConnectorProfileByName("unknown", info);
+        CPPUNIT_ASSERT( !bret );
+        bret = inport.getConnectorProfileByName("InPortBaseTest0", info);
+        CPPUNIT_ASSERT( bret );
+        bret = inport.getConnectorProfileByName("InPortBaseTest1", info);
+        CPPUNIT_ASSERT( bret );
+
         CPPUNIT_ASSERT_EQUAL(2,(int)inport.get_m_connectors().size());
         std::vector<RTC::InPortConnector*> list =  inport.get_m_connectors();
         inport.activateInterfaces();
         inport.deactivateInterfaces();
 
         portAdmin.deletePort(inport);
+
+        ic = NULL;
+        delete ic;
     }
     /*!
      * @brief publishInterfaces()メソッドのテスト
@@ -2240,9 +2402,8 @@ namespace InPortBase
               = inport.createConnector_public(prof, prop, provider);
         CPPUNIT_ASSERT(0!= connector);
             
-
         portAdmin.deletePort(inport);
-        delete provider;
+//        delete provider;
     }
     /*!
      * @brief createConnector()メソッドのテスト
@@ -2262,81 +2423,155 @@ namespace InPortBase
         RTC::InPortProvider* provider = new InPortCorbaCdrProviderMock();
         RTC::InPortConnector* connector 
               = inport.createConnector_public(prof, prop, provider);
-        CPPUNIT_ASSERT(0 == connector);
+        CPPUNIT_ASSERT(0 != connector);
             
-
         portAdmin.deletePort(inport);
-        delete provider;
+//        delete provider;
     }
 
-    
+    /*!
+     * @brief addConnectorDataListener(), removeConnectorDataListener(), addConnectorListener(), removeConnectorListener(), isLittleEndian(), connect() メソッドのテスト
+     * 
+     */
+    void test_ConnectorListener(void)
+    {
+        RTC::TimedLong tdl;
+        OutPortMock<RTC::TimedLong> outport("OutPort", tdl);
+        coil::Properties dummy;
+        outport.init(dummy);
+
+        //既に "corba_cdr" で登録されている場合は削除する。
+        if( RTC::InPortProviderFactory::instance().hasFactory("corba_cdr") )
+        {
+            RTC::InPortProviderFactory::instance().removeFactory("corba_cdr");
+        }
+        //"corba_cdr" に InPortCorbaCdrProvider を登録する。
+        RTC::InPortProviderFactory::instance().
+        addFactory("corba_cdr",
+                   ::coil::Creator< ::RTC::InPortProvider, 
+                                    ::RTC::InPortCorbaCdrProvider>,
+                   ::coil::Destructor< ::RTC::InPortProvider, 
+                                       ::RTC::InPortCorbaCdrProvider>);
+
+        //既に "corba_cdr" で登録されている場合は削除する。
+        if( RTC::OutPortConsumerFactory::instance().hasFactory("corba_cdr") )
+        {
+            RTC::OutPortConsumerFactory::instance().removeFactory("corba_cdr");
+        }
+        //"corba_cdr" に InPortCorbaCdrProvider を登録する。
+        RTC::OutPortConsumerFactory::instance().
+        addFactory("corba_cdr",
+                   ::coil::Creator< ::RTC::OutPortConsumer, 
+                                    ::RTC::OutPortCorbaCdrConsumer>,
+                   ::coil::Destructor< ::RTC::OutPortConsumer, 
+                                       ::RTC::OutPortCorbaCdrConsumer>);
+
+        //既に "ring_buffer" で登録されている場合は削除する。
+        if( RTC::CdrBufferFactory::instance().hasFactory("ring_buffer") )
+        {
+            RTC::CdrBufferFactory::instance().removeFactory("ring_buffer");
+        }
+
+        //"ring_buffer" に CdrRingBufferMock を登録する。
+        RTC::CdrBufferFactory::instance().
+        addFactory("ring_buffer",
+                   coil::Creator<RTC::CdrBufferBase, CdrRingBufferMock>,
+                   coil::Destructor<RTC::CdrBufferBase, CdrRingBufferMock>);
+
+        InPortBaseMock inport("InPortBaseTest", toTypename<RTC::TimedLong>());
+        inport.init(dummy);
+
+        RTC::PortAdmin portAdmin(m_pORB,m_pPOA);
+        portAdmin.registerPort(inport); 
+        RTC::ConnectorProfile prof;
+        prof.connector_id = "id0";
+        prof.name = CORBA::string_dup("connectTest0");
+        prof.ports.length(2);
+        prof.ports[0] = inport.get_port_profile()->port_ref;
+        prof.ports[1] = outport.get_port_profile()->port_ref;
+        CORBA_SeqUtil::push_back(prof.properties,
+                                 NVUtil::newNV("dataport.interface_type",
+                                 "corba_cdr"));
+        CORBA_SeqUtil::push_back(prof.properties,
+                                 NVUtil::newNV("dataport.dataflow_type",
+                                 "push"));
+        CORBA_SeqUtil::push_back(prof.properties,
+                                 NVUtil::newNV("dataport.subscription_type",
+                                 "flush"));
+
+        //ConnectorDataListeners settting
+        for (int i(0); i<cdl_len; ++i)
+          {
+            m_datalisteners[i] = new DataListener(str_cdl[i]);
+          }
+
+        //ConnectorListeners settting
+        for (int i(0); i<cl_len; ++i)
+          {
+            m_connlisteners[i] = new ConnListener(str_cl[i]);
+          }
+
+        // addConnectorDataListener()
+        for (int i(0); i<cdl_len; ++i)
+          {
+            inport.addConnectorDataListener((RTC::ConnectorDataListenerType)i, 
+                                             m_datalisteners[i], true);
+          }
+
+        // addConnectorListener()
+        for (int i(0); i<cl_len; ++i)
+          {
+            inport.addConnectorListener((RTC::ConnectorListenerType)i, 
+                                         m_connlisteners[i], true);
+          }
+
+        // Listener add count check
+        CPPUNIT_ASSERT_EQUAL(10, cdl_count);
+        CPPUNIT_ASSERT_EQUAL(7, cl_count);
+
+        inport.publishInterfaces_public(prof);
+
+        // connect()
+        RTC::ReturnCode_t ret;
+        ret = inport.connect(prof);
+        CPPUNIT_ASSERT_EQUAL(RTC::RTC_OK, ret);
+
+        // isLittleEndian()
+        // little set & check
+        bool bret = inport.isLittleEndian();
+        CPPUNIT_ASSERT( bret );
+
+        tdl.data = 100;
+        outport.write(tdl);
+
+        inport.activateInterfaces();
+        inport.deactivateInterfaces();
+        ret = inport.disconnect_all();
+        CPPUNIT_ASSERT_EQUAL(RTC::RTC_OK, ret);
+
+        portAdmin.deletePort(inport);
+        // removeConnectorDataListener()
+        for (int i(0); i<cdl_len; ++i)
+          {
+            inport.removeConnectorDataListener((RTC::ConnectorDataListenerType)i, 
+                                                m_datalisteners[i]);
+          }
+
+        // removeConnectorListener()
+        for (int i(0); i<cl_len; ++i)
+          {
+            inport.removeConnectorListener((RTC::ConnectorListenerType)i, 
+                                            m_connlisteners[i]);
+          }
+
+        // Listener remove count check
+        CPPUNIT_ASSERT_EQUAL(0, cdl_count);
+        CPPUNIT_ASSERT_EQUAL(0, cl_count);
+
+    }
+
   };
 }; // namespace OutPortBase
-
-/*!
- * @brief Mock RTC
- */
-namespace RTC 
-{
-  /*!
-   *
-   * Mock InPortPushConnector
-   *
-   */
-  /*!
-   *
-   *
-   */
-  InPortPushConnector::InPortPushConnector(ConnectorInfo info, 
-                                           InPortProvider* provider,
-                                           ConnectorListeners& listeners,
-                                           CdrBufferBase* buffer)
-    : InPortConnector(info, buffer),
-      m_provider(provider), 
-      m_listeners(listeners), 
-      m_deleteBuffer(buffer == 0 ? true : false)
-
-  {
-      if(info.properties["InPortBaseTests"]=="bad_alloc")
-      {
-          throw std::bad_alloc();
-      }
-  }
-  /*!
-   *
-   *
-   */
-  InPortPushConnector::~InPortPushConnector()
-  {
-  }
-  /*!
-   *
-   *
-   */
-  ConnectorBase::ReturnCode InPortPushConnector::disconnect()
-  {
-      return PORT_OK;
-  }
-  /*!
-   *
-   *
-   */
-  ConnectorBase::ReturnCode
-  InPortPushConnector::read(cdrMemoryStream& data)
-  {
-      return PORT_OK;
-  }
-  /*!
-   *
-   *
-   */
-  CdrBufferBase* InPortPushConnector::createBuffer(ConnectorInfo& info)
-  {
-      return new ::InPortBase::CdrRingBufferMock();
-  }
-
-};
-
 
 
 /*

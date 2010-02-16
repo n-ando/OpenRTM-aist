@@ -520,7 +520,7 @@ namespace InPortPushConnector
     }
 		
     /*!
-     * @brief Constructor
+     * @brief Constructor メソッドテスト
      * 
      */
     void test_InPortPushConnector()
@@ -595,7 +595,7 @@ namespace InPortPushConnector
 
     }
     /*!
-     * @brief read
+     * @brief read メソッドテスト
      * 
      */
     void test_read()
@@ -652,7 +652,7 @@ namespace InPortPushConnector
 
     }
     /*!
-     * @brief disconnect
+     * @brief disconnect メソッドテスト
      * 
      */
     void test_disconnect()
