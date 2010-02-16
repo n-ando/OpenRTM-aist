@@ -733,7 +733,7 @@ namespace SdoConfiguration
 //Deleted this test, because description was not used.
 //      CPPUNIT_ASSERT_EQUAL(std::string("DESCRIPTION 1 M"),
 //			   std::string(cfgSetRet->description));
-      CPPUNIT_ASSERT_EQUAL(CORBA::ULong(2),
+      CPPUNIT_ASSERT_EQUAL(CORBA::ULong(3),
 			   cfgSetRet->configuration_data.length());
 
       {

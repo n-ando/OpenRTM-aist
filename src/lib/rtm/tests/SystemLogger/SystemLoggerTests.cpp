@@ -1265,7 +1265,9 @@ namespace Tests
 
           // nameÈ½Äê
           bret = false;
-          if( (vstr[4] == "manager:") || (vstr[4] == "TestName:") )
+          if( (vstr[4] == "manager:") || (vstr[4] == "TestName:") ||
+              (vstr[4] == "NamingOnCorba:") || (vstr[4] == "NamingManager:") ||
+              (vstr[4] == "ManagerServant:") )
               bret = true;
           CPPUNIT_ASSERT(bret);
         }

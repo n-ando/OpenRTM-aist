@@ -59,20 +59,36 @@
 #include <rtm/RTC.h>
 #include <rtm/PortBase.h>
 #include <rtm/RTObject.h>
+#include <rtm/PortCallback.h>
 
 /*!
  * @class PortBaseTests class
  * @brief PortBase test
  */
-/*
- *
- *
- *
- *
- *
- */
+
 namespace PortBase
 {
+
+  class ConnectionCallbackMock : public RTC::ConnectionCallback
+  {
+  public:
+    ConnectionCallbackMock(const char* name) : m_name(name) {}
+    virtual ~ConnectionCallbackMock()
+    {
+      //std::cout << "dtor of " << m_name << std::endl;
+    }
+
+    virtual void operator()(RTC::ConnectorProfile& profile)
+    {
+      std::cout << "---------------------------------------------"   << std::endl;
+      std::cout << "Connection Callback: " << m_name                 << std::endl;
+      std::cout << "Profile::name: " << profile.name           << std::endl;
+      std::cout << "---------------------------------------------"   << std::endl;
+    };
+    std::string m_name;
+  };
+
+
   class PortBaseMock : public RTC::PortBase
   {
   public:
@@ -212,6 +228,12 @@ namespace PortBase
     RTC::PortBase* m_pPortBase_3;
 
   public:
+    ConnectionCallbackMock* m_on_publish;
+    ConnectionCallbackMock* m_on_subscribe;
+    ConnectionCallbackMock* m_on_connected;
+    ConnectionCallbackMock* m_on_unsubscribe;
+    ConnectionCallbackMock* m_on_disconnected;
+    ConnectionCallbackMock* m_on_connection_lost;
 	
     /*!
      * @brief Constructor
@@ -249,7 +271,7 @@ namespace PortBase
       // ORBの初期化
       m_orb = CORBA::ORB_init(g_argc, argv);
       PortableServer::POA_ptr poa = PortableServer::POA::_narrow(
-								 m_orb->resolve_initial_references("RootPOA"));
+				m_orb->resolve_initial_references("RootPOA"));
 			
       // PortProfile.interfacesの構築準備
       RTC::PortInterfaceProfile portIfProfile;
@@ -301,6 +323,21 @@ namespace PortBase
       // POAを活性化する			
       PortableServer::POAManager_var poaMgr = poa->the_POAManager();
       poaMgr->activate();
+
+      m_on_publish = new ConnectionCallbackMock("OnPublishInterfaces");
+      m_on_subscribe = new ConnectionCallbackMock("OnSubscribeInterfaces");
+      m_on_connected = new ConnectionCallbackMock("OnConnected");
+      m_on_unsubscribe = new ConnectionCallbackMock("OnUnsubscribeInterfaces");
+      m_on_disconnected = new ConnectionCallbackMock("OnDisconnected");
+      m_on_connection_lost = new ConnectionCallbackMock("OnConnectionLost");
+
+      m_pPortBase->setOnPublishInterfaces(m_on_publish);
+      m_pPortBase->setOnSubscribeInterfaces(m_on_subscribe);
+      m_pPortBase->setOnConnected(m_on_connected);
+      m_pPortBase->setOnUnsubscribeInterfaces(m_on_unsubscribe);
+      m_pPortBase->setOnDisconnected(m_on_disconnected);
+      m_pPortBase->setOnConnectionLost(m_on_connection_lost);
+
     }
 		
     /*!
@@ -308,6 +345,17 @@ namespace PortBase
      */
     virtual void tearDown()
     {
+/*
+      delete m_on_connection_lost;
+      delete m_on_disconnected;
+      delete m_on_unsubscribe;
+      delete m_on_connected;
+      delete m_on_subscribe;
+      delete m_on_publish;
+      delete m_pPortBase_3;
+      delete m_pPortBase_2;
+      delete m_pPortBase;
+*/
       //if (m_orb != 0) {
       // m_orb->destroy();
       // m_orb = 0;
@@ -329,7 +377,8 @@ namespace PortBase
       // (1) オブジェクト参照経由で、get_port_profile()に正しくアクセスできるか？
       // get_port_profile()はCORBAインタフェースなので、オブジェクト参照経由でアクセスし、
       // CORBAインタフェースとして機能していることを確認する
-      const RTC::PortService_ptr portRef = m_pPortBase->getPortRef(); const RTC::PortProfile* pPortProfile = portRef->get_port_profile();
+      const RTC::PortService_ptr portRef = m_pPortBase->getPortRef();
+      const RTC::PortProfile* pPortProfile = portRef->get_port_profile();
 			
       // (2) PortProfile.nameを正しく取得できるか？
       CPPUNIT_ASSERT_EQUAL(
@@ -610,7 +659,6 @@ namespace PortBase
 		
     void test_disconnect_all()
     {
-      // TODO 未テスト
       RTC::PortService_ptr portRef_1 = m_pPortBase->getPortRef();
       RTC::PortService_ptr portRef_2 = m_pPortBase_2->getPortRef();
       RTC::PortService_ptr portRef_3 = m_pPortBase_3->getPortRef();
@@ -659,6 +707,10 @@ namespace PortBase
     {
       // setName()を用いて、PortProfile.nameを書き換える
       m_pPortBase->setName("inport0-changed");
+			
+      // setName()を用いて、PortProfile.nameを書き換える
+      std::string str(m_pPortBase->getName());
+      CPPUNIT_ASSERT_EQUAL(std::string("inport0-changed"), str);
 			
       // setName()により、意図どおりにPortProfile.nameが書き換えられているか？
       const RTC::PortProfile& portProfile = m_pPortBase->getPortProfile();
@@ -791,7 +843,7 @@ namespace PortBase
     void test_setOwner()
     {
         PortableServer::POA_ptr poa = PortableServer::POA::_narrow(
-								 m_orb->resolve_initial_references("RootPOA"));
+				m_orb->resolve_initial_references("RootPOA"));
         RTC::RTObject_impl* obj = new RTC::RTObject_impl(m_orb,poa);
         RTC::RTObject_ptr owner = obj->getObjRef();
         RTC::PortProfile  portprofile = m_pPortBase->getProfile();
@@ -799,7 +851,10 @@ namespace PortBase
         m_pPortBase->setOwner(owner);
         portprofile = m_pPortBase->getProfile();
         CPPUNIT_ASSERT(!CORBA::is_nil(portprofile.owner));
-//        delete obj;
+
+        poa->the_POAManager()->deactivate(false, true);
+        obj->finalize();
+        delete obj;
     }
   };
 }; // namespace PortBase

@@ -36,6 +36,7 @@
 #include <rtm/NVUtil.h>
 #include <rtm/DataPortStatus.h>
 #include <rtm/ConnectorListener.h>
+#include <rtm/OutPortPullConnector.h>
 
 /*!
  * @class OutPortCorbaCdrProviderTests class
@@ -248,6 +249,14 @@ namespace OutPortCorbaCdrProvider
         
         provider.setBuffer(buffer);
 
+        RTC::OutPortConnector* connector;
+        connector = new RTC::OutPortPullConnector(info, &provider, m_listeners, buffer);
+        if (connector == 0)
+          {
+            std::cout << "ERROR: Connector creation failed." << std::endl;
+          }
+        provider.setConnector(connector);
+
         //データなしの状態でコール(empty)
         retcode = provider.get(cdr_data);
         CPPUNIT_ASSERT_EQUAL((::OpenRTM::PortStatus)3, retcode);
@@ -278,9 +287,11 @@ namespace OutPortCorbaCdrProvider
             PortableServer::Servant ser = m_pPOA->reference_to_servant(var);
 	    m_pPOA->deactivate_object(*m_pPOA->servant_to_id(ser));
         }
+
+        delete connector;
     }
   };
-}; // namespace OutPortBase
+}; // namespace OutPortCorbaCdrProvider
 
 /*
  * Register test suite
@@ -369,4 +380,4 @@ int main(int argc, char* argv[])
   return 0; // runner.run() ? 0 : 1;
 }
 #endif // MAIN
-#endif // OutPortBase_cpp
+#endif // OutPortCorbaCdrProvider_cpp

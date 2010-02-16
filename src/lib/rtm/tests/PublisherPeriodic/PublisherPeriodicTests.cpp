@@ -119,6 +119,7 @@ namespace PublisherPeriodic
        */
       virtual ~InPortCorbaCdrConsumerMock()
       {
+          delete m_buffer;
       }
       /*!
        * 
@@ -538,9 +539,9 @@ namespace PublisherPeriodic
      */
     void test_setConsumer(void)
     {
-        RTC::InPortCorbaCdrConsumer *consumer0 
+        RTC::InPortCorbaCdrConsumer* consumer0 
                                     = new RTC::InPortCorbaCdrConsumer();
-        RTC::InPortCorbaCdrConsumer *consumer1 
+        RTC::InPortCorbaCdrConsumer* consumer1 
                                     = new RTC::InPortCorbaCdrConsumer();
         RTC::PublisherPeriodic publisher;
 
@@ -556,8 +557,8 @@ namespace PublisherPeriodic
         CPPUNIT_ASSERT_EQUAL(RTC::PublisherPeriodic::PORT_OK, 
                              publisher.setConsumer(consumer1));
 
-        delete consumer0;
         delete consumer1;
+        delete consumer0;
     }
     /*!
      * @brief setBuffer()メソッドのテスト
@@ -581,8 +582,8 @@ namespace PublisherPeriodic
         CPPUNIT_ASSERT_EQUAL(RTC::PublisherPeriodic::PORT_OK, 
                              publisher.setBuffer(buffer1));
 
-        delete buffer0;
         delete buffer1;
+        delete buffer0;
     }
     /*!
      * @brief activate(),deactivate(),isActiveメソッドのテスト
@@ -590,7 +591,7 @@ namespace PublisherPeriodic
      */
     void test_activate_deactivate_isActive(void)
     {
-        RTC::InPortCorbaCdrConsumer *consumer 
+        RTC::InPortCorbaCdrConsumer* consumer 
                                     = new RTC::InPortCorbaCdrConsumer();
         RTC::PublisherPeriodic publisher;
         publisher.setConsumer(consumer);
@@ -662,6 +663,7 @@ namespace PublisherPeriodic
         CPPUNIT_ASSERT_EQUAL(false, 
                              publisher.isActive());
         
+        delete buffer;
         delete consumer;
     }
     /*!
@@ -671,7 +673,7 @@ namespace PublisherPeriodic
      */
     void test_pushAll(void)
     {
-        InPortCorbaCdrConsumerMock *consumer 
+        InPortCorbaCdrConsumerMock* consumer 
                                     = new InPortCorbaCdrConsumerMock();
         RTC::CdrBufferBase* buffer = new RTC::CdrRingBuffer();
         PublisherPeriodicMock publisher;
@@ -817,7 +819,7 @@ namespace PublisherPeriodic
      */
     void test_pushAll_2(void)
     {
-        InPortCorbaCdrConsumerMock *consumer 
+        InPortCorbaCdrConsumerMock* consumer 
                                     = new InPortCorbaCdrConsumerMock();
         RTC::CdrBufferBase* buffer = new RTC::CdrRingBuffer();
         PublisherPeriodicMock publisher;
@@ -965,7 +967,7 @@ namespace PublisherPeriodic
      */
     void test_pushFifo(void)
     {
-        InPortCorbaCdrConsumerMock *consumer 
+        InPortCorbaCdrConsumerMock* consumer 
                                     = new InPortCorbaCdrConsumerMock();
         RTC::CdrBufferBase* buffer = new RTC::CdrRingBuffer();
         PublisherPeriodicMock publisher;
@@ -1143,7 +1145,7 @@ namespace PublisherPeriodic
      */
     void test_pushFifo_2(void)
     {
-        InPortCorbaCdrConsumerMock *consumer 
+        InPortCorbaCdrConsumerMock* consumer 
                                     = new InPortCorbaCdrConsumerMock();
         RTC::CdrBufferBase* buffer = new RTC::CdrRingBuffer();
         PublisherPeriodicMock publisher;
@@ -1318,7 +1320,7 @@ namespace PublisherPeriodic
      */
     void test_pushSkip(void)
     {
-        InPortCorbaCdrConsumerMock *consumer 
+        InPortCorbaCdrConsumerMock* consumer 
                                     = new InPortCorbaCdrConsumerMock();
         RTC::CdrBufferBase* buffer = new RTC::CdrRingBuffer();
         PublisherPeriodicMock publisher;
@@ -1466,7 +1468,7 @@ namespace PublisherPeriodic
      */
     void test_pushSkip_2(void)
     {
-        InPortCorbaCdrConsumerMock *consumer 
+        InPortCorbaCdrConsumerMock* consumer 
                                     = new InPortCorbaCdrConsumerMock();
         RTC::CdrBufferBase* buffer = new RTC::CdrRingBuffer();
         PublisherPeriodicMock publisher;
@@ -1628,7 +1630,7 @@ namespace PublisherPeriodic
      */
     void test_pushNew(void)
     {
-        InPortCorbaCdrConsumerMock *consumer 
+        InPortCorbaCdrConsumerMock* consumer 
                                     = new InPortCorbaCdrConsumerMock();
         RTC::CdrBufferBase* buffer = new RTC::CdrRingBuffer();
         PublisherPeriodicMock publisher;
@@ -1732,7 +1734,7 @@ namespace PublisherPeriodic
      */
     void test_write(void)
     {
-        InPortCorbaCdrConsumerMock *consumer 
+        InPortCorbaCdrConsumerMock* consumer 
                                     = new InPortCorbaCdrConsumerMock();
         RTC::CdrBufferBase* buffer = new RTC::CdrRingBuffer();
         PublisherPeriodicMock publisher;
@@ -1840,9 +1842,8 @@ namespace PublisherPeriodic
         publisher.write(cdr,0,0);
         coil::usleep(10000);
 
-        delete consumer;
         delete buffer;
-
+        delete consumer;
     }
     /*!
      * @brief デストラクタのテスト
