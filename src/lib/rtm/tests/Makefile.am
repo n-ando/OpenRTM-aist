@@ -8,8 +8,10 @@
 AUTOMAKE_OPTIONS = 1.9
 
 SUBDIRS = \
+	CORBA_IORUtil     \
 	CORBA_SeqUtil     \
 	ConfigAdmin \
+	ConnectorListener \
 	CorbaConsumer     \
 	CorbaNaming \
 	CorbaPort         \
@@ -41,6 +43,7 @@ SUBDIRS = \
 	OutPortCorbaCdrConsumer \
 	OutPortCorbaCdrProvider \
 	OutPortProvider   \
+	PeriodicECSharedComposite \
 	PeriodicExecutionContext \
 	PortAdmin         \
 	PortBase          \
