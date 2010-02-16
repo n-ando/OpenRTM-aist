@@ -67,7 +67,7 @@ namespace ModuleManager
     CPPUNIT_TEST(test_setLoadpath_and_getLoadPath);
     CPPUNIT_TEST(test_addLoadpath);
     //CPPUNIT_TEST(test_getLoadedModules);
-    //CPPUNIT_TEST(test_getLoadableModules);
+    CPPUNIT_TEST(test_getLoadableModules);
     CPPUNIT_TEST(test_allowAbsolutePath_and_disallowAbsolutePath);
     //CPPUNIT_TEST(test_allowModuleDownload);
     //CPPUNIT_TEST(test_disallowModuleDownload);
@@ -446,7 +446,20 @@ namespace ModuleManager
      */
     void test_getLoadableModules()
     {
-      // 当該メソッドが未実装につき、テストも未実装
+      std::vector<coil::Properties> props = m_pModMgr->getLoadableModules();
+      int len = props.size();
+      CPPUNIT_ASSERT(len > 0);
+
+      bool bret = false;
+      for(int i(0); i<len; ++i)
+      {
+        if(props[i].getProperty("module_file_name") == "libRTC.so")
+        {
+          bret = true;
+          break;
+        }
+      }
+      CPPUNIT_ASSERT(bret);
     }
 		
     /*!

@@ -77,6 +77,7 @@ namespace ManagerConfig
     {
       return m_configFile;
     }
+  bool m_isMaster;
   };
 	
   class ManagerConfigTests
@@ -129,7 +130,8 @@ namespace ManagerConfig
       CPPUNIT_ASSERT(mgrCfg.fileExist("./rtc.conf"));
 
       // コマンド引数の-fオプションで指定したファイルで正しく初期化できるか？
-      char* argv[] = { "command", "-f", "./rtc.conf" };
+//      char* argv[] = { "command", "-f", "./rtc.conf" };
+      char* argv[] = { "command", "-d", "./rtc.conf" };
       int argc = sizeof(argv) / sizeof(char*);
       mgrCfg.init(argc, argv);
 			
@@ -182,6 +184,35 @@ namespace ManagerConfig
 		     != properties.getProperty("manager.os.hostname"));
       CPPUNIT_ASSERT(std::string("")
 		     != properties.getProperty("manager.pid"));
+      CPPUNIT_ASSERT(std::string("YES")
+		     == properties.getProperty("manager.is_master"));
+
+      // コマンド引数の-aオプション指定が正しく反映されるか？
+      // corba.corba_servant 指定の確認
+      argv[1] = "-a";
+      argc = sizeof(argv) / sizeof(char*);
+      mgrCfg.init(argc, argv);
+      mgrCfg.configure(properties);
+      CPPUNIT_ASSERT_EQUAL(std::string("NO"),
+			   properties.getProperty("manager.corba_servant"));
+
+      // コマンド引数の-oオプション指定が正しく反映されるか？
+      // configuration 上書き指定の確認
+      argv[1] = "-omanager.is_master:NO";
+      argc = sizeof(argv) / sizeof(char*);
+      mgrCfg.init(argc, argv);
+      mgrCfg.configure(properties);
+      CPPUNIT_ASSERT_EQUAL(std::string("NO"),
+			   properties.getProperty("manager.is_master"));
+
+      // コマンド引数の-pオプション指定が正しく反映されるか？
+      // corba.endpoints ポート番号指定の確認
+      argv[1] = "-p9876";
+      argc = sizeof(argv) / sizeof(char*);
+      mgrCfg.init(argc, argv);
+      mgrCfg.configure(properties);
+      CPPUNIT_ASSERT_EQUAL(std::string(":9876"),
+			   properties.getProperty("corba.endpoints"));
     }
 		
     /*!
@@ -246,6 +277,8 @@ namespace ManagerConfig
 		     != properties.getProperty("manager.os.hostname"));
       CPPUNIT_ASSERT(std::string("")
 		     != properties.getProperty("manager.pid"));
+      CPPUNIT_ASSERT(std::string("")
+		     != properties.getProperty("manager.is_master"));
     }
 		
   };
