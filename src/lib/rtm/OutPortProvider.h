@@ -38,25 +38,71 @@ namespace RTC
    * @class OutPortProvider
    * @brief OutPortProvider
    *
-   * - Port に対して何を提供しているかを宣言する。
-   *   PortProfile の properties に Provider に関する情報を追加する。
+   * OutPort の PROVIDED インターフェースを実装するための抽象基底クラス。
+   * OutPort に対して新しいインターフェースを実装する場合には、このクラ
+   * スを継承し、以下の関数を実装する必要がある。
    *
-   * (例) OutPort を Provide する場合
+   * - init()
+   * - setBuffer()
+   * - setListener()
+   * - setConnector()
+   * 
+   * さらに、コンストラクタ内で以下の関数を呼び、設定情報を初期化する必
+   * 要がある。
+   * 
+   * - setPortType()
+   * - setDataType()
+   * - setInterfaceType()
+   * - setDataFlowType()
+   * - setSubscriptionType()
    *
-   * OutPortCorbaProvider が以下を宣言
-   *  - dataport.interface_type = CORBA_Any
-   *  - dataport.dataflow_type = Push, Pull
-   *  - dataport.subscription_type = Once, New, Periodic
+   * そのほか、OutPortProvider のプロパティとして外部に公開する必要のあ
+   * る値は、protected 変数 (SDOPackage::NVList) m_properties に対して
+   * セットすること。セットされた値は、インターフェースのプロファイルと
+   * して、また、接続時に他のインターフェースにこのインターフェースに関
+   * する情報を与える際に利用される。以下の仮想関数は、ポートのインター
+   * フェースプロファイル取得時および接続処理時にポートから呼び出される。
+   * 予めセットされたこのインターフェースのプロファイル情報はこれらの関
+   * 数呼び出しによりポートに伝えられる。
+   *
+   * - publishInterfaceProfile()
+   * - publishInterface()
+   *
+   * OutPort は OutPortProvider のファクトリ管理クラスに対して利用可能
+   * な OutPortProvider を問合せ、提供可能なインターフェースタイプを外
+   * 部に宣言する。従って、OutPort　に対して PROVIDED インターフェース
+   * を提供する OutPortProvider のサブクラスは、OutPortProviderFactory
+   * にファクトリ関数を登録する必要がある。
+   *
+   * RTC::OutPortProviderFactory::instance().addFactory() を、
+   *
+   * - 第1引数: プロバイダの名前, "corba_cdr" など
+   * - 第2引数: ファクトリ関数 coil::Creator<B, T>
+   * - 第3引数: 削除関数 coil::Destructor<B, T>
    * 
-   * OutPortRawTCPProvider が以下を宣言
-   *  - dataport.interface_type = RawTCP
-   *  - dataport.dataflow_type = Push, Pull
-   *  - dataport.subscription_type = Once, New, Periodic
+   * を与えて呼び出す必要がある。以下は、ファクトリへの登録と、それを初
+   * 期化関数とした例である。
    * 
-   * 最終的に PortProfile::properties は
-   *  - dataport.interface_type = CORBA_Any, RawTCP
-   *  - dataport.dataflow_type = Push, Pull
-   *  - dataport.subscription_type = Once, New, Periodic
+   * <pre>
+   * extern "C"
+   * {
+   *   void OutPortCorbaCdrProviderInit(void)
+   *   {
+   *     RTC::OutPortProviderFactory&
+   *                         factory(RTC::OutPortProviderFactory::instance());
+   *     factory.addFactory("corba_cdr",
+   *                        ::coil::Creator<::RTC::OutPortProvider,
+   *                                        ::RTC::OutPortCorbaCdrProvider>,
+   *                        ::coil::Destructor<::RTC::OutPortProvider,
+   *                                           ::RTC::OutPortCorbaCdrProvider>);
+   *   }
+   * };
+   * </pre>
+   *
+   * この例のように、ファクトリへの登録を初期化関数として、extern "C"
+   * によりシンボルを参照可能にしておく。こうすることで、
+   * OutPortProvider を共有オブジェクト化 (DLL化) して動的ロード可能に
+   * し、プロバイダの型を動的に追加することが可能となる。
    *
    * @since 0.4.0
    *
@@ -65,25 +111,76 @@ namespace RTC
    * @class OutPortProvider
    * @brief OutPortProvider
    *
-   * - Declare what is provided to the port.
-   *   Add information associated with Provider to the properties of PortProfile.
+   * The virtual class for OutPort's PROVIDED interface
+   * implementation.  New interface for OutPort have to inherit this
+   * class, and have to implement the following functions.
    *
-   * (Example) When OutPort is provided:
+   * - init()
+   * - setBuffer()
+   * - setListener()
+   * - setConnector()
+   * 
+   * Moreover, calling the following functions in the constructor, and
+   * properties have to be set.
    *
-   * OutPortCorbaProvider declares the following:
-   *  - dataport.interface_type = CORBA_Any
-   *  - dataport.dataflow_type = Push, Pull
-   *  - dataport.subscription_type = Once, New, Periodic
-   * 
-   * OutPortRawTCPProvider declares the following:
-   *  - dataport.interface_type = RawTCP
-   *  - dataport.dataflow_type = Push, Pull
-   *  - dataport.subscription_type = Once, New, Periodic
-   * 
-   * Finally, PortProfile::properties declares the following:
-   *  - dataport.interface_type = CORBA_Any, RawTCP
-   *  - dataport.dataflow_type = Push, Pull
-   *  - dataport.subscription_type = Once, New, Periodic
+   * - setPortType()
+   * - setDataType()
+   * - setInterfaceType()
+   * - setDataFlowType()
+   * - setSubscriptionType()
+   *
+   * OutPortProvider's properties that have to be provided to others
+   * should be set to protected variable (SDOPackage::NVList)
+   * m_properties. Values that are set to the property are published
+   * as interface profile information, and it is also published to
+   * required interface when connection is established.  The following
+   * virtual functions are called when port's profiles are acquired
+   * from others or connections are established. The following virtual
+   * functions are called when port's profiles are acquired from
+   * others or connections are established. Interface profile
+   * information that is reviously set is given to Port calling by
+   * these functions.
+   *
+   * - publishInterfaceProfile()
+   * - publishInterface()
+   *
+   * OutPort inquires available OutPortProviders to the factory class
+   * of OutPortProvider, and publishes available interfaces to
+   * others. Therefore, sub-classes of OutPortProvider that provides
+   * PROVIDED interface to OutPort should register its factory to
+   * OutPortProviderFactory.
+   *
+   * RTC::OutPortProviderFactory::instance().addFactory() would be
+   * called with the following arguments.
+   *
+   * 1st arg: The name of provider. ex. "corba_cdr"
+   * 2nd arg: Factory function. coil::Creator<B, T>
+   * 3rd arg: Destruction function. coil::Destructor<B, T>
+   *
+   * The following example shows how to register factory function.
+   * And it is also declared as a initialization function.
+   *
+   * <pre>
+   * extern "C"
+   * {
+   *   void OutPortCorbaCdrProviderInit(void)
+   *   {
+   *     RTC::OutPortProviderFactory&
+   *                         factory(RTC::OutPortProviderFactory::instance());
+   *     factory.addFactory("corba_cdr",
+   *                        ::coil::Creator<::RTC::OutPortProvider,
+   *                                        ::RTC::OutPortCorbaCdrProvider>,
+   *                        ::coil::Destructor<::RTC::OutPortProvider,
+   *                                           ::RTC::OutPortCorbaCdrProvider>);
+   *   }
+   * };
+   * </pre>
+   *
+   * It is recommended that the registration process is declared as a
+   * initialization function with "extern C" to be accessed from the
+   * outside of module.  If the OutPortProviders are compiled as a
+   * shared object or DLL for dynamic loading, new OutPortProvider
+   * types can be added dynamically.
    *
    * @since 0.4.0
    *
@@ -98,10 +195,13 @@ namespace RTC
      * @if jp
      * @brief デストラクタ
      *
-     * デストラクタ
+     * 仮想デストラクタ
      *
      * @else
      * @brief Destructor
+     *
+     * Virtual destructor
+     *
      * @endif
      */
     virtual ~OutPortProvider(void);
@@ -165,8 +265,31 @@ namespace RTC
     /*!
      * @if jp
      * @brief リスナを設定する。
+     *
+     * OutPort はデータ送信処理における各種イベントに対して特定のリスナ
+     * オブジェクトをコールするコールバック機構を提供する。詳細は
+     * ConnectorListener.h の ConnectorDataListener, ConnectorListener
+     * 等を参照のこと。OutPortProvider のサブクラスでは、与えられたリス
+     * ナを適切なタイミングで呼び出すべきである。ただし、すべてのリスナ
+     * を呼び出す必要はない。
+     *
+     * @param info 接続情報
+     * @param listeners リスナオブジェクト
+     *
      * @else
      * @brief Set the listener. 
+     *
+     * OutPort provides callback functionality that calls specific
+     * listener objects according to the events in the data publishing
+     * process. For details, see documentation of
+     * ConnectorDataListener class and ConnectorListener class in
+     * ConnectorListener.h. In the sub-classes of OutPortProvider, the
+     * given listeners should be called in the proper timing. However,
+     * it is not necessary to call all the listeners.
+     *
+     * @param info Connector information
+     * @param listeners Listener objects
+     *
      * @endif
      */
     virtual void setListener(ConnectorInfo& info,
@@ -175,8 +298,25 @@ namespace RTC
     /*!
      * @if jp
      * @brief Connectorを設定する。
+     *
+     * OutPort は接続確立時に OutPortConnector オブジェクトを生成し、生
+     * 成したオブジェクトのポインタと共にこの関数を呼び出す。所有権は
+     * OutPort が保持するので OutPortProvider は OutPortConnector を削
+     * 除してはいけない。
+     *
+     * @param connector OutPortConnector
+     *
      * @else
      * @brief set Connector
+     *
+     * OutPort creates OutPortConnector object when it establishes
+     * connection between OutPort and InPort, and it calls this
+     * function with a pointer to the connector object. Since the
+     * OutPort has the ownership of this connector, OutPortProvider
+     * should not delete it.
+     *
+     * @param connector OutPortConnector
+     *
      * @endif
      */
     virtual void setConnector(OutPortConnector* connector) = 0;
@@ -216,6 +356,7 @@ namespace RTC
      * ンターフェースが登録済みの場合は何も行わない。
      *
      * @param properties Interface情報を受け取るプロパティ
+     * @return true: 正常終了
      *
      * @else
      * @brief Publish interface information
@@ -228,6 +369,7 @@ namespace RTC
      * subscribed.
      *
      * @param properties Properties to receive interface information
+     * @return true: normal return
      *
      * @endif
      */

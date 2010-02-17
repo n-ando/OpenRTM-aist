@@ -5,7 +5,7 @@
  * @date $Date: 2007-12-31 03:08:05 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
- * Copyright (C) 2003-2008
+ * Copyright (C) 2003-2010
  *     Noriaki Ando
  *     Task-intelligence Research Group,
  *     Intelligent Systems Research Institute,
@@ -98,7 +98,7 @@ namespace RTC
    *     無指定の場合はデフォルトの ringbuffer が使用される。<br>
    *     ex. ringbuffer, shmbuffer, doublebuffer, etc.
    *     正し、Consumer, Publisher のタイプによっては特定のバッファ型を
-   *     要求するがあるための、その場合は指定は無効となる。
+   *     要求するものがあるための、その場合は指定は無効となる。
    *
    * - buffer.length: <br>
    *     バッファの長さ
@@ -132,18 +132,18 @@ namespace RTC
    *      利用可能な Publisher のタイプ <br>
    *      new, periodic, flush, etc..
    *
-   * - publisher.push.policy: <br>
+   * - publisher.push_policy: <br>
    *      InPortへデータを送信するポリシー <br>
-   *      - all: バッファにたまっているすべて送信
+   *      - all: バッファにたまっているデータをすべて送信
    *      - fifo: バッファをFIFOとみなして送信
    *      - skip: 古いデータから一定数を間引いて送信
    *      - new: 常に新しいデータのみを送信
    *
-   * - publisher.push.skip_rate: <br>
-   *      push.policy=skip のときのスキップ率 <br>
+   * - publisher.skip_count: <br>
+   *      publisher.skip_count = n<br>
    *      n: n要素毎にひとつ送信
    *
-   * - publisher.periodic.rate:
+   * - publisher.push_rate:
    *
    * - publisher.thread.type: <br>
    *       Publisher のスレッドのタイプ <br>
@@ -314,27 +314,6 @@ namespace RTC
      * @endif
      */
     virtual bool write() = 0;
-
-
-    /*!
-     * @if jp
-     * @brief OutPort名称の取得
-     *
-     * OutPortの名称を取得する。
-     *
-     * @return ポート名称
-     *
-     * @else
-     *
-     * @brief Retrieve OutPort name
-     *
-     * Retrieve OutPort name
-     *
-     * @return the port name
-     *
-     * @endif
-     */
-    //    const char* name() const;
 
     /*!
      * @if jp
@@ -762,7 +741,7 @@ namespace RTC
      *
      * return it whether endian setting.
      *
-     *@return Return true in the case of "little", false in "big" than it.
+     * @return Return true in the case of "little", false in "big" than it.
      *
      * @endif
      */
@@ -969,7 +948,8 @@ namespace RTC
      * @param prop チェックするプロパティ
      * @param littleEndian エンディアン情報（true:little,false:big）
      * @return true:"serializer"キーが存在しない または 存在していて内容がある。
-,false:"serializer"キーが存在しているが内容が空 または 存在しているが内容が"little","big" 以外。
+     *         false:"serializer"キーが存在しているが内容が空 または 存
+     *         在しているが内容が"little","big" 以外。
      *
      * @else
      *
@@ -982,9 +962,12 @@ namespace RTC
      *
      * @param prop Properties
      * @param littleEndian Endian Information(true:little,false:big)
-     * @return true:"Serializer" key doesn't exist. or  "Serializer" key exists and there is a content.
-     *
-     *false:There is no content though "Serializer" key exists. or ithe content is not "Little. " though "Serializer" key exists. or The content is not "little" or "big" though "Serializer" key exists.
+     * @return  true:"Serializer" key doesn't exist. or "Serializer"
+     *          key exists and there is a content.
+     *          false:There is no content though "Serializer" key
+     *          exists. or ithe content is not "Little. " though
+     *          "Serializer" key exists, or the content is not
+     *          "little" or "big" though "Serializer" key exists.
      *
      * @endif
      */
