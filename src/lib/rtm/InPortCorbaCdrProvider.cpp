@@ -5,7 +5,7 @@
  * @date  $Date: 2008-01-14 07:49:59 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
- * Copyright (C) 2009
+ * Copyright (C) 2009-2010
  *     Noriaki Ando
  *     Task-intelligence Research Group,
  *     Intelligent Systems Research Institute,
@@ -70,12 +70,26 @@ namespace RTC
   {
   }
 
+  /*!
+   * @if jp
+   * @brief バッファをセットする
+   * @else
+   * @brief Setting outside buffer's pointer
+   * @endif
+   */
   void InPortCorbaCdrProvider::
   setBuffer(BufferBase<cdrMemoryStream>* buffer)
   {
     m_buffer = buffer;
   }
 
+  /*!
+   * @if jp
+   * @brief リスナを設定する
+   * @else
+   * @brief Set the listener
+   * @endif
+   */
   void InPortCorbaCdrProvider::setListener(ConnectorInfo& info,
                                            ConnectorListeners* listeners)
   {
@@ -83,6 +97,13 @@ namespace RTC
     m_listeners = listeners;
   }
 
+  /*!
+   * @if jp
+   * @brief Connectorを設定する。
+   * @else
+   * @brief set Connector
+   * @endif
+   */
   void InPortCorbaCdrProvider::setConnector(InPortConnector* connector)
   {
     m_connector = connector;
@@ -182,6 +203,13 @@ namespace RTC
 
 extern "C"
 {
+  /*!
+   * @if jp
+   * @brief モジュール初期化関数
+   * @else
+   * @brief Module initialization
+   * @endif
+   */
   void InPortCorbaCdrProviderInit(void)
   {
     RTC::InPortProviderFactory& factory(RTC::InPortProviderFactory::instance());

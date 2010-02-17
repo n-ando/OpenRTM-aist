@@ -196,6 +196,7 @@ namespace RTC
      */
     virtual void setListener(ConnectorInfo& info,
                              ConnectorListeners* listeners);
+
     /*!
      * @if jp
      * @brief Connectorを設定する。
