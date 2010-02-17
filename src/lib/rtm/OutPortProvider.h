@@ -210,7 +210,7 @@ namespace RTC
      * @if jp
      * @brief 設定初期化
      *
-     * InPortConsumerの各種設定を行う。実装クラスでは、与えられた
+     * OutPortProvider の各種設定を行う。実装クラスでは、与えられた
      * Propertiesから必要な情報を取得して各種設定を行う。この init() 関
      * 数は、OutPortProvider生成直後および、接続時にそれぞれ呼ばれる可
      * 能性がある。したがって、この関数は複数回呼ばれることを想定して記
@@ -498,7 +498,6 @@ namespace RTC
 
 
   public:
-    // functors
     /*!
      * @if jp
      * @brief インターフェースプロファイルを公開するたのファンクタ
@@ -539,6 +538,13 @@ namespace RTC
     };
   };
 
+  /*!
+   * @if jp
+   * @brief OutPortProviderFactory型宣言
+   * @else
+   * @brief OutPortProviderFactory type definition
+   * @endif
+   */
   typedef ::coil::GlobalFactory<OutPortProvider> OutPortProviderFactory;
 
 }; // namespace RTC

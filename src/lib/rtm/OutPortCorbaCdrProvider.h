@@ -5,7 +5,7 @@
  * @date  $Date: 2008-01-14 07:52:40 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
- * Copyright (C) 2006-2009
+ * Copyright (C) 2006-2010
  *     Noriaki Ando
  *     Task-intelligence Research Group,
  *     Intelligent Systems Research Institute,
@@ -39,9 +39,10 @@ namespace RTC
    * @class OutPortCorbaCdrProvider
    * @brief OutPortCorbaCdrProvider クラス
    *
-   * 通信手段に CORBA を利用した出力ポートプロバイダーの実装クラス。
+   * OutPortProvider 
    *
-   * @param DataType 当該プロバイダに割り当てたバッファが保持するデータ型
+   * データ転送に CORBA の OpenRTM::OutPortCdr インターフェースを利用し
+   * た、pull 型データフロー型を実現する OutPort プロバイダクラス。
    *
    * @since 0.4.0
    *
@@ -49,11 +50,9 @@ namespace RTC
    * @class OutPortCorbaCdrProvider
    * @brief OutPortCorbaCdrProvider class
    *
-   * This is an implementation class of OutPort Provider that uses 
-   * CORBA for mean of communication.
-   *
-   * @param DataType Data type held by the buffer that is assigned to this 
-   *        provider
+   * The OutPort provider class which uses the OpenRTM::OutPortCdr
+   * interface in CORBA for data transfer and realizes a pull-type
+   * dataflow.
    *
    * @since 0.4.0
    *
@@ -71,14 +70,10 @@ namespace RTC
      *
      * コンストラクタ
      *
-     * @param buffer 当該プロバイダに割り当てるバッファオブジェクト
-     *
      * @else
      * @brief Constructor
      *
      * Constructor
-     *
-     * @param buffer Buffer object that is assigned to this provider
      *
      * @endif
      */
@@ -103,7 +98,7 @@ namespace RTC
      * @if jp
      * @brief 設定初期化
      *
-     * InPortConsumerの各種設定を行う。実装クラスでは、与えられた
+     * OutPortCorbaCdrProvider の各種設定を行う。与えられた
      * Propertiesから必要な情報を取得して各種設定を行う。この init() 関
      * 数は、OutPortProvider生成直後および、接続時にそれぞれ呼ばれる可
      * 能性がある。したがって、この関数は複数回呼ばれることを想定して記
@@ -132,7 +127,7 @@ namespace RTC
      * @if jp
      * @brief バッファをセットする
      *
-     * OutPortProviderがデータを取り出すバッファをセットする。
+     * OutPortProvider がデータを取り出すバッファをセットする。
      * すでにセットされたバッファがある場合、以前のバッファへの
      * ポインタに対して上書きされる。
      * OutPortProviderはバッファの所有権を仮定していないので、
@@ -154,11 +149,49 @@ namespace RTC
      * @endif
      */
     virtual void setBuffer(CdrBufferBase* buffer);
+
     /*!
      * @if jp
      * @brief リスナを設定する。
+     *
+     * OutPort はデータ送信処理における各種イベントに対して特定のリスナ
+     * オブジェクトをコールするコールバック機構を提供する。詳細は
+     * ConnectorListener.h の ConnectorDataListener, ConnectorListener
+     * 等を参照のこと。OutPortCorbaCdrProvider では、以下のコールバック
+     * が提供される。
+     * 
+     * - ON_BUFFER_READ
+     * - ON_SEND
+     * - ON_BUFFER_EMPTY
+     * - ON_BUFFER_READ_TIMEOUT
+     * - ON_SENDER_EMPTY
+     * - ON_SENDER_TIMEOUT
+     * - ON_SENDER_ERROR
+     *
+     * @param info 接続情報
+     * @param listeners リスナオブジェクト
+     *
      * @else
      * @brief Set the listener. 
+     *
+     * OutPort provides callback functionality that calls specific
+     * listener objects according to the events in the data publishing
+     * process. For details, see documentation of
+     * ConnectorDataListener class and ConnectorListener class in
+     * ConnectorListener.h. In this OutPortCorbaCdrProvider provides
+     * the following callbacks.
+     * 
+     * - ON_BUFFER_READ
+     * - ON_SEND
+     * - ON_BUFFER_EMPTY
+     * - ON_BUFFER_READ_TIMEOUT
+     * - ON_SENDER_EMPTY
+     * - ON_SENDER_TIMEOUT
+     * - ON_SENDER_ERROR
+     *
+     * @param info Connector information
+     * @param listeners Listener objects
+     *
      * @endif
      */
     virtual void setListener(ConnectorInfo& info,
@@ -166,8 +199,25 @@ namespace RTC
     /*!
      * @if jp
      * @brief Connectorを設定する。
+     *
+     * OutPort は接続確立時に OutPortConnector オブジェクトを生成し、生
+     * 成したオブジェクトのポインタと共にこの関数を呼び出す。所有権は
+     * OutPort が保持するので OutPortProvider は OutPortConnector を削
+     * 除してはいけない。
+     *
+     * @param connector OutPortConnector
+     *
      * @else
      * @brief set Connector
+     *
+     * OutPort creates OutPortConnector object when it establishes
+     * connection between OutPort and InPort, and it calls this
+     * function with a pointer to the connector object. Since the
+     * OutPort has the ownership of this connector, OutPortProvider
+     * should not delete it.
+     *
+     * @param connector OutPortConnector
+     *
      * @endif
      */
     virtual void setConnector(OutPortConnector* connector);
@@ -204,72 +254,43 @@ namespace RTC
     ::OpenRTM::PortStatus convertReturn(BufferStatus::Enum status,
                                         const cdrMemoryStream& data);
 
-    
-    /*!
-     * @brief Connector data listener functions
-     */
-//    inline void onBufferWrite(const cdrMemoryStream& data)
-//    {
-//      m_listeners->
-//        connectorData_[ON_BUFFER_WRITE].notify(m_profile, data);
-//    }
-//
-//    inline void onBufferFull(const cdrMemoryStream& data)
-//    {
-//      m_listeners->
-//        connectorData_[ON_BUFFER_FULL].notify(m_profile, data);
-//    }
-//
-//    inline void onBufferWriteTimeout(const cdrMemoryStream& data)
-//    {
-//      m_listeners->
-//        connectorData_[ON_BUFFER_WRITE_TIMEOUT].notify(m_profile, data);
-//    }
-//
-//    inline void onBufferWriteOverwrite(const cdrMemoryStream& data)
-//    {
-//      m_listeners->
-//        connectorData_[ON_BUFFER_OVERWRITE].notify(m_profile, data);
-//    }
 
+    /*!
+     * @if jp
+     * @brief ON_BUFFER_READ のリスナへ通知する。 
+     * @param data cdrMemoryStream
+     * @else
+     * @brief Notify an ON_BUFFER_READ event to listeners
+     * @param data cdrMemoryStream
+     * @endif
+     */
     inline void onBufferRead(const cdrMemoryStream& data)
     {
       m_listeners->
         connectorData_[ON_BUFFER_READ].notify(m_profile, data);
     }
 
+    /*!
+     * @if jp
+     * @brief ON_SEND のリスナへ通知する。 
+     * @param data cdrMemoryStream
+     * @else
+     * @brief Notify an ON_SEND event to listeners
+     * @param data cdrMemoryStream
+     * @endif
+     */
     inline void onSend(const cdrMemoryStream& data)
     {
       m_listeners->
         connectorData_[ON_SEND].notify(m_profile, data);
     }
 
-//    inline void onReceived(const cdrMemoryStream& data)
-//    {
-//      m_listeners->
-//        connectorData_[ON_RECEIVED].notify(m_profile, data);
-//    }
-//
-//    inline void onReceiverFull(const cdrMemoryStream& data)
-//    {
-//      m_listeners->
-//        connectorData_[ON_RECEIVER_FULL].notify(m_profile, data);
-//    }
-//
-//    inline void onReceiverTimeout(const cdrMemoryStream& data)
-//    {
-//      m_listeners->
-//        connectorData_[ON_RECEIVER_TIMEOUT].notify(m_profile, data);
-//    }
-//
-//    inline void onReceiverError(const cdrMemoryStream& data)
-//    {
-//      m_listeners->
-//        connectorData_[ON_RECEIVER_ERROR].notify(m_profile, data);
-//    }
-
     /*!
-     * @brief Connector listener functions
+     * @if jp
+     * @brief ON_BUFFER_EMPTYのリスナへ通知する。 
+     * @else
+     * @brief Notify an ON_BUFFER_EMPTY event to listeners
+     * @endif
      */
     inline void onBufferEmpty()
     {
@@ -277,24 +298,52 @@ namespace RTC
         connector_[ON_BUFFER_EMPTY].notify(m_profile);
     }
 
+    /*!
+     * @if jp
+     * @brief ON_BUFFER_READ_TIMEOUT のリスナへ通知する。 
+     * @else
+     * @brief Notify an ON_BUFFER_READ_TIMEOUT event to listeners
+     * @endif
+     */
     inline void onBufferReadTimeout()
     {
       m_listeners->
         connector_[ON_BUFFER_READ_TIMEOUT].notify(m_profile);
     }
 
+    /*!
+     * @if jp
+     * @brief ON_SENDER_EMPTYのリスナへ通知する。 
+     * @else
+     * @brief Notify an ON_SENDER_EMPTY event to listeners
+     * @endif
+     */
     inline void onSenderEmpty()
     {
       m_listeners->
         connector_[ON_SENDER_EMPTY].notify(m_profile);
     }
 
+    /*!
+     * @if jp
+     * @brief ON_SENDER_TIMEOUT のリスナへ通知する。 
+     * @else
+     * @brief Notify an ON_SENDER_TIMEOUT event to listeners
+     * @endif
+     */
     inline void onSenderTimeout()
     {
       m_listeners->
         connector_[ON_SENDER_TIMEOUT].notify(m_profile);
     }
 
+    /*!
+     * @if jp
+     * @brief ON_SENDER_ERRORのリスナへ通知する。 
+     * @else
+     * @brief Notify an ON_SENDER_ERROR event to listeners
+     * @endif
+     */
     inline void onSenderError()
     {
       m_listeners->
@@ -307,12 +356,24 @@ namespace RTC
     ConnectorListeners* m_listeners;
     ConnectorInfo m_profile;
     OutPortConnector* m_connector;
-
   };  // class OutPortCorbaCdrProvider
 };     // namespace RTC
 
 extern "C"
 {
+  /*!
+   * @if jp
+   * @brief モジュール初期化関数
+   *
+   * OutPortCorbaCdrProvider のファクトリを登録する初期化関数。
+   *
+   * @else
+   * @brief Module initialization
+   *
+   * This initialization function registers OutPortCorbaCdrProvider's factory.
+   *
+   * @endif
+   */
   void OutPortCorbaCdrProviderInit(void);
 };
 
