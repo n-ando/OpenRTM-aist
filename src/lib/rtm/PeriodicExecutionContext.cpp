@@ -484,6 +484,13 @@ namespace RTC
 
 extern "C"
 {
+  /*!
+   * @if jp
+   * @brief ECFactoryへの登録のための初期化関数
+   * @else
+   * @brief Initialization function to register to ECFactory
+   * @endif
+   */
   void PeriodicExecutionContextInit(RTC::Manager* manager)
   {
     manager->registerECFactory("PeriodicExecutionContext",
