@@ -5,7 +5,7 @@
  * @date $Date: 2008-01-14 10:19:42 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
- * Copyright (C) 2006-2009
+ * Copyright (C) 2006-2010
  *     Noriaki Ando
  *     Task-intelligence Research Group,
  *     Intelligent Systems Research Institute,
@@ -831,6 +831,13 @@ namespace RTC
     return true;
   }
 
+  /*!
+   * @if jp
+   * @brief 存在しないポートをdisconnectする。
+   * @else
+   * @brief Disconnect ports that doesn't exist. 
+   * @endif
+   */
   void PortBase::updateConnectors()
   {
     std::vector<std::string> connector_ids;
@@ -857,7 +864,13 @@ namespace RTC
       }
   }
   
-
+  /*!
+   * @if jp
+   * @brief ポートの存在を確認する。
+   * @else
+   * @brief Existence of ports
+   * @endif
+   */
   bool PortBase::checkPorts(::RTC::PortServiceList& ports)
   {
     for (CORBA::ULong i(0), len(ports.length()); i < len; ++i)

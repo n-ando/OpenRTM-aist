@@ -5,7 +5,7 @@
  * @date $Date: 2008-01-14 07:56:44 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
- * Copyright (C) 2006-2008
+ * Copyright (C) 2006-2010
  *     Noriaki Ando
  *     Task-intelligence Research Group,
  *     Intelligent Systems Research Institute,
@@ -1860,7 +1860,9 @@ namespace RTC
      *
      * @brief PortProfile の properties に NameValue 値を要素に追加する
      *
-     * PortProfile の properties に NameValue 値を要素に追加する。
+     * PortProfile の properties に NameValue 値を要素に追加する。この
+     * 関数により設定された properties は get_prot_profile() により外部
+     * から参照される。
      *
      * @param key properties の name
      * @param value properties の value
@@ -1869,7 +1871,9 @@ namespace RTC
      *
      * @brief Append NameValue data to PortProfile's properties
      *
-     * Append NameValue data to PortProfile's properties.
+     * Append NameValue data to PortProfile's properties.  The
+     * properties which are set by this function would be referred
+     * through get_port_profile() from outsides.
      *
      * @param key The name of properties
      * @param value The value of properties
@@ -1887,13 +1891,20 @@ namespace RTC
      *
      * @brief 存在しないポートをdisconnectする。
      *
+     * 死んだPortを検出し、もし死んでいるポートがあった場合には、接続を
+     * 解除する。
+     *
      * @else
      *
      * @brief Disconnect ports that doesn't exist. 
      *
+     * This function detects dead-port, and if dead ports are found in
+     * the connection list, disconnects them.
+     *
      * @endif
      */
     void updateConnectors();
+
     /*!
      * @if jp
      *
