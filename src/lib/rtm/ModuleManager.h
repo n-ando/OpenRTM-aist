@@ -5,7 +5,7 @@
  * @date $Date: 2007-12-31 03:08:04 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
- * Copyright (C) 2006-2008
+ * Copyright (C) 2006-2010
  *     Noriaki Ando
  *     Task-intelligence Research Group,
  *     Intelligent Systems Research Institute,
@@ -304,7 +304,8 @@ namespace RTC
      *
      * @endif
      */
-    std::string load(const std::string& file_name, const std::string& init_func);
+    std::string load(const std::string& file_name,
+                     const std::string& init_func);
     
     /*!
      * @if jp
@@ -662,7 +663,6 @@ namespace RTC
      * @brief Module list that has already loaded
      * @endif
      */
-    //    DllMap m_modules;
     ObjectManager<const char*, DLLEntity, DllPred> m_modules;
     
     /*!
@@ -706,6 +706,7 @@ namespace RTC
      * @endif
      */
     std::string m_initFuncSuffix;
+
     /*!
      * @if jp
      * @brief 初期実行関数プリフィックス
@@ -715,6 +716,13 @@ namespace RTC
      */
     std::string m_initFuncPrefix;
 
+    /*!
+     * @if jp
+     * @brief モジュールアンロードファンクタ
+     * @else
+     * @brief Module unloading functor
+     * @endif
+     */
     class UnloadPred
     {
     public:

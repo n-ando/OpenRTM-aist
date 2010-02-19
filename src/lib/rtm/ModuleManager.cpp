@@ -5,7 +5,7 @@
  * @date $Date: 2007-12-31 03:08:04 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
- * Copyright (C) 2006-2008
+ * Copyright (C) 2006-2010
  *     Noriaki Ando
  *     Task-intelligence Research Group,
  *     Intelligent Systems Research Institute,
@@ -109,7 +109,7 @@ namespace RTC
     if (!fileExist(file_path)) throw FileNotFound(file_path.c_str());
     
     DLLEntity* dll(new DLLEntity());
-
+    
     int retval =  dll->dll.open(file_path.c_str());
     if (retval != 0)
       {
@@ -175,7 +175,7 @@ namespace RTC
     if (dll != NULL) {
       delete dll;
     }
-
+    
     return;
   }
   
@@ -189,7 +189,7 @@ namespace RTC
   void ModuleManager::unloadAll()
   {
     std::vector<DLLEntity*> dlls(m_modules.getObjects());
-
+    
     for (int i(0), len(dlls.size()); i < len; ++i)
       {
         std::string ident(dlls[i]->properties["file_path"]);
@@ -277,69 +277,69 @@ namespace RTC
       {
         modules.push_back(dlls[i]->properties);
       }
-           return modules;
-         }
+    return modules;
+  }
   
-    /*!
+  /*!
    * @if jp
    * @brief ロード可能なモジュールリストを取得する(未実装)
    * @else
    * @brief Get the loadable module list(not implemented)
    * @endif
    */
-    std::vector<coil::Properties> ModuleManager::getLoadableModules()
-    {
-      // getting loadable module file path list.
-      coil::vstring dlls;
-      for (size_t i(0); i < m_loadPath.size(); ++i)
-        {
-          if (m_loadPath[i].empty()) { continue; }
-          std::string& path(m_loadPath[i]);
+  std::vector<coil::Properties> ModuleManager::getLoadableModules()
+  {
+    // getting loadable module file path list.
+    coil::vstring dlls;
+    for (size_t i(0); i < m_loadPath.size(); ++i)
+      {
+        if (m_loadPath[i].empty()) { continue; }
+        std::string& path(m_loadPath[i]);
 #ifdef WIN32
-          coil::vstring flist = coil::filelist(path.c_str(), "*.dll");
+        coil::vstring flist = coil::filelist(path.c_str(), "*.dll");
 #else
-          coil::vstring flist = coil::filelist(path.c_str(), "*.so");
+        coil::vstring flist = coil::filelist(path.c_str(), "*.so");
 #endif // WIN32
-          for (size_t j(0); j < flist.size(); ++j)
-            {
-              if (*(path.end() - 1) != '/') { path += "/"; }
-              dlls.push_back(path + flist[j]);
-            }
-        }
-
-      // getting module properties from loadable modules
-      std::vector<coil::Properties> prop;
-      for (size_t i(0), len(dlls.size()); i < len; ++i)
-        {
-          std::string cmd("rtcprof ");
-          cmd += dlls[i];
-          FILE* fd;
-          if ((fd = popen(cmd.c_str(), "r")) == NULL)
-            {
-              std::cerr << "popen faild" << std::endl;
-              continue;
-            }
-          coil::Properties p;
-          do
-            {
-              char str[512];
-              fgets(str, 512, fd);
-              std::string line(str);
-              line.erase(line.size() - 1);
-              std::string::size_type pos;
-              if ((pos = line.find(":")) == std::string::npos ) { continue; }
-
-              p[line.substr(0, pos)] = line.substr(pos + 1);
-              coil::eraseBothEndsBlank(p[line.substr(0, pos)]);
-            } while (!feof(fd));
-          pclose(fd);
-          p["module_file_name"] = coil::basename(dlls[i].c_str());
-          p["module_file_path"] = dlls[i].c_str();
-          prop.push_back(p);
-        }
-
-      return prop;
-    }
+        for (size_t j(0); j < flist.size(); ++j)
+          {
+            if (*(path.end() - 1) != '/') { path += "/"; }
+            dlls.push_back(path + flist[j]);
+          }
+      }
+    
+    // getting module properties from loadable modules
+    std::vector<coil::Properties> prop;
+    for (size_t i(0), len(dlls.size()); i < len; ++i)
+      {
+        std::string cmd("rtcprof ");
+        cmd += dlls[i];
+        FILE* fd;
+        if ((fd = popen(cmd.c_str(), "r")) == NULL)
+          {
+            std::cerr << "popen faild" << std::endl;
+            continue;
+          }
+        coil::Properties p;
+        do
+          {
+            char str[512];
+            fgets(str, 512, fd);
+            std::string line(str);
+            line.erase(line.size() - 1);
+            std::string::size_type pos;
+            if ((pos = line.find(":")) == std::string::npos ) { continue; }
+            
+            p[line.substr(0, pos)] = line.substr(pos + 1);
+            coil::eraseBothEndsBlank(p[line.substr(0, pos)]);
+          } while (!feof(fd));
+        pclose(fd);
+        p["module_file_name"] = coil::basename(dlls[i].c_str());
+        p["module_file_path"] = dlls[i].c_str();
+        prop.push_back(p);
+      }
+    
+    return prop;
+  }
   
   /*!
    * @if jp
