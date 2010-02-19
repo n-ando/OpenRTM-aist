@@ -5,7 +5,7 @@
  * @date $Date: 2008-01-14 07:56:11 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
- * Copyright (C) 2006
+ * Copyright (C) 2006-2010
  *     Task-intelligence Research Group,
  *     Intelligent Systems Research Institute,
  *     National Institute of
@@ -51,8 +51,6 @@ namespace RTC
     }
     const PortService_ptr m_port;
   };
-
-
   
   /*!
    * @if jp
@@ -79,7 +77,8 @@ namespace RTC
    * @endif
    */
   PortAdmin::PortAdmin(CORBA::ORB_ptr orb, PortableServer::POA_ptr poa)
-    : m_pORB(CORBA::ORB::_duplicate(orb)), m_pPOA(PortableServer::POA::_duplicate(poa)),
+    : m_pORB(CORBA::ORB::_duplicate(orb)),
+      m_pPOA(PortableServer::POA::_duplicate(poa)),
       rtclog("portadmin")
   {
   }
@@ -160,11 +159,20 @@ namespace RTC
 
 
     // Store Port's ref to PortServiceList
-    CORBA_SeqUtil::push_back(m_portRefs, RTC::PortService::_duplicate(port.getPortRef()));
+    CORBA_SeqUtil::push_back(m_portRefs,
+                             RTC::PortService::_duplicate(port.getPortRef()));
     
     // Store Port servant
     return m_portServants.registerObject(&port);
   }
+
+  /*!
+   * @if jp
+   * @brief Port ¤òÅÐÏ¿¤¹¤ë
+   * @else
+   * @brief Regsiter the Port
+   * @endif
+   */
   bool PortAdmin::addPort(PortService_ptr port)
   {
     // Check for duplicate
