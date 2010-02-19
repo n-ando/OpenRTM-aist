@@ -5,7 +5,7 @@
  * @date $Date: 2007-12-31 03:08:04 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
- * Copyright (C) 2006-2008
+ * Copyright (C) 2006-2010
  *     Noriaki Ando
  *     Task-intelligence Research Group,
  *     Intelligent Systems Research Institute,
@@ -552,11 +552,15 @@ namespace NVUtil
   /*!
    * @if jp
    * @brief NVList に設定されている内容を文字列として標準出力する。
+   *
    * @param nv 出力対象 NVList
+   *
    * @else
    * @brief Print information configured in NVList as a string type 
    *        to Standard Outport.
+   *
    * @param nv The target NVList for the print
+   *
    * @endif
    */
   void dump(const SDOPackage::NVList& nv);
@@ -564,10 +568,14 @@ namespace NVUtil
   /*!
    * @if jp
    * @brief NVList に設定されている内容を文字列にする
+   *
    * @param nv 出力対象 NVList
+   *
    * @else
    * @brief Get information configured in NVList as a string type.
+   *
    * @param nv The target NVList for the print
+   *
    * @endif
    */
   std::string toString(const SDOPackage::NVList& nv);
