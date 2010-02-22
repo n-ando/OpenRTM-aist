@@ -91,10 +91,23 @@ namespace RTC
    */
   ConnectorBase::ReturnCode OutPortPullConnector::disconnect()
   {
+    RTC_TRACE(("disconnect()"));
     // delete provider
-    //    OutPortProviderFactory& factory(OutPortProviderFactory::instance());
-    //    factory.deleteObject(m_buffer);
-    
+    if (m_provider != 0)
+      {
+        OutPortProviderFactory& cfactory(OutPortProviderFactory::instance());
+        cfactory.deleteObject(m_provider);
+      }
+    m_provider = 0;
+
+    // delete buffer
+    if (m_buffer != 0)
+      {
+        CdrBufferFactory& bfactory(CdrBufferFactory::instance());
+        bfactory.deleteObject(m_buffer);
+      }
+    m_buffer = 0;
+
     return PORT_OK;
   }
 

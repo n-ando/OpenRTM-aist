@@ -93,10 +93,15 @@ namespace RTC
    */
   ConnectorBase::ReturnCode InPortPullConnector::disconnect()
   {
-    // delete provider
-    //    InPortProviderFactory& factory(InPortProviderFactory::instance());
-    //    factory.deleteObject(m_buffer);
-    
+    RTC_TRACE(("disconnect()"));
+    // delete consumer
+    if (m_consumer != 0)
+      {
+        OutPortConsumerFactory& cfactory(OutPortConsumerFactory::instance());
+        cfactory.deleteObject(m_consumer);
+      }
+    m_consumer = 0;
+
     return PORT_OK;
   }
   
