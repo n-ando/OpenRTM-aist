@@ -1477,6 +1477,7 @@ std::vector<coil::Properties> Manager::getLoadableModules()
       {
         deleteComponent(m_finalized.comps[i]);
       }
+		m_finalized.comps.clear();
   }
 
   void Manager::notifyFinalized(RTObject_impl* comp)
