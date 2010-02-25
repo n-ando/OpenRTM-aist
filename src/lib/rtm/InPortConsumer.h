@@ -252,6 +252,4 @@ namespace RTC
   typedef ::coil::GlobalFactory<InPortConsumer> InPortConsumerFactory;
 };     // namespace RTC
 
-template class ::coil::GlobalFactory<RTC::InPortConsumer>;
-
 #endif // RTC_INPORTCONSUMER_H
