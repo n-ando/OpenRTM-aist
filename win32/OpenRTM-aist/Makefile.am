@@ -39,8 +39,6 @@ coil_config.vsprops:
 dist-hook: clean-local sln
 
 EXTRA_DIST =                          \
-	OpenRTM-aist_vc8.sln          \
-	OpenRTM-aist_vc9.sln          \
 	OpenRTM-aist.sln.dep          \
 	RunAtFirst.py                 \
 	autobuild_vc8.bat             \
