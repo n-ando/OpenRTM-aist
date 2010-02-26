@@ -120,7 +120,7 @@ dist-hook: lst vcproj
 
 
 clean-local:
-	rm -f \
-	*.gch *.bak *.rpo *.sym lib*.*_pure_* *.lst \
-	Makefile.old *core *~ *.so *.log
+	rm -f *.bak *.rpo *.sym lib*.*_pure_* 
+	rm -f *.lst *.core *~ *.so *.log
+	rm -f Makefile.old 
 

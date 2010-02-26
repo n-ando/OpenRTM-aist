@@ -64,7 +64,9 @@ wxs:
 dist-hook: lst vcproj wxs
 
 clean-local:
-	rm -rf rtcd *.o *~ *core .libs *.lst
+	rm -rf rtcd
+	rm -rf *.o *~ *.core *.lst *.log
+	rm -rf .libs 
 
 EXTRA_DIST = rtcd.yaml
 

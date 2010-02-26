@@ -243,6 +243,6 @@ clean_skelstub:
 	rm -f *C.cpp *C.h *S.cpp *S.h *_T.cpp *_T.h *.inl
 
 clean-local: clean_objs clean_skelstub
-	rm -f \
-	*.bak *.rpo *.sym lib*.*_pure_* *.lst \
-	Makefile.old *core *~ *loT
+	rm -f *.bak *.rpo *.sym lib*.*_pure_*
+	rm -f *.lst *core *~ *loT *.log
+	rm -f Makefile.old 
