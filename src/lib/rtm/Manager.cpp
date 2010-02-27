@@ -77,9 +77,9 @@ namespace RTC
    * @endif
    */
   Manager::Manager()
-    : m_initProc(NULL),
+    : m_initProc(0), m_namingManager(0), m_timer(0),
       m_logStreamBuf(), rtclog(&m_logStreamBuf),
-      m_runner(NULL), m_terminator(NULL)
+      m_runner(0), m_terminator(0)
   {
     new coil::SignalAction((coil::SignalHandler) handler, SIGINT);
   }
@@ -92,9 +92,9 @@ namespace RTC
    * @endif
    */
   Manager::Manager(const Manager& manager)
-    : m_initProc(NULL),
+    : m_initProc(0), m_namingManager(0), m_timer(0),
       m_logStreamBuf(), rtclog(&m_logStreamBuf),
-      m_runner(NULL), m_terminator(NULL)
+      m_runner(0), m_terminator(0)
   {
     new coil::SignalAction((coil::SignalHandler) handler, SIGINT);
   }
@@ -749,7 +749,8 @@ std::vector<coil::Properties> Manager::getLoadableModules()
 	factory->destroy(comp);
       } 
     
-    if (coil::toBool(m_config["manager.shutdown_onrtcs"], "YES", "NO", true) &&
+    if (coil::toBool(m_config["manager.shutdown_on_nortcs"],
+                     "YES", "NO", true) &&
         !coil::toBool(m_config["manager.is_master"], "YES", "NO", false))
       {
         std::vector<RTObject_impl*> comps;
@@ -919,12 +920,13 @@ std::vector<coil::Properties> Manager::getLoadableModules()
   void Manager::shutdownManager()
   {
     RTC_TRACE(("Manager::shutdownManager()"));
+    m_timer->stop();
   }
 
   void  Manager::shutdownOnNoRtcs()
   {
     RTC_TRACE(("Manager::shutdownOnNoRtcs()"));
-    if (coil::toBool(m_config["manager.shutdown_onrtcs"], "YES", "NO", true))
+    if (coil::toBool(m_config["manager.shutdown_on_nortcs"], "YES", "NO", true))
       {
         std::vector<RTObject_impl*> comps(getComponents());
         if (comps.size() == 0)
@@ -1477,7 +1479,7 @@ std::vector<coil::Properties> Manager::getLoadableModules()
       {
         deleteComponent(m_finalized.comps[i]);
       }
-		m_finalized.comps.clear();
+    m_finalized.comps.clear();
   }
 
   void Manager::notifyFinalized(RTObject_impl* comp)
