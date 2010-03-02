@@ -30,10 +30,14 @@
 
 namespace coil
 {
-  
-  //============================================================
-  // Time statictics object
-  //============================================================
+
+  /*!
+   * @if jp
+   * @brief コンストラクタ
+   * @else
+   * @brief Constructor
+   * @endif
+   */
   TimeMeasure::TimeMeasure(int buflen)
     : m_begin(0.0), m_interval(0.0),
       m_count(0), m_countMax(buflen + 1),
@@ -45,20 +49,26 @@ namespace coil
         m_record.push_back(TimeValue(0, 0));
       }
   }
-  
-  
-  //============================================================
-  // Begin time measurement for time statistics
-  //============================================================
+
+  /*!
+   * @if jp
+   * @brief 時間統計の計測を開始する
+   * @else
+   * @brief Begin time measurement for time statistics
+   * @endif
+   */
   void TimeMeasure::tick()
   {
     m_begin = gettimeofday(); // [TimeValue]
   }
-  
-  
-  //============================================================
-  // End time measurement for time statistics
-  //============================================================
+
+  /*!
+   * @if jp
+   * @brief 時間統計の計測を終了する
+   * @else
+   * @brief Finish time measurement for time statistics
+   * @endif
+   */
   void TimeMeasure::tack()
   {
     if (m_begin.sec() == 0) { return; }
@@ -72,27 +82,52 @@ namespace coil
         m_recurred = true;
       }
   }
-  
+
+  /*!
+   * @if jp
+   * @brief 経過時間を取得する
+   * @else
+   * @brief Get a interval time
+   * @endif
+   */
   coil::TimeValue& TimeMeasure::interval()
   {
     return m_interval;
   }
 
+  /*!
+   * @if jp
+   * @brief 統計関連データの初期化
+   * @else
+   * @brief Initialize for statistics related data
+   * @endif
+   */
   void TimeMeasure::reset()
   {
     m_count = 0;
     m_recurred = false;
     m_begin = 0.0;
   }
-  
+
+  /*!
+   * @if jp
+   * @brief 時間統計バッファサイズを取得する
+   * @else
+   * @brief Get number of time measurement buffer
+   * @endif
+   */
   unsigned long int TimeMeasure::count() const
   {
     return m_recurred ? m_record.size() : m_count;
   }
 
-  //============================================================
-  // Get total statistics
-  //============================================================
+  /*!
+   * @if jp
+   * @brief 統計データの総計を取得する
+   * @else
+   * @brief Get total statistics
+   * @endif
+   */
   bool TimeMeasure::getStatistics(double &max_interval,
                                   double &min_interval,
                                   double &mean_interval,
@@ -123,6 +158,13 @@ namespace coil
     return true;
   }
 
+  /*!
+   * @if jp
+   * @brief 統計結果を取得する
+   * @else
+   * @brief Get statistics result
+   * @endif
+   */
   TimeMeasure::Statistics TimeMeasure::getStatistics()
   {
     Statistics s;
