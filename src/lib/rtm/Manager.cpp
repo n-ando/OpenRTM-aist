@@ -1624,9 +1624,9 @@ std::vector<coil::Properties> Manager::getLoadableModules()
 	  }
       }
     // Merge Properties. type_prop is merged properties
-    comp->getProperties() << prop;
+		comp->setProperties(prop);
     type_prop << name_prop;
-    comp->getProperties() << type_prop;
+    comp->setProperties(type_prop);
     
     //------------------------------------------------------------
     // Format component's name for NameService
