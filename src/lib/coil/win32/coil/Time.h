@@ -1,6 +1,6 @@
 // -*- C++ -*-
 /*!
- * @file Time_posix.h
+ * @file Time_win32.h
  * @brief Time functions
  * @date $Date$
  * @author Noriaki Ando <n-ando@aist.go.jp>
@@ -35,7 +35,29 @@ struct timezone {
 	  int tz_minuteswest;
 	  int tz_dsttime;
   };
-inline unsigned int sleep(unsigned int seconds)
+
+  /*!
+   * @if jp
+   * @brief 指定された秒間は処理を休止する
+   *
+   * 指定された秒間は処理を休止する。
+   *
+   * @param seconds 秒数
+   *
+   * @return 0: 成功
+   *
+   * @else
+   * @brief Stop a processing at specified second time
+   *
+   * Stop a processing at specified second time.
+   *
+   * @param seconds Second time
+   *
+   * @return 0: successful
+   *
+   * @endif
+   */
+  inline unsigned int sleep(unsigned int seconds)
   {
 
     ::Sleep( seconds *1000 );
@@ -43,6 +65,28 @@ inline unsigned int sleep(unsigned int seconds)
   }
 
 //static short m_time_DLLinit_count = 0;
+
+  /*!
+   * @if jp
+   * @brief 指定された秒間は処理を休止する
+   *
+   * 指定された秒間は処理を休止する。
+   *
+   * @param interval TimeValueオブジェクト
+   *
+   * @return 0: 成功, != 0: 失敗
+   *
+   * @else
+   * @brief Stop a processing at specified second time
+   *
+   * Stop a processing at specified second time.
+   *
+   * @param interval TimeValue object
+   *
+   * @return 0: successful, != 0: failed
+   *
+   * @endif
+   */
   inline int sleep(TimeValue interval)
   {
     struct timeval tv;
@@ -97,6 +141,27 @@ inline unsigned int sleep(unsigned int seconds)
     return iret;
   }
 
+  /*!
+   * @if jp
+   * @brief 指定されたマイクロ秒間は処理を休止する
+   *
+   * 指定されたマイクロ秒間は処理を休止する。
+   *
+   * @param usec マイクロ秒数
+   *
+   * @return 0: 成功, != 0: 失敗
+   *
+   * @else
+   * @brief Stop a processing at specified micro second time
+   *
+   * Stop a processing at specified micro second time.
+   *
+   * @param usec Micro second time
+   *
+   * @return 0: successful, != 0: failed
+   *
+   * @endif
+   */
   inline int usleep(unsigned int usec)
   {
     struct timeval tv;
@@ -144,6 +209,29 @@ inline unsigned int sleep(unsigned int seconds)
 
   }
 
+  /*!
+   * @if jp
+   * @brief 時刻とタイムゾーンを取得する
+   *
+   * 時刻とタイムゾーンを取得する。
+   *
+   * @param tv 時刻構造体
+   * @param tz タイムゾーン構造体
+   *
+   * @return 0: 成功
+   *
+   * @else
+   * @brief Get the time and timezone
+   *
+   * Get the time and timezone
+   *
+   * @param tv Structure of time
+   * @param tz Structure of timezone
+   *
+   * @return 0: successful
+   *
+   * @endif
+   */
   inline int gettimeofday(struct timeval *tv, struct timezone *tz)
   {
 	  FILETIME        ftime;
@@ -178,6 +266,23 @@ inline unsigned int sleep(unsigned int seconds)
 	  return 0;
   }
 
+  /*!
+   * @if jp
+   * @brief 時刻を取得する
+   *
+   * 時刻を取得する。
+   *
+   * @return TimeValueオブジェクト
+   *
+   * @else
+   * @brief Get the time
+   *
+   * Get the time
+   *
+   * @return TimeValue object
+   *
+   * @endif
+   */
   inline TimeValue gettimeofday()
   {
     timeval tv;
@@ -185,6 +290,29 @@ inline unsigned int sleep(unsigned int seconds)
     return TimeValue(tv.tv_sec, tv.tv_usec);
   }
 
+  /*!
+   * @if jp
+   * @brief 時刻とタイムゾーンを設定する
+   *
+   * 時刻とタイムゾーンを設定する。
+   *
+   * @param tv 時刻構造体
+   * @param tz タイムゾーン構造体
+   *
+   * @return 0: 成功
+   *
+   * @else
+   * @brief Set the time and timezone
+   *
+   * Set the time and timezone
+   *
+   * @param tv Structure of time
+   * @param tz Structure of timezone
+   *
+   * @return 0: successful
+   *
+   * @endif
+   */
   inline int settimeofday(const struct timeval *tv , const struct timezone *tz)
   {
 
