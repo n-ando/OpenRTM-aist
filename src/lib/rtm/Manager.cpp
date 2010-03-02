@@ -527,25 +527,25 @@ std::vector<coil::Properties> Manager::getLoadableModules()
         coil::vstring exported_ports;
         exported_ports = coil::split(comp_prop["exported_ports"], ",");
 
-	std::string exported_ports_str("");
+				std::string exported_ports_str("");
         for (size_t i(0), len(exported_ports.size()); i < len; ++i)
           {
             coil::vstring keyval(coil::split(exported_ports[i], "."));
-	    if (keyval.size() > 2)
+						if (keyval.size() > 2)
               {
                 exported_ports_str += (keyval[0] + "." + keyval.back());
               }
-	    else
+						else
               {
                 exported_ports_str += exported_ports[i];
               }
 	    
-	    if (i != exported_ports.size() - 1)
+						if (i != exported_ports.size() - 1)
               {
                 exported_ports_str += ",";
               }
           }
-
+				
         comp_prop["exported_ports"] = exported_ports_str;
         comp_prop["conf.default.exported_ports"] = exported_ports_str;
  
@@ -557,7 +557,7 @@ std::vector<coil::Properties> Manager::getLoadableModules()
     FactoryBase* factory(m_factory.find(comp_id));
     if (factory == 0)
       {
-	RTC_ERROR(("Factory not found: %s",
+				RTC_ERROR(("Factory not found: %s",
                    comp_id["implementation_id"].c_str()));
 
         // automatic module loading
@@ -766,12 +766,12 @@ std::vector<coil::Properties> Manager::getLoadableModules()
   {
     RTC_TRACE(("deleteComponent(%s)", instance_name));
     RTObject_impl* comp;
+    comp = m_compManager.find(instance_name);
     if (comp == 0)
       {
         RTC_WARN(("RTC %s was not found in manager.", instance_name));
         return;
       }
-    comp = m_compManager.find(instance_name);
     deleteComponent(comp);
   }
   
@@ -879,13 +879,13 @@ std::vector<coil::Properties> Manager::getLoadableModules()
     if (coil::toBool(m_config["timer.enable"], "YES", "NO", true))
       {
         coil::TimeValue tm(0, 100000);
-	std::string tick(m_config["timer.tick"]);
-	if (!tick.empty())
-	  {
-	    tm = atof(tick.c_str());
-	    m_timer = new coil::Timer(tm);
-	    m_timer->start();
-	  }
+				std::string tick(m_config["timer.tick"]);
+				if (!tick.empty())
+					{
+						tm = atof(tick.c_str());
+						m_timer = new coil::Timer(tm);
+						m_timer->start();
+					}
       }
 
     if (coil::toBool(m_config["manager.shutdown_auto"], "YES", "NO", true) &&
@@ -893,10 +893,10 @@ std::vector<coil::Properties> Manager::getLoadableModules()
       {
         coil::TimeValue tm(10, 0); 
         if (m_timer != NULL)
-	  {
-	    m_timer->registerListenerObj(this, 
-					 &Manager::shutdownOnNoRtcs, tm);
-	  }
+					{
+						m_timer->registerListenerObj(this, 
+																				 &Manager::shutdownOnNoRtcs, tm);
+					}
       }
     
     {
