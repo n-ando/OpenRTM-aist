@@ -24,6 +24,19 @@ namespace coil
 
 #define TIMEVALUE_ONE_SECOND_IN_USECS 1000000 // 1 [sec] = 1000000 [usec]
 
+  /*!
+   * @if jp
+   *
+   * @class TimeValue
+   * @brief TimeValue クラス
+   *
+   * @else
+   *
+   * @class TimeValue
+   * @brief TimeValue class
+   *
+   * @endif
+   */
   class TimeValue
   {
   public:
@@ -51,9 +64,70 @@ namespace coil
      * @endif
      */
     TimeValue(long sec=0, long usec=0);
+
+    /*!
+     * @if jp
+     *
+     * @brief コンストラクタ
+     * 
+     * コンストラクタ
+     * 指定された秒，マイクロ秒で初期化する。
+     *
+     * @param timeval (秒 * 1000000 + マイクロ秒)
+     * 
+     * @else
+     *
+     * @brief Constructor
+     * 
+     * Constructor
+     * Initialize with the specified second and micro second.
+     *
+     * @param timeval (Second * 1000000 + Micro second)
+     * 
+     * @endif
+     */
     TimeValue(double timeval);
 
+    /*!
+     * @if jp
+     *
+     * @brief 秒単位の値を取得する
+     * 
+     * 秒単位の値を取得する
+     *
+     * @return 値
+     *
+     * @else
+     *
+     * @brief Get value of second time scale
+     * 
+     * Get value of second time scale.
+     *
+     * @return value
+     *
+     * @endif
+     */
     inline long int sec() const {return m_sec;}
+
+    /*!
+     * @if jp
+     *
+     * @brief マイクロ秒単位の値を取得する
+     * 
+     * マイクロ秒単位の値を取得する
+     *
+     * @return 値
+     *
+     * @else
+     *
+     * @brief Get value of micro second time scale
+     * 
+     * Get value of micro second time scale.
+     *
+     * @return value
+     *
+     * @endif
+     */
     inline long int usec() const {return m_usec;}
     
     /*!
