@@ -1,7 +1,7 @@
 // -*- C++ -*-
 /*!
- * @file Task.cpp
- * @brief Task class
+ * @file File_win32.h
+ * @brief File functions
  * @date $Date$
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
@@ -30,6 +30,29 @@ namespace coil
   /*!
   *  @note like ACE.
   */
+  /*!
+   * @if jp
+   *
+   * @brief ファイルパスよりディレクトリ部分を取得する
+   *
+   * ファイルパスよりディレクトリ部分を取得する。
+   *
+   * @param path ファイルパス
+   *
+   * @return ディレクトリ名称
+   *
+   * @else
+   *
+   * @brief Get a directory part than a file pass
+   *
+   * Get a directory part than a file pass.
+   *
+   * @param path File path
+   *
+   * @return Directory name
+   *
+   * @endif
+   */
   inline std::string dirname(char* path)
   {
     char return_dirname[MaxPathLength + 1];
@@ -74,6 +97,29 @@ namespace coil
     return dir_name;
   }
 
+  /*!
+   * @if jp
+   *
+   * @brief ファイルパスよりファイル名部分を取得する
+   *
+   * ファイルパスよりファイル名部分を取得する。
+   *
+   * @param path ファイルパス
+   *
+   * @return ファイル名称
+   *
+   * @else
+   *
+   * @brief Get a file name part than a file pass
+   *
+   * Get a directory part than a file pass.
+   *
+   * @param path File path
+   *
+   * @return File name
+   *
+   * @endif
+   */
   inline std::string basename(const char* path)
   {
     char p[MaxPathLength + 1];
@@ -126,12 +172,34 @@ namespace coil
 
   typedef unsigned int ino_t;
   
+  /*!
+   * @if jp
+   *
+   * @brief ディレクトリエントリ用構造体
+   *
+   * @else
+   *
+   * @brief Structure for directory entry
+   *
+   * @endif
+   */
   struct dirent
   {
     ino_t          d_ino;
     char           d_name[_MAX_PATH];
   };
 
+  /*!
+   * @if jp
+   *
+   * @brief ディレクトリストリーム用構造体
+   *
+   * @else
+   *
+   * @brief Structure for directory stream
+   *
+   * @endif
+   */
   typedef struct
   {
     HANDLE h;
@@ -141,6 +209,29 @@ namespace coil
   } DIR;
 
 
+  /*!
+   * @if jp
+   *
+   * @brief ディレクトリストリームをオープンする
+   *
+   * ディレクトリストリームをオープンする。
+   *
+   * @param name ファイルパス
+   *
+   * @return DIR 構造体ポインタ
+   *
+   * @else
+   *
+   * @brief Open a directory stream
+   *
+   * Open a directory stream.
+   *
+   * @param name File path
+   *
+   * @return DIR Structure pointer
+   *
+   * @endif
+   */
   DIR* opendir(const char *name)
   {
     if (name == 0) { return 0; }
@@ -189,6 +280,29 @@ namespace coil
   }
 
 
+  /*!
+   * @if jp
+   *
+   * @brief ディレクトリエントリポインタを取得する
+   *
+   * ディレクトリエントリポインタを取得する。
+   *
+   * @param dir DIR 構造体ポインタ
+   *
+   * @return DIR エントリポインタ
+   *
+   * @else
+   *
+   * @brief Get a directory entry pointer
+   *
+   * Get a directory entry pointer.
+   *
+   * @param dir DIR Structure pointer
+   *
+   * @return DIR entry pointer
+   *
+   * @endif
+   */
   dirent* readdir(DIR *dir)
   {
     if (dir == 0) { return 0; }
@@ -201,6 +315,29 @@ namespace coil
     return &dir->entry;
   }
 
+  /*!
+   * @if jp
+   *
+   * @brief ディレクトリストリームを閉じる
+   *
+   * ディレクトリストリームを閉じる。
+   *
+   * @param dir DIR 構造体ポインタ
+   *
+   * @return 0: 成功, -1: 失敗
+   *
+   * @else
+   *
+   * @brief Close a directory stream
+   *
+   * Close a directory stream.
+   *
+   * @param dir DIR Structure pointer
+   *
+   * @return 0: successful, -1: failed
+   *
+   * @endif
+   */
   int closedir(DIR *dir)
   {
     if (dir == 0) { return -1; }
@@ -216,6 +353,31 @@ namespace coil
 
 
 
+  /*!
+   * @if jp
+   *
+   * @brief ファイルリストを取得する
+   *
+   * ディレクトリパスの中で指定ファイルにマッチするリストを取得する。
+   *
+   * @param path ディレクトリパス
+   * @param glob_str ファイル名
+   *
+   * @return ファイルリスト
+   *
+   * @else
+   *
+   * @brief Get file list
+   *
+   * Get a list matching a file designated than a directory path.
+   *
+   * @param path Directory path
+   * @param glob_str File name
+   *
+   * @return File list
+   *
+   * @endif
+   */
   inline coil::vstring filelist(const char* path, const char* glob_str = "")
   {
     struct dirent* ent; 
