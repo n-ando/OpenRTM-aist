@@ -1,7 +1,7 @@
 // -*- C++ -*-
 /*!
- * @file  RtmServiceInterface.h
- * @brief RT-Middleware Service interface
+ * @file  Guard.h
+ * @brief Guard template class
  * @date  $Date$
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
@@ -24,18 +24,68 @@
 
 namespace coil
 {
+  /*!
+   * @if jp
+   *
+   * @class Guard
+   * @brief Guard テンプレートクラス
+   *
+   * @else
+   *
+   * @class Guard
+   * @brief Guard template class
+   *
+   * @endif
+   */
   template <class M>
   class Guard
   {
   public:
+
+    /*!
+     * @if jp
+     *
+     * @brief コンストラクタ
+     *
+     * コンストラクタ。
+     *
+     * @param mutex スレッド
+     *
+     * @else
+     *
+     * @brief Constructor
+     *
+     * Constructor
+     *
+     * @param mutex pthread
+     *
+     * @endif
+     */
     Guard(M& mutex) : m_mutex(mutex)
     {
       m_mutex.lock();
     }
+
+    /*!
+     * @if jp
+     *
+     * @brief デストラクタ
+     *
+     * デストラクタ。
+     *
+     * @else
+     *
+     * @brief Destructor
+     *
+     * Destructor
+     *
+     * @endif
+     */
     ~Guard()
     {
       m_mutex.unlock();
     }
+
   private:
     Guard(const Guard&);
     Guard& operator=(const Guard&);
