@@ -837,7 +837,7 @@ namespace ManagerServant
             {"modules.init_func_prefix", ""},
             {"is_master",                ""},
             {"corba_servant",            "YES"},
-            {"shutdown_onrtcs",          "YES"},
+            {"shutdown_on_nortcs",       "YES"},
             {"shutdown_auto",            "YES"},
             {"command",                  "rtcd"},
             {"os.name",                  "Linux"},
@@ -904,7 +904,7 @@ namespace ManagerServant
             {"manager.modules.init_func_prefix",""},
             {"manager.is_master",               ""},
             {"manager.corba_servant",           "YES"},
-            {"manager.shutdown_onrtcs",         "YES"},
+            {"manager.shutdown_on_nortcs",      "YES"},
             {"manager.shutdown_auto",           "YES"},
             {"manager.command",                 "rtcd"},
             {"manager.os.name",                 "Linux"},
@@ -1084,7 +1084,7 @@ namespace ManagerServant
             ret = pman->load_module(".libs/DummyModule1.so","DummyModule1Init");
             CPPUNIT_ASSERT_EQUAL(::RTC::RTC_OK, ret);
             CPPUNIT_ASSERT(isFound(pman->get_loadable_modules(), 
-                                   "DummyModule1"));
+                                   "DummyModule1.so"));
         }
         catch(...)
         {
@@ -1097,7 +1097,7 @@ namespace ManagerServant
             ret = pman->load_module(".libs/DummyModule2.so","DummyModule2Init");
             CPPUNIT_ASSERT_EQUAL(::RTC::RTC_OK, ret);
             CPPUNIT_ASSERT(isFound(pman->get_loadable_modules(), 
-                                   "DummyModule2"));
+                                   "DummyModule2.so"));
         }
         catch(...)
         {
@@ -1113,12 +1113,12 @@ namespace ManagerServant
         //Check returns(ModuleProfileList).
         CPPUNIT_ASSERT_EQUAL((::CORBA::ULong)3, modlist.length());
 
-        CPPUNIT_ASSERT_EQUAL(::std::string("implementation_id"), 
+        CPPUNIT_ASSERT_EQUAL(::std::string("module_file_name"), 
                              ::std::string(modlist[0].properties[0].name));
         const char* ch;
         if( modlist[0].properties[0].value >>= ch )
         {
-            CPPUNIT_ASSERT_EQUAL(::std::string("DummyModule2"), 
+            CPPUNIT_ASSERT_EQUAL(::std::string("DummyModule2.so"), 
                                  ::std::string(ch));
         }
         else
@@ -1126,12 +1126,12 @@ namespace ManagerServant
             CPPUNIT_FAIL( "ModuleProfileList is illegal." );
         }
 
-        CPPUNIT_ASSERT_EQUAL(::std::string("lang_type"), 
+        CPPUNIT_ASSERT_EQUAL(::std::string("module_file_name"), 
                              ::std::string(modlist[1].properties[0].name));
 
         if( modlist[1].properties[0].value >>= ch )
         {
-            CPPUNIT_ASSERT_EQUAL(::std::string("compile"), 
+            CPPUNIT_ASSERT_EQUAL(::std::string("DummyLib.so"), 
                                  ::std::string(ch));
         }
         else
