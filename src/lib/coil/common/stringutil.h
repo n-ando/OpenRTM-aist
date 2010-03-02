@@ -321,7 +321,7 @@ namespace coil
 
   /*!
    * @if jp
-   * @brief 文字列のを正規化する
+   * @brief 文字列を正規化する
    *
    * 与えられた文字列の先頭および末尾に存在する空白文字を削除し、
    * 英字をすべて小文字に変換する。
@@ -425,7 +425,7 @@ namespace coil
               bool default_value = true);
   /*!
    * @if jp
-   * @brief 文字列リスト中にある文字列が含まれるかどうか
+   * @brief 文字列リスト中にある文字列が含まれるかどうかを判断する
    * 
    * 第1引数にカンマ区切りのリストを、第2引数に探索対象文字列を指定し、
    * その文字列が第1引数の中に含まれるかを判断する。
@@ -448,6 +448,30 @@ namespace coil
    */
   bool includes(const vstring& list, std::string value,
                 bool ignore_case = true);
+
+  /*!
+   * @if jp
+   * @brief 文字列リスト中にある文字列が含まれるかどうかを判断する
+   * 
+   * 第1引数にカンマ区切りのリストを、第2引数に探索対象文字列を指定し、
+   * その文字列が第1引数の中に含まれるかを判断する。
+   *
+   * @param list 対象文字列
+   * @param value 探索文字列
+   * @return true: 含まれる、false: 含まれない
+   *
+   * @else
+   * @brief Include if a string is included in string list
+   * 
+   * if the second argument is included in the comma separated string
+   * list of the first argument, This operation returns "true value".
+   *
+   * @param list The target comma separated string
+   * @param value The searched string
+   * @return true: included, false: not included
+   *
+   * @endif
+   */
   bool includes(const std::string& list, std::string value,
                 bool ignore_case = true);
   
@@ -547,7 +571,7 @@ namespace coil
    * @param val 変換先オブジェクト
    * @param str 変換元文字列
    *
-   * @return 変換処理実行結果
+   * @return true: 成功, false: 失敗
    *
    * @else
    * @brief Convert the given std::string to object.
@@ -557,7 +581,7 @@ namespace coil
    * @param val The object of conversion destination
    * @param str String of conversion source
    *
-   * @return Conversion processing result
+   * @return true: successful, false: failed
    *
    * @endif
    */
@@ -572,6 +596,29 @@ namespace coil
     return true;
   }
   
+  /*!
+   * @if jp
+   * @brief 与えられた文字列をstd::stringに変換
+   *
+   * 引数で与えられた文字列をstd::stringに変換する。
+   *
+   * @param val 変換先文字列
+   * @param str 変換元文字列
+   *
+   * @return true: 成功, false: 失敗
+   *
+   * @else
+   * @brief Convert the given string to std::string.
+   *
+   * Convert string given by the argument to std::string.
+   *
+   * @param val String of conversion destination
+   * @param str String of conversion source
+   *
+   * @return true: successful, false: failed
+   *
+   * @endif
+   */
   template<>
   bool stringTo<std::string>(std::string& val, const char* str);
 
@@ -651,6 +698,27 @@ namespace coil
   char** toArgv(const vstring& args); 
 
 
+  /*!
+   * @if jp
+   * @brief 指定された書式に変換
+   *
+   * 引数で与えられた書式に変換して返す。
+   *
+   * @param fmt 書式
+   *
+   * @return 変換結果文字列
+   *
+   * @else
+   * @brief Convert it into a format given with an argumen
+   *
+   * Convert it into a format given with an argument and return it.
+   *
+   * @param fmt Format
+   *
+   * @return String of conversion result
+   *
+   * @endif
+   */
   std::string sprintf(char const * __restrict fmt, ...);
   
 }; // namepsace coil
