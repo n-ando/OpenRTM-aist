@@ -450,7 +450,7 @@ namespace RTM
               {
                 ::RTC::RTCList_var srtcs;
                 srtcs = m_slaves[i]->get_components();
-                CORBA_SeqUtil::push_back_list(srtcs.inout(), crtcs.in());
+                CORBA_SeqUtil::push_back_list(crtcs.inout(), srtcs.in());
                 continue;
               }
           }
