@@ -591,13 +591,11 @@ std::vector<coil::Properties> Manager::getLoadableModules()
 
     coil::Properties prop;
     prop = factory->profile();
-    prop << comp_prop;
 
     const char* inherit_prop[] = {
       "exec_cxt.periodic.type",
       "exec_cxt.periodic.rate",
       "exec_cxt.evdriven.type",
-      "naming.formats",
       "logger.enable",
       "logger.log_level",
       "naming.enable",
@@ -608,8 +606,8 @@ std::vector<coil::Properties> Manager::getLoadableModules()
 
     for (int i(0); inherit_prop[i][0] != '\0'; ++i)
       {
-	if (prop[inherit_prop[i]] == "")
-	  prop[inherit_prop[i]] = m_config[inherit_prop[i]];
+        const char* key(inherit_prop[i]);
+        prop[key] = m_config[key];
       }
       
     RTObject_impl* comp;
@@ -621,6 +619,8 @@ std::vector<coil::Properties> Manager::getLoadableModules()
 	return NULL;
       }
     RTC_TRACE(("RTC created: %s", comp_id["implementation_id"].c_str()));
+
+    prop << comp_prop;
 
     //------------------------------------------------------------
     // Load configuration file specified in "rtc.conf"
