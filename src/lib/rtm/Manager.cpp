@@ -1102,15 +1102,16 @@ std::vector<coil::Properties> Manager::getLoadableModules()
   {
     // corba.endpoint is obsolete
     // corba.endpoints with comma separated values are acceptable
-    if (!m_config.hasKey("corba.endpoints"))
+    if (m_config.findNode("corba.endpoints") != 0)
       {
         endpoints = coil::split(m_config["corba.endpoints"], ",");
         RTC_DEBUG(("corba.endpoints: %s", m_config["corba.endpoints"].c_str()));
       }
-    else if (!m_config.hasKey("corba.endpoint"))
+
+    if (m_config.hasKey("corba.endpoint") != 0)
       {
-        endpoints = coil::split(m_config["corba.endpoint"], ",");
-        RTC_DEBUG(("corba.endpoints: %s", m_config["corba.endpoint"].c_str()));
+        endpoints.push_back(m_config["corba.endpoint"]);
+        RTC_DEBUG(("corba.endpoint: %s", m_config["corba.endpoint"].c_str()));
       }
 
     // If this process has master manager,
