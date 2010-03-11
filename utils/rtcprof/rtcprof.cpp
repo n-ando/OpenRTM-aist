@@ -82,8 +82,8 @@ int main(int argc, char* argv[])
             {
               exists = true;
             }
-          if (!exists) { profs.push_back(newp[i]); }
         }
+      if (!exists) { profs.push_back(newp[i]); }
     }
 
   // loaded component profile have to be one
