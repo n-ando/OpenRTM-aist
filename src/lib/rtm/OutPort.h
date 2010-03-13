@@ -306,7 +306,6 @@ namespace RTC
         size_t conn_size(m_connectors.size());
         if (!(conn_size > 0)) { return false; }
         
-        bool result(true);
         m_status.resize(conn_size);
 
         for (size_t i(0), len(conn_size); i < len; ++i)
