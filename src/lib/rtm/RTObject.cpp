@@ -86,7 +86,9 @@ namespace RTC
       m_pPOA(PortableServer::POA::_duplicate(poa)),
       m_portAdmin(orb, poa),
       m_created(true), m_exiting(false),
-      m_properties(default_conf), m_configsets(m_properties.getNode("conf"))
+      m_properties(default_conf), m_configsets(m_properties.getNode("conf")),
+      m_readAll(false),m_writeAll(false),
+      m_readAllCompletion(false),m_writeAllCompletion(false)
   {
     m_objref = this->_this();
     m_pSdoConfigImpl = new SDOPackage::Configuration_impl(m_configsets);
