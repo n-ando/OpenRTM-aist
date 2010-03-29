@@ -107,7 +107,7 @@
 
     <String Id="InstallScopeDlg_Title" Overridable="yes">[ProductName] のセットアップ</String>
     <String Id="InstallScopeDlgBannerBitmap" Overridable="yes">WixUI_Bmp_Banner</String>
-    <String Id="InstallScopeDlgDescription" Overridable="yes">インストールの種類とインストール先フォルダを選択してください。</String>
+    <String Id="InstallScopeDlgDescription" Overridable="yes">目的に合わせてインストールの種類を選択してください。</String>
     <String Id="InstallScopeDlgTitle" Overridable="yes">{\WixUI_Font_Title}インストールの種類</String>
     <String Id="InstallScopeDlgPerUser" Overridable="yes">{\WixUI_Font_Emphasized}ユーザー アカウント ([USERNAME]) にインストール(&amp;F)</String>
     <String Id="InstallScopeDlgPerUserDescription" Overridable="yes">[ProductName] はあなたのユーザー アカウントでのみ利用可能となります。ローカル管理者特権は必要ありません。</String>
@@ -202,7 +202,7 @@
     <String Id="SetupTypeDlgTypicalButtonTooltip" Overridable="yes">標準インストール</String>
     <String Id="SetupTypeDlgCustomButton" Overridable="yes">カスタム(&amp;U)</String>
     <String Id="SetupTypeDlgCustomButtonTooltip" Overridable="yes">カスタム インストール</String>
-    <String Id="SetupTypeDlgCompleteButton" Overridable="yes">完全(&amp;O)</String>
+    <String Id="SetupTypeDlgCompleteButton" Overridable="yes">完了(&amp;O)</String>
     <String Id="SetupTypeDlgCompleteButtonTooltip" Overridable="yes">完全インストール</String>
     <String Id="SetupTypeDlgBannerBitmap" Overridable="yes">WixUI_Bmp_Banner</String>
     <String Id="SetupTypeDlgTitle" Overridable="yes">{\WixUI_Font_Title}セットアップの種類の選択</String>

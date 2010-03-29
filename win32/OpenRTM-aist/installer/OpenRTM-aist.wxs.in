@@ -389,7 +389,10 @@
     <WixVariable Id="WixUIBannerBmp" Value="Bitmaps/bannrbmp.bmp" />
     <WixVariable Id="WixUIDialogBmp" Value="Bitmaps/dlgbmp.bmp" />
 
-    <UIRef Id="WixUI_Mondo" />
+    <!-- <UIRef Id="WixUI_Mondo" /> -->
+    <!-- WixUI_Mondo にインストールの種類を選択するダイアログを追加したもの -->
+    <UIRef Id="WixUI_Mondo_RTM" />
+
     <Property Id="WIXUI_INSTALLDIR" Value="INSTALLLOCATION" />
   </Product>
 </Wix>

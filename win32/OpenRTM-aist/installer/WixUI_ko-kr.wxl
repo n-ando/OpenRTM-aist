@@ -107,7 +107,7 @@
     
     <String Id="InstallScopeDlg_Title" Overridable="yes">[ProductName] 설치</String>
     <String Id="InstallScopeDlgBannerBitmap" Overridable="yes">WixUI_Bmp_Banner</String>
-    <String Id="InstallScopeDlgDescription" Overridable="yes">설치 종류와 설치 폴더를 선택하십시오.</String>
+    <String Id="InstallScopeDlgDescription" Overridable="yes">요구에 가장 잘 맞는 설치 유형을 선택하십시오.</String>
     <String Id="InstallScopeDlgTitle" Overridable="yes">{\WixUI_Font_Title}설치 종류</String>
     <String Id="InstallScopeDlgPerUser" Overridable="yes">{\WixUI_Font_Emphasized}사용자 ([USERNAME]) 설치(&amp;F)</String>
     <String Id="InstallScopeDlgPerUserDescription" Overridable="yes">[ProductName] 는(은) 현재 사용자 대상에 대해 이용 가능합니다. Administrator 권한이 필요하지 않습니다.</String>
