@@ -531,16 +531,16 @@ std::vector<coil::Properties> Manager::getLoadableModules()
         for (size_t i(0), len(exported_ports.size()); i < len; ++i)
           {
             coil::vstring keyval(coil::split(exported_ports[i], "."));
-						if (keyval.size() > 2)
+            if (keyval.size() > 2)
               {
                 exported_ports_str += (keyval[0] + "." + keyval.back());
               }
-						else
+            else
               {
                 exported_ports_str += exported_ports[i];
               }
 	    
-						if (i != exported_ports.size() - 1)
+            if (i != exported_ports.size() - 1)
               {
                 exported_ports_str += ",";
               }
@@ -557,19 +557,19 @@ std::vector<coil::Properties> Manager::getLoadableModules()
     FactoryBase* factory(m_factory.find(comp_id));
     if (factory == 0)
       {
-				RTC_ERROR(("Factory not found: %s",
+        RTC_ERROR(("Factory not found: %s",
                    comp_id["implementation_id"].c_str()));
-
+        
         // automatic module loading
         std::vector<coil::Properties> mp(m_module->getLoadableModules());
         RTC_INFO(("%d loadable modules found", mp.size()));
-
+        
         std::vector<coil::Properties>::iterator it;
         it = std::find_if(mp.begin(), mp.end(), ModulePredicate(comp_id));
         if (it == mp.end())
           {
             RTC_ERROR(("No module for %s in loadable modules list",
-                      comp_id["implementation_id"].c_str()));
+                       comp_id["implementation_id"].c_str()));
             return 0;
           }
         if (it->findNode("module_file_name") == 0)
@@ -579,7 +579,7 @@ std::vector<coil::Properties> Manager::getLoadableModules()
           }
         // module loading
         RTC_INFO(("Loading module: %s", (*it)["module_file_name"].c_str()))
-        load((*it)["module_file_name"].c_str(), "");
+          load((*it)["module_file_name"].c_str(), "");
         factory = m_factory.find(comp_id);
         if (factory == 0) 
           {
@@ -1625,7 +1625,7 @@ std::vector<coil::Properties> Manager::getLoadableModules()
 	  }
       }
     // Merge Properties. type_prop is merged properties
-		comp->setProperties(prop);
+    comp->setProperties(prop);
     type_prop << name_prop;
     comp->setProperties(type_prop);
     
