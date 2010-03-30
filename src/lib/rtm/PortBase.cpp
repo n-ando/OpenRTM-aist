@@ -53,8 +53,11 @@ namespace RTC
     portname += name;
 
     m_profile.name = CORBA::string_dup(portname.c_str());
+    m_profile.interfaces.length(0);
     m_profile.port_ref = m_objref;
+    m_profile.connector_profiles.length(0);
     m_profile.owner = RTC::RTObject::_nil();
+    m_profile.properties.length(0);
   }
   
   /*!

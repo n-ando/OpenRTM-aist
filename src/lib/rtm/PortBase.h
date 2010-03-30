@@ -143,6 +143,7 @@ namespace RTC
      * PortBase のコンストラクタは Port 名 name を引数に取り初期化を行う
      * と同時に、自分自身を CORBA Object として活性化し、自身の PortProfile
      * の port_ref に自身のオブジェクトリファレンスを格納する。
+     * 名前には、"." 以外の文字列を使用することができる。
      *
      * @param name Port の名前(デフォルト値:"")
      *
@@ -154,6 +155,7 @@ namespace RTC
      * and initialized. At the same time, the PortBase activates itself
      * as CORBA object and stores its object reference to the PortProfile's 
      * port_ref member.
+     * Characters except "." can be used for the name of the port.
      *
      * @param name The name of Port (The default value:"")
      *
