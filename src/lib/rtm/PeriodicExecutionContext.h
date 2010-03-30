@@ -1566,6 +1566,18 @@ namespace RTC
      * @endif
      */
     bool m_nowait;
+
+    class find_participant
+    {
+      RTObject_var m_comp;
+    public:      
+      find_participant(RTObject_ptr comp)
+        : m_comp(RTObject::_duplicate(comp)) {}
+      bool operator()(RTObject_ptr comp)
+      {
+        return m_comp->_is_equivalent(comp);
+      }
+    };
   }; // class PeriodicExecutionContext
 }; // namespace RTC
 
