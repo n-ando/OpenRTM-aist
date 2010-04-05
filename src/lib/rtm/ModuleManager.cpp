@@ -289,56 +289,34 @@ namespace RTC
    */
   std::vector<coil::Properties> ModuleManager::getLoadableModules()
   {
+    RTC_TRACE(("getLoadableModules()"));
+
     // getting loadable module file path list.
-    coil::vstring dlls;
-    for (size_t i(0); i < m_loadPath.size(); ++i)
+    coil::Properties& gprop(Manager::instance().getConfig());
+    coil::vstring langs(coil::split(gprop["manager.supported_languages"], ","));
+    RTC_DEBUG(("langs: %s", gprop["manager.supported_languages"].c_str()));
+
+    // for each languages
+    for (size_t l(0); l < langs.size(); ++l)
       {
-        if (m_loadPath[i].empty()) { continue; }
-        std::string& path(m_loadPath[i]);
-#ifdef WIN32
-        coil::vstring flist = coil::filelist(path.c_str(), "*.dll");
-#else
-        coil::vstring flist = coil::filelist(path.c_str(), "*.so");
-#endif // WIN32
-        for (size_t j(0); j < flist.size(); ++j)
-          {
-            if (*(path.end() - 1) != '/') { path += "/"; }
-            dlls.push_back(path + flist[j]);
-          }
+        // 1. getting loadable files list
+        coil::vstring modules;
+        getModuleList(langs[l], modules);
+        RTC_DEBUG(("%s: %s", langs[l].c_str(), coil::flatten(modules).c_str()));
+
+        // 2. getting module properties from loadable modules
+        vProperties tmpprops;
+        getModuleProfiles(langs[l], modules, tmpprops);
+        RTC_DEBUG(("Modile profile size: %d (newly founded modules)",
+                   tmpprops.size()));
+        m_modprofs.insert(m_modprofs.end(), tmpprops.begin(), tmpprops.end());
       }
-    
-    // getting module properties from loadable modules
-    std::vector<coil::Properties> prop;
-    for (size_t i(0), len(dlls.size()); i < len; ++i)
-      {
-        std::string cmd("rtcprof ");
-        cmd += dlls[i];
-        FILE* fd;
-        if ((fd = popen(cmd.c_str(), "r")) == NULL)
-          {
-            std::cerr << "popen faild" << std::endl;
-            continue;
-          }
-        coil::Properties p;
-        do
-          {
-            char str[512];
-            fgets(str, 512, fd);
-            std::string line(str);
-            line.erase(line.size() - 1);
-            std::string::size_type pos;
-            if ((pos = line.find(":")) == std::string::npos ) { continue; }
-            
-            p[line.substr(0, pos)] = line.substr(pos + 1);
-            coil::eraseBothEndsBlank(p[line.substr(0, pos)]);
-          } while (!feof(fd));
-        pclose(fd);
-        p["module_file_name"] = coil::basename(dlls[i].c_str());
-        p["module_file_path"] = dlls[i].c_str();
-        prop.push_back(p);
-      }
-    
-    return prop;
+    RTC_DEBUG(("Modile profile size: %d", m_modprofs.size()));
+    // 3. removing module profiles for which module file does not exist
+    removeInvalidModules();
+    RTC_DEBUG(("Modile profile size: %d (invalid mod-profiles deleted)",
+               m_modprofs.size()));
+    return m_modprofs;
   }
   
   /*!
@@ -408,5 +386,155 @@ namespace RTC
     std::string base_name(coil::basename(file_path.c_str()));
     
     return m_initFuncPrefix + base_name + m_initFuncSuffix;
+  }
+
+
+  /*!
+   * @if jp
+   * @brief 無効なモジュールプロファイルを削除する
+   * @else
+   * @brief Removing incalid module profiles
+   * @endif
+   */
+  void ModuleManager::removeInvalidModules()
+  {
+    std::vector<coil::Properties>::iterator it(m_modprofs.begin());
+
+    while (it < m_modprofs.end())
+      {
+        if (!fileExist((*it)["module_file_path"]))
+          {
+            it = m_modprofs.erase(it);
+          }
+        ++it;
+      }
+  }
+
+  /*!
+   * @if jp
+   * @brief 指定言語におけるロードパス上のローダブルなファイルリストを返す
+   * @else
+   * @brief Getting loadable file list on the loadpath for given language
+   * @endif
+   */
+  void ModuleManager::getModuleList(const std::string& lang,
+                                    coil::vstring& modules)
+  {
+    std::string l = "manager.modules." + lang;
+    coil::Properties& lprop(Manager::instance().getConfig().getNode(l));
+
+    // load path: manager.modules.<lang>.load_path + manager.modules.load_path
+    coil::vstring paths(coil::split(lprop["load_paths"], ","));
+    paths.insert(paths.end(), m_loadPath.begin(), m_loadPath.end());
+
+    coil::vstring suffixes(coil::split(lprop["suffixes"], ","));
+    RTC_DEBUG(("suffixes: %s", coil::flatten(suffixes).c_str()));
+
+    // for each load path list
+    for (size_t i(0); i < paths.size(); ++i)
+      {
+        if (paths[i].empty())
+          {
+            RTC_WARN(("Given load path is empty"));
+            continue;
+          }
+        std::string& path(paths[i]);
+        RTC_DEBUG(("Module load path: %s", path.c_str()));
+
+        // get file list for each suffixes
+        coil::vstring flist;
+        for (size_t s(0); s < suffixes.size(); ++s)
+          {
+            std::string glob("*."); glob += suffixes[s];
+            coil::vstring tmp = coil::filelist(path.c_str(), glob.c_str());
+            RTC_DEBUG(("File list (path:%s, ext:%s): %s", path.c_str(),
+                       suffixes[s].c_str(), coil::flatten(tmp).c_str()));
+            flist.insert(flist.end(), tmp.begin(), tmp.end());
+          }
+        
+        // reformat file path and remove cached files
+        for (size_t j(0); j < flist.size(); ++j)
+          {
+            if (*(path.end() - 1) != '/') { path += "/"; }
+            std::string fpath(path + flist[j]);
+            addNewFile(fpath, modules);
+          }
+      }
+  }
+
+  /*!
+   * @if jp
+   * @brief キャッシュに無いパスだけmodulesに追加する
+   * @else
+   * @brief Adding file path not existing cache
+   * @endif
+   */
+  void ModuleManager::addNewFile(const std::string& fpath,
+                                 coil::vstring& modules)
+  {
+    bool exists(false);
+    for (size_t k(0); k < m_modprofs.size(); ++k)
+      {
+        if (m_modprofs[k]["module_file_path"] == fpath)
+          {
+            exists = true;
+            RTC_DEBUG(("Module %s already exists in cache.",
+                       fpath.c_str()));
+            break;
+          }
+      }
+    if (!exists)
+      {
+        RTC_DEBUG(("New module: %s", fpath.c_str()));
+        modules.push_back(fpath);
+      }
+  }
+
+  /*!
+   * @if jp
+   * @brief 指定言語、ファイルリストからモジュールのプロパティを返す
+   * @else
+   * @brief Getting module properties from given language and file list
+   * @endif
+   */
+  void ModuleManager::getModuleProfiles(const std::string& lang,
+                                        const coil::vstring& modules,
+                                        vProperties& modprops)
+  {
+    std::string l = "manager.modules." + lang;
+    coil::Properties& lprop(Manager::instance().getConfig().getNode(l));
+    std::vector<coil::Properties> prop;
+
+    for (size_t i(0), len(modules.size()); i < len; ++i)
+      {
+        std::string cmd(lprop["profile_cmd"]);
+        cmd += " " + modules[i];
+        FILE* fd;
+        if ((fd = popen(cmd.c_str(), "r")) == NULL)
+          {
+            std::cerr << "popen faild" << std::endl;
+            continue;
+          }
+        coil::Properties p;
+        do
+          {
+            char str[512];
+            fgets(str, 512, fd);
+            std::string line(str);
+            line.erase(line.size() - 1);
+            std::string::size_type pos(line.find(":"));
+            if (pos != std::string::npos )
+              {
+                p[line.substr(0, pos)] = line.substr(pos + 1);
+                coil::eraseBothEndsBlank(p[line.substr(0, pos)]);
+              }
+          } while (!feof(fd));
+        pclose(fd);
+        RTC_DEBUG(("rtcprof cmd sub process done."));
+        if (p["implementation_id"].empty()) { continue; }
+        p["module_file_name"] = coil::basename(modules[i].c_str());
+        p["module_file_path"] = modules[i].c_str();
+        modprops.push_back(p);
+      }
   }
 }; // namespace RTC

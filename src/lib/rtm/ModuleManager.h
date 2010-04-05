@@ -73,6 +73,7 @@ namespace RTC
    */
   class ModuleManager
   {
+    typedef std::vector<coil::Properties> vProperties;
   public:
     /*!
      * @if jp
@@ -449,7 +450,7 @@ namespace RTC
      * @endif
      */
     std::vector<coil::Properties> getLoadableModules();
-    
+
     /*!
      * @if jp
      * @brief モジュールの絶対パス指定許可
@@ -601,6 +602,43 @@ namespace RTC
   protected:
     /*!
      * @if jp
+     * @brief 無効なモジュールプロファイルを削除する
+     * @else
+     * @brief Removing incalid module profiles
+     * @endif
+     */
+    void removeInvalidModules();
+    
+    /*!
+     * @if jp
+     * @brief 指定言語におけるロードパス上のローダブルなファイルリストを返す
+     * @else
+     * @brief Getting loadable file list on the loadpath for given language
+     * @endif
+     */
+    void getModuleList(const std::string& lang, coil::vstring& modules);
+
+    /*!
+     * @if jp
+     * @brief キャッシュに無いパスだけmodulesに追加する
+     * @else
+     * @brief Adding file path not existing cache
+     * @endif
+     */
+    void addNewFile(const std::string& fpath, coil::vstring& modules);
+
+    /*!
+     * @if jp
+     * @brief 指定言語、ファイルリストからモジュールのプロパティを返す
+     * @else
+     * @brief Getting module properties from given language and file list
+     * @endif
+     */
+    void getModuleProfiles(const std::string& lang,
+                           const coil::vstring& modules, vProperties& modprops);
+
+    /*!
+     * @if jp
      * @brief ロガーストリーム
      * @else
      * @brief Logger stream
@@ -628,6 +666,7 @@ namespace RTC
     typedef std::vector<DLLEntity>    DllMap;
     typedef DllMap::iterator           DllMapItr;
     typedef DllMap::const_iterator     DllMapConstItr;
+
     
     /*!
      * @if jp
@@ -733,6 +772,8 @@ namespace RTC
         delete dll;
       }
     };
+
+    vProperties m_modprofs;
 
   };   // class ModuleManager
 };     // namespace RTC  

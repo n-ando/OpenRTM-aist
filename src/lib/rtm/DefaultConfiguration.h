@@ -5,7 +5,7 @@
  * @date $Date: 2007-12-31 03:08:03 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
- * Copyright (C) 2006-2008
+ * Copyright (C) 2006-2010
  *     Noriaki Ando
  *     Task-intelligence Research Group,
  *     Intelligent Systems Research Institute,
@@ -18,7 +18,7 @@
  */
 
 #include "rtm/version.h"
-
+#include "rtm/config_rtc.h"
 /*!
  * @if jp
  * @brief Manager 用 デフォルト・コンフィギュレーション
@@ -82,7 +82,26 @@ static const char* default_config[] =
     "manager.shutdown_auto",              "YES",
     "manager.name",                       "manager",
     "manager.command",                    "rtcd",
-
+    "manager.supported_languages",        "C++, Python, Java",
+    "manager.modules.C++.manager_cmd",    "rtcd",
+    "manager.modules.C++.profile_cmd",    "rtcprof",
+#ifdef WIN32
+    "manager.modules.C++.suffixes",       "dll",
+#endif
+#ifdef RTM_OS_DARWIN
+    "manager.modules.C++.suffixes",       "dylib",
+#else
+    "manager.modules.C++.suffixes",       "so",
+#endif
+    "manager.modules.C++.load_paths",     "./",
+    "manager.modules.Python.manager_cmd", "rtcd_python",
+    "manager.modules.Python.profile_cmd", "rtcprof_python",
+    "manager.modules.Python.suffixes",    "py, pyc",
+    "manager.modules.Python.load_paths",  "./",
+    "manager.modules.Java.manager_cmd",   "rtcd_java",
+    "manager.modules.Java.profile_cmd",   "rtcprof_java",
+    "manager.modules.Java.suffixes",      "class, jar",
+    "manager.modules.Java.load_paths",    "./",
     ""
   };
 
