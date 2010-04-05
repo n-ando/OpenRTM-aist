@@ -262,11 +262,17 @@ namespace RTC
     for (CorbaConsumerList::iterator it(m_consumers.begin());
          it != m_consumers.end(); ++it)
       {
-        bool res0(findProvider(nv, *it));
-        if (res0) { continue; }
-
-        bool res1(findProviderOld(nv, *it));
-        if (res1) { continue; }
+        std::string ior;
+        if (findProvider(nv, *it, ior))
+          {
+            setObject(ior, *it);
+            continue;
+          }
+        if (findProviderOld(nv, *it, ior))
+          {
+            setObject(ior, *it);
+            continue;
+          }
 
         // never come here without error
         // if strict connection option is set, error is returned.
@@ -295,14 +301,30 @@ namespace RTC
     RTC_TRACE(("unsubscribeInterfaces()"));
 
     const NVList& nv(connector_profile.properties);
-
     RTC_DEBUG_STR((NVUtil::toString(nv)));
-    
-    CORBA_SeqUtil::for_each(nv, unsubscribe(m_consumers));
+
+    for (CorbaConsumerList::iterator it(m_consumers.begin());
+         it != m_consumers.end(); ++it)
+      {
+        std::string ior;
+        if (findProvider(nv, *it, ior))
+          {
+            RTC_DEBUG(("Correspoinding consumer found."));
+            releaseObject(ior, *it);
+            continue;
+          }
+        if (findProviderOld(nv, *it, ior))
+          {
+            RTC_DEBUG(("Correspoinding consumer found."));
+            releaseObject(ior, *it);
+            continue;
+          }
+      }
   }
   
 
-  bool CorbaPort::findProvider(const NVList& nv, CorbaConsumerHolder& cons)
+  bool CorbaPort::findProvider(const NVList& nv, CorbaConsumerHolder& cons,
+                               std::string& iorstr)
   {
     // new consumer interface descriptor
     std::string newdesc;
@@ -330,24 +352,13 @@ namespace RTC
         RTC_WARN(("Cannot extract Provider IOR string"));
         return false;
       }
- 
-    // if ior string is "null" or "nil", ignore it.
-    if (std::string("null") == ior) { return true; }
-    if (std::string("nil")  == ior) { return true; }
-    // IOR should be started by "IOR:"
-    if (std::string("IOR:").compare(0, 4, ior, 4) != 0) { return false; }
-    // set IOR to the consumer
-    if (!cons.setObject(ior))
-      {
-        RTC_ERROR(("Cannot narrow reference"));
-        return false;
-      }
-    RTC_ERROR(("interface matched with new descriptor: %s", newdesc.c_str()));
-
+    iorstr = ior;
+    RTC_DEBUG(("interface matched with new descriptor: %s", newdesc.c_str()));
     return true;
   }
 
-  bool CorbaPort::findProviderOld(const NVList&nv, CorbaConsumerHolder& cons)
+  bool CorbaPort::findProviderOld(const NVList&nv, CorbaConsumerHolder& cons,
+                                  std::string& iorstr)
   {
     // old consumer interface descriptor
     std::string olddesc("port."); olddesc += cons.descriptor();
@@ -362,17 +373,43 @@ namespace RTC
         RTC_WARN(("Cannot extract Provider IOR string"));
         return false;
       }
+    iorstr = ior;
+    RTC_ERROR(("interface matched with old descriptor: %s", olddesc.c_str()));
+    return true;
+  }
+ 
+  bool CorbaPort::setObject(const std::string& ior, CorbaConsumerHolder& cons)
+  {
+    // if ior string is "null" or "nil", ignore it.
+    if (std::string("null") == ior) { return true; }
+    if (std::string("nil")  == ior) { return true; }
+    // IOR should be started by "IOR:"
+    if (std::string("IOR:").compare(0, 4, ior.c_str(), 4) != 0)
+      {
+        return false;
+      }
 
     // set IOR to the consumer
-    if (!cons.setObject(ior))
+    if (!cons.setObject(ior.c_str()))
       {
         RTC_ERROR(("Cannot narrow reference"));
         return false;
       }
-
-    RTC_ERROR(("interface matched with old descriptor: %s", olddesc.c_str()));
-
+    RTC_TRACE(("setObject() done"));
     return true;
+  }
+
+  bool CorbaPort::releaseObject(const std::string& ior,
+                                CorbaConsumerHolder& cons)
+  {
+    if (ior == cons.getIor())
+      {
+        cons.releaseObject();
+        RTC_DEBUG(("Consumer %s released.", cons.descriptor().c_str()));
+        return true;
+      }
+    RTC_WARN(("IORs between Consumer and Connector are different."));
+    return false;
   }
   
 };

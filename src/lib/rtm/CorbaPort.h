@@ -1101,7 +1101,8 @@ namespace RTC
      *
      * @endif
      */
-   virtual bool findProvider(const NVList& nv, CorbaConsumerHolder& cons);
+    virtual bool findProvider(const NVList& nv, CorbaConsumerHolder& cons,
+                              std::string& iorstr);
 
     /*!
      * @if jp
@@ -1110,12 +1111,12 @@ namespace RTC
      * この関数は、古いバージョンの互換性のための関数である。
      *
      * NVList 中から CorbaConsumerHolder に保持されている Consumer に合
-     * 致するキーを持つ Provider を見つけ、IOR を抽出しナローイングして
-     * Consumer にセットする。対応するキーが存在しない、IOR が見つから
-     * ない、ナローイングに失敗した場合、false を返す。
+     * 致するキーを持つ Provider を見つける。対応するキーが存在しない、
+     * IOR が見つからない場合、false を返す。
      *  
      * @param nv Provider が含まれている ConnectorProfile::properties の NVList
      * @param cons Provider と対応する Consumer のホルダ
+     * @param iorstr 見つかったIOR文字列を格納する変数
      * 
      * @retrun bool Consumer に対応する Provider が見つからない場合 false
      *
@@ -1125,19 +1126,77 @@ namespace RTC
      * This function is for the old version's compatibility.
      *
      * This function finds out a Provider with the key that is matched
-     * with Cosumer's name in the CorbaConsumerHolder, extracts IOR
-     * and performs narrowing into the Consumer and set it to the
-     * Consumer. False is returned when there is no corresponding key
-     * and IOR and the narrowing failed.
+     * with Cosumer's name in the CorbaConsumerHolder and extracts
+     * IOR.  False is returned when there is no corresponding key and
+     * IOR.
      *  
      * @param nv NVlist of ConnectorProfile::properties that includes Provider
      * @param cons a Consumer holder to be matched with a Provider
+     * @param iorstr variable which is set IOR string
      * 
      * @return bool false is returned if there is no provider for the consumer
      *
      * @endif
      */
-    virtual bool findProviderOld(const NVList&nv, CorbaConsumerHolder& cons);
+    virtual bool findProviderOld(const NVList&nv, CorbaConsumerHolder& cons,
+                                 std::string& iorstr);
+
+    /*!
+     * @if jp
+     * @brief Consumer に IOR をセットする
+     *
+     * IOR をナローイングしてConsumer にセットする。ナローイングに失敗
+     * した場合、false を返す。ただし、IOR文字列が、nullまたはnilの場合、
+     * オブジェクトに何もセットせずに true を返す。
+     *
+     * @param ior セットする IOR 文字列
+     * @param cons Consumer のホルダ
+     * 
+     * @retrun bool Consumer へのナローイングに失敗した場合 false
+     *
+     * @else
+     * @brief Setting IOR to Consumer
+     *
+     * This function performs narrowing into the Consumer and set it to the
+     * Consumer. False is returned when the narrowing failed. But, if IOR
+     * string is "null" or "nil", this function returns true.
+     *  
+     * @param ior IOR string
+     * @param cons Consumer holder
+     * 
+     * @retrun bool false if narrowing failed.
+     *
+     * @endif
+     */
+    bool setObject(const std::string& ior, CorbaConsumerHolder& cons);
+
+    /*!
+     * @if jp
+     * @brief Consumer のオブジェクトをリリースする
+     *
+     * Consumer にセットされた参照をリリースする。ConsumerのIORが与えら
+     * れたIOR文字列と異なる場合、falseを返す。
+     *
+     * @param ior セットする IOR 文字列
+     * @param cons Consumer のホルダ
+     * 
+     * @retrun ConsumerのIORが与えられたIOR文字列と異なる場合、falseを返す。
+     *
+     * @else
+     * @brief Releasing Consumer Object
+     *
+     * This function releases object reference of Consumer. If the
+     * given IOR string is different from Consumer's IOR string, it
+     * returns false.
+     *  
+     * @param ior IOR string
+     * @param cons Consumer holder
+     * 
+     * @retrun bool False if IOR and Consumer's IOR are different
+     *
+     * @endif
+     */
+    bool releaseObject(const std::string& ior, CorbaConsumerHolder& cons);
 
   private:
     /*!
@@ -1253,7 +1312,8 @@ namespace RTC
                           CorbaConsumerBase* consumer)
         : m_typeName(type_name),
           m_instanceName(instance_name),
-          m_consumer(consumer)
+          m_consumer(consumer),
+          m_ior("")
       {
       }
       std::string instanceName() { return m_instanceName; }
@@ -1262,6 +1322,7 @@ namespace RTC
 
       bool setObject(const char* ior)
       {
+        m_ior = ior;
         CORBA::ORB_ptr orb = ::RTC::Manager::instance().getORB();
         CORBA::Object_var obj = orb->string_to_object(ior);
         if (CORBA::is_nil(obj))
@@ -1275,11 +1336,15 @@ namespace RTC
       {
         m_consumer->releaseObject();
       }
-
+      const std::string& getIor()
+      {
+        return m_ior;
+      }
     private:
       std::string m_typeName;
       std::string m_instanceName;
       CorbaConsumerBase* m_consumer;
+      std::string m_ior;
     };
     typedef std::vector<CorbaConsumerHolder> CorbaConsumerList;
     CorbaConsumerList m_consumers;
