@@ -206,10 +206,10 @@ namespace RTC
       {
         //------------------------------------------------------------
         // new version descriptor
-        // <comp_iname>.port.<port_name>.provider.<type_name>.<instance_name>
+        // <comp_iname>.port.<port_name>.provided.<type_name>.<instance_name>
         std::string newdesc;
         newdesc = m_ownerInstanceName + ".port." + (const char*)m_profile.name
-          + ".provider." + it->descriptor();
+          + ".provided." + it->descriptor();
         CORBA_SeqUtil::
           push_back(properties,
                     NVUtil::newNV(newdesc.c_str(), it->ior().c_str()));
@@ -329,7 +329,7 @@ namespace RTC
     // new consumer interface descriptor
     std::string newdesc;
     newdesc = m_ownerInstanceName + ".port." + (const char*)m_profile.name
-      + ".consumer." + cons.descriptor();
+      + ".required." + cons.descriptor();
 
     // find a NameValue of the consumer
     CORBA::Long cons_index(NVUtil::find_index(nv, newdesc.c_str()));
