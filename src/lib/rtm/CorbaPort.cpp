@@ -5,7 +5,7 @@
  * @date  $Date: 2007-12-31 03:08:02 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
- * Copyright (C) 2006-2009
+ * Copyright (C) 2006-2010
  *     Noriaki Ando
  *     Task-intelligence Research Group,
  *     Intelligent Systems Research Institute,
@@ -69,8 +69,8 @@ namespace RTC
     RTC_DEBUG_STR((m_properties));
 
     int num(-1);
-    if (!coil::stringTo(num, 
-                     m_properties.getProperty("connection_limit","-1").c_str()))
+    if (!coil::stringTo(num, m_properties.getProperty("connection_limit",
+                                                      "-1").c_str()))
       {
         RTC_ERROR(("invalid connection_limit value: %s", 
                    m_properties.getProperty("connection_limit").c_str()));
@@ -195,7 +195,7 @@ namespace RTC
     RTC_TRACE(("publishInterfaces()"));
 
     ReturnCode_t returnvalue = _publishInterfaces();
-    if(returnvalue!=RTC::RTC_OK)
+    if(returnvalue != RTC::RTC_OK)
       {
         return returnvalue;
       }
@@ -322,7 +322,13 @@ namespace RTC
       }
   }
   
-
+  /*!
+   * @if jp
+   * @brief Consumer に合致する Provider を NVList の中から見つける
+   * @else
+   * @brief Find out a provider corresponding to the consumer from NVList
+   * @endif
+   */
   bool CorbaPort::findProvider(const NVList& nv, CorbaConsumerHolder& cons,
                                std::string& iorstr)
   {
@@ -357,6 +363,13 @@ namespace RTC
     return true;
   }
 
+  /*!
+   * @if jp
+   * @brief Consumer に合致する Provider を NVList の中から見つける
+   * @else
+   * @brief Find out a provider corresponding to the consumer from NVList
+   * @endif
+   */
   bool CorbaPort::findProviderOld(const NVList&nv, CorbaConsumerHolder& cons,
                                   std::string& iorstr)
   {
@@ -377,7 +390,14 @@ namespace RTC
     RTC_INFO(("interface matched with old descriptor: %s", olddesc.c_str()));
     return true;
   }
- 
+
+  /*!
+   * @if jp
+   * @brief Consumer に IOR をセットする
+   * @else
+   * @brief Setting IOR to Consumer
+   * @endif
+   */
   bool CorbaPort::setObject(const std::string& ior, CorbaConsumerHolder& cons)
   {
     // if ior string is "null" or "nil", ignore it.
@@ -399,6 +419,13 @@ namespace RTC
     return true;
   }
 
+  /*!
+   * @if jp
+   * @brief Consumer のオブジェクトをリリースする
+   * @else
+   * @brief Releasing Consumer Object
+   * @endif
+   */
   bool CorbaPort::releaseObject(const std::string& ior,
                                 CorbaConsumerHolder& cons)
   {
