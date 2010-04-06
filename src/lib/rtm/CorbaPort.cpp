@@ -207,9 +207,9 @@ namespace RTC
         //------------------------------------------------------------
         // new version descriptor
         // <comp_iname>.port.<port_name>.provided.<type_name>.<instance_name>
-        std::string newdesc;
-        newdesc = m_ownerInstanceName + ".port." + (const char*)m_profile.name
-          + ".provided." + it->descriptor();
+        std::string newdesc((const char*)m_profile.name);
+        newdesc.insert(m_ownerInstanceName.size(), ".port");
+        newdesc += ".provided." + it->descriptor();
         CORBA_SeqUtil::
           push_back(properties,
                     NVUtil::newNV(newdesc.c_str(), it->ior().c_str()));
@@ -327,9 +327,9 @@ namespace RTC
                                std::string& iorstr)
   {
     // new consumer interface descriptor
-    std::string newdesc;
-    newdesc = m_ownerInstanceName + ".port." + (const char*)m_profile.name
-      + ".required." + cons.descriptor();
+    std::string newdesc((const char*)m_profile.name);
+    newdesc.insert(m_ownerInstanceName.size(), ".port");
+    newdesc += ".required." + cons.descriptor();
 
     // find a NameValue of the consumer
     CORBA::Long cons_index(NVUtil::find_index(nv, newdesc.c_str()));
@@ -374,7 +374,7 @@ namespace RTC
         return false;
       }
     iorstr = ior;
-    RTC_ERROR(("interface matched with old descriptor: %s", olddesc.c_str()));
+    RTC_INFO(("interface matched with old descriptor: %s", olddesc.c_str()));
     return true;
   }
  
