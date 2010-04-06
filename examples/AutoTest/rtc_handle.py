@@ -5,7 +5,6 @@ import sys
 from omniORB import CORBA, URI
 from omniORB import any
 
-import OpenRTM
 import RTC
 
 
@@ -354,11 +353,11 @@ class RtcHandle :
 #  you can subscribe and communicate to the outside port with the pipe.
 #  you need an rtc implementation to use pipes.
 #
-class Pipe :
-    pass
-
-class PipeOut(Pipe):
-    def __init__(self, name, data_buf, size=8) :
-        self.name =  name
-        self.data =  data_buf
-        self.OpenRTM.InPort(name,data_buf,OpenRTM.RingBuffer(size))
+# class Pipe :
+#     pass
+# 
+# class PipeOut(Pipe):
+#     def __init__(self, name, data_buf, size=8) :
+#         self.name =  name
+#         self.data =  data_buf
+#         self.OpenRTM_aist.InPort(name,data_buf,OpenRTM_aist.RingBuffer(size))
