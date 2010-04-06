@@ -130,7 +130,7 @@ RTC::ReturnCode_t AutoTestIn::onExecute(RTC::UniqueId ec_id)
 
       fout << std::fixed;
       fout << std::showpoint;
-      fout << std::setprecision(1);
+      fout << std::setprecision(6);
       /*
       std::cout << std::fixed;
       std::cout << std::showpoint;

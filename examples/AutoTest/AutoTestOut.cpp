@@ -135,7 +135,7 @@ RTC::ReturnCode_t AutoTestOut::onExecute(RTC::UniqueId ec_id)
     //std::cout << "1 " << ss << std::endl;
     std::cout << std::fixed;
     std::cout << std::showpoint;
-    std::cout << std::setprecision(1);
+    std::cout << std::setprecision(6);
     std::stringstream iss;
     std::string str;
     iss.str(ss);
