@@ -373,7 +373,10 @@ namespace RTC
     RTC_TRACE(("pushNew()"));
     if (bufferIsEmpty()) { return BUFFER_EMPTY; }
     
-	m_readback = true;
+    // In case of the periodic/push_new policy, the buffer should
+    // allow readback. But, readback flag should be set as "true"
+    // after written at least one datum into the buffer.
+    m_readback = true;
     m_buffer->advanceRptr(m_buffer->readable() - 1);
     
     const cdrMemoryStream& cdr(m_buffer->get());
