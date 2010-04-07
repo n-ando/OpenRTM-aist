@@ -373,6 +373,7 @@ namespace RTC
     RTC_TRACE(("pushNew()"));
     if (bufferIsEmpty()) { return BUFFER_EMPTY; }
     
+	m_readback = true;
     m_buffer->advanceRptr(m_buffer->readable() - 1);
     
     const cdrMemoryStream& cdr(m_buffer->get());
