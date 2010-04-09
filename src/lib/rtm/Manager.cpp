@@ -1108,12 +1108,12 @@ std::vector<coil::Properties> Manager::getLoadableModules()
         RTC_DEBUG(("corba.endpoints: %s", m_config["corba.endpoints"].c_str()));
       }
 
-    if (m_config.hasKey("corba.endpoint") != 0)
+    if (m_config.findNode("corba.endpoint") != 0)
       {
-        endpoints.push_back(m_config["corba.endpoint"]);
+        coil::vstring tmp(coil::split(m_config["corba.endpoint"], ","));
+        endpoints.insert(endpoints.end(), tmp.begin(), tmp.end());
         RTC_DEBUG(("corba.endpoint: %s", m_config["corba.endpoint"].c_str()));
       }
-
     // If this process has master manager,
     // master manager's endpoint inserted at the top of endpoints
     RTC_DEBUG(("manager.is_master: %s",
@@ -1131,6 +1131,8 @@ std::vector<coil::Properties> Manager::getLoadableModules()
             endpoints.insert(endpoints.begin(), ":2810");
           }
       }
+    coil::vstring tmp(endpoints);
+    endpoints = coil::unique_sv(tmp);
   }
 
   void Manager::createORBEndpointOption(std::string& opt,
