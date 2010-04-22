@@ -538,15 +538,18 @@ namespace RTC
     throw (CORBA::SystemException)
   {
     RTC_TRACE(("get_context_handle()"));
-    // ec_id 0 : owned context
-    // ec_id 1-: participating context
-    if (cxt->_is_equivalent(m_ecMine[0]))
-      {
-        return (ExecutionContextHandle_t)0;
-      }
     CORBA::Long num;
+    num = CORBA_SeqUtil::find(m_ecMine, ec_find(cxt));
+    if (num != -1)
+      { 
+        return (ExecutionContextHandle_t)num;
+      }
     num = CORBA_SeqUtil::find(m_ecOther, ec_find(cxt));
-    return (ExecutionContextHandle_t)(num + 1);
+    if (num != -1)
+      { 
+        return (ExecutionContextHandle_t)(ECOTHER_OFFSET + num);
+      }
+    return (ExecutionContextHandle_t)(-1);
   }
 
 
