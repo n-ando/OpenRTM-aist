@@ -87,20 +87,21 @@ static const char* default_config[] =
     "manager.modules.C++.profile_cmd",    "rtcprof",
 #ifdef WIN32
     "manager.modules.C++.suffixes",       "dll",
-#endif
+#else
 #ifdef RTM_OS_DARWIN
     "manager.modules.C++.suffixes",       "dylib",
 #else
     "manager.modules.C++.suffixes",       "so",
 #endif
+#endif
     "manager.modules.C++.load_paths",     "./",
     "manager.modules.Python.manager_cmd", "rtcd_python",
     "manager.modules.Python.profile_cmd", "rtcprof_python",
-    "manager.modules.Python.suffixes",    "py, pyc",
+    "manager.modules.Python.suffixes",    "py",
     "manager.modules.Python.load_paths",  "./",
     "manager.modules.Java.manager_cmd",   "rtcd_java",
     "manager.modules.Java.profile_cmd",   "rtcprof_java",
-    "manager.modules.Java.suffixes",      "class, jar",
+    "manager.modules.Java.suffixes",      "class",
     "manager.modules.Java.load_paths",    "./",
     ""
   };
