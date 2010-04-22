@@ -523,10 +523,12 @@ namespace RTC
             std::string line(str);
             line.erase(line.size() - 1);
             std::string::size_type pos(line.find(":"));
-            if (pos != std::string::npos )
+            if (pos != std::string::npos)
               {
-                p[line.substr(0, pos)] = line.substr(pos + 1);
-                coil::eraseBothEndsBlank(p[line.substr(0, pos)]);
+                std::string key(line.substr(0, pos));
+                coil::eraseBothEndsBlank(key);
+                p[key] = line.substr(pos + 1);
+                coil::eraseBothEndsBlank(p[key]);
               }
           } while (!feof(fd));
         pclose(fd);
