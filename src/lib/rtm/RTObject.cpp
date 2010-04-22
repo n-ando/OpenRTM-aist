@@ -1855,8 +1855,25 @@ namespace RTC
     for (int i(0), len(m_eclist.size()); i < len; ++i)
       {
         m_eclist[i]->stop();
-        PortableServer::ObjectId_var oid = m_pPOA->servant_to_id(m_eclist[i]);
-	m_pPOA->deactivate_object(oid);
+        try
+          {
+            PortableServer::ObjectId_var oid
+              = m_pPOA->servant_to_id(m_eclist[i]);
+            m_pPOA->deactivate_object(oid);
+          }
+        catch (PortableServer::POA::ServantNotActive &e)
+          {
+            RTC_ERROR(("%s", e._name()));
+          }
+        catch (PortableServer::POA::WrongPolicy &e)
+          {
+            RTC_ERROR(("%s", e._name()));
+          }
+        catch (...)
+          {
+            // never throws exception
+            RTC_ERROR(("Unknown exception caught."));
+          }
         delete m_eclist[i];
       }
     if (!m_eclist.empty())
@@ -1886,9 +1903,18 @@ namespace RTC
 	m_pPOA->deactivate_object(oid1);
 	m_pPOA->deactivate_object(oid2);
       }
+    catch (PortableServer::POA::ServantNotActive &e)
+      {
+        RTC_ERROR(("%s", e._name()));
+      }
+    catch (PortableServer::POA::WrongPolicy &e)
+      {
+        RTC_ERROR(("%s", e._name()));
+      }
     catch (...)
       {
-	;
+        // never throws exception
+        RTC_ERROR(("Unknown exception caught."));
       }
     
     if (m_pManager != NULL)

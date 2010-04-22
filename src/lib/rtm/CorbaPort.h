@@ -1231,11 +1231,7 @@ namespace RTC
             Manager::instance().
               getPOA()->activate_object_with_id(m_oid, m_servant);
           }
-        catch(const ::PortableServer::POA::ServantAlreadyActive &)
-          {
-            ;
-          }
-        catch(const ::PortableServer::POA::ObjectAlreadyActive &)
+        catch(...)
           {
             ;
           }
@@ -1263,7 +1259,7 @@ namespace RTC
           {
             ; // do nothing
           }
-        catch(const ::PortableServer::POA::ObjectAlreadyActive &)
+        catch(...)
           {
             ; // do nothing
           }
@@ -1274,7 +1270,7 @@ namespace RTC
           {
             Manager::instance().getPOA()->deactivate_object(m_oid);
           }
-        catch(const ::PortableServer::POA::ObjectNotActive&)
+        catch(...)
           {
             ; // do nothing
           }

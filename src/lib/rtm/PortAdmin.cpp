@@ -229,23 +229,12 @@ namespace RTC
 	return false;
       }
   }
+
   bool PortAdmin::removePort(PortService_ptr port)
   {
     try
       {
-        // port.disconnect_all();
-	// port.shutdown();
-	
-        //	PortProfile_var prof(port->get_port_profile());
-        //	const char* tmp(prof->name);
-        //	CORBA_SeqUtil::erase_if(m_portRefs, find_port_name(tmp));
 	CORBA_SeqUtil::erase_if(m_portRefs, find_port(port));
-	
-        //	PortableServer::ObjectId_var oid = m_pPOA->servant_to_id(&port);
-	//	m_pPOA->deactivate_object(oid);
-        //	port.setPortRef(RTC::PortService::_nil());
-	
-        //	m_portServants.unregisterObject(tmp);
 	return true;
       }
     catch (...)
