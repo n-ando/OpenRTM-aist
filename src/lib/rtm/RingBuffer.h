@@ -478,9 +478,13 @@ namespace RTC
       if (empty_)
         {
           Guard eguard(m_empty.mutex);
+          advanceWptr(1);
           m_empty.cond.signal();
         }
-      advanceWptr(1);
+      else
+        {
+          advanceWptr(1);
+        }
       return ::RTC::BufferStatus::BUFFER_OK;
     }
     
