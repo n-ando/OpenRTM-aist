@@ -1637,7 +1637,10 @@ std::vector<coil::Properties> Manager::getLoadableModules()
     coil::Properties& comp_prop(comp->getProperties());
     
     naming_formats += m_config["naming.formats"];
-    naming_formats += ", " + comp_prop["naming.formats"];
+    if (comp_prop.findNode("naming.formats") != 0)
+      {
+        naming_formats = comp_prop["naming.formats"];
+      }
     naming_formats = coil::flatten(coil::unique_sv(coil::split(naming_formats,
                                                                ",")));
     
