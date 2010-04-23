@@ -1242,7 +1242,10 @@ namespace RTC
         m_ior = ior_var;
         deactivate();
       }
-
+      virtual ~CorbaProviderHolder()
+      {
+        deactivate();
+      }
       std::string instanceName() { return m_instanceName; }
       std::string typeName() { return m_typeName; }
       std::string ior() { return m_ior; }

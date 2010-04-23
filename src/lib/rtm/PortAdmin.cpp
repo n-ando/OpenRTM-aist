@@ -316,6 +316,7 @@ namespace RTC
    */
   void PortAdmin::finalizePorts()
   {
+    deactivatePorts();
     std::vector<PortBase*> ports;
     ports = m_portServants.getObjects();
     for_each(ports.begin(), ports.end(), del_port(this));
