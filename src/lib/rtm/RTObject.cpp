@@ -398,12 +398,7 @@ namespace RTC
     CORBA_SeqUtil::for_each(m_ecOther,
 			    deactivate_comps(m_objref));
 
-    // stop and detach myself from owned EC
-    for (CORBA::ULong ic(0), len(m_ecMine.length()); ic < len; ++ic)
-      {
-        //        m_ecMine[ic]->stop();
-        //        m_ecMine[ic]->remove_component(this->_this());
-      }
+    // owned EC will be finalised later in finalizeContext().
 
     // detach myself from other EC
     for (CORBA::ULong ic(0), len(m_ecOther.length()); ic < len; ++ic)
@@ -1119,13 +1114,8 @@ namespace RTC
     try
       {
 	SDOPackage::DeviceProfile_var dprofile;
-	dprofile = new SDOPackage::DeviceProfile(m_pSdoConfigImpl->getDeviceProfile());
-        
-//	dprofile->device_type  = m_pSdoConfigImpl->getDeviceProfile().device_type;
-//	dprofile->manufacturer = m_pSdoConfigImpl->getDeviceProfile().manufacturer;
-//	dprofile->model        = m_pSdoConfigImpl->getDeviceProfile().model;
-//	dprofile->version      = m_pSdoConfigImpl->getDeviceProfile().version;
-//	dprofile->properties   = m_pSdoConfigImpl->getDeviceProfile().properties;
+	dprofile =
+          new SDOPackage::DeviceProfile(m_pSdoConfigImpl->getDeviceProfile());
 	return dprofile._retn();
       }
     catch (...)
