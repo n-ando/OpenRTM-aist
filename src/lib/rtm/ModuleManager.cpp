@@ -508,7 +508,7 @@ namespace RTC
     for (size_t i(0), len(modules.size()); i < len; ++i)
       {
         std::string cmd(lprop["profile_cmd"]);
-        cmd += " " + modules[i];
+        cmd += " \"" + modules[i] + "\"";
         FILE* fd;
         if ((fd = popen(cmd.c_str(), "r")) == NULL)
           {
