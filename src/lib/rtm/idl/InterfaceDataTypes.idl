@@ -698,7 +698,7 @@ module RTC {
         /// Target time to arrive at the waypoint by.
         Time timeLimit;
         /// Maximum sped to travel at while heading to the waypoint.
-        Pose2D maxSpeed;
+        Velocity2D maxSpeed;
     };
 
     /*!
@@ -733,7 +733,7 @@ module RTC {
         /// Target time to arrive at the waypoint by.
         Time timeLimit;
         /// Maximum sped to travel at while heading to the waypoint.
-        Pose3D maxSpeed;
+        Velocity3D maxSpeed;
     };
 
     /*!
