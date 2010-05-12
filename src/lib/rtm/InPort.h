@@ -312,6 +312,9 @@ namespace RTC
           RTC_DEBUG(("no connectors"));
           return false;
         }
+      // In single-buffer mode, all connectors share the same buffer. This
+      // means that we only need to read from the first connector to get data
+      // received by any connector.
       int r(m_connectors[0]->getBuffer()->readable());
       if (r > 0)
         {
@@ -355,6 +358,9 @@ namespace RTC
           RTC_DEBUG(("no connectors"));
           return true;
         }
+      // In single-buffer mode, all connectors share the same buffer. This
+      // means that we only need to read from the first connector to get data
+      // received by any connector.
       int r(m_connectors[0]->getBuffer()->readable());
       if (r == 0)
         {
@@ -458,6 +464,9 @@ namespace RTC
 
       cdrMemoryStream cdr;
 
+      // In single-buffer mode, all connectors share the same buffer. This
+      // means that we only need to read from the first connector to get data
+      // received by any connector.
       ReturnCode ret(m_connectors[0]->read(cdr));
       if (ret == PORT_OK)
         {
