@@ -1,7 +1,7 @@
 // -*- C++ -*-
 /*!
- * @file   InPortTests.cpp
- * @brief  InPort test class
+ * @file   InPortConnectorTests.cpp
+ * @brief  InPortConnector test class
  * @date   $Date: 2008/03/13 13:12:25 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
@@ -14,7 +14,7 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: InPortTests.cpp 817 2008-08-06 02:54:26Z n-ando $
+ * $Id: InPortConnectorTests.cpp 817 2008-08-06 02:54:26Z n-ando $
  *
  */
 
@@ -75,7 +75,9 @@ namespace InPortConnector
     : public CppUnit::TestFixture
   {
     CPPUNIT_TEST_SUITE(InPortConnectorTests);
+
     CPPUNIT_TEST(test_case0);
+
     CPPUNIT_TEST_SUITE_END();
 		
   private:
@@ -117,7 +119,7 @@ namespace InPortConnector
     }
 		
     /*!
-     * @brief profile(),id(),name(),getBuffer()
+     * @brief profile(),id(),name(),getBuffer(),setEndian(),isLittleEndian() メソッドのテスト
      * 
      */
     void test_case0()
@@ -135,27 +137,35 @@ namespace InPortConnector
 					       "push"));
         CORBA_SeqUtil::push_back(cprof.properties,
                                  NVUtil::newNV("dataport.subscription_type",
-					        "new"));
+					       "new"));
 
 
         coil::Properties prop;
         NVUtil::copyToProperties(prop, cprof.properties);
         RTC::ConnectorInfo info(cprof.name,
-                                       cprof.connector_id,
-                                       CORBA_SeqUtil::refToVstring(cprof.ports),
-                                       prop); 
+                                cprof.connector_id,
+                                CORBA_SeqUtil::refToVstring(cprof.ports),
+                                prop); 
         RTC::CdrBufferBase* m_thebuffer;
         m_thebuffer = RTC::CdrBufferFactory::instance().createObject("ring_buffer");
-        InPortConnector::InPortConnectorMock connector(info, m_thebuffer);
-        CPPUNIT_ASSERT_EQUAL(std::string(cprof.connector_id),std::string(connector.id()));
-        CPPUNIT_ASSERT_EQUAL(std::string(cprof.name),std::string(connector.name()));
-        CPPUNIT_ASSERT_EQUAL(m_thebuffer,connector.getBuffer());
 
+        InPortConnector::InPortConnectorMock connector(info, m_thebuffer);
+        CPPUNIT_ASSERT_EQUAL(std::string(cprof.connector_id), std::string(connector.id()));
+        CPPUNIT_ASSERT_EQUAL(std::string(cprof.name), std::string(connector.name()));
+        CPPUNIT_ASSERT_EQUAL(m_thebuffer, connector.getBuffer());
+
+        connector.setEndian(false);
+        CPPUNIT_ASSERT(!connector.isLittleEndian());
+        connector.setEndian(true);
+        CPPUNIT_ASSERT(connector.isLittleEndian());
+
+        RTC::ConnectorInfo info2 = connector.profile();
+        CPPUNIT_ASSERT_EQUAL(info.name, info2.name);
+        CPPUNIT_ASSERT_EQUAL(info.id, info2.id);
     }
-		
-		
+
   };
-}; // namespace InPort
+}; // namespace InPortConnector
 
 /*
  * Register test suite
@@ -244,4 +254,4 @@ int main(int argc, char* argv[])
   return 0; // runner.run() ? 0 : 1;
 }
 #endif // MAIN
-#endif // InPort_cpp
+#endif // InPortConnector_cpp

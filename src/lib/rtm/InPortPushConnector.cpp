@@ -118,7 +118,8 @@ namespace RTC
    */
   ConnectorBase::ReturnCode InPortPushConnector::disconnect()
   {
-    // delete consumer
+    RTC_TRACE(("disconnect()"));
+    // delete provider
     if (m_provider != 0)
       {
         InPortProviderFactory& cfactory(InPortProviderFactory::instance());

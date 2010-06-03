@@ -99,7 +99,7 @@ namespace coil
   }
 #endif
 
-#ifdef COIL_OS_LINUX
+#if defined(COIL_OS_LINUX) || defined(COIL_OS_DARWIN)
 
   UUID_Generator::UUID_Generator(){}
   
@@ -116,7 +116,7 @@ namespace coil
   }
   
   UUID::UUID(uuid_t *uuid){
-    strcpy((char *)this->_uuid, (char *)(*uuid));
+    strncpy((char *)this->_uuid, (char *)(*uuid), sizeof(this->_uuid));
   }
   
   const char* UUID::to_string(){

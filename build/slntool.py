@@ -185,28 +185,34 @@ def get_slnyaml(depfile, projfiles):
         d0_depends = d0.has_key("Depend")
         d1_depends = d1.has_key("Depend")
         if not d0_depends and not d1_depends:
+            # both d0, d1 has no dependency 
             return 0
-        elif not d0_depends and d1_depends:
+
+        if not d0_depends and d1_depends:
+            # only "d1" has dependency: d0 < d1
             return -1 
-        elif d0_depends and not d1_depends:
+
+        if d0_depends and not d1_depends:
+            # only "d0" has dependency: d1 < d0
             return 1 
-        elif d0_depends and d1_depends:
-            d0_in_dep = depdict.has_key(d0["Name"])
-            d1_in_dep = depdict.has_key(d1["Name"])
-            if not d0_in_dep and not d1_in_dep:
-                return 0
-            elif not d0_in_dep and d1_in_dep:
-                return -1
-            elif d0_in_dep and not d1_in_dep:
-                return 1
-            else:
-                if depdict[d0["Name"]].count(d1["Name"]) > 0:
-                    return 1
-                elif depdict[d1["Name"]].count(d0["Name"]) > 0:
-                    return -1
-                return 0
-        else:
+
+        # d0 and d1 has dependency
+        d0_in_dep = depdict.has_key(d0["Name"])
+        d1_in_dep = depdict.has_key(d1["Name"])
+        if not d0_in_dep and not d1_in_dep:
             return 0
+        if not d0_in_dep and d1_in_dep:
+            return -1
+        if d0_in_dep and not d1_in_dep:
+            return 1
+        
+        # both d0 and d1 have several dependency
+        if depdict[d0["Name"]].count(d1["Name"]) > 0:
+            return 1
+        if depdict[d1["Name"]].count(d0["Name"]) > 0:
+            return -1
+        return 0
+
     projs.sort(depsort)
     for pj in projs:
         list = """  - Name: %s

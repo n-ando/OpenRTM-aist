@@ -34,6 +34,13 @@ namespace coil
     normalize();
   }
   
+  /*!
+   * @if jp
+   * @brief コンストラクタ
+   * @else
+   * @brief Constructor
+   * @endif
+   */
   TimeValue::TimeValue(double timeval)
   {
     double dbHalfAdj;

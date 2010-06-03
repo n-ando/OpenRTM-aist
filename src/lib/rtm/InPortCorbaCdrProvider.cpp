@@ -5,7 +5,7 @@
  * @date  $Date: 2008-01-14 07:49:59 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
- * Copyright (C) 2009
+ * Copyright (C) 2009-2010
  *     Noriaki Ando
  *     Task-intelligence Research Group,
  *     Intelligent Systems Research Institute,
@@ -61,21 +61,51 @@ namespace RTC
    */
   InPortCorbaCdrProvider::~InPortCorbaCdrProvider(void)
   {
-    PortableServer::ObjectId_var oid;
-    oid = _default_POA()->servant_to_id(this);
-    _default_POA()->deactivate_object(oid);
+    try
+      {
+        PortableServer::ObjectId_var oid;
+        oid = _default_POA()->servant_to_id(this);
+        _default_POA()->deactivate_object(oid);
+      }
+    catch (PortableServer::POA::ServantNotActive &e)
+      {
+        RTC_ERROR(("%s", e._name()));
+      }
+    catch (PortableServer::POA::WrongPolicy &e)
+      {
+        RTC_ERROR(("%s", e._name()));
+      }
+    catch (...)
+      {
+        // never throws exception
+        RTC_ERROR(("Unknown exception caught."));
+      }
   }
 
   void InPortCorbaCdrProvider::init(coil::Properties& prop)
   {
   }
 
+  /*!
+   * @if jp
+   * @brief バッファをセットする
+   * @else
+   * @brief Setting outside buffer's pointer
+   * @endif
+   */
   void InPortCorbaCdrProvider::
   setBuffer(BufferBase<cdrMemoryStream>* buffer)
   {
     m_buffer = buffer;
   }
 
+  /*!
+   * @if jp
+   * @brief リスナを設定する
+   * @else
+   * @brief Set the listener
+   * @endif
+   */
   void InPortCorbaCdrProvider::setListener(ConnectorInfo& info,
                                            ConnectorListeners* listeners)
   {
@@ -83,6 +113,13 @@ namespace RTC
     m_listeners = listeners;
   }
 
+  /*!
+   * @if jp
+   * @brief Connectorを設定する。
+   * @else
+   * @brief set Connector
+   * @endif
+   */
   void InPortCorbaCdrProvider::setConnector(InPortConnector* connector)
   {
     m_connector = connector;
@@ -182,6 +219,13 @@ namespace RTC
 
 extern "C"
 {
+  /*!
+   * @if jp
+   * @brief モジュール初期化関数
+   * @else
+   * @brief Module initialization
+   * @endif
+   */
   void InPortCorbaCdrProviderInit(void)
   {
     RTC::InPortProviderFactory& factory(RTC::InPortProviderFactory::instance());

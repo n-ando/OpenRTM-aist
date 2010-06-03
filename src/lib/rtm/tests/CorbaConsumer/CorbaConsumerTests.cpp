@@ -133,6 +133,9 @@ namespace CorbaConsumer
       CPPUNIT_ASSERT_EQUAL(0, helloImpl->m_invokedCount);
       consumer._ptr()->hello_world();
       CPPUNIT_ASSERT_EQUAL(1, helloImpl->m_invokedCount);
+
+      m_pPOA->deactivate_object(*m_pPOA->servant_to_id(helloImpl));
+      delete helloImpl;
     }
 		
     /*!
@@ -158,6 +161,9 @@ namespace CorbaConsumer
       CPPUNIT_ASSERT_EQUAL(0, helloImpl->m_invokedCount);
       consumerNew._ptr()->hello_world();
       CPPUNIT_ASSERT_EQUAL(1, helloImpl->m_invokedCount);
+
+      m_pPOA->deactivate_object(*m_pPOA->servant_to_id(helloImpl));
+      delete helloImpl;
     }
 		
     /*!
@@ -180,6 +186,9 @@ namespace CorbaConsumer
       CPPUNIT_ASSERT_EQUAL(0, helloImpl->m_invokedCount);
       consumer->hello_world();
       CPPUNIT_ASSERT_EQUAL(1, helloImpl->m_invokedCount);
+
+      m_pPOA->deactivate_object(*m_pPOA->servant_to_id(helloImpl));
+      delete helloImpl;
     }
 		
     void test_substitute_operator()
@@ -199,6 +208,9 @@ namespace CorbaConsumer
       CPPUNIT_ASSERT_EQUAL(0, helloImpl->m_invokedCount);
       consumerNew._ptr()->hello_world();
       CPPUNIT_ASSERT_EQUAL(1, helloImpl->m_invokedCount);
+
+      m_pPOA->deactivate_object(*m_pPOA->servant_to_id(helloImpl));
+      delete helloImpl;
     }
 		
     /*!
@@ -222,6 +234,9 @@ namespace CorbaConsumer
       // releaseObject()呼出によって、保持されているオブジェクト参照が正しくクリアされるか？
       consumer.releaseObject();
       CPPUNIT_ASSERT(CORBA::is_nil(consumer._ptr()));
+
+      m_pPOA->deactivate_object(*m_pPOA->servant_to_id(helloImpl));
+      delete helloImpl;
     }
 		
   };

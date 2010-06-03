@@ -307,15 +307,21 @@ namespace RTC
     virtual bool isNew()
     {
       RTC_TRACE(("isNew()"));
-      if (m_connectors.size() == 0)
-        {
-          RTC_DEBUG(("no connectors"));
-          return false;
-        }
+
       // In single-buffer mode, all connectors share the same buffer. This
       // means that we only need to read from the first connector to get data
       // received by any connector.
-      int r(m_connectors[0]->getBuffer()->readable());
+      int r(0);
+      {
+        Guard guard(m_connectorsMutex);
+        if (m_connectors.size() == 0)
+          {
+            RTC_DEBUG(("no connectors"));
+            return false;
+          }
+        r = m_connectors[0]->getBuffer()->readable();
+      }
+      
       if (r > 0)
         {
           RTC_DEBUG(("isNew() = true, readable data: %d", r));
@@ -352,16 +358,21 @@ namespace RTC
     virtual bool isEmpty()
     {
       RTC_TRACE(("isEmpty()"));
+      int r(0);
 
-      if (m_connectors.size() == 0)
-        {
-          RTC_DEBUG(("no connectors"));
-          return true;
-        }
-      // In single-buffer mode, all connectors share the same buffer. This
-      // means that we only need to read from the first connector to get data
-      // received by any connector.
-      int r(m_connectors[0]->getBuffer()->readable());
+      {
+        Guard guard(m_connectorsMutex);
+        if (m_connectors.size() == 0)
+          {
+            RTC_DEBUG(("no connectors"));
+            return true;
+          }
+        // In single-buffer mode, all connectors share the same buffer. This
+        // means that we only need to read from the first connector to get data
+        // received by any connector.
+        r = m_connectors[0]->getBuffer()->readable();
+      }
+
       if (r == 0)
         {
           RTC_DEBUG(("isEmpty() = true, buffer is empty"));
@@ -456,18 +467,21 @@ namespace RTC
           RTC_TRACE(("OnRead called"));
         }
 
-      if (m_connectors.size() == 0)
-        {
-          RTC_DEBUG(("no connectors"));
-          return false;
-        }
-
       cdrMemoryStream cdr;
-
-      // In single-buffer mode, all connectors share the same buffer. This
-      // means that we only need to read from the first connector to get data
-      // received by any connector.
-      ReturnCode ret(m_connectors[0]->read(cdr));
+      ReturnCode ret;
+      {
+        Guard guard(m_connectorsMutex);
+        if (m_connectors.size() == 0)
+          {
+            RTC_DEBUG(("no connectors"));
+            return false;
+          }
+        
+        // In single-buffer mode, all connectors share the same buffer. This
+        // means that we only need to read from the first connector to get data
+        // received by any connector.
+        ret = m_connectors[0]->read(cdr);
+      }
       if (ret == PORT_OK)
         {
           RTC_DEBUG(("data read succeeded"));

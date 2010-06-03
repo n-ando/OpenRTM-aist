@@ -1,4 +1,22 @@
 // -*- C++ -*-
+/*!
+ * @file   InPortProviderTests.cpp
+ * @brief  InPortProvider test class
+ * @date   $Date: 2008/03/13 13:12:25 $
+ * @author Noriaki Ando <n-ando@aist.go.jp>
+ *
+ *
+ * Copyright (C) 2006
+ *     Noriaki Ando
+ *     Task-intelligence Research Group,
+ *     Intelligent Systems Research Institute,
+ *     National Institute of
+ *         Advanced Industrial Science and Technology (AIST), Japan
+ *     All rights reserved.
+ *
+ * $Id: InPortTests.cpp 817 2008-08-06 02:54:26Z n-ando $
+ *
+ */
 
 /*
  * $Log: InPortProviderTests.cpp,v $
@@ -32,31 +50,33 @@ namespace InPortProvider
   {
   public:
     InPortProviderMock(
-		       const std::string& dataType,
 		       const std::string& interfaceType,
 		       const std::string& dataFlowType,
-		       const std::string& subscriptionType,
-		       const std::map<std::string, std::string>& properties)
+		       const std::string& subscriptionType)
     {
       setInterfaceType(interfaceType.c_str());
       setDataFlowType(dataFlowType.c_str());
       setSubscriptionType(subscriptionType.c_str());
-			
-      for (std::map<std::string, std::string>::const_iterator it = properties.begin();
-	   it != properties.end(); it++)
-	{
-	  const char* key = it->first.c_str();
-	  const char* value = it->second.c_str();
-	  NVUtil::appendStringValue(m_properties, key, value);
-	}
     }
-    virtual void init(coil::Properties& prop)
+    void setDummydataInProperties(void)
+    {
+      NVUtil::appendStringValue(m_properties, "KEY1", "VALUE1");
+      NVUtil::appendStringValue(m_properties, "KEY2", "VALUE2");
+    }
+    void init(coil::Properties& prop)
       {
       }
-    virtual void setBuffer(RTC::BufferBase<cdrMemoryStream>* buffer) 
+    void setBuffer(RTC::BufferBase<cdrMemoryStream>* buffer) 
       {
       }
-  };
+    void setListener(RTC::ConnectorInfo& info,
+                     RTC::ConnectorListeners* listeners)
+      {
+      }
+    void setConnector(RTC::InPortConnector* connector)
+      {
+      }
+   };
 	
   int g_argc;
   std::vector<std::string> g_argv;
@@ -107,86 +127,72 @@ namespace InPortProvider
     }
 		
     /*!
-     * @brief publishInterfaceProfile()メソッドのテスト
+     * @brief publishInterfaceProfile()
      * 
-     * - "dataport.data_type"を正しく取得できるか？
-     * - "dataport.interface_type"を正しく取得できるか？
-     * - "dataport.dataflow_type"を正しく取得できるか？
-     * - "dataport.subscription_type"を正しく取得できるか？
+     * - "dataport.interface_type"
+     * - "dataport.dataflow_type"
+     * - "dataport.subscription_type"
      */
     void test_publishInterfaceProfile()
     {
-      std::map<std::string, std::string> properties;
-      properties.insert(std::pair<std::string, std::string>("KEY1", "VALUE1"));
-      properties.insert(std::pair<std::string, std::string>("KEY2", "VALUE2"));
+      std::auto_ptr<InPortProviderMock> provider(
+          new InPortProviderMock("INTERFACE_TYPE", "DATA_FLOW_TYPE", "SUBSCRIPTION_TYPE"));
+
+      //m_propertiesへ設定
+      provider->setDummydataInProperties();
+
+      SDOPackage::NVList prop;
+      provider->publishInterfaceProfile(prop);
 			
-      std::auto_ptr<RTC::InPortProvider> provider(
-						  new InPortProviderMock(
-									 "DATA_TYPE", "INTERFACE_TYPE",
-									 "DATA_FLOW_TYPE", "SUBSCRIPTION_TYPE",
-									 properties));
-			
-      SDOPackage::NVList profile;
-      provider->publishInterfaceProfile(profile);
-			
-      // "dataport.interface_type"を正しく取得できるか？
+      // "dataport.interface_type"
       CPPUNIT_ASSERT_EQUAL(std::string("INTERFACE_TYPE"),
-			   NVUtil::toString(profile, "dataport.interface_type"));
+			   NVUtil::toString(prop, "dataport.interface_type"));
 			
-      // プロパティを正しく取得できるか？
-      CPPUNIT_ASSERT_EQUAL(std::string("VALUE1"), NVUtil::toString(profile, "KEY1"));
-      CPPUNIT_ASSERT_EQUAL(std::string("VALUE2"), NVUtil::toString(profile, "KEY2"));
+      // 
+      CPPUNIT_ASSERT_EQUAL(std::string("VALUE1"), NVUtil::toString(prop, "KEY1"));
+      CPPUNIT_ASSERT_EQUAL(std::string("VALUE2"), NVUtil::toString(prop, "KEY2"));
     }
 		
     /*!
-     * @brief publishInterface()メソッドのテスト（インタフェースタイプが一致する場合）
+     * @brief publishInterface()
      * 
-     * - プロパティを正しく取得できるか？
+     * - 
      */
     void test_publishInterface_with_interfaceType_matched()
     {
-      std::map<std::string, std::string> properties;
-      properties.insert(std::pair<std::string, std::string>("KEY1", "VALUE1"));
-      properties.insert(std::pair<std::string, std::string>("KEY2", "VALUE2"));
-			
-      std::auto_ptr<RTC::InPortProvider> provider(
-						  new InPortProviderMock(
-									 "DATA_TYPE", "INTERFACE_TYPE",
-									 "DATA_FLOW_TYPE", "SUBSCRIPTION_TYPE",
-									 properties));
-			
+      std::auto_ptr<InPortProviderMock> provider(
+          new InPortProviderMock("INTERFACE_TYPE", "DATA_FLOW_TYPE", "SUBSCRIPTION_TYPE"));
+
+      //m_propertiesへ設定
+      provider->setDummydataInProperties();
+
       SDOPackage::NVList props;
       NVUtil::appendStringValue(props, "dataport.interface_type", "INTERFACE_TYPE");
-      CPPUNIT_ASSERT_EQUAL(true,provider->publishInterface(props));
-			
-      // プロパティを正しく取得できるか？
+      CPPUNIT_ASSERT_EQUAL(true, provider->publishInterface(props));
+
+      // 
       CPPUNIT_ASSERT_EQUAL(std::string("VALUE1"), NVUtil::toString(props, "KEY1"));
       CPPUNIT_ASSERT_EQUAL(std::string("VALUE2"), NVUtil::toString(props, "KEY2"));
     }
 		
     /*!
-     * @brief publishInterface()メソッドのテスト（インタフェースタイプが一致しない場合）
+     * @brief publishInterface()
      * 
-     * - （意図どおり）プロパティを取得できないか？
+     * - 
      */
     void test_publishInterface_with_interfaceType_unmatched()
     {
-			
-      std::map<std::string, std::string> properties;
-      properties.insert(std::pair<std::string, std::string>("KEY1", "VALUE1"));
-      properties.insert(std::pair<std::string, std::string>("KEY2", "VALUE2"));
-			
-      std::auto_ptr<RTC::InPortProvider> provider(
-						  new InPortProviderMock(
-									 "DATA_TYPE", "INTERFACE_TYPE",
-									 "DATA_FLOW_TYPE", "SUBSCRIPTION_TYPE",
-									 properties));
-			
+      std::auto_ptr<InPortProviderMock> provider(
+          new InPortProviderMock("INTERFACE_TYPE", "DATA_FLOW_TYPE", "SUBSCRIPTION_TYPE"));
+
+      //m_propertiesへ設定
+      provider->setDummydataInProperties();
+
       SDOPackage::NVList props;
       NVUtil::appendStringValue(props, "dataport.interface_type", "UNMATCHED_INTERFACE_TYPE");
-      CPPUNIT_ASSERT_EQUAL(false,provider->publishInterface(props));
-			
-      // （意図どおり）プロパティを取得できないか？
+      CPPUNIT_ASSERT_EQUAL(false, provider->publishInterface(props));
+
+      // 
       CPPUNIT_ASSERT_EQUAL(std::string(""), NVUtil::toString(props, "KEY1"));
       CPPUNIT_ASSERT_EQUAL(std::string(""), NVUtil::toString(props, "KEY2"));
     }

@@ -10,7 +10,7 @@
 	  <Shortcut Id="RTSystemEditorRCP.exe"
 		    Directory="ToolsMenuFolder"
 		    Name="RT System Editor"
-		    Show="normal" WorkingDirectory="tools"/>
+		    Show="normal" WorkingDirectory="USERPROFILEDIR"/>
 	</File>
         <File Id="startup.jar" Name="startup.jar" Source="C:\distribution\OpenRTP\RTSystemEditor\startup.jar" />
       </Component>

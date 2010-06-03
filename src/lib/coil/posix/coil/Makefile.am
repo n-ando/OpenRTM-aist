@@ -28,33 +28,35 @@ COIL_PLATFORM_H   =    \
 	$(COIL_PLATFORM_SRC:.cpp=.h)
 
 # coil common source
-COIL_COMMON_SRC =       \
-	Allocator.cpp   \
-	PeriodicTask.cpp\
-	Properties.cpp  \
-	TimeValue.cpp   \
-	TimeMeasure.cpp \
-	Timer.cpp       \
+COIL_COMMON_SRC =        \
+	Allocator.cpp    \
+	PeriodicTask.cpp \
+	Properties.cpp   \
+	TimeMeasure.cpp  \
+	TimeValue.cpp    \
+	Timer.cpp        \
+	crc.cpp          \
 	stringutil.cpp
 
 # coil common headers
-COIL_COMMON_H   =       \
-	Allocator.h     \
-	Async.h         \
-	Listener.h      \
-	TimeMeasure.h   \
-	memory.h        \
-	NonCopyable.h   \
-	TimeValue.h     \
-	stringutil.h    \
-	Guard.h         \
+COIL_COMMON_H   =           \
+	Allocator.h         \
+	Async.h             \
+	Factory.h           \
+	Guard.h             \
+	Listener.h          \
+	Logger.h            \
+	NonCopyable.h       \
+	PeriodicTask.h      \
 	PeriodicTaskBase.h  \
-	PeriodicTask.h  \
-	Properties.h    \
-	Timer.h         \
-	Logger.h        \
-	Singleton.h     \
-	Factory.h
+	Properties.h        \
+	Singleton.h         \
+	TimeMeasure.h       \
+	TimeValue.h         \
+	Timer.h             \
+	crc.h               \
+	stringutil.h
+
 
 # coil all sources and headers
 COIL_SRC = $(COIL_COMMON_SRC) $(COIL_PLATFORM_SRC)

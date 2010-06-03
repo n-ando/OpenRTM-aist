@@ -201,6 +201,8 @@ namespace CorbaPort
 	= new RTC::CorbaConsumer<MyService>(); // will be deleted automatically
 			
       RTC::CorbaPort* port = new RTC::CorbaPort("name of port");
+      coil::Properties dummy;
+      port->init(dummy);
       port->registerProvider("MyService (provided)", "Generic (provided)", *pMyServiceImpl);
       port->registerConsumer("MyService (required)", "Generic (required)", *pMyServiceConsumer);
 			
@@ -242,6 +244,11 @@ namespace CorbaPort
 	      CPPUNIT_FAIL(msg);
 	    }
 	}
+
+      delete port;
+      delete pMyServiceConsumer;
+      m_pPOA->deactivate_object(*m_pPOA->servant_to_id(pMyServiceImpl));
+      delete pMyServiceImpl;
     }
 		
     /*!
@@ -295,6 +302,15 @@ namespace CorbaPort
       CPPUNIT_ASSERT(! pMyServiceImplB->is_hello_world_called());
       (*pMyServiceConsumerB)->hello_world();
       CPPUNIT_ASSERT(pMyServiceImplB->is_hello_world_called());
+
+//      delete port1;
+      delete port0;
+      delete pMyServiceConsumerA;
+      m_pPOA->deactivate_object(*m_pPOA->servant_to_id(pMyServiceImplB));
+      delete pMyServiceImplB;
+      delete pMyServiceConsumerB;
+      m_pPOA->deactivate_object(*m_pPOA->servant_to_id(pMyServiceImplA));
+      delete pMyServiceImplA;
     }
     
     /*!
@@ -359,6 +375,14 @@ namespace CorbaPort
 	  // Properly disconnected.
 	}
 
+//      delete port1;
+      delete port0;
+      delete pMyServiceConsumerA;
+      m_pPOA->deactivate_object(*m_pPOA->servant_to_id(pMyServiceImplB));
+      delete pMyServiceImplB;
+      delete pMyServiceConsumerB;
+      m_pPOA->deactivate_object(*m_pPOA->servant_to_id(pMyServiceImplA));
+      delete pMyServiceImplA;
     }
     /*!
      * @brief registerProvider()メソッドのテスト
@@ -397,6 +421,11 @@ namespace CorbaPort
 
       port0->deactivateInterfaces_public();
 
+      delete port0;
+      m_pPOA->deactivate_object(*m_pPOA->servant_to_id(pImpl1));
+      delete pImpl1;
+      m_pPOA->deactivate_object(*m_pPOA->servant_to_id(pImpl0));
+      delete pImpl0;
     }
     /*!
      * @brief registerProvider()メソッドのテスト
@@ -475,6 +504,15 @@ namespace CorbaPort
 
       // 切断する
       port0->getPortRef()->disconnect(connProfile.connector_id);
+
+//      delete port1;
+      delete port0;
+      delete pMyServiceConsumerA;
+      m_pPOA->deactivate_object(*m_pPOA->servant_to_id(pMyServiceImplB));
+      delete pMyServiceImplB;
+      delete pMyServiceConsumerB;
+      m_pPOA->deactivate_object(*m_pPOA->servant_to_id(pMyServiceImplA));
+      delete pMyServiceImplA;
     }
     
   };

@@ -31,6 +31,9 @@ ns = env.name_space['localhost:9898']
 compo0 = ns.rtc_handles["ConsoleIn0.rtc"]
 compo1 = ns.rtc_handles["ConsoleOut0.rtc"]
 
+#compo0 = ns.rtc_handles["SequenceInComponent0.rtc"]
+#compo1 = ns.rtc_handles["SequenceOutComponent0.rtc"]
+
 def mem_rss():
     (stat, output) = commands.getstatusoutput("ps alxww | grep \"[r]\"tcd")
     return output.split()[7]
@@ -106,6 +109,11 @@ conprof2 = RTC.ConnectorProfile("connector0", "123", [consout_ports[0], consin_p
 
 #print "ConnectorProfile2=\n",conprof2
 
+#ec1 = compo0.rtc_ref.get_owned_contexts()
+#ec2 = compo1.rtc_ref.get_owned_contexts()
+#ec1[0].activate_component(compo0.rtc_ref)
+#ec2[0].activate_component(compo1.rtc_ref)
+
 ## -----------------------------------------------------------------------------
 fodat = "put()"
 print_file_and_cons(fodat)
@@ -129,7 +137,8 @@ for i in range(loop_cnt):
     # print "   ior=",ior
     inportobj = env.orb.string_to_object(ior)
     inportcdr = inportobj._narrow(OpenRTM.InPortCdr)
-    data0 = cdrMarshal(any.to_any(12345).typecode(), 12345, 1)
+    data = RTC.TimedLong(RTC.Time(0,0),12345)
+    data0 = cdrMarshal(any.to_any(data).typecode(), data, 1)
     ret1 = inportcdr.put(data0)
     # print "   put() ret=" + str(ret1)
     #if ret1 != OpenRTM.PORT_OK:
@@ -214,6 +223,8 @@ fodat = "   %05d: %s KB end" % (i+1, rssEnd)
 print_file_and_cons(fodat,1)
 leak_check(rssStart, rssEnd)
 ## -----------------------------------------------------------------------------
+#ec2[0].deactivate_component(compo1.rtc_ref)
+#ec1[0].deactivate_component(compo0.rtc_ref)
 
 fodat = "=== " + test_case + " end ==="
 print_file_and_cons(fodat)

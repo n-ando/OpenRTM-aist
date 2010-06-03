@@ -22,6 +22,13 @@
 
 namespace RTC
 {
+  /*!
+   * @if jp
+   * @brief コンストラクタ
+   * @elsek
+   * @brief Constructor
+   * @endif
+   */
   OutPortPullConnector::OutPortPullConnector(ConnectorInfo info,
                                              OutPortProvider* provider,
                                              ConnectorListeners& listeners,
@@ -48,32 +55,65 @@ namespace RTC
     onConnect();
   }
 
+  /*!
+   * @if jp
+   * @brief デストラクタ
+   * @else
+   * @brief Destructor
+   * @endif
+   */
   OutPortPullConnector::~OutPortPullConnector()
   {
     onDisconnect();
     disconnect();
   }
-  
+
+  /*!
+   * @if jp
+   * @brief read 関数
+   * @else
+   * @brief Destructor
+   * @endif
+   */
   ConnectorBase::ReturnCode
   OutPortPullConnector::write(const cdrMemoryStream& data)
   {
     m_buffer->write(data);
     return PORT_OK;
   }
-  
+
+  /*!
+   * @if jp
+   * @brief 接続解除関数
+   * @else
+   * @brief Disconnect connection
+   * @endif
+   */
   ConnectorBase::ReturnCode OutPortPullConnector::disconnect()
   {
+    RTC_TRACE(("disconnect()"));
     // delete provider
+    if (m_provider != 0)
+      {
+        OutPortProviderFactory& cfactory(OutPortProviderFactory::instance());
+        cfactory.deleteObject(m_provider);
+      }
+    m_provider = 0;
 
-    //    OutPortProviderFactory& factory(OutPortProviderFactory::instance());
-    //    factory.deleteObject(m_buffer);
-    
+    // delete buffer
+    if (m_buffer != 0)
+      {
+        CdrBufferFactory& bfactory(CdrBufferFactory::instance());
+        bfactory.deleteObject(m_buffer);
+      }
+    m_buffer = 0;
+
     return PORT_OK;
   }
 
   /*!
    * @if jp
-   * @brief Buffer を所得する
+   * @brief Buffer を取得する
    *
    * Connector が保持している Buffer を返す
    *

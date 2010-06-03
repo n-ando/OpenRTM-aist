@@ -170,7 +170,9 @@ all: do-test
 
 # do tests
 do-test:
-	./ManagerServantTests
+#	./ManagerServantTests
+	./ManagerServantTests --xml managerservanttests.xml \
+	--xsl default.xsl
 
 # clean-up
 clean-local:

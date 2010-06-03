@@ -41,7 +41,8 @@ AM_CPPFLAGS =             \
 
 AM_LDFLAGS =              \
 	-L.               \
-	-L$(top_builddir)
+	-L$(top_builddir) \
+	-L$(top_builddir)/src/lib/coil/lib
 
 noinst_PROGRAMS = RingBufferTests
 
@@ -50,7 +51,7 @@ nodist_RingBufferTests_SOURCES =     \
 	RingBufferTests.cpp
 
 RingBufferTests_LDFLAGS = -L../../ -L$(libdir) $(AM_LDFLAGS)
-RingBufferTests_LDADD   = -lcppunit -lRTC
+RingBufferTests_LDADD   = -lcppunit -lcoil -lRTC
 
 EXTRA_DIST =            \
 	RingBufferTests.cpp
@@ -60,10 +61,8 @@ all: do-test
 
 # do tests
 do-test:
-	./RingBufferTests
-
-#	./RingBufferTests --xml ringbuffertests.xml \
-#	--xsl default.xsl
+	./RingBufferTests --xml ringbuffertests.xml \
+	--xsl default.xsl
 
 # clean-up
 clean-local:

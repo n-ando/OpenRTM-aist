@@ -1286,7 +1286,32 @@ namespace coil
     Properties* root;
     std::vector<Properties*> leaf;
     const std::string m_empty;
+
+    /*!
+     * @if jp
+     * @brief Propertyをストリームに出力する
+     *
+     * Propertyをストリームに出力する。
+     *
+     * @param lhs 出力ストリーム
+     * @param rhs プロパティ
+     *
+     * @return 出力ストリーム
+     *
+     * @else
+     * @brief Output Properties to stream
+     *
+     * Output Properties to stream.
+     *
+     * @param lhs Output stream
+     * @param rhs Properties
+     *
+     * @return Output stream
+     *
+     * @endif
+     */
     friend std::ostream& operator<<(std::ostream& lhs, const Properties& rhs);
+
   };   // class Properties
 };     // namespace coil  
 #endif // COIL_PROPERTIES_H

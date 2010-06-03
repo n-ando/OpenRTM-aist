@@ -115,11 +115,12 @@ namespace RTC
      * 
      * この関数は、以下のリターンコードを返す。
      *
-     * - PORT_OK:       正常終了。
-     * - PORT_ERROR:    データ送信の過程で何らかのエラーが発生した。
-     * - SEND_FULL:     データを送信したが、相手側バッファがフルだった。
-     * - SEND_TIMEOUT:  データを送信したが、相手側バッファがタイムアウトした。
-     * - UNKNOWN_ERROR: 原因不明のエラー
+     * - PORT_OK:         正常終了。
+     * - PORT_ERROR:      データ送信の過程で何らかのエラーが発生した。
+     * - SEND_FULL:       データを送信したが、相手側バッファがフルだった。
+     * - SEND_TIMEOUT:    データを送信したが、相手側バッファがタイムアウトした。
+     * - CONNECTION_LOST: 接続が切断された
+     * - UNKNOWN_ERROR:   原因不明のエラー
      *
      * @param data 送信するデータ
      * @return リターンコード
@@ -250,7 +251,5 @@ namespace RTC
 
   typedef ::coil::GlobalFactory<InPortConsumer> InPortConsumerFactory;
 };     // namespace RTC
-
-template class ::coil::GlobalFactory<RTC::InPortConsumer>;
 
 #endif // RTC_INPORTCONSUMER_H

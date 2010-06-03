@@ -86,7 +86,9 @@ namespace RTC
       m_pPOA(PortableServer::POA::_duplicate(poa)),
       m_portAdmin(orb, poa),
       m_created(true), m_exiting(false),
-      m_properties(default_conf), m_configsets(m_properties.getNode("conf"))
+      m_properties(default_conf), m_configsets(m_properties.getNode("conf")),
+      m_readAll(false),m_writeAll(false),
+      m_readAllCompletion(false),m_writeAllCompletion(false)
   {
     m_objref = this->_this();
     m_pSdoConfigImpl = new SDOPackage::Configuration_impl(m_configsets);
@@ -396,12 +398,7 @@ namespace RTC
     CORBA_SeqUtil::for_each(m_ecOther,
 			    deactivate_comps(m_objref));
 
-    // stop and detach myself from owned EC
-    for (CORBA::ULong ic(0), len(m_ecMine.length()); ic < len; ++ic)
-      {
-        //        m_ecMine[ic]->stop();
-        //        m_ecMine[ic]->remove_component(this->_this());
-      }
+    // owned EC will be finalised later in finalizeContext().
 
     // detach myself from other EC
     for (CORBA::ULong ic(0), len(m_ecOther.length()); ic < len; ++ic)
@@ -536,15 +533,18 @@ namespace RTC
     throw (CORBA::SystemException)
   {
     RTC_TRACE(("get_context_handle()"));
-    // ec_id 0 : owned context
-    // ec_id 1-: participating context
-    if (cxt->_is_equivalent(m_ecMine[0]))
-      {
-        return (ExecutionContextHandle_t)0;
-      }
     CORBA::Long num;
+    num = CORBA_SeqUtil::find(m_ecMine, ec_find(cxt));
+    if (num != -1)
+      { 
+        return (ExecutionContextHandle_t)num;
+      }
     num = CORBA_SeqUtil::find(m_ecOther, ec_find(cxt));
-    return (ExecutionContextHandle_t)(num + 1);
+    if (num != -1)
+      { 
+        return (ExecutionContextHandle_t)(ECOTHER_OFFSET + num);
+      }
+    return (ExecutionContextHandle_t)(-1);
   }
 
 
@@ -1114,13 +1114,8 @@ namespace RTC
     try
       {
 	SDOPackage::DeviceProfile_var dprofile;
-	dprofile = new SDOPackage::DeviceProfile(m_pSdoConfigImpl->getDeviceProfile());
-        
-//	dprofile->device_type  = m_pSdoConfigImpl->getDeviceProfile().device_type;
-//	dprofile->manufacturer = m_pSdoConfigImpl->getDeviceProfile().manufacturer;
-//	dprofile->model        = m_pSdoConfigImpl->getDeviceProfile().model;
-//	dprofile->version      = m_pSdoConfigImpl->getDeviceProfile().version;
-//	dprofile->properties   = m_pSdoConfigImpl->getDeviceProfile().properties;
+	dprofile =
+          new SDOPackage::DeviceProfile(m_pSdoConfigImpl->getDeviceProfile());
 	return dprofile._retn();
       }
     catch (...)
@@ -1608,7 +1603,6 @@ namespace RTC
 	    if ( (*it) == &inport )
 	      {
 		m_inports.erase(it);
-		std::cout << "removeInPort erase port found." << std::endl;
 		return true;
 	      }
 	    ++it;
@@ -1639,7 +1633,6 @@ namespace RTC
 	    if ( (*it) == &outport )
 	      {
 		m_outports.erase(it);
-		std::cout << "removeOutPort erase port found." << std::endl;
 		return true;
 	      }
 	    ++it;
@@ -1852,8 +1845,25 @@ namespace RTC
     for (int i(0), len(m_eclist.size()); i < len; ++i)
       {
         m_eclist[i]->stop();
-        PortableServer::ObjectId_var oid = m_pPOA->servant_to_id(m_eclist[i]);
-	m_pPOA->deactivate_object(oid);
+        try
+          {
+            PortableServer::ObjectId_var oid
+              = m_pPOA->servant_to_id(m_eclist[i]);
+            m_pPOA->deactivate_object(oid);
+          }
+        catch (PortableServer::POA::ServantNotActive &e)
+          {
+            RTC_ERROR(("%s", e._name()));
+          }
+        catch (PortableServer::POA::WrongPolicy &e)
+          {
+            RTC_ERROR(("%s", e._name()));
+          }
+        catch (...)
+          {
+            // never throws exception
+            RTC_ERROR(("Unknown exception caught."));
+          }
         delete m_eclist[i];
       }
     if (!m_eclist.empty())
@@ -1883,9 +1893,18 @@ namespace RTC
 	m_pPOA->deactivate_object(oid1);
 	m_pPOA->deactivate_object(oid2);
       }
+    catch (PortableServer::POA::ServantNotActive &e)
+      {
+        RTC_ERROR(("%s", e._name()));
+      }
+    catch (PortableServer::POA::WrongPolicy &e)
+      {
+        RTC_ERROR(("%s", e._name()));
+      }
     catch (...)
       {
-	;
+        // never throws exception
+        RTC_ERROR(("Unknown exception caught."));
       }
     
     if (m_pManager != NULL)

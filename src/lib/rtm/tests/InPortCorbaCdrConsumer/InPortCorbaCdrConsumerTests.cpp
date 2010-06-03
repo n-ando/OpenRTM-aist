@@ -123,14 +123,16 @@ namespace InPortCorbaCdrConsumer
     CPPUNIT_TEST_SUITE(InPortCorbaCdrConsumerTests);
 
     CPPUNIT_TEST(test_case0);
+
     CPPUNIT_TEST_SUITE_END();
 	
   private:
     CORBA::ORB_ptr m_pORB;
     PortableServer::POA_ptr m_pPOA;
+    RTC::ConnectorListeners m_listeners;
+    RTC::InPortConnector* connector;
 
   public:
-    RTC::ConnectorListeners m_listeners;
 	
     /*!
      * @brief Constructor
@@ -150,6 +152,7 @@ namespace InPortCorbaCdrConsumer
      */
     ~InPortCorbaCdrConsumerTests()
     {
+      delete connector;
     }
 		
     /*!
@@ -172,9 +175,6 @@ namespace InPortCorbaCdrConsumer
      */
     void test_case0()
     {
-        //
-        //
-        //
         InPortCorbaCdrConsumerMock consumer;
 
         //ConnectorInfo
@@ -224,12 +224,14 @@ namespace InPortCorbaCdrConsumer
         bool ret;
         int testdata[8] = { 12,34,56,78,90,23,45,99 };
 
+        consumer.init(prop);
         ret = consumer.subscribeInterface(prof.properties);
         //ior を設定していないのでfalseとなることを確認する。
         CPPUNIT_ASSERT_EQUAL(false, ret);
 
         RTC::InPortCorbaCdrProvider provider;
         provider.setListener(info, &m_listeners);
+        consumer.publishInterfaceProfile(prof.properties);
 
         CORBA_SeqUtil::push_back(prof.properties,
                                  NVUtil::newNV("dataport.interface_type",
@@ -258,7 +260,6 @@ namespace InPortCorbaCdrConsumer
         buffer = RTC::CdrBufferFactory::instance().createObject("ring_buffer");
         provider.setBuffer(buffer);
 
-        RTC::InPortConnector* connector;
         connector = new RTC::InPortPushConnector(info, &provider, m_listeners, buffer);
         if (connector == 0)
           {
@@ -302,7 +303,9 @@ namespace InPortCorbaCdrConsumer
              PortableServer::Servant ser = m_pPOA->reference_to_servant(var);
 	     m_pPOA->deactivate_object(*m_pPOA->servant_to_id(ser));
          }
-//        delete connector;
+
+        // delete connector;
+        // ここで delete すると落ちるので、デストラクタで行う。
     }
     
   };

@@ -65,6 +65,9 @@ namespace CorbaNaming
     : public CppUnit::TestFixture
   {
     CPPUNIT_TEST_SUITE(CorbaNamingTests);
+    CPPUNIT_TEST(test_resolveStr);
+    CPPUNIT_TEST(test_bindOrResolve);
+    CPPUNIT_TEST(test_bindOrResolveContext);
     CPPUNIT_TEST(test_bind);
     CPPUNIT_TEST(test_bindByString);
     CPPUNIT_TEST(test_bindRecursive);
@@ -105,7 +108,10 @@ namespace CorbaNaming
 				
 	      context =	resolvedObj;
 					
-	      if (i == len - 1) return context;
+	      if (i == len - 1)
+	        {
+                  return context;
+	        }
 	    }
 	  else
 	    {
@@ -179,6 +185,118 @@ namespace CorbaNaming
     }
 		
     /*!
+     * @brief getNameServer(), toString(), toUrl(), resolveStr()メソッドのテスト
+     * 
+     * - 
+     */
+    void test_resolveStr()
+    {
+      std::string set_name("corbaloc::localhost:2809/NameService");
+      m_pNaming->init("localhost:2809");
+
+      // ネームサーバの名前を正しく取得できるか
+      std::string get_name(m_pNaming->getNameServer());
+      CPPUNIT_ASSERT_EQUAL(set_name, get_name);
+
+      CosNaming::Name name;
+      name.length(1);
+      name[0].id = "id";
+      name[0].kind = "kind";
+      // 与えられた NameComponent の文字列表現を正しく返すか
+      std::string str(m_pNaming->toString(name));
+      CPPUNIT_ASSERT("id.kind" == str);
+
+//      std::string url(m_pNaming->toUrl("", "" ));
+
+      RTC::CorbaObjectManager objMgr(m_pORB, m_pPOA);
+      RTC::RTObject_impl* rto = new RTC::RTObject_impl(m_pORB, m_pPOA);
+      objMgr.activate(rto);
+      CPPUNIT_ASSERT(! CORBA::is_nil(rto->getObjRef()));
+      m_pNaming->bindByString("id.kind", rto->getObjRef());
+
+      // 与えられた文字列表現を resolve しオブジェクトを返すか
+      CORBA::Object_ptr obj = m_pNaming->resolveStr("id.kind");
+      CPPUNIT_ASSERT(obj->_is_equivalent(rto->_this()));
+
+      rto->_remove_ref();
+    }
+		
+    /*!
+     * @brief bindOrResolve()メソッドのテスト
+     * 
+     * - オブジェクトの名前をバインドまたは解決できるか
+     */
+    void test_bindOrResolve()
+    {
+      RTC::CorbaObjectManager objMgr(m_pORB, m_pPOA);
+			
+      // バインド先となるコンテキストを登録しておく
+      RTC::RTObject_impl* rto0 = new RTC::RTObject_impl(m_pORB, m_pPOA);
+      objMgr.activate(rto0);
+      CPPUNIT_ASSERT(! CORBA::is_nil(rto0->getObjRef()));
+
+      const char* fullName0 = "id0-lv0.kind0-lv0/id0-lv1.kind0-lv1";
+      m_pNaming->bind(m_pNaming->toName(fullName0), rto0->getObjRef());
+      CORBA::Object_ptr obj0 = resolveRecursive("id0-lv0.kind0-lv0");
+      CosNaming::NamingContext_var nc0 = CosNaming::NamingContextExt::_narrow(obj0);
+      CPPUNIT_ASSERT(! CORBA::is_nil(nc0));
+			
+      // アクティブ化する
+      RTC::RTObject_impl* rto = new RTC::RTObject_impl(m_pORB, m_pPOA);
+      objMgr.activate(rto);
+      CPPUNIT_ASSERT(! CORBA::is_nil(rto->getObjRef()));
+
+      // オブジェクトをバインドし、それが正しく設定されるか？
+      const char* fullName = "lv1-id.lv1-kind";
+      CORBA::Object_ptr obj1 = m_pNaming->bindOrResolve(nc0._retn(), 
+                                          m_pNaming->toName(fullName), rto->getObjRef());
+      CORBA::Object_ptr obj = resolveRecursive("id0-lv0.kind0-lv0/lv1-id.lv1-kind");
+      CPPUNIT_ASSERT(obj->_is_equivalent(rto->_this()));
+
+      rto->_remove_ref();
+      rto0->_remove_ref();
+    }
+		
+    /*!
+     * @brief bindOrResolveContext()メソッドのテスト
+     * 
+     * - 名前をバインドまたは解決できるか
+     */
+    void test_bindOrResolveContext()
+    {
+      RTC::CorbaObjectManager objMgr(m_pORB, m_pPOA);
+			
+      // バインド先となるコンテキストを登録しておく
+      RTC::RTObject_impl* rto0 = new RTC::RTObject_impl(m_pORB, m_pPOA);
+      objMgr.activate(rto0);
+      CPPUNIT_ASSERT(! CORBA::is_nil(rto0->getObjRef()));
+
+      const char* fullName0 = "id0-lv0.kind0-lv0/id0-lv1.kind0-lv1";
+      m_pNaming->bind(m_pNaming->toName(fullName0), rto0->getObjRef());
+      CORBA::Object_ptr obj0 = resolveRecursive("id0-lv0.kind0-lv0");
+      CosNaming::NamingContext_var nc0 = CosNaming::NamingContextExt::_narrow(obj0);
+      CPPUNIT_ASSERT(! CORBA::is_nil(nc0));
+			
+      // アクティブ化する
+      RTC::RTObject_impl* rto = new RTC::RTObject_impl(m_pORB, m_pPOA);
+      objMgr.activate(rto);
+      CPPUNIT_ASSERT(! CORBA::is_nil(rto->getObjRef()));
+
+      // オブジェクトをバインドし、それが正しく設定されるか？
+      const char* fullName = "lv1-id.lv1-kind";
+      CosNaming::NamingContext_var nc1 = m_pNaming->bindOrResolveContext(nc0._retn(), 
+                                          m_pNaming->toName(fullName) );
+      CPPUNIT_ASSERT(! CORBA::is_nil(nc1));
+
+      CosNaming::NamingContext_var nc2 = m_pNaming->bindOrResolveContext(nc1._retn(), 
+                                          m_pNaming->toName(fullName), m_pNaming->newContext() );
+      CPPUNIT_ASSERT(! CORBA::is_nil(nc2));
+
+      rto->_remove_ref();
+      rto0->_remove_ref();
+    }
+		
+    /*!
      * @brief bind()メソッドのテスト
      * 
      * - オブジェクトをバインドし、それが正しく設定されるか？
@@ -197,6 +315,7 @@ namespace CorbaNaming
       m_pNaming->bind(m_pNaming->toName(fullName), rto->getObjRef());
       CORBA::Object_ptr obj = resolveRecursive(fullName);
       CPPUNIT_ASSERT(obj->_is_equivalent(rto->_this()));
+      rto->_remove_ref();
     }
 		
     /*!
@@ -219,6 +338,7 @@ namespace CorbaNaming
       m_pNaming->bindByString(fullName, rto->getObjRef());
       CORBA::Object_ptr obj = resolveRecursive(fullName);
       CPPUNIT_ASSERT(obj->_is_equivalent(rto->_this()));
+      rto->_remove_ref();
     }
 		
     /*!
@@ -252,6 +372,8 @@ namespace CorbaNaming
       m_pNaming->bindRecursive(nc0._retn(), m_pNaming->toName(fullName), rto->getObjRef());
       CORBA::Object_ptr obj = resolveRecursive("id0-lv0.kind0-lv0/lv1-id.lv1-kind/lv2-id.lv2-kind/lv3-id.lv3-kind");
       CPPUNIT_ASSERT(obj->_is_equivalent(rto->_this()));
+      rto->_remove_ref();
+      rto0->_remove_ref();
     }
 		
     /*!
@@ -281,6 +403,7 @@ namespace CorbaNaming
 	  CPPUNIT_FAIL("Expected exception not thrown.");
 	}
       catch (CosNaming::NamingContext::AlreadyBound expected) {}
+      rto->_remove_ref();
     }
 		
     /*!
@@ -310,6 +433,8 @@ namespace CorbaNaming
       m_pNaming->rebind(m_pNaming->toName(fullName), rto2->getObjRef());
       CORBA::Object_ptr obj2 = resolveRecursive(fullName);
       CPPUNIT_ASSERT(obj2->_is_equivalent(rto2->_this()));
+      rto2->_remove_ref();
+      rto1->_remove_ref();
     }
 		
     /*!
@@ -339,6 +464,8 @@ namespace CorbaNaming
       m_pNaming->rebindByString(fullName, rto2->getObjRef());
       CORBA::Object_ptr obj2 = resolveRecursive(fullName);
       CPPUNIT_ASSERT(obj2->_is_equivalent(rto2->_this()));
+      rto2->_remove_ref();
+      rto1->_remove_ref();
     }
 		
     /*!
@@ -380,6 +507,8 @@ namespace CorbaNaming
       CORBA::Object_ptr objRto2 = resolveRecursive(
 						   "id-parent.kind-parent/id-rto.kind-rto");
       CPPUNIT_ASSERT(objRto2->_is_equivalent(rto2->getObjRef()));
+      rto2->_remove_ref();
+      rto1->_remove_ref();
     }
 		
     /*!
@@ -410,6 +539,7 @@ namespace CorbaNaming
 			
       CORBA::Object_ptr objRto = resolveRecursive("id-lv0.kind-lv0/id-lv1.kind-lv1/id.kind");
       CPPUNIT_ASSERT(objRto->_is_equivalent(rto->getObjRef()));
+      rto->_remove_ref();
     }
 
     /*!
@@ -449,6 +579,7 @@ namespace CorbaNaming
       CORBA::Object_ptr objRto = resolveRecursive(
 						  "id-parent.kind-parent/id-lv0.kind-lv0/id-lv1.kind-lv1/id.kind");
       CPPUNIT_ASSERT(objRto->_is_equivalent(rto->getObjRef()));
+      rto->_remove_ref();
     }
 		
     /*!
@@ -487,6 +618,8 @@ namespace CorbaNaming
       m_pNaming->rebindContext(m_pNaming->toName("id-nc.kind-nc"), nc2);
       CORBA::Object_ptr objRto2 = resolveRecursive("id-nc.kind-nc/id-rto.kind-rto");
       CPPUNIT_ASSERT(objRto2->_is_equivalent(rto2->getObjRef()));
+      rto2->_remove_ref();
+      rto1->_remove_ref();
     }
 
     /*!
@@ -536,6 +669,8 @@ namespace CorbaNaming
       CORBA::Object_ptr objRto2 = resolveRecursive(
 						   "id-parent.kind-parent/id-nc.kind-nc/id-rto.kind-rto");
       CPPUNIT_ASSERT(objRto2->_is_equivalent(rto2->getObjRef()));
+      rto2->_remove_ref();
+      rto1->_remove_ref();
     }
 		
     void test_resolve()
@@ -580,6 +715,7 @@ namespace CorbaNaming
 	{
 	  CPPUNIT_FAIL("Unexpected exception catched.");
 	}
+      rto->_remove_ref();
     }
 		
     /*!
@@ -607,6 +743,7 @@ namespace CorbaNaming
       CORBA::Object_ptr obj = resolveRecursive("id-lv0.kind-lv0/id.kind");
       CPPUNIT_ASSERT(! CORBA::is_nil(obj));
 
+      rto->_remove_ref();
     }
 		
     void test_destroy()

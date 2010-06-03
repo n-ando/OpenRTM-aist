@@ -85,7 +85,9 @@ namespace NVUtil
     CPPUNIT_TEST(test_toProperties);
     CPPUNIT_TEST(test_copyToProperties);
     CPPUNIT_TEST(test_find);
+    CPPUNIT_TEST(test_find_index);
     CPPUNIT_TEST(test_isString);
+    CPPUNIT_TEST(test_isStringValue);
     CPPUNIT_TEST(test_toString);
     CPPUNIT_TEST(test_appendStringValue);
     CPPUNIT_TEST(test_append);
@@ -409,6 +411,38 @@ namespace NVUtil
     }
     
     /*!
+     * @brief find_index()のテスト
+     * 
+     * - 指定した名称でNVList内の要素番号を正しく検索できるか？
+     */
+    void test_find_index()
+    {
+      SDOPackage::NVList nvlist;
+      nvlist.length(2);
+      
+      // (1) NVList要素のnameに"short",valueにshort型のデータをセット。
+      string name1 = "short";
+      CORBA::Short value1 = 1;
+      nvlist[0].name = name1.c_str();
+      nvlist[0].value <<= value1;
+      
+      // (2) NVList要素のnameに"long",valueにlong型のデータをセット。
+      string name2 = "long";
+      CORBA::Long value2 = 111;
+      nvlist[1].name = name2.c_str();
+      nvlist[1].value <<= value2;
+
+      // (3) nvlistの中からNameValue.nameが"long"のNameValue.valueを検索して、要素番号を取得できることを確認する。
+      CORBA::Long ret;
+      ret = find_index(nvlist, name1.c_str());
+      CPPUNIT_ASSERT_EQUAL((CORBA::Long)0, ret);
+      
+      // (4) nvlistの中からNameValue.nameが"short"のNameValue.valueを検索して、要素番号を取得できることを確認する。
+      ret = find_index(nvlist, name2.c_str());
+      CPPUNIT_ASSERT_EQUAL((CORBA::Long)1, ret);
+    }
+    
+    /*!
      * @brief isString()のテスト
      * 
      *  - NVList内の指定した名称を持つ値がstring型かどうかを正しく判定できるか？
@@ -433,6 +467,33 @@ namespace NVUtil
       // (3) isString(nvlist,name)にて,指定されたnameのvalueの型がstringかどうかを判定。
       CPPUNIT_ASSERT(!isString(nvlist, name1.c_str()));
       CPPUNIT_ASSERT(isString(nvlist, name2.c_str()));
+    }
+
+    /*!
+     * @brief isStringValue()のテスト
+     * 
+     *  - NVList内の指定した名称を持つ値がstring型かどうかを正しく判定できるか？
+     */
+    void test_isStringValue()
+    {
+      SDOPackage::NVList nvlist;
+      nvlist.length(2);
+      
+      // (1) NVList要素のnameに"short",valueにshort型のデータをセット。
+      string name1 = "short";
+      CORBA::Short value1 = 1;
+      nvlist[0].name = name1.c_str();
+      nvlist[0].value <<= value1;
+      
+      // (2) NVList要素のnameに"string",valueにstring型のデータをセット。
+      string name2 = "string";
+      string value2 = "test";
+      nvlist[1].name = name2.c_str();
+      nvlist[1].value <<= value2.c_str();
+      
+      // (3) isString(nvlist,name)にて,指定されたnameのvalueの型がstringかどうかを判定。
+      CPPUNIT_ASSERT(!isStringValue(nvlist, name1.c_str(), "1"));
+      CPPUNIT_ASSERT(isStringValue(nvlist, name2.c_str(), "test"));
     }
 
     /*!
@@ -577,17 +638,13 @@ namespace NVUtil
       nvlistC[1].name = nameC2.c_str();
       nvlistC[1].value <<= valueC2.c_str();
 
-      string nameC3 = "harumi";
-      string valueC3 = "miyamoto";
+      string nameC3 = "name_hoge";
+      string valueC3 = "value_hoge";
       nvlistC[2].name = nameC3.c_str();
       nvlistC[2].value <<= valueC3.c_str();
      
 
       dump(nvlistC);
-      //      CPPUNIT_ASSERT("nameC1: valueC1\nnameC2: valueC2\nharumi: miyamoto" == dump(nvlistC));
-      //CPPUNIT_ASSERT_EQUAL(strC,dump(nvlistC));
-
-      //CPPUNIT_ASSERT_EQUAL(strC, toString(strC2,dump(nvlistC)));
     }	
 
     // std::string toString(const SDOPackage::NVList& nv);のテストです。

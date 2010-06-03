@@ -27,13 +27,6 @@
 #include <rtm/Manager.h>
 #include <rtm/PeriodicExecutionContext.h>
 
-// for Windows DLL export 
-#if defined(WIN32) || defined(_WIN32) || defined(__WIN32__) || defined(__NT__)
-#   define DLL_EXPORT __declspec(dllexport)
-#else 
-#	define DLL_EXPORT 
-#endif /* Windows */
-
 #ifdef WIN32
 #pragma warning( disable : 4290 )
 #endif
@@ -45,10 +38,15 @@ namespace RTC
    * @class OpenHRPExecutionContext
    * @brief OpenHRPExecutionContext クラス
    *
+   * OpenHRP3のための実行コンテキスト。外部からの tick() 呼び出しにより、1周期
+   * 分だけ処理を進めることができる。
    *
    * @else
    * @class OpenHRPExecutionContext
    * @brief OpenHRPExecutionContext class
+   *
+   * This is ExecutionContext for OpenHRP3.  This EC can execute only
+   * one cycle by tick() call from external framework.
    *
    *
    * @endif
@@ -65,6 +63,7 @@ namespace RTC
      * @endif
      */
     OpenHRPExecutionContext();
+
     /*!
      * @if jp
      * @brief デストラクタ
@@ -73,6 +72,7 @@ namespace RTC
      * @endif
      */
     virtual ~OpenHRPExecutionContext(void);
+
     /*!
      * @if jp
      * @brief ExecutionContextの処理を進める
@@ -88,6 +88,7 @@ namespace RTC
      */
     virtual void tick(void)
       throw (CORBA::SystemException);
+
     /*!
      * @if jp
      * @brief ExecutionContext のスレッド実行フラグ
@@ -108,6 +109,13 @@ namespace RTC
 
 extern "C"
 {
+  /*!
+   * @if jp
+   * @brief ECFactoryへの登録のための初期化関数
+   * @else
+   * @brief Initialization function to register to ECFactory
+   * @endif
+   */
   DLL_EXPORT void OpenHRPExecutionContextInit(RTC::Manager* manager);
 };
 

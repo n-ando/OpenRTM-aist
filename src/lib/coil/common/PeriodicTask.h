@@ -1,7 +1,7 @@
 // -*- C++ -*-
 /*!
- * @file Factory.h
- * @brief generic Factory template class
+ * @file PeriodicTask.h
+ * @brief PeriodicTask class
  * @date $Date$
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
@@ -36,7 +36,8 @@ namespace coil
 {
   /*!
    * @if jp
-   * @class 周期タスクスレッド実行クラス
+   * @class PeriodicTask
+   * @brief 周期タスクスレッド実行クラス
    *
    * 特定の関数を周期実行するためのスレッドオブジェクトを実現する。
    * 使用手順は以下の通り。
@@ -52,7 +53,8 @@ namespace coil
    * task.finalize(); // タスクを終了させる
    * 
    * @else
-   * @brief
+   * @class PeriodicTask
+   * @brief PeriodicTask class
    *
    * @endif
    */
@@ -64,18 +66,34 @@ namespace coil
 
     /*!
      * @if jp
-     * @brief ctor
+     *
+     * @brief コンストラクタ
+     *
+     * コンストラクタ
+     *
      * @else
-     * @brief ctor
+     *
+     * @brief Constructor
+     *
+     * Constructor
+     *
      * @endif
      */
     PeriodicTask();
     
     /*!
      * @if jp
-     * @brief dtor
+     *
+     * @brief デストラクタ
+     *
+     * デストラクタ。
+     *
      * @else
-     * @brief dtor
+     *
+     * @brief Destructor
+     *
+     * Destructor
+     *
      * @endif
      */
     virtual ~PeriodicTask();
@@ -179,6 +197,23 @@ namespace coil
      */
     virtual bool setTask(TaskFuncBase* func, bool delete_in_dtor = true);
 
+    /*!
+     * @if jp
+     * @brief タスク実行関数をセットする
+     *
+     * @param func int (*)() 型の関数ポインタ
+     *
+     * @return true: 成功, false: 失敗
+     *
+     * @else
+     * @brief Setting task execution function
+     *
+     * @param func Set int (*)() type function pointer
+     *
+     * @return true: successful, false: failed
+     *
+     * @endif
+     */
     template <class O, class F>
     bool setTask(O* obj, F fun)
     {
@@ -219,7 +254,7 @@ namespace coil
      * @if jp
      * @brief タスク関数実行時間計測を有効にするか
      * @else
-     * @brief 
+     * @brief Validate a Task execute time measurement
      * @endif
      */
     virtual void executionMeasure(bool value);
@@ -228,7 +263,7 @@ namespace coil
      * @if jp
      * @brief タスク関数実行時間計測周期
      * @else
-     * @brief 
+     * @brief Task execute time measurement period
      * @endif
      */
     virtual void executionMeasureCount(int n);
@@ -237,7 +272,7 @@ namespace coil
      * @if jp
      * @brief タスク周期時間計測を有効にするか
      * @else
-     * @brief 
+     * @brief Validate a Task period time measurement
      * @endif
      */
     virtual void periodicMeasure(bool value);
@@ -246,7 +281,7 @@ namespace coil
      * @if jp
      * @brief タスク周期時間計測周期
      * @else
-     * @brief 
+     * @brief Task period time measurement count
      * @endif
      */
     virtual void periodicMeasureCount(int n);
@@ -255,7 +290,7 @@ namespace coil
      * @if jp
      * @brief タスク関数実行時間計測結果を取得
      * @else
-     * @brief 
+     * @brief Get a result in task execute time measurement
      * @endif
      */
     virtual TimeMeasure::Statistics getExecStat();
@@ -264,25 +299,94 @@ namespace coil
      * @if jp
      * @brief タスク周期時間計測結果を取得
      * @else
-     * @brief 
+     * @brief Get a result in task period time measurement
      * @endif
      */
     virtual TimeMeasure::Statistics getPeriodStat();
     
   protected:
+    /*!
+     * @if jp
+     * @brief PeriodicTask 用のスレッド実行
+     * @else
+     * @brief Thread execution for PeriodicTask
+     * @endif
+     */
     virtual int svc();
+
+    /*!
+     * @if jp
+     * @brief スレッド休止
+     * @else
+     * @brief Thread sleep
+     * @endif
+     */
     virtual void sleep();
+
+    /*!
+     * @if jp
+     * @brief 実行状態更新
+     * @else
+     * @brief Update for execute state
+     * @endif
+     */
     virtual void updateExecStat();
+
+    /*!
+     * @if jp
+     * @brief 周期状態更新
+     * @else
+     * @brief Update for period state
+     * @endif
+     */
     virtual void updatePeriodStat();
 
   protected:
-    // execution period
+    /*!
+     * @if jp
+     * @brief タスク実行周期
+     * @else
+     * @brief Task execution period
+     * @endif
+     */
     coil::TimeValue m_period;
+
+    /*!
+     * @if jp
+     * @brief スレッド休止フラグ
+     * @else
+     * @brief Thread sleep flag
+     * @endif
+     */
     bool m_nowait;
+
+    /*!
+     * @if jp
+     * @brief タスク実行関数
+     * @else
+     * @brief Task execution function
+     * @endif
+     */
     TaskFuncBase* m_func;
+
+    /*!
+     * @if jp
+     * @brief タスク実行関数削除フラグ
+     * @else
+     * @brief Task execution function delete flag
+     * @endif
+     */
     bool m_deleteInDtor;
 
-    // alive flag
+    /*!
+     * @if jp
+     * @class alive_t
+     * @brief alive_t クラス
+     * @else
+     * @class alive_t
+     * @brief alive_t class
+     * @endif
+     */
     class alive_t
     {
     public:
@@ -290,9 +394,23 @@ namespace coil
       bool value;
       coil::Mutex mutex;
     };
+
+    /*!
+     * @if jp
+     * @brief タスク生存フラグ
+     * @else
+     * @brief Task alive flag
+     * @endif
+     */
     alive_t m_alive;
 
-    // suspend flag
+    /*!
+     * @if jp
+     * @brief タスク中断管理用構造体
+     * @else
+     * @brief Structure for task suspend management
+     * @endif
+     */
     struct suspend_t
     {
       suspend_t(bool sus) : suspend(sus), mutex(), cond(mutex) {}
@@ -300,27 +418,117 @@ namespace coil
       coil::Mutex mutex;
       coil::Condition<coil::Mutex> cond;
     };
+
+    /*!
+     * @if jp
+     * @brief タスク中断情報
+     * @else
+     * @brief Task suspend infomation
+     * @endif
+     */
     suspend_t m_suspend;
       
-    // time measurement statistics struct
+    /*!
+     * @if jp
+     * @brief タスク実行時間計測管理用構造体
+     * @else
+     * @brief Structure for task execution time measurement management
+     * @endif
+     */
     struct statistics_t
     {
       coil::TimeMeasure::Statistics stat;
       coil::Mutex mutex;
     };
 
-    // variables for execution time measurement
+    /*!
+     * @if jp
+     * @brief タスク実行時間計測フラグ
+     * @else
+     * @brief Task execution time measurement flag
+     * @endif
+     */
     bool              m_execMeasure;
+
+    /*!
+     * @if jp
+     * @brief タスク実行時間計測回数
+     * @else
+     * @brief Task execution time measurement count
+     * @endif
+     */
     unsigned int      m_execCount;
+
+    /*!
+     * @if jp
+     * @brief タスク実行時間計測周期
+     * @else
+     * @brief Task execution time measurement max count
+     * @endif
+     */
     unsigned int      m_execCountMax;
+
+    /*!
+     * @if jp
+     * @brief タスク実行時間計測統計
+     * @else
+     * @brief Task execution time measurement statistics
+     * @endif
+     */
     statistics_t      m_execStat;
+
+    /*!
+     * @if jp
+     * @brief タスク実行時間計測情報
+     * @else
+     * @brief Task execution time  measurement infomation
+     * @endif
+     */
     coil::TimeMeasure m_execTime;
 
-    // variables for period time measurement
+    /*!
+     * @if jp
+     * @brief タスク周期時間計測フラグ
+     * @else
+     * @brief Task periodic time measurement flag
+     * @endif
+     */
     bool              m_periodMeasure;
+
+    /*!
+     * @if jp
+     * @brief タスク周期時間計測回数
+     * @else
+     * @brief Task periodic time measurement count
+     * @endif
+     */
     unsigned int      m_periodCount;
+
+    /*!
+     * @if jp
+     * @brief タスク周期時間計測最大数
+     * @else
+     * @brief Task periodic time measurement max count
+     * @endif
+     */
     unsigned int      m_periodCountMax;
+
+    /*!
+     * @if jp
+     * @brief タスク周期時間計測統計
+     * @else
+     * @brief Task periodic time measurement statistics
+     * @endif
+     */
     statistics_t      m_periodStat;
+
+    /*!
+     * @if jp
+     * @brief タスク周期時間計測情報
+     * @else
+     * @brief Task periodic time  measurement infomation
+     * @endif
+     */
     coil::TimeMeasure m_periodTime;
 
   };

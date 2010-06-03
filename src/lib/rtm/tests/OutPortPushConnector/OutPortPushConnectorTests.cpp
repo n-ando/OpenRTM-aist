@@ -644,7 +644,7 @@ namespace OutPortPushConnector
     }
 		
     /*!
-     * @brief Constructor
+     * @brief Constructor メソッドテスト
      * 
      */
     void test_OutPortPushConnector()
@@ -770,7 +770,7 @@ namespace OutPortPushConnector
         delete consumer;
     }
     /*!
-     * @brief write
+     * @brief write メソッドテスト
      * 
      */
     void test_write()
@@ -828,7 +828,7 @@ namespace OutPortPushConnector
         delete consumer;
     }
     /*!
-     * @brief disconnect
+     * @brief disconnect メソッドテスト
      * 
      */
     void test_disconnect_getBuffer()
@@ -876,7 +876,7 @@ namespace OutPortPushConnector
         delete consumer;
     }
     /*!
-     * @brief activate
+     * @brief activate メソッドテスト
      * 
      */
     void test_activate_deactivate()

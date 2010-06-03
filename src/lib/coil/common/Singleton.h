@@ -27,7 +27,9 @@ namespace coil
 {
   /*!
    * @if jp
-   * @class Singleton クラステンプレート
+   *
+   * @class Singleton
+   * @brief Singleton テンプレートクラス
    *
    * このテンプレートは、任意のクラスを Singleton にするテンプレートである。
    * 以下のようにして使用する。
@@ -63,7 +65,9 @@ namespace coil
    * A& a(A::instance()); // が唯一のインスタンスを得る唯一の方法
    *
    * @else
-   * @class Singleton class template
+   *
+   * @class Singleton
+   * @brief Singleton template class
    *
    * This class template makes any classed into Singleton classes.
    * Usage is as follows.
@@ -104,6 +108,26 @@ namespace coil
   public:
     typedef SingletonClass* SingletonClassPtr;
     typedef ::coil::Mutex Mutex;
+
+    /*!
+     * @if jp
+     *
+     * @brief インスタンス生成
+     *
+     * インスタンスを生成する。
+     *
+     * @return インスタンス
+     *
+     * @else
+     *
+     * @brief Create instance
+     *
+     * Create instance.
+     *
+     * @return Instances
+     *
+     * @endif
+     */
     static SingletonClass& instance()
     {
 
@@ -120,7 +144,38 @@ namespace coil
     }
 
   protected:
+    /*!
+     * @if jp
+     *
+     * @brief コンストラクタ
+     *
+     * コンストラクタ
+     *
+     * @else
+     *
+     * @brief Constructor
+     *
+     * Constructor
+     *
+     * @endif
+     */
     Singleton(){};
+
+    /*!
+     * @if jp
+     *
+     * @brief デストラクタ
+     *
+     * デストラクタ。
+     *
+     * @else
+     *
+     * @brief Destructor
+     *
+     * Destructor
+     *
+     * @endif
+     */
     ~Singleton(){};
 
   private:
@@ -128,7 +183,22 @@ namespace coil
     Singleton& operator=(const Singleton& x);
 
   protected:
+    /*!
+     * @if jp
+     * @brief 排他制御オブジェクト
+     * @else
+     * @brief Mutual exclusion object
+     * @endif
+     */
     static coil::Mutex m_mutex;
+
+    /*!
+     * @if jp
+     * @brief SingletonClass オブジェクト
+     * @else
+     * @brief SingletonClass object
+     * @endif
+     */
     static SingletonClass* m_instance;
   };
 

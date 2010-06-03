@@ -1,7 +1,7 @@
 // -*- C++ -*-
 /*!
- * @file TimeMeasure.cpp
- * @brief Periodic time measurement class
+ * @file Logger.h
+ * @brief log_streambuf and log_stream class
  * @date $Date$
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
@@ -37,6 +37,19 @@
 
 namespace coil
 {
+  /*!
+   * @if jp
+   *
+   * @class log_streambuf
+   * @brief log_streambuf テンプレートクラス
+   *
+   * @else
+   *
+   * @class log_streambuf
+   * @brief log_streambuf template class
+   *
+   * @endif
+   */
   template <typename _CharT, typename _Traits=std::char_traits<_CharT> >
   class log_streambuf
     : public ::std::basic_streambuf<_CharT, _Traits>
@@ -161,7 +174,25 @@ namespace coil
       return false;
     }
 
-
+    /*!
+     * @if jp
+     *
+     * @brief ストリームバッファ取得
+     *
+     * ストリームバッファを返す。
+     *
+     * @return streambuf_type リスト
+     *
+     * @else
+     *
+     * @brief Get stream buffer list
+     *
+     * Return a stream buffer list.
+     *
+     * @return streambuf_type list
+     *
+     * @endif
+     */
     std::vector<streambuf_type*> getBuffers()
     {
       std::vector<streambuf_type*> buffs;
@@ -287,6 +318,7 @@ namespace coil
      *
      * @endif
      */
+
     virtual int overflow (int c = traits_type::eof())
     {
       Guard guard(m_mutex);
@@ -386,6 +418,18 @@ namespace coil
     }
 
   public:
+
+    /*!
+     * @if jp
+     *
+     * @brief ストリーム管理用構造体
+     *
+     * @else
+     *
+     * @brief Structure for stream management
+     *
+     * @endif
+     */
     struct Stream
     {
       Stream(streambuf_type* stream, bool cleanup = false)
@@ -426,7 +470,51 @@ namespace coil
     };
 
   private:
+
+    /*!
+     * @if jp
+     *
+     * @brief コピーコンストラクタ
+     *
+     * コピーコンストラクタ
+     *
+     * @param x log_streambuf オブジェクト
+     *
+     * @else
+     *
+     * @brief Copy Constructor
+     *
+     * Copy Constructor
+     *
+     * @param x log_streambuf object
+     *
+     * @endif
+     */
     log_streambuf(const log_streambuf& x);
+
+    /*!
+     * @if jp
+     *
+     * @brief 代入演算子
+     *
+     * log_streambufオブジェクトをコピーする。
+     *
+     * @param x log_streambuf オブジェクト
+     *
+     * @return 代入結果
+     *
+     * @else
+     *
+     * @brief Assignment operator
+     *
+     * Copy a log_streambuf object.
+     *
+     * @param x log_streambuf object.
+     *
+     * @return Assignment result.
+     *
+     * @endif
+     */
     log_streambuf& operator=(const log_streambuf& x);
 
     std::vector<Stream> m_streams;
@@ -437,10 +525,14 @@ namespace coil
 
   /*!
    * @if jp
-   * @class log_stream クラス
+   *
+   * @class log_stream
+   * @brief log_stream テンプレートクラス
    *
    * @else
-   * @class log_stream class
+   *
+   * @class log_stream
+   * @brief log_stream template class
    *
    * @endif
    */
@@ -547,7 +639,7 @@ namespace coil
      *
      * @brief ログレベル取得
      *
-     * ログレベルを所得する。
+     * ログレベルを取得する。
      *
      * @return ログレベル
      *
@@ -650,11 +742,34 @@ namespace coil
 	}
     }
     
+    /*!
+     * @if jp
+     *
+     * @brief ログレベル有効チェック
+     *
+     * 指定されたログレベルが有効範囲かチェックし、有効・無効を返す。
+     *
+     * @param level ログレベル
+     *
+     * @return true: 有効, false: 無効
+     *
+     * @else
+     *
+     * @brief Log level effective check
+     *
+     * Check it whether an appointed log level is an effective range 
+     * and return effective or invalidity.
+     *
+     * @param level Log level
+     *
+     * @return true: Valid, false: Invalid
+     *
+     * @endif
+     */
     bool isValid(int level) const
     {
       return m_minLevel <= level && level <= m_logLevel;
     }
-
 
     /*!
      * @if jp
@@ -694,9 +809,85 @@ namespace coil
 
     
   protected:
+
+    /*!
+     * @if jp
+     *
+     * @brief デストラクタ
+     *
+     * デストラクタ。
+     *
+     * @else
+     *
+     * @brief Destructor
+     *
+     * Destructor
+     *
+     * @endif
+     */
     ~log_stream(){};
+
+    /*!
+     * @if jp
+     *
+     * @brief デフォルトコンストラクタ
+     *
+     * デフォルトコンストラクタ
+     *
+     * @else
+     *
+     * @brief Default constructor
+     *
+     * Default constructor
+     *
+     * @endif
+     */
     log_stream();
+
+    /*!
+     * @if jp
+     *
+     * @brief コピーコンストラクタ
+     *
+     * コピーコンストラクタ
+     *
+     * @param x log_stream オブジェクト
+     *
+     * @else
+     *
+     * @brief Copy Constructor
+     *
+     * Copy Constructor
+     *
+     * @param x log_stream object
+     *
+     * @endif
+     */
     log_stream(const log_stream& x);
+
+    /*!
+     * @if jp
+     *
+     * @brief 代入演算子
+     *
+     * log_streamオブジェクトをコピーする。
+     *
+     * @param x log_streamオブジェクト
+     *
+     * @return 代入結果
+     *
+     * @else
+     *
+     * @brief Assignment operator
+     *
+     * Copy a log_stream object.
+     *
+     * @param x log_stream object.
+     *
+     * @return Assignment result.
+     *
+     * @endif
+     */
     log_stream& operator=(const log_stream& x);
 
   private:
@@ -712,7 +903,23 @@ namespace coil
      */
     std::ofstream m_dummy;
   public:
+
+    /*!
+     * @if jp
+     * @brief ロック有効モード
+     * @else
+     * @brief Lock enable mode
+     * @endif
+     */
     static bool m_lockEnable;
+
+    /*!
+     * @if jp
+     * @brief 排他制御オブジェクト
+     * @else
+     * @brief Mutual exclusion object
+     * @endif
+     */
     static Mutex m_mutex;
   };
 

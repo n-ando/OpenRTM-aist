@@ -131,6 +131,29 @@ namespace RTC
   };
 }; // namespace RTC
 
+/*!
+ * @if jp
+ *
+ * @brief ::RTC::BufferStatus 導入
+ * 
+ * ::RTC::BufferStatus で宣言されている Enum のすべてのメンバをネーム
+ * スペースに導入するためのマクロ。BufferStatus を利用するクラスにお
+ * いて、クラス宣言の先頭において DATAPORTSTATUS_ENUM を記載するだけで、
+ * BufferStatus で宣言されている enum メンバが名前解決演算子なしにア
+ * クセス可能になる。
+ *
+ * @else
+ *
+ * @brief Importing ::RTC::BufferStatus macro
+ *
+ * This macro imports all the member of enum declared in
+ * ::RTC::BufferStatus into the current namespace.  Inserting at the
+ * head of class declaration, classes which utilize BufferStatus can
+ * access Enum members of BufferStatus without using namespace
+ * resolve operator.
+ *
+ * @endif
+ */
 #define BUFFERSTATUS_ENUM \
   typedef ::RTC::BufferStatus::Enum ReturnCode;       \
   using ::RTC::BufferStatus::BUFFER_OK;               \

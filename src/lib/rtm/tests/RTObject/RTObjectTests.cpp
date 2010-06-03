@@ -83,12 +83,10 @@ namespace RTObject
       ecs = RTC::ExecutionContextService::_narrow(exec_context);
       if (RTC::RTObject_impl::m_ecMine[id] == ecs)
       {
-//        std::cout << "chk_ecMine() return true" << std::endl;
         return true;
       }
       else
       {
-//        std::cout << "chk_ecMine() return false" << std::endl;
         return false;
       }
     }
@@ -99,7 +97,6 @@ namespace RTObject
     {
       int len(RTC::RTObject_impl::m_eclist.size());
       eclist = RTC::RTObject_impl::m_eclist;
-//      std::cout << "get_eclist() m_eclist.size()=" << len << std::endl;
       return len;
     }
 
@@ -459,7 +456,7 @@ namespace RTObject
      */
     void test_initialize_invoking_on_initialize()
     {
-      RTObjectMock* rto	= new RTObjectMock(m_pORB, m_pPOA); // will be deleted automatically
+      RTObjectMock* rto = new RTObjectMock(m_pORB, m_pPOA); // will be deleted automatically
 			
       // initialize()メソッド呼出により、on_initialize()コールバックが呼び出されるか？
       CPPUNIT_ASSERT_EQUAL(0, rto->countLog("on_initialize"));
@@ -480,7 +477,7 @@ namespace RTObject
      */
     void test_initialize_in_Alive()
     {
-      RTObjectMock* rto	= new RTObjectMock(m_pORB, m_pPOA); // will be deleted automatically
+      RTObjectMock* rto = new RTObjectMock(m_pORB, m_pPOA); // will be deleted automatically
 			
       // initialize()メソッド呼出しを行い、Alive状態に遷移させる
       coil::Properties prop;
@@ -506,7 +503,7 @@ namespace RTObject
      */
     void test_finalize_invoking_on_finalize()
     {
-      RTObjectMock* rto	= new RTObjectMock(m_pORB, m_pPOA); // will be deleted automatically
+      RTObjectMock* rto = new RTObjectMock(m_pORB, m_pPOA); // will be deleted automatically
 			
       // initialize()メソッド呼出しを行い、Alive状態に遷移させる
       coil::Properties prop;
@@ -520,11 +517,11 @@ namespace RTObject
 			
       // finalize()呼出しにより、on_finalize()コールバックが呼び出されるか？
       CPPUNIT_ASSERT_EQUAL(0, rto->countLog("on_finalize"));
-      CPPUNIT_ASSERT_EQUAL(RTC::RTC_OK, rto->finalize());
-      CPPUNIT_ASSERT_EQUAL(1, rto->countLog("on_finalize"));
 			
       CPPUNIT_ASSERT_EQUAL(true, rto->is_alive(ec));
+      // exit()呼び出しで、finalize()が有効となり実行される
       rto->exit();
+      CPPUNIT_ASSERT_EQUAL(1, rto->countLog("on_finalize"));
       delete rto;
     }
 		
@@ -535,12 +532,8 @@ namespace RTObject
      */
     void test_finalize_participating_in_execution_context()
     {
-      RTObjectMock* rto	= new RTObjectMock(m_pORB, m_pPOA); // will be deleted automatically
+      RTObjectMock* rto = new RTObjectMock(m_pORB, m_pPOA); // will be deleted automatically
 			
-      // ExecutionContextを生成する
-//      RTC::PeriodicExecutionContext* ec
-//	= new RTC::PeriodicExecutionContext(); // will be deleted automatically
-
       // initialize()メソッド呼出しを行い、Alive状態に遷移させる
       coil::Properties prop;
       prop.setProperty("exec_cxt.periodic.type","PeriodicExecutionContext");
@@ -570,18 +563,10 @@ namespace RTObject
      */
     void test_finalize_in_Created()
     {
-      RTObjectMock* rto	= new RTObjectMock(m_pORB, m_pPOA); // will be deleted automatically
+      RTObjectMock* rto = new RTObjectMock(m_pORB, m_pPOA); // will be deleted automatically
 			
       // Created状態でfinalize()を呼出した場合、意図どおりのエラーで返るか？
       CPPUNIT_ASSERT_EQUAL(RTC::PRECONDITION_NOT_MET, rto->finalize());
-      /*
-      coil::Properties prop;
-      prop.setProperty("exec_cxt.periodic.type","PeriodicExecutionContext");
-      prop.setProperty("exec_cxt.periodic.rate","1000");
-      rto->setProperties(prop);
-      rto->initialize();
-      rto->exit();
-      */
       rto->shutdown();
       delete rto;
     }
@@ -602,13 +587,9 @@ namespace RTObject
      */
     void test_exit()
     {
-      RTObjectMock* rto	= new RTObjectMock(m_pORB, m_pPOA); // will be deleted automatically
+      RTObjectMock* rto = new RTObjectMock(m_pORB, m_pPOA); // will be deleted automatically
       rto->setObjRef(rto->_this());
 			
-      // ExecutionContextを生成する
-//      RTC::PeriodicExecutionContext* ec
-//	= new RTC::PeriodicExecutionContext(); // will be deleted automatically
-
       // initialize()メソッド呼出しを行い、Alive状態に遷移させる
       coil::Properties prop;
       prop.setProperty("exec_cxt.periodic.type","PeriodicExecutionContext");
@@ -649,7 +630,7 @@ namespace RTObject
      */
     void test_exit_in_Created()
     {
-      RTObjectMock* rto	= new RTObjectMock(m_pORB, m_pPOA); // will be deleted automatically
+      RTObjectMock* rto = new RTObjectMock(m_pORB, m_pPOA); // will be deleted automatically
       rto->setObjRef(rto->_this());
 			
       // Create状態でexit()を呼出した場合、意図どおりのエラーを返すか？
@@ -666,7 +647,7 @@ namespace RTObject
      */
     void test_detach_executioncontext()
     {
-      RTObjectMock* rto	= new RTObjectMock(m_pORB, m_pPOA); // will be deleted automatically
+      RTObjectMock* rto = new RTObjectMock(m_pORB, m_pPOA); // will be deleted automatically
 			
       // ExecutionContextを生成する
       RTC::PeriodicExecutionContext* ec
@@ -691,7 +672,7 @@ namespace RTObject
      */
     void test_detach_executioncontext_with_illegal_id()
     {
-      RTObjectMock* rto	= new RTObjectMock(m_pORB, m_pPOA); // will be deleted automatically
+      RTObjectMock* rto = new RTObjectMock(m_pORB, m_pPOA); // will be deleted automatically
 			
       // 存在しないIDでRTCのdetachを試みた場合、意図どおりのエラーを返すか？
       CPPUNIT_ASSERT_EQUAL(RTC::BAD_PARAMETER,
@@ -707,7 +688,7 @@ namespace RTObject
      */
     void test_get_context()
     {
-      RTObjectMock* rto	= new RTObjectMock(m_pORB, m_pPOA); // will be deleted automatically
+      RTObjectMock* rto = new RTObjectMock(m_pORB, m_pPOA); // will be deleted automatically
 			
       // ExecutionContextを生成する
       RTC::PeriodicExecutionContext* ec1
@@ -747,7 +728,7 @@ namespace RTObject
      */
     void test_get_contexts()
     {
-      RTObjectMock* rto	= new RTObjectMock(m_pORB, m_pPOA); // will be deleted automatically
+      RTObjectMock* rto = new RTObjectMock(m_pORB, m_pPOA); // will be deleted automatically
 			
       // ExecutionContextを生成する
       RTC::PeriodicExecutionContext* ec1
@@ -762,7 +743,6 @@ namespace RTObject
       CPPUNIT_ASSERT(RTC::UniqueId(-1) != id2);
 			
       // attachされているExecutionContextをすべて正しく取得できるか？
-//      RTC::ExecutionContextList* ecList = rto->get_owned_contexts();
       RTC::ExecutionContextList* ecList = rto->get_participating_contexts();
       CPPUNIT_ASSERT(ecList != NULL);
       CPPUNIT_ASSERT_EQUAL(CORBA::ULong(2), ecList->length());
@@ -792,7 +772,7 @@ namespace RTObject
      */
     void test_get_component_profile()
     {
-      RTObjectMock* rto	= new RTObjectMock(m_pORB, m_pPOA); // will be deleted automatically
+      RTObjectMock* rto = new RTObjectMock(m_pORB, m_pPOA); // will be deleted automatically
 			
       // ComponentProfileとして取得されるべき情報をあらかじめ設定しておく
       coil::Properties prop;
@@ -834,7 +814,7 @@ namespace RTObject
      */
     void test_add_removePort()
     {
-      RTObjectMock* rto	= new RTObjectMock(m_pORB, m_pPOA); // will be deleted automatically
+      RTObjectMock* rto = new RTObjectMock(m_pORB, m_pPOA); // will be deleted automatically
 
       PortMock* port0 = new PortMock();
       port0->setName("port0");
@@ -901,7 +881,7 @@ namespace RTObject
      */
     void test_readAll()
     {
-      RTObjectMock* rto	= new RTObjectMock(m_pORB, m_pPOA); // will be deleted automatically
+      RTObjectMock* rto = new RTObjectMock(m_pORB, m_pPOA); // will be deleted automatically
 
       InPortMock*  inport0  = new InPortMock("in","TimedLong");
       InPortMock*  inport1  = new InPortMock("in2","TimedLong");
@@ -976,7 +956,7 @@ namespace RTObject
      */
     void test_writeAll()
     {
-      RTObjectMock* rto	= new RTObjectMock(m_pORB, m_pPOA); // will be deleted automatically
+      RTObjectMock* rto = new RTObjectMock(m_pORB, m_pPOA); // will be deleted automatically
 
       OutPortMock*  outport0  = new OutPortMock("out","TimedLong");
       OutPortMock*  outport1  = new OutPortMock("out2","TimedLong");
@@ -1049,7 +1029,7 @@ namespace RTObject
      */
     void test_get_ports()
     {
-      RTObjectMock* rto	= new RTObjectMock(m_pORB, m_pPOA); // will be deleted automatically
+      RTObjectMock* rto = new RTObjectMock(m_pORB, m_pPOA); // will be deleted automatically
 
       // Portを登録しておく
       PortMock* port0 = new PortMock();
@@ -1088,7 +1068,7 @@ namespace RTObject
 /*
     void test_get_execution_context_services()
     {
-      RTObjectMock* rto	= new RTObjectMock(m_pORB, m_pPOA); // will be deleted automatically
+      RTObjectMock* rto = new RTObjectMock(m_pORB, m_pPOA); // will be deleted automatically
 
       // ExecutionContextを生成する
       RTC::PeriodicExecutionContext* ec1
@@ -1127,10 +1107,14 @@ namespace RTObject
      */
     void test_get_sdo_id()
     {
-      RTObjectMock* rto1	= new RTObjectMock(m_pORB, m_pPOA); // will be deleted automatically
+      RTObjectMock* rto1 = new RTObjectMock(m_pORB, m_pPOA); // will be deleted automatically
       rto1->setInstanceName("INSTANCE_NAME 1");
-      RTObjectMock* rto2	= new RTObjectMock(m_pORB, m_pPOA); // will be deleted automatically
+      std::string str1(rto1->getInstanceName());
+      CPPUNIT_ASSERT("INSTANCE_NAME 1" == str1);
+      RTObjectMock* rto2 = new RTObjectMock(m_pORB, m_pPOA); // will be deleted automatically
       rto2->setInstanceName("INSTANCE_NAME 2");
+      std::string str2(rto2->getInstanceName());
+      CPPUNIT_ASSERT("INSTANCE_NAME 2" == str2);
 
       // SDO IDを取得できるか？
       char* id1 = rto1->get_sdo_id();
@@ -1157,7 +1141,7 @@ namespace RTObject
      */
     void test_get_sdo_type()
     {
-      RTObjectMock* rto	= new RTObjectMock(m_pORB, m_pPOA); // will be deleted automatically
+      RTObjectMock* rto = new RTObjectMock(m_pORB, m_pPOA); // will be deleted automatically
 				
       // ※ 実装上、type_nameがSDOタイプとして使用されているため、ここで準備設定している
       coil::Properties prop;
@@ -1200,7 +1184,7 @@ namespace RTObject
      */
     void test_get_service_profile_with_illegal_arguments()
     {
-      RTObjectMock* rto	= new RTObjectMock(m_pORB, m_pPOA); // will be deleted automatically
+      RTObjectMock* rto = new RTObjectMock(m_pORB, m_pPOA); // will be deleted automatically
 			
       // 引数にNULLを指定した場合、意図どおりの例外がスローされるか？
       try
@@ -1249,7 +1233,7 @@ namespace RTObject
 		
     void test_get_sdo_service_with_illegal_arguments()
     {
-      RTObjectMock* rto	= new RTObjectMock(m_pORB, m_pPOA); // will be deleted automatically
+      RTObjectMock* rto = new RTObjectMock(m_pORB, m_pPOA); // will be deleted automatically
 			
       // 引数にNULLを指定した場合、意図どおりの例外がスローされるか？
       try
@@ -1295,7 +1279,7 @@ namespace RTObject
      */
     void test_get_configuration_and_set_device_profile_and_get_device_profile()
     {
-      RTObjectMock* rto	= new RTObjectMock(m_pORB, m_pPOA); // will be deleted automatically
+      RTObjectMock* rto = new RTObjectMock(m_pORB, m_pPOA); // will be deleted automatically
 			
       // DeviceProfileを準備しておく
       SDOPackage::DeviceProfile devProf;
@@ -1340,7 +1324,7 @@ namespace RTObject
      */
     void test_get_configuration_and_set_service_profile_and_get_service_profile()
     {
-      RTObjectMock* rto	= new RTObjectMock(m_pORB, m_pPOA); // will be deleted automatically
+      RTObjectMock* rto = new RTObjectMock(m_pORB, m_pPOA); // will be deleted automatically
 
       // SDOServiceを準備する
       SDOServiceMock* sdoSvc1 = new SDOServiceMock();
@@ -1403,12 +1387,6 @@ namespace RTObject
 
       rto->shutdown();
       delete rto;
-      /**
-      delete sdoSvc2;
-      delete sdoSvc1;
-      rto->exit();
-      delete rto;
-      */
     }
 		
     /*!
@@ -1418,7 +1396,7 @@ namespace RTObject
      */
     void test_get_configuration_and_set_service_profile_and_get_service_profiles()
     {
-      RTObjectMock* rto	= new RTObjectMock(m_pORB, m_pPOA); // will be deleted automatically
+      RTObjectMock* rto = new RTObjectMock(m_pORB, m_pPOA); // will be deleted automatically
 
       // SDOServiceを準備する
       SDOServiceMock* sdoSvc1 = new SDOServiceMock();
@@ -1490,12 +1468,6 @@ namespace RTObject
 
       rto->shutdown();
       delete rto;
-      /**
-      delete sdoSvc2;
-      delete sdoSvc1;
-      rto->exit();
-      delete rto;
-      */
     }
 		
     /*!
@@ -1506,7 +1478,7 @@ namespace RTObject
      */
     void test_get_configuration_and_set_service_profile_and_get_sdo_service()
     {
-      RTObjectMock* rto	= new RTObjectMock(m_pORB, m_pPOA); // will be deleted automatically
+      RTObjectMock* rto = new RTObjectMock(m_pORB, m_pPOA); // will be deleted automatically
 
       // SDOServiceを準備する
       SDOServiceMock* sdoSvc1 = new SDOServiceMock();
@@ -1561,7 +1533,7 @@ namespace RTObject
      */
     void test_get_configuration_and_remove_service_profile()
     {
-      RTObjectMock* rto	= new RTObjectMock(m_pORB, m_pPOA); // will be deleted automatically
+      RTObjectMock* rto = new RTObjectMock(m_pORB, m_pPOA); // will be deleted automatically
 
       // SDOServiceを準備する
       SDOServiceMock* sdoSvc1 = new SDOServiceMock();
@@ -1619,7 +1591,7 @@ namespace RTObject
      */
     void test_get_configuration_and_add_organization_and_get_organizations()
     {
-      RTObjectMock* rto	= new RTObjectMock(m_pORB, m_pPOA); // will be deleted automatically
+      RTObjectMock* rto = new RTObjectMock(m_pORB, m_pPOA); // will be deleted automatically
 			
       // Organizationを準備する
       OrganizationMock* org1 = new OrganizationMock("ORG 1");
@@ -1662,7 +1634,7 @@ namespace RTObject
      */
     void test_get_configuration_and_remove_organization()
     {
-      RTObjectMock* rto	= new RTObjectMock(m_pORB, m_pPOA); // will be deleted automatically
+      RTObjectMock* rto = new RTObjectMock(m_pORB, m_pPOA); // will be deleted automatically
 			
       // Organizationを準備する
       OrganizationMock* org1 = new OrganizationMock("ORG 1");
@@ -1692,7 +1664,6 @@ namespace RTObject
 
       rto->shutdown();
       delete rto;
-//      std::cout<<"OUT test_get_configuration_and_remove_organization()"<<std::endl;
     }
 		
     /*!
@@ -1710,8 +1681,7 @@ namespace RTObject
      */
     void test_get_status()
     {
-//      std::cout<<"IN  test_get_status()"<<std::endl;
-      RTObjectMock* rto	= new RTObjectMock(m_pORB, m_pPOA); // will be deleted automatically
+      RTObjectMock* rto = new RTObjectMock(m_pORB, m_pPOA); // will be deleted automatically
 			
       // Mockの機能を用いてstatusを設定しておく
       CORBA::Any valueAny1; valueAny1 <<= CORBA::Float(3.14159);
@@ -1747,7 +1717,7 @@ namespace RTObject
      */
     void test_get_status_list()
     {
-      RTObjectMock* rto	= new RTObjectMock(m_pORB, m_pPOA); // will be deleted automatically
+      RTObjectMock* rto = new RTObjectMock(m_pORB, m_pPOA); // will be deleted automatically
 			
       // Mockの機能を用いてstatusを設定しておく
       CORBA::Any valueAny1; valueAny1 <<= CORBA::Float(3.14159);
@@ -1784,7 +1754,7 @@ namespace RTObject
      */
     void test_finalizeContexts()
     {
-      RTObjectMock* rto	= new RTObjectMock(m_pORB, m_pPOA);
+      RTObjectMock* rto = new RTObjectMock(m_pORB, m_pPOA);
       coil::Properties prop;
       prop.setProperty("exec_cxt.periodic.type","PeriodicExecutionContext");
       prop.setProperty("exec_cxt.periodic.rate","1000");
@@ -1815,7 +1785,7 @@ namespace RTObject
      */
     void test_bindContext()
     {
-      RTObjectMock* rto	= new RTObjectMock(m_pORB, m_pPOA);
+      RTObjectMock* rto = new RTObjectMock(m_pORB, m_pPOA);
       coil::Properties prop;
       prop.setProperty("exec_cxt.periodic.type","PeriodicExecutionContext");
       prop.setProperty("exec_cxt.periodic.rate","1000");

@@ -154,6 +154,7 @@ namespace PortAdmin
     CPPUNIT_TEST(test_getPortRef);
     CPPUNIT_TEST(test_getPort);
     CPPUNIT_TEST(test_addPort);
+    CPPUNIT_TEST(test_registerPort);
     CPPUNIT_TEST(test_removePort);
     CPPUNIT_TEST(test_deletePortByName);
     CPPUNIT_TEST(test_finalizePorts);
@@ -309,10 +310,46 @@ namespace PortAdmin
       CPPUNIT_ASSERT_EQUAL(false, portAdmin.addPort(*port0));
 
       PortMock* port1 = new PortMock();
-      port0->setName("port1");
+      port1->setName("port1");
       // test for addPort(PortService_ptr)
       CPPUNIT_ASSERT_EQUAL(true, portAdmin.addPort(port1->getPortRef()));
       CPPUNIT_ASSERT_EQUAL(false, portAdmin.addPort(port1->getPortRef()));
+      delete port1;
+      delete port0;
+    }
+
+    /*!
+     * @brief registerPort(),deletePort()メソッドのテスト
+     */
+    void test_registerPort()
+    {
+      RTC::PortAdmin portAdmin(m_orb, m_poa);
+			
+      // Portを登録しておく
+      PortMock* port0 = new PortMock();
+      port0->setName("port0");
+      // test for registerPort(PortBase&)
+      portAdmin.registerPort(*port0);
+
+      PortMock* port1 = new PortMock();
+      port1->setName("port1");
+      // test for registerPort(PortService_ptr)
+      portAdmin.registerPort(port1->getPortRef());
+
+      // 登録されているうち、１つのPortを削除する
+      portAdmin.deletePort(*port0);
+
+      // getPortList()にて、登録されている全Portを取得する
+      RTC::PortServiceList* portList = portAdmin.getPortServiceList();
+			
+      // 削除したPortが、取得したPortList内に含まれていないことを確認する
+      CPPUNIT_ASSERT_EQUAL(CORBA::ULong(1), portList->length());
+      RTC::PortProfile* portProf1 = (*portList)[0]->get_port_profile();
+      CPPUNIT_ASSERT_EQUAL(std::string("port1"), std::string(portProf1->name));
+			
+      // 削除したPortのProfileのリファレンスがnilになっているか？
+      const RTC::PortProfile& portProf0 = port0->getProfile();
+      CPPUNIT_ASSERT(CORBA::is_nil(portProf0.port_ref));
       delete port1;
       delete port0;
     }

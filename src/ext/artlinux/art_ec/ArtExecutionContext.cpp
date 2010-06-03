@@ -40,7 +40,8 @@ namespace RTC
 
   int ArtExecutionContext::svc(void)
   {
-    if (art_enter(ART_PRIO_MAX-1, ART_TASK_PERIODIC, m_usec) == -1)
+    int usec(m_period.sec() * 1000000 + m_period.usec());
+    if (art_enter(ART_PRIO_MAX-1, ART_TASK_PERIODIC, usec) == -1)
       {
 	std::cerr << "fatal error: art_enter" << std::endl;
       }

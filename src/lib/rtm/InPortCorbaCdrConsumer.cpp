@@ -5,7 +5,7 @@
  * @date  $Date: 2007-12-31 03:08:03 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
- * Copyright (C) 2006
+ * Copyright (C) 2006-2010
  *     Noriaki Ando
  *     Task-intelligence Research Group,
  *     Intelligent Systems Research Institute,
@@ -331,7 +331,14 @@ namespace RTC
 };     // namespace RTC
 
 extern "C"
-{
+{ 
+  /*!
+   * @if jp
+   * @brief モジュール初期化関数
+   * @else
+   * @brief Module initialization
+   * @endif
+   */
   void InPortCorbaCdrConsumerInit(void)
   {
     RTC::InPortConsumerFactory& factory(RTC::InPortConsumerFactory::instance());

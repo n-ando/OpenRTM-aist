@@ -31,13 +31,13 @@
  * @if jp
  * @namespace RTM
  *
- * @brief RTCマネージャ
+ * @brief RT-Middleware
  *
  *
  * @else
  * @namespace RTM
  *
- * @brief RTCManager
+ * @brief RT-Middleware
  *
  *
  * @endif

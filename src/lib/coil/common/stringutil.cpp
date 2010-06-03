@@ -173,7 +173,7 @@ namespace coil
   
   /*!
    * @if jp
-   * @brief 文字列をアンエスケープためのFunctor
+   * @brief 文字列をアンエスケープするためのFunctor
    * @else
    * @brief Functor to unescape string
    * @endif
@@ -227,6 +227,13 @@ namespace coil
     return for_each(str.begin(), str.end(), unescape_functor()).str;
   }
 
+  /*!
+   * @if jp
+   * @brief 文字列の空白文字を削除する
+   * @else
+   * @brief Erase blank characters of string
+   * @endif
+   */
   void eraseBlank(std::string& str)
   {
     std::string::iterator it(str.begin());
@@ -288,7 +295,7 @@ namespace coil
 
   /*!
    * @if jp
-   * @brief 文字列のを正規化する
+   * @brief 文字列を正規化する
    * @else
    * @brief Erase the head/tail blank and replace upper case to lower case
    * @endif
@@ -412,6 +419,13 @@ namespace coil
       return default_value;
   }
 
+  /*!
+   * @if jp
+   * @brief 文字列リスト中にある文字列が含まれるかどうかを判断する
+   * @else
+   * @brief Include if a string is included in string list
+   * @endif
+   */
   bool includes(const vstring& list, std::string value, bool ignore_case)
   {
     if (ignore_case) { toLower(value); }
@@ -425,6 +439,13 @@ namespace coil
     return false;
   }
 
+  /*!
+   * @if jp
+   * @brief 文字列リスト中にある文字列が含まれるかどうかを判断する
+   * @else
+   * @brief Include if a string is included in string list
+   * @endif
+   */
   bool includes(const std::string& list, std::string value, bool ignore_case)
   {
     vstring vlist(split(list, ","));
@@ -488,6 +509,13 @@ namespace coil
     vstring str;
   };
 
+  /*!
+   * @if jp
+   * @brief 与えられた文字列をstd::stringに変換
+   * @else
+   * @brief Convert the given string to std::string.
+   * @endif
+   */
   template<>
   bool stringTo<std::string>(std::string& val, const char* str)
   {
@@ -552,6 +580,13 @@ namespace coil
     return argv;
   }
 
+  /*!
+   * @if jp
+   * @brief 指定された書式に変換
+   * @else
+   * @brief Convert it into a format given with an argumen
+   * @endif
+   */
   std::string sprintf(char const * __restrict fmt, ...)
   {
 #ifndef LINE_MAX

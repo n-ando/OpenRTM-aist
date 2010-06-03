@@ -377,6 +377,12 @@ namespace ExtTrigExecutionContext
           usleep(1000);
 	  ec->tick();
 	}
+
+      ec->stop();
+      m_pPOA->deactivate_object(*m_pPOA->servant_to_id(ec));
+      delete ec;
+      m_pPOA->deactivate_object(*m_pPOA->servant_to_id(rto));
+      delete rto;
     }
 		
   };

@@ -51,13 +51,14 @@ void usage()
   std::cout << "  --endian *      ";
   std::cout << ": Set endian type Little or Big" << std::endl;
   std::cout << "  --buffer : Set buffer configuration" << std::endl;
-  std::cout << "  --buffer \"[inport|outport].buffer.[length|[read_write_[policy|timeout]]\" value" << std::endl;
+  std::cout << "  --buffer [inport|outport].buffer.[length|[read|write.[policy|timeout]] value" << std::endl;
   std::cout << "    policy:  [write.full_policy,read.empty_policy]" << std::endl;
   std::cout << "    timeout: [write.timeout,read.timeout]" << std::endl;
   std::cout << "    value:  " << std::endl;
   std::cout << "       full_policy:  [overwrite, do_nothing, block]" << std::endl;
   std::cout << "       empty_policy: [readback,  do_nothing, block]" << std::endl;
   std::cout << "       timeout: sec (e.g. 1.0)" << std::endl;
+  std::cout << "       length:  The length of the ring buffer. (e.g. 10)" << std::endl;
   std::cout << std::endl;
   std::cout << "exsample:" << std::endl;
   std::cout << "  ConnectorComp --port 2809 --origin OUT" << std::endl;
@@ -69,7 +70,9 @@ void usage()
   std::cout << "  ConnectorComp --periodic 10 --policy FIFO" << std::endl;
   std::cout << "  ConnectorComp --periodic 10 --policy NEW" << std::endl;
   std::cout << "  ConnectorComp --flush --endian Little" << std::endl;
-  std::cout << "  ConnectorComp --buffer inport.buffer.read.empty_policy do_nothing" << std::endl;
+  std::cout << "  ConnectorComp --buffer inport.buffer.read.empty_policy block \\" << std::endl;
+  std::cout << "                --buffer inport.buffer.read.timeout 0.1 \\ " << std::endl;
+  std::cout << "                --buffer inport.buffer.length 10 " << std::endl;
   std::cout << std::endl;
 }
 
@@ -151,7 +154,6 @@ int main (int argc, char** argv)
 	      connect_origin = arg2;
 	    }
 	}
-      std::cout << "deb 0" << std::endl;
       if (arg == "--buffer")
 	{
 	  if (++i < argc)
@@ -163,7 +165,6 @@ int main (int argc, char** argv)
 	      buffer_prop.insert(std::pair< std::string, std::string >(key,val));
 	    }
 	}
-      std::cout << "deb 1" << std::endl;
     }
   
   CORBA::ORB_var orb = CORBA::ORB_init(_argc, _argv);
@@ -193,10 +194,8 @@ int main (int argc, char** argv)
     std::cout << "          connect: ConsoleOut -> ConsoleIn" << std::endl;
   std::cout << std::endl;
 
-  std::cout << "deb 2-0" << std::endl;
   // find ConsoleIn0 component
   conin.setObject(naming.resolve("ConsoleIn0.rtc"));
-  std::cout << "deb 2-1" << std::endl;
 
   // get ports
   pin = conin->get_ports();
@@ -256,20 +255,15 @@ int main (int argc, char** argv)
 			   NVUtil::newNV("dataport.serializer.cdr.endian",
 					 endian.c_str()));
 
-  std::cout << "deb 2" << std::endl;
   std::map<std::string, std::string>::iterator it=buffer_prop.begin();
-  std::cout << "deb 3" << std::endl;
   while (it != buffer_prop.end()) {
     std::string key("dataport.");
     key += it->first;
     CORBA_SeqUtil::push_back(prof.properties,
 			     NVUtil::newNV(key.c_str(),
 					   it->second.c_str()));
-    std::cout << "buffer_prop.key: " << key << std::endl;
-    std::cout << "buffer_prop.val: " << it->second << std::endl;
     ++it;
   }
-  std::cout << "deb 4" << std::endl;
 
   ReturnCode_t ret;
   if (connect_origin == "in")

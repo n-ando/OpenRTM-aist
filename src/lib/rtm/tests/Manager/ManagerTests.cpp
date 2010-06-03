@@ -168,8 +168,6 @@ namespace Tests
                                coil::Properties& ec_conf)
     {
       bool bret = RTC::Manager::procContextArgs(ec_args, ec_id, ec_conf);
-//      if (bret) std::cout << "Manager::procContextArgs() bret:true" << std::endl;
-//      else      std::cout << "Manager::procContextArgs() bret:false" << std::endl;
       return bret;
     }
 
@@ -259,7 +257,7 @@ namespace Tests
   {
     CPPUNIT_TEST_SUITE(ManagerTests);
 
-//    CPPUNIT_TEST(test_deleteComponent); // 結果はOK。exit()を実行しているのでコメントにしておく。
+//    CPPUNIT_TEST(test_deleteComponent); //OK
     CPPUNIT_TEST(test_getLogLevel);
     CPPUNIT_TEST(test_getLoadedModules);
     CPPUNIT_TEST(test_getFactoryProfiles);
@@ -272,22 +270,13 @@ namespace Tests
     CPPUNIT_TEST(test_instance);
     CPPUNIT_TEST(test_instance_without_init);
 
-//  Manager::init() function returns error, 
-//  when Manager::init() function is executed 
-//  after terminate() function is executed.
-//  test_terminate_immediately_after_the_initialization function and 
-//  test_terminate_after_the_activation function are using 
-//  Manager::terminate function.
-//  Therefor, execute these functions alone.
-//
-//    CPPUNIT_TEST(test_terminate_immediately_after_the_initialization);
-//    CPPUNIT_TEST(test_terminate_after_the_activation);
+//    CPPUNIT_TEST(test_terminate_immediately_after_the_initialization);  //OK
+//    CPPUNIT_TEST(test_terminate_after_the_activation);  //OK
 
-//    CPPUNIT_TEST(test_getLogbuf);
     CPPUNIT_TEST(test_getConfig);
     CPPUNIT_TEST(test_setModuleInitProc);
 
-    CPPUNIT_TEST(test_runManager_no_block);
+//    CPPUNIT_TEST(test_runManager_no_block);  //OK
 //    CPPUNIT_TEST(test_runManager_block);
     CPPUNIT_TEST(test_load);
     CPPUNIT_TEST(test_unload);
@@ -296,17 +285,11 @@ namespace Tests
     CPPUNIT_TEST(test_registerECFactory);
     CPPUNIT_TEST(test_getModulesFactories);
 
-//  Manager::init() function returns error, 
-//  when Manager::init() function is executed 
-//  after terminate() function is executed.
-//  The following functions are using Manager::terminate fucntion.
-//   - test_cleanupComponent
-//   - test_getComponents
-//   - test_createComponent_DataFlowComponent
-//   - test_createComponent_failed_in_bindExecutionContext
-//  Therefor, execution these funciotns alone.
-    CPPUNIT_TEST(test_cleanupComponent);
-//    CPPUNIT_TEST(test_getComponents);
+    CPPUNIT_TEST(test_getLoadableModules);
+    CPPUNIT_TEST(test_notifyFinalized);
+
+//    CPPUNIT_TEST(test_cleanupComponent);  //OK
+//    CPPUNIT_TEST(test_getComponents);  //OK
 		
     // ※現在、各テスト間の独立性を完全に確保できていないため、下記テストは実施順序を変更しないこと。
     //   また、テスト内容を変更したり、他テストを追加したりする場合は、必ずしもテスト間の独立性が
@@ -314,10 +297,10 @@ namespace Tests
     //   CORBA::ORB::destroy()が失敗する場合があり、次テスト時のCORBA::ORB_init()呼出が
     //   新ORBインスタンスを返さない場合があるため。詳しい原因は現時点では不明。
     //
-//    CPPUNIT_TEST(test_createComponent_DataFlowComponent);
-    //CPPUNIT_TEST(test_createComponent_Non_DataFlowComponent);
-//    CPPUNIT_TEST(test_createComponent_failed_in_bindExecutionContext);
-    //CPPUNIT_TEST(test_createComponent_with_illegal_module_name);
+    // CPPUNIT_TEST(test_createComponent_DataFlowComponent);
+    // CPPUNIT_TEST(test_createComponent_Non_DataFlowComponent);  //OK
+    // CPPUNIT_TEST(test_createComponent_failed_in_bindExecutionContext);  //OK
+    // CPPUNIT_TEST(test_createComponent_with_illegal_module_name);
 
     CPPUNIT_TEST_SUITE_END();
 	
@@ -520,6 +503,11 @@ namespace Tests
       CPPUNIT_ASSERT(CORBA::is_nil(m_mgr->getPOA()));
     }
 		
+    void test_notifyFinalized()
+    {
+      // shutdown()を通じて呼び出されるメソッドであるため、直接のテスト対象とはしない
+    }
+		
     void test_shutdown()
     {
       // terminate()を通じて呼び出されるメソッドであるため、直接のテスト対象とはしない
@@ -532,27 +520,6 @@ namespace Tests
     }
 		
     /*!
-     * @brief getLogbuf()メソッドのテスト
-     * 
-     * - ログバッファを正しく取得でき、さらにオープンされているか？
-     */
-/*
-    void test_getLogbuf()
-    {
-      // 初期化を行う
-//      int argc = 1;
-      int argc = 3;
-      char* argv[] = { "ManagerTests","-f","fixture1.conf" };
-			
-      m_mgr = RTC::Manager::init(argc, argv);
-      CPPUNIT_ASSERT(m_mgr != NULL);
-			
-      // ログバッファを正しく取得でき、さらにオープンされているか？
-      RTC::Logbuf& logbuf = m_mgr->getLogbuf();
-      CPPUNIT_ASSERT(logbuf.is_open());
-    }
-*/		
-    /*!
      * @brief getConfig()メソッドのテスト
      * 
      * - confファイルで指定した各種設定を、getConfig()を通じて正しく取得できるか？
@@ -560,8 +527,6 @@ namespace Tests
     void test_getConfig()
     {
       // 初期化を行う
-//      int argc = 1;
-//      char* argv[] = { "-f","fixture2.conf" };
       int argc = 3;
       char* argv[] = { "ManagerTests","-f","fixture2.conf" };
 			
@@ -570,7 +535,7 @@ namespace Tests
 			
       // confファイルで指定した各種設定を、getConfig()を通じて正しく取得できるか？
       coil::Properties& properties = m_mgr->getConfig();
-      CPPUNIT_ASSERT_EQUAL(std::string("yes"),
+      CPPUNIT_ASSERT_EQUAL(std::string("NO"),
 			   properties.getProperty("logger.enable"));
       CPPUNIT_ASSERT_EQUAL(std::string("fixture2.log"),
 			   properties.getProperty("logger.file_name"));
@@ -661,11 +626,8 @@ namespace Tests
       coil::sleep(3);
       CPPUNIT_ASSERT_EQUAL(1, logger.countLog("initialize"));
 
-/*
-      rto->exit();
-//      m_mgr->terminate();
-shutdown_ORB(m_mgr);
-*/
+      poa->deactivate_object(rtoId);
+      delete rto;
     }
 		
     /*!
@@ -679,7 +641,6 @@ shutdown_ORB(m_mgr);
       int argc = 0;
       char* argv[] = {};
 			
-	//std::cout<<"IN test_runManager_block"<<std::endl;
       m_mgr = RTC::Manager::init(argc, argv);
       CPPUNIT_ASSERT(m_mgr != NULL);
 			
@@ -692,7 +653,6 @@ shutdown_ORB(m_mgr);
       RTObjectMock* rto = new RTObjectMock(orb, poa);
       CPPUNIT_ASSERT(rto != NULL);
 			
-//      PortableServer::ObjectId_var rtoId = poa->activate_object(rto);
       PortableServer::ObjectId_var rtoId;
       try
         {
@@ -700,7 +660,6 @@ shutdown_ORB(m_mgr);
         }
       catch(const ::PortableServer::POA::ServantAlreadyActive &)
         {
-	//std::cout<<"    ServantAlreadyActive"<<std::endl;
           rtoId = poa->servant_to_id(rto);
         }
 			
@@ -717,13 +676,13 @@ shutdown_ORB(m_mgr);
       CPPUNIT_ASSERT_EQUAL(0, logger.countLog("initialize"));
       {
 	InvokerMock invoker(rtoRef, m_mgr);
-	//std::cout<<"    block"<<std::endl;
 	m_mgr->runManager(false); // true:非ブロッキング，false:ブロッキング
-	//std::cout<<"    sleep3"<<std::endl;
 	coil::sleep(3);
       }
       CPPUNIT_ASSERT_EQUAL(1, logger.countLog("initialize"));
-	//std::cout<<"OUT test_runManager_block"<<std::endl;
+
+      poa->deactivate_object(rtoId);
+      delete rto;
     }
 		
     class InvokerMock
@@ -750,7 +709,6 @@ shutdown_ORB(m_mgr);
 	// ブロックされているrunManager呼出をブロック解除する
         m_rtoRef->exit();
         m_mgr->shutdown();
-//shutdown_ORB(m_mgr);
 	m_mgr->join();
 				
 	return 0;
@@ -769,8 +727,6 @@ shutdown_ORB(m_mgr);
     void test_load()
     {
       // 初期化を行う
-//      int argc = 1;
-//      char* argv[] = { "-f fixture3.conf" };
       int argc = 3;
       char* argv[] = { "ManagerTests","-f","fixture3.conf" };
 			
@@ -850,8 +806,6 @@ shutdown_ORB(m_mgr);
     void test_unloadAll()
     {
       // 初期化を行う
-//      int argc = 1;
-//      char* argv[] = { "-f fixture3.conf" };
       int argc = 3;
       char* argv[] = { "ManagerTests","-f","fixture3.conf" };
 			
@@ -905,9 +859,48 @@ shutdown_ORB(m_mgr);
       // CPPUNIT_ASSERT(! isFound(m_mgr->getLoadedModules(), moduleName2));
     }
 		
+    /*!
+     * @brief getLoadableModules()メソッドのテスト
+     * 
+     * - ロード可能なモジュールリストを正しく取得できるか？
+     */
     void test_getLoadableModules()
     {
-      // テスト対象のクラス側が未実装につき、テストも未実装
+      int argc = 3;
+      char* argv[] = { "ManagerTests","-f","fixture3.conf" };
+			
+      m_mgr = RTC::Manager::init(argc, argv);
+      CPPUNIT_ASSERT(m_mgr != NULL);
+
+      // Managerとは別に、確認用にモジュールへのシンボルを取得しておく
+      typedef int (*FUNC_GETINITPROCCOUNT)();
+      typedef void (*FUNC_RESETINITPROCCOUNT)();
+      coil::DynamicLib loader("./.libs/DummyModule.so");
+
+      FUNC_GETINITPROCCOUNT pGetInitProcCount
+	= (FUNC_GETINITPROCCOUNT) loader.symbol("getInitProcCount");
+      CPPUNIT_ASSERT(pGetInitProcCount != NULL);
+			
+      FUNC_RESETINITPROCCOUNT pResetInitProcCount
+	= (FUNC_RESETINITPROCCOUNT) loader.symbol("resetInitProcCount");
+      CPPUNIT_ASSERT(pResetInitProcCount != NULL);
+			
+      (*pResetInitProcCount)(); // カウンタクリア
+			
+      CPPUNIT_ASSERT_EQUAL(0, (*pGetInitProcCount)());
+      m_mgr->load("./.libs/DummyModule.so", "InitProc");
+
+      // ロード可能なモジュールリストを正しく取得できるか？
+      std::vector<coil::Properties> props = m_mgr->getLoadableModules();
+      CPPUNIT_ASSERT(props.size() > 0);
+
+      //for(int i=0;i<props.size(); ++i)
+      //{
+      //  std::cout << "--------------- props[" << i << "] dump ---------------" << std::endl;
+      //  props[i].list(std::cout);
+      //}
+      CPPUNIT_ASSERT_EQUAL(std::string("./.libs/DummyModule2.so"),
+			   props[0].getProperty("module_file_path"));
     }
 		
     /*!
@@ -930,7 +923,7 @@ shutdown_ORB(m_mgr);
 
       CPPUNIT_ASSERT(! isFound(m_mgr->getModulesFactories(), "ID"));
       CPPUNIT_ASSERT(m_mgr->registerFactory(
-					    properties, CreateDataFlowComponentMock, DeleteDataFlowComponentMock));
+		    properties, CreateDataFlowComponentMock, DeleteDataFlowComponentMock));
       CPPUNIT_ASSERT(isFound(m_mgr->getModulesFactories(), "ID"));
     }
 		
@@ -950,15 +943,15 @@ shutdown_ORB(m_mgr);
 			
       // 正常にECFactoryを登録できるか？
       CPPUNIT_ASSERT(m_mgr->registerECFactory(
-					      "PeriodicEC",
-					      RTC::ECCreate<RTC::PeriodicExecutionContext>,
-					      RTC::ECDelete<RTC::PeriodicExecutionContext>));
+		      "PeriodicEC",
+		      RTC::ECCreate<RTC::PeriodicExecutionContext>,
+		      RTC::ECDelete<RTC::PeriodicExecutionContext>));
 			
       // 登録済みのECFactoryと同一の名称で登録を試みた場合、意図どおり登録失敗するか？
       CPPUNIT_ASSERT(! m_mgr->registerECFactory(
-						"PeriodicEC",
-						RTC::ECCreate<RTC::PeriodicExecutionContext>,
-						RTC::ECDelete<RTC::PeriodicExecutionContext>));
+			"PeriodicEC",
+			RTC::ECCreate<RTC::PeriodicExecutionContext>,
+			RTC::ECDelete<RTC::PeriodicExecutionContext>));
     }
 		
     /*!
@@ -979,12 +972,12 @@ shutdown_ORB(m_mgr);
       coil::Properties properties1;
       properties1.setProperty("implementation_id", "ID 1");
       CPPUNIT_ASSERT(m_mgr->registerFactory(
-					    properties1, CreateDataFlowComponentMock, DeleteDataFlowComponentMock));
+		    properties1, CreateDataFlowComponentMock, DeleteDataFlowComponentMock));
 
       coil::Properties properties2;
       properties2.setProperty("implementation_id", "ID 2");
       CPPUNIT_ASSERT(m_mgr->registerFactory(
-					    properties2, CreateDataFlowComponentMock, DeleteDataFlowComponentMock));
+		    properties2, CreateDataFlowComponentMock, DeleteDataFlowComponentMock));
 				
       // 登録されているFactoryの（"implementation_id"プロパティの）リストを正しく取得できるか？
       CPPUNIT_ASSERT_EQUAL(3, (int) m_mgr->getModulesFactories().size());
@@ -1001,8 +994,6 @@ shutdown_ORB(m_mgr);
     void test_createComponent_DataFlowComponent()
     {
       // 初期化を行う
-//      int argc = 1;
-//      char* argv[] = { "-f fixture4.conf" };
       int argc = 3;
       char* argv[] = { "ManagerTests","-f","fixture4.conf" };
 			
@@ -1021,13 +1012,13 @@ shutdown_ORB(m_mgr);
       properties.setProperty("implementation_id", "DataFlowComponentFactory");
       properties.setProperty("type_name", "DataFlowComponent");
       CPPUNIT_ASSERT(m_mgr->registerFactory(
-					    properties, CreateDataFlowComponentMock, DeleteDataFlowComponentMock));
+		    properties, CreateDataFlowComponentMock, DeleteDataFlowComponentMock));
 			
       // ECFactoryを登録しておく
       CPPUNIT_ASSERT(m_mgr->registerECFactory(
-					      "PeriodicEC",
-					      RTC::ECCreate<RTC::PeriodicExecutionContext>,
-					      RTC::ECDelete<RTC::PeriodicExecutionContext>));
+		      "PeriodicEC",
+		      RTC::ECCreate<RTC::PeriodicExecutionContext>,
+		      RTC::ECDelete<RTC::PeriodicExecutionContext>));
 			
       // 正しくコンポーネントを生成できるか？
       RTC::RtcBase* comp = m_mgr->createComponent("DataFlowComponentFactory");
@@ -1089,8 +1080,6 @@ shutdown_ORB(m_mgr);
     void test_createComponent_failed_in_bindExecutionContext()
     {
       // 初期化を行う
-//      int argc = 1;
-//      char* argv[] = { "-f fixture4.conf" };
       int argc = 3;
       char* argv[] = { "ManagerTests","-f","fixture4.conf" };
 			
@@ -1109,7 +1098,7 @@ shutdown_ORB(m_mgr);
       properties.setProperty("implementation_id", "DataFlowComponentFactory");
       properties.setProperty("type_name", "DataFlowComponent");
       CPPUNIT_ASSERT(m_mgr->registerFactory(
-					    properties, CreateDataFlowComponentMock, DeleteDataFlowComponentMock));
+		    properties, CreateDataFlowComponentMock, DeleteDataFlowComponentMock));
 			
       // bindExecutionContext()で失敗するように、意図的にECFactoryを登録せずにおく
 			
@@ -1150,13 +1139,13 @@ shutdown_ORB(m_mgr);
       properties.setProperty("implementation_id", "DataFlowComponentFactory");
       properties.setProperty("type_name", "DataFlowComponent");
       CPPUNIT_ASSERT(m_mgr->registerFactory(
-					    properties, CreateDataFlowComponentMock, DeleteDataFlowComponentMock));
+		    properties, CreateDataFlowComponentMock, DeleteDataFlowComponentMock));
 			
       // ECFactoryを登録しておく
       CPPUNIT_ASSERT(m_mgr->registerECFactory(
-					      "PeriodicEC",
-					      RTC::ECCreate<RTC::PeriodicExecutionContext>,
-					      RTC::ECDelete<RTC::PeriodicExecutionContext>));
+		      "PeriodicEC",
+		      RTC::ECCreate<RTC::PeriodicExecutionContext>,
+		      RTC::ECDelete<RTC::PeriodicExecutionContext>));
 
       // 確認用にネームサービスへのアクセス手段としてNamingManagerを準備しておく
       // ※fixture4.confの各設定に合わせている点に注意
@@ -1219,8 +1208,6 @@ shutdown_ORB(m_mgr);
     void test_getComponents()
     {
       // 初期化を行う
-//      int argc = 1;
-//      char* argv[] = { "-f fixture4.conf" };
       int argc = 3;
       char* argv[] = { "ManagerTests","-f","fixture4.conf" };
 			
@@ -1239,13 +1226,13 @@ shutdown_ORB(m_mgr);
       properties.setProperty("implementation_id", "DataFlowComponentFactory");
       properties.setProperty("type_name", "DataFlowComponent");
       CPPUNIT_ASSERT(m_mgr->registerFactory(
-					    properties, CreateDataFlowComponentMock, DeleteDataFlowComponentMock));
+		    properties, CreateDataFlowComponentMock, DeleteDataFlowComponentMock));
 			
       // ECFactoryを登録しておく
       CPPUNIT_ASSERT(m_mgr->registerECFactory(
-					      "PeriodicEC",
-					      RTC::ECCreate<RTC::PeriodicExecutionContext>,
-					      RTC::ECDelete<RTC::PeriodicExecutionContext>));
+		      "PeriodicEC",
+		      RTC::ECCreate<RTC::PeriodicExecutionContext>,
+		      RTC::ECDelete<RTC::PeriodicExecutionContext>));
 			
       // 複数のコンポーネントを生成しておく
       RTC::RtcBase* comp1 = m_mgr->createComponent("DataFlowComponentFactory");
@@ -1389,6 +1376,8 @@ shutdown_ORB(m_mgr);
       CPPUNIT_ASSERT_EQUAL(chk_val, ec_id);
       chk_val = "1000";
       CPPUNIT_ASSERT_EQUAL(chk_val, ec_prop["rate"]);
+
+      delete man;
     }
 		
     /*!
@@ -1437,11 +1426,8 @@ shutdown_ORB(m_mgr);
 
       // ロード済みのモジュールリストを正しく取得できるか？
       std::vector<coil::Properties> props = m_mgr->getLoadedModules();
-      // std::cout << "props.size()=" << props.size() << std::endl;
       CPPUNIT_ASSERT(props.size() > 0);
 
-      // std::cout << "props=\n" << props[0] << std::endl;
-      // std::cout << "props=\n" << props[0].getProperty("file_path") << std::endl;
       CPPUNIT_ASSERT_EQUAL(std::string(".//./.libs/DummyModule.so"),
 			   props[0].getProperty("file_path"));
     }
@@ -1466,12 +1452,8 @@ shutdown_ORB(m_mgr);
       CPPUNIT_ASSERT(isFound(m_mgr->getModulesFactories(), "ID"));
 
       std::vector<coil::Properties> props = m_mgr->getFactoryProfiles();
-      // std::cout << "props.size()=" << props.size() << std::endl;
       CPPUNIT_ASSERT(props.size() > 0);
 
-      // std::cout << "props[0]=\n" << props[0] << std::endl;
-      // std::cout << "props[1]=\n" << props[1] << std::endl;
-      // std::cout << "props=\n" << props[0].getProperty("implementation_id") << std::endl;
       CPPUNIT_ASSERT_EQUAL(std::string("PeriodicECSharedComposite"),
 			   props[0].getProperty("implementation_id"));
       CPPUNIT_ASSERT_EQUAL(std::string("ID"),
@@ -1494,15 +1476,11 @@ shutdown_ORB(m_mgr);
       // return NULL check
       ec_args = "";
       ec = m_mgr->createContext(ec_args.c_str());
-      // if(ec == NULL ) std::cout << "ec == NULL" << std::endl;
-      // else		std::cout << "ec != NULL" << std::endl;
       CPPUNIT_ASSERT(ec == NULL);
 
       // return NULL check (Factory not found)
       ec_args = "periodic?rate=1000";
       ec = m_mgr->createContext(ec_args.c_str());
-      // if(ec == NULL ) std::cout << "ec == NULL" << std::endl;
-      // else		std::cout << "ec != NULL" << std::endl;
       CPPUNIT_ASSERT(ec == NULL);
 
       // return any check
@@ -1511,8 +1489,6 @@ shutdown_ORB(m_mgr);
 			RTC::ECDelete<RTC::PeriodicExecutionContext>);
       ec_args = "PeriodicEC?rate=1000";
       ec = m_mgr->createContext(ec_args.c_str());
-      // if(ec == NULL ) std::cout << "ec == NULL" << std::endl;
-      // else		std::cout << "ec != NULL" << std::endl;
       CPPUNIT_ASSERT(ec != NULL);
     }
 		

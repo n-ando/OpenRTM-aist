@@ -1,7 +1,7 @@
 // -*- C++ -*-
 /*!
- * @file Factory.h
- * @brief generic Factory template class
+ * @file PeriodicTask.cpp
+ * @brief PeriodicTask class
  * @date $Date$
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
@@ -24,9 +24,9 @@ namespace coil
 {
   /*!
    * @if jp
-   * @brief ctor
+   * @brief コンストラクタ
    * @else
-   * @brief ctor
+   * @brief Constructor
    * @endif
    */
   PeriodicTask::PeriodicTask()
@@ -40,9 +40,9 @@ namespace coil
   
   /*!
    * @if jp
-   * @brief dtor
+   * @brief デストラクタ
    * @else
-   * @brief dtor
+   * @brief Destructor
    * @endif
    */
   PeriodicTask::~PeriodicTask()
@@ -193,7 +193,7 @@ namespace coil
    * @if jp
    * @brief タスク関数実行時間計測を有効にするか
    * @else
-   * @brief 
+   * @brief Validate a Task execute time measurement
    * @endif
    */
   void PeriodicTask::executionMeasure(bool value)
@@ -205,7 +205,7 @@ namespace coil
    * @if jp
    * @brief タスク関数実行時間計測周期
    * @else
-   * @brief 
+   * @brief Task execute time measurement period
    * @endif
    */
   void PeriodicTask::executionMeasureCount(int n)
@@ -217,7 +217,7 @@ namespace coil
    * @if jp
    * @brief タスク周期時間計測を有効にするか
    * @else
-   * @brief 
+   * @brief Validate a Task period time measurement
    * @endif
    */
   void PeriodicTask::periodicMeasure(bool value)
@@ -229,7 +229,7 @@ namespace coil
    * @if jp
    * @brief タスク周期時間計測周期
    * @else
-   * @brief 
+   * @brief Task period time measurement count
    * @endif
    */
   void PeriodicTask::periodicMeasureCount(int n)
@@ -241,7 +241,7 @@ namespace coil
    * @if jp
    * @brief タスク関数実行時間計測結果を取得
    * @else
-   * @brief 
+   * @brief Get a result in task execute time measurement
    * @endif
    */
   TimeMeasure::Statistics PeriodicTask::getExecStat()
@@ -254,7 +254,7 @@ namespace coil
    * @if jp
    * @brief タスク周期時間計測結果を取得
    * @else
-   * @brief 
+   * @brief Get a result in task period time measurement
    * @endif
    */
   TimeMeasure::Statistics PeriodicTask::getPeriodStat()
@@ -265,11 +265,12 @@ namespace coil
 
   //----------------------------------------------------------------------
   // protected functions
+  //----------------------------------------------------------------------
   /*!
    * @if jp
-   * @brief
+   * @brief PeriodicTask 用のスレッド実行
    * @else
-   * @brief 
+   * @brief Thread execution for PeriodicTask
    * @endif
    */
   int PeriodicTask::svc()
@@ -306,7 +307,15 @@ namespace coil
 
   //----------------------------------------------------------------------
   // protected member function
+  //----------------------------------------------------------------------
 
+  /*!
+   * @if jp
+   * @brief スレッド休止
+   * @else
+   * @brief Thread sleep
+   * @endif
+   */
   void PeriodicTask::sleep()
   { 
     if (m_nowait)
@@ -316,6 +325,13 @@ namespace coil
     coil::sleep(m_period - m_execTime.interval());
   }
 
+  /*!
+   * @if jp
+   * @brief 実行状態更新
+   * @else
+   * @brief Update for execute state
+   * @endif
+   */
   void PeriodicTask::updateExecStat()
   {
     if (m_execCount > m_execCountMax)
@@ -327,6 +343,13 @@ namespace coil
     ++m_execCount;
   }
 
+  /*!
+   * @if jp
+   * @brief 周期状態更新
+   * @else
+   * @brief Update for period state
+   * @endif
+   */
   void PeriodicTask::updatePeriodStat()
   {
     if (m_periodCount > m_periodCountMax)

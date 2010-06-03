@@ -1443,8 +1443,10 @@ AC_OUTPUT([Makefile
 	src/lib/rtm/idl/Makefile
 	src/lib/rtm/idl/device_interfaces/Makefile
 	src/lib/rtm/tests/Makefile
+	src/lib/rtm/tests/CORBA_IORUtil/Makefile
 	src/lib/rtm/tests/CORBA_SeqUtil/Makefile
 	src/lib/rtm/tests/ConfigAdmin/Makefile
+	src/lib/rtm/tests/ConnectorListener/Makefile
 	src/lib/rtm/tests/CorbaConsumer/Makefile
 	src/lib/rtm/tests/CorbaNaming/Makefile
 	src/lib/rtm/tests/CorbaPort/Makefile
@@ -1476,6 +1478,7 @@ AC_OUTPUT([Makefile
 	src/lib/rtm/tests/OutPortCorbaCdrConsumer/Makefile
 	src/lib/rtm/tests/OutPortCorbaCdrProvider/Makefile
 	src/lib/rtm/tests/OutPortProvider/Makefile
+	src/lib/rtm/tests/PeriodicECSharedComposite/Makefile
 	src/lib/rtm/tests/PeriodicExecutionContext/Makefile
 	src/lib/rtm/tests/PortAdmin/Makefile
 	src/lib/rtm/tests/PortBase/Makefile

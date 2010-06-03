@@ -14,7 +14,7 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: InPortTests.cpp 817 2008-08-06 02:54:26Z n-ando $
+ * $Id: OutPortConnectorTests.cpp 817 2008-08-06 02:54:26Z n-ando $
  *
  */
 
@@ -118,7 +118,9 @@ namespace OutPortConnector
     : public CppUnit::TestFixture
   {
     CPPUNIT_TEST_SUITE(OutPortConnectorTests);
+
     CPPUNIT_TEST(test_case0);
+
     CPPUNIT_TEST_SUITE_END();
 		
   private:
@@ -228,7 +230,7 @@ namespace OutPortConnector
     }
 
   };
-}; // namespace InPort
+}; // namespace OutPortConnector
 
 /*
  * Register test suite
@@ -317,4 +319,4 @@ int main(int argc, char* argv[])
   return 0; // runner.run() ? 0 : 1;
 }
 #endif // MAIN
-#endif // InPort_cpp
+#endif // OutPortConnector_cpp

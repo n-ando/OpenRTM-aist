@@ -155,9 +155,14 @@ namespace RTC
      *
      * @brief 仮想コールバックメソッド
      *
+     * データポートの Connector において発生する各種イベントに対するコー
+     * ルバックメソッド
+     *
      * @else
      *
      * @brief Virtual Callback method
+     *
+     * This is a the Callback method to various events generated in Connector. 
      *
      * @endif
      */
@@ -257,9 +262,15 @@ namespace RTC
      *
      * @brief 仮想コールバックメソッド
      *
+     * データポートの Connector において発生する各種イベントに対するコー
+     * ルバックメソッド
+     *
      * @else
      *
      * @brief Virtual Callback method
+     *
+     * This method invokes the callback method of ConnectorDataListenerT. 
+     * Data is converted into the variable type used in DataPort.
      *
      * @endif
      */
@@ -381,9 +392,15 @@ namespace RTC
      *
      * @brief 仮想コールバックメソッド
      *
+     * データポートの Connector において発生する各種イベントに対するコー
+     * ルバックメソッド
+     *
      * @else
      *
      * @brief Virtual Callback method
+     *
+     * This method invokes the callback method of ConnectorDataListenerT. 
+     * Data is converted into the variable type used in DataPort.
      *
      * @endif
      */
@@ -432,10 +449,20 @@ namespace RTC
      *
      * @brief リスナーの追加
      *
+     * リスナーを追加する。
+     *
+     * @param listener 追加するリスナ
+     * @param autoclean true:デストラクタで削除する,
+     *                  false:デストラクタで削除しない
      * @else
      *
      * @brief Add the listener.
      *
+     * This method adds the listener. 
+     *
+     * @param listener Added listener
+     * @param autoclean true:The listener is deleted at the destructor.,
+     *                  false:The listener is not deleted at the destructor. 
      * @endif
      */
     void addListener(ConnectorDataListener* listener, bool autoclean);
@@ -445,10 +472,16 @@ namespace RTC
      *
      * @brief リスナーの削除
      *
+     * リスナを削除する。
+     *
+     * @param listener 削除するリスナ
      * @else
      *
      * @brief Remove the listener. 
      *
+     * This method removes the listener. 
+     *
+     * @param listener Removed listener
      * @endif
      */
     void removeListener(ConnectorDataListener* listener);
@@ -458,10 +491,18 @@ namespace RTC
      *
      * @brief リスナーへ通知する
      *
+     * 登録されているリスナのコールバックメソッドを呼び出す。
+     *
+     * @param info ConnectorInfo
+     * @param cdrdata データ
      * @else
      *
      * @brief Notify listeners. 
      *
+     * This calls the Callback method of the registered listener. 
+     *
+     * @param info ConnectorInfo
+     * @param cdrdata Data
      * @endif
      */
     void notify(const ConnectorInfo& info,
@@ -514,10 +555,20 @@ namespace RTC
      *
      * @brief リスナーの追加
      *
+     * リスナーを追加する。
+     *
+     * @param listener 追加するリスナ
+     * @param autoclean true:デストラクタで削除する,
+     *                  false:デストラクタで削除しない
      * @else
      *
      * @brief Add the listener.
      *
+     * This method adds the listener. 
+     *
+     * @param listener Added listener
+     * @param autoclean true:The listener is deleted at the destructor.,
+     *                  false:The listener is not deleted at the destructor. 
      * @endif
      */
     void addListener(ConnectorListener* listener, bool autoclean);
@@ -527,10 +578,16 @@ namespace RTC
      *
      * @brief リスナーの削除
      *
+     * リスナを削除する。
+     *
+     * @param listener 削除するリスナ
      * @else
      *
      * @brief Remove the listener. 
      *
+     * This method removes the listener. 
+     *
+     * @param listener Removed listener
      * @endif
      */
     void removeListener(ConnectorListener* listener);
@@ -540,10 +597,16 @@ namespace RTC
      *
      * @brief リスナーへ通知する
      *
+     * 登録されているリスナのコールバックメソッドを呼び出す。
+     *
+     * @param info ConnectorInfo
      * @else
      *
      * @brief Notify listeners. 
      *
+     * This calls the Callback method of the registered listener. 
+     *
+     * @param info ConnectorInfo
      * @endif
      */
     void notify(const ConnectorInfo& info);

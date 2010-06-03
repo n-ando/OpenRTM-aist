@@ -162,6 +162,13 @@ namespace RTC
     return PORT_OK;
   }
 
+  /*!
+   * @if jp
+   * @brief データを書き込む
+   * @else
+   * @brief Write data 
+   * @endif
+   */
   PublisherBase::ReturnCode
   PublisherPeriodic::write(const cdrMemoryStream& data,
                            unsigned long sec,
@@ -193,11 +200,25 @@ namespace RTC
     return convertReturn(ret, data);
   }
 
+  /*!
+   * @if jp
+   * @brief アクティブ化確認
+   * @else
+   * @brief Confirm to activate
+   * @endif
+   */
   bool PublisherPeriodic::isActive()
   {
     return m_active;
   }
 
+  /*!
+   * @if jp
+   * @brief アクティブ化
+   * @else
+   * @brief activation
+   * @endif
+   */
   PublisherBase::ReturnCode PublisherPeriodic::activate()
   {
     if (m_task == 0) { return PRECONDITION_NOT_MET; }
@@ -207,6 +228,13 @@ namespace RTC
     return PORT_OK;
   }
 
+  /*!
+   * @if jp
+   * @brief 非アクティブ化
+   * @else
+   * @brief deactivation
+   * @endif
+   */
   PublisherBase::ReturnCode PublisherPeriodic::deactivate()
   {
     if (m_task == 0) { return PRECONDITION_NOT_MET; }
@@ -214,6 +242,7 @@ namespace RTC
     m_task->suspend();
     return PORT_OK;
   }
+
   /*!
    * @if jp
    * @brief スレッド実行関数
@@ -344,6 +373,10 @@ namespace RTC
     RTC_TRACE(("pushNew()"));
     if (bufferIsEmpty()) { return BUFFER_EMPTY; }
     
+    // In case of the periodic/push_new policy, the buffer should
+    // allow readback. But, readback flag should be set as "true"
+    // after written at least one datum into the buffer.
+    m_readback = true;
     m_buffer->advanceRptr(m_buffer->readable() - 1);
     
     const cdrMemoryStream& cdr(m_buffer->get());
@@ -470,6 +503,13 @@ namespace RTC
     return true;
   }
 
+  /*!
+   * @if jp
+   * @brief BufferStatus から DataPortStatus への変換
+   * @else
+   * @brief Convertion from BufferStatus to DataPortStatus
+   * @endif
+   */
   PublisherBase::ReturnCode
   PublisherPeriodic::convertReturn(BufferStatus::Enum status,
                                    const cdrMemoryStream& data)
@@ -511,6 +551,13 @@ namespace RTC
     return DataPortStatus::PORT_ERROR;
   }
 
+  /*!
+   * @if jp
+   * @brief DataPortStatusに従ってリスナへ通知する関数を呼び出す。
+   * @else
+   * @brief Call listeners according to the DataPortStatus
+   * @endif
+   */
   PublisherPeriodic::ReturnCode
   PublisherPeriodic::invokeListener(DataPortStatus::Enum status,
                                     const cdrMemoryStream& data)
