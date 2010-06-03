@@ -1017,20 +1017,6 @@ namespace RTC
   {
       return 0;
   }
- /*
-  *
-  *
-  *
-  *
-  *
-  */
- /*
-  *
-  *
-  *
-  *
-  *
-  */
   /*!
    * @if jp
    * @brief デストラクタ
@@ -1446,34 +1432,9 @@ namespace OutPort
                       ::RTC::RTC_logger.countLog("55"));
 
 	m_pPOA->deactivate_object(*m_pPOA->servant_to_id(&outport));
+        delete consumer;
     }
-    /*!
-     * @brief write()メソッドとread()メソッドのテスト
-     * 
-     * - write()で書き込んだ値が、read()で正しく読み出されるか？
-     */
-/*
-    void test_write_and_read()
-    {
-      RTC::TimedDouble bindValue;
-      RTC::OutPort<RTC::TimedDouble>* outPort
-	= new RTC::OutPort<RTC::TimedDouble>("OutPort", bindValue);
-			
-      for (int i = 0; i < 100; ++i)
-	{
-	  RTC::TimedDouble writeValue;
-	  writeValue.data = i * 3.14159265;
-	  CPPUNIT_ASSERT(outPort->write(writeValue));
-				
-	  RTC::TimedDouble readValue;
-	  CPPUNIT_ASSERT(outPort->read(readValue));
-				
-	  // write()で書き込んだ値が、read()で正しく読み出されるか？
-	  CPPUNIT_ASSERT_EQUAL(writeValue.data, readValue.data);
-	}
-      delete outPort;
-    }
-*/		
+
     /*!
      * @brief write()メソッドのOnWriteコールバック呼出テスト
      * 
@@ -1557,6 +1518,7 @@ namespace OutPort
 			
       // あらかじめ設定されたOnWriteコールバックが正しく呼び出されたか？
       CPPUNIT_ASSERT_EQUAL(writeValue.data, onWrite.m_value.data);
+      delete inPort;
       delete outPort;
     }
 		
@@ -1615,6 +1577,7 @@ namespace OutPort
 			
       // OutPortに割り当てされたバッファがフルの場合に、あらかじめ設定されたOnOverflowコールバックが正しく呼び出されたか？
 //      CPPUNIT_ASSERT_EQUAL(writeValue.data, onOverflow.m_value.data);
+      delete inPort;
       delete outPort;
     }
 
@@ -1668,6 +1631,7 @@ namespace OutPort
 			
       // バッファフルでない場合、OnOverflowコールバックが意図どおり未呼出のままか？
 //      CPPUNIT_ASSERT_EQUAL((double) 0, onOverflow.m_value.data);
+      delete inPort;
       delete outPort;
     }
 		
@@ -1707,6 +1671,7 @@ namespace OutPort
 				
 	}
       m_pPOA->deactivate_object(*m_pPOA->servant_to_id(outPort));
+      delete consumer;
       delete outPort;
     }
 
@@ -1792,6 +1757,7 @@ namespace OutPort
 				     (double) WTIMEOUT_USEC / USEC_PER_SEC, interval,
 				     0.1 * WTIMEOUT_USEC/USEC_PER_SEC);
       }
+      delete inPort;
       delete outPort;
     }
 		

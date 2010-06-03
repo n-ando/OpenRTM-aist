@@ -7,16 +7,13 @@
 
 AUTOMAKE_OPTIONS = 1.4
 
-SUBDIRS = device_interfaces
+SUBDIRS = . device_interfaces
 
 IDLC = @IDLC@
 IDLFLAGS = @IDL_FLAGS@
 LIBS = @LIBS@
 AM_CPPFLAGS=-I$(top_srcdir)/src/lib -I$(top_srcdir)/src/lib/rtm
 AM_LDFLAGS=-L$(top_builddir)/src/lib/rtm -L$(top_builddir)/src/lib/rtm/idl
-
-# Suffix definition of sources and headers of skeletons and stubs 
-SUFFIXES = .idl Skel.cpp Stub.cpp Stub.o Skel.o
 
 # RTM idl sources
 IDL_SOURCES =             \
@@ -113,6 +110,23 @@ ORBIT2_SRC = \
 	$(IDL_SOURCES:.idl=-cpp.h)
 
 
+idl-stamp: $(IDL_SOURCES)
+	@touch idl-stamp
+	@for f in $(IDL_SOURCES) ; do \
+		$(OIDLC) $$f ; \
+		$(IDLC) $(IDLFLAGS) $$f ; \
+		$(top_srcdir)/build/makewrapper.py $$f ; \
+	done ;
+
+$(ALL_SRC): idl-stamp
+	@if test -f $@ ; then \
+		touch $@ ; \
+	else \
+		rm -f idl-stamp ; \
+		$(MAKE) $(AM_MAKEFLAGS) idl-stamp ; \
+	fi ;
+
+
 # Install directory of headers and idl files
 rtmheaderdir = $(prefix)/include/rtm
 idldir =       $(rtmheaderdir)/idl
@@ -122,27 +136,16 @@ idl_DATA = $(IDL_SOURCES)
 
 nodist_rtmskel_HEADERS = $(ALL_SRC)
 
-
 #------------------------------------------------------------
 # Intermediate library : libRTCSkel.a
 noinst_LTLIBRARIES = libRTCSkel.la libRTCStub.la
 
 nodist_libRTCSkel_la_SOURCES = $(SKEL_CPP)
-
 libRTCSkel_la_LIBADD = $(LIBS)
 
 nodist_libRTCStub_la_SOURCES = $(STUB_CPP)
-
 libRTCStub_la_LIBADD = $(LIBS)
-
-.idlSkel.cpp:
-	$(OIDLC) $<
-	$(IDLC) $(IDLFLAGS) $<
-	$(top_srcdir)/build/makewrapper.py $<
-.idlStub.cpp:
-	$(OIDLC) $<
-	$(IDLC) $(IDLFLAGS) $<
-	$(top_srcdir)/build/makewrapper.py $<
+#
 #------------------------------------------------------------
 
 
@@ -197,6 +200,7 @@ dist-hook: lst vcproj wxs
 # Cleanup
 clean-local:
 	rm -f $(ALL_SRC) *~ *.core *.lst Makefile.old
+	rm -f idl-stamp
 
 # Extra sources included distribution
 EXTRA_DIST = \

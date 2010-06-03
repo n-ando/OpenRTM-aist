@@ -464,13 +464,13 @@ namespace coil
     return *findNode(key);
   }
 
-/*!
- * @if jp
- * @brief 新規ノードを生成する
- * @else
- * @brief Create newly node of Properties
- * @endif
- */
+  /*!
+   * @if jp
+   * @brief 新規ノードを生成する
+   * @else
+   * @brief Create newly node of Properties
+   * @endif
+   */
   bool Properties::createNode(const std::string& key)
   {
     if (key.empty()) { return false; }
@@ -785,6 +785,13 @@ namespace coil
     return space;
   }
   
+  /*!
+   * @if jp
+   * @brief インデントを生成する
+   * @else
+   * @brief Create indents
+   * @endif
+   */
   std::string indent(int index)
   {
     std::string space;
@@ -795,6 +802,13 @@ namespace coil
     return space;
   }
   
+  /*!
+   * @if jp
+   * @brief Propertyをストリームに出力する
+   * @else
+   * @brief Output Properties to stream
+   * @endif
+   */
   std::ostream& operator<<(std::ostream& lhs, const Properties& rhs)
   {
     return rhs._dump(lhs, rhs, 0);

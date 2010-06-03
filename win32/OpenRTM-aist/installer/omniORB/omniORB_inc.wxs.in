@@ -190,6 +190,15 @@
             </Directory>
           </Directory>
         </Directory>
+        <Directory Id="omni_lib_python1.5" Name="python1.5">
+          <Component Id="OmniLibPython1_5" Guid="{% OmniLibPython1_5.GUID %}">
+	    {% for file in OmniLibPython1_5.Files %}
+	    <File Id="{% file.Id %}" Name="{% file.Name %}"
+		  DiskId="1" Source="{% file.Source %}">
+	    </File>
+	    {% endfor %}
+          </Component>
+        </Directory>
         <Directory Id="omni_lib_x86_win32" Name="x86_win32">
           <Component Id="OmniLibX86_win32" Guid="{% OmniLibX86_win32.GUID %}">
 	    {% for file in OmniLibX86_win32.Files %}

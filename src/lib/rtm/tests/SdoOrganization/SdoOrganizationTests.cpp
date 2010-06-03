@@ -68,6 +68,7 @@ namespace SdoOrganization
     CPPUNIT_TEST_SUITE_END();
     
   private:
+    ::RTC::RTObject_impl* rtobj;
     Organization_impl* m_pOi;
     char* m_id;
   public:
@@ -91,7 +92,6 @@ namespace SdoOrganization
      */
     virtual void setUp()
     {
-      ::RTC::RTObject_impl* rtobj;
       ::RTC::Manager& mgr(RTC::Manager::instance());
       rtobj = new ::RTC::RTObject_impl(&mgr);
       m_pOi = new Organization_impl(rtobj->getObjRef());
@@ -103,6 +103,7 @@ namespace SdoOrganization
     virtual void tearDown()
     {
       m_pOi->_remove_ref();
+      rtobj->_remove_ref();
     }
 
 
@@ -548,6 +549,7 @@ namespace SdoOrganization
 	  ret = m_pOi->set_owner(ptrOwner);
 	  CPPUNIT_ASSERT(ret);
 	  sflg = 0;
+          rtobj2->_remove_ref();
 	}
 	catch (InvalidParameter ip) {
 	  cout << "InvalidParameter exception." << endl;
@@ -638,6 +640,7 @@ namespace SdoOrganization
 	ret = m_pOi->set_members(slist);
 	CPPUNIT_ASSERT(ret);
 	sflg = 0;
+        rtobj2->_remove_ref();
       }
       catch (InvalidParameter ip) {
         cout << "InvalidParameter exception." << endl;
@@ -835,6 +838,7 @@ namespace SdoOrganization
           mgr2.getPOAManager()->deactivate(false, true);
         }
       }
+      rtobj2->_remove_ref();
       m_pOi2->_remove_ref();
 //      std::cout << "test_add_remove_members OUT" << std::endl;
     }

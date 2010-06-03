@@ -1,7 +1,7 @@
 // -*- C++ -*-
 /*!
- * @file  SignalPosix.h
- * @brief RT-Middleware Service interface
+ * @file  Signal_win32.h
+ * @brief SignalAction class
  * @date  $Date$
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
@@ -34,14 +34,84 @@ namespace coil
 	  unsigned int __bits[_SIG_WORDS];
   } sigset_t;	
 
+  /*!
+   * @if jp
+   *
+   * @class SignalAction
+   * @brief SignalAction クラス
+   *
+   * @else
+   *
+   * @class SignalAction
+   * @brief SignalAction class
+   *
+   * @endif
+   */
   class SignalAction
   {
   public:
+    /*!
+     * @if jp
+     *
+     * @brief コンストラクタ
+     *
+     * コンストラクタ。
+     *
+     * @else
+     *
+     * @brief Constructor
+     *
+     * Constructor
+     *
+     * @endif
+     */
     SignalAction();
+
+    /*!
+     * @if jp
+     *
+     * @brief コンストラクタ
+     *
+     * コンストラクタ。
+     *
+     * @param handle シグナルハンドラ
+     * @param signum シグナル番号
+     * @param mask マスク
+     * @param flags フラグ
+     *
+     * @else
+     *
+     * @brief Constructor
+     *
+     * Constructor
+     *
+     * @param handle Signal handler.
+     * @param signum Signal number.
+     * @param mask Signal mask.
+     * @param flags Signal flag.
+     *
+     * @endif
+     */
     SignalAction(SignalHandler handle, int signum, sigset_t *mask = 0,
                  int flags = 0);
     
+    /*!
+     * @if jp
+     *
+     * @brief デストラクタ
+     *
+     * デストラクタ。
+     *
+     * @else
+     *
+     * @brief Destructor
+     *
+     * Destructor
+     *
+     * @endif
+     */
     ~SignalAction();
+
   private:
     SignalAction(const SignalAction&);
     SignalAction& operator=(const SignalAction &);

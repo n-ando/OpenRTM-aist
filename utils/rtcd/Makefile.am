@@ -13,7 +13,8 @@ AM_LDFLAGS=-L$(top_builddir) -L$(top_buiddir)/src/lib/rtm -L$(top_builddir)/src/
 bin_PROGRAMS = rtcd
 
 rtcd_SOURCES = rtcd.cpp
-rtcd_LDADD   = $(top_builddir)/src/lib/rtm/libRTC.la
+rtcd_LDADD   = $(top_builddir)/src/lib/rtm/libRTC.la \
+	$(top_builddir)/src/lib/coil/lib/libcoil.la
 rtcd_LDFLAGS = -L$(top_builddir)/src/lib/rtm
 
 #------------------------------------------------------------
@@ -64,7 +65,9 @@ wxs:
 dist-hook: lst vcproj wxs
 
 clean-local:
-	rm -rf rtcd *.o *~ *core .libs *.lst
+	rm -rf rtcd
+	rm -rf *.o *~ *.core *.lst *.log
+	rm -rf .libs 
 
 EXTRA_DIST = rtcd.yaml
 

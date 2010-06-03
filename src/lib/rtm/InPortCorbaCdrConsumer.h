@@ -32,26 +32,23 @@ namespace RTC
 {
   /*!
    * @if jp
-   *
    * @class InPortCorbaCdrConsumer
-   *
    * @brief InPortCorbaCdrConsumer クラス
    *
-   * 通信手段に CORBA を利用した入力ポートコンシューマの実装クラス。
+   * InPortConsumer 
    *
-   * @param DataType 本ポートにて扱うデータ型
+   * データ転送に CORBA の OpenRTM::InPortCdr インターフェースを利用し
+   * た、push 型データフロー型を実現する InPort コンシューマクラス。
    *
-   * @since 1.0
+   * @since 0.4.0
    *
    * @else
    * @class InPortCorbaCdrConsumer
-   *
    * @brief InPortCorbaCdrConsumer class
    *
-   * This is an implementation class of the input port Consumer 
-   * that uses CORBA for means of communication.
-   *
-   * @param DataType Data type for this port
+   * The InPort consumer class which uses the OpenRTM::InPortCdr
+   * interface in CORBA for data transfer and realizes a push-type
+   * dataflow.
    *
    * @since 0.4.0
    *
@@ -101,13 +98,26 @@ namespace RTC
      * @if jp
      * @brief 設定初期化
      *
-     * InPortConsumerの各種設定を行う
+     * InPortConsumerの各種設定を行う。実装クラスでは、与えられた
+     * Propertiesから必要な情報を取得して各種設定を行う。この init() 関
+     * 数は、InPortProvider生成直後および、接続時にそれぞれ呼ばれる可
+     * 能性がある。したがって、この関数は複数回呼ばれることを想定して記
+     * 述されるべきである。
+     * 
+     * @param prop 設定情報
      *
      * @else
+     *
      * @brief Initializing configuration
      *
-     * This operation would be called to configure this consumer
-     * in initialization.
+     * This operation would be called to configure in initialization.
+     * In the concrete class, configuration should be performed
+     * getting appropriate information from the given Properties data.
+     * This function might be called right after instantiation and
+     * connection sequence respectivly.  Therefore, this function
+     * should be implemented assuming multiple call.
+     *
+     * @param prop Configuration information
      *
      * @endif
      */
@@ -293,6 +303,19 @@ namespace RTC
 
 extern "C"
 {
+  /*!
+   * @if jp
+   * @brief モジュール初期化関数
+   *
+   * InPortCorbaCdrConsumer のファクトリを登録する初期化関数。
+   *
+   * @else
+   * @brief Module initialization
+   *
+   * This initialization function registers InPortCorbaCdrConsumer's factory.
+   *
+   * @endif
+   */
   void InPortCorbaCdrConsumerInit(void);
 };
 

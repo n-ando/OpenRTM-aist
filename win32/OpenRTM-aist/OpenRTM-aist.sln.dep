@@ -1,28 +1,25 @@
-libRTC: libcoil
-libRTC: libRTCSkel
-rtcd: libRTC
-rtcprof: libRTC
-ConfigSampleComp: libRTC
-ConfigSample: libRTC
-ConsoleInComp: libRTC
-ConsoleIn: libRTC
-ConsoleOutComp: libRTC
-ConsoleOut: libRTC
-SeqInComp: libRTC
-SeqIn: libRTC
-SeqOutComp: libRTC
-SeqOut: libRTC
-MyServiceConsumer: libRTC
-MyServiceConsumerComp: libRTC
-MyServiceConsumerComp: MyServiceConsumer
-MyServiceProviderComp: libRTC
-MyServiceProviderComp: MyServiceConsumerComp
-MyServiceProvider: libRTC
-MyServiceProvider: MyServiceProviderComp
-Motor: libRTC
-MotorComp: libRTC
-Controller: libRTC
-ControllerComp: libRTC
-Sensor: libRTC
-SensorComp: libRTC
-Composite: libRTC
+libcoil:
+libRTC: libcoil libRTCSkel
+rtcd: libcoil libRTC
+rtcprof: libcoil libRTC
+ConfigSampleComp: libcoil libRTC
+ConfigSample: libcoil libRTC
+ConsoleInComp: libcoil libRTC
+ConsoleIn: libcoil libRTC
+ConsoleOutComp: libcoil libRTC
+ConsoleOut: libcoil libRTC
+SeqInComp: libcoil libRTC
+SeqIn: libcoil libRTC
+SeqOutComp: libcoil libRTC
+SeqOut: libcoil libRTC
+MyServiceConsumerComp: libcoil libRTC
+MyServiceConsumer: libcoil libRTC MyServiceConsumerComp
+MyServiceProviderComp: libcoil libRTC MyServiceConsumerComp MyServiceConsumer
+MyServiceProvider: libcoil libRTC MyServiceConsumerComp MyServiceConsumer MyServiceProviderComp
+Motor: libcoil libRTC
+MotorComp: libcoil libRTC
+Controller: libcoil libRTC
+ControllerComp: libcoil libRTC
+Sensor: libcoil libRTC
+SensorComp: libcoil libRTC
+Composite: libcoil libRTC

@@ -49,8 +49,11 @@ nodist_InPortProviderTests_SOURCES =             \
 	$(top_srcdir)/src/lib/rtm/ModuleManager.cpp   \
 	$(top_srcdir)/src/lib/rtm/ManagerServant.cpp  \
 	$(top_srcdir)/src/lib/rtm/RTObject.cpp     \
-	$(top_builddir)/src/lib/rtm/PortAdmin.cpp  \
+	$(top_srcdir)/src/lib/rtm/PortAdmin.cpp  \
 	$(top_srcdir)/src/lib/rtm/ConfigAdmin.cpp  \
+	$(top_srcdir)/src/lib/rtm/CorbaPort.cpp          \
+	$(top_srcdir)/src/lib/rtm/ConnectorListener.cpp  \
+	$(top_srcdir)/src/lib/rtm/CORBA_IORUtil.cpp      \
 	$(top_srcdir)/src/lib/rtm/FactoryInit.cpp              \
 	$(top_srcdir)/src/lib/rtm/CdrRingBuffer.cpp            \
 	$(top_srcdir)/src/lib/rtm/DefaultPeriodicTask.cpp      \

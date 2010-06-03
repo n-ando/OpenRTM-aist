@@ -95,90 +95,13 @@ namespace Tests
     virtual RTC::ReturnCode_t finalize() { return RTC::RTC_OK; }
     virtual RTC::ReturnCode_t exit() { return RTC::RTC_OK; }
     virtual CORBA::Boolean is_alive(RTC::_objref_ExecutionContext*) { return true; }
-//    virtual RTC::ExecutionContextList* get_contexts() { return NULL; }
     virtual RTC::_objref_ExecutionContext* get_context(RTC::ExecutionContextHandle_t) { return NULL; }
 		
     // RTC::_impl_RTObject
     virtual RTC::ComponentProfile* get_component_profile() { return NULL; }
     virtual RTC::PortServiceList* get_ports() { return NULL; }
-//    virtual RTC::ExecutionContextServiceList* get_execution_context_services() { return NULL; }
   };
 
-/*
-  class FiniteStateMachineComponentMock
-    : public virtual POA_OpenRTM::FiniteStateMachineComponent
-  {
-    // RTC::_impl_ComponentAction
-    virtual RTC::ExecutionContextHandle_t attach_context(RTC::_objref_ExecutionContext*) { return RTC::ExecutionContextHandle_t(0); }
-    virtual RTC::ReturnCode_t detach_context(RTC::ExecutionContextHandle_t) { return RTC::RTC_OK; }
-    virtual RTC::ReturnCode_t on_initialize() { return RTC::RTC_OK; }
-    virtual RTC::ReturnCode_t on_finalize() { return RTC::RTC_OK; }
-    virtual RTC::ReturnCode_t on_startup(RTC::ExecutionContextHandle_t) { return RTC::RTC_OK; }
-    virtual RTC::ReturnCode_t on_shutdown(RTC::ExecutionContextHandle_t) { return RTC::RTC_OK; }
-    virtual RTC::ReturnCode_t on_activated(RTC::ExecutionContextHandle_t) { return RTC::RTC_OK; }
-    virtual RTC::ReturnCode_t on_deactivated(RTC::ExecutionContextHandle_t) { return RTC::RTC_OK; }
-    virtual RTC::ReturnCode_t on_aborting(RTC::ExecutionContextHandle_t) { return RTC::RTC_OK; }
-    virtual RTC::ReturnCode_t on_error(RTC::ExecutionContextHandle_t) { return RTC::RTC_OK; }
-    virtual RTC::ReturnCode_t on_reset(RTC::ExecutionContextHandle_t) { return RTC::RTC_OK; }
-		
-    // RTC::_impl_LightweightRTObject
-    virtual RTC::ReturnCode_t initialize() { return RTC::RTC_OK; }
-    virtual RTC::ReturnCode_t finalize() { return RTC::RTC_OK; }
-    virtual RTC::ReturnCode_t exit() { return RTC::RTC_OK; }
-    virtual CORBA::Boolean is_alive(RTC::_objref_ExecutionContext*) { return true; }
-//    virtual RTC::ExecutionContextList* get_contexts() { return NULL; }
-    virtual RTC::_objref_ExecutionContext* get_context(RTC::ExecutionContextHandle_t) { return NULL; }
-		
-    // SDOPackage::_impl_SDOSystemElement
-    virtual SDOPackage::OrganizationList* get_owned_organizations() { return NULL; }
-		
-    // SDOPackage::_impl_SDO
-    virtual char* get_sdo_id() { return NULL; }
-    virtual char* get_sdo_type() { return NULL; }
-    virtual SDOPackage::DeviceProfile* get_device_profile() { return NULL; }
-    virtual SDOPackage::ServiceProfileList* get_service_profiles() { return NULL; }
-    virtual SDOPackage::ServiceProfile* get_service_profile(const char*) { return NULL; }
-    virtual SDOPackage::_objref_SDOService* get_sdo_service(const char*) { return NULL; }
-    virtual SDOPackage::_objref_Configuration* get_configuration() { return NULL; }
-    virtual SDOPackage::_objref_Monitoring* get_monitoring() { return NULL; }
-    virtual SDOPackage::OrganizationList* get_organizations() { return NULL; }
-    virtual SDOPackage::NVList* get_status_list() { return NULL; }
-    virtual CORBA::Any* get_status(const char*) { return NULL; }
-		
-    // RTC::_impl_RTObject
-    virtual RTC::ComponentProfile* get_component_profile() { return NULL; }
-    virtual RTC::PortServiceList* get_ports() { return NULL; }
-//    virtual RTC::ExecutionContextServiceList* get_execution_context_services() { return NULL; }
-		
-    // RTC::_impl_FsmParticipantAction
-    virtual RTC::ReturnCode_t on_action(RTC::ExecutionContextHandle_t) { return RTC::RTC_OK; }
-    virtual RTC::ExecutionContextList*get_owned_contexts()
-    {
-      return NULL;
-    }
-    virtual RTC::ExecutionContextList* get_participating_contexts()
-    {
-      return NULL;
-    }
-    virtual RTC::ExecutionContextHandle_t get_context_handle(RTC::_objref_ExecutionContext*)
-    {
-      return 0;
-    }
-
-    virtual RTC::_objref_Mode* get_current_mode_in_context(RTC::_objref_ExecutionContext*)
-    {
-      return NULL;
-    }
-    virtual RTC::_objref_Mode* get_pending_mode_in_context(RTC::_objref_ExecutionContext*)
-    {
-      return NULL;
-    }
-    virtual RTC::ReturnCode_t on_mode_changed(RTC::ExecutionContextHandle_t)
-    {
-      return RTC::RTC_OK;
-    }
-  };
-*/
   class FsmObjectMock
     : public virtual POA_RTC::FsmObject
   {
@@ -296,22 +219,18 @@ namespace Tests
     CPPUNIT_TEST_SUITE(RTCUtilTests);
 		
     CPPUNIT_TEST(test_isDataFlowComponent_DataFlowComponent);
-//    CPPUNIT_TEST(test_isDataFlowComponent_FiniteStateMachineComponent);
     CPPUNIT_TEST(test_isDataFlowComponent_FsmObject);
     CPPUNIT_TEST(test_isDataFlowComponent_MultiModeObject);
 
     CPPUNIT_TEST(test_isFsmParticipant_DataFlowComponent);
-//    CPPUNIT_TEST(test_isFsmParticipant_FiniteStateMachineComponent);
     CPPUNIT_TEST(test_isFsmParticipant_FsmObject);
     CPPUNIT_TEST(test_isFsmParticipant_MultiModeObject);
 
     CPPUNIT_TEST(test_isFsmObject_DataFlowComponent);
-//    CPPUNIT_TEST(test_isFsmObject_FiniteStateMachineComponent);
     CPPUNIT_TEST(test_isFsmObject_FsmObject);
     CPPUNIT_TEST(test_isFsmObject_MultiModeObject);
 		
     CPPUNIT_TEST(test_isMultiModeObject_DataFlowComponent);
-//    CPPUNIT_TEST(test_isMultiModeObject_FiniteStateMachineComponent);
     CPPUNIT_TEST(test_isMultiModeObject_FsmObject);
     CPPUNIT_TEST(test_isMultiModeObject_MultiModeObject);
 		
@@ -363,18 +282,9 @@ namespace Tests
       CPPUNIT_ASSERT(! CORBA::is_nil(ref));
 			
       CPPUNIT_ASSERT(RTC_Utils::isDataFlowComponent(ref));
+      m_pPOA->deactivate_object(*m_pPOA->servant_to_id(obj));
+      delete obj;
     }
-		
-/*
-    void test_isDataFlowComponent_FiniteStateMachineComponent()
-    {
-      FiniteStateMachineComponentMock* obj = new FiniteStateMachineComponentMock();
-      CORBA::Object_ptr ref = obj->_this();
-      CPPUNIT_ASSERT(! CORBA::is_nil(ref));
-			
-      CPPUNIT_ASSERT(! RTC_Utils::isDataFlowComponent(ref));
-    }
-*/
 		
     void test_isDataFlowComponent_FsmObject()
     {
@@ -383,6 +293,8 @@ namespace Tests
       CPPUNIT_ASSERT(! CORBA::is_nil(ref));
 			
       CPPUNIT_ASSERT(! RTC_Utils::isDataFlowComponent(ref));
+      m_pPOA->deactivate_object(*m_pPOA->servant_to_id(obj));
+      delete obj;
     }
 		
     void test_isDataFlowComponent_MultiModeObject()
@@ -393,6 +305,8 @@ namespace Tests
       CPPUNIT_ASSERT(! CORBA::is_nil(ref));
 			
       CPPUNIT_ASSERT(! RTC_Utils::isDataFlowComponent(ref));
+      m_pPOA->deactivate_object(*m_pPOA->servant_to_id(obj));
+      delete obj;
     }
 		
     void test_isFsmParticipant_DataFlowComponent()
@@ -402,18 +316,9 @@ namespace Tests
       CPPUNIT_ASSERT(! CORBA::is_nil(ref));
 			
       CPPUNIT_ASSERT(! RTC_Utils::isFsmParticipant(ref));
+      m_pPOA->deactivate_object(*m_pPOA->servant_to_id(obj));
+      delete obj;
     }
-		
-/*
-    void test_isFsmParticipant_FiniteStateMachineComponent()
-    {
-      FiniteStateMachineComponentMock* obj = new FiniteStateMachineComponentMock();
-      CORBA::Object_ptr ref = obj->_this();
-      CPPUNIT_ASSERT(! CORBA::is_nil(ref));
-			
-      CPPUNIT_ASSERT(RTC_Utils::isFsmParticipant(ref));
-    }
-*/
 		
     void test_isFsmParticipant_FsmObject()
     {
@@ -422,6 +327,8 @@ namespace Tests
       CPPUNIT_ASSERT(! CORBA::is_nil(ref));
 			
       CPPUNIT_ASSERT(! RTC_Utils::isFsmParticipant(ref));
+      m_pPOA->deactivate_object(*m_pPOA->servant_to_id(obj));
+      delete obj;
     }
 		
     void test_isFsmParticipant_MultiModeObject()
@@ -432,6 +339,8 @@ namespace Tests
       CPPUNIT_ASSERT(! CORBA::is_nil(ref));
 			
       CPPUNIT_ASSERT(! RTC_Utils::isFsmParticipant(ref));
+      m_pPOA->deactivate_object(*m_pPOA->servant_to_id(obj));
+      delete obj;
     }
 		
     void test_isFsmObject_DataFlowComponent()
@@ -441,18 +350,9 @@ namespace Tests
       CPPUNIT_ASSERT(! CORBA::is_nil(ref));
 			
       CPPUNIT_ASSERT(! RTC_Utils::isFsmObject(ref));
+      m_pPOA->deactivate_object(*m_pPOA->servant_to_id(obj));
+      delete obj;
     }
-		
-/*
-    void test_isFsmObject_FiniteStateMachineComponent()
-    {
-      FiniteStateMachineComponentMock* obj = new FiniteStateMachineComponentMock();
-      CORBA::Object_ptr ref = obj->_this();
-      CPPUNIT_ASSERT(! CORBA::is_nil(ref));
-			
-      CPPUNIT_ASSERT(! RTC_Utils::isFsmObject(ref));
-    }
-*/
 		
     void test_isFsmObject_FsmObject()
     {
@@ -461,6 +361,8 @@ namespace Tests
       CPPUNIT_ASSERT(! CORBA::is_nil(ref));
 			
       CPPUNIT_ASSERT(RTC_Utils::isFsmObject(ref));
+      m_pPOA->deactivate_object(*m_pPOA->servant_to_id(obj));
+      delete obj;
     }
 
     void test_isFsmObject_MultiModeObject()
@@ -471,6 +373,8 @@ namespace Tests
       CPPUNIT_ASSERT(! CORBA::is_nil(ref));
 			
       CPPUNIT_ASSERT(! RTC_Utils::isFsmObject(ref));
+      m_pPOA->deactivate_object(*m_pPOA->servant_to_id(obj));
+      delete obj;
     }
 		
     void test_isMultiModeObject_DataFlowComponent()
@@ -480,18 +384,9 @@ namespace Tests
       CPPUNIT_ASSERT(! CORBA::is_nil(ref));
 			
       CPPUNIT_ASSERT(! RTC_Utils::isMultiModeObject(ref));
+      m_pPOA->deactivate_object(*m_pPOA->servant_to_id(obj));
+      delete obj;
     }
-
-/*
-    void test_isMultiModeObject_FiniteStateMachineComponent()
-    {
-      FiniteStateMachineComponentMock* obj = new FiniteStateMachineComponentMock();
-      CORBA::Object_ptr ref = obj->_this();
-      CPPUNIT_ASSERT(! CORBA::is_nil(ref));
-			
-      CPPUNIT_ASSERT(! RTC_Utils::isMultiModeObject(ref));
-    }
-*/
 
     void test_isMultiModeObject_FsmObject()
     {
@@ -500,6 +395,8 @@ namespace Tests
       CPPUNIT_ASSERT(! CORBA::is_nil(ref));
 			
       CPPUNIT_ASSERT(! RTC_Utils::isMultiModeObject(ref));
+      m_pPOA->deactivate_object(*m_pPOA->servant_to_id(obj));
+      delete obj;
     }
 
     void test_isMultiModeObject_MultiModeObject()
@@ -510,6 +407,8 @@ namespace Tests
       CPPUNIT_ASSERT(! CORBA::is_nil(ref));
 			
       CPPUNIT_ASSERT(RTC_Utils::isMultiModeObject(ref));
+      m_pPOA->deactivate_object(*m_pPOA->servant_to_id(obj));
+      delete obj;
     }
 		
   };

@@ -32,15 +32,47 @@ namespace RTC
    * @class OutPortPullConnector
    * @brief OutPortPullConnector クラス
    *
-   * OutPort の Pull 型データフローのための Connector
+   * OutPort の pull 型データフローのための Connector クラス。このオブ
+   * ジェクトは、接続時に dataflow_type に pull が指定された場合、
+   * OutPort によって生成・所有され、InPortPullConnector と対になって、
+   * データポートの pull 型のデータフローを実現する。一つの接続に対して、
+   * 一つのデータストリームを提供する唯一の Connector が対応する。
+   * Connector は 接続時に生成される UUID 形式の ID により区別される。
+   *
+   * OutPortPullConnector は以下の三つのオブジェクトを所有し管理する。
+   *
+   * - InPortConsumer
+   * - Buffer
+   *
+   * OutPort に書き込まれたデータは OutPortPullConnector::write() に渡
+   * され Buffer に書き込まれる。InPortPullConnector が
+   * OutPortPullConnector からデータを読み出すことで InPort にデータが
+   * 転送される。
    *
    * @since 1.0.0
    *
    * @else
    * @class OutPortPullConnector
-   * @brief OutPortPullConnector base class
+   * @brief OutPortPullConnector class
    *
-   * A connector class for pull type dataflow of OutPort
+   * Connector class of OutPort for pull type dataflow. When "pull" is
+   * specified as dataflow_type at the time of establishing
+   * connection, this object is generated and owned by the OutPort.
+   * This connector and InPortPullConnector make a pair and realize
+   * pull type dataflow of data ports. One connector corresponds to
+   * one connection which provides a data stream. Connector is
+   * distinguished by ID of the UUID that is generated at establishing
+   * connection.
+   *
+   * OutPortPullConnector owns and manages the following objects.
+   *
+   * - InPortConsumer
+   * - Buffer
+   *
+   * Data written into the OutPort is passed to
+   * OutPortPullConnector::write(), and it is written into the buffer.
+   * By reading data from OutPortPullConnector to InPortPullConnector,
+   * data transfer is realized.
    *
    * @since 1.0.0
    *
@@ -56,24 +88,39 @@ namespace RTC
      * @if jp
      * @brief コンストラクタ
      *
-     * OutPortPullConnector は OutPortProvider の所有権を持つ。
-     * したがって、OutPortPullConnector 削除時には、OutPortProvider も同時に
-     * 解体・削除される。
+     * OutPortPullConnector のコンストラクタはオブジェクト生成時に下記
+     * を引数にとる。ConnectorInfo は接続情報を含み、この情報に従いバッ
+     * ファ等を生成する。OutPort インターフェースのプロバイダオブジェク
+     * トへのポインタを取り、所有権を持つので、OutPortPullConnector は
+     * OutPortProvider の解体責任を持つ。各種イベントに対するコールバッ
+     * ク機構を提供する ConnectorListeners を持ち、適切なタイミングでコー
+     * ルバックを呼び出す。データバッファがもし OutPortBase から提供さ
+     * れる場合はそのポインタを取る。
      *
-     * @param profile pointer to a ConnectorProfile
-     * @param provider pointer to an OutPortProvider
-     * @param buffer pointer to a buffer
+     * @param info ConnectorInfo
+     * @param provider OutPortProvider
+     * @param listeners ConnectorListeners 型のリスナオブジェクトリスト
+     * @param buffer CdrBufferBase 型のバッファ
      *
-     * @elsek
+     * @else
      * @brief Constructor
      *
-     * OutPortPullConnector assume ownership of InPortConsumer.
-     * Therefore, OutPortProvider will be deleted when OutPortPushConnector
-     * is destructed.
+     * OutPortPullConnector's constructor is given the following
+     * arguments.  According to ConnectorInfo which includes
+     * connection information, a buffer is created.  It is also given
+     * a pointer to the provider object for the OutPort interface.
+     * The owner-ship of the pointer is owned by this
+     * OutPortPullConnector, it has responsibility to destruct the
+     * OutPortProvider.  OutPortPullConnector also has
+     * ConnectorListeners to provide event callback mechanisms, and
+     * they would be called at the proper timing.  If data buffer is
+     * given by OutPortBase, the pointer to the buffer is also given
+     * as arguments.
      *
-     * @param profile pointer to a ConnectorProfile
-     * @param provider pointer to an OutPortProvider
-     * @param buffer pointer to a buffer
+     * @param info ConnectorInfo
+     * @param provider OutPortProvider
+     * @param listeners ConnectorListeners type lsitener object list
+     * @param buffer CdrBufferBase type buffer
      *
      * @endif
      */

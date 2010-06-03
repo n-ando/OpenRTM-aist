@@ -392,6 +392,7 @@ namespace PeriodicExecutionContext
     PortableServer::POA_ptr m_pPOA;
 	
   public:
+
     /*!
      * @brief Constructor
      */
@@ -449,6 +450,9 @@ namespace PeriodicExecutionContext
       // stop()呼出後は、非running状態か？
       CPPUNIT_ASSERT_EQUAL(RTC::RTC_OK, ec->stop());
       CPPUNIT_ASSERT_EQUAL(CORBA::Boolean(false), ec->is_running());
+
+      m_pPOA->deactivate_object(*m_pPOA->servant_to_id(ec));
+      delete ec;
     }
 		
     /*!
@@ -479,7 +483,12 @@ namespace PeriodicExecutionContext
 			
       // この時点で、on_startup()が1回だけ呼び出されているはず
       CPPUNIT_ASSERT_EQUAL(1, mock->countLog("on_startup"));
+
       ec->stop();
+      m_pPOA->deactivate_object(*m_pPOA->servant_to_id(ec));
+      delete ec;
+      m_pPOA->deactivate_object(*m_pPOA->servant_to_id(rto));
+      delete rto;
     }
 		
     /*!
@@ -501,7 +510,10 @@ namespace PeriodicExecutionContext
 			
       // さらにstart()呼出しを行い、意図どおりのエラーコードで戻ることを確認する
       CPPUNIT_ASSERT_EQUAL(RTC::PRECONDITION_NOT_MET, ec->start());
+
       ec->stop();
+      m_pPOA->deactivate_object(*m_pPOA->servant_to_id(ec));
+      delete ec;
     }
 		
     /*!
@@ -528,10 +540,11 @@ namespace PeriodicExecutionContext
       mock->setAlive(false);
       CPPUNIT_ASSERT_EQUAL(CORBA::Boolean(false), rto->is_alive(NULL));
 			
-      // start()呼出しを行い、意図どおりのエラーコードで戻ることを確認する
-      // CPPUNIT_ASSERT_EQUAL(RTC::PRECONDITION_NOT_MET, ec->start());
-      // ec->stop();
-      // delete ec;
+      ec->stop();
+      m_pPOA->deactivate_object(*m_pPOA->servant_to_id(ec));
+      delete ec;
+      m_pPOA->deactivate_object(*m_pPOA->servant_to_id(rto));
+      delete rto;
     }
 		
     /*!
@@ -565,7 +578,11 @@ namespace PeriodicExecutionContext
 			
       // この時点で、on_shutdown()が1回だけ呼び出されているはず
       CPPUNIT_ASSERT_EQUAL(1, mock->countLog("on_shutdown"));
-      // delete ec;
+
+      m_pPOA->deactivate_object(*m_pPOA->servant_to_id(ec));
+      delete ec;
+      m_pPOA->deactivate_object(*m_pPOA->servant_to_id(rto));
+      delete rto;
     }
 		
     /*!
@@ -594,6 +611,9 @@ namespace PeriodicExecutionContext
       // さらにstop()を呼び出し、意図どおりのエラーコードで戻ることを確認する
       CPPUNIT_ASSERT_EQUAL(CORBA::Boolean(false), ec->is_running());
       CPPUNIT_ASSERT_EQUAL(RTC::PRECONDITION_NOT_MET, ec->stop());
+
+      m_pPOA->deactivate_object(*m_pPOA->servant_to_id(ec));
+      delete ec;
     }
 		
     /*!
@@ -616,6 +636,9 @@ namespace PeriodicExecutionContext
 	  // stop()を呼び出す
 	  CPPUNIT_ASSERT_EQUAL(RTC::RTC_OK, ec->stop());
 	}
+
+      m_pPOA->deactivate_object(*m_pPOA->servant_to_id(ec));
+      delete ec;
     }
 		
     /*!
@@ -636,6 +659,10 @@ namespace PeriodicExecutionContext
 	  CPPUNIT_ASSERT_EQUAL(RTC::RTC_OK, ec->set_rate(rate));
 	  CPPUNIT_ASSERT_EQUAL(rate, ec->get_rate());
 	}
+
+      ec->stop();
+      m_pPOA->deactivate_object(*m_pPOA->servant_to_id(ec));
+      delete ec;
     }
 		
     /*!
@@ -656,6 +683,10 @@ namespace PeriodicExecutionContext
 	  CORBA::Double rate((double) - 1.0 * i);
 	  CPPUNIT_ASSERT_EQUAL(RTC::BAD_PARAMETER, ec->set_rate(rate));
 	}
+
+      ec->stop();
+      m_pPOA->deactivate_object(*m_pPOA->servant_to_id(ec));
+      delete ec;
     }
 		
     /*!
@@ -682,11 +713,23 @@ namespace PeriodicExecutionContext
       // この時点では、on_rate_changed()は1回も呼び出されていないはず
       CPPUNIT_ASSERT_EQUAL(0, mock->countLog("on_rate_changed"));
 			
+      RTC::ExecutionContextProfile* ecp;
+      ecp = ec->get_profile();
+      CPPUNIT_ASSERT_EQUAL(CORBA::Double(0), ecp->rate);
+
       // set_rate()を呼出す
       CPPUNIT_ASSERT_EQUAL(RTC::RTC_OK, ec->set_rate(CORBA::Double(1.0)));
+      ecp = ec->get_profile();
+      CPPUNIT_ASSERT_EQUAL(CORBA::Double(1.0), ecp->rate);
 			
       // この時点で、on_rate_changed()が1回だけ呼び出されているはず
       CPPUNIT_ASSERT_EQUAL(1, mock->countLog("on_rate_changed"));
+
+      ec->stop();
+      m_pPOA->deactivate_object(*m_pPOA->servant_to_id(ec));
+      delete ec;
+      m_pPOA->deactivate_object(*m_pPOA->servant_to_id(rto));
+      delete rto;
     }
 		
     /*!
@@ -714,6 +757,12 @@ namespace PeriodicExecutionContext
 			
       // この時点で、attach_executioncontext()が1回だけ呼び出されているはず
       CPPUNIT_ASSERT_EQUAL(1, mock->countLog("attach_executioncontext"));
+
+      ec->stop();
+      m_pPOA->deactivate_object(*m_pPOA->servant_to_id(ec));
+      delete ec;
+      m_pPOA->deactivate_object(*m_pPOA->servant_to_id(rto));
+      delete rto;
     }
 		
     /*!
@@ -736,6 +785,12 @@ namespace PeriodicExecutionContext
       // LightweightRTObjectではあるが、DataFlowComponentではないRTObjectを用いて、
       // add()呼出しを試みて、意図どおりエラーコードで戻ることを確認する
       // CPPUNIT_ASSERT_EQUAL(RTC::PRECONDITION_NOT_MET, ec->add(rto->_this()));
+
+      ec->stop();
+      m_pPOA->deactivate_object(*m_pPOA->servant_to_id(ec));
+      delete ec;
+      m_pPOA->deactivate_object(*m_pPOA->servant_to_id(rto));
+      delete rto;
     }
 		
     /*!
@@ -766,6 +821,12 @@ namespace PeriodicExecutionContext
 			
       // この時点で、detach_executioncontext()が1回だけ呼び出されているはず
       CPPUNIT_ASSERT_EQUAL(1, mock->countLog("detach_executioncontext"));
+
+      ec->stop();
+      m_pPOA->deactivate_object(*m_pPOA->servant_to_id(ec));
+      delete ec;
+      m_pPOA->deactivate_object(*m_pPOA->servant_to_id(rto));
+      delete rto;
     }
 		
     /*!
@@ -786,6 +847,12 @@ namespace PeriodicExecutionContext
       // まだ登録していないコンポーネントについてExecutionContextからの登録解除を試みて、
       // 意図どおりのエラーコードで戻ることを確認する
       CPPUNIT_ASSERT_EQUAL(RTC::BAD_PARAMETER, ec->remove_component(rto->_this()));
+
+      ec->stop();
+      m_pPOA->deactivate_object(*m_pPOA->servant_to_id(ec));
+      delete ec;
+      m_pPOA->deactivate_object(*m_pPOA->servant_to_id(rto));
+      delete rto;
     }
 		
     /*!
@@ -814,8 +881,12 @@ namespace PeriodicExecutionContext
 
       // コンポーネントがActiveのままでremove()を試みて、意図どおりのエラーコードが戻ることを確認する
       // CPPUNIT_ASSERT_EQUAL(RTC::PRECONDITION_NOT_MET, ec->remove(rto->_this()));
-      ec->stop();
 
+      ec->stop();
+      m_pPOA->deactivate_object(*m_pPOA->servant_to_id(ec));
+      delete ec;
+      m_pPOA->deactivate_object(*m_pPOA->servant_to_id(rto));
+      delete rto;
     }
 		
     /*!
@@ -849,7 +920,12 @@ namespace PeriodicExecutionContext
 			
       // remove()が成功することを確認する
       CPPUNIT_ASSERT_EQUAL(RTC::RTC_OK, ec->remove_component(rto->_this()));
+
       ec->stop();
+      m_pPOA->deactivate_object(*m_pPOA->servant_to_id(ec));
+      delete ec;
+      m_pPOA->deactivate_object(*m_pPOA->servant_to_id(rto));
+      delete rto;
     }
 		
     /*!
@@ -887,7 +963,12 @@ namespace PeriodicExecutionContext
       // activate_component()からon_activated()の呼出しは同期呼出であり、
       // スレッドコンテキストを切替えることなく、Active状態に遷移していることを確認する
       CPPUNIT_ASSERT_EQUAL(RTC::ACTIVE_STATE, ec->get_component_state(rto->_this()));
+
       ec->stop();
+      m_pPOA->deactivate_object(*m_pPOA->servant_to_id(ec));
+      delete ec;
+      m_pPOA->deactivate_object(*m_pPOA->servant_to_id(rto));
+      delete rto;
     }
 		
     /*!
@@ -909,7 +990,12 @@ namespace PeriodicExecutionContext
       // ExecutionContextにコンポーネント登録することなくactivate_component()を呼出し、
       // 意図どおりのエラコードで戻ることを確認する
       CPPUNIT_ASSERT_EQUAL(RTC::BAD_PARAMETER, ec->activate_component(rto->_this()));
+
       ec->stop();
+      m_pPOA->deactivate_object(*m_pPOA->servant_to_id(ec));
+      delete ec;
+      m_pPOA->deactivate_object(*m_pPOA->servant_to_id(rto));
+      delete rto;
     }
 		
     /*!
@@ -939,7 +1025,12 @@ namespace PeriodicExecutionContext
 			
       // Error状態でactivate_component()呼出しを行い、意図どおりのエラーコードで戻ることを確認する
       CPPUNIT_ASSERT_EQUAL(RTC::PRECONDITION_NOT_MET, ec->activate_component(rto->_this()));
+
       ec->stop();
+      m_pPOA->deactivate_object(*m_pPOA->servant_to_id(ec));
+      delete ec;
+      m_pPOA->deactivate_object(*m_pPOA->servant_to_id(rto));
+      delete rto;
     }
 		
     /*!
@@ -968,6 +1059,12 @@ namespace PeriodicExecutionContext
 			
       // activate_component()呼出しを行い、意図どおりのエラーコードで戻ることを確認する
       // CPPUNIT_ASSERT_EQUAL(RTC::BAD_PARAMETER, ec->activate_component(rto->_this()));
+
+      ec->stop();
+      m_pPOA->deactivate_object(*m_pPOA->servant_to_id(ec));
+      delete ec;
+      m_pPOA->deactivate_object(*m_pPOA->servant_to_id(rto));
+      delete rto;
     }
 		
     /*!
@@ -1006,7 +1103,12 @@ namespace PeriodicExecutionContext
 
       // この時点で、on_deactivated()は1回だけ呼び出されているはず
       CPPUNIT_ASSERT_EQUAL(1, mock->countLog("on_deactivated"));
+
       ec->stop();
+      m_pPOA->deactivate_object(*m_pPOA->servant_to_id(ec));
+      delete ec;
+      m_pPOA->deactivate_object(*m_pPOA->servant_to_id(rto));
+      delete rto;
     }
 		
     /*!
@@ -1028,7 +1130,12 @@ namespace PeriodicExecutionContext
       // ExecutionContextに登録していないコンポーネントに対してdeactivateを試みて、
       // 意図どおりのエラーコードで戻ることを確認する
       CPPUNIT_ASSERT_EQUAL(RTC::BAD_PARAMETER, ec->deactivate_component(rto->_this()));
+
       ec->stop();
+      m_pPOA->deactivate_object(*m_pPOA->servant_to_id(ec));
+      delete ec;
+      m_pPOA->deactivate_object(*m_pPOA->servant_to_id(rto));
+      delete rto;
     }
 		
     /*!
@@ -1064,6 +1171,12 @@ namespace PeriodicExecutionContext
 
       // 非Alive状態のコンポーネントに対してdeactivateを試みて、意図どおりのエラーコードで戻ることを確認する
       // CPPUNIT_ASSERT_EQUAL(RTC::BAD_PARAMETER, ec->deactivate_component(rto->_this()));
+
+      ec->stop();
+      m_pPOA->deactivate_object(*m_pPOA->servant_to_id(ec));
+      delete ec;
+      m_pPOA->deactivate_object(*m_pPOA->servant_to_id(rto));
+      delete rto;
     }
 		
     /*!
@@ -1099,7 +1212,12 @@ namespace PeriodicExecutionContext
       coil::usleep(100000);
       // この時点で、on_reset()が1回だけ呼び出されているはず
       CPPUNIT_ASSERT_EQUAL(1, mock->countLog("on_reset"));
+
       ec->stop();
+      m_pPOA->deactivate_object(*m_pPOA->servant_to_id(ec));
+      delete ec;
+      m_pPOA->deactivate_object(*m_pPOA->servant_to_id(rto));
+      delete rto;
     }
 		
     /*!
@@ -1124,7 +1242,12 @@ namespace PeriodicExecutionContext
       // この状態(Inactive)でreset_component()呼出しを行い、意図どおりのエラーコードで戻ることを確認する
       CPPUNIT_ASSERT_EQUAL(RTC::INACTIVE_STATE, ec->get_component_state(rto->_this()));
       CPPUNIT_ASSERT_EQUAL(RTC::PRECONDITION_NOT_MET, ec->reset_component(rto->_this()));
+
       ec->stop();
+      m_pPOA->deactivate_object(*m_pPOA->servant_to_id(ec));
+      delete ec;
+      m_pPOA->deactivate_object(*m_pPOA->servant_to_id(rto));
+      delete rto;
     }
 		
     /*!
@@ -1153,6 +1276,12 @@ namespace PeriodicExecutionContext
 			
       // この状態(Created)でreset_component()呼出しを行い、意図どおりのエラーコードで戻ることを確認する
       CPPUNIT_ASSERT_EQUAL(RTC::PRECONDITION_NOT_MET, ec->reset_component(rto->_this()));
+
+      ec->stop();
+      m_pPOA->deactivate_object(*m_pPOA->servant_to_id(ec));
+      delete ec;
+      m_pPOA->deactivate_object(*m_pPOA->servant_to_id(rto));
+      delete rto;
     }
 		
     /*!
@@ -1192,6 +1321,12 @@ namespace PeriodicExecutionContext
 
       // 登録したコンポーネントの削除
       ec->clear_m_comps();
+
+      ec->stop();
+      m_pPOA->deactivate_object(*m_pPOA->servant_to_id(ec));
+      delete ec;
+      m_pPOA->deactivate_object(*m_pPOA->servant_to_id(rto));
+      delete rto;
     }
 
   };

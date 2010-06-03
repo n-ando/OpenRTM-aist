@@ -1,7 +1,7 @@
 // -*- C++ -*-
 /*!
- * @file Task.cpp
- * @brief Task class
+ * @file File_posix.h
+ * @brief File functions
  * @date $Date$
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
@@ -30,6 +30,29 @@
 namespace coil
 {
 
+  /*!
+   * @if jp
+   *
+   * @brief ファイルパスよりディレクトリ部分を取得する
+   *
+   * ファイルパスよりディレクトリ部分を取得する。
+   *
+   * @param path ファイルパス
+   *
+   * @return ディレクトリ名称
+   *
+   * @else
+   *
+   * @brief Get a directory part than a file pass
+   *
+   * Get a directory part than a file pass.
+   *
+   * @param path File path
+   *
+   * @return Directory name
+   *
+   * @endif
+   */
   inline std::string dirname(char* path)
   {
     char path_name[strlen(path)+1];
@@ -38,6 +61,29 @@ namespace coil
     return dir_name;
   }
 
+  /*!
+   * @if jp
+   *
+   * @brief ファイルパスよりファイル名部分を取得する
+   *
+   * ファイルパスよりファイル名部分を取得する。
+   *
+   * @param path ファイルパス
+   *
+   * @return ファイル名称
+   *
+   * @else
+   *
+   * @brief Get a file name part than a file pass
+   *
+   * Get a directory part than a file pass.
+   *
+   * @param path File path
+   *
+   * @return File name
+   *
+   * @endif
+   */
   inline std::string basename(const char* path)
   {
     char path_name[strlen(path)+1];
@@ -46,6 +92,31 @@ namespace coil
     return base_name;
   }
 
+  /*!
+   * @if jp
+   *
+   * @brief ファイルリストを取得する
+   *
+   * ディレクトリパスの中で指定ファイルにマッチするリストを取得する。
+   *
+   * @param path ディレクトリパス
+   * @param glob_str ファイル名
+   *
+   * @return ファイルリスト
+   *
+   * @else
+   *
+   * @brief Get file list
+   *
+   * Get a list matching a file designated than a directory path.
+   *
+   * @param path Directory path
+   * @param glob_str File name
+   *
+   * @return File list
+   *
+   * @endif
+   */
   inline coil::vstring filelist(const char* path, const char* glob_str = "")
   {
     struct dirent* ent; 

@@ -1074,6 +1074,9 @@ namespace ConfigAdmin
       CPPUNIT_ASSERT(!cdm2->result);
       configAdmin.onUpdateMock("config_id");
       CPPUNIT_ASSERT(cdm2->result);
+
+      // delete cdm1; delete cdm2 は不要です。
+      // ConfigAdmin::setOn*()の中で、delete m_* を実行しています。
     }
 		
     /*!
@@ -1101,6 +1104,9 @@ namespace ConfigAdmin
       CPPUNIT_ASSERT(!cdm2->result);
       configAdmin.onUpdateParamMock("config_id", "param2");
       CPPUNIT_ASSERT(cdm2->result);
+
+      // delete cdm1; delete cdm2 は不要です。
+      // ConfigAdmin::setOn*()の中で、delete m_* を実行しています。
     }
 		
     /*!
@@ -1130,6 +1136,9 @@ namespace ConfigAdmin
       CPPUNIT_ASSERT(!cdm2->result);
       configAdmin.onSetConfigurationSetMock(configSet2);
       CPPUNIT_ASSERT(cdm2->result);
+
+      // delete cdm1; delete cdm2 は不要です。
+      // ConfigAdmin::setOn*()の中で、delete m_* を実行しています。
     }
 		
     /*!
@@ -1159,6 +1168,9 @@ namespace ConfigAdmin
       CPPUNIT_ASSERT(!cdm2->result);
       configAdmin.onAddConfigurationSetMock(configSet2);
       CPPUNIT_ASSERT(cdm2->result);
+
+      // delete cdm1; delete cdm2 は不要です。
+      // ConfigAdmin::setOn*()の中で、delete m_* を実行しています。
     }
 		
     /*!
@@ -1186,6 +1198,9 @@ namespace ConfigAdmin
       CPPUNIT_ASSERT(!cdm2->result);
       configAdmin.onRemoveConfigurationSetMock("config_id2");
       CPPUNIT_ASSERT(cdm2->result);
+
+      // delete cdm1; delete cdm2 は不要です。
+      // ConfigAdmin::setOn*()の中で、delete m_* を実行しています。
     }
 		
     /*!
@@ -1213,6 +1228,9 @@ namespace ConfigAdmin
       CPPUNIT_ASSERT(!cdm2->result);
       configAdmin.onActivateSetMock("config_id2");
       CPPUNIT_ASSERT(cdm2->result);
+
+      // delete cdm1; delete cdm2 は不要です。
+      // ConfigAdmin::setOn*()の中で、delete m_* を実行しています。
     }
 		
 

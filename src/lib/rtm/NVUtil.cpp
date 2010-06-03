@@ -369,11 +369,26 @@ namespace NVUtil
     return out;
   }
 
+  /*!
+   * @if jp
+   * @brief NVList に設定されている内容を文字列として標準出力する。
+   * @else
+   * @brief Print information configured in NVList as a string type 
+   *        to Standard Outport.
+   * @endif
+   */
   void dump(const SDOPackage::NVList& nv)
   {
     dump_to_stream(std::cout, nv);
   }
 
+  /*!
+   * @if jp
+   * @brief NVList に設定されている内容を文字列にする
+   * @else
+   * @brief Get information configured in NVList as a string type
+   * @endif
+   */
   std::string toString(const SDOPackage::NVList& nv)
   {
     std::stringstream s;

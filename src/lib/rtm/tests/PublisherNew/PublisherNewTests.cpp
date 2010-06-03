@@ -119,6 +119,7 @@ namespace PublisherNew
        */
       virtual ~InPortCorbaCdrConsumerMock()
       {
+          delete m_buffer;
       }
       /*!
        * 
@@ -456,6 +457,7 @@ namespace PublisherNew
         CPPUNIT_ASSERT_EQUAL(false, 
                              publisher.isActive());
         
+        coil::usleep(10000);
         delete consumer;
     }
     /*!
@@ -544,8 +546,11 @@ namespace PublisherNew
         RTC::TimedLong td;
         td.data = 9;
         td >>= cdr;
-        CPPUNIT_ASSERT_EQUAL(RTC::PublisherNew::BUFFER_FULL,
-                                 publisher.write(cdr,0,0));
+        RTC::PublisherBase::ReturnCode ret = publisher.write(cdr,0,0);
+        bool bret = false;
+        if( (ret == RTC::PublisherNew::PORT_OK) || 
+            (ret == RTC::PublisherNew::BUFFER_FULL) ) bret = true;
+        CPPUNIT_ASSERT(bret);
         coil::usleep(10000);
         }
 
@@ -597,6 +602,7 @@ namespace PublisherNew
         }
         publisher.deactivate();
         
+        coil::usleep(10000);
         delete buffer;
         delete consumer;
         
@@ -755,6 +761,7 @@ namespace PublisherNew
         coil::usleep(10000);
         publisher.deactivate();
         
+        coil::usleep(10000);
         delete buffer;
         delete consumer;
         
@@ -921,6 +928,7 @@ namespace PublisherNew
 
         coil::usleep(10000);
         publisher.deactivate();
+        coil::usleep(10000);
         delete buffer;
         delete consumer;
         
@@ -1092,6 +1100,7 @@ namespace PublisherNew
         coil::usleep(10000);
         publisher.deactivate();
         
+        coil::usleep(10000);
         delete buffer;
         delete consumer;
         
@@ -1236,6 +1245,7 @@ namespace PublisherNew
        
         coil::usleep(100000);
         publisher.deactivate();
+        coil::usleep(10000);
         delete buffer;
         delete consumer;
     }
@@ -1405,6 +1415,7 @@ namespace PublisherNew
         coil::usleep(10000);
         publisher.deactivate();
         
+        coil::usleep(10000);
         delete buffer;
         delete consumer;
         
@@ -1504,8 +1515,9 @@ namespace PublisherNew
         CPPUNIT_ASSERT_EQUAL((long)7, rtd.data);
         }
 
-        coil::usleep(10000);
+        coil::usleep(1000000);  // ここは長めにしないと落ちます。
         publisher.deactivate();
+        coil::usleep(1000000);  // ここは長めにしないと落ちます。
         delete buffer;
         delete consumer;
     }

@@ -31,6 +31,8 @@
 #include <rtm/CdrBufferBase.h>
 #include <rtm/PortAdmin.h>
 #include <rtm/CORBA_SeqUtil.h>
+#include <rtm/ConnectorListener.h>
+#include <rtm/InPortPushConnector.h>
 
 /*!
  * @class InPortCorbaCdrProviderTests class
@@ -38,6 +40,49 @@
  */
 namespace InPortCorbaCdrProvider
 {
+
+  class DataListener
+    : public RTC::ConnectorDataListenerT<RTC::TimedLong>
+  {
+  public:
+    DataListener(const char* name) : m_name(name) {}
+    virtual ~DataListener()
+    {
+      //std::cout << "dtor of " << m_name << std::endl;
+    }
+
+    virtual void operator()(const RTC::ConnectorInfo& info,
+                            const RTC::TimedLong& data)
+    {
+      std::cout << "------------------------------"   << std::endl;
+      std::cout << "Data Listener: " << m_name       << std::endl;
+      std::cout << "Profile::name: " << info.name    << std::endl;
+      std::cout << "------------------------------"   << std::endl;
+    };
+    std::string m_name;
+  };
+
+
+  class ConnListener
+    : public RTC::ConnectorListener
+  {
+  public:
+    ConnListener(const char* name) : m_name(name) {}
+    virtual ~ConnListener()
+    {
+      //std::cout << "dtor of " << m_name << std::endl;
+    }
+
+    virtual void operator()(const RTC::ConnectorInfo& info)
+    {
+      std::cout << "------------------------------"   << std::endl;
+      std::cout << "Connector Listener: " << m_name       << std::endl;
+      std::cout << "Profile::name:      " << info.name    << std::endl;
+      std::cout << "------------------------------"   << std::endl;
+    };
+    std::string m_name;
+  };
+
   /*!
    * 
    * 
@@ -80,6 +125,8 @@ namespace InPortCorbaCdrProvider
   private:
     CORBA::ORB_ptr m_pORB;
     PortableServer::POA_ptr m_pPOA;
+    RTC::ConnectorListeners m_listeners;
+    RTC::InPortConnector* connector;
 
   public:
 	
@@ -101,6 +148,7 @@ namespace InPortCorbaCdrProvider
      */
     ~InPortCorbaCdrProviderTests()
     {
+      delete connector;
     }
 		
     /*!
@@ -123,64 +171,124 @@ namespace InPortCorbaCdrProvider
      */
     void test_case0()
     {
-        //
-        //
-        //
         InPortCorbaCdrProviderMock provider;
         CORBA::Long index;
 
-        //IOR をプロぺティに追加することを確認
+        //ConnectorInfo
+        coil::Properties prop;
+        coil::vstring ports;
+        RTC::ConnectorInfo info("name", "id", ports, prop);
+
+        //ConnectorDataListeners
+        m_listeners.connectorData_[RTC::ON_BUFFER_WRITE].addListener(
+                                   new DataListener("ON_BUFFER_WRITE"), true);
+        m_listeners.connectorData_[RTC::ON_BUFFER_FULL].addListener(
+                                   new DataListener("ON_BUFFER_FULL"), true);
+        m_listeners.connectorData_[RTC::ON_BUFFER_WRITE_TIMEOUT].addListener(
+                                   new DataListener("ON_BUFFER_WRITE_TIMEOUT"), true);
+        m_listeners.connectorData_[RTC::ON_BUFFER_OVERWRITE].addListener(
+                                   new DataListener("ON_BUFFER_OVERWRITE"), true);
+        m_listeners.connectorData_[RTC::ON_BUFFER_READ].addListener(
+                                   new DataListener("ON_BUFFER_READ"), true);
+        m_listeners.connectorData_[RTC::ON_SEND].addListener(
+                                   new DataListener("ON_SEND"), true);
+        m_listeners.connectorData_[RTC::ON_RECEIVED].addListener(
+                                   new DataListener("ON_RECEIVED"), true);
+        m_listeners.connectorData_[RTC::ON_RECEIVER_FULL].addListener(
+                                   new DataListener("ON_RECEIVER_FULL"), true);
+        m_listeners.connectorData_[RTC::ON_RECEIVER_TIMEOUT].addListener(
+                                   new DataListener("ON_RECEIVER_TIMEOUT"), true);
+        m_listeners.connectorData_[RTC::ON_RECEIVER_ERROR].addListener(
+                                   new DataListener("ON_RECEIVER_ERROR"), true);
+
+        //ConnectorListeners
+        m_listeners.connector_[RTC::ON_BUFFER_EMPTY].addListener(
+                                    new ConnListener("ON_BUFFER_EMPTY"), true);
+        m_listeners.connector_[RTC::ON_BUFFER_READ_TIMEOUT].addListener(
+                                    new ConnListener("ON_BUFFER_READ_TIMEOUT"), true);
+        m_listeners.connector_[RTC::ON_SENDER_EMPTY].addListener(
+                                    new ConnListener("ON_SENDER_EMPTY"), true);
+        m_listeners.connector_[RTC::ON_SENDER_TIMEOUT].addListener(
+                                    new ConnListener("ON_SENDER_TIMEOUT"), true);
+        m_listeners.connector_[RTC::ON_SENDER_ERROR].addListener(
+                                    new ConnListener("ON_SENDER_ERROR"), true);
+        m_listeners.connector_[RTC::ON_CONNECT].addListener(
+                                    new ConnListener("ON_CONNECT"), true);
+        m_listeners.connector_[RTC::ON_DISCONNECT].addListener(
+                                    new ConnListener("ON_DISCONNECT"), true);
+
+        //IOR をプロパティに追加することを確認
         index = NVUtil::find_index(provider.get_m_properties(),"dataport.corba_cdr.inport_ior");
         CPPUNIT_ASSERT(0<=index);
 
-        //ref をプロぺティに追加することを確認
+        //ref をプロパティに追加することを確認
         index = NVUtil::find_index(provider.get_m_properties(),"dataport.corba_cdr.inport_ref");
         CPPUNIT_ASSERT(0<=index);
 
-          // 未実装関数のため省略
-          //provideri.init();
+        provider.init(prop);
+        provider.setListener(info, &m_listeners);
 
         ::OpenRTM::PortStatus ret;
         ::OpenRTM::CdrData data;
-        CORBA_SeqUtil::push_back(data,0);
+        int testdata[10] = { 0,1,2,3,4,5,6,7,8,9 };
+        cdrMemoryStream cdr;
+        RTC::TimedLong td;
+        CORBA::ULong len;
 
-        ret = provider.put(data);      
+        td.data = testdata[0];
+        td >>= cdr;
+        len = (CORBA::ULong)cdr.bufSize();
+        data.length(len);
+        cdr.get_octet_array(&(data[0]), len);
+        ret = provider.put(data);
+
+        // buffer 未設定によるPORT_ERROR
         CPPUNIT_ASSERT_EQUAL(::OpenRTM::PORT_ERROR,ret);
 
         RTC::CdrBufferBase* buffer;
         buffer = RTC::CdrBufferFactory::instance().createObject("ring_buffer");
         provider.setBuffer(buffer);
 
-        ret = provider.put(data);      
-        CPPUNIT_ASSERT_EQUAL(::OpenRTM::PORT_OK,ret);
-        CORBA_SeqUtil::push_back(data,1);
-        CORBA_SeqUtil::push_back(data,2);
-        CORBA_SeqUtil::push_back(data,3);
-        CORBA_SeqUtil::push_back(data,4);
-        CORBA_SeqUtil::push_back(data,5);
-        CORBA_SeqUtil::push_back(data,6);
-        ret = provider.put(data);      
-        CPPUNIT_ASSERT_EQUAL(::OpenRTM::PORT_OK,ret);
-        CORBA_SeqUtil::push_back(data,7);
+        connector = new RTC::InPortPushConnector(info, &provider, m_listeners, buffer);
+        if (connector == 0)
+          {
+            std::cout << "ERROR: Connector creation failed." << std::endl;
+          }
+        provider.setConnector(connector);
 
-        ret = provider.put(data);      
+        ret = provider.put(data);
         CPPUNIT_ASSERT_EQUAL(::OpenRTM::PORT_OK,ret);
-        ret = provider.put(data);      
+
+        for( int i(1); i<7; ++i )
+          {
+            OpenRTM::PortStatus ret;
+            cdrMemoryStream cdr;
+            RTC::TimedLong td;
+            CORBA::ULong len;
+            td.data = testdata[i];
+            td >>= cdr;
+            len = (CORBA::ULong)cdr.bufSize();
+            data.length(len);
+            cdr.get_octet_array(&(data[0]), len);
+            ret = provider.put(data);
+            CPPUNIT_ASSERT_EQUAL(::OpenRTM::PORT_OK,ret);
+
+          }
+        cdrMemoryStream cdr2;
+        td.data = testdata[7];
+        td >>= cdr2;
+        len = (CORBA::ULong)cdr2.bufSize();
+        data.length(len);
+        cdr2.get_octet_array(&(data[0]), len);
+        ret = provider.put(data);
         CPPUNIT_ASSERT_EQUAL(::OpenRTM::PORT_OK,ret);
-        ret = provider.put(data);      
-        CPPUNIT_ASSERT_EQUAL(::OpenRTM::PORT_OK,ret);
-        ret = provider.put(data);      
-        CPPUNIT_ASSERT_EQUAL(::OpenRTM::PORT_OK,ret);
-        ret = provider.put(data);      
-        CPPUNIT_ASSERT_EQUAL(::OpenRTM::PORT_OK,ret);
-        ret = provider.put(data);      
-        CPPUNIT_ASSERT_EQUAL(::OpenRTM::PORT_OK,ret);
-        ret = provider.put(data);      
-        CPPUNIT_ASSERT_EQUAL(::OpenRTM::BUFFER_FULL,ret);
+
+        // delete connector;
+        // ここで delete すると落ちるので、デストラクタで行う。
     }
     
   };
-}; // namespace OutPortBase
+}; // namespace InPortCorbaCdrProvider
 
 /*
  * Register test suite
@@ -269,4 +377,4 @@ int main(int argc, char* argv[])
   return 0; // runner.run() ? 0 : 1;
 }
 #endif // MAIN
-#endif // OutPortBase_cpp
+#endif // InPortCorbaCdrProvider_cpp

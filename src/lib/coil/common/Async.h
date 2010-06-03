@@ -25,29 +25,181 @@
 
 namespace coil
 {
+  /*!
+   * @if jp
+   *
+   * @class Async
+   * @brief Async クラス
+   *
+   * @else
+   *
+   * @class Async
+   * @brief Async class
+   *
+   * @endif
+   */
   class Async
     : public coil::Task
   {
   public:
+    /*!
+     * @if jp
+     *
+     * @brief コンストラクタ
+     *
+     * コンストラクタ。
+     *
+     * @else
+     *
+     * @brief Constructor
+     *
+     * Constructor
+     *
+     * @endif
+     */
     Async() {}
+
+    /*!
+     * @if jp
+     *
+     * @brief デストラクタ
+     *
+     * デストラクタ。
+     *
+     * @else
+     *
+     * @brief Destructor
+     *
+     * Destructor
+     *
+     * @endif
+     */
     virtual ~Async(){}
+
+    /*!
+     * @if jp
+     *
+     * @brief 非同期実行用純粋仮想関数
+     *
+     * 非同期実行用純粋仮想関数。
+     *
+     * @else
+     *
+     * @brief Asynchronous invocation
+     *
+     * Pure virtual function for Asynchronous invocation.
+     *
+     * @endif
+     */
     virtual void invoke() = 0;
+
+    /*!
+     * @if jp
+     *
+     * @brief 完了状態チェック用純粋仮想関数
+     *
+     * 完了状態チェック用純粋仮想関数。
+     *
+     * @return true: 完了, false: 未完了
+     *
+     * @else
+     *
+     * @brief Check on completion state
+     *
+     * Pure virtual function for check on completion state.
+     *
+     * @return true: finished, false: unfinished
+     *
+     * @endif
+     */
     virtual bool finished() = 0;
   };
   
+  /*!
+   * @if jp
+   *
+   * @class Async_t
+   * @brief Async_t テンプレートクラス
+   *
+   * @else
+   *
+   * @class Async_t
+   * @brief Async_t template class
+   *
+   * @endif
+   */
   template <typename Object, typename Func>
   class Async_t
     : public Async
   {
   public:
+
+    /*!
+     * @if jp
+     *
+     * @brief コンストラクタ
+     *
+     * コンストラクタ。
+     *
+     * @param obj 登録対象オブジェクト
+     * @param func 非同期実行用関数
+     * @param auto_delete 非同期実行終了時に自動的にインスタンス削除を行うかどうかのフラグ
+     *
+     * @else
+     *
+     * @brief Constructor
+     *
+     * Constructor
+     *
+     * @param obj The target object for the asynchronous function.
+     * @param func Asynchronous function.
+     * @param auto_delete flag for automatic instance destruction.
+     *
+     * @endif
+     */
     Async_t(Object* obj, Func func, bool auto_delete = false)
       : m_obj(obj), m_func(func), m_finished(false), m_autodelete(auto_delete)
     {
     }
+
+    /*!
+     * @if jp
+     *
+     * @brief デストラクタ
+     *
+     * デストラクタ。
+     *
+     * @else
+     *
+     * @brief Destructor
+     *
+     * Destructor
+     *
+     * @endif
+     */
     virtual ~Async_t()
     {
     }
     
+    /*!
+     * @if jp
+     *
+     * @brief 非同期処理用のスレッド実行関数
+     *
+     * 登録されたオブジェクトの非同期処理を呼び出す。
+     *
+     * @return 実行結果
+     *
+     * @else
+     *
+     * @brief Thread execution function for asynchronous invoke.
+     *
+     * Invoke the registered objects operation.
+     *
+     * @return The execution result.
+     *
+     * @endif
+     */
     virtual int svc()
     {
       m_func(m_obj);
@@ -58,15 +210,67 @@ namespace coil
       
       return 0;
     }
+
+    /*!
+     * @if jp
+     *
+     * @brief 非同期処理終了
+     *
+     * 非同期処理を終了し、インスタンスを削除する。
+     *
+     * @else
+     *
+     * @brief Finalize the asynchronous function
+     *
+     * Finalize the asynchronous function for preparing it for destruction.
+     *
+     * @endif
+     */
     virtual void finalize()
     {
       Task::finalize();
       if (m_autodelete) delete this;
     }
+
+    /*!
+     * @if jp
+     *
+     * @brief 非同期処理活性化
+     *
+     * 非同期処理を活性化する。
+     *
+     * @else
+     *
+     * @brief Asynchronous function Activation
+     *
+     * Activate of Asynchronous function.
+     *
+     * @endif
+     */
     virtual void invoke()
     {
       activate();
     }
+
+    /*!
+     * @if jp
+     *
+     * @brief 完了状態チェック
+     *
+     * 完了状態を返す。
+     *
+     * @return true: 完了, false: 未完了
+     *
+     * @else
+     *
+     * @brief Check on completion state
+     *
+     * Return a completion state.
+     *
+     * @return true: finished, false: unfinished
+     *
+     * @endif
+     */
     virtual bool finished()
     {
       Guard<Mutex> guard(m_mutex);
@@ -80,33 +284,157 @@ namespace coil
     Mutex m_mutex;
   };
   
+  /*!
+   * @if jp
+   *
+   * @class Async_ref_t
+   * @brief Async_ref_t テンプレートクラス
+   *
+   * @else
+   *
+   * @class Async_ref_t
+   * @brief Async_ref_t template class
+   *
+   * @endif
+   */
   template <typename Object, typename Func>
   class Async_ref_t
     : public Async
   {
   public:
+
+    /*!
+     * @if jp
+     *
+     * @brief コンストラクタ
+     *
+     * コンストラクタ。
+     *
+     * @param obj 登録対象オブジェクト
+     * @param func 非同期実行用関数
+     * @param auto_delete 非同期実行終了時に自動的にインスタンス削除を行うかどうかのフラグ
+     *
+     * @else
+     *
+     * @brief Constructor
+     *
+     * Constructor
+     *
+     * @param obj The target object for the asynchronous function.
+     * @param func Asynchronous function.
+     * @param auto_delete flag for automatic instance destruction.
+     *
+     * @endif
+     */
     Async_ref_t(Object* obj, Func& func, bool auto_delete = false)
       : m_obj(obj), m_func(func), m_finished(false), m_autodelete(auto_delete)
     {
     }
+
+    /*!
+     * @if jp
+     *
+     * @brief デストラクタ
+     *
+     * デストラクタ。
+     *
+     * @else
+     *
+     * @brief Destructor
+     *
+     * Destructor
+     *
+     * @endif
+     */
     virtual ~Async_ref_t()
     {
     }
     
+    /*!
+     * @if jp
+     *
+     * @brief 非同期処理用のスレッド実行関数
+     *
+     * 登録されたオブジェクトの非同期処理を呼び出す。
+     *
+     * @return 実行結果
+     *
+     * @else
+     *
+     * @brief Thread execution function for asynchronous invoke.
+     *
+     * Invoke the registered objects operation.
+     *
+     * @return The execution result.
+     *
+     * @endif
+     */
     virtual int svc()
     {
       m_func(m_obj);
       m_finished = true;
       return 0;
     }
+
+    /*!
+     * @if jp
+     *
+     * @brief 非同期処理活性化
+     *
+     * 非同期処理を活性化する。
+     *
+     * @else
+     *
+     * @brief Asynchronous function Activation
+     *
+     * Activate of Asynchronous function.
+     *
+     * @endif
+     */
     virtual void invoke()
     {
       activate();
     }
+
+    /*!
+     * @if jp
+     *
+     * @brief 完了状態チェック
+     *
+     * 完了状態を返す。
+     *
+     * @return true: 完了, false: 未完了
+     *
+     * @else
+     *
+     * @brief Check on completion state
+     *
+     * Return a completion state.
+     *
+     * @return true: finished, false: unfinished
+     *
+     * @endif
+     */
     virtual bool finished()
     {
       return m_finished;
     }
+
+    /*!
+     * @if jp
+     *
+     * @brief 非同期処理終了
+     *
+     * 非同期処理を終了し、インスタンスを削除する。
+     *
+     * @else
+     *
+     * @brief Finalize the asynchronous function
+     *
+     * Finalize the asynchronous function for preparing it for destruction.
+     *
+     * @endif
+     */
     virtual void finalize()
     {
       Task::finalize();
@@ -197,7 +525,23 @@ namespace coil
    * // インスタンス生成と同時に実行することもできる。
    * AsyncInvoker(&a, std::mem_fun(&A::hoge))->invoke();
    *
+   * @param obj 登録対象オブジェクト
+   * @param func 非同期実行用関数
+   * @param auto_delete 非同期実行終了時に自動的にインスタンス削除を行うかどうかのフラグ
+   *
+   * @return Async_t インスタンス
+   *
    * @else
+   *
+   * @brief Helper function for async member function summons
+   *
+   * Helper function for async member function summons.
+   *
+   * @param obj The target object for the asynchronous function.
+   * @param func Asynchronous function.
+   * @param auto_delete flag for automatic instance destruction.
+   *
+   * @return Async_t Instance
    *
    * @endif
    */
@@ -208,6 +552,33 @@ namespace coil
     return new Async_t<Object, Func>(obj, func, auto_delete);
   }
 
+  /*!
+   * @if jp
+   *
+   * @brief 非同期メンバー関数呼び出しヘルパー関数
+   *
+   * メンバー関数を非同期に呼ぶためのヘルパー関数
+   *
+   * @param obj 登録対象オブジェクト
+   * @param func 非同期実行用関数
+   * @param auto_delete 非同期実行終了時に自動的にインスタンス削除を行うかどうかのフラグ
+   *
+   * @return Async_ref_t インスタンス
+   *
+   * @else
+   *
+   * @brief Helper function for async member function summons
+   *
+   * Helper function for async member function summons.
+   *
+   * @param obj The target object for the asynchronous function.
+   * @param func Asynchronous function.
+   * @param auto_delete flag for automatic instance destruction.
+   *
+   * @return Async_ref_t Instance
+   *
+   * @endif
+   */
   template <typename Object, typename Func>
   inline Async_ref_t<Object, Func>*
   AsyncInvoker(Object* obj, Func* func, bool auto_delete = false)

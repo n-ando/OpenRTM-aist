@@ -125,14 +125,15 @@ namespace OutPortCorbaCdrConsumer
     CPPUNIT_TEST_SUITE(OutPortCorbaCdrConsumerTests);
 
     CPPUNIT_TEST(test_case0);
+
     CPPUNIT_TEST_SUITE_END();
 	
   private:
     CORBA::ORB_ptr m_pORB;
     PortableServer::POA_ptr m_pPOA;
+    RTC::ConnectorListeners m_listeners;
 
   public:
-    RTC::ConnectorListeners m_listeners;
 	
     /*!
      * @brief Constructor

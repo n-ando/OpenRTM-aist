@@ -1,7 +1,7 @@
 // -*- C++ -*-
 /*!
- * @file  MutexPosix.h
- * @brief RT-Middleware Service interface
+ * @file  Mutex_win32.h
+ * @brief mutex class
  * @date  $Date$
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
@@ -26,9 +26,41 @@ namespace coil
 {
   typedef HANDLE pthread_mutex_t;
   
+  /*!
+   * @if jp
+   *
+   * @class Mutex
+   * @brief Mutex クラス
+   *
+   * @else
+   *
+   * @class Mutex
+   * @brief Mutex class
+   *
+   * @endif
+   */
   class Mutex
   {
   public:
+    /*!
+     * @if jp
+     *
+     * @brief コンストラクタ
+     *
+     * コンストラクタ。
+     *
+     * @param name オブジェクト名
+     *
+     * @else
+     *
+     * @brief Constructor
+     *
+     * Constructor
+     *
+     * @param name Object name
+     *
+     * @endif
+     */
     Mutex(const char * const name = 0)
     {
         SECURITY_DESCRIPTOR sd_buffer;
@@ -45,17 +77,62 @@ namespace coil
 
     }
 
+    /*!
+     * @if jp
+     *
+     * @brief デストラクタ
+     *
+     * デストラクタ。
+     *
+     * @else
+     *
+     * @brief Destructor
+     *
+     * Destructor
+     *
+     * @endif
+     */
     ~Mutex()
     {
 		::CloseHandle(mutex_);
 		
     }
 
+    /*!
+     * @if jp
+     *
+     * @brief 排他制御のロック
+     *
+     * 排他制御のロックを行う。
+     *
+     * @else
+     *
+     * @brief Mutual exclusion lock
+     *
+     * Lock the Mutual exclusion.
+     *
+     * @endif
+     */
     inline void lock()
     {
 		::WaitForSingleObject(mutex_,INFINITE);
     }
 
+    /*!
+     * @if jp
+     *
+     * @brief 排他制御のノンブロッキングロック
+     *
+     * 排他制御のロックをノンブロッキングで行う。
+     *
+     * @else
+     *
+     * @brief Mutual exclusion non-blocking lock
+     *
+     * Lock the Mutual exclusion by non-blocking.
+     *
+     * @endif
+     */
     inline bool trylock()
     {
         unsigned long dwret;
@@ -74,6 +151,21 @@ namespace coil
 		}
     }
 
+    /*!
+     * @if jp
+     *
+     * @brief 排他制御のロック解除
+     *
+     * 排他制御のロック解除を行う。
+     *
+     * @else
+     *
+     * @brief Mutual exclusion unlock
+     *
+     * Unlock the Mutual exclusion.
+     *
+     * @endif
+     */
     inline void unlock()
     {
 		::ReleaseMutex(mutex_);

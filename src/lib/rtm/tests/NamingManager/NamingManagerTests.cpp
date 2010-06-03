@@ -210,6 +210,9 @@ namespace NamingManager
 	}
       catch (CosNaming::NamingContext::NotFound expected) {}
       objMgr.deactivate(rto);
+
+      rto->finalize();
+      delete rto;
     }
 
     /*!
@@ -253,6 +256,8 @@ namespace NamingManager
 	}
       catch (CosNaming::NamingContext::NotFound expected) {}
       objMgr.deactivate(mgrs);
+
+      delete mgrs;
     }
 
   };
@@ -387,6 +392,9 @@ namespace NamingManager
       // アンバインドしたオブジェクトのresolveが意図どおり失敗するか？
       CPPUNIT_ASSERT(! canResolve(name_server, "id", "kind"));
       objMgr.deactivate(rto);
+
+      rto->finalize();
+      delete rto;
     }
 		
     /*!
@@ -428,6 +436,11 @@ namespace NamingManager
       CPPUNIT_ASSERT(! canResolve(name_server, "id2", "kind2"));
       objMgr.deactivate(rto2);
       objMgr.deactivate(rto1);
+
+      rto2->finalize();
+      delete rto2;
+      rto1->finalize();
+      delete rto1;
     }
 		
     /*!
@@ -470,6 +483,11 @@ namespace NamingManager
       CPPUNIT_ASSERT(objs.end() != std::find(objs.begin(), objs.end(), rto2));
       objMgr.deactivate(rto2);
       objMgr.deactivate(rto1);
+
+      rto2->finalize();
+      delete rto2;
+      rto1->finalize();
+      delete rto1;
     }
 		
     /*!
@@ -513,6 +531,9 @@ namespace NamingManager
       nmgr.update();
       CPPUNIT_ASSERT(canResolve(name_server, "id", "kind"));
       objMgr.deactivate(rto);
+
+      rto->finalize();
+      delete rto;
     }
 
     /*!
@@ -633,6 +654,10 @@ namespace NamingManager
       objMgr.deactivate(mgrs3);
       objMgr.deactivate(mgrs2);
       objMgr.deactivate(mgrs1);
+
+      delete mgrs3;
+      delete mgrs2;
+      delete mgrs1;
     }
 
     /*!
@@ -666,6 +691,8 @@ namespace NamingManager
       // アンバインドしたオブジェクトのresolveが意図どおり失敗するか？
       CPPUNIT_ASSERT(! canResolve(name_server, "id", "kind"));
       objMgr.deactivate(mgrs);
+
+      delete mgrs;
     }
 
   };

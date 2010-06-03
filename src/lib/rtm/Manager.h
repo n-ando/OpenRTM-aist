@@ -993,14 +993,14 @@ namespace RTC
      * @if jp
      * @brief Manager の終了処理
      *
-     * configuration の "manager.shutdown_onrtcs" YES で、
+     * configuration の "manager.shutdown_on_nortcs" YES で、
      * コンポーネントが登録されていない場合 Manager を終了する。
      *
      * @else
      * @brief Shutdown Manager
      *
      * This method shutdowns Manager as follows.
-     * - "Manager.shutdown_onrtcs" of configuration is YES. 
+     * - "Manager.shutdown_on_nortcs" of configuration is YES. 
      * - The component is not registered. 
      *
      * @endif

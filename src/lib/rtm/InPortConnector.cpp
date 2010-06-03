@@ -30,7 +30,8 @@ namespace RTC
    */
   InPortConnector::InPortConnector(ConnectorInfo& info,
                                    CdrBufferBase* buffer)
-    : rtclog("InPortConnector"), m_profile(info), m_buffer(buffer), m_littleEndian(true)
+    : rtclog("InPortConnector"), m_profile(info),
+      m_buffer(buffer), m_littleEndian(true)
   {
   }
 
@@ -104,7 +105,7 @@ namespace RTC
 
   /*!
    * @if jp
-   * @brief Buffer を所得する
+   * @brief Buffer を取得する
    *
    * Connector が保持している Buffer を返す
    *

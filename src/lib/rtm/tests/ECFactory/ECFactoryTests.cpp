@@ -1,7 +1,7 @@
 // -*- C++ -*-
 /*!
- * @file   ExtTrigExecutionContextTests.cpp
- * @brief  ExtTrigExecutionContext test class
+ * @file   ECFactoryTests.cpp
+ * @brief  ECFactory test class
  * @date   $Date: 2008/04/15 08:38:41 $
  *
  * $Id: ECFactoryTests.cpp,v 1.1 2008/04/15 08:38:41 arafune Exp $
@@ -92,10 +92,10 @@ namespace ECFactory
       std::string name = "name of execution context";
 			
       std::auto_ptr<RTC::ECFactoryBase> factory(
-						new RTC::ECFactoryCXX(
-								      name.c_str(),
-								      RTC::ECCreate<RTC::PeriodicExecutionContext>,
-								      RTC::ECDelete<RTC::PeriodicExecutionContext>));
+		new RTC::ECFactoryCXX(
+				      name.c_str(),
+				      RTC::ECCreate<RTC::PeriodicExecutionContext>,
+				      RTC::ECDelete<RTC::PeriodicExecutionContext>));
 			
       // コンストラクタで指定した名称を、name()メソッドで正しく取得できるか？
       CPPUNIT_ASSERT_EQUAL(name, std::string(factory->name()));
@@ -110,16 +110,17 @@ namespace ECFactory
     void test_create_and_destroy()
     {
       std::auto_ptr<RTC::ECFactoryBase> factory(
-						new RTC::ECFactoryCXX(
-								      "name of execution context",
-								      RTC::ECCreate<RTC::PeriodicExecutionContext>,
-								      RTC::ECDelete<RTC::PeriodicExecutionContext>));
+		new RTC::ECFactoryCXX(
+				      "name of execution context",
+				      RTC::ECCreate<RTC::PeriodicExecutionContext>,
+				      RTC::ECDelete<RTC::PeriodicExecutionContext>));
 			
       // create()呼出しにより、所定のExcecutionContextのインスタンスが生成されるか？
       RTC::ExecutionContextBase* ec = factory->create();
       CPPUNIT_ASSERT(dynamic_cast<RTC::PeriodicExecutionContext*>(ec) != 0);
 			
       // destroy()呼出しにより、所定のExecutionContextインスタンスが削除されるか？
+      m_pPOA->deactivate_object(*m_pPOA->servant_to_id(ec));
       factory->destroy(ec);
       CPPUNIT_ASSERT(dynamic_cast<RTC::PeriodicExecutionContext*>(ec) == 0);
     }

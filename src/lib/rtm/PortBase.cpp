@@ -5,7 +5,7 @@
  * @date $Date: 2008-01-14 10:19:42 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
- * Copyright (C) 2006-2009
+ * Copyright (C) 2006-2010
  *     Noriaki Ando
  *     Task-intelligence Research Group,
  *     Intelligent Systems Research Institute,
@@ -53,8 +53,11 @@ namespace RTC
     portname += name;
 
     m_profile.name = CORBA::string_dup(portname.c_str());
+    m_profile.interfaces.length(0);
     m_profile.port_ref = m_objref;
+    m_profile.connector_profiles.length(0);
     m_profile.owner = RTC::RTObject::_nil();
+    m_profile.properties.length(0);
   }
   
   /*!
@@ -226,6 +229,7 @@ namespace RTC
     throw (CORBA::SystemException)
   {
     RTC_TRACE(("notify_connect()"));
+    Guard guard(m_connectorsMutex);
     ReturnCode_t retval[] = {RTC::RTC_OK, RTC::RTC_OK, RTC::RTC_OK};
 
     // publish owned interface information to the ConnectorProfile
@@ -379,6 +383,7 @@ namespace RTC
     throw (CORBA::SystemException)
   {
     RTC_TRACE(("notify_disconnect(%s)", connector_id));
+    Guard guard(m_connectorsMutex);
     Guard gaurd(m_profile_mutex);
 
     // find connector_profile
@@ -829,6 +834,13 @@ namespace RTC
     return true;
   }
 
+  /*!
+   * @if jp
+   * @brief 存在しないポートをdisconnectする。
+   * @else
+   * @brief Disconnect ports that doesn't exist. 
+   * @endif
+   */
   void PortBase::updateConnectors()
   {
     std::vector<std::string> connector_ids;
@@ -855,7 +867,13 @@ namespace RTC
       }
   }
   
-
+  /*!
+   * @if jp
+   * @brief ポートの存在を確認する。
+   * @else
+   * @brief Existence of ports
+   * @endif
+   */
   bool PortBase::checkPorts(::RTC::PortServiceList& ports)
   {
     for (CORBA::ULong i(0), len(ports.length()); i < len; ++i)

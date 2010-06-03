@@ -422,7 +422,7 @@ namespace OutPortPullConnector
     CPPUNIT_TEST(test_OutPortPullConnector);
     CPPUNIT_TEST(test_write);
     CPPUNIT_TEST(test_disconnect_getBuffer);
-//    CPPUNIT_TEST(test_activate_deactivate);
+    CPPUNIT_TEST(test_activate_deactivate);
 
     CPPUNIT_TEST_SUITE_END();
 		
@@ -508,7 +508,7 @@ namespace OutPortPullConnector
     }
 		
     /*!
-     * @brief Constructor
+     * @brief Constructor メソッドテスト
      * 
      */
     void test_OutPortPullConnector()
@@ -565,7 +565,7 @@ namespace OutPortPullConnector
     }
 
     /*!
-     * @brief write
+     * @brief write メソッドテスト
      * 
      */
     void test_write()
@@ -612,7 +612,7 @@ namespace OutPortPullConnector
     }
 
     /*!
-     * @brief disconnect
+     * @brief disconnect メソッドテスト
      * 
      */
     void test_disconnect_getBuffer()
@@ -655,7 +655,7 @@ namespace OutPortPullConnector
     }
 
     /*!
-     * @brief activate
+     * @brief activate メソッドテスト
      * 
      */
     void test_activate_deactivate()

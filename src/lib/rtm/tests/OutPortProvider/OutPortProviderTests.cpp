@@ -1,4 +1,22 @@
 // -*- C++ -*-
+/*!
+ * @file   OutPortProviderTests.cpp
+ * @brief  OutPortProvider test class
+ * @date   $Date: 2008/03/13 13:12:25 $
+ * @author Noriaki Ando <n-ando@aist.go.jp>
+ *
+ *
+ * Copyright (C) 2006
+ *     Noriaki Ando
+ *     Task-intelligence Research Group,
+ *     Intelligent Systems Research Institute,
+ *     National Institute of
+ *         Advanced Industrial Science and Technology (AIST), Japan
+ *     All rights reserved.
+ *
+ * $Id$
+ *
+ */
 
 /*
  * $Log: OutPortProviderTests.cpp,v $

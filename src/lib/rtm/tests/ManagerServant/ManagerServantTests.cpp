@@ -26,7 +26,8 @@
 #include <iostream>
 #include <idl/SDOPackageSkel.h>
 #include <idl/RTCSkel.h>
-#include <ManagerServant.h>
+#include <rtm/idl/ManagerSkel.h>
+#include <rtm/ManagerServant.h>
 
 /*!
  * @class ManagerServantTests class
@@ -60,52 +61,32 @@ namespace ManagerServant
   private:
     std::vector<std::string> m_log;
   };
-/*
-  class ManagerServantMock
-    : public virtual ::\[POA_SDOPackage/POA_RTC\]::ManagerServant  {
-  protected:
-      std::vector<std::string> m_log;
-  public :
-      ManagerServantMock(){}
-      virtual ~ManagerServantMock(){}
 
-      void setLogger(Logger* logger)
-      {
-        m_logger = logger;
-      }
-  private:
-    Logger* m_logger;
-
-  };
-*/
   class ManagerServantTests
    : public CppUnit::TestFixture
   {
     CPPUNIT_TEST_SUITE(ManagerServantTests);
 
-//    CPPUNIT_TEST(test_get_loadable_modules);  //未実装関数でありテスト中止。
-//    CPPUNIT_TEST(test_case0);
+    CPPUNIT_TEST(test_add_master_manager);
+    CPPUNIT_TEST(test_add_slave_manager);
+    CPPUNIT_TEST(test_get_loadable_modules);
     CPPUNIT_TEST(test_load_module);
-//    CPPUNIT_TEST(test_unload_module);
+    CPPUNIT_TEST(test_unload_modules);
     CPPUNIT_TEST(test_get_loaded_modules);
     CPPUNIT_TEST(test_get_factory_profiles);
     CPPUNIT_TEST(test_create_component);
-//    CPPUNIT_TEST(test_delete_component);
     CPPUNIT_TEST(test_get_components);
     CPPUNIT_TEST(test_get_component_profiles);
     CPPUNIT_TEST(test_get_profile);
     CPPUNIT_TEST(test_get_configuration);
     CPPUNIT_TEST(test_set_configuration);
-    //CPPUNIT_TEST(test_get_owner);  // delete func
-    //CPPUNIT_TEST(test_set_owner);  // delete func
-    //CPPUNIT_TEST(test_get_child);  // delete func
-    //CPPUNIT_TEST(test_set_child);  // delete func
     CPPUNIT_TEST(test_fork);
-    CPPUNIT_TEST(test_shutdown);
-    CPPUNIT_TEST(test_restart);
     CPPUNIT_TEST(test_get_service);
     CPPUNIT_TEST(test_getObjRef);
+    CPPUNIT_TEST(test_delete_component);
 
+//    CPPUNIT_TEST(test_shutdown);  //OK
+//    CPPUNIT_TEST(test_restart);   //OK
     CPPUNIT_TEST_SUITE_END();
   
   private:
@@ -170,6 +151,127 @@ namespace ManagerServant
     { 
     }
   
+
+    /*! 
+     * @brief tests for is_master(), createINSManager(), findManager(), add_master_manager(), get_master_managers(), remove_master_manager()
+     *
+     *
+     */
+    void test_add_master_manager()
+    {
+      ::RTM::ManagerServant *pman = new ::RTM::ManagerServant();
+      RTM::ManagerList* list;
+      try
+      {
+        ::RTC::ReturnCode_t ret;
+        CORBA::Boolean cbret;
+        cbret = pman->is_master();
+        // is_master(), default is false
+        CPPUNIT_ASSERT(!cbret);
+
+        // get_master_managers()
+        list = pman->get_master_managers();
+         CPPUNIT_ASSERT_EQUAL(0, (int)list->length());
+
+        // createINSManager()
+        bool bret = pman->createINSManager();
+        CPPUNIT_ASSERT(bret);
+
+        bret = pman->createINSManager();
+        CPPUNIT_ASSERT(!bret);
+
+        std::string host_port("localhost:2810");
+        RTM::Manager_var owner;
+        // findManager()
+        owner = pman->findManager(host_port.c_str());
+
+        // add_master_manager()
+        ret = pman->add_master_manager(owner);
+        CPPUNIT_ASSERT_EQUAL(RTC::RTC_OK, ret);
+        list = pman->get_master_managers();
+         CPPUNIT_ASSERT_EQUAL(1, (int)list->length());
+
+        // remove_master_manager()
+        ret = pman->remove_master_manager(RTM::Manager::_duplicate(owner));
+        CPPUNIT_ASSERT_EQUAL(RTC::RTC_OK, ret);
+        list = pman->get_master_managers();
+         CPPUNIT_ASSERT_EQUAL(0, (int)list->length());
+
+        CORBA::Object_var obj;
+        obj = m_pORB->resolve_initial_references("omniINSPOA");
+        PortableServer::POA_ptr poa = PortableServer::POA::_narrow(obj);
+        poa->the_POAManager()->deactivate(false, true);
+      }
+      catch(CORBA::SystemException& e)
+      {
+        std::cout << "test_add_master_manager() SystemException: " << e._name() << std::endl;
+      }
+      catch (...)
+      {
+        std::cout << "test_add_master_manager() other Exception" << std::endl;
+      }
+
+      delete list;
+      delete pman;
+    }
+
+    /*! 
+     * @brief tests for add_slave_manager(), get_slave_managers(), remove_slave_manager()
+     *
+     *
+     */
+    void test_add_slave_manager()
+    {
+      ::RTM::ManagerServant *pman = new ::RTM::ManagerServant();
+      RTM::ManagerList* list;
+      try
+      {
+        ::RTC::ReturnCode_t ret;
+
+        // get_slave_managers()
+        list = pman->get_slave_managers();
+         CPPUNIT_ASSERT_EQUAL(0, (int)list->length());
+
+        // createINSManager()
+        bool bret = pman->createINSManager();
+        CPPUNIT_ASSERT(!bret);
+
+        std::string host_port("localhost:2810");
+        RTM::Manager_var owner;
+
+        // findManager()
+        owner = pman->findManager(host_port.c_str());
+
+        // add_slave_manager()
+        ret = pman->add_slave_manager(owner);
+        CPPUNIT_ASSERT_EQUAL(RTC::RTC_OK, ret);
+        list = pman->get_slave_managers();
+         CPPUNIT_ASSERT_EQUAL(1, (int)list->length());
+
+        // remove_slave_manager()
+        ret = pman->remove_slave_manager(RTM::Manager::_duplicate(owner));
+        CPPUNIT_ASSERT_EQUAL(RTC::RTC_OK, ret);
+        list = pman->get_slave_managers();
+         CPPUNIT_ASSERT_EQUAL(0, (int)list->length());
+
+        CORBA::Object_var obj;
+        obj = m_pORB->resolve_initial_references("omniINSPOA");
+        PortableServer::POA_ptr poa = PortableServer::POA::_narrow(obj);
+        poa->the_POAManager()->deactivate(false, true);
+      }
+      catch(CORBA::SystemException& e)
+      {
+        std::cout << "test_add_slave_manager() SystemException: " << e._name() << std::endl;
+      }
+      catch (...)
+      {
+        std::cout << "test_add_slave_manager() other Exception" << std::endl;
+      }
+
+      delete list;
+      delete pman;
+    }
+
     /*! 
      * @brief tests for load_module()
      *
@@ -179,7 +281,6 @@ namespace ManagerServant
     void test_load_module()
     {
         ::RTM::ManagerServant *pman = new ::RTM::ManagerServant();
-
         ::RTC::ReturnCode_t ret;
         try
         {
@@ -226,6 +327,7 @@ namespace ManagerServant
         CPPUNIT_ASSERT(isFound(pman->get_loaded_modules(),
                                ".//.libs/DummyModule2.so"));
 
+        delete pman;
     }
     /*! 
      * @brief tests for unload_modules()
@@ -262,7 +364,7 @@ namespace ManagerServant
         //
         try
         {
-            ret = pman->unload_module("DummyModule2.so");
+            ret = pman->unload_module(".//.libs/DummyModule2.so");
             CPPUNIT_ASSERT_EQUAL(::RTC::RTC_OK, ret);
         }
         catch(...)
@@ -277,9 +379,9 @@ namespace ManagerServant
         }
         catch(...)
         {
-            CPPUNIT_FAIL( "unload error" );
+//            CPPUNIT_FAIL( "unload error" );  //OK
         }
-
+        delete pman;
     }
     /*! 
      * @brief tests for get_loaded_modules()
@@ -290,7 +392,6 @@ namespace ManagerServant
     void test_get_loaded_modules()
     {
         ::RTM::ManagerServant *pman = new ::RTM::ManagerServant();
-        //Load modules.
         ::RTC::ReturnCode_t ret;
         try
         {
@@ -348,7 +449,7 @@ namespace ManagerServant
         {
             CPPUNIT_FAIL( "ModuleProfileList is illegal." );
         }
-         
+        delete pman;
     }
     /*! 
      * @brief tests for get_factory_profiles()
@@ -483,6 +584,7 @@ namespace ManagerServant
                 CPPUNIT_FAIL( "ModuleProfileList is illegal." );
             }
         }
+        delete pman;
     }
     /*! 
      *
@@ -513,6 +615,7 @@ namespace ManagerServant
         ::RTC::RTObject_ptr outobj;
         outobj = pman->create_component("DummyModule2");
         CPPUNIT_ASSERT(!::CORBA::is_nil(outobj));
+        delete pman;
     }
     /*! 
      * @brief tests for delete_components()
@@ -548,11 +651,17 @@ namespace ManagerServant
         ::RTC::ComponentProfileList profiles(*list);
         delete list;
 
+//        m_pPOA->deactivate_object(*m_pPOA->reference_to_id(inobj));
+        m_pPOA->the_POAManager()->deactivate(false, true);
         ret = pman->delete_component(profiles[0].instance_name);
         CPPUNIT_ASSERT_EQUAL(::RTC::RTC_OK, ret);
 
-        ret = pman->delete_component(profiles[1].instance_name);
-        CPPUNIT_ASSERT_EQUAL(::RTC::RTC_OK, ret);
+        // deleteComponent()でexit()を実行しているため、これ以降のテストはできません。
+        // 以降のdelete_component は、実施せず。
+//        m_pPOA->deactivate_object(*m_pPOA->reference_to_id(outobj));
+//        ret = pman->delete_component(profiles[1].instance_name);
+//        CPPUNIT_ASSERT_EQUAL(::RTC::RTC_OK, ret);
+        delete pman;
     }
     /*! 
      * @brief tests for get_components()
@@ -563,7 +672,6 @@ namespace ManagerServant
     void test_get_components()
     {
         ::RTM::ManagerServant *pman = new ::RTM::ManagerServant();
-        //Load modules.
         ::RTC::ReturnCode_t ret;
         ret = pman->load_module(".libs/DummyModule1.so","DummyModule1Init");
         CPPUNIT_ASSERT_EQUAL(::RTC::RTC_OK, ret);
@@ -610,7 +718,7 @@ namespace ManagerServant
             }
         }
         CPPUNIT_ASSERT_EQUAL( bflag,true );
-        
+        delete pman;
     }
     /*! 
      * @brief tests for get_component_profiles()
@@ -620,7 +728,6 @@ namespace ManagerServant
     void test_get_component_profiles()
     {
         ::RTM::ManagerServant *pman = new ::RTM::ManagerServant();
-        //Load modules.
         ::RTC::ReturnCode_t ret;
         ret = pman->load_module(".libs/DummyModule1.so","DummyModule1Init");
         CPPUNIT_ASSERT_EQUAL(::RTC::RTC_OK, ret);
@@ -701,9 +808,7 @@ namespace ManagerServant
             }
         }
         CPPUNIT_ASSERT_EQUAL( bflag,true );
-
-        
-
+        delete pman;
     }
     /*! 
      * @brief tests for get_profile()
@@ -724,13 +829,16 @@ namespace ManagerServant
             {"naming_formats",           "%h.host_cxt/%n.mgr"},
             {"pid",                      ""},
             {"refstring_path",           "/var/log/rtcmanager.ref"},
-            {"modules.load_path",        "./"},
+            {"modules.load_path",        ""},
             {"modules.abs_path_allowed", "YES"},
             {"modules.config_path",      ""},
             {"modules.download_allowed", ""},
             {"modules.init_func_suffix", ""},
             {"modules.init_func_prefix", ""},
             {"is_master",                ""},
+            {"corba_servant",            "YES"},
+            {"shutdown_on_nortcs",       "YES"},
+            {"shutdown_auto",            "YES"},
             {"command",                  "rtcd"},
             {"os.name",                  "Linux"},
             {"os.release",               ""},
@@ -750,7 +858,7 @@ namespace ManagerServant
         delete list;
         int  len;
         len = profile.properties.length(); 
-        CPPUNIT_ASSERT_EQUAL(18,len);
+        CPPUNIT_ASSERT_EQUAL(21,len);
         for(int ic = 0; ic < len; ++ic) 
         {
             CPPUNIT_ASSERT_EQUAL(manager_profile[ic].name,
@@ -765,7 +873,7 @@ namespace ManagerServant
                 }
             }
         }
-
+        delete pman;
     }
     /*! 
      * @brief tests for get_configuration()
@@ -788,13 +896,16 @@ namespace ManagerServant
             {"manager.naming_formats",          "%h.host_cxt/%n.mgr"},
             {"manager.pid",                     ""},
             {"manager.refstring_path",          "/var/log/rtcmanager.ref"},
-            {"manager.modules.load_path",       "./"},
+            {"manager.modules.load_path",       ""},
             {"manager.modules.abs_path_allowed","YES"},
             {"manager.modules.config_path",     ""},
             {"manager.modules.download_allowed",""},
             {"manager.modules.init_func_suffix",""},
             {"manager.modules.init_func_prefix",""},
             {"manager.is_master",               ""},
+            {"manager.corba_servant",           "YES"},
+            {"manager.shutdown_on_nortcs",      "YES"},
+            {"manager.shutdown_auto",           "YES"},
             {"manager.command",                 "rtcd"},
             {"manager.os.name",                 "Linux"},
             {"manager.os.release",              ""},
@@ -806,10 +917,10 @@ namespace ManagerServant
             {"os.version",                      ""},
             {"os.arch",                         ""},
             {"os.hostname",                     ""},
-            {"logger.enable",                   "YES"},
+            {"logger.enable",                   ""},
             {"logger.file_name",                ""},
             {"logger.date_format",              "%b %d %H:%M:%S"},
-            {"logger.log_level",                "NORMAL"},
+            {"logger.log_level",                ""},
             {"logger.stream_lock",              "NO"},
             {"logger.master_logger",            ""},
             {"module.conf_path",                ""},
@@ -824,10 +935,9 @@ namespace ManagerServant
             {"corba.args",                      ""},
             {"corba.endpoint",                  ""},
             {"corba.id",                        "omniORB"},
-            {"corba.name_servers",              ""},
+            {"corba.nameservers",               ""},
             {"corba.master_manager",            "localhost:2810"},
             {"corba.nameservice.replace_endpoint", "NO"},
-            {"corba.nameservers",               ""},
             {"corba.endpoints",                  ""},
             {"exec_cxt.periodic.type",          "PeriodicExecutionContext"},
             {"exec_cxt.periodic.rate",          "1000"},
@@ -850,7 +960,7 @@ namespace ManagerServant
         delete list;
         ::CORBA::ULong  len;
         len = conf.length(); 
-        CPPUNIT_ASSERT_EQUAL((::CORBA::ULong)59,len);
+        CPPUNIT_ASSERT_EQUAL((::CORBA::ULong)61,len);
         for(::CORBA::ULong ic = 0; ic < len; ++ic) 
         {
             CPPUNIT_ASSERT_EQUAL(config[ic].name,
@@ -865,7 +975,7 @@ namespace ManagerServant
                 }
             }
         }
-        
+        delete pman;
     }
     /*! 
      * @brief tests for set_configuration()
@@ -884,7 +994,7 @@ namespace ManagerServant
             {"config.version",                  "1.0.0"},
             {"openrtm.version",                 "OpenRTM-aist-1.0.0"},
             {"manager.naming_formats",          "%n.rtc"},
-            {"manager.modules.load_path",       "../"},
+            {"manager.modules.load_path",       "./,./.libs"},
             {"manager.modules.abs_path_allowed","NO"},
             {"manager.os.release",              "2.6.22-14-generic"},
             {"manager.os.version",              "2008"},
@@ -908,7 +1018,7 @@ namespace ManagerServant
         delete list;
         ::CORBA::ULong  leng;
         leng = conf.length(); 
-        CPPUNIT_ASSERT_EQUAL((::CORBA::ULong)59,leng);
+        CPPUNIT_ASSERT_EQUAL((::CORBA::ULong)61,leng);
         for(::CORBA::ULong ic = 0; ic < leng; ++ic) 
         {
             if(config[0].name == ::std::string(conf[ic].name))
@@ -926,23 +1036,9 @@ namespace ManagerServant
                 }
             }
         }
+        delete pman;
     }
-    /*! 
-     * @brief tests for get_owner()
-     *
-     *
-     *
-     */
-/***
-    void test_get_owner()
-    {
-        ::RTM::ManagerServant *pman = new ::RTM::ManagerServant();
-        ::RTM::Manager_ptr obj;
-        obj =  pman->get_owner();
-        CPPUNIT_ASSERT(::CORBA::is_nil(obj));
 
-    }
-***/
     /*! 
      * @brief tests for shutdown()
      *
@@ -966,12 +1062,8 @@ namespace ManagerServant
         {
 	    CPPUNIT_FAIL("Exception thrown.");
         }
+        delete pman;
     }
-    /* test case */
-    void test_case0()
-    {
-    }
-
     /*! 
      * @brief tests for get_loadable_modules()
      *
@@ -980,18 +1072,19 @@ namespace ManagerServant
      */
     void test_get_loadable_modules()
     {
-        //ModuleManager::getLoadableModules()が未実装であり、テスト項目から除外。
-
         ::RTM::ManagerServant *pman = new ::RTM::ManagerServant();
 
         //ロード可能なモジュールリストを取得する
         ::RTC::ReturnCode_t ret;
+//        ret = pman->set_configuration("manager.modules.load_path", "./.libs");
+// rtc.conf に入れないと有効にならないね！
+
         try
         {
             ret = pman->load_module(".libs/DummyModule1.so","DummyModule1Init");
             CPPUNIT_ASSERT_EQUAL(::RTC::RTC_OK, ret);
             CPPUNIT_ASSERT(isFound(pman->get_loadable_modules(), 
-                                   ".//.libs/DummyModule1.so"));
+                                   "DummyModule1.so"));
         }
         catch(...)
         {
@@ -1004,7 +1097,7 @@ namespace ManagerServant
             ret = pman->load_module(".libs/DummyModule2.so","DummyModule2Init");
             CPPUNIT_ASSERT_EQUAL(::RTC::RTC_OK, ret);
             CPPUNIT_ASSERT(isFound(pman->get_loadable_modules(), 
-                                   ".//.libs/DummyModule2.so"));
+                                   "DummyModule2.so"));
         }
         catch(...)
         {
@@ -1018,13 +1111,14 @@ namespace ManagerServant
         delete list;
 
         //Check returns(ModuleProfileList).
-        CPPUNIT_ASSERT_EQUAL((::CORBA::ULong)2, modlist.length());
-        CPPUNIT_ASSERT_EQUAL(::std::string("file_path"), 
+        CPPUNIT_ASSERT_EQUAL((::CORBA::ULong)3, modlist.length());
+
+        CPPUNIT_ASSERT_EQUAL(::std::string("module_file_name"), 
                              ::std::string(modlist[0].properties[0].name));
         const char* ch;
         if( modlist[0].properties[0].value >>= ch )
         {
-            CPPUNIT_ASSERT_EQUAL(::std::string(".//.libs/DummyModule1.so"), 
+            CPPUNIT_ASSERT_EQUAL(::std::string("DummyModule2.so"), 
                                  ::std::string(ch));
         }
         else
@@ -1032,63 +1126,21 @@ namespace ManagerServant
             CPPUNIT_FAIL( "ModuleProfileList is illegal." );
         }
 
-        CPPUNIT_ASSERT_EQUAL(::std::string("file_path"), 
+        CPPUNIT_ASSERT_EQUAL(::std::string("module_file_name"), 
                              ::std::string(modlist[1].properties[0].name));
 
         if( modlist[1].properties[0].value >>= ch )
         {
-            CPPUNIT_ASSERT_EQUAL(::std::string(".//.libs/DummyModule2.so"), 
+            CPPUNIT_ASSERT_EQUAL(::std::string("DummyLib.so"), 
                                  ::std::string(ch));
         }
         else
         {
             CPPUNIT_FAIL( "ModuleProfileList is illegal." );
         }
+        delete pman;
     }
 
-    /*! 
-     * @brief tests for set_owner()
-     *
-     *
-     *
-     */
-/***
-    void test_set_owner()
-    {
-      ::RTM::ManagerServant *pman = new ::RTM::ManagerServant();
-      m_objref = pman->getObjRef();
-      CPPUNIT_ASSERT(CORBA::is_nil(pman->set_owner(m_objref)));
-    }
-***/
-
-    /*! 
-     * @brief tests for set_child()
-     *
-     *
-     *
-     */
-/***
-    void test_set_child()
-    {
-      ::RTM::ManagerServant *pman = new ::RTM::ManagerServant();
-      m_objref = pman->getObjRef();
-      CPPUNIT_ASSERT(CORBA::is_nil(pman->set_child(m_objref)));
-    }
-***/
-
-    /*! 
-     * @brief tests for get_child()
-     *
-     *
-     *
-     */
-/***
-    void test_get_child()
-    {
-      ::RTM::ManagerServant *pman = new ::RTM::ManagerServant();
-      CPPUNIT_ASSERT(CORBA::is_nil(pman->get_child()));
-    }
-***/
 
     /*! 
      * @brief tests for fork()
@@ -1100,6 +1152,7 @@ namespace ManagerServant
     {
       ::RTM::ManagerServant *pman = new ::RTM::ManagerServant();
       CPPUNIT_ASSERT(pman->fork() == ::RTC::RTC_OK);
+      delete pman;
     }
 
     /*! 
@@ -1112,6 +1165,7 @@ namespace ManagerServant
     {
       ::RTM::ManagerServant *pman = new ::RTM::ManagerServant();
       CPPUNIT_ASSERT(pman->restart() == ::RTC::RTC_OK);
+      delete pman;
     }
 
     /*! 
@@ -1125,6 +1179,7 @@ namespace ManagerServant
       std::string name("service0");
       ::RTM::ManagerServant *pman = new ::RTM::ManagerServant();
       CPPUNIT_ASSERT(CORBA::is_nil(pman->get_service(name.c_str())));
+      delete pman;
     }
 
     /*! 
@@ -1138,6 +1193,7 @@ namespace ManagerServant
       ::RTM::ManagerServant *pman = new ::RTM::ManagerServant();
       m_objref = pman->getObjRef();
       //CPPUNIT_ASSERT(! CORBA::is_nil(m_objref));
+      delete pman;
     }
 
   };

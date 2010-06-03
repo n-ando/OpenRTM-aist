@@ -18,7 +18,6 @@ COIL_COMMON_H   =       \
 	Async.h         \
 	Listener.h      \
 	TimeMeasure.h   \
-	memory.h        \
 	NonCopyable.h   \
 	TimeValue.h     \
 	stringutil.h    \

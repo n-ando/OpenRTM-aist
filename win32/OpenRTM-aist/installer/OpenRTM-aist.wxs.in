@@ -8,7 +8,6 @@
 	   Version="{% Product.Version %}" 
            Manufacturer="{% Product.Manufacturer %}"
            UpgradeCode="{% Product.UpgradeCode %}">
-
     <Package Id="*" 
              Keywords="Installer"
              Description="{% Package.Description %}"
@@ -16,6 +15,27 @@
 	     Languages='$(var.language)'
              Compressed="{% Package.Compressed %}"
 	     SummaryCodepage='$(var.codepage)' />
+    <!-- プロパティ -->
+    <Property Id='USERPROFILEDIR' Value='%USERPROFILE%' />
+    <!-- アップグレード -->
+    <Upgrade Id="{% Product.UpgradeCode %}">
+     <UpgradeVersion OnlyDetect="yes"
+		      Minimum="1.0.0.1"
+		      Maximum="1.1.0"
+		      Property="NEWERVERSIONDETECTED"
+		      IncludeMinimum="no" /> 
+      <UpgradeVersion OnlyDetect="no"
+		      Minimum="1.0.0"
+		      Maximum="1.0.0.1"
+		      Property="OLDERVERSIONBEINGUPGRADED"
+		      IncludeMaximum="no" /> 
+      <UpgradeVersion OnlyDetect='no' Property='PREVIOUSFOUND'
+                      Minimum='1.0.0' IncludeMinimum='yes'
+                      Maximum='1.1.0' IncludeMaximum='no' />
+    </Upgrade>
+    <InstallExecuteSequence>
+      <RemoveExistingProducts Before="InstallInitialize"/>
+    </InstallExecuteSequence>
     <!-- メディア -->    
     <Media Id="1" Cabinet="OpenRTM.cab" EmbedCab="yes"/>
 
@@ -42,12 +62,12 @@
 		  {% if file.Name is rtm-naming.bat %}
 		  <Shortcut Id="{% file.Id %}" Directory="ToolsMenuFolder"
 			    Name="Start Naming Service"
-			    Show="normal" WorkingDirectory="tools"/>
+			    Show="normal" WorkingDirectory="bin"/>
 		  {% endif %}
 		  {% if file.Name is rtc.conf %}
 		  <Shortcut Id="{% file.Id %}" Directory="ToolsMenuFolder"
 			    Name="rtc.conf for RTC daemon"
-			    Show="normal" WorkingDirectory="tools"/>
+			    Show="normal" WorkingDirectory="bin"/>
 		  {% endif %}
 		</File>
 		{% endfor %}
@@ -58,7 +78,7 @@
 		  {% if file.Name is rtcd.exe %}
 		  <Shortcut Id="{% file.Id %}" Directory="ToolsMenuFolder"
 			    Name="Start RTC daemon" Arguments=" -d "
-			    Show="normal" WorkingDirectory="tools"/>
+			    Show="normal" WorkingDirectory="bin"/>
 		  {% endif %}
 		</File>
 		{% endfor %}
@@ -210,7 +230,7 @@
 		    {% if file.Name is rtc.conf %}
 		    <Shortcut Id="{% file.Id %}" Directory="ExpMenuFolder"
 			      Name="rtc.conf for examples"
-			      Show="normal" WorkingDirectory="tools"/>
+			      Show="normal" WorkingDirectory="CXXexamples"/>
 		    {% endif %}
 		    {% if-any file.Shortcut %}{% if file.Shortcut is True %}
 		    <Shortcut Id="{% file.Id %}" Directory="ExpMenuFolder"
@@ -354,6 +374,7 @@
 	<ComponentRef Id="OmniLibPythonOmniidl_beCxxHeader"/>
 	<ComponentRef Id="OmniLibPythonOmniidl_beCxxImpl"/>
 	<ComponentRef Id="OmniLibPythonOmniidl_beCxxSkel"/>
+	<ComponentRef Id="OmniLibPython1_5"/>
 	<ComponentRef Id="OmniLibX86_win32"/>
       </Feature>
     </Feature>
@@ -368,7 +389,10 @@
     <WixVariable Id="WixUIBannerBmp" Value="Bitmaps/bannrbmp.bmp" />
     <WixVariable Id="WixUIDialogBmp" Value="Bitmaps/dlgbmp.bmp" />
 
-    <UIRef Id="WixUI_Mondo" />
+    <!-- <UIRef Id="WixUI_Mondo" /> -->
+    <!-- WixUI_Mondo にインストールの種類を選択するダイアログを追加したもの -->
+    <UIRef Id="WixUI_Mondo_RTM" />
+
     <Property Id="WIXUI_INSTALLDIR" Value="INSTALLLOCATION" />
   </Product>
 </Wix>

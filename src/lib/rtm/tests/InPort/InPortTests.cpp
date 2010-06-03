@@ -150,30 +150,10 @@ namespace InPort
        * 
        * 
        */
-      /*!
-       * 
-       * 
-       */
-      /*!
-       * 
-       * 
-       */
-      /*!
-       * 
-       * 
-       */
       RTC::InPortBase::ConnectorList get_m_connectors()
       {
           return RTC::InPort<DataType>::m_connectors;
       }
-      /*!
-       * 
-       * 
-       */
-      /*!
-       * 
-       * 
-       */
       /*!
        * 
        * 
@@ -1321,6 +1301,7 @@ namespace InPort
 
 
 	m_pPOA->deactivate_object(*m_pPOA->servant_to_id(&inport));
+        delete provider;
     }
     /*!
      * @brief isEmpty()メソッドのテスト
@@ -1361,6 +1342,7 @@ namespace InPort
 
 
 	m_pPOA->deactivate_object(*m_pPOA->servant_to_id(&inport));
+        delete provider;
     }
     /*!
      * @brief read(),operator>>(DataType&),setOnRead(),setOnReadConvert()メソッドのテスト
@@ -1481,6 +1463,7 @@ namespace InPort
                      ::RTC::RTC_logger.countLog("InPortPushConnector::read"));
 
 	m_pPOA->deactivate_object(*m_pPOA->servant_to_id(&inport));
+        delete provider;
     }
     /*!
      * @brief setOnWrite()メソッドのテスト

@@ -51,6 +51,12 @@
 #include <rtm/OutPortPushConnector.h>
 #include <rtm/OutPortProvider.h>
 #include <rtm/OutPortPullConnector.h>
+#include <rtm/ConnectorListener.h>
+
+// ConnectorDataListenerType count
+#define cdl_len 10
+// ConnectorListenerType count
+#define cl_len 7
 
 /*!
  * @class OutPortBaseTests class
@@ -58,6 +64,85 @@
  */
 namespace OutPortBase
 {
+
+  // ConnectorDataListenerType
+  static const char* str_cdl[] =
+  {
+    "ON_BUFFER_WRITE",
+    "ON_BUFFER_FULL",
+    "ON_BUFFER_WRITE_TIMEOUT",
+    "ON_BUFFER_OVERWRITE",
+    "ON_BUFFER_READ", 
+    "ON_SEND", 
+    "ON_RECEIVED",
+    "ON_RECEIVER_FULL", 
+    "ON_RECEIVER_TIMEOUT", 
+    "ON_RECEIVER_ERROR"
+  };
+
+  // ConnectorListenerType
+  static const char* str_cl[] =
+  {
+    "ON_BUFFER_EMPTY",
+    "ON_BUFFER_READ_TIMEOUT",
+    "ON_SENDER_EMPTY", 
+    "ON_SENDER_TIMEOUT", 
+    "ON_SENDER_ERROR", 
+    "ON_CONNECT",
+    "ON_DISCONNECT"
+  };
+
+  static int cdl_count;
+  static int cl_count;
+
+  class DataListener
+    : public RTC::ConnectorDataListenerT<RTC::TimedLong>
+  {
+  public:
+    DataListener(const char* name) : m_name(name)
+    {
+      ++cdl_count;
+    }
+    virtual ~DataListener()
+    {
+      --cdl_count;
+    }
+
+    virtual void operator()(const RTC::ConnectorInfo& info,
+                            const RTC::TimedLong& data)
+    {
+      std::cout << "------------------------------"   << std::endl;
+      std::cout << "Data Listener: " << m_name       << std::endl;
+      std::cout << "Profile::name: " << info.name    << std::endl;
+      std::cout << "------------------------------"   << std::endl;
+    };
+    std::string m_name;
+  };
+
+
+  class ConnListener
+    : public RTC::ConnectorListener
+  {
+  public:
+    ConnListener(const char* name) : m_name(name)
+    {
+      ++cl_count;
+    }
+    virtual ~ConnListener()
+    {
+      --cl_count;
+    }
+
+    virtual void operator()(const RTC::ConnectorInfo& info)
+    {
+      std::cout << "------------------------------"   << std::endl;
+      std::cout << "Connector Listener: " << m_name       << std::endl;
+      std::cout << "Profile::name:      " << info.name    << std::endl;
+      std::cout << "------------------------------"   << std::endl;
+    };
+    std::string m_name;
+  };
+
   /*!
    * 
    * 
@@ -501,6 +586,7 @@ namespace OutPortBase
      }
 
   };
+
   /*!
    * 
    * 
@@ -737,6 +823,7 @@ namespace OutPortBase
     : public CppUnit::TestFixture
   {
     CPPUNIT_TEST_SUITE(OutPortBaseTests);
+
     CPPUNIT_TEST(test_constructor);
     CPPUNIT_TEST(test_initConsumers);
     CPPUNIT_TEST(test_initConsumers2);//Consumers are not registered in Factory.
@@ -745,8 +832,6 @@ namespace OutPortBase
     CPPUNIT_TEST(test_init_properties);
     CPPUNIT_TEST(test_name);
     CPPUNIT_TEST(test_connectors_getConnectorXX);
-//    CPPUNIT_TEST(test_onConnect);    //The processing is not implemented.
-//    CPPUNIT_TEST(test_onDisconnect); //The processing is not implemented.
     CPPUNIT_TEST(test_activateInterfaces_deactivateInterfaces);
     CPPUNIT_TEST(test_publishInterfaces);
     CPPUNIT_TEST(test_publishInterfaces2);//dataport.dataflow_type is "push" 
@@ -758,11 +843,16 @@ namespace OutPortBase
     CPPUNIT_TEST(test_subscribeInterfaces3);//dataport.dataflow_type is "else"
     CPPUNIT_TEST(test_subscribeInterfaces4);//Consumer is deleted.
     CPPUNIT_TEST(test_subscribeInterfaces5);
+    CPPUNIT_TEST(test_ConnectorListener);
+
     CPPUNIT_TEST_SUITE_END();
 	
   private:
     CORBA::ORB_ptr m_pORB;
     PortableServer::POA_ptr m_pPOA;
+    RTC::ConnectorListeners m_listeners;
+    DataListener *m_datalisteners[cdl_len];
+    ConnListener *m_connlisteners[cl_len];
 
   public:
     RTC::Logger rtclog;
@@ -1345,8 +1435,6 @@ namespace OutPortBase
         coil::Properties dummy;
         inPort.init(dummy);
         outPort.init(dummy);
-//        inPort.init(inprof.properties);
-//        outPort.init(inprof.properties);
 
         inPort.publishInterfaces_public(inprof);
 
@@ -1397,7 +1485,6 @@ namespace OutPortBase
             prop << conn_prop.getNode("dataport"); // marge ConnectorProfile
             RTC::OutPortProvider* provider(outPort.createProvider_public(prof, prop));
             outPort.createConnector_public(prof,prop,provider);
-//            outPort.publishInterfaces_public(prof);
 
             std::vector<RTC::OutPortConnector*> objs = outPort.connectors();
 
@@ -1405,7 +1492,6 @@ namespace OutPortBase
             CPPUNIT_ASSERT_EQUAL(vstrid[ic], std::string(objs[ic]->id()));
             CPPUNIT_ASSERT_EQUAL(vstrname[ic], std::string(objs[ic]->name()));
         }
-
 
         //
         //getConnectorProfiles()
@@ -1446,6 +1532,26 @@ namespace OutPortBase
         {
             CPPUNIT_ASSERT_EQUAL(vstrname[ic], names[ic]);
         }
+
+        //
+        // getConnectorById()
+        //
+        RTC::OutPortConnector* oc = outPort.getConnectorById("unknown");
+        CPPUNIT_ASSERT(oc == 0);
+        oc = outPort.getConnectorById("id0");
+        CPPUNIT_ASSERT(oc != 0);
+        oc = outPort.getConnectorById("id1");
+        CPPUNIT_ASSERT(oc != 0);
+
+        //
+        // getConnectorByName()
+        //
+        oc = outPort.getConnectorByName("unknown");
+        CPPUNIT_ASSERT(oc == 0);
+        oc = outPort.getConnectorByName("foo0");
+        CPPUNIT_ASSERT(oc != 0);
+        oc = outPort.getConnectorByName("foo1");
+        CPPUNIT_ASSERT(oc != 0);
 
         //
         //getConnectorProfileById()
@@ -1518,22 +1624,7 @@ namespace OutPortBase
         portAdmin.deletePort(outPort);
         portAdmin.deletePort(inPort);
     }
-    /*!
-     * @brief onConnect()メソッドのテスト
-     * 
-     */
-    void test_onConnect(void)
-    {
-        //onConnectは未実装のため本テストは省略 
-    }
-    /*!
-     * @brief onDisconnect()メソッドのテスト
-     * 
-     */
-    void test_onDisconnect(void)
-    {
-        //onDisconnectは未実装のため本テストは省略 
-    }
+
     /*!
      * @brief activateInterfaces(),deactivateInterfaces()メソッドのテスト
      * 
@@ -1761,7 +1852,6 @@ namespace OutPortBase
         CPPUNIT_ASSERT_EQUAL(0,(int)outPort.get_m_connectors().size());
         CPPUNIT_ASSERT_EQUAL(RTC::RTC_OK,retcode);
 
-
         portAdmin.deletePort(outPort);
     }
     /*!
@@ -1828,7 +1918,6 @@ namespace OutPortBase
         retcode = outPort.publishInterfaces_public(prof);
         CPPUNIT_ASSERT_EQUAL(0,(int)outPort.get_m_connectors().size());
         CPPUNIT_ASSERT_EQUAL(RTC::BAD_PARAMETER,retcode);
-
 
         portAdmin.deletePort(outPort);
     }
@@ -2272,175 +2361,111 @@ namespace OutPortBase
 
         portAdmin.deletePort(outPort);
     }
-    /*!
-     * @brief attach()メソッドのテスト
-     * 
-     * - attach()メソッドを用いて複数のPublisherを順番に登録した後にnotify()を呼び出し、
-     * 登録されている各Publisherが登録順にコールバックされるか？
-     */
-/*
-    void test_attach()
-    {
-			
-      std::string footPrints;
-        OutPortBaseMock outPort("MyOutPort", toTypename<RTC::TimedDouble>());
-      outPort.attach("A", new PublisherA(footPrints));
-      outPort.attach("B", new PublisherB(footPrints));
-      outPort.attach("C", new PublisherC(footPrints));
-      outPort.attach("D", new PublisherD(footPrints));
-      outPort.notify();
-			
-      CPPUNIT_ASSERT_EQUAL(std::string("ABCD"), footPrints);
-    }
-*/		
-    /*!
-     * @brief attach_back()メソッドのテスト
-     * 
-     * - attach_back()メソッドを用いて複数のPublisherを順番に登録した後にnotify()を呼び出し、
-     * 登録されている各Publisherが登録順にコールバックされるか？
-     */
-/*
-    void test_attach_back()
-    {
-        OutPortBaseMock outPort("MyOutPort", toTypename<RTC::TimedDouble>());
-			
-      std::string footPrints;
-      outPort.attach_back("A", new PublisherA(footPrints));
-      outPort.attach_back("B", new PublisherB(footPrints));
-      outPort.attach_back("C", new PublisherC(footPrints));
-      outPort.attach_back("D", new PublisherD(footPrints));
-      outPort.notify();
-			
-      CPPUNIT_ASSERT_EQUAL(std::string("ABCD"), footPrints);
-    }
-*/		
-    /*!
-     * @brief attach_front()メソッドのテスト
-     * 
-     * - attach_front()メソッドを用いて複数のPublisherを順番に登録した後にnotify()を呼び出し、
-     * 登録されている各Publisherが登録順の逆順にコールバックされるか？
-     */
-/*
-    void test_attach_front()
-    {
-        OutPortBaseMock outPort("MyOutPort", toTypename<RTC::TimedDouble>());
-			
-      std::string footPrints;
-      outPort.attach_front("A", new PublisherA(footPrints));
-      outPort.attach_front("B", new PublisherB(footPrints));
-      outPort.attach_front("C", new PublisherC(footPrints));
-      outPort.attach_front("D", new PublisherD(footPrints));
-      outPort.notify();
-			
-      CPPUNIT_ASSERT_EQUAL(std::string("DCBA"), footPrints);
-    }
-*/
-		
-    /*!
-     * @brief attach_back()メソッドとattach_front()メソッドを組み合わせたテスト
-     * 
-     * - attach_back()メソッドとattach_front()メソッドを用いて複数のPublisherを登録した後に
-     * notify()を呼び出し、登録されている各Publisherが意図どおりの順にコールバックされるか？
-     */
-/*
-    void test_attach_mix()
-    {
-        OutPortBaseMock outPort("MyOutPort", toTypename<RTC::TimedDouble>());
-			
-      std::string footPrints;
-      outPort.attach_back("A", new PublisherA(footPrints)); // A
-      outPort.attach_back("B", new PublisherB(footPrints)); // AB
-      outPort.attach_front("C", new PublisherC(footPrints)); // CAB
-      outPort.attach_front("D", new PublisherD(footPrints)); // DCAB
-      outPort.notify();
-			
-      CPPUNIT_ASSERT_EQUAL(std::string("DCAB"), footPrints);
-    }
-*/
-		
-    /*!
-     * @brief detach()メソッドのテスト
-     * 
-     * - はじめに複数のPublisherを登録し、その後、１つずつ登録解除していき、意図どおりに指定したPublihserが登録解除されているか？
-     */
-/*
-    void test_detach()
-    {
-        OutPortBaseMock outPort("MyOutPort", toTypename<RTC::TimedDouble>());
-      std::string footPrints;
-			
-      // はじめに複数のPublisherを登録しておく
-      outPort.attach("A", new PublisherA(footPrints));
-      outPort.attach("B", new PublisherB(footPrints));
-      outPort.attach("C", new PublisherC(footPrints));
-      outPort.attach("D", new PublisherD(footPrints));
-      outPort.notify();
-      CPPUNIT_ASSERT_EQUAL(std::string("ABCD"), footPrints);
-			
-      // PublisherAを登録解除してnotify()を呼出した際、登録解除されていない各Publisherのみが意図どおりの順序で呼び出されるか？
-      footPrints.clear();
-      std::auto_ptr<RTC::PublisherBase> pubA(outPort.detach("A"));
-      outPort.notify();
-      CPPUNIT_ASSERT_EQUAL(std::string("BCD"), footPrints);
-			
-      // PublisherBを登録解除してnotify()を呼出した際、登録解除されていない各Publisherのみが意図どおりの順序で呼び出されるか？
-      footPrints.clear();
-      std::auto_ptr<RTC::PublisherBase> pubB(outPort.detach("B"));
-      outPort.notify();
-      CPPUNIT_ASSERT_EQUAL(std::string("CD"), footPrints);
-			
-      // PublisherDを登録解除してnotify()を呼出した際、登録解除されていない各Publisherのみが意図どおりの順序で呼び出されるか？
-      footPrints.clear();
-      std::auto_ptr<RTC::PublisherBase> pubD(outPort.detach("D"));
-      outPort.notify();
-      CPPUNIT_ASSERT_EQUAL(std::string("C"), footPrints);
-			
-      // PublisherCを登録解除してnotify()を呼出した際、登録解除されていない各Publisherのみが意図どおりの順序で呼び出されるか？
-      footPrints.clear();
-      std::auto_ptr<RTC::PublisherBase> pubC(outPort.detach("C"));
-      outPort.notify();
-      CPPUNIT_ASSERT_EQUAL(std::string(""), footPrints);
-    }
-*/    
-    /*!
-     * @brief デストラクタのテスト
-     * 
-     * - 登録されている各Publisherが破棄されるか？
-     */
-/*
-    void test_destructor()
-    {
-      std::string footPrints;
-      {
-        OutPortBaseMock outPort("MyOutPort", toTypename<RTC::TimedDouble>());
 
-	outPort.attach("A", new PublisherA(footPrints));
-	outPort.attach("B", new PublisherB(footPrints));
-	outPort.attach("C", new PublisherC(footPrints));
-	outPort.attach("D", new PublisherD(footPrints));
+    /*!
+     * @brief addConnectorDataListener(), removeConnectorDataListener(), addConnectorListener(), removeConnectorListener(), isLittleEndian(), connect() メソッドのテスト
+     * 
+     */
+    void test_ConnectorListener(void)
+    {
+        RTC::TimedLong tdl;
+        InPortMock<RTC::TimedLong> inPort("InPort", tdl);
 
-        PublisherA *ppuba = new PublisherA(footPrints);
-	outPort.attach("A", ppuba);
-        PublisherB *ppubb = new PublisherB(footPrints);
-	outPort.attach("B", ppubb);
-        PublisherC *ppubc= new PublisherC(footPrints);
-	outPort.attach("C", ppubc);
-        PublisherD *ppubd= new PublisherD(footPrints);
-	outPort.attach("D", ppubd);
-				
-	// この時点でフットプリントは何もないはず
-	CPPUNIT_ASSERT_EQUAL(std::string(""), footPrints);
-        delete ppuba;
-        delete ppubb;
-        delete ppubc;
-        delete ppubd;
-      } // destructor呼出し
+        OutPortBaseMock outPort("OutPortBaseTest", toTypename<RTC::TimedLong>());
 
-//      // 各デストラクタが呼び出されているか？
-      CPPUNIT_ASSERT_EQUAL(std::string("abcd"), footPrints);
+        RTC::PortAdmin portAdmin(m_pORB,m_pPOA);
+        portAdmin.registerPort(outPort); 
+        portAdmin.registerPort(inPort); 
+
+        RTC::ConnectorProfile prof;
+        prof.ports.length(2);
+        prof.ports[0] = inPort.get_port_profile()->port_ref;
+        prof.ports[1] = outPort.get_port_profile()->port_ref;
+        CORBA_SeqUtil::push_back(prof.properties,
+                                 NVUtil::newNV("dataport.interface_type",
+                                 "corba_cdr"));
+        CORBA_SeqUtil::push_back(prof.properties,
+                                 NVUtil::newNV("dataport.dataflow_type",
+                                 "push"));
+        CORBA_SeqUtil::push_back(prof.properties,
+                                 NVUtil::newNV("dataport.subscription_type",
+                                 "flush"));
+        prof.connector_id = "id0";
+        prof.name = CORBA::string_dup("test");
+        coil::Properties dummy;
+        inPort.init(dummy);
+        outPort.init(dummy);
+
+        //ConnectorDataListeners settting
+        for (int i(0); i<cdl_len; ++i)
+          {
+            m_datalisteners[i] = new DataListener(str_cdl[i]);
+          }
+
+        //ConnectorListeners settting
+        for (int i(0); i<cl_len; ++i)
+          {
+            m_connlisteners[i] = new ConnListener(str_cl[i]);
+          }
+
+        // addConnectorDataListener()
+        for (int i(0); i<cdl_len; ++i)
+          {
+            outPort.addConnectorDataListener((RTC::ConnectorDataListenerType)i, 
+                                             m_datalisteners[i], true);
+          }
+
+        // addConnectorListener()
+        for (int i(0); i<cl_len; ++i)
+          {
+            outPort.addConnectorListener((RTC::ConnectorListenerType)i, 
+                                         m_connlisteners[i], true);
+          }
+
+        // Listener add count check
+        CPPUNIT_ASSERT_EQUAL(10, cdl_count);
+        CPPUNIT_ASSERT_EQUAL(7, cl_count);
+
+        inPort.publishInterfaces_public(prof);
+        outPort.subscribeInterfaces_public(prof);
+
+        // connect()
+        RTC::ReturnCode_t ret;
+        ret = outPort.connect(prof);
+        CPPUNIT_ASSERT_EQUAL(RTC::RTC_OK, ret);
+
+        // isLittleEndian()
+        bool bret = outPort.isLittleEndian();
+        CPPUNIT_ASSERT( bret );
+
+        outPort.activateInterfaces();
+        outPort.deactivateInterfaces();
+
+        ret = outPort.disconnect_all();
+        CPPUNIT_ASSERT_EQUAL(RTC::RTC_OK, ret);
+
+        portAdmin.deletePort(outPort);
+        portAdmin.deletePort(inPort);
+
+        // removeConnectorDataListener()
+        for (int i(0); i<cdl_len; ++i)
+          {
+            outPort.removeConnectorDataListener((RTC::ConnectorDataListenerType)i, 
+                                                m_datalisteners[i]);
+          }
+
+        // removeConnectorListener()
+        for (int i(0); i<cl_len; ++i)
+          {
+            outPort.removeConnectorListener((RTC::ConnectorListenerType)i, 
+                                            m_connlisteners[i]);
+          }
+
+        // Listener remove count check
+        CPPUNIT_ASSERT_EQUAL(0, cdl_count);
+        CPPUNIT_ASSERT_EQUAL(0, cl_count);
     }
-*/
-    
+
   };
 }; // namespace OutPortBase
 
@@ -2470,6 +2495,10 @@ namespace RTC
       {
           throw std::bad_alloc();
       }
+      m_publisher = createPublisher(info);
+      m_publisher->init(info.properties);
+      m_publisher->setListener(m_profile, &m_listeners);
+      onConnect();
   }
   /*!
    *
@@ -2477,6 +2506,8 @@ namespace RTC
    */
   OutPortPushConnector::~OutPortPushConnector()
   {
+      onDisconnect();
+      disconnect();
   }
   /*!
    *
@@ -2484,6 +2515,12 @@ namespace RTC
    */
   ConnectorBase::ReturnCode OutPortPushConnector::disconnect()
   {
+      if (m_publisher != 0)
+        {
+          PublisherFactory& pfactory(PublisherFactory::instance());
+          pfactory.deleteObject(m_publisher);
+        }
+      m_publisher = 0;
       return PORT_OK;
   }
   /*!
@@ -2536,6 +2573,23 @@ namespace RTC
       return new ::OutPortBase::CdrRingBufferMock();
 
   }
+  /*!
+   *
+   *
+   */
+  void OutPortPushConnector::onConnect()
+  {
+    m_listeners.connector_[ON_CONNECT].notify(m_profile);
+  }
+  /*!
+   *
+   *
+   */
+  void OutPortPushConnector::onDisconnect()
+  {
+    m_listeners.connector_[ON_DISCONNECT].notify(m_profile);
+  }
+
   /*!
    *
    * Mock OutPortPullConnector

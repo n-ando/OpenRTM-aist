@@ -139,6 +139,37 @@ namespace RTC
 
   /*!
    * @if jp
+   * @brief Connector を取得
+   * @else
+   * @brief Connector list
+   * @endif
+   */
+  const std::vector<InPortConnector*>& InPortBase::connectors()
+  {
+    RTC_TRACE(("connectors(): size = %d", m_connectors.size()));
+    return m_connectors;
+  }
+
+  /*!
+   * @if jp
+   * @brief ConnectorProfile を取得
+   * @else
+   * @brief ConnectorProfile list
+   * @endif
+   */
+  ConnectorInfoList InPortBase::getConnectorProfiles()
+  {
+    RTC_TRACE(("getConnectorProfiles(): size = %d", m_connectors.size()));
+    ConnectorInfoList profs;
+    for (int i(0), len(m_connectors.size()); i < len; ++i)
+      {
+        profs.push_back(m_connectors[i]->profile());
+      }
+    return profs;
+  }
+
+  /*!
+   * @if jp
    * @brief ConnectorId を取得
    * @else
    * @brief ConnectorId list
@@ -357,7 +388,7 @@ namespace RTC
   {
     if (type < CONNECTOR_LISTENER_NUM)
       {
-        RTC_TRACE(("removeConnectorDataListener(%s)",
+        RTC_TRACE(("addConnectorListener(%s)",
                    ConnectorListener::toString(type)));
         m_listeners.connector_[type].addListener(listener, autoclean);
         return;

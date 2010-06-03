@@ -5,7 +5,7 @@
  * @date  $Date: 2008-01-13 10:28:27 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
- * Copyright (C) 2009
+ * Copyright (C) 2009-2010
  *     Noriaki Ando
  *     Task-intelligence Research Group,
  *     Intelligent Systems Research Institute,
@@ -71,6 +71,13 @@ namespace RTC
     m_buffer = buffer;
   }
 
+  /*!
+   * @if jp
+   * @brief リスナを設定する。
+   * @else
+   * @brief Set the listener. 
+   * @endif
+   */
   void OutPortCorbaCdrConsumer::setListener(ConnectorInfo& info,
                                             ConnectorListeners* listeners)
   {
@@ -265,9 +272,17 @@ namespace RTC
 
 extern "C"
 {
+  /*!
+   * @if jp
+   * @brief モジュール初期化関数
+   * @else
+   * @brief Module initialization
+   * @endif
+   */
   void OutPortCorbaCdrConsumerInit(void)
   {
-    RTC::OutPortConsumerFactory& factory(RTC::OutPortConsumerFactory::instance());
+    RTC::OutPortConsumerFactory&
+      factory(RTC::OutPortConsumerFactory::instance());
     factory.addFactory("corba_cdr",
                        ::coil::Creator< ::RTC::OutPortConsumer,
                                         ::RTC::OutPortCorbaCdrConsumer>,

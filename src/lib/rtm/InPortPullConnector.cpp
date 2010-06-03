@@ -69,14 +69,8 @@ namespace RTC
   /*!
    * @if jp
    * @brief read 関数
-   *
-   * Buffer からデータを InPort へ read する関数
-   *
    * @else
    * @brief Destructor
-   *
-   * The read function to read data from buffer to InPort
-   *
    * @endif
    */
   ConnectorBase::ReturnCode
@@ -93,22 +87,21 @@ namespace RTC
   /*!
    * @if jp
    * @brief 接続解除関数
-   *
-   * Connector が保持している接続を解除する
-   *
    * @else
    * @brief Disconnect connection
-   *
-   * This operation disconnect this connection
-   *
    * @endif
    */
   ConnectorBase::ReturnCode InPortPullConnector::disconnect()
   {
-    // delete provider
-    //    InPortProviderFactory& factory(InPortProviderFactory::instance());
-    //    factory.deleteObject(m_buffer);
-    
+    RTC_TRACE(("disconnect()"));
+    // delete consumer
+    if (m_consumer != 0)
+      {
+        OutPortConsumerFactory& cfactory(OutPortConsumerFactory::instance());
+        cfactory.deleteObject(m_consumer);
+      }
+    m_consumer = 0;
+
     return PORT_OK;
   }
   

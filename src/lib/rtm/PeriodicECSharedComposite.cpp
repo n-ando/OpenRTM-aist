@@ -43,6 +43,13 @@ static const char* periodicecsharedcomposite_spec[] =
 
 namespace SDOPackage
 {
+  /*!
+   * @if jp
+   * @brief コンストラクタ
+   * @else
+   * @brief Constructor
+   * @endif
+   */
   PeriodicECOrganization::PeriodicECOrganization(::RTC::RTObject_impl* rtobj)
     : Organization_impl(rtobj->getObjRef()),
       rtclog("PeriodicECOrganization"),
@@ -51,6 +58,13 @@ namespace SDOPackage
   {
   }
 
+  /*!
+   * @if jp
+   * @brief デストラクタ
+   * @else
+   * @brief Destructor
+   * @endif
+   */
   PeriodicECOrganization::~PeriodicECOrganization()
   {
     ;
@@ -165,7 +179,13 @@ namespace SDOPackage
     return result;
   }
 
-  
+  /*!
+   * @if jp
+   * @brief Organizationメンバーを削除する
+   * @else
+   * @brief Remove a member of Organization
+   * @endif
+   */
   void PeriodicECOrganization::removeAllMembers()
   {
     RTC_TRACE(("removeAllMembers()"));
@@ -415,8 +435,7 @@ namespace SDOPackage
     for (::CORBA::ULong i(0), len(plist.length()); i < len; ++i)
       {
         // port name -> comp_name.port_name
-        std::string port_name(comp_name);
-        port_name += "."; port_name += plist[i].name;
+        std::string port_name(plist[i].name);
 
         RTC_DEBUG(("port_name: %s is in %s?",
                    port_name.c_str(),
@@ -443,13 +462,26 @@ namespace SDOPackage
       }
    }
 
+  /*!
+   * @if jp
+   * @brief PortsListを更新する
+   * @else
+   * @brief PortsList is updated
+   * @endif
+   */
   void PeriodicECOrganization::updateExportedPortsList()
   {
     std::string plist(m_rtobj->getProperties()["conf.default.exported_ports"]);
     m_expPorts = ::coil::split(plist, ",");
   }
 
-
+  /*!
+   * @if jp
+   * @brief Organizationメンバーを更新/削除する
+   * @else
+   * @brief Update/Remove a member of Organization
+   * @endif
+   */
   void PeriodicECOrganization::updateDelegatedPorts()
   {
     std::vector<std::string>& oldPorts(m_expPorts);
@@ -614,9 +646,9 @@ namespace RTC
 
   /*!
    * @if jp
-   * @brief 初期化
+   * @brief 活性化処理用コールバック関数
    * @else
-   * @brief Initialization
+   * @brief Callback function to activate
    * @endif
    */
   ReturnCode_t PeriodicECSharedComposite::onActivated(RTC::UniqueId exec_handle)
@@ -637,9 +669,9 @@ namespace RTC
 
   /*!
    * @if jp
-   * @brief 初期化
+   * @brief 非活性化処理用コールバック関数
    * @else
-   * @brief Initialization
+   * @brief Callback function to deactivate
    * @endif
    */
   ReturnCode_t PeriodicECSharedComposite::onDeactivated(RTC::UniqueId exec_handle)
@@ -658,11 +690,12 @@ namespace RTC
 
   /*!
    * @if jp
-   * @brief 初期化
+   * @brief リセット処理用コールバック関数
    * @else
-   * @brief Initialization
+   * @brief Callback function to reset
    * @endif
-   */  ReturnCode_t PeriodicECSharedComposite::onReset(RTC::UniqueId exec_handle)
+   */
+  ReturnCode_t PeriodicECSharedComposite::onReset(RTC::UniqueId exec_handle)
   {
     RTC_TRACE(("onReset(%d)", exec_handle));
     ::RTC::ExecutionContextList_var ecs(get_owned_contexts());
@@ -678,9 +711,9 @@ namespace RTC
 
   /*!
    * @if jp
-   * @brief 初期化
+   * @brief [ComponentAction CORBA interface] RTC の終了
    * @else
-   * @brief Initialization
+   * @brief [ComponentAction CORBA interface] Finalize RTC
    * @endif
    */
   ReturnCode_t PeriodicECSharedComposite::onFinalize()

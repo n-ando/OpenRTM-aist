@@ -49,7 +49,38 @@ namespace coil
   class NonCopyable
   {
   protected:
+    /*!
+     * @if jp
+     *
+     * @brief コンストラクタ
+     *
+     * コンストラクタ。
+     *
+     * @else
+     *
+     * @brief Constructor
+     *
+     * Constructor
+     *
+     * @endif
+     */
     NonCopyable() {}
+
+    /*!
+     * @if jp
+     *
+     * @brief デストラクタ
+     *
+     * デストラクタ。
+     *
+     * @else
+     *
+     * @brief Destructor
+     *
+     * Destructor
+     *
+     * @endif
+     */
     ~NonCopyable() {}
   private:
     NonCopyable(const NonCopyable&);
@@ -93,7 +124,38 @@ namespace coil
   class NonCopyableCRTP
   {
   protected:
+    /*!
+     * @if jp
+     *
+     * @brief コンストラクタ
+     *
+     * コンストラクタ。
+     *
+     * @else
+     *
+     * @brief Constructor
+     *
+     * Constructor
+     *
+     * @endif
+     */
     NonCopyable () {}
+
+    /*!
+     * @if jp
+     *
+     * @brief デストラクタ
+     *
+     * デストラクタ。
+     *
+     * @else
+     *
+     * @brief Destructor
+     *
+     * Destructor
+     *
+     * @endif
+     */
     ~NonCopyable () {}
   private: 
     NonCopyable (const NonCopyable &);

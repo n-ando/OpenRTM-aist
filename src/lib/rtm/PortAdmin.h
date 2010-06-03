@@ -5,7 +5,7 @@
  * @date $Date: 2007-12-31 03:08:05 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
- * Copyright (C) 2006-2008
+ * Copyright (C) 2006-2010
  *     Noriaki Ando
  *     Task-intelligence Research Group,
  *     Intelligent Systems Research Institute,
@@ -32,9 +32,8 @@ namespace RTC
    * @class PortAdmin
    * @brief PortAdmin クラス
    *
-   * 各種 Port の管理を行うクラス。
-   * Port の登録/登録解除など各種管理操作を実行するとともに、登録されている Port
-   * Port の管理を行うクラス。
+   * 各種 Port の管理を行うクラス。Port の登録/登録解除など各種管理操作
+   * を実行するとともに、登録されている Port Port の管理を行うクラス。
    *
    * @since 0.4.0
    *
@@ -42,9 +41,9 @@ namespace RTC
    * @class PortAdmin
    * @brief PortAdmin class
    *
-   * This is a class to manage various Ports.
-   * It executes various management operations such as registering and 
-   * unregistering Port etc and also manages registered ports.
+   * This is a class to manage various Ports.  It executes various
+   * management operations such as registering and unregistering Port
+   * etc and also manages registered ports.
    *
    * @since 0.4.0
    *
@@ -102,8 +101,8 @@ namespace RTC
      *
      * @brief Get PortServiceList
      *
-     * This operation returns the pointer to the PortServiceList of Ports registered
-     * by addPort().
+     * This operation returns the pointer to the PortServiceList of
+     * Ports registered by addPort().
      *
      * @return The pointer points PortServiceList
      *
@@ -143,7 +142,6 @@ namespace RTC
      * なければならない。
      *
      * @param port_name 参照を返すPortの名前
-     *
      * @return PortService_ptr Portのオブジェクト参照
      *
      * @else
@@ -156,7 +154,6 @@ namespace RTC
      * addPort().
      *
      * @param port_name The name of Port to be returned the reference.
-     *
      * @return PortService_ptr Port object reference.
      *
      * @endif
@@ -173,7 +170,6 @@ namespace RTC
      * なければならない。
      *
      * @param port_name 参照を返すPortの名前
-     *
      * @return PortBase* Portサーバント基底クラスのポインタ
      *
      * @else
@@ -186,7 +182,6 @@ namespace RTC
      * addPort().
      *
      * @param port_name The name of Port to be returned the servant pointer.
-     *
      * @return PortBase* The pointer to Port's servant.
      *
      * @endif
@@ -220,6 +215,7 @@ namespace RTC
      * @endif
      */
     bool addPort(PortBase& port);
+
     /*!
      * @if jp
      *
@@ -247,6 +243,7 @@ namespace RTC
      * @endif
      */
     bool addPort(PortService_ptr port);
+
     /*!
      * @if jp
      *
@@ -272,6 +269,7 @@ namespace RTC
      * @endif
      */
     void registerPort(PortBase& port);
+
     /*!
      * @if jp
      *
@@ -324,6 +322,7 @@ namespace RTC
      * @endif
      */
     bool removePort(PortBase& port);
+
     /*!
      * @if jp
      *
@@ -350,6 +349,7 @@ namespace RTC
      * @endif
      */
     bool removePort(PortService_ptr port);
+
     /*!
      * @if jp
      *
@@ -374,6 +374,7 @@ namespace RTC
      * @endif
      */
     void deletePort(PortBase& port);
+
     /*!
      * @if jp
      *
@@ -414,9 +415,10 @@ namespace RTC
      *
      * @brief Unregister the Port's registration by its name
      *
-     * This operation unregister the Port's registration specified by port_ name.
-     * When the Port is unregistered, Port is deactivated, and the object
-     * reference in the Port's profile is set to nil.
+     * This operation unregister the Port's registration specified by
+     * port_ name.  When the Port is unregistered, Port is
+     * deactivated, and the object reference in the Port's profile is
+     * set to nil.
      *
      * @param port_name The Port's name.
      *
@@ -484,17 +486,49 @@ namespace RTC
     void finalizePorts();
     
   private:
-    // ORB へのポインタ
+    /*!
+     * @if jp
+     * @brief ORB への参照
+     * @else
+     * @brief Reference to ORB
+     * @endif
+     */
     CORBA::ORB_var m_pORB;
     
-    // POA へのポインタ
+    /*!
+     * @if jp
+     * @brief POA への参照
+     * @else
+     * @brief Reference to POA
+     * @endif
+     */
     PortableServer::POA_var m_pPOA;
     
-    // Portのオブジェクトリファレンスのリスト. PortServiceList
+    /*!
+     * @if jp
+     * @brief Portのオブジェクトリファレンスのリスト
+     * @else
+     * @brief List of Port's object references
+     * @endif
+     */
     PortServiceList m_portRefs;
-    
+
+    /*!
+     * @if jp
+     * @brief ロガーストリーム
+     * @else
+     * @brief Logger stream
+     * @endif
+     */
     mutable Logger rtclog;
-    
+
+    /*!
+     * @if jp
+     * @brief comp_op ファンクタ (未使用?)
+     * @else
+     * @brief comp_op functor
+     * @endif
+     */
     template <class T>
     class comp_op
     {
@@ -515,7 +549,14 @@ namespace RTC
     private:
       std::string m_name;
     };
-    
+
+    /*!
+     * @if jp
+     * @brief PortProfileList 収集ファンクタ (未使用?)
+     * @else
+     * @brief PortProfileList corerection functor
+     * @endif
+     */
     class port_prof_collect
     {
     public:
@@ -528,6 +569,13 @@ namespace RTC
       PortProfileList& m_p;
     };
 
+    /*!
+     * @if jp
+     * @brief PortProfileList 収集ファンクタ
+     * @else
+     * @brief PortProfileList corerection functor
+     * @endif
+     */
     class port_prof_collect2
     {
     public:

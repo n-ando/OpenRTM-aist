@@ -5,7 +5,7 @@
  * @date $Date$
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
- * Copyright (C) 2009
+ * Copyright (C) 2009-2010
  *     Noriaki Ando
  *     Task-intelligence Research Group,
  *     Intelligent Systems Research Institute,
@@ -207,7 +207,30 @@ namespace RTC
 
 };
 
-#define DATAPORTSTATUS_ENUM \
+/*!
+ * @if jp
+ *
+ * @brief ::RTC::DataPortStatus 導入
+ * 
+ * ::RTC::DataPortStatus で宣言されている Enum のすべてのメンバをネーム
+ * スペースに導入するためのマクロ。DataPortStatus を利用するクラスにお
+ * いて、クラス宣言の先頭において DATAPORTSTATUS_ENUM を記載するだけで、
+ * DataPortStatus で宣言されている enum メンバが名前解決演算子なしにア
+ * クセス可能になる。
+ *
+ * @else
+ *
+ * @brief Importing ::RTC::DataPortStatus macro
+ *
+ * This macro imports all the member of enum declared in
+ * ::RTC::DataPortStatus into the current namespace.  Inserting at the
+ * head of class declaration, classes which utilize DataPortStatus can
+ * access Enum members of DataPortStatus without using namespace
+ * resolve operator.
+ *
+ * @endif
+ */
+#define DATAPORTSTATUS_ENUM                             \
   typedef ::RTC::DataPortStatus::Enum ReturnCode;       \
   using ::RTC::DataPortStatus::PORT_OK;                 \
   using ::RTC::DataPortStatus::PORT_ERROR;              \

@@ -136,7 +136,7 @@ namespace RTC
 	  {
           case 'a':
             {
-              m_argprop["maanger.corba_servant"] = "NO";
+              m_argprop["manager.corba_servant"] = "NO";
             }
             break;
 	    // Specify configuration file not default

@@ -10,9 +10,11 @@ SUBDIRS = bin etc build docs examples utils coil rtm installer .
 clean-local:
 	rm -f *~ *.sln *.yaml *.ncb *.suo *.user
 	rm -rf components
+	rm -f coil_distbuild.vsprops
+	rm -f coil_config.vsprops
 
 
-sln: OpenRTM-aist_vc8.sln OpenRTM-aist_vc9.sln coil_distbuild.vsprops
+sln: OpenRTM-aist_vc8.sln OpenRTM-aist_vc9.sln
 
 OpenRTM-aist_vc8.sln: OpenRTM-aist.sln.dep
 	$(top_srcdir)/build/slntool.py     \
@@ -30,17 +32,17 @@ OpenRTM-aist_vc9.sln:
 		`find ./ -name '*_vc9.vcproj' \! -name 'USB*.vcproj'`
 	qkc -ms OpenRTM-aist_vc9.sln
 
+vsprops:  coil_distbuild.vsprops coil_config.vsprops
+
 coil_distbuild.vsprops:
 	cp -p $(top_srcdir)/src/lib/coil/win32/coil_distbuild.vsprops .
 
 coil_config.vsprops:
 	cp -p $(top_srcdir)/src/lib/coil/win32/coil_config.vsprops .
 
-dist-hook: clean-local sln
+dist-hook: clean-local sln vsprops
 
 EXTRA_DIST =                          \
-	OpenRTM-aist_vc8.sln          \
-	OpenRTM-aist_vc9.sln          \
 	OpenRTM-aist.sln.dep          \
 	RunAtFirst.py                 \
 	autobuild_vc8.bat             \

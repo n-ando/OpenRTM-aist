@@ -99,6 +99,7 @@ namespace PublisherFlush
        */
       virtual ~InPortCorbaCdrConsumerMock()
       {
+          delete m_buffer;
       }
       /*!
        * 
@@ -425,6 +426,7 @@ namespace PublisherFlush
         m_OnCheck = 5;  // UNKNOWN_ERROR:onReceiverError()
         publisher.write(cdr,0,0);
 
+        delete consumer;
     }
 
     /*!

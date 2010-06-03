@@ -32,11 +32,17 @@ namespace RTC
   OutPortProvider::~OutPortProvider(void)
   {
   }
-
+  
+  /*!
+   * @if jp
+   * @brief 設定初期化
+   * @else
+   * @brief Initializing configuration
+   * @endif
+   */
   void OutPortProvider::init(coil::Properties& prop)
   {
   }
-
 
   /*!
    * @if jp

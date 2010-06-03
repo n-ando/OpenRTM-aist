@@ -29,8 +29,8 @@ static const char* sensor_spec[] =
 Sensor::Sensor(RTC::Manager* manager)
     // <rtc-template block="initializer">
   : RTC::DataFlowComponentBase(manager),
-    m_outOut("out", m_out),
-    m_inIn("in", m_in)
+    m_inIn("in", m_in),
+    m_outOut("out", m_out)
 
     // </rtc-template>
 {

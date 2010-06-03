@@ -450,7 +450,7 @@ namespace RTM
               {
                 ::RTC::RTCList_var srtcs;
                 srtcs = m_slaves[i]->get_components();
-                CORBA_SeqUtil::push_back_list(srtcs.inout(), crtcs.in());
+                CORBA_SeqUtil::push_back_list(crtcs.inout(), srtcs.in());
                 continue;
               }
           }
@@ -645,7 +645,7 @@ namespace RTM
   ManagerList* ManagerServant::get_slave_managers()
   {
     Guard guard(m_slaveMutex);
-    RTC_TRACE(("get_slave_managers(), %s slaves", m_slaves.length()));
+    RTC_TRACE(("get_slave_managers(), %d slaves", m_slaves.length()));
     
     return new ManagerList(m_slaves);
   }
@@ -686,7 +686,7 @@ namespace RTM
   RTC::ReturnCode_t ManagerServant::remove_slave_manager(RTM::Manager_ptr mgr)
   {
     Guard guard(m_slaveMutex);
-    RTC_TRACE(("remove_slave_manager(), %s slaves", m_slaves.length()));
+    RTC_TRACE(("remove_slave_manager(), %d slaves", m_slaves.length()));
     CORBA::Long index;
     index = CORBA_SeqUtil::find(m_slaves, is_equiv(mgr));
     
@@ -697,7 +697,7 @@ namespace RTM
       }
     
     CORBA_SeqUtil::erase(m_slaves, index);
-    RTC_TRACE(("remove_slave_manager() done, %s slaves", m_slaves.length()));
+    RTC_TRACE(("remove_slave_manager() done, %d slaves", m_slaves.length()));
     return RTC::RTC_OK;
   }
   

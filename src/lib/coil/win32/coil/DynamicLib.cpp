@@ -21,11 +21,25 @@
 
 namespace coil
 {
+  /*!
+   * @if jp
+   * @brief コンストラクタ
+   * @else
+   * @brief Constructor
+   * @endif
+   */
   DynamicLib::DynamicLib(int close_handle_on_destruction)
     : m_closeflag(close_handle_on_destruction)
   {
   }
 
+  /*!
+   * @if jp
+   * @brief コンストラクタ
+   * @else
+   * @brief Constructor
+   * @endif
+   */
   DynamicLib::DynamicLib(const char* dynlib_name,
                          int open_mode,
                          int close_handle_on_destruction)
@@ -38,11 +52,25 @@ namespace coil
       }
   }
 
+  /*!
+   * @if jp
+   * @brief デストラクタ
+   * @else
+   * @brief Destructor
+   * @endif
+   */
   DynamicLib::~DynamicLib()
   {
     close();
   }
 
+  /*!
+   * @if jp
+   * @brief コピーコンストラクタ
+   * @else
+   * @brief Copy Constructor
+   * @endif
+   */
   DynamicLib::DynamicLib(const DynamicLib& rhs)
     : m_name(""), m_mode(0), m_closeflag(0), m_handle(0)
   {
@@ -52,6 +80,13 @@ namespace coil
     throw std::bad_alloc();
   }
 
+  /*!
+   * @if jp
+   * @brief 代入演算子
+   * @else
+   * @brief Assignment operator
+   * @endif
+   */
   DynamicLib& DynamicLib::operator=(const DynamicLib& rhs)
   {
     DynamicLib tmp(rhs);
@@ -62,6 +97,13 @@ namespace coil
     return *this;
   }
 
+  /*!
+   * @if jp
+   * @brief 動的リンクライブラリのロード
+   * @else
+   * @brief Load of the Dynamic link library 
+   * @endif
+   */
   int DynamicLib::open(const char* dll_name,
                    int open_mode,
                    int close_handle_on_destruction)
@@ -76,6 +118,13 @@ namespace coil
     return 0;
   }
 
+  /*!
+   * @if jp
+   * @brief 動的リンクライブラリのアンロード
+   * @else
+   * @brief Unload of the Dynamic link library 
+   * @endif
+   */
   int DynamicLib::close(void)
   {
     if (m_handle == NULL)
@@ -84,12 +133,26 @@ namespace coil
     return 0;
   }
 
+  /*!
+   * @if jp
+   * @brief シンボルがロードされたメモリアドレスを返す
+   * @else
+   * @brief Return an address of the memory where a symbol was loaded
+   * @endif
+   */
   void* DynamicLib::symbol (const char* symbol_name)
   {
     if (m_handle == NULL) return NULL;
     return ::GetProcAddress(m_handle, symbol_name);
   }
 
+  /*!
+   * @if jp
+   * @brief エラーについての説明メッセージを返す
+   * @else
+   * @brief Return the explanation message about the error
+   * @endif
+   */
   const char* DynamicLib::error(void) const
   {
     DWORD dwcode;
