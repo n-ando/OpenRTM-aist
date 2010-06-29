@@ -87,6 +87,12 @@ namespace Mutex
       {
           return ShareCount;
       }
+      void setShareCount(long lc)
+      {
+          mtx.lock();
+          ShareCount = lc;
+          mtx.unlock();
+      }
     };
     class TestTaskTrylock
        : public coil::Task 
@@ -132,6 +138,12 @@ namespace Mutex
       {
           return ShareCount;
       }
+      void setShareCount(long lc)
+      {
+          mtx.lock();
+          ShareCount = lc;
+          mtx.unlock();
+      }
 
     };
     /*!
@@ -175,6 +187,7 @@ namespace Mutex
         char cstr[256];
         MutexTests::TestTaskLock tka;
         MutexTests::TestTaskLock tkb;
+        tka.setShareCount(0); 
 
         tka.activate();
         tkb.activate();        
@@ -198,6 +211,7 @@ namespace Mutex
         char cstr[256];
         MutexTests::TestTaskTrylock tka;
         MutexTests::TestTaskTrylock tkb;
+        tka.setShareCount(0); 
 
         tka.activate();
         tkb.activate();        
