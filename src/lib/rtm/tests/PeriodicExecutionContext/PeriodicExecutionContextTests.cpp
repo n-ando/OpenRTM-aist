@@ -715,7 +715,7 @@ namespace PeriodicExecutionContext
 			
       RTC::ExecutionContextProfile* ecp;
       ecp = ec->get_profile();
-      CPPUNIT_ASSERT_EQUAL(CORBA::Double(0), ecp->rate);
+      CPPUNIT_ASSERT_EQUAL(CORBA::Double(1000000), ecp->rate);
 
       // set_rate()を呼出す
       CPPUNIT_ASSERT_EQUAL(RTC::RTC_OK, ec->set_rate(CORBA::Double(1.0)));
