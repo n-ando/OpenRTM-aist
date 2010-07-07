@@ -133,6 +133,10 @@ namespace PortAdmin
           }
     }
   public:
+      PortMock()
+      {
+          m_logger = NULL;
+      }
       /*!
        *
        *
