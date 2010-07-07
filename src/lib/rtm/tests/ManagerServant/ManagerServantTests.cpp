@@ -28,6 +28,7 @@
 #include <idl/RTCSkel.h>
 #include <rtm/idl/ManagerSkel.h>
 #include <rtm/ManagerServant.h>
+#include <rtm/NVUtil.h>
 
 /*!
  * @class ManagerServantTests class
@@ -1110,7 +1111,7 @@ namespace ManagerServant
             ret = pman->load_module(".libs/DummyModule1.so","DummyModule1Init");
             CPPUNIT_ASSERT_EQUAL(::RTC::RTC_OK, ret);
             CPPUNIT_ASSERT(isFound(pman->get_loadable_modules(), 
-                                   "DummyModule1.so"));
+                                   "DummyModule1"));
         }
         catch(...)
         {
@@ -1123,7 +1124,7 @@ namespace ManagerServant
             ret = pman->load_module(".libs/DummyModule2.so","DummyModule2Init");
             CPPUNIT_ASSERT_EQUAL(::RTC::RTC_OK, ret);
             CPPUNIT_ASSERT(isFound(pman->get_loadable_modules(), 
-                                   "DummyModule2.so"));
+                                   "DummyModule2"));
         }
         catch(...)
         {
@@ -1137,12 +1138,13 @@ namespace ManagerServant
         delete list;
 
         //Check returns(ModuleProfileList).
-        CPPUNIT_ASSERT_EQUAL((::CORBA::ULong)3, modlist.length());
+        CPPUNIT_ASSERT_EQUAL((::CORBA::ULong)2, modlist.length());
 
-        CPPUNIT_ASSERT_EQUAL(::std::string("module_file_name"), 
-                             ::std::string(modlist[0].properties[0].name));
+        CORBA::Long long_ret = NVUtil::find_index(modlist[0].properties,"module_file_name");
+        CPPUNIT_ASSERT(long_ret!=-1);
+
         const char* ch;
-        if( modlist[0].properties[0].value >>= ch )
+        if( modlist[0].properties[long_ret].value >>= ch )
         {
             CPPUNIT_ASSERT_EQUAL(::std::string("DummyModule2.so"), 
                                  ::std::string(ch));
@@ -1152,12 +1154,12 @@ namespace ManagerServant
             CPPUNIT_FAIL( "ModuleProfileList is illegal." );
         }
 
-        CPPUNIT_ASSERT_EQUAL(::std::string("module_file_name"), 
-                             ::std::string(modlist[1].properties[0].name));
+        long_ret = NVUtil::find_index(modlist[1].properties,"module_file_name");
+        CPPUNIT_ASSERT(long_ret!=-1);
 
-        if( modlist[1].properties[0].value >>= ch )
+        if( modlist[1].properties[long_ret].value >>= ch )
         {
-            CPPUNIT_ASSERT_EQUAL(::std::string("DummyLib.so"), 
+            CPPUNIT_ASSERT_EQUAL(::std::string("DummyModule1.so"), 
                                  ::std::string(ch));
         }
         else
