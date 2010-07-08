@@ -115,7 +115,7 @@ namespace ModuleManager
 	  "manager.modules.config_path", "/etc/rtc",
 	  "manager.modules.detect_loadable", "Yes",
 	  "manager.modules.load_path",
-	  "/usr/lib, /usr/local/lib, /usr/local/lib/rtc, ../../.libs",
+	  "../../.libs, .libs, /usr/lib, /usr/local/lib, /usr/local/lib/rtc",
 	  "manager.modules.init_func_suffix", "Init",
 	  "manager.modules.init_func_prefix", "",
 	  "manager.modules.abs_path_allowed", "Yes",
@@ -453,7 +453,7 @@ namespace ModuleManager
       bool bret = false;
       for(int i(0); i<len; ++i)
       {
-        if(props[i].getProperty("module_file_name") == "libRTC.so")
+        if(props[i].getProperty("module_file_name") == "DummyModule1.so")
         {
           bret = true;
           break;

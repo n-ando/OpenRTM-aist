@@ -38,67 +38,109 @@ IDL_SOURCES = \
 	$(top_srcdir)/src/lib/rtm/idl/BasicDataType.idl \
 	$(top_srcdir)/src/lib/rtm/idl/DataPort.idl
 
+dummylibdir  = $(pkgdatadir)/src/lib/rtm/tests/ModuleManager
+dummylib_LTLIBRARIES = DummyLib.la
+nodist_DummyLib_la_SOURCES = \
+	$(IDL_SOURCES:.idl=Skel.cpp)                             \
+	$(top_builddir)/src/lib/rtm/NVUtil.cpp                   \
+	$(top_builddir)/src/lib/rtm/CorbaNaming.cpp              \
+	$(top_builddir)/src/lib/rtm/NamingManager.cpp            \
+	$(top_builddir)/src/lib/rtm/PortBase.cpp                 \
+	$(top_builddir)/src/lib/rtm/PortAdmin.cpp                \
+	$(top_builddir)/src/lib/rtm/ConfigAdmin.cpp              \
+	$(top_builddir)/src/lib/rtm/SdoOrganization.cpp          \
+	$(top_builddir)/src/lib/rtm/SdoConfiguration.cpp         \
+	$(top_builddir)/src/lib/rtm/ModuleManager.cpp            \
+	$(top_builddir)/src/lib/rtm/ManagerConfig.cpp            \
+	$(top_builddir)/src/lib/rtm/RTCUtil.cpp                  \
+	$(top_builddir)/src/lib/rtm/NumberingPolicy.cpp          \
+	$(top_builddir)/src/lib/rtm/Factory.cpp                  \
+	$(top_builddir)/src/lib/rtm/ECFactory.cpp                \
+	$(top_builddir)/src/lib/rtm/ExtTrigExecutionContext.cpp  \
+	$(top_builddir)/src/lib/rtm/PeriodicExecutionContext.cpp \
+	$(top_builddir)/src/lib/rtm/OpenHRPExecutionContext.cpp  \
+	$(top_builddir)/src/lib/rtm/PeriodicECSharedComposite.cpp\
+	$(top_builddir)/src/lib/rtm/RTObject.cpp                 \
+	$(top_builddir)/src/lib/rtm/Manager.cpp                  \
+	$(top_srcdir)/src/lib/rtm/CorbaPort.cpp               \
+	$(top_srcdir)/src/lib/rtm/ConnectorListener.cpp       \
+	$(top_srcdir)/src/lib/rtm/CORBA_IORUtil.cpp           \
+	$(top_srcdir)/src/lib/rtm/SystemLogger.cpp               \
+	$(top_srcdir)/src/lib/rtm/FactoryInit.cpp                  \
+	$(top_srcdir)/src/lib/rtm/CdrRingBuffer.cpp                \
+	$(top_srcdir)/src/lib/rtm/DefaultPeriodicTask.cpp          \
+	$(top_srcdir)/src/lib/rtm/PublisherFlush.cpp               \
+	$(top_srcdir)/src/lib/rtm/PublisherNew.cpp                 \
+	$(top_srcdir)/src/lib/rtm/PublisherPeriodic.cpp            \
+	$(top_srcdir)/src/lib/rtm/InPortCorbaCdrProvider.cpp       \
+	$(top_srcdir)/src/lib/rtm/InPortCorbaCdrConsumer.cpp       \
+	$(top_srcdir)/src/lib/rtm/OutPortCorbaCdrConsumer.cpp      \
+	$(top_srcdir)/src/lib/rtm/OutPortCorbaCdrProvider.cpp      \
+	$(top_srcdir)/src/lib/rtm/OutPortBase.cpp                \
+	$(top_srcdir)/src/lib/rtm/OutPortProvider.cpp            \
+	$(top_srcdir)/src/lib/rtm/OutPortConnector.cpp           \
+	$(top_srcdir)/src/lib/rtm/OutPortPullConnector.cpp       \
+	$(top_srcdir)/src/lib/rtm/OutPortPushConnector.cpp       \
+	$(top_srcdir)/src/lib/rtm/InPortBase.cpp                 \
+	$(top_srcdir)/src/lib/rtm/InPortProvider.cpp             \
+	$(top_srcdir)/src/lib/rtm/InPortConnector.cpp            \
+	$(top_srcdir)/src/lib/rtm/InPortPullConnector.cpp        \
+	$(top_srcdir)/src/lib/rtm/InPortPushConnector.cpp        \
+	$(top_builddir)/src/lib/rtm/DataFlowComponentBase.cpp    \
+        $(top_builddir)/src/lib/rtm/ManagerServant.cpp
+DummyLib_la_LDFLAGS = -module \
+        -L$(top_builddir)/src/lib/coil/lib
+DummyLib_la_LIBADD   =                            \
+	-lomniORB4                                \
+	-lomnithread                              \
+	-lomniDynamic4                            \
+	-lcoil                                    \
+	-luuid
+
 noinst_PROGRAMS = ModuleManagerTests
 
 nodist_ModuleManagerTests_SOURCES = \
 	../TestRunner.cpp \
-	$(IDL_SOURCES:.idl=Skel.cpp) \
-	$(top_srcdir)/src/lib/rtm/NVUtil.cpp \
-	$(top_srcdir)/src/lib/coil/common/stringutil.cpp \
-	$(top_srcdir)/src/lib/coil/common/Properties.cpp \
-	$(top_srcdir)/src/lib/rtm/CorbaNaming.cpp \
-	$(top_srcdir)/src/lib/rtm/CorbaPort.cpp          \
-	$(top_srcdir)/src/lib/rtm/ConnectorListener.cpp  \
-	$(top_srcdir)/src/lib/rtm/CORBA_IORUtil.cpp      \
-	$(top_srcdir)/src/lib/rtm/NamingManager.cpp \
-	$(top_srcdir)/src/lib/rtm/PortBase.cpp \
-	$(top_srcdir)/src/lib/rtm/PortAdmin.cpp \
-	$(top_srcdir)/src/lib/rtm/ConfigAdmin.cpp \
-	$(top_srcdir)/src/lib/rtm/SdoConfiguration.cpp \
-	$(top_srcdir)/src/lib/rtm/ModuleManager.cpp \
-	$(top_srcdir)/src/lib/rtm/ManagerConfig.cpp \
-	$(top_srcdir)/src/lib/rtm/RTCUtil.cpp \
-	$(top_srcdir)/src/lib/coil/common/Timer.cpp \
-	$(top_srcdir)/src/lib/rtm/NumberingPolicy.cpp \
-	$(top_srcdir)/src/lib/rtm/Manager.cpp \
-	$(top_srcdir)/src/lib/rtm/Factory.cpp \
-	$(top_srcdir)/src/lib/rtm/ECFactory.cpp \
-	$(top_srcdir)/src/lib/rtm/ExtTrigExecutionContext.cpp \
-	$(top_srcdir)/src/lib/rtm/PeriodicExecutionContext.cpp \
-	$(top_srcdir)/src/lib/rtm/OpenHRPExecutionContext.cpp \
-	$(top_srcdir)/src/lib/rtm/RTObject.cpp \
-	$(top_srcdir)/src/lib/coil/posix/coil/DynamicLib.cpp \
-	$(top_srcdir)/src/lib/rtm/ManagerServant.cpp \
-	$(top_srcdir)/src/lib/rtm/PeriodicECSharedComposite.cpp \
-	$(top_srcdir)/src/lib/rtm/SdoOrganization.cpp \
-	$(top_srcdir)/src/lib/rtm/SystemLogger.cpp \
-	$(top_srcdir)/src/lib/rtm/FactoryInit.cpp \
-	$(top_srcdir)/src/lib/rtm/InPortCorbaCdrProvider.cpp \
-	$(top_srcdir)/src/lib/rtm/InPortCorbaCdrConsumer.cpp \
-	$(top_srcdir)/src/lib/rtm/OutPortCorbaCdrConsumer.cpp \
-	$(top_srcdir)/src/lib/rtm/OutPortCorbaCdrProvider.cpp \
-	$(top_srcdir)/src/lib/rtm/InPortBase.cpp \
-	$(top_srcdir)/src/lib/rtm/OutPortBase.cpp \
-	$(top_srcdir)/src/lib/rtm/CdrRingBuffer.cpp \
-	$(top_srcdir)/src/lib/rtm/DefaultPeriodicTask.cpp \
-	$(top_srcdir)/src/lib/rtm/PublisherFlush.cpp \
-	$(top_srcdir)/src/lib/rtm/PublisherNew.cpp \
-	$(top_srcdir)/src/lib/rtm/PublisherPeriodic.cpp \
-	$(top_srcdir)/src/lib/rtm/InPortProvider.cpp \
-	$(top_srcdir)/src/lib/rtm/OutPortProvider.cpp \
-	$(top_srcdir)/src/lib/rtm/InPortPullConnector.cpp \
-	$(top_srcdir)/src/lib/rtm/InPortPushConnector.cpp \
-	$(top_srcdir)/src/lib/rtm/InPortConnector.cpp \
-	$(top_srcdir)/src/lib/rtm/OutPortPullConnector.cpp \
-	$(top_srcdir)/src/lib/rtm/OutPortPushConnector.cpp \
-	$(top_srcdir)/src/lib/rtm/OutPortConnector.cpp \
 	ModuleManagerTests.cpp
+#ModuleManagerTests_LDFLAGS = -L$(libdir) $(AM_LDFLAGS) \
+#        -L$(top_builddir)/src/lib/coil/lib
+ModuleManagerTests_LDFLAGS = -L$(libdir) \
+        -L$(top_builddir)/src/lib/coil/lib
+ModuleManagerTests_LDADD   =                       \
+         -lcppunit                                 \
+         -lomniORB4                                \
+         -lomnithread                              \
+         -lomniDynamic4                            \
+         -lcoil                                    \
+         -luuid                                    \
+	$(top_builddir)/src/lib/rtm/tests/ModuleManager/.libs/DummyLib.la
 
-ModuleManagerTests_LDFLAGS = -L$(libdir) $(AM_LDFLAGS)
-ModuleManagerTests_LDADD   = -lcppunit -lcoil -luuid
+TEST_SRC = $(ModuleManagerTests_SOURCES)
+TEST_H   = 
+
+socompdir  = $(pkgdatadir)/src/lib/rtm/tests/ModuleManager
+
+# Loadable RTCs
+socomp_LTLIBRARIES = DummyModule1.la
+
+nodist_DummyModule1_la_SOURCES = DummyModule1.h \
+	$(top_builddir)/src/lib/rtm/DataFlowComponentBase.cpp    \
+                       DummyModule1.cpp 
+DummyModule1_la_LDFLAGS = -module \
+        -L$(top_builddir)/src/lib/coil/lib
+DummyModule1_la_LIBADD  = \
+         -lomniORB4                                \
+         -lomnithread                              \
+         -lomniDynamic4                            \
+         -lcoil                                    \
+         -luuid                                    \
+	$(top_builddir)/src/lib/rtm/tests/ModuleManager/.libs/DummyLib.la
+
 
 EXTRA_DIST = \
-	ModuleManagerTests.cpp
+	ModuleManagerTests.cpp \
+	DummyModule1.h \
+	DummyModule1.cpp 
 
 # all
 all: do-test
