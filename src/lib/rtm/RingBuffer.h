@@ -340,13 +340,13 @@ namespace RTC
       //     n satisfies n'<= readable elements
       //                 n'<= m_fillcount
       //                 n >= - m_fillcount
-      if (n > 0 && n > static_cast<long int>(m_length - m_fillcount) ||
-          n < 0 && n < static_cast<long int>(-m_fillcount))
+      Guard guard(m_posmutex);
+      if ((n > 0 && n > static_cast<long int>(m_length - m_fillcount)) ||
+          (n < 0 && n < static_cast<long int>(-m_fillcount)))
         {
           return ::RTC::BufferStatus::PRECONDITION_NOT_MET;
         }
 
-      Guard guard(m_posmutex);
       m_wpos = (m_wpos + n + m_length) % m_length;
       m_fillcount += n;
       m_wcount += n;
@@ -430,8 +430,9 @@ namespace RTC
     virtual ReturnCode write(const DataType& value,
                              long int sec = -1, long int nsec = 0)
     {
+      {
       Guard guard(m_full.mutex);
-      
+        
       if (full())
         {
           
@@ -470,21 +471,23 @@ namespace RTC
               return ::RTC::BufferStatus::PRECONDITION_NOT_MET;
             }
         }
-      
-      bool empty_(empty());
-      
+      }      
+    
       put(value);
-      
-      if (empty_)
-        {
-          Guard eguard(m_empty.mutex);
-          advanceWptr(1);
-          m_empty.cond.signal();
-        }
-      else
-        {
-          advanceWptr(1);
-        }
+
+	  {
+		Guard eguard(m_empty.mutex);
+		if (empty())
+		  {
+			// Guard eguard(m_empty.mutex);
+			advanceWptr(1);
+			m_empty.cond.signal();
+		  }
+		else
+		  {
+			advanceWptr(1);
+		  }
+	  }
       return ::RTC::BufferStatus::BUFFER_OK;
     }
     
@@ -596,13 +599,13 @@ namespace RTC
       // n < 0 : -n = n'
       //     n satisfies n'<= m_length - m_fillcount
       //                 n >= m_fillcount - m_length
+      Guard guard(m_posmutex);
       if ((n > 0 && n > static_cast<long int>(m_fillcount)) ||
           (n < 0 && n < static_cast<long int>(m_fillcount - m_length)))
         {
           return ::RTC::BufferStatus::PRECONDITION_NOT_MET;
         }
 
-      Guard guard(m_posmutex);
       m_rpos = (m_rpos + n + m_length) % m_length;
       m_fillcount -= n;
       return ::RTC::BufferStatus::BUFFER_OK;
@@ -708,6 +711,7 @@ namespace RTC
     virtual ReturnCode read(DataType& value,
                             long int sec = -1, long int nsec = 0)
     {
+      {
       Guard gaurd(m_empty.mutex);
       
       if (empty())
@@ -753,18 +757,23 @@ namespace RTC
               return ::RTC::BufferStatus::PRECONDITION_NOT_MET;
             }
         }
-      
-      bool full_(full());
+      }
       
       get(value);
-      advanceRptr();
 
-      if (full_)
-        {
-          Guard fguard(m_full.mutex);
-          m_full.cond.signal();
-        }
-      
+	  {
+		Guard fguard(m_full.mutex);
+		if (full())
+		  {
+			// Guard fguard(m_full.mutex);
+			advanceRptr(1);
+			m_full.cond.signal();
+		  }
+		else
+		  {
+			advanceRptr(1);
+		  }
+	  }
       return ::RTC::BufferStatus::BUFFER_OK;
     }
     
