@@ -770,7 +770,7 @@ namespace PublisherPeriodic
 
             RTC::TimedLong rtd;
             rtd <<= data;
-            CPPUNIT_ASSERT_EQUAL((long)icc, rtd.data);
+            CPPUNIT_ASSERT_EQUAL((long)icc, (long)rtd.data);
         }
 
         coil::usleep(20000);
@@ -804,7 +804,7 @@ namespace PublisherPeriodic
 
             RTC::TimedLong rtd;
             rtd <<= data;
-            CPPUNIT_ASSERT_EQUAL((long)icc+4, rtd.data);
+            CPPUNIT_ASSERT_EQUAL((long)icc+4, (long)rtd.data);
         }
         publisher.deactivate();
         
@@ -917,7 +917,7 @@ namespace PublisherPeriodic
 
             RTC::TimedLong rtd;
             rtd <<= data;
-            CPPUNIT_ASSERT_EQUAL((long)icc, rtd.data);
+            CPPUNIT_ASSERT_EQUAL((long)icc, (long)rtd.data);
         }
 
         coil::usleep(10000);
@@ -931,7 +931,7 @@ namespace PublisherPeriodic
 
             RTC::TimedLong rtd;
             rtd <<= data;
-            CPPUNIT_ASSERT_EQUAL((long)icc+8, rtd.data);
+            CPPUNIT_ASSERT_EQUAL((long)icc+8, (long)rtd.data);
         }
         {
         cdrMemoryStream cdr;
@@ -951,7 +951,7 @@ namespace PublisherPeriodic
 
         RTC::TimedLong rtd;
         rtd <<= data;
-        CPPUNIT_ASSERT_EQUAL((long)17, rtd.data);
+        CPPUNIT_ASSERT_EQUAL((long)17, (long)rtd.data);
         }
 
         coil::usleep(10000);
@@ -1064,7 +1064,7 @@ namespace PublisherPeriodic
 
             RTC::TimedLong rtd;
             rtd <<= data;
-            CPPUNIT_ASSERT_EQUAL((long)icc, rtd.data);
+            CPPUNIT_ASSERT_EQUAL((long)icc, (long)rtd.data);
         }
         coil::usleep(40000);
 
@@ -1116,7 +1116,7 @@ namespace PublisherPeriodic
 
             RTC::TimedLong rtd;
             rtd <<= data;
-            CPPUNIT_ASSERT_EQUAL((long)icc+4, rtd.data);
+            CPPUNIT_ASSERT_EQUAL((long)icc+4, (long)rtd.data);
         }
         coil::usleep(20000);
         for(int icc(0);icc<2;++icc)
@@ -1128,7 +1128,7 @@ namespace PublisherPeriodic
 
             RTC::TimedLong rtd;
             rtd <<= data;
-            CPPUNIT_ASSERT_EQUAL((long)icc+12, rtd.data);
+            CPPUNIT_ASSERT_EQUAL((long)icc+12, (long)rtd.data);
         }
 
 
@@ -1244,7 +1244,7 @@ namespace PublisherPeriodic
 
             RTC::TimedLong rtd;
             rtd <<= data;
-            CPPUNIT_ASSERT_EQUAL((long)icc, rtd.data);
+            CPPUNIT_ASSERT_EQUAL((long)icc, (long)rtd.data);
         }
 
         coil::usleep(80000);
@@ -1280,7 +1280,7 @@ namespace PublisherPeriodic
 
             RTC::TimedLong rtd;
             rtd <<= data;
-            CPPUNIT_ASSERT_EQUAL((long)icc+8, rtd.data);
+            CPPUNIT_ASSERT_EQUAL((long)icc+8, (long)rtd.data);
         }
         coil::usleep(10000);
         {
@@ -1303,7 +1303,7 @@ namespace PublisherPeriodic
 
             RTC::TimedLong rtd;
             rtd <<= data;
-            CPPUNIT_ASSERT_EQUAL((long)icc+17, rtd.data);
+            CPPUNIT_ASSERT_EQUAL((long)icc+17, (long)rtd.data);
         }
 
 
@@ -1417,7 +1417,7 @@ namespace PublisherPeriodic
 
             RTC::TimedLong rtd;
             rtd <<= data;
-            CPPUNIT_ASSERT_EQUAL((long)icc*2+1, rtd.data);
+            CPPUNIT_ASSERT_EQUAL((long)icc*2+1, (long)rtd.data);
         }
 
         coil::usleep(40000);
@@ -1453,7 +1453,7 @@ namespace PublisherPeriodic
 
             RTC::TimedLong rtd;
             rtd <<= data;
-            CPPUNIT_ASSERT_EQUAL((long)icc*2+9, rtd.data);
+            CPPUNIT_ASSERT_EQUAL((long)icc*2+9, (long)rtd.data);
         }
        
         coil::usleep(100000);
@@ -1567,7 +1567,7 @@ namespace PublisherPeriodic
 
             RTC::TimedLong rtd;
             rtd <<= data;
-            CPPUNIT_ASSERT_EQUAL((long)icc*2+1, rtd.data);
+            CPPUNIT_ASSERT_EQUAL((long)icc*2+1, (long)rtd.data);
         }
 
         coil::usleep(20000);
@@ -1583,7 +1583,7 @@ namespace PublisherPeriodic
 
             RTC::TimedLong rtd;
             rtd <<= data;
-            CPPUNIT_ASSERT_EQUAL((long)icc*2+17, rtd.data);
+            CPPUNIT_ASSERT_EQUAL((long)icc*2+17, (long)rtd.data);
         }
         coil::usleep(20000);
         {
@@ -1614,7 +1614,7 @@ namespace PublisherPeriodic
 
         RTC::TimedLong rtd;
         rtd <<= data;
-        CPPUNIT_ASSERT_EQUAL((long)26, rtd.data);
+        CPPUNIT_ASSERT_EQUAL((long)26, (long)rtd.data);
         }
 
         coil::usleep(10000);
@@ -1719,7 +1719,7 @@ namespace PublisherPeriodic
 
         RTC::TimedLong rtd;
         rtd <<= data;
-        CPPUNIT_ASSERT_EQUAL((long)7, rtd.data);
+        CPPUNIT_ASSERT_EQUAL((long)7, (long)rtd.data);
         }
 
         coil::usleep(10000);
