@@ -153,6 +153,12 @@ DummyModule2_la_LIBADD  = \
 	-luuid                                    \
 	$(top_builddir)/src/lib/rtm/tests/Manager/.libs/DummyLib.la
 
+bin_PROGRAMS = rtcprof
+rtcprof_SOURCES = $(top_builddir)/utils/rtcprof/rtcprof.cpp
+rtcprof_LDADD   = $(top_builddir)/src/lib/rtm/libRTC.la \
+	$(top_builddir)/src/lib/coil/lib/libcoil.la
+rtcprof_LDFLAGS = -L$(top_builddir)/src/lib/rtm
+
 
 
 EXTRA_DIST = \
@@ -165,7 +171,6 @@ EXTRA_DIST = \
 	fixture2.conf \
 	fixture3.conf \
 	fixture4.conf
-
 
 
 # all
