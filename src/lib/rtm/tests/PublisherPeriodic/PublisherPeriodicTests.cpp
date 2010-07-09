@@ -1048,7 +1048,7 @@ namespace PublisherPeriodic
         RTC::TimedLong td;
         td.data = 9;
         td >>= cdr;
-        CPPUNIT_ASSERT_EQUAL(RTC::PublisherPeriodic::PORT_OK,
+        CPPUNIT_ASSERT_EQUAL(RTC::PublisherPeriodic::BUFFER_FULL,
                                  publisher.write(cdr,0,0));
         coil::usleep(10000);
         }
