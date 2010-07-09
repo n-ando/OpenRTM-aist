@@ -53,6 +53,54 @@
 
 //#define DEBUG
 
+static const int NLOOP = 0x00000fff;	// 読み書きのループ回数
+typedef ::RTC::BufferStatus::Enum ReturnCode;
+int isBlockTest = false;
+ReturnCode g_ret = RTC::BufferStatus::BUFFER_OK;
+
+// 読み込みスレッド
+void* reader(void* arg)
+{
+  RTC::RingBuffer<int>* buff = static_cast<RTC::RingBuffer<int>*>(arg);
+  ReturnCode ret;
+  for (int i = 0; i < NLOOP; i++) {
+	int output = -1;
+	ret = (*buff).read(output);
+#if PRINTOUT
+	std::cout << "read() : " << output << std::endl;
+#endif
+	if (ret == RTC::BufferStatus::TIMEOUT) {
+	  g_ret = ret;
+	  break;
+	}
+	if (isBlockTest) {
+	  if (output != i) {
+		std::cout << "ERROR!!: output=" << output;
+		std::cout << ", correct data=" << i;
+		std::cout << ", return code=" << ret << std::endl;
+		abort();
+	  }
+	}
+  }
+  return NULL;
+}
+
+// 書き込みスレッド
+void* writer(void* arg)
+{
+  RTC::RingBuffer<int>* buff = static_cast<RTC::RingBuffer<int>*>(arg);
+  
+  for (int i = 0; i < NLOOP; i++) {
+	int input = i;
+	(*buff).write(input);
+#if PRINTOUT
+	std::cout << "write(" << input << ")" << std::endl;
+#endif
+  }
+  return NULL;
+}
+
+
 namespace RingBuffer
 {
   /*!
@@ -63,7 +111,7 @@ namespace RingBuffer
     : public CppUnit::TestFixture
   {
     CPPUNIT_TEST_SUITE(RingBufferTests);
-		
+
     CPPUNIT_TEST(test_length);
     CPPUNIT_TEST(test_isFull);
     CPPUNIT_TEST(test_isEmpty);
@@ -76,10 +124,57 @@ namespace RingBuffer
     CPPUNIT_TEST(test_advanceWptr);
     CPPUNIT_TEST(test_rptr_get);
     CPPUNIT_TEST(test_advanceRptr);
-		
+
+	CPPUNIT_TEST(test_owrite_rback); // full: overwrite, empty: readback, buff length 1,8
+	CPPUNIT_TEST(test_owrite_dnothing); // full: overwrite, empty: do_nothing, buff length 1,8
+	CPPUNIT_TEST(test_owrite_block); // full: overwrite, empty: block, buff length 1,8
+
+	CPPUNIT_TEST(test_dnothing_rback); // full: do_nothing, empty: readback, buff length 1,8
+	CPPUNIT_TEST(test_dnothing_dnothing); // full: do_nothing, empty: do_nothing, buff length 1,8
+	CPPUNIT_TEST(test_dnothing_block); // full: do_nothing, empty: block, buff length 1,8
+  
+	CPPUNIT_TEST(test_block_rback); // full: block, empty: readback, buff length 1,8
+	CPPUNIT_TEST(test_block_dnothing); // full: block, empty: do_nothing, buff length 1,8
+	CPPUNIT_TEST(test_block_block_wr); // full: block, empty: block, buff length 1,8
+
+	CPPUNIT_TEST(test_block_block_rw); // full: block, empty: block, read -> write
+
     CPPUNIT_TEST_SUITE_END();
 		
   private:
+	void do_test(RTC::RingBuffer<int>& buff, bool read_first=false)
+	{
+	  pthread_t tr, tw;
+
+	  if (read_first) {
+		// 読み込みスレッドの開始
+		if (pthread_create(&tr, NULL , reader, static_cast<void *>(&buff)) != 0) {
+		  perror("pthread_create(r)");
+		  return;
+		}
+		// 書き込みスレッドの開始
+		if (pthread_create(&tw, NULL , writer, static_cast<void *>(&buff)) != 0) {
+		  perror("pthread_create(w)");
+		  return;
+		}
+	  }
+	  else {
+		// 書き込みスレッドの開始
+		if (pthread_create(&tw, NULL , writer, static_cast<void *>(&buff)) != 0) {
+		  perror("pthread_create(w)");
+		  return;
+		}
+		// 読み込みスレッドの開始
+		if (pthread_create(&tr, NULL , reader, static_cast<void *>(&buff)) != 0) {
+		  perror("pthread_create(r)");
+		  return;
+		}
+	  }
+	  
+	  // スレッドの合流
+	  pthread_join(tw, NULL);
+	  pthread_join(tr, NULL);
+	}
 		
   public:
     /*!
@@ -160,39 +255,6 @@ namespace RingBuffer
       CPPUNIT_ASSERT_EQUAL(false, buff.empty());
     }
 		
-    /*!
-     * @brief isEmpty()メソッドのテスト
-     * @attention 本テストは、RingBufferの実装仕様がリング状バッファ対応
-     *            されたものに対するテスト内容になっている。
-     *            リング状バッファ対応前のRinguBufferでは本テストは失敗する。
-     *
-     * - 最後の１データを残して読み取り、空と判定されないことを確認する
-     * - 最後の１データまで読み取り、空と判定されることを確認する
-     */
-    void _test_isEmpty()
-    {
-      // バッファを作成する
-      long int length = 10;
-      RTC::RingBuffer<int> buff(length);
-			
-      int value = 12345;
-      for (unsigned int i(0); i < buff.length(); ++i)
-        {
-          buff.write(value);
-        }
-
-      // (1) 最後の１データを残して読み取り、空と判定されないことを確認する
-      for (long int i = 0; i < length - 1; i++) {
-	int data;
-	buff.read(data);
-	CPPUNIT_ASSERT_EQUAL(false, buff.empty());
-      }
-
-      // (2) 最後の１データまで読み取り、空と判定されることを確認する
-      int data;
-      buff.read(data);
-      CPPUNIT_ASSERT_EQUAL(true, buff.empty());
-    }
 		
     /*!
      * @brief isFull()メソッドのテスト
@@ -701,6 +763,387 @@ namespace RingBuffer
         CPPUNIT_ASSERT_EQUAL(idata[3],*buff.rptr());
         CPPUNIT_ASSERT_EQUAL((size_t)3,buff.writable());
     }
+
+	/*
+	 * デッドロックの検証1
+	 *
+	 * バッファサイズ: 1, 8
+	 * write.full_policy: overwrite
+	 * read.empty_policy: readback
+	 *
+	 */
+	void test_owrite_rback()
+	{
+	  RTC::RingBuffer<int> buff(1);
+
+	  // デフォルト設定以外のバッファ
+	  coil::Properties prop;
+	  prop["write.full_policy"] = "overwrite";
+	  prop["read.empty_policy"] = "readback";
+	  buff.init(prop);
+
+	  g_ret = RTC::BufferStatus::BUFFER_OK;
+	  do_test(buff);
+
+	  CPPUNIT_ASSERT(g_ret == RTC::BufferStatus::BUFFER_OK);
+	  g_ret = RTC::BufferStatus::BUFFER_OK;
+
+	  RTC::RingBuffer<int> buff2(8);
+	  buff2.init(prop);
+
+	  do_test(buff2);
+	  CPPUNIT_ASSERT(g_ret == RTC::BufferStatus::BUFFER_OK);
+	  g_ret = RTC::BufferStatus::BUFFER_OK;
+
+	  std::cout << std::flush;
+	  return;
+	}
+
+
+	/*
+	 * デッドロックの検証2
+	 *
+	 * バッファサイズ: 1, 8
+	 * write.full_policy: overwrite
+	 * read.empty_policy: do_nothing
+	 *
+	 */
+	void test_owrite_dnothing()
+	{
+	  RTC::RingBuffer<int> buff(1);
+
+	  // デフォルト設定以外のバッファ
+	  coil::Properties prop;
+	  prop["write.full_policy"] = "overwrite";
+	  prop["read.empty_policy"] = "do_nothing";
+	  buff.init(prop);
+
+	  g_ret = RTC::BufferStatus::BUFFER_OK;
+	  do_test(buff);
+	  CPPUNIT_ASSERT(g_ret == RTC::BufferStatus::BUFFER_OK);
+	  g_ret = RTC::BufferStatus::BUFFER_OK;
+
+
+	  RTC::RingBuffer<int> buff2(8);
+	  buff2.init(prop);
+
+	  do_test(buff2);
+	  CPPUNIT_ASSERT(g_ret == RTC::BufferStatus::BUFFER_OK);
+	  g_ret = RTC::BufferStatus::BUFFER_OK;
+
+	  std::cout << std::flush;
+	  return;
+	}
+
+
+	/*
+	 * デッドロックの検証3
+	 *
+	 * バッファサイズ: 1, 8
+	 * write.full_policy: overwrite
+	 * read.empty_policy: block
+	 * read.timeout: 3.0
+	 *
+	 */
+	void test_owrite_block()
+	{
+	  RTC::RingBuffer<int> buff(1);
+
+	  // デフォルト設定以外のバッファ
+	  coil::Properties prop;
+	  prop["write.full_policy"] = "overwrite";
+	  prop["read.empty_policy"] = "block";
+	  prop["read.timeout"]      = "3.0";
+	  buff.init(prop);
+
+	  g_ret = RTC::BufferStatus::BUFFER_OK;
+	  do_test(buff);
+	  // CPPUNIT_ASSERT(g_ret == RTC::BufferStatus::BUFFER_OK);
+	  g_ret = RTC::BufferStatus::BUFFER_OK;
+
+
+	  RTC::RingBuffer<int> buff2(8);
+	  buff2.init(prop);
+	  do_test(buff2);
+	  // CPPUNIT_ASSERT(g_ret == RTC::BufferStatus::BUFFER_OK);
+	  g_ret = RTC::BufferStatus::BUFFER_OK;
+
+
+	  std::cout << std::flush;
+	  return;
+	}
+		
+
+	/*
+	 * デッドロックの検証4
+	 *
+	 * バッファサイズ: 1, 8
+	 * write.full_policy: do_nothing
+	 * read.empty_policy: readback
+	 *
+	 */
+	void test_dnothing_rback()
+	{
+	  RTC::RingBuffer<int> buff(1);
+
+	  // デフォルト設定以外のバッファ
+	  coil::Properties prop;
+	  prop["write.full_policy"] = "do_nothing";
+	  prop["read.empty_policy"] = "readback";
+	  buff.init(prop);
+
+	  g_ret = RTC::BufferStatus::BUFFER_OK;
+	  do_test(buff);
+	  CPPUNIT_ASSERT(g_ret == RTC::BufferStatus::BUFFER_OK);
+	  g_ret = RTC::BufferStatus::BUFFER_OK;
+
+
+	  RTC::RingBuffer<int> buff2(8);
+	  buff2.init(prop);
+	  do_test(buff2);
+	  CPPUNIT_ASSERT(g_ret == RTC::BufferStatus::BUFFER_OK);
+	  g_ret = RTC::BufferStatus::BUFFER_OK;
+
+
+	  std::cout << std::flush;
+	  return;
+	}
+
+
+	/*
+	 * デッドロックの検証5
+	 *
+	 * バッファサイズ: 1, 8
+	 * write.full_policy: do_nothing
+	 * read.empty_policy: do_nothing
+	 *
+	 */
+	void test_dnothing_dnothing()
+	{
+	  RTC::RingBuffer<int> buff(1);
+
+	  // デフォルト設定以外のバッファ
+	  coil::Properties prop;
+	  prop["write.full_policy"] = "do_nothing";
+	  prop["read.empty_policy"] = "do_nothing";
+	  buff.init(prop);
+
+	  g_ret = RTC::BufferStatus::BUFFER_OK;
+	  do_test(buff);
+	  CPPUNIT_ASSERT(g_ret == RTC::BufferStatus::BUFFER_OK);
+	  g_ret = RTC::BufferStatus::BUFFER_OK;
+
+
+	  RTC::RingBuffer<int> buff2(8);
+	  buff2.init(prop);
+	  do_test(buff2);
+	  CPPUNIT_ASSERT(g_ret == RTC::BufferStatus::BUFFER_OK);
+	  g_ret = RTC::BufferStatus::BUFFER_OK;
+
+
+	  std::cout << std::flush;
+	  return;
+	}
+
+
+	/*
+	 * デッドロックの検証6
+	 *
+	 * バッファサイズ: 1, 8
+	 * write.full_policy: do_nothing
+	 * read.empty_policy: block
+	 * read.timeout: 1.0
+	 *
+	 */
+	void test_dnothing_block()
+	{
+	  RTC::RingBuffer<int> buff(1);
+
+	  // デフォルト設定以外のバッファ
+	  coil::Properties prop;
+	  prop["write.full_policy"] = "do_nothing";
+	  prop["read.empty_policy"] = "block";
+	  prop["read.timeout"]      = "1.0";
+	  buff.init(prop);
+
+	  g_ret = RTC::BufferStatus::BUFFER_OK;
+	  do_test(buff);
+	  // CPPUNIT_ASSERT(g_ret == RTC::BufferStatus::BUFFER_OK);
+	  g_ret = RTC::BufferStatus::BUFFER_OK;
+
+
+	  RTC::RingBuffer<int> buff2(8);
+	  buff2.init(prop);
+	  do_test(buff2);
+	  // CPPUNIT_ASSERT(g_ret == RTC::BufferStatus::BUFFER_OK);
+	  g_ret = RTC::BufferStatus::BUFFER_OK;
+
+
+	  std::cout << std::flush;
+	  return;
+	}
+
+
+	/*
+	 * デッドロックの検証7
+	 *
+	 * バッファサイズ: 1, 8
+	 * write.full_policy: block
+	 * read.empty_policy: readback
+	 * write.timeout: 1.0
+	 *
+	 */
+	void test_block_rback()
+	{
+	  RTC::RingBuffer<int> buff(1);
+
+	  // デフォルト設定以外のバッファ
+	  coil::Properties prop;
+	  prop["write.full_policy"] = "block";
+	  prop["read.empty_policy"] = "readback";
+	  prop["write.timeout"]      = "1.0";
+	  buff.init(prop);
+
+	  g_ret = RTC::BufferStatus::BUFFER_OK;
+	  do_test(buff);
+	  CPPUNIT_ASSERT(g_ret == RTC::BufferStatus::BUFFER_OK);
+	  g_ret = RTC::BufferStatus::BUFFER_OK;
+
+
+	  RTC::RingBuffer<int> buff2(8);
+	  buff2.init(prop);
+	  do_test(buff2);
+	  CPPUNIT_ASSERT(g_ret == RTC::BufferStatus::BUFFER_OK);
+	  g_ret = RTC::BufferStatus::BUFFER_OK;
+
+
+	  std::cout << std::flush;
+	  return;
+	}
+
+
+	/*
+	 * デッドロックの検証8
+	 *
+	 * バッファサイズ: 1, 8
+	 * write.full_policy: block
+	 * read.empty_policy: do_nothing
+	 * write.timeout: 1.0
+	 *
+	 */
+	void test_block_dnothing()
+	{
+	  RTC::RingBuffer<int> buff(1);
+
+	  // デフォルト設定以外のバッファ
+	  coil::Properties prop;
+	  prop["write.full_policy"] = "block";
+	  prop["read.empty_policy"] = "do_nothing";
+	  prop["write.timeout"]      = "1.0";
+	  buff.init(prop);
+
+	  g_ret = RTC::BufferStatus::BUFFER_OK;
+	  do_test(buff);
+	  CPPUNIT_ASSERT(g_ret == RTC::BufferStatus::BUFFER_OK);
+	  g_ret = RTC::BufferStatus::BUFFER_OK;
+
+
+	  RTC::RingBuffer<int> buff2(8);
+	  buff2.init(prop);
+	  do_test(buff2);
+	  CPPUNIT_ASSERT(g_ret == RTC::BufferStatus::BUFFER_OK);
+	  g_ret = RTC::BufferStatus::BUFFER_OK;
+
+
+	  std::cout << std::flush;
+	  return;
+	}
+
+
+	/*
+	 * デッドロックの検証9
+	 *
+	 * バッファサイズ: 1, 8
+	 * write.full_policy: block
+	 * read.empty_policy: block
+	 * write.timeout: 3.0
+	 * read.timeout: 3.0
+	 *
+	 */
+	void test_block_block_wr()
+	{
+	  RTC::RingBuffer<int> buff(1);
+
+	  // デフォルト設定以外のバッファ
+	  coil::Properties prop;
+	  prop["write.full_policy"] = "block";
+	  prop["read.empty_policy"] = "block";
+	  prop["write.timeout"]     = "3.0";
+	  prop["read.timeout"]      = "3.0";
+	  buff.init(prop);
+
+	  isBlockTest = true;
+	  g_ret = RTC::BufferStatus::BUFFER_OK;
+	  do_test(buff);
+	  CPPUNIT_ASSERT(g_ret == RTC::BufferStatus::BUFFER_OK);
+	  g_ret = RTC::BufferStatus::BUFFER_OK;
+
+
+	  RTC::RingBuffer<int> buff2(8);
+	  buff2.init(prop);
+	  do_test(buff2);
+	  CPPUNIT_ASSERT(g_ret == RTC::BufferStatus::BUFFER_OK);
+	  g_ret = RTC::BufferStatus::BUFFER_OK;
+
+
+	  isBlockTest = false;
+	  std::cout << std::flush;
+	  return;
+	}
+
+
+	/*
+	 * デッドロックの検証10 read -> write
+	 *
+	 * バッファサイズ: 1, 8
+	 * write.full_policy: block
+	 * read.empty_policy: block
+	 * write.timeout: 3.0
+	 * read.timeout: 3.0
+	 *
+	 */
+	void test_block_block_rw()
+	{
+	  RTC::RingBuffer<int> buff(1);
+
+	  // デフォルト設定以外のバッファ
+	  coil::Properties prop;
+	  prop["write.full_policy"] = "block";
+	  prop["read.empty_policy"] = "block";
+	  prop["write.timeout"]     = "3.0";
+	  prop["read.timeout"]      = "3.0";
+	  buff.init(prop);
+
+	  isBlockTest = true;
+	  g_ret = RTC::BufferStatus::BUFFER_OK;
+	  do_test(buff,true);
+	  CPPUNIT_ASSERT(g_ret == RTC::BufferStatus::BUFFER_OK);
+	  g_ret = RTC::BufferStatus::BUFFER_OK;
+
+
+	  RTC::RingBuffer<int> buff2(8);
+	  buff2.init(prop);
+	  do_test(buff2,true);
+	  CPPUNIT_ASSERT(g_ret == RTC::BufferStatus::BUFFER_OK);
+	  g_ret = RTC::BufferStatus::BUFFER_OK;
+
+
+	  isBlockTest = false;
+	  std::cout << std::flush;
+	  return;
+	}
+
+
 
   };
 }; // namespace RingBuffer
