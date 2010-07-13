@@ -834,9 +834,9 @@ namespace PublisherNew
             CPPUNIT_ASSERT_EQUAL(RTC::PublisherNew::PORT_OK,
                                  publisher.write(cdr,0,0));
 
+            coil::usleep(10000);
         }
 
-        coil::usleep(100000);
         //provider 側のバッファ full の状態でコール(full)
         {
         cdrMemoryStream cdr;
@@ -1492,7 +1492,7 @@ namespace PublisherNew
 
         }
 
-        coil::usleep(10000);
+        coil::usleep(2000000);
         //provider 側のバッファから取得
         //
         int len = consumer->get_m_put_data_len() -1;
