@@ -1480,7 +1480,7 @@ namespace PublisherNew
 
         //8件のデータは転送されない
         //最新データの7は転送される。
-        for(int icc(0);icc<8;++icc)
+        for(int icc(0);icc<7;++icc)
         {
             cdrMemoryStream cdr;
             RTC::TimedLong td;
@@ -1492,7 +1492,19 @@ namespace PublisherNew
 
         }
 
-        coil::usleep(2000000);
+        coil::usleep(10000);
+        {
+            cdrMemoryStream cdr;
+            RTC::TimedLong td;
+            td.data = 7;
+            td >>= cdr;
+
+            CPPUNIT_ASSERT_EQUAL(RTC::PublisherNew::PORT_OK,
+                                 publisher.write(cdr,0,0));
+
+        }
+
+        coil::usleep(10000);
         //provider 側のバッファから取得
         //
         int len = consumer->get_m_put_data_len() -1;
