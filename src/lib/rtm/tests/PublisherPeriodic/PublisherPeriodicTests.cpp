@@ -738,7 +738,7 @@ namespace PublisherPeriodic
 
         }
 
-        coil::usleep(10000);
+        coil::usleep(20000);
         //provider 側のバッファ full の状態でコール(full)
         {
         cdrMemoryStream cdr;
@@ -920,7 +920,7 @@ namespace PublisherPeriodic
             CPPUNIT_ASSERT_EQUAL((long)icc, (long)rtd.data);
         }
 
-        coil::usleep(10000);
+        coil::usleep(20000);
         //データを確認する。
         for(int icc(0);icc<8;++icc)
         {
