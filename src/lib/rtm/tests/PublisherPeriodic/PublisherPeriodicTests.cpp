@@ -686,7 +686,7 @@ namespace PublisherPeriodic
         prop.setProperty("measurement.exec_count","0");
         prop.setProperty("measurement.period_time","enable");
         prop.setProperty("measurement.period_count","0");
-        prop.setProperty("publisher.push_rate","2000");
+        prop.setProperty("publisher.push_rate","1000");
         publisher.init(prop);
         coil::usleep(10000);
 
@@ -832,7 +832,7 @@ namespace PublisherPeriodic
         prop.setProperty("measurement.exec_count","0");
         prop.setProperty("measurement.period_time","enable");
         prop.setProperty("measurement.period_count","0");
-        prop.setProperty("publisher.push_rate","2000");
+        prop.setProperty("publisher.push_rate","1000");
         publisher.init(prop);
         coil::usleep(10000);
 
