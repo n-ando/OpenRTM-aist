@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="shift_jis"?>
+<VisualStudioPropertySheet
+	ProjectType="Visual C++"
+	Version="8.00"
+	Name="SensAble 3DTouch"
+	>
+	<Tool
+		Name="VCCLCompilerTool"
+		AdditionalIncludeDirectories="$(3dtouch_includes)"
+	/>
+	<Tool
+		Name="VCLinkerTool"
+		AdditionalLibraryDirectories="$(3dtouch_libdir)"
+	/>
+	<UserMacro
+		Name="user_lib"
+		Value="$(3dtouch_lib)"
+	/>
+	<UserMacro
+		Name="user_libd"
+		Value="$(3dtouch_libd)"
+	/>
+	<UserMacro
+		Name="3dtouch_root"
+		Value="%3DTOUCH_BASE%"
+	/>
+	<UserMacro
+		Name="3dtouch_includes"
+		Value="&quot;$(3dtouch_root)\include&quot;;&quot;$(3dtouch_root)\utilities\include&quot;"
+	/>
+	<UserMacro
+		Name="3dtouch_libdir"
+		Value="&quot;$(3dtouch_root)\lib&quot;;&quot;$(3dtouch_root)\utilities\lib&quot;"
+	/>
+	<UserMacro
+		Name="3dtouch_lib"
+		Value="hd.lib hl.lib hdu.lib"
+	/>
+	<UserMacro
+		Name="3dtouch_libd"
+		Value="hd.lib hl.lib hdud.lib"
+	/>
+</VisualStudioPropertySheet>
+
