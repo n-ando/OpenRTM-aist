@@ -903,7 +903,7 @@ module RTC {
         /// Time stamp.
         Time tm;
         /// Intensity values normalised to between 0 and 1.
-        IntensityList ranges;
+        IntensityList intensities;
         /// Geometry of the ranger at the time the scan data was measured.
         RangerGeometry geometry;
         /// Configuration of the ranger at the time the scan data was measured.
