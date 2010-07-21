@@ -440,7 +440,7 @@ namespace PublisherPeriodic
         prop.setProperty("thread_type","bar");
         prop.setProperty("measurement.exec_time","default");
         prop.setProperty("measurement.period_count","1");
-        prop.setProperty("publisher.push_rate","1000.0");
+        prop.setProperty("publisher.push_rate","10.0");
 
         //thread_type が不正の場合 INVALID_ARGS を返すことを確認する。
         retcode = publisher.init(prop);
@@ -455,7 +455,7 @@ namespace PublisherPeriodic
         prop.setProperty("measurement.exec_count","0");
         prop.setProperty("measurement.period_time","enable");
         prop.setProperty("measurement.period_count","0");
-        prop.setProperty("publisher.push_rate","1000");
+        prop.setProperty("publisher.push_rate","10");
         retcode = publisher.init(prop);
         //coil::usleep(10000);
         CPPUNIT_ASSERT_EQUAL(RTC::PublisherPeriodic::PORT_OK, retcode);
@@ -467,7 +467,7 @@ namespace PublisherPeriodic
         prop.setProperty("measurement.exec_count","1");
         prop.setProperty("measurement.period_time","disable");
         prop.setProperty("measurement.period_count","1");
-        prop.setProperty("publisher.push_rate","2000");
+        prop.setProperty("publisher.push_rate","20");
         retcode = publisher.init(prop);
         //coil::usleep(10000);
         CPPUNIT_ASSERT_EQUAL(RTC::PublisherPeriodic::PORT_OK, retcode);
@@ -479,7 +479,7 @@ namespace PublisherPeriodic
         prop.setProperty("measurement.exec_count","-1");
         prop.setProperty("measurement.period_time","bar");
         prop.setProperty("measurement.period_count","-1");
-        prop.setProperty("publisher.push_rate","1000");
+        prop.setProperty("publisher.push_rate","10");
         retcode = publisher.init(prop);
         //coil::usleep(10000);
         CPPUNIT_ASSERT_EQUAL(RTC::PublisherPeriodic::PORT_OK, retcode);
@@ -491,7 +491,7 @@ namespace PublisherPeriodic
         prop.setProperty("measurement.exec_count","foo");
         prop.setProperty("measurement.period_time","enable");
         prop.setProperty("measurement.period_count","foo");
-        prop.setProperty("publisher.push_rate","1000");
+        prop.setProperty("publisher.push_rate","10");
         retcode = publisher.init(prop);
         //coil::usleep(10000);
         CPPUNIT_ASSERT_EQUAL(RTC::PublisherPeriodic::PORT_OK, retcode);
@@ -503,7 +503,7 @@ namespace PublisherPeriodic
         prop.setProperty("measurement.exec_count","0");
         prop.setProperty("measurement.period_time","enable");
         prop.setProperty("measurement.period_count","0");
-        prop.setProperty("publisher.push_rate","1000");
+        prop.setProperty("publisher.push_rate","10");
         retcode = publisher.init(prop);
         //coil::usleep(10000);
         CPPUNIT_ASSERT_EQUAL(RTC::PublisherPeriodic::PORT_OK, retcode);
@@ -615,7 +615,7 @@ namespace PublisherPeriodic
         prop.setProperty("measurement.exec_count","0");
         prop.setProperty("measurement.period_time","enable");
         prop.setProperty("measurement.period_count","0");
-        prop.setProperty("publisher.push_rate","2000");
+        prop.setProperty("publisher.push_rate","20");
         publisher.init(prop);
         coil::usleep(10000);
 
@@ -686,7 +686,7 @@ namespace PublisherPeriodic
         prop.setProperty("measurement.exec_count","0");
         prop.setProperty("measurement.period_time","enable");
         prop.setProperty("measurement.period_count","0");
-        prop.setProperty("publisher.push_rate","1000");
+        prop.setProperty("publisher.push_rate","10");
         publisher.init(prop);
         coil::usleep(10000);
 
@@ -738,7 +738,7 @@ namespace PublisherPeriodic
 
         }
 
-        coil::usleep(20000);
+        coil::usleep(150000);
         //provider 側のバッファ full の状態でコール(full)
         {
         cdrMemoryStream cdr;
@@ -747,7 +747,7 @@ namespace PublisherPeriodic
         td >>= cdr;
         CPPUNIT_ASSERT_EQUAL(RTC::PublisherPeriodic::PORT_OK,
                                  publisher.write(cdr,0,0));
-        coil::usleep(10000);
+        coil::usleep(150000);
         }
         {
         cdrMemoryStream cdr;
@@ -756,7 +756,7 @@ namespace PublisherPeriodic
         td >>= cdr;
         CPPUNIT_ASSERT_EQUAL(RTC::PublisherPeriodic::BUFFER_FULL,
                                  publisher.write(cdr,0,0));
-        coil::usleep(10000);
+        coil::usleep(150000);
         }
 
         //provider 側のバッファから 4 件取得
@@ -773,7 +773,7 @@ namespace PublisherPeriodic
             CPPUNIT_ASSERT_EQUAL((long)icc, (long)rtd.data);
         }
 
-        coil::usleep(20000);
+        coil::usleep(150000);
         //provider 側のバッファ full ではない状態でコール
         {
         cdrMemoryStream cdr;
@@ -782,7 +782,7 @@ namespace PublisherPeriodic
         td >>= cdr;
         CPPUNIT_ASSERT_EQUAL(RTC::PublisherPeriodic::PORT_OK,
                                  publisher.write(cdr,0,0));
-        coil::usleep(10000);
+        coil::usleep(150000);
         }
         {
         cdrMemoryStream cdr;
@@ -791,7 +791,7 @@ namespace PublisherPeriodic
         td >>= cdr;
         CPPUNIT_ASSERT_EQUAL(RTC::PublisherPeriodic::PORT_OK,
                                  publisher.write(cdr,0,0));
-        coil::usleep(10000);
+        coil::usleep(150000);
         }
 
         //データ抜けががないことを確認する。
@@ -832,7 +832,7 @@ namespace PublisherPeriodic
         prop.setProperty("measurement.exec_count","0");
         prop.setProperty("measurement.period_time","enable");
         prop.setProperty("measurement.period_count","0");
-        prop.setProperty("publisher.push_rate","1000");
+        prop.setProperty("publisher.push_rate","10");
         publisher.init(prop);
         coil::usleep(10000);
 
@@ -891,7 +891,7 @@ namespace PublisherPeriodic
                 CPPUNIT_ASSERT_EQUAL(RTC::PublisherPeriodic::BUFFER_FULL,
                                      ret);
             }
-            coil::usleep(10000);
+            coil::usleep(150000);
 
         }
 
@@ -904,7 +904,7 @@ namespace PublisherPeriodic
         td >>= cdr;
         CPPUNIT_ASSERT_EQUAL(RTC::PublisherPeriodic::BUFFER_FULL,
                                  publisher.write(cdr,0,0));
-        coil::usleep(10000);
+        coil::usleep(150000);
         }
 
         //データを確認する。
@@ -920,7 +920,7 @@ namespace PublisherPeriodic
             CPPUNIT_ASSERT_EQUAL((long)icc, (long)rtd.data);
         }
 
-        coil::usleep(20000);
+        coil::usleep(300000);
         //データを確認する。
         for(int icc(0);icc<8;++icc)
         {
@@ -940,7 +940,7 @@ namespace PublisherPeriodic
         td >>= cdr;
         CPPUNIT_ASSERT_EQUAL(RTC::PublisherPeriodic::PORT_OK,
                                  publisher.write(cdr,0,0));
-        coil::usleep(20000);
+        coil::usleep(150000);
         }
         //データを確認する。
         {
@@ -954,7 +954,7 @@ namespace PublisherPeriodic
         CPPUNIT_ASSERT_EQUAL((long)17, (long)rtd.data);
         }
 
-        coil::usleep(10000);
+        coil::usleep(150000);
         publisher.deactivate();
         
         delete buffer;
@@ -980,7 +980,7 @@ namespace PublisherPeriodic
         prop.setProperty("measurement.exec_count","0");
         prop.setProperty("measurement.period_time","enable");
         prop.setProperty("measurement.period_count","0");
-        prop.setProperty("publisher.push_rate","100");
+        prop.setProperty("publisher.push_rate","10");
         publisher.init(prop);
         coil::usleep(10000);
 
@@ -1030,7 +1030,7 @@ namespace PublisherPeriodic
             CPPUNIT_ASSERT_EQUAL(RTC::PublisherPeriodic::PORT_OK,
                                  publisher.write(cdr,0,0));
 
-        coil::usleep(10000);
+        coil::usleep(150000);
         }
 
         //provider 側のバッファ full の状態でコール(full)
@@ -1041,7 +1041,7 @@ namespace PublisherPeriodic
         td >>= cdr;
         CPPUNIT_ASSERT_EQUAL(RTC::PublisherPeriodic::PORT_OK,
                                  publisher.write(cdr,0,0));
-        coil::usleep(20000);
+        coil::usleep(150000);
         }
         {
         cdrMemoryStream cdr;
@@ -1050,7 +1050,7 @@ namespace PublisherPeriodic
         td >>= cdr;
         CPPUNIT_ASSERT_EQUAL(RTC::PublisherPeriodic::BUFFER_FULL,
                                  publisher.write(cdr,0,0));
-        coil::usleep(10000);
+        coil::usleep(150000);
         }
 
         //provider 側のバッファから 4 件取得
@@ -1066,7 +1066,7 @@ namespace PublisherPeriodic
             rtd <<= data;
             CPPUNIT_ASSERT_EQUAL((long)icc, (long)rtd.data);
         }
-        coil::usleep(40000);
+        coil::usleep(220000); //Waits to complete writing 8 and 9. 
 
         //provider 側のバッファ full ではない状態でコール
         {
@@ -1076,7 +1076,7 @@ namespace PublisherPeriodic
         td >>= cdr;
         CPPUNIT_ASSERT_EQUAL(RTC::PublisherPeriodic::PORT_OK,
                                  publisher.write(cdr,0,0));
-        coil::usleep(30000);
+        coil::usleep(150000);
         }
         {
         cdrMemoryStream cdr;
@@ -1085,7 +1085,7 @@ namespace PublisherPeriodic
         td >>= cdr;
         CPPUNIT_ASSERT_EQUAL(RTC::PublisherPeriodic::PORT_OK,
                                  publisher.write(cdr,0,0));
-        coil::usleep(20000);
+        coil::usleep(150000);
         }
         {
         cdrMemoryStream cdr;
@@ -1094,7 +1094,7 @@ namespace PublisherPeriodic
         td >>= cdr;
         CPPUNIT_ASSERT_EQUAL(RTC::PublisherPeriodic::PORT_OK,
                                  publisher.write(cdr,0,0));
-        coil::usleep(20000);
+        coil::usleep(150000);
         }
         {
         cdrMemoryStream cdr;
@@ -1103,7 +1103,7 @@ namespace PublisherPeriodic
         td >>= cdr;
         CPPUNIT_ASSERT_EQUAL(RTC::PublisherPeriodic::BUFFER_FULL,
                                  publisher.write(cdr,0,0));
-        coil::usleep(10000);
+        coil::usleep(150000);
         }
 
         //データ抜けががないことを確認する。
@@ -1118,7 +1118,7 @@ namespace PublisherPeriodic
             rtd <<= data;
             CPPUNIT_ASSERT_EQUAL((long)icc+4, (long)rtd.data);
         }
-        coil::usleep(20000);
+        coil::usleep(400000);  //Meanwhile, 12 and 13 are forwarded. 
         for(int icc(0);icc<2;++icc)
         {
             cdrMemoryStream data;
@@ -1158,7 +1158,7 @@ namespace PublisherPeriodic
         prop.setProperty("measurement.exec_count","0");
         prop.setProperty("measurement.period_time","enable");
         prop.setProperty("measurement.period_count","0");
-        prop.setProperty("publisher.push_rate","100");
+        prop.setProperty("publisher.push_rate","10");
         publisher.init(prop);
         coil::usleep(10000);
 
@@ -1218,7 +1218,7 @@ namespace PublisherPeriodic
                 CPPUNIT_ASSERT_EQUAL(RTC::PublisherPeriodic::BUFFER_FULL,
                                      ret);
             }
-            coil::usleep(20000);
+            coil::usleep(150000);
 
         }
 
@@ -1231,7 +1231,7 @@ namespace PublisherPeriodic
         td >>= cdr;
         CPPUNIT_ASSERT_EQUAL(RTC::PublisherPeriodic::BUFFER_FULL,
                                  publisher.write(cdr,0,0));
-        coil::usleep(10000);
+        coil::usleep(100000);
         }
 
         //データを確認する。
@@ -1247,7 +1247,7 @@ namespace PublisherPeriodic
             CPPUNIT_ASSERT_EQUAL((long)icc, (long)rtd.data);
         }
 
-        coil::usleep(80000);
+        coil::usleep(800000);
         // この write データは転送される。
         for(int icc(0);icc<8;++icc)
         {
@@ -1267,7 +1267,7 @@ namespace PublisherPeriodic
             //    CPPUNIT_ASSERT_EQUAL(RTC::PublisherPeriodic::BUFFER_FULL,
             //                         ret);
             //}
-            coil::usleep(10000);
+            coil::usleep(100000);
         }
         coil::usleep(80000);
         //データを確認する。
@@ -1282,7 +1282,7 @@ namespace PublisherPeriodic
             rtd <<= data;
             CPPUNIT_ASSERT_EQUAL((long)icc+8, (long)rtd.data);
         }
-        coil::usleep(10000);
+        coil::usleep(100000);
         {
         cdrMemoryStream cdr;
         RTC::TimedLong td;
@@ -1290,9 +1290,9 @@ namespace PublisherPeriodic
         td >>= cdr;
         //CPPUNIT_ASSERT_EQUAL(RTC::PublisherPeriodic::PORT_OK,
         //                         publisher.write(cdr,0,0));
-        coil::usleep(10000);
+        coil::usleep(100000);
         }
-        coil::usleep(80000);
+        coil::usleep(800000);
         //データを確認する。
         for(int icc(0);icc<8;++icc)
         {
@@ -1307,7 +1307,7 @@ namespace PublisherPeriodic
         }
 
 
-        coil::usleep(10000);
+        coil::usleep(100000);
         publisher.deactivate();
         
         delete buffer;
@@ -1333,7 +1333,7 @@ namespace PublisherPeriodic
         prop.setProperty("measurement.exec_count","0");
         prop.setProperty("measurement.period_time","enable");
         prop.setProperty("measurement.period_count","0");
-        prop.setProperty("publisher.push_rate","1000.0");
+        prop.setProperty("publisher.push_rate","10.0");
         publisher.init(prop);
         coil::usleep(10000);
 
@@ -1383,7 +1383,7 @@ namespace PublisherPeriodic
             CPPUNIT_ASSERT_EQUAL(RTC::PublisherPeriodic::PORT_OK,
                                  publisher.write(cdr,0,0));
 
-            coil::usleep(10000);
+            coil::usleep(150000);
         }
 
         //provider 側のバッファ full の状態でコール(full)
@@ -1394,7 +1394,7 @@ namespace PublisherPeriodic
         td >>= cdr;
         CPPUNIT_ASSERT_EQUAL(RTC::PublisherPeriodic::PORT_OK,
                                  publisher.write(cdr,0,0));
-        coil::usleep(10000);
+        coil::usleep(150000);
         }
         {
         cdrMemoryStream cdr;
@@ -1403,7 +1403,7 @@ namespace PublisherPeriodic
         td >>= cdr;
         CPPUNIT_ASSERT_EQUAL(RTC::PublisherPeriodic::PORT_OK,
                                  publisher.write(cdr,0,0));
-        coil::usleep(10000);
+        coil::usleep(150000);
         }
 
         //provider 側のバッファから 4 件取得
@@ -1420,7 +1420,7 @@ namespace PublisherPeriodic
             CPPUNIT_ASSERT_EQUAL((long)icc*2+1, (long)rtd.data);
         }
 
-        coil::usleep(40000);
+        coil::usleep(450000);
         //provider 側のバッファ full ではない状態でコール
         {
         cdrMemoryStream cdr;
@@ -1429,7 +1429,7 @@ namespace PublisherPeriodic
         td >>= cdr;
         CPPUNIT_ASSERT_EQUAL(RTC::PublisherPeriodic::PORT_OK,
                                  publisher.write(cdr,0,0));
-        coil::usleep(10000);
+        coil::usleep(150000);
         }
         {
         cdrMemoryStream cdr;
@@ -1438,7 +1438,7 @@ namespace PublisherPeriodic
         td >>= cdr;
         CPPUNIT_ASSERT_EQUAL(RTC::PublisherPeriodic::PORT_OK,
                                  publisher.write(cdr,0,0));
-        coil::usleep(10000);
+        coil::usleep(150000);
         }
 
         //データ抜けががないことを確認する。
@@ -1481,7 +1481,7 @@ namespace PublisherPeriodic
         prop.setProperty("measurement.exec_count","0");
         prop.setProperty("measurement.period_time","enable");
         prop.setProperty("measurement.period_count","0");
-        prop.setProperty("publisher.push_rate","1000.0");
+        prop.setProperty("publisher.push_rate","10.0");
         publisher.init(prop);
         coil::usleep(10000);
 
@@ -1541,7 +1541,7 @@ namespace PublisherPeriodic
                 CPPUNIT_ASSERT_EQUAL(RTC::PublisherPeriodic::BUFFER_FULL,
                                      ret);
             }
-            coil::usleep(20000);
+            coil::usleep(150000);
 
         }
 
@@ -1554,7 +1554,7 @@ namespace PublisherPeriodic
         td >>= cdr;
         CPPUNIT_ASSERT_EQUAL(RTC::PublisherPeriodic::BUFFER_FULL,
                                  publisher.write(cdr,0,0));
-        coil::usleep(10000);
+        coil::usleep(150000);
         }
 
         //データを確認する。
@@ -1570,7 +1570,7 @@ namespace PublisherPeriodic
             CPPUNIT_ASSERT_EQUAL((long)icc*2+1, (long)rtd.data);
         }
 
-        coil::usleep(20000);
+        coil::usleep(150000);
         //データを確認する。
         int len =consumer->get_m_put_data_len();
         CPPUNIT_ASSERT_EQUAL(4,len);
@@ -1585,7 +1585,7 @@ namespace PublisherPeriodic
             rtd <<= data;
             CPPUNIT_ASSERT_EQUAL((long)icc*2+17, (long)rtd.data);
         }
-        coil::usleep(20000);
+        coil::usleep(150000);
         {
         cdrMemoryStream cdr;
         RTC::TimedLong td;
@@ -1593,7 +1593,7 @@ namespace PublisherPeriodic
         td >>= cdr;
         CPPUNIT_ASSERT_EQUAL(RTC::PublisherPeriodic::PORT_OK,
                                  publisher.write(cdr,0,0));
-        coil::usleep(10000);
+        coil::usleep(150000);
         }
         {
         cdrMemoryStream cdr;
@@ -1602,7 +1602,7 @@ namespace PublisherPeriodic
         td >>= cdr;
         CPPUNIT_ASSERT_EQUAL(RTC::PublisherPeriodic::PORT_OK,
                                  publisher.write(cdr,0,0));
-        coil::usleep(10000);
+        coil::usleep(150000);
         }
         //データを確認する。
         {
@@ -1617,7 +1617,7 @@ namespace PublisherPeriodic
         CPPUNIT_ASSERT_EQUAL((long)26, (long)rtd.data);
         }
 
-        coil::usleep(10000);
+        coil::usleep(100000);
         publisher.deactivate();
         
         delete buffer;
@@ -1643,7 +1643,7 @@ namespace PublisherPeriodic
         prop.setProperty("measurement.exec_count","0");
         prop.setProperty("measurement.period_time","enable");
         prop.setProperty("measurement.period_count","0");
-        prop.setProperty("publisher.push_rate","100");
+        prop.setProperty("publisher.push_rate","10");
         publisher.init(prop);
         coil::usleep(10000);
 
@@ -1698,7 +1698,7 @@ namespace PublisherPeriodic
         }
 
   
-        coil::usleep(10000);
+        coil::usleep(150000);
         //provider 側のバッファから取得
         //
         int len = consumer->get_m_put_data_len() -1;
@@ -1709,7 +1709,7 @@ namespace PublisherPeriodic
             CORBA::ULong inlen = data.bufSize();
             CPPUNIT_ASSERT_EQUAL(12,(int)inlen);
         }
-        coil::usleep(10000);
+        coil::usleep(150000);
         //最新データが転送されていることを確認する。
         {
         cdrMemoryStream data;
@@ -1722,7 +1722,7 @@ namespace PublisherPeriodic
         CPPUNIT_ASSERT_EQUAL((long)7, (long)rtd.data);
         }
 
-        coil::usleep(10000);
+        coil::usleep(100000);
         publisher.deactivate();
         delete buffer;
         delete consumer;
@@ -1747,7 +1747,7 @@ namespace PublisherPeriodic
         prop.setProperty("measurement.exec_count","0");
         prop.setProperty("measurement.period_time","enable");
         prop.setProperty("measurement.period_count","0");
-        prop.setProperty("publisher.push_rate","100");
+        prop.setProperty("publisher.push_rate","10");
         publisher.init(prop);
         coil::usleep(10000);
 
@@ -1791,7 +1791,7 @@ namespace PublisherPeriodic
         td >>= cdr;
         CPPUNIT_ASSERT_EQUAL(RTC::PublisherPeriodic::PRECONDITION_NOT_MET,
                                  publisher.write(cdr,0,0));
-        coil::usleep(10000);
+        coil::usleep(100000);
         }
 
         //
@@ -1803,7 +1803,7 @@ namespace PublisherPeriodic
         td >>= cdr;
         CPPUNIT_ASSERT_EQUAL(RTC::PublisherPeriodic::PRECONDITION_NOT_MET,
                                  publisher.write(cdr,0,0));
-        coil::usleep(10000);
+        coil::usleep(100000);
         }
 
         //
@@ -1815,7 +1815,7 @@ namespace PublisherPeriodic
         td >>= cdr;
         CPPUNIT_ASSERT_EQUAL(RTC::PublisherPeriodic::PORT_OK,
                                  publisher.write(cdr,0,0));
-        coil::usleep(10000);
+        coil::usleep(100000);
         }
 
         //Listener callback check
@@ -1831,16 +1831,16 @@ namespace PublisherPeriodic
         coil::usleep(10000);
         m_OnCheck = 3;  // SEND_FULL:onReceiverFull()
         publisher.write(cdr,0,0);
-        coil::usleep(10000);
+        coil::usleep(100000);
         m_OnCheck = 4;  // SEND_TIMEOUT:onReceiverTimeout()
         publisher.write(cdr,0,0);
-        coil::usleep(10000);
+        coil::usleep(100000);
         m_OnCheck = 5;  // UNKNOWN_ERROR:onReceiverError()
         publisher.write(cdr,0,0);
-        coil::usleep(10000);
+        coil::usleep(100000);
         m_OnCheck = 6;  // CONNECTION_LOST:onReceiverError()
         publisher.write(cdr,0,0);
-        coil::usleep(10000);
+        coil::usleep(100000);
 
         delete buffer;
         delete consumer;
