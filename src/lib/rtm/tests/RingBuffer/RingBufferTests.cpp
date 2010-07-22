@@ -58,12 +58,22 @@ typedef ::RTC::BufferStatus::Enum ReturnCode;
 int isBlockTest = false;
 ReturnCode g_ret = RTC::BufferStatus::BUFFER_OK;
 
+struct thread_arg
+{
+    thread_arg(RTC::RingBuffer<int>& buff, int loop=NLOOP)
+        : m_buff(buff), m_n_loop(loop)
+    {}
+    RTC::RingBuffer<int>& m_buff;
+    int m_n_loop;
+};
 // 読み込みスレッド
 void* reader(void* arg)
 {
-  RTC::RingBuffer<int>* buff = static_cast<RTC::RingBuffer<int>*>(arg);
+  thread_arg* t_arg = (thread_arg*)arg;
+  RTC::RingBuffer<int>* buff = (RTC::RingBuffer<int>*)&(t_arg->m_buff);
+  
   ReturnCode ret;
-  for (int i = 0; i < NLOOP; i++) {
+  for (int i = 0; i < t_arg->m_n_loop; i++) {
 	int output = -1;
 	ret = (*buff).read(output);
 #if PRINTOUT
@@ -88,9 +98,11 @@ void* reader(void* arg)
 // 書き込みスレッド
 void* writer(void* arg)
 {
-  RTC::RingBuffer<int>* buff = static_cast<RTC::RingBuffer<int>*>(arg);
+  thread_arg* t_arg = (thread_arg*)arg;
+  RTC::RingBuffer<int>* buff = (RTC::RingBuffer<int>*)&(t_arg->m_buff);
   
-  for (int i = 0; i < NLOOP; i++) {
+  
+  for (int i = 0; i < t_arg->m_n_loop; i++) {
 	int input = i;
 	(*buff).write(input);
 #if PRINTOUT
@@ -132,7 +144,6 @@ namespace RingBuffer
 	CPPUNIT_TEST(test_dnothing_rback); // full: do_nothing, empty: readback, buff length 1,8
 	CPPUNIT_TEST(test_dnothing_dnothing); // full: do_nothing, empty: do_nothing, buff length 1,8
 	CPPUNIT_TEST(test_dnothing_block); // full: do_nothing, empty: block, buff length 1,8
-  
 	CPPUNIT_TEST(test_block_rback); // full: block, empty: readback, buff length 1,8
 	CPPUNIT_TEST(test_block_dnothing); // full: block, empty: do_nothing, buff length 1,8
 	CPPUNIT_TEST(test_block_block_wr); // full: block, empty: block, buff length 1,8
@@ -142,9 +153,10 @@ namespace RingBuffer
     CPPUNIT_TEST_SUITE_END();
 		
   private:
-	void do_test(RTC::RingBuffer<int>& buff, bool read_first=false)
+	void do_test(RTC::RingBuffer<int>& buff, int loop=NLOOP, bool read_first=false)
 	{
 	  pthread_t tr, tw;
+          thread_arg arg(buff,loop);
 
 	  if (read_first) {
 		// 読み込みスレッドの開始
@@ -160,12 +172,14 @@ namespace RingBuffer
 	  }
 	  else {
 		// 書き込みスレッドの開始
-		if (pthread_create(&tw, NULL , writer, static_cast<void *>(&buff)) != 0) {
+//		if (pthread_create(&tw, NULL , writer, static_cast<void *>(&buff)) != 0) {
+		if (pthread_create(&tw, NULL , writer, &arg) != 0) {
 		  perror("pthread_create(w)");
 		  return;
 		}
 		// 読み込みスレッドの開始
-		if (pthread_create(&tr, NULL , reader, static_cast<void *>(&buff)) != 0) {
+//		if (pthread_create(&tr, NULL , reader, static_cast<void *>(&buff)) != 0) {
+		if (pthread_create(&tr, NULL , reader, &arg) != 0) {
 		  perror("pthread_create(r)");
 		  return;
 		}
@@ -1005,14 +1019,14 @@ namespace RingBuffer
 	  buff.init(prop);
 
 	  g_ret = RTC::BufferStatus::BUFFER_OK;
-	  do_test(buff);
+	  do_test(buff,100);
 	  CPPUNIT_ASSERT(g_ret == RTC::BufferStatus::BUFFER_OK);
 	  g_ret = RTC::BufferStatus::BUFFER_OK;
 
 
 	  RTC::RingBuffer<int> buff2(8);
 	  buff2.init(prop);
-	  do_test(buff2);
+	  do_test(buff2,100);
 	  CPPUNIT_ASSERT(g_ret == RTC::BufferStatus::BUFFER_OK);
 	  g_ret = RTC::BufferStatus::BUFFER_OK;
 
@@ -1043,14 +1057,14 @@ namespace RingBuffer
 	  buff.init(prop);
 
 	  g_ret = RTC::BufferStatus::BUFFER_OK;
-	  do_test(buff);
+	  do_test(buff,100);
 	  CPPUNIT_ASSERT(g_ret == RTC::BufferStatus::BUFFER_OK);
 	  g_ret = RTC::BufferStatus::BUFFER_OK;
 
 
 	  RTC::RingBuffer<int> buff2(8);
 	  buff2.init(prop);
-	  do_test(buff2);
+	  do_test(buff2,100);
 	  CPPUNIT_ASSERT(g_ret == RTC::BufferStatus::BUFFER_OK);
 	  g_ret = RTC::BufferStatus::BUFFER_OK;
 
