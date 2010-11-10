@@ -26,6 +26,7 @@
 #include <string>
 #include <map>
 #include <iostream>
+#include <cstdlib>
 
 #include <coil/Logger.h>
 #include <coil/Task.h>
