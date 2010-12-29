@@ -157,6 +157,14 @@ DummyModule2_la_LIBADD  = \
 	-luuid                                    \
 	$(top_builddir)/src/lib/rtm/tests/ManagerServant/.libs/DummyLib.la
 
+
+bin_PROGRAMS = rtcprof
+rtcprof_SOURCES = $(top_builddir)/utils/rtcprof/rtcprof.cpp
+rtcprof_LDADD   = $(top_builddir)/src/lib/rtm/libRTC.la \
+	$(top_builddir)/src/lib/coil/lib/libcoil.la
+rtcprof_LDFLAGS = -L$(top_builddir)/src/lib/rtm
+
+
 EXTRA_DIST = \
 	ManagerServantTests.cpp \
 	DummyModule1.h \

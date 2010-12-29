@@ -565,7 +565,7 @@ namespace PublisherNew
 
             RTC::TimedLong rtd;
             rtd <<= data;
-            CPPUNIT_ASSERT_EQUAL((long)icc, rtd.data);
+            CPPUNIT_ASSERT_EQUAL((long)icc, (long)rtd.data);
         }
 
         //provider 側のバッファ full ではない状態でコール
@@ -598,7 +598,7 @@ namespace PublisherNew
 
             RTC::TimedLong rtd;
             rtd <<= data;
-            CPPUNIT_ASSERT_EQUAL((long)icc+4, rtd.data);
+            CPPUNIT_ASSERT_EQUAL((long)icc+4, (long)rtd.data);
         }
         publisher.deactivate();
         
@@ -711,7 +711,7 @@ namespace PublisherNew
 
             RTC::TimedLong rtd;
             rtd <<= data;
-            CPPUNIT_ASSERT_EQUAL((long)icc, rtd.data);
+            CPPUNIT_ASSERT_EQUAL((long)icc, (long)rtd.data);
         }
 
         //consumer の buffer が full 状態のため、
@@ -735,7 +735,7 @@ namespace PublisherNew
 
             RTC::TimedLong rtd;
             rtd <<= data;
-            CPPUNIT_ASSERT_EQUAL((long)icc+8, rtd.data);
+            CPPUNIT_ASSERT_EQUAL((long)icc+8, (long)rtd.data);
         }
         {
         cdrMemoryStream cdr;
@@ -755,7 +755,7 @@ namespace PublisherNew
 
         RTC::TimedLong rtd;
         rtd <<= data;
-        CPPUNIT_ASSERT_EQUAL((long)18, rtd.data);
+        CPPUNIT_ASSERT_EQUAL((long)18, (long)rtd.data);
         }
 
         coil::usleep(10000);
@@ -834,9 +834,9 @@ namespace PublisherNew
             CPPUNIT_ASSERT_EQUAL(RTC::PublisherNew::PORT_OK,
                                  publisher.write(cdr,0,0));
 
+            coil::usleep(10000);
         }
 
-        coil::usleep(100000);
         //provider 側のバッファ full の状態でコール(full)
         {
         cdrMemoryStream cdr;
@@ -870,7 +870,7 @@ namespace PublisherNew
 
             RTC::TimedLong rtd;
             rtd <<= data;
-            CPPUNIT_ASSERT_EQUAL((long)icc, rtd.data);
+            CPPUNIT_ASSERT_EQUAL((long)icc, (long)rtd.data);
         }
 
         //provider 側のバッファ full ではない状態でコール
@@ -921,7 +921,7 @@ namespace PublisherNew
 
             RTC::TimedLong rtd;
             rtd <<= data;
-            CPPUNIT_ASSERT_EQUAL((long)icc+4, rtd.data);
+            CPPUNIT_ASSERT_EQUAL((long)icc+4, (long)rtd.data);
         }
 
         //この時点で consumer 側のバッファにデータが 2 件格納されている状態
@@ -1038,7 +1038,7 @@ namespace PublisherNew
 
             RTC::TimedLong rtd;
             rtd <<= data;
-            CPPUNIT_ASSERT_EQUAL((long)icc, rtd.data);
+            CPPUNIT_ASSERT_EQUAL((long)icc, (long)rtd.data);
         }
 
         //consumer の buffer が full 状態のため、
@@ -1073,7 +1073,7 @@ namespace PublisherNew
 
             RTC::TimedLong rtd;
             rtd <<= data;
-            CPPUNIT_ASSERT_EQUAL((long)icc+8, rtd.data);
+            CPPUNIT_ASSERT_EQUAL((long)icc+8, (long)rtd.data);
         }
         {
         cdrMemoryStream cdr;
@@ -1093,7 +1093,7 @@ namespace PublisherNew
 
             RTC::TimedLong rtd;
             rtd <<= data;
-            CPPUNIT_ASSERT_EQUAL((long)18, rtd.data);
+            CPPUNIT_ASSERT_EQUAL((long)18, (long)rtd.data);
         }
 
 
@@ -1207,7 +1207,7 @@ namespace PublisherNew
 
             RTC::TimedLong rtd;
             rtd <<= data;
-            CPPUNIT_ASSERT_EQUAL((long)icc*2+1, rtd.data);
+            CPPUNIT_ASSERT_EQUAL((long)icc*2+1, (long)rtd.data);
         }
 
         //provider 側のバッファ full ではない状態でコール
@@ -1240,7 +1240,7 @@ namespace PublisherNew
 
             RTC::TimedLong rtd;
             rtd <<= data;
-            CPPUNIT_ASSERT_EQUAL((long)icc*2+9, rtd.data);
+            CPPUNIT_ASSERT_EQUAL((long)icc*2+9, (long)rtd.data);
         }
        
         coil::usleep(100000);
@@ -1354,7 +1354,7 @@ namespace PublisherNew
 
             RTC::TimedLong rtd;
             rtd <<= data;
-            CPPUNIT_ASSERT_EQUAL((long)icc*2+1, rtd.data);
+            CPPUNIT_ASSERT_EQUAL((long)icc*2+1, (long)rtd.data);
         }
 
         //consumer の buffer が full 状態のため、
@@ -1380,7 +1380,7 @@ namespace PublisherNew
 
             RTC::TimedLong rtd;
             rtd <<= data;
-            CPPUNIT_ASSERT_EQUAL((long)icc*2+17, rtd.data);
+            CPPUNIT_ASSERT_EQUAL((long)icc*2+17, (long)rtd.data);
         }
         {
         cdrMemoryStream cdr;
@@ -1409,7 +1409,7 @@ namespace PublisherNew
 
             RTC::TimedLong rtd;
             rtd <<= data;
-            CPPUNIT_ASSERT_EQUAL((long)27, rtd.data);
+            CPPUNIT_ASSERT_EQUAL((long)27, (long)rtd.data);
         }
 
         coil::usleep(10000);
@@ -1480,11 +1480,23 @@ namespace PublisherNew
 
         //8件のデータは転送されない
         //最新データの7は転送される。
-        for(int icc(0);icc<8;++icc)
+        for(int icc(0);icc<7;++icc)
         {
             cdrMemoryStream cdr;
             RTC::TimedLong td;
             td.data = icc;
+            td >>= cdr;
+
+            CPPUNIT_ASSERT_EQUAL(RTC::PublisherNew::PORT_OK,
+                                 publisher.write(cdr,0,0));
+
+        }
+
+        coil::usleep(10000);
+        {
+            cdrMemoryStream cdr;
+            RTC::TimedLong td;
+            td.data = 7;
             td >>= cdr;
 
             CPPUNIT_ASSERT_EQUAL(RTC::PublisherNew::PORT_OK,
@@ -1512,7 +1524,7 @@ namespace PublisherNew
 
         RTC::TimedLong rtd;
         rtd <<= data;
-        CPPUNIT_ASSERT_EQUAL((long)7, rtd.data);
+        CPPUNIT_ASSERT_EQUAL((long)7, (long)rtd.data);
         }
 
         coil::usleep(1000000);  // ここは長めにしないと落ちます。

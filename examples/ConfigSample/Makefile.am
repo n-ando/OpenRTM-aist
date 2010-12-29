@@ -33,6 +33,7 @@ example_PROGRAMS = ConfigSampleComp
 example_DATA     = configsample.conf
 
 ConfigSampleComp_SOURCES = ConfigSampleComp.cpp 
+ConfigSampleComp_DEPENDENCIES = ConfigSample.la
 ConfigSampleComp_LDFLAGS = -L$(top_builddir)/src/lib/rtm/.libs
 ConfigSampleComp_LDADD   = ConfigSample.o \
 	$(top_builddir)/src/lib/rtm/libRTC.la \

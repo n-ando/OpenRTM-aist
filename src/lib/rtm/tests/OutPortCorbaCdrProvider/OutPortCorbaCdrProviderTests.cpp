@@ -176,7 +176,8 @@ namespace OutPortCorbaCdrProvider
         //
         //
         //
-        OutPortCorbaCdrProviderMock provider;
+        OutPortCorbaCdrProviderMock* provider 
+            = new OutPortCorbaCdrProviderMock();
 
         //ConnectorInfo
         coil::Properties prop;
@@ -221,20 +222,20 @@ namespace OutPortCorbaCdrProvider
         m_listeners.connector_[RTC::ON_DISCONNECT].addListener(
                                     new ConnListener("ON_DISCONNECT"), true);
 
-        provider.setListener(info, &m_listeners);
+        provider->setListener(info, &m_listeners);
 
         int index;
         //IOR をプロぺティに追加することを確認
-        index = NVUtil::find_index(provider.get_m_properties(),
+        index = NVUtil::find_index(provider->get_m_properties(),
                                    "dataport.corba_cdr.outport_ior");
         CPPUNIT_ASSERT(0<=index);
 
         //ref をプロぺティに追加することを確認
-        index = NVUtil::find_index(provider.get_m_properties(),
+        index = NVUtil::find_index(provider->get_m_properties(),
                                    "dataport.corba_cdr.outport_ref");
         CPPUNIT_ASSERT(0<=index);
 
-        provider.init(prop);
+        provider->init(prop);
 
         RTC::CdrBufferBase* buffer;
         buffer = RTC::CdrBufferFactory::instance().createObject("ring_buffer");
@@ -244,21 +245,24 @@ namespace OutPortCorbaCdrProvider
         ::OpenRTM::CdrData_var cdr_data;
 
         // buffer がない状態でコール(unkown error)
-        retcode = provider.get(cdr_data.out());
+        retcode = provider->get(cdr_data.out());
         CPPUNIT_ASSERT_EQUAL((::OpenRTM::PortStatus)5, retcode);
         
-        provider.setBuffer(buffer);
+        provider->setBuffer(buffer);
 
         RTC::OutPortConnector* connector;
-        connector = new RTC::OutPortPullConnector(info, &provider, m_listeners, buffer);
+        connector = new RTC::OutPortPullConnector(info, 
+                                                  provider, 
+                                                  m_listeners, 
+                                                  buffer);
         if (connector == 0)
           {
             std::cout << "ERROR: Connector creation failed." << std::endl;
           }
-        provider.setConnector(connector);
+        provider->setConnector(connector);
 
         //データなしの状態でコール(empty)
-        retcode = provider.get(cdr_data);
+        retcode = provider->get(cdr_data);
         CPPUNIT_ASSERT_EQUAL((::OpenRTM::PortStatus)3, retcode);
 
         int testdata[8] = { 12,34,56,78,90,23,45,99 };
@@ -272,11 +276,11 @@ namespace OutPortCorbaCdrProvider
 
         }
 
-        retcode = provider.get(cdr_data);
+        retcode = provider->get(cdr_data);
         CPPUNIT_ASSERT_EQUAL((::OpenRTM::PortStatus)0, retcode);
 
 
-        SDOPackage::NVList list = provider.get_m_properties();
+        SDOPackage::NVList list = provider->get_m_properties();
         index = NVUtil::find_index(list,
                                    "dataport.corba_cdr.outport_ior");
 
@@ -287,6 +291,7 @@ namespace OutPortCorbaCdrProvider
             PortableServer::Servant ser = m_pPOA->reference_to_servant(var);
 	    m_pPOA->deactivate_object(*m_pPOA->servant_to_id(ser));
         }
+
 
         delete connector;
     }

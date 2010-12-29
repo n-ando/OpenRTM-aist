@@ -281,7 +281,7 @@ namespace OutPortCorbaCdrConsumer
 
         RTC::TimedLong rtd;
         rtd <<= indata;
-        CPPUNIT_ASSERT_EQUAL((long)testdata[0], rtd.data);
+        CPPUNIT_ASSERT_EQUAL((long)testdata[0], (long)rtd.data);
 
         CPPUNIT_ASSERT(!CORBA::is_nil(consumer.get_m_objre()));
         consumer.unsubscribeInterface(prof.properties);

@@ -86,6 +86,11 @@ namespace Guard
       {
           return ShareCount;
       }
+      void setShareCount(long lc)
+      {
+          coil::Guard<coil::Mutex> guard(mtx);
+          ShareCount = lc;
+      }
     };
 
     /*!
@@ -132,6 +137,7 @@ namespace Guard
     {
       GuardTests::TestGuardTask tka;
       GuardTests::TestGuardTask tkb;
+      tka.setShareCount(0);
       long lc;
       char cstr[256];
 

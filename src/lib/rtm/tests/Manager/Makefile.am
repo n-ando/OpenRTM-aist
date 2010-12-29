@@ -128,6 +128,7 @@ socompdir  = $(pkgdatadir)/src/lib/rtm/tests/Manager
 socomp_LTLIBRARIES = DummyModule.la  DummyModule2.la  
 
 nodist_DummyModule_la_SOURCES = DummyModule.h \
+				$(top_srcdir)/src/lib/rtm/DataFlowComponentBase.cpp \
 				DummyModule.cpp
 DummyModule_la_LDFLAGS = -module \
 	-L$(top_builddir)/src/lib/coil/lib
@@ -140,6 +141,7 @@ DummyModule_la_LIBADD  = \
 	$(top_builddir)/src/lib/rtm/tests/Manager/.libs/DummyLib.la
 
 nodist_DummyModule2_la_SOURCES = DummyModule2.h \
+				$(top_srcdir)/src/lib/rtm/DataFlowComponentBase.cpp \
 				DummyModule2.cpp
 DummyModule2_la_LDFLAGS = -module \
 	-L$(top_builddir)/src/lib/coil/lib
@@ -150,6 +152,12 @@ DummyModule2_la_LIBADD  = \
  	-lcoil                                    \
 	-luuid                                    \
 	$(top_builddir)/src/lib/rtm/tests/Manager/.libs/DummyLib.la
+
+bin_PROGRAMS = rtcprof
+rtcprof_SOURCES = $(top_builddir)/utils/rtcprof/rtcprof.cpp
+rtcprof_LDADD   = $(top_builddir)/src/lib/rtm/libRTC.la \
+	$(top_builddir)/src/lib/coil/lib/libcoil.la
+rtcprof_LDFLAGS = -L$(top_builddir)/src/lib/rtm
 
 
 
@@ -163,7 +171,6 @@ EXTRA_DIST = \
 	fixture2.conf \
 	fixture3.conf \
 	fixture4.conf
-
 
 
 # all

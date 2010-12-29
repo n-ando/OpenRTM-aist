@@ -396,7 +396,7 @@ namespace PublisherFlush
             RTC::TimedLong rtd;
             rtd <<= data;
 
-            CPPUNIT_ASSERT_EQUAL((long)testdata[icc], rtd.data);
+            CPPUNIT_ASSERT_EQUAL((long)testdata[icc], (long)rtd.data);
         }
 
         //deactivateしてからwriteをコール

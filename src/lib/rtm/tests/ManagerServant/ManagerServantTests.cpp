@@ -28,6 +28,7 @@
 #include <idl/RTCSkel.h>
 #include <rtm/idl/ManagerSkel.h>
 #include <rtm/ManagerServant.h>
+#include <rtm/NVUtil.h>
 
 /*!
  * @class ManagerServantTests class
@@ -831,21 +832,34 @@ namespace ManagerServant
             {"refstring_path",           "/var/log/rtcmanager.ref"},
             {"modules.load_path",        ""},
             {"modules.abs_path_allowed", "YES"},
+            {"modules.C++.manager_cmd",  ""},
+            {"modules.C++.profile_cmd",  ""},
+            {"modules.C++.suffixes",     ""},
+            {"modules.C++.load_paths",   ""},
+            {"modules.Python.manager_cmd",""},
+            {"modules.Python.profile_cmd",""},
+            {"modules.Python.suffixes",  ""},
+            {"modules.Python.load_paths",""},
+            {"modules.Java.manager_cmd", ""},
+            {"modules.Java.profile_cmd", ""},
+            {"modules.Java.suffixes",    ""},
+            {"modules.Java.load_paths",  ""},
             {"modules.config_path",      ""},
             {"modules.download_allowed", ""},
             {"modules.init_func_suffix", ""},
             {"modules.init_func_prefix", ""},
+//            {"modules.config_ext",       ""},
             {"is_master",                ""},
             {"corba_servant",            "YES"},
             {"shutdown_on_nortcs",       "YES"},
             {"shutdown_auto",            "YES"},
             {"command",                  "rtcd"},
+            {"supported_languages",     ""},
             {"os.name",                  "Linux"},
             {"os.release",               ""},
             {"os.version",               ""},
             {"os.arch",                  ""},
             {"os.hostname",              ""},
-            {"name",                     ""},
             {"",""},
         };
 
@@ -858,7 +872,7 @@ namespace ManagerServant
         delete list;
         int  len;
         len = profile.properties.length(); 
-        CPPUNIT_ASSERT_EQUAL(21,len);
+        CPPUNIT_ASSERT_EQUAL(34,len);
         for(int ic = 0; ic < len; ++ic) 
         {
             CPPUNIT_ASSERT_EQUAL(manager_profile[ic].name,
@@ -898,6 +912,18 @@ namespace ManagerServant
             {"manager.refstring_path",          "/var/log/rtcmanager.ref"},
             {"manager.modules.load_path",       ""},
             {"manager.modules.abs_path_allowed","YES"},
+            {"manager.modules.C++.manager_cmd",  ""},
+            {"manager.modules.C++.profile_cmd",  ""},
+            {"manager.modules.C++.suffixes",     ""},
+            {"manager.modules.C++.load_paths",   ""},
+            {"manager.modules.Python.manager_cmd",""},
+            {"manager.modules.Python.profile_cmd",""},
+            {"manager.modules.Python.suffixes",  ""},
+            {"manager.modules.Python.load_paths",""},
+            {"manager.modules.Java.manager_cmd", ""},
+            {"manager.modules.Java.profile_cmd", ""},
+            {"manager.modules.Java.suffixes",    ""},
+            {"manager.modules.Java.load_paths",  ""},
             {"manager.modules.config_path",     ""},
             {"manager.modules.download_allowed",""},
             {"manager.modules.init_func_suffix",""},
@@ -907,6 +933,7 @@ namespace ManagerServant
             {"manager.shutdown_on_nortcs",      "YES"},
             {"manager.shutdown_auto",           "YES"},
             {"manager.command",                 "rtcd"},
+            {"manager.supported_languages",     ""},
             {"manager.os.name",                 "Linux"},
             {"manager.os.release",              ""},
             {"manager.os.version",              ""},
@@ -938,7 +965,7 @@ namespace ManagerServant
             {"corba.nameservers",               ""},
             {"corba.master_manager",            "localhost:2810"},
             {"corba.nameservice.replace_endpoint", "NO"},
-            {"corba.endpoints",                  ""},
+//            {"corba.endpoints",                  ""},
             {"exec_cxt.periodic.type",          "PeriodicExecutionContext"},
             {"exec_cxt.periodic.rate",          "1000"},
             {"exec_cxt.evdriven.type",          "EventDrivenExecutionContext"},
@@ -960,7 +987,7 @@ namespace ManagerServant
         delete list;
         ::CORBA::ULong  len;
         len = conf.length(); 
-        CPPUNIT_ASSERT_EQUAL((::CORBA::ULong)61,len);
+        CPPUNIT_ASSERT_EQUAL((::CORBA::ULong)73,len);
         for(::CORBA::ULong ic = 0; ic < len; ++ic) 
         {
             CPPUNIT_ASSERT_EQUAL(config[ic].name,
@@ -1018,7 +1045,7 @@ namespace ManagerServant
         delete list;
         ::CORBA::ULong  leng;
         leng = conf.length(); 
-        CPPUNIT_ASSERT_EQUAL((::CORBA::ULong)61,leng);
+        CPPUNIT_ASSERT_EQUAL((::CORBA::ULong)73,leng);
         for(::CORBA::ULong ic = 0; ic < leng; ++ic) 
         {
             if(config[0].name == ::std::string(conf[ic].name))
@@ -1084,7 +1111,7 @@ namespace ManagerServant
             ret = pman->load_module(".libs/DummyModule1.so","DummyModule1Init");
             CPPUNIT_ASSERT_EQUAL(::RTC::RTC_OK, ret);
             CPPUNIT_ASSERT(isFound(pman->get_loadable_modules(), 
-                                   "DummyModule1.so"));
+                                   "DummyModule1"));
         }
         catch(...)
         {
@@ -1097,7 +1124,7 @@ namespace ManagerServant
             ret = pman->load_module(".libs/DummyModule2.so","DummyModule2Init");
             CPPUNIT_ASSERT_EQUAL(::RTC::RTC_OK, ret);
             CPPUNIT_ASSERT(isFound(pman->get_loadable_modules(), 
-                                   "DummyModule2.so"));
+                                   "DummyModule2"));
         }
         catch(...)
         {
@@ -1111,12 +1138,13 @@ namespace ManagerServant
         delete list;
 
         //Check returns(ModuleProfileList).
-        CPPUNIT_ASSERT_EQUAL((::CORBA::ULong)3, modlist.length());
+        CPPUNIT_ASSERT_EQUAL((::CORBA::ULong)2, modlist.length());
 
-        CPPUNIT_ASSERT_EQUAL(::std::string("module_file_name"), 
-                             ::std::string(modlist[0].properties[0].name));
+        CORBA::Long long_ret = NVUtil::find_index(modlist[0].properties,"module_file_name");
+        CPPUNIT_ASSERT(long_ret!=-1);
+
         const char* ch;
-        if( modlist[0].properties[0].value >>= ch )
+        if( modlist[0].properties[long_ret].value >>= ch )
         {
             CPPUNIT_ASSERT_EQUAL(::std::string("DummyModule2.so"), 
                                  ::std::string(ch));
@@ -1126,12 +1154,12 @@ namespace ManagerServant
             CPPUNIT_FAIL( "ModuleProfileList is illegal." );
         }
 
-        CPPUNIT_ASSERT_EQUAL(::std::string("module_file_name"), 
-                             ::std::string(modlist[1].properties[0].name));
+        long_ret = NVUtil::find_index(modlist[1].properties,"module_file_name");
+        CPPUNIT_ASSERT(long_ret!=-1);
 
-        if( modlist[1].properties[0].value >>= ch )
+        if( modlist[1].properties[long_ret].value >>= ch )
         {
-            CPPUNIT_ASSERT_EQUAL(::std::string("DummyLib.so"), 
+            CPPUNIT_ASSERT_EQUAL(::std::string("DummyModule1.so"), 
                                  ::std::string(ch));
         }
         else

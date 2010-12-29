@@ -44,18 +44,21 @@ example_PROGRAMS = ControllerComp MotorComp SensorComp Composite
 example_DATA = rtc.conf composite.conf
 
 ControllerComp_SOURCES = ControllerComp.cpp 
+ControllerComp_DEPENDENCIES = Controller.la
 ControllerComp_LDFLAGS = -L$(top_builddir)/src/lib/rtm/.libs
 ControllerComp_LDADD   =  Controller.o \
 	$(top_builddir)/src/lib/rtm/libRTC.la \
 	$(top_builddir)/src/lib/coil/lib/libcoil.la
 
 MotorComp_SOURCES = MotorComp.cpp 
+MotorComp_DEPENDENCIES = Motor.la
 MotorComp_LDFLAGS = -L$(top_builddir)/src/lib/rtm/.libs
 MotorComp_LDADD   = Motor.o \
 	$(top_builddir)/src/lib/rtm/libRTC.la \
 	$(top_builddir)/src/lib/coil/lib/libcoil.la
 
 SensorComp_SOURCES = SensorComp.cpp 
+SensorComp_DEPENDENCIES = Sensor.la
 SensorComp_LDFLAGS = -L$(top_builddir)/src/lib/rtm/.libs
 SensorComp_LDADD   =  Sensor.o \
 	$(top_builddir)/src/lib/rtm/libRTC.la \

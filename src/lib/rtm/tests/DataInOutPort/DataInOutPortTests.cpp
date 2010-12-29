@@ -145,7 +145,7 @@ namespace DataInOutPort
 					     "push"));
       CORBA_SeqUtil::push_back(prof.properties,
 			       NVUtil::newNV("dataport.subscription_type",
-					     "new"));
+					     "flush"));
       RTC::ReturnCode_t ret= m_inport.connect(prof);
       CPPUNIT_ASSERT(ret == RTC::RTC_OK);
       

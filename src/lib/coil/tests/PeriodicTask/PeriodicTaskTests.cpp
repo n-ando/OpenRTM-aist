@@ -82,7 +82,9 @@ public:
       {
           m_logger->log("mysvc3");
       }
-      coil::sleep(coil::TimeValue(0, 30000));
+//      coil::sleep(coil::TimeValue(0, 30000));
+//useconds_t delay=30000;
+      coil::usleep(30000);
       return 0;
     }
 
@@ -327,6 +329,7 @@ namespace PeriodicTask
      */
     void test_executionMeasure()
     {
+std::cout<<"IN  test_executionMeasure()"<<std::endl;
       const double wait(0.03); // [s]
       A a;
       coil::PeriodicTask p;
@@ -411,6 +414,7 @@ namespace PeriodicTask
      */
     void test_periodicMeasure()
     {
+std::cout<<"IN  test_periodicMeasure()"<<std::endl;
       const double wait(0.05); // [s]
       A a;
       coil::PeriodicTask p;
