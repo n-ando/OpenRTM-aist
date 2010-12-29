@@ -120,6 +120,6 @@ int main(int argc, char* argv[])
       break;
     }
   runner.setOutputter(outputter);
-  runner.run();
-  return 0; // runner.run() ? 0 : 1;
+  return runner.run() ? 0 : 1;
+//  return 0; // runner.run() ? 0 : 1;
 }

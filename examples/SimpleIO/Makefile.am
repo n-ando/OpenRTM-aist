@@ -39,12 +39,14 @@ noinst_PROGRAMS = ConnectorComp
 example_DATA = rtc.conf consin.conf consout.conf component.conf rtc.conf.org
 
 ConsoleInComp_SOURCES = ConsoleInComp.cpp 
+ConsoleInComp_DEPENDENCIES = ConsoleIn.la
 ConsoleInComp_LDFLAGS = -L$(top_builddir)/src/lib/rtm/.libs
 ConsoleInComp_LDADD   =  ConsoleIn.o \
 	$(top_builddir)/src/lib/rtm/libRTC.la \
 	$(top_builddir)/src/lib/coil/lib/libcoil.la
 
 ConsoleOutComp_SOURCES = ConsoleOutComp.cpp 
+ConsoleOutComp_DEPENDENCIES = ConsoleOut.la
 ConsoleOutComp_LDFLAGS = -L$(top_builddir)/src/lib/rtm/.libs
 ConsoleOutComp_LDADD   =  ConsoleOut.o \
 	$(top_builddir)/src/lib/rtm/libRTC.la \

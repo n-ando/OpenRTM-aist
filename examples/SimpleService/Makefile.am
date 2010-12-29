@@ -128,7 +128,6 @@ EXTRA_DIST =                       \
 	rtc.conf
 
 ALL_SRC =                    \
-	$(IDL_SOURCES)       \
         $(PROVIDER_COMP_SRC) \
         $(CONSUMER_COMP_SRC)
 
