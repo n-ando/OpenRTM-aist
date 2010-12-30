@@ -202,6 +202,8 @@ namespace RTC
      *    from 0-11. 
      * @%M minute as a number (0-59) 
      * @%p locale's equivalent of AM or PM 
+     * @%Q millisecond as a number (0-999) from ver 1.1
+     * @%q microsecond as a number (0-999) from ver 1.1
      * @%S second as a number (0-59) 
      * @%U week of the year, sunday as the first day 
      * @%w weekday as a decimal (0-6, sunday=0) 
@@ -236,6 +238,8 @@ namespace RTC
      *    from 0-11. 
      * @%M minute as a number (0-59) 
      * @%p locale's equivalent of AM or PM 
+     * @%Q millisecond as a number (0-999) from ver 1.1
+     * @%q microsecond as a number (0-999) from ver 1.1
      * @%S second as a number (0-59) 
      * @%U week of the year, sunday as the first day 
      * @%w weekday as a decimal (0-6, sunday=0) 
@@ -336,6 +340,8 @@ namespace RTC
     std::string m_name;
     std::string m_dateFormat;
     static const char* m_levelString[];
+    int m_msEnable;
+    int m_usEnable;
   };    
 
 

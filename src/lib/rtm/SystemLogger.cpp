@@ -37,16 +37,22 @@ namespace RTC
   Logger::Logger(const char* name)
     : ::coil::LogStream(&(Manager::instance().getLogStreamBuf()),
                         RTL_SILENT, RTL_PARANOID, RTL_SILENT),
-      m_name(name), m_dateFormat("%b %d %H:%M:%S")
+      m_name(name), m_dateFormat("%b %d %H:%M:%S.%Q"),
+      m_msEnable(0), m_usEnable(0)
   {
     setLevel(Manager::instance().getLogLevel().c_str());
+    m_msEnable = coil::replaceString(m_dateFormat, "%Q", "#m#");
+    m_usEnable = coil::replaceString(m_dateFormat, "%q", "#u#");
   }
 
   Logger::Logger(LogStreamBuf* streambuf)
     : ::coil::LogStream(streambuf,
                         RTL_SILENT, RTL_PARANOID,  RTL_SILENT),
-      m_name("unknown"), m_dateFormat("%b %d %H:%M:%S")
+      m_name("unknown"), m_dateFormat("%b %d %H:%M:%S.%Q"),
+      m_msEnable(0), m_usEnable(0)
   {
+    m_msEnable = coil::replaceString(m_dateFormat, "%Q", "#m#");
+    m_usEnable = coil::replaceString(m_dateFormat, "%q", "#u#");
   }
 
   Logger::~Logger(void)
@@ -75,6 +81,8 @@ namespace RTC
   void Logger::setDateFormat(const char* format)
   {
     m_dateFormat = std::string(format);
+    m_msEnable = coil::replaceString(m_dateFormat, "%Q", "#m#");
+    m_usEnable = coil::replaceString(m_dateFormat, "%q", "#u#");
   }
 
   /*!
@@ -112,15 +120,32 @@ namespace RTC
   {
     const int maxsize = 256;
     char buf[maxsize];
+    coil::TimeValue tm(coil::gettimeofday());
 
     time_t timer;
     struct tm* date;
-      
-    timer = time(NULL);
-    date = localtime(&timer);
-    strftime(buf, sizeof(buf), m_dateFormat.c_str(), date);
 
-    return std::string(buf);
+    timer = tm.sec();
+    date = gmtime(&timer);
+      
+    strftime(buf, sizeof(buf), m_dateFormat.c_str(), date);
+    std::string fmt(buf);
+
+    if (m_msEnable > 0)
+      {
+        char msec[4];
+        snprintf(msec, 4, "%03d", (int)(tm.usec() / 1000));
+        coil::replaceString(fmt, "#m#", msec);
+      }
+    if (m_usEnable > 0)
+      {
+        char usec[4];
+        snprintf(usec, 4, "%03d",
+                 (int)(tm.usec() - ((tm.usec() / 1000) * 1000)));
+        coil::replaceString(fmt, "#u#", usec);
+      }
+
+    return fmt;
   }
 
   /*!
