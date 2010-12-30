@@ -363,8 +363,8 @@ namespace coil
    *
    * @endif
    */
-  void replaceString(std::string& str, const std::string from,
-                     const std::string to);
+  unsigned int replaceString(std::string& str, const std::string from,
+                             const std::string to);
   
   /*!
    * @if jp
