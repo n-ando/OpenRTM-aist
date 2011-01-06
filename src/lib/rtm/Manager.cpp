@@ -1058,7 +1058,8 @@ std::vector<coil::Properties> Manager::getLoadableModules()
 	// ORB initialization
 	m_pORB = CORBA::ORB_init(argc, argv);
 	// Get the RootPOA
-	CORBA::Object_var obj = m_pORB->resolve_initial_references("RootPOA");
+	CORBA::Object_var obj =
+          m_pORB->resolve_initial_references((char*)"RootPOA");
 	m_pPOA = PortableServer::POA::_narrow(obj);
 	if (CORBA::is_nil(m_pPOA))
 	  {
@@ -1222,7 +1223,9 @@ std::vector<coil::Properties> Manager::getLoadableModules()
 	catch (CORBA::SystemException& ex)
 	  {
 	    RTC_ERROR(("Exception cought during root POA destruction"));
+#ifndef ORB_IS_RTORB
 	    RTC_ERROR(("CORBA::SystemException(minor=%d)", ex.minor()));
+#endif // ORB_IS_RTORB
 	  }
 	catch (...)
 	  {
@@ -1243,7 +1246,9 @@ std::vector<coil::Properties> Manager::getLoadableModules()
 	catch (CORBA::SystemException& ex)
 	  {
 	    RTC_ERROR(("Exception caught during ORB shutdown"));
+#ifndef ORB_IS_RTORB
             RTC_ERROR(("CORBA::SystemException(minodor=%d)", ex.minor()));
+#endif // ORB_IS_RTORB
 	  }
 	catch (...)
 	  {
@@ -1378,7 +1383,7 @@ std::vector<coil::Properties> Manager::getLoadableModules()
       {
         return true;
       }
-    m_mgrservant = new RTM::ManagerServant();
+    m_mgrservant = new ::RTM::ManagerServant();
     coil::Properties& prop(m_config.getNode("manager"));
     std::vector<std::string> names(coil::split(prop["naming_formats"], ","));
 

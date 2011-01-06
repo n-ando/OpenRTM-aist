@@ -1924,7 +1924,11 @@ namespace RTC
      *
      * @endif
      */
+#ifndef ORB_IS_RTORB
     bool checkPorts(::RTC::PortServiceList& ports);
+#else // ORB_IS_RTORB
+    bool checkPorts(RTC_PortServiceList& ports);
+#endif // ORB_IS_RTORB
 
     /*!
      * @if jp

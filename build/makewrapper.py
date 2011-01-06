@@ -63,6 +63,11 @@ skel_cpp_temp = """// -*- C++ -*-
 #elif defined ORB_IS_ORBIT2
 #include "[skel_dir]/[basename]-cpp-skels.cc"
 #include "[skel_dir]/[basename]-cpp-stubs.cc"
+#elif defined ORB_IS_RTORB
+#include "[skel_dir]/[basename]-common.c"
+#include "[skel_dir]/[basename]-stubs.c"
+#include "[skel_dir]/[basename]-skels.c"
+#include "[skel_dir]/[basename]-skelimpl.c"
 #else
 #error "NO ORB defined"
 #endif
@@ -116,6 +121,8 @@ skel_h_temp = """// -*- C++ -*-
 #elif defined ORB_IS_ORBIT2
 #include "[skel_dir]/[basename]-cpp-stubs.h"
 #include "[skel_dir]/[basename]-cpp-skels.h"
+#elif defined ORB_IS_RTORB
+#include "[skel_dir]/[basename].h"
 #else
 #error "NO ORB defined"
 #endif
@@ -161,6 +168,8 @@ stub_cpp_temp = """// -*- C++ -*-
 #include "[skel_dir]/[basename].cc"
 #elif defined ORB_IS_ORBIT2
 #include "[skel_dir]/[basename]-cpp-stubs.cc"
+#elif defined ORB_IS_RTORB
+#include "[skel_dir]/[basename]-stubs.c"
 #else
 #error "NO ORB defined"
 #endif
@@ -211,6 +220,8 @@ stub_h_temp = """// -*- C++ -*-
 #include "[skel_dir]/[basename].h"
 #elif defined ORB_IS_ORBIT2
 #include "[skel_dir]/[basename]-cpp-stubs.h"
+#elif defined ORB_IS_RTORB
+#include "[skel_dir]/[basename].h"
 #else
 #error "NO ORB defined"
 #endif
@@ -222,7 +233,7 @@ class wrapper_data:
     def __init__(self, basename, dir_name):
         self.data = {}
         self.data["basename"] = basename
-        self.data["BASENAME"] = basename.upper()
+        self.data["BASENAME"] = re.sub("-", "_", basename.upper())
         self.data["idl_name"] = basename + ".idl"
         self.data["skel_dir"] = dir_name
         self.data["date"]     = time.ctime()

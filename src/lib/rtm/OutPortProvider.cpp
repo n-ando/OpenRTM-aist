@@ -53,8 +53,14 @@ namespace RTC
    */
   void OutPortProvider::publishInterfaceProfile(SDOPackage::NVList& prop)
   {
+#ifdef ORB_IS_RTORB
+    SDOPackage_NVList prop_ptr(*prop.cobj());
+    NVUtil::appendStringValue(prop_ptr, "dataport.interface_type",
+                              m_interfaceType.c_str());
+#else // ORB_IS_RTORB
     NVUtil::appendStringValue(prop, "dataport.interface_type",
-			      m_interfaceType.c_str());
+                             m_interfaceType.c_str());
+#endif // ORB_IS_RTORB
     NVUtil::append(prop, m_properties);
   }
   

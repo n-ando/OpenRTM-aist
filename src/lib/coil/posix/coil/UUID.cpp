@@ -99,7 +99,7 @@ namespace coil
   }
 #endif
 
-#if defined(COIL_OS_LINUX) || defined(COIL_OS_DARWIN)
+#if defined(COIL_OS_LINUX) || defined(COIL_OS_DARWIN) || defined(COIL_OS_CYGWIN)
 
   UUID_Generator::UUID_Generator(){}
   

@@ -362,7 +362,7 @@ namespace RTM
      *
      * @endif
      */
-    bool is_master();
+    ::CORBA::Boolean is_master();
 
     /*!
      * @if jp

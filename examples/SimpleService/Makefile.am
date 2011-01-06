@@ -25,14 +25,14 @@ WRAPPER_FLAGS = --include-dir="" --skel-suffix=Skel --stub-suffix=Stub
 .idlSkel.cpp:
 	echo $(PROVIDER_OBJ)
 	$(IDLC) $(IDLFLAGS) $<
-	PYTHONPATH=$(top_srcdir)/build:$(PYTHONPATH) \
-	PATH=$(top_srcdir)/utils/rtm-config:$(PATH)  \
+	PYTHONPATH="$(top_srcdir)/build:$(PYTHONPATH)" \
+	PATH="$(top_srcdir)/utils/rtm-config:$(PATH)"  \
 	$(WRAPPER) $(WRAPPER_FLAGS) --idl-file=$<
 
 .idlStub.cpp:
 	$(IDLC) $(IDLFLAGS) $<
-	PYTHONPATH=$(PYTHONPATH):$(top_srcdir)/build \
-	PATH=$(top_srcdir)/utils/rtm-config:$(PATH)  \
+	PYTHONPATH="$(PYTHONPATH):$(top_srcdir)/build" \
+	PATH="$(top_srcdir)/utils/rtm-config:$(PATH)"  \
 	$(WRAPPER) $(WRAPPER_FLAGS) --idl-file=$<
 
 #------------------------------------------------------------

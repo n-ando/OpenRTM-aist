@@ -96,9 +96,8 @@ namespace RTC
 
     try
       {
-        m_providers.push_back(CorbaProviderHolder(type_name,
-                                                  instance_name,
-                                                  &provider));
+        CorbaProviderHolder providerholder(type_name, instance_name, &provider);
+        m_providers.push_back(providerholder);
       }
     catch (...)
       {
@@ -225,7 +224,21 @@ namespace RTC
         ++it;
       }
 
+#ifdef ORB_IS_RTORB
+    {
+      CORBA::ULong len1(connector_profile.properties.length());
+      CORBA::ULong len2(properties.length());
+      CORBA::ULong len(len1 + len2);
+      connector_profile.properties.length(len);
+      
+      for (CORBA::ULong i = 0; i < len2; ++i)
+        {
+          connector_profile.properties[len1 + i] = properties[i];
+        }
+    }
+#else // ORB_IS_RTORB
     CORBA_SeqUtil::push_back_list(connector_profile.properties, properties);
+#endif
     
     RTC_DEBUG_STR((NVUtil::toString(properties)));                         
 

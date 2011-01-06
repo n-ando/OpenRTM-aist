@@ -359,7 +359,11 @@ namespace RTC
           }
         catch (CORBA::SystemException &e)
           {
+#ifndef ORB_IS_RTORB
             RTC_WARN(("Exception caught: minor code(%d).", e.minor()));;
+#else // ORB_IS_RTORB
+            RTC_WARN(("Exception caught"));
+#endif // ORB_IS_RTORB
             continue;
           }
         catch (...)
@@ -407,8 +411,21 @@ namespace RTC
       {
         (*m_onDisconnected)(prof);
       }
-   
+// Why RtORB does not use CORBA_SeqUtil?
+#ifndef ORB_IS_RTORB
     CORBA_SeqUtil::erase(m_profile.connector_profiles, index);
+#else // ORB_IS_RTORB
+    CORBA::ULong len(m_profile.connector_profiles.length());
+    if (index < (CORBA::Long)len)
+      {
+        for (CORBA::ULong i(index); i < len - 1; ++i)
+          {
+            m_profile.connector_profiles[i] = 
+              m_profile.connector_profiles[i + 1] ;
+          }
+        m_profile.connector_profiles._length=len-1;
+      }
+#endif // ORB_IS_RTORB
 
     return retval;
   }
@@ -636,7 +653,11 @@ namespace RTC
           }
         catch (CORBA::SystemException& e)
           {
+#ifndef ORB_IS_RTORB
             RTC_WARN(("Exception caught: minor code.", e.minor()));
+#else // ORB_IS_RTORB
+            RTC_WARN(("Exception caught"));
+#endif // ORB_IS_RTORB
             continue;
           } 
         catch (...)
@@ -845,6 +866,8 @@ namespace RTC
   {
     std::vector<std::string> connector_ids;
     {
+// Why RtORB copies ConnectorProfile?
+#ifndef ORB_IS_RTORB
       Guard guard(m_profile_mutex);
       ConnectorProfileList& clist(m_profile.connector_profiles);
 
@@ -857,6 +880,21 @@ namespace RTC
               RTC_WARN(("Dead connection: %s", id));
             }
         }
+#else // ORB_IS_RTORB
+      ConnectorProfileList* clist;
+      clist = new ConnectorProfileList(m_profile.connector_profiles);
+
+      for (CORBA::ULong i(0); i < clist->length(); ++i)
+        {
+          if (!checkPorts((*clist)[i].ports))
+            {
+              const char* id((*clist)[i].connector_id);
+              connector_ids.push_back(id);
+              RTC_WARN(("Dead connection: %s", id));
+            }
+        }
+      delete clist;
+#endif // ORB_IS_RTORB
     }
     std::vector<std::string>::iterator it, it_end;
 
@@ -874,7 +912,11 @@ namespace RTC
    * @brief Existence of ports
    * @endif
    */
+#ifndef ORB_IS_RTORB
   bool PortBase::checkPorts(::RTC::PortServiceList& ports)
+#else // ORB_IS_RTORB
+  bool PortBase::checkPorts(RTC_PortServiceList& ports)
+#endif // ORB_IS_RTORB
   {
     for (CORBA::ULong i(0), len(ports.length()); i < len; ++i)
       {

@@ -63,7 +63,7 @@ namespace coil
     addr.sin_addr.s_addr = **(unsigned int **)(hostent->h_addr_list);
     dest_addr = inet_ntoa(addr.sin_addr);
     
-#if defined(COIL_OS_FREEBSD) || defined(COIL_OS_DARWIN)
+#if defined(COIL_OS_FREEBSD) || defined(COIL_OS_DARWIN) || defined(COIL_OS_CYGWIN)
     std::string cmd("PATH=/bin:/sbin:/usr/bin:/usr/sbin "
                     "route get ");
     const char* match_str = "interface";
@@ -71,8 +71,8 @@ namespace coil
     size_t ifname_pos(1);
     cmd += dest_addr;
     cmd += " 2> /dev/null";
-#endif // COIL_OS_IS_FREEBSD
-#ifdef COIL_OS_LINUX    
+#endif // COIL_OS_IS_FREEBSD || COIL_OS_DARWIN || COIL_OS_CYGWIN
+#if defined(COIL_OS_LINUX)
     std::string cmd("PATH=/bin:/sbin:/usr/bin:/usr/sbin "
                     "ip route get ");
     const char* match_str = "dev ";
@@ -99,15 +99,15 @@ namespace coil
         line.erase(line.end() - 1);
         coil::vstring vs(coil::split(line, delimiter));
 
-#if defined(COIL_OS_FREEBSD) || defined(COIL_OS_DARWIN)
+#if defined(COIL_OS_FREEBSD) || defined(COIL_OS_DARWIN) || defined(COIL_OS_CYGWIN)
         if (vs.size() > ifname_pos)
           {
             dest_if = vs[ifname_pos];
             pclose(fp);
             return true;
           }
-#endif // COIL_OS_FREEBSD
-#ifdef COIL_OS_LINUX
+#endif // COIL_OS_FREEBSD || COIL_OS_DARWIN || COIL_OS_CYGWIN
+#if defined(COIL_OS_LINUX)
         for (int i(0); i < vs.size(); ++i)
           {
             if (vs[i] == "dev")
@@ -116,7 +116,7 @@ namespace coil
                 return true;
               }
           }
-#endif
+#endif // COIL_OS_LINUX
       } while (!feof(fp));
     pclose(fp);
     return false;

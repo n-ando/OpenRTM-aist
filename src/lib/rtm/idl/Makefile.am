@@ -16,6 +16,9 @@ AM_CPPFLAGS=-I$(top_srcdir)/src/lib -I$(top_srcdir)/src/lib/rtm
 AM_LDFLAGS=-L$(top_builddir)/src/lib/rtm -L$(top_builddir)/src/lib/rtm/idl
 
 # RTM idl sources
+if ORB_IS_RTORB
+IDL_SOURCES = OpenRTM-aist.idl
+else
 IDL_SOURCES =             \
 	SDOPackage.idl        \
 	RTC.idl               \
@@ -25,6 +28,7 @@ IDL_SOURCES =             \
 	DataPort.idl          \
 	ExtendedDataTypes.idl \
 	InterfaceDataTypes.idl
+endif
 
 SKEL_H   = $(IDL_SOURCES:.idl=Skel.h)
 SKEL_CPP = $(IDL_SOURCES:.idl=Skel.cpp)
@@ -64,6 +68,21 @@ else
 OIDLC = echo
 endif
 
+# RtORB cannot handle multiple IDL files
+# Unified IDL OpenRTM-aist.idl is compiled and linked.
+# Other skel/stub headers are provided as dummies.
+if ORB_IS_RTORB
+DUMMY_SKELS =                   \
+        SDOPackageSkel.h        \
+        RTCSkel.h               \
+        OpenRTMSkel.h           \
+        ManagerSkel.h           \
+        BasicDataTypeSkel.h     \
+        DataPortSkel.h          \
+        ExtendedDataTypesSkel.h \
+        InterfaceDataTypesSkel.h
+ORB_SRC = $(RTORB_SRC)
+endif
 
 TAO_SRC = \
 	$(IDL_SOURCES:.idl=S.h) \
@@ -109,6 +128,24 @@ ORBIT2_SRC = \
 	$(IDL_SOURCES:.idl=-cpp.cc) \
 	$(IDL_SOURCES:.idl=-cpp.h)
 
+RTORB_SRC = \
+	OpenRTM-aist.h          \
+	OpenRTM-aist-common.c   \
+	OpenRTM-aist-skelimpl.c \
+	OpenRTM-aist-skels.c    \
+	OpenRTM-aist-stubs.c
+
+# This IDL file is for only RtORB
+OpenRTM-aist.idl:
+	echo '// This IDL file is for only RtORB' > OpenRTM-aist.idl
+	echo '#include "BasicDataType.idl"' >> OpenRTM-aist.idl
+	echo '#include "ExtendedDataTypes.idl"' >> OpenRTM-aist.idl
+	echo '#include "RTC.idl"' >> OpenRTM-aist.idl
+	echo '#include "OpenRTM.idl"' >> OpenRTM-aist.idl
+	echo '#pragma ""' >> OpenRTM-aist.idl
+	echo '#include "Manager.idl"' >> OpenRTM-aist.idl
+	echo '#include "DataPort.idl"' >> OpenRTM-aist.idl
+	echo '#include "InterfaceDataTypes.idl"' >> OpenRTM-aist.idl
 
 idl-stamp: $(IDL_SOURCES)
 	@touch idl-stamp
@@ -126,6 +163,16 @@ $(ALL_SRC): idl-stamp
 		$(MAKE) $(AM_MAKEFLAGS) idl-stamp ; \
 	fi ;
 
+OpenRTM-aistSkel.cpp OpenRTM-aistStub.cpp: OpenRTM-aist.idl
+	@for f in $(IDL_SOURCES) ; do \
+		$(OIDLC) $$f ; \
+		$(IDLC) $(IDLFLAGS) $$f ; \
+		$(top_srcdir)/build/makewrapper.py $$f ; \
+	done ;
+	@for f in $(DUMMY_SKELS) ; do \
+		cp OpenRTM-aistSkel.h $$f ; \
+	done
+
 
 # Install directory of headers and idl files
 rtmheaderdir = $(prefix)/include/rtm
@@ -134,16 +181,21 @@ rtmskeldir =   $(rtmheaderdir)/idl
 
 idl_DATA = $(IDL_SOURCES)
 
-nodist_rtmskel_HEADERS = $(ALL_SRC)
+nodist_rtmskel_HEADERS = $(ALL_SRC) 
 
 #------------------------------------------------------------
 # Intermediate library : libRTCSkel.a
 noinst_LTLIBRARIES = libRTCSkel.la libRTCStub.la
 
+if ORB_IS_RTORB
+nodist_libRTCSkel_la_SOURCES = OpenRTM-aistSkel.cpp
+nodist_libRTCStub_la_SOURCES = OpenRTM-aistStub.cpp
+else
 nodist_libRTCSkel_la_SOURCES = $(SKEL_CPP)
-libRTCSkel_la_LIBADD = $(LIBS)
-
 nodist_libRTCStub_la_SOURCES = $(STUB_CPP)
+endif
+
+libRTCSkel_la_LIBADD = $(LIBS)
 libRTCStub_la_LIBADD = $(LIBS)
 #
 #------------------------------------------------------------
@@ -199,7 +251,7 @@ dist-hook: lst vcproj wxs
 
 # Cleanup
 clean-local:
-	rm -f $(ALL_SRC) *~ *.core *.lst Makefile.old
+	rm -f $(ALL_SRC) *~ *.core *.lst Makefile.old *.h *.c
 	rm -f idl-stamp
 
 # Extra sources included distribution

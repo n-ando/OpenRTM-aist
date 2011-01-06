@@ -93,6 +93,9 @@ namespace SDOPackage
      *
      * @endif
      */
+#ifdef ORB_IS_RTORB
+    Organization_impl(RTC::RTObject_ptr sdo);
+#endif // ORB_IS_RTROB
     Organization_impl(SDOSystemElement_ptr sdo);
     
     /*!

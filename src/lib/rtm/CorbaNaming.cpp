@@ -119,7 +119,11 @@ namespace RTC
       }
     catch (CannotProceed& e)
       {
-	force ? bindRecursive(e.cxt, e.rest_of_name, obj) : throw e;
+#ifndef ORB_IS_RTORB
+        force ? bindRecursive(e.cxt, e.rest_of_name, obj) : throw e;
+#else // ORB_IS_RTORB
+        force ? bindRecursive(e.cxt(), e.rest_of_name(), obj) : throw e;
+#endif // ORB_IS_RTORB
       }
   }
   
@@ -193,7 +197,11 @@ namespace RTC
       }
     catch (CannotProceed& e)
       {
-	force ? rebindRecursive(e.cxt, e.rest_of_name, obj) : throw e;
+#ifndef ORB_IS_RTORB
+        force ? rebindRecursive(e.cxt, e.rest_of_name, obj) : throw e;
+#else // ORB_IS_RTORB
+        force ? rebindRecursive(e.cxt(), e.rest_of_name(), obj) : throw e;
+#endif // ORB_IS_RTORB
       }
   }
   
@@ -436,7 +444,12 @@ namespace RTC
       }
     catch (CannotProceed& e)
       {
-	force ? bindRecursive(e.cxt, e.rest_of_name, newContext()) : throw e;
+#ifndef ORB_IS_RTORB
+        force ? bindRecursive(e.cxt, e.rest_of_name, newContext()) : throw e;
+#else // ORB_IS_RTORB
+        force ? 
+          bindRecursive(e.cxt(), e.rest_of_name(), newContext()) : throw e;
+#endif // ORB_IS_RTORB
       }
     return CosNaming::NamingContext::_nil();
   }
@@ -482,7 +495,13 @@ namespace RTC
     CosNaming::BindingIterator_var bi;
     CORBA::Boolean cont(true);
     
-    context->list(m_blLength, bl, bi);
+#ifndef ORB_IS_RTORB
+    context->list(m_blLength, bl.out(), bi.out());
+#else // ORB_IS_RTORB
+    //    context->list(m_blLength, bl, bi);
+    context->list(m_blLength, (CosNaming::BindingList_out)bl,
+                  (CosNaming::BindingIterator_ptr)bi);
+#endif // ORB_IS_RTORB
     
     while (cont)
       {
@@ -537,11 +556,17 @@ namespace RTC
    * @endif
    */
   void CorbaNaming::list(CosNaming::NamingContext_ptr name_cxt,
-			 unsigned long how_many,
+			 CORBA::ULong how_many,
 			 CosNaming::BindingList_var& bl,
 			 CosNaming::BindingIterator_var& bi)
   {
-    name_cxt->list(how_many, bl, bi);
+#ifndef ORB_IS_RTORB
+    name_cxt->list(how_many, bl.out(), bi.out());
+#else // ORB_IS_RTORB
+    name_cxt->list(how_many, (CosNaming::BindingList_out)bl,
+                   (CosNaming::BindingIterator_ptr)bi);
+#endif // ORB_IS_RTORB
+
   }
   
   /*!
@@ -606,7 +631,11 @@ namespace RTC
 	else
 	  {
 	    name[i].id   = CORBA::string_dup(name_comps[i].c_str());
+#ifndef ORB_IS_RTORB
 	    name[i].kind = "";
+#else // ORB_IS_RTORB
+	    name[i].kind = (char*)"";
+#endif // ORB_IS_RTORB
 	  }
       }
     return name;
@@ -766,8 +795,8 @@ namespace RTC
    * @endif
    */
   CosNaming::Name CorbaNaming::subName(const CosNaming::Name& name,
-				       long begin,
-				       long end)
+				       CORBA::Long begin,
+				       CORBA::Long end)
   {
     if (end < 0) end = name.length() - 1;
     
@@ -802,7 +831,7 @@ namespace RTC
    */
   void CorbaNaming::nameToString(const CosNaming::Name& name,
 				 char* string_name,
-				 unsigned long slen)
+				 CORBA::ULong slen)
   {
     char* s = string_name;
     for (CORBA::ULong i = 0; i < name.length(); ++i)

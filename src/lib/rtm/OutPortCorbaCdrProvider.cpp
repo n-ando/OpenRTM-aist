@@ -44,9 +44,15 @@ namespace RTC
     // set outPort's reference
     CORBA::ORB_ptr orb = ::RTC::Manager::instance().getORB();
     CORBA::String_var ior = orb->object_to_string(m_objref.in());
+#ifndef ORB_IS_RTORB
     CORBA_SeqUtil::
       push_back(m_properties,
                 NVUtil::newNV("dataport.corba_cdr.outport_ior", ior));
+#else // ORB_IS_RTORB
+    CORBA_SeqUtil::
+      push_back(m_properties,
+                NVUtil::newNV("dataport.corba_cdr.outport_ior", ior.in()));
+#endif // ORB_IS_RTORB
     CORBA_SeqUtil::
       push_back(m_properties,
                 NVUtil::newNV("dataport.corba_cdr.outport_ref", m_objref));
@@ -164,8 +170,13 @@ namespace RTC
 	  RTC_ERROR(("buffer is empty."));
 	  return ::OpenRTM::BUFFER_EMPTY;
 	}
+#ifndef ORB_IS_RTORB
         data->length(len);
         cdr.get_octet_array(&((*data)[0]), len);
+#else
+        data->length(len);
+        cdr.get_octet_array((char *)&((*data)[0]), (int)len);
+#endif // ORB_IS_RTORB
       }
 
     return convertReturn(ret, cdr);

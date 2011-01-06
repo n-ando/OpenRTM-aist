@@ -60,6 +60,8 @@ skel_h = """// -*- C++ -*-
 #elif defined ORB_IS_ORBIT2
 #  include "[include_dir]/[basename]-cpp-stubs.h"
 #  include "[include_dir]/[basename]-cpp-skels.h"
+#elif defined ORB_IS_RTORB
+#  include "[include_dir][basename].h"
 #else
 #  error "NO ORB defined"
 #endif
@@ -99,6 +101,11 @@ skel_cpp = """// -*- C++ -*-
 #elif defined ORB_IS_ORBIT2
 #  include "[include_dir][basename]-cpp-stubs.cc"
 #  include "[include_dir][basename]-cpp-skels.cc"
+#elif defined ORB_IS_RTORB
+#  include "[include_dir][basename]-common.c"
+#  include "[include_dir][basename]-stubs.c"
+#  include "[include_dir][basename]-skels.c"
+#  include "[include_dir][basename]-skelimpl.c"
 #else
 #  error "NO ORB defined"
 #endif
@@ -142,6 +149,8 @@ stub_h = """// -*- C++ -*-
 #  include "[include_dir][basename].h"
 #elif defined ORB_IS_ORBIT2
 #  include "[include_dir][basename]-cpp-stubs.h"
+#elif defined ORB_IS_RTORB
+#  include "[include_dir][basename].h"
 #else
 #  error "NO ORB defined"
 #endif
@@ -177,6 +186,9 @@ stub_cpp = """// -*- C++ -*-
 #  include "[include_dir][basename].cc"
 #elif defined ORB_IS_ORBIT2
 #  include "[include_dir][basename]-cpp-stubs.cc"
+#elif defined ORB_IS_RTORB
+#  include "[include_dir][basename]-common.c"
+#  include "[include_dir][basename]-stubs.c"
 #else
 #  error "NO ORB defined"
 #endif

@@ -120,7 +120,11 @@ module SDOPackage
   struct Parameter
   {
     string         name;
+#ifndef ORBIT2_IDL
     TypeCode       type;
+#else
+    TypeCode       type;
+#endif
     AllowedValues  allowed_values;
   };
 

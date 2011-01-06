@@ -159,6 +159,14 @@ case $system in
 	AC_DEFINE([COIL_PLATFORM], [POSIX], [Platform is POSIX])
 	COIL_PLATFORM=posix
 	;;	
+[CYGWIN*)]
+	AC_DEFINE([COIL_OS_CYGWIN], [TRUE], [OS is Cygwin])
+	AC_DEFINE([COIL_PLATFORM], [POSIX], [Platform is POSIX])
+	COIL_PLATFORM=posix
+	CPPFLAGS="-DCygwin $CPPFLAGS"
+	CXXFLAGS="-DCygwin $CXXFLAGS"
+	LDFLAGS="-no-undefined $LDFLAGS -luuid -ldl"
+	;;	
 *)
 	echo "Unkonown system"
 	;;

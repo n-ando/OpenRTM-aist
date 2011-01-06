@@ -24,6 +24,14 @@
 #include <vector>
 #include <sstream>
 
+// Cygwin's gcc does not provide wstring type
+#if defined(Cygwin) && ( __GNUC__ < 4 )
+namespace std
+{
+  typedef basic_string<wchar_t> wstring;
+}
+#endif
+
 namespace coil
 {
   typedef std::vector<std::string> vstring;

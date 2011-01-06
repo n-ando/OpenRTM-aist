@@ -219,7 +219,7 @@ int main (int argc, char** argv)
 
   // connect ports
   ConnectorProfile prof;
-  prof.connector_id = "";
+  prof.connector_id = (char*)"";
   prof.name = CORBA::string_dup("connector0");
   prof.ports.length(2);
   prof.ports[0] = pin[(CORBA::ULong)0];
@@ -267,9 +267,13 @@ int main (int argc, char** argv)
 
   ReturnCode_t ret;
   if (connect_origin == "in")
-    ret = pin[(CORBA::ULong)0]->connect(prof);
+    {
+      ret = pin[(CORBA::ULong)0]->connect(prof);
+    }
   else
-    ret = pout[(CORBA::ULong)0]->connect(prof);
+    {
+      ret = pout[(CORBA::ULong)0]->connect(prof);
+    }
 
   assert(ret == RTC::RTC_OK);
 

@@ -417,7 +417,12 @@ namespace CORBA_SeqUtil
 
     for (CORBA::ULong i(0), len(objlist.length()); i < len; ++i)
       {
+#ifndef ORB_IS_RTORB
         CORBA::String_var str_var = orb->object_to_string(objlist[i].in());
+#else
+        CORBA_Object obj = (objlist.cobj())->_buffer[i];
+        CORBA::String_var str_var = orb->object_to_string2(obj);
+#endif
         iorlist.push_back(str_var.in());
       }
     return iorlist;
