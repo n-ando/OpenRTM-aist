@@ -89,7 +89,12 @@ namespace SDOPackage
       {
         const SDO_var sdo(sdo_list[i]);
         ::OpenRTM::DataFlowComponent_var dfc;
+#ifndef ORB_IS_RTORB
         if (!sdoToDFC(sdo.in(), dfc.out())) { continue; }
+#else // ORB_IS_RTORB
+        ::OpenRTM::DataFlowComponent_ptr dfc_ptr(dfc.object());
+        if (!sdoToDFC(sdo.in(), dfc_ptr)) { continue; }
+#endif // ORB_IS_RTORB
 
         Member member(dfc.in());
         stopOwnedEC(member);
@@ -123,9 +128,18 @@ namespace SDOPackage
 
     for (::CORBA::ULong i(0), len(sdo_list.length()); i < len; ++i)
       {
+#ifndef ORB_IS_RTORB
         const SDO_var sdo  = sdo_list[i];
         ::OpenRTM::DataFlowComponent_var dfc;
 	if (!sdoToDFC(sdo.in(), dfc.out())) { continue; }
+#else // ORB_IS_RTORB
+        const SDO_var sdo  = sdo_list[i].object();
+
+        ::OpenRTM::DataFlowComponent_var dfc;
+        ::OpenRTM::DataFlowComponent_ptr dfc_ptr(dfc);
+
+	if (!sdoToDFC(sdo.in(), dfc_ptr)) { continue; }
+#endif // ORB_IS_RTORB
 
 	Member member(dfc.in());
 
@@ -325,8 +339,14 @@ namespace SDOPackage
         SDOList_var sdos = orglist[i]->get_members();
         for (CORBA::ULong j(0); j < sdos->length(); ++j)
           {
+#ifndef ORB_IS_RTORB
             ::OpenRTM::DataFlowComponent_var dfc;
             if (!sdoToDFC(sdos[j].in(), dfc.out())) { continue; }
+#else // ORB_IS_RTORB
+            ::OpenRTM::DataFlowComponent_var dfc;
+            ::OpenRTM::DataFlowComponent_ptr dfc_ptr(dfc);
+            if (!sdoToDFC(sdos[j].in(), dfc_ptr)) { continue; }
+#endif // ORB_IS_RTORB
             m_ec->add_component(dfc.in());
           }
       }
@@ -361,8 +381,14 @@ namespace SDOPackage
         SDOList_var sdos = orglist[i]->get_members();
         for (CORBA::ULong j(0); j < sdos->length(); ++j)
           {
+#ifndef ORB_IS_RTORB
             ::OpenRTM::DataFlowComponent_var dfc;
             if (!sdoToDFC(sdos[j].in(), dfc.out())) { continue; }
+#else // ORB_IS_RTORB
+            ::OpenRTM::DataFlowComponent_var dfc;
+            ::OpenRTM::DataFlowComponent_ptr dfc_ptr(dfc);
+            if (!sdoToDFC(sdos[j].in(), dfc_ptr)) { continue; }
+#endif // ORB_IS_RTORB
             m_ec->remove_component(dfc.in());
           }
       }
@@ -383,7 +409,11 @@ namespace SDOPackage
     if (portlist.size() == 0) { return; }
 
     std::string comp_name(member.profile_->instance_name);
+#ifndef ORB_IS_RTORB
     ::RTC::PortProfileList& plist(member.profile_->port_profiles);
+#else // ORB_IS_RTORB
+    ::RTC::PortProfileList plist(member.profile_->port_profiles);
+#endif // ORB_IS_RTORB
     
     // port delegation
     for (::CORBA::ULong i(0), len(plist.length()); i < len; ++i)
@@ -429,7 +459,11 @@ namespace SDOPackage
     if (portlist.size() == 0) { return; }
 
     std::string comp_name(member.profile_->instance_name);
+#ifndef ORB_IS_RTORB
     ::RTC::PortProfileList& plist(member.profile_->port_profiles);
+#else // ORB_IS_RTORB
+    ::RTC::PortProfileList plist(member.profile_->port_profiles);
+#endif // ORB_IS_RTORB
 
     // port delegation
     for (::CORBA::ULong i(0), len(plist.length()); i < len; ++i)
@@ -628,10 +662,17 @@ namespace RTC
         }
 
         ::SDOPackage::SDO_var sdo;
+#ifndef ORB_IS_RTORB
         sdo = ::SDOPackage::SDO::_duplicate(rtc->getObjRef());
         if (::CORBA::is_nil(sdo)) continue;
 
         ::CORBA_SeqUtil::push_back(sdos, sdo);
+#else // ORB_IS_RTORB
+        sdo = ::SDOPackage::SDO::_duplicate((rtc->getObjRef()).in());
+        if (::CORBA::is_nil(sdo)) continue;
+
+        ::CORBA_SeqUtil::push_back(sdos, ::SDOPackage::SDO_ptr(sdo));
+#endif // ORB_IS_RTORB
       }
     
     try

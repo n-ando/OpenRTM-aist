@@ -863,12 +863,22 @@ namespace RTC
         RTC_TRACE(("provider created"));
         provider->init(prop.getNode("provider"));
 
+#ifndef ORB_IS_RTORB
         if (!provider->publishInterface(cprof.properties))
           {
             RTC_ERROR(("publishing interface information error"));
             OutPortProviderFactory::instance().deleteObject(provider);
             return 0;
           }
+#else // ORB_IS_RTORB
+        ::SDOPackage::NVList_ptr prop_ref(cprof.properties);
+        if (!provider->publishInterface(*prop_ref))
+          {
+            RTC_ERROR(("publishing interface information error"));
+            OutPortProviderFactory::instance().deleteObject(provider);
+            return 0;
+          }
+#endif // ORB_IS_RTORB
         return provider;
       }
 
@@ -933,10 +943,19 @@ namespace RTC
                                coil::Properties& prop,
                                InPortConsumer* consumer)
   {
+#ifndef ORB_IS_RTORB
     ConnectorInfo profile(cprof.name,
                           cprof.connector_id,
                           CORBA_SeqUtil::refToVstring(cprof.ports),
                           prop); 
+#else // ORB_IS_RTORB
+    ConnectorInfo profile(cprof.name,
+                          cprof.connector_id,
+                          CORBA_SeqUtil::
+                          refToVstring(RTC::PortServiceList(cprof.ports)),
+                          prop); 
+#endif // ORB_IS_RTORB
+
     OutPortConnector* connector(0);
     try
       {
@@ -978,10 +997,19 @@ namespace RTC
                                OutPortProvider* provider)
   {
     RTC_VERBOSE(("createConnector()"));
+#ifndef ORB_IS_RTORB
     ConnectorInfo profile(cprof.name,
                           cprof.connector_id,
                           CORBA_SeqUtil::refToVstring(cprof.ports),
                           prop); 
+#else // ORB_IS_RTORB
+    ConnectorInfo profile(cprof.name,
+                          cprof.connector_id,
+                          CORBA_SeqUtil::
+                          refToVstring(RTC::PortServiceList(cprof.ports)),
+                          prop); 
+#endif // ORB_IS_RTORB
+
     OutPortConnector* connector(0);
     try
       {

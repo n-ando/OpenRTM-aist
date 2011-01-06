@@ -104,7 +104,11 @@ namespace NVUtil
    * @brief Copy the properties to NVList
    * @endif
    */
+#ifndef ORB_IS_RTORB
   void copyFromProperties(SDOPackage::NVList& nv, const coil::Properties& prop)
+#else // ORB_IS_RTORB
+    void copyFromProperties(SDOPackage_NVList& nv, const coil::Properties& prop)
+#endif // ORB_IS_RTORB
   {
     std::vector<std::string> keys;
     keys = prop.propertyNames();
@@ -113,7 +117,12 @@ namespace NVUtil
     
     for (CORBA::ULong i = 0; i < len; ++i)
       {
-	nv[i].name = CORBA::string_dup(keys[i].c_str());
+// Why RtORB does not copy string to Properties.
+#ifndef ORB_IS_RTORB
+        nv[i].name = CORBA::string_dup(keys[i].c_str());
+#else // ORB_IS_RTORB
+        nv[i].name = (char *)keys[i].c_str();
+#endif // ORB_IS_RTORB
 	nv[i].value <<= prop[keys[i]].c_str();
       }
   }
@@ -300,8 +309,13 @@ namespace NVUtil
    * @brief Append the specified string to element of NVList
    * @endif
    */
+#ifndef ORB_IS_RTORB
   bool appendStringValue(SDOPackage::NVList& nv, const char* name,
-			 const char* value)
+                         const char* value)
+#else // ORB_IS_RTORB
+  bool appendStringValue(SDOPackage_NVList& nv, const char* name,
+                         const char* value)
+#endif // ORB_IS_RTORB
   {
     //    if (!isString(nv, name)) return false;
     

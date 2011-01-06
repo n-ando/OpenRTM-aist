@@ -1225,6 +1225,7 @@ namespace RTC
           m_servant(servant),
           m_ior()
       {  
+#ifndef ORB_IS_RTORB
         m_oid = Manager::instance().getPOA()->servant_to_id(m_servant);
         try
           {
@@ -1241,6 +1242,15 @@ namespace RTC
         CORBA::String_var ior_var = orb->object_to_string(obj);
         m_ior = ior_var;
         deactivate();
+#else // ORB_IS_RTORB
+        // why RtORB does not activate object by __this()
+        // and does not deactivate at the end of ctor?
+        CORBA::Object_var obj;
+        obj = CORBA::Object_var(m_servant->__this());
+        CORBA::ORB_ptr orb = Manager::instance().getORB();
+        CORBA::String_var ior_var = orb->object_to_string(obj);
+        m_ior = ior_var;
+#endif // ORB_IS_RTORB
       }
       virtual ~CorbaProviderHolder()
       {

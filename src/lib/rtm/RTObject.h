@@ -5,8 +5,7 @@
  * @date $Date: 2008-01-14 07:57:18 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
- * Copyright (C) 2006-2008
- *     Task-intelligence Research Group,
+ * Copyright (C) 2006-2010
  *     Intelligent Systems Research Institute,
  *     National Institute of
  *         Advanced Industrial Science and Technology (AIST), Japan

@@ -100,8 +100,9 @@ AC_ARG_WITH(orbix,            [  --with-orbix=dir                Find Orbix inst
 AC_ARG_WITH(orbacus,          [  --with-orbacus=dir              Find ORBacus installation below dir])
 AC_ARG_WITH(tao,              [  --with-tao=dir                  Find TAO installation below dir])
 AC_ARG_WITH(omniorb,          [  --with-omniorb=dir              Find omniORB installation below dir])
-AC_ARG_WITH(omniorb,          [  --with-orbit2=dir               Find ORBit2 installation below dir])
+AC_ARG_WITH(orbit2,           [  --with-orbit2=dir               Find ORBit2 installation below dir])
 AC_ARG_WITH(orbexpress,       [  --with-orbexpress=dir           Find ORBexpress installation below dir])
+AC_ARG_WITH(rtorb,            [  --with-rtorb=dir                Find RtORB installation below dir])
 AC_ARG_WITH(generic-orb,      [  --with-generic-orb              Use other CORBA 2.3 ORB])
 AC_ARG_WITH(generic-orb-lib,  [  --with-generic-orb-lib	=libs    ORB libraries (-l...)])
 
@@ -172,6 +173,13 @@ case $system in
 	AC_DEFINE([RTM_OS_QNX], [TRUE], [OS is QNX])
 	os="qnx"
 	;;	
+[CYGWIN*)]
+	AC_DEFINE([RTM_OS_CYGWIN], [TRUE], [OS is Cygwin])
+	os="cygwin"
+	CPPFLAGS="-DCygwin $CPPFLAGS"
+	CXXFLAGS="-DCygwin $CXXFLAGS"
+	LDFLAGS="-no-undefined $LDFLAGS -luuid -ldl"
+	;;
 *)
 	echo "Unkonown system"
 	;;
@@ -428,6 +436,9 @@ if test "x$with_orbit2" != "x" ; then
 fi
 if test "x$with_orbexpress" != "x" ; then
 	orb_to_use=ORBexpress
+fi
+if test "x$with_rtorb" != "x" ; then
+   	orb_to_use=RtORB
 fi
 if test "x$orb_to_use" = "x" ; then
 	orb_to_use=omniORB
@@ -1172,6 +1183,141 @@ dnl ------------------------------------------------------------
 dnl end of ORBexpres
 dnl ------------------------------------------------------------
 
+dnl ============================================================
+dnl RtORB setup
+dnl
+dnl 1. check RtORB/corba.hh for RtORB
+dnl 2. check RtORB library "libRtORB.so and libRtORB_cpp.so"
+dnl 3. check RtORB idl compiler "rtorb-idl"
+dnl 4. set IDL compile options, CPPFLAGS, LDFLAGS, LIBS etc...
+dnl ============================================================
+have_rtorb=no
+
+if test "x$orb_to_use" = "xRtORB" ; then
+	dnl ------------------------------------------------------------
+	dnl  find ORBit2's orbit2-config script and check version
+	dnl ------------------------------------------------------------
+	AC_MSG_CHECKING(for RtORB/corba.hh)
+	FP_FIND_FILE(RtORB/corba.hh,
+			$with_rtorb/include $more_incs $base_incs $base_dirs,
+			include cxx/include)
+	if test "x$RtORB_corba_hh_dir" = "x" ; then
+		AC_MSG_RESULT(not found)
+		AC_MSG_ERROR(use --with-rtorb to locate RtORB)
+	else
+		AC_MSG_RESULT(found in $RtORB_corba_hh_dir)
+		have_rtorb=yes
+	fi
+fi
+	
+if test "x$have_rtorb" = "xyes" ; then
+	dnl ------------------------------------------------------------
+	dnl Find indent
+	dnl ------------------------------------------------------------
+	AC_MSG_CHECKING(for indent)
+	FP_FIND_FILE(indent,$with_rtorb/bin $base_bins $base_dirs,bin)
+	if test "x$indent" = "x" ; then
+		AC_MSG_RESULT(not found. cat is used instead of indent.)
+		rtorb_indent="cat"
+	else
+		AC_MSG_RESULT($indent)
+		rtorb_indent="$indent"
+	fi
+
+	dnl ------------------------------------------------------------
+	dnl  Find libRtORB.so
+	dnl ------------------------------------------------------------
+	AC_MSG_CHECKING(for libRtORB.so)
+	if test "x$os" = "xcygwin" ; then
+		FP_FIND_FILE(RtORB.dll,
+			$with_rtorb $more_libs $base_libs $base_dirs,lib cxx/lib)
+		if test "x$RtORB_dll_dir" = "x" ; then
+			AC_MSG_RESULT(not found)
+			AC_MSG_ERROR(use --with-rtorb=dir to locate <dir>/lib/RtORB.dll)
+		else
+			AC_MSG_RESULT(found in $RtORB_dll_dir)
+			dnl shared lib dir is unified to "$libRtORB_so_dir"
+			libRtORB_so_dir=$RtORB_dll_dir
+		fi
+	else
+		FP_FIND_FILE(libRtORB.so,
+			$with_rtorb/lib $more_libs $base_libs $base_dirs,
+			lib cxx/lib)
+		if test "x$libRtORB_so_dir" = "x" ; then
+			AC_MSG_RESULT(not found)
+			AC_MSG_ERROR(use --with-rtorb=dir to locate <dir>/lib/libRtORB.so)
+		else
+			AC_MSG_RESULT(found in $libRtORB_so_dir)
+		fi
+	fi
+
+	dnl ------------------------------------------------------------
+	dnl  Find libRtORB_cpp.so
+	dnl ------------------------------------------------------------
+	AC_MSG_CHECKING(for libRtORB_cpp.so)
+	if test "x$os" = "xcygwin" ; then
+		FP_FIND_FILE(RtORB_cpp.dll,
+			$with_rtorb/lib $more_libs $base_libs $base_dirs,
+			lib cxx/lib)
+		if test "x$RtORB_cpp_dll_dir" = "x" ; then
+			AC_MSG_RESULT(not found)
+			AC_MSG_ERROR(use --with-rtorb=dir to locate <dir>/lib/RtORB_cpp.dll)
+		else
+			AC_MSG_RESULT(found in $RtORB_cpp_dll_dir)
+			dnl shared lib dir is unified to "$libRtORB_cpp_so_dir"
+			libRtORB_cpp_so_dir=$RtORB_cpp_dll_dir
+		fi
+	else
+		FP_FIND_FILE(libRtORB_cpp.so,
+			$with_rtorb/lib $more_libs $base_libs $base_dirs,
+			lib cxx/lib)
+		if test "x$libRtORB_cpp_so_dir" = "x" ; then
+			AC_MSG_RESULT(not found)
+			AC_MSG_ERROR(use --with-rtorb=dir to locate <dir>/lib/libRtORB_cpp.so)
+		else
+			AC_MSG_RESULT(found in $libRtORB_cpp_so_dir)
+		fi
+	fi
+
+	dnl ------------------------------------------------------------
+	dnl  Find rtorb-idl
+	dnl ------------------------------------------------------------
+	AC_MSG_CHECKING(for rtorb-idl)
+	FP_FIND_FILE(rtorb-idl,$with_rtorb/bin $base_bins $base_dirs,bin)
+	if test "x$rtorb_idl" = "x" ; then
+		AC_MSG_RESULT(not found)
+		AC_MSG_ERROR(use --with-rtorb=dir to locate bin prefix. ex. <dir>/bin/rtorb-idl)
+	else
+		AC_MSG_RESULT(found. $rtorb_idl)
+	fi
+
+	dnl ------------------------------------------------------------
+	dnl  RtORB setup complete
+	dnl ------------------------------------------------------------
+	IDLC=$rtorb_idl	
+	IDL_FLAGS="--skeleton-impl --c-output-formatter=$rtorb_indent -DORBIT2_IDL -I."
+	COSNAMES=$with_rtorb/CosName/NameService
+	dnl  Compiler/Linker options
+	CPPFLAGS="$CPPFLAGS -DUSE_THREAD -I$RtORB_corba_hh_dir"
+	CXXFLAGS="$CXXFLAGS -DUSE_THREAD -I$RtORB_corba_hh_dir"
+	LDFLAGS="$LDFLAGS -L$libRtORB_cpp_so_dir -L$libRtORB_so_dir"
+
+	if test "x$os" = "xcygwin" ; then 
+		LIBS="$LIBS -lRtORB -lRtORB_cpp -lpthread"
+		LDSOLIBS="$LDSOLIBS -lRtORB -lRtORB_cpp -lpthread"
+	else
+		LIBS="$LIBS -lRtORB -lRtORB_cpp -lpthread"
+		LDSOLIBS="$LDSOLIBS -lRtORB -lRtORB_cpp -lpthread"
+	fi
+	AC_DEFINE([ORB_IS_RTORB], [TRUE], [ORB is RtORB])
+fi
+
+if test "x$orb_to_use" = "x" && test "x$have_rtorb" = "xyes" ; then
+	orb_to_use=RtORB
+fi
+
+dnl end of RtORB setup
+dnl------------------------------------------------------------
 
 dnl ------------------------------------------------------------
 dnl  ORB setup
@@ -1199,6 +1345,9 @@ ORBit2)
 ORBexpress)
         AC_MSG_RESULT([ORBexpress, version $orbexpress_version])
         ;;
+RtORB)
+        AC_MSG_RESULT([RtORB, version $rtorb_version])
+        ;;
 generic)
         AC_MSG_RESULT([generic ORB, unknown version])
         ORB_SOURCES="event-corba.cc"
@@ -1220,6 +1369,7 @@ AM_CONDITIONAL(ORB_IS_OMNIORB, test x$orb_to_use = xomniORB)
 AM_CONDITIONAL(ORB_IS_MICO, test x$orb_to_use = xMICO)
 AM_CONDITIONAL(ORB_IS_ORBIT2, test x$orb_to_use = xORBit2)
 AM_CONDITIONAL(ORB_IS_ORBEXPRESS, test x$orb_to_use = xORBexpress)
+AM_CONDITIONAL(ORB_IS_RTORB, test x$orb_to_use = xRtORB)
 
 
 dnl ------------------------------------------------------------

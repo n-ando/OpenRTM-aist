@@ -24,10 +24,13 @@
 #include <rtm/DataPortStatus.h>
 #include <rtm/CdrBufferBase.h>
 
+// Why RtORB does not allow the following foward declaration?
+#ifndef ORB_IS_RTORB
 namespace SDOPackage
 {
   class NVList;
 };
+#endif // ORB_IS_RTORB
 
 namespace coil
 {

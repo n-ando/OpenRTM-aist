@@ -640,7 +640,10 @@ namespace RTC
         if (id == (*it)->id())
           {
             // Connector's dtor must call disconnect()
+// RtORB's bug? This causes double delete and segmeentation fault.
+#ifndef ORB_IS_RTORB
             delete *it;
+#endif
             m_connectors.erase(it);
             RTC_TRACE(("delete connector: %s", id.c_str()));
             return;
@@ -818,12 +821,23 @@ namespace RTC
         RTC_DEBUG(("provider created"));
         provider->init(prop.getNode("provider"));
 
+#ifndef ORB_IS_RTORB
         if (!provider->publishInterface(cprof.properties))
           {
             RTC_ERROR(("publishing interface information error"));
             InPortProviderFactory::instance().deleteObject(provider);
             return 0;
           }
+#else // ORB_IS_RTORB
+        // RtORB's copy ctor's bug?
+        ::SDOPackage::NVList_ptr prop_ref(cprof.properties);
+        if (!provider->publishInterface(*prop_ref))
+          {
+            RTC_ERROR(("publishing interface information error"));
+            InPortProviderFactory::instance().deleteObject(provider);
+            return 0;
+          }
+#endif // ORB_IS_RTORB
         return provider;
       }
 
@@ -887,10 +901,19 @@ namespace RTC
   InPortBase::createConnector(ConnectorProfile& cprof, coil::Properties& prop,
                               InPortProvider* provider)
   {
+#ifndef ORB_IS_RTORB
     ConnectorInfo profile(cprof.name,
                           cprof.connector_id,
                           CORBA_SeqUtil::refToVstring(cprof.ports),
                           prop); 
+#else // ORB_IS_RTORB
+    ConnectorInfo profile(cprof.name,
+                          cprof.connector_id,
+                          CORBA_SeqUtil::
+                          refToVstring(RTC::PortServiceList(cprof.ports)),
+                          prop); 
+#endif // ORB_IS_RTORB
+
     InPortConnector* connector(0);
     try
       {
@@ -939,10 +962,19 @@ namespace RTC
                               coil::Properties& prop,
                               OutPortConsumer* consumer)
   {
+#ifndef ORB_IS_RTORB
     ConnectorInfo profile(cprof.name,
                           cprof.connector_id,
                           CORBA_SeqUtil::refToVstring(cprof.ports),
                           prop); 
+#else // ORB_IS_RTORB
+    ConnectorInfo profile(cprof.name,
+                          cprof.connector_id,
+                          CORBA_SeqUtil::
+                          refToVstring(RTC::PortServiceList(cprof.ports)),
+                          prop); 
+#endif // ORB_IS_RTORB
+
     InPortConnector* connector(0);
     try
       {

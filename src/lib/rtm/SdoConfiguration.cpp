@@ -80,8 +80,13 @@ namespace SDOPackage
   toConfigurationSet(SDOPackage::ConfigurationSet& conf,
 		     const coil::Properties& prop)
   {
+#ifndef ORB_IS_RTORB
     conf.description = CORBA::string_dup(prop["description"].c_str());
     conf.id = CORBA::string_dup(prop.getName());
+#else // ORB_IS_RTORB
+    conf.description = (char *)prop["description"].c_str();
+    conf.id = (char *)prop.getName();
+#endif // ORB_IS_RTORB
     NVUtil::copyFromProperties(conf.configuration_data, prop);
   }
   
@@ -407,11 +412,10 @@ namespace SDOPackage
       {
 	Guard guard(m_config_mutex);
 	
-	ConfigurationSetList_var config_sets;
-	config_sets = new ConfigurationSetList((CORBA::ULong)0);
-	
 	std::vector<coil::Properties*> cf(m_configsets.getConfigurationSets());
-	config_sets->length(cf.size());
+	ConfigurationSetList_var config_sets = 
+          new ConfigurationSetList((CORBA::ULong)cf.size());
+
 	for (CORBA::ULong i(0), len(cf.size()); i < len; ++i)
 	  {
 	    toConfigurationSet(config_sets[i], *(cf[i]));

@@ -56,8 +56,13 @@ namespace RTC
   {
     RTC_TRACE(("publishInterfaceProfile()"));
 
+#ifdef ORB_IS_RTORB
+    NVUtil::appendStringValue(*prop.cobj(), "dataport.interface_type",
+                             m_interfaceType.c_str());
+#else // ORB_IS_RTORB
     NVUtil::appendStringValue(prop, "dataport.interface_type",
-			      m_interfaceType.c_str());
+                              m_interfaceType.c_str());
+#endif // ORB_IS_RTORB
     NVUtil::append(prop, m_properties);
   }
   

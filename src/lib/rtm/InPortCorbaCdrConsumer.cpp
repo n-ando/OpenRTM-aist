@@ -71,8 +71,17 @@ namespace RTC
   {
     RTC_PARANOID(("put()"));
 
+#ifndef ORB_IS_RTORB
     ::OpenRTM::CdrData tmp(data.bufSize(), data.bufSize(),
                            static_cast<CORBA::Octet*>(data.bufPtr()), 0);
+#else // ORB_IS_RTORB
+    OpenRTM_CdrData *cdrdata_tmp = new OpenRTM_CdrData();
+    cdrdata_tmp->_buffer = 
+      (CORBA_octet *)RtORB_alloc(data.bufSize(), "InPortCorbaCdrComsumer::put");
+    memcpy(cdrdata_tmp->_buffer, data.bufPtr(), data.bufSize());
+    cdrdata_tmp->_length = cdrdata_tmp->_maximum= data.bufSize();
+    ::OpenRTM::CdrData tmp(cdrdata_tmp);
+#endif // ORB_IS_RTORB
     try
       {
         // return code conversion

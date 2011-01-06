@@ -12,7 +12,9 @@ COIL_COMMON_SRC =       \
 	TimeValue.cpp   \
 	TimeMeasure.cpp \
 	Timer.cpp       \
+	crc.cpp          \
 	stringutil.cpp
+
 COIL_COMMON_H   =       \
 	Allocator.h     \
 	Async.h         \
@@ -28,6 +30,7 @@ COIL_COMMON_H   =       \
 	Timer.h         \
 	Logger.h        \
 	Singleton.h     \
+	crc.h           \
 	Factory.h
 
 EXTRA_DIST =               \

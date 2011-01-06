@@ -32,6 +32,10 @@
 #include <orbsvcs/CosNamingC.h>
 #endif
 
+#ifdef ORB_IS_RTORB
+#include <RtORB/cdrStream.h>
+#endif // ORB_IS_RTORB
+
 #ifdef ORB_IS_OMNIORB
 
 #ifdef WIN32

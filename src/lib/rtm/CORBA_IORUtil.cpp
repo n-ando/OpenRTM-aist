@@ -31,6 +31,7 @@ namespace CORBA_IORUtil
   typedef _CORBA_Unbounded_Sequence_String StringUSequence;
 #endif
 
+#ifndef ORB_IS_RTORB
   // prototype of static functions 
   static void print_key(std::stringstream& s, OctetUSequence& key);
   
@@ -41,6 +42,7 @@ namespace CORBA_IORUtil
 
   static void print_tagged_components(std::stringstream& sstr,
                                       IOP::MultipleComponentProfile& comps);
+#endif // ORB_IS_RTORB
 
 
   /*!
@@ -52,6 +54,7 @@ namespace CORBA_IORUtil
    */
   bool toIOR(const char* iorstr, IOP::IOR& ior)
   {
+#ifndef ORB_IS_RTORB
     if (iorstr == 0) { return false; }
     size_t size = strlen(iorstr);
 
@@ -102,6 +105,10 @@ namespace CORBA_IORUtil
     ior.type_id = IOP::IOR::unmarshaltype_id(buf);
     ior.profiles <<= buf;
     return true;
+#else // ORB_IS_RTORB
+    // RtORB does not supports this function
+    return false;
+#endif // ORB_IS_RTORB
   }
 
   /*!
@@ -113,6 +120,7 @@ namespace CORBA_IORUtil
    */
   bool toString(IOP::IOR& ior, std::string& iorstr)
   {
+#ifndef ORB_IS_RTORB
     cdrMemoryStream buf(CORBA::ULong(0),CORBA::Boolean(1));
     buf.marshalBoolean(omni::myByteOrder);
     buf.marshalRawString(ior.type_id);
@@ -157,6 +165,10 @@ namespace CORBA_IORUtil
     iorstr = result;
     delete result;
     return true;
+#else // ORB_IS_RTORB
+    // RtORB does not this function.
+    return false;
+#endif // ORB_IS_RTORB
   }
 
   /*!
@@ -168,6 +180,7 @@ namespace CORBA_IORUtil
    */
   bool replaceEndpoint(std::string& iorstr, const std::string& endpoint)
   {
+#ifndef ORB_IS_RTORB
     try
       {
         IOP::IOR ior;
@@ -199,6 +212,7 @@ namespace CORBA_IORUtil
       {
         return false;
       }
+#endif // ORB_IS_RTORB
     return false;
   }
 
@@ -212,6 +226,7 @@ namespace CORBA_IORUtil
   std::string formatIORinfo(const char* iorstr)
   {
     std::stringstream retstr;
+#ifndef ORB_IS_RTORB
     IOP::IOR ior;
     toIOR(iorstr, ior);
 
@@ -266,10 +281,14 @@ namespace CORBA_IORUtil
                    << std::endl;
           }
       }
+#else // ORB_IS_RTORB
+    retstr << "RtORB does't support formatIORinfo() function." << std::endl;
+#endif // ORB_IS_RTORB
     return retstr.str();
   }
 
 
+#ifndef ORB_IS_RTORB
   //------------------------------------------------------------
   // static functions
 
@@ -407,4 +426,5 @@ namespace CORBA_IORUtil
           }
       }
   }
+#endif // ORB_IS_RTORB
 };

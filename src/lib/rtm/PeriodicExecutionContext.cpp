@@ -300,6 +300,8 @@ namespace RTC
     throw (CORBA::SystemException)
   {
     RTC_TRACE(("activate_component()"));
+// Why RtORB does not allow STL's find_if and iterator?
+#ifndef ORB_IS_RTORB
     CompItr it;
     it = std::find_if(m_comps.begin(), m_comps.end(),
 		      find_comp(comp));
@@ -312,6 +314,22 @@ namespace RTC
 
     it->_sm.m_sm.goTo(ACTIVE_STATE);
     return RTC::RTC_OK;
+#else // ORB_IS_RTORB
+    for (int i(0); i < (int)m_comps.size() ; ++i)
+      {
+        if(m_comps.at(i)._ref->_is_equivalent(comp))
+          {
+
+            if (!(m_comps.at(i)._sm.m_sm.isIn(INACTIVE_STATE)))
+              {
+                return RTC::PRECONDITION_NOT_MET;
+              }
+            m_comps.at(i)._sm.m_sm.goTo(ACTIVE_STATE);
+            return RTC::RTC_OK;
+          }
+      }
+    return RTC::BAD_PARAMETER;
+#endif // ORB_IS_RTORB
   }
   
   /*!
@@ -326,6 +344,8 @@ namespace RTC
     throw (CORBA::SystemException)
   {
     RTC_TRACE(("deactivate_component()"));
+// Why RtORB does not allow STL's find_if and iterator?
+#ifndef ORB_IS_RTORB
     CompItr it;
     it = std::find_if(m_comps.begin(), m_comps.end(),
 		      find_comp(comp));
@@ -337,6 +357,21 @@ namespace RTC
     
     it->_sm.m_sm.goTo(INACTIVE_STATE);
     return RTC::RTC_OK;
+#else // ORB_IS_RTORB
+    for (int i(0); i < (int)m_comps.size(); ++i)
+      {
+        if(m_comps.at(i)._ref->_is_equivalent(comp))
+          {
+            if (!(m_comps.at(i)._sm.m_sm.isIn(ACTIVE_STATE)))
+              {
+                return RTC::PRECONDITION_NOT_MET;
+              }
+            m_comps.at(i)._sm.m_sm.goTo(INACTIVE_STATE);
+            return RTC::RTC_OK;
+          }
+      }
+    return RTC::BAD_PARAMETER;
+#endif // ORB_IS_RTORB
   }
   
   /*!
@@ -376,6 +411,7 @@ namespace RTC
     throw (CORBA::SystemException)
   {
     RTC_TRACE(("get_component_state()"));
+#ifndef ORB_IS_RTORB
     CompItr it;
     it = std::find_if(m_comps.begin(), m_comps.end(), find_comp(comp));
 
@@ -385,6 +421,16 @@ namespace RTC
       }
     
     return it->_sm.m_sm.getState();
+#else // ORB_IS_RTORB
+    for (int i(0); i < (int)m_comps.size(); ++i)
+      {
+        if(m_comps.at(i)._ref->_is_equivalent(comp))
+          {
+            return m_comps.at(i)._sm.m_sm.getState();
+          }
+      }
+    return RTC::CREATED_STATE; 
+#endif // ORB_IS_RTORB
   }
   
   /*!
@@ -429,7 +475,7 @@ namespace RTC
 	ExecutionContextHandle_t id;
 	id = dfp->attach_context(m_ref);
 	m_comps.push_back(Comp(comp, dfp, id));
-        CORBA_SeqUtil::push_back(m_profile.participants, rtc);
+        CORBA_SeqUtil::push_back(m_profile.participants, rtc.in());
 	return RTC::RTC_OK;
       }
     catch (CORBA::Exception& e)

@@ -181,7 +181,11 @@ namespace RTM
                   {
                     ::RTM::ModuleProfileList_var sprof;
                     sprof = m_slaves[i]->get_loadable_modules();
+#ifndef ORB_IS_RTORB
                     CORBA_SeqUtil::push_back_list(cprof.inout(), sprof.in());
+#else // ORB_IS_RTORB
+                    CORBA_SeqUtil::push_back_list(cprof, sprof);
+#endif // ORB_IS_RTORB
                     continue; 
                   }
               }
@@ -231,7 +235,11 @@ namespace RTM
                   {
                     ::RTM::ModuleProfileList_var sprof;
                     sprof = m_slaves[i]->get_loaded_modules();
+#ifndef ORB_IS_RTORB
                     CORBA_SeqUtil::push_back_list(cprof.inout(), sprof.in());
+#else // ORB_IS_RTORB
+                    CORBA_SeqUtil::push_back_list(cprof, sprof);
+#endif // ORB_IS_RTORB
                     continue;
                   }
               }
@@ -281,7 +289,11 @@ namespace RTM
                   {
                     ::RTM::ModuleProfileList_var sprof;
                     sprof = m_slaves[i]->get_factory_profiles();
+#ifndef ORB_IS_RTORB
                     CORBA_SeqUtil::push_back_list(cprof.inout(), sprof.in());
+#else // ORB_IS_RTORB
+                    CORBA_SeqUtil::push_back_list(cprof, sprof);
+#endif // ORB_IS_RTORB
                     continue;
                   }
               }
@@ -450,7 +462,11 @@ namespace RTM
               {
                 ::RTC::RTCList_var srtcs;
                 srtcs = m_slaves[i]->get_components();
+#ifndef ORB_IS_RTORB
                 CORBA_SeqUtil::push_back_list(crtcs.inout(), srtcs.in());
+#else // ORB_IS_RTORB
+                CORBA_SeqUtil::push_back_list(srtcs, crtcs);
+#endif // ORB_IS_RTORB
                 continue;
               }
           }
@@ -496,7 +512,11 @@ namespace RTM
               {
                 ::RTC::ComponentProfileList_var sprofs;
                 sprofs = m_slaves[i]->get_component_profiles();
+#ifndef ORB_IS_RTORB
                 CORBA_SeqUtil::push_back_list(cprofs.inout(), sprofs.in());
+#else // ORB_IS_RTORB
+                CORBA_SeqUtil::push_back_list(cprofs, sprofs);
+#endif // ORB_IS_RTORB
                 continue;
               }
           }
@@ -537,8 +557,15 @@ namespace RTM
   RTM::NVList* ManagerServant::get_configuration()
   {
     RTC_TRACE(("get_configuration()"));
+#ifndef ORB_IS_RTORB
     ::RTC::NVList* nvlist = new ::RTC::NVList();
     NVUtil::copyFromProperties(*nvlist, m_mgr.getConfig());
+#else
+    ::RTC::NVList* nvlist;
+    RTC_NVList nvlist_in;
+    NVUtil::copyFromProperties(nvlist_in, m_mgr.getConfig());
+    nvlist = new ::RTC::NVList(nvlist_in);
+#endif
     return nvlist;
   }
   
@@ -738,14 +765,23 @@ namespace RTM
       {
         //Ppreparing INS POA
         CORBA::Object_var obj;
+#ifndef ORB_IS_RTORB
         obj = m_mgr.getORB()->resolve_initial_references("omniINSPOA");
+#else // ROB_IS_RTORB
+        obj = m_mgr.getORB()->resolve_initial_references((char*)"omniINSPOA");
+#endif // ORB_IS_RTORB
         PortableServer::POA_ptr poa = PortableServer::POA::_narrow(obj);
         poa->the_POAManager()->activate();
 
         // Create readable object ID
         coil::Properties config(m_mgr.getConfig());
         PortableServer::ObjectId_var id; 
+#ifndef ORB_IS_RTORB
         id = PortableServer::string_to_ObjectId(config["manager.name"].c_str());
+#else // ORB_IS_RTORB
+        id = PortableServer::
+          string_to_ObjectId((char *)config["manager.name"].c_str());
+#endif // ORB_IS_RTORB
 
         // Object activation
         poa->activate_object_with_id(id.in(), this);
@@ -776,7 +812,9 @@ namespace RTM
     try
       {
         coil::Properties config(m_mgr.getConfig());
-        std::string mgrloc("corbaloc:iiop:");
+        // Why RtORB does not allow corbaloc:iiop: ?
+        //        std::string mgrloc("corbaloc:iiop:");
+        std::string mgrloc("corbaloc::");
         mgrloc += host_port;
         mgrloc += "/" + config["manager.name"];
 
@@ -784,7 +822,19 @@ namespace RTM
 
         CORBA::Object_var mobj;
         mobj = m_mgr.getORB()->string_to_object(mgrloc.c_str());
+#ifndef ORB_IS_RTORB
         RTM::Manager_var mgr = ::RTM::Manager::_narrow(mobj);
+#else // ORB_IS_RTORB
+        RTM::Manager_var mgr;
+        if(!make_client_connection(mobj->impl()->connection))
+          {
+            return RTM::Manager_ptr();
+          }
+        else
+          {
+            mgr = ::RTM::Manager::_narrow(mobj);
+          }
+#endif // ORB_IS_RTORB
 
         CORBA::String_var ior;
         ior = m_mgr.getORB()->object_to_string(RTM::Manager::_duplicate(mgr));
@@ -796,7 +846,9 @@ namespace RTM
       }
     catch(CORBA::SystemException& e)
       {
+#ifndef ORB_IS_RTORB
         RTC_DEBUG(("CORBA SystemException cought (CORBA::%s)", e._name()));
+#endif // ORB_IS_RTORB
       }
     catch (...)
       {

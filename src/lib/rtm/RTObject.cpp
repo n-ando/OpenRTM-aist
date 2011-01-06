@@ -212,7 +212,7 @@ namespace RTC
   // former rtc_active_do()
   ReturnCode_t RTObject_impl::onExecute(RTC::UniqueId ec_id)
   {
-    RTC_TRACE(("onExecute(%d)", ec_id));
+    RTC_PARANOID(("onExecute(%d)", ec_id));
     return RTC::RTC_OK;
   }
   
@@ -272,7 +272,7 @@ namespace RTC
   // no corresponding operation exists in OpenRTm-aist-0.2.0
   ReturnCode_t RTObject_impl::onStateUpdate(RTC::UniqueId ec_id)
   {
-    RTC_TRACE(("onStateUpdate(%d)", ec_id));
+    RTC_PARANOID(("onStateUpdate(%d)", ec_id));
     return RTC::RTC_OK;
   }
   
@@ -493,11 +493,29 @@ namespace RTC
     throw (CORBA::SystemException)
   {
     RTC_TRACE(("get_owned_context()"));
+
+#ifndef ORB_IS_RTORB
     ExecutionContextList_var execlist;
     execlist = new ExecutionContextList();
     
     CORBA_SeqUtil::for_each(m_ecMine, ec_copy(execlist));
-    
+#else // ORB_IS_RTORB
+    ExecutionContextList_var execlist;
+    execlist = new ExecutionContextList();
+
+    int n = m_ecMine.length();
+    for(int i(0), j(0); i < n ; ++i)
+      {
+        RTC_ExecutionContext ec_mine = m_ecMine.cobj()->_buffer[i];
+
+        if (ec_mine)
+          {
+            execlist.length(j+1);
+            execlist->cobj()->_buffer[j] = CORBA_Object_dup(ec_mine);
+            ++j;
+          }
+      }
+#endif // ORB_IS_RTORB 
     return execlist._retn();
   }
 
@@ -672,6 +690,7 @@ namespace RTC
       {
 	ComponentProfile_var profile
 	  = new ComponentProfile();
+#ifndef ORB_IS_RTORB
         profile->instance_name = 
           CORBA::string_dup(m_properties["instance_name"].c_str());
         profile->type_name     = 
@@ -685,6 +704,16 @@ namespace RTC
         profile->category      = 
           CORBA::string_dup(m_properties["category"].c_str());
         profile->port_profiles = m_portAdmin.getPortProfileList();
+#else // ORB_IS_RTORB
+        profile->instance_name = (char *)m_properties["instance_name"].c_str();
+        profile->type_name     = (char *)m_properties["type_name"].c_str();
+        profile->description   = (char *)m_properties["description"].c_str();
+        profile->version       = (char *)m_properties["version"].c_str();
+        profile->vendor        = (char *)m_properties["vendor"].c_str();
+        profile->category      = (char *)m_properties["category"].c_str();
+        PortProfileList ppl    = m_portAdmin.getPortProfileList();
+        profile->port_profiles = ppl._retn();
+#endif // ORB_IS_RTORB
 	return profile._retn();
       }
     catch (...)
@@ -955,7 +984,7 @@ namespace RTC
   ReturnCode_t RTObject_impl::on_execute(UniqueId ec_id)
     throw (CORBA::SystemException)
   {
-    RTC_TRACE(("on_execute(%d)", ec_id));
+    RTC_PARANOID(("on_execute(%d)", ec_id));
     ReturnCode_t ret(RTC::RTC_ERROR);
     try
       {
@@ -983,7 +1012,7 @@ namespace RTC
   ReturnCode_t RTObject_impl::on_state_update(UniqueId ec_id)
     throw (CORBA::SystemException)
   {
-    RTC_TRACE(("on_state_update(%d)", ec_id));
+    RTC_PARANOID(("on_state_update(%d)", ec_id));
     ReturnCode_t ret(RTC::RTC_ERROR);
     try
       {
@@ -1173,7 +1202,8 @@ namespace RTC
     index = CORBA_SeqUtil::find(m_sdoSvcProfiles, svc_name(id));
     if(index < 0)
     {
-      throw SDOPackage::InvalidParameter("get_service_profile(): Name is not found.");
+      throw SDOPackage::InvalidParameter("get_service_profile():"
+                                         "Name is not found.");
     }
     try
       {
@@ -1241,9 +1271,15 @@ namespace RTC
       throw SDOPackage::InterfaceNotImplemented();
     try
       {
+#ifdef ORB_IS_RTORB
+	SDOPackage::Configuration_ptr config;
+	config = m_pSdoConfig;
+	return config;
+#else // ORB_IS_RTORB
 	SDOPackage::Configuration_var config;
 	config = m_pSdoConfig;
 	return config._retn();
+#endif // ORB_IS_RTORB
       }
     catch (...)
       {
@@ -1366,7 +1402,11 @@ namespace RTC
     RTC_TRACE(("setInstanceName(%s)", instance_name));
 
     m_properties["instance_name"] = instance_name;
+#ifndef ORB_IS_RTORB
     m_profile.instance_name = m_properties["instance_name"].c_str();
+#else // ORB_IS_RTORB
+    m_profile.instance_name = (char *)m_properties["instance_name"].c_str();
+#endif // ORB_IS_RTORB
   }
   
   /*!
@@ -1420,12 +1460,21 @@ namespace RTC
   {
     RTC_TRACE(("setProperties()"));
     m_properties << prop;
+#ifndef ORB_IS_RTORB
     m_profile.instance_name = m_properties["instance_name"].c_str();
     m_profile.type_name     = m_properties["type_name"].c_str();
     m_profile.description   = m_properties["description"].c_str();
     m_profile.version       = m_properties["version"].c_str();
     m_profile.vendor        = m_properties["vendor"].c_str();
     m_profile.category      = m_properties["category"].c_str();
+#else // ORB_IS_RTORB
+    m_profile.instance_name = (char*)m_properties["instance_name"].c_str();
+    m_profile.type_name     = (char*)m_properties["type_name"].c_str();
+    m_profile.description   = (char*)m_properties["description"].c_str();
+    m_profile.version       = (char*)m_properties["version"].c_str();
+    m_profile.vendor        = (char*)m_properties["vendor"].c_str();
+    m_profile.category      = (char*)m_properties["category"].c_str();
+#endif //ORB_IS_RTORB
   }
   
   /*!

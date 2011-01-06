@@ -28,10 +28,13 @@ namespace coil
   class Properties;
 };
 
+// Why RtORB does not allow forward declaration?
+#ifndef ORB_IS_RTORB
 namespace SDOPackage
 {
   class NVList;
 };
+#endif // ORB_IS_RTORB
 
 class cdrMemoryStream;
 

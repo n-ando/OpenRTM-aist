@@ -1106,7 +1106,7 @@ namespace RTC
      * @endif
      */
     void list(CosNaming::NamingContext_ptr name_cxt,
-	      unsigned long how_many,
+	      CORBA::ULong how_many,
 	      CosNaming::BindingList_var& bl,
 	      CosNaming::BindingIterator_var& bi);
     
@@ -1489,8 +1489,8 @@ namespace RTC
      * @endif
      */
     CosNaming::Name subName(const CosNaming::Name& name,
-			    long begin,
-			    long end = -1);
+			    CORBA::Long begin,
+			    CORBA::Long end = -1);
     
   protected:
     /*!
@@ -1526,7 +1526,7 @@ namespace RTC
      * @endif
      */
     void nameToString(const CosNaming::Name& name, char* string_name,
-		      unsigned long slen);
+		      CORBA::ULong slen);
     /*!
      * @if jp
      * @brief ネームコンポーネントの文字列表現時の文字長を取得する

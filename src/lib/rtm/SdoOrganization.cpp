@@ -31,6 +31,24 @@ namespace SDOPackage
    * @brief Constructor
    * @endif
    */
+#ifdef ORB_IS_RTORB
+  Organization_impl::Organization_impl(RTC::RTObject_ptr sdo)
+    : rtclog("organization")
+  {
+    m_varOwner = sdo.in();
+
+    coil::UUID_Generator uugen;
+    uugen.init();
+    std::auto_ptr<coil::UUID> uuid(uugen.generateUUID(2,0x01));
+    m_pId = uuid->to_string();
+#ifdef WIN32
+    uuid->~UUID();
+#endif // WIN32
+    m_dependency = OWN;
+    m_objref = this->_this();
+  }
+#endif // ORB_IS_RTORB
+
   Organization_impl::Organization_impl(SDOSystemElement_ptr sdo)
     : rtclog("organization"), m_varOwner(SDOSystemElement::_duplicate(sdo))
   {
@@ -40,7 +58,7 @@ namespace SDOPackage
     m_pId = uuid->to_string();
 #ifdef WIN32
     uuid->~UUID();
-#endif
+#endif // WIN32
     m_dependency = OWN;
     m_objref = this->_this();
   }
