@@ -435,6 +435,7 @@ namespace RTC
    *     - ON_RECEIVER_ERROR
    *     - ON_CONNECT
    *     - ON_DISCONNECT
+   *     .
    *   - New房
    *     - ON_BUFFER_WRITE
    *     - ON_BUFFER_FULL
@@ -449,6 +450,7 @@ namespace RTC
    *     - ON_SENDER_ERROR
    *     - ON_CONNECT
    *     - ON_DISCONNECT
+   *     .
    *   - Periodic房
    *     - ON_BUFFER_WRITE
    *     - ON_BUFFER_FULL
@@ -464,6 +466,8 @@ namespace RTC
    *     - ON_SENDER_ERROR
    *     - ON_CONNECT
    *     - ON_DISCONNECT
+   *     .
+   *   .
    * -Pull房
    *   - ON_BUFFER_READ
    *   - ON_SEND
@@ -487,6 +491,7 @@ namespace RTC
    *     - ON_RECEIVER_ERROR
    *     - ON_CONNECT
    *     - ON_DISCONNECT
+   *     .
    * - Pull房
    *     - ON_CONNECT
    *     - ON_DISCONNECT
