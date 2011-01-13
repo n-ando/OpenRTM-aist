@@ -102,8 +102,8 @@ namespace RTC
    * なものや、呼び出されるタイミングが異なる。
    * 以下に、インターフェースがCORBA CDR型の場合のコールバック一覧を示す。
    *
-   * OutPort:
-   * - Push型: Subscription Typeによりさらにイベントの種類が分かれる。
+   * OuttPort:
+   * -  Push型: Subscription Typeによりさらにイベントの種類が分かれる。
    *   - Flush: Flush型にはバッファがないため ON_BUFFER 系のイベントは発生しない
    *     - ON_SEND
    *     - ON_RECEIVED
@@ -112,6 +112,7 @@ namespace RTC
    *     - ON_RECEIVER_ERROR
    *     - ON_CONNECT
    *     - ON_DISCONNECT
+   *     .
    *   - New型
    *     - ON_BUFFER_WRITE
    *     - ON_BUFFER_FULL
@@ -126,6 +127,7 @@ namespace RTC
    *     - ON_SENDER_ERROR
    *     - ON_CONNECT
    *     - ON_DISCONNECT
+   *     .
    *   - Periodic型
    *     - ON_BUFFER_WRITE
    *     - ON_BUFFER_FULL
@@ -141,16 +143,18 @@ namespace RTC
    *     - ON_SENDER_ERROR
    *     - ON_CONNECT
    *     - ON_DISCONNECT
-   * -Pull型
-   *     - ON_BUFFER_READ
-   *     - ON_SEND
-   *     - ON_BUFFER_EMPTY
-   *     - ON_BUFFER_READ_TIMEOUT
-   *     - ON_SENDER_EMPTY
-   *     - ON_SENDER_TIMEOUT
-   *     - ON_SENDER_ERROR
-   *     - ON_CONNECT
-   *     - ON_DISCONNECT
+   *     .
+   *   .
+   * - Pull型
+   *   - ON_BUFFER_READ
+   *   - ON_SEND
+   *   - ON_BUFFER_EMPTY
+   *   - ON_BUFFER_READ_TIMEOUT
+   *   - ON_SENDER_EMPTY
+   *   - ON_SENDER_TIMEOUT
+   *   - ON_SENDER_ERROR
+   *   - ON_CONNECT
+   *   - ON_DISCONNECT
    *
    * InPort:
    * - Push型:
@@ -164,6 +168,7 @@ namespace RTC
    *     - ON_RECEIVER_ERROR
    *     - ON_CONNECT
    *     - ON_DISCONNECT
+   *     .
    * - Pull型
    *     - ON_CONNECT
    *     - ON_DISCONNECT
@@ -419,14 +424,14 @@ namespace RTC
    *
    * データポートには、接続時にデータの送受信方法についてデータフロー型、
    * サブスクリプション型等を設定することができる。
-   * ConnectorDaataListener/ConnectorListener はともに、様々なイベント
+   * ConnectorDaataListener/ConnectorListener は共にに、様々なイベント
    * に対するコールバックを設定することができるが、これらデータフロー型
-   * およびサブスクリプション型の設定に応じて、利用可能なもの利用不可能
-   * なものや、呼び出されるタイミングが異なる。
-   * 以下に、インターフェースがCORBA CDR型の場合のコールバック一覧を示す。
+   * およびサブスクリプション型の設定に応じて、利用できるもの、できない
+   * もの、また呼び出されるタイミングが異なる。以下に、インターフェース
+   * がCORBA CDR型の場合のコールバック一覧を示す。
    *
-   * OutPort:
-   * - Push型: Subscription Typeによりさらにイベントの種類が分かれる。
+   * OuttPort:
+   * -  Push型: Subscription Typeによりさらにイベントの種類が分かれる。
    *   - Flush: Flush型にはバッファがないため ON_BUFFER 系のイベントは発生しない
    *     - ON_SEND
    *     - ON_RECEIVED
@@ -468,7 +473,7 @@ namespace RTC
    *     - ON_DISCONNECT
    *     .
    *   .
-   * -Pull型
+   * - Pull型
    *   - ON_BUFFER_READ
    *   - ON_SEND
    *   - ON_BUFFER_EMPTY
