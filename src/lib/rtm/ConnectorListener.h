@@ -85,6 +85,89 @@ namespace RTC
    * データポートの Connector において発生する各種イベントに対するコー
    * ルバックを実現するリスナクラスの基底クラス。
    *
+   * コアロジックがOutPortに対してデータ書き込み、InPort側でデータが取
+   * 得されるまでの間で発生する各種イベントをフックするコールバックを設
+   * 定することができる。なお、リスナークラスは2種類存在し、バッファフ
+   * ルや送信時のコールバックで、その時点で有効なデータをファンクタの引
+   * 数として受け取る ConnectorDataListener であり、もう一方はデータエ
+   * ンプティやバッファ読み込み時のタイムアウトなどデータが取得できない
+   * 場合などにコールされるファンクタの引数に何もとらならい
+   * ConnecotorListener がある。
+   *
+   * データポートには、接続時にデータの送受信方法についてデータフロー型、
+   * サブスクリプション型等を設定することができる。
+   * ConnectorDaataListener/ConnectorListener はともに、様々なイベント
+   * に対するコールバックを設定することができるが、これらデータフロー型
+   * およびサブスクリプション型の設定に応じて、利用可能なもの利用不可能
+   * なものや、呼び出されるタイミングが異なる。
+   * 以下に、インターフェースがCORBA CDR型の場合のコールバック一覧を示す。
+   *
+   * OutPort:
+   * - Push型: Subscription Typeによりさらにイベントの種類が分かれる。
+   *   - Flush: Flush型にはバッファがないため ON_BUFFER 系のイベントは発生しない
+   *     - ON_SEND
+   *     - ON_RECEIVED
+   *     - ON_RECEIVER_FULL
+   *     - ON_RECEIVER_TIMEOUT
+   *     - ON_RECEIVER_ERROR
+   *     - ON_CONNECT
+   *     - ON_DISCONNECT
+   *   - New型
+   *     - ON_BUFFER_WRITE
+   *     - ON_BUFFER_FULL
+   *     - ON_BUFFER_WRITE_TIMEOUT
+   *     - ON_BUFFER_OVERWRITE
+   *     - ON_BUFFER_READ
+   *     - ON_SEND
+   *     - ON_RECEIVED
+   *     - ON_RECEIVER_FULL
+   *     - ON_RECEIVER_TIMEOUT
+   *     - ON_RECEIVER_ERROR
+   *     - ON_SENDER_ERROR
+   *     - ON_CONNECT
+   *     - ON_DISCONNECT
+   *   - Periodic型
+   *     - ON_BUFFER_WRITE
+   *     - ON_BUFFER_FULL
+   *     - ON_BUFFER_WRITE_TIMEOUT
+   *     - ON_BUFFER_READ
+   *     - ON_SEND
+   *     - ON_RECEIVED
+   *     - ON_RECEIVER_FULL
+   *     - ON_RECEIVER_TIMEOUT
+   *     - ON_RECEIVER_ERROR
+   *     - ON_BUFFER_EMPTY
+   *     - ON_SENDER_EMPTY
+   *     - ON_SENDER_ERROR
+   *     - ON_CONNECT
+   *     - ON_DISCONNECT
+   * -Pull型
+   *     - ON_BUFFER_READ
+   *     - ON_SEND
+   *     - ON_BUFFER_EMPTY
+   *     - ON_BUFFER_READ_TIMEOUT
+   *     - ON_SENDER_EMPTY
+   *     - ON_SENDER_TIMEOUT
+   *     - ON_SENDER_ERROR
+   *     - ON_CONNECT
+   *     - ON_DISCONNECT
+   *
+   * InPort:
+   * - Push型:
+   *     - ON_BUFFER_WRITE
+   *     - ON_BUFFER_FULL
+   *     - ON_BUFFER_WRITE_TIMEOUT
+   *     - ON_BUFFER_WRITE_OVERWRITE
+   *     - ON_RECEIVED
+   *     - ON_RECEIVER_FULL
+   *     - ON_RECEIVER_TIMEOUT
+   *     - ON_RECEIVER_ERROR
+   *     - ON_CONNECT
+   *     - ON_DISCONNECT
+   * - Pull型
+   *     - ON_CONNECT
+   *     - ON_DISCONNECT
+   *
    * @else
    * @class ConnectorDataListener class
    * @brief ConnectorDataListener class
@@ -324,6 +407,89 @@ namespace RTC
    *
    * データポートの Connector において発生する各種イベントに対するコー
    * ルバックを実現するリスナクラスの基底クラス。
+   *
+   * コアロジックがOutPortに対してデータ書き込み、InPort側でデータが取
+   * 得されるまでの間で発生する各種イベントをフックするコールバックを設
+   * 定することができる。なお、リスナークラスは2種類存在し、バッファフ
+   * ルや送信時のコールバックで、その時点で有効なデータをファンクタの引
+   * 数として受け取る ConnectorDataListener であり、もう一方はデータエ
+   * ンプティやバッファ読み込み時のタイムアウトなどデータが取得できない
+   * 場合などにコールされるファンクタの引数に何もとらならい
+   * ConnecotorListener がある。
+   *
+   * データポートには、接続時にデータの送受信方法についてデータフロー型、
+   * サブスクリプション型等を設定することができる。
+   * ConnectorDaataListener/ConnectorListener はともに、様々なイベント
+   * に対するコールバックを設定することができるが、これらデータフロー型
+   * およびサブスクリプション型の設定に応じて、利用可能なもの利用不可能
+   * なものや、呼び出されるタイミングが異なる。
+   * 以下に、インターフェースがCORBA CDR型の場合のコールバック一覧を示す。
+   *
+   * OutPort:
+   * - Push型: Subscription Typeによりさらにイベントの種類が分かれる。
+   *   - Flush: Flush型にはバッファがないため ON_BUFFER 系のイベントは発生しない
+   *     - ON_SEND
+   *     - ON_RECEIVED
+   *     - ON_RECEIVER_FULL
+   *     - ON_RECEIVER_TIMEOUT
+   *     - ON_RECEIVER_ERROR
+   *     - ON_CONNECT
+   *     - ON_DISCONNECT
+   *   - New型
+   *     - ON_BUFFER_WRITE
+   *     - ON_BUFFER_FULL
+   *     - ON_BUFFER_WRITE_TIMEOUT
+   *     - ON_BUFFER_OVERWRITE
+   *     - ON_BUFFER_READ
+   *     - ON_SEND
+   *     - ON_RECEIVED
+   *     - ON_RECEIVER_FULL
+   *     - ON_RECEIVER_TIMEOUT
+   *     - ON_RECEIVER_ERROR
+   *     - ON_SENDER_ERROR
+   *     - ON_CONNECT
+   *     - ON_DISCONNECT
+   *   - Periodic型
+   *     - ON_BUFFER_WRITE
+   *     - ON_BUFFER_FULL
+   *     - ON_BUFFER_WRITE_TIMEOUT
+   *     - ON_BUFFER_READ
+   *     - ON_SEND
+   *     - ON_RECEIVED
+   *     - ON_RECEIVER_FULL
+   *     - ON_RECEIVER_TIMEOUT
+   *     - ON_RECEIVER_ERROR
+   *     - ON_BUFFER_EMPTY
+   *     - ON_SENDER_EMPTY
+   *     - ON_SENDER_ERROR
+   *     - ON_CONNECT
+   *     - ON_DISCONNECT
+   * -Pull型
+   *     - ON_BUFFER_READ
+   *     - ON_SEND
+   *     - ON_BUFFER_EMPTY
+   *     - ON_BUFFER_READ_TIMEOUT
+   *     - ON_SENDER_EMPTY
+   *     - ON_SENDER_TIMEOUT
+   *     - ON_SENDER_ERROR
+   *     - ON_CONNECT
+   *     - ON_DISCONNECT
+   *
+   * InPort:
+   * - Push型:
+   *     - ON_BUFFER_WRITE
+   *     - ON_BUFFER_FULL
+   *     - ON_BUFFER_WRITE_TIMEOUT
+   *     - ON_BUFFER_WRITE_OVERWRITE
+   *     - ON_RECEIVED
+   *     - ON_RECEIVER_FULL
+   *     - ON_RECEIVER_TIMEOUT
+   *     - ON_RECEIVER_ERROR
+   *     - ON_CONNECT
+   *     - ON_DISCONNECT
+   * - Pull型
+   *     - ON_CONNECT
+   *     - ON_DISCONNECT
    *
    * @else
    * @class ConnectorListener class
