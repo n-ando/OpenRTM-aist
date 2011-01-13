@@ -158,6 +158,8 @@ class SeqIn
  protected:
   // DataInPort declaration
   // <rtc-template block="inport_declare">
+  TimedOctet m_Octet;
+  InPort<TimedOctet> m_OctetIn;
   TimedShort m_Short;
   InPort<TimedShort> m_ShortIn;
   TimedLong m_Long;
@@ -166,6 +168,8 @@ class SeqIn
   InPort<TimedFloat> m_FloatIn;
   TimedDouble m_Double;
   InPort<TimedDouble> m_DoubleIn;
+  TimedOctetSeq m_OctetSeq;
+  InPort<TimedOctetSeq> m_OctetSeqIn;
   TimedShortSeq m_ShortSeq;
   InPort<TimedShortSeq> m_ShortSeqIn;
   TimedLongSeq m_LongSeq;

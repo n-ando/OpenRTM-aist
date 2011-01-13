@@ -37,10 +37,12 @@ static const char* seqout_spec[] =
 SeqOut::SeqOut(RTC::Manager* manager)
   : RTC::DataFlowComponentBase(manager),
     // <rtc-template block="initializer">
+    m_OctetOut("Octet", m_Octet),
     m_ShortOut("Short", m_Short),
     m_LongOut("Long", m_Long),
     m_FloatOut("Float", m_Float),
     m_DoubleOut("Double", m_Double),
+    m_OctetSeqOut("OctetSeq", m_OctetSeq),
     m_ShortSeqOut("ShortSeq", m_ShortSeq),
     m_LongSeqOut("LongSeq", m_LongSeq),
     m_FloatSeqOut("FloatSeq", m_FloatSeq),
@@ -63,10 +65,12 @@ RTC::ReturnCode_t SeqOut::onInitialize()
   // Set InPort buffers
   
   // Set OutPort buffer
+  addOutPort("Octet", m_OctetOut);
   addOutPort("Short", m_ShortOut);
   addOutPort("Long", m_LongOut);
   addOutPort("Float", m_FloatOut);
   addOutPort("Double", m_DoubleOut);
+  addOutPort("OctetSeq", m_OctetSeqOut);
   addOutPort("ShortSeq", m_ShortSeqOut);
   addOutPort("LongSeq", m_LongSeqOut);
   addOutPort("FloatSeq", m_FloatSeqOut);
@@ -119,6 +123,7 @@ RTC::ReturnCode_t SeqOut::onInitialize()
   m_FloatSeq.data.length(10);
   m_LongSeq.data.length(10);
   m_ShortSeq.data.length(10);
+  m_OctetSeq.data.length(10);
 
   // <rtc-template block="bind_config">
   // Bind variables and configuration variable
@@ -168,6 +173,7 @@ RTC::ReturnCode_t SeqOut::onDeactivated(RTC::UniqueId ec_id)
 
 RTC::ReturnCode_t SeqOut::onExecute(RTC::UniqueId ec_id)
 {
+  static unsigned char cnt0, cntseq0;
   static short  cnt1, cntseq1;
   static long   cnt2, cntseq2;
   static float  cnt3, cntseq3;
@@ -176,6 +182,13 @@ RTC::ReturnCode_t SeqOut::onExecute(RTC::UniqueId ec_id)
   // Configuration check
   if (m_data_type == "serial")
     {
+      ++cnt0;
+      if( cnt0 > 254 )
+        {
+          cnt0 = 1;
+        }
+      m_Octet.data = cnt0;
+
       ++cnt1;
       if( cnt1 > 30000 )
         {
@@ -206,6 +219,7 @@ RTC::ReturnCode_t SeqOut::onExecute(RTC::UniqueId ec_id)
     }
   else				//default
     {
+      m_Octet.data = rand();
       m_Short.data = rand();
       m_Long.data = rand();
       m_Float.data = rand();
@@ -216,13 +230,30 @@ RTC::ReturnCode_t SeqOut::onExecute(RTC::UniqueId ec_id)
   std::cout << m_Double.data << " ";
   std::cout << m_Float.data << " ";
   std::cout << m_Long.data << " ";
-  std::cout << m_Short.data << "                                   " << std::endl << std::endl;
+  std::cout << m_Short.data << " ";
+  std::cout << int(m_Octet.data) << "[";
+  if (int(m_Octet.data) < 0x20 || int(m_Octet.data) > 0x7e)
+    {
+      std::cout << " " << "]";
+    }
+  else
+    {
+      std::cout << m_Octet.data << "]";
+    }
+  std::cout << "                                " << std::endl << std::endl;
 
   for (CORBA::ULong i = 0; i < 10; ++i)
     {
       // Configuration check
       if (m_data_type == "serial")
         {
+          ++cntseq0;
+          if( cntseq0 > 254 )
+            {
+              cntseq0 = 1;
+            }
+          m_OctetSeq.data[i] = cntseq0;
+
           ++cntseq1;
           if( cntseq1 > 30000 )
             {
@@ -257,13 +288,24 @@ RTC::ReturnCode_t SeqOut::onExecute(RTC::UniqueId ec_id)
           m_FloatSeq.data[i] = static_cast<float>(rand());
           m_LongSeq.data[i] = static_cast<long>(rand());
           m_ShortSeq.data[i] = static_cast<short>(rand());
+          m_OctetSeq.data[i] = static_cast<unsigned char>(rand());
         }
 
       std::cout << i << ": ";
       std::cout << m_DoubleSeq.data[i] << " ";
       std::cout << m_FloatSeq.data[i] << " ";
       std::cout << m_LongSeq.data[i] << " ";
-      std::cout << m_ShortSeq.data[i] << "                                " << std::endl;
+      std::cout << m_ShortSeq.data[i] << " ";
+      std::cout << int(m_OctetSeq.data[i]) << "[";
+      if (int(m_OctetSeq.data[i]) < 0x20 || int(m_OctetSeq.data[i]) > 0x7e)
+        {
+          std::cout << " " << "]";
+        }
+      else
+        {
+          std::cout << m_OctetSeq.data[i] << "]";
+        }
+      std::cout << "                             " << std::endl;
     }
   // Configuration check
   if (m_data_type == "serial")
@@ -281,11 +323,13 @@ RTC::ReturnCode_t SeqOut::onExecute(RTC::UniqueId ec_id)
       std::cout << "[A\r[A\r[A\r[A\r[A\r[A\r[A\r[A\r[A\r[A\r[A\r[A\r[A\r[A\r";
     }
 
+  m_OctetOut.write();
   m_ShortOut.write();
   m_LongOut.write();
   m_FloatOut.write();
   m_DoubleOut.write();
 
+  m_OctetSeqOut.write();
   m_ShortSeqOut.write();
   m_LongSeqOut.write();
   m_FloatSeqOut.write();

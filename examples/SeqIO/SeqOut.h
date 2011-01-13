@@ -164,6 +164,8 @@ class SeqOut
 
   // DataOutPort declaration
   // <rtc-template block="outport_declare">
+  TimedOctet m_Octet;
+  OutPort<TimedOctet> m_OctetOut;
   TimedShort m_Short;
   OutPort<TimedShort> m_ShortOut;
   TimedLong m_Long;
@@ -172,6 +174,8 @@ class SeqOut
   OutPort<TimedFloat> m_FloatOut;
   TimedDouble m_Double;
   OutPort<TimedDouble> m_DoubleOut;
+  TimedOctetSeq m_OctetSeq;
+  OutPort<TimedOctetSeq> m_OctetSeqOut;
   TimedShortSeq m_ShortSeq;
   OutPort<TimedShortSeq> m_ShortSeqOut;
   TimedLongSeq m_LongSeq;
