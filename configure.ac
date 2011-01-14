@@ -1212,19 +1212,6 @@ fi
 	
 if test "x$have_rtorb" = "xyes" ; then
 	dnl ------------------------------------------------------------
-	dnl Find indent
-	dnl ------------------------------------------------------------
-	AC_MSG_CHECKING(for indent)
-	FP_FIND_FILE(indent,$with_rtorb/bin $base_bins $base_dirs,bin)
-	if test "x$indent" = "x" ; then
-		AC_MSG_RESULT(not found. cat is used instead of indent.)
-		rtorb_indent="cat"
-	else
-		AC_MSG_RESULT($indent)
-		rtorb_indent="$indent"
-	fi
-
-	dnl ------------------------------------------------------------
 	dnl  Find libRtORB.so
 	dnl ------------------------------------------------------------
 	AC_MSG_CHECKING(for libRtORB.so)
@@ -1295,11 +1282,11 @@ if test "x$have_rtorb" = "xyes" ; then
 	dnl  RtORB setup complete
 	dnl ------------------------------------------------------------
 	IDLC=$rtorb_idl	
-	IDL_FLAGS="--skeleton-impl --c-output-formatter=$rtorb_indent -DORBIT2_IDL -I."
+	IDL_FLAGS="--skeleton-impl -DORBIT2_IDL -I."
 	COSNAMES=$with_rtorb/CosName/NameService
 	dnl  Compiler/Linker options
-	CPPFLAGS="$CPPFLAGS -DUSE_THREAD -I$RtORB_corba_hh_dir"
-	CXXFLAGS="$CXXFLAGS -DUSE_THREAD -I$RtORB_corba_hh_dir"
+	CPPFLAGS="$CPPFLAGS -I$RtORB_corba_hh_dir"
+	CXXFLAGS="$CXXFLAGS -I$RtORB_corba_hh_dir"
 	LDFLAGS="$LDFLAGS -L$libRtORB_cpp_so_dir -L$libRtORB_so_dir"
 
 	if test "x$os" = "xcygwin" ; then 
