@@ -43,7 +43,7 @@ MyServiceSVC_impl::~MyServiceSVC_impl()
 char* MyServiceSVC_impl::echo(const char* msg)
   throw (CORBA::SystemException)
 {
-  CORBA_SeqUtil::push_back(m_echoList, msg);
+  CORBA_SeqUtil::push_back(m_echoList, CORBA::string_dup(msg));
   std::cout << "MyService::echo() was called." << std::endl;
 
   for (int i(0); i < 10; ++i)
