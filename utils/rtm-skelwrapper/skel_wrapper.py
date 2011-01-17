@@ -102,6 +102,7 @@ skel_cpp = """// -*- C++ -*-
 #  include "[include_dir][basename]-cpp-stubs.cc"
 #  include "[include_dir][basename]-cpp-skels.cc"
 #elif defined ORB_IS_RTORB
+[include_openrtm_idl_decls]
 #  include "[include_dir][basename]-common.c"
 #  include "[include_dir][basename]-stubs.c"
 #  include "[include_dir][basename]-skels.c"
@@ -187,6 +188,7 @@ stub_cpp = """// -*- C++ -*-
 #elif defined ORB_IS_ORBIT2
 #  include "[include_dir][basename]-cpp-stubs.cc"
 #elif defined ORB_IS_RTORB
+[include_openrtm_idl_decls]
 #  include "[include_dir][basename]-common.c"
 #  include "[include_dir][basename]-stubs.c"
 #else
@@ -233,6 +235,11 @@ class skel_wrapper:
 		
 		self.data["date"] = time.ctime()
 		self.data["config_inc"] = config_inc
+		if basename == "OpenRTM-aist" :
+			self.data["include_openrtm_idl_decls"] = ""
+		else:
+			self.data["include_openrtm_idl_decls"] = "#  include \"OpenRTM-aist-decls.h\"\n"
+		
 		return
 
 	def print_skel_h(self):
