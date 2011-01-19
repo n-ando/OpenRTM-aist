@@ -415,6 +415,8 @@ namespace SDOPackage
 	std::vector<coil::Properties*> cf(m_configsets.getConfigurationSets());
 	ConfigurationSetList_var config_sets = 
           new ConfigurationSetList((CORBA::ULong)cf.size());
+        // Ctor's first arg is max length. Actual length has to be set.
+        config_sets->length((CORBA::ULong)cf.size());
 
 	for (CORBA::ULong i(0), len(cf.size()); i < len; ++i)
 	  {
@@ -423,8 +425,19 @@ namespace SDOPackage
 	
 	return config_sets._retn();
       }
+    catch (CORBA::SystemException& e)
+      {
+#ifndef ORB_IS_RTORB
+        RTC_ERROR(("CORBA::SystemException cought: %s", e._name()));
+#else
+        RTC_ERROR(("CORBA::SystemException cought."));
+#endif
+	throw InternalError("Configuration::get_configuration_sets()");
+
+      }
     catch (...)
       {
+        RTC_ERROR(("Unknown exception cought."));
 	throw InternalError("Configuration::get_configuration_sets()");
       }
     // never reach here
