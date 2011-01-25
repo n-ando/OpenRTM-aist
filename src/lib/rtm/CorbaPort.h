@@ -1245,6 +1245,7 @@ namespace RTC
 #else // ORB_IS_RTORB
         // why RtORB does not activate object by __this()
         // and does not deactivate at the end of ctor?
+        m_oid = Manager::instance().getPOA()->servant_to_id(m_servant);
         CORBA::Object_var obj;
         obj = CORBA::Object_var(m_servant->__this());
         CORBA::ORB_ptr orb = Manager::instance().getORB();
