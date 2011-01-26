@@ -1923,6 +1923,83 @@ namespace RTC
   
   /*!
    * @if jp
+   * @brief PreComponentActionListener リスナを追加する
+   *
+   * @else
+   * @brief Adding PreComponentAction type listener
+   *
+   * @endif
+   */
+  void RTObject_impl::
+  addPreComponentActionListener(PreComponentActionListenerType listener_type,
+                                PreComponentActionListener* listener,
+                                bool autoclean)
+  {
+    m_actionListeners.
+      preaction_[listener_type].addListener(listener, autoclean);
+  }
+  
+  
+  /*!
+   * @if jp
+   * @brief PreComponentActionListener リスナを削除する
+   *
+   * @else
+   * @brief Removing PreComponentAction type listener
+   *
+   * @endif
+   */
+  void RTObject_impl::
+  removePreComponentActionListener(
+                                   PreComponentActionListenerType listener_type,
+                                   PreComponentActionListener* listener)
+  {
+    m_actionListeners.
+      preaction_[listener_type].removeListener(listener);
+  }
+
+
+  /*!
+   * @if jp
+   * @brief PostComponentActionListener リスナを追加する
+   *
+   * @else
+   * @brief Adding PostComponentAction type listener
+   *
+   * @endif
+   */
+  void RTObject_impl::
+  addPostComponentActionListener(
+                                 PostComponentActionListenerType listener_type,
+                                 PostComponentActionListener* listener,
+                                 bool autoclean)
+  {
+    m_actionListeners.
+      postaction_[listener_type].addListener(listener, autoclean);
+  }
+
+
+  /*!
+   * @if jp
+   * @brief PostComponentActionListener リスナを削除する
+   *
+   * @else
+   * @brief Removing PostComponentAction type listener
+   *
+   * @endif
+   */
+  void RTObject_impl::
+  removePostComponentActionListener(
+                                PostComponentActionListenerType listener_type,
+                                PostComponentActionListener* listener)
+  {
+    m_actionListeners.
+      postaction_[listener_type].removeListener(listener);
+  }
+
+
+  /*!
+   * @if jp
    * @brief RTC を終了する
    * @else
    * @brief Shutdown RTC
@@ -1962,4 +2039,7 @@ namespace RTC
         m_pManager->notifyFinalized(this);
       }
   }
+
+
+
 }

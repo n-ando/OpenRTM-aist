@@ -29,10 +29,9 @@
 #include <rtm/InPortBase.h>
 #include <rtm/OutPortBase.h>
 #include <rtm/CorbaPort.h>
-//#include <rtm/InPort.h>
-//#include <rtm/OutPort.h>
 #include <rtm/ConfigAdmin.h>
 #include <rtm/SystemLogger.h>
+#include <rtm/ComponentActionListener.h>
 
 #define ECOTHER_OFFSET 1000
 
@@ -2836,8 +2835,9 @@ namespace RTC
      *        (readAll()メソッド呼出あり:true, readAll()メソッド呼出なし:false)
      *
      * @param completion(default:false) 
-     *    readAll()にて、どれかの一つのInPortのread()が失敗しても全てのInPortのread()を呼び出す:true,
-     *    readAll()にて、どれかの一つのInPortのread()が失敗した場合、すぐにfalseで抜ける:false
+     *    readAll()にて、どれかの一つのInPortのread()が失敗しても全ての
+     *    InPortのread()を呼び出す:true, readAll()にて、どれかの一つの
+     *    InPortのread()が失敗した場合、すぐにfalseで抜ける:false
      *
      * @else
      *
@@ -2868,11 +2868,14 @@ namespace RTC
      * パラメータがfalseの場合は、writeAll()呼出を無効にする。
      *
      * @param write(default:true) 
-     *        (writeAll()メソッド呼出あり:true, writeAll()メソッド呼出なし:false)
+     *        (writeAll()メソッド呼出あり:true, writeAll()メソッド呼出
+     *        なし:false)
      *
      * @param completion(default:false) 
-     *    writeAll()にて、どれかの一つのOutPortのwrite()が失敗しても全てのOutPortのwrite()を呼び出しを行う:true,
-     *    writeAll()にて、どれかの一つのOutPortのwrite()が失敗した場合、すぐにfalseで抜ける:false
+     *    writeAll()にて、どれかの一つのOutPortのwrite()が失敗しても全
+     *    てのOutPortのwrite()を呼び出しを行う:true, writeAll()にて、ど
+     *    れかの一つのOutPortのwrite()が失敗した場合、すぐにfalseで抜け
+     *    る:false
      *
      * @else
      *
@@ -2909,6 +2912,8 @@ namespace RTC
      * @endif
      */
     void finalizePorts();
+
+
     /*!
      * @if jp
      *
@@ -2922,17 +2927,212 @@ namespace RTC
      */
     void finalizeContexts();
 
-    /*
-      template <class DataType>
-      void registerInPort(BufferBase<DataType>& buffer)
-      {
-      CorbaInPort<DataType>* port;
-      p = new CorbaInPort<DataType>(buffer);
-      PortService_var inport;
-      inport = new PortInPort();
-      inport->setInPortRef(p->_this());
-      }
-    */
+
+    /*!
+     * @if jp
+     * @brief PreComponentActionListener リスナを追加する
+     *
+     * ComponentAction 実装関数の呼び出し直前のイベントに関連する各種リ
+     * スナを設定する。
+     *
+     * 設定できるリスナのタイプとコールバックイベントは以下の通り
+     *
+     * - PRE_ON_INITIALIZE:    onInitialize 直前
+     * - PRE_ON_FINALIZE:      onFinalize 直前
+     * - PRE_ON_STARTUP:       onStartup 直前
+     * - PRE_ON_SHUTDOWN:      onShutdown 直前
+     * - PRE_ON_ACTIVATED:     onActivated 直前
+     * - PRE_ON_DEACTIVATED:   onDeactivated 直前
+     * - PRE_ON_ABORTED:       onAborted 直前
+     * - PRE_ON_ERROR:         onError 直前
+     * - PRE_ON_RESET:         onReset 直前
+     * - PRE_ON_EXECUTE:       onExecute 直前
+     * - PRE_ON_STATE_UPDATE:  onStateUpdate 直前
+     *
+     * リスナは PreComponentActionListener を継承し、以下のシグニチャを持つ
+     * operator() を実装している必要がある。
+     *
+     * PreComponentActionListener::operator()(UniqueId ec_id)
+     *
+     * デフォルトでは、この関数に与えたリスナオブジェクトの所有権は
+     * RTObjectに移り、RTObject解体時もしくは、
+     * removePreComponentActionListener() により削除時に自動的に解体される。
+     * リスナオブジェクトの所有権を呼び出し側で維持したい場合は、第3引
+     * 数に false を指定し、自動的な解体を抑制することができる。
+     *
+     * @param listener_type リスナタイプ
+     * @param listener リスナオブジェクトへのポインタ
+     * @param autoclean リスナオブジェクトの自動的解体を行うかどうかのフラグ
+     *
+     * @else
+     * @brief Adding PreComponentAction type listener
+     *
+     * This operation adds certain listeners related to ComponentActions
+     * pre events.
+     * The following listener types are available.
+     *
+     * - PRE_ON_INITIALIZE:    before onInitialize
+     * - PRE_ON_FINALIZE:      before onFinalize
+     * - PRE_ON_STARTUP:       before onStartup
+     * - PRE_ON_SHUTDOWN:      before onShutdown
+     * - PRE_ON_ACTIVATED:     before onActivated
+     * - PRE_ON_DEACTIVATED:   before onDeactivated
+     * - PRE_ON_ABORTED:       before onAborted
+     * - PRE_ON_ERROR:         before onError
+     * - PRE_ON_RESET:         before onReset
+     * - PRE_ON_EXECUTE:       before onExecute
+     * - PRE_ON_STATE_UPDATE:  before onStateUpdate
+     *
+     * Listeners should have the following function operator().
+     *
+     * PreComponentActionListener::operator()(UniqueId ec_id)
+     *
+     * The ownership of the given listener object is transferred to
+     * this RTObject object in default.  The given listener object will
+     * be destroied automatically in the RTObject's dtor or if the
+     * listener is deleted by removePreComponentActionListener() function.
+     * If you want to keep ownership of the listener object, give
+     * "false" value to 3rd argument to inhibit automatic destruction.
+     *
+     * @param listener_type A listener type
+     * @param listener A pointer to a listener object
+     * @param autoclean A flag for automatic listener destruction
+     *
+     * @endif
+     */
+    void 
+    addPreComponentActionListener(RTC::PreComponentActionListenerType listener_type,
+                                  PreComponentActionListener* listener,
+                                  bool autoclean = true);
+
+
+    /*!
+     * @if jp
+     * @brief PreComponentActionListener リスナを削除する
+     *
+     * 設定した各種リスナを削除する。
+     * 
+     * @param listener_type リスナタイプ
+     * @param listener リスナオブジェクトへのポインタ
+     *
+     * @else
+     * @brief Removing PreComponentAction type listener
+     *
+     * This operation removes a specified listener.
+     *     
+     * @param listener_type A listener type
+     * @param listener A pointer to a listener object
+     *
+     * @endif
+     */
+    void 
+    removePreComponentActionListener(
+                                 PreComponentActionListenerType listener_type,
+                                 PreComponentActionListener* listener);
+
+
+    /*!
+     * @if jp
+     * @brief PostComponentActionListener リスナを追加する
+     *
+     * ComponentAction 実装関数の呼び出し直後のイベントに関連する各種リ
+     * スナを設定する。
+     *
+     * 設定できるリスナのタイプとコールバックイベントは以下の通り
+     *
+     * - POST_ON_INITIALIZE:    onInitialize 直後
+     * - POST_ON_FINALIZE:      onFinalize 直後
+     * - POST_ON_STARTUP:       onStartup 直後
+     * - POST_ON_SHUTDOWN:      onShutdown 直後
+     * - POST_ON_ACTIVATED:     onActivated 直後
+     * - POST_ON_DEACTIVATED:   onDeactivated 直後
+     * - POST_ON_ABORTED:       onAborted 直後
+     * - POST_ON_ERROR:         onError 直後
+     * - POST_ON_RESET:         onReset 直後
+     * - POST_ON_EXECUTE:       onExecute 直後
+     * - POST_ON_STATE_UPDATE:  onStateUpdate 直後
+     *
+     * リスナは PostComponentActionListener を継承し、以下のシグニチャを持つ
+     * operator() を実装している必要がある。
+     *
+     * PostComponentActionListener::operator()(UniqueId ec_id, ReturnCode_t ret)
+     *
+     * デフォルトでは、この関数に与えたリスナオブジェクトの所有権は
+     * RTObjectに移り、RTObject解体時もしくは、
+     * removePostComponentActionListener() により削除時に自動的に解体される。
+     * リスナオブジェクトの所有権を呼び出し側で維持したい場合は、第3引
+     * 数に false を指定し、自動的な解体を抑制することができる。
+     *
+     * @param listener_type リスナタイプ
+     * @param listener リスナオブジェクトへのポインタ
+     * @param autoclean リスナオブジェクトの自動的解体を行うかどうかのフラグ
+     *
+     * @else
+     * @brief Adding PostComponentAction type listener
+     *
+     * This operation adds certain listeners related to ComponentActions
+     * post events.
+     * The following listener types are available.
+     *
+     * - POST_ON_INITIALIZE:    after onInitialize
+     * - POST_ON_FINALIZE:      after onFinalize
+     * - POST_ON_STARTUP:       after onStartup
+     * - POST_ON_SHUTDOWN:      after onShutdown
+     * - POST_ON_ACTIVATED:     after onActivated
+     * - POST_ON_DEACTIVATED:   after onDeactivated
+     * - POST_ON_ABORTED:       after onAborted
+     * - POST_ON_ERROR:         after onError
+     * - POST_ON_RESET:         after onReset
+     * - POST_ON_EXECUTE:       after onExecute
+     * - POST_ON_STATE_UPDATE:  after onStateUpdate
+     *
+     * Listeners should have the following function operator().
+     *
+     * PostComponentActionListener::operator()(UniqueId ec_id, ReturnCode_t ret)
+     *
+     * The ownership of the given listener object is transferred to
+     * this RTObject object in default.  The given listener object will
+     * be destroied automatically in the RTObject's dtor or if the
+     * listener is deleted by removePostComponentActionListener() function.
+     * If you want to keep ownership of the listener object, give
+     * "false" value to 3rd argument to inhibit automatic destruction.
+     *
+     * @param listener_type A listener type
+     * @param listener A pointer to a listener object
+     * @param autoclean A flag for automatic listener destruction
+     *
+     * @endif
+     */
+    void 
+    addPostComponentActionListener(
+                               PostComponentActionListenerType listener_type,
+                               PostComponentActionListener* listener,
+                               bool autoclean = true);
+
+
+    /*!
+     * @if jp
+     * @brief PostComponentActionListener リスナを削除する
+     *
+     * 設定した各種リスナを削除する。
+     * 
+     * @param listener_type リスナタイプ
+     * @param listener リスナオブジェクトへのポインタ
+     *
+     * @else
+     * @brief Removing PostComponentAction type listener
+     *
+     * This operation removes a specified listener.
+     *     
+     * @param listener_type A listener type
+     * @param listener A pointer to a listener object
+     *
+     * @endif
+     */
+    void 
+    removePostComponentActionListener(
+                                  PostComponentActionListenerType listener_type,
+                                  PostComponentActionListener* listener);
     
   protected:
     /*!
@@ -3240,6 +3440,21 @@ namespace RTC
      * @endif
      */
     bool m_writeAllCompletion;
+
+    /*!
+     * @if jp
+     * @brief ComponentActionListenerホルダ
+     *
+     * ComponentActionListenrを保持するホルダ
+     *
+     * @else
+     * @brief ComponentActionListener holder
+     *
+     * Holders of ComponentActionListeners
+     *
+     * @endif
+     */
+    ComponentActionListeners m_actionListeners;
 
     //------------------------------------------------------------
     // Functor
