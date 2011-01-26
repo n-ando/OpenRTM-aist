@@ -59,6 +59,7 @@ COMP_SRC =                           \
 	PortAdmin.cpp                \
 	RTObject.cpp                 \
 	ConfigAdmin.cpp              \
+	ComponentActionListener.cpp  \
 	SdoConfiguration.cpp         \
 	SdoOrganization.cpp          \
 	PeriodicECSharedComposite.cpp
