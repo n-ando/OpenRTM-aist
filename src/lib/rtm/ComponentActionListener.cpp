@@ -1,13 +1,12 @@
 // -*- C++ -*-
 /*!
- * @file PreComponentActionListener.cpp
- * @brief connector listener class
+ * @file ComponentActionListener.cpp
+ * @brief Component action listener class
  * @date $Date$
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
- * Copyright (C) 2009
+ * Copyright (C) 2011
  *     Noriaki Ando
- *     Task-intelligence Research Group,
  *     Intelligent Systems Research Institute,
  *     National Institute of
  *         Advanced Industrial Science and Technology (AIST), Japan
@@ -21,7 +20,6 @@
 
 namespace RTC
 {
-  typedef ExecutionContextHandle_t UniqueId;
   /*!
    * @if jp
    * @class PostComponentActionListener епеще╣

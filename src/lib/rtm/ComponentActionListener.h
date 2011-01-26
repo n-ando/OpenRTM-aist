@@ -7,7 +7,6 @@
  *
  * Copyright (C) 2011
  *     Noriaki Ando
- *     Task-intelligence Research Group,
  *     Intelligent Systems Research Institute,
  *     National Institute of
  *         Advanced Industrial Science and Technology (AIST), Japan
@@ -17,8 +16,8 @@
  *
  */
 
-#ifndef RTC_CONNECTORLISTENER_H
-#define RTC_CONNECTORLISTENER_H
+#ifndef RTC_COMPONENTACTIONLISTENER_H
+#define RTC_COMPONENTACTIONLISTENER_H
 
 #include <vector>
 #include <utility>
@@ -31,19 +30,19 @@ namespace RTC
   typedef ExecutionContextHandle_t UniqueId;
   /*!
    * @if jp
-   * @brief PreComponentActionListener ‚Ìƒ^ƒCƒv
+   * @brief PreComponentActionListener ¤Î¥¿¥¤¥×
    *
-   * - PRE_ON_INITIALIZE:
-   * - PRE_ON_FINALIZE:
-   * - PRE_ON_STARTUP:
-   * - PRE_ON_SHUTDOWN:
-   * - PRE_ON_ACTIVATED:
-   * - PRE_ON_DEACTIVATED:
-   * - PRE_ON_ABORTED:
-   * - PRE_ON_ERROR:
-   * - PRE_ON_RESET:
-   * - PRE_ON_EXECUTE:
-   * - PRE_ON_STATE_UPDATE:
+   * - PRE_ON_INITIALIZE:    onInitialize Ä¾Á°
+   * - PRE_ON_FINALIZE:      onFinalize Ä¾Á°
+   * - PRE_ON_STARTUP:       onStartup Ä¾Á°
+   * - PRE_ON_SHUTDOWN:      onShutdown Ä¾Á°
+   * - PRE_ON_ACTIVATED:     onActivated Ä¾Á°
+   * - PRE_ON_DEACTIVATED:   onDeactivated Ä¾Á°
+   * - PRE_ON_ABORTED:       onAborted Ä¾Á°
+   * - PRE_ON_ERROR:         onError Ä¾Á°
+   * - PRE_ON_RESET:         onReset Ä¾Á°
+   * - PRE_ON_EXECUTE:       onExecute Ä¾Á°
+   * - PRE_ON_STATE_UPDATE:  onStateUpdate Ä¾Á°
    *
    * @else
    * @brief The types of ConnectorDataListener
@@ -69,11 +68,11 @@ namespace RTC
 
   /*!
    * @if jp
-   * @class PreComponentActionListener ƒNƒ‰ƒX
-   * @brief PreComponentActionListener ƒNƒ‰ƒX
+   * @class PreComponentActionListener ¥¯¥é¥¹
+   * @brief PreComponentActionListener ¥¯¥é¥¹
    *
-   * OMG RTCd—l‚Å’è‹`‚³‚ê‚Ä‚¢‚éˆÈ‰º‚ÌƒRƒ“ƒ|[ƒlƒ“ƒgƒAƒNƒVƒ‡ƒ“ƒg‚É‚Â‚¢
-   * ‚ÄA
+   * OMG RTC»ÅÍÍ¤ÇÄêµÁ¤µ¤ì¤Æ¤¤¤ë°Ê²¼¤Î¥³¥ó¥İ¡¼¥Í¥ó¥È¥¢¥¯¥·¥ç¥ó¥È¤Ë¤Ä¤¤
+   * ¤Æ¡¢
    *
    * - on_initialize()
    * - on_finalize()
@@ -87,8 +86,8 @@ namespace RTC
    * - on_execute()
    * - on_state_update()
    *
-   * ŠeƒAƒNƒVƒ‡ƒ“‚É‘Î‰‚·‚éƒ†[ƒU[ƒR[ƒh‚ªŒÄ‚Î‚ê‚é’¼‘O‚Ìƒ^ƒCƒ~ƒ“ƒO
-   * ‚ÅƒR[ƒ‹‚³‚ê‚éƒŠƒX‚ÈƒNƒ‰ƒX‚ÌŠî’êƒNƒ‰ƒXB
+   * ³Æ¥¢¥¯¥·¥ç¥ó¤ËÂĞ±ş¤¹¤ë¥æ¡¼¥¶¡¼¥³¡¼¥É¤¬¸Æ¤Ğ¤ì¤ëÄ¾Á°¤Î¥¿¥¤¥ß¥ó¥°
+   * ¤Ç¥³¡¼¥ë¤µ¤ì¤ë¥ê¥¹¤Ê¥¯¥é¥¹¤Î´ğÄì¥¯¥é¥¹¡£
    *
    * - PRE_ON_INITIALIZE:
    * - PRE_ON_FINALIZE:
@@ -115,13 +114,13 @@ namespace RTC
     /*!
      * @if jp
      *
-     * @brief PreComponentActionListenerType ‚ğ•¶š—ñ‚É•ÏŠ·
+     * @brief PreComponentActionListenerType ¤òÊ¸»úÎó¤ËÊÑ´¹
      *
-     * PreComponentActionListenerType ‚ğ•¶š—ñ‚É•ÏŠ·‚·‚é
+     * PreComponentActionListenerType ¤òÊ¸»úÎó¤ËÊÑ´¹¤¹¤ë
      *
-     * @param type •ÏŠ·‘ÎÛ PreComponentActionListenerType
+     * @param type ÊÑ´¹ÂĞ¾İ PreComponentActionListenerType
      *
-     * @return •¶š—ñ•ÏŠ·Œ‹‰Ê
+     * @return Ê¸»úÎóÊÑ´¹·ë²Ì
      *
      * @else
      *
@@ -158,7 +157,7 @@ namespace RTC
 
     /*!
      * @if jp
-     * @brief ƒfƒXƒgƒ‰ƒNƒ^
+     * @brief ¥Ç¥¹¥È¥é¥¯¥¿
      * @else
      * @brief Destructor
      * @endif
@@ -168,9 +167,9 @@ namespace RTC
     /*!
      * @if jp
      *
-     * @brief ‰¼‘zƒR[ƒ‹ƒoƒbƒNŠÖ”
+     * @brief ²¾ÁÛ¥³¡¼¥ë¥Ğ¥Ã¥¯´Ø¿ô
      *
-     * PreComponentActionListener ‚ÌƒR[ƒ‹ƒoƒbƒNŠÖ”
+     * PreComponentActionListener ¤Î¥³¡¼¥ë¥Ğ¥Ã¥¯´Ø¿ô
      *
      * @else
      *
@@ -186,7 +185,7 @@ namespace RTC
 
   /*!
    * @if jp
-   * @brief PostCompoenntActionListener ‚Ìƒ^ƒCƒv
+   * @brief PostCompoenntActionListener ¤Î¥¿¥¤¥×
    *
    * - POST_ON_INITIALIZE:
    * - POST_ON_FINALIZE:
@@ -224,11 +223,11 @@ namespace RTC
 
   /*!
    * @if jp
-   * @class PostComponentActionListener ƒNƒ‰ƒX
-   * @brief PostComponentActionListener ƒNƒ‰ƒX
+   * @class PostComponentActionListener ¥¯¥é¥¹
+   * @brief PostComponentActionListener ¥¯¥é¥¹
    *
-   * OMG RTCd—l‚Å’è‹`‚³‚ê‚Ä‚¢‚éˆÈ‰º‚ÌƒRƒ“ƒ|[ƒlƒ“ƒgƒAƒNƒVƒ‡ƒ“ƒg‚É‚Â‚¢
-   * ‚ÄA
+   * OMG RTC»ÅÍÍ¤ÇÄêµÁ¤µ¤ì¤Æ¤¤¤ë°Ê²¼¤Î¥³¥ó¥İ¡¼¥Í¥ó¥È¥¢¥¯¥·¥ç¥ó¥È¤Ë¤Ä¤¤
+   * ¤Æ¡¢
    *
    * - on_initialize()
    * - on_finalize()
@@ -242,8 +241,8 @@ namespace RTC
    * - on_execute()
    * - on_state_update()
    *
-   * ŠeƒAƒNƒVƒ‡ƒ“‚É‘Î‰‚·‚éƒ†[ƒU[ƒR[ƒh‚ªŒÄ‚Î‚ê‚é’¼‘O‚Ìƒ^ƒCƒ~ƒ“ƒO
-   * ‚ÅƒR[ƒ‹‚³‚ê‚éƒŠƒX‚ÈƒNƒ‰ƒX‚ÌŠî’êƒNƒ‰ƒXB
+   * ³Æ¥¢¥¯¥·¥ç¥ó¤ËÂĞ±ş¤¹¤ë¥æ¡¼¥¶¡¼¥³¡¼¥É¤¬¸Æ¤Ğ¤ì¤ëÄ¾Á°¤Î¥¿¥¤¥ß¥ó¥°
+   * ¤Ç¥³¡¼¥ë¤µ¤ì¤ë¥ê¥¹¤Ê¥¯¥é¥¹¤Î´ğÄì¥¯¥é¥¹¡£
    *
    * - POST_ON_INITIALIZE:
    * - POST_ON_FINALIZE:
@@ -270,13 +269,13 @@ namespace RTC
     /*!
      * @if jp
      *
-     * @brief PostComponentActionListenerType ‚ğ•¶š—ñ‚É•ÏŠ·
+     * @brief PostComponentActionListenerType ¤òÊ¸»úÎó¤ËÊÑ´¹
      *
-     * PostComponentActionListenerType ‚ğ•¶š—ñ‚É•ÏŠ·‚·‚é
+     * PostComponentActionListenerType ¤òÊ¸»úÎó¤ËÊÑ´¹¤¹¤ë
      *
-     * @param type •ÏŠ·‘ÎÛ PostComponentActionListenerType
+     * @param type ÊÑ´¹ÂĞ¾İ PostComponentActionListenerType
      *
-     * @return •¶š—ñ•ÏŠ·Œ‹‰Ê
+     * @return Ê¸»úÎóÊÑ´¹·ë²Ì
      *
      * @else
      *
@@ -316,7 +315,7 @@ namespace RTC
 
     /*!
      * @if jp
-     * @brief ƒfƒXƒgƒ‰ƒNƒ^
+     * @brief ¥Ç¥¹¥È¥é¥¯¥¿
      * @else
      * @brief Destructor
      * @endif
@@ -326,9 +325,9 @@ namespace RTC
     /*!
      * @if jp
      *
-     * @brief ‰¼‘zƒR[ƒ‹ƒoƒbƒNŠÖ”
+     * @brief ²¾ÁÛ¥³¡¼¥ë¥Ğ¥Ã¥¯´Ø¿ô
      *
-     * PostComponentActionListener ‚ÌƒR[ƒ‹ƒoƒbƒNŠÖ”
+     * PostComponentActionListener ¤Î¥³¡¼¥ë¥Ğ¥Ã¥¯´Ø¿ô
      *
      * @else
      *
@@ -346,9 +345,9 @@ namespace RTC
   /*!
    * @if jp
    * @class PreComponentActionListenerHolder 
-   * @brief PreComponentActionListener ƒzƒ‹ƒ_ƒNƒ‰ƒX
+   * @brief PreComponentActionListener ¥Û¥ë¥À¥¯¥é¥¹
    *
-   * •¡”‚Ì PreComponentActionListener ‚ğ•Û‚µŠÇ—‚·‚éƒNƒ‰ƒXB
+   * Ê£¿ô¤Î PreComponentActionListener ¤òÊİ»ı¤·´ÉÍı¤¹¤ë¥¯¥é¥¹¡£
    *
    * @else
    * @class PreComponentActionListenerHolder
@@ -364,7 +363,7 @@ namespace RTC
   public:
     /*!
      * @if jp
-     * @brief ƒRƒ“ƒXƒgƒ‰ƒNƒ^
+     * @brief ¥³¥ó¥¹¥È¥é¥¯¥¿
      * @else
      * @brief Constructor
      * @endif
@@ -373,7 +372,7 @@ namespace RTC
     
     /*!
      * @if jp
-     * @brief ƒfƒXƒgƒ‰ƒNƒ^
+     * @brief ¥Ç¥¹¥È¥é¥¯¥¿
      * @else
      * @brief Destructor
      * @endif
@@ -383,13 +382,13 @@ namespace RTC
     /*!
      * @if jp
      *
-     * @brief ƒŠƒXƒi[‚Ì’Ç‰Á
+     * @brief ¥ê¥¹¥Ê¡¼¤ÎÄÉ²Ã
      *
-     * ƒŠƒXƒi[‚ğ’Ç‰Á‚·‚éB
+     * ¥ê¥¹¥Ê¡¼¤òÄÉ²Ã¤¹¤ë¡£
      *
-     * @param listener ’Ç‰Á‚·‚éƒŠƒXƒi
-     * @param autoclean true:ƒfƒXƒgƒ‰ƒNƒ^‚Åíœ‚·‚é,
-     *                  false:ƒfƒXƒgƒ‰ƒNƒ^‚Åíœ‚µ‚È‚¢
+     * @param listener ÄÉ²Ã¤¹¤ë¥ê¥¹¥Ê
+     * @param autoclean true:¥Ç¥¹¥È¥é¥¯¥¿¤Çºï½ü¤¹¤ë,
+     *                  false:¥Ç¥¹¥È¥é¥¯¥¿¤Çºï½ü¤·¤Ê¤¤
      * @else
      *
      * @brief Add the listener.
@@ -406,11 +405,11 @@ namespace RTC
     /*!
      * @if jp
      *
-     * @brief ƒŠƒXƒi[‚Ìíœ
+     * @brief ¥ê¥¹¥Ê¡¼¤Îºï½ü
      *
-     * ƒŠƒXƒi‚ğíœ‚·‚éB
+     * ¥ê¥¹¥Ê¤òºï½ü¤¹¤ë¡£
      *
-     * @param listener íœ‚·‚éƒŠƒXƒi
+     * @param listener ºï½ü¤¹¤ë¥ê¥¹¥Ê
      * @else
      *
      * @brief Remove the listener. 
@@ -425,9 +424,9 @@ namespace RTC
     /*!
      * @if jp
      *
-     * @brief ƒŠƒXƒi[‚Ö’Ê’m‚·‚é
+     * @brief ¥ê¥¹¥Ê¡¼¤ØÄÌÃÎ¤¹¤ë
      *
-     * “o˜^‚³‚ê‚Ä‚¢‚éƒŠƒXƒi‚ÌƒR[ƒ‹ƒoƒbƒNƒƒ\ƒbƒh‚ğŒÄ‚Ño‚·B
+     * ÅĞÏ¿¤µ¤ì¤Æ¤¤¤ë¥ê¥¹¥Ê¤Î¥³¡¼¥ë¥Ğ¥Ã¥¯¥á¥½¥Ã¥É¤ò¸Æ¤Ó½Ğ¤¹¡£
      *
      * @param info ConnectorInfo
      * @else
@@ -449,9 +448,9 @@ namespace RTC
   /*!
    * @if jp
    * @class PostComponentActionListenerHolder
-   * @brief PostComponentActionListener ƒzƒ‹ƒ_ƒNƒ‰ƒX
+   * @brief PostComponentActionListener ¥Û¥ë¥À¥¯¥é¥¹
    *
-   * •¡”‚Ì PostComponentActionListener ‚ğ•Û‚µŠÇ—‚·‚éƒNƒ‰ƒXB
+   * Ê£¿ô¤Î PostComponentActionListener ¤òÊİ»ı¤·´ÉÍı¤¹¤ë¥¯¥é¥¹¡£
    *
    * @else
    * @class PostComponentActionListenerHolder
@@ -468,7 +467,7 @@ namespace RTC
   public:
     /*!
      * @if jp
-     * @brief ƒRƒ“ƒXƒgƒ‰ƒNƒ^
+     * @brief ¥³¥ó¥¹¥È¥é¥¯¥¿
      * @else
      * @brief Constructor
      * @endif
@@ -476,7 +475,7 @@ namespace RTC
     PostComponentActionListenerHolder();
     /*!
      * @if jp
-     * @brief ƒfƒXƒgƒ‰ƒNƒ^
+     * @brief ¥Ç¥¹¥È¥é¥¯¥¿
      * @else
      * @brief Destructor
      * @endif
@@ -486,13 +485,13 @@ namespace RTC
     /*!
      * @if jp
      *
-     * @brief ƒŠƒXƒi[‚Ì’Ç‰Á
+     * @brief ¥ê¥¹¥Ê¡¼¤ÎÄÉ²Ã
      *
-     * ƒŠƒXƒi[‚ğ’Ç‰Á‚·‚éB
+     * ¥ê¥¹¥Ê¡¼¤òÄÉ²Ã¤¹¤ë¡£
      *
-     * @param listener ’Ç‰Á‚·‚éƒŠƒXƒi
-     * @param autoclean true:ƒfƒXƒgƒ‰ƒNƒ^‚Åíœ‚·‚é,
-     *                  false:ƒfƒXƒgƒ‰ƒNƒ^‚Åíœ‚µ‚È‚¢
+     * @param listener ÄÉ²Ã¤¹¤ë¥ê¥¹¥Ê
+     * @param autoclean true:¥Ç¥¹¥È¥é¥¯¥¿¤Çºï½ü¤¹¤ë,
+     *                  false:¥Ç¥¹¥È¥é¥¯¥¿¤Çºï½ü¤·¤Ê¤¤
      * @else
      *
      * @brief Add the listener.
@@ -509,11 +508,11 @@ namespace RTC
     /*!
      * @if jp
      *
-     * @brief ƒŠƒXƒi[‚Ìíœ
+     * @brief ¥ê¥¹¥Ê¡¼¤Îºï½ü
      *
-     * ƒŠƒXƒi‚ğíœ‚·‚éB
+     * ¥ê¥¹¥Ê¤òºï½ü¤¹¤ë¡£
      *
-     * @param listener íœ‚·‚éƒŠƒXƒi
+     * @param listener ºï½ü¤¹¤ë¥ê¥¹¥Ê
      * @else
      *
      * @brief Remove the listener. 
@@ -528,12 +527,12 @@ namespace RTC
     /*!
      * @if jp
      *
-     * @brief ƒŠƒXƒi[‚Ö’Ê’m‚·‚é
+     * @brief ¥ê¥¹¥Ê¡¼¤ØÄÌÃÎ¤¹¤ë
      *
-     * “o˜^‚³‚ê‚Ä‚¢‚éƒŠƒXƒi‚ÌƒR[ƒ‹ƒoƒbƒNƒƒ\ƒbƒh‚ğŒÄ‚Ño‚·B
+     * ÅĞÏ¿¤µ¤ì¤Æ¤¤¤ë¥ê¥¹¥Ê¤Î¥³¡¼¥ë¥Ğ¥Ã¥¯¥á¥½¥Ã¥É¤ò¸Æ¤Ó½Ğ¤¹¡£
      *
      * @param info ConnectorInfo
-     * @param cdrdata ƒf[ƒ^
+     * @param cdrdata ¥Ç¡¼¥¿
      * @else
      *
      * @brief Notify listeners. 
@@ -554,7 +553,7 @@ namespace RTC
   /*!
    * @if jp
    * @class ComponentActionListeners
-   * @brief ComponentActionListeners ƒNƒ‰ƒX
+   * @brief ComponentActionListeners ¥¯¥é¥¹
    *
    *
    * @else
@@ -569,8 +568,8 @@ namespace RTC
   public:
     /*!
      * @if jp
-     * @brief PreComponentActionListenerTypeƒŠƒXƒi”z—ñ
-     * PreComponentActionListenerTypeƒŠƒXƒi‚ğŠi”[
+     * @brief PreComponentActionListenerType¥ê¥¹¥ÊÇÛÎó
+     * PreComponentActionListenerType¥ê¥¹¥Ê¤ò³ÊÇ¼
      * @else
      * @brief PreComponentActionListenerType listener array
      * The PreComponentActionListenerType listener is stored. 
@@ -580,8 +579,8 @@ namespace RTC
     preaction_[PRE_COMPONENT_ACTION_LISTENER_NUM];
     /*!
      * @if jp
-     * @brief PostComponentActionTypeƒŠƒXƒi”z—ñ
-     * PostComponentActionTypeƒŠƒXƒi‚ğŠi”[
+     * @brief PostComponentActionType¥ê¥¹¥ÊÇÛÎó
+     * PostComponentActionType¥ê¥¹¥Ê¤ò³ÊÇ¼
      * @else
      * @brief PostComponentActionType listener array
      * The PostComponentActionType listener is stored.
@@ -594,4 +593,4 @@ namespace RTC
 
 }; // namespace RTC
 
-#endif // RTC_CONNECTORLISTENER_H
+#endif // RTC_COMPONENTACTIONLISTENER_H
