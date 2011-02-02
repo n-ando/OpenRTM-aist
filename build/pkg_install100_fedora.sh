@@ -21,6 +21,8 @@ openrtm="OpenRTM-aist OpenRTM-aist-devel OpenRTM-aist-doc OpenRTM-aist-example P
 openrtm04="OpenRTM-aist-0.4.2 OpenRTM-aist-devel-0.4.2 OpenRTM-aist-doc-0.4.2 OpenRTM-aist-example-0.4.2 PyYAML"
 packages="gcc-c++ uuid-devel $omni $openrtm"
 
+reposervers="www.openrtm.org www.openrtm.de"
+reposerver=""
 
 #----------------------------------------
 # root かどうかをチェック
@@ -46,6 +48,31 @@ clean_pkg_list () {
     rm -f $rpm_qa
 }
 
+#----------------------------------------
+# 近いリポジトリサーバを探す
+#----------------------------------------
+check_reposerver()
+{
+    minrtt=65535
+    nearhost=''
+    for host in $reposervers; do
+	rtt=`ping -c 1 $host | grep 'time=' | sed -e 's/^.*time=\([0-9\.]*\) ms.*/\1/' 2> /dev/null`
+	if test "x$rtt" = "x"; then
+	    rtt=65535
+	fi
+	if test `echo "scale=2 ; $rtt < $minrtt" | bc` -gt 0; then
+	    minrtt=$rtt
+	    nearhost=$host
+	fi
+    done
+    if test "x$nearhost" = "x"; then
+	echo "Repository servers unreachable.", $hosts
+	exit 1
+    fi
+    reposerver=$nearhost
+}
+
+
 #---------------------------------------
 # リポジトリサイト設定ファイルを生成
 #---------------------------------------
@@ -54,12 +81,13 @@ cat <<EOF
 [openrtm]
 name=Fedora \$releasever - \$basearch
 failovermethod=priority
-baseurl=http://www.openrtm.org/pub/Linux/Fedora/releases/\$releasever/Fedora/\$basearch/os/Packages
+baseurl=http://$reposerver/pub/Linux/Fedora/releases/\$releasever/Fedora/\$basearch/os/Packages
 enabled=1
 gpgcheck=0
 gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-fedora file:///etc/pki/rpm-gpg/RPM-GPG-KEY
 EOF
 } 
+
 create_repo() {
     repo="/etc/yum.repos.d/openrtm.repo"
     if test ! -f $repo ; then
@@ -129,6 +157,7 @@ fi
 if test "x$1" = "x-u" ; then
     uninstall_packages `reverse $packages`
 else
+    check_reposerver
     create_repo
     install_packages $packages
 fi
