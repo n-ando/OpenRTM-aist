@@ -3133,6 +3133,176 @@ namespace RTC
     removePostComponentActionListener(
                                   PostComponentActionListenerType listener_type,
                                   PostComponentActionListener* listener);
+
+
+
+    /*!
+     * @if jp
+     * @brief PortActionListener リスナを追加する
+     *
+     * Portの追加、削除時にコールバックされる各種リスナを設定する。
+     *
+     * 設定できるリスナのタイプとコールバックイベントは以下の通り
+     *
+     * - ADD_PORT:    Port追加時
+     * - REMOVE_PORT: Port削除時
+     *
+     * リスナは PortActionListener を継承し、以下のシグニチャを持つ
+     * operator() を実装している必要がある。
+     *
+     * PortActionListener::operator()(PortProfile& pprof)
+     *
+     * デフォルトでは、この関数に与えたリスナオブジェクトの所有権は
+     * RTObjectに移り、RTObject解体時もしくは、
+     * removePortActionListener() により削除時に自動的に解体される。
+     * リスナオブジェクトの所有権を呼び出し側で維持したい場合は、第3引
+     * 数に false を指定し、自動的な解体を抑制することができる。
+     *
+     * @param listener_type リスナタイプ
+     * @param listener リスナオブジェクトへのポインタ
+     * @param autoclean リスナオブジェクトの自動的解体を行うかどうかのフラグ
+     *
+     * @else
+     * @brief Adding PortAction type listener
+     *
+     * This operation adds certain listeners related to ComponentActions
+     * post events.
+     * The following listener types are available.
+     *
+     * - ADD_PORT:    At adding Port
+     * - REMOVE_PORT: At removing Port
+     *
+     * Listeners should have the following function operator().
+     *
+     * PortActionListener::operator()(RTC::PortProfile pprof)
+     *
+     * The ownership of the given listener object is transferred to
+     * this RTObject object in default.  The given listener object will
+     * be destroied automatically in the RTObject's dtor or if the
+     * listener is deleted by removePortActionListener() function.
+     * If you want to keep ownership of the listener object, give
+     * "false" value to 3rd argument to inhibit automatic destruction.
+     *
+     * @param listener_type A listener type
+     * @param listener A pointer to a listener object
+     * @param autoclean A flag for automatic listener destruction
+     *
+     * @endif
+     */
+    void 
+    addPortActionListener(PortActionListenerType listener_type,
+                          PortActionListener* listener,
+                          bool autoclean = true);
+    
+
+    /*!
+     * @if jp
+     * @brief PortActionListener リスナを削除する
+     *
+     * 設定した各種リスナを削除する。
+     * 
+     * @param listener_type リスナタイプ
+     * @param listener リスナオブジェクトへのポインタ
+     *
+     * @else
+     * @brief Removing PortAction type listener
+     *
+     * This operation removes a specified listener.
+     *     
+     * @param listener_type A listener type
+     * @param listener A pointer to a listener object
+     *
+     * @endif
+     */
+    void 
+    removePortActionListener(PortActionListenerType listener_type,
+                             PortActionListener* listener);
+
+
+
+    /*!
+     * @if jp
+     * @brief ExecutionContextActionListener リスナを追加する
+     *
+     * ExecutionContextの追加、削除時にコールバックされる各種リスナを設定する。
+     *
+     * 設定できるリスナのタイプとコールバックイベントは以下の通り
+     *
+     * - ATTACH_EC:    ExecutionContext アタッチ時
+     * - DETACH_EC:    ExecutionContext デタッチ時
+     *
+     * リスナは ExecutionContextActionListener を継承し、以下のシグニチャを持つ
+     * operator() を実装している必要がある。
+     *
+     * ExecutionContextActionListener::operator()(UniqueId　ec_id)
+     *
+     * デフォルトでは、この関数に与えたリスナオブジェクトの所有権は
+     * RTObjectに移り、RTObject解体時もしくは、
+     * removeExecutionContextActionListener() により削除時に自動的に解体される。
+     * リスナオブジェクトの所有権を呼び出し側で維持したい場合は、第3引
+     * 数に false を指定し、自動的な解体を抑制することができる。
+     *
+     * @param listener_type リスナタイプ
+     * @param listener リスナオブジェクトへのポインタ
+     * @param autoclean リスナオブジェクトの自動的解体を行うかどうかのフラグ
+     *
+     * @else
+     * @brief Adding ExecutionContextAction type listener
+     *
+     * This operation adds certain listeners related to ComponentActions
+     * post events.
+     * The following listener types are available.
+     *
+     * - ADD_PORT:    At adding ExecutionContext
+     * - REMOVE_PORT: At removing ExecutionContext
+     *
+     * Listeners should have the following function operator().
+     *
+     * ExecutionContextActionListener::operator()(UniqueId ec_id)
+     *
+     * The ownership of the given listener object is transferred to
+     * this RTObject object in default.  The given listener object will
+     * be destroied automatically in the RTObject's dtor or if the
+     * listener is deleted by removeExecutionContextActionListener() function.
+     * If you want to keep ownership of the listener object, give
+     * "false" value to 3rd argument to inhibit automatic destruction.
+     *
+     * @param listener_type A listener type
+     * @param listener A pointer to a listener object
+     * @param autoclean A flag for automatic listener destruction
+     *
+     * @endif
+     */
+    typedef ExecutionContextActionListenerType ECActionListenerType;
+    typedef ExecutionContextActionListener ECActionListener;
+    void addExecutionContextActionListener(ECActionListenerType listener_type,
+                                           ECActionListener* listener,
+                                           bool autoclean = true);
+    
+
+    /*!
+     * @if jp
+     * @brief ExecutionContextActionListener リスナを削除する
+     *
+     * 設定した各種リスナを削除する。
+     * 
+     * @param listener_type リスナタイプ
+     * @param listener リスナオブジェクトへのポインタ
+     *
+     * @else
+     * @brief Removing ExecutionContextAction type listener
+     *
+     * This operation removes a specified listener.
+     *     
+     * @param listener_type A listener type
+     * @param listener A pointer to a listener object
+     *
+     * @endif
+     */
+    void 
+    removeExecutionContextActionListener(ECActionListenerType listener_type,
+                                         ECActionListener* listener);
+   
     
   protected:
     /*!
@@ -3276,6 +3446,25 @@ namespace RTC
       m_actionListeners.postaction_[POST_ON_RATE_CHANGED].notify(ec_id, ret);
     }
 
+    inline void onAddPort(const PortProfile& pprof)
+    {
+      m_actionListeners.portaction_[ADD_PORT].notify(pprof);
+    }
+    
+    inline void onRemovePort(const PortProfile& pprof)
+    {
+      m_actionListeners.portaction_[REMOVE_PORT].notify(pprof);
+    }
+    
+    inline void onAttachExecutionContext(UniqueId ec_id)
+    {
+      m_actionListeners.ecaction_[ATTACH_EC].notify(ec_id);
+    }
+    
+    inline void onDetachExecutionContext(UniqueId ec_id)
+    {
+      m_actionListeners.ecaction_[DETACH_EC].notify(ec_id);
+    }
     
   protected:
     /*!
