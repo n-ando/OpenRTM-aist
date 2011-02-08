@@ -827,8 +827,7 @@ namespace RTC
      * @endif
      */
     ConnectorListenerHolder connector_[CONNECTOR_LISTENER_NUM];
-  }
-;
+  };
 };
 
 #endif // RTC_CONNECTORLISTENER_H

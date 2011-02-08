@@ -3001,7 +3001,7 @@ namespace RTC
      * @endif
      */
     void 
-    addPreComponentActionListener(RTC::PreComponentActionListenerType listener_type,
+    addPreComponentActionListener(PreComponentActionListenerType listener_type,
                                   PreComponentActionListener* listener,
                                   bool autoclean = true);
 
@@ -3155,6 +3155,127 @@ namespace RTC
      * @endif
      */
     void shutdown();
+
+    inline void preOnInitialize(UniqueId ec_id)
+    {
+      m_actionListeners.preaction_[PRE_ON_INITIALIZE].notify(ec_id);
+    }
+
+    inline void preOnFinalize(UniqueId ec_id)
+    {
+      m_actionListeners.preaction_[PRE_ON_FINALIZE].notify(ec_id);
+    }
+
+    inline void preOnStartup(UniqueId ec_id)
+    {
+      m_actionListeners.preaction_[PRE_ON_STARTUP].notify(ec_id);
+    }
+
+    inline void preOnShutdown(UniqueId ec_id)
+    {
+      m_actionListeners.preaction_[PRE_ON_SHUTDOWN].notify(ec_id);
+    }
+
+    inline void preOnActivated(UniqueId ec_id)
+    {
+      m_actionListeners.preaction_[PRE_ON_ACTIVATED].notify(ec_id);
+    }
+
+    inline void preOnDeactivated(UniqueId ec_id)
+    {
+      m_actionListeners.preaction_[PRE_ON_DEACTIVATED].notify(ec_id);
+    }
+
+    inline void preOnAborting(UniqueId ec_id)
+    {
+      m_actionListeners.preaction_[PRE_ON_ABORTING].notify(ec_id);
+    }
+
+    inline void preOnError(UniqueId ec_id)
+    {
+      m_actionListeners.preaction_[PRE_ON_ERROR].notify(ec_id);
+    }
+
+    inline void preOnReset(UniqueId ec_id)
+    {
+      m_actionListeners.preaction_[PRE_ON_RESET].notify(ec_id);
+    }
+
+    inline void preOnExecute(UniqueId ec_id)
+    {
+      m_actionListeners.preaction_[PRE_ON_EXECUTE].notify(ec_id);
+    }
+
+    inline void preOnStateUpdate(UniqueId ec_id)
+    {
+      m_actionListeners.preaction_[PRE_ON_STATE_UPDATE].notify(ec_id);
+    }
+
+    inline void preOnRateChanged(UniqueId ec_id)
+    {
+      m_actionListeners.preaction_[PRE_ON_RATE_CHANGED].notify(ec_id);
+    }
+
+    inline void postOnInitialize(UniqueId ec_id, ReturnCode_t ret)
+    {
+      m_actionListeners.postaction_[POST_ON_INITIALIZE].notify(ec_id, ret);
+    }
+
+    inline void postOnFinalize(UniqueId ec_id, ReturnCode_t ret)
+    {
+      m_actionListeners.postaction_[POST_ON_FINALIZE].notify(ec_id, ret);
+    }
+
+    inline void postOnStartup(UniqueId ec_id, ReturnCode_t ret)
+    {
+      m_actionListeners.postaction_[POST_ON_STARTUP].notify(ec_id, ret);
+    }
+
+    inline void postOnShutdown(UniqueId ec_id, ReturnCode_t ret)
+    {
+      m_actionListeners.postaction_[POST_ON_SHUTDOWN].notify(ec_id, ret);
+    }
+
+    inline void postOnActivated(UniqueId ec_id, ReturnCode_t ret)
+    {
+      m_actionListeners.postaction_[POST_ON_ACTIVATED].notify(ec_id, ret);
+    }
+
+    inline void postOnDeactivated(UniqueId ec_id, ReturnCode_t ret)
+    {
+      m_actionListeners.postaction_[POST_ON_DEACTIVATED].notify(ec_id, ret);
+    }
+
+    inline void postOnAborting(UniqueId ec_id, ReturnCode_t ret)
+    {
+      m_actionListeners.postaction_[POST_ON_ABORTING].notify(ec_id, ret);
+    }
+
+    inline void postOnError(UniqueId ec_id, ReturnCode_t ret)
+    {
+      m_actionListeners.postaction_[POST_ON_ERROR].notify(ec_id, ret);
+    }
+
+    inline void postOnReset(UniqueId ec_id, ReturnCode_t ret)
+    {
+      m_actionListeners.postaction_[POST_ON_RESET].notify(ec_id, ret);
+    }
+
+    inline void postOnExecute(UniqueId ec_id, ReturnCode_t ret)
+    {
+      m_actionListeners.postaction_[POST_ON_EXECUTE].notify(ec_id, ret);
+    }
+
+    inline void postOnStateUpdate(UniqueId ec_id, ReturnCode_t ret)
+    {
+      m_actionListeners.postaction_[POST_ON_STATE_UPDATE].notify(ec_id, ret);
+    }
+
+    inline void postOnRateChanged(UniqueId ec_id, ReturnCode_t ret)
+    {
+      m_actionListeners.postaction_[POST_ON_RATE_CHANGED].notify(ec_id, ret);
+    }
+
     
   protected:
     /*!
