@@ -38,11 +38,12 @@ namespace RTC
    * - PRE_ON_SHUTDOWN:      onShutdown 直前
    * - PRE_ON_ACTIVATED:     onActivated 直前
    * - PRE_ON_DEACTIVATED:   onDeactivated 直前
-   * - PRE_ON_ABORTED:       onAborted 直前
+   * - PRE_ON_ABORTING:      onAborted 直前
    * - PRE_ON_ERROR:         onError 直前
    * - PRE_ON_RESET:         onReset 直前
    * - PRE_ON_EXECUTE:       onExecute 直前
    * - PRE_ON_STATE_UPDATE:  onStateUpdate 直前
+   * - PRE_ON_RATE_CHANGED:  onRateChanged 直前
    *
    * @else
    * @brief The types of ConnectorDataListener
@@ -58,11 +59,12 @@ namespace RTC
       PRE_ON_SHUTDOWN,
       PRE_ON_ACTIVATED,
       PRE_ON_DEACTIVATED,
-      PRE_ON_ABORTED,
+      PRE_ON_ABORTING,
       PRE_ON_ERROR,
       PRE_ON_RESET,
       PRE_ON_EXECUTE,
       PRE_ON_STATE_UPDATE,
+      PRE_ON_RATE_CHANGED,
       PRE_COMPONENT_ACTION_LISTENER_NUM
     };
 
@@ -85,6 +87,7 @@ namespace RTC
    * - on_reset()
    * - on_execute()
    * - on_state_update()
+   * - on_rate_changed()
    *
    * 各アクションに対応するユーザーコードが呼ばれる直前のタイミング
    * でコールされるリスなクラスの基底クラス。
@@ -95,9 +98,12 @@ namespace RTC
    * - PRE_ON_SHUTDOWN:
    * - PRE_ON_ACTIVATED:
    * - PRE_ON_DEACTIVATED:
-   * - PRE_ON_ABORTED:
+   * - PRE_ON_ABORTING:
    * - PRE_ON_ERROR:
    * - PRE_ON_RESET:
+   * - PRE_IN_EXECUTE:
+   * - PRE_ON_STATE_UPDATE:
+   * - PRE_ON_RATE_CHANGED:
    *
    * @else
    * @class PreComponentActionListener class
@@ -144,11 +150,12 @@ namespace RTC
           "PRE_ON_SHUTDOWN",
           "PRE_ON_ACTIVATED",
           "PRE_ON_DEACTIVATED",
-          "PRE_ON_ABORTED",
+          "PRE_ON_ABORTING",
           "PRE_ON_ERROR",
           "PRE_ON_RESET",
           "PRE_ON_EXECUTE",
           "PRE_ON_STATE_UPDATE",
+          "PRE_ON_RATE_CHANGED",
           "PRE_COMPONENT_ACTION_LISTENER_NUM"
         };
       if (type < PRE_COMPONENT_ACTION_LISTENER_NUM) { return typeString[type]; }
@@ -193,11 +200,12 @@ namespace RTC
    * - POST_ON_SHUTDOWN:
    * - POST_ON_ACTIVATED:
    * - POST_ON_DEACTIVATED:
-   * - POST_ON_ABORTED:
+   * - POST_ON_ABORTING:
    * - POST_ON_ERROR:
    * - POST_ON_RESET:
    * - POST_ON_EXECUTE:
    * - POST_ON_STATE_UPDATE:
+   * - POST_ON_RATE_CHANGED:
    *
    * @else
    * @brief The types of ConnectorDataListener
@@ -212,11 +220,12 @@ namespace RTC
       POST_ON_SHUTDOWN,
       POST_ON_ACTIVATED,
       POST_ON_DEACTIVATED,
-      POST_ON_ABORTED,
+      POST_ON_ABORTING,
       POST_ON_ERROR,
       POST_ON_RESET,
       POST_ON_EXECUTE,
       POST_ON_STATE_UPDATE,
+      POST_ON_RATE_CHANGED,
       POST_COMPONENT_ACTION_LISTENER_NUM
     };
 
@@ -240,6 +249,7 @@ namespace RTC
    * - on_reset()
    * - on_execute()
    * - on_state_update()
+   * - on_rate_changed()
    *
    * 各アクションに対応するユーザーコードが呼ばれる直前のタイミング
    * でコールされるリスなクラスの基底クラス。
@@ -250,9 +260,12 @@ namespace RTC
    * - POST_ON_SHUTDOWN:
    * - POST_ON_ACTIVATED:
    * - POST_ON_DEACTIVATED:
-   * - POST_ON_ABORTED:
+   * - POST_ON_ABORTING:
    * - POST_ON_ERROR:
    * - POST_ON_RESET:
+   * - POST_ON_EXECUTE:
+   * - POST_ON_STATE_UPDATE:
+   * - POST_ON_RATE_CHANGED:
    *
    * @else
    * @class PostComponentActionListener class
@@ -299,11 +312,12 @@ namespace RTC
           "POST_ON_SHUTDOWN",
           "POST_ON_ACTIVATED",
           "POST_ON_DEACTIVATED",
-          "POST_ON_ABORTED",
+          "POST_ON_ABORTING",
           "POST_ON_ERROR",
           "POST_ON_RESET",
           "POST_ON_EXECUTE",
           "POST_ON_STATE_UPDATE",
+          "POST_ON_RATE_CHANGED",
           "POST_COMPONENT_ACTION_LISTENER_NUM"
         };
       if (type < POST_COMPONENT_ACTION_LISTENER_NUM)

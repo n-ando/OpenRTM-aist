@@ -765,7 +765,9 @@ namespace RTC
     ReturnCode_t ret(RTC::RTC_ERROR);
     try
       {
-	ret = onInitialize();
+        preOnInitialize(0);
+        ret = onInitialize();
+        postOnInitialize(0, ret);
         std::string active_set;
         active_set = m_properties.getProperty("configuration.active_config",
                                               "default");
@@ -799,7 +801,9 @@ namespace RTC
     ReturnCode_t ret(RTC::RTC_ERROR);
     try
       {
+        preOnFinalize(0);
 	ret = onFinalize();
+        postOnFinalize(0, ret);
       }
     catch (...)
       {
@@ -822,7 +826,9 @@ namespace RTC
     ReturnCode_t ret(RTC::RTC_ERROR);
     try
       {
+        preOnStartup(ec_id);
 	ret = onStartup(ec_id);
+        postOnStartup(ec_id, ret);
       }
     catch (...)
       {
@@ -845,7 +851,9 @@ namespace RTC
     ReturnCode_t ret(RTC::RTC_ERROR);
     try
       {
+        preOnShutdown(ec_id);
 	ret = onShutdown(ec_id);
+        postOnShutdown(ec_id, ret);
       }
     catch (...)
       {
@@ -868,9 +876,11 @@ namespace RTC
     ReturnCode_t ret(RTC::RTC_ERROR);
     try
       {
+        preOnActivated(ec_id);
 	m_configsets.update();
 	ret = onActivated(ec_id);
         m_portAdmin.activatePorts();
+        postOnActivated(ec_id, ret);
       }
     catch (...)
       {
@@ -893,8 +903,10 @@ namespace RTC
     ReturnCode_t ret(RTC::RTC_ERROR);
     try
       {
+        preOnDeactivated(ec_id);
         m_portAdmin.deactivatePorts();
 	ret = onDeactivated(ec_id);
+        postOnDeactivated(ec_id, ret);
       }
     catch (...)
       {
@@ -917,7 +929,9 @@ namespace RTC
     ReturnCode_t ret(RTC::RTC_ERROR);
     try
       {
+        preOnAborting(ec_id);
 	ret = onAborting(ec_id);
+        postOnAborting(ec_id, ret);
       }
     catch (...)
       {
@@ -940,8 +954,10 @@ namespace RTC
     ReturnCode_t ret(RTC::RTC_ERROR);
     try
       {
+        preOnError(ec_id);
 	ret = onError(ec_id);
 	m_configsets.update();
+        postOnError(ec_id, ret);
       }
     catch (...)
       {
@@ -964,7 +980,9 @@ namespace RTC
     ReturnCode_t ret(RTC::RTC_ERROR);
     try
       {
+        preOnReset(ec_id);
 	ret = onReset(ec_id);
+        postOnReset(ec_id, ret);
       }
     catch (...)
       {
@@ -988,11 +1006,11 @@ namespace RTC
     ReturnCode_t ret(RTC::RTC_ERROR);
     try
       {
-	if (m_readAll)
-	  readAll();
+        preOnExecute(ec_id);
+	if (m_readAll) {readAll(); }
 	ret = onExecute(ec_id);
-	if (m_writeAll)
-	  writeAll();
+	if (m_writeAll) { writeAll();}
+        postOnExecute(ec_id, ret);
       }
     catch (...)
       {
@@ -1016,8 +1034,10 @@ namespace RTC
     ReturnCode_t ret(RTC::RTC_ERROR);
     try
       {
+        preOnStateUpdate(ec_id);
 	ret = onStateUpdate(ec_id);
 	m_configsets.update();
+        postOnStateUpdate(ec_id, ret);
       }
     catch (...)
       {
@@ -1040,7 +1060,9 @@ namespace RTC
     ReturnCode_t ret(RTC::RTC_ERROR);
     try
       {
+        preOnRateChanged(ec_id);
 	ret = onRateChanged(ec_id);
+        postOnRateChanged(ec_id, ret);
       }
     catch (...)
       {
