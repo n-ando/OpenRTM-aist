@@ -20,6 +20,8 @@
 
 namespace RTC
 {
+
+  //============================================================
   /*!
    * @if jp
    * @class PostComponentActionListener クラス
@@ -38,6 +40,89 @@ namespace RTC
    */
   PreComponentActionListener::~PreComponentActionListener(){}
 
+  /*!
+   * @if jp
+   * @class PortActionListener クラス
+   * @else
+   * @class PortActionListener class
+   * @endif
+   */
+  PortActionListener::~PortActionListener(){}
+  
+  /*!
+   * @if jp
+   * @class ExecutionContextActionListener クラス
+   * @else
+   * @class ExecutionContextActionListener class
+   * @endif
+   */
+  ExecutionContextActionListener::~ExecutionContextActionListener(){}
+  
+
+
+
+
+  //============================================================
+  /*!
+   * @if jp
+   * @class PreComponentActionListener ホルダクラス
+   * @else
+   * @class PreComponentActionListener holder class
+   * @endif
+   */
+  PreComponentActionListenerHolder::PreComponentActionListenerHolder()
+  {
+  }
+    
+  
+  PreComponentActionListenerHolder::~PreComponentActionListenerHolder()
+  {
+    for (int i(0), len(m_listeners.size()); i < len; ++i)
+      {
+        if (m_listeners[i].second)
+          {
+            delete m_listeners[i].first;
+          }
+      }
+  }
+
+  
+  void PreComponentActionListenerHolder::addListener(PreComponentActionListener* listener,
+                                                     bool autoclean)
+  {
+    m_listeners.push_back(Entry(listener, autoclean));
+  }
+  
+  
+  void PreComponentActionListenerHolder::removeListener(PreComponentActionListener* listener)
+  {
+    std::vector<Entry>::iterator it(m_listeners.begin());
+    
+    for (; it != m_listeners.end(); ++it)
+      {
+        if ((*it).first == listener)
+          {
+            if ((*it).second)
+              {
+                delete (*it).first;
+              }
+            m_listeners.erase(it);
+            return;
+          }
+      }
+    
+  }
+  
+  
+  void PreComponentActionListenerHolder::notify(UniqueId ec_id)
+  {
+    for (int i(0), len(m_listeners.size()); i < len; ++i)
+      {
+        m_listeners[i].first->operator()(ec_id);
+      }
+  }
+
+  //============================================================
   /*!
    * @if jp
    * @class PostComponentActionListener ホルダクラス
@@ -101,17 +186,17 @@ namespace RTC
 
   /*!
    * @if jp
-   * @class PreComponentActionListener ホルダクラス
+   * @class PortActionListener ホルダクラス
    * @else
-   * @class PreComponentActionListener holder class
+   * @class PortActionListener holder class
    * @endif
    */
-  PreComponentActionListenerHolder::PreComponentActionListenerHolder()
+  PortActionListenerHolder::PortActionListenerHolder()
   {
   }
     
   
-  PreComponentActionListenerHolder::~PreComponentActionListenerHolder()
+  PortActionListenerHolder::~PortActionListenerHolder()
   {
     for (int i(0), len(m_listeners.size()); i < len; ++i)
       {
@@ -123,14 +208,14 @@ namespace RTC
   }
 
   
-  void PreComponentActionListenerHolder::addListener(PreComponentActionListener* listener,
-                                            bool autoclean)
+  void PortActionListenerHolder::addListener(PortActionListener* listener,
+                                             bool autoclean)
   {
     m_listeners.push_back(Entry(listener, autoclean));
   }
   
-
-  void PreComponentActionListenerHolder::removeListener(PreComponentActionListener* listener)
+  
+  void PortActionListenerHolder::removeListener(PortActionListener* listener)
   {
     std::vector<Entry>::iterator it(m_listeners.begin());
     
@@ -150,13 +235,75 @@ namespace RTC
   }
   
   
-  void PreComponentActionListenerHolder::notify(UniqueId ec_id)
+  void PortActionListenerHolder::notify(const RTC::PortProfile& pprofile)
+  {
+    for (int i(0), len(m_listeners.size()); i < len; ++i)
+      {
+        m_listeners[i].first->operator()(pprofile);
+      }
+  }
+
+
+
+  /*!
+   * @if jp
+   * @class ExecutionContextActionListener ホルダクラス
+   * @else
+   * @class ExecutionContextActionListener holder class
+   * @endif
+   */
+  ExecutionContextActionListenerHolder::ExecutionContextActionListenerHolder()
+  {
+  }
+    
+  
+  ExecutionContextActionListenerHolder::~ExecutionContextActionListenerHolder()
+  {
+    for (int i(0), len(m_listeners.size()); i < len; ++i)
+      {
+        if (m_listeners[i].second)
+          {
+            delete m_listeners[i].first;
+          }
+      }
+  }
+
+  
+  void ExecutionContextActionListenerHolder::addListener(ExecutionContextActionListener* listener,
+                                             bool autoclean)
+  {
+    m_listeners.push_back(Entry(listener, autoclean));
+  }
+  
+  
+  void ExecutionContextActionListenerHolder::removeListener(ExecutionContextActionListener* listener)
+  {
+    std::vector<Entry>::iterator it(m_listeners.begin());
+    
+    for (; it != m_listeners.end(); ++it)
+      {
+        if ((*it).first == listener)
+          {
+            if ((*it).second)
+              {
+                delete (*it).first;
+              }
+            m_listeners.erase(it);
+            return;
+          }
+      }
+    
+  }
+  
+  
+  void ExecutionContextActionListenerHolder::notify(UniqueId ec_id)
   {
     for (int i(0), len(m_listeners.size()); i < len; ++i)
       {
         m_listeners[i].first->operator()(ec_id);
       }
   }
+
 };
 
 

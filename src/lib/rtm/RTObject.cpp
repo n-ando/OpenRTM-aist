@@ -594,7 +594,9 @@ namespace RTC
         if (::CORBA::is_nil(m_ecOther[i]))
           {
             m_ecOther[i] = ExecutionContextService::_duplicate(ecs);
-            return i + ECOTHER_OFFSET;
+            UniqueId ec_id(i + ECOTHER_OFFSET);
+            onAttachExecutionContext(ec_id);
+            return ec_id;
           }
       }
 
@@ -602,7 +604,9 @@ namespace RTC
     CORBA_SeqUtil::
       push_back(m_ecOther, ExecutionContextService::_duplicate(ecs));
     
-    return (m_ecOther.length() - 1) + ECOTHER_OFFSET;
+    UniqueId ec_id((m_ecOther.length() - 1) + ECOTHER_OFFSET);
+    onAttachExecutionContext(ec_id);
+    return ec_id;
   }
   
   UniqueId
@@ -626,6 +630,7 @@ namespace RTC
         if (::CORBA::is_nil(m_ecMine[i]))
           {
             m_ecMine[i] = ExecutionContextService::_duplicate(ecs);
+            onAttachExecutionContext(i);
             return i;
           }
       }
@@ -634,7 +639,9 @@ namespace RTC
     CORBA_SeqUtil::
       push_back(m_ecMine, ExecutionContextService::_duplicate(ecs));
     
-    return (m_ecMine.length() - 1);
+    UniqueId ec_id(m_ecMine.length() - 1);
+    onDetachExecutionContext(ec_id);
+    return ec_id;
   }
 
   /*!
@@ -1543,6 +1550,7 @@ namespace RTC
   {
     RTC_TRACE(("addPort(PortBase&)"));
     port.setOwner(this->getObjRef());
+    onAddPort(port.getPortProfile());
     return m_portAdmin.addPort(port);
   }
   
@@ -1723,6 +1731,7 @@ namespace RTC
   bool RTObject_impl::removePort(PortBase& port)
   {
     RTC_TRACE(("removePort(PortBase&)"));
+    onRemovePort(port.getPortProfile());
     return m_portAdmin.removePort(port);
   }
   bool RTObject_impl::removePort(PortService_ptr port)
@@ -1733,6 +1742,7 @@ namespace RTC
   bool RTObject_impl::removePort(CorbaPort& port)
   {
     RTC_TRACE(("removePort(PortBase&)"));
+    onRemovePort(port.getPortProfile());
     return m_portAdmin.removePort((PortBase&)port);
   }
 
@@ -2017,6 +2027,79 @@ namespace RTC
   {
     m_actionListeners.
       postaction_[listener_type].removeListener(listener);
+  }
+
+  /*!
+   * @if jp
+   * @brief PortActionListener リスナを追加する
+   *
+   * @else
+   * @brief Adding PortAction type listener
+   *
+   * @endif
+   */
+  void RTObject_impl::
+  addPortActionListener(PortActionListenerType listener_type,
+                        PortActionListener* listener,
+                        bool autoclean)
+  {
+    m_actionListeners.
+      portaction_[listener_type].addListener(listener, autoclean);
+  }
+
+
+  /*!
+   * @if jp
+   * @brief PortActionListener リスナを削除する
+   *
+   * @else
+   * @brief Removing PortAction type listener
+   *
+   * @endif
+   */
+  void RTObject_impl::
+  removePortActionListener(PortActionListenerType listener_type,
+                           PortActionListener* listener)
+  {
+    m_actionListeners.
+      portaction_[listener_type].removeListener(listener);
+  }
+
+
+  /*!
+   * @if jp
+   * @brief ExectionContextActionListener リスナを追加する
+   *
+   * @else
+   * @brief Adding ExecutionContextAction type listener
+   *
+   * @endif
+   */
+  void RTObject_impl::
+  addExecutionContextActionListener(ECActionListenerType listener_type,
+                                    ECActionListener* listener,
+                                    bool autoclean)
+  {
+    m_actionListeners.
+      ecaction_[listener_type].addListener(listener, autoclean);
+  }
+
+
+  /*!
+   * @if jp
+   * @brief ExecutionContextActionListener リスナを削除する
+   *
+   * @else
+   * @brief Removing ExecutionContextAction type listener
+   *
+   * @endif
+   */
+  void RTObject_impl::
+  removeExecutionContextActionListener(ECActionListenerType listener_type,
+                                       ECActionListener* listener)
+  {
+    m_actionListeners.
+      ecaction_[listener_type].removeListener(listener);
   }
 
 

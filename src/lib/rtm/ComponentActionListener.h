@@ -28,6 +28,7 @@
 namespace RTC
 {
   typedef ExecutionContextHandle_t UniqueId;
+  //============================================================
   /*!
    * @if jp
    * @brief PreComponentActionListener のタイプ
@@ -190,6 +191,7 @@ namespace RTC
   };
 
 
+  //============================================================
   /*!
    * @if jp
    * @brief PostCompoenntActionListener のタイプ
@@ -355,7 +357,222 @@ namespace RTC
                             ReturnCode_t ret) = 0;
   };
 
+  //============================================================
+  /*!
+   * @if jp
+   * @brief PortActionListener のタイプ
+   *
+   * - ADD_PORT:             Port 追加時
+   * - REMOVE_PORT:          Port 削除時
+   *
+   * @else
+   * @brief The types of PortActionListener
+   * 
+   * @endif
+   */
 
+  enum PortActionListenerType
+    {
+      ADD_PORT,
+      REMOVE_PORT,
+      PORT_ACTION_LISTENER_NUM
+    };
+
+  /*!
+   * @if jp
+   * @class PortActionListener クラス
+   * @brief PortActionListener クラス
+   *
+   * 各アクションに対応するユーザーコードが呼ばれる直前のタイミング
+   * でコールされるリスなクラスの基底クラス。
+   *
+   * - ADD_PORT:
+   * - REMOVE_PORT:
+   *
+   * @else
+   * @class PortActionListener class
+   * @brief PortActionListener class
+   *
+   * This class is abstract base class for listener classes that
+   * provides callbacks for various events in rtobject.
+   *
+   * @endif
+   */
+  class PortActionListener
+  {
+  public:
+    /*!
+     * @if jp
+     *
+     * @brief PreComponentActionListenerType を文字列に変換
+     *
+     * PreComponentActionListenerType を文字列に変換する
+     *
+     * @param type 変換対象 PreComponentActionListenerType
+     *
+     * @return 文字列変換結果
+     *
+     * @else
+     *
+     * @brief Convert PreComponentActionListenerType into the string.
+     *
+     * Convert PreComponentActionListenerType into the string.
+     *
+     * @param type The target PreComponentActionListenerType for transformation
+     *
+     * @return Trnasformation result of string representation
+     *
+     * @endif
+     */
+    static const char* toString(PortActionListenerType type)
+    {
+      static const char* typeString[] =
+        {
+          "ADD_PORT",
+          "REMOVE_PORT",
+          "PORT_ACTION_LISTENER_NUM"
+        };
+      if (type < PORT_ACTION_LISTENER_NUM) { return typeString[type]; }
+      return "";
+    }
+
+    /*!
+     * @if jp
+     * @brief デストラクタ
+     * @else
+     * @brief Destructor
+     * @endif
+     */
+    virtual ~PortActionListener();
+
+    /*!
+     * @if jp
+     *
+     * @brief 仮想コールバック関数
+     *
+     * PortActionListener のコールバック関数
+     *
+     * @else
+     *
+     * @brief Virtual Callback function
+     *
+     * This is a the Callback function for PortActionListener
+     *
+     * @endif
+     */
+    virtual void operator()(const ::RTC::PortProfile& pprof) = 0;
+  };
+
+
+  //============================================================
+  /*!
+   * @if jp
+   * @brief ExecutionContextActionListener のタイプ
+   *
+   * - ADD_PORT:             ExecutionContext 追加時
+   * - REMOVE_PORT:          ExecutionContext 削除時
+   *
+   * @else
+   * @brief The types of ExecutionContextActionListener
+   * 
+   * @endif
+   */
+
+  enum ExecutionContextActionListenerType
+    {
+      ATTACH_EC,
+      DETACH_EC,
+      EC_ACTION_LISTENER_NUM
+    };
+
+  /*!
+   * @if jp
+   * @class ExecutionContextActionListener クラス
+   * @brief ExecutionContextActionListener クラス
+   *
+   * 各アクションに対応するユーザーコードが呼ばれる直前のタイミング
+   * でコールされるリスなクラスの基底クラス。
+   *
+   * - ADD_PORT:
+   * - REMOVE_PORT:
+   *
+   * @else
+   * @class ExecutionContextActionListener class
+   * @brief ExecutionContextActionListener class
+   *
+   * This class is abstract base class for listener classes that
+   * provides callbacks for various events in rtobject.
+   *
+   * @endif
+   */
+  class ExecutionContextActionListener
+  {
+  public:
+    /*!
+     * @if jp
+     *
+     * @brief PreComponentActionListenerType を文字列に変換
+     *
+     * PreComponentActionListenerType を文字列に変換する
+     *
+     * @param type 変換対象 PreComponentActionListenerType
+     *
+     * @return 文字列変換結果
+     *
+     * @else
+     *
+     * @brief Convert PreComponentActionListenerType into the string.
+     *
+     * Convert PreComponentActionListenerType into the string.
+     *
+     * @param type The target PreComponentActionListenerType for transformation
+     *
+     * @return Trnasformation result of string representation
+     *
+     * @endif
+     */
+    static const char* toString(ExecutionContextActionListenerType type)
+    {
+      static const char* typeString[] =
+        {
+          "ATTACH_EC",
+          "DETACH_ECT",
+          "EC_ACTION_LISTENER_NUM"
+        };
+      if (type < EC_ACTION_LISTENER_NUM) { return typeString[type]; }
+      return "";
+    }
+
+    /*!
+     * @if jp
+     * @brief デストラクタ
+     * @else
+     * @brief Destructor
+     * @endif
+     */
+    virtual ~ExecutionContextActionListener();
+
+    /*!
+     * @if jp
+     *
+     * @brief 仮想コールバック関数
+     *
+     * ExecutionContextActionListener のコールバック関数
+     *
+     * @else
+     *
+     * @brief Virtual Callback function
+     *
+     * This is a the Callback function for ExecutionContextActionListener
+     *
+     * @endif
+     */
+    virtual void operator()(UniqueId ec_id) = 0;
+  };
+
+
+
+  //============================================================
   /*!
    * @if jp
    * @class PreComponentActionListenerHolder 
@@ -367,7 +584,8 @@ namespace RTC
    * @class PreComponentActionListenerHolder
    * @brief PreComponentActionListener holder class
    *
-   * This class manages one ore more instances of PreComponentActionListener class.
+   * This class manages one ore more instances of
+   * PreComponentActionListener class.
    *
    * @endif
    */
@@ -564,6 +782,216 @@ namespace RTC
   };
 
 
+  //============================================================
+  /*!
+   * @if jp
+   * @class PortActionListenerHolder
+   * @brief PortActionListener ホルダクラス
+   *
+   * 複数の PortActionListener を保持し管理するクラス。
+   *
+   * @else
+   * @class PortActionListenerHolder
+   * @brief PortActionListener holder class
+   *
+   * This class manages one ore more instances of
+   * PortActionListener class.
+   *
+   * @endif
+   */
+  class PortActionListenerHolder
+  {
+    typedef std::pair<PortActionListener*, bool> Entry;
+  public:
+    /*!
+     * @if jp
+     * @brief コンストラクタ
+     * @else
+     * @brief Constructor
+     * @endif
+     */
+    PortActionListenerHolder();
+    /*!
+     * @if jp
+     * @brief デストラクタ
+     * @else
+     * @brief Destructor
+     * @endif
+     */
+    virtual ~PortActionListenerHolder();
+    
+    /*!
+     * @if jp
+     *
+     * @brief リスナーの追加
+     *
+     * リスナーを追加する。
+     *
+     * @param listener 追加するリスナ
+     * @param autoclean true:デストラクタで削除する,
+     *                  false:デストラクタで削除しない
+     * @else
+     *
+     * @brief Add the listener.
+     *
+     * This method adds the listener. 
+     *
+     * @param listener Added listener
+     * @param autoclean true:The listener is deleted at the destructor.,
+     *                  false:The listener is not deleted at the destructor. 
+     * @endif
+     */
+    void addListener(PortActionListener* listener, bool autoclean);
+    
+    /*!
+     * @if jp
+     *
+     * @brief リスナーの削除
+     *
+     * リスナを削除する。
+     *
+     * @param listener 削除するリスナ
+     * @else
+     *
+     * @brief Remove the listener. 
+     *
+     * This method removes the listener. 
+     *
+     * @param listener Removed listener
+     * @endif
+     */
+    void removeListener(PortActionListener* listener);
+    
+    /*!
+     * @if jp
+     *
+     * @brief リスナーへ通知する
+     *
+     * 登録されているリスナのコールバックメソッドを呼び出す。
+     *
+     * @param info ConnectorInfo
+     * @param cdrdata データ
+     * @else
+     *
+     * @brief Notify listeners. 
+     *
+     * This calls the Callback method of the registered listener. 
+     *
+     * @param info ConnectorInfo
+     * @param cdrdata Data
+     * @endif
+     */
+    void notify(const RTC::PortProfile& pprofile);
+    
+  private:
+    std::vector<Entry> m_listeners;
+  };
+
+  /*!
+   * @if jp
+   * @class ExecutionContextActionListenerHolder
+   * @brief ExecutionContextActionListener ホルダクラス
+   *
+   * 複数の ExecutionContextActionListener を保持し管理するクラス。
+   *
+   * @else
+   * @class ExecutionContextActionListenerHolder
+   * @brief ExecutionContextActionListener holder class
+   *
+   * This class manages one ore more instances of
+   * ExecutionContextActionListener class.
+   *
+   * @endif
+   */
+  class ExecutionContextActionListenerHolder
+  {
+    typedef std::pair<ExecutionContextActionListener*, bool> Entry;
+  public:
+    /*!
+     * @if jp
+     * @brief コンストラクタ
+     * @else
+     * @brief Constructor
+     * @endif
+     */
+    ExecutionContextActionListenerHolder();
+    /*!
+     * @if jp
+     * @brief デストラクタ
+     * @else
+     * @brief Destructor
+     * @endif
+     */
+    virtual ~ExecutionContextActionListenerHolder();
+    
+    /*!
+     * @if jp
+     *
+     * @brief リスナーの追加
+     *
+     * リスナーを追加する。
+     *
+     * @param listener 追加するリスナ
+     * @param autoclean true:デストラクタで削除する,
+     *                  false:デストラクタで削除しない
+     * @else
+     *
+     * @brief Add the listener.
+     *
+     * This method adds the listener. 
+     *
+     * @param listener Added listener
+     * @param autoclean true:The listener is deleted at the destructor.,
+     *                  false:The listener is not deleted at the destructor. 
+     * @endif
+     */
+    void addListener(ExecutionContextActionListener* listener, bool autoclean);
+    
+    /*!
+     * @if jp
+     *
+     * @brief リスナーの削除
+     *
+     * リスナを削除する。
+     *
+     * @param listener 削除するリスナ
+     * @else
+     *
+     * @brief Remove the listener. 
+     *
+     * This method removes the listener. 
+     *
+     * @param listener Removed listener
+     * @endif
+     */
+    void removeListener(ExecutionContextActionListener* listener);
+    
+    /*!
+     * @if jp
+     *
+     * @brief リスナーへ通知する
+     *
+     * 登録されているリスナのコールバックメソッドを呼び出す。
+     *
+     * @param info ConnectorInfo
+     * @param cdrdata データ
+     * @else
+     *
+     * @brief Notify listeners. 
+     *
+     * This calls the Callback method of the registered listener. 
+     *
+     * @param info ConnectorInfo
+     * @param cdrdata Data
+     * @endif
+     */
+    void notify(UniqueId ec_id);
+    
+  private:
+    std::vector<Entry> m_listeners;
+  };
+
+
   /*!
    * @if jp
    * @class ComponentActionListeners
@@ -602,6 +1030,28 @@ namespace RTC
      */
     PostComponentActionListenerHolder 
     postaction_[POST_COMPONENT_ACTION_LISTENER_NUM];
+    /*!
+     * @if jp
+     * @brief PortActionTypeリスナ配列
+     * PortActionTypeリスナを格納
+     * @else
+     * @brief PortActionType listener array
+     * The PortActionType listener is stored.
+     * @endif
+     */
+    PortActionListenerHolder
+    portaction_[PORT_ACTION_LISTENER_NUM];
+    /*!
+     * @if jp
+     * @brief ExecutionContextActionTypeリスナ配列
+     * ExecutionContextActionTypeリスナを格納
+     * @else
+     * @brief ExecutionContextActionType listener array
+     * The ExecutionContextActionType listener is stored.
+     * @endif
+     */
+   ExecutionContextActionListenerHolder
+    ecaction_[EC_ACTION_LISTENER_NUM];
   };
 
 
