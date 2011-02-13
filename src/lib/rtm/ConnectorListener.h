@@ -102,7 +102,7 @@ namespace RTC
    * なものや、呼び出されるタイミングが異なる。
    * 以下に、インターフェースがCORBA CDR型の場合のコールバック一覧を示す。
    *
-   * OuttPort:
+   * OutPort:
    * -  Push型: Subscription Typeによりさらにイベントの種類が分かれる。
    *   - Flush: Flush型にはバッファがないため ON_BUFFER 系のイベントは発生しない
    *     - ON_SEND
@@ -430,7 +430,7 @@ namespace RTC
    * もの、また呼び出されるタイミングが異なる。以下に、インターフェース
    * がCORBA CDR型の場合のコールバック一覧を示す。
    *
-   * OuttPort:
+   * OutPort:
    * -  Push型: Subscription Typeによりさらにイベントの種類が分かれる。
    *   - Flush: Flush型にはバッファがないため ON_BUFFER 系のイベントは発生しない
    *     - ON_SEND
