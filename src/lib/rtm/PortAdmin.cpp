@@ -177,8 +177,9 @@ namespace RTC
   {
     // Check for duplicate
     if (CORBA_SeqUtil::find(m_portRefs, find_port_name(port.getName())) != -1)
-      return false;
-
+      {
+        return false;
+      }
 
     // Store Port's ref to PortServiceList
     CORBA_SeqUtil::push_back(m_portRefs,
