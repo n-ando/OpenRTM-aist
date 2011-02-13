@@ -5,7 +5,7 @@
  * @date $Date: 2007-12-31 03:08:02 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
- * Copyright (C) 2007-2009
+ * Copyright (C) 2007-2011
  *     Task-intelligence Research Group,
  *     Intelligent Systems Research Institute,
  *     National Institute of
@@ -19,11 +19,12 @@
 #ifndef RTC_CONFIGADMIN_H
 #define RTC_CONFIGADMIN_H
 
-#include <coil/Properties.h>
-#include <coil/stringutil.h>
 #include <string>
 #include <vector>
 #include <iostream>
+#include <coil/Properties.h>
+#include <coil/stringutil.h>
+#include <rtm/ConfigurationListener.h>
 
 /*!
  * @if jp
@@ -52,44 +53,7 @@ namespace RTC
    *
    * @endif
    */
-  class OnUpdateCallback
-  {
-  public:
-    /*!
-     * @if jp
-     *
-     * @brief 仮想デストラクタ
-     *
-     * 仮想デストラクタ。
-     *
-     * @else
-     *
-     * @brief Virtual destructor
-     *
-     * Virtual Destructor
-     *
-     * @endif
-     */
-    virtual ~OnUpdateCallback(void){};
-    /*!
-     * @if jp
-     *
-     * @brief 仮想コールバックメソッド
-     *
-     * コンフィギュレーションパラメータの更新(ID指定)時に呼び出される
-     * コールバックメソッド
-     *
-     * @else
-     *
-     * @brief Virtual Callback method
-     *
-     * This is the callback method invoked when the update of the 
-     * configuration parameter (ID specification).
-     *
-     * @endif
-     */
-    virtual void operator()(const char* config_set) = 0;
-  };
+  typedef ConfigurationSetNameListener OnUpdateCallback;
 
   /*!
    * @if jp
@@ -102,45 +66,7 @@ namespace RTC
    *
    * @endif
    */
-  class OnUpdateParamCallback
-  {
-  public:
-    /*!
-     * @if jp
-     *
-     * @brief 仮想デストラクタ
-     *
-     * 仮想デストラクタ。
-     *
-     * @else
-     *
-     * @brief Virtual destructor
-     *
-     * Virtual Destructor
-     *
-     * @endif
-     */
-    virtual ~OnUpdateParamCallback(void){};
-    /*!
-     * @if jp
-     *
-     * @brief 仮想コールバックメソッド
-     *
-     * コンフィギュレーションパラメータの更新(名称指定)時に呼び出される
-     * コールバックメソッド
-     *
-     * @else
-     *
-     * @brief Virtual Callback method
-     *
-     * This is the callback method invoked when the update of the 
-     * configuration parameter (name specification).
-     *
-     * @endif
-     */
-    virtual void operator()(const char* config_set,
-                            const char* config_param) = 0;
-  };
+  typedef ConfigurationParamListener OnUpdateParamCallback;
 
   /*!
    * @if jp
@@ -153,44 +79,7 @@ namespace RTC
    *
    * @endif
    */
-  class OnSetConfigurationSetCallback
-  {
-  public:
-    /*!
-     * @if jp
-     *
-     * @brief 仮想デストラクタ
-     *
-     * 仮想デストラクタ。
-     *
-     * @else
-     *
-     * @brief Virtual destructor
-     *
-     * Virtual Destructor
-     *
-     * @endif
-     */
-    virtual ~OnSetConfigurationSetCallback(void){};
-    /*!
-     * @if jp
-     *
-     * @brief 仮想コールバックメソッド
-     *
-     * 指定したプロパティのコンフィギュレーションセットへの追加された時に
-     * コールされるコールバックメソッド
-     *
-     * @else
-     *
-     * @brief Virtual Callback method
-     *
-     * This is the callback method invoked when added to the configuration 
-     * set of the property that specifies it. 
-     *
-     * @endif
-     */
-    virtual void operator()(const coil::Properties& config_set) = 0;
-  };
+  typedef ConfigurationSetListener OnSetConfigurationSetCallback;
 
   /*!
    * @if jp
@@ -203,44 +92,7 @@ namespace RTC
    *
    * @endif
    */
-  class OnAddConfigurationAddCallback
-  {
-  public:
-    /*!
-     * @if jp
-     *
-     * @brief 仮想デストラクタ
-     *
-     * 仮想デストラクタ。
-     *
-     * @else
-     *
-     * @brief Virtual destructor
-     *
-     * Virtual Destructor
-     *
-     * @endif
-     */
-    virtual ~OnAddConfigurationAddCallback(void){};
-    /*!
-     * @if jp
-     *
-     * @brief 仮想コールバックメソッド
-     *
-     * コンフィギュレーションセットに設定値が追加されたときにコールされる
-     * コールバックメソッド
-     *
-     * @else
-     *
-     * @brief Virtual Callback method
-     *
-     * This is the callback method invoked when a set value is added to the 
-     * configuration set. 
-     *
-     * @endif
-     */
-    virtual void operator()(const coil::Properties& config_set) = 0;
-  };
+  typedef ConfigurationSetListener OnAddConfigurationAddCallback;
 
   /*!
    * @if jp
@@ -253,44 +105,7 @@ namespace RTC
    *
    * @endif
    */
-  class OnRemoveConfigurationSetCallback
-  {
-  public:
-    /*!
-     * @if jp
-     *
-     * @brief 仮想デストラクタ
-     *
-     * 仮想デストラクタ。
-     *
-     * @else
-     *
-     * @brief Virtual destructor
-     *
-     * Virtual Destructor
-     *
-     * @endif
-     */
-    virtual ~OnRemoveConfigurationSetCallback(void){};
-    /*!
-     * @if jp
-     *
-     * @brief 仮想コールバックメソッド
-     *
-     * コンフィギュレーションセットが削除されているときにコールされる
-     * コールバックメソッド
-     *
-     * @else
-     *
-     * @brief Virtual Callback method
-     *
-     * This is the callback method invoked when the configuration set has 
-     * been deleted. 
-     *
-     * @endif
-     */
-    virtual void operator()(const char* config_set) = 0;
-  };
+  typedef ConfigurationSetNameListener OnRemoveConfigurationSetCallback;
 
   /*!
    * @if jp
@@ -303,44 +118,8 @@ namespace RTC
    *
    * @endif
    */
-  class OnActivateSetCallback
-  {
-  public:
-    /*!
-     * @if jp
-     *
-     * @brief 仮想デストラクタ
-     *
-     * 仮想デストラクタ。
-     *
-     * @else
-     *
-     * @brief Virtual destructor
-     *
-     * Virtual Destructor
-     *
-     * @endif
-     */
-    virtual ~OnActivateSetCallback(void){};
-    /*!
-     * @if jp
-     *
-     * @brief 仮想コールバックメソッド
-     *
-     * コンフィギュレーションセットがアクティブ化されたときにコールされる
-     * コールバックメソッド
-     *
-     * @else
-     *
-     * @brief Virtual Callback method
-     *
-     * This is the callback method invoked when * the configuration set is 
-     * made active.
-     *
-     * @endif
-     */
-    virtual void operator()(const char* config_id) = 0;
-  };
+  typedef ConfigurationSetNameListener OnActivateSetCallback;
+
 
   //============================================================
   // ConfigBase class
@@ -1289,120 +1068,216 @@ namespace RTC
      */
     bool activateConfigurationSet(const char* config_id);
 
-    /*!
-     * @if jp
-     *
-     * @brief OnUpdate のコールバックの設定
-     *
-     * OnUpdate で呼ばれるコールバックのオブジェクトを設定する。
-     * 
-     * @param cb OnUpdateCallback型のオブジェクト
-     *
-     * @else
-     *
-     * @brief Set callback that is called by OnUpdate. 
-     * 
-     * @param cb OnUpdateCallback type object
-     *
-     * @endif
-     */
+    //------------------------------------------------------------
+    // obsolete functions
+    //
     void setOnUpdate(OnUpdateCallback* cb);
-
-    /*!
-     * @if jp
-     *
-     * @brief OnUpdateParam のコールバックの設定
-     *
-     * OnUpdateParam で呼ばれるコールバックのオブジェクトを設定する。
-     * 
-     * @param cb OnUpdateParamCallback型のオブジェクト
-     *
-     * @else
-     *
-     * @brief Set callback that is called by OnUpdateParam. 
-     * 
-     * @param cb OnUpdateParamCallback type object
-     *
-     * @endif
-     */
+    
     void setOnUpdateParam(OnUpdateParamCallback* cb);
-
-    /*!
-     * @if jp
-     *
-     * @brief OnSetConfigurationSet のコールバックの設定
-     *
-     * OnSetConfigurationSet で呼ばれるコールバックのオブジェクトを設定する。
-     * 
-     * @param cb OnSetConfigurationSetCallback型のオブジェクト
-     *
-     * @else
-     *
-     * @brief Set callback that is called by OnSetConfiguration. 
-     * 
-     * @param cb OnSetConfigurationSetCallback type object
-     *
-     * @endif
-     */
+    
     void setOnSetConfigurationSet(OnSetConfigurationSetCallback* cb);
 
-    /*!
-     * @if jp
-     *
-     * @brief OnAddConfigurationSet のコールバックの設定
-     *
-     * OnAddConfigurationSet で呼ばれるコールバックのオブジェクトを設定する。
-     * 
-     * @param cb OnAddConfigurationAddCallback型のオブジェクト
-     *
-     * @else
-     *
-     * @brief Set callback that is called by OnSetConfiguration. 
-     * 
-     * @param cb OnSetConfigurationSetCallback type object
-     *
-     * @endif
-     */
     void setOnAddConfigurationSet(OnAddConfigurationAddCallback* cb);
 
-    /*!
-     * @if jp
-     *
-     * @brief OnRemoveConfigurationSet のコールバックの設定
-     *
-     * OnRemoveConfiguration で呼ばれるコールバックのオブジェクトを設定する。
-     * 
-     * @param cb OnRemoveConfigurationSetCallback型のオブジェクト
-     *
-     * @else
-     *
-     * @brief Set callback that is called by OnRemoveConfigurationSet. 
-     * 
-     * @param cb OnRemoveConfigurationSetCallback type object
-     *
-     * @endif
-     */
     void setOnRemoveConfigurationSet(OnRemoveConfigurationSetCallback* cb);
 
+    void setOnActivateSet(OnActivateSetCallback* cb);
+    //
+    // end of obsolete functions
+    //------------------------------------------------------------
+
     /*!
      * @if jp
      *
-     * @brief OnActivateSet のコールバックの設定
+     * @brief ConfigurationParamListener を追加する
      *
-     * OnActivateSet で呼ばれるコールバックのオブジェクトを設定する。
+     * update(const char* config_set, const char* config_param) が呼ばれた際に
+     * コールされるリスナ ConfigurationParamListener を追加する。
+     * type には現在のところ ON_UPDATE_CONFIG_PARAM のみが入る。
+     *
+     * @param type ConfigurationParamListenerType型の値。
+     *             ON_UPDATE_CONFIG_PARAM がある。
+     *
+     * @param listener ConfigurationParamListener 型のリスナオブジェクト。
+     * @param autoclean リスナオブジェクトを自動で削除するかどうかのフラグ
      * 
-     * @param cb OnActivateSetCallback型のオブジェクト
-     *
      * @else
      *
-     * @brief Set callback that is called by OnActivateSet. 
+     * @brief Adding ConfigurationParamListener 
      * 
-     * @param cb OnActivateSetCallback type object
+     * This function adds a listener object which is called when
+     * update(const char* config_set, const char* config_param) is
+     * called. In the type argument, currently only
+     * ON_UPDATE_CONFIG_PARAM is allowed.
+     *
+     * @param type ConfigurationParamListenerType value
+     *             ON_UPDATE_CONFIG_PARAM is only allowed.
+     *
+     * @param listener ConfigurationParamListener listener object.
+     * @param autoclean a flag whether if the listener object autocleaned.
      *
      * @endif
      */
-    void setOnActivateSet(OnActivateSetCallback* cb);
+    void addConfigurationParamListener(ConfigurationParamListenerType type,
+                                       ConfigurationParamListener* listener,
+                                       bool autoclean = true);
 
+    /*!
+     * @if jp
+     *
+     * @brief ConfigurationParamListener を削除する
+     *
+     * addConfigurationParamListener で追加されたリスナオブジェクトを削除する。
+     *
+     * @param type ConfigurationParamListenerType型の値。
+     *             ON_UPDATE_CONFIG_PARAM がある。
+     * @param listener 与えたリスナオブジェクトへのポインタ
+     * 
+     * @else
+     *
+     * @brief Removing ConfigurationParamListener 
+     * 
+     * This function removes a listener object which is added by
+     * addConfigurationParamListener() function.
+     *
+     * @param type ConfigurationParamListenerType value
+     *             ON_UPDATE_CONFIG_PARAM is only allowed.
+     * @param listener a pointer to ConfigurationParamListener listener object.
+     *
+     * @endif
+     */
+    void removeConfigurationParamListener(ConfigurationParamListenerType type,
+                                          ConfigurationParamListener* listener);
+    
+    /*!
+     * @if jp
+     *
+     * @brief ConfigurationSetListener を追加する
+     *
+     * ConfigurationSet が更新されたときなどに呼ばれるリスナ
+     * ConfigurationSetListener を追加する。設定可能なイベントは以下の
+     * 2種類がある。
+     *
+     * - ON_SET_CONFIG_SET: setConfigurationSetValues() で
+     *                      ConfigurationSet に値が設定された場合。
+     * - ON_ADD_CONFIG_SET: addConfigurationSet() で新しい
+     *                      ConfigurationSet が追加された場合。
+     *
+     * @param type ConfigurationSetListenerType型の値。
+     * @param listener ConfigurationSetListener 型のリスナオブジェクト。
+     * @param autoclean リスナオブジェクトを自動で削除するかどうかのフラグ
+     * 
+     * @else
+     *
+     * @brief Adding ConfigurationSetListener 
+     * 
+     * This function add a listener object which is called when
+     * ConfigurationSet is updated. Available events are the followings.
+     *
+     * @param type ConfigurationSetListenerType value
+     * @param listener ConfigurationSetListener listener object.
+     * @param autoclean a flag whether if the listener object autocleaned.
+     *
+     * @endif
+     */
+    void addConfigurationSetListener(ConfigurationSetListenerType type,
+                                     ConfigurationSetListener* listener,
+                                     bool autoclean = true);
+
+    /*!
+     * @if jp
+     *
+     * @brief ConfigurationSetListener を削除する
+     *
+     * addConfigurationSetListener で追加されたリスナオブジェクトを削除する。
+     *
+     * @param type ConfigurationSetListenerType型の値。
+     * @param listener 与えたリスナオブジェクトへのポインタ
+     * 
+     * @else
+     *
+     * @brief Removing ConfigurationSetListener 
+     * 
+     * This function removes a listener object which is added by
+     * addConfigurationSetListener() function.
+     *
+     * @param type ConfigurationSetListenerType value
+     * @param listener a pointer to ConfigurationSetListener listener object.
+     *
+     * @endif
+     */
+    void removeConfigurationSetListener(ConfigurationSetListenerType type,
+                                        ConfigurationSetListener* listener);
+    
+    /*!
+     * @if jp
+     *
+     * @brief ConfigurationSetNameListener を追加する
+     *
+     * ConfigurationSetName が更新されたときなどに呼ばれるリスナ
+     * ConfigurationSetNameListener を追加する。設定可能なイベントは以下の
+     * 3種類がある。
+     *
+     * - ON_UPDATE_CONFIG_SET: ある ConfigurationSet がアップデートされた
+     * - ON_REMOVE_CONFIG_SET: ある ConfigurationSet が削除された
+     * - ON_ACTIVATE_CONFIG_SET: ある ConfigurationSet がアクティブ化された
+     *
+     * @param type ConfigurationSetNameListenerType型の値。
+     * @param listener ConfigurationSetNameListener 型のリスナオブジェクト。
+     * @param autoclean リスナオブジェクトを自動で削除するかどうかのフラグ
+     * 
+     * @else
+     *
+     * @brief Adding ConfigurationSetNameListener 
+     * 
+     * This function add a listener object which is called when
+     * ConfigurationSetName is updated. Available events are the followings.
+     *
+     * - ON_UPDATE_CONFIG_SET: A ConfigurationSet has been updated.
+     * - ON_REMOVE_CONFIG_SET: A ConfigurationSet has been deleted.
+     * - ON_ACTIVATE_CONFIG_SET: A ConfigurationSet has been activated.
+     *
+     * @param type ConfigurationSetNameListenerType value
+     * @param listener ConfigurationSetNameListener listener object.
+     * @param autoclean a flag whether if the listener object autocleaned.
+     *
+     * @endif
+     */
+    void 
+    addConfigurationSetNameListener(ConfigurationSetNameListenerType type,
+                                    ConfigurationSetNameListener* listener,
+                                    bool autoclean = true);
+
+    /*!
+     * @if jp
+     *
+     * @brief ConfigurationSetNameListener を削除する
+     *
+     * addConfigurationSetNameListener で追加されたリスナオブジェクトを
+     * 削除する。
+     *
+     * @param type ConfigurationSetNameListenerType型の値。
+     *             ON_UPDATE_CONFIG_PARAM がある。
+     * @param listener 与えたリスナオブジェクトへのポインタ
+     * 
+     * @else
+     *
+     * @brief Removing ConfigurationSetNameListener 
+     * 
+     * This function removes a listener object which is added by
+     * addConfigurationSetNameListener() function.
+     *
+     * @param type ConfigurationSetNameListenerType value
+     *             ON_UPDATE_CONFIG_PARAM is only allowed.
+     * @param listener a pointer to ConfigurationSetNameListener
+     *             listener object.
+     *
+     * @endif
+     */
+    void
+    removeConfigurationSetNameListener(ConfigurationSetNameListenerType type,
+                                       ConfigurationSetNameListener* listener);
+    
   protected:
     /*!
      * @if jp
@@ -1554,14 +1429,7 @@ namespace RTC
     bool m_active;
     bool m_changed;
     std::vector<std::string> m_newConfig;
-
-    OnUpdateCallback*                 m_updateCb;
-    OnUpdateParamCallback*            m_updateParamCb;
-    OnSetConfigurationSetCallback*    m_setConfigSetCb;
-    OnAddConfigurationAddCallback*    m_addConfigSetCb;
-    OnRemoveConfigurationSetCallback* m_removeConfigSetCb;
-    OnActivateSetCallback*            m_activateSetCb;
-
+    ConfigurationListeners m_listeners;
 
   };
 }; // namespace RTC

@@ -5,7 +5,7 @@
  * @date $Date: 2007-12-31 03:08:02 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
- * Copyright (C) 2007-2009
+ * Copyright (C) 2007-2011
  *     Task-intelligence Research Group,
  *     Intelligent Systems Research Institute,
  *     National Institute of
@@ -31,10 +31,7 @@ namespace RTC
    */
   ConfigAdmin::ConfigAdmin(coil::Properties& configsets)
     : m_configsets(configsets), m_activeId("default"),
-      m_active(true), m_changed(false),
-      m_updateCb(0), m_updateParamCb(0),
-      m_setConfigSetCb(0), m_addConfigSetCb(0),
-      m_removeConfigSetCb(0), m_activateSetCb(0)
+      m_active(true), m_changed(false)
   {
   }
   
@@ -52,12 +49,6 @@ namespace RTC
 	if (m_params[i] != NULL) { delete m_params[i]; }
       }
     m_params.clear();
-    setOnUpdate(0);
-    setOnUpdateParam(0);
-    setOnSetConfigurationSet(0);
-    setOnAddConfigurationSet(0);
-    setOnRemoveConfigurationSet(0);
-    setOnActivateSet(0);
   }
   
 
@@ -285,85 +276,216 @@ namespace RTC
     return true;
   }
 
+  //------------------------------------------------------------
+  // obsolete functions
+  //
   void ConfigAdmin::setOnUpdate(OnUpdateCallback* cb)
   {
-    if (m_updateCb != 0) { delete m_updateCb; }
-    m_updateCb = cb;
+    std::cerr << "setOnUpdate function is obsolete." << std::endl;
+    std::cerr << "Use addConfigurationSetNameListener instead." << std::endl;
+    m_listeners.configsetname_[ON_UPDATE_CONFIG_SET].addListener(cb, false);
   }
 
   void ConfigAdmin::setOnUpdateParam(OnUpdateParamCallback* cb)
   {
-    if (m_updateParamCb != 0) { delete m_updateParamCb; }
-    m_updateParamCb = cb;
+    std::cerr << "setOnUpdateParam function is obsolete." << std::endl;
+    std::cerr << "Use addConfigurationParamListener instead." << std::endl;
+    m_listeners.configparam_[ON_UPDATE_CONFIG_PARAM].addListener(cb, false);
   }
 
   void ConfigAdmin::setOnSetConfigurationSet(OnSetConfigurationSetCallback* cb)
   {
-    if (m_setConfigSetCb != 0) { delete m_setConfigSetCb; }
-    m_setConfigSetCb = cb;
+    std::cerr << "setOnSetConfigurationSet function is obsolete." << std::endl;
+    std::cerr << "Use addConfigurationSetListener instead." << std::endl;
+    m_listeners.configset_[ON_SET_CONFIG_SET].addListener(cb, false);
   }
 
   void ConfigAdmin::setOnAddConfigurationSet(OnAddConfigurationAddCallback* cb)
   {
-    if (m_addConfigSetCb != 0) { delete m_addConfigSetCb; }
-    m_addConfigSetCb = cb;
+    std::cerr << "setOnAddConfigurationSet function is obsolete." << std::endl;
+    std::cerr << "Use addConfigurationSetListener instead." << std::endl;
+    m_listeners.configset_[ON_ADD_CONFIG_SET].addListener(cb, false);
   }
 
   void
   ConfigAdmin::setOnRemoveConfigurationSet(OnRemoveConfigurationSetCallback* cb)
   {
-    if (m_removeConfigSetCb != 0) { delete m_removeConfigSetCb; }
-    m_removeConfigSetCb = cb;
+    std::cerr << "setOnRemoveConfigurationSet function is obsolete."<<std::endl;
+    std::cerr << "Use addConfigurationSetNameListener instead." << std::endl;
+    m_listeners.configsetname_[ON_REMOVE_CONFIG_SET].addListener(cb, false);
   }
 
   void ConfigAdmin::setOnActivateSet(OnActivateSetCallback* cb)
   {
-    if (m_activateSetCb != 0) { delete m_activateSetCb; }
-    m_activateSetCb = cb;
+    std::cerr << "setOnActivateSet function is obsolete." << std::endl;
+    std::cerr << "Use addConfigurationSetNameListener instead." << std::endl;
+    m_listeners.configsetname_[ON_ACTIVATE_CONFIG_SET].addListener(cb, false);
+  }
+  //
+  // end of obsolete functions
+  //------------------------------------------------------------
+
+  /*!
+   * @if jp
+   * @brief ConfigurationParamListener を追加する
+   * @else
+   * @brief Adding ConfigurationParamListener 
+   * @endif
+   */
+  void ConfigAdmin::
+  addConfigurationParamListener(ConfigurationParamListenerType type,
+                                ConfigurationParamListener* listener,
+                                bool autoclean)
+  {
+    m_listeners.configparam_[type].addListener(listener, autoclean);
   }
 
+  /*!
+   * @if jp
+   * @brief ConfigurationParamListener を削除する
+   * @else
+   * @brief Removing ConfigurationParamListener 
+   * @endif
+   */
+  void ConfigAdmin::
+  removeConfigurationParamListener(ConfigurationParamListenerType type,
+                                   ConfigurationParamListener* listener)
+  {
+    m_listeners.configparam_[type].removeListener(listener);
+  }
+    
+  /*!
+   * @if jp
+   * @brief ConfigurationSetListener を追加する
+   * @else
+   * @brief Adding ConfigurationSetListener 
+   * @endif
+   */
+  void ConfigAdmin::
+  addConfigurationSetListener(ConfigurationSetListenerType type,
+                              ConfigurationSetListener* listener,
+                              bool autoclean)
+  {
+    m_listeners.configset_[type].addListener(listener, autoclean);
+  }
+
+  /*!
+   * @if jp
+   * @brief ConfigurationSetListener を削除する
+   * @else
+   * @brief Removing ConfigurationSetListener 
+   * @endif
+   */
+  void ConfigAdmin::
+  removeConfigurationSetListener(ConfigurationSetListenerType type,
+                                 ConfigurationSetListener* listener)
+  {
+    m_listeners.configset_[type].removeListener(listener);
+  }
+    
+  /*!
+   * @if jp
+   * @brief ConfigurationSetNameListener を追加する
+   * @else
+   * @brief Adding ConfigurationSetNameListener 
+   * @endif
+   */
+  void ConfigAdmin::
+  addConfigurationSetNameListener(ConfigurationSetNameListenerType type,
+                                  ConfigurationSetNameListener* listener,
+                                  bool autoclean)
+  {
+    m_listeners.configsetname_[type].addListener(listener, autoclean);
+  }
+
+  /*!
+   * @if jp
+   * @brief ConfigurationSetNameListener を削除する
+   * @else
+   * @brief Removing ConfigurationSetNameListener 
+   * @endif
+   */
+  void ConfigAdmin::
+  removeConfigurationSetNameListener(ConfigurationSetNameListenerType type,
+                                     ConfigurationSetNameListener* listener)
+  {
+    m_listeners.configsetname_[type].removeListener(listener);
+  }
+
+  //------------------------------------------------------------
+  // protected functions
+  /*!
+   * @if jp
+   * @brief コンフィギュレーションパラメータの更新(ID指定)時にコールされる
+   * @else
+   * @brief When the configuration parameter is updated, it is called. 
+   * @endif
+   */
   void ConfigAdmin::onUpdate(const char* config_set)
   {
-    if (m_updateCb != 0)
-      {
-        (*m_updateCb)(config_set);
-      }
+    m_listeners.configsetname_[ON_UPDATE_CONFIG_SET].notify(config_set);
   }
+
+  /*!
+   * @if jp
+   * @brief コンフィギュレーションパラメータの更新(名称指定)時にコールされる
+   * @else
+   * @brief When the configuration parameter is updated, it is called. 
+   * @endif
+   */
   void
   ConfigAdmin::onUpdateParam(const char* config_set, const char* config_param)
   {
-    if (m_updateParamCb != 0)
-      {
-        (*m_updateParamCb)(config_set, config_param);
-      }
+    m_listeners.configparam_[ON_UPDATE_CONFIG_PARAM].notify(config_set,
+                                                            config_param);
   }
+
+  /*!
+   * @if jp
+   * @brief コンフィギュレーションセットへの追加時にコールされる
+   * @else
+   * @brief Called when the property is added to the configuration set
+   * @endif
+   */
   void ConfigAdmin::onSetConfigurationSet(const coil::Properties& config_set)
   {
-    if (m_setConfigSetCb != 0)
-      {
-        (*m_setConfigSetCb)(config_set);
-      }
+    m_listeners.configset_[ON_SET_CONFIG_SET].notify(config_set);
   }
+
+  /*!
+   * @if jp
+   * @brief 設定値が追加されたときにコールされる。
+   * @else
+   * @brief Called when a set value is added to the configuration set
+   * @endif
+   */
   void ConfigAdmin::onAddConfigurationSet(const coil::Properties& config_set)
   {
-    if (m_addConfigSetCb != 0)
-      {
-        (*m_addConfigSetCb)(config_set);
-      }
+    m_listeners.configset_[ON_ADD_CONFIG_SET].notify(config_set);
   }
+
+  /*!
+   * @if jp
+   * @brief セットが削除されてるときにコールされる。
+   * @else
+   * @brief Called when the configuration set has been deleted
+   * @endif
+   */
   void ConfigAdmin::onRemoveConfigurationSet(const char* config_id)
   {
-    if (m_removeConfigSetCb != 0)
-      {
-        (*m_removeConfigSetCb)(config_id);
-      }
+    m_listeners.configsetname_[ON_REMOVE_CONFIG_SET].notify(config_id);
   }
+
+  /*!
+   * @if jp
+   * @brief セットがアクティブ化されたときにコールされる。
+   * @else
+   * @brief Called when the configuration set is made active
+   * @endif
+   */
   void ConfigAdmin::onActivateSet(const char* config_id)
   {
-    if (m_activateSetCb != 0)
-      {
-        (*m_activateSetCb)(config_id);
-      }
+    m_listeners.configsetname_[ON_ACTIVATE_CONFIG_SET].notify(config_id);
   }
   
 
