@@ -275,7 +275,11 @@ namespace RTC
 	  {
 	    RTC_ERROR(("Module load error: %s", e.reason.c_str()));
 	  }
-	catch (ModuleManager::NotFound& e)
+	catch (ModuleManager::SymbolNotFound& e)
+	  {
+	    RTC_ERROR(("Symbol not found: %s", e.name.c_str()));
+	  }
+	catch (ModuleManager::ModuleNotFound& e)
 	  {
 	    RTC_ERROR(("Module not found: %s", e.name.c_str()));
 	  }
