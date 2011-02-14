@@ -34,10 +34,12 @@ static const char* seqin_spec[] =
 SeqIn::SeqIn(RTC::Manager* manager)
   : RTC::DataFlowComponentBase(manager),
     // <rtc-template block="initializer">
+    m_OctetIn("Octet", m_Octet),
     m_ShortIn("Short", m_Short),
     m_LongIn("Long", m_Long),
     m_FloatIn("Float", m_Float),
     m_DoubleIn("Double", m_Double),
+    m_OctetSeqIn("OctetSeq", m_OctetSeq),
     m_ShortSeqIn("ShortSeq", m_ShortSeq),
     m_LongSeqIn("LongSeq", m_LongSeq),
     m_FloatSeqIn("FloatSeq", m_FloatSeq),
@@ -58,10 +60,12 @@ RTC::ReturnCode_t SeqIn::onInitialize()
   // Registration: InPort/OutPort/Service
   // <rtc-template block="registration">
   // Set InPort buffers
+  addInPort("Octet", m_OctetIn);
   addInPort("Short", m_ShortIn);
   addInPort("Long", m_LongIn);
   addInPort("Float", m_FloatIn);
   addInPort("Double", m_DoubleIn);
+  addInPort("OctetSeq", m_OctetSeqIn);
   addInPort("ShortSeq", m_ShortSeqIn);
   addInPort("LongSeq", m_LongSeqIn);
   addInPort("FloatSeq", m_FloatSeqIn);
@@ -158,45 +162,51 @@ RTC::ReturnCode_t SeqIn::onExecute(RTC::UniqueId ec_id)
   m_FloatIn.read();
   m_LongIn.read();
   m_ShortIn.read();
+  m_OctetIn.read();
   m_DoubleSeqIn.read();
   m_FloatSeqIn.read();
   m_LongSeqIn.read();
   m_ShortSeqIn.read();
+  m_OctetSeqIn.read();
   
   int h_col(4);
   int col(13);
-  int all_col = h_col + (col * 4);
+  int all_col = h_col + (col * 5);
   int all_row(0);
   
   int d_size(1);
   int f_size(1);
   int l_size(1);
   int s_size(1);
+  int o_size(1);
   
   int ds_size(m_DoubleSeq.data.length());
   int fs_size(m_FloatSeq.data.length());
   int ls_size(m_LongSeq.data.length());
   int ss_size(m_ShortSeq.data.length());
+  int os_size(m_OctetSeq.data.length());
   
   int max_size;
   
   std::vector<int> in_size;
   std::vector<int>::iterator it;
-  in_size.reserve(8);
+  in_size.reserve(10);
   in_size.push_back(d_size);
   in_size.push_back(f_size);
   in_size.push_back(l_size);
   in_size.push_back(s_size);
+  in_size.push_back(o_size);
   in_size.push_back(ds_size);
   in_size.push_back(fs_size);
   in_size.push_back(ls_size);
   in_size.push_back(ss_size);
+  in_size.push_back(os_size);
   
   it = std::max_element(in_size.begin(), in_size.end());
   
   max_size = *it;
   
-  std::cout.width(h_col + (col * 4));
+  std::cout.width(h_col + (col * 5));
   std::cout.fill('-');
   std::cout << "-" << std::endl; all_row++;
   
@@ -220,6 +230,10 @@ RTC::ReturnCode_t SeqIn::onExecute(RTC::UniqueId ec_id)
   std::cout.setf(std::ios::right, std::ios::adjustfield);
   std::cout.fill(' ');
   std::cout << "Short";
+  std::cout.width(col);
+  std::cout.setf(std::ios::right, std::ios::adjustfield);
+  std::cout.fill(' ');
+  std::cout << "Octet";
   std::cout << std::endl; all_row++;
   
   std::cout.width(all_col);
@@ -233,7 +247,7 @@ RTC::ReturnCode_t SeqIn::onExecute(RTC::UniqueId ec_id)
     std::cout << " ";
   std::cout << std::endl; all_row++;
   
-  std::cout.width(h_col + (col * 4));
+  std::cout.width(h_col + (col * 5));
   std::cout.fill('-');
   std::cout << "-" << std::endl; all_row++;
   
@@ -257,6 +271,18 @@ RTC::ReturnCode_t SeqIn::onExecute(RTC::UniqueId ec_id)
   std::cout.setf(std::ios::right, std::ios::adjustfield);
   std::cout.fill(' ');
   std::cout << m_Short.data;
+  std::cout.width(col);
+  std::cout.setf(std::ios::right, std::ios::adjustfield);
+  std::cout.fill(' ');
+  std::cout << int(m_Octet.data) << "[";
+  if (int(m_Octet.data) < 0x20 || int(m_Octet.data) > 0x7e)
+    {
+      std::cout << " " << "]";
+    }
+  else
+    {
+      std::cout << m_Octet.data << "]";
+    }
   std::cout << std::endl; all_row++;
   
   std::cout.width(all_col);
@@ -330,7 +356,27 @@ RTC::ReturnCode_t SeqIn::onExecute(RTC::UniqueId ec_id)
 	{
 	  std::cout << "-";
 	}
-      
+
+      std::cout.width(col);
+      std::cout.setf(std::ios::right, std::ios::adjustfield);
+      std::cout.fill(' ');
+      if (i < os_size)
+       {
+         std::cout << int(m_OctetSeq.data[i]) << "[";
+         if (int(m_OctetSeq.data[i]) < 0x20 || int(m_OctetSeq.data[i]) > 0x7e)
+           {
+             std::cout << " " << "]";
+           }
+         else
+           {
+             std::cout << m_OctetSeq.data[i] << "]";
+           }
+       }
+      else
+       {
+         std::cout << "-";
+       }
+         
       std::cout << std::endl; all_row++;
     }
   
