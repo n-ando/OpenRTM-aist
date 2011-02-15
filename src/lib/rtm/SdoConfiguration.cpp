@@ -7,7 +7,6 @@
  *
  * Copyright (C) 2006-2008
  *     Noriaki Ando
- *     Task-intelligence Research Group,
  *     Intelligent Systems Research Institute,
  *     National Institute of
  *         Advanced Industrial Science and Technology (AIST), Japan
@@ -100,8 +99,10 @@ namespace SDOPackage
    * @brief Constructor
    * @endif
    */
-  Configuration_impl::Configuration_impl(RTC::ConfigAdmin& configsets)
-    : rtclog("sdo_config"), m_configsets(configsets)
+  Configuration_impl::Configuration_impl(RTC::ConfigAdmin& configsets,
+                                         RTC::SdoServiceAdmin& sdoServiceAdmin)
+    : rtclog("sdo_config"), m_configsets(configsets),
+      m_sdoservice(sdoServiceAdmin)
   {
     m_objref = this->_this();
   }
@@ -166,31 +167,13 @@ namespace SDOPackage
     //    if (CORBA::is_nil(sProfile.service)) throw InvalidParameter();
     try
       {
-	if (strcmp(sProfile.id, "") == 0)
-	  {
-	    ServiceProfile prof(sProfile);
-	    prof.id = CORBA::string_dup(getUUID().c_str());
-	    CORBA_SeqUtil::push_back(m_serviceProfiles, prof);
-	    return true;
-	  }
-	
-	CORBA::Long index;
-	index = CORBA_SeqUtil::find(m_serviceProfiles,
-				    service_id(sProfile.id));
-	if (index >= 0)
-	  {
-	    CORBA_SeqUtil::erase(m_serviceProfiles, index);
-	  }
-	CORBA_SeqUtil::push_back(m_serviceProfiles, sProfile);
-	return true;
+        return m_sdoservice.addSdoServiceConsumer(sProfile);
       }
     catch (...)
       {
 	throw InternalError("Configuration::set_service_profile");
-	return false;
       }
-    // never reach here
-    return true;
+    return false;
   }
   
   /*!
@@ -235,15 +218,13 @@ namespace SDOPackage
     RTC_TRACE(("remove_service_profile(%s)", id));
     try
       {
-	CORBA_SeqUtil::erase_if(m_serviceProfiles, service_id(id));
+        return m_sdoservice.removeSdoServiceConsumer(id);
       }
     catch (...)
       {
 	throw InternalError("Configuration::remove_service_profile");
-	// never reach here
-	return false;
       }
-    return true;
+    return false;
   }
   
   /*!

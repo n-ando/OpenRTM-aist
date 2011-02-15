@@ -64,12 +64,15 @@ namespace RTC
       m_portAdmin(manager->getORB(), manager->getPOA()),
       m_created(true), m_exiting(false),
       m_properties(default_conf), m_configsets(m_properties.getNode("conf")),
+      m_sdoservice(*this),
       m_readAll(false),m_writeAll(false),
       m_readAllCompletion(false),m_writeAllCompletion(false)
   {
     m_objref = this->_this();
-    m_pSdoConfigImpl = new SDOPackage::Configuration_impl(m_configsets);
-    m_pSdoConfig = SDOPackage::Configuration::_duplicate(m_pSdoConfigImpl->getObjRef());
+    m_pSdoConfigImpl = new SDOPackage::Configuration_impl(m_configsets,
+                                                          m_sdoservice);
+    m_pSdoConfig = SDOPackage::Configuration::
+      _duplicate(m_pSdoConfigImpl->getObjRef());
   }
   
   /*!
@@ -87,12 +90,15 @@ namespace RTC
       m_portAdmin(orb, poa),
       m_created(true), m_exiting(false),
       m_properties(default_conf), m_configsets(m_properties.getNode("conf")),
+      m_sdoservice(*this),
       m_readAll(false),m_writeAll(false),
       m_readAllCompletion(false),m_writeAllCompletion(false)
   {
     m_objref = this->_this();
-    m_pSdoConfigImpl = new SDOPackage::Configuration_impl(m_configsets);
-    m_pSdoConfig = SDOPackage::Configuration::_duplicate(m_pSdoConfigImpl->getObjRef());
+    m_pSdoConfigImpl = new SDOPackage::Configuration_impl(m_configsets,
+                                                          m_sdoservice);
+    m_pSdoConfig = SDOPackage::Configuration::
+      _duplicate(m_pSdoConfigImpl->getObjRef());
   }
   
   /*!
@@ -1781,7 +1787,80 @@ namespace RTC
     m_portAdmin.deletePortByName(port_name);
     return;
   }
+
+   
+  /*!
+   * @if jp
+   *
+   * @brief [local interface] SDOサービスを追加する
+   * @else
+   * @brief [local interface] Add SDO service
+   * @endif
+   */
+  ReturnCode_t
+  RTObject_impl::addSdoService(const SDOPackage::ServiceProfile& profile)
+  {
+    CORBA::Boolean ret = m_pSdoConfigImpl->add_service_profile(profile);
+    if (ret) { return RTC::RTC_OK; }
+    return RTC::RTC_ERROR;
+    /*
+    std::string id(profile.id);
+    for (CORBA::ULong i(0), len(m_sdoSvcProfiles.length()); i < len; ++i)
+      {
+        if (id == m_sdoSvcProfiles[i].id)
+          {
+            return RTC::PRECONDITION_NOT_MET;
+          }
+      }
+    CORBA_SeqUtil::push_back(m_sdoSvcProfiles, profile);
+    return RTC::RTC_OK;
+    */
+  }
   
+  /*!
+   * @if jp
+   * @brief [local interface] SDOサービスを削除する
+   * @else
+   * @brief [local interface] Remove SDO service
+   * @endif
+   */
+  SDOPackage::SDOService_var
+  RTObject_impl::removeSdoService(const char* service_id)
+  {
+    SDOPackage::SDOService_var service;
+    try
+      {
+        service = get_sdo_service(service_id);
+        m_pSdoConfigImpl->remove_service_profile(service_id);
+      }
+    catch (SDOPackage::InvalidParameter& e)
+      {
+      }
+    catch (SDOPackage::NotAvailable& e)
+      {
+      }
+    catch (SDOPackage::InternalError& e)
+      {
+      }
+    catch (...)
+      {
+      }
+    return service._retn();
+    /*
+    std::string id(service_id);
+    SDOPackage::ServiceProfile_var profile;
+    for (CORBA::ULong i(0), len(m_sdoSvcProfiles.length()); i < len; ++i)
+      {
+        if (id == m_sdoSvcProfiles[i].id)
+          {
+            profile = m_sdoSvcProfiles[i];
+            CORBA_SeqUtil::erase(m_sdoSvcProfile, id);
+          }
+      }
+    return profile._retn();
+    */
+  }
+ 
   /*!
    * @if jp
    * @brief 全 InPort のデータを読み込む。
@@ -2102,7 +2181,95 @@ namespace RTC
       ecaction_[listener_type].removeListener(listener);
   }
 
+  
+  /*!
+   * @if jp
+   * @brief ConfigurationParamListener を追加する
+   * @else
+   * @brief Adding ConfigurationParamListener 
+   * @endif
+   */
+  void RTObject_impl::
+  addConfigurationParamListener(ConfigurationParamListenerType type,
+                                ConfigurationParamListener* listener,
+                                bool autoclean)
+  {
+    m_configsets.addConfigurationParamListener(type, listener, autoclean);
+  }
 
+  /*!
+   * @if jp
+   * @brief ConfigurationParamListener を削除する
+   * @else
+   * @brief Removing ConfigurationParamListener 
+   * @endif
+   */
+  void RTObject_impl::
+  removeConfigurationParamListener(ConfigurationParamListenerType type,
+                                   ConfigurationParamListener* listener)
+  {
+    m_configsets.removeConfigurationParamListener(type, listener);
+  }
+
+  /*!
+   * @if jp
+   * @brief ConfigurationSetListener を追加する
+   * @else
+   * @brief Adding ConfigurationSetListener 
+   * @endif
+   */
+  void RTObject_impl::
+  addConfigurationSetListener(ConfigurationSetListenerType type,
+                              ConfigurationSetListener* listener,
+                              bool autoclean)
+  {
+    m_configsets.addConfigurationSetListener(type, listener, autoclean);
+  }
+  
+  /*!
+   * @if jp
+   * @brief ConfigurationSetListener を削除する
+   * @else
+   * @brief Removing ConfigurationSetListener 
+   * @endif
+   */
+  void RTObject_impl::
+  removeConfigurationSetListener(ConfigurationSetListenerType type,
+                                 ConfigurationSetListener* listener)
+  {
+    m_configsets.removeConfigurationSetListener(type, listener);
+  }
+  
+  /*!
+   * @if jp
+   * @brief ConfigurationSetNameListener を追加する
+   * @else
+   * @brief Adding ConfigurationSetNameListener 
+   * @endif
+   */
+  void RTObject_impl::
+  addConfigurationSetNameListener(ConfigurationSetNameListenerType type,
+                                  ConfigurationSetNameListener* listener,
+                                  bool autoclean)
+  {
+    m_configsets.addConfigurationSetNameListener(type, listener, autoclean);
+  }
+  
+  /*!
+   * @if jp
+   * @brief ConfigurationSetNameListener を削除する
+   * @else
+   * @brief Removing ConfigurationSetNameListener 
+   * @endif
+   */
+  void RTObject_impl::
+  removeConfigurationSetNameListener(ConfigurationSetNameListenerType type,
+                                     ConfigurationSetNameListener* listener)
+  {
+    m_configsets.removeConfigurationSetNameListener(type, listener);
+  }
+  
+  
   /*!
    * @if jp
    * @brief RTC を終了する

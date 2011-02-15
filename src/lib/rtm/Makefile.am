@@ -62,6 +62,7 @@ COMP_SRC =                           \
 	ComponentActionListener.cpp  \
 	ConfigurationListener.cpp    \
 	SdoConfiguration.cpp         \
+	SdoServiceAdmin.cpp          \
 	SdoOrganization.cpp          \
 	PeriodicECSharedComposite.cpp
 

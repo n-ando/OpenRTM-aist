@@ -20,6 +20,8 @@
 #ifndef RTC_SDOCONFIGURATION_H
 #define RTC_SDOCONFIGURATION_H
 
+#include <string>
+
 // CORBA header include
 #include <rtm/RTC.h>
 #include <coil/Mutex.h>
@@ -29,7 +31,7 @@
 #include <rtm/idl/SDOPackageSkel.h>
 #include <rtm/ConfigAdmin.h>
 #include <rtm/SystemLogger.h>
-#include <string>
+#include <rtm/SdoServiceAdmin.h>
 
 // SdoConfiguration with SeqEx 159120
 // SdoConfiguration with SeqUtil 114504 114224
@@ -175,7 +177,8 @@ namespace SDOPackage
      *
      * @endif
      */
-    Configuration_impl(RTC::ConfigAdmin& configAdmin);
+    Configuration_impl(RTC::ConfigAdmin& configAdmin,
+                       RTC::SdoServiceAdmin& sdoServiceAdmin);
     
     /*!
      * @if jp
@@ -1162,6 +1165,16 @@ namespace SDOPackage
     */
     RTC::ConfigAdmin& m_configsets;
     Mutex m_config_mutex;
+
+    /*!
+     * @if jp
+     * @brief Lock 付き SDO Service 管理オブジェクト
+     * @else
+     * @brief SDO Service admin object with mutex lock
+     * @endif
+     */
+    RTC::SdoServiceAdmin& m_sdoservice;
+    Mutex m_sdoservice_mutex;
     
     /*!
      * @if jp
