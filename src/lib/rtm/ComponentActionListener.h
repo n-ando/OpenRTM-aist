@@ -91,7 +91,7 @@ namespace RTC
    * - on_rate_changed()
    *
    * 各アクションに対応するユーザーコードが呼ばれる直前のタイミング
-   * でコールされるリスなクラスの基底クラス。
+   * でコールされるリスナクラスの基底クラス。
    *
    * - PRE_ON_INITIALIZE:
    * - PRE_ON_FINALIZE:
@@ -480,8 +480,8 @@ namespace RTC
 
   enum ExecutionContextActionListenerType
     {
-      ATTACH_EC,
-      DETACH_EC,
+      EC_ATTACHED,
+      EC_DETACHED,
       EC_ACTION_LISTENER_NUM
     };
 

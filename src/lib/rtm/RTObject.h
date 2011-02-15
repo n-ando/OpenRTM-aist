@@ -32,6 +32,7 @@
 #include <rtm/ConfigAdmin.h>
 #include <rtm/SystemLogger.h>
 #include <rtm/ComponentActionListener.h>
+#include <rtm/SdoServiceAdmin.h>
 
 #define ECOTHER_OFFSET 1000
 
@@ -322,9 +323,9 @@ namespace RTC
      * 
      * ComponentAction::on_deactivated が呼ばれた際に実行されるコールバック
      * 関数。<BR>
-     * 本関数は無条件に RTC::RTC_OK を返すようにダミー実装されているので、
-     * 各コンポーネントの実際の非活性化処理は、本関数をオーバーライドして実装する
-     * 必要がある。
+     * 本関数は無条件に RTC::RTC_OK を返すようにダミー実装されているの
+     * で、各コンポーネントの実際の非活性化処理は、本関数をオーバーライ
+     * ドして実装する必要がある。
      * 
      * @param exec_handle 参加している ExecutionContext の ID
      *
@@ -373,11 +374,12 @@ namespace RTC
      * 
      * This is a callback function that is executed when
      * DataFlowComponentAction::on_execute is invoked.<BR>
-     * As for actual periodic execution of each component, since this function is
-     * dummy-implemented to return RTC::RTC_OK unconditionally, you need to
-     * implement this function by overriding it.
-     * This function is invoked periodically as the first execution pass of
-     * Two-Pass Execution in Periodic Sampled Data Processing.
+     * As for actual periodic execution of each component, since this
+     * function is dummy-implemented to return RTC::RTC_OK
+     * unconditionally, you need to implement this function by
+     * overriding it.  This function is invoked periodically as the
+     * first execution pass of Two-Pass Execution in Periodic Sampled
+     * Data Processing.
      * 
      * @param exec_handle ID of the participant ExecutionContext
      *
@@ -465,8 +467,8 @@ namespace RTC
      * 
      * ComponentAction::on_reset が呼ばれた際に実行されるコールバック関数。<BR>
      * 本関数は無条件に RTC::RTC_OK を返すようにダミー実装されているので、
-     * 各コンポーネントの実際のリセット処理は、本関数をオーバーライドして実装する
-     * 必要がある。
+     * 各コンポーネントの実際のリセット処理は、本関数をオーバーライドし
+     * て実装する必要がある。
      * 
      * @param exec_handle 参加している ExecutionContext の ID
      *
@@ -500,10 +502,10 @@ namespace RTC
      * DataFlowComponentAction::on_state_update が呼ばれた際に実行される
      * コールバック関数。<BR>
      * 本関数は無条件に RTC::RTC_OK を返すようにダミー実装されているので、
-     * 各コンポーネントの実際の状態変更処理は、本関数をオーバーライドして実装する
-     * 必要がある。<BR>
-     * 本関数は Periodic Sampled Data Processing における Two-Pass Executionの
-     * ２回目の実行パスとして定期的に呼び出される。
+     * 各コンポーネントの実際の状態変更処理は、本関数をオーバーライドし
+     * て実装する必要がある。<BR> 本関数は Periodic Sampled Data
+     * Processing における Two-Pass Executionの２回目の実行パスとして定
+     * 期的に呼び出される。
      *
      * @param exec_handle 参加している ExecutionContext の ID
      * 
@@ -515,11 +517,12 @@ namespace RTC
      * 
      * This is a callback function that is executed when
      * DataFlowComponentAction::on_state_update was invoked.<BR>
-     * As for actual updating the state of each component, since this function is
-     * dummy-implemented to return RTC::RTC_OK unconditionally, you need to
-     * implement this function by overriding it.<BR>
-     * This function is invoked periodically as the second execution pass of
-     * Two-Pass Execution in Periodic Sampled Data Processing.
+     * As for actual updating the state of each component, since this
+     * function is dummy-implemented to return RTC::RTC_OK
+     * unconditionally, you need to implement this function by
+     * overriding it.<BR> This function is invoked periodically as the
+     * second execution pass of Two-Pass Execution in Periodic Sampled
+     * Data Processing.
      *
      * @param exec_handle ID of the participant ExecutionContext
      * 
@@ -539,10 +542,10 @@ namespace RTC
      * DataFlowComponentAction::on_rate_changed が呼ばれた際に実行される
      * コールバック関数。<BR>
      * 本関数は無条件に RTC::RTC_OK を返すようにダミー実装されているので、
-     * 各コンポーネントの実際の状態変更処理は、本関数をオーバーライドして実装する
-     * 必要がある。<BR>
-     * 本関数は Periodic Sampled Data Processing において ExecutionContext の
-     * 実行が更新された際に呼び出される。
+     * 各コンポーネントの実際の状態変更処理は、本関数をオーバーライドし
+     * て実装する必要がある。<BR> 本関数は Periodic Sampled Data
+     * Processing において ExecutionContext の実行が更新された際に呼び
+     * 出される。
      *
      * @param exec_handle 参加している ExecutionContext の ID
      * 
@@ -593,7 +596,7 @@ namespace RTC
      * 
      * @else
      *
-     * @brief [CORBA interface] IInitialize the RTC that realizes this interface.
+     * @brief [CORBA interface] Initialize the RTC that realizes this interface.
      *
      * The invocation of this operation shall result in the invocation of the
      * callback ComponentAction::on_initialize.
@@ -636,7 +639,7 @@ namespace RTC
      * 
      * @else
      *
-     * @brief [CORBA interface] Finalize the RTC for preparing it for destruction
+     * @brief [CORBA interface] Finalize the RTC for destruction
      * 
      * This invocation of this operation shall result in the invocation of the
      * callback ComponentAction::on_finalize.
@@ -649,8 +652,9 @@ namespace RTC
      * - An RTC may not be finalized while it is in the Created state. Any 
      *   attempt to invoke this operation while in that state shall fail with 
      *   ReturnCode_t::PRECONDITION_NOT_MET.
-     * - Application developers are not expected to call this operation directly;
-     *  it exists for use by the RTC infrastructure.
+     * - Application developers are not expected to call this
+     *   operation directly; it exists for use by the RTC
+     *   infrastructure.
      *
      * @return The return code of ReturnCode_t type
      * 
@@ -710,13 +714,14 @@ namespace RTC
      *
      * @brief [CORBA interface] RTC が Alive 状態であるかどうか確認する。
      *
-     * RTC が指定した ExecutionContext に対して Alive状態であるかどうか確認する。
-     * RTC の状態が Active であるか、Inactive であるか、Error であるかは実行中の
-     * ExecutionContext に依存する。すなわち、ある ExecutionContext に対しては
-     * Active  状態であっても、他の ExecutionContext に対しては Inactive 状態と
-     * なる場合もありえる。従って、このオペレーションは指定された
-     * ExecutionContext に問い合わせて、この RTC の状態が Active、Inactive、
-     * Error の場合には Alive 状態として返す。
+     * RTC が指定した ExecutionContext に対して Alive状態であるかどうか
+     * 確認する。RTC の状態が Active であるか、Inactive であるか、
+     * Error であるかは実行中のExecutionContext に依存する。すなわち、
+     * ある ExecutionContext に対してはActive 状態であっても、他の
+     * ExecutionContext に対しては Inactive 状態となる場合もありえる。
+     * 従って、このオペレーションは指定されたExecutionContext に問い合
+     * わせて、この RTC の状態が Active、Inactive、Error の場合には
+     * Alive 状態として返す。
      *
      * @return Alive 状態確認結果
      *
@@ -836,9 +841,9 @@ namespace RTC
      *
      * 指定した ExecutionContext にこの RTC を所属させる。この RTC と関連する 
      * ExecutionContext のハンドルを返す。
-     * このオペレーションは、ExecutionContextOperations::add_component が呼ばれた
-     * 際に呼び出される。返されたハンドルは他のクライアントで使用することを想定
-     * していない。
+     * このオペレーションは、ExecutionContextOperations::add_component
+     * が呼ばれた際に呼び出される。返されたハンドルは他のクライアントで
+     * 使用することを想定していない。
      *
      * @param exec_context 所属先 ExecutionContext
      *
@@ -887,8 +892,8 @@ namespace RTC
      * @else
      * @brief [CORBA interface] Detach ExecutionContext.
      *
-     * Inform this RTC that it is no longer participating in the given execution 
-     * context.
+     * Inform this RTC that it is no longer participating in the given
+     * execution context.
      * This operation is intended to be invoked by 
      * ExecutionContextOperations::remove. It is not intended for use 
      * by other clients.
@@ -896,9 +901,9 @@ namespace RTC
      * - This operation may not be invoked if this RTC is not already 
      *   participating in the execution context. Such a call shall fail with 
      *   ReturnCode_t::PRECONDITION_NOT_MET.
-     * - This operation may not be invoked if this RTC is Active in the indicated
-     *   execution context. Otherwise, it shall fail with 
-     *   ReturnCode_t::PRECONDITION_NOT_MET.
+     * - This operation may not be invoked if this RTC is Active in
+     *   the indicated execution context. Otherwise, it shall fail
+     *   with ReturnCode_t::PRECONDITION_NOT_MET.
      *
      * @param exec_handle Detaching ExecutionContext Handle
      *
@@ -1001,7 +1006,8 @@ namespace RTC
      *
      * The RTC has been initialized and entered the Alive state.
      * Any RTC-specific initialization logic should be performed here.
-     * As a result of this operation, onInitialize() callback function is called.
+     * As a result of this operation, onInitialize() callback function
+     * is called.
      *
      * @return The return code of ReturnCode_t type
      *
@@ -1165,9 +1171,9 @@ namespace RTC
      *
      * RTC が所属する ExecutionContext が Active 状態から Error 状態へ遷移した
      * 場合に呼び出される。
-     * このオペレーションは RTC が Error 状態に遷移した際に一度だけ呼び出される。
-     * このオペレーション呼び出しの結果として onAborting() コールバック関数が
-     * 呼び出される。
+     * このオペレーションは RTC が Error 状態に遷移した際に一度だけ呼び
+     * 出される。このオペレーション呼び出しの結果として onAborting() コー
+     * ルバック関数が呼び出される。
      *
      * @param exec_handle 状態遷移した ExecutionContext の ID
      *
@@ -1259,12 +1265,13 @@ namespace RTC
      *
      * @brief [ComponentAction CORBA interface] Resetting RTC
      *
-     * The RTC is in the Error state. An attempt is being made to recover it such
-     * that it can return to the Inactive state.
-     * If the RTC was successfully recovered and can safely return to the
-     * Inactive state, this method shall complete with ReturnCode_t::OK. Any
-     * other result shall indicate that the RTC should remain in the Error state.
-     * As a result of this operation, onReset() callback function is invoked.
+     * The RTC is in the Error state. An attempt is being made to
+     * recover it such that it can return to the Inactive state.
+     * If the RTC was successfully recovered and can safely return to
+     * the Inactive state, this method shall complete with
+     * ReturnCode_t::OK. Any other result shall indicate that the RTC
+     * should remain in the Error state.  As a result of this
+     * operation, onReset() callback function is invoked.
      *
      * @param exec_handle ID of target ExecutionContext for the reset
      *
@@ -1313,7 +1320,8 @@ namespace RTC
      * Constraints
      * - The execution context of the given context shall be PERIODIC.
      *
-     * @param exec_handle ID of target ExecutionContext for Primary Periodic Operation
+     * @param exec_handle ID of target ExecutionContext for Primary
+     *                    Periodic Operation
      *
      * @return The return code of ReturnCode_t type
      *
@@ -2781,6 +2789,40 @@ namespace RTC
     /*!
      * @if jp
      *
+     * @brief [local interface] SDOサービスを追加する
+     * 
+     * SDOサービスを追加する。
+     *
+     * @else
+     *
+     * @brief [local interface] Add SDO service
+     *
+     * This operation adds SDO service to this RT-Component.
+     *
+     * @endif
+     */
+    ReturnCode_t addSdoService(const SDOPackage::ServiceProfile& profile);
+
+    /*!
+     * @if jp
+     *
+     * @brief [local interface] SDOサービスを削除する
+     * 
+     * SDOサービスを削除する。
+     *
+     * @else
+     *
+     * @brief [local interface] Remove SDO service
+     *
+     * This operation removes SDO service to this RT-Component.
+     *
+     * @endif
+     */
+    SDOPackage::SDOService_var removeSdoService(const char* service_name);
+
+    /*!
+     * @if jp
+     *
      * @brief 全 InPort のデータを読み込む。
      *
      * RTC が保持する全ての InPort のデータを読み込む。
@@ -3000,11 +3042,41 @@ namespace RTC
      *
      * @endif
      */
+    typedef PreComponentActionListener PreCompActionListener;
+    typedef PreComponentActionListenerType PreCompActionListenerType;
     void 
     addPreComponentActionListener(PreComponentActionListenerType listener_type,
                                   PreComponentActionListener* listener,
                                   bool autoclean = true);
 
+
+    template <class Listener>
+    PreComponentActionListener*
+    addPortComponentActionListener(PreCompActionListenerType listener_type,
+                                   Listener& obj,
+                                   void (Listener::*memfunc)(UniqueId ec_id))
+    {
+      class Noname
+        : public PreComponentActionListener
+      {
+      public:
+        Noname(Listener& obj, void (Listener::*memfunc)(UniqueId))
+          : m_obj(obj), m_memfunc(memfunc)
+        {
+        }
+        void operator()(UniqueId ec_id)
+        {
+          (m_obj.*m_memfunc)(ec_id);
+        }
+      private:
+        Listener& m_obj;
+        typedef void (Listener::*Memfunc)(UniqueId ec_id);
+        Memfunc& m_memfunc;
+      };
+      Noname* listener(new Noname(obj, memfunc));
+      addPreComponentActionListener(listener_type, listener, true);
+      return listener;
+    }
 
     /*!
      * @if jp
@@ -3103,12 +3175,42 @@ namespace RTC
      *
      * @endif
      */
+    typedef PostComponentActionListener PostCompActionListener;
+    typedef PostComponentActionListenerType PostCompActionListenerType;
     void 
     addPostComponentActionListener(
                                PostComponentActionListenerType listener_type,
                                PostComponentActionListener* listener,
                                bool autoclean = true);
 
+    template <class Listener>
+    PostComponentActionListener*
+    addPortComponentActionListener(PostCompActionListenerType listener_type,
+                                   Listener& obj,
+                                   void (Listener::*memfunc)(UniqueId ec_id,
+                                                             ReturnCode_t ret))
+    {
+      class Noname
+        : public PostComponentActionListener
+      {
+      public:
+        Noname(Listener& obj, void (Listener::*memfunc)(UniqueId))
+          : m_obj(obj), m_memfunc(memfunc)
+        {
+        }
+        void operator()(UniqueId ec_id, ReturnCode_t ret)
+        {
+          (m_obj.*m_memfunc)(ec_id, ret);
+        }
+      private:
+        Listener& m_obj;
+        typedef void (Listener::*Memfunc)(UniqueId ec_id, ReturnCode_t ret);
+        Memfunc& m_memfunc;
+      };
+      Noname* listener(new Noname(obj, memfunc));
+      addPostComponentActionListener(listener_type, listener, true);
+      return listener;
+    }
 
     /*!
      * @if jp
@@ -3194,6 +3296,33 @@ namespace RTC
                           PortActionListener* listener,
                           bool autoclean = true);
     
+    template <class Listener>
+    PortActionListener*
+    addPortActionListener(PortActionListenerType listener_type,
+                          Listener& obj,
+                          void (Listener::*memfunc)(const RTC::PortProfile&))
+    {
+      class Noname
+        : public PortActionListener
+      {
+      public:
+        Noname(Listener& obj, void (Listener::*memfunc)(UniqueId))
+          : m_obj(obj), m_memfunc(memfunc)
+        {
+        }
+        void operator()(const RTC::PortProfile& pprofile)
+        {
+          (m_obj.*m_memfunc)(pprofile);
+        }
+      private:
+        Listener& m_obj;
+        typedef void (Listener::*Memfunc)(const RTC::PortProfile&);
+        Memfunc& m_memfunc;
+      };
+      Noname* listener(new Noname(obj, memfunc));
+      addPortActionListener(listener_type, listener, true);
+      return listener;
+    }
 
     /*!
      * @if jp
@@ -3278,6 +3407,34 @@ namespace RTC
     void addExecutionContextActionListener(ECActionListenerType listener_type,
                                            ECActionListener* listener,
                                            bool autoclean = true);
+
+    template <class Listener>
+    ECActionListener*
+    addExecutionContextActionListener(ECActionListenerType listener_type,
+                                      Listener& obj,
+                                      void (Listener::*memfunc)(UniqueId))
+    {
+      class Noname
+        : public ECActionListener
+      {
+      public:
+        Noname(Listener& obj, void (Listener::*memfunc)(UniqueId))
+          : m_obj(obj), m_memfunc(memfunc)
+        {
+        }
+        void operator()(UniqueId ec_id)
+        {
+          (m_obj.*m_memfunc)(ec_id);
+        }
+      private:
+        Listener& m_obj;
+        typedef void (Listener::*Memfunc)(UniqueId);
+        Memfunc& m_memfunc;
+      };
+      Noname* listener(new Noname(obj, memfunc));
+      addExecutionContextActionListener(listener_type, listener, true);
+      return listener;
+    }
     
 
     /*!
@@ -3302,7 +3459,288 @@ namespace RTC
     void 
     removeExecutionContextActionListener(ECActionListenerType listener_type,
                                          ECActionListener* listener);
-   
+
+
+    /*!
+     * @if jp
+     *
+     * @brief ConfigurationParamListener を追加する
+     *
+     * update(const char* config_set, const char* config_param) が呼ばれた際に
+     * コールされるリスナ ConfigurationParamListener を追加する。
+     * type には現在のところ ON_UPDATE_CONFIG_PARAM のみが入る。
+     *
+     * @param type ConfigurationParamListenerType型の値。
+     *             ON_UPDATE_CONFIG_PARAM がある。
+     *
+     * @param listener ConfigurationParamListener 型のリスナオブジェクト。
+     * @param autoclean リスナオブジェクトを自動で削除するかどうかのフラグ
+     * 
+     * @else
+     *
+     * @brief Adding ConfigurationParamListener 
+     * 
+     * This function adds a listener object which is called when
+     * update(const char* config_set, const char* config_param) is
+     * called. In the type argument, currently only
+     * ON_UPDATE_CONFIG_PARAM is allowed.
+     *
+     * @param type ConfigurationParamListenerType value
+     *             ON_UPDATE_CONFIG_PARAM is only allowed.
+     *
+     * @param listener ConfigurationParamListener listener object.
+     * @param autoclean a flag whether if the listener object autocleaned.
+     *
+     * @endif
+     */
+    void addConfigurationParamListener(ConfigurationParamListenerType type,
+                                       ConfigurationParamListener* listener,
+                                       bool autoclean = true);
+
+    template <class Listener>
+    ConfigurationParamListener*
+    addConfigurationParamListener(ConfigurationParamListenerType listener_type,
+                                  Listener& obj,
+                                  void (Listener::*memfunc)(const char*,
+                                                            const char*))
+    {
+      class Noname
+        : public ConfigurationParamListener
+      {
+      public:
+        Noname(Listener& obj,
+               void (Listener::*memfunc)(const char*, const char*))
+          : m_obj(obj), m_memfunc(memfunc)
+        {
+        }
+        void operator()(const char* config_set_name,
+                        const char* config_param_name)
+        {
+          (m_obj.*m_memfunc)(config_set_name, config_param_name);
+        }
+      private:
+        Listener& m_obj;
+        typedef void (Listener::*Memfunc)(const char*, const char*);
+        Memfunc& m_memfunc;
+      };
+      Noname* listener(new Noname(obj, memfunc));
+      addConfigurationParamListener(listener_type, listener, true);
+      return listener;
+    }
+
+    /*!
+     * @if jp
+     *
+     * @brief ConfigurationParamListener を削除する
+     *
+     * addConfigurationParamListener で追加されたリスナオブジェクトを削除する。
+     *
+     * @param type ConfigurationParamListenerType型の値。
+     *             ON_UPDATE_CONFIG_PARAM がある。
+     * @param listener 与えたリスナオブジェクトへのポインタ
+     * 
+     * @else
+     *
+     * @brief Removing ConfigurationParamListener 
+     * 
+     * This function removes a listener object which is added by
+     * addConfigurationParamListener() function.
+     *
+     * @param type ConfigurationParamListenerType value
+     *             ON_UPDATE_CONFIG_PARAM is only allowed.
+     * @param listener a pointer to ConfigurationParamListener listener object.
+     *
+     * @endif
+     */
+    void removeConfigurationParamListener(ConfigurationParamListenerType type,
+                                          ConfigurationParamListener* listener);
+    
+    /*!
+     * @if jp
+     *
+     * @brief ConfigurationSetListener を追加する
+     *
+     * ConfigurationSet が更新されたときなどに呼ばれるリスナ
+     * ConfigurationSetListener を追加する。設定可能なイベントは以下の
+     * 2種類がある。
+     *
+     * - ON_SET_CONFIG_SET: setConfigurationSetValues() で
+     *                      ConfigurationSet に値が設定された場合。
+     * - ON_ADD_CONFIG_SET: addConfigurationSet() で新しい
+     *                      ConfigurationSet が追加された場合。
+     *
+     * @param type ConfigurationSetListenerType型の値。
+     * @param listener ConfigurationSetListener 型のリスナオブジェクト。
+     * @param autoclean リスナオブジェクトを自動で削除するかどうかのフラグ
+     * 
+     * @else
+     *
+     * @brief Adding ConfigurationSetListener 
+     * 
+     * This function add a listener object which is called when
+     * ConfigurationSet is updated. Available events are the followings.
+     *
+     * @param type ConfigurationSetListenerType value
+     * @param listener ConfigurationSetListener listener object.
+     * @param autoclean a flag whether if the listener object autocleaned.
+     *
+     * @endif
+     */
+    void addConfigurationSetListener(ConfigurationSetListenerType type,
+                                     ConfigurationSetListener* listener,
+                                     bool autoclean = true);
+
+    template <class Listener>
+    ConfigurationSetListener*
+    addConfigurationSetListener(ConfigurationSetListenerType listener_type,
+                                Listener& obj,
+                                void (Listener::*memfunc)
+                                (const coil::Properties& config_set))
+    {
+      class Noname
+        : public ConfigurationSetListener
+      {
+      public:
+        Noname(Listener& obj,
+               void (Listener::*memfunc)(const coil::Properties& config_set))
+          : m_obj(obj), m_memfunc(memfunc)
+        {
+        }
+        virtual void operator()(const coil::Properties& config_set)
+        {
+          (m_obj.*m_memfunc)(config_set);
+        }
+      private:
+        Listener& m_obj;
+        typedef void (Listener::*Memfunc)(const coil::Properties& config_set);
+        Memfunc& m_memfunc;
+      };
+      Noname* listener(new Noname(obj, memfunc));
+      addConfigurationSetListener(listener_type, listener, true);
+      return listener;
+    }
+
+    /*!
+     * @if jp
+     *
+     * @brief ConfigurationSetListener を削除する
+     *
+     * addConfigurationSetListener で追加されたリスナオブジェクトを削除する。
+     *
+     * @param type ConfigurationSetListenerType型の値。
+     * @param listener 与えたリスナオブジェクトへのポインタ
+     * 
+     * @else
+     *
+     * @brief Removing ConfigurationSetListener 
+     * 
+     * This function removes a listener object which is added by
+     * addConfigurationSetListener() function.
+     *
+     * @param type ConfigurationSetListenerType value
+     * @param listener a pointer to ConfigurationSetListener listener object.
+     *
+     * @endif
+     */
+    void removeConfigurationSetListener(ConfigurationSetListenerType type,
+                                        ConfigurationSetListener* listener);
+    
+    /*!
+     * @if jp
+     *
+     * @brief ConfigurationSetNameListener を追加する
+     *
+     * ConfigurationSetName が更新されたときなどに呼ばれるリスナ
+     * ConfigurationSetNameListener を追加する。設定可能なイベントは以下の
+     * 3種類がある。
+     *
+     * - ON_UPDATE_CONFIG_SET: ある ConfigurationSet がアップデートされた
+     * - ON_REMOVE_CONFIG_SET: ある ConfigurationSet が削除された
+     * - ON_ACTIVATE_CONFIG_SET: ある ConfigurationSet がアクティブ化された
+     *
+     * @param type ConfigurationSetNameListenerType型の値。
+     * @param listener ConfigurationSetNameListener 型のリスナオブジェクト。
+     * @param autoclean リスナオブジェクトを自動で削除するかどうかのフラグ
+     * 
+     * @else
+     *
+     * @brief Adding ConfigurationSetNameListener 
+     * 
+     * This function add a listener object which is called when
+     * ConfigurationSetName is updated. Available events are the followings.
+     *
+     * - ON_UPDATE_CONFIG_SET: A ConfigurationSet has been updated.
+     * - ON_REMOVE_CONFIG_SET: A ConfigurationSet has been deleted.
+     * - ON_ACTIVATE_CONFIG_SET: A ConfigurationSet has been activated.
+     *
+     * @param type ConfigurationSetNameListenerType value
+     * @param listener ConfigurationSetNameListener listener object.
+     * @param autoclean a flag whether if the listener object autocleaned.
+     *
+     * @endif
+     */
+    void 
+    addConfigurationSetNameListener(ConfigurationSetNameListenerType type,
+                                    ConfigurationSetNameListener* listener,
+                                    bool autoclean = true);
+
+    template <class Listener>
+    ConfigurationSetNameListener*
+    addConfigurationSetNameListener(ConfigurationSetNameListenerType type,
+                                    Listener& obj,
+                                    void (Listener::*memfunc)(const char*))
+    {
+      class Noname
+        : public ConfigurationSetNameListener
+      {
+      public:
+        Noname(Listener& obj, void (Listener::*memfunc)(const char*))
+          : m_obj(obj), m_memfunc(memfunc)
+        {
+        }
+        virtual void operator()(const char* config_set_name)
+        {
+          (m_obj.*m_memfunc)(config_set_name);
+        }
+      private:
+        Listener& m_obj;
+        typedef void (Listener::*Memfunc)(const char*);
+        Memfunc& m_memfunc;
+      };
+      Noname* listener(new Noname(obj, memfunc));
+      addConfigurationSetNameListener(type, listener, true);
+      return listener;
+    }
+
+    /*!
+     * @if jp
+     *
+     * @brief ConfigurationSetNameListener を削除する
+     *
+     * addConfigurationSetNameListener で追加されたリスナオブジェクトを
+     * 削除する。
+     *
+     * @param type ConfigurationSetNameListenerType型の値。
+     *             ON_UPDATE_CONFIG_PARAM がある。
+     * @param listener 与えたリスナオブジェクトへのポインタ
+     * 
+     * @else
+     *
+     * @brief Removing ConfigurationSetNameListener 
+     * 
+     * This function removes a listener object which is added by
+     * addConfigurationSetNameListener() function.
+     *
+     * @param type ConfigurationSetNameListenerType value
+     *             ON_UPDATE_CONFIG_PARAM is only allowed.
+     * @param listener a pointer to ConfigurationSetNameListener
+     *             listener object.
+     *
+     * @endif
+     */
+    void
+    removeConfigurationSetNameListener(ConfigurationSetNameListenerType type,
+                                       ConfigurationSetNameListener* listener);
     
   protected:
     /*!
@@ -3458,12 +3896,12 @@ namespace RTC
     
     inline void onAttachExecutionContext(UniqueId ec_id)
     {
-      m_actionListeners.ecaction_[ATTACH_EC].notify(ec_id);
+      m_actionListeners.ecaction_[EC_ATTACHED].notify(ec_id);
     }
     
     inline void onDetachExecutionContext(UniqueId ec_id)
     {
-      m_actionListeners.ecaction_[DETACH_EC].notify(ec_id);
+      m_actionListeners.ecaction_[EC_DETACHED].notify(ec_id);
     }
     
   protected:
@@ -3696,6 +4134,14 @@ namespace RTC
      */
     ConfigAdmin m_configsets;
     
+    /*!
+     * @if jp
+     * @brief SDO Service 管理オブジェクト
+     * @else
+     * @brief SDO Service Administrator Object
+     * @endif
+     */
+    SdoServiceAdmin m_sdoservice;
 
     /*!
      * @if jp
