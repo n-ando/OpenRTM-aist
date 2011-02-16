@@ -3185,7 +3185,7 @@ namespace RTC
 
     template <class Listener>
     PostComponentActionListener*
-    addPortComponentActionListener(PostCompActionListenerType listener_type,
+    addPostComponentActionListener(PostCompActionListenerType listener_type,
                                    Listener& obj,
                                    void (Listener::*memfunc)(UniqueId ec_id,
                                                              ReturnCode_t ret))
@@ -3194,7 +3194,7 @@ namespace RTC
         : public PostComponentActionListener
       {
       public:
-        Noname(Listener& obj, void (Listener::*memfunc)(UniqueId))
+        Noname(Listener& obj, void (Listener::*memfunc)(UniqueId, ReturnCode_t))
           : m_obj(obj), m_memfunc(memfunc)
         {
         }
