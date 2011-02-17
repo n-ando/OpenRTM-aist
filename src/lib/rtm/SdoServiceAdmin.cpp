@@ -16,6 +16,7 @@
  *
  */
 
+#include <memory>
 #include <coil/UUID.h>
 #include <coil/Guard.h>
 #include <coil/stringutil.h>
