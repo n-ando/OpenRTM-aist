@@ -33,6 +33,7 @@
 #include <rtm/SystemLogger.h>
 #include <rtm/ComponentActionListener.h>
 #include <rtm/SdoServiceAdmin.h>
+#include <rtm/PortConnectListener.h>
 
 #define ECOTHER_OFFSET 1000
 
@@ -3071,7 +3072,7 @@ namespace RTC
       private:
         Listener& m_obj;
         typedef void (Listener::*Memfunc)(UniqueId ec_id);
-        Memfunc& m_memfunc;
+        Memfunc m_memfunc;
       };
       Noname* listener(new Noname(obj, memfunc));
       addPreComponentActionListener(listener_type, listener, true);
@@ -3205,7 +3206,7 @@ namespace RTC
       private:
         Listener& m_obj;
         typedef void (Listener::*Memfunc)(UniqueId ec_id, ReturnCode_t ret);
-        Memfunc& m_memfunc;
+        Memfunc m_memfunc;
       };
       Noname* listener(new Noname(obj, memfunc));
       addPostComponentActionListener(listener_type, listener, true);
@@ -3306,7 +3307,8 @@ namespace RTC
         : public PortActionListener
       {
       public:
-        Noname(Listener& obj, void (Listener::*memfunc)(UniqueId))
+        Noname(Listener& obj,
+               void (Listener::*memfunc)(const RTC::PortProfile&))
           : m_obj(obj), m_memfunc(memfunc)
         {
         }
@@ -3317,7 +3319,7 @@ namespace RTC
       private:
         Listener& m_obj;
         typedef void (Listener::*Memfunc)(const RTC::PortProfile&);
-        Memfunc& m_memfunc;
+        Memfunc m_memfunc;
       };
       Noname* listener(new Noname(obj, memfunc));
       addPortActionListener(listener_type, listener, true);
@@ -3429,7 +3431,7 @@ namespace RTC
       private:
         Listener& m_obj;
         typedef void (Listener::*Memfunc)(UniqueId);
-        Memfunc& m_memfunc;
+        Memfunc m_memfunc;
       };
       Noname* listener(new Noname(obj, memfunc));
       addExecutionContextActionListener(listener_type, listener, true);
@@ -3459,6 +3461,242 @@ namespace RTC
     void 
     removeExecutionContextActionListener(ECActionListenerType listener_type,
                                          ECActionListener* listener);
+
+
+    /*!
+     * @if jp
+     * @brief PortConnectListener リスナを追加する
+     *
+     * Portの接続時や接続解除時に呼び出される各種リスナを設定する。
+     *
+     * 設定できるリスナのタイプとコールバックイベントは以下の通り
+     *
+     * - ON_NOTIFY_CONNECT: notify_connect() 関数内呼び出し直後
+     * - ON_NOTIFY_DISCONNECT: notify_disconnect() 呼び出し直後
+     * - ON_UNSUBSCRIBE_INTERFACES: notify_disconnect() 内のIF購読解除時
+     *
+     * リスナは PortConnectListener を継承し、以下のシグニチャを持つ
+     * operator() を実装している必要がある。
+     *
+     * PortConnectListener::operator()(const char*, ConnectorProfile)
+     *
+     * デフォルトでは、この関数に与えたリスナオブジェクトの所有権は
+     * RTObjectに移り、RTObject解体時もしくは、
+     * removePortConnectListener() により削除時に自動的に解体される。
+     * リスナオブジェクトの所有権を呼び出し側で維持したい場合は、第3引
+     * 数に false を指定し、自動的な解体を抑制することができる。
+     *
+     * @param listener_type リスナタイプ
+     * @param listener リスナオブジェクトへのポインタ
+     * @param autoclean リスナオブジェクトの自動的解体を行うかどうかのフラグ
+     *
+     * @else
+     * @brief Adding PortConnect type listener
+     *
+     * This operation adds certain listeners related to Port's connect actions.
+     * The following listener types are available.
+     *
+     * - ON_NOTIFY_CONNECT: right after entering into notify_connect()
+     * - ON_NOTIFY_DISCONNECT: right after entering into notify_disconnect()
+     * - ON_UNSUBSCRIBE_INTERFACES: unsubscribing IF in notify_disconnect()
+     *
+     * Listeners should have the following function operator().
+     *
+     * PortConnectListener::operator()(const char*, ConnectorProfile)
+     *
+     * The ownership of the given listener object is transferred to
+     * this RTObject object in default.  The given listener object will
+     * be destroied automatically in the RTObject's dtor or if the
+     * listener is deleted by removePortConnectListener() function.
+     * If you want to keep ownership of the listener object, give
+     * "false" value to 3rd argument to inhibit automatic destruction.
+     *
+     * @param listener_type A listener type
+     * @param listener A pointer to a listener object
+     * @param autoclean A flag for automatic listener destruction
+     *
+     * @endif
+     */
+    void addPortConnectListener(PortConnectListenerType listener_type,
+                                           PortConnectListener* listener,
+                                           bool autoclean = true);
+
+    template <class Listener>
+    PortConnectListener*
+    addPortConnectListener(PortConnectListenerType listener_type,
+                           Listener& obj,
+                           void (Listener::*memfunc)(const char*,
+                                                     ConnectorProfile&))
+    {
+      class Noname
+        : public PortConnectListener
+      {
+      public:
+        Noname(Listener& obj,
+               void (Listener::*memfunc)(const char*, ConnectorProfile&))
+          : m_obj(obj), m_memfunc(memfunc)
+        {
+        }
+        void operator()(const char* portname, ConnectorProfile& cprofile)
+        {
+          (m_obj.*m_memfunc)(portname, cprofile);
+        }
+      private:
+        Listener& m_obj;
+        typedef void (Listener::*Memfunc)(const char*, ConnectorProfile&);
+        Memfunc m_memfunc;
+      };
+      Noname* listener(new Noname(obj, memfunc));
+      addPortConnectListener(listener_type, listener, true);
+      return listener;
+    }
+    
+
+    /*!
+     * @if jp
+     * @brief PortConnectListener リスナを削除する
+     *
+     * 設定した各種リスナを削除する。
+     * 
+     * @param listener_type リスナタイプ
+     * @param listener リスナオブジェクトへのポインタ
+     *
+     * @else
+     * @brief Removing PortConnect type listener
+     *
+     * This operation removes a specified listener.
+     *     
+     * @param listener_type A listener type
+     * @param listener A pointer to a listener object
+     *
+     * @endif
+     */
+    void 
+    removePortConnectListener(PortConnectListenerType listener_type,
+                              PortConnectListener* listener);
+
+    /*!
+     * @if jp
+     * @brief PortConnectRetListener リスナを追加する
+     *
+     * Portの接続時や接続解除時に呼び出される各種リスナを設定する。
+     *
+     * 設定できるリスナのタイプとコールバックイベントは以下の通り
+     *
+     * - ON_CONNECT_NEXTPORT: notify_connect() 中のカスケード呼び出し直後
+     * - ON_SUBSCRIBE_INTERFACES: notify_connect() 中のインターフェース購読直後
+     * - ON_CONNECTED: nofity_connect() 接続処理完了時に呼び出される
+     * - ON_DISCONNECT_NEXT: notify_disconnect() 中にカスケード呼び出し直後
+     * - ON_DISCONNECTED: notify_disconnect() リターン時
+     *
+     * リスナは PortConnectRetListener を継承し、以下のシグニチャを持つ
+     * operator() を実装している必要がある。
+     *
+     * PortConnectRetListener::operator()(const char*, ConnectorProfile)
+     *
+     * デフォルトでは、この関数に与えたリスナオブジェクトの所有権は
+     * RTObjectに移り、RTObject解体時もしくは、
+     * removePortConnectRetListener() により削除時に自動的に解体される。
+     * リスナオブジェクトの所有権を呼び出し側で維持したい場合は、第3引
+     * 数に false を指定し、自動的な解体を抑制することができる。
+     *
+     * @param listener_type リスナタイプ
+     * @param listener リスナオブジェクトへのポインタ
+     * @param autoclean リスナオブジェクトの自動的解体を行うかどうかのフラグ
+     *
+     * @else
+     * @brief Adding PortConnectRet type listener
+     *
+     * This operation adds certain listeners related to Port's connect actions.
+     * The following listener types are available.
+     *
+     * - ON_CONNECT_NEXTPORT: after cascade-call in notify_connect()
+     * - ON_SUBSCRIBE_INTERFACES: after IF subscribing in notify_connect()
+     * - ON_CONNECTED: completed nofity_connect() connection process
+     * - ON_DISCONNECT_NEXT: after cascade-call in notify_disconnect()
+     * - ON_DISCONNECTED: completed notify_disconnect() disconnection process
+     *
+     * Listeners should have the following function operator().
+     *
+     * PortConnectRetListener::operator()(const char*, ConnectorProfile)
+     *
+     * The ownership of the given listener object is transferred to
+     * this RTObject object in default.  The given listener object will
+     * be destroied automatically in the RTObject's dtor or if the
+     * listener is deleted by removePortConnectRetListener() function.
+     * If you want to keep ownership of the listener object, give
+     * "false" value to 3rd argument to inhibit automatic destruction.
+     *
+     * @param listener_type A listener type
+     * @param listener A pointer to a listener object
+     * @param autoclean A flag for automatic listener destruction
+     *
+     * @endif
+     */
+    void addPortConnectRetListener(PortConnectRetListenerType listener_type,
+                                           PortConnectRetListener* listener,
+                                           bool autoclean = true);
+
+    template <class Listener>
+    PortConnectRetListener*
+    addPortConnectRetListener(PortConnectRetListenerType listener_type,
+                              Listener& obj,
+                              void (Listener::*memfunc)(const char*,
+                                                        ConnectorProfile&,
+                                                        ReturnCode_t))
+    {
+      class Noname
+        : public PortConnectRetListener
+      {
+      public:
+        Noname(Listener& obj,
+               void (Listener::*memfunc)(const char*,
+                                         ConnectorProfile&,
+                                         ReturnCode_t))
+          : m_obj(obj), m_memfunc(memfunc)
+        {
+        }
+        void operator()(const char* portname,
+                        ConnectorProfile& cprofile,
+                        ReturnCode_t ret)
+        {
+          (m_obj.*m_memfunc)(portname, cprofile, ret);
+        }
+      private:
+        Listener& m_obj;
+        typedef void (Listener::*Memfunc)(const char* portname,
+                                          ConnectorProfile& cprofile,
+                                          ReturnCode_t ret);
+        Memfunc m_memfunc;
+      };
+      Noname* listener(new Noname(obj, memfunc));
+      addPortConnectRetListener(listener_type, listener, true);
+      return listener;
+    }
+    
+
+    /*!
+     * @if jp
+     * @brief PortConnectRetListener リスナを削除する
+     *
+     * 設定した各種リスナを削除する。
+     * 
+     * @param listener_type リスナタイプ
+     * @param listener リスナオブジェクトへのポインタ
+     *
+     * @else
+     * @brief Removing PortConnectRet type listener
+     *
+     * This operation removes a specified listener.
+     *     
+     * @param listener_type A listener type
+     * @param listener A pointer to a listener object
+     *
+     * @endif
+     */
+    void 
+    removePortConnectRetListener(PortConnectRetListenerType listener_type,
+                                 PortConnectRetListener* listener);
 
 
     /*!
@@ -3521,7 +3759,7 @@ namespace RTC
       private:
         Listener& m_obj;
         typedef void (Listener::*Memfunc)(const char*, const char*);
-        Memfunc& m_memfunc;
+        Memfunc m_memfunc;
       };
       Noname* listener(new Noname(obj, memfunc));
       addConfigurationParamListener(listener_type, listener, true);
@@ -3613,7 +3851,7 @@ namespace RTC
       private:
         Listener& m_obj;
         typedef void (Listener::*Memfunc)(const coil::Properties& config_set);
-        Memfunc& m_memfunc;
+        Memfunc m_memfunc;
       };
       Noname* listener(new Noname(obj, memfunc));
       addConfigurationSetListener(listener_type, listener, true);
@@ -3705,7 +3943,7 @@ namespace RTC
       private:
         Listener& m_obj;
         typedef void (Listener::*Memfunc)(const char*);
-        Memfunc& m_memfunc;
+        Memfunc m_memfunc;
       };
       Noname* listener(new Noname(obj, memfunc));
       addConfigurationSetNameListener(type, listener, true);
@@ -4211,6 +4449,21 @@ namespace RTC
      * @endif
      */
     ComponentActionListeners m_actionListeners;
+
+    /*!
+     * @if jp
+     * @brief PortConnectListenerホルダ
+     *
+     * PortConnectListenrを保持するホルダ
+     *
+     * @else
+     * @brief PortConnectListener holder
+     *
+     * Holders of PortConnectListeners
+     *
+     * @endif
+     */
+    PortConnectListeners m_portconnListeners;
 
     //------------------------------------------------------------
     // Functor

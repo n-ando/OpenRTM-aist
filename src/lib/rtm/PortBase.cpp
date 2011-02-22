@@ -44,7 +44,8 @@ namespace RTC
       m_onConnected(0),
       m_onUnsubscribeInterfaces(0),
       m_onDisconnected(0),
-      m_onConnectionLost(0)
+      m_onConnectionLost(0),
+      m_portconnListeners(NULL)
   {
     m_objref = this->_this();
     // Now Port name is <instance_name>.<port_name>. r1648
@@ -232,34 +233,42 @@ namespace RTC
     Guard guard(m_connectorsMutex);
     ReturnCode_t retval[] = {RTC::RTC_OK, RTC::RTC_OK, RTC::RTC_OK};
 
+    onNotifyConnect(getName(), connector_profile);
+
     // publish owned interface information to the ConnectorProfile
     retval[0] = publishInterfaces(connector_profile);
     if (retval[0] != RTC::RTC_OK)
       {
         RTC_ERROR(("publishInterfaces() in notify_connect() failed."));
       }
+    onPublishInterfaces(getName(), connector_profile, retval[0]);
     if (m_onPublishInterfaces != 0)
       {
         (*m_onPublishInterfaces)(connector_profile);
       }
-    
+
+
     // call notify_connect() of the next Port
     retval[1] = connectNext(connector_profile);
     if (retval[1] != RTC::RTC_OK)
       {
         RTC_ERROR(("connectNext() in notify_connect() failed."));
       }
+    onConnectNextport(getName(), connector_profile, retval[1]);
 
     // subscribe interface from the ConnectorProfile's information
+
     if (m_onSubscribeInterfaces != 0)
       {
         (*m_onSubscribeInterfaces)(connector_profile);
       }
+
     retval[2] = subscribeInterfaces(connector_profile);
     if (retval[2] != RTC::RTC_OK) 
       {
         RTC_ERROR(("subscribeInterfaces() in notify_connect() failed."));
       }
+    onSubscribeInterfaces(getName(), connector_profile, retval[2]);
 
     RTC_PARANOID(("%d connectors are existing",
                   m_profile.connector_profiles.length()));
@@ -282,6 +291,7 @@ namespace RTC
       {
         if (retval[i] != RTC::RTC_OK)
           {
+            onConnected(getName(), connector_profile, retval[i]);
             return retval[i];
           }
       }
@@ -291,7 +301,7 @@ namespace RTC
       {
         (*m_onConnected)(connector_profile);
       }
-
+    onConnected(getName(), connector_profile, RTC::RTC_OK);
     return RTC::RTC_OK;
   }
  
@@ -399,12 +409,16 @@ namespace RTC
       }
     
     ConnectorProfile& prof(m_profile.connector_profiles[(CORBA::ULong)index]);
+    onNotifyDisconnect(getName(), prof);
+
     ReturnCode_t retval(disconnectNext(prof));
+    onDisconnectNextport(getName(), prof, retval);
 
     if (m_onUnsubscribeInterfaces != 0)
       {
         (*m_onUnsubscribeInterfaces)(prof);
       }
+    onUnsubscribeInterfaces(getName(), prof);
     unsubscribeInterfaces(prof);
  
     if (m_onDisconnected != 0)
@@ -426,7 +440,7 @@ namespace RTC
         m_profile.connector_profiles._length=len-1;
       }
 #endif // ORB_IS_RTORB
-
+    onDisconnected(getName(), prof, retval);
     return retval;
   }
   
@@ -591,6 +605,13 @@ namespace RTC
   {
     m_onConnectionLost = on_connection_lost;
   }  
+
+  void PortBase::
+  setPortConnectListenerHolder(PortConnectListeners* portconnListeners)
+  {
+    m_portconnListeners = portconnListeners;
+  }
+
 
   //============================================================
   // protected operations
