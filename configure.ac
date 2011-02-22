@@ -1417,6 +1417,7 @@ dnl ARTLinux setup
 dnl
 dnl ------------------------------------------------------------
 if test "x$os" = "xlinux" ; then
+   	RTPREEMPTEC="rtpreempt"
 	AC_MSG_CHECKING(for art_task.h)
 	FP_FIND_FILE(art_task.h,
 		$with_artlinux $more_incs $base_incs $base_dirs /usr/src/linux/include,
@@ -1521,6 +1522,10 @@ dnl ARTLinux lib
 AC_SUBST(ARTLINUX)
 AC_SUBST(ARTLIB)
 AC_SUBST(UNITTEST)
+
+dnl RT preempt EC
+AC_SUBST(RTPREEMPTEC)
+
 dnl ------------------------------------------------------------
 
 UNIQUE($CPPFLAGS)
@@ -1633,6 +1638,7 @@ AC_OUTPUT([Makefile
 	src/ext/Makefile
 	src/ext/ec/Makefile
 	src/ext/ec/artlinux/Makefile
+	src/ext/ec/rtpreempt/Makefile
 	src/ext/sdo/Makefile
 	src/ext/sdo/observer/Makefile
 	utils/Makefile
