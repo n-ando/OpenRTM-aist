@@ -1556,6 +1556,7 @@ namespace RTC
   {
     RTC_TRACE(("addPort(PortBase&)"));
     port.setOwner(this->getObjRef());
+    port.setPortConnectListenerHolder(&m_portconnListeners);
     onAddPort(port.getPortProfile());
     return m_portAdmin.addPort(port);
   }
@@ -1609,10 +1610,11 @@ namespace RTC
 
     bool ret(addPort(inport));
     
-    if (!ret) {
-      RTC_ERROR(("addInPort() failed."));
-      return ret;
-    }
+    if (!ret)
+      {
+        RTC_ERROR(("addInPort() failed."));
+        return ret;
+      }
 
     inport.init(m_properties.getNode(propkey));
     m_inports.push_back(&inport);
@@ -1625,7 +1627,9 @@ namespace RTC
     RTC_TRACE(("registerInPort(%s)", name));
 
     if (!addInPort(name, inport))
-      RTC_ERROR(("addInPort(%s) failed.", name));
+      {
+        RTC_ERROR(("addInPort(%s) failed.", name));
+      }
   }
 
   /*!
@@ -1647,10 +1651,11 @@ namespace RTC
     
     bool ret(addPort(outport));
     
-    if (!ret) {
-      RTC_ERROR(("addOutPort() failed."));
-      return ret;
-    }
+    if (!ret)
+      {
+        RTC_ERROR(("addOutPort() failed."));
+        return ret;
+      }
 
     outport.init(m_properties.getNode(propkey));
     m_outports.push_back(&outport);
@@ -1663,8 +1668,9 @@ namespace RTC
     RTC_TRACE(("registerOutPort(%s)", name));
 
     if (!addOutPort(name, outport))
-      RTC_ERROR(("addOutPort(%s) failed.", name));
-
+      {
+        RTC_ERROR(("addOutPort(%s) failed.", name));
+      }
   }
   
   /*!
@@ -2181,7 +2187,68 @@ namespace RTC
       ecaction_[listener_type].removeListener(listener);
   }
 
-  
+  /*!
+   * @if jp
+   * @brief PortConnectListener リスナを追加する
+   * @else
+   * @brief Adding PortConnect type listener
+   * @endif
+   */
+  void RTObject_impl::
+  addPortConnectListener(PortConnectListenerType listener_type,
+                         PortConnectListener* listener,
+                         bool autoclean)
+  {
+    m_portconnListeners.
+      portconnect_[listener_type].addListener(listener, autoclean);
+  }
+
+  /*!
+   * @if jp
+   * @brief PortConnectListener リスナを削除する
+   * @else
+   * @brief Removing PortConnect type listener
+   * @endif
+   */
+  void RTObject_impl::
+  removePortConnectListener(PortConnectListenerType listener_type,
+                            PortConnectListener* listener)
+  {
+    m_portconnListeners.
+      portconnect_[listener_type].removeListener(listener);
+  }
+
+  /*!
+   * @if jp
+   * @brief PortConnectRetListener リスナを追加する
+   * @else
+   * @brief Adding PortConnectRet type listener
+   * @endif
+   */
+  void RTObject_impl::
+  addPortConnectRetListener(PortConnectRetListenerType listener_type,
+                            PortConnectRetListener* listener,
+                            bool autoclean)
+  {
+    m_portconnListeners.
+      portconnret_[listener_type].addListener(listener, autoclean);
+  }
+
+  /*!
+   * @if jp
+   * @brief PortConnectRetListener リスナを削除する
+   * @else
+   * @brief Removing PortConnectRet type listener
+   * @endif
+   */
+  void RTObject_impl::
+  removePortConnectRetListener(PortConnectRetListenerType listener_type,
+                               PortConnectRetListener* listener)
+  {
+    m_portconnListeners.
+      portconnret_[listener_type].removeListener(listener);
+  }
+
   /*!
    * @if jp
    * @brief ConfigurationParamListener を追加する

@@ -30,7 +30,7 @@
 #include <rtm/CORBA_SeqUtil.h>
 #include <rtm/NVUtil.h>
 #include <rtm/SystemLogger.h>
-
+#include <rtm/PortConnectListener.h>
 #include <iostream>
 
 #ifdef WIN32
@@ -1250,6 +1250,28 @@ namespace RTC
      */
     void setOnConnectionLost(ConnectionCallback* on_connection_lost);
 
+    /*!
+     * @if jp
+     * @brief PortConnectListeners のホルダをセットする
+     *
+     * ポートの接続に関するリスナ群を保持するホルダクラスへのポインタを
+     * セットする。この関数は通常親のRTObjectから呼ばれ、RTObjectが持つ
+     * ホルダクラスへのポインタがセットされる。
+     *
+     * @param portconnListeners PortConnectListeners オブジェクトのポインタ
+     *
+     * @else
+     * @brief Setting PortConnectListener holder
+     *
+     * This operation sets a functor that is called when connection
+     * of this port does lost. 
+     *
+     * @param on_connection_lost a pointer to ConnectionCallback's subclasses
+     *
+     * @endif
+     */
+    void setPortConnectListenerHolder(PortConnectListeners* portconnListeners);
+
     //============================================================
     // protected operations
     //============================================================
@@ -1930,6 +1952,106 @@ namespace RTC
     bool checkPorts(RTC_PortServiceList& ports);
 #endif // ORB_IS_RTORB
 
+
+    inline void onNotifyConnect(const char* portname,
+                                RTC::ConnectorProfile& profile)
+    {
+      if (m_portconnListeners != NULL)
+        {
+          m_portconnListeners->
+            portconnect_[ON_NOTIFY_CONNECT].notify(portname, profile);
+        }
+    }
+
+    inline void onNotifyDisconnect(const char* portname,
+                                   RTC::ConnectorProfile& profile)
+    {
+      if (m_portconnListeners != NULL)
+        {
+          m_portconnListeners->
+            portconnect_[ON_NOTIFY_DISCONNECT].notify(portname, profile);
+        }
+    }
+    inline void onUnsubscribeInterfaces(const char* portname,
+                                        RTC::ConnectorProfile& profile)
+    {
+      if (m_portconnListeners != NULL)
+        {
+          m_portconnListeners->
+            portconnect_[ON_UNSUBSCRIBE_INTERFACES].notify(portname, profile);
+        }
+    }
+
+    inline void onPublishInterfaces(const char* portname,
+                                    RTC::ConnectorProfile& profile,
+                                    ReturnCode_t ret)
+    {
+      if (m_portconnListeners != NULL)
+        {
+          m_portconnListeners->
+            portconnret_[ON_PUBLISH_INTERFACES].notify(portname,
+                                                       profile, ret);
+        }
+    }
+
+    inline void onConnectNextport(const char* portname,
+                                  RTC::ConnectorProfile& profile,
+                                  ReturnCode_t ret)
+    {
+      if (m_portconnListeners != NULL)
+        {
+          m_portconnListeners->
+            portconnret_[ON_CONNECT_NEXTPORT].notify(portname,
+                                                     profile, ret);
+        }
+    }
+
+    inline void onSubscribeInterfaces(const char* portname,
+                                      RTC::ConnectorProfile& profile,
+                                      ReturnCode_t ret)
+    {
+      if (m_portconnListeners != NULL)
+        {
+          m_portconnListeners->
+            portconnret_[ON_SUBSCRIBE_INTERFACES].notify(portname,
+                                                         profile, ret);
+        }
+    }
+
+    inline void onConnected(const char* portname,
+                            RTC::ConnectorProfile& profile,
+                            ReturnCode_t ret)
+    {
+      if (m_portconnListeners != NULL)
+        {
+          m_portconnListeners->
+            portconnret_[ON_CONNECTED].notify(portname, profile, ret);
+        }
+    }
+
+    inline void onDisconnectNextport(const char* portname,
+                                 RTC::ConnectorProfile& profile,
+                                 ReturnCode_t ret)
+    {
+      if (m_portconnListeners != NULL)
+        {
+          m_portconnListeners->
+            portconnret_[ON_DISCONNECT_NEXT].notify(portname, profile, ret);
+        }
+    }
+
+    inline void onDisconnected(const char* portname,
+                               RTC::ConnectorProfile& profile,
+                               ReturnCode_t ret)
+    {
+      if (m_portconnListeners != NULL)
+        {
+          m_portconnListeners->
+            portconnret_[ON_DISCONNECTED].notify(portname, profile, ret);
+        }
+    }
+
+  protected:
     /*!
      * @if jp
      * @brief ロガーストリーム
@@ -2073,6 +2195,20 @@ namespace RTC
      */
     ConnectionCallback* m_onConnectionLost;
 
+    /*!
+     * @if jp
+     * @brief PortConnectListenerホルダ
+     *
+     * PortConnectListenrを保持するホルダ
+     *
+     * @else
+     * @brief PortConnectListener holder
+     *
+     * Holders of PortConnectListeners
+     *
+     * @endif
+     */
+    PortConnectListeners* m_portconnListeners;
 
     //============================================================
     // Functor
