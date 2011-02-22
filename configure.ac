@@ -1631,8 +1631,10 @@ AC_OUTPUT([Makefile
 	src/lib/rtm/tests/StateMachine/Makefile
 	src/lib/rtm/tests/SystemLogger/Makefile
 	src/ext/Makefile
-	src/ext/artlinux/Makefile
-	src/ext/artlinux/art_ec/Makefile
+	src/ext/ec/Makefile
+	src/ext/ec/artlinux/Makefile
+	src/ext/sdo/Makefile
+	src/ext/sdo/observer/Makefile
 	utils/Makefile
 	utils/rtm-config/Makefile
 	utils/rtc-template/Makefile
