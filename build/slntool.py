@@ -133,6 +133,8 @@ def get_projinfo(fname,vcversion):
               "VC9": {"guid":'^.*?ProjectGUID=\"{(.*)}\"',"name":'^.*?Name=\"(.*)\"'}, 
               "VC10": {"guid":'^.*?<ProjectGuid>{(.*)}</ProjectGuid>',"name":'^.*<ProjectName>(.*)</ProjectName>'}
              }
+    re_guid = re.compile(regexs[vcversion]["guid"])
+    re_name = re.compile(regexs[vcversion]["name"])
     fd = open(fname, "r")
     pj = fd.readlines()
     for t in pj:
