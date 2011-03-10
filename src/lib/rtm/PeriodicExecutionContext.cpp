@@ -261,6 +261,7 @@ namespace RTC
     throw (CORBA::SystemException)
   {
     RTC_TRACE(("get_rate()"));
+    Guard guard(m_profileMutex);
     return m_profile.rate;
   }
   
@@ -277,7 +278,10 @@ namespace RTC
     RTC_TRACE(("set_rate(%f)", rate));
     if (rate > 0.0)
       {
-	m_profile.rate = rate;
+        {
+          Guard guard(m_profileMutex);
+          m_profile.rate = rate;
+        }
 	m_period = coil::TimeValue(1.0/rate);
 	if (m_period == 0.0) { m_nowait = true; }
 	std::for_each(m_comps.begin(), m_comps.end(), invoke_on_rate_changed());
@@ -475,7 +479,7 @@ namespace RTC
 	ExecutionContextHandle_t id;
 	id = dfp->attach_context(m_ref);
 	m_comps.push_back(Comp(comp, dfp, id));
-        CORBA_SeqUtil::push_back(m_profile.participants, rtc.in());
+        CORBA_SeqUtil::push_back(m_profile.participants, rtc._retn());
 	return RTC::RTC_OK;
       }
     catch (CORBA::Exception& e)
@@ -527,22 +531,29 @@ namespace RTC
     it = std::find_if(m_comps.begin(), m_comps.end(),
 		      find_comp(comp));
     if (it == m_comps.end())
-      return RTC::BAD_PARAMETER;
-    
+      {
+        RTC_TRACE(("remove_component(): no RTC found in this context."));
+        return RTC::BAD_PARAMETER;
+      }
+
     Comp& c(*it);
     c._ref->detach_context(c._sm.ec_id);
     c._ref = RTC::LightweightRTObject::_nil();
     m_comps.erase(it);
+    RTC_TRACE(("remove_component(): an RTC removed from this context."));
 
+    //RTObject_var rtcomp = RTObject::_narrow(LightweightRTObject::_duplicate(comp));
     RTObject_var rtcomp = RTObject::_narrow(comp);
     if (CORBA::is_nil(rtcomp))
       {
         RTC_ERROR(("Invalid object reference."));
         return RTC::RTC_ERROR;
       }
-    CORBA_SeqUtil::erase_if(m_profile.participants,
-                            find_participant(rtcomp));
-    
+    {
+      Guard guard(m_profileMutex);
+      CORBA_SeqUtil::erase_if(m_profile.participants,
+                              find_participant(rtcomp));
+    }
     return RTC::RTC_OK;
   }
   
@@ -561,7 +572,10 @@ namespace RTC
   {
     RTC_TRACE(("get_profile()"));
     ExecutionContextProfile_var p;
-    p = new ExecutionContextProfile(m_profile);
+    {
+      Guard guard(m_profileMutex);
+      p = new ExecutionContextProfile(m_profile);
+    }
     return p._retn();
   }
 }; // namespace RTC  
