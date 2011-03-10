@@ -12,7 +12,7 @@
 #         Advanced Industrial Science and Technology (AIST), Japan
 #     All rights reserved.
 #
-# $Id: slntool.py 2058 2011-03-10 05:00:27Z fsi-katami $
+# $Id: slntool.py 1863 2010-02-11 06:31:11Z n-ando $
 #
 
 import sys
@@ -133,6 +133,8 @@ def get_projinfo(fname,vcversion):
               "VC9": {"guid":'^.*?ProjectGUID=\"{(.*)}\"',"name":'^.*?Name=\"(.*)\"'}, 
               "VC10": {"guid":'^.*?<ProjectGuid>{(.*)}</ProjectGuid>',"name":'^.*<ProjectName>(.*)</ProjectName>'}
              }
+    re_guid = re.compile(regexs[vcversion]["guid"])
+    re_name = re.compile(regexs[vcversion]["name"])
     fd = open(fname, "r")
     pj = fd.readlines()
     for t in pj:
