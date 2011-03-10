@@ -148,12 +148,16 @@ module OpenRTM
      * 
      * ExecutionContextの状態が変化したことを示す列挙子。
      *
-     * RTCにECがattachまたはdetachされたことを示す列挙子。
+     * RTCにECが attach/detach/rate_change/startup/shutdown されたことを
+     * 示す列挙子。
      *
-     * ComponentObserver::updatestatus() の hint には、attach/detach の
-     * どちらが行われたかと、対象となるECのidが与えられる。
+     * ComponentObserver::updatestatus() の hint には、
+     * attach/detach/rate_change/startup/shutdow のいずれが行われたかと、
+     * 対象となるECのidが与えられる。
      *
-     * hint: (ATTACHED, DETACHED):<Execution Context ID>
+     * hint: (ATTACHED, DETACHED, RATE_CHANGED, STARTUP,
+     *        SHUTDOWN):<Execution Context ID>
+     *
      * 例:
      *   ATTACHED:1002 (ECがアタッチされ、そのIDは1002)
      *
@@ -161,12 +165,14 @@ module OpenRTM
      *
      * @brief The stauts of ExecutionContext
      * 
-     * This is enumerator notifies that ExecutionContext is attached
-     * or detached.  Attach or detach operation and target
-     * ExecutionContext's id is given in the argument of
-     * ComponentObserver::updateStatus() 's hint.
+     * This is enumerator notifies that ExecutionContext is
+     * attach/detach/rate_change/startup/shutdown.  Attach or detach
+     * operation and target ExecutionContext's id is given in the
+     * argument of ComponentObserver::updateStatus() 's hint.
      *
-     * hint: (ATTACHED, DETACHED):<Execution Context ID>
+     * hint: (ATTACHED, DETACHED, RATE_CHANGED, STARTUP,
+     *        SHUTDOWN):<Execution Context ID>
+     *
      * Example:
      *   ATTACHED:1002 (EC is attached and its ID is 1002)
      *
