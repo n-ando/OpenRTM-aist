@@ -646,7 +646,6 @@ namespace RTC
       push_back(m_ecMine, ExecutionContextService::_duplicate(ecs));
     
     UniqueId ec_id(m_ecMine.length() - 1);
-    onDetachExecutionContext(ec_id);
     return ec_id;
   }
 
@@ -680,7 +679,7 @@ namespace RTC
       }
     
     m_ecOther[index] = ::RTC::ExecutionContextService::_nil();
-
+    onDetachExecutionContext(ec_id);
     return RTC::RTC_OK;
   }
   
