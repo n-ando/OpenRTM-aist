@@ -396,9 +396,25 @@ namespace RTC
             onGeneric("RATE_CHANGED:", ec_id);
           }
       }
+      void onStartup(UniqueId ec_id, ReturnCode_t ret)
+      {
+        if (ret == RTC::RTC_OK)
+          {
+            onGeneric("STARTUP:", ec_id);
+          }
+      }
+      void onShutdown(UniqueId ec_id, ReturnCode_t ret)
+      {
+        if (ret == RTC::RTC_OK)
+          {
+            onGeneric("SHUTDOWN:", ec_id);
+          }
+      }
       ExecutionContextActionListener* ecAttached;
       ExecutionContextActionListener* ecDetached;
       PostComponentActionListener* ecRatechanged;
+      PostComponentActionListener* ecStartup;
+      PostComponentActionListener* ecShutdown;
     private:
       ComponentObserverConsumer& m_coc;
     };

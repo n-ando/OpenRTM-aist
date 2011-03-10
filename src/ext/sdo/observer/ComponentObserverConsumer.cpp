@@ -523,6 +523,20 @@ namespace RTC
                                                   m_ecaction,
                                                   &ECAction::onRateChanged);
       }
+    if (m_ecaction.ecStartup == NULL)
+      {
+        m_ecaction.ecStartup = 
+          m_rtobj->addPostComponentActionListener(POST_ON_STARTUP,
+                                                  m_ecaction,
+                                                  &ECAction::onStartup);
+      }
+    if (m_ecaction.ecShutdown == NULL)
+      {
+        m_ecaction.ecShutdown = 
+          m_rtobj->addPostComponentActionListener(POST_ON_SHUTDOWN,
+                                                  m_ecaction,
+                                                  &ECAction::onShutdown);
+      }
   }
 
   /*!
@@ -548,6 +562,16 @@ namespace RTC
       {
         m_rtobj->removePostComponentActionListener(POST_ON_RATE_CHANGED,
                                                    m_ecaction.ecRatechanged);
+      }
+    if (m_ecaction.ecStartup != NULL)
+      {
+        m_rtobj->removePostComponentActionListener(POST_ON_STARTUP,
+                                                   m_ecaction.ecStartup);
+      }
+    if (m_ecaction.ecShutdown != NULL)
+      {
+        m_rtobj->removePostComponentActionListener(POST_ON_SHUTDOWN,
+                                                   m_ecaction.ecShutdown);
       }
   }
 
