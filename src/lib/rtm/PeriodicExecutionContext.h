@@ -65,6 +65,7 @@ namespace RTC
     : public virtual ExecutionContextBase,
       public coil::Task
   {
+    typedef coil::Guard<coil::Mutex> Guard;
   public:
     /*!
      * @if jp
@@ -1538,6 +1539,7 @@ namespace RTC
      * @endif
      */
     ExecutionContextProfile m_profile;
+    coil::Mutex m_profileMutex;
     
     /*!
      * @if jp
