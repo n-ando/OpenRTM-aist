@@ -23,7 +23,7 @@ HelloRTWorld::HelloRTWorld(RtcManager* manager)
 
 RtmRes HelloRTWorld::rtc_active_do()
 {
-  std::cout << "Hello RT World!!!" << std::endl;
+  std::cout << "Hello RT World!" << std::endl;
   return RTM_OK;
 }
 
