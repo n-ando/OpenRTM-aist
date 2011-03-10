@@ -24,7 +24,8 @@ import yat
 # Generic vcproj template
 #------------------------------------------------------------
 vcversions = {"VC8": {"sln": "9.00", "vc": "2005"},
-              "VC9": {"sln": "10.00", "vc": "2008"}
+              "VC9": {"sln": "10.00", "vc": "2008"},
+              "VC10": {"sln": "11.00", "vc": "2010"}
               }
 sln_template = """Microsoft Visual Studio Solution File, Format Version %s
 # Visual Studio %s
@@ -77,7 +78,7 @@ Usage:
   slntool.py --dep dep_file [--outfile outfile] vcproj_files...
 
 Options:
-    --vcversion: Visual C++'s version [VC8|VC9]
+    --vcversion: Visual C++'s version [VC8|VC9|VC10]
     --dep: dependency file
     --out or --output: output file name
 
@@ -109,6 +110,29 @@ def get_projinfo(fname):
     guid = None
     re_guid = re.compile('^.*?ProjectGUID=\"{(.*)}\"')
     re_name = re.compile('^.*?Name=\"(.*)\"')
+    fd = open(fname, "r")
+    pj = fd.readlines()
+    for t in pj:
+        n = re_name.match(t)
+        g = re_guid.match(t)
+
+        if name == None and n:
+            name = n.group(1)
+        if guid == None and g:
+            guid = g.group(1)
+
+        if name and guid:
+            break
+    fd.close()
+    return {"Name": name, "GUID": guid, "FileName": fname}
+
+def get_projinfo(fname,vcversion):
+    name = None
+    guid = None
+    regexs = {"VC8": {"guid":'^.*?ProjectGUID=\"{(.*)}\"',"name":'^.*?Name=\"(.*)\"'}, 
+              "VC9": {"guid":'^.*?ProjectGUID=\"{(.*)}\"',"name":'^.*?Name=\"(.*)\"'}, 
+              "VC10": {"guid":'^.*?<ProjectGuid>{(.*)}</ProjectGuid>',"name":'^.*<ProjectName>(.*)</ProjectName>'}
+             }
     fd = open(fname, "r")
     pj = fd.readlines()
     for t in pj:
@@ -229,7 +253,71 @@ def get_slnyaml(depfile, projfiles):
     yaml_text = sln_yaml + projlist
     return yaml_text
         
+def get_slnyaml(depfile, projfiles, vcversion):
+    depdict = get_dependencies(depfile)
+    projs = []
+    projlist = """Projects:
+"""
+    for f in projfiles:
+        pj = get_projinfo(f, vcversion)
+        if depdict.has_key(pj["Name"]):
+            pj["Depend"] = depdict[pj["Name"]]
+        projs.append(pj)
+    def depsort(d0, d1):
+        """
+        d0  < d1: return -1 
+        d0 == d1: return  0 
+        d0  > d1: return  1 
+        """
+        d0_depends = d0.has_key("Depend")
+        d1_depends = d1.has_key("Depend")
+        if not d0_depends and not d1_depends:
+            # both d0, d1 has no dependency 
+            return 0
+
+        if not d0_depends and d1_depends:
+            # only "d1" has dependency: d0 < d1
+            return -1 
+
+        if d0_depends and not d1_depends:
+            # only "d0" has dependency: d1 < d0
+            return 1 
+
+        # d0 and d1 has dependency
+        d0_in_dep = depdict.has_key(d0["Name"])
+        d1_in_dep = depdict.has_key(d1["Name"])
+        if not d0_in_dep and not d1_in_dep:
+            return 0
+        if not d0_in_dep and d1_in_dep:
+            return -1
+        if d0_in_dep and not d1_in_dep:
+            return 1
+        
+        # both d0 and d1 have several dependency
+        if depdict[d0["Name"]].count(d1["Name"]) > 0:
+            return 1
+        if depdict[d1["Name"]].count(d0["Name"]) > 0:
+            return -1
+        return 0
+
+    projs.sort(depsort)
+    for pj in projs:
+        list = """  - Name: %s
+    FileName: %s
+    GUID: &%s %s
+    Depend:
+""" % (pj["Name"], pj["FileName"], pj["Name"], pj["GUID"])
+        if pj.has_key("Depend"):
+            for dep in pj["Depend"]:
+                dep = """      - *%s
+""" % (dep)
+                list += dep
+        projlist += list
+    yaml_text = sln_yaml + projlist
+    return yaml_text
+
 def gen_solution(version, yaml_text):
+
     dict = yaml.load(yaml_text)
     t = yat.Template(sln_template 
                      % (vcversions[version]["sln"],
@@ -263,7 +351,8 @@ def main(argv):
     depfile = res[1]
     outfile = res[2]
     flist   = res[3]
-    sln_text = gen_solution(version, get_slnyaml(depfile, flist))
+    #sln_text = gen_solution(version, get_slnyaml(depfile, flist))
+    sln_text = gen_solution(version, get_slnyaml(depfile, flist, version))
 
     if outfile == None:
         fd = sys.stdout
