@@ -18,6 +18,7 @@
  */
 
 #include <algorithm>
+#include <iterator>
 
 #include <rtm/CORBA_SeqUtil.h>
 #include <rtm/NVUtil.h>

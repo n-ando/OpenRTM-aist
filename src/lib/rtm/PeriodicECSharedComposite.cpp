@@ -21,6 +21,7 @@
 #include <rtm/Manager.h>
 #include <string>
 #include <iostream>
+#include <iterator>
 
 
 static const char* periodicecsharedcomposite_spec[] =

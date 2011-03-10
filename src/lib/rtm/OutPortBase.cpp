@@ -20,6 +20,7 @@
 #include <iostream>
 #include <algorithm>
 #include <functional>
+#include <iterator>
 #include <coil/stringutil.h>
 
 #include <rtm/ConnectorBase.h>
