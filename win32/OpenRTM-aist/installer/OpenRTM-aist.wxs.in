@@ -276,6 +276,9 @@
 	<?if $(env.VC_VERSION) = "Visual C++ 2008" ?>
 	<?include VC9msm_inc.wxs ?>
 	<?endif ?>
+	<?if $(env.VC_VERSION) = "Visual C++ 2010" ?>
+	<?include VC10msm_inc.wxs ?>
+	<?endif ?>
       </Directory>
       <!-- プログラムフォルダ -->
       <Directory Id="ProgramMenuFolder">
@@ -382,7 +385,14 @@
     <Feature Id="VCRedist"
 	     Title="$(env.VC_VERSION) Runtime" AllowAdvertise="no" Level="1"> 
       <MergeRef Id="VCCRTx86.msm"/> 
+      <?if $(env.VC_VERSION) = "Visual C++ 2005" ?>
       <MergeRef Id="POLVCCRTx86.msm"/>
+      <?endif ?>
+      <?if $(env.VC_VERSION) = "Visual C++ 2008" ?>
+      <MergeRef Id="POLVCCRTx86.msm"/>
+      <?endif ?>
+      <?if $(env.VC_VERSION) = "Visual C++ 2010" ?>
+      <?endif ?>
     </Feature>
 
     <WixVariable Id="WixUILicenseRtf" Value="License.rtf" />
