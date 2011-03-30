@@ -3,8 +3,8 @@
   <PropertyGroup Label="UserMacros">
     <omni_dllver>414</omni_dllver>
     <omnithread_dllver>34</omnithread_dllver>
-    <rtm_dllver>100</rtm_dllver>
-    <rtm_version>1.0.0</rtm_version>
+    <rtm_dllver>110</rtm_dllver>
+    <rtm_version>1.1.0</rtm_version>
     <coil_dllver />
     <coil_lib>coil$(coil_dllver).lib</coil_lib>
     <coil_libd>coil$(coil_dllver)d.lib</coil_libd>
