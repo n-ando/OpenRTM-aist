@@ -117,29 +117,30 @@ rtmheaderdir = $(prefix)/include/rtm
 
 rtmheader_HEADERS = \
 	$(libRTC_la_SOURCES:.cpp=.h) \
-	BufferBase.h 		\
-	BufferStatus.h 		\
-	CORBA_SeqUtil.h 	\
-	CdrBufferBase.h 	\
-	ConnectorBase.h 	\
-	CorbaConsumer.h 	\
-	DataInPort.h 		\
-	DataOutPort.h 		\
-	DataPortStatus.h 	\
-	DefaultConfiguration.h 	\
-	ExecutionContextBase.h 	\
-	InPort.h 		\
-	InPortConsumer.h 	\
-	ObjectManager.h 	\
-	OutPort.h 		\
-	OutPortConsumer.h 	\
-	PeriodicTaskFactory.h 	\
-	PortCallback.h 		\
-	PublisherBase.h 	\
-	RTC.h 			\
-	RingBuffer.h 		\
-	StateMachine.h 		\
-	Typename.h              \
+	BufferBase.h 		 \
+	BufferStatus.h 		 \
+	CORBA_SeqUtil.h 	 \
+	CdrBufferBase.h 	 \
+	ConnectorBase.h 	 \
+	CorbaConsumer.h 	 \
+	DataInPort.h 		 \
+	DataOutPort.h 		 \
+	DataPortStatus.h 	 \
+	DefaultConfiguration.h 	 \
+	ExecutionContextBase.h 	 \
+	InPort.h 		 \
+	InPortConsumer.h 	 \
+	ObjectManager.h 	 \
+	OutPort.h 		 \
+	OutPortConsumer.h 	 \
+	PeriodicTaskFactory.h 	 \
+	PortCallback.h 		 \
+	PublisherBase.h 	 \
+	RTC.h 			 \
+	RingBuffer.h 		 \
+	SdoServiceConsumerBase.h \
+	StateMachine.h 		 \
+	Typename.h               \
 	config_rtc.h
 
 
