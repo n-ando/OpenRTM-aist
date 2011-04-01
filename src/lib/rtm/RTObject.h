@@ -2821,6 +2821,9 @@ namespace RTC
      */
     SDOPackage::SDOService_var removeSdoService(const char* service_name);
 
+    bool addSdoServiceConsumer(const SDOPackage::ServiceProfile& sProfile);
+    bool removeSdoServiceConsumer(const char* id);
+
     /*!
      * @if jp
      *

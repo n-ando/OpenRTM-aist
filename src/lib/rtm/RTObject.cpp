@@ -1866,6 +1866,17 @@ namespace RTC
     */
   }
  
+  bool RTObject_impl::
+  addSdoServiceConsumer(const SDOPackage::ServiceProfile& sProfile)
+  {
+    return m_sdoservice.addSdoServiceConsumer(sProfile);
+  }
+
+  bool RTObject_impl::removeSdoServiceConsumer(const char* id)
+  {
+    return m_sdoservice.removeSdoServiceConsumer(id);
+  }
+
   /*!
    * @if jp
    * @brief 全 InPort のデータを読み込む。

@@ -261,7 +261,7 @@ namespace RTC
    */
   void ComponentObserverConsumer::heartbeat()
   {
-    m_observer->update_status(OpenRTM::HEARTBEAT, "");
+    updateStatus(OpenRTM::HEARTBEAT, "");
   }
 
   /*!

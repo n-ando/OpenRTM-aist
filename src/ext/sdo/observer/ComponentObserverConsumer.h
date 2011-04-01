@@ -97,9 +97,44 @@ namespace RTC
     virtual void finalize();
 
   protected:
-    void updateStatus(OpenRTM::StatusKind statuskind, const char* msg)
+    /*!
+     * @if jp
+     * @brief リモートオブジェクトコール
+     * @else
+     * @brief Calling remote object
+     * @endif
+     */
+    inline void updateStatus(OpenRTM::StatusKind statuskind, const char* msg)
     {
-      m_observer->update_status(statuskind, msg);
+      try
+        {
+          m_observer->update_status(statuskind, msg);
+        }
+      catch (...)
+        {
+          m_rtobj->removeSdoServiceConsumer(m_profile.id);
+        }
+    }
+
+    /*!
+     * @if jp
+     * @brief Kindを文字列へ変換する
+     * @else
+     * @brief Converting kind to string
+     * @endif
+     */
+    inline const char* toString(OpenRTM::StatusKind statuskind)
+    {
+      static const char* kind[] = 
+        {
+          "COMPONENT_PROFILE",
+          "RTC_STATUS",
+          "EC_STATUS",
+          "PORT_PROFILE",
+          "CONFIGURATION",
+          "HEARTBEAT"
+        };
+      return statuskind < sizeof(kind)/sizeof(char*) ? kind[statuskind] : "";
     }
 
     /*!
@@ -375,6 +410,7 @@ namespace RTC
     public:
       ECAction(ComponentObserverConsumer& coc)
         : ecAttached(NULL), ecDetached(NULL), ecRatechanged(NULL),
+          ecStartup(NULL), ecShutdown(NULL),
           m_coc(coc) {}
       void onGeneric(const char* _msg, UniqueId ec_id)
       {
@@ -430,7 +466,10 @@ namespace RTC
     {
     public:
       ConfigAction(ComponentObserverConsumer& coc)
-        : m_coc(coc) {}
+        : updateConfigParamListener(NULL), setConfigSetListener(NULL),
+          addConfigSetListener(NULL), updateConfigSetListener(NULL),
+          removeConfigSetListener(NULL), activateConfigSetListener(NULL),
+          m_coc(coc) {}
       void updateConfigParam(const char* configsetname,
                              const char* configparamname)
       {
@@ -484,7 +523,6 @@ namespace RTC
     coil::TimeValue m_interval;
     bool m_heartbeat;
     ListenerId m_hblistenerid;
-
 
     // このタイマーはいずれグローバルなタイマにおきかえる
     coil::Timer m_timer;
