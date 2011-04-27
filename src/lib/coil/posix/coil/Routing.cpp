@@ -21,6 +21,7 @@
 #include <netdb.h>      // gethostbyname
 #include <arpa/inet.h>  // inet_ntoa
 #include <netinet/in.h> // sockaddr_in
+#include <sys/wait.h>
 
 #include <coil/Routing.h>
 #include <coil/stringutil.h>
@@ -104,6 +105,7 @@ namespace coil
           {
             dest_if = vs[ifname_pos];
             pclose(fp);
+	    wait(NULL);
             return true;
           }
 #endif // COIL_OS_FREEBSD || COIL_OS_DARWIN || COIL_OS_CYGWIN
@@ -119,6 +121,7 @@ namespace coil
 #endif // COIL_OS_LINUX
       } while (!feof(fp));
     pclose(fp);
+    wait(NULL);
     return false;
   }
 
@@ -156,10 +159,12 @@ namespace coil
           {
             ipaddr = vs[1];
             pclose(fp);
+	    wait(NULL);
             return true;
           }
       } while (!feof(fp));
     pclose(fp);
+    wait(NULL);
     return false;
   }
   
