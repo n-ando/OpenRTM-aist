@@ -1046,7 +1046,7 @@ if test "x$have_omniorb" = "xyes" ; then
 	AC_MSG_CHECKING(for omniNames)
 	dnl  omninames -> $omninames $omninames_dir
 	FP_FIND_FILE(omniNames,$with_omniorb/bin $base_bins $base_dirs,bin)
-	if test "x$omniidl" = "x" ; then
+	if test "x$omniNames" = "x" ; then
 		AC_MSG_RESULT(not found)
 		AC_MSG_ERROR(use --with-omniorb to locate omniNames)
 	else
@@ -1641,6 +1641,7 @@ AC_OUTPUT([Makefile
 	src/ext/ec/rtpreempt/Makefile
 	src/ext/sdo/Makefile
 	src/ext/sdo/observer/Makefile
+	src/ext/sdo/logger/Makefile
 	utils/Makefile
 	utils/rtm-config/Makefile
 	utils/rtc-template/Makefile
