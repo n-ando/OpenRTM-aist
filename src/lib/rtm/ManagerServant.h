@@ -574,19 +574,88 @@ namespace RTM
      * @endif
      */
     RTM::Manager_ptr findManager(const char* host_port);
+
   private:
     typedef coil::Guard<coil::Mutex> Guard;
+    /*!
+     * @if jp
+     * @brief ロガーオブジェクト
+     * @else
+     * @brief Logger object
+     * @endif
+     */
     ::RTC::Logger rtclog;
+
+    /*!
+     * @if jp
+     * @brief RTC::Managerへの参照
+     * @else
+     * @brief Reference to the RTC::Manager
+     * @endif
+     */
     ::RTC::Manager& m_mgr;
+
+    /*!
+     * @if jp
+     * @brief ManagerServantのオブジェクトリファレンス
+     * @else
+     * @brief An object reference of ManagerServant
+     * @endif
+     */
     ::RTM::Manager_var m_objref;
 
+    /*!
+     * @if jp
+     * @brief マスタマネージャのリスト
+     * @else
+     * @brief List of master managers
+     * @endif
+     */
     ::RTM::ManagerList m_masters;
+
+    /*!
+     * @if jp
+     * @brief m_masters の Mutex
+     * @else
+     * @brief Mutex of m_masters
+     * @endif
+     */
     ::coil::Mutex m_masterMutex;
+
+    /*!
+     * @if jp
+     * @brief スレーブマネージャのリスト
+     * @else
+     * @brief List of slave managers
+     * @endif
+     */
     ::RTM::ManagerList m_slaves;
+
+    /*!
+     * @if jp
+     * @brief m_slaves の Mutex
+     * @else
+     * @brief Mutex of m_slaves
+     * @endif
+     */
     ::coil::Mutex m_slaveMutex;
 
+    /*!
+     * @if jp
+     * @brief マスタかどうかのフラグ
+     * @else
+     * @brief Flag if this is master
+     * @endif
+     */
     CORBA::Boolean m_isMaster;
 
+    /*!
+     * @if jp
+     * @brief Manager_var が等価かどうかのファンクタ
+     * @else
+     * @brief Functor to inspect if Manster_var is equivalent
+     * @endif
+     */
     class is_equiv
     {
       RTM::Manager_var m_mgr;
