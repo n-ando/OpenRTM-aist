@@ -267,7 +267,7 @@ namespace RTC
      * the load module can be specified with URL.
      *
      * The file_name can be specified by the absolute path.
-     * If manager.modules.allowAbsolutePath is no, module of file_name
+     * If manager.modules.abs_path_allowed is no, module of file_name
      * will be searched from the default module load path and loaded.
      * 
      * @param file_name The target module name for the loading
