@@ -246,7 +246,7 @@ namespace RTC
      * ロードするモジュールをURLで指定することができる。
      *
      * file_name は絶対パスで指定することができる。
-     * manager.modules.allowAbsolutePath が no の場合、
+     * manager.modules.abs_path_allowd が no の場合、
      * 既定のモジュールロードパスから、file_name のモジュールを探しロードする。
      * 
      * @param file_name ロード対象モジュール名
