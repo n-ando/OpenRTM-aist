@@ -4490,9 +4490,9 @@ namespace RTC
     
     /*!
      * @if jp
-     * @brief ExecutionContext 検索用ファンクタ
+     * @brief ExecutionContext コピーファンクタ
      * @else
-     * @brief Functor to find ExecutionContext
+     * @brief Functor to copy ExecutionContext
      * @endif
      */
     struct ec_copy
@@ -4505,12 +4505,19 @@ namespace RTC
       {
         if (!::CORBA::is_nil(ecs))
           {
-	    CORBA_SeqUtil::push_back(m_eclist, ExecutionContext::_duplicate(ecs));
+	    CORBA_SeqUtil::push_back(m_eclist,
+                                     ExecutionContext::_duplicate(ecs));
           }
       }
       ExecutionContextList& m_eclist;
     };  // struct ec_copy
-
+    /*!
+     * @if jp
+     * @brief ExecutionContext 検索用ファンクタ
+     * @else
+     * @brief Functor to find ExecutionContext
+     * @endif
+     */
     struct ec_find
     {
       ec_find(ExecutionContext_ptr& ec)
