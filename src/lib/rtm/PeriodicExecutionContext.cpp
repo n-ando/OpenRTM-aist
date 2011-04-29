@@ -148,12 +148,24 @@ namespace RTC
 	  {
 	    m_worker.cond_.wait();
 	  }
+        coil::TimeValue t0(coil::gettimeofday());
 	if (m_worker.running_)
 	  {
 	    std::for_each(m_comps.begin(), m_comps.end(), invoke_worker());
 	  }
 	m_worker.mutex_.unlock();
-        if (!m_nowait) { coil::sleep(m_period); }
+        coil::TimeValue t1(coil::gettimeofday());
+        RTC_PARANOID(("Period:    %f [s]", (double)m_period));
+        RTC_PARANOID(("Execution: %f [s]", (double)(t1 - t0)));
+        RTC_PARANOID(("Sleep:     %f [s]", (double)(m_period - (t1 - t0))));
+        coil::TimeValue t2(coil::gettimeofday());
+        if (!m_nowait && m_period > (t1 - t0))
+          {
+            RTC_PARANOID(("sleeping..."));
+            coil::sleep((coil::TimeValue)(m_period - (t1 - t0)));
+          }
+        coil::TimeValue t3(coil::gettimeofday());
+        RTC_PARANOID(("Slept:     %f [s]", (double)(t3 - t2)));
       } while (m_svc);
 
     return 0;
