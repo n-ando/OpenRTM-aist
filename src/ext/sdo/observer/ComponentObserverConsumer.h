@@ -536,6 +536,6 @@ extern "C"
   DLL_EXPORT void ComponentObserverConsumerInit();
 };
 
-#endif // RTC_SDOSERVICECONSUMERBASE_H
+#endif // RTC_COMPONENTOBSERVERCONSUMER_H
 
 
