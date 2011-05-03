@@ -232,7 +232,11 @@ namespace RTC
 	   int bufsize=64, 
 	   bool read_block = false, bool write_block = false,
 	   int read_timeout = 0, int write_timeout = 0)
-      :	InPortBase(name, toTypename<DataType>()),
+#if defined(__GNUC__) && (__GNUC__ <= 3 && __GNUC_MINOR__ <= 3) 
+      :	InPortBase(name, ::CORBA_Util::toRepositoryIdOfStruct<DataType>()),
+#else
+      :	InPortBase(name, ::CORBA_Util::toRepositoryId<DataType>()),
+#endif
         m_name(name), m_value(value),
 	m_OnRead(NULL),  m_OnReadConvert(NULL)
     {

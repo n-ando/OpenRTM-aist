@@ -179,6 +179,18 @@ namespace CORBA_Util
     return typecode<is_corba_object<T>::value, T>::name();
   }
   
+  template <class T>
+  const char* toTypenameOfStruct()
+  {
+    return typecode<false, T>::name();
+  }
+  
+  template <class T>
+  const char* toTypenameOfObject()
+  {
+    return typecode<true, T>::name();
+  }
+  
   /*!
    * @if jp
    * @brief CORBA型のリポジトリIDを文字列で取得する
@@ -220,6 +232,18 @@ namespace CORBA_Util
   const char* toRepositoryId()
   {
     return typecode<is_corba_object<T>::value, T>::id();
+  }
+
+  template <class T>
+  const char* toRepositoryIdOfStruct()
+  {
+    return typecode<false, T>::id();
+  }
+
+  template <class T>
+  const char* toRepositoryIdOfObject()
+  {
+    return typecode<true, T>::id();
   }
   
 }; // namespace CORBA_Util
