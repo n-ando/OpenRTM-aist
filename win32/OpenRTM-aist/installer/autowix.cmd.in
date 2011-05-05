@@ -100,6 +100,48 @@ if not exist omniORB_inc.wxs (
 
 
 @rem ------------------------------------------------------------
+@rem Generate OpenCV's wxs file
+@rem ------------------------------------------------------------
+if "x%OPENCV_ROOT%" == "x" (
+   echo Environment Variable "OPENCV_ROOT" is not set. Abort.
+   goto END
+)
+set INCLUDE_OPENCV=YES
+
+if not exist OpenCV_inc.wxs (
+   cd OpenCV2.1
+   set TMP_PYTHONPATH=%PYTHONPATH%
+   set PYTHONPATH=../../bin;%PYTHONPATH%
+   echo Generating OpenCV_inc.wxs......
+   opencvwxs.py
+   set PYTHONPATH=%TMP_PYTHONPATH%
+   copy OpenCV_inc.wxs ..
+   cd ..
+)
+
+
+@rem ------------------------------------------------------------
+@rem Generate OpenCV-RTC wxs file
+@rem ------------------------------------------------------------
+if "x%OPENCV_RTC_ROOT%" == "x" (
+   echo Environment Variable "OPENCV_RTC_ROOT" is not set. Abort.
+   goto END
+)
+set INCLUDE_OPENCV_RTC=YES
+
+if not exist OpenCV-RTC_inc.wxs (
+   cd OpenCV-RTC
+   set TMP_PYTHONPATH=%PYTHONPATH%
+   set PYTHONPATH=../../bin;%PYTHONPATH%
+   echo Generating OpenCV-RTC_inc.wxs......
+   opencvrtcwxs.py
+   set PYTHONPATH=%TMP_PYTHONPATH%
+   copy OpenCV-RTC_inc.wxs ..
+   cd ..
+)
+
+
+@rem ------------------------------------------------------------
 @rem Import Language-Country, Language codes, Codepages
 @rem from langs.txt
 @rem http://www.tramontana.co.hu/wix/lesson2.php#2.4

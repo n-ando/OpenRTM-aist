@@ -21,27 +21,22 @@
 @rem ------------------------------------------------------------
 @set RTM_ROOT=%~dp0
 @set PATH="C:\Program Files\Microsoft Visual Studio 9.0\VC\vcpackages";%PATH%
-@set OMNI_ROOT=C:\distribution\omniORB-4.1.4_vc9
+@set OMNI_ROOT=C:\distribution\omniORB-4.1.4
 @set RTSE_ROOT=C:\distribution\OpenRTP\RTSystemEditor
 @set VC_VERSION=Visual C++ 2008
+@set OPENCV_ROOT=C:\distribution\OpenCV2.1
+@set OPENCV_RTC_ROOT=C:\distribution\ImageProcessing\opencv
 
 @rem ============================================================
 @rem copy property sheet
 @rem ============================================================
 copy   etc\rtm_config_omni414.vsprops rtm_config.vsprops
-copy   etc\rtm_config_omni414.vsprops examples\USBCamera\rtm_config.vsprops
-copy   coil_config.vsprops examples\USBCamera\coil_config.vsprops
 
 @rem ============================================================
 @rem build OpenRTM-aist
 @rem ============================================================
 
 vcbuild /M2 /rebuild OpenRTM-aist_vc9.sln
-
-@rem ============================================================
-@rem build USBCamera examples
-@rem ============================================================
-vcbuild /M2 /rebuild examples\USBCamera\USBCamera_vc9.sln
 
 cd installer
 call autowix.cmd

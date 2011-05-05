@@ -40,6 +40,11 @@ EXTRA_DIST =                       \
 	omniORB/omniwxs.py         \
 	OpenRTP/OpenRTP_inc.wxs.in \
 	OpenRTP/OpenRTP_inc.wxs    \
-	OpenRTP/openrtpwxs.py
+	OpenRTP/openrtpwxs.py      \
+	OpenCV2.1/OpenCV_inc.wxs.in \
+	OpenCV2.1/opencvwxs.py \
+	OpenCV-RTC/OpenCVRTC_bin.yaml \
+	OpenCV-RTC/OpenCV-RTC_inc.wxs.in \
+	OpenCV-RTC/opencvrtcwxs.py
 
 DIST_SUBDIRS = Bitmaps
