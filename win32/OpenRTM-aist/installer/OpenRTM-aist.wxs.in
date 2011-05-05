@@ -222,6 +222,12 @@
 	    <!-- examples -->
 	    <Directory Id="examples" Name="examples">
 	      <Directory Id="CXXexamples" Name="C++">
+            <!-- OpenCV-RTC components -->
+            <?if $(env.INCLUDE_OPENCV_RTC) = YES ?>
+              <?include OpenCV-RTC_inc.wxs ?>
+            <?endif ?>
+            <!-- end of OpenCV-RTC -->
+
 		<Component Id="Examples" Guid="{% Examples.GUID %}">
 		  {% for file in Examples.Files %}
 		  <File Id="{% file.Id %}"
@@ -265,6 +271,12 @@
 	<?endif ?>
 	<!-- end of rtmtools -->
 
+	<!-- OpenCV components -->
+	<?if $(env.INCLUDE_OPENCV) = YES ?>
+	<?include OpenCV_inc.wxs ?>
+	<?endif ?>
+	<!-- end of OpenCV -->
+
       </Directory>
 
       <!-- システムフォルダ -->
@@ -289,6 +301,8 @@
 	    </Directory>
 	    <Directory Id="Components" Name="components">
 	      <Directory Id="ExpMenuFolder" Name="examples">
+	      </Directory>
+	      <Directory Id="OpenCVRtcMenuFolder" Name="opencv-rtcs">
 	      </Directory>
 	    </Directory>
 	    <Directory Id="DocMenuFolder" Name="documents">
@@ -316,6 +330,10 @@
       <!-- examples -->
       <Feature Id="Examples" Level="1" Title="Examples">
 	<ComponentRef Id="Examples"/>
+      </Feature>
+      <!-- opencv examples -->
+      <Feature Id="OpenCVRTC" Level="1" Title="OpenCV RTC">
+	<ComponentRef Id="OpenCVRTCBin"/>
       </Feature>
       <!-- documents -->
       <Feature Id="Docs" Level="1" Title="Documents">
@@ -382,6 +400,24 @@
       </Feature>
     </Feature>
     <?endif ?>
+
+    <!-- OpenCV -->
+    <?if $(env.INCLUDE_OPENCV) = YES ?>
+    <Feature Id="OpenCV" Level="1" Title="OpenCV2.1">
+      <Feature Id="OpenCV2.1Runtime" Level="1"
+	       Title="Runtime Environment">
+	<ComponentRef Id="OpenCV"/>
+	<ComponentRef Id="OpenCVBin"/>
+	<ComponentRef Id="OpenCVDoc"/>
+      </Feature>
+      <Feature Id="OpenCV2.1Devel" Level="1"
+	       Title="Development Environment">
+	<ComponentRef Id="OpenCVIncludeOpencv"/>
+	<ComponentRef Id="OpenCVLib"/>
+      </Feature>
+    </Feature>
+    <?endif ?>
+
     <Feature Id="VCRedist"
 	     Title="$(env.VC_VERSION) Runtime" AllowAdvertise="no" Level="1"> 
       <MergeRef Id="VCCRTx86.msm"/> 

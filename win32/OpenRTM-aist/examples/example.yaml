@@ -52,16 +52,6 @@ Examples:
       Name: ConfigSampleComp.exe
       Source: ..\\examples\\ConfigSample\\ConfigSampleComp\\Release\\ConfigSampleComp.exe
       Shortcut: true
-    - Id: USBCameraAqcuireComp.exe
-      ShortName: CamAq.exe
-      Name: USBCameraAqcuireComp.exe
-      Source: ..\\examples\\USBCamera\\USBCameraAcquireComp\\Release\\USBCameraAcquireComp.exe
-      Shortcut: true
-    - Id: USBCameraMonitorComp.exe
-      ShortName: CamMon.exe
-      Name: USBCameraMonitorComp.exe
-      Source: ..\\examples\\USBCamera\\USBCameraMonitorComp\\Release\\USBCameraMonitorComp.exe
-      Shortcut: true
     - Id: ControllerComp.exe
       ShortName: Ctrl.exe
       Name: ControllerComp.exe
@@ -108,14 +98,6 @@ Examples:
       ShortName: ConfSamp.dll
       Name: ConfigSample.dll
       Source: ..\\examples\\ConfigSample\\ConfigSample\\Release\\ConfigSample.dll
-    - Id: USBCameraAqcuire.dll
-      ShortName: CamAq.dll
-      Name: USBCameraAqcuire.dll
-      Source: ..\\examples\\USBCamera\\USBCameraAcquire\\Release\\USBCameraAcquire.dll
-    - Id: USBCameraMonitor.dll
-      ShortName: CamMon.dll
-      Name: USBCameraMonitor.dll
-      Source: ..\\examples\\USBCamera\\USBCameraMonitor\\Release\\USBCameraMonitor.dll
     - Id: Controller.dll
       ShortName: Ctrl.dll
       Name: Controller.dll
