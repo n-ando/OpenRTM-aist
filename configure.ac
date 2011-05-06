@@ -1526,6 +1526,14 @@ AC_SUBST(UNITTEST)
 dnl RT preempt EC
 AC_SUBST(RTPREEMPTEC)
 
+dnl OpenRTM's includedir/libdir/datadir definition
+rtmlibdir=$libdir"/openrtm-"$major_version"."$minor_version
+rtmdatadir=$datadir"/openrtm-"$major_version"."$minor_version
+rtmincludedir=$includedir"/openrtm-"$major_version"."$minor_version
+AC_SUBST(rtmlibdir)
+AC_SUBST(rtmdatadir)
+AC_SUBST(rtmincludedir)
+
 dnl ------------------------------------------------------------
 
 UNIQUE($CPPFLAGS)
@@ -1573,6 +1581,10 @@ echo ''
 echo 'ORB: '$ORB
 echo 'IDLC: '$IDLC
 echo 'IDL_FLAGS: '$IDL_FLAGS
+echo ''
+echo 'include dir: '$rtmincludedir
+echo 'lib dir:     '$rtmlibdir
+echo 'data dir:    '$rtmdatadir
 echo '------------------------------------------------------------'
 echo ''
 
