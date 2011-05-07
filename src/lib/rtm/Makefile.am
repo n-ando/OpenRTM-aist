@@ -118,11 +118,10 @@ libRTC_la_LIBADD = \
 libRTC_la_LDFLAGS =                 \
 	-no-undefined               \
 	-L$(top_builddir)/src/lib/rtm/idl   \
-	-release $(PACKAGE_VERSION) \
-	-version-info 0:4:0
+	-release $(PACKAGE_VERSION)
 
 
-rtmheaderdir = $(prefix)/include/rtm
+rtmheaderdir = $(rtm_includedir)/rtm
 
 rtmheader_HEADERS = \
 	$(libRTC_la_SOURCES:.cpp=.h) \

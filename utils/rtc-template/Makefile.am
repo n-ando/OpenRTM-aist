@@ -18,7 +18,7 @@ slntool.py:
 
 rtc-template: 
 
-pyhelperdir = $(pkglibdir)/py_helper
+pyhelperdir = $(rtm_libdir)/py_helper
 
 pyhelper_SCRIPTS =       \
 	yat.py           \

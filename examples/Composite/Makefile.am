@@ -14,8 +14,8 @@ AM_LDFLAGS=-L$(top_builddir) -L$(top_builddir)/src/lib/rtm -L$(top_builddir)/src
 # Targets
 #------------------------------------------------------------
 # Targets directories
-exampledir = $(pkgdatadir)/examples
-socompdir  = $(exampledir)/rtcs
+exampledir = $(rtm_exampledir)
+socompdir  = $(exampledir)/rtc
 sourcedir  = $(exampledir)/src/Composite
 
 # Loadable RTCs

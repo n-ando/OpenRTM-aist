@@ -175,7 +175,7 @@ OpenRTM-aistSkel.cpp OpenRTM-aistStub.cpp: OpenRTM-aist.idl
 
 
 # Install directory of headers and idl files
-rtmheaderdir = $(prefix)/include/rtm
+rtmheaderdir = $(rtm_includedir)/rtm
 idldir =       $(rtmheaderdir)/idl
 rtmskeldir =   $(rtmheaderdir)/idl
 

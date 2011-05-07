@@ -1077,6 +1077,7 @@ if test "x$have_omniorb" = "xyes" ; then
 	dnl  omniORB setup complete
 	dnl ------------------------------------------------------------
 	PATH_NORM($omniidl)
+	PATH_NORM($omniNames)
 	IDLC=$n_path
 	IDL_FLAGS="-bcxx -Wba -nf"
 	COSNAMES=$omniNames
@@ -1527,12 +1528,29 @@ dnl RT preempt EC
 AC_SUBST(RTPREEMPTEC)
 
 dnl OpenRTM's includedir/libdir/datadir definition
-rtmlibdir=$libdir"/openrtm-"$major_version"."$minor_version
-rtmdatadir=$datadir"/openrtm-"$major_version"."$minor_version
-rtmincludedir=$includedir"/openrtm-"$major_version"."$minor_version
-AC_SUBST(rtmlibdir)
-AC_SUBST(rtmdatadir)
-AC_SUBST(rtmincludedir)
+rtm_includedir=$includedir"/openrtm-"$major_version"."$minor_version
+rtm_libdir=$libdir"/openrtm-"$major_version"."$minor_version
+rtm_datadir=$datadir"/openrtm-"$major_version"."$minor_version
+
+dnl under lib/openrtm-x.y directories
+rtm_rtcdir=$rtm_libdir"/rtc"
+rtm_ecdir=$rtm_libdir"/ec"
+rtm_rtmdir=$rtm_libdir"/rtm"
+rtm_svcdir=$rtm_libdir"/svc"
+rtm_sdodir=$rtm_libdir"/sdo"
+rtm_docdir=$rtm_datadir"/doc"
+rtm_exampledir=$rtm_datadir"/example"
+
+AC_SUBST(rtm_libdir)
+AC_SUBST(rtm_datadir)
+AC_SUBST(rtm_includedir)
+AC_SUBST(rtm_rtcdir)
+AC_SUBST(rtm_ecdir)
+AC_SUBST(rtm_rtmdir)
+AC_SUBST(rtm_svcdir)
+AC_SUBST(rtm_sdodir)
+AC_SUBST(rtm_docdir)
+AC_SUBST(rtm_exampledir)
 
 dnl ------------------------------------------------------------
 
@@ -1582,9 +1600,9 @@ echo 'ORB: '$ORB
 echo 'IDLC: '$IDLC
 echo 'IDL_FLAGS: '$IDL_FLAGS
 echo ''
-echo 'include dir: '$rtmincludedir
-echo 'lib dir:     '$rtmlibdir
-echo 'data dir:    '$rtmdatadir
+echo 'include dir: '$rtm_includedir
+echo 'lib dir:     '$rtm_libdir
+echo 'data dir:    '$rtm_datadir
 echo '------------------------------------------------------------'
 echo ''
 

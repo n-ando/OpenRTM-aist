@@ -104,7 +104,7 @@ SystemLoggerTests_LDADD   = \
 #
 #
 #
-socompdir  = $(pkgdatadir)/src/lib/rtm/tests/SystemLogger
+#socompdir  = $(pkgdatadir)/src/lib/rtm/tests/SystemLogger
 
 
 

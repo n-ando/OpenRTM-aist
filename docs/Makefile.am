@@ -25,7 +25,7 @@ IDLReference-en:
 #DevelopersGuide.pdf:
 #	make -f Makefile.docs DevelopersGuide.pdf
 
-docsdir = $(pkgdatadir)
+docdir = $(rtm_docdir)
 
 EXTRA_DIST = \
 	ClassReference \
@@ -38,48 +38,48 @@ EXTRA_DIST = \
 #install-manual:
 #	$(mkinstalldirs) $(DESTDIR)$(pkgdatadir)/docs/
 #	if test -f DevelopersGuide.ps; then \
-#	  $(INSTALL_DATA) DevelopersGuide.ps $(DESTDIR)$(pkgdatadir)/docs/; \
+#	  $(INSTALL_DATA) DevelopersGuide.ps $(rtm_docdir); \
 #	fi
 #	if test -f DevelopersGuide.pdf; then \
-#	  $(INSTALL_DATA) DevelopersGuide.pdf $(DESTDIR)$(pkgdatadir)/docs/; \
+#	  $(INSTALL_DATA) DevelopersGuide.pdf $(rtm_docdir); \
 #	fi
 
 install-class-reference:
 	if test -d ClassReference; then \
-	  $(mkinstalldirs) $(DESTDIR)$(pkgdatadir)/docs/ClassReference/html; \
+	  $(mkinstalldirs) $(rtm_docdir)/ClassReference/html; \
 	  for x in ClassReference/html/*; do \
 	    if test -f $$x; then \
-	      $(INSTALL_DATA) $$x $(DESTDIR)$(pkgdatadir)/docs/ClassReference/html/;\
+	      $(INSTALL_DATA) $$x $(rtm_docdir)/ClassReference/html/;\
 	    fi \
 	  done \
 	fi
 
 install-class-reference-en:
 	if test -d ClassReference-en; then \
-	  $(mkinstalldirs) $(DESTDIR)$(pkgdatadir)/docs/ClassReference-en/html; \
+	  $(mkinstalldirs) $(rtm_docdir)/ClassReference-en/html; \
 	  for x in ClassReference-en/html/*; do \
 	    if test -f $$x; then \
-	      $(INSTALL_DATA) $$x $(DESTDIR)$(pkgdatadir)/docs/ClassReference-en/html/;\
+	      $(INSTALL_DATA) $$x $(rtm_docdir)/ClassReference-en/html/;\
 	    fi \
 	  done \
 	fi
 
 install-idl-reference:
 	if test -d IDLReference; then \
-	  $(mkinstalldirs) $(DESTDIR)$(pkgdatadir)/docs/IDLReference/html; \
+	  $(mkinstalldirs) $(rtm_docdir)/IDLReference/html; \
 	  for x in IDLReference/html/*; do \
 	    if test -f $$x; then \
-	      $(INSTALL_DATA) $$x $(DESTDIR)$(pkgdatadir)/docs/IDLReference/html/;\
+	      $(INSTALL_DATA) $$x $(rtm_docdir)/IDLReference/html/;\
 	    fi \
 	  done \
 	fi
 
 install-idl-reference-en:
 	if test -d IDLReference-en; then \
-	  $(mkinstalldirs) $(DESTDIR)$(pkgdatadir)/docs/IDLReference-en/html; \
+	  $(mkinstalldirs) $(rtm_docdir)/IDLReference-en/html; \
 	  for x in IDLReference-en/html/*; do \
 	    if test -f $$x; then \
-	      $(INSTALL_DATA) $$x $(DESTDIR)$(pkgdatadir)/docs/IDLReference-en/html/;\
+	      $(INSTALL_DATA) $$x $(rtm_docdir)/IDLReference-en/html/;\
 	    fi \
 	  done \
 	fi
