@@ -12,7 +12,7 @@ bin_SCRIPTS = rtm-skelwrapper
 all:
 	chmod 755 rtm-skelwrapper
 
-pyhelperdir = $(pkglibdir)/py_helper
+pyhelperdir = $(rtm_libdir)/py_helper
 
 pyhelper_SCRIPTS = skel_wrapper.py
 

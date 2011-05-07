@@ -68,8 +68,8 @@ CONSUMER_OBJ=$(CONSUMER_DIST_SRC:.cpp=.o)
 # Targets
 #------------------------------------------------------------
 # Targets directories
-exampledir = $(pkgdatadir)/examples
-socompdir  = $(exampledir)/rtcs
+exampledir = $(rtm_exampledir)
+socompdir  = $(exampledir)/rtc
 sourcedir  = $(exampledir)/src/SimpleService
 
 # Loadable RTCs
@@ -113,7 +113,14 @@ MyServiceConsumerComp_LDADD   =               \
 
 
 # Example sources
-source_DATA = $(ALL_SRC) $(EXTRA_DIST)
+source_DATA =                     \
+	$(EXTRA_DIST)             \
+	$(PROVIDER_DIST_H)        \
+	$(PROVIDER_DIST_SRC)      \
+	$(CONSUMER_DIST_H)        \
+	$(CONSUMER_DIST_SRC)      \
+	MyServiceProviderComp.cpp \
+	MyServiceConsumerComp.cpp
 
 #------------------------------------------------------------
 # Extra distributed files

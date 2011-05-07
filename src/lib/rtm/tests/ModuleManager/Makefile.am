@@ -38,8 +38,8 @@ IDL_SOURCES = \
 	$(top_srcdir)/src/lib/rtm/idl/BasicDataType.idl \
 	$(top_srcdir)/src/lib/rtm/idl/DataPort.idl
 
-dummylibdir  = $(pkgdatadir)/src/lib/rtm/tests/ModuleManager
-dummylib_LTLIBRARIES = DummyLib.la
+#dummylibdir  = $(pkgdatadir)/src/lib/rtm/tests/ModuleManager
+noinst_LTLIBRARIES = DummyLib.la DummyModule1.la
 nodist_DummyLib_la_SOURCES = \
 	$(IDL_SOURCES:.idl=Skel.cpp)                             \
 	$(top_builddir)/src/lib/rtm/NVUtil.cpp                   \
@@ -118,10 +118,10 @@ ModuleManagerTests_LDADD   =                       \
 TEST_SRC = $(ModuleManagerTests_SOURCES)
 TEST_H   = 
 
-socompdir  = $(pkgdatadir)/src/lib/rtm/tests/ModuleManager
+#socompdir  = $(pkgdatadir)/src/lib/rtm/tests/ModuleManager
 
 # Loadable RTCs
-socomp_LTLIBRARIES = DummyModule1.la
+#noinst_LTLIBRARIES = DummyModule1.la
 
 nodist_DummyModule1_la_SOURCES = DummyModule1.h \
 	$(top_builddir)/src/lib/rtm/DataFlowComponentBase.cpp    \

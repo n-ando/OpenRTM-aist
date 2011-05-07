@@ -36,11 +36,7 @@ IDL_SOURCES = \
 	$(top_srcdir)/src/lib/rtm/idl/BasicDataType.idl \
 	$(top_srcdir)/src/lib/rtm/idl/DataPort.idl
 
-#
-#
-#
-dummylibdir  = $(pkgdatadir)/src/lib/rtm/tests/Manager
-dummylib_LTLIBRARIES = DummyLib.la
+noinst_LTLIBRARIES = DummyLib.la DummyModule.la DummyModule2.la  
 nodist_DummyLib_la_SOURCES = \
 	$(IDL_SOURCES:.idl=Skel.cpp) \
 	$(top_srcdir)/src/lib/rtm/NVUtil.cpp \
@@ -121,11 +117,11 @@ ManagerTests_LDADD   = \
 #
 #
 #
-socompdir  = $(pkgdatadir)/src/lib/rtm/tests/Manager
+#socompdir  = $(pkgdatadir)/src/lib/rtm/tests/Manager
 
 # Loadable RTCs
 #socomp_LTLIBRARIES = ConsoleIn.la ConsoleOut.la
-socomp_LTLIBRARIES = DummyModule.la  DummyModule2.la  
+#noinst_LTLIBRARIES = DummyModule.la  DummyModule2.la  
 
 nodist_DummyModule_la_SOURCES = DummyModule.h \
 				$(top_srcdir)/src/lib/rtm/DataFlowComponentBase.cpp \
@@ -136,7 +132,7 @@ DummyModule_la_LIBADD  = \
 	-lomniORB4                                \
 	-lomnithread                              \
 	-lomniDynamic4                            \
- 	-lcoil                                    \
+	-lcoil                                    \
 	-luuid                                    \
 	$(top_builddir)/src/lib/rtm/tests/Manager/.libs/DummyLib.la
 
@@ -149,7 +145,7 @@ DummyModule2_la_LIBADD  = \
 	-lomniORB4                                \
 	-lomnithread                              \
 	-lomniDynamic4                            \
- 	-lcoil                                    \
+	-lcoil                                    \
 	-luuid                                    \
 	$(top_builddir)/src/lib/rtm/tests/Manager/.libs/DummyLib.la
 

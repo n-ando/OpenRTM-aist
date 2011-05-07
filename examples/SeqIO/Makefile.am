@@ -14,9 +14,9 @@ AM_LDFLAGS=-L$(top_builddir) -L$(top_builddir)/src/lib/rtm -L$(top_builddir)/src
 # Targets
 #------------------------------------------------------------
 # Targets directories
-exampledir = $(pkgdatadir)/examples
-socompdir  = $(exampledir)/rtcs
-sourcedir  = $(exampledir)/src/SeqIO
+exampledir = $(rtm_exampledir)
+socompdir  = $(rtm_exampledir)/rtc
+sourcedir  = $(rtm_exampledir)/src/SeqIO
 
 # Loadable RTCs
 socomp_LTLIBRARIES = SeqIn.la SeqOut.la

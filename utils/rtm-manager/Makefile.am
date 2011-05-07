@@ -19,7 +19,7 @@ IDLS =          \
 
 SUFFIXES = .idl _idl.py
 
-managerhelperdir = $(pkglibdir)/manager_helper
+managerhelperdir = $(rtm_libdir)/manager_helper
 
 managerhelper_SCRIPTS = \
 	NSHelper.py        \

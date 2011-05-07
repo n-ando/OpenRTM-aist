@@ -26,7 +26,7 @@ bin_SCRIPTS = tests
 tests:
 
 # Something to install to libdir
-pymoduledir = $(pkglibdir)/tests
+pymoduledir = $(rtm_libdir)/tests
 pymodule_SCRIPTS = \
 	$(PY_STUBS) \
 	$(TESTS_SOURCES)

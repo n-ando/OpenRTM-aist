@@ -68,8 +68,8 @@ CONSUMER_OBJ=$(CONSUMER_DIST_SRC:.cpp=.o)
 # Targets
 #------------------------------------------------------------
 # Targets directories
-exampledir = $(pkgdatadir)/examples
-socompdir  = $(exampledir)/rtcs
+exampledir = $(rtm_exampledir)
+socompdir  = $(exampledir)/rtc
 sourcedir  = $(exampledir)/src/AutoTest
 
 # Loadable RTCs

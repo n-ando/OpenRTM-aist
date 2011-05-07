@@ -27,9 +27,9 @@ rtm-config: rtm-config.in
 	echo 'rtm_prefix="'${prefix}'"' >> $@
 	echo 'rtm_exec_prefix="'${exec_prefix}'"' >> $@
 	echo 'rtm_cxx="'${CXX}'"' >> $@
-	echo 'rtm_cflags="'${CXXFLAGS}' -I'${prefix}'/include -I'${prefix}'/include/rtm/idl"' >> $@
+	echo 'rtm_cflags="'${CXXFLAGS}' -I'${prefix}'/include -I'${rtm_includedir}' -I'${rtm_includedir}'/rtm/idl"' >> $@
 	echo 'rtm_libs="'${LDFLAGS}' -L'${prefix}'/lib '${LIBS}' -lRTC -lcoil"' >> $@
-	echo 'rtm_libdir="'${pkglibdir}'"' >> $@
+	echo 'rtm_libdir="'${rtm_libdir}'"' >> $@
 	echo 'rtm_version="'${RTM_VERSION}'"' >> $@
 	echo 'rtm_orb="'${ORB}'"' >> $@
 	echo 'rtm_idlc="'${IDLC}'"' >> $@
@@ -42,6 +42,6 @@ EXTRA_DIST = \
 	openrtm-aist.pc.in
 
 clean-local:
-	rm -f libRTM.pc
+	rm -f openrtm-aist.pc
 	rm -f rtm-config
 	rm -rf *~ *core

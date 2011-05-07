@@ -45,7 +45,7 @@ TEMPLATES = ActArray.xml \
 	VelocityControl3D.xml
 
 # Install directory of headers and idl files
-exampledir = $(pkgdatadir)/examples
+exampledir = $(rtm_exampledir)
 templatedir = $(exampledir)/templates/
 
 template_DATA = $(TEMPLATES)

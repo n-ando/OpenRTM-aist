@@ -5,7 +5,7 @@ includedir=@includedir@
 rtm_prefix=@prefix@
 rtm_exec_prefix=@exec_prefix@
 rtm_cxx=@CXX@
-rtm_cflags=@CXXFLAGS@ -I${prefix}/include -I${prefix}/include/rtm/idl
+rtm_cflags=@CXXFLAGS@ -I${prefix}/include -I@rtm_includedir@ -I@rtm_includedir@/rtm/idl
 rtm_libs=@LDFLAGS@ -L${prefix}/lib @LIBS@ -lRTC -lcoil
 rtm_libdir=@pkglibdir@
 rtm_version=@RTM_VERSION@
@@ -16,6 +16,6 @@ rtm_idlflags=@IDLFLAGS@
 Name: @PACKAGE@
 Description: @RTM_DESCRIPTION@
 Version: @RTM_VERSION@
-Requires:
+Requires: 
 Libs: ${rtm_libs}
 Cflags: ${rtm_cflags}

@@ -12,7 +12,7 @@ AM_LDFLAGS=-L$(top_builddir) -L$(top_builddir)/src/lib/rtm -L$(top_builddir)/src
 # Targets
 #------------------------------------------------------------
 # Targets directories
-moduledir = $(pkgdatadir)/modules/ec
+moduledir = $(rtm_ecdir)
 
 module_LTLIBRARIES = RTPreemptEC.la
 

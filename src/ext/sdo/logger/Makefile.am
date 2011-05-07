@@ -57,8 +57,7 @@ LOGGER_OBJ=$(LOGGER_DIST_SRC:.cpp=.o)
 # Targets
 #------------------------------------------------------------
 # Targets directories
-moduledir = $(pkgdatadir)/modules
-socompdir = $(moduledir)/extmodules
+socompdir = $(rtm_sdodir)
 
 # Loadable Module
 noinst_LTLIBRARIES = libLoggerSkel.la libLoggerStub.la 

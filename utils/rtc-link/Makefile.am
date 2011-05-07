@@ -26,7 +26,7 @@ bin_SCRIPTS = rtc-link
 rtc-link:
 
 # Something to install to libdir
-pymoduledir = $(pkglibdir)/rtc-link
+pymoduledir = $(rtm_libdir)/rtc-link
 pymodule_SCRIPTS = \
 	$(PY_STUBS) \
 	$(RTCLINK_SOURCES)
