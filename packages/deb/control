@@ -2,7 +2,7 @@ Source: openrtm-aist
 Section: main
 Priority: extra
 Maintainer: Noriaki Ando <n-ando@aist.go.jp>
-Build-Depends: debhelper, omniidl4, python
+Build-Depends: debhelper, libomniorb4-dev, omniidl, omniorb-nameserver, python, uuid-dev
 Standards-Version: 3.8.4
 Homepage: http://www.openrtm.org
 
