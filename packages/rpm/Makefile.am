@@ -38,8 +38,6 @@ rpm_build.sh: rpm_build.sh.in
 	echo "" >> $@
 	cat rpm_build.sh.in >> $@
 
-dist-hook: rpmpkg_build.sh
-
 clean-local:
 	rm -f *~
 	rm -f files
