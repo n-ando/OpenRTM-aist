@@ -87,7 +87,7 @@ clean-local:
 #------------------------------------------------------------
 win32_builddir = .
 
-vcproj: ConfigurationProxy_vc8.vcproj ConfigurationProxy_vc9.vcproj
+vcproj: ConfigurationProxy_vc8.vcproj ConfigurationProxy_vc9.vcproj  ConfigurationProxy_vc10.vcproj
 
 ConfigurationProxy_vc8.vcproj:
 	$(top_builddir)/build/vcprojtool.py vcproj \
@@ -112,5 +112,16 @@ ConfigurationProxy_vc9.vcproj:
 		--source $(TEST_SRC)
 #		--header $(TEST_H)
 	qkc -sm $(win32_builddir)/ConfigurationProxy_vc9.vcproj
+
+ConfigurationProxy_vc10.vcproj:
+	$(top_builddir)/build/vcprojtool.py vcproj \
+		--projectname ConfigurationProxyTest \
+		--type EXE \
+		--vcversion "10.00" \
+		--version $(COIL_VERSION) \
+		--out $(win32_builddir)/ConfigurationProxy_vc10.vcproj \
+		--yaml ../coil_test.vcproj.yaml \
+		--source $(TEST_SRC)
+	qkc -sm $(win32_builddir)/ConfigurationProxy_vc10.vcproj
 
 

@@ -59,7 +59,7 @@ clean-local:
 #------------------------------------------------------------
 win32_builddir = .
 
-vcproj: Signal_vc8.vcproj Signal_vc9.vcproj
+vcproj: Signal_vc8.vcproj Signal_vc9.vcproj Signal_vc10.vcproj
 
 Signal_vc8.vcproj:
 	$(top_builddir)/build/vcprojtool.py vcproj \
@@ -84,5 +84,17 @@ Signal_vc9.vcproj:
 		--source $(TEST_SRC)
 #		--header $(TEST_H)
 	qkc -sm $(win32_builddir)/Signal_vc9.vcproj
+
+Signal_vc10.vcproj:
+	$(top_builddir)/build/vcprojtool.py vcproj \
+		--projectname SignalTest \
+		--type EXE \
+		--vcversion "10.00" \
+		--version $(COIL_VERSION) \
+		--out $(win32_builddir)/Signal_vc10.vcproj \
+		--yaml ../coil_test.vcproj.yaml \
+		--source $(TEST_SRC)
+	qkc -sm $(win32_builddir)/Signal_vc10.vcproj
+
 
 

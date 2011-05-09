@@ -88,7 +88,7 @@ clean-local:
 #------------------------------------------------------------
 win32_builddir = .
 
-vcproj: Properties_vc8.vcproj Properties_vc9.vcproj
+vcproj: Properties_vc8.vcproj Properties_vc9.vcproj Properties_vc10.vcproj
 
 Properties_vc8.vcproj:
 	$(top_builddir)/build/vcprojtool.py vcproj \
@@ -113,6 +113,19 @@ Properties_vc9.vcproj:
 		--source $(TEST_SRC)
 #		--header $(TEST_H)
 	qkc -sm $(win32_builddir)/Properties_vc9.vcproj
+
+Properties_vc10.vcproj:
+	$(top_builddir)/build/vcprojtool.py vcproj \
+		--projectname PropertiesTest \
+		--type EXE \
+		--vcversion "10.00" \
+		--version $(COIL_VERSION) \
+		--out $(win32_builddir)/Properties_vc10.vcproj \
+		--yaml ../coil_test.vcproj.yaml \
+		--source $(TEST_SRC)
+	qkc -sm $(win32_builddir)/Properties_vc10.vcproj
+
+
 
 
 
