@@ -18,7 +18,7 @@ dnl  Autoconf initial macros
 dnl ------------------------------------------------------------
 dnl  Process this file with autoconf to produce a configure script.
 AC_PREREQ(2.59)
-AC_INIT(coil, 1.1, n-ando@aist.go.jp, coil)
+AC_INIT(coil, 1.1.0, n-ando@aist.go.jp, coil)
 AC_CONFIG_AUX_DIR([.])
 AM_INIT_AUTOMAKE([dist-bzip2 tar-pax])
 AM_CONFIG_HEADER([include/coil/config_coil.h])
@@ -497,6 +497,15 @@ LDSOLIBS="$more_libs $LDSOLIBS"
 
 UNIQUE($IDL_FLAGS)
 IDL_FLAGS=$u_list
+
+dnl OpenRTM's includedir/libdir/datadir definition
+coil_includedir=$includedir"/coil-"$major_version"."$minor_version
+coil_libdir=$libdir"/coil-"$major_version"."$minor_version
+coil_datadir=$datadir"/coil-"$major_version"."$minor_version
+
+AC_SUBST(coil_libdir)
+AC_SUBST(coil_datadir)
+AC_SUBST(coil_includedir)
 
 echo ''
 echo '------------------------------------------------------------'

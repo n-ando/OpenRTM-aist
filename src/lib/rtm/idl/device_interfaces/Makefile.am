@@ -28,8 +28,7 @@ IDL_SOURCES = ActArray.idl \
 	Ranger.idl
 
 # Install directory of device idl files
-rtmheaderdir = $(prefix)/include/rtm
-idldir       = $(rtmheaderdir)/idl/device_interfaces
+idldir       = $(rtm_includedir)/rtm/idl/device_interfaces
 
 idl_DATA = $(IDL_SOURCES)
 

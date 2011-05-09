@@ -22,7 +22,15 @@ AC_INIT(OpenRTM-aist, 1.1.0, n-ando@aist.go.jp, OpenRTM-aist)
 AC_CONFIG_AUX_DIR([.])
 AM_INIT_AUTOMAKE([dist-bzip2 tar-pax])
 AM_CONFIG_HEADER([src/lib/rtm/config_rtc.h])
+
+dnl ------------------------------------------------------------
+dnl Config files created at configure
+dnl ------------------------------------------------------------
+dnl pkgconfig pc file
 AC_CONFIG_FILES([utils/rtm-config/openrtm-aist.pc:utils/rtm-config/openrtm-aist.pc.in])
+dnl RPM package spec file and build script
+dnl AC_CONFIG_FILES([packages/rpm/OpenRTM-aist.spec:packages/rpm/OpenRTM-aist.spec.in])
+dnl AC_CONFIG_FILES([packages/rpm/rpm_build.sh:packages/rpm/rpm_build.sh.in])
 
 dnl ------------------------------------------------------------
 dnl rename config header's PACKAGE_* definition
@@ -1076,11 +1084,17 @@ if test "x$have_omniorb" = "xyes" ; then
 	dnl ------------------------------------------------------------
 	dnl  omniORB setup complete
 	dnl ------------------------------------------------------------
+	dnl omniidl and commandline options
 	PATH_NORM($omniidl)
-	PATH_NORM($omniNames)
-	IDLC=$n_path
+	omniidl=$n_path
+	IDLC=$omniidl
 	IDL_FLAGS="-bcxx -Wba -nf"
+
+	dnl omniNames
+	PATH_NORM($omniNames)
+	omniNames=$n_path
 	COSNAMES=$omniNames
+
 	dnl  Compiler/Linker options
 	CPPFLAGS="-I$omniORB4_CORBA_h_dir $CPPFLAGS"
 	CXXFLAGS="-I$omniORB4_CORBA_h_dir $CXXFLAGS"
@@ -1531,6 +1545,7 @@ dnl OpenRTM's includedir/libdir/datadir definition
 rtm_includedir=$includedir"/openrtm-"$major_version"."$minor_version
 rtm_libdir=$libdir"/openrtm-"$major_version"."$minor_version
 rtm_datadir=$datadir"/openrtm-"$major_version"."$minor_version
+coil_includedir=$includedir"/coil-"$major_version"."$minor_version
 
 dnl under lib/openrtm-x.y directories
 rtm_rtcdir=$rtm_libdir"/rtc"
@@ -1544,6 +1559,7 @@ rtm_exampledir=$rtm_datadir"/example"
 AC_SUBST(rtm_libdir)
 AC_SUBST(rtm_datadir)
 AC_SUBST(rtm_includedir)
+AC_SUBST(coil_includedir)
 AC_SUBST(rtm_rtcdir)
 AC_SUBST(rtm_ecdir)
 AC_SUBST(rtm_rtmdir)
@@ -1609,6 +1625,9 @@ echo ''
 
 AC_OUTPUT([Makefile
 	build/Makefile
+	packages/Makefile
+	packages/deb/Makefile
+	packages/rpm/Makefile
 	src/Makefile
 	src/lib/Makefile
 	src/lib/rtm/Makefile
