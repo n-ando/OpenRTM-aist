@@ -46,40 +46,40 @@ EXTRA_DIST = \
 
 install-class-reference:
 	if test -d ClassReference; then \
-	  $(mkinstalldirs) $(rtm_docdir)/ClassReference/html; \
+	  $(mkinstalldirs) $(DESTDIR)$(rtm_docdir)/ClassReference/html; \
 	  for x in ClassReference/html/*; do \
 	    if test -f $$x; then \
-	      $(INSTALL_DATA) $$x $(rtm_docdir)/ClassReference/html/;\
+	      $(INSTALL_DATA) $$x $(DESTDIR)$(rtm_docdir)/ClassReference/html/;\
 	    fi \
 	  done \
 	fi
 
 install-class-reference-en:
 	if test -d ClassReference-en; then \
-	  $(mkinstalldirs) $(rtm_docdir)/ClassReference-en/html; \
+	  $(mkinstalldirs) $(DESTDIR)$(rtm_docdir)/ClassReference-en/html; \
 	  for x in ClassReference-en/html/*; do \
 	    if test -f $$x; then \
-	      $(INSTALL_DATA) $$x $(rtm_docdir)/ClassReference-en/html/;\
+	      $(INSTALL_DATA) $$x $(DESTDIR)$(rtm_docdir)/ClassReference-en/html/;\
 	    fi \
 	  done \
 	fi
 
 install-idl-reference:
 	if test -d IDLReference; then \
-	  $(mkinstalldirs) $(rtm_docdir)/IDLReference/html; \
+	  $(mkinstalldirs) $(DESTDIR)$(rtm_docdir)/IDLReference/html; \
 	  for x in IDLReference/html/*; do \
 	    if test -f $$x; then \
-	      $(INSTALL_DATA) $$x $(rtm_docdir)/IDLReference/html/;\
+	      $(INSTALL_DATA) $$x $(DESTDIR)$(rtm_docdir)/IDLReference/html/;\
 	    fi \
 	  done \
 	fi
 
 install-idl-reference-en:
 	if test -d IDLReference-en; then \
-	  $(mkinstalldirs) $(rtm_docdir)/IDLReference-en/html; \
+	  $(mkinstalldirs) $(DESTDIR)$(rtm_docdir)/IDLReference-en/html; \
 	  for x in IDLReference-en/html/*; do \
 	    if test -f $$x; then \
-	      $(INSTALL_DATA) $$x $(rtm_docdir)/IDLReference-en/html/;\
+	      $(INSTALL_DATA) $$x $(DESTDIR)$(rtm_docdir)/IDLReference-en/html/;\
 	    fi \
 	  done \
 	fi

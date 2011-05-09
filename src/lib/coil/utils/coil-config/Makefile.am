@@ -18,9 +18,9 @@ coil-config: coil-config.in
 	echo 'coil_prefix="'${prefix}'"' >> $@
 	echo 'coil_exec_prefix="'${exec_prefix}'"' >> $@
 	echo 'coil_cxx="'${CXX}'"' >> $@
-	echo 'coil_cflags="'${CXXFLAGS}' -I'${prefix}'/include"' >> $@
+	echo 'coil_cflags="'${CXXFLAGS}' -I'${coil_includedir}'"' >> $@
 	echo 'coil_libs="'${LDFLAGS}' -L'${prefix}'/lib '${LIBS}' -lRTC"' >> $@
-	echo 'coil_libdir="'${pkglibdir}'"' >> $@
+	echo 'coil_libdir="'${coil_libdir}'"' >> $@
 	echo 'coil_version="'${COIL_VERSION}'"' >> $@
 	cat coil-config.in >> $@
 	chmod 755 $@

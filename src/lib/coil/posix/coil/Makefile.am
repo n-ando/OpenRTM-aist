@@ -71,7 +71,7 @@ $(COIL_COMMON_H):
 	cp -p $(top_srcdir)/common/*.h .
 
 
-coilheaderdir = $(prefix)/include/coil
+coilheaderdir = $(coil_includedir)/coil
 
 coilheader_HEADERS = $(COIL_H) $(top_srcdir)/include/coil/config_coil.h
 
