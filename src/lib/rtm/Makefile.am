@@ -101,7 +101,6 @@ PORT_SRC =                           \
 
 
 RTC_SRC = \
-	version.h \
 	$(UTIL_SRC) $(MGR_SRC) $(COMP_SRC) $(PORT_SRC)
 
 
@@ -165,7 +164,7 @@ lst:
 #------------------------------------------------------------
 win32_builddir = $(top_builddir)/win32/OpenRTM-aist/
 
-vcproj: vc8proj vc9proj
+vcproj: vc8proj vc9proj vc10proj
 
 vc8proj: libRTC.vcproj.yaml
 	$(top_builddir)/build/vcprojtool.py vcproj \
@@ -188,6 +187,17 @@ vc9proj: libRTC.vcproj.yaml
 		--source $(RTC_SRC) \
 		--header $(rtmheader_HEADERS)
 	qkc -sm $(win32_builddir)/rtm/libRTC_vc9.vcproj
+
+vc10proj: libRTC.vcproj.yaml
+	$(top_builddir)/build/vcxprojtool.py vcxproj \
+		--type DLL \
+		--vcversion "10.00" \
+		--version $(RTM_VERSION) \
+		--out $(win32_builddir)/rtm/libRTC_vc10.vcxproj \
+		--yaml libRTC.vcproj.yaml \
+		--source $(RTC_SRC) \
+		--header $(rtmheader_HEADERS)
+	qkc -sm $(win32_builddir)/rtm/libRTC_vc10.vcxproj
 
 #------------------------------------------------------------
 # for wxs file

@@ -150,7 +150,7 @@ lst:
 #------------------------------------------------------------
 win32_builddir=$(top_builddir)/win32/OpenRTM-aist/examples/SimpleService
 
-vcproj: vc8proj vc9proj
+vcproj: vc8proj vc9proj vc10proj
 
 vc8proj: 
 	$(top_builddir)/build/vcprojtool.py vcproj                   \
@@ -235,6 +235,48 @@ vc9proj:
 		--source $(CONSUMER_COMP_SRC)                           \
 		--header $(CONSUMER_H)
 	qkc -sm $(win32_builddir)/MyServiceConsumerDll_vc9.vcproj
+
+vc10proj: 
+	$(top_builddir)/build/vcxprojtool.py vcxproj                   \
+		--type EXE                                           \
+		--vcversion "10.00"                                   \
+		--projectname "MyServiceProviderComp"                \
+		--version $(RTM_VERSION)                             \
+		--out $(win32_builddir)/MyServiceProvider_vc10.vcxproj \
+		--yaml ../rtc.vcproj.yaml                            \
+		--source $(PROVIDER_COMP_SRC)                        \
+		--header $(PROVIDER_H)
+	qkc -sm $(win32_builddir)/MyServiceProvider_vc10.vcxproj
+	$(top_builddir)/build/vcxprojtool.py vcxproj                      \
+		--type DLL                                              \
+		--vcversion "10.00"                                      \
+		--projectname "MyServiceProvider"                       \
+		--version $(RTM_VERSION)                                \
+		--out $(win32_builddir)/MyServiceProviderDll_vc10.vcxproj \
+		--yaml ../rtcdll.vcproj.yaml                            \
+		--source $(PROVIDER_SRC)                                \
+		--header $(PROVIDER_H)
+	qkc -sm $(win32_builddir)/MyServiceProviderDll_vc10.vcxproj
+	$(top_builddir)/build/vcxprojtool.py vcxproj                   \
+		--type EXE                                           \
+		--vcversion "10.00"                                   \
+		--projectname "MyServiceConsumerComp"                \
+		--version $(RTM_VERSION)                             \
+		--out $(win32_builddir)/MyServiceConsumer_vc10.vcxproj \
+		--yaml ../rtc.vcproj.yaml                            \
+		--source $(CONSUMER_COMP_SRC)                        \
+		--header $(CONSUMER_H)
+	qkc -sm $(win32_builddir)/MyServiceConsumer_vc10.vcxproj
+	$(top_builddir)/build/vcxprojtool.py vcxproj                      \
+		--type DLL                                              \
+		--vcversion "10.00"                                      \
+		--projectname "MyServiceConsumer"                       \
+		--version $(RTM_VERSION)                                \
+		--out $(win32_builddir)/MyServiceConsumerDll_vc10.vcxproj \
+		--yaml ../rtcdll.vcproj.yaml                            \
+		--source $(CONSUMER_COMP_SRC)                           \
+		--header $(CONSUMER_H)
+	qkc -sm $(win32_builddir)/MyServiceConsumerDll_vc10.vcxproj
 
 dist-hook: lst vcproj
 

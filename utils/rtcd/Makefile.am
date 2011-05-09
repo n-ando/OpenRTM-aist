@@ -29,7 +29,7 @@ lst:
 #------------------------------------------------------------
 win32_builddir = $(top_builddir)/win32/OpenRTM-aist/
 
-vcproj: vc8proj vc9proj
+vcproj: vc8proj vc9proj vc10proj
 
 vc8proj: rtcd.yaml
 	$(top_builddir)/build/vcprojtool.py vcproj                 \
@@ -52,6 +52,16 @@ vc9proj: rtcd.yaml
 		--yaml rtcd.yaml                                   \
 		--source $(rtcd_SOURCES)
 #	qkc -sm $(win32_builddir)/rtm/rtcd_vc9.vcproj
+
+vc10proj: rtcd.yaml
+	$(top_builddir)/build/vcxprojtool.py vcxproj                 \
+		--type RTCEXE                                      \
+		--vcversion "10.00"                                 \
+		--projectname "rtcd"                               \
+		--version $(RTM_VERSION)                           \
+		--out $(win32_builddir)/utils/rtcd/rtcd_vc10.vcxproj \
+		--yaml rtcd.yaml                                   \
+		--source $(rtcd_SOURCES)
 #------------------------------------------------------------
 # for wxs file
 #------------------------------------------------------------

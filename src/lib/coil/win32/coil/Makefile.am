@@ -74,6 +74,7 @@ clean-local:
 	rm -f *~
 	rm -f $(COIL_COMMON_SRC) $(COIL_COMMON_H)
 	rm -f *.vcproj
+	rm -f *.vcxproj
 	rm -f *.user
 	rm -f *.def
 	rm -f *.lst
@@ -83,6 +84,7 @@ EXTRA_DIST =                \
 	$(COIL_ALL)         \
 	libcoil_vc8.vcproj  \
 	libcoil_vc9.vcproj  \
+	libcoil_vc10.vcxproj  \
 	libcoil.vcproj.yaml
 
 #------------------------------------------------------------
@@ -97,7 +99,7 @@ lst:
 #------------------------------------------------------------
 win32_builddir = .
 
-vcproj: libcoil_vc8.vcproj libcoil_vc9.vcproj
+vcproj: libcoil_vc8.vcproj libcoil_vc9.vcproj libcoil_vc10.vcxproj
 
 libcoil_vc8.vcproj: libcoil.vcproj.yaml $(COIL_ALL)
 	$(top_builddir)/build/vcprojtool.py vcproj \
@@ -120,6 +122,17 @@ libcoil_vc9.vcproj: libcoil.vcproj.yaml $(COIL_ALL)
 		--source $(COIL_SRC) \
 		--header $(COIL_H)
 	qkc -sm $(win32_builddir)/libcoil_vc9.vcproj
+
+libcoil_vc10.vcxproj: libcoil.vcproj.yaml $(COIL_ALL)
+	$(top_builddir)/build/vcxprojtool.py vcxproj \
+		--type DLL \
+		--vcversion "10.00" \
+		--version $(COIL_VERSION) \
+		--out $(win32_builddir)/libcoil_vc10.vcxproj \
+		--yaml libcoil.vcproj.yaml \
+		--source $(COIL_SRC) \
+		--header $(COIL_H)
+	qkc -sm $(win32_builddir)/libcoil_vc10.vcxproj
 
 #------------------------------------------------------------
 # for wxs file

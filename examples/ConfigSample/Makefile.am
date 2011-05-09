@@ -70,7 +70,7 @@ lst:
 #------------------------------------------------------------
 win32_builddir=$(top_builddir)/win32/OpenRTM-aist/examples/ConfigSample/
 
-vcproj: vc8proj vc9proj
+vcproj: vc8proj vc9proj  vc10proj
 
 vc8proj:
 	$(top_builddir)/build/vcprojtool.py vcproj              \
@@ -116,6 +116,27 @@ vc9proj:
 		--header ConfigSample.h VectorConvert.h
 	qkc -sm $(win32_builddir)/ConfigSampleDll_vc9.vcproj
 
+vc10proj:
+	$(top_builddir)/build/vcxprojtool.py vcxproj              \
+		--type EXE                                      \
+		--vcversion "10.00"                              \
+		--projectname "ConfigSampleComp"                \
+		--version $(RTM_VERSION)                        \
+		--out $(win32_builddir)/ConfigSample_vc10.vcxproj \
+		--yaml ../rtc.vcproj.yaml                       \
+		--source ConfigSample.cpp ConfigSampleComp.cpp  \
+		--header ConfigSample.h VectorConvert.h
+	qkc -sm $(win32_builddir)/ConfigSample_vc10.vcxproj
+	$(top_builddir)/build/vcxprojtool.py vcxproj                 \
+		--type DLL                                         \
+		--vcversion "10.00"                                 \
+		--projectname "ConfigSample"                       \
+		--version $(RTM_VERSION)                           \
+		--out $(win32_builddir)/ConfigSampleDll_vc10.vcxproj \
+		--yaml ../rtcdll.vcproj.yaml                       \
+		--source ConfigSample.cpp                          \
+		--header ConfigSample.h VectorConvert.h
+	qkc -sm $(win32_builddir)/ConfigSampleDll_vc10.vcxproj
 
 dist-hook: lst vcproj
 

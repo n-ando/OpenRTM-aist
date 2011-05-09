@@ -41,13 +41,16 @@ EXTRA_DIST =                    \
 	coiltest_config.vsprops \
 	coiltest_vc8.sln        \
 	coiltest_vc9.sln
+#	coiltest_vc10.sln
 
 #------------------------------------------------------------
 # sln file build rules
 #------------------------------------------------------------
 win32_builddir = .
 
+#sln: coiltest_vc8.sln coiltest_vc9.sln coiltest_vc10.sln
 sln: coiltest_vc8.sln coiltest_vc9.sln
+
 vcproj:
 	(for testdir in $(SUBDIRS) ; do cd $$testdir ; make vcproj ; cd .. ; done)
 
@@ -67,4 +70,13 @@ coiltest_vc9.sln: coil_test.sln.dep vcproj
 		--out coiltest_vc9.sln \
 		`find ./ -name '*_vc9.vcproj'`
 	qkc -ms coiltest_vc9.sln
+
+#coiltest_vc10.sln: coil_test.sln.dep vcproj
+#	$(top_srcdir)/build/slntool.py     \
+		--vcversion VC10            \
+		--dep coil_test.sln.dep \
+		--out coiltest_vc10.sln \
+		`find ./ -name '*_vc10.vcproj'`
+#	qkc -ms coiltest_vc10.sln
+
 

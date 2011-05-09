@@ -59,7 +59,7 @@ clean-local:
 #------------------------------------------------------------
 win32_builddir = .
 
-vcproj: UUID_vc8.vcproj UUID_vc9.vcproj
+vcproj: UUID_vc8.vcproj UUID_vc9.vcproj UUID_vc10.vcproj
 
 UUID_vc8.vcproj:
 	$(top_builddir)/build/vcprojtool.py vcproj \
@@ -85,4 +85,14 @@ UUID_vc9.vcproj:
 #		--header $(TEST_H)
 	qkc -sm $(win32_builddir)/UUID_vc9.vcproj
 
+UUID_vc10.vcproj:
+	$(top_builddir)/build/vcprojtool.py vcproj \
+		--projectname UUIDTest \
+		--type EXE \
+		--vcversion "10.00" \
+		--version $(COIL_VERSION) \
+		--out $(win32_builddir)/UUID_vc10.vcproj \
+		--yaml ../coil_test.vcproj.yaml \
+		--source $(TEST_SRC)
+	qkc -sm $(win32_builddir)/UUID_vc10.vcproj
 

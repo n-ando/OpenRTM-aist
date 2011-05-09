@@ -19,6 +19,10 @@
 #include <rtm/SystemLogger.h>
 #include <rtm/Manager.h>
 
+#if defined(_MSC_VER)
+#define snprintf _snprintf
+#endif
+
 namespace RTC
 {
   const char* Logger::m_levelString[] =

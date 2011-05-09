@@ -21,4 +21,5 @@ EXTRA_DIST =                       \
 	etc.yaml                   \
 	rtm_config_omni407.vsprops \
 	rtm_config_omni412.vsprops \
-	rtm_config_omni414.vsprops
+	rtm_config_omni414.vsprops \
+	rtm_config_omni414.props
