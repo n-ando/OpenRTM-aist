@@ -115,11 +115,10 @@ install-arch:
 
 	# for openrtm-aist-example package
 	#$(MAKE)
-	(cd $(CURDIR)/src/lib/coil     ; $(MAKE) DESTDIR=$(CURDIR)/debian/openrtm-aist-example install-exec)
-	(cd $(CURDIR)/src/lib/rtm      ; $(MAKE) DESTDIR=$(CURDIR)/debian/openrtm-aist-example install-exec)
+	(mkdir $(CURDIR)/debian/openrtm-aist-example/usr/)
+	(ln -s $(CURDIR)/debian/openrtm-aist/usr/lib $(CURDIR)/debian/openrtm-aist-example/usr/)
 	(cd $(CURDIR)/examples         ; $(MAKE) DESTDIR=$(CURDIR)/debian/openrtm-aist-example install)
-	(cd $(CURDIR)/src/lib/rtm      ; $(MAKE) DESTDIR=$(CURDIR)/debian/openrtm-aist-example uninstall)
-	(cd $(CURDIR)/src/lib/coil     ; $(MAKE) DESTDIR=$(CURDIR)/debian/openrtm-aist-example uninstall)
+	(rm $(CURDIR)/debian/openrtm-aist-example/usr/lib)
 
 	dh_install -s
 # Must not depend on anything. This is to be called by
