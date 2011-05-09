@@ -81,6 +81,10 @@ lib_LTLIBRARIES = libcoil.la
 libcoil_la_SOURCES =          \
 	$(COIL_ALL)
 
+libcoil_la_LDFLAGS =                \
+	-no-undefined               \
+	-release $(PACKAGE_VERSION)
+
 clean-local:
 	rm -f *~
 	rm -f *.o *.lo *.loT
