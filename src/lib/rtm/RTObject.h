@@ -2789,6 +2789,335 @@ namespace RTC
     
     /*!
      * @if jp
+     * 
+     * @brief [local interface] 実行コンテキストを取得する
+     *
+     * get_context() と同じ機能のローカル版。違いはない。
+     * この関数は以下の関数内で呼ばれることを前提としている。
+     *
+     * - onStartup()
+     * - onShutdown()
+     * - onActivated()
+     * - onDeactivated()
+     * - onExecute()
+     * - onAborting()
+     * - onError()
+     * - onReset()
+     * - onStateUpdate()
+     * - onRateChanged()
+     *
+     * この関数の引数はこれらの関数の引数 UniquieID exec_handle でなけ
+     * ればならない。
+     *
+     * @param ec_id 上記関数の第1引数 exec_handle を渡す必要がある。
+     *
+     * @else
+     * 
+     * @brief [local interface] Getting current execution context
+     *
+     * This function is the local version of get_context(). completely
+     * same as get_context() function. This function is assumed to be
+     * called from the following functions.
+     *
+     * - onStartup()
+     * - onShutdown()
+     * - onActivated()
+     * - onDeactivated()
+     * - onExecute()
+     * - onAborting()
+     * - onError()
+     * - onReset()
+     * - onStateUpdate()
+     * - onRateChanged()
+     *
+     * The argument of this function should be the first argument
+     * (UniqueId ec_id) of the above functions.
+     *
+     * @param ec_id The above functions' first argument "exec_handle."
+     *
+     * @endif
+     */
+    ExecutionContext_ptr getExecutionContext(RTC::UniqueId ec_id);
+
+    /*!
+     * @if jp
+     * 
+     * @brief [local interface] 実行コンテキストの実行レートを取得する
+     *
+     * 現在実行中の実行コンテキストの実行レートを取得する。実行コンテキ
+     * ストのKindがPERIODIC以外の場合の動作は未定義である。この関数は以
+     * 下の関数内で呼ばれることを前提としている。
+     *
+     * - onStartup()
+     * - onShutdown()
+     * - onActivated()
+     * - onDeactivated()
+     * - onExecute()
+     * - onAborting()
+     * - onError()
+     * - onReset()
+     * - onStateUpdate()
+     * - onRateChanged()
+     *
+     * この関数の引数はこれらの関数の引数 UniquieID exec_handle でなけ
+     * ればならない。
+     *
+     * @param ec_id 上記関数の第1引数 exec_handle を渡す必要がある。
+     *
+     * @else
+     * 
+     * @brief [local interface] Getting current context' execution rate
+     *
+     * This function returns current execution rate in this
+     * context. If this context's kind is not PERIODC, behavior is not
+     * defined. This function is assumed to be called from the
+     * following functions.
+     *
+     * - onStartup()
+     * - onShutdown()
+     * - onActivated()
+     * - onDeactivated()
+     * - onExecute()
+     * - onAborting()
+     * - onError()
+     * - onReset()
+     * - onStateUpdate()
+     * - onRateChanged()
+     *
+     * The argument of this function should be the first argument
+     * (UniqueId ec_id) of the above functions.
+     *
+     * @param ec_id The above functions' first argument "exec_handle."
+     *
+     * @endif
+     */
+    double getExecutionRate(RTC::UniqueId ec_id);
+
+    /*!
+     * @if jp
+     * 
+     * @brief [local interface] 実行コンテキストの実行レートを設定する
+     *
+     * 現在実行中の実行コンテキストの実行レートを設定する。実行コンテキ
+     * ストのKindがPERIODIC以外の場合の動作は未定義である。この関数は以
+     * 下の関数内で呼ばれることを前提としている。
+     *
+     * - onStartup()
+     * - onShutdown()
+     * - onActivated()
+     * - onDeactivated()
+     * - onExecute()
+     * - onAborting()
+     * - onError()
+     * - onReset()
+     * - onStateUpdate()
+     * - onRateChanged()
+     *
+     * この関数の引数はこれらの関数の引数 UniquieID exec_handle でなけ
+     * ればならない。
+     *
+     * @param ec_id 上記関数の第1引数 exec_handle を渡す必要がある。
+     * @param rate 実行レートを [Hz] で与える
+     *
+     * @else
+     * 
+     * @brief [local interface] Setting current context' execution rate
+     *
+     * This function sets a execution rate in the context. If this
+     * context's kind is not PERIODC, behavior is not defined. This
+     * function is assumed to be called from the following functions.
+     *
+     * - onStartup()
+     * - onShutdown()
+     * - onActivated()
+     * - onDeactivated()
+     * - onExecute()
+     * - onAborting()
+     * - onError()
+     * - onReset()
+     * - onStateUpdate()
+     * - onRateChanged()
+     *
+     * The argument of this function should be the first argument
+     * (UniqueId ec_id) of the above functions.
+     *
+     * @param ec_id The above functions' first argument "exec_handle."
+     * @param rate Execution rate in [Hz].
+     *
+     * @endif
+     */
+    ReturnCode_t setExecutionRate(RTC::UniqueId ec_id, double rate);
+
+    /*!
+     * @if jp
+     * 
+     * @brief [local interface] 実行コンテキストの所有権を調べる
+     *
+     * 現在実行中の実行コンテキストの所有権を調べる。この関数は以下の関
+     * 数内で呼ばれることを前提としている。
+     *
+     * - onStartup()
+     * - onShutdown()
+     * - onActivated()
+     * - onDeactivated()
+     * - onExecute()
+     * - onAborting()
+     * - onError()
+     * - onReset()
+     * - onStateUpdate()
+     * - onRateChanged()
+     *
+     * この関数の引数はこれらの関数の引数 UniquieID exec_handle でなけ
+     * ればならない。
+     *
+     * @param ec_id 上記関数の第1引数 exec_handle を渡す必要がある。
+     * @return true: 自身の実行コンテキスト、false: 他の実行コンテキスト
+     *
+     * @else
+     * 
+     * @brief [local interface] Checking if the current context is own context
+     *
+     * This function checks if the current context is own execution
+     * context. This function is assumed to be called from the
+     * following functions.
+     *
+     * - onStartup()
+     * - onShutdown()
+     * - onActivated()
+     * - onDeactivated()
+     * - onExecute()
+     * - onAborting()
+     * - onError()
+     * - onReset()
+     * - onStateUpdate()
+     * - onRateChanged()
+     *
+     * The argument of this function should be the first argument
+     * (UniqueId ec_id) of the above functions.
+     *
+     * @param ec_id The above functions' first argument "exec_handle."
+     * @return true: Own context, false: other's context
+     *
+     * @endif
+     */
+    bool isOwnExecutionContext(RTC::UniqueId ec_id);
+
+    /*!
+     * @if jp
+     * 
+     * @brief [local interface] 状態を Inactive に遷移させる
+     *
+     * 状態を Active から Inactive に遷移させる。この関数は以下の関
+     * 数内で呼ばれることを前提としている。
+     *
+     * - onActivated()
+     * - onExecute()
+     * - onStateUpdate()
+     *
+     * この関数の引数は上記の関数の引数 UniquieID exec_handle でなけ
+     * ればならない。
+     *
+     * @param ec_id 上記関数の第1引数 exec_handle を渡す必要がある。
+     * @return リターンコード
+     *
+     * @else
+     * 
+     * @brief [local interface] Make transition to Inactive state
+     *
+     * This function makes transition from Active to Inactive
+     * state. This function is assumed to be called from the following
+     * functions.
+     *
+     * - onActivated()
+     * - onExecute()
+     * - onStateUpdate()
+     *
+     * The argument of this function should be the first argument
+     * (UniqueId ec_id) of the above function.
+     *
+     * @param ec_id The above functions' first argument "exec_handle."
+     * @return Return code
+     *
+     * @endif
+     */
+    ReturnCode_t deactivate(RTC::UniqueId ec_id);
+
+    /*!
+     * @if jp
+     * 
+     * @brief [local interface] 状態を Active に遷移させる
+     *
+     * 状態を Inactive から Active に遷移させる。この関数は以下の関
+     * 数内で呼ばれることを前提としている。
+     *
+     * - onStartup()
+     * - onDeactivated()
+     *
+     * この関数の引数は上記の関数の引数 UniquieID exec_handle でなけ
+     * ればならない。
+     *
+     * @param ec_id 上記関数の第1引数 exec_handle を渡す必要がある。
+     * @return リターンコード
+     *
+     * @else
+     * 
+     * @brief [local interface] Make transition to Active state
+     *
+     * This function makes transition from Inactive to Active
+     * state. This function is assumed to be called from the following
+     * functions.
+     *
+     * - onStartup()
+     * - onDeactivated()
+     *
+     * The argument of this function should be the first argument
+     * (UniqueId ec_id) of the above function.
+     *
+     * @param ec_id The above functions' first argument "exec_handle."
+     * @return Return code
+     *
+     * @endif
+     */
+    ReturnCode_t activate(RTC::UniqueId ec_id);
+
+    /*!
+     * @if jp
+     * 
+     * @brief [local interface] 状態をリセットし Inactive に遷移させる
+     *
+     * 状態を Error から Inactive に遷移させる。この関数は以下の関
+     * 数内で呼ばれることを前提としている。
+     *
+     * - onError()
+     *
+     * この関数の引数は上記の関数の引数 UniquieID exec_handle でなけ
+     * ればならない。
+     *
+     * @param ec_id 上記関数の第1引数 exec_handle を渡す必要がある。
+     * @return リターンコード
+     *
+     * @else
+     * 
+     * @brief [local interface] Resetting and go to Inactive state
+     *
+     * This function reset RTC and makes transition from Error to Inactive
+     * state. This function is assumed to be called from the following
+     * functions.
+     *
+     * - onError()
+     *
+     * The argument of this function should be the first argument
+     * (UniqueId ec_id) of the above function.
+     *
+     * @param ec_id The above functions' first argument "exec_handle."
+     * @return Return code
+     *
+     * @endif
+     */
+    ReturnCode_t reset(RTC::UniqueId ec_id);
+
+    /*!
+     * @if jp
      *
      * @brief [local interface] SDOサービスを追加する
      * 

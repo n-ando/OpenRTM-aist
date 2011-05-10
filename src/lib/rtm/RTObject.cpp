@@ -1793,6 +1793,121 @@ namespace RTC
     return;
   }
 
+  /*!
+   * @if jp
+   * @brief [local interface] 実行コンテキストを取得する
+   * @else
+   * @brief [local interface] Getting current execution context
+   * @endif
+   */
+  ExecutionContext_ptr
+  RTObject_impl::getExecutionContext(RTC::UniqueId ec_id)
+  {
+    return get_context(ec_id);
+  }
+
+  /*!
+   * @if jp
+   * @brief [local interface] 実行コンテキストの実行レートを取得する
+   * @else
+   * @brief [local interface] Getting current context' execution rate
+   * @endif
+   */
+  double RTObject_impl::getExecutionRate(RTC::UniqueId ec_id)
+  {
+    ExecutionContext_var ec(getExecutionContext(ec_id));
+    if (CORBA::is_nil(ec))
+      {
+        return 0.0;
+      }
+    return ec->get_rate();
+  }
+
+  /*!
+   * @if jp
+   * @brief [local interface] 実行コンテキストの実行レートを設定する
+   * @else
+   * @brief [local interface] Setting current context' execution rate
+   * @endif
+   */
+  ReturnCode_t
+  RTObject_impl::setExecutionRate(RTC::UniqueId ec_id, double rate)
+  {
+    ExecutionContext_var ec(getExecutionContext(ec_id));
+    if (CORBA::is_nil(ec))
+      {
+        return RTC::RTC_ERROR;
+      }
+    ec->set_rate(rate);
+    return RTC::RTC_OK;
+  }
+
+  /*!
+   * @if jp
+   * @brief [local interface] 実行コンテキストの所有権を調べる
+   * @else
+   * @brief [local interface] Checking if the current context is own context
+   * @endif
+   */
+ bool RTObject_impl::isOwnExecutionContext(RTC::UniqueId ec_id)
+  {
+    if (ec_id < ECOTHER_OFFSET)
+      {
+        return true;
+      }
+    return false;
+  }
+
+  /*!
+   * @if jp
+   * @brief [local interface] 状態を Inactive に遷移させる
+   * @else
+   * @brief [local interface] Make transition to Inactive state
+   * @endif
+   */
+  ReturnCode_t RTObject_impl::deactivate(RTC::UniqueId ec_id)
+  {
+    ExecutionContext_var ec(getExecutionContext(ec_id));
+    if (CORBA::is_nil(ec))
+      {
+        return RTC::RTC_ERROR;
+      }
+    return ec->deactivate_component(::RTC::RTObject::_duplicate(getObjRef()));
+  }
+
+  /*!
+   * @if jp
+   * @brief [local interface] 状態を Active に遷移させる
+   * @else
+   * @brief [local interface] Make transition to Active state
+   * @endif
+   */
+  ReturnCode_t RTObject_impl::activate(RTC::UniqueId ec_id)
+  {
+    ExecutionContext_var ec(getExecutionContext(ec_id));
+    if (CORBA::is_nil(ec))
+      {
+        return RTC::RTC_ERROR;
+      }
+    return ec->activate_component(::RTC::RTObject::_duplicate(getObjRef()));
+  }
+
+  /*!
+   * @if jp
+   * @brief [local interface] 状態をリセットし Inactive に遷移させる
+   * @else
+   * @brief [local interface] Resetting and go to Inactive state
+   * @endif
+   */
+  ReturnCode_t RTObject_impl::reset(RTC::UniqueId ec_id)
+  {
+    ExecutionContext_var ec(getExecutionContext(ec_id));
+    if (CORBA::is_nil(ec))
+      {
+        return RTC::RTC_ERROR;
+      }
+    return ec->reset_component(::RTC::RTObject::_duplicate(getObjRef()));
+  }
    
   /*!
    * @if jp
