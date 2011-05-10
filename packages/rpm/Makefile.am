@@ -41,6 +41,9 @@ rpm_build.sh: rpm_build.sh.in
 clean-local:
 	rm -f *~
 	rm -f files
+	rm -f OpenRTM-aist.spec rpm_build.sh
+	rm -rf BUILD RPMS SOURCES SPECS SRPMS
+	rm -f OpenRTM-aist-* 
 
 EXTRA_DIST = \
 	OpenRTM-aist.spec.in      \
