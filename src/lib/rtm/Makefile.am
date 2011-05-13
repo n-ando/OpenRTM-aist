@@ -106,6 +106,7 @@ RTC_SRC = \
 
 libRTC_la_SOURCES = \
 	version.h \
+	version.txt \
 	$(UTIL_SRC) $(MGR_SRC) $(COMP_SRC) $(PORT_SRC)
 
 
