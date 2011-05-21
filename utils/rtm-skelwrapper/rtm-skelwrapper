@@ -46,7 +46,7 @@ config_inc = """
 
 def usage():
 	print """
-Usage: rtc-skelwrapper [OPTIONS]
+Usage: rtm-skelwrapper [OPTIONS]
 
 Options:
 
@@ -54,13 +54,61 @@ Options:
     [--idl-file[=IDL_file]]               IDL file name
     [--skel-suffix[=suffix]]              Suffix of server skelton files
     [--stub-suffix[=suffix]]              Suffix of client stub files
-    [--include-dir[=dir] ot -I]           include prefix in #include
+    [--include-dir[=dir] or -I]           include prefix in #include
+    [--output-dir[=dir] or -o]            output directory
+
+Example:
+$ rtm-skelwrapper --idl=file=<IDL path>/<IDL basename>.idl
+                  --include-dir=<include dir>
+                  --output-dir=<output dir>
+                  -skel-suffix=<skel suffix> 
+                  -stub-suffix=<stub suffix> 
+
+In this case, the following files are generated under <output dir>.
+
+  <IDL basename><skel suffix>.h
+  <IDL basename><skel suffix>.cpp
+  <IDL basename><stub suffix>.h
+  <IDL basename><stub suffix>.cpp
+
+And these files include the target IDL file by the following
+#include directive.
+
+#include <<include dir>/<IDL basename>(CORBA impl specific suffix)>
+
+Absolute path is not recommended for the "--include-dir" option.
+When option "--include-dir=my/idl" is specified, the generated
+skeleton's header includes actual CORBA implementation dependent
+skeletons as follows.
+
+#if   defined ORB_IS_TAO
+#  include "my/idl/RangerC.h"
+#  include "my/idl/RangerS.h"
+#elif defined ORB_IS_OMNIORB
+#  include "my/idl/Ranger.hh"
+#endif
+         
+Therefore, if you compile this skeletons/stubs, you have to specify an
+appropriate include directory in the compiler options.
+
+<IDL path> is used for only include-guard. For example, if
+"--idl-file=/usr/include/idl/MyInterface.idl" is specified, the
+following include guard will be defined.
+
+#ifndef _USR_INCLUDE_IDL_MYINTERFACE_H
+#define _USR_INCLUDE_IDL_MYINTERFACE_H
+
+  : (codes)
+
+#endif // _USR_INCLUDE_IDL_MYINTERFACE_H
+
 """
 
 
 def main():
 	try:
-		opts, args = getopt.getopt(sys.argv[1:], "f:I:h", opt_args_fmt)
+		opts, args = getopt.getopt(sys.argv[1:], "f:I:o:h",
+					   opt_args_fmt)
 	except getopt.GetoptError:
 		print "Error: Invalid options.", getopt.GetoptError
 		usage()
@@ -70,7 +118,8 @@ def main():
 		usage()
 		sys.exit(-1)
 
-	include_dir = "rtm/idl/"
+	include_dir = ""
+	output_dir  = ""
 	skel_suffix = "Skel"
 	stub_suffix = "Stub"
 	idl_file    = None
@@ -84,6 +133,9 @@ def main():
 
 		if opt in ("-I", "--include-dir"):
 			include_dir = arg
+
+		if opt in ("-o", "--output-dir"):
+			output_dir = arg
 
 		if opt in ("--skel-suffix"):
 			skel_suffix = arg
@@ -100,7 +152,7 @@ def main():
 	import skel_wrapper
 
 	s = skel_wrapper.skel_wrapper(idl_file, skel_suffix, stub_suffix,
-				      include_dir, config_inc)
+				      include_dir, config_inc, output_dir)
 	s.generate()
 
 
