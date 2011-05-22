@@ -19,9 +19,9 @@ BY YOU.
 
 LICENSE
 -------
-The OpenRTM-aist (H22PRO-1089) is the dual-licensed open source
-software. You can use, copy, distribute and/or modify this library
-under the terms and conditions of either of the licenses below.
+The coil is the dual-licensed open source software. You can use, copy,
+distribute and/or modify this library under the terms and conditions
+of either of the licenses below.
 
 1) LGPL (GNU LESSER GENERAL PUBLIC LICENSE)
 See COPYING.LIB.
@@ -37,7 +37,7 @@ AIST.
 
 SUBMISSIONS
 -----------
-The OpenRTM-aist is maintained by the National Institute of Advanced
+The coil is maintained by the National Institute of Advanced
 Industrial Science and Technology (AIST), Tsukuba, Japan for the
 development of open-source software as part of the open-source
 software community.  By submitting comments, suggestions, code, code
@@ -47,7 +47,7 @@ the right to do so, that any such Submissions are given freely and
 unreservedly, and that they waive any claims to copyright or
 ownership. In addition, submitters acknowledge that any such
 Submission might become part of the copyright maintained on the
-overall body of code that comprises the OpenRTM-aist. By making a
+overall body of code that comprises the coil. By making a
 Submission, submitter agree to these terms. Moreover, submitters
 acknowledge that the incorporation or modification of such Submissions
 is entirely at the discretion of the moderators of the open-source
