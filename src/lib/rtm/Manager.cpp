@@ -597,6 +597,16 @@ std::vector<coil::Properties> Manager::getLoadableModules()
     prop = factory->profile();
 
     const char* inherit_prop[] = {
+      "config.version",
+      "openrtm.name",
+      "openrtm.version",
+      "os.name",
+      "os.release",
+      "os.version",
+      "os.arch",
+      "os.hostname",
+      "corba.endpoint",
+      "corba.id",
       "exec_cxt.periodic.type",
       "exec_cxt.periodic.rate",
       "exec_cxt.evdriven.type",
