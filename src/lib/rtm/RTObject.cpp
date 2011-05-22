@@ -726,6 +726,7 @@ namespace RTC
         PortProfileList ppl    = m_portAdmin.getPortProfileList();
         profile->port_profiles = ppl._retn();
 #endif // ORB_IS_RTORB
+        NVUtil::copyFromProperties(profile->properties, m_properties);
 	return profile._retn();
       }
     catch (...)
