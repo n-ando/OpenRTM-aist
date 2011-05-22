@@ -317,11 +317,11 @@ namespace RTC
      * @brief システム情報を設定する
      *
      * システム情報を取得しプロパティにセットする。設定されるキーは以下の通り。
-     *  - manager.os.name    : OS名
-     *  - manager.os.release : OSリリース名
-     *  - maanger.os.version : OSバージョン名
-     *  - manager.os.arch    : OSアーキテクチャ
-     *  - manager.os.hostname: ホスト名
+     *  - os.name    : OS名
+     *  - os.release : OSリリース名
+     *  - os.version : OSバージョン名
+     *  - os.arch    : OSアーキテクチャ
+     *  - os.hostname: ホスト名
      *  - manager.pid        : プロセスID
      * 
      * @param prop システム情報を設定したプロパティ
@@ -330,11 +330,11 @@ namespace RTC
      * @brief Set system information
      * 
      * Get the following system info. and set them to Manager's properties.
-     *  - manager.os.name    : OS name
-     *  - manager.os.release : OS release name
-     *  - manager.os.version : OS version
-     *  - manager.os.arch    : OS architecture
-     *  - manager.os.hostname: Hostname
+     *  - os.name    : OS name
+     *  - os.release : OS release name
+     *  - os.version : OS version
+     *  - os.arch    : OS architecture
+     *  - os.hostname: Hostname
      *  - manager.pid        : process ID
      *
      * @param prop Properties to set system information

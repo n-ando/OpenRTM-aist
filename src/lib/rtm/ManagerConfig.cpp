@@ -243,11 +243,11 @@ namespace RTC
     char pidc[8];
     sprintf(pidc, "%d", pid);
     
-    prop.setProperty("manager.os.name",     sysinfo.sysname);
-    prop.setProperty("manager.os.release",  sysinfo.release);
-    prop.setProperty("manager.os.version",  sysinfo.version);
-    prop.setProperty("manager.os.arch",     sysinfo.machine);
-    prop.setProperty("manager.os.hostname", sysinfo.nodename);
+    prop.setProperty("os.name",     sysinfo.sysname);
+    prop.setProperty("os.release",  sysinfo.release);
+    prop.setProperty("os.version",  sysinfo.version);
+    prop.setProperty("os.arch",     sysinfo.machine);
+    prop.setProperty("os.hostname", sysinfo.nodename);
     prop.setProperty("manager.pid",         pidc);
     
     return;
