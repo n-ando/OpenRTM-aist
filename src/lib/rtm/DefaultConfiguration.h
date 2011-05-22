@@ -39,7 +39,8 @@
 static const char* default_config[] =
   {
     "config.version",                     openrtm_version,
-    "openrtm.version",                    openrtm_name,
+    "openrtm.name",                       openrtm_name,
+    "openrtm.version",                    openrtm_version,
     "manager.instance_name",              "manager",
     "manager.name",                       "manager",
     "manager.naming_formats",             "%h.host_cxt/%n.mgr",
