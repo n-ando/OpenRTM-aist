@@ -2,6 +2,7 @@ libcoil:
 libRTC: libcoil libRTCSkel
 rtcd: libcoil libRTC
 rtcprof: libcoil libRTC
+ComponentObserverConsumer: libcoil libRTC
 ConfigSampleComp: libcoil libRTC
 ConfigSample: libcoil libRTC
 ConsoleInComp: libcoil libRTC
