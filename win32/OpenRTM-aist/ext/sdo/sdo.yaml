@@ -4,4 +4,4 @@ SDOService:
     - Id: ComponentObserverConsumer.dll
       ShortName: CompObsC.dll
       Name: ComponentObserverConsumer.dll
-      Source: ..\\ext\\sdo\\observer\\Release\\ComponentObserverConsumer.dll
+      Source: ..\\ext\\sdo\\observer\\ComponentObserverConsumer\\Release\\ComponentObserverConsumer.dll
