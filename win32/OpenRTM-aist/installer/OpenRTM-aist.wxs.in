@@ -219,14 +219,28 @@
 	      </Directory>
 	    </Directory>
 	    
+	    <!-- extension -->
+	    <Directory Id="ext" Name="ext">
+	      <Directory Id="sdo" Name="sdo">
+		<Component Id="SDOService" Guid="{% SDOService.GUID %}">
+	      	  {% for file in SDOService.Files %}
+		  <File Id="{% file.Id %}"
+			Name="{% file.Name %}" DiskId="1"
+			Source="{% file.Source %}"/>
+		  {% endfor %}
+		  </Component>
+	      </Directory>
+	    </Directory>
+
 	    <!-- examples -->
 	    <Directory Id="examples" Name="examples">
 	      <Directory Id="CXXexamples" Name="C++">
-            <!-- OpenCV-RTC components -->
-            <?if $(env.INCLUDE_OPENCV_RTC) = YES ?>
-              <?include OpenCV-RTC_inc.wxs ?>
-            <?endif ?>
-            <!-- end of OpenCV-RTC -->
+
+		<!-- OpenCV-RTC components -->
+		<?if $(env.INCLUDE_OPENCV_RTC) = YES ?>
+		<?include OpenCV-RTC_inc.wxs ?>
+		<?endif ?>
+		<!-- end of OpenCV-RTC -->
 
 		<Component Id="Examples" Guid="{% Examples.GUID %}">
 		  {% for file in Examples.Files %}

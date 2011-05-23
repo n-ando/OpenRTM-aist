@@ -1723,6 +1723,9 @@ AC_OUTPUT([Makefile
 	win32/OpenRTM-aist/examples/SeqIO/Makefile
 	win32/OpenRTM-aist/examples/SimpleService/Makefile
 	win32/OpenRTM-aist/examples/USBCamera/Makefile
+	win32/OpenRTM-aist/ext/Makefile
+	win32/OpenRTM-aist/ext/sdo/Makefile
+	win32/OpenRTM-aist/ext/sdo/observer/Makefile
 	win32/OpenRTM-aist/utils/Makefile
 	win32/OpenRTM-aist/utils/rtc-template/Makefile
 	win32/OpenRTM-aist/utils/rtcd/Makefile
