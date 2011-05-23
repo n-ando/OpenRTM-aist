@@ -334,6 +334,7 @@
 	<ComponentRef Id="Bin"/>
 	<ComponentRef Id="COILs"/>
 	<ComponentRef Id="Etc"/>
+	<ComponentRef Id="SDOService"/>
       </Feature>
       <!-- devel -->
       <Feature Id="Devel" Level="1" Title="Development Environment">
