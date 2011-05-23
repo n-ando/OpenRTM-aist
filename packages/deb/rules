@@ -117,8 +117,10 @@ install-arch:
 	#$(MAKE)
 	(mkdir $(CURDIR)/debian/openrtm-aist-example/usr/)
 	(ln -s $(CURDIR)/debian/openrtm-aist/usr/lib $(CURDIR)/debian/openrtm-aist-example/usr/)
+	(ln -s $(CURDIR)/debian/openrtm-aist/usr/lib64 $(CURDIR)/debian/openrtm-aist-example/usr/)
 	(cd $(CURDIR)/examples         ; $(MAKE) DESTDIR=$(CURDIR)/debian/openrtm-aist-example install)
 	(rm $(CURDIR)/debian/openrtm-aist-example/usr/lib)
+	(rm $(CURDIR)/debian/openrtm-aist-example/usr/lib64)
 
 	dh_install -s
 # Must not depend on anything. This is to be called by
