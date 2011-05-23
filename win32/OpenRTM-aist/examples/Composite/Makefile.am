@@ -7,7 +7,7 @@
 clean-local:
 	rm -rf Debug Release
 	rm -rf *~ *.cpp *.h *.idl *.conf
-	rm -rf *.vcproj *.user *.ncb *.suo
+	rm -rf *.vcproj *.vcxproj *.user *.ncb *.suo
 	rm -rf Composite
 	rm -rf Controller ControllerComp
 	rm -rf Motor MotorComp
