@@ -215,37 +215,38 @@ module OpenRTM
      * @brief Configurationの状態
      * 
      * Configurationの状態が変化したことを示す列挙子。Configurationに対
-     * して、コンフィギュレーションが更新された (UPDATE)、コンフィギュ
-     * レーションパラメータが更新された (UPDATEPARAM)、アクティブコンフィ
-     * ギュレーションが変更された (SET_ACTIVE_CONFIG_SET)、コンフィギュ
-     * レーションセットが追加された (ADD_CONFIG_SET)、コンフィギュレー
-     * ションセットが削除された (REMOVE_CONFIG_SET)、コンフィギュレーショ
-     * ンセットがアクティブにされた (ACTIVATE_CONFIG_SET) といったアク
-     * ションがあったことが通知される。
+     * して、コンフィギュレーションパラメータが更新された
+     * (UPDATE_CONFIG_PARAM)、アクティブコンフィギュレーションが変更さ
+     * れた (SET_CONFIG_SET)、コンフィギュレーションセットが追加された
+     * (ADD_CONFIG_SET)、コンフィギュレーションが更新された
+     * (UPDATE_CONFIG_SET)、コンフィギュレーションセットが削除された
+     * (REMOVE_CONFIG_SET)、コンフィギュレーションセットがアクティブに
+     * された (ACTIVATE_CONFIG_SET) といったアクションがあったことが通
+     * 知される。
      *
-     * - UPDATE_CONFIGSET:<configuration set's name>
-     * - UPDATE_PARAMETER:<config set's name>.<config param's key>
-     * - SET_CONFIG_SET: <config set's name>
-     * - ADD_CONFIG_SET <config set's name>
-     * - REMOVE_CONFIG_SET: <config set's name>
-     * - ACTIVATE_CONFIG_SET: <config set's name>
+     * - UPDATE_CONFIG_PARAM: <config set name>.<config param name>
+     * - SET_CONFIG_SET: <config set name>
+     * - ADD_CONFIG_SET: <config set name>
+     * - UPDATE_CONFIG_SET: <config set name>
+     * - REMOVE_CONFIG_SET: <config set name>
+     * - ACTIVATE_CONFIG_SET:  <config set name>
      * 
      * @else
      *
      * @brief The stauts of ports
      * 
      * This is enumerator which notifies that configuration is
-     * changed.  To the configuration a configuration set has been
-     * updated, a configuration parameter has been updated, the active
-     * configuration set has been changed, a configuration set has
+     * changed.  To the configuration, a configuration parameter has
+     * been updated, the active configuration set has been changed, a
+     * configuration set has been updated, a configuration set has
      * been added or removed, these actions would be notified.
      *
-     * - UPDATE_CONFIGSET:<configuration set's name>
-     * - UPDATE_PARAMETER:<config set's name>.<config param's key>
-     * - SET_CONFIG_SET: <config set's name>
-     * - ADD_CONFIG_SET <config set's name>
-     * - REMOVE_CONFIG_SET: <config set's name>
-     * - ACTIVATE_CONFIG_SET: <config set's name>
+     * - UPDATE_CONFIG_PARAM: <config set name>.<config param name>
+     * - SET_CONFIG_SET: <config set name>
+     * - ADD_CONFIG_SET: <config set name>
+     * - UPDATE_CONFIG_SET: <config set name>
+     * - REMOVE_CONFIG_SET: <config set name>
+     * - ACTIVATE_CONFIG_SET:  <config set name>
      *
      * @endif
      */
