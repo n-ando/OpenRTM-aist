@@ -473,27 +473,41 @@ namespace RTC
       void updateConfigParam(const char* configsetname,
                              const char* configparamname)
       {
-        m_coc.updateStatus(OpenRTM::CONFIGURATION, "UPDATE_CONFIG_PARAM");
+        std::string msg("UPDATE_CONFIG_PARAM: ");
+        msg += configsetname;
+        msg += ".";
+        msg += configparamname;
+        m_coc.updateStatus(OpenRTM::CONFIGURATION, msg.c_str());
       }
       void setConfigSet(const coil::Properties& config_set)
       {
-        m_coc.updateStatus(OpenRTM::CONFIGURATION, "SET_CONFIG_SET");
+        std::string msg("SET_CONFIG_SET: ");
+        msg += config_set.getName();
+        m_coc.updateStatus(OpenRTM::CONFIGURATION, msg.c_str());
       }
       void addConfigSet(const coil::Properties& config_set)
       {
-        m_coc.updateStatus(OpenRTM::CONFIGURATION, "ADD_CONFIG_SET");
+        std::string msg("ADD_CONFIG_SET: ");
+        msg += config_set.getName();
+        m_coc.updateStatus(OpenRTM::CONFIGURATION, msg.c_str());
       }
       void updateConfigSet(const char* config_set_name)
       {
-        m_coc.updateStatus(OpenRTM::CONFIGURATION, "UPDATE_CONFIG_SET");
+        std::string msg("UPDATE_CONFIG_SET: ");
+        msg += config_set_name;
+        m_coc.updateStatus(OpenRTM::CONFIGURATION, msg.c_str());
       }
       void removeConfigSet(const char* config_set_name)
       {
-        m_coc.updateStatus(OpenRTM::CONFIGURATION, "REMOVE_CONFIG_SET");
+        std::string msg("REMOVE_CONFIG_SET: ");
+        msg += config_set_name;
+        m_coc.updateStatus(OpenRTM::CONFIGURATION, msg.c_str());
       }
       void activateConfigSet(const char* config_set_name)
       {
-        m_coc.updateStatus(OpenRTM::CONFIGURATION, "ACTIVATE_CONFIG_SET");
+        std::string msg("ACTIVATE_CONFIG_SET: ");
+        msg += config_set_name;
+        m_coc.updateStatus(OpenRTM::CONFIGURATION, msg.c_str());
       }
       // Listener object's pointer holder
       ConfigurationParamListener*   updateConfigParamListener;
