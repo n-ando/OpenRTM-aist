@@ -39,7 +39,7 @@
 	/>
 	<UserMacro
 		Name="coil_dllver"
-		Value=""
+		Value="110"
 	/>
 	<!-- omniORB macros -->
 	<UserMacro
