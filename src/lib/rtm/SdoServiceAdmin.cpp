@@ -128,21 +128,21 @@ namespace RTC
   bool SdoServiceAdmin::
   addSdoServiceConsumer(const SDOPackage::ServiceProfile& sProfile)
   {
+    Guard guard(m_consumer_mutex);
     RTC_TRACE(("addSdoServiceConsumer(IFR = %s)",
                static_cast<const char*>(sProfile.interface_type)));
-    SDOPackage::ServiceProfile profile(sProfile);
     
     // Not supported consumer type -> error return
     if (!isAllowedConsumerType(sProfile))  { return false; }
     if (!isExistingConsumerType(sProfile)) { return false; }
-    if (strncmp(profile.id, "", 1) == 0)   
+    RTC_DEBUG(("Valid SDO service required"));
+    if (strncmp(sProfile.id, "", 1) == 0)   
       {
         RTC_WARN(("No id specified. It should be given by clients."));
         return false;
       }
-
+    RTC_DEBUG(("Valid ID specified"));
     { // re-initialization
-      Guard guard(m_consumer_mutex);
       std::string id(sProfile.id);
       for (size_t i(0); i < m_consumers.size(); ++i)
         {
@@ -155,17 +155,20 @@ namespace RTC
             }
         }
     }
+    RTC_DEBUG(("SDO service properly initialized."));
 
     // new pofile
     SdoServiceConsumerFactory& 
       factory(SdoServiceConsumerFactory::instance());
-    const char* ctype = static_cast<const char*>(profile.interface_type);
+    const char* ctype = static_cast<const char*>(sProfile.interface_type);
+    if (ctype == NULL) { return false; }
     SdoServiceConsumerBase* consumer(factory.createObject(ctype));
     if (consumer == NULL) 
       {
         RTC_ERROR(("Hmm... consumer must be created."));
         return false; 
       }
+    RTC_DEBUG(("An SDO service consumer created."));
 
     // initialize
     if (!consumer->init(m_rtobj, sProfile))
@@ -180,9 +183,14 @@ namespace RTC
         RTC_INFO(("SDO consumer was deleted by initialization failure"));
         return false;
       }
+    RTC_DEBUG(("An SDO service consumer initialized."));
+    RTC_DEBUG(("id:         %s", static_cast<const char*>(sProfile.id)));
+    RTC_DEBUG(("IFR:        %s",
+               static_cast<const char*>(sProfile.interface_type)));
+    RTC_DEBUG(("properties: %s",
+               NVUtil::toString(sProfile.properties).c_str()));
 
     // store consumer
-    Guard guard(m_consumer_mutex);
     m_consumers.push_back(consumer);
     
     return true;
@@ -197,6 +205,7 @@ namespace RTC
    */
   bool SdoServiceAdmin::removeSdoServiceConsumer(const char* id)
   {
+    Guard guard(m_consumer_mutex);
     if (id == NULL || id[0] == '\0')
       {
         RTC_ERROR(("removeSdoServiceConsumer(): id is invalid."));
@@ -204,7 +213,6 @@ namespace RTC
       }
     RTC_TRACE(("removeSdoServiceConsumer(id = %s)", id));
 
-    Guard guard(m_consumer_mutex);
     std::string strid(id);
     std::vector<SdoServiceConsumerBase*>::iterator it = m_consumers.begin();
     std::vector<SdoServiceConsumerBase*>::iterator it_end = m_consumers.end();
