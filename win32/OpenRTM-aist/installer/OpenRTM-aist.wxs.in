@@ -19,19 +19,19 @@
     <Property Id='USERPROFILEDIR' Value='%USERPROFILE%' />
     <!-- アップグレード -->
     <Upgrade Id="{% Product.UpgradeCode %}">
-     <UpgradeVersion OnlyDetect="yes"
-		      Minimum="1.0.0.1"
-		      Maximum="1.1.0"
+      <UpgradeVersion OnlyDetect="yes"
+		      Minimum="1.1.0.1"
+		      Maximum="1.2.0"
 		      Property="NEWERVERSIONDETECTED"
 		      IncludeMinimum="no" /> 
       <UpgradeVersion OnlyDetect="no"
-		      Minimum="1.0.0"
-		      Maximum="1.0.0.1"
+		      Minimum="1.1.0"
+		      Maximum="1.1.0.1"
 		      Property="OLDERVERSIONBEINGUPGRADED"
 		      IncludeMaximum="no" /> 
       <UpgradeVersion OnlyDetect='no' Property='PREVIOUSFOUND'
-                      Minimum='1.0.0' IncludeMinimum='yes'
-                      Maximum='1.1.0' IncludeMaximum='no' />
+                      Minimum='1.1.0' IncludeMinimum='yes'
+                      Maximum='1.2.0' IncludeMaximum='no' />
     </Upgrade>
     <InstallExecuteSequence>
       <RemoveExistingProducts Before="InstallInitialize"/>
@@ -54,7 +54,7 @@
 			     System='yes' Part='all' Value='[Version]' />
 		<Environment Id='UpdatePath' Name='PATH' Action='set'
 			     System='yes' Part='last'
-			     Value='[bin]' />
+			     Value='%RTM_ROOT%\bin' />
 		{% for file in Bin.Files %}
 		<File Id="{% file.Id %}"
 		      Name="{% file.Name %}" DiskId="1"
@@ -209,7 +209,7 @@
 		<Component Id="RtcTemplate" Guid="{% RtcTemplate.GUID %}">
 		  <Environment Id='UpdatePath2' Name='PATH' Action='set'
 			       System='yes' Part='last'
-			       Value='[rtc_template]' />
+			       Value='%RTM_ROOT%\utils\rtc-template' />
 	      	  {% for file in RtcTemplate.Files %}
 		  <File Id="{% file.Id %}"
 			Name="{% file.Name %}" DiskId="1"
@@ -270,26 +270,28 @@
 		</Component>
 	      </Directory>
 	    </Directory>
+
+	    <!-- omniORB components -->
+	    <?if $(env.INCLUDE_OMNIORB) = YES ?>
+	    <?include omniORB_inc.wxs ?>
+	    <?endif ?>
+	    <!-- end of omniORB -->
+	    
+	    <!-- rtmtools components -->
+	    <?if $(env.INCLUDE_OPENRTP) = YES ?>
+	    <?include OpenRTP_inc.wxs ?>
+	    <?endif ?>
+	    <!-- end of rtmtools -->
+	    
+	    <!-- OpenCV components -->
+	    <?if $(env.INCLUDE_OPENCV) = YES ?>
+	    <?include OpenCV_inc.wxs ?>
+	    <?endif ?>
+	    <!-- end of OpenCV -->
+	    
 	  </Directory>
 	</Directory><!--end of OpenRTM-aist-->
 
-	<!-- omniORB components -->
-	<?if $(env.INCLUDE_OMNIORB) = YES ?>
-	<?include omniORB_inc.wxs ?>
-	<?endif ?>
-	<!-- end of omniORB -->
-
-	<!-- rtmtools components -->
-	<?if $(env.INCLUDE_OPENRTP) = YES ?>
-	<?include OpenRTP_inc.wxs ?>
-	<?endif ?>
-	<!-- end of rtmtools -->
-
-	<!-- OpenCV components -->
-	<?if $(env.INCLUDE_OPENCV) = YES ?>
-	<?include OpenCV_inc.wxs ?>
-	<?endif ?>
-	<!-- end of OpenCV -->
 
       </Directory>
 
