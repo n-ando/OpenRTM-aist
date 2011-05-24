@@ -1751,7 +1751,7 @@ std::vector<coil::Properties> Manager::getLoadableModules()
 		else if (c == 'v')  str += prop["version"];
 		else if (c == 'V')  str += prop["vendor"];
 		else if (c == 'c')  str += prop["category"];
-		else if (c == 'h')  str += m_config["manager.os.hostname"];
+		else if (c == 'h')  str += m_config["os.hostname"];
 		else if (c == 'M')  str += m_config["manager.name"];
 		else if (c == 'p')  str += m_config["manager.pid"];
 		else str.push_back(c);
