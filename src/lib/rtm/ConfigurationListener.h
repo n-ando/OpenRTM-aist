@@ -21,6 +21,8 @@
 
 #include <vector>
 #include <coil/Properties.h>
+#include <coil/Mutex.h>
+#include <coil/Guard.h>
 
 namespace RTC
 {
@@ -380,6 +382,7 @@ namespace RTC
   class ConfigurationParamListenerHolder
   {
     typedef std::pair<ConfigurationParamListener*, bool> Entry;
+    typedef coil::Guard<coil::Mutex> Guard;
   public:
     /*!
      * @if jp
@@ -463,6 +466,7 @@ namespace RTC
     
   private:
     std::vector<Entry> m_listeners;
+    coil::Mutex m_mutex;
   };
 
 
@@ -486,6 +490,7 @@ namespace RTC
   class ConfigurationSetListenerHolder
   {
     typedef std::pair<ConfigurationSetListener*, bool> Entry;
+    typedef coil::Guard<coil::Mutex> Guard;
   public:
     /*!
      * @if jp
@@ -569,6 +574,7 @@ namespace RTC
     
   private:
     std::vector<Entry> m_listeners;
+    coil::Mutex m_mutex;
   };
 
 
@@ -592,6 +598,7 @@ namespace RTC
   class ConfigurationSetNameListenerHolder
   {
     typedef std::pair<ConfigurationSetNameListener*, bool> Entry;
+    typedef coil::Guard<coil::Mutex> Guard;
   public:
     /*!
      * @if jp
@@ -674,6 +681,7 @@ namespace RTC
       
   private:
     std::vector<Entry> m_listeners;
+    coil::Mutex m_mutex;
   };
 
   //------------------------------------------------------------
