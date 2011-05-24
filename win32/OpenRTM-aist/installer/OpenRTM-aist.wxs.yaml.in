@@ -7,7 +7,7 @@ Product:
   Version: __VERSION__
   ShortVersion: __SHORT_VERSION__
   Manufacturer: AIST
-  UpgradeCode: 572C59A1-4637-4624-AD55-FC4533CE4C8B
+  UpgradeCode: 44461E5D-84EF-11E0-9AC9-000C290BB873
 Package:
   Description: OpenRTM-aist Installer
   InstallerVersion: "300"
