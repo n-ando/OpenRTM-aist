@@ -78,7 +78,6 @@ namespace RTC
    * 扱うデータ型 DataType をとる。
    *
    *
-   *
    * OnWrite系コールバック (書込みに起因するイベントによりコールされる)
    *
    * - void OnWrite<DataType>::operator()(const DataType): 
@@ -88,118 +87,6 @@ namespace RTC
    *     OutPort::write() を呼び出し、データをバッファに書き込む前に呼ばれ
    *     データの変換を行う。operator()()の戻り値がシリアライズされバッファに
    *     書き込まれる。
-   *
-   *
-   * OnBuffer系コールバック (バッファに起因するイベントによりコールされる)
-   *
-   * 2種類のコールバックファンクタのシグニチャ
-   * ConnectorDataCallback::operator()(ConnectorId, const cdrStream&)
-   * ConnectorCallback::operator()(ConnectorId)
-   *
-   * - void OnBufferWrite::operator()(ConnectorId, cdrStream):
-   *     BufferBase::write() コール時に単純に呼び出されるコールバック。
-   *     引数にはwrite()されるシリアライズ済みのデータが与えられる。        
-   *   
-   * - void OnBufferFull::operator()(ConnectorId, cdrStream):
-   *     BufferBase::write() コール時に、バッファがいっぱいの場合に
-   *     呼び出されるコールバック。コネクタのIDおよび書き込めなかったデータ
-   *     が引数に与えられる。
-   *
-   * - void OnBufferWriteTimeout::operator()(ConnectorId, cdrStream):
-   *     ConnectorBase::write() コール時に、バッファがいっぱいで書込みが
-   *     タイムアウトした場合に呼び出されるコールバック。コネクタのID
-   *     および書き込めなかったデータが引数に与えられる。
-   *
-   * - void OnBufferOverwrite::operator()(ConnectorId, cdrStream):
-   *     BufferBase::write() コール時に、バッファが上書きモードに設定
-   *     されており、バッファがいっぱいの場合に呼び出されるコールバック。
-   *     コネクタのIDが引数に与えられる。
-   *
-   *
-   * - void OnBufferRead::operator()(ConnectorId, cdrStream):
-   *     BufferBase::read() コール時に単純に呼び出されるコールバック。
-   *     引数には read() で返されるシリアライズ済みのデータが与えられる。
-   *
-   * - void OnBufferEmpty::operator()(ConnectorId): 
-   *     コネクタがバッファを読みだす際に、バッファが空の場合に呼び出される。
-   *     コネクタのIDが引数に与えられる。
-   *
-   * - void OnBufferReadTimeout::operator()(ConnectorId):
-   *     コネクタがバッファを読みだす際に、バッファが空でかつ、読み出しが
-   *     タイムアウトした場合に呼び出されるコールバック。コネクタのID
-   *     が引数に与えられる。
-   *
-   *
-   * OnConnect系コールバック (接続に起因するイベントによりコールされる)
-   *
-   * 1種類のコールバックファンクタのシグニチャ
-   * ConnectionCallback::operator()(ConnectorProfile)
-   * 
-   * - void OnConnect::operator()(ConnectorProfile):
-   *     ポートの接続時に呼び出されるコールバック。引数にConnectorProfile
-   *     が与えられる。
-   *
-   * - void OnDisconnect::operator()(ConnectorId):
-   *     ポートの接続切断時に呼び出されるコールバック。引数にコネクタID
-   *     が与えられる。  
-   *
-   * - void OnConnectionLost::operator()(ConnectorId):
-   *     ポートの接続がロストした場合に呼び出されるコールバック。
-   *     引数にコネクタIDが与えられる。OutPortは、相手側InPortとの
-   *     接続をロストした場合、接続を強制的に切断するので、
-   *     引き続き OnDisconnect コールバックが呼び出される。
-   *
-
-   *
-   *
-   * - void OnSend:operator()(ConnectorId, cdrStream):
-   *     データがInPortに対して送られる際に呼び出されるコールバック。
-   *     引数にコネクタIDが与えられる。
-   *
-   * - void OnReceived::operator()(ConnectorId, cdrStream):
-   *     データの送信および受信が完了した際に呼び出されるコールバック。
-   *     引数には、コネクタIDが与えられる。
-   *
-
-   *
-   *
-   * OnSender系コールバック (送信側に起因するイベントによりコールされる)
-   *   以下は、パブリッシャが存在する接続、すなわち dataflow type = push 
-   *   のときのみ有効。
-   *
-   * - void OnSenderTimeout::operator()(ConnectorId, cdrStream):
-   *     データがInPortに対して送られたが、送信がタイムアウトした際に
-   *     呼び出されるコールバック。引数にコネクタIDが与えられる。
-   *     InPortのプロバイダおよびコンシューマが対応している場合に限り有効。
-   *
-   * - void OnSenderError::operator()(ConnectorId, cdrStream):
-   *     データがInPortに対して送られたが、何らかのエラーをInPort側が
-   *     返した場合に呼び出されるコールバック。
-   *     引数には、コネクタIDが与えられる。
-   *
-   *
-   * OnReceiver系コールバック (受信側に起因するイベントによりコールされる)
-   *   以下は、パブリッシャが存在する接続、すなわち dataflow type = push 
-   *   のときのみ有効。
-   * 
-   * - void OnReceiverFull::operator()(ConnectorId, cdrStream):
-   *     データがInPortに送られるものの、InPort側のバッファがいっぱいの場合に
-   *     これを通知するために呼ばれるコールバック。
-   *     引数には、コネクタIDが与えられる。
-   *
-   * - void OnReceiverTimeout::operator()(ConnectorId, cdrStream):
-   *     データがInPortに送られるものの、InPort側のバッファがいっぱいで
-   *     タイムアウトした場合にこれを通知するために呼ばれるコールバック。
-   *     引数には、コネクタIDが与えられる。
-   *
-   * - void OnReceiverError::operator()(ConnectorId, cdrStream):
-   *     データがInPortに送られるものの、InPort側で何らかのエラーを返した
-   *     場合に呼び出されるコールバック。
-   *     引数には、コネクタIDが与えられる。
-   *
-   *
-   *
-   *
    *
    * @since 0.2.0
    *
