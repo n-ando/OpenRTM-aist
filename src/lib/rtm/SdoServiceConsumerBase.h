@@ -50,6 +50,7 @@ namespace RTC
   class SdoServiceConsumerBase
   {
   public:
+    virtual ~SdoServiceConsumerBase() {};
     virtual bool init(RTObject_impl& rtobj,
                       const SDOPackage::ServiceProfile& profile) = 0;
     virtual bool reinit(const SDOPackage::ServiceProfile& profile) = 0;
@@ -59,6 +60,11 @@ namespace RTC
 
   typedef ::coil::GlobalFactory<
     ::RTC::SdoServiceConsumerBase > SdoServiceConsumerFactory;
+
+#if defined(WIN32) || defined(_WIN32) || defined(__WIN32__) || defined(__NT__)
+  EXTERN template class DLL_PLUGIN 
+                     ::coil::GlobalFactory< ::RTC::SdoServiceConsumerBase >;
+#endif
   
 }; // namespace RTC
 

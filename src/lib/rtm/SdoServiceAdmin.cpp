@@ -221,10 +221,10 @@ namespace RTC
         if (strid == static_cast<const char*>((*it)->getProfile().id))
           {
             (*it)->finalize();
-            m_consumers.erase(it);
             SdoServiceConsumerFactory& 
               factory(SdoServiceConsumerFactory::instance());
             factory.deleteObject(*it);
+            m_consumers.erase(it);
             RTC_INFO(("SDO service has been deleted: %s", id));
             return true;
           }
