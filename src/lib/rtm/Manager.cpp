@@ -38,6 +38,7 @@
 #include <coil/OS.h>
 #include <rtm/FactoryInit.h>
 #include <rtm/CORBA_IORUtil.h>
+#include <rtm/SdoServiceConsumerBase.h>
 
 #if defined(minor)
 #undef minor
@@ -288,6 +289,9 @@ namespace RTC
 	    RTC_ERROR(("Unknown Exception"));
 	  }
       }
+
+    m_config["sdo.service.consumer.available_services"]
+      = coil::flatten(SdoServiceConsumerFactory::instance().getIdentifiers());
 
     if (m_initProc != NULL)
       {

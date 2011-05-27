@@ -64,10 +64,15 @@ namespace RTC
 
     // getting consumer types from RTC's properties
     ::coil::Properties& prop(m_rtobj.getProperties());
-    ::std::string constypes = prop["sdo_service.consumer_types"];
+    ::std::string constypes = prop["sdo.service.consumer.allowed_services"];
     m_consumerTypes = ::coil::split(constypes, ",", true);
-    RTC_DEBUG(("sdo_service.consumer_types: %s",
+    RTC_DEBUG(("sdo.service.consumer.allowed_services: %s",
                coil::flatten(m_consumerTypes).c_str()));
+
+    prop["sdo.service.consumer.available_services"]
+      = coil::flatten(SdoServiceConsumerFactory::instance().getIdentifiers());
+    RTC_DEBUG(("sdo.service.consumer.allowed_services: %s",
+               prop["sdo.service.consumer.available_services"].c_str()));
 
     // If types include '[Aa][Ll][Ll]', all types allowed in this RTC
     for (size_t i(0); i < m_consumerTypes.size(); ++i)
@@ -77,7 +82,7 @@ namespace RTC
         if (tmp == "all")
           {
             m_allConsumerAllowed = true;
-            RTC_DEBUG(("sdo_service.consumer_types: ALL"));
+            RTC_DEBUG(("sdo.service.consumer.allowed_services: ALL"));
           }
       }
   }
