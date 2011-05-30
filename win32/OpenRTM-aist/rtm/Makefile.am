@@ -11,7 +11,7 @@ RTM_SHORT_VERSION = @RTM_SHORT_VERSION@
 
 clean-local:
 	rm -rf Debug Release
-	rm -f *~ *.cpp *.h *.cc *.hh
+	rm -f *~ *.cpp *.h *.cc *.hh version.txt
 	rm -f *.sln *.suo *.ncb *.user *.vcproj *.vcxproj *.def
 
 src:
