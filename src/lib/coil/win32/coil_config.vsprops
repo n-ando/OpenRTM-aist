@@ -18,11 +18,11 @@
 	/>
 	<UserMacro
 		Name="coil_dllver"
-		Value=""
+		Value="110"
 	/>
 	<UserMacro
 		Name="coil_version"
-		Value="1.0.0"
+		Value="1.1.0"
 	/>
 	<!-- coil macros -->
 	<UserMacro

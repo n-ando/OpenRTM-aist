@@ -35,16 +35,24 @@ namespace RTC
     find_port_name(const char* name) : m_name(name) {};
     bool operator()(const PortService_ptr& p)
     {
+      try
+        {
 #ifndef ORB_IS_RTORB
-      PortProfile_var prof(p->get_port_profile());
-      std::string name(prof->name);
+          PortProfile_var prof(p->get_port_profile());
+          std::string name(prof->name);
 #else // ORB_IS_RTORB
-      PortProfile *pp;
-      pp = p->get_port_profile();
-      std::string name( pp->name);
-      delete pp;
+          PortProfile *pp;
+          pp = p->get_port_profile();
+          std::string name( pp->name);
+          delete pp;
 #endif // ORB_IS_RTORB
-      return m_name == name;
+          return m_name == name;
+        }
+      catch (...)
+        {
+          return false;
+        }
+      return false;
     }
     const std::string m_name;
   };
@@ -128,9 +136,16 @@ namespace RTC
 
     for (CORBA::ULong i (0); i < len; ++i)
       {
-        pp = m_portRefs[i]->get_port_profile();
-        port_profs[i] = *(pp);
-        delete pp;
+        try
+          {
+            pp = m_portRefs[i]->get_port_profile();
+            port_profs[i] = *(pp);
+            delete pp;
+          }
+        catch (...)
+          {
+            ;
+          }
       }
 #endif // ORB_IS_RTORB
     return port_profs;
@@ -199,15 +214,24 @@ namespace RTC
   bool PortAdmin::addPort(PortService_ptr port)
   {
     // Check for duplicate
-    PortProfile_var prof(port->get_port_profile());
-    std::string name(prof->name);
+    try
+      {
+        PortProfile_var prof(port->get_port_profile());
+        std::string name(prof->name);
+        
 // Why RtORB delete _var object explicitly?
 #ifdef ORB_IS_RTORB
-    delete prof._retn();
+        delete prof._retn();
 #endif
-    if (CORBA_SeqUtil::find(m_portRefs, find_port_name(name.c_str())) != -1)
-      return false;
-
+        if (CORBA_SeqUtil::find(m_portRefs, find_port_name(name.c_str())) != -1)
+          {
+            return false;
+          }
+      }
+    catch (...)
+      {
+        return false;
+      }
     CORBA_SeqUtil::push_back(m_portRefs, RTC::PortService::_duplicate(port));
     return true;
   }

@@ -7,15 +7,15 @@
 
 VER = $(RTM_SHORT_VERSION)
 WINLIBS = libRTCSkel.lib \
-	libRTCSkeld.lib \
-	RTC$(VER).lib \
-	RTC$(VER)d.lib \
-	RTC$(VER).dll \
-	RTC$(VER)d.dll \
-	coil.lib \
-	coild.lib \
-	coil.dll \
-	coild.dll
+	libRTCSkeld.lib  \
+	RTC$(VER).l\ib   \
+	RTC$(VER)d.lib   \
+	RTC$(VER).dll    \
+	RTC$(VER)d.dll   \
+	coil$(VER).lib   \
+	coil$(VER)d.lib  \
+	coil$(VER).dll   \
+	coil$(VER)d.dll
 
 clean-local:
 	rm -f *~ *.dll *.lib *.exe

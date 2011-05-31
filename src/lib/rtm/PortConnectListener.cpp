@@ -101,6 +101,7 @@ namespace RTC
   
   PortConnectListenerHolder::~PortConnectListenerHolder()
   {
+    Guard guard(m_mutex);
     for (int i(0), len(m_listeners.size()); i < len; ++i)
       {
         if (m_listeners[i].second)
@@ -114,12 +115,14 @@ namespace RTC
   void PortConnectListenerHolder::addListener(PortConnectListener* listener,
                                               bool autoclean)
   {
+    Guard guard(m_mutex);
     m_listeners.push_back(Entry(listener, autoclean));
   }
   
   
   void PortConnectListenerHolder::removeListener(PortConnectListener* listener)
   {
+    Guard guard(m_mutex);
     std::vector<Entry>::iterator it(m_listeners.begin());
     
     for (; it != m_listeners.end(); ++it)
@@ -141,6 +144,7 @@ namespace RTC
   void PortConnectListenerHolder::notify(const char* portname,
                                          RTC::ConnectorProfile& profile)
   {
+    Guard guard(m_mutex);
     for (int i(0), len(m_listeners.size()); i < len; ++i)
       {
         m_listeners[i].first->operator()(portname, profile);
@@ -162,6 +166,7 @@ namespace RTC
 
   PortConnectRetListenerHolder::~PortConnectRetListenerHolder()
   {
+    Guard guard(m_mutex);
     for (int i(0), len(m_listeners.size()); i < len; ++i)
       {
         if (m_listeners[i].second)
@@ -175,6 +180,7 @@ namespace RTC
   void PortConnectRetListenerHolder::
   addListener(PortConnectRetListener* listener, bool autoclean)
   {
+    Guard guard(m_mutex);
     m_listeners.push_back(Entry(listener, autoclean));
   }
 
@@ -182,6 +188,7 @@ namespace RTC
   void PortConnectRetListenerHolder::
   removeListener(PortConnectRetListener* listener)
   {
+    Guard guard(m_mutex);
     std::vector<Entry>::iterator it(m_listeners.begin());
     for (; it != m_listeners.end(); ++it)
       {
@@ -203,6 +210,7 @@ namespace RTC
                                             RTC::ConnectorProfile& profile,
                                             ReturnCode_t ret)
   {
+    Guard guard(m_mutex);
     for (int i(0), len(m_listeners.size()); i < len; ++i)
       {
         m_listeners[i].first->operator()(portname, profile, ret);

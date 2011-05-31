@@ -33,6 +33,18 @@
 copy   etc\rtm_config_omni414.vsprops rtm_config.vsprops
 
 @rem ============================================================
+@rem convert property sheet to cmake
+@rem ============================================================
+if not exist rtm_config.cmake (
+
+   set TMP_PYTHONPATH=%PYTHONPATH%
+   set PYTHONPATH=./bin;%PYTHONPATH%
+   echo Generating cmake file
+   build\vsprops2cmake.py rtm_config.vsprops
+   set PYTHONPATH=%TMP_PYTHONPATH%
+)
+
+@rem ============================================================
 @rem build OpenRTM-aist
 @rem ============================================================
 

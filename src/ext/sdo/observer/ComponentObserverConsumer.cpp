@@ -637,7 +637,7 @@ namespace RTC
    * @else
    * @brief Unsetting Configurationlistener
    * @endif
-     */
+   */
   void ComponentObserverConsumer::unsetConfigurationListeners()
   {
 

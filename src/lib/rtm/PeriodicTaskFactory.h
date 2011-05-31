@@ -26,8 +26,12 @@
 namespace RTC
 {
 
-  typedef coil::GlobalFactory<coil::PeriodicTaskBase> PeriodicTaskFactory;
+  typedef ::coil::GlobalFactory<coil::PeriodicTaskBase> PeriodicTaskFactory;
 
+#if defined(WIN32) || defined(_WIN32) || defined(__WIN32__) || defined(__NT__)
+  EXTERN template class DLL_PLUGIN
+                     ::coil::GlobalFactory<coil::PeriodicTaskBase>;
+#endif
 };
 
 #endif // RTC_PERIODICTASKFACTORY_H
