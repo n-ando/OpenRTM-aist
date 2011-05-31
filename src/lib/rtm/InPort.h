@@ -52,8 +52,6 @@ namespace RTC
    * なっているが、コンストラクタ引数によりサイズを指定することができる。
    * データはフラグによって未読、既読状態が管理され、isNew(), write(), read(),
    * isFull(), isEmpty() 等のメソッドによりハンドリングすることができる。
-   *
-   *
    *   
    * OnRead系コールバック (読み出しに起因するイベントによりコールされる)
    *
@@ -65,90 +63,6 @@ namespace RTC
    *     データの変換を行う。引数にはバッファから読み出された値が与えられ、
    *     変換後のデータを戻り値として返す。この値がread()の返す値となる。
    *
-   *
-   * OnBuffer系コールバック (バッファに起因するイベントによりコールされる)
-   *
-   * - void OnBufferOverwrite::operator(ConnectorId):
-   *     ConnectorBase::write() コール時に、バッファが上書きモードに設定
-   *     されており、バッファがいっぱいの場合に呼び出されるコールバック。
-   *     コネクタのIDが引数に与えられる。
-   *
-   * - void OnBufferEmpty::operator(ConnectorId): 
-   *     コネクタがバッファを読みだす際に、バッファが空の場合に呼び出される。
-   *     コネクタのIDが引数に与えられる。
-   *
-   * - void OnBufferReadTimeout::operator(ConnectorId):
-   *     コネクタがバッファを読みだす際に、バッファが空でかつ、読み出しが
-   *     タイムアウトした場合に呼び出されるコールバック。コネクタのID
-   *     が引数に与えられる。
-   *
-   * - void OnBufferFull::operator(ConnectorId, DataType):
-   *     ConnectorBase::write() コール時に、バッファがいっぱいの場合に
-   *     呼び出されるコールバック。コネクタのIDおよび書き込めなかったデータ
-   *     が引数に与えられる。
-   *
-   * - void OnBufferWriteTimeout::operator(ConnectorId, DataType):
-   *     ConnectorBase::write() コール時に、バッファがいっぱいで書込みが
-   *     タイムアウトした場合に呼び出されるコールバック。コネクタのID
-   *     および書き込めなかったデータが引数に与えられる。
-   *
-   *
-   * OnConnect系コールバック (接続に起因するイベントによりコールされる)
-   * 
-   * - void OnConnect::operator(ConnectorProfile):
-   *      ポートの接続時に呼び出されるコールバック。引数にConnectorProfile
-   *      が与えられる。
-   *
-   * - void OnDisconnect::operator(ConnectorId):
-   *      ポートの接続切断時に呼び出されるコールバック。引数にコネクタID
-   *      が与えられる。  
-   *
-   * - void OnConnectionLost::operator(ConnectorId):
-   *      ポートの接続がロストした場合に呼び出されるコールバック。
-   *      引数にコネクタIDが与えられる。InPortは、相手側OutPortとの
-   *      接続をロストした場合、接続を強制的に切断するので、
-   *      引き続き OnDisconnect コールバックが呼び出される。
-   *
-   *
-   * OnReceive系コールバック (送信側に起因するイベントによりコールされる)
-   *
-   * - void OnSend::operator(ConnectorId):
-   *      データがInPortに対して送られる際に呼び出されるコールバック。
-   *      引数にコネクタIDが与えられる。
-   *
-   * - void OnSenderTimeout::operator(ConnectorId):
-   *      データがInPortに対して送られたが、送信がタイムアウトした際に
-   *      呼び出されるコールバック。引数にコネクタIDが与えられる。
-   *      InPortのプロバイダおよびコンシューマが対応している場合に限り有効。
-   *
-   * - void OnSenderError::operator(ConnectorId):
-   *      データがInPortに対して送られたが、何らかのエラーをInPort側が
-   *      返した場合に呼び出されるコールバック。
-   *      引数には、コネクタIDが与えられる。
-   *
-   *
-   * OnReceive系コールバック (受信側に起因するイベントによりコールされる)
-   * 
-   * - void OnReceiverFull::operator(ConnectorId):
-   *      データがInPortに送られるものの、InPort側のバッファがいっぱいの場合に
-   *      これを通知するために呼ばれるコールバック。
-   *       引数には、コネクタIDが与えられる。
-   *
-   * - void OnReceiverTimeout::operator(ConnectorId):
-   *      データがInPortに送られるものの、InPort側のバッファがいっぱいで
-   *      タイムアウトした場合にこれを通知するために呼ばれるコールバック。
-   *       引数には、コネクタIDが与えられる。
-   *
-   * - void OnReceiverError::operator(ConnectorId):
-   *       データがInPortに送られるものの、InPort側で何らかのエラーを返した
-   *       場合に呼び出されるコールバック。
-   *       引数には、コネクタIDが与えられる。
-   *
-   * - void OnReceived::operator(ConnectorId):
-   *       データの送信および受信が完了した際に呼び出されるコールバック。
-   *       引数には、コネクタIDが与えられる。
-   *
-   *
    * @since 0.2.0
    *
    * @else
@@ -157,15 +71,15 @@ namespace RTC
    *
    * @brief InPort template class
    *
-   * This is a template class that implements InPort.
-   * <T> is the type defined in BasicDataType.idl and must be the structure which
-   * has both Time type tm and type-T data as a member. InPort has a ring
-   * buffer internally, and stores the received data externally in this buffer
-   * one by one. The size of ring buffer can be specified according to 
-   * the argument of constructor, though the default size is 64. Unread
-   * data and data which is already read are managed with the flag, and the
-   * data can be handled by the isNew(), write(), read(), isFull() and isEmpty()
-   * method etc. 
+   * This is a template class that implements InPort.  <T> is the type
+   * defined in BasicDataType.idl and must be the structure which has
+   * both Time type tm and type-T data as a member. InPort has a ring
+   * buffer internally, and stores the received data externally in
+   * this buffer one by one. The size of ring buffer can be specified
+   * according to the argument of constructor, though the default size
+   * is 64. Unread data and data which is already read are managed
+   * with the flag, and the data can be handled by the isNew(),
+   * write(), read(), isFull() and isEmpty() method etc.
    *
    * @since 0.2.0
    *

@@ -16,6 +16,7 @@ EXTRA_DIST =                       \
 	makedeffile.py             \
 	slntool.py                 \
 	vcprojtool.py              \
+	vsprops2cmake.py           \
 	makewxs.py                 \
 	makewrapper.pl             \
 	makewrapper.py             \

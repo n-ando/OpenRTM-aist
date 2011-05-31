@@ -6,8 +6,7 @@
 #  @date $Date: 2008-03-06 06:51:10 $
 #  @author Noriaki Ando <n-ando@aist.go.jp>
 # 
-#  Copyright (C) 2004-2007
-#      Task-intelligence Research Group,
+#  Copyright (C) 2004-2011
 #      Intelligent Systems Research Institute,
 #      National Institute of
 #          Advanced Industrial Science and Technology (AIST), Japan
@@ -247,43 +246,53 @@ class skel_wrapper:
 			self.data["include_openrtm_idl_decls"] = ""
 		else:
 			self.data["include_openrtm_idl_decls"] = "#  include \"OpenRTM-aist-decls.h\"\n"
-		
+		return
+
+	def gen(self, fname, temp_txt):
+		data = self.data
+		t = yat.Template(temp_txt)
+		text = t.generate(data)
+
+		if os.access(fname, os.F_OK): # file exists
+			f = file(fname, "r")
+			oldtext = f.read()
+			f.close()
+
+			newtext = re.sub(" \@date.*?\n", "", text)
+			oldtext2 = re.sub(" \@date.*?\n", "", oldtext)
+			if newtext == oldtext2:
+				print "\"" + fname + \
+			    "\" exists and contents is same."
+				print "No need to generate the file."
+				return
+			else:
+				print "\"", fname, \
+			    "\" already exists but contents are not same"
+
+		f = file(fname, "w")
+		f.write(text)
+		f.close()
+		print "\"" + fname + "\"" " was generated."
 		return
 
 	def print_skel_h(self):
-		f = file(self.data["output_dir"] + self.data["skel_h"], "w")
-		t = yat.Template(skel_h)
-		text=t.generate(self.data)
-		f.write(text)
-		f.close()
-		print self.data["skel_h"], " was generated."
+		fname = self.data["output_dir"] + self.data["skel_h"]
+		self.gen(fname, skel_h)
 		return
 
 	def print_skel_cpp(self):
-		f = file(self.data["output_dir"] + self.data["skel_cpp"], "w")
-		t = yat.Template(skel_cpp)
-		text=t.generate(self.data)
-                f.write(text)
-                f.close()
-		print self.data["skel_cpp"], " was generated."
+		fname = self.data["output_dir"] + self.data["skel_cpp"]
+		self.gen(fname, skel_cpp)
 		return
 
 	def print_stub_h(self):
-		f = file(self.data["output_dir"] + self.data["stub_h"], "w")
-		t = yat.Template(stub_h)
-		text=t.generate(self.data)
-                f.write(text)
-                f.close()
-		print self.data["stub_h"], " was generated."
+		fname = self.data["output_dir"] + self.data["stub_h"]
+		self.gen(fname, stub_h)
 		return
 
 	def print_stub_cpp(self):
-		f = file(self.data["output_dir"] + self.data["stub_cpp"], "w")
-		t = yat.Template(stub_cpp)
-		text=t.generate(self.data)
-                f.write(text)
-                f.close()
-		print self.data["stub_cpp"], " was generated."
+		fname = self.data["output_dir"] + self.data["stub_cpp"]
+		self.gen(fname, stub_cpp)
 		return
 
 	def print_all(self):
