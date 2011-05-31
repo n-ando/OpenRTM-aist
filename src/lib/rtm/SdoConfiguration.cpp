@@ -702,32 +702,6 @@ namespace SDOPackage
   
   /*!
    * @if jp
-   * @brief SDO の ServiceProfile のリストを取得する
-   * @else
-   * @brief Get a list of ServiceProfile of SDO
-   * @endif
-   */
-  const ServiceProfileList Configuration_impl::getServiceProfiles()
-  {
-    return m_serviceProfiles;
-  }
-  /*!
-   * @if jp
-   * @brief SDO の ServiceProfile を取得する
-   * @else
-   * @brief Get Service Profile of SDO
-   * @endif
-   */
-  const ServiceProfile Configuration_impl::getServiceProfile(const char* id)
-  {
-    CORBA::Long index;
-    index =  CORBA_SeqUtil::find(m_serviceProfiles, service_id(id));
-    if (index < 0) return ServiceProfile();
-    return m_serviceProfiles[index];
-  }
-  
-  /*!
-   * @if jp
    * @brief SDO の Organization リストを取得する
    * @else
    * @brief Get a list of Organization of SDO
