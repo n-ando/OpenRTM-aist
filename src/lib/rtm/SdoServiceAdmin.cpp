@@ -57,7 +57,7 @@ namespace RTC
    * @endif
    */
   SdoServiceAdmin::SdoServiceAdmin(::RTC::RTObject_impl& rtobj)
-    : m_rtobj(rtobj), m_allConsumerAllowed(true),
+    : m_rtobj(rtobj), m_allConsumerEnabled(true),
       rtclog("SdoServiceAdmin")
   {
     RTC_TRACE(("SdoServiceAdmin::SdoServiceAdmin(%s)",
@@ -67,10 +67,10 @@ namespace RTC
 
     //------------------------------------------------------------
     // SDO service provider
-   ::coil::vstring allowedProviderTypes 
-      = ::coil::split(prop["sdo.service.provider.allowed_services"], ",", true);
-    RTC_DEBUG(("sdo.service.provider.allowed_services: %s",
-               prop["sdo.service.provider.allowed_services"].c_str()));
+   ::coil::vstring enabledProviderTypes 
+      = ::coil::split(prop["sdo.service.provider.enabled_services"], ",", true);
+    RTC_DEBUG(("sdo.service.provider.enabled_services: %s",
+               prop["sdo.service.provider.enabled_services"].c_str()));
 
     ::coil::vstring availableProviderTypes 
       = SdoServiceProviderFactory::instance().getIdentifiers();
@@ -80,21 +80,21 @@ namespace RTC
                prop["sdo.service.provider.available_services"].c_str()));
 
     
-    // If types include '[Aa][Ll][Ll]', all types allowed in this RTC
+    // If types include '[Aa][Ll][Ll]', all types enabled in this RTC
     ::coil::vstring activeProviderTypes;
-    for (size_t i(0); i < allowedProviderTypes.size(); ++i)
+    for (size_t i(0); i < enabledProviderTypes.size(); ++i)
       {
-        std::string tmp(allowedProviderTypes[i]);
+        std::string tmp(enabledProviderTypes[i]);
         coil::toLower(tmp);
         if (tmp == "all")
           {
             activeProviderTypes = availableProviderTypes;
-            RTC_DEBUG(("sdo.service.provider.allowed_services: ALL"));
+            RTC_DEBUG(("sdo.service.provider.enabled_services: ALL"));
             break;
           }
         for (size_t j(0); j < availableProviderTypes.size(); ++j)
           {
-            if (availableProviderTypes[j] == allowedProviderTypes[i])
+            if (availableProviderTypes[j] == enabledProviderTypes[i])
               {
                 activeProviderTypes.push_back(availableProviderTypes[j]);
               }
@@ -123,24 +123,24 @@ namespace RTC
     // SDO service consumer
     // getting consumer types from RTC's properties
 
-    ::std::string constypes = prop["sdo.service.consumer.allowed_services"];
+    ::std::string constypes = prop["sdo.service.consumer.enabled_services"];
     m_consumerTypes = ::coil::split(constypes, ",", true);
-    RTC_DEBUG(("sdo.service.consumer.allowed_services: %s", constypes.c_str()));
+    RTC_DEBUG(("sdo.service.consumer.enabled_services: %s", constypes.c_str()));
 
     prop["sdo.service.consumer.available_services"]
       = coil::flatten(SdoServiceConsumerFactory::instance().getIdentifiers());
     RTC_DEBUG(("sdo.service.consumer.available_services: %s",
                prop["sdo.service.consumer.available_services"].c_str()));
 
-    // If types include '[Aa][Ll][Ll]', all types allowed in this RTC
+    // If types include '[Aa][Ll][Ll]', all types enabled in this RTC
     for (size_t i(0); i < m_consumerTypes.size(); ++i)
       {
         std::string tmp(m_consumerTypes[i]);
         coil::toLower(tmp);
         if (tmp == "all")
           {
-            m_allConsumerAllowed = true;
-            RTC_DEBUG(("sdo.service.consumer.allowed_services: ALL"));
+            m_allConsumerEnabled = true;
+            RTC_DEBUG(("sdo.service.consumer.enabled_services: ALL"));
           }
       }
   }
@@ -230,6 +230,69 @@ namespace RTC
 
   /*!
    * @if jp
+   * @brief SDO service provider をセットする
+   * @else
+   * @brief Set a SDO service provider
+   * @endif
+   */
+  bool SdoServiceAdmin::
+  addSdoServiceProvider(const SDOPackage::ServiceProfile& prof,
+                        SdoServiceProviderBase* provider)
+  {
+    RTC_TRACE(("SdoServiceAdmin::addSdoServiceProvider(if=%s)",
+               static_cast<const char*>(prof.interface_type)));
+    Guard guard(m_provider_mutex);
+
+    std::string id(static_cast<const char*>(prof.id));
+    for (size_t i(0); i < m_providers.size(); ++i)
+      {
+        if (id == static_cast<const char*>(m_providers[i]->getProfile().id))
+          {
+            RTC_ERROR(("SDO service(id=%s, ifr=%s) already exists",
+                       static_cast<const char*>(prof.id),
+                       static_cast<const char*>(prof.interface_type)));
+            return false;
+          }
+      }
+    m_providers.push_back(provider);
+    return true;
+  }
+
+  /*!
+   * @if jp
+   * @brief SDO service provider を削除する
+   * @else
+   * @brief Remove a SDO service provider
+   * @endif
+   */
+  bool SdoServiceAdmin::removeSdoServiceProvider(const char* id)
+  {
+    RTC_TRACE(("removeSdoServiceProvider(%d)", id));
+    Guard gurad(m_provider_mutex);
+
+    std::string strid(id);
+    std::vector<SdoServiceProviderBase*>::iterator it = m_providers.begin();
+    std::vector<SdoServiceProviderBase*>::iterator it_end = m_providers.end();
+    while (it != it_end)
+      {
+        if (strid == static_cast<const char*>((*it)->getProfile().id))
+          {
+            (*it)->finalize();
+            SdoServiceProviderFactory& 
+              factory(SdoServiceProviderFactory::instance());
+            factory.deleteObject(*it);
+            m_providers.erase(it);
+            RTC_INFO(("SDO service provider has been deleted: %s", id));
+            return true;
+          }
+        ++it;
+      }
+    RTC_WARN(("Specified SDO service provider not found: %s", id));
+    return false;
+  }
+
+  /*!
+   * @if jp
    * @brief Service Consumer を追加する
    * @else
    * @brief Add Service Consumer
@@ -243,7 +306,7 @@ namespace RTC
                static_cast<const char*>(sProfile.interface_type)));
     
     // Not supported consumer type -> error return
-    if (!isAllowedConsumerType(sProfile))  { return false; }
+    if (!isEnabledConsumerType(sProfile))  { return false; }
     if (!isExistingConsumerType(sProfile)) { return false; }
     RTC_DEBUG(("Valid SDO service required"));
     if (strncmp(sProfile.id, "", 1) == 0)   
@@ -352,13 +415,13 @@ namespace RTC
    * @if jp
    * @brief 許可されたサービス型かどうか調べる
    * @else
-   * @brief If it is allowed service type
+   * @brief If it is enabled service type
    * @endif
    */
   bool SdoServiceAdmin::
-  isAllowedConsumerType(const SDOPackage::ServiceProfile& sProfile)
+  isEnabledConsumerType(const SDOPackage::ServiceProfile& sProfile)
   {
-    if (m_allConsumerAllowed) { return true; }
+    if (m_allConsumerEnabled) { return true; }
 
     for (size_t i(0); i < m_consumerTypes.size(); ++i)
       {
