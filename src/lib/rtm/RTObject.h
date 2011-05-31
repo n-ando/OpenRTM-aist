@@ -3119,43 +3119,6 @@ namespace RTC
     /*!
      * @if jp
      *
-     * @brief [local interface] SDOサービスを追加する
-     * 
-     * SDOサービスを追加する。
-     *
-     * @else
-     *
-     * @brief [local interface] Add SDO service
-     *
-     * This operation adds SDO service to this RT-Component.
-     *
-     * @endif
-     */
-    ReturnCode_t addSdoService(const SDOPackage::ServiceProfile& profile);
-
-    /*!
-     * @if jp
-     *
-     * @brief [local interface] SDOサービスを削除する
-     * 
-     * SDOサービスを削除する。
-     *
-     * @else
-     *
-     * @brief [local interface] Remove SDO service
-     *
-     * This operation removes SDO service to this RT-Component.
-     *
-     * @endif
-     */
-    SDOPackage::SDOService_var removeSdoService(const char* service_name);
-
-    bool addSdoServiceConsumer(const SDOPackage::ServiceProfile& sProfile);
-    bool removeSdoServiceConsumer(const char* id);
-
-    /*!
-     * @if jp
-     *
      * @brief 全 InPort のデータを読み込む。
      *
      * RTC が保持する全ての InPort のデータを読み込む。
@@ -4521,15 +4484,6 @@ namespace RTC
      * @endif
      */
     SDOPackage::OrganizationList m_sdoOwnedOrganizations;
-    
-    /*!
-     * @if jp
-     * @brief SDOService のプロファイルリスト
-     * @else
-     * @brief SDOService Profile List
-     * @endif
-     */
-    SDOPackage::ServiceProfileList m_sdoSvcProfiles;
     
     /*!
      * @if jp
