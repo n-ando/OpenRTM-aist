@@ -23,6 +23,7 @@
 #include <rtm/RTObject.h>
 #include <rtm/CORBA_SeqUtil.h>
 #include <rtm/SdoServiceAdmin.h>
+#include <rtm/SdoServiceProviderBase.h>
 #include <rtm/SdoServiceConsumerBase.h>
 
 namespace RTC
@@ -62,16 +63,73 @@ namespace RTC
     RTC_TRACE(("SdoServiceAdmin::SdoServiceAdmin(%s)",
                rtobj.getProperties()["instance_name"].c_str()));
 
-    // getting consumer types from RTC's properties
     ::coil::Properties& prop(m_rtobj.getProperties());
+
+    //------------------------------------------------------------
+    // SDO service provider
+   ::coil::vstring allowedProviderTypes 
+      = ::coil::split(prop["sdo.service.provider.allowed_services"], ",", true);
+    RTC_DEBUG(("sdo.service.provider.allowed_services: %s",
+               prop["sdo.service.provider.allowed_services"].c_str()));
+
+    ::coil::vstring availableProviderTypes 
+      = SdoServiceProviderFactory::instance().getIdentifiers();
+    prop["sdo.service.provider.available_services"]
+      = coil::flatten(availableProviderTypes);
+    RTC_DEBUG(("sdo.service.provider.available_services: %s",
+               prop["sdo.service.provider.available_services"].c_str()));
+
+    
+    // If types include '[Aa][Ll][Ll]', all types allowed in this RTC
+    ::coil::vstring activeProviderTypes;
+    for (size_t i(0); i < allowedProviderTypes.size(); ++i)
+      {
+        std::string tmp(allowedProviderTypes[i]);
+        coil::toLower(tmp);
+        if (tmp == "all")
+          {
+            activeProviderTypes = availableProviderTypes;
+            RTC_DEBUG(("sdo.service.provider.allowed_services: ALL"));
+            break;
+          }
+        for (size_t j(0); j < availableProviderTypes.size(); ++j)
+          {
+            if (availableProviderTypes[j] == allowedProviderTypes[i])
+              {
+                activeProviderTypes.push_back(availableProviderTypes[j]);
+              }
+          }
+      }
+
+    SdoServiceProviderFactory& factory(SdoServiceProviderFactory::instance());
+    for (size_t i(0); i < activeProviderTypes.size(); ++i)
+      {
+        SdoServiceProviderBase* svc
+          = factory.createObject(activeProviderTypes[i]);
+        
+        SDOPackage::ServiceProfile prof;
+        prof.id             = CORBA::string_dup(activeProviderTypes[i].c_str());
+        prof.interface_type = CORBA::string_dup(activeProviderTypes[i].c_str());
+        prof.service        = svc->_this();
+        std::string propkey = ifrToKey(activeProviderTypes[i]);
+        NVUtil::copyFromProperties(prof.properties,
+                                   prop.getNode(propkey.c_str()));
+
+        svc->init(rtobj, prof);
+        m_providers.push_back(svc);
+      }
+
+    //------------------------------------------------------------
+    // SDO service consumer
+    // getting consumer types from RTC's properties
+
     ::std::string constypes = prop["sdo.service.consumer.allowed_services"];
     m_consumerTypes = ::coil::split(constypes, ",", true);
-    RTC_DEBUG(("sdo.service.consumer.allowed_services: %s",
-               coil::flatten(m_consumerTypes).c_str()));
+    RTC_DEBUG(("sdo.service.consumer.allowed_services: %s", constypes.c_str()));
 
     prop["sdo.service.consumer.available_services"]
       = coil::flatten(SdoServiceConsumerFactory::instance().getIdentifiers());
-    RTC_DEBUG(("sdo.service.consumer.allowed_services: %s",
+    RTC_DEBUG(("sdo.service.consumer.available_services: %s",
                prop["sdo.service.consumer.available_services"].c_str()));
 
     // If types include '[Aa][Ll][Ll]', all types allowed in this RTC
@@ -96,32 +154,79 @@ namespace RTC
    */
   SdoServiceAdmin::~SdoServiceAdmin()
   {
+    for (size_t i(0); i < m_providers.size(); ++i)
+      {
+        m_providers[i]->finalize();
+        delete m_providers[i];
+      }
+    m_providers.clear();
+
+    for (size_t i(0); i < m_consumers.size(); ++i)
+      {
+        m_consumers[i]->finalize();
+        delete m_consumers[i];
+      }
+    m_consumers.clear();
   }
   
   /*!
    * @if jp
-   * @brief Service Consumer Factory を登録する
+   * @brief SDO Service Provider の ServiceProfileList を取得する
    * @else
-   * @brief Add Service Consumer Factory
+   * @brief Get ServiceProfileList of SDO Service Provider
    * @endif
    */
-  bool SdoServiceAdmin::addSdoServiceConsumerFactory()
+  SDOPackage::ServiceProfileList* SdoServiceAdmin::getServiceProviderProfiles()
   {
-    return false;
+    SDOPackage::ServiceProfileList_var prof
+      = new SDOPackage::ServiceProfileList();
+    SDOPackage::ServiceProfileList prof2;
+    Guard guard(m_provider_mutex);
+    for (size_t i(0); i < m_providers.size(); ++i)
+      {
+        CORBA_SeqUtil::push_back(prof2, m_providers[i]->getProfile());
+      }
+    return prof._retn();
   }
 
   /*!
    * @if jp
-   * @brief Service Consumer Factory を削除する
+   * @brief SDO Service Provider の ServiceProfile を取得する
    * @else
-   * @brief Remove Service Consumer Factory
+   * @brief Get ServiceProfile of an SDO Service Provider
    * @endif
    */
-  bool SdoServiceAdmin::removeSdoServiceConsumerFactory()
+  SDOPackage::ServiceProfile*
+  SdoServiceAdmin::getServiceProviderProfile(const char* id)
   {
-    return false;
+    std::string idstr(id);
+    Guard guard(m_provider_mutex);
+    for (size_t i(0); i < m_providers.size(); ++i)
+      {
+        if (idstr == static_cast<const char*>(m_providers[i]->getProfile().id))
+          {
+            return new SDOPackage::ServiceProfile(m_providers[i]->getProfile());
+          }
+      }
+    throw new SDOPackage::InvalidParameter();
+    return new SDOPackage::ServiceProfile();
   }
-    
+
+  /*!
+   * @if jp
+   * @brief SDO Service Provider の Service を取得する
+   * @else
+   * @brief Get ServiceProfile of an SDO Service
+   * @endif
+   */   
+  SDOPackage::SDOService_ptr SdoServiceAdmin::getServiceProvider(const char* id)
+  {
+    SDOPackage::ServiceProfile_var prof;
+    prof = getServiceProviderProfile(id);
+    SDOPackage::SDOService_var sdo 
+      = SDOPackage::SDOService::_duplicate(prof->service);
+    return sdo._retn();
+  }
 
   /*!
    * @if jp
@@ -307,6 +412,15 @@ namespace RTC
     std::auto_ptr<coil::UUID> uuid(uugen.generateUUID(2,0x01));
     
     return (const char*) uuid->to_string();
+  }
+
+  std::string SdoServiceAdmin::ifrToKey(std::string& ifr)
+  {
+    ::coil::vstring ifrvstr = ::coil::split(ifr, ":");
+    ::coil::toLower(ifrvstr[1]);
+    ::coil::replaceString(ifrvstr[1], ".", "_");
+    ::coil::replaceString(ifrvstr[1], "/", ".");
+    return ifrvstr[1];
   }
 
 
