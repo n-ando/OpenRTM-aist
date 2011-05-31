@@ -259,6 +259,25 @@ namespace RTC
 
     /*!
      * @if jp
+     * @brief SDO service provider をセットする
+     * @else
+     * @brief Set a SDO service provider
+     * @endif
+     */
+    bool addSdoServiceProvider(const SDOPackage::ServiceProfile& prof,
+                               SdoServiceProviderBase* provider);
+
+    /*!
+     * @if jp
+     * @brief SDO service provider を削除する
+     * @else
+     * @brief Remove a SDO service provider
+     * @endif
+     */
+    bool removeSdoServiceProvider(const char* id);
+
+    /*!
+     * @if jp
      *
      * @brief Service Consumer を追加する
      * 
@@ -291,11 +310,11 @@ protected:
      * 
      * @else
      *
-     * @brief If it is allowed service type
+     * @brief If it is enabled service type
      *
      * @endif
      */
-    bool isAllowedConsumerType(const SDOPackage::ServiceProfile& sProfile);
+    bool isEnabledConsumerType(const SDOPackage::ServiceProfile& sProfile);
 
     /*!
      * @if jp
@@ -318,7 +337,7 @@ protected:
   private:
     RTC::RTObject_impl& m_rtobj;
     coil::vstring m_consumerTypes;
-    bool m_allConsumerAllowed;
+    bool m_allConsumerEnabled;
     
     /*!
      * @if jp

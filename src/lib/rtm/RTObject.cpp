@@ -1914,6 +1914,57 @@ namespace RTC
 
   /*!
    * @if jp
+   * @brief [local interface] SDO service provider をセットする
+   * @else
+   * @brief [local interface] Set a SDO service provider
+   * @endif
+   */
+  bool RTObject_impl::
+  addSdoServiceProvider(const SDOPackage::ServiceProfile& prof,
+                        SdoServiceProviderBase* provider)
+  {
+    return m_sdoservice.addSdoServiceProvider(prof, provider);
+  }
+
+  /*!
+   * @if jp
+   * @brief [local interface] SDO service provider を削除する
+   * @else
+   * @brief [local interface] Remove a SDO service provider
+   * @endif
+   */
+  bool RTObject_impl::removeSdoServiceProvider(const char* id)
+  {
+    return m_sdoservice.removeSdoServiceProvider(id);
+  }
+
+  /*!
+   * @if jp
+   * @brief [local interface] SDO service provider をセットする
+   * @else
+   * @brief [local interface] Set a SDO service provider
+   * @endif
+   */
+  bool RTObject_impl::
+  addSdoServiceConsumer(const SDOPackage::ServiceProfile& prof)
+  {
+    return m_sdoservice.addSdoServiceConsumer(prof);
+  }
+
+  /*!
+   * @if jp
+   * @brief [local interface] SDO service provider を削除する
+   * @else
+   * @brief [local interface] Remove a SDO service provider
+   * @endif
+   */
+  bool RTObject_impl::removeSdoServiceConsumer(const char* id)
+  {
+    return m_sdoservice.removeSdoServiceConsumer(id);
+  }
+
+  /*!
+   * @if jp
    * @brief 全 InPort のデータを読み込む。
    * @return 読み込み結果(全ポートの読み込み成功:true，失敗:false)
    * @else
