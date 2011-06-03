@@ -27,7 +27,7 @@ rtm-config: rtm-config.in
 	echo 'rtm_prefix="'${prefix}'"' >> $@
 	echo 'rtm_exec_prefix="'${exec_prefix}'"' >> $@
 	echo 'rtm_cxx="'${CXX}'"' >> $@
-	echo 'rtm_cflags="'${CXXFLAGS}' -I'${prefix}'/include -I'${rtm_includedir}' -I'${rtm_includedir}'/rtm/idl"' >> $@
+	echo 'rtm_cflags="'${CXXFLAGS}' -I'${prefix}'/include -I'${coil_includedir}' -I'${rtm_includedir}' -I'${rtm_includedir}'/rtm/idl"' >> $@
 	echo 'rtm_libs="'${LDFLAGS}' -L'${prefix}'/lib '${LIBS}' -lRTC -lcoil"' >> $@
 	echo 'rtm_libdir="'${rtm_libdir}'"' >> $@
 	echo 'rtm_version="'${RTM_VERSION}'"' >> $@
