@@ -3,6 +3,8 @@
 # @file FindOpenRTM.cmake
 # @brief Find script for cmake
 #
+# $Id$
+#
 # omniORB variables
 # - OMNIORB_DIR:
 # - OMNIORB_CFLAGS: cflags
@@ -131,7 +133,7 @@ endmacro(rtm_norm_path)
 #------------------------------------------------------------
 if(WIN32)
   set(WIN32_RTM "10")
-  find_file(rtm_conf "rtm_config.cmake" PATHS "$ENV{RTM_ROOT}/etc")
+  find_file(rtm_conf "rtm_config.cmake" PATHS "$ENV{RTM_ROOT}/cmake")
   if(rtm_conf)
     set(WIN32_RTM "11")
     set(RTM_CONFIG_CMAKE "${rtm_conf}")

@@ -77,13 +77,13 @@ cmakedir = ${rtm_datadir}/cmake
 cmake_DATA = OpenRTMConfig.cmake FindOpenRTM.cmake
 
 # basic compiler/linker options
-OPENRTM_CFLAGS=${CXXFLAGS}
+OPENRTM_CFLAGS=`echo "${CXXFLAGS}" | sed -e 's/\-I[^ ]*//g'`
 OPENRTM_INCLUDE_DIRS=        \
 	-I${prefix}/include  \
 	-I${coil_includedir} \
 	-I${rtm_includedir}  \
 	-I${rtm_includedir}/rtm/idl
-OPENRTM_LDFLAGS_=${LDFLAGS}
+OPENRTM_LDFLAGS_=`echo "${LDFLAGS}" | sed -e 's/\-L[^ ]*//g'`
 OPENRTM_LIBRARY_DIRS=-L${prefix}/lib
 OPENRTM_LIBRARIES_=${LIBS} -lRTC -lcoil
 
@@ -152,7 +152,7 @@ OpenRTMConfig.cmake: Makefile.am
 	echo "" >> $@
 	echo "" >> $@
 	echo "# Basic compiler/linker options" >> $@
-	echo "set(OPENRTM_CFLAGS ${CXXFLAGS})" >> $@
+	echo "set(OPENRTM_CFLAGS ${OPENRTM_CFLAGS})" >> $@
 	echo "set(OPENRTM_INCLUDE_DIRS ${OPENRTM_INCLUDE_DIRS})" >> $@
 	echo "set(OPENRTM_LDFLAGS ${OPENRTM_LDFLAGS_})" >> $@
 	echo "set(OPENRTM_LIBRARY_DIRS ${OPENRTM_LIBRARY_DIRS})" >> $@
