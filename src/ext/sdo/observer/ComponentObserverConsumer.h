@@ -123,9 +123,9 @@ namespace RTC
      * @brief Converting kind to string
      * @endif
      */
-    inline const char* toString(OpenRTM::StatusKind statuskind)
+    inline const char* toString(OpenRTM::StatusKind kind)
     {
-      static const char* kind[] = 
+      static const char* kinds[] = 
         {
           "COMPONENT_PROFILE",
           "RTC_STATUS",
@@ -134,7 +134,7 @@ namespace RTC
           "CONFIGURATION",
           "HEARTBEAT"
         };
-      return statuskind < sizeof(kind)/sizeof(char*) ? kind[statuskind] : "";
+      return (size_t)kind < sizeof(kind)/sizeof(char*) ? kinds[kind] : "";
     }
 
     /*!
