@@ -1,0 +1,13 @@
+Cmake:
+  GUID: 1E25EFF6-8C7C-11E0-9306-000C290BB873
+  Files:
+    - Id: Cmake000
+      ShortName: findopen.cma
+      Name: FindOpenRTM.cmake
+      Source: ..\\cmake\\FindOpenRTM.cmake
+    - Id: Cmake001
+      ShortName: rtm_c000.cma
+      Name: rtm_config.cmake
+      Source: ..\\rtm_config.cmake
+
+
