@@ -68,7 +68,7 @@
 #
 
 clean-local:
-	rm -f OpenRTMConfig.cmake
+	rm -f OpenRTMConfig.cmake FindOpenRTM.cmake
 	rm -rf *~
 
 wxs:

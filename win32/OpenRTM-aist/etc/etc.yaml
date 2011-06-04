@@ -20,4 +20,4 @@ Etc:
     - Id: Etc0005
       ShortName: rtm_c000.cma
       Name: rtm_config.cmake
-      Source: ..\\rtm_config.cmake
+      Source: ..\\cmake\\rtm_config.cmake
