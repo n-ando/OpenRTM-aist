@@ -36,9 +36,9 @@
 # Windows:
 #   <prefix>/<name>*/cmake: C:/Progam Files/OpenRTM-aist/1.1/cmake
 # UNIX:
-#   <prefix>/share/<name>*/cmake: /usr/share/openrtm-1.1/cmake
+#   <prefix>/lib/<name>*/cmake: /usr/lib/openrtm-1.1/cmake
 # Mac OS X
-#   <prefix>/share/<name>*/cmake: /opt/local/share/openrtm-1.1/cmake
+#   <prefix>/lib/<name>*/cmake: /opt/local/lib/openrtm-1.1/cmake
 #
 # Users' CMakeList.txt just only use the following find_package() command
 #   find_package(OpenRTM-aist ....)
@@ -57,7 +57,7 @@
 #   find_package(openrtm-aist CONFIGS OpenRTMConfig.cmake): OK
 #
 # UNIX)
-# configfile: /usr/share/openrtm-1.1/cmake/OpenRTMConfig.cmake
+# configfile: /usr/lib/openrtm-1.1/cmake/OpenRTMConfig.cmake
 # directives:
 #   find_package(openrtm CONFIGS OpenRTMConfig.cmake): OK
 #   find_package(OpenRTM CONFIGS OpenRTMConfig.cmake): OK
@@ -73,7 +73,7 @@ ORB = @ORB@
 IDLC = @IDLC@
 IDLFLAGS = @IDL_FLAGS@
 
-cmakedir = ${rtm_datadir}/cmake
+cmakedir = ${rtm_libdir}/cmake
 cmake_DATA = OpenRTMConfig.cmake FindOpenRTM.cmake
 
 # basic compiler/linker options
