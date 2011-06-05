@@ -112,7 +112,7 @@ export DONT_STRIP=1
 %files devel
 %defattr(-,root,root,-)
 %attr(755,root,root) %{_bindir}/rtc-template
-%attr(755,root,root) %{_bindir}/rtc-skelwrapper
+%attr(755,root,root) %{_bindir}/rtm-skelwrapper
 %attr(755,root,root) %{_bindir}/coil-config
 %{rtm_includedir}/*
 %{coil_includedir}/*
