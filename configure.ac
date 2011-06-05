@@ -1693,6 +1693,7 @@ AC_OUTPUT([Makefile
 	src/ext/sdo/logger/Makefile
 	utils/Makefile
 	utils/rtm-config/Makefile
+	utils/cmake/Makefile
 	utils/rtc-template/Makefile
 	utils/rtm-skelwrapper/Makefile
 	utils/rtm-naming/Makefile
@@ -1714,6 +1715,7 @@ AC_OUTPUT([Makefile
 	win32/OpenRTM-aist/Makefile
 	win32/OpenRTM-aist/bin/Makefile
 	win32/OpenRTM-aist/etc/Makefile
+	win32/OpenRTM-aist/cmake/Makefile
 	win32/OpenRTM-aist/docs/Makefile
 	win32/OpenRTM-aist/build/Makefile
 	win32/OpenRTM-aist/examples/Makefile
@@ -1723,6 +1725,9 @@ AC_OUTPUT([Makefile
 	win32/OpenRTM-aist/examples/SeqIO/Makefile
 	win32/OpenRTM-aist/examples/SimpleService/Makefile
 	win32/OpenRTM-aist/examples/USBCamera/Makefile
+	win32/OpenRTM-aist/ext/Makefile
+	win32/OpenRTM-aist/ext/sdo/Makefile
+	win32/OpenRTM-aist/ext/sdo/observer/Makefile
 	win32/OpenRTM-aist/utils/Makefile
 	win32/OpenRTM-aist/utils/rtc-template/Makefile
 	win32/OpenRTM-aist/utils/rtcd/Makefile

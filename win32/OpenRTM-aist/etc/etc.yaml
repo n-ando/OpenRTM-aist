@@ -17,3 +17,7 @@ Etc:
       ShortName: rtc.con
       Name: rtc.conf.sample
       Source: ..\\etc\\rtc.conf.sample
+    - Id: Etc0005
+      ShortName: rtm_c000.cma
+      Name: rtm_config.cmake
+      Source: ..\\cmake\\rtm_config.cmake

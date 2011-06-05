@@ -1,5 +1,5 @@
 
-Copyright (C) 2003-2010
+Copyright (C) 2003-2011
      Noriaki Ando and the OpenRTM-aist Project team
      Intelligent Systems Research Institute,
      National Institute of Advanced Industrial Science and Technology (AIST),
@@ -23,12 +23,8 @@ The OpenRTM-aist (H22PRO-1089) is the dual-licensed open source
 software. You can use, copy, distribute and/or modify this library
 under the terms and conditions of either of the licenses below.
 
-1) EPL (Eclipse Public License - v 1.0)
-See
-http://www.eclipse.org/legal/epl-v10.html
-http://www.eclipse.org/org/documents/epl-v10.php
-or
-COPYING.LIB.
+1) LGPL (GNU LESSER GENERAL PUBLIC LICENSE)
+See COPYING.LIB.
 
 2) Individual Licnese
 You can purchase license from AIST and/or AIST's TLO to copy,

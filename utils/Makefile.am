@@ -7,5 +7,5 @@
 
 AUTOMAKE_OPTIONS = 1.4
 
-SUBDIRS = rtm-config rtc-template rtm-skelwrapper rtm-naming rtcd rtcprof
+SUBDIRS = rtm-config cmake rtc-template rtm-skelwrapper rtm-naming rtcd rtcprof
 

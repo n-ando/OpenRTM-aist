@@ -102,6 +102,7 @@ install-arch:
 	(cd $(CURDIR)/utils/rtcd         ; $(MAKE) DESTDIR=$(CURDIR)/debian/openrtm-aist install)
 	(cd $(CURDIR)/utils/rtcprof      ; $(MAKE) DESTDIR=$(CURDIR)/debian/openrtm-aist install)
 	(cd $(CURDIR)/utils/rtm-naming   ; $(MAKE) DESTDIR=$(CURDIR)/debian/openrtm-aist install)
+	(cd $(CURDIR)/utils/rtm-config   ; $(MAKE) DESTDIR=$(CURDIR)/debian/openrtm-aist install)
 	(cd $(CURDIR)/src/ext            ; $(MAKE) DESTDIR=$(CURDIR)/debian/openrtm-aist install-exec)
 
 	# for openrtm-dev package
@@ -110,15 +111,17 @@ install-arch:
 	(cd $(CURDIR)/src/lib/coil          ; $(MAKE) DESTDIR=$(CURDIR)/debian/openrtm-aist-dev install-data)
 	(cd $(CURDIR)/utils/rtc-template    ; $(MAKE) DESTDIR=$(CURDIR)/debian/openrtm-aist-dev install)
 	(cd $(CURDIR)/utils/rtm-skelwrapper ; $(MAKE) DESTDIR=$(CURDIR)/debian/openrtm-aist-dev install)
-	(cd $(CURDIR)/utils/rtm-config      ; $(MAKE) DESTDIR=$(CURDIR)/debian/openrtm-aist-dev install)
+	(cd $(CURDIR)/utils/cmake           ; $(MAKE) DESTDIR=$(CURDIR)/debian/openrtm-aist-dev install)
 	(cd $(CURDIR)/src/lib/coil/utils/coil-config      ; $(MAKE) DESTDIR=$(CURDIR)/debian/openrtm-aist-dev install)
 
 	# for openrtm-aist-example package
 	#$(MAKE)
 	(mkdir $(CURDIR)/debian/openrtm-aist-example/usr/)
 	(ln -s $(CURDIR)/debian/openrtm-aist/usr/lib $(CURDIR)/debian/openrtm-aist-example/usr/)
+	(ln -s $(CURDIR)/debian/openrtm-aist/usr/lib64 $(CURDIR)/debian/openrtm-aist-example/usr/)
 	(cd $(CURDIR)/examples         ; $(MAKE) DESTDIR=$(CURDIR)/debian/openrtm-aist-example install)
 	(rm $(CURDIR)/debian/openrtm-aist-example/usr/lib)
+	(rm $(CURDIR)/debian/openrtm-aist-example/usr/lib64)
 
 	dh_install -s
 # Must not depend on anything. This is to be called by

@@ -4,9 +4,8 @@
 # @date $Date: 2008-02-29 04:50:39 $
 # @author Norkai Ando <n-ando@aist.go.jp>
 #
-# Copyright (C) 2005-2006
+# Copyright (C) 2005-2011
 #     Noriaki Ando
-#     Task-intelligence Research Group,
 #     Intelligent Systems Research Institute,
 #     National Institute of
 #         Advanced Industrial Science and Technology (AIST), Japan
@@ -251,12 +250,26 @@ class wrapper_gen:
         self.data = data
 
     def gen(self, fname, temp_txt, data):
-        f = file(fname, "w")
-        #		s = StringIO.StringIO()
+
         t = yat.Template(temp_txt)
-        text=t.generate(data)
-        #		gen_txt = s.getvalue().splitlines()
-        #		f.write(gen_txt)
+        text = t.generate(data)
+
+        if os.access(fname, os.F_OK): # file exists
+            f = file(fname, "r")
+            oldtext = f.read()
+            f.close()
+
+            newtext = re.sub(" \@date.*?\n", "", text)
+            oldtext2 = re.sub(" \@date.*?\n", "", oldtext)
+            if newtext == oldtext2:
+                print "\"", fname, \
+                    "\" already exists and it will be same as new one."
+                print "File is not need to be generated."
+                return
+            else:
+                print "\"", fname, "\" already exists but contents are not same"
+
+        f = file(fname, "w")
         f.write(text)
         f.close()
         print "\"", fname, "\"" " was generated."

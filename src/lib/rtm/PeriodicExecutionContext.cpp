@@ -141,6 +141,7 @@ namespace RTC
   int PeriodicExecutionContext::svc(void)
   {
     RTC_TRACE(("svc()"));
+    int count(0);
     do 
       {
         m_worker.mutex_.lock();
@@ -155,17 +156,25 @@ namespace RTC
 	  }
 	m_worker.mutex_.unlock();
         coil::TimeValue t1(coil::gettimeofday());
-        RTC_PARANOID(("Period:    %f [s]", (double)m_period));
-        RTC_PARANOID(("Execution: %f [s]", (double)(t1 - t0)));
-        RTC_PARANOID(("Sleep:     %f [s]", (double)(m_period - (t1 - t0))));
+        if (count > 1000)
+          {
+            RTC_PARANOID(("Period:    %f [s]", (double)m_period));
+            RTC_PARANOID(("Execution: %f [s]", (double)(t1 - t0)));
+            RTC_PARANOID(("Sleep:     %f [s]", (double)(m_period - (t1 - t0))));
+          }
         coil::TimeValue t2(coil::gettimeofday());
         if (!m_nowait && m_period > (t1 - t0))
           {
-            RTC_PARANOID(("sleeping..."));
+            if (count > 1000) { RTC_PARANOID(("sleeping...")); }
             coil::sleep((coil::TimeValue)(m_period - (t1 - t0)));
           }
-        coil::TimeValue t3(coil::gettimeofday());
-        RTC_PARANOID(("Slept:     %f [s]", (double)(t3 - t2)));
+        if (count > 1000)
+          {
+            coil::TimeValue t3(coil::gettimeofday());
+            RTC_PARANOID(("Slept:     %f [s]", (double)(t3 - t2)));
+            count = 0;
+          }
+        ++count;
       } while (m_svc);
 
     return 0;

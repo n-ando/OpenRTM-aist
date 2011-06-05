@@ -28,6 +28,7 @@
 namespace RTC
 {
   class RTObject_impl;
+  class SdoServiceProviderBase;
   class SdoServiceConsumerBase;
 
   /*!
@@ -84,9 +85,6 @@ namespace RTC
    * するServiceProfileを探索するため、サービス提供側では削除時までIDを
    * 保持しておかなければならない。
    *
-   * 
-   *
-   *
    *
    * @since 1.1.0
    *
@@ -95,6 +93,53 @@ namespace RTC
    * @class SDO service administration class
    * @brief SDO service administration class
    *
+   * This class is the administration class for SDO Services. The SDO
+   * Service, which is defined in the OMG SDO Specification, is a kind
+   * of service for certain functionalities which is provided and/or
+   * consumed by SDO. The specification does not define details.
+   * However, in this implementation, the following behaviors of SDO
+   * services are assumed and this class manages these SDO services.
+   *
+   * In this context, the SDO Services that are owned by SDO/RTC is
+   * called SDO Service Provider, and the SDO Services that receive
+   * references to provided services by other SDOs/RTCs or
+   * applications is called SDO Serivce Consumer.
+   *
+   * SDO Service Provider is called from other applications, and it is
+   * used to access to internal functionality of an SDO/RTC.  Other
+   * SDO/RTC or applications would get a ServiceProfiles or a
+   * reference to the SDO serivce through the following operations,
+   * and then they call operations of the service.
+   *
+   * - SDO::get_service_profiles ()
+   * - SDO::get_service_profile (in UniqueIdentifier id)
+   * - SDO::get_sdo_service (in UniqueIdentifier id) 
+   *
+   * Since references of services in other SDOs/RTCs or applications
+   * could be released anytime, service providers cannot know where
+   * and how many consumers refer them. On the other hand, since
+   * SDO/RTC which provides services can stop and delete them anytime,
+   * consumers have to call operations by assuming that the reference
+   * cannot be accessed always.
+   *
+   * SDO Service Consumer, which is a reference to the service entity
+   * in the other SDOs/RTCs or other applications, is given with
+   * ServiceProfile, and SDO/RTC would call operation to access some
+   * functionality to the service object. And giving certain observer
+   * object, it will work as callback from SDO/RTC. SDO service
+   * consumer, which is defferent from SDO service provider, is added
+   * and deleted through SDO Configuration interface shown as follows.
+   *
+   * - Configuration::add_service_profile (in ServiceProfile sProfile)
+   * - Configuration::remove_service_profile (in UniqueIdentifier id)
+   *
+   * To set a SDO service to the target SDO/RTC, other SDOs/RTCs and
+   * applications have to give their service references with
+   * ServiceProfile including ID, interface type and properties to the
+   * add_service_profile() operation.  The ID has to be unique such as
+   * UUID.  Since ID is used when the service is removed from the
+   * target SDO/RTC, SDOs/RTCs and applications of service provider
+   * side have to keep the ID until removing the service.
    *
    * @since 1.1.0
    *
@@ -144,29 +189,93 @@ namespace RTC
     /*!
      * @if jp
      *
-     * @brief Service Consumer Factory を登録する
+     * @brief SDO Service Provider の ServiceProfileList を取得する
      * 
      * @else
      *
-     * @brief Add Service Consumer Factory
+     * @brief Get ServiceProfileList of SDO Service Provider
      *
      * @endif
      */
-    bool addSdoServiceConsumerFactory();
+    SDOPackage::ServiceProfileList* getServiceProviderProfiles();
 
     /*!
      * @if jp
      *
-     * @brief Service Consumer Factory を削除する
+     * @brief SDO Service Provider の ServiceProfile を取得する
+     *
+     * id で指定されたIFR IDを持つSDO Service Provider の
+     * ServiceProfile を取得する。id が NULL ポインタの場合、指定された
+     * id に該当するServiceProfile が存在しない場合、InvalidParameter
+     * 例外が送出される。
+     *
+     * @param id SDO Service provider の IFR ID
+     * @return 指定された id を持つ ServiceProfile
      * 
      * @else
      *
-     * @brief Remove Service Consumer Factory
+     * @brief Get ServiceProfile of an SDO Service Provider
+     *
+     * This operation returnes ServiceProfile of an SDO Service
+     * Provider which has the specified id. If the specified id is
+     * NULL pointer or the specified id does not exist in the
+     * ServiceProfile list, InvalidParameter exception will be thrown.
+     *
+     * @param id IFR ID of an SDO Service provider
+     * @return ServiceProfile which has the specified id
      *
      * @endif
      */
-    bool removeSdoServiceConsumerFactory();
-    
+    SDOPackage::ServiceProfile* getServiceProviderProfile(const char* id);
+
+    /*!
+     * @if jp
+     *
+     * @brief SDO Service Provider の Service を取得する
+     *
+     * id で指定されたIFR IDを持つSDO Service のオブジェクトリファレン
+     * ス を取得する。id が NULL ポインタの場合、指定された id に該当す
+     * るServiceProfile が存在しない場合、InvalidParameter 例外が送出さ
+     * れる。
+     *
+     * @param id SDO Service provider の IFR ID
+     * @return 指定された id を持つ SDO Service のオブジェクトリファレンス
+     * 
+     * @else
+     *
+     * @brief Get ServiceProfile of an SDO Service
+     *
+     * This operation returnes an object reference of an SDO Service
+     * Provider which has the specified id. If the specified id is
+     * NULL pointer or the specified id does not exist in the
+     * ServiceProfile list, InvalidParameter exception will be thrown.
+     *
+     * @param id IFR ID of an SDO Service provider
+     * @return an SDO Service reference which has the specified id
+     *
+     * @endif
+     */
+    SDOPackage::SDOService_ptr getServiceProvider(const char* id);
+
+    /*!
+     * @if jp
+     * @brief SDO service provider をセットする
+     * @else
+     * @brief Set a SDO service provider
+     * @endif
+     */
+    bool addSdoServiceProvider(const SDOPackage::ServiceProfile& prof,
+                               SdoServiceProviderBase* provider);
+
+    /*!
+     * @if jp
+     * @brief SDO service provider を削除する
+     * @else
+     * @brief Remove a SDO service provider
+     * @endif
+     */
+    bool removeSdoServiceProvider(const char* id);
+
     /*!
      * @if jp
      *
@@ -201,11 +310,11 @@ protected:
      * 
      * @else
      *
-     * @brief If it is allowed service type
+     * @brief If it is enabled service type
      *
      * @endif
      */
-    bool isAllowedConsumerType(const SDOPackage::ServiceProfile& sProfile);
+    bool isEnabledConsumerType(const SDOPackage::ServiceProfile& sProfile);
 
     /*!
      * @if jp
@@ -222,11 +331,13 @@ protected:
 
     const std::string getUUID() const;
     
+    std::string ifrToKey(std::string& ifr);
+
 
   private:
     RTC::RTObject_impl& m_rtobj;
     coil::vstring m_consumerTypes;
-    bool m_allConsumerAllowed;
+    bool m_allConsumerEnabled;
     
     /*!
      * @if jp
@@ -235,7 +346,7 @@ protected:
      * @brief SDO ServiceProfileList with mutex lock
      * @endif
      */
-    SDOPackage::ServiceProfileList m_providerProfiles;
+    std::vector<SdoServiceProviderBase*> m_providers;
     coil::Mutex m_provider_mutex;
     
     /*!

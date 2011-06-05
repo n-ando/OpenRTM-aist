@@ -76,9 +76,9 @@ cp $tarballname SOURCES
 #
 # Fedora12/13's omniORB package names are odd.
 #------------------------------------------------------------
-if test "x$dist_key" = "xfc12" || test "x$dist_key" = "xfc13" ; then
-    sed -e 's/Requires:      omniORB$/Requires:      libomniORB/g' > tmp.spec
-    sed -e 's/BuildRequires: omniORB-devel$/BuildRequires: libomniORB-devel/' tmp.spec > SPECS/OpenRTM-aist.spec
+if test "x$dist_key" = "xfc12" || test "x$dist_key" = "xfc13" || test "x$dist_key" = "xvl50" ; then
+    sed -e 's/Requires:      omniORB$/Requires:      libomniORB4.1/g' OpenRTM-aist.spec > tmp.spec
+    sed -e 's/BuildRequires: omniORB-devel$/BuildRequires: libomniORB4.1-devel/' tmp.spec > SPECS/OpenRTM-aist.spec
     rm tmp.spec
 else
     cp OpenRTM-aist.spec SPECS/OpenRTM-aist.spec

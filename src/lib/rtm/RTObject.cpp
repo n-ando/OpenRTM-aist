@@ -726,6 +726,7 @@ namespace RTC
         PortProfileList ppl    = m_portAdmin.getPortProfileList();
         profile->port_profiles = ppl._retn();
 #endif // ORB_IS_RTORB
+        NVUtil::copyFromProperties(profile->properties, m_properties);
 	return profile._retn();
       }
     catch (...)
@@ -1187,7 +1188,10 @@ namespace RTC
       }
     return new SDOPackage::DeviceProfile();
   }
-  
+
+  //------------------------------------------------------------
+  // SDO service
+  //------------------------------------------------------------
   /*!
    * @if jp
    * @brief [SDO interface] SDO ServiceProfile の取得 
@@ -1200,18 +1204,19 @@ namespace RTC
 	   SDOPackage::NotAvailable, SDOPackage::InternalError)
   {
     RTC_TRACE(("get_service_profiles()"));
-    m_sdoSvcProfiles = m_pSdoConfigImpl->getServiceProfiles();
+
+    SDOPackage::ServiceProfileList_var sprofiles;
     try
       {
-	SDOPackage::ServiceProfileList_var sprofiles;
-	sprofiles = new SDOPackage::ServiceProfileList(m_sdoSvcProfiles);
-	return sprofiles._retn();
+	sprofiles = m_sdoservice.getServiceProviderProfiles();
+        RTC_DEBUG(("SDO ServiceProfiles[%d]", sprofiles->length()));
       }
     catch (...)
       {
+        RTC_ERROR(("Unknown exception cought in get_service_profiles()."));
 	throw SDOPackage::InternalError("get_service_profiles()");
       }
-    return new SDOPackage::ServiceProfileList();
+    return sprofiles._retn();
   }
   
   /*!
@@ -1227,29 +1232,29 @@ namespace RTC
 	   SDOPackage::InvalidParameter, SDOPackage::NotAvailable,
 	   SDOPackage::InternalError)
   {
-    RTC_TRACE(("get_service_profile(%s))", id));
-    m_sdoSvcProfiles = m_pSdoConfigImpl->getServiceProfiles();
     if (!id)
-      throw SDOPackage::InvalidParameter("get_service_profile(): Empty name.");
+      {
+        throw SDOPackage::
+          InvalidParameter("get_service_profile(): Empty name.");
+      }
+    RTC_TRACE(("get_service_profile(%s))", id));
     
-    CORBA::Long index;
-    index = CORBA_SeqUtil::find(m_sdoSvcProfiles, svc_name(id));
-    if(index < 0)
-    {
-      throw SDOPackage::InvalidParameter("get_service_profile():"
-                                         "Name is not found.");
-    }
+    SDOPackage::ServiceProfile_var prof;
     try
       {
-	SDOPackage::ServiceProfile_var sprofile;
-	sprofile = new SDOPackage::ServiceProfile(m_sdoSvcProfiles[index]);
-	return sprofile._retn();
+	prof = m_sdoservice.getServiceProviderProfile(id);
+      }
+    catch (SDOPackage::InvalidParameter &e)
+      {
+        RTC_ERROR(("InvalidParameter exception: name (%s) is not found", id));
+        throw e;
       }
     catch (...)
       {
+        RTC_ERROR(("Unknown exception cought in get_service_profile(%s).", id));
 	throw SDOPackage::InternalError("get_service_profile()");
       }
-    return new SDOPackage::ServiceProfile();
+    return prof._retn();
   }
   
   /*!
@@ -1265,27 +1270,25 @@ namespace RTC
 	   SDOPackage::InternalError)
   {
     RTC_TRACE(("get_sdo_service(%s))", id));
-    m_sdoSvcProfiles = m_pSdoConfigImpl->getServiceProfiles();
     if (!id)
-      throw SDOPackage::InvalidParameter("get_service(): Empty name.");
-    
-    CORBA::Long index;
-    index = CORBA_SeqUtil::find(m_sdoSvcProfiles, svc_name(id));
-    if (index <0)
-    {
-      throw SDOPackage::InvalidParameter("get_service(): Name is not found.");
-    }
+      {
+        throw SDOPackage::InvalidParameter("get_service(): Empty name.");
+      }
+
+    SDOPackage::SDOService_var sdo;
     try
       {
-	SDOPackage::SDOService_var service;
-	service = m_sdoSvcProfiles[index].service;
-	return service._retn();
+	sdo = m_sdoservice.getServiceProvider(id);
+      }
+    catch (SDOPackage::InvalidParameter &e)
+      {
+        throw e;
       }
     catch (...)
       {
 	throw SDOPackage::InternalError("get_service()");
       }
-    return SDOPackage::SDOService::_nil();
+    return sdo;
   }
   
   /*!
@@ -1908,85 +1911,53 @@ namespace RTC
       }
     return ec->reset_component(::RTC::RTObject::_duplicate(getObjRef()));
   }
-   
+
   /*!
    * @if jp
-   *
-   * @brief [local interface] SDOサービスを追加する
+   * @brief [local interface] SDO service provider をセットする
    * @else
-   * @brief [local interface] Add SDO service
+   * @brief [local interface] Set a SDO service provider
    * @endif
    */
-  ReturnCode_t
-  RTObject_impl::addSdoService(const SDOPackage::ServiceProfile& profile)
-  {
-    CORBA::Boolean ret = m_pSdoConfigImpl->add_service_profile(profile);
-    if (ret) { return RTC::RTC_OK; }
-    return RTC::RTC_ERROR;
-    /*
-    std::string id(profile.id);
-    for (CORBA::ULong i(0), len(m_sdoSvcProfiles.length()); i < len; ++i)
-      {
-        if (id == m_sdoSvcProfiles[i].id)
-          {
-            return RTC::PRECONDITION_NOT_MET;
-          }
-      }
-    CORBA_SeqUtil::push_back(m_sdoSvcProfiles, profile);
-    return RTC::RTC_OK;
-    */
-  }
-  
-  /*!
-   * @if jp
-   * @brief [local interface] SDOサービスを削除する
-   * @else
-   * @brief [local interface] Remove SDO service
-   * @endif
-   */
-  SDOPackage::SDOService_var
-  RTObject_impl::removeSdoService(const char* service_id)
-  {
-    SDOPackage::SDOService_var service;
-    try
-      {
-        service = get_sdo_service(service_id);
-        m_pSdoConfigImpl->remove_service_profile(service_id);
-      }
-    catch (SDOPackage::InvalidParameter& e)
-      {
-      }
-    catch (SDOPackage::NotAvailable& e)
-      {
-      }
-    catch (SDOPackage::InternalError& e)
-      {
-      }
-    catch (...)
-      {
-      }
-    return service._retn();
-    /*
-    std::string id(service_id);
-    SDOPackage::ServiceProfile_var profile;
-    for (CORBA::ULong i(0), len(m_sdoSvcProfiles.length()); i < len; ++i)
-      {
-        if (id == m_sdoSvcProfiles[i].id)
-          {
-            profile = m_sdoSvcProfiles[i];
-            CORBA_SeqUtil::erase(m_sdoSvcProfile, id);
-          }
-      }
-    return profile._retn();
-    */
-  }
- 
   bool RTObject_impl::
-  addSdoServiceConsumer(const SDOPackage::ServiceProfile& sProfile)
+  addSdoServiceProvider(const SDOPackage::ServiceProfile& prof,
+                        SdoServiceProviderBase* provider)
   {
-    return m_sdoservice.addSdoServiceConsumer(sProfile);
+    return m_sdoservice.addSdoServiceProvider(prof, provider);
   }
 
+  /*!
+   * @if jp
+   * @brief [local interface] SDO service provider を削除する
+   * @else
+   * @brief [local interface] Remove a SDO service provider
+   * @endif
+   */
+  bool RTObject_impl::removeSdoServiceProvider(const char* id)
+  {
+    return m_sdoservice.removeSdoServiceProvider(id);
+  }
+
+  /*!
+   * @if jp
+   * @brief [local interface] SDO service provider をセットする
+   * @else
+   * @brief [local interface] Set a SDO service provider
+   * @endif
+   */
+  bool RTObject_impl::
+  addSdoServiceConsumer(const SDOPackage::ServiceProfile& prof)
+  {
+    return m_sdoservice.addSdoServiceConsumer(prof);
+  }
+
+  /*!
+   * @if jp
+   * @brief [local interface] SDO service provider を削除する
+   * @else
+   * @brief [local interface] Remove a SDO service provider
+   * @endif
+   */
   bool RTObject_impl::removeSdoServiceConsumer(const char* id)
   {
     return m_sdoservice.removeSdoServiceConsumer(id);

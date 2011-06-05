@@ -4,9 +4,8 @@
 # @date $Date: 2008-03-06 06:46:37 $
 # @author Norkai Ando <n-ando@aist.go.jp>
 #
-# Copyright (C) 2008
-#     Noriaki Ando
-#     Task-intelligence Research Group,
+# Copyright (C) 2008-2011
+#     Noriaki Ando, Tsuyoto Katami
 #     Intelligent Systems Research Institute,
 #     National Institute of
 #         Advanced Industrial Science and Technology (AIST), Japan

@@ -66,7 +66,7 @@ nodist_libLoggerStub_la_SOURCES = $(IDL_SOURCES:.idl=Stub.cpp)
 
 socomp_LTLIBRARIES = LoggerConsumer.la
 
-dist_LoggerConsumer_la_SOURCES = \
+nodist_LoggerConsumer_la_SOURCES = \
 	$(LOGGER_DIST_SRC) $(LOGGER_DIST_H)
 LoggerConsumer_la_LDFLAGS = -module
 LoggerConsumer_la_DEPENDENCIES = libLoggerStub.la

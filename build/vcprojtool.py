@@ -6,7 +6,6 @@
 #
 # Copyright (C) 2008
 #     Noriaki Ando
-#     Task-intelligence Research Group,
 #     Intelligent Systems Research Institute,
 #     National Institute of
 #         Advanced Industrial Science and Technology (AIST), Japan

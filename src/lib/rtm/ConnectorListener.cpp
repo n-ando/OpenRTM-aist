@@ -53,6 +53,7 @@ namespace RTC
 
   ConnectorDataListenerHolder::~ConnectorDataListenerHolder()
   {
+    Guard guard(m_mutex);
     for (int i(0), len(m_listeners.size()); i < len; ++i)
       {
         if (m_listeners[i].second)
@@ -66,6 +67,7 @@ namespace RTC
   void ConnectorDataListenerHolder::
   addListener(ConnectorDataListener* listener, bool autoclean)
   {
+    Guard guard(m_mutex);
     m_listeners.push_back(Entry(listener, autoclean));
   }
 
@@ -73,6 +75,7 @@ namespace RTC
   void ConnectorDataListenerHolder::
   removeListener(ConnectorDataListener* listener)
   {
+    Guard guard(m_mutex);
     std::vector<Entry>::iterator it(m_listeners.begin());
     for (; it != m_listeners.end(); ++it)
       {
@@ -93,6 +96,7 @@ namespace RTC
   void ConnectorDataListenerHolder::notify(const ConnectorInfo& info,
                                            const cdrMemoryStream& cdrdata)
   {
+    Guard guard(m_mutex);
     for (int i(0), len(m_listeners.size()); i < len; ++i)
       {
         m_listeners[i].first->operator()(info, cdrdata);
@@ -114,6 +118,7 @@ namespace RTC
   
   ConnectorListenerHolder::~ConnectorListenerHolder()
   {
+    Guard guard(m_mutex);
     for (int i(0), len(m_listeners.size()); i < len; ++i)
       {
         if (m_listeners[i].second)
@@ -127,12 +132,14 @@ namespace RTC
   void ConnectorListenerHolder::addListener(ConnectorListener* listener,
                                             bool autoclean)
   {
+    Guard guard(m_mutex);
     m_listeners.push_back(Entry(listener, autoclean));
   }
   
 
   void ConnectorListenerHolder::removeListener(ConnectorListener* listener)
   {
+    Guard guard(m_mutex);
     std::vector<Entry>::iterator it(m_listeners.begin());
     
     for (; it != m_listeners.end(); ++it)
@@ -153,6 +160,7 @@ namespace RTC
   
   void ConnectorListenerHolder::notify(const ConnectorInfo& info)
   {
+    Guard guard(m_mutex);
     for (int i(0), len(m_listeners.size()); i < len; ++i)
       {
         m_listeners[i].first->operator()(info);

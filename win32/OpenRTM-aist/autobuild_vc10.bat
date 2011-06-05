@@ -34,6 +34,22 @@ copy   etc\rtm_config_omni414.props examples\USBCamera\rtm_config.props
 copy   coil_config.props examples\USBCamera\coil_config.props
 
 @rem ============================================================
+@rem convert property sheet to cmake
+@rem ============================================================
+set TMP_PYTHONPATH=%PYTHONPATH%
+set PYTHONPATH=./bin;%PYTHONPATH%
+
+echo Generating rtm_config.cmake file
+build\vsprops2cmake.py rtm_config.vsprops
+move rtm_config.cmake cmake
+
+echo Generating OpenRTMConfig.cmake file
+build\cmakeconfgen.py rtm_config.vsprops
+move OpenRTMConfig.cmake cmake
+
+set PYTHONPATH=%TMP_PYTHONPATH%
+
+@rem ============================================================
 @rem build OpenRTM-aist
 @rem ============================================================
 

@@ -19,19 +19,19 @@
     <Property Id='USERPROFILEDIR' Value='%USERPROFILE%' />
     <!-- アップグレード -->
     <Upgrade Id="{% Product.UpgradeCode %}">
-     <UpgradeVersion OnlyDetect="yes"
-		      Minimum="1.0.0.1"
-		      Maximum="1.1.0"
+      <UpgradeVersion OnlyDetect="yes"
+		      Minimum="1.1.0.1"
+		      Maximum="1.2.0"
 		      Property="NEWERVERSIONDETECTED"
 		      IncludeMinimum="no" /> 
       <UpgradeVersion OnlyDetect="no"
-		      Minimum="1.0.0"
-		      Maximum="1.0.0.1"
+		      Minimum="1.1.0"
+		      Maximum="1.1.0.1"
 		      Property="OLDERVERSIONBEINGUPGRADED"
 		      IncludeMaximum="no" /> 
       <UpgradeVersion OnlyDetect='no' Property='PREVIOUSFOUND'
-                      Minimum='1.0.0' IncludeMinimum='yes'
-                      Maximum='1.1.0' IncludeMaximum='no' />
+                      Minimum='1.1.0' IncludeMinimum='yes'
+                      Maximum='1.2.0' IncludeMaximum='no' />
     </Upgrade>
     <InstallExecuteSequence>
       <RemoveExistingProducts Before="InstallInitialize"/>
@@ -54,7 +54,7 @@
 			     System='yes' Part='all' Value='[Version]' />
 		<Environment Id='UpdatePath' Name='PATH' Action='set'
 			     System='yes' Part='last'
-			     Value='[bin]' />
+			     Value='%RTM_ROOT%\bin' />
 		{% for file in Bin.Files %}
 		<File Id="{% file.Id %}"
 		      Name="{% file.Name %}" DiskId="1"
@@ -94,6 +94,17 @@
 	    <Directory Id="etc" Name="etc">
 	      <Component Id="Etc" Guid="{% Etc.GUID %}">
 		{% for file in Etc.Files %}
+		<File Id="{% file.Id %}"
+		      Name="{% file.Name %}" DiskId="1"
+		      Source="{% file.Source %}">
+		</File>
+		{% endfor %}
+	      </Component>
+	    </Directory>
+	    <!-- cmake -->
+	    <Directory Id="cmake" Name="cmake">
+	      <Component Id="Cmake" Guid="{% Cmake.GUID %}">
+		{% for file in Cmake.Files %}
 		<File Id="{% file.Id %}"
 		      Name="{% file.Name %}" DiskId="1"
 		      Source="{% file.Source %}">
@@ -209,7 +220,7 @@
 		<Component Id="RtcTemplate" Guid="{% RtcTemplate.GUID %}">
 		  <Environment Id='UpdatePath2' Name='PATH' Action='set'
 			       System='yes' Part='last'
-			       Value='[rtc_template]' />
+			       Value='%RTM_ROOT%\utils\rtc-template' />
 	      	  {% for file in RtcTemplate.Files %}
 		  <File Id="{% file.Id %}"
 			Name="{% file.Name %}" DiskId="1"
@@ -219,14 +230,28 @@
 	      </Directory>
 	    </Directory>
 	    
+	    <!-- extension -->
+	    <Directory Id="ext" Name="ext">
+	      <Directory Id="sdo" Name="sdo">
+		<Component Id="SDOService" Guid="{% SDOService.GUID %}">
+	      	  {% for file in SDOService.Files %}
+		  <File Id="{% file.Id %}"
+			Name="{% file.Name %}" DiskId="1"
+			Source="{% file.Source %}"/>
+		  {% endfor %}
+		  </Component>
+	      </Directory>
+	    </Directory>
+
 	    <!-- examples -->
 	    <Directory Id="examples" Name="examples">
 	      <Directory Id="CXXexamples" Name="C++">
-            <!-- OpenCV-RTC components -->
-            <?if $(env.INCLUDE_OPENCV_RTC) = YES ?>
-              <?include OpenCV-RTC_inc.wxs ?>
-            <?endif ?>
-            <!-- end of OpenCV-RTC -->
+
+		<!-- OpenCV-RTC components -->
+		<?if $(env.INCLUDE_OPENCV_RTC) = YES ?>
+		<?include OpenCV-RTC_inc.wxs ?>
+		<?endif ?>
+		<!-- end of OpenCV-RTC -->
 
 		<Component Id="Examples" Guid="{% Examples.GUID %}">
 		  {% for file in Examples.Files %}
@@ -256,26 +281,28 @@
 		</Component>
 	      </Directory>
 	    </Directory>
+
+	    <!-- omniORB components -->
+	    <?if $(env.INCLUDE_OMNIORB) = YES ?>
+	    <?include omniORB_inc.wxs ?>
+	    <?endif ?>
+	    <!-- end of omniORB -->
+	    
+	    <!-- rtmtools components -->
+	    <?if $(env.INCLUDE_OPENRTP) = YES ?>
+	    <?include OpenRTP_inc.wxs ?>
+	    <?endif ?>
+	    <!-- end of rtmtools -->
+	    
+	    <!-- OpenCV components -->
+	    <?if $(env.INCLUDE_OPENCV) = YES ?>
+	    <?include OpenCV_inc.wxs ?>
+	    <?endif ?>
+	    <!-- end of OpenCV -->
+	    
 	  </Directory>
 	</Directory><!--end of OpenRTM-aist-->
 
-	<!-- omniORB components -->
-	<?if $(env.INCLUDE_OMNIORB) = YES ?>
-	<?include omniORB_inc.wxs ?>
-	<?endif ?>
-	<!-- end of omniORB -->
-
-	<!-- rtmtools components -->
-	<?if $(env.INCLUDE_OPENRTP) = YES ?>
-	<?include OpenRTP_inc.wxs ?>
-	<?endif ?>
-	<!-- end of rtmtools -->
-
-	<!-- OpenCV components -->
-	<?if $(env.INCLUDE_OPENCV) = YES ?>
-	<?include OpenCV_inc.wxs ?>
-	<?endif ?>
-	<!-- end of OpenCV -->
 
       </Directory>
 
@@ -320,6 +347,8 @@
 	<ComponentRef Id="Bin"/>
 	<ComponentRef Id="COILs"/>
 	<ComponentRef Id="Etc"/>
+	<ComponentRef Id="Cmake"/>
+	<ComponentRef Id="SDOService"/>
       </Feature>
       <!-- devel -->
       <Feature Id="Devel" Level="1" Title="Development Environment">
@@ -353,17 +382,13 @@
     <Feature Id="OpenRTP" Level="1" Title="OpenRT Platform Tool Chain">
       <!-- rtse rcp -->
       <Feature Id="RTSystemEditor" Level="1" Title="RTSystemEditor">
-	<ComponentRef Id="RTSystemEditor" />
-	<ComponentRef Id="configuration" />
-	<ComponentRef Id="plugins" />
-	<ComponentRef Id="org.eclipse.core.runtime.compatibility.registry_3.2.1.R32x_v20060907" />
+	<ComponentRef Id="Openrtp" />
+	<ComponentRef Id="OpenrtpConfiguration" />
+	<ComponentRef Id="OpenrtpPlugins" />
+	<ComponentRef Id="org.eclipse.core.runtime.compatibility.registry_3.2.200.v20080610" />
 	<ComponentRef Id="META_INF" />
-	<ComponentRef Id="org.eclipse.jdt.junit.runtime.nl1_3.2.1.v200609270227" />
-	<ComponentRef Id="META_INF_1" />
-	<ComponentRef Id="org.eclipse.jdt.junit.runtime_3.2.1.r321_v20060721" />
+	<ComponentRef Id="org.eclipse.equinox.launcher.win32.win32.x86_1.0.101.R34x_v20080731" />
 	<ComponentRef Id="META_INF_2" />
-	<ComponentRef Id="org.junit_3.8.1" />
-	<ComponentRef Id="META_INF_3" />
       </Feature>
     </Feature>
     <?endif ?>

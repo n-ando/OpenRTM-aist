@@ -97,26 +97,28 @@ export DONT_STRIP=1
 %files
 /etc/rtc.conf.sample
 %defattr(-,root,root,-)
+%attr(755,root,root) %{_bindir}/rtm-naming
+%attr(755,root,root) %{_bindir}/rtcd
+%attr(755,root,root) %{_bindir}/rtcprof
+%attr(755,root,root) %{_bindir}/rtm-config
 %{_libdir}/libRTC*
 %{_libdir}/libcoil*
 %{rtm_libdir}/ec/*
 %{rtm_libdir}/sdo/*
-#%{_libdir}/openrtm-%{shortversion}/ec/*
-#%{_libdir}/openrtm-%{shortversion}/sdo/*
 
 
 #------------------------------------------------------------
 # devel package file list
 %files devel
 %defattr(-,root,root,-)
-%attr(755,root,root) %{_bindir}/*
+%attr(755,root,root) %{_bindir}/rtc-template
+%attr(755,root,root) %{_bindir}/rtm-skelwrapper
+%attr(755,root,root) %{_bindir}/coil-config
 %{rtm_includedir}/*
 %{coil_includedir}/*
 %{rtm_libdir}/py_helper/*
 %{_libdir}/pkgconfig/*
-#%{rtm_libdir}/
-#%{_includedir}/*
-#%{_libdir}/openrtm-%{shortversion}/
+%{rtm_libdir}/cmake/*
 
 
 #------------------------------------------------------------
@@ -124,7 +126,7 @@ export DONT_STRIP=1
 %files doc
 %defattr(-,root,root,-)
 %{rtm_datadir}/doc/*
-#%{_datadir}/openrtm-%{shortversion}/doc/*
+
 
 #------------------------------------------------------------
 # example package file list
@@ -136,16 +138,14 @@ export DONT_STRIP=1
 %{rtm_datadir}/example/src/*
 %{rtm_datadir}/example/rtc/*
 %{rtm_datadir}/example/templates/*
-#%attr(755,root,root) %{_datadir}/openrtm-%{shortversion}/example/*Comp*
-#%{_datadir}/openrtm-%{shortversion}/example/*.conf
-#%{_datadir}/openrtm-%{shortversion}/example/*.conf.org
-#%{_datadir}/openrtm-%{shortversion}/example/src/*
-#%{_datadir}/openrtm-%{shortversion}/example/rtc/*
-#%{_datadir}/openrtm-%{shortversion}/example/templates/*
+
 
 #------------------------------------------------------------
 # changelog section
 %changelog
+* Thu Jun 4 2011 Noriaki Ando <n-ando@aist.go.jp> - 1.1.0-0._distname
+- CMakefile has been added.
+
 * Thu May 7 2011 Noriaki Ando <n-ando@aist.go.jp> - 1.1.0-0._distname
 - The 1.1.0 release of OpenRTM-aist.
 

@@ -6,7 +6,7 @@
 ##---------------------------------------------------------------------------
 
 clean-local:
-	rm -rf *~ *core *.cpp *.vcproj *.user *.exe
+	rm -rf *~ *core *.cpp *.vcproj *.vcxproj *.user *.exe
 	rm -rf rtc.conf
 	rm -rf rtcprof
 

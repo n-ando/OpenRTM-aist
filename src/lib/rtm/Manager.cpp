@@ -38,6 +38,7 @@
 #include <coil/OS.h>
 #include <rtm/FactoryInit.h>
 #include <rtm/CORBA_IORUtil.h>
+#include <rtm/SdoServiceConsumerBase.h>
 
 #if defined(minor)
 #undef minor
@@ -288,6 +289,9 @@ namespace RTC
 	    RTC_ERROR(("Unknown Exception"));
 	  }
       }
+
+    m_config["sdo.service.consumer.available_services"]
+      = coil::flatten(SdoServiceConsumerFactory::instance().getIdentifiers());
 
     if (m_initProc != NULL)
       {
@@ -597,6 +601,16 @@ std::vector<coil::Properties> Manager::getLoadableModules()
     prop = factory->profile();
 
     const char* inherit_prop[] = {
+      "config.version",
+      "openrtm.name",
+      "openrtm.version",
+      "os.name",
+      "os.release",
+      "os.version",
+      "os.arch",
+      "os.hostname",
+      "corba.endpoint",
+      "corba.id",
       "exec_cxt.periodic.type",
       "exec_cxt.periodic.rate",
       "exec_cxt.evdriven.type",
@@ -1741,7 +1755,7 @@ std::vector<coil::Properties> Manager::getLoadableModules()
 		else if (c == 'v')  str += prop["version"];
 		else if (c == 'V')  str += prop["vendor"];
 		else if (c == 'c')  str += prop["category"];
-		else if (c == 'h')  str += m_config["manager.os.hostname"];
+		else if (c == 'h')  str += m_config["os.hostname"];
 		else if (c == 'M')  str += m_config["manager.name"];
 		else if (c == 'p')  str += m_config["manager.pid"];
 		else str.push_back(c);

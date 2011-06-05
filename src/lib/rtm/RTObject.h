@@ -3118,39 +3118,39 @@ namespace RTC
 
     /*!
      * @if jp
-     *
-     * @brief [local interface] SDOサービスを追加する
-     * 
-     * SDOサービスを追加する。
-     *
+     * @brief [local interface] SDO service provider をセットする
      * @else
-     *
-     * @brief [local interface] Add SDO service
-     *
-     * This operation adds SDO service to this RT-Component.
-     *
+     * @brief [local interface] Set a SDO service provider
      * @endif
      */
-    ReturnCode_t addSdoService(const SDOPackage::ServiceProfile& profile);
+    bool addSdoServiceProvider(const SDOPackage::ServiceProfile& prof,
+                               SdoServiceProviderBase* provider);
 
     /*!
      * @if jp
-     *
-     * @brief [local interface] SDOサービスを削除する
-     * 
-     * SDOサービスを削除する。
-     *
+     * @brief [local interface] SDO service provider を削除する
      * @else
-     *
-     * @brief [local interface] Remove SDO service
-     *
-     * This operation removes SDO service to this RT-Component.
-     *
+     * @brief [local interface] Remove a SDO service provider
      * @endif
      */
-    SDOPackage::SDOService_var removeSdoService(const char* service_name);
+    bool removeSdoServiceProvider(const char* id);
 
-    bool addSdoServiceConsumer(const SDOPackage::ServiceProfile& sProfile);
+    /*!
+     * @if jp
+     * @brief [local interface] SDO service provider をセットする
+     * @else
+     * @brief [local interface] Set a SDO service provider
+     * @endif
+     */
+    bool addSdoServiceConsumer(const SDOPackage::ServiceProfile& prof);
+
+    /*!
+     * @if jp
+     * @brief [local interface] SDO service provider を削除する
+     * @else
+     * @brief [local interface] Remove a SDO service provider
+     * @endif
+     */
     bool removeSdoServiceConsumer(const char* id);
 
     /*!
@@ -4521,15 +4521,6 @@ namespace RTC
      * @endif
      */
     SDOPackage::OrganizationList m_sdoOwnedOrganizations;
-    
-    /*!
-     * @if jp
-     * @brief SDOService のプロファイルリスト
-     * @else
-     * @brief SDOService Profile List
-     * @endif
-     */
-    SDOPackage::ServiceProfileList m_sdoSvcProfiles;
     
     /*!
      * @if jp

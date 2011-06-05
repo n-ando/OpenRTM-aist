@@ -97,8 +97,10 @@ fi
 #------------------------------------------------------------
 # package build process
 #------------------------------------------------------------
-packagedir=../../
+packagedir=`pwd`/../../
 mkdir $packagedir/debian
+
+rm -f $packagedir/packages/openrtm-aist*
 
 cp README.Debian $packagedir/debian/
 cp changelog $packagedir/debian/
@@ -115,3 +117,5 @@ chmod 755 $packagedir/debian/rules
 cd $packagedir
 
 dpkg-buildpackage -W -us -uc -rfakeroot
+
+mv $packagedir/../openrtm-aist* $packagedir/packages/

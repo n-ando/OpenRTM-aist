@@ -4,7 +4,7 @@
 ##
 ## $Id$
 ##---------------------------------------------------------------------------
-SUBDIRS = bin etc build docs examples utils coil rtm installer .
+SUBDIRS = bin etc cmake build docs examples ext utils coil rtm installer .
 
 
 clean-local:

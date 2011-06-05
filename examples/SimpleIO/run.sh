@@ -38,7 +38,7 @@ fi
 
 ../../utils/rtm-naming/rtm-naming $nsport
 
-echo 'corba.nameservers: '$hostname':'$nsport > ./rtc.conf
+echo 'corba.nameservers: 127.0.0.1:'$nsport > ./rtc.conf
 echo 'naming.formats: %n.rtc' >> ./rtc.conf
 echo 'logger.log_level: TRACE' >> ./rtc.conf
 
@@ -46,7 +46,7 @@ $term -e ./ConsoleInComp &
 $term -e ./ConsoleOutComp &
 
 sleep 5
-./ConnectorComp &
+./ConnectorComp --port $nsport --flush &
 
 #sleep 10
 #nspid=`ps -ax | grep 9876 | awk '{print $1}'`
