@@ -17,6 +17,7 @@ EXTRA_DIST =                       \
 	slntool.py                 \
 	vcprojtool.py              \
 	vsprops2cmake.py           \
+	cmakeconfgen.py            \
 	makewxs.py                 \
 	makewrapper.pl             \
 	makewrapper.py             \

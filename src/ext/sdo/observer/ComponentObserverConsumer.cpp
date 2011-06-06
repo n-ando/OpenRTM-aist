@@ -332,7 +332,6 @@ namespace RTC
   {
     if (m_compstat.activatedListener == NULL)
       {
-        std::cout << "activateL attached" << std::endl;
         m_compstat.activatedListener = 
           m_rtobj->addPostComponentActionListener(POST_ON_ACTIVATED,
                                                   m_compstat,
@@ -340,7 +339,6 @@ namespace RTC
       }
     if (m_compstat.deactivatedListener == NULL)
       {
-        std::cout << "deactivateL attached" << std::endl;
         m_compstat.deactivatedListener = 
           m_rtobj->addPostComponentActionListener(POST_ON_DEACTIVATED,
                                                   m_compstat,
@@ -348,7 +346,6 @@ namespace RTC
       }
     if (m_compstat.resetListener == NULL)
       {
-        std::cout << "resetL attached" << std::endl;
         m_compstat.resetListener = 
           m_rtobj->addPostComponentActionListener(POST_ON_RESET,
                                                   m_compstat,
@@ -356,7 +353,6 @@ namespace RTC
       }
     if (m_compstat.abortingListener == NULL)
       {
-        std::cout << "abortL attached" << std::endl;
         m_compstat.abortingListener = 
           m_rtobj->addPostComponentActionListener(POST_ON_ABORTING,
                                                   m_compstat,
@@ -364,7 +360,6 @@ namespace RTC
       }
     if (m_compstat.finalizeListener == NULL)
       {
-        std::cout << "finalizeL attached" << std::endl;
         m_compstat.finalizeListener = 
           m_rtobj->addPostComponentActionListener(POST_ON_FINALIZE,
                                                   m_compstat,

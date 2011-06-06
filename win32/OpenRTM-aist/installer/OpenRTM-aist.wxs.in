@@ -101,6 +101,17 @@
 		{% endfor %}
 	      </Component>
 	    </Directory>
+	    <!-- cmake -->
+	    <Directory Id="cmake" Name="cmake">
+	      <Component Id="Cmake" Guid="{% Cmake.GUID %}">
+		{% for file in Cmake.Files %}
+		<File Id="{% file.Id %}"
+		      Name="{% file.Name %}" DiskId="1"
+		      Source="{% file.Source %}">
+		</File>
+		{% endfor %}
+	      </Component>
+	    </Directory>
 	    <!-- rtm -->
 	    <Directory Id="rtm" Name="rtm">
 	      <Component Id="Headers" Guid="{% Headers.GUID %}">
@@ -336,6 +347,7 @@
 	<ComponentRef Id="Bin"/>
 	<ComponentRef Id="COILs"/>
 	<ComponentRef Id="Etc"/>
+	<ComponentRef Id="Cmake"/>
 	<ComponentRef Id="SDOService"/>
       </Feature>
       <!-- devel -->

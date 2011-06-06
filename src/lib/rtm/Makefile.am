@@ -146,6 +146,7 @@ rtmheader_HEADERS = \
 	PublisherBase.h 	 \
 	RTC.h 			 \
 	RingBuffer.h 		 \
+	SdoServiceProviderBase.h \
 	SdoServiceConsumerBase.h \
 	StateMachine.h 		 \
 	Typename.h               \

@@ -1693,6 +1693,7 @@ AC_OUTPUT([Makefile
 	src/ext/sdo/logger/Makefile
 	utils/Makefile
 	utils/rtm-config/Makefile
+	utils/cmake/Makefile
 	utils/rtc-template/Makefile
 	utils/rtm-skelwrapper/Makefile
 	utils/rtm-naming/Makefile
@@ -1714,6 +1715,7 @@ AC_OUTPUT([Makefile
 	win32/OpenRTM-aist/Makefile
 	win32/OpenRTM-aist/bin/Makefile
 	win32/OpenRTM-aist/etc/Makefile
+	win32/OpenRTM-aist/cmake/Makefile
 	win32/OpenRTM-aist/docs/Makefile
 	win32/OpenRTM-aist/build/Makefile
 	win32/OpenRTM-aist/examples/Makefile

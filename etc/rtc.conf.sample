@@ -350,13 +350,13 @@ exec_cxt.periodic.rate: 1000
 # SDO service settings
 #============================================================
 #
-# SDO service consumer settings
-#
-sdo.service.consumer.available_services: [read only]
-sdo.service.consumer.allowed_services: ALL
-#
 # SDO service provider settings
 #
 sdo.service.provider.available_services: [read only]
-sdo.service.provider.allowed_services: ALL
+sdo.service.provider.enabled_services: ALL
 sdo.service.provider.providing_services: [read only]
+#
+# SDO service consumer settings
+#
+sdo.service.consumer.available_services: [read only]
+sdo.service.consumer.enabled_services: ALL

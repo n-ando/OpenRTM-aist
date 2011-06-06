@@ -3118,6 +3118,43 @@ namespace RTC
 
     /*!
      * @if jp
+     * @brief [local interface] SDO service provider をセットする
+     * @else
+     * @brief [local interface] Set a SDO service provider
+     * @endif
+     */
+    bool addSdoServiceProvider(const SDOPackage::ServiceProfile& prof,
+                               SdoServiceProviderBase* provider);
+
+    /*!
+     * @if jp
+     * @brief [local interface] SDO service provider を削除する
+     * @else
+     * @brief [local interface] Remove a SDO service provider
+     * @endif
+     */
+    bool removeSdoServiceProvider(const char* id);
+
+    /*!
+     * @if jp
+     * @brief [local interface] SDO service provider をセットする
+     * @else
+     * @brief [local interface] Set a SDO service provider
+     * @endif
+     */
+    bool addSdoServiceConsumer(const SDOPackage::ServiceProfile& prof);
+
+    /*!
+     * @if jp
+     * @brief [local interface] SDO service provider を削除する
+     * @else
+     * @brief [local interface] Remove a SDO service provider
+     * @endif
+     */
+    bool removeSdoServiceConsumer(const char* id);
+
+    /*!
+     * @if jp
      *
      * @brief 全 InPort のデータを読み込む。
      *
