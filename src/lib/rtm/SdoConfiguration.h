@@ -964,56 +964,6 @@ namespace SDOPackage
     /*!
      * @if jp
      *
-     * @brief SDO の ServiceProfile のリストを取得する
-     * 
-     * SDO の ServiceProfile のリストを取得する
-     * 
-     * @return SDO ServiceProfileリスト
-     * 
-     * @else
-     *
-     * @brief Get a list of ServiceProfile of SDO
-     * 
-     * Get a list of ServiceProfile of SDO.
-     * 
-     * @return List of ServiceProfile of SDO
-     * 
-     * @endif
-     */
-    const ServiceProfileList getServiceProfiles();
-    
-    /*!
-     * @if jp
-     *
-     * @brief SDO の ServiceProfile を取得する
-     * 
-     * このオペレーションは引数 "id" で指定されたSDO の ServiceProfileを返す。
-     * "id" で指定された ServiceProfileが存在しない場合、
-     * ServiceProfileのインスタンスを生成し返す。
-     * 
-     * @param id ServiceProfile の識別子。
-     * 
-     * @return 指定された SDO ServiceProfile
-     * 
-     * @else
-     *
-     * @brief Get Service Profile of SDO
-     * 
-     * This operation returns ServiceProfile of SDO specified by argument "id".
-     * If ServiceProfile specified by "id" does not exist,
-     * the instance of ServiceProfile will be generated and returned.
-     * 
-     * @param id Identifier of ServiceProfile
-     * 
-     * @return The specified SDO ServiceProfile
-     * 
-     * @endif
-     */
-    const ServiceProfile getServiceProfile(const char* id);
-    
-    /*!
-     * @if jp
-     *
      * @brief SDO の Organization リストを取得する
      * 
      * SDO の Organization リストを取得する
@@ -1073,16 +1023,6 @@ namespace SDOPackage
      */
     DeviceProfile m_deviceProfile;
     Mutex m_dprofile_mutex;
-    
-    /*!
-     * @if jp
-     * @brief Lock 付き SDO ServiceProfileList
-     * @else
-     * @brief SDO ServiceProfileList with mutex lock
-     * @endif
-     */
-    ServiceProfileList m_serviceProfiles;
-    Mutex m_sprofile_mutex;
     
     /*!
      * @if jp
@@ -1201,24 +1141,6 @@ namespace SDOPackage
 	return m_name == std::string(nv.name);
       }
       std::string m_name;
-    };
-    
-    /*!
-     * @if jp
-     * @brief  ServiceProfile用functor
-     * @else
-     * @brief  Functor for ServiceProfile
-     * @endif
-     */
-    struct service_id
-    {
-      service_id(const char* id) : m_id(id) {};
-      bool operator()(const ServiceProfile& s)
-      {
-	std::string id(s.id);
-	return m_id == id;
-      }
-      const std::string m_id;
     };
     
     /*!
