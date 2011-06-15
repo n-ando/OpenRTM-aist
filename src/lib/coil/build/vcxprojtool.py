@@ -1087,9 +1087,6 @@ class YamlConfig:
         text += FileList(self.flist).generate()
 
         text = self.replace_uuid(text)
-        print "zzzzzzzzzzzzz--"
-        print text
-        print "zzzzzzzzzzzzz--"
         if self.projectname:
             text = text.replace("__PROJECT_NAME__", self.projectname)
         if self.version:
@@ -1135,16 +1132,10 @@ class FileList:
                 text += self.temp % \
                     (self.filter[f]["Id"], self.filter[f]["name"],
                      self.filter[f]["filter"])
-                print "zzzzzzzzzzzzz"
-                print text
-                print "zzzzzzzzzzzzz"
                 for file in self.flist[f]:
                     # vcproj's path delimiter should be "\"
                     file = file.replace("/","\\")
                     text += "    - Path: " + file + "\n"
-                print "zzzzzzzzzzzzz"
-                print text
-                print "zzzzzzzzzzzzz"
         return text
 
 
