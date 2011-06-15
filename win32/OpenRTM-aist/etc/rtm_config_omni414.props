@@ -20,7 +20,7 @@
     <rtm_libd>RTC$(rtm_dllver)d.lib;$(coil_libd);$(omni_libd);advapi32.lib;ws2_32.lib;mswsock.lib;$(user_libd)</rtm_libd>
     <rtm_lib>RTC$(rtm_dllver).lib;$(coil_lib);$(omni_lib);advapi32.lib;ws2_32.lib;mswsock.lib;$(user_lib)</rtm_lib>
     <rtm_idlc>omniidl</rtm_idlc>
-    <rtm_idlflags>-bcxx -Wba -nf</rtm_idlflags>
+    <rtm_idlflags>-bcxx -Wba -nf -I $(SolutionDir)\rtm\idl</rtm_idlflags>
   </PropertyGroup>
   <PropertyGroup>
     <_ProjectFileVersion>10.0.30319.1</_ProjectFileVersion>
