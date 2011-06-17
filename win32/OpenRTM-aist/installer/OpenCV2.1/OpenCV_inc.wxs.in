@@ -17,7 +17,7 @@
       <Component Id="OpenCVBin" Guid="{% OpenCVBin.GUID %}">
 	    <Environment Id="OpenCVUpdatePath" Name="PATH" Action="set"
 			         System="yes" Part="last"
-			         Value="%OPENCV_ROOT%\bin" />
+			         Value="[OpenCV_bin]" />
 	      {% for file in OpenCVBin.Files %}
 	        <File Id="{% file.Id %}" Name="{% file.Name %}"
 		          DiskId="1" Source="{% file.Source %}">
