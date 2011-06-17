@@ -202,7 +202,7 @@
     <String Id="SetupTypeDlgTypicalButtonTooltip" Overridable="yes">標準インストール</String>
     <String Id="SetupTypeDlgCustomButton" Overridable="yes">カスタム(&amp;U)</String>
     <String Id="SetupTypeDlgCustomButtonTooltip" Overridable="yes">カスタム インストール</String>
-    <String Id="SetupTypeDlgCompleteButton" Overridable="yes">完了(&amp;O)</String>
+    <String Id="SetupTypeDlgCompleteButton" Overridable="yes">完全(&amp;O)</String>
     <String Id="SetupTypeDlgCompleteButtonTooltip" Overridable="yes">完全インストール</String>
     <String Id="SetupTypeDlgBannerBitmap" Overridable="yes">WixUI_Bmp_Banner</String>
     <String Id="SetupTypeDlgTitle" Overridable="yes">{\WixUI_Font_Title}セットアップの種類の選択</String>
