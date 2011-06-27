@@ -69,8 +69,8 @@ Configurations:
     VC10_OutputDirectory: "$(ProjectDir)$(Configuration)"
     VC10_IntermediateDirectory: "$(Configuration)"
     VC10_InheritedPropertySheets: 
-      - "$(SolutionDir)coil_config.props"
       - "$(SolutionDir)coil_distbuild.props"
+      - "$(SolutionDir)coil_config.props"
     VC10_LinkIncrementalCondition: "true"
     VC10_VCCLCompilerTool:
       - Key: Optimization
@@ -176,8 +176,8 @@ Configurations:
     VC10_OutputDirectory: "$(ProjectDir)$(Configuration)"
     VC10_IntermediateDirectory: "$(Configuration)"
     VC10_InheritedPropertySheets: 
-      - "$(SolutionDir)coil_config.props"
       - "$(SolutionDir)coil_distbuild.props"
+      - "$(SolutionDir)coil_config.props"
     VC10_LinkIncrementalCondition: "false"
     VC10_VCCLCompilerTool:
       - Key: PreprocessorDefinitions
