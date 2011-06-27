@@ -20,7 +20,7 @@
 @rem   RTSE should be under the following OMNI_ROOT directory.
 @rem ------------------------------------------------------------
 @set RTM_ROOT=%~dp0
-@set PATH="C:\Program Files\Microsoft Visual Studio 10.0\VC\BIN";"c:\WINDOWS\Microsoft.NET\Framework\v4.0.30319";"C:\Program Files\Microsoft Visual Studio 10.0\VC\vcpackages";%PATH%
+@set PATH="C:\Program Files\Microsoft Visual Studio 10.0\Common7\IDE\";"C:\Program Files\Microsoft Visual Studio 10.0\VC\BIN";"c:\WINDOWS\Microsoft.NET\Framework\v4.0.30319";"C:\Program Files\Microsoft Visual Studio 10.0\VC\vcpackages";%PATH%
 @set OMNI_ROOT=C:\distribution\omniORB-4.1.4_vc10
 @set RTSE_ROOT=C:\distribution\OpenRTP\RTSystemEditor
 @set VC_VERSION=Visual C++ 2010
