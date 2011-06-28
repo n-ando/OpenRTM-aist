@@ -14,9 +14,6 @@
 			          Icon="RTC.ico" IconIndex="0"
 			  {% if-any file.Arguments %}
 			    Arguments='{% file.Arguments %}'{% endif %}> 
-		      {% if file.Name is AffineComp.exe %}
-		        <Icon Id="RTC.ico" SourceFile="Bitmaps\RTC.ico"/>
-		      {% endif %}
 		    </Shortcut>
 		  {% endif %}{% endif %}
 	    </File>
