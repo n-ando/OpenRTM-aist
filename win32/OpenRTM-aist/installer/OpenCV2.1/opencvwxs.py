@@ -76,9 +76,15 @@ for (path, files) in data:
 
     makewxs.main(cmd)
 
+import re
+if None != re.search('2\.2',base_dir):
+    cmd = ["wxs",
+           "-o", "OpenCV_inc.wxs",
+           "-i", "OpenCV22_inc.wxs.in"]
+else:
+    cmd = ["wxs",
+           "-o", "OpenCV_inc.wxs",
+           "-i", "OpenCV_inc.wxs.in"]
 
-cmd = ["wxs",
-       "-o", "OpenCV_inc.wxs",
-       "-i", "OpenCV_inc.wxs.in"]
 cmd += glob.glob("*.yaml")
 makewxs.main(cmd)
