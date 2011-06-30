@@ -3385,7 +3385,7 @@ namespace RTC
 
     template <class Listener>
     PreComponentActionListener*
-    addPortComponentActionListener(PreCompActionListenerType listener_type,
+    addPreComponentActionListener(PreCompActionListenerType listener_type,
                                    Listener& obj,
                                    void (Listener::*memfunc)(UniqueId ec_id))
     {
