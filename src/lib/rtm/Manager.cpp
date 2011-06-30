@@ -1640,6 +1640,10 @@ std::vector<coil::Properties> Manager::getLoadableModules()
 	    name_prop.load(conff);
 	  }
       }
+    if (m_config.findNode(category + "." + inst_name) != NULL)
+      {
+        name_prop << m_config.getNode(category + "." + inst_name);
+      }
     
     if (!m_config[type_conf].empty())
       {
@@ -1649,6 +1653,11 @@ std::vector<coil::Properties> Manager::getLoadableModules()
 	    type_prop.load(conff);
 	  }
       }
+    if (m_config.findNode(category + "." + type_name) != NULL)
+      {
+        type_prop << m_config.getNode(category + "." + type_name);
+      }
+
     // Merge Properties. type_prop is merged properties
     comp->setProperties(prop);
     type_prop << name_prop;
