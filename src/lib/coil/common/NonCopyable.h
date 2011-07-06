@@ -158,7 +158,7 @@ namespace coil
      */
     ~NonCopyableCRTP() {}
   private: 
-    NonCopyableCRTP(const NonCopyable &);
+    NonCopyableCRTP(const NonCopyableCRTP &);
     T & operator=(const T &);
   };
 };
