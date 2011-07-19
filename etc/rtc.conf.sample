@@ -45,6 +45,7 @@ corba.master_manager: localhost:2810
 #   process will be shutdown in case no rtc exists on periodic check.
 manager.shutdown_on_nortcs: YES
 manager.shutdown_auto: YES
+manager.auto_shutdown_duration: 10.0
 
 #============================================================
 # CORBA configuration

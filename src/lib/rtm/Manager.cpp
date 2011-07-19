@@ -909,12 +909,21 @@ std::vector<coil::Properties> Manager::getLoadableModules()
     if (coil::toBool(m_config["manager.shutdown_auto"], "YES", "NO", true) &&
         !coil::toBool(m_config["manager.is_master"], "YES", "NO", false))
       {
-        coil::TimeValue tm(10, 0); 
+        coil::TimeValue tm(10, 0);
+        if (m_config.findNode("manager.auto_shutdown_duration") != NULL)
+          {
+            double duration;
+            const char* s = m_config["manager.auto_shutdown_duration"].c_str();
+            if (coil::stringTo(duration, s))
+              {
+                tm = duration;
+              }
+          }
         if (m_timer != NULL)
-					{
-						m_timer->registerListenerObj(this, 
-																				 &Manager::shutdownOnNoRtcs, tm);
-					}
+          {
+            m_timer->registerListenerObj(this, 
+                                         &Manager::shutdownOnNoRtcs, tm);
+          }
       }
     
     {
