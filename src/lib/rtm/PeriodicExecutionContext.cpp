@@ -399,7 +399,7 @@ namespace RTC
     if (it->_sm.m_sm.isIn(INACTIVE_STATE))
       {
         RTC_TRACE(("The component has been properly deactivated."));
-        RTC::RTC_OK;
+        return RTC::RTC_OK;
       }
     RTC_ERROR(("The component could not be deactivated."));
     return RTC::RTC_ERROR;
@@ -432,7 +432,7 @@ namespace RTC
             if (m_comps.at(i)._sm.m_sm.isIn(INACTIVE_STATE))
               {
                 RTC_TRACE(("The component has been properly deactivated."));
-                RTC::RTC_OK;
+                return RTC::RTC_OK;
               }
             RTC_ERROR(("The component could not be deactivated."));
             return RTC::RTC_ERROR;
