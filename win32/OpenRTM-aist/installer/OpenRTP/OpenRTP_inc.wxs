@@ -2,7 +2,7 @@
 <Include xmlns="http://schemas.microsoft.com/wix/2006/wi">
   <!-- root directory -->		
   <Directory Id="OpenRTP" Name="OpenRTP">
-    <Directory Id="OpenRTPVersion" Name="0.1">
+    <Directory Id="OpenRTPVersion" Name="1.1">
       <Component Id="Openrtp" Guid="6C2EF40F-8300-11E0-B1B3-00059A3C7800">
 	<Environment Id="OPENRTP_ROOT" Name="OPENRTP_ROOT" Action="set"
 		     System="yes" Value="[openrtpVersion]" />
@@ -36,38 +36,38 @@
 	  	  <File Id="OpenrtpPlugins0001" Name="com.ibm.icu_3.8.1.v20080530.jar"
 		DiskId="1" Source="C:\\distribution\\OpenRTP\\RTSystemEditor\\plugins\\com.ibm.icu_3.8.1.v20080530.jar">
 	  </File>
-	  	  <File Id="OpenrtpPlugins0002" Name="jp.go.aist.rtm.nameserviceview.nl1_1.1.0.v20110411.jar"
-		DiskId="1" Source="C:\\distribution\\OpenRTP\\RTSystemEditor\\plugins\\jp.go.aist.rtm.nameserviceview.nl1_1.1.0.v20110411.jar">
+	  	  <File Id="OpenrtpPlugins0002" Name="jp.go.aist.rtm.nameserviceview.nl1_1.1.0.rc2v20110725.jar"
+		DiskId="1" Source="C:\\distribution\\OpenRTP\\RTSystemEditor\\plugins\\jp.go.aist.rtm.nameserviceview.nl1_1.1.0.rc2v20110725.jar">
 	  </File>
-	  	  <File Id="OpenrtpPlugins0003" Name="jp.go.aist.rtm.nameserviceview_1.1.0.v20110411.jar"
-		DiskId="1" Source="C:\\distribution\\OpenRTP\\RTSystemEditor\\plugins\\jp.go.aist.rtm.nameserviceview_1.1.0.v20110411.jar">
+	  	  <File Id="OpenrtpPlugins0003" Name="jp.go.aist.rtm.nameserviceview_1.1.0.rc2v20110725.jar"
+		DiskId="1" Source="C:\\distribution\\OpenRTP\\RTSystemEditor\\plugins\\jp.go.aist.rtm.nameserviceview_1.1.0.rc2v20110725.jar">
 	  </File>
-	  	  <File Id="OpenrtpPlugins0004" Name="jp.go.aist.rtm.repositoryView.nl1_1.1.0.v20110411.jar"
-		DiskId="1" Source="C:\\distribution\\OpenRTP\\RTSystemEditor\\plugins\\jp.go.aist.rtm.repositoryView.nl1_1.1.0.v20110411.jar">
+	  	  <File Id="OpenrtpPlugins0004" Name="jp.go.aist.rtm.repositoryView.nl1_1.1.0.rc2v20110725.jar"
+		DiskId="1" Source="C:\\distribution\\OpenRTP\\RTSystemEditor\\plugins\\jp.go.aist.rtm.repositoryView.nl1_1.1.0.rc2v20110725.jar">
 	  </File>
-	  	  <File Id="OpenrtpPlugins0005" Name="jp.go.aist.rtm.repositoryView_1.1.0.v20110411.jar"
-		DiskId="1" Source="C:\\distribution\\OpenRTP\\RTSystemEditor\\plugins\\jp.go.aist.rtm.repositoryView_1.1.0.v20110411.jar">
+	  	  <File Id="OpenrtpPlugins0005" Name="jp.go.aist.rtm.repositoryView_1.1.0.rc2v20110725.jar"
+		DiskId="1" Source="C:\\distribution\\OpenRTP\\RTSystemEditor\\plugins\\jp.go.aist.rtm.repositoryView_1.1.0.rc2v20110725.jar">
 	  </File>
-	  	  <File Id="OpenrtpPlugins0006" Name="jp.go.aist.rtm.systemeditor.nl1_1.1.0.v20110509.jar"
-		DiskId="1" Source="C:\\distribution\\OpenRTP\\RTSystemEditor\\plugins\\jp.go.aist.rtm.systemeditor.nl1_1.1.0.v20110509.jar">
+	  	  <File Id="OpenrtpPlugins0006" Name="jp.go.aist.rtm.systemeditor.nl1_1.1.0.rc2v20110725.jar"
+		DiskId="1" Source="C:\\distribution\\OpenRTP\\RTSystemEditor\\plugins\\jp.go.aist.rtm.systemeditor.nl1_1.1.0.rc2v20110725.jar">
 	  </File>
 	  	  <File Id="OpenrtpPlugins0007" Name="jp.go.aist.rtm.systemeditor.RCP_1.0.0.jar"
 		DiskId="1" Source="C:\\distribution\\OpenRTP\\RTSystemEditor\\plugins\\jp.go.aist.rtm.systemeditor.RCP_1.0.0.jar">
 	  </File>
-	  	  <File Id="OpenrtpPlugins0008" Name="jp.go.aist.rtm.systemeditor_1.1.0.v20110520.jar"
-		DiskId="1" Source="C:\\distribution\\OpenRTP\\RTSystemEditor\\plugins\\jp.go.aist.rtm.systemeditor_1.1.0.v20110520.jar">
+	  	  <File Id="OpenrtpPlugins0008" Name="jp.go.aist.rtm.systemeditor_1.1.0.rc2v20110725.jar"
+		DiskId="1" Source="C:\\distribution\\OpenRTP\\RTSystemEditor\\plugins\\jp.go.aist.rtm.systemeditor_1.1.0.rc2v20110725.jar">
 	  </File>
-	  	  <File Id="OpenrtpPlugins0009" Name="jp.go.aist.rtm.toolscommon.nl1_1.1.0.v20110428.jar"
-		DiskId="1" Source="C:\\distribution\\OpenRTP\\RTSystemEditor\\plugins\\jp.go.aist.rtm.toolscommon.nl1_1.1.0.v20110428.jar">
+	  	  <File Id="OpenrtpPlugins0009" Name="jp.go.aist.rtm.toolscommon.nl1_1.1.0.rc2v20110725.jar"
+		DiskId="1" Source="C:\\distribution\\OpenRTP\\RTSystemEditor\\plugins\\jp.go.aist.rtm.toolscommon.nl1_1.1.0.rc2v20110725.jar">
 	  </File>
-	  	  <File Id="OpenrtpPlugins0010" Name="jp.go.aist.rtm.toolscommon.profiles.nl1_1.1.0.v20110411.jar"
-		DiskId="1" Source="C:\\distribution\\OpenRTP\\RTSystemEditor\\plugins\\jp.go.aist.rtm.toolscommon.profiles.nl1_1.1.0.v20110411.jar">
+	  	  <File Id="OpenrtpPlugins0010" Name="jp.go.aist.rtm.toolscommon.profiles.nl1_1.1.0.rc2v20110725.jar"
+		DiskId="1" Source="C:\\distribution\\OpenRTP\\RTSystemEditor\\plugins\\jp.go.aist.rtm.toolscommon.profiles.nl1_1.1.0.rc2v20110725.jar">
 	  </File>
-	  	  <File Id="OpenrtpPlugins0011" Name="jp.go.aist.rtm.toolscommon.profiles_1.1.0.v20110411.jar"
-		DiskId="1" Source="C:\\distribution\\OpenRTP\\RTSystemEditor\\plugins\\jp.go.aist.rtm.toolscommon.profiles_1.1.0.v20110411.jar">
+	  	  <File Id="OpenrtpPlugins0011" Name="jp.go.aist.rtm.toolscommon.profiles_1.1.0.rc2v20110725.jar"
+		DiskId="1" Source="C:\\distribution\\OpenRTP\\RTSystemEditor\\plugins\\jp.go.aist.rtm.toolscommon.profiles_1.1.0.rc2v20110725.jar">
 	  </File>
-	  	  <File Id="OpenrtpPlugins0012" Name="jp.go.aist.rtm.toolscommon_1.1.0.v20110519.jar"
-		DiskId="1" Source="C:\\distribution\\OpenRTP\\RTSystemEditor\\plugins\\jp.go.aist.rtm.toolscommon_1.1.0.v20110519.jar">
+	  	  <File Id="OpenrtpPlugins0012" Name="jp.go.aist.rtm.toolscommon_1.1.0.rc2v20110725.jar"
+		DiskId="1" Source="C:\\distribution\\OpenRTP\\RTSystemEditor\\plugins\\jp.go.aist.rtm.toolscommon_1.1.0.rc2v20110725.jar">
 	  </File>
 	  	  <File Id="OpenrtpPlugins0013" Name="org.eclipse.core.commands.nl_ja_3.4.0.I20080509-2000.jar"
 		DiskId="1" Source="C:\\distribution\\OpenRTP\\RTSystemEditor\\plugins\\org.eclipse.core.commands.nl_ja_3.4.0.I20080509-2000.jar">

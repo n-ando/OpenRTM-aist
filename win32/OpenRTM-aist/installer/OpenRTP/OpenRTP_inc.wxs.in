@@ -2,7 +2,7 @@
 <Include xmlns="http://schemas.microsoft.com/wix/2006/wi">
   <!-- root directory -->		
   <Directory Id="OpenRTP" Name="OpenRTP">
-    <Directory Id="OpenRTPVersion" Name="0.1">
+    <Directory Id="OpenRTPVersion" Name="1.1">
       <Component Id="Openrtp" Guid="{% Openrtp.GUID %}">
 	<Environment Id="OPENRTP_ROOT" Name="OPENRTP_ROOT" Action="set"
 		     System="yes" Value="[openrtpVersion]" />
