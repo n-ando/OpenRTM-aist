@@ -387,7 +387,7 @@ namespace RTC
     RTC_PARANOID(("Sleep time is %f [us]", sleeptime));
     while (it->_sm.m_sm.isIn(ACTIVE_STATE))
       {
-        RTC_TRACE(("Waiting to be the INACTIVE state"));
+        RTC_TRACE(("Waiting to be the INACTIVE state %d %f", count, (double)coil::gettimeofday()));
         coil::usleep(sleeptime);
         if (count > 1000)
           {
@@ -415,7 +415,7 @@ namespace RTC
             m_comps.at(i)._sm.m_sm.goTo(INACTIVE_STATE);
             int count(0);
             const double usec_per_sec(1.0e6);
-            double sleeptime(10.0 * usec_per_sec / get_rate());
+            double sleeptime(usec_per_sec / get_rate());
             RTC_PARANOID(("Sleep time is %f [us]", sleeptime));
             while (m_comps.at(i)._sm.m_sm.isIn(ACTIVE_STATE))
               {
