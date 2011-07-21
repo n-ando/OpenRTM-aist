@@ -15,7 +15,7 @@
 #
 
 data = [
-    ("bin",             "*.dll *.exe")
+    ("bin",             "*.dll *.exe rtc.conf")
 ]
 
 import os

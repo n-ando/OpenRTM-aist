@@ -3,7 +3,7 @@
   <!-- root directory -->		
   <Directory Id="OpenCVRoot" Name="OpenCV2.2">
     <Component Id="OpenCV" Guid="{% OpenCV.GUID %}">
-	  <Environment Id="OPENCV_ROOT" Name="OPENCV_ROOT" Action="set"
+	  <Environment Id="OPENCV_DIR" Name="OpenCV_DIR" Action="set"
 		           System="yes" Value="[OpenCVRoot]" />
 	    {% for file in OpenCV.Files %}
 	      <File Id="{% file.Id %}" Name="{% file.Name %}"
