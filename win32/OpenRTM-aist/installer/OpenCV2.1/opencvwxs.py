@@ -14,7 +14,7 @@
 # $Id$
 #
 
-OpenCV_files = "README"
+OpenCV_files = "README OpenCVConfig.cmake"
 
 data = [
     ("",                OpenCV_files),
