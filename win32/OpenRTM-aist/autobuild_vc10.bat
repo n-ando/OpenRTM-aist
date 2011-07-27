@@ -24,6 +24,8 @@
 @set OMNI_ROOT=C:\distribution\omniORB-4.1.4_vc10
 @set RTSE_ROOT=C:\distribution\OpenRTP\RTSystemEditor
 @set VC_VERSION=Visual C++ 2010
+@set OPENCV_ROOT=C:\distribution\OpenCV2.2
+@set OPENCV_RTC_ROOT=C:\distribution\ImageProcessing\opencv
 
 @rem ============================================================
 @rem copy property sheet
