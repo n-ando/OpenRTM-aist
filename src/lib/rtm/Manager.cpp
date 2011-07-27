@@ -1095,6 +1095,29 @@ std::vector<coil::Properties> Manager::getLoadableModules()
 	  }
 	// Get the POAManager
 	m_pPOAManager = m_pPOA->the_POAManager();
+
+#ifdef ORB_IS_OMNIORB
+        const char* conf = "corba.alternate_iiop_addresses";
+        if (m_config.findNode(conf) != NULL)
+          {
+            coil::vstring addr_list;
+            addr_list = coil::split(m_config[conf], ",", true);
+
+            for (size_t i(0); i < addr_list.size(); ++i)
+              {
+                coil::vstring addr_port = coil::split(addr_list[i], ":");
+                if (addr_port.size() == 2)
+                  {
+                    IIOP::Address iiop_addr;
+                    iiop_addr.host = addr_port[0].c_str();
+                    CORBA::UShort port; 
+                    coil::stringTo(port, addr_port[1].c_str());
+                    iiop_addr.port = port;
+                    omniIOR::add_IIOP_ADDRESS(iiop_addr);
+                  }
+              }
+          }
+#endif // ORB_IS_OMNIORB
       }
     catch (...)
       {
