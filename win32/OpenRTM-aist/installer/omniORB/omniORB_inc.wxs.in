@@ -19,7 +19,7 @@
           <Component Id="OmniBinScripts" Guid="{% OmniBinScripts.GUID %}">
 	    <Environment Id="OmniUpdatePath" Name="PATH" Action="set"
 			 System="yes" Part="last"
-			 Value="%OMNI_ROOT%\bin\x86_win32" />
+			 Value="[omni_bin]x86_win32" />
 	    {% for file in OmniBinScripts.Files %}
 	    <File Id="{% file.Id %}" Name="{% file.Name %}"
 		  DiskId="1" Source="{% file.Source %}">

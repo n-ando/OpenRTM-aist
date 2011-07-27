@@ -139,7 +139,7 @@ namespace coil
      *
      * @endif
      */
-    NonCopyable () {}
+    NonCopyableCRTP() {}
 
     /*!
      * @if jp
@@ -156,9 +156,9 @@ namespace coil
      *
      * @endif
      */
-    ~NonCopyable () {}
+    ~NonCopyableCRTP() {}
   private: 
-    NonCopyable (const NonCopyable &);
-    T & operator = (const T &);
+    NonCopyableCRTP(const NonCopyableCRTP &);
+    T & operator=(const T &);
   };
 };

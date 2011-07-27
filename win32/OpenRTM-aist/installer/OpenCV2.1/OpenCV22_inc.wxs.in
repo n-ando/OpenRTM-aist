@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Include xmlns="http://schemas.microsoft.com/wix/2006/wi">
   <!-- root directory -->		
-  <Directory Id="OpenCVRoot" Name="OpenCV2.1">
+  <Directory Id="OpenCVRoot" Name="OpenCV2.2">
     <Component Id="OpenCV" Guid="{% OpenCV.GUID %}">
 	  <Environment Id="OPENCV_DIR" Name="OpenCV_DIR" Action="set"
 		           System="yes" Value="[OpenCVRoot]" />

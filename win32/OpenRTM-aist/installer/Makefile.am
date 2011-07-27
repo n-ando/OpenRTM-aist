@@ -43,7 +43,6 @@ EXTRA_DIST =                       \
 	OpenRTP/openrtpwxs.py      \
 	OpenCV2.1/OpenCV_inc.wxs.in \
 	OpenCV2.1/opencvwxs.py \
-	OpenCV-RTC/OpenCVRTC_bin.yaml \
 	OpenCV-RTC/OpenCV-RTC_inc.wxs.in \
 	OpenCV-RTC/opencvrtcwxs.py
 

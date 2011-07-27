@@ -909,12 +909,21 @@ std::vector<coil::Properties> Manager::getLoadableModules()
     if (coil::toBool(m_config["manager.shutdown_auto"], "YES", "NO", true) &&
         !coil::toBool(m_config["manager.is_master"], "YES", "NO", false))
       {
-        coil::TimeValue tm(10, 0); 
+        coil::TimeValue tm(10, 0);
+        if (m_config.findNode("manager.auto_shutdown_duration") != NULL)
+          {
+            double duration;
+            const char* s = m_config["manager.auto_shutdown_duration"].c_str();
+            if (coil::stringTo(duration, s))
+              {
+                tm = duration;
+              }
+          }
         if (m_timer != NULL)
-					{
-						m_timer->registerListenerObj(this, 
-																				 &Manager::shutdownOnNoRtcs, tm);
-					}
+          {
+            m_timer->registerListenerObj(this, 
+                                         &Manager::shutdownOnNoRtcs, tm);
+          }
       }
     
     {
@@ -1086,6 +1095,29 @@ std::vector<coil::Properties> Manager::getLoadableModules()
 	  }
 	// Get the POAManager
 	m_pPOAManager = m_pPOA->the_POAManager();
+
+#ifdef ORB_IS_OMNIORB
+        const char* conf = "corba.alternate_iiop_addresses";
+        if (m_config.findNode(conf) != NULL)
+          {
+            coil::vstring addr_list;
+            addr_list = coil::split(m_config[conf], ",", true);
+
+            for (size_t i(0); i < addr_list.size(); ++i)
+              {
+                coil::vstring addr_port = coil::split(addr_list[i], ":");
+                if (addr_port.size() == 2)
+                  {
+                    IIOP::Address iiop_addr;
+                    iiop_addr.host = addr_port[0].c_str();
+                    CORBA::UShort port; 
+                    coil::stringTo(port, addr_port[1].c_str());
+                    iiop_addr.port = port;
+                    omniIOR::add_IIOP_ADDRESS(iiop_addr);
+                  }
+              }
+          }
+#endif // ORB_IS_OMNIORB
       }
     catch (...)
       {
@@ -1640,6 +1672,10 @@ std::vector<coil::Properties> Manager::getLoadableModules()
 	    name_prop.load(conff);
 	  }
       }
+    if (m_config.findNode(category + "." + inst_name) != NULL)
+      {
+        name_prop << m_config.getNode(category + "." + inst_name);
+      }
     
     if (!m_config[type_conf].empty())
       {
@@ -1649,6 +1685,11 @@ std::vector<coil::Properties> Manager::getLoadableModules()
 	    type_prop.load(conff);
 	  }
       }
+    if (m_config.findNode(category + "." + type_name) != NULL)
+      {
+        type_prop << m_config.getNode(category + "." + type_name);
+      }
+
     // Merge Properties. type_prop is merged properties
     comp->setProperties(prop);
     type_prop << name_prop;

@@ -45,6 +45,7 @@ corba.master_manager: localhost:2810
 #   process will be shutdown in case no rtc exists on periodic check.
 manager.shutdown_on_nortcs: YES
 manager.shutdown_auto: YES
+manager.auto_shutdown_duration: 10.0
 
 #============================================================
 # CORBA configuration
@@ -116,6 +117,35 @@ corba.nameservers: localhost
 # multiple endpoints.
 #
 corba.nameservice.replace_endpoint: NO
+
+#
+# IOR alternate IIOP addresses
+#
+# This option adds alternate IIOP addresses into the IOR Profiles.
+# IOR can include additional endpoints for a servant. It is almost
+# same as "corba.endpoints" option, but this option does not create
+# actual endpoint on the ORB. (corba.endpoints try to create actual
+# endpoint, and if it cannot be created, error will be returned.)
+# This option just add alternate IIOP endpoint address information to
+# an IOR.
+#
+# This option can be used when RTCs are located inside of NAT or
+# router.  Generally speaking, RTCs in a private network cannot
+# connect to RTCs in the global network, because global client cannot
+# reach to private servants. However, if route (or NAT) is properly
+# configured for port forwarding, global RTCs can reach to RTCs in
+# private network.
+#
+# A setting example is as follows.
+# 1) Configure your router properly for port-forwarding.
+#    ex. global 2810 port is forwarded to private 2810
+# 2) Set the following options in rtc.conf
+#  corba.nameservers: my.global.nameserver.com <- name server in global network
+#  corba.endpoints: :2810 <- actual port number
+#  corba.additional_ior_addresses: w.x.y.z:2810 <- routers global IP addr/port
+# 3) Launch global RTCs and private RTC, and connect them.
+#
+corba.alternate_iiop_addresses: addr:port
 
 #============================================================
 # Naming configurations

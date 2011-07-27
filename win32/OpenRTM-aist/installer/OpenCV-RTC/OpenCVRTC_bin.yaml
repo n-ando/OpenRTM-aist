@@ -225,3 +225,8 @@ OpenCVRTCBin:
       Name: translateComp.exe
       Source: C:\\distribution\\ImageProcessing\\opencv\\bin\\translateComp.exe
       Shortcut: true
+    - Id: OpenCVRTCBin0050
+      ShortName: rtc.conf
+      Name: rtc.conf
+      Source: C:\\distribution\\ImageProcessing\\opencv\\bin\\rtc.conf
+      Shortcut: false

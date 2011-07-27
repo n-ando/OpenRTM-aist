@@ -780,23 +780,23 @@ namespace RTC
       {
         preOnInitialize(0);
         ret = onInitialize();
-        postOnInitialize(0, ret);
-        std::string active_set;
-        active_set = m_properties.getProperty("configuration.active_config",
-                                              "default");
-        if (m_configsets.haveConfig(active_set.c_str()))
-          {
-            m_configsets.update(active_set.c_str());
-          }
-        else
-          {
-            m_configsets.update("default");
-          }
       }
     catch (...)
       {
-	return RTC::RTC_ERROR;
+	ret = RTC::RTC_ERROR;
       }
+    std::string active_set;
+    active_set = m_properties.getProperty("configuration.active_config",
+                                          "default");
+    if (m_configsets.haveConfig(active_set.c_str()))
+      {
+        m_configsets.update(active_set.c_str());
+      }
+    else
+      {
+        m_configsets.update("default");
+      }
+    postOnInitialize(0, ret);
     return ret;
   }
   
@@ -816,12 +816,12 @@ namespace RTC
       {
         preOnFinalize(0);
 	ret = onFinalize();
-        postOnFinalize(0, ret);
       }
     catch (...)
       {
-	return RTC::RTC_ERROR;
+	ret = RTC::RTC_ERROR;
       }
+    postOnFinalize(0, ret);
     return ret;
   }
   
@@ -841,12 +841,12 @@ namespace RTC
       {
         preOnStartup(ec_id);
 	ret = onStartup(ec_id);
-        postOnStartup(ec_id, ret);
       }
     catch (...)
       {
-	return RTC::RTC_ERROR;
+	ret = RTC::RTC_ERROR;
       }
+    postOnStartup(ec_id, ret);
     return ret;
   }
   
@@ -866,12 +866,12 @@ namespace RTC
       {
         preOnShutdown(ec_id);
 	ret = onShutdown(ec_id);
-        postOnShutdown(ec_id, ret);
       }
     catch (...)
       {
-	return RTC::RTC_ERROR;
+	ret = RTC::RTC_ERROR;
       }
+    postOnShutdown(ec_id, ret);
     return ret;
   }
   
@@ -893,12 +893,12 @@ namespace RTC
 	m_configsets.update();
 	ret = onActivated(ec_id);
         m_portAdmin.activatePorts();
-        postOnActivated(ec_id, ret);
       }
     catch (...)
       {
-	return RTC::RTC_ERROR;
+	ret = RTC::RTC_ERROR;
       }
+    postOnActivated(ec_id, ret);
     return ret;
   }
   
@@ -919,12 +919,12 @@ namespace RTC
         preOnDeactivated(ec_id);
         m_portAdmin.deactivatePorts();
 	ret = onDeactivated(ec_id);
-        postOnDeactivated(ec_id, ret);
       }
     catch (...)
       {
-	return RTC::RTC_ERROR;
+	ret = RTC::RTC_ERROR;
       }
+    postOnDeactivated(ec_id, ret);
     return ret;
   }
   
@@ -944,12 +944,12 @@ namespace RTC
       {
         preOnAborting(ec_id);
 	ret = onAborting(ec_id);
-        postOnAborting(ec_id, ret);
       }
     catch (...)
       {
-	return RTC::RTC_ERROR;
+	ret = RTC::RTC_ERROR;
       }
+    postOnAborting(ec_id, ret);
     return ret;
   }
   
@@ -969,13 +969,13 @@ namespace RTC
       {
         preOnError(ec_id);
 	ret = onError(ec_id);
-	m_configsets.update();
-        postOnError(ec_id, ret);
       }
     catch (...)
       {
-	return RTC::RTC_ERROR;
+	ret = RTC::RTC_ERROR;
       }
+    m_configsets.update();
+    postOnError(ec_id, ret);
     return ret;
   }
   
@@ -995,12 +995,12 @@ namespace RTC
       {
         preOnReset(ec_id);
 	ret = onReset(ec_id);
-        postOnReset(ec_id, ret);
       }
     catch (...)
       {
-	return RTC::RTC_ERROR;
+	ret = RTC::RTC_ERROR;
       }
+    postOnReset(ec_id, ret);
     return ret;
   }
   
@@ -1023,12 +1023,12 @@ namespace RTC
 	if (m_readAll) {readAll(); }
 	ret = onExecute(ec_id);
 	if (m_writeAll) { writeAll();}
-        postOnExecute(ec_id, ret);
       }
     catch (...)
       {
-	return RTC::RTC_ERROR;
+	ret = RTC::RTC_ERROR;
       }
+    postOnExecute(ec_id, ret);
     return ret;
   }
   
@@ -1050,12 +1050,12 @@ namespace RTC
         preOnStateUpdate(ec_id);
 	ret = onStateUpdate(ec_id);
 	m_configsets.update();
-        postOnStateUpdate(ec_id, ret);
       }
     catch (...)
       {
-	return RTC::RTC_ERROR;
+	ret = RTC::RTC_ERROR;
       }
+    postOnStateUpdate(ec_id, ret);
     return ret;
   }
   
@@ -1075,12 +1075,12 @@ namespace RTC
       {
         preOnRateChanged(ec_id);
 	ret = onRateChanged(ec_id);
-        postOnRateChanged(ec_id, ret);
       }
     catch (...)
       {
-	return RTC::RTC_ERROR;
+	ret = RTC::RTC_ERROR;
       }
+    postOnRateChanged(ec_id, ret);
     return ret;
   }
   

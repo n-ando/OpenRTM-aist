@@ -52,6 +52,7 @@ class file_list:
       ShortName: %s
       Name: %s
       Source: %s
+      Shortcut: %s
 """
         self.count = -1
 
@@ -83,6 +84,18 @@ class file_list:
             return short_name
         return short_name + "." + short_ext
 
+    def is_ext_exe(self, fname):
+        try:
+            name, ext = fname.rsplit(".", 1)
+        except:
+            name = fname
+            ext  = ""
+        if ext == "exe":
+            flag = "true"
+        else:
+            flag = "false"
+        return flag
+
     def id(self):
         self.count += 1
         return self.comp + '%04d' % (self.count)
@@ -113,7 +126,8 @@ class file_list:
             self.write(self.fitem % (self.escape(self.id()),
                                      self.escape(self.to_shortname(fname)),
                                      self.escape(fname),
-                                     self.escape(self.path + fname)))
+                                     self.escape(self.path + fname),
+                                     self.is_ext_exe(fname)))
         return self.output
 
 

@@ -54,7 +54,7 @@
 			     System='yes' Part='all' Value='[Version]' />
 		<Environment Id='UpdatePath' Name='PATH' Action='set'
 			     System='yes' Part='last'
-			     Value='%RTM_ROOT%\bin' />
+			     Value='[bin]' />
 		{% for file in Bin.Files %}
 		<File Id="{% file.Id %}"
 		      Name="{% file.Name %}" DiskId="1"
@@ -322,7 +322,7 @@
       <!-- プログラムフォルダ -->
       <Directory Id="ProgramMenuFolder">
 	<Directory Id="AppMenuFolder"
-		   Name="{% Product.Name %}">
+		   Name="{% Product.Name %} {% Product.ShortVersion %}">
 	  <Directory Id="CxxMenuFolder" Name="C++">
 	    <Directory Id="ToolsMenuFolder" Name="tools">
 	    </Directory>
@@ -341,7 +341,8 @@
 
 
     <!-- OpenRTM-aist -->
-    <Feature Id="OpenRTM" Level="1" Title="OpenRTM-aist (C++)">
+    <Feature Id="OpenRTM" Level="1" Title="OpenRTM-aist (C++)"
+	     ConfigurableDirectory="INSTALLLOCATION">
       <!-- runtime -->
       <Feature Id="Runtime" Level="1" Title="Runtime Environment">
 	<ComponentRef Id="Bin"/>
@@ -459,7 +460,7 @@
     <WixVariable Id="WixUILicenseRtf" Value="License.rtf" />
     <WixVariable Id="WixUIBannerBmp" Value="Bitmaps/bannrbmp.bmp" />
     <WixVariable Id="WixUIDialogBmp" Value="Bitmaps/dlgbmp.bmp" />
-    <WixVariable Id="WixUICostingPopupOptOut" Value="1" Overridable="yes" />
+    <WixVariable Id="WixUICostingPopupOptOut" Value="1" Overridable="no" />
 
     <!-- <UIRef Id="WixUI_Mondo" /> -->
     <!-- WixUI_Mondo にインストールの種類を選択するダイアログを追加したもの -->

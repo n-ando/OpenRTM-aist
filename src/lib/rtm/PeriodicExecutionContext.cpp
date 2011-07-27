@@ -374,14 +374,35 @@ namespace RTC
     CompItr it;
     it = std::find_if(m_comps.begin(), m_comps.end(),
 		      find_comp(comp));
-    if (it == m_comps.end())
-      return RTC::BAD_PARAMETER;
-    
+    if (it == m_comps.end()) { return RTC::BAD_PARAMETER; }
     if (!(it->_sm.m_sm.isIn(ACTIVE_STATE)))
-      return RTC::PRECONDITION_NOT_MET;
+      {
+        return RTC::PRECONDITION_NOT_MET;
+      }
     
     it->_sm.m_sm.goTo(INACTIVE_STATE);
-    return RTC::RTC_OK;
+    int count(0);
+    const double usec_per_sec(1.0e6);
+    double sleeptime(10.0 * usec_per_sec / get_rate());
+    RTC_PARANOID(("Sleep time is %f [us]", sleeptime));
+    while (it->_sm.m_sm.isIn(ACTIVE_STATE))
+      {
+        RTC_TRACE(("Waiting to be the INACTIVE state %d %f", count, (double)coil::gettimeofday()));
+        coil::usleep(sleeptime);
+        if (count > 1000)
+          {
+            RTC_ERROR(("The component is not responding."));
+            break;
+          }
+        ++count;
+      }
+    if (it->_sm.m_sm.isIn(INACTIVE_STATE))
+      {
+        RTC_TRACE(("The component has been properly deactivated."));
+        return RTC::RTC_OK;
+      }
+    RTC_ERROR(("The component could not be deactivated."));
+    return RTC::RTC_ERROR;
 #else // ORB_IS_RTORB
     for (int i(0); i < (int)m_comps.size(); ++i)
       {
@@ -392,7 +413,29 @@ namespace RTC
                 return RTC::PRECONDITION_NOT_MET;
               }
             m_comps.at(i)._sm.m_sm.goTo(INACTIVE_STATE);
-            return RTC::RTC_OK;
+            int count(0);
+            const double usec_per_sec(1.0e6);
+            double sleeptime(usec_per_sec / get_rate());
+            RTC_PARANOID(("Sleep time is %f [us]", sleeptime));
+            while (m_comps.at(i)._sm.m_sm.isIn(ACTIVE_STATE))
+              {
+                RTC_TRACE(("Waiting to be the INACTIVE state"));
+                coil::usleep(sleeptime);
+                
+                if (count > 1000)
+                  {
+                    RTC_ERROR(("The component is not responding."));
+                    break;
+                  }
+                ++count;
+              }
+            if (m_comps.at(i)._sm.m_sm.isIn(INACTIVE_STATE))
+              {
+                RTC_TRACE(("The component has been properly deactivated."));
+                return RTC::RTC_OK;
+              }
+            RTC_ERROR(("The component could not be deactivated."));
+            return RTC::RTC_ERROR;
           }
       }
     return RTC::BAD_PARAMETER;

@@ -15,7 +15,7 @@
 #
 
 data = [
-    ("bin",             "*.dll *.exe")
+    ("bin",             "*.dll *.exe rtc.conf")
 ]
 
 import os
@@ -62,13 +62,13 @@ for (path, files) in data:
     for f in files.split(" "):
         flist += glob.glob(full_path + "\\" + f)
 
-    #cmd = ["flist",
-    #       "-c", comp_name,
-    #       "-o", dir_name + ".yaml",
-    #       "-p",  base_dir + path]
-    #cmd += flist
-    #
-    #makewxs.main(cmd)
+    cmd = ["flist",
+           "-c", comp_name,
+           "-o", dir_name + ".yaml",
+           "-p",  base_dir + path]
+    cmd += flist
+    
+    makewxs.main(cmd)
 
 
 cmd = ["wxs",

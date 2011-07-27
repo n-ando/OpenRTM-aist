@@ -143,14 +143,12 @@ message(STATUS "  OPENRTM_IDL_WRAPPER_FLAGS=${OPENRTM_IDL_WRAPPER_FLAGS}")
 """
 
 
-def process_lib(libs):
+def process_lib(libs, type):
     liblist = libs.split(" ")
     results = ""
     for l in liblist:
-        if re.match(".*[dD].[lL][iI][bB]", l):
-            results += "debug;" + re.sub(".[lL][iI][bB]", "", l) + ";"
-        else:
-            results += "optimized;" + re.sub(".[lL][iI][bB]", "", l) + ";"
+        if re.match(".*.[lL][iI][bB]", l):
+            results += type + ";" + re.sub(".[lL][iI][bB]", "", l) + ";"
     return results[:-1]
 
 
@@ -202,10 +200,10 @@ if __name__ == '__main__':
         rtm_cflags += ";-D_WIN32_WINNT=0x0400"
 
     # libs
-    omni_libs  = process_lib(dict["omni_lib"])
-    omni_libs += ";" + process_lib(dict["omni_libd"])
-    rtm_libs   = process_lib(dict["rtm_lib"])
-    rtm_libs  += ";" + process_lib(dict["rtm_libd"])
+    omni_libs  = process_lib(dict["omni_lib"], "optimized")
+    omni_libs += ";" + process_lib(dict["omni_libd"], "debug")
+    rtm_libs   = process_lib(dict["rtm_lib"], "optimized")
+    rtm_libs  += ";" + process_lib(dict["rtm_libd"], "debug")
 
 
 

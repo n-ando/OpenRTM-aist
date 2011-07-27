@@ -3385,7 +3385,7 @@ namespace RTC
 
     template <class Listener>
     PreComponentActionListener*
-    addPortComponentActionListener(PreCompActionListenerType listener_type,
+    addPreComponentActionListener(PreCompActionListenerType listener_type,
                                    Listener& obj,
                                    void (Listener::*memfunc)(UniqueId ec_id))
     {
@@ -4883,7 +4883,9 @@ namespace RTC
       {
         if (!::CORBA::is_nil(ec) && !ec->_non_existent())
           {
+            
 	    ec->deactivate_component(RTC::LightweightRTObject::_duplicate(m_comp));
+            ec->stop();
           }
       }
       LightweightRTObject_var m_comp;
