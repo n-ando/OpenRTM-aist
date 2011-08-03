@@ -119,6 +119,7 @@ namespace coil
    */
   void Timer::invoke()
   {
+    Guard guard(m_taskMutex);
     for (size_t i(0), len(m_tasks.size()); i < len; ++i)
       {
 	m_tasks[i].remains = m_tasks[i].remains - m_interval;
