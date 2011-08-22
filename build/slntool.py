@@ -104,28 +104,7 @@ Lib2: Lib1
 """
 
 
-def get_projinfo(fname):
-    name = None
-    guid = None
-    re_guid = re.compile('^.*?ProjectGUID=\"{(.*)}\"')
-    re_name = re.compile('^.*?Name=\"(.*)\"')
-    fd = open(fname, "r")
-    pj = fd.readlines()
-    for t in pj:
-        n = re_name.match(t)
-        g = re_guid.match(t)
-
-        if name == None and n:
-            name = n.group(1)
-        if guid == None and g:
-            guid = g.group(1)
-
-        if name and guid:
-            break
-    fd.close()
-    return {"Name": name, "GUID": guid, "FileName": fname}
-
-def get_projinfo(fname,vcversion):
+def get_projinfo(fname,vcversion="VC8"):
     name = None
     guid = None
     regexs = {"VC8": {"guid":'^.*?ProjectGUID=\"{(.*)}\"',"name":'^.*?Name=\"(.*)\"'}, 
@@ -191,70 +170,7 @@ def parse_args(argv):
         i += 1
     return (vcversion, depfile, outfile, flist)
 
-def get_slnyaml(depfile, projfiles):
-    depdict = get_dependencies(depfile)
-    projs = []
-    projlist = """Projects:
-"""
-    for f in projfiles:
-        pj = get_projinfo(f)
-        if depdict.has_key(pj["Name"]):
-            pj["Depend"] = depdict[pj["Name"]]
-        projs.append(pj)
-    def depsort(d0, d1):
-        """
-        d0  < d1: return -1 
-        d0 == d1: return  0 
-        d0  > d1: return  1 
-        """
-        d0_depends = d0.has_key("Depend")
-        d1_depends = d1.has_key("Depend")
-        if not d0_depends and not d1_depends:
-            # both d0, d1 has no dependency 
-            return 0
-
-        if not d0_depends and d1_depends:
-            # only "d1" has dependency: d0 < d1
-            return -1 
-
-        if d0_depends and not d1_depends:
-            # only "d0" has dependency: d1 < d0
-            return 1 
-
-        # d0 and d1 has dependency
-        d0_in_dep = depdict.has_key(d0["Name"])
-        d1_in_dep = depdict.has_key(d1["Name"])
-        if not d0_in_dep and not d1_in_dep:
-            return 0
-        if not d0_in_dep and d1_in_dep:
-            return -1
-        if d0_in_dep and not d1_in_dep:
-            return 1
-        
-        # both d0 and d1 have several dependency
-        if depdict[d0["Name"]].count(d1["Name"]) > 0:
-            return 1
-        if depdict[d1["Name"]].count(d0["Name"]) > 0:
-            return -1
-        return 0
-
-    projs.sort(depsort)
-    for pj in projs:
-        list = """  - Name: %s
-    FileName: %s
-    GUID: &%s %s
-    Depend:
-""" % (pj["Name"], pj["FileName"], pj["Name"], pj["GUID"])
-        if pj.has_key("Depend"):
-            for dep in pj["Depend"]:
-                dep = """      - *%s
-""" % (dep)
-                list += dep
-        projlist += list
-    yaml_text = sln_yaml + projlist
-    return yaml_text
-        
-def get_slnyaml(depfile, projfiles, vcversion):
+def get_slnyaml(depfile, projfiles, vcversion="VC8"):
     depdict = get_dependencies(depfile)
     projs = []
     projlist = """Projects:
