@@ -22,6 +22,8 @@
 #ifndef OutPortPushConnector_cpp
 #define OutPortPushConnector_cpp
 
+#include <omniORB4/cdrStream.h>
+
 #include <cppunit/ui/text/TestRunner.h>
 #include <cppunit/TextOutputter.h>
 #include <cppunit/extensions/TestFactoryRegistry.h>
@@ -175,7 +177,7 @@ namespace OutPortPushConnector
       bool subscribeInterface(const SDOPackage::NVList& properties)
       {
     
-          return true;;
+          return true;
       }
   
       /*!
@@ -212,7 +214,7 @@ namespace OutPortPushConnector
       {
           m_logger = NULL;
       }
-      ~PublisherFlushMock()
+      virtual ~PublisherFlushMock()
       {
       }
       /*!
@@ -386,7 +388,7 @@ namespace OutPortPushConnector
       {
           m_logger = NULL;
       }
-      ~PublisherNewMock()
+      virtual ~PublisherNewMock()
       {
       }
       /*!

@@ -14,7 +14,7 @@ public:
             : RTC::DataFlowComponentBase(manager)
         {
         };
-        ~DummyModule(){};
+        virtual ~DummyModule(){};
  
 	static void InitProc(Manager* manager) { m_counter++; }
 	static int getInitProcCount() { return m_counter; }

@@ -208,6 +208,7 @@ namespace RTObject
     {
       return;
     }
+    virtual ~OutPortMock() {}
 
     bool write() {
       ++m_cnt;
