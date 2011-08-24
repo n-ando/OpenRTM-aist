@@ -1690,6 +1690,8 @@ AC_OUTPUT([Makefile
 	src/ext/ec/rtpreempt/Makefile
 	src/ext/sdo/Makefile
 	src/ext/sdo/observer/Makefile
+	src/ext/local_service/Makefile
+	src/ext/local_service/nameservice_file/Makefile
 	utils/Makefile
 	utils/rtm-config/Makefile
 	utils/cmake/Makefile
