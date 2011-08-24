@@ -170,7 +170,7 @@ namespace RTC
             m_isMaster = true;
 	    break;
 	  default:
-	    ;
+	    break;
 	  }
       }
     return;
