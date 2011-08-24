@@ -662,6 +662,7 @@ namespace coil
    * 文字列リストが空の場合には空白文字を返す。
    *
    * @param sv CSV変換対象文字列リスト
+   * @param delimiter 接続される文字列の間の文字 (デフォルト: ", ")
    *
    * @return CSV変換結果文字列
    *
@@ -673,12 +674,13 @@ namespace coil
    * If the string list is empty, the null will be returned.
    *
    * @param sv The target string list for creating CSV
+   * @param delimiter Delimiter string between connected words (default: ",")
    *
    * @return String of CSV creating result
    *
    * @endif
    */
-  std::string flatten(vstring sv);
+  std::string flatten(vstring sv, std::string delimiter = ", ");
   
   /*!
    * @if jp

@@ -546,14 +546,14 @@ namespace coil
    * @brief Create CSV file from the given string list
    * @endif
    */
-  std::string flatten(vstring sv)
+  std::string flatten(vstring sv, std::string delimiter)
   {
     if (sv.size() == 0) return "";
     
     std::string str;
     for (size_t i(0), len(sv.size() - 1); i < len; ++i)
       {
-        str += sv[i] + ", ";
+        str += sv[i] + delimiter;
       }
     return str + sv.back();
   }
