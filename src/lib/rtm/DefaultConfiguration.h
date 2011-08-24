@@ -105,6 +105,7 @@ static const char* default_config[] =
     "manager.modules.Java.profile_cmd",      "rtcprof_java",
     "manager.modules.Java.suffixes",         "class",
     "manager.modules.Java.load_paths",       "./",
+    "manager.local_service.enabled_services","ALL",
     "sdo.service.provider.enabled_service",  "ALL",
     "sdo.service.consumer.enabled_service",  "ALL",
     ""
