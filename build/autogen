@@ -157,9 +157,9 @@ do_prepare()
     echo "------------------------------------------------------------"
     find_file "/usr/local/share/aclocal /usr/local/share/aclocal${ac_ver} 
                /usr/local/share/aclocal${ac_ver2}
-               /opt/local/share/aclocal
                /usr/share/aclocal /usr/share/aclocal${ac_ver} 
-               /usr/share/aclocal${ac_ver2}" \
+               /usr/share/aclocal${ac_ver2}
+               /opt/local/share/aclocal" \
 	"libtool.m4 libtool${lt_ver}.m4 libtool${lt_ver2}.m4 
          libtool${ac_ver}.m4 libtool${ac_ver2}.m4"
     libtool_m4=${file_path}
