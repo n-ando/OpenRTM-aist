@@ -39,6 +39,7 @@
 #include <rtm/FactoryInit.h>
 #include <rtm/CORBA_IORUtil.h>
 #include <rtm/SdoServiceConsumerBase.h>
+#include <rtm/LocalServiceAdmin.h>
 
 #if defined(minor)
 #undef minor
@@ -154,6 +155,7 @@ namespace RTC
 	    manager->initExecContext();
 	    manager->initComposite();
 	    manager->initTimer();
+            manager->initManagerServant();
 	  }
       }
     return *manager;
@@ -182,6 +184,7 @@ namespace RTC
   void Manager::shutdown()
   {
     RTC_TRACE(("Manager::shutdown()"));
+    m_listeners.manager_.preShutdown();
     shutdownComponents();
     shutdownNaming();
     shutdownORB();
@@ -195,6 +198,7 @@ namespace RTC
       {
 	join();
       }
+    m_listeners.manager_.postShutdown();
     shutdownLogger();
   }
   
@@ -293,6 +297,8 @@ namespace RTC
     m_config["sdo.service.consumer.available_services"]
       = coil::flatten(SdoServiceConsumerFactory::instance().getIdentifiers());
 
+    initLocalService();
+
     if (m_initProc != NULL)
       {
         m_initProc(this);
@@ -349,6 +355,7 @@ namespace RTC
                fname, initfunc));
     std::string file_name(fname);
     std::string init_func(initfunc);
+    m_listeners.module_.preLoad(file_name, init_func);
     try
       {
         if (init_func.empty())
@@ -358,6 +365,7 @@ namespace RTC
           }
         std::string path(m_module->load(file_name, init_func));
         RTC_DEBUG(("module path: %s", path.c_str()));
+        m_listeners.module_.postLoad(path, init_func);
       }
     catch (...)
       {
@@ -376,7 +384,10 @@ namespace RTC
   void Manager::unload(const char* fname)
   {
     RTC_TRACE(("Manager::unload()"));
+    std::string fnamestr(fname);
+    m_listeners.module_.preUnload(fnamestr);
     m_module->unload(fname);
+    m_listeners.module_.postUnload(fnamestr);
     return;
   }
   
@@ -520,10 +531,12 @@ std::vector<coil::Properties> Manager::getLoadableModules()
   RTObject_impl* Manager::createComponent(const char* comp_args)
   {
     RTC_TRACE(("Manager::createComponent(%s)", comp_args));
+    std::string argstr(comp_args);
+    m_listeners.rtclifecycle_.preCreate(argstr);
     //------------------------------------------------------------
     // extract "comp_type" and "comp_prop" from comp_arg
     coil::Properties comp_prop, comp_id;
-    if (!procComponentArgs(comp_args, comp_id, comp_prop)) return NULL;
+    if (!procComponentArgs(argstr.c_str(), comp_id, comp_prop)) return NULL;
 
     //------------------------------------------------------------
     // Because the format of port-name had been changed from <port_name> 
@@ -637,7 +650,7 @@ std::vector<coil::Properties> Manager::getLoadableModules()
 	return NULL;
       }
     RTC_TRACE(("RTC created: %s", comp_id["implementation_id"].c_str()));
-
+    m_listeners.rtclifecycle_.postCreate(comp);
     prop << comp_prop;
 
     //------------------------------------------------------------
@@ -646,12 +659,14 @@ std::vector<coil::Properties> Manager::getLoadableModules()
     // rtc.conf:
     //   [category].[type_name].config_file = file_name
     //   [category].[instance_name].config_file = file_name
+    m_listeners.rtclifecycle_.preConfigure(prop);
     configureComponent(comp, prop);
-
+    m_listeners.rtclifecycle_.postConfigure(prop);
     // comp->setProperties(prop);
     
     //------------------------------------------------------------
     // Component initialization
+    m_listeners.rtclifecycle_.preInitialize();
     if (comp->initialize() != RTC::RTC_OK)
       {
 	RTC_TRACE(("RTC initialization failed: %s",
@@ -662,6 +677,7 @@ std::vector<coil::Properties> Manager::getLoadableModules()
       }
     RTC_TRACE(("RTC initialization succeeded: %s",
                comp_id["implementation_id"].c_str()));
+    m_listeners.rtclifecycle_.postInitialize();
     //------------------------------------------------------------
     // Bind component to naming service
     registerComponent(comp);
@@ -681,13 +697,16 @@ std::vector<coil::Properties> Manager::getLoadableModules()
     // ### NamingManager のみで代用可能
     m_compManager.registerObject(comp);
     
-    std::vector<std::string> names(comp->getNamingNames());
+    coil::vstring names(comp->getNamingNames());
     
+    m_listeners.naming_.preBind(comp, names);
     for (int i(0), len(names.size()); i < len; ++i)
       {
 	RTC_TRACE(("Bind name: %s", names[i].c_str()));
 	m_namingManager->bindObject(names[i].c_str(), comp);
       }
+    m_listeners.naming_.postBind(comp, names);
+
     return true;
   }
   
@@ -704,13 +723,15 @@ std::vector<coil::Properties> Manager::getLoadableModules()
     // ### NamingManager のみで代用可能
     m_compManager.unregisterObject(comp->getInstanceName());
     
-    std::vector<std::string> names(comp->getNamingNames());
-    
+    coil::vstring names(comp->getNamingNames());
+
+    m_listeners.naming_.preUnbind(comp, names);
     for (int i(0), len(names.size()); i < len; ++i)
       {
 	RTC_TRACE(("Unbind name: %s", names[i].c_str()));
 	m_namingManager->unbindObject(names[i].c_str());
       }
+    m_listeners.naming_.postUnbind(comp, names);
 
     return true;
   }
@@ -818,6 +839,69 @@ std::vector<coil::Properties> Manager::getLoadableModules()
     RTC_TRACE(("Manager::getComponents()"));
     return m_compManager.getObjects();
   }
+
+  void Manager::
+  addManagerActionListener(RTM::ManagerActionListener* listener,
+                           bool autoclean)
+  {
+    m_listeners.manager_.addListener(listener, autoclean);
+  }
+  void Manager::
+  removeManagerActionListener(RTM::ManagerActionListener* listener)
+  {
+    m_listeners.manager_.removeListener(listener);
+  }
+  
+  void Manager::
+  addModuleActionListener(RTM::ModuleActionListener* listener,
+                           bool autoclean)
+  {
+    m_listeners.module_.addListener(listener, autoclean);
+  }
+  void Manager::
+  removeModuleActionListener(RTM::ModuleActionListener* listener)
+  {
+    m_listeners.module_.removeListener(listener);
+  }
+
+  void Manager::
+  addRtcLifecycleActionListener(RTM::RtcLifecycleActionListener* listener,
+                                bool autoclean)
+  {
+    m_listeners.rtclifecycle_.addListener(listener, autoclean);
+  }
+  void Manager::
+  removeRtcLifecycleActionListener(RTM::RtcLifecycleActionListener* listener)
+  {
+    m_listeners.rtclifecycle_.removeListener(listener);
+  }
+  
+  void Manager::
+  addNamingActionListener(RTM::NamingActionListener* listener,
+                          bool autoclean)
+  {
+    m_listeners.naming_.addListener(listener, autoclean);
+  }
+
+  void Manager::
+  removeNamingActionListener(RTM::NamingActionListener* listener)
+  {
+    m_listeners.naming_.removeListener(listener);
+  }
+  
+  void Manager::
+  addLocalServiceActionListener(RTM::LocalServiceActionListener* listener,
+                                bool autoclean)
+  {
+    m_listeners.localservice_.addListener(listener, autoclean);
+  }
+
+  void Manager::
+  removeLocalServiceActionListener(RTM::LocalServiceActionListener* listener)
+  {
+    m_listeners.localservice_.removeListener(listener);
+  }
+
   
   //============================================================
   // CORBA 関連
@@ -1375,6 +1459,19 @@ std::vector<coil::Properties> Manager::getLoadableModules()
   void Manager::shutdownNaming()
   {
     RTC_TRACE(("Manager::shutdownNaming()"));
+    std::vector<RTObject_impl*> comps = getComponents();
+
+    for (size_t i(0); i < comps.size(); ++i)
+      {
+        coil::vstring names = comps[i]->getNamingNames();
+        m_listeners.naming_.preUnbind(comps[i], names);
+        for (size_t j(0); j < names.size(); ++j)
+          {
+            m_namingManager->unbindObject(names[j].c_str());
+          }
+        m_listeners.naming_.postUnbind(comps[i], names);
+      }
+
     m_namingManager->unbindAll();
     delete m_namingManager;
   }
@@ -1473,6 +1570,25 @@ std::vector<coil::Properties> Manager::getLoadableModules()
     return true;
   }
   
+  bool Manager::initLocalService()
+  {
+    RTC_TRACE(("Manager::initLocalService()"));
+
+    RTM::LocalServiceAdmin& admin = RTM::LocalServiceAdmin::instance();
+    coil::Properties& prop(m_config.getNode("manager.local_service"));
+    admin.init(prop);
+    RTC_DEBUG(("LocalServiceAdmin's properties:"));
+    RTC_DEBUG_STR((prop));
+
+    RTM::LocalServiceProfileList svclist = admin.getServiceProfiles();
+    for (size_t i(0); i < svclist.size(); ++i)
+      {
+        RTC_INFO(("Available local service: %s (%s)",
+        svclist[i].name.c_str(), svclist[i].uuid.c_str()));
+      }
+    return true;
+  }
+
   /*!
    * @if jp
    * @brief NamingManager の終了処理

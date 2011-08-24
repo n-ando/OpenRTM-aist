@@ -58,7 +58,9 @@ MGR_SRC =                            \
 	NamingManager.cpp            \
 	NumberingPolicy.cpp          \
 	ManagerServant.cpp           \
-	SystemLogger.cpp
+	SystemLogger.cpp             \
+	LocalServiceAdmin.cpp        \
+	ManagerActionListener.cpp
 
 COMP_SRC =                           \
 	DataFlowComponentBase.cpp    \
@@ -150,6 +152,8 @@ rtmheader_HEADERS = \
 	SdoServiceConsumerBase.h \
 	StateMachine.h 		 \
 	Typename.h               \
+	LocalServiceBase.h	 \
+	ListenerHolder.h         \
 	config_rtc.h
 
 
