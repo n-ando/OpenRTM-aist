@@ -79,13 +79,13 @@ cmake_DATA = OpenRTMConfig.cmake FindOpenRTM.cmake
 # basic compiler/linker options
 OPENRTM_CFLAGS=`echo "${CXXFLAGS}" | sed -e 's/\-I[^ ]*//g'`
 OPENRTM_INCLUDE_DIRS=        \
-	-I${prefix}/include  \
-	-I${coil_includedir} \
-	-I${rtm_includedir}  \
-	-I${rtm_includedir}/rtm/idl
+	${prefix}/include  \
+	${coil_includedir} \
+	${rtm_includedir}  \
+	${rtm_includedir}/rtm/idl
 OPENRTM_LDFLAGS_=`echo "${LDFLAGS}" | sed -e 's/\-L[^ ]*//g'`
-OPENRTM_LIBRARY_DIRS=-L${prefix}/lib
-OPENRTM_LIBRARIES_=${LIBS} -lRTC -lcoil
+OPENRTM_LIBRARY_DIRS=${prefix}/lib
+OPENRTM_LIBRARIES_=`echo "${LIBS} RTC coil" | sed -e 's/\-l[^ ]*//g'`
 
 # OpenRTM-aist specific directory
 COIL_INCLUDE_DIR=${coil_includedir}
