@@ -2256,6 +2256,75 @@ namespace RTC
       m_configsets.bindParameter(param_name, var, def_val, trans);
       return true;
     }
+
+    /*!
+     * @if jp
+     *
+     * @brief コンフィギュレーションサービスを取得する
+     * 
+     * コンフィギュレーションサービスオブジェクトを取得する。このサービ
+     * スオブジェクトを利用して、コンフィギュレーションパラメータの操作
+     * を行うことができる。主な操作としては、
+     *
+     * - unbindParameter(): パラメータのアンバインド
+     * - update(): パラメータの更新
+     * - update(set_name): 特定のセットの更新
+     * - update(set_name, param_name): 特定のセットのパラメータの更新
+     * - isExist(): パラメータの存在確認
+     * - isChanged(): パラメータが変更されたかの確認
+     * - changedParameters(): 変更さえたパラメータのリスト
+     * - getActiveId(): アクティブセット名の取得
+     * - haveConfig(config_id): コンフィグセットを持っているかどうか
+     * - getConfigurationSets(): 全コンフィギュレーションセットの取得
+     * - getConfigurationSet(set_id): 特定セットを取得
+     *
+     * コールバック関連 
+     * - addConfigurationParamListener(): リスナの追加
+     * - removeConfigurationParamListener(): リスナの削除
+     * - addConfigurationSetListener(): リスナの追加
+     * - removeConfigurationSetListener(): リスナの削除
+     * - addConfigurationSetNameListener(): リスナの追加
+     * - removeConfigurationSetNameListener(): リスナの削除
+     *
+     * 詳細はConfigAdminクラスリファレンスを参照のこと。
+     *
+     * @return ConfigAdmin object
+     * 
+     * @else
+     *
+     * @brief Getting configuration service
+     * 
+     * This operation returns configuration service object. By using
+     * this service, user can manipulate configuration
+     * parameters. Mainly the following operations are supported.
+     *
+     * - unbindParameter(): Unbinding parameters
+     * - update(): Updateing parameters
+     * - update(set_name): Updating a specific configuration set
+     * - update(set_name, param_name): Updating specific parameter in a set
+     * - isExist(): Checking existence of a parameter
+     * - isChanged(): Check if a parameter was updated
+     * - changedParameters(): Getting changed parameter list
+     * - getActiveId(): Getting active configuration set name
+     * - haveConfig(config_id): Checking if having a specified configuration set
+     * - getConfigurationSets(): getting all the configuration sets
+     * - getConfigurationSet(set_id): Getting a configuration set
+     *
+     * Callback related member functions
+     * - addConfigurationParamListener(): Adding listener
+     * - removeConfigurationParamListener(): Removing listener
+     * - addConfigurationSetListener(): Adding listener
+     * - removeConfigurationSetListener(): Removing listener
+     * - addConfigurationSetNameListener(): Adding listener
+     * - removeConfigurationSetNameListener(): Removing listener
+     *
+     * See details in the ConfigAdmin class reference
+     *
+     * @return ConfigAdmin object
+     *
+     * @endif
+     */
+    ConfigAdmin& getConfigService() { return m_configsets; }
     
     /*!
      * @if jp

@@ -878,6 +878,27 @@ namespace RTC
      * @endif
      */
     bool isChanged(void) {return m_changed;}
+
+    /*!
+     * @if jp
+     *
+     * @brief 変更されたパラメータのリスト
+     * 
+     * コンフィギュレーションパラメータのうち変更されたもののリストを返す。
+     *
+     * @return 変更されたパラメータ名リスト
+     *
+     * @else
+     *
+     * @brief Changed parameters list
+     * 
+     * This operation returns parameter list which are changed.
+     *
+     * @return Changed parameters list
+     *
+     * @endif
+     */
+    coil::vstring& changedParameters() { return m_changedParam; }
     
     /*!
      * @if jp
@@ -1533,7 +1554,8 @@ namespace RTC
     std::string m_activeId;
     bool m_active;
     bool m_changed;
-    std::vector<std::string> m_newConfig;
+    coil::vstring m_changedParam;
+    coil::vstring m_newConfig;
     ConfigurationListeners m_listeners;
 
   };
