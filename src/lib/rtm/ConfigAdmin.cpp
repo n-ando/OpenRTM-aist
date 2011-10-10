@@ -140,13 +140,15 @@ namespace RTC
   void ConfigAdmin::update(const char* config_set)
   {
     if (m_configsets.hasKey(config_set) == NULL) { return; }
-    
+    // clear changed parameter list
+    m_changedParam.clear();
     coil::Properties& prop(m_configsets.getNode(config_set));
     
     for (int i(0), len(m_params.size()); i < len; ++i)
       {
 	if (prop.hasKey(m_params[i]->name) != NULL)
           {
+            // m_changedParam is updated here
             m_params[i]->update(prop[m_params[i]->name].c_str());
           }
       }
@@ -174,7 +176,6 @@ namespace RTC
     if (it != m_params.end())
       {
 	(*it)->update(m_configsets[key].c_str());
-        onUpdateParam(config_set, config_param);
 	return;
       }
   }
@@ -495,6 +496,7 @@ namespace RTC
   ConfigAdmin::onUpdateParam(const char* config_param, const char* config_value)
   {
     std::cout << "Update: key = " << config_param << " value = " << config_value << std::endl;
+    m_changedParam.push_back(config_param);
     m_listeners.configparam_[ON_UPDATE_CONFIG_PARAM].notify(config_param,
                                                             config_value);
   }
