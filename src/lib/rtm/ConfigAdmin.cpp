@@ -25,6 +25,31 @@ namespace RTC
 {
   /*!
    * @if jp
+   * @brief コールバックのセット
+   * @else
+   * @brief Setting callback
+   * @endif
+   */
+  void ConfigBase::setCallback(ConfigAdmin* cadmin, CallbackFunc cbf)
+    {
+      m_admin = cadmin;
+      m_callback = cbf;
+    }
+
+  /*!
+   * @if jp
+   * @brief 変数変更を知らせるオブザーバ関数
+   * @else
+   * @brief Observer function to notify variable changed
+   * @endif
+   */
+  void ConfigBase::notifyUpdate(const char* key, const char* val)
+  {
+    (m_admin->*m_callback)(key, val);
+  }
+
+  /*!
+   * @if jp
    * @brief コンストラクタ
    * @else
    * @endif
@@ -51,6 +76,39 @@ namespace RTC
     m_params.clear();
   }
   
+  /*!
+   * @if jp
+   * @brief コンフィギュレーションパラメータの解除
+   * @else
+   * @brief Unbinding configuration parameters
+   * @endif
+   */
+  bool ConfigAdmin::unbindParameter(const char* param_name)
+  {
+    std::vector<ConfigBase*>::iterator it;
+    it = std::find_if(m_params.begin(), m_params.end(),
+		      find_conf(param_name));
+    if (it == m_params.end())
+      {
+        return false;
+      }
+    m_params.erase(it);
+
+    // configsets
+    const std::vector<coil::Properties*>& leaf(m_configsets.getLeaf());
+
+    for (size_t i(0); i < leaf.size(); ++i)
+      {
+        if (leaf[i]->hasKey(param_name))
+          {
+            coil::Properties* p(leaf[i]->removeNode(param_name));
+            delete p;
+          }
+      }
+
+    return true;
+  }
+
 
   /*!
    * @if jp
@@ -88,11 +146,11 @@ namespace RTC
     for (int i(0), len(m_params.size()); i < len; ++i)
       {
 	if (prop.hasKey(m_params[i]->name) != NULL)
-	  {
-	    m_params[i]->update(prop[m_params[i]->name].c_str());
-            onUpdate(config_set);
-	  }
+          {
+            m_params[i]->update(prop[m_params[i]->name].c_str());
+          }
       }
+    onUpdate(config_set);
   }
 
 
@@ -182,7 +240,7 @@ namespace RTC
     std::string node(config_set.getName());
     if (node.empty()) { return false; }
     
-    coil::Properties& p(m_configsets.getNode(config_set.getName()));
+    coil::Properties& p(m_configsets.getNode(node));
 
     p << config_set;
     m_changed = true;
@@ -434,10 +492,11 @@ namespace RTC
    * @endif
    */
   void
-  ConfigAdmin::onUpdateParam(const char* config_set, const char* config_param)
+  ConfigAdmin::onUpdateParam(const char* config_param, const char* config_value)
   {
-    m_listeners.configparam_[ON_UPDATE_CONFIG_PARAM].notify(config_set,
-                                                            config_param);
+    std::cout << "Update: key = " << config_param << " value = " << config_value << std::endl;
+    m_listeners.configparam_[ON_UPDATE_CONFIG_PARAM].notify(config_param,
+                                                            config_value);
   }
 
   /*!
