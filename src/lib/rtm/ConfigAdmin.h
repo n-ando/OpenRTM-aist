@@ -120,6 +120,8 @@ namespace RTC
    */
   typedef ConfigurationSetNameListener OnActivateSetCallback;
 
+  // forward decl
+  class ConfigAdmin;
 
   //============================================================
   // ConfigBase class
@@ -178,7 +180,9 @@ namespace RTC
      * @endif
      */
     ConfigBase(const char* name_, const char* def_val)
-      : name(name_), default_value(def_val) {}
+      : name(name_), default_value(def_val),
+        string_value(""), m_admin(NULL), m_callback(NULL)
+    {}
     
     /*!
      * @if jp
@@ -196,6 +200,44 @@ namespace RTC
      * @endif
      */
     virtual ~ConfigBase(void){};
+
+    // typedef of ConfigAdmin's member function
+    typedef void (ConfigAdmin::*CallbackFunc)(const char*, const char*);
+
+    /*!
+     * @if jp
+     *
+     * @brief コールバックのセット
+     * 
+     * 変数変更時にコールされるコールバック関数をセットする.
+     *
+     * @else
+     *
+     * @brief Setting callback
+     *
+     * This member function sets callback function which is called
+     * when variable is changed.
+     *
+     * @endif
+     */
+    void setCallback(ConfigAdmin* cadmin, CallbackFunc cbf);
+
+    /*!
+     * @if jp
+     *
+     * @brief 変数変更を知らせるオブザーバ関数
+     * 
+     * 変数変更を知らせるオブザーバ関数.
+     *
+     * @else
+     *
+     * @brief Observer function to notify variable changed
+     *
+     * This function notifies variable has been changed.
+     *
+     * @endif
+     */
+    void notifyUpdate(const char* key, const char* val);
     
     /*!
      * @if jp
@@ -223,7 +265,7 @@ namespace RTC
      * @endif
      */
     virtual bool update(const char* val) = 0;
-    
+
     /*!
      * @if jp
      * @brief  コンフィギュレーション名
@@ -241,6 +283,32 @@ namespace RTC
      * @endif
      */
     const char* default_value;
+
+  protected:
+    /*!
+     * @if jp
+     * @brief  文字列形式の現在値
+     * @else
+     * @brief  Current value in string format
+     * @endif
+     */
+    std::string string_value;
+    /*!
+     * @if jp
+     * @brief  ConfigAdminオブジェクトへのポインタ
+     * @else
+     * @brief  A pointer to the ConfigAdmin object
+     * @endif
+     */
+    ConfigAdmin* m_admin;
+    /*!
+     * @if jp
+     * @brief  コールバックのメンバ関数ポインタ
+     * @else
+     * @brief  A member function pointer to the callback function.
+     * @endif
+     */
+    CallbackFunc m_callback;
   };
   
   //============================================================
@@ -357,8 +425,16 @@ namespace RTC
      */
     virtual bool update(const char* val)
     {
-      if ((*m_trans)(m_var, val)) { return true; }
+      if (string_value == val) { return true; }
+      string_value = val;
+      // value changed
+      if ((*m_trans)(m_var, val))
+        {
+          notifyUpdate(name, val);
+          return true;
+        }
       (*m_trans)(m_var, default_value);
+      notifyUpdate(name, val);
       return false;
     }
     
@@ -617,9 +693,38 @@ namespace RTC
       if (def_val == 0) { return false; }
       if (isExist(param_name)) { return false; }
       if (!trans(var, def_val)) { return false; }
-      m_params.push_back(new Config<VarType>(param_name, var, def_val, trans));
+      Config<VarType>* c = new Config<VarType>(param_name, var, def_val, trans);
+      m_params.push_back(c);
+      c->setCallback(this, &RTC::ConfigAdmin::onUpdateParam);
       return true;
     }
+
+    /*!
+     * @if jp
+     *
+     * @brief コンフィギュレーションパラメータの解除
+     * 
+     * コンフィギュレーションパラメータと変数のバインドを解除する。
+     * 指定した名称のコンフィギュレーションパラメータが存在しない場合は
+     * falseを返す。
+     *
+     * @param param_name コンフィギュレーションパラメータ名
+     * @return 設定結果(設定成功:true，設定失敗:false)
+     * 
+     * @else
+     *
+     * @brief Unbinding configuration parameters
+     * 
+     * Unbind configuration parameter from its variable. It returns
+     * false, if configuration parameter of specified name has already
+     * existed.
+     *
+     * @param param_name Configuration parameter name
+     * @return Setup result (Successful:true, Failed:false)
+     *
+     * @endif
+     */
+    bool unbindParameter(const char* param_name);
         
     /*!
      * @if jp
