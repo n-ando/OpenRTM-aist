@@ -121,6 +121,7 @@ namespace RTC
    */
   void ConfigAdmin::update(void)
   {
+    m_changedParam.clear();
     if (m_changed && m_active)
       {
 	update(m_activeId.c_str());
@@ -165,6 +166,7 @@ namespace RTC
    */
   void ConfigAdmin::update(const char* config_set, const char* config_param)
   {
+    m_changedParam.clear();
     if ((config_set == 0) || (config_param == 0)) { return; }
 
     std::string key(config_set);
