@@ -122,10 +122,10 @@ find_autotools()
 
     #============================================================
     # find libtool
-    find_cmd "libtool${lt_ver} libtool${lt_ver2} libtool"
+    find_cmd "libtool${lt_ver} libtool${lt_ver2} glibtool libtool"
     lt_cmd=${cmd_path}
     # libtoolize
-    find_cmd "libtoolize${lt_ver} libtoolize${lt_ver2} libtoolize glibtoolize"
+    find_cmd "libtoolize${lt_ver} libtoolize${lt_ver2} glibtoolize libtoolize"
     ltz_cmd=${cmd_path}
 
     echo "autoconf   was found in ${ac_cmd}."
