@@ -127,7 +127,7 @@ namespace RTM
     bool
     FileNameservice::reinit(const ::coil::Properties& props)
     {
-      RTC_TRCE(("reinit()"));
+      RTC_TRACE(("reinit()"));
       RTC_DEBUG_STR((props));
       bool ret(processServiceProfile(props));
       m_profile.properties << props;
