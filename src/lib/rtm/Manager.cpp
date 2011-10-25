@@ -40,6 +40,7 @@
 #include <rtm/CORBA_IORUtil.h>
 #include <rtm/SdoServiceConsumerBase.h>
 #include <rtm/LocalServiceAdmin.h>
+#include <rtm/SystemLogger.h>
 
 #if defined(minor)
 #undef minor
@@ -265,6 +266,37 @@ namespace RTC
 	return false;
       }
 
+    std::vector<std::string> lsvc;
+    lsvc = coil::split(m_config["manager.local_service.modules"], ",");
+
+    for (int i(0), len(lsvc.size()); i < len; ++i)
+      {
+	std::string basename(coil::split(lsvc[i], ".").operator[](0));
+	basename += "Init";
+	try
+	  {
+	    m_module->load(lsvc[i], basename);
+	  }
+	catch (ModuleManager::Error& e)
+	  {
+	    RTC_ERROR(("Module load error: %s", e.reason.c_str()));
+	  }
+	catch (ModuleManager::SymbolNotFound& e)
+	  {
+	    RTC_ERROR(("Symbol not found: %s", e.name.c_str()));
+	  }
+	catch (ModuleManager::ModuleNotFound& e)
+	  {
+	    RTC_ERROR(("Module not found: %s", e.name.c_str()));
+	  }
+	catch (...)
+	  {
+	    RTC_ERROR(("Unknown Exception"));
+	  }
+      }
+
+    initLocalService();
+
     std::vector<std::string> mods;
     mods = coil::split(m_config["manager.modules.preload"], ",");
 
@@ -297,7 +329,7 @@ namespace RTC
     m_config["sdo.service.consumer.available_services"]
       = coil::flatten(SdoServiceConsumerFactory::instance().getIdentifiers());
 
-    initLocalService();
+
 
     if (m_initProc != NULL)
       {
@@ -1609,7 +1641,7 @@ std::vector<coil::Properties> Manager::getLoadableModules()
 	    coil::Properties p(comps[i]->getInstanceName());
 	    p << comps[i]->getProperties();
             rtclog.lock();
-	    rtclog.level(Logger::RTL_PARANOID) << p;
+	    rtclog.level(::RTC::Logger::RTL_PARANOID) << p;
             rtclog.unlock();
 	  }
 	catch (...)
