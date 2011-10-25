@@ -657,6 +657,8 @@ namespace RTC
      * 指定した名称のコンフィギュレーションパラメータが既に存在する場合は
      * falseを返す。
      * \<VarType\>としてコンフィギュレーションパラメータのデータ型を指定する。
+     * なお、このメンバ関数が呼ばれた後、現在アクティブなコンフィギュレー
+     * ションセットの値が変数にセットされる。
      *
      * @param param_name コンフィギュレーションパラメータ名
      * @param var コンフィギュレーションパラメータ格納用変数
@@ -673,6 +675,8 @@ namespace RTC
      * Return false, if configuration parameter of specified name has already 
      * existed.
      * Specify the data type of the configuration as \<VarType\>.
+     * After calling this function, configuration variable would be
+     * updated by the active configuration parameter.
      *
      * @param param_name Configuration parameter name
      * @param var Configuration parameter variable
@@ -696,6 +700,7 @@ namespace RTC
       Config<VarType>* c = new Config<VarType>(param_name, var, def_val, trans);
       m_params.push_back(c);
       c->setCallback(this, &RTC::ConfigAdmin::onUpdateParam);
+      update(getActiveId(), param_name);
       return true;
     }
 
