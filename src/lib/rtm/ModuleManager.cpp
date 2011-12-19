@@ -32,7 +32,7 @@ namespace RTC
   
   /*!
    * @if jp
-   * @brief ¥³¥ó¥¹¥È¥é¥¯¥¿
+   * @brief ƒRƒ“ƒXƒgƒ‰ƒNƒ^
    * @else
    * @brief Constructor
    * @endif
@@ -52,7 +52,7 @@ namespace RTC
   
   /*!
    * @if jp
-   * @brief ¥Ç¥¹¥È¥é¥¯¥¿
+   * @brief ƒfƒXƒgƒ‰ƒNƒ^
    * @else
    * @brief Destructor
    * @endif
@@ -64,7 +64,7 @@ namespace RTC
   
   /*!
    * @if jp
-   * @brief ¥â¥¸¥å¡¼¥ë¤Î¥í¡¼¥É
+   * @brief ƒ‚ƒWƒ…[ƒ‹‚Ìƒ[ƒh
    * @else
    * @brief Load the module
    * @endif
@@ -127,7 +127,7 @@ namespace RTC
   
   /*!
    * @if jp
-   * @brief ¥â¥¸¥å¡¼¥ë¤Î¥í¡¼¥É¡¢½é´ü²½
+   * @brief ƒ‚ƒWƒ…[ƒ‹‚Ìƒ[ƒhA‰Šú‰»
    * @else
    * @brief Load and initialize the module
    * @endif
@@ -158,7 +158,7 @@ namespace RTC
   
   /*!
    * @if jp
-   * @brief ¥â¥¸¥å¡¼¥ë¤Î¥¢¥ó¥í¡¼¥É
+   * @brief ƒ‚ƒWƒ…[ƒ‹‚ÌƒAƒ“ƒ[ƒh
    * @else
    * @brief Unload the module
    * @endif
@@ -181,7 +181,7 @@ namespace RTC
   
   /*!
    * @if jp
-   * @brief Á´¥â¥¸¥å¡¼¥ë¤Î¥¢¥ó¥í¡¼¥É
+   * @brief ‘Sƒ‚ƒWƒ…[ƒ‹‚ÌƒAƒ“ƒ[ƒh
    * @else
    * @brief Unload all modules
    * @endif
@@ -201,7 +201,7 @@ namespace RTC
   
   /*!
    * @if jp
-   * @brief ¥â¥¸¥å¡¼¥ë¤Î¥·¥ó¥Ü¥ë¤Î»²¾È
+   * @brief ƒ‚ƒWƒ…[ƒ‹‚ÌƒVƒ“ƒ{ƒ‹‚ÌQÆ
    * @else
    * @brief Refer to the symbol of the module
    * @endif
@@ -230,7 +230,7 @@ namespace RTC
   
   /*!
    * @if jp
-   * @brief ¥â¥¸¥å¡¼¥ë¥í¡¼¥É¥Ñ¥¹¤ò»ØÄê¤¹¤ë
+   * @brief ƒ‚ƒWƒ…[ƒ‹ƒ[ƒhƒpƒX‚ğw’è‚·‚é
    * @else
    * @brief Set the module load path
    * @endif
@@ -243,7 +243,7 @@ namespace RTC
   
   /*!
    * @if jp
-   * @brief ¥â¥¸¥å¡¼¥ë¥í¡¼¥É¥Ñ¥¹¤òÄÉ²Ã¤¹¤ë
+   * @brief ƒ‚ƒWƒ…[ƒ‹ƒ[ƒhƒpƒX‚ğ’Ç‰Á‚·‚é
    * @else
    * @brief Add the module load path
    * @endif
@@ -264,7 +264,7 @@ namespace RTC
   
   /*!
    * @if jp
-   * @brief ¥í¡¼¥ÉºÑ¤ß¤Î¥â¥¸¥å¡¼¥ë¥ê¥¹¥È¤ò¼èÆÀ¤¹¤ë
+   * @brief ƒ[ƒhÏ‚İ‚Ìƒ‚ƒWƒ…[ƒ‹ƒŠƒXƒg‚ğæ“¾‚·‚é
    * @else
    * @brief Get the module list that has been loaded
    * @endif
@@ -282,7 +282,7 @@ namespace RTC
   
   /*!
    * @if jp
-   * @brief ¥í¡¼¥É²ÄÇ½¤Ê¥â¥¸¥å¡¼¥ë¥ê¥¹¥È¤ò¼èÆÀ¤¹¤ë(Ì¤¼ÂÁõ)
+   * @brief ƒ[ƒh‰Â”\‚Èƒ‚ƒWƒ…[ƒ‹ƒŠƒXƒg‚ğæ“¾‚·‚é(–¢À‘•)
    * @else
    * @brief Get the loadable module list(not implemented)
    * @endif
@@ -321,7 +321,7 @@ namespace RTC
   
   /*!
    * @if jp
-   * @brief LoadPath ¤«¤é¤Î¥Õ¥¡¥¤¥ë¤Î¸¡º÷
+   * @brief LoadPath ‚©‚ç‚Ìƒtƒ@ƒCƒ‹‚ÌŒŸõ
    * @else
    * @brief Search the file from the LoadPath
    * @endif
@@ -350,7 +350,7 @@ namespace RTC
   
   /*!
    * @if jp
-   * @brief ¥Õ¥¡¥¤¥ë¤¬Â¸ºß¤¹¤ë¤«¤É¤¦¤«¤Î¥Á¥§¥Ã¥¯
+   * @brief ƒtƒ@ƒCƒ‹‚ª‘¶İ‚·‚é‚©‚Ç‚¤‚©‚Ìƒ`ƒFƒbƒN
    * @else
    * @brief Check whether the file exists
    * @endif
@@ -376,7 +376,7 @@ namespace RTC
   
   /*!
    * @if jp
-   * @brief ½é´ü²½´Ø¿ô¥·¥ó¥Ü¥ë¤òÀ¸À®¤¹¤ë
+   * @brief ‰Šú‰»ŠÖ”ƒVƒ“ƒ{ƒ‹‚ğ¶¬‚·‚é
    * @else
    * @brief Create initialization function symbol
    * @endif
@@ -391,7 +391,7 @@ namespace RTC
 
   /*!
    * @if jp
-   * @brief Ìµ¸ú¤Ê¥â¥¸¥å¡¼¥ë¥×¥í¥Õ¥¡¥¤¥ë¤òºï½ü¤¹¤ë
+   * @brief –³Œø‚Èƒ‚ƒWƒ…[ƒ‹ƒvƒƒtƒ@ƒCƒ‹‚ğíœ‚·‚é
    * @else
    * @brief Removing incalid module profiles
    * @endif
@@ -412,7 +412,7 @@ namespace RTC
 
   /*!
    * @if jp
-   * @brief »ØÄê¸À¸ì¤Ë¤ª¤±¤ë¥í¡¼¥É¥Ñ¥¹¾å¤Î¥í¡¼¥À¥Ö¥ë¤Ê¥Õ¥¡¥¤¥ë¥ê¥¹¥È¤òÊÖ¤¹
+   * @brief w’èŒ¾Œê‚É‚¨‚¯‚éƒ[ƒhƒpƒXã‚Ìƒ[ƒ_ƒuƒ‹‚Èƒtƒ@ƒCƒ‹ƒŠƒXƒg‚ğ•Ô‚·
    * @else
    * @brief Getting loadable file list on the loadpath for given language
    * @endif
@@ -464,7 +464,7 @@ namespace RTC
 
   /*!
    * @if jp
-   * @brief ¥­¥ã¥Ã¥·¥å¤ËÌµ¤¤¥Ñ¥¹¤À¤±modules¤ËÄÉ²Ã¤¹¤ë
+   * @brief ƒLƒƒƒbƒVƒ…‚É–³‚¢ƒpƒX‚¾‚¯modules‚É’Ç‰Á‚·‚é
    * @else
    * @brief Adding file path not existing cache
    * @endif
@@ -492,7 +492,7 @@ namespace RTC
 
   /*!
    * @if jp
-   * @brief »ØÄê¸À¸ì¡¢¥Õ¥¡¥¤¥ë¥ê¥¹¥È¤«¤é¥â¥¸¥å¡¼¥ë¤Î¥×¥í¥Ñ¥Æ¥£¤òÊÖ¤¹
+   * @brief w’èŒ¾ŒêAƒtƒ@ƒCƒ‹ƒŠƒXƒg‚©‚çƒ‚ƒWƒ…[ƒ‹‚ÌƒvƒƒpƒeƒB‚ğ•Ô‚·
    * @else
    * @brief Getting module properties from given language and file list
    * @endif
@@ -521,7 +521,8 @@ namespace RTC
             char str[512];
             fgets(str, 512, fd);
             std::string line(str);
-            line.erase(line.size() - 1);
+            if (0 < line.size())
+              line.erase(line.size() - 1);
             std::string::size_type pos(line.find(":"));
             if (pos != std::string::npos)
               {
