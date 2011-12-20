@@ -5,7 +5,7 @@
  * @date $Date: 2007-12-31 03:08:06 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
- * Copyright (C) 2006-2008
+ * Copyright (C) 2006-2009
  *     Noriaki Ando
  *     Task-intelligence Research Group,
  *     Intelligent Systems Research Institute,
@@ -340,13 +340,13 @@ namespace RTC
       //     n satisfies n'<= readable elements
       //                 n'<= m_fillcount
       //                 n >= - m_fillcount
-      if (n > 0 && n > static_cast<long int>(m_length - m_fillcount) ||
-          n < 0 && n < static_cast<long int>(-m_fillcount))
+      Guard guard(m_posmutex);
+      if ((n > 0 && n > static_cast<long int>(m_length - m_fillcount)) ||
+          (n < 0 && n < static_cast<long int>(-m_fillcount)))
         {
           return ::RTC::BufferStatus::PRECONDITION_NOT_MET;
         }
 
-      Guard guard(m_posmutex);
       m_wpos = (m_wpos + n + m_length) % m_length;
       m_fillcount += n;
       m_wcount += n;
@@ -430,8 +430,9 @@ namespace RTC
     virtual ReturnCode write(const DataType& value,
                              long int sec = -1, long int nsec = 0)
     {
+      {
       Guard guard(m_full.mutex);
-      
+        
       if (full())
         {
           
@@ -470,17 +471,23 @@ namespace RTC
               return ::RTC::BufferStatus::PRECONDITION_NOT_MET;
             }
         }
-      
-      bool empty_(empty());
-      
+      }      
+    
       put(value);
-      
-      if (empty_)
-        {
-          Guard eguard(m_empty.mutex);
-          m_empty.cond.signal();
-        }
-      advanceWptr(1);
+
+	  {
+		Guard eguard(m_empty.mutex);
+		if (empty())
+		  {
+			// Guard eguard(m_empty.mutex);
+			advanceWptr(1);
+			m_empty.cond.signal();
+		  }
+		else
+		  {
+			advanceWptr(1);
+		  }
+	  }
       return ::RTC::BufferStatus::BUFFER_OK;
     }
     
@@ -592,13 +599,13 @@ namespace RTC
       // n < 0 : -n = n'
       //     n satisfies n'<= m_length - m_fillcount
       //                 n >= m_fillcount - m_length
+      Guard guard(m_posmutex);
       if ((n > 0 && n > static_cast<long int>(m_fillcount)) ||
           (n < 0 && n < static_cast<long int>(m_fillcount - m_length)))
         {
           return ::RTC::BufferStatus::PRECONDITION_NOT_MET;
         }
 
-      Guard guard(m_posmutex);
       m_rpos = (m_rpos + n + m_length) % m_length;
       m_fillcount -= n;
       return ::RTC::BufferStatus::BUFFER_OK;
@@ -704,6 +711,7 @@ namespace RTC
     virtual ReturnCode read(DataType& value,
                             long int sec = -1, long int nsec = 0)
     {
+      {
       Guard gaurd(m_empty.mutex);
       
       if (empty())
@@ -749,18 +757,23 @@ namespace RTC
               return ::RTC::BufferStatus::PRECONDITION_NOT_MET;
             }
         }
-      
-      bool full_(full());
+      }
       
       get(value);
-      advanceRptr();
 
-      if (full_)
-        {
-          Guard fguard(m_full.mutex);
-          m_full.cond.signal();
-        }
-      
+	  {
+		Guard fguard(m_full.mutex);
+		if (full())
+		  {
+			// Guard fguard(m_full.mutex);
+			advanceRptr(1);
+			m_full.cond.signal();
+		  }
+		else
+		  {
+			advanceRptr(1);
+		  }
+	  }
       return ::RTC::BufferStatus::BUFFER_OK;
     }
     
@@ -891,20 +904,120 @@ namespace RTC
     }
     
   private:
+    /*!
+     * @if jp
+     * @brief 上書きフラグ
+     * @else
+     * @brief Overwrite flag
+     * @endif
+     */
     bool m_overwrite;
+
+    /*!
+     * @if jp
+     * @brief 読み戻しフラグ
+     * @else
+     * @brief Readback flag
+     * @endif
+     */
     bool m_readback;
+
+    /*!
+     * @if jp
+     * @brief タイムアウト付き書き込みフラグ
+     * @else
+     * @brief Timedwrite flag
+     * @endif
+     */
     bool m_timedwrite;
+    /*!
+     * @if jp
+     * @brief タイムアウト付き読み出しフラグ
+     * @else
+     * @brief Timedread flag
+     * @endif
+     */
     bool m_timedread;
+
+    /*!
+     * @if jp
+     * @brief 書き込み時タイムアウト
+     * @else
+     * @brief Timeout time for writing
+     * @endif
+     */
     coil::TimeValue m_wtimeout;
+
+    /*!
+     * @if jp
+     * @brief 読み出し時タイムアウト
+     * @else
+     * @brief Timeout time of reading
+     * @endif
+     */
     coil::TimeValue m_rtimeout;
-    
+
+    /*!
+     * @if jp
+     * @brief バッファ長
+     * @else
+     * @brief Buffer length
+     * @endif
+     */
     size_t m_length;
+
+    /*!
+     * @if jp
+     * @brief 書き込みポインタ
+     * @else
+     * @brief pointer to write
+     * @endif
+     */
     size_t m_wpos;
+
+    /*!
+     * @if jp
+     * @brief 読み出しポインタ
+     * @else
+     * @brief poitner to read
+     * @endif
+     */
     size_t m_rpos;
+
+    /*!
+     * @if jp
+     * @brief Fillカウント
+     * @else
+     * @brief Fill count
+     * @endif
+     */
     size_t m_fillcount;
+
+    /*!
+     * @if jp
+     * @brief 書き込みカウント
+     * @else
+     * @brief Counter for writing
+     * @endif
+     */
     size_t m_wcount;
+
+    /*!
+     * @if jp
+     * @brief バッファ配列
+     * @else
+     * @brief baffer array
+     * @endif
+     */
     std::vector<DataType> m_buffer;
     
+    /*!
+     * @if jp
+     * @brief 条件変数構造体
+     * @else
+     * @brief struct for condition variable
+     * @endif
+     */
     struct condition
     {
       condition() : cond(mutex) {}
@@ -912,8 +1025,31 @@ namespace RTC
       coil::Mutex mutex;
     };
     
+    /*!
+     * @if jp
+     * @brief 位置変数ミューテックス
+     * @else
+     * @brief mutex for position variable
+     * @endif
+     */
     mutable coil::Mutex m_posmutex;
+
+    /*!
+     * @if jp
+     * @brief 空条件変数
+     * @else
+     * @brief empty condition variable
+     * @endif
+     */
     condition m_empty;
+
+    /*!
+     * @if jp
+     * @brief 満杯条件変数
+     * @else
+     * @brief full condition variable
+     * @endif
+     */
     condition m_full;
   };
 }; // namespace RTC
