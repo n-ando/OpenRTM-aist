@@ -108,7 +108,14 @@ MyServiceConsumerComp_LDADD   = .libs/MyServiceConsumer.a \
 
 
 # Example sources
-source_DATA = $(ALL_SRC) $(EXTRA_DIST)
+source_DATA =                     \
+	$(EXTRA_DIST)             \
+	$(PROVIDER_DIST_H)        \
+	$(PROVIDER_DIST_SRC)      \
+	$(CONSUMER_DIST_H)        \
+	$(CONSUMER_DIST_SRC)      \
+	MyServiceProviderComp.cpp \
+	MyServiceConsumerComp.cpp
 
 #------------------------------------------------------------
 # Extra distributed files

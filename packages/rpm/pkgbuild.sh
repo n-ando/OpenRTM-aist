@@ -10,7 +10,7 @@ cat <<EOF
 # $Id$
 #
 %define pkgname OpenRTM-aist
-%define version        1.0.0
+%define version        1.0.1
 %define distname       __DISTNAME__
 %define builddir       %{_topdir}/BUILD/%{distname}
 %define pkgver         1
@@ -150,7 +150,7 @@ cat <<EOF
 # $Id$
 #
 %define pkgname OpenRTM-aist
-%define version        1.0.0
+%define version        1.0.1
 %define distname       __DISTNAME__
 %define builddir       %{_topdir}/BUILD/%{distname}
 %define pkgver         1
