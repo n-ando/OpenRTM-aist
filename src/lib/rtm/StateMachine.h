@@ -301,11 +301,11 @@ namespace RTC_Utils
 
     virtual ~StateMachine()
     {
-      delete m_entry;
-      delete m_predo;
-      delete m_do;
-      delete m_postdo;
-      delete m_exit;
+      delete [] m_entry;
+      delete [] m_predo;
+      delete [] m_do;
+      delete [] m_postdo;
+      delete [] m_exit;
     };
 
 
