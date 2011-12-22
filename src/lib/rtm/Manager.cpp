@@ -77,7 +77,7 @@ namespace RTC
    * @endif
    */
   Manager::Manager()
-    : m_initProc(NULL),
+    : m_initProc(NULL), m_namingManager(NULL), m_timer(NULL),
       m_logStreamBuf(), rtclog(&m_logStreamBuf),
       m_runner(NULL), m_terminator(NULL)
   {
@@ -92,7 +92,7 @@ namespace RTC
    * @endif
    */
   Manager::Manager(const Manager& manager)
-    : m_initProc(NULL),
+    : m_initProc(NULL), m_namingManager(NULL), m_timer(NULL),
       m_logStreamBuf(), rtclog(&m_logStreamBuf),
       m_runner(NULL), m_terminator(NULL)
   {
