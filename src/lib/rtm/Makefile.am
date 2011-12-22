@@ -109,8 +109,8 @@ libRTC_la_LDFLAGS =                 \
 	-version-info 0:4:0
 
 install-exec-hook:
-	ln -s $(DESTDIR)$(libdir)/libRTC-1.0.1.so.0  $(DESTDIR)$(libdir)/libRTC-1.0.0.so.0
-	ln -s $(DESTDIR)$(libdir)/libRTC-1.0.1.so.0  $(DESTDIR)$(libdir)/libRTC-1.0.so.0
+	(cd $(DESTDIR)$(libdir); ln -s libRTC-1.0.1.so.0 libRTC-1.0.0.so.0)
+	(cd $(DESTDIR)$(libdir); ln -s libRTC-1.0.1.so.0 libRTC-1.0.so.0)
 
 rtmheaderdir = $(prefix)/include/rtm
 
