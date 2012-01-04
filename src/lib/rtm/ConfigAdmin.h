@@ -138,8 +138,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual void operator()(const char* config_set,
-                            const char* config_param) = 0;
+    virtual void operator()(const char* config_set, const char* config_param) = 0;
   };
 
   /*!
@@ -1451,7 +1450,7 @@ namespace RTC
     /*!
      * @if jp
      *
-     * @brief コンフィギュレーションセットへの追加時にコールされる
+     * @brief 指定したプロパティのコンフィギュレーションセットへの追加された時にコールされる
      *
      * 設定されてるコールバックオブジェクトを呼び出す。
      *
@@ -1459,7 +1458,7 @@ namespace RTC
      *
      * @else
      *
-     * @brief Called when the property is added to the configuration set
+     * @brief When the property is added to the configuration set, this function is called. 
      *
      * Call the set callback object.
      * 
@@ -1472,7 +1471,7 @@ namespace RTC
     /*!
      * @if jp
      *
-     * @brief 設定値が追加されたときにコールされる。
+     * @brief コンフィギュレーションセットに設定値が追加されたときにコールされる。
      *
      * 設定されてるコールバックオブジェクトを呼び出す。
      *
@@ -1480,7 +1479,7 @@ namespace RTC
      *
      * @else
      *
-     * @brief Called when a set value is added to the configuration set
+     * @brief When a set value is added to the configuration set, this function is called.
      *
      * Call the set callback object.
      * 
@@ -1493,7 +1492,7 @@ namespace RTC
     /*!
      * @if jp
      *
-     * @brief セットが削除されてるときにコールされる。
+     * @brief コンフィギュレーションセットが削除されているときにコールされる。
      *
      * 設定されてるコールバックオブジェクトを呼び出す。
      *
@@ -1501,7 +1500,7 @@ namespace RTC
      *
      * @else
      *
-     * @brief Called when the configuration set has been deleted
+     * @brief When the configuration set has been deleted, this function is called. 
      *
      * Call the set callback object.
      * 
@@ -1514,7 +1513,7 @@ namespace RTC
     /*!
      * @if jp
      *
-     * @brief セットがアクティブ化されたときにコールされる。
+     * @brief コンフィギュレーションセットがアクティブ化されたときにコールされる。
      *
      * 設定されてるコールバックオブジェクトを呼び出す。
      *
@@ -1522,7 +1521,7 @@ namespace RTC
      *
      * @else
      *
-     * @brief Called when the configuration set is made active
+     * @brief When the configuration set is made active, this function is called.
      *
      * Call the set callback object.
      * 
@@ -1533,8 +1532,8 @@ namespace RTC
     void onActivateSet(const char* config_id);
     
   private:
-    ConfigAdmin(const ConfigAdmin& ca);
-    ConfigAdmin& operator=(const ConfigAdmin& ca);
+    ConfigAdmin(const ConfigAdmin& ca);// : m_configsets(ca.m_configsets) {};
+    ConfigAdmin& operator=(const ConfigAdmin& ca); //{return *this;};
     
     struct find_conf
     {

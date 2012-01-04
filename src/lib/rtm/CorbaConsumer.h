@@ -398,7 +398,7 @@ namespace RTC
       return *this;
     }
 
-    void swap(CorbaConsumer& x)
+    void swap(const CorbaConsumer& x)
     {
       CorbaConsumerBase::swap(x);
       ObjectTypeVar tmpref = x.m_var;

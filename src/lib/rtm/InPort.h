@@ -307,18 +307,12 @@ namespace RTC
     virtual bool isNew()
     {
       RTC_TRACE(("isNew()"));
-      int r(0);
-
-      {
-        Guard guard(m_connectorsMutex);
-        if (m_connectors.size() == 0)
-         {
-            RTC_DEBUG(("no connectors"));
-            return false;
-         }
-        r = m_connectors[0]->getBuffer()->readable();
-      }
-
+      if (m_connectors.size() == 0)
+        {
+          RTC_DEBUG(("no connectors"));
+          return false;
+        }
+      int r(m_connectors[0]->getBuffer()->readable());
       if (r > 0)
         {
           RTC_DEBUG(("isNew() = true, readable data: %d", r));
@@ -355,18 +349,13 @@ namespace RTC
     virtual bool isEmpty()
     {
       RTC_TRACE(("isEmpty()"));
-      int r(0);
 
-      {
-        Guard guard(m_connectorsMutex);
-        if (m_connectors.size() == 0)
-          {
-            RTC_DEBUG(("no connectors"));
-            return true;
-          }
-        r = m_connectors[0]->getBuffer()->readable();
-      }
-
+      if (m_connectors.size() == 0)
+        {
+          RTC_DEBUG(("no connectors"));
+          return true;
+        }
+      int r(m_connectors[0]->getBuffer()->readable());
       if (r == 0)
         {
           RTC_DEBUG(("isEmpty() = true, buffer is empty"));
@@ -461,18 +450,15 @@ namespace RTC
           RTC_TRACE(("OnRead called"));
         }
 
-      cdrMemoryStream cdr;
-      ReturnCode ret;
-      {
-        Guard guard(m_connectorsMutex);
-        if (m_connectors.size() == 0)
-          {
-            RTC_DEBUG(("no connectors"));
-            return false;
-          }
+      if (m_connectors.size() == 0)
+        {
+          RTC_DEBUG(("no connectors"));
+          return false;
+        }
 
-        ret = m_connectors[0]->read(cdr);
-      }
+      cdrMemoryStream cdr;
+
+      ReturnCode ret(m_connectors[0]->read(cdr));
       if (ret == PORT_OK)
         {
           RTC_DEBUG(("data read succeeded"));

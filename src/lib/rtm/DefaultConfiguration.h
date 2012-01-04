@@ -5,7 +5,7 @@
  * @date $Date: 2007-12-31 03:08:03 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
- * Copyright (C) 2006-2010
+ * Copyright (C) 2006-2008
  *     Noriaki Ando
  *     Task-intelligence Research Group,
  *     Intelligent Systems Research Institute,
@@ -18,7 +18,7 @@
  */
 
 #include "rtm/version.h"
-#include "rtm/config_rtc.h"
+
 /*!
  * @if jp
  * @brief Manager 用 デフォルト・コンフィギュレーション
@@ -78,31 +78,11 @@ static const char* default_config[] =
     "manager.modules.abs_path_allowed",   "YES",
     "manager.is_master",                  "NO",
     "manager.corba_servant",              "YES",
-    "manager.shutdown_on_nortcs",         "YES",
+    "manager.shutdown_nortcs",            "YES",
     "manager.shutdown_auto",              "YES",
     "manager.name",                       "manager",
     "manager.command",                    "rtcd",
-    "manager.supported_languages",        "C++, Python, Java",
-    "manager.modules.C++.manager_cmd",    "rtcd",
-    "manager.modules.C++.profile_cmd",    "rtcprof",
-#ifdef WIN32
-    "manager.modules.C++.suffixes",       "dll",
-#else
-#ifdef RTM_OS_DARWIN
-    "manager.modules.C++.suffixes",       "dylib",
-#else
-    "manager.modules.C++.suffixes",       "so",
-#endif
-#endif
-    "manager.modules.C++.load_paths",     "./",
-    "manager.modules.Python.manager_cmd", "rtcd_python",
-    "manager.modules.Python.profile_cmd", "rtcprof_python",
-    "manager.modules.Python.suffixes",    "py",
-    "manager.modules.Python.load_paths",  "./",
-    "manager.modules.Java.manager_cmd",   "rtcd_java",
-    "manager.modules.Java.profile_cmd",   "rtcprof_java",
-    "manager.modules.Java.suffixes",      "class",
-    "manager.modules.Java.load_paths",    "./",
+
     ""
   };
 

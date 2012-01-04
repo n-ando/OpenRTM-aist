@@ -5,7 +5,7 @@
  * @date $Date: 2007-12-31 03:08:04 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
- * Copyright (C) 2006-2010
+ * Copyright (C) 2006-2008
  *     Noriaki Ando
  *     Task-intelligence Research Group,
  *     Intelligent Systems Research Institute,
@@ -73,7 +73,6 @@ namespace RTC
    */
   class ModuleManager
   {
-    typedef std::vector<coil::Properties> vProperties;
   public:
     /*!
      * @if jp
@@ -305,8 +304,7 @@ namespace RTC
      *
      * @endif
      */
-    std::string load(const std::string& file_name,
-                     const std::string& init_func);
+    std::string load(const std::string& file_name, const std::string& init_func);
     
     /*!
      * @if jp
@@ -450,7 +448,7 @@ namespace RTC
      * @endif
      */
     std::vector<coil::Properties> getLoadableModules();
-
+    
     /*!
      * @if jp
      * @brief モジュールの絶対パス指定許可
@@ -602,43 +600,6 @@ namespace RTC
   protected:
     /*!
      * @if jp
-     * @brief 無効なモジュールプロファイルを削除する
-     * @else
-     * @brief Removing incalid module profiles
-     * @endif
-     */
-    void removeInvalidModules();
-    
-    /*!
-     * @if jp
-     * @brief 指定言語におけるロードパス上のローダブルなファイルリストを返す
-     * @else
-     * @brief Getting loadable file list on the loadpath for given language
-     * @endif
-     */
-    void getModuleList(const std::string& lang, coil::vstring& modules);
-
-    /*!
-     * @if jp
-     * @brief キャッシュに無いパスだけmodulesに追加する
-     * @else
-     * @brief Adding file path not existing cache
-     * @endif
-     */
-    void addNewFile(const std::string& fpath, coil::vstring& modules);
-
-    /*!
-     * @if jp
-     * @brief 指定言語、ファイルリストからモジュールのプロパティを返す
-     * @else
-     * @brief Getting module properties from given language and file list
-     * @endif
-     */
-    void getModuleProfiles(const std::string& lang,
-                           const coil::vstring& modules, vProperties& modprops);
-
-    /*!
-     * @if jp
      * @brief ロガーストリーム
      * @else
      * @brief Logger stream
@@ -666,7 +627,6 @@ namespace RTC
     typedef std::vector<DLLEntity>    DllMap;
     typedef DllMap::iterator           DllMapItr;
     typedef DllMap::const_iterator     DllMapConstItr;
-
     
     /*!
      * @if jp
@@ -702,6 +662,7 @@ namespace RTC
      * @brief Module list that has already loaded
      * @endif
      */
+    //    DllMap m_modules;
     ObjectManager<const char*, DLLEntity, DllPred> m_modules;
     
     /*!
@@ -745,7 +706,6 @@ namespace RTC
      * @endif
      */
     std::string m_initFuncSuffix;
-
     /*!
      * @if jp
      * @brief 初期実行関数プリフィックス
@@ -755,13 +715,6 @@ namespace RTC
      */
     std::string m_initFuncPrefix;
 
-    /*!
-     * @if jp
-     * @brief モジュールアンロードファンクタ
-     * @else
-     * @brief Module unloading functor
-     * @endif
-     */
     class UnloadPred
     {
     public:
@@ -772,8 +725,6 @@ namespace RTC
         delete dll;
       }
     };
-
-    vProperties m_modprofs;
 
   };   // class ModuleManager
 };     // namespace RTC  

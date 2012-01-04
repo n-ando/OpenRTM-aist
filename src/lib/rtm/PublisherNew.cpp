@@ -155,13 +155,6 @@ namespace RTC
     return PORT_OK;
   }
 
-  /*!
-   * @if jp
-   * @brief データを書き込む
-   * @else
-   * @brief Write data 
-   * @endif
-   */
   PublisherBase::ReturnCode PublisherNew::write(const cdrMemoryStream& data,
                                                 unsigned long sec,
                                                 unsigned long usec)
@@ -197,38 +190,17 @@ namespace RTC
     return convertReturn(ret, data);
   }
 
-  /*!
-   * @if jp
-   * @brief アクティブ化確認
-   * @else
-   * @brief Confirm to activate
-   * @endif
-   */
   bool PublisherNew::isActive()
   {
     return m_active;
   }
 
-  /*!
-   * @if jp
-   * @brief アクティブ化
-   * @else
-   * @brief activation
-   * @endif
-   */
   PublisherBase::ReturnCode PublisherNew::activate()
   {
     m_active = true;
     return PORT_OK;
   }
 
-  /*!
-   * @if jp
-   * @brief 非アクティブ化
-   * @else
-   * @brief deactivation
-   * @endif
-   */
   PublisherBase::ReturnCode PublisherNew::deactivate()
   {
     m_active = false;
@@ -482,13 +454,6 @@ namespace RTC
     return PORT_OK;
   }
 
-  /*!
-   * @if jp
-   * @brief BufferStatus から DataPortStatus への変換
-   * @else
-   * @brief Convertion from BufferStatus to DataPortStatus
-   * @endif
-   */
   PublisherBase::ReturnCode
   PublisherNew::convertReturn(BufferStatus::Enum status,
                               const cdrMemoryStream& data)
@@ -530,13 +495,6 @@ namespace RTC
     return DataPortStatus::PORT_ERROR;
   }
 
-  /*!
-   * @if jp
-   * @brief DataPortStatusに従ってリスナへ通知する関数を呼び出す。
-   * @else
-   * @brief Call listeners according to the DataPortStatus
-   * @endif
-   */
   PublisherNew::ReturnCode
   PublisherNew::invokeListener(DataPortStatus::Enum status,
                                const cdrMemoryStream& data)

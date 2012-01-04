@@ -5,7 +5,7 @@
  * @date  $Date: 2007-12-31 03:08:02 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
- * Copyright (C) 2006-2010
+ * Copyright (C) 2006-2009
  *     Noriaki Ando
  *     Task-intelligence Research Group,
  *     Intelligent Systems Research Institute,
@@ -69,8 +69,8 @@ namespace RTC
     RTC_DEBUG_STR((m_properties));
 
     int num(-1);
-    if (!coil::stringTo(num, m_properties.getProperty("connection_limit",
-                                                      "-1").c_str()))
+    if (!coil::stringTo(num, 
+                     m_properties.getProperty("connection_limit","-1").c_str()))
       {
         RTC_ERROR(("invalid connection_limit value: %s", 
                    m_properties.getProperty("connection_limit").c_str()));
@@ -195,7 +195,7 @@ namespace RTC
     RTC_TRACE(("publishInterfaces()"));
 
     ReturnCode_t returnvalue = _publishInterfaces();
-    if(returnvalue != RTC::RTC_OK)
+    if(returnvalue!=RTC::RTC_OK)
       {
         return returnvalue;
       }
@@ -206,10 +206,10 @@ namespace RTC
       {
         //------------------------------------------------------------
         // new version descriptor
-        // <comp_iname>.port.<port_name>.provided.<type_name>.<instance_name>
-        std::string newdesc((const char*)m_profile.name);
-        newdesc.insert(m_ownerInstanceName.size(), ".port");
-        newdesc += ".provided." + it->descriptor();
+        // <comp_iname>.port.<port_name>.provider.<type_name>.<instance_name>
+        std::string newdesc;
+        newdesc = m_ownerInstanceName + ".port." + (const char*)m_profile.name
+          + ".provider." + it->descriptor();
         CORBA_SeqUtil::
           push_back(properties,
                     NVUtil::newNV(newdesc.c_str(), it->ior().c_str()));
@@ -262,17 +262,11 @@ namespace RTC
     for (CorbaConsumerList::iterator it(m_consumers.begin());
          it != m_consumers.end(); ++it)
       {
-        std::string ior;
-        if (findProvider(nv, *it, ior))
-          {
-            setObject(ior, *it);
-            continue;
-          }
-        if (findProviderOld(nv, *it, ior))
-          {
-            setObject(ior, *it);
-            continue;
-          }
+        bool res0(findProvider(nv, *it));
+        if (res0) { continue; }
+
+        bool res1(findProviderOld(nv, *it));
+        if (res1) { continue; }
 
         // never come here without error
         // if strict connection option is set, error is returned.
@@ -301,41 +295,19 @@ namespace RTC
     RTC_TRACE(("unsubscribeInterfaces()"));
 
     const NVList& nv(connector_profile.properties);
-    RTC_DEBUG_STR((NVUtil::toString(nv)));
 
-    for (CorbaConsumerList::iterator it(m_consumers.begin());
-         it != m_consumers.end(); ++it)
-      {
-        std::string ior;
-        if (findProvider(nv, *it, ior))
-          {
-            RTC_DEBUG(("Correspoinding consumer found."));
-            releaseObject(ior, *it);
-            continue;
-          }
-        if (findProviderOld(nv, *it, ior))
-          {
-            RTC_DEBUG(("Correspoinding consumer found."));
-            releaseObject(ior, *it);
-            continue;
-          }
-      }
+    RTC_DEBUG_STR((NVUtil::toString(nv)));
+    
+    CORBA_SeqUtil::for_each(nv, unsubscribe(m_consumers));
   }
   
-  /*!
-   * @if jp
-   * @brief Consumer に合致する Provider を NVList の中から見つける
-   * @else
-   * @brief Find out a provider corresponding to the consumer from NVList
-   * @endif
-   */
-  bool CorbaPort::findProvider(const NVList& nv, CorbaConsumerHolder& cons,
-                               std::string& iorstr)
+
+  bool CorbaPort::findProvider(const NVList& nv, CorbaConsumerHolder& cons)
   {
     // new consumer interface descriptor
-    std::string newdesc((const char*)m_profile.name);
-    newdesc.insert(m_ownerInstanceName.size(), ".port");
-    newdesc += ".required." + cons.descriptor();
+    std::string newdesc;
+    newdesc = m_ownerInstanceName + ".port." + (const char*)m_profile.name
+      + ".consumer." + cons.descriptor();
 
     // find a NameValue of the consumer
     CORBA::Long cons_index(NVUtil::find_index(nv, newdesc.c_str()));
@@ -358,20 +330,24 @@ namespace RTC
         RTC_WARN(("Cannot extract Provider IOR string"));
         return false;
       }
-    iorstr = ior;
-    RTC_DEBUG(("interface matched with new descriptor: %s", newdesc.c_str()));
+ 
+    // if ior string is "null" or "nil", ignore it.
+    if (std::string("null") == ior) { return true; }
+    if (std::string("nil")  == ior) { return true; }
+    // IOR should be started by "IOR:"
+    if (std::string("IOR:").compare(0, 4, ior, 4) != 0) { return false; }
+    // set IOR to the consumer
+    if (!cons.setObject(ior))
+      {
+        RTC_ERROR(("Cannot narrow reference"));
+        return false;
+      }
+    RTC_ERROR(("interface matched with new descriptor: %s", newdesc.c_str()));
+
     return true;
   }
 
-  /*!
-   * @if jp
-   * @brief Consumer に合致する Provider を NVList の中から見つける
-   * @else
-   * @brief Find out a provider corresponding to the consumer from NVList
-   * @endif
-   */
-  bool CorbaPort::findProviderOld(const NVList&nv, CorbaConsumerHolder& cons,
-                                  std::string& iorstr)
+  bool CorbaPort::findProviderOld(const NVList&nv, CorbaConsumerHolder& cons)
   {
     // old consumer interface descriptor
     std::string olddesc("port."); olddesc += cons.descriptor();
@@ -386,57 +362,17 @@ namespace RTC
         RTC_WARN(("Cannot extract Provider IOR string"));
         return false;
       }
-    iorstr = ior;
-    RTC_INFO(("interface matched with old descriptor: %s", olddesc.c_str()));
-    return true;
-  }
-
-  /*!
-   * @if jp
-   * @brief Consumer に IOR をセットする
-   * @else
-   * @brief Setting IOR to Consumer
-   * @endif
-   */
-  bool CorbaPort::setObject(const std::string& ior, CorbaConsumerHolder& cons)
-  {
-    // if ior string is "null" or "nil", ignore it.
-    if (std::string("null") == ior) { return true; }
-    if (std::string("nil")  == ior) { return true; }
-    // IOR should be started by "IOR:"
-    if (std::string("IOR:").compare(0, 4, ior.c_str(), 4) != 0)
-      {
-        return false;
-      }
 
     // set IOR to the consumer
-    if (!cons.setObject(ior.c_str()))
+    if (!cons.setObject(ior))
       {
         RTC_ERROR(("Cannot narrow reference"));
         return false;
       }
-    RTC_TRACE(("setObject() done"));
-    return true;
-  }
 
-  /*!
-   * @if jp
-   * @brief Consumer のオブジェクトをリリースする
-   * @else
-   * @brief Releasing Consumer Object
-   * @endif
-   */
-  bool CorbaPort::releaseObject(const std::string& ior,
-                                CorbaConsumerHolder& cons)
-  {
-    if (ior == cons.getIor())
-      {
-        cons.releaseObject();
-        RTC_DEBUG(("Consumer %s released.", cons.descriptor().c_str()));
-        return true;
-      }
-    RTC_WARN(("IORs between Consumer and Connector are different."));
-    return false;
+    RTC_ERROR(("interface matched with old descriptor: %s", olddesc.c_str()));
+
+    return true;
   }
   
 };

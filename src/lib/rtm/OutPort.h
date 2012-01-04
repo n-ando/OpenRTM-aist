@@ -224,7 +224,7 @@ namespace RTC
      */
     OutPort(const char* name, DataType& value)
       : OutPortBase(name, toTypename<DataType>()), m_value(value),
-        m_onWrite(0), m_onWriteConvert(0)
+	m_onWrite(0), m_onWriteConvert(0)
     {
     }
     
@@ -290,57 +290,51 @@ namespace RTC
      */
     virtual bool write(DataType& value)
     {
-      RTC_TRACE(("DataType write()"));
+      RTC_TRACE(("DataType write()"))
 
       if (m_onWrite != NULL)
         {
           (*m_onWrite)(value);
-          RTC_TRACE(("OnWrite called"));
+          RTC_TRACE(("OnWrite called"))
         }
 
-      bool result(true);
-      std::vector<const char *> disconnect_ids;
-      {
-        Guard guard(m_connectorsMutex);
-        // check number of connectors
-        size_t conn_size(m_connectors.size());
-        if (!(conn_size > 0)) { return false; }
+      // check number of connectors
+      size_t conn_size(m_connectors.size());
+      if (!(conn_size > 0)) { return false; }
         
-        m_status.resize(conn_size);
+      bool result(true);
+      m_status.resize(conn_size);
 
-        for (size_t i(0), len(conn_size); i < len; ++i)
-          {
-            ReturnCode ret;
-            if (m_onWriteConvert != NULL)
-              {
-                RTC_DEBUG(("m_connectors.OnWriteConvert called"));
-                ret = m_connectors[i]->write(((*m_onWriteConvert)(value)));
-              }
-            else
-              {
-                RTC_DEBUG(("m_connectors.write called"));
-                ret = m_connectors[i]->write(value);
-              }
-            m_status[i] = ret;
-            if (ret == PORT_OK) { continue; }
-      
-            result = false;
-            const char* id(m_connectors[i]->profile().id.c_str());
-            RTC::ConnectorProfile prof(findConnProfile(id));
+      for (size_t i(0), len(conn_size); i < len; ++i)
+        {
+          ReturnCode ret;
+          if (m_onWriteConvert != NULL)
+            {
+              RTC_DEBUG(("m_connectors.OnWriteConvert called"));
+              ret = m_connectors[i]->write(((*m_onWriteConvert)(value)));
+            }
+          else
+            {
+              RTC_DEBUG(("m_connectors.write called"));
+              ret = m_connectors[i]->write(value);
+            }
+          m_status[i] = ret;
+          if (ret == PORT_OK) { continue; }
 
-            if (ret == CONNECTION_LOST)
-              {
-                RTC_WARN(("connection_lost id: %s", id));
-                if (m_onConnectionLost != 0)
-                  {
-                    (*m_onConnectionLost)(prof);
-                  }
-                disconnect_ids.push_back(id);
-              }
-          }
-      }
-      std::for_each(disconnect_ids.begin(),disconnect_ids.end(),
-                    std::bind1st(std::mem_fun(&PortBase::disconnect),this));
+          result = false;
+          const char* id(m_connectors[i]->profile().id.c_str());
+          RTC::ConnectorProfile prof(findConnProfile(id));
+
+          if (ret == CONNECTION_LOST)
+            {
+              RTC_WARN(("connection_lost id: %s", m_connectors[i]->profile().id.c_str()));
+              if (m_onConnectionLost != 0)
+                {
+                  (*m_onConnectionLost)(prof);
+                }
+              disconnect(m_connectors[i]->id());
+            }
+        }
       return result;
     }
     
