@@ -334,8 +334,8 @@ namespace RTC
 
     ReturnCode_t ret;
     ret = on_initialize();
-    if (ret != RTC::RTC_OK) return ret;
     m_created = false;
+    if (ret != RTC::RTC_OK) return ret;
 
     for (::CORBA::ULong i(0), len(m_ecMine.length()); i < len; ++i)
       {
@@ -346,7 +346,7 @@ namespace RTC
     // ret must be RTC_OK
     return ret;
   }
-  
+ 
   /*!
    * @if jp
    * @brief [CORBA interface] RTC を終了する
@@ -358,8 +358,8 @@ namespace RTC
     throw (CORBA::SystemException)
   {
     RTC_TRACE(("finalize()"));
-    if (m_created) return RTC::PRECONDITION_NOT_MET;
-    if (!m_exiting) return RTC::PRECONDITION_NOT_MET;
+    if (m_created)  { return RTC::PRECONDITION_NOT_MET; }
+    if (!m_exiting) { return RTC::PRECONDITION_NOT_MET; }
     // Return RTC::PRECONDITION_NOT_MET,
     // When the component is registered in ExecutionContext.
     // m_ecMine.length() != 0 || 
@@ -395,7 +395,7 @@ namespace RTC
     throw (CORBA::SystemException)
   {
     RTC_TRACE(("exit()"));
-    if (m_created) return RTC::PRECONDITION_NOT_MET;
+    if (m_created) { return RTC::PRECONDITION_NOT_MET; }
 
     // deactivate myself on owned EC
     CORBA_SeqUtil::for_each(m_ecMine,
@@ -410,7 +410,7 @@ namespace RTC
     for (CORBA::ULong ic(0), len(m_ecOther.length()); ic < len; ++ic)
       {
         //        m_ecOther[ic]->stop();
-	RTC::LightweightRTObject_var comp(this->_this());
+        RTC::LightweightRTObject_var comp(this->_this());
         if (! ::CORBA::is_nil(m_ecOther[ic]))
           {
             m_ecOther[ic]->remove_component(comp.in());
@@ -779,22 +779,41 @@ namespace RTC
     try
       {
         preOnInitialize(0);
+        RTC_DEBUG(("Calling onInitialize()."));
         ret = onInitialize();
+        if (ret != RTC::RTC_OK)
+          {
+            RTC_ERROR(("onInitialize() returns an ERROR (%d)", ret));
+          }
+        else
+          {
+            RTC_DEBUG(("onInitialize() succeeded."));
+          }
       }
     catch (...)
       {
-	ret = RTC::RTC_ERROR;
+        RTC_ERRIR(("onInitialize() raised an exception."));
+        ret = RTC::RTC_ERROR;
       }
     std::string active_set;
     active_set = m_properties.getProperty("configuration.active_config",
                                           "default");
     if (m_configsets.haveConfig(active_set.c_str()))
       {
+        RTC_DEBUG(("Active configuration set: %s exists.",
+                   active_set.c_str()));
+        m_configsets.activateConfigurationSet(active_set.c_str());
         m_configsets.update(active_set.c_str());
+        RTC_INFO(("Initial active configuration set is %s.",
+                   active_set.c_str()));
       }
     else
       {
+        RTC_DEBUG(("Active configuration set: %s does not exists.",
+               active_set.c_str()));
+        m_configsets.activateConfigurationSet("default");
         m_configsets.update("default");
+        RTC_INFO(("Initial active configuration set is default-set."));
       }
     postOnInitialize(0, ret);
     return ret;
