@@ -18,7 +18,7 @@ dnl  Autoconf initial macros
 dnl ------------------------------------------------------------
 dnl  Process this file with autoconf to produce a configure script.
 AC_PREREQ(2.59)
-AC_INIT(OpenRTM-aist, 1.0.0, n-ando@aist.go.jp, OpenRTM-aist)
+AC_INIT(OpenRTM-aist, 1.0.2, n-ando@aist.go.jp, OpenRTM-aist)
 AC_CONFIG_AUX_DIR([.])
 AM_INIT_AUTOMAKE([dist-bzip2 tar-pax])
 AM_CONFIG_HEADER([src/lib/rtm/config_rtc.h])
@@ -1437,6 +1437,9 @@ echo ''
 
 AC_OUTPUT([Makefile
 	build/Makefile
+    packages/Makefile
+    packages/deb/Makefile
+    packages/rpm/Makefile
 	src/Makefile
 	src/lib/Makefile
 	src/lib/rtm/Makefile
