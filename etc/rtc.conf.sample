@@ -369,6 +369,19 @@ timer.tick: 0.1
 #
 # Periodic type ExecutionContext
 #
+# Other availabilities in OpenRTM-aist
+#
+# - ExtTrigExecutionContext: External triggered EC. It is embedded in
+#                            OpenRTM library.
+# - OpenHRPExecutionContext: External triggred paralell execution
+#                            EC. It is embedded in OpenRTM
+#                            library. This is usually used with
+#                            OpenHRP3.
+# - RTPreemptEC:             Real-time execution context for Linux
+#                            RT-preemptive pathed kernel.
+# - ArtExecutionContext:     Real-time execution context for ARTLinux
+#                            (http://sourceforge.net/projects/art-linux/)
+#
 exec_cxt.periodic.type: PeriodicExecutionContext
 
 #
