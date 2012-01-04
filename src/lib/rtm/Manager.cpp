@@ -701,11 +701,15 @@ std::vector<coil::Properties> Manager::getLoadableModules()
     m_listeners.rtclifecycle_.preInitialize();
     if (comp->initialize() != RTC::RTC_OK)
       {
-	RTC_TRACE(("RTC initialization failed: %s",
+        RTC_TRACE(("RTC initialization failed: %s",
                    comp_id["implementation_id"].c_str()));
-	comp->exit();
-	RTC_TRACE(("%s was finalized", comp_id["implementation_id"].c_str()));
-	return NULL;
+        RTC_TRACE(("%s was finalized", comp_id["implementation_id"].c_str()));
+        if (comp->exit() != RTC::RTC_OK)
+          {
+            RTC_DEBUG(("%s finalization was failed.",
+                       comp_id["implementation_id"].c_str()));
+          }
+        return NULL;
       }
     RTC_TRACE(("RTC initialization succeeded: %s",
                comp_id["implementation_id"].c_str()));
@@ -1804,43 +1808,71 @@ std::vector<coil::Properties> Manager::getLoadableModules()
     std::string category(comp->getCategory());
     std::string type_name(comp->getTypeName());
     std::string inst_name(comp->getInstanceName());
-    
+
     std::string type_conf(category + "." + type_name + ".config_file");
     std::string name_conf(category + "." + inst_name + ".config_file");
-    
-    
+    coil::vstring config_fname;
     coil::Properties type_prop, name_prop;
-    
+
     // Load "category.instance_name.config_file"
     if (!m_config[name_conf].empty())
       {
-	std::ifstream conff(m_config[name_conf].c_str());
-	if (!conff.fail())
-	  {
-	    name_prop.load(conff);
-	  }
+        std::ifstream conff(m_config[name_conf].c_str());
+        if (!conff.fail())
+          {
+            name_prop.load(conff);
+            RTC_INFO(("Component instance conf file: %s loaded.",
+                      m_config[name_conf].c_str()));
+            RTC_DEBUG_STR((name_prop))
+            config_fname.push_back(m_config[name_conf].c_str());
+          }
       }
     if (m_config.findNode(category + "." + inst_name) != NULL)
       {
-        name_prop << m_config.getNode(category + "." + inst_name);
+        coil::Properties& temp(m_config.getNode(category + "." + inst_name));
+        coil::vstring keys(temp.propertyNames());
+        if (!(keys.size() == 1 && keys.back() == "config_file"))
+          {
+            name_prop << m_config.getNode(category + "." + inst_name);
+            RTC_INFO(("Component type conf exists in rtc.conf. Merged."));
+            RTC_DEBUG_STR((name_prop));
+            if (m_config.findNode("config_file") != NULL)
+              {
+                config_fname.push_back(m_config["config_file"]);
+              }
+          }
       }
-    
     if (!m_config[type_conf].empty())
       {
-	std::ifstream conff(m_config[type_conf].c_str());
-	if (!conff.fail())
-	  {
-	    type_prop.load(conff);
-	  }
+        std::ifstream conff(m_config[type_conf].c_str());
+        if (!conff.fail())
+          {
+            type_prop.load(conff);
+            RTC_INFO(("Component type conf file: %s loaded.",
+                      m_config[type_conf].c_str()));
+            RTC_DEBUG_STR((type_prop));
+            config_fname.push_back(m_config[type_conf].c_str());
+          }
       }
     if (m_config.findNode(category + "." + type_name) != NULL)
       {
-        type_prop << m_config.getNode(category + "." + type_name);
+        coil::Properties& temp(m_config.getNode(category + "." + type_name));
+        coil::vstring keys(temp.propertyNames());
+        if (!(keys.size() == 1 && keys.back() == "config_file"))
+          {
+            type_prop << m_config.getNode(category + "." + type_name);
+            RTC_INFO(("Component type conf exists in rtc.conf. Merged."));
+            RTC_DEBUG_STR((type_prop));
+            if (m_config.findNode("config_file") != NULL)
+              {
+                config_fname.push_back(m_config["config_file"]);
+              }
+          }
       }
-
     // Merge Properties. type_prop is merged properties
     comp->setProperties(prop);
     type_prop << name_prop;
+    type_prop["config_file"] = coil::flatten(coil::unique_sv(config_fname));
     comp->setProperties(type_prop);
     
     //------------------------------------------------------------
