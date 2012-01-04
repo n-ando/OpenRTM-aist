@@ -2272,7 +2272,7 @@ namespace RTC
      * - update(set_name, param_name): 特定のセットのパラメータの更新
      * - isExist(): パラメータの存在確認
      * - isChanged(): パラメータが変更されたかの確認
-     * - changedParameters(): 変更さえたパラメータのリスト
+     * - changedParameters(): 変更されたパラメータのリスト
      * - getActiveId(): アクティブセット名の取得
      * - haveConfig(config_id): コンフィグセットを持っているかどうか
      * - getConfigurationSets(): 全コンフィギュレーションセットの取得
