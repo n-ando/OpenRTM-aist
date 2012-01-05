@@ -19,4 +19,5 @@ EXTRA_DIST =        \
 
 clean-local:
 	rm -f *~ *.core
+	rm -rf debian build-arch-stamp build-indep-stamp
 

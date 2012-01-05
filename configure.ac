@@ -39,7 +39,7 @@ dnl ------------------------------------------------------------
 major_version=[`echo $VERSION | sed -e 's/\([0-9]\{1,\}\)\.\([0-9]\{1,\}\)\.\([0-9]\{1,\}\)/\1/g'`]
 minor_version=[`echo $VERSION | sed -e 's/\([0-9]\{1,\}\)\.\([0-9]\{1,\}\)\.\([0-9]\{1,\}\)/\2/g'`]
 revision_num=[`echo $VERSION | sed -e 's/\([0-9]\{1,\}\)\.\([0-9]\{1,\}\)\.\([0-9]\{1,\}\)/\3/g'`]
-short_version=$major_version$minor_version$revision_num
+short_version=$major_version$minor_version"0"
 
 RTM_VERSION=$VERSION
 RTM_MAJOR_VERSION=$major_version

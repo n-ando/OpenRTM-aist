@@ -8,3 +8,6 @@
 AUTOMAKE_OPTIONS = 1.4
 
 SUBDIRS = deb rpm
+
+clean-local:
+	rm -rf DEBIAN *.deb openrtm*.tar.gz *.dsc *.changes
