@@ -128,16 +128,16 @@
 /* #undef RTM_RTDSC */
 
 /* RTM short version */
-#define RTM_SHORT_VERSION "100"
+#define RTM_SHORT_VERSION "__RTM_SHORT_VERSION__"
 
 /* RTM version */
-#define RTM_VERSION "1.0.0"
+#define RTM_VERSION "__RTM_VERSION__"
 
 /* Define to 1 if you have the ANSI C header files. */
 /* #undef STDC_HEADERS 1 */
 
 /* Version number of package */
-#define VERSION "1.0.0"
+#define VERSION "__RTM_VERSION__"
 
 /* Define if using the dmalloc debugging malloc package */
 /* #undef WITH_DMALLOC */
