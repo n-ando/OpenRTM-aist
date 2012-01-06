@@ -112,6 +112,11 @@ install-exec-hook:
 	(cd $(DESTDIR)$(libdir); ln -s libRTC-1.0.2.so.0 libRTC-1.0.0.so.0)
 	(cd $(DESTDIR)$(libdir); ln -s libRTC-1.0.2.so.0 libRTC-1.0.so.0)
 
+uninstall-hook:
+	rm -f $(DESTDIR)$(libdir)/libRTC-1.0.0.so.0
+	rm -f $(DESTDIR)$(libdir)/libRTC-1.0.so.0
+
+
 rtmheaderdir = $(prefix)/include/rtm
 
 rtmheader_HEADERS = \
