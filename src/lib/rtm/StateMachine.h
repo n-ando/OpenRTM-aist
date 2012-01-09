@@ -664,9 +664,9 @@ namespace RTC_Utils
       Guard guard(m_mutex);
       m_states.next = state;
       if (m_states.curr == state)
-	{
-	  m_selftrans  = true;
-	}
+        {
+          m_selftrans  = true;
+        }
     }
 
     
@@ -689,44 +689,104 @@ namespace RTC_Utils
     void worker()
     {
       States state;
-      
+
       sync(state);
-      
+
       if (state.curr == state.next)
-	{
-	  // pre-do
-	  if (m_predo[state.curr] != NULL)
-	    (m_listener->*m_predo [state.curr])(state);
-	  
-	  if (need_trans()) return;
-	  
-	  // do
-	  if (m_do[state.curr] != NULL)
-	    (m_listener->*m_do    [state.curr])(state);
-	  
-	  if (need_trans()) return;
-	  
-	  // post-do
-	  if (m_postdo[state.curr] != NULL)
-	    (m_listener->*m_postdo[state.curr])(state);
-	}
+        {
+          // pre-do
+          if (m_predo[state.curr] != NULL)
+            (m_listener->*m_predo [state.curr])(state);
+
+          if (need_trans()) return;
+
+          // do
+          if (m_do[state.curr] != NULL)
+            (m_listener->*m_do    [state.curr])(state);
+
+          if (need_trans()) return;
+
+          // post-do
+          if (m_postdo[state.curr] != NULL)
+            (m_listener->*m_postdo[state.curr])(state);
+        }
       else
-	{
-	  if (m_exit[state.curr] != NULL)
-	    (m_listener->*m_exit[state.curr])(state);
-	  
-	  sync(state);
-	  
-	  if (state.curr != state.next)
-	    {
-	      state.curr = state.next;
-	      if(m_entry[state.curr] != NULL)
-		(m_listener->*m_entry[state.curr])(state);
-	      update_curr(state.curr);
-	    }
-	}
+        {
+          if (m_exit[state.curr] != NULL)
+            (m_listener->*m_exit[state.curr])(state);
+
+          sync(state);
+
+          if (state.curr != state.next)
+            {
+              state.curr = state.next;
+              if(m_entry[state.curr] != NULL)
+                (m_listener->*m_entry[state.curr])(state);
+              update_curr(state.curr);
+            }
+        }
     }
-    
+
+    //============================================================
+    // divided worker functions
+    // The following divided worker functions have to be used together.
+    // - worker_pre()
+    // - worker_do()
+    // - worker_post()
+    //
+    void worker_pre()
+    {
+      //      std::cout << "worker_pre()" << std::endl;
+      States state;
+      sync(state);
+      if (state.curr == state.next)
+        {
+          if (m_predo[state.curr] != NULL)
+            {
+              (m_listener->*m_predo[state.curr])(state);
+            }
+          return;
+        }
+
+      // State changed
+      if (m_exit[state.curr] != NULL)
+        {
+          (m_listener->*m_exit[state.curr])(state);
+        }
+      sync(state);
+      if (state.curr != state.next)
+        {
+          state.curr = state.next;
+          if(m_entry[state.curr] != NULL)
+            {
+              (m_listener->*m_entry[state.curr])(state);
+            }
+          update_curr(state.curr);
+        }
+    }
+
+    void worker_do()
+    {
+      //      std::cout << "worker_do()" << std::endl;
+      States state;
+      sync(state);
+      if (m_do[state.curr] != NULL)
+        {
+          (m_listener->*m_do[state.curr])(state);
+        }
+    }
+
+    void worker_post()
+    {
+      //      std::cout << "worker_post()" << std::endl;
+      States state;
+      sync(state);
+      if (m_postdo[state.curr] != NULL)
+        {
+          (m_listener->*m_postdo[state.curr])(state);
+        }
+    }
+
   protected:
     /*!
      * @if jp
@@ -751,7 +811,7 @@ namespace RTC_Utils
     {
       for (int i = 0; i < m_num; ++i) s[i] = nullfunc;
     }
-    
+
     /*!
      * @if jp
      * @brief 状態数
@@ -760,7 +820,7 @@ namespace RTC_Utils
      * @endif
      */
     int m_num;
-    
+
     /*!
      * @if jp
      * @brief コールバック関数用リスナー
@@ -769,7 +829,7 @@ namespace RTC_Utils
      * @endif
      */
     Listener* m_listener;
-    
+
     /*!
      * @if jp
      * @brief Entry action 用コールバック関数
@@ -778,7 +838,7 @@ namespace RTC_Utils
      * @endif
      */
     Callback* m_entry;
-    
+
     /*!
      * @if jp
      * @brief PreDo action 用コールバック関数
@@ -787,7 +847,7 @@ namespace RTC_Utils
      * @endif
      */
     Callback* m_predo;
-    
+
     /*!
      * @if jp
      * @brief Do action 用コールバック関数
@@ -796,7 +856,7 @@ namespace RTC_Utils
      * @endif
      */
     Callback* m_do;
-    
+
     /*!
      * @if jp
      * @brief PostDo action 用コールバック関数
@@ -805,7 +865,7 @@ namespace RTC_Utils
      * @endif
      */
     Callback* m_postdo;
-    
+
     /*!
      * @if jp
      * @brief Exit action 用コールバック関数
@@ -814,7 +874,7 @@ namespace RTC_Utils
      * @endif
      */
     Callback* m_exit;
-    
+
     /*!
      * @if jp
      * @brief State transition action 用コールバック関数
@@ -823,7 +883,7 @@ namespace RTC_Utils
      * @endif
      */
     Callback  m_transit;
-    
+
     /*!
      * @if jp
      * @brief 現在の状態情報
@@ -834,20 +894,20 @@ namespace RTC_Utils
     States m_states;
     bool m_selftrans;
     Mutex m_mutex;
-    
+
   private:
     inline void sync(States& st)
     {
       Guard guard(m_mutex);
       st = m_states;
     }
-    
+
     inline bool need_trans()
     {
       Guard guard(m_mutex);
       return (m_states.curr != m_states.next);
     }
-    
+
     inline void update_curr(const State curr)
     {
       Guard guard(m_mutex);
