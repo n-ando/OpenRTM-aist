@@ -131,28 +131,7 @@ namespace RTC
      * @endif
      */
     virtual ~PeriodicExecutionContext(void);
-    
-    /*!
-     * @if jp
-     * @brief CORBA オブジェクト参照の取得
-     *
-     * 本オブジェクトの ExecutioncontextService としての CORBA オブジェ
-     * クト参照を取得する。
-     *
-     * @return CORBA オブジェクト参照
-     *
-     * @else
-     * @brief Get the reference to the CORBA object
-     *
-     * Get the reference to the CORBA object as
-     * ExecutioncontextService of this object.
-     *
-     * @return The reference to CORBA object
-     *
-     * @endif
-     */
-    virtual ExecutionContextService_ptr getObjRef(void) {return m_ref;}
-    
+
     /*!
      * @if jp
      * @brief ExecutionContext用アクティビティスレッドを生成する
@@ -176,7 +155,7 @@ namespace RTC
      * @return The generation result
      *
      * @endif
-     */     
+     */
     virtual int open(void *args);
     
     /*!
@@ -197,7 +176,7 @@ namespace RTC
      * @return The execution result
      *
      * @endif
-     */     
+     */
     virtual int svc(void);
     
     /*!
@@ -981,6 +960,9 @@ namespace RTC
        * @endif
        */
       virtual void worker(void) {return m_sm.worker();}
+      virtual void worker_pre(void) {return m_sm.worker_pre();}
+      virtual void worker_do(void) {return m_sm.worker_do();}
+      virtual void worker_post(void) {return m_sm.worker_post();}
       
       /*!
        * @if jp
@@ -1469,7 +1451,28 @@ namespace RTC
     {
       void operator()(Comp& comp)
       {
-	comp._sm.worker();
+        comp._sm.worker();
+      }
+    };
+    struct invoke_worker_pre
+    {
+      void operator()(Comp& comp)
+      {
+        comp._sm.worker_pre();
+      }
+    };
+    struct invoke_worker_do
+    {
+      void operator()(Comp& comp)
+      {
+        comp._sm.worker_do();
+      }
+    };
+    struct invoke_worker_post
+    {
+      void operator()(Comp& comp)
+      {
+        comp._sm.worker_post();
       }
     };
     
@@ -1535,17 +1538,7 @@ namespace RTC
      * @endif
      */
     Worker m_worker;
-    
-    /*!
-     * @if jp
-     * @brief ExecutionContextProfile
-     * @else
-     * @brief ExecutionContextProfile
-     * @endif
-     */
-    ExecutionContextProfile m_profile;
-    coil::Mutex m_profileMutex;
-    
+
     /*!
      * @if jp
      * @brief ExecutionContext の実行周期
@@ -1554,16 +1547,7 @@ namespace RTC
      * @endif
      */
     coil::TimeValue m_period;
-    
-    /*!
-     * @if jp
-     * @brief ExecutionContextService オブジェクトへの参照
-     * @else
-     * @brief Reference to ExecutionContextService object
-     * @endif
-     */
-    ExecutionContextService_var m_ref;
-    
+
     /*!
      * @if jp
      * @brief ExecutionContext 即時実行(wait無し実行)フラグ

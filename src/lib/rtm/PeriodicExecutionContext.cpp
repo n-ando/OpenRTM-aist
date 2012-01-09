@@ -40,21 +40,19 @@ namespace RTC
   {
     RTC_TRACE(("PeriodicExecutionContext()"));
 
-    m_period = (double)DEEFAULT_PERIOD;
-    RTC_DEBUG(("Actual rate: %d [sec], %d [usec]",
-               m_period.sec(), m_period.usec()));
 
     // getting my reference
-    m_ref = this->_this();
+    m_profile.setObjRef(this->_this());
 
     // profile initialization
-    m_profile.kind = PERIODIC;
-    m_profile.rate = 1.0 / m_period;
-    m_profile.owner = RTC::RTObject::_nil();
-    m_profile.participants.length(0);
-    m_profile.properties.length(0);
+    m_profile.setKind(PERIODIC);
+    m_profile.setRate(1.0 / (double)DEEFAULT_PERIOD);
+    m_profile.setOwner(RTC::RTObject::_nil());
+
+    RTC_DEBUG(("Actual period: %d [sec], %d [usec]",
+               m_profile.getPeriod().sec(), m_profile.getPeriod().usec()));
   }
-  
+
   /*!
    * @if jp
    * @brief コンストラクタ
@@ -64,26 +62,24 @@ namespace RTC
    */
   PeriodicExecutionContext::
   PeriodicExecutionContext(OpenRTM::DataFlowComponent_ptr owner,
-			   double rate)
+                           double rate)
     : rtclog("periodic_ec"), m_running(false), m_svc(true), m_nowait(true)
   {
     RTC_TRACE(("PeriodicExecutionContext(owner, rate = %f)", rate));
 
     if (rate == 0) { rate = 1.0 / DEEFAULT_PERIOD; }
-    m_period = coil::TimeValue(1.0 / rate);
+    m_profile.setPeriod(coil::TimeValue(1.0 / rate));
     if (m_period < 0.000001) { m_nowait = true; }
-    RTC_DEBUG(("Actual rate: %d [sec], %d [usec]",
-               m_period.sec(), m_period.usec()));
+    RTC_DEBUG(("Actual period: %d [sec], %d [usec]",
+               m_profile.getPeriod().sec(), m_profile.getPeriod().usec()));
 
     // getting my reference
-    m_ref = this->_this();
+    m_profile.setObjRef(this->_this());
 
     // profile initialization
-    m_profile.kind = PERIODIC;
-    m_profile.rate = 1.0 / m_period;
-    m_profile.owner = RTC::RTObject::_nil();
-    m_profile.participants.length(0);
-    m_profile.properties.length(0);
+    m_profile.setKind(PERIODIC);
+    m_profile.setRate(1.0 / (double)DEEFAULT_PERIOD);
+    m_profile.setOwner(RTC::RTObject::_nil());
   }
   
   /*!
@@ -103,10 +99,6 @@ namespace RTC
     m_svc = false;
     wait();
 
-    // cleanup EC's profile
-    m_profile.owner = RTC::RTObject::_nil();
-    m_profile.participants.length(0);
-    m_profile.properties.length(0);
   }
   
   /*------------------------------------------------------------
@@ -142,19 +134,21 @@ namespace RTC
   {
     RTC_TRACE(("svc()"));
     int count(0);
-    do 
+    do
       {
         m_worker.mutex_.lock();
-	while (!m_worker.running_)
-	  {
-	    m_worker.cond_.wait();
-	  }
+        while (!m_worker.running_)
+          {
+            m_worker.cond_.wait();
+          }
         coil::TimeValue t0(coil::gettimeofday());
-	if (m_worker.running_)
-	  {
-	    std::for_each(m_comps.begin(), m_comps.end(), invoke_worker());
-	  }
-	m_worker.mutex_.unlock();
+        if (m_worker.running_)
+          {
+            std::for_each(m_comps.begin(), m_comps.end(), invoke_worker_pre());
+            std::for_each(m_comps.begin(), m_comps.end(), invoke_worker_do());
+            std::for_each(m_comps.begin(), m_comps.end(), invoke_worker_post());
+          }
+        m_worker.mutex_.unlock();
         coil::TimeValue t1(coil::gettimeofday());
         if (count > 1000)
           {
@@ -284,8 +278,7 @@ namespace RTC
     throw (CORBA::SystemException)
   {
     RTC_TRACE(("get_rate()"));
-    Guard guard(m_profileMutex);
-    return m_profile.rate;
+    return m_profile.getRate();
   }
 
   /*!
@@ -301,15 +294,11 @@ namespace RTC
     RTC_TRACE(("set_rate(%f)", rate));
     if (rate > 0.0)
       {
-        {
-          Guard guard(m_profileMutex);
-          m_profile.rate = rate;
-        }
-        m_period = coil::TimeValue(1.0/rate);
-        if (m_period == 0.0) { m_nowait = true; }
+        m_profile.setRate(rate);
+        if ((double)m_profile.getRate() == 0.0) { m_nowait = true; }
         std::for_each(m_comps.begin(), m_comps.end(), invoke_on_rate_changed());
-        RTC_DEBUG(("Actual rate: %d [sec], %d [usec]",
-                   m_period.sec(), m_period.usec()));
+        RTC_DEBUG(("Actual period: %d [sec], %d [usec]",
+                   m_profile.getPeriod().sec(), m_profile.getPeriod().usec()));
         return RTC::RTC_OK;
       }
     return RTC::BAD_PARAMETER;
@@ -515,8 +504,9 @@ namespace RTC
   ExecutionKind PeriodicExecutionContext::get_kind()
     throw (CORBA::SystemException)
   {
-    RTC_TRACE(("get_kind()"));
-    return m_profile.kind;
+    RTC_TRACE(("get_kind() = %s",
+               m_profile.getKindString()));
+    return getKind();
   }
 
   /*!
@@ -544,10 +534,11 @@ namespace RTC
           {
             return RTC::BAD_PARAMETER;
           }
+        ExecutionContextService_var ec = m_profile.getObjRef();
         ExecutionContextHandle_t id;
-        id = dfp->attach_context(m_ref);
+        id = dfp->attach_context(ec);
         m_comps.push_back(Comp(comp, dfp, id));
-        CORBA_SeqUtil::push_back(m_profile.participants, rtc._retn());
+        m_profile.addComponent(rtc._retn());
         return RTC::RTC_OK;
       }
     catch (CORBA::Exception& e)
@@ -566,8 +557,8 @@ namespace RTC
     LightweightRTObject_var comp = RTC::RTObject::_duplicate(rtc->getObjRef());
     OpenRTM::DataFlowComponent_var dfp;
     dfp = OpenRTM::DataFlowComponent::_narrow(comp);
-
-    ExecutionContextHandle_t id = rtc->bindContext(m_ref);
+    ExecutionContextService_var ec = m_profile.getObjRef();
+    ExecutionContextHandle_t id = rtc->bindContext(ec);
     if (id < 0 || id > ECOTHER_OFFSET) 
       {
         // id should be owned context id < ECOTHER_OFFSET
@@ -578,8 +569,7 @@ namespace RTC
 
     // rtc is owner of this EC
     m_comps.push_back(Comp(comp,dfp,id));
-    m_profile.owner = RTC::RTObject::_duplicate(dfp);
-
+    m_profile.setOwner(RTC::RTObject::_duplicate(dfp));
     return RTC::RTC_OK;
   }
 
@@ -610,17 +600,8 @@ namespace RTC
     m_comps.erase(it);
     RTC_TRACE(("remove_component(): an RTC removed from this context."));
 
-    RTObject_var rtcomp = RTObject::_narrow(comp);
-    if (CORBA::is_nil(rtcomp))
-      {
-        RTC_ERROR(("Invalid object reference."));
-        return RTC::RTC_ERROR;
-      }
-    {
-      Guard guard(m_profileMutex);
-      CORBA_SeqUtil::erase_if(m_profile.participants,
-                              find_participant(rtcomp));
-    }
+    m_profile.removeComponent(comp);
+
     return RTC::RTC_OK;
   }
   
@@ -638,12 +619,7 @@ namespace RTC
     throw (CORBA::SystemException)
   {
     RTC_TRACE(("get_profile()"));
-    ExecutionContextProfile_var p;
-    {
-      Guard guard(m_profileMutex);
-      p = new ExecutionContextProfile(m_profile);
-    }
-    return p._retn();
+    return m_profile.getProfile();
   }
 }; // namespace RTC  
 

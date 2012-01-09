@@ -104,21 +104,6 @@ namespace RTC
      */
     virtual RTC::ReturnCode_t bindComponent(RTObject_impl* rtc) = 0;
 
-    /*!
-     * @if jp
-     * @brief オブジェクトのリファレンスを取得する。
-     *
-     * オブジェクトのリファレンスを取得する。
-     *
-     * @else
-     * @brief Get the reference of the object. 
-     *
-     * Get the reference of the object.
-     *
-     * @endif
-     */
-    virtual RTC::ExecutionContextService_ptr getObjRef() = 0;
-
     //============================================================
     // Delegated functions to ExecutionContextProfile
     //============================================================
@@ -165,7 +150,10 @@ namespace RTC
      *
      * @endif
      */
-    //    RTC::ExecutionContextService_ptr getObjRef(void) const;
+    RTC::ExecutionContextService_ptr getObjRef(void) const
+    {
+      return m_profile.getObjRef();
+    }
 
     /*!
      * @if jp
