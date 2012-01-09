@@ -311,26 +311,48 @@ namespace RTC
     throw (CORBA::SystemException)
   {
     RTC_TRACE(("initialize()"));
+    std::string ec_type;
     std::string ec_args;
 
+    ec_type = m_properties["exec_cxt.periodic.type"];
     ec_args += m_properties["exec_cxt.periodic.type"];
     ec_args += "?";
     ec_args += "rate=" + m_properties["exec_cxt.periodic.rate"];
 
     RTC::ExecutionContextBase* ec;
-    ec = RTC::Manager::instance().createContext(ec_args.c_str());
-    if (ec == NULL) return RTC::RTC_ERROR;
+    ec = RTC::ExecutionContextFactory::instance().createObject(ec_type.c_str());
+    if (ec == NULL)
+      {
+        RTC_ERROR(("EC (%s) creation failed.", ec_type.c_str()));
+        coil::vstring ecs;
+        ecs = RTC::ExecutionContextFactory::instance().getIdentifiers();
+        RTC_DEBUG(("Available EC list: %s",
+                   coil::flatten(ecs).c_str()));
+        return RTC::RTC_ERROR;
+      }
+    RTC_DEBUG(("EC (%s) created.", ec_type.c_str()));
 
-    ec->set_rate(atof(m_properties["exec_cxt.periodic.rate"].c_str()));
     m_eclist.push_back(ec);
     ExecutionContextService_var ecv;
     ecv = RTC::ExecutionContextService::_duplicate(ec->getObjRef());
-    if (CORBA::is_nil(ecv)) return RTC::RTC_ERROR;
+    if (CORBA::is_nil(ecv))
+      {
+        RTC_ERROR(("Getting object reference of ec failed."));
+        return RTC::RTC_ERROR;
+      }
+    double ec_rate;
+    coil::stringTo(ec_rate, m_properties["exec_cxt.periodic.rate"].c_str());
+    ecv->set_rate(ec_rate);
+    RTC_DEBUG(("Execution context rate is set to %f.", ec_rate));
 
     ec->bindComponent(this);
     // -- entering alive state --
     // at least one EC must be attached
-    if (m_ecMine.length() == 0) return RTC::PRECONDITION_NOT_MET;
+    if (m_ecMine.length() == 0)
+      {
+        RTC_ERROR(("No EC of this RTC."));
+        return RTC::PRECONDITION_NOT_MET;
+      }
 
     ReturnCode_t ret;
     ret = on_initialize();
@@ -792,7 +814,7 @@ namespace RTC
       }
     catch (...)
       {
-        RTC_ERRIR(("onInitialize() raised an exception."));
+        RTC_ERROR(("onInitialize() raised an exception."));
         ret = RTC::RTC_ERROR;
       }
     std::string active_set;
@@ -2125,12 +2147,22 @@ namespace RTC
     RTC_TRACE(("finalizeContexts()"));
     for (int i(0), len(m_eclist.size()); i < len; ++i)
       {
-        m_eclist[i]->stop();
+        m_eclist[i]->getObjRef()->stop();
         try
           {
+            PortableServer::RefCountServantBase* servant(NULL);
+            servant =
+              dynamic_cast<PortableServer::RefCountServantBase*>(m_eclist[i]);
+            if (servant == NULL)
+              {
+                RTC_ERROR(("Dynamic cast error: ECBase -> Servant."));
+                continue;
+              }
+            RTC_DEBUG(("Deactivating Execution Context."));
             PortableServer::ObjectId_var oid
-              = m_pPOA->servant_to_id(m_eclist[i]);
+              = m_pPOA->servant_to_id(servant);
             m_pPOA->deactivate_object(oid);
+            RTC_DEBUG(("Deactivating EC done."));
           }
         catch (PortableServer::POA::ServantNotActive &e)
           {

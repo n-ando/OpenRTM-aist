@@ -62,11 +62,16 @@ namespace RTC
    * @endif
    */
   class PeriodicExecutionContext
-    : public virtual ExecutionContextBase,
+    : public virtual POA_OpenRTM::ExtTrigExecutionContextService,
+      public virtual PortableServer::RefCountServantBase,
+      public virtual ExecutionContextBase,
       public coil::Task
   {
     typedef coil::Guard<coil::Mutex> Guard;
   public:
+    virtual void tick()
+      throw (CORBA::SystemException)
+    {};
     /*!
      * @if jp
      * @brief デフォルトコンストラクタ

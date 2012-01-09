@@ -64,6 +64,8 @@ MGR_SRC =                            \
 
 COMP_SRC =                           \
 	DataFlowComponentBase.cpp    \
+	ExecutionContextBase.cpp     \
+	ExecutionContextProfile.cpp  \
 	PeriodicExecutionContext.cpp \
 	ExtTrigExecutionContext.cpp  \
 	OpenHRPExecutionContext.cpp  \

@@ -256,8 +256,10 @@ namespace RTC
     throw (CORBA::SystemException)
   {
     RTC_TRACE(("stop()"));
-    if (!m_running) return RTC::PRECONDITION_NOT_MET;
-    
+    if (!m_running)
+      {
+        return RTC::PRECONDITION_NOT_MET;
+      }
     // stop thread
     m_running = false;
     {
@@ -267,10 +269,10 @@ namespace RTC
     }
     // invoke on_shutdown for each comps.
     std::for_each(m_comps.begin(), m_comps.end(), invoke_on_shutdown());
-   
+
     return RTC::RTC_OK;
   }
-  
+
   /*!
    * @if jp
    * @brief ExecutionContext の実行周期(Hz)を取得する
@@ -285,7 +287,7 @@ namespace RTC
     Guard guard(m_profileMutex);
     return m_profile.rate;
   }
-  
+
   /*!
    * @if jp
    * @brief ExecutionContext の実行周期(Hz)を設定する
@@ -303,23 +305,23 @@ namespace RTC
           Guard guard(m_profileMutex);
           m_profile.rate = rate;
         }
-	m_period = coil::TimeValue(1.0/rate);
-	if (m_period == 0.0) { m_nowait = true; }
-	std::for_each(m_comps.begin(), m_comps.end(), invoke_on_rate_changed());
+        m_period = coil::TimeValue(1.0/rate);
+        if (m_period == 0.0) { m_nowait = true; }
+        std::for_each(m_comps.begin(), m_comps.end(), invoke_on_rate_changed());
         RTC_DEBUG(("Actual rate: %d [sec], %d [usec]",
                    m_period.sec(), m_period.usec()));
-	return RTC::RTC_OK;
+        return RTC::RTC_OK;
       }
     return RTC::BAD_PARAMETER;
   }
-  
+
   /*!
    * @if jp
    * @brief RTコンポーネントをアクティブ化する
    * @else
    * @brief Activate an RT-Component
    * @endif
-   */ 
+   */
   ReturnCode_t
   PeriodicExecutionContext::activate_component(LightweightRTObject_ptr comp)
     throw (CORBA::SystemException)
@@ -329,7 +331,7 @@ namespace RTC
 #ifndef ORB_IS_RTORB
     CompItr it;
     it = std::find_if(m_comps.begin(), m_comps.end(),
-		      find_comp(comp));
+                      find_comp(comp));
 
     if (it == m_comps.end())
       return RTC::BAD_PARAMETER;
@@ -356,14 +358,14 @@ namespace RTC
     return RTC::BAD_PARAMETER;
 #endif // ORB_IS_RTORB
   }
-  
+
   /*!
    * @if jp
    * @brief RTコンポーネントを非アクティブ化する
    * @else
    * @brief Deactivate an RT-Component
    * @endif
-   */  
+   */
   ReturnCode_t
   PeriodicExecutionContext::deactivate_component(LightweightRTObject_ptr comp)
     throw (CORBA::SystemException)
@@ -373,13 +375,13 @@ namespace RTC
 #ifndef ORB_IS_RTORB
     CompItr it;
     it = std::find_if(m_comps.begin(), m_comps.end(),
-		      find_comp(comp));
+                      find_comp(comp));
     if (it == m_comps.end()) { return RTC::BAD_PARAMETER; }
     if (!(it->_sm.m_sm.isIn(ACTIVE_STATE)))
       {
         return RTC::PRECONDITION_NOT_MET;
       }
-    
+
     it->_sm.m_sm.goTo(INACTIVE_STATE);
     int count(0);
     const double usec_per_sec(1.0e6);
@@ -387,7 +389,8 @@ namespace RTC
     RTC_PARANOID(("Sleep time is %f [us]", sleeptime));
     while (it->_sm.m_sm.isIn(ACTIVE_STATE))
       {
-        RTC_TRACE(("Waiting to be the INACTIVE state %d %f", count, (double)coil::gettimeofday()));
+        RTC_TRACE(("Waiting to be the INACTIVE state %d %f",
+                   count, (double)coil::gettimeofday()));
         coil::usleep(sleeptime);
         if (count > 1000)
           {
@@ -421,7 +424,6 @@ namespace RTC
               {
                 RTC_TRACE(("Waiting to be the INACTIVE state"));
                 coil::usleep(sleeptime);
-                
                 if (count > 1000)
                   {
                     RTC_ERROR(("The component is not responding."));
@@ -441,14 +443,14 @@ namespace RTC
     return RTC::BAD_PARAMETER;
 #endif // ORB_IS_RTORB
   }
-  
+
   /*!
    * @if jp
    * @brief RTコンポーネントをリセットする
    * @else
    * @brief Reset the RT-Component
    * @endif
-   */  
+   */
   ReturnCode_t
   PeriodicExecutionContext::reset_component(LightweightRTObject_ptr comp)
     throw (CORBA::SystemException)
@@ -456,17 +458,19 @@ namespace RTC
     RTC_TRACE(("reset_component()"));
     CompItr it;
     it = std::find_if(m_comps.begin(), m_comps.end(),
-		      find_comp(comp));
+                      find_comp(comp));
     if (it == m_comps.end())
-      return RTC::BAD_PARAMETER;
-    
+      {
+        return RTC::BAD_PARAMETER;
+      }
     if (!(it->_sm.m_sm.isIn(ERROR_STATE)))
-      return RTC::PRECONDITION_NOT_MET;
-    
+      {
+        return RTC::PRECONDITION_NOT_MET;
+      }
     it->_sm.m_sm.goTo(INACTIVE_STATE);
     return RTC::RTC_OK;
   }
-  
+
   /*!
    * @if jp
    * @brief RTコンポーネントの状態を取得する
@@ -485,9 +489,9 @@ namespace RTC
 
     if (it == m_comps.end())
       {
-	return RTC::CREATED_STATE;
+        return RTC::CREATED_STATE;
       }
-    
+
     return it->_sm.m_sm.getState();
 #else // ORB_IS_RTORB
     for (int i(0); i < (int)m_comps.size(); ++i)
@@ -497,10 +501,10 @@ namespace RTC
             return m_comps.at(i)._sm.m_sm.getState();
           }
       }
-    return RTC::CREATED_STATE; 
+    return RTC::CREATED_STATE;
 #endif // ORB_IS_RTORB
   }
-  
+
   /*!
    * @if jp
    * @brief ExecutionKind を取得する
@@ -514,7 +518,7 @@ namespace RTC
     RTC_TRACE(("get_kind()"));
     return m_profile.kind;
   }
-  
+
   /*!
    * @if jp
    * @brief RTコンポーネントを追加する
@@ -528,28 +532,28 @@ namespace RTC
   {
     RTC_TRACE(("add_component()"));
     if (CORBA::is_nil(comp)) return RTC::BAD_PARAMETER;
-    
+
     try
       {
-	OpenRTM::DataFlowComponent_var dfp;
-	dfp = OpenRTM::DataFlowComponent::_narrow(comp);
+        OpenRTM::DataFlowComponent_var dfp;
+        dfp = OpenRTM::DataFlowComponent::_narrow(comp);
         RTC::RTObject_var rtc;
         rtc = RTC::RTObject::_narrow(comp);
         //Check the pointer.
         if(CORBA::is_nil(dfp) || CORBA::is_nil(rtc))
           {
-	    return RTC::BAD_PARAMETER;
+            return RTC::BAD_PARAMETER;
           }
-	ExecutionContextHandle_t id;
-	id = dfp->attach_context(m_ref);
-	m_comps.push_back(Comp(comp, dfp, id));
+        ExecutionContextHandle_t id;
+        id = dfp->attach_context(m_ref);
+        m_comps.push_back(Comp(comp, dfp, id));
         CORBA_SeqUtil::push_back(m_profile.participants, rtc._retn());
-	return RTC::RTC_OK;
+        return RTC::RTC_OK;
       }
     catch (CORBA::Exception& e)
       {
-	(void)(e);
-	return RTC::BAD_PARAMETER;
+        (void)(e);
+        return RTC::BAD_PARAMETER;
       }
     return RTC::RTC_OK;
   }
@@ -578,14 +582,14 @@ namespace RTC
 
     return RTC::RTC_OK;
   }
-  
+
   /*!
    * @if jp
    * @brief コンポーネントをコンポーネントリストから削除する
    * @else
    * @brief Remove the RT-Component from participant list
    * @endif
-   */	
+   */
   ReturnCode_t
   PeriodicExecutionContext::remove_component(LightweightRTObject_ptr comp)
     throw (CORBA::SystemException)
@@ -593,7 +597,7 @@ namespace RTC
     RTC_TRACE(("remove_component()"));
     CompItr it;
     it = std::find_if(m_comps.begin(), m_comps.end(),
-		      find_comp(comp));
+                      find_comp(comp));
     if (it == m_comps.end())
       {
         RTC_TRACE(("remove_component(): no RTC found in this context."));
@@ -606,7 +610,6 @@ namespace RTC
     m_comps.erase(it);
     RTC_TRACE(("remove_component(): an RTC removed from this context."));
 
-    //RTObject_var rtcomp = RTObject::_narrow(LightweightRTObject::_duplicate(comp));
     RTObject_var rtcomp = RTObject::_narrow(comp);
     if (CORBA::is_nil(rtcomp))
       {
@@ -655,9 +658,12 @@ extern "C"
    */
   void PeriodicExecutionContextInit(RTC::Manager* manager)
   {
-    manager->registerECFactory("PeriodicExecutionContext",
-			       RTC::ECCreate<RTC::PeriodicExecutionContext>,
-			       RTC::ECDelete<RTC::PeriodicExecutionContext>);
+    RTC::ExecutionContextFactory::
+      instance().addFactory("PeriodicExecutionContext",
+                            ::coil::Creator< ::RTC::ExecutionContextBase,
+                            ::RTC::PeriodicExecutionContext>,
+                            ::coil::Destructor< ::RTC::ExecutionContextBase,
+                            ::RTC::PeriodicExecutionContext>);
   }
 };
 
