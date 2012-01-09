@@ -169,6 +169,8 @@ namespace RTC_impl
      * @endif
      */
     RTC::ReturnCode_t setRate(double rate);
+    RTC::ReturnCode_t setPeriod(double period);
+    RTC::ReturnCode_t setPeriod(coil::TimeValue period);
 
     /*!
      * @if jp
@@ -191,6 +193,7 @@ namespace RTC_impl
      * @endif
      */
     double getRate(void) const;
+    coil::TimeValue getPeriod(void) const;
 
     /*!
      * @if jp
@@ -215,6 +218,10 @@ namespace RTC_impl
      * @endif
      */
     const char* getKindString(RTC::ExecutionKind kind) const;
+    const char* getKindString() const
+    {
+      return getKindString(m_profile.kind);
+    }
 
     /*!
      * @if jp

@@ -77,6 +77,8 @@ namespace RTC_impl
   void ExecutionContextProfile::
   setObjRef(RTC::ExecutionContextService_ptr ec_ptr)
   {
+    RTC_TRACE(("setObjRef()"));
+    Guard guard(m_profileMutex);
     m_ref = RTC::ExecutionContextService::_duplicate(ec_ptr);
   }
 
@@ -90,6 +92,8 @@ namespace RTC_impl
   RTC::ExecutionContextService_ptr
   ExecutionContextProfile::getObjRef(void) const
   {
+    RTC_TRACE(("getObjRef()"));
+    Guard guard(m_profileMutex);
     return RTC::ExecutionContextService::_duplicate(m_ref);
   }
 
@@ -110,6 +114,26 @@ namespace RTC_impl
     m_period = coil::TimeValue(1.0/rate);
     return RTC::RTC_OK;
   }
+  RTC::ReturnCode_t ExecutionContextProfile::setPeriod(double period)
+  {
+    RTC_TRACE(("setPeriod(%f [sec])", period));
+    if (period < 0.0) { return RTC::BAD_PARAMETER; }
+
+    Guard guard(m_profileMutex);
+    m_profile.rate = 1.0 / period;
+    m_period = coil::TimeValue(period);
+    return RTC::RTC_OK;
+  }
+  RTC::ReturnCode_t ExecutionContextProfile::setPeriod(coil::TimeValue period)
+  {
+    RTC_TRACE(("setPeriod(%f [sec])", (double)period));
+    if ((double)period < 0.0) { return RTC::BAD_PARAMETER; }
+
+    Guard guard(m_profileMutex);
+    m_profile.rate = 1.0 / (double)period;
+    m_period = period;
+    return RTC::RTC_OK;
+  }
 
   /*!
    * @if jp
@@ -123,6 +147,13 @@ namespace RTC_impl
     RTC_TRACE(("get_rate()"));
     Guard guard(m_profileMutex);
     return m_profile.rate;
+  }
+
+  coil::TimeValue ExecutionContextProfile::getPeriod() const
+  {
+    RTC_TRACE(("getPeriod()"));
+    Guard guard(m_profileMutex);
+    return m_period;
   }
 
   /*!
