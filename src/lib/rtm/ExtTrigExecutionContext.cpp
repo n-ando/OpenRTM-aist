@@ -106,8 +106,11 @@ extern "C"
    */
   void ExtTrigExecutionContextInit(RTC::Manager* manager)
   {
-    manager->registerECFactory("ExtTrigExecutionContext",
-			       RTC::ECCreate<RTC::ExtTrigExecutionContext>,
-			       RTC::ECDelete<RTC::ExtTrigExecutionContext>);
+    RTC::ExecutionContextFactory::
+      instance().addFactory("ExtTrigExecutionContext",
+                            ::coil::Creator< ::RTC::ExecutionContextBase,
+                            ::RTC::ExtTrigExecutionContext>,
+                            ::coil::Destructor< ::RTC::ExecutionContextBase,
+                            ::RTC::ExtTrigExecutionContext>);
   }
 };

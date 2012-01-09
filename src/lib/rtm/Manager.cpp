@@ -1656,7 +1656,14 @@ std::vector<coil::Properties> Manager::getLoadableModules()
     for (CORBA::ULong i(0), len(m_ecs.size()); i < len; ++i)
       {
 	try{
-          PortableServer::ObjectId_var oid = m_pPOA->servant_to_id(m_ecs[i]);
+      PortableServer::RefCountServantBase* servant;
+      servant = dynamic_cast<PortableServer::RefCountServantBase*>(m_ecs[i]);
+      if (servant == NULL)
+        {
+          RTC_ERROR(("Invalid dynamic cast. EC->RefCountServantBase failed."));
+          return;
+        }
+      PortableServer::ObjectId_var oid = m_pPOA->servant_to_id(servant);
 	  m_pPOA->deactivate_object(oid);
 	}
 	catch (...)
@@ -1664,6 +1671,7 @@ std::vector<coil::Properties> Manager::getLoadableModules()
 	    ;
 	  }
       }
+    return;
   }
   
   /*!

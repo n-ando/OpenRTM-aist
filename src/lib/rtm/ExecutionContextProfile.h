@@ -1,12 +1,12 @@
 // -*- C++ -*-
 /*!
- * @file ExecutionContextBase.h
- * @brief ExecutionContext base class
- * @date $Date: 2008-01-14 07:48:55 $
+ * @file ExecutionContextProfile.h
+ * @brief ExecutionContextProfile class
+ * @date $Date$
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
- * Copyright (C) 2007
- *     Task-intelligence Research Group,
+ * Copyright (C) 2011
+ *     Noriaki Ando
  *     Intelligent Systems Research Institute,
  *     National Institute of
  *         Advanced Industrial Science and Technology (AIST), Japan
@@ -16,135 +16,82 @@
  *
  */
 
-#ifndef RTC_EXECUTIONCONTEXTBASE_H
-#define RTC_EXECUTIONCONTEXTBASE_H
+#ifndef RTC_EXECUTIONCONTEXTPROFILE_H
+#define RTC_EXECUTIONCONTEXTPROFILE_H
 
-#include <coil/Factory.h>
+#include <coil/Mutex.h>
+#include <coil/Guard.h>
+#include <coil/Properties.h>
+#include <coil/TimeValue.h>
 
-#include <rtm/idl/RTCSkel.h>
-#include <rtm/idl/OpenRTMSkel.h>
-#include <rtm/Factory.h>
-#include <rtm/ExecutionContextProfile.h>
+#include <rtm/idl/RTCStub.h>
+#include <rtm/SystemLogger.h>
 
 #ifdef WIN32
 #pragma warning( disable : 4290 )
 #endif
 
-namespace coil
-{
-  class Properties;
-}
-
-namespace RTC
+namespace RTC_impl
 {
   /*!
    * @if jp
-   * @class ExecutionContextBase
-   * @brief ExecutionContext用基底クラス
+   * @class ExecutionContextProfile
+   * @brief ExecutionContextProfile クラス
    *
-   * ExecutionContextの基底クラス。
+   * Periodic Sampled Data Processing(周期実行用)ExecutionContextクラス。
    *
    * @since 0.4.0
    *
    * @else
-   * @class ExecutionContextBase
-   * @brief A base class for ExecutionContext
+   * @class ExecutionContextProfile
+   * @brief ExecutionContextProfile class
    *
-   * A base class of ExecutionContext.
+   * Periodic Sampled Data Processing (for the execution cycles)
+   * ExecutionContext class
    *
    * @since 0.4.0
    *
    * @endif
    */
-  class ExecutionContextBase
+  class ExecutionContextProfile
   {
+    typedef coil::Guard<coil::Mutex> Guard;
   public:
     /*!
      * @if jp
-     * @brief 仮想デストラクタ
+     * @brief デフォルトコンストラクタ
      *
-     * 仮想デストラクタ
+     * デフォルトコンストラクタ
+     * プロファイルに以下の項目を設定する。
+     *  - kind : PERIODIC
+     *  - rate : 0.0
      *
      * @else
-     * @brief Virtual Destructor
+     * @brief Default Constructor
      *
-     * Virtual Destructor
+     * Default Constructor
+     * Set the following items to profile.
+     *  - kind : PERIODIC
+     *  - rate : 0.0
      *
      * @endif
      */
-    virtual ~ExecutionContextBase(void);
+    ExecutionContextProfile(RTC::ExecutionKind kind = RTC::PERIODIC);
 
     /*!
      * @if jp
-     * @brief ExecutionContextの処理を進める
+     * @brief デストラクタ
      *
-     * ExecutionContextの処理を１周期分進める。
+     * デストラクタ
      *
      * @else
-     * @brief Proceed with tick of ExecutionContext
+     * @brief Destructor
      *
-     * Proceed with tick of ExecutionContext for one period.
+     * Destructor
      *
      * @endif
      */
-    virtual void init(coil::Properties& props);
-
-    /*!
-     * @if jp
-     * @brief コンポーネントをバインドする。
-     *
-     * コンポーネントをバインドする。
-     *
-     * @else
-     * @brief Bind the component.
-     *
-     * Bind the component.
-     *
-     * @endif
-     */
-    virtual RTC::ReturnCode_t bindComponent(RTObject_impl* rtc) = 0;
-
-    /*!
-     * @if jp
-     * @brief オブジェクトのリファレンスを取得する。
-     *
-     * オブジェクトのリファレンスを取得する。
-     *
-     * @else
-     * @brief Get the reference of the object. 
-     *
-     * Get the reference of the object.
-     *
-     * @endif
-     */
-    virtual RTC::ExecutionContextService_ptr getObjRef() = 0;
-
-    //============================================================
-    // Delegated functions to ExecutionContextProfile
-    //============================================================
-    /*!
-     * @if jp
-     * @brief CORBA オブジェクト参照の取得
-     *
-     * 本オブジェクトの ExecutioncontextService としての CORBA オブジェ
-     * クト参照を取得する。
-     *
-     * @return CORBA オブジェクト参照
-     *
-     * @else
-     * @brief Get the reference to the CORBA object
-     *
-     * Get the reference to the CORBA object as
-     * ExecutioncontextService of this object.
-     *
-     * @return The reference to CORBA object
-     *
-     * @endif
-     */
-    void setObjRef(RTC::ExecutionContextService_ptr ec_ptr)
-    {
-      m_profile.setObjRef(ec_ptr);
-    }
+    virtual ~ExecutionContextProfile(void);
 
     /*!
      * @if jp
@@ -165,7 +112,28 @@ namespace RTC
      *
      * @endif
      */
-    //    RTC::ExecutionContextService_ptr getObjRef(void) const;
+    void setObjRef(RTC::ExecutionContextService_ptr ec_ptr);
+
+    /*!
+     * @if jp
+     * @brief CORBA オブジェクト参照の取得
+     *
+     * 本オブジェクトの ExecutioncontextService としての CORBA オブジェ
+     * クト参照を取得する。
+     *
+     * @return CORBA オブジェクト参照
+     *
+     * @else
+     * @brief Get the reference to the CORBA object
+     *
+     * Get the reference to the CORBA object as
+     * ExecutioncontextService of this object.
+     *
+     * @return The reference to CORBA object
+     *
+     * @endif
+     */
+    RTC::ExecutionContextService_ptr getObjRef(void) const;
 
     /*!
      * @if jp
@@ -200,10 +168,7 @@ namespace RTC
      *
      * @endif
      */
-    RTC::ReturnCode_t setRate(double rate)
-    {
-      return m_profile.setRate(rate);;
-    }
+    RTC::ReturnCode_t setRate(double rate);
 
     /*!
      * @if jp
@@ -225,10 +190,7 @@ namespace RTC
      *
      * @endif
      */
-    double getRate(void) const
-    {
-      return m_profile.getRate();
-    }
+    double getRate(void) const;
 
     /*!
      * @if jp
@@ -252,10 +214,7 @@ namespace RTC
      *
      * @endif
      */
-    const char* getKindString(RTC::ExecutionKind kind) const
-    {
-      return m_profile.getKindString(kind);
-    }
+    const char* getKindString(RTC::ExecutionKind kind) const;
 
     /*!
      * @if jp
@@ -275,10 +234,7 @@ namespace RTC
      *
      * @endif
      */
-    RTC::ReturnCode_t setKind(RTC::ExecutionKind kind)
-    {
-      return m_profile.setKind(kind);
-    }
+    RTC::ReturnCode_t setKind(RTC::ExecutionKind kind);
 
     /*!
      * @if jp
@@ -299,10 +255,7 @@ namespace RTC
      *
      * @endif
      */
-    RTC::ExecutionKind getKind(void) const
-    {
-      return m_profile.getKind();
-    }
+    RTC::ExecutionKind getKind(void) const;
 
     /*!
      * @if jp
@@ -321,10 +274,7 @@ namespace RTC
      * @return The return code of ReturnCode_t type
      * @endif
      */
-    RTC::ReturnCode_t setOwner(RTC::LightweightRTObject_ptr comp)
-    {
-      return m_profile.setOwner(comp);
-    }
+    RTC::ReturnCode_t setOwner(RTC::LightweightRTObject_ptr comp);
 
     /*!
      * @if jp
@@ -342,10 +292,7 @@ namespace RTC
      * @return a reference of the owner RT-Component
      * @endif
      */
-    const RTC::RTObject_ptr getOwner() const
-    {
-      return m_profile.getOwner();
-    }
+    const RTC::RTObject_ptr getOwner() const;
 
     /*!
      * @if jp
@@ -378,10 +325,7 @@ namespace RTC
      *
      * @endif
      */
-    RTC::ReturnCode_t addComponent(RTC::LightweightRTObject_ptr comp)
-    {
-      return m_profile.addComponent(comp);
-    }
+    RTC::ReturnCode_t addComponent(RTC::LightweightRTObject_ptr comp);
 
     /*!
      * @if jp
@@ -413,10 +357,7 @@ namespace RTC
      *
      * @endif
      */
-    RTC::ReturnCode_t removeComponent(RTC::LightweightRTObject_ptr comp)
-    {
-      return m_profile.removeComponent(comp);
-    }
+    RTC::ReturnCode_t removeComponent(RTC::LightweightRTObject_ptr comp);
 
     /*!
      * @if jp
@@ -436,10 +377,7 @@ namespace RTC
      *
      * @endif
      */
-    const RTC::RTCList& getComponentList() const
-    {
-      return m_profile.getComponentList();
-    }
+    const RTC::RTCList& getComponentList() const;
 
     /*!
      * @if jp
@@ -461,10 +399,7 @@ namespace RTC
      *
      * @endif
      */
-    void setProperties(coil::Properties& props)
-    {
-      m_profile.setProperties(props);
-    }
+    void setProperties(coil::Properties& props);
 
     /*!
      * @if jp
@@ -485,10 +420,7 @@ namespace RTC
      *
      * @endif
      */
-    const coil::Properties getProperties() const
-    {
-      return m_profile.getProperties();
-    }
+    const coil::Properties getProperties() const;
 
     /*!
      * @if jp
@@ -512,10 +444,7 @@ namespace RTC
      *
      * @endif
      */
-    RTC::ExecutionContextProfile* getProfile(void)
-    {
-      return m_profile.getProfile();
-    }
+    RTC::ExecutionContextProfile* getProfile(void);
 
     /*!
      * @if jp
@@ -534,28 +463,103 @@ namespace RTC
      *
      * @endif
      */
-    const RTC::ExecutionContextProfile& getProfile(void) const
+    const RTC::ExecutionContextProfile& getProfile(void) const;
+
+    /*!
+     * @if jp
+     * @brief ExecutionContextProfileをロックする
+     *
+     * このオブジェクトが管理する RTC::ExecutionContextProfile をロックする。
+     * ロックが不要になった際にはunlock()でロックを解除しなければならない。
+     *
+     * @else
+     * @brief Getting a lock of RTC::ExecutionContextProfile
+     *
+     * This function locks  RTC::ExecutionContextProfile in the object.
+     * The lock should be released when the lock is unneccessary.
+     *
+     * @endif
+     */
+    void lock() const;
+
+    /*!
+     * @if jp
+     * @brief ExecutionContextProfileをアンロックする
+     *
+     * このオブジェクトが管理する RTC::ExecutionContextProfile をアンロッ
+     * クする。
+     *
+     * @else
+     * @brief Release a lock of the RTC::ExecutionContextProfile
+     *
+     * This function release the lock of RTC::ExecutionContextProfile
+     * in the object.
+     *
+     * @endif
+     */
+    void unlock() const;
+
+  private:
+    /*!
+     * @if jp
+     * @brief Logger
+     * @else
+     * @brief Logger
+     * @endif
+     */
+    mutable RTC::Logger rtclog;
+    /*!
+     * @if jp
+     * @brief ECProfile
+     * @else
+     * @brief ECProfile
+     * @endif
+     */
+    RTC::ExecutionContextProfile m_profile;
+
+    /*!
+     * @if jp
+     * @brief mutex of ExecutionContextProfile
+     * @else
+     * @brief mutex ExecutionContextProfile
+     * @endif
+     */
+    mutable coil::Mutex m_profileMutex;
+
+    /*!
+     * @if jp
+     * @brief ExecutionContext の実行周期
+     * @else
+     * @brief Execution cycle of ExecutionContext
+     * @endif
+     */
+    coil::TimeValue m_period;
+
+    /*!
+     * @if jp
+     * @brief ExecutionContextService オブジェクトへの参照
+     * @else
+     * @brief Reference to ExecutionContextService object
+     * @endif
+     */
+    RTC::ExecutionContextService_var m_ref;
+
+    class find_participant
     {
-      return m_profile.getProfile();
-    }
-    // end of delegated functions to ExecutionContextProfile
-    //============================================================
-
-
-
-  protected:
-    RTC_impl::ExecutionContextProfile m_profile;
-  };  // class ExecutionContextBase
-
-  typedef coil::GlobalFactory<ExecutionContextBase> ExecutionContextFactory;
-
-#if defined(WIN32) || defined(_WIN32) || defined(__WIN32__) || defined(__NT__)
-  EXTERN template class DLL_PLUGIN coil::GlobalFactory<ExecutionContextBase>;
-#endif
-};  // namespace RTC
+      RTC::RTObject_var m_comp;
+    public:      
+      find_participant(RTC::RTObject_ptr comp)
+        : m_comp(RTC::RTObject::_duplicate(comp)) {}
+      bool operator()(RTC::RTObject_ptr comp)
+      {
+        return m_comp->_is_equivalent(comp);
+      }
+    };
+  }; // class ExecutionContextProfile
+}; // namespace RTC
 
 #ifdef WIN32
 #pragma warning( default : 4290 )
 #endif
 
-#endif // RTC_EXECUTIONCONTEXTBASE_H
+#endif // RTC_EXECUTIONCONTEXTPROFILE_H
