@@ -111,20 +111,20 @@ namespace RTC
     // DCL for singleton
     if (!manager)
       {
-	Guard guard(mutex);
-	if (!manager)
-	  {
-	    manager = new Manager();
-	    manager->initManager(argc, argv);
-	    manager->initLogger();
-	    manager->initORB();
-	    manager->initNaming();
+        Guard guard(mutex);
+        if (!manager)
+          {
+            manager = new Manager();
+            manager->initManager(argc, argv);
+            manager->initLogger();
+            manager->initORB();
+            manager->initNaming();
             manager->initFactories();
-	    manager->initExecContext();
-	    manager->initComposite();
-	    manager->initTimer();
+            manager->initExecContext();
+            manager->initComposite();
+            manager->initTimer();
             manager->initManagerServant();
-	  }
+          }
       }
     return manager;
   }
@@ -141,19 +141,20 @@ namespace RTC
     // DCL for singleton
     if (!manager)
       {
-	Guard guard(mutex);
-	if (!manager)
-	  {
-	    manager = new Manager();
-	    manager->initManager(0, NULL);
-	    manager->initLogger();
-	    manager->initORB();
-	    manager->initNaming();
+        Guard guard(mutex);
+        if (!manager)
+          {
+            manager = new Manager();
+            manager->initManager(0, NULL);
+            manager->initLogger();
+            manager->initORB();
+            manager->initNaming();
             manager->initFactories();
-	    manager->initExecContext();
-	    manager->initComposite();
-	    manager->initTimer();
-	  }
+            manager->initExecContext();
+            manager->initComposite();
+            manager->initTimer();
+            manager->initManagerServant();
+          }
       }
     return *manager;
   }
