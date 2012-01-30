@@ -17,6 +17,10 @@
  *
  */
 
+
+#ifndef COIL_NONCOPYABLE_H
+#define COIL_NONCOPYABLE_H
+
 namespace coil
 {
   /*!
@@ -162,3 +166,5 @@ namespace coil
     T & operator=(const T &);
   };
 };
+
+#endif // COIL_NONCOPYABLE_H
