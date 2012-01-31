@@ -54,6 +54,14 @@ set PYTHONPATH=%TMP_PYTHONPATH%
 
 vcbuild /M2 /rebuild OpenRTM-aist_vc9.sln
 
+@rem ============================================================
+@rem build OpenCV-RTC
+@rem ============================================================
+
+cd %OPENCV_RTC_ROOT%
+vcbuild /M2 /rebuild OpenCV-RTC_vc9.sln
+cd %RTM_ROOT%
+
 cd installer
 call autowix.cmd
 cd ..
