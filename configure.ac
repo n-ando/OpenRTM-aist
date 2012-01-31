@@ -81,7 +81,6 @@ CXXFLAGS="-Wall -fPIC $CXXFLAGS"
 AC_SEARCH_LIBS(pthread_create, pthread c_r, , 
 	AC_MSG_ERROR([** thread library is needed **])) 
 
-LDFLAGS="-export-dynamic $LDFLAGS"
 SHLIB_SUFFIX=".so"
 
 dnl ------------------------------------------------------------
@@ -148,12 +147,13 @@ fi
 case $system in
 [FreeBSD*)]
 	AC_DEFINE([RTM_OS_FREEBSD], [TRUE], [OS is FreeBSD])
+	LDFLAGS="-export-dynamic $LDFLAGS"
 	os="freebsd"
 	;;	
 [Linux*)]
 	AC_DEFINE([RTM_OS_LINUX], [TRUE], [OS is Linux])
 	AC_DEFINE([_REENTRANT], [TRUE], [Multi Thread Support])
-	LDFLAGS="$LDFLAGS -luuid -ldl"
+	LDFLAGS="-luuid -ldl -export-dynamic $LDFLAGS"
 	os="linux"
 	;;	
 [HP-UX*)]
@@ -175,6 +175,7 @@ case $system in
 [Darwin*)]
 	AC_DEFINE([RTM_OS_DARWIN], [TRUE], [OS is Max OS X])
 	SHLIB_SUFFIX=".dylib"
+	LDFLAGS="--export-dynamic $LDFLAGS"
 	os="darwin"
 	;;	
 [QNX*)]
@@ -186,7 +187,7 @@ case $system in
 	os="cygwin"
 	CPPFLAGS="-DCygwin $CPPFLAGS"
 	CXXFLAGS="-DCygwin $CXXFLAGS"
-	LDFLAGS="-no-undefined $LDFLAGS -luuid -ldl"
+	LDFLAGS="-no-undefined -luuid -ldl -export-dynamic $LDFLAGS"
 	;;
 *)
 	echo "Unkonown system"
