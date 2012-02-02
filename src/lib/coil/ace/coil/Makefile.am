@@ -62,26 +62,12 @@ COIL_ALL = $(COIL_SRC) $(COIL_H)
 $(COIL_COMMON_SRC):
 	cp -p $(top_srcdir)/common/*.cpp .
 	cp -p $(top_srcdir)/common/*.h .
-	for x in *.cpp; do \
-	  qkc -ms $${x} > $${x}_sjis; \
-	  mv $${x}_sjis $${x}; \
-	done
-	for x in *.h; do \
-	  qkc -ms $${x} > $${x}_sjis; \
-	  mv $${x}_sjis $${x}; \
-	done
+	qkc -O- -ms *.cpp
+
 
 $(COIL_COMMON_H):
 	cp -p $(top_srcdir)/common/*.h .
-	for x in *.cpp; do \
-	  qkc -ms $${x} > $${x}_sjis; \
-	  mv $${x}_sjis $${x}; \
-	done
-	for x in *.h; do \
-	  qkc -ms $${x} > $${x}_sjis; \
-	  mv $${x}_sjis $${x}; \
-	done
-
+	qkc -O- -ms *.h
 
 coilheaderdir = $(prefix)/include/coil
 

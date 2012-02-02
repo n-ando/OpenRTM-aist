@@ -19,14 +19,7 @@ src:
 	cp -p $(top_srcdir)/src/lib/rtm/*.h .
 	cp -p $(top_srcdir)/src/lib/rtm/version.txt .
 	cp -p config_rtc.h.in config_rtc.h
-	for x in *.cpp; do \
-	  qkc -ms $${x} > $${x}_sjis; \
-	  mv $${x}_sjis $${x}; \
-	done
-	for x in *.h; do \
-	  qkc -ms $${x} > $${x}_sjis; \
-	  mv $${x}_sjis $${x}; \
-	done
+	qkc -O- -ms *.cpp *.h
 
 dist-hook: src
 
