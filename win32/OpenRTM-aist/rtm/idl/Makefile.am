@@ -11,7 +11,10 @@ clean-local:
 
 src:
 	cp -p $(top_srcdir)/src/lib/rtm/idl/*.idl .
-	qkc -ms *.idl
+	for x in *.idl; do \
+	  qkc -ms $${x} > $${x}_sjis; \
+	  mv $${x}_sjis $${x}; \
+	done
 
 
 dist-hook: src

@@ -63,11 +63,17 @@ COIL_ALL = $(COIL_SRC) $(COIL_H)
 
 $(COIL_COMMON_SRC):
 	cp -p $(top_srcdir)/common/*.cpp .
-	qkc -ms *.cpp
+	for x in *.cpp; do \
+	  qkc -ms $${x} > $${x}_sjis; \
+	  mv $${x}_sjis $${x}; \
+	done
 
 $(COIL_COMMON_H):
 	cp -p $(top_srcdir)/common/*.h .
-	qkc -ms *.h
+	for x in *.h; do \
+	  qkc -ms $${x} > $${x}_sjis; \
+	  mv $${x}_sjis $${x}; \
+	done
 
 
 clean-local:
