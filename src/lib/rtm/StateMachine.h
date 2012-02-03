@@ -19,7 +19,8 @@
 #ifndef RTC_STATEMACHINE_H
 #define RTC_STATEMACHINE_H
 
-#include <rtm/RTC.h>
+#include <cassert>
+#include <vector>
 #include <coil/Mutex.h>
 #include <coil/Guard.h>
 
@@ -284,31 +285,54 @@ namespace RTC_Utils
      */
     StateMachine(int num_of_state)
       : m_num(num_of_state),
-	m_entry (new Callback[m_num]),
-	m_predo (new Callback[m_num]),
-	m_do    (new Callback[m_num]),
-	m_postdo(new Callback[m_num]),
-	m_exit  (new Callback[m_num])
+        m_listener(NULL),
+        m_entry(m_num, (Callback)NULL),
+        m_predo(m_num, (Callback)NULL),
+        m_do(m_num, (Callback)NULL),
+        m_postdo(m_num, (Callback)NULL),
+        m_exit(m_num, (Callback)NULL),
+        m_transit(NULL)
     {
-      setNullFunc(m_entry,  NULL);
-      setNullFunc(m_do,     NULL);
-      setNullFunc(m_exit,   NULL);
-      setNullFunc(m_predo,  NULL);
-      setNullFunc(m_postdo, NULL);
-      m_transit = NULL;
     };
-    
 
     virtual ~StateMachine()
     {
-      delete [] m_entry;
-      delete [] m_predo;
-      delete [] m_do;
-      delete [] m_postdo;
-      delete [] m_exit;
     };
 
+    StateMachine(const StateMachine& other)
+      : m_num(other.m_num),
+        m_listener(other.m_listener),
+        m_entry (other.m_entry),
+        m_predo (other.m_predo),
+        m_do    (other.m_do),
+        m_postdo(other.m_postdo),
+        m_exit  (other.m_exit),
+        m_transit(other.m_transit),
+        m_states(other.m_states),
+        m_selftrans(other.m_selftrans)
+    {
+    }
 
+    StateMachine& operator=(const StateMachine& other)
+    {
+      StateMachine temp(other);
+      swap(temp);
+      return *this;
+    }
+
+    void swap(StateMachine& other)
+    {
+      std::swap(m_num,       other.m_num);
+      std::swap(m_listener,  other.m_listener);
+      std::swap(m_entry,     other.m_entry);
+      std::swap(m_predo,     other.m_predo);
+      std::swap(m_do,        other.m_do);
+      std::swap(m_postdo,    other.m_postdo);
+      std::swap(m_exit,      other.m_exit);
+      std::swap(m_transit,   other.m_transit);
+      std::swap(m_states,    other.m_states);
+      std::swap(m_selftrans, other.m_selftrans);
+    }
     /*!
      * @if jp
      * @brief NOP関数を登録する
@@ -355,6 +379,7 @@ namespace RTC_Utils
      */
     void setListener(Listener* listener)
     {
+      assert(listener != NULL);
       m_listener = listener;
     }
     
@@ -384,7 +409,15 @@ namespace RTC_Utils
      */
     bool setEntryAction(State state, Callback call_back)
     {
-      m_entry[state] = call_back;
+     try
+        {
+          m_entry.at(state) = call_back;
+        }
+      catch (...)
+        {
+          assert(false);
+          return false;
+        }
       return true;
     }
     
@@ -413,7 +446,15 @@ namespace RTC_Utils
      */
     bool setPreDoAction(State state, Callback call_back)
     {
-      m_predo[state] = call_back;
+      try
+        {
+          m_predo.at(state) = call_back;
+        }
+      catch (...)
+        {
+          assert(false);
+          return false;
+        }
       return true;
     }
     
@@ -442,7 +483,15 @@ namespace RTC_Utils
      */
     bool setDoAction(State state, Callback call_back)
     {
-      m_do[state] = call_back;
+      try
+        {
+          m_do.at(state) = call_back;
+        }
+      catch (...)
+        {
+          assert(false);
+          return false;
+        }
       return true;
     }
     
@@ -471,7 +520,15 @@ namespace RTC_Utils
      */
     bool setPostDoAction(State state, Callback call_back)
     {
-      m_postdo[state] = call_back;
+      try
+        {
+          m_postdo.at(state) = call_back;
+        }
+      catch (...)
+        {
+          assert(false);
+          return false;
+        }
       return true;
     }
     
@@ -500,7 +557,15 @@ namespace RTC_Utils
      */
     bool setExitAction(State state, Callback call_back)
     {
-      m_exit[state] = call_back;
+      try
+        {
+          m_exit.at(state) = call_back;
+        }
+      catch (...)
+        {
+          assert(false);
+          return false;
+        }
       return true;
     }
     
@@ -736,7 +801,6 @@ namespace RTC_Utils
     //
     void worker_pre()
     {
-      //      std::cout << "worker_pre()" << std::endl;
       States state;
       sync(state);
       if (state.curr == state.next)
@@ -767,7 +831,6 @@ namespace RTC_Utils
 
     void worker_do()
     {
-      //      std::cout << "worker_do()" << std::endl;
       States state;
       sync(state);
       if (m_do[state.curr] != NULL)
@@ -778,7 +841,6 @@ namespace RTC_Utils
 
     void worker_post()
     {
-      //      std::cout << "worker_post()" << std::endl;
       States state;
       sync(state);
       if (m_postdo[state.curr] != NULL)
@@ -807,9 +869,14 @@ namespace RTC_Utils
      *
      * @endif
      */
-    void setNullFunc(Callback* s, Callback nullfunc)
+    void setNullFunc(std::vector<Callback>& s, Callback nullfunc)
     {
-      for (int i = 0; i < m_num; ++i) s[i] = nullfunc;
+      s.clear();
+      //      assert((size_t)m_num == s.size());
+      for (size_t i(0); i < m_num; ++i)
+        {
+          s.push_back(nullfunc);
+        }
     }
 
     /*!
@@ -837,7 +904,7 @@ namespace RTC_Utils
      * @brief Callback function for Entry action
      * @endif
      */
-    Callback* m_entry;
+    std::vector<Callback> m_entry;
 
     /*!
      * @if jp
@@ -846,7 +913,7 @@ namespace RTC_Utils
      * @brief Callback function for PreDo action
      * @endif
      */
-    Callback* m_predo;
+    std::vector<Callback> m_predo;
 
     /*!
      * @if jp
@@ -855,7 +922,7 @@ namespace RTC_Utils
      * @brief Callback function for Do action
      * @endif
      */
-    Callback* m_do;
+    std::vector<Callback> m_do;
 
     /*!
      * @if jp
@@ -864,7 +931,7 @@ namespace RTC_Utils
      * @brief Callback function for PostDo action
      * @endif
      */
-    Callback* m_postdo;
+    std::vector<Callback> m_postdo;
 
     /*!
      * @if jp
@@ -873,7 +940,7 @@ namespace RTC_Utils
      * @brief Callback function for Exit action
      * @endif
      */
-    Callback* m_exit;
+    std::vector<Callback> m_exit;
 
     /*!
      * @if jp

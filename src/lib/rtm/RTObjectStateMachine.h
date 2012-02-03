@@ -23,7 +23,7 @@
 #include <rtm/SystemLogger.h>
 #include <coil/NonCopyable.h>
 #include <rtm/idl/RTCSkel.h>
-#include <rtm/StateMachine2.h>
+#include <rtm/StateMachine.h>
 #include <assert.h>
 #include <iostream>
 
