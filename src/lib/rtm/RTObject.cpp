@@ -418,6 +418,7 @@ namespace RTC
   {
     RTC_TRACE(("exit()"));
     if (m_created) { return RTC::PRECONDITION_NOT_MET; }
+    if (m_exiting) { return RTC::RTC_OK; }
 
     // deactivate myself on owned EC
     CORBA_SeqUtil::for_each(m_ecMine,
