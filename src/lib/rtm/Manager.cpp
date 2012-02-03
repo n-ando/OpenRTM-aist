@@ -656,9 +656,18 @@ std::vector<coil::Properties> Manager::getLoadableModules()
       "os.hostname",
       "corba.endpoint",
       "corba.id",
+      "ec.type",
+      "ec.rate",
+      "ec.synchronous_transition",
+      "ec.synchronous_activation",
+      "ec.synchronous_deactivation",
+      "ec.synchronous_reset",
+      "ec.transition_timeout",
+      "ec.activation_timeout",
+      "ec.deactivation_timeout",
+      "ec.reset_timeout",
       "exec_cxt.periodic.type",
       "exec_cxt.periodic.rate",
-      "exec_cxt.evdriven.type",
       "logger.enable",
       "logger.log_level",
       "naming.enable",
@@ -670,7 +679,10 @@ std::vector<coil::Properties> Manager::getLoadableModules()
     for (int i(0); inherit_prop[i][0] != '\0'; ++i)
       {
         const char* key(inherit_prop[i]);
-        prop[key] = m_config[key];
+        if (m_config.findNode(key) != NULL)
+          {
+            prop[key] = m_config[key];
+          }
       }
       
     RTObject_impl* comp;
