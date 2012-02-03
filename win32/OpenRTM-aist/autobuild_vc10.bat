@@ -69,6 +69,7 @@ msbuild /M:2 /t:rebuild /p:configuration=release examples\USBCamera\USBCamera_vc
 @rem ============================================================
 
 cd %OPENCV_RTC_ROOT%
+call copyprops.bat
 msbuild /M:2 /t:rebuild ImageProcessing_opencv.sln
 cd %RTM_ROOT%
 
