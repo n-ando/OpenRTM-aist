@@ -497,7 +497,6 @@ namespace RTC
   void
   ConfigAdmin::onUpdateParam(const char* config_param, const char* config_value)
   {
-    std::cout << "Update: key = " << config_param << " value = " << config_value << std::endl;
     m_changedParam.push_back(config_param);
     m_listeners.configparam_[ON_UPDATE_CONFIG_PARAM].notify(config_param,
                                                             config_value);
