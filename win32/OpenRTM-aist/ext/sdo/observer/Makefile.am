@@ -14,8 +14,8 @@ src:
 	cp -p $(top_srcdir)/src/ext/sdo/observer/*.cpp .
 	cp -p $(top_srcdir)/src/ext/sdo/observer/*.h .
 	cp -p $(top_srcdir)/src/ext/sdo/observer/*.idl .
-	qkc -ms *.cpp
-	qkc -ms *.h
-	qkc -ms *.idl
+	qkc -O- -ms *.cpp
+	qkc -O- -ms *.h
+	qkc -O- -ms *.idl
 
 dist-hook: src

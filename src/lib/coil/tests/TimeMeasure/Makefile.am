@@ -70,7 +70,7 @@ TimeMeasure_vc8.vcproj:
 		--yaml ../coil_test.vcproj.yaml \
 		--source $(TEST_SRC)
 #		--header $(TEST_H)
-	qkc -sm $(win32_builddir)/TimeMeasure_vc8.vcproj
+	qkc -O- -sm $(win32_builddir)/TimeMeasure_vc8.vcproj
 
 TimeMeasure_vc9.vcproj:
 	$(top_builddir)/build/vcprojtool.py vcproj \
@@ -82,6 +82,6 @@ TimeMeasure_vc9.vcproj:
 		--yaml ../coil_test.vcproj.yaml \
 		--source $(TEST_SRC)
 #		--header $(TEST_H)
-	qkc -sm $(win32_builddir)/TimeMeasure_vc9.vcproj
+	qkc -O- -sm $(win32_builddir)/TimeMeasure_vc9.vcproj
 
 

@@ -71,7 +71,7 @@ UUID_vc8.vcproj:
 		--yaml ../coil_test.vcproj.yaml \
 		--source $(TEST_SRC)
 #		--header $(TEST_H)
-	qkc -sm $(win32_builddir)/UUID_vc8.vcproj
+	qkc -O- -sm $(win32_builddir)/UUID_vc8.vcproj
 
 UUID_vc9.vcproj:
 	$(top_builddir)/build/vcprojtool.py vcproj \
@@ -83,7 +83,7 @@ UUID_vc9.vcproj:
 		--yaml ../coil_test.vcproj.yaml \
 		--source $(TEST_SRC)
 #		--header $(TEST_H)
-	qkc -sm $(win32_builddir)/UUID_vc9.vcproj
+	qkc -O- -sm $(win32_builddir)/UUID_vc9.vcproj
 
 UUID_vc10.vcproj:
 	$(top_builddir)/build/vcprojtool.py vcproj \
@@ -94,5 +94,5 @@ UUID_vc10.vcproj:
 		--out $(win32_builddir)/UUID_vc10.vcproj \
 		--yaml ../coil_test.vcproj.yaml \
 		--source $(TEST_SRC)
-	qkc -sm $(win32_builddir)/UUID_vc10.vcproj
+	qkc -O- -sm $(win32_builddir)/UUID_vc10.vcproj
 

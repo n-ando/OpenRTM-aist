@@ -177,7 +177,7 @@ vc8proj: libRTC.vcproj.yaml
 		--yaml libRTC.vcproj.yaml \
 		--source $(RTC_SRC) \
 		--header $(rtmheader_HEADERS)
-	qkc -sm $(win32_builddir)/rtm/libRTC_vc8.vcproj
+	qkc -O- -sm $(win32_builddir)/rtm/libRTC_vc8.vcproj
 
 vc9proj: libRTC.vcproj.yaml
 	$(top_builddir)/build/vcprojtool.py vcproj \
@@ -188,7 +188,7 @@ vc9proj: libRTC.vcproj.yaml
 		--yaml libRTC.vcproj.yaml \
 		--source $(RTC_SRC) \
 		--header $(rtmheader_HEADERS)
-	qkc -sm $(win32_builddir)/rtm/libRTC_vc9.vcproj
+	qkc -O- -sm $(win32_builddir)/rtm/libRTC_vc9.vcproj
 
 vc10proj: libRTC.vcproj.yaml
 	$(top_builddir)/build/vcxprojtool.py vcxproj \
@@ -199,7 +199,7 @@ vc10proj: libRTC.vcproj.yaml
 		--yaml libRTC.vcproj.yaml \
 		--source $(RTC_SRC) \
 		--header $(rtmheader_HEADERS)
-	qkc -sm $(win32_builddir)/rtm/libRTC_vc10.vcxproj
+	qkc -O- -sm $(win32_builddir)/rtm/libRTC_vc10.vcxproj
 
 #------------------------------------------------------------
 # for wxs file
