@@ -66,15 +66,6 @@ if not exist "%RTSE_ROOT%\RTSystemEditorRCP.exe" (
 set INCLUDE_RTSE=YES
 set INCLUDE_OPENRTP=YES
 
-@rem ============================================================
-@rem build OpenCV-RTC
-@rem ============================================================
-
-cd %OPENCV_RTC_ROOT%
-call copyprops.bat
-msbuild /M:2 /t:rebuild ImageProcessing_opencv.sln
-cd %RTM_ROOT%\installer
-
 if not exist OpenRTP_inc.wxs (
    cd OpenRTP
 rem set TMP_PYTHONPATH=%PYTHONPATH%
@@ -137,6 +128,15 @@ if "x%OPENCV_RTC_ROOT%" == "x" (
    goto END
 )
 set INCLUDE_OPENCV_RTC=YES
+
+@rem ============================================================
+@rem build OpenCV-RTC
+@rem ============================================================
+
+cd %OPENCV_RTC_ROOT%
+call copyprops.bat
+msbuild /M:2 /t:rebuild ImageProcessing_opencv.sln
+cd %RTM_ROOT%\installer
 
 if not exist OpenCV-RTC_inc.wxs (
    cd OpenCV-RTC
