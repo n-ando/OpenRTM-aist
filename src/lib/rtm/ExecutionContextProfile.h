@@ -95,20 +95,24 @@ namespace RTC_impl
 
     /*!
      * @if jp
-     * @brief CORBA オブジェクト参照の取得
+     * @brief CORBA オブジェクト参照のセット
      *
-     * 本オブジェクトの ExecutioncontextService としての CORBA オブジェ
-     * クト参照を取得する。
+     * ExecutioncontextService の CORBA オブジェクト参照をセットする。
+     * セットされると、それまでセットされていたオブジェクト参照は
+     * releaseされる。セットするオブジェクト参照は有効な参照でなければ
+     * ならない。
      *
-     * @return CORBA オブジェクト参照
+     * @param ec_ptr ExecutionContextServiceのCORBAオブジェクト参照
      *
      * @else
-     * @brief Get the reference to the CORBA object
+     * @brief Setting a CORBA object reference
      *
-     * Get the reference to the CORBA object as
-     * ExecutioncontextService of this object.
+     * This operation sets a object reference to
+     * ExecutionContextService.  After setting a new object reference,
+     * old reference is released.  The object reference have to be
+     * valid reference.
      *
-     * @return The reference to CORBA object
+     * @param ec_ptr A CORBA object reference of ExecutionContextService
      *
      * @endif
      */
@@ -370,7 +374,11 @@ namespace RTC_impl
      * @if jp
      * @brief RTコンポーネントの参加者リストを取得する
      *
-     * 現在登録されている参加者RTCのリストを取得する。
+     * 現在登録されている参加者RTCのリストを取得する。この関数はコンポー
+     * ネントリストのメンバ変数への参照を返すので、リスト使用前に
+     * ExecutionContextProfile::lock() でロックし、リスト使用後は
+     * ExecutionContextProfile::unlock() でロックを開放しなければならな
+     * い。
      *
      * @return 参加者RTCのリスト
      *
@@ -378,7 +386,12 @@ namespace RTC_impl
      *
      * @brief Getting participant RTC list
      *
-     * This function returns a list of participant RTC of the execution context.
+     * This function returns a list of participant RTC of the
+     * execution context.  Since the function returns a reference to
+     * the member variable of component list, user have to lock by
+     * ExecutionContextProfile::lock() before using the list, and user
+     * also have to release the unlock by
+     * ExecutionContextProfile::unlock().
      *
      * @return Participants RTC list
      *
