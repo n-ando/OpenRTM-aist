@@ -59,6 +59,7 @@ vcbuild /M2 /rebuild OpenRTM-aist_vc8.sln
 @rem ============================================================
 
 cd %OPENCV_RTC_ROOT%
+call copyprops.bat
 vcbuild /M2 /rebuild OpenCV-RTC_vc8.sln
 cd %RTM_ROOT%
 
