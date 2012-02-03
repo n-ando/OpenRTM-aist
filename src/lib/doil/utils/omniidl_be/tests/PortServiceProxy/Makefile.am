@@ -101,7 +101,7 @@ PortServiceProxy_vc8.vcproj:
 		--yaml ../coil_test.vcproj.yaml \
 		--source $(TEST_SRC)
 #		--header $(TEST_H)
-	qkc -sm $(win32_builddir)/PortServiceProxy_vc8.vcproj
+	qkc -O- -sm $(win32_builddir)/PortServiceProxy_vc8.vcproj
 
 PortServiceProxy_vc9.vcproj:
 	$(top_builddir)/build/vcprojtool.py vcproj \
@@ -113,7 +113,7 @@ PortServiceProxy_vc9.vcproj:
 		--yaml ../coil_test.vcproj.yaml \
 		--source $(TEST_SRC)
 #		--header $(TEST_H)
-	qkc -sm $(win32_builddir)/PortServiceProxy_vc9.vcproj
+	qkc -O- -sm $(win32_builddir)/PortServiceProxy_vc9.vcproj
 
 
 PortServiceProxy_vc10.vcproj:
@@ -125,6 +125,6 @@ PortServiceProxy_vc10.vcproj:
 		--out $(win32_builddir)/PortServiceProxy_vc10.vcproj \
 		--yaml ../coil_test.vcproj.yaml \
 		--source $(TEST_SRC)
-	qkc -sm $(win32_builddir)/PortServiceProxy_vc10.vcproj
+	qkc -O- -sm $(win32_builddir)/PortServiceProxy_vc10.vcproj
 
 

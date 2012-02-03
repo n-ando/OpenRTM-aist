@@ -82,7 +82,7 @@ vc8proj:
 		--yaml ../rtc.vcproj.yaml                       \
 		--source ConfigSample.cpp ConfigSampleComp.cpp  \
 		--header ConfigSample.h VectorConvert.h
-	qkc -sm $(win32_builddir)/ConfigSample_vc8.vcproj
+	qkc -O- -sm $(win32_builddir)/ConfigSample_vc8.vcproj
 	$(top_builddir)/build/vcprojtool.py vcproj                 \
 		--type DLL                                         \
 		--vcversion "8.00"                                 \
@@ -92,7 +92,7 @@ vc8proj:
 		--yaml ../rtcdll.vcproj.yaml                       \
 		--source ConfigSample.cpp                          \
 		--header ConfigSample.h VectorConvert.h
-	qkc -sm $(win32_builddir)/ConfigSampleDll_vc8.vcproj
+	qkc -O- -sm $(win32_builddir)/ConfigSampleDll_vc8.vcproj
 
 vc9proj:
 	$(top_builddir)/build/vcprojtool.py vcproj              \
@@ -104,7 +104,7 @@ vc9proj:
 		--yaml ../rtc.vcproj.yaml                       \
 		--source ConfigSample.cpp ConfigSampleComp.cpp  \
 		--header ConfigSample.h VectorConvert.h
-	qkc -sm $(win32_builddir)/ConfigSample_vc9.vcproj
+	qkc -O- -sm $(win32_builddir)/ConfigSample_vc9.vcproj
 	$(top_builddir)/build/vcprojtool.py vcproj                 \
 		--type DLL                                         \
 		--vcversion "9.00"                                 \
@@ -114,7 +114,7 @@ vc9proj:
 		--yaml ../rtcdll.vcproj.yaml                       \
 		--source ConfigSample.cpp                          \
 		--header ConfigSample.h VectorConvert.h
-	qkc -sm $(win32_builddir)/ConfigSampleDll_vc9.vcproj
+	qkc -O- -sm $(win32_builddir)/ConfigSampleDll_vc9.vcproj
 
 vc10proj:
 	$(top_builddir)/build/vcxprojtool.py vcxproj              \
@@ -126,7 +126,7 @@ vc10proj:
 		--yaml ../rtc.vcproj.yaml                       \
 		--source ConfigSample.cpp ConfigSampleComp.cpp  \
 		--header ConfigSample.h VectorConvert.h
-	qkc -sm $(win32_builddir)/ConfigSample_vc10.vcxproj
+	qkc -O- -sm $(win32_builddir)/ConfigSample_vc10.vcxproj
 	$(top_builddir)/build/vcxprojtool.py vcxproj                 \
 		--type DLL                                         \
 		--vcversion "10.00"                                 \
@@ -136,7 +136,7 @@ vc10proj:
 		--yaml ../rtcdll.vcproj.yaml                       \
 		--source ConfigSample.cpp                          \
 		--header ConfigSample.h VectorConvert.h
-	qkc -sm $(win32_builddir)/ConfigSampleDll_vc10.vcxproj
+	qkc -O- -sm $(win32_builddir)/ConfigSampleDll_vc10.vcxproj
 
 dist-hook: lst vcproj
 

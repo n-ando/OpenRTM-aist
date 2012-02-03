@@ -47,7 +47,7 @@ libdoilcorba_la_LIBADD = -ldoil -lcoil $(LIBS)
 #		--yaml libRTCSkel.vcproj.yaml \
 #		--source $(SKEL_CPP) \
 #		--header $(SKEL_H)
-#	qkc -sm $(win32_builddir)/rtm/idl/libRTCSkel_vc8.vcproj
+#	qkc -O- -sm $(win32_builddir)/rtm/idl/libRTCSkel_vc8.vcproj
 #
 #vc9proj: libRTCSkel.vcproj.yaml
 #	$(top_builddir)/build/vcprojtool.py vcproj \
@@ -58,7 +58,7 @@ libdoilcorba_la_LIBADD = -ldoil -lcoil $(LIBS)
 #		--yaml libRTCSkel.vcproj.yaml \
 #		--source $(SKEL_CPP) \
 #		--header $(SKEL_H)
-#	qkc -sm $(win32_builddir)/rtm/idl/libRTCSkel_vc9.vcproj
+#	qkc -O- -sm $(win32_builddir)/rtm/idl/libRTCSkel_vc9.vcproj
 #
 ##------------------------------------------------------------
 ## for wxs file

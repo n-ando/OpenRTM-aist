@@ -40,7 +40,7 @@ vc8proj: rtcd.yaml
 		--out $(win32_builddir)/utils/rtcd/rtcd_vc8.vcproj \
 		--yaml rtcd.yaml                                   \
 		--source $(rtcd_SOURCES)
-#	qkc -sm $(win32_builddir)/rtm/libRTC_vc8.vcproj
+#	qkc -O- -sm $(win32_builddir)/rtm/libRTC_vc8.vcproj
 
 vc9proj: rtcd.yaml
 	$(top_builddir)/build/vcprojtool.py vcproj                 \
@@ -51,7 +51,7 @@ vc9proj: rtcd.yaml
 		--out $(win32_builddir)/utils/rtcd/rtcd_vc9.vcproj \
 		--yaml rtcd.yaml                                   \
 		--source $(rtcd_SOURCES)
-#	qkc -sm $(win32_builddir)/rtm/rtcd_vc9.vcproj
+#	qkc -O- -sm $(win32_builddir)/rtm/rtcd_vc9.vcproj
 
 vc10proj: rtcd.yaml
 	$(top_builddir)/build/vcxprojtool.py vcxproj                 \

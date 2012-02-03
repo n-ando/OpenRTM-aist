@@ -13,4 +13,5 @@ src:
 	cp -p $(top_srcdir)/src/lib/rtm/idl/*.idl .
 	qkc -O- -ms *.idl
 
+
 dist-hook: src

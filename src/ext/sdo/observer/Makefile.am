@@ -107,7 +107,7 @@ vc8proj:
 		--yaml $(top_builddir)/examples/rtcdll.vcproj.yaml \
 		--source $(OBSERVER_SRC)                        \
 		--header $(OBSERVER_H)
-	qkc -sm $(win32_builddir)/$(PROJNAME)Dll_vc8.vcproj
+	qkc -O- -sm $(win32_builddir)/$(PROJNAME)Dll_vc8.vcproj
 
 vc9proj:
 	$(top_builddir)/build/vcprojtool.py vcproj              \
@@ -119,7 +119,7 @@ vc9proj:
 		--yaml $(top_builddir)/examples/rtcdll.vcproj.yaml \
 		--source $(OBSERVER_SRC)                        \
 		--header $(OBSERVER_H)
-	qkc -sm $(win32_builddir)/$(PROJNAME)Dll_vc9.vcproj
+	qkc -O- -sm $(win32_builddir)/$(PROJNAME)Dll_vc9.vcproj
 
 vc10proj:
 	$(top_builddir)/build/vcxprojtool.py vcxproj              \
@@ -131,7 +131,7 @@ vc10proj:
 		--yaml $(top_builddir)/examples/rtcdll.vcproj.yaml  \
 		--source $(OBSERVER_SRC)                          \
 		--header $(OBSERVER_H)
-	qkc -sm $(win32_builddir)/$(PROJNAME)Dll_vc10.vcxproj
+	qkc -O- -sm $(win32_builddir)/$(PROJNAME)Dll_vc10.vcxproj
 
 
 dist-hook: lst vcproj

@@ -14,7 +14,7 @@ src:
 	cp -p $(top_srcdir)/examples/SimpleIO/*.cpp .
 	cp -p $(top_srcdir)/examples/SimpleIO/*.h .
 	cp -p $(top_srcdir)/examples/SimpleIO/rtc.conf .
-	qkc -ms *.cpp
-	qkc -ms *.h
+	qkc -O- -ms *.cpp
+	qkc -O- -ms *.h
 
 dist-hook: src
