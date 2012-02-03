@@ -4542,6 +4542,37 @@ namespace RTC
     {
       m_actionListeners.ecaction_[EC_DETACHED].notify(ec_id);
     }
+
+    ReturnCode_t getInheritedECOptions(coil::Properties& default_opts);
+
+    /*!
+     * @brief getting individual EC options from RTC's configuration file
+     */
+    ReturnCode_t
+    getPrivateContextOptions(std::vector<coil::Properties>& ec_args);
+
+    /*!
+     * @brief getting global EC options from rtc.conf
+     */
+    ReturnCode_t
+    getGlobalContextOptions(coil::Properties& global_ec_props);
+
+    /*!
+     * @brief getting EC options
+     */
+    ReturnCode_t
+    getContextOptions(std::vector<coil::Properties>& ec_args);
+
+    /*!
+     * @brief fiding existing EC from the factory
+     */
+    ReturnCode_t findExistingEC(coil::Properties& ec_arg,
+                                RTC::ExecutionContextBase*& ec);
+    /*!
+     * @brief creating, initializing and binding context
+     */
+    ReturnCode_t createContexts(std::vector<coil::Properties>& ec_args);
+    
     
   protected:
     /*!
