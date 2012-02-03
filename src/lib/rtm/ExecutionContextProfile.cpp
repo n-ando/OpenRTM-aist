@@ -16,6 +16,7 @@
  *
  */
 
+#include <assert.h>
 #include <rtm/ExecutionContextProfile.h>
 #include <rtm/CORBA_SeqUtil.h>
 #include <rtm/NVUtil.h>
@@ -78,6 +79,7 @@ namespace RTC_impl
   setObjRef(RTC::ExecutionContextService_ptr ec_ptr)
   {
     RTC_TRACE(("setObjRef()"));
+    assert(!CORBA::is_nil(ec_ptr));
     Guard guard(m_profileMutex);
     m_ref = RTC::ExecutionContextService::_duplicate(ec_ptr);
   }
@@ -106,7 +108,7 @@ namespace RTC_impl
    */
   RTC::ReturnCode_t ExecutionContextProfile::setRate(double rate)
   {
-    RTC_TRACE(("set_rate(%f)", rate));
+    RTC_TRACE(("setRate(%f)", rate));
     if (rate < 0.0) { return RTC::BAD_PARAMETER; }
 
     Guard guard(m_profileMutex);
@@ -114,6 +116,7 @@ namespace RTC_impl
     m_period = coil::TimeValue(1.0/rate);
     return RTC::RTC_OK;
   }
+
   RTC::ReturnCode_t ExecutionContextProfile::setPeriod(double period)
   {
     RTC_TRACE(("setPeriod(%f [sec])", period));
@@ -124,6 +127,7 @@ namespace RTC_impl
     m_period = coil::TimeValue(period);
     return RTC::RTC_OK;
   }
+
   RTC::ReturnCode_t ExecutionContextProfile::setPeriod(coil::TimeValue period)
   {
     RTC_TRACE(("setPeriod(%f [sec])", (double)period));
@@ -144,14 +148,12 @@ namespace RTC_impl
    */
   CORBA::Double ExecutionContextProfile::getRate() const
   {
-    RTC_TRACE(("get_rate()"));
     Guard guard(m_profileMutex);
     return m_profile.rate;
   }
 
   coil::TimeValue ExecutionContextProfile::getPeriod() const
   {
-    RTC_TRACE(("getPeriod()"));
     Guard guard(m_profileMutex);
     return m_period;
   }
@@ -203,6 +205,7 @@ namespace RTC_impl
    */
   RTC::ExecutionKind ExecutionContextProfile::getKind(void) const
   {
+    Guard guard(m_profileMutex);
     RTC_TRACE(("%s = getKind()", getKindString(m_profile.kind)));
     return m_profile.kind;
   }
@@ -218,19 +221,15 @@ namespace RTC_impl
   setOwner(RTC::LightweightRTObject_ptr comp)
   {
     RTC_TRACE(("setOwner()"));
-    if (CORBA::is_nil(comp))
-      {
-        RTC_ERROR(("nil reference is given."));
-        return RTC::BAD_PARAMETER;
-      }
-    RTC::RTObject_var rtobj;
-    rtobj = RTC::RTObject::_narrow(comp);
+    assert(!CORBA::is_nil(comp));
+    RTC::RTObject_var rtobj = RTC::RTObject::_narrow(comp);
     if (CORBA::is_nil(rtobj))
       {
         RTC_ERROR(("Narrowing failed."));
-        return RTC::RTC_ERROR;
+        return RTC::BAD_PARAMETER;
       }
-    m_profile.owner = RTC::RTObject::_duplicate(m_profile.owner);
+    Guard guard(m_profileMutex);
+    m_profile.owner = RTC::RTObject::_duplicate(rtobj);
     return RTC::RTC_OK;
   }
 
@@ -244,6 +243,7 @@ namespace RTC_impl
   const RTC::RTObject_ptr ExecutionContextProfile::getOwner() const
   {
     RTC_TRACE(("getOwner()"));
+    Guard guard(m_profileMutex);
     return RTC::RTObject::_duplicate(m_profile.owner);
   }
 
@@ -269,6 +269,7 @@ namespace RTC_impl
         RTC_ERROR(("Narrowing was failed."));
         return RTC::RTC_ERROR;
       }
+    Guard guard(m_profileMutex);
     CORBA_SeqUtil::push_back(m_profile.participants, rtobj._retn());
     return RTC::RTC_OK;
   }
