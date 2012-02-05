@@ -66,6 +66,8 @@ COMP_SRC =                           \
 	DataFlowComponentBase.cpp    \
 	ExecutionContextBase.cpp     \
 	ExecutionContextProfile.cpp  \
+	RTObjectStateMachine.cpp     \
+	ExecutionContextWorker.cpp   \
 	PeriodicExecutionContext.cpp \
 	ExtTrigExecutionContext.cpp  \
 	OpenHRPExecutionContext.cpp  \
