@@ -5,9 +5,8 @@
  * @date $Date: 2008-01-14 07:53:01 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
- * Copyright (C) 2006-2008
+ * Copyright (C) 2006-2008,2012
  *     Noriaki Ando
- *     Task-intelligence Research Group,
  *     Intelligent Systems Research Institute,
  *     National Institute of
  *         Advanced Industrial Science and Technology (AIST), Japan
@@ -442,11 +441,11 @@ namespace RTC_impl
     for (size_t i(0); i < len; ++i) { m_comps[i]->workerPostDo(); }
     updateComponentList();
   }
-  
+
   void ExecutionContextWorker::invokeWorkerPreDo()
   {
     RTC_PARANOID(("invokeWorkerPreDo()"));
-    Guard gurad(m_mutex);
+    // m_comps never changes its size here
     size_t len(m_comps.size());
     for (size_t i(0); i < len; ++i) { m_comps[i]->workerPreDo();  }
   }
@@ -454,7 +453,7 @@ namespace RTC_impl
   void ExecutionContextWorker::invokeWorkerDo()
   {
     RTC_PARANOID(("invokeWorkerDo()"));
-    Guard gurad(m_mutex);
+    // m_comps never changes its size here
     size_t len(m_comps.size());
     for (size_t i(0); i < len; ++i) { m_comps[i]->workerDo();     }
   }
@@ -462,11 +461,12 @@ namespace RTC_impl
   void ExecutionContextWorker::invokeWorkerPostDo()
   {
     RTC_PARANOID(("invokeWorkerPostDo()"));
-    Guard gurad(m_mutex);
+    // m_comps never changes its size here
     size_t len(m_comps.size());
     for (size_t i(0); i < len; ++i) { m_comps[i]->workerPostDo(); }
+    // m_comps might be changed here
     updateComponentList();
   }
-  
+
 }; // namespace RTC_impl
 
