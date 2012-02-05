@@ -5,7 +5,7 @@
  * @date $Date$
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
- * Copyright (C) 2011
+ * Copyright (C) 2011-2012
  *     Noriaki Ando
  *     Intelligent Systems Research Institute,
  *     National Institute of
