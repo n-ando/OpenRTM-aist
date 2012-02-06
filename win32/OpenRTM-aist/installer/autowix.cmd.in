@@ -129,15 +129,6 @@ if "x%OPENCV_RTC_ROOT%" == "x" (
 )
 set INCLUDE_OPENCV_RTC=YES
 
-@rem ============================================================
-@rem build OpenCV-RTC
-@rem ============================================================
-
-cd %OPENCV_RTC_ROOT%
-call copyprops.bat
-msbuild /M:2 /t:rebuild ImageProcessing_opencv.sln
-cd %RTM_ROOT%\installer
-
 if not exist OpenCV-RTC_inc.wxs (
    cd OpenCV-RTC
    set TMP_PYTHONPATH=%PYTHONPATH%

@@ -64,6 +64,15 @@ msbuild /M:2 /t:rebuild /p:configuration=release OpenRTM-aist_vc10.sln
 msbuild /M:2 /t:rebuild /p:configuration=debug examples\USBCamera\USBCamera_vc10.sln
 msbuild /M:2 /t:rebuild /p:configuration=release examples\USBCamera\USBCamera_vc10.sln
 
+@rem ============================================================
+@rem build OpenCV-RTC
+@rem ============================================================
+
+cd %OPENCV_RTC_ROOT%
+call copyprops.bat
+msbuild /M:2 /t:rebuild ImageProcessing_opencv.sln
+cd %RTM_ROOT%
+
 cd installer
 call autowix.cmd
 cd ..
