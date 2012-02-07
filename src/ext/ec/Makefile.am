@@ -9,4 +9,4 @@ AUTOMAKE_OPTIONS = 1.4
 
 SUBDIRS = @ARTLINUX@ @RTPREEMPTEC@
 
-DIST_SUBDIRS = artlinux rtpreempt
+DIST_SUBDIRS = artlinux rtpreempt logical_time
