@@ -17,8 +17,8 @@
  */
 
 #include <coil/Time.h>
-#include <math.h>
 #include <coil/ClockManager.h>
+#include <coil/Guard.h>
 
 namespace coil
 {
@@ -60,11 +60,13 @@ namespace coil
 
   coil::TimeValue LogicalClock::gettime() const
   {
+    coil::Guard<coil::Mutex> guard(m_currentTimeMutex);
     return m_currentTime;
   }
 
   bool LogicalClock::settime(coil::TimeValue clocktime)
   {
+    Guard<Mutex> guard(m_currentTimeMutex);
     m_currentTime = clocktime;
     return true;
   }
@@ -78,21 +80,23 @@ namespace coil
     : m_offset(0.0)
   {
   }
-  
+
   AdjustedClock::~AdjustedClock()
   {
   }
-  
+
   coil::TimeValue AdjustedClock::gettime() const
   {
+    Guard<Mutex> guard(m_offsetMutex);
     return coil::gettimeofday() - m_offset;
   }
-  
+
   bool AdjustedClock::settime(coil::TimeValue clocktime)
-    {
-      m_offset = coil::gettimeofday() - clocktime;
-      return true;
-    }
+  {
+    Guard<Mutex> guard(m_offsetMutex);
+    m_offset = coil::gettimeofday() - clocktime;
+    return true;
+  }
 
   IClock& ClockManager::getClock(std::string clocktype)
   {

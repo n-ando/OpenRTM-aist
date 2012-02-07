@@ -22,6 +22,7 @@
 #include <string>
 #include <coil/Singleton.h>
 #include <coil/TimeValue.h>
+#include <coil/Mutex.h>
 
 namespace coil
 {
@@ -113,12 +114,14 @@ namespace coil
   class LogicalClock
     : public IClock
   {
-    coil::TimeValue m_currentTime;
   public:
     LogicalClock();
     virtual ~LogicalClock();
     virtual coil::TimeValue gettime() const;
     virtual bool settime(coil::TimeValue clocktime);
+  private:
+    coil::TimeValue m_currentTime;
+    mutable coil::Mutex m_currentTimeMutex;
   };
 
   /*!
@@ -139,12 +142,14 @@ namespace coil
   class AdjustedClock
     : public IClock
   {
-    coil::TimeValue m_offset;
   public:
     AdjustedClock();
     virtual ~AdjustedClock();
     virtual coil::TimeValue gettime() const;
     virtual bool settime(coil::TimeValue clocktime);
+  private:
+    coil::TimeValue m_offset;
+    mutable coil::Mutex m_offsetMutex;
   };
 
   /*!
