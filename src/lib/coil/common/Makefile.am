@@ -5,17 +5,18 @@
 ## $Id$
 ##---------------------------------------------------------------------------
 
-COIL_COMMON_SRC =       \
+COIL_COMMON_SRC =   \
 	Allocator.cpp   \
 	PeriodicTask.cpp\
 	Properties.cpp  \
 	TimeValue.cpp   \
 	TimeMeasure.cpp \
 	Timer.cpp       \
-	crc.cpp          \
+	ClockManager.h  \
+	crc.cpp         \
 	stringutil.cpp
 
-COIL_COMMON_H   =       \
+COIL_COMMON_H   =   \
 	Allocator.h     \
 	Async.h         \
 	Listener.h      \
@@ -28,6 +29,7 @@ COIL_COMMON_H   =       \
 	PeriodicTask.h  \
 	Properties.h    \
 	Timer.h         \
+	ClockManager.h  \
 	Logger.h        \
 	Singleton.h     \
 	crc.h           \
