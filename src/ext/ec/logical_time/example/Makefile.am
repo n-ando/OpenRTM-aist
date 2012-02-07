@@ -10,6 +10,12 @@ AUTOMAKE_OPTIONS = 1.4
 AM_CPPFLAGS=-I$(top_srcdir)/src/lib -I$(top_srcdir)/src/lib/coil/include -I$(top_srcdir)/src/lib/rtm/idl
 AM_LDFLAGS=-L$(top_builddir) -L$(top_builddir)/src/lib/rtm -L$(top_builddir)/src/lib/rtm/idl
 
+all-local:
+	mkdir -p idl
+	cp -p $(top_srcdir)/src/lib/rtm/idl/SDOPackage.idl idl/
+	cp -p $(top_srcdir)/src/lib/rtm/idl/RTC.idl idl/
+	cp -p ../LogicalTimeTriggeredEC.idl idl/
+
 #------------------------------------------------------------
 # Targets
 #------------------------------------------------------------
@@ -19,7 +25,7 @@ socompdir  = $(exampledir)/rtc
 sourcedir  = $(exampledir)/src/ExtTrigger
 
 # Standalone RTCs
-example_PROGRAMS = LTTSampleComp TriggerApp
+example_PROGRAMS = LTTSampleComp
 example_DATA = rtc.conf
 
 LTTSampleComp_SOURCES = LTTSampleComp.cpp LTTSample.cpp LTTSample.h
@@ -28,13 +34,6 @@ LTTSampleComp_LDADD   = $(top_builddir)/src/lib/rtm/libRTC.la \
 	../libLogicalTimeTriggeredECSkel.la
 LTTSampleComp_LDFLAGS = -L$(top_builddir)/src/lib/rtm/.libs
 
-TriggerApp_SOURCES = TriggerApp.cpp
-TriggerApp_LDADD   =                            \
-	$(top_builddir)/src/lib/rtm/libRTC.la       \
-	$(top_builddir)/src/lib/coil/lib/libcoil.la \
-	../libLogicalTimeTriggeredECSkel.la
-TriggerApp_LDFLAGS = -L$(top_builddir)/src/lib/rtm/.libs
-
 # Example sources
 source_DATA = $(ALL_SRC) $(EXTRA_DIST)
 
@@ -42,12 +41,11 @@ source_DATA = $(ALL_SRC) $(EXTRA_DIST)
 # Extra distributed files
 #------------------------------------------------------------
 EXTRA_DIST =            \
+	TickApp.py          \
 	run.sh              \
 	rtc.conf
 
-ALL_SRC =                    \
-	$(LTTSampleComp_SOURCES) \
-	$(TriggerApp_SOURCES)
+ALL_SRC = $(LTTSampleComp_SOURCES)
 
 #------------------------------------------------------------
 # File list for deb/ports packages
