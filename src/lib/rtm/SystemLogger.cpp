@@ -50,14 +50,12 @@ namespace RTC
     coil::Properties& prop(Manager::instance().getConfig());
     if (prop.findNode("logger.date_format") != NULL)
       {
-        setDateFormat(prop["logger.date_foramt"].c_str());
+        setDateFormat(prop["logger.date_format"].c_str());
       }
     if (prop.findNode("logger.clock_type") != NULL)
       {
         setClockType(prop["logger.clock_type"]);
       }
-    m_msEnable = coil::replaceString(m_dateFormat, "%Q", "#m#");
-    m_usEnable = coil::replaceString(m_dateFormat, "%q", "#u#");
   }
 
   Logger::Logger(LogStreamBuf* streambuf)
@@ -68,8 +66,7 @@ namespace RTC
       m_clock(&coil::ClockManager::instance().getClock("system")),
       m_msEnable(0), m_usEnable(0)
   {
-    m_msEnable = coil::replaceString(m_dateFormat, "%Q", "#m#");
-    m_usEnable = coil::replaceString(m_dateFormat, "%q", "#u#");
+    setDateFormat(m_dateFormat.c_str());
   }
 
   Logger::~Logger(void)
