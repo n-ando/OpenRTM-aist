@@ -23,11 +23,11 @@
 
 // COIL
 #include <coil/Time.h>
+#include <coil/ClockManager.h>
 #include <coil/Logger.h>
 #include <coil/Mutex.h>
 #include <coil/Guard.h>
 #include <coil/stringutil.h>
-
 
 namespace RTC
 {
@@ -257,7 +257,47 @@ namespace RTC
      * @endif
      */
     void setDateFormat(const char* format);
-    
+
+    /*!
+     * @if jp
+     *
+     * @brief ログ記録時に使用するクロックを指定する
+     *
+     * ログ記録時に時刻を取得するためのクロックの種類を指定することができる。
+     * - system: システムクロック。デフォルト
+     * - logical: 論理時間クロック。
+     * - adjusted: 調整済みクロック。
+     *
+     * 論理時間クロックについては
+     * <pre>
+     * coil::ClockManager::instance().getClock("logical").settime()
+     * </pre>
+     * で時刻を設定する必要がある。
+     *
+     * @param clocktype 上述のクロックタイプ
+     *
+     * @else
+     *
+     * @brief Specifying clock type to be used for logging
+     *
+     * This function sets a clock type getting time when it is used
+     * for logging. Available clock types are,
+     * - system: System clock. Default option.
+     * - logical: Logical time clock.
+     * - adjusted: Adjusted clock.
+     *
+     * To use logical time clock, call and set time by the following
+     * function in somewhere.
+     * <pre>
+     * coil::ClockManager::instance().getClock("logical").settime()
+     * </pre>
+     *
+     * @param clocktype A clock type above mentioned
+     *
+     * @endif
+     */
+    void setClockType(std::string clocktype);
+
     /*!
      * @if jp
      *
@@ -339,6 +379,7 @@ namespace RTC
   private:
     std::string m_name;
     std::string m_dateFormat;
+    coil::IClock* m_clock;
     static const char* m_levelString[];
     int m_msEnable;
     int m_usEnable;
