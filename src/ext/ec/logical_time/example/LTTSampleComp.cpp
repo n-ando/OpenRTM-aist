@@ -24,7 +24,9 @@ void MyModuleInit(RTC::Manager* manager)
   std::cout << "Creating a component: \"LTTSample\"....";
   comp = manager->createComponent("LTTSample");
   std::cout << "succeed." << std::endl;
-
+  RTC::ExecutionContextList_var eclist = comp->get_owned_contexts();
+  eclist[0]->start();
+  eclist[0]->activate_component(RTC::RTObject::_duplicate(comp->getObjRef()));
   RTC::ComponentProfile_var prof;
   prof = comp->get_component_profile();
   std::cout << "=================================================" << std::endl;
@@ -48,37 +50,56 @@ void MyModuleInit(RTC::Manager* manager)
       PortService_ptr port;
       port = (*portlist)[i];
       std::cout << "================================================="
-		<< std::endl;
+                << std::endl;
       std::cout << "Port" << i << " (name): ";
       std::cout << port->get_port_profile()->name << std::endl;
       std::cout << "-------------------------------------------------"
-		<< std::endl;    
+                << std::endl;
       RTC::PortInterfaceProfileList iflist;
       iflist = port->get_port_profile()->interfaces;
-
       for (CORBA::ULong i(0), n(iflist.length()); i < n; ++i)
-	{
-	  std::cout << "I/F name: ";
-	  std::cout << iflist[i].instance_name << std::endl;
-	  std::cout << "I/F type: ";
-	  std::cout << iflist[i].type_name << std::endl;
-	  const char* pol;
-	  pol = iflist[i].polarity == 0 ? "PROVIDED" : "REQUIRED";
-	  std::cout << "Polarity: " << pol << std::endl;
-	}
+        {
+          std::cout << "I/F name: ";
+          std::cout << iflist[i].instance_name << std::endl;
+          std::cout << "I/F type: ";
+          std::cout << iflist[i].type_name << std::endl;
+          const char* pol;
+          pol = iflist[i].polarity == 0 ? "PROVIDED" : "REQUIRED";
+          std::cout << "Polarity: " << pol << std::endl;
+        }
       std::cout << "- properties -" << std::endl;
       NVUtil::dump(port->get_port_profile()->properties);
-      std::cout << "-------------------------------------------------" << std::endl;
+      std::cout << "-------------------------------------------------"
+                << std::endl;
     }
   return;
 }
 
 
-
 int main (int argc, char** argv)
 {
+  std::cout << "Usage:" << std::endl;
+  std::cout << argv[0] << " [--standalone]" << std::endl;
+  std::cout << std::endl;
+  std::cout << "    --standalone: send tick to the EC internally" << std::endl;
+
+  bool standalone(false);
+  for (int i(0); i < argc; ++i)
+    {
+      if (std::string("--standalone") == argv[i])
+        {
+          standalone = true;
+        }
+    }
   RTC::Manager* manager;
-  manager = RTC::Manager::init(argc, argv);
+  if (standalone)
+    {
+      manager = RTC::Manager::init(0, 0);
+    }
+  else
+    {
+      manager = RTC::Manager::init(argc, argv);
+    }
 
   // Set module initialization proceduer
   // This procedure will be invoked in activateManager() function.
@@ -89,7 +110,7 @@ int main (int argc, char** argv)
 
   // run the manager in blocking mode
   // runManager(false) is the default.
-  manager->runManager(true);
+  manager->runManager(standalone);
 
   // If you want to run the manager in non-blocking mode, do like this
   // manager->runManager(true);
@@ -118,10 +139,15 @@ int main (int argc, char** argv)
     }
   for (size_t i(0); i < 100; ++i)
     {
+      std::cout << "sending a tick (time: " << i;
+      std::cout << " [s], " << i * 1000 << " [usec])" << std::endl;
       ttlec->tick(i, i * 1000);
       CORBA::ULong sec, usec;
       ttlec->get_time(sec, usec);
-      std::cout << "time: " << sec << " [s] " << usec << " [usec]" << std::endl;
+      std::cout << "getting time   (time: " << sec;
+      std::cout << " [s], " << usec << " [usec])" << std::endl;
+      std::cout << std::endl;
+      coil::usleep(500000);
     }
   manager->shutdown();
   return 0;
