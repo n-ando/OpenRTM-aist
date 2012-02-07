@@ -9,7 +9,7 @@
 
 #include "LTTSample.h"
 #include <iostream>
-
+#include <iomanip>
 // Module specification
 // <rtc-template block="module_spec">
 static const char* consolein_spec[] =
@@ -30,8 +30,8 @@ static const char* consolein_spec[] =
 
 LTTSample::LTTSample(RTC::Manager* manager)
   : RTC::DataFlowComponentBase(manager),
+    m_clock(coil::ClockManager::instance().getClock("logical"))
     // <rtc-template block="initializer">
-    m_outOut("out", m_out)
     // </rtc-template>
 {
 }
@@ -48,7 +48,6 @@ RTC::ReturnCode_t LTTSample::onInitialize()
   // Set InPort buffers
   
   // Set OutPort buffer
-  addOutPort("out", m_outOut);
   
   // Set service provider to Ports
   
@@ -63,11 +62,9 @@ RTC::ReturnCode_t LTTSample::onInitialize()
 
 RTC::ReturnCode_t LTTSample::onExecute(RTC::UniqueId ec_id)
 {
-  std::cout << "Please input number: ";
-  std::cin >> m_out.data;
-  std::cout << "Sending to subscriber: " << m_out.data << std::endl;
-  m_outOut.write();
-
+  std::cout.setf(std::ios_base::fixed,std::ios_base::floatfield);
+  std::cout << std::setprecision(6);
+  std::cout << "Current time (in onExecute()): " << std::setw(10) << m_clock.gettime() << std::endl;
   return RTC::RTC_OK;
 }
 

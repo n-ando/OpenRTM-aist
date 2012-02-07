@@ -7,8 +7,11 @@
  * $Id: LTTSample.h 1402 2009-06-24 05:46:53Z hakuta $
  */
 
-#ifndef CONSOLEIN_H
-#define CONSOLEIN_H
+#ifndef LTTSAMPLE_H
+#define LTTSAMPLE_H
+
+#include <coil/ClockManager.h>
+#include <coil/TimeValue.h>
 
 #include <rtm/idl/BasicDataTypeSkel.h>
 #include <rtm/Manager.h>
@@ -94,9 +97,7 @@ class LTTSample
 
   // DataOutPort declaration
   // <rtc-template block="outport_declare">
-  TimedLong m_out;
-  OutPort<TimedLong> m_outOut;
-  
+
   // </rtc-template>
 
   // CORBA Port declaration
@@ -115,7 +116,7 @@ class LTTSample
   // </rtc-template>
 
  private:
-
+  coil::IClock& m_clock;
 };
 
 
@@ -124,4 +125,4 @@ extern "C"
   DLL_EXPORT void LTTSampleInit(RTC::Manager* manager);
 };
 
-#endif // CONSOLEIN_H
+#endif // LTTSAMPLE_H
