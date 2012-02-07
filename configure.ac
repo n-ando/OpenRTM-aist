@@ -1689,6 +1689,8 @@ AC_OUTPUT([Makefile
 	src/ext/ec/Makefile
 	src/ext/ec/artlinux/Makefile
 	src/ext/ec/rtpreempt/Makefile
+	src/ext/ec/logical_time/Makefile
+	src/ext/ec/logical_time/example/Makefile
 	src/ext/sdo/Makefile
 	src/ext/sdo/observer/Makefile
 	src/ext/local_service/Makefile
