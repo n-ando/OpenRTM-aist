@@ -243,7 +243,7 @@ namespace RTM
             }
           m_files.erase(it);
           boost::system::error_code error;
-          const bool result = fs::remove(filepath, error);
+          const bool result = fs::remove(filepath); // , error);
           RTC_DEBUG(("Removing file: %s", filepath.string().c_str()));
           if (!result || error)
             {
@@ -267,12 +267,12 @@ namespace RTM
      */
     bool FileNameservice::createDirectory(fs::path& directory)
     {
-      RTC_TARCE(("onUnregisterNameservice(%s)", directory.string().c_str()));
+      RTC_TRACE(("onUnregisterNameservice(%s)", directory.string().c_str()));
       if (!fs::exists(directory))
         {
           RTC_DEBUG(("Directory %s not found", directory.string().c_str()));
           boost::system::error_code error;
-          const bool result = fs::create_directories(directory, error);
+          const bool result = fs::create_directories(directory); //, error);
           RTC_DEBUG(("Creating directory: %s", directory.string().c_str()));
           if (!result || error)
             {
