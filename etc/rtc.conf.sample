@@ -350,6 +350,22 @@ logger.date_format: %b %d %H:%M:%S
 #
 logger.log_level: NORMAL
 
+#
+# Logger's clock time
+#
+# logger.clock_type option specifies a type of clock to be used for
+# timestamp of log message. Now these three types are available.
+#
+# - system: system clock [default]
+# - logical: logical clock
+# - adjusted: adjusted clock
+#
+# To use logical time clock, call and set time by the following
+# function in somewhere.
+# coil::ClockManager::instance().getClock("logical").settime()
+#
+logger.clock_type: system
+
 #============================================================
 # Timer configuration
 #============================================================

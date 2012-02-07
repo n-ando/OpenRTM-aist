@@ -1147,7 +1147,7 @@ std::vector<coil::Properties> Manager::getLoadableModules()
 
     // Set date format for log entry header
     rtclog.setDateFormat(m_config["logger.date_format"].c_str());
-    
+    rtclog.setClockType(m_config["logger.clock_type"]);
     // Loglevel was set from configuration file.
     rtclog.setLevel(m_config["logger.log_level"].c_str());
 	
@@ -1158,7 +1158,7 @@ std::vector<coil::Properties> Manager::getLoadableModules()
                  
 	
     RTC_INFO(("%s", m_config["openrtm.version"].c_str()));
-    RTC_INFO(("Copyright (C) 2003-2010"));
+    RTC_INFO(("Copyright (C) 2003-2012"));
     RTC_INFO(("  Noriaki Ando"));
     RTC_INFO(("  Intelligent Systems Research Institute, AIST"));
     RTC_INFO(("Manager starting."));
