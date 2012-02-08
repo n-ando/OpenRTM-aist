@@ -77,7 +77,7 @@ namespace RTC_impl
    */
   CORBA::Boolean ExecutionContextWorker::isRunning()
   {
-    RTC_TRACE(("is_running()"));
+    RTC_TRACE(("isRunning()"));
     return m_running;
   }
   

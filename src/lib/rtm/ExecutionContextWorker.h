@@ -345,7 +345,7 @@ namespace RTC_impl
         "ACTIVE_STATE",
         "ERROR_STATE"
       };
-      return state >= RTC::CREATED_STATE || state <= RTC::ERROR_STATE ?
+      return state >= RTC::CREATED_STATE && state <= RTC::ERROR_STATE ?
         st[state] : "";
     }
     /*!
