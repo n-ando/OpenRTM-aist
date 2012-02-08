@@ -82,15 +82,6 @@ vc8proj:
 		--source LTTSample.cpp                          \
 		--header LTTSample.h
 	qkc -sm $(win32_builddir)/LTTSampleDll_vc8.vcproj
-	$(top_builddir)/build/vcprojtool.py vcproj        \
-		--type EXE                                    \
-		--vcversion "8.00"                            \
-		--projectname "TriggerApp"                    \
-		--version $(RTM_VERSION)                      \
-		--out $(win32_builddir)/TriggerApp_vc8.vcproj \
-		--yaml ../rtc.vcproj.yaml                     \
-		--source TriggerApp.cpp
-	qkc -sm $(win32_builddir)/TriggerApp_vc8.vcproj
 
 vc9proj:
 	$(top_builddir)/build/vcprojtool.py vcproj       \
@@ -113,15 +104,6 @@ vc9proj:
 		--source LTTSample.cpp                          \
 		--header LTTSample.h
 	qkc -sm $(win32_builddir)/LTTSampleDll_vc9.vcproj
-	$(top_builddir)/build/vcprojtool.py vcproj        \
-		--type EXE                                    \
-		--vcversion "9.00"                            \
-		--projectname "TriggerAppComp"                \
-		--version $(RTM_VERSION)                      \
-		--out $(win32_builddir)/TriggerApp_vc9.vcproj \
-		--yaml ../rtc.vcproj.yaml                     \
-		--source TriggerApp.cpp
-	qkc -sm $(win32_builddir)/TriggerApp_vc9.vcproj
 
 vc10proj:
 	$(top_builddir)/build/vcxprojtool.py vcxproj       \
@@ -144,20 +126,11 @@ vc10proj:
 		--source LTTSample.cpp                            \
 		--header LTTSample.h
 	qkc -sm $(win32_builddir)/LTTSampleDll_vc10.vcxproj
-	$(top_builddir)/build/vcxprojtool.py vcxproj        \
-		--type EXE                                      \
-		--vcversion "10.00"                             \
-		--projectname "TriggerAppComp"                  \
-		--version $(RTM_VERSION)                        \
-		--out $(win32_builddir)/TriggerApp_vc10.vcxproj \
-		--yaml ../rtc.vcxproj.yaml                      \
-		--source TriggerApp.cpp
-	qkc -sm $(win32_builddir)/TriggerApp_vc10.vcxproj
 
 dist-hook: lst
 
 clean-local:
-	rm -f \
-	*.bak *.rpo *.sym lib*.*_pure_* *.lst \
-	Makefile.old *core *~ *.so *.log
+	rm -f *.bak *.rpo *.sym lib*.*_pure_* *.lst
+	rm -f Makefile.old *core *~ *.so *.log
 	rm -f $(example_PROGRAMS)
+	rm -rf idl

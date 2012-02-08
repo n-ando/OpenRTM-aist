@@ -1,19 +1,45 @@
 #!/usr/bin/env python
+# -*- coding: euc-jp -*- 
+##
+# @file TickApp.py
+# @brief Example application for LogicalTimeTriggeredEC
+# @date$
+# @author Noriaki Ando <n-ando@aist.go.jp>
+#
+# Copyright (C) 2012
+#     Noriaki Ando
+#     Intelligent Systems Research Institute,
+#     National Institute of
+#         Advanced Industrial Science and Technology (AIST), Japan
+#     All rights reserved.
+#
+# Usage:
+# $ python TickApp.py
+#
+# This python script
+# - Launches LTTSampleComp component,
+# - Gets its object reference from LTTSample.rtc file in the current directory,
+# - Obtains EC from RTC
+# - When tick button is pushed, tick() operation of the EC is called
+# - And then call gettime() operation of the EC is called
+# - print current time
+# - When X button is pushed, tryp to terminate LTTSampleComp
+# - And kill all the process LTTSampleComp (and lt-LTTSampleComp)
+#
+# Requirement:
+# - LogicalTimeTriggeredEC.so as EC
+# - FileNameservice.so as local service
+# - SDOPackage.idl, RTC.idl and LogicalTimeTriggeredEC.idl in idl dir
+#
+# See details in rtc.conf
+#
 
 import Tkinter as Tk
 
-class SendTick:
-    def __init__(self):
-        pass
-
-def hoge():
-    print "hoge"
-    
 class Frame(Tk.Frame):
     def __init__(self, master = None):
         self.lttsample = LTTSample()
         self.time = 0.0
-#        self.protocol("WM_DELETE_WINDOW", self.closeEvent)
         Tk.Frame.__init__(self, master)
         self.master.title('Tick Application')
 
@@ -93,8 +119,8 @@ class Frame(Tk.Frame):
         import time
         time.sleep(1.0)
         import os
-        os.system("killall LTTSampleComp")
-        os.system("killall lt-LTTSampleComp")
+        os.popen("killall -q LTTSampleComp")
+        os.popen("killall -q lt-LTTSampleComp")
 
 import CORBA
 
@@ -106,11 +132,21 @@ class LTTSample:
         except:
             print "LTTSample0.rtc not found"
             import os
-            import time
-            print "Launching LTTSampleComp..."
+            import time, sys
+            write = sys.stdout.write
+            write("Launching LTTSampleComp...")
+            sys.stdout.flush()
             os.system("./LTTSampleComp&")
-            time.sleep(1.0)
-            self.ior = open("LTTSample0.rtc").read()
+            while True:
+                try:
+                    self.ior = open("LTTSample0.rtc").read()
+                    break;
+                except:
+                    write(".")
+                    sys.stdout.flush()
+                    time.sleep(0.01)
+                    pass
+            print "done"
         obj = self.orb.string_to_object(self.ior)
         if CORBA.is_nil(obj):
             print "Object in LTTSample0.rtc is nil. Restarting LTTSampleComp..."
@@ -126,7 +162,8 @@ class LTTSample:
 
         self.sdo_idl = omniORB.importIDL("idl/SDOPackage.idl")
         self.rtc_idl = omniORB.importIDL("idl/RTC.idl", ["-Iidl"])
-        self.ltt_idl = omniORB.importIDL("idl/LogicalTimeTriggeredEC.idl", ["-Iidl"])
+        self.ltt_idl = omniORB.importIDL("idl/LogicalTimeTriggeredEC.idl",
+                                         ["-Iidl"])
 
         RTC = sys.modules["RTC"]
         OpenRTM = sys.modules["OpenRTM"]
@@ -145,7 +182,20 @@ class LTTSample:
         cxts = self.rtobj.get_owned_contexts()
         self.lttcxt = cxts[0]._narrow(OpenRTM.LogicalTimeTriggeredEC)
         profile = self.lttcxt.get_profile()
-        print profile
+        p = {}
+        p["kind"] = profile.kind
+        p["rate"] = profile.rate
+        p["owner"] = profile.owner
+        from omniORB import any
+        for prop in profile.properties:
+            p[prop.name] = any.from_any(prop.value)
+        print "ExecutionContext:"
+        print "      type:", p.pop("type")
+        print "      name:", p.pop("name")
+        print "      kind:", p.pop("kind")
+        print "      rate:", p.pop("rate")
+        print "     owner:", p.pop("owner")
+        print "properties:", p
 
     def tick(self, ticktime):
         sec = int(ticktime)
@@ -157,11 +207,20 @@ class LTTSample:
 
     def shutdown(self):
         self.rtobj.exit()
-
+        import time, sys
+        write = sys.stdout.write
+        write("Waiting RTC termination.")
+        try:
+            while True:
+                self.rtobj._non_existent()
+                write(".")
+                sys.stdout.flush()
+                time.sleep(0.01)
+        except:
+            pass
+        print "done"
 
 if __name__ == '__main__':
-#    root = Tk.Tk()
-#    root.protocol("WM_DELETE_WINDOW", on_close(root))
     f = Frame()
     f.pack()
     f.mainloop()
