@@ -170,7 +170,7 @@ namespace RTC
    */
   RTC::ReturnCode_t ExecutionContextBase::stop()
   {
-    RTC_TRACE(("start()"));
+    RTC_TRACE(("stop()"));
     RTC::ReturnCode_t ret = onStopping(); // Template
     if (ret != RTC::RTC_OK)
       {
