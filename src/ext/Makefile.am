@@ -7,6 +7,6 @@
 
 AUTOMAKE_OPTIONS = 1.4
 
-SUBDIRS = ec sdo
+SUBDIRS = local_service ec sdo 
 
 
