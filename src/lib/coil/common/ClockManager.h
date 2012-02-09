@@ -28,14 +28,14 @@ namespace coil
 {
   /*!
    * @if jp
-   * @class ОЮНПР▌ТшБEОцУ╛ГIГuГWГFГNГgВ╠ГCГУГ^Б[ГtГFБ[ГX
+   * @class ╗■╣я└▀─ъбж╝ш╞└еке╓е╕езепе╚д╬едеєе┐б╝е╒езб╝е╣
    *
-   * В▒В╠ГNГЙГXВ═ ClockManager В╔ВцВ┴В─К╟ЧЭВ│ВъВщГNГНГbГNГIГuГWГFГNГgВ╠
-   * В╜В▀В╠ГCГУГ^Б[ГtГFБ[ГXВ┼ВаВщБBClockManager В═ХбРФВ╠ГNГНГbГNГIГuГWГF
-   * ГNГgВЁК╟ЧЭВ╡БAХKЧvВ╔ЙЮВ╢В─УKР╪В╚ГNГНГbГNГIГuГWГFГNГgВЁ IClock ГCГУ
-   * Г^Б[ГtГFБ[ГXВЁВрВ┬ГIГuГWГFГNГgВ╞В╡В─Х╘В╖БBГNГНГbГNГIГuГWГFГNГgВ═ТP
-   * В╔ГVГXГeГАОЮНПВЁХ╘В╖ВрВ╠ВтБAУ╞ОйВ╠Ш_ЧЭОЮНПВЁОЭВ┬ГNГНГbГNГIГuГWГFГN
-   * ГgУЩВкНlВжВчВъВщБB
+   * д│д╬епеще╣д╧ ClockManager д╦дшд├д╞┤╔═¤д╡дьдыепеэе├епеке╓е╕езепе╚д╬
+   * д┐дсд╬едеєе┐б╝е╒езб╝е╣д╟двдыбгClockManager д╧╩г┐Їд╬епеэе├епеке╓е╕ез
+   * епе╚дЄ┤╔═¤д╖бв╔м═╫д╦▒■д╕д╞┼м└┌д╩епеэе├епеке╓е╕езепе╚дЄ IClock едеє
+   * е┐б╝е╒езб╝е╣дЄдтд─еке╓е╕езепе╚д╚д╖д╞╩╓д╣бгепеэе├епеке╓е╕езепе╚д╧├▒
+   * д╦е╖е╣е╞ер╗■╣ядЄ╩╓д╣дтд╬дфбв╞╚╝лд╬╧└═¤╗■╣ядЄ╗¤д─епеэе├епеке╓е╕езеп
+   * е╚┼∙дм╣═дидщдьдыбг
    *
    * @else
    * @brief An interface to set and get time
@@ -54,8 +54,8 @@ namespace coil
     virtual ~IClock() {}
     /*!
      * @if jp
-     * @brief ОЮНПВЁОцУ╛В╖Вщ
-     * @return М╗Н▌В╠ОЮНП
+     * @brief ╗■╣ядЄ╝ш╞└д╣ды
+     * @return ╕╜║▀д╬╗■╣я
      * @else
      * @brief Getting time
      * @return Current time
@@ -64,8 +64,8 @@ namespace coil
     virtual coil::TimeValue gettime() const = 0;
     /*!
      * @if jp
-     * @brief ОЮНПВЁР▌ТшВ╖Вщ
-     * @param clocktime М╗Н▌В╠ОЮНП
+     * @brief ╗■╣ядЄ└▀─ъд╣ды
+     * @param clocktime ╕╜║▀д╬╗■╣я
      * @else
      * @brief Setting time
      * @param clocktime Current time
@@ -76,9 +76,9 @@ namespace coil
 
   /*!
    * @if jp
-   * @class ГVГXГeГАОЮНПВЁИ╡ВдГNГНГbГNГIГuГWГFГNГg
+   * @class е╖е╣е╞ер╗■╣ядЄ░╖джепеэе├епеке╓е╕езепе╚
    *
-   * В▒В╠ГNГЙГXВ═ГVГXГeГАГNГНГbГNВЁР▌ТшВ▄В╜В═ОцУ╛В╖ВщГNГЙГXВ┼ВаВщБB
+   * д│д╬епеще╣д╧е╖е╣е╞ерепеэе├епдЄ└▀─ъд▐д┐д╧╝ш╞└д╣дыепеще╣д╟двдыбг
    *
    * @else
    * @brief clock object to handle system clock
@@ -98,10 +98,10 @@ namespace coil
 
   /*!
    * @if jp
-   * @class Ш_ЧЭОЮК╘ВЁИ╡ВдГNГНГbГNГIГuГWГFГNГg
+   * @class ╧└═¤╗■┤╓дЄ░╖джепеэе├епеке╓е╕езепе╚
    *
-   * В▒В╠ГNГЙГXВ═Ш_ЧЭОЮК╘ВЁР▌ТшВ▄В╜В═ОцУ╛В╖ВщГNГЙГXВ┼ВаВщБB
-   * ТPПГВ╔ settime() В╔ВцВ┴В─Р▌ТшВ│ВъВ╜ОЮНПВЁ gettime() В╔ВцВ┴В─ОцУ╛В╖ВщВ╖БB
+   * д│д╬епеще╣д╧╧└═¤╗■┤╓дЄ└▀─ъд▐д┐д╧╝ш╞└д╣дыепеще╣д╟двдыбг
+   * ├▒╜уд╦ settime() д╦дшд├д╞└▀─ъд╡дьд┐╗■╣ядЄ gettime() д╦дшд├д╞╝ш╞└д╣дыд╣бг
    *
    * @else
    * @brief Clock object to handle logical clock
@@ -126,10 +126,10 @@ namespace coil
 
   /*!
    * @if jp
-   * @class Т▓РоН╧В▌ОЮНПВЁИ╡ВдГNГНГbГNГIГuГWГFГNГg
+   * @class ─┤└░║╤д▀╗■╣ядЄ░╖джепеэе├епеке╓е╕езепе╚
    *
-   * settime() М─В╤ПoВ╡ОЮВ╔М╗Н▌ОЮНПВ╞В╠Н╖ВЁГIГtГZГbГgВ╞В╡В─Х█ОЭВ╡БA
-   * gettime() В╔ВцВ┴В─ГIГtГZГbГgТ▓РоН╧В▌В╠ОЮНПВЁХ╘В╖БB
+   * settime() ╕╞д╙╜╨д╖╗■д╦╕╜║▀╗■╣яд╚д╬║╣дЄеке╒е╗е├е╚д╚д╖д╞╩▌╗¤д╖бв
+   * gettime() д╦дшд├д╞еке╒е╗е├е╚─┤└░║╤д▀д╬╗■╣ядЄ╩╓д╣бг
    *
    * @else
    * @brief Clock object to handle adjusted clock
@@ -154,12 +154,12 @@ namespace coil
 
   /*!
    * @if jp
-   * @class ГOГНБ[ГoГЛВ╚ГNГНГbГNК╟ЧЭГNГЙГXБB
+   * @class е░еэб╝е╨еыд╩епеэе├еп┤╔═¤епеще╣бг
    *
-   * В▒В╠ГNГЙГXВ═ГOГНБ[ГoГЛВ╔ГNГНГbГNГIГuГWГFГNГgВЁТёЛЯВ╖ВщГVГУГOГЛГgГУ
-   * ГNГЙГXВ┼ВаВщБBgetClocK(ГNГНГbГNЦ╝) В╔ВцВш IClock М^В╠ГNГНГbГNГIГu
-   * ГWГFГNГgВЁХ╘В╖БBЧШЧpЙ┬Ф\В╚ГNГНГbГNВ═ "system", "logical" ВиВцВ╤
-   * "adjusted" В╠ВRОэЧ▐В┼ВаВщБB
+   * д│д╬епеще╣д╧е░еэб╝е╨еыд╦епеэе├епеке╓е╕езепе╚дЄ─є╢бд╣дые╖еєе░еые╚еє
+   * епеще╣д╟двдыбгgetClocK(епеэе├еп╠╛) д╦дшдъ IClock ╖┐д╬епеэе├епеке╓
+   * е╕езепе╚дЄ╩╓д╣бг═°═╤▓─╟╜д╩епеэе├епд╧ "system", "logical" дкдшд╙
+   * "adjusted" д╬г│╝я╬рд╟двдыбг
    *
    * @else
    * @brief A global clock management class
