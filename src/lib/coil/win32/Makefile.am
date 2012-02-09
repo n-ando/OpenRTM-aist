@@ -11,11 +11,13 @@ clean-local:
 	rm -f *~
 	rm -f *.sln *.ncb *.suo
 
-EXTRA_DIST =                   \
+EXTRA_DIST =               \
 	coil                   \
 	coil.sln.dep           \
 	coil_config.vsprops    \
+	coil_config.props      \
 	coil_distbuild.vsprops \
+	coil_distbuild.props   \
 	coil_vc8.sln           \
 	coil_vc9.sln           \
 	coil_vc10.sln
