@@ -180,11 +180,11 @@ namespace RTC
   {
     SDOPackage::ServiceProfileList_var prof
       = new SDOPackage::ServiceProfileList();
-    SDOPackage::ServiceProfileList prof2;
     Guard guard(m_provider_mutex);
+    prof->length(m_providers.size());
     for (size_t i(0); i < m_providers.size(); ++i)
       {
-        CORBA_SeqUtil::push_back(prof2, m_providers[i]->getProfile());
+        prof[i] = m_providers[i]->getProfile();
       }
     return prof._retn();
   }

@@ -31,7 +31,7 @@
  * CORBA sequence に対して以下のユーティリティテンプレート関数を提供する。
  * 操作はスレッドセーフではないので、スレッドセーフに操作したい場合は、
  * 対象となるシーケンス値を適切にmutex等で保護する必要がある。
- * 
+ *
  * - for_each()
  * - find()
  * - push_back()
@@ -51,7 +51,7 @@
  * Since these functions are not thread-safe operations,
  * if the sequence would be operated in thread-safe,
  * the value should be protected by mutex properly.
- * 
+ *
  * - for_each()
  * - find()
  * - push_back()
@@ -101,11 +101,11 @@ namespace CORBA_SeqUtil
     len = seq.length();
     for (CORBA::ULong i = 0; i < len; ++i)
       {
-	f(seq[i]);
+        f(seq[i]);
       }
     return f;
   }
-  
+
   /*!
    * @if jp
    * @brief CORBA sequence の中から functor に適合する要素のインデックスを返す
@@ -123,7 +123,7 @@ namespace CORBA_SeqUtil
    *
    * @else
    *
-   * @brief Return the index of CORBA sequence element that functor matches 
+   * @brief Return the index of CORBA sequence element that functor matches
    *
    * This operation applies the given functor to the given CORBA sequence,
    * and returns the index of the sequence element that the functor matches.
@@ -144,11 +144,11 @@ namespace CORBA_SeqUtil
     CORBA::ULong len(seq.length());
     for (CORBA::ULong i = 0; i < len; ++i)
       {
-	if (f(seq[i])) return (CORBA::Long)i;
+        if (f(seq[i])) { return (CORBA::Long)i; }
       }
     return -1;
   }
-  
+
   /*!
    * @if jp
    * @brief CORBA sequence の最後に要素を追加する
@@ -178,7 +178,7 @@ namespace CORBA_SeqUtil
     seq.length(len + 1);
     seq[len] = elem;
   }
-  
+
   /*!
    * @if jp
    * @brief CORBA sequence をマージする
@@ -206,13 +206,13 @@ namespace CORBA_SeqUtil
     CORBA::ULong len2(seq2.length());
     CORBA::ULong len(len1 + len2);
     seq1.length(len);
-    
+
     for (CORBA::ULong i = 0; i < len2; ++i)
       {
-	seq1[len1 + i] = seq2[i];
+        seq1[len1 + i] = seq2[i];
       }
   }
-  
+
   /*!
    * @if jp
    * @brief CORBA sequence に要素を挿入する
@@ -247,18 +247,18 @@ namespace CORBA_SeqUtil
     CORBA::ULong len(seq.length());
     if (index > len)
       {
-	push_back(seq, elem);
-	return;
+        push_back(seq, elem);
+        return;
       }
-    
+
     seq.length(len + 1);
     for (CORBA::ULong i = len; i > index; --i)
       {
-	seq[i] = seq[i - 1];
+        seq[i] = seq[i - 1];
       }
     seq[index] = elem;
   }
-  
+
   /*!
    * @if jp
    * @brief CORBA sequence の先頭要素を取得する
@@ -289,7 +289,7 @@ namespace CORBA_SeqUtil
   {
     return seq[0];
   }
-  
+
   /*!
    * @if jp
    * @brief CORBA sequence の末尾要素を取得する
@@ -312,13 +312,13 @@ namespace CORBA_SeqUtil
    * @return An acquisition element
    *
    * @endif
-   */	
+   */
   template <class CorbaSequence, class SequenceElement>
   SequenceElement& back(CorbaSequence& seq)
   {
     return seq[seq.length() - 1];
   }
-  
+
   /*!
    * @if jp
    * @brief CORBA sequence の指定された位置の要素を削除する
@@ -346,14 +346,14 @@ namespace CORBA_SeqUtil
   {
     CORBA::ULong len(seq.length());
     if (index > len) return;
-    
+
     for (CORBA::ULong i = index; i < len - 1; ++i)
       {
-	seq[i] = seq[i + 1];
+        seq[i] = seq[i + 1];
       }
     seq.length(len - 1);
   }
-  
+
   /*!
    * @if jp
    *
@@ -369,7 +369,7 @@ namespace CORBA_SeqUtil
    *
    * @brief Remove an element of a sequence according to a predicate
    *
-   * This operation removes the element from sequence when a condition of 
+   * This operation removes the element from sequence when a condition of
    * a function object given as a predicate is True.
    *
    * @param seq target CORBA sequence
@@ -385,11 +385,11 @@ namespace CORBA_SeqUtil
     if (index < 0) return;
     CORBA_SeqUtil::erase(seq, index);
   }
-  
+
   /*!
    * @if jp
    * @brief CORBA sequence の全要素を削除
-   *   
+   *
    * CORBA sequence の全要素を削除する。
    * seq.length(0) と同じ。
    *
