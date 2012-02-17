@@ -24,6 +24,7 @@ Options:
         [--version]
         [--cxx]
         [--cflags]
+        [--cflags-only-I]
         [--libs]
         [--libdir]
         [--orb]
@@ -70,12 +71,15 @@ while test $# -gt 0; do
     --cflags)
       echo_cflags=yes
       ;;
+    --cflags-only-I)
+      echo_cflags_i=yes
+      ;;
     --libs)
       echo_libs=yes
       ;;
     --libdir)
       echo_libdir=yes
-	  ;;
+      ;;
     --orb)
       echo_orb=yes
       ;;
@@ -106,6 +110,10 @@ fi
 
 if test "$echo_cflags" = "yes"; then
       echo $rtm_cflags
+fi
+
+if test "$echo_cflags_i" = "yes"; then
+      echo $rtm_cflags_i
 fi
 
 if test "$echo_libs" = "yes"; then
