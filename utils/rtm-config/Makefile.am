@@ -21,22 +21,8 @@ pkgconfig_DATA = openrtm-aist.pc
 
 bin_SCRIPTS = rtm-config
 
-rtm-config: rtm-config.in
-	echo '#!/bin/sh' > $@
-	echo '' >> $@
-	echo 'rtm_prefix="'${prefix}'"' >> $@
-	echo 'rtm_exec_prefix="'${exec_prefix}'"' >> $@
-	echo 'rtm_cxx="'${CXX}'"' >> $@
-	echo 'rtm_cflags="'${CXXFLAGS}' -I'${prefix}'/include -I'${coil_includedir}' -I'${rtm_includedir}' -I'${rtm_includedir}'/rtm/idl"' >> $@
-	echo 'rtm_cflags_i="-I'${prefix}'/include -I'${coil_includedir}' -I'${rtm_includedir}' -I'${rtm_includedir}'/rtm/idl"' >> $@
-	echo 'rtm_libs="'${LDFLAGS}' -L'${prefix}'/lib '${LIBS}' -lRTC -lcoil"' >> $@
-	echo 'rtm_libdir="'${rtm_libdir}'"' >> $@
-	echo 'rtm_version="'${RTM_VERSION}'"' >> $@
-	echo 'rtm_orb="'${ORB}'"' >> $@
-	echo 'rtm_idlc="'${IDLC}'"' >> $@
-	echo 'rtm_idlflags="'${IDLFLAGS}'"' >> $@
-	cat rtm-config.in >> $@
-	chmod 755 $@
+all-local:
+	chmod 755 rtm-config
 
 EXTRA_DIST = \
 	rtm-config.in \
