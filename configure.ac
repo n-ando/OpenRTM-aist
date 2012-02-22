@@ -38,7 +38,7 @@ dnl ------------------------------------------------------------
 dnl rename config header's PACKAGE_* definition
 dnl ------------------------------------------------------------
 mv src/lib/rtm/config_rtc.h.in src/lib/rtm/config_rtc.h.in.org
-sed -e 's/undef PACKAGE/undef RTM_PACKAGE/g' src/lib/rtm/config_rtc.h.in.org | sed -e 's/\#define VERSION .*//g' > src/lib/rtm/config_rtc.h.in
+sed -e 's/undef PACKAGE/undef RTM_PACKAGE/g' src/lib/rtm/config_rtc.h.in.org | sed -e 's/\#undef VERSION.*//g' > src/lib/rtm/config_rtc.h.in
 rm -f src/lib/rtm/config_rtc.h.in.org
 
 AC_CONFIG_SUBDIRS([src/lib/coil])
