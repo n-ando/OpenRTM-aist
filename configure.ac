@@ -23,6 +23,7 @@ AC_CONFIG_AUX_DIR([.])
 AM_INIT_AUTOMAKE([dist-bzip2 tar-pax])
 AM_CONFIG_HEADER([src/lib/rtm/config_rtc.h])
 AC_CONFIG_FILES([utils/rtm-config/openrtm-aist.pc:utils/rtm-config/openrtm-aist.pc.in])
+AC_CONFIG_FILES([utils/rtm-config/rtm-config:utils/rtm-config/rtm-config.in])
 
 dnl ------------------------------------------------------------
 dnl rename config header's PACKAGE_* definition
@@ -1384,6 +1385,36 @@ dnl ARTLinux lib
 AC_SUBST(ARTLINUX)
 AC_SUBST(ARTLIB)
 AC_SUBST(UNITTEST)
+
+dnl OpenRTM's includedir/libdir/datadir definition
+rtm_includedir=$includedir
+rtm_idldir=$rtm_includedir"/rtm/idl"
+rtm_libdir=$libdir"/OpenRTM-aist"
+rtm_datadir=$datadir"/OpenRTM-aist"
+coil_includedir=$includedir
+
+dnl under lib/openrtm-x.y directories
+rtm_rtcdir=$rtm_libdir"/rtc"
+rtm_ecdir=$rtm_libdir"/ec"
+rtm_rtmdir=$rtm_libdir"/rtm"
+rtm_svcdir=$rtm_libdir"/svc"
+rtm_sdodir=$rtm_libdir"/sdo"
+rtm_docdir=$rtm_datadir"/doc"
+rtm_exampledir=$rtm_datadir"/example"
+
+AC_SUBST(rtm_libdir)
+AC_SUBST(rtm_datadir)
+AC_SUBST(rtm_includedir)
+AC_SUBST(rtm_idldir)
+AC_SUBST(coil_includedir)
+AC_SUBST(rtm_rtcdir)
+AC_SUBST(rtm_ecdir)
+AC_SUBST(rtm_rtmdir)
+AC_SUBST(rtm_svcdir)
+AC_SUBST(rtm_sdodir)
+AC_SUBST(rtm_docdir)
+AC_SUBST(rtm_exampledir)
+
 dnl ------------------------------------------------------------
 
 UNIQUE($CPPFLAGS)
