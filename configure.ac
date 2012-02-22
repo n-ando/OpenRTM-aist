@@ -28,6 +28,8 @@ dnl Config files created at configure
 dnl ------------------------------------------------------------
 dnl pkgconfig pc file
 AC_CONFIG_FILES([utils/rtm-config/openrtm-aist.pc:utils/rtm-config/openrtm-aist.pc.in])
+AC_CONFIG_FILES([utils/rtm-config/rtm-config:utils/rtm-config/rtm-config.in])
+
 dnl RPM package spec file and build script
 dnl AC_CONFIG_FILES([packages/rpm/OpenRTM-aist.spec:packages/rpm/OpenRTM-aist.spec.in])
 dnl AC_CONFIG_FILES([packages/rpm/rpm_build.sh:packages/rpm/rpm_build.sh.in])
@@ -1544,6 +1546,7 @@ AC_SUBST(RTPREEMPTEC)
 
 dnl OpenRTM's includedir/libdir/datadir definition
 rtm_includedir=$includedir"/openrtm-"$major_version"."$minor_version
+rtm_idldir=$rtm_includedir"/rtm/idl"
 rtm_libdir=$libdir"/openrtm-"$major_version"."$minor_version
 rtm_datadir=$datadir"/openrtm-"$major_version"."$minor_version
 coil_includedir=$includedir"/coil-"$major_version"."$minor_version
@@ -1560,6 +1563,7 @@ rtm_exampledir=$rtm_datadir"/example"
 AC_SUBST(rtm_libdir)
 AC_SUBST(rtm_datadir)
 AC_SUBST(rtm_includedir)
+AC_SUBST(rtm_idldir)
 AC_SUBST(coil_includedir)
 AC_SUBST(rtm_rtcdir)
 AC_SUBST(rtm_ecdir)
