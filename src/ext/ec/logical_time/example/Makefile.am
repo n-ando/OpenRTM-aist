@@ -57,77 +57,77 @@ ALL_SRC = $(LTTSampleComp_SOURCES)
 #------------------------------------------------------------
 # Visual Studio Project
 #------------------------------------------------------------
-win32_builddir=$(top_builddir)/win32/OpenRTM-aist/examples/LTTSample
+#win32_builddir=$(top_builddir)/win32/OpenRTM-aist/examples/LTTSample
 
-vcproj: vc8proj vc9proj vc10proj
+#vcproj: vc8proj vc9proj vc10proj
 
-vc8proj: 
-	$(top_builddir)/build/vcprojtool.py vcproj       \
-		--type EXE                                   \
-		--vcversion "8.00"                           \
-		--projectname "LTTSampleComp"                \
-		--version $(RTM_VERSION)                     \
-		--out $(win32_builddir)/LTTSample_vc8.vcproj \
-		--yaml ../rtc.vcproj.yaml                    \
-		--source LTTSample.cpp LTTSampleComp.cpp     \
-		--header LTTSample.h
-	qkc -sm $(win32_builddir)/LTTSample_vc8.vcproj
-	$(top_builddir)/build/vcprojtool.py vcproj          \
-		--type DLL                                      \
-		--vcversion "8.00"                              \
-		--projectname "LTTSample"                       \
-		--version $(RTM_VERSION)                        \
-		--out $(win32_builddir)/LTTSampleDll_vc8.vcproj \
-		--yaml ../rtcdll.vcproj.yaml                    \
-		--source LTTSample.cpp                          \
-		--header LTTSample.h
-	qkc -sm $(win32_builddir)/LTTSampleDll_vc8.vcproj
+#vc8proj: 
+#	$(top_builddir)/build/vcprojtool.py vcproj       \
+#		--type EXE                                   \
+#		--vcversion "8.00"                           \
+#		--projectname "LTTSampleComp"                \
+#		--version $(RTM_VERSION)                     \
+#		--out $(win32_builddir)/LTTSample_vc8.vcproj \
+#		--yaml ../rtc.vcproj.yaml                    \
+#		--source LTTSample.cpp LTTSampleComp.cpp     \
+#		--header LTTSample.h
+#	qkc -sm $(win32_builddir)/LTTSample_vc8.vcproj
+#	$(top_builddir)/build/vcprojtool.py vcproj          \
+#		--type DLL                                      \
+#		--vcversion "8.00"                              \
+#		--projectname "LTTSample"                       \
+#		--version $(RTM_VERSION)                        \
+#		--out $(win32_builddir)/LTTSampleDll_vc8.vcproj \
+#		--yaml ../rtcdll.vcproj.yaml                    \
+#		--source LTTSample.cpp                          \
+#		--header LTTSample.h
+#	qkc -sm $(win32_builddir)/LTTSampleDll_vc8.vcproj
+#
+#vc9proj:
+#	$(top_builddir)/build/vcprojtool.py vcproj       \
+#		--type EXE                                   \
+#		--vcversion "9.00"                           \
+#		--projectname "LTTSampleComp"                \
+#		--version $(RTM_VERSION)                     \
+#		--out $(win32_builddir)/LTTSample_vc9.vcproj \
+#		--yaml ../rtc.vcproj.yaml                    \
+#		--source LTTSample.cpp LTTSampleComp.cpp     \
+#		--header LTTSample.h
+#	qkc -sm $(win32_builddir)/LTTSample_vc9.vcproj
+#	$(top_builddir)/build/vcprojtool.py vcproj          \
+#		--type DLL                                      \
+#		--vcversion "9.00"                              \
+#		--projectname "LTTSample"                       \
+#		--version $(RTM_VERSION)                        \
+#		--out $(win32_builddir)/LTTSampleDll_vc9.vcproj \
+#		--yaml ../rtcdll.vcproj.yaml                    \
+#		--source LTTSample.cpp                          \
+#		--header LTTSample.h
+#	qkc -sm $(win32_builddir)/LTTSampleDll_vc9.vcproj
+#
+#vc10proj:
+#	$(top_builddir)/build/vcxprojtool.py vcxproj       \
+#		--type EXE                                     \
+#		--vcversion "10.00"                            \
+#		--projectname "LTTSampleComp"                  \
+#		--version $(RTM_VERSION)                       \
+#		--out $(win32_builddir)/LTTSample_vc10.vcxproj \
+#		--yaml ../rtc.vcxproj.yaml                     \
+#		--source LTTSample.cpp LTTSampleComp.cpp       \
+#		--header LTTSample.h
+#	qkc -sm $(win32_builddir)/LTTSample_vc10.vcxproj
+#	$(top_builddir)/build/vcxprojtool.py vcxproj          \
+#		--type DLL                                        \
+#		--vcversion "10.00"                               \
+#		--projectname "LTTSample"                         \
+#		--version $(RTM_VERSION)                          \
+#		--out $(win32_builddir)/LTTSampleDll_vc10.vcxproj \
+#		--yaml ../rtcdll.vcxproj.yaml                     \
+#		--source LTTSample.cpp                            \
+#		--header LTTSample.h
+#	qkc -sm $(win32_builddir)/LTTSampleDll_vc10.vcxproj
 
-vc9proj:
-	$(top_builddir)/build/vcprojtool.py vcproj       \
-		--type EXE                                   \
-		--vcversion "9.00"                           \
-		--projectname "LTTSampleComp"                \
-		--version $(RTM_VERSION)                     \
-		--out $(win32_builddir)/LTTSample_vc9.vcproj \
-		--yaml ../rtc.vcproj.yaml                    \
-		--source LTTSample.cpp LTTSampleComp.cpp     \
-		--header LTTSample.h
-	qkc -sm $(win32_builddir)/LTTSample_vc9.vcproj
-	$(top_builddir)/build/vcprojtool.py vcproj          \
-		--type DLL                                      \
-		--vcversion "9.00"                              \
-		--projectname "LTTSample"                       \
-		--version $(RTM_VERSION)                        \
-		--out $(win32_builddir)/LTTSampleDll_vc9.vcproj \
-		--yaml ../rtcdll.vcproj.yaml                    \
-		--source LTTSample.cpp                          \
-		--header LTTSample.h
-	qkc -sm $(win32_builddir)/LTTSampleDll_vc9.vcproj
-
-vc10proj:
-	$(top_builddir)/build/vcxprojtool.py vcxproj       \
-		--type EXE                                     \
-		--vcversion "10.00"                            \
-		--projectname "LTTSampleComp"                  \
-		--version $(RTM_VERSION)                       \
-		--out $(win32_builddir)/LTTSample_vc10.vcxproj \
-		--yaml ../rtc.vcxproj.yaml                     \
-		--source LTTSample.cpp LTTSampleComp.cpp       \
-		--header LTTSample.h
-	qkc -sm $(win32_builddir)/LTTSample_vc10.vcxproj
-	$(top_builddir)/build/vcxprojtool.py vcxproj          \
-		--type DLL                                        \
-		--vcversion "10.00"                               \
-		--projectname "LTTSample"                         \
-		--version $(RTM_VERSION)                          \
-		--out $(win32_builddir)/LTTSampleDll_vc10.vcxproj \
-		--yaml ../rtcdll.vcxproj.yaml                     \
-		--source LTTSample.cpp                            \
-		--header LTTSample.h
-	qkc -sm $(win32_builddir)/LTTSampleDll_vc10.vcxproj
-
-dist-hook: lst
+#dist-hook: vcproj
 
 clean-local:
 	rm -f *.bak *.rpo *.sym lib*.*_pure_* *.lst

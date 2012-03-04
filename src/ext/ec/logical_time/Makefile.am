@@ -59,7 +59,7 @@ OBSERVER_OBJ=$(OBSERVER_DIST_SRC:.cpp=.o)
 # Targets
 #------------------------------------------------------------
 # Targets directories
-socompdir = $(rtm_sdodir)
+socompdir = $(rtm_ecdir)
 
 # Loadable Module
 noinst_LTLIBRARIES = libLogicalTimeTriggeredECSkel.la libLogicalTimeTriggeredECStub.la 
