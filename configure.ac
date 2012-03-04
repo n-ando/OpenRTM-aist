@@ -1459,7 +1459,8 @@ if test "x$os" = "xlinux" ; then
 		fi
 		AC_DEFINE([ARTLINUX], [TRUE], [ARTLinux is avaiable])
 		ARTLINUX="artlinux"
-		ARTLIB="$art_syscalls_o_dir/art_syscalls.o"
+        PATH_NORM($art_syscalls_o_dir/art_syscalls.o)
+		ARTLIB=$n_path
 		echo 'RTM is compiled with ARTLinux'
 	fi
 fi
@@ -1692,6 +1693,7 @@ AC_OUTPUT([Makefile
 	src/ext/Makefile
 	src/ext/ec/Makefile
 	src/ext/ec/artlinux/Makefile
+	src/ext/ec/artlinux/example/Makefile
 	src/ext/ec/rtpreempt/Makefile
 	src/ext/ec/logical_time/Makefile
 	src/ext/ec/logical_time/example/Makefile
