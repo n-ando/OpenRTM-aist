@@ -34,6 +34,7 @@
 # See details in rtc.conf
 #
 
+import os
 import Tkinter as Tk
 
 class Frame(Tk.Frame):
@@ -118,9 +119,11 @@ class Frame(Tk.Frame):
         self.lttsample.shutdown()
         import time
         time.sleep(1.0)
-        import os
-        os.popen("killall -q LTTSampleComp")
-        os.popen("killall -q lt-LTTSampleComp")
+        if os.sep == '\\':
+            os.popen("TaskKill /im LTTSampleComp.exe")
+        else:
+            os.popen("killall -q LTTSampleComp")
+            os.popen("killall -q lt-LTTSampleComp")
 
 import CORBA
 
@@ -131,12 +134,14 @@ class LTTSample:
             self.ior = open("LTTSample0.rtc").read()
         except:
             print "LTTSample0.rtc not found"
-            import os
             import time, sys
             write = sys.stdout.write
             write("Launching LTTSampleComp...")
             sys.stdout.flush()
-            os.system("./LTTSampleComp&")
+            if os.sep == '\\':
+                os.system("start LTTSampleComp.exe")
+            else:
+                os.system("./LTTSampleComp&")
             while True:
                 try:
                     self.ior = open("LTTSample0.rtc").read()
@@ -150,7 +155,10 @@ class LTTSample:
         obj = self.orb.string_to_object(self.ior)
         if CORBA.is_nil(obj):
             print "Object in LTTSample0.rtc is nil. Restarting LTTSampleComp..."
-            os.system("./LTTSampleComp&")
+            if os.sep == '\\':
+                os.system("start LTTSampleComp.exe")
+            else:
+                os.system("./LTTSampleComp&")
             self.ior = open("LTTSample0.rtc").read()
             obj = self.orb.string_to_object(self.ior)
             if CORBA.is_nil(obj):
@@ -160,21 +168,27 @@ class LTTSample:
         import omniORB
         import sys
 
-        self.sdo_idl = omniORB.importIDL("idl/SDOPackage.idl")
-        self.rtc_idl = omniORB.importIDL("idl/RTC.idl", ["-Iidl"])
-        self.ltt_idl = omniORB.importIDL("idl/LogicalTimeTriggeredEC.idl",
+        if os.sep == '\\':
+            os.system("omniidl -I. -bpython SDOPackage.idl RTC.idl LogicalTimeTriggeredEC.idl")
+            import RTC
+            import OpenRTM
+        else:
+            self.sdo_idl = omniORB.importIDL("idl/SDOPackage.idl")
+            self.rtc_idl = omniORB.importIDL("idl/RTC.idl", ["-Iidl"])
+            self.ltt_idl = omniORB.importIDL("idl/LogicalTimeTriggeredEC.idl",
                                          ["-Iidl"])
-
-        RTC = sys.modules["RTC"]
-        OpenRTM = sys.modules["OpenRTM"]
+            RTC = sys.modules["RTC"]
+            OpenRTM = sys.modules["OpenRTM"]
         try:
             self.rtobj = obj._narrow(RTC.RTObject)
         except:
             print "Narrowing failed. Restarting LTTSampleComp..."
-            import os
             import time
             print "Launching LTTSampleComp..."
-            os.system("./LTTSampleComp&")
+            if os.sep == '\\':
+                os.system("start LTTSampleComp.exe")
+            else:
+                os.system("./LTTSampleComp&")
             time.sleep(1.0)
             obj = self.orb.string_to_object(open("LTTSample0.rtc").read())
             self.rtobj = obj._narrow(RTC.RTObject)
