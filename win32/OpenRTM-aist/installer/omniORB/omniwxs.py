@@ -14,7 +14,13 @@
 # $Id$
 #
 
-omni_files = "COPYING CREDITS THIS_IS_OMNIORB_4_1_4 COPYING.LIB update.log COPYING.PYTHON sample.reg README.FIRST.txt README.win32.txt ReleaseNotes.txt"
+omni_files = "COPYING CREDITS COPYING.LIB update.log COPYING.PYTHON sample.reg README.FIRST.txt README.win32.txt ReleaseNotes.txt "
+
+import sys
+if len(sys.argv) > 1:
+    # add THIS_IS_OMNIORB_<version> file
+    # usage: omniwxs.py 'THIS_IS_OMNIORB_4_1_4'
+    omni_files += sys.argv[1]
 
 data = [
     ("",                                 omni_files),
