@@ -6,7 +6,7 @@
 	>
 	<Tool
 		Name="VCCLCompilerTool"
-		AdditionalIncludeDirectories="$(omni_includes);$(rtm_includes)"
+		AdditionalIncludeDirectories="$(omni_includes);$(rtm_includes);."
 		PreprocessorDefinitions="_WIN32_WINNT=0x0500"
 	/>
 	<Tool
