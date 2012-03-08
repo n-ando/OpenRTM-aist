@@ -1731,11 +1731,16 @@ AC_OUTPUT([Makefile
 	win32/OpenRTM-aist/examples/Makefile
 	win32/OpenRTM-aist/examples/Composite/Makefile
 	win32/OpenRTM-aist/examples/ConfigSample/Makefile
+	win32/OpenRTM-aist/examples/LTTSample/Makefile
 	win32/OpenRTM-aist/examples/SimpleIO/Makefile
 	win32/OpenRTM-aist/examples/SeqIO/Makefile
 	win32/OpenRTM-aist/examples/SimpleService/Makefile
 	win32/OpenRTM-aist/examples/USBCamera/Makefile
 	win32/OpenRTM-aist/ext/Makefile
+	win32/OpenRTM-aist/ext/ec/Makefile
+	win32/OpenRTM-aist/ext/ec/logical_time/Makefile
+	win32/OpenRTM-aist/ext/local_service/Makefile
+	win32/OpenRTM-aist/ext/local_service/nameservice_file/Makefile
 	win32/OpenRTM-aist/ext/sdo/Makefile
 	win32/OpenRTM-aist/ext/sdo/observer/Makefile
 	win32/OpenRTM-aist/utils/Makefile
