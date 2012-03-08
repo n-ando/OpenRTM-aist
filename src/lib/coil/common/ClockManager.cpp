@@ -115,4 +115,20 @@ namespace coil
     return m_systemClock;
   }
 
+#ifdef WIN32
+  ClockManager* ClockManager::clockmgr = NULL;
+  coil::Mutex ClockManager::clockmgr_mutex;
+  ClockManager& ClockManager::instance()
+  {
+    if(!clockmgr)
+	  {
+		coil::Guard<coil::Mutex> guard(clockmgr_mutex);
+        if (!clockmgr)
+		  {
+			clockmgr = new ClockManager();
+		  }
+	  }
+    return *clockmgr;
+  }
+#endif
 }; // namespace coil
