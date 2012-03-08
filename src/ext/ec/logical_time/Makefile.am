@@ -94,7 +94,7 @@ lst:
 #------------------------------------------------------------
 # Visual Studio Project
 #------------------------------------------------------------
-win32_builddir=$(top_builddir)/win32/OpenRTM-aist/ext/sdo/observer
+win32_builddir=$(top_builddir)/win32/OpenRTM-aist/ext/ec/logical_time
 PROJNAME=LogicalTimeTriggeredEC
 
 vcproj: vc8proj vc9proj vc10proj

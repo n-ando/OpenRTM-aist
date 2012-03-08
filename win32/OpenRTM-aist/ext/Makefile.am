@@ -4,7 +4,7 @@
 ##
 ## $Id$
 ##---------------------------------------------------------------------------
-SUBDIRS = sdo .
+SUBDIRS = ec local_service sdo .
 
 clean-local:
 	rm -f *~
