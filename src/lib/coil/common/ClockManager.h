@@ -23,6 +23,7 @@
 #include <coil/Singleton.h>
 #include <coil/TimeValue.h>
 #include <coil/Mutex.h>
+#include <coil/Guard.h>
 
 namespace coil
 {
@@ -172,10 +173,19 @@ namespace coil
    * @endif
    */
   class ClockManager
+#ifndef WIN32
     : public coil::Singleton<ClockManager>
+#endif
   {
   public:
     IClock& getClock(std::string clocktype);
+#ifdef WIN32
+    static ClockManager& instance();
+    static ClockManager* clockmgr;
+    static coil::Mutex clockmgr_mutex;
+  private:
+	ClockManager() {};
+#endif
   private:
     SystemClock   m_systemClock;
     LogicalClock  m_logicalClock;
