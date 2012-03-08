@@ -232,20 +232,52 @@
 	    
 	    <!-- extension -->
 	    <Directory Id="ext" Name="ext">
-	      <Directory Id="sdo" Name="sdo">
-		<Component Id="SDOService" Guid="{% SDOService.GUID %}">
-	      	  {% for file in SDOService.Files %}
-		  <File Id="{% file.Id %}"
-			Name="{% file.Name %}" DiskId="1"
-			Source="{% file.Source %}"/>
-		  {% endfor %}
-		  </Component>
+	      <Directory Id="ec" Name="ec">
+			<Directory Id="logical_time" Name="logical_time">
+			<Component Id="LogicalTime" Guid="{% LogicalTime.GUID %}">
+	      	  {% for file in LogicalTime.Files %}
+			  <File Id="{% file.Id %}"
+					Name="{% file.Name %}" DiskId="1"
+					Source="{% file.Source %}"/>
+			  {% endfor %}
+			</Component>
+			</Directory>
 	      </Directory>
-	    </Directory>
+	      <Directory Id="local_service" Name="local_service">
+	        <Directory Id="nameservice_file" Name="nameservice_file">
+			  <Component Id="FileNameservice" Guid="{% FileNameservice.GUID %}">
+				{% for file in FileNameservice.Files %}
+				<File Id="{% file.Id %}"
+					  Name="{% file.Name %}" DiskId="1"
+					  Source="{% file.Source %}"/>
+				{% endfor %}
+			  </Component>
+			</Directory>
+	      </Directory>
+	      <Directory Id="sdo" Name="sdo">
+			<Component Id="SDOService" Guid="{% SDOService.GUID %}">
+	      	  {% for file in SDOService.Files %}
+			  <File Id="{% file.Id %}"
+					Name="{% file.Name %}" DiskId="1"
+					Source="{% file.Source %}"/>
+			  {% endfor %}
+			</Component>
+		  </Directory>
+		</Directory>
 
 	    <!-- examples -->
 	    <Directory Id="examples" Name="examples">
 	      <Directory Id="CXXexamples" Name="C++">
+			<Directory Id="LTTSample" Name="LTTSample">
+			  <Component Id="LTTSample" Guid="{% LTTSample.GUID %}">
+				{% for file in LTTSample.Files %}
+				<File Id="{% file.Id %}"
+					  Name="{% file.Name %}" DiskId="1"
+					  Source="{% file.Source %}">
+				</File>
+				{% endfor %}
+			  </Component>
+			</Directory>
 
 		<!-- OpenCV-RTC components -->
 		<?if $(env.INCLUDE_OPENCV_RTC) = YES ?>
@@ -350,6 +382,8 @@
 	<ComponentRef Id="Etc"/>
 	<ComponentRef Id="Cmake"/>
 	<ComponentRef Id="SDOService"/>
+	<ComponentRef Id="LogicalTime"/>
+	<ComponentRef Id="FileNameservice"/>
       </Feature>
       <!-- devel -->
       <Feature Id="Devel" Level="1" Title="Development Environment">
@@ -360,6 +394,10 @@
       <!-- examples -->
       <Feature Id="Examples" Level="1" Title="Examples">
 	<ComponentRef Id="Examples"/>
+      </Feature>
+      <!-- lttsampel -->
+      <Feature Id="LTTSample" Level="1" Title="LTTSample">
+	<ComponentRef Id="LTTSample"/>
       </Feature>
       <!-- opencv examples -->
       <Feature Id="OpenCVRTC" Level="1" Title="OpenCV RTC">
@@ -429,6 +467,39 @@
 
     <!-- OpenCV -->
     <?if $(env.INCLUDE_OPENCV) = YES ?>
+      <?if $(env.VC_VERSION) = "Visual C++ 2010" ?>
+    <Feature Id="OpenCV" Level="1" Title="OpenCV2.3">
+      <Feature Id="OpenCV2.3Runtime" Level="1"
+	       Title="Runtime Environment">
+	<ComponentRef Id="OpenCV"/>
+	<ComponentRef Id="OpenCVBin"/>
+	<ComponentRef Id="OpenCVGpuX86Bin"/>
+	<ComponentRef Id="OpenCVDoc"/>
+      </Feature>
+      <Feature Id="OpenCV2.3Devel" Level="1"
+	       Title="Development Environment">
+	<ComponentRef Id="OpenCVIncludeOpencv"/>
+	<ComponentRef Id="OpenCVIncludeOpencv2"/>
+	<ComponentRef Id="OpenCVIncludeOpencv2Calib3d"/>
+	<ComponentRef Id="OpenCVIncludeOpencv2Contrib"/>
+	<ComponentRef Id="OpenCVIncludeOpencv2Core"/>
+	<ComponentRef Id="OpenCVIncludeOpencv2Features2d"/>
+	<ComponentRef Id="OpenCVIncludeOpencv2Flann"/>
+	<ComponentRef Id="OpenCVIncludeOpencv2Gpu"/>
+	<ComponentRef Id="OpenCVIncludeOpencv2Highgui"/>
+	<ComponentRef Id="OpenCVIncludeOpencv2Imgproc"/>
+	<ComponentRef Id="OpenCVIncludeOpencv2Legacy"/>
+	<ComponentRef Id="OpenCVIncludeOpencv2Ml"/>
+	<ComponentRef Id="OpenCVIncludeOpencv2Objdetect"/>
+	<ComponentRef Id="OpenCVIncludeOpencv2Ts"/>
+	<ComponentRef Id="OpenCVIncludeOpencv2Video"/>
+	<ComponentRef Id="OpenCVLib"/>
+	<ComponentRef Id="OpenCVGpuX86Lib"/>
+	<ComponentRef Id="OpenCVStaticlib"/>
+
+      </Feature>
+    </Feature>
+      <?else ?>
     <Feature Id="OpenCV" Level="1" Title="OpenCV2.1">
       <Feature Id="OpenCV2.1Runtime" Level="1"
 	       Title="Runtime Environment">
@@ -442,6 +513,7 @@
 	<ComponentRef Id="OpenCVLib"/>
       </Feature>
     </Feature>
+    <?endif ?>
     <?endif ?>
 
     <Feature Id="VCRedist"
