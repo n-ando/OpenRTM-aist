@@ -21,18 +21,19 @@
 @rem ------------------------------------------------------------
 @set RTM_ROOT=%~dp0
 @set PATH="C:\Program Files\Microsoft Visual Studio 10.0\Common7\IDE\";"C:\Program Files\Microsoft Visual Studio 10.0\VC\BIN";"c:\WINDOWS\Microsoft.NET\Framework\v4.0.30319";"C:\Program Files\Microsoft Visual Studio 10.0\VC\vcpackages";%PATH%
-@set OMNI_ROOT=C:\distribution\omniORB-4.1.4_vc10
+@set OMNI_ROOT=C:\distribution\omniORB-4.1.5_vc10
 @set RTSE_ROOT=C:\distribution\OpenRTP\RTSystemEditor
 @set VC_VERSION=Visual C++ 2010
-@set OPENCV_ROOT=C:\distribution\OpenCV2.2
+@set OPENCV_ROOT=C:\distribution\OpenCV2.3
 @set OPENCV_RTC_ROOT=C:\distribution\ImageProcessing\opencv
+@set BOOST_ROOT=C:\Program Files\boost\boost_1_47
 
 @rem ============================================================
 @rem copy property sheet
 @rem ============================================================
-copy   etc\rtm_config_omni414.vsprops rtm_config.vsprops
-copy   etc\rtm_config_omni414.props rtm_config.props
-copy   etc\rtm_config_omni414.props examples\USBCamera\rtm_config.props
+copy   etc\rtm_config_omni415.vsprops rtm_config.vsprops
+copy   etc\rtm_config_omni415.props rtm_config.props
+copy   etc\rtm_config_omni415.props examples\USBCamera\rtm_config.props
 copy   coil_config.props examples\USBCamera\coil_config.props
 
 @rem ============================================================
@@ -59,12 +60,14 @@ msbuild /M:2 /t:rebuild /p:configuration=debug OpenRTM-aist_vc10.sln
 msbuild /M:2 /t:rebuild /p:configuration=release OpenRTM-aist_vc10.sln
 
 @rem ============================================================
-@rem build USBCamera examples
+@rem build OpenCV-RTC
 @rem ============================================================
-msbuild /M:2 /t:rebuild /p:configuration=debug examples\USBCamera\USBCamera_vc10.sln
-msbuild /M:2 /t:rebuild /p:configuration=release examples\USBCamera\USBCamera_vc10.sln
+
+cd %OPENCV_RTC_ROOT%
+call build_vc10.bat
+cd %RTM_ROOT%
 
 cd installer
-call autowix.cmd
+call autowix_vc10.cmd
 cd ..
 

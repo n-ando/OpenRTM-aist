@@ -26,6 +26,7 @@
 @set VC_VERSION=Visual C++ 2005
 @set OPENCV_ROOT=C:\distribution\OpenCV2.1
 @set OPENCV_RTC_ROOT=C:\distribution\ImageProcessing\opencv
+@set BOOST_ROOT=C:\Program Files\boost\boost_1_47
 
 @rem ============================================================
 @rem copy property sheet
@@ -53,6 +54,15 @@ set PYTHONPATH=%TMP_PYTHONPATH%
 @rem ============================================================
 
 vcbuild /M2 /rebuild OpenRTM-aist_vc8.sln
+
+@rem ============================================================
+@rem build OpenCV-RTC
+@rem ============================================================
+
+cd %OPENCV_RTC_ROOT%
+call copyprops.bat
+vcbuild /M2 /rebuild OpenCV-RTC_vc8.sln
+cd %RTM_ROOT%
 
 cd installer
 call autowix.cmd
