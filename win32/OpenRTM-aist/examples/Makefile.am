@@ -4,14 +4,14 @@
 ##
 ## $Id$
 ##---------------------------------------------------------------------------
-SUBDIRS = Composite ConfigSample SimpleIO SeqIO SimpleService USBCamera .
+SUBDIRS = Composite ConfigSample LTTSample SimpleIO SeqIO SimpleService USBCamera .
 
 wxs:
-	cp -p example.yaml ../installer/
+	cp -p *.yaml ../installer/
 
 clean-local:
 	rm -f *~
 
 dist-hook: clean-local wxs
 
-EXTRA_DIST = example.yaml
+EXTRA_DIST = example.yaml lttsample.yaml

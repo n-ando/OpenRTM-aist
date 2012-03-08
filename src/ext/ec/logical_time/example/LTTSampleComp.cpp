@@ -12,7 +12,7 @@
 #include <string>
 #include "LTTSample.h"
 #include <rtm/NVUtil.h>
-#include "../LogicalTimeTriggeredECStub.h"
+#include <LogicalTimeTriggeredECStub.h>
 
 
 void MyModuleInit(RTC::Manager* manager)
@@ -25,8 +25,13 @@ void MyModuleInit(RTC::Manager* manager)
   comp = manager->createComponent("LTTSample");
   std::cout << "succeed." << std::endl;
   RTC::ExecutionContextList_var eclist = comp->get_owned_contexts();
-  eclist[0]->start();
-  eclist[0]->activate_component(RTC::RTObject::_duplicate(comp->getObjRef()));
+  if ( eclist->length() > 0) {
+	eclist[0]->start();
+	eclist[0]->activate_component(RTC::RTObject::_duplicate(comp->getObjRef()));
+  }
+  else {
+	std::cerr << "No owned EC." << std::endl;
+  }
   RTC::ComponentProfile_var prof;
   prof = comp->get_component_profile();
   std::cout << "=================================================" << std::endl;
