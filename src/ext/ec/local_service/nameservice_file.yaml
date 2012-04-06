@@ -1,0 +1,11 @@
+FileNameservice:
+  GUID: 19178CF4-5D0E-11E1-A106-000C29A5666C
+  Files:
+    - Id: FileNameservice.dll
+      ShortName: FNsvc.dll
+      Name: FileNameservice.dll
+      Source: ..\\ext\\local_service\\nameservice_file\\FileNameservice\\Release\\FileNameservice.dll
+    - Id: FileNameserviced.dll
+      ShortName: FNsvcd.dll
+      Name: FileNameserviced.dll
+      Source: ..\\ext\\local_service\\nameservice_file\\FileNameservice\\Debug\\FileNameserviced.dll
