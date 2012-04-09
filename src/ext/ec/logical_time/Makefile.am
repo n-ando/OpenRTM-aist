@@ -10,7 +10,7 @@ AUTOMAKE_OPTIONS = 1.9
 SUBDIRS = . example
 
 IDLC = @IDLC@
-IDLFLAGS = @IDL_FLAGS@ -I$(top_srcdir)/src/lib/rtm/idl
+IDLFLAGS = @IDL_FLAGS@ -I../$(top_srcdir)/src/lib/rtm/idl
 LIBS = @LIBS@
 
 AM_CPPFLAGS=-I$(top_srcdir)/src/lib -I$(top_srcdir)/src/lib/coil/include -I$(top_srcdir)/src/lib/rtm/idl
@@ -26,16 +26,21 @@ WRAPPER_FLAGS = --include-dir="" --skel-suffix=Skel --stub-suffix=Stub
 
 .idlSkel.cpp:
 	echo $(PROVIDER_OBJ)
-	$(IDLC) $(IDLFLAGS) $<
+	mkdir -p idl
+	cp $< idl/
+	(cd idl ; $(IDLC) $(IDLFLAGS) $< )
 	PYTHONPATH="$(top_srcdir)/build:$(PYTHONPATH)" \
 	PATH="$(top_srcdir)/utils/rtm-config:$(PATH)"  \
-	$(WRAPPER) $(WRAPPER_FLAGS) --idl-file=$<
+	$(WRAPPER) $(WRAPPER_FLAGS) --idl-file=$< --include-dir="idl/"
 
 .idlStub.cpp:
-	$(IDLC) $(IDLFLAGS) $<
+	echo $(PROVIDER_OBJ)
+	mkdir -p idl
+	cp $< idl/
+	(cd idl ; $(IDLC) $(IDLFLAGS) $< )
 	PYTHONPATH="$(PYTHONPATH):$(top_srcdir)/build" \
 	PATH="$(top_srcdir)/utils/rtm-config:$(PATH)"  \
-	$(WRAPPER) $(WRAPPER_FLAGS) --idl-file=$<
+	$(WRAPPER) $(WRAPPER_FLAGS) --idl-file=$< --include-dir="idl/"
 
 #------------------------------------------------------------
 # Source list
@@ -43,7 +48,7 @@ WRAPPER_FLAGS = --include-dir="" --skel-suffix=Skel --stub-suffix=Stub
 IDL_SOURCES = LogicalTimeTriggeredEC.idl
 
 OBSERVER_DIST_SRC   = LogicalTimeTriggeredEC.cpp
-OBSERVER_NODIST_SRC = $(IDL_SOURCES:.idl=Stub.cpp)
+OBSERVER_NODIST_SRC = idl/$(IDL_SOURCES:.idl=Stub.cpp)
 OBSERVER_SRC        = $(OBSERVER_DIST_SRC) $(OBSERVER_NODIST_SRC)
 
 OBSERVER_DIST_H     = $(OBSERVER_DIST_SRC:.cpp=.h)
@@ -145,6 +150,7 @@ clean_objs:
 clean_skelstub:
 	rm -f *Skel.h *Skel.cpp
 	rm -f *Stub.h *Stub.cpp
+	rm -rf idl
 	rm -f *.hh *SK.cc
 	rm -f *S.cpp *S.h *_T.cpp *_T.h *.inl
 

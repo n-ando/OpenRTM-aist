@@ -81,6 +81,15 @@ DUMMY_SKELS =                   \
         DataPortSkel.h          \
         ExtendedDataTypesSkel.h \
         InterfaceDataTypesSkel.h
+DUMMY_STUBS =                   \
+        SDOPackageStub.h        \
+        RTCStub.h               \
+        OpenRTMStub.h           \
+        ManagerStub.h           \
+        BasicDataTypeStub.h     \
+        DataPortStub.h          \
+        ExtendedDataTypesStub.h \
+        InterfaceDataTypesStub.h
 ORB_SRC = $(RTORB_SRC)
 endif
 
@@ -170,8 +179,14 @@ OpenRTM-aistSkel.cpp OpenRTM-aistStub.cpp: OpenRTM-aist.idl
 		$(top_srcdir)/build/makewrapper.py $$f ; \
 	done ;
 	@for f in $(DUMMY_SKELS) ; do \
+		echo cp OpenRTM-aistSkel.h $$f ; \
+		cp OpenRTM-aistStub.h $$f ; \
 		cp OpenRTM-aistSkel.h $$f ; \
-	done
+	done ;
+	@for f in $(DUMMY_STUBS) ; do \
+		echo cp OpenRTM-aistSkel.h $$f ; \
+		cp OpenRTM-aistSkel.h $$f ; \
+	done ;
 
 
 # Install directory of headers and idl files
@@ -263,6 +278,7 @@ dist-hook: lst vcproj wxs
 # Cleanup
 clean-local:
 	rm -f $(ALL_SRC) *~ *.core *.lst Makefile.old *.h *.c
+	rm -f OpenRTM-aist.idl
 	rm -f idl-stamp
 
 # Extra sources included distribution

@@ -138,7 +138,7 @@ namespace RTC_impl
      *
      * @endif
      */
-    bool isRunning(void);
+    CORBA::Boolean isRunning(void);
 
     /*!
      * @if jp
