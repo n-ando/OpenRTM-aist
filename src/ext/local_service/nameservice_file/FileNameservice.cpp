@@ -404,8 +404,13 @@ namespace RTM
     NamingAction::preBind(RTC::RTObject_impl* rtobj, coil::vstring& name_)
     {
       coil::vstring name = name_;
+#ifndef ORB_IS_RTORB
       CORBA::Object_var objref =
         RTC::RTObject::_duplicate(rtobj->getObjRef());
+#else
+      RTC::RTObject_var objref =
+        RTC::RTObject::_duplicate(rtobj->getObjRef());
+#endif // ORB_IS_RTORB
       CORBA::String_var ior =
         RTC::Manager::instance().getORB()->object_to_string(objref);
       coil::vstring ns_info;

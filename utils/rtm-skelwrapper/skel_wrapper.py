@@ -86,7 +86,7 @@ skel_cpp = """// -*- C++ -*-
  *
  */
 
-#include "[include_dir][skel_h]"
+#include "[skel_h]"
 
 #if defined ORB_IS_TAO
 #  include "[include_dir][basename]C.cpp"
@@ -139,7 +139,7 @@ stub_h = """// -*- C++ -*-
 [config_inc]
 
 #if   defined ORB_IS_TAO
-#  include "[include_dir][basename]C.h"
+#  include "[basename]C.h"
 #elif defined ORB_IS_OMNIORB
 #  if defined(WIN32) || defined(_WIN32) || defined(__WIN32__) || defined(__NT__)
 #    undef USE_stub_in_nt_dll
@@ -175,7 +175,7 @@ stub_cpp = """// -*- C++ -*-
  *
  */
 
-#include "[include_dir][stub_h]"
+#include "[stub_h]"
 
 #if   defined ORB_IS_TAO
 #  include "[include_dir][basename]C.cpp"

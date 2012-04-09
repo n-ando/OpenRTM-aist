@@ -270,7 +270,12 @@ namespace RTC_impl
         return RTC::RTC_ERROR;
       }
     Guard guard(m_profileMutex);
+#ifndef ORB_IS_RTORB
     CORBA_SeqUtil::push_back(m_profile.participants, rtobj._retn());
+#else
+    CORBA_SeqUtil::push_back(m_profile.participants,
+                             RTC::RTObject::_duplicate(rtobj.in()));
+#endif
     return RTC::RTC_OK;
   }
 
