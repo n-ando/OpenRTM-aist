@@ -17,6 +17,8 @@
  */
 
 #include <rtm/RTObjectStateMachine.h>
+#include <rtm/Manager.h>
+#include <rtm/RTObject.h>
 #include <iostream>
 #include <stdio.h>
 
@@ -27,7 +29,8 @@ namespace RTC_impl
     : m_id(id),
       m_rtobj(RTC::LightweightRTObject::_duplicate(comp)),
       m_sm(NUM_OF_LIFECYCLESTATE),
-      m_ca(false), m_dfc(false), m_fsm(false), m_mode(false)
+      m_ca(false), m_dfc(false), m_fsm(false), m_mode(false),
+      m_rtobjPtr(NULL), m_measure(false)
   {
     m_caVar   = RTC::ComponentAction::_nil();
     m_dfcVar  = RTC::DataFlowComponentAction::_nil();
@@ -155,7 +158,11 @@ namespace RTC_impl
   setComponentAction(const RTC::LightweightRTObject_ptr comp)
   {
     m_caVar = RTC::ComponentAction::_narrow(comp);
-    if (!CORBA::is_nil(m_caVar)) { m_ca = true; }
+    if (CORBA::is_nil(m_caVar)) { return; }
+    m_ca = true;
+    PortableServer::POA_ptr poa = RTC::Manager::instance().getPOA();
+    m_rtobjPtr =
+      dynamic_cast<RTC::RTObject_impl*>(poa->reference_to_servant(comp));
   }
 
   void RTObjectStateMachine::
@@ -182,16 +189,40 @@ namespace RTC_impl
   // RTC::ComponentAction operations
   void RTObjectStateMachine::onStartup(void)
   {
+    // call Servant
+    if (m_rtobjPtr != NULL)
+      {
+        m_rtobjPtr->on_startup(m_id);
+        return;
+      }
+    // call Object reference
     if (!m_ca) { return; }
     m_caVar->on_startup(m_id);
   }
   void RTObjectStateMachine::onShutdown(void)
   {
+    // call Servant
+    if (m_rtobjPtr != NULL)
+      {
+        m_rtobjPtr->on_shutdown(m_id);
+        return;
+      }
+    // call Object reference
     if (!m_ca) { return; }
     m_caVar->on_shutdown(m_id);
   }
   void RTObjectStateMachine::onActivated(const ExecContextStates& st)
   {
+    // call Servant
+    if (m_rtobjPtr != NULL)
+      {
+        if (m_rtobjPtr->on_activated(m_id) != RTC::RTC_OK)
+          {
+            m_sm.goTo(RTC::ERROR_STATE);
+          }
+        return;
+      }
+    // call Object reference
     if (!m_ca) { return; }
     if (m_caVar->on_activated(m_id) != RTC::RTC_OK)
       {
@@ -203,24 +234,55 @@ namespace RTC_impl
 
   void RTObjectStateMachine::onDeactivated(const ExecContextStates& st)
   {
+    // call Servant
+    if (m_rtobjPtr != NULL)
+      {
+        m_rtobjPtr->on_deactivated(m_id);
+        return;
+      }
+    // call Object reference
     if (!m_ca) { return; }
     m_caVar->on_deactivated(m_id);
   }
 
   void RTObjectStateMachine::onAborting(const ExecContextStates& st)
   {
+    // call Servant
+    if (m_rtobjPtr != NULL)
+      {
+        m_rtobjPtr->on_aborting(m_id);
+        return;
+      }
+    // call Object reference
     if (!m_ca) { return; }
-    m_caVar->on_error(m_id);
+    m_caVar->on_aborting(m_id);
   }
 
   void RTObjectStateMachine::onError(const ExecContextStates& st)
   {
+    // call Servant
+    if (m_rtobjPtr != NULL)
+      {
+        m_rtobjPtr->on_error(m_id);
+        return;
+      }
+    // call Object reference
     if (!m_ca) { return; }
     m_caVar->on_error(m_id);
   }
 
   void RTObjectStateMachine::onReset(const ExecContextStates& st)
   {
+    // call Servant
+    if (m_rtobjPtr != NULL)
+      {
+        if (m_rtobjPtr->on_reset(m_id) != RTC::RTC_OK)
+          {
+            m_sm.goTo(RTC::ERROR_STATE);
+          }
+        return;
+      }
+    // call Object reference
     if (!m_ca) { return; }
     if (m_caVar->on_reset(m_id) != RTC::RTC_OK)
       {
@@ -233,8 +295,57 @@ namespace RTC_impl
   // RTC::DataflowComponentAction
   void RTObjectStateMachine::onExecute(const ExecContextStates& st)
   {
+    static int count;
+    double max_interval, min_interval, mean_interval, stddev;
+    // call Servant
+    if (m_rtobjPtr != NULL)
+      {
+        if (m_measure) { m_svtMeasure.tick(); }
+        if (m_rtobjPtr->on_execute(m_id) != RTC::RTC_OK)
+          {
+            m_sm.goTo(RTC::ERROR_STATE);
+          }
+        if (m_measure)
+          {
+            m_svtMeasure.tack();
+            if (count > 1000)
+              {
+                count = 0;
+                m_svtMeasure.getStatistics(max_interval, min_interval,
+                                           mean_interval, stddev);
+                std::cout << "[servant] ";
+                std::cout << " max: "    << max_interval;
+                std::cout << " min: "    << min_interval;
+                std::cout << " mean: "   << mean_interval;
+                std::cout << " stddev: " << stddev;
+                std::cout << std::endl;
+              }
+            ++count;
+          }
+        return;
+      }
+    // call Object reference
     if (!m_dfc) { return; }
-    if (m_dfcVar->on_execute(m_id) != RTC::RTC_OK)
+    if (m_measure) { m_refMeasure.tick(); }
+    RTC::ReturnCode_t ret = m_dfcVar->on_execute(m_id);
+    if (m_measure)
+      {
+        m_refMeasure.tack();
+        if (count > 1000)
+          {
+            count = 0;
+            m_refMeasure.getStatistics(max_interval, min_interval,
+                                       mean_interval, stddev);
+            std::cout << "[objref] ";
+            std::cout << " max: "    << max_interval;
+            std::cout << " min: "    << min_interval;
+            std::cout << " mean: "   << mean_interval;
+            std::cout << " stddev: " << stddev;
+            std::cout << std::endl;
+          }
+        ++count;
+      }
+    if (ret != RTC::RTC_OK)
       {
         m_sm.goTo(RTC::ERROR_STATE);
         return;
@@ -244,6 +355,16 @@ namespace RTC_impl
 
   void RTObjectStateMachine::onStateUpdate(const ExecContextStates& st)
   {
+    // call Servant
+    if (m_rtobjPtr != NULL)
+      {
+        if (m_rtobjPtr->on_state_update(m_id) != RTC::RTC_OK)
+          {
+            m_sm.goTo(RTC::ERROR_STATE);
+          }
+        return;
+      }
+    // call Object reference
     if (!m_dfc) { return; }
     if (m_dfcVar->on_state_update(m_id) != RTC::RTC_OK)
       {
@@ -255,6 +376,16 @@ namespace RTC_impl
 
   void RTObjectStateMachine::onRateChanged(void)
   {
+    // call Servant
+    if (m_rtobjPtr != NULL)
+      {
+        if (m_rtobjPtr->on_rate_changed(m_id) != RTC::RTC_OK)
+          {
+            m_sm.goTo(RTC::ERROR_STATE);
+          }
+        return;
+      }
+    // call Object reference
     if (!m_dfc) { return; }
     if (m_dfcVar->on_rate_changed(m_id) != RTC::RTC_OK)
       {
