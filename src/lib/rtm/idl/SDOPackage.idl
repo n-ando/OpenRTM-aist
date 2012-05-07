@@ -36,9 +36,7 @@
 #ifdef USE_MONITORING
 #include <CosNotifyComm.idl>
 #endif
-#ifndef ORBIT2_IDL
-#define TypeCode CORBA::TypeCode
-#endif
+
 /** CORBA specific model for SDOs */
 
 #pragma prefix "org.omg"
@@ -52,7 +50,7 @@ module SDOPackage
   interface Configuration;
   interface Monitoring;
   interface Organization;
-  
+
   /** ------- Data Types -------*/
   typedef sequence<string>       StringList;
   typedef sequence<SDO>          SDOList;
@@ -120,10 +118,10 @@ module SDOPackage
   struct Parameter
   {
     string         name;
-#ifndef ORBIT2_IDL
-    TypeCode       type;
+#ifdef __ORBIT_IDL__
+    TypeCode type;
 #else
-    TypeCode       type;
+    CORBA::TypeCode type;
 #endif
     AllowedValues  allowed_values;
   };
@@ -173,7 +171,7 @@ module SDOPackage
   exception InterfaceNotImplemented  exception_body;
   exception InvalidParameter         exception_body;
   exception InternalError            exception_body;
-  
+
   /** ------- Interfaces -------*/
   interface SDOSystemElement
   {
@@ -261,7 +259,7 @@ module SDOPackage
 #endif
 
   interface SDOService {};
-  
+
   interface Organization
   {
     UniqueIdentifier get_organization_id ()
