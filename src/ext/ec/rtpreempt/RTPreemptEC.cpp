@@ -670,9 +670,12 @@ extern "C"
                             ::RTC_exp::RTPreemptEC>,
                             ::coil::Destructor< ::RTC::ExecutionContextBase,
                             ::RTC_exp::RTPreemptEC>);
-
-    coil::vstring ecs;
-    ecs = RTC::ExecutionContextFactory::instance().getIdentifiers();
+    RTC::ExecutionContextFactory::
+      instance().addFactory("rtpreempt_ec",
+                            ::coil::Creator< ::RTC::ExecutionContextBase,
+                            ::RTC_exp::RTPreemptEC>,
+                            ::coil::Destructor< ::RTC::ExecutionContextBase,
+                            ::RTC_exp::RTPreemptEC>);
   }
 };
 
