@@ -22,6 +22,7 @@
 #include <stdlib.h>
 #include <rtm/SystemLogger.h>
 #include <coil/NonCopyable.h>
+#include <coil/TimeMeasure.h>
 #include <rtm/idl/RTCSkel.h>
 #include <rtm/StateMachine.h>
 #include <assert.h>
@@ -32,7 +33,10 @@
 #ifdef WIN32
 #pragma warning( disable : 4290 )
 #endif
-
+namespace RTC
+{
+  class RTObject_impl;
+}
 namespace RTC_impl
 {
   typedef RTC::ExecutionContextHandle_t Ecid;
@@ -82,7 +86,7 @@ namespace RTC_impl
     bool isCurrentState(ExecContextState state);
     bool isNextState(ExecContextState state);
     void goTo(ExecContextState state);
-    
+
     // Workers
     void workerPreDo(void);
     void workerDo(void);
@@ -111,10 +115,13 @@ namespace RTC_impl
     RTC::DataFlowComponentAction_var  m_dfcVar;
     RTC::FsmParticipantAction_var     m_fsmVar;
     RTC::MultiModeComponentAction_var m_modeVar;
+    RTC::RTObject_impl* m_rtobjPtr;
+    bool m_measure;
 
     //    char dara[1000];
     // Component action invoker
-    
+    coil::TimeMeasure m_svtMeasure;
+    coil::TimeMeasure m_refMeasure;
   };
 }; // namespace RTC
 
