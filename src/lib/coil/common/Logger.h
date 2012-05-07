@@ -766,7 +766,7 @@ namespace coil
      *
      * @endif
      */
-    bool isValid(int level) const
+    inline bool isValid(int level) const
     {
       return m_minLevel <= level && level <= m_logLevel;
     }
