@@ -13,7 +13,7 @@
 #---------------------------------------
 omni="libomniorb4 libomniorb4-dev omniidl4 omniorb4-nameserver omniidl omniorb-nameserver"
 openrtm="openrtm-aist openrtm-aist-doc openrtm-aist-dev openrtm-aist-example python-yaml"
-devel="gcc g++ make uuid-dev"
+devel="gcc g++ make uuid-dev libboost-filesystem-dev"
 packages="$devel $omni $openrtm"
 u_packages="$omni $openrtm "
 
