@@ -11,7 +11,7 @@
 #---------------------------------------
 # パッケージリスト
 #---------------------------------------
-omni="libomniorb4 libomniorb4-dev omniidl4 omniorb4-nameserver"
+omni="libomniorb4 libomniorb4-dev omniidl4 omniorb4-nameserver omniidl omniorb-nameserver"
 openrtm="openrtm-aist openrtm-aist-doc openrtm-aist-dev openrtm-aist-example python-yaml"
 devel="gcc g++ make uuid-dev"
 packages="$devel $omni $openrtm"
