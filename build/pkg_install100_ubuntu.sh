@@ -11,7 +11,7 @@
 #---------------------------------------
 # パッケージリスト
 #---------------------------------------
-omni="libomniorb4 libomniorb4-dev omniidl4 omniorb4-nameserver"
+omni="libomniorb4 libomniorb4-dev omniidl4 omniorb4-nameserver omniidl omniorb-nameserver"
 ace="libace libace-dev"
 openrtm="openrtm-aist openrtm-aist-doc openrtm-aist-dev openrtm-aist-example python-yaml"
 openrtm04="openrtm-aist=0.4.2-1 openrtm-aist-doc=0.4.2-1 openrtm-aist-dev=0.4.2-1 openrtm-aist-example=0.4.2-1 python-yaml" 
