@@ -529,6 +529,35 @@ namespace coil
   
   /*!
    * @if jp
+   * @brief 与えられた文字列をboolに変換
+   * @else
+   * @brief Convert the given string to bool.
+   * @endif
+   */
+  template <>
+  bool stringTo<bool>(bool& val, const char* str)
+  {
+    if (str == 0) { return false; }
+    std::string boolstr(str);
+    coil::normalize(boolstr);
+    if (boolstr == "true" || boolstr == "1" ||
+        boolstr == "yes"  || boolstr == "on")
+      {
+        val = true;
+        return true;
+      }
+    else if (boolstr == "false" || boolstr == "0" ||
+             boolstr == "no"    || boolstr == "off")
+      {
+        val = false;
+        return true;
+      }
+    return false;
+  }
+
+  
+  /*!
+   * @if jp
    * @brief 与えられた文字列リストから重複を削除
    * @else
    * @brief Eliminate duplication from the given string list
