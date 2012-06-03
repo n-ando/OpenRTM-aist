@@ -85,12 +85,12 @@ if test ! "x$dist_key" = "xDebian" -a ! "x$dist_key" = "xUbuntu" ; then
 fi
 
 
-file_list = "README.Debian changelog compat control copyright dirs docs files rules"
+file_list="README.Debian changelog compat control copyright dirs docs files rules"
 if test "x$dist_release" = "x11.04" || \
    test "x$dist_release" = "x11.10" || \
    test "x$dist_release" = "x12.04" || \
    test "x$dist_release" = "x12.11" ; then
-   file_list = "README.Debian changelog compat control.1 copyright dirs docs files rules"
+   file_list="README.Debian changelog compat control.1 copyright dirs docs files rules"
 fi
 
 
