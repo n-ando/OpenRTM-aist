@@ -114,7 +114,7 @@ mkdir $packagedir/debian
 rm -f $packagedir/packages/openrtm-aist*
 
 for f in $file_list; do
-    f_real=`echo $f | sed -e 's/\(.*\)\.[0-9]+/\1/'`
+    f_real=`echo $f | sed -e 's/\(.*\)\.[0-9]*/\1/'`
     cp $f $packagedir/debian/$f_real
 done
 chmod 444 $packagedir/debian/files
