@@ -45,6 +45,7 @@ if test -f /etc/lsb-release ; then
     if test "x$DISTRIB_DESCRIPTION" != "x" ; then
 	dist_name=$DISTRIB_DESCRIPTION-`uname -m`
 	dist_key=$DISTRIB_ID
+    dist_release=$DISTRIB_RELEASE
     fi
 fi
 # Check the Fedora version
@@ -83,6 +84,16 @@ if test ! "x$dist_key" = "xDebian" -a ! "x$dist_key" = "xUbuntu" ; then
     exit 0
 fi
 
+
+file_list = "README.Debian changelog compat control copyright dirs docs files rules"
+if test "x$dist_release" = "x11.04" || \
+   test "x$dist_release" = "x11.10" || \
+   test "x$dist_release" = "x12.04" || \
+   test "x$dist_release" = "x12.11" ; then
+   file_list = "README.Debian changelog compat control.1 copyright dirs docs files rules"
+fi
+
+
 #------------------------------------------------------------
 # create "files" file
 #------------------------------------------------------------
@@ -102,16 +113,11 @@ mkdir $packagedir/debian
 
 rm -f $packagedir/packages/openrtm-aist*
 
-cp README.Debian $packagedir/debian/
-cp changelog $packagedir/debian/
-cp compat $packagedir/debian/
-cp control $packagedir/debian/
-cp copyright $packagedir/debian/
-cp dirs $packagedir/debian/
-cp docs $packagedir/debian/
-cp files $packagedir/debian/
+for f in $file_list; do
+    f_real=`echo $f | sed -e 's/\(.*\)\.[0-9]+/\1/'`
+    cp $f $packagedir/debian/$f_real
+done
 chmod 444 $packagedir/debian/files
-cp rules $packagedir/debian/
 chmod 755 $packagedir/debian/rules
 
 cd $packagedir
