@@ -95,3 +95,5 @@ echo "%_topdir $builddir" > .rpmrc
 # %prep process can be skiped. = --short-circuit -bc
 rpm_def="_topdir $builddir"
 rpmbuild --define "$rpm_def" -ba OpenRTM-aist.spec
+cd ..
+rm $packagename

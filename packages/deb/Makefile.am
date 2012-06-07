@@ -57,6 +57,7 @@ EXTRA_DIST = \
 	changelog     \
 	compat        \
 	control       \
+	control.1     \
 	copyright     \
 	dirs          \
 	docs          \
