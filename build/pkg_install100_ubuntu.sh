@@ -195,6 +195,7 @@ else
     create_srclist
     update_source_list
     apt-get update
+    uninstall_packages `reverse $openrtm`
     install_packages $packages
 fi
 
