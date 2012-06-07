@@ -78,7 +78,7 @@ Example components and sources
 #------------------------------------------------------------
 # build section
 %build
-%configure --prefix=/usr
+%configure --prefix=/usr CFLAGS="-O2 -g" CXXFLAGS="-O2 -g"
 %{__make}
 
 #------------------------------------------------------------
