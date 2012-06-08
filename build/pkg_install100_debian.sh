@@ -171,10 +171,13 @@ reverse () {
 #----------------------------------------
 uninstall_packages () {
     for p in $*; do
-	echo $msg11 $p
-	aptitude remove $p
-	echo $msg10
-	echo ""
+        echo $msg11 $p
+        apt-get remove $p
+        if test "$?" != 0; then
+            apt-get purge $p
+        fi
+        echo $msg10
+        echo ""
     done
 }
 
@@ -195,6 +198,8 @@ else
     check_reposerver
     create_srclist
     update_source_list
+    apt-get autoclean
     apt-get update
+    uninstall_packages `reverse $openrtm`
     install_packages $packages
 fi
