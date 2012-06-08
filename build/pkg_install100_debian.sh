@@ -91,7 +91,7 @@ check_reposerver()
 # リポジトリサーバ
 #---------------------------------------
 create_srclist () {
-    cnames="sarge etch lenny"
+    cnames="sarge etch lenny squeeze"
     for c in $cnames; do
 	if test -f "/etc/apt/sources.list"; then
 	    res=`grep $c /etc/apt/sources.list`
