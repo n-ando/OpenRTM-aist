@@ -42,24 +42,8 @@ PKGVER=`head -n 1 changelog | sed 's/.*(\([0-9\.\-]*\).*/\1/'`
 all-local: ${EXTRA_DIST} files
 	sh dpkg_build.sh
 
-files: changelog
-	echo "openrtm-aist_"${PKGVER}"_amd64.deb main extra" > files
-	echo "openrtm-aist-dev_"${PKGVER}"_amd64.deb main extra" >> files
-	echo "openrtm-aist-example_"${PKGVER}"_amd64.deb main extra" >> files
-	echo "openrtm-aist-doc_"${PKGVER}"_all.deb main extra" >> files
-
 clean-local:
 	rm -f *~
 	rm -f files
 
-EXTRA_DIST = \
-	README.Debian \
-	changelog     \
-	compat        \
-	control       \
-	control.1     \
-	copyright     \
-	dirs          \
-	docs          \
-	rules         \
-	dpkg_build.sh
+EXTRA_DIST = dpkg_build.sh

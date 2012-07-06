@@ -20,6 +20,7 @@ RTPreemptEC_la_SOURCES = RTPreemptEC.cpp RTPreemptEC.h
 RTPreemptEC_la_LDFLAGS = -module -shared
 RTPreemptEC_la_FLAGS   = -L$(top_builddir)/src/lib/rtm/.lib
 RTPreemptEC_la_LIBADD  = \
+	-lrt                                  \
 	$(top_builddir)/src/lib/rtm/libRTC.la \
 	$(top_builddir)/src/lib/coil/lib/libcoil.la 
 

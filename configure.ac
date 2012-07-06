@@ -1632,6 +1632,7 @@ AC_OUTPUT([Makefile
 	build/Makefile
 	packages/Makefile
 	packages/deb/Makefile
+	packages/deb/debian/Makefile
 	packages/rpm/Makefile
 	src/Makefile
 	src/lib/Makefile

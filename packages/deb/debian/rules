@@ -103,7 +103,7 @@ install-arch:
 	(cd $(CURDIR)/utils/rtcprof      ; $(MAKE) DESTDIR=$(CURDIR)/debian/openrtm-aist install)
 	(cd $(CURDIR)/utils/rtm-naming   ; $(MAKE) DESTDIR=$(CURDIR)/debian/openrtm-aist install)
 	(cd $(CURDIR)/utils/rtm-config   ; $(MAKE) DESTDIR=$(CURDIR)/debian/openrtm-aist install)
-	(cd $(CURDIR)/src/ext            ; $(MAKE) DESTDIR=$(CURDIR)/debian/openrtm-aist install-exec)
+	(cd $(CURDIR)/src/ext            ; $(MAKE) DESTDIR=$(CURDIR)/debian/openrtm-aist install)
 
 	# for openrtm-dev package
 	#$(MAKE)

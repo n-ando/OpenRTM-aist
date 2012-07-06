@@ -1,5 +1,5 @@
 Source: openrtm-aist
-Section: main
+Section: science
 Priority: extra
 Maintainer: Noriaki Ando <n-ando@aist.go.jp>
 Build-Depends: debhelper, libomniorb4-dev, omniidl4, omniorb4-nameserver, python, uuid-dev

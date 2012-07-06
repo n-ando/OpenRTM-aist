@@ -45,7 +45,6 @@ if test -f /etc/lsb-release ; then
     if test "x$DISTRIB_DESCRIPTION" != "x" ; then
 	dist_name=$DISTRIB_DESCRIPTION-`uname -m`
 	dist_key=$DISTRIB_ID
-    dist_release=$DISTRIB_RELEASE
     fi
 fi
 # Check the Fedora version
@@ -84,44 +83,33 @@ if test ! "x$dist_key" = "xDebian" -a ! "x$dist_key" = "xUbuntu" ; then
     exit 0
 fi
 
-
-file_list="README.Debian changelog compat control copyright dirs docs files rules"
-if test "x$dist_release" = "x11.04" || \
-   test "x$dist_release" = "x11.10" || \
-   test "x$dist_release" = "x12.04" || \
-   test "x$dist_release" = "x12.11" ; then
-   file_list="README.Debian changelog compat control.1 copyright dirs docs files rules"
-fi
-
-
 #------------------------------------------------------------
 # create "files" file
 #------------------------------------------------------------
-if test ! -f "files" ; then
-    PKGVER=`head -n 1 changelog | sed 's/.*(\([0-9\.\-]*\).*/\1/'`
-    echo "openrtm-aist_"${PKGVER}"_amd64.deb main extra" > files
-    echo "openrtm-aist-dev_"${PKGVER}"_amd64.deb main extra" >> files
-    echo "openrtm-aist-example_"${PKGVER}"_amd64.deb main extra" >> files
-    echo "openrtm-aist-doc_"${PKGVER}"_all.deb main extra" >> files
-fi
+#if test ! -f "files" ; then
+#    PKGVER=`head -n 1 changelog | sed 's/.*(\([0-9\.\-]*\).*/\1/'`
+#    echo "openrtm-aist_"${PKGVER}"_amd64.deb main extra" > files
+#    echo "openrtm-aist-dev_"${PKGVER}"_amd64.deb main extra" >> files
+#    echo "openrtm-aist-example_"${PKGVER}"_amd64.deb main extra" >> files
+#    echo "openrtm-aist-doc_"${PKGVER}"_all.deb main extra" >> files
+#fi
 
 #------------------------------------------------------------
 # package build process
 #------------------------------------------------------------
 packagedir=`pwd`/../../
-mkdir $packagedir/debian
-
 rm -f $packagedir/packages/openrtm-aist*
 
-for f in $file_list; do
-    f_real=`echo $f | sed -e 's/\(.*\)\.[0-9]*/\1/'`
-    cp $f $packagedir/debian/$f_real
-done
-chmod 444 $packagedir/debian/files
+cp -r debian $packagedir
 chmod 755 $packagedir/debian/rules
+if test -f $packagedir/debian/control.$DISTRIB_CODENAME; then
+    mv $packagedir/debian/control /tmp/control.$$
+    cp $packagedir/debian/control.$DISTRIB_CODENAME $packagedir/debian/control
+fi
 
 cd $packagedir
-
+rm -f config.status
 dpkg-buildpackage -W -us -uc -rfakeroot
 
 mv $packagedir/../openrtm-aist* $packagedir/packages/
+mv /tmp/control.$$ $packagedir/debian/control
