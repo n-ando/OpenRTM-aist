@@ -86,7 +86,7 @@ create_srclist () {
 # ソースリスト更新関数の定義
 #---------------------------------------
 update_source_list () {
-    rtmsite=`grep openrtm /etc/apt/sources.list`
+    rtmsite=`grep '^$openrtm_repo' /etc/apt/sources.list`
     if test "x$rtmsite" = "x" ; then
 	echo $msg4
 	echo $msg5
