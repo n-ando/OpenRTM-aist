@@ -152,7 +152,8 @@ namespace RTC
       :	InPortBase(name, ::CORBA_Util::toRepositoryId<DataType>()),
 #endif
         m_name(name), m_value(value),
-	m_OnRead(NULL),  m_OnReadConvert(NULL)
+	m_OnRead(NULL),  m_OnReadConvert(NULL),
+	m_status(1)
     {
     }
     
@@ -399,6 +400,7 @@ namespace RTC
         // means that we only need to read from the first connector to get data
         // received by any connector.
         ret = m_connectors[0]->read(cdr);
+	m_status[0] = ret;
       }
       if (ret == PORT_OK)
         {
@@ -480,6 +482,77 @@ namespace RTC
       rhs = m_value;
       return;
     }
+
+    /*!
+     * @if jp
+     *
+     * @brief 特定のコネクタへの書き込みステータスを得る
+     *
+     * InPort は接続ごとに Connector と呼ばれる仮想データチャネルを持
+     * つ。write() 関数はこれら Connector に対してデータを書き込むが、
+     * 各 Connector は書き込みごとにステータスを返す。write() 関数では、
+     * すべての Connector が正常終了したときのみ true を返し、それ以外
+     * では false を返却する。この関数は write() が false の場合ステー
+     * タスを調べるのに使用することができる。
+     *
+     * @param index Connector の index
+     * @return ステータス
+     *
+     * @else
+     *
+     * @brief Getting specified connector's writing status
+     *
+     * An InPort has Connectors that are virtual data stream channel
+     * for each connection.  "write()" function write into these
+     * Connectors, and each Connector returns writing-status.  write()
+     * function will return a true value if all Connectors return
+     * normal status, and a false value will be returned if at least
+     * one Connector failed.  This function can be used to inspect
+     * each return status
+     *
+     * @param index Connector index
+     * @return Writing status
+     *
+     * @endif
+     */
+    DataPortStatus::Enum getStatus(int index)
+    {
+      return m_status[0];
+    }
+    /*!
+     * @if jp
+     *
+     * @brief 特定のコネクタへの書き込みステータスリストを得る
+     *
+     * InPort は接続ごとに Connector と呼ばれる仮想データチャネルを持
+     * つ。write() 関数はこれら Connector に対してデータを書き込むが、
+     * 各 Connector は書き込みごとにステータスを返す。write() 関数では、
+     * すべての Connector が正常終了したときのみ true を返し、それ以外
+     * では false を返却する。この関数は write() が false の場合ステー
+     * タスを調べるのに使用することができる。
+     *
+     * @return ステータスリスト
+     *
+     * @else
+     *
+     * @brief Getting specified connector's writing status list
+     *
+     * An InPort has Connectors that are virtual data stream channel
+     * for each connection.  "write()" function write into these
+     * Connectors, and each Connector returns writing-status.  write()
+     * function will return a true value if all Connectors return
+     * normal status, and a false value will be returned if at least
+     * one Connector failed.  This function can be used to inspect
+     * each return status
+     *
+     * @return Writing status list
+     *
+     * @endif
+     */
+    DataPortStatusList getStatusList()
+    {
+      return m_status;
+    }    
     
     /*!
      * @if jp
@@ -572,7 +645,8 @@ namespace RTC
      * @endif
      */
     OnReadConvert<DataType>* m_OnReadConvert;
-   
+
+    DataPortStatusList m_status;
   };
 }; // End of namesepace RTM
 
