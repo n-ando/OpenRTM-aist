@@ -19,7 +19,7 @@ moduledir = $(rtm_ecdir)
 module_LTLIBRARIES = ArtExecutionContext.la
 
 ArtExecutionContext_la_SOURCES = ArtExecutionContext.cpp ArtExecutionContext.h
-ArtExecutionContext_la_LDFLAGS = -module -shared
+ArtExecutionContext_la_LDFLAGS = -module -shared $(ARTLIB)
 ArtExecutionContext_la_FLAGS   = -L$(top_builddir)/src/lib/rtm/.lib
 ArtExecutionContext_la_LIBADD  = $(top_builddir)/src/lib/rtm/libRTC.la
 

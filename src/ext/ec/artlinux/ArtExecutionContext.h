@@ -1,4 +1,4 @@
-// -*- C++ -*-
+l// -*- C++ -*-
 /*!
  * @file ArtExecutionContext.h
  * @brief ArtExecutionContext class
@@ -38,6 +38,22 @@ namespace RTC
     ArtExecutionContext();
     virtual ~ArtExecutionContext();
     virtual int svc(void);
+
+    template <class T>
+    void getProperty(coil::Properties& prop, const char* key, T& value)
+    {
+      if (prop.findNode(key) != 0)
+        {
+          T tmp;
+          if (coil::stringTo(tmp, prop[key].c_str()))
+            {
+              value = tmp;
+            }
+        }
+    }
+
+  private:
+    int m_priority;
   };
 };
 
