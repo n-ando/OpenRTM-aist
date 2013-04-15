@@ -177,9 +177,16 @@ namespace coil
      */
     bool wait(long second, long nano_second = 0)
     {
+      struct timeval tv;
       timespec abstime;
-      abstime.tv_sec = std::time(0) + second;
-      abstime.tv_nsec = nano_second;
+
+      ::gettimeofday(&tv, NULL);
+      abstime.tv_sec  = tv.tv_sec + second;
+      abstime.tv_nsec = tv.tv_usec * 1000 + nano_second;
+      if (abstime.tv_nsec >= 1000000000) {
+        abstime.tv_nsec -= 1000000000;
+        abstime.tv_sec ++;
+      }
       return 0 == ::pthread_cond_timedwait(&m_cond, &m_mutex.mutex_, &abstime);
     }
 
