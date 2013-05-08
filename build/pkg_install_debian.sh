@@ -6,17 +6,30 @@
 #         Shinji Kurihara
 #         Tetsuo Ando
 #         Harumi Miyamoto
+#         Nobu Kawauchi
 #
 
 #---------------------------------------
 # パッケージリスト
 #---------------------------------------
-omni="libomniorb4 libomniorb4-dev omniidl4 omniorb4-nameserver"
+set_package_list()
+{
+if [ "$code_name" = "wheezy" ]; then
+	omni="libomniorb4-1 libomniorb4-dev omniidl omniorb-nameserver"
+else
+	omni="libomniorb4 libomniorb4-dev omniidl4 omniorb4-nameserver"
+fi
+ace="libace libace-dev"
 openrtm="openrtm-aist openrtm-aist-doc openrtm-aist-dev openrtm-aist-example"
+openrtm04="openrtm-aist=0.4.2-1 openrtm-aist-doc=0.4.2-1 openrtm-aist-dev=0.4.2-1 openrtm-aist-example=0.4.2-1"
 pyyaml="python-support python-yaml"
 devel="gcc g++ make uuid-dev"
 packages="$devel $omni $pyyaml $openrtm"
-u_packages="$omni $openrtm "
+u_packages="$omni $ace $openrtm "
+
+reposervers="www.openrtm.org www.openrtm.de"
+reposerver=""
+}
 
 #---------------------------------------
 # ロケールの言語確認
@@ -33,7 +46,7 @@ if test "$lang" = "jp" ;then
     msg3="このOSはサポートされておりません。"
     msg4=" OpenRTM-aistのリポジトリが登録されていません。"
     msg5="Source.listにOpenrRTM-aistのリポジトリ："
-    msg6="を追加します。よろしいですか？ (y/n) [y] "
+    msg6="を追加します。よろしいですか？(y/n)[y] "
     msg7="中断します。"
     msg8="ルートユーザーで実行してください。"
     msg9="インストール中です..."
@@ -45,7 +58,7 @@ else
     msg3="This OS is not supported."
     msg4="No repository entry for OpenRTM-aist is configured in your system."
     msg5="repository entry for OpenrRTM-aist: "
-    msg6="Do you want to add the repository entry for OpenrRTM-aist in source.list? (y/n) [y] "
+    msg6="Do you want to add the repository entry for OpenrRTM-aist in source.list?(y/n)[y] "
     msg7="Abort."
     msg8="This script should be run as root."
     msg9="Now installing: "
@@ -57,10 +70,10 @@ fi
 }
 
 #---------------------------------------
-# リポジトリサーバ
+# コードネーム取得
 #---------------------------------------
-create_srclist () {
-    cnames="sarge etch lenny"
+check_codename () {
+    cnames="sarge etch lenny squeeze wheezy"
     for c in $cnames; do
 	if test -f "/etc/apt/sources.list"; then
 	    res=`grep $c /etc/apt/sources.list`
@@ -78,14 +91,45 @@ create_srclist () {
 	echo $msg3
 	exit
     fi
-    openrtm_repo="deb http://www.openrtm.org/pub/Linux/debian/ $code_name main"
+}
+
+#----------------------------------------
+# 近いリポジトリサーバを探す
+#----------------------------------------
+check_reposerver()
+{
+    minrtt=65535
+    nearhost=''
+    for host in $reposervers; do
+	rtt=`ping -c 1 $host | grep 'time=' | sed -e 's/^.*time=\([0-9\.]*\) ms.*/\1/' 2> /dev/null`
+	if test "x$rtt" = "x"; then
+	    rtt=65535
+	fi
+	if test `echo "scale=2 ; $rtt < $minrtt" | bc` -gt 0; then
+	    minrtt=$rtt
+	    nearhost=$host
+	fi
+    done
+    if test "x$nearhost" = "x"; then
+	echo "Repository servers unreachable.", $hosts
+	exit 1
+    fi
+    reposerver=$nearhost
+}
+
+
+#---------------------------------------
+# リポジトリサーバ
+#---------------------------------------
+create_srclist () {
+    openrtm_repo="deb http://$reposerver/pub/Linux/debian/ $code_name main"
 }
 
 #---------------------------------------
 # ソースリスト更新関数の定義
 #---------------------------------------
 update_source_list () {
-    rtmsite=`grep openrtm /etc/apt/sources.list`
+    rtmsite=`grep $reposerver /etc/apt/sources.list`
     if test "x$rtmsite" = "x" ; then
 	echo $msg4
 	echo $msg5
@@ -119,7 +163,7 @@ check_root () {
 #----------------------------------------
 install_packages () {
     for p in $*; do
-	echo $msg9 $p
+	echo $msg9 $p　
 	apt-get install $p
 	echo $msg10
 	echo ""
@@ -140,10 +184,13 @@ reverse () {
 #----------------------------------------
 uninstall_packages () {
     for p in $*; do
-	echo $msg11 $p
-	aptitude remove $p
-	echo $msg10
-	echo ""
+        echo $msg11 $p
+        apt-get remove $p
+        if test "$?" != 0; then
+            apt-get purge $p
+        fi
+        echo $msg10
+        echo ""
     done
 }
 
@@ -152,12 +199,22 @@ uninstall_packages () {
 #---------------------------------------
 check_lang
 check_root
+check_codename
+set_package_list
+
+if test "x$1" = "x0.4.2" || test "x$1" = "x0.4" ; then
+    openrtm=$openrtm04
+    packages="$devel $omni $ace $pyyaml $openrtm"
+fi
+
 if test "x$1" = "x-u" ; then
     uninstall_packages `reverse $u_packages`
 else
+    check_reposerver
     create_srclist
     update_source_list
+    apt-get autoclean
     apt-get update
+    uninstall_packages `reverse $openrtm`
     install_packages $packages
 fi
-
