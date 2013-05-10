@@ -5,23 +5,35 @@
 # @author Noriaki Ando <n-ando@aist.go.jp>
 #         Shinji Kurihara
 #         Tetsuo Ando
+#         Nobu Kawauchi
 #
-# §≥§Œ•∑•ß•Î•π•Ø•Í•◊•»§œ°¢ace§™§Ë§”omniORB§Œ•—•√•±°º•∏§Ú•§•Û•π•»°º•Î§∑°¢
-# fedora§Œ≥´»Ø¥ƒ∂≠§ÚπΩ√€§∑§ﬁ§π°£
+# „Åì„ÅÆ„Ç∑„Çß„É´„Çπ„ÇØ„É™„Éó„Éà„ÅØ„ÄÅace„Åä„Çà„Å≥omniORB„ÅÆ„Éë„ÉÉ„Ç±„Éº„Ç∏„Çí„Ç§„É≥„Çπ„Éà„Éº„É´„Åó„ÄÅ
+# fedora„ÅÆÈñãÁô∫Áí∞Â¢É„ÇíÊßãÁØâ„Åó„Åæ„Åô„ÄÇ
 #
 # $Id$
 #
+#---------------------------------------
+# „Éë„ÉÉ„Ç±„Éº„Ç∏„É™„Çπ„Éà
+#---------------------------------------
+version_num=`cat /etc/fedora-release | awk '/Fedora/{print $3}' -`
+if [ $version_num -ge 16 ] && [ $version_num -le 18 ]; then
+	# „Éê„Éº„Ç∏„Éß„É≥„Åå16,17,18„ÅÆÂ†¥Âêà
+	omni="omniORB omniORB-devel omniORB-doc omniORB-servers omniORB-utils"
+else
+	omni="omniORB omniORB-devel omniORB-doc omniORB-servers omniORB-utils omniORB-bootscripts"
+fi
 
-#---------------------------------------
-# •—•√•±°º•∏•Í•π•»
-#---------------------------------------
-omni="omniORB omniORB-devel omniORB-doc omniORB-servers omniORB-utils omniORB-bootscripts"
+ace="ace ace-devel"
 openrtm="OpenRTM-aist OpenRTM-aist-devel OpenRTM-aist-doc OpenRTM-aist-example PyYAML"
-packages="gcc-c++ $omni $openrtm"
+openrtm04="OpenRTM-aist-0.4.2 OpenRTM-aist-devel-0.4.2 OpenRTM-aist-doc-0.4.2 OpenRTM-aist-example-0.4.2 PyYAML"
+devel="gcc-c++ uuid-devel libuuid-devel"
+packages="$devel $omni $openrtm"
 
+reposervers="www.openrtm.org www.openrtm.de"
+reposerver=""
 
 #----------------------------------------
-# root §´§…§¶§´§Ú•¡•ß•√•Ø
+# root „Åã„Å©„ÅÜ„Åã„Çí„ÉÅ„Çß„ÉÉ„ÇØ
 #----------------------------------------
 check_root () {
     if test ! `id -u` = 0 ; then
@@ -34,7 +46,7 @@ check_root () {
 }
 
 #---------------------------------------
-# •§•Û•π•»°º•Î∫—•—•√•±°º•∏•Í•π•»
+# „Ç§„É≥„Çπ„Éà„Éº„É´Ê∏à„Éë„ÉÉ„Ç±„Éº„Ç∏„É™„Çπ„Éà
 #---------------------------------------
 rpm_qa="/tmp/yum_list.txt"
 get_pkg_list () {
@@ -44,30 +56,56 @@ clean_pkg_list () {
     rm -f $rpm_qa
 }
 
+#----------------------------------------
+# Ëøë„ÅÑ„É™„Éù„Ç∏„Éà„É™„Çµ„Éº„Éê„ÇíÊé¢„Åô
+#----------------------------------------
+check_reposerver()
+{
+    minrtt=65535
+    nearhost=''
+    for host in $reposervers; do
+	rtt=`ping -c 1 $host | grep 'time=' | sed -e 's/^.*time=\([0-9\.]*\) ms.*/\1/' 2> /dev/null`
+	if test "x$rtt" = "x"; then
+	    rtt=65535
+	fi
+	if test `echo "scale=2 ; $rtt < $minrtt" | bc` -gt 0; then
+	    minrtt=$rtt
+	    nearhost=$host
+	fi
+    done
+    if test "x$nearhost" = "x"; then
+	echo "Repository servers unreachable.", $hosts
+	exit 1
+    fi
+    reposerver=$nearhost
+}
+
+
 #---------------------------------------
-# •Í•›•∏•»•Í•µ•§•»¿ﬂƒÍ•’•°•§•Î§Ú¿∏¿Æ
+# „É™„Éù„Ç∏„Éà„É™„Çµ„Ç§„ÉàË®≠ÂÆö„Éï„Ç°„Ç§„É´„ÇíÁîüÊàê
 #---------------------------------------
 openrtm_repo () {
 cat <<EOF
 [openrtm]
 name=Fedora \$releasever - \$basearch
 failovermethod=priority
-baseurl=http://www.openrtm.org/pub/Linux/Fedora/releases/\$releasever/Fedora/\$basearch/os/Packages
+baseurl=http://$reposerver/pub/Linux/Fedora/releases/\$releasever/Fedora/\$basearch/os/Packages
 enabled=1
 gpgcheck=0
 gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-fedora file:///etc/pki/rpm-gpg/RPM-GPG-KEY
 EOF
 } 
+
 create_repo() {
     repo="/etc/yum.repos.d/openrtm.repo"
     if test ! -f $repo ; then
-	echo "OpenRTM-aist §Œ•Í•›•∏•»•Í§¨≈–œø§µ§Ï§∆§§§ﬁ§ª§Û°£"
-	echo "OpenRTM-aist §Œ•Í•›•∏•»•Í: "
+	echo "OpenRTM-aist „ÅÆ„É™„Éù„Ç∏„Éà„É™„ÅåÁôªÈå≤„Åï„Çå„Å¶„ÅÑ„Åæ„Åõ„Çì„ÄÇ"
+	echo "OpenRTM-aist „ÅÆ„É™„Éù„Ç∏„Éà„É™: "
 	echo "  http://www.openrtm.org/pub/Linux/Fedora/"
-	read -p "§Úƒ…≤√§∑§ﬁ§π°£§Ë§Ì§∑§§§«§π§´°© (y/n) [y] " kick_shell
+	read -p "„ÇíËøΩÂä†„Åó„Åæ„Åô„ÄÇ„Çà„Çç„Åó„ÅÑ„Åß„Åô„ÅãÔºü (y/n) [y] " kick_shell
 
 	if test "x$kick_shell" = "xn" ; then
-	    echo "√Ê√«§∑§ﬁ§π°£"
+	    echo "‰∏≠Êñ≠„Åó„Åæ„Åô„ÄÇ"
 	    exit 0
 	else
 	    openrtm_repo > /etc/yum.repos.d/openrtm.repo
@@ -76,44 +114,25 @@ create_repo() {
 }
 
 #----------------------------------------
-# •—•√•±°º•∏•§•Û•π•»°º•Î¥ÿøÙ
+# „Éë„ÉÉ„Ç±„Éº„Ç∏„Ç§„É≥„Çπ„Éà„Éº„É´Èñ¢Êï∞
 #----------------------------------------
 install_packages () {
     for p in $*; do
-	if test "x$p" = "x0.4.2" || test "x$p" = "x0.4.2" ; then
-	    :
+	ins=`rpm -qa $p`
+	if test "x$ins" = "x"; then
+	    echo "Now installing: " $p
+	    yum install $p
+	    echo "done."
+	    echo ""
 	else
-	    if echo "$p" | grep -q '=0.4.2' ; then
-		str=`echo "$p" |sed 's/=0.4.2//'`
-	    else 
-		str="$p"
-	    fi
-
-	    ins=`rpm -qa $str`
-
-	    if test "x$ins" = "x"; then
-		echo "Now installing: " $p
-		yum install $p
-		echo "done."
-		echo ""
-	    else  
-		if echo "$ins" |grep -q '0.4.2-0' ; then
-			yum install $p
-			echo "done." 
-			echo ""
-	       else 
- 		    echo $ins
-		    echo $str "is already installed."
-		    echo ""
-		fi
-	    fi
+	    echo $p "is already installed."
+	    echo ""
 	fi
     done
 }
 
-
 #------------------------------------------------------------
-# •Í•π•»§Úµ’ΩÁ§À§π§Î
+# „É™„Çπ„Éà„ÇíÈÄÜÈ†Ü„Å´„Åô„Çã
 #------------------------------------------------------------
 reverse () {
     for i in $*; do
@@ -122,7 +141,7 @@ reverse () {
 }
 
 #----------------------------------------
-# •—•√•±°º•∏§Ú•¢•Û•§•Û•π•»°º•Î§π§Î
+# „Éë„ÉÉ„Ç±„Éº„Ç∏„Çí„Ç¢„É≥„Ç§„É≥„Çπ„Éà„Éº„É´„Åô„Çã
 #----------------------------------------
 uninstall_packages () {
     for p in $*; do
@@ -134,12 +153,19 @@ uninstall_packages () {
 }
 
 #---------------------------------------
-# •·•§•Û
+# „É°„Ç§„É≥
 #---------------------------------------
 check_root
+
+if test "x$1" = "x0.4.2" || test "x$1" = "x0.4" ; then
+    openrtm=$openrtm04
+    packages="$devel $omni $ace $openrtm"
+fi
+
 if test "x$1" = "x-u" ; then
     uninstall_packages `reverse $packages`
 else
+    check_reposerver
     create_repo
     install_packages $packages
 fi
