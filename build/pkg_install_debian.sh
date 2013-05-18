@@ -45,7 +45,7 @@ if test "$lang" = "jp" ;then
     msg2="コードネーム ： "
     msg3="このOSはサポートされておりません。"
     msg4=" OpenRTM-aistのリポジトリが登録されていません。"
-    msg5="Source.listにOpenrRTM-aistのリポジトリ："
+    msg5="Source.listにOpenRTM-aistのリポジトリ："
     msg6="を追加します。よろしいですか？(y/n)[y] "
     msg7="中断します。"
     msg8="ルートユーザーで実行してください。"
@@ -57,8 +57,8 @@ else
     msg2="The code name is : "
     msg3="This OS is not supported."
     msg4="No repository entry for OpenRTM-aist is configured in your system."
-    msg5="repository entry for OpenrRTM-aist: "
-    msg6="Do you want to add the repository entry for OpenrRTM-aist in source.list?(y/n)[y] "
+    msg5="repository entry for OpenRTM-aist: "
+    msg6="Do you want to add the repository entry for OpenRTM-aist in source.list?(y/n)[y] "
     msg7="Abort."
     msg8="This script should be run as root."
     msg9="Now installing: "
@@ -134,7 +134,7 @@ update_source_list () {
 	echo $msg4
 	echo $msg5
 	echo "  " $openrtm_repo
-	read -p $msg6 kick_shell
+	read -p "$msg6" kick_shell
 
 	if test "x$kick_shell" = "xn" ; then
 	    echo $msg7
