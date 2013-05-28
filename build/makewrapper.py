@@ -284,7 +284,6 @@ class wrapper_gen:
         import sys
         if sys.platform != 'win32':
             self.omniorb_gcc4_fix()
-        self.omniorb_gcc4_fix()
         return
 
     def write_skel(self):
