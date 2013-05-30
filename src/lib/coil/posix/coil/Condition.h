@@ -23,7 +23,7 @@
 #include <pthread.h>
 #include <algorithm>
 #include <ctime>
-
+#include <sys/time.h>
 
 namespace coil
 {
