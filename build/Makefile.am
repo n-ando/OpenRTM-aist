@@ -25,9 +25,9 @@ EXTRA_DIST =                   \
 	makewrapper.pl             \
 	makewrapper.py             \
 	pickupprojs.py             \
-	pkg_install100_debian.sh   \
-	pkg_install100_fedora.sh   \
-	pkg_install100_ubuntu.sh   \
+	pkg_install_debian.sh   \
+	pkg_install_fedora.sh   \
+	pkg_install_ubuntu.sh   \
 	pkg_install100_vine.sh     \
 	pkg_install_debian.sh      \
 	pkg_install_debianSarge.sh \
