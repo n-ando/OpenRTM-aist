@@ -46,11 +46,15 @@ IDL_SOURCES = ComponentObserver.idl
 
 OBSERVER_DIST_SRC   = ComponentObserverConsumer.cpp
 OBSERVER_NODIST_SRC = idl/$(IDL_SOURCES:.idl=Stub.cpp)
+OBSERVER_NDWIN_SRC   = $(IDL_SOURCES:.idl=Stub.cpp)
 OBSERVER_SRC        = $(OBSERVER_DIST_SRC) $(OBSERVER_NODIST_SRC)
+OBSERVER_WIN_SRC     = $(OBSERVER_DIST_SRC) $(OBSERVER_NDWIN_SRC)
 
 OBSERVER_DIST_H     = $(OBSERVER_DIST_SRC:.cpp=.h)
 OBSERVER_NODIST_H   = $(OBSERVER_NODIST_SRC:.cpp=.h)
+OBSERVER_NODWIN_H    = $(OBSERVER_NODWIN_SRC:.cpp=.h)
 OBSERVER_H          = $(OBSERVER_DIST_H) $(OBSERVER_NODIST_H)
+OBSERVER_WIN_H       = $(OBSERVER_DIST_H) $(OBSERVER_NOWIN__H)
 
 #------------------------------------------------------------
 # Object list
@@ -109,8 +113,8 @@ vc8proj:
 		--version $(RTM_VERSION)                        \
 		--out $(win32_builddir)/$(PROJNAME)Dll_vc8.vcproj  \
 		--yaml $(top_builddir)/examples/rtcdll.vcproj.yaml \
-		--source $(OBSERVER_SRC)                        \
-		--header $(OBSERVER_H)
+		--source $(OBSERVER_WIN_SRC)                        \
+		--header $(OBSERVER_WIN_H)
 	qkc -sm $(win32_builddir)/$(PROJNAME)Dll_vc8.vcproj
 
 vc9proj:
@@ -121,8 +125,8 @@ vc9proj:
 		--version $(RTM_VERSION)                        \
 		--out $(win32_builddir)/$(PROJNAME)Dll_vc9.vcproj  \
 		--yaml $(top_builddir)/examples/rtcdll.vcproj.yaml \
-		--source $(OBSERVER_SRC)                        \
-		--header $(OBSERVER_H)
+		--source $(OBSERVER_WIN_SRC)                        \
+		--header $(OBSERVER_WIN_H)
 	qkc -sm $(win32_builddir)/$(PROJNAME)Dll_vc9.vcproj
 
 vc10proj:
@@ -133,8 +137,8 @@ vc10proj:
 		--version $(RTM_VERSION)                          \
 		--out $(win32_builddir)/$(PROJNAME)Dll_vc10.vcxproj \
 		--yaml $(top_builddir)/examples/rtcdll.vcproj.yaml  \
-		--source $(OBSERVER_SRC)                          \
-		--header $(OBSERVER_H)
+		--source $(OBSERVER_WIN_SRC)                          \
+		--header $(OBSERVER_WIN_H)
 	qkc -sm $(win32_builddir)/$(PROJNAME)Dll_vc10.vcxproj
 
 
