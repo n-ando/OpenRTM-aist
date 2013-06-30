@@ -114,6 +114,7 @@ AC_ARG_WITH(orbexpress,       [  --with-orbexpress=dir           Find ORBexpress
 AC_ARG_WITH(rtorb,            [  --with-rtorb=dir                Find RtORB installation below dir])
 AC_ARG_WITH(generic-orb,      [  --with-generic-orb              Use other CORBA 2.3 ORB])
 AC_ARG_WITH(generic-orb-lib,  [  --with-generic-orb-lib	=libs    ORB libraries (-l...)])
+AC_ARG_WITH(doxygen,          [  --without-doxygen               Don't create documentation by doxygen])
 
 dnl  Script wrapper selection
 #AC_ARG_WITH(python,           [  --with-python=dir               Find Python installation below dir])
@@ -273,86 +274,29 @@ dnl Checks for library functions.
 dnl AC_FUNC_ERROR_AT_LINE
 
 
-
-
-
-
-
 dnl ============================================================
-dnl Check ACE setup
+dnl Check Doxygen setup
 dnl
-dnl 1. check ace/ACE.h for ACE
-dnl 2. check libACE.so
-dnl 3. check ACE version from ace/Version.h
+dnl 1. check if doxygen installed
+dnl 2. set DOCS variable
 dnl ============================================================
 dnl ------------------------------------------------------------
-dnl  Find ace/ACE.h
+dnl  Find doxygen
 dnl ------------------------------------------------------------
-dnl AC_MSG_CHECKING(for ace/ACE.h)
-dnl dnl PKG_CHECK_MODULES(ACE,ACE)
-dnl FP_FIND_FILE(ace/ACE.h,
-dnl 	$with_ace_includes $more_incs $base_incs $base_dirs,
-dnl 	ACE_wrappers include cxx/include)
-dnl if test "x$ace_ACE_h_dir" = "x" ; then
-dnl 	AC_MSG_RESULT(ACE (ace/ACE.h) not found)
-dnl 	AC_MSG_ERROR(
-dnl 	use --with-ace-includes=<dir> to locate ace/ACE.h
-dnl hint: <dir>/( ACE_wrappers | include | cxx/include ) will be searched.)
-dnl 	# Error exit!!
-dnl else
-dnl 	AC_MSG_RESULT(found in $ace_ACE_h_dir)
-dnl 	have_ace=yes
-dnl fi
-dnl 
-dnl dnl ------------------------------------------------------------
-dnl dnl  Find libACE.so / Checking ACE version
-dnl dnl ------------------------------------------------------------
-dnl if test "x$have_ace" = "xyes" ; then
-dnl 	AC_MSG_CHECKING(for libACE.so)
-dnl 	FP_FIND_FILE(libACE.so,
-dnl 		$with_ace_lib $more_libs $base_libs $base_dirs,
-dnl 		ACE_wrappers/ace/lib lib cxx/lib)
-dnl 	if test "x$libACE_so_dir" = "x" ; then
-dnl 		AC_MSG_RESULT(not found)
-dnl 		AC_MSG_ERROR(
-dnl 	use --with-ace-lib=<dir> to locate libACE.so.
-dnl hint: <dir>/( ACE_wrappers/ace/lib lib cxx/lib ) will be searched.)
-dnl 		# Error exit!!
-dnl 	else
-dnl 		AC_MSG_RESULT(found in $libACE_so_dir)
-dnl 	fi
-dnl 
-dnl 	AC_MSG_CHECKING(ACE version)
-dnl 
-dnl 	# In ACE 5.5.4, ACE_VERSION is defined as ACE_VERSION " 5.5.4"
-dnl 	# "cut" cannot be used to extract version strings
-dnl 	ace_version=[`grep ACE_VERSION $ace_ACE_h_dir/ace/Version.h | sed 's/.*\"\(.*\)\"/\1/' | sed 's/ //g'`]
-dnl 
-dnl 	case $ace_version in
-dnl 	[5.6.1|5.5.*|5.4.*|5.3.*|5.5|5.4|5.3)]
-dnl 		AC_DEFINE([ACE_5_6_1_OR_EARLIER], [TRUE], [ACE version 5.6.1 or earlier])
-dnl 		;;
-dnl 	# ACE 5.6.2 or later signature of UUID_Generator::generateUUID
-dnl 	# has been changed as generate_UUID
-dnl 	[5.7.*|5.6.[2-9]|5.7|5.6)]
-dnl 		;;
-dnl 	*)
-dnl 		AC_MSG_WARN([Unknown ACE version number, expecting 5.3.0 or above.])
-dnl 	esac
-dnl  	AC_MSG_RESULT($ace_version)
-dnl 
-dnl 	#
-dnl 	# ACE setup complete
-dnl 	#
-dnl 	# Compiler/Linker options
-dnl 	CPPFLAGS="-I$ace_ACE_h_dir $CPPFLAGS"
-dnl 	CXXFLAGS="-I$ace_ACE_h_dir $CXXFLAGS"
-dnl 	LDFLAGS="-L$libACE_so_dir $LDFLAGS "
-dnl 	LIBS="-lACE $LIBS"
-dnl 	LDSOLIBS="-lACE $LDSOLIBS"
-dnl 	AC_DEFINE([WITH_ACE], [TRUE], [compiled with ACE])
-dnl fi
-
+DOCS="docs"
+if test "x$with_doxygen" = "xno" ; then
+	DOCS=""
+else
+	AC_MSG_CHECKING(for doxygen)
+	FP_FIND_FILE(doxygen,$base_bins $base_dirs,bin)
+	if test "x$doxygen" = "x" ; then
+		AC_MSG_RESULT(not found)
+		AC_MSG_ERROR(Please install doxygen or use --without-document option)
+	else
+		AC_MSG_RESULT($doxygen)
+	fi
+	DOCS="docs"
+fi
 
 dnl ============================================================
 dnl Check boost setup
@@ -1533,6 +1477,9 @@ AC_SUBST(ORB)
 AC_SUBST(IDLC)
 AC_SUBST(IDL_FLAGS)
 AC_SUBST(COSNAMES)
+
+dnl Documentation related options
+AC_SUBST(DOCS)
 
 dnl Wrapper code subdirectory 
 AC_SUBST(WRAPPERS)
