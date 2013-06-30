@@ -7,7 +7,7 @@
 
 AUTOMAKE_OPTIONS = 1.4
 
-SUBDIRS = build src utils examples etc docs win32
+SUBDIRS = build src utils examples etc $(DOCS) win32
 
 DIST_SUBDIRS = packages $(SUBDIRS)
 
