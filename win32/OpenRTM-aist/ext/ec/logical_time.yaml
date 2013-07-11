@@ -5,7 +5,4 @@ LogicalTime:
       ShortName: LTTEC.dll
       Name: LogicalTimeTriggeredEC.dll
       Source: ..\\ext\\ec\\logical_time\\LogicalTimeTriggeredEC\\Release\\LogicalTimeTriggeredEC.dll
-    - Id: LogicalTimeTriggeredECd.dll
-      ShortName: LTTECd.dll
-      Name: LogicalTimeTriggeredECd.dll
-      Source: ..\\ext\\ec\\logical_time\\LogicalTimeTriggeredEC\\Debug\\LogicalTimeTriggeredECd.dll
+ 
