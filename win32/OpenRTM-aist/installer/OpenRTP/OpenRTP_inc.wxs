@@ -273,15 +273,15 @@
           </Directory>
         </Directory>
         <Directory Id="org.eclipse.equinox.launcher.win32.win32.x86_1.0.101.R34x_v20080731" Name="org.eclipse.equinox.launcher.win32.win32.x86_1.0.101.R34x_v20080731">
-          <Component Id="org.eclipse.equinox.launcher.win32.win32.x86_1.0.101.R34x_v20080731" DiskId="1" Guid="9B406546-ADAC-458F-8868-4D8E286A179F">
+          <Component Id="org.eclipse.equinox.launcher.win32.win32.x86_1.0.101.R34x_v20080731" DiskId="1" Guid="1F0FFE6B-831F-41a3-A32E-7756BA008366">
             <File Id="about.html_1" Name="about.html" Source="C:\distribution\OpenRTP\RTSystemEditor\plugins\org.eclipse.equinox.launcher.win32.win32.x86_1.0.101.R34x_v20080731\about.html" />
             <File Id="launcher.win32.win32.x86.properties" Name="launcher.win32.win32.x86.properties" Source="C:\distribution\OpenRTP\RTSystemEditor\plugins\org.eclipse.equinox.launcher.win32.win32.x86_1.0.101.R34x_v20080731\launcher.win32.win32.x86.properties" />
             <File Id="eclipse_1115.dll" Name="eclipse_1115.dll" Source="C:\distribution\OpenRTP\RTSystemEditor\plugins\org.eclipse.equinox.launcher.win32.win32.x86_1.0.101.R34x_v20080731\eclipse_1115.dll" />
           </Component>
           <Directory Id="META_INF_2" Name="META-INF_2">
-            <Component Id="META_INF_2" DiskId="1" Guid="2FC7BBAC-7BE2-43A6-B281-45E5321BA6CD">
-              <File Id="eclipse.inf_1" Name="eclipse.inf" Source="C:\distribution\OpenRTP\RTSystemEditor\plugins\org.eclipse.equinox.launcher.win32.win32.x86_1.0.101.R34x_v20080731\META-INF\eclipse.inf" />
-              <File Id="MANIFEST.MF_1" Name="MANIFEST.MF" Source="C:\distribution\OpenRTP\RTSystemEditor\plugins\org.eclipse.equinox.launcher.win32.win32.x86_1.0.101.R34x_v20080731\META-INF\MANIFEST.MF" />
+            <Component Id="META_INF_2" DiskId="1" Guid="FBF62DCE-8E21-49e6-944A-49C8503B1360">
+              <File Id="eclipse.inf_1" Name="eclipse.inf" Source="C:\distribution\OpenRTP\RTSystemEditor\plugins\org.eclipse.equinox.launcher.win32.win32.x86_1.0.101.R34x_v20080731\META-INF_2\eclipse.inf" />
+              <File Id="MANIFEST.MF_1" Name="MANIFEST.MF" Source="C:\distribution\OpenRTP\RTSystemEditor\plugins\org.eclipse.equinox.launcher.win32.win32.x86_1.0.101.R34x_v20080731\META-INF_2\MANIFEST.MF" />
             </Component>
           </Directory>
         </Directory>
