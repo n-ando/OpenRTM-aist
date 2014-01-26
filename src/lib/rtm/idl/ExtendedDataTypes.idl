@@ -694,6 +694,28 @@ module RTC {
         Time tm;
         OAP data;
     };
+
+  /*!
+   * @struct Quaternion
+   * @brief Data type for Quaternion
+   */
+  struct Quaternion
+  {
+    double x;
+    double y;
+    double z;
+    double w;
+  };
+
+  /*!
+   * @struct TimedQuaternion
+   * @brief Timed version data type for Quaternion
+   */
+  struct TimedQuaternion
+  {
+    Time tm;
+    Quaternion data;
+  };
 };
 
 #endif // ExtendedDataTypes_idl
