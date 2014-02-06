@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup Label="UserMacros">
-    <omni_dllver>414</omni_dllver>
+    <omni_dllver>415</omni_dllver>
     <omnithread_dllver>34</omnithread_dllver>
     <rtm_dllver>110</rtm_dllver>
     <rtm_version>1.1.0</rtm_version>
@@ -28,7 +28,7 @@
   </PropertyGroup>
   <ItemDefinitionGroup>
     <ClCompile>
-      <AdditionalIncludeDirectories>$(omni_includes);$(rtm_includes);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(omni_includes);$(rtm_includes);.;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>RTC_CORBA_CXXMAPPING11;_WIN32_WINNT=0x0500;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>

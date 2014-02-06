@@ -115,6 +115,7 @@ namespace coil
             if (vs[i] == "dev")
               {
                 dest_if = vs[i + 1];
+                pclose(fp);
                 return true;
               }
           }

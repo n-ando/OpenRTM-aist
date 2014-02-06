@@ -280,7 +280,10 @@ class wrapper_gen:
         self.write_skelh()
         self.write_stub()
         self.write_stubh()
-        self.omniorb_gcc4_fix()
+
+        import sys
+        if sys.platform != 'win32':
+            self.omniorb_gcc4_fix()
         return
 
     def write_skel(self):
