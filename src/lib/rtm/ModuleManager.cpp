@@ -32,7 +32,7 @@ namespace RTC
   
   /*!
    * @if jp
-   * @brief 僐儞僗僩儔僋僞
+   * @brief コンストラクタ
    * @else
    * @brief Constructor
    * @endif
@@ -52,7 +52,7 @@ namespace RTC
   
   /*!
    * @if jp
-   * @brief 僨僗僩儔僋僞
+   * @brief デストラクタ
    * @else
    * @brief Destructor
    * @endif
@@ -64,7 +64,7 @@ namespace RTC
   
   /*!
    * @if jp
-   * @brief 儌僕儏乕儖偺儘乕僪
+   * @brief モジュ〖ルのロ〖ド
    * @else
    * @brief Load the module
    * @endif
@@ -141,7 +141,7 @@ namespace RTC
   
   /*!
    * @if jp
-   * @brief 儌僕儏乕儖偺儘乕僪丄弶婜壔
+   * @brief モジュ〖ルのロ〖ド、介袋步
    * @else
    * @brief Load and initialize the module
    * @endif
@@ -172,7 +172,7 @@ namespace RTC
   
   /*!
    * @if jp
-   * @brief 儌僕儏乕儖偺傾儞儘乕僪
+   * @brief モジュ〖ルのアンロ〖ド
    * @else
    * @brief Unload the module
    * @endif
@@ -195,7 +195,7 @@ namespace RTC
   
   /*!
    * @if jp
-   * @brief 慡儌僕儏乕儖偺傾儞儘乕僪
+   * @brief 链モジュ〖ルのアンロ〖ド
    * @else
    * @brief Unload all modules
    * @endif
@@ -216,7 +216,7 @@ namespace RTC
   
   /*!
    * @if jp
-   * @brief 儌僕儏乕儖偺僔儞儃儖偺嶲徠
+   * @brief モジュ〖ルのシンボルの徊救
    * @else
    * @brief Refer to the symbol of the module
    * @endif
@@ -251,7 +251,7 @@ namespace RTC
   
   /*!
    * @if jp
-   * @brief 儌僕儏乕儖儘乕僪僷僗傪巜掕偡傞
+   * @brief モジュ〖ルロ〖ドパスを回年する
    * @else
    * @brief Set the module load path
    * @endif
@@ -265,7 +265,7 @@ namespace RTC
   
   /*!
    * @if jp
-   * @brief 儌僕儏乕儖儘乕僪僷僗傪捛壛偡傞
+   * @brief モジュ〖ルロ〖ドパスを纳裁する
    * @else
    * @brief Add the module load path
    * @endif
@@ -287,7 +287,7 @@ namespace RTC
   
   /*!
    * @if jp
-   * @brief 儘乕僪嵪傒偺儌僕儏乕儖儕僗僩傪庢摼偡傞
+   * @brief ロ〖ド貉みのモジュ〖ルリストを艰评する
    * @else
    * @brief Get the module list that has been loaded
    * @endif
@@ -306,7 +306,7 @@ namespace RTC
   
   /*!
    * @if jp
-   * @brief 儘乕僪壜擻側儌僕儏乕儖儕僗僩傪庢摼偡傞(枹幚憰)
+   * @brief ロ〖ド材墙なモジュ〖ルリストを艰评する(踏悸刘)
    * @else
    * @brief Get the loadable module list(not implemented)
    * @endif
@@ -345,7 +345,7 @@ namespace RTC
   
   /*!
    * @if jp
-   * @brief LoadPath 偐傜偺僼傽僀儖偺専嶕
+   * @brief LoadPath からのファイルの浮瑚
    * @else
    * @brief Search the file from the LoadPath
    * @endif
@@ -376,7 +376,7 @@ namespace RTC
   
   /*!
    * @if jp
-   * @brief 僼傽僀儖偑懚嵼偡傞偐偳偆偐偺僠僃僢僋
+   * @brief ファイルが赂哼するかどうかのチェック
    * @else
    * @brief Check whether the file exists
    * @endif
@@ -403,7 +403,7 @@ namespace RTC
   
   /*!
    * @if jp
-   * @brief 弶婜壔娭悢僔儞儃儖傪惗惉偡傞
+   * @brief 介袋步簇眶シンボルを栏喇する
    * @else
    * @brief Create initialization function symbol
    * @endif
@@ -419,7 +419,7 @@ namespace RTC
 
   /*!
    * @if jp
-   * @brief 柍岠側儌僕儏乕儖僾儘僼傽僀儖傪嶍彍偡傞
+   * @brief 痰跟なモジュ〖ルプロファイルを猴近する
    * @else
    * @brief Removing incalid module profiles
    * @endif
@@ -440,7 +440,7 @@ namespace RTC
 
   /*!
    * @if jp
-   * @brief 巜掕尵岅偵偍偗傞儘乕僪僷僗忋偺儘乕僟僽儖側僼傽僀儖儕僗僩傪曉偡
+   * @brief 回年咐胳におけるロ〖ドパス惧のロ〖ダブルなファイルリストを手す
    * @else
    * @brief Getting loadable file list on the loadpath for given language
    * @endif
@@ -492,7 +492,7 @@ namespace RTC
 
   /*!
    * @if jp
-   * @brief 僉儍僢僔儏偵柍偄僷僗偩偗modules偵捛壛偡傞
+   * @brief キャッシュに痰いパスだけmodulesに纳裁する
    * @else
    * @brief Adding file path not existing cache
    * @endif
@@ -520,7 +520,7 @@ namespace RTC
 
   /*!
    * @if jp
-   * @brief 巜掕尵岅丄僼傽僀儖儕僗僩偐傜儌僕儏乕儖偺僾儘僷僥傿傪曉偡
+   * @brief 回年咐胳、ファイルリストからモジュ〖ルのプロパティを手す
    * @else
    * @brief Getting module properties from given language and file list
    * @endif
