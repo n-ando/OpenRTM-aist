@@ -27,6 +27,7 @@
  *
  */
 
+#include <stdlib.h>
 #include <string>
 #include <fstream>
 #include <cppunit/ui/text/TestRunner.h>
