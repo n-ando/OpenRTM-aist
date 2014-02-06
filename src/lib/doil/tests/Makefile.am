@@ -5,8 +5,9 @@
 ## $Id$
 ##---------------------------------------------------------------------------
 
-SUBDIRS = \
-        ORBManager
+#SUBDIRS = \
+#        ORBManager
+SUBDIRS = 
 
 clean-local:
 	rm -f *~

@@ -1699,6 +1699,21 @@ AC_OUTPUT([Makefile
 	win32/OpenRTM-aist/rtm/idl/Makefile
 	win32/OpenRTM-aist/installer/Makefile
 	win32/OpenRTM-aist/installer/Bitmaps/Makefile
+	src/lib/rtc/Makefile
+	src/lib/rtc/corba/Makefile
+	src/lib/rtc/corba/idl/Makefile
+	src/lib/doil/Makefile
+	src/lib/doil/utils/Makefile
+	src/lib/doil/utils/omniidl_be/Makefile
+	src/lib/doil/utils/omniidl_be/tests/ConfigurationProxy/Makefile
+	src/lib/doil/ice/Makefile
+	src/lib/doil/tests/Makefile
+	src/lib/doil/tests/ORBManager/Makefile
+	src/lib/doil/corba/Makefile
+	src/lib/doil/corba/tests/Makefile
+	src/lib/doil/corba/tests/CORBAManager/Makefile
+	src/lib/doil/utils/omniidl_be/tests/unitTest/Makefile
+	src/lib/doil/utils/omniidl_be/tests/unitTest/ComponentActionServant/Makefile
 	])
 
 

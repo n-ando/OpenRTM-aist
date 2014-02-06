@@ -20,7 +20,8 @@ IDLC = @IDLC@
 IDLFLAGS = @IDL_FLAGS@
 LIBS = @LIBS@
 
-open_rtm_dir = $(top_builddir)/../../../../..
+#open_rtm_dir = $(top_builddir)/../../../../..
+open_rtm_dir = ../../../../../..
 target_srcdir = $(top_builddir)/..
 
 AM_CPPFLAGS = -I.
@@ -28,6 +29,7 @@ AM_CPPFLAGS += -I$(includedir)
 AM_CPPFLAGS += -I$(target_srcdir)
 AM_CPPFLAGS += -I$(open_rtm_dir)
 AM_CPPFLAGS += -I$(open_rtm_dir)/rtc/corba/idl
+AM_CPPFLAGS += -I$(open_rtm_dir)/coil/posix
 
 AM_LDFLAGS = -L.
 AM_LDFLAGS += -L$(open_rtm_dir)/coil/lib
