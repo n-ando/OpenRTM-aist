@@ -10,12 +10,12 @@
 #ifndef CONSOLEIN_H
 #define CONSOLEIN_H
 
+#include <rtm/idl/BasicDataTypeSkel.h>
 #include <rtm/Manager.h>
 #include <rtm/DataFlowComponentBase.h>
 #include <rtm/CorbaPort.h>
 #include <rtm/DataInPort.h>
 #include <rtm/DataOutPort.h>
-#include <rtm/idl/BasicDataTypeSkel.h>
 #include <rtm/ConnectorListener.h>
 
 #include <iostream>
