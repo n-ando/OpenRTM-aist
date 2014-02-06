@@ -78,6 +78,7 @@ namespace RTC
       {
 	if (!m_downloadAllowed)
 	  {
+	    RTC_ERROR(("Downloading module is not allowed."));
 	    throw NotAllowedOperation("Downloading module is not allowed.");
 	  }
 	else
@@ -92,6 +93,7 @@ namespace RTC
       {
 	if (!m_absoluteAllowed)
 	  {
+	    RTC_ERROR(("Absolute path is not allowed"));
 	    throw NotAllowedOperation("Absolute path is not allowed");
 	  }
 	else
@@ -105,22 +107,34 @@ namespace RTC
       }
     
     // Now file_name is valid full path to module
-    if (file_path == "") throw InvalidArguments("Invalid file name.");
-    if (!fileExist(file_path)) throw FileNotFound(file_path.c_str());
+    if (file_path == "")
+      {
+	RTC_ERROR(("Invalid file name: Empty file name."));
+	throw InvalidArguments("Invalid file name.");
+      }
+    if (!fileExist(file_path))
+      {
+	RTC_ERROR(("Module file not found: %s", file_path.c_str()));
+	throw FileNotFound(file_path.c_str());
+      }
     
     DLLEntity* dll(new DLLEntity());
     
     int retval =  dll->dll.open(file_path.c_str());
     if (retval != 0)
       {
+	RTC_ERROR(("Module file %s load failed: %s",
+		   file_path.c_str(), dll->dll.error()));
         delete dll;
 	throw Error("DLL open failed.");
       }
     dll->properties["file_path"] = file_path;
     bool ret = m_modules.registerObject(dll);
-    if (!ret) {
-      delete dll;
-    }
+    if (!ret)
+      {
+	RTC_ERROR(("Module registration failed: %s", file_path.c_str()));
+	delete dll;
+      }
     
     return file_path;
   }
@@ -150,7 +164,7 @@ namespace RTC
     ModuleInitFunc init;
     
     init = (ModuleInitFunc)this->symbol(name.c_str(), init_func);
-    
+
     init(&(Manager::instance()));
     
     return name;
@@ -188,6 +202,7 @@ namespace RTC
    */
   void ModuleManager::unloadAll()
   {
+    RTC_TRACE(("unloadAll()"));
     std::vector<DLLEntity*> dlls(m_modules.getObjects());
     
     for (int i(0), len(dlls.size()); i < len; ++i)
@@ -210,18 +225,24 @@ namespace RTC
 			      const std::string& func_name)
     throw (ModuleNotFound, SymbolNotFound)
   {
+    RTC_TRACE(("symbol(%s, %s)",
+	       file_name.c_str(), func_name.c_str()))
     // "file_name" should be in modules map.
     DLLEntity* dll(m_modules.find(file_name.c_str()));
     if (dll == NULL)
       {
+	RTC_ERROR(("Module %s not found in module table.", file_name.c_str()));
 	throw ModuleNotFound(file_name);
       }
-    
+
+    RTC_DEBUG(("Finding function symbol: %s in %s",
+	       func_name.c_str(), file_name.c_str()));
     void* func;
     func = dll->dll.symbol(func_name.c_str());
     
     if (!func)
       {
+	RTC_ERROR(("Specified symbol %s not found.", func_name.c_str()));
 	throw SymbolNotFound(func_name);
       }
     
@@ -237,6 +258,7 @@ namespace RTC
    */
   void ModuleManager::setLoadpath(const std::vector<std::string>& load_path)
   {
+    RTC_TRACE(("setLoadpath(%s)", coil::flatten(load_path, ", ").c_str()));
     m_loadPath = load_path;
     return;
   }
@@ -250,6 +272,7 @@ namespace RTC
    */
   void ModuleManager::addLoadpath(const std::vector<std::string>& load_path)
   {
+    RTC_TRACE(("addLoadpath(%s)", coil::flatten(load_path, ", ").c_str()));
     StringVectorConstItr it(load_path.begin());
     StringVectorConstItr it_end(load_path.end());
     
@@ -271,6 +294,7 @@ namespace RTC
    */
   std::vector<coil::Properties> ModuleManager::getLoadedModules()
   {
+    RTC_TRACE(("getLoadedModules()"));
     std::vector< DLLEntity* > dlls(m_modules.getObjects());
     std::vector<coil::Properties> modules;
     for (int i(0), len(dlls.size()); i < len; ++i)
@@ -329,6 +353,8 @@ namespace RTC
   std::string ModuleManager::findFile(const std::string& fname,
 				      const std::vector<std::string>& load_path)
   {
+    RTC_TRACE(("findFile(%s, %s)", fname.c_str(),
+	       coil::flatten(load_path, ", ").c_str()));
     StringVectorConstItr it, it_end;
     std::string file_name(fname);
     
@@ -357,6 +383,7 @@ namespace RTC
    */
   bool ModuleManager::fileExist(const std::string& filename)
   {
+    RTC_TRACE(("fileExist(%s)", filename.c_str()));
     std::ifstream infile;
     infile.open(filename.c_str(), std::ios::in);
     // fial() 0: ok, !0: fail
@@ -383,6 +410,7 @@ namespace RTC
    */
   std::string ModuleManager::getInitFuncName(const std::string& file_path)
   {
+    RTC_TRACE(("getInitFuncName(%s)", file_path.c_str()));
     std::string base_name(coil::basename(file_path.c_str()));
     
     return m_initFuncPrefix + base_name + m_initFuncSuffix;
@@ -521,7 +549,8 @@ namespace RTC
             char str[512];
             fgets(str, 512, fd);
             std::string line(str);
-            line.erase(line.size() - 1);
+            if (0 < line.size())
+              line.erase(line.size() - 1);
             std::string::size_type pos(line.find(":"));
             if (pos != std::string::npos)
               {
