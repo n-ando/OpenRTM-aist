@@ -5,8 +5,9 @@
 ## $Id$
 ##---------------------------------------------------------------------------
 
-SUBDIRS = \
-        IceManager
+#SUBDIRS = \
+#        IceManager
+SUBDIRS = 
 
 clean-local:
 	rm -f *~

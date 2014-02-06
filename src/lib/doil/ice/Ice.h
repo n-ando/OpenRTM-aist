@@ -20,6 +20,6 @@
 #define DOIL_ICE_ICE_H
 
 #include <rtm/config_rtc.h>
-//#include <Ice/Ice.h>
+#include <Ice/Ice.h>
 
 #endif // DOIL_ICE_ICE_H
