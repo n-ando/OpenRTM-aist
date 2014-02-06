@@ -178,7 +178,7 @@ case $system in
 [Darwin*)]
 	AC_DEFINE([RTM_OS_DARWIN], [TRUE], [OS is Max OS X])
 	SHLIB_SUFFIX=".dylib"
-	LDFLAGS="--export-dynamic $LDFLAGS"
+	LDFLAGS="-export-dynamic $LDFLAGS"
 	os="darwin"
 	;;	
 [QNX*)]
