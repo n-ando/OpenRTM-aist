@@ -88,7 +88,8 @@ inline bool local_to_corba(const std::string& _from, ::CORBA::String_member& _to
 }
 
 
-inline bool local_to_corba(const std::string& _from, _CORBA_String_element::_CORBA_String_element _to)
+//inline bool local_to_corba(const std::string& _from, _CORBA_String_element::_CORBA_String_element _to)
+inline bool local_to_corba(const std::string& _from, ::_CORBA_String_element _to)
 {
   _to.out() = ::CORBA::string_dup(_from.c_str());
   return true;

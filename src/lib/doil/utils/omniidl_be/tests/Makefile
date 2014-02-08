@@ -1,5 +1,6 @@
 all: RTC
-OMNIIDL=PYTHONPATH=$(PYTHONPATH):../../ omniidl
+#OMNIIDL=PYTHONPATH=$(PYTHONPATH):../../ omniidl
+OMNIIDL=omniidl
 
 CXXFLAGS= \
 	-fPIC -c \
