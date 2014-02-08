@@ -9,6 +9,7 @@
  */
 
 
+#include <stdio.h>
 #include <ConfigurationImpl.h>
 #include <iostream>
 #include <Logger.h>
