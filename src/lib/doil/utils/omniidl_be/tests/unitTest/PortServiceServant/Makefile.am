@@ -20,14 +20,20 @@ IDLC = @IDLC@
 IDLFLAGS = @IDL_FLAGS@
 LIBS = @LIBS@
 
-open_rtm_dir = $(top_builddir)/../../../../..
-target_srcdir = $(top_builddir)/..
+#open_rtm_dir = $(top_builddir)/../../../../..
+open_rtm_dir = ../../../../../..
+#target_srcdir = $(top_builddir)/..
+target_srcdir = ../..
 
 AM_CPPFLAGS = -I.
 AM_CPPFLAGS += -I$(includedir)
 AM_CPPFLAGS += -I$(target_srcdir)
 AM_CPPFLAGS += -I$(open_rtm_dir)
 AM_CPPFLAGS += -I$(open_rtm_dir)/rtc/corba/idl
+AM_CPPFLAGS += -I../
+AM_CPPFLAGS += -I../../
+AM_CPPFLAGS += -I../../../../../../coil/posix
+AM_CPPFLAGS += -I../../../../../../
 
 AM_LDFLAGS = -L.
 AM_LDFLAGS += -L$(open_rtm_dir)/coil/lib
@@ -50,7 +56,7 @@ PortServiceServantTests_LDADD   = -lomniORB4
 PortServiceServantTests_LDADD  += -lomnithread
 PortServiceServantTests_LDADD  += -lomniDynamic4
 PortServiceServantTests_LDADD  += -lcoil
-#PortServiceServantTests_LDADD  += -lcppunit
+PortServiceServantTests_LDADD  += -lcppunit
 PortServiceServantTests_LDADD  += $(target_srcdir)/PortServiceServant.o
 PortServiceServantTests_LDADD  += $(target_srcdir)/RTCTypeConversion.o
 PortServiceServantTests_LDADD  += $(target_srcdir)/SDOPackageTypeConversion.o
