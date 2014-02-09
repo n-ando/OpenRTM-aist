@@ -80,15 +80,28 @@ adapter:
 		-Wbcorbaadapter -Wbimplicit \
 		-Wbans=CORBA ./RTC.idl
 	$(OMNIIDL) -bdoil \
-		-Wbcorbaservant -Wbimplicit \
+		-Wbcorbaadapter -Wbimplicit \
 		-Wbans=CORBA ./SDOPackage.idl
+#	$(OMNIIDL) -bdoil \
+#		-Wbcorbaservant -Wbimplicit \
+#		-Wbans=CORBA ./SDOPackage.idl
 	g++ -I../../../../ -I../../../../coil/include *.h
 
+proxy:
+	rm -f *.gch
+	$(OMNIIDL) -bdoil -Wbi=SDOPackageTypes.h \
+		-Wbcorbaproxy -Wbimplicit \
+		-Wbans=CORBA ./RTC.idl
+	$(OMNIIDL) -bdoil \
+		-Wbcorbaproxy -Wbimplicit \
+		-Wbans=CORBA ./SDOPackage.idl
+#	g++ $(CXXFLAGS) *.h
 
 clean:
 	rm -f *~
 	rm -f *Servant*
 	rm -f *Adapter*
+	rm -f *Proxy*
 	rm -f *TypeConversion*
 	rm -f *Types*
 	rm -f I*.h

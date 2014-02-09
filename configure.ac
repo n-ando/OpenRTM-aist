@@ -1715,6 +1715,7 @@ AC_OUTPUT([Makefile
 	src/lib/doil/corba/tests/Makefile
 	src/lib/doil/corba/tests/CORBAManager/Makefile
 	src/lib/doil/utils/omniidl_be/tests/unitTest/Makefile
+	src/lib/doil/utils/omniidl_be/tests/unitTest/stubs/Makefile
 	src/lib/doil/utils/omniidl_be/tests/unitTest/ComponentActionServant/Makefile
 	src/lib/doil/utils/omniidl_be/tests/unitTest/PortServiceServant/Makefile
 	src/lib/doil/utils/omniidl_be/tests/unitTest/ConfigurationServant/Makefile
