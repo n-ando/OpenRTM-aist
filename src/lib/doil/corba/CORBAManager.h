@@ -26,7 +26,7 @@
 #include <doil/ProxyFactory.h>
 #include <doil/corba/CORBA.h>
 #include <doil/corba/CORBAServantBase.h>
-//#include <doil/corba/CORBAProxyBase.h>
+#include <doil/corba/CORBAProxyBase.h>
 #include <doil/ObjectManager.h>
 
 namespace doil
