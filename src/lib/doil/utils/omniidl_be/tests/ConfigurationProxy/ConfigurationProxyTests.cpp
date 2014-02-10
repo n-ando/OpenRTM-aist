@@ -93,11 +93,18 @@ namespace ConfigurationProxy
 	return value._retn();
 //      return new ::CORBA::Any();
     }
+    virtual ::CORBA::Boolean add_organization_property(
+          const ::SDOPackage::OrganizationProperty& organization_property)
+    {
+	return true;
+    }
+/*
     virtual ::CORBA::Boolean set_organization_property(
           const ::SDOPackage::OrganizationProperty& organization_property)
     {
 	return true;
     }
+*/
     virtual ::CORBA::Boolean set_organization_property_value(
           const char* name, const CORBA::Any& value)
     {
@@ -392,6 +399,19 @@ namespace ConfigurationProxy
     /*! 
      *
      */
+     ::CORBA::Boolean add_service_profile(const ::SDOPackage::ServiceProfile& sProfile)
+       throw (CORBA::SystemException,
+   	      ::SDOPackage::InvalidParameter, 
+              ::SDOPackage::NotAvailable, 
+              ::SDOPackage::InternalError)
+     {
+        if (m_logger != NULL) m_logger->log("add_service_profile");
+        return true;
+     }
+    /*! 
+     *
+     */
+/*
      ::CORBA::Boolean set_service_profile(const ::SDOPackage::ServiceProfile& sProfile)
        throw (CORBA::SystemException,
    	      ::SDOPackage::InvalidParameter, 
@@ -401,6 +421,7 @@ namespace ConfigurationProxy
         if (m_logger != NULL) m_logger->log("set_service_profile");
         return true;
      }
+*/
     /*! 
      *
      */
@@ -629,7 +650,7 @@ namespace ConfigurationProxy
      *
      */
     ::CORBA::Boolean set_configuration_set_values(
-             const char* id,
+//             const char* id,
              const ::SDOPackage::ConfigurationSet& configuration_set)
       throw (CORBA::SystemException,
 	     ::SDOPackage::InvalidParameter, 
@@ -639,7 +660,7 @@ namespace ConfigurationProxy
         if (m_logger != NULL)
         { 
             m_logger->log("set_configuration_set_values");
-            m_logger->log(id);
+//            m_logger->log(id);
             m_logger->log(configuration_set.id.in());
             m_logger->log(configuration_set.description.in());
             m_logger->log(configuration_set.configuration_data[0].name.in());
@@ -654,8 +675,8 @@ namespace ConfigurationProxy
             any >>= to_str;
             m_logger->log(to_str.val);
         }
-        if (std::string(id).empty()) 
-            throw ::SDOPackage::InvalidParameter("ID is empty.");
+//        if (std::string(id).empty()) 
+//            throw ::SDOPackage::InvalidParameter("ID is empty.");
 	return true;
     }
     /*! 
