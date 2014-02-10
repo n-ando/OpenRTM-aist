@@ -96,6 +96,8 @@ proxy:
 		-Wbcorbaproxy -Wbimplicit \
 		-Wbans=CORBA ./SDOPackage.idl
 #	g++ $(CXXFLAGS) *.h
+	g++ $(CXXFLAGS) RTCTypeConversion.cpp
+	g++ -shared -o RTCTypeConversion.so RTCTypeConversion.o
 
 clean:
 	rm -f *~

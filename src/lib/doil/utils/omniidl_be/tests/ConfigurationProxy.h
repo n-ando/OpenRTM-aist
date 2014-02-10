@@ -21,10 +21,12 @@
 
 namespace SDOPackage 
 {
+namespace CORBA 
+{
 
   class ConfigurationProxy 
   : public virtual ::doil::CORBA::CORBAProxyBase,
-    public virtual ::SDOPackage::IConfiguration
+    public virtual ::SDOPackage::Local::IConfiguration
   {
     typedef coil::Mutex Mutex;
     typedef coil::Guard<Mutex> Guard;
@@ -147,6 +149,7 @@ namespace SDOPackage
     int m_refcount;
   };
 
+}; // namespace CORBA
 }; // namespace SDOPackage 
 
 #ifndef SDOPACKAGE_CONFIGURATIONSERVANT_H 

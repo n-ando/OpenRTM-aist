@@ -38,8 +38,9 @@ namespace CORBA
 #endif
   {
   public:
-    CORBAProxyBase(ImplBase* impl)
-      : m_refcount(1), m_id(impl->id()), m_name(impl->name())
+    //CORBAProxyBase(ImplBase* impl)
+    CORBAProxyBase(::CORBA::Object_ptr impl)
+      : m_refcount(1)//, m_id(impl->id()), m_name(impl->name())
     {
     }
     virtual ~CORBAProxyBase(){}

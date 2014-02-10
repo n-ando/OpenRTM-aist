@@ -17,11 +17,14 @@
 
 namespace SDOPackage 
 {
+namespace CORBA 
+{
   /*!
    * @brief ctor
    */ 
   ConfigurationProxy::ConfigurationProxy(::CORBA::Object_ptr obj)
-   : m_obj(::SDOPackage::Configuration::_nil()),
+   : ::doil::CORBA::CORBAProxyBase(obj),
+     m_obj(::SDOPackage::Configuration::_nil()),
      m_refcount(1)//   : m_obj(::SDOPackage::Configuration::_nil())
   {
     m_obj = ::SDOPackage::Configuration::_narrow(obj);
@@ -41,10 +44,10 @@ namespace SDOPackage
   /*!
    * @brief set_device_profile 
    */ 
-  bool ConfigurationProxy::set_device_profile(const ::SDOPackage::DeviceProfile& dProfile)
-      throw (::SDOPackage::InvalidParameter,
-             ::SDOPackage::NotAvailable,
-             ::SDOPackage::InternalError)
+  bool ConfigurationProxy::set_device_profile(const ::SDOPackage::Local::DeviceProfile& dProfile)
+      throw (::SDOPackage::Local::InvalidParameter,
+             ::SDOPackage::Local::NotAvailable,
+             ::SDOPackage::Local::InternalError)
   {
     // Convert Local to CORBA.
     // (The direction of the argument is 'in' or 'inout'.)
@@ -68,10 +71,10 @@ namespace SDOPackage
   /*!
    * @brief set_service_profile 
    */ 
-  bool ConfigurationProxy::set_service_profile(const ::SDOPackage::ServiceProfile& sProfile)
-      throw (::SDOPackage::InvalidParameter,
-             ::SDOPackage::NotAvailable,
-             ::SDOPackage::InternalError)
+  bool ConfigurationProxy::set_service_profile(const ::SDOPackage::Local::ServiceProfile& sProfile)
+      throw (::SDOPackage::Local::InvalidParameter,
+             ::SDOPackage::Local::NotAvailable,
+             ::SDOPackage::Local::InternalError)
   {
     // Convert Local to CORBA.
     // (The direction of the argument is 'in' or 'inout'.)
@@ -95,15 +98,15 @@ namespace SDOPackage
   /*!
    * @brief add_organization 
    */ 
-  bool ConfigurationProxy::add_organization(const ::SDOPackage::IOrganization* org)
-      throw (::SDOPackage::InvalidParameter,
-             ::SDOPackage::NotAvailable,
-             ::SDOPackage::InternalError)
+  bool ConfigurationProxy::add_organization(const ::SDOPackage::Local::IOrganization* org)
+      throw (::SDOPackage::Local::InvalidParameter,
+             ::SDOPackage::Local::NotAvailable,
+             ::SDOPackage::Local::InternalError)
   {
     // Convert Local to CORBA.
     // (The direction of the argument is 'in' or 'inout'.)
     ::SDOPackage::Organization_ptr _org;
-    local_to_corba(const_cast< ::SDOPackage::IOrganization* >(org), _org);
+    local_to_corba(const_cast< ::SDOPackage::Local::IOrganization* >(org), _org);
 
     // Execute the method. 
     ::CORBA::Boolean corba_ret;
@@ -123,9 +126,9 @@ namespace SDOPackage
    * @brief remove_service_profile 
    */ 
   bool ConfigurationProxy::remove_service_profile(const ::std::string& id)
-      throw (::SDOPackage::InvalidParameter,
-             ::SDOPackage::NotAvailable,
-             ::SDOPackage::InternalError)
+      throw (::SDOPackage::Local::InvalidParameter,
+             ::SDOPackage::Local::NotAvailable,
+             ::SDOPackage::Local::InternalError)
   {
     // Convert Local to CORBA.
     // (The direction of the argument is 'in' or 'inout'.)
@@ -150,9 +153,9 @@ namespace SDOPackage
    * @brief remove_organization 
    */ 
   bool ConfigurationProxy::remove_organization(const ::std::string& organization_id)
-      throw (::SDOPackage::InvalidParameter,
-             ::SDOPackage::NotAvailable,
-             ::SDOPackage::InternalError)
+      throw (::SDOPackage::Local::InvalidParameter,
+             ::SDOPackage::Local::NotAvailable,
+             ::SDOPackage::Local::InternalError)
   {
     // Convert Local to CORBA.
     // (The direction of the argument is 'in' or 'inout'.)
@@ -176,18 +179,17 @@ namespace SDOPackage
   /*!
    * @brief get_configuration_parameters 
    */ 
-  ::SDOPackage::ParameterList ConfigurationProxy::get_configuration_parameters()
-      throw (::SDOPackage::NotAvailable,
-             ::SDOPackage::InternalError)
+  ::SDOPackage::Local::ParameterList ConfigurationProxy::get_configuration_parameters()
+      throw (::SDOPackage::Local::NotAvailable,
+             ::SDOPackage::Local::InternalError)
   {
     // Convert Local to CORBA.
     // (The direction of the argument is 'in' or 'inout'.)
 
     // Execute the method. 
     ::SDOPackage::ParameterList* corba_ret;
-    ::SDOPackage::ParameterList local_ret;
+    ::SDOPackage::Local::ParameterList local_ret;
     corba_ret = m_obj->get_configuration_parameters();
-
     // Convert CORBA to Local.
     // (The direction of the argument is 'out' or 'inout'.)
 
@@ -200,16 +202,16 @@ namespace SDOPackage
   /*!
    * @brief get_configuration_parameter_values 
    */ 
-  ::SDOPackage::NVList ConfigurationProxy::get_configuration_parameter_values()
-      throw (::SDOPackage::NotAvailable,
-             ::SDOPackage::InternalError)
+  ::SDOPackage::Local::NVList ConfigurationProxy::get_configuration_parameter_values()
+      throw (::SDOPackage::Local::NotAvailable,
+             ::SDOPackage::Local::InternalError)
   {
     // Convert Local to CORBA.
     // (The direction of the argument is 'in' or 'inout'.)
 
     // Execute the method. 
     ::SDOPackage::NVList* corba_ret;
-    ::SDOPackage::NVList local_ret;
+    ::SDOPackage::Local::NVList local_ret;
     corba_ret = m_obj->get_configuration_parameter_values();
 
     // Convert CORBA to Local.
@@ -225,9 +227,9 @@ namespace SDOPackage
    * @brief get_configuration_parameter_value 
    */ 
   ::std::string ConfigurationProxy::get_configuration_parameter_value(const ::std::string& name)
-      throw (::SDOPackage::InvalidParameter,
-             ::SDOPackage::NotAvailable,
-             ::SDOPackage::InternalError)
+      throw (::SDOPackage::Local::InvalidParameter,
+             ::SDOPackage::Local::NotAvailable,
+             ::SDOPackage::Local::InternalError)
   {
     // Convert Local to CORBA.
     // (The direction of the argument is 'in' or 'inout'.)
@@ -252,9 +254,9 @@ namespace SDOPackage
    * @brief set_configuration_parameter 
    */ 
   bool ConfigurationProxy::set_configuration_parameter(const ::std::string& name, const ::std::string& value)
-      throw (::SDOPackage::InvalidParameter,
-             ::SDOPackage::NotAvailable,
-             ::SDOPackage::InternalError)
+      throw (::SDOPackage::Local::InvalidParameter,
+             ::SDOPackage::Local::NotAvailable,
+             ::SDOPackage::Local::InternalError)
   {
     // Convert Local to CORBA.
     // (The direction of the argument is 'in' or 'inout'.)
@@ -280,16 +282,16 @@ namespace SDOPackage
   /*!
    * @brief get_configuration_sets 
    */ 
-  ::SDOPackage::ConfigurationSetList ConfigurationProxy::get_configuration_sets()
-      throw (::SDOPackage::NotAvailable,
-             ::SDOPackage::InternalError)
+  ::SDOPackage::Local::ConfigurationSetList ConfigurationProxy::get_configuration_sets()
+      throw (::SDOPackage::Local::NotAvailable,
+             ::SDOPackage::Local::InternalError)
   {
     // Convert Local to CORBA.
     // (The direction of the argument is 'in' or 'inout'.)
 
     // Execute the method. 
     ::SDOPackage::ConfigurationSetList* corba_ret;
-    ::SDOPackage::ConfigurationSetList local_ret;
+    ::SDOPackage::Local::ConfigurationSetList local_ret;
     corba_ret = m_obj->get_configuration_sets();
 
     // Convert CORBA to Local.
@@ -304,9 +306,9 @@ namespace SDOPackage
   /*!
    * @brief get_configuration_set 
    */ 
-  ::SDOPackage::ConfigurationSet ConfigurationProxy::get_configuration_set(const ::std::string& config_id)
-      throw (::SDOPackage::NotAvailable,
-             ::SDOPackage::InternalError)
+  ::SDOPackage::Local::ConfigurationSet ConfigurationProxy::get_configuration_set(const ::std::string& config_id)
+      throw (::SDOPackage::Local::NotAvailable,
+             ::SDOPackage::Local::InternalError)
   {
     // Convert Local to CORBA.
     // (The direction of the argument is 'in' or 'inout'.)
@@ -315,7 +317,7 @@ namespace SDOPackage
 
     // Execute the method. 
     ::SDOPackage::ConfigurationSet* corba_ret;
-    ::SDOPackage::ConfigurationSet local_ret;
+    ::SDOPackage::Local::ConfigurationSet local_ret;
     corba_ret = m_obj->get_configuration_set(_config_id);
 
     // Convert CORBA to Local.
@@ -330,10 +332,10 @@ namespace SDOPackage
   /*!
    * @brief set_configuration_set_values 
    */ 
-  bool ConfigurationProxy::set_configuration_set_values(const ::std::string& config_id, const ::SDOPackage::ConfigurationSet& configuration_set)
-      throw (::SDOPackage::InvalidParameter,
-             ::SDOPackage::NotAvailable,
-             ::SDOPackage::InternalError)
+  bool ConfigurationProxy::set_configuration_set_values(const ::std::string& config_id, const ::SDOPackage::Local::ConfigurationSet& configuration_set)
+      throw (::SDOPackage::Local::InvalidParameter,
+             ::SDOPackage::Local::NotAvailable,
+             ::SDOPackage::Local::InternalError)
   {
     // Convert Local to CORBA.
     // (The direction of the argument is 'in' or 'inout'.)
@@ -359,16 +361,16 @@ namespace SDOPackage
   /*!
    * @brief get_active_configuration_set 
    */ 
-  ::SDOPackage::ConfigurationSet ConfigurationProxy::get_active_configuration_set()
-      throw (::SDOPackage::NotAvailable,
-             ::SDOPackage::InternalError)
+  ::SDOPackage::Local::ConfigurationSet ConfigurationProxy::get_active_configuration_set()
+      throw (::SDOPackage::Local::NotAvailable,
+             ::SDOPackage::Local::InternalError)
   {
     // Convert Local to CORBA.
     // (The direction of the argument is 'in' or 'inout'.)
 
     // Execute the method. 
     ::SDOPackage::ConfigurationSet* corba_ret;
-    ::SDOPackage::ConfigurationSet local_ret;
+    ::SDOPackage::Local::ConfigurationSet local_ret;
     corba_ret = m_obj->get_active_configuration_set();
 
     // Convert CORBA to Local.
@@ -383,10 +385,10 @@ namespace SDOPackage
   /*!
    * @brief add_configuration_set 
    */ 
-  bool ConfigurationProxy::add_configuration_set(const ::SDOPackage::ConfigurationSet& configuration_set)
-      throw (::SDOPackage::InvalidParameter,
-             ::SDOPackage::NotAvailable,
-             ::SDOPackage::InternalError)
+  bool ConfigurationProxy::add_configuration_set(const ::SDOPackage::Local::ConfigurationSet& configuration_set)
+      throw (::SDOPackage::Local::InvalidParameter,
+             ::SDOPackage::Local::NotAvailable,
+             ::SDOPackage::Local::InternalError)
   {
     // Convert Local to CORBA.
     // (The direction of the argument is 'in' or 'inout'.)
@@ -411,9 +413,9 @@ namespace SDOPackage
    * @brief remove_configuration_set 
    */ 
   bool ConfigurationProxy::remove_configuration_set(const ::std::string& config_id)
-      throw (::SDOPackage::InvalidParameter,
-             ::SDOPackage::NotAvailable,
-             ::SDOPackage::InternalError)
+      throw (::SDOPackage::Local::InvalidParameter,
+             ::SDOPackage::Local::NotAvailable,
+             ::SDOPackage::Local::InternalError)
   {
     // Convert Local to CORBA.
     // (The direction of the argument is 'in' or 'inout'.)
@@ -438,9 +440,9 @@ namespace SDOPackage
    * @brief activate_configuration_set 
    */ 
   bool ConfigurationProxy::activate_configuration_set(const ::std::string& config_id)
-      throw (::SDOPackage::InvalidParameter,
-             ::SDOPackage::NotAvailable,
-             ::SDOPackage::InternalError)
+      throw (::SDOPackage::Local::InvalidParameter,
+             ::SDOPackage::Local::NotAvailable,
+             ::SDOPackage::Local::InternalError)
   {
     // Convert Local to CORBA.
     // (The direction of the argument is 'in' or 'inout'.)
@@ -461,6 +463,7 @@ namespace SDOPackage
     return local_ret;
   }
 
+}; // namespace CORBA
 }; // namespace SDOPackage 
 
 extern "C"
@@ -469,8 +472,8 @@ extern "C"
   {
     doil::CORBA::CORBAManager& mgr(doil::CORBA::CORBAManager::instance());
     mgr.registerProxyFactory("ConfigurationProxy",
-                        doil::New< ::SDOPackage::ConfigurationProxy >,
-                        doil::Delete< ::SDOPackage::ConfigurationProxy >);
+                        doil::New< ::SDOPackage::CORBA::ConfigurationProxy >,
+                        doil::Delete< ::SDOPackage::CORBA::ConfigurationProxy >);
   }
 };
 
