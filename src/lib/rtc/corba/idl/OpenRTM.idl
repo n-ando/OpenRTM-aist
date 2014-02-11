@@ -28,31 +28,31 @@ module OpenRTM
   {
   };
 
-  interface FiniteStateMachineComponent
-    : RTC::RTObject, RTC::FsmParticipant
-  {
-  };
-
-  interface DataFlowFiniteStateMachineComponent
-    : RTC::RTObject, RTC::DataFlowComponent, RTC::FsmParticipant
-  {
-  };
-
-  interface DataFlowMultiModeComponent
-    : RTC::RTObject, RTC::DataFlowComponent, RTC::MultiModeObject
-  {
-  };
-
-  interface FiniteStateMachineMultiModeComponent
-    : RTC::RTObject, RTC::FsmParticipant, RTC::MultiModeObject
-  {
-  };
-
-  interface DataFlowFiniteStateMachineMultiModeComponent
-    : RTC::RTObject, RTC::DataFlowComponent,
-    RTC::FsmParticipant, RTC::MultiModeObject
-  {
-  };
+//  interface FiniteStateMachineComponent
+//    : RTC::RTObject, RTC::FsmParticipant
+//  {
+//  };
+//
+//  interface DataFlowFiniteStateMachineComponent
+//    : RTC::RTObject, RTC::DataFlowComponent, RTC::FsmParticipant
+//  {
+//  };
+//
+//  interface DataFlowMultiModeComponent
+//    : RTC::RTObject, RTC::DataFlowComponent, RTC::MultiModeObject
+//  {
+//  };
+//
+//  interface FiniteStateMachineMultiModeComponent
+//    : RTC::RTObject, RTC::FsmParticipant, RTC::MultiModeObject
+//  {
+//  };
+//
+//  interface DataFlowFiniteStateMachineMultiModeComponent
+//    : RTC::RTObject, RTC::DataFlowComponent,
+//    RTC::FsmParticipant, RTC::MultiModeObject
+//  {
+//  };
 
 
   interface ExtTrigExecutionContextService

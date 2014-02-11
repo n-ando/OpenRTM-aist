@@ -12,7 +12,7 @@
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
  *
- * $Id: BasicDataType.idl 990 2008-10-29 06:30:09Z n-ando $
+ * $Id: BasicDataType.idl 1580 2009-12-07 08:54:10Z kurihara $
  *
  */
 
@@ -77,6 +77,12 @@ module RTC {
 	char data;
   };
 
+  struct TimedWChar
+  {
+	Time tm;
+	wchar data;
+  };
+
   struct TimedBoolean
   {
 	Time tm;
@@ -93,6 +99,13 @@ module RTC {
   {
 	Time tm;
 	string data;
+  };
+
+
+  struct TimedWString
+  {
+	Time tm;
+	wstring data;
   };
 
 
@@ -141,6 +154,12 @@ module RTC {
 	sequence<char> data;
   };
 
+  struct TimedWCharSeq
+  {
+	Time tm;
+	sequence<wchar> data;
+  };
+
   struct TimedBooleanSeq
   {
 	Time tm;
@@ -157,6 +176,12 @@ module RTC {
   {
 	Time tm;
 	sequence<string> data;
+  };
+  
+  struct TimedWStringSeq
+  {
+	Time tm;
+	sequence<wstring> data;
   };
   
 };
