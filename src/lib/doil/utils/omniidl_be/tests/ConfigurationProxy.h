@@ -39,12 +39,16 @@ namespace CORBA
              ::SDOPackage::Local::NotAvailable,
              ::SDOPackage::Local::InternalError);
 
-
+    virtual bool add_service_profile(const ::SDOPackage::Local::ServiceProfile& sProfile)
+      throw (::SDOPackage::Local::InvalidParameter,
+             ::SDOPackage::Local::NotAvailable,
+             ::SDOPackage::Local::InternalError);
+/*
     virtual bool set_service_profile(const ::SDOPackage::Local::ServiceProfile& sProfile)
       throw (::SDOPackage::Local::InvalidParameter,
              ::SDOPackage::Local::NotAvailable,
              ::SDOPackage::Local::InternalError);
-
+*/
 
     virtual bool add_organization(const ::SDOPackage::Local::IOrganization* org)
       throw (::SDOPackage::Local::InvalidParameter,
@@ -96,7 +100,8 @@ namespace CORBA
              ::SDOPackage::Local::InternalError);
 
 
-    virtual bool set_configuration_set_values(const ::std::string& config_id, const ::SDOPackage::Local::ConfigurationSet& configuration_set)
+    //virtual bool set_configuration_set_values(const ::std::string& config_id, const ::SDOPackage::Local::ConfigurationSet& configuration_set)
+    virtual bool set_configuration_set_values(const ::SDOPackage::Local::ConfigurationSet& configuration_set)
       throw (::SDOPackage::Local::InvalidParameter,
              ::SDOPackage::Local::NotAvailable,
              ::SDOPackage::Local::InternalError);

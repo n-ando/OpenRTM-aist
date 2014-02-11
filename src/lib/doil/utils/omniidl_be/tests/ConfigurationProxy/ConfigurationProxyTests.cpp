@@ -250,6 +250,14 @@ namespace ConfigurationProxy
     {
         return "IOrganizationMock";
     }
+    virtual bool add_organization_property(const ::SDOPackage::Local::OrganizationProperty& organization_property)
+      throw (::SDOPackage::Local::InvalidParameter,
+             ::SDOPackage::Local::NotAvailable,
+             ::SDOPackage::Local::InternalError)
+    {
+        return true;       
+    }
+/*
     virtual bool set_organization_property(const ::SDOPackage::Local::OrganizationProperty& organization_property)
       throw (::SDOPackage::Local::InvalidParameter,
              ::SDOPackage::Local::NotAvailable,
@@ -257,6 +265,7 @@ namespace ConfigurationProxy
     {
         return true;       
     }
+*/
 
     virtual bool set_organization_property_value(const ::std::string&name, const ::std::string& value)
       throw (::SDOPackage::Local::InvalidParameter,
@@ -411,7 +420,6 @@ namespace ConfigurationProxy
     /*! 
      *
      */
-/*
      ::CORBA::Boolean set_service_profile(const ::SDOPackage::ServiceProfile& sProfile)
        throw (CORBA::SystemException,
    	      ::SDOPackage::InvalidParameter, 
@@ -421,7 +429,6 @@ namespace ConfigurationProxy
         if (m_logger != NULL) m_logger->log("set_service_profile");
         return true;
      }
-*/
     /*! 
      *
      */
@@ -777,7 +784,8 @@ namespace ConfigurationProxy
   {
     CPPUNIT_TEST_SUITE(ConfigurationProxyTests);
     CPPUNIT_TEST(test_set_device_profile);
-    CPPUNIT_TEST(test_set_service_profile);
+    //CPPUNIT_TEST(test_set_service_profile);
+    CPPUNIT_TEST(test_add_service_profile);
     CPPUNIT_TEST(test_add_organization);
     CPPUNIT_TEST(test_remove_service_profile);
     CPPUNIT_TEST(test_remove_organization);
@@ -869,8 +877,10 @@ namespace ConfigurationProxy
      *
      *
      */
+/*
     void test_set_service_profile()
     {
+      std::cout <<"test_set_service_profile() entry "<<std::endl;
       doil::CORBA::CORBAManager& 
                             mgr(doil::CORBA::CORBAManager::instance());
       std::cout <<"Manager Name==>"<< mgr.name() << std::endl;
@@ -882,13 +892,69 @@ namespace ConfigurationProxy
          std::cout<<"ref is nil.Abort test."<<std::endl;
          return;
       }
+      
+      std::cout <<"test_set_service_profile() ref: "<<ref<<std::endl;
       ::SDOPackage::CORBA::ConfigurationProxy* ap 
                  = new ::SDOPackage::CORBA::ConfigurationProxy(ref);
 
       Logger logger;
       obj->setLogger(&logger);
 
+      std::cout <<"test_set_service_profile() 030 "<<std::endl;
       CPPUNIT_ASSERT_EQUAL(0, logger.countLog("set_service_profile"));
+      ::SDOPackage::Local::ServiceProfile porf;
+      ISDOServiceMock service;
+
+      std::cout <<"test_set_service_profile() 040 "<<std::endl;
+      mgr.registerFactory(service.id(), 
+                          doil::New<ISDOServiceServantMock>,
+                          doil::Delete<ISDOServiceServantMock>);
+      std::cout <<"test_set_service_profile() 050 "<<std::endl;
+      mgr.activateObject(&service);
+
+      porf.service = &service;
+      const ::SDOPackage::Local::ServiceProfile _porf = porf;
+      std::cout <<"test_set_service_profile() 060 "<<std::endl;
+      ap->set_service_profile(_porf);
+      std::cout <<"test_set_service_profile() 070 "<<std::endl;
+      CPPUNIT_ASSERT_EQUAL(1, logger.countLog("set_service_profile"));
+
+      std::cout <<"test_set_service_profile() 080 "<<std::endl;
+      mgr.deactivateObject(&service);
+      std::cout <<"test_set_service_profile() 080 "<<std::endl;
+
+      delete ap;
+      CORBA::release(ref);
+      mgr.shutdown();
+      std::cout <<"test_set_service_profile() ret "<<std::endl;
+    }
+*/
+    /*! 
+     *
+     *
+     *
+     */
+    void test_add_service_profile()
+    {
+      doil::CORBA::CORBAManager& 
+                            mgr(doil::CORBA::CORBAManager::instance());
+      //std::cout <<"Manager Name==>"<< mgr.name() << std::endl;
+
+      ConfigurationMock* obj = new ConfigurationMock();
+      ::CORBA::Object_ptr ref = obj->_this();
+      if(::CORBA::is_nil(ref))
+      {
+         std::cout<<"ref is nil.Abort test."<<std::endl;
+         return;
+      }
+      
+      ::SDOPackage::CORBA::ConfigurationProxy* ap 
+                 = new ::SDOPackage::CORBA::ConfigurationProxy(ref);
+
+      Logger logger;
+      obj->setLogger(&logger);
+
+      CPPUNIT_ASSERT_EQUAL(0, logger.countLog("add_service_profile"));
       ::SDOPackage::Local::ServiceProfile porf;
       ISDOServiceMock service;
 
@@ -899,8 +965,8 @@ namespace ConfigurationProxy
 
       porf.service = &service;
       const ::SDOPackage::Local::ServiceProfile _porf = porf;
-      ap->set_service_profile(_porf);
-      CPPUNIT_ASSERT_EQUAL(1, logger.countLog("set_service_profile"));
+      ap->add_service_profile(_porf);
+      CPPUNIT_ASSERT_EQUAL(1, logger.countLog("add_service_profile"));
 
       mgr.deactivateObject(&service);
 
@@ -916,7 +982,7 @@ namespace ConfigurationProxy
     {
       doil::CORBA::CORBAManager& 
                             mgr(doil::CORBA::CORBAManager::instance());
-      std::cout <<"Manager Name==>"<< mgr.name() << std::endl;
+      //std::cout <<"Manager Name==>"<< mgr.name() << std::endl;
 
       ConfigurationMock* obj = new ConfigurationMock();
       ::CORBA::Object_ptr ref = obj->_this();
@@ -1013,7 +1079,6 @@ namespace ConfigurationProxy
      */
     void test_get_configuration_parameters()
     {
-std::cout<<"test_get_configuration_parameters"<<std::endl;
       ConfigurationMock* obj = new ConfigurationMock();
       ::CORBA::Object_ptr ref = obj->_this();
       if(::CORBA::is_nil(ref))
@@ -1263,11 +1328,12 @@ std::cout<<"test_get_configuration_parameters"<<std::endl;
 
       CPPUNIT_ASSERT_EQUAL(0, 
                         logger.countLog("set_configuration_set_values"));
-      CPPUNIT_ASSERT_EQUAL(0, logger.countLog(str));
-      ap->set_configuration_set_values(str,configuration_set);
+      //CPPUNIT_ASSERT_EQUAL(0, logger.countLog(str));
+      //ap->set_configuration_set_values(str,configuration_set);
+      ap->set_configuration_set_values(configuration_set);
       CPPUNIT_ASSERT_EQUAL(1, 
                         logger.countLog("set_configuration_set_values"));
-      CPPUNIT_ASSERT_EQUAL(1, logger.countLog(str));
+      //CPPUNIT_ASSERT_EQUAL(1, logger.countLog(str));
 
       delete ap;
       CORBA::release(ref);

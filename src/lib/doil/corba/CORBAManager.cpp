@@ -191,8 +191,8 @@ namespace CORBA
     if (impl == NULL) return INVALID_ARGS;
 
     const char* id = impl->id();
-    std::cout << "CORBAManager::activateObject: id " << id << std::endl;
-    std::cout << "CORBAManager::activateObject: name " << impl->name() << std::endl;
+    //std::cout << "CORBAManager::activateObject: id " << id << std::endl;
+    //std::cout << "CORBAManager::activateObject: name " << impl->name() << std::endl;
     ServantFactory* factory = m_factory.find(id);
 
 #if 0

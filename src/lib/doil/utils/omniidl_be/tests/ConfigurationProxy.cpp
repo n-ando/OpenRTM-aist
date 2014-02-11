@@ -71,6 +71,7 @@ namespace CORBA
   /*!
    * @brief set_service_profile 
    */ 
+/*
   bool ConfigurationProxy::set_service_profile(const ::SDOPackage::Local::ServiceProfile& sProfile)
       throw (::SDOPackage::Local::InvalidParameter,
              ::SDOPackage::Local::NotAvailable,
@@ -94,7 +95,33 @@ namespace CORBA
     corba_to_local(corba_ret, local_ret);
     return local_ret;
   }
+*/
+  /*!
+   * @brief add_service_profile 
+   */ 
+  bool ConfigurationProxy::add_service_profile(const ::SDOPackage::Local::ServiceProfile& sProfile)
+      throw (::SDOPackage::Local::InvalidParameter,
+             ::SDOPackage::Local::NotAvailable,
+             ::SDOPackage::Local::InternalError)
+  {
+    // Convert Local to CORBA.
+    // (The direction of the argument is 'in' or 'inout'.)
+    ::SDOPackage::ServiceProfile _sProfile;
+    local_to_corba(sProfile, _sProfile);
 
+    // Execute the method. 
+    ::CORBA::Boolean corba_ret;
+    bool local_ret;
+    corba_ret = m_obj->add_service_profile(_sProfile);
+
+    // Convert CORBA to Local.
+    // (The direction of the argument is 'out' or 'inout'.)
+
+    // Generate the return value.
+//    local_ret = corba_ret;
+    corba_to_local(corba_ret, local_ret);
+    return local_ret;
+  }
   /*!
    * @brief add_organization 
    */ 
@@ -332,22 +359,24 @@ namespace CORBA
   /*!
    * @brief set_configuration_set_values 
    */ 
-  bool ConfigurationProxy::set_configuration_set_values(const ::std::string& config_id, const ::SDOPackage::Local::ConfigurationSet& configuration_set)
+  //bool ConfigurationProxy::set_configuration_set_values(const ::std::string& config_id, const ::SDOPackage::Local::ConfigurationSet& configuration_set)
+  bool ConfigurationProxy::set_configuration_set_values(const ::SDOPackage::Local::ConfigurationSet& configuration_set)
       throw (::SDOPackage::Local::InvalidParameter,
              ::SDOPackage::Local::NotAvailable,
              ::SDOPackage::Local::InternalError)
   {
     // Convert Local to CORBA.
     // (The direction of the argument is 'in' or 'inout'.)
-    char* _config_id;
+    //char* _config_id;
     ::SDOPackage::ConfigurationSet _configuration_set;
-    local_to_corba(config_id, _config_id);
+    //local_to_corba(config_id, _config_id);
     local_to_corba(configuration_set, _configuration_set);
 
     // Execute the method. 
     ::CORBA::Boolean corba_ret;
     bool local_ret;
-    corba_ret = m_obj->set_configuration_set_values(_config_id, _configuration_set);
+    //corba_ret = m_obj->set_configuration_set_values(_config_id, _configuration_set);
+    corba_ret = m_obj->set_configuration_set_values(_configuration_set);
 
     // Convert CORBA to Local.
     // (The direction of the argument is 'out' or 'inout'.)

@@ -119,7 +119,7 @@ public:
   {
     ObjectVectorItr it;
     Guard guard(m_objects._mutex);
-    
+
     it = std::find_if(m_objects._obj.begin(), m_objects._obj.end(),
 		      Predicate(obj));
     if (it == m_objects._obj.end())
