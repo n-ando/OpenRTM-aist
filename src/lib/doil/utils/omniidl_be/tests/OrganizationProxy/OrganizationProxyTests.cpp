@@ -169,7 +169,17 @@ namespace OrganizationProxy
     /*! 
      *
      */
+/*
     virtual CORBA::Boolean set_organization_property(const SDOPackage::OrganizationProperty& organization_property)
+    {
+      return false;
+    }
+*/
+		
+    /*! 
+     *
+     */
+    virtual CORBA::Boolean add_organization_property(const SDOPackage::OrganizationProperty& organization_property)
     {
       return false;
     }
