@@ -1707,9 +1707,26 @@ AC_OUTPUT([Makefile
 	src/lib/doil/utils/omniidl_be/Makefile
 	src/lib/doil/utils/omniidl_be/tests/ComponentActionProxy/Makefile
 	src/lib/doil/utils/omniidl_be/tests/ConfigurationProxy/Makefile
+	src/lib/doil/utils/omniidl_be/tests/DataFlowComponentActionProxy/Makefile
+	src/lib/doil/utils/omniidl_be/tests/DataFlowComponentProxy/Makefile
 	src/lib/doil/utils/omniidl_be/tests/ExecutionContextProxy/Makefile
+	src/lib/doil/utils/omniidl_be/tests/ExecutionContextServiceProxy/Makefile
+	src/lib/doil/utils/omniidl_be/tests/FsmObjectProxy/Makefile
+	src/lib/doil/utils/omniidl_be/tests/FsmParticipantActionProxy/Makefile
+	src/lib/doil/utils/omniidl_be/tests/FsmParticipantProxy/Makefile
+	src/lib/doil/utils/omniidl_be/tests/FsmProxy/Makefile
+	src/lib/doil/utils/omniidl_be/tests/LightweightRTObjectProxy/Makefile
+	src/lib/doil/utils/omniidl_be/tests/ModeCapableProxy/Makefile
+	src/lib/doil/utils/omniidl_be/tests/ModeProxy/Makefile
+	src/lib/doil/utils/omniidl_be/tests/MonitoringProxy/Makefile
+	src/lib/doil/utils/omniidl_be/tests/MultiModeComponentActionProxy/Makefile
+	src/lib/doil/utils/omniidl_be/tests/MultiModeObjectProxy/Makefile
 	src/lib/doil/utils/omniidl_be/tests/OrganizationProxy/Makefile
 	src/lib/doil/utils/omniidl_be/tests/PortServiceProxy/Makefile
+	src/lib/doil/utils/omniidl_be/tests/RTObjectProxy/Makefile
+	src/lib/doil/utils/omniidl_be/tests/SDOProxy/Makefile
+	src/lib/doil/utils/omniidl_be/tests/SDOServiceProxy/Makefile
+	src/lib/doil/utils/omniidl_be/tests/SDOSystemElementProxy/Makefile
 	src/lib/doil/ice/Makefile
 	src/lib/doil/ice/tests/Makefile
 	src/lib/doil/ice/tests/IceManager/Makefile
