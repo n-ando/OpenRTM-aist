@@ -22,7 +22,8 @@ LIBS = @LIBS@
 
 #open_rtm_dir = $(top_builddir)/../../../../..
 open_rtm_dir = ../../../../../..
-target_srcdir = $(top_builddir)/..
+#target_srcdir = $(top_builddir)/..
+target_srcdir = ../..
 
 AM_CPPFLAGS = -I.
 AM_CPPFLAGS += -I$(includedir)
@@ -52,7 +53,7 @@ ComponentActionServantTests_LDADD   = -lomniORB4
 ComponentActionServantTests_LDADD  += -lomnithread
 ComponentActionServantTests_LDADD  += -lomniDynamic4
 ComponentActionServantTests_LDADD  += -lcoil
-#ComponentActionServantTests_LDADD  += -lcppunit
+ComponentActionServantTests_LDADD  += -lcppunit
 ComponentActionServantTests_LDADD  += $(target_srcdir)/ComponentActionServant.o
 ComponentActionServantTests_LDADD  += $(target_srcdir)/RTCTypeConversion.o
 ComponentActionServantTests_LDADD  += $(target_srcdir)/SDOPackageTypeConversion.o
