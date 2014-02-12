@@ -1705,7 +1705,9 @@ AC_OUTPUT([Makefile
 	src/lib/doil/Makefile
 	src/lib/doil/utils/Makefile
 	src/lib/doil/utils/omniidl_be/Makefile
+	src/lib/doil/utils/omniidl_be/tests/ComponentActionProxy/Makefile
 	src/lib/doil/utils/omniidl_be/tests/ConfigurationProxy/Makefile
+	src/lib/doil/utils/omniidl_be/tests/ExecutionContextProxy/Makefile
 	src/lib/doil/utils/omniidl_be/tests/OrganizationProxy/Makefile
 	src/lib/doil/utils/omniidl_be/tests/PortServiceProxy/Makefile
 	src/lib/doil/ice/Makefile
