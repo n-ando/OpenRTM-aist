@@ -25,36 +25,54 @@ AM_CPPFLAGS= -I.                                    \
 	-I$(top_builddir)                           \
 	-I.                                         \
 	-I../                                       \
-        -I$(top_builddir)/../../../../              \
-        -I$(top_builddir)/../../../../rtm           \
-        -I$(top_builddir)/../../../../coil/include  \
-        -I$(top_builddir)/../../../../rtc/corba/idl \
-        -I$(top_builddir)/../../../../rtc/corba     \
+        -I../../../../../              \
+        -I../../../../../rtm           \
+        -I../../../../../coil/include  \
+        -I../../../../../rtc/corba/idl \
+        -I../../../../../rtc/corba     \
         -I/usr/include/                             \
         -I/usr/include/omniORB4/
-
+#        -I$(top_builddir)/../../../../              \
+#        -I$(top_builddir)/../../../../rtm           \
+#        -I$(top_builddir)/../../../../coil/include  \
+#        -I$(top_builddir)/../../../../rtc/corba/idl \
+#        -I$(top_builddir)/../../../../rtc/corba     \
+#
 AM_LDFLAGS= -L.                   \
 	-L$(top_builddir)         \
         -L$(top_builddir)/../../../../coil/lib
 
 
 IDL_SOURCES = \
-        $(top_builddir)/../../../../rtc/corba/idl/SDOPackage.idl \
-        $(top_builddir)/../../../../rtc/corba/idl/RTC.idl        \
-        $(top_builddir)/../../../../rtc/corba/idl/OpenRTM.idl 
+        ../../../../../rtc/corba/idl/SDOPackage.idl \
+        ../../../../../rtc/corba/idl/RTC.idl        \
+        ../../../../../rtc/corba/idl/OpenRTM.idl 
+#        $(top_builddir)/../../../../rtc/corba/idl/SDOPackage.idl \
+#        $(top_builddir)/../../../../rtc/corba/idl/RTC.idl        \
+#        $(top_builddir)/../../../../rtc/corba/idl/OpenRTM.idl 
 
 noinst_PROGRAMS = ExecutionContextProxyTests
 
 ExecutionContextProxyTests_SOURCES = \
         ../TestRunner.cpp                                       \
 	$(IDL_SOURCES:.idl=Skel.cpp)                            \
-        $(top_builddir)/../../../../doil/corba/CORBAManager.cpp \
-        $(top_builddir)/../../../../doil/ORBManager.cpp         \
-        $(top_builddir)/../../../../rtm/NVUtil.cpp              \
-        $(top_builddir)/RTCTypeConversion.cpp                   \
-        $(top_builddir)/SDOPackageTypeConversion.cpp            \
-        $(top_builddir)/ExecutionContextProxy.cpp \
+        ../../../../../doil/corba/CORBAManager.cpp \
+        ../../../../../doil/ORBManager.cpp         \
+        ../../../../../rtm/NVUtil.cpp              \
+        ../RTCTypeConversion.cpp                   \
+        ../SDOPackageTypeConversion.cpp            \
+        ../ExecutionContextProxy.cpp \
         ExecutionContextProxyTests.cpp
+#ExecutionContextProxyTests_SOURCES = \
+#        ../TestRunner.cpp                                       \
+#	$(IDL_SOURCES:.idl=Skel.cpp)                            \
+#        $(top_builddir)/../../../../doil/corba/CORBAManager.cpp \
+#        $(top_builddir)/../../../../doil/ORBManager.cpp         \
+#        $(top_builddir)/../../../../rtm/NVUtil.cpp              \
+#        $(top_builddir)/RTCTypeConversion.cpp                   \
+#        $(top_builddir)/SDOPackageTypeConversion.cpp            \
+#        $(top_builddir)/ExecutionContextProxy.cpp \
+#        ExecutionContextProxyTests.cpp
 ExecutionContextProxyTests_LDFLAGS = -L$(libdir)
 ExecutionContextProxyTests_LDADD   = \
          -lcppunit                                 \

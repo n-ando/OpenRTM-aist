@@ -548,7 +548,7 @@ namespace ExecutionContextProxy
     {
       doil::CORBA::CORBAManager& 
                             mgr(doil::CORBA::CORBAManager::instance());
-      std::cout <<"Manager Name==>"<< mgr.name() << std::endl;
+      //std::cout <<"Manager Name==>"<< mgr.name() << std::endl;
 
 
       ExecutionContextRtmMock* obj = new ExecutionContextRtmMock();
