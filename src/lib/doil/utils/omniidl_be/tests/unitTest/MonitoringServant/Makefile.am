@@ -28,6 +28,7 @@ AM_CPPFLAGS += -I$(includedir)
 AM_CPPFLAGS += -I$(target_srcdir)
 AM_CPPFLAGS += -I$(open_rtm_dir)
 AM_CPPFLAGS += -I$(open_rtm_dir)/rtc/corba/idl
+AM_CPPFLAGS += -I../../../../../../coil/posix
 
 AM_LDFLAGS = -L.
 AM_LDFLAGS += -L$(open_rtm_dir)/coil/lib
@@ -50,7 +51,7 @@ MonitoringServantTests_LDADD   = -lomniORB4
 MonitoringServantTests_LDADD  += -lomnithread
 MonitoringServantTests_LDADD  += -lomniDynamic4
 MonitoringServantTests_LDADD  += -lcoil
-#MonitoringServantTests_LDADD  += -lcppunit
+MonitoringServantTests_LDADD  += -lcppunit
 MonitoringServantTests_LDADD  += $(target_srcdir)/MonitoringServant.o
 MonitoringServantTests_LDADD  += $(target_srcdir)/RTCTypeConversion.o
 MonitoringServantTests_LDADD  += $(target_srcdir)/SDOPackageTypeConversion.o

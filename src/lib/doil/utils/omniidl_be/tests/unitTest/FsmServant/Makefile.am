@@ -28,6 +28,7 @@ AM_CPPFLAGS += -I$(includedir)
 AM_CPPFLAGS += -I$(target_srcdir)
 AM_CPPFLAGS += -I$(open_rtm_dir)
 AM_CPPFLAGS += -I$(open_rtm_dir)/rtc/corba/idl
+AM_CPPFLAGS += -I../../../../../../coil/posix
 
 AM_LDFLAGS = -L.
 AM_LDFLAGS += -L$(open_rtm_dir)/coil/lib
@@ -50,7 +51,7 @@ FsmServantTests_LDADD   = -lomniORB4
 FsmServantTests_LDADD  += -lomnithread
 FsmServantTests_LDADD  += -lomniDynamic4
 FsmServantTests_LDADD  += -lcoil
-#FsmServantTests_LDADD  += -lcppunit
+FsmServantTests_LDADD  += -lcppunit
 FsmServantTests_LDADD  += $(target_srcdir)/FsmServant.o
 FsmServantTests_LDADD  += $(target_srcdir)/RTCTypeConversion.o
 FsmServantTests_LDADD  += $(target_srcdir)/SDOPackageTypeConversion.o
