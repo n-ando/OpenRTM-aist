@@ -20,14 +20,17 @@ IDLC = @IDLC@
 IDLFLAGS = @IDL_FLAGS@
 LIBS = @LIBS@
 
-open_rtm_dir = $(top_builddir)/../../../../..
-target_srcdir = $(top_builddir)/..
+#open_rtm_dir = $(top_builddir)/../../../../..
+open_rtm_dir = ../../../../../..
+#target_srcdir = $(top_builddir)/..
+target_srcdir = ../..
 
 AM_CPPFLAGS = -I.
 AM_CPPFLAGS += -I$(includedir)
 AM_CPPFLAGS += -I$(target_srcdir)
 AM_CPPFLAGS += -I$(open_rtm_dir)
 AM_CPPFLAGS += -I$(open_rtm_dir)/rtc/corba/idl
+AM_CPPFLAGS += -I../../../../../../coil/posix
 
 AM_LDFLAGS = -L.
 AM_LDFLAGS += -L$(open_rtm_dir)/coil/lib
@@ -50,7 +53,7 @@ DataFlowComponentActionServantTests_LDADD   = -lomniORB4
 DataFlowComponentActionServantTests_LDADD  += -lomnithread
 DataFlowComponentActionServantTests_LDADD  += -lomniDynamic4
 DataFlowComponentActionServantTests_LDADD  += -lcoil
-#DataFlowComponentActionServantTests_LDADD  += -lcppunit
+DataFlowComponentActionServantTests_LDADD  += -lcppunit
 DataFlowComponentActionServantTests_LDADD  += $(target_srcdir)/DataFlowComponentActionServant.o
 DataFlowComponentActionServantTests_LDADD  += $(target_srcdir)/RTCTypeConversion.o
 DataFlowComponentActionServantTests_LDADD  += $(target_srcdir)/SDOPackageTypeConversion.o
