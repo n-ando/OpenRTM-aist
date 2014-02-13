@@ -31,7 +31,16 @@ namespace ComponentActionServant
    : public CppUnit::TestFixture
   {
     CPPUNIT_TEST_SUITE(ComponentActionServantTests);
-    CPPUNIT_TEST(test_case0);
+    CPPUNIT_TEST(test_call_on_initialize);
+    CPPUNIT_TEST(test_call_on_finalize);
+    CPPUNIT_TEST(test_call_on_startup);
+    CPPUNIT_TEST(test_call_on_shutdown);
+    CPPUNIT_TEST(test_call_on_activated);
+    CPPUNIT_TEST(test_call_on_deactivated);
+    CPPUNIT_TEST(test_call_on_aborting);
+    CPPUNIT_TEST(test_call_on_error);
+    CPPUNIT_TEST(test_call_on_reset);
+    //CPPUNIT_TEST(test_case0);
     CPPUNIT_TEST_SUITE_END();
   
   private:
@@ -66,6 +75,33 @@ namespace ComponentActionServant
     { 
     }
   
+    void test_call_on_initialize()
+    { 
+    }
+    void test_call_on_finalize()
+    { 
+    }
+    void test_call_on_startup()
+    { 
+    }
+    void test_call_on_shutdown()
+    { 
+    }
+    void test_call_on_activated()
+    { 
+    }
+    void test_call_on_deactivated()
+    { 
+    }
+    void test_call_on_aborting()
+    { 
+    }
+    void test_call_on_error()
+    { 
+    }
+    void test_call_on_reset()
+    { 
+    }
     /* test case */
     void test_case0()
     {
