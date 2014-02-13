@@ -43,7 +43,7 @@ namespace ConfigurationServant
   {
     CPPUNIT_TEST_SUITE(ConfigurationServantTests);
     CPPUNIT_TEST(test_call_set_device_profile);
-    CPPUNIT_TEST(test_call_set_service_profile);
+    CPPUNIT_TEST(test_call_add_service_profile);
     CPPUNIT_TEST(test_call_add_organization);
     CPPUNIT_TEST(test_call_remove_service_profile);
     CPPUNIT_TEST(test_call_remove_organization);
@@ -132,14 +132,14 @@ namespace ConfigurationServant
      * @brief Implのメソドが呼び出されていること
      * @brief 戻り値が妥当であること
      */
-    void test_call_set_service_profile()
+    void test_call_add_service_profile()
     {
       CPPUNIT_ASSERT(CServant);
 
-      std::string str("set_service_profile");
+      std::string str("add_service_profile");
       ::SDOPackage::ServiceProfile sp;
       ::CORBA::Boolean result;
-      result = CServant->set_service_profile(sp);
+      result = CServant->add_service_profile(sp);
       CPPUNIT_ASSERT_EQUAL_MESSAGE("not true", true, result);
       CPPUNIT_ASSERT_EQUAL_MESSAGE("not method name", Log.pop(), str);
     }
@@ -319,7 +319,7 @@ namespace ConfigurationServant
       std::string config_id("hoge");
       ::SDOPackage::ConfigurationSet set;
       ::CORBA::Boolean result;
-      result = CServant->set_configuration_set_values(config_id.c_str(), set);
+      result = CServant->set_configuration_set_values(set);
       CPPUNIT_ASSERT_EQUAL_MESSAGE("not true", true, result);
       CPPUNIT_ASSERT_EQUAL_MESSAGE("not method name", Log.pop(), str);
       CPPUNIT_ASSERT_EQUAL_MESSAGE("not argument", Log.pop(), config_id);

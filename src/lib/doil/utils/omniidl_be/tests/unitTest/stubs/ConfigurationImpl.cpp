@@ -59,7 +59,7 @@ namespace Servant
       return true;
     }
 
-     bool ConfigurationImpl::set_service_profile(const ::SDOPackage::Local::ServiceProfile& sProfile)
+     bool ConfigurationImpl::add_service_profile(const ::SDOPackage::Local::ServiceProfile& sProfile)
       throw (::SDOPackage::Local::InvalidParameter,
              ::SDOPackage::Local::NotAvailable,
              ::SDOPackage::Local::InternalError)
@@ -155,13 +155,12 @@ namespace Servant
       return result;
     }
 
-     bool ConfigurationImpl::set_configuration_set_values(const ::std::string&config_id, const ::SDOPackage::Local::ConfigurationSet& configuration_set)
+     bool ConfigurationImpl::set_configuration_set_values(const ::SDOPackage::Local::ConfigurationSet& configuration_set)
       throw (::SDOPackage::Local::InvalidParameter,
              ::SDOPackage::Local::NotAvailable,
              ::SDOPackage::Local::InternalError)
     {
       m_logger->push("set_configuration_set_values");
-      m_logger->push(config_id.c_str());
       return true;
     }
 

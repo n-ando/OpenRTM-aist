@@ -73,6 +73,7 @@ namespace ModeCapableProxy
   protected:
       ::std::vector<std::string> m_log;
   private:
+        ::RTC::Mode_var m_varMode;
   public :
       ModeCapableMock(){}
       virtual ~ModeCapableMock()
@@ -90,6 +91,11 @@ namespace ModeCapableProxy
      ::RTC::Mode_ptr get_default_mode()
      {
         if (m_logger != NULL) m_logger->log("get_default_mode");
+        //::RTC::MODE_var mode;
+        //mode = new ::RTC::MODE();
+        //return mode._retn();
+        return m_varMode._retn();
+
      }
     /*! 
      *

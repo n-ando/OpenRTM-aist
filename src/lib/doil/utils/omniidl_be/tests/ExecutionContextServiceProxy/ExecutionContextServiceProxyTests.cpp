@@ -101,7 +101,11 @@ namespace ExecutionContextServiceProxy
              ::SDOPackage::InternalError)
      {
         if (m_logger != NULL) m_logger->log("get_profile");
-        return NULL;
+
+
+        ::RTC::ExecutionContextProfile_var prof;
+        prof = new ::RTC::ExecutionContextProfile();
+        return prof._retn();
      }
     /*! 
      *
@@ -305,8 +309,8 @@ namespace ExecutionContextServiceProxy
       obj->setLogger(&logger);
 
       CPPUNIT_ASSERT_EQUAL(0, logger.countLog("get_profile"));
-      const ::SDOPackage::Local::DeviceProfile porf;
-      ap->get_profile();
+      ::RTC::Local::ExecutionContextProfile prof;
+      prof = ap->get_profile();
       CPPUNIT_ASSERT_EQUAL(1, logger.countLog("get_profile"));
 
       

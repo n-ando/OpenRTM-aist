@@ -90,6 +90,9 @@ namespace SDOSystemElementProxy
      ::SDOPackage::OrganizationList* get_owned_organizations()
      {
         if (m_logger != NULL) m_logger->log("get_owned_organizationse");
+        ::SDOPackage::OrganizationList_var org;
+        org = new ::SDOPackage::OrganizationList();
+        return org._retn();
      }
   private:
     Logger* m_logger;

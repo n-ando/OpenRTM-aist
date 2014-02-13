@@ -62,6 +62,8 @@ namespace RTObjectProxy
     std::vector<std::string> m_log;
   };
 
+
+
   /*!
    * 
    * 
@@ -90,6 +92,9 @@ namespace RTObjectProxy
      ::RTC::ComponentProfile* get_component_profile()
      {
         if (m_logger != NULL) m_logger->log("get_component_profile");
+        ::RTC::ComponentProfile_var prof;
+        prof = new ::RTC::ComponentProfile();
+        return prof._retn();
      }
     /*! 
      *
@@ -97,6 +102,9 @@ namespace RTObjectProxy
      ::RTC::PortServiceList* get_ports()
      {
         if (m_logger != NULL) m_logger->log("get_ports");
+        ::RTC::PortServiceList_var ports;
+        ports = new ::RTC::PortServiceList();
+        return ports._retn();
      }
     /*! 
      *
