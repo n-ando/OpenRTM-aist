@@ -38,6 +38,7 @@ AM_LDFLAGS += -L$(open_rtm_dir)/coil/lib
 lib_LIBRARIES = libstubs.a
 libstubs_a_SOURCES = ConfigurationImpl.cpp
 libstubs_a_SOURCES += Logger.cpp
+libstubs_a_SOURCES += ComponentActionImpl.cpp
 stubsdir = .
 
 noinst_LIBRARIES = libstubs.a
