@@ -316,13 +316,11 @@ namespace ConfigurationServant
       CPPUNIT_ASSERT(CServant);
 
       std::string str("set_configuration_set_values");
-      std::string config_id("hoge");
       ::SDOPackage::ConfigurationSet set;
       ::CORBA::Boolean result;
       result = CServant->set_configuration_set_values(set);
       CPPUNIT_ASSERT_EQUAL_MESSAGE("not true", true, result);
       CPPUNIT_ASSERT_EQUAL_MESSAGE("not method name", Log.pop(), str);
-      CPPUNIT_ASSERT_EQUAL_MESSAGE("not argument", Log.pop(), config_id);
     }
 
     /*!

@@ -29,6 +29,8 @@ AM_CPPFLAGS += -I$(target_srcdir)
 AM_CPPFLAGS += -I$(open_rtm_dir)
 AM_CPPFLAGS += -I$(open_rtm_dir)/rtc/corba/idl
 AM_CPPFLAGS += -I../../../../../../coil/posix
+AM_CPPFLAGS += -I../
+AM_CPPFLAGS += -I../stubs
 
 AM_LDFLAGS = -L.
 AM_LDFLAGS += -L$(open_rtm_dir)/coil/lib
@@ -44,6 +46,8 @@ OrganizationServantTests_SOURCES += OrganizationServantTests.cpp
 OrganizationServantTests_SOURCES += $(IDL_SOURCES:.idl=Stub.cpp)
 OrganizationServantTests_SOURCES += $(open_rtm_dir)/doil/ORBManager.cpp
 OrganizationServantTests_SOURCES += $(open_rtm_dir)/doil/corba/CORBAManager.cpp
+OrganizationServantTests_SOURCES += ../stubs/OrganizationImpl.cpp 
+OrganizationServantTests_SOURCES += ../stubs/Logger.cpp 
 
 OrganizationServantTests_LDFLAGS = -L$(libdir)
 

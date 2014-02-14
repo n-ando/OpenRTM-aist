@@ -12,6 +12,7 @@
 #include <stdio.h>
 #include <ComponentActionImpl.h>
 #include <iostream>
+#include <string>
 #include <Logger.h>
 
 namespace UnitTest
@@ -27,6 +28,8 @@ namespace Servant
    * @brief ComponentAction implementation class for ComponentActionServant' unittest.
    * @endif
    */
+   int ComponentActionImpl::count = 0;
+
     ComponentActionImpl::ComponentActionImpl()
     {
       ++count;
@@ -102,22 +105,24 @@ namespace Servant
         return RTC::Local::RTC_OK;
     }
 
-    ::RTC::Local::ReturnCode_t ComponentActionImpl::on_aborting(::RTC::Local::ExecutionContextHandle_t exec_handle)
-      throw ()
-    {
-        if (m_logger != NULL) 
-          {
-            m_logger->push("on_aborting");
-          }
-        return RTC::Local::RTC_OK;
-    }
-
     ::RTC::Local::ReturnCode_t ComponentActionImpl::on_error(::RTC::Local::ExecutionContextHandle_t exec_handle)
       throw ()
     {
         if (m_logger != NULL) 
           {
             m_logger->push("on_error");
+          }
+        return RTC::Local::RTC_OK;
+    }
+
+    ::RTC::Local::ReturnCode_t ComponentActionImpl::on_aborting(::RTC::Local::ExecutionContextHandle_t exec_handle)
+      throw ()
+    {
+        if (m_logger != NULL) 
+          {
+            //std::cout<<"size:"<<m_logger->size()<<std::endl;
+            m_logger->push("on_aborting");
+            //std::cout<<"size:"<<m_logger->size()<<std::endl;
           }
         return RTC::Local::RTC_OK;
     }

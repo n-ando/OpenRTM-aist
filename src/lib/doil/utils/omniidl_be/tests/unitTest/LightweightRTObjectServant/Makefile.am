@@ -36,6 +36,8 @@ AM_CPPFLAGS += -I../../../../../../coil/posix
 AM_CPPFLAGS += -I../../../../../../
 AM_CPPFLAGS += -I/usr/include/omniORB4/
 AM_CPPFLAGS += -I/usr/include/omniORB4/internal/
+AM_CPPFLAGS += -I../
+AM_CPPFLAGS += -I../stubs
 
 AM_LDFLAGS = -L.
 AM_LDFLAGS += -L$(open_rtm_dir)/coil/lib
@@ -51,6 +53,9 @@ LightweightRTObjectServantTests_SOURCES += LightweightRTObjectServantTests.cpp
 LightweightRTObjectServantTests_SOURCES += $(IDL_SOURCES:.idl=Stub.cpp)
 LightweightRTObjectServantTests_SOURCES += $(open_rtm_dir)/doil/ORBManager.cpp
 LightweightRTObjectServantTests_SOURCES += $(open_rtm_dir)/doil/corba/CORBAManager.cpp
+LightweightRTObjectServantTests_SOURCES += ../stubs/LightweightRTObjectImpl.cpp 
+LightweightRTObjectServantTests_SOURCES += ../stubs/ExecutionContextImpl.cpp 
+LightweightRTObjectServantTests_SOURCES += ../stubs/Logger.cpp 
 
 LightweightRTObjectServantTests_LDFLAGS = -L$(libdir)
 #LightweightRTObjectServantTests_LDFLAGS += -L../stubs

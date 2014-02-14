@@ -20,6 +20,12 @@
 #include <cppunit/ui/text/TestRunner.h>
 #include <cppunit/extensions/HelperMacros.h>
 #include <cppunit/TestAssert.h>
+#include <ExecutionContextServiceServant.h>
+#include <doil/ServantBase.h>
+#include <doil/corba/CORBAManager.h>
+#include <stubs/ExecutionContextServiceImpl.h>
+#include <stubs/Logger.h>
+
 
 /*!
  * @class ExecutionContextServiceServantTests class
@@ -31,10 +37,15 @@ namespace ExecutionContextServiceServant
    : public CppUnit::TestFixture
   {
     CPPUNIT_TEST_SUITE(ExecutionContextServiceServantTests);
-    CPPUNIT_TEST(test_case0);
+    CPPUNIT_TEST(test_call_get_profile);
+    //CPPUNIT_TEST(test_case0);
     CPPUNIT_TEST_SUITE_END();
   
   private:
+    ::UnitTest::Servant::ExecutionContextServiceImpl* Impl;
+    ::UnitTest::Servant::Logger Log;
+    ::doil::ServantBase* Servant;
+    ::RTC::CORBA::ExecutionContextServiceServant * CServant;
   
   public:
   
@@ -43,6 +54,14 @@ namespace ExecutionContextServiceServant
      */
     ExecutionContextServiceServantTests()
     {
+        // registerFactory
+        Impl = new UnitTest::Servant::ExecutionContextServiceImpl(Log);
+        doil::CORBA::CORBAManager::instance().registerFactory(Impl->id(),
+            doil::New<RTC::CORBA::ExecutionContextServiceServant>,
+            doil::Delete<RTC::CORBA::ExecutionContextServiceServant>);
+        doil::ReturnCode_t ret = doil::CORBA::CORBAManager::instance().activateObject(Impl);
+        Servant = doil::CORBA::CORBAManager::instance().toServant(Impl);
+        CServant = dynamic_cast<RTC::CORBA::ExecutionContextServiceServant*>(Servant);
     }
     
     /*!
@@ -50,6 +69,8 @@ namespace ExecutionContextServiceServant
      */
     ~ExecutionContextServiceServantTests()
     {
+      delete Impl;
+      Impl = 0;
     }
   
     /*!
@@ -66,6 +87,16 @@ namespace ExecutionContextServiceServant
     { 
     }
   
+    void test_call_get_profile()
+    {
+      CPPUNIT_ASSERT(CServant);
+
+      std::string str("get_profile");
+      ::RTC::ExecutionContextProfile* result;
+      result = CServant->get_profile();
+      //CPPUNIT_ASSERT_EQUAL_MESSAGE("not true", true, result);
+      CPPUNIT_ASSERT_EQUAL_MESSAGE("not method name", Log.pop(), str);
+    }
     /* test case */
     void test_case0()
     {

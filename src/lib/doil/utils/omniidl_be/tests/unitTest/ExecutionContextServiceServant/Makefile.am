@@ -29,6 +29,8 @@ AM_CPPFLAGS += -I$(target_srcdir)
 AM_CPPFLAGS += -I$(open_rtm_dir)
 AM_CPPFLAGS += -I$(open_rtm_dir)/rtc/corba/idl
 AM_CPPFLAGS += -I../../../../../../coil/posix
+AM_CPPFLAGS += -I../
+AM_CPPFLAGS += -I../stubs
 
 AM_LDFLAGS = -L.
 AM_LDFLAGS += -L$(open_rtm_dir)/coil/lib
@@ -44,6 +46,8 @@ ExecutionContextServiceServantTests_SOURCES += ExecutionContextServiceServantTes
 ExecutionContextServiceServantTests_SOURCES += $(IDL_SOURCES:.idl=Stub.cpp)
 ExecutionContextServiceServantTests_SOURCES += $(open_rtm_dir)/doil/ORBManager.cpp
 ExecutionContextServiceServantTests_SOURCES += $(open_rtm_dir)/doil/corba/CORBAManager.cpp
+ExecutionContextServiceServantTests_SOURCES += ../stubs/ExecutionContextServiceImpl.cpp 
+ExecutionContextServiceServantTests_SOURCES += ../stubs/Logger.cpp 
 
 ExecutionContextServiceServantTests_LDFLAGS = -L$(libdir)
 

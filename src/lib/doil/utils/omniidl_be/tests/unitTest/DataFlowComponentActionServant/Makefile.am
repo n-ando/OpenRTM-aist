@@ -31,6 +31,8 @@ AM_CPPFLAGS += -I$(target_srcdir)
 AM_CPPFLAGS += -I$(open_rtm_dir)
 AM_CPPFLAGS += -I$(open_rtm_dir)/rtc/corba/idl
 AM_CPPFLAGS += -I../../../../../../coil/posix
+AM_CPPFLAGS += -I../
+AM_CPPFLAGS += -I../stubs
 
 AM_LDFLAGS = -L.
 AM_LDFLAGS += -L$(open_rtm_dir)/coil/lib
@@ -46,6 +48,8 @@ DataFlowComponentActionServantTests_SOURCES += DataFlowComponentActionServantTes
 DataFlowComponentActionServantTests_SOURCES += $(IDL_SOURCES:.idl=Stub.cpp)
 DataFlowComponentActionServantTests_SOURCES += $(open_rtm_dir)/doil/ORBManager.cpp
 DataFlowComponentActionServantTests_SOURCES += $(open_rtm_dir)/doil/corba/CORBAManager.cpp
+DataFlowComponentActionServantTests_SOURCES += ../stubs/DataFlowComponentActionImpl.cpp 
+DataFlowComponentActionServantTests_SOURCES += ../stubs/Logger.cpp 
 
 DataFlowComponentActionServantTests_LDFLAGS = -L$(libdir)
 

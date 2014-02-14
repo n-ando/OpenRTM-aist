@@ -20,6 +20,11 @@
 #include <cppunit/ui/text/TestRunner.h>
 #include <cppunit/extensions/HelperMacros.h>
 #include <cppunit/TestAssert.h>
+#include <FsmServiceServant.h>
+#include <doil/ServantBase.h>
+#include <doil/corba/CORBAManager.h>
+#include <stubs/FsmServiceImpl.h>
+#include <stubs/Logger.h>
 
 /*!
  * @class FsmServiceServantTests class
@@ -31,10 +36,16 @@ namespace FsmServiceServant
    : public CppUnit::TestFixture
   {
     CPPUNIT_TEST_SUITE(FsmServiceServantTests);
-    CPPUNIT_TEST(test_case0);
+    CPPUNIT_TEST(test_call_get_fsm_profile);
+    CPPUNIT_TEST(test_call_set_fsm_profile);
+    //CPPUNIT_TEST(test_case0);
     CPPUNIT_TEST_SUITE_END();
   
   private:
+    ::UnitTest::Servant::FsmServiceImpl* Impl;
+    ::UnitTest::Servant::Logger Log;
+    ::doil::ServantBase* Servant;
+    ::RTC::CORBA::FsmServiceServant * CServant;
   
   public:
   
@@ -43,6 +54,14 @@ namespace FsmServiceServant
      */
     FsmServiceServantTests()
     {
+        // registerFactory
+        Impl = new UnitTest::Servant::FsmServiceImpl(Log);
+        doil::CORBA::CORBAManager::instance().registerFactory(Impl->id(),
+            doil::New<RTC::CORBA::FsmServiceServant>,
+            doil::Delete<RTC::CORBA::FsmServiceServant>);
+        doil::ReturnCode_t ret = doil::CORBA::CORBAManager::instance().activateObject(Impl);
+        Servant = doil::CORBA::CORBAManager::instance().toServant(Impl);
+        CServant = dynamic_cast<RTC::CORBA::FsmServiceServant*>(Servant);
     }
     
     /*!
@@ -50,6 +69,8 @@ namespace FsmServiceServant
      */
     ~FsmServiceServantTests()
     {
+      delete Impl;
+      Impl = 0;
     }
   
     /*!
@@ -64,6 +85,28 @@ namespace FsmServiceServant
      */
     virtual void tearDown()
     { 
+    }
+
+    void test_call_get_fsm_profile()
+    {
+      CPPUNIT_ASSERT(CServant);
+
+      std::string str("get_fsm_profile");
+      ::RTC::FsmProfile* result;
+      result = CServant->get_fsm_profile();
+      //CPPUNIT_ASSERT_EQUAL_MESSAGE("not true", ::RTC::RTC_OK, result);
+      CPPUNIT_ASSERT_EQUAL_MESSAGE("not method name", Log.pop(), str);
+    }
+    void test_call_set_fsm_profile()
+    {
+      CPPUNIT_ASSERT(CServant);
+
+      std::string str("set_fsm_profile");
+      ::RTC::ReturnCode_t result;
+      ::RTC::FsmProfile fsm_profile;
+      result = CServant->set_fsm_profile(fsm_profile);
+      CPPUNIT_ASSERT_EQUAL_MESSAGE("not true", ::RTC::RTC_OK, result);
+      CPPUNIT_ASSERT_EQUAL_MESSAGE("not method name", Log.pop(), str);
     }
   
     /* test case */

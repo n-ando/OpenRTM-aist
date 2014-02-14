@@ -20,6 +20,11 @@
 #include <cppunit/ui/text/TestRunner.h>
 #include <cppunit/extensions/HelperMacros.h>
 #include <cppunit/TestAssert.h>
+#include <OrganizationServant.h>
+#include <doil/ServantBase.h>
+#include <doil/corba/CORBAManager.h>
+#include <stubs/OrganizationImpl.h>
+#include <stubs/Logger.h>
 
 /*!
  * @class OrganizationServantTests class
@@ -31,10 +36,28 @@ namespace OrganizationServant
    : public CppUnit::TestFixture
   {
     CPPUNIT_TEST_SUITE(OrganizationServantTests);
-    CPPUNIT_TEST(test_case0);
+    CPPUNIT_TEST(test_call_get_organization_id);
+    CPPUNIT_TEST(test_call_get_organization_property);
+    CPPUNIT_TEST(test_call_get_organization_property_value);
+    CPPUNIT_TEST(test_call_add_organization_property);
+    CPPUNIT_TEST(test_call_set_organization_property_value);
+    CPPUNIT_TEST(test_call_remove_organization_property);
+    CPPUNIT_TEST(test_call_get_owner);
+    CPPUNIT_TEST(test_call_set_owner);
+    CPPUNIT_TEST(test_call_get_members);
+    CPPUNIT_TEST(test_call_set_members);
+    CPPUNIT_TEST(test_call_add_members);
+    CPPUNIT_TEST(test_call_remove_member);
+    CPPUNIT_TEST(test_call_get_dependency);
+    CPPUNIT_TEST(test_call_set_dependency);
+    //CPPUNIT_TEST(test_case0);
     CPPUNIT_TEST_SUITE_END();
   
   private:
+    ::UnitTest::Servant::OrganizationImpl* Impl;
+    ::UnitTest::Servant::Logger Log;
+    ::doil::ServantBase* Servant;
+    ::SDOPackage::CORBA::OrganizationServant * CServant;
   
   public:
   
@@ -43,6 +66,14 @@ namespace OrganizationServant
      */
     OrganizationServantTests()
     {
+        // registerFactory
+        Impl = new UnitTest::Servant::OrganizationImpl(Log);
+        doil::CORBA::CORBAManager::instance().registerFactory(Impl->id(),
+            doil::New<SDOPackage::CORBA::OrganizationServant>,
+            doil::Delete<SDOPackage::CORBA::OrganizationServant>);
+        doil::ReturnCode_t ret = doil::CORBA::CORBAManager::instance().activateObject(Impl);
+        Servant = doil::CORBA::CORBAManager::instance().toServant(Impl);
+        CServant = dynamic_cast<SDOPackage::CORBA::OrganizationServant*>(Servant);
     }
     
     /*!
@@ -50,6 +81,8 @@ namespace OrganizationServant
      */
     ~OrganizationServantTests()
     {
+      delete Impl;
+      Impl = 0;
     }
   
     /*!
@@ -64,6 +97,172 @@ namespace OrganizationServant
      */
     virtual void tearDown()
     { 
+    }
+    void test_call_get_organization_id()
+    {
+      CPPUNIT_ASSERT(CServant);
+
+      std::string str("get_organization_id");
+      std::string str2("foo");
+      ::std::string result;
+      result = CServant->get_organization_id();
+      CPPUNIT_ASSERT_EQUAL_MESSAGE("not true", str2, result);
+      CPPUNIT_ASSERT_EQUAL_MESSAGE("not method name", Log.pop(), str);
+    }
+    void test_call_get_organization_property()
+    {
+      CPPUNIT_ASSERT(CServant);
+
+      std::string str("get_organization_property");
+      ::SDOPackage::OrganizationProperty* result;
+      result = CServant->get_organization_property();
+      //CPPUNIT_ASSERT_EQUAL_MESSAGE("not true", ::RTC::RTC_OK, result);
+      CPPUNIT_ASSERT_EQUAL_MESSAGE("not method name", Log.pop(), str);
+    }
+
+    void test_call_get_organization_property_value()
+    {
+      CPPUNIT_ASSERT(CServant);
+
+      std::string str("get_organization_property_value");
+      CORBA::Any* result;
+      result = CServant->get_organization_property_value("foo");
+      //CPPUNIT_ASSERT_EQUAL_MESSAGE("not true", str2, result);
+      CPPUNIT_ASSERT_EQUAL_MESSAGE("not method name", Log.pop(), str);
+    }
+
+    void test_call_add_organization_property()
+    {
+      CPPUNIT_ASSERT(CServant);
+
+      std::string str("add_organization_property");
+      ::CORBA::Boolean result;
+      ::SDOPackage::OrganizationProperty organization_property;
+      result = CServant->add_organization_property(organization_property);
+      CPPUNIT_ASSERT_EQUAL_MESSAGE("not true", true, result);
+      CPPUNIT_ASSERT_EQUAL_MESSAGE("not method name", Log.pop(), str);
+    }
+
+    void test_call_set_organization_property_value()
+    {
+      CPPUNIT_ASSERT(CServant);
+
+      std::string str("set_organization_property_value");
+      const std::string str1 = "bar";
+      const std::string str2 = "foo";
+      CORBA::Any any;
+      any <<= str.c_str();
+      ::CORBA::Boolean result;
+      result = CServant->set_organization_property_value("bar",any);
+      CPPUNIT_ASSERT_EQUAL_MESSAGE("not true", true, result);
+      CPPUNIT_ASSERT_EQUAL_MESSAGE("not method name", Log.pop(), str);
+    }
+
+    void test_call_remove_organization_property()
+    {
+      CPPUNIT_ASSERT(CServant);
+
+      std::string str("remove_organization_property");
+      ::CORBA::Boolean result;
+      result = CServant->remove_organization_property("bar");
+      CPPUNIT_ASSERT_EQUAL_MESSAGE("not true", true, result);
+      CPPUNIT_ASSERT_EQUAL_MESSAGE("not method name", Log.pop(), str);
+    }
+
+    void test_call_get_owner()
+    {
+std::cout<<"test_call_get_owner"<<std::endl;
+      CPPUNIT_ASSERT(CServant);
+
+      std::string str("get_owner");
+      SDOPackage::SDOSystemElement_var varOwner;
+      SDOPackage::SDOSystemElement_ptr ptrOwner;
+      varOwner = CServant->get_owner();
+      CPPUNIT_ASSERT(!::CORBA::is_nil(varOwner));
+      //CPPUNIT_ASSERT_EQUAL_MESSAGE("not true", ::RTC::RTC_OK, result);
+      CPPUNIT_ASSERT_EQUAL_MESSAGE("not method name", Log.pop(), str);
+    }
+
+    void test_call_set_owner()
+    {
+std::cout<<"test_call_set_owner"<<std::endl;
+      CPPUNIT_ASSERT(CServant);
+
+      std::string str("set_owner");
+      ::CORBA::Boolean result;
+      ::SDOPackage::SDOSystemElement_ptr sdo;
+      result = CServant->set_owner(sdo);
+      CPPUNIT_ASSERT_EQUAL_MESSAGE("not true", true, result);
+      CPPUNIT_ASSERT_EQUAL_MESSAGE("not method name", Log.pop(), str);
+    }
+
+    void test_call_get_members()
+    {
+      CPPUNIT_ASSERT(CServant);
+
+      std::string str("get_members");
+      ::SDOPackage::SDOList* result;
+      result = CServant->get_members();
+      //CPPUNIT_ASSERT_EQUAL_MESSAGE("not true", ::RTC::RTC_OK, result);
+      CPPUNIT_ASSERT_EQUAL_MESSAGE("not method name", Log.pop(), str);
+    }
+
+    void test_call_set_members()
+    {
+      CPPUNIT_ASSERT(CServant);
+
+      std::string str("set_members");
+      ::CORBA::Boolean result;
+      ::SDOPackage::SDOList sdo_list;
+      result = CServant->set_members(sdo_list);
+      CPPUNIT_ASSERT_EQUAL_MESSAGE("not true", true, result);
+      CPPUNIT_ASSERT_EQUAL_MESSAGE("not method name", Log.pop(), str);
+    }
+
+    void test_call_add_members()
+    {
+      CPPUNIT_ASSERT(CServant);
+
+      std::string str("add_members");
+      ::CORBA::Boolean result;
+      ::SDOPackage::SDOList sdo_list;
+      result = CServant->add_members(sdo_list);
+      CPPUNIT_ASSERT_EQUAL_MESSAGE("not true", true, result);
+      CPPUNIT_ASSERT_EQUAL_MESSAGE("not method name", Log.pop(), str);
+    }
+
+    void test_call_remove_member()
+    {
+      CPPUNIT_ASSERT(CServant);
+
+      std::string str("remove_member");
+      ::CORBA::Boolean result;
+      result = CServant->remove_member("bar");
+      CPPUNIT_ASSERT_EQUAL_MESSAGE("not true", true, result);
+      CPPUNIT_ASSERT_EQUAL_MESSAGE("not method name", Log.pop(), str);
+    }
+
+    void test_call_get_dependency()
+    {
+      CPPUNIT_ASSERT(CServant);
+
+      std::string str("get_dependency");
+      ::SDOPackage::DependencyType result;
+      result = CServant->get_dependency();
+      //CPPUNIT_ASSERT_EQUAL_MESSAGE("not true", ::RTC::RTC_OK, result);
+      CPPUNIT_ASSERT_EQUAL_MESSAGE("not method name", Log.pop(), str);
+    }
+
+    void test_call_set_dependency()
+    {
+      CPPUNIT_ASSERT(CServant);
+
+      std::string str("send_stimulus");
+      ::CORBA::Boolean result;
+      ::SDOPackage::DependencyType dependency;
+      result = CServant->set_dependency(dependency);
+      CPPUNIT_ASSERT_EQUAL_MESSAGE("not true", true, result);
+      CPPUNIT_ASSERT_EQUAL_MESSAGE("not method name", Log.pop(), str);
     }
   
     /* test case */

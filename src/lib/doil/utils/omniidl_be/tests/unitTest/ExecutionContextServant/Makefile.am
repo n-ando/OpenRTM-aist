@@ -20,8 +20,10 @@ IDLC = @IDLC@
 IDLFLAGS = @IDL_FLAGS@
 LIBS = @LIBS@
 
-open_rtm_dir = $(top_builddir)/../../../../..
-target_srcdir = $(top_builddir)/..
+#open_rtm_dir = $(top_builddir)/../../../../..
+open_rtm_dir = ../../../../../..
+#target_srcdir = $(top_builddir)/..
+target_srcdir = ../..
 
 AM_CPPFLAGS = -I.
 AM_CPPFLAGS += -I$(includedir)
@@ -29,6 +31,8 @@ AM_CPPFLAGS += -I$(target_srcdir)
 AM_CPPFLAGS += -I$(open_rtm_dir)
 AM_CPPFLAGS += -I$(open_rtm_dir)/rtc/corba/idl
 AM_CPPFLAGS += -I../../../../../../coil/posix
+AM_CPPFLAGS += -I../
+AM_CPPFLAGS += -I../stubs
 
 AM_LDFLAGS = -L.
 AM_LDFLAGS += -L$(open_rtm_dir)/coil/lib
@@ -44,6 +48,8 @@ ExecutionContextServantTests_SOURCES += ExecutionContextServantTests.cpp
 ExecutionContextServantTests_SOURCES += $(IDL_SOURCES:.idl=Stub.cpp)
 ExecutionContextServantTests_SOURCES += $(open_rtm_dir)/doil/ORBManager.cpp
 ExecutionContextServantTests_SOURCES += $(open_rtm_dir)/doil/corba/CORBAManager.cpp
+ExecutionContextServantTests_SOURCES += ../stubs/ExecutionContextImpl.cpp 
+ExecutionContextServantTests_SOURCES += ../stubs/Logger.cpp 
 
 ExecutionContextServantTests_LDFLAGS = -L$(libdir)
 

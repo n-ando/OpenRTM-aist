@@ -69,6 +69,10 @@ namespace Servant
     virtual ::RTC::Local::ReturnCode_t on_reset(::RTC::Local::ExecutionContextHandle_t exec_handle)
       throw ();
 
+    const char* id() { return "ComponentAction"; }
+    const char* name() { return m_name; }
+    void incRef() { refcount++; }
+    void decRef() { refcount--; }
   private:
     static int count;
     char m_name[32];

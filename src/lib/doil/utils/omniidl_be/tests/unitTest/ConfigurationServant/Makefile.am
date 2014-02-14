@@ -36,6 +36,7 @@ AM_CPPFLAGS += -I../../../../../../coil/posix
 AM_CPPFLAGS += -I../../../../../../
 AM_CPPFLAGS += -I/usr/include/omniORB4/
 AM_CPPFLAGS += -I/usr/include/omniORB4/internal/
+AM_CPPFLAGS += -I../stubs
 
 AM_LDFLAGS = -L.
 AM_LDFLAGS += -L$(open_rtm_dir)/coil/lib
@@ -51,6 +52,7 @@ ConfigurationServantTests_SOURCES += ConfigurationServantTests.cpp
 ConfigurationServantTests_SOURCES += $(IDL_SOURCES:.idl=Stub.cpp)
 ConfigurationServantTests_SOURCES += $(open_rtm_dir)/doil/ORBManager.cpp
 ConfigurationServantTests_SOURCES += $(open_rtm_dir)/doil/corba/CORBAManager.cpp
+ConfigurationServantTests_SOURCES += ../stubs/ConfigurationImpl.cpp
 
 ConfigurationServantTests_LDFLAGS = -L$(libdir)
 ConfigurationServantTests_LDFLAGS += -L../stubs

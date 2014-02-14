@@ -20,6 +20,11 @@
 #include <cppunit/ui/text/TestRunner.h>
 #include <cppunit/extensions/HelperMacros.h>
 #include <cppunit/TestAssert.h>
+#include <MultiModeComponentActionServant.h>
+#include <doil/ServantBase.h>
+#include <doil/corba/CORBAManager.h>
+#include <stubs/MultiModeComponentActionImpl.h>
+#include <stubs/Logger.h>
 
 /*!
  * @class MultiModeComponentActionServantTests class
@@ -31,10 +36,15 @@ namespace MultiModeComponentActionServant
    : public CppUnit::TestFixture
   {
     CPPUNIT_TEST_SUITE(MultiModeComponentActionServantTests);
-    CPPUNIT_TEST(test_case0);
+    CPPUNIT_TEST(test_call_on_mode_changed);
+    //CPPUNIT_TEST(test_case0);
     CPPUNIT_TEST_SUITE_END();
   
   private:
+    ::UnitTest::Servant::MultiModeComponentActionImpl* Impl;
+    ::UnitTest::Servant::Logger Log;
+    ::doil::ServantBase* Servant;
+    ::RTC::CORBA::MultiModeComponentActionServant * CServant;
   
   public:
   
@@ -43,6 +53,14 @@ namespace MultiModeComponentActionServant
      */
     MultiModeComponentActionServantTests()
     {
+        // registerFactory
+        Impl = new UnitTest::Servant::MultiModeComponentActionImpl(Log);
+        doil::CORBA::CORBAManager::instance().registerFactory(Impl->id(),
+            doil::New<RTC::CORBA::MultiModeComponentActionServant>,
+            doil::Delete<RTC::CORBA::MultiModeComponentActionServant>);
+        doil::ReturnCode_t ret = doil::CORBA::CORBAManager::instance().activateObject(Impl);
+        Servant = doil::CORBA::CORBAManager::instance().toServant(Impl);
+        CServant = dynamic_cast<RTC::CORBA::MultiModeComponentActionServant*>(Servant);
     }
     
     /*!
@@ -50,6 +68,8 @@ namespace MultiModeComponentActionServant
      */
     ~MultiModeComponentActionServantTests()
     {
+      delete Impl;
+      Impl = 0;
     }
   
     /*!
@@ -64,6 +84,17 @@ namespace MultiModeComponentActionServant
      */
     virtual void tearDown()
     { 
+    }
+    void test_call_on_mode_changed()
+    {
+      CPPUNIT_ASSERT(CServant);
+
+      std::string str("on_mode_changed");
+      ::RTC::ReturnCode_t result;
+      ::RTC::Local::ExecutionContextHandle_t exec_handle;
+      result = CServant->on_mode_changed(exec_handle);
+      CPPUNIT_ASSERT_EQUAL_MESSAGE("not true", ::RTC::RTC_OK, result);
+      CPPUNIT_ASSERT_EQUAL_MESSAGE("not method name", Log.pop(), str);
     }
   
     /* test case */

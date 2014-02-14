@@ -39,6 +39,17 @@ lib_LIBRARIES = libstubs.a
 libstubs_a_SOURCES = ConfigurationImpl.cpp
 libstubs_a_SOURCES += Logger.cpp
 libstubs_a_SOURCES += ComponentActionImpl.cpp
+libstubs_a_SOURCES += DataFlowComponentActionImpl.cpp
+libstubs_a_SOURCES += LightweightRTObjectImpl.cpp
+libstubs_a_SOURCES += DataFlowComponentImpl.cpp
+libstubs_a_SOURCES += ExecutionContextServiceImpl.cpp
+libstubs_a_SOURCES += FsmObjectImpl.cpp
+libstubs_a_SOURCES += FsmParticipantActionImpl.cpp
+libstubs_a_SOURCES += FsmServiceImpl.cpp
+libstubs_a_SOURCES += ModeImpl.cpp
+libstubs_a_SOURCES += ModeCapableImpl.cpp
+libstubs_a_SOURCES += MultiModeComponentActionImpl.cpp
+libstubs_a_SOURCES += OrganizationImpl.cpp
 stubsdir = .
 
 noinst_LIBRARIES = libstubs.a

@@ -20,6 +20,11 @@
 #include <cppunit/ui/text/TestRunner.h>
 #include <cppunit/extensions/HelperMacros.h>
 #include <cppunit/TestAssert.h>
+#include <DataFlowComponentActionServant.h>
+#include <doil/ServantBase.h>
+#include <doil/corba/CORBAManager.h>
+#include <stubs/DataFlowComponentActionImpl.h>
+#include <stubs/Logger.h>
 
 /*!
  * @class DataFlowComponentActionServantTests class
@@ -31,10 +36,17 @@ namespace DataFlowComponentActionServant
    : public CppUnit::TestFixture
   {
     CPPUNIT_TEST_SUITE(DataFlowComponentActionServantTests);
-    CPPUNIT_TEST(test_case0);
+    CPPUNIT_TEST(test_call_on_execute);
+    CPPUNIT_TEST(test_call_on_state_update);
+    CPPUNIT_TEST(test_call_on_rate_changed);
+    //CPPUNIT_TEST(test_case0);
     CPPUNIT_TEST_SUITE_END();
   
   private:
+    ::UnitTest::Servant::DataFlowComponentActionImpl* Impl;
+    ::UnitTest::Servant::Logger Log;
+    ::doil::ServantBase* Servant;
+    ::RTC::CORBA::DataFlowComponentActionServant * CServant;
   
   public:
   
@@ -43,6 +55,14 @@ namespace DataFlowComponentActionServant
      */
     DataFlowComponentActionServantTests()
     {
+        // registerFactory
+        Impl = new UnitTest::Servant::DataFlowComponentActionImpl(Log);
+        doil::CORBA::CORBAManager::instance().registerFactory(Impl->id(),
+            doil::New<RTC::CORBA::DataFlowComponentActionServant>,
+            doil::Delete<RTC::CORBA::DataFlowComponentActionServant>);
+        doil::ReturnCode_t ret = doil::CORBA::CORBAManager::instance().activateObject(Impl);
+        Servant = doil::CORBA::CORBAManager::instance().toServant(Impl);
+        CServant = dynamic_cast<RTC::CORBA::DataFlowComponentActionServant*>(Servant);
     }
     
     /*!
@@ -50,6 +70,8 @@ namespace DataFlowComponentActionServant
      */
     ~DataFlowComponentActionServantTests()
     {
+      delete Impl;
+      Impl = 0;
     }
   
     /*!
@@ -66,6 +88,39 @@ namespace DataFlowComponentActionServant
     { 
     }
   
+    void test_call_on_execute()
+    {
+      CPPUNIT_ASSERT(CServant);
+
+      std::string str("on_execute");
+      ::RTC::ExecutionContextHandle_t exec_handle;
+      ::RTC::ReturnCode_t result;
+      result = CServant->on_execute(exec_handle);
+      CPPUNIT_ASSERT_EQUAL_MESSAGE("not true", RTC::RTC_OK, result);
+      CPPUNIT_ASSERT_EQUAL_MESSAGE("not method name", Log.pop(), str);
+    }
+    void test_call_on_state_update()
+    {
+      CPPUNIT_ASSERT(CServant);
+
+      std::string str("on_state_update");
+      ::RTC::ExecutionContextHandle_t exec_handle;
+      ::RTC::ReturnCode_t result;
+      result = CServant->on_state_update(exec_handle);
+      CPPUNIT_ASSERT_EQUAL_MESSAGE("not true", RTC::RTC_OK, result);
+      CPPUNIT_ASSERT_EQUAL_MESSAGE("not method name", Log.pop(), str);
+    }
+    void test_call_on_rate_changed()
+    {
+      CPPUNIT_ASSERT(CServant);
+
+      std::string str("on_rate_changed");
+      ::RTC::ExecutionContextHandle_t exec_handle;
+      ::RTC::ReturnCode_t result;
+      result = CServant->on_rate_changed(exec_handle);
+      CPPUNIT_ASSERT_EQUAL_MESSAGE("not true", RTC::RTC_OK, result);
+      CPPUNIT_ASSERT_EQUAL_MESSAGE("not method name", Log.pop(), str);
+    }
     /* test case */
     void test_case0()
     {

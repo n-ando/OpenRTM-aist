@@ -64,7 +64,7 @@ namespace Servant
              ::SDOPackage::Local::NotAvailable,
              ::SDOPackage::Local::InternalError)
     {
-      m_logger->push("set_service_profile");
+      m_logger->push("add_service_profile");
       return true;
     }
 
