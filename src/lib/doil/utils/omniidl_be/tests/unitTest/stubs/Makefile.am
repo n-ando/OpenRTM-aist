@@ -50,6 +50,8 @@ libstubs_a_SOURCES += ModeImpl.cpp
 libstubs_a_SOURCES += ModeCapableImpl.cpp
 libstubs_a_SOURCES += MultiModeComponentActionImpl.cpp
 libstubs_a_SOURCES += OrganizationImpl.cpp
+libstubs_a_SOURCES += SDOSystemElementImpl.cpp
+#libstubs_a_SOURCES += SDOImpl.cpp
 stubsdir = .
 
 noinst_LIBRARIES = libstubs.a
