@@ -20,6 +20,11 @@
 #include <cppunit/ui/text/TestRunner.h>
 #include <cppunit/extensions/HelperMacros.h>
 #include <cppunit/TestAssert.h>
+#include <SDOSystemElementServant.h>
+#include <doil/ServantBase.h>
+#include <doil/corba/CORBAManager.h>
+#include <stubs/SDOSystemElementImpl.h>
+#include <stubs/Logger.h>
 
 /*!
  * @class SDOSystemElementServantTests class
@@ -31,10 +36,15 @@ namespace SDOSystemElementServant
    : public CppUnit::TestFixture
   {
     CPPUNIT_TEST_SUITE(SDOSystemElementServantTests);
-    CPPUNIT_TEST(test_case0);
+    CPPUNIT_TEST(test_call_get_owned_organizations);
+    //CPPUNIT_TEST(test_case0);
     CPPUNIT_TEST_SUITE_END();
   
   private:
+    ::UnitTest::Servant::SDOSystemElementImpl* Impl;
+    ::UnitTest::Servant::Logger Log;
+    ::doil::ServantBase* Servant;
+    ::SDOPackage::CORBA::SDOSystemElementServant * CServant;
   
   public:
   
@@ -43,6 +53,14 @@ namespace SDOSystemElementServant
      */
     SDOSystemElementServantTests()
     {
+        // registerFactory
+        Impl = new UnitTest::Servant::SDOSystemElementImpl(Log);
+        doil::CORBA::CORBAManager::instance().registerFactory(Impl->id(),
+            doil::New<SDOPackage::CORBA::SDOSystemElementServant>,
+            doil::Delete<SDOPackage::CORBA::SDOSystemElementServant>);
+        doil::ReturnCode_t ret = doil::CORBA::CORBAManager::instance().activateObject(Impl);
+        Servant = doil::CORBA::CORBAManager::instance().toServant(Impl);
+        CServant = dynamic_cast<SDOPackage::CORBA::SDOSystemElementServant*>(Servant);
     }
     
     /*!
@@ -50,6 +68,8 @@ namespace SDOSystemElementServant
      */
     ~SDOSystemElementServantTests()
     {
+      delete Impl;
+      Impl = 0;
     }
   
     /*!
@@ -64,6 +84,17 @@ namespace SDOSystemElementServant
      */
     virtual void tearDown()
     { 
+    }
+
+    void test_call_get_owned_organizations()
+    { 
+      CPPUNIT_ASSERT(CServant);
+
+      std::string str("get_owned_organizations");
+      ::SDOPackage::OrganizationList_var result;
+      result = CServant->get_owned_organizations();
+      //CPPUNIT_ASSERT_EQUAL_MESSAGE("not true", RTC::RTC_OK, result);
+      CPPUNIT_ASSERT_EQUAL_MESSAGE("not method name", Log.pop(), str);
     }
   
     /* test case */
