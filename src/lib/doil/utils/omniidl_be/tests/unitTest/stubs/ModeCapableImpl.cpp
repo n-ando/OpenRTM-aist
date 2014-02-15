@@ -55,8 +55,10 @@ namespace Servant
             m_logger->push("get_fsm_profile");
           }
         //ModeImpl* lo_ret = new ModeImpl();
-        ::RTC::Local::IMode* ret; 
-        return ret;
+        //::RTC::Local::IMode * ret = new UnitTest::Servant::ModeImpl(); 
+        //::UnitTest::Servant::ModeImpl * ret = new ::UnitTest::Servant::ModeImpl(); 
+        //::UnitTest::Servant::ModeImpl  ret;
+        return NULL;
     }
 
     ::RTC::Local::IMode* ModeCapableImpl::get_current_mode()

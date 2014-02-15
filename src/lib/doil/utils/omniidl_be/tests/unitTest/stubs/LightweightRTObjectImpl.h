@@ -113,8 +113,8 @@ namespace Servant
     char m_name[32];
     int refcount;
     Logger *m_logger;
-    //::RTC::Local::IExecutionContext m_pec;
-    ::UnitTest::Servant::ExecutionContextImpl m_pec;
+    ::RTC::Local::IExecutionContext * m_pec;
+    //::UnitTest::Servant::ExecutionContextImpl m_pec;
   };
 
 }; // namespace Servant

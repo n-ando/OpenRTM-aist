@@ -46,6 +46,10 @@ RTObjectServantTests_SOURCES += RTObjectServantTests.cpp
 RTObjectServantTests_SOURCES += $(IDL_SOURCES:.idl=Stub.cpp)
 RTObjectServantTests_SOURCES += $(open_rtm_dir)/doil/ORBManager.cpp
 RTObjectServantTests_SOURCES += $(open_rtm_dir)/doil/corba/CORBAManager.cpp
+RTObjectServantTests_SOURCES += ../stubs/RTObjectImpl.cpp 
+RTObjectServantTests_SOURCES += ../stubs/ExecutionContextImpl.cpp 
+RTObjectServantTests_SOURCES += ../stubs/Logger.cpp 
+RTObjectServantTests_SOURCES += ../stubs/PortServiceImpl.cpp
 
 RTObjectServantTests_LDFLAGS = -L$(libdir)
 
@@ -57,9 +61,6 @@ RTObjectServantTests_LDADD  += -lcppunit
 RTObjectServantTests_LDADD  += $(target_srcdir)/RTObjectServant.o
 RTObjectServantTests_LDADD  += $(target_srcdir)/RTCTypeConversion.o
 RTObjectServantTests_LDADD  += $(target_srcdir)/SDOPackageTypeConversion.o
-RTObjectServantTests_SOURCES += ../stubs/RTObjectImpl.cpp 
-RTObjectServantTests_SOURCES += ../stubs/ExecutionContextImpl.cpp 
-RTObjectServantTests_SOURCES += ../stubs/Logger.cpp 
 
 RTObjectServantTests_LDADD  += $(target_srcdir)/ComponentActionServant.o
 RTObjectServantTests_LDADD  += $(target_srcdir)/LightweightRTObjectServant.o

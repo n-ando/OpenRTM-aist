@@ -11,6 +11,7 @@
 
 #include <stdio.h>
 #include <OrganizationImpl.h>
+#include <SDOSystemElementImpl.h>
 #include <iostream>
 #include <sstream>
 #include <string>
@@ -55,7 +56,7 @@ namespace Servant
           {
             m_logger->push("get_organization_id");
           }
-        return "_id";
+        return "foo";
     }
 
     ::SDOPackage::Local::OrganizationProperty OrganizationImpl::get_organization_property()
@@ -126,7 +127,9 @@ namespace Servant
           {
             m_logger->push("get_owner");
           }
-        return NULL;
+        ::SDOPackage::Local::ISDOSystemElement * ret = new UnitTest::Servant::SDOSystemElementImpl();
+std::cout<<ret<<std::endl;
+        return ret; 
     }
 
     bool OrganizationImpl::set_owner(const ::SDOPackage::Local::ISDOSystemElement* sdo)

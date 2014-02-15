@@ -46,6 +46,7 @@ OrganizationServantTests_SOURCES += OrganizationServantTests.cpp
 OrganizationServantTests_SOURCES += $(IDL_SOURCES:.idl=Stub.cpp)
 OrganizationServantTests_SOURCES += $(open_rtm_dir)/doil/ORBManager.cpp
 OrganizationServantTests_SOURCES += $(open_rtm_dir)/doil/corba/CORBAManager.cpp
+OrganizationServantTests_SOURCES += ../stubs/SDOSystemElementImpl.cpp
 OrganizationServantTests_SOURCES += ../stubs/OrganizationImpl.cpp 
 OrganizationServantTests_SOURCES += ../stubs/Logger.cpp 
 

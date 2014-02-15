@@ -11,6 +11,8 @@
 
 #include <stdio.h>
 #include <SDOImpl.h>
+#include <SDOServiceImpl.h>
+#include <ConfigurationImpl.h>
 #include <iostream>
 #include <sstream>
 #include <string>
@@ -35,6 +37,7 @@ namespace Servant
     {
       ++count;
       m_logger = new Logger();
+      m_sdos = new UnitTest::Servant::SDOServiceImpl();
     } 
     SDOImpl::SDOImpl(Logger& aLogger)
     {
@@ -101,7 +104,18 @@ namespace Servant
           {
             m_logger->push("get_service_profile");
           }
+
+        ::SDOPackage::Local::NameValue nv;
+         nv.name="foo";
+         nv.value="bar";
+std::cout<<"1"<<std::endl;
         ::SDOPackage::Local::ServiceProfile prof;
+std::cout<<"2"<<std::endl;
+        prof.id = "foo";
+        prof.interface_type = "bar";
+        prof.properties.push_back(nv);
+        prof.service = m_sdos;
+std::cout<<"3:"<<prof.service<<std::endl;
         return prof;
     }
 
@@ -114,7 +128,8 @@ namespace Servant
           {
             m_logger->push("get_sdo_service");
           }
-        ::SDOPackage::Local::ISDOService* ret;
+        ::SDOPackage::Local::ISDOService* ret = m_sdos;
+        return m_sdos;
         return ret;
     }
 
@@ -127,7 +142,7 @@ namespace Servant
           {
             m_logger->push("get_configuration");
           }
-        ::SDOPackage::Local::IConfiguration* ret;
+        ::SDOPackage::Local::IConfiguration * ret = new UnitTest::Servant::ConfigurationImpl() ;
         return ret;
     }
 

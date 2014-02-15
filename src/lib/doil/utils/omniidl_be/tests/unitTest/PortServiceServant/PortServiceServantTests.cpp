@@ -36,6 +36,7 @@ namespace PortServiceServant
    : public CppUnit::TestFixture
   {
     CPPUNIT_TEST_SUITE(PortServiceServantTests);
+/*
     CPPUNIT_TEST(test_call_get_port_profile);
     CPPUNIT_TEST(test_call_get_connector_profiles);
     CPPUNIT_TEST(test_call_get_connector_profile);
@@ -43,7 +44,10 @@ namespace PortServiceServant
     CPPUNIT_TEST(test_call_disconnect);
     CPPUNIT_TEST(test_call_disconnect_all);
     CPPUNIT_TEST(test_call_notify_connect);
+*/
     CPPUNIT_TEST(test_call_notify_disconnect);
+/*
+*/
     //CPPUNIT_TEST(test_case0);
     CPPUNIT_TEST_SUITE_END();
   

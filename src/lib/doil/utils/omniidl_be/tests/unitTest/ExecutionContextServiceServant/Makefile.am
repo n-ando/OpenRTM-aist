@@ -46,6 +46,9 @@ ExecutionContextServiceServantTests_SOURCES += ExecutionContextServiceServantTes
 ExecutionContextServiceServantTests_SOURCES += $(IDL_SOURCES:.idl=Stub.cpp)
 ExecutionContextServiceServantTests_SOURCES += $(open_rtm_dir)/doil/ORBManager.cpp
 ExecutionContextServiceServantTests_SOURCES += $(open_rtm_dir)/doil/corba/CORBAManager.cpp
+ExecutionContextServiceServantTests_SOURCES += ../stubs/RTObjectImpl.cpp 
+ExecutionContextServiceServantTests_SOURCES += ../stubs/PortServiceImpl.cpp 
+ExecutionContextServiceServantTests_SOURCES += ../stubs/ExecutionContextImpl.cpp 
 ExecutionContextServiceServantTests_SOURCES += ../stubs/ExecutionContextServiceImpl.cpp 
 ExecutionContextServiceServantTests_SOURCES += ../stubs/Logger.cpp 
 

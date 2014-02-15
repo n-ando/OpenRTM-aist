@@ -34,7 +34,7 @@ namespace Servant
 
   class SDOServiceImpl
    : public virtual doil::ImplBase,
-     public virtual RTC::Local::ISDOService
+     public virtual SDOPackage::Local::ISDOService
 
   {
   public:

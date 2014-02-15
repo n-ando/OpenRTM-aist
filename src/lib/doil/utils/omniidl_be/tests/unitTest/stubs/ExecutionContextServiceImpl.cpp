@@ -11,6 +11,7 @@
 
 #include <stdio.h>
 #include <ExecutionContextServiceImpl.h>
+#include <RTObjectImpl.h>
 #include <iostream>
 #include <sstream>
 #include <string>
@@ -57,7 +58,7 @@ namespace Servant
         ::RTC::Local::ExecutionContextProfile ret;
         m_ret.kind = ::RTC::Local::PERIODIC;
         m_ret.rate = 100.0;
-        m_ret.owner = NULL;
+        m_ret.owner = new UnitTest::Servant::RTObjectImpl();
         return m_ret;
     }
 

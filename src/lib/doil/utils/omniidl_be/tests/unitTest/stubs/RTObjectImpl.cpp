@@ -10,7 +10,9 @@
 
 
 #include <stdio.h>
+#include <IRTObject.h>
 #include <RTObjectImpl.h>
+#include <PortServiceImpl.h>
 #include <ExecutionContextImpl.h>
 #include <iostream>
 #include <string>
@@ -53,7 +55,12 @@ namespace Servant
           {
             m_logger->push("get_component_profile");
           }
+        //::RTC::Local::PortProfileList port_profiles;
+        //::RTC::Local::IRTObject* parent;
+        //:::RTC::Local::NVList properties;
         ::RTC::Local::ComponentProfile ret;
+        //ret.parent =  dynamic_cast<::RTC::Local::IRTObject*>(this);
+        ret.parent =  this;
         return ret;
     }
 
@@ -65,6 +72,8 @@ namespace Servant
             m_logger->push("get_ports");
           }
         ::RTC::Local::PortServiceList ret;
+        //new UnitTest::Servant::PortServiceImpl();
+        ret.push_back(new UnitTest::Servant::PortServiceImpl());
         return ret;
     }
 

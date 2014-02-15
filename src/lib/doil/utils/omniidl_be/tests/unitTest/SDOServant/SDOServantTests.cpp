@@ -40,10 +40,12 @@ namespace SDOServant
     CPPUNIT_TEST(test_call_get_sdo_type);
     CPPUNIT_TEST(test_call_get_device_profile);
     CPPUNIT_TEST(test_call_get_service_profiles);
+
     CPPUNIT_TEST(test_call_get_service_profile);
     CPPUNIT_TEST(test_call_get_sdo_service);
     CPPUNIT_TEST(test_call_get_configuration);
     CPPUNIT_TEST(test_call_get_monitoring);
+
     CPPUNIT_TEST(test_call_get_organizations);
     CPPUNIT_TEST(test_call_get_status_list);
     CPPUNIT_TEST(test_call_get_status);

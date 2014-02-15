@@ -35,13 +35,13 @@ namespace Servant
     {
       ++count;
       m_logger = new Logger();
-      //m_pec = new ::UnitTest::Servant::ExecutionContextImpl();
+      m_pec = new ::UnitTest::Servant::ExecutionContextImpl();
     } 
     LightweightRTObjectImpl::LightweightRTObjectImpl(Logger& aLogger)
     {
       ++count;
       m_logger = &aLogger;
-      //m_pec = new ::UnitTest::Servant::ExecutionContextImpl();
+      m_pec = new ::UnitTest::Servant::ExecutionContextImpl();
     } 
 
     LightweightRTObjectImpl::~LightweightRTObjectImpl()
@@ -116,11 +116,10 @@ namespace Servant
           {
             m_logger->push("get_context");
           }
-       std::cout<<"010"<<std::endl;
        ::RTC::Local::IExecutionContext *ret = new ::UnitTest::Servant::ExecutionContextImpl();
-       std::cout<<"020"<<std::endl;
+       std::cout<<"020:"<< m_pec <<std::endl;
         //return ret;
-        return (::RTC::Local::IExecutionContext *)&m_pec;
+        return m_pec;
     }
 
     ::RTC::Local::ExecutionContextList LightweightRTObjectImpl::get_owned_contexts()

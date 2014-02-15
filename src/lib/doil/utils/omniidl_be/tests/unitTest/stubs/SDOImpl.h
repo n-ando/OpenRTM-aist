@@ -102,6 +102,7 @@ namespace Servant
     const char* name() { return m_name; }
     void incRef() { refcount++; }
     void decRef() { refcount--; }
+    ::SDOPackage::Local::ISDOService * m_sdos;
   private:
     static int count;
     char m_name[32];

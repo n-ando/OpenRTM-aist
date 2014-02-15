@@ -11,6 +11,7 @@
 
 #include <stdio.h>
 #include <PortServiceImpl.h>
+#include <RTObjectImpl.h>
 #include <ExecutionContextImpl.h>
 #include <iostream>
 #include <string>
@@ -54,6 +55,8 @@ namespace Servant
             m_logger->push("get_port_profile");
           }
         ::RTC::Local::PortProfile ret;
+        ret.port_ref = this;
+        ret.owner = new UnitTest::Servant::RTObjectImpl();
         return ret;
     }
 

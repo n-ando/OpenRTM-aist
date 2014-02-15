@@ -47,6 +47,8 @@ SDOServantTests_SOURCES += $(IDL_SOURCES:.idl=Stub.cpp)
 SDOServantTests_SOURCES += $(open_rtm_dir)/doil/ORBManager.cpp
 SDOServantTests_SOURCES += $(open_rtm_dir)/doil/corba/CORBAManager.cpp
 SDOServantTests_SOURCES += ../stubs/SDOImpl.cpp 
+SDOServantTests_SOURCES += ../stubs/ConfigurationImpl.cpp 
+SDOServantTests_SOURCES += ../stubs/SDOServiceImpl.cpp 
 SDOServantTests_SOURCES += ../stubs/Logger.cpp 
 
 SDOServantTests_LDFLAGS = -L$(libdir)

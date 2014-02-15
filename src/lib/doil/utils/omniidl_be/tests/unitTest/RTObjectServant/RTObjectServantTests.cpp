@@ -36,7 +36,7 @@ namespace RTObjectServant
    : public CppUnit::TestFixture
   {
     CPPUNIT_TEST_SUITE(RTObjectServantTests);
-    CPPUNIT_TEST(test_call_get_component_profile);
+    //CPPUNIT_TEST(test_call_get_component_profile);
     CPPUNIT_TEST(test_call_get_ports);
     //CPPUNIT_TEST(test_case0);
     CPPUNIT_TEST_SUITE_END();
