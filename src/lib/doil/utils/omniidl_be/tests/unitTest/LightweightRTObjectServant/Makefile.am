@@ -67,6 +67,7 @@ LightweightRTObjectServantTests_LDADD  += -lcoil
 LightweightRTObjectServantTests_LDADD  += -lcppunit
 #LightweightRTObjectServantTests_LDADD  += -lstubs
 LightweightRTObjectServantTests_LDADD  += $(target_srcdir)/LightweightRTObjectServant.o
+LightweightRTObjectServantTests_LDADD  += $(target_srcdir)/ExecutionContextServant.o
 LightweightRTObjectServantTests_LDADD  += $(target_srcdir)/RTCTypeConversion.o
 LightweightRTObjectServantTests_LDADD  += $(target_srcdir)/SDOPackageTypeConversion.o
 LightweightRTObjectServantTests_LDADD  += $(target_srcdir)/ComponentActionServant.o

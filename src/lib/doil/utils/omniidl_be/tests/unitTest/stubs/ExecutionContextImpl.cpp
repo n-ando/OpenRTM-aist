@@ -33,11 +33,13 @@ namespace Servant
 
     ExecutionContextImpl::ExecutionContextImpl()
     {
+      sprintf(m_name, "%s", id());
       ++count;
       m_logger = new Logger();
     } 
     ExecutionContextImpl::ExecutionContextImpl(Logger& aLogger)
     {
+      sprintf(m_name, "%s", id());
       ++count;
       m_logger = &aLogger;
     } 

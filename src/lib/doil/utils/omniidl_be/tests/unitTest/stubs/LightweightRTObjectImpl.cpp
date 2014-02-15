@@ -117,7 +117,6 @@ namespace Servant
             m_logger->push("get_context");
           }
        ::RTC::Local::IExecutionContext *ret = new ::UnitTest::Servant::ExecutionContextImpl();
-       std::cout<<"020:"<< m_pec <<std::endl;
         //return ret;
         return m_pec;
     }

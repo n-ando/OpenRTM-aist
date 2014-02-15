@@ -20,10 +20,15 @@
 #include <cppunit/ui/text/TestRunner.h>
 #include <cppunit/extensions/HelperMacros.h>
 #include <cppunit/TestAssert.h>
+
 #include <LightweightRTObjectServant.h>
+#include <ExecutionContextServant.h>
+
 #include <doil/ServantBase.h>
 #include <doil/corba/CORBAManager.h>
+
 #include <stubs/LightweightRTObjectImpl.h>
+#include <stubs/ExecutionContextImpl.h>
 #include <stubs/Logger.h>
 
 /*!
@@ -51,6 +56,8 @@ namespace LightweightRTObjectServant
   
   private:
     ::UnitTest::Servant::LightweightRTObjectImpl* Impl;
+    ::UnitTest::Servant::ExecutionContextImpl* EImpl;
+
     ::UnitTest::Servant::Logger Log;
     ::doil::ServantBase* Servant;
     ::RTC::CORBA::LightweightRTObjectServant * CServant;
@@ -71,6 +78,14 @@ namespace LightweightRTObjectServant
         doil::ReturnCode_t ret = doil::CORBA::CORBAManager::instance().activateObject(Impl);
         Servant = doil::CORBA::CORBAManager::instance().toServant(Impl);
         CServant = dynamic_cast<RTC::CORBA::LightweightRTObjectServant*>(Servant);
+
+        EImpl = new UnitTest::Servant::ExecutionContextImpl(Log);
+        doil::CORBA::CORBAManager::instance().registerFactory(EImpl->id(),
+            doil::New<RTC::CORBA::ExecutionContextServant>,
+            doil::Delete<RTC::CORBA::ExecutionContextServant>);
+        ret = doil::CORBA::CORBAManager::instance().activateObject(EImpl);
+
+
     }
     
     /*!
