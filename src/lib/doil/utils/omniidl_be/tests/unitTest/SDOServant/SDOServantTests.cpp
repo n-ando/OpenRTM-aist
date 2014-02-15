@@ -20,10 +20,20 @@
 #include <cppunit/ui/text/TestRunner.h>
 #include <cppunit/extensions/HelperMacros.h>
 #include <cppunit/TestAssert.h>
+
 #include <SDOServant.h>
+#include <SDOServiceServant.h>
+#include <ConfigurationServant.h>
+#include <MonitoringServant.h>
+
 #include <doil/ServantBase.h>
 #include <doil/corba/CORBAManager.h>
+
 #include <stubs/SDOImpl.h>
+#include <stubs/SDOServiceImpl.h>
+#include <stubs/ConfigurationImpl.h>
+#include <stubs/MonitoringImpl.h>
+
 #include <stubs/Logger.h>
 
 /*!
@@ -54,9 +64,17 @@ namespace SDOServant
   
   private:
     ::UnitTest::Servant::SDOImpl* Impl;
+    ::UnitTest::Servant::SDOServiceImpl* SSImpl;
+    ::UnitTest::Servant::ConfigurationImpl* CImpl;
+    ::UnitTest::Servant::MonitoringImpl* MImpl;
+
     ::UnitTest::Servant::Logger Log;
+
     ::doil::ServantBase* Servant;
     ::SDOPackage::CORBA::SDOServant * CServant;
+    ::SDOPackage::CORBA::SDOServiceServant * CSServant;
+    ::SDOPackage::CORBA::ConfigurationServant * CCServant;
+    ::SDOPackage::CORBA::MonitoringServant * MServant;
   
   public:
   
@@ -73,6 +91,28 @@ namespace SDOServant
         doil::ReturnCode_t ret = doil::CORBA::CORBAManager::instance().activateObject(Impl);
         Servant = doil::CORBA::CORBAManager::instance().toServant(Impl);
         CServant = dynamic_cast<SDOPackage::CORBA::SDOServant*>(Servant);
+
+        SSImpl = new UnitTest::Servant::SDOServiceImpl();
+        doil::CORBA::CORBAManager::instance().registerFactory(SSImpl->id(),
+            doil::New<SDOPackage::CORBA::SDOServiceServant>,
+            doil::Delete<SDOPackage::CORBA::SDOServiceServant>);
+        doil::ReturnCode_t ret2 = doil::CORBA::CORBAManager::instance().activateObject(SSImpl);
+        //Servant = doil::CORBA::CORBAManager::instance().toServant(SSImpl);
+        //CSServant = dynamic_cast<SDOPackage::CORBA::SDOServiceServant*>(Servant);
+
+        CImpl = new UnitTest::Servant::ConfigurationImpl();
+        doil::CORBA::CORBAManager::instance().registerFactory(CImpl->id(),
+            doil::New<SDOPackage::CORBA::ConfigurationServant>,
+            doil::Delete<SDOPackage::CORBA::ConfigurationServant>);
+        doil::CORBA::CORBAManager::instance().activateObject(CImpl);
+        //Servant = doil::CORBA::CORBAManager::instance().toServant(CImpl);
+        //CCServant = dynamic_cast<SDOPackage::CORBA::ConfigurationServant*>(Servant);
+
+        MImpl = new UnitTest::Servant::MonitoringImpl();
+        doil::CORBA::CORBAManager::instance().registerFactory(MImpl->id(),
+            doil::New<SDOPackage::CORBA::MonitoringServant>,
+            doil::Delete<SDOPackage::CORBA::MonitoringServant>);
+        doil::CORBA::CORBAManager::instance().activateObject(MImpl);
     }
     
     /*!

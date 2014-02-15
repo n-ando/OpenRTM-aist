@@ -49,6 +49,7 @@ SDOServantTests_SOURCES += $(open_rtm_dir)/doil/corba/CORBAManager.cpp
 SDOServantTests_SOURCES += ../stubs/SDOImpl.cpp 
 SDOServantTests_SOURCES += ../stubs/ConfigurationImpl.cpp 
 SDOServantTests_SOURCES += ../stubs/SDOServiceImpl.cpp 
+SDOServantTests_SOURCES += ../stubs/MonitoringImpl.cpp 
 SDOServantTests_SOURCES += ../stubs/Logger.cpp 
 
 SDOServantTests_LDFLAGS = -L$(libdir)
@@ -59,6 +60,9 @@ SDOServantTests_LDADD  += -lomniDynamic4
 SDOServantTests_LDADD  += -lcoil
 SDOServantTests_LDADD  += -lcppunit
 SDOServantTests_LDADD  += $(target_srcdir)/SDOServant.o
+SDOServantTests_LDADD  += $(target_srcdir)/SDOServiceServant.o
+SDOServantTests_LDADD  += $(target_srcdir)/ConfigurationServant.o
+SDOServantTests_LDADD  += $(target_srcdir)/MonitoringServant.o
 SDOServantTests_LDADD  += $(target_srcdir)/RTCTypeConversion.o
 SDOServantTests_LDADD  += $(target_srcdir)/SDOPackageTypeConversion.o
 
