@@ -10,8 +10,8 @@
 
 
 #include <stdio.h>
-#include <ModeCapableImpl.h>
 #include <ModeImpl.h>
+#include <ModeCapableImpl.h>
 #include <iostream>
 #include <sstream>
 #include <string>
@@ -52,13 +52,13 @@ namespace Servant
     {
         if (m_logger != NULL) 
           {
-            m_logger->push("get_fsm_profile");
+            m_logger->push("get_default_mode");
           }
         //ModeImpl* lo_ret = new ModeImpl();
-        //::RTC::Local::IMode * ret = new UnitTest::Servant::ModeImpl(); 
+        ::RTC::Local::IMode * ret = new UnitTest::Servant::ModeImpl(); 
         //::UnitTest::Servant::ModeImpl * ret = new ::UnitTest::Servant::ModeImpl(); 
         //::UnitTest::Servant::ModeImpl  ret;
-        return NULL;
+        return ret;
     }
 
     ::RTC::Local::IMode* ModeCapableImpl::get_current_mode()
@@ -68,8 +68,9 @@ namespace Servant
           {
             m_logger->push("get_current_mode");
           }
+        ::RTC::Local::IMode * ret = new UnitTest::Servant::ModeImpl(); 
         //::RTC::Local::IMode *ret = NULL;
-        return NULL;
+        return ret;
     }
 
     ::RTC::Local::IMode* ModeCapableImpl::get_current_mode_in_context(const ::RTC::Local::IExecutionContext* exec_context)
@@ -80,7 +81,8 @@ namespace Servant
             m_logger->push("get_current_mode_in_context");
           }
         //::RTC::Local::IMode *ret = NULL;
-        return NULL;
+        ::RTC::Local::IMode * ret = new UnitTest::Servant::ModeImpl(); 
+        return ret;
     }
 
     ::RTC::Local::IMode* ModeCapableImpl::get_pending_mode()
@@ -91,7 +93,8 @@ namespace Servant
             m_logger->push("get_pending_mode");
           }
         //::RTC::Local::IMode *ret = NULL;
-        return NULL;
+        ::RTC::Local::IMode * ret = new UnitTest::Servant::ModeImpl(); 
+        return ret;
     }
 
     ::RTC::Local::IMode* ModeCapableImpl::get_pending_mode_in_context(const ::RTC::Local::IExecutionContext* exec_context)
@@ -102,6 +105,8 @@ namespace Servant
             m_logger->push("get_pending_mode_in_context");
           }
         //::RTC::Local::IMode ret = *NULL;
+        ::RTC::Local::IMode * ret = new UnitTest::Servant::ModeImpl(); 
+        return ret;
         return NULL;
     }
 

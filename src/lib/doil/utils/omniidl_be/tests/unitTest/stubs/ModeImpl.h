@@ -8,8 +8,8 @@
  * $Id$
  */
 
-#ifndef MODECAPABLE_IMPL_H
-#define MODECAPABLE_IMPL_H
+#ifndef MODE_IMPL_H
+#define MODE_IMPL_H
 
 
 #include <doil/ImplBase.h>

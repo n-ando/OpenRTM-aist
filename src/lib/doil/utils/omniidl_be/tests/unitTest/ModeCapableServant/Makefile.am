@@ -46,6 +46,7 @@ ModeCapableServantTests_SOURCES += ModeCapableServantTests.cpp
 ModeCapableServantTests_SOURCES += $(IDL_SOURCES:.idl=Stub.cpp)
 ModeCapableServantTests_SOURCES += $(open_rtm_dir)/doil/ORBManager.cpp
 ModeCapableServantTests_SOURCES += $(open_rtm_dir)/doil/corba/CORBAManager.cpp
+ModeCapableServantTests_SOURCES += ../stubs/ModeImpl.cpp 
 ModeCapableServantTests_SOURCES += ../stubs/ModeCapableImpl.cpp 
 ModeCapableServantTests_SOURCES += ../stubs/Logger.cpp 
 
@@ -57,6 +58,7 @@ ModeCapableServantTests_LDADD  += -lomniDynamic4
 ModeCapableServantTests_LDADD  += -lcoil
 ModeCapableServantTests_LDADD  += -lcppunit
 ModeCapableServantTests_LDADD  += $(target_srcdir)/ModeCapableServant.o
+ModeCapableServantTests_LDADD  += $(target_srcdir)/ModeServant.o
 ModeCapableServantTests_LDADD  += $(target_srcdir)/RTCTypeConversion.o
 ModeCapableServantTests_LDADD  += $(target_srcdir)/SDOPackageTypeConversion.o
 

@@ -33,11 +33,13 @@ namespace Servant
 
     ModeImpl::ModeImpl()
     {
+      sprintf(m_name, "%s", id());
       ++count;
       m_logger = new Logger();
     } 
     ModeImpl::ModeImpl(Logger& aLogger)
     {
+      sprintf(m_name, "%s", id());
       ++count;
       m_logger = &aLogger;
     } 

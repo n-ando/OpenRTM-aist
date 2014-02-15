@@ -20,10 +20,16 @@
 #include <cppunit/ui/text/TestRunner.h>
 #include <cppunit/extensions/HelperMacros.h>
 #include <cppunit/TestAssert.h>
+
 #include <ModeCapableServant.h>
+#include <ModeServant.h>
+
 #include <doil/ServantBase.h>
 #include <doil/corba/CORBAManager.h>
+
 #include <stubs/ModeCapableImpl.h>
+#include <stubs/ModeImpl.h>
+
 #include <stubs/Logger.h>
 
 /*!
@@ -47,8 +53,11 @@ namespace ModeCapableServant
   
   private:
     ::UnitTest::Servant::ModeCapableImpl* Impl;
+    ::UnitTest::Servant::ModeImpl* MImpl;
+
     ::UnitTest::Servant::Logger Log;
     ::doil::ServantBase* Servant;
+
     ::RTC::CORBA::ModeCapableServant * CServant;
   
   public:
@@ -66,6 +75,13 @@ namespace ModeCapableServant
         doil::ReturnCode_t ret = doil::CORBA::CORBAManager::instance().activateObject(Impl);
         Servant = doil::CORBA::CORBAManager::instance().toServant(Impl);
         CServant = dynamic_cast<RTC::CORBA::ModeCapableServant*>(Servant);
+
+        MImpl = new UnitTest::Servant::ModeImpl();
+        doil::CORBA::CORBAManager::instance().registerFactory(MImpl->id(),
+            doil::New<RTC::CORBA::ModeServant>,
+            doil::Delete<RTC::CORBA::ModeServant>);
+        ret = doil::CORBA::CORBAManager::instance().activateObject(MImpl);
+
     }
     
     /*!
