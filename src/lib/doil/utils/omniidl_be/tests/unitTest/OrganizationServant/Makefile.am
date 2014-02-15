@@ -58,6 +58,7 @@ OrganizationServantTests_LDADD  += -lomniDynamic4
 OrganizationServantTests_LDADD  += -lcoil
 OrganizationServantTests_LDADD  += -lcppunit
 OrganizationServantTests_LDADD  += $(target_srcdir)/OrganizationServant.o
+OrganizationServantTests_LDADD  += $(target_srcdir)/SDOSystemElementServant.o
 OrganizationServantTests_LDADD  += $(target_srcdir)/RTCTypeConversion.o
 OrganizationServantTests_LDADD  += $(target_srcdir)/SDOPackageTypeConversion.o
 

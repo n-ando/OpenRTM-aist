@@ -128,7 +128,6 @@ namespace Servant
             m_logger->push("get_owner");
           }
         ::SDOPackage::Local::ISDOSystemElement * ret = new UnitTest::Servant::SDOSystemElementImpl();
-std::cout<<ret<<std::endl;
         return ret; 
     }
 
