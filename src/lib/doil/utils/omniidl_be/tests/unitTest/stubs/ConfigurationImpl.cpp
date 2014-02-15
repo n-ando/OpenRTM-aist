@@ -31,7 +31,8 @@ namespace Servant
 
     ConfigurationImpl::ConfigurationImpl()
     {
-      sprintf(m_name, "%s%d", id(), count);
+      //sprintf(m_name, "%s%d", id(), count);
+      sprintf(m_name, "%s", id());
       ++count;
       m_logger = new Logger();
 //      std::cout << "ConfigrationImpl: " << name() << " created." << std::endl;
@@ -39,7 +40,8 @@ namespace Servant
 
     ConfigurationImpl::ConfigurationImpl(Logger& aLogger)
     {
-      sprintf(m_name, "%s%d", id(), count);
+      //sprintf(m_name, "%s%d", id(), count);
+      sprintf(m_name, "%s", id());
       ++count;
       m_logger = &aLogger;
 //      std::cout << "ConfigrationImpl: " << name() << " created." << std::endl;

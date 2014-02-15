@@ -13,6 +13,7 @@
 #include <SDOImpl.h>
 #include <SDOServiceImpl.h>
 #include <ConfigurationImpl.h>
+#include <MonitoringImpl.h>
 #include <iostream>
 #include <sstream>
 #include <string>
@@ -35,12 +36,14 @@ namespace Servant
 
     SDOImpl::SDOImpl()
     {
+      sprintf(m_name, "%s", id());
       ++count;
       m_logger = new Logger();
       m_sdos = new UnitTest::Servant::SDOServiceImpl();
     } 
     SDOImpl::SDOImpl(Logger& aLogger)
     {
+      sprintf(m_name, "%s", id());
       ++count;
       m_logger = &aLogger;
     } 
@@ -115,7 +118,9 @@ std::cout<<"2"<<std::endl;
         prof.interface_type = "bar";
         prof.properties.push_back(nv);
         prof.service = m_sdos;
+        prof.service = new UnitTest::Servant::SDOServiceImpl();
 std::cout<<"3:"<<prof.service<<std::endl;
+std::cout<<"3:"<<prof.service->name()<<std::endl;
         return prof;
     }
 
@@ -128,9 +133,7 @@ std::cout<<"3:"<<prof.service<<std::endl;
           {
             m_logger->push("get_sdo_service");
           }
-        ::SDOPackage::Local::ISDOService* ret = m_sdos;
-        return m_sdos;
-        return ret;
+        return  new UnitTest::Servant::SDOServiceImpl();
     }
 
     ::SDOPackage::Local::IConfiguration* SDOImpl::get_configuration()
@@ -155,7 +158,7 @@ std::cout<<"3:"<<prof.service<<std::endl;
           {
             m_logger->push("get_monitoring");
           }
-        ::SDOPackage::Local::IMonitoring* ret;
+        ::SDOPackage::Local::IMonitoring* ret = new UnitTest::Servant::MonitoringImpl();
         return ret;
     }
 

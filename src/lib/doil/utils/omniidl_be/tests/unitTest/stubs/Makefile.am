@@ -54,6 +54,7 @@ libstubs_a_SOURCES += SDOSystemElementImpl.cpp
 libstubs_a_SOURCES += SDOImpl.cpp
 libstubs_a_SOURCES += RTObjectImpl.cpp
 libstubs_a_SOURCES += PortServiceImpl.cpp
+libstubs_a_SOURCES += MonitoringImpl.cpp
 stubsdir = .
 
 noinst_LIBRARIES = libstubs.a

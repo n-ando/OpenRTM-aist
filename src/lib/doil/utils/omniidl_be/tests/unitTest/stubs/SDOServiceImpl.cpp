@@ -33,11 +33,15 @@ namespace Servant
 
     SDOServiceImpl::SDOServiceImpl()
     {
+      //sprintf(m_name, "%s%d", id(), count);
+      sprintf(m_name, "%s", id());
       ++count;
       m_logger = new Logger();
     } 
     SDOServiceImpl::SDOServiceImpl(Logger& aLogger)
     {
+      //sprintf(m_name, "%s%d", id(), count);
+      sprintf(m_name, "%s", id());
       ++count;
       m_logger = &aLogger;
     } 
