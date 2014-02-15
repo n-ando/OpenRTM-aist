@@ -92,9 +92,10 @@ namespace ComponentActionProxy
     ::RTC::ReturnCode_t on_initialize()
     {
         if (m_logger != NULL) 
-        {
+          {
             m_logger->log("on_initialize");
-        }
+          }
+        return RTC::RTC_OK;
     }
     /*! 
      *

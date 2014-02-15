@@ -9,6 +9,7 @@
  * $Id$
  */
 
+#include <iostream>
 #include <doil/corba/CORBAManager.h>
 #include <IExecutionContextService.h>
 #include <ExecutionContextServiceProxy.h>
@@ -58,7 +59,6 @@ namespace CORBA
     ::RTC::ExecutionContextProfile* corba_ret;
     ::RTC::Local::ExecutionContextProfile local_ret;
     corba_ret = m_obj->get_profile();
-
     // Convert CORBA to Local.
     // (The direction of the argument is 'out' or 'inout'.)
 
