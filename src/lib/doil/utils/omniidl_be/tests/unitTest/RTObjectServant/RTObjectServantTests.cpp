@@ -20,6 +20,11 @@
 #include <cppunit/ui/text/TestRunner.h>
 #include <cppunit/extensions/HelperMacros.h>
 #include <cppunit/TestAssert.h>
+#include <RTObjectServant.h>
+#include <doil/ServantBase.h>
+#include <doil/corba/CORBAManager.h>
+#include <stubs/RTObjectImpl.h>
+#include <stubs/Logger.h>
 
 /*!
  * @class RTObjectServantTests class
@@ -31,10 +36,16 @@ namespace RTObjectServant
    : public CppUnit::TestFixture
   {
     CPPUNIT_TEST_SUITE(RTObjectServantTests);
-    CPPUNIT_TEST(test_case0);
+    CPPUNIT_TEST(test_call_get_component_profile);
+    CPPUNIT_TEST(test_call_get_ports);
+    //CPPUNIT_TEST(test_case0);
     CPPUNIT_TEST_SUITE_END();
   
   private:
+    ::UnitTest::Servant::RTObjectImpl* Impl;
+    ::UnitTest::Servant::Logger Log;
+    ::doil::ServantBase* Servant;
+    ::RTC::CORBA::RTObjectServant * CServant;
   
   public:
   
@@ -43,6 +54,14 @@ namespace RTObjectServant
      */
     RTObjectServantTests()
     {
+        // registerFactory
+        Impl = new UnitTest::Servant::RTObjectImpl(Log);
+        doil::CORBA::CORBAManager::instance().registerFactory(Impl->id(),
+            doil::New<RTC::CORBA::RTObjectServant>,
+            doil::Delete<RTC::CORBA::RTObjectServant>);
+        doil::ReturnCode_t ret = doil::CORBA::CORBAManager::instance().activateObject(Impl);
+        Servant = doil::CORBA::CORBAManager::instance().toServant(Impl);
+        CServant = dynamic_cast<RTC::CORBA::RTObjectServant*>(Servant);
     }
     
     /*!
@@ -50,6 +69,8 @@ namespace RTObjectServant
      */
     ~RTObjectServantTests()
     {
+      delete Impl;
+      Impl = 0;
     }
   
     /*!
@@ -65,6 +86,30 @@ namespace RTObjectServant
     virtual void tearDown()
     { 
     }
+
+
+    void test_call_get_component_profile()
+    {
+      CPPUNIT_ASSERT(CServant);
+
+      std::string str("get_component_profile");
+      ::RTC::ComponentProfile *result;
+      result = CServant->get_component_profile();
+      //CPPUNIT_ASSERT_EQUAL_MESSAGE("not true", RTC::RTC_OK, result);
+      CPPUNIT_ASSERT_EQUAL_MESSAGE("not method name", Log.pop(), str);
+    }
+
+    void test_call_get_ports()
+    {
+      CPPUNIT_ASSERT(CServant);
+
+      std::string str("get_ports");
+      ::RTC::PortServiceList *result;
+      result = CServant->get_ports();
+      //CPPUNIT_ASSERT_EQUAL_MESSAGE("not true", RTC::RTC_OK, result);
+      CPPUNIT_ASSERT_EQUAL_MESSAGE("not method name", Log.pop(), str);
+    }
+
   
     /* test case */
     void test_case0()

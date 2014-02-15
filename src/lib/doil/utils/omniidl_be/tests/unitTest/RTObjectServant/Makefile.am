@@ -29,6 +29,8 @@ AM_CPPFLAGS += -I$(target_srcdir)
 AM_CPPFLAGS += -I$(open_rtm_dir)
 AM_CPPFLAGS += -I$(open_rtm_dir)/rtc/corba/idl
 AM_CPPFLAGS += -I../../../../../../coil/posix
+AM_CPPFLAGS += -I../
+AM_CPPFLAGS += -I../stubs
 
 AM_LDFLAGS = -L.
 AM_LDFLAGS += -L$(open_rtm_dir)/coil/lib
@@ -55,6 +57,9 @@ RTObjectServantTests_LDADD  += -lcppunit
 RTObjectServantTests_LDADD  += $(target_srcdir)/RTObjectServant.o
 RTObjectServantTests_LDADD  += $(target_srcdir)/RTCTypeConversion.o
 RTObjectServantTests_LDADD  += $(target_srcdir)/SDOPackageTypeConversion.o
+RTObjectServantTests_SOURCES += ../stubs/RTObjectImpl.cpp 
+RTObjectServantTests_SOURCES += ../stubs/ExecutionContextImpl.cpp 
+RTObjectServantTests_SOURCES += ../stubs/Logger.cpp 
 
 RTObjectServantTests_LDADD  += $(target_srcdir)/ComponentActionServant.o
 RTObjectServantTests_LDADD  += $(target_srcdir)/LightweightRTObjectServant.o

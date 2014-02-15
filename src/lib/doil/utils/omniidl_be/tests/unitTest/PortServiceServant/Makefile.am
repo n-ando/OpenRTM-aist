@@ -34,6 +34,8 @@ AM_CPPFLAGS += -I../
 AM_CPPFLAGS += -I../../
 AM_CPPFLAGS += -I../../../../../../coil/posix
 AM_CPPFLAGS += -I../../../../../../
+AM_CPPFLAGS += -I../
+AM_CPPFLAGS += -I../stubs
 
 AM_LDFLAGS = -L.
 AM_LDFLAGS += -L$(open_rtm_dir)/coil/lib
@@ -49,6 +51,9 @@ PortServiceServantTests_SOURCES += PortServiceServantTests.cpp
 PortServiceServantTests_SOURCES += $(IDL_SOURCES:.idl=Stub.cpp)
 PortServiceServantTests_SOURCES += $(open_rtm_dir)/doil/ORBManager.cpp
 PortServiceServantTests_SOURCES += $(open_rtm_dir)/doil/corba/CORBAManager.cpp
+PortServiceServantTests_SOURCES += ../stubs/PortServiceImpl.cpp 
+PortServiceServantTests_SOURCES += ../stubs/ExecutionContextImpl.cpp 
+PortServiceServantTests_SOURCES += ../stubs/Logger.cpp 
 
 PortServiceServantTests_LDFLAGS = -L$(libdir)
 
