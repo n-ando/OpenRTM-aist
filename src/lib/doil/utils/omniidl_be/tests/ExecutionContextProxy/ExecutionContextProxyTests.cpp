@@ -288,7 +288,11 @@ namespace ExecutionContextProxy
      */
   ::CORBA::Boolean is_running()
   {
-    return false;
+    if (m_logger != NULL)
+      {
+        m_logger->log("is_running");
+      }
+    return true;
   }
   
 
@@ -297,7 +301,11 @@ namespace ExecutionContextProxy
      */
   ::RTC::ReturnCode_t start()
   {
-    return RTC::RTC_OK;
+    if (m_logger != NULL)
+      {
+        m_logger->log("start");
+      }
+    return RTC::BAD_PARAMETER;
   }
   
 
@@ -306,7 +314,11 @@ namespace ExecutionContextProxy
      */
   ::RTC::ReturnCode_t stop()
   {
-    return RTC::RTC_OK;
+    if (m_logger != NULL)
+      {
+        m_logger->log("stop");
+      }
+    return RTC::BAD_PARAMETER;
   }
   
   
@@ -345,7 +357,11 @@ namespace ExecutionContextProxy
      */
   ::RTC::ReturnCode_t activate_component(::RTC::LightweightRTObject_ptr comp)
   {
-    return RTC::RTC_OK;
+    if (m_logger != NULL)
+      {
+        m_logger->log("activate_component");
+      }
+    return RTC::BAD_PARAMETER;
   }
   
 
@@ -354,7 +370,11 @@ namespace ExecutionContextProxy
      */
   ::RTC::ReturnCode_t deactivate_component(::RTC::LightweightRTObject_ptr comp)
   {
-    return RTC::RTC_OK;
+    if (m_logger != NULL)
+      {
+        m_logger->log("deactivate_component");
+      }
+    return RTC::BAD_PARAMETER;
   }
   
 
@@ -363,7 +383,11 @@ namespace ExecutionContextProxy
      */
   ::RTC::ReturnCode_t reset_component(::RTC::LightweightRTObject_ptr comp)
   {
-    return RTC::RTC_OK;
+    if (m_logger != NULL)
+      {
+        m_logger->log("reset_component");
+      }
+    return RTC::BAD_PARAMETER;
   }
   
   
@@ -372,6 +396,10 @@ namespace ExecutionContextProxy
      */
   ::RTC::LifeCycleState get_component_state(::RTC::LightweightRTObject_ptr comp)
   {
+    if (m_logger != NULL)
+      {
+        m_logger->log("get_component_state");
+      }
     return RTC::INACTIVE_STATE;
   }
   
@@ -381,6 +409,11 @@ namespace ExecutionContextProxy
      */
   ::RTC::ExecutionKind get_kind()
   {
+    if (m_logger != NULL)
+      {
+        m_logger->log("get_kind");
+      }
+    return RTC::PERIODIC;
 //    return m_profile.kind;
   }
     /*! 
@@ -428,6 +461,17 @@ namespace ExecutionContextProxy
   {
     CPPUNIT_TEST_SUITE(ExecutionContextProxyTests);
 //    CPPUNIT_TEST(test_case0);
+
+    CPPUNIT_TEST(test_is_running);
+    CPPUNIT_TEST(test_start);
+    CPPUNIT_TEST(test_stop);
+    CPPUNIT_TEST(test_remove_component);
+    CPPUNIT_TEST(test_activate_component);
+    CPPUNIT_TEST(test_deactivate_component);
+    CPPUNIT_TEST(test_reset_component);
+    CPPUNIT_TEST(test_get_component_state);
+    CPPUNIT_TEST(test_get_kind);
+
     CPPUNIT_TEST(test_get_rate);
     CPPUNIT_TEST(test_set_rate);
     CPPUNIT_TEST(test_add_component);
@@ -574,6 +618,331 @@ namespace ExecutionContextProxy
       ret = ap->add_component(comp); 
       CPPUNIT_ASSERT_EQUAL(1, logger.countLog("add_component"));
       CPPUNIT_ASSERT_EQUAL(::RTC::Local::BAD_PARAMETER, ret);
+
+      delete ap;
+      CORBA::release(ref);
+
+    }
+    /*! 
+     *
+     *
+     *
+     */
+    void test_is_running()
+    {
+
+
+      ExecutionContextRtmMock* obj = new ExecutionContextRtmMock();
+      ::CORBA::Object_ptr ref = obj->_this();
+      if(::CORBA::is_nil(ref))
+      {
+         std::cout<<"ref is nil.Abort test."<<std::endl;
+         return;
+      }
+      ::RTC::CORBA::ExecutionContextProxy* ap 
+                 = new ::RTC::CORBA::ExecutionContextProxy(ref);
+
+      Logger logger;
+      obj->setLogger(&logger);
+
+      bool ret;
+      CPPUNIT_ASSERT_EQUAL(0, logger.countLog("is_running"));
+      ret = ap->is_running();
+      CPPUNIT_ASSERT_EQUAL(1, logger.countLog("is_running"));
+      CPPUNIT_ASSERT_EQUAL(true, ret);
+
+      delete ap;
+      CORBA::release(ref);
+
+    }
+    /*! 
+     *
+     *
+     *
+     */
+    void test_start()
+    {
+
+
+      ExecutionContextRtmMock* obj = new ExecutionContextRtmMock();
+      ::CORBA::Object_ptr ref = obj->_this();
+      if(::CORBA::is_nil(ref))
+      {
+         std::cout<<"ref is nil.Abort test."<<std::endl;
+         return;
+      }
+      ::RTC::CORBA::ExecutionContextProxy* ap 
+                 = new ::RTC::CORBA::ExecutionContextProxy(ref);
+
+      Logger logger;
+      obj->setLogger(&logger);
+
+      ::RTC::Local::ReturnCode_t ret;
+      CPPUNIT_ASSERT_EQUAL(0, logger.countLog("start"));
+      ret = ap->start();
+      CPPUNIT_ASSERT_EQUAL(1, logger.countLog("start"));
+      CPPUNIT_ASSERT_EQUAL(::RTC::Local::BAD_PARAMETER, ret);
+
+      delete ap;
+      CORBA::release(ref);
+
+    }
+    /*! 
+     *
+     *
+     *
+     */
+    void test_stop()
+    {
+
+
+      ExecutionContextRtmMock* obj = new ExecutionContextRtmMock();
+      ::CORBA::Object_ptr ref = obj->_this();
+      if(::CORBA::is_nil(ref))
+      {
+         std::cout<<"ref is nil.Abort test."<<std::endl;
+         return;
+      }
+      ::RTC::CORBA::ExecutionContextProxy* ap 
+                 = new ::RTC::CORBA::ExecutionContextProxy(ref);
+
+      Logger logger;
+      obj->setLogger(&logger);
+
+      ::RTC::Local::ReturnCode_t ret;
+      CPPUNIT_ASSERT_EQUAL(0, logger.countLog("stop"));
+      ret = ap->stop();
+      CPPUNIT_ASSERT_EQUAL(1, logger.countLog("stop"));
+      CPPUNIT_ASSERT_EQUAL(::RTC::Local::BAD_PARAMETER, ret);
+
+      delete ap;
+      CORBA::release(ref);
+
+    }
+    /*! 
+     *
+     *
+     *
+     */
+    void test_remove_component()
+    {
+      doil::CORBA::CORBAManager& 
+                            mgr(doil::CORBA::CORBAManager::instance());
+      //std::cout <<"Manager Name==>"<< mgr.name() << std::endl;
+
+
+      ExecutionContextRtmMock* obj = new ExecutionContextRtmMock();
+      ::CORBA::Object_ptr ref = obj->_this();
+      if(::CORBA::is_nil(ref))
+      {
+         std::cout<<"ref is nil.Abort test."<<std::endl;
+         return;
+      }
+      ::RTC::CORBA::ExecutionContextProxy* ap 
+                 = new ::RTC::CORBA::ExecutionContextProxy(ref);
+
+      Logger logger;
+      obj->setLogger(&logger);
+
+      ::RTC::Local::ReturnCode_t ret;
+      ILightweightRTObjectMock* comp = new ILightweightRTObjectMock();
+      mgr.registerFactory(comp->id(), 
+                          doil::New<LightweightRTObjectServantMock>,
+                          doil::Delete<LightweightRTObjectServantMock>);
+      mgr.activateObject(comp);
+      CPPUNIT_ASSERT_EQUAL(0, logger.countLog("add_component"));
+      ret = ap->add_component(comp); 
+      CPPUNIT_ASSERT_EQUAL(1, logger.countLog("add_component"));
+      CPPUNIT_ASSERT_EQUAL(::RTC::Local::BAD_PARAMETER, ret);
+
+      delete ap;
+      CORBA::release(ref);
+
+    }
+    /*! 
+     *
+     *
+     *
+     */
+    void test_activate_component()
+    {
+      doil::CORBA::CORBAManager& 
+                            mgr(doil::CORBA::CORBAManager::instance());
+      //std::cout <<"Manager Name==>"<< mgr.name() << std::endl;
+
+
+      ExecutionContextRtmMock* obj = new ExecutionContextRtmMock();
+      ::CORBA::Object_ptr ref = obj->_this();
+      if(::CORBA::is_nil(ref))
+      {
+         std::cout<<"ref is nil.Abort test."<<std::endl;
+         return;
+      }
+      ::RTC::CORBA::ExecutionContextProxy* ap 
+                 = new ::RTC::CORBA::ExecutionContextProxy(ref);
+
+      Logger logger;
+      obj->setLogger(&logger);
+
+      ::RTC::Local::ReturnCode_t ret;
+      ILightweightRTObjectMock* comp = new ILightweightRTObjectMock();
+      mgr.registerFactory(comp->id(), 
+                          doil::New<LightweightRTObjectServantMock>,
+                          doil::Delete<LightweightRTObjectServantMock>);
+      mgr.activateObject(comp);
+      CPPUNIT_ASSERT_EQUAL(0, logger.countLog("activate_component"));
+      ret = ap->activate_component(comp); 
+      CPPUNIT_ASSERT_EQUAL(1, logger.countLog("activate_component"));
+      CPPUNIT_ASSERT_EQUAL(::RTC::Local::BAD_PARAMETER, ret);
+
+      delete ap;
+      CORBA::release(ref);
+    }
+    /*! 
+     *
+     *
+     *
+     */
+    void test_deactivate_component()
+    {
+      doil::CORBA::CORBAManager& 
+                            mgr(doil::CORBA::CORBAManager::instance());
+      //std::cout <<"Manager Name==>"<< mgr.name() << std::endl;
+
+
+      ExecutionContextRtmMock* obj = new ExecutionContextRtmMock();
+      ::CORBA::Object_ptr ref = obj->_this();
+      if(::CORBA::is_nil(ref))
+      {
+         std::cout<<"ref is nil.Abort test."<<std::endl;
+         return;
+      }
+      ::RTC::CORBA::ExecutionContextProxy* ap 
+                 = new ::RTC::CORBA::ExecutionContextProxy(ref);
+
+      Logger logger;
+      obj->setLogger(&logger);
+
+      ::RTC::Local::ReturnCode_t ret;
+      ILightweightRTObjectMock* comp = new ILightweightRTObjectMock();
+      mgr.registerFactory(comp->id(), 
+                          doil::New<LightweightRTObjectServantMock>,
+                          doil::Delete<LightweightRTObjectServantMock>);
+      mgr.activateObject(comp);
+      CPPUNIT_ASSERT_EQUAL(0, logger.countLog("deactivate_component"));
+      ret = ap->deactivate_component(comp); 
+      CPPUNIT_ASSERT_EQUAL(1, logger.countLog("deactivate_component"));
+      CPPUNIT_ASSERT_EQUAL(::RTC::Local::BAD_PARAMETER, ret);
+
+      delete ap;
+      CORBA::release(ref);
+    }
+    /*! 
+     *
+     *
+     *
+     */
+    void test_reset_component()
+    {
+      doil::CORBA::CORBAManager& 
+                            mgr(doil::CORBA::CORBAManager::instance());
+      //std::cout <<"Manager Name==>"<< mgr.name() << std::endl;
+
+
+      ExecutionContextRtmMock* obj = new ExecutionContextRtmMock();
+      ::CORBA::Object_ptr ref = obj->_this();
+      if(::CORBA::is_nil(ref))
+      {
+         std::cout<<"ref is nil.Abort test."<<std::endl;
+         return;
+      }
+      ::RTC::CORBA::ExecutionContextProxy* ap 
+                 = new ::RTC::CORBA::ExecutionContextProxy(ref);
+
+      Logger logger;
+      obj->setLogger(&logger);
+
+      ::RTC::Local::ReturnCode_t ret;
+      ILightweightRTObjectMock* comp = new ILightweightRTObjectMock();
+      mgr.registerFactory(comp->id(), 
+                          doil::New<LightweightRTObjectServantMock>,
+                          doil::Delete<LightweightRTObjectServantMock>);
+      mgr.activateObject(comp);
+      CPPUNIT_ASSERT_EQUAL(0, logger.countLog("reset_component"));
+      ret = ap->reset_component(comp); 
+      CPPUNIT_ASSERT_EQUAL(1, logger.countLog("reset_component"));
+      CPPUNIT_ASSERT_EQUAL(::RTC::Local::BAD_PARAMETER, ret);
+
+      delete ap;
+      CORBA::release(ref);
+    }
+    /*! 
+     *
+     *
+     *
+     */
+    void test_get_component_state()
+    {
+      doil::CORBA::CORBAManager& 
+                            mgr(doil::CORBA::CORBAManager::instance());
+      //std::cout <<"Manager Name==>"<< mgr.name() << std::endl;
+
+
+      ExecutionContextRtmMock* obj = new ExecutionContextRtmMock();
+      ::CORBA::Object_ptr ref = obj->_this();
+      if(::CORBA::is_nil(ref))
+      {
+         std::cout<<"ref is nil.Abort test."<<std::endl;
+         return;
+      }
+      ::RTC::CORBA::ExecutionContextProxy* ap 
+                 = new ::RTC::CORBA::ExecutionContextProxy(ref);
+
+      Logger logger;
+      obj->setLogger(&logger);
+
+      ::RTC::Local::LifeCycleState ret;
+      ILightweightRTObjectMock* comp = new ILightweightRTObjectMock();
+      mgr.registerFactory(comp->id(), 
+                          doil::New<LightweightRTObjectServantMock>,
+                          doil::Delete<LightweightRTObjectServantMock>);
+      mgr.activateObject(comp);
+      CPPUNIT_ASSERT_EQUAL(0, logger.countLog("get_component_state"));
+      ret = ap->get_component_state(comp); 
+      CPPUNIT_ASSERT_EQUAL(1, logger.countLog("get_component_state"));
+      CPPUNIT_ASSERT_EQUAL(::RTC::Local::INACTIVE_STATE, ret);
+
+      delete ap;
+      CORBA::release(ref);
+
+    }
+    /*! 
+     *
+     *
+     *
+     */
+    void test_get_kind()
+    {
+
+
+      ExecutionContextRtmMock* obj = new ExecutionContextRtmMock();
+      ::CORBA::Object_ptr ref = obj->_this();
+      if(::CORBA::is_nil(ref))
+      {
+         std::cout<<"ref is nil.Abort test."<<std::endl;
+         return;
+      }
+      ::RTC::CORBA::ExecutionContextProxy* ap 
+                 = new ::RTC::CORBA::ExecutionContextProxy(ref);
+
+      Logger logger;
+      obj->setLogger(&logger);
+
+      ::RTC::Local::ExecutionKind ret;
+      CPPUNIT_ASSERT_EQUAL(0, logger.countLog("get_kind"));
+      ret = ap->get_kind();
+      CPPUNIT_ASSERT_EQUAL(1, logger.countLog("get_kind"));
+      CPPUNIT_ASSERT_EQUAL(::RTC::Local::PERIODIC, ret);
 
       delete ap;
       CORBA::release(ref);
