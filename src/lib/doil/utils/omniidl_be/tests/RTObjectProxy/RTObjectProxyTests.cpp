@@ -609,26 +609,30 @@ namespace RTObjectProxy
      */
     char* get_sdo_id()
     {
-        char m_str[] = "bar";
-        char *ret = m_str;
         if (m_logger != NULL) 
           {
             m_logger->push("get_sdo_id");
           }
-        return ret;
+        char m_str[] = "bar";
+        char *ret = m_str;
+	CORBA::String_var sdo_id;
+	sdo_id = CORBA::string_dup(m_str);
+	return sdo_id._retn();
     }
     /*! 
      *
      */
     char* get_sdo_type()
     {
-        char str[] = "bar";
-        char *ret = str;
         if (m_logger != NULL) 
           {
             m_logger->push("get_sdo_type");
           }
-        return ret;
+        char m_str[] = "bar";
+        char *ret = m_str;
+	CORBA::String_var sdo_id;
+	sdo_id = CORBA::string_dup(m_str);
+	return sdo_id._retn();
     }
     /*! 
      *
@@ -1670,8 +1674,7 @@ namespace RTObjectProxy
       std::string str2("bar");
 
       std::string result;
-      //result = ap->get_sdo_id();
-      //ap->get_sdo_id();
+      result = ap->get_sdo_id();
       CPPUNIT_ASSERT_EQUAL_MESSAGE("not method name", logger.pop(), str);
       CPPUNIT_ASSERT_EQUAL_MESSAGE("not true", str2, result);
 
@@ -1708,11 +1711,9 @@ namespace RTObjectProxy
       std::string str2("bar");
 
       std::string result;
-      //result = ap->get_sdo_type();
-      //ap->get_sdo_type();
+      result = ap->get_sdo_type();
       CPPUNIT_ASSERT_EQUAL_MESSAGE("not method name", logger.pop(), str);
       CPPUNIT_ASSERT_EQUAL_MESSAGE("not true", str2, result);
-
       delete ap;
       CORBA::release(ref);
     }
