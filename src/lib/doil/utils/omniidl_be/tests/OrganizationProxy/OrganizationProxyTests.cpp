@@ -148,14 +148,26 @@ namespace OrganizationProxy
      */
     virtual char* get_organization_id()
     {
-      return "get_organization_id";
+        if (m_logger != NULL)
+        {
+            m_logger->log("get_organization_id");
+        }
+        char m_str[] = "get_organization_id";
+	CORBA::String_var sdo_id;
+	sdo_id = CORBA::string_dup(m_str);
+	return sdo_id._retn();
     }
     /*! 
      *
      */
     virtual SDOPackage::OrganizationProperty* get_organization_property()
     {
-      return NULL;
+        if (m_logger != NULL)
+        {
+            m_logger->log("get_organization_property");
+        }
+      SDOPackage::OrganizationProperty *ret = new SDOPackage::OrganizationProperty();
+      return ret;
     }
 		
     /*! 
@@ -163,7 +175,15 @@ namespace OrganizationProxy
      */
     virtual CORBA::Any* get_organization_property_value(const char* name)
     {
-      return NULL;
+        if (m_logger != NULL)
+        {
+            m_logger->log("get_organization_property_value");
+        }
+        const char *m_str = "value";
+        CORBA::Any corba_any; 
+        corba_any <<= m_str;
+        ::CORBA::Any* ret = new ::CORBA::Any (corba_any);
+        return ret;
     }
 		
     /*! 
@@ -181,7 +201,11 @@ namespace OrganizationProxy
      */
     virtual CORBA::Boolean add_organization_property(const SDOPackage::OrganizationProperty& organization_property)
     {
-      return false;
+        if (m_logger != NULL)
+        {
+            m_logger->log("add_organization_property");
+        }
+        return false;
     }
 		
     /*! 
@@ -189,6 +213,10 @@ namespace OrganizationProxy
      */
     virtual CORBA::Boolean set_organization_property_value(const char* name, const CORBA::Any& value)
     {
+        if (m_logger != NULL)
+        {
+            m_logger->log("set_organization_property_value");
+        }
       return false;
     }
 		
@@ -197,6 +225,10 @@ namespace OrganizationProxy
      */
     virtual CORBA::Boolean remove_organization_property(const char* name)
     {
+        if (m_logger != NULL)
+        {
+            m_logger->log("remove_organization_property");
+        }
       return false;
     }
 		
@@ -205,7 +237,11 @@ namespace OrganizationProxy
      */
     virtual SDOPackage::SDOSystemElement_ptr get_owner()
     {
-      return NULL;
+        if (m_logger != NULL)
+        {
+            m_logger->log("get_owner");
+        }
+      return ::SDOPackage::SDOSystemElement::_nil();
     }
 		
     /*! 
@@ -225,7 +261,14 @@ namespace OrganizationProxy
      */
     virtual SDOPackage::SDOList* get_members()
     {
-      return NULL;
+        if (m_logger != NULL)
+        {
+            m_logger->log("get_members");
+        }
+        SDOPackage::SDOList m_memberList;
+        SDOPackage::SDOList_var sdos;
+        sdos = new SDOPackage::SDOList(m_memberList);
+        return sdos._retn();
     }
 		
     /*! 
@@ -233,6 +276,10 @@ namespace OrganizationProxy
      */
     virtual CORBA::Boolean set_members(const SDOPackage::SDOList& sdos)
     {
+        if (m_logger != NULL)
+        {
+            m_logger->log("set_members");
+        }
       return false;
     }
 		
@@ -241,6 +288,10 @@ namespace OrganizationProxy
      */
     virtual CORBA::Boolean add_members(const SDOPackage::SDOList& sdo_list)
     {
+        if (m_logger != NULL)
+        {
+            m_logger->log("add_members");
+        }
       return false;
     }
 		
@@ -249,6 +300,10 @@ namespace OrganizationProxy
      */
     virtual CORBA::Boolean remove_member(const char* id)
     {
+        if (m_logger != NULL)
+        {
+            m_logger->log("remove_members");
+        }
       return false;
     }
 		
@@ -257,6 +312,10 @@ namespace OrganizationProxy
      */
     virtual SDOPackage::DependencyType get_dependency()
     {
+        if (m_logger != NULL)
+        {
+            m_logger->log("get_dependency");
+        }
       return SDOPackage::NO_DEPENDENCY;
     }
 		
@@ -265,6 +324,10 @@ namespace OrganizationProxy
      */
     virtual CORBA::Boolean set_dependency(SDOPackage::DependencyType dependency)
     {
+        if (m_logger != NULL)
+        {
+            m_logger->log("set_dependency");
+        }
       return false;
     }
   private:
@@ -276,6 +339,21 @@ namespace OrganizationProxy
    : public CppUnit::TestFixture
   {
     CPPUNIT_TEST_SUITE(OrganizationProxyTests);
+
+    CPPUNIT_TEST(test_get_organization_id);
+    CPPUNIT_TEST(test_get_organization_property);
+    CPPUNIT_TEST(test_get_organization_property_value);
+    CPPUNIT_TEST(test_add_organization_property);
+    CPPUNIT_TEST(test_set_organization_property_value);
+    CPPUNIT_TEST(test_remove_organization_property);
+    CPPUNIT_TEST(test_get_owner);
+    CPPUNIT_TEST(test_get_members);
+    CPPUNIT_TEST(test_set_members);
+    CPPUNIT_TEST(test_add_members);
+    CPPUNIT_TEST(test_remove_member);
+    CPPUNIT_TEST(test_get_dependency);
+    CPPUNIT_TEST(test_set_dependency);
+
     CPPUNIT_TEST(test_set_owner);
 //    CPPUNIT_TEST(test_case0);
     CPPUNIT_TEST_SUITE_END();
@@ -353,6 +431,430 @@ namespace OrganizationProxy
       CPPUNIT_ASSERT_EQUAL(0, logger.countLog("set_owner"));
       ret = ap->set_owner(sdo);
       CPPUNIT_ASSERT_EQUAL(1, logger.countLog("set_owner"));
+      CPPUNIT_ASSERT_EQUAL(false, ret);
+
+      delete ap;
+      CORBA::release(ref);
+
+    }
+    /*! 
+     *
+     *
+     *
+     */
+    void test_get_organization_id()
+    {
+
+      OrganizationRtmMock* obj = new OrganizationRtmMock();
+      ::CORBA::Object_ptr ref = obj->_this();
+      if(::CORBA::is_nil(ref))
+      {
+         std::cout<<"ref is nil.Abort test."<<std::endl;
+         return;
+      }
+      ::SDOPackage::CORBA::OrganizationProxy* ap 
+                 = new ::SDOPackage::CORBA::OrganizationProxy(ref);
+
+      Logger logger;
+      obj->setLogger(&logger);
+
+       
+      std::string ret; 
+      std::string str("get_organization_id");
+      CPPUNIT_ASSERT_EQUAL(0, logger.countLog("get_organization_id"));
+      ret = ap->get_organization_id();
+      CPPUNIT_ASSERT_EQUAL(1, logger.countLog("get_organization_id"));
+      CPPUNIT_ASSERT_EQUAL(str, ret);
+
+      delete ap;
+      CORBA::release(ref);
+
+    }
+    /*! 
+     *
+     *
+     *
+     */
+    void test_get_organization_property()
+    {
+
+      OrganizationRtmMock* obj = new OrganizationRtmMock();
+      ::CORBA::Object_ptr ref = obj->_this();
+      if(::CORBA::is_nil(ref))
+      {
+         std::cout<<"ref is nil.Abort test."<<std::endl;
+         return;
+      }
+      ::SDOPackage::CORBA::OrganizationProxy* ap 
+                 = new ::SDOPackage::CORBA::OrganizationProxy(ref);
+
+      Logger logger;
+      obj->setLogger(&logger);
+
+       
+      SDOPackage::Local::OrganizationProperty ret; 
+      CPPUNIT_ASSERT_EQUAL(0, logger.countLog("get_organization_property"));
+      ret = ap->get_organization_property();
+      CPPUNIT_ASSERT_EQUAL(1, logger.countLog("get_organization_property"));
+      //CPPUNIT_ASSERT_EQUAL(false, ret);
+
+      delete ap;
+      CORBA::release(ref);
+
+    }
+    /*! 
+     *
+     *
+     *
+     */
+    void test_get_organization_property_value()
+    {
+
+      OrganizationRtmMock* obj = new OrganizationRtmMock();
+      ::CORBA::Object_ptr ref = obj->_this();
+      if(::CORBA::is_nil(ref))
+      {
+         std::cout<<"ref is nil.Abort test."<<std::endl;
+         return;
+      }
+      ::SDOPackage::CORBA::OrganizationProxy* ap 
+                 = new ::SDOPackage::CORBA::OrganizationProxy(ref);
+
+      Logger logger;
+      obj->setLogger(&logger);
+
+       
+      std::string ret; 
+      std::string str("value");
+      CPPUNIT_ASSERT_EQUAL(0, logger.countLog("get_organization_property_value"));
+      ret = ap->get_organization_property_value("foo");
+      CPPUNIT_ASSERT_EQUAL(1, logger.countLog("get_organization_property_value"));
+      CPPUNIT_ASSERT_EQUAL(str, ret);
+
+      delete ap;
+      CORBA::release(ref);
+
+    }
+    /*! 
+     *
+     *
+     *
+     */
+    void test_add_organization_property()
+    {
+
+      OrganizationRtmMock* obj = new OrganizationRtmMock();
+      ::CORBA::Object_ptr ref = obj->_this();
+      if(::CORBA::is_nil(ref))
+      {
+         std::cout<<"ref is nil.Abort test."<<std::endl;
+         return;
+      }
+      ::SDOPackage::CORBA::OrganizationProxy* ap 
+                 = new ::SDOPackage::CORBA::OrganizationProxy(ref);
+
+      Logger logger;
+      obj->setLogger(&logger);
+
+       
+      bool ret; 
+      SDOPackage::Local::OrganizationProperty oprop;
+      CPPUNIT_ASSERT_EQUAL(0, logger.countLog("add_organization_property"));
+      ret = ap->add_organization_property(oprop);
+      CPPUNIT_ASSERT_EQUAL(1, logger.countLog("add_organization_property"));
+      CPPUNIT_ASSERT_EQUAL(false, ret);
+
+      delete ap;
+      CORBA::release(ref);
+
+    }
+    /*! 
+     *
+     *
+     *
+     */
+    void test_set_organization_property_value()
+    {
+
+      OrganizationRtmMock* obj = new OrganizationRtmMock();
+      ::CORBA::Object_ptr ref = obj->_this();
+      if(::CORBA::is_nil(ref))
+      {
+         std::cout<<"ref is nil.Abort test."<<std::endl;
+         return;
+      }
+      ::SDOPackage::CORBA::OrganizationProxy* ap 
+                 = new ::SDOPackage::CORBA::OrganizationProxy(ref);
+
+      Logger logger;
+      obj->setLogger(&logger);
+
+       
+      bool ret; 
+      std::string str1("foo");
+      std::string str2("bar");
+      
+      CPPUNIT_ASSERT_EQUAL(0, logger.countLog("set_organization_property_value"));
+      ret = ap->set_organization_property_value(str1,str2);
+      CPPUNIT_ASSERT_EQUAL(1, logger.countLog("set_organization_property_value"));
+      CPPUNIT_ASSERT_EQUAL(false, ret);
+
+      delete ap;
+      CORBA::release(ref);
+
+    }
+    /*! 
+     *
+     *
+     *
+     */
+    void test_remove_organization_property()
+    {
+      OrganizationRtmMock* obj = new OrganizationRtmMock();
+      ::CORBA::Object_ptr ref = obj->_this();
+      if(::CORBA::is_nil(ref))
+      {
+         std::cout<<"ref is nil.Abort test."<<std::endl;
+         return;
+      }
+      ::SDOPackage::CORBA::OrganizationProxy* ap 
+                 = new ::SDOPackage::CORBA::OrganizationProxy(ref);
+
+      Logger logger;
+      obj->setLogger(&logger);
+
+       
+      bool ret; 
+      std::string str1("foo");
+      
+      CPPUNIT_ASSERT_EQUAL(0, logger.countLog("remove_organization_property"));
+      ret = ap->remove_organization_property(str1);
+      CPPUNIT_ASSERT_EQUAL(1, logger.countLog("remove_organization_property"));
+      CPPUNIT_ASSERT_EQUAL(false, ret);
+
+      delete ap;
+      CORBA::release(ref);
+
+
+    }
+    /*! 
+     *
+     *
+     *
+     */
+    void test_get_owner()
+    {
+
+      OrganizationRtmMock* obj = new OrganizationRtmMock();
+      ::CORBA::Object_ptr ref = obj->_this();
+      if(::CORBA::is_nil(ref))
+      {
+         std::cout<<"ref is nil.Abort test."<<std::endl;
+         return;
+      }
+      ::SDOPackage::CORBA::OrganizationProxy* ap 
+                 = new ::SDOPackage::CORBA::OrganizationProxy(ref);
+
+      Logger logger;
+      obj->setLogger(&logger);
+
+       
+      //::SDOPackage::Local::ISDOSystemElement* ret; 
+      CPPUNIT_ASSERT_EQUAL(0, logger.countLog("get_owner"));
+      //ret = ap->get_owner();
+      ap->get_owner();
+      CPPUNIT_ASSERT_EQUAL(1, logger.countLog("get_owner"));
+      //CPPUNIT_ASSERT_EQUAL(false, ret);
+
+      delete ap;
+      CORBA::release(ref);
+
+    }
+    /*! 
+     *
+     *
+     *
+     */
+    void test_get_members()
+    {
+
+      OrganizationRtmMock* obj = new OrganizationRtmMock();
+      ::CORBA::Object_ptr ref = obj->_this();
+      if(::CORBA::is_nil(ref))
+      {
+         std::cout<<"ref is nil.Abort test."<<std::endl;
+         return;
+      }
+      ::SDOPackage::CORBA::OrganizationProxy* ap 
+                 = new ::SDOPackage::CORBA::OrganizationProxy(ref);
+
+      Logger logger;
+      obj->setLogger(&logger);
+
+       
+      ::SDOPackage::Local::SDOList ret; 
+      CPPUNIT_ASSERT_EQUAL(0, logger.countLog("get_members"));
+      ret = ap->get_members();
+      CPPUNIT_ASSERT_EQUAL(1, logger.countLog("get_members"));
+      //CPPUNIT_ASSERT_EQUAL(false, ret);
+
+      delete ap;
+      CORBA::release(ref);
+
+    }
+    /*! 
+     *
+     *
+     *
+     */
+    void test_set_members()
+    {
+
+      OrganizationRtmMock* obj = new OrganizationRtmMock();
+      ::CORBA::Object_ptr ref = obj->_this();
+      if(::CORBA::is_nil(ref))
+      {
+         std::cout<<"ref is nil.Abort test."<<std::endl;
+         return;
+      }
+      ::SDOPackage::CORBA::OrganizationProxy* ap 
+                 = new ::SDOPackage::CORBA::OrganizationProxy(ref);
+
+      Logger logger;
+      obj->setLogger(&logger);
+
+       
+      bool ret; 
+      ::SDOPackage::Local::SDOList sdos;
+      CPPUNIT_ASSERT_EQUAL(0, logger.countLog("set_members"));
+      ret = ap->set_members(sdos);
+      CPPUNIT_ASSERT_EQUAL(1, logger.countLog("set_members"));
+      CPPUNIT_ASSERT_EQUAL(false, ret);
+
+      delete ap;
+      CORBA::release(ref);
+
+    }
+    /*! 
+     *
+     *
+     *
+     */
+    void test_add_members()
+    {
+      OrganizationRtmMock* obj = new OrganizationRtmMock();
+      ::CORBA::Object_ptr ref = obj->_this();
+      if(::CORBA::is_nil(ref))
+      {
+         std::cout<<"ref is nil.Abort test."<<std::endl;
+         return;
+      }
+      ::SDOPackage::CORBA::OrganizationProxy* ap 
+                 = new ::SDOPackage::CORBA::OrganizationProxy(ref);
+
+      Logger logger;
+      obj->setLogger(&logger);
+
+       
+      bool ret; 
+      ::SDOPackage::Local::SDOList sdos;
+      CPPUNIT_ASSERT_EQUAL(0, logger.countLog("add_members"));
+      ret = ap->add_members(sdos);
+      CPPUNIT_ASSERT_EQUAL(1, logger.countLog("add_members"));
+      CPPUNIT_ASSERT_EQUAL(false, ret);
+
+      delete ap;
+      CORBA::release(ref);
+    }
+    /*! 
+     *
+     *
+     *
+     */
+    void test_remove_member()
+    {
+      OrganizationRtmMock* obj = new OrganizationRtmMock();
+      ::CORBA::Object_ptr ref = obj->_this();
+      if(::CORBA::is_nil(ref))
+      {
+         std::cout<<"ref is nil.Abort test."<<std::endl;
+         return;
+      }
+      ::SDOPackage::CORBA::OrganizationProxy* ap 
+                 = new ::SDOPackage::CORBA::OrganizationProxy(ref);
+
+      Logger logger;
+      obj->setLogger(&logger);
+
+       
+      bool ret; 
+      std::string str("foo");
+      CPPUNIT_ASSERT_EQUAL(0, logger.countLog("remove_members"));
+      ret = ap->remove_member(str);
+      CPPUNIT_ASSERT_EQUAL(1, logger.countLog("remove_members"));
+      CPPUNIT_ASSERT_EQUAL(false, ret);
+
+      delete ap;
+      CORBA::release(ref);
+
+    }
+    /*! 
+     *
+     *
+     *
+     */
+    void test_get_dependency()
+    {
+
+      OrganizationRtmMock* obj = new OrganizationRtmMock();
+      ::CORBA::Object_ptr ref = obj->_this();
+      if(::CORBA::is_nil(ref))
+      {
+         std::cout<<"ref is nil.Abort test."<<std::endl;
+         return;
+      }
+      ::SDOPackage::CORBA::OrganizationProxy* ap 
+                 = new ::SDOPackage::CORBA::OrganizationProxy(ref);
+
+      Logger logger;
+      obj->setLogger(&logger);
+
+       
+      SDOPackage::Local::DependencyType ret; 
+      CPPUNIT_ASSERT_EQUAL(0, logger.countLog("get_dependency"));
+      ret = ap->get_dependency();
+      CPPUNIT_ASSERT_EQUAL(1, logger.countLog("get_dependency"));
+      CPPUNIT_ASSERT_EQUAL(SDOPackage::Local::NO_DEPENDENCY, ret);
+
+      delete ap;
+      CORBA::release(ref);
+
+    }
+    /*! 
+     *
+     *
+     *
+     */
+    void test_set_dependency()
+    {
+      OrganizationRtmMock* obj = new OrganizationRtmMock();
+      ::CORBA::Object_ptr ref = obj->_this();
+      if(::CORBA::is_nil(ref))
+      {
+         std::cout<<"ref is nil.Abort test."<<std::endl;
+         return;
+      }
+      ::SDOPackage::CORBA::OrganizationProxy* ap 
+                 = new ::SDOPackage::CORBA::OrganizationProxy(ref);
+
+      Logger logger;
+      obj->setLogger(&logger);
+
+       
+      bool ret; 
+      CPPUNIT_ASSERT_EQUAL(0, logger.countLog("set_dependency"));
+      ret = ap->set_dependency(SDOPackage::Local::NO_DEPENDENCY);
+      CPPUNIT_ASSERT_EQUAL(1, logger.countLog("set_dependency"));
       CPPUNIT_ASSERT_EQUAL(false, ret);
 
       delete ap;
