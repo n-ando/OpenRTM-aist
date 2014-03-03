@@ -22,18 +22,22 @@ SUFFIXES = .o .so .idl Skel.cpp Stub.cpp Stub.o Skel.o
 WRAPPER  = $(top_builddir)/utils/rtm-skelwrapper/rtm-skelwrapper
 WRAPPER_FLAGS = --include-dir="" --skel-suffix=Skel --stub-suffix=Stub
 
-.idlSkel.cpp:
-	echo $(PROVIDER_OBJ)
-	$(IDLC) $(IDLFLAGS) $<
-	PYTHONPATH="$(top_srcdir)/build:$(PYTHONPATH)" \
-	PATH="$(top_srcdir)/utils/rtm-config:$(PATH)"  \
-	$(WRAPPER) $(WRAPPER_FLAGS) --idl-file=$<
+idl-stamp: $(IDL_SOURCES)
+	@touch idl-stamp
+	@for f in $(IDL_SOURCES) ; do \
+		$(IDLC) $(IDLFLAGS) $$f ; \
+		PYTHONPATH="$(top_srcdir)/build:$(PYTHONPATH)" \
+		PATH="$(top_srcdir)/utils/rtm-config:$(PATH)"  \
+		$(WRAPPER) $(WRAPPER_FLAGS) --idl-file=$$f ; \
+	done ;
 
-.idlStub.cpp:
-	$(IDLC) $(IDLFLAGS) $<
-	PYTHONPATH="$(PYTHONPATH):$(top_srcdir)/build" \
-	PATH="$(top_srcdir)/utils/rtm-config:$(PATH)"  \
-	$(WRAPPER) $(WRAPPER_FLAGS) --idl-file=$<
+$(ALL_SRC): idl-stamp
+	@if test -f $@ ; then \
+		touch $@ ; \
+	else \
+		rm -f idl-stamp ; \
+		$(MAKE) $(AM_MAKEFLAGS) idl-stamp ; \
+	fi ;
 
 #------------------------------------------------------------
 # Source list
@@ -74,8 +78,8 @@ sourcedir  = $(exampledir)/src/SimpleService
 
 # Loadable RTCs
 noinst_LTLIBRARIES = libMyServiceSkel.la libMyServiceStub.la 
-nodist_libMyServiceSkel_la_SOURCES = $(PROVIDER_NODIST_SRC)
-nodist_libMyServiceStub_la_SOURCES = $(CONSUMER_NODIST_SRC)
+nodist_libMyServiceSkel_la_SOURCES = $(PROVIDER_NODIST_SRC) $(PROVIDER_NODIST_H)
+nodist_libMyServiceStub_la_SOURCES = $(CONSUMER_NODIST_SRC) $(CONSUMER_NODIST_H)
 
 socomp_LTLIBRARIES = MyServiceProvider.la MyServiceConsumer.la
 
@@ -293,4 +297,5 @@ clean_skelstub:
 clean-local: clean_objs clean_skelstub
 	rm -f *.bak *.rpo *.sym lib*.*_pure_*
 	rm -f *.lst *core *~ *loT *.log
-	rm -f Makefile.old 
+	rm -f Makefile.old
+	rm -f idl-stamp
