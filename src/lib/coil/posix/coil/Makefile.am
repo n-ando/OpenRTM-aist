@@ -65,12 +65,11 @@ COIL_SRC = $(COIL_COMMON_SRC) $(COIL_PLATFORM_SRC)
 COIL_H   = $(COIL_COMMON_H) $(COIL_PLATFORM_H)
 COIL_ALL = $(COIL_SRC) $(COIL_H)
 
-$(COIL_COMMON_SRC):
-	cp -p $(top_srcdir)/common/*.cpp .
-	cp -p $(top_srcdir)/common/*.h .
+$(COIL_COMMON_SRC): $(COIL_COMMON_H)
+	cp -p $(top_srcdir)/common/$@ .
 
 $(COIL_COMMON_H):
-	cp -p $(top_srcdir)/common/*.h .
+	cp -p $(top_srcdir)/common/$@ .
 
 
 coilheaderdir = $(coil_includedir)/coil
