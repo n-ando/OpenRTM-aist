@@ -24,23 +24,25 @@ SUFFIXES = .o .so .idl Skel.cpp Stub.cpp Stub.o Skel.o
 WRAPPER  = $(top_builddir)/utils/rtm-skelwrapper/rtm-skelwrapper
 WRAPPER_FLAGS = --include-dir="" --skel-suffix=Skel --stub-suffix=Stub
 
-.idlSkel.cpp:
-	echo $(PROVIDER_OBJ)
+idl-stamp: $(IDL_SOURCES)
+	@touch idl-stamp
 	mkdir -p idl
-	cp $< idl/
-	(cd idl ; $(IDLC) $(IDLFLAGS) $< )
-	PYTHONPATH="$(top_srcdir)/build:$(PYTHONPATH)" \
-	PATH="$(top_srcdir)/utils/rtm-config:$(PATH)"  \
-	$(WRAPPER) $(WRAPPER_FLAGS) --idl-file=$< --include-dir="idl/"
+	(cd $(top_builddir)/utils/rtm-config; $(MAKE))
+	@for f in $(IDL_SOURCES) ; do \
+		cp $$f idl/ ; \
+		(cd idl ; $(IDLC) $(IDLFLAGS) $$f ; cd ..) ; \
+		PYTHONPATH="$(top_srcdir)/build:$(PYTHONPATH)" \
+		PATH="$(top_srcdir)/utils/rtm-config:$(PATH)"  \
+		$(WRAPPER) $(WRAPPER_FLAGS) --idl-file=$$f --include-dir=idl/ ; \
+	done ;
 
-.idlStub.cpp:
-	echo $(PROVIDER_OBJ)
-	mkdir -p idl
-	cp $< idl/
-	(cd idl ; $(IDLC) $(IDLFLAGS) $< )
-	PYTHONPATH="$(PYTHONPATH):$(top_srcdir)/build" \
-	PATH="$(top_srcdir)/utils/rtm-config:$(PATH)"  \
-	$(WRAPPER) $(WRAPPER_FLAGS) --idl-file=$< --include-dir="idl/"
+$(ALL_SRC): idl-stamp
+	@if test -f $@ ; then \
+		touch $@ ; \
+	else \
+		rm -f idl-stamp ; \
+		$(MAKE) $(AM_MAKEFLAGS) idl-stamp ; \
+	fi ;
 
 #------------------------------------------------------------
 # Source list
@@ -48,8 +50,8 @@ WRAPPER_FLAGS = --include-dir="" --skel-suffix=Skel --stub-suffix=Stub
 IDL_SOURCES = LogicalTimeTriggeredEC.idl
 
 OBSERVER_DIST_SRC   = LogicalTimeTriggeredEC.cpp
-OBSERVER_NODIST_SRC = idl/$(IDL_SOURCES:.idl=Stub.cpp)
-OBSERVER_NDWIN_SRC  = $(IDL_SOURCES:.idl=Stub.cpp)
+OBSERVER_NODIST_SRC = $(IDL_SOURCES:.idl=Stub.cpp) $(IDL_SOURCES:.idl=Skel.cpp)
+OBSERVER_NDWIN_SRC  = $(IDL_SOURCES:.idl=Stub.cpp) $(IDL_SOURCES:.idl=Skel.cpp)
 OBSERVER_SRC        = $(OBSERVER_DIST_SRC) $(OBSERVER_NODIST_SRC)
 OBSERVER_WIN_SRC    = $(OBSERVER_DIST_SRC) $(OBSERVER_NDWIN_SRC)
 
@@ -80,7 +82,7 @@ socomp_LTLIBRARIES = LogicalTimeTriggeredEC.la
 dist_LogicalTimeTriggeredEC_la_SOURCES = \
 	$(OBSERVER_DIST_SRC) $(OBSERVER_DIST_H)
 LogicalTimeTriggeredEC_la_LDFLAGS = -module
-LogicalTimeTriggeredEC_la_DEPENDENCIES = libLogicalTimeTriggeredECStub.la
+LogicalTimeTriggeredEC_la_DEPENDENCIES = libLogicalTimeTriggeredECSkel.la
 LogicalTimeTriggeredEC_la_LIBADD  =                 \
 	libLogicalTimeTriggeredECStub.la            \
 	$(top_builddir)/src/lib/rtm/libRTC.la       \
@@ -161,4 +163,5 @@ clean_skelstub:
 clean-local: clean_objs clean_skelstub
 	rm -f *.bak *.rpo *.sym lib*.*_pure_*
 	rm -f *.lst *core *~ *loT *.log
-	rm -f Makefile.old 
+	rm -f Makefile.old
+	rm -f idl-stamp
