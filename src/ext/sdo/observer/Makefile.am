@@ -22,22 +22,25 @@ SUFFIXES = .o .so .idl Skel.cpp Stub.cpp Stub.o Skel.o
 WRAPPER  = $(top_builddir)/utils/rtm-skelwrapper/rtm-skelwrapper
 WRAPPER_FLAGS = --include-dir="" --skel-suffix=Skel --stub-suffix=Stub
 
-.idlSkel.cpp:
-	echo $(PROVIDER_OBJ)
+idl-stamp: $(IDL_SOURCES)
+	@touch idl-stamp
 	mkdir -p idl
-	cp $< idl/
-	(cd idl ; $(IDLC) $(IDLFLAGS) $< )
-	PYTHONPATH="$(top_srcdir)/build:$(PYTHONPATH)" \
-	PATH="$(top_srcdir)/utils/rtm-config:$(PATH)"  \
-	$(WRAPPER) $(WRAPPER_FLAGS) --idl-file=$< --include-dir=idl/
+	(cd $(top_builddir)/utils/rtm-config; $(MAKE))
+	@for f in $(IDL_SOURCES) ; do \
+		cp $$f idl/ ; \
+		(cd idl ; $(IDLC) $(IDLFLAGS) $$f ; cd ..) ; \
+		PYTHONPATH="$(top_srcdir)/build:$(PYTHONPATH)" \
+		PATH="$(top_srcdir)/utils/rtm-config:$(PATH)"  \
+		$(WRAPPER) $(WRAPPER_FLAGS) --idl-file=$$f --include-dir=idl/ ; \
+	done ;
 
-.idlStub.cpp:
-	mkdir -p idl
-	cp $< idl/
-	(cd idl ; $(IDLC) $(IDLFLAGS) $< )
-	PYTHONPATH="$(PYTHONPATH):$(top_srcdir)/build" \
-	PATH="$(top_srcdir)/utils/rtm-config:$(PATH)"  \
-	$(WRAPPER) $(WRAPPER_FLAGS) --idl-file=$< --include-dir=idl/
+$(ALL_SRC): idl-stamp
+	@if test -f $@ ; then \
+		touch $@ ; \
+	else \
+		rm -f idl-stamp ; \
+		$(MAKE) $(AM_MAKEFLAGS) idl-stamp ; \
+	fi ;
 
 #------------------------------------------------------------
 # Source list
@@ -45,7 +48,7 @@ WRAPPER_FLAGS = --include-dir="" --skel-suffix=Skel --stub-suffix=Stub
 IDL_SOURCES = ComponentObserver.idl
 
 OBSERVER_DIST_SRC   = ComponentObserverConsumer.cpp
-OBSERVER_NODIST_SRC = idl/$(IDL_SOURCES:.idl=Stub.cpp)
+OBSERVER_NODIST_SRC = $(IDL_SOURCES:.idl=Stub.cpp)
 OBSERVER_NDWIN_SRC   = $(IDL_SOURCES:.idl=Stub.cpp)
 OBSERVER_SRC        = $(OBSERVER_DIST_SRC) $(OBSERVER_NODIST_SRC)
 OBSERVER_WIN_SRC     = $(OBSERVER_DIST_SRC) $(OBSERVER_NDWIN_SRC)
@@ -68,9 +71,8 @@ OBSERVER_OBJ=$(OBSERVER_DIST_SRC:.cpp=.o)
 socompdir = $(rtm_sdodir)
 
 # Loadable Module
-noinst_LTLIBRARIES = libComponentObserverSkel.la libComponentObserverStub.la 
-nodist_libComponentObserverSkel_la_SOURCES = $(IDL_SOURCES:.idl=Skel.cpp)
-nodist_libComponentObserverStub_la_SOURCES = $(IDL_SOURCES:.idl=Stub.cpp)
+noinst_LTLIBRARIES = libComponentObserverStub.la
+nodist_libComponentObserverStub_la_SOURCES =  $(IDL_SOURCES:.idl=Stub.cpp)
 
 socomp_LTLIBRARIES = ComponentObserverConsumer.la
 
@@ -158,4 +160,5 @@ clean_skelstub:
 clean-local: clean_objs clean_skelstub
 	rm -f *.bak *.rpo *.sym lib*.*_pure_*
 	rm -f *.lst *core *~ *loT *.log
-	rm -f Makefile.old 
+	rm -f Makefile.old
+	rm -rf idl-stamp
