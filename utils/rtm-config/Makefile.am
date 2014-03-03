@@ -21,7 +21,7 @@ pkgconfig_DATA = openrtm-aist.pc
 
 bin_SCRIPTS = rtm-config
 
-all-local:
+all-local: rtm-config
 	chmod 755 rtm-config
 
 EXTRA_DIST = \

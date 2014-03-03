@@ -8,7 +8,7 @@
 AUTOMAKE_OPTIONS = 1.9
 
 IDLC = @IDLC@
-IDLFLAGS = @IDL_FLAGS@ -I$(top_srcdir)/src/lib/rtm/idl
+IDLFLAGS = @IDL_FLAGS@ -I../$(top_srcdir)/src/lib/rtm/idl
 LIBS = @LIBS@
 
 AM_CPPFLAGS=-I$(top_srcdir)/src/lib -I$(top_srcdir)/src/lib/coil/include -I$(top_srcdir)/src/lib/rtm/idl
@@ -22,18 +22,25 @@ SUFFIXES = .o .so .idl Skel.cpp Stub.cpp Stub.o Skel.o
 WRAPPER  = $(top_builddir)/utils/rtm-skelwrapper/rtm-skelwrapper
 WRAPPER_FLAGS = --include-dir="" --skel-suffix=Skel --stub-suffix=Stub
 
-.idlSkel.cpp:
-	echo $(PROVIDER_OBJ)
-	$(IDLC) $(IDLFLAGS) $<
-	PYTHONPATH="$(top_srcdir)/build:$(PYTHONPATH)" \
-	PATH="$(top_srcdir)/utils/rtm-config:$(PATH)"  \
-	$(WRAPPER) $(WRAPPER_FLAGS) --idl-file=$<
+idl-stamp: $(IDL_SOURCES)
+	@touch idl-stamp
+	mkdir -p idl
+	(cd $(top_builddir)/utils/rtm-config; $(MAKE))
+	@for f in $(IDL_SOURCES) ; do \
+		cp $$f idl/ ; \
+		(cd idl ; $(IDLC) $(IDLFLAGS) $$f ; cd ..) ; \
+		PYTHONPATH="$(top_srcdir)/build:$(PYTHONPATH)" \
+		PATH="$(top_srcdir)/utils/rtm-config:$(PATH)"  \
+		$(WRAPPER) $(WRAPPER_FLAGS) --idl-file=$$f --include-dir=idl/ ; \
+	done ;
 
-.idlStub.cpp:
-	$(IDLC) $(IDLFLAGS) $<
-	PYTHONPATH="$(PYTHONPATH):$(top_srcdir)/build" \
-	PATH="$(top_srcdir)/utils/rtm-config:$(PATH)"  \
-	$(WRAPPER) $(WRAPPER_FLAGS) --idl-file=$<
+$(ALL_SRC): idl-stamp
+	@if test -f $@ ; then \
+		touch $@ ; \
+	else \
+		rm -f idl-stamp ; \
+		$(MAKE) $(AM_MAKEFLAGS) idl-stamp ; \
+	fi ;
 
 #------------------------------------------------------------
 # Source list
@@ -42,11 +49,15 @@ IDL_SOURCES = ComponentObserver.idl
 
 OBSERVER_DIST_SRC   = ComponentObserverConsumer.cpp
 OBSERVER_NODIST_SRC = $(IDL_SOURCES:.idl=Stub.cpp)
+OBSERVER_NDWIN_SRC   = $(IDL_SOURCES:.idl=Stub.cpp)
 OBSERVER_SRC        = $(OBSERVER_DIST_SRC) $(OBSERVER_NODIST_SRC)
+OBSERVER_WIN_SRC     = $(OBSERVER_DIST_SRC) $(OBSERVER_NDWIN_SRC)
 
 OBSERVER_DIST_H     = $(OBSERVER_DIST_SRC:.cpp=.h)
 OBSERVER_NODIST_H   = $(OBSERVER_NODIST_SRC:.cpp=.h)
+OBSERVER_NODWIN_H    = $(OBSERVER_NODWIN_SRC:.cpp=.h)
 OBSERVER_H          = $(OBSERVER_DIST_H) $(OBSERVER_NODIST_H)
+OBSERVER_WIN_H       = $(OBSERVER_DIST_H) $(OBSERVER_NOWIN__H)
 
 #------------------------------------------------------------
 # Object list
@@ -60,9 +71,8 @@ OBSERVER_OBJ=$(OBSERVER_DIST_SRC:.cpp=.o)
 socompdir = $(rtm_sdodir)
 
 # Loadable Module
-noinst_LTLIBRARIES = libComponentObserverSkel.la libComponentObserverStub.la 
-nodist_libComponentObserverSkel_la_SOURCES = $(IDL_SOURCES:.idl=Skel.cpp)
-nodist_libComponentObserverStub_la_SOURCES = $(IDL_SOURCES:.idl=Stub.cpp)
+noinst_LTLIBRARIES = libComponentObserverStub.la
+nodist_libComponentObserverStub_la_SOURCES =  $(IDL_SOURCES:.idl=Stub.cpp)
 
 socomp_LTLIBRARIES = ComponentObserverConsumer.la
 
@@ -105,9 +115,9 @@ vc8proj:
 		--version $(RTM_VERSION)                        \
 		--out $(win32_builddir)/$(PROJNAME)Dll_vc8.vcproj  \
 		--yaml $(top_builddir)/examples/rtcdll.vcproj.yaml \
-		--source $(OBSERVER_SRC)                        \
-		--header $(OBSERVER_H)
-	qkc -O- -sm $(win32_builddir)/$(PROJNAME)Dll_vc8.vcproj
+		--source $(OBSERVER_WIN_SRC)                        \
+		--header $(OBSERVER_WIN_H)
+	qkc -sm $(win32_builddir)/$(PROJNAME)Dll_vc8.vcproj
 
 vc9proj:
 	$(top_builddir)/build/vcprojtool.py vcproj              \
@@ -117,9 +127,9 @@ vc9proj:
 		--version $(RTM_VERSION)                        \
 		--out $(win32_builddir)/$(PROJNAME)Dll_vc9.vcproj  \
 		--yaml $(top_builddir)/examples/rtcdll.vcproj.yaml \
-		--source $(OBSERVER_SRC)                        \
-		--header $(OBSERVER_H)
-	qkc -O- -sm $(win32_builddir)/$(PROJNAME)Dll_vc9.vcproj
+		--source $(OBSERVER_WIN_SRC)                        \
+		--header $(OBSERVER_WIN_H)
+	qkc -sm $(win32_builddir)/$(PROJNAME)Dll_vc9.vcproj
 
 vc10proj:
 	$(top_builddir)/build/vcxprojtool.py vcxproj              \
@@ -129,9 +139,9 @@ vc10proj:
 		--version $(RTM_VERSION)                          \
 		--out $(win32_builddir)/$(PROJNAME)Dll_vc10.vcxproj \
 		--yaml $(top_builddir)/examples/rtcdll.vcproj.yaml  \
-		--source $(OBSERVER_SRC)                          \
-		--header $(OBSERVER_H)
-	qkc -O- -sm $(win32_builddir)/$(PROJNAME)Dll_vc10.vcxproj
+		--source $(OBSERVER_WIN_SRC)                          \
+		--header $(OBSERVER_WIN_H)
+	qkc -sm $(win32_builddir)/$(PROJNAME)Dll_vc10.vcxproj
 
 
 dist-hook: lst vcproj
@@ -143,10 +153,12 @@ clean_objs:
 clean_skelstub:
 	rm -f *Skel.h *Skel.cpp
 	rm -f *Stub.h *Stub.cpp
+	rm -rf idl
 	rm -f *.hh *SK.cc
 	rm -f *C.cpp *C.h *S.cpp *S.h *_T.cpp *_T.h *.inl
 
 clean-local: clean_objs clean_skelstub
 	rm -f *.bak *.rpo *.sym lib*.*_pure_*
 	rm -f *.lst *core *~ *loT *.log
-	rm -f Makefile.old 
+	rm -f Makefile.old
+	rm -rf idl-stamp
