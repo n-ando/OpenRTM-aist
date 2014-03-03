@@ -86,7 +86,7 @@ skel_cpp = """// -*- C++ -*-
  *
  */
 
-#include "[include_dir][skel_h]"
+#include "[skel_h]"
 
 #if defined ORB_IS_TAO
 #  include "[include_dir][basename]C.cpp"
@@ -175,7 +175,7 @@ stub_cpp = """// -*- C++ -*-
  *
  */
 
-#include "[include_dir][stub_h]"
+#include "[stub_h]"
 
 #if   defined ORB_IS_TAO
 #  include "[include_dir][basename]C.cpp"
