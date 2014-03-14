@@ -13,6 +13,7 @@ EXTRA_DIST =                   \
 	autogen                \
 	setuptest.py           \
 	vcprojtool.py          \
+	vcxprojtool.py         \
 	makedeffile.py         \
 	slntool.py             \
 	yat.py                 \
