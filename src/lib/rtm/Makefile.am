@@ -174,7 +174,7 @@ lst:
 #------------------------------------------------------------
 win32_builddir = $(top_builddir)/win32/OpenRTM-aist/
 
-vcproj: vc8proj vc9proj vc10proj
+vcproj: vc8proj vc9proj vc10proj vc11proj vc12proj
 
 vc8proj: libRTC.vcproj.yaml
 	$(top_builddir)/build/vcprojtool.py vcproj \
@@ -208,6 +208,28 @@ vc10proj: libRTC.vcproj.yaml
 		--source $(RTC_SRC) \
 		--header $(rtmheader_HEADERS)
 	qkc -sm $(win32_builddir)/rtm/libRTC_vc10.vcxproj
+
+vc11proj: libRTC.vcproj.yaml
+	$(top_builddir)/build/vcxprojtool.py vcxproj \
+		--type DLL \
+		--vcversion "11.00" \
+		--version $(RTM_VERSION) \
+		--out $(win32_builddir)/rtm/libRTC_vc11.vcxproj \
+		--yaml libRTC.vcproj.yaml \
+		--source $(RTC_SRC) \
+		--header $(rtmheader_HEADERS)
+	qkc -sm $(win32_builddir)/rtm/libRTC_vc11.vcxproj
+
+vc12proj: libRTC.vcproj.yaml
+	$(top_builddir)/build/vcxprojtool.py vcxproj \
+		--type DLL \
+		--vcversion "12.00" \
+		--version $(RTM_VERSION) \
+		--out $(win32_builddir)/rtm/libRTC_vc12.vcxproj \
+		--yaml libRTC.vcproj.yaml \
+		--source $(RTC_SRC) \
+		--header $(rtmheader_HEADERS)
+	qkc -sm $(win32_builddir)/rtm/libRTC_vc12.vcxproj
 
 #------------------------------------------------------------
 # for wxs file
