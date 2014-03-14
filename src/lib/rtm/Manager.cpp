@@ -271,11 +271,32 @@ namespace RTC
 
     for (int i(0), len(lsvc.size()); i < len; ++i)
       {
-	std::string basename(coil::split(lsvc[i], ".").operator[](0));
-	basename += "Init";
+	size_t begin_pos(lsvc[i].find_first_of('('));
+	size_t end_pos(lsvc[i].find_first_of(')'));
+	std::string filename, initfunc;
+	if (begin_pos != std::string::npos && end_pos != std::string::npos &&
+	    begin_pos < end_pos)
+	  {
+	    initfunc = lsvc[i].substr(begin_pos + 1, end_pos - (begin_pos + 1));
+	    filename = lsvc[i].substr(0, begin_pos);
+	    coil::eraseBothEndsBlank(initfunc);
+	    coil::eraseBothEndsBlank(filename);
+	  }
+	else
+	  {
+	    initfunc = coil::split(lsvc[i], ".").operator[](0) + "Init";
+	    filename = lsvc[i];
+	  }
+	if (filename.find_first_of('.') == std::string::npos)
+	  {
+	    if (m_config.findNode("manager.modules.C++.suffixes") != 0)
+	      {
+		filename += "." + m_config["manager.modules.C++.suffixes"];
+	      }
+	  }
 	try
 	  {
-	    m_module->load(lsvc[i], basename);
+	    m_module->load(filename, initfunc);
 	  }
 	catch (ModuleManager::Error& e)
 	  {
@@ -302,11 +323,33 @@ namespace RTC
 
     for (int i(0), len(mods.size()); i < len; ++i)
       {
-	std::string basename(coil::split(mods[i], ".").operator[](0));
-	basename += "Init";
+	size_t begin_pos(mods[i].find_first_of('('));
+	size_t end_pos(mods[i].find_first_of(')'));
+	std::string filename, initfunc;
+	if (begin_pos != std::string::npos && end_pos != std::string::npos &&
+	    begin_pos < end_pos)
+	  {
+	    initfunc = mods[i].substr(begin_pos + 1, end_pos - (begin_pos + 1));
+	    filename = mods[i].substr(0, begin_pos);
+	    coil::eraseBothEndsBlank(initfunc);
+	    coil::eraseBothEndsBlank(filename);
+	  }
+	else
+	  {
+	    initfunc = coil::split(mods[i], ".").operator[](0) + "Init";
+	    filename = mods[i];
+	  }
+	if (filename.find_first_of('.') == std::string::npos)
+	  {
+	    std::cout <<  m_config["manager.modules.C++.suffixes"] << std::endl;
+	    if (m_config.findNode("manager.modules.C++.suffixes") != 0)
+	      {
+		filename += "." + m_config["manager.modules.C++.suffixes"];
+	      }
+	  }
 	try
 	  {
-	    m_module->load(mods[i], basename);
+	    m_module->load(filename, initfunc);
 	  }
 	catch (ModuleManager::Error& e)
 	  {
