@@ -8,6 +8,7 @@ clean-local:
 	rm -rf Debug Release
 	rm -rf *~ *.cpp *.h *.hh *.cc *.idl rtc.conf
 	rm -rf *.user *.ncb *.suo
+	rm -rf *.vcproj *.vcxproj
 	rm -rf LogicalTimeTriggeredEC
 
 src:
