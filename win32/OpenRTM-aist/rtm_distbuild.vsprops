@@ -2,7 +2,7 @@
 <VisualStudioPropertySheet
 	ProjectType="Visual C++"
 	Version="8.00"
-	Name="OpenRTM-aist-1.0"
+	Name="OpenRTM-aist-$(RTM_SHORTVER)"
 	>
 	<UserMacro
 		Name="rtm_root"
