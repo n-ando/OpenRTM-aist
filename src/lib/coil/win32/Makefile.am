@@ -20,14 +20,16 @@ EXTRA_DIST =               \
 	coil_distbuild.props   \
 	coil_vc8.sln           \
 	coil_vc9.sln           \
-	coil_vc10.sln
+	coil_vc10.sln          \
+	coil_vc11.sln          \
+	coil_vc12.sln
 
 #------------------------------------------------------------
 # sln file build rules
 #------------------------------------------------------------
 win32_builddir = .
 
-sln: coil_vc8.sln coil_vc9.sln  coil_vc10.sln
+sln: coil_vc8.sln coil_vc9.sln coil_vc10.sln coil_vc11.sln coil_vc12.sln
 
 vcproj:
 	(cd coil ; make vcproj)
@@ -56,4 +58,20 @@ coil_vc10.sln: coil.sln.dep vcproj
 		--out coil_vc10.sln \
 		`find ./ -name '*_vc10.vcxproj'`
 	qkc -ms coil_vc10.sln
+
+coil_vc11.sln: coil.sln.dep vcproj
+	$(top_srcdir)/build/slntool.py     \
+		--vcversion VC11            \
+		--dep coil.sln.dep \
+		--out coil_vc11.sln \
+		`find ./ -name '*_vc11.vcxproj'`
+	qkc -ms coil_vc11.sln
+
+coil_vc12.sln: coil.sln.dep vcproj
+	$(top_srcdir)/build/slntool.py     \
+		--vcversion VC12            \
+		--dep coil.sln.dep \
+		--out coil_vc12.sln \
+		`find ./ -name '*_vc12.vcxproj'`
+	qkc -ms coil_vc12.sln
 
