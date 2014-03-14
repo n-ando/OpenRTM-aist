@@ -2,11 +2,11 @@
 <VisualStudioPropertySheet
 	ProjectType="Visual C++"
 	Version="8.00"
-	Name="OpenRTM-aist-1.0"
+	Name="OpenRTM-aist-%RTM_SHORTVER%"
 	>
 	<Tool
 		Name="VCCLCompilerTool"
-		AdditionalIncludeDirectories="$(omni_includes);$(rtm_includes);."
+		AdditionalIncludeDirectories="$(omni_includes);$(rtm_includes)"
 		PreprocessorDefinitions="RTC_CORBA_CXXMAPPING11;_WIN32_WINNT=0x0500"
 	/>
 	<Tool
@@ -19,11 +19,11 @@
 	/>
 	<UserMacro
 		Name="omni_dllver"
-		Value="412"
+		Value="%OMNI_DLLVER%"
 	/>
 	<UserMacro
 		Name="omnithread_dllver"
-		Value="33"
+		Value="%OMNITHREAD_DLLVER%"
 	/>
 	<UserMacro
 		Name="rtm_root"
@@ -31,15 +31,15 @@
 	/>
 	<UserMacro
 		Name="rtm_dllver"
-		Value="110"
+		Value="%RTM_DLLVER%"
 	/>
 	<UserMacro
 		Name="rtm_version"
-		Value="1.1.0"
+		Value="%RTM_VERSION%"
 	/>
 	<UserMacro
 		Name="coil_dllver"
-		Value=""
+		Value="%COIL_DLLVER%"
 	/>
 	<!-- omniORB macros -->
 	<UserMacro
@@ -93,7 +93,7 @@
 	/>
 	<UserMacro
 		Name="rtm_idlflags"
-		Value="-bcxx -Wba -nf"
+		Value="-bcxx -Wba -nf -I&quot;$(SolutionDir)\rtm\idl&quot;"
 	/>
 	<!-- coil macros -->
 	<UserMacro
