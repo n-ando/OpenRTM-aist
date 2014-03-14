@@ -49,9 +49,15 @@
 
 #include <string>
 #include <sstream>
+#include <unistd.h>
 #include <rtm/RingBuffer.h>
 
 //#define DEBUG
+
+#ifdef __QNX__
+using std::abort;
+using std::perror;
+#endif
 
 static const int NLOOP = 0x00000fff;	// 読み書きのループ回数
 typedef ::RTC::BufferStatus::Enum ReturnCode;

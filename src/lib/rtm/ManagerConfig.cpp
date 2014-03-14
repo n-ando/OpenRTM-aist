@@ -25,6 +25,10 @@
 #include <coil/stringutil.h>
 #include <rtm/DefaultConfiguration.h>
 
+#ifdef __QNX__
+using std::sprintf;
+#endif
+
 namespace RTC
 {
   

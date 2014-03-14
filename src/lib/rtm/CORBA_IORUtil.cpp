@@ -233,7 +233,7 @@ namespace CORBA_IORUtil
     if (ior.profiles.length() == 0 && strlen(ior.type_id) == 0)
       {
         retstr << "IOR is a nil object reference." << std::endl;
-        retstr << iorstr << std::endl;
+        if (iorstr) { retstr << iorstr << std::endl; }
         return retstr.str();
       }
 

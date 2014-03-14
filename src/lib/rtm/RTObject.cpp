@@ -25,6 +25,10 @@
 #include <iostream>
 #include <typeinfo>
 
+#ifdef __QNX__
+using std::atof;
+#endif
+
 namespace RTC
 {
   /*!

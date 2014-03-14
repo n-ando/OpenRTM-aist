@@ -27,6 +27,10 @@
 
 using namespace RTC;
 
+#ifdef __QNX__
+using std::exit;
+#endif
+
 void usage()
 {
   std::cout << std::endl;
