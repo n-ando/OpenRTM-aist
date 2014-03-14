@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup Label="UserMacros">
-    <coil_dllver>110</coil_dllver>
-    <coil_version>1.0.0</coil_version>
+    <coil_dllver>$(COIL_DLL_VER)</coil_dllver>
+    <coil_version>$(COIL_VERSION)</coil_version>
     <coil_includes>$(coil_root);..</coil_includes>
     <coil_libdir>$(coil_root)\bin</coil_libdir>
     <coil_bin>$(coil_root)\bin;$(coil_root)\build</coil_bin>
@@ -12,7 +12,7 @@
   </PropertyGroup>
   <PropertyGroup>
     <_ProjectFileVersion>10.0.30319.1</_ProjectFileVersion>
-    <_PropertySheetDisplayName>coil-1.0</_PropertySheetDisplayName>
+    <_PropertySheetDisplayName>coil-$(COIL_SHORT_VER)</_PropertySheetDisplayName>
   </PropertyGroup>
   <ItemDefinitionGroup>
     <ClCompile>

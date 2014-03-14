@@ -2,7 +2,7 @@
 <VisualStudioPropertySheet
 	ProjectType="Visual C++"
 	Version="8.00"
-	Name="coil-1.0"
+	Name="coil-%COIL_SHORT_VER%"
 	>
 	<Tool
 		Name="VCCLCompilerTool"
@@ -18,11 +18,11 @@
 	/>
 	<UserMacro
 		Name="coil_dllver"
-		Value="110"
+		Value="%COIL_DLL_VER%"
 	/>
 	<UserMacro
 		Name="coil_version"
-		Value="1.1.0"
+		Value="%COIL_VERSION%"
 	/>
 	<!-- coil macros -->
 	<UserMacro

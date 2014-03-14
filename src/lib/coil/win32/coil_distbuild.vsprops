@@ -2,7 +2,7 @@
 <VisualStudioPropertySheet
 	ProjectType="Visual C++"
 	Version="8.00"
-	Name="coil-dist-1.0"
+	Name="coil-dist-%COIL_SHORT_VER%"
 	>
 	<UserMacro
 		Name="coil_root"
