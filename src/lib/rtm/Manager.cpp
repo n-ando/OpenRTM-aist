@@ -1995,6 +1995,12 @@ std::vector<coil::Properties> Manager::getLoadableModules()
 		else if (c == 'v')  str += prop["version"];
 		else if (c == 'V')  str += prop["vendor"];
 		else if (c == 'c')  str += prop["category"];
+		else if (c == 'i')  str += prop["implementation_id"];
+		else if (c == 'N')
+		  {
+		    size_t n = prop["implementation_id"].size();
+		    str += prop["instance_name"].substr(n);
+		  }
 		else if (c == 'h')  str += m_config["os.hostname"];
 		else if (c == 'M')  str += m_config["manager.name"];
 		else if (c == 'p')  str += m_config["manager.pid"];
