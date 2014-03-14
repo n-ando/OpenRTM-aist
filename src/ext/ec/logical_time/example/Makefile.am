@@ -127,7 +127,7 @@ vc10proj:
 		--header LTTSample.h
 	qkc -sm $(win32_builddir)/LTTSampleDll_vc10.vcxproj
 
-dist-hook: lst vcproj
+dist-hook: lst vcproj all-local
 
 clean-local:
 	rm -f *.bak *.rpo *.sym lib*.*_pure_* *.lst
