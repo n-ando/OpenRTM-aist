@@ -70,7 +70,7 @@ lst:
 #------------------------------------------------------------
 win32_builddir=$(top_builddir)/win32/OpenRTM-aist/examples/ConfigSample/
 
-vcproj: vc8proj vc9proj  vc10proj
+vcproj: vc8proj vc9proj vc10proj vc11proj vc12proj
 
 vc8proj:
 	$(top_builddir)/build/vcprojtool.py vcproj              \
@@ -137,6 +137,50 @@ vc10proj:
 		--source ConfigSample.cpp                          \
 		--header ConfigSample.h VectorConvert.h
 	qkc -sm $(win32_builddir)/ConfigSampleDll_vc10.vcxproj
+
+vc11proj:
+	$(top_builddir)/build/vcxprojtool.py vcxproj              \
+		--type EXE                                      \
+		--vcversion "11.00"                              \
+		--projectname "ConfigSampleComp"                \
+		--version $(RTM_VERSION)                        \
+		--out $(win32_builddir)/ConfigSample_vc11.vcxproj \
+		--yaml ../rtc.vcproj.yaml                       \
+		--source ConfigSample.cpp ConfigSampleComp.cpp  \
+		--header ConfigSample.h VectorConvert.h
+	qkc -sm $(win32_builddir)/ConfigSample_vc11.vcxproj
+	$(top_builddir)/build/vcxprojtool.py vcxproj                 \
+		--type DLL                                         \
+		--vcversion "11.00"                                 \
+		--projectname "ConfigSample"                       \
+		--version $(RTM_VERSION)                           \
+		--out $(win32_builddir)/ConfigSampleDll_vc11.vcxproj \
+		--yaml ../rtcdll.vcproj.yaml                       \
+		--source ConfigSample.cpp                          \
+		--header ConfigSample.h VectorConvert.h
+	qkc -sm $(win32_builddir)/ConfigSampleDll_vc11.vcxproj
+
+vc12proj:
+	$(top_builddir)/build/vcxprojtool.py vcxproj              \
+		--type EXE                                      \
+		--vcversion "12.00"                              \
+		--projectname "ConfigSampleComp"                \
+		--version $(RTM_VERSION)                        \
+		--out $(win32_builddir)/ConfigSample_vc12.vcxproj \
+		--yaml ../rtc.vcproj.yaml                       \
+		--source ConfigSample.cpp ConfigSampleComp.cpp  \
+		--header ConfigSample.h VectorConvert.h
+	qkc -sm $(win32_builddir)/ConfigSample_vc12.vcxproj
+	$(top_builddir)/build/vcxprojtool.py vcxproj                 \
+		--type DLL                                         \
+		--vcversion "12.00"                                 \
+		--projectname "ConfigSample"                       \
+		--version $(RTM_VERSION)                           \
+		--out $(win32_builddir)/ConfigSampleDll_vc12.vcxproj \
+		--yaml ../rtcdll.vcproj.yaml                       \
+		--source ConfigSample.cpp                          \
+		--header ConfigSample.h VectorConvert.h
+	qkc -sm $(win32_builddir)/ConfigSampleDll_vc12.vcxproj
 
 dist-hook: lst vcproj
 
