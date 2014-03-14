@@ -21,6 +21,10 @@
 #include <coil/stringutil.h>
 #include <iostream>
 
+#ifdef __QNX__
+using std::size_t;
+#endif
+
 namespace coil
 {
   /*!

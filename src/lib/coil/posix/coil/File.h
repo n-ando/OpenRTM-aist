@@ -27,6 +27,11 @@
 #include <coil/config_coil.h>
 #include <coil/stringutil.h>
 
+#ifdef __QNX__
+using std::strlen;
+using std::strcpy;
+#endif
+
 namespace coil
 {
 

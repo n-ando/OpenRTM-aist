@@ -32,6 +32,10 @@
 
 /* Global Valiables */
 
+#ifdef __QNX__
+using std::fprintf;
+using std::sprintf;
+#endif
 
 namespace OS
 {

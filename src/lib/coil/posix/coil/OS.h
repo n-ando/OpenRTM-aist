@@ -180,6 +180,9 @@ namespace coil
       : optarg(::optarg), optind(1), opterr(1), optopt(0), m_argc(argc), m_argv(argv), m_opt(opt), m_flag(flag)
     {
       ::optind = 1;
+#ifdef __QNX___
+      optind_last = 1;
+#endif
     }
 
     /*!
@@ -200,6 +203,9 @@ namespace coil
     ~GetOpt()
     {
       ::optind = 1;
+#ifdef __QNX__
+      optind_last = 1;
+#endif
     }
 
     /*!
@@ -224,14 +230,27 @@ namespace coil
     int operator()()
     {
       ::opterr = opterr;
+#ifndef __QNX__
       ::optind = optind;
-
+#else
+      ::optind = optind_last;
+      ::optarg = 0;
+#endif
       int result = getopt(m_argc, m_argv, m_opt);
-
+#ifdef __QNX__
+        if(::optind == optind_last)
+	  {
+            ::optind++;
+            result = getopt(m_argc, m_argv, m_opt);
+            optind_last = ::optind;
+	  }
+#endif
       optarg = ::optarg;
       optind = ::optind;
       optopt = ::optopt;
-
+#if __QNX__
+      if(optind_last < m_argc) { ++optind_last; }
+#endif
       return result;
     }
 
@@ -239,6 +258,9 @@ namespace coil
     int optind;       //! 処理対象引数
     int opterr;       //! エラー表示 0:抑止、1:表示
     int optopt;       //! オプション文字が足りない時、多い時にセットされる
+#ifdef __QNX__
+    int optind_last;
+#endif
 
   private:
     int m_argc;

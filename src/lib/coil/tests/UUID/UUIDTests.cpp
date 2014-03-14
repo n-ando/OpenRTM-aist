@@ -30,6 +30,10 @@
  * @brief UUID test
  */
 
+#ifdef __QNX__
+using std::isxdigit;
+#endif
+
 namespace coilUUID
 {
   class UUIDTests
