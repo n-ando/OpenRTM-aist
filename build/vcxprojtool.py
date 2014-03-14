@@ -24,9 +24,17 @@ vcxproj_template = """<?xml version="1.0" encoding="utf-8"?>
       <Configuration>Debug</Configuration>
       <Platform>Win32</Platform>
     </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
     <ProjectConfiguration Include="Release|Win32">
       <Configuration>Release</Configuration>
       <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
@@ -265,6 +273,18 @@ Configurations:
     VC10_InheritedPropertySheets: # Set vsprops file if you need
 """
 
+def get_after_config(text):
+  import re
+  ret = ""
+  flag = False
+  for l in text.splitlines():
+    m = re.match("^Configurations:", l)
+    if m:
+      flag = True
+      continue
+    if flag:
+      ret += l.replace("Win32", "x64") + "\n"
+  return ret
 
 #------------------------------------------------------------
 # Yaml template
@@ -410,6 +430,7 @@ copy "$(OutDir)\coil$(coil_dllver).dll" "$(SolutionDir)bin\\"'
 #    VCWebDeploymentTool:
 #    VC10_VCPostBuildEventTool:
 """
+exe_yaml = exe_yaml + get_after_config(exe_yaml)
 
 dll_yaml = """ProjectType: "Visual C++"
 Version: "__VCVERSION__"
@@ -556,6 +577,8 @@ Configurations:
           copy "$(OutDir)\\\\$(TargetName).lib" "$(SolutionDir)bin\\\\"
           copy "$(OutDir)\\\\$(TargetName).dll" "$(SolutionDir)bin\\\\"
 """
+dll_yaml = dll_yaml + get_after_config(dll_yaml)
+
 #------------------------------------------------------------
 lib_yaml = """ProjectType: "Visual C++"
 Version: "__VCVERSION__"
@@ -663,7 +686,7 @@ Configurations:
         Value: |
           copy "$(OutDir)\\\\libRTCSkel.lib" "$(SolutionDir)\\\\bin"
 """
-
+lib_yaml = lib_yaml + get_after_config(lib_yaml)
 
 rtcexe_yaml="""ProjectType: "Visual C++"
 Version: "__VCVERSION__"
@@ -780,6 +803,7 @@ Configurations:
       - Key: TargetMachine
         Value: "MachineX86"
 """
+rtcexe_yaml = rtcexe_yaml + get_after_config(rtcexe_yaml)
 
 rtcdll_yaml="""ProjectType: "Visual C++"
 Version: "__VCVERSION__"
@@ -919,6 +943,7 @@ examples:
   vcprojtool.py yaml --type [exe|dll|nmake|lib] --output
   vcprojtool.py flist --out --source|--header|--resource *
 """
+rtcdll_yaml = rtcdll_yaml + get_after_config(rtcdll_yaml)
 
 import sys
 
