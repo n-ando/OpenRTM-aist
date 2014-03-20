@@ -79,47 +79,62 @@ goto end
 @rem ============================================================
 :x86
 echo Compiling 32bit binaries
+echo Setting up Visual C++ environment.
+if %VC_VERSION% == 9  (call "C:\Program Files (x86)\Microsoft Visual Studio 9.0\VC\vcvarsall.bat" x86 ; goto VCBUILDx86)
+if %VC_VERSION% == 10 (call "C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\vcvarsall.bat%" x86 ; goto MSBUILDx86)
+if %VC_VERSION% == 11 (call "C:\Program Files (x86)\Microsoft Visual Studio 11.0\VC\vcvarsall.bat" x86 ; goto MSBUILDx86)
+if %VC_VERSION% == 12 (call "C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\vcvarsall.bat" x86 ; goto MSBUILDx86)
 
 @rem ------------------------------------------------------------
-@rem Setting up Visual C++ environment
-echo Setting up Visual C++ environment.
-if %VC_VERSION% == 9  (call "C:\Program Files (x86)\Microsoft Visual Studio 9.0\VC\vcvarsall.bat" x86)
-if %VC_VERSION% == 10 (call "C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\vcvarsall.bat%" x86)
-if %VC_VERSION% == 11 (call "C:\Program Files (x86)\Microsoft Visual Studio 11.0\VC\vcvarsall.bat" x86)
-if %VC_VERSION% == 12 (call "C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\vcvarsall.bat" x86)
+@rem Build (VC2008 x86)
+@rem ------------------------------------------------------------
+:VCBUILDx86
 echo Visual Studio Dir: %VSINSTALLDIR%
 echo LIB: %LIB%
+vcbuild /M2 /rebuild OpenRTM-aist_vc%VC_VERSION%.sln
+goto END
 
 @rem ------------------------------------------------------------
-@rem Build
+@rem Build (VC2010- x86)
 @rem ------------------------------------------------------------
-msbuild /M:2 /t:rebuild /p:configuration=debug OpenRTM-aist_vc10.sln
-msbuild /M:2 /t:rebuild /p:configuration=release OpenRTM-aist_vc10.sln
-
-goto end
+:MSBUILDx86
+echo Visual Studio Dir: %VSINSTALLDIR%
+echo LIB: %LIB%
+msbuild /M:2 /t:rebuild /p:configuration=debug OpenRTM-aist_vc%VC_VERSION%.sln
+msbuild /M:2 /t:rebuild /p:configuration=release OpenRTM-aist_vc%VC_VERSION%.sln
+goto END
 
 @rem ============================================================
 @rem  Compiling 64bit binaries
 @rem ============================================================
 :x86_64
 echo Compiling 64bit binaries
-
-@rem ------------------------------------------------------------
 @rem Setting up Visual C++ environment
-if /i %VC_VERSION% == 9  (call "C:\Program Files (x86)\Microsoft Visual Studio 9.0\VC\vcvarsall.bat"  x64)
-if /i %VC_VERSION% == 10 (call "C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\vcvarsall.bat" x64)
-if /i %VC_VERSION% == 11 (call "C:\Program Files (x86)\Microsoft Visual Studio 11.0\VC\vcvarsall.bat" x64)
-if /i %VC_VERSION% == 12 (call "C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\vcvarsall.bat" x64)
+if /i %VC_VERSION% == 9  (call "C:\Program Files (x86)\Microsoft Visual Studio 9.0\VC\vcvarsall.bat"  x64 ; goto VCBUILDx64)
+if /i %VC_VERSION% == 10 (call "C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\vcvarsall.bat" x64 ; goto MSBUILDx64)
+if /i %VC_VERSION% == 11 (call "C:\Program Files (x86)\Microsoft Visual Studio 11.0\VC\vcvarsall.bat" x64 ; goto MSBUILDx64)
+if /i %VC_VERSION% == 12 (call "C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\vcvarsall.bat" x64 ; goto MSBUILDx64)
 echo Visual Studio Dir: %VSINSTALLDIR%
 echo LIB: %LIB%
 
 @rem ------------------------------------------------------------
-@rem Build
+@rem Build (VC2008 x64)
 @rem ------------------------------------------------------------
+:VCBUILDx64
+echo Visual Studio Dir: %VSINSTALLDIR%
+echo LIB: %LIB%
+vcbuild /M2 /rebuild OpenRTM-aist_vc%VC_VERSION%.sln
+goto END
+
+@rem ------------------------------------------------------------
+@rem Build (VC2010- x64)
+@rem ------------------------------------------------------------
+:MSBUILDx64
+echo Visual Studio Dir: %VSINSTALLDIR%
+echo LIB: %LIB%
 set VC_VERSION=10_x64
-@rem msbuild /M:4 /t:build /fileLogger /flp:logfile=debug.log /v:diag /p:configuration=debug /p:platform=x64 OpenRTM-aist_vc10.sln
-msbuild /M:4 /t:build /fileLogger /flp:logfile=release.log /v:diag /p:configuration=release /p:platform=x64 OpenRTM-aist_vc10.sln
+msbuild /M:4 /t:rebuild /fileLogger /flp:logfile=debug.log /v:diag /p:configuration=debug /p:platform=x64 OpenRTM-aist_vc%VC_VERSION%.sln
+msbuild /M:4 /t:rebuild /fileLogger /flp:logfile=release.log /v:diag /p:configuration=release /p:platform=x64 OpenRTM-aist_vc%VC_VERSION%.sln
+goto END
 
-goto end
-
-:end
+:END
