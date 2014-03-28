@@ -73,16 +73,21 @@ coil_distbuild.props:
 coil_config.props:
 	cp -p $(top_srcdir)/src/lib/coil/win32/coil_config.props .
 
-copyright:
+AUTHORS:
 	cp $(top_srcdir)/AUTHORS     .
+ChangeLog:
 	cp $(top_srcdir)/ChangeLog   .
+COPYING.LIB:
 	cp $(top_srcdir)/COPYING.LIB .
+COPYRIGHT:
 	cp $(top_srcdir)/COPYRIGHT   .
+README:
 	cp $(top_srcdir)/README      .
+README.jp:
 	cp $(top_srcdir)/README.jp   .
 
 
-dist-hook: clean-local sln vsprops copyright
+dist-hook: clean-local sln vsprops
 
 EXTRA_DIST =                      \
 	OpenRTM-aist.sln.dep          \
