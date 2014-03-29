@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup Label="UserMacros">
-    <omni_dllver>415</omni_dllver>
-    <omnithread_dllver>34</omnithread_dllver>
-    <rtm_dllver>110</rtm_dllver>
-    <rtm_version>1.1.0</rtm_version>
-    <coil_dllver>110</coil_dllver>
+    <omni_dllver>$(OMNI_DLLVER)</omni_dllver>
+    <omnithread_dllver>$(OMNITHREAD_DLLVER)</omnithread_dllver>
+    <rtm_dllver>$(RTM_DLLVER)</rtm_dllver>
+    <rtm_version>$(RTM_VERSION)</rtm_version>
+    <coil_dllver>$(COIL_DLLVER)</coil_dllver>
     <coil_lib>coil$(coil_dllver).lib</coil_lib>
     <coil_libd>coil$(coil_dllver)d.lib</coil_libd>
     <omni_includes>$(omni_root)\include</omni_includes>
@@ -24,11 +24,11 @@
   </PropertyGroup>
   <PropertyGroup>
     <_ProjectFileVersion>10.0.30319.1</_ProjectFileVersion>
-    <_PropertySheetDisplayName>OpenRTM-aist-1.0</_PropertySheetDisplayName>
+    <_PropertySheetDisplayName>OpenRTM-aist-$(RTM_SHORTVER)</_PropertySheetDisplayName>
   </PropertyGroup>
   <ItemDefinitionGroup>
     <ClCompile>
-      <AdditionalIncludeDirectories>$(omni_includes);$(rtm_includes);.;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(omni_includes);$(rtm_includes);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>RTC_CORBA_CXXMAPPING11;_WIN32_WINNT=0x0500;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>

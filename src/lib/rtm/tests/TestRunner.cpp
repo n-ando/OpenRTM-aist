@@ -36,6 +36,10 @@
 #include <cppunit/CompilerOutputter.h>
 #include <cppunit/extensions/TestFactoryRegistry.h>
 
+#ifdef __QNX__
+using std::exit;
+#endif
+
 enum FORMAT
   {
     TEXT_OUT,

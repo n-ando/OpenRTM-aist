@@ -38,6 +38,10 @@
 #include <coil/Mutex.h>
 #include <coil/Guard.h>
 
+#ifdef __QNX__
+using std::rand;
+#endif
+
 namespace coil 
 {
 };

@@ -2,20 +2,16 @@
 <VisualStudioPropertySheet
 	ProjectType="Visual C++"
 	Version="8.00"
-	Name="OpenRTM-aist-1.0"
+	Name="OpenRTM-aist-%RTM_SHORTVER%"
 	>
 	<Tool
 		Name="VCCLCompilerTool"
-		AdditionalIncludeDirectories="$(ace_includes);$(omni_includes);$(rtm_includes)"
-		PreprocessorDefinitions="RTC_CORBA_CXXMAPPING11"
+		AdditionalIncludeDirectories="$(omni_includes);$(rtm_includes)"
+		PreprocessorDefinitions="RTC_CORBA_CXXMAPPING11;_WIN32_WINNT=0x0500"
 	/>
 	<Tool
 		Name="VCLinkerTool"
-		AdditionalLibraryDirectories="$(ace_libdir);$(omni_libdir);$(rtm_libdir)"
-	/>
-	<UserMacro
-		Name="ace_root"
-		Value="%ACE_ROOT%"
+		AdditionalLibraryDirectories="$(omni_libdir);$(rtm_libdir)"
 	/>
 	<UserMacro
 		Name="omni_root"
@@ -23,32 +19,27 @@
 	/>
 	<UserMacro
 		Name="omni_dllver"
-		Value="412"
+		Value="%OMNI_DLLVER%"
 	/>
 	<UserMacro
 		Name="omnithread_dllver"
-		Value="33"
+		Value="%OMNITHREAD_DLLVER%"
 	/>
 	<UserMacro
 		Name="rtm_root"
 		Value="%RTM_ROOT%"
 	/>
 	<UserMacro
+		Name="rtm_dllver"
+		Value="%RTM_DLLVER%"
+	/>
+	<UserMacro
+		Name="rtm_version"
+		Value="%RTM_VERSION%"
+	/>
+	<UserMacro
 		Name="coil_dllver"
-		Value="100"
-	/>
-	<UserMacro
-		Name="coil_version"
-		Value="1.0.0"
-	/>
-	<!-- ACE macros -->
-	<UserMacro
-		Name="ace_includes"
-		Value="&quot;$(ace_root)&quot;"
-	/>
-	<UserMacro
-		Name="ace_libdir"
-		Value="$(ace_root)\lib"
+		Value="%COIL_DLLVER%"
 	/>
 	<!-- omniORB macros -->
 	<UserMacro
@@ -90,11 +81,11 @@
 	/>
 	<UserMacro
 		Name="rtm_libd"
-		Value="ACEd.lib RTC$(rtm_dllver)d.lib $(omni_libd) advapi32.lib ws2_32.lib mswsock.lib $(user_libd)"
+		Value="RTC$(rtm_dllver)d.lib $(coil_libd) $(omni_libd) advapi32.lib ws2_32.lib mswsock.lib $(user_libd)"
 	/>
 	<UserMacro
 		Name="rtm_lib"
-		Value="ACE.lib RTC$(rtm_dllver).lib $(omni_lib) advapi32.lib ws2_32.lib mswsock.lib $(user_lib)"
+		Value="RTC$(rtm_dllver).lib $(coil_lib) $(omni_lib) advapi32.lib ws2_32.lib mswsock.lib $(user_lib)"
 	/>
 	<UserMacro
 		Name="rtm_idlc"
@@ -102,6 +93,16 @@
 	/>
 	<UserMacro
 		Name="rtm_idlflags"
-		Value="-bcxx -Wba -nf"
+		Value="-bcxx -Wba -nf -I&quot;$(SolutionDir)\rtm\idl&quot;"
 	/>
+	<!-- coil macros -->
+	<UserMacro
+		Name="coil_lib"
+		Value="coil$(coil_dllver).lib"
+	/>
+	<UserMacro
+		Name="coil_libd"
+		Value="coil$(coil_dllver)d.lib"
+	/>
+
 </VisualStudioPropertySheet>

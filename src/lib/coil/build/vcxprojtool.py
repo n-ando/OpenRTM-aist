@@ -5,8 +5,7 @@
 # @author Norkai Ando <n-ando@aist.go.jp>
 #
 # Copyright (C) 2008
-#     Noriaki Ando
-#     Task-intelligence Research Group,
+#     Tsuyoto Katami, Noriaki Ando
 #     Intelligent Systems Research Institute,
 #     National Institute of
 #         Advanced Industrial Science and Technology (AIST), Japan
@@ -25,9 +24,17 @@ vcxproj_template = """<?xml version="1.0" encoding="utf-8"?>
       <Configuration>Debug</Configuration>
       <Platform>Win32</Platform>
     </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
     <ProjectConfiguration Include="Release|Win32">
       <Configuration>Release</Configuration>
       <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
@@ -142,7 +149,7 @@ conf_type = {"EXE": "Application", "DLL": "DynamicLibrary",
 # Tool set for configuration
 #------------------------------------------------------------
 PreBuildEventtools = {"EXE":
-             ["PreBuildEvent",
+             ["VC10_VCPreBuildEventTool",
               "VCCustomBuildTool",
               "VCXMLDataGeneratorTool",
               "VCWebServiceProxyGeneratorTool",
@@ -151,9 +158,9 @@ PreBuildEventtools = {"EXE":
               "VCResourceCompilerTool",
               "VCManifestTool"],
          "DLL":
-             ["PreBuildEvent"],
+             ["VC10_VCPreBuildEventTool"],
          "LIB":
-             ["PreBuildEvent"]
+             ["VC10_VCPreBuildEventTool"]
          }
 PreBuildEventtools["RTCEXE"] = PreBuildEventtools["EXE"]
 PreBuildEventtools["RTCDLL"] = PreBuildEventtools["DLL"]
@@ -229,16 +236,7 @@ Linktools = {"EXE":
 Linktools["RTCEXE"] = Linktools["EXE"]
 Linktools["RTCDLL"] = Linktools["DLL"]
 PostBuildEventtools = {"EXE":
-             ["VC10_VCPreLinkEventTool",
-              "VC10_VCLinkerTool",
-              "VCALinkTool",
-              "VCManifestTool",
-              "VCXDCMakeTool",
-              "VCBscMakeTool",
-              "VCFxCopTool",
-              "VCAppVerifierTool",
-              "VCWebDeploymentTool",
-              "VC10_VCPostBuildEventTool"],
+             ["VC10_VCPostBuildEventTool"],
          "DLL":
              ["VC10_VCPostBuildEventTool"],
          "LIB":
@@ -420,6 +418,7 @@ copy "$(OutDir)\coil$(coil_dllver).dll" "$(SolutionDir)bin\\"'
 #    VCWebDeploymentTool:
 #    VC10_VCPostBuildEventTool:
 """
+exe_yaml = exe_yaml + "\n" + exe_yaml.replace("Win32", "x64")
 
 dll_yaml = """ProjectType: "Visual C++"
 Version: "__VCVERSION__"
@@ -566,6 +565,8 @@ Configurations:
           copy "$(OutDir)\\\\$(TargetName).lib" "$(SolutionDir)bin\\\\"
           copy "$(OutDir)\\\\$(TargetName).dll" "$(SolutionDir)bin\\\\"
 """
+dll_yaml = dll_yaml + "\n" + dll_yaml.replace("Win32", "x64")
+
 #------------------------------------------------------------
 lib_yaml = """ProjectType: "Visual C++"
 Version: "__VCVERSION__"
@@ -673,7 +674,7 @@ Configurations:
         Value: |
           copy "$(OutDir)\\\\libRTCSkel.lib" "$(SolutionDir)\\\\bin"
 """
-
+lib_yaml = lib_yaml + "\n" + lib_yaml.replace("Win32", "x64")
 
 rtcexe_yaml="""ProjectType: "Visual C++"
 Version: "__VCVERSION__"
@@ -790,6 +791,7 @@ Configurations:
       - Key: TargetMachine
         Value: "MachineX86"
 """
+rtcexe_yaml = rtcexe_yaml + "\n" + rtcexe_yaml.replace("Win32", "x64")
 
 rtcdll_yaml="""ProjectType: "Visual C++"
 Version: "__VCVERSION__"
@@ -911,7 +913,6 @@ Configurations:
 """
 
 
-
 def usage():
     print """Usage:
   vcprojtool.py cmd options
@@ -929,6 +930,7 @@ examples:
   vcprojtool.py yaml --type [exe|dll|nmake|lib] --output
   vcprojtool.py flist --out --source|--header|--resource *
 """
+rtcdll_yaml = rtcdll_yaml + "\n" + rtcdll_yaml.replace("Win32", "x64")
 
 import sys
 

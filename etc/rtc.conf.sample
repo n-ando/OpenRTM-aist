@@ -225,11 +225,22 @@ manager.modules.load_path: ./
 # Loadable modules, which is specified only as its file name, is searched
 # in each module load path specified in the "manager.modules.load_path".
 # If the "manager.modules.abs_path_allowed" option is YES, loadable file
-# can be specified as full-path name,
+# can be specified as full-path name.
+#
+# Module initialization function name is usually estimated module file
+# name.  If the module file name is ConsoleIn.so, the initialization
+# function name is set to "ConsleInInit." If you want to specify
+# specify the initialization function name, the initialization
+# function name in parenthesis after module file name can be
+# specified, like as "Hoge.so (ConsoleInInit)".  File extensions such
+# as ".so", ".dll", ".dylib" can be drop. If module file name without
+# file extension is specified, an extension specified in property
+# variable "manager.modules.C++.suffixes" is supplied.
 #
 # Valid settings:
 # manager.modules.preload: ConsoleIn.dll, ConsoleOut.dll
 # manager.modules.preload: ConsoleIn.so, ConsoleOut.so
+# manager.modules.preload: Hoge.so (ConsoleInInit), ConsoleOut
 # manager.modules.abs_path_allowed: YES
 # manager.modules.preload: /usr/lib/OpenRTM-aist/ConsoleIn.so
 #
@@ -267,6 +278,29 @@ manager.modules.abs_path_allowed: YES
 # manager.components.precreate: ConsoleIn, ConsoleOut, SeqIn, SeqOut
 #
 manager.components.precreate: 
+
+#
+# Loading local service modules
+#
+# Local service mechanisms are provided for services provided among
+# components in the same process. Components can obtain and utilize
+# local services from the manager. By using this mechanism components
+# can share resources each other.
+#
+# Local service modules sometimes must be initialized before component
+# module loading and initialization. Loadable modules which is
+# specified in this option are previously loaded and initialized.
+#
+manager.local_service.modules: IEEE1394CameraService.so
+
+#
+# Specifying enabled local services
+#
+# All the loaded local service modules are activated and enabled in
+# default.  This option specify local serivces to be enabled when
+# manager enables local services.
+#
+manager.local_service.enabled_services: IEEE1394CameraService
 
 
 #============================================================

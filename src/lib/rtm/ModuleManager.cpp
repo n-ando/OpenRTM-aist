@@ -27,6 +27,12 @@
 #include <rtm/ModuleManager.h>
 #include <coil/stringutil.h>
 
+#ifdef __QNX__
+using std::FILE;
+using std::fgets;
+using std::feof;
+#endif
+
 namespace RTC
 {
   

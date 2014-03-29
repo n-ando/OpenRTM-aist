@@ -74,7 +74,7 @@ lst:
 #------------------------------------------------------------
 win32_builddir=$(top_builddir)/win32/OpenRTM-aist/examples/ExtTrigger
 
-vcproj: vc8proj vc9proj vc10proj
+vcproj: vc8proj vc9proj vc10proj vc11proj vc12proj
 
 vc8proj: 
 	$(top_builddir)/build/vcprojtool.py vcproj           \

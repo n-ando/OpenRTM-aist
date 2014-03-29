@@ -28,6 +28,11 @@
 #include <cctype>
 #include <cstdio>
 
+#ifdef __QNX__
+using std::toupper;
+using std::isalpha;
+#endif
+
 namespace coil
 {
   /*!

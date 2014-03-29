@@ -86,7 +86,7 @@ lst:
 #------------------------------------------------------------
 win32_builddir=$(top_builddir)/win32/OpenRTM-aist/examples/SeqIO
 
-vcproj: vc8proj vc9proj  vc10proj
+vcproj: vc8proj vc9proj vc10proj vc11proj vc12proj
 
 vc8proj: 
 	$(top_builddir)/build/vcprojtool.py vcproj       \
@@ -213,6 +213,90 @@ vc10proj:
 		--source SeqOut.cpp                          \
 		--header SeqOut.h
 	qkc -O- -sm $(win32_builddir)/SeqOutDll_vc10.vcxproj
+
+vc11proj:
+	$(top_builddir)/build/vcxprojtool.py vcxproj       \
+		--type EXE                               \
+		--vcversion "11.00"                       \
+		--projectname "SeqInComp"                \
+		--version $(RTM_VERSION)                 \
+		--out $(win32_builddir)/SeqIn_vc11.vcxproj \
+		--yaml ../rtc.vcproj.yaml                \
+		--source SeqIn.cpp SeqInComp.cpp         \
+		--header SeqIn.h
+	qkc -sm $(win32_builddir)/SeqIn_vc11.vcxproj
+	$(top_builddir)/build/vcxprojtool.py vcxproj          \
+		--type DLL                                  \
+		--vcversion "11.00"                          \
+		--projectname "SeqIn"                       \
+		--version $(RTM_VERSION)                    \
+		--out $(win32_builddir)/SeqInDll_vc11.vcxproj \
+		--yaml ../rtcdll.vcproj.yaml                \
+		--source SeqIn.cpp                          \
+		--header SeqIn.h
+	qkc -sm $(win32_builddir)/SeqInDll_vc11.vcxproj
+	$(top_builddir)/build/vcxprojtool.py vcxproj        \
+		--type EXE                                \
+		--vcversion "11.00"                        \
+		--projectname "SeqOutComp"                \
+		--version $(RTM_VERSION)                  \
+		--out $(win32_builddir)/SeqOut_vc11.vcxproj \
+		--yaml ../rtc.vcproj.yaml                 \
+		--source SeqOut.cpp SeqOutComp.cpp        \
+		--header SeqOut.h
+	qkc -sm $(win32_builddir)/SeqOut_vc11.vcxproj
+	$(top_builddir)/build/vcxprojtool.py vcxproj           \
+		--type DLL                                   \
+		--vcversion "11.00"                           \
+		--projectname "SeqOut"                       \
+		--version $(RTM_VERSION)                     \
+		--out $(win32_builddir)/SeqOutDll_vc11.vcxproj \
+		--yaml ../rtcdll.vcproj.yaml                 \
+		--source SeqOut.cpp                          \
+		--header SeqOut.h
+	qkc -sm $(win32_builddir)/SeqOutDll_vc11.vcxproj
+
+vc12proj:
+	$(top_builddir)/build/vcxprojtool.py vcxproj       \
+		--type EXE                               \
+		--vcversion "12.00"                       \
+		--projectname "SeqInComp"                \
+		--version $(RTM_VERSION)                 \
+		--out $(win32_builddir)/SeqIn_vc12.vcxproj \
+		--yaml ../rtc.vcproj.yaml                \
+		--source SeqIn.cpp SeqInComp.cpp         \
+		--header SeqIn.h
+	qkc -sm $(win32_builddir)/SeqIn_vc12.vcxproj
+	$(top_builddir)/build/vcxprojtool.py vcxproj          \
+		--type DLL                                  \
+		--vcversion "12.00"                          \
+		--projectname "SeqIn"                       \
+		--version $(RTM_VERSION)                    \
+		--out $(win32_builddir)/SeqInDll_vc12.vcxproj \
+		--yaml ../rtcdll.vcproj.yaml                \
+		--source SeqIn.cpp                          \
+		--header SeqIn.h
+	qkc -sm $(win32_builddir)/SeqInDll_vc12.vcxproj
+	$(top_builddir)/build/vcxprojtool.py vcxproj        \
+		--type EXE                                \
+		--vcversion "12.00"                        \
+		--projectname "SeqOutComp"                \
+		--version $(RTM_VERSION)                  \
+		--out $(win32_builddir)/SeqOut_vc12.vcxproj \
+		--yaml ../rtc.vcproj.yaml                 \
+		--source SeqOut.cpp SeqOutComp.cpp        \
+		--header SeqOut.h
+	qkc -sm $(win32_builddir)/SeqOut_vc12.vcxproj
+	$(top_builddir)/build/vcxprojtool.py vcxproj           \
+		--type DLL                                   \
+		--vcversion "12.00"                           \
+		--projectname "SeqOut"                       \
+		--version $(RTM_VERSION)                     \
+		--out $(win32_builddir)/SeqOutDll_vc12.vcxproj \
+		--yaml ../rtcdll.vcproj.yaml                 \
+		--source SeqOut.cpp                          \
+		--header SeqOut.h
+	qkc -sm $(win32_builddir)/SeqOutDll_vc12.vcxproj
 
 dist-hook: lst vcproj
 
