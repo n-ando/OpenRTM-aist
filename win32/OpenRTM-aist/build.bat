@@ -86,14 +86,17 @@ if %VC_VERSION% == 9  (
    )
 if %VC_VERSION% == 10 (
    call "C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\vcvarsall.bat%" x86
+   set VCTOOLSET=4.0
    goto MSBUILDx86
    )
 if %VC_VERSION% == 11 (
    call "C:\Program Files (x86)\Microsoft Visual Studio 11.0\VC\vcvarsall.bat" x86
+   set VCTOOLSET=4.0
    goto MSBUILDx86
    )
 if %VC_VERSION% == 12 (
    call "C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\vcvarsall.bat" x86
+   set VCTOOLSET=12.0
    goto MSBUILDx86
    )
 
@@ -112,10 +115,15 @@ goto END
 :MSBUILDx86
 echo Visual Studio Dir: %VSINSTALLDIR%
 echo LIB: %LIB%
-@rem msbuild /M:2 /t:clean /p:configuration=debug /p:platform=Win32 OpenRTM-aist_vc%VC_VERSION%.sln
-@rem msbuild /M:2 /t:clean /p:configuration=release /p:platform=Win32 OpenRTM-aist_vc%VC_VERSION%.sln
-@rem msbuild /M:2 /t:rebuild /p:configuration=debug /p:platform=Win32 OpenRTM-aist_vc%VC_VERSION%.sln
-msbuild /M:2 /t:rebuild /p:configuration=release /p:platform=Win32 OpenRTM-aist_vc%VC_VERSION%.sln
+set OPT=/M:4 /toolsversion:$VCTOOLSET% /p:platform=Win32
+set SLN=OpenRTM-aist_vc%VC_VERSION%.sln
+set LOG=/fileLogger /flp:logfile=debug.log /v:diag 
+
+msbuild /t:clean /p:configuration=debug     %OPT% %SLN%
+msbuild /t:clean /p:configuration=release   %OPT% %SLN%
+msbuild /t:rebuild /p:configuration=debug   %OPT% %LOG% %SLN%
+msbuild /t:rebuild /p:configuration=release %OPT% %LOG% %SLN%
+
 goto END
 
 @rem ============================================================
@@ -130,14 +138,17 @@ if /i %VC_VERSION% == 9  (
    )
 if /i %VC_VERSION% == 10 (
    call "C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\vcvarsall.bat" amd64
+   set VCTOOLSET=4.0
    goto MSBUILDx64
    )
 if /i %VC_VERSION% == 11 (
    call "C:\Program Files (x86)\Microsoft Visual Studio 11.0\VC\vcvarsall.bat" amd64
+   set VCTOOLSET=4.0
    goto MSBUILDx64
    )
 if /i %VC_VERSION% == 12 (
    call "C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\vcvarsall.bat" amd64
+   set VCTOOLSET=12.0
    goto MSBUILDx64
    )
 echo Visual Studio Dir: %VSINSTALLDIR%
@@ -158,11 +169,15 @@ goto END
 :MSBUILDx64
 echo Visual Studio Dir: %VSINSTALLDIR%
 echo LIB: %LIB%
-msbuild /M:4 /t:clean /fileLogger /flp:logfile=debug.log /v:diag /p:configuration=debug /p:platform=x64 OpenRTM-aist_vc%VC_VERSION%.sln
-msbuild /M:4 /t:clean /fileLogger /flp:logfile=release.log /v:diag /p:configuration=release /p:platform=x64 OpenRTM-aist_vc%VC_VERSION%.sln
+set OPT=/M:4 /toolsversion:$VCTOOLSET% /p:platform=x64
+set SLN=OpenRTM-aist_vc%VC_VERSION%.sln
+set LOG=/fileLogger /flp:logfile=debug.log /v:diag 
 
-@rem msbuild /M:4 /t:rebuild /fileLogger /flp:logfile=debug.log /v:diag /p:configuration=debug /p:platform=x64 OpenRTM-aist_vc%VC_VERSION%.sln
-@rem msbuild /M:4 /t:rebuild /fileLogger /flp:logfile=release.log /v:diag /p:configuration=release /p:platform=x64 OpenRTM-aist_vc%VC_VERSION%.sln
+msbuild /t:clean /p:configuration=debug     %OPT% %SLN%
+msbuild /t:clean /p:configuration=release   %OPT% %SLN%
+msbuild /t:rebuild /p:configuration=debug   %OPT% %LOG% %SLN%
+msbuild /t:rebuild /p:configuration=release %OPT% %LOG% %SLN%
+
 goto END
 
 :END
