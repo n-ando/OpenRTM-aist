@@ -18,7 +18,7 @@
 # Generic vcxproj template
 #------------------------------------------------------------
 vcxproj_template = """<?xml version="1.0" encoding="utf-8"?>
-<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project DefaultTargets="Build" ToolsVersion="[Version]" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
       <Configuration>Debug</Configuration>
@@ -1108,6 +1108,8 @@ class YamlConfig:
             text = text.replace("__VERSION__", self.version)
         if self.vcversion:
             text = text.replace("__VCVERSION__", self.vcversion)
+            text = text.replace("__VCSHORTVER__",
+                                self.vcversion.replace(".",""))
         return text
 
 #------------------------------------------------------------

@@ -20,7 +20,7 @@
 #ifndef RTC_OUTPORT_H
 #define RTC_OUTPORT_H
 
-#include <iostream>
+#include <functional>
 #include <string>
 
 #include <coil/TimeValue.h>
