@@ -36,9 +36,9 @@
 set PATH=%PATH%;C:\cygwin\bin;C:\cygwin64\bin
 set RTM_ROOT=%~dp0
 set COIL_ROOT=%RTM_ROOT%\coil
-set OMNI_ROOT=%RTM_ROOT%\omniORB
+set OMNI_ROOT=C:\work\aaaaa\OpenRTM-aist\omniORB
 set VC_VERSION=10
-set ARCH=x86
+set ARCH=x86_64
 set PATH=%OMNI_ROOT%\bin\x86_win32;%PATH%
 
 if %ARCH% == x86       set DLL_ARCH=
@@ -87,11 +87,13 @@ if %VC_VERSION% == 9  (
 if %VC_VERSION% == 10 (
    call "C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\vcvarsall.bat%" x86
    set VCTOOLSET=4.0
+   set VCTargetsPath=C:\Program Files (x86)\MSBuild\Microsoft.Cpp\v4.0
    goto MSBUILDx86
    )
 if %VC_VERSION% == 11 (
    call "C:\Program Files (x86)\Microsoft Visual Studio 11.0\VC\vcvarsall.bat" x86
    set VCTOOLSET=4.0
+   set VCTargetsPath=C:\Program Files (x86)\MSBuild\Microsoft.Cpp\v4.0\v110
    goto MSBUILDx86
    )
 if %VC_VERSION% == 12 (
@@ -115,7 +117,7 @@ goto END
 :MSBUILDx86
 echo Visual Studio Dir: %VSINSTALLDIR%
 echo LIB: %LIB%
-set OPT=/M:4 /toolsversion:$VCTOOLSET% /p:platform=Win32
+set OPT=/M:4 /toolsversion:%VCTOOLSET% /p:platform=Win32
 set SLN=OpenRTM-aist_vc%VC_VERSION%.sln
 set LOG=/fileLogger /flp:logfile=debug.log /v:diag 
 
@@ -139,11 +141,13 @@ if /i %VC_VERSION% == 9  (
 if /i %VC_VERSION% == 10 (
    call "C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\vcvarsall.bat" amd64
    set VCTOOLSET=4.0
+   set VCTargetsPath=C:\Program Files (x86)\MSBuild\Microsoft.Cpp\v4.0
    goto MSBUILDx64
    )
 if /i %VC_VERSION% == 11 (
    call "C:\Program Files (x86)\Microsoft Visual Studio 11.0\VC\vcvarsall.bat" amd64
    set VCTOOLSET=4.0
+   set VCTargetsPath=C:\Program Files (x86)\MSBuild\Microsoft.Cpp\v4.0\v110
    goto MSBUILDx64
    )
 if /i %VC_VERSION% == 12 (
@@ -169,10 +173,9 @@ goto END
 :MSBUILDx64
 echo Visual Studio Dir: %VSINSTALLDIR%
 echo LIB: %LIB%
-set OPT=/M:4 /toolsversion:$VCTOOLSET% /p:platform=x64
+set OPT=/M:4 /toolsversion:%VCTOOLSET% /p:platform=x64
 set SLN=OpenRTM-aist_vc%VC_VERSION%.sln
 set LOG=/fileLogger /flp:logfile=debug.log /v:diag 
-
 msbuild /t:clean /p:configuration=debug     %OPT% %SLN%
 msbuild /t:clean /p:configuration=release   %OPT% %SLN%
 msbuild /t:rebuild /p:configuration=debug   %OPT% %LOG% %SLN%
