@@ -18,7 +18,7 @@ dnl  Autoconf initial macros
 dnl ------------------------------------------------------------
 dnl  Process this file with autoconf to produce a configure script.
 AC_PREREQ(2.59)
-AC_INIT(coil, 1.1.0, n-ando@aist.go.jp, coil)
+AC_INIT(coil, 1.1.1, n-ando@aist.go.jp, coil)
 AC_CONFIG_AUX_DIR([.])
 AM_INIT_AUTOMAKE([dist-bzip2 tar-pax])
 AM_CONFIG_HEADER([include/coil/config_coil.h])
