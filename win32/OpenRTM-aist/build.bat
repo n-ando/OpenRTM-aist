@@ -36,10 +36,10 @@
 set RTM_ROOT=%~dp0
 set COIL_ROOT=%RTM_ROOT%\coil
 
-if not {%OMNI_ROOT%} == {0}  set OMNI_ROOT=C:\work\aaaaa\OpenRTM-aist\omniORB
-if not {%ARCH%} == {0}       set ARCH=x86_64
-if not {%VC_VERSION%} == {0} set VC_VERSION=10
-if not {%PYTHON_DIR%} == {0} set PYTHON_DIR=c:\python27
+if {%OMNI_ROOT%} == {0}  set OMNI_ROOT=C:\work\aaaaa\OpenRTM-aist\omniORB
+if {%ARCH%} == {0}       set ARCH=x86_64
+if {%VC_VERSION%} == {0} set VC_VERSION=10
+if {%PYTHON_DIR%} == {0} set PYTHON_DIR=c:\python27
 
 set PATH_ORG=%PATH%
 set PATH=%PATH%;C:\cygwin\bin;C:\cygwin64\bin
