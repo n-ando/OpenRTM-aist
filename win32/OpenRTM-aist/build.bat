@@ -36,10 +36,18 @@
 set RTM_ROOT=%~dp0
 set COIL_ROOT=%RTM_ROOT%\coil
 
-if {%OMNI_ROOT%} == {0}  set OMNI_ROOT=C:\work\aaaaa\OpenRTM-aist\omniORB
-if {%ARCH%} == {0}       set ARCH=x86_64
-if {%VC_VERSION%} == {0} set VC_VERSION=10
-if {%PYTHON_DIR%} == {0} set PYTHON_DIR=c:\python27
+if not {%OMNI_ROOT%} == {0}  set OMNI_ROOT=C:\work\aaaaa\OpenRTM-aist\omniORB
+if not {%ARCH%} == {0}       set ARCH=x86_64
+if not {%VC_VERSION%} == {0} set VC_VERSION=10
+if not {%PYTHON_DIR%} == {0} set PYTHON_DIR=c:\python27
+
+@rem ------------------------------------------------------------
+@rem Printing env variables
+echo Environment variables:
+echo OMNI_ROOT  : %OMNI_ROOT%
+echo ARCH       : %ARCH%
+echo VC_VERSION : %VC_VERSION%
+echo PYTHON_DIR : %PYTHON_DIR%
 
 set PATH_ORG=%PATH%
 set PATH=%PATH%;C:\cygwin\bin;C:\cygwin64\bin
@@ -68,12 +76,6 @@ set OMNITHREAD_VERSION=3.4
 %PYTHON_DIR%\python build\cmakeconfgen.py rtm_config.vsprops
 move OpenRTMConfig.cmake cmake
 
-@rem ------------------------------------------------------------
-@rem Printing env variables
-echo Environment variables:
-echo ARCH       : %ARCH%
-echo VC_VERSION : %VC_VERSION%
-echo PYTHON_DIR : %PYTHON_DIR%
 
 @rem ============================================================
 @rem  switching to x86 or x86_64
@@ -82,7 +84,6 @@ echo ARCH %ARCH%
 if %ARCH% == x86       goto x86
 if %ARCH% == x86_64    goto x86_64
 goto END
-
 
 @rem ============================================================
 @rem  Compiling 32bit binaries
