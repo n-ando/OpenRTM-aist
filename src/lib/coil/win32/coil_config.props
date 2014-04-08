@@ -3,6 +3,7 @@
   <PropertyGroup Label="UserMacros">
     <coil_dllver>$(COIL_DLLVER)</coil_dllver>
     <coil_version>$(COIL_VERSION)</coil_version>
+    <coil_shortver>$(COIL_SHORTVER)</coil_shortver>
     <coil_includes>$(coil_root);..</coil_includes>
     <coil_libdir>$(coil_root)\bin</coil_libdir>
     <coil_bin>$(coil_root)\bin;$(coil_root)\build</coil_bin>
@@ -31,6 +32,9 @@
     </BuildMacro>
     <BuildMacro Include="coil_version">
       <Value>$(coil_version)</Value>
+    </BuildMacro>
+    <BuildMacro Include="coil_shortver">
+      <Value>$(coil_shortver)</Value>
     </BuildMacro>
     <BuildMacro Include="coil_includes">
       <Value>$(coil_includes)</Value>

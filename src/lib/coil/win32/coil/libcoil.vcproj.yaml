@@ -42,7 +42,7 @@ Configurations:
           lib -out:"$(TargetDir)coil_static.lib" "$(TargetDir)*.obj"
           set PATH=%PATH%;$(coil_path)
           cd "$(TargetDir)"
-          start /wait cmd /c makedeffile.py coil_static.lib coil$(coil_dllver)d $(coil_version) coil$(coil_dllver)d.def
+          start /wait cmd /c makedeffile.py coil_static.lib coil$(coil_dllver)d $(coil_shortver) coil$(coil_dllver)d.def
           move coil$(coil_dllver)d.def ..\
     VCLinkerTool:
       - Key: AdditionalDependencies
@@ -95,7 +95,7 @@ Configurations:
           lib -out:"$(TargetDir)coil_static.lib" "$(TargetDir)*.obj"
           set PATH=%PATH%;$(coil_path)
           cd "$(TargetDir)"
-          start /wait cmd /c makedeffile.py coil_static.lib coil$(coil_dllver)d $(coil_version) coil$(coil_dllver)d.def
+          start /wait cmd /c makedeffile.py coil_static.lib coil$(coil_dllver)d $(coil_shortver) coil$(coil_dllver)d.def
           move coil$(coil_dllver)d.def ..\
     VC10_VCLinkerTool:
       - Key: AdditionalDependencies
@@ -148,7 +148,7 @@ Configurations:
           lib -out:"$(TargetDir)coil_static.lib" "$(TargetDir)*.obj"
           set PATH=%PATH%;$(coil_path)
           cd "$(TargetDir)"
-          start /wait cmd /c makedeffile.py coil_static.lib coil$(coil_dllver)d $(coil_version) coil$(coil_dllver)d.def
+          start /wait cmd /c makedeffile.py coil_static.lib coil$(coil_dllver)d $(coil_shortver) coil$(coil_dllver)d.def
           move coil$(coil_dllver)d.def ..\
     VCLinkerTool:
       - Key: AdditionalDependencies
@@ -201,7 +201,7 @@ Configurations:
           lib -out:"$(TargetDir)coil_static.lib" "$(TargetDir)*.obj"
           set PATH=%PATH%;$(coil_path)
           cd "$(TargetDir)"
-          start /wait cmd /c makedeffile.py coil_static.lib coil$(coil_dllver)d $(coil_version) coil$(coil_dllver)d.def
+          start /wait cmd /c makedeffile.py coil_static.lib coil$(coil_dllver)d $(coil_shortver) coil$(coil_dllver)d.def
           move coil$(coil_dllver)d.def ..\
     VC10_VCLinkerTool:
       - Key: AdditionalDependencies
@@ -252,7 +252,7 @@ Configurations:
           lib -out:"$(TargetDir)coil_static.lib" "$(TargetDir)*.obj"
           set PATH=%PATH%;$(coil_path)
           cd "$(OutDir)"
-          start /wait cmd /c makedeffile.py coil_static.lib $(TargetName) $(coil_version) $(TargetName).def
+          start /wait cmd /c makedeffile.py coil_static.lib $(TargetName) $(coil_shortver) $(TargetName).def
           move coil$(coil_dllver).def ..\\
     VCLinkerTool:
       - Key: AdditionalDependencies
@@ -302,7 +302,7 @@ Configurations:
           lib -out:"$(TargetDir)coil_static.lib" "$(TargetDir)*.obj"
           set PATH=%PATH%;$(coil_path)
           cd "$(OutDir)"
-          start /wait cmd /c makedeffile.py coil_static.lib coil$(coil_dllver) $(coil_version) coil$(coil_dllver).def
+          start /wait cmd /c makedeffile.py coil_static.lib coil$(coil_dllver) $(coil_shortver) coil$(coil_dllver).def
           move coil$(coil_dllver).def ..\\
     VC10_VCLinkerTool:
       - Key: AdditionalDependencies
@@ -352,7 +352,7 @@ Configurations:
           lib -out:"$(TargetDir)coil_static.lib" "$(TargetDir)*.obj"
           set PATH=%PATH%;$(coil_path)
           cd "$(OutDir)"
-          start /wait cmd /c makedeffile.py coil_static.lib $(TargetName) $(coil_version) $(TargetName).def
+          start /wait cmd /c makedeffile.py coil_static.lib $(TargetName) $(coil_shortver) $(TargetName).def
           move coil$(coil_dllver).def ..\\
     VCLinkerTool:
       - Key: AdditionalDependencies
@@ -402,7 +402,7 @@ Configurations:
           lib -out:"$(TargetDir)coil_static.lib" "$(TargetDir)*.obj"
           set PATH=%PATH%;$(coil_path)
           cd "$(OutDir)"
-          start /wait cmd /c makedeffile.py coil_static.lib coil$(coil_dllver) $(coil_version) coil$(coil_dllver).def
+          start /wait cmd /c makedeffile.py coil_static.lib coil$(coil_dllver) $(coil_shortver) coil$(coil_dllver).def
           move coil$(coil_dllver).def ..\\
     VC10_VCLinkerTool:
       - Key: AdditionalDependencies
