@@ -42,7 +42,7 @@ Configurations:
           lib -out:"$(TargetDir)RTC_static.lib" "$(TargetDir)*.obj" "$(ProjectDir)idl\$(ConfigurationName)\*.obj"
           set PATH=%PATH%;$(rtm_path)
           cd "$(TargetDir)"
-          start /wait cmd /c makedeffile.py RTC_static.lib RTC$(rtm_dllver)d $(rtm_version) RTC$(rtm_dllver)d.def
+          start /wait cmd /c makedeffile.py RTC_static.lib RTC$(rtm_dllver)d $(rtm_shortver) RTC$(rtm_dllver)d.def
           move RTC$(rtm_dllver)d.def ..\
     VCLinkerTool:
       - Key: AdditionalDependencies
@@ -95,7 +95,7 @@ Configurations:
           lib -out:"$(TargetDir)RTC_static.lib" "$(TargetDir)*.obj" "$(ProjectDir)idl\$(ConfigurationName)\*.obj"
           set PATH=%PATH%;$(rtm_path)
           cd "$(TargetDir)"
-          start /wait cmd /c makedeffile.py RTC_static.lib RTC$(rtm_dllver)d $(rtm_version) RTC$(rtm_dllver)d.def
+          start /wait cmd /c makedeffile.py RTC_static.lib RTC$(rtm_dllver)d $(rtm_shortver) RTC$(rtm_dllver)d.def
           move RTC$(rtm_dllver)d.def ..\
     VC10_VCLinkerTool:
       - Key: AdditionalDependencies
@@ -148,7 +148,7 @@ Configurations:
           lib -out:"$(TargetDir)RTC_static.lib" "$(TargetDir)*.obj" "$(ProjectDir)idl\$(ConfigurationName)\*.obj"
           set PATH=%PATH%;$(rtm_path)
           cd "$(TargetDir)"
-          start /wait cmd /c makedeffile.py RTC_static.lib RTC$(rtm_dllver)d $(rtm_version) RTC$(rtm_dllver)d.def
+          start /wait cmd /c makedeffile.py RTC_static.lib RTC$(rtm_dllver)d $(rtm_shortver) RTC$(rtm_dllver)d.def
           move RTC$(rtm_dllver)d.def ..\
     VCLinkerTool:
       - Key: AdditionalDependencies
@@ -201,7 +201,7 @@ Configurations:
           lib -out:"$(TargetDir)RTC_static.lib" "$(TargetDir)*.obj" "$(ProjectDir)idl\$(ConfigurationName)\*.obj"
           set PATH=%PATH%;$(rtm_path)
           cd "$(TargetDir)"
-          start /wait cmd /c makedeffile.py RTC_static.lib RTC$(rtm_dllver)d $(rtm_version) RTC$(rtm_dllver)d.def
+          start /wait cmd /c makedeffile.py RTC_static.lib RTC$(rtm_dllver)d $(rtm_shortver) RTC$(rtm_dllver)d.def
           move RTC$(rtm_dllver)d.def ..\
     VC10_VCLinkerTool:
       - Key: AdditionalDependencies
@@ -252,7 +252,7 @@ Configurations:
           lib -out:"$(TargetDir)RTC_static.lib" "$(TargetDir)*.obj" "$(ProjectDir)idl\$(ConfigurationName)\*.obj"
           set PATH=%PATH%;$(rtm_path)
           cd "$(OutDir)"
-          start /wait cmd /c makedeffile.py RTC_static.lib $(TargetName) $(rtm_version) $(TargetName).def
+          start /wait cmd /c makedeffile.py RTC_static.lib $(TargetName) $(rtm_shortver) $(TargetName).def
           move RTC$(rtm_dllver).def ..\\
     VCLinkerTool:
       - Key: AdditionalDependencies
@@ -301,7 +301,7 @@ Configurations:
           lib -out:"$(TargetDir)RTC_static.lib" "$(TargetDir)*.obj" "$(ProjectDir)idl\$(ConfigurationName)\*.obj"
           set PATH=%PATH%;$(rtm_path)
           cd "$(OutDir)"
-          start /wait cmd /c makedeffile.py RTC_static.lib RTC$(rtm_dllver) $(rtm_version) RTC$(rtm_dllver).def
+          start /wait cmd /c makedeffile.py RTC_static.lib RTC$(rtm_dllver) $(rtm_shortver) RTC$(rtm_dllver).def
           move RTC$(rtm_dllver).def ..\\
     VC10_VCLinkerTool:
       - Key: AdditionalDependencies
@@ -351,7 +351,7 @@ Configurations:
           lib -out:"$(TargetDir)RTC_static.lib" "$(TargetDir)*.obj" "$(ProjectDir)idl\$(ConfigurationName)\*.obj"
           set PATH=%PATH%;$(rtm_path)
           cd "$(OutDir)"
-          start /wait cmd /c makedeffile.py RTC_static.lib $(TargetName) $(rtm_version) $(TargetName).def
+          start /wait cmd /c makedeffile.py RTC_static.lib $(TargetName) $(rtm_shortver) $(TargetName).def
           move RTC$(rtm_dllver).def ..\\
     VCLinkerTool:
       - Key: AdditionalDependencies
@@ -400,7 +400,7 @@ Configurations:
           lib -out:"$(TargetDir)RTC_static.lib" "$(TargetDir)*.obj" "$(ProjectDir)idl\$(ConfigurationName)\*.obj"
           set PATH=%PATH%;$(rtm_path)
           cd "$(OutDir)"
-          start /wait cmd /c makedeffile.py RTC_static.lib RTC$(rtm_dllver) $(rtm_version) RTC$(rtm_dllver).def
+          start /wait cmd /c makedeffile.py RTC_static.lib RTC$(rtm_dllver) $(rtm_shortver) RTC$(rtm_dllver).def
           move RTC$(rtm_dllver).def ..\\
     VC10_VCLinkerTool:
       - Key: AdditionalDependencies

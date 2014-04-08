@@ -38,6 +38,10 @@
 		Value="%RTM_VERSION%"
 	/>
 	<UserMacro
+		Name="rtm_shortver"
+		Value="%RTM_SHORTVER%"
+	/>
+	<UserMacro
 		Name="coil_dllver"
 		Value="%COIL_DLLVER%"
 	/>
