@@ -24,7 +24,7 @@ OpenRTM-aist_vc8.sln: OpenRTM-aist.sln.dep
 		--dep OpenRTM-aist.sln.dep \
 		--out OpenRTM-aist_vc8.sln \
 		`find ./ -name '*_vc8.vcproj' \! -name 'USB*.vcproj' \! -name 'LTT*.vcproj' \! -name 'LogicalTime*.vcproj' \! -name 'FileName*.vcproj'`
-	qkc -ms OpenRTM-aist_vc8.sln
+	qkc -O- -ms OpenRTM-aist_vc8.sln
 
 OpenRTM-aist_vc9.sln:
 	$(top_srcdir)/build/slntool.py     \
@@ -32,7 +32,7 @@ OpenRTM-aist_vc9.sln:
 		--dep OpenRTM-aist.sln.dep \
 		--out OpenRTM-aist_vc9.sln \
 		`find ./ -name '*_vc9.vcproj' \! -name 'USB*.vcproj' \! -name 'LTT*.vcproj' \! -name 'LogicalTime*.vcproj' \! -name 'FileName*.vcproj'`
-	qkc -ms OpenRTM-aist_vc9.sln
+	qkc -O- -ms OpenRTM-aist_vc9.sln
 
 OpenRTM-aist_vc10.sln:
 	$(top_srcdir)/build/slntool.py      \
@@ -40,7 +40,7 @@ OpenRTM-aist_vc10.sln:
 		--dep OpenRTM-aist.sln.dep  \
 		--out OpenRTM-aist_vc10.sln \
 		`find ./ -name '*_vc10.vcxproj' \! -name 'USB*.vcxproj' \! -name 'LTT*.vcxproj' \! -name 'LogicalTime*.vcxproj' \! -name 'FileName*.vcxproj'`
-	qkc -ms OpenRTM-aist_vc10.sln
+	qkc -O- -ms OpenRTM-aist_vc10.sln
 
 OpenRTM-aist_vc11.sln:
 	$(top_srcdir)/build/slntool.py      \
@@ -48,7 +48,7 @@ OpenRTM-aist_vc11.sln:
 		--dep OpenRTM-aist.sln.dep  \
 		--out OpenRTM-aist_vc11.sln \
 		`find ./ -name '*_vc11.vcxproj' \! -name 'USB*.vcxproj' \! -name 'LTT*.vcxproj' \! -name 'LogicalTime*.vcxproj' \! -name 'FileName*.vcxproj'`
-	qkc -ms OpenRTM-aist_vc11.sln
+	qkc -O- -ms OpenRTM-aist_vc11.sln
 
 OpenRTM-aist_vc12.sln:
 	$(top_srcdir)/build/slntool.py      \
@@ -56,7 +56,7 @@ OpenRTM-aist_vc12.sln:
 		--dep OpenRTM-aist.sln.dep  \
 		--out OpenRTM-aist_vc12.sln \
 		`find ./ -name '*_vc12.vcxproj' \! -name 'USB*.vcxproj' \! -name 'LTT*.vcxproj' \! -name 'LogicalTime*.vcxproj' \! -name 'FileName*.vcxproj'`
-	qkc -ms OpenRTM-aist_vc12.sln
+	qkc -O- -ms OpenRTM-aist_vc12.sln
 
 vsprops:  coil_distbuild.vsprops coil_config.vsprops coil_distbuild.props coil_config.props
 

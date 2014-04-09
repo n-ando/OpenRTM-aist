@@ -100,7 +100,7 @@ OrganizationProxy_vc8.vcproj:
 		--yaml ../coil_test.vcproj.yaml \
 		--source $(TEST_SRC)
 #		--header $(TEST_H)
-	qkc -sm $(win32_builddir)/OrganizationProxy_vc8.vcproj
+	qkc -O- -sm $(win32_builddir)/OrganizationProxy_vc8.vcproj
 
 OrganizationProxy_vc9.vcproj:
 	$(top_builddir)/build/vcprojtool.py vcproj \
@@ -112,7 +112,7 @@ OrganizationProxy_vc9.vcproj:
 		--yaml ../coil_test.vcproj.yaml \
 		--source $(TEST_SRC)
 #		--header $(TEST_H)
-	qkc -sm $(win32_builddir)/OrganizationProxy_vc9.vcproj
+	qkc -O- -sm $(win32_builddir)/OrganizationProxy_vc9.vcproj
 
 
 OrganizationProxy_vc10.vcproj:
@@ -124,5 +124,5 @@ OrganizationProxy_vc10.vcproj:
 		--out $(win32_builddir)/OrganizationProxy_vc10.vcproj \
 		--yaml ../coil_test.vcproj.yaml \
 		--source $(TEST_SRC)
-	qkc -sm $(win32_builddir)/OrganizationProxy_vc10.vcproj
+	qkc -O- -sm $(win32_builddir)/OrganizationProxy_vc10.vcproj
 

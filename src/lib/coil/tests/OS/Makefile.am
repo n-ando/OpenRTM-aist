@@ -68,7 +68,7 @@ OS_vc8.vcproj:
 		--yaml ../coil_test.vcproj.yaml \
 		--source $(TEST_SRC)
 #		--header $(TEST_H)
-	qkc -sm $(win32_builddir)/OS_vc8.vcproj
+	qkc -O- -sm $(win32_builddir)/OS_vc8.vcproj
 
 OS_vc9.vcproj:
 	$(top_builddir)/build/vcprojtool.py vcproj \
@@ -80,7 +80,7 @@ OS_vc9.vcproj:
 		--yaml ../coil_test.vcproj.yaml \
 		--source $(TEST_SRC)
 #		--header $(TEST_H)
-	qkc -sm $(win32_builddir)/OS_vc9.vcproj
+	qkc -O- -sm $(win32_builddir)/OS_vc9.vcproj
 
 OS_vc10.vcproj:
 	$(top_builddir)/build/vcprojtool.py vcproj \
@@ -91,6 +91,6 @@ OS_vc10.vcproj:
 		--out $(win32_builddir)/OS_vc10.vcproj \
 		--yaml ../coil_test.vcproj.yaml \
 		--source $(TEST_SRC)
-	qkc -sm $(win32_builddir)/OS_vc10.vcproj
+	qkc -O- -sm $(win32_builddir)/OS_vc10.vcproj
 
 

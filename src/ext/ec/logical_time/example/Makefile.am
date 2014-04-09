@@ -71,7 +71,7 @@ vc8proj:
 		--yaml $(top_builddir)/examples/rtc.vcproj.yaml                    \
 		--source LTTSample.cpp LTTSampleComp.cpp LogicalTimeTriggeredECStub.cpp  \
 		--header LTTSample.h LogicalTimeTriggeredECStub.h
-	qkc -sm $(win32_builddir)/LTTSample_vc8.vcproj
+	qkc -O- -sm $(win32_builddir)/LTTSample_vc8.vcproj
 	$(top_builddir)/build/vcprojtool.py vcproj          \
 		--type DLL                                      \
 		--vcversion "8.00"                              \
@@ -81,7 +81,7 @@ vc8proj:
 		--yaml $(top_builddir)/examples/rtcdll.vcproj.yaml                    \
 		--source LTTSample.cpp                          \
 		--header LTTSample.h
-	qkc -sm $(win32_builddir)/LTTSampleDll_vc8.vcproj
+	qkc -O- -sm $(win32_builddir)/LTTSampleDll_vc8.vcproj
 
 vc9proj:
 	$(top_builddir)/build/vcprojtool.py vcproj       \
@@ -93,7 +93,7 @@ vc9proj:
 		--yaml $(top_builddir)/examples/rtc.vcproj.yaml                    \
 		--source LTTSample.cpp LTTSampleComp.cpp LogicalTimeTriggeredECStub.cpp \
 		--header LTTSample.h LogicalTimeTriggeredECStub.h
-	qkc -sm $(win32_builddir)/LTTSample_vc9.vcproj
+	qkc -O- -sm $(win32_builddir)/LTTSample_vc9.vcproj
 	$(top_builddir)/build/vcprojtool.py vcproj          \
 		--type DLL                                      \
 		--vcversion "9.00"                              \
@@ -103,7 +103,7 @@ vc9proj:
 		--yaml $(top_builddir)/examples/rtcdll.vcproj.yaml                    \
 		--source LTTSample.cpp                          \
 		--header LTTSample.h
-	qkc -sm $(win32_builddir)/LTTSampleDll_vc9.vcproj
+	qkc -O- -sm $(win32_builddir)/LTTSampleDll_vc9.vcproj
 
 vc10proj:
 	$(top_builddir)/build/vcxprojtool.py vcxproj       \
@@ -115,7 +115,7 @@ vc10proj:
 		--yaml $(top_builddir)/examples/rtc.vcproj.yaml                     \
 		--source LTTSample.cpp LTTSampleComp.cpp LogicalTimeTriggeredECStub.cpp \
 		--header LTTSample.h LogicalTimeTriggeredECStub.h
-	qkc -sm $(win32_builddir)/LTTSample_vc10.vcxproj
+	qkc -O- -sm $(win32_builddir)/LTTSample_vc10.vcxproj
 	$(top_builddir)/build/vcxprojtool.py vcxproj          \
 		--type DLL                                        \
 		--vcversion "10.00"                               \
@@ -125,7 +125,7 @@ vc10proj:
 		--yaml $(top_builddir)/examples/rtcdll.vcproj.yaml                     \
 		--source LTTSample.cpp                            \
 		--header LTTSample.h
-	qkc -sm $(win32_builddir)/LTTSampleDll_vc10.vcxproj
+	qkc -O- -sm $(win32_builddir)/LTTSampleDll_vc10.vcxproj
 
 dist-hook: lst vcproj all-local
 
