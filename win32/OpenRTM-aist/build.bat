@@ -36,10 +36,10 @@
 set RTM_ROOT=%~dp0
 set COIL_ROOT=%RTM_ROOT%\coil
 
-if not {%OMNI_ROOT%} == {0}  set OMNI_ROOT=C:\work\aaaaa\OpenRTM-aist\omniORB
-if not {%ARCH%} == {0}       set ARCH=x86_64
-if not {%VC_VERSION%} == {0} set VC_VERSION=10
-if not {%PYTHON_DIR%} == {0} set PYTHON_DIR=c:\python27
+if not DEFINED OMNI_ROOT  set OMNI_ROOT=C:\work\aaaaa\OpenRTM-aist\omniORB
+if not DEFINED ARCH       set ARCH=x86_64
+if not DEFINED VC_VERSION set VC_VERSION=10
+if not DEFINED PYTHON_DIR set PYTHON_DIR=c:\python27
 
 @rem ------------------------------------------------------------
 @rem Printing env variables
@@ -98,16 +98,19 @@ if %VC_VERSION% == 9  (
 if %VC_VERSION% == 10 (
    call "C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\vcvarsall.bat%" x86
    set VCTOOLSET=4.0
+   set PLATFORMTOOL=
    goto MSBUILDx86
    )
 if %VC_VERSION% == 11 (
    call "C:\Program Files (x86)\Microsoft Visual Studio 11.0\VC\vcvarsall.bat" x86
    set VCTOOLSET=4.0
+   set PLATFORMTOOL=/p:PlatformToolset=v110
    goto MSBUILDx86
    )
 if %VC_VERSION% == 12 (
    call "C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\vcvarsall.bat" x86
    set VCTOOLSET=12.0
+   set PLATFORMTOOL=/p:PlatformToolset=v120
    goto MSBUILDx86
    )
 
@@ -126,7 +129,7 @@ goto END
 :MSBUILDx86
 echo Visual Studio Dir: %VSINSTALLDIR%
 echo LIB: %LIB%
-set OPT=/M:4 /toolsversion:%VCTOOLSET% /p:platform=Win32
+set OPT=/M:4 /toolsversion:%VCTOOLSET% %PLATFORMTOOL% /p:platform=Win32
 set SLN=OpenRTM-aist_vc%VC_VERSION%.sln
 set LOG=/fileLogger /flp:logfile=debug.log /v:diag 
 
@@ -151,16 +154,19 @@ if /i %VC_VERSION% == 9  (
 if /i %VC_VERSION% == 10 (
    call "C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\vcvarsall.bat" amd64
    set VCTOOLSET=4.0
+   set PLATFORMTOOL=
    goto MSBUILDx64
    )
 if /i %VC_VERSION% == 11 (
    call "C:\Program Files (x86)\Microsoft Visual Studio 11.0\VC\vcvarsall.bat" amd64
    set VCTOOLSET=4.0
+   set PLATFORMTOOL=/p:PlatformToolset=v110
    goto MSBUILDx64
    )
 if /i %VC_VERSION% == 12 (
    call "C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\vcvarsall.bat" amd64
    set VCTOOLSET=12.0
+   set PLATFORMTOOL=/p:PlatformToolset=v120
    goto MSBUILDx64
    )
 echo Visual Studio Dir: %VSINSTALLDIR%
@@ -181,7 +187,7 @@ goto END
 :MSBUILDx64
 echo Visual Studio Dir: %VSINSTALLDIR%
 echo LIB: %LIB%
-set OPT=/M:4 /toolsversion:%VCTOOLSET% /p:platform=x64
+set OPT=/M:4 /toolsversion:%VCTOOLSET% %PLATFORMTOOL% /p:platform=x64
 set SLN=OpenRTM-aist_vc%VC_VERSION%.sln
 set LOG=/fileLogger /flp:logfile=debug.log /v:diag 
 
