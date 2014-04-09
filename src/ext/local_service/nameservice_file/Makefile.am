@@ -49,7 +49,7 @@ vc8proj:
 		--yaml $(top_builddir)/examples/rtcdll.vcproj.yaml \
 		--source $(FILENAMESERVICE_SRC)                        \
 		--header $(FILENAMESERVICE_H)
-	qkc -sm $(win32_builddir)/$(PROJNAME)Dll_vc8.vcproj
+	qkc -O- -sm $(win32_builddir)/$(PROJNAME)Dll_vc8.vcproj
 
 vc9proj:
 	$(top_builddir)/build/vcprojtool.py vcproj              \
@@ -61,7 +61,7 @@ vc9proj:
 		--yaml $(top_builddir)/examples/rtcdll.vcproj.yaml \
 		--source $(FILENAMESERVICE_SRC)                        \
 		--header $(FILENAMESERVICE_H)
-	qkc -sm $(win32_builddir)/$(PROJNAME)Dll_vc9.vcproj
+	qkc -O- -sm $(win32_builddir)/$(PROJNAME)Dll_vc9.vcproj
 
 vc10proj:
 	$(top_builddir)/build/vcxprojtool.py vcxproj              \
@@ -73,7 +73,7 @@ vc10proj:
 		--yaml $(top_builddir)/examples/rtcdll.vcproj.yaml  \
 		--source $(FILENAMESERVICE_SRC)                          \
 		--header $(FILENAMESERVICE_H)
-	qkc -sm $(win32_builddir)/$(PROJNAME)Dll_vc10.vcxproj
+	qkc -O- -sm $(win32_builddir)/$(PROJNAME)Dll_vc10.vcxproj
 
 vc11proj:
 	$(top_builddir)/build/vcxprojtool.py vcxproj              \
@@ -85,7 +85,7 @@ vc11proj:
 		--yaml $(top_builddir)/examples/rtcdll.vcproj.yaml  \
 		--source $(FILENAMESERVICE_SRC)                          \
 		--header $(FILENAMESERVICE_H)
-	qkc -sm $(win32_builddir)/$(PROJNAME)Dll_vc11.vcxproj
+	qkc -O- -sm $(win32_builddir)/$(PROJNAME)Dll_vc11.vcxproj
 
 vc12proj:
 	$(top_builddir)/build/vcxprojtool.py vcxproj              \
@@ -97,7 +97,7 @@ vc12proj:
 		--yaml $(top_builddir)/examples/rtcdll.vcproj.yaml  \
 		--source $(FILENAMESERVICE_SRC)                          \
 		--header $(FILENAMESERVICE_H)
-	qkc -sm $(win32_builddir)/$(PROJNAME)Dll_vc12.vcxproj
+	qkc -O- -sm $(win32_builddir)/$(PROJNAME)Dll_vc12.vcxproj
 
 
 #dist-hook: vcproj

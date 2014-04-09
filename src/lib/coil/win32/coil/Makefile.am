@@ -65,11 +65,11 @@ COIL_ALL = $(COIL_SRC) $(COIL_H)
 
 $(COIL_COMMON_SRC):
 	cp -p $(top_srcdir)/common/*.cpp .
-	qkc -ms *.cpp
+	qkc -O- -ms *.cpp
 
 $(COIL_COMMON_H):
 	cp -p $(top_srcdir)/common/*.h .
-	qkc -ms *.h
+	qkc -O- -ms *.h
 
 
 clean-local:
@@ -112,7 +112,7 @@ libcoil_vc8.vcproj: libcoil.vcproj.yaml $(COIL_ALL)
 		--yaml libcoil.vcproj.yaml \
 		--source $(COIL_SRC) \
 		--header $(COIL_H)
-	qkc -sm $(win32_builddir)/libcoil_vc8.vcproj
+	qkc -O- -sm $(win32_builddir)/libcoil_vc8.vcproj
 
 libcoil_vc9.vcproj: libcoil.vcproj.yaml $(COIL_ALL)
 	$(top_builddir)/build/vcprojtool.py vcproj \
@@ -123,7 +123,7 @@ libcoil_vc9.vcproj: libcoil.vcproj.yaml $(COIL_ALL)
 		--yaml libcoil.vcproj.yaml \
 		--source $(COIL_SRC) \
 		--header $(COIL_H)
-	qkc -sm $(win32_builddir)/libcoil_vc9.vcproj
+	qkc -O- -sm $(win32_builddir)/libcoil_vc9.vcproj
 
 libcoil_vc10.vcxproj: libcoil.vcproj.yaml $(COIL_ALL)
 	$(top_builddir)/build/vcxprojtool.py vcxproj \
@@ -134,7 +134,7 @@ libcoil_vc10.vcxproj: libcoil.vcproj.yaml $(COIL_ALL)
 		--yaml libcoil.vcproj.yaml \
 		--source $(COIL_SRC) \
 		--header $(COIL_H)
-	qkc -sm $(win32_builddir)/libcoil_vc10.vcxproj
+	qkc -O- -sm $(win32_builddir)/libcoil_vc10.vcxproj
 
 libcoil_vc11.vcxproj: libcoil.vcproj.yaml $(COIL_ALL)
 	$(top_builddir)/build/vcxprojtool.py vcxproj \
@@ -145,7 +145,7 @@ libcoil_vc11.vcxproj: libcoil.vcproj.yaml $(COIL_ALL)
 		--yaml libcoil.vcproj.yaml \
 		--source $(COIL_SRC) \
 		--header $(COIL_H)
-	qkc -sm $(win32_builddir)/libcoil_vc11.vcxproj
+	qkc -O- -sm $(win32_builddir)/libcoil_vc11.vcxproj
 
 libcoil_vc12.vcxproj: libcoil.vcproj.yaml $(COIL_ALL)
 	$(top_builddir)/build/vcxprojtool.py vcxproj \
@@ -156,7 +156,7 @@ libcoil_vc12.vcxproj: libcoil.vcproj.yaml $(COIL_ALL)
 		--yaml libcoil.vcproj.yaml \
 		--source $(COIL_SRC) \
 		--header $(COIL_H)
-	qkc -sm $(win32_builddir)/libcoil_vc12.vcxproj
+	qkc -O- -sm $(win32_builddir)/libcoil_vc12.vcxproj
 
 #------------------------------------------------------------
 # for wxs file

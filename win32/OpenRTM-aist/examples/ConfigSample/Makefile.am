@@ -14,8 +14,8 @@ src:
 	cp -p $(top_srcdir)/examples/ConfigSample/*.cpp .
 	cp -p $(top_srcdir)/examples/ConfigSample/*.h .
 	cp -p $(top_srcdir)/examples/ConfigSample/*.conf .
-	qkc -ms *.cpp
-	qkc -ms *.h
-	qkc -ms *.conf
+	qkc -O- -ms *.cpp
+	qkc -O- -ms *.h
+	qkc -O- -ms *.conf
 
 dist-hook: src

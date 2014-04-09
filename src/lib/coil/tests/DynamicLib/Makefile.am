@@ -81,7 +81,7 @@ DynamicLib_vc8.vcproj:
 		--yaml ../coil_test.vcproj.yaml \
 		--source $(TEST_SRC)
 #		--header $(TEST_H)
-	qkc -sm $(win32_builddir)/DynamicLib_vc8.vcproj
+	qkc -O- -sm $(win32_builddir)/DynamicLib_vc8.vcproj
 
 DynamicLib_vc9.vcproj:
 	$(top_builddir)/build/vcprojtool.py vcproj \
@@ -93,7 +93,7 @@ DynamicLib_vc9.vcproj:
 		--yaml ../coil_test.vcproj.yaml \
 		--source $(TEST_SRC)
 #		--header $(TEST_H)
-	qkc -sm $(win32_builddir)/DynamicLib_vc9.vcproj
+	qkc -O- -sm $(win32_builddir)/DynamicLib_vc9.vcproj
 
 DynamicLib_vc10.vcproj:
 	$(top_builddir)/build/vcprojtool.py vcproj \
@@ -104,7 +104,7 @@ DynamicLib_vc10.vcproj:
 		--out $(win32_builddir)/DynamicLib_vc10.vcproj \
 		--yaml ../coil_test.vcproj.yaml \
 		--source $(TEST_SRC)
-	qkc -sm $(win32_builddir)/DynamicLib_vc10.vcproj
+	qkc -O- -sm $(win32_builddir)/DynamicLib_vc10.vcproj
 
 DynamicLib_libDynamicLib_vc8.vcproj:
 	$(top_builddir)/build/vcprojtool.py vcproj \
@@ -116,7 +116,7 @@ DynamicLib_libDynamicLib_vc8.vcproj:
 		--yaml ../coil_test_dll.vcproj.yaml \
 		--source $(libDynamicLib_la_SOURCES)
 #		--header $(TEST_H)
-	qkc -sm $(win32_builddir)/DynamicLib_libDynamicLib_vc8.vcproj
+	qkc -O- -sm $(win32_builddir)/DynamicLib_libDynamicLib_vc8.vcproj
 
 
 DynamicLib_libDynamicLib_vc9.vcproj:
@@ -129,7 +129,7 @@ DynamicLib_libDynamicLib_vc9.vcproj:
 		--yaml ../coil_test_dll.vcproj.yaml \
 		--source $(libDynamicLib_la_SOURCES)
 #		--header $(TEST_H)
-	qkc -sm $(win32_builddir)/DynamicLib_libDynamicLib_vc9.vcproj
+	qkc -O- -sm $(win32_builddir)/DynamicLib_libDynamicLib_vc9.vcproj
 
 
 DynamicLib_libDynamicLib_vc10.vcproj:
@@ -141,5 +141,5 @@ DynamicLib_libDynamicLib_vc10.vcproj:
 		--out $(win32_builddir)/DynamicLib_libDynamicLib_vc10.vcproj \
 		--yaml ../coil_test_dll.vcproj.yaml \
 		--source $(libDynamicLib_la_SOURCES)
-	qkc -sm $(win32_builddir)/DynamicLib_libDynamicLib_vc10.vcproj
+	qkc -O- -sm $(win32_builddir)/DynamicLib_libDynamicLib_vc10.vcproj
 

@@ -88,7 +88,7 @@ Configurations:
       - Key: WarningLevel
         Value: "Level3"
       - Key: DebugInformationFormat
-        Value: "EditAndContinue"
+        Value: "ProgramDatabase"
     VC10_VCPreLinkEventTool:
       - Key: Command
         Value: |
@@ -194,7 +194,7 @@ Configurations:
       - Key: WarningLevel
         Value: "Level3"
       - Key: DebugInformationFormat
-        Value: "EditAndContinue"
+        Value: "ProgramDatabase"
     VC10_VCPreLinkEventTool:
       - Key: Command
         Value: |

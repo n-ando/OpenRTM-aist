@@ -74,7 +74,7 @@ Mutex_vc8.vcproj:
 		--yaml ../coil_test.vcproj.yaml \
 		--source $(TEST_SRC)
 #		--header $(TEST_H)
-	qkc -sm $(win32_builddir)/Mutex_vc8.vcproj
+	qkc -O- -sm $(win32_builddir)/Mutex_vc8.vcproj
 
 Mutex_vc9.vcproj:
 	$(top_builddir)/build/vcprojtool.py vcproj \
@@ -86,7 +86,7 @@ Mutex_vc9.vcproj:
 		--yaml ../coil_test.vcproj.yaml \
 		--source $(TEST_SRC)
 #		--header $(TEST_H)
-	qkc -sm $(win32_builddir)/Mutex_vc9.vcproj
+	qkc -O- -sm $(win32_builddir)/Mutex_vc9.vcproj
 
 Mutex_vc10.vcproj:
 	$(top_builddir)/build/vcprojtool.py vcproj \
@@ -98,6 +98,6 @@ Mutex_vc10.vcproj:
 		--yaml ../coil_test.vcproj.yaml \
 		--source $(TEST_SRC)
 #		--header $(TEST_H)
-	qkc -sm $(win32_builddir)/Mutex_vc10.vcproj
+	qkc -O- -sm $(win32_builddir)/Mutex_vc10.vcproj
 
 

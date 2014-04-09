@@ -16,8 +16,8 @@ src:
 	cp -p $(top_srcdir)/examples/SimpleService/*.h .
 	cp -p $(top_srcdir)/examples/SimpleService/*.idl .
 	cp -p $(top_srcdir)/examples/SimpleService/rtc.conf .
-	qkc -ms *.cpp
-	qkc -ms *.h
-	qkc -ms *.idl
+	qkc -O- -ms *.cpp
+	qkc -O- -ms *.h
+	qkc -O- -ms *.idl
 
 dist-hook: src
