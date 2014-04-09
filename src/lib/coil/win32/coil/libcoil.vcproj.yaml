@@ -50,7 +50,7 @@ Configurations:
       - Key: OutputFile
         Value: "$(OutDir)\\coil$(coil_dllver)d.dll"
       - Key: Version
-        Value: __VERSION__
+        Value: $(coil_shortver)
       - Key: LinkIncremental
         Value: "2"
       - Key: ModuleDefinitionFile
@@ -103,7 +103,7 @@ Configurations:
       - Key: OutputFile
         Value: "$(OutDir)\\coil$(coil_dllver)d.dll"
       - Key: Version
-        Value: __VERSION__
+        Value: $(coil_shortver)
       - Key: LinkIncremental
         Value: "true"
       - Key: ModuleDefinitionFile
@@ -156,7 +156,7 @@ Configurations:
       - Key: OutputFile
         Value: "$(OutDir)\\coil$(coil_dllver)d.dll"
       - Key: Version
-        Value: __VERSION__
+        Value: $(coil_shortver)
       - Key: LinkIncremental
         Value: "2"
       - Key: ModuleDefinitionFile
@@ -209,7 +209,7 @@ Configurations:
       - Key: OutputFile
         Value: "$(OutDir)\\coil$(coil_dllver)d.dll"
       - Key: Version
-        Value: __VERSION__
+        Value: $(rtm_shortver)
       - Key: LinkIncremental
         Value: "true"
       - Key: ModuleDefinitionFile
