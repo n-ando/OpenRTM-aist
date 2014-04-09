@@ -9,12 +9,22 @@
 #
 # The following environment variables should be set.
 #
-export OMNI_VERSION=4.1.7
-export OMNITH_VER=3.4
-export PYTHON_DIR=/cygdrive/c/Python27
-export VC_VERSION=10
-export ARCH=x86
-#
+if test "x$OMNI_VERSION" = "x" ; then
+    export OMNI_VERSION=4.1.7
+fi
+if test "x$OMNITH_VER" = "x" ; then
+    export OMNITH_VER=3.4
+fi
+if test "x$PYTHON_DIR" = "x" ; then
+    export PYTHON_DIR=/cygdrive/c/Python27
+fi
+if test "x$VC_VERSION" = "x" ; then
+    export VC_VERSION=10
+fi
+if test "x$ARCH" = "x" ; then
+    export ARCH=x86
+fi
+
 export PATH=/cygdrive/c/cygwin64/bin:$PATH
 echo `pwd`
 
