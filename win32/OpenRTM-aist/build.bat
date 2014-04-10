@@ -35,8 +35,7 @@
 
 set RTM_ROOT=%~dp0
 set COIL_ROOT=%RTM_ROOT%\coil
-
-if not DEFINED OMNI_ROOT  set OMNI_ROOT=C:\work\aaaaa\OpenRTM-aist\omniORB
+set OMNI_ROOT=%RTM_ROOT%\omniORB
 if not DEFINED ARCH       set ARCH=x86_64
 if not DEFINED VC_VERSION set VC_VERSION=10
 if not DEFINED PYTHON_DIR set PYTHON_DIR=c:\python27
