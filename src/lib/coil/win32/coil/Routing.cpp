@@ -17,6 +17,9 @@
  *
  */
 
+#ifndef NTDDI_VERSION
+#define NTDDI_VERSION 0x05000000
+#endif
 
 #include <winsock2.h>
 #include <ws2tcpip.h>

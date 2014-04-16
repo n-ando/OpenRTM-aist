@@ -23,8 +23,11 @@
 #include <string>
 #include <vector>
 #include <sstream>
-#include <stdint.h>
 
+#if defined (_MSC_VER) && (_MSC_VER <=1500) // VC2008(VC9.0) or before
+#else
+#include <stdint.h>
+#endif
 // Cygwin's gcc does not provide wstring type
 #if defined(Cygwin) && ( __GNUC__ < 4 )
 namespace std
