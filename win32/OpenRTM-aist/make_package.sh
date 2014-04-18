@@ -70,8 +70,10 @@ else
 	PY_VER=`echo $PYTHON_DIR | sed 's/.*[Pp][Yy][Tt][Hh][Oo][Nn]\([0-9][0-9]\).*/\1/'`
 fi
 
-NEW_DIR=${OPENRTM_DIR}-${WIN_ARCH}-vc${VC_VERSION}
-ZIP_FILE=${OPENRTM_DIR}-${WIN_ARCH}-vc${VC_VERSION}.zip
+OPENRTM_VER=`grep '^name' ${OPENRTM_DIR}/rtm/version.txt | awk '{print $3;}'`
+
+NEW_DIR=${OPENRTM_VER}-${WIN_ARCH}-vc${VC_VERSION}
+ZIP_FILE=${OPENRTM_VER}-${WIN_ARCH}-vc${VC_VERSION}.zip
 
 echo "NEW_DIR: " ${NEW_DIR}
 echo "OPENRTM_DIR: " ${OPENRTM_DIR}
