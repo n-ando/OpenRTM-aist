@@ -119,7 +119,8 @@ if %VC_VERSION% == 12 (
 :VCBUILDx86
 echo Visual Studio Dir: %VSINSTALLDIR%
 echo LIB: %LIB%
-vcbuild /M2 /rebuild OpenRTM-aist_vc%VC_VERSION%.sln
+vcbuild /M2 /rebuild OpenRTM-aist_vc%VC_VERSION%.sln "release|win32"
+vcbuild /M2 /rebuild OpenRTM-aist_vc%VC_VERSION%.sln "debug|win32"
 goto END
 
 @rem ------------------------------------------------------------
@@ -177,7 +178,8 @@ echo LIB: %LIB%
 :VCBUILDx64
 echo Visual Studio Dir: %VSINSTALLDIR%
 echo LIB: %LIB%
-vcbuild /M2 /rebuild OpenRTM-aist_vc%VC_VERSION%.sln
+vcbuild /M2 /rebuild OpenRTM-aist_vc%VC_VERSION%.sln "release|x64"
+vcbuild /M2 /rebuild OpenRTM-aist_vc%VC_VERSION%.sln "debug|x64"
 goto END
 
 @rem ------------------------------------------------------------
