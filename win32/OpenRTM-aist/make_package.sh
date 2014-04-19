@@ -9,10 +9,18 @@
 #
 # The following environment variables should be set.
 # ex.
-export OPENRTM_DIR=OpenRTM-aist
-export PYTHON_DIR=/cygdrive/c/Python27
-export VC_VERSION=10
-export ARCH=x86
+if test "x$OPENRTM_DIR" = "x" ; then
+    export OPENRTM_DIR=OpenRTM-aist
+fi
+if test "x$PYTHON_DIR" = "x" ; then
+    export PYTHON_DIR=/cygdrive/c/Python27
+fi
+if test "x$VC_VERSION" = "x" ; then
+    export VC_VERSION=10
+fi
+if test "x$ARCH" = "x" ; then
+    export ARCH=x86
+fi
 export PATH=${PATH}:/bin:/usr/bin
 #
 #==============================
