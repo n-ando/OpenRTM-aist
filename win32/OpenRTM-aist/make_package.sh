@@ -44,8 +44,8 @@ echo "Removing auto generated temp files."
 /usr/bin/find ./$OPENRTM_DIR -name 'Makefile' -type f -exec rm {} \;
 /usr/bin/find ./$OPENRTM_DIR -name 'Makefile.in' -type f -exec rm {} \;
 /usr/bin/find ./$OPENRTM_DIR -name 'Makefile.am' -type f -exec rm {} \;
+
 dirs="rtm examples utils"
-dirs=""
 for d in $dirs ; do
 	/usr/bin/find ./$OPENRTM_DIR/$d/ -name '*.obj' -type f -exec rm {} \;
 	/usr/bin/find ./$OPENRTM_DIR/$d/ -name '*.pdb' -type f -exec rm {} \;
