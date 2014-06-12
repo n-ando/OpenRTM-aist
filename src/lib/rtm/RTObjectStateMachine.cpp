@@ -161,8 +161,19 @@ namespace RTC_impl
     if (CORBA::is_nil(m_caVar)) { return; }
     m_ca = true;
     PortableServer::POA_ptr poa = RTC::Manager::instance().getPOA();
-    m_rtobjPtr =
-      dynamic_cast<RTC::RTObject_impl*>(poa->reference_to_servant(comp));
+    try
+      {
+        m_rtobjPtr =
+          dynamic_cast<RTC::RTObject_impl*>(poa->reference_to_servant(comp));
+      }
+    catch (CORBA::SystemException& ex)
+      {
+        m_rtobjPtr = NULL;
+      }
+    catch (...)
+      {
+        m_rtobjPtr = NULL;
+      }
   }
 
   void RTObjectStateMachine::
