@@ -346,7 +346,8 @@ namespace coil
 	coil::eraseHeadBlank(tmp);
 	
 	// Skip comments or empty lines
-	if (tmp[0] == '#' || tmp[0] == '!' || tmp == "") continue;
+	if (tmp.empty()) { continue; }
+    if (tmp[0] == '#' || tmp[0] == '!') { continue; }
 	
 	// line-end '\' continues entry
 	if (tmp[tmp.size() - 1] == '\\' && !coil::isEscaped(tmp, tmp.size() - 1))
@@ -358,7 +359,7 @@ namespace coil
 	pline += tmp;
 	
 	// Skip empty line (made of only ' ' or '\t')
-	if (pline == "") continue;
+	if (pline.empty()) { continue; }
 	
 	std::string key, value;
 	splitKeyValue(pline, key, value);
