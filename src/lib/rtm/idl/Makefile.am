@@ -27,7 +27,11 @@ IDL_SOURCES =             \
 	BasicDataType.idl     \
 	DataPort.idl          \
 	ExtendedDataTypes.idl \
-	InterfaceDataTypes.idl
+	InterfaceDataTypes.idl  \
+	ManipulatorCommonInterface_DataTypes.idl  \
+	ManipulatorCommonInterface_Common.idl     \
+	ManipulatorCommonInterface_Middle.idl     \
+	Img.idl
 endif
 
 SKEL_H   = $(IDL_SOURCES:.idl=Skel.h)
@@ -80,7 +84,11 @@ DUMMY_SKELS =                   \
         BasicDataTypeSkel.h     \
         DataPortSkel.h          \
         ExtendedDataTypesSkel.h \
-        InterfaceDataTypesSkel.h
+        InterfaceDataTypesSkel.h  \
+        ManipulatorCommonInterface_DataTypesSkel.h  \
+        ManipulatorCommonInterface_CommonSkel.h     \
+        ManipulatorCommonInterface_MiddleSkel.h     \
+        ImgSkel.h
 DUMMY_STUBS =                   \
         SDOPackageStub.h        \
         RTCStub.h               \
@@ -89,7 +97,11 @@ DUMMY_STUBS =                   \
         BasicDataTypeStub.h     \
         DataPortStub.h          \
         ExtendedDataTypesStub.h \
-        InterfaceDataTypesStub.h
+        InterfaceDataTypesStub.h  \
+        ManipulatorCommonInterface_DataTypesStub.h  \
+        ManipulatorCommonInterface_CommonStub.h     \
+        ManipulatorCommonInterface_MiddleStub.h     \
+        ImgStub.h
 ORB_SRC = $(RTORB_SRC)
 endif
 
@@ -155,6 +167,10 @@ OpenRTM-aist.idl:
 	echo '#include "Manager.idl"' >> OpenRTM-aist.idl
 	echo '#include "DataPort.idl"' >> OpenRTM-aist.idl
 	echo '#include "InterfaceDataTypes.idl"' >> OpenRTM-aist.idl
+	echo '#include "ManipulatorCommonInterface_DataTypes.idl"' >> OpenRTM-aist.idl
+	echo '#include "ManipulatorCommonInterface_Common.idl"' >> OpenRTM-aist.idl
+	echo '#include "ManipulatorCommonInterface_Middle.idl"' >> OpenRTM-aist.idl
+	echo '#include "Img.idl"' >> OpenRTM-aist.idl
 
 idl-stamp: $(IDL_SOURCES)
 	@touch idl-stamp

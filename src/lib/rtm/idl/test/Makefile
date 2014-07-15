@@ -8,7 +8,11 @@ IDLFILES = \
 	Manager.idl            \
 	OpenRTM.idl            \
 	RTC.idl                \
-	SDOPackage.idl
+	SDOPackage.idl         \
+	ManipulatorCommonInterface_DataTypes.idl  \
+	ManipulatorCommonInterface_Common.idl     \
+	ManipulatorCommonInterface_Middle.idl     \
+	Img.idl
 
 omniidl:
 	rm  -rf omniidl
