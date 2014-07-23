@@ -31,7 +31,7 @@ IDL_SOURCES =             \
 	ManipulatorCommonInterface_DataTypes.idl  \
 	ManipulatorCommonInterface_Common.idl     \
 	ManipulatorCommonInterface_Middle.idl     \
-	Img.idl
+	CameraCommonInterface.idl
 endif
 
 SKEL_H   = $(IDL_SOURCES:.idl=Skel.h)
@@ -170,7 +170,7 @@ OpenRTM-aist.idl:
 	echo '#include "ManipulatorCommonInterface_DataTypes.idl"' >> OpenRTM-aist.idl
 	echo '#include "ManipulatorCommonInterface_Common.idl"' >> OpenRTM-aist.idl
 	echo '#include "ManipulatorCommonInterface_Middle.idl"' >> OpenRTM-aist.idl
-	echo '#include "Img.idl"' >> OpenRTM-aist.idl
+	echo '#include "CameraCommonInterface.idl"' >> OpenRTM-aist.idl
 
 idl-stamp: $(IDL_SOURCES)
 	@touch idl-stamp
