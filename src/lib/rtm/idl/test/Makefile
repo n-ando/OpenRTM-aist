@@ -12,7 +12,7 @@ IDLFILES = \
 	ManipulatorCommonInterface_DataTypes.idl  \
 	ManipulatorCommonInterface_Common.idl     \
 	ManipulatorCommonInterface_Middle.idl     \
-	Img.idl
+	CameraCommonInterface.idl
 
 omniidl:
 	rm  -rf omniidl
