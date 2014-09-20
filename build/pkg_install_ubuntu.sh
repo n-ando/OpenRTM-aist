@@ -14,12 +14,13 @@
 omni="libomniorb4 libomniorb4-dev omniidl4 omniorb4-nameserver omniidl omniorb-nameserver"
 ace="libace libace-dev"
 openrtm="openrtm-aist openrtm-aist-doc openrtm-aist-dev openrtm-aist-example python-yaml"
-openrtm04="openrtm-aist=0.4.2-1 openrtm-aist-doc=0.4.2-1 openrtm-aist-dev=0.4.2-1 openrtm-aist-example=0.4.2-1 python-yaml" 
+openrtm04="openrtm-aist=0.4.2-1 openrtm-aist-doc=0.4.2-1 openrtm-aist-dev=0.4.2-1 openrtm-aist-example=0.4.2-1 python-yaml"
 devel="gcc g++ make uuid-dev libboost-filesystem-dev"
 packages="$devel $omni $openrtm"
 u_packages="$omni $ace $openrtm "
 
-reposervers="www.openrtm.org www.openrtm.de"
+default_reposerver="openrtm.org"
+reposervers="openrtm.org"
 reposerver=""
 
 #---------------------------------------
@@ -78,7 +79,8 @@ check_reposerver()
     done
     if test "x$nearhost" = "x"; then
 	echo "Repository servers unreachable.", $hosts
-	exit 1
+	echo "Check your internet connection. (or are you using proxy?)"
+	nearhost=$default_reposerver
     fi
     reposerver=$nearhost
 }

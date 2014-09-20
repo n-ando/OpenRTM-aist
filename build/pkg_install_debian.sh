@@ -27,7 +27,8 @@ devel="gcc g++ make uuid-dev"
 packages="$devel $omni $pyyaml $openrtm"
 u_packages="$omni $ace $openrtm "
 
-reposervers="www.openrtm.org www.openrtm.de"
+default_reposerver="openrtm.org"
+reposervers="openrtm.org"
 reposerver=""
 }
 
@@ -112,7 +113,8 @@ check_reposerver()
     done
     if test "x$nearhost" = "x"; then
 	echo "Repository servers unreachable.", $hosts
-	exit 1
+	echo "Check your internet connection. (or are you using proxy?)"
+    nearhost=$default_reposerver
     fi
     reposerver=$nearhost
 }
