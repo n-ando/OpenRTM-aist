@@ -24,6 +24,10 @@
 		Name="coil_version"
 		Value="%COIL_VERSION%"
 	/>
+	<UserMacro
+		Name="coil_shortver"
+		Value="%COIL_SHORTVER%"
+	/>
 	<!-- coil macros -->
 	<UserMacro
 		Name="coil_includes"

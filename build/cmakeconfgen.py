@@ -153,6 +153,7 @@ def process_lib(libs, type):
 
 
 if __name__ == '__main__':
+    import os
     if len(sys.argv) < 2:
         print "please specify vsprops file"
         sys.exit(1)
@@ -176,6 +177,22 @@ if __name__ == '__main__':
         value = value.replace("\\", "/")
         value = value.replace("\"", "")
         value = re.sub("(SolutionDir)", "%RTM_ROOT%", value)
+        envs = [
+            "COIL_DLLVER",
+            "COIL_VERSION",
+            "COIL_SHORTVER",
+            "RTM_DLLVER",
+            "RTM_VERSION",
+            "RTM_SHORTVER",
+            "OMNI_DLLVER",
+            "OMNI_VERSION",
+            "OMNI_SHORTVER",
+            "OMNITHREAD_DLLVER",
+            "OMNITHREAD_VERSION",
+            ]
+        for env_str in envs:
+            env_var = "%" + env_str + "%"
+            value = re.sub(env_var, os.environ[env_str], value)
         dict[name] = value
     dict["user_lib"] = ""
     dict["user_libd"] = ""

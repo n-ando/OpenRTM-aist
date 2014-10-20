@@ -5,6 +5,7 @@
     <omnithread_dllver>$(OMNITHREAD_DLLVER)</omnithread_dllver>
     <rtm_dllver>$(RTM_DLLVER)</rtm_dllver>
     <rtm_version>$(RTM_VERSION)</rtm_version>
+    <rtm_shortver>$(RTM_SHORTVER)</rtm_shortver>
     <coil_dllver>$(COIL_DLLVER)</coil_dllver>
     <coil_lib>coil$(coil_dllver).lib</coil_lib>
     <coil_libd>coil$(coil_dllver)d.lib</coil_libd>
@@ -53,6 +54,9 @@
     </BuildMacro>
     <BuildMacro Include="rtm_version">
       <Value>$(rtm_version)</Value>
+    </BuildMacro>
+    <BuildMacro Include="rtm_shortver">
+      <Value>$(rtm_shortver)</Value>
     </BuildMacro>
     <BuildMacro Include="coil_dllver">
       <Value>$(coil_dllver)</Value>

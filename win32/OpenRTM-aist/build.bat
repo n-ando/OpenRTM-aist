@@ -5,7 +5,7 @@
 @rem @author Noriaki Ando <n-ando@aist.go.jp>
 @rem                Copyright (C) 2014 n-ando All Rights Reserved
 @rem
-@rem In order to compile omniORB on Windows, this batch file can be
+@rem In order to compile OpenRTM-aist on Windows, this batch file can be
 @rem used with the following prerequisite tools and environments.
 @rem
 @rem 0. 64bit Windows 7 or later
@@ -26,19 +26,31 @@
 @rem
 @rem Environment vairables required
 @rem
-@rem OMNIORB_SRC: URL to download omniORB source code tar-ball
+@rem OMNI_ROOT: omniORB binary installation dir
 @rem ARCH: x86 or x86_64
 @rem VC_VERSION: 9(=VC2008), 10(=VC2010), 11(=VC2012), 12(=VC2013),....
 @rem PYTHON_DIR: /cygdrive/c/Python27
 @rem
 @rem ============================================================
 
-set PATH=%PATH%;C:\cygwin\bin;C:\cygwin64\bin
 set RTM_ROOT=%~dp0
 set COIL_ROOT=%RTM_ROOT%\coil
-set OMNI_ROOT=C:\work\aaaaa\OpenRTM-aist\omniORB
-set VC_VERSION=10
-set ARCH=x86_64
+
+if not DEFINED OMNI_ROOT  set OMNI_ROOT=C:\work\aaaaa\OpenRTM-aist\omniORB
+if not DEFINED ARCH       set ARCH=x86_64
+if not DEFINED VC_VERSION set VC_VERSION=10
+if not DEFINED PYTHON_DIR set PYTHON_DIR=c:\python27
+
+@rem ------------------------------------------------------------
+@rem Printing env variables
+echo Environment variables:
+echo OMNI_ROOT  : %OMNI_ROOT%
+echo ARCH       : %ARCH%
+echo VC_VERSION : %VC_VERSION%
+echo PYTHON_DIR : %PYTHON_DIR%
+
+set PATH_ORG=%PATH%
+set PATH=%PATH%;C:\cygwin\bin;C:\cygwin64\bin
 set PATH=%OMNI_ROOT%\bin\x86_win32;%PATH%
 
 if %ARCH% == x86       set DLL_ARCH=
@@ -59,11 +71,11 @@ set OMNITHREAD_DLLVER=34
 set OMNITHREAD_VERSION=3.4
 
 @rem ------------------------------------------------------------
-@rem Printing env variables
-echo Environment variables:
-echo ARCH       : %ARCH%
-echo VC_VERSION : %VC_VERSION%
-echo PYTHON_DIR : %PYTHON_DIR%
+@rem Copying Config.cmake
+@rem ------------------------------------------------------------
+%PYTHON_DIR%\python build\cmakeconfgen.py rtm_config.vsprops
+move OpenRTMConfig.cmake cmake
+
 
 @rem ============================================================
 @rem  switching to x86 or x86_64
@@ -71,8 +83,7 @@ echo PYTHON_DIR : %PYTHON_DIR%
 echo ARCH %ARCH%
 if %ARCH% == x86       goto x86
 if %ARCH% == x86_64    goto x86_64
-goto end
-
+goto END
 
 @rem ============================================================
 @rem  Compiling 32bit binaries
@@ -87,18 +98,19 @@ if %VC_VERSION% == 9  (
 if %VC_VERSION% == 10 (
    call "C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\vcvarsall.bat%" x86
    set VCTOOLSET=4.0
-   set VCTargetsPath=C:\Program Files (x86)\MSBuild\Microsoft.Cpp\v4.0
+   set PLATFORMTOOL=
    goto MSBUILDx86
    )
 if %VC_VERSION% == 11 (
    call "C:\Program Files (x86)\Microsoft Visual Studio 11.0\VC\vcvarsall.bat" x86
    set VCTOOLSET=4.0
-   set VCTargetsPath=C:\Program Files (x86)\MSBuild\Microsoft.Cpp\v4.0\v110
+   set PLATFORMTOOL=/p:PlatformToolset=v110
    goto MSBUILDx86
    )
 if %VC_VERSION% == 12 (
    call "C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\vcvarsall.bat" x86
    set VCTOOLSET=12.0
+   set PLATFORMTOOL=/p:PlatformToolset=v120
    goto MSBUILDx86
    )
 
@@ -117,13 +129,14 @@ goto END
 :MSBUILDx86
 echo Visual Studio Dir: %VSINSTALLDIR%
 echo LIB: %LIB%
-set OPT=/M:4 /toolsversion:%VCTOOLSET% /p:platform=Win32
+set OPT=/M:4 /toolsversion:%VCTOOLSET% %PLATFORMTOOL% /p:platform=Win32
 set SLN=OpenRTM-aist_vc%VC_VERSION%.sln
 set LOG=/fileLogger /flp:logfile=debug.log /v:diag 
 
 msbuild /t:clean /p:configuration=debug     %OPT% %SLN%
-msbuild /t:clean /p:configuration=release   %OPT% %SLN%
 msbuild /t:rebuild /p:configuration=debug   %OPT% %LOG% %SLN%
+
+msbuild /t:clean /p:configuration=release   %OPT% %SLN%
 msbuild /t:rebuild /p:configuration=release %OPT% %LOG% %SLN%
 
 goto END
@@ -141,18 +154,19 @@ if /i %VC_VERSION% == 9  (
 if /i %VC_VERSION% == 10 (
    call "C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\vcvarsall.bat" amd64
    set VCTOOLSET=4.0
-   set VCTargetsPath=C:\Program Files (x86)\MSBuild\Microsoft.Cpp\v4.0
+   set PLATFORMTOOL=
    goto MSBUILDx64
    )
 if /i %VC_VERSION% == 11 (
    call "C:\Program Files (x86)\Microsoft Visual Studio 11.0\VC\vcvarsall.bat" amd64
    set VCTOOLSET=4.0
-   set VCTargetsPath=C:\Program Files (x86)\MSBuild\Microsoft.Cpp\v4.0\v110
+   set PLATFORMTOOL=/p:PlatformToolset=v110
    goto MSBUILDx64
    )
 if /i %VC_VERSION% == 12 (
    call "C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\vcvarsall.bat" amd64
    set VCTOOLSET=12.0
+   set PLATFORMTOOL=/p:PlatformToolset=v120
    goto MSBUILDx64
    )
 echo Visual Studio Dir: %VSINSTALLDIR%
@@ -173,14 +187,17 @@ goto END
 :MSBUILDx64
 echo Visual Studio Dir: %VSINSTALLDIR%
 echo LIB: %LIB%
-set OPT=/M:4 /toolsversion:%VCTOOLSET% /p:platform=x64
+set OPT=/M:4 /toolsversion:%VCTOOLSET% %PLATFORMTOOL% /p:platform=x64
 set SLN=OpenRTM-aist_vc%VC_VERSION%.sln
 set LOG=/fileLogger /flp:logfile=debug.log /v:diag 
+
 msbuild /t:clean /p:configuration=debug     %OPT% %SLN%
-msbuild /t:clean /p:configuration=release   %OPT% %SLN%
 msbuild /t:rebuild /p:configuration=debug   %OPT% %LOG% %SLN%
+
+msbuild /t:clean /p:configuration=release   %OPT% %SLN%
 msbuild /t:rebuild /p:configuration=release %OPT% %LOG% %SLN%
 
 goto END
 
 :END
+set PATH=%PATH_ORG%
