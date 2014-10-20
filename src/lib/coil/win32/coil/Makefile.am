@@ -143,7 +143,7 @@ libcoil_vc11.vcxproj: libcoil.vcproj.yaml $(COIL_ALL)
 		--yaml libcoil.vcproj.yaml \
 		--source $(COIL_SRC) \
 		--header $(COIL_H)
-	qkc -O- -sm $(win32_builddir)/libcoil_vc11.vcxproj
+	qkc -sm $(win32_builddir)/libcoil_vc11.vcxproj
 
 libcoil_vc12.vcxproj: libcoil.vcproj.yaml $(COIL_ALL)
 	$(top_builddir)/build/vcxprojtool.py vcxproj \
@@ -154,7 +154,7 @@ libcoil_vc12.vcxproj: libcoil.vcproj.yaml $(COIL_ALL)
 		--yaml libcoil.vcproj.yaml \
 		--source $(COIL_SRC) \
 		--header $(COIL_H)
-	qkc -O- -sm $(win32_builddir)/libcoil_vc12.vcxproj
+	qkc -sm $(win32_builddir)/libcoil_vc12.vcxproj
 
 #------------------------------------------------------------
 # for wxs file

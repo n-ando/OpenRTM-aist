@@ -292,7 +292,7 @@ vc11proj:
 		--yaml ../rtc.vcproj.yaml                            \
 		--source $(PROVIDER_COMP_SRC)                        \
 		--header $(PROVIDER_H)
-	qkc -O- -sm $(win32_builddir)/MyServiceProvider_vc11.vcxproj
+	qkc -sm $(win32_builddir)/MyServiceProvider_vc11.vcxproj
 	$(top_builddir)/build/vcxprojtool.py vcxproj                      \
 		--type DLL                                              \
 		--vcversion "11.00"                                      \
@@ -302,7 +302,7 @@ vc11proj:
 		--yaml ../rtcdll.vcproj.yaml                            \
 		--source $(PROVIDER_SRC)                                \
 		--header $(PROVIDER_H)
-	qkc -O- -sm $(win32_builddir)/MyServiceProviderDll_vc11.vcxproj
+	qkc -sm $(win32_builddir)/MyServiceProviderDll_vc11.vcxproj
 	$(top_builddir)/build/vcxprojtool.py vcxproj                   \
 		--type EXE                                           \
 		--vcversion "11.00"                                   \
@@ -312,7 +312,7 @@ vc11proj:
 		--yaml ../rtc.vcproj.yaml                            \
 		--source $(CONSUMER_COMP_SRC)                        \
 		--header $(CONSUMER_H)
-	qkc -O- -sm $(win32_builddir)/MyServiceConsumer_vc11.vcxproj
+	qkc -sm $(win32_builddir)/MyServiceConsumer_vc11.vcxproj
 	$(top_builddir)/build/vcxprojtool.py vcxproj                      \
 		--type DLL                                              \
 		--vcversion "11.00"                                      \
@@ -322,7 +322,7 @@ vc11proj:
 		--yaml ../rtcdll.vcproj.yaml                            \
 		--source $(CONSUMER_COMP_SRC)                           \
 		--header $(CONSUMER_H)
-	qkc -O- -sm $(win32_builddir)/MyServiceConsumerDll_vc11.vcxproj
+	qkc -sm $(win32_builddir)/MyServiceConsumerDll_vc11.vcxproj
 
 vc12proj: 
 	$(top_builddir)/build/vcxprojtool.py vcxproj                   \
@@ -334,7 +334,7 @@ vc12proj:
 		--yaml ../rtc.vcproj.yaml                            \
 		--source $(PROVIDER_COMP_SRC)                        \
 		--header $(PROVIDER_H)
-	qkc -O- -sm $(win32_builddir)/MyServiceProvider_vc12.vcxproj
+	qkc -sm $(win32_builddir)/MyServiceProvider_vc12.vcxproj
 	$(top_builddir)/build/vcxprojtool.py vcxproj                      \
 		--type DLL                                              \
 		--vcversion "12.00"                                      \
@@ -344,7 +344,7 @@ vc12proj:
 		--yaml ../rtcdll.vcproj.yaml                            \
 		--source $(PROVIDER_SRC)                                \
 		--header $(PROVIDER_H)
-	qkc -O- -sm $(win32_builddir)/MyServiceProviderDll_vc12.vcxproj
+	qkc -sm $(win32_builddir)/MyServiceProviderDll_vc12.vcxproj
 	$(top_builddir)/build/vcxprojtool.py vcxproj                   \
 		--type EXE                                           \
 		--vcversion "12.00"                                   \
@@ -354,7 +354,7 @@ vc12proj:
 		--yaml ../rtc.vcproj.yaml                            \
 		--source $(CONSUMER_COMP_SRC)                        \
 		--header $(CONSUMER_H)
-	qkc -O- -sm $(win32_builddir)/MyServiceConsumer_vc12.vcxproj
+	qkc -sm $(win32_builddir)/MyServiceConsumer_vc12.vcxproj
 	$(top_builddir)/build/vcxprojtool.py vcxproj                      \
 		--type DLL                                              \
 		--vcversion "12.00"                                      \
@@ -364,7 +364,7 @@ vc12proj:
 		--yaml ../rtcdll.vcproj.yaml                            \
 		--source $(CONSUMER_COMP_SRC)                           \
 		--header $(CONSUMER_H)
-	qkc -O- -sm $(win32_builddir)/MyServiceConsumerDll_vc12.vcxproj
+	qkc -sm $(win32_builddir)/MyServiceConsumerDll_vc12.vcxproj
 
 dist-hook: lst vcproj
 

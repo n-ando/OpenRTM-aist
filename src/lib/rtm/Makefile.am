@@ -210,7 +210,7 @@ vc11proj: libRTC.vcproj.yaml
 		--yaml libRTC.vcproj.yaml \
 		--source $(RTC_SRC) \
 		--header $(rtmheader_HEADERS)
-	qkc -O- -sm $(win32_builddir)/rtm/libRTC_vc11.vcxproj
+	qkc -sm $(win32_builddir)/rtm/libRTC_vc11.vcxproj
 
 vc12proj: libRTC.vcproj.yaml
 	$(top_builddir)/build/vcxprojtool.py vcxproj \
@@ -221,7 +221,7 @@ vc12proj: libRTC.vcproj.yaml
 		--yaml libRTC.vcproj.yaml \
 		--source $(RTC_SRC) \
 		--header $(rtmheader_HEADERS)
-	qkc -O- -sm $(win32_builddir)/rtm/libRTC_vc12.vcxproj
+	qkc -sm $(win32_builddir)/rtm/libRTC_vc12.vcxproj
 
 #------------------------------------------------------------
 # for wxs file

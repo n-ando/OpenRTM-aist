@@ -257,7 +257,7 @@ vc11proj: libRTCSkel.vcproj.yaml
 		--yaml libRTCSkel.vcproj.yaml \
 		--source $(SKEL_CPP) \
 		--header $(SKEL_H)
-	qkc -O- -sm $(win32_builddir)/rtm/idl/libRTCSkel_vc11.vcxproj
+	qkc -sm $(win32_builddir)/rtm/idl/libRTCSkel_vc11.vcxproj
 
 vc12proj: libRTCSkel.vcproj.yaml
 	$(top_builddir)/build/vcxprojtool.py vcxproj \
@@ -268,7 +268,7 @@ vc12proj: libRTCSkel.vcproj.yaml
 		--yaml libRTCSkel.vcproj.yaml \
 		--source $(SKEL_CPP) \
 		--header $(SKEL_H)
-	qkc -O- -sm $(win32_builddir)/rtm/idl/libRTCSkel_vc12.vcxproj
+	qkc -sm $(win32_builddir)/rtm/idl/libRTCSkel_vc12.vcxproj
 
 #------------------------------------------------------------
 # for wxs file
