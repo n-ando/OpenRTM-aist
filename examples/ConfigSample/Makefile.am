@@ -148,7 +148,7 @@ vc11proj:
 		--yaml ../rtc.vcproj.yaml                       \
 		--source ConfigSample.cpp ConfigSampleComp.cpp  \
 		--header ConfigSample.h VectorConvert.h
-	qkc -sm $(win32_builddir)/ConfigSample_vc11.vcxproj
+	qkc -O- -sm $(win32_builddir)/ConfigSample_vc11.vcxproj
 	$(top_builddir)/build/vcxprojtool.py vcxproj                 \
 		--type DLL                                         \
 		--vcversion "11.00"                                 \
@@ -158,7 +158,7 @@ vc11proj:
 		--yaml ../rtcdll.vcproj.yaml                       \
 		--source ConfigSample.cpp                          \
 		--header ConfigSample.h VectorConvert.h
-	qkc -sm $(win32_builddir)/ConfigSampleDll_vc11.vcxproj
+	qkc -O- -sm $(win32_builddir)/ConfigSampleDll_vc11.vcxproj
 
 vc12proj:
 	$(top_builddir)/build/vcxprojtool.py vcxproj              \
@@ -170,7 +170,7 @@ vc12proj:
 		--yaml ../rtc.vcproj.yaml                       \
 		--source ConfigSample.cpp ConfigSampleComp.cpp  \
 		--header ConfigSample.h VectorConvert.h
-	qkc -sm $(win32_builddir)/ConfigSample_vc12.vcxproj
+	qkc -O- -sm $(win32_builddir)/ConfigSample_vc12.vcxproj
 	$(top_builddir)/build/vcxprojtool.py vcxproj                 \
 		--type DLL                                         \
 		--vcversion "12.00"                                 \
@@ -180,7 +180,7 @@ vc12proj:
 		--yaml ../rtcdll.vcproj.yaml                       \
 		--source ConfigSample.cpp                          \
 		--header ConfigSample.h VectorConvert.h
-	qkc -sm $(win32_builddir)/ConfigSampleDll_vc12.vcxproj
+	qkc -O- -sm $(win32_builddir)/ConfigSampleDll_vc12.vcxproj
 
 dist-hook: lst vcproj
 

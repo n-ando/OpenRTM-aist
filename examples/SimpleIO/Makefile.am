@@ -235,7 +235,7 @@ vc11proj:
 		--yaml ../rtc.vcproj.yaml                    \
 		--source ConsoleIn.cpp ConsoleInComp.cpp     \
 		--header ConsoleIn.h
-	qkc -sm $(win32_builddir)/ConsoleIn_vc11.vcxproj
+	qkc -O- -sm $(win32_builddir)/ConsoleIn_vc11.vcxproj
 	$(top_builddir)/build/vcxprojtool.py vcxproj              \
 		--type DLL                                      \
 		--vcversion "11.00"                              \
@@ -245,7 +245,7 @@ vc11proj:
 		--yaml ../rtcdll.vcproj.yaml                    \
 		--source ConsoleIn.cpp                          \
 		--header ConsoleIn.h
-	qkc -sm $(win32_builddir)/ConsoleInDll_vc11.vcxproj
+	qkc -O- -sm $(win32_builddir)/ConsoleInDll_vc11.vcxproj
 	$(top_builddir)/build/vcxprojtool.py vcxproj            \
 		--type EXE                                    \
 		--vcversion "11.00"                            \
@@ -255,7 +255,7 @@ vc11proj:
 		--yaml ../rtc.vcproj.yaml                     \
 		--source ConsoleOut.cpp ConsoleOutComp.cpp    \
 		--header ConsoleOut.h
-	qkc -sm $(win32_builddir)/ConsoleOut_vc11.vcxproj
+	qkc -O- -sm $(win32_builddir)/ConsoleOut_vc11.vcxproj
 	$(top_builddir)/build/vcxprojtool.py vcxproj               \
 		--type DLL                                       \
 		--vcversion "11.00"                               \
@@ -265,7 +265,7 @@ vc11proj:
 		--yaml ../rtcdll.vcproj.yaml                     \
 		--source ConsoleOut.cpp                          \
 		--header ConsoleOut.h
-	qkc -sm $(win32_builddir)/ConsoleOutDll_vc11.vcxproj
+	qkc -O- -sm $(win32_builddir)/ConsoleOutDll_vc11.vcxproj
 
 vc12proj:
 	$(top_builddir)/build/vcxprojtool.py vcxproj           \
@@ -277,7 +277,7 @@ vc12proj:
 		--yaml ../rtc.vcproj.yaml                    \
 		--source ConsoleIn.cpp ConsoleInComp.cpp     \
 		--header ConsoleIn.h
-	qkc -sm $(win32_builddir)/ConsoleIn_vc12.vcxproj
+	qkc -O- -sm $(win32_builddir)/ConsoleIn_vc12.vcxproj
 	$(top_builddir)/build/vcxprojtool.py vcxproj              \
 		--type DLL                                      \
 		--vcversion "12.00"                              \
@@ -287,7 +287,7 @@ vc12proj:
 		--yaml ../rtcdll.vcproj.yaml                    \
 		--source ConsoleIn.cpp                          \
 		--header ConsoleIn.h
-	qkc -sm $(win32_builddir)/ConsoleInDll_vc12.vcxproj
+	qkc -O- -sm $(win32_builddir)/ConsoleInDll_vc12.vcxproj
 	$(top_builddir)/build/vcxprojtool.py vcxproj            \
 		--type EXE                                    \
 		--vcversion "12.00"                            \
@@ -297,7 +297,7 @@ vc12proj:
 		--yaml ../rtc.vcproj.yaml                     \
 		--source ConsoleOut.cpp ConsoleOutComp.cpp    \
 		--header ConsoleOut.h
-	qkc -sm $(win32_builddir)/ConsoleOut_vc12.vcxproj
+	qkc -O- -sm $(win32_builddir)/ConsoleOut_vc12.vcxproj
 	$(top_builddir)/build/vcxprojtool.py vcxproj               \
 		--type DLL                                       \
 		--vcversion "12.00"                               \
@@ -307,7 +307,7 @@ vc12proj:
 		--yaml ../rtcdll.vcproj.yaml                     \
 		--source ConsoleOut.cpp                          \
 		--header ConsoleOut.h
-	qkc -sm $(win32_builddir)/ConsoleOutDll_vc12.vcxproj
+	qkc -O- -sm $(win32_builddir)/ConsoleOutDll_vc12.vcxproj
 
 dist-hook: lst vcproj
 
