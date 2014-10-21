@@ -9,10 +9,18 @@
 #
 # The following environment variables should be set.
 # ex.
-export OPENRTM_DIR=OpenRTM-aist
-export PYTHON_DIR=/cygdrive/c/Python27
-export VC_VERSION=10
-export ARCH=x86
+if test "x$OPENRTM_DIR" = "x" ; then
+    export OPENRTM_DIR=OpenRTM-aist
+fi
+if test "x$PYTHON_DIR" = "x" ; then
+    export PYTHON_DIR=/cygdrive/c/Python27
+fi
+if test "x$VC_VERSION" = "x" ; then
+    export VC_VERSION=10
+fi
+if test "x$ARCH" = "x" ; then
+    export ARCH=x86
+fi
 export PATH=${PATH}:/bin:/usr/bin
 #
 #==============================
@@ -36,8 +44,8 @@ echo "Removing auto generated temp files."
 /usr/bin/find ./$OPENRTM_DIR -name 'Makefile' -type f -exec rm {} \;
 /usr/bin/find ./$OPENRTM_DIR -name 'Makefile.in' -type f -exec rm {} \;
 /usr/bin/find ./$OPENRTM_DIR -name 'Makefile.am' -type f -exec rm {} \;
+
 dirs="rtm examples utils"
-dirs=""
 for d in $dirs ; do
 	/usr/bin/find ./$OPENRTM_DIR/$d/ -name '*.obj' -type f -exec rm {} \;
 	/usr/bin/find ./$OPENRTM_DIR/$d/ -name '*.pdb' -type f -exec rm {} \;
@@ -70,8 +78,10 @@ else
 	PY_VER=`echo $PYTHON_DIR | sed 's/.*[Pp][Yy][Tt][Hh][Oo][Nn]\([0-9][0-9]\).*/\1/'`
 fi
 
-NEW_DIR=${OPENRTM_DIR}-${WIN_ARCH}-vc${VC_VERSION}
-ZIP_FILE=${OPENRTM_DIR}-${WIN_ARCH}-vc${VC_VERSION}.zip
+OPENRTM_VER=`grep '^name' ${OPENRTM_DIR}/rtm/version.txt | awk '{print $3;}'`
+
+NEW_DIR=${OPENRTM_VER}-${WIN_ARCH}-vc${VC_VERSION}
+ZIP_FILE=${OPENRTM_VER}-${WIN_ARCH}-vc${VC_VERSION}.zip
 
 echo "NEW_DIR: " ${NEW_DIR}
 echo "OPENRTM_DIR: " ${OPENRTM_DIR}
