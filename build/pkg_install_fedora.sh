@@ -29,7 +29,8 @@ openrtm04="OpenRTM-aist-0.4.2 OpenRTM-aist-devel-0.4.2 OpenRTM-aist-doc-0.4.2 Op
 devel="gcc-c++ uuid-devel libuuid-devel"
 packages="$devel $omni $openrtm"
 
-reposervers="www.openrtm.org www.openrtm.de"
+default_reposerver="openrtm.org"
+reposervers="openrtm.org"
 reposerver=""
 
 #----------------------------------------
@@ -75,7 +76,8 @@ check_reposerver()
     done
     if test "x$nearhost" = "x"; then
 	echo "Repository servers unreachable.", $hosts
-	exit 1
+    echo "Check your internet connection. (or are you using proxy?)"
+    nearhost=$default_reposerver
     fi
     reposerver=$nearhost
 }
