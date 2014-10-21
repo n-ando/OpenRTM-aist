@@ -24,6 +24,10 @@
 #include <vector>
 #include <sstream>
 
+#if defined (_MSC_VER) && (_MSC_VER <=1500) // VC2008(VC9.0) or before
+#else
+#include <stdint.h>
+#endif
 // Cygwin's gcc does not provide wstring type
 #if defined(Cygwin) && ( __GNUC__ < 4 )
 namespace std
@@ -632,6 +636,109 @@ namespace coil
 
   /*!
    * @if jp
+   * @brief 与えられた文字列をboolに変換
+   *
+   * 引数で与えられた文字列をboolに変換する。true/false を指定するため
+   * に以下の文字列が使用可能。大文字と小文字の区別はない。
+   *
+   * - true: 1, true, yes, on
+   * - true: 0, false, no, off
+   *
+   * @param val 変換先文字列
+   * @param str 変換元文字列
+   *
+   * @return true: 成功, false: 失敗
+   *
+   * @else
+   * @brief Convert the given string to bool
+   *
+   * Convert string given by the argument to bool. The following
+   * string can be used to specify true/false. Given string is not
+   * case-sensitive.
+   *
+   * - true: 1, true, yes, on
+   * - true: 0, false, no, off
+   *
+   * @param val String of conversion destination
+   * @param str String of conversion source
+   *
+   * @return true: successful, false: failed
+   *
+   * @endif
+   */
+  template <>
+  bool stringTo<bool>(bool& val, const char* str);
+
+  /*!
+   * @if jp
+   * @brief ポインタを16進数文字列に変換する
+   *
+   * 引数で与えられた文字列を16進数文字列に変換する。変換された文字列の
+   * 先頭には "0x" が付加される。
+   *
+   * @param ptr ポインタ
+   *
+   * @return 16進数文字列
+   *
+   * @else
+   * @brief Converting a pointer to hexadecimal string
+   *
+   * This function converts given string to hexadecimal string. "0x"
+   * will be added the head of the converted string.
+   *
+   * @param ptr A pointer to be converted
+   *
+   * @return Hexadecimal string
+   *
+   * @endif
+   */
+  template<class T>
+  std::string ptrToHex(T* n)
+  {
+    std::stringstream ss;
+    ss << std::hex << std::showbase;
+    ss << reinterpret_cast<uintptr_t>(n);
+    return ss.str();
+  };
+
+  /*!
+   * @if jp
+   * @brief 16進数文字列をポインタに変換する
+   *
+   * 引数で与えられた16進数文字列を文字列をに変換する。文字列の
+   * 先頭には "0x" が付加されているべきである。
+   *
+   * @param ptr ポインタ
+   * @param str 16進数文字列
+   * @return 変換が成功したら true、それ以外は false
+   *
+   * @else
+   * @brief Converting hexadecimal string to a pointer
+   *
+   * This function converts given hexadecimal string to a
+   * pointer. Hexadecimal string should have "0x" string in the head
+   * of string.
+   *
+   * @param ptr Pointer
+   * @param str Hexadeciaml string
+   * @return True will be returned when conversion successful
+   *
+   * @endif
+   */
+  template <class T>
+  bool hexToPtr(T*& ptr, const std::string str)
+  {
+    std::stringstream s;
+    if ((s << std::hex << str).fail()) { return false; }
+    uintptr_t intval;
+    if ((s >> intval).fail()) { return false; }
+    ptr = reinterpret_cast<T*>(intval);
+    if (ptr == NULL) { return false; }
+    return true;
+  }
+
+  /*!
+   * @if jp
    * @brief 与えられた文字列リストから重複を削除
    *
    * 引数で与えられた文字列リストから重複を削除したリストを作成する。
@@ -662,6 +769,7 @@ namespace coil
    * 文字列リストが空の場合には空白文字を返す。
    *
    * @param sv CSV変換対象文字列リスト
+   * @param delimiter 接続される文字列の間の文字 (デフォルト: ", ")
    *
    * @return CSV変換結果文字列
    *
@@ -673,12 +781,13 @@ namespace coil
    * If the string list is empty, the null will be returned.
    *
    * @param sv The target string list for creating CSV
+   * @param delimiter Delimiter string between connected words (default: ",")
    *
    * @return String of CSV creating result
    *
    * @endif
    */
-  std::string flatten(vstring sv);
+  std::string flatten(vstring sv, std::string delimiter = ", ");
   
   /*!
    * @if jp
