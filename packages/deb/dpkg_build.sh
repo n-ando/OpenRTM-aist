@@ -86,36 +86,30 @@ fi
 #------------------------------------------------------------
 # create "files" file
 #------------------------------------------------------------
-if test ! -f "files" ; then
-    PKGVER=`head -n 1 changelog | sed 's/.*(\([0-9\.\-]*\).*/\1/'`
-    echo "openrtm-aist_"${PKGVER}"_amd64.deb main extra" > files
-    echo "openrtm-aist-dev_"${PKGVER}"_amd64.deb main extra" >> files
-    echo "openrtm-aist-example_"${PKGVER}"_amd64.deb main extra" >> files
-    echo "openrtm-aist-doc_"${PKGVER}"_all.deb main extra" >> files
-fi
+#if test ! -f "files" ; then
+#    PKGVER=`head -n 1 changelog | sed 's/.*(\([0-9\.\-]*\).*/\1/'`
+#    echo "openrtm-aist_"${PKGVER}"_amd64.deb main extra" > files
+#    echo "openrtm-aist-dev_"${PKGVER}"_amd64.deb main extra" >> files
+#    echo "openrtm-aist-example_"${PKGVER}"_amd64.deb main extra" >> files
+#    echo "openrtm-aist-doc_"${PKGVER}"_all.deb main extra" >> files
+#fi
 
 #------------------------------------------------------------
 # package build process
 #------------------------------------------------------------
 packagedir=`pwd`/../../
-mkdir $packagedir/debian
-
 rm -f $packagedir/packages/openrtm-aist*
 
-cp README.Debian $packagedir/debian/
-cp changelog $packagedir/debian/
-cp compat $packagedir/debian/
-cp control $packagedir/debian/
-cp copyright $packagedir/debian/
-cp dirs $packagedir/debian/
-cp docs $packagedir/debian/
-cp files $packagedir/debian/
-chmod 444 $packagedir/debian/files
-cp rules $packagedir/debian/
+cp -r debian $packagedir
 chmod 755 $packagedir/debian/rules
+if test -f $packagedir/debian/control.$DISTRIB_CODENAME; then
+    mv $packagedir/debian/control /tmp/control.$$
+    cp $packagedir/debian/control.$DISTRIB_CODENAME $packagedir/debian/control
+fi
 
 cd $packagedir
-
+rm -f config.status
 dpkg-buildpackage -W -us -uc -rfakeroot
 
 mv $packagedir/../openrtm-aist* $packagedir/packages/
+mv /tmp/control.$$ $packagedir/debian/control

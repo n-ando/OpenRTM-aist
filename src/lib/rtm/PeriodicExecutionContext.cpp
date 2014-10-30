@@ -5,8 +5,9 @@
  * @date $Date: 2008-01-14 07:53:01 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
- * Copyright (C) 2006-2008,2012
+ * Copyright (C) 2006-2008
  *     Noriaki Ando
+ *     Task-intelligence Research Group,
  *     Intelligent Systems Research Institute,
  *     National Institute of
  *         Advanced Industrial Science and Technology (AIST), Japan
@@ -16,17 +17,15 @@
  *
  */
 
+#include <coil/Time.h>
+#include <coil/TimeValue.h>
+#include <rtm/PeriodicExecutionContext.h>
+#include <rtm/RTObject.h>
 #include <algorithm>
 #include <iostream>
 
-#include <coil/Time.h>
-#include <coil/TimeValue.h>
-
-#include <rtm/PeriodicExecutionContext.h>
-#include <rtm/RTObjectStateMachine.h>
-
 #define DEEFAULT_PERIOD 0.000001
-namespace RTC_exp
+namespace RTC
 {
   /*!
    * @if jp
@@ -37,23 +36,56 @@ namespace RTC_exp
    */
   PeriodicExecutionContext::
   PeriodicExecutionContext()
-    : ExecutionContextBase("periodic_ec"),
-      rtclog("periodic_ec"),
-      m_svc(false), m_nowait(false)
+    : rtclog("periodic_ec"), m_running(false), m_svc(true), m_nowait(false)
   {
     RTC_TRACE(("PeriodicExecutionContext()"));
 
+    m_period = (double)DEEFAULT_PERIOD;
+    RTC_DEBUG(("Actual rate: %d [sec], %d [usec]",
+               m_period.sec(), m_period.usec()));
+
     // getting my reference
-    setObjRef(this->_this());
+    m_ref = this->_this();
 
     // profile initialization
-    setKind(RTC::PERIODIC);
-    setRate(1.0 / (double)DEEFAULT_PERIOD);
-
-    RTC_DEBUG(("Actual period: %d [sec], %d [usec]",
-               m_profile.getPeriod().sec(), m_profile.getPeriod().usec()));
+    m_profile.kind = PERIODIC;
+    m_profile.rate = 1.0 / m_period;
+    m_profile.owner = RTC::RTObject::_nil();
+    m_profile.participants.length(0);
+    m_profile.properties.length(0);
   }
+  
+  /*!
+   * @if jp
+   * @brief コンストラクタ
+   * @else
+   * @brief Construnctor
+   * @endif
+   */
+  PeriodicExecutionContext::
+  PeriodicExecutionContext(OpenRTM::DataFlowComponent_ptr owner,
+			   double rate)
+    : rtclog("periodic_ec"), m_running(false), m_svc(true), m_nowait(true)
+  {
+    RTC_TRACE(("PeriodicExecutionContext(owner, rate = %f)", rate));
 
+    if (rate == 0) { rate = 1.0 / DEEFAULT_PERIOD; }
+    m_period = coil::TimeValue(1.0 / rate);
+    if (m_period < 0.000001) { m_nowait = true; }
+    RTC_DEBUG(("Actual rate: %d [sec], %d [usec]",
+               m_period.sec(), m_period.usec()));
+
+    // getting my reference
+    m_ref = this->_this();
+
+    // profile initialization
+    m_profile.kind = PERIODIC;
+    m_profile.rate = 1.0 / m_period;
+    m_profile.owner = RTC::RTObject::_nil();
+    m_profile.participants.length(0);
+    m_profile.properties.length(0);
+  }
+  
   /*!
    * @if jp
    * @brief デストラクタ
@@ -64,18 +96,19 @@ namespace RTC_exp
   PeriodicExecutionContext::~PeriodicExecutionContext()
   {
     RTC_TRACE(("~PeriodicExecutionContext()"));
-    {
-      Guard guard(m_svcmutex);
-      m_svc = false;
-    }
-    {
-      Guard guard(m_workerthread.mutex_);
-      m_workerthread.running_ = true;
-      m_workerthread.cond_.signal();
-    }
+    m_worker.mutex_.lock();
+    m_worker.running_ = true;
+    m_worker.cond_.signal();
+    m_worker.mutex_.unlock();
+    m_svc = false;
     wait();
-  }
 
+    // cleanup EC's profile
+    m_profile.owner = RTC::RTObject::_nil();
+    m_profile.participants.length(0);
+    m_profile.properties.length(0);
+  }
+  
   /*------------------------------------------------------------
    * Start activity
    * ACE_Task class method over ride.
@@ -93,7 +126,7 @@ namespace RTC_exp
     activate();
     return 0;
   }
-
+  
   /*------------------------------------------------------------
    * Run by a daemon thread to handle deferred processing
    * ACE_Task class method over ride.
@@ -109,36 +142,31 @@ namespace RTC_exp
   {
     RTC_TRACE(("svc()"));
     int count(0);
-    do
+    do 
       {
-        ExecutionContextBase::invokeWorkerPreDo();
-        // Thread will stopped when all RTCs are INACTIVE.
-        // Therefore WorkerPreDo(updating state) have to be invoked
-        // before stopping thread.
-        {
-          Guard guard(m_workerthread.mutex_);
-          while (!m_workerthread.running_)
-            {
-              m_workerthread.cond_.wait();
-            }
-        }
+        m_worker.mutex_.lock();
+	while (!m_worker.running_)
+	  {
+	    m_worker.cond_.wait();
+	  }
         coil::TimeValue t0(coil::gettimeofday());
-        ExecutionContextBase::invokeWorkerDo();
-        ExecutionContextBase::invokeWorkerPostDo();
+	if (m_worker.running_)
+	  {
+	    std::for_each(m_comps.begin(), m_comps.end(), invoke_worker());
+	  }
+	m_worker.mutex_.unlock();
         coil::TimeValue t1(coil::gettimeofday());
-
-        coil::TimeValue period(getPeriod());
         if (count > 1000)
           {
-            RTC_PARANOID(("Period:    %f [s]", (double)period));
+            RTC_PARANOID(("Period:    %f [s]", (double)m_period));
             RTC_PARANOID(("Execution: %f [s]", (double)(t1 - t0)));
-            RTC_PARANOID(("Sleep:     %f [s]", (double)(period - (t1 - t0))));
+            RTC_PARANOID(("Sleep:     %f [s]", (double)(m_period - (t1 - t0))));
           }
         coil::TimeValue t2(coil::gettimeofday());
-        if (!m_nowait && period > (t1 - t0))
+        if (!m_nowait && m_period > (t1 - t0))
           {
             if (count > 1000) { RTC_PARANOID(("sleeping...")); }
-            coil::sleep((coil::TimeValue)(period - (t1 - t0)));
+            coil::sleep((coil::TimeValue)(m_period - (t1 - t0)));
           }
         if (count > 1000)
           {
@@ -147,11 +175,11 @@ namespace RTC_exp
             count = 0;
           }
         ++count;
-      } while (threadRunning());
-    RTC_DEBUG(("Thread terminated."));
+      } while (m_svc);
+
     return 0;
   }
-
+  
   /*!
    * @if jp
    * @brief ExecutionContext 用のスレッド実行関数
@@ -162,14 +190,16 @@ namespace RTC_exp
   int PeriodicExecutionContext::close(unsigned long flags)
   {
     RTC_TRACE(("close()"));
+    
     // At this point, this component have to be finished.
     // Current state and Next state should be RTC_EXITING.
+    //    delete this;
     return 0;
   }
-
-
+  
+  
   //============================================================
-  // ExecutionContext CORBA operations
+  // ExecutionContext
   //============================================================
   /*!
    * @if jp
@@ -181,9 +211,10 @@ namespace RTC_exp
   CORBA::Boolean PeriodicExecutionContext::is_running()
     throw (CORBA::SystemException)
   {
-    return ExecutionContextBase::isRunning();
+    RTC_TRACE(("is_running()"));
+    return m_running;
   }
-
+  
   /*!
    * @if jp
    * @brief ExecutionContext の実行を開始
@@ -191,12 +222,29 @@ namespace RTC_exp
    * @brief Start the ExecutionContext
    * @endif
    */
-  RTC::ReturnCode_t PeriodicExecutionContext::start()
+  ReturnCode_t PeriodicExecutionContext::start()
     throw (CORBA::SystemException)
   {
-    return ExecutionContextBase::start();
+    RTC_TRACE(("start()"));
+    if (m_running) return RTC::PRECONDITION_NOT_MET;
+    
+    // invoke ComponentAction::on_startup for each comps.
+    std::for_each(m_comps.begin(), m_comps.end(), invoke_on_startup());
+    
+    // change EC thread state
+    m_running = true;
+    {
+      m_worker.mutex_.lock();
+      m_worker.running_ = true;
+      m_worker.cond_.signal();
+      m_worker.mutex_.unlock();
+    }
+    
+    this->open(0);
+    
+    return RTC::RTC_OK;
   }
-
+  
   /*!
    * @if jp
    * @brief ExecutionContext の実行を停止
@@ -204,14 +252,25 @@ namespace RTC_exp
    * @brief Stop the ExecutionContext
    * @endif
    */
-  RTC::ReturnCode_t PeriodicExecutionContext::stop()
+  ReturnCode_t PeriodicExecutionContext::stop()
     throw (CORBA::SystemException)
   {
-    return ExecutionContextBase::stop();
+    RTC_TRACE(("stop()"));
+    if (!m_running) return RTC::PRECONDITION_NOT_MET;
+    
+    // stop thread
+    m_running = false;
+    {
+      m_worker.mutex_.lock();
+      m_worker.running_ = false;
+      m_worker.mutex_.unlock();
+    }
+    // invoke on_shutdown for each comps.
+    std::for_each(m_comps.begin(), m_comps.end(), invoke_on_shutdown());
+   
+    return RTC::RTC_OK;
   }
-
-
-
+  
   /*!
    * @if jp
    * @brief ExecutionContext の実行周期(Hz)を取得する
@@ -222,9 +281,11 @@ namespace RTC_exp
   CORBA::Double PeriodicExecutionContext::get_rate()
     throw (CORBA::SystemException)
   {
-    return ExecutionContextBase::getRate();
+    RTC_TRACE(("get_rate()"));
+    Guard guard(m_profileMutex);
+    return m_profile.rate;
   }
-
+  
   /*!
    * @if jp
    * @brief ExecutionContext の実行周期(Hz)を設定する
@@ -232,82 +293,180 @@ namespace RTC_exp
    * @brief Set execution rate(Hz) of ExecutionContext
    * @endif
    */
-  RTC::ReturnCode_t PeriodicExecutionContext::set_rate(CORBA::Double rate)
+  ReturnCode_t PeriodicExecutionContext::set_rate(CORBA::Double rate)
     throw (CORBA::SystemException)
   {
-    return ExecutionContextBase::setRate(rate);
+    RTC_TRACE(("set_rate(%f)", rate));
+    if (rate > 0.0)
+      {
+        {
+          Guard guard(m_profileMutex);
+          m_profile.rate = rate;
+        }
+	m_period = coil::TimeValue(1.0/rate);
+	if (m_period == 0.0) { m_nowait = true; }
+	std::for_each(m_comps.begin(), m_comps.end(), invoke_on_rate_changed());
+        RTC_DEBUG(("Actual rate: %d [sec], %d [usec]",
+                   m_period.sec(), m_period.usec()));
+	return RTC::RTC_OK;
+      }
+    return RTC::BAD_PARAMETER;
   }
-
-  /*!
-   * @if jp
-   * @brief RTコンポーネントを追加する
-   * @else
-   * @brief Add an RT-Component
-   * @endif
-   */
-  RTC::ReturnCode_t
-  PeriodicExecutionContext::add_component(RTC::LightweightRTObject_ptr comp)
-    throw (CORBA::SystemException)
-  {
-    return ExecutionContextBase::addComponent(comp);
-  }
-
-  /*!
-   * @if jp
-   * @brief コンポーネントをコンポーネントリストから削除する
-   * @else
-   * @brief Remove the RT-Component from participant list
-   * @endif
-   */
-  RTC::ReturnCode_t PeriodicExecutionContext::
-  remove_component(RTC::LightweightRTObject_ptr comp)
-    throw (CORBA::SystemException)
-  {
-    return ExecutionContextBase::removeComponent(comp);
-  }
-
+  
   /*!
    * @if jp
    * @brief RTコンポーネントをアクティブ化する
    * @else
    * @brief Activate an RT-Component
    * @endif
-   */
-  RTC::ReturnCode_t PeriodicExecutionContext::
-  activate_component(RTC::LightweightRTObject_ptr comp)
+   */ 
+  ReturnCode_t
+  PeriodicExecutionContext::activate_component(LightweightRTObject_ptr comp)
     throw (CORBA::SystemException)
   {
-    return ExecutionContextBase::activateComponent(comp);
-  }
+    RTC_TRACE(("activate_component()"));
+// Why RtORB does not allow STL's find_if and iterator?
+#ifndef ORB_IS_RTORB
+    CompItr it;
+    it = std::find_if(m_comps.begin(), m_comps.end(),
+		      find_comp(comp));
 
+    if (it == m_comps.end())
+      return RTC::BAD_PARAMETER;
+
+    if (!(it->_sm.m_sm.isIn(INACTIVE_STATE)))
+        return RTC::PRECONDITION_NOT_MET;
+
+    it->_sm.m_sm.goTo(ACTIVE_STATE);
+    return RTC::RTC_OK;
+#else // ORB_IS_RTORB
+    for (int i(0); i < (int)m_comps.size() ; ++i)
+      {
+        if(m_comps.at(i)._ref->_is_equivalent(comp))
+          {
+
+            if (!(m_comps.at(i)._sm.m_sm.isIn(INACTIVE_STATE)))
+              {
+                return RTC::PRECONDITION_NOT_MET;
+              }
+            m_comps.at(i)._sm.m_sm.goTo(ACTIVE_STATE);
+            return RTC::RTC_OK;
+          }
+      }
+    return RTC::BAD_PARAMETER;
+#endif // ORB_IS_RTORB
+  }
+  
   /*!
    * @if jp
    * @brief RTコンポーネントを非アクティブ化する
    * @else
    * @brief Deactivate an RT-Component
    * @endif
-   */
-  RTC::ReturnCode_t PeriodicExecutionContext::
-  deactivate_component(RTC::LightweightRTObject_ptr comp)
+   */  
+  ReturnCode_t
+  PeriodicExecutionContext::deactivate_component(LightweightRTObject_ptr comp)
     throw (CORBA::SystemException)
   {
-    return ExecutionContextBase::deactivateComponent(comp);
+    RTC_TRACE(("deactivate_component()"));
+// Why RtORB does not allow STL's find_if and iterator?
+#ifndef ORB_IS_RTORB
+    CompItr it;
+    it = std::find_if(m_comps.begin(), m_comps.end(),
+		      find_comp(comp));
+    if (it == m_comps.end()) { return RTC::BAD_PARAMETER; }
+    if (!(it->_sm.m_sm.isIn(ACTIVE_STATE)))
+      {
+        return RTC::PRECONDITION_NOT_MET;
+      }
+    
+    it->_sm.m_sm.goTo(INACTIVE_STATE);
+    int count(0);
+    const double usec_per_sec(1.0e6);
+    double sleeptime(10.0 * usec_per_sec / get_rate());
+    RTC_PARANOID(("Sleep time is %f [us]", sleeptime));
+    while (it->_sm.m_sm.isIn(ACTIVE_STATE))
+      {
+        RTC_TRACE(("Waiting to be the INACTIVE state %d %f", count, (double)coil::gettimeofday()));
+        coil::usleep(sleeptime);
+        if (count > 1000)
+          {
+            RTC_ERROR(("The component is not responding."));
+            break;
+          }
+        ++count;
+      }
+    if (it->_sm.m_sm.isIn(INACTIVE_STATE))
+      {
+        RTC_TRACE(("The component has been properly deactivated."));
+        return RTC::RTC_OK;
+      }
+    RTC_ERROR(("The component could not be deactivated."));
+    return RTC::RTC_ERROR;
+#else // ORB_IS_RTORB
+    for (int i(0); i < (int)m_comps.size(); ++i)
+      {
+        if(m_comps.at(i)._ref->_is_equivalent(comp))
+          {
+            if (!(m_comps.at(i)._sm.m_sm.isIn(ACTIVE_STATE)))
+              {
+                return RTC::PRECONDITION_NOT_MET;
+              }
+            m_comps.at(i)._sm.m_sm.goTo(INACTIVE_STATE);
+            int count(0);
+            const double usec_per_sec(1.0e6);
+            double sleeptime(usec_per_sec / get_rate());
+            RTC_PARANOID(("Sleep time is %f [us]", sleeptime));
+            while (m_comps.at(i)._sm.m_sm.isIn(ACTIVE_STATE))
+              {
+                RTC_TRACE(("Waiting to be the INACTIVE state"));
+                coil::usleep(sleeptime);
+                
+                if (count > 1000)
+                  {
+                    RTC_ERROR(("The component is not responding."));
+                    break;
+                  }
+                ++count;
+              }
+            if (m_comps.at(i)._sm.m_sm.isIn(INACTIVE_STATE))
+              {
+                RTC_TRACE(("The component has been properly deactivated."));
+                return RTC::RTC_OK;
+              }
+            RTC_ERROR(("The component could not be deactivated."));
+            return RTC::RTC_ERROR;
+          }
+      }
+    return RTC::BAD_PARAMETER;
+#endif // ORB_IS_RTORB
   }
-
+  
   /*!
    * @if jp
    * @brief RTコンポーネントをリセットする
    * @else
    * @brief Reset the RT-Component
    * @endif
-   */
-  RTC::ReturnCode_t PeriodicExecutionContext::
-  reset_component(RTC::LightweightRTObject_ptr comp)
+   */  
+  ReturnCode_t
+  PeriodicExecutionContext::reset_component(LightweightRTObject_ptr comp)
     throw (CORBA::SystemException)
   {
-    return ExecutionContextBase::resetComponent(comp);
+    RTC_TRACE(("reset_component()"));
+    CompItr it;
+    it = std::find_if(m_comps.begin(), m_comps.end(),
+		      find_comp(comp));
+    if (it == m_comps.end())
+      return RTC::BAD_PARAMETER;
+    
+    if (!(it->_sm.m_sm.isIn(ERROR_STATE)))
+      return RTC::PRECONDITION_NOT_MET;
+    
+    it->_sm.m_sm.goTo(INACTIVE_STATE);
+    return RTC::RTC_OK;
   }
-
+  
   /*!
    * @if jp
    * @brief RTコンポーネントの状態を取得する
@@ -315,14 +474,33 @@ namespace RTC_exp
    * @brief Get RT-Component's state
    * @endif
    */
-  RTC::LifeCycleState PeriodicExecutionContext::
-  get_component_state(RTC::LightweightRTObject_ptr comp)
+  LifeCycleState
+  PeriodicExecutionContext::get_component_state(LightweightRTObject_ptr comp)
     throw (CORBA::SystemException)
   {
-    RTC::LifeCycleState ret = ExecutionContextBase::getComponentState(comp);
-    return ret;
-  }
+    RTC_TRACE(("get_component_state()"));
+#ifndef ORB_IS_RTORB
+    CompItr it;
+    it = std::find_if(m_comps.begin(), m_comps.end(), find_comp(comp));
 
+    if (it == m_comps.end())
+      {
+	return RTC::CREATED_STATE;
+      }
+    
+    return it->_sm.m_sm.getState();
+#else // ORB_IS_RTORB
+    for (int i(0); i < (int)m_comps.size(); ++i)
+      {
+        if(m_comps.at(i)._ref->_is_equivalent(comp))
+          {
+            return m_comps.at(i)._sm.m_sm.getState();
+          }
+      }
+    return RTC::CREATED_STATE; 
+#endif // ORB_IS_RTORB
+  }
+  
   /*!
    * @if jp
    * @brief ExecutionKind を取得する
@@ -330,15 +508,122 @@ namespace RTC_exp
    * @brief Get the ExecutionKind
    * @endif
    */
-  RTC::ExecutionKind PeriodicExecutionContext::get_kind()
+  ExecutionKind PeriodicExecutionContext::get_kind()
     throw (CORBA::SystemException)
   {
-    return ExecutionContextBase::getKind();
+    RTC_TRACE(("get_kind()"));
+    return m_profile.kind;
+  }
+  
+  /*!
+   * @if jp
+   * @brief RTコンポーネントを追加する
+   * @else
+   * @brief Add an RT-Component
+   * @endif
+   */
+  ReturnCode_t
+  PeriodicExecutionContext::add_component(LightweightRTObject_ptr comp)
+    throw (CORBA::SystemException)
+  {
+    RTC_TRACE(("add_component()"));
+    if (CORBA::is_nil(comp)) return RTC::BAD_PARAMETER;
+    
+    try
+      {
+	OpenRTM::DataFlowComponent_var dfp;
+	dfp = OpenRTM::DataFlowComponent::_narrow(comp);
+        RTC::RTObject_var rtc;
+        rtc = RTC::RTObject::_narrow(comp);
+        //Check the pointer.
+        if(CORBA::is_nil(dfp) || CORBA::is_nil(rtc))
+          {
+	    return RTC::BAD_PARAMETER;
+          }
+	ExecutionContextHandle_t id;
+	id = dfp->attach_context(m_ref);
+	m_comps.push_back(Comp(comp, dfp, id));
+        CORBA_SeqUtil::push_back(m_profile.participants, rtc._retn());
+	return RTC::RTC_OK;
+      }
+    catch (CORBA::Exception& e)
+      {
+	(void)(e);
+	return RTC::BAD_PARAMETER;
+      }
+    return RTC::RTC_OK;
   }
 
-  //------------------------------------------------------------
+  RTC::ReturnCode_t PeriodicExecutionContext::bindComponent(RTObject_impl* rtc)
+  {
+    RTC_TRACE(("bindComponent()"));
+    if (rtc == NULL) return RTC::BAD_PARAMETER;
+
+    LightweightRTObject_var comp = RTC::RTObject::_duplicate(rtc->getObjRef());
+    OpenRTM::DataFlowComponent_var dfp;
+    dfp = OpenRTM::DataFlowComponent::_narrow(comp);
+
+    ExecutionContextHandle_t id = rtc->bindContext(m_ref);
+    if (id < 0 || id > ECOTHER_OFFSET) 
+      {
+        // id should be owned context id < ECOTHER_OFFSET
+        RTC_ERROR(("bindContext returns invalid id: %d", id));
+        return RTC::RTC_ERROR;
+      }
+    RTC_DEBUG(("bindContext returns id = %d", id));
+
+    // rtc is owner of this EC
+    m_comps.push_back(Comp(comp,dfp,id));
+    m_profile.owner = RTC::RTObject::_duplicate(dfp);
+
+    return RTC::RTC_OK;
+  }
+  
+  /*!
+   * @if jp
+   * @brief コンポーネントをコンポーネントリストから削除する
+   * @else
+   * @brief Remove the RT-Component from participant list
+   * @endif
+   */	
+  ReturnCode_t
+  PeriodicExecutionContext::remove_component(LightweightRTObject_ptr comp)
+    throw (CORBA::SystemException)
+  {
+    RTC_TRACE(("remove_component()"));
+    CompItr it;
+    it = std::find_if(m_comps.begin(), m_comps.end(),
+		      find_comp(comp));
+    if (it == m_comps.end())
+      {
+        RTC_TRACE(("remove_component(): no RTC found in this context."));
+        return RTC::BAD_PARAMETER;
+      }
+
+    Comp& c(*it);
+    c._ref->detach_context(c._sm.ec_id);
+    c._ref = RTC::LightweightRTObject::_nil();
+    m_comps.erase(it);
+    RTC_TRACE(("remove_component(): an RTC removed from this context."));
+
+    //RTObject_var rtcomp = RTObject::_narrow(LightweightRTObject::_duplicate(comp));
+    RTObject_var rtcomp = RTObject::_narrow(comp);
+    if (CORBA::is_nil(rtcomp))
+      {
+        RTC_ERROR(("Invalid object reference."));
+        return RTC::RTC_ERROR;
+      }
+    {
+      Guard guard(m_profileMutex);
+      CORBA_SeqUtil::erase_if(m_profile.participants,
+                              find_participant(rtcomp));
+    }
+    return RTC::RTC_OK;
+  }
+  
+  //============================================================
   // ExecutionContextService interfaces
-  //------------------------------------------------------------
+  //============================================================
   /*!
    * @if jp
    * @brief ExecutionContextProfile を取得する
@@ -346,190 +631,17 @@ namespace RTC_exp
    * @brief Get the ExecutionContextProfile
    * @endif
    */
-  RTC::ExecutionContextProfile* PeriodicExecutionContext::get_profile()
+  ExecutionContextProfile* PeriodicExecutionContext::get_profile()
     throw (CORBA::SystemException)
   {
-    return ExecutionContextBase::getProfile();
-  }
-
-
-  //============================================================
-  // protected functions
-  //============================================================
-  /*!
-   * @brief onStarted() template function
-   */
-  RTC::ReturnCode_t PeriodicExecutionContext::onStarted()
-  {
-    // change EC thread state
+    RTC_TRACE(("get_profile()"));
+    ExecutionContextProfile_var p;
     {
-      Guard guard(m_svcmutex);
-      if (!m_svc)
-        {
-          m_svc = true;
-          this->open(0);
-        }
+      Guard guard(m_profileMutex);
+      p = new ExecutionContextProfile(m_profile);
     }
-    if (isAllNextState(RTC::INACTIVE_STATE))
-      {
-        Guard guard(m_workerthread.mutex_);
-        m_workerthread.running_ = false;
-      }
-    else
-      {
-        Guard guard(m_workerthread.mutex_);
-        m_workerthread.running_ = true;
-        m_workerthread.cond_.signal();
-      }
-    return RTC::RTC_OK;
+    return p._retn();
   }
-
-  /*!
-   * @brief onStopping() template function
-   */
-  RTC::ReturnCode_t PeriodicExecutionContext::onStopping()
-  {
-    // stop thread
-    Guard guard(m_workerthread.mutex_);
-    m_workerthread.running_ = false;
-    return RTC::RTC_OK;
-  }
-
-  /*!
-   * @brief onWaitingActivated() template function
-   */
-  RTC::ReturnCode_t PeriodicExecutionContext::
-  onWaitingActivated(RTC_impl::RTObjectStateMachine* comp, long int count)
-  {
-    RTC_TRACE(("onWaitingActivated(count = %d)", count));
-    RTC_PARANOID(("curr: %s, next: %s",
-                  getStateString(comp->getStates().curr),
-                  getStateString(comp->getStates().next)));
-    // Now comp's next state must be ACTIVE state
-    // If worker thread is stopped, restart worker thread.
-    Guard guard(m_workerthread.mutex_);
-    if (m_workerthread.running_ == false)
-      {
-        m_workerthread.running_ = true;
-        m_workerthread.cond_.signal();
-      }
-    return RTC::RTC_OK;
-  }
-
-  /*!
-   * @brief onActivated() template function
-   */
-  RTC::ReturnCode_t PeriodicExecutionContext::
-  onActivated(RTC_impl::RTObjectStateMachine* comp, long int count)
-  {
-    RTC_TRACE(("onActivated(count = %d)", count));
-    RTC_PARANOID(("curr: %s, next: %s",
-                  getStateString(comp->getStates().curr),
-                  getStateString(comp->getStates().next)));
-    // count = -1; Asynch mode. Since onWaitingActivated is not
-    // called, onActivated() have to send restart singnal to worker
-    // thread.
-    // count > 0: Synch mode.
-
-    // Now comp's next state must be ACTIVE state
-    // If worker thread is stopped, restart worker thread.
-    Guard guard(m_workerthread.mutex_);
-    if (m_workerthread.running_ == false)
-      {
-        m_workerthread.running_ = true;
-        m_workerthread.cond_.signal();
-      }
-    return RTC::RTC_OK;
-  }
-
-  /*!
-   * @brief onWaitingDeactivated() template function
-   */
-  RTC::ReturnCode_t PeriodicExecutionContext::
-  onWaitingDeactivated(RTC_impl::RTObjectStateMachine* comp, long int count)
-  {
-    RTC_TRACE(("onWaitingDeactivated(count = %d)", count));
-    RTC_PARANOID(("curr: %s, next: %s",
-                  getStateString(comp->getStates().curr),
-                  getStateString(comp->getStates().next)));
-    if (isAllNextState(RTC::INACTIVE_STATE))
-      {
-        Guard guard(m_workerthread.mutex_);
-        if (m_workerthread.running_ == true)
-          {
-            m_workerthread.running_ = false;
-            RTC_TRACE(("All RTCs are INACTIVE. Stopping worker thread."));
-          }
-      }
-    return RTC::RTC_OK;
-  }
-
-  /*!
-   * @brief onDeactivated() template function
-   */
-  RTC::ReturnCode_t PeriodicExecutionContext::
-  onDeactivated(RTC_impl::RTObjectStateMachine* comp, long int count)
-  {
-    RTC_TRACE(("onDeactivated(count = %d)", count));
-    RTC_PARANOID(("curr: %s, next: %s",
-                  getStateString(comp->getStates().curr),
-                  getStateString(comp->getStates().next)));
-    if (isAllNextState(RTC::INACTIVE_STATE))
-      {
-        Guard guard(m_workerthread.mutex_);
-        if (m_workerthread.running_ == true)
-          {
-            m_workerthread.running_ = false;
-            RTC_TRACE(("All RTCs are INACTIVE. Stopping worker thread."));
-          }
-      }
-    return RTC::RTC_OK;
-  }
-
-  /*!
-   * @brief onWaitingReset() template function
-   */
-  RTC::ReturnCode_t PeriodicExecutionContext::
-  onWaitingReset(RTC_impl::RTObjectStateMachine* comp, long int count)
-  {
-    RTC_TRACE(("onWaitingReset(count = %d)", count));
-    RTC_PARANOID(("curr: %s, next: %s",
-                  getStateString(comp->getStates().curr),
-                  getStateString(comp->getStates().next)));
-    if (isAllNextState(RTC::INACTIVE_STATE))
-      {
-        Guard guard(m_workerthread.mutex_);
-        if (m_workerthread.running_ == true)
-          {
-            m_workerthread.running_ = false;
-            RTC_TRACE(("All RTCs are INACTIVE. Stopping worker thread."));
-          }
-      }
-    return RTC::RTC_OK;
-  }
-
-  /*!
-   * @brief onReset() template function
-   */
-  RTC::ReturnCode_t PeriodicExecutionContext::
-  onReset(RTC_impl::RTObjectStateMachine* comp, long int count)
-  {
-    RTC_TRACE(("onReset(count = %d)", count));
-    RTC_PARANOID(("curr: %s, next: %s",
-                  getStateString(comp->getStates().curr),
-                  getStateString(comp->getStates().next)));
-    if (isAllNextState(RTC::INACTIVE_STATE))
-      {
-        Guard guard(m_workerthread.mutex_);
-        if (m_workerthread.running_ == true)
-          {
-            m_workerthread.running_ = false;
-            RTC_TRACE(("All RTCs are INACTIVE. Stopping worker thread."));
-          }
-      }
-    return RTC::RTC_OK;
-  }
-
 }; // namespace RTC  
 
 extern "C"
@@ -541,18 +653,11 @@ extern "C"
    * @brief Initialization function to register to ECFactory
    * @endif
    */
-
- void PeriodicExecutionContextInit(RTC::Manager* manager)
+  void PeriodicExecutionContextInit(RTC::Manager* manager)
   {
-    RTC::ExecutionContextFactory::
-      instance().addFactory("PeriodicExecutionContext",
-                            ::coil::Creator< ::RTC::ExecutionContextBase,
-                            ::RTC_exp::PeriodicExecutionContext>,
-                            ::coil::Destructor< ::RTC::ExecutionContextBase,
-                            ::RTC_exp::PeriodicExecutionContext>);
-
-    coil::vstring ecs;
-    ecs = RTC::ExecutionContextFactory::instance().getIdentifiers();
+    manager->registerECFactory("PeriodicExecutionContext",
+			       RTC::ECCreate<RTC::PeriodicExecutionContext>,
+			       RTC::ECDelete<RTC::PeriodicExecutionContext>);
   }
 };
 

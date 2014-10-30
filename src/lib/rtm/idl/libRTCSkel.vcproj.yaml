@@ -23,10 +23,6 @@ Configurations:
           makewrapper.py SDOPackage.idl
           makewrapper.py ExtendedDataTypes.idl
           makewrapper.py InterfaceDataTypes.idl
-          makewrapper.py ManipulatorCommonInterface_DataTypes.idl
-          makewrapper.py ManipulatorCommonInterface_Common.idl
-          makewrapper.py ManipulatorCommonInterface_Middle.idl
-          makewrapper.py CameraCommonInterface.idl
           omniidl -bcxx -Wba -nf BasicDataType.idl
           omniidl -bcxx -Wba -nf DataPort.idl
           omniidl -bcxx -Wba -nf Manager.idl
@@ -34,11 +30,7 @@ Configurations:
           omniidl -bcxx -Wba -nf RTC.idl
           omniidl -bcxx -Wba -nf SDOPackage.idl
           omniidl -bcxx -Wba -nf ExtendedDataTypes.idl
-          omniidl -bcxx -Wba -nf InterfaceDataTypes.idl
-          omniidl -bcxx -Wba -nf ManipulatorCommonInterface_DataTypes.idl
-          omniidl -bcxx -Wba -nf ManipulatorCommonInterface_Common.idl
-          omniidl -bcxx -Wba -nf ManipulatorCommonInterface_Middle.idl
-          omniidl -bcxx -Wba -nf CameraCommonInterface.idl&#x0D;&#x0A;
+          omniidl -bcxx -Wba -nf InterfaceDataTypes.idl&#x0D;&#x0A;
     VCCLCompilerTool:
       - Key: Optimization
         Value: "0"
@@ -84,10 +76,6 @@ Configurations:
           makewrapper.py SDOPackage.idl
           makewrapper.py ExtendedDataTypes.idl
           makewrapper.py InterfaceDataTypes.idl
-          makewrapper.py ManipulatorCommonInterface_DataTypes.idl
-          makewrapper.py ManipulatorCommonInterface_Common.idl
-          makewrapper.py ManipulatorCommonInterface_Middle.idl
-          makewrapper.py CameraCommonInterface.idl
           omniidl -bcxx -Wba -nf BasicDataType.idl
           omniidl -bcxx -Wba -nf DataPort.idl
           omniidl -bcxx -Wba -nf Manager.idl
@@ -95,11 +83,7 @@ Configurations:
           omniidl -bcxx -Wba -nf RTC.idl
           omniidl -bcxx -Wba -nf SDOPackage.idl
           omniidl -bcxx -Wba -nf ExtendedDataTypes.idl
-          omniidl -bcxx -Wba -nf InterfaceDataTypes.idl
-          omniidl -bcxx -Wba -nf ManipulatorCommonInterface_DataTypes.idl
-          omniidl -bcxx -Wba -nf ManipulatorCommonInterface_Common.idl
-          omniidl -bcxx -Wba -nf ManipulatorCommonInterface_Middle.idl
-          omniidl -bcxx -Wba -nf CameraCommonInterface.idl&#x0D;&#x0A;
+          omniidl -bcxx -Wba -nf InterfaceDataTypes.idl&#x0D;&#x0A;
     VC10_VCCLCompilerTool:
       - Key: Optimization
         Value: "Disabled"
@@ -143,10 +127,6 @@ Configurations:
           makewrapper.py SDOPackage.idl
           makewrapper.py ExtendedDataTypes.idl
           makewrapper.py InterfaceDataTypes.idl
-          makewrapper.py ManipulatorCommonInterface_DataTypes.idl
-          makewrapper.py ManipulatorCommonInterface_Common.idl
-          makewrapper.py ManipulatorCommonInterface_Middle.idl
-          makewrapper.py CameraCommonInterface.idl
           omniidl -bcxx -Wba -nf BasicDataType.idl
           omniidl -bcxx -Wba -nf DataPort.idl
           omniidl -bcxx -Wba -nf Manager.idl
@@ -154,11 +134,7 @@ Configurations:
           omniidl -bcxx -Wba -nf RTC.idl
           omniidl -bcxx -Wba -nf SDOPackage.idl
           omniidl -bcxx -Wba -nf ExtendedDataTypes.idl
-          omniidl -bcxx -Wba -nf InterfaceDataTypes.idl
-          omniidl -bcxx -Wba -nf ManipulatorCommonInterface_DataTypes.idl
-          omniidl -bcxx -Wba -nf ManipulatorCommonInterface_Common.idl
-          omniidl -bcxx -Wba -nf ManipulatorCommonInterface_Middle.idl
-          omniidl -bcxx -Wba -nf CameraCommonInterface.idl&#x0D;&#x0A;
+          omniidl -bcxx -Wba -nf InterfaceDataTypes.idl&#x0D;&#x0A;
     VCCLCompilerTool:
       - Key: Optimization
         Value: "0"
@@ -204,10 +180,6 @@ Configurations:
           makewrapper.py SDOPackage.idl
           makewrapper.py ExtendedDataTypes.idl
           makewrapper.py InterfaceDataTypes.idl
-          makewrapper.py ManipulatorCommonInterface_DataTypes.idl
-          makewrapper.py ManipulatorCommonInterface_Common.idl
-          makewrapper.py ManipulatorCommonInterface_Middle.idl
-          makewrapper.py CameraCommonInterface.idl
           omniidl -bcxx -Wba -nf BasicDataType.idl
           omniidl -bcxx -Wba -nf DataPort.idl
           omniidl -bcxx -Wba -nf Manager.idl
@@ -215,11 +187,7 @@ Configurations:
           omniidl -bcxx -Wba -nf RTC.idl
           omniidl -bcxx -Wba -nf SDOPackage.idl
           omniidl -bcxx -Wba -nf ExtendedDataTypes.idl
-          omniidl -bcxx -Wba -nf InterfaceDataTypes.idl
-          omniidl -bcxx -Wba -nf ManipulatorCommonInterface_DataTypes.idl
-          omniidl -bcxx -Wba -nf ManipulatorCommonInterface_Common.idl
-          omniidl -bcxx -Wba -nf ManipulatorCommonInterface_Middle.idl
-          omniidl -bcxx -Wba -nf CameraCommonInterface.idl&#x0D;&#x0A;
+          omniidl -bcxx -Wba -nf InterfaceDataTypes.idl&#x0D;&#x0A;
     VC10_VCCLCompilerTool:
       - Key: Optimization
         Value: "Disabled"
@@ -264,10 +232,6 @@ Configurations:
           makewrapper.py SDOPackage.idl
           makewrapper.py ExtendedDataTypes.idl
           makewrapper.py InterfaceDataTypes.idl
-          makewrapper.py ManipulatorCommonInterface_DataTypes.idl
-          makewrapper.py ManipulatorCommonInterface_Common.idl
-          makewrapper.py ManipulatorCommonInterface_Middle.idl
-          makewrapper.py CameraCommonInterface.idl
           omniidl -bcxx -Wba -nf BasicDataType.idl
           omniidl -bcxx -Wba -nf DataPort.idl
           omniidl -bcxx -Wba -nf Manager.idl
@@ -275,11 +239,7 @@ Configurations:
           omniidl -bcxx -Wba -nf RTC.idl
           omniidl -bcxx -Wba -nf SDOPackage.idl
           omniidl -bcxx -Wba -nf ExtendedDataTypes.idl
-          omniidl -bcxx -Wba -nf InterfaceDataTypes.idl
-          omniidl -bcxx -Wba -nf ManipulatorCommonInterface_DataTypes.idl
-          omniidl -bcxx -Wba -nf ManipulatorCommonInterface_Common.idl
-          omniidl -bcxx -Wba -nf ManipulatorCommonInterface_Middle.idl
-          omniidl -bcxx -Wba -nf CameraCommonInterface.idl&#x0D;&#x0A;
+          omniidl -bcxx -Wba -nf InterfaceDataTypes.idl&#x0D;&#x0A;
     VCCLCompilerTool:
       - Key: PreprocessorDefinitions
         Value: "WIN32;NDEBUG;_LIB;__WIN32__;__NT__;__OSVERSION__=4;__x86__;_WIN32_WINNT=0x0400;_CRT_SECURE_NO_DEPRECATE"
@@ -319,10 +279,6 @@ Configurations:
           makewrapper.py SDOPackage.idl
           makewrapper.py ExtendedDataTypes.idl
           makewrapper.py InterfaceDataTypes.idl
-          makewrapper.py ManipulatorCommonInterface_DataTypes.idl
-          makewrapper.py ManipulatorCommonInterface_Common.idl
-          makewrapper.py ManipulatorCommonInterface_Middle.idl
-          makewrapper.py CameraCommonInterface.idl
           omniidl -bcxx -Wba -nf BasicDataType.idl
           omniidl -bcxx -Wba -nf DataPort.idl
           omniidl -bcxx -Wba -nf Manager.idl
@@ -330,11 +286,7 @@ Configurations:
           omniidl -bcxx -Wba -nf RTC.idl
           omniidl -bcxx -Wba -nf SDOPackage.idl
           omniidl -bcxx -Wba -nf ExtendedDataTypes.idl
-          omniidl -bcxx -Wba -nf InterfaceDataTypes.idl
-          omniidl -bcxx -Wba -nf ManipulatorCommonInterface_DataTypes.idl
-          omniidl -bcxx -Wba -nf ManipulatorCommonInterface_Common.idl
-          omniidl -bcxx -Wba -nf ManipulatorCommonInterface_Middle.idl
-          omniidl -bcxx -Wba -nf CameraCommonInterface.idl&#x0D;&#x0A;
+          omniidl -bcxx -Wba -nf InterfaceDataTypes.idl&#x0D;&#x0A;
     VC10_VCCLCompilerTool:
       - Key: PreprocessorDefinitions
         Value: "WIN32;NDEBUG;_LIB;__WIN32__;__NT__;__OSVERSION__=4;__x86__;_WIN32_WINNT=0x0400;_CRT_SECURE_NO_DEPRECATE;%(PreprocessorDefinitions)"
@@ -373,10 +325,6 @@ Configurations:
           makewrapper.py SDOPackage.idl
           makewrapper.py ExtendedDataTypes.idl
           makewrapper.py InterfaceDataTypes.idl
-          makewrapper.py ManipulatorCommonInterface_DataTypes.idl
-          makewrapper.py ManipulatorCommonInterface_Common.idl
-          makewrapper.py ManipulatorCommonInterface_Middle.idl
-          makewrapper.py CameraCommonInterface.idl
           omniidl -bcxx -Wba -nf BasicDataType.idl
           omniidl -bcxx -Wba -nf DataPort.idl
           omniidl -bcxx -Wba -nf Manager.idl
@@ -384,11 +332,7 @@ Configurations:
           omniidl -bcxx -Wba -nf RTC.idl
           omniidl -bcxx -Wba -nf SDOPackage.idl
           omniidl -bcxx -Wba -nf ExtendedDataTypes.idl
-          omniidl -bcxx -Wba -nf InterfaceDataTypes.idl
-          omniidl -bcxx -Wba -nf ManipulatorCommonInterface_DataTypes.idl
-          omniidl -bcxx -Wba -nf ManipulatorCommonInterface_Common.idl
-          omniidl -bcxx -Wba -nf ManipulatorCommonInterface_Middle.idl
-          omniidl -bcxx -Wba -nf CameraCommonInterface.idl&#x0D;&#x0A;
+          omniidl -bcxx -Wba -nf InterfaceDataTypes.idl&#x0D;&#x0A;
     VCCLCompilerTool:
       - Key: PreprocessorDefinitions
         Value: "WIN32;NDEBUG;_LIB;__WIN32__;__NT__;__OSVERSION__=4;__x86__;_WIN32_WINNT=0x0400;_CRT_SECURE_NO_DEPRECATE"
@@ -428,10 +372,6 @@ Configurations:
           makewrapper.py SDOPackage.idl
           makewrapper.py ExtendedDataTypes.idl
           makewrapper.py InterfaceDataTypes.idl
-          makewrapper.py ManipulatorCommonInterface_DataTypes.idl
-          makewrapper.py ManipulatorCommonInterface_Common.idl
-          makewrapper.py ManipulatorCommonInterface_Middle.idl
-          makewrapper.py CameraCommonInterface.idl
           omniidl -bcxx -Wba -nf BasicDataType.idl
           omniidl -bcxx -Wba -nf DataPort.idl
           omniidl -bcxx -Wba -nf Manager.idl
@@ -439,11 +379,7 @@ Configurations:
           omniidl -bcxx -Wba -nf RTC.idl
           omniidl -bcxx -Wba -nf SDOPackage.idl
           omniidl -bcxx -Wba -nf ExtendedDataTypes.idl
-          omniidl -bcxx -Wba -nf InterfaceDataTypes.idl
-          omniidl -bcxx -Wba -nf ManipulatorCommonInterface_DataTypes.idl
-          omniidl -bcxx -Wba -nf ManipulatorCommonInterface_Common.idl
-          omniidl -bcxx -Wba -nf ManipulatorCommonInterface_Middle.idl
-          omniidl -bcxx -Wba -nf CameraCommonInterface.idl&#x0D;&#x0A;
+          omniidl -bcxx -Wba -nf InterfaceDataTypes.idl&#x0D;&#x0A;
     VC10_VCCLCompilerTool:
       - Key: PreprocessorDefinitions
         Value: "WIN32;NDEBUG;_LIB;__WIN32__;__NT__;__OSVERSION__=4;__x86__;_WIN32_WINNT=0x0400;_CRT_SECURE_NO_DEPRECATE;%(PreprocessorDefinitions)"

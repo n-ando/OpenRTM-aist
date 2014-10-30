@@ -39,8 +39,6 @@
 #include <rtm/FactoryInit.h>
 #include <rtm/CORBA_IORUtil.h>
 #include <rtm/SdoServiceConsumerBase.h>
-#include <rtm/LocalServiceAdmin.h>
-#include <rtm/SystemLogger.h>
 
 #if defined(minor)
 #undef minor
@@ -104,7 +102,7 @@ namespace RTC
   
   /*!
    * @if jp
-   * @brief •ﬁ•Õ°º•∏•„§ŒΩÈ¥¸≤Ω
+   * @brief •ﬁ•Õ°º•∏•„§ŒΩÈ¥ÅEΩ
    * @else
    * @brief Initialize manager
    * @endif
@@ -114,20 +112,20 @@ namespace RTC
     // DCL for singleton
     if (!manager)
       {
-        Guard guard(mutex);
-        if (!manager)
-          {
-            manager = new Manager();
-            manager->initManager(argc, argv);
-            manager->initLogger();
-            manager->initORB();
-            manager->initNaming();
+	Guard guard(mutex);
+	if (!manager)
+	  {
+	    manager = new Manager();
+	    manager->initManager(argc, argv);
+	    manager->initLogger();
+	    manager->initORB();
+	    manager->initNaming();
             manager->initFactories();
-            manager->initExecContext();
-            manager->initComposite();
-            manager->initTimer();
+	    manager->initExecContext();
+	    manager->initComposite();
+	    manager->initTimer();
             manager->initManagerServant();
-          }
+	  }
       }
     return manager;
   }
@@ -138,26 +136,25 @@ namespace RTC
    * @else
    * @brief Get instance of the manager
    * @endif
-   */
+   */ 
   Manager& Manager::instance()
   {
     // DCL for singleton
     if (!manager)
       {
-        Guard guard(mutex);
-        if (!manager)
-          {
-            manager = new Manager();
-            manager->initManager(0, NULL);
-            manager->initLogger();
-            manager->initORB();
-            manager->initNaming();
+	Guard guard(mutex);
+	if (!manager)
+	  {
+	    manager = new Manager();
+	    manager->initManager(0, NULL);
+	    manager->initLogger();
+	    manager->initORB();
+	    manager->initNaming();
             manager->initFactories();
-            manager->initExecContext();
-            manager->initComposite();
-            manager->initTimer();
-            manager->initManagerServant();
-          }
+	    manager->initExecContext();
+	    manager->initComposite();
+	    manager->initTimer();
+	  }
       }
     return *manager;
   }
@@ -177,20 +174,18 @@ namespace RTC
   
   /*!
    * @if jp
-   * @brief •ﬁ•Õ°º•∏•„°¶•∑•„•√•»•¿•¶•Û
-   * @else
+   * @brief •ﬁ•Õ°º•∏•„°¶•∑•„•√•»•¿•¶•ÅE   * @else
    * @brief Shutdown Manager
    * @endif
    */
   void Manager::shutdown()
   {
     RTC_TRACE(("Manager::shutdown()"));
-    m_listeners.manager_.preShutdown();
     shutdownComponents();
     shutdownNaming();
     shutdownORB();
     shutdownManager();
-    // Ω™Œª¬‘§¡πÁ§Ô§ª
+    // Ω™Œª¬‘§¡πÁ§ÅEª
     if (m_runner != NULL)
       {
 	m_runner->wait();
@@ -199,13 +194,12 @@ namespace RTC
       {
 	join();
       }
-    m_listeners.manager_.postShutdown();
     shutdownLogger();
   }
   
   /*!
    * @if jp
-   * @brief •ﬁ•Õ°º•∏•„Ω™ŒªΩËÕ˝§Œ¬‘§¡πÁ§Ô§ª
+   * @brief •ﬁ•Õ°º•∏•„Ω™ŒªΩËÕ˝§Œ¬‘§¡πÁ§ÅEª
    * @else
    * @brief Wait for Manager's termination
    * @endif
@@ -229,7 +223,7 @@ namespace RTC
   
   /*!
    * @if jp
-   * @brief ΩÈ¥¸≤Ω•◊•Ì•∑°º•∏•„§Œ•ª•√•»
+   * @brief ΩÈ¥ÅEΩ•◊•˙¡∑°º•∏•„§Œ•ª•√•»
    * @else
    * @brief Set initial procedure
    * @endif
@@ -266,58 +260,6 @@ namespace RTC
 	return false;
       }
 
-    std::vector<std::string> lsvc;
-    lsvc = coil::split(m_config["manager.local_service.modules"], ",");
-
-    for (int i(0), len(lsvc.size()); i < len; ++i)
-      {
-	size_t begin_pos(lsvc[i].find_first_of('('));
-	size_t end_pos(lsvc[i].find_first_of(')'));
-	std::string filename, initfunc;
-	if (begin_pos != std::string::npos && end_pos != std::string::npos &&
-	    begin_pos < end_pos)
-	  {
-	    initfunc = lsvc[i].substr(begin_pos + 1, end_pos - (begin_pos + 1));
-	    filename = lsvc[i].substr(0, begin_pos);
-	    coil::eraseBothEndsBlank(initfunc);
-	    coil::eraseBothEndsBlank(filename);
-	  }
-	else
-	  {
-	    initfunc = coil::split(lsvc[i], ".").operator[](0) + "Init";
-	    filename = lsvc[i];
-	  }
-	if (filename.find_first_of('.') == std::string::npos)
-	  {
-	    if (m_config.findNode("manager.modules.C++.suffixes") != 0)
-	      {
-		filename += "." + m_config["manager.modules.C++.suffixes"];
-	      }
-	  }
-	try
-	  {
-	    m_module->load(filename, initfunc);
-	  }
-	catch (ModuleManager::Error& e)
-	  {
-	    RTC_ERROR(("Module load error: %s", e.reason.c_str()));
-	  }
-	catch (ModuleManager::SymbolNotFound& e)
-	  {
-	    RTC_ERROR(("Symbol not found: %s", e.name.c_str()));
-	  }
-	catch (ModuleManager::ModuleNotFound& e)
-	  {
-	    RTC_ERROR(("Module not found: %s", e.name.c_str()));
-	  }
-	catch (...)
-	  {
-	    RTC_ERROR(("Unknown Exception"));
-	  }
-      }
-
-    initLocalService();
-
     std::vector<std::string> mods;
     mods = coil::split(m_config["manager.modules.preload"], ",");
 
@@ -349,7 +291,7 @@ namespace RTC
 	  }
 	try
 	  {
-	    m_module->load(filename, initfunc);
+	    m_module->load(mods[i], initfunc);
 	  }
 	catch (ModuleManager::Error& e)
 	  {
@@ -371,8 +313,6 @@ namespace RTC
 
     m_config["sdo.service.consumer.available_services"]
       = coil::flatten(SdoServiceConsumerFactory::instance().getIdentifiers());
-
-
 
     if (m_initProc != NULL)
       {
@@ -419,7 +359,7 @@ namespace RTC
   //============================================================
   /*!
    * @if jp
-   * @brief •‚•∏•Â°º•Î§Œ•Ì°º•…
+   * @brief •‚•∏•Â°º•ÅEŒ•˙Ωº•…
    * @else
    * @brief Load module
    * @endif
@@ -430,7 +370,6 @@ namespace RTC
                fname, initfunc));
     std::string file_name(fname);
     std::string init_func(initfunc);
-    m_listeners.module_.preLoad(file_name, init_func);
     try
       {
         if (init_func.empty())
@@ -440,7 +379,6 @@ namespace RTC
           }
         std::string path(m_module->load(file_name, init_func));
         RTC_DEBUG(("module path: %s", path.c_str()));
-        m_listeners.module_.postLoad(path, init_func);
       }
     catch (...)
       {
@@ -451,7 +389,7 @@ namespace RTC
   
   /*!
    * @if jp
-   * @brief •‚•∏•Â°º•Î§Œ•¢•Û•Ì°º•…
+   * @brief •‚•∏•Â°º•ÅEŒ•¢•Û•˙Ωº•…
    * @else
    * @brief Unload module
    * @endif
@@ -459,16 +397,13 @@ namespace RTC
   void Manager::unload(const char* fname)
   {
     RTC_TRACE(("Manager::unload()"));
-    std::string fnamestr(fname);
-    m_listeners.module_.preUnload(fnamestr);
     m_module->unload(fname);
-    m_listeners.module_.postUnload(fnamestr);
     return;
   }
   
   /*!
    * @if jp
-   * @brief ¡¥•‚•∏•Â°º•Î§Œ•¢•Û•Ì°º•…
+   * @brief ¡¥•‚•∏•Â°º•ÅEŒ•¢•Û•˙Ωº•…
    * @else
    * @brief Unload all modules
    * @endif
@@ -482,8 +417,7 @@ namespace RTC
   
   /*!
    * @if jp
-   * @brief •Ì°º•…∫—§ﬂ§Œ•‚•∏•Â°º•Î•Í•π•»§ÚºË∆¿§π§Î
-   * @else
+   * @brief •˙Ωº•…∫—§ﬂ§Œ•‚•∏•Â°º•ÅEÅEπ•»§ÚºË∆¿§π§ÅE   * @else
    * @brief Get a list of loaded modules
    * @endif
    */
@@ -495,8 +429,7 @@ namespace RTC
   
   /*!
    * @if jp
-   * @brief •Ì°º•…≤ƒ«Ω§ •‚•∏•Â°º•Î•Í•π•»§ÚºË∆¿§π§Î
-   * @else
+   * @brief •˙Ωº•…≤ƒ«Ω§ •‚•∏•Â°º•ÅEÅEπ•»§ÚºË∆¿§π§ÅE   * @else
    * @brief Get a list of loadable modules
    * @endif
    */
@@ -511,8 +444,7 @@ std::vector<coil::Properties> Manager::getLoadableModules()
   //============================================================
   /*!
    * @if jp
-   * @brief RT•≥•Û•›°º•Õ•Û•»Õ—•’•°•Ø•»•Í§Ú≈–œø§π§Î
-   * @else
+   * @brief RT•≥•Û•›°º•Õ•Û•»Õ—•’•°•Ø•»•Í§Ú≈–œø§π§ÅE   * @else
    * @brief Register RT-Component Factory
    * @endif
    */
@@ -552,8 +484,7 @@ std::vector<coil::Properties> Manager::getLoadableModules()
   
   /*!
    * @if jp
-   * @brief ExecutionContextÕ—•’•°•Ø•»•Í§Ú≈–œø§π§Î
-   * @else
+   * @brief ExecutionContextÕ—•’•°•Ø•»•Í§Ú≈–œø§π§ÅE   * @else
    * @brief Register ExecutionContext Factory
    * @endif
    */
@@ -580,8 +511,7 @@ std::vector<coil::Properties> Manager::getLoadableModules()
   
   /*!
    * @if jp
-   * @brief •’•°•Ø•»•Í¡¥•Í•π•»§ÚºË∆¿§π§Î
-   * @else
+   * @brief •’•°•Ø•»•ÅE¥•ÅEπ•»§ÚºË∆¿§π§ÅE   * @else
    * @brief Get the list of all Factories
    * @endif
    */
@@ -598,20 +528,17 @@ std::vector<coil::Properties> Manager::getLoadableModules()
   //============================================================
   /*!
    * @if jp
-   * @brief RT•≥•Û•›°º•Õ•Û•»§Ú¿∏¿Æ§π§Î
-   * @else
+   * @brief RT•≥•Û•›°º•Õ•Û•»§Ú¿∏¿Æ§π§ÅE   * @else
    * @brief Create RT-Components
    * @endif
    */
   RTObject_impl* Manager::createComponent(const char* comp_args)
   {
     RTC_TRACE(("Manager::createComponent(%s)", comp_args));
-    std::string argstr(comp_args);
-    m_listeners.rtclifecycle_.preCreate(argstr);
     //------------------------------------------------------------
     // extract "comp_type" and "comp_prop" from comp_arg
     coil::Properties comp_prop, comp_id;
-    if (!procComponentArgs(argstr.c_str(), comp_id, comp_prop)) return NULL;
+    if (!procComponentArgs(comp_args, comp_id, comp_prop)) return NULL;
 
     //------------------------------------------------------------
     // Because the format of port-name had been changed from <port_name> 
@@ -701,15 +628,7 @@ std::vector<coil::Properties> Manager::getLoadableModules()
       "corba.id",
       "exec_cxt.periodic.type",
       "exec_cxt.periodic.rate",
-      "exec_cxt.event_driven.type",
-      "exec_cxt.sync_transition",
-      "exec_cxt.sync_activation",
-      "exec_cxt.sync_deactivation",
-      "exec_cxt.sync_reset",
-      "exec_cxt.transition_timeout",
-      "exec_cxt.activation_timeout",
-      "exec_cxt.deactivation_timeout",
-      "exec_cxt.reset_timeout",
+      "exec_cxt.evdriven.type",
       "logger.enable",
       "logger.log_level",
       "naming.enable",
@@ -736,7 +655,7 @@ std::vector<coil::Properties> Manager::getLoadableModules()
 	return NULL;
       }
     RTC_TRACE(("RTC created: %s", comp_id["implementation_id"].c_str()));
-    m_listeners.rtclifecycle_.postCreate(comp);
+
     prop << comp_prop;
 
     //------------------------------------------------------------
@@ -745,14 +664,12 @@ std::vector<coil::Properties> Manager::getLoadableModules()
     // rtc.conf:
     //   [category].[type_name].config_file = file_name
     //   [category].[instance_name].config_file = file_name
-    m_listeners.rtclifecycle_.preConfigure(prop);
     configureComponent(comp, prop);
-    m_listeners.rtclifecycle_.postConfigure(prop);
+
     // comp->setProperties(prop);
     
     //------------------------------------------------------------
     // Component initialization
-    m_listeners.rtclifecycle_.preInitialize();
     if (comp->initialize() != RTC::RTC_OK)
       {
         RTC_TRACE(("RTC initialization failed: %s",
@@ -767,7 +684,6 @@ std::vector<coil::Properties> Manager::getLoadableModules()
       }
     RTC_TRACE(("RTC initialization succeeded: %s",
                comp_id["implementation_id"].c_str()));
-    m_listeners.rtclifecycle_.postInitialize();
     //------------------------------------------------------------
     // Bind component to naming service
     registerComponent(comp);
@@ -776,8 +692,7 @@ std::vector<coil::Properties> Manager::getLoadableModules()
   
   /*!
    * @if jp
-   * @brief RT•≥•Û•›°º•Õ•Û•»§Úƒæ¿‹ Manager §À≈–œø§π§Î
-   * @else
+   * @brief RT•≥•Û•›°º•Õ•Û•»§Úƒæ¿‹ Manager §À≈–œø§π§ÅE   * @else
    * @brief Register RT-Component directly without Factory
    * @endif
    */
@@ -787,23 +702,19 @@ std::vector<coil::Properties> Manager::getLoadableModules()
     // ### NamingManager §Œ§ﬂ§«¬ÂÕ—≤ƒ«Ω
     m_compManager.registerObject(comp);
     
-    coil::vstring names(comp->getNamingNames());
+    std::vector<std::string> names(comp->getNamingNames());
     
-    m_listeners.naming_.preBind(comp, names);
     for (int i(0), len(names.size()); i < len; ++i)
       {
 	RTC_TRACE(("Bind name: %s", names[i].c_str()));
 	m_namingManager->bindObject(names[i].c_str(), comp);
       }
-    m_listeners.naming_.postBind(comp, names);
-
     return true;
   }
   
   /*!
    * @if jp
-   * @brief RT•≥•Û•›°º•Õ•Û•»§Œ≈–œø§Ú≤ÚΩ¸§π§Î
-   * @else
+   * @brief RT•≥•Û•›°º•Õ•Û•»§Œ≈–œø§Ú≤ÚΩÅEπ§ÅE   * @else
    * @brief Unregister RT-Components
    * @endif
    */
@@ -814,14 +725,12 @@ std::vector<coil::Properties> Manager::getLoadableModules()
     m_compManager.unregisterObject(comp->getInstanceName());
     
     coil::vstring names(comp->getNamingNames());
-
-    m_listeners.naming_.preUnbind(comp, names);
+    
     for (int i(0), len(names.size()); i < len; ++i)
       {
 	RTC_TRACE(("Unbind name: %s", names[i].c_str()));
 	m_namingManager->unbindObject(names[i].c_str());
       }
-    m_listeners.naming_.postUnbind(comp, names);
 
     return true;
   }
@@ -851,8 +760,7 @@ std::vector<coil::Properties> Manager::getLoadableModules()
   
   /*!
    * @if jp
-   * @brief Manager §À≈–œø§µ§Ï§∆§§§ÎRT•≥•Û•›°º•Õ•Û•»§Ú∫ÔΩ¸§π§Î
-   * @else
+   * @brief Manager §À≈–œø§µ§ÅE∆§§§ÅET•≥•Û•›°º•Õ•Û•»§Ú∫ÅEÅEπ§ÅE   * @else
    * @brief Unregister RT-Components that have been registered to Manager
    * @endif
    */
@@ -906,8 +814,7 @@ std::vector<coil::Properties> Manager::getLoadableModules()
   
   /*!
    * @if jp
-   * @brief Manager §À≈–œø§µ§Ï§∆§§§ÎRT•≥•Û•›°º•Õ•Û•»§Ú∏°∫˜§π§Î
-   * @else
+   * @brief Manager §À≈–œø§µ§ÅE∆§§§ÅET•≥•Û•›°º•Õ•Û•»§Ú∏°∫˜§π§ÅE   * @else
    * @brief Get RT-Component's pointer
    * @endif
    */
@@ -919,8 +826,7 @@ std::vector<coil::Properties> Manager::getLoadableModules()
   
   /*!
    * @if jp
-   * @brief Manager §À≈–œø§µ§Ï§∆§§§Î¡¥RT•≥•Û•›°º•Õ•Û•»§ÚºË∆¿§π§Î
-   * @else
+   * @brief Manager §À≈–œø§µ§ÅE∆§§§ÅE¥RT•≥•Û•›°º•Õ•Û•»§ÚºË∆¿§π§ÅE   * @else
    * @brief Get all RT-Components registered in the Manager
    * @endif
    */
@@ -929,77 +835,13 @@ std::vector<coil::Properties> Manager::getLoadableModules()
     RTC_TRACE(("Manager::getComponents()"));
     return m_compManager.getObjects();
   }
-
-  void Manager::
-  addManagerActionListener(RTM::ManagerActionListener* listener,
-                           bool autoclean)
-  {
-    m_listeners.manager_.addListener(listener, autoclean);
-  }
-  void Manager::
-  removeManagerActionListener(RTM::ManagerActionListener* listener)
-  {
-    m_listeners.manager_.removeListener(listener);
-  }
-  
-  void Manager::
-  addModuleActionListener(RTM::ModuleActionListener* listener,
-                           bool autoclean)
-  {
-    m_listeners.module_.addListener(listener, autoclean);
-  }
-  void Manager::
-  removeModuleActionListener(RTM::ModuleActionListener* listener)
-  {
-    m_listeners.module_.removeListener(listener);
-  }
-
-  void Manager::
-  addRtcLifecycleActionListener(RTM::RtcLifecycleActionListener* listener,
-                                bool autoclean)
-  {
-    m_listeners.rtclifecycle_.addListener(listener, autoclean);
-  }
-  void Manager::
-  removeRtcLifecycleActionListener(RTM::RtcLifecycleActionListener* listener)
-  {
-    m_listeners.rtclifecycle_.removeListener(listener);
-  }
-  
-  void Manager::
-  addNamingActionListener(RTM::NamingActionListener* listener,
-                          bool autoclean)
-  {
-    m_listeners.naming_.addListener(listener, autoclean);
-  }
-
-  void Manager::
-  removeNamingActionListener(RTM::NamingActionListener* listener)
-  {
-    m_listeners.naming_.removeListener(listener);
-  }
-  
-  void Manager::
-  addLocalServiceActionListener(RTM::LocalServiceActionListener* listener,
-                                bool autoclean)
-  {
-    m_listeners.localservice_.addListener(listener, autoclean);
-  }
-
-  void Manager::
-  removeLocalServiceActionListener(RTM::LocalServiceActionListener* listener)
-  {
-    m_listeners.localservice_.removeListener(listener);
-  }
-
   
   //============================================================
   // CORBA ¥ÿœ¢
   //============================================================
   /*!
    * @if jp
-   * @brief ORB §Œ•›•§•Û•ø§ÚºË∆¿§π§Î
-   * @else
+   * @brief ORB §Œ•›•§•Û•ø§ÚºË∆¿§π§ÅE   * @else
    * @brief Get the pointer to the ORB
    * @endif
    */
@@ -1011,8 +853,7 @@ std::vector<coil::Properties> Manager::getLoadableModules()
   
   /*!
    * @if jp
-   * @brief Manager §¨ª˝§ƒ RootPOA §Œ•›•§•Û•ø§ÚºË∆¿§π§Î
-   * @else
+   * @brief Manager §¨ª˝§ƒ RootPOA §Œ•›•§•Û•ø§ÚºË∆¿§π§ÅE   * @else
    * @brief Get the pointer to the RootPOA 
    * @endif
    */
@@ -1024,8 +865,7 @@ std::vector<coil::Properties> Manager::getLoadableModules()
   
   /*!
    * @if jp
-   * @brief Manager §¨ª˝§ƒ POAManager §ÚºË∆¿§π§Î
-   * @else
+   * @brief Manager §¨ª˝§ƒ POAManager §ÚºË∆¿§π§ÅE   * @else
    * @brief Get the pointer to the POAManager 
    * @endif
    */
@@ -1044,7 +884,7 @@ std::vector<coil::Properties> Manager::getLoadableModules()
   //============================================================
   /*!
    * @if jp
-   * @brief Manager §Œ∆‚…ÙΩÈ¥¸≤ΩΩËÕ˝
+   * @brief Manager §Œ∆‚…ÙΩÈ¥ÅEΩΩËÕ˝
    * @else
    * @brief Manager internal initialization
    * @endif
@@ -1143,7 +983,7 @@ std::vector<coil::Properties> Manager::getLoadableModules()
   //============================================================
   /*!
    * @if jp
-   * @brief System logger §ŒΩÈ¥¸≤Ω
+   * @brief System logger §ŒΩÈ¥ÅEΩ
    * @else
    * @brief System logger initialization
    * @endif
@@ -1190,7 +1030,7 @@ std::vector<coil::Properties> Manager::getLoadableModules()
 
     // Set date format for log entry header
     rtclog.setDateFormat(m_config["logger.date_format"].c_str());
-    rtclog.setClockType(m_config["logger.clock_type"]);
+    
     // Loglevel was set from configuration file.
     rtclog.setLevel(m_config["logger.log_level"].c_str());
 	
@@ -1201,7 +1041,7 @@ std::vector<coil::Properties> Manager::getLoadableModules()
                  
 	
     RTC_INFO(("%s", m_config["openrtm.version"].c_str()));
-    RTC_INFO(("Copyright (C) 2003-2012"));
+    RTC_INFO(("Copyright (C) 2003-2014"));
     RTC_INFO(("  Noriaki Ando"));
     RTC_INFO(("  Intelligent Systems Research Institute, AIST"));
     RTC_INFO(("Manager starting."));
@@ -1239,7 +1079,7 @@ std::vector<coil::Properties> Manager::getLoadableModules()
   //============================================================
   /*!
    * @if jp
-   * @brief CORBA ORB §ŒΩÈ¥¸≤ΩΩËÕ˝
+   * @brief CORBA ORB §ŒΩÈ¥ÅEΩΩËÕ˝
    * @else
    * @brief CORBA ORB initialization
    * @endif
@@ -1303,7 +1143,7 @@ std::vector<coil::Properties> Manager::getLoadableModules()
   
   /*!
    * @if jp
-   * @brief ORB §Œ•≥•ﬁ•Û•…•È•§•Û•™•◊•∑•Á•Û∫Ó¿Æ
+   * @brief ORB §Œ•≥•ﬁ•Û•…•È•§•Û•™•◊•∑•Á•Û∫˚‹Æ
    * @else
    * @brief ORB command option creation
    * @endif
@@ -1486,7 +1326,7 @@ std::vector<coil::Properties> Manager::getLoadableModules()
   //============================================================
   /*!
    * @if jp
-   * @brief NamingManager §ŒΩÈ¥¸≤Ω
+   * @brief NamingManager §ŒΩÈ¥ÅEΩ
    * @else
    * @brief NamingManager initialization
    * @endif
@@ -1549,19 +1389,6 @@ std::vector<coil::Properties> Manager::getLoadableModules()
   void Manager::shutdownNaming()
   {
     RTC_TRACE(("Manager::shutdownNaming()"));
-    std::vector<RTObject_impl*> comps = getComponents();
-
-    for (size_t i(0); i < comps.size(); ++i)
-      {
-        coil::vstring names = comps[i]->getNamingNames();
-        m_listeners.naming_.preUnbind(comps[i], names);
-        for (size_t j(0); j < names.size(); ++j)
-          {
-            m_namingManager->unbindObject(names[j].c_str());
-          }
-        m_listeners.naming_.postUnbind(comps[i], names);
-      }
-
     m_namingManager->unbindAll();
     delete m_namingManager;
   }
@@ -1571,7 +1398,7 @@ std::vector<coil::Properties> Manager::getLoadableModules()
   //============================================================
   /*!
    * @if jp
-   * @brief ExecutionContextManager §ŒΩÈ¥¸≤Ω
+   * @brief ExecutionContextManager §ŒΩÈ¥ÅEΩ
    * @else
    * @brief ExecutionContextManager initialization
    * @endif
@@ -1602,7 +1429,7 @@ std::vector<coil::Properties> Manager::getLoadableModules()
 
   /*!
    * @if jp
-   * @brief Timer §ŒΩÈ¥¸≤Ω
+   * @brief Timer §ŒΩÈ¥ÅEΩ
    * @else
    * @brief Timer initialization
    * @endif
@@ -1660,25 +1487,6 @@ std::vector<coil::Properties> Manager::getLoadableModules()
     return true;
   }
   
-  bool Manager::initLocalService()
-  {
-    RTC_TRACE(("Manager::initLocalService()"));
-
-    RTM::LocalServiceAdmin& admin = RTM::LocalServiceAdmin::instance();
-    coil::Properties& prop(m_config.getNode("manager.local_service"));
-    admin.init(prop);
-    RTC_DEBUG(("LocalServiceAdmin's properties:"));
-    RTC_DEBUG_STR((prop));
-
-    RTM::LocalServiceProfileList svclist = admin.getServiceProfiles();
-    for (size_t i(0); i < svclist.size(); ++i)
-      {
-        RTC_INFO(("Available local service: %s (%s)",
-        svclist[i].name.c_str(), svclist[i].uuid.c_str()));
-      }
-    return true;
-  }
-
   /*!
    * @if jp
    * @brief NamingManager §ŒΩ™ŒªΩËÕ˝
@@ -1699,7 +1507,7 @@ std::vector<coil::Properties> Manager::getLoadableModules()
 	    coil::Properties p(comps[i]->getInstanceName());
 	    p << comps[i]->getProperties();
             rtclog.lock();
-	    rtclog.level(::RTC::Logger::RTL_PARANOID) << p;
+	    rtclog.level(Logger::RTL_PARANOID) << p;
             rtclog.unlock();
 	  }
 	catch (...)
@@ -1710,14 +1518,7 @@ std::vector<coil::Properties> Manager::getLoadableModules()
     for (CORBA::ULong i(0), len(m_ecs.size()); i < len; ++i)
       {
 	try{
-      PortableServer::RefCountServantBase* servant;
-      servant = dynamic_cast<PortableServer::RefCountServantBase*>(m_ecs[i]);
-      if (servant == NULL)
-        {
-          RTC_ERROR(("Invalid dynamic cast. EC->RefCountServantBase failed."));
-          return;
-        }
-      PortableServer::ObjectId_var oid = m_pPOA->servant_to_id(servant);
+          PortableServer::ObjectId_var oid = m_pPOA->servant_to_id(m_ecs[i]);
 	  m_pPOA->deactivate_object(oid);
 	}
 	catch (...)
@@ -1725,13 +1526,11 @@ std::vector<coil::Properties> Manager::getLoadableModules()
 	    ;
 	  }
       }
-    return;
   }
   
   /*!
    * @if jp
-   * @brief RT•≥•Û•›°º•Õ•Û•»§Œ≈–œø≤ÚΩ¸
-   * @else
+   * @brief RT•≥•Û•›°º•Õ•Û•»§Œ≈–œø≤ÚΩÅE   * @else
    * @brief Unregister RT-Components
    * @endif
    */
@@ -1763,8 +1562,7 @@ std::vector<coil::Properties> Manager::getLoadableModules()
   
   /*!
    * @if jp
-   * @brief createComponent§Œ∞˙øÙ§ÚΩËÕ˝§π§Î
-   * @else
+   * @brief createComponent§Œ∞˙øÙ§ÚΩËÕ˝§π§ÅE   * @else
    *
    * @endif
    */
@@ -1859,7 +1657,7 @@ std::vector<coil::Properties> Manager::getLoadableModules()
   
   /*!
    * @if jp
-   * @brief RT•≥•Û•›°º•Õ•Û•»§Œ•≥•Û•’•£•Æ•Â•Ï°º•∑•Á•ÛΩËÕ˝
+   * @brief RT•≥•Û•›°º•Õ•Û•»§Œ•≥•Û•’•£•Æ•Â•ÅEº•∑•Á•ÛΩËÕ˝
    * @else
    *
    * @endif
@@ -1870,12 +1668,13 @@ std::vector<coil::Properties> Manager::getLoadableModules()
     std::string category(comp->getCategory());
     std::string type_name(comp->getTypeName());
     std::string inst_name(comp->getInstanceName());
-
+    
     std::string type_conf(category + "." + type_name + ".config_file");
     std::string name_conf(category + "." + inst_name + ".config_file");
     coil::vstring config_fname;
+    
     coil::Properties type_prop, name_prop;
-
+    
     // Load "category.instance_name.config_file"
     if (!m_config[name_conf].empty())
       {
@@ -1886,7 +1685,7 @@ std::vector<coil::Properties> Manager::getLoadableModules()
             RTC_INFO(("Component instance conf file: %s loaded.",
                       m_config[name_conf].c_str()));
             RTC_DEBUG_STR((name_prop))
-            config_fname.push_back(m_config[name_conf].c_str());
+              config_fname.push_back(m_config[name_conf].c_str());
           }
       }
     if (m_config.findNode(category + "." + inst_name) != NULL)
@@ -1904,6 +1703,7 @@ std::vector<coil::Properties> Manager::getLoadableModules()
               }
           }
       }
+    
     if (!m_config[type_conf].empty())
       {
         std::ifstream conff(m_config[type_conf].c_str());
@@ -1931,10 +1731,11 @@ std::vector<coil::Properties> Manager::getLoadableModules()
               }
           }
       }
+    
     // Merge Properties. type_prop is merged properties
     comp->setProperties(prop);
     type_prop << name_prop;
-    type_prop["config_file"] = coil::flatten(coil::unique_sv(config_fname));
+    type_prop["config_file"] = coil::flatten(coil::unique_sv(config_fname));    
     comp->setProperties(type_prop);
     
     //------------------------------------------------------------
@@ -1958,7 +1759,7 @@ std::vector<coil::Properties> Manager::getLoadableModules()
   
   /*!
    * @if jp
-   * @brief •◊•Ì•—•∆•£æ Û§Œ•ﬁ°º•∏
+   * @brief •◊•˙¡—•∆•£æ Û§Œ•ﬁ°º•∏
    * @else
    * @brief Merge property information
    * @endif
@@ -1985,13 +1786,12 @@ std::vector<coil::Properties> Manager::getLoadableModules()
   
   /*!
    * @if jp
-   * @brief NamingServer §À≈–œø§π§Î∫›§Œ≈–œøæ Û§Ú¡»§ﬂŒ©§∆§Î
-   * @else
+   * @brief NamingServer §À≈–œø§π§ÅE›§Œ≈–œøæ Û§Ú¡»§ﬂŒ©§∆§ÅE   * @else
    * @brief Construct registration information when registering to Naming server
    * @endif
    */
   std::string Manager::formatString(const char* naming_format,
-				    coil::Properties& prop)
+                                    coil::Properties& prop)
   {
     std::string name(naming_format), str("");
     std::string::iterator it, it_end;
@@ -2001,60 +1801,60 @@ std::vector<coil::Properties> Manager::getLoadableModules()
     it_end = name.end();
     for ( ; it != it_end; ++it)
       {
-	char c(*it);
-	if (c == '%')
-	  {
-	    ++count;
-	    if (!(count % 2)) str.push_back((*it));
-	  }
-	else if (c == '$')
-	  {
-	    count = 0;
-	    ++it;
-	    if (*it == '{' || *it == '(')
-	      {
-		++it;
-		std::string env;
-		for ( ; it != it_end && (*it) != '}' && (*it) != ')'; ++it)
-		  {
-		    env += *it;
-		  }
-		char* envval = coil::getenv(env.c_str());
-		if (envval != NULL) str += envval;
-	      }
-	    else
-	      {
-		str.push_back(c);
-	      }
-	  }
-	else
-	  {
-	    if (count > 0 && (count % 2))
-	      {
-		count = 0;
-		if      (c == 'n')  str += prop["instance_name"];
-		else if (c == 't')  str += prop["type_name"];
-		else if (c == 'm')  str += prop["type_name"];
-		else if (c == 'v')  str += prop["version"];
-		else if (c == 'V')  str += prop["vendor"];
-		else if (c == 'c')  str += prop["category"];
-		else if (c == 'i')  str += prop["implementation_id"];
-		else if (c == 'N')
-		  {
-		    size_t n = prop["implementation_id"].size();
-		    str += prop["instance_name"].substr(n);
-		  }
-		else if (c == 'h')  str += m_config["os.hostname"];
-		else if (c == 'M')  str += m_config["manager.name"];
-		else if (c == 'p')  str += m_config["manager.pid"];
-		else str.push_back(c);
-	      }
-	    else
-	      {
-		count = 0;
-		str.push_back(c);
-	      }
-	  }
+        char c(*it);
+        if (c == '%')
+          {
+            ++count;
+            if (!(count % 2)) str.push_back((*it));
+          }
+        else if (c == '$')
+          {
+            count = 0;
+            ++it;
+            if (*it == '{' || *it == '(')
+              {
+                ++it;
+                std::string env;
+                for ( ; it != it_end && (*it) != '}' && (*it) != ')'; ++it)
+                  {
+                    env += *it;
+                  }
+                char* envval = coil::getenv(env.c_str());
+                if (envval != NULL) str += envval;
+              }
+            else
+              {
+               str.push_back(c);
+              }
+          }
+        else
+          {
+            if (count > 0 && (count % 2))
+              {
+                count = 0;
+                if      (c == 'n')  str += prop["instance_name"];
+                else if (c == 't')  str += prop["type_name"];
+                else if (c == 'm')  str += prop["type_name"];
+                else if (c == 'v')  str += prop["version"];
+                else if (c == 'V')  str += prop["vendor"];
+                else if (c == 'c')  str += prop["category"];
+                else if (c == 'i')  str += prop["implementation_id"];
+                else if (c == 'N')
+                  {
+                    size_t n = prop["implementation_id"].size();
+                    str += prop["instance_name"].substr(n);
+                  }
+                else if (c == 'h')  str += m_config["os.hostname"];
+                else if (c == 'M')  str += m_config["manager.name"];
+                else if (c == 'p')  str += m_config["manager.pid"];
+                else str.push_back(c);
+              }
+            else
+              {
+                count = 0;
+                str.push_back(c);
+              }
+          }
       }
     return str;
   }

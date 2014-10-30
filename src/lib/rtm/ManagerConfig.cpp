@@ -118,7 +118,6 @@ namespace RTC
 
     // Properties from arguments are marged finally
     prop << m_argprop;
-    prop["config_file"] = m_configFile;
   }
   
   /*!
@@ -175,7 +174,7 @@ namespace RTC
             m_isMaster = true;
 	    break;
 	  default:
-	    break;
+	    ;
 	  }
       }
     return;

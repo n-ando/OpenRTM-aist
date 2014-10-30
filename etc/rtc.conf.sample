@@ -384,22 +384,6 @@ logger.date_format: %b %d %H:%M:%S
 #
 logger.log_level: NORMAL
 
-#
-# Logger's clock time
-#
-# logger.clock_type option specifies a type of clock to be used for
-# timestamp of log message. Now these three types are available.
-#
-# - system: system clock [default]
-# - logical: logical clock
-# - adjusted: adjusted clock
-#
-# To use logical time clock, call and set time by the following
-# function in somewhere.
-# coil::ClockManager::instance().getClock("logical").settime()
-#
-logger.clock_type: system
-
 #============================================================
 # Timer configuration
 #============================================================
@@ -419,64 +403,12 @@ timer.tick: 0.1
 #
 # Periodic type ExecutionContext
 #
-# Other availabilities in OpenRTM-aist
-#
-# - ExtTrigExecutionContext: External triggered EC. It is embedded in
-#                            OpenRTM library.
-# - OpenHRPExecutionContext: External triggred paralell execution
-#                            EC. It is embedded in OpenRTM
-#                            library. This is usually used with
-#                            OpenHRP3.
-# - RTPreemptEC:             Real-time execution context for Linux
-#                            RT-preemptive pathed kernel.
-# - ArtExecutionContext:     Real-time execution context for ARTLinux
-#                            (http://sourceforge.net/projects/art-linux/)
-#
 exec_cxt.periodic.type: PeriodicExecutionContext
-# exec_cxt.event_driven_type: to be implemented
 
 #
 # The execution cycle of ExecutionContext
 #
 exec_cxt.periodic.rate: 1000
-
-#
-# State transition mode settings YES/NO
-#
-# Default: YES (efault setting is recommended.)
-#
-# Activating, deactivating and resetting of RTC makes state
-# transition.  Some execution contexts execute main logic in different
-# thread.  If these flags set to YES, activation, deactivation and
-# resetting will be performed synchronously.  In other words, if these
-# flags are YES, activation/deactivation/resetting-operations must be
-# returned after state transition completed.
-#
-# "synchronous_transition" will set synchronous transition flags to
-# all other synchronous transition flags
-# (synchronous_activation/deactivation/resetting.
-#
-exec_cxt.sync_transition: YES
-exec_cxt.sync_activation: YES
-exec_cxt.sync_deactivation: YES
-exec_cxt.sync_reset: YES
-
-#
-# Timeout of synchronous state transition [s]
-#
-# Default: 1.0 [s]
-#
-# When synchronous transition flags are set to YES, the following
-# timeout settings are valid. If "transition_timeout" is set, the
-# value will be set to all other timeout of activation/deactivation
-# and resetting
-#
-exec_cxt.transition_timeout: 0.5
-exec_cxt.activation_timeout: 0.5
-exec_cxt.deactivation_timeout: 0.5
-exec_cxt.reset_timeout: 0.5
-
-
 
 #============================================================
 # SDO service settings

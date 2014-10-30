@@ -74,8 +74,7 @@ static const char* default_config[] =
     "corba.nameservice.replace_endpoint",    "NO",
     "exec_cxt.periodic.type",                "PeriodicExecutionContext",
     "exec_cxt.periodic.rate",                "1000",
-    "exec_cxt.sync_transition",              "YES",
-    "exec_cxt.transition_timeout",           "0.5",
+    "exec_cxt.evdriven.type",                "EventDrivenExecutionContext",
     "manager.modules.load_path",             "./",
     "manager.modules.abs_path_allowed",      "YES",
     "manager.is_master",                     "NO",
@@ -106,7 +105,6 @@ static const char* default_config[] =
     "manager.modules.Java.profile_cmd",      "rtcprof_java",
     "manager.modules.Java.suffixes",         "class",
     "manager.modules.Java.load_paths",       "./",
-    "manager.local_service.enabled_services","ALL",
     "sdo.service.provider.enabled_service",  "ALL",
     "sdo.service.consumer.enabled_service",  "ALL",
     ""

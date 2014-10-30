@@ -58,7 +58,6 @@ namespace InPortProvider
       setDataFlowType(dataFlowType.c_str());
       setSubscriptionType(subscriptionType.c_str());
     }
-    virtual ~InPortProviderMock(){};
     void setDummydataInProperties(void)
     {
       NVUtil::appendStringValue(m_properties, "KEY1", "VALUE1");

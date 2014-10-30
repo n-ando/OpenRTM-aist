@@ -426,22 +426,8 @@ namespace RTM
   RTC::ReturnCode_t ManagerServant::delete_component(const char* instance_name)
   {
     RTC_TRACE(("delete_component(%s)", instance_name));
-
-    RTC::RTObject_impl* comp = m_mgr.getComponent(instance_name);
-    if (comp == NULL)
-      {
-        RTC_WARN(("No such component exists: %s", instance_name));
-        return RTC::BAD_PARAMETER;
-      }
-    try
-      {
-        comp->exit();
-      }
-    catch (...)
-      { // never come here
-        RTC_ERROR(("Unknown exception was raised, when RTC was finalized."));
-        return RTC::RTC_ERROR;
-      }
+    
+    m_mgr.deleteComponent(instance_name);
     return ::RTC::RTC_OK;
   }
   

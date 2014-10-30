@@ -79,20 +79,19 @@ cmake_DATA = OpenRTMConfig.cmake FindOpenRTM.cmake
 # basic compiler/linker options
 OPENRTM_CFLAGS=`echo "${CXXFLAGS}" | sed -e 's/\-I[^ ]*//g'`
 OPENRTM_INCLUDE_DIRS=        \
-	${prefix}/include  \
-	${coil_includedir} \
-	${rtm_includedir}  \
-	${rtm_includedir}/rtm/idl
+	-I${prefix}/include  \
+	-I${coil_includedir} \
+	-I${rtm_includedir}  \
+	-I${rtm_includedir}/rtm/idl
 OPENRTM_LDFLAGS_=`echo "${LDFLAGS}" | sed -e 's/\-L[^ ]*//g'`
-OPENRTM_LIBRARY_DIRS=${prefix}/lib
-OPENRTM_LIBRARIES_=`echo ${LIBS} RTC coil | sed -e 's/\-l\([^ ]*\)/\1/g'`
+OPENRTM_LIBRARY_DIRS=-L${prefix}/lib
+OPENRTM_LIBRARIES_=${LIBS} -lRTC -lcoil
 
 # OpenRTM-aist specific directory
 COIL_INCLUDE_DIR=${coil_includedir}
 OPENRTM_INCLUDE_DIR=${rtm_includedir}
 OPENRTM_LIB_DIR=${rtm_libdir}
 OPENRTM_DATA_DIR=${rtm_datadir}
-OPENRTM_DIR=${prefix}
 
 # OpenRTM-aist version
 OPENRTM_VERSION=${RTM_VERSION}
@@ -159,7 +158,6 @@ OpenRTMConfig.cmake: Makefile.am
 	echo "set(OPENRTM_LIBRARY_DIRS ${OPENRTM_LIBRARY_DIRS})" >> $@
 	echo "set(OPENRTM_LIBRARIES ${OPENRTM_LIBRARIES_})" >> $@
 	echo "set(OPENRTM_LIB_DIR ${OPENRTM_LIB_DIR})" >> $@
-	echo "set(OPENRTM_DIR ${OPENRTM_DIR})" >> $@
 	echo "" >> $@
 	echo "# OpenRTM-aist specific directory" >> $@
 	echo "set(COIL_INCLUDE_DIR ${COIL_INCLUDE_DIR})" >> $@
@@ -180,18 +178,6 @@ OpenRTMConfig.cmake: Makefile.am
 	echo "set(OPENRTM_IDL_WRAPPER_FLAGS ${OPENRTM_IDL_WRAPPER_FLAGS})" >> $@
 	echo "set(OPENRTM_IDLC ${OPENRTM_IDLC})" >> $@
 	echo "set(OPENRTM_IDLFLAGS ${OPENRTM_IDLFLAGS})" >> $@
-	echo "" >> $@
-	echo "include(FindPkgConfig)" >> $@
-	echo "#" >> $@
-	echo "# Getting omniORB settings" >> $@
-	echo "#" >> $@
-	echo "pkg_check_modules(OMNIORB REQUIRED "omniORB4")" >> $@
-	echo "if(NOT OMNIORB_DIR)" >> $@
-	echo "  if(OMNIORB_FOUND)" >> $@
-	echo "    set(OMNIORB_DIR "${OMNIORB_PREFIX}")" >> $@
-	echo "  endif()" >> $@
-	echo "  set(OMNIORB_DIR "${OMNIORB_DIR}" CACHE PATH "omniORB root directory")" >> $@
-	echo "endif()" >> $@
 	echo "" >> $@
 	echo 'message(STATUS "OpenRTM-aist configuration done")' >> $@
 	echo "# end of OpenRTMConfig.cmake" >> $@

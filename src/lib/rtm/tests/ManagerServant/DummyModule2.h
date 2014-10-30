@@ -34,7 +34,7 @@ class DummyModule2
 {
  public:
   DummyModule2(RTC::Manager* manager);
-  virtual ~DummyModule2();
+  ~DummyModule2();
 
   // The initialize action (on CREATED->ALIVE transition)
   // formaer rtc_init_entry() 

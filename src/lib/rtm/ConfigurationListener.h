@@ -31,7 +31,7 @@ namespace RTC
    * @if jp
    * @brief ConfigurationParamListener のタイプ
    *
-   * - ON_UPDATE_CONFIG_PARAM: パラメータが変更された
+   * - ON_UPDATE_CONFIG_PARAM,
    *
    * @else
    * @brief The types of ConnectorDataListener

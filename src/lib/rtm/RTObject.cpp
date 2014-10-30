@@ -315,43 +315,42 @@ namespace RTC
     throw (CORBA::SystemException)
   {
     RTC_TRACE(("initialize()"));
+    std::string ec_args;
 
-    // EC creation
-    std::vector<coil::Properties> ec_args;
-    if (getContextOptions(ec_args) != RTC::RTC_OK)
-      {
-        RTC_ERROR(("Valid EC options are not available. Aborting"));
-        return RTC::BAD_PARAMETER;
-      }
-    if (createContexts(ec_args) != RTC::RTC_OK)
-      {
-        RTC_ERROR(("EC creation failed. Maybe out of resources. Aborting."));
-        return RTC::OUT_OF_RESOURCES;
-      }
+    ec_args += m_properties["exec_cxt.periodic.type"];
+    ec_args += "?";
+    ec_args += "rate=" + m_properties["exec_cxt.periodic.rate"];
 
+    RTC::ExecutionContextBase* ec;
+    ec = RTC::Manager::instance().createContext(ec_args.c_str());
+    if (ec == NULL) return RTC::RTC_ERROR;
+
+    ec->set_rate(atof(m_properties["exec_cxt.periodic.rate"].c_str()));
+    m_eclist.push_back(ec);
+    ExecutionContextService_var ecv;
+    ecv = RTC::ExecutionContextService::_duplicate(ec->getObjRef());
+    if (CORBA::is_nil(ecv)) return RTC::RTC_ERROR;
+
+    ec->bindComponent(this);
     // -- entering alive state --
-    RTC_INFO(("%d execution context%s created.",
-              m_ecMine.length(),
-              (m_ecMine.length() == 1) ? " was" : "s were"));
+    // at least one EC must be attached
+    if (m_ecMine.length() == 0) return RTC::PRECONDITION_NOT_MET;
+
     ReturnCode_t ret;
     ret = on_initialize();
+    if (ret != RTC::RTC_OK) return ret;
     m_created = false;
-    if (ret != RTC::RTC_OK)
-      {
-        RTC_ERROR(("on_initialize() failed."));
-        return ret;
-      }
-    RTC_DEBUG(("on_initialize() was properly done."));
+
     for (::CORBA::ULong i(0), len(m_ecMine.length()); i < len; ++i)
       {
         RTC_DEBUG(("EC[%d] starting.", i));
         m_ecMine[i]->start();
       }
+
     // ret must be RTC_OK
-    assert(ret == RTC::RTC_OK);
     return ret;
   }
- 
+  
   /*!
    * @if jp
    * @brief [CORBA interface] RTC を終了する
@@ -363,8 +362,8 @@ namespace RTC
     throw (CORBA::SystemException)
   {
     RTC_TRACE(("finalize()"));
-    if (m_created)  { return RTC::PRECONDITION_NOT_MET; }
-    if (!m_exiting) { return RTC::PRECONDITION_NOT_MET; }
+    if (m_created) return RTC::PRECONDITION_NOT_MET;
+    if (!m_exiting) return RTC::PRECONDITION_NOT_MET;
     // Return RTC::PRECONDITION_NOT_MET,
     // When the component is registered in ExecutionContext.
     // m_ecMine.length() != 0 || 
@@ -416,7 +415,7 @@ namespace RTC
     for (CORBA::ULong ic(0), len(m_ecOther.length()); ic < len; ++ic)
       {
         //        m_ecOther[ic]->stop();
-        RTC::LightweightRTObject_var comp(this->_this());
+	RTC::LightweightRTObject_var comp(this->_this());
         if (! ::CORBA::is_nil(m_ecOther[ic]))
           {
             m_ecOther[ic]->remove_component(comp.in());
@@ -785,41 +784,22 @@ namespace RTC
     try
       {
         preOnInitialize(0);
-        RTC_DEBUG(("Calling onInitialize()."));
         ret = onInitialize();
-        if (ret != RTC::RTC_OK)
-          {
-            RTC_ERROR(("onInitialize() returns an ERROR (%d)", ret));
-          }
-        else
-          {
-            RTC_DEBUG(("onInitialize() succeeded."));
-          }
       }
     catch (...)
       {
-        RTC_ERROR(("onInitialize() raised an exception."));
-        ret = RTC::RTC_ERROR;
+	ret = RTC::RTC_ERROR;
       }
     std::string active_set;
     active_set = m_properties.getProperty("configuration.active_config",
                                           "default");
     if (m_configsets.haveConfig(active_set.c_str()))
       {
-        RTC_DEBUG(("Active configuration set: %s exists.",
-                   active_set.c_str()));
-        m_configsets.activateConfigurationSet(active_set.c_str());
         m_configsets.update(active_set.c_str());
-        RTC_INFO(("Initial active configuration set is %s.",
-                   active_set.c_str()));
       }
     else
       {
-        RTC_DEBUG(("Active configuration set: %s does not exists.",
-               active_set.c_str()));
-        m_configsets.activateConfigurationSet("default");
         m_configsets.update("default");
-        RTC_INFO(("Initial active configuration set is default-set."));
       }
     postOnInitialize(0, ret);
     return ret;
@@ -890,11 +870,11 @@ namespace RTC
     try
       {
         preOnShutdown(ec_id);
-        ret = onShutdown(ec_id);
+	ret = onShutdown(ec_id);
       }
     catch (...)
       {
-        ret = RTC::RTC_ERROR;
+	ret = RTC::RTC_ERROR;
       }
     postOnShutdown(ec_id, ret);
     return ret;
@@ -915,13 +895,13 @@ namespace RTC
     try
       {
         preOnActivated(ec_id);
-        m_configsets.update();
-        ret = onActivated(ec_id);
+	m_configsets.update();
+	ret = onActivated(ec_id);
         m_portAdmin.activatePorts();
       }
     catch (...)
       {
-        ret = RTC::RTC_ERROR;
+	ret = RTC::RTC_ERROR;
       }
     postOnActivated(ec_id, ret);
     return ret;
@@ -943,7 +923,7 @@ namespace RTC
       {
         preOnDeactivated(ec_id);
         m_portAdmin.deactivatePorts();
-        ret = onDeactivated(ec_id);
+	ret = onDeactivated(ec_id);
       }
     catch (...)
       {
@@ -2131,22 +2111,12 @@ namespace RTC
     RTC_TRACE(("finalizeContexts()"));
     for (int i(0), len(m_eclist.size()); i < len; ++i)
       {
-        m_eclist[i]->getObjRef()->stop();
+        m_eclist[i]->stop();
         try
           {
-            PortableServer::RefCountServantBase* servant(NULL);
-            servant =
-              dynamic_cast<PortableServer::RefCountServantBase*>(m_eclist[i]);
-            if (servant == NULL)
-              {
-                RTC_ERROR(("Dynamic cast error: ECBase -> Servant."));
-                continue;
-              }
-            RTC_DEBUG(("Deactivating Execution Context."));
             PortableServer::ObjectId_var oid
-              = m_pPOA->servant_to_id(servant);
+              = m_pPOA->servant_to_id(m_eclist[i]);
             m_pPOA->deactivate_object(oid);
-            RTC_DEBUG(("Deactivating EC done."));
           }
         catch (PortableServer::POA::ServantNotActive &e)
           {
@@ -2423,7 +2393,7 @@ namespace RTC
   {
     m_configsets.addConfigurationSetListener(type, listener, autoclean);
   }
-
+  
   /*!
    * @if jp
    * @brief ConfigurationSetListener を削除する
@@ -2437,7 +2407,7 @@ namespace RTC
   {
     m_configsets.removeConfigurationSetListener(type, listener);
   }
-
+  
   /*!
    * @if jp
    * @brief ConfigurationSetNameListener を追加する
@@ -2452,7 +2422,7 @@ namespace RTC
   {
     m_configsets.addConfigurationSetNameListener(type, listener, autoclean);
   }
-
+  
   /*!
    * @if jp
    * @brief ConfigurationSetNameListener を削除する
@@ -2480,14 +2450,14 @@ namespace RTC
     RTC_TRACE(("shutdown()"));
     try
       {
-        finalizePorts();
+	finalizePorts();
         finalizeContexts();
         PortableServer::ObjectId_var oid1;
         oid1 = m_pPOA->servant_to_id(m_pSdoConfigImpl);
         PortableServer::ObjectId_var oid2;
         oid2 = m_pPOA->servant_to_id(this);
-        m_pPOA->deactivate_object(oid1);
-        m_pPOA->deactivate_object(oid2);
+	m_pPOA->deactivate_object(oid1);
+	m_pPOA->deactivate_object(oid2);
       }
     catch (PortableServer::POA::ServantNotActive &e)
       {
@@ -2502,7 +2472,7 @@ namespace RTC
         // never throws exception
         RTC_ERROR(("Unknown exception caught."));
       }
-
+    
     if (m_pManager != NULL)
       {
         RTC_DEBUG(("Cleanup on Manager"));
@@ -2510,231 +2480,6 @@ namespace RTC
       }
   }
 
-  ReturnCode_t RTObject_impl::
-  getInheritedECOptions(coil::Properties& default_opts)
-  {
-    const char* inherited_opts[] =
-      {
-        "sync_transition",
-        "sync_activation",
-        "sync_deactivation",
-        "sync_reset",
-        "transition_timeout",
-        "activation_timeout",
-        "deactivation_timeout",
-        "reset_timeout",
-        ""
-      };
-    coil::Properties* p = m_properties.findNode("exec_cxt");
-    if (p == NULL)
-      {
-        RTC_WARN(("No exec_cxt option found."));
-        return RTC::RTC_ERROR;
-      }
-    RTC_DEBUG(("Copying inherited EC options."));
-    for (size_t i(0); inherited_opts[i][0] != '\0'; ++i)
-      {
-        if ((*p).findNode(inherited_opts[i]) != NULL)
-          {
-            RTC_PARANOID(("Option %s exists.", inherited_opts[i]));
-            default_opts[inherited_opts[i]] = (*p)[inherited_opts[i]];
-          }
-      }
-    return RTC::RTC_OK;
-  }
-
-  /*!
-   * @brief getting individual EC options from RTC's configuration file
-   */
-  ReturnCode_t RTObject_impl::
-  getPrivateContextOptions(std::vector<coil::Properties>& ec_args)
-  {
-    RTC_TRACE(("getPrivateContextOptions()"));
-    // Component specific multiple EC option available
-    if (m_properties.findNode("execution_contexts") == NULL)
-      {
-        RTC_DEBUG(("No component specific EC specified."));
-        return RTC::RTC_ERROR;
-      }
-    std::string& args(m_properties["execution_contexts"]);
-    coil::vstring ecs_tmp = coil::split(args, ",", true);
-    if (ecs_tmp.empty()) { return RTC::RTC_ERROR; }
-    RTC_DEBUG(("Component specific e EC option available,"));
-    RTC_DEBUG(("%s", args.c_str()));
-
-    coil::Properties default_opts;
-    getInheritedECOptions(default_opts);
-    for (size_t i(0); i < ecs_tmp.size(); ++i)
-      {
-        if (coil::normalize(ecs_tmp[i]) == "none")
-          {
-            RTC_INFO(("EC none. EC will not be bound to the RTC."));
-            ec_args.clear();
-            return RTC::RTC_OK;
-          }
-        coil::vstring type_and_name = coil::split(ecs_tmp[i], "(", true);
-        if (type_and_name.size() > 2)
-          {
-            RTC_DEBUG(("Invalid EC type specified: %s", ecs_tmp[i].c_str()));
-            continue;
-          }
-        coil::Properties p = default_opts;
-        // create EC's properties
-        p["type"] = type_and_name[0];
-        RTC_DEBUG(("p_type: %s", p["type"].c_str()));
-        coil::Properties* p_type = m_properties.findNode("ec." + p["type"]);
-        if (p_type != NULL)
-          {
-            RTC_DEBUG(("p_type props:"));
-            RTC_DEBUG_STR((*p_type));
-            p << *p_type;
-          }
-        else { RTC_DEBUG(("p_type none")); }
-
-        // EC name specified
-        RTC_DEBUG(("size: %d, name: %s", type_and_name.size(),
-                   type_and_name[1].c_str()))
-        if (type_and_name.size() == 2 &&
-            type_and_name[1].at(type_and_name[1].size() - 1) == ')')
-          {
-            type_and_name[1].erase(type_and_name[1].size() - 1);
-            p["name"] = type_and_name[1];
-            coil::Properties* p_name = m_properties.findNode("ec." + p["name"]);
-            if (p_name != NULL)
-              {
-                RTC_DEBUG(("p_name props:"));
-                RTC_DEBUG_STR((*p_name));
-                p << *p_name;
-              }
-            else { RTC_DEBUG(("p_name none")); }
-          }
-        ec_args.push_back(p);
-        RTC_DEBUG(("New EC properties stored:"));
-        RTC_DEBUG_STR((p));
-      }
-    return RTC::RTC_OK;
-  }
-
-  /*!
-   * @brief getting global EC options from rtc.conf
-   */
-  ReturnCode_t RTObject_impl::
-  getGlobalContextOptions(coil::Properties& global_ec_props)
-  {
-    // exec_cxt option is obsolete
-    RTC_TRACE(("getGlobalContextOptions()"));
-
-    coil::Properties* prop = m_properties.findNode("exec_cxt.periodic");
-    if (prop == NULL)
-      {
-        RTC_WARN(("No global EC options found."));
-        return RTC::RTC_ERROR;
-      }
-    RTC_DEBUG(("Global EC options are specified."));
-    RTC_DEBUG_STR((*prop));
-    getInheritedECOptions(global_ec_props);
-    global_ec_props << *prop;
-    return RTC::RTC_OK;
-  }
-
-  /*!
-   * @brief getting EC options
-   */
-  ReturnCode_t RTObject_impl::
-  getContextOptions(std::vector<coil::Properties>& ec_args)
-  {
-    RTC_DEBUG(("getContextOptions()"));
-    coil::Properties global_props;
-    ReturnCode_t ret_global  = getGlobalContextOptions(global_props);
-    ReturnCode_t ret_private = getPrivateContextOptions(ec_args);
-
-    // private(X), global(X) -> error
-    // private(O), global(O) -> private
-    // private(X), global(O) -> global
-    // private(O), global(X) -> private
-    if (ret_global != RTC::RTC_OK && ret_private != RTC::RTC_OK)
-      {
-        return RTC::RTC_ERROR;
-      }
-    if (ret_global == RTC::RTC_OK && ret_private != RTC::RTC_OK)
-      {
-        ec_args.push_back(global_props);
-      }
-    return RTC::RTC_OK;
-  }
-  
-  /*!
-   * @brief finding existing EC from the factory
-   */
-  ReturnCode_t RTObject_impl::
-  findExistingEC(coil::Properties& ec_arg,
-                 RTC::ExecutionContextBase*& ec)
-  {
-    std::vector<RTC::ExecutionContextBase*> eclist;
-    eclist = RTC::ExecutionContextFactory::instance().createdObjects();
-    for (size_t i(0); i < eclist.size(); ++i)
-      {
-        if (eclist[i]->getProperties()["type"] == ec_arg["type"] &&
-            eclist[i]->getProperties()["name"] == ec_arg["name"])
-          {
-            ec = eclist[i];
-            return RTC::RTC_OK;
-          }
-      }
-    return RTC::RTC_ERROR;
-  }
-
-  /*!
-   * @brief creating, initializing and binding context
-   */
-  ReturnCode_t RTObject_impl::
-  createContexts(std::vector<coil::Properties>& ec_args)
-  {
-    ReturnCode_t ret(RTC::RTC_OK);
-    coil::vstring avail_ec
-      = RTC::ExecutionContextFactory::instance().getIdentifiers();
-
-    for (size_t i(0); i < ec_args.size(); ++i)
-      {
-        std::string& ec_type(ec_args[i]["type"]);
-        std::string& ec_name(ec_args[i]["name"]);
-        RTC::ExecutionContextBase* ec;
-        if (!ec_name.empty() &&
-            findExistingEC(ec_args[i], ec) == RTC::RTC_OK)
-          { // if EC's name exists, find existing EC in the factory.
-            RTC_DEBUG(("EC: type=%s, name=%s already exists.",
-                       ec_type.c_str(), ec_name.c_str()));
-          }
-        else
-          { // If EC's name is empty or no existing EC, create new EC.
-            if (std::find(avail_ec.begin(), avail_ec.end(), ec_type)
-                == avail_ec.end())
-              {
-                RTC_WARN(("EC %s is not available.", ec_type.c_str()));
-                RTC_DEBUG(("Available ECs: %s",
-                           coil::flatten(avail_ec).c_str()));
-                continue;
-              }
-            ec = RTC::ExecutionContextFactory::
-              instance().createObject(ec_type.c_str());
-          }
-
-        if (ec == NULL)
-          { // EC factory available but creation failed. Resource full?
-            RTC_ERROR(("EC (%s) creation failed.", ec_type.c_str()));
-            RTC_DEBUG(("Available EC list: %s",
-                       coil::flatten(avail_ec).c_str()));
-            ret = RTC::RTC_ERROR;
-            continue;
-          }
-        RTC_DEBUG(("EC (%s) created.", ec_type.c_str()));
-
-        ec->init(ec_args[i]);
-        m_eclist.push_back(ec);
-        ec->bindComponent(this);
-      }
-    return ret;
-  }
 
 
 }

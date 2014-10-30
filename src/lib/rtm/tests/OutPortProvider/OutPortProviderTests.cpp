@@ -152,7 +152,6 @@ namespace OutPortProvider
       setSubscriptionType(subscriptionType.c_str());
 			
     }
-    virtual ~OutPortProviderMock() {}
 
     void setDummydataInProperties(void)
     {

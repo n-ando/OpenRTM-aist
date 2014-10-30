@@ -162,7 +162,7 @@ while test $# -gt 0; do
       ;;
     --libdir)
       echo_libdir=yes
-      ;;
+	  ;;
     --orb)
       echo_orb=yes
       ;;

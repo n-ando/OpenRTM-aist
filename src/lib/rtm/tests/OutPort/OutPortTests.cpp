@@ -29,8 +29,6 @@
 #ifndef OutPort_cpp
 #define OutPort_cpp
 
-#include <sys/time.h>
-
 #include <cppunit/ui/text/TestRunner.h>
 #include <cppunit/TextOutputter.h>
 #include <cppunit/extensions/TestFactoryRegistry.h>
@@ -186,7 +184,7 @@ namespace OutPort
       bool subscribeInterface(const SDOPackage::NVList& properties)
       {
     
-          return true;
+          return true;;
       }
   
       /*!
@@ -272,7 +270,7 @@ namespace OutPort
       bool subscribeInterface(const SDOPackage::NVList& properties)
       {
     
-          return true;
+          return true;;
       }
   
       /*!
@@ -537,7 +535,7 @@ namespace OutPort
       {
           m_logger = NULL;
       }
-      virtual ~PublisherFlushMock()
+      ~PublisherFlushMock()
       {
       }
       /*!

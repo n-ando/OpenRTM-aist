@@ -377,8 +377,6 @@ clean_skelstub:
 	rm -f *Stub.h *Stub.cpp
 	rm -f *.hh *SK.cc
 	rm -f *C.cpp *C.h *S.cpp *S.h *_T.cpp *_T.h *.inl
-	rm -f *-common.c *-decls.h *-skelimpl.c *-skels.c *-stubs.c
-	rm -f MyService.h MyService.hh
 
 clean-local: clean_objs clean_skelstub
 	rm -f *.bak *.rpo *.sym lib*.*_pure_*

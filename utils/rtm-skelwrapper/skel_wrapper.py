@@ -139,7 +139,7 @@ stub_h = """// -*- C++ -*-
 [config_inc]
 
 #if   defined ORB_IS_TAO
-#  include "[basename]C.h"
+#  include "[include_dir][basename]C.h"
 #elif defined ORB_IS_OMNIORB
 #  if defined(WIN32) || defined(_WIN32) || defined(__WIN32__) || defined(__NT__)
 #    undef USE_stub_in_nt_dll

@@ -264,7 +264,7 @@ namespace RTC
    */
   void ModuleManager::setLoadpath(const std::vector<std::string>& load_path)
   {
-    RTC_TRACE(("setLoadpath(%s)", coil::flatten(load_path, ", ").c_str()));
+    RTC_TRACE(("setLoadpath(%s)", coil::flatten(load_path).c_str()));
     m_loadPath = load_path;
     return;
   }
@@ -278,7 +278,7 @@ namespace RTC
    */
   void ModuleManager::addLoadpath(const std::vector<std::string>& load_path)
   {
-    RTC_TRACE(("addLoadpath(%s)", coil::flatten(load_path, ", ").c_str()));
+    RTC_TRACE(("addLoadpath(%s)", coil::flatten(load_path).c_str()));
     StringVectorConstItr it(load_path.begin());
     StringVectorConstItr it_end(load_path.end());
     
@@ -360,7 +360,7 @@ namespace RTC
 				      const std::vector<std::string>& load_path)
   {
     RTC_TRACE(("findFile(%s, %s)", fname.c_str(),
-	       coil::flatten(load_path, ", ").c_str()));
+	       coil::flatten(load_path).c_str()));
     StringVectorConstItr it, it_end;
     std::string file_name(fname);
     

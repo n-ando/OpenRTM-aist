@@ -684,12 +684,7 @@ extern "C"
   {
     RTC::SdoServiceConsumerFactory& factory
       = RTC::SdoServiceConsumerFactory::instance();
-#ifndef ORB_IS_RTORB
     factory.addFactory(CORBA_Util::toRepositoryId<OpenRTM::ComponentObserver>(),
-#else
-    factory.addFactory(CORBA_Util::
-                       toRepositoryIdOfObject<OpenRTM::ComponentObserver>(),
-#endif
                        ::coil::Creator< ::RTC::SdoServiceConsumerBase,
                        ::RTC::ComponentObserverConsumer>,
                        ::coil::Destructor< ::RTC::SdoServiceConsumerBase,

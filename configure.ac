@@ -38,7 +38,7 @@ dnl ------------------------------------------------------------
 dnl rename config header's PACKAGE_* definition
 dnl ------------------------------------------------------------
 mv src/lib/rtm/config_rtc.h.in src/lib/rtm/config_rtc.h.in.org
-sed -e 's/undef PACKAGE/undef RTM_PACKAGE/g' src/lib/rtm/config_rtc.h.in.org | sed -e 's/\#undef VERSION.*//g' > src/lib/rtm/config_rtc.h.in
+sed -e 's/undef PACKAGE/undef RTM_PACKAGE/g' src/lib/rtm/config_rtc.h.in.org | sed -e 's/\#define VERSION .*//g' > src/lib/rtm/config_rtc.h.in
 rm -f src/lib/rtm/config_rtc.h.in.org
 
 AC_CONFIG_SUBDIRS([src/lib/coil])
@@ -1403,8 +1403,7 @@ if test "x$os" = "xlinux" ; then
 		fi
 		AC_DEFINE([ARTLINUX], [TRUE], [ARTLinux is avaiable])
 		ARTLINUX="artlinux"
-        PATH_NORM($art_syscalls_o_dir/art_syscalls.o)
-		ARTLIB=$n_path
+		ARTLIB="$art_syscalls_o_dir/art_syscalls.o"
 		echo 'RTM is compiled with ARTLinux'
 	fi
 fi
@@ -1580,6 +1579,7 @@ AC_OUTPUT([Makefile
 	build/Makefile
 	packages/Makefile
 	packages/deb/Makefile
+	packages/deb/debian/Makefile
 	packages/rpm/Makefile
 	src/Makefile
 	src/lib/Makefile
@@ -1640,14 +1640,9 @@ AC_OUTPUT([Makefile
 	src/ext/Makefile
 	src/ext/ec/Makefile
 	src/ext/ec/artlinux/Makefile
-	src/ext/ec/artlinux/example/Makefile
 	src/ext/ec/rtpreempt/Makefile
-	src/ext/ec/logical_time/Makefile
-	src/ext/ec/logical_time/example/Makefile
 	src/ext/sdo/Makefile
 	src/ext/sdo/observer/Makefile
-	src/ext/local_service/Makefile
-	src/ext/local_service/nameservice_file/Makefile
 	utils/Makefile
 	utils/rtm-config/Makefile
 	utils/cmake/Makefile
@@ -1678,16 +1673,11 @@ AC_OUTPUT([Makefile
 	win32/OpenRTM-aist/examples/Makefile
 	win32/OpenRTM-aist/examples/Composite/Makefile
 	win32/OpenRTM-aist/examples/ConfigSample/Makefile
-	win32/OpenRTM-aist/examples/LTTSample/Makefile
 	win32/OpenRTM-aist/examples/SimpleIO/Makefile
 	win32/OpenRTM-aist/examples/SeqIO/Makefile
 	win32/OpenRTM-aist/examples/SimpleService/Makefile
 	win32/OpenRTM-aist/examples/USBCamera/Makefile
 	win32/OpenRTM-aist/ext/Makefile
-	win32/OpenRTM-aist/ext/ec/Makefile
-	win32/OpenRTM-aist/ext/ec/logical_time/Makefile
-	win32/OpenRTM-aist/ext/local_service/Makefile
-	win32/OpenRTM-aist/ext/local_service/nameservice_file/Makefile
 	win32/OpenRTM-aist/ext/sdo/Makefile
 	win32/OpenRTM-aist/ext/sdo/observer/Makefile
 	win32/OpenRTM-aist/utils/Makefile

@@ -41,32 +41,22 @@ namespace RTC
   Logger::Logger(const char* name)
     : ::coil::LogStream(&(Manager::instance().getLogStreamBuf()),
                         RTL_SILENT, RTL_PARANOID, RTL_SILENT),
-      m_name(name),
-      m_dateFormat("%b %d %H:%M:%S.%Q"),
-      m_clock(&coil::ClockManager::instance().getClock("system")),
+      m_name(name), m_dateFormat("%b %d %H:%M:%S.%Q"),
       m_msEnable(0), m_usEnable(0)
   {
     setLevel(Manager::instance().getLogLevel().c_str());
-    coil::Properties& prop(Manager::instance().getConfig());
-    if (prop.findNode("logger.date_format") != NULL)
-      {
-        setDateFormat(prop["logger.date_format"].c_str());
-      }
-    if (prop.findNode("logger.clock_type") != NULL)
-      {
-        setClockType(prop["logger.clock_type"]);
-      }
+    m_msEnable = coil::replaceString(m_dateFormat, "%Q", "#m#");
+    m_usEnable = coil::replaceString(m_dateFormat, "%q", "#u#");
   }
 
   Logger::Logger(LogStreamBuf* streambuf)
     : ::coil::LogStream(streambuf,
                         RTL_SILENT, RTL_PARANOID,  RTL_SILENT),
-      m_name("unknown"),
-      m_dateFormat("%b %d %H:%M:%S.%Q"),
-      m_clock(&coil::ClockManager::instance().getClock("system")),
+      m_name("unknown"), m_dateFormat("%b %d %H:%M:%S.%Q"),
       m_msEnable(0), m_usEnable(0)
   {
-    setDateFormat(m_dateFormat.c_str());
+    m_msEnable = coil::replaceString(m_dateFormat, "%Q", "#m#");
+    m_usEnable = coil::replaceString(m_dateFormat, "%q", "#u#");
   }
 
   Logger::~Logger(void)
@@ -99,10 +89,6 @@ namespace RTC
     m_usEnable = coil::replaceString(m_dateFormat, "%q", "#u#");
   }
 
-  void Logger::setClockType(std::string clocktype)
-  {
-    m_clock = &coil::ClockManager::instance().getClock(clocktype);
-  }
   /*!
    * @if jp
    * @brief ヘッダの日時の後に付加する文字列を設定する。
@@ -138,7 +124,7 @@ namespace RTC
   {
     const int maxsize = 256;
     char buf[maxsize];
-    coil::TimeValue tm(m_clock->gettime());
+    coil::TimeValue tm(coil::gettimeofday());
 
     time_t timer;
     struct tm* date;

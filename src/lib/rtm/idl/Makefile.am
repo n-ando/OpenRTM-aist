@@ -27,11 +27,7 @@ IDL_SOURCES =             \
 	BasicDataType.idl     \
 	DataPort.idl          \
 	ExtendedDataTypes.idl \
-	InterfaceDataTypes.idl  \
-	ManipulatorCommonInterface_DataTypes.idl  \
-	ManipulatorCommonInterface_Common.idl     \
-	ManipulatorCommonInterface_Middle.idl     \
-	CameraCommonInterface.idl
+	InterfaceDataTypes.idl
 endif
 
 SKEL_H   = $(IDL_SOURCES:.idl=Skel.h)
@@ -84,24 +80,7 @@ DUMMY_SKELS =                   \
         BasicDataTypeSkel.h     \
         DataPortSkel.h          \
         ExtendedDataTypesSkel.h \
-        InterfaceDataTypesSkel.h  \
-        ManipulatorCommonInterface_DataTypesSkel.h  \
-        ManipulatorCommonInterface_CommonSkel.h     \
-        ManipulatorCommonInterface_MiddleSkel.h     \
-        ImgSkel.h
-DUMMY_STUBS =                   \
-        SDOPackageStub.h        \
-        RTCStub.h               \
-        OpenRTMStub.h           \
-        ManagerStub.h           \
-        BasicDataTypeStub.h     \
-        DataPortStub.h          \
-        ExtendedDataTypesStub.h \
-        InterfaceDataTypesStub.h  \
-        ManipulatorCommonInterface_DataTypesStub.h  \
-        ManipulatorCommonInterface_CommonStub.h     \
-        ManipulatorCommonInterface_MiddleStub.h     \
-        ImgStub.h
+        InterfaceDataTypesSkel.h
 ORB_SRC = $(RTORB_SRC)
 endif
 
@@ -167,10 +146,6 @@ OpenRTM-aist.idl:
 	echo '#include "Manager.idl"' >> OpenRTM-aist.idl
 	echo '#include "DataPort.idl"' >> OpenRTM-aist.idl
 	echo '#include "InterfaceDataTypes.idl"' >> OpenRTM-aist.idl
-	echo '#include "ManipulatorCommonInterface_DataTypes.idl"' >> OpenRTM-aist.idl
-	echo '#include "ManipulatorCommonInterface_Common.idl"' >> OpenRTM-aist.idl
-	echo '#include "ManipulatorCommonInterface_Middle.idl"' >> OpenRTM-aist.idl
-	echo '#include "CameraCommonInterface.idl"' >> OpenRTM-aist.idl
 
 idl-stamp: $(IDL_SOURCES)
 	@touch idl-stamp
@@ -195,14 +170,8 @@ OpenRTM-aistSkel.cpp OpenRTM-aistStub.cpp: OpenRTM-aist.idl
 		$(top_srcdir)/build/makewrapper.py $$f ; \
 	done ;
 	@for f in $(DUMMY_SKELS) ; do \
-		echo cp OpenRTM-aistSkel.h $$f ; \
-		cp OpenRTM-aistStub.h $$f ; \
 		cp OpenRTM-aistSkel.h $$f ; \
-	done ;
-	@for f in $(DUMMY_STUBS) ; do \
-		echo cp OpenRTM-aistSkel.h $$f ; \
-		cp OpenRTM-aistSkel.h $$f ; \
-	done ;
+	done
 
 
 # Install directory of headers and idl files
@@ -316,7 +285,6 @@ dist-hook: lst vcproj wxs
 # Cleanup
 clean-local:
 	rm -f $(ALL_SRC) *~ *.core *.lst Makefile.old *.h *.c
-	rm -f OpenRTM-aist.idl
 	rm -f idl-stamp
 
 # Extra sources included distribution

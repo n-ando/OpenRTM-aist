@@ -34,7 +34,6 @@
 #include <rtm/ECFactory.h>
 #include <rtm/ObjectManager.h>
 #include <rtm/SystemLogger.h>
-#include <rtm/ManagerActionListener.h>
 
 namespace RTM
 {
@@ -875,38 +874,6 @@ namespace RTC
      * @endif
      */
     std::vector<RTObject_impl*> getComponents();
-
-
-    void
-    addManagerActionListener(RTM::ManagerActionListener* listener,
-                             bool autoclean = true);
-    void
-    removeManagerActionListener(RTM::ManagerActionListener* listener);
-
-    void
-    addModuleActionListener(RTM::ModuleActionListener* listener,
-                             bool autoclean = true);
-    void
-    removeModuleActionListener(RTM::ModuleActionListener* listener);
-
-    void
-    addRtcLifecycleActionListener(RTM::RtcLifecycleActionListener* listener,
-                                  bool autoclean = true);
-    void
-    removeRtcLifecycleActionListener(RTM::RtcLifecycleActionListener* listener);
-    
-    void
-    addNamingActionListener(RTM::NamingActionListener* listener,
-                            bool autoclean = true);
-    void
-    removeNamingActionListener(RTM::NamingActionListener* listener);
-    
-    void
-    addLocalServiceActionListener(RTM::LocalServiceActionListener* listener,
-                                       bool autoclean = true);
-    void
-    removeLocalServiceActionListener(RTM::LocalServiceActionListener* listener);
-
     
     //============================================================
     // CORBA 関連
@@ -1475,21 +1442,6 @@ namespace RTC
 
     /*!
      * @if jp
-     * @brief LocalService の初期化
-     *
-     * @return Timer 初期化処理実行結果(初期化成功:true、初期化失敗:false)
-     *
-     * @else
-     * @brief LocalService initialization
-     *
-     * @return Timer Initialization result (Successful:true, Failed:false)
-     *
-     * @endif
-     */
-    bool initLocalService();
-
-    /*!
-     * @if jp
      * @brief ManagerServant へのポインタ
      * @else
      * @brief The pointer to the ManagerServant
@@ -2005,7 +1957,7 @@ namespace RTC
      * @endif
      */
     OrbRunner* m_runner;
-
+    
     //------------------------------------------------------------
     // Manager Terminator
     //------------------------------------------------------------
@@ -2157,7 +2109,7 @@ namespace RTC
     };
     Finalized m_finalized;
 
-    ::RTM::ManagerActionListeners m_listeners;
+
   }; // class Manager
 }; // namespace RTC
 

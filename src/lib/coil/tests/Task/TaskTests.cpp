@@ -28,10 +28,9 @@
 #include <cppunit/extensions/HelperMacros.h>
 #include <cppunit/TestAssert.h>
 
+//#include <../../include/coil/Task.h>
 #include <coil/Task.h>
 #include <coil/Time.h>
-#include <coil/Guard.h>
-#include <coil/Mutex.h>
 
 /*!
  * @class TaskTests class
@@ -39,12 +38,12 @@
  */
 namespace Task
 {
-  typedef coil::Guard<coil::Mutex> Guard;
   class TaskTests
-    : public CppUnit::TestFixture , 
-      public coil::Task
+   : public CppUnit::TestFixture , 
+     public coil::Task
   {
     CPPUNIT_TEST_SUITE(TaskTests);
+//    CPPUNIT_TEST(test_case0);
     CPPUNIT_TEST(test_open_close);
     CPPUNIT_TEST(test_activate);
     CPPUNIT_TEST(test_activate2);
@@ -52,10 +51,9 @@ namespace Task
     CPPUNIT_TEST(test_suspend);
     CPPUNIT_TEST(test_resume);
     CPPUNIT_TEST_SUITE_END();
-    
+  
   private:
     bool m_statflag;
-    coil::Mutex m_statflagmutex;
     short m_tasknumber;
     short m_threadcmd;
     short m_threadcnt[256];
@@ -65,21 +63,24 @@ namespace Task
      * @brief Constructor
      */
     TaskTests()
-      : m_statflag(false), m_tasknumber(0), m_threadcmd(0)
     {
-      for (size_t ic(0); ic < 256; ++ic)
+        short ic;
+        for (ic=0; ic<256; ic++)
         {
-          m_threadcnt[ic] = 0;
+            m_threadcnt[ic] = 0;
         }
+        m_statflag = false;
+        m_tasknumber =0;
+        m_threadcmd = 0;
     }
-
+    
     /*!
      * @brief Destructor
      */
     ~TaskTests()
     {
     }
-    
+  
     /*!
      * @brief Test initialization
      */
@@ -93,104 +94,102 @@ namespace Task
     virtual void tearDown()
     { 
     }
-    
-    //------------------------------------------------------------
+  
+    /*
+    ---------------------------------------------------------------------------
+    ---------------------------------------------------------------------------
+    */
     int svc(void)
     {
-      {
-        Guard guard(m_statflagmutex);
+        short ic;
         m_statflag = true;
-      }
-      switch(m_threadcmd)
+        switch(m_threadcmd)
         {
-        case 0:
-          std::cout << "," << std::flush;
-          m_tasknumber ++;
-          for(;;)
-            {
-              {
-                Guard guard(m_statflagmutex);
-                if(m_statflag != true)
-                  {
+            case 0:
+                std::cout<<"/"<<std::endl;
+                m_tasknumber ++;
+                for(;;)
+                {  
+                  if(m_statflag != true)
+		  {
                     break;
-                  }
-              }
-              m_threadcnt[m_tasknumber-1]++;
-            }
-          break;
-        case 1:
-          for(size_t ic(0); ic < 10; ++ic)
-            {
-              std::cout << ";" << std::flush;
-            }
-          break;
-        default:
-          break;
+		  }
+		  m_threadcnt[m_tasknumber-1]++;
+                }
+                break;
+            case 1:
+                std::cout<<"/"<<std::endl;
+                for(ic=0;ic<10;ic++){
+                  ;;
+                }
+                break;
+            default:
+                break;
         }
-      return 0;
+        return 0;
     }
     /* test case */
     void test_case0()
     {
     }
-    //============================================================
-    // This function tests the Task::open function and the Task::close
-    // function.  Check that the open function and the close function
-    // return 0.
-    //============================================================
+    /*
+    ---------------------------------------------------------------------------
+    This function tests the Task::open function and the Task::close function.
+    Check that the open function and the close function return 0.
+    ---------------------------------------------------------------------------
+    */
     void test_open_close()
     {
-      int iret;
-      iret = 1;
-      iret = open(0);
-      CPPUNIT_ASSERT_MESSAGE("open", (iret == 0) );
-      
-      iret = 1;
-      iret = close(0);
-      CPPUNIT_ASSERT_MESSAGE("close", (iret == 0) );
-      
+        int iret;
+        iret = 1;
+        iret = open(0);
+        CPPUNIT_ASSERT_MESSAGE("open", (iret == 0) );
+
+        iret = 1;
+        iret = close(0);
+        CPPUNIT_ASSERT_MESSAGE("close", (iret == 0) );
+
     }
-    //============================================================
-    // This function tests the Task::activate function.  Check that
-    // the thread makes only one even if the activate function is
-    // called two or more times.
-    //============================================================
+    /*
+    ---------------------------------------------------------------------------
+    This function tests the Task::activate function.
+    Check that the thread makes only one even if the activate function is
+    called two or more times.
+    ---------------------------------------------------------------------------
+    */
     void test_activate()
     {
-      
-      time_t tmstart, tmend;
-      char cstr[256];
-      {
-        Guard guard(m_statflagmutex);
-        if (m_statflag == true)
-          {
-            m_statflag = false;
-          }
-      }
-      m_threadcmd = 0;
-      m_tasknumber = 0;
-      //Start 10 threads. & Check that only 1 thread start.
-      for (short ic(0); ic < 10; ++ic)
+        
+        time_t tmstart, tmend;
+		char cstr[256];
+        short ic;
+        if ( m_statflag == true )
         {
-          //Start a thread. 
-          activate();
-          std::cout << ">" << std::flush;
-          time(&tmstart);
-          for(;;)
+            m_statflag = false;
+        }
+        m_threadcmd = 0;
+        m_tasknumber = 0;
+        //Start 10 threads. & Check that only 1 thread start.
+        for (ic=0; ic<10; ic++)
+        {
+            //Start a thread. 
+            activate();
+            time(&tmstart);
+            for(;;)
             {
               time(&tmend);
-              if(difftime(tmend,tmstart) >= 1.0)
-                {
-                  break;
-                }
-            }
-          sprintf(cstr, "counter:%d ", m_tasknumber);
-          //Check that a thread start.
-          CPPUNIT_ASSERT_MESSAGE(cstr , (m_tasknumber == 1) );
+              if(difftime(tmend,tmstart)>=1.0)
+              {
+                break;
+              }
+	    }
+            sprintf(cstr, "counter:%d ", m_tasknumber);
+            //Check that a thread start.
+            CPPUNIT_ASSERT_MESSAGE(cstr , (m_tasknumber == 1) );
         }
-      m_statflag = false;
-      std::cout << "waiting" << std::flush;
-      wait();
+        m_statflag = false;
+        wait();
+
     }
     /*!
      * @brief activate()
@@ -199,71 +198,74 @@ namespace Task
      */
     void test_activate2()
     {
-      time_t tmstart, tmend;
-      {
-        Guard guard(m_statflagmutex);
-        if (m_statflag == true)
-          {
-            m_statflag = false;
-          }
-      }
-      m_threadcmd = 0;
-      m_tasknumber = 0;
-      //Start 10 threads. & Check that 10 thread start.
-      for (size_t ic(0); ic < 10; ++ic)
+        
+        time_t tmstart, tmend;
+		char cstr[256];
+        short ic;
+        if ( m_statflag == true )
         {
-          //Start a thread. 
-          activate();
-          time(&tmstart);
-          for(;;)
+            m_statflag = false;
+        }
+        m_threadcmd = 0;
+        m_tasknumber = 0;
+        //Start 10 threads. & Check that 10 thread start.
+        for (ic=0; ic<10; ic++)
+        {
+            //Start a thread. 
+            activate();
+            time(&tmstart);
+            for(;;)
             {
               time(&tmend);
               if(difftime(tmend,tmstart)>=1.0)
-                {
-                  break;
-                }
-            }
-          char cstr[256];
-          sprintf(cstr, "m_tasknumber:%d (ic+1):%d", m_tasknumber,ic+1);
-          //Check that a thread start.
-          CPPUNIT_ASSERT_MESSAGE(cstr , (m_tasknumber == ic+1) );
-          {
-            Guard guard(m_statflagmutex);
+              {
+                break;
+              }
+	    }
+            sprintf(cstr, "m_tasknumber:%d (ic+1):%d", m_tasknumber,ic+1);
+            //Check that a thread start.
+            CPPUNIT_ASSERT_MESSAGE(cstr , (m_tasknumber == ic+1) );
             m_statflag = false;
-          }
             wait();
         }
+
     }
-    //============================================================
+    /*
+    ---------------------------------------------------------------------------
+    ---------------------------------------------------------------------------
+    */
     void test_wait()
     {
-      wait(); //If Segmentation fault is not caused, it is OK.
-      m_threadcmd = 1;
-      activate();
-      wait();
+        wait(); //If Segmentation fault is not caused, it is OK.
+        m_threadcmd = 1;        
+        activate();
+        wait();
     }
-    //============================================================
-    // This function tests the Task::suspend function.
-    // Check that the suspend function returns 0.
-    //============================================================
+    /*
+    ---------------------------------------------------------------------------
+    This function tests the Task::suspend function.
+    Check that the suspend function returns 0.
+    ---------------------------------------------------------------------------
+    */
     void test_suspend()
     {
-      int iret;
-      iret = 1;
-      iret = suspend();
-      CPPUNIT_ASSERT_MESSAGE("suspend", (iret == 0) );
+        int iret;
+        iret = 1;
+        iret = suspend();
+        CPPUNIT_ASSERT_MESSAGE("suspend", (iret == 0) );
     }
-
-    //============================================================
-    // This function tests the Task::resume function.
-    // Check that the resume function returns 0.
-    //============================================================
+    /*
+    ---------------------------------------------------------------------------
+    This function tests the Task::resume function.
+    Check that the resume function returns 0.
+    ---------------------------------------------------------------------------
+    */
     void test_resume()
     {
-      int iret;
-      iret = 1;
-      iret = resume();
-      CPPUNIT_ASSERT_MESSAGE("resume", (iret == 0) );
+        int iret;
+        iret = 1;
+        iret = resume();
+        CPPUNIT_ASSERT_MESSAGE("resume", (iret == 0) );
     }
   };
 }; // namespace Task
@@ -276,13 +278,13 @@ CPPUNIT_TEST_SUITE_REGISTRATION(Task::TaskTests);
 #ifdef LOCAL_MAIN
 int main(int argc, char* argv[])
 {
-  CppUnit::TextUi::TestRunner runner;
-  runner.addTest(CppUnit::TestFactoryRegistry::getRegistry().makeTest());
-  CppUnit::Outputter* outputter = 
-    new CppUnit::TextOutputter(&runner.result(), std::cout);
-  runner.setOutputter(outputter);
-  bool retcode = runner.run();
-  return !retcode;
+    CppUnit::TextUi::TestRunner runner;
+    runner.addTest(CppUnit::TestFactoryRegistry::getRegistry().makeTest());
+    CppUnit::Outputter* outputter = 
+      new CppUnit::TextOutputter(&runner.result(), std::cout);
+    runner.setOutputter(outputter);
+    bool retcode = runner.run();
+    return !retcode;
 }
 #endif // MAIN
 #endif // Task_cpp

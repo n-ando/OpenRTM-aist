@@ -33,7 +33,6 @@ COIL_COMMON_SRC =        \
 	TimeMeasure.cpp  \
 	TimeValue.cpp    \
 	Timer.cpp        \
-	ClockManager.cpp \
 	crc.cpp          \
 	stringutil.cpp
 
@@ -53,7 +52,6 @@ COIL_COMMON_H   =           \
 	TimeMeasure.h       \
 	TimeValue.h         \
 	Timer.h             \
-	ClockManager.h      \
 	crc.h               \
 	stringutil.h
 

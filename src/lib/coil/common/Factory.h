@@ -5,7 +5,7 @@
  * @date $Date$
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
- * Copyright (C) 2009, 2012
+ * Copyright (C) 2009
  *     Noriaki Ando
  *     Task-intelligence Research Group,
  *     Intelligent Systems Research Institute,
@@ -20,7 +20,6 @@
 #ifndef COIL_FACTORY_H
 #define COIL_FACTORY_H
 
-#include <assert.h>
 #include <string>
 #include <map>
 #include <algorithm>
@@ -108,9 +107,7 @@ namespace coil
   public:
 
     typedef std::map<Identifier, FactoryEntry> FactoryMap;
-    typedef typename FactoryMap::iterator      FactoryMapIt;
-    typedef std::map<AbstractClass*, FactoryEntry> ObjectMap;
-    typedef typename ObjectMap::iterator           ObjectMapIt;
+    typedef typename FactoryMap::iterator     FactoryMapIt;
     
     enum ReturnCode
       {
@@ -223,7 +220,7 @@ namespace coil
     {
       if (creator == 0 || destructor == 0) { return INVALID_ARG; }
       if (m_creators.count(id) != 0) { return ALREADY_EXISTS; }
-      FactoryEntry f(id, creator, destructor);
+      FactoryEntry f(creator, destructor);
       m_creators[id] = f;
       return FACTORY_OK;
     }
@@ -256,6 +253,7 @@ namespace coil
     ReturnCode removeFactory(const Identifier& id)
     {
       if (m_creators.count(id) == 0) { return NOT_FOUND; }
+
       m_creators.erase(id);
       return FACTORY_OK;
     }
@@ -286,10 +284,7 @@ namespace coil
     AbstractClass* createObject(const Identifier& id)
     {
       if (m_creators.count(id) == 0) { return 0; }
-      AbstractClass* obj = m_creators[id].creator_();
-      assert(m_objects.count(obj) == 0);
-      m_objects[obj] = m_creators[id];
-      return obj;
+      return m_creators[id].creator_();
     }
 
     /*!
@@ -313,15 +308,10 @@ namespace coil
      *
      * @endif
      */
-    ReturnCode deleteObject(const Identifier& id, AbstractClass*& obj)
+    void deleteObject(const Identifier& id, AbstractClass*& obj)
     {
-      if (m_creators.count(id) == 0)
-        {
-          return deleteObject(obj);
-        }
+      if (m_creators.count(id) == 0) { return; }
       m_creators[id].destructor_(obj);
-      m_objects.erase(obj);
-      return FACTORY_OK;
     }
 
     /*!
@@ -343,158 +333,16 @@ namespace coil
      *
      * @endif
      */
-    ReturnCode deleteObject(AbstractClass*& obj)
+    void deleteObject(AbstractClass*& obj)
     {
-      if (m_objects.count(obj) == 0) { return NOT_FOUND; }
-      AbstractClass* tmp(obj);
-      m_objects[obj].destructor_(obj);
-      m_objects.erase(tmp);
-      return FACTORY_OK;
-    }
+      FactoryMapIt it(m_creators.begin());
+      FactoryMapIt it_end(m_creators.end());
 
-    /*!
-     * @if jp
-     *
-     * @brief 生成済みオブジェクトリストの取得
-     *
-     * このファクトリで生成されたオブジェクトのリストを取得する。
-     *
-     * @return 生成済みオブジェクトリスト
-     *
-     * @else
-     *
-     * @brief Getting created objects
-     *
-     * This operation returns a list of created objects by the factory.
-     *
-     * @return created object list
-     *
-     * @endif
-     */
-    std::vector<AbstractClass*> createdObjects()
-    {
-      std::vector<AbstractClass*> objects;
-      for (ObjectMapIt it(m_objects.begin()); it != m_objects.end(); ++it)
+      while (it != it_end)
         {
-          objects.push_back(it->first);
+          it->second.destructor_(obj);
+          ++it;
         }
-      return objects;
-    }
-
-    /*!
-     * @if jp
-     *
-     * @brief オブジェクトがこのファクトリの生成物かどうか調べる
-     *
-     * @param obj 対象オブジェクト
-     * @return true: このファクトリの生成物
-     *         false: このファクトリの生成物ではない
-     *
-     * @else
-     *
-     * @brief Whether a object is a product of this factory
-     *
-     * @param obj A target object
-     * @return true: The object is a product of the factory
-     *         false: The object is not a product of the factory
-     *
-     * @return created object list
-     *
-     * @endif
-     */
-    bool isProducerOf(AbstractClass* obj)
-    {
-      return m_objects.count(obj) != 0;
-    }
-
-    /*!
-     * @if jp
-     *
-     * @brief オブジェクトからクラス識別子(ID)を取得する
-     *
-     * 当該オブジェクトのクラス識別子(ID)を取得する。
-     *
-     * @param obj [in] クラス識別子(ID)を取得したいオブジェクト
-     * @param id [out] クラス識別子(ID)
-     * @return リターンコード NOT_FOUND: 識別子が存在しない
-     *                        FACTORY_OK: 正常終了
-     * @else
-     *
-     * @brief Getting class identifier (ID) from a object
-     *
-     * This operation returns a class identifier (ID) from a object.
-     *
-     * @param obj [in] An object to investigate its class ID.
-     * @param id [out] Class identifier (ID)
-     * @return Return code NOT_FOUND: ID not found
-     *                        FACTORY_OK: normal return
-     * @endif
-     */
-    ReturnCode objectToIdentifier(AbstractClass* obj, Identifier& id)
-    {
-      if (m_objects.count(obj) == 0) { return NOT_FOUND; }
-      id = m_objects[obj].id_;
-      return FACTORY_OK;
-    }
-
-    /*!
-     * @if jp
-     *
-     * @brief オブジェクトのコンストラクタを取得する
-     *
-     * このファクトリで生成されたオブジェクトのコンストラクタを取得する。
-     * obj はこのファクトリで生成されたものでなければならない。予め
-     * isProducerOf() 関数で当該オブジェクトがこのファクトリの生成物で
-     * あるかどうかをチェックしなければならない。
-     *
-     * @return オブジェクトのデストラクタ
-     *
-     * @else
-     *
-     * @brief Getting destructor of the object
-     *
-     * This operation returns a constructor of the object created by
-     * the factory.  obj must be a product of the factory.  User must
-     * check if the object is a product of the factory by using
-     * isProducerOf()-function, before using this function.
-     *
-     * @return destructor of the object
-     *
-     * @endif
-     */
-    Creator objectToCreator(AbstractClass* obj)
-    {
-      return m_objects[obj].creator_;
-    }
-
-    /*!
-     * @if jp
-     *
-     * @brief オブジェクトのデストラクタを取得する
-     *
-     * このファクトリで生成されたオブジェクトのデストラクタを取得する。
-     * obj はこのファクトリで生成されたものでなければならない。予め
-     * isProducerOf() 関数で当該オブジェクトがこのファクトリの生成物で
-     * あるかどうかをチェックしなければならない。
-     *
-     * @return オブジェクトのデストラクタ
-     *
-     * @else
-     *
-     * @brief Getting destructor of the object
-     *
-     * This operation returns a destructor of the object created by
-     * the factory.  obj must be a product of the factory.  User must
-     * check if the object is a product of the factory by using
-     * isProducerOf()-function, before using this function.
-     *
-     * @return destructor of the object
-     *
-     * @endif
-     */
-    Destructor objectToDestructor(AbstractClass* obj)
-    {
-      return m_objects[obj].destructor_;
     }
 
   private:
@@ -540,16 +388,14 @@ namespace coil
        *
        * @endif
        */
-      FactoryEntry(Identifier id, Creator creator, Destructor destructor)
-        : id_(id), creator_(creator), destructor_(destructor)
+      FactoryEntry(Creator creator, Destructor destructor)
+        : creator_(creator), destructor_(destructor)
       {
       }
-      std::string id_;
       Creator creator_;
       Destructor destructor_;
     };
     FactoryMap m_creators;
-    ObjectMap  m_objects;
   };
 
 

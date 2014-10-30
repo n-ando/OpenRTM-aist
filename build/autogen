@@ -122,10 +122,10 @@ find_autotools()
 
     #============================================================
     # find libtool
-    find_cmd "libtool${lt_ver} libtool${lt_ver2} glibtool libtool"
+    find_cmd "libtool${lt_ver} libtool${lt_ver2} libtool"
     lt_cmd=${cmd_path}
     # libtoolize
-    find_cmd "libtoolize${lt_ver} libtoolize${lt_ver2} glibtoolize libtoolize"
+    find_cmd "libtoolize${lt_ver} libtoolize${lt_ver2} libtoolize glibtoolize"
     ltz_cmd=${cmd_path}
 
     echo "autoconf   was found in ${ac_cmd}."
@@ -157,9 +157,9 @@ do_prepare()
     echo "------------------------------------------------------------"
     find_file "/usr/local/share/aclocal /usr/local/share/aclocal${ac_ver} 
                /usr/local/share/aclocal${ac_ver2}
+               /opt/local/share/aclocal
                /usr/share/aclocal /usr/share/aclocal${ac_ver} 
-               /usr/share/aclocal${ac_ver2}
-               /opt/local/share/aclocal" \
+               /usr/share/aclocal${ac_ver2}" \
 	"libtool.m4 libtool${lt_ver}.m4 libtool${lt_ver2}.m4 
          libtool${ac_ver}.m4 libtool${ac_ver2}.m4"
     libtool_m4=${file_path}

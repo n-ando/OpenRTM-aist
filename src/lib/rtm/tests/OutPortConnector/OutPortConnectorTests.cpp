@@ -71,7 +71,6 @@ namespace OutPortConnector
   public:
     OutPortMock(const char* name, const char* value) 
      : OutPortBase(name, value) {}
-    virtual ~OutPortMock() {}
     /*!
      * 
      */

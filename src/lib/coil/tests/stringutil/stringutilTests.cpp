@@ -24,11 +24,6 @@
 #include <cppunit/TestAssert.h>
 
 #include <coil/stringutil.h>
-      class A
-      {
-      public:
-        int intval;
-      };
 
 /*!
  * @class stringutilTests class
@@ -55,9 +50,6 @@ namespace stringutil
     CPPUNIT_TEST(test_isURL);
     CPPUNIT_TEST(test_otos);
     CPPUNIT_TEST(test_stringTo);
-    CPPUNIT_TEST(test_stringToBool);
-    CPPUNIT_TEST(test_ptrToHex);
-    CPPUNIT_TEST(test_hexToPtr);
     CPPUNIT_TEST(test_unique_sv);
     CPPUNIT_TEST(test_flatten);
     CPPUNIT_TEST(test_toArgv);
@@ -141,82 +133,6 @@ namespace stringutil
     }
     void test_stringTo()
     {
-    }
-    void test_stringToBool()
-    {
-      bool val;
-      if (coil::stringTo(val, "1")) { CPPUNIT_ASSERT_EQUAL(val, true); }
-      else                    { CPPUNIT_FAIL("conversion failed: 1"); }
-      if (coil::stringTo(val, "0")) { CPPUNIT_ASSERT_EQUAL(val, false); }
-      else                    { CPPUNIT_FAIL("conversion failed: 0"); }
-
-      if (coil::stringTo(val, "true"))  { CPPUNIT_ASSERT_EQUAL(val, true); }
-      else                        { CPPUNIT_FAIL("conversion failed: true"); }
-      if (coil::stringTo(val, "false")) { CPPUNIT_ASSERT_EQUAL(val, false); }
-      else                        { CPPUNIT_FAIL("conversion failed: false"); }
-
-      if (coil::stringTo(val, "TRUE"))  { CPPUNIT_ASSERT_EQUAL(val, true); }
-      else                        { CPPUNIT_FAIL("conversion failed: TRUE"); }
-      if (coil::stringTo(val, "FALSE")) { CPPUNIT_ASSERT_EQUAL(val, false); }
-      else                        { CPPUNIT_FAIL("conversion failed: FALSE"); }
-
-      if (coil::stringTo(val, "TrUe"))  { CPPUNIT_ASSERT_EQUAL(val, true); }
-      else                        { CPPUNIT_FAIL("conversion failed: TrUe"); }
-      if (coil::stringTo(val, "fAlsE")) { CPPUNIT_ASSERT_EQUAL(val, false); }
-      else                        { CPPUNIT_FAIL("conversion failed: fAlsE"); }
-
-      if (coil::stringTo(val, "yes"))  { CPPUNIT_ASSERT_EQUAL(val, true); }
-      else                       { CPPUNIT_FAIL("conversion failed: yes"); }
-      if (coil::stringTo(val, "no"))   { CPPUNIT_ASSERT_EQUAL(val, false); }
-      else                       { CPPUNIT_FAIL("conversion failed: no"); }
-
-      if (coil::stringTo(val, "YES"))  { CPPUNIT_ASSERT_EQUAL(val, true); }
-      else                       { CPPUNIT_FAIL("conversion failed: YES"); }
-      if (coil::stringTo(val, "NO"))   { CPPUNIT_ASSERT_EQUAL(val, false); }
-      else                       { CPPUNIT_FAIL("conversion failed: NO"); }
-
-      if (coil::stringTo(val, "on"))  { CPPUNIT_ASSERT_EQUAL(val, true); }
-      else                      { CPPUNIT_FAIL("conversion failed: on"); }
-      if (coil::stringTo(val, "off")) { CPPUNIT_ASSERT_EQUAL(val, false); }
-      else                      { CPPUNIT_FAIL("conversion failed: off"); }
-
-      if (coil::stringTo(val, "ON"))  { CPPUNIT_ASSERT_EQUAL(val, true); }
-      else                      { CPPUNIT_FAIL("conversion failed: ON"); }
-      if (coil::stringTo(val, "OFF")) { CPPUNIT_ASSERT_EQUAL(val, false); }
-      else                      { CPPUNIT_FAIL("conversion failed: OFF"); }
-
-      if (coil::stringTo(val, "hoge")) { CPPUNIT_FAIL("conversion failed: ON"); }
-      if (coil::stringTo(val, "muNya")) { CPPUNIT_FAIL("conversion failed: ON"); }
-      if (coil::stringTo(val, "12345")) { CPPUNIT_FAIL("conversion failed: ON"); }
-    }
-    void test_ptrToHex()
-    {
-      A* a = new A();
-      std::string ptrstr = coil::ptrToHex(a);
-      char cbuf[11];
-      sprintf(cbuf, "0x%x", reinterpret_cast<uintptr_t>(a));
-      CPPUNIT_ASSERT_MESSAGE(cbuf, (ptrstr == cbuf));
-      delete a;
-    }
-
-    void test_hexToPtr()
-    {
-      A* a0 = new A();
-      a0->intval = 98765;
-      std::string ptrstr = coil::ptrToHex(a0);
-      char cbuf[11];
-      sprintf(cbuf, "0x%x", reinterpret_cast<uintptr_t>(a0));
-      CPPUNIT_ASSERT_MESSAGE(cbuf, (ptrstr == cbuf));
-
-      A* a1;
-      CPPUNIT_ASSERT(coil::hexToPtr(a1, ptrstr));
-      CPPUNIT_ASSERT((a0 == a1));
-      CPPUNIT_ASSERT((a1->intval == 98765));
-
-      a1->intval = 12345;
-      CPPUNIT_ASSERT((a0->intval == 12345));
-
-      delete a0;
     }
     void test_unique_sv()
     {
