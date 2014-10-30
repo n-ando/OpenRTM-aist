@@ -39,11 +39,11 @@ AUTOMAKE_OPTIONS = 1.4
 
 PKGVER=`head -n 1 changelog | sed 's/.*(\([0-9\.\-]*\).*/\1/'`
 
-all-local: ${EXTRA_DIST} files
+all-local: ${EXTRA_DIST}
 	sh dpkg_build.sh
 
 clean-local:
 	rm -f *~
-	rm -f files
 
 EXTRA_DIST = dpkg_build.sh
+DIST_SUBDIRS = debian

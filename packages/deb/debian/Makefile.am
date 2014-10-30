@@ -22,6 +22,7 @@ EXTRA_DIST = \
 	control.natty    \
 	control.oneiric  \
 	control.precise  \
+	control.trusty   \
 	copyright        \
 	dirs             \
 	docs             \
