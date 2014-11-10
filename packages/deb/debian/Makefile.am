@@ -23,6 +23,8 @@ EXTRA_DIST = \
 	control.oneiric  \
 	control.precise  \
 	control.trusty   \
+	control.squeeze  \
+	control.wheezy   \
 	copyright        \
 	dirs             \
 	docs             \

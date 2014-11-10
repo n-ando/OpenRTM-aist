@@ -39,6 +39,26 @@ release=`uname -r`-`uname -p`
 
 dist_name=""
 dist_key=""
+
+#---------------------------------------
+# Debianコードネーム取得
+#---------------------------------------
+check_codename ()
+{
+    cnames="sarge etch lenny squeeze wheezy"
+    for c in $cnames; do
+	if test -f "/etc/apt/sources.list"; then
+	    res=`grep $c /etc/apt/sources.list`
+	else
+	    echo "This distribution may not be debian/ubuntu."
+	    exit
+	fi
+	if test ! "x$res" = "x" ; then
+	    DISTRIB_CODENAME=$c
+	fi
+    done
+}
+
 # Check the lsb distribution name
 if test -f /etc/lsb-release ; then
     . /etc/lsb-release
@@ -56,6 +76,7 @@ fi
 if test "x$dist_name" = "x" && test -f /etc/debian_version ; then
     dist_name="Debian"`cat /etc/debian_version`-`uname -m`
     dist_key="Debian"
+    check_codename
 fi
 # Check the Vine version
 if test "x$dist_name" = "x" && test -f /etc/vine-release ; then
