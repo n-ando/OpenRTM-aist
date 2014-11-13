@@ -16,8 +16,8 @@
 # パッケージリスト
 #---------------------------------------
 version_num=`cat /etc/fedora-release | awk '/Fedora/{print $3}' -`
-if [ $version_num -ge 16 ] && [ $version_num -le 18 ]; then
-	# バージョンが16,17,18の場合
+if [ $version_num -ge 16 ]; then
+	# バージョンが16以降の場合
 	omni="omniORB omniORB-devel omniORB-doc omniORB-servers omniORB-utils"
 else
 	omni="omniORB omniORB-devel omniORB-doc omniORB-servers omniORB-utils omniORB-bootscripts"
