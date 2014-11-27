@@ -11,6 +11,7 @@
 %define pkgver         0
 %define _unpackaged_files_terminate_build   1
 %define __os_install_post %{nil}
+%define rtm_libdir     %{_libdir}/openrtm-%{shortversion}
 
 #------------------------------------------------------------
 # Package information

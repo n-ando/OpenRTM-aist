@@ -21,9 +21,6 @@ export DH_OPTIONS
 DEB_HOST_GNU_TYPE   ?= $(shell dpkg-architecture -qDEB_HOST_GNU_TYPE)
 DEB_BUILD_GNU_TYPE  ?= $(shell dpkg-architecture -qDEB_BUILD_GNU_TYPE)
 
-# Multiarch support
-DEB_HOST_MULTIARCH ?= $(shell dpkg-architecture -qDEB_HOST_MULTIARCH)
-
 CFLAGS = -Wall -g
 
 ifneq (,$(findstring noopt,$(DEB_BUILD_OPTIONS)))
@@ -41,7 +38,7 @@ endif
 ifneq "$(wildcard /usr/share/misc/config.guess)" ""
 	cp -f /usr/share/misc/config.guess config.guess
 endif
-	./configure --host=$(DEB_HOST_GNU_TYPE) --build=$(DEB_BUILD_GNU_TYPE) --prefix=/usr --mandir=\$${prefix}/share/man --infodir=\$${prefix}/share/info CFLAGS="$(CFLAGS)" LDFLAGS="-Wl,-z,defs" --libdir=\$${prefix}/lib/$(DEB_HOST_MULTIARCH)
+	./configure --host=$(DEB_HOST_GNU_TYPE) --build=$(DEB_BUILD_GNU_TYPE) --prefix=/usr --mandir=\$${prefix}/share/man --infodir=\$${prefix}/share/info CFLAGS="$(CFLAGS)" LDFLAGS="-Wl,-z,defs" --libdir=\$${prefix}/lib/i386-linux-gnu
 
 
 #Architecture 
@@ -119,7 +116,7 @@ install-arch:
 	# for openrtm-aist-example package
 	#$(MAKE)
 	(mkdir -p $(CURDIR)/debian/openrtm-aist-example/usr/lib)
-	(ln -s $(CURDIR)/debian/openrtm-aist/usr/lib/$(DEB_HOST_MULTIARCH) $(CURDIR)/debian/openrtm-aist-example/usr/lib)
+	(ln -s $(CURDIR)/debian/openrtm-aist/usr/lib/i386-linux-gnu $(CURDIR)/debian/openrtm-aist-example/usr/lib)
 	(cd $(CURDIR)/examples         ; $(MAKE) DESTDIR=$(CURDIR)/debian/openrtm-aist-example install)
 	(rm -r $(CURDIR)/debian/openrtm-aist-example/usr/lib)
 

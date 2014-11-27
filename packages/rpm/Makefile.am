@@ -27,7 +27,6 @@ OpenRTM-aist.spec: OpenRTM-aist.spec.in
 	echo "%define distname        $(dist_key)" >> $@
 	echo "%define rtm_includedir  $(rtm_includedir)" >> $@
 	echo "%define coil_includedir $(coil_includedir)" >> $@
-	echo "%define rtm_libdir      $(rtm_libdir)" >> $@
 	echo "%define rtm_datadir     $(rtm_datadir)" >> $@
 	cat OpenRTM-aist.spec.in >> $@
 

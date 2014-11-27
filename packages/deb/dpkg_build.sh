@@ -40,6 +40,9 @@ release=`uname -r`-`uname -p`
 dist_name=""
 dist_key=""
 
+# not support multiarch
+not_multiarch_cnmaes="lucid marveric squeeze natty oneiric"
+
 #---------------------------------------
 # Debianコードネーム取得
 #---------------------------------------
@@ -122,15 +125,38 @@ packagedir=`pwd`/../../
 rm -f $packagedir/packages/openrtm-aist*
 
 cp -r debian $packagedir
-chmod 755 $packagedir/debian/rules
-if test -f $packagedir/debian/control.$DISTRIB_CODENAME; then
-    mv $packagedir/debian/control /tmp/control.$$
-    cp $packagedir/debian/control.$DISTRIB_CODENAME $packagedir/debian/control
+
+# check multiarch support
+multiarch_flg="OFF"
+if test "x$dist_key" = "xDebian" || test "x$dist_key" = "xUbuntu" ; then
+    for c in $not_multiarch_cnmaes; do
+        if test $DISTRIB_CODENAME = $c ; then
+            mv $packagedir/debian/compat /tmp/compat.$$
+            echo 7 >  $packagedir/debian/compat
+            mv $packagedir/debian/rules /tmp/rules.$$
+            cp $packagedir/debian/rules.not-multiarch $packagedir/debian/rules
+            DEB_HOST_ARCH=`dpkg-architecture -qDEB_HOST_ARCH`
+            if test "x$DEB_HOST_ARCH" = "xamd64" ; then
+                sed -i -s 's/i386/x86_64/' $packagedir/debian/rules
+            fi
+            mv $packagedir/debian/control /tmp/control.$$
+            cp $packagedir/debian/control.not-multiarch $packagedir/debian/control
+            multiarch_flg="ON"
+            echo "... Multiarch not supported."
+            break
+        fi
+    done
 fi
+
+chmod 755 $packagedir/debian/rules
 
 cd $packagedir
 rm -f config.status
 dpkg-buildpackage -W -us -uc -rfakeroot
 
 mv $packagedir/../openrtm-aist* $packagedir/packages/
-mv /tmp/control.$$ $packagedir/debian/control
+if test "x$multiarch_flg" = "xON" ; then 
+    mv /tmp/compat.$$ $packagedir/debian/compat
+    mv /tmp/rules.$$ $packagedir/debian/rules
+    mv /tmp/control.$$ $packagedir/debian/control
+fi

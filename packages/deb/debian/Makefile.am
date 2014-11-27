@@ -17,15 +17,9 @@ EXTRA_DIST = \
 	changelog.ppa    \
 	compat           \
 	control          \
-	control.lucid    \
-	control.marveric \
-	control.natty    \
-	control.oneiric  \
-	control.precise  \
-	control.trusty   \
-	control.squeeze  \
-	control.wheezy   \
+	control.not-multiarch    \
 	copyright        \
 	dirs             \
 	docs             \
-	rules
+	rules            \
+	rules.not-multiarch
