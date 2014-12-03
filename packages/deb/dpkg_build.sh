@@ -137,7 +137,9 @@ if test "x$dist_key" = "xDebian" || test "x$dist_key" = "xUbuntu" ; then
             cp $packagedir/debian/rules.not-multiarch $packagedir/debian/rules
             DEB_HOST_ARCH=`dpkg-architecture -qDEB_HOST_ARCH`
             if test "x$DEB_HOST_ARCH" = "xamd64" ; then
-                sed -i -s 's/i386/x86_64/' $packagedir/debian/rules
+                sed -i -s 's/lib-arch/lib64/' $packagedir/debian/rules
+            else
+                sed -i -s 's/lib-arch/lib/' $packagedir/debian/rules
             fi
             mv $packagedir/debian/control /tmp/control.$$
             cp $packagedir/debian/control.not-multiarch $packagedir/debian/control

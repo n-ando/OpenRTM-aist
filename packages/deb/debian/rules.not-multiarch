@@ -38,7 +38,7 @@ endif
 ifneq "$(wildcard /usr/share/misc/config.guess)" ""
 	cp -f /usr/share/misc/config.guess config.guess
 endif
-	./configure --host=$(DEB_HOST_GNU_TYPE) --build=$(DEB_BUILD_GNU_TYPE) --prefix=/usr --mandir=\$${prefix}/share/man --infodir=\$${prefix}/share/info CFLAGS="$(CFLAGS)" LDFLAGS="-Wl,-z,defs" --libdir=\$${prefix}/lib/i386-linux-gnu
+	./configure --host=$(DEB_HOST_GNU_TYPE) --build=$(DEB_BUILD_GNU_TYPE) --prefix=/usr --mandir=\$${prefix}/share/man --infodir=\$${prefix}/share/info CFLAGS="$(CFLAGS)" LDFLAGS="-Wl,-z,defs" --libdir=\$${prefix}/lib-arch
 
 
 #Architecture 
@@ -115,10 +115,10 @@ install-arch:
 
 	# for openrtm-aist-example package
 	#$(MAKE)
-	(mkdir -p $(CURDIR)/debian/openrtm-aist-example/usr/lib)
-	(ln -s $(CURDIR)/debian/openrtm-aist/usr/lib/i386-linux-gnu $(CURDIR)/debian/openrtm-aist-example/usr/lib)
+	(mkdir -p $(CURDIR)/debian/openrtm-aist-example/usr)
+	(ln -s $(CURDIR)/debian/openrtm-aist/usr/lib-arch $(CURDIR)/debian/openrtm-aist-example/usr)
 	(cd $(CURDIR)/examples         ; $(MAKE) DESTDIR=$(CURDIR)/debian/openrtm-aist-example install)
-	(rm -r $(CURDIR)/debian/openrtm-aist-example/usr/lib)
+	(rm -r $(CURDIR)/debian/openrtm-aist-example/usr/lib-arch)
 
 	dh_install -s
 # Must not depend on anything. This is to be called by
