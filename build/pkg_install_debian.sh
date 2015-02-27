@@ -14,11 +14,7 @@
 #---------------------------------------
 set_package_list()
 {
-if [ "$code_name" = "wheezy" ]; then
-	omni="libomniorb4-1 libomniorb4-dev omniidl omniorb-nameserver"
-else
-	omni="libomniorb4 libomniorb4-dev omniidl4 omniorb4-nameserver"
-fi
+omni="libomniorb4-dev omniidl"
 ace="libace libace-dev"
 openrtm="openrtm-aist openrtm-aist-doc openrtm-aist-dev openrtm-aist-example"
 openrtm04="openrtm-aist=0.4.2-1 openrtm-aist-doc=0.4.2-1 openrtm-aist-dev=0.4.2-1 openrtm-aist-example=0.4.2-1"
@@ -187,7 +183,7 @@ reverse () {
 uninstall_packages () {
     for p in $*; do
         echo $msg11 $p
-        apt-get remove $p
+        aptitude remove $p
         if test "$?" != 0; then
             apt-get purge $p
         fi

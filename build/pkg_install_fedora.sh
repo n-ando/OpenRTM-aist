@@ -16,13 +16,7 @@
 # パッケージリスト
 #---------------------------------------
 version_num=`cat /etc/fedora-release | awk '/Fedora/{print $3}' -`
-if [ $version_num -ge 16 ]; then
-	# バージョンが16以降の場合
-	omni="omniORB omniORB-devel omniORB-doc omniORB-servers omniORB-utils"
-else
-	omni="omniORB omniORB-devel omniORB-doc omniORB-servers omniORB-utils omniORB-bootscripts"
-fi
-
+omni="omniORB omniORB-devel omniORB-doc omniORB-servers omniORB-utils"
 ace="ace ace-devel"
 openrtm="OpenRTM-aist OpenRTM-aist-devel OpenRTM-aist-doc OpenRTM-aist-example PyYAML"
 openrtm04="OpenRTM-aist-0.4.2 OpenRTM-aist-devel-0.4.2 OpenRTM-aist-doc-0.4.2 OpenRTM-aist-example-0.4.2 PyYAML"
