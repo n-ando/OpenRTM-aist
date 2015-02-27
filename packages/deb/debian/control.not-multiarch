@@ -8,7 +8,7 @@ Homepage: http://www.openrtm.org
 
 Package: openrtm-aist
 Architecture: any
-Depends: ${shlibs:Depends}, ${misc:Depends}
+Depends: ${shlibs:Depends}, ${misc:Depends}, omniorb-nameserver
 Description: OpenRTM-aist, RT-Middleware distributed by AIST
  OpenRTM-aist is a reference implementation of RTC (Robotic Technology
  Component) specification which is OMG standard. OpenRTM-aist includes
