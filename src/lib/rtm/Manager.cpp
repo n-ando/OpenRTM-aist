@@ -1287,7 +1287,11 @@ std::vector<coil::Properties> Manager::getLoadableModules()
                     CORBA::UShort port; 
                     coil::stringTo(port, addr_port[1].c_str());
                     iiop_addr.port = port;
+#if defined(RTM_OMNIORB_40) || defined(RTM_OMNIORB_41)
                     omniIOR::add_IIOP_ADDRESS(iiop_addr);
+#else
+                    omniIOR::add_IIOP_ADDRESS(iiop_addr, 0);
+#endif // defined(RTC_OMNIORB_40) and defined(RTC_OMNIORB_41)
                   }
               }
           }
