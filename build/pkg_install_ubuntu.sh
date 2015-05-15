@@ -11,16 +11,15 @@
 #---------------------------------------
 # パッケージリスト
 #---------------------------------------
-omni="libomniorb4 libomniorb4-dev omniidl4 omniorb4-nameserver omniidl omniorb-nameserver"
+omni="libomniorb4-dev omniidl"
 ace="libace libace-dev"
 openrtm="openrtm-aist openrtm-aist-doc openrtm-aist-dev openrtm-aist-example python-yaml"
-openrtm04="openrtm-aist=0.4.2-1 openrtm-aist-doc=0.4.2-1 openrtm-aist-dev=0.4.2-1 openrtm-aist-example=0.4.2-1 python-yaml"
+openrtm04="openrtm-aist=0.4.2-1 openrtm-aist-doc=0.4.2-1 openrtm-aist-dev=0.4.2-1 openrtm-aist-example=0.4.2-1 python-yaml" 
 devel="gcc g++ make uuid-dev libboost-filesystem-dev"
 packages="$devel $omni $openrtm"
 u_packages="$omni $ace $openrtm "
 
-default_reposerver="openrtm.org"
-reposervers="openrtm.org"
+reposervers="www.openrtm.org www.openrtm.de"
 reposerver=""
 
 #---------------------------------------
@@ -79,8 +78,7 @@ check_reposerver()
     done
     if test "x$nearhost" = "x"; then
 	echo "Repository servers unreachable.", $hosts
-	echo "Check your internet connection. (or are you using proxy?)"
-	nearhost=$default_reposerver
+	exit 1
     fi
     reposerver=$nearhost
 }
@@ -173,7 +171,7 @@ reverse () {
 uninstall_packages () {
     for p in $*; do
 	echo $msg11 $p
-	apt-get remove $p
+	aptitude remove $p
     if test "$?" != 0; then
         apt-get purge $p
     fi

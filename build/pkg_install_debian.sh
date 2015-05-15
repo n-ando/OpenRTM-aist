@@ -14,11 +14,7 @@
 #---------------------------------------
 set_package_list()
 {
-if [ "$code_name" = "wheezy" ]; then
-	omni="libomniorb4-1 libomniorb4-dev omniidl omniorb-nameserver"
-else
-	omni="libomniorb4 libomniorb4-dev omniidl4 omniorb4-nameserver"
-fi
+omni="libomniorb4-dev omniidl"
 ace="libace libace-dev"
 openrtm="openrtm-aist openrtm-aist-doc openrtm-aist-dev openrtm-aist-example"
 openrtm04="openrtm-aist=0.4.2-1 openrtm-aist-doc=0.4.2-1 openrtm-aist-dev=0.4.2-1 openrtm-aist-example=0.4.2-1"
@@ -27,8 +23,7 @@ devel="gcc g++ make uuid-dev"
 packages="$devel $omni $pyyaml $openrtm"
 u_packages="$omni $ace $openrtm "
 
-default_reposerver="openrtm.org"
-reposervers="openrtm.org"
+reposervers="www.openrtm.org www.openrtm.de"
 reposerver=""
 }
 
@@ -46,7 +41,7 @@ if test "$lang" = "jp" ;then
     msg2="コードネーム ： "
     msg3="このOSはサポートされておりません。"
     msg4=" OpenRTM-aistのリポジトリが登録されていません。"
-    msg5="Source.listにOpenRTM-aistのリポジトリ："
+    msg5="Source.listにOpenrRTM-aistのリポジトリ："
     msg6="を追加します。よろしいですか？(y/n)[y] "
     msg7="中断します。"
     msg8="ルートユーザーで実行してください。"
@@ -58,8 +53,8 @@ else
     msg2="The code name is : "
     msg3="This OS is not supported."
     msg4="No repository entry for OpenRTM-aist is configured in your system."
-    msg5="repository entry for OpenRTM-aist: "
-    msg6="Do you want to add the repository entry for OpenRTM-aist in source.list?(y/n)[y] "
+    msg5="repository entry for OpenrRTM-aist: "
+    msg6="Do you want to add the repository entry for OpenrRTM-aist in source.list?(y/n)[y] "
     msg7="Abort."
     msg8="This script should be run as root."
     msg9="Now installing: "
@@ -113,8 +108,7 @@ check_reposerver()
     done
     if test "x$nearhost" = "x"; then
 	echo "Repository servers unreachable.", $hosts
-	echo "Check your internet connection. (or are you using proxy?)"
-    nearhost=$default_reposerver
+	exit 1
     fi
     reposerver=$nearhost
 }
@@ -187,7 +181,7 @@ reverse () {
 uninstall_packages () {
     for p in $*; do
         echo $msg11 $p
-        apt-get remove $p
+        aptitude remove $p
         if test "$?" != 0; then
             apt-get purge $p
         fi

@@ -11,6 +11,7 @@
 %define pkgver         0
 %define _unpackaged_files_terminate_build   1
 %define __os_install_post %{nil}
+%define rtm_libdir     %{_libdir}/openrtm-%{shortversion}
 
 #------------------------------------------------------------
 # Package information
@@ -78,7 +79,7 @@ Example components and sources
 #------------------------------------------------------------
 # build section
 %build
-%configure --prefix=/usr
+%configure --prefix=/usr CFLAGS="-O2 -g" CXXFLAGS="-O2 -g"
 %{__make}
 
 #------------------------------------------------------------
