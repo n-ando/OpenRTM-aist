@@ -94,4 +94,6 @@ echo "%_topdir $builddir" > .rpmrc
 # We have already extracted source under BUILD directory.
 # %prep process can be skiped. = --short-circuit -bc
 rpm_def="_topdir $builddir"
-rpmbuild --define "$rpm_def" -ba OpenRTM-aist.spec
+rpmbuild --target `uname -i` --define "$rpm_def" -ba OpenRTM-aist.spec
+cd ..
+rm $packagename

@@ -39,6 +39,29 @@ release=`uname -r`-`uname -p`
 
 dist_name=""
 dist_key=""
+
+# not support multiarch
+not_multiarch_cnmaes="lucid marveric squeeze natty oneiric"
+
+#---------------------------------------
+# Debianコードネーム取得
+#---------------------------------------
+check_codename ()
+{
+    cnames="sarge etch lenny squeeze wheezy"
+    for c in $cnames; do
+	if test -f "/etc/apt/sources.list"; then
+	    res=`grep $c /etc/apt/sources.list`
+	else
+	    echo "This distribution may not be debian/ubuntu."
+	    exit
+	fi
+	if test ! "x$res" = "x" ; then
+	    DISTRIB_CODENAME=$c
+	fi
+    done
+}
+
 # Check the lsb distribution name
 if test -f /etc/lsb-release ; then
     . /etc/lsb-release
@@ -56,6 +79,7 @@ fi
 if test "x$dist_name" = "x" && test -f /etc/debian_version ; then
     dist_name="Debian"`cat /etc/debian_version`-`uname -m`
     dist_key="Debian"
+    check_codename
 fi
 # Check the Vine version
 if test "x$dist_name" = "x" && test -f /etc/vine-release ; then
@@ -86,36 +110,55 @@ fi
 #------------------------------------------------------------
 # create "files" file
 #------------------------------------------------------------
-if test ! -f "files" ; then
-    PKGVER=`head -n 1 changelog | sed 's/.*(\([0-9\.\-]*\).*/\1/'`
-    echo "openrtm-aist_"${PKGVER}"_amd64.deb main extra" > files
-    echo "openrtm-aist-dev_"${PKGVER}"_amd64.deb main extra" >> files
-    echo "openrtm-aist-example_"${PKGVER}"_amd64.deb main extra" >> files
-    echo "openrtm-aist-doc_"${PKGVER}"_all.deb main extra" >> files
-fi
+#if test ! -f "files" ; then
+#    PKGVER=`head -n 1 changelog | sed 's/.*(\([0-9\.\-]*\).*/\1/'`
+#    echo "openrtm-aist_"${PKGVER}"_amd64.deb main extra" > files
+#    echo "openrtm-aist-dev_"${PKGVER}"_amd64.deb main extra" >> files
+#    echo "openrtm-aist-example_"${PKGVER}"_amd64.deb main extra" >> files
+#    echo "openrtm-aist-doc_"${PKGVER}"_all.deb main extra" >> files
+#fi
 
 #------------------------------------------------------------
 # package build process
 #------------------------------------------------------------
 packagedir=`pwd`/../../
-mkdir $packagedir/debian
-
 rm -f $packagedir/packages/openrtm-aist*
 
-cp README.Debian $packagedir/debian/
-cp changelog $packagedir/debian/
-cp compat $packagedir/debian/
-cp control $packagedir/debian/
-cp copyright $packagedir/debian/
-cp dirs $packagedir/debian/
-cp docs $packagedir/debian/
-cp files $packagedir/debian/
-chmod 444 $packagedir/debian/files
-cp rules $packagedir/debian/
+cp -r debian $packagedir
+
+# check multiarch support
+multiarch_flg="OFF"
+if test "x$dist_key" = "xDebian" || test "x$dist_key" = "xUbuntu" ; then
+    for c in $not_multiarch_cnmaes; do
+        if test $DISTRIB_CODENAME = $c ; then
+            mv $packagedir/debian/compat /tmp/compat.$$
+            echo 7 >  $packagedir/debian/compat
+            mv $packagedir/debian/rules /tmp/rules.$$
+            cp $packagedir/debian/rules.not-multiarch $packagedir/debian/rules
+            DEB_HOST_ARCH=`dpkg-architecture -qDEB_HOST_ARCH`
+            if test "x$DEB_HOST_ARCH" = "xamd64" ; then
+                sed -i -s 's/lib-arch/lib64/' $packagedir/debian/rules
+            else
+                sed -i -s 's/lib-arch/lib/' $packagedir/debian/rules
+            fi
+            mv $packagedir/debian/control /tmp/control.$$
+            cp $packagedir/debian/control.not-multiarch $packagedir/debian/control
+            multiarch_flg="ON"
+            echo "... Multiarch not supported."
+            break
+        fi
+    done
+fi
+
 chmod 755 $packagedir/debian/rules
 
 cd $packagedir
-
+rm -f config.status
 dpkg-buildpackage -W -us -uc -rfakeroot
 
 mv $packagedir/../openrtm-aist* $packagedir/packages/
+if test "x$multiarch_flg" = "xON" ; then 
+    mv /tmp/compat.$$ $packagedir/debian/compat
+    mv /tmp/rules.$$ $packagedir/debian/rules
+    mv /tmp/control.$$ $packagedir/debian/control
+fi

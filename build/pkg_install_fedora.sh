@@ -16,21 +16,14 @@
 # パッケージリスト
 #---------------------------------------
 version_num=`cat /etc/fedora-release | awk '/Fedora/{print $3}' -`
-if [ $version_num -ge 16 ]; then
-	# バージョンが16以降の場合
-	omni="omniORB omniORB-devel omniORB-doc omniORB-servers omniORB-utils"
-else
-	omni="omniORB omniORB-devel omniORB-doc omniORB-servers omniORB-utils omniORB-bootscripts"
-fi
-
+omni="omniORB omniORB-devel omniORB-doc omniORB-servers omniORB-utils"
 ace="ace ace-devel"
 openrtm="OpenRTM-aist OpenRTM-aist-devel OpenRTM-aist-doc OpenRTM-aist-example PyYAML"
 openrtm04="OpenRTM-aist-0.4.2 OpenRTM-aist-devel-0.4.2 OpenRTM-aist-doc-0.4.2 OpenRTM-aist-example-0.4.2 PyYAML"
 devel="gcc-c++ uuid-devel libuuid-devel"
 packages="$devel $omni $openrtm"
 
-default_reposerver="openrtm.org"
-reposervers="openrtm.org"
+reposervers="www.openrtm.org www.openrtm.de"
 reposerver=""
 
 #----------------------------------------
@@ -76,8 +69,7 @@ check_reposerver()
     done
     if test "x$nearhost" = "x"; then
 	echo "Repository servers unreachable.", $hosts
-    echo "Check your internet connection. (or are you using proxy?)"
-    nearhost=$default_reposerver
+	exit 1
     fi
     reposerver=$nearhost
 }
