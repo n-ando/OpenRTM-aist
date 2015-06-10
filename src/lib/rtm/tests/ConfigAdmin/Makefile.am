@@ -42,6 +42,7 @@ nodist_ConfigAdminTests_SOURCES = \
 	../TestRunner.cpp \
 	$(top_builddir)/src/lib/coil/common/Properties.cpp \
 	$(top_builddir)/src/lib/coil/common/stringutil.cpp \
+	$(top_builddir)/src/lib/rtm/ConfigurationListener.cpp \
 	$(top_builddir)/src/lib/rtm/ConfigAdmin.cpp \
 	ConfigAdminTests.cpp
 
