@@ -82,6 +82,7 @@ all: do-test
 
 # do tests
 do-test:
+	/bin/sh rtm_coverage.sh
 #	./AllTests --xml alltests.xml --xsl default.xsl
 
 # Cleanup
@@ -93,3 +94,4 @@ clean-local:
 	*~ *core \
 	Makefile.old \
 	*.cc *.hh *.i *.a *.c *.inl
+

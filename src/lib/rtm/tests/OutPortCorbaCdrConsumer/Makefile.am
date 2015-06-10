@@ -16,6 +16,7 @@ IDLFLAGS = @IDL_FLAGS@
 LIBS = @LIBS@
 
 AM_CPPFLAGS = \
+	-coverage \
 	 -I. \
 	-I$(top_builddir) \
 	-I$(top_builddir)/src/lib/ \
@@ -89,13 +90,21 @@ nodist_OutPortCorbaCdrConsumerTests_SOURCES =     \
 	OutPortCorbaCdrConsumerTests.cpp
 
 OutPortCorbaCdrConsumerTests_LDFLAGS = -L$(libdir) $(AM_LDFLAGS)
-OutPortCorbaCdrConsumerTests_LDADD   = -lcppunit -lcoil
+OutPortCorbaCdrConsumerTests_LDADD   = -lcppunit -lcoil -lgcov
 
 EXTRA_DIST =        \
 	OutPortCorbaCdrConsumerTests.cpp
 
 # all
-all: do-test
+all: do-test do-coverage
+
+do-coverage: 
+	./OutPortCorbaCdrConsumerTests 
+	/usr/bin/gcov OutPortCorbaCdrConsumerTests.gcda 
+	/bin/mkdir ./Coverage 
+	/usr/bin/lcov -c -d . -o ./Coverage/OutPortCorbaCdrConsumerTests.info 
+	/usr/bin/python ../rtm_tests_changeInfo.py ./Coverage/OutPortCorbaCdrConsumerTests.info 
+	/usr/bin/genhtml -o ./Coverage ./Coverage/OutPortCorbaCdrConsumerTests.info 
 
 # do tests
 do-test:
@@ -103,6 +112,9 @@ do-test:
 
 # clean-up
 clean-local:
+	rm -rf ./Coverage
+	rm -f *.gcda *.gcno *.gcov
+	rm -f OutPortCorbaCdrConsumerTests
 	rm -f                               \
         *.log *.xml                         \
 	*.o *.Po *.gch *.la                 \
@@ -110,3 +122,4 @@ clean-local:
 	*~ *core                            \
 	Makefile.old                        \
 	*.cc *.hh *.i *.a *.c *.inl
+

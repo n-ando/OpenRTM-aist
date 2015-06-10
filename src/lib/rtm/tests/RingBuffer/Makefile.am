@@ -30,6 +30,7 @@ IDLFLAGS = @IDL_FLAGS@
 LIBS = @LIBS@
 
 AM_CPPFLAGS =             \
+	-coverage \
 	-I.               \
 	-I$(top_builddir) \
 	-I$(top_builddir)/src/lib \
@@ -51,13 +52,21 @@ nodist_RingBufferTests_SOURCES =     \
 	RingBufferTests.cpp
 
 RingBufferTests_LDFLAGS = -L../../ -L$(libdir) $(AM_LDFLAGS)
-RingBufferTests_LDADD   = -lcppunit -lcoil -lRTC
+RingBufferTests_LDADD   = -lcppunit -lcoil -lRTC -lgcov
 
 EXTRA_DIST =            \
 	RingBufferTests.cpp
 
 # all
-all: do-test
+all: do-test do-coverage
+
+do-coverage: 
+	./RingBufferTests 
+	/usr/bin/gcov RingBufferTests.gcda 
+	/bin/mkdir ./Coverage 
+	/usr/bin/lcov -c -d . -o ./Coverage/RingBufferTests.info 
+	/usr/bin/python ../rtm_tests_changeInfo.py ./Coverage/RingBufferTests.info 
+	/usr/bin/genhtml -o ./Coverage ./Coverage/RingBufferTests.info 
 
 # do tests
 do-test:
@@ -66,6 +75,9 @@ do-test:
 
 # clean-up
 clean-local:
+	rm -rf ./Coverage
+	rm -f *.gcda *.gcno *.gcov
+	rm -f RingBufferTests
 	rm -f                               \
         *.log *.xml                         \
 	*.o *.Po *.gch *.la                 \
@@ -73,3 +85,4 @@ clean-local:
 	*~ *core                            \
 	Makefile.old                        \
 	*.cc *.hh *.i *.a *.c *.inl
+

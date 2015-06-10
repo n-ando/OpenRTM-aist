@@ -16,6 +16,7 @@ IDLFLAGS = @IDL_FLAGS@
 LIBS = @LIBS@
 
 AM_CPPFLAGS= \
+	-coverage \
 	-I. \
 	-I$(top_builddir) \
 	-I$(top_builddir)/src/lib \
@@ -93,13 +94,21 @@ nodist_SdoConfigurationTests_SOURCES = \
 	SdoConfigurationTests.cpp
 
 SdoConfigurationTests_LDFLAGS = -L$(libdir) $(AM_LDFLAGS)
-SdoConfigurationTests_LDADD   = -lcppunit -lcoil -luuid
+SdoConfigurationTests_LDADD   = -lcppunit -lcoil -luuid -lgcov
 
 EXTRA_DIST =                  \
 	SdoConfigurationTests.cpp
 
 # all
-all: do-test
+all: do-test do-coverage
+
+do-coverage: 
+	./SdoConfigurationTests 
+	/usr/bin/gcov SdoConfigurationTests.gcda 
+	/bin/mkdir ./Coverage 
+	/usr/bin/lcov -c -d . -o ./Coverage/SdoConfigurationTests.info 
+	/usr/bin/python ../rtm_tests_changeInfo.py ./Coverage/SdoConfigurationTests.info 
+	/usr/bin/genhtml -o ./Coverage ./Coverage/SdoConfigurationTests.info 
 
 # do tests
 do-test:
@@ -108,6 +117,9 @@ do-test:
 
 # clean-up
 clean-local:
+	rm -rf ./Coverage
+	rm -f *.gcda *.gcno *.gcov
+	rm -f SdoConfigurationTests
 	rm -f                               \
         *.log *.xml                         \
 	*.o *.Po *.gch *.la                 \
@@ -115,3 +127,4 @@ clean-local:
 	*~ *core                            \
 	Makefile.old                        \
 	*.cc *.hh *.i *.a *.c *.inl
+

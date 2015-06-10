@@ -20,6 +20,7 @@ IDLFLAGS = @IDL_FLAGS@
 LIBS = @LIBS@
 
 AM_CPPFLAGS = \
+	-coverage \
 	-I. \
 	-I$(top_builddir) \
 	-I$(top_builddir)/src/lib \
@@ -99,13 +100,21 @@ nodist_ExtTrigExecutionContextTests_SOURCES = \
 	ExtTrigExecutionContextTests.cpp
 
 ExtTrigExecutionContextTests_LDFLAGS = -L$(libdir) $(AM_LDFLAGS)
-ExtTrigExecutionContextTests_LDADD   = -lcppunit -lcoil -luuid
+ExtTrigExecutionContextTests_LDADD   = -lcppunit -lcoil -luuid -lgcov
 
 EXTRA_DIST = \
 	ExtTrigExecutionContextTests.cpp
 
 # all
-all: do-test
+all: do-test do-coverage
+
+do-coverage: 
+	./ExtTrigExecutionContextTests 
+	/usr/bin/gcov ExtTrigExecutionContextTests.gcda 
+	/bin/mkdir ./Coverage 
+	/usr/bin/lcov -c -d . -o ./Coverage/ExtTrigExecutionContextTests.info 
+	/usr/bin/python ../rtm_tests_changeInfo.py ./Coverage/ExtTrigExecutionContextTests.info 
+	/usr/bin/genhtml -o ./Coverage ./Coverage/ExtTrigExecutionContextTests.info 
 
 # do tests
 do-test:
@@ -114,6 +123,9 @@ do-test:
 
 # clean-up
 clean-local:
+	rm -rf ./Coverage
+	rm -f *.gcda *.gcno *.gcov
+	rm -f ExtTrigExecutionContextTests
 	rm -f                               \
         *.log *.xml                         \
 	*.o *.Po *.gch *.la                 \
@@ -121,3 +133,4 @@ clean-local:
 	*~ *core                            \
 	Makefile.old                        \
 	*.cc *.hh *.i *.a *.c *.inl
+

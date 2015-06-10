@@ -16,6 +16,7 @@ IDLFLAGS = @IDL_FLAGS@
 LIBS = @LIBS@
 
 AM_CPPFLAGS =                    \
+	-coverage \
 	 -I.                      \
 	-I$(top_builddir)         \
 	-I$(top_builddir)/src/lib \
@@ -44,13 +45,21 @@ nodist_NVUtilTests_SOURCES =             \
 	NVUtilTests.cpp
 
 NVUtilTests_LDFLAGS = -L$(libdir)
-NVUtilTests_LDADD   = -lcppunit
+NVUtilTests_LDADD   = -lcppunit -lgcov
 
 EXTRA_DIST =        \
 	NVUtilTests.cpp
 
 # all
-all: do-test
+all: do-test do-coverage
+
+do-coverage: 
+	./NVUtilTests 
+	/usr/bin/gcov NVUtilTests.gcda 
+	/bin/mkdir ./Coverage 
+	/usr/bin/lcov -c -d . -o ./Coverage/NVUtilTests.info 
+	/usr/bin/python ../rtm_tests_changeInfo.py ./Coverage/NVUtilTests.info 
+	/usr/bin/genhtml -o ./Coverage ./Coverage/NVUtilTests.info 
 
 # do tests
 do-test:
@@ -58,6 +67,9 @@ do-test:
 
 # clean-up
 clean-local:
+	rm -rf ./Coverage
+	rm -f *.gcda *.gcno *.gcov
+	rm -f NVUtilTests
 	rm -f                               \
         *.log *.xml                         \
 	*.o *.Po *.gch *.la                 \
@@ -65,3 +77,4 @@ clean-local:
 	*~ *core                            \
 	Makefile.old                        \
 	*.cc *.hh *.i *.a *.c *.inl
+

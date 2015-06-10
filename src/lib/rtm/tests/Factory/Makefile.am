@@ -16,6 +16,7 @@ IDLFLAGS = @IDL_FLAGS@
 LIBS = @LIBS@
 
 AM_CPPFLAGS = \
+	-coverage \
 	-I. \
 	-I$(top_builddir) \
 	-I$(top_builddir)/src/lib \
@@ -93,13 +94,21 @@ nodist_FactoryTests_SOURCES = \
 	FactoryTests.cpp
 
 FactoryTests_LDFLAGS = -L$(libdir) $(AM_LDFLAGS)
-FactoryTests_LDADD   = -lcppunit -lcoil -luuid
+FactoryTests_LDADD   = -lcppunit -lcoil -luuid -lgcov
 
 EXTRA_DIST = \
 	FactoryTests.cpp
 
 # all
-all: do-test
+all: do-test do-coverage
+
+do-coverage: 
+	./FactoryTests 
+	/usr/bin/gcov FactoryTests.gcda 
+	/bin/mkdir ./Coverage 
+	/usr/bin/lcov -c -d . -o ./Coverage/FactoryTests.info 
+	/usr/bin/python ../rtm_tests_changeInfo.py ./Coverage/FactoryTests.info 
+	/usr/bin/genhtml -o ./Coverage ./Coverage/FactoryTests.info 
 
 # do tests
 do-test:
@@ -107,6 +116,9 @@ do-test:
 
 # clean-up
 clean-local:
+	rm -rf ./Coverage
+	rm -f *.gcda *.gcno *.gcov
+	rm -f FactoryTests
 	rm -f                               \
         *.log *.xml                         \
 	*.o *.Po *.gch *.la                 \
@@ -114,3 +126,4 @@ clean-local:
 	*~ *core                            \
 	Makefile.old                        \
 	*.cc *.hh *.i *.a *.c *.inl
+

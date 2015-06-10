@@ -16,6 +16,7 @@ IDLFLAGS = @IDL_FLAGS@
 LIBS = @LIBS@
 
 AM_CPPFLAGS = \
+	-coverage \
 	 -I. \
 	-I$(top_builddir) \
 	-I$(top_builddir)/src/lib/ \
@@ -104,14 +105,22 @@ nodist_CORBA_SeqUtilTests_SOURCES =      \
 	CORBA_SeqUtilTests.cpp
 
 CORBA_SeqUtilTests_LDFLAGS = -L$(libdir) $(AM_LDFLAGS)
-CORBA_SeqUtilTests_LDADD   = -lcppunit -lcoil
+CORBA_SeqUtilTests_LDADD   = -lcppunit -lcoil -lgcov
 
 EXTRA_DIST = \
 	CORBA_SeqUtilTests.cpp \
 	SeqUtilTests.idl
 
 # all
-all: do-test
+all: do-test do-coverage
+
+do-coverage: 
+	./CORBA_SeqUtilTests 
+	/usr/bin/gcov CORBA_SeqUtilTests.gcda 
+	/bin/mkdir ./Coverage 
+	/usr/bin/lcov -c -d . -o ./Coverage/CORBA_SeqUtilTests.info 
+	/usr/bin/python ../rtm_tests_changeInfo.py ./Coverage/CORBA_SeqUtilTests.info 
+	/usr/bin/genhtml -o ./Coverage ./Coverage/CORBA_SeqUtilTests.info 
 
 # do tests
 do-test:
@@ -119,6 +128,9 @@ do-test:
 
 # clean-up
 clean-local:
+	rm -rf ./Coverage
+	rm -f *.gcda *.gcno *.gcov
+	rm -f CORBA_SeqUtilTests
 	rm -f                               \
         *.log *.xml                         \
 	*.o *.Po *.gch *.la                 \
@@ -126,3 +138,4 @@ clean-local:
 	*~ *core                            \
 	Makefile.old                        \
 	*.cc *.hh *.i *.a *.c *.inl
+

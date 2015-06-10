@@ -15,6 +15,7 @@ IDLFLAGS = @IDL_FLAGS@
 LIBS = @LIBS@
 
 AM_CPPFLAGS = \
+	-coverage \
 	-I. \
 	-I$(top_builddir) \
 	-I$(top_builddir)/src/lib \
@@ -92,13 +93,21 @@ nodist_NamingManagerTests_SOURCES = \
 	NamingManagerTests.cpp
 
 NamingManagerTests_LDFLAGS = -L$(libdir) $(AM_LDFLAGS)
-NamingManagerTests_LDADD   = -lcppunit -lcoil -luuid
+NamingManagerTests_LDADD   = -lcppunit -lcoil -luuid -lgcov
 
 EXTRA_DIST = \
 	NamingManagerTests.cpp
 
 # all
-all: do-test
+all: do-test do-coverage
+
+do-coverage: 
+	./NamingManagerTests 
+	/usr/bin/gcov NamingManagerTests.gcda 
+	/bin/mkdir ./Coverage 
+	/usr/bin/lcov -c -d . -o ./Coverage/NamingManagerTests.info 
+	/usr/bin/python ../rtm_tests_changeInfo.py ./Coverage/NamingManagerTests.info 
+	/usr/bin/genhtml -o ./Coverage ./Coverage/NamingManagerTests.info 
 
 # do tests
 do-test:
@@ -107,6 +116,9 @@ do-test:
 
 # clean-up
 clean-local:
+	rm -rf ./Coverage
+	rm -f *.gcda *.gcno *.gcov
+	rm -f NamingManagerTests
 	rm -f                               \
         *.log *.xml                         \
 	*.o *.Po *.gch *.la                 \
@@ -114,3 +126,4 @@ clean-local:
 	*~ *core                            \
 	Makefile.old                        \
 	*.cc *.hh *.i *.a *.c *.inl
+

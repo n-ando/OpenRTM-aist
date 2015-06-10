@@ -23,6 +23,7 @@ IDLFLAGS = @IDL_FLAGS@
 LIBS = @LIBS@
 
 AM_CPPFLAGS = \
+	-coverage \
 	 -I. \
 	-I$(top_builddir) \
 	-I$(includedir)   \
@@ -45,14 +46,22 @@ nodist_ConfigAdminTests_SOURCES = \
 	ConfigAdminTests.cpp
 
 ConfigAdminTests_LDFLAGS = -L$(libdir)
-ConfigAdminTests_LDADD   = -lcppunit
+ConfigAdminTests_LDADD   = -lcppunit -lgcov
 
 EXTRA_DIST = \
 	ConfigAdminTests.cpp
 
 
 # all
-all: do-test
+all: do-test do-coverage
+
+do-coverage: 
+	./ConfigAdminTests 
+	/usr/bin/gcov ConfigAdminTests.gcda 
+	/bin/mkdir ./Coverage 
+	/usr/bin/lcov -c -d . -o ./Coverage/ConfigAdminTests.info 
+	/usr/bin/python ../rtm_tests_changeInfo.py ./Coverage/ConfigAdminTests.info 
+	/usr/bin/genhtml -o ./Coverage ./Coverage/ConfigAdminTests.info 
 
 # do tests
 do-test:
@@ -60,6 +69,9 @@ do-test:
 
 # clean-up
 clean-local:
+	rm -rf ./Coverage
+	rm -f *.gcda *.gcno *.gcov
+	rm -f ConfigAdminTests
 	rm -f                               \
         *.log *.xml                         \
 	new.conf stored.conf                \
@@ -68,3 +80,4 @@ clean-local:
 	*~ *core                            \
 	Makefile.old                        \
 	*.cc *.hh *.i *.a *.c *.inl
+

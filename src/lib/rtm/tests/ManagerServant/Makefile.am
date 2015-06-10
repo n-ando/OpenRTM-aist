@@ -21,6 +21,7 @@ IDLFLAGS = @IDL_FLAGS@
 LIBS = @LIBS@
 
 AM_CPPFLAGS= -I.                                \
+	-coverage \
 	-I$(includedir)                         \
 	-I$(top_builddir)                       \
 	-I.                                     \
@@ -113,6 +114,7 @@ nodist_ManagerServantTests_SOURCES =                             \
 ManagerServantTests_LDFLAGS = -L$(libdir) \
         -L$(top_builddir)/src/lib/coil/lib
 ManagerServantTests_LDADD   =                      \
+	-lgcov \
          -lcppunit                                 \
          -lomniORB4                                \
          -lomnithread                              \
@@ -174,7 +176,15 @@ EXTRA_DIST = \
 
 
 # all
-all: do-test
+all: do-test do-coverage
+
+do-coverage: 
+	./ManagerServantTests 
+	/usr/bin/gcov ManagerServantTests.gcda 
+	/bin/mkdir ./Coverage 
+	/usr/bin/lcov -c -d . -o ./Coverage/ManagerServantTests.info 
+	/usr/bin/python ../rtm_tests_changeInfo.py ./Coverage/ManagerServantTests.info 
+	/usr/bin/genhtml -o ./Coverage ./Coverage/ManagerServantTests.info 
 
 # do tests
 do-test:
@@ -184,6 +194,9 @@ do-test:
 
 # clean-up
 clean-local:
+	rm -rf ./Coverage
+	rm -f *.gcda *.gcno *.gcov
+	rm -f ManagerServantTests
 	rm -f *.o *.Po *.gch *.la
 	rm -f *~ *core
 	rm -f *.xml
@@ -235,5 +248,6 @@ ManagerServant_vc10.vcproj:
 		--yaml ../coil_test.vcproj.yaml \
 		--source $(TEST_SRC)
 	qkc -O- -sm $(win32_builddir)/ManagerServant_vc10.vcproj
+
 
 

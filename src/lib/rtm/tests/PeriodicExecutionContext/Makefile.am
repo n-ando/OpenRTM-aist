@@ -16,6 +16,7 @@ IDLFLAGS = @IDL_FLAGS@
 LIBS = @LIBS@
 
 AM_CPPFLAGS = \
+	-coverage \
 	-I. \
 	-I$(top_builddir) \
 	-I$(top_builddir)/src/lib \
@@ -94,13 +95,21 @@ nodist_PeriodicExecutionContextTests_SOURCES = \
 	PeriodicExecutionContextTests.cpp
 
 PeriodicExecutionContextTests_LDFLAGS = -L$(libdir) $(AM_LDFLAGS)
-PeriodicExecutionContextTests_LDADD   = -lcppunit -lcoil -luuid
+PeriodicExecutionContextTests_LDADD   = -lcppunit -lcoil -luuid -lgcov
 
 EXTRA_DIST = \
 	PeriodicExecutionContextTests.cpp
 
 # all
-all: do-test
+all: do-test do-coverage
+
+do-coverage: 
+	./PeriodicExecutionContextTests 
+	/usr/bin/gcov PeriodicExecutionContextTests.gcda 
+	/bin/mkdir ./Coverage 
+	/usr/bin/lcov -c -d . -o ./Coverage/PeriodicExecutionContextTests.info 
+	/usr/bin/python ../rtm_tests_changeInfo.py ./Coverage/PeriodicExecutionContextTests.info 
+	/usr/bin/genhtml -o ./Coverage ./Coverage/PeriodicExecutionContextTests.info 
 
 # do tests
 do-test:
@@ -109,6 +118,9 @@ do-test:
 
 # clean-up
 clean-local:
+	rm -rf ./Coverage
+	rm -f *.gcda *.gcno *.gcov
+	rm -f PeriodicExecutionContextTests
 	rm -f                               \
         *.log *.xml                         \
 	*.o *.Po *.gch *.la                 \
@@ -116,3 +128,4 @@ clean-local:
 	*~ *core                            \
 	Makefile.old                        \
 	*.cc *.hh *.i *.a *.c *.inl
+

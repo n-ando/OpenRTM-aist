@@ -16,6 +16,7 @@ IDLFLAGS = @IDL_FLAGS@
 LIBS = @LIBS@
 
 AM_CPPFLAGS = \
+	-coverage \
 	 -I. \
 	-I$(top_builddir) \
 	-I$(top_builddir)/src/lib \
@@ -37,13 +38,21 @@ nodist_ObjectManagerTests_SOURCES =     \
 	ObjectManagerTests.cpp
 
 ObjectManagerTests_LDFLAGS = -L$(libdir)
-ObjectManagerTests_LDADD   = -lcppunit
+ObjectManagerTests_LDADD   = -lcppunit -lgcov
 
 EXTRA_DIST =               \
 	ObjectManagerTests.cpp
 
 # all
-all: do-test
+all: do-test do-coverage
+
+do-coverage: 
+	./ObjectManagerTests 
+	/usr/bin/gcov ObjectManagerTests.gcda 
+	/bin/mkdir ./Coverage 
+	/usr/bin/lcov -c -d . -o ./Coverage/ObjectManagerTests.info 
+	/usr/bin/python ../rtm_tests_changeInfo.py ./Coverage/ObjectManagerTests.info 
+	/usr/bin/genhtml -o ./Coverage ./Coverage/ObjectManagerTests.info 
 
 # do tests
 do-test:
@@ -52,6 +61,9 @@ do-test:
 
 # clean-up
 clean-local:
+	rm -rf ./Coverage
+	rm -f *.gcda *.gcno *.gcov
+	rm -f ObjectManagerTests
 	rm -f                               \
         *.log *.xml                         \
 	*.o *.Po *.gch *.la                 \
@@ -59,3 +71,4 @@ clean-local:
 	*~ *core                            \
 	Makefile.old                        \
 	*.cc *.hh *.i *.a *.c *.inl
+
