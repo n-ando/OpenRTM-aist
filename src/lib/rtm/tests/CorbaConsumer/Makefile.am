@@ -30,6 +30,7 @@ IDLFLAGS = @IDL_FLAGS@
 LIBS = @LIBS@
 
 AM_CPPFLAGS=               \
+	-coverage \
 	-I.                \
 	-I$(top_builddir)  \
 	-I$(includedir)    \
@@ -56,14 +57,22 @@ nodist_CorbaConsumerTests_SOURCES = \
 	CorbaConsumerTests.cpp
 
 CorbaConsumerTests_LDFLAGS = -L$(libdir)
-CorbaConsumerTests_LDADD   = -lcppunit
+CorbaConsumerTests_LDADD   = -lcppunit -lgcov
 
 EXTRA_DIST =               \
 	CorbaConsumerTests.cpp \
 	$(IDL_SOURCES)
 
 # all
-all: do-test
+all: do-test do-coverage
+
+do-coverage: 
+	./CorbaConsumerTests 
+	/usr/bin/gcov CorbaConsumerTests.gcda 
+	/bin/mkdir ./Coverage 
+	/usr/bin/lcov -c -d . -o ./Coverage/CorbaConsumerTests.info 
+	/usr/bin/python ../rtm_tests_changeInfo.py ./Coverage/CorbaConsumerTests.info 
+	/usr/bin/genhtml -o ./Coverage ./Coverage/CorbaConsumerTests.info 
 
 # do tests
 do-test:
@@ -71,6 +80,9 @@ do-test:
 
 # clean-up
 clean-local:
+	rm -rf ./Coverage
+	rm -f *.gcda *.gcno *.gcov
+	rm -f CorbaConsumerTests
 	rm -f                               \
         *.log *.xml                         \
 	*.o *.Po *.gch *.la                 \
@@ -78,3 +90,4 @@ clean-local:
 	*~ *core                            \
 	Makefile.old                        \
 	*.cc *.hh *.i *.a *.c *.inl
+

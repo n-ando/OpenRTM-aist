@@ -16,6 +16,7 @@ IDLFLAGS = @IDL_FLAGS@
 LIBS = @LIBS@
 
 AM_CPPFLAGS=              \
+	-coverage \
 	-I.               \
 	-I$(top_builddir) \
 	-I$(top_builddir)/src/lib \
@@ -42,13 +43,21 @@ nodist_SdoOrganizationTests_SOURCES =              \
 #	(top_builddir)/src/lib/rtm/SdoOrganization.cpp    
 
 SdoOrganizationTests_LDFLAGS = -L$(libdir) $(AM_LDFLAGS)
-SdoOrganizationTests_LDADD   = -lcppunit -lRTC -lcoil -luuid
+SdoOrganizationTests_LDADD   = -lcppunit -lRTC -lcoil -luuid -lgcov
 
 EXTRA_DIST =                 \
 	SdoOrganizationTests.cpp
 
 # all
-all: do-test
+all: do-test do-coverage
+
+do-coverage: 
+	./SdoOrganizationTests 
+	/usr/bin/gcov SdoOrganizationTests.gcda 
+	/bin/mkdir ./Coverage 
+	/usr/bin/lcov -c -d . -o ./Coverage/SdoOrganizationTests.info 
+	/usr/bin/python ../rtm_tests_changeInfo.py ./Coverage/SdoOrganizationTests.info 
+	/usr/bin/genhtml -o ./Coverage ./Coverage/SdoOrganizationTests.info 
 
 # do tests
 do-test:
@@ -57,6 +66,9 @@ do-test:
 
 # clean-up
 clean-local:
+	rm -rf ./Coverage
+	rm -f *.gcda *.gcno *.gcov
+	rm -f SdoOrganizationTests
 	rm -f                               \
         *.log *.xml                         \
 	*.o *.Po *.gch *.la                 \
@@ -64,3 +76,4 @@ clean-local:
 	*~ *core                            \
 	Makefile.old                        \
 	*.cc *.hh *.i *.a *.c *.inl
+

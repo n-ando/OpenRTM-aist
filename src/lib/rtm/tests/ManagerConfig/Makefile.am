@@ -16,6 +16,7 @@ IDLFLAGS = @IDL_FLAGS@
 LIBS = @LIBS@
 
 AM_CPPFLAGS =\
+	-coverage \
 	-I. \
 	-I$(top_builddir) \
 	-I$(top_builddir)/src/lib \
@@ -37,14 +38,22 @@ nodist_ManagerConfigTests_SOURCES =\
 	ManagerConfigTests.cpp
 
 ManagerConfigTests_LDFLAGS = -L$(libdir) $(AM_LDFLAGS)
-ManagerConfigTests_LDADD   = -lcppunit -lcoil
+ManagerConfigTests_LDADD   = -lcppunit -lcoil -lgcov
 
 EXTRA_DIST =               \
 	ManagerConfigTests.cpp \
 	rtc.conf
 
 # all
-all: do-test
+all: do-test do-coverage
+
+do-coverage: 
+	./ManagerConfigTests 
+	/usr/bin/gcov ManagerConfigTests.gcda 
+	/bin/mkdir ./Coverage 
+	/usr/bin/lcov -c -d . -o ./Coverage/ManagerConfigTests.info 
+	/usr/bin/python ../rtm_tests_changeInfo.py ./Coverage/ManagerConfigTests.info 
+	/usr/bin/genhtml -o ./Coverage ./Coverage/ManagerConfigTests.info 
 
 # do tests
 do-test:
@@ -53,6 +62,9 @@ do-test:
 
 # clean-up
 clean-local:
+	rm -rf ./Coverage
+	rm -f *.gcda *.gcno *.gcov
+	rm -f ManagerConfigTests
 	rm -f                               \
         *.log *.xml                         \
 	*.o *.Po *.gch *.la                 \
@@ -60,3 +72,4 @@ clean-local:
 	*~ *core                            \
 	Makefile.old                        \
 	*.cc *.hh *.i *.a *.c *.inl
+

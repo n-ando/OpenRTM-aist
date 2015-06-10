@@ -16,6 +16,7 @@ IDLFLAGS = @IDL_FLAGS@
 LIBS = @LIBS@
 
 AM_CPPFLAGS = \
+	-coverage \
 	 -I. \
 	-I$(top_builddir) \
 	-I$(top_builddir)/src/lib/ \
@@ -89,13 +90,21 @@ nodist_InPortConnectorTests_SOURCES =     \
 	InPortConnectorTests.cpp
 
 InPortConnectorTests_LDFLAGS = -L$(libdir) $(AM_LDFLAGS)
-InPortConnectorTests_LDADD   = -lcppunit -lcoil
+InPortConnectorTests_LDADD   = -lcppunit -lcoil -lgcov
 
 EXTRA_DIST =        \
 	InPortConnectorTests.cpp
 
 # all
-all: do-test
+all: do-test do-coverage
+
+do-coverage: 
+	./InPortConnectorTests 
+	/usr/bin/gcov InPortConnectorTests.gcda 
+	/bin/mkdir ./Coverage 
+	/usr/bin/lcov -c -d . -o ./Coverage/InPortConnectorTests.info 
+	/usr/bin/python ../rtm_tests_changeInfo.py ./Coverage/InPortConnectorTests.info 
+	/usr/bin/genhtml -o ./Coverage ./Coverage/InPortConnectorTests.info 
 
 # do tests
 do-test:
@@ -103,6 +112,9 @@ do-test:
 
 # clean-up
 clean-local:
+	rm -rf ./Coverage
+	rm -f *.gcda *.gcno *.gcov
+	rm -f InPortConnectorTests
 	rm -f                               \
         *.log *.xml                         \
 	*.o *.Po *.gch *.la                 \
@@ -110,3 +122,4 @@ clean-local:
 	*~ *core                            \
 	Makefile.old                        \
 	*.cc *.hh *.i *.a *.c *.inl
+

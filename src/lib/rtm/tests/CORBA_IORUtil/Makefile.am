@@ -30,6 +30,7 @@ IDLFLAGS = @IDL_FLAGS@
 LIBS = @LIBS@
 
 AM_CPPFLAGS =                     \
+	-coverage \
 	 -I.                      \
 	-I$(top_builddir)         \
 	-I$(top_builddir)/src/lib/ \
@@ -61,7 +62,7 @@ nodist_CORBA_IORUtilTests_SOURCES =                 \
 	CORBA_IORUtilTests.cpp
 
 CORBA_IORUtilTests_LDFLAGS = -L$(libdir) $(AM_LDFLAGS)
-CORBA_IORUtilTests_LDADD   = -lcppunit -lcoil -luuid
+CORBA_IORUtilTests_LDADD   = -lcppunit -lcoil -luuid -lgcov
 
 # Extra sources included distribution
 EXTRA_DIST =               \
@@ -69,7 +70,15 @@ EXTRA_DIST =               \
 
 
 # all
-all: do-test
+all: do-test do-coverage
+
+do-coverage: 
+	./CORBA_IORUtilTests 
+	/usr/bin/gcov CORBA_IORUtilTests.gcda 
+	/bin/mkdir ./Coverage 
+	/usr/bin/lcov -c -d . -o ./Coverage/CORBA_IORUtilTests.info 
+	/usr/bin/python ../rtm_tests_changeInfo.py ./Coverage/CORBA_IORUtilTests.info 
+	/usr/bin/genhtml -o ./Coverage ./Coverage/CORBA_IORUtilTests.info 
 
 # do tests
 do-test:
@@ -77,6 +86,9 @@ do-test:
 
 # clean-up
 clean-local:
+	rm -rf ./Coverage
+	rm -f *.gcda *.gcno *.gcov
+	rm -f CORBA_IORUtilTests
 	rm -f                               \
         *.log *.xml                         \
 	*.o *.Po *.gch *.la                 \
@@ -84,3 +96,4 @@ clean-local:
 	*~ *core                            \
 	Makefile.old                        \
 	*.cc *.hh *.i *.a *.c *.inl
+

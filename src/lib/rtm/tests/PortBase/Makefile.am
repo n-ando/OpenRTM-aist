@@ -30,6 +30,7 @@ IDLFLAGS = @IDL_FLAGS@
 LIBS = @LIBS@
 
 AM_CPPFLAGS =                     \
+	-coverage \
 	-I.                       \
 	-I$(top_builddir)         \
 	-I$(top_builddir)/src/lib/ \
@@ -110,13 +111,21 @@ nodist_PortBaseTests_SOURCES =           \
 
 
 PortBaseTests_LDFLAGS = -L$(libdir) $(AM_LDFLAGS)
-PortBaseTests_LDADD   = -lcppunit -lcoil -luuid
+PortBaseTests_LDADD   = -lcppunit -lcoil -luuid -lgcov
 
 EXTRA_DIST =          \
 	PortBaseTests.cpp
 
 # all
-all: do-test
+all: do-test do-coverage
+
+do-coverage: 
+	./PortBaseTests 
+	/usr/bin/gcov PortBaseTests.gcda 
+	/bin/mkdir ./Coverage 
+	/usr/bin/lcov -c -d . -o ./Coverage/PortBaseTests.info 
+	/usr/bin/python ../rtm_tests_changeInfo.py ./Coverage/PortBaseTests.info 
+	/usr/bin/genhtml -o ./Coverage ./Coverage/PortBaseTests.info 
 
 # do tests
 do-test:
@@ -125,6 +134,9 @@ do-test:
 
 # clean-up
 clean-local:
+	rm -rf ./Coverage
+	rm -f *.gcda *.gcno *.gcov
+	rm -f PortBaseTests
 	rm -f                               \
         *.log *.xml                         \
 	*.o *.Po *.gch *.la                 \
@@ -132,3 +144,4 @@ clean-local:
 	*~ *core                            \
 	Makefile.old                        \
 	*.cc *.hh *.i *.a *.c *.inl
+

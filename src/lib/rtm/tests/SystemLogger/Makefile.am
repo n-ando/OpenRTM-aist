@@ -15,6 +15,7 @@ IDLFLAGS = @IDL_FLAGS@
 LIBS = @LIBS@
 
 AM_CPPFLAGS = \
+	-coverage \
 	-I. \
 	-I$(top_builddir) \
 	-I$(top_builddir)/src/lib \
@@ -93,6 +94,7 @@ nodist_SystemLoggerTests_SOURCES = \
 SystemLoggerTests_LDFLAGS = -L$(libdir) $(AM_LDFLAGS) \
         -L$(top_builddir)/src/lib/coil/lib
 SystemLoggerTests_LDADD   = \
+	-lgcov \
          -lcppunit                                 \
          -lomniORB4                                \
          -lomnithread                              \
@@ -115,7 +117,15 @@ EXTRA_DIST = \
 
 
 # all
-all: do-test
+all: do-test do-coverage
+
+do-coverage: 
+	./SystemLoggerTests 
+	/usr/bin/gcov SystemLoggerTests.gcda 
+	/bin/mkdir ./Coverage 
+	/usr/bin/lcov -c -d . -o ./Coverage/SystemLoggerTests.info 
+	/usr/bin/python ../rtm_tests_changeInfo.py ./Coverage/SystemLoggerTests.info 
+	/usr/bin/genhtml -o ./Coverage ./Coverage/SystemLoggerTests.info 
 
 # do tests
 do-test:
@@ -123,6 +133,9 @@ do-test:
 
 # clean-up
 clean-local:
+	rm -rf ./Coverage
+	rm -f *.gcda *.gcno *.gcov
+	rm -f SystemLoggerTests
 	rm -f                               \
         *.log *.xml                         \
 	*.o *.Po *.gch *.la                 \
@@ -130,3 +143,4 @@ clean-local:
 	*~ *core                            \
 	Makefile.old                        \
 	*.cc *.hh *.i *.a *.c *.inl
+

@@ -26,6 +26,7 @@ IDLFLAGS = @IDL_FLAGS@
 LIBS = @LIBS@
 
 AM_CPPFLAGS = \
+	-coverage \
 	-I. \
 	-I$(top_builddir) \
 	-I$(top_builddir)/src/lib \
@@ -51,13 +52,21 @@ nodist_RTCUtilTests_SOURCES = \
 	RTCUtilTests.cpp
 
 RTCUtilTests_LDFLAGS = -L$(libdir) $(AM_LDFLAGS)
-RTCUtilTests_LDADD   = -lcppunit
+RTCUtilTests_LDADD   = -lcppunit -lgcov
 
 EXTRA_DIST = \
 	RTCUtilTests.cpp
 
 # all
-all: do-test
+all: do-test do-coverage
+
+do-coverage: 
+	./RTCUtilTests 
+	/usr/bin/gcov RTCUtilTests.gcda 
+	/bin/mkdir ./Coverage 
+	/usr/bin/lcov -c -d . -o ./Coverage/RTCUtilTests.info 
+	/usr/bin/python ../rtm_tests_changeInfo.py ./Coverage/RTCUtilTests.info 
+	/usr/bin/genhtml -o ./Coverage ./Coverage/RTCUtilTests.info 
 
 # do tests
 do-test:
@@ -66,6 +75,9 @@ do-test:
 
 # clean-up
 clean-local:
+	rm -rf ./Coverage
+	rm -f *.gcda *.gcno *.gcov
+	rm -f RTCUtilTests
 	rm -f                               \
         *.log *.xml                         \
 	*.o *.Po *.gch *.la                 \
@@ -73,3 +85,4 @@ clean-local:
 	*~ *core                            \
 	Makefile.old                        \
 	*.cc *.hh *.i *.a *.c *.inl
+

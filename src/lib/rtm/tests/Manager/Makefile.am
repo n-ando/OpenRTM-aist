@@ -15,6 +15,7 @@ IDLFLAGS = @IDL_FLAGS@
 LIBS = @LIBS@
 
 AM_CPPFLAGS = \
+	-coverage \
 	-I. \
 	-I$(top_builddir) \
 	-I$(top_builddir)/src/lib \
@@ -104,6 +105,7 @@ nodist_ManagerTests_SOURCES = \
 ManagerTests_LDFLAGS = -L$(libdir) $(AM_LDFLAGS) \
         -L$(top_builddir)/src/lib/coil/lib
 ManagerTests_LDADD   = \
+	-lgcov \
          -lcppunit                                 \
          -lomniORB4                                \
          -lomnithread                              \
@@ -170,7 +172,15 @@ EXTRA_DIST = \
 
 
 # all
-all: do-test
+all: do-test do-coverage
+
+do-coverage: 
+	./ManagerTests 
+	/usr/bin/gcov ManagerTests.gcda 
+	/bin/mkdir ./Coverage 
+	/usr/bin/lcov -c -d . -o ./Coverage/ManagerTests.info 
+	/usr/bin/python ../rtm_tests_changeInfo.py ./Coverage/ManagerTests.info 
+	/usr/bin/genhtml -o ./Coverage ./Coverage/ManagerTests.info 
 
 # do tests
 do-test:
@@ -178,6 +188,9 @@ do-test:
 
 # clean-up
 clean-local:
+	rm -rf ./Coverage
+	rm -f *.gcda *.gcno *.gcov
+	rm -f ManagerTests
 	rm -f                               \
         *.log *.xml                         \
 	*.o *.Po *.gch *.la                 \
@@ -185,3 +198,4 @@ clean-local:
 	*~ *core                            \
 	Makefile.old                        \
 	*.cc *.hh *.i *.a *.c *.inl
+

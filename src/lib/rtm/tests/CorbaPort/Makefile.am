@@ -30,6 +30,7 @@ IDLFLAGS = @IDL_FLAGS@
 LIBS = @LIBS@
 
 AM_CPPFLAGS =                     \
+	-coverage \
 	-I.                       \
 	-I$(top_builddir)         \
 	-I$(top_builddir)/src/lib/ \
@@ -110,14 +111,22 @@ nodist_CorbaPortTests_SOURCES =                  \
 	CorbaPortTests.cpp
 
 CorbaPortTests_LDFLAGS = -L$(libdir) $(AM_LDFLAGS)
-CorbaPortTests_LDADD   = -lcppunit -lcoil -luuid
+CorbaPortTests_LDADD   = -lcppunit -lcoil -luuid -lgcov
 
 EXTRA_DIST =           \
 	$(IDL_SOURCES)     \
 	CorbaPortTests.cpp
 
 # all
-all: do-test
+all: do-test do-coverage
+
+do-coverage: 
+	./CorbaPortTests 
+	/usr/bin/gcov CorbaPortTests.gcda 
+	/bin/mkdir ./Coverage 
+	/usr/bin/lcov -c -d . -o ./Coverage/CorbaPortTests.info 
+	/usr/bin/python ../rtm_tests_changeInfo.py ./Coverage/CorbaPortTests.info 
+	/usr/bin/genhtml -o ./Coverage ./Coverage/CorbaPortTests.info 
 
 # do tests
 do-test:
@@ -125,6 +134,9 @@ do-test:
 
 # clean-up
 clean-local:
+	rm -rf ./Coverage
+	rm -f *.gcda *.gcno *.gcov
+	rm -f CorbaPortTests
 	rm -f                               \
         *.log *.xml                         \
 	*.o *.Po *.gch *.la                 \
@@ -132,3 +144,4 @@ clean-local:
 	*~ *core                            \
 	Makefile.old                        \
 	*.cc *.hh *.i *.a *.c *.inl
+
