@@ -52,6 +52,16 @@ nodist_ExtTrigExecutionContextTests_SOURCES = \
 	$(top_srcdir)/src/lib/rtm/NVUtil.cpp \
 	$(top_srcdir)/src/lib/coil/common/stringutil.cpp \
 	$(top_srcdir)/src/lib/coil/common/Properties.cpp \
+	$(top_srcdir)/src/lib/rtm/PortConnectListener.cpp \
+	$(top_srcdir)/src/lib/rtm/LocalServiceAdmin.cpp \
+	$(top_srcdir)/src/lib/rtm/ExecutionContextProfile.cpp \
+	$(top_srcdir)/src/lib/rtm/RTObjectStateMachine.cpp \
+	$(top_srcdir)/src/lib/rtm/ExecutionContextWorker.cpp \
+	$(top_srcdir)/src/lib/rtm/ManagerActionListener.cpp \
+	$(top_srcdir)/src/lib/rtm/ConfigurationListener.cpp \
+	$(top_srcdir)/src/lib/rtm/ExecutionContextBase.cpp \
+	$(top_srcdir)/src/lib/rtm/SdoServiceAdmin.cpp \
+	$(top_srcdir)/src/lib/rtm/ComponentActionListener.cpp \
 	$(top_srcdir)/src/lib/rtm/RTObject.cpp \
 	$(top_srcdir)/src/lib/rtm/CorbaNaming.cpp \
 	$(top_srcdir)/src/lib/rtm/CorbaPort.cpp          \
