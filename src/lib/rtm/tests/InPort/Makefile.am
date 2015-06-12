@@ -43,6 +43,8 @@ noinst_PROGRAMS = InPortTests
 nodist_InPortTests_SOURCES =     \
 	../TestRunner.cpp        \
 	$(IDL_SOURCES:.idl=Skel.cpp) \
+	$(top_srcdir)/src/lib/rtm/ManagerActionListener.cpp \
+	$(top_srcdir)/src/lib/rtm/PortConnectListener.cpp \
 	$(top_srcdir)/src/lib/rtm/NVUtil.cpp \
 	$(top_srcdir)/src/lib/rtm/PortBase.cpp \
 	$(top_srcdir)/src/lib/rtm/CdrRingBuffer.cpp            \
