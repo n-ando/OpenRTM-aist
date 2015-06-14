@@ -379,13 +379,119 @@ namespace RTC
         m_initProc(this);
       }
 
+    RTC_TRACE(("Components pre-creation: %s",
+               m_config["manager.components.precreate"].c_str()));
     std::vector<std::string> comp;
     comp = coil::split(m_config["manager.components.precreate"], ",");
     for (int i(0), len(comp.size()); i < len; ++i)
       {
-	this->createComponent(comp[i].c_str());
+        this->createComponent(comp[i].c_str());
       }
 
+    { // pre-connection
+      RTC_TRACE(("Connection pre-creation: %s",
+                 m_config["manager.components.preconnect"].c_str()));
+      std::vector<std::string> connectors;
+      connectors = coil::split(m_config["manager.components.preconnect"], ",");
+      for (int i(0), len(connectors.size()); i < len; ++i)
+        {
+          // ConsoleIn.out:Console.in(dataflow_type=push,....)
+          coil::vstring conn_prop = coil::split(connectors[i], "(");
+          coil::replaceString(conn_prop[1], ")", "");
+          coil::vstring comp_ports;
+          comp_ports = coil::split(conn_prop[0], ":");
+          if (comp_ports.size() != 2)
+            {
+              RTC_ERROR(("Invalid format for pre-connection."));
+              RTC_ERROR(("Format must be Comp0.port0:Comp1.port1"));
+              continue;
+            }
+          std::string comp0_name = coil::split(comp_ports[0], ".")[0];
+          std::string comp1_name = coil::split(comp_ports[1], ".")[0];
+          RTObject_impl* comp0 = getComponent(comp0_name.c_str());
+          RTObject_impl* comp1 = getComponent(comp1_name.c_str());
+          if (comp0 == NULL)
+            { RTC_ERROR(("%s not found.", comp0_name.c_str())); }
+          if (comp1 == NULL)
+            { RTC_ERROR(("%s not found.", comp1_name.c_str())); }
+          std::string port0 = comp_ports[0];
+          std::string port1 = comp_ports[1];
+          
+          PortServiceList_var ports0 = comp0->get_ports();
+          PortServiceList_var ports1 = comp1->get_ports();
+          RTC_DEBUG(("%s has %d ports.", comp0_name.c_str(), ports0->length()));
+          RTC_DEBUG(("%s has %d ports.", comp1_name.c_str(), ports1->length()));
+          
+          PortService_var port0_var;
+          for (size_t p(0); p < ports0->length(); ++p)
+            {
+              PortProfile_var pp = ports0[p]->get_port_profile();
+              std::string s(CORBA::string_dup(pp->name));
+              if (comp_ports[0] == s)
+                {
+                  RTC_DEBUG(("port %s found: ", comp_ports[0].c_str()));
+                  port0_var = ports0[p];
+                }
+            }
+          PortService_var port1_var;
+          for (size_t p(0); p < ports1->length(); ++p)
+            {
+              PortProfile_var pp = ports1[p]->get_port_profile();
+              std::string s(CORBA::string_dup(pp->name));
+              if (port1 == s)
+                {
+                  RTC_DEBUG(("port %s found: ", comp_ports[1].c_str()));
+                  port1_var = ports1[p];
+                }
+            }
+          if (CORBA::is_nil(port0_var))
+            {
+              RTC_ERROR(("port0 %s is nil obj", comp_ports[0].c_str()));
+              continue;
+            }
+          if (CORBA::is_nil(port1_var))
+            {
+              RTC_ERROR(("port1 %s is nil obj", comp_ports[1].c_str()));
+              continue;
+            }
+          ConnectorProfile conn_prof;
+          std::string prof_name;
+          conn_prof.name = CORBA::string_dup(connectors[i].c_str());
+          conn_prof.connector_id = CORBA::string_dup("");
+          conn_prof.ports.length(2);
+          conn_prof.ports[0] = port0_var;
+          conn_prof.ports[1] = port1_var;
+          coil::Properties prop;
+          prop["dataport.dataflow_type"] = "push";
+          prop["dataport.interface_type"] = "corba_cdr";
+          coil::vstring opt_props = coil::split(conn_prop[1], "&");
+          for (size_t o(0); o < opt_props.size(); ++o)
+            {
+              coil::vstring temp = coil::split(opt_props[o], "=");
+              prop["dataport." + temp[0]] = temp[1];
+            }
+          NVUtil::copyFromProperties(conn_prof.properties, prop);
+          if (RTC::RTC_OK != port0_var->connect(conn_prof))
+            {
+              RTC_ERROR(("Connection error: %s",
+                         connectors[i].c_str()));
+            }
+        }
+    } // end of pre-connection
+
+    { // pre-activation
+      RTC_TRACE(("Connection pre-creation: %s",
+                 m_config["manager.components.preconnect"].c_str()));
+      std::vector<std::string> comps;
+      comps = coil::split(m_config["manager.components.preactivation"],
+                               ",");
+      for (int i(0), len(comps.size()); i < len; ++i)
+        {
+          RTObject_impl* comp = getComponent(comps[i].c_str());
+          ExecutionContextList_var ecs = comp->get_owned_contexts();
+          ecs[0]->activate_component(comp->getObjRef());
+        }
+    } // end of pre-activation
     return true;
   }
   
