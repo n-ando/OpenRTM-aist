@@ -116,12 +116,13 @@ EXTRA_DIST =                  \
 all: do-test do-coverage
 
 do-coverage: 
+	rm -rf ./Coverage
 	./PublisherPeriodicTests 
-	/usr/bin/gcov PublisherPeriodicTests.gcda 
-	/bin/mkdir ./Coverage 
-	/usr/bin/lcov -c -d . -o ./Coverage/PublisherPeriodicTests.info 
-	/usr/bin/python ../rtm_tests_changeInfo.py ./Coverage/PublisherPeriodicTests.info 
-	/usr/bin/genhtml -o ./Coverage ./Coverage/PublisherPeriodicTests.info 
+	gcov PublisherPeriodicTests.gcda 
+	mkdir -p ./Coverage 
+	lcov -c -d . -o ./Coverage/PublisherPeriodicTests.info 
+	../rtm_tests_changeInfo.py ./Coverage/PublisherPeriodicTests.info 
+	genhtml -o ./Coverage ./Coverage/PublisherPeriodicTests.info 
 
 # do tests
 do-test:
@@ -140,4 +141,5 @@ clean-local:
 	*~ *core                            \
 	Makefile.old                        \
 	*.cc *.hh *.i *.a *.c *.inl
+
 

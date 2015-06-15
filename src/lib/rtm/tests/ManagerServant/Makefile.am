@@ -179,12 +179,13 @@ EXTRA_DIST = \
 all: do-test do-coverage
 
 do-coverage: 
+	rm -rf ./Coverage
 	./ManagerServantTests 
-	/usr/bin/gcov ManagerServantTests.gcda 
-	/bin/mkdir ./Coverage 
-	/usr/bin/lcov -c -d . -o ./Coverage/ManagerServantTests.info 
-	/usr/bin/python ../rtm_tests_changeInfo.py ./Coverage/ManagerServantTests.info 
-	/usr/bin/genhtml -o ./Coverage ./Coverage/ManagerServantTests.info 
+	gcov ManagerServantTests.gcda 
+	mkdir -p ./Coverage 
+	lcov -c -d . -o ./Coverage/ManagerServantTests.info 
+	../rtm_tests_changeInfo.py ./Coverage/ManagerServantTests.info 
+	genhtml -o ./Coverage ./Coverage/ManagerServantTests.info 
 
 # do tests
 do-test:
@@ -248,6 +249,7 @@ ManagerServant_vc10.vcproj:
 		--yaml ../coil_test.vcproj.yaml \
 		--source $(TEST_SRC)
 	qkc -O- -sm $(win32_builddir)/ManagerServant_vc10.vcproj
+
 
 
 

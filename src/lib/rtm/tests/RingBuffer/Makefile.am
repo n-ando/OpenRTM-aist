@@ -61,12 +61,13 @@ EXTRA_DIST =            \
 all: do-test do-coverage
 
 do-coverage: 
+	rm -rf ./Coverage
 	./RingBufferTests 
-	/usr/bin/gcov RingBufferTests.gcda 
-	/bin/mkdir ./Coverage 
-	/usr/bin/lcov -c -d . -o ./Coverage/RingBufferTests.info 
-	/usr/bin/python ../rtm_tests_changeInfo.py ./Coverage/RingBufferTests.info 
-	/usr/bin/genhtml -o ./Coverage ./Coverage/RingBufferTests.info 
+	gcov RingBufferTests.gcda 
+	mkdir -p ./Coverage 
+	lcov -c -d . -o ./Coverage/RingBufferTests.info 
+	../rtm_tests_changeInfo.py ./Coverage/RingBufferTests.info 
+	genhtml -o ./Coverage ./Coverage/RingBufferTests.info 
 
 # do tests
 do-test:
@@ -85,4 +86,5 @@ clean-local:
 	*~ *core                            \
 	Makefile.old                        \
 	*.cc *.hh *.i *.a *.c *.inl
+
 

@@ -73,12 +73,13 @@ EXTRA_DIST =               \
 all: do-test do-coverage
 
 do-coverage: 
+	rm -rf ./Coverage
 	./CORBA_IORUtilTests 
-	/usr/bin/gcov CORBA_IORUtilTests.gcda 
-	/bin/mkdir ./Coverage 
-	/usr/bin/lcov -c -d . -o ./Coverage/CORBA_IORUtilTests.info 
-	/usr/bin/python ../rtm_tests_changeInfo.py ./Coverage/CORBA_IORUtilTests.info 
-	/usr/bin/genhtml -o ./Coverage ./Coverage/CORBA_IORUtilTests.info 
+	gcov CORBA_IORUtilTests.gcda 
+	mkdir -p ./Coverage 
+	lcov -c -d . -o ./Coverage/CORBA_IORUtilTests.info 
+	../rtm_tests_changeInfo.py ./Coverage/CORBA_IORUtilTests.info 
+	genhtml -o ./Coverage ./Coverage/CORBA_IORUtilTests.info 
 
 # do tests
 do-test:
@@ -96,4 +97,5 @@ clean-local:
 	*~ *core                            \
 	Makefile.old                        \
 	*.cc *.hh *.i *.a *.c *.inl
+
 

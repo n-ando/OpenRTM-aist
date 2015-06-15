@@ -74,12 +74,13 @@ EXTRA_DIST =               \
 all: do-test do-coverage
 
 do-coverage: 
+	rm -rf ./Coverage
 	./ConnectorListenerTests 
-	/usr/bin/gcov ConnectorListenerTests.gcda 
-	/bin/mkdir ./Coverage 
-	/usr/bin/lcov -c -d . -o ./Coverage/ConnectorListenerTests.info 
-	/usr/bin/python ../rtm_tests_changeInfo.py ./Coverage/ConnectorListenerTests.info 
-	/usr/bin/genhtml -o ./Coverage ./Coverage/ConnectorListenerTests.info 
+	gcov ConnectorListenerTests.gcda 
+	mkdir -p ./Coverage 
+	lcov -c -d . -o ./Coverage/ConnectorListenerTests.info 
+	../rtm_tests_changeInfo.py ./Coverage/ConnectorListenerTests.info 
+	genhtml -o ./Coverage ./Coverage/ConnectorListenerTests.info 
 
 # do tests
 do-test:
@@ -97,4 +98,5 @@ clean-local:
 	*~ *core                            \
 	Makefile.old                        \
 	*.cc *.hh *.i *.a *.c *.inl
+
 

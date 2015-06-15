@@ -112,12 +112,13 @@ EXTRA_DIST = \
 all: do-test do-coverage
 
 do-coverage: 
+	rm -rf ./Coverage
 	./NamingManagerTests 
-	/usr/bin/gcov NamingManagerTests.gcda 
-	/bin/mkdir ./Coverage 
-	/usr/bin/lcov -c -d . -o ./Coverage/NamingManagerTests.info 
-	/usr/bin/python ../rtm_tests_changeInfo.py ./Coverage/NamingManagerTests.info 
-	/usr/bin/genhtml -o ./Coverage ./Coverage/NamingManagerTests.info 
+	gcov NamingManagerTests.gcda 
+	mkdir -p ./Coverage 
+	lcov -c -d . -o ./Coverage/NamingManagerTests.info 
+	../rtm_tests_changeInfo.py ./Coverage/NamingManagerTests.info 
+	genhtml -o ./Coverage ./Coverage/NamingManagerTests.info 
 
 # do tests
 do-test:
@@ -136,4 +137,5 @@ clean-local:
 	*~ *core                            \
 	Makefile.old                        \
 	*.cc *.hh *.i *.a *.c *.inl
+
 
