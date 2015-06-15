@@ -20,6 +20,8 @@
 # option -r            : install robot component Runtime tool_packages
 # option -ur           : Uninstall robot component Runtime tool_packages
 #
+# chmod 775
+#
 
 #---------------------------------------
 # パッケージリスト

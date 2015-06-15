@@ -1,6 +1,6 @@
 #!/bin/sh
 #
-# chmod 764
+# chmod 775
 #
 
 compileOKDir_list="CORBA_IORUtil ConnectorListener CorbaConsumer NVUtil NumberingPolicy ObjectManager OutPortProvider PeriodicECSharedComposite RTCUtil RingBuffer SdoOrganization SdoService StateMachine"
