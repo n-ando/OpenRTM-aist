@@ -48,12 +48,13 @@ EXTRA_DIST = \
 all: do-test do-coverage
 
 do-coverage: 
+	rm -rf ./Coverage
 	./PeriodicECSharedCompositeTests 
-	/usr/bin/gcov PeriodicECSharedCompositeTests.gcda 
-	/bin/mkdir ./Coverage 
-	/usr/bin/lcov -c -d . -o ./Coverage/PeriodicECSharedCompositeTests.info 
-	/usr/bin/python ../rtm_tests_changeInfo.py ./Coverage/PeriodicECSharedCompositeTests.info 
-	/usr/bin/genhtml -o ./Coverage ./Coverage/PeriodicECSharedCompositeTests.info 
+	gcov PeriodicECSharedCompositeTests.gcda 
+	mkdir -p ./Coverage 
+	lcov -c -d . -o ./Coverage/PeriodicECSharedCompositeTests.info 
+	../rtm_tests_changeInfo.py ./Coverage/PeriodicECSharedCompositeTests.info 
+	genhtml -o ./Coverage ./Coverage/PeriodicECSharedCompositeTests.info 
 
 # do tests
 do-test:
@@ -72,4 +73,5 @@ clean-local:
 	*~ *core                            \
 	Makefile.old                        \
 	*.cc *.hh *.i *.a *.c *.inl
+
 

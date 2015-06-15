@@ -61,12 +61,13 @@ EXTRA_DIST = \
 all: do-test do-coverage
 
 do-coverage: 
+	rm -rf ./Coverage
 	./RTCUtilTests 
-	/usr/bin/gcov RTCUtilTests.gcda 
-	/bin/mkdir ./Coverage 
-	/usr/bin/lcov -c -d . -o ./Coverage/RTCUtilTests.info 
-	/usr/bin/python ../rtm_tests_changeInfo.py ./Coverage/RTCUtilTests.info 
-	/usr/bin/genhtml -o ./Coverage ./Coverage/RTCUtilTests.info 
+	gcov RTCUtilTests.gcda 
+	mkdir -p ./Coverage 
+	lcov -c -d . -o ./Coverage/RTCUtilTests.info 
+	../rtm_tests_changeInfo.py ./Coverage/RTCUtilTests.info 
+	genhtml -o ./Coverage ./Coverage/RTCUtilTests.info 
 
 # do tests
 do-test:
@@ -85,4 +86,5 @@ clean-local:
 	*~ *core                            \
 	Makefile.old                        \
 	*.cc *.hh *.i *.a *.c *.inl
+
 

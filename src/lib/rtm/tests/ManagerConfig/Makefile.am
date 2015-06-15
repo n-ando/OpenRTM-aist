@@ -48,12 +48,13 @@ EXTRA_DIST =               \
 all: do-test do-coverage
 
 do-coverage: 
+	rm -rf ./Coverage
 	./ManagerConfigTests 
-	/usr/bin/gcov ManagerConfigTests.gcda 
-	/bin/mkdir ./Coverage 
-	/usr/bin/lcov -c -d . -o ./Coverage/ManagerConfigTests.info 
-	/usr/bin/python ../rtm_tests_changeInfo.py ./Coverage/ManagerConfigTests.info 
-	/usr/bin/genhtml -o ./Coverage ./Coverage/ManagerConfigTests.info 
+	gcov ManagerConfigTests.gcda 
+	mkdir -p ./Coverage 
+	lcov -c -d . -o ./Coverage/ManagerConfigTests.info 
+	../rtm_tests_changeInfo.py ./Coverage/ManagerConfigTests.info 
+	genhtml -o ./Coverage ./Coverage/ManagerConfigTests.info 
 
 # do tests
 do-test:
@@ -72,4 +73,5 @@ clean-local:
 	*~ *core                            \
 	Makefile.old                        \
 	*.cc *.hh *.i *.a *.c *.inl
+
 

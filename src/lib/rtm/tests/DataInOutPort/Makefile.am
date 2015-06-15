@@ -128,12 +128,13 @@ EXTRA_DIST =               \
 all: do-test do-coverage
 
 do-coverage: 
+	rm -rf ./Coverage
 	./DataInOutPortTests 
-	/usr/bin/gcov DataInOutPortTests.gcda 
-	/bin/mkdir ./Coverage 
-	/usr/bin/lcov -c -d . -o ./Coverage/DataInOutPortTests.info 
-	/usr/bin/python ../rtm_tests_changeInfo.py ./Coverage/DataInOutPortTests.info 
-	/usr/bin/genhtml -o ./Coverage ./Coverage/DataInOutPortTests.info 
+	gcov DataInOutPortTests.gcda 
+	mkdir -p ./Coverage 
+	lcov -c -d . -o ./Coverage/DataInOutPortTests.info 
+	../rtm_tests_changeInfo.py ./Coverage/DataInOutPortTests.info 
+	genhtml -o ./Coverage ./Coverage/DataInOutPortTests.info 
 
 # do tests
 do-test:
@@ -151,4 +152,5 @@ clean-local:
 	*~ *core                            \
 	Makefile.old                        \
 	*.cc *.hh *.i *.a *.c *.inl
+
 
