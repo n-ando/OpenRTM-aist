@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 #
-# chmod 764
+# chmod 775
 #
 
 import sys, os, datetime, time
