@@ -43,6 +43,16 @@ noinst_PROGRAMS = OutPortPullConnectorTests
 nodist_OutPortPullConnectorTests_SOURCES =     \
 	../TestRunner.cpp                 \
 	$(IDL_SOURCES:.idl=Skel.cpp) \
+	$(top_srcdir)/src/lib/rtm/ConfigurationListener.cpp \
+	$(top_srcdir)/src/lib/rtm/LocalServiceAdmin.cpp \
+	$(top_srcdir)/src/lib/rtm/RTObjectStateMachine.cpp \
+	$(top_srcdir)/src/lib/rtm/ExecutionContextProfile.cpp \
+	$(top_srcdir)/src/lib/rtm/ExecutionContextWorker.cpp \
+	$(top_srcdir)/src/lib/rtm/ComponentActionListener.cpp \
+	$(top_srcdir)/src/lib/rtm/ExecutionContextBase.cpp \
+	$(top_srcdir)/src/lib/rtm/ManagerActionListener.cpp \
+	$(top_srcdir)/src/lib/rtm/PortConnectListener.cpp \
+	$(top_srcdir)/src/lib/rtm/SdoServiceAdmin.cpp \
 	$(top_srcdir)/src/lib/rtm/NVUtil.cpp \
 	$(top_srcdir)/src/lib/rtm/PortBase.cpp \
 	$(top_srcdir)/src/lib/rtm/Manager.cpp                      \
