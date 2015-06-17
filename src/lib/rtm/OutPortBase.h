@@ -1016,6 +1016,15 @@ namespace RTC
   protected:
     /*!
      * @if jp
+     * @brief ローカルのピアInPortを取得
+     * @else
+     * @brief Getting local peer InPort if available
+     * @endif
+     */
+    InPortBase* getLocalInPort(const ConnectorInfo& profile);
+    
+    /*!
+     * @if jp
      * @brief プロパティ
      * @else
      * @brief Properties

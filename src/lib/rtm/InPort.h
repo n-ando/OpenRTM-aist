@@ -27,6 +27,8 @@
 #include <coil/TimeValue.h>
 #include <coil/Time.h>
 #include <coil/OS.h>
+#include <coil/Mutex.h>
+#include <coil/Guard.h>
 
 #include <rtm/RTC.h>
 #include <rtm/Typename.h>
@@ -152,8 +154,8 @@ namespace RTC
       :	InPortBase(name, ::CORBA_Util::toRepositoryId<DataType>()),
 #endif
         m_name(name), m_value(value),
-	m_OnRead(NULL),  m_OnReadConvert(NULL),
-	m_status(1)
+        m_OnRead(NULL),  m_OnReadConvert(NULL),
+        m_status(1), m_directNewData(false)
     {
     }
     
@@ -230,6 +232,14 @@ namespace RTC
       // In single-buffer mode, all connectors share the same buffer. This
       // means that we only need to read from the first connector to get data
       // received by any connector.
+      {
+        Guard gurad(m_valueMutex);
+        if (m_directNewData == true)
+          {
+            RTC_DEBUG(("isNew() returns true because of direct write."));
+            return true;
+          }
+      }
       int r(0);
       {
         Guard guard(m_connectorsMutex);
@@ -277,6 +287,7 @@ namespace RTC
     virtual bool isEmpty()
     {
       RTC_TRACE(("isEmpty()"));
+      if (m_directNewData == true) { return false; }
       int r(0);
 
       {
@@ -300,6 +311,13 @@ namespace RTC
       
       RTC_DEBUG(("isEmpty() = false, data exists in the buffer"));
       return false;
+    }
+
+    virtual void write(const DataType& data)
+    {
+      Guard guard(m_valueMutex);
+      m_value = data;
+      m_directNewData = true;
     }
 
     /*!
@@ -385,7 +403,23 @@ namespace RTC
           (*m_OnRead)();
           RTC_TRACE(("OnRead called"));
         }
-
+      // 1) direct connection
+      {
+        Guard guard(m_valueMutex);
+        if (m_directNewData == true)
+          {
+            RTC_DEBUG(("Direct data transfer"));
+            if (m_OnReadConvert != 0) 
+              {
+                m_value = (*m_OnReadConvert)(m_value);
+                RTC_DEBUG(("OnReadConvert for direct data called"));
+                return true;
+              }
+            m_directNewData = false;
+            return true;
+          }
+      }
+      // 2) network connection
       cdrMemoryStream cdr;
       ReturnCode ret;
       {
@@ -395,15 +429,16 @@ namespace RTC
             RTC_DEBUG(("no connectors"));
             return false;
           }
-        
+
         // In single-buffer mode, all connectors share the same buffer. This
         // means that we only need to read from the first connector to get data
         // received by any connector.
         ret = m_connectors[0]->read(cdr);
-	m_status[0] = ret;
+        m_status[0] = ret;
       }
       if (ret == PORT_OK)
         {
+          Guard guard(m_valueMutex);
           RTC_DEBUG(("data read succeeded"));
           m_value <<= cdr;
           if (m_OnReadConvert != 0) 
@@ -627,6 +662,7 @@ namespace RTC
      * @endif
      */
     DataType& m_value;
+    mutable coil::Mutex m_valueMutex;
     
     /*!
      * @if jp
@@ -646,7 +682,23 @@ namespace RTC
      */
     OnReadConvert<DataType>* m_OnReadConvert;
 
+    /*!
+     * @if jp
+     * @brief コネクタごとのリードステータス
+     * @else
+     * @brief Read status of each connector
+     * @endif
+     */
     DataPortStatusList m_status;
+
+    /*!
+     * @if jp
+     * @brief ダイレクトデータ転送フラグ
+     * @else
+     * @brief A flag for direct data transfer
+     * @endif
+     */
+    bool m_directNewData;
   };
 }; // End of namesepace RTM
 

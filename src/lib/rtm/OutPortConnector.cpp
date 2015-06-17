@@ -29,7 +29,8 @@ namespace RTC
    * @endif
    */
   OutPortConnector::OutPortConnector(ConnectorInfo& info)
-    : rtclog("OutPortConnector"), m_profile(info), m_littleEndian(true)
+    : rtclog("OutPortConnector"), m_profile(info), m_littleEndian(true),
+      m_directInPort(NULL)
   {
   }
 
