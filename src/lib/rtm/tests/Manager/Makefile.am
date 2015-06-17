@@ -112,7 +112,7 @@ ManagerTests_LDADD   = \
          -lomniDynamic4                            \
 	-lcoil                                    \
          -luuid                                    \
-	$(top_builddir)/src/lib/rtm/tests/Manager/.libs/DummyLib.la
+	$(top_builddir)/src/lib/rtm/tests/Manager/DummyLib.la
 
 
 
@@ -136,7 +136,7 @@ DummyModule_la_LIBADD  = \
 	-lomniDynamic4                            \
 	-lcoil                                    \
 	-luuid                                    \
-	$(top_builddir)/src/lib/rtm/tests/Manager/.libs/DummyLib.la
+	$(top_builddir)/src/lib/rtm/tests/Manager/DummyLib.la
 
 nodist_DummyModule2_la_SOURCES = DummyModule2.h \
 				$(top_srcdir)/src/lib/rtm/DataFlowComponentBase.cpp \
@@ -149,7 +149,7 @@ DummyModule2_la_LIBADD  = \
 	-lomniDynamic4                            \
 	-lcoil                                    \
 	-luuid                                    \
-	$(top_builddir)/src/lib/rtm/tests/Manager/.libs/DummyLib.la
+	$(top_builddir)/src/lib/rtm/tests/Manager/DummyLib.la
 
 bin_PROGRAMS = rtcprof
 rtcprof_SOURCES = $(top_builddir)/utils/rtcprof/rtcprof.cpp
