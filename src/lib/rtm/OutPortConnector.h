@@ -22,6 +22,9 @@
 
 #include <rtm/SystemLogger.h>
 #include <rtm/ConnectorBase.h>
+#include <rtm/InPortBase.h>
+#include <rtm/InPort.h>
+
 
 namespace RTC
 {
@@ -208,13 +211,27 @@ namespace RTC
     template <class DataType>
     ReturnCode write(const DataType& data)
     {
+      if (m_directInPort != NULL)
+        {
+          static_cast<InPort<DataType>*>(m_directInPort)->write(data);
+          return PORT_OK;
+        }
       m_cdr.rewindPtrs();
       RTC_TRACE(("connector endian: %s", isLittleEndian() ? "little":"big"));
       m_cdr.setByteSwapFlag(isLittleEndian());
       data >>= m_cdr;
       return write(m_cdr);
     }
-
+    
+    bool setInPort(InPortBase* directInPort)
+    {
+      if (directInPort == NULL)
+        {
+          return false;
+        }
+      m_directInPort = directInPort;
+      return true;
+    }
   protected:
     /*!
      * @if jp
@@ -248,6 +265,15 @@ namespace RTC
      * @endif
      */
     cdrMemoryStream m_cdr;
+
+    /*!
+     * @if jp
+     * @brief 同一プロセス上のピアInPortのポインタ
+     * @else
+     * @brief InProt pointer to the peer in the same process
+     * @endif
+     */
+    InPortBase* m_directInPort;
 
   };
 }; // namespace RTC

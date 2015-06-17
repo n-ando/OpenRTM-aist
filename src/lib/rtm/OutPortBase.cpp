@@ -29,7 +29,6 @@
 #include <rtm/OutPortBase.h>
 #include <rtm/PublisherBase.h>
 
-
 namespace RTC
 {
   /*!
@@ -971,6 +970,19 @@ namespace RTC
 
         // endian type set
         connector->setEndian(m_littleEndian);
+
+        // set direct InPort if ConnectorProfile
+        //  .properties["dataport.outport.direct_dataput.disable"] != YES
+        if (!coil::toBool(prop["direct_dataput.disable"], "YES", "NO", false))
+          {
+            InPortBase* inport = getLocalInPort(profile);
+            if (inport != NULL)
+              {
+                connector->setInPort(inport);
+              }
+          }
+        // end of direct port
+
         m_connectors.push_back(connector);
         RTC_PARANOID(("connector pushback done: size = %d",
                       m_connectors.size()));
@@ -1034,6 +1046,43 @@ namespace RTC
       }
     RTC_FATAL(("never comes here: createConnector()"));
     return 0;
+  }
+
+  /*!
+   * @if jp
+   * @brief ローカルのピアInPortを取得
+   * @else
+   * @brief Getting local peer InPort if available
+   * @endif
+   */
+  InPortBase*
+  OutPortBase::getLocalInPort(const ConnectorInfo& profile)
+  {
+    RTC_DEBUG(("Trying direct port connection."));
+    CORBA::ORB_var orb = RTC::Manager::instance().getORB();
+    RTC_DEBUG(("Current connector profile: name=%s, id=%s",
+               profile.name.c_str(), profile.id.c_str()));
+    // finding peer port object
+    for (size_t i = 0;  i < profile.ports.size() ; ++i)
+      {
+        CORBA::Object_var obj;
+        obj = orb->string_to_object(profile.ports[i].c_str());
+        if (getPortRef()->_is_equivalent(obj)) { continue; }
+        RTC_DEBUG(("Peer port found: %s.", profile.ports[i].c_str()));
+        try
+          {
+            PortableServer::POA_var poa = RTC::Manager::instance().getPOA();
+            InPortBase* inport = dynamic_cast<InPortBase*>
+              (poa->reference_to_servant(obj));
+            RTC_DEBUG(("InPortBase servant pointer is obtained."));
+            return inport;
+          }
+        catch (...)
+          {
+            RTC_DEBUG(("Peer port is remote port"));
+          }
+      }
+    return NULL;
   }
 
 }; // end of namespace RTM
