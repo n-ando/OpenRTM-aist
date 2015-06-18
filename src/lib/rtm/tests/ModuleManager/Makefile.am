@@ -115,7 +115,7 @@ ModuleManagerTests_LDADD   =                       \
          -lomniDynamic4                            \
          -lcoil                                    \
          -luuid                                    \
-	$(top_builddir)/src/lib/rtm/tests/ModuleManager/.libs/DummyLib.la
+	$(top_builddir)/src/lib/rtm/tests/ModuleManager/DummyLib.la
 
 TEST_SRC = $(ModuleManagerTests_SOURCES)
 TEST_H   = 
@@ -136,7 +136,7 @@ DummyModule1_la_LIBADD  = \
          -lomniDynamic4                            \
          -lcoil                                    \
          -luuid                                    \
-	$(top_builddir)/src/lib/rtm/tests/ModuleManager/.libs/DummyLib.la
+	$(top_builddir)/src/lib/rtm/tests/ModuleManager/DummyLib.la
 
 bin_PROGRAMS = rtcprof
 rtcprof_SOURCES = $(top_builddir)/utils/rtcprof/rtcprof.cpp
