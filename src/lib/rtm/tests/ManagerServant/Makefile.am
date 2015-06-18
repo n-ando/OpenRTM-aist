@@ -121,7 +121,7 @@ ManagerServantTests_LDADD   =                      \
          -lomniDynamic4                            \
          -lcoil                                    \
          -luuid                                    \
-	$(top_builddir)/src/lib/rtm/tests/ManagerServant/.libs/DummyLib.la
+	$(top_builddir)/src/lib/rtm/tests/ManagerServant/DummyLib.la
 
 TEST_SRC = $(ManagerServantTests_SOURCES)
 TEST_H   = 
@@ -144,7 +144,7 @@ DummyModule1_la_LIBADD  = \
          -lomniDynamic4                            \
          -lcoil                                    \
          -luuid                                    \
-	$(top_builddir)/src/lib/rtm/tests/ManagerServant/.libs/DummyLib.la
+	$(top_builddir)/src/lib/rtm/tests/ManagerServant/DummyLib.la
 
 nodist_DummyModule2_la_SOURCES = DummyModule2.h \
 	$(top_builddir)/src/lib/rtm/DataFlowComponentBase.cpp    \
@@ -157,7 +157,7 @@ DummyModule2_la_LIBADD  = \
 	-lomniDynamic4                            \
 	-lcoil                                    \
 	-luuid                                    \
-	$(top_builddir)/src/lib/rtm/tests/ManagerServant/.libs/DummyLib.la
+	$(top_builddir)/src/lib/rtm/tests/ManagerServant/DummyLib.la
 
 
 bin_PROGRAMS = rtcprof
