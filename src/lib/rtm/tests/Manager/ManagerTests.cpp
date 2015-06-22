@@ -944,14 +944,14 @@ namespace Tests
       // 正常にECFactoryを登録できるか？
       CPPUNIT_ASSERT(m_mgr->registerECFactory(
 		      "PeriodicEC",
-		      RTC::ECCreate<RTC::PeriodicExecutionContext>,
-		      RTC::ECDelete<RTC::PeriodicExecutionContext>));
+		      RTC::ECCreate<RTC_exp::PeriodicExecutionContext>,
+		      RTC::ECDelete<RTC_exp::PeriodicExecutionContext>));
 			
       // 登録済みのECFactoryと同一の名称で登録を試みた場合、意図どおり登録失敗するか？
       CPPUNIT_ASSERT(! m_mgr->registerECFactory(
 			"PeriodicEC",
-			RTC::ECCreate<RTC::PeriodicExecutionContext>,
-			RTC::ECDelete<RTC::PeriodicExecutionContext>));
+			RTC::ECCreate<RTC_exp::PeriodicExecutionContext>,
+			RTC::ECDelete<RTC_exp::PeriodicExecutionContext>));
     }
 		
     /*!
@@ -1017,8 +1017,8 @@ namespace Tests
       // ECFactoryを登録しておく
       CPPUNIT_ASSERT(m_mgr->registerECFactory(
 		      "PeriodicEC",
-		      RTC::ECCreate<RTC::PeriodicExecutionContext>,
-		      RTC::ECDelete<RTC::PeriodicExecutionContext>));
+		      RTC::ECCreate<RTC_exp::PeriodicExecutionContext>,
+		      RTC::ECDelete<RTC_exp::PeriodicExecutionContext>));
 			
       // 正しくコンポーネントを生成できるか？
       RTC::RtcBase* comp = m_mgr->createComponent("DataFlowComponentFactory");
@@ -1144,8 +1144,8 @@ namespace Tests
       // ECFactoryを登録しておく
       CPPUNIT_ASSERT(m_mgr->registerECFactory(
 		      "PeriodicEC",
-		      RTC::ECCreate<RTC::PeriodicExecutionContext>,
-		      RTC::ECDelete<RTC::PeriodicExecutionContext>));
+		      RTC::ECCreate<RTC_exp::PeriodicExecutionContext>,
+		      RTC::ECDelete<RTC_exp::PeriodicExecutionContext>));
 
       // 確認用にネームサービスへのアクセス手段としてNamingManagerを準備しておく
       // ※fixture4.confの各設定に合わせている点に注意
@@ -1231,8 +1231,8 @@ namespace Tests
       // ECFactoryを登録しておく
       CPPUNIT_ASSERT(m_mgr->registerECFactory(
 		      "PeriodicEC",
-		      RTC::ECCreate<RTC::PeriodicExecutionContext>,
-		      RTC::ECDelete<RTC::PeriodicExecutionContext>));
+		      RTC::ECCreate<RTC_exp::PeriodicExecutionContext>,
+		      RTC::ECDelete<RTC_exp::PeriodicExecutionContext>));
 			
       // 複数のコンポーネントを生成しておく
       RTC::RtcBase* comp1 = m_mgr->createComponent("DataFlowComponentFactory");
@@ -1486,8 +1486,8 @@ namespace Tests
 
       // return any check
       m_mgr->registerECFactory("PeriodicEC", 
-			RTC::ECCreate<RTC::PeriodicExecutionContext>, 
-			RTC::ECDelete<RTC::PeriodicExecutionContext>);
+			RTC::ECCreate<RTC_exp::PeriodicExecutionContext>, 
+			RTC::ECDelete<RTC_exp::PeriodicExecutionContext>);
       ec_args = "PeriodicEC?rate=1000";
       ec = m_mgr->createContext(ec_args.c_str());
       CPPUNIT_ASSERT(ec != NULL);
@@ -1523,8 +1523,8 @@ namespace Tests
       // ECFactoryを登録しておく
       CPPUNIT_ASSERT(m_mgr->registerECFactory(
 		      "PeriodicEC",
-		      RTC::ECCreate<RTC::PeriodicExecutionContext>,
-		      RTC::ECDelete<RTC::PeriodicExecutionContext>));
+		      RTC::ECCreate<RTC_exp::PeriodicExecutionContext>,
+		      RTC::ECDelete<RTC_exp::PeriodicExecutionContext>));
 
       // 正しくコンポーネントを生成できるか？
       RTC::RtcBase* comp = m_mgr->createComponent("DataFlowComponentFactory");

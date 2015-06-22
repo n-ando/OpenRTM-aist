@@ -40,6 +40,16 @@ IDL_SOURCES = \
 noinst_LTLIBRARIES = DummyLib.la DummyModule.la DummyModule2.la  
 nodist_DummyLib_la_SOURCES = \
 	$(IDL_SOURCES:.idl=Skel.cpp) \
+	$(top_srcdir)/src/lib/rtm/ConfigurationListener.cpp \
+	$(top_srcdir)/src/lib/rtm/RTObjectStateMachine.cpp \
+	$(top_srcdir)/src/lib/rtm/ExecutionContextProfile.cpp \
+	$(top_srcdir)/src/lib/rtm/ExecutionContextWorker.cpp \
+	$(top_srcdir)/src/lib/rtm/ComponentActionListener.cpp \
+	$(top_srcdir)/src/lib/rtm/SdoServiceAdmin.cpp \
+	$(top_srcdir)/src/lib/rtm/LocalServiceAdmin.cpp \
+	$(top_srcdir)/src/lib/rtm/ExecutionContextBase.cpp \
+	$(top_srcdir)/src/lib/rtm/ManagerActionListener.cpp \
+	$(top_srcdir)/src/lib/rtm/PortConnectListener.cpp \
 	$(top_srcdir)/src/lib/rtm/NVUtil.cpp \
 	$(top_srcdir)/src/lib/rtm/CorbaNaming.cpp \
 	$(top_srcdir)/src/lib/rtm/NamingManager.cpp \
@@ -155,7 +165,7 @@ bin_PROGRAMS = rtcprof
 rtcprof_SOURCES = $(top_builddir)/utils/rtcprof/rtcprof.cpp
 rtcprof_LDADD   = $(top_builddir)/src/lib/rtm/libRTC.la \
 	$(top_builddir)/src/lib/coil/lib/libcoil.la
-rtcprof_LDFLAGS = -L$(top_builddir)/src/lib/rtm
+rtcprof_LDFLAGS = -coverage -L$(top_builddir)/src/lib/rtm -lgcov
 
 
 
