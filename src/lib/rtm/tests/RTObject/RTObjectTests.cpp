@@ -651,8 +651,8 @@ namespace RTObject
       RTObjectMock* rto = new RTObjectMock(m_pORB, m_pPOA); // will be deleted automatically
 			
       // ExecutionContextを生成する
-      RTC::PeriodicExecutionContext* ec
-	= new RTC::PeriodicExecutionContext(); // will be deleted automatically
+      RTC_exp::PeriodicExecutionContext* ec
+	= new RTC_exp::PeriodicExecutionContext(); // will be deleted automatically
 			
       // ExecutionContextにattachしておく
       RTC::UniqueId id = rto->attach_context(ec->_this());
@@ -692,10 +692,10 @@ namespace RTObject
       RTObjectMock* rto = new RTObjectMock(m_pORB, m_pPOA); // will be deleted automatically
 			
       // ExecutionContextを生成する
-      RTC::PeriodicExecutionContext* ec1
-	= new RTC::PeriodicExecutionContext(); // will be deleted automatically
-      RTC::PeriodicExecutionContext* ec2
-	= new RTC::PeriodicExecutionContext(); // will be deleted automatically
+      RTC_exp::PeriodicExecutionContext* ec1
+	= new RTC_exp::PeriodicExecutionContext(); // will be deleted automatically
+      RTC_exp::PeriodicExecutionContext* ec2
+	= new RTC_exp::PeriodicExecutionContext(); // will be deleted automatically
 			
       // ExecutionContextにattachしておく
       RTC::UniqueId id1 = rto->attach_context(ec1->_this());
@@ -732,10 +732,10 @@ namespace RTObject
       RTObjectMock* rto = new RTObjectMock(m_pORB, m_pPOA); // will be deleted automatically
 			
       // ExecutionContextを生成する
-      RTC::PeriodicExecutionContext* ec1
-	= new RTC::PeriodicExecutionContext(); // will be deleted automatically
-      RTC::PeriodicExecutionContext* ec2
-	= new RTC::PeriodicExecutionContext(); // will be deleted automatically
+      RTC_exp::PeriodicExecutionContext* ec1
+	= new RTC_exp::PeriodicExecutionContext(); // will be deleted automatically
+      RTC_exp::PeriodicExecutionContext* ec2
+	= new RTC_exp::PeriodicExecutionContext(); // will be deleted automatically
 
       // ExecutionContextにattachしておく
       RTC::UniqueId id1 = rto->attach_context(ec1->_this());
@@ -1072,10 +1072,10 @@ namespace RTObject
       RTObjectMock* rto = new RTObjectMock(m_pORB, m_pPOA); // will be deleted automatically
 
       // ExecutionContextを生成する
-      RTC::PeriodicExecutionContext* ec1
-	= new RTC::PeriodicExecutionContext(); // will be deleted automatically
-      RTC::PeriodicExecutionContext* ec2
-	= new RTC::PeriodicExecutionContext(); // will be deleted automatically
+      RTC_exp::PeriodicExecutionContext* ec1
+	= new RTC_exp::PeriodicExecutionContext(); // will be deleted automatically
+      RTC_exp::PeriodicExecutionContext* ec2
+	= new RTC_exp::PeriodicExecutionContext(); // will be deleted automatically
 
       // ExecutionContextにattachしておく
       RTC::UniqueId id1 = rto->attach_context(ec1->_this());
@@ -1800,7 +1800,7 @@ namespace RTObject
       CPPUNIT_ASSERT_EQUAL(-1, id);
 
       // m_ecMine 未登録の場合、m_ecMineの番号を返すか？
-      RTC::PeriodicExecutionContext* pec = new RTC::PeriodicExecutionContext();
+      RTC_exp::PeriodicExecutionContext* pec = new RTC_exp::PeriodicExecutionContext();
       ec = pec->getObjRef();
       id = (int)(rto->bindContext(ec));
 
@@ -1813,7 +1813,7 @@ namespace RTObject
       // m_ecMine 登録済みで nil の場合、m_ecMineの番号を返すか？
       rto->ecMine[0] = RTC::ExecutionContextService::_nil();
       rto->set_ecMine();
-      RTC::PeriodicExecutionContext* pec2 = new RTC::PeriodicExecutionContext();
+      RTC_exp::PeriodicExecutionContext* pec2 = new RTC_exp::PeriodicExecutionContext();
       ec = pec2->getObjRef();
       id = (int)(rto->bindContext(ec));
 
