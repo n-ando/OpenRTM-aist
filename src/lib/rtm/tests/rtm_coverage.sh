@@ -1,16 +1,7 @@
 #!/bin/sh
 #
-# chmod 775
-#
-
-compileOKDir_list="CORBA_IORUtil ConnectorListener CorbaConsumer NVUtil NumberingPolicy ObjectManager OutPortProvider PeriodicECSharedComposite RTCUtil RingBuffer SdoOrganization SdoService StateMachine"
-
-#compileOKDir_list="CORBA_IORUtil"
 
 Tests="Tests"
-
-#echo "--------cd src/lib/rtm/tests--------"
-#cd OpenRTM-aist/src/lib/rtm/tests
 
 COVERAGE_DIR=../Coverage
 
@@ -22,11 +13,13 @@ echo "--------mkdir ../Coverage--------"
 mkdir $COVERAGE_DIR
 
 makeOKDirCoverage2rtm () {
-    for dir in $*; do
+    for dir in `ls -l | awk '$1 ~ /d/{print $9}'`; do
 	cd $dir
 	pwd
 	runCmd=$dir$Tests
-	cat ./Coverage/$runCmd.info >> ../../Coverage/allcoverage.info
+	if [ -e ./Coverage ]; then
+	    cat ./Coverage/$runCmd.info >> ../../Coverage/allcoverage.info
+	fi
 	cd ../
 	pwd
     done
@@ -36,6 +29,4 @@ makeOKDirCoverage2rtm () {
     genhtml -o . allcoverage.info
 }
 
-makeOKDirCoverage2rtm $compileOKDir_list
-
-
+makeOKDirCoverage2rtm
