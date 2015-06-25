@@ -331,22 +331,22 @@ namespace PeriodicExecutionContext
   };
 
   class PeriodicExecutionContextMock
-    : public RTC::PeriodicExecutionContext
+    : public RTC_exp::PeriodicExecutionContext
   {
   public:
-    PeriodicExecutionContextMock() : RTC::PeriodicExecutionContext() {}
+    PeriodicExecutionContextMock() : RTC_exp::PeriodicExecutionContext() {}
     virtual ~PeriodicExecutionContextMock(void){}
 
     // protected: 変数をここで更新
     void set_m_ref()
       {
-        RTC::PeriodicExecutionContext::m_ref = m_refmock;
+        RTC_exp::PeriodicExecutionContext::m_ref = m_refmock;
       }
     void clear_m_comps()
       {
-        if (!RTC::PeriodicExecutionContext::m_comps.empty())
+        if (!RTC_exp::PeriodicExecutionContext::m_comps.empty())
           {
-            RTC::PeriodicExecutionContext::m_comps.clear();
+            RTC_exp::PeriodicExecutionContext::m_comps.clear();
           }
       }
     RTC::ExecutionContextService_var m_refmock;
@@ -437,8 +437,8 @@ namespace PeriodicExecutionContext
      */
     void test_is_running()
     {
-      RTC::PeriodicExecutionContext* ec
-	= new RTC::PeriodicExecutionContext(); // will be deleted automatically
+      RTC_exp::PeriodicExecutionContext* ec
+	= new RTC_exp::PeriodicExecutionContext(); // will be deleted automatically
 			
       // start()呼出し前は、非running状態か？
       CPPUNIT_ASSERT_EQUAL(CORBA::Boolean(false), ec->is_running());
@@ -469,8 +469,8 @@ namespace PeriodicExecutionContext
 	= dynamic_cast<DataFlowComponentMock*>(rto);
 			
       // ExecutionContextを生成する
-      RTC::PeriodicExecutionContext* ec
-	= new RTC::PeriodicExecutionContext(); // will be deleted automatically
+      RTC_exp::PeriodicExecutionContext* ec
+	= new RTC_exp::PeriodicExecutionContext(); // will be deleted automatically
 				
       // ExecutionContextにRTObjectを登録する
       CPPUNIT_ASSERT_EQUAL(RTC::RTC_OK, ec->add_component(rto->_this()));
@@ -498,8 +498,8 @@ namespace PeriodicExecutionContext
      */
     void test_start_with_running()
     {
-      RTC::PeriodicExecutionContext* ec
-	= new RTC::PeriodicExecutionContext(); // will be deleted automatically
+      RTC_exp::PeriodicExecutionContext* ec
+	= new RTC_exp::PeriodicExecutionContext(); // will be deleted automatically
 			
       // start()呼出し前は、非running状態のはず
       CPPUNIT_ASSERT_EQUAL(CORBA::Boolean(false), ec->is_running());
@@ -530,8 +530,8 @@ namespace PeriodicExecutionContext
 	= dynamic_cast<DataFlowComponentMock*>(rto);
 			
       // ExecutionContextを生成する
-      RTC::PeriodicExecutionContext* ec
-	= new RTC::PeriodicExecutionContext(); // will be deleted automatically
+      RTC_exp::PeriodicExecutionContext* ec
+	= new RTC_exp::PeriodicExecutionContext(); // will be deleted automatically
 			
       // ExecutionContextにRTObjectを登録する
       CPPUNIT_ASSERT_EQUAL(RTC::RTC_OK, ec->add_component(rto->_this()));
@@ -561,8 +561,8 @@ namespace PeriodicExecutionContext
 	= dynamic_cast<DataFlowComponentMock*>(rto);
 			
       // ExecutionContextを生成する
-      RTC::PeriodicExecutionContext* ec
-	= new RTC::PeriodicExecutionContext(); // will be deleted automatically
+      RTC_exp::PeriodicExecutionContext* ec
+	= new RTC_exp::PeriodicExecutionContext(); // will be deleted automatically
 			
       // ExecutionContextにRTObjectを登録する
       CPPUNIT_ASSERT_EQUAL(RTC::RTC_OK, ec->add_component(rto->_this()));
@@ -593,8 +593,8 @@ namespace PeriodicExecutionContext
     void test_stop_with_not_running()
     {
       // ExecutionContextを生成する
-      RTC::PeriodicExecutionContext* ec
-	= new RTC::PeriodicExecutionContext(); // will be deleted automatically
+      RTC_exp::PeriodicExecutionContext* ec
+	= new RTC_exp::PeriodicExecutionContext(); // will be deleted automatically
 
       // まだstart()していない状態で、つまり非runningの状態で、
       // stop()を呼び出し、意図どおりのエラーコードで戻ることを確認する
@@ -624,8 +624,8 @@ namespace PeriodicExecutionContext
     void test_start_and_stop_multiple_times()
     {
       // ExecutionContextを生成する
-      RTC::PeriodicExecutionContext* ec
-	= new RTC::PeriodicExecutionContext(); // will be deleted automatically
+      RTC_exp::PeriodicExecutionContext* ec
+	= new RTC_exp::PeriodicExecutionContext(); // will be deleted automatically
 			
       // start(), stop()を連続して正常に呼び出せるか？
       for (int i = 0; i < 1000; ++i)
@@ -649,8 +649,8 @@ namespace PeriodicExecutionContext
     void test_set_rate_and_get_rate()
     {
       // ExecutionContextを生成する
-      RTC::PeriodicExecutionContext* ec
-	= new RTC::PeriodicExecutionContext(); // will be deleted automatically
+      RTC_exp::PeriodicExecutionContext* ec
+	= new RTC_exp::PeriodicExecutionContext(); // will be deleted automatically
 			
       // set_rate()で設定したレートが、get_rate()で正しく取得できるか？
       for (int i = 1; i <= 10; ++i)
@@ -674,8 +674,8 @@ namespace PeriodicExecutionContext
     void test_set_rate_with_zero_or_negative_rate()
     {
       // ExecutionContextを生成する
-      RTC::PeriodicExecutionContext* ec
-	= new RTC::PeriodicExecutionContext(); // will be deleted automatically
+      RTC_exp::PeriodicExecutionContext* ec
+	= new RTC_exp::PeriodicExecutionContext(); // will be deleted automatically
 			
       // 0または負数のレートを指定した場合、意図どおりのエラーコードで戻るか？
       for (int i = 0; i < 10; ++i)
@@ -703,8 +703,8 @@ namespace PeriodicExecutionContext
 	= dynamic_cast<DataFlowComponentMock*>(rto);
 			
       // ExecutionContextを生成する
-      RTC::PeriodicExecutionContext* ec
-	= new RTC::PeriodicExecutionContext(); // will be deleted automatically
+      RTC_exp::PeriodicExecutionContext* ec
+	= new RTC_exp::PeriodicExecutionContext(); // will be deleted automatically
       CPPUNIT_ASSERT_EQUAL(RTC::PERIODIC, ec->get_kind());
 			
       // ExecutionContextにRTObjectを登録する
@@ -746,8 +746,8 @@ namespace PeriodicExecutionContext
 	= dynamic_cast<DataFlowComponentMock*>(rto);
 			
       // ExecutionContextを生成する
-      RTC::PeriodicExecutionContext* ec
-	= new RTC::PeriodicExecutionContext(); // will be deleted automatically
+      RTC_exp::PeriodicExecutionContext* ec
+	= new RTC_exp::PeriodicExecutionContext(); // will be deleted automatically
 			
       // この時点では、attach_executioncontext()は1回も呼び出されていないはず
       CPPUNIT_ASSERT_EQUAL(0, mock->countLog("attach_executioncontext"));
@@ -778,8 +778,8 @@ namespace PeriodicExecutionContext
 	= new LightweightRTObjectMock(); // will be deleted automatically
 
       // ExecutionContextを生成する
-      RTC::PeriodicExecutionContext* ec
-	= new RTC::PeriodicExecutionContext(); // will be deleted automatically
+      RTC_exp::PeriodicExecutionContext* ec
+	= new RTC_exp::PeriodicExecutionContext(); // will be deleted automatically
       CPPUNIT_ASSERT_EQUAL(RTC::PERIODIC, ec->get_kind());
 			
       // LightweightRTObjectではあるが、DataFlowComponentではないRTObjectを用いて、
@@ -807,8 +807,8 @@ namespace PeriodicExecutionContext
 	= dynamic_cast<DataFlowComponentMock*>(rto);
 			
       // ExecutionContextを生成する
-      RTC::PeriodicExecutionContext* ec
-	= new RTC::PeriodicExecutionContext(); // will be deleted automatically
+      RTC_exp::PeriodicExecutionContext* ec
+	= new RTC_exp::PeriodicExecutionContext(); // will be deleted automatically
 			
       // ExecutionContextにRTObjectを登録する
       CPPUNIT_ASSERT_EQUAL(RTC::RTC_OK, ec->add_component(rto->_this()));
@@ -841,8 +841,8 @@ namespace PeriodicExecutionContext
 	= new DataFlowComponentMock(); // will be deleted automatically
 
       // ExecutionContextを生成する
-      RTC::PeriodicExecutionContext* ec
-	= new RTC::PeriodicExecutionContext(); // will be deleted automatically
+      RTC_exp::PeriodicExecutionContext* ec
+	= new RTC_exp::PeriodicExecutionContext(); // will be deleted automatically
 			
       // まだ登録していないコンポーネントについてExecutionContextからの登録解除を試みて、
       // 意図どおりのエラーコードで戻ることを確認する
@@ -867,8 +867,8 @@ namespace PeriodicExecutionContext
 	= new DataFlowComponentMock(); // will be deleted automatically
 
       // ExecutionContextを生成する
-      RTC::PeriodicExecutionContext* ec
-	= new RTC::PeriodicExecutionContext(); // will be deleted automatically
+      RTC_exp::PeriodicExecutionContext* ec
+	= new RTC_exp::PeriodicExecutionContext(); // will be deleted automatically
       CPPUNIT_ASSERT_EQUAL(RTC::RTC_OK, ec->start());
 
       // ExecutionContextにRTObjectを登録する
@@ -901,8 +901,8 @@ namespace PeriodicExecutionContext
 	= new DataFlowComponentMock(); // will be deleted automatically
 
       // ExecutionContextを生成する
-      RTC::PeriodicExecutionContext* ec
-	= new RTC::PeriodicExecutionContext(); // will be deleted automatically
+      RTC_exp::PeriodicExecutionContext* ec
+	= new RTC_exp::PeriodicExecutionContext(); // will be deleted automatically
       CPPUNIT_ASSERT_EQUAL(RTC::RTC_OK, ec->start());
 
       // ExecutionContextにRTObjectを登録する
@@ -942,8 +942,8 @@ namespace PeriodicExecutionContext
 	= dynamic_cast<DataFlowComponentMock*>(rto);
 
       // ExecutionContextを生成する
-      RTC::PeriodicExecutionContext* ec
-	= new RTC::PeriodicExecutionContext(); // will be deleted automatically
+      RTC_exp::PeriodicExecutionContext* ec
+	= new RTC_exp::PeriodicExecutionContext(); // will be deleted automatically
       CPPUNIT_ASSERT_EQUAL(RTC::RTC_OK, ec->start());
 
       // ExecutionContextにRTObjectを登録する
@@ -983,8 +983,8 @@ namespace PeriodicExecutionContext
 	= new DataFlowComponentMock(); // will be deleted automatically
 
       // ExecutionContextを生成する
-      RTC::PeriodicExecutionContext* ec
-	= new RTC::PeriodicExecutionContext(); // will be deleted automatically
+      RTC_exp::PeriodicExecutionContext* ec
+	= new RTC_exp::PeriodicExecutionContext(); // will be deleted automatically
       CPPUNIT_ASSERT_EQUAL(RTC::RTC_OK, ec->start());
 
       // ExecutionContextにコンポーネント登録することなくactivate_component()を呼出し、
@@ -1012,8 +1012,8 @@ namespace PeriodicExecutionContext
 	= dynamic_cast<DataFlowComponentMock*>(rto);
 
       // ExecutionContextを生成する
-      RTC::PeriodicExecutionContext* ec
-	= new RTC::PeriodicExecutionContext(); // will be deleted automatically
+      RTC_exp::PeriodicExecutionContext* ec
+	= new RTC_exp::PeriodicExecutionContext(); // will be deleted automatically
       CPPUNIT_ASSERT_EQUAL(RTC::RTC_OK, ec->start());
 			
       // コンポーネントをError状態にまで遷移させる
@@ -1047,8 +1047,8 @@ namespace PeriodicExecutionContext
 	= dynamic_cast<DataFlowComponentMock*>(rto);
 			
       // ExecutionContextを生成する
-      RTC::PeriodicExecutionContext* ec
-	= new RTC::PeriodicExecutionContext(); // will be deleted automatically
+      RTC_exp::PeriodicExecutionContext* ec
+	= new RTC_exp::PeriodicExecutionContext(); // will be deleted automatically
 			
       // ExecutionContextにRTObjectを登録する
       CPPUNIT_ASSERT_EQUAL(RTC::RTC_OK, ec->add_component(rto->_this()));
@@ -1081,8 +1081,8 @@ namespace PeriodicExecutionContext
 	= dynamic_cast<DataFlowComponentMock*>(rto);
 
       // ExecutionContextを生成する
-      RTC::PeriodicExecutionContext* ec
-	= new RTC::PeriodicExecutionContext(); // will be deleted automatically
+      RTC_exp::PeriodicExecutionContext* ec
+	= new RTC_exp::PeriodicExecutionContext(); // will be deleted automatically
       CPPUNIT_ASSERT_EQUAL(RTC::RTC_OK, ec->start());
 
       // ExecutionContextにRTObjectを登録する
@@ -1123,8 +1123,8 @@ namespace PeriodicExecutionContext
 	= new DataFlowComponentMock(); // will be deleted automatically
 
       // ExecutionContextを生成する
-      RTC::PeriodicExecutionContext* ec
-	= new RTC::PeriodicExecutionContext(); // will be deleted automatically
+      RTC_exp::PeriodicExecutionContext* ec
+	= new RTC_exp::PeriodicExecutionContext(); // will be deleted automatically
       CPPUNIT_ASSERT_EQUAL(RTC::RTC_OK, ec->start());
 
       // ExecutionContextに登録していないコンポーネントに対してdeactivateを試みて、
@@ -1152,8 +1152,8 @@ namespace PeriodicExecutionContext
 	= dynamic_cast<DataFlowComponentMock*>(rto);
 			
       // ExecutionContextを生成する
-      RTC::PeriodicExecutionContext* ec
-	= new RTC::PeriodicExecutionContext(); // will be deleted automatically
+      RTC_exp::PeriodicExecutionContext* ec
+	= new RTC_exp::PeriodicExecutionContext(); // will be deleted automatically
 
       ec->start();
 			
@@ -1193,8 +1193,8 @@ namespace PeriodicExecutionContext
 	= dynamic_cast<DataFlowComponentMock*>(rto);
 
       // ExecutionContextを生成する
-      RTC::PeriodicExecutionContext* ec
-	= new RTC::PeriodicExecutionContext(); // will be deleted automatically
+      RTC_exp::PeriodicExecutionContext* ec
+	= new RTC_exp::PeriodicExecutionContext(); // will be deleted automatically
       CPPUNIT_ASSERT_EQUAL(RTC::RTC_OK, ec->start());
 			
       // コンポーネントをError状態にまで遷移させる
@@ -1232,8 +1232,8 @@ namespace PeriodicExecutionContext
 	= new DataFlowComponentMock(); // will be deleted automatically
 			
       // ExecutionContextを生成する
-      RTC::PeriodicExecutionContext* ec
-	= new RTC::PeriodicExecutionContext(); // will be deleted automatically
+      RTC_exp::PeriodicExecutionContext* ec
+	= new RTC_exp::PeriodicExecutionContext(); // will be deleted automatically
       CPPUNIT_ASSERT_EQUAL(RTC::RTC_OK, ec->start());
 			
       // ExecutionContextにRTObjectを登録する
@@ -1268,8 +1268,8 @@ namespace PeriodicExecutionContext
       CPPUNIT_ASSERT_EQUAL(CORBA::Boolean(false), rto->is_alive(NULL));
 			
       // ExecutionContextを生成する
-      RTC::PeriodicExecutionContext* ec
-	= new RTC::PeriodicExecutionContext(); // will be deleted automatically
+      RTC_exp::PeriodicExecutionContext* ec
+	= new RTC_exp::PeriodicExecutionContext(); // will be deleted automatically
 
       // ExecutionContextにRTObjectを登録する
       CPPUNIT_ASSERT_EQUAL(RTC::RTC_OK, ec->add_component(rto->_this()));
