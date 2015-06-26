@@ -22,7 +22,7 @@
 #ifndef OutPortPushConnector_cpp
 #define OutPortPushConnector_cpp
 
-#include <omniORB4/cdrStream.h>
+//#include <omniORB4/cdrStream.h>
 
 #include <cppunit/ui/text/TestRunner.h>
 #include <cppunit/TextOutputter.h>
