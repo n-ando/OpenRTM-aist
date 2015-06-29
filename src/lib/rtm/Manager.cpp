@@ -411,9 +411,9 @@ namespace RTC
           RTObject_impl* comp0 = getComponent(comp0_name.c_str());
           RTObject_impl* comp1 = getComponent(comp1_name.c_str());
           if (comp0 == NULL)
-            { RTC_ERROR(("%s not found.", comp0_name.c_str())); }
+            { RTC_ERROR(("%s not found.", comp0_name.c_str())); continue; }
           if (comp1 == NULL)
-            { RTC_ERROR(("%s not found.", comp1_name.c_str())); }
+            { RTC_ERROR(("%s not found.", comp1_name.c_str())); continue; }
           std::string port0 = comp_ports[0];
           std::string port1 = comp_ports[1];
           
@@ -480,14 +480,17 @@ namespace RTC
     } // end of pre-connection
 
     { // pre-activation
-      RTC_TRACE(("Connection pre-creation: %s",
-                 m_config["manager.components.preconnect"].c_str()));
+      RTC_TRACE(("Components pre-activation: %s",
+                 m_config["manager.components.preactivation"].c_str()));
       std::vector<std::string> comps;
       comps = coil::split(m_config["manager.components.preactivation"],
                                ",");
       for (int i(0), len(comps.size()); i < len; ++i)
         {
           RTObject_impl* comp = getComponent(comps[i].c_str());
+          if (comp == NULL)
+            { RTC_ERROR(("%s not found.", comps[i].c_str())); continue; }
+
           ExecutionContextList_var ecs = comp->get_owned_contexts();
           ecs[0]->activate_component(comp->getObjRef());
         }
