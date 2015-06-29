@@ -668,6 +668,25 @@ namespace RTC
     /*!
      * @if jp
      *
+     * @brief リスナーの数を得る
+     *
+     * 現在登録されているリスナー数を得る。
+     *
+     * @return listener数
+     * @else
+     *
+     * @brief Getting number of listeners.
+     *
+     * This method returns current number of listenrs.
+     *
+     * @return number of listeners
+     * @endif
+     */
+    size_t size();
+
+    /*!
+     * @if jp
+     *
      * @brief リスナーへ通知する
      *
      * 登録されているリスナのコールバックメソッドを呼び出す。
@@ -686,7 +705,44 @@ namespace RTC
      */
     void notify(const ConnectorInfo& info,
                 const cdrMemoryStream& cdrdata);
-    
+
+    /*!
+     * @if jp
+     *
+     * @brief リスナーへ通知する(データ型指定版)
+     *
+     * 登録されているリスナのコールバックメソッドを呼び出す。
+     * COnnectorDataListenerT 型のコールバックのみコールされる。
+     *
+     * @param info ConnectorInfo
+     * @param typeddata データ（データ型指定あり）
+     * @else
+     *
+     * @brief Notify listeners. (Typed data version)
+     *
+     * This calls the Callback method of the registered listener.
+     * This operation calls only ConnectorDataListenerT type callback.
+     *
+     * @param info ConnectorInfo
+     * @param typeddata Data
+     * @endif
+     */
+    template <class DataType>
+    void notify(const ConnectorInfo& info, const DataType& typeddata)
+    {
+      Guard guard(m_mutex);
+      for (int i(0), len(m_listeners.size()); i < len; ++i)
+        {
+          ConnectorDataListenerT<DataType>* listener(0);
+          listener =
+          dynamic_cast<ConnectorDataListenerT<DataType>*>(m_listeners[i].first);
+          if (listener != 0)
+            {
+              listener->operator()(info, typeddata);
+            }
+        }
+    }
+
   private:
     std::vector<Entry> m_listeners;
     coil::Mutex m_mutex;
@@ -772,6 +828,25 @@ namespace RTC
      * @endif
      */
     void removeListener(ConnectorListener* listener);
+
+    /*!
+     * @if jp
+     *
+     * @brief リスナーの数を得る
+     *
+     * 現在登録されているリスナー数を得る。
+     *
+     * @return listener数
+     * @else
+     *
+     * @brief Getting number of listeners.
+     *
+     * This method returns current number of listenrs.
+     *
+     * @return number of listeners
+     * @endif
+     */
+    size_t size();
 
     /*!
      * @if jp
