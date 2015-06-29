@@ -92,6 +92,11 @@ namespace RTC
     
   }
 
+  size_t ConnectorDataListenerHolder::size()
+  {
+    Guard guard(m_mutex);
+    return m_listeners.size();
+  }
     
   void ConnectorDataListenerHolder::notify(const ConnectorInfo& info,
                                            const cdrMemoryStream& cdrdata)
@@ -157,6 +162,11 @@ namespace RTC
     
   }
   
+  size_t ConnectorListenerHolder::size()
+  {
+    Guard guard(m_mutex);
+    return m_listeners.size();
+  }
   
   void ConnectorListenerHolder::notify(const ConnectorInfo& info)
   {
