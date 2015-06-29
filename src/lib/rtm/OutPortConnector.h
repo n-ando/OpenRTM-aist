@@ -214,7 +214,7 @@ namespace RTC
       if (m_directInPort != NULL)
         {
           InPort<DataType>* inport;
-          inprot = static_cast<InPort<DataType>*>(m_directInPort);
+          inport = static_cast<InPort<DataType>*>(m_directInPort);
           if (inport->isNew())
             {
               // ON_BUFFER_OVERWRITE(In,Out), ON_RECEIVER_FULL(In,Out) callback
