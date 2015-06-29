@@ -33,7 +33,7 @@ namespace RTC
                                              OutPortProvider* provider,
                                              ConnectorListeners& listeners,
                                              CdrBufferBase* buffer)
-    : OutPortConnector(info),
+    : OutPortConnector(info, listeners),
       m_provider(provider),
       m_listeners(listeners),
       m_buffer(buffer)

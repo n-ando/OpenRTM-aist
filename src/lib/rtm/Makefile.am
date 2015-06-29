@@ -103,7 +103,9 @@ PORT_SRC =                           \
 	InPortCorbaCdrProvider.cpp   \
 	OutPortCorbaCdrConsumer.cpp  \
 	OutPortCorbaCdrProvider.cpp  \
-	InPortCorbaCdrConsumer.cpp
+	InPortCorbaCdrConsumer.cpp   \
+	InPortDirectProvider.cpp     \
+	InPortDirectConsumer.cpp
 
 
 RTC_SRC = \

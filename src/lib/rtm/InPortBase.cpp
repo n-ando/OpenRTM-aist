@@ -1012,4 +1012,8 @@ namespace RTC
     return 0;
   }
 
+  ConnectorListeners& InPortBase::getListeners()
+  {
+   return m_listeners; 
+  }
 };

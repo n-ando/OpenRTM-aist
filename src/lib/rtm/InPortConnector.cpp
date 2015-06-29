@@ -29,9 +29,10 @@ namespace RTC
    * @endif
    */
   InPortConnector::InPortConnector(ConnectorInfo& info,
+                                   ConnectorListeners& listeners,
                                    CdrBufferBase* buffer)
     : rtclog("InPortConnector"), m_profile(info),
-      m_buffer(buffer), m_littleEndian(true)
+      m_listeners(listeners), m_buffer(buffer), m_littleEndian(true)
   {
   }
 
