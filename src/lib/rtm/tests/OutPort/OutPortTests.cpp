@@ -53,7 +53,7 @@
  * @class OutPortTests class
  * @brief OutPort test
  */
-namespace OutPort
+namespace OutPortTs
 {
   /*!
    * 
@@ -719,7 +719,7 @@ namespace RTC
   /*!
    * Global variable for test
    */
-  OutPort::Logger RTC_logger;
+  OutPortTs::Logger RTC_logger;
   ConnectorBase::ReturnCode OutPortPushConnector_write_return_value;
   /*!
    *
@@ -814,7 +814,7 @@ namespace RTC
   */
   CdrBufferBase* OutPortPushConnector::createBuffer(ConnectorInfo& info)
   {
-      return new ::OutPort::CdrRingBufferMock();
+      return new ::OutPortTs::CdrRingBufferMock();
   }
  /*!
   * 
@@ -822,7 +822,7 @@ namespace RTC
   */
   PublisherBase* OutPortPushConnector::createPublisher(ConnectorInfo& info)
   {
-      return new ::OutPort::PublisherFlushMock();
+      return new ::OutPortTs::PublisherFlushMock();
   }
 
 
@@ -1142,7 +1142,7 @@ namespace RTC
  *
  *
  */
-namespace OutPort
+namespace OutPortTs
 {	
   /*!
    * 
@@ -1764,12 +1764,12 @@ namespace OutPort
     }
 		
   };
-}; // namespace OutPort
+}; // namespace OutPortTs
 
 /*
  * Register test suite
  */
-CPPUNIT_TEST_SUITE_REGISTRATION(OutPort::OutPortTests);
+CPPUNIT_TEST_SUITE_REGISTRATION(OutPortTs::OutPortTests);
 
 #ifdef LOCAL_MAIN
 int main(int argc, char* argv[])
