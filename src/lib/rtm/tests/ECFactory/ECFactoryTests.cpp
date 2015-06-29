@@ -94,8 +94,8 @@ namespace ECFactory
       std::auto_ptr<RTC::ECFactoryBase> factory(
 		new RTC::ECFactoryCXX(
 				      name.c_str(),
-				      RTC::ECCreate<RTC::PeriodicExecutionContext>,
-				      RTC::ECDelete<RTC::PeriodicExecutionContext>));
+				      RTC::ECCreate<RTC::ExecutionContextBase>,
+				      RTC::ECDelete<RTC::ExecutionContextBase>));
 			
       // コンストラクタで指定した名称を、name()メソッドで正しく取得できるか？
       CPPUNIT_ASSERT_EQUAL(name, std::string(factory->name()));
@@ -112,17 +112,17 @@ namespace ECFactory
       std::auto_ptr<RTC::ECFactoryBase> factory(
 		new RTC::ECFactoryCXX(
 				      "name of execution context",
-				      RTC::ECCreate<RTC::PeriodicExecutionContext>,
-				      RTC::ECDelete<RTC::PeriodicExecutionContext>));
+				      RTC::ECCreate<RTC::ExecutionContextBase>,
+				      RTC::ECDelete<RTC::ExecutionContextBase>));
 			
       // create()呼出しにより、所定のExcecutionContextのインスタンスが生成されるか？
       RTC::ExecutionContextBase* ec = factory->create();
-      CPPUNIT_ASSERT(dynamic_cast<RTC::PeriodicExecutionContext*>(ec) != 0);
+      CPPUNIT_ASSERT(dynamic_cast<RTC::ExecutionContextBase*>(ec) != 0);
 			
       // destroy()呼出しにより、所定のExecutionContextインスタンスが削除されるか？
       m_pPOA->deactivate_object(*m_pPOA->servant_to_id(ec));
       factory->destroy(ec);
-      CPPUNIT_ASSERT(dynamic_cast<RTC::PeriodicExecutionContext*>(ec) == 0);
+      CPPUNIT_ASSERT(dynamic_cast<RTC::ExecutionContextBase*>(ec) == 0);
     }
 		
   };
