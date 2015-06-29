@@ -598,6 +598,25 @@ namespace RTC
     connect(ConnectorProfile& connector_profile)
       throw (CORBA::SystemException);
 
+    /*!
+     * @if jp
+     * @brief リスナホルダを取得する
+     *
+     * InPortBaseが保持するリスナホルダを返す。
+     *
+     * @return ConnectorListeners
+     *
+     * @else
+     * @brief Getting listeners holder
+     *
+     * This operation returns listeners holder.
+     *
+     * @return ConnectorListeners
+     *
+     * @endif
+     */
+    virtual ConnectorListeners& getListeners();
+
   protected:
 
     /*!
@@ -793,7 +812,6 @@ namespace RTC
     InPortConnector*
     createConnector(const ConnectorProfile& cprof, coil::Properties& prop,
                     OutPortConsumer* consumer);
-
   protected:
     /*!
      * @if jp

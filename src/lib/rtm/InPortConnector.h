@@ -20,6 +20,7 @@
 #ifndef RTC_INPORTCONNECTOR_H
 #define RTC_INPORTCONNECTOR_H
 
+#include <rtm/ConnectorListener.h>
 #include <rtm/ConnectorBase.h>
 
 namespace RTC
@@ -64,6 +65,7 @@ namespace RTC
      * @endif
      */
     InPortConnector(ConnectorInfo& info,
+                    ConnectorListeners& listeners,
                     CdrBufferBase* buffer);
 
     /*!
@@ -249,6 +251,14 @@ namespace RTC
     ConnectorInfo m_profile;
     /*!
      * @if jp
+     * @brief ConnectorListenrs への参照
+     * @else
+     * @brief A reference to a ConnectorListener
+     * @endif
+     */
+    ConnectorListeners& m_listeners;
+    /*!
+     * @if jp
      * @brief Connector が保持している Buffer
      * @else
      * @brief Connector's buffer
@@ -263,6 +273,15 @@ namespace RTC
      * @endif
      */
     bool m_littleEndian;
+    /*!
+     * @if jp
+     * @brief OutPort 側の ConnectorListenrs への参照
+     * @else
+     * @brief A pointer to a OutPort's ConnectorListener
+     * @endif
+     */
+    ConnectorListeners* m_outPortListeners;
+
   };
 }; // namespace RTC
 

@@ -32,6 +32,8 @@
 #include <rtm/InPortCorbaCdrConsumer.h>
 #include <rtm/OutPortCorbaCdrConsumer.h>
 #include <rtm/OutPortCorbaCdrProvider.h>
+#include <rtm/InPortDirectProvider.h>
+#include <rtm/InPortDirectConsumer.h>
 
 void FactoryInit()
 {
@@ -51,4 +53,6 @@ void FactoryInit()
     InPortCorbaCdrConsumerInit();
     OutPortCorbaCdrConsumerInit();
     OutPortCorbaCdrProviderInit();
+    InPortDirectProviderInit();
+    InPortDirectConsumerInit();
 }

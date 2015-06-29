@@ -34,7 +34,7 @@ namespace RTC
                                            InPortProvider* provider,
                                            ConnectorListeners& listeners,
                                            CdrBufferBase* buffer)
-    : InPortConnector(info, buffer),
+    : InPortConnector(info, listeners, buffer),
       m_provider(provider), 
       m_listeners(listeners), 
       m_deleteBuffer(buffer == 0 ? true : false)

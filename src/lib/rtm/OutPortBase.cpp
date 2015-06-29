@@ -971,17 +971,20 @@ namespace RTC
         // endian type set
         connector->setEndian(m_littleEndian);
 
-        // set direct InPort if ConnectorProfile
-        //  .properties["dataport.outport.direct_dataput.disable"] != YES
-        if (!coil::toBool(prop["direct_dataput.disable"], "YES", "NO", false))
+        // "interface_type" == "direct"
+        if (coil::normalize(prop["interface_type"]) == "direct")
           {
             InPortBase* inport = getLocalInPort(profile);
-            if (inport != NULL)
+            if (inport == NULL)
               {
-                connector->setInPort(inport);
+                RTC_DEBUG(("interface_type is direct, "
+                           "but a peer InPort servant could not be obtained."));
+                delete connector;
+                return 0;
               }
+            connector->setInPort(inport);
           }
-        // end of direct port
+        // end of direct interface_type
 
         m_connectors.push_back(connector);
         RTC_PARANOID(("connector pushback done: size = %d",
@@ -1079,7 +1082,7 @@ namespace RTC
           }
         catch (...)
           {
-            RTC_DEBUG(("Peer port is remote port"));
+            RTC_DEBUG(("Peer port might be a remote port"));
           }
       }
     return NULL;

@@ -34,7 +34,7 @@ namespace RTC
                                            OutPortConsumer* consumer,
                                            ConnectorListeners& listeners,
                                            CdrBufferBase* buffer)
-    : InPortConnector(info, buffer), m_consumer(consumer),
+    : InPortConnector(info, listeners, buffer), m_consumer(consumer),
       m_listeners(listeners)
   {
     if (buffer == 0)
