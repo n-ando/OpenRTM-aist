@@ -720,12 +720,12 @@ def PickupIDLFiles(dict):
 	for f in svcidls.keys():
 		idl = {}
 		idl["idl_fname"] = f
-		idl["idl_basename"] = f.split(".")[0]
+		idl["idl_basename"] = os.path.splitext(f)[0]
 		dict["service_idl"].append(idl)
 	for f in cnsidls.keys():
 		idl = {}
 		idl["idl_fname"] = f
-		idl["idl_basename"] = f.split(".")[0]
+		idl["idl_basename"] = os.path.splitext(f)[0]
 		dict["consumer_idl"].append(idl)
 	return
 
