@@ -238,13 +238,13 @@ namespace RTC
       
             result = false;
             const char* id(m_connectors[i]->profile().id.c_str());
-            RTC::ConnectorProfile prof(findConnProfile(id));
 
             if (ret == CONNECTION_LOST)
               {
                 RTC_WARN(("connection_lost id: %s", id));
                 if (m_onConnectionLost != 0)
                   {
+                    RTC::ConnectorProfile prof(findConnProfile(id));
                     (*m_onConnectionLost)(prof);
                   }
                 disconnect_ids.push_back(id);
