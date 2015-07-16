@@ -542,7 +542,7 @@ namespace RTC
    * @brief Get the object reference of the Port
    * @endif
    */
-  PortService_ptr PortBase::getPortRef()
+  PortService_ptr PortBase::getPortRef() const
   {
     RTC_TRACE(("getPortRef()"));
     Guard gurad(m_profile_mutex);

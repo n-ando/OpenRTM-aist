@@ -961,7 +961,7 @@ namespace RTC
      *
      * @endif
      */
-    PortService_ptr getPortRef();
+    PortService_ptr getPortRef() const;
     
     /*!
      * @if jp
