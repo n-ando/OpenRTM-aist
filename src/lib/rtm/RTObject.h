@@ -2577,6 +2577,8 @@ namespace RTC
      * @endif
      */
     bool addInPort(const char* name, InPortBase& inport);
+    const std::vector<InPortBase*>& getInPorts() const {return m_inports;};
+    const std::vector<OutPortBase*>& getOutPorts() const {return m_outports;};
     /*!
      * @if jp
      * 
