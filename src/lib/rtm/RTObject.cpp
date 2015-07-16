@@ -1626,7 +1626,7 @@ namespace RTC
    * @endif
    */
   bool RTObject_impl::addInPort(const char* name,
-				InPortBase& inport)
+                                InPortBase& inport)
   {
     RTC_TRACE(("addInPort(%s)", name));
 
