@@ -128,8 +128,11 @@ namespace RTC
     RTC_PARANOID(("given properties:"));
     RTC_DEBUG_STR((prop));
 
+    // merge properties to PortProfile.properties
     m_properties << prop;
-
+    NVList nv;
+    NVUtil::copyFromProperties(nv, m_properties);
+    CORBA_SeqUtil::push_back_list(m_profile.properties, nv);
     RTC_PARANOID(("updated properties:"));
     RTC_DEBUG_STR((m_properties));
 
