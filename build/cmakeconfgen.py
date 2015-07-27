@@ -211,10 +211,10 @@ if __name__ == '__main__':
     omni_cflags += ";-D_CRT_SECURE_NO_DEPRECATE"
 
     rtm_cflags = omni_cflags + ";-DINCLUDE_stub_in_nt_dll"
-    if re.match("^41", dict["omni_dllver"]):
-        rtm_cflags += ";-DRTC_CORBA_CXXMAPPING11;-D_WIN32_WINNT=0x0500"
-    else:
+    if re.match("^40", dict["omni_dllver"]):
         rtm_cflags += ";-D_WIN32_WINNT=0x0400"
+    else:
+        rtm_cflags += ";-DRTC_CORBA_CXXMAPPING11;-D_WIN32_WINNT=0x0500"
 
     # libs
     omni_libs  = process_lib(dict["omni_lib"], "optimized")
