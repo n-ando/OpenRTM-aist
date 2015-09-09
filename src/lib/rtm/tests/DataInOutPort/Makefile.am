@@ -60,6 +60,8 @@ nodist_DataInOutPortTests_SOURCES =                 \
 	$(IDL_SOURCES:.idl=Skel.cpp)                \
 	$(top_srcdir)/src/lib/coil/common/stringutil.cpp            \
 	$(top_srcdir)/src/lib/coil/common/Properties.cpp            \
+	$(top_srcdir)/src/lib/rtm/InPortDirectProvider.cpp \
+	$(top_srcdir)/src/lib/rtm/InPortDirectConsumer.cpp \
 	$(top_srcdir)/src/lib/rtm/RTObjectStateMachine.cpp \
 	$(top_srcdir)/src/lib/rtm/ExecutionContextProfile.cpp \
 	$(top_srcdir)/src/lib/rtm/ExecutionContextWorker.cpp \
