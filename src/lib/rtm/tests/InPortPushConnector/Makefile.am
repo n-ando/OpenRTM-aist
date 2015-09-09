@@ -43,6 +43,8 @@ noinst_PROGRAMS = InPortPushConnectorTests
 nodist_InPortPushConnectorTests_SOURCES =     \
 	../TestRunner.cpp                 \
 	$(IDL_SOURCES:.idl=Skel.cpp) \
+	$(top_srcdir)/src/lib/rtm/InPortDirectProvider.cpp \
+	$(top_srcdir)/src/lib/rtm/InPortDirectConsumer.cpp \
 	$(top_srcdir)/src/lib/rtm/PortConnectListener.cpp \
 	$(top_srcdir)/src/lib/rtm/ConfigurationListener.cpp \
 	$(top_srcdir)/src/lib/rtm/ExecutionContextProfile.cpp \

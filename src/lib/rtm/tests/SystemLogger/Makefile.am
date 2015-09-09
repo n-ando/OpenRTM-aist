@@ -45,6 +45,8 @@ noinst_PROGRAMS = SystemLoggerTests
 nodist_SystemLoggerTests_SOURCES = \
 	../TestRunner.cpp \
 	$(IDL_SOURCES:.idl=Skel.cpp) \
+	$(top_srcdir)/src/lib/rtm/InPortDirectProvider.cpp \
+	$(top_srcdir)/src/lib/rtm/InPortDirectConsumer.cpp \
 	$(top_srcdir)/src/lib/rtm/LocalServiceAdmin.cpp \
 	$(top_srcdir)/src/lib/rtm/ManagerActionListener.cpp \
 	$(top_srcdir)/src/lib/rtm/ComponentActionListener.cpp \
