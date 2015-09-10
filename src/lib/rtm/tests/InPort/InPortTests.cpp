@@ -674,7 +674,7 @@ namespace RTC
                                            InPortProvider* provider,
 					   ConnectorListeners& listeners,
                                            CdrBufferBase* buffer)
-    : InPortConnector(profile, buffer),
+    : InPortConnector(profile, listeners, buffer),
       m_listeners(listeners)
   {
 
