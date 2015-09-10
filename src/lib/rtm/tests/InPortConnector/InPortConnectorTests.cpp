@@ -48,8 +48,9 @@ namespace InPortConnector
   {
   public:
       InPortConnectorMock(RTC::ConnectorInfo& info,
+			  RTC::ConnectorListeners& listeners,
                           RTC::CdrBufferBase* buffer)
-        : RTC::InPortConnector(info, buffer)
+        : RTC::InPortConnector(info, listeners, buffer)
       {
       }
       virtual ~InPortConnectorMock()
@@ -148,8 +149,9 @@ namespace InPortConnector
                                 prop); 
         RTC::CdrBufferBase* m_thebuffer;
         m_thebuffer = RTC::CdrBufferFactory::instance().createObject("ring_buffer");
+        RTC::ConnectorListeners m_listeners;
 
-        InPortConnector::InPortConnectorMock connector(info, m_thebuffer);
+        InPortConnector::InPortConnectorMock connector(info, m_listeners, m_thebuffer);
         CPPUNIT_ASSERT_EQUAL(std::string(cprof.connector_id), std::string(connector.id()));
         CPPUNIT_ASSERT_EQUAL(std::string(cprof.name), std::string(connector.name()));
         CPPUNIT_ASSERT_EQUAL(m_thebuffer, connector.getBuffer());
