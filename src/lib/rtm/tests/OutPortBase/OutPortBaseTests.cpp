@@ -2488,7 +2488,7 @@ namespace RTC
                                              InPortConsumer* consumer,
                                              ConnectorListeners& listeners,
                                              CdrBufferBase* buffer)
-    : OutPortConnector(info),
+    : OutPortConnector(info, listeners),
       m_consumer(consumer), m_publisher(0), m_listeners(listeners), m_buffer(buffer)
   {
       if(info.properties["OutPortBaseTests"]=="bad_alloc")
@@ -2603,7 +2603,7 @@ namespace RTC
                                              OutPortProvider* provider,
                                              ConnectorListeners& listeners,
                                              CdrBufferBase* buffer)
-    : OutPortConnector(info), m_provider(provider), m_listeners(listeners),
+    : OutPortConnector(info, listeners), m_provider(provider), m_listeners(listeners),
       m_buffer(buffer)
 
   {

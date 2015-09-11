@@ -86,8 +86,8 @@ namespace OutPortConnector
     : public RTC::OutPortConnector
   {
   public:
-      OutPortConnectorMock(RTC::ConnectorInfo& info)
-        : RTC::OutPortConnector(info)
+      OutPortConnectorMock(RTC::ConnectorInfo& info, RTC::ConnectorListeners& listeners)
+        : RTC::OutPortConnector(info, listeners)
       {
       }
       virtual ~OutPortConnectorMock()
@@ -205,8 +205,9 @@ namespace OutPortConnector
         NVUtil::copyToProperties(prop, cprof.properties);
         RTC::ConnectorInfo info(cprof.name, cprof.connector_id, 
                                 CORBA_SeqUtil::refToVstring(cprof.ports), prop);
+        RTC::ConnectorListeners m_listeners;
 
-        OutPortConnectorMock connector(info);
+        OutPortConnectorMock connector(info, m_listeners);
         CPPUNIT_ASSERT_EQUAL(std::string(cprof.connector_id), std::string(connector.id()));
         CPPUNIT_ASSERT_EQUAL(std::string(cprof.name), std::string(connector.name()));
         connector.setEndian(false);
