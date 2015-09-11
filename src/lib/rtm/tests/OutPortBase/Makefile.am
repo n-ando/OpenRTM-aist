@@ -57,6 +57,8 @@ noinst_PROGRAMS = OutPortBaseTests
 nodist_OutPortBaseTests_SOURCES =       \
 	../TestRunner.cpp                   \
 	$(IDL_SOURCES:.idl=Skel.cpp) \
+	$(top_srcdir)/src/lib/rtm/InPortDirectProvider.cpp \
+	$(top_srcdir)/src/lib/rtm/InPortDirectConsumer.cpp \
 	$(top_srcdir)/src/lib/rtm/ConfigurationListener.cpp \
 	$(top_srcdir)/src/lib/rtm/LocalServiceAdmin.cpp \
 	$(top_srcdir)/src/lib/rtm/RTObjectStateMachine.cpp \

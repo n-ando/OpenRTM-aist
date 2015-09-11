@@ -49,6 +49,8 @@ noinst_PROGRAMS = ExtTrigExecutionContextTests
 nodist_ExtTrigExecutionContextTests_SOURCES = \
 	../TestRunner.cpp \
 	$(IDL_SOURCES:.idl=Skel.cpp) \
+	$(top_srcdir)/src/lib/rtm/InPortDirectProvider.cpp \
+	$(top_srcdir)/src/lib/rtm/InPortDirectConsumer.cpp \
 	$(top_srcdir)/src/lib/rtm/NVUtil.cpp \
 	$(top_srcdir)/src/lib/coil/common/stringutil.cpp \
 	$(top_srcdir)/src/lib/coil/common/Properties.cpp \
