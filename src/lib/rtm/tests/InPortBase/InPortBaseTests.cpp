@@ -993,7 +993,7 @@ namespace InPortBase
         //getPortProfileのpropertiesに以下が追加される
         CPPUNIT_ASSERT_EQUAL(std::string("push,pull"),
                              prop["dataport.dataflow_type"]);
-        CPPUNIT_ASSERT_EQUAL(std::string("corba_cdr"),
+        CPPUNIT_ASSERT_EQUAL(std::string("corba_cdr, direct"),
                              prop["dataport.interface_type"]);
  
         //ProviderTypes,ConsumerTypesが取得される
@@ -1090,7 +1090,7 @@ namespace InPortBase
         //getPortProfileのpropertiesに以下が追加される
         CPPUNIT_ASSERT_EQUAL(std::string("push,pull"),
                              prop["dataport.dataflow_type"]);
-        CPPUNIT_ASSERT_EQUAL(std::string("corba_cdr"),
+        CPPUNIT_ASSERT_EQUAL(std::string("corba_cdr, direct"),
                              prop["dataport.interface_type"]);
  
         //ProviderTypes,ConsumerTypesが取得される
@@ -1183,7 +1183,7 @@ namespace InPortBase
         //getPortProfileのpropertiesに以下が追加される
         CPPUNIT_ASSERT_EQUAL(std::string("push,pull"),
                              prop["dataport.dataflow_type"]);
-        CPPUNIT_ASSERT_EQUAL(std::string("corba_cdr"),
+        CPPUNIT_ASSERT_EQUAL(std::string("corba_cdr, direct"),
                              prop["dataport.interface_type"]);
  
         //ProviderTypes,ConsumerTypesが取得される
@@ -1265,7 +1265,7 @@ namespace InPortBase
         //getPortProfileのpropertiesに以下が追加される
         CPPUNIT_ASSERT_EQUAL(std::string("push"),
                              prop["dataport.dataflow_type"]);
-        CPPUNIT_ASSERT_EQUAL(std::string("corba_cdr"),
+        CPPUNIT_ASSERT_EQUAL(std::string("corba_cdr, direct"),
                              prop["dataport.interface_type"]);
  
         //ProviderTypes,ConsumerTypesが取得される
@@ -1335,14 +1335,14 @@ namespace InPortBase
         prop = NVUtil::toProperties(profile.properties);
 
         //getPortProfileのpropertiesに以下が追加される
-        CPPUNIT_ASSERT_EQUAL(std::string(""),
+        CPPUNIT_ASSERT_EQUAL(std::string("push"),
                              prop["dataport.dataflow_type"]);
-        CPPUNIT_ASSERT_EQUAL(std::string(""),
+        CPPUNIT_ASSERT_EQUAL(std::string("direct"),
                              prop["dataport.interface_type"]);
 
         //ProviderTypes,ConsumerTypesが取得される
         pstr = inport.getProviderTypes();
-        CPPUNIT_ASSERT((size_t)0== pstr.size());
+        CPPUNIT_ASSERT((size_t)0!= pstr.size());
 
         portAdmin.deletePort(inport);
     }
