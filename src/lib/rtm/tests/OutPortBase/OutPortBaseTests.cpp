@@ -1149,7 +1149,7 @@ namespace OutPortBase
         //getPortProfileのpropertiesに以下が追加される
         CPPUNIT_ASSERT_EQUAL(std::string("push"),
                              prop["dataport.dataflow_type"]);
-        CPPUNIT_ASSERT_EQUAL(std::string("corba_cdr"),
+        CPPUNIT_ASSERT_EQUAL(std::string("corba_cdr, direct"),
                              prop["dataport.interface_type"]);
  
         //ProviderTypes,ConsumerTypesが取得される
@@ -1208,14 +1208,14 @@ namespace OutPortBase
         prop = NVUtil::toProperties(profile.properties);
 
         //getPortProfileのpropertiesに以下が追加される
-        CPPUNIT_ASSERT_EQUAL(std::string(""),
+        CPPUNIT_ASSERT_EQUAL(std::string("push"),
                              prop["dataport.dataflow_type"]);
-        CPPUNIT_ASSERT_EQUAL(std::string(""),
+        CPPUNIT_ASSERT_EQUAL(std::string("direct"),
                              prop["dataport.interface_type"]);
  
         //ProviderTypes,ConsumerTypesが取得される
         cstr = outPort.get_m_consumerTypes();
-        CPPUNIT_ASSERT((size_t)0== cstr.size());
+        CPPUNIT_ASSERT((size_t)0!= cstr.size());
 
         portAdmin.deletePort(outPort);
     }
