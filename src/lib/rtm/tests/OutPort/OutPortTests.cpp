@@ -834,6 +834,7 @@ namespace RTC
   *
   *
   */
+#if 0
   Manager* Manager::manager = NULL;
   coil::Mutex Manager::mutex;
  /*!
@@ -1019,6 +1020,7 @@ namespace RTC
   {
       return 0;
   }
+#endif
   /*!
    * @if jp
    * @brief デストラクタ
