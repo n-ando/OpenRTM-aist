@@ -1064,13 +1064,14 @@ namespace ConfigAdmin
       OnUpdateCallbackMock* cdm2 = new OnUpdateCallbackMock();
 
       // 1回目のsetでメンバー変数へ設定
-      configAdmin.setOnUpdate(cdm1);
+      RTC::ConfigurationSetNameListenerType csnltype = RTC::ON_UPDATE_CONFIG_SET;
+      configAdmin.addConfigurationSetNameListener(csnltype, cdm1, false);
       CPPUNIT_ASSERT(!cdm1->result);
       configAdmin.onUpdateMock("config_id");
       CPPUNIT_ASSERT(cdm1->result);
 
       // 2回目のsetでdeleteが呼ばれる
-      configAdmin.setOnUpdate(cdm2);
+      configAdmin.addConfigurationSetNameListener(csnltype, cdm2, false);
       CPPUNIT_ASSERT(!cdm2->result);
       configAdmin.onUpdateMock("config_id");
       CPPUNIT_ASSERT(cdm2->result);
@@ -1094,13 +1095,14 @@ namespace ConfigAdmin
       OnUpdateParamCallbackMock* cdm2 = new OnUpdateParamCallbackMock();
 
       // 1回目のsetでメンバー変数へ設定
-      configAdmin.setOnUpdateParam(cdm1);
+      RTC::ConfigurationParamListenerType cpltype = RTC::ON_UPDATE_CONFIG_PARAM;
+      configAdmin.addConfigurationParamListener(cpltype, cdm1, false);
       CPPUNIT_ASSERT(!cdm1->result);
       configAdmin.onUpdateParamMock("config_id", "param1");
       CPPUNIT_ASSERT(cdm1->result);
 
       // 2回目のsetでdeleteが呼ばれる
-      configAdmin.setOnUpdateParam(cdm2);
+      configAdmin.addConfigurationParamListener(cpltype, cdm2, false);
       CPPUNIT_ASSERT(!cdm2->result);
       configAdmin.onUpdateParamMock("config_id", "param2");
       CPPUNIT_ASSERT(cdm2->result);
@@ -1126,13 +1128,14 @@ namespace ConfigAdmin
       OnSetConfigurationSetCallbackMock* cdm2 = new OnSetConfigurationSetCallbackMock();
 
       // 1回目のsetでメンバー変数へ設定
-      configAdmin.setOnSetConfigurationSet(cdm1);
+      RTC::ConfigurationSetListenerType csltype = RTC::ON_SET_CONFIG_SET;
+      configAdmin.addConfigurationSetListener(csltype, cdm1, false);
       CPPUNIT_ASSERT(!cdm1->result);
       configAdmin.onSetConfigurationSetMock(configSet);
       CPPUNIT_ASSERT(cdm1->result);
 
       // 2回目のsetでdeleteが呼ばれる
-      configAdmin.setOnSetConfigurationSet(cdm2);
+      configAdmin.addConfigurationSetListener(csltype, cdm2, false);
       CPPUNIT_ASSERT(!cdm2->result);
       configAdmin.onSetConfigurationSetMock(configSet2);
       CPPUNIT_ASSERT(cdm2->result);
@@ -1158,13 +1161,14 @@ namespace ConfigAdmin
       OnAddConfigurationAddCallbackMock* cdm2 = new OnAddConfigurationAddCallbackMock();
 
       // 1回目のsetでメンバー変数へ設定
-      configAdmin.setOnAddConfigurationSet(cdm1);
+      RTC::ConfigurationSetListenerType csltype = RTC::ON_ADD_CONFIG_SET;
+      configAdmin.addConfigurationSetListener(csltype, cdm1, false);
       CPPUNIT_ASSERT(!cdm1->result);
       configAdmin.onAddConfigurationSetMock(configSet);
       CPPUNIT_ASSERT(cdm1->result);
 
       // 2回目のsetでdeleteが呼ばれる
-      configAdmin.setOnAddConfigurationSet(cdm2);
+      configAdmin.addConfigurationSetListener(csltype, cdm2, false);
       CPPUNIT_ASSERT(!cdm2->result);
       configAdmin.onAddConfigurationSetMock(configSet2);
       CPPUNIT_ASSERT(cdm2->result);
@@ -1188,13 +1192,14 @@ namespace ConfigAdmin
       OnRemoveConfigurationSetCallbackMock* cdm2 = new OnRemoveConfigurationSetCallbackMock();
 
       // 1回目のsetでメンバー変数へ設定
-      configAdmin.setOnRemoveConfigurationSet(cdm1);
+      RTC::ConfigurationSetNameListenerType csnltype = RTC::ON_REMOVE_CONFIG_SET;
+      configAdmin.addConfigurationSetNameListener(csnltype, cdm1, false);
       CPPUNIT_ASSERT(!cdm1->result);
       configAdmin.onRemoveConfigurationSetMock("config_id");
       CPPUNIT_ASSERT(cdm1->result);
 
       // 2回目のsetでdeleteが呼ばれる
-      configAdmin.setOnRemoveConfigurationSet(cdm2);
+      configAdmin.addConfigurationSetNameListener(csnltype, cdm2, false);
       CPPUNIT_ASSERT(!cdm2->result);
       configAdmin.onRemoveConfigurationSetMock("config_id2");
       CPPUNIT_ASSERT(cdm2->result);
@@ -1218,13 +1223,14 @@ namespace ConfigAdmin
       OnActivateSetCallbackMock* cdm2 = new OnActivateSetCallbackMock();
 
       // 1回目のsetでメンバー変数へ設定
-      configAdmin.setOnActivateSet(cdm1);
+      RTC::ConfigurationSetNameListenerType csnltype = RTC::ON_ACTIVATE_CONFIG_SET;
+      configAdmin.addConfigurationSetNameListener(csnltype, cdm1, false);
       CPPUNIT_ASSERT(!cdm1->result);
       configAdmin.onActivateSetMock("config_id");
       CPPUNIT_ASSERT(cdm1->result);
 
       // 2回目のsetでdeleteが呼ばれる
-      configAdmin.setOnActivateSet(cdm2);
+      configAdmin.addConfigurationSetNameListener(csnltype, cdm2, false);
       CPPUNIT_ASSERT(!cdm2->result);
       configAdmin.onActivateSetMock("config_id2");
       CPPUNIT_ASSERT(cdm2->result);
