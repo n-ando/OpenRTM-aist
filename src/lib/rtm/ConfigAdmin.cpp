@@ -45,6 +45,7 @@ namespace RTC
    */
   void ConfigBase::notifyUpdate(const char* key, const char* val)
   {
+    if(m_admin == 0 || m_callback == 0) return;
     (m_admin->*m_callback)(key, val);
   }
 
