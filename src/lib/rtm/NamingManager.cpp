@@ -69,7 +69,7 @@ namespace RTC
    * @endif
    */
   void NamingOnCorba::bindObject(const char* name,
-				 const RTObject_impl* rtobj)
+                                 const RTObject_impl* rtobj)
   {
     RTC_TRACE(("bindObject(name = %s, rtobj)", name));
 #ifdef ORB_IS_OMNIORB
@@ -100,7 +100,38 @@ namespace RTC
   }
 
   void NamingOnCorba::bindObject(const char* name,
-				 const RTM::ManagerServant* mgr)
+                                 const PortBase* port)
+  {
+    RTC_TRACE(("bindObject(name = %s, rtobj)", name));
+#ifdef ORB_IS_OMNIORB
+    if (!m_endpoint.empty() && m_replaceEndpoint)
+      {
+        CORBA::Object_var obj(PortService::_duplicate(port->getPortRef()));
+        CORBA::String_var ior;
+        ior = RTC::Manager::instance().getORB()->object_to_string(obj.in());
+        std::string iorstr((const char*)ior);
+
+        RTC_DEBUG(("Original IOR information:\n %s",
+                   CORBA_IORUtil::formatIORinfo(iorstr.c_str()).c_str()));
+        CORBA_IORUtil::replaceEndpoint(iorstr, m_endpoint);
+        CORBA::Object_var newobj = RTC::Manager::instance().
+          getORB()->string_to_object(iorstr.c_str());
+
+        RTC_DEBUG(("Modified IOR information:\n %s",
+                   CORBA_IORUtil::formatIORinfo(iorstr.c_str()).c_str()));
+        m_cosnaming.rebindByString(name, newobj.in(), true);
+      }
+    else
+      {
+#endif // ORB_IS_OMNIORB
+        m_cosnaming.rebindByString(name, port->getPortRef(), true);
+#ifdef ORB_IS_OMNIORB
+      }
+#endif // ORB_IS_OMNIORB
+  }
+
+  void NamingOnCorba::bindObject(const char* name,
+                                 const RTM::ManagerServant* mgr)
   {
     RTC_TRACE(("bindObject(name = %s, mgr)", name));
 #ifdef ORB_IS_OMNIORB
@@ -184,7 +215,7 @@ namespace RTC
    * @endif
    */
   void NamingManager::registerNameServer(const char* method,
-					 const char* name_server)
+                                         const char* name_server)
   {
     RTC_TRACE(("NamingManager::registerNameServer(%s, %s)",
 	       method, name_server));
@@ -192,7 +223,7 @@ namespace RTC
     name = createNamingObj(method, name_server);
 
     Guard guard(m_namesMutex);
-    m_names.push_back(new Names(method, name_server, name));
+    m_names.push_back(new NamingService(method, name_server, name));
   }
   
   /*!
@@ -202,15 +233,15 @@ namespace RTC
    * @brief Bind the specified objects to NamingService
    * @endif
    */
-  void NamingManager::bindObject(const char* name, 
-				 const RTObject_impl* rtobj)
+  void NamingManager::bindObject(const char* name,
+                                 const RTObject_impl* rtobj)
   {
     RTC_TRACE(("NamingManager::bindObject(%s)", name));
     
     Guard guard(m_namesMutex);
     for (int i(0), len(m_names.size()); i < len; ++i)
       {
-	if (m_names[i]->ns != 0)
+        if (m_names[i]->ns != 0)
           {
             try
               {
@@ -225,15 +256,38 @@ namespace RTC
       }
     registerCompName(name, rtobj);
   }
-  void NamingManager::bindObject(const char* name, 
-				 const RTM::ManagerServant* mgr)
+  void NamingManager::bindObject(const char* name,
+                                 const PortBase* port)
   {
     RTC_TRACE(("NamingManager::bindObject(%s)", name));
     
     Guard guard(m_namesMutex);
     for (int i(0), len(m_names.size()); i < len; ++i)
       {
-	if (m_names[i]->ns != 0)
+        if (m_names[i]->ns != 0)
+          {
+            try
+              {
+                m_names[i]->ns->bindObject(name, port);
+              }
+            catch (...)
+              {
+                delete m_names[i]->ns;
+                m_names[i]->ns = 0;
+              }
+          }
+      }
+    registerPortName(name, port);
+  }
+  void NamingManager::bindObject(const char* name, 
+                                 const RTM::ManagerServant* mgr)
+  {
+    RTC_TRACE(("NamingManager::bindObject(%s)", name));
+    
+    Guard guard(m_namesMutex);
+    for (int i(0), len(m_names.size()); i < len; ++i)
+      {
+        if (m_names[i]->ns != 0)
           {
             try
               {
@@ -454,6 +508,27 @@ namespace RTC
     m_compNames.push_back(new Comps(name, rtobj));
     return;
   }
+  /*!
+   * @if jp
+   * @brief NameServer に登録するコンポーネントの設定
+   * @else
+   * @brief Configure the components that will be registered to NameServer
+   * @endif
+   */
+  void NamingManager::registerPortName(const char* name,
+                                       const PortBase* port)
+  {
+    for (int i(0), len(m_portNames.size()); i < len; ++i)
+      {
+        if (m_portNames[i]->name == name)
+          {
+            m_portNames[i]->port = port;
+            return;
+          }
+      }
+    m_portNames.push_back(new Port(name, port));
+    return;
+  }
   void NamingManager::registerMgrName(const char* name,
                                       const RTM::ManagerServant* mgr)
   {
@@ -505,7 +580,7 @@ namespace RTC
     return;
   }
 
-  void NamingManager::retryConnection(Names* ns)
+  void NamingManager::retryConnection(NamingService* ns)
   {
     // recreate NamingObj
     NamingBase* nsobj(0);

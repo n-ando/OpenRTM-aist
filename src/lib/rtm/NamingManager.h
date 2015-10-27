@@ -110,6 +110,7 @@ namespace RTC
      * @endif
      */
     virtual void bindObject(const char* name, const RTObject_impl* rtobj) = 0;
+    virtual void bindObject(const char* name, const PortBase* port) = 0;
 
     /*!
      * @if jp
@@ -169,7 +170,31 @@ namespace RTC
     virtual bool isAlive() = 0;
   };
   
-
+  /*!
+   * @if jp
+   * @brief NameServer 管理用構造体
+   * @else
+   * @brief Structure for NameServer management
+   * @endif
+   */
+  class NamingService
+  {
+  public:
+    NamingService(const char* meth, const char* name, NamingBase* naming)
+      : method(meth), nsname(name), ns(naming)
+    {
+    }
+    
+    ~NamingService()
+    {
+      delete ns;
+    }
+    
+    std::string method;
+    std::string nsname;
+    NamingBase* ns;
+  };
+  
   /*!
    * @if jp
    *
@@ -262,6 +287,8 @@ namespace RTC
      * @endif
      */
     virtual void bindObject(const char* name, const RTObject_impl* rtobj);
+    virtual void bindObject(const char* name, const PortBase* port);
+
     /*!
      * @if jp
      *
@@ -280,7 +307,7 @@ namespace RTC
      * @endif
      */
     virtual void bindObject(const char* name, const RTM::ManagerServant* mgr);
-    
+
     /*!
      * @if jp
      *
@@ -301,7 +328,7 @@ namespace RTC
      * @endif
      */
     virtual void unbindObject(const char* name);
-    
+
     /*!
      * @if jp
      *
@@ -318,13 +345,14 @@ namespace RTC
      * @endif
      */
     virtual bool isAlive();
+    CorbaNaming& getCorbaNaming() { return m_cosnaming; }
 
   private:
     Logger rtclog;
     CorbaNaming m_cosnaming;
     std::string m_endpoint;
     bool m_replaceEndpoint;
-    std::map<std::string, RTObject_impl*> m_names;
+    //    std::map<std::string, RTObject_impl*> m_names;
   };
   
   /*!
@@ -437,6 +465,7 @@ namespace RTC
      * @endif
      */
     void bindObject(const char* name, const RTObject_impl* rtobj);
+    void bindObject(const char* name, const PortBase* port);
 
     /*!
      * @if jp
@@ -539,6 +568,7 @@ namespace RTC
      * @endif
      */
     std::vector<RTObject_impl*> getObjects();
+    std::vector<NamingService*>& getNameServices() { return m_names; }
     
   protected:
     /*!
@@ -615,6 +645,29 @@ namespace RTC
     /*!
      * @if jp
      *
+     * @brief NameServer に登録するコンポーネントの設定
+     * 
+     * NameServer に登録するコンポーネントを設定する。
+     *
+     * @param name コンポーネントの登録時名称
+     * @param rtobj 登録対象オブジェクト
+     * 
+     * @else
+     *
+     * @brief Configure the components that will be registered to NameServer
+     * 
+     * Configure the components that will be registered to NameServer.
+     *
+     * @param name Names of components at the registration
+     * @param rtobj The target objects for registration
+     * 
+     * @endif
+     */
+    void registerPortName(const char* name, const PortBase* port);
+
+    /*!
+     * @if jp
+     *
      * @brief NameServer に登録するManagerServantの設定
      * 
      * NameServer に登録するManagerServantを設定する。
@@ -656,6 +709,7 @@ namespace RTC
      * @endif
      */
     void unregisterCompName(const char* name);
+    void unregisterPortName(const char* name);
 
     /*!
      * @if jp
@@ -698,35 +752,10 @@ namespace RTC
      * 
      * @endif
      */
-    class Names;
-    void retryConnection(Names* ns);
-    
+    void retryConnection(NamingService* ns);
+
   protected:
     // Name Servers' method/name and object
-    /*!
-     * @if jp
-     * @brief NameServer 管理用構造体
-     * @else
-     * @brief Structure for NameServer management
-     * @endif
-     */
-    class Names
-    {
-    public:
-      Names(const char* meth, const char* name, NamingBase* naming)
-	: method(meth), nsname(name), ns(naming)
-      {
-      }
-      
-      ~Names()
-      {
-        delete ns;
-      }
-      
-      std::string method;
-      std::string nsname;
-      NamingBase* ns;
-    };
     /*!
      * @if jp
      * @brief NameServer リスト
@@ -734,7 +763,7 @@ namespace RTC
      * @brief NameServer list
      * @endif
      */
-    std::vector<Names*> m_names;
+    std::vector<NamingService*> m_names;
     /*!
      * @if jp
      * @brief NameServer リストのmutex
@@ -759,6 +788,21 @@ namespace RTC
       {}
       std::string name;
       const RTObject_impl* rtobj;
+    };
+    /*!
+     * @if jp
+     * @brief コンポーネント管理用構造体
+     * @else
+     * @brief Structure for component management
+     * @endif
+     */
+    struct Port
+    {
+      Port(const char* n, const PortBase* p)
+	: name(n), port(p)
+      {}
+      std::string name;
+      const PortBase* port;
     };
     /*!
      * @if jp
@@ -791,6 +835,22 @@ namespace RTC
      * @endif
      */
     Mutex m_compNamesMutex;
+    /*!
+     * @if jp
+     * @brief コンポーネントリスト
+     * @else
+     * @brief Component list
+     * @endif
+     */
+    std::vector<Port*> m_portNames;
+    /*!
+     * @if jp
+     * @brief コンポーネントリストのmutex
+     * @else
+     * @brief Mutex of Port list
+     * @endif
+     */
+    Mutex m_portNamesMutex;
     /*!
      * @if jp
      * @brief ManagerServantリスト
