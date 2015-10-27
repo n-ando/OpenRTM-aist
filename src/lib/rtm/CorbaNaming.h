@@ -1106,9 +1106,97 @@ namespace RTC
      * @endif
      */
     void list(CosNaming::NamingContext_ptr name_cxt,
-	      CORBA::ULong how_many,
-	      CosNaming::BindingList_var& bl,
-	      CosNaming::BindingIterator_var& bi);
+              CORBA::ULong how_many,
+              CosNaming::BindingList_var& bl,
+              CosNaming::BindingIterator_var& bi);
+    /*!
+     * @if jp
+     * @brief 与えられた Naming パス以下のすべてのバインディングを取得する
+     *
+     * 文字列で指定されたネーミング絶対パス以下のすべてのバインディング
+     * すなわちバインディングのタイプと参照のセットを取得する。パスは、
+     * ルートコンテキストから階層を "/"、名前とコンテキストを "." で区
+     * 切った文字列である。
+     *
+     * 例えば、<name0>.<context0>/.../<name[n]>.<context[n]> を指定する
+     * と<name[n]>.<context[n]> の下にバインドされているコンテキストま
+     * たはオブジェクトリファレンスのリストが BindingList として返され
+     * る。
+     *
+     * @param string_name [in] 文字列で指定されるターゲットのパス
+     * @param bl [out] 指定されたパスの下のバインディングリスト
+     *
+     * @else
+     *
+     * @brief Get all the binding under given naming path
+     *
+     * This operation obtains all the binding list, which are a pair
+     * of binding type and reference, under specified absolute naming
+     * path. The path string consists of the path from root context
+     * delimited by "/" and name and context delimited by ".".
+     *
+     * For example, when <name0>.<context0>/.../<name[n]>.<context[n]>
+     * is specified as the path, this operation returns all the
+     * contexts and references under the "<name[n]>.<context[n]>"
+     * context in a BindingList.
+     *
+     * @param string_name [in] The target path specified by a string
+     * @param bl [out] Binding list under the specified path
+     *
+     * @endif
+     */
+    void list(const char* string_name,
+              CosNaming::BindingList_var& bl);
+
+    /*!
+     * @if jp
+     * @brief 与えられたパス以下の指定されたkindのバインディングを取得する
+     *
+     * 文字列で指定されたネーミング絶対パス以下のうち、指定された kind
+     * を持つすべてのバインディングを取得する。パスは、ルートコンテキス
+     * トから階層を "/"、名前とコンテキストを "." で区切った文字列であ
+     * る。
+     *
+     * 例えば、第1引数にパス
+     * <name0>.<context0>/.../<name[n]>.<context[n]> を指定し、第2引数
+     * の kind "hoge" を指定すると、と<name[n]>.<context[n]> の下にバイ
+     * ンドされているコンテキストまたはオブジェクトリファレンスのリスト
+     * のうち kind が "hoge" のものが BindingList として返される。
+     *
+     * 例えば、<name0>.<context0>/.../<name[n]>.<context[n]> を指定する
+     * と<name[n]>.<context[n]> の下にバインドされているコンテキストま
+     * たはオブジェクトリファレンスのリストが BindingList として返され
+     * る。
+     *
+     * @param string_name [in] 文字列で指定されるターゲットのパス
+     * @param string_kind [in] 文字列で指定されるターゲットのkind
+     * @param bl [out] 指定されたパスの下のバインディングリスト
+     *
+     * @else
+     *
+     * @brief Get all the binding with specified kind under given naming path
+     *
+     * This operation obtains all the binding list with specified kind
+     * under specified absolute naming path. The path string consists
+     * of the path from root context delimited by "/" and name and
+     * context delimited by ".".
+     *
+     * For example, when <name0>.<context0>/.../<name[n]>.<context[n]>
+     * is specified in the first argument as the path, and "hoge" is
+     * specified the second argument as the kind, this operation
+     * returns all the contexts and references under the
+     * "<name[n]>.<context[n]>" context with kind "hoge" in a
+     * BindingList.
+     *
+     * @param string_name [in] The target path specified by a string
+     * @param string_kind [in] The target kind specified by a string
+     * @param bl [out] Binding list under the specified path
+     *
+     * @endif
+     */
+    void listByKind(const char* string_name,
+                    const char* string_kind,
+                    CosNaming::BindingList_var& bl);
     
     //============================================================
     // interface of NamingContextExt
