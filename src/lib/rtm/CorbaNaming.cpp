@@ -556,9 +556,9 @@ namespace RTC
    * @endif
    */
   void CorbaNaming::list(CosNaming::NamingContext_ptr name_cxt,
-			 CORBA::ULong how_many,
-			 CosNaming::BindingList_var& bl,
-			 CosNaming::BindingIterator_var& bi)
+                         CORBA::ULong how_many,
+                         CosNaming::BindingList_var& bl,
+                         CosNaming::BindingIterator_var& bi)
   {
 #ifndef ORB_IS_RTORB
     name_cxt->list(how_many, bl.out(), bi.out());
@@ -569,6 +569,93 @@ namespace RTC
 
   }
   
+  /*!
+   * @if jp
+   * @brief 与えられた Naming パス以下のすべてのバインディングを取得する
+   * @else
+   * @brief Get all the binding under given naming path
+   * @endif
+   */
+  void CorbaNaming::list(const char* string_name,
+                         CosNaming::BindingList_var& bl)
+  {
+    if (string_name == 0) { return; }
+    CORBA::Object_var obj = resolveStr(string_name);
+    CosNaming::NamingContext_var nc;
+    nc = CosNaming::NamingContext::_narrow(obj);
+    if (CORBA::is_nil(nc))
+      {
+        bl->length(0);
+        return;
+      }
+    CORBA::Long max_list_size(65536);
+    CosNaming::BindingIterator_var bi;
+#ifndef ORB_IS_RTORB
+    nc->list(max_list_size, bl.out(), bi.out());
+#else // ORB_IS_RTORB
+    nc->list(max_list_size, (CosNaming::BindingList_out)bl,
+             (CosNaming::BindingIterator_ptr)bi);
+#endif // ORB_IS_RTORB
+    CORBA::Long   max_remaining = max_list_size - bl->length();
+    CORBA::Boolean more_bindings = !CORBA::is_nil(bi);
+    
+    if (more_bindings)
+      {
+        while (more_bindings && (max_remaining > 0))
+          {
+            CosNaming::BindingList_var tmp_bl;
+            more_bindings = bi->next_n(max_remaining, tmp_bl.out());
+            //Append 'tmp_bl' to 'bl'
+            CORBA::ULong bl_len = bl->length();
+            bl->length(bl_len + tmp_bl->length());
+            for (CORBA::ULong i(0); i < tmp_bl->length(); ++i)
+              {
+                bl[i + bl_len] = tmp_bl[i];
+              }
+            max_remaining = max_list_size - bl->length();
+          }
+        bi->destroy();
+      }
+    return;
+  }
+  
+  /*!
+   * @if jp
+   * @brief 与えられたパス以下の指定されたkindのバインディングを取得する
+   * @else
+   * @brief Get all the binding with specified kind under given naming path
+   * @endif
+   */
+  void CorbaNaming::listByKind(const char* string_name,
+                               const char* string_kind,
+                               CosNaming::BindingList_var& bl)
+  {
+    if (string_name == 0) { bl->length(0); return; }
+    if (string_kind == 0) { bl->length(0); return; }
+    std::string kind(string_kind);
+
+    CosNaming::BindingList_var tmp_bl; // = new CosNaming::BindingList();
+    list(string_name, tmp_bl);
+
+    CORBA::ULong tmp_len(tmp_bl->length());
+    bl->length(tmp_bl->length());
+    CORBA::ULong list_len(0);
+    for (CORBA::ULong i(0); i < tmp_len; ++i)
+      {
+        if (tmp_bl[i].binding_type != CosNaming::nobject) { continue; }
+        CORBA::ULong last_index = tmp_bl[i].binding_name.length() - 1;
+        const char* tmp = tmp_bl[i].binding_name[last_index].kind;
+        if (kind != tmp) { continue; }
+
+        bl[list_len] = tmp_bl[i];
+        ++list_len;
+        const char* tmp_char = toString(tmp_bl[i].binding_name);
+        delete tmp_char;
+      }
+    bl->length(list_len);
+    return;
+  }
+
   /*!
    * @if jp
    * @brief 与えられた NameComponent の文字列表現を返す
