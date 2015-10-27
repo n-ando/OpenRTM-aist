@@ -1611,6 +1611,9 @@ namespace RTC
   {
     RTC_TRACE(("addPort(CrobaPort)"));
     std::string propkey("port.corbaport.");
+    std::string tmp(port.getName());
+    coil::vstring vtmp = coil::split(tmp, ".");
+    propkey += vtmp.back();
     m_properties.getNode(propkey) 
       << m_properties.getNode("port.corba");
     
