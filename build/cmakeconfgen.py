@@ -46,9 +46,6 @@ template="""
 #
 # OpenRTM-aist specific directory
 # - COIL_INCLUDE_DIR: coil include dir
-# - OPENRTM_INCLUDE_DIR: OpenRTM's include directory
-# - OPENRTM_LIB_DIR: OpenRTM's lib directory
-# - OPENRTM_DATA_DIR: OpenRTM's shared directory
 #
 # OpenRTM-aist version
 # - OPENRTM_VERSION: x.y.z version
@@ -67,10 +64,67 @@ template="""
 message(STATUS "OpenRTMConfig.cmake found.")
 message(STATUS "Configrued by configuration mode.")
 
-string(REPLACE "\\\\" "/" OMNIORB_DIR "$ENV{OMNI_ROOT}")
-string(REPLACE "\\\\" "/" OPENRTM_DIR "$ENV{RTM_ROOT}")
-string(REGEX REPLACE "/$" "" OMNIORB_DIR "${OMNIORB_DIR}")
+# OpenRTM-aist version
+set(OPENRTM_VERSION [openrtm_version])
+set(OPENRTM_VERSION_MAJOR [openrtm_version_major])
+set(OPENRTM_VERSION_MINOR [openrtm_version_minor])
+set(OPENRTM_VERSION_PATCH [openrtm_version_patch])
+set(OPENRTM_SHORT_VERSION [openrtm_short_version])
+
+# CMAKE_GENERATOR check
+if (${CMAKE_GENERATOR} STREQUAL "Visual Studio 9 2008")
+  set(RTM_VC_VER "vc9")
+  set(CMAKE_BITNESS "32")
+endif()
+if (${CMAKE_GENERATOR} STREQUAL "Visual Studio 10 2010")
+  set(RTM_VC_VER "vc10")
+  set(CMAKE_BITNESS "32")
+endif()
+if (${CMAKE_GENERATOR} STREQUAL "Visual Studio 10 2010 Win64")
+  set(RTM_VC_VER "vc10")
+  set(CMAKE_BITNESS "64")
+endif()
+if (${CMAKE_GENERATOR} STREQUAL "Visual Studio 11 2012")
+  set(RTM_VC_VER "vc11")
+  set(CMAKE_BITNESS "32")
+endif()
+if (${CMAKE_GENERATOR} STREQUAL "Visual Studio 11 2012 Win64")
+  set(RTM_VC_VER "vc11")
+  set(CMAKE_BITNESS "64")
+endif()
+if (${CMAKE_GENERATOR} STREQUAL "Visual Studio 12 2013")
+  set(RTM_VC_VER "vc12")
+  set(CMAKE_BITNESS "32")
+endif()
+if (${CMAKE_GENERATOR} STREQUAL "Visual Studio 12 2013 Win64")
+  set(RTM_VC_VER "vc12")
+  set(CMAKE_BITNESS "64")
+endif()
+if (${CMAKE_GENERATOR} STREQUAL "Visual Studio 14 2015")
+  set(RTM_VC_VER "vc14")
+  set(CMAKE_BITNESS "32")
+endif()
+if (${CMAKE_GENERATOR} STREQUAL "Visual Studio 14 2015 Win64")
+  set(RTM_VC_VER "vc14")
+  set(CMAKE_BITNESS "64")
+endif()
+
+MESSAGE(STATUS "VC version is : ${CMAKE_GENERATOR} (${CMAKE_BITNESS}bit)")
+
+if ("${CMAKE_BITNESS}" STREQUAL "32")
+  if ($ENV{PROCESSOR_ARCHITECTURE} STREQUAL "x86")
+    set(OPENRTM_DIR "C:/Program Files/OpenRTM-aist/${OPENRTM_VERSION}_${RTM_VC_VER}")
+  else()
+    set(OPENRTM_DIR "C:/Program Files (x86)/OpenRTM-aist/${OPENRTM_VERSION}_${RTM_VC_VER}")
+  endif()
+else()
+  set(OPENRTM_DIR "C:/Program Files/OpenRTM-aist/${OPENRTM_VERSION}_${RTM_VC_VER}")
+endif()
+
 string(REGEX REPLACE "/$" "" OPENRTM_DIR "${OPENRTM_DIR}")
+
+string(REPLACE "\\\\" "/" OMNIORB_DIR "$ENV{OMNI_ROOT}")
+string(REGEX REPLACE "/$" "" OMNIORB_DIR "${OMNIORB_DIR}")
 
 # omniORB options
 file(GLOB _vers RELATIVE "${OMNIORB_DIR}" "${OMNIORB_DIR}/THIS_IS_OMNIORB*")
@@ -79,6 +133,10 @@ if("${_vers}" STREQUAL "")
 endif()
 string(REGEX REPLACE "[[]^0-9]+([[]0-9]+)_([[]0-9]+)_([[]0-9]+)"
   "\\\\1.\\\\2.\\\\3" OMNIORB_VERSION "${_vers}")
+  
+set(OMNIORB_DIR ${OPENRTM_DIR}/omniORB/${OMNIORB_VERSION}_${RTM_VC_VER})
+set(OMNIORB_SHORT_VERSION [omni_dllver])
+
 set(OMNIORB_CFLAGS [omniorb_cflags])
 set(OMNIORB_INCLUDE_DIRS [omniorb_include_dirs])
 set(OMNIORB_LDFLAGS [omniorb_ldflags])
@@ -90,20 +148,14 @@ set(OPENRTM_CFLAGS [openrtm_cflags])
 set(OPENRTM_INCLUDE_DIRS [openrtm_include_dirs])
 set(OPENRTM_LDFLAGS [openrtm_ldflags])
 set(OPENRTM_LIBRARY_DIRS [openrtm_lib_dirs])
-set(OPENRTM_LIBRARIES [openrtm_libs])
+if ("${CMAKE_BITNESS}" STREQUAL "32")
+  set(OPENRTM_LIBRARIES [openrtm_libs])
+else()
+  set(OPENRTM_LIBRARIES [openrtm_libs_x64])
+endif()
 
 # OpenRTM-aist specific directory
 set(COIL_INCLUDE_DIR [coil_include_dir])
-set(OPENRTM_INCLUDE_DIR [openrtm_include_dir])
-set(OPENRTM_LIB_DIR [openrtm_libdir])
-set(OPENRTM_DATA_DIR [openrtm_data_dir])
-
-# OpenRTM-aist version
-set(OPENRTM_VERSION [openrtm_version])
-set(OPENRTM_VERSION_MAJOR [openrtm_version_major])
-set(OPENRTM_VERSION_MINOR [openrtm_version_minor])
-set(OPENRTM_VERSION_PATCH [openrtm_version_patch])
-set(OPENRTM_SHORT_VERSION [openrtm_short_version])
 
 # OpenRTM-aist's CORBA related settings
 set(OPENRTM_ORB [openrtm_orb])
@@ -221,7 +273,8 @@ if __name__ == '__main__':
     omni_libs += ";" + process_lib(dict["omni_libd"], "debug")
     rtm_libs   = process_lib(dict["rtm_lib"], "optimized")
     rtm_libs  += ";" + process_lib(dict["rtm_libd"], "debug")
-
+    rtm_libs_x64   = process_lib(dict["rtm_lib_x64"], "optimized")
+    rtm_libs_x64  += ";" + process_lib(dict["rtm_libd_x64"], "debug")
 
 
     dict["omniorb_cflags"] = omni_cflags
@@ -235,10 +288,8 @@ if __name__ == '__main__':
     dict["openrtm_ldflags"] = ""
     dict["openrtm_lib_dirs"] = str(dict["rtm_libdir"] + ";" + dict["omni_libdir"])
     dict["openrtm_libs"] = str(rtm_libs)
+    dict["openrtm_libs_x64"] = str(rtm_libs_x64)
     dict["coil_include_dir"] = str(dict["rtm_libdir"])
-    dict["openrtm_include_dir"] = "%RTM_ROOT%"
-    dict["openrtm_libdir"] = "%RTM_ROOT%"
-    dict["openrtm_data_dir"] = "%RTM_ROOT%"
     dict["openrtm_version"] = str(dict["rtm_version"])
     dict["openrtm_version_major"] = str(dict["rtm_version"].split(".")[0])
     dict["openrtm_version_minor"] = str(dict["rtm_version"].split(".")[1])
