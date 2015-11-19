@@ -24,21 +24,6 @@ AM_INIT_AUTOMAKE([dist-bzip2 tar-pax])
 AM_CONFIG_HEADER([include/coil/config_coil.h])
 AC_CONFIG_FILES([utils/coil-config/libcoil.pc:utils/coil-config/libcoil.pc.in])
 
-if test "${libdir}" = '${exec_prefix}/lib'; then
-  case `uname -m` in
-    x86_64|ppc64|powerpc64)
-      if test -f /etc/fedora-release ; then
-        libdir='${exec_prefix}/lib64'
-      else
-        libdir='${exec_prefix}/lib/x86_64-linux-gnu'
-      fi
-      ;;
-    *)
-      libdir='${exec_prefix}/lib'
-      ;;
-  esac
-fi
-
 dnl ------------------------------------------------------------
 dnl rename config header's PACKAGE_* definition
 dnl ------------------------------------------------------------
