@@ -14,7 +14,7 @@ clean-local:
 	rm -f coil_config.vsprops
 	rm -f coil_distbuild.props
 	rm -f coil_config.props
-
+	rm -f build.bat
 
 sln: OpenRTM-aist_vc8.sln OpenRTM-aist_vc9.sln OpenRTM-aist_vc10.sln OpenRTM-aist_vc11.sln OpenRTM-aist_vc12.sln
 
@@ -73,6 +73,9 @@ coil_distbuild.props:
 coil_config.props:
 	cp -p $(top_srcdir)/src/lib/coil/win32/coil_config.props .
 
+build.bat:
+	sed -e 's/__VERSION__/$(VERSION)/g' build.bat.in > build.bat	
+
 AUTHORS:
 	cp $(top_srcdir)/AUTHORS     .
 ChangeLog:
@@ -87,7 +90,7 @@ README.jp:
 	cp $(top_srcdir)/README.jp   .
 
 
-dist-hook: clean-local sln vsprops
+dist-hook: clean-local sln vsprops build.bat
 
 EXTRA_DIST =                      \
 	OpenRTM-aist.sln.dep          \
