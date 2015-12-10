@@ -39,7 +39,7 @@ reposervers="openrtm.org"
 reposerver=""
 
 #---------------------------------------
-autotools="autoconf libtool"
+autotools="autoconf libtool libtool-bin"
 build_tools="gcc g++ make"
 dep_pkg="uuid-dev doxygen"
 deb_tools="build-essential debhelper devscripts"
