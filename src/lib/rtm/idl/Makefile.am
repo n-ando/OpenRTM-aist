@@ -244,7 +244,7 @@ lst:
 #------------------------------------------------------------
 win32_builddir=$(top_builddir)/win32/OpenRTM-aist/
 
-vcproj: vc8proj vc9proj vc10proj vc11proj vc12proj
+vcproj: vc8proj vc9proj vc10proj vc11proj vc12proj vc14proj
 
 vc8proj: libRTCSkel.vcproj.yaml
 	$(top_builddir)/build/vcprojtool.py vcproj \
@@ -300,6 +300,17 @@ vc12proj: libRTCSkel.vcproj.yaml
 		--source $(SKEL_CPP) \
 		--header $(SKEL_H)
 	qkc -O- -sm $(win32_builddir)/rtm/idl/libRTCSkel_vc12.vcxproj
+	
+vc14proj: libRTCSkel.vcproj.yaml
+	$(top_builddir)/build/vcxprojtool.py vcxproj \
+		--type LIB \
+		--vcversion "14.00" \
+		--version $(RTM_VERSION) \
+		--out $(win32_builddir)/rtm/idl/libRTCSkel_vc14.vcxproj \
+		--yaml libRTCSkel.vcproj.yaml \
+		--source $(SKEL_CPP) \
+		--header $(SKEL_H)
+	qkc -O- -sm $(win32_builddir)/rtm/idl/libRTCSkel_vc14.vcxproj
 
 #------------------------------------------------------------
 # for wxs file
