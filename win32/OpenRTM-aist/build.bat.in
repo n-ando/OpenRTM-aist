@@ -61,12 +61,18 @@ set PATH=%OMNI_ROOT%\bin\x86_win32;%PATH%
 @rem ------------------------------------------------------------
 @rem Copying Config.cmake
 @rem ------------------------------------------------------------
-set RTM_DLLVER=%RTM_VERSION:.=%
+if %ARCH% == x86       set DLL_ARCH=
+if %ARCH% == x86_64    set DLL_ARCH=_x64
+
+set RTM_VC_VER=vc%VC_VERSION%
+set RTM_DLLVER=%RTM_VERSION:.=%_%RTM_VC_VER%%DLL_ARCH%
 set RTM_SHORTVER=%RTM_VERSION:~0,3%
+set RTM_DLL_SHORTVER=%RTM_VERSION:.=%
 
 set COIL_VERSION=%RTM_VERSION%
 set COIL_DLLVER=%RTM_DLLVER%
 set COIL_SHORTVER=%RTM_SHORTVER%
+set COIL_DLL_SHORTVER=%RTM_DLL_SHORTVER%
 
 set OMNI_DLLVER=%OMNI_VERSION:.=%
 set OMNI_SHORTVER=%OMNI_VERSION:~0,3%
@@ -114,7 +120,7 @@ if %VC_VERSION% == 12 (
    )
 if %VC_VERSION% == 14 (
    call "C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\vcvarsall.bat" x86
-   set VCTOOLSET=12.0
+   set VCTOOLSET=14.0
    set PLATFORMTOOL=/p:PlatformToolset=v140
    goto MSBUILDx86
    )
@@ -177,7 +183,7 @@ if /i %VC_VERSION% == 12 (
    )
 if /i %VC_VERSION% == 14 (
    call "C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\vcvarsall.bat" amd64
-   set VCTOOLSET=12.0
+   set VCTOOLSET=14.0
    set PLATFORMTOOL=/p:PlatformToolset=v140
    goto MSBUILDx64
    )

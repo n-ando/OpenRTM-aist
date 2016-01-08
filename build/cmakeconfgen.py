@@ -112,13 +112,9 @@ endif()
 MESSAGE(STATUS "VC version is : ${CMAKE_GENERATOR} (${CMAKE_BITNESS}bit)")
 
 if ("${CMAKE_BITNESS}" STREQUAL "32")
-  if ($ENV{PROCESSOR_ARCHITECTURE} STREQUAL "x86")
-    set(OPENRTM_DIR "C:/Program Files/OpenRTM-aist/${OPENRTM_VERSION}_${RTM_VC_VER}")
-  else()
-    set(OPENRTM_DIR "C:/Program Files (x86)/OpenRTM-aist/${OPENRTM_VERSION}_${RTM_VC_VER}")
-  endif()
+  set(OPENRTM_DIR "$ENV{ProgramFiles}/OpenRTM-aist/${OPENRTM_VERSION}_${RTM_VC_VER}")
 else()
-  set(OPENRTM_DIR "C:/Program Files/OpenRTM-aist/${OPENRTM_VERSION}_${RTM_VC_VER}")
+  set(OPENRTM_DIR "$ENV{ProgramW6432}/OpenRTM-aist/${OPENRTM_VERSION}_${RTM_VC_VER}")
 endif()
 
 string(REGEX REPLACE "/$" "" OPENRTM_DIR "${OPENRTM_DIR}")
@@ -164,6 +160,9 @@ set(OPENRTM_IDL_WRAPPER_FLAGS [openrtm_idl_wrapper_flags])
 set(OPENRTM_IDLC [openrtm_idlc])
 set(OPENRTM_IDLFLAGS [openrtm_idlflags])
 
+# OpenCV setting
+set(ENV{OpenCV_DIR} "${OPENRTM_DIR}")
+
 message(STATUS "OpenRTM-aist configuration done")
 
 message(STATUS "  OMNIORB_DIR=${OMNIORB_DIR}")
@@ -189,6 +188,8 @@ message(STATUS "  OPENRTM_IDLC=${OPENRTM_IDLC}")
 message(STATUS "  OPENRTM_IDLFLAGS=${OPENRTM_IDLFLAGS}")
 message(STATUS "  OPENRTM_IDL_WRAPPER=${OPENRTM_IDL_WRAPPER}")
 message(STATUS "  OPENRTM_IDL_WRAPPER_FLAGS=${OPENRTM_IDL_WRAPPER_FLAGS}")
+
+message(STATUS "  OpenCV_DIR=$ENV{OpenCV_DIR}")
 
 # end of OpenRTMConfig.cmake
 
@@ -233,9 +234,11 @@ if __name__ == '__main__':
             "COIL_DLLVER",
             "COIL_VERSION",
             "COIL_SHORTVER",
+            "COIL_DLL_SHORTVER",
             "RTM_DLLVER",
             "RTM_VERSION",
             "RTM_SHORTVER",
+            "RTM_DLL_SHORTVER",
             "OMNI_DLLVER",
             "OMNI_VERSION",
             "OMNI_SHORTVER",
