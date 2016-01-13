@@ -274,10 +274,10 @@ if __name__ == '__main__':
     # libs
     omni_libs  = process_lib(dict["omni_lib"], "optimized")
     omni_libs += ";" + process_lib(dict["omni_libd"], "debug")
-    rtm_libs   = process_lib(dict["rtm_lib"], "optimized")
-    rtm_libs  += ";" + process_lib(dict["rtm_libd"], "debug")
-    rtm_libs_x64   = process_lib(dict["rtm_lib_x64"], "optimized")
-    rtm_libs_x64  += ";" + process_lib(dict["rtm_libd_x64"], "debug")
+    rtm_libs   = process_lib(dict["rtm_cmake_lib"], "optimized")
+    rtm_libs  += ";" + process_lib(dict["rtm_cmake_libd"], "debug")
+    rtm_libs_x64   = process_lib(dict["rtm_cmake_lib_x64"], "optimized")
+    rtm_libs_x64  += ";" + process_lib(dict["rtm_cmake_libd_x64"], "debug")
 
 
     dict["omniorb_cflags"] = omni_cflags
