@@ -101,20 +101,37 @@
 	/>
 	<UserMacro
 		Name="rtm_libd"
-		Value="RTC$(rtm_cmake_dllver)d.lib $(coil_libd) $(omni_libd) advapi32.lib ws2_32.lib mswsock.lib $(user_libd)"
+		Value="RTC$(rtm_dllver)d.lib $(coil_libd) $(omni_libd) advapi32.lib ws2_32.lib mswsock.lib $(user_libd)"
 	/>
 	<UserMacro
 		Name="rtm_libd_x64"
 
-		Value="RTC$(rtm_cmake_dllver_x64)d.lib $(coil_libd_x64) $(omni_libd) advapi32.lib ws2_32.lib mswsock.lib $(user_libd)"
+		Value="RTC$(rtm_dllver_x64)d.lib $(coil_libd_x64) $(omni_libd) advapi32.lib ws2_32.lib mswsock.lib $(user_libd)"
 	/>
 	<UserMacro
 		Name="rtm_lib"
-		Value="RTC$(rtm_cmake_dllver).lib $(coil_lib) $(omni_lib) advapi32.lib ws2_32.lib mswsock.lib $(user_lib)"
+		Value="RTC$(rtm_dllver).lib $(coil_lib) $(omni_lib) advapi32.lib ws2_32.lib mswsock.lib $(user_lib)"
 	/>
 	<UserMacro
 		Name="rtm_lib_x64"
-		Value="RTC$(rtm_cmake_dllver_x64).lib $(coil_lib_x64) $(omni_lib) advapi32.lib ws2_32.lib mswsock.lib $(user_lib)"
+		Value="RTC$(rtm_dllver_x64).lib $(coil_lib_x64) $(omni_lib) advapi32.lib ws2_32.lib mswsock.lib $(user_lib)"
+	/>
+	<UserMacro
+		Name="rtm_cmake_libd"
+		Value="RTC$(rtm_cmake_dllver)d.lib coil$(coil_cmake_dllver)d.lib $(omni_libd) advapi32.lib ws2_32.lib mswsock.lib $(user_libd)"
+	/>
+	<UserMacro
+		Name="rtm_cmake_libd_x64"
+
+		Value="RTC$(rtm_cmake_dllver_x64)d.lib coil$(coil_cmake_dllver_x64)d.lib $(omni_libd) advapi32.lib ws2_32.lib mswsock.lib $(user_libd)"
+	/>
+	<UserMacro
+		Name="rtm_cmake_lib"
+		Value="RTC$(rtm_cmake_dllver).lib coil$(coil_cmake_dllver).lib $(omni_lib) advapi32.lib ws2_32.lib mswsock.lib $(user_lib)"
+	/>
+	<UserMacro
+		Name="rtm_cmake_lib_x64"
+		Value="RTC$(rtm_cmake_dllver_x64).lib coil$(coil_cmake_dllver_x64).lib $(omni_lib) advapi32.lib ws2_32.lib mswsock.lib $(user_lib)"
 	/>
 	<UserMacro
 		Name="rtm_idlc"
@@ -127,19 +144,18 @@
 	<!-- coil macros -->
 	<UserMacro
 		Name="coil_lib"
-		Value="coil$(coil_cmake_dllver).lib"
+		Value="coil$(coil_dllver).lib"
 	/>
 	<UserMacro
 		Name="coil_lib_x64"
-		Value="coil$(coil_cmake_dllver_x64).lib"
+		Value="coil$(coil_dllver_x64).lib"
 	/>
 	<UserMacro
 		Name="coil_libd"
-		Value="coil$(coil_cmake_dllver)d.lib"
+		Value="coil$(coil_dllver)d.lib"
 	/>
 	<UserMacro
 		Name="coil_libd_x64"
-		Value="coil$(coil_cmake_dllver_x64)d.lib"
+		Value="coil$(coil_dllver_x64)d.lib"
 	/>
-
 </VisualStudioPropertySheet>
