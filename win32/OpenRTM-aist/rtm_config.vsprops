@@ -31,11 +31,15 @@
 	/>
 	<UserMacro
 		Name="rtm_dllver"
-		Value="%RTM_DLLVER%_${RTM_VC_VER}"
+		Value="%RTM_DLLVER%"
 	/>
 	<UserMacro
-		Name="rtm_dllver_x64"
-		Value="%RTM_DLLVER%_${RTM_VC_VER}_x64"
+		Name="rtm_cmake_dllver"
+		Value="%RTM_DLL_SHORTVER%_${RTM_VC_VER}"
+	/>
+	<UserMacro
+		Name="rtm_cmake_dllver_x64"
+		Value="%RTM_DLL_SHORTVER%_${RTM_VC_VER}_x64"
 	/>
 	<UserMacro
 		Name="rtm_version"
@@ -47,11 +51,15 @@
 	/>
 	<UserMacro
 		Name="coil_dllver"
-		Value="%COIL_DLLVER%_${RTM_VC_VER}"
+		Value="%COIL_DLLVER%"
 	/>
 	<UserMacro
-		Name="coil_dllver_x64"
-		Value="%COIL_DLLVER%_${RTM_VC_VER}_x64"
+		Name="coil_cmake_dllver"
+		Value="%COIL_DLL_SHORTVER%_${RTM_VC_VER}"
+	/>
+	<UserMacro
+		Name="coil_cmake_dllver_x64"
+		Value="%COIL_DLL_SHORTVER%_${RTM_VC_VER}_x64"
 	/>
 	<!-- omniORB macros -->
 	<UserMacro
@@ -109,6 +117,23 @@
 		Value="RTC$(rtm_dllver_x64).lib $(coil_lib_x64) $(omni_lib) advapi32.lib ws2_32.lib mswsock.lib $(user_lib)"
 	/>
 	<UserMacro
+		Name="rtm_cmake_libd"
+		Value="RTC$(rtm_cmake_dllver)d.lib coil$(coil_cmake_dllver)d.lib $(omni_libd) advapi32.lib ws2_32.lib mswsock.lib $(user_libd)"
+	/>
+	<UserMacro
+		Name="rtm_cmake_libd_x64"
+
+		Value="RTC$(rtm_cmake_dllver_x64)d.lib coil$(coil_cmake_dllver_x64)d.lib $(omni_libd) advapi32.lib ws2_32.lib mswsock.lib $(user_libd)"
+	/>
+	<UserMacro
+		Name="rtm_cmake_lib"
+		Value="RTC$(rtm_cmake_dllver).lib coil$(coil_cmake_dllver).lib $(omni_lib) advapi32.lib ws2_32.lib mswsock.lib $(user_lib)"
+	/>
+	<UserMacro
+		Name="rtm_cmake_lib_x64"
+		Value="RTC$(rtm_cmake_dllver_x64).lib coil$(coil_cmake_dllver_x64).lib $(omni_lib) advapi32.lib ws2_32.lib mswsock.lib $(user_lib)"
+	/>
+	<UserMacro
 		Name="rtm_idlc"
 		Value="omniidl"
 	/>
@@ -133,5 +158,4 @@
 		Name="coil_libd_x64"
 		Value="coil$(coil_dllver_x64)d.lib"
 	/>
-
 </VisualStudioPropertySheet>
