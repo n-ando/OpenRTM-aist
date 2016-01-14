@@ -40,7 +40,7 @@ if not DEFINED ARCH       set ARCH=x86
 if not DEFINED VC_VERSION set VC_VERSION=12
 if not DEFINED PYTHON_DIR set PYTHON_DIR=c:\python27
 if not DEFINED RTM_VERSION set RTM_VERSION=__VERSION__
-if not DEFINED OMNI_VERSION  set OMNI_VERSION=4.2.0
+if not DEFINED OMNI_VERSION  set OMNI_VERSION=4.2.1
 if not DEFINED OMNITHREAD_VERSION set OMNITHREAD_VERSION=4.0
 
 @rem ------------------------------------------------------------
@@ -112,6 +112,12 @@ if %VC_VERSION% == 12 (
    set PLATFORMTOOL=/p:PlatformToolset=v120
    goto MSBUILDx86
    )
+if %VC_VERSION% == 14 (
+   call "C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\vcvarsall.bat" x86
+   set VCTOOLSET=12.0
+   set PLATFORMTOOL=/p:PlatformToolset=v140
+   goto MSBUILDx86
+   )
 
 @rem ------------------------------------------------------------
 @rem Build (VC2008 x86)
@@ -169,6 +175,13 @@ if /i %VC_VERSION% == 12 (
    set PLATFORMTOOL=/p:PlatformToolset=v120
    goto MSBUILDx64
    )
+if /i %VC_VERSION% == 14 (
+   call "C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\vcvarsall.bat" amd64
+   set VCTOOLSET=12.0
+   set PLATFORMTOOL=/p:PlatformToolset=v140
+   goto MSBUILDx64
+   )
+
 echo Visual Studio Dir: %VSINSTALLDIR%
 echo LIB: %LIB%
 
