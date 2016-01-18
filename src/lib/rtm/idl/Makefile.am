@@ -302,27 +302,27 @@ vc9proj: libRTCSkel.vcproj.yaml
 		--version $(RTM_VERSION) \
 		--out $(win32_builddir)/rtm/idl/libRTCSkel_vc9.vcproj \
 		--yaml libRTCSkel.vcproj.yaml \
-		--source $(SKEL_CPP) \
-		--header $(SKEL_H)
+		--source $(RTCSKEL_CPP) \
+		--header $(RTCSKEL_H)
 	qkc -O- -sm $(win32_builddir)/rtm/idl/libRTCSkel_vc9.vcproj
-	$(top_builddir)/build/vcxprojtool.py vcxproj \
-		--type LIB \
+	$(top_builddir)/build/vcprojtool.py vcproj \
+		--type DLL \
 		--vcversion "9.00" \
 		--version $(RTM_VERSION) \
-		--out $(win32_builddir)/rtm/idl/libManipulatorSkel_vc9.vcxproj \
+		--out $(win32_builddir)/rtm/idl/libManipulatorSkel_vc9.vcproj \
 		--yaml libManipulatorSkel.vcproj.yaml \
-		--source $(SKEL_CPP) \
-		--header $(SKEL_H)
-	qkc -O- -sm $(win32_builddir)/rtm/idl/libManipulatorSkel_vc9.vcxproj
-	$(top_builddir)/build/vcxprojtool.py vcxproj \
-		--type LIB \
+		--source $(MANIPULATORSKEL_CPP) \
+		--header $(MANIPULATORSKEL_H)
+	qkc -O- -sm $(win32_builddir)/rtm/idl/libManipulatorSkel_vc9.vcproj
+	$(top_builddir)/build/vcprojtool.py vcproj \
+		--type DLL \
 		--vcversion "9.00" \
 		--version $(RTM_VERSION) \
-		--out $(win32_builddir)/rtm/idl/libCameraSkel_vc9.vcxproj \
+		--out $(win32_builddir)/rtm/idl/libCameraSkel_vc9.vcproj \
 		--yaml libCameraSkel.vcproj.yaml \
-		--source $(SKEL_CPP) \
-		--header $(SKEL_H)
-	qkc -O- -sm $(win32_builddir)/rtm/idl/libCameraSkel_vc9.vcxproj
+		--source $(CAMERASKEL_CPP) \
+		--header $(CAMERASKEL_H)
+	qkc -O- -sm $(win32_builddir)/rtm/idl/libCameraSkel_vc9.vcproj
 
 vc10proj: libRTCSkel.vcproj.yaml
 	$(top_builddir)/build/vcxprojtool.py vcxproj \
@@ -331,26 +331,26 @@ vc10proj: libRTCSkel.vcproj.yaml
 		--version $(RTM_VERSION) \
 		--out $(win32_builddir)/rtm/idl/libRTCSkel_vc10.vcxproj \
 		--yaml libRTCSkel.vcproj.yaml \
-		--source $(SKEL_CPP) \
-		--header $(SKEL_H)
+		--source $(RTCSKEL_CPP) \
+		--header $(RTCSKEL_H)
 	qkc -O- -sm $(win32_builddir)/rtm/idl/libRTCSkel_vc10.vcxproj
 	$(top_builddir)/build/vcxprojtool.py vcxproj \
-		--type LIB \
+		--type DLL \
 		--vcversion "10.00" \
 		--version $(RTM_VERSION) \
 		--out $(win32_builddir)/rtm/idl/libManipulatorSkel_vc10.vcxproj \
 		--yaml libManipulatorSkel.vcproj.yaml \
-		--source $(SKEL_CPP) \
-		--header $(SKEL_H)
+		--source $(MANIPULATORSKEL_CPP) \
+		--header $(MANIPULATORSKEL_H)
 	qkc -O- -sm $(win32_builddir)/rtm/idl/libManipulatorSkel_vc10.vcxproj
 	$(top_builddir)/build/vcxprojtool.py vcxproj \
-		--type LIB \
+		--type DLL \
 		--vcversion "10.00" \
 		--version $(RTM_VERSION) \
 		--out $(win32_builddir)/rtm/idl/libCameraSkel_vc10.vcxproj \
 		--yaml libCameraSkel.vcproj.yaml \
-		--source $(SKEL_CPP) \
-		--header $(SKEL_H)
+		--source $(CAMERASKEL_CPP) \
+		--header $(CAMERASKEL_H)
 	qkc -O- -sm $(win32_builddir)/rtm/idl/libCameraSkel_vc10.vcxproj
 
 vc11proj: libRTCSkel.vcproj.yaml
@@ -360,26 +360,26 @@ vc11proj: libRTCSkel.vcproj.yaml
 		--version $(RTM_VERSION) \
 		--out $(win32_builddir)/rtm/idl/libRTCSkel_vc11.vcxproj \
 		--yaml libRTCSkel.vcproj.yaml \
-		--source $(SKEL_CPP) \
-		--header $(SKEL_H)
+		--source $(RTCSKEL_CPP) \
+		--header $(RTCSKEL_H)
 	qkc -O- -sm $(win32_builddir)/rtm/idl/libRTCSkel_vc11.vcxproj
 	$(top_builddir)/build/vcxprojtool.py vcxproj \
-		--type LIB \
+		--type DLL \
 		--vcversion "11.00" \
 		--version $(RTM_VERSION) \
 		--out $(win32_builddir)/rtm/idl/libManipulatorSkel_vc11.vcxproj \
 		--yaml libManipulatorSkel.vcproj.yaml \
-		--source $(SKEL_CPP) \
-		--header $(SKEL_H)
+		--source $(MANIPULATORSKEL_CPP) \
+		--header $(MANIPULATORSKEL_H)
 	qkc -O- -sm $(win32_builddir)/rtm/idl/libManipulatorSkel_vc11.vcxproj
 	$(top_builddir)/build/vcxprojtool.py vcxproj \
-		--type LIB \
+		--type DLL \
 		--vcversion "11.00" \
 		--version $(RTM_VERSION) \
 		--out $(win32_builddir)/rtm/idl/libCameraSkel_vc11.vcxproj \
 		--yaml libCameraSkel.vcproj.yaml \
-		--source $(SKEL_CPP) \
-		--header $(SKEL_H)
+		--source $(CAMERASKEL_CPP) \
+		--header $(CAMERASKEL_H)
 	qkc -O- -sm $(win32_builddir)/rtm/idl/libCameraSkel_vc11.vcxproj
 
 vc12proj: libRTCSkel.vcproj.yaml
@@ -389,26 +389,26 @@ vc12proj: libRTCSkel.vcproj.yaml
 		--version $(RTM_VERSION) \
 		--out $(win32_builddir)/rtm/idl/libRTCSkel_vc12.vcxproj \
 		--yaml libRTCSkel.vcproj.yaml \
-		--source $(SKEL_CPP) \
-		--header $(SKEL_H)
+		--source $(RTCSKEL_CPP) \
+		--header $(RTCSKEL_H)
 	qkc -O- -sm $(win32_builddir)/rtm/idl/libRTCSkel_vc12.vcxproj
 	$(top_builddir)/build/vcxprojtool.py vcxproj \
-		--type LIB \
+		--type DLL \
 		--vcversion "12.00" \
 		--version $(RTM_VERSION) \
 		--out $(win32_builddir)/rtm/idl/libManipulatorSkel_vc12.vcxproj \
 		--yaml libManipulatorSkel.vcproj.yaml \
-		--source $(SKEL_CPP) \
-		--header $(SKEL_H)
+		--source $(MANIPULATORSKEL_CPP) \
+		--header $(MANIPULATORSKEL_H)
 	qkc -O- -sm $(win32_builddir)/rtm/idl/libManipulatorSkel_vc12.vcxproj
 	$(top_builddir)/build/vcxprojtool.py vcxproj \
-		--type LIB \
+		--type DLL \
 		--vcversion "12.00" \
 		--version $(RTM_VERSION) \
 		--out $(win32_builddir)/rtm/idl/libCameraSkel_vc12.vcxproj \
 		--yaml libCameraSkel.vcproj.yaml \
-		--source $(SKEL_CPP) \
-		--header $(SKEL_H)
+		--source $(CAMERASKEL_CPP) \
+		--header $(CAMERASKEL_H)
 	qkc -O- -sm $(win32_builddir)/rtm/idl/libCameraSkel_vc12.vcxproj
 vc14proj: libRTCSkel.vcproj.yaml
 	$(top_builddir)/build/vcxprojtool.py vcxproj \
@@ -417,26 +417,26 @@ vc14proj: libRTCSkel.vcproj.yaml
 		--version $(RTM_VERSION) \
 		--out $(win32_builddir)/rtm/idl/libRTCSkel_vc14.vcxproj \
 		--yaml libRTCSkel.vcproj.yaml \
-		--source $(SKEL_CPP) \
-		--header $(SKEL_H)
+		--source $(RTCSKEL_CPP) \
+		--header $(RTCSKEL_H)
 	qkc -O- -sm $(win32_builddir)/rtm/idl/libRTCSkel_vc14.vcxproj
 	$(top_builddir)/build/vcxprojtool.py vcxproj \
-		--type LIB \
+		--type DLL \
 		--vcversion "14.00" \
 		--version $(RTM_VERSION) \
 		--out $(win32_builddir)/rtm/idl/libManipulatorSkel_vc14.vcxproj \
 		--yaml libManipulatorSkel.vcproj.yaml \
-		--source $(SKEL_CPP) \
-		--header $(SKEL_H)
+		--source $(MANIPULATORSKEL_CPP) \
+		--header $(MANIPULATORSKEL_H)
 	qkc -O- -sm $(win32_builddir)/rtm/idl/libManipulatorSkel_vc14.vcxproj
 	$(top_builddir)/build/vcxprojtool.py vcxproj \
-		--type LIB \
+		--type DLL \
 		--vcversion "14.00" \
 		--version $(RTM_VERSION) \
 		--out $(win32_builddir)/rtm/idl/libCameraSkel_vc14.vcxproj \
 		--yaml libCameraSkel.vcproj.yaml \
-		--source $(SKEL_CPP) \
-		--header $(SKEL_H)
+		--source $(CAMERASKEL_CPP) \
+		--header $(CAMERASKEL_H)
 	qkc -O- -sm $(win32_builddir)/rtm/idl/libCameraSkel_vc14.vcxproj
 
 

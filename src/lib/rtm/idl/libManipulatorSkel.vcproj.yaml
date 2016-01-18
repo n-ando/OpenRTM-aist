@@ -19,6 +19,16 @@ Configurations:
     ConfigurationType: "2"
     InheritedPropertySheets: "$(SolutionDir)rtm_config.vsprops;$(SolutionDir)rtm_distbuild.vsprops"
     CharacterSet: "0"
+    VCPreBuildEventTool:
+      - Key: CommandLine
+        Value: |
+          set PATH=$(rtm_path);%PYTHON_ROOT%\\;%PATH%
+          makewrapper.py ManipulatorCommonInterface_DataTypes.idl
+          makewrapper.py ManipulatorCommonInterface_Common.idl
+          makewrapper.py ManipulatorCommonInterface_Middle.idl
+          omniidl -bcxx -Wba -nf ManipulatorCommonInterface_DataTypes.idl
+          omniidl -bcxx -Wba -nf ManipulatorCommonInterface_Common.idl
+          omniidl -bcxx -Wba -nf ManipulatorCommonInterface_Middle.idl
     VCCLCompilerTool:
       - Key: Optimization
         Value: "0"
@@ -46,7 +56,7 @@ Configurations:
           move ManipulatorSkel$(rtm_dllver)d.def ..\
     VCLinkerTool:
       - Key: AdditionalDependencies
-        Value: "$(rtm_depend_libd)"
+        Value: "libRTCSkeld.lib $(rtm_depend_libd)"
       - Key: OutputFile
         Value: "$(OutDir)\\ManipulatorSkel$(rtm_dllver)d.dll"
       - Key: Version
@@ -72,6 +82,16 @@ Configurations:
       - "$(SolutionDir)rtm_config.props"
       - "$(SolutionDir)rtm_distbuild.props"
     VC10_LinkIncrementalCondition: "true"
+    VC10_VCPreBuildEventTool: 
+      - Key: Command 
+        Value: | 
+          set PATH=$(rtm_path);%PYTHON_ROOT%\\;%PATH%
+          makewrapper.py ManipulatorCommonInterface_DataTypes.idl
+          makewrapper.py ManipulatorCommonInterface_Common.idl
+          makewrapper.py ManipulatorCommonInterface_Middle.idl
+          omniidl -bcxx -Wba -nf ManipulatorCommonInterface_DataTypes.idl
+          omniidl -bcxx -Wba -nf ManipulatorCommonInterface_Common.idl
+          omniidl -bcxx -Wba -nf ManipulatorCommonInterface_Middle.idl
     VC10_VCCLCompilerTool:
       - Key: Optimization
         Value: "Disabled"
@@ -99,7 +119,7 @@ Configurations:
           move ManipulatorSkel$(rtm_dllver)d.def ..\
     VC10_VCLinkerTool:
       - Key: AdditionalDependencies
-        Value: "%(AdditionalDependencies)"
+        Value: "libRTCSkeld.lib;$(rtm_depend_libd);%(AdditionalDependencies)"
       - Key: OutputFile
         Value: "$(OutDir)\\ManipulatorSkel$(rtm_dllver)d.dll"
       - Key: Version
@@ -125,6 +145,16 @@ Configurations:
     ConfigurationType: "2"
     InheritedPropertySheets: "$(SolutionDir)rtm_config.vsprops;$(SolutionDir)rtm_distbuild.vsprops"
     CharacterSet: "0"
+    VCPreBuildEventTool:
+      - Key: CommandLine
+        Value: |
+          set PATH=$(rtm_path);%PYTHON_ROOT%\\;%PATH%
+          makewrapper.py ManipulatorCommonInterface_DataTypes.idl
+          makewrapper.py ManipulatorCommonInterface_Common.idl
+          makewrapper.py ManipulatorCommonInterface_Middle.idl
+          omniidl -bcxx -Wba -nf ManipulatorCommonInterface_DataTypes.idl
+          omniidl -bcxx -Wba -nf ManipulatorCommonInterface_Common.idl
+          omniidl -bcxx -Wba -nf ManipulatorCommonInterface_Middle.idl
     VCCLCompilerTool:
       - Key: Optimization
         Value: "0"
@@ -152,7 +182,7 @@ Configurations:
           move ManipulatorSkel$(rtm_dllver)d.def ..\
     VCLinkerTool:
       - Key: AdditionalDependencies
-        Value: "$(rtm_depend_libd)"
+        Value: "libRTCSkeld.lib $(rtm_depend_libd)"
       - Key: OutputFile
         Value: "$(OutDir)\\ManipulatorSkel$(rtm_dllver)d.dll"
       - Key: Version
@@ -178,6 +208,16 @@ Configurations:
       - "$(SolutionDir)rtm_config.props"
       - "$(SolutionDir)rtm_distbuild.props"
     VC10_LinkIncrementalCondition: "true"
+    VC10_VCPreBuildEventTool: 
+      - Key: Command 
+        Value: | 
+          set PATH=$(rtm_path);%PYTHON_ROOT%\\;%PATH%
+          makewrapper.py ManipulatorCommonInterface_DataTypes.idl
+          makewrapper.py ManipulatorCommonInterface_Common.idl
+          makewrapper.py ManipulatorCommonInterface_Middle.idl
+          omniidl -bcxx -Wba -nf ManipulatorCommonInterface_DataTypes.idl
+          omniidl -bcxx -Wba -nf ManipulatorCommonInterface_Common.idl
+          omniidl -bcxx -Wba -nf ManipulatorCommonInterface_Middle.idl
     VC10_VCCLCompilerTool:
       - Key: Optimization
         Value: "Disabled"
@@ -205,7 +245,7 @@ Configurations:
           move ManipulatorSkel$(rtm_dllver)d.def ..\
     VC10_VCLinkerTool:
       - Key: AdditionalDependencies
-        Value: "%(AdditionalDependencies)"
+        Value: "libRTCSkeld.lib;$(rtm_depend_libd);%(AdditionalDependencies)"
       - Key: OutputFile
         Value: "$(OutDir)\\ManipulatorSkel$(rtm_dllver)d.dll"
       - Key: Version
@@ -235,6 +275,16 @@ Configurations:
     InheritedPropertySheets: "$(SolutionDir)rtm_config.vsprops;$(SolutionDir)rtm_distbuild.vsprops"
     CharacterSet: "0"
     WholeProgramOptimization: "0"
+    VCPreBuildEventTool:
+      - Key: CommandLine
+        Value: |
+          set PATH=$(rtm_path);%PYTHON_ROOT%\\;%PATH%
+          makewrapper.py ManipulatorCommonInterface_DataTypes.idl
+          makewrapper.py ManipulatorCommonInterface_Common.idl
+          makewrapper.py ManipulatorCommonInterface_Middle.idl
+          omniidl -bcxx -Wba -nf ManipulatorCommonInterface_DataTypes.idl
+          omniidl -bcxx -Wba -nf ManipulatorCommonInterface_Common.idl
+          omniidl -bcxx -Wba -nf ManipulatorCommonInterface_Middle.idl
     VCCLCompilerTool:
       - Key: PreprocessorDefinitions
         Value: "LIBRARY_EXPORTS;WIN32;NDEBUG;_WINDOWS;_USRDLL;__WIN32__;__NT__;__OSVERSION__=4;__x86__;_WIN32_WINNT=0x0400;_CRT_SECURE_NO_DEPRECATE"
@@ -256,7 +306,7 @@ Configurations:
           move ManipulatorSkel$(rtm_dllver).def ..\\
     VCLinkerTool:
       - Key: AdditionalDependencies
-        Value: "$(rtm_depend_lib)"
+        Value: "libRTCSkel.lib $(rtm_depend_lib)"
       - Key: OutputFile
         Value: "$(OutDir)\\ManipulatorSkel$(rtm_dllver).dll"
       - Key: LinkIncremental
@@ -284,6 +334,16 @@ Configurations:
       - "$(SolutionDir)rtm_config.props"
       - "$(SolutionDir)rtm_distbuild.props"
     VC10_LinkIncrementalCondition: "false"
+    VC10_VCPreBuildEventTool: 
+      - Key: Command 
+        Value: | 
+          set PATH=$(rtm_path);%PYTHON_ROOT%\\;%PATH%
+          makewrapper.py ManipulatorCommonInterface_DataTypes.idl
+          makewrapper.py ManipulatorCommonInterface_Common.idl
+          makewrapper.py ManipulatorCommonInterface_Middle.idl
+          omniidl -bcxx -Wba -nf ManipulatorCommonInterface_DataTypes.idl
+          omniidl -bcxx -Wba -nf ManipulatorCommonInterface_Common.idl
+          omniidl -bcxx -Wba -nf ManipulatorCommonInterface_Middle.idl
     VC10_VCCLCompilerTool:
       - Key: PreprocessorDefinitions
         Value: "LIBRARY_EXPORTS;WIN32;NDEBUG;_WINDOWS;_USRDLL;__WIN32__;__NT__;__OSVERSION__=4;__x86__;_WIN32_WINNT=0x0400;_CRT_SECURE_NO_DEPRECATE;%(PreprocessorDefinitions)"
@@ -305,7 +365,7 @@ Configurations:
           move ManipulatorSkel$(rtm_dllver).def ..\\
     VC10_VCLinkerTool:
       - Key: AdditionalDependencies
-        Value: "%(AdditionalDependencies)"
+        Value: "libRTCSkel.lib;$(rtm_depend_lib);%(AdditionalDependencies)"
       - Key: OutputFile
         Value: "$(OutDir)\\ManipulatorSkel$(rtm_dllver).dll"
       - Key: LinkIncremental
@@ -334,6 +394,16 @@ Configurations:
     InheritedPropertySheets: "$(SolutionDir)rtm_config.vsprops;$(SolutionDir)rtm_distbuild.vsprops"
     CharacterSet: "0"
     WholeProgramOptimization: "0"
+    VCPreBuildEventTool:
+      - Key: CommandLine
+        Value: |
+          set PATH=$(rtm_path);%PYTHON_ROOT%\\;%PATH%
+          makewrapper.py ManipulatorCommonInterface_DataTypes.idl
+          makewrapper.py ManipulatorCommonInterface_Common.idl
+          makewrapper.py ManipulatorCommonInterface_Middle.idl
+          omniidl -bcxx -Wba -nf ManipulatorCommonInterface_DataTypes.idl
+          omniidl -bcxx -Wba -nf ManipulatorCommonInterface_Common.idl
+          omniidl -bcxx -Wba -nf ManipulatorCommonInterface_Middle.idl
     VCCLCompilerTool:
       - Key: PreprocessorDefinitions
         Value: "LIBRARY_EXPORTS;WIN32;NDEBUG;_WINDOWS;_USRDLL;__WIN32__;__NT__;__OSVERSION__=4;__x86__;_WIN32_WINNT=0x0400;_CRT_SECURE_NO_DEPRECATE"
@@ -355,7 +425,7 @@ Configurations:
           move ManipulatorSkel$(rtm_dllver).def ..\\
     VCLinkerTool:
       - Key: AdditionalDependencies
-        Value: "$(rtm_depend_lib)"
+        Value: "libRTCSkel.lib $(rtm_depend_lib)"
       - Key: OutputFile
         Value: "$(OutDir)\\ManipulatorSkel$(rtm_dllver).dll"
       - Key: LinkIncremental
@@ -383,6 +453,16 @@ Configurations:
       - "$(SolutionDir)rtm_config.props"
       - "$(SolutionDir)rtm_distbuild.props"
     VC10_LinkIncrementalCondition: "false"
+    VC10_VCPreBuildEventTool: 
+      - Key: Command 
+        Value: | 
+          set PATH=$(rtm_path);%PYTHON_ROOT%\\;%PATH%
+          makewrapper.py ManipulatorCommonInterface_DataTypes.idl
+          makewrapper.py ManipulatorCommonInterface_Common.idl
+          makewrapper.py ManipulatorCommonInterface_Middle.idl
+          omniidl -bcxx -Wba -nf ManipulatorCommonInterface_DataTypes.idl
+          omniidl -bcxx -Wba -nf ManipulatorCommonInterface_Common.idl
+          omniidl -bcxx -Wba -nf ManipulatorCommonInterface_Middle.idl
     VC10_VCCLCompilerTool:
       - Key: PreprocessorDefinitions
         Value: "LIBRARY_EXPORTS;WIN32;NDEBUG;_WINDOWS;_USRDLL;__WIN32__;__NT__;__OSVERSION__=4;__x86__;_WIN32_WINNT=0x0400;_CRT_SECURE_NO_DEPRECATE;%(PreprocessorDefinitions)"
@@ -404,7 +484,7 @@ Configurations:
           move ManipulatorSkel$(rtm_dllver).def ..\\
     VC10_VCLinkerTool:
       - Key: AdditionalDependencies
-        Value: "%(AdditionalDependencies)"
+        Value: "libRTCSkel.lib;$(rtm_depend_lib);%(AdditionalDependencies)"
       - Key: OutputFile
         Value: "$(OutDir)\\ManipulatorSkel$(rtm_dllver).dll"
       - Key: LinkIncremental
