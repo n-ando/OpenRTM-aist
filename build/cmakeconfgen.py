@@ -71,68 +71,12 @@ set(OPENRTM_VERSION_MINOR [openrtm_version_minor])
 set(OPENRTM_VERSION_PATCH [openrtm_version_patch])
 set(OPENRTM_SHORT_VERSION [openrtm_short_version])
 
-# CMAKE_GENERATOR check
-if (${CMAKE_GENERATOR} STREQUAL "Visual Studio 9 2008")
-  set(RTM_VC_VER "vc9")
-  set(CMAKE_BITNESS "32")
-endif()
-if (${CMAKE_GENERATOR} STREQUAL "Visual Studio 10 2010")
-  set(RTM_VC_VER "vc10")
-  set(CMAKE_BITNESS "32")
-endif()
-if (${CMAKE_GENERATOR} STREQUAL "Visual Studio 10 2010 Win64")
-  set(RTM_VC_VER "vc10")
-  set(CMAKE_BITNESS "64")
-endif()
-if (${CMAKE_GENERATOR} STREQUAL "Visual Studio 11 2012")
-  set(RTM_VC_VER "vc11")
-  set(CMAKE_BITNESS "32")
-endif()
-if (${CMAKE_GENERATOR} STREQUAL "Visual Studio 11 2012 Win64")
-  set(RTM_VC_VER "vc11")
-  set(CMAKE_BITNESS "64")
-endif()
-if (${CMAKE_GENERATOR} STREQUAL "Visual Studio 12 2013")
-  set(RTM_VC_VER "vc12")
-  set(CMAKE_BITNESS "32")
-endif()
-if (${CMAKE_GENERATOR} STREQUAL "Visual Studio 12 2013 Win64")
-  set(RTM_VC_VER "vc12")
-  set(CMAKE_BITNESS "64")
-endif()
-if (${CMAKE_GENERATOR} STREQUAL "Visual Studio 14 2015")
-  set(RTM_VC_VER "vc14")
-  set(CMAKE_BITNESS "32")
-endif()
-if (${CMAKE_GENERATOR} STREQUAL "Visual Studio 14 2015 Win64")
-  set(RTM_VC_VER "vc14")
-  set(CMAKE_BITNESS "64")
-endif()
-
-MESSAGE(STATUS "VC version is : ${CMAKE_GENERATOR} (${CMAKE_BITNESS}bit)")
-
-if ("${CMAKE_BITNESS}" STREQUAL "32")
-  set(OPENRTM_DIR "$ENV{ProgramFiles}/OpenRTM-aist/${OPENRTM_VERSION}_${RTM_VC_VER}")
-else()
-  set(OPENRTM_DIR "$ENV{ProgramW6432}/OpenRTM-aist/${OPENRTM_VERSION}_${RTM_VC_VER}")
-endif()
-
+string(REPLACE "\\\\" "/" OMNIORB_DIR "$ENV{OMNI_ROOT}")
+string(REPLACE "\\\\" "/" OPENRTM_DIR "$ENV{RTM_ROOT}")
+string(REGEX REPLACE "/$" "" OMNIORB_DIR "${OMNIORB_DIR}")
 string(REGEX REPLACE "/$" "" OPENRTM_DIR "${OPENRTM_DIR}")
 
-string(REPLACE "\\\\" "/" OMNIORB_DIR "$ENV{OMNI_ROOT}")
-string(REGEX REPLACE "/$" "" OMNIORB_DIR "${OMNIORB_DIR}")
-
 # omniORB options
-file(GLOB _vers RELATIVE "${OMNIORB_DIR}" "${OMNIORB_DIR}/THIS_IS_OMNIORB*")
-if("${_vers}" STREQUAL "")
-  message(FATAL_ERROR "omniORB version file not found.")
-endif()
-string(REGEX REPLACE "[[]^0-9]+([[]0-9]+)_([[]0-9]+)_([[]0-9]+)"
-  "\\\\1.\\\\2.\\\\3" OMNIORB_VERSION "${_vers}")
-  
-set(OMNIORB_DIR ${OPENRTM_DIR}/omniORB/${OMNIORB_VERSION}_${RTM_VC_VER})
-set(OMNIORB_SHORT_VERSION [omni_dllver])
-
 set(OMNIORB_CFLAGS [omniorb_cflags])
 set(OMNIORB_INCLUDE_DIRS [omniorb_include_dirs])
 set(OMNIORB_LDFLAGS [omniorb_ldflags])
@@ -143,12 +87,19 @@ set(OMNIORB_LIBRARIES [omniorb_libraries])
 set(OPENRTM_CFLAGS [openrtm_cflags])
 set(OPENRTM_INCLUDE_DIRS [openrtm_include_dirs])
 set(OPENRTM_LDFLAGS [openrtm_ldflags])
+
+get_filename_component(OpenRTM_CONFIG2_PATH "${CMAKE_CURRENT_LIST_FILE}" PATH CACHE)
+set(OPENRTM_BIN_PATH "${OPENRTM_DIR}/bin")
+file(GLOB rtm_libs "${OpenRTM_CONFIG2_PATH}/RTC*.lib")
+foreach(rtm_lib ${rtm_libs})
+  if(EXISTS "${rtm_lib}")
+    set(OPENRTM_BIN_PATH ${OpenRTM_CONFIG2_PATH})
+  endif()
+endforeach()
+message(STATUS "OPENRTM_BIN_PATH=${OPENRTM_BIN_PATH}")
+
 set(OPENRTM_LIBRARY_DIRS [openrtm_lib_dirs])
-if ("${CMAKE_BITNESS}" STREQUAL "32")
-  set(OPENRTM_LIBRARIES [openrtm_libs])
-else()
-  set(OPENRTM_LIBRARIES [openrtm_libs_x64])
-endif()
+set(OPENRTM_LIBRARIES [openrtm_libs])
 
 # OpenRTM-aist specific directory
 set(COIL_INCLUDE_DIR [coil_include_dir])
@@ -159,9 +110,6 @@ set(OPENRTM_IDL_WRAPPER [openrtm_idl_wrapper])
 set(OPENRTM_IDL_WRAPPER_FLAGS [openrtm_idl_wrapper_flags])
 set(OPENRTM_IDLC [openrtm_idlc])
 set(OPENRTM_IDLFLAGS [openrtm_idlflags])
-
-# OpenCV setting
-set(ENV{OpenCV_DIR} "${OPENRTM_DIR}")
 
 message(STATUS "OpenRTM-aist configuration done")
 
@@ -188,8 +136,6 @@ message(STATUS "  OPENRTM_IDLC=${OPENRTM_IDLC}")
 message(STATUS "  OPENRTM_IDLFLAGS=${OPENRTM_IDLFLAGS}")
 message(STATUS "  OPENRTM_IDL_WRAPPER=${OPENRTM_IDL_WRAPPER}")
 message(STATUS "  OPENRTM_IDL_WRAPPER_FLAGS=${OPENRTM_IDL_WRAPPER_FLAGS}")
-
-message(STATUS "  OpenCV_DIR=$ENV{OpenCV_DIR}")
 
 # end of OpenRTMConfig.cmake
 
@@ -274,11 +220,8 @@ if __name__ == '__main__':
     # libs
     omni_libs  = process_lib(dict["omni_lib"], "optimized")
     omni_libs += ";" + process_lib(dict["omni_libd"], "debug")
-    rtm_libs   = process_lib(dict["rtm_cmake_lib"], "optimized")
-    rtm_libs  += ";" + process_lib(dict["rtm_cmake_libd"], "debug")
-    rtm_libs_x64   = process_lib(dict["rtm_cmake_lib_x64"], "optimized")
-    rtm_libs_x64  += ";" + process_lib(dict["rtm_cmake_libd_x64"], "debug")
-
+    rtm_libs   = process_lib(dict["rtm_lib"], "optimized")
+    rtm_libs  += ";" + process_lib(dict["rtm_libd"], "debug")
 
     dict["omniorb_cflags"] = omni_cflags
     dict["omniorb_include_dirs"] = dict["omni_includes"] 
@@ -289,9 +232,8 @@ if __name__ == '__main__':
     dict["openrtm_cflags"] = rtm_cflags
     dict["openrtm_include_dirs"] = str(dict["rtm_includes"])
     dict["openrtm_ldflags"] = ""
-    dict["openrtm_lib_dirs"] = str(dict["rtm_libdir"] + ";" + dict["omni_libdir"])
+    dict["openrtm_lib_dirs"] = str("${OPENRTM_BIN_PATH};" + dict["omni_libdir"])
     dict["openrtm_libs"] = str(rtm_libs)
-    dict["openrtm_libs_x64"] = str(rtm_libs_x64)
     dict["coil_include_dir"] = str(dict["rtm_libdir"])
     dict["openrtm_version"] = str(dict["rtm_version"])
     dict["openrtm_version_major"] = str(dict["rtm_version"].split(".")[0])
