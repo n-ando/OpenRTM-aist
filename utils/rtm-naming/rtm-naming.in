@@ -234,6 +234,7 @@ start_omninames()
     echo 'Starting omniORB omniNames: '$hostname':'$port
     rm -f ./omninames-$hostname.log
     rm -f ./omninames-$hostname.bak
+    rm -f ./omninames-$hostname.dat
     $cosnames -start $port -logdir $currdir &
     ret=$!
     sleep 1
