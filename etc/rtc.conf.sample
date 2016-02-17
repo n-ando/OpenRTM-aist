@@ -280,6 +280,32 @@ manager.modules.abs_path_allowed: YES
 manager.components.precreate: 
 
 #
+# Advance connection creation
+#
+# This option specifies connections to be created in advance before
+# starting the manager's event-loop. The target components and ports
+# must be created previously by manager.components.precreate optinos.
+#
+# Example:
+# manager.components.preconnect: ConsoleIn.out:ConsoleOut.in(dataflow_type=push,interface_type=corba_cdr)
+# if no parenthis parts are included, dataflow_type=push,interface_type=corba_cdr
+#
+manager.components.preconnect: 
+
+#
+# Advance component activation
+#
+# This option specifies components' names (module name) to be
+# activated in advance before starting the manager's event-loop. The
+# target components should be created previously by
+# manager.components.precreate optinos.
+#
+# Example:
+# manager.components.preactivate: ConsoleIn0, ConsoleOut0
+#
+manager.components.preactivate:
+
+#
 # Loading local service modules
 #
 # Local service mechanisms are provided for services provided among
