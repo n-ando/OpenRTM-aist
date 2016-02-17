@@ -285,10 +285,14 @@ manager.components.precreate:
 # This option specifies connections to be created in advance before
 # starting the manager's event-loop. The target components and ports
 # must be created previously by manager.components.precreate optinos.
+# A port is specified as XXX format, and a connection is specified by
+# a delimiter XX between ports such as ConsoleIn.out:ConsoleOut.in. A
+# connector profile is specified in the following parentheses "()" by
+# "key=falue" format with "&" delimiter.
 #
 # Example:
-# manager.components.preconnect: ConsoleIn.out:ConsoleOut.in(dataflow_type=push,interface_type=corba_cdr)
-# if no parenthis parts are included, dataflow_type=push,interface_type=corba_cdr
+# manager.components.preconnect: ConsoleIn.out:ConsoleOut.in(dataflow_type=push&interface_type=corba_cdr), SeqIn.octet:SeqOut.octet(dataflow_type=push&&interface_type=direct)
+# if no parenthis parts are included, dataflow_type=push, interface_type=corba_cdr
 #
 manager.components.preconnect: 
 
