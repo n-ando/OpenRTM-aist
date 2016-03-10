@@ -27,6 +27,12 @@
 #include <rtm/RTC.h>
 #include <rtm/PeriodicExecutionContext.h>
 #include <rtm/RTObject.h>
+#include <rtm/SdoServiceAdmin.h> ///
+#include <rtm/SdoServiceConsumerBase.h> ///
+#include <rtm/SdoServiceProviderBase.h> ///
+#include "RTObjectTestsSkel.h" ///
+#include <rtm/CorbaConsumer.h> ///
+#include <rtm/ExecutionContextBase.h> ///
 
 /*!
  * @class RTObjectTests class
@@ -233,7 +239,241 @@ namespace RTObject
       public virtual PortableServer::RefCountServantBase
   {
   };
-	
+
+  /////-----
+  class MyIncrementConsumer
+    : public RTC::SdoServiceConsumerBase
+  {
+  protected:
+    RTC::RTObject_impl* m_rtobj;
+    SDOPackage::ServiceProfile m_profile;
+    RTC::CorbaConsumer<TEST::IncrementCount> m_myconsumer;
+
+  public:
+    MyIncrementConsumer():m_rtobj(NULL)
+    {
+    }
+    ~MyIncrementConsumer()
+    {
+    }
+    bool init(RTC::RTObject_impl& rtobj, const SDOPackage::ServiceProfile& profile)
+    {
+      std::cerr << "\nMyIncrementConsumer():        init()" << std::endl;
+      if (!m_myconsumer.setObject(profile.service)){
+	std::cerr << "\nMyIncrementConsumer():        init(): setObject() return false" << std::endl;
+        return false;
+      }
+      std::cerr << "MyIncrementConsumer():        setObject() return true" << std::endl;
+      m_rtobj = &rtobj;
+      m_profile = profile;
+      coil::Properties prop;
+      NVUtil::copyToProperties(prop, profile.properties);
+      return true;
+    }
+
+    bool reinit(const SDOPackage::ServiceProfile& profile)
+    {
+      std::cerr << "\nMyIncrementConsumer():        reinit()" << std::endl;
+      if (!m_myconsumer._ptr()->_is_equivalent(profile.service))
+	{
+	  RTC::CorbaConsumer<TEST::IncrementCount> tmp;
+	  if (!tmp.setObject(profile.service))
+	    {
+	      return false;
+	    }
+	  m_myconsumer.releaseObject();
+	  m_myconsumer.setObject(profile.service);
+	}
+      m_profile= profile;
+      coil::Properties prop;
+      NVUtil::copyToProperties(prop, profile.properties);
+      return true;
+    }
+    const SDOPackage::ServiceProfile& getProfile() const
+    {
+      std::cerr << "\nMyIncrementConsumer():        getProfile()" << std::endl;
+      return m_profile;
+    }  
+    void finalize()
+    {
+    }
+    void consumerIncrementCount()
+    {
+      m_myconsumer->increment_count();
+    }
+  };
+
+  RTC::SdoServiceConsumerBase* testConsumer = NULL;
+  template <class AbstractClass, class ConcreteClass>
+  AbstractClass* Creator()
+  {
+    ConcreteClass* theInstance = new ConcreteClass();
+    testConsumer = (RTC::SdoServiceConsumerBase*) theInstance;
+    return theInstance;
+  };
+
+  class MyIncrementProvider
+    : public RTC::SdoServiceProviderBase,
+      public POA_TEST::IncrementCount
+  {
+  protected:
+    RTC::RTObject_impl* m_rtobj;
+    SDOPackage::ServiceProfile m_profile;
+    RTC::CorbaConsumer<TEST::IncrementCount> m_myprovider;
+    int m_invokedCount;
+
+  public:
+    MyIncrementProvider():m_rtobj(NULL), m_invokedCount(0)
+    {
+    }
+    ~MyIncrementProvider()
+    {
+    }
+    bool init(RTC::RTObject_impl& rtobj, const SDOPackage::ServiceProfile& profile)
+    {
+      std::cerr << "\nMyIncrementProvider():        init()" << std::endl;
+      if (m_myprovider.setObject(profile.service) == false){
+	std::cerr << "\nMyIncrementProvider():        init() return false" << std::endl;
+        return false;
+      }
+      m_rtobj = &rtobj;
+      m_profile = profile;
+      coil::Properties prop;
+      NVUtil::copyToProperties(prop, profile.properties);
+      return true;
+    }
+    bool reinit(const SDOPackage::ServiceProfile& profile)
+    {
+      std::cerr << "\nMyIncrementProvider():        reinit()" << std::endl;
+      m_profile= profile;
+      coil::Properties prop;
+      NVUtil::copyToProperties(prop, profile.properties);
+      return true;
+    }
+    const SDOPackage::ServiceProfile& getProfile() const
+    {
+      std::cerr << "\nMyIncrementProvider():        getProfile()" << std::endl;
+      return m_profile;
+    }  
+    void finalize()
+    {
+    }
+
+    void increment_count()
+    {
+      ++m_invokedCount;
+    }
+
+    int get_invoked_count()
+    {
+      return m_invokedCount;
+    }
+  };
+
+  // class MySDOServiceConsumer
+  //   : public RTC::SdoServiceConsumerBase
+  // {
+  // protected:
+  //   RTC::RTObject_impl* m_rtobj;
+  //   SDOPackage::ServiceProfile m_profile;
+  //   ///NG// RTC::CorbaConsumer<RTC::ExecutionContext> m_myconsumer;
+  //   RTC::CorbaConsumer<SDOPackage::SDOService> m_myconsumer;
+
+  // public:
+  //   MySDOServiceConsumer():m_rtobj(NULL)
+  //   {
+  //   }
+  //   ~MySDOServiceConsumer()
+  //   {
+  //   }
+  //   bool init(RTC::RTObject_impl& rtobj, const SDOPackage::ServiceProfile& profile)
+  //   {
+  //     std::cerr << "\nMySDOServiceConsumer():        init()" << std::endl;
+  //     if (!m_myconsumer.setObject(profile.service)){
+  // 	std::cerr << "\nMySDOServiceConsumer():        init(): setObject() return false" << std::endl;
+  //       return false;
+  //     }
+  //     /*
+  //     bool bRetn = m_myconsumer.setObject(profile.service);
+  //     if (bRetn == false ) {
+  // 	std::cerr << "MySDOServiceConsumer():        setObject() return false" << std::endl;
+  //       return false;
+  //     } else {
+  // 	std::cerr << "MySDOServiceConsumer():        setObject() return true" << std::endl;
+  //     }
+  //     */
+  //     std::cerr << "MySDOServiceConsumer():        setObject() return true" << std::endl;
+  //     m_rtobj = &rtobj;
+  //     m_profile = profile;
+  //     coil::Properties prop;
+  //     NVUtil::copyToProperties(prop, profile.properties);
+  //     return true;
+  //   }
+  //   bool reinit(const SDOPackage::ServiceProfile& profile)
+  //   {
+  //     std::cerr << "\nMySDOServiceConsumer():        reinit()" << std::endl;
+  //     m_profile= profile;
+  //     coil::Properties prop;
+  //     NVUtil::copyToProperties(prop, profile.properties);
+  //     return true;
+  //   }
+  //   const SDOPackage::ServiceProfile& getProfile() const
+  //   {
+  //     std::cerr << "\nMySDOServiceConsumer():        getProfile()" << std::endl;
+  //     return m_profile;
+  //   }  
+  //   void finalize()
+  //   {
+  //   }
+  // };
+
+  class MySDOServiceProvider
+    : public RTC::SdoServiceProviderBase
+  {
+  public:
+    MySDOServiceProvider():m_rtobj(NULL)
+    {
+    }
+    ~MySDOServiceProvider()
+    {
+    }
+    bool init(RTC::RTObject_impl& rtobj, const SDOPackage::ServiceProfile& profile)
+    {
+      std::cerr << "\nMySDOServiceProvider():        init()" << std::endl;
+      if (m_myprovider.setObject(profile.service) == false){
+	std::cerr << "\nMySDOServiceProvider():        init() return false" << std::endl;
+        return false;
+      }
+      m_rtobj = &rtobj;
+      m_profile = profile;
+      coil::Properties prop;
+      NVUtil::copyToProperties(prop, profile.properties);
+      return true;
+    }
+    bool reinit(const SDOPackage::ServiceProfile& profile)
+    {
+      std::cerr << "\nMySDOServiceProvider():        reinit()" << std::endl;
+      m_profile= profile;
+      coil::Properties prop;
+      NVUtil::copyToProperties(prop, profile.properties);
+      return true;
+    }
+    const SDOPackage::ServiceProfile& getProfile() const
+    {
+      std::cerr << "\nMySDOServiceProvider():        getProfile()" << std::endl;
+      return m_profile;
+    }  
+    void finalize()
+    {
+    }
+  protected:
+    RTC::RTObject_impl* m_rtobj;
+    SDOPackage::ServiceProfile m_profile;
+    ///NG// RTC::CorbaConsumer<RTC::ExecutionContext> m_myprovider;
+    RTC::CorbaConsumer<SDOPackage::SDOService> m_myprovider;
+  };
+  /////-----END
+
   struct PortFinder
   {
     PortFinder(const RTC::PortService_ptr& port) : m_port(port) {}
@@ -370,44 +610,52 @@ namespace RTObject
   {
     CPPUNIT_TEST_SUITE(RTObjectTests);
 
-    CPPUNIT_TEST(test_finalizeContexts);
-    CPPUNIT_TEST(test_bindContext);
-    CPPUNIT_TEST(test_add_removePort);
-    CPPUNIT_TEST(test_readAll);
-    CPPUNIT_TEST(test_writeAll);
-    CPPUNIT_TEST(test_initialize_invoking_on_initialize);
-    CPPUNIT_TEST(test_initialize_in_Alive);
-    CPPUNIT_TEST(test_finalize_invoking_on_finalize);
-    CPPUNIT_TEST(test_finalize_participating_in_execution_context);
-    CPPUNIT_TEST(test_finalize_in_Created);
+    CPPUNIT_TEST(test_finalizeContexts);//OK
+    CPPUNIT_TEST(test_bindContext);//OK
+    CPPUNIT_TEST(test_add_removePort);//OK
+    CPPUNIT_TEST(test_readAll);//OK
+    CPPUNIT_TEST(test_writeAll);//OK
+    CPPUNIT_TEST(test_initialize_invoking_on_initialize);//OK
+    CPPUNIT_TEST(test_initialize_in_Alive);//OK
+    CPPUNIT_TEST(test_finalize_invoking_on_finalize);//OK
+    CPPUNIT_TEST(test_finalize_participating_in_execution_context);//Modifed
+    CPPUNIT_TEST(test_finalize_in_Created);//OK
     //		CPPUNIT_TEST(test_is_alive);
-    CPPUNIT_TEST(test_exit);
-    CPPUNIT_TEST(test_exit_in_Created);
-    CPPUNIT_TEST(test_detach_executioncontext);
-    CPPUNIT_TEST(test_detach_executioncontext_with_illegal_id);
-    CPPUNIT_TEST(test_get_context);
-    CPPUNIT_TEST(test_get_contexts);
-    CPPUNIT_TEST(test_get_component_profile);
-    CPPUNIT_TEST(test_get_ports);
+    CPPUNIT_TEST(test_exit);//Modifed
+    CPPUNIT_TEST(test_exit_in_Created);//OK
+    CPPUNIT_TEST(test_detach_executioncontext);//OK
+    CPPUNIT_TEST(test_detach_executioncontext_with_illegal_id);//OK
+    CPPUNIT_TEST(test_get_context);//OK
+    CPPUNIT_TEST(test_get_contexts);//OK
+    CPPUNIT_TEST(test_get_component_profile);//OK
+    CPPUNIT_TEST(test_get_ports);//OK
 //    CPPUNIT_TEST(test_get_execution_context_services);
     //		CPPUNIT_TEST(test_get_owned_organizations);
-    CPPUNIT_TEST(test_get_sdo_id);
-    CPPUNIT_TEST(test_get_sdo_type);
+    CPPUNIT_TEST(test_get_sdo_id);//OK
+    CPPUNIT_TEST(test_get_sdo_type);//OK
     //		CPPUNIT_TEST(test_get_device_profile);
     //		CPPUNIT_TEST(test_get_service_profile);
-    CPPUNIT_TEST(test_get_service_profile_with_illegal_arguments);
-    CPPUNIT_TEST(test_get_sdo_service);
-    CPPUNIT_TEST(test_get_sdo_service_with_illegal_arguments);
-    CPPUNIT_TEST(test_get_configuration_and_set_device_profile_and_get_device_profile);
-    CPPUNIT_TEST(test_get_configuration_and_set_service_profile_and_get_service_profile);
-    CPPUNIT_TEST(test_get_configuration_and_set_service_profile_and_get_service_profiles);
-    CPPUNIT_TEST(test_get_configuration_and_set_service_profile_and_get_sdo_service);
-    CPPUNIT_TEST(test_get_configuration_and_remove_service_profile);
-    CPPUNIT_TEST(test_get_configuration_and_add_organization_and_get_organizations);
-    CPPUNIT_TEST(test_get_configuration_and_remove_organization);
+    ///CPPUNIT_TEST(test_get_service_profile_with_illegal_arguments);
+    ///CPPUNIT_TEST(test_get_sdo_service);
+    ///CPPUNIT_TEST(test_get_sdo_service_with_illegal_arguments);
+    ///CPPUNIT_TEST(test_get_configuration_and_set_device_profile_and_get_device_profile);
+    ///CPPUNIT_TEST(test_get_configuration_and_set_service_profile_and_get_service_profile);
+    ///CPPUNIT_TEST(test_get_configuration_and_set_service_profile_and_get_service_profiles);
+    ///CPPUNIT_TEST(test_get_configuration_and_set_service_profile_and_get_sdo_service);
+    ///CPPUNIT_TEST(test_get_configuration_and_remove_service_profile);
+    CPPUNIT_TEST(test_consumer_add_service_profile_remove_it);///OK
+    CPPUNIT_TEST(test_consumer_add_service_profile_remove_it_with_illegal_arguments);///OK
+    CPPUNIT_TEST(test_provider_get_service_profile);///OK
+    CPPUNIT_TEST(test_provider_get_service_profile_with_illegal_arguments);///OK
+    CPPUNIT_TEST(test_provider_get_sdo_service);///OK
+    CPPUNIT_TEST(test_provider_get_sdo_service_with_illegal_arguments);///OK
+    CPPUNIT_TEST(test_provider_get_service_profiles);///OK
+
+    CPPUNIT_TEST(test_get_configuration_and_add_organization_and_get_organizations);//OK
+    CPPUNIT_TEST(test_get_configuration_and_remove_organization);//OK
     //		CPPUNIT_TEST(test_get_monitoring);
-    CPPUNIT_TEST(test_get_status);
-    CPPUNIT_TEST(test_get_status_list);
+    CPPUNIT_TEST(test_get_status);//OK
+    CPPUNIT_TEST(test_get_status_list);//OK
 
     CPPUNIT_TEST_SUITE_END();
 	
@@ -457,6 +705,14 @@ namespace RTObject
      */
     void test_initialize_invoking_on_initialize()
     {
+      std::cout << "\ntest_initialize_invoking_on_initialize()" << std::endl;
+
+      RTC::ExecutionContextFactory::instance().addFactory("PeriodicExecutionContext", 
+							  ::coil::Creator< ::RTC::ExecutionContextBase,
+							  ::RTC_exp::PeriodicExecutionContext>,
+							  ::coil::Destructor< ::RTC::ExecutionContextBase,
+							  ::RTC_exp::PeriodicExecutionContext>); /////
+
       RTObjectMock* rto = new RTObjectMock(m_pORB, m_pPOA); // will be deleted automatically
 			
       // initialize()メソッド呼出により、on_initialize()コールバックが呼び出されるか？
@@ -467,7 +723,9 @@ namespace RTObject
       rto->setProperties(prop);
       CPPUNIT_ASSERT_EQUAL(RTC::RTC_OK, rto->initialize());
       CPPUNIT_ASSERT_EQUAL(1, rto->countLog("on_initialize"));
-      rto->exit();
+      RTC::ExecutionContextFactory::instance().removeFactory("PeriodicExecutionContext"); /////
+      ///rto->exit();//
+      CPPUNIT_ASSERT_EQUAL(RTC::RTC_OK, rto->exit());///OK
       delete rto;
     }
 		
@@ -478,6 +736,14 @@ namespace RTObject
      */
     void test_initialize_in_Alive()
     {
+      std::cout << "\ntest_initialize_in_Alive()" << std::endl;
+
+      RTC::ExecutionContextFactory::instance().addFactory("PeriodicExecutionContext", 
+							  ::coil::Creator< ::RTC::ExecutionContextBase,
+							  ::RTC_exp::PeriodicExecutionContext>,
+							  ::coil::Destructor< ::RTC::ExecutionContextBase,
+							  ::RTC_exp::PeriodicExecutionContext>); /////
+
       RTObjectMock* rto = new RTObjectMock(m_pORB, m_pPOA); // will be deleted automatically
 			
       // initialize()メソッド呼出しを行い、Alive状態に遷移させる
@@ -485,6 +751,7 @@ namespace RTObject
       prop.setProperty("exec_cxt.periodic.type","PeriodicExecutionContext");
       prop.setProperty("exec_cxt.periodic.rate","1000");
       rto->setProperties(prop);
+      std::cout << "\ntest_initialize_in_Alive() rto->initialize() 1" << std::endl;
       CPPUNIT_ASSERT_EQUAL(RTC::RTC_OK, rto->initialize());
 
       RTC::ExecutionContext_ptr ec;
@@ -492,8 +759,14 @@ namespace RTObject
       CPPUNIT_ASSERT_EQUAL(true, rto->is_alive(ec));
 			
       // Alive状態でinitialize()メソッド呼出しを行った場合、正常に動作するか？
+      std::cout << "\ntest_initialize_in_Alive() rto->initialize() 2" << std::endl;
       CPPUNIT_ASSERT_EQUAL(RTC::RTC_OK, rto->initialize());
-      rto->exit();
+      RTC::ExecutionContextFactory::instance().removeFactory("PeriodicExecutionContext"); /////
+      ///std::cout << "\ntest_initialize_in_Alive() rto->finalizeContexts()" << std::endl;
+      ///rto->finalizeContexts();///
+      ///rto->exit();//
+      std::cout << "\ntest_initialize_in_Alive() rto->exit()" << std::endl;
+      CPPUNIT_ASSERT_EQUAL(RTC::RTC_OK, rto->exit());///NG
       delete rto;
     }
 		
@@ -504,6 +777,14 @@ namespace RTObject
      */
     void test_finalize_invoking_on_finalize()
     {
+      std::cout << "\ntest_finalize_invoking_on_finalize()" << std::endl;
+
+      RTC::ExecutionContextFactory::instance().addFactory("PeriodicExecutionContext", 
+							  ::coil::Creator< ::RTC::ExecutionContextBase,
+							  ::RTC_exp::PeriodicExecutionContext>,
+							  ::coil::Destructor< ::RTC::ExecutionContextBase,
+							  ::RTC_exp::PeriodicExecutionContext>); /////
+
       RTObjectMock* rto = new RTObjectMock(m_pORB, m_pPOA); // will be deleted automatically
 			
       // initialize()メソッド呼出しを行い、Alive状態に遷移させる
@@ -511,6 +792,7 @@ namespace RTObject
       prop.setProperty("exec_cxt.periodic.type","PeriodicExecutionContext");
       prop.setProperty("exec_cxt.periodic.rate","1000");
       rto->setProperties(prop);
+      std::cout << "\ntest_finalize_invoking_on_finalize() rto->initialize()" << std::endl;
       CPPUNIT_ASSERT_EQUAL(RTC::RTC_OK, rto->initialize());
       RTC::ExecutionContext_ptr ec;
       ec = rto->get_context(0);
@@ -521,7 +803,14 @@ namespace RTObject
 			
       CPPUNIT_ASSERT_EQUAL(true, rto->is_alive(ec));
       // exit()呼び出しで、finalize()が有効となり実行される
-      rto->exit();
+      RTC::ExecutionContextFactory::instance().removeFactory("PeriodicExecutionContext"); /////
+
+      // std::cout << "\ntest_finalize_invoking_on_finalize() rto->finalizeContexts()" << std::endl;
+      // rto->finalizeContexts();
+
+      ///rto->exit();//
+      std::cout << "\ntest_finalize_invoking_on_finalize() rto->exit()" << std::endl;
+      CPPUNIT_ASSERT_EQUAL(RTC::RTC_OK, rto->exit());///
       CPPUNIT_ASSERT_EQUAL(1, rto->countLog("on_finalize"));
       delete rto;
     }
@@ -533,27 +822,65 @@ namespace RTObject
      */
     void test_finalize_participating_in_execution_context()
     {
+      std::cout << "\ntest_finalize_participating_in_execution_context()" << std::endl;
+
+      RTC::ExecutionContextFactory::instance().addFactory("PeriodicExecutionContext", 
+							  ::coil::Creator< ::RTC::ExecutionContextBase,
+ 							  ::RTC_exp::PeriodicExecutionContext>,
+ 							  ::coil::Destructor< ::RTC::ExecutionContextBase,
+ 							  ::RTC_exp::PeriodicExecutionContext>); /////
+
       RTObjectMock* rto = new RTObjectMock(m_pORB, m_pPOA); // will be deleted automatically
+      RTObjectMock* rtoOther = new RTObjectMock(m_pORB, m_pPOA); // will be deleted automatically
 			
       // initialize()メソッド呼出しを行い、Alive状態に遷移させる
       coil::Properties prop;
       prop.setProperty("exec_cxt.periodic.type","PeriodicExecutionContext");
-      prop.setProperty("exec_cxt.periodic.rate","1000");
+      prop.setProperty("exec_cxt.periodic.rate","1");
       rto->setProperties(prop);
+      std::cout << "\ntest_finalize_participating_ rto->initialize()" << std::endl;
       CPPUNIT_ASSERT_EQUAL(RTC::RTC_OK, rto->initialize());
 
       RTC::ExecutionContext_ptr ec;
       ec = rto->get_context(0);
+      std::cout << "\ntest_finalize_participating_ rto->is_alive(ec)" << std::endl;
       CPPUNIT_ASSERT_EQUAL(true, rto->is_alive(ec));
 			
       // ExecutionContextに登録しておく
-      CPPUNIT_ASSERT_EQUAL(RTC::RTC_OK, ec->add_component(rto->_this()));
-			
-      // ExecutionContextに登録された状態でfinalize()を呼び出した場合、意図どおりのエラーを返すか？
-      CPPUNIT_ASSERT_EQUAL(RTC::PRECONDITION_NOT_MET, rto->finalize());
+      std::cout << "\ntest_finalize_participating_ ec->add_component(..)" << std::endl;
+      CPPUNIT_ASSERT_EQUAL(RTC::RTC_OK, ec->add_component(rtoOther->_this()));//
+      std::cout << "\ntest_finalize_participating_: ec->activate_component(rto->_this())" << std::endl;
+      CPPUNIT_ASSERT_EQUAL(RTC::RTC_OK, ec->activate_component(rto->_this()));//
 
-      CPPUNIT_ASSERT_EQUAL(RTC::RTC_OK, ec->remove_component(rto->_this()));
-      rto->exit();
+      std::cout << "\ntest_finalize_participating_: coil::sleep(...)" << std::endl;
+      coil::sleep(2);//
+
+      // ExecutionContextに登録された状態でfinalize()を呼び出した場合、意図どおりのエラーを返すか？
+      std::cout << "\ntest_finalize_participating_ rto->finalize()" << std::endl;
+      CPPUNIT_ASSERT_EQUAL(RTC::PRECONDITION_NOT_MET, rto->finalize());//
+
+      ///std::cout << "\ntest_finalize_participating_ rto->detach_context(ECOTHER_OFFSET + 0)" << std::endl;
+      ///CPPUNIT_ASSERT_EQUAL(RTC::RTC_OK, rto->detach_context(ECOTHER_OFFSET + 0));/////
+      ///CPPUNIT_ASSERT_EQUAL(RTC::RTC_OK, rto->detach_context(0));/////
+
+      std::cout << "\ntest_finalize_participating_: ec->deactivate_component(rto->_this())" << std::endl;
+      CPPUNIT_ASSERT_EQUAL(RTC::RTC_OK, ec->deactivate_component(rto->_this()));//
+
+      std::cout << "\ntest_finalize_participating_: coil::sleep(...)2" << std::endl;
+      coil::sleep(2);//
+
+      std::cout << "\ntest_finalize_participating_ ec->remove_component(..)" << std::endl;
+      CPPUNIT_ASSERT_EQUAL(RTC::RTC_OK, ec->remove_component(rtoOther->_this()));//
+
+      std::cout << "\ntest_finalize_participating_ removeFactory(..)" << std::endl;
+      RTC::ExecutionContextFactory::instance().removeFactory("PeriodicExecutionContext"); /////
+      ///rto->exit();//NG
+      std::cout << "\ntest_finalize_participating_ rto->exit()" << std::endl;
+      CPPUNIT_ASSERT_EQUAL(RTC::RTC_OK, rto->exit());
+
+      m_pPOA->deactivate_object(*m_pPOA->servant_to_id(rtoOther));
+      delete rtoOther;
+      m_pPOA->deactivate_object(*m_pPOA->servant_to_id(rto));
       delete rto;
     }
 		
@@ -564,10 +891,19 @@ namespace RTObject
      */
     void test_finalize_in_Created()
     {
+      std::cout << "\ntest_finalize_in_Created()" << std::endl;
+
+      RTC::ExecutionContextFactory::instance().addFactory("PeriodicExecutionContext", 
+							  ::coil::Creator< ::RTC::ExecutionContextBase,
+							  ::RTC_exp::PeriodicExecutionContext>,
+							  ::coil::Destructor< ::RTC::ExecutionContextBase,
+							  ::RTC_exp::PeriodicExecutionContext>); /////
+
       RTObjectMock* rto = new RTObjectMock(m_pORB, m_pPOA); // will be deleted automatically
 			
       // Created状態でfinalize()を呼出した場合、意図どおりのエラーで返るか？
       CPPUNIT_ASSERT_EQUAL(RTC::PRECONDITION_NOT_MET, rto->finalize());
+      RTC::ExecutionContextFactory::instance().removeFactory("PeriodicExecutionContext"); /////
       rto->shutdown();
       delete rto;
     }
@@ -588,39 +924,72 @@ namespace RTObject
      */
     void test_exit()
     {
+      std::cout << "\ntest_exit()" << std::endl;
+
+      RTC::ExecutionContextFactory::instance().addFactory("PeriodicExecutionContext2", 
+							  ::coil::Creator< ::RTC::ExecutionContextBase,
+							  ::RTC_exp::PeriodicExecutionContext>,
+							  ::coil::Destructor< ::RTC::ExecutionContextBase,
+							  ::RTC_exp::PeriodicExecutionContext>); /////
+
       RTObjectMock* rto = new RTObjectMock(m_pORB, m_pPOA); // will be deleted automatically
+      RTObjectMock* rtoOther = new RTObjectMock(m_pORB, m_pPOA); // will be deleted automatically
       rto->setObjRef(rto->_this());
+      CPPUNIT_ASSERT(! CORBA::is_nil(rto->getObjRef()));///
+      CPPUNIT_ASSERT(! CORBA::is_nil(rto->_this()));///
 			
       // initialize()メソッド呼出しを行い、Alive状態に遷移させる
       coil::Properties prop;
-      prop.setProperty("exec_cxt.periodic.type","PeriodicExecutionContext");
-      prop.setProperty("exec_cxt.periodic.rate","1000");
+      prop.setProperty("exec_cxt.periodic.type","PeriodicExecutionContext2");
+      ///prop.setProperty("exec_cxt.periodic.rate","1000"); /// 1ms 
+      prop.setProperty("exec_cxt.periodic.rate","2"); /// 500ms
       rto->setProperties(prop);
+      std::cout << "\ntest_exit(): rto->initialize()" << std::endl;
       CPPUNIT_ASSERT_EQUAL(RTC::RTC_OK, rto->initialize());
 
       RTC::ExecutionContext_ptr ec;
+      std::cout << "\ntest_exit(): rto->get_context(0)" << std::endl;
       ec = rto->get_context(0);
       CPPUNIT_ASSERT_EQUAL(true, rto->is_alive(ec));
 			
       // コンポーネントをExecutionContextに登録してアクティブ化する
-      CPPUNIT_ASSERT_EQUAL(RTC::RTC_OK, ec->add_component(rto->_this()));
-      CPPUNIT_ASSERT_EQUAL(RTC::RTC_OK, ec->activate_component(rto->_this()));
+      std::cout << "\ntest_exit(): ec->add_component(rto->_this())" << std::endl;
+      CPPUNIT_ASSERT_EQUAL(RTC::RTC_OK, ec->add_component(rtoOther->_this()));//
+      //Call activate_component() for the state machine drive ???. 
+      std::cout << "\ntest_exit(): ec->activate_component(rto->_this())" << std::endl;
+      CPPUNIT_ASSERT_EQUAL(RTC::RTC_OK, ec->activate_component(rto->_this()));//
+
       //Call start() for the state machine drive. 
-      ec->start();
-      coil::sleep(1);
+      // std::cout << "\ntest_exit(): ec->start()" << std::endl;
+      // CPPUNIT_ASSERT_EQUAL(RTC::RTC_OK, ec->start());///NG, because at initialize() m_ecMine[i]->start()
+
+      std::cout << "\ntest_exit(): coil::sleep(1)" << std::endl;
+      coil::sleep(1);//
 			
       // exit()呼出しにより、当該コンポーネントがfinalize()されるか？
       // exit()呼出しにより、当該コンポーネントが終状態に遷移するか？
+      std::cout << "\ntest_exit(): rto->countLog() 0" << std::endl;
       CPPUNIT_ASSERT_EQUAL(0, rto->countLog("on_finalize"));
+      std::cout << "\ntest_exit(): ec->get_component_state(rto->_this())" << std::endl;
       CPPUNIT_ASSERT_EQUAL(RTC::ACTIVE_STATE, ec->get_component_state(rto->_this()));
-      ec->stop();
-      coil::sleep(1);
+      // std::cout << "\ntest_exit(): ec->stop()" << std::endl;
+      // CPPUNIT_ASSERT_EQUAL(RTC::RTC_OK, ec->stop());//
+      // coil::sleep(1);//
+
       //Call remove_component(),to cancel the registered component.
-      ec->remove_component(rto->_this());
-      CPPUNIT_ASSERT_EQUAL(RTC::RTC_OK, rto->exit());
+      std::cout << "\ntest_exit(): ec->remove_component(rtoOther->_this())" << std::endl;
+      CPPUNIT_ASSERT_EQUAL(RTC::RTC_OK, ec->remove_component(rtoOther->_this()));///
+      std::cout << "\ntest_exit(): rto->exit()" << std::endl;
+      CPPUNIT_ASSERT_EQUAL(RTC::RTC_OK, rto->exit());//
+      std::cout << "\ntest_exit(): rto->countLog() 1" << std::endl;
       CPPUNIT_ASSERT_EQUAL(1, rto->countLog("on_finalize"));
+      std::cout << "\ntest_exit(): rto->is_alive()" << std::endl;
       CPPUNIT_ASSERT_EQUAL(true, rto->is_alive(ec));
 
+      RTC::ExecutionContextFactory::instance().removeFactory("PeriodicExecutionContext2"); /////
+      m_pPOA->deactivate_object(*m_pPOA->servant_to_id(rtoOther));///
+      delete rtoOther;
+      m_pPOA->deactivate_object(*m_pPOA->servant_to_id(rto));///
       delete rto;
     }
 
@@ -815,6 +1184,8 @@ namespace RTObject
      */
     void test_add_removePort()
     {
+      std::cerr << "\n test_add_removePort()" << std::endl;
+
       RTObjectMock* rto = new RTObjectMock(m_pORB, m_pPOA); // will be deleted automatically
 
       PortMock* port0 = new PortMock();
@@ -825,6 +1196,7 @@ namespace RTObject
       // PortBase::updateConnectors()内、Guard guard(m_profile_mutex);でロックされ、
       // 処理が戻ってこない。(デッドロック???)
       // CPPUNIT_ASSERT_EQUAL(false, rto->addPort(*port0));
+      CPPUNIT_ASSERT_EQUAL(false, rto->addPort(*port0));/////
 
       PortMock* port1 = new PortMock();
       port1->setName("port1");
@@ -849,6 +1221,10 @@ namespace RTObject
       // 処理が戻ってこない。(デッドロック???)
       // CPPUNIT_ASSERT_EQUAL(false, rto->addInPort("in",*inport0));
       // CPPUNIT_ASSERT_EQUAL(false, rto->addOutPort("out", *outport0));
+      std::cerr << "\n test_add_removePort() rto->addInPort(in,*inport0)" << std::endl;
+      CPPUNIT_ASSERT_EQUAL(false, rto->addInPort("in",*inport0));/////
+      std::cerr << "\n test_add_removePort() rto->addOutPort(out, *outport0)" << std::endl;
+      CPPUNIT_ASSERT_EQUAL(false, rto->addOutPort("out", *outport0));/////
 
       // 登録したPort参照をすべて正しく取得できるか？
       portList = rto->get_ports();
@@ -863,11 +1239,16 @@ namespace RTObject
       CPPUNIT_ASSERT(portList != NULL);
       CPPUNIT_ASSERT_EQUAL(CORBA::ULong(0), portList->length());
 
+      std::cerr << "\n test_add_removePort() delete outport0" << std::endl;
       delete outport0;
+      std::cerr << "\n test_add_removePort() delete inport0" << std::endl;
       delete inport0;
+      std::cerr << "\n test_add_removePort() delete port1" << std::endl;
       delete port1;
+      std::cerr << "\n test_add_removePort() delete port0" << std::endl;
       delete port0;
 
+      std::cerr << "\n test_add_removePort() rto->shutdown()" << std::endl;
       rto->shutdown();
       delete rto;
 
@@ -882,6 +1263,8 @@ namespace RTObject
      */
     void test_readAll()
     {
+      std::cerr << "\n test_readAll() " << std::endl;
+
       RTObjectMock* rto = new RTObjectMock(m_pORB, m_pPOA); // will be deleted automatically
 
       InPortMock*  inport0  = new InPortMock("in","TimedLong");
@@ -957,6 +1340,8 @@ namespace RTObject
      */
     void test_writeAll()
     {
+      std::cerr << "\n test_writeAll() " << std::endl;
+
       RTObjectMock* rto = new RTObjectMock(m_pORB, m_pPOA); // will be deleted automatically
 
       OutPortMock*  outport0  = new OutPortMock("out","TimedLong");
@@ -1176,7 +1561,522 @@ namespace RTObject
     {
       // test_get_configuration_and_set_service_profile_and_get_service_profileで兼ねる
     }
-		
+
+    /////--------
+    /////----consumer test----
+    /*!
+     * @brief add_service_profile(), remove_service_profile()メソッドのテスト
+     * 
+     * - Configuration::add_service_profile()を通して、SDOServiceConsumerを正しく設定できるか？
+     * - remove_service_profile()を用いて、設定されているSDPServiceConsumerを正しく削除できるか？
+     */
+    void test_consumer_add_service_profile_remove_it()
+    {
+      std::cerr << "\n!!!-----test_consumer_add_service_profile_remove_it()" << std::endl;
+
+      CPPUNIT_ASSERT_EQUAL(true, testConsumer == NULL);
+
+      RTObjectMock *rto = new RTObjectMock(m_pORB, m_pPOA); // will be deleted automatically
+
+      // 1. プロバイダを作成する（Other's Provier）
+      // Consumerに割り当てるオブジェクトを生成する
+      MyIncrementProvider* svcPrv = new MyIncrementProvider();
+
+      // 2. コンシューマをファクトリに登録する
+      std::string prof_name("Test Consumer");
+
+      RTC::SdoServiceConsumerFactory& factory = RTC::SdoServiceConsumerFactory::instance();
+      factory.addFactory(prof_name.c_str(), 
+			 ::RTObject::Creator< ::RTC::SdoServiceConsumerBase,
+			 ::RTObject::MyIncrementConsumer>,
+			 ::coil::Destructor< ::RTC::SdoServiceConsumerBase,
+			 ::RTObject::MyIncrementConsumer>);
+
+      // 3. プロファイルをRTCの1.でつくったサービスプロバイダのリファレンスとともにセットする
+      SDOPackage::ServiceProfile svcPrvProf;
+      svcPrvProf.id             = prof_name.c_str();
+      svcPrvProf.interface_type = prof_name.c_str();
+      svcPrvProf.service        = svcPrv->_this();
+      svcPrvProf.properties.length(1);
+      svcPrvProf.properties[0].name = "Provider PROPERTIES";
+      svcPrvProf.properties[0].value <<= "3.14159";
+
+      // 4. RTCの内部でファクトリからコンシューマのインスタンスが一つcreateされ、
+      //    init()内で、CorbaConsumerに1.のプロバイダのリファレンスがセットされる。
+      //
+      // Configurationインタフェースを取得する
+      SDOPackage::Configuration_ptr cfg = rto->get_configuration();
+      CPPUNIT_ASSERT(! CORBA::is_nil(cfg));
+
+      // Configurationインタフェースに、ServiceProfileを設定する
+      // 生成したオブジェクトをConsumerにセットする
+      CPPUNIT_ASSERT_EQUAL(true, cfg->add_service_profile(svcPrvProf));
+
+      // 
+      // 5. RTC内部でConsumerのoperationを呼ぶと、CorbaConsuemr経由で
+      //    Providerの関数が呼ばれる。
+      //    (これから、SdoServiceを継承し,operationをいくつか追加したSdoServiceを実装して、
+      //     それを利用する想定でテストを書く)
+      CPPUNIT_ASSERT_EQUAL(true, testConsumer != NULL);
+      SDOPackage::ServiceProfile gotSvcPrvProf = testConsumer->getProfile();
+
+      CPPUNIT_ASSERT_EQUAL(prof_name, std::string(gotSvcPrvProf.id));
+      CPPUNIT_ASSERT_EQUAL(CORBA::ULong(1), gotSvcPrvProf.properties.length());
+      CPPUNIT_ASSERT_EQUAL(std::string("Provider PROPERTIES"),
+      			   std::string(gotSvcPrvProf.properties[0].name));
+      {
+	const char* value; gotSvcPrvProf.properties[0].value >>= value;
+	CPPUNIT_ASSERT_EQUAL(std::string("3.14159"), std::string(value));
+      }
+
+      CPPUNIT_ASSERT_EQUAL(0, svcPrv->get_invoked_count());
+      // Consumerに割り当てたオブジェクトのメソッドを正しく呼び出せるか？
+      ((MyIncrementConsumer* )testConsumer)->consumerIncrementCount();
+      CPPUNIT_ASSERT_EQUAL(1, svcPrv->get_invoked_count());
+
+      //
+      // 設定したうち、removeして、正しくremoveされたことを確認する
+      CPPUNIT_ASSERT_EQUAL(true, cfg->remove_service_profile(prof_name.c_str()));
+
+      m_pPOA->deactivate_object(*m_pPOA->servant_to_id(svcPrv));
+      rto->shutdown();
+      delete rto;
+    }
+
+    /*!
+     * @brief add_service_profile(), remove_service_profile()メソッドのテスト
+     * 
+     * - Configuration::add_service_profile()を通して、SDOServiceConsumerを正しく設定できるか？
+     * - remove_service_profile()を用いて、"illegal_arguments"で、設定されている
+     * - SDPServiceConsumerを削除できないか？
+     */
+    void test_consumer_add_service_profile_remove_it_with_illegal_arguments()
+    {
+      std::cerr << "\ntest_consumer_add_service_profile_remove_it_with_illegal_arguments()" << std::endl;
+
+      RTObjectMock *rto = new RTObjectMock(m_pORB, m_pPOA); // will be deleted automatically
+
+      // 1. プロバイダを作成する（Other's Provier）
+      // Consumerに割り当てるオブジェクトを生成する
+      MyIncrementProvider* svcPrv = new MyIncrementProvider();
+
+      // 2. コンシューマをファクトリに登録する
+      std::string prof_name("Test Provider");
+
+      RTC::SdoServiceConsumerFactory& factory = RTC::SdoServiceConsumerFactory::instance();
+      factory.addFactory(prof_name.c_str(), 
+			 ::RTObject::Creator< ::RTC::SdoServiceConsumerBase,
+			 ::RTObject::MyIncrementConsumer>,
+			 ::coil::Destructor< ::RTC::SdoServiceConsumerBase,
+			 ::RTObject::MyIncrementConsumer>);
+
+      // 3. プロファイルをRTCの1.でつくったサービスプロバイダのリファレンスとともにセットする
+      SDOPackage::ServiceProfile svcPrvProf;
+      svcPrvProf.id             = prof_name.c_str();
+      svcPrvProf.interface_type = prof_name.c_str();
+      svcPrvProf.service        = svcPrv->_this();
+      svcPrvProf.properties.length(1);
+      svcPrvProf.properties[0].name = "Provider PROPERTIES";
+      svcPrvProf.properties[0].value <<= "3.14159";
+
+      // 4. RTCの内部でファクトリからコンシューマのインスタンスが一つcreateされ、
+      //    init()内で、CorbaConsumerに1.のプロバイダのリファレンスがセットされる。
+      //
+      // Configurationインタフェースを取得する
+      SDOPackage::Configuration_ptr cfg = rto->get_configuration();
+      CPPUNIT_ASSERT(! CORBA::is_nil(cfg));
+
+      // Configurationインタフェースに、ServiceProfileを設定する
+      // 生成したオブジェクトをConsumerにセットする
+      CPPUNIT_ASSERT_EQUAL(true, cfg->add_service_profile(svcPrvProf));
+
+      //
+      // 設定したうち、removeして、正しくremoveされたことを確認する
+      CPPUNIT_ASSERT_EQUAL(false, cfg->remove_service_profile("Test Provider NG"));
+      CPPUNIT_ASSERT_EQUAL(true, cfg->remove_service_profile(prof_name.c_str()));
+      try {
+	cfg->remove_service_profile(prof_name.c_str());
+	CPPUNIT_FAIL("Exception not thrown.");
+      }
+      catch(...){
+	  // 意図どおりの例外をキャッチした
+	std::cout << "\nSDO Service Consumer is completely removed." << std::endl;
+      }
+
+      m_pPOA->deactivate_object(*m_pPOA->servant_to_id(svcPrv));
+      rto->shutdown();
+      delete rto;
+    }
+
+    /////----provider test----
+#define FACTORY_OK 0
+    /*!
+     * @brief get_service_profile()メソッドのテスト
+     * 
+     * - get_service_profile()を用いてServiceProfileを取得して、正しく設定されたことを確認する
+     *
+     */
+    void test_provider_get_service_profile()
+    {
+      std::cerr << "\ntest_provider_get_service_profile():\n" << std::endl;
+
+      RTObjectMock *rto = new RTObjectMock(m_pORB, m_pPOA); // will be deleted automatically
+
+      // SDOServiceProviderのfactoryを準備する
+      std::string prof_name("Test Provider");
+      RTC::SdoServiceProviderFactory& factoryPrv = RTC::SdoServiceProviderFactory::instance();
+
+      factoryPrv.addFactory(prof_name.c_str(),
+      			    ::coil::Creator< ::RTC::SdoServiceProviderBase,
+      			    ::RTObject::MySDOServiceProvider>,
+      			    ::coil::Destructor< ::RTC::SdoServiceProviderBase,
+      			    ::RTObject::MySDOServiceProvider>);
+
+      // SDOServiceProviderのobjectを準備する
+      RTC::SdoServiceProviderBase* svcPrv = factoryPrv.createObject(prof_name);
+
+      // ServiceProfileを準備しておく
+      SDOPackage::ServiceProfile svcPrvProf;
+      svcPrvProf.id             = CORBA::string_dup(prof_name.c_str());
+      svcPrvProf.interface_type = CORBA::string_dup(prof_name.c_str());
+      svcPrvProf.service        = svcPrv->_this();
+      svcPrvProf.properties.length(1);
+      svcPrvProf.properties[0].name = "PROPERTIES NAME 1";
+      svcPrvProf.properties[0].value <<= "3.14159";
+
+      // SDOServiceProviderを初期化する
+      (RTObject::MySDOServiceProvider*)(svcPrv)->init((RTC::RTObject_impl& )rto, svcPrvProf);
+      ///svcPrv->init((RTC::RTObject_impl& )rto, svcPrvProf);
+      
+      CORBA::Boolean retn = rto->addSdoServiceProvider(svcPrvProf, svcPrv);
+      CPPUNIT_ASSERT_EQUAL(true, retn);
+
+      // get_service_profile()を用いてServiceProfileを取得して、正しく設定されたことを確認する
+      SDOPackage::ServiceProfile* tmp_prof = rto->get_service_profile(prof_name.c_str());
+      ///std::cerr << "\n-----test_provider_get_service_profile():rto->get_service_profile() End\n" << std::endl;
+      CPPUNIT_ASSERT(tmp_prof != NULL);
+
+      CPPUNIT_ASSERT_EQUAL(prof_name, std::string(tmp_prof->id));
+      CPPUNIT_ASSERT_EQUAL(prof_name, std::string(tmp_prof->interface_type));
+      CPPUNIT_ASSERT_EQUAL(CORBA::ULong(1), tmp_prof->properties.length());
+      CPPUNIT_ASSERT_EQUAL(std::string("PROPERTIES NAME 1"),
+      			   std::string(tmp_prof->properties[0].name));
+      {
+	const char* value; tmp_prof->properties[0].value >>= value;
+	CPPUNIT_ASSERT_EQUAL(std::string("3.14159"), std::string(value));
+      }
+
+      // get_sdo_service()を用いてServiceを取得して、正しく設定されたことを確認する
+      SDOPackage::SDOService_ptr tmp_svcPtr = rto->get_sdo_service(prof_name.c_str());
+      CPPUNIT_ASSERT(tmp_svcPtr != NULL);
+      CPPUNIT_ASSERT_EQUAL(true, tmp_svcPtr == tmp_prof->service);
+      CPPUNIT_ASSERT_EQUAL(true, tmp_svcPtr == svcPrvProf.service);
+      ///std::cerr << "\n-----test_provider_get_service_profile():rto->get_sdo_service() End\n" << std::endl;
+
+      ///
+      m_pPOA->deactivate_object(*m_pPOA->servant_to_id(svcPrv));
+      retn = rto->removeSdoServiceProvider(prof_name.c_str());
+      CPPUNIT_ASSERT_EQUAL(true, retn);
+      CPPUNIT_ASSERT_EQUAL(true, FACTORY_OK == factoryPrv.removeFactory(prof_name.c_str()));
+
+      rto->shutdown();
+      delete rto;
+    }
+
+    /*!
+     * @brief get_service_profiles()メソッドのテスト
+     * 
+     * - get_service_profiles()を用いてすべてのServiceProfileを取得して、正しく設定されたことを確認する
+     *
+     */
+    void test_provider_get_service_profiles()
+    {
+      std::cerr << "\ntest_provider_get_service_profiles():\n" << std::endl;
+
+      RTObjectMock *rto = new RTObjectMock(m_pORB, m_pPOA); // will be deleted automatically
+
+      // SDOServiceProviderのfactoryを準備する
+      std::string prof_name("Test Provider 1");
+      RTC::SdoServiceProviderFactory& factoryPrv = RTC::SdoServiceProviderFactory::instance();
+      factoryPrv.addFactory(prof_name.c_str(),
+			    ::coil::Creator< ::RTC::SdoServiceProviderBase,
+			    ::RTObject::MySDOServiceProvider>,
+			    ::coil::Destructor< ::RTC::SdoServiceProviderBase,
+			    ::RTObject::MySDOServiceProvider>);
+
+      // SDOServiceProviderのobjectを準備する
+      RTC::SdoServiceProviderBase* svcPrv = factoryPrv.createObject(prof_name);
+
+      // ServiceProfileを準備しておく
+      SDOPackage::ServiceProfile svcPrvProf;
+      svcPrvProf.id             = CORBA::string_dup(prof_name.c_str());
+      svcPrvProf.interface_type = CORBA::string_dup(prof_name.c_str());
+      svcPrvProf.service        = svcPrv->_this();
+      svcPrvProf.properties.length(1);
+      svcPrvProf.properties[0].name = "PROPERTIES NAME 1";
+      svcPrvProf.properties[0].value <<= "3.14159";
+
+      // SDOServiceProviderのfactoryの２を準備する
+      std::string prof_name2("Test Provider 2");
+      RTC::SdoServiceProviderFactory& factoryPrv2 = RTC::SdoServiceProviderFactory::instance();
+      factoryPrv2.addFactory(prof_name2.c_str(),
+			    ::coil::Creator< ::RTC::SdoServiceProviderBase,
+			    ::RTObject::MySDOServiceProvider>,
+			    ::coil::Destructor< ::RTC::SdoServiceProviderBase,
+			    ::RTObject::MySDOServiceProvider>);
+
+      // SDOServiceProviderのobjectを準備する
+      RTC::SdoServiceProviderBase* svcPrv2 = factoryPrv2.createObject(prof_name2);
+
+      // ServiceProfileを準備しておく
+      SDOPackage::ServiceProfile svcPrvProf2;
+      svcPrvProf2.id             = CORBA::string_dup(prof_name2.c_str());
+      svcPrvProf2.interface_type = CORBA::string_dup(prof_name2.c_str());
+      svcPrvProf2.service        = svcPrv2->_this();
+      svcPrvProf2.properties.length(1);
+      svcPrvProf2.properties[0].name = "PROPERTIES NAME 2";
+      svcPrvProf2.properties[0].value <<= "2.7182818";
+
+      // SDOServiceProviderを初期化する
+      (RTObject::MySDOServiceProvider*)(svcPrv)->init((RTC::RTObject_impl& )rto, svcPrvProf);
+      (RTObject::MySDOServiceProvider*)(svcPrv2)->init((RTC::RTObject_impl& )rto, svcPrvProf2);
+
+      CORBA::Boolean retn = rto->addSdoServiceProvider(svcPrvProf, svcPrv);
+      CPPUNIT_ASSERT_EQUAL(true, retn);
+      retn = rto->addSdoServiceProvider(svcPrvProf2, svcPrv2);
+      CPPUNIT_ASSERT_EQUAL(true, retn);
+
+      // get_service_profiles()を用いてすべてのServiceProfileを取得して、正しく設定されたことを確認する
+      SDOPackage::ServiceProfileList_var tmp_profiles = rto->get_service_profiles();
+      long int iCnt = tmp_profiles->length();
+      std::cerr << "\ntest_provider_get_service_profiles():tmp_profiles->length() = " << iCnt << std::endl;
+
+      int iCheckCnt = 0;
+      for(long int i = 0; i < iCnt; i++) {
+	if(prof_name == std::string(tmp_profiles[i].id)) {
+	    CPPUNIT_ASSERT_EQUAL(prof_name, std::string(tmp_profiles[i].interface_type));
+	    CPPUNIT_ASSERT_EQUAL(CORBA::ULong(1), tmp_profiles[i].properties.length());
+	    CPPUNIT_ASSERT_EQUAL(std::string("PROPERTIES NAME 1"),
+				 std::string(tmp_profiles[i].properties[0].name));
+	    {
+	      const char* value; tmp_profiles[i].properties[0].value >>= value;
+	      CPPUNIT_ASSERT_EQUAL(std::string("3.14159"), std::string(value));
+	    }
+	    iCheckCnt++;
+	  }
+	if(prof_name2 == std::string(tmp_profiles[i].id)) {
+	    CPPUNIT_ASSERT_EQUAL(prof_name2, std::string(tmp_profiles[i].interface_type));
+	    CPPUNIT_ASSERT_EQUAL(CORBA::ULong(1), tmp_profiles[i].properties.length());
+	    CPPUNIT_ASSERT_EQUAL(std::string("PROPERTIES NAME 2"),
+				 std::string(tmp_profiles[i].properties[0].name));
+	    {
+	      const char* value; tmp_profiles[i].properties[0].value >>= value;
+	      CPPUNIT_ASSERT_EQUAL(std::string("2.7182818"), std::string(value));
+	    }
+	    iCheckCnt++;
+	  }
+      }
+      CPPUNIT_ASSERT_EQUAL(2, iCheckCnt);
+
+      ///
+      m_pPOA->deactivate_object(*m_pPOA->servant_to_id(svcPrv));
+      m_pPOA->deactivate_object(*m_pPOA->servant_to_id(svcPrv2));
+
+      retn = rto->removeSdoServiceProvider(prof_name.c_str());
+      CPPUNIT_ASSERT_EQUAL(true, retn);
+      CPPUNIT_ASSERT_EQUAL(true, FACTORY_OK == factoryPrv.removeFactory(prof_name.c_str()));
+
+      retn = rto->removeSdoServiceProvider(prof_name2.c_str());
+      CPPUNIT_ASSERT_EQUAL(true, retn);
+      CPPUNIT_ASSERT_EQUAL(true, FACTORY_OK == factoryPrv2.removeFactory(prof_name2.c_str()));
+
+      rto->shutdown();
+      delete rto;
+    }
+
+    /*!
+     * @brief get_sdo_service()メソッドのテスト
+     * 
+     * - get_sdo_service()を用いてServiceを取得して、正しく設定されたことを確認する
+     *
+     */
+    void test_provider_get_sdo_service()
+    {
+      std::cerr << "\ntest_provider_get_sdo_service():\n" << std::endl;
+
+      RTObjectMock *rto = new RTObjectMock(m_pORB, m_pPOA); // will be deleted automatically
+
+      // SDOServiceProviderのfactoryを準備する
+      std::string prof_name("Test Provider SDO Service");
+      RTC::SdoServiceProviderFactory& factoryPrv = RTC::SdoServiceProviderFactory::instance();
+      factoryPrv.addFactory(prof_name.c_str(),
+			    ::coil::Creator< ::RTC::SdoServiceProviderBase,
+			    ::RTObject::MySDOServiceProvider>,
+			    ::coil::Destructor< ::RTC::SdoServiceProviderBase,
+			    ::RTObject::MySDOServiceProvider>);
+
+      // SDOServiceProviderのobjectを準備する
+      RTC::SdoServiceProviderBase* svcPrv = factoryPrv.createObject(prof_name);
+
+      // ServiceProfileを準備しておく
+      SDOPackage::ServiceProfile svcPrvProf;
+      svcPrvProf.id             = CORBA::string_dup(prof_name.c_str());
+      svcPrvProf.interface_type = CORBA::string_dup(prof_name.c_str());
+      svcPrvProf.service        = svcPrv->_this();
+
+      // SDOServiceProviderを初期化する
+      (RTObject::MySDOServiceProvider*)(svcPrv)->init((RTC::RTObject_impl& )rto, svcPrvProf);
+      
+      CORBA::Boolean retn = rto->addSdoServiceProvider(svcPrvProf, svcPrv);
+      CPPUNIT_ASSERT_EQUAL(true, retn);
+
+      // get_service_profile()を用いてServiceProfileを取得して、正しく設定されたことを確認する
+      SDOPackage::ServiceProfile* tmp_prof = rto->get_service_profile(prof_name.c_str());
+      CPPUNIT_ASSERT(tmp_prof != NULL);
+
+      CPPUNIT_ASSERT_EQUAL(prof_name, std::string(tmp_prof->id));
+      CPPUNIT_ASSERT_EQUAL(prof_name, std::string(tmp_prof->interface_type));
+
+      // get_sdo_service()を用いてServiceを取得して、正しく設定されたことを確認する
+      SDOPackage::SDOService_ptr tmp_svcPtr = rto->get_sdo_service(prof_name.c_str());
+      CPPUNIT_ASSERT(tmp_svcPtr != NULL);
+      CPPUNIT_ASSERT_EQUAL(true, tmp_svcPtr == tmp_prof->service);
+      CPPUNIT_ASSERT_EQUAL(true, tmp_svcPtr == svcPrvProf.service);
+
+      ///
+      m_pPOA->deactivate_object(*m_pPOA->servant_to_id(svcPrv));
+      retn = rto->removeSdoServiceProvider(prof_name.c_str());
+      CPPUNIT_ASSERT_EQUAL(true, retn);
+      CPPUNIT_ASSERT_EQUAL(true, FACTORY_OK == factoryPrv.removeFactory(prof_name.c_str()));
+
+      rto->shutdown();
+      delete rto;
+    }
+
+    /*!
+     * @brief get_service_profile()メソッドのテスト
+     * 
+     * - get_service_profile()を用い、"illegal_arguments"で、ServiceProfileを取得できるかを確認する
+     *
+     */
+    void test_provider_get_service_profile_with_illegal_arguments()
+    {
+      std::cerr << "\ntest_provider_get_service_profile_with_illegal_arguments():\n" << std::endl;
+
+      RTObjectMock *rto = new RTObjectMock(m_pORB, m_pPOA); // will be deleted automatically
+
+      // SDOServiceProviderのfactoryを準備する
+      std::string prof_name("Test Provider Argument");
+      RTC::SdoServiceProviderFactory& factoryPrv = RTC::SdoServiceProviderFactory::instance();
+      factoryPrv.addFactory(prof_name.c_str(),
+			    ::coil::Creator< ::RTC::SdoServiceProviderBase,
+			    ::RTObject::MySDOServiceProvider>,
+			    ::coil::Destructor< ::RTC::SdoServiceProviderBase,
+			    ::RTObject::MySDOServiceProvider>);
+
+      // SDOServiceProviderのobjectを準備する
+      RTC::SdoServiceProviderBase* svcPrv = factoryPrv.createObject(prof_name);
+
+      // ServiceProfileを準備しておく
+      SDOPackage::ServiceProfile svcPrvProf;
+      svcPrvProf.id             = CORBA::string_dup(prof_name.c_str());
+      svcPrvProf.interface_type = CORBA::string_dup(prof_name.c_str());
+      svcPrvProf.service        = svcPrv->_this();
+      svcPrvProf.properties.length(1);
+      svcPrvProf.properties[0].name = "PROPERTIES NAME 1";
+      svcPrvProf.properties[0].value <<= "3.14159";
+
+      // SDOServiceProviderを初期化する
+      (RTObject::MySDOServiceProvider*)(svcPrv)->init((RTC::RTObject_impl& )rto, svcPrvProf);
+      
+      CORBA::Boolean retn = rto->addSdoServiceProvider(svcPrvProf, svcPrv);
+      CPPUNIT_ASSERT_EQUAL(true, retn);
+
+      //
+      // get_service_profile()を用い、"illegal_arguments"で、ServiceProfileを取得できるかを確認する
+      try {
+	SDOPackage::ServiceProfile* tmp_prof = rto->get_service_profile("Test Provider Illegal Argument");
+	CPPUNIT_FAIL("Exception not thrown.");
+      }
+      catch(...){
+	  // 意図どおりの例外をキャッチした
+	std::cout << "\nWith Illegal Argument can not get Service Profile." << std::endl;
+      }
+
+      ///
+      m_pPOA->deactivate_object(*m_pPOA->servant_to_id(svcPrv));
+      retn = rto->removeSdoServiceProvider(prof_name.c_str());
+      CPPUNIT_ASSERT_EQUAL(true, retn);
+      CPPUNIT_ASSERT_EQUAL(true, FACTORY_OK == factoryPrv.removeFactory(prof_name.c_str()));
+
+      rto->shutdown();
+      delete rto;
+    }
+
+    /*!
+     * @brief get_sdo_service()メソッドのテスト
+     * 
+     * - get_sdo_service()を用い、"illegal_arguments"で、Serviceを取得できるかを確認する
+     *
+     */
+    void test_provider_get_sdo_service_with_illegal_arguments()
+    {
+      std::cerr << "\ntest_provider_get_sdo_service_with_illegal_arguments():\n" << std::endl;
+
+      RTObjectMock *rto = new RTObjectMock(m_pORB, m_pPOA); // will be deleted automatically
+
+      // SDOServiceProviderのfactoryを準備する
+      std::string prof_name("Test Provider Get Service with Argument");
+      RTC::SdoServiceProviderFactory& factoryPrv = RTC::SdoServiceProviderFactory::instance();
+      factoryPrv.addFactory(prof_name.c_str(),
+			    ::coil::Creator< ::RTC::SdoServiceProviderBase,
+			    ::RTObject::MySDOServiceProvider>,
+			    ::coil::Destructor< ::RTC::SdoServiceProviderBase,
+			    ::RTObject::MySDOServiceProvider>);
+
+      // SDOServiceProviderのobjectを準備する
+      RTC::SdoServiceProviderBase* svcPrv = factoryPrv.createObject(prof_name);
+
+      // ServiceProfileを準備しておく
+      SDOPackage::ServiceProfile svcPrvProf;
+      svcPrvProf.id             = CORBA::string_dup(prof_name.c_str());
+      svcPrvProf.interface_type = CORBA::string_dup(prof_name.c_str());
+      svcPrvProf.service        = svcPrv->_this();
+
+      // SDOServiceProviderを初期化する
+      (RTObject::MySDOServiceProvider*)(svcPrv)->init((RTC::RTObject_impl& )rto, svcPrvProf);
+      
+      CORBA::Boolean retn = rto->addSdoServiceProvider(svcPrvProf, svcPrv);
+      CPPUNIT_ASSERT_EQUAL(true, retn);
+
+      // get_service_profile()を用いてServiceProfileを取得して、正しく設定されたことを確認する
+      SDOPackage::ServiceProfile* tmp_prof = rto->get_service_profile(prof_name.c_str());
+      CPPUNIT_ASSERT(tmp_prof != NULL);
+
+      CPPUNIT_ASSERT_EQUAL(prof_name, std::string(tmp_prof->id));
+      CPPUNIT_ASSERT_EQUAL(prof_name, std::string(tmp_prof->interface_type));
+
+      // get_sod_service()を用い、"illegal_arguments"で、Serviceを取得できるかを確認する
+      try {
+	SDOPackage::SDOService_ptr tmp_svcPtr = rto->get_sdo_service("Test Provider Get Service with Illegal Argument");
+	CPPUNIT_FAIL("Exception not thrown.");
+      }
+      catch(...){
+	  // 意図どおりの例外をキャッチした
+	std::cout << "\nWith Illegal Argument can not get Service Profile." << std::endl;
+      }
+
+      ///
+      m_pPOA->deactivate_object(*m_pPOA->servant_to_id(svcPrv));
+      retn = rto->removeSdoServiceProvider(prof_name.c_str());
+      CPPUNIT_ASSERT_EQUAL(true, retn);
+      CPPUNIT_ASSERT_EQUAL(true, FACTORY_OK == factoryPrv.removeFactory(prof_name.c_str()));
+
+      rto->shutdown();
+      delete rto;
+    }
+    /////--------END
+
     /*!
      * @brief get_service_profile()メソッドのテスト
      * 
@@ -1755,27 +2655,48 @@ namespace RTObject
      */
     void test_finalizeContexts()
     {
+      std::cout << "\ntest_finalizeContexts()" << std::endl;
+
+      RTC::ExecutionContextFactory::instance().addFactory("PeriodicExecutionContext", 
+							  ::coil::Creator< ::RTC::ExecutionContextBase,
+							  ::RTC_exp::PeriodicExecutionContext>,
+							  ::coil::Destructor< ::RTC::ExecutionContextBase,
+							  ::RTC_exp::PeriodicExecutionContext>); /////
+
       RTObjectMock* rto = new RTObjectMock(m_pORB, m_pPOA);
       coil::Properties prop;
       prop.setProperty("exec_cxt.periodic.type","PeriodicExecutionContext");
       prop.setProperty("exec_cxt.periodic.rate","1000");
       rto->setProperties(prop);
       // initialize()で、m_eclistへ登録し、m_ecMineをstart
+      std::cout << "\ntest_finalizeContexts() initialize() 1" << std::endl;
       CPPUNIT_ASSERT_EQUAL(RTC::RTC_OK, rto->initialize());
       CPPUNIT_ASSERT_EQUAL(1, rto->get_eclist());
+      std::cout << "\ntest_finalizeContexts() initialize() 2" << std::endl;
       CPPUNIT_ASSERT_EQUAL(RTC::RTC_OK, rto->initialize());
       CPPUNIT_ASSERT_EQUAL(2, rto->get_eclist());
+      std::cout << "\ntest_finalizeContexts() initialize() 3" << std::endl;
       CPPUNIT_ASSERT_EQUAL(RTC::RTC_OK, rto->initialize());
+      std::cout << "\ntest_finalizeContexts() rto->get_eclist() 3" << std::endl;
       CPPUNIT_ASSERT_EQUAL(3, rto->get_eclist());
 
       RTC::ExecutionContext_ptr ec;
       ec = rto->get_context(0);
+      std::cout << "\ntest_finalizeContexts() rto->is_alive(ec)" << std::endl;
       CPPUNIT_ASSERT_EQUAL(true, rto->is_alive(ec));
+      std::cout << "\ntest_finalizeContexts() rto->finalizeContexts()" << std::endl;
       rto->finalizeContexts();
 
       // 全コンテキストが削除されたか？
+      std::cout << "\ntest_finalizeContexts() rto->get_eclist() 0" << std::endl;
       CPPUNIT_ASSERT_EQUAL(0, rto->get_eclist());
-      rto->exit();
+      std::cout << "\ntest_finalizeContexts() removeFactory(PeriodicExecutionContext)" << std::endl;
+      RTC::ExecutionContextFactory::instance().removeFactory("PeriodicExecutionContext");/////
+      ///RTC::ExecutionContextFactory::instance().deleteObject(*m_pPOA->servant_to_id(rto));///
+      ///rto->exit();//
+      std::cout << "\ntest_finalizeContexts() rto->exit()" << std::endl;
+      CPPUNIT_ASSERT_EQUAL(RTC::RTC_OK, rto->exit());///
+      ///m_pPOA->deactivate_object(*m_pPOA->servant_to_id(rto));///
       delete rto;
     }
 		
@@ -1786,6 +2707,8 @@ namespace RTObject
      */
     void test_bindContext()
     {
+      std::cout << "\ntest_bindContext() \n" << std::endl;
+
       RTObjectMock* rto = new RTObjectMock(m_pORB, m_pPOA);
       coil::Properties prop;
       prop.setProperty("exec_cxt.periodic.type","PeriodicExecutionContext");
@@ -1797,6 +2720,7 @@ namespace RTObject
       // nilを設定した場合、-1を返すか？
       ec = RTC::ExecutionContext::_nil();
       int id = (int)(rto->bindContext(ec));
+      std::cout << "\ntest_bindContext() EQUAL(-1, id)" << std::endl;
       CPPUNIT_ASSERT_EQUAL(-1, id);
 
       // m_ecMine 未登録の場合、m_ecMineの番号を返すか？
@@ -1805,32 +2729,40 @@ namespace RTObject
       id = (int)(rto->bindContext(ec));
 
       // [0]に登録されるか？
+      std::cout << "\ntest_bindContext() EQUAL(0, id)" << std::endl;
       CPPUNIT_ASSERT_EQUAL(0, id);
 
       // 正しく登録されているか？
+      std::cout << "\ntest_bindContext() rto->chk_ecMine(id,ec)" << std::endl;
       CPPUNIT_ASSERT(rto->chk_ecMine(id,ec));
 
       // m_ecMine 登録済みで nil の場合、m_ecMineの番号を返すか？
       rto->ecMine[0] = RTC::ExecutionContextService::_nil();
+      std::cout << "\ntest_bindContext() rto->set_ecMine()" << std::endl;
       rto->set_ecMine();
       RTC_exp::PeriodicExecutionContext* pec2 = new RTC_exp::PeriodicExecutionContext();
       ec = pec2->getObjRef();
       id = (int)(rto->bindContext(ec));
 
       // [0]に登録されるか？
+      std::cout << "\ntest_bindContext() EQUAL(0, id)" << std::endl;
       CPPUNIT_ASSERT_EQUAL(0, id);
 
       // 正しく登録されているか？
+      std::cout << "\ntest_bindContext() rto->chk_ecMine(id,ec)" << std::endl;
       CPPUNIT_ASSERT(rto->chk_ecMine(id,ec));
 
-      rto->exit();
+      ///rto->exit();//
+      // std::cout << "\ntest_bindContext() rto->exit()" << std::endl;
+      // CPPUNIT_ASSERT_EQUAL(RTC::RTC_OK, rto->exit());///
 
       m_pPOA->deactivate_object(*m_pPOA->servant_to_id(pec));
       delete pec;
       m_pPOA->deactivate_object(*m_pPOA->servant_to_id(pec2));
       delete pec2;
 
-      rto->shutdown();
+      std::cout << "\ntest_bindContext() rto->shutdown()" << std::endl;
+      rto->shutdown();//
       delete rto;
 
     }

@@ -37,13 +37,19 @@ AM_LDFLAGS = \
 	-L$(top_builddir) \
 	-L$(top_builddir)/src/lib/coil/lib
 
+SUFFIXES = .idl Skel.cpp Stub.cpp Stub.o Skel.o
+.idlSkel.cpp:
+	$(top_srcdir)/build/makewrapper.py $< rtm/tests/RTObject/
+	$(IDLC) $(IDLFLAGS) $<
+
 IDL_SOURCES = \
 	$(top_srcdir)/src/lib/rtm/idl/SDOPackage.idl \
 	$(top_srcdir)/src/lib/rtm/idl/RTC.idl \
 	$(top_srcdir)/src/lib/rtm/idl/OpenRTM.idl \
 	$(top_srcdir)/src/lib/rtm/idl/Manager.idl \
 	$(top_srcdir)/src/lib/rtm/idl/BasicDataType.idl \
-	$(top_srcdir)/src/lib/rtm/idl/DataPort.idl
+	$(top_srcdir)/src/lib/rtm/idl/DataPort.idl \
+	RTObjectTests.idl
 
 noinst_PROGRAMS = RTObjectTests
 
@@ -116,7 +122,9 @@ RTObjectTests_LDFLAGS = -L$(libdir) $(AM_LDFLAGS)
 RTObjectTests_LDADD   = -lcppunit -lcoil -luuid -lgcov
 
 EXTRA_DIST = \
-	RTObjectTests.cpp
+	RTObjectTests.cpp \
+	$(IDL_SOURCES)
+
 
 # all
 all: do-test do-coverage
@@ -147,5 +155,3 @@ clean-local:
 	*~ *core                            \
 	Makefile.old                        \
 	*.cc *.hh *.i *.a *.c *.inl
-
-
