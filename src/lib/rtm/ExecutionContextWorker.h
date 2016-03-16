@@ -45,16 +45,68 @@ namespace RTC_impl
   typedef RTC::LightweightRTObject_var LightweightRTObject_var;
   /*!
    * @if jp
-   * @class PeriodicExecutionContext
-   * @brief PeriodicExecutionContext クラス
+   * @class ExecutionContextWorker
+   * @brief ExecutionContextWorker クラス
    *
-   * Periodic Sampled Data Processing(周期実行用)ExecutionContextクラス。
+   * RTCの状態マシン・プロキシクラス RTObjectStateMachine を保持・管理
+   * し、コールバックを実際にコールするためのワーカークラスインターフェー
+   * スクラス。ECの実装者は、ExecutionContextBase を継承し、メンバ変数
+   * として保持されているこの ExecutionContextWorker クラスのインター
+   * フェース経由でRTObjectのコールバックをコールすることになる。
    *
-   * @since 0.4.0
+   * - ECのオブジェクトリファレンスのセッタ・ゲッター
+   *   - void setECRef(RTC::ExecutionContextService_ptr ref);
+   *   - RTC::ExecutionContextService_ptr getECRef();
+   *   ECの具象クラス初期化時には、アクティブ化したECのオブジェクトリファ
+   *   レンスをsetECRef() でセットする。
+   *
+   * - ECの実行・停止関係関数
+   *   - CORBA::Boolean isRunning(void);
+   *   - RTC::ReturnCode_t start(void);
+   *   - RTC::ReturnCode_t stop(void);
+   *
+   * - RTCのアクティブ化・非アクティブ化関数
+   *   - RTC::ReturnCode_t activateComponent(RTC::LightweightRTObject_ptr comp,
+   *                                         RTObjectStateMachine*& rtobj);
+   *   - RTC::ReturnCode_t waitActivateComplete(RTObjectStateMachine*& rtobj,
+   *                                            coil::TimeValue timeout = 1.0,
+   *                                            long int cycle = 1000);
+   *
+   *   - RTC::ReturnCode_t deactivateComponent(RTC::LightweightRTObject_ptr comp,  *                                           RTObjectStateMachine*& rtobj);
+   *   - RTC::ReturnCode_t waitDeactivateComplete(RTObjectStateMachine*& rtobj,
+   *                                              coil::TimeValue timeout = 1.0,
+   *                                              long int cycle = 1000);
+   *   -  RTC::ReturnCode_t resetComponent(RTC::LightweightRTObject_ptr com,
+   *                                       RTObjectStateMachine*& rtobj);
+   *   -  RTC::ReturnCode_t waitResetComplete(RTObjectStateMachine*& rtobj,
+   *                                          coil::TimeValue timeout = 1.0,
+   *                                          long int cycle = 1000);
+   *   - RTC::LifeCycleState getComponentState(RTC::LightweightRTObject_ptr comp);
+   *   - const char* getStateString(RTC::LifeCycleState state)
+   *
+   * - RTC追加・削除系関数
+   *   - RTC::ReturnCode_t addComponent(RTC::LightweightRTObject_ptr comp);
+   *   - RTC::ReturnCode_t bindComponent(RTC::RTObject_impl* rtc);
+   *   - RTC::ReturnCode_t removeComponent(RTC::LightweightRTObject_ptr comp);
+   *   - RTObjectStateMachine* findComponent(RTC::LightweightRTObject_ptr comp);
+   *
+   * - 状態問い合わせ系関数
+   *   - bool isAllCurrentState(RTC::LifeCycleState state);
+   *   - bool isAllNextState(RTC::LifeCycleState state);
+   *   - bool isOneOfCurrentState(RTC::LifeCycleState state);
+   *   - bool isOneOfNextState(RTC::LifeCycleState state);
+   *
+   * - Workerの駆動およびコールバック
+   *   - void invokeWorker();
+   *   - void invokeWorkerPreDo();
+   *   - void invokeWorkerDo();
+   *   - void invokeWorkerPostDo();
+   *
+   * @since 1.2
    *
    * @else
-   * @class PeriodicExecutionContext
-   * @brief PeriodicExecutionContext class
+   * @class ExecutionContextWorker
+   * @brief ExecutionContextWorker class
    *
    * Periodic Sampled Data Processing (for the execution cycles)
    * ExecutionContext class
@@ -244,7 +296,7 @@ namespace RTC_impl
      * る。指定したRTコンポーネントが参加者リストに含まれない場合は、
      * BAD_PARAMETER が返される。指定したRTコンポーネントの状態が
      * Active 以外の場合は、PRECONDITION_NOT_MET が返される。
-     *
+     *a
      * @param comp 非アクティブ化対象RTコンポーネント
      *
      * @return ReturnCode_t 型のリターンコード
@@ -352,11 +404,17 @@ namespace RTC_impl
      * @if jp
      * @brief RTコンポーネントを追加する
      *
-     * 指定したRTコンポーネントを参加者リストに追加する。追加されたRTコ
-     * ンポーネントは attach_context が呼ばれ、Inactive 状態に遷移する。
-     * 指定されたRTコンポーネントがnullの場合は、BAD_PARAMETER が返され
-     * る。指定されたRTコンポーネントが DataFlowComponent 以外の場合は、
-     * BAD_PARAMETER が返される。
+     * 指定したRTコンポーネントを"参加者リスト"に追加する。追加された
+     * RTコンポーネントは attach_context が呼ばれ、Inactive 状態に遷移
+     * する。指定されたRTコンポーネントが null の場合は、BAD_PARAMETER が
+     * 返される。指定されたRTコンポーネントが DataFlowComponent 以外の
+     * 場合は、BAD_PARAMETER が返される。
+     *
+     * この関数が呼ばれた段階では、他の RTC は StateMachine 内のコール
+     * バック関数を呼び出し中の可能性があり、まずは "参加者リスト:
+     * m_addedComps" に RTC を追加しておく。コールバック呼び出しが一旦
+     * 終わった段階で同期的に updateComponentList() 関数が呼ばれ、この
+     * Worker に正式に RTC が参加した状態となる。
      *
      * @param comp 追加対象RTコンポーネント
      *
@@ -373,6 +431,12 @@ namespace RTC_impl
      * RT-Component is null or if the given RT-Component is other than
      * DataFlowComponent.
      *
+     * When right after this operation is called, since other RTCs
+     * might being called their callbacks of the StateMachine, at
+     * first the RTC is added into the "Participants: m_addedComps."
+     * After RTCs callbacks are called, updateComponentList() function
+     * is invoked and RTCs are officially a member of the worker.
+     *
      * @param comp The target RT-Component for add
      *
      * @return The return code of ReturnCode_t type
@@ -385,14 +449,23 @@ namespace RTC_impl
      * @if jp
      * @brief コンポーネントをバインドする。
      *
-     * コンポーネントをバインドする。
+     * コンポーネントに owned context をバインドする。引数に渡される
+     * RTObject_impl は、この EC の owner であり、内部的には RTObject
+     * の bindContext() をコール氏、ec_idを取得する。ec_id は
+     * ECOTHER_OFFSET よりも小さい。その後、RTObject のプロキシである
+     * RTObjectStateMachine を生成し、コンポーネントのリストに加える。
      *
      * @param rtc RTコンポーネント
      * @return ReturnCode_t 型のリターンコード
      * @else
      * @brief Bind the component.
      *
-     * Bind the component.
+     * This operation bind a RT-Component into owned context. Given
+     * argument RTObject_impl is the owner of the EC, and internally
+     * RTObject's bindContext() member function is called and obtain
+     * ec_id. The ec_id must be smaller than ECOTHER_OFFSET. After
+     * that proxy of RTObject RTObjectStateMachine is created, and it
+     * is added to the component list.
      *
      * @param rtc RT-Component's instances
      * @return The return code of ReturnCode_t type
@@ -445,6 +518,13 @@ namespace RTC_impl
     
     
   protected:
+    /*!
+     * @if jp
+     * @brief コンポーネントリストの更新
+     * @else
+     * @brief Updating component list
+     * @endif
+     */
     void updateComponentList();
 
 
