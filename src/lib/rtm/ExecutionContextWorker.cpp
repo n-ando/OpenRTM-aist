@@ -5,7 +5,7 @@
  * @date $Date: 2008-01-14 07:53:01 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
- * Copyright (C) 2006-2008,2012
+ * Copyright (C) 2006-2008,2012,2016
  *     Noriaki Ando
  *     Intelligent Systems Research Institute,
  *     National Institute of
@@ -149,7 +149,6 @@ namespace RTC_impl
                                             RTObjectStateMachine*& rtobj)
   {
     RTC_TRACE(("activateComponent()"));
-    Guard m_guard(m_mutex);
     RTObjectStateMachine* obj = findComponent(comp);
     if (obj == NULL)
       {
@@ -181,7 +180,6 @@ namespace RTC_impl
                                               RTObjectStateMachine*& rtobj)
   {
     RTC_TRACE(("deactivateComponent()"));
-    Guard m_guard(m_mutex);
 
     rtobj = findComponent(comp);
     if (rtobj == NULL)
@@ -210,7 +208,6 @@ namespace RTC_impl
                                          RTObjectStateMachine*& rtobj)
   {
     RTC_TRACE(("resetComponent()"));
-    Guard m_guard(m_mutex);
 
     rtobj = findComponent(comp);
     if (rtobj == NULL)
@@ -238,7 +235,7 @@ namespace RTC_impl
   ExecutionContextWorker::getComponentState(RTC::LightweightRTObject_ptr comp)
   {
     RTC_TRACE(("getComponentState()"));
-    Guard m_guard(m_mutex);
+
     RTObjectStateMachine* rtobj = findComponent(comp);
     if (rtobj == NULL)
       {
@@ -281,9 +278,21 @@ namespace RTC_impl
         return RTC::RTC_ERROR;
       }
     RTC_DEBUG(("addComponent() succeeded."));
+
+    // if EC is stopping, update component list immediately.
+    Guard guard(m_mutex);
+    if (!m_running) { updateComponentList(); }
+
     return RTC::RTC_OK;
   }
-  
+
+  /*!
+   * @if jp
+   * @brief コンポーネントをバインドする。
+   * @else
+   * @brief Bind the component.
+   * @endif
+   */  
   RTC::ReturnCode_t ExecutionContextWorker::
   bindComponent(RTC::RTObject_impl* rtc)
   {
@@ -310,6 +319,7 @@ namespace RTC_impl
     //    RTObjectStateMachine o(id, comp);
     m_comps.push_back(new RTObjectStateMachine(id, comp));
     RTC_DEBUG(("bindComponent() succeeded."));
+
     return RTC::RTC_OK;
   }
   
@@ -330,7 +340,6 @@ namespace RTC_impl
         return RTC::BAD_PARAMETER;
       }
 
-    Guard guard(m_mutex);
     RTObjectStateMachine* rtobj = findComponent(comp);
 
     if (rtobj == NULL)
@@ -341,12 +350,15 @@ namespace RTC_impl
     Guard removeGuard(m_removedMutex);
     m_removedComps.push_back(rtobj);
 
+    // if EC is stopping, update component list immediately.
+    Guard guard(m_mutex);
+    if (!m_running) { updateComponentList(); }
+
     return RTC::RTC_OK;
   }
 
   void ExecutionContextWorker::updateComponentList()
   {
-    Guard guard(m_mutex);
     {    // adding component
       Guard addedGuard(m_addedMutex);
       for (size_t i(0); i < m_addedComps.size(); ++i)
@@ -377,6 +389,7 @@ namespace RTC_impl
   RTObjectStateMachine*
   ExecutionContextWorker::findComponent(RTC::LightweightRTObject_ptr comp)
   {
+    Guard guard(m_mutex);
     for (size_t i(0); i < m_comps.size() ; ++i)
       {
         if(m_comps.at(i)->isEquivalent(comp))
@@ -439,6 +452,7 @@ namespace RTC_impl
     for (size_t i(0); i < len; ++i) { m_comps[i]->workerPreDo();  }
     for (size_t i(0); i < len; ++i) { m_comps[i]->workerDo();     }
     for (size_t i(0); i < len; ++i) { m_comps[i]->workerPostDo(); }
+    Guard guard(m_mutex);
     updateComponentList();
   }
 
@@ -465,6 +479,7 @@ namespace RTC_impl
     size_t len(m_comps.size());
     for (size_t i(0); i < len; ++i) { m_comps[i]->workerPostDo(); }
     // m_comps might be changed here
+    Guard guard(m_mutex);
     updateComponentList();
   }
 
