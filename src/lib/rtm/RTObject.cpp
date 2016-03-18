@@ -2164,7 +2164,7 @@ namespace RTC
             // never throws exception
             RTC_ERROR(("Unknown exception caught."));
           }
-	RTC::ExecutionContextFactory::instance().deleteObject(m_eclist[i]); /////
+	RTC::ExecutionContextFactory::instance().deleteObject(m_eclist[i]);
       }
     if (!m_eclist.empty())
       {
