@@ -27,6 +27,15 @@ default_reposerver="openrtm.org"
 reposervers="openrtm.org"
 reposerver=""
 
+#---------------------------------------
+# yum / dnf コマンド切替え
+#---------------------------------------
+if [ $version_num -ge 22 ]; then
+    COMMAND="dnf"
+else
+    COMMAND="yum"
+fi
+
 #----------------------------------------
 # root かどうかをチェック
 #----------------------------------------
@@ -117,7 +126,7 @@ install_packages () {
 	ins=`rpm -qa $p`
 	if test "x$ins" = "x"; then
 	    echo "Now installing: " $p
-	    yum install $p
+	    $COMMAND install $p
 	    echo "done."
 	    echo ""
 	else
@@ -142,7 +151,7 @@ reverse () {
 uninstall_packages () {
     for p in $*; do
 	echo "Now uninstalling: " $p
-	yum erase $p
+	$COMMAND erase $p
 	echo "done."
 	echo ""
     done

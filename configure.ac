@@ -1045,7 +1045,7 @@ if test "x$have_omniorb" = "xyes" ; then
 	PATH_NORM($omniidl)
 	omniidl=$n_path
 	IDLC=$omniidl
-	IDL_FLAGS="-bcxx -Wba -nf"
+	IDL_FLAGS="-bcxx -Wba -nf -Wbuse_quotes"
 
 	dnl omniNames
 	PATH_NORM($omniNames)
@@ -1697,6 +1697,7 @@ AC_OUTPUT([Makefile
 	win32/OpenRTM-aist/coil/Makefile
 	win32/OpenRTM-aist/rtm/Makefile
 	win32/OpenRTM-aist/rtm/idl/Makefile
+	win32/OpenRTM-aist/rtm/idl/device_interfaces/Makefile
 	win32/OpenRTM-aist/installer/Makefile
 	win32/OpenRTM-aist/installer/Bitmaps/Makefile
 	])

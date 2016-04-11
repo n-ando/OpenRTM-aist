@@ -29,7 +29,7 @@ lst:
 #------------------------------------------------------------
 win32_builddir = $(top_builddir)/win32/OpenRTM-aist/
 
-vcproj: vc8proj vc9proj vc10proj vc11proj vc12proj
+vcproj: vc8proj vc9proj vc10proj vc11proj vc12proj vc14proj
 
 vc8proj: rtcprof.yaml
 	$(top_builddir)/build/vcprojtool.py vcproj                   \
@@ -82,6 +82,17 @@ vc12proj: rtcprof.yaml
 		--out $(win32_builddir)/utils/rtcprof/rtcprof_vc12.vcxproj \
 		--yaml rtcprof.yaml                                        \
 		--source $(rtcprof_SOURCES)
+		
+vc14proj: rtcprof.yaml
+	$(top_builddir)/build/vcxprojtool.py vcxproj                   \
+		--type RTCEXE                                              \
+		--vcversion "14.00"                                        \
+		--projectname "rtcprof"                                    \
+		--version $(RTM_VERSION)                                   \
+		--out $(win32_builddir)/utils/rtcprof/rtcprof_vc14.vcxproj \
+		--yaml rtcprof.yaml                                        \
+		--source $(rtcprof_SOURCES)
+				
 #------------------------------------------------------------
 # for wxs file
 #------------------------------------------------------------
