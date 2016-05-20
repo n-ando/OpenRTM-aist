@@ -27,6 +27,7 @@ COIL_PLATFORM_H   =    \
 # coil common source
 COIL_COMMON_SRC =        \
 	Allocator.cpp    \
+	ClockManager.cpp \
 	PeriodicTask.cpp \
 	Properties.cpp   \
 	TimeMeasure.cpp  \
@@ -39,6 +40,7 @@ COIL_COMMON_SRC =        \
 COIL_COMMON_H   =           \
 	Allocator.h         \
 	Async.h             \
+	ClockManager.h      \
 	Factory.h           \
 	Guard.h             \
 	Listener.h          \

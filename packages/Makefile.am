@@ -8,3 +8,6 @@
 AUTOMAKE_OPTIONS = 1.4
 
 SUBDIRS = deb rpm
+
+clean-local:
+	rm -f *.deb *.dsc *.changes *.tar.gz
