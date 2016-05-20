@@ -20,3 +20,7 @@ DIST_SUBDIRS = $(SUBDIRS) $(NO_PLATFORM) win32 tests
 clean-local:
 	rm -f config_coil.h
 	rm -f *~
+	rm -f compile
+	rm -rf coil-$(VERSION)
+	rm -f coil-$(VERSION).tar.gz
+	rm -f coil-$(VERSION).tar.bz2
