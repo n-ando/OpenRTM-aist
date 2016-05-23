@@ -1,7 +1,7 @@
 libcoil:
 libRTC: libcoil libRTCSkel
-libManipulatorSkel: libcoil libRTCSkel libRTC
-libCameraSkel: libcoil libRTCSkel libManipulatorSkel libRTC
+librtmManipulator: libcoil libRTCSkel libRTC
+librtmCamera: libcoil libRTCSkel librtmManipulator libRTC
 rtcd: libcoil libRTC
 rtcprof: libcoil libRTC
 ComponentObserverConsumer: libcoil libRTC

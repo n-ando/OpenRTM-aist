@@ -15,7 +15,11 @@ LIBS = @LIBS@
 AM_CPPFLAGS=-I$(top_srcdir)/src/lib -I$(top_srcdir)/src/lib/rtm
 AM_LDFLAGS=-L$(top_builddir)/src/lib/rtm -L$(top_builddir)/src/lib/rtm/idl
 
-RTCSKEL_SOURCES =             \
+# RTM idl sources
+if ORB_IS_RTORB
+IDL_SOURCES = OpenRTM-aist.idl
+else
+IDL_SOURCES =             \
 	SDOPackage.idl        \
 	RTC.idl               \
 	OpenRTM.idl           \
@@ -24,22 +28,7 @@ RTCSKEL_SOURCES =             \
 	DataPort.idl          \
 	ExtendedDataTypes.idl \
 	InterfaceDataTypes.idl
-MANIPULATORSKEL_SOURCES =                         \
-	ManipulatorCommonInterface_DataTypes.idl  \
-	ManipulatorCommonInterface_Common.idl     \
-	ManipulatorCommonInterface_Middle.idl
-CAMERASKEL_SOURCES = CameraCommonInterface.idl
-
-# RTM idl sources
-if ORB_IS_RTORB
-IDL_SOURCES = OpenRTM-aist.idl
-else
-IDL_SOURCES =                      \
-	$(RTCSKEL_SOURCES)         \
-	$(MANIPULATORSKEL_SOURCES) \
-	$(CAMERASKEL_SOURCES)
 endif
-
 
 SKEL_H   = $(IDL_SOURCES:.idl=Skel.h)
 SKEL_CPP = $(IDL_SOURCES:.idl=Skel.cpp)
@@ -51,21 +40,6 @@ ALL_SRC =           \
 	$(STUB_H)   \
 	$(STUB_CPP) \
 	$(ORB_SRC)
-
-RTCSKEL_H   = $(RTCSKEL_SOURCES:.idl=Skel.h)
-RTCSKEL_CPP = $(RTCSKEL_SOURCES:.idl=Skel.cpp)
-RTCSTUB_H   = $(RTCSKEL_SOURCES:.idl=Stub.h)
-RTCSTUB_CPP = $(RTCSKEL_SOURCES:.idl=Stub.cpp)
-
-MANIPULATORSKEL_H   = $(MANIPULATORSKEL_SOURCES:.idl=Skel.h)
-MANIPULATORSKEL_CPP = $(MANIPULATORSKEL_SOURCES:.idl=Skel.cpp)
-MANIPULATORSTUB_H   = $(MANIPULATORSKEL_SOURCES:.idl=Stub.h)
-MANIPULATORSTUB_CPP = $(MANIPULATORSKEL_SOURCES:.idl=Stub.cpp)
-
-CAMERASKEL_H   = $(CAMERASKEL_SOURCES:.idl=Skel.h)
-CAMERASKEL_CPP = $(CAMERASKEL_SOURCES:.idl=Skel.cpp)
-CAMERASTUB_H   = $(CAMERASKEL_SOURCES:.idl=Stub.h)
-CAMERASTUB_CPP = $(CAMERASKEL_SOURCES:.idl=Stub.cpp)
 
 if ORB_IS_TAO
 ORB_SRC = $(TAO_SRC)
@@ -106,24 +80,7 @@ DUMMY_SKELS =                   \
         BasicDataTypeSkel.h     \
         DataPortSkel.h          \
         ExtendedDataTypesSkel.h \
-        InterfaceDataTypesSkel.h  \
-        ManipulatorCommonInterface_DataTypesSkel.h  \
-        ManipulatorCommonInterface_CommonSkel.h     \
-        ManipulatorCommonInterface_MiddleSkel.h     \
-        ImgSkel.h
-DUMMY_STUBS =                   \
-        SDOPackageStub.h        \
-        RTCStub.h               \
-        OpenRTMStub.h           \
-        ManagerStub.h           \
-        BasicDataTypeStub.h     \
-        DataPortStub.h          \
-        ExtendedDataTypesStub.h \
-        InterfaceDataTypesStub.h  \
-        ManipulatorCommonInterface_DataTypesStub.h  \
-        ManipulatorCommonInterface_CommonStub.h     \
-        ManipulatorCommonInterface_MiddleStub.h     \
-        ImgStub.h
+        InterfaceDataTypesSkel.h
 ORB_SRC = $(RTORB_SRC)
 endif
 
@@ -189,10 +146,6 @@ OpenRTM-aist.idl:
 	echo '#include "Manager.idl"' >> OpenRTM-aist.idl
 	echo '#include "DataPort.idl"' >> OpenRTM-aist.idl
 	echo '#include "InterfaceDataTypes.idl"' >> OpenRTM-aist.idl
-	echo '#include "ManipulatorCommonInterface_DataTypes.idl"' >> OpenRTM-aist.idl
-	echo '#include "ManipulatorCommonInterface_Common.idl"' >> OpenRTM-aist.idl
-	echo '#include "ManipulatorCommonInterface_Middle.idl"' >> OpenRTM-aist.idl
-	echo '#include "CameraCommonInterface.idl"' >> OpenRTM-aist.idl
 
 idl-stamp: $(IDL_SOURCES)
 	@touch idl-stamp
@@ -238,8 +191,8 @@ if ORB_IS_RTORB
 nodist_libRTCSkel_la_SOURCES = OpenRTM-aistSkel.cpp
 nodist_libRTCStub_la_SOURCES = OpenRTM-aistStub.cpp
 else
-nodist_libRTCSkel_la_SOURCES = $(RTCSKEL_CPP)
-nodist_libRTCStub_la_SOURCES = $(RTCSTUB_CPP)
+nodist_libRTCSkel_la_SOURCES = $(SKEL_CPP)
+nodist_libRTCStub_la_SOURCES = $(STUB_CPP)
 endif
 
 libRTCSkel_la_LIBADD = $(LIBS)
@@ -247,22 +200,6 @@ libRTCStub_la_LIBADD = $(LIBS)
 #
 #------------------------------------------------------------
 
-lib_LTLIBRARIES = \
-	libManipulatorSkel.la \
-	libManipulatorStub.la \
-	libCameraSkel.la      \
-	libCameraStub.la
-
-libManipulatorSkel_la_SOURCES = $(MANIPULATORSKEL_CPP)
-libManipulatorStub_la_SOURCES = $(MANIPULATORSTUB_CPP)
-
-libCameraSkel_la_SOURCES = $(CAMERASKEL_CPP)
-libCameraStub_la_SOURCES = $(CAMERASTUB_CPP)
-
-libManipulatorSkel_la_LIBADD = $(LIBS)
-libManipulatorStub_la_LIBADD = $(LIBS)
-libCameraSkel_la_LIBADD = $(LIBS)
-libCameraStub_la_LIBADD = $(LIBS)
 
 #------------------------------------------------------------
 # File list for deb/ports packages
@@ -296,27 +233,9 @@ vc9proj: libRTCSkel.vcproj.yaml
 		--version $(RTM_VERSION) \
 		--out $(win32_builddir)/rtm/idl/libRTCSkel_vc9.vcproj \
 		--yaml libRTCSkel.vcproj.yaml \
-		--source $(RTCSKEL_CPP) \
-		--header $(RTCSKEL_H)
+		--source $(SKEL_CPP) \
+		--header $(SKEL_H)
 	qkc -O- -sm $(win32_builddir)/rtm/idl/libRTCSkel_vc9.vcproj
-	$(top_builddir)/build/vcprojtool.py vcproj \
-		--type DLL \
-		--vcversion "9.00" \
-		--version $(RTM_VERSION) \
-		--out $(win32_builddir)/rtm/idl/libManipulatorSkel_vc9.vcproj \
-		--yaml libManipulatorSkel.vcproj.yaml \
-		--source $(MANIPULATORSKEL_CPP) \
-		--header $(MANIPULATORSKEL_H)
-	qkc -O- -sm $(win32_builddir)/rtm/idl/libManipulatorSkel_vc9.vcproj
-	$(top_builddir)/build/vcprojtool.py vcproj \
-		--type DLL \
-		--vcversion "9.00" \
-		--version $(RTM_VERSION) \
-		--out $(win32_builddir)/rtm/idl/libCameraSkel_vc9.vcproj \
-		--yaml libCameraSkel.vcproj.yaml \
-		--source $(CAMERASKEL_CPP) \
-		--header $(CAMERASKEL_H)
-	qkc -O- -sm $(win32_builddir)/rtm/idl/libCameraSkel_vc9.vcproj
 
 vc10proj: libRTCSkel.vcproj.yaml
 	$(top_builddir)/build/vcxprojtool.py vcxproj \
@@ -325,27 +244,9 @@ vc10proj: libRTCSkel.vcproj.yaml
 		--version $(RTM_VERSION) \
 		--out $(win32_builddir)/rtm/idl/libRTCSkel_vc10.vcxproj \
 		--yaml libRTCSkel.vcproj.yaml \
-		--source $(RTCSKEL_CPP) \
-		--header $(RTCSKEL_H)
+		--source $(SKEL_CPP) \
+		--header $(SKEL_H)
 	qkc -O- -sm $(win32_builddir)/rtm/idl/libRTCSkel_vc10.vcxproj
-	$(top_builddir)/build/vcxprojtool.py vcxproj \
-		--type DLL \
-		--vcversion "10.00" \
-		--version $(RTM_VERSION) \
-		--out $(win32_builddir)/rtm/idl/libManipulatorSkel_vc10.vcxproj \
-		--yaml libManipulatorSkel.vcproj.yaml \
-		--source $(MANIPULATORSKEL_CPP) \
-		--header $(MANIPULATORSKEL_H)
-	qkc -O- -sm $(win32_builddir)/rtm/idl/libManipulatorSkel_vc10.vcxproj
-	$(top_builddir)/build/vcxprojtool.py vcxproj \
-		--type DLL \
-		--vcversion "10.00" \
-		--version $(RTM_VERSION) \
-		--out $(win32_builddir)/rtm/idl/libCameraSkel_vc10.vcxproj \
-		--yaml libCameraSkel.vcproj.yaml \
-		--source $(CAMERASKEL_CPP) \
-		--header $(CAMERASKEL_H)
-	qkc -O- -sm $(win32_builddir)/rtm/idl/libCameraSkel_vc10.vcxproj
 
 vc11proj: libRTCSkel.vcproj.yaml
 	$(top_builddir)/build/vcxprojtool.py vcxproj \
@@ -354,27 +255,9 @@ vc11proj: libRTCSkel.vcproj.yaml
 		--version $(RTM_VERSION) \
 		--out $(win32_builddir)/rtm/idl/libRTCSkel_vc11.vcxproj \
 		--yaml libRTCSkel.vcproj.yaml \
-		--source $(RTCSKEL_CPP) \
-		--header $(RTCSKEL_H)
+		--source $(SKEL_CPP) \
+		--header $(SKEL_H)
 	qkc -O- -sm $(win32_builddir)/rtm/idl/libRTCSkel_vc11.vcxproj
-	$(top_builddir)/build/vcxprojtool.py vcxproj \
-		--type DLL \
-		--vcversion "11.00" \
-		--version $(RTM_VERSION) \
-		--out $(win32_builddir)/rtm/idl/libManipulatorSkel_vc11.vcxproj \
-		--yaml libManipulatorSkel.vcproj.yaml \
-		--source $(MANIPULATORSKEL_CPP) \
-		--header $(MANIPULATORSKEL_H)
-	qkc -O- -sm $(win32_builddir)/rtm/idl/libManipulatorSkel_vc11.vcxproj
-	$(top_builddir)/build/vcxprojtool.py vcxproj \
-		--type DLL \
-		--vcversion "11.00" \
-		--version $(RTM_VERSION) \
-		--out $(win32_builddir)/rtm/idl/libCameraSkel_vc11.vcxproj \
-		--yaml libCameraSkel.vcproj.yaml \
-		--source $(CAMERASKEL_CPP) \
-		--header $(CAMERASKEL_H)
-	qkc -O- -sm $(win32_builddir)/rtm/idl/libCameraSkel_vc11.vcxproj
 
 vc12proj: libRTCSkel.vcproj.yaml
 	$(top_builddir)/build/vcxprojtool.py vcxproj \
@@ -383,57 +266,19 @@ vc12proj: libRTCSkel.vcproj.yaml
 		--version $(RTM_VERSION) \
 		--out $(win32_builddir)/rtm/idl/libRTCSkel_vc12.vcxproj \
 		--yaml libRTCSkel.vcproj.yaml \
-		--source $(RTCSKEL_CPP) \
-		--header $(RTCSKEL_H)
+		--source $(SKEL_CPP) \
+		--header $(SKEL_H)
 	qkc -O- -sm $(win32_builddir)/rtm/idl/libRTCSkel_vc12.vcxproj
-	$(top_builddir)/build/vcxprojtool.py vcxproj \
-		--type DLL \
-		--vcversion "12.00" \
-		--version $(RTM_VERSION) \
-		--out $(win32_builddir)/rtm/idl/libManipulatorSkel_vc12.vcxproj \
-		--yaml libManipulatorSkel.vcproj.yaml \
-		--source $(MANIPULATORSKEL_CPP) \
-		--header $(MANIPULATORSKEL_H)
-	qkc -O- -sm $(win32_builddir)/rtm/idl/libManipulatorSkel_vc12.vcxproj
-	$(top_builddir)/build/vcxprojtool.py vcxproj \
-		--type DLL \
-		--vcversion "12.00" \
-		--version $(RTM_VERSION) \
-		--out $(win32_builddir)/rtm/idl/libCameraSkel_vc12.vcxproj \
-		--yaml libCameraSkel.vcproj.yaml \
-		--source $(CAMERASKEL_CPP) \
-		--header $(CAMERASKEL_H)
-	qkc -O- -sm $(win32_builddir)/rtm/idl/libCameraSkel_vc12.vcxproj
 vc14proj: libRTCSkel.vcproj.yaml
-	$(top_builddir)/build/vcxprojtool.py vcxproj \
-		--type LIB \
-		--vcversion "14.00" \
-		--version $(RTM_VERSION) \
-		--out $(win32_builddir)/rtm/idl/libRTCSkel_vc14.vcxproj \
-		--yaml libRTCSkel.vcproj.yaml \
-		--source $(RTCSKEL_CPP) \
-		--header $(RTCSKEL_H)
+		$(top_builddir)/build/vcxprojtool.py vcxproj \
+			--type LIB \
+			--vcversion "14.00" \
+			--version $(RTM_VERSION) \
+			--out $(win32_builddir)/rtm/idl/libRTCSkel_vc14.vcxproj \
+			--yaml libRTCSkel.vcproj.yaml \
+			--source $(SKEL_CPP) \
+			--header $(SKEL_H)
 	qkc -O- -sm $(win32_builddir)/rtm/idl/libRTCSkel_vc14.vcxproj
-	$(top_builddir)/build/vcxprojtool.py vcxproj \
-		--type DLL \
-		--vcversion "14.00" \
-		--version $(RTM_VERSION) \
-		--out $(win32_builddir)/rtm/idl/libManipulatorSkel_vc14.vcxproj \
-		--yaml libManipulatorSkel.vcproj.yaml \
-		--source $(MANIPULATORSKEL_CPP) \
-		--header $(MANIPULATORSKEL_H)
-	qkc -O- -sm $(win32_builddir)/rtm/idl/libManipulatorSkel_vc14.vcxproj
-	$(top_builddir)/build/vcxprojtool.py vcxproj \
-		--type DLL \
-		--vcversion "14.00" \
-		--version $(RTM_VERSION) \
-		--out $(win32_builddir)/rtm/idl/libCameraSkel_vc14.vcxproj \
-		--yaml libCameraSkel.vcproj.yaml \
-		--source $(CAMERASKEL_CPP) \
-		--header $(CAMERASKEL_H)
-	qkc -O- -sm $(win32_builddir)/rtm/idl/libCameraSkel_vc14.vcxproj
-
-
 #------------------------------------------------------------
 # for wxs file
 #------------------------------------------------------------
@@ -457,4 +302,3 @@ EXTRA_DIST = \
 	libRTCSkel.vcproj.yaml
 
 DIST_SUBDIRS = device_interfaces
-
