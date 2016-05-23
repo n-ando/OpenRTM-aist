@@ -211,7 +211,7 @@ namespace RTC
           (*m_onWrite)(value);
           RTC_TRACE(("OnWrite called"));
         }
-      m_profile.properties[m_index].value <<= value;
+      m_profile.properties[m_propValueIndex].value <<= value;
 
       bool result(true);
       std::vector<const char *> disconnect_ids;
