@@ -291,7 +291,7 @@ else
 	FP_FIND_FILE(doxygen,$base_bins $base_dirs,bin)
 	if test "x$doxygen" = "x" ; then
 		AC_MSG_RESULT(not found)
-		AC_MSG_ERROR(Please install doxygen or use --without-document option)
+		AC_MSG_ERROR(Please install doxygen or use --without-doxygen option)
 	else
 		AC_MSG_RESULT($doxygen)
 	fi
