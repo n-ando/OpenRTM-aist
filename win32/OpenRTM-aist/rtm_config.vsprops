@@ -69,7 +69,7 @@
 	<!-- OpenRTM-aist macros -->
 	<UserMacro
 		Name="rtm_includes"
-		Value="&quot;$(rtm_root)&quot;;&quot;$(rtm_root)\rtm\idl&quot;"
+		Value="&quot;$(rtm_root)&quot;;&quot;$(rtm_root)\rtm\idl&quot;;&quot;$(rtm_root)\rtm\ext&quot;"
 	/>
 	<UserMacro
 		Name="rtm_libdir"
