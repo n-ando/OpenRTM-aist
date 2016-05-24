@@ -1595,6 +1595,7 @@ AC_OUTPUT([Makefile
 	src/lib/Makefile
 	src/lib/rtm/Makefile
 	src/lib/rtm/idl/Makefile
+	src/lib/rtm/ext/Makefile
 	src/lib/rtm/idl/device_interfaces/Makefile
 	src/lib/rtm/tests/Makefile
 	src/lib/rtm/tests/CORBA_IORUtil/Makefile
@@ -1696,6 +1697,7 @@ AC_OUTPUT([Makefile
 	win32/OpenRTM-aist/utils/rtcprof/Makefile
 	win32/OpenRTM-aist/coil/Makefile
 	win32/OpenRTM-aist/rtm/Makefile
+	win32/OpenRTM-aist/rtm/ext/Makefile
 	win32/OpenRTM-aist/rtm/idl/Makefile
 	win32/OpenRTM-aist/rtm/idl/device_interfaces/Makefile
 	win32/OpenRTM-aist/installer/Makefile

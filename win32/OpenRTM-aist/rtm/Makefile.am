@@ -4,7 +4,7 @@
 ##
 ## $Id$
 ##---------------------------------------------------------------------------
-SUBDIRS = idl .
+SUBDIRS = idl . ext
 
 RTM_VERSION = @RTM_VERSION@
 RTM_SHORT_VERSION = @RTM_SHORT_VERSION@

@@ -1,13 +1,13 @@
 #
-# @brief VCProject configuration file for libManipulatorSkel
+# @brief VCProject configuration file for librtmCamera
 # @date $Date: 2008-02-29 04:58:39 $
 # @author Norkai Ando <n-ando@aist.go.jp>
 #
 ProjectType: "Visual C++"
 Version: "__VCVERSION__"
-Name: libManipulatorSkel
+Name: librtmCamera
 ProjectGUID: __GUID__
-RootNamespace: libManipulatorSkel
+RootNamespace: librtmCamera
 Keyword: "Win32Proj"
 Configurations:
 #------------------------------------------------------------
@@ -22,13 +22,9 @@ Configurations:
     VCPreBuildEventTool:
       - Key: CommandLine
         Value: |
-          set PATH=$(rtm_path);%PYTHON_ROOT%\\;%PATH%
-          makewrapper.py ManipulatorCommonInterface_DataTypes.idl
-          makewrapper.py ManipulatorCommonInterface_Common.idl
-          makewrapper.py ManipulatorCommonInterface_Middle.idl
-          omniidl -bcxx -Wba -nf ManipulatorCommonInterface_DataTypes.idl
-          omniidl -bcxx -Wba -nf ManipulatorCommonInterface_Common.idl
-          omniidl -bcxx -Wba -nf ManipulatorCommonInterface_Middle.idl
+          set PATH=$(rtm_path);%PYTHON_ROOT%\\\\;%PATH%
+          for %%x in (*.idl) do rtm-skelwrapper.py --include-dir="" --skel-suffix=Skel --stub-suffix=Stub --idl-file=%%x
+          for %%x in (*.idl) do $(rtm_idlc) $(rtm_idlflags) -Wbdll_includes %%x
     VCCLCompilerTool:
       - Key: Optimization
         Value: "0"
@@ -49,16 +45,16 @@ Configurations:
     VCPreLinkEventTool:
       - Key: CommandLine
         Value: |
-          lib -out:"$(TargetDir)ManipulatorSkel_static.lib" "$(TargetDir)*.obj" "$(ProjectDir)idl\$(ConfigurationName)\*.obj"
+          lib -out:"$(TargetDir)rtmCamera_static.lib" "$(TargetDir)*.obj" "$(ProjectDir)idl\$(ConfigurationName)\*.obj"
           set PATH=%PATH%;$(rtm_path)
           cd "$(TargetDir)"
-          start /wait cmd /c makedeffile.py ManipulatorSkel_static.lib ManipulatorSkel$(rtm_dllver)d $(rtm_shortver) ManipulatorSkel$(rtm_dllver)d.def
-          move ManipulatorSkel$(rtm_dllver)d.def ..\
+          start /wait cmd /c makedeffile.py rtmCamera_static.lib rtmCamera$(rtm_dllver)d $(rtm_shortver) rtmCamera$(rtm_dllver)d.def
+          move rtmCamera$(rtm_dllver)d.def ..\
     VCLinkerTool:
       - Key: AdditionalDependencies
         Value: "libRTCSkeld.lib $(rtm_depend_libd)"
       - Key: OutputFile
-        Value: "$(OutDir)\\ManipulatorSkel$(rtm_dllver)d.dll"
+        Value: "$(OutDir)\\rtmCamera$(rtm_dllver)d.dll"
       - Key: Version
         Value: $(rtm_shortver)
       - Key: LinkIncremental
@@ -86,12 +82,8 @@ Configurations:
       - Key: Command 
         Value: | 
           set PATH=$(rtm_path);%PYTHON_ROOT%\\;%PATH%
-          makewrapper.py ManipulatorCommonInterface_DataTypes.idl
-          makewrapper.py ManipulatorCommonInterface_Common.idl
-          makewrapper.py ManipulatorCommonInterface_Middle.idl
-          omniidl -bcxx -Wba -nf ManipulatorCommonInterface_DataTypes.idl
-          omniidl -bcxx -Wba -nf ManipulatorCommonInterface_Common.idl
-          omniidl -bcxx -Wba -nf ManipulatorCommonInterface_Middle.idl
+          for %%x in (*.idl) do rtm-skelwrapper.py --include-dir="" --skel-suffix=Skel --stub-suffix=Stub --idl-file=%%x
+          for %%x in (*.idl) do $(rtm_idlc) $(rtm_idlflags) -Wbdll_includes %%x
     VC10_VCCLCompilerTool:
       - Key: Optimization
         Value: "Disabled"
@@ -112,22 +104,22 @@ Configurations:
     VC10_VCPreLinkEventTool:
       - Key: Command
         Value: |
-          lib -out:"$(TargetDir)ManipulatorSkel_static.lib" "$(TargetDir)*.obj" "$(ProjectDir)idl\$(ConfigurationName)\*.obj"
+          lib -out:"$(TargetDir)rtmCamera_static.lib" "$(TargetDir)*.obj" "$(ProjectDir)idl\$(ConfigurationName)\*.obj"
           set PATH=%PATH%;$(rtm_path)
           cd "$(TargetDir)"
-          start /wait cmd /c makedeffile.py ManipulatorSkel_static.lib ManipulatorSkel$(rtm_dllver)d $(rtm_shortver) ManipulatorSkel$(rtm_dllver)d.def
-          move ManipulatorSkel$(rtm_dllver)d.def ..\
+          start /wait cmd /c makedeffile.py rtmCamera_static.lib rtmCamera$(rtm_dllver)d $(rtm_shortver) rtmCamera$(rtm_dllver)d.def
+          move rtmCamera$(rtm_dllver)d.def ..\
     VC10_VCLinkerTool:
       - Key: AdditionalDependencies
         Value: "libRTCSkeld.lib;$(rtm_depend_libd);%(AdditionalDependencies)"
       - Key: OutputFile
-        Value: "$(OutDir)\\ManipulatorSkel$(rtm_dllver)d.dll"
+        Value: "$(OutDir)\\rtmCamera$(rtm_dllver)d.dll"
       - Key: Version
         Value: $(rtm_shortver)
       - Key: LinkIncremental
         Value: "true"
       - Key: ModuleDefinitionFile
-        Value: "ManipulatorSkel$(rtm_dllver)d.def"
+        Value: "rtmCamera$(rtm_dllver)d.def"
       - Key: GenerateDebugInformation
         Value: "true"
       - Key: SubSystem
@@ -137,8 +129,8 @@ Configurations:
     VC10_VCPostBuildEventTool:
       - Key: Command
         Value: |
-          copy "$(OutDir)\\$(TargetName).lib" "$(SolutionDir)bin\\ManipulatorSkel$(rtm_dllver)d.lib"
-          copy "$(OutDir)\\ManipulatorSkel$(rtm_dllver)d.dll" "$(SolutionDir)bin\\"
+          copy "$(OutDir)\\$(TargetName).lib" "$(SolutionDir)bin\\rtmCamera$(rtm_dllver)d.lib"
+          copy "$(OutDir)\\rtmCamera$(rtm_dllver)d.dll" "$(SolutionDir)bin\\"
   - Name: "Debug|x64"
     OutputDirectory: "$(ProjectDir)$(ConfigurationName)"
     IntermediateDirectory: "$(ConfigurationName)"
@@ -149,12 +141,8 @@ Configurations:
       - Key: CommandLine
         Value: |
           set PATH=$(rtm_path);%PYTHON_ROOT%\\;%PATH%
-          makewrapper.py ManipulatorCommonInterface_DataTypes.idl
-          makewrapper.py ManipulatorCommonInterface_Common.idl
-          makewrapper.py ManipulatorCommonInterface_Middle.idl
-          omniidl -bcxx -Wba -nf ManipulatorCommonInterface_DataTypes.idl
-          omniidl -bcxx -Wba -nf ManipulatorCommonInterface_Common.idl
-          omniidl -bcxx -Wba -nf ManipulatorCommonInterface_Middle.idl
+          for %%x in (*.idl) do rtm-skelwrapper.py --include-dir="" --skel-suffix=Skel --stub-suffix=Stub --idl-file=%%x
+          for %%x in (*.idl) do $(rtm_idlc) $(rtm_idlflags) -Wbdll_includes %%x
     VCCLCompilerTool:
       - Key: Optimization
         Value: "0"
@@ -175,16 +163,16 @@ Configurations:
     VCPreLinkEventTool:
       - Key: CommandLine
         Value: |
-          lib -out:"$(TargetDir)ManipulatorSkel_static.lib" "$(TargetDir)*.obj" "$(ProjectDir)idl\$(ConfigurationName)\*.obj"
+          lib -out:"$(TargetDir)rtmCamera_static.lib" "$(TargetDir)*.obj" "$(ProjectDir)idl\$(ConfigurationName)\*.obj"
           set PATH=%PATH%;$(rtm_path)
           cd "$(TargetDir)"
-          start /wait cmd /c makedeffile.py ManipulatorSkel_static.lib ManipulatorSkel$(rtm_dllver)d $(rtm_shortver) ManipulatorSkel$(rtm_dllver)d.def
-          move ManipulatorSkel$(rtm_dllver)d.def ..\
+          start /wait cmd /c makedeffile.py rtmCamera_static.lib rtmCamera$(rtm_dllver)d $(rtm_shortver) rtmCamera$(rtm_dllver)d.def
+          move rtmCamera$(rtm_dllver)d.def ..\
     VCLinkerTool:
       - Key: AdditionalDependencies
         Value: "libRTCSkeld.lib $(rtm_depend_libd)"
       - Key: OutputFile
-        Value: "$(OutDir)\\ManipulatorSkel$(rtm_dllver)d.dll"
+        Value: "$(OutDir)\\rtmCamera$(rtm_dllver)d.dll"
       - Key: Version
         Value: $(rtm_shortver)
       - Key: LinkIncremental
@@ -212,12 +200,8 @@ Configurations:
       - Key: Command 
         Value: | 
           set PATH=$(rtm_path);%PYTHON_ROOT%\\;%PATH%
-          makewrapper.py ManipulatorCommonInterface_DataTypes.idl
-          makewrapper.py ManipulatorCommonInterface_Common.idl
-          makewrapper.py ManipulatorCommonInterface_Middle.idl
-          omniidl -bcxx -Wba -nf ManipulatorCommonInterface_DataTypes.idl
-          omniidl -bcxx -Wba -nf ManipulatorCommonInterface_Common.idl
-          omniidl -bcxx -Wba -nf ManipulatorCommonInterface_Middle.idl
+          for %%x in (*.idl) do rtm-skelwrapper.py --include-dir="" --skel-suffix=Skel --stub-suffix=Stub --idl-file=%%x
+          for %%x in (*.idl) do $(rtm_idlc) $(rtm_idlflags) -Wbdll_includes %%x
     VC10_VCCLCompilerTool:
       - Key: Optimization
         Value: "Disabled"
@@ -238,22 +222,22 @@ Configurations:
     VC10_VCPreLinkEventTool:
       - Key: Command
         Value: |
-          lib -out:"$(TargetDir)ManipulatorSkel_static.lib" "$(TargetDir)*.obj" "$(ProjectDir)idl\$(ConfigurationName)\*.obj"
+          lib -out:"$(TargetDir)rtmCamera_static.lib" "$(TargetDir)*.obj" "$(ProjectDir)idl\$(ConfigurationName)\*.obj"
           set PATH=%PATH%;$(rtm_path)
           cd "$(TargetDir)"
-          start /wait cmd /c makedeffile.py ManipulatorSkel_static.lib ManipulatorSkel$(rtm_dllver)d $(rtm_shortver) ManipulatorSkel$(rtm_dllver)d.def
-          move ManipulatorSkel$(rtm_dllver)d.def ..\
+          start /wait cmd /c makedeffile.py rtmCamera_static.lib rtmCamera$(rtm_dllver)d $(rtm_shortver) rtmCamera$(rtm_dllver)d.def
+          move rtmCamera$(rtm_dllver)d.def ..\
     VC10_VCLinkerTool:
       - Key: AdditionalDependencies
         Value: "libRTCSkeld.lib;$(rtm_depend_libd);%(AdditionalDependencies)"
       - Key: OutputFile
-        Value: "$(OutDir)\\ManipulatorSkel$(rtm_dllver)d.dll"
+        Value: "$(OutDir)\\rtmCamera$(rtm_dllver)d.dll"
       - Key: Version
         Value: $(rtm_shortver)
       - Key: LinkIncremental
         Value: "true"
       - Key: ModuleDefinitionFile
-        Value: "ManipulatorSkel$(rtm_dllver)d.def"
+        Value: "rtmCamera$(rtm_dllver)d.def"
       - Key: GenerateDebugInformation
         Value: "true"
       - Key: SubSystem
@@ -263,8 +247,8 @@ Configurations:
     VC10_VCPostBuildEventTool:
       - Key: Command
         Value: |
-          copy "$(OutDir)\\$(TargetName).lib" "$(SolutionDir)bin\\ManipulatorSkel$(rtm_dllver)d.lib"
-          copy "$(OutDir)\\ManipulatorSkel$(rtm_dllver)d.dll" "$(SolutionDir)bin\\"
+          copy "$(OutDir)\\$(TargetName).lib" "$(SolutionDir)bin\\rtmCamera$(rtm_dllver)d.lib"
+          copy "$(OutDir)\\rtmCamera$(rtm_dllver)d.dll" "$(SolutionDir)bin\\"
 #------------------------------------------------------------
 # Release Configuration
 #------------------------------------------------------------
@@ -279,12 +263,8 @@ Configurations:
       - Key: CommandLine
         Value: |
           set PATH=$(rtm_path);%PYTHON_ROOT%\\;%PATH%
-          makewrapper.py ManipulatorCommonInterface_DataTypes.idl
-          makewrapper.py ManipulatorCommonInterface_Common.idl
-          makewrapper.py ManipulatorCommonInterface_Middle.idl
-          omniidl -bcxx -Wba -nf ManipulatorCommonInterface_DataTypes.idl
-          omniidl -bcxx -Wba -nf ManipulatorCommonInterface_Common.idl
-          omniidl -bcxx -Wba -nf ManipulatorCommonInterface_Middle.idl
+          for %%x in (*.idl) do rtm-skelwrapper.py --include-dir="" --skel-suffix=Skel --stub-suffix=Stub --idl-file=%%x
+          for %%x in (*.idl) do $(rtm_idlc) $(rtm_idlflags) -Wbdll_includes %%x
     VCCLCompilerTool:
       - Key: PreprocessorDefinitions
         Value: "LIBRARY_EXPORTS;WIN32;NDEBUG;_WINDOWS;_USRDLL;__WIN32__;__NT__;__OSVERSION__=4;__x86__;_WIN32_WINNT=0x0400;_CRT_SECURE_NO_DEPRECATE"
@@ -299,16 +279,16 @@ Configurations:
     VCPreLinkEventTool:
       - Key: CommandLine
         Value: |
-          lib -out:"$(TargetDir)ManipulatorSkel_static.lib" "$(TargetDir)*.obj" "$(ProjectDir)idl\$(ConfigurationName)\*.obj"
+          lib -out:"$(TargetDir)rtmCamera_static.lib" "$(TargetDir)*.obj" "$(ProjectDir)idl\$(ConfigurationName)\*.obj"
           set PATH=%PATH%;$(rtm_path)
           cd "$(OutDir)"
-          start /wait cmd /c makedeffile.py ManipulatorSkel_static.lib $(TargetName) $(rtm_shortver) $(TargetName).def
-          move ManipulatorSkel$(rtm_dllver).def ..\\
+          start /wait cmd /c makedeffile.py rtmCamera_static.lib $(TargetName) $(rtm_shortver) $(TargetName).def
+          move rtmCamera$(rtm_dllver).def ..\\
     VCLinkerTool:
       - Key: AdditionalDependencies
         Value: "libRTCSkel.lib $(rtm_depend_lib)"
       - Key: OutputFile
-        Value: "$(OutDir)\\ManipulatorSkel$(rtm_dllver).dll"
+        Value: "$(OutDir)\\rtmCamera$(rtm_dllver).dll"
       - Key: LinkIncremental
         Value: "1"
       - Key: ModuleDefinitionFile
@@ -338,12 +318,8 @@ Configurations:
       - Key: Command 
         Value: | 
           set PATH=$(rtm_path);%PYTHON_ROOT%\\;%PATH%
-          makewrapper.py ManipulatorCommonInterface_DataTypes.idl
-          makewrapper.py ManipulatorCommonInterface_Common.idl
-          makewrapper.py ManipulatorCommonInterface_Middle.idl
-          omniidl -bcxx -Wba -nf ManipulatorCommonInterface_DataTypes.idl
-          omniidl -bcxx -Wba -nf ManipulatorCommonInterface_Common.idl
-          omniidl -bcxx -Wba -nf ManipulatorCommonInterface_Middle.idl
+          for %%x in (*.idl) do rtm-skelwrapper.py --include-dir="" --skel-suffix=Skel --stub-suffix=Stub --idl-file=%%x
+          for %%x in (*.idl) do $(rtm_idlc) $(rtm_idlflags) -Wbdll_includes %%x
     VC10_VCCLCompilerTool:
       - Key: PreprocessorDefinitions
         Value: "LIBRARY_EXPORTS;WIN32;NDEBUG;_WINDOWS;_USRDLL;__WIN32__;__NT__;__OSVERSION__=4;__x86__;_WIN32_WINNT=0x0400;_CRT_SECURE_NO_DEPRECATE;%(PreprocessorDefinitions)"
@@ -358,20 +334,20 @@ Configurations:
     VC10_VCPreLinkEventTool:
       - Key: Command
         Value: |
-          lib -out:"$(TargetDir)ManipulatorSkel_static.lib" "$(TargetDir)*.obj" "$(ProjectDir)idl\$(ConfigurationName)\*.obj"
+          lib -out:"$(TargetDir)rtmCamera_static.lib" "$(TargetDir)*.obj" "$(ProjectDir)idl\$(ConfigurationName)\*.obj"
           set PATH=%PATH%;$(rtm_path)
           cd "$(OutDir)"
-          start /wait cmd /c makedeffile.py ManipulatorSkel_static.lib ManipulatorSkel$(rtm_dllver) $(rtm_shortver) ManipulatorSkel$(rtm_dllver).def
-          move ManipulatorSkel$(rtm_dllver).def ..\\
+          start /wait cmd /c makedeffile.py rtmCamera_static.lib rtmCamera$(rtm_dllver) $(rtm_shortver) rtmCamera$(rtm_dllver).def
+          move rtmCamera$(rtm_dllver).def ..\\
     VC10_VCLinkerTool:
       - Key: AdditionalDependencies
         Value: "libRTCSkel.lib;$(rtm_depend_lib);%(AdditionalDependencies)"
       - Key: OutputFile
-        Value: "$(OutDir)\\ManipulatorSkel$(rtm_dllver).dll"
+        Value: "$(OutDir)\\rtmCamera$(rtm_dllver).dll"
       - Key: LinkIncremental
         Value: "false"
       - Key: ModuleDefinitionFile
-        Value: "ManipulatorSkel$(rtm_dllver).def"
+        Value: "rtmCamera$(rtm_dllver).def"
       - Key: GenerateDebugInformation
         Value: "false"
       - Key: SubSystem
@@ -385,8 +361,8 @@ Configurations:
     VC10_VCPostBuildEventTool:
       - Key: Command
         Value: |
-          copy "$(OutDir)\\$(TargetName).lib" "$(SolutionDir)bin\\ManipulatorSkel$(rtm_dllver).lib"
-          copy "$(OutDir)\\ManipulatorSkel$(rtm_dllver).dll" "$(SolutionDir)bin\\"
+          copy "$(OutDir)\\$(TargetName).lib" "$(SolutionDir)bin\\rtmCamera$(rtm_dllver).lib"
+          copy "$(OutDir)\\rtmCamera$(rtm_dllver).dll" "$(SolutionDir)bin\\"
   - Name: "Release|x64"
     OutputDirectory: "$(ProjectDir)$(ConfigurationName)"
     IntermediateDirectory: "$(ConfigurationName)"
@@ -398,12 +374,8 @@ Configurations:
       - Key: CommandLine
         Value: |
           set PATH=$(rtm_path);%PYTHON_ROOT%\\;%PATH%
-          makewrapper.py ManipulatorCommonInterface_DataTypes.idl
-          makewrapper.py ManipulatorCommonInterface_Common.idl
-          makewrapper.py ManipulatorCommonInterface_Middle.idl
-          omniidl -bcxx -Wba -nf ManipulatorCommonInterface_DataTypes.idl
-          omniidl -bcxx -Wba -nf ManipulatorCommonInterface_Common.idl
-          omniidl -bcxx -Wba -nf ManipulatorCommonInterface_Middle.idl
+          for %%x in (*.idl) do rtm-skelwrapper.py --include-dir="" --skel-suffix=Skel --stub-suffix=Stub --idl-file=%%x
+          for %%x in (*.idl) do $(rtm_idlc) $(rtm_idlflags) -Wbdll_includes %%x
     VCCLCompilerTool:
       - Key: PreprocessorDefinitions
         Value: "LIBRARY_EXPORTS;WIN32;NDEBUG;_WINDOWS;_USRDLL;__WIN32__;__NT__;__OSVERSION__=4;__x86__;_WIN32_WINNT=0x0400;_CRT_SECURE_NO_DEPRECATE"
@@ -418,16 +390,16 @@ Configurations:
     VCPreLinkEventTool:
       - Key: CommandLine
         Value: |
-          lib -out:"$(TargetDir)ManipulatorSkel_static.lib" "$(TargetDir)*.obj" "$(ProjectDir)idl\$(ConfigurationName)\*.obj"
+          lib -out:"$(TargetDir)rtmCamera_static.lib" "$(TargetDir)*.obj" "$(ProjectDir)idl\$(ConfigurationName)\*.obj"
           set PATH=%PATH%;$(rtm_path)
           cd "$(OutDir)"
-          start /wait cmd /c makedeffile.py ManipulatorSkel_static.lib $(TargetName) $(rtm_shortver) $(TargetName).def
-          move ManipulatorSkel$(rtm_dllver).def ..\\
+          start /wait cmd /c makedeffile.py rtmCamera_static.lib $(TargetName) $(rtm_shortver) $(TargetName).def
+          move rtmCamera$(rtm_dllver).def ..\\
     VCLinkerTool:
       - Key: AdditionalDependencies
         Value: "libRTCSkel.lib $(rtm_depend_lib)"
       - Key: OutputFile
-        Value: "$(OutDir)\\ManipulatorSkel$(rtm_dllver).dll"
+        Value: "$(OutDir)\\rtmCamera$(rtm_dllver).dll"
       - Key: LinkIncremental
         Value: "1"
       - Key: ModuleDefinitionFile
@@ -457,12 +429,8 @@ Configurations:
       - Key: Command 
         Value: | 
           set PATH=$(rtm_path);%PYTHON_ROOT%\\;%PATH%
-          makewrapper.py ManipulatorCommonInterface_DataTypes.idl
-          makewrapper.py ManipulatorCommonInterface_Common.idl
-          makewrapper.py ManipulatorCommonInterface_Middle.idl
-          omniidl -bcxx -Wba -nf ManipulatorCommonInterface_DataTypes.idl
-          omniidl -bcxx -Wba -nf ManipulatorCommonInterface_Common.idl
-          omniidl -bcxx -Wba -nf ManipulatorCommonInterface_Middle.idl
+          for %%x in (*.idl) do rtm-skelwrapper.py --include-dir="" --skel-suffix=Skel --stub-suffix=Stub --idl-file=%%x
+          for %%x in (*.idl) do $(rtm_idlc) $(rtm_idlflags) -Wbdll_includes %%x
     VC10_VCCLCompilerTool:
       - Key: PreprocessorDefinitions
         Value: "LIBRARY_EXPORTS;WIN32;NDEBUG;_WINDOWS;_USRDLL;__WIN32__;__NT__;__OSVERSION__=4;__x86__;_WIN32_WINNT=0x0400;_CRT_SECURE_NO_DEPRECATE;%(PreprocessorDefinitions)"
@@ -477,20 +445,20 @@ Configurations:
     VC10_VCPreLinkEventTool:
       - Key: Command
         Value: |
-          lib -out:"$(TargetDir)ManipulatorSkel_static.lib" "$(TargetDir)*.obj" "$(ProjectDir)idl\$(ConfigurationName)\*.obj"
+          lib -out:"$(TargetDir)rtmCamera_static.lib" "$(TargetDir)*.obj" "$(ProjectDir)idl\$(ConfigurationName)\*.obj"
           set PATH=%PATH%;$(rtm_path)
           cd "$(OutDir)"
-          start /wait cmd /c makedeffile.py ManipulatorSkel_static.lib ManipulatorSkel$(rtm_dllver) $(rtm_shortver) ManipulatorSkel$(rtm_dllver).def
-          move ManipulatorSkel$(rtm_dllver).def ..\\
+          start /wait cmd /c makedeffile.py rtmCamera_static.lib rtmCamera$(rtm_dllver) $(rtm_shortver) rtmCamera$(rtm_dllver).def
+          move rtmCamera$(rtm_dllver).def ..\\
     VC10_VCLinkerTool:
       - Key: AdditionalDependencies
         Value: "libRTCSkel.lib;$(rtm_depend_lib);%(AdditionalDependencies)"
       - Key: OutputFile
-        Value: "$(OutDir)\\ManipulatorSkel$(rtm_dllver).dll"
+        Value: "$(OutDir)\\rtmCamera$(rtm_dllver).dll"
       - Key: LinkIncremental
         Value: "false"
       - Key: ModuleDefinitionFile
-        Value: "ManipulatorSkel$(rtm_dllver).def"
+        Value: "rtmCamera$(rtm_dllver).def"
       - Key: GenerateDebugInformation
         Value: "false"
       - Key: SubSystem
@@ -504,5 +472,5 @@ Configurations:
     VC10_VCPostBuildEventTool:
       - Key: Command
         Value: |
-          copy "$(OutDir)\\$(TargetName).lib" "$(SolutionDir)bin\\ManipulatorSkel$(rtm_dllver).lib"
-          copy "$(OutDir)\\ManipulatorSkel$(rtm_dllver).dll" "$(SolutionDir)bin\\"
+          copy "$(OutDir)\\$(TargetName).lib" "$(SolutionDir)bin\\rtmCamera$(rtm_dllver).lib"
+          copy "$(OutDir)\\rtmCamera$(rtm_dllver).dll" "$(SolutionDir)bin\\"

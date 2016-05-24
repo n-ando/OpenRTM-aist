@@ -9,6 +9,7 @@ SUBDIRS = bin etc cmake build docs examples ext utils coil rtm installer .
 
 clean-local:
 	rm -f *~ *.sln *.yaml *.ncb *.suo *.user
+	rm -f AUTHORS COPYING.LIB COPYRIGHT ChangeLog README README.jp
 	rm -rf components
 	rm -f coil_distbuild.vsprops
 	rm -f coil_config.vsprops

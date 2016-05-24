@@ -70,7 +70,7 @@ fi
 # コードネーム取得
 #---------------------------------------
 check_codename () {
-    cnames="sarge etch lenny squeeze wheezy"
+    cnames="sarge etch lenny squeeze wheezy jessie"
     for c in $cnames; do
 	if test -f "/etc/apt/sources.list"; then
 	    res=`grep $c /etc/apt/sources.list`
