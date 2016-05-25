@@ -147,23 +147,25 @@ $(ALL_SRC): idl-stamp
 		$(MAKE) $(AM_MAKEFLAGS) idl-stamp ; \
 	fi ;
 
+#------------------------------------------------------------
 # Install directory of headers and idl files
+#------------------------------------------------------------
 rtmheaderdir = $(rtm_includedir)/rtm
-idldir =       $(rtmheaderdir)/idl
-rtmskeldir =   $(rtmheaderdir)/idl
+idldir =       $(rtmheaderdir)/ext
+extskeldir =   $(rtmheaderdir)/ext
 
 idl_DATA = $(IDL_SOURCES)
-
-nodist_rtmskel_HEADERS = $(ALL_SRC) 
+nodist_extskel_HEADERS = $(ALL_SRC)
 
 #------------------------------------------------------------
-
+# libraries
+#------------------------------------------------------------
 lib_LTLIBRARIES = \
 	librtmManipulator.la \
 	librtmCamera.la
 
-librtmManipulator_la_SOURCES = $(MANIPULATORSKEL_CPP)
-librtmCamera_la_SOURCES = $(CAMERASKEL_CPP)
+nodist_librtmManipulator_la_SOURCES = $(MANIPULATORSKEL_CPP)
+nodist_librtmCamera_la_SOURCES = $(CAMERASKEL_CPP)
 
 librtmManipulator_la_LIBADD = $(LIBS) -lRTC
 librtmCamera_la_LIBADD = $(LIBS) -lRTC
