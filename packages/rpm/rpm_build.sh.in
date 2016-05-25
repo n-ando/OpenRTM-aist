@@ -59,11 +59,13 @@ distname=`echo $dist_name | sed 's/[ |\(|\)]//g'`
 
 echo "distribution: " $dist_name
 
+arch=`uname -i | sed -s 's/i[3-5]/i6/g'`
+
 #------------------------------------------------------------
 # package build process
 #------------------------------------------------------------
 mkdir -p {BUILD,RPMS,SOURCES,SPECS,SRPMS}
-mkdir -p RPMS/{i386,i586,i686,x86_64,noarch}
+mkdir -p RPMS/{$arch,noarch}
 
 # fake tar-ball is created under SOURCES dir
 rm -f $packagename
@@ -94,6 +96,6 @@ echo "%_topdir $builddir" > .rpmrc
 # We have already extracted source under BUILD directory.
 # %prep process can be skiped. = --short-circuit -bc
 rpm_def="_topdir $builddir"
-rpmbuild --target `uname -i` --define "$rpm_def" -ba OpenRTM-aist.spec
+rpmbuild --target "$arch" --define "$rpm_def" -ba OpenRTM-aist.spec
 cd ..
 rm $packagename
