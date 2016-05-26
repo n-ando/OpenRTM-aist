@@ -41,7 +41,7 @@ Sensor_la_LIBADD  = $(top_builddir)/src/lib/rtm/libRTC.la \
 
 # Standalone RTCs
 example_PROGRAMS = ControllerComp MotorComp SensorComp Composite
-example_DATA = rtc.conf composite.conf
+example_DATA = rtc.conf composite.conf rtc.composite.linux.conf
 
 ControllerComp_SOURCES = ControllerComp.cpp 
 ControllerComp_DEPENDENCIES = Controller.la
@@ -86,7 +86,8 @@ EXTRA_DIST =                \
 	README.Motor        \
 	README.Sensor       \
 	rtc.conf            \
-	composite.conf
+	composite.conf      \
+	rtc.composite.linux.conf
 
 ALL_SRC =                  \
 	ControllerComp.cpp \
