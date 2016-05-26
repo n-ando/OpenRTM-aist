@@ -20,7 +20,7 @@ sourcedir  = $(exampledir)/src/ExtTrigger
 
 # Standalone RTCs
 example_PROGRAMS = ConsoleInCompExt ConsoleOutCompExt ConnectorCompExt
-example_DATA = rtc.conf rtc.conf.org
+example_DATA = rtc.conf
 
 ConsoleInCompExt_SOURCES = ConsoleInComp.cpp ConsoleIn.cpp ConsoleIn.h
 ConsoleInCompExt_LDADD   = $(top_builddir)/src/lib/rtm/libRTC.la \
@@ -50,8 +50,7 @@ EXTRA_DIST =                \
 	Makefile.ConsoleOut \
 	README.ConsoleIn    \
 	README.ConsoleOut   \
-	rtc.conf            \
-	rtc.conf.org
+	rtc.conf            
 
 ALL_SRC =                  \
 	ConsoleInComp.cpp  \
