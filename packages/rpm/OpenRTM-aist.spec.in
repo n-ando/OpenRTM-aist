@@ -136,7 +136,6 @@ export DONT_STRIP=1
 %defattr(-,root,root,-)
 %attr(755,root,root) %{rtm_datadir}/example/*Comp*
 %{rtm_datadir}/example/*.conf
-%{rtm_datadir}/example/*.conf.org
 %{rtm_datadir}/example/src/*
 %{rtm_datadir}/example/rtc/*
 %{rtm_datadir}/example/templates/*
