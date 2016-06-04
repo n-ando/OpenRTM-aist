@@ -138,7 +138,7 @@ namespace RTC
 #endif
         m_value(value), m_onWrite(0), m_onWriteConvert(0)
     {
-      addProperty("dataport.data_value", m_value);
+      addProperty("dataport.data_value", 0);
       m_propValueIndex = NVUtil::find_index(m_profile.properties, "dataport.data_value");
     }
     
