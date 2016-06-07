@@ -141,7 +141,8 @@ namespace RTC
       addProperty("dataport.data_value", CORBA::Short(0));
       {
 	Guard guard(m_profile_mutex);
-	m_propValueIndex = NVUtil::find_index(m_profile.properties, "dataport.data_value");
+	m_propValueIndex = NVUtil::find_index(m_profile.properties,
+					      "dataport.data_value");
       }
     }
     
