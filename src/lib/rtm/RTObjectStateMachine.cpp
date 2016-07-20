@@ -160,7 +160,7 @@ namespace RTC_impl
     m_caVar = RTC::ComponentAction::_narrow(comp);
     if (CORBA::is_nil(m_caVar)) { return; }
     m_ca = true;
-    PortableServer::POA_ptr poa = RTC::Manager::instance().getPOA();
+    PortableServer::POA_var poa = ::RTC::Manager::instance().getPOA();
     try
       {
         m_rtobjPtr =

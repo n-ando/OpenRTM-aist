@@ -92,8 +92,8 @@ namespace RTC
    * @endif
    */
   PortAdmin::PortAdmin(CORBA::ORB_ptr orb, PortableServer::POA_ptr poa)
-    : m_pORB(CORBA::ORB::_duplicate(orb)),
-      m_pPOA(PortableServer::POA::_duplicate(poa)),
+    : m_pORB(orb),
+      m_pPOA(poa),
       rtclog("portadmin")
   {
   }

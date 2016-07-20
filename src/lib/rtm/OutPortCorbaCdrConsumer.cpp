@@ -162,7 +162,7 @@ namespace RTC
         const char* ior;
         properties[index].value >>= ior;
 
-        CORBA::ORB_ptr orb = ::RTC::Manager::instance().getORB();
+        CORBA::ORB_var orb = ::RTC::Manager::instance().getORB();
         CORBA::Object_var var = orb->string_to_object(ior);
         bool ret(setObject(var.in()));
         if (ret)
@@ -203,7 +203,7 @@ namespace RTC
     if (properties[index].value >>= ior)
       {
         RTC_DEBUG(("dataport.corba_cdr.outport_ior found."));
-        CORBA::ORB_ptr orb = RTC::Manager::instance().getORB();
+        CORBA::ORB_var orb = ::RTC::Manager::instance().getORB();
         CORBA::Object_var var = orb->string_to_object(ior);
         if (_ptr()->_is_equivalent(var))
           {

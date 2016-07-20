@@ -49,7 +49,7 @@
 //static sig_atomic_t g_mgrActive = true;
 extern "C" void handler (int)
 {
-  RTC::Manager::instance().terminate();
+  ::RTC::Manager::instance().terminate();
 }
 
 namespace RTC
@@ -252,12 +252,12 @@ namespace RTC
     
     try
       {
-        if(CORBA::is_nil(this->getPOAManager()))
+        if(CORBA::is_nil(this->thePOAManager()))
         {
           RTC_ERROR(("Could not get POA manager."));
           return false;
         }
-	this->getPOAManager()->activate();
+        this->thePOAManager()->activate();
         RTC_TRACE(("POA Manager activated."));
       }
     catch (...)
@@ -1107,41 +1107,78 @@ std::vector<coil::Properties> Manager::getLoadableModules()
   //============================================================
   /*!
    * @if jp
-   * @brief ORB のポインタを取得する
+   * @brief ORB のポインタを取得する (所有権保持)
    * @else
-   * @brief Get the pointer to the ORB
+   * @brief Get the pointer to the ORB (ownership retained)
+   * @endif
+   */
+  CORBA::ORB_ptr Manager::theORB()
+  {
+    RTC_TRACE(("Manager::theORB()"));
+    return m_pORB.in();
+  }
+  /*!
+   * @if jp
+   * @brief ORB のポインタを取得する (所有権複製)
+   * @else
+   * @brief Get the pointer to the ORB (ownership duplicated)
    * @endif
    */
   CORBA::ORB_ptr Manager::getORB()
   {
     RTC_TRACE(("Manager::getORB()"));
-    return m_pORB;
+    return CORBA::ORB::_duplicate(m_pORB);
   }
   
   /*!
    * @if jp
-   * @brief Manager が持つ RootPOA のポインタを取得する
+   * @brief Manager が持つ RootPOA のポインタを取得する (所有権保持)
    * @else
-   * @brief Get the pointer to the RootPOA 
+   * @brief Get the pointer to the RootPOA (ownership retained)
+   * @endif
+   */
+  PortableServer::POA_ptr Manager::thePOA()
+  {
+    RTC_TRACE(("Manager::thePOA()"));
+    return m_pPOA.in();
+  }
+  /*!
+   * @if jp
+   * @brief Manager が持つ RootPOA のポインタを取得する (所有権複製)
+   * @else
+   * @brief Get the pointer to the RootPOA (ownership duplicated)
    * @endif
    */
   PortableServer::POA_ptr Manager::getPOA()
   {
     RTC_TRACE(("Manager::getPOA()"));
-    return m_pPOA;
+    return PortableServer::POA::_duplicate(m_pPOA);
   }
   
   /*!
    * @if jp
-   * @brief Manager が持つ POAManager を取得する
+   * @brief Manager が持つ POAManager を取得する (所有権保持)
    * @else
-   * @brief Get the pointer to the POAManager 
+   * @brief Get the pointer to the POAManager (ownership retained)
+   * @endif
+   */
+  PortableServer::POAManager_ptr Manager::thePOAManager()
+  {
+    RTC_TRACE(("Manager::thePOAManager()"));
+    return m_pPOAManager.in();
+  }
+  
+  /*!
+   * @if jp
+   * @brief Manager が持つ POAManager を取得する (所有権複製)
+   * @else
+   * @brief Get the pointer to the POAManager (ownership duplicated)
    * @endif
    */
   PortableServer::POAManager_ptr Manager::getPOAManager()
   {
     RTC_TRACE(("Manager::getPOAManager()"));
-    return m_pPOAManager;
+    return PortableServer::POAManager::_duplicate(m_pPOAManager);
   }
   
   //============================================================
