@@ -780,9 +780,9 @@ namespace RTM
         //Ppreparing INS POA
         CORBA::Object_var obj;
 #ifndef ORB_IS_RTORB
-        obj = m_mgr.getORB()->resolve_initial_references("omniINSPOA");
+        obj = m_mgr.theORB()->resolve_initial_references("omniINSPOA");
 #else // ROB_IS_RTORB
-        obj = m_mgr.getORB()->resolve_initial_references((char*)"omniINSPOA");
+        obj = m_mgr.theORB()->resolve_initial_references((char*)"omniINSPOA");
 #endif // ORB_IS_RTORB
         PortableServer::POA_ptr poa = PortableServer::POA::_narrow(obj);
         poa->the_POAManager()->activate();
@@ -805,7 +805,7 @@ namespace RTM
         m_objref = ::RTM::Manager::_narrow(mgrobj);
 
         CORBA::String_var ior;
-        ior = m_mgr.getORB()->
+        ior = m_mgr.theORB()->
           object_to_string(RTM::Manager::_duplicate(m_objref));
         std::string iorstr((const char*)ior);
         RTC_DEBUG(("Manager's IOR information:\n %s",
@@ -835,7 +835,7 @@ namespace RTM
         RTC_DEBUG(("corbaloc: %s", mgrloc.c_str()));
 
         CORBA::Object_var mobj;
-        mobj = m_mgr.getORB()->string_to_object(mgrloc.c_str());
+        mobj = m_mgr.theORB()->string_to_object(mgrloc.c_str());
 #ifndef ORB_IS_RTORB
         RTM::Manager_var mgr = ::RTM::Manager::_narrow(mobj);
 #else // ORB_IS_RTORB
@@ -851,7 +851,7 @@ namespace RTM
 #endif // ORB_IS_RTORB
 
         CORBA::String_var ior;
-        ior = m_mgr.getORB()->object_to_string(RTM::Manager::_duplicate(mgr));
+        ior = m_mgr.theORB()->object_to_string(RTM::Manager::_duplicate(mgr));
         std::string iorstr((const char*)ior);
         RTC_DEBUG(("Manager's IOR information:\n %s",
                    CORBA_IORUtil::formatIORinfo(iorstr.c_str()).c_str()));

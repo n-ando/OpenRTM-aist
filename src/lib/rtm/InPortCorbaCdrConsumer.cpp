@@ -178,7 +178,7 @@ namespace RTC
         return false;
       }
     
-    CORBA::ORB_ptr orb = RTC::Manager::instance().getORB();
+    CORBA::ORB_var orb = ::RTC::Manager::instance().getORB();
     CORBA::Object_var obj = orb->string_to_object(ior);
     
     if (CORBA::is_nil(obj))
@@ -263,7 +263,7 @@ namespace RTC
         return false;
       }
     
-    CORBA::ORB_ptr orb = RTC::Manager::instance().getORB();
+    CORBA::ORB_var orb = ::RTC::Manager::instance().getORB();
     CORBA::Object_var var = orb->string_to_object(ior);
     if (!(_ptr()->_is_equivalent(var)))
       {

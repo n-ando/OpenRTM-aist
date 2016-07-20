@@ -1,4 +1,4 @@
-// -*- C++ -*-
+/// -*- C++ -*-
 /*!
  * @file Manager.h
  * @brief RTComponent manager class
@@ -913,54 +913,198 @@ namespace RTC
     //============================================================
     /*!
      * @if jp
-     * @brief ORB のポインタを取得する
+     * @brief ORB のポインタを取得する (所有権保持)
      *
-     * Manager に設定された ORB のポインタを取得する。
+     * Manager に設定された ORB のポインタを取得する。所有権は保持され
+     * たままである。_var型で受ける場合は getORB() を用いること。この関
+     * 数は以下のようにORBのオペレーションを直接呼ぶ場合に利用する。
+     *
+     * Manager::instance().theORB()->string_to_object(<IOR string>);
      *
      * @return ORB オブジェクト
      *
      * @else
-     * @brief Get the pointer to ORB
+     * @brief Get the pointer to ORB (ownership retained)
      *
-     * Get the pointer to ORB that has been set to Manager.
+     * Get the pointer to ORB that has been set to Manager. The
+     * ownership of ORB is retained. If the returned value is assigned
+     * to _var variable, getORB() operation must be used. This
+     * operation is provided for the following use.
+     *
+     * Manager::instance().theORB()->string_to_object(<IOR string>);
+     *
+     * @return ORB object
+     *
+     * @endif
+     */
+    CORBA::ORB_ptr theORB();
+
+    /*!
+     * @if jp
+     * @brief ORB のポインタを取得する (所有権複製)
+     *
+     * Manager に設定された ORB のポインタを取得する。所有権はコピーさ
+     * れ（リファレンスカウントが1増加する。）、受け取った側でも所有権
+     * を獲得する。したがって、使用後にはリファレンスを解放する必要があ
+     * る。通常は以下のように戻り値を _var 型変数で受け取り、自動的に解
+     * 放させる方法が推奨される。
+     *
+     * {
+     *   CORBA::ORB_var orb = Manager::instance().getORB();
+     *   orb->string_to_object(<IOR string>);
+     * } // ORB's reference in orb is released here.
+     *
+     * @return ORB オブジェクト
+     *
+     * @else
+     * @brief Get the pointer to ORB (ownership duplicated)
+     *
+     * Get the pointer to ORB that has been set to Manager. The
+     * ownership is copied (the reference count is incremented.),
+     * calling side also obtains reference ownership. The obtained
+     * reference must be released after use. Usually it is recommended
+     * that return value are assigned to _var type variables are
+     * wonership would be released automatically.
+     *
+     * {
+     *   CORBA::ORB_var orb = Manager::instance().getORB();
+     *   orb->string_to_object(<IOR string>);
+     * } // ORB's reference in orb is released here.
      *
      * @return ORB object
      *
      * @endif
      */
     CORBA::ORB_ptr getORB();
-    
+
     /*!
      * @if jp
-     * @brief Manager が持つ RootPOA のポインタを取得する
+     * @brief Manager が持つ RootPOA のポインタを取得する (所有権保持)
      *
-     * Manager に設定された RootPOA へのポインタを取得する。
+     * Manager に設定された RootPOA へのポインタを取得する。所有権は保持され
+     * たままである。_var型で受ける場合は getPOA() を用いること。この関
+     * 数は以下のようにPOAのオペレーションを直接呼ぶ場合に利用する。
+     *
+     * Manager::instance().getPOA()->servant_to_id(m_servant);
      *
      * @return RootPOAオブジェクト
      *
      * @else
      * @brief Get a pointer to RootPOA held by Manager
      *
-     * Get the pointer to RootPOA that has been set to Manager.
+     * Get the pointer to RootPOA that has been set to Manager. The
+     * ownership of POA is retained. If the returned value is assigned
+     * to _var variable, getPOA() operation must be used. This
+     * operation is provided for the following use.
+     *
+     * Manager::instance().getPOA()->servant_to_id(m_servant);
+     *
+     * @return RootPOA object
+     *
+     * @endif
+     */
+
+    PortableServer::POA_ptr thePOA();
+    /*!
+     * @if jp
+     * @brief Manager が持つ RootPOA のポインタを取得する (所有権複製)
+     *
+     * Manager に設定された RootPOA へのポインタを取得する。所有権はコ
+     * ピーされ（リファレンスカウントが1増加する。）、受け取った側でも
+     * 所有権を獲得する。したがって、使用後にはリファレンスを解放する必
+     * 要がある。通常は以下のように戻り値を _var 型変数で受け取り、自動
+     * 的に解放させる方法が推奨される。
+     *
+     * {
+     *   PortableServer::POA_var poa = Manager::instance().getPOA();;
+     *   poa->servant_to_id(m_servant);
+     * } // POA's reference in orb is released here.
+     *
+     * @return RootPOAオブジェクト
+     *
+     * @else
+     * @brief Get a pointer to RootPOA held by Manager
+     *
+     * Get the pointer to RootPOA that has been set to Manager. The
+     * ownership is copied (the reference count is incremented.),
+     * calling side also obtains reference ownership. The obtained
+     * reference must be released after use. Usually it is recommended
+     * that return value are assigned to _var type variables are
+     * wonership would be released automatically.
+     *
+     * {
+     *   PortableServer::POA_var poa = Manager::instance().getPOA();;
+     *   poa->servant_to_id(m_servant);
+     * } // POA's reference in orb is released here.
      *
      * @return RootPOA object
      *
      * @endif
      */
     PortableServer::POA_ptr getPOA();
-    
+
     /*!
      * @if jp
-     * @brief Manager が持つ POAManager を取得する
+     * @brief Manager が持つ POAManager を取得する (所有権保持)
      *
-     * Manager に設定された POAMAnager を取得する。
+     * Manager に設定された POAMAnager を取得する。所有権は保持され
+     * たままである。_var型で受ける場合は getORB() を用いること。この関
+     * 数は以下のようにORBのオペレーションを直接呼ぶ場合に利用する。
+     *
+     * Manager::instance().thePOAManager()->activate();
      *
      * @return POAマネージャ
      *
      * @else
-     * @brief Get POAManager that Manager has
+     * @brief Get POAManager that Manager has (ownership retained)
      *
-     * Get POAMAnager that has been set to Manager.
+     * Get POAMAnager that has been set to Manager. The ownership of
+     * POAManager is retained. If the returned value is assigned to
+     * _var variable, getPOAManager() operation must be used. This
+     * operation is provided for the following use.
+     *
+     * Manager::instance().thePOAManager()->activate();
+     *
+     * @return POA manager
+     *
+     * @endif
+     */
+
+    PortableServer::POAManager_ptr thePOAManager();
+    /*!
+     * @if jp
+     * @brief Manager が持つ POAManager を取得する (所有権複製)
+     *
+     * Manager に設定された POAMAnager を取得する。所有権はコピーさ
+     * れ（リファレンスカウントが1増加する。）、受け取った側でも所有権
+     * を獲得する。したがって、使用後にはリファレンスを解放する必要があ
+     * る。通常は以下のように戻り値を _var 型変数で受け取り、自動的に解
+     * 放させる方法が推奨される。
+     *
+     * {
+     *   PortableServer::POAManager_var poam;
+     *   poam = = Manager::instance().getPOAManager();
+     *   poam->activate();
+     * } // POAManager's reference in orb is released here.
+     *
+     *
+     * @return POAマネージャ
+     *
+     * @else
+     * @brief Get POAManager that Manager has (ownership duplicated)
+     *
+     * Get POAMAnager that has been set to Manager. The
+     * ownership is copied (the reference count is incremented.),
+     * calling side also obtains reference ownership. The obtained
+     * reference must be released after use. Usually it is recommended
+     * that return value are assigned to _var type variables are
+     * wonership would be released automatically.
+     *
+     * {
+     *   PortableServer::POAManager_var poam;
+     *   poam = = Manager::instance().getPOAManager();
+     *   poam->activate();
+     * } // POAManager's reference in orb is released here.
      *
      * @return POA manager
      *

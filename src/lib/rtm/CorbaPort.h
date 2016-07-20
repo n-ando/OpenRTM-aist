@@ -1226,29 +1226,30 @@ namespace RTC
           m_ior()
       {  
 #ifndef ORB_IS_RTORB
-        m_oid = Manager::instance().getPOA()->servant_to_id(m_servant);
+        PortableServer::POA_var poa = ::RTC::Manager::instance().getPOA();
+        m_oid = poa->servant_to_id(m_servant);
         try
           {
-            Manager::instance().
-              getPOA()->activate_object_with_id(m_oid, m_servant);
+            poa->activate_object_with_id(m_oid, m_servant);
           }
         catch(...)
           {
             ;
           }
         CORBA::Object_var obj;
-        obj = Manager::instance().getPOA()->id_to_reference(m_oid);
-        CORBA::ORB_ptr orb = Manager::instance().getORB();
+        obj = poa->id_to_reference(m_oid);
+        CORBA::ORB_var orb = Manager::instance().getORB();
         CORBA::String_var ior_var = orb->object_to_string(obj);
         m_ior = ior_var;
         deactivate();
 #else // ORB_IS_RTORB
         // why RtORB does not activate object by __this()
         // and does not deactivate at the end of ctor?
-        m_oid = Manager::instance().getPOA()->servant_to_id(m_servant);
+        PortableServer::POA_var poa = ::RTC::Manager::instance().getPOA();
+        m_oid = poa->servant_to_id(m_servant);
         CORBA::Object_var obj;
         obj = CORBA::Object_var(m_servant->__this());
-        CORBA::ORB_ptr orb = Manager::instance().getORB();
+        CORBA::ORB_var orb = Manager::instance().getORB();
         CORBA::String_var ior_var = orb->object_to_string(obj);
         m_ior = ior_var;
 #endif // ORB_IS_RTORB
@@ -1266,8 +1267,8 @@ namespace RTC
       {
         try
           {
-            Manager::instance().
-              getPOA()->activate_object_with_id(m_oid, m_servant);
+            ::RTC::Manager::instance().
+              thePOA()->activate_object_with_id(m_oid, m_servant);
           }
         catch(const ::PortableServer::POA::ServantAlreadyActive &)
           {
@@ -1282,7 +1283,7 @@ namespace RTC
       {
         try
           {
-            Manager::instance().getPOA()->deactivate_object(m_oid);
+            ::RTC::Manager::instance().thePOA()->deactivate_object(m_oid);
           }
         catch(...)
           {
@@ -1333,7 +1334,7 @@ namespace RTC
       bool setObject(const char* ior)
       {
         m_ior = ior;
-        CORBA::ORB_ptr orb = ::RTC::Manager::instance().getORB();
+        CORBA::ORB_var orb = ::RTC::Manager::instance().getORB();
         CORBA::Object_var obj = orb->string_to_object(ior);
         if (CORBA::is_nil(obj))
           {

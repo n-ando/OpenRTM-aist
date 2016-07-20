@@ -42,7 +42,7 @@ namespace RTC
     m_objref = this->_this();
     
     // set InPort's reference
-    CORBA::ORB_ptr orb = ::RTC::Manager::instance().getORB();
+    CORBA::ORB_var orb = ::RTC::Manager::instance().getORB();
     CORBA::String_var ior = orb->object_to_string(m_objref.in());
     CORBA_SeqUtil::
       push_back(m_properties,

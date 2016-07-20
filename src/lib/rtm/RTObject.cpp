@@ -63,8 +63,8 @@ namespace RTC
    */
   RTObject_impl::RTObject_impl(Manager* manager)
     : m_pManager(manager),
-      m_pORB(CORBA::ORB::_duplicate(manager->getORB())),
-      m_pPOA(PortableServer::POA::_duplicate(manager->getPOA())),
+      m_pORB(manager->getORB()),
+      m_pPOA(manager->getPOA()),
       m_portAdmin(manager->getORB(), manager->getPOA()),
       m_created(true), m_exiting(false),
       m_properties(default_conf), m_configsets(m_properties.getNode("conf")),

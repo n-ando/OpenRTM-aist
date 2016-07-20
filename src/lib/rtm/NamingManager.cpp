@@ -77,14 +77,14 @@ namespace RTC
       {
         CORBA::Object_var obj(RTObject::_duplicate(rtobj->getObjRef()));
         CORBA::String_var ior;
-        ior = RTC::Manager::instance().getORB()->object_to_string(obj.in());
+        CORBA::ORB_var orb = ::RTC::Manager::instance().getORB();
+        ior = orb->object_to_string(obj.in());
         std::string iorstr((const char*)ior);
 
         RTC_DEBUG(("Original IOR information:\n %s",
                    CORBA_IORUtil::formatIORinfo(iorstr.c_str()).c_str()));
         CORBA_IORUtil::replaceEndpoint(iorstr, m_endpoint);
-        CORBA::Object_var newobj = RTC::Manager::instance().
-          getORB()->string_to_object(iorstr.c_str());
+        CORBA::Object_var newobj = orb->string_to_object(iorstr.c_str());
 
         RTC_DEBUG(("Modified IOR information:\n %s",
                    CORBA_IORUtil::formatIORinfo(iorstr.c_str()).c_str()));
@@ -108,14 +108,14 @@ namespace RTC
       {
         CORBA::Object_var obj(PortService::_duplicate(port->getPortRef()));
         CORBA::String_var ior;
-        ior = RTC::Manager::instance().getORB()->object_to_string(obj.in());
+        CORBA::ORB_var orb = ::RTC::Manager::instance().getORB();
+        ior = orb->object_to_string(obj.in());
         std::string iorstr((const char*)ior);
 
         RTC_DEBUG(("Original IOR information:\n %s",
                    CORBA_IORUtil::formatIORinfo(iorstr.c_str()).c_str()));
         CORBA_IORUtil::replaceEndpoint(iorstr, m_endpoint);
-        CORBA::Object_var newobj = RTC::Manager::instance().
-          getORB()->string_to_object(iorstr.c_str());
+        CORBA::Object_var newobj = orb->string_to_object(iorstr.c_str());
 
         RTC_DEBUG(("Modified IOR information:\n %s",
                    CORBA_IORUtil::formatIORinfo(iorstr.c_str()).c_str()));
@@ -139,14 +139,14 @@ namespace RTC
       {
         CORBA::Object_var obj(RTM::Manager::_duplicate(mgr->getObjRef()));
         CORBA::String_var ior;
-        ior = RTC::Manager::instance().getORB()->object_to_string(obj.in());
+        CORBA::ORB_var orb = ::RTC::Manager::instance().getORB();
+        ior = orb->object_to_string(obj.in());
         std::string iorstr((const char*)ior);
 
         RTC_DEBUG(("Original IOR information:\n %s",
                    CORBA_IORUtil::formatIORinfo(iorstr.c_str()).c_str()));
         CORBA_IORUtil::replaceEndpoint(iorstr, m_endpoint);
-        CORBA::Object_var newobj = RTC::Manager::instance().
-          getORB()->string_to_object(iorstr.c_str());
+        CORBA::Object_var newobj = orb->string_to_object(iorstr.c_str());
 
         RTC_DEBUG(("Modified IOR information]\n %s",
                    CORBA_IORUtil::formatIORinfo(iorstr.c_str()).c_str()));
@@ -444,30 +444,29 @@ namespace RTC
    * @endif
    */
   NamingBase* NamingManager::createNamingObj(const char* method,
-					     const char* name_server)
+                                             const char* name_server)
   {
     RTC_TRACE(("createNamingObj(method = %s, nameserver = %s",
                method, name_server));
     std::string m(method);
     if (m == "corba")
       {
-	try
-	  {
-	    NamingBase* name;
-            CORBA::ORB_var orb;
-            orb = CORBA::ORB::_duplicate(m_manager->getORB());
-	    name = new NamingOnCorba(orb.in(), name_server);
-	    if (name == NULL) return NULL;
-	    RTC_INFO(("NameServer connection succeeded: %s/%s",		\
-		      method, name_server));
-	    return name;
-	  }
-	catch (...)
-	  {
-	    RTC_INFO(("NameServer connection failed: %s/%s",		\
-		      method, name_server));
-	    return NULL;
-	  }
+        try
+          {
+            NamingBase* name;
+            CORBA::ORB_var orb = m_manager->getORB();
+            name = new NamingOnCorba(orb.in(), name_server);
+            if (name == NULL) return NULL;
+            RTC_INFO(("NameServer connection succeeded: %s/%s", \
+                      method, name_server));
+            return name;
+          }
+        catch (...)
+          {
+            RTC_INFO(("NameServer connection failed: %s/%s",    \
+                      method, name_server));
+            return NULL;
+          }
       }
     return NULL;
   }

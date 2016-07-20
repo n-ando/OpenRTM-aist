@@ -413,7 +413,7 @@ namespace CORBA_SeqUtil
   coil::vstring refToVstring(const CorbaRefSequence& objlist)
   {
     coil::vstring iorlist;
-    CORBA::ORB_ptr orb = ::RTC::Manager::instance().getORB();
+    CORBA::ORB_var orb = ::RTC::Manager::instance().getORB();
 
     for (CORBA::ULong i(0), len(objlist.length()); i < len; ++i)
       {

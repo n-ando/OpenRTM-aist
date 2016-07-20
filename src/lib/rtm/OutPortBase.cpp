@@ -1065,7 +1065,7 @@ namespace RTC
   OutPortBase::getLocalInPort(const ConnectorInfo& profile)
   {
     RTC_DEBUG(("Trying direct port connection."));
-    CORBA::ORB_var orb = RTC::Manager::instance().getORB();
+    CORBA::ORB_var orb = ::RTC::Manager::instance().getORB();
     RTC_DEBUG(("Current connector profile: name=%s, id=%s",
                profile.name.c_str(), profile.id.c_str()));
     // finding peer port object
@@ -1077,7 +1077,7 @@ namespace RTC
         RTC_DEBUG(("Peer port found: %s.", profile.ports[i].c_str()));
         try
           {
-            PortableServer::POA_var poa = RTC::Manager::instance().getPOA();
+            PortableServer::POA_var poa = ::RTC::Manager::instance().getPOA();
             InPortBase* inport = dynamic_cast<InPortBase*>
               (poa->reference_to_servant(obj));
             RTC_DEBUG(("InPortBase servant pointer is obtained."));
