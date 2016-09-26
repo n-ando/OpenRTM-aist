@@ -1,0 +1,8 @@
+LogicalTime:
+  GUID: EC62BA24-5D0A-11E1-A34F-000C29A5666C
+  Files:
+    - Id: LogicalTimeTriggeredEC.dll
+      ShortName: LTTEC.dll
+      Name: LogicalTimeTriggeredEC.dll
+      Source: ..\\ext\\ec\\logical_time\\LogicalTimeTriggeredEC\\Release\\LogicalTimeTriggeredEC.dll
+ 
