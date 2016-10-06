@@ -114,8 +114,13 @@ namespace RTC
         std::string propkey = ifrToKey(activeProviderTypes[i]);
         NVUtil::copyFromProperties(prof.properties,
                                    prop.getNode(propkey.c_str()));
-
-        svc->init(rtobj, prof);
+        // TODO: return value must be concerned
+        if (svc->init(rtobj, prof) != true)
+          {
+            svc->finalize();
+            delete svc;
+            continue;
+          }
         m_providers.push_back(svc);
       }
 

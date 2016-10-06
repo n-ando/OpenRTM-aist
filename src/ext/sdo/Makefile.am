@@ -7,6 +7,6 @@
 
 AUTOMAKE_OPTIONS = 1.4
 
-SUBDIRS = observer fsm4rtc_observer
+SUBDIRS = observer fsm4rtc_observer extended_fsm
 
 
