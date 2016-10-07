@@ -160,19 +160,6 @@
   TypeName(const TypeName&);               \
   TypeName& operator=(const TypeName&)
 
-
-namespace coil
-{
-  class Properties;
-};
-namespace hrtm
-{
-  namespace utils
-  {
-    using Properties = coil::Properties;
-  };
-};
-
 //#ifndef hrtm
 //#define hrtm RTC
 //#endif // hrtmcomp

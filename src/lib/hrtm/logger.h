@@ -1,11 +1,27 @@
+// -*- C++ -*-
+/*!
+ * @file logger.h
+ * @brief RTC::Logger wrapper class for hrtm::Logger
+ * @date $Date$
+ * @author Noriaki Ando <n-ando@aist.go.jp>
+ *
+ * Copyright (C) 2016
+ *     Noriaki Ando
+ *     National Institute of
+ *     Advanced Industrial Science and Technology (AIST), Japan
+ *     All rights reserved.
+ *
+ * $Id$
+ *
+ */
 #ifndef HRTM_LOGGER_H
 #define HRTM_LOGGER_H
 
 #include <rtm/SystemLogger.h>
 
 #define HRTM_ERROR(name, text)
-//#define HRTM_ERROR_STR RTC_ERROR_STR
-#define HRTM_WARN(name, text)
+#define HRTM_ERROR_STR RTC_ERROR_STR
+#define HRTM_WARNING(name, text)
 #define HRTM_WARN_STR RTC_WARN_STR
 #define HRTM_NORMAL(name, text)
 #define HRTM_NORMAL_STR RTC_NORMAL_STR
@@ -24,7 +40,15 @@ namespace hrtm
 {
   namespace utils
   {
+#ifndef CXX11
+    class Logger
+      : public RTC::Logger
+    {
+    public:
+    };
+#else
     using Logger = RTC::Logger;
+#endif // CXX11
   };
 };
 #endif // HRTM_LOGGER_H

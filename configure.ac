@@ -1595,6 +1595,7 @@ AC_OUTPUT([Makefile
 	src/Makefile
 	src/lib/Makefile
 	src/lib/rtm/Makefile
+	src/lib/hrtm/Makefile
 	src/lib/rtm/idl/Makefile
 	src/lib/rtm/ext/Makefile
 	src/lib/rtm/idl/device_interfaces/Makefile
@@ -1681,6 +1682,7 @@ AC_OUTPUT([Makefile
 	examples/ExtTrigger/Makefile
 	examples/Templates/Makefile
 	examples/tests/Makefile
+	examples/Fsm/Makefile
 	docs/Makefile
 	win32/Makefile
 	win32/OpenRTM-aist/Makefile
