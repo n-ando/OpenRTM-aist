@@ -51,14 +51,14 @@ Fsm::~Fsm() {
 
 RTC::ReturnCode_t Fsm::onInitialize() {
   getInstanceName();
-//  addInPort("EvConfig", in_port_ev_config_);
-//  addInPort("EvInFocus", in_port_ev_in_focus_);
-//  addInPort("EvOff", in_port_ev_off_);
-//  addInPort("EvOn", in_port_ev_on_);
-//  addInPort("EvShutterFull", in_port_ev_shutter_full_);
-//  addInPort("EvShutterHalf", in_port_ev_shutter_half_);
-//  addInPort("EvShutterReleased", in_port_ev_shutter_released_);
-//  addOutPort("out", out_port_out_);
+  addInPort("EvConfig", in_port_ev_config_);
+  addInPort("EvInFocus", in_port_ev_in_focus_);
+  addInPort("EvOff", in_port_ev_off_);
+  addInPort("EvOn", in_port_ev_on_);
+  addInPort("EvShutterFull", in_port_ev_shutter_full_);
+  addInPort("EvShutterHalf", in_port_ev_shutter_half_);
+  addInPort("EvShutterReleased", in_port_ev_shutter_released_);
+  addOutPort("out", out_port_out_);
 
   Top::set_component(this);
   machine_ = new hrtm::sc::Machine<Top>(new Top::Data());

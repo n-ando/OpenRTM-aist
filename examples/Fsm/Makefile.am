@@ -24,18 +24,22 @@ socomp_LTLIBRARIES = Fsm.la
 Fsm_la_SOURCES = Fsm.cc Fsm.h camera.cc camera.h camera_functions.cc camera_functions.h
 Fsm_la_LDFLAGS = -module
 Fsm_la_FLAGS   = -L$(top_builddir)/src/lib/rtm/.lib
-Fsm_la_LIBADD  = $(top_builddir)/src/lib/rtm/libRTC.la \
+Fsm_la_LIBADD  = -lPocoFoundation \
+	$(top_builddir)/src/lib/hrtm/libHRTM.la \
+	$(top_builddir)/src/lib/rtm/libRTC.la  \
 	$(top_builddir)/src/lib/coil/lib/libcoil.la
 
 # Standalone RTCs
 example_PROGRAMS = FsmComp
-example_DATA = rtc.conf fsm.conf
+example_DATA = rtc.conf
 
 FsmComp_SOURCES = FsmMain.cc
 FsmComp_DEPENDENCIES = Fsm.la
 FsmComp_LDFLAGS = -L$(top_builddir)/src/lib/rtm/.libs
-FsmComp_LDADD   =  Fsm.o \
-	$(top_builddir)/src/lib/rtm/libRTC.la \
+FsmComp_LDADD   =  Fsm.o camera.o camera_functions.o \
+	-lPocoFoundation \
+	$(top_builddir)/src/lib/hrtm/libHRTM.la \
+	$(top_builddir)/src/lib/rtm/libRTC.la  \
 	$(top_builddir)/src/lib/coil/lib/libcoil.la
 
 # Example sources
