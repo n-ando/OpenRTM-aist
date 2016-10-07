@@ -4,7 +4,7 @@
 ##
 ## $Id$
 ##---------------------------------------------------------------------------
-SUBDIRS = Composite ConfigSample LTTSample SimpleIO SeqIO SimpleService USBCamera .
+SUBDIRS = Composite ConfigSample LTTSample SimpleIO SeqIO SimpleService USBCamera Fsm .
 
 wxs:
 	cp -p *.yaml ../installer/
