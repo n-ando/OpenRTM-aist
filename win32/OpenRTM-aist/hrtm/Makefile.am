@@ -8,7 +8,7 @@ SUBDIRS = idls
 
 clean-local:
 	rm -rf Debug Release
-	rm -f *~ *.cpp *.h *.cc *.hh version.txt
+	rm -f *~ *.cpp *.h *.cc *.hh
 	rm -f *.sln *.suo *.ncb *.user *.vcproj *.vcxproj *.def
 
 src:
