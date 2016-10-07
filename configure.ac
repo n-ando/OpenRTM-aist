@@ -1594,8 +1594,9 @@ AC_OUTPUT([Makefile
 	packages/rpm/Makefile
 	src/Makefile
 	src/lib/Makefile
-	src/lib/rtm/Makefile
 	src/lib/hrtm/Makefile
+	src/lib/hrtm/idls/Makefile
+	src/lib/rtm/Makefile
 	src/lib/rtm/idl/Makefile
 	src/lib/rtm/ext/Makefile
 	src/lib/rtm/idl/device_interfaces/Makefile
@@ -1699,6 +1700,7 @@ AC_OUTPUT([Makefile
 	win32/OpenRTM-aist/examples/SeqIO/Makefile
 	win32/OpenRTM-aist/examples/SimpleService/Makefile
 	win32/OpenRTM-aist/examples/USBCamera/Makefile
+	win32/OpenRTM-aist/examples/Fsm/Makefile
 	win32/OpenRTM-aist/ext/Makefile
 	win32/OpenRTM-aist/ext/ec/Makefile
 	win32/OpenRTM-aist/ext/ec/logical_time/Makefile
@@ -1706,6 +1708,8 @@ AC_OUTPUT([Makefile
 	win32/OpenRTM-aist/ext/local_service/nameservice_file/Makefile
 	win32/OpenRTM-aist/ext/sdo/Makefile
 	win32/OpenRTM-aist/ext/sdo/observer/Makefile
+	win32/OpenRTM-aist/ext/sdo/fsm4rtc_observer/Makefile
+	win32/OpenRTM-aist/ext/sdo/extended_fsm/Makefile
 	win32/OpenRTM-aist/utils/Makefile
 	win32/OpenRTM-aist/utils/rtc-template/Makefile
 	win32/OpenRTM-aist/utils/rtcd/Makefile
@@ -1715,6 +1719,8 @@ AC_OUTPUT([Makefile
 	win32/OpenRTM-aist/rtm/ext/Makefile
 	win32/OpenRTM-aist/rtm/idl/Makefile
 	win32/OpenRTM-aist/rtm/idl/device_interfaces/Makefile
+	win32/OpenRTM-aist/hrtm/Makefile
+	win32/OpenRTM-aist/hrtm/idls/Makefile
 	win32/OpenRTM-aist/installer/Makefile
 	win32/OpenRTM-aist/installer/Bitmaps/Makefile
 	])
