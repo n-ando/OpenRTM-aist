@@ -41,13 +41,13 @@ lib_LTLIBRARIES = libRTC.la
 #	PortProfileHelper.cpp
 #	ObjectManager.cpp
 
-UTIL_SRC =                \
+UTIL_SRC =            \
 	CORBA_IORUtil.cpp \
 	NVUtil.cpp        \
 	RTCUtil.cpp       \
 	DefaultPeriodicTask.cpp
 
-MGR_SRC =                            \
+MGR_SRC =                        \
 	FactoryInit.cpp              \
 	CorbaNaming.cpp              \
 	Factory.cpp                  \
@@ -62,7 +62,7 @@ MGR_SRC =                            \
 	LocalServiceAdmin.cpp        \
 	ManagerActionListener.cpp
 
-COMP_SRC =                           \
+COMP_SRC =                       \
 	DataFlowComponentBase.cpp    \
 	ExecutionContextBase.cpp     \
 	ExecutionContextProfile.cpp  \
@@ -81,7 +81,7 @@ COMP_SRC =                           \
 	SdoOrganization.cpp          \
 	PeriodicECSharedComposite.cpp
 
-PORT_SRC =                           \
+PORT_SRC =                       \
 	InPortConnector.cpp          \
 	OutPortConnector.cpp         \
 	OutPortPullConnector.cpp     \
