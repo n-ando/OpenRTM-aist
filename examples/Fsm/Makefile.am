@@ -49,9 +49,9 @@ source_DATA = $(ALL_SRC) $(EXTRA_DIST)
 # Extra distributed files
 #------------------------------------------------------------
 EXTRA_DIST =                \
-	README.Fsm    \
+	CMakeLists.txt       \
 	rtc.conf            \
-	fsm.conf
+	rtc_shared.conf
 
 ALL_SRC =               \
 	FsmMain.cc          \
