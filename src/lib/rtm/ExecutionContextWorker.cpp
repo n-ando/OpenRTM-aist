@@ -136,6 +136,26 @@ namespace RTC_impl
     return RTC::RTC_OK;
   }
 
+  /*!
+   * @if jp
+   * @brief ExecutionContext の周期が変化した
+   * @else
+   * @brief Changing execution rate of the ExecutionContext
+   * @endif
+   */
+  RTC::ReturnCode_t ExecutionContextWorker::rateChanged(void)
+  {
+    RTC_TRACE(("rateChanged()"));
+    // invoke on_shutdown for each comps.
+    RTC::ReturnCode_t ret(RTC::RTC_OK);
+    for (size_t i(0); i < m_comps.size(); ++i)
+      {
+        RTC::ReturnCode_t tmp = m_comps[i]->onRateChanged();
+        if (tmp != RTC::RTC_OK) { ret = tmp; }
+      }
+    return ret;
+  }
+
 
   /*!
    * @if jp
