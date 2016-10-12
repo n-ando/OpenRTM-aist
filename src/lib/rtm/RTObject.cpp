@@ -2741,22 +2741,65 @@ namespace RTC
 
 	if (m_eclist.empty())
 	{
-	
-		coil::Properties prop;
-		prop.setDefaults(default_config);
+
+		coil::Properties default_prop;
+		default_prop.setDefaults(default_config);
 		RTC::ExecutionContextBase* ec = NULL;
 		ec = RTC::ExecutionContextFactory::
-			instance().createObject(prop["exec_cxt.periodic.type"].c_str());
+			instance().createObject(default_prop["exec_cxt.periodic.type"].c_str());
 		if (ec == NULL)
 		{
-			RTC_ERROR(("EC (%s) creation failed.", prop["exec_cxt.periodic.type"].c_str()));
+			RTC_ERROR(("EC (%s) creation failed.", default_prop["exec_cxt.periodic.type"].c_str()));
 			RTC_DEBUG(("Available EC list: %s",
 				coil::flatten(avail_ec).c_str()));
-			ret = RTC::RTC_ERROR;
+			
+			return RTC::RTC_ERROR;
+		}
+
+		coil::Properties default_opts;
+
+		coil::Properties* prop = default_prop.findNode("exec_cxt.periodic");
+		
+		if (prop == NULL)
+		{
+			RTC_WARN(("No global EC options found."));
+			return RTC::RTC_ERROR;
+		}
+
+		default_opts << *prop;
+		
+		const char* inherited_opts[] =
+		{
+			"sync_transition",
+			"sync_activation",
+			"sync_deactivation",
+			"sync_reset",
+			"transition_timeout",
+			"activation_timeout",
+			"deactivation_timeout",
+			"reset_timeout",
+			""
+		};
+
+		coil::Properties* p = default_prop.findNode("exec_cxt");
+		if (p == NULL)
+		{
+			RTC_WARN(("No exec_cxt option found."));
+			return RTC::RTC_ERROR;
+		}
+		RTC_DEBUG(("Copying inherited EC options."));
+		for (size_t i(0); inherited_opts[i][0] != '\0'; ++i)
+		{
+			if ((*p).findNode(inherited_opts[i]) != NULL)
+			{
+				RTC_PARANOID(("Option %s exists.", inherited_opts[i]));
+				default_opts[inherited_opts[i]] = (*p)[inherited_opts[i]];
+			}
 		}
 		
+
 		
-		ec->init(coil::Properties());
+		ec->init(default_opts);
 		m_eclist.push_back(ec);
 		ec->bindComponent(this);
 	}
