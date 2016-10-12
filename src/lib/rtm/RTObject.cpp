@@ -21,6 +21,7 @@
 #include <rtm/SdoConfiguration.h>
 #include <rtm/CORBA_SeqUtil.h>
 #include <rtm/Manager.h>
+#include <rtm/DefaultConfiguration.h>
 #include <coil/stringutil.h>
 #include <iostream>
 #include <typeinfo>
@@ -2736,6 +2737,29 @@ namespace RTC
         m_eclist.push_back(ec);
         ec->bindComponent(this);
       }
+
+
+	if (m_eclist.empty())
+	{
+	
+		coil::Properties prop;
+		prop.setDefaults(default_config);
+		RTC::ExecutionContextBase* ec = NULL;
+		ec = RTC::ExecutionContextFactory::
+			instance().createObject(prop["exec_cxt.periodic.type"].c_str());
+		if (ec == NULL)
+		{
+			RTC_ERROR(("EC (%s) creation failed.", prop["exec_cxt.periodic.type"].c_str()));
+			RTC_DEBUG(("Available EC list: %s",
+				coil::flatten(avail_ec).c_str()));
+			ret = RTC::RTC_ERROR;
+		}
+		
+		
+		ec->init(coil::Properties());
+		m_eclist.push_back(ec);
+		ec->bindComponent(this);
+	}
     return ret;
   }
 
