@@ -143,7 +143,7 @@ namespace RTC_impl
    * @brief Changing execution rate of the ExecutionContext
    * @endif
    */
-  RTC::ReturnCode_t ExecutionContextWorker::rateChanged(void)
+  RTC::ReturnCode_t ExecutionContextWorker::rateChanged()
   {
     RTC_TRACE(("rateChanged()"));
     // invoke on_shutdown for each comps.
@@ -367,12 +367,15 @@ namespace RTC_impl
         RTC_ERROR(("no RTC found in this context."));
         return  RTC::BAD_PARAMETER;
       }
-    Guard removeGuard(m_removedMutex);
-    m_removedComps.push_back(rtobj);
-
+    {
+      Guard removeGuard(m_removedMutex);
+      m_removedComps.push_back(rtobj);
+    }
     // if EC is stopping, update component list immediately.
-    Guard guard(m_mutex);
-    if (!m_running) { updateComponentList(); }
+    {
+      Guard guard(m_mutex);
+      if (!m_running) { updateComponentList(); }
+    }
 
     return RTC::RTC_OK;
   }
