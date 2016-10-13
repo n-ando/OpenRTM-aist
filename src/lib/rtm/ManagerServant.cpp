@@ -32,6 +32,8 @@ namespace RTM
   ManagerServant::ManagerServant()
     : rtclog("ManagerServant"),
       m_mgr(::RTC::Manager::instance()),
+      m_objref(CORBA::Object::_nil()),
+      m_masters(0), m_slaves(0),
       m_isMaster(false)
   {
     rtclog.setName("ManagerServant");
