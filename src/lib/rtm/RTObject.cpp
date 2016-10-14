@@ -2744,12 +2744,22 @@ namespace RTC
         coil::Properties default_prop;
         default_prop.setDefaults(default_config);
         RTC::ExecutionContextBase* ec = NULL;
+
+        std::string& ec_type(default_prop["exec_cxt.periodic.type"]);
+        if (std::find(avail_ec.begin(), avail_ec.end(), ec_type)
+                == avail_ec.end())
+        {
+            RTC_WARN(("EC %s is not available.", ec_type.c_str()));
+            RTC_DEBUG(("Available ECs: %s",
+                       coil::flatten(avail_ec).c_str()));
+            return RTC::RTC_ERROR;
+        }
         ec = RTC::ExecutionContextFactory::instance().
-          createObject(default_prop["exec_cxt.periodic.type"].c_str());
+          createObject(ec_type.c_str());
         if (ec == NULL)
           {
             RTC_ERROR(("EC (%s) creation failed.",
-                       default_prop["exec_cxt.periodic.type"].c_str()));
+                       ec_type.c_str()));
             RTC_DEBUG(("Available EC list: %s",
                        coil::flatten(avail_ec).c_str()));
             return RTC::RTC_ERROR;
@@ -2760,7 +2770,7 @@ namespace RTC
 
         if (prop == NULL)
           {
-            RTC_WARN(("No global EC options found."));
+            RTC_WARN(("No default EC options found."));
             return RTC::RTC_ERROR;
           }
 
