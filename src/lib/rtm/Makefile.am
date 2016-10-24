@@ -75,6 +75,7 @@ COMP_SRC =                       \
 	RTObject.cpp                 \
 	ConfigAdmin.cpp              \
 	ComponentActionListener.cpp  \
+	FsmActionListener.cpp        \
 	ConfigurationListener.cpp    \
 	SdoConfiguration.cpp         \
 	SdoServiceAdmin.cpp          \
