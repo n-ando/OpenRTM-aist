@@ -763,6 +763,10 @@ namespace RTC
    */
   void ComponentObserverConsumer::setFSMStructureListeners()
   {
+    m_fsmaction.fsmActionListener = 
+      m_rtobj->addPreFsmActionListener(PRE_ON_STATE_CHANGE,
+                                       m_fsmaction,
+                                       &FSMAction::updateFsmStatus);
   }
 
   /*!
