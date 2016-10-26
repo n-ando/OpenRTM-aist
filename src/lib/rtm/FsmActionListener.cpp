@@ -42,13 +42,22 @@ namespace RTC
 
   /*!
    * @if jp
+   * @class FsmProfileListener クラス
+   * @else
+   * @class PortActionListener class
+   * @endif
+   */
+  FsmProfileListener::~FsmProfileListener(){}
+
+  /*!
+   * @if jp
    * @class PortActionListener クラス
    * @else
    * @class PortActionListener class
    * @endif
    */
-  FsmStructureActionListener::~FsmStructureActionListener(){}
-  
+  FsmStructureListener::~FsmStructureListener(){}
+
 
 
   //============================================================
@@ -62,8 +71,7 @@ namespace RTC
   PreFsmActionListenerHolder::PreFsmActionListenerHolder()
   {
   }
-    
-  
+
   PreFsmActionListenerHolder::~PreFsmActionListenerHolder()
   {
     Guard guard(m_mutex);
@@ -76,7 +84,6 @@ namespace RTC
       }
   }
 
-  
   void PreFsmActionListenerHolder::
   addListener(PreFsmActionListener* listener,
               bool autoclean)
@@ -84,14 +91,13 @@ namespace RTC
     Guard guard(m_mutex);
     m_listeners.push_back(Entry(listener, autoclean));
   }
-  
-  
+
   void PreFsmActionListenerHolder::
   removeListener(PreFsmActionListener* listener)
   {
     Guard guard(m_mutex);
     std::vector<Entry>::iterator it(m_listeners.begin());
-    
+
     for (; it != m_listeners.end(); ++it)
       {
         if ((*it).first == listener)
@@ -104,16 +110,14 @@ namespace RTC
             return;
           }
       }
-    
   }
-  
-  
-  void PreFsmActionListenerHolder::notify(UniqueId ec_id)
+
+  void PreFsmActionListenerHolder::notify(const char* state)
   {
     Guard guard(m_mutex);
     for (int i(0), len(m_listeners.size()); i < len; ++i)
       {
-        m_listeners[i].first->operator()(ec_id);
+        m_listeners[i].first->operator()(state);
       }
   }
 
@@ -128,7 +132,6 @@ namespace RTC
   PostFsmActionListenerHolder::PostFsmActionListenerHolder()
   {
   }
-  
 
   PostFsmActionListenerHolder::~PostFsmActionListenerHolder()
   {
@@ -142,7 +145,6 @@ namespace RTC
       }
   }
 
-  
   void PostFsmActionListenerHolder::
   addListener(PostFsmActionListener* listener, bool autoclean)
   {
@@ -150,7 +152,6 @@ namespace RTC
     m_listeners.push_back(Entry(listener, autoclean));
   }
 
-  
   void PostFsmActionListenerHolder::
   removeListener(PostFsmActionListener* listener)
   {
@@ -168,34 +169,30 @@ namespace RTC
             return;
           }
       }
-    
   }
 
-    
-  void PostFsmActionListenerHolder::notify(UniqueId ec_id,
-                                                 ReturnCode_t ret)
+  void PostFsmActionListenerHolder::notify(const char* state,
+                                           ReturnCode_t ret)
   {
     Guard guard(m_mutex);
     for (int i(0), len(m_listeners.size()); i < len; ++i)
       {
-        m_listeners[i].first->operator()(ec_id, ret);
+        m_listeners[i].first->operator()(state, ret);
       }
   }
 
-
   /*!
    * @if jp
-   * @class FsmStructureActionListener ホルダクラス
+   * @class FsmProfileListener ホルダクラス
    * @else
-   * @class FsmStructureActionListener holder class
+   * @class FsmProfileListener holder class
    * @endif
    */
-  FsmStructureActionListenerHolder::FsmStructureActionListenerHolder()
+  FsmProfileListenerHolder::FsmProfileListenerHolder()
   {
   }
-    
-  
-  FsmStructureActionListenerHolder::~FsmStructureActionListenerHolder()
+
+  FsmProfileListenerHolder::~FsmProfileListenerHolder()
   {
     Guard guard(m_mutex);
     for (int i(0), len(m_listeners.size()); i < len; ++i)
@@ -207,20 +204,19 @@ namespace RTC
       }
   }
 
-  
-  void FsmStructureActionListenerHolder::addListener(FsmStructureActionListener* listener,
+  void FsmProfileListenerHolder::addListener(FsmProfileListener* listener,
                                              bool autoclean)
   {
     Guard guard(m_mutex);
     m_listeners.push_back(Entry(listener, autoclean));
   }
-  
-  
-  void FsmStructureActionListenerHolder::removeListener(FsmStructureActionListener* listener)
+
+  void
+  FsmProfileListenerHolder::removeListener(FsmProfileListener* listener)
   {
     Guard guard(m_mutex);
     std::vector<Entry>::iterator it(m_listeners.begin());
-    
+
     for (; it != m_listeners.end(); ++it)
       {
         if ((*it).first == listener)
@@ -233,16 +229,73 @@ namespace RTC
             return;
           }
       }
-    
   }
-  
-  
-  void FsmStructureActionListenerHolder::notify(const RTC::FsmStructure& pprofile)
+
+  void FsmProfileListenerHolder::notify(RTC::FsmProfile& profile)
   {
     Guard guard(m_mutex);
     for (int i(0), len(m_listeners.size()); i < len; ++i)
       {
-        m_listeners[i].first->operator()(pprofile);
+        m_listeners[i].first->operator()(profile);
+      }
+  }
+
+  /*!
+   * @if jp
+   * @class FsmStructureListener ホルダクラス
+   * @else
+   * @class FsmStructureListener holder class
+   * @endif
+   */
+  FsmStructureListenerHolder::FsmStructureListenerHolder()
+  {
+  }
+
+  FsmStructureListenerHolder::~FsmStructureListenerHolder()
+  {
+    Guard guard(m_mutex);
+    for (int i(0), len(m_listeners.size()); i < len; ++i)
+      {
+        if (m_listeners[i].second)
+          {
+            delete m_listeners[i].first;
+          }
+      }
+  }
+
+  void FsmStructureListenerHolder::addListener(FsmStructureListener* listener,
+                                               bool autoclean)
+  {
+    Guard guard(m_mutex);
+    m_listeners.push_back(Entry(listener, autoclean));
+  }
+
+  void
+  FsmStructureListenerHolder::removeListener(FsmStructureListener* listener)
+  {
+    Guard guard(m_mutex);
+    std::vector<Entry>::iterator it(m_listeners.begin());
+
+    for (; it != m_listeners.end(); ++it)
+      {
+        if ((*it).first == listener)
+          {
+            if ((*it).second)
+              {
+                delete (*it).first;
+              }
+            m_listeners.erase(it);
+            return;
+          }
+      }
+  }
+
+  void FsmStructureListenerHolder::notify(RTC::FsmStructure& structure)
+  {
+    Guard guard(m_mutex);
+    for (int i(0), len(m_listeners.size()); i < len; ++i)
+      {
+        m_listeners[i].first->operator()(structure);
       }
   }
 
