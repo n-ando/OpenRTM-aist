@@ -34,6 +34,7 @@
 #include <rtm/ComponentActionListener.h>
 #include <rtm/SdoServiceAdmin.h>
 #include <rtm/PortConnectListener.h>
+#include <rtm/FsmActionListener.h>
 
 #define ECOTHER_OFFSET 1000
 
@@ -3449,8 +3450,8 @@ namespace RTC
     typedef PreComponentActionListener PreCompActionListener;
     typedef PreComponentActionListenerType PreCompActionListenerType;
     void 
-    addPreComponentActionListener(PreComponentActionListenerType listener_type,
-                                  PreComponentActionListener* listener,
+    addPreComponentActionListener(PreCompActionListenerType listener_type,
+                                  PreCompActionListener* listener,
                                   bool autoclean = true);
 
 
@@ -4382,7 +4383,510 @@ namespace RTC
     void
     removeConfigurationSetNameListener(ConfigurationSetNameListenerType type,
                                        ConfigurationSetNameListener* listener);
-    
+
+    //============================================================
+    // FSM Listener
+    /*!
+     * @if jp
+     * @brief PreFsmActionListener リスナを追加する
+     *
+     * FsmAction 実装関数の呼び出し直前のイベントに関連する各種リ
+     * スナを設定する。
+     *
+     * 設定できるリスナのタイプとコールバックイベントは以下の通り
+     *
+     * - PRE_ON_INITIALIZE:    onInitialize 直前
+     * - PRE_ON_FINALIZE:      onFinalize 直前
+     * - PRE_ON_STARTUP:       onStartup 直前
+     * - PRE_ON_SHUTDOWN:      onShutdown 直前
+     * - PRE_ON_ACTIVATED:     onActivated 直前
+     * - PRE_ON_DEACTIVATED:   onDeactivated 直前
+     * - PRE_ON_ABORTED:       onAborted 直前
+     * - PRE_ON_ERROR:         onError 直前
+     * - PRE_ON_RESET:         onReset 直前
+     * - PRE_ON_EXECUTE:       onExecute 直前
+     * - PRE_ON_STATE_UPDATE:  onStateUpdate 直前
+     *
+     * リスナは PreFsmActionListener を継承し、以下のシグニチャを持つ
+     * operator() を実装している必要がある。
+     *
+     * PreFsmActionListener::operator()(UniqueId ec_id)
+     *
+     * デフォルトでは、この関数に与えたリスナオブジェクトの所有権は
+     * RTObjectに移り、RTObject解体時もしくは、
+     * removePreFsmActionListener() により削除時に自動的に解体される。
+     * リスナオブジェクトの所有権を呼び出し側で維持したい場合は、第3引
+     * 数に false を指定し、自動的な解体を抑制することができる。
+     *
+     * @param listener_type リスナタイプ
+     * @param listener リスナオブジェクトへのポインタ
+     * @param autoclean リスナオブジェクトの自動的解体を行うかどうかのフラグ
+     *
+     * @else
+     * @brief Adding PreFsmAction type listener
+     *
+     * This operation adds certain listeners related to FsmActions
+     * pre events.
+     * The following listener types are available.
+     *
+     * - PRE_ON_INITIALIZE:    before onInitialize
+     * - PRE_ON_FINALIZE:      before onFinalize
+     * - PRE_ON_STARTUP:       before onStartup
+     * - PRE_ON_SHUTDOWN:      before onShutdown
+     * - PRE_ON_ACTIVATED:     before onActivated
+     * - PRE_ON_DEACTIVATED:   before onDeactivated
+     * - PRE_ON_ABORTED:       before onAborted
+     * - PRE_ON_ERROR:         before onError
+     * - PRE_ON_RESET:         before onReset
+     * - PRE_ON_EXECUTE:       before onExecute
+     * - PRE_ON_STATE_UPDATE:  before onStateUpdate
+     *
+     * Listeners should have the following function operator().
+     *
+     * PreFsmActionListener::operator()(UniqueId ec_id)
+     *
+     * The ownership of the given listener object is transferred to
+     * this RTObject object in default.  The given listener object will
+     * be destroied automatically in the RTObject's dtor or if the
+     * listener is deleted by removePreFsmActionListener() function.
+     * If you want to keep ownership of the listener object, give
+     * "false" value to 3rd argument to inhibit automatic destruction.
+     *
+     * @param listener_type A listener type
+     * @param listener A pointer to a listener object
+     * @param autoclean A flag for automatic listener destruction
+     *
+     * @endif
+     */
+    void 
+    addPreFsmActionListener(PreFsmActionListenerType listener_type,
+                                  PreFsmActionListener* listener,
+                                  bool autoclean = true);
+
+
+    template <class Listener>
+    PreFsmActionListener*
+    addPreFsmActionListener(PreFsmActionListenerType listener_type,
+                                   Listener& obj,
+                                   void (Listener::*memfunc)(const char* state))
+    {
+      class Noname
+        : public PreFsmActionListener
+      {
+      public:
+        Noname(Listener& obj, void (Listener::*memfunc)(const char*))
+          : m_obj(obj), m_memfunc(memfunc)
+        {
+        }
+        void operator()(const char* state)
+        {
+          (m_obj.*m_memfunc)(state);
+        }
+      private:
+        Listener& m_obj;
+        typedef void (Listener::*Memfunc)(const char* state);
+        Memfunc m_memfunc;
+      };
+      Noname* listener(new Noname(obj, memfunc));
+      addPreFsmActionListener(listener_type, listener, true);
+      return listener;
+    }
+
+    /*!
+     * @if jp
+     * @brief PreFsmActionListener リスナを削除する
+     *
+     * 設定した各種リスナを削除する。
+     * 
+     * @param listener_type リスナタイプ
+     * @param listener リスナオブジェクトへのポインタ
+     *
+     * @else
+     * @brief Removing PreFsmAction type listener
+     *
+     * This operation removes a specified listener.
+     *     
+     * @param listener_type A listener type
+     * @param listener A pointer to a listener object
+     *
+     * @endif
+     */
+    void
+    removePreFsmActionListener(
+                               PreFsmActionListenerType listener_type,
+                               PreFsmActionListener* listener);
+
+
+    /*!
+     * @if jp
+     * @brief PostFsmActionListener リスナを追加する
+     *
+     * FsmAction 実装関数の呼び出し直後のイベントに関連する各種リ
+     * スナを設定する。
+     *
+     * 設定できるリスナのタイプとコールバックイベントは以下の通り
+     *
+     * - POST_ON_INITIALIZE:    onInitialize 直後
+     * - POST_ON_FINALIZE:      onFinalize 直後
+     * - POST_ON_STARTUP:       onStartup 直後
+     * - POST_ON_SHUTDOWN:      onShutdown 直後
+     * - POST_ON_ACTIVATED:     onActivated 直後
+     * - POST_ON_DEACTIVATED:   onDeactivated 直後
+     * - POST_ON_ABORTED:       onAborted 直後
+     * - POST_ON_ERROR:         onError 直後
+     * - POST_ON_RESET:         onReset 直後
+     * - POST_ON_EXECUTE:       onExecute 直後
+     * - POST_ON_STATE_UPDATE:  onStateUpdate 直後
+     *
+     * リスナは PostFsmActionListener を継承し、以下のシグニチャを持つ
+     * operator() を実装している必要がある。
+     *
+     * PostFsmActionListener::operator()(const char* state, ReturnCode_t ret)
+     *
+     * デフォルトでは、この関数に与えたリスナオブジェクトの所有権は
+     * RTObjectに移り、RTObject解体時もしくは、
+     * removePostFsmActionListener() により削除時に自動的に解体される。
+     * リスナオブジェクトの所有権を呼び出し側で維持したい場合は、第3引
+     * 数に false を指定し、自動的な解体を抑制することができる。
+     *
+     * @param listener_type リスナタイプ
+     * @param listener リスナオブジェクトへのポインタ
+     * @param autoclean リスナオブジェクトの自動的解体を行うかどうかのフラグ
+     *
+     * @else
+     * @brief Adding PostFsmAction type listener
+     *
+     * This operation adds certain listeners related to FsmActions
+     * post events.
+     * The following listener types are available.
+     *
+     * - POST_ON_INITIALIZE:    after onInitialize
+     * - POST_ON_FINALIZE:      after onFinalize
+     * - POST_ON_STARTUP:       after onStartup
+     * - POST_ON_SHUTDOWN:      after onShutdown
+     * - POST_ON_ACTIVATED:     after onActivated
+     * - POST_ON_DEACTIVATED:   after onDeactivated
+     * - POST_ON_ABORTED:       after onAborted
+     * - POST_ON_ERROR:         after onError
+     * - POST_ON_RESET:         after onReset
+     * - POST_ON_EXECUTE:       after onExecute
+     * - POST_ON_STATE_UPDATE:  after onStateUpdate
+     *
+     * Listeners should have the following function operator().
+     *
+     * PostFsmActionListener::operator()(const char* state, ReturnCode_t ret)
+     *
+     * The ownership of the given listener object is transferred to
+     * this RTObject object in default.  The given listener object will
+     * be destroied automatically in the RTObject's dtor or if the
+     * listener is deleted by removePostFsmActionListener() function.
+     * If you want to keep ownership of the listener object, give
+     * "false" value to 3rd argument to inhibit automatic destruction.
+     *
+     * @param listener_type A listener type
+     * @param listener A pointer to a listener object
+     * @param autoclean A flag for automatic listener destruction
+     *
+     * @endif
+     */
+    void
+    addPostFsmActionListener(PostFsmActionListenerType listener_type,
+                             PostFsmActionListener* listener,
+                               bool autoclean = true);
+
+    template <class Listener>
+    PostFsmActionListener*
+    addPostFsmActionListener(PostFsmActionListenerType listener_type,
+                             Listener& obj,
+                             void (Listener::*memfunc)(const char* state,
+                                                       ReturnCode_t ret))
+    {
+      class Noname
+        : public PostFsmActionListener
+      {
+      public:
+        Noname(Listener& obj,
+               void (Listener::*memfunc)(const char*, ReturnCode_t))
+          : m_obj(obj), m_memfunc(memfunc)
+        {
+        }
+        void operator()(const char* state, ReturnCode_t ret)
+        {
+          (m_obj.*m_memfunc)(state, ret);
+        }
+      private:
+        Listener& m_obj;
+        typedef void (Listener::*Memfunc)(const char* state, ReturnCode_t ret);
+        Memfunc m_memfunc;
+      };
+      Noname* listener(new Noname(obj, memfunc));
+      addPostFsmActionListener(listener_type, listener, true);
+      return listener;
+    }
+
+    /*!
+     * @if jp
+     * @brief PostFsmActionListener リスナを削除する
+     *
+     * 設定した各種リスナを削除する。
+     *
+     * @param listener_type リスナタイプ
+     * @param listener リスナオブジェクトへのポインタ
+     *
+     * @else
+     * @brief Removing PostFsmAction type listener
+     *
+     * This operation removes a specified listener.
+     *
+     * @param listener_type A listener type
+     * @param listener A pointer to a listener object
+     *
+     * @endif
+     */
+    void
+    removePostFsmActionListener(PostFsmActionListenerType listener_type,
+                                PostFsmActionListener* listener);
+
+    /*!
+     * @if jp
+     * @brief FsmProfileListener リスナを追加する
+     *
+     * FSMへのプロファイルの設定、取得時、またFSM自体への状態や遷移、イ
+     * ベントの追加削除時にコールバックされる各種リスナを設定する。
+     *
+     * 設定できるリスナのタイプとコールバックイベントは以下の通り
+     *
+     * - SET_FSM_PROFILE       : FSM Profile設定時
+     * - GET_FSM_PROFILE       : FSM Profile取得時
+     * - ADD_FSM_STATE         : FSMにStateが追加された
+     * - REMOVE_FSM_STATE      : FSMからStateが削除された
+     * - ADD_FSM_TRANSITION    : FSMに遷移が追加された
+     * - REMOVE_FSM_TRANSITION : FSMから遷移が削除された
+     * - BIND_FSM_EVENT        : FSMにイベントがバインドされた
+     * - UNBIND_FSM_EVENT      : FSMにイベントがアンバインドされた
+     *
+     * リスナは FsmProfileListener を継承し、以下のシグニチャを持つ
+     * operator() を実装している必要がある。
+     *
+     * FsmProfileListener::operator()(RTC::FsmProfile& pprof)
+     *
+     * デフォルトでは、この関数に与えたリスナオブジェクトの所有権は
+     * RTObjectに移り、RTObject解体時もしくは、
+     * removeFsmProfileListener() により削除時に自動的に解体される。
+     * リスナオブジェクトの所有権を呼び出し側で維持したい場合は、第3引
+     * 数に false を指定し、自動的な解体を抑制することができる。
+     *
+     * @param listener_type リスナタイプ
+     * @param listener リスナオブジェクトへのポインタ
+     * @param autoclean リスナオブジェクトの自動的解体を行うかどうかのフラグ
+     *
+     * @else
+     * @brief Adding FsmProfile type listener
+     *
+     * This operation adds certain listeners that is called when
+     * setting/getting FsmProfile and stae/transition/event add/remove
+     * to/from the FSM itself.
+     *
+     * The following listener types are available.
+     *
+     * - SET_FSM_PROFILE       : Setting FSM Profile
+     * - GET_FSM_PROFILE       : Getting FSM Profile
+     * - ADD_FSM_STATE         : A State added to the FSM
+     * - REMOVE_FSM_STATE      : A State removed from FSM
+     * - ADD_FSM_TRANSITION    : A transition added to the FSM
+     * - REMOVE_FSM_TRANSITION : A transition removed from FSM
+     * - BIND_FSM_EVENT        : An event bounded to the FSM
+     * - UNBIND_FSM_EVENT      : An event unbounded to the FSM
+     *
+     * Listeners should have the following function operator().
+     *
+     * FsmProfileListener::operator()(RTC::PortProfile pprof)
+     *
+     * The ownership of the given listener object is transferred to
+     * this RTObject object in default.  The given listener object will
+     * be destroied automatically in the RTObject's dtor or if the
+     * listener is deleted by removeFsmProfileListener() function.
+     * If you want to keep ownership of the listener object, give
+     * "false" value to 3rd argument to inhibit automatic destruction.
+     *
+     * @param listener_type A listener type
+     * @param listener A pointer to a listener object
+     * @param autoclean A flag for automatic listener destruction
+     *
+     * @endif
+     */
+    void
+    addFsmProfileListener(FsmProfileListenerType listener_type,
+                          FsmProfileListener* listener,
+                          bool autoclean = true);
+
+    template <class Listener>
+    FsmProfileListener*
+    addFsmProfileListener(FsmProfileListenerType listener_type,
+                          Listener& obj,
+                          void (Listener::*memfunc)(const RTC::PortProfile&))
+    {
+      class Noname
+        : public FsmProfileListener
+      {
+      public:
+        Noname(Listener& obj,
+               void (Listener::*memfunc)(const RTC::FsmProfile&))
+          : m_obj(obj), m_memfunc(memfunc)
+        {
+        }
+        void operator()(const RTC::PortProfile& pprofile)
+        {
+          (m_obj.*m_memfunc)(pprofile);
+        }
+      private:
+        Listener& m_obj;
+        typedef void (Listener::*Memfunc)(const RTC::FsmProfile&);
+        Memfunc m_memfunc;
+      };
+      Noname* listener(new Noname(obj, memfunc));
+      addFsmProfileListener(listener_type, listener, true);
+      return listener;
+    }
+
+    /*!
+     * @if jp
+     * @brief FsmProfileListener リスナを削除する
+     *
+     * 設定した各種リスナを削除する。
+     *
+     * @param listener_type リスナタイプ
+     * @param listener リスナオブジェクトへのポインタ
+     *
+     * @else
+     * @brief Removing FsmProfile type listener
+     *
+     * This operation removes a specified listener.
+     *
+     * @param listener_type A listener type
+     * @param listener A pointer to a listener object
+     *
+     * @endif
+     */
+    void
+    removeFsmProfileListener(FsmProfileListenerType listener_type,
+                             FsmProfileListener* listener);
+
+
+    /*!
+     * @if jp
+     * @brief FsmStructureListener リスナを追加する
+     *
+     * ExtendedFsmService に関連する FSM structure の設定・取得時にコー
+     * ルバックされる各種リスナを設定する。
+     *
+     * 設定できるリスナのタイプとコールバックイベントは以下の通り
+     *
+     * - SET_FSM_STRUCTURE: FSM構造の設定
+     * - GET_FSM_STRUCTURE: FSM構造の取得
+     *
+     * リスナは FsmStructureListener を継承し、以下のシグニチャを持つ
+     * operator() を実装している必要がある。
+     *
+     * FsmStructureListener::operator()(FsmStructure& structure)
+     *
+     * デフォルトでは、この関数に与えたリスナオブジェクトの所有権は
+     * RTObjectに移り、RTObject解体時もしくは、
+     * removeFsmStructureListener() により削除時に自動的に解体される。
+     * リスナオブジェクトの所有権を呼び出し側で維持したい場合は、第3引
+     * 数に false を指定し、自動的な解体を抑制することができる。
+     *
+     * @param listener_type リスナタイプ
+     * @param listener リスナオブジェクトへのポインタ
+     * @param autoclean リスナオブジェクトの自動的解体を行うかどうかのフラグ
+     *
+     * @else
+     * @brief Adding FsmStructure type listener
+     *
+     * This operation adds certain listeners related to FSM structure
+     * data which are handled by ExtendedFsmService.
+     *
+     * The following listener types are available.
+     *
+     * - SET_FSM_STRUCTURE: Setting FSM structure
+     * - GET_FSM_STRUCTURE: Getting FSM structure
+     *
+     * Listeners should have the following function operator().
+     *
+     * FsmStructureListener::operator()(RTC::FsmStructure structure)
+     *
+     * The ownership of the given listener object is transferred to
+     * this RTObject object in default.  The given listener object will
+     * be destroied automatically in the RTObject's dtor or if the
+     * listener is deleted by removeFsmStructureListener() function.
+     * If you want to keep ownership of the listener object, give
+     * "false" value to 3rd argument to inhibit automatic destruction.
+     *
+     * @param listener_type A listener type
+     * @param listener A pointer to a listener object
+     * @param autoclean A flag for automatic listener destruction
+     *
+     * @endif
+     */
+    void
+    addFsmStructureListener(FsmStructureListenerType listener_type,
+                            FsmStructureListener* listener,
+                            bool autoclean = true);
+
+    template <class Listener>
+    FsmStructureListener*
+    addFsmStructureListener(FsmStructureListenerType listener_type,
+                            Listener& obj,
+                            void (Listener::*memfunc)(const RTC::PortProfile&))
+    {
+      class Noname
+        : public FsmStructureListener
+      {
+      public:
+        Noname(Listener& obj,
+               void (Listener::*memfunc)(const RTC::FsmStructure&))
+          : m_obj(obj), m_memfunc(memfunc)
+        {
+        }
+        void operator()(const RTC::PortProfile& pprofile)
+        {
+          (m_obj.*m_memfunc)(pprofile);
+        }
+      private:
+        Listener& m_obj;
+        typedef void (Listener::*Memfunc)(const RTC::FsmStructure&);
+        Memfunc m_memfunc;
+      };
+      Noname* listener(new Noname(obj, memfunc));
+      addFsmStructureListener(listener_type, listener, true);
+      return listener;
+    }
+
+    /*!
+     * @if jp
+     * @brief FsmStructureListener リスナを削除する
+     *
+     * 設定した各種リスナを削除する。
+     *
+     * @param listener_type リスナタイプ
+     * @param listener リスナオブジェクトへのポインタ
+     *
+     * @else
+     * @brief Removing FsmStructure type listener
+     *
+     * This operation removes a specified listener.
+     *
+     * @param listener_type A listener type
+     * @param listener A pointer to a listener object
+     *
+     * @endif
+     */
+    void
+    removeFsmStructureListener(FsmStructureListenerType listener_type,
+                               FsmStructureListener* listener);
+
+
+
   protected:
     /*!
      * @if jp
@@ -4529,20 +5033,25 @@ namespace RTC
     {
       m_actionListeners.portaction_[ADD_PORT].notify(pprof);
     }
-    
+
     inline void onRemovePort(const PortProfile& pprof)
     {
       m_actionListeners.portaction_[REMOVE_PORT].notify(pprof);
     }
-    
+
     inline void onAttachExecutionContext(UniqueId ec_id)
     {
       m_actionListeners.ecaction_[EC_ATTACHED].notify(ec_id);
     }
-    
+
     inline void onDetachExecutionContext(UniqueId ec_id)
     {
       m_actionListeners.ecaction_[EC_DETACHED].notify(ec_id);
+    }
+
+    inline void onFsmStateChanged(const char* state)
+    {
+      m_fsmActionListeners.preaction_[PRE_ON_STATE_CHANGE].notify(state);
     }
 
     ReturnCode_t getInheritedECOptions(coil::Properties& default_opts);
@@ -4889,6 +5398,21 @@ namespace RTC
      * @endif
      */
     PortConnectListeners m_portconnListeners;
+
+    /*!
+     * @if jp
+     * @brief ComponentActionListenerホルダ
+     *
+     * ComponentActionListenrを保持するホルダ
+     *
+     * @else
+     * @brief ComponentActionListener holder
+     *
+     * Holders of ComponentActionListeners
+     *
+     * @endif
+     */
+    FsmActionListeners m_fsmActionListeners;
 
     //------------------------------------------------------------
     // Functor

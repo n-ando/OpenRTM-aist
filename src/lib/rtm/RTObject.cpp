@@ -2469,7 +2469,154 @@ namespace RTC
   {
     m_configsets.removeConfigurationSetNameListener(type, listener);
   }
+
+  //============================================================
+  // FSM Listener
+  /*!
+   * @if jp
+   * @brief PreFsmActionListener リスナを追加する
+   *
+   * @else
+   * @brief Adding PreFsmAction type listener
+   *
+   * @endif
+   */
+  void RTObject_impl::
+  addPreFsmActionListener(PreFsmActionListenerType listener_type,
+                          PreFsmActionListener* listener,
+                          bool autoclean)
+  {
+    m_fsmActionListeners.
+      preaction_[listener_type].addListener(listener, autoclean);
+  }
   
+  
+  /*!
+   * @if jp
+   * @brief PreFsmActionListener リスナを削除する
+   *
+   * @else
+   * @brief Removing PreFsmAction type listener
+   *
+   * @endif
+   */
+  void RTObject_impl::
+  removePreFsmActionListener(PreFsmActionListenerType listener_type,
+                             PreFsmActionListener* listener)
+  {
+    m_fsmActionListeners.
+      preaction_[listener_type].removeListener(listener);
+  }
+
+
+  /*!
+   * @if jp
+   * @brief PostFsmActionListener リスナを追加する
+   *
+   * @else
+   * @brief Adding PostFsmAction type listener
+   *
+   * @endif
+   */
+  void RTObject_impl::
+  addPostFsmActionListener(PostFsmActionListenerType listener_type,
+                           PostFsmActionListener* listener,
+                           bool autoclean)
+  {
+    m_fsmActionListeners.
+      postaction_[listener_type].addListener(listener, autoclean);
+  }
+
+
+  /*!
+   * @if jp
+   * @brief PostFsmActionListener リスナを削除する
+   *
+   * @else
+   * @brief Removing PostFsmAction type listener
+   *
+   * @endif
+   */
+  void RTObject_impl::
+  removePostFsmActionListener(PostFsmActionListenerType listener_type,
+                              PostFsmActionListener* listener)
+  {
+    m_fsmActionListeners.
+      postaction_[listener_type].removeListener(listener);
+  }
+
+  /*!
+   * @if jp
+   * @brief FsmProfileListener リスナを追加する
+   *
+   * @else
+   * @brief Adding FsmProfile type listener
+   *
+   * @endif
+   */
+  void RTObject_impl::
+  addFsmProfileListener(FsmProfileListenerType listener_type,
+                          FsmProfileListener* listener,
+                          bool autoclean)
+  {
+    m_fsmActionListeners.
+      profile_[listener_type].addListener(listener, autoclean);
+  }
+
+
+  /*!
+   * @if jp
+   * @brief FsmProfileListener リスナを削除する
+   *
+   * @else
+   * @brief Removing FsmProfile type listener
+   *
+   * @endif
+   */
+  void RTObject_impl::
+  removeFsmProfileListener(FsmProfileListenerType listener_type,
+                             FsmProfileListener* listener)
+  {
+    m_fsmActionListeners.
+      profile_[listener_type].removeListener(listener);
+  }
+
+  /*!
+   * @if jp
+   * @brief FsmStructureListener リスナを追加する
+   *
+   * @else
+   * @brief Adding FsmStructure type listener
+   *
+   * @endif
+   */
+  void RTObject_impl::
+  addFsmStructureListener(FsmStructureListenerType listener_type,
+                          FsmStructureListener* listener,
+                          bool autoclean)
+  {
+    m_fsmActionListeners.
+      structure_[listener_type].addListener(listener, autoclean);
+  }
+
+
+  /*!
+   * @if jp
+   * @brief FsmStructureListener リスナを削除する
+   *
+   * @else
+   * @brief Removing FsmStructure type listener
+   *
+   * @endif
+   */
+  void RTObject_impl::
+  removeFsmStructureListener(FsmStructureListenerType listener_type,
+                             FsmStructureListener* listener)
+  {
+    m_fsmActionListeners.
+      structure_[listener_type].removeListener(listener);
+  }
+
   
   /*!
    * @if jp
