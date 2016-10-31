@@ -394,6 +394,32 @@ namespace RTC_exp
     m_workerthread.running_ = false;
     return RTC::RTC_OK;
   }
+  // template virtual functions adding/removing component
+  /*!
+   * @brief onAddedComponent() template function
+   */
+  RTC::ReturnCode_t PeriodicExecutionContext::
+  onAddedComponent(RTC::LightweightRTObject_ptr rtobj)
+  {
+    Guard guard(m_workerthread.mutex_);
+    if (m_workerthread.running_ == false)
+      {
+        m_worker.updateComponentList();
+      }
+  }
+  /*!
+   * @brief onRemovedComponent() template function
+   */
+  RTC::ReturnCode_t PeriodicExecutionContext::
+  onRemovedComponent(RTC::LightweightRTObject_ptr rtobj)
+  {
+    Guard guard(m_workerthread.mutex_);
+    if (m_workerthread.running_ == false)
+      {
+        m_worker.updateComponentList();
+      }
+    return RTC::RTC_OK;
+  }
 
   /*!
    * @brief onWaitingActivated() template function

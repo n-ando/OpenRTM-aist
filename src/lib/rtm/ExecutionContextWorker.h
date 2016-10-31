@@ -249,6 +249,11 @@ namespace RTC_impl
      */
     RTC::ReturnCode_t stop(void);
 
+    RTC::ReturnCode_t startThread(void);
+
+    RTC::ReturnCode_t stopThread(void);
+
+    
     /*!
      * @if jp
      * @brief ExecutionContext の実行周期が変更された
@@ -544,9 +549,7 @@ namespace RTC_impl
     void invokeWorkerPreDo();
     void invokeWorkerDo();
     void invokeWorkerPostDo();
-    
-    
-  protected:
+
     /*!
      * @if jp
      * @brief コンポーネントリストの更新
@@ -555,26 +558,6 @@ namespace RTC_impl
      * @endif
      */
     void updateComponentList();
-
-
-
-    /*!
-     * @if jp
-     * @brief コンポーネント検索用ファンクタ
-     * @else
-     * @brief Functor to find the component
-     * @endif
-     */
-//    struct find_comp
-//    {
-//      RTC::LightweightRTObject_var m_comp;
-//      find_comp(RTC::LightweightRTObject_ptr comp)
-//        : m_comp(RTC::LightweightRTObject::_duplicate(comp)) {}
-//      bool operator()(RTObjectStateMachine* comp)
-//      {
-//        return comp->isEquivalent(m_comp);
-//      }
-//    };
 
     //------------------------------------------------------------
     // member variables

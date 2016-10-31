@@ -579,6 +579,18 @@ namespace RTC_exp
      * @brief onStopping() template function
      */
     virtual RTC::ReturnCode_t onStopping();
+    // template virtual functions adding/removing component
+    /*!
+     * @brief onAddedComponent() template function
+     */
+     virtual RTC::ReturnCode_t
+     onAddedComponent(RTC::LightweightRTObject_ptr rtobj);
+    /*!
+     * @brief onRemovedComponent() template function
+     */
+    virtual RTC::ReturnCode_t
+    onRemovedComponent(RTC::LightweightRTObject_ptr rtobj);
+
     /*!
      * @brief onWaitingActivated() template function
      */
