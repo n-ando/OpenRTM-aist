@@ -406,6 +406,7 @@ namespace RTC_exp
       {
         m_worker.updateComponentList();
       }
+    return RTC::RTC_OK;
   }
   /*!
    * @brief onRemovedComponent() template function
