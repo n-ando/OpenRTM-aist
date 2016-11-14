@@ -392,6 +392,33 @@ namespace RTC
       }
     return RTC::RTC_OK;
   }
+  // template virtual functions adding/removing component
+  /*!
+   * @brief onAddedComponent() template function
+   */
+  RTC::ReturnCode_t ExtTrigExecutionContext::
+  onAddedComponent(RTC::LightweightRTObject_ptr rtobj)
+  {
+    Guard guard(m_worker.mutex_);
+    if (m_worker.ticked_ == false)
+      {
+        ExecutionContextBase::m_worker.updateComponentList();
+      }
+    return RTC::RTC_OK;
+  }
+  /*!
+   * @brief onRemovedComponent() template function
+   */
+  RTC::ReturnCode_t ExtTrigExecutionContext::
+  onRemovedComponent(RTC::LightweightRTObject_ptr rtobj)
+  {
+    Guard guard(m_worker.mutex_);
+    if (m_worker.ticked_ == false)
+      {
+        ExecutionContextBase::m_worker.updateComponentList();
+      }
+    return RTC::RTC_OK;
+  }
 
   /*!
    * @brief onWaitingActivated() template function
