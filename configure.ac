@@ -1690,6 +1690,7 @@ AC_OUTPUT([Makefile
 	win32/OpenRTM-aist/examples/Makefile
 	win32/OpenRTM-aist/examples/Composite/Makefile
 	win32/OpenRTM-aist/examples/ConfigSample/Makefile
+	win32/OpenRTM-aist/examples/ExtTrigger/Makefile
 	win32/OpenRTM-aist/examples/LTTSample/Makefile
 	win32/OpenRTM-aist/examples/SimpleIO/Makefile
 	win32/OpenRTM-aist/examples/SeqIO/Makefile

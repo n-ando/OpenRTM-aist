@@ -110,4 +110,19 @@ Examples:
       ShortName: Sens.dll
       Name: Sensor.dll
       Source: ..\\examples\\Composite\\Sensor\\Release\\Sensor.dll
+    - Id: ExtConnectorComp.exe
+      ShortName: ExtConnect.exe
+      Name: ExtConnectorComp.exe
+      Source: ..\\examples\\ExtTrigger\\ConnectorComp\\Release\\ExtConnectorComp.exe
+      Shortcut: true
+    - Id: ExtConsoleInComp.exe
+      ShortName: ExtConsIn.exe
+      Name: ExtConsoleInComp.exe
+      Source: ..\\examples\\ExtTrigger\\ConsoleInComp\\Release\\ExtConsoleInComp.exe
+      Shortcut: true
+    - Id: ExtConsoleOutComp.exe
+      ShortName: ExtConsOut.exe
+      Name: ExtConsoleOutComp.exe
+      Source: ..\\examples\\ExtTrigger\\ConsoleOutComp\\Release\\ExtConsoleOutComp.exe
+      Shortcut: true
 

@@ -19,23 +19,23 @@ socompdir  = $(exampledir)/rtc
 sourcedir  = $(exampledir)/src/ExtTrigger
 
 # Standalone RTCs
-example_PROGRAMS = ConsoleInCompExt ConsoleOutCompExt ConnectorCompExt
+example_PROGRAMS = ExtConsoleInComp ExtConsoleOutComp ExtConnectorComp
 example_DATA = rtc.conf
 
-ConsoleInCompExt_SOURCES = ConsoleInComp.cpp ConsoleIn.cpp ConsoleIn.h
-ConsoleInCompExt_LDADD   = $(top_builddir)/src/lib/rtm/libRTC.la \
+ExtConsoleInComp_SOURCES = ConsoleInComp.cpp ConsoleIn.cpp ConsoleIn.h
+ExtConsoleInComp_LDADD   = $(top_builddir)/src/lib/rtm/libRTC.la \
 	$(top_builddir)/src/lib/coil/lib/libcoil.la
-ConsoleInCompExt_LDFLAGS = -L$(top_builddir)/src/lib/rtm/.libs
+ExtConsoleInComp_LDFLAGS = -L$(top_builddir)/src/lib/rtm/.libs
 
-ConsoleOutCompExt_SOURCES = ConsoleOutComp.cpp ConsoleOut.cpp ConsoleOut.h
-ConsoleOutCompExt_LDADD   = $(top_builddir)/src/lib/rtm/libRTC.la \
+ExtConsoleOutComp_SOURCES = ConsoleOutComp.cpp ConsoleOut.cpp ConsoleOut.h
+ExtConsoleOutComp_LDADD   = $(top_builddir)/src/lib/rtm/libRTC.la \
 	$(top_builddir)/src/lib/coil/lib/libcoil.la
-ConsoleOutCompExt_LDFLAGS = -L$(top_builddir)/src/lib/rtm/.libs
+ExtConsoleOutComp_LDFLAGS = -L$(top_builddir)/src/lib/rtm/.libs
 
-ConnectorCompExt_SOURCES = ConnectorComp.cpp
-ConnectorCompExt_LDADD   = $(top_builddir)/src/lib/rtm/libRTC.la \
+ExtConnectorComp_SOURCES = ConnectorComp.cpp
+ExtConnectorComp_LDADD   = $(top_builddir)/src/lib/rtm/libRTC.la \
 	$(top_builddir)/src/lib/coil/lib/libcoil.la
-ConnectorCompExt_LDFLAGS = -L$(top_builddir)/src/lib/rtm/.libs
+ExtConnectorComp_LDFLAGS = -L$(top_builddir)/src/lib/rtm/.libs
 
 # Example sources
 source_DATA = $(ALL_SRC) $(EXTRA_DIST)
@@ -79,7 +79,7 @@ vc8proj:
 	$(top_builddir)/build/vcprojtool.py vcproj           \
 		--type EXE                                   \
 		--vcversion "8.00"                           \
-		--projectname "ConsoleInComp"                \
+		--projectname "ExtConsoleInComp"                \
 		--version $(RTM_VERSION)                     \
 		--out $(win32_builddir)/ConsoleIn_vc8.vcproj \
 		--yaml ../rtc.vcproj.yaml                    \
@@ -89,7 +89,7 @@ vc8proj:
 	$(top_builddir)/build/vcprojtool.py vcproj              \
 		--type DLL                                      \
 		--vcversion "8.00"                              \
-		--projectname "ConsoleIn"                       \
+		--projectname "ExtConsoleIn"                       \
 		--version $(RTM_VERSION)                        \
 		--out $(win32_builddir)/ConsoleInDll_vc8.vcproj \
 		--yaml ../rtcdll.vcproj.yaml                    \
@@ -99,7 +99,7 @@ vc8proj:
 	$(top_builddir)/build/vcprojtool.py vcproj            \
 		--type EXE                                    \
 		--vcversion "8.00"                            \
-		--projectname "ConsoleOutComp"                \
+		--projectname "ExtConsoleOutComp"                \
 		--version $(RTM_VERSION)                      \
 		--out $(win32_builddir)/ConsoleOut_vc8.vcproj \
 		--yaml ../rtc.vcproj.yaml                     \
@@ -109,19 +109,27 @@ vc8proj:
 	$(top_builddir)/build/vcprojtool.py vcproj               \
 		--type DLL                                       \
 		--vcversion "8.00"                               \
-		--projectname "ConsoleOut"                       \
+		--projectname "ExtConsoleOut"                       \
 		--version $(RTM_VERSION)                         \
 		--out $(win32_builddir)/ConsoleOutDll_vc8.vcproj \
 		--yaml ../rtcdll.vcproj.yaml                     \
 		--source ConsoleOut.cpp                          \
 		--header ConsoleOut.h
 	qkc -O- -sm $(win32_builddir)/ConsoleOutDll_vc8.vcproj
+	$(top_builddir)/build/vcprojtool.py vcproj               \
+		--type EXE                                       \
+		--vcversion "8.00"                               \
+		--projectname "ExtConnectorComp"                       \
+		--version $(RTM_VERSION)                         \
+		--out $(win32_builddir)/ConnectorComp_vc8.vcproj \
+		--yaml ../rtc.vcproj.yaml                     \
+		--source ConnectorComp.cpp
 
 vc9proj:
 	$(top_builddir)/build/vcprojtool.py vcproj           \
 		--type EXE                                   \
 		--vcversion "9.00"                           \
-		--projectname "ConsoleInComp"                \
+		--projectname "ExtConsoleInComp"                \
 		--version $(RTM_VERSION)                     \
 		--out $(win32_builddir)/ConsoleIn_vc9.vcproj \
 		--yaml ../rtc.vcproj.yaml                    \
@@ -131,7 +139,7 @@ vc9proj:
 	$(top_builddir)/build/vcprojtool.py vcproj              \
 		--type DLL                                      \
 		--vcversion "9.00"                              \
-		--projectname "ConsoleIn"                       \
+		--projectname "ExtConsoleIn"                       \
 		--version $(RTM_VERSION)                        \
 		--out $(win32_builddir)/ConsoleInDll_vc9.vcproj \
 		--yaml ../rtcdll.vcproj.yaml                    \
@@ -141,7 +149,7 @@ vc9proj:
 	$(top_builddir)/build/vcprojtool.py vcproj            \
 		--type EXE                                    \
 		--vcversion "9.00"                            \
-		--projectname "ConsoleOutComp"                \
+		--projectname "ExtConsoleOutComp"                \
 		--version $(RTM_VERSION)                      \
 		--out $(win32_builddir)/ConsoleOut_vc9.vcproj \
 		--yaml ../rtc.vcproj.yaml                     \
@@ -151,183 +159,223 @@ vc9proj:
 	$(top_builddir)/build/vcprojtool.py vcproj               \
 		--type DLL                                       \
 		--vcversion "9.00"                               \
-		--projectname "ConsoleOut"                       \
+		--projectname "ExtConsoleOut"                       \
 		--version $(RTM_VERSION)                         \
 		--out $(win32_builddir)/ConsoleOutDll_vc9.vcproj \
 		--yaml ../rtcdll.vcproj.yaml                     \
 		--source ConsoleOut.cpp                          \
 		--header ConsoleOut.h
 	qkc -O- -sm $(win32_builddir)/ConsoleOutDll_vc9.vcproj
+	$(top_builddir)/build/vcprojtool.py vcproj               \
+		--type EXE                                       \
+		--vcversion "9.00"                               \
+		--projectname "ExtConnectorComp"                       \
+		--version $(RTM_VERSION)                         \
+		--out $(win32_builddir)/ConnectorComp_vc9.vcproj \
+		--yaml ../rtc.vcproj.yaml                     \
+		--source ConnectorComp.cpp
 
 vc10proj:
 	$(top_builddir)/build/vcxprojtool.py vcxproj           \
 		--type EXE                                   \
 		--vcversion "10.00"                           \
-		--projectname "ConsoleInComp"                \
+		--projectname "ExtConsoleInComp"                \
 		--version $(RTM_VERSION)                     \
 		--out $(win32_builddir)/ConsoleIn_vc10.vcxproj \
-		--yaml ../rtc.vcxproj.yaml                    \
+		--yaml ../rtc.vcproj.yaml                    \
 		--source ConsoleIn.cpp ConsoleInComp.cpp     \
 		--header ConsoleIn.h
 	qkc -O- -sm $(win32_builddir)/ConsoleIn_vc10.vcxproj
 	$(top_builddir)/build/vcxprojtool.py vcxproj              \
 		--type DLL                                      \
 		--vcversion "10.00"                              \
-		--projectname "ConsoleIn"                       \
+		--projectname "ExtConsoleIn"                       \
 		--version $(RTM_VERSION)                        \
 		--out $(win32_builddir)/ConsoleInDll_vc10.vcxproj \
-		--yaml ../rtcdll.vcxproj.yaml                    \
+		--yaml ../rtcdll.vcproj.yaml                    \
 		--source ConsoleIn.cpp                          \
 		--header ConsoleIn.h
 	qkc -O- -sm $(win32_builddir)/ConsoleInDll_vc10.vcxproj
 	$(top_builddir)/build/vcxprojtool.py vcxproj            \
 		--type EXE                                    \
 		--vcversion "10.00"                            \
-		--projectname "ConsoleOutComp"                \
+		--projectname "ExtConsoleOutComp"                \
 		--version $(RTM_VERSION)                      \
 		--out $(win32_builddir)/ConsoleOut_vc10.vcxproj \
-		--yaml ../rtc.vcxproj.yaml                     \
+		--yaml ../rtc.vcproj.yaml                     \
 		--source ConsoleOut.cpp ConsoleOutComp.cpp    \
 		--header ConsoleOut.h
 	qkc -O- -sm $(win32_builddir)/ConsoleOut_vc10.vcxproj
 	$(top_builddir)/build/vcxprojtool.py vcxproj               \
 		--type DLL                                       \
 		--vcversion "10.00"                               \
-		--projectname "ConsoleOut"                       \
+		--projectname "ExtConsoleOut"                       \
 		--version $(RTM_VERSION)                         \
 		--out $(win32_builddir)/ConsoleOutDll_vc10.vcxproj \
-		--yaml ../rtcdll.vcxproj.yaml                     \
+		--yaml ../rtcdll.vcproj.yaml                     \
 		--source ConsoleOut.cpp                          \
 		--header ConsoleOut.h
 	qkc -O- -sm $(win32_builddir)/ConsoleOutDll_vc10.vcxproj
-
+	$(top_builddir)/build/vcxprojtool.py vcxproj               \
+		--type EXE                                       \
+		--vcversion "10.00"                               \
+		--projectname "ExtConnectorComp"                       \
+		--version $(RTM_VERSION)                         \
+		--out $(win32_builddir)/ConnectorComp_vc10.vcxproj \
+		--yaml ../rtc.vcproj.yaml                     \
+		--source ConnectorComp.cpp
+		
 vc11proj:
 	$(top_builddir)/build/vcxprojtool.py vcxproj           \
 		--type EXE                                   \
 		--vcversion "11.00"                           \
-		--projectname "ConsoleInComp"                \
+		--projectname "ExtConsoleInComp"                \
 		--version $(RTM_VERSION)                     \
 		--out $(win32_builddir)/ConsoleIn_vc11.vcxproj \
-		--yaml ../rtc.vcxproj.yaml                    \
+		--yaml ../rtc.vcproj.yaml                    \
 		--source ConsoleIn.cpp ConsoleInComp.cpp     \
 		--header ConsoleIn.h
 	qkc -O- -sm $(win32_builddir)/ConsoleIn_vc11.vcxproj
 	$(top_builddir)/build/vcxprojtool.py vcxproj              \
 		--type DLL                                      \
 		--vcversion "11.00"                              \
-		--projectname "ConsoleIn"                       \
+		--projectname "ExtConsoleIn"                       \
 		--version $(RTM_VERSION)                        \
 		--out $(win32_builddir)/ConsoleInDll_vc11.vcxproj \
-		--yaml ../rtcdll.vcxproj.yaml                    \
+		--yaml ../rtcdll.vcproj.yaml                    \
 		--source ConsoleIn.cpp                          \
 		--header ConsoleIn.h
 	qkc -O- -sm $(win32_builddir)/ConsoleInDll_vc11.vcxproj
 	$(top_builddir)/build/vcxprojtool.py vcxproj            \
 		--type EXE                                    \
 		--vcversion "11.00"                            \
-		--projectname "ConsoleOutComp"                \
+		--projectname "ExtConsoleOutComp"                \
 		--version $(RTM_VERSION)                      \
 		--out $(win32_builddir)/ConsoleOut_vc11.vcxproj \
-		--yaml ../rtc.vcxproj.yaml                     \
+		--yaml ../rtc.vcproj.yaml                     \
 		--source ConsoleOut.cpp ConsoleOutComp.cpp    \
 		--header ConsoleOut.h
 	qkc -O- -sm $(win32_builddir)/ConsoleOut_vc11.vcxproj
 	$(top_builddir)/build/vcxprojtool.py vcxproj               \
 		--type DLL                                       \
 		--vcversion "11.00"                               \
-		--projectname "ConsoleOut"                       \
+		--projectname "ExtConsoleOut"                       \
 		--version $(RTM_VERSION)                         \
 		--out $(win32_builddir)/ConsoleOutDll_vc11.vcxproj \
-		--yaml ../rtcdll.vcxproj.yaml                     \
+		--yaml ../rtcdll.vcproj.yaml                     \
 		--source ConsoleOut.cpp                          \
 		--header ConsoleOut.h
 	qkc -O- -sm $(win32_builddir)/ConsoleOutDll_vc11.vcxproj
+	$(top_builddir)/build/vcxprojtool.py vcxproj               \
+		--type EXE                                       \
+		--vcversion "11.00"                               \
+		--projectname "ExtConnectorComp"                       \
+		--version $(RTM_VERSION)                         \
+		--out $(win32_builddir)/ConnectorComp_vc11.vcxproj \
+		--yaml ../rtc.vcproj.yaml                     \
+		--source ConnectorComp.cpp
 
 vc12proj:
 	$(top_builddir)/build/vcxprojtool.py vcxproj           \
 		--type EXE                                   \
 		--vcversion "12.00"                           \
-		--projectname "ConsoleInComp"                \
+		--projectname "ExtConsoleInComp"                \
 		--version $(RTM_VERSION)                     \
 		--out $(win32_builddir)/ConsoleIn_vc12.vcxproj \
-		--yaml ../rtc.vcxproj.yaml                    \
+		--yaml ../rtc.vcproj.yaml                    \
 		--source ConsoleIn.cpp ConsoleInComp.cpp     \
 		--header ConsoleIn.h
 	qkc -O- -sm $(win32_builddir)/ConsoleIn_vc12.vcxproj
 	$(top_builddir)/build/vcxprojtool.py vcxproj              \
 		--type DLL                                      \
 		--vcversion "12.00"                              \
-		--projectname "ConsoleIn"                       \
+		--projectname "ExtConsoleIn"                       \
 		--version $(RTM_VERSION)                        \
 		--out $(win32_builddir)/ConsoleInDll_vc12.vcxproj \
-		--yaml ../rtcdll.vcxproj.yaml                    \
+		--yaml ../rtcdll.vcproj.yaml                    \
 		--source ConsoleIn.cpp                          \
 		--header ConsoleIn.h
 	qkc -O- -sm $(win32_builddir)/ConsoleInDll_vc12.vcxproj
 	$(top_builddir)/build/vcxprojtool.py vcxproj            \
 		--type EXE                                    \
 		--vcversion "12.00"                            \
-		--projectname "ConsoleOutComp"                \
+		--projectname "ExtConsoleOutComp"                \
 		--version $(RTM_VERSION)                      \
 		--out $(win32_builddir)/ConsoleOut_vc12.vcxproj \
-		--yaml ../rtc.vcxproj.yaml                     \
+		--yaml ../rtc.vcproj.yaml                     \
 		--source ConsoleOut.cpp ConsoleOutComp.cpp    \
 		--header ConsoleOut.h
 	qkc -O- -sm $(win32_builddir)/ConsoleOut_vc12.vcxproj
 	$(top_builddir)/build/vcxprojtool.py vcxproj               \
 		--type DLL                                       \
 		--vcversion "12.00"                               \
-		--projectname "ConsoleOut"                       \
+		--projectname "ExtConsoleOut"                       \
 		--version $(RTM_VERSION)                         \
 		--out $(win32_builddir)/ConsoleOutDll_vc12.vcxproj \
-		--yaml ../rtcdll.vcxproj.yaml                     \
+		--yaml ../rtcdll.vcproj.yaml                     \
 		--source ConsoleOut.cpp                          \
 		--header ConsoleOut.h
 	qkc -O- -sm $(win32_builddir)/ConsoleOutDll_vc12.vcxproj
+	$(top_builddir)/build/vcxprojtool.py vcxproj               \
+		--type EXE                                       \
+		--vcversion "12.00"                               \
+		--projectname "ExtConnectorComp"                       \
+		--version $(RTM_VERSION)                         \
+		--out $(win32_builddir)/ConnectorComp_vc12.vcxproj \
+		--yaml ../rtc.vcproj.yaml                     \
+		--source ConnectorComp.cpp
 
 vc14proj:
 	$(top_builddir)/build/vcxprojtool.py vcxproj           \
 		--type EXE                                   \
 		--vcversion "14.00"                           \
-		--projectname "ConsoleInComp"                \
+		--projectname "ExtConsoleInComp"                \
 		--version $(RTM_VERSION)                     \
 		--out $(win32_builddir)/ConsoleIn_vc14.vcxproj \
-		--yaml ../rtc.vcxproj.yaml                    \
+		--yaml ../rtc.vcproj.yaml                    \
 		--source ConsoleIn.cpp ConsoleInComp.cpp     \
 		--header ConsoleIn.h
 	qkc -O- -sm $(win32_builddir)/ConsoleIn_vc14.vcxproj
 	$(top_builddir)/build/vcxprojtool.py vcxproj              \
 		--type DLL                                      \
 		--vcversion "14.00"                              \
-		--projectname "ConsoleIn"                       \
+		--projectname "ExtConsoleIn"                       \
 		--version $(RTM_VERSION)                        \
 		--out $(win32_builddir)/ConsoleInDll_vc14.vcxproj \
-		--yaml ../rtcdll.vcxproj.yaml                    \
+		--yaml ../rtcdll.vcproj.yaml                    \
 		--source ConsoleIn.cpp                          \
 		--header ConsoleIn.h
 	qkc -O- -sm $(win32_builddir)/ConsoleInDll_vc14.vcxproj
 	$(top_builddir)/build/vcxprojtool.py vcxproj            \
 		--type EXE                                    \
 		--vcversion "14.00"                            \
-		--projectname "ConsoleOutComp"                \
+		--projectname "ExtConsoleOutComp"                \
 		--version $(RTM_VERSION)                      \
 		--out $(win32_builddir)/ConsoleOut_vc14.vcxproj \
-		--yaml ../rtc.vcxproj.yaml                     \
+		--yaml ../rtc.vcproj.yaml                     \
 		--source ConsoleOut.cpp ConsoleOutComp.cpp    \
 		--header ConsoleOut.h
 	qkc -O- -sm $(win32_builddir)/ConsoleOut_vc14.vcxproj
 	$(top_builddir)/build/vcxprojtool.py vcxproj               \
 		--type DLL                                       \
 		--vcversion "14.00"                               \
-		--projectname "ConsoleOut"                       \
+		--projectname "ExtConsoleOut"                       \
 		--version $(RTM_VERSION)                         \
 		--out $(win32_builddir)/ConsoleOutDll_vc14.vcxproj \
-		--yaml ../rtcdll.vcxproj.yaml                     \
+		--yaml ../rtcdll.vcproj.yaml                     \
 		--source ConsoleOut.cpp                          \
 		--header ConsoleOut.h
 	qkc -O- -sm $(win32_builddir)/ConsoleOutDll_vc14.vcxproj
+	$(top_builddir)/build/vcxprojtool.py vcxproj               \
+		--type EXE                                       \
+		--vcversion "14.00"                               \
+		--projectname "ExtConnectorComp"                       \
+		--version $(RTM_VERSION)                         \
+		--out $(win32_builddir)/ConnectorComp_vc14.vcxproj \
+		--yaml ../rtc.vcproj.yaml                     \
+		--source ConnectorComp.cpp
 
-dist-hook: lst
+dist-hook: lst vcproj
 
 clean-local:
 	rm -f \
