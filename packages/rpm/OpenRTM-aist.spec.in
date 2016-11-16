@@ -144,6 +144,9 @@ export DONT_STRIP=1
 #------------------------------------------------------------
 # changelog section
 %changelog
+* Wed Nov 16 2016 Noriaki Ando <n-ando@aist.go.jp> - 1.2.0-0._distname
+- The 1.2.0 release of OpenRTM-aist.
+
 * Thu Jun 4 2011 Noriaki Ando <n-ando@aist.go.jp> - 1.1.0-0._distname
 - CMakefile has been added.
 
