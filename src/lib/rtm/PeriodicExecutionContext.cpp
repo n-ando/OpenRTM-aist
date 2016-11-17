@@ -18,7 +18,10 @@
 
 #include <algorithm>
 #include <iostream>
-
+#ifdef RTM_OS_LINUX
+#define _GNU_SOURCE
+#include <pthread.h>
+#endif // RTM_OS_LINUX
 #include <coil/Time.h>
 #include <coil/TimeValue.h>
 
@@ -76,6 +79,16 @@ namespace RTC_exp
     wait();
   }
 
+  void PeriodicExecutionContext::init(coil::Properties& props)
+  {
+    RTC_TRACE(("init()"));
+    ExecutionContextBase::init(props);
+
+    setCpuAffinity(props);
+
+    RTC_DEBUG(("init() done"));
+  }
+
   /*------------------------------------------------------------
    * Start activity
    * ACE_Task class method over ride.
@@ -109,6 +122,37 @@ namespace RTC_exp
   {
     RTC_TRACE(("svc()"));
     int count(0);
+
+#ifdef RTM_OS_LINUX
+    pthread_t tid(pthread_self());
+    cpu_set_t cpu_set;
+    CPU_ZERO(&cpu_set);
+
+    for (size_t i(0); i < m_cpu.size(); ++i)
+      {
+        RTC_DEBUG(("CPU affinity mask set to %d", m_cpu[i]));
+        CPU_SET(m_cpu[i], &cpu_set);
+      }
+
+    int result = pthread_setaffinity_np(tid, sizeof(cpu_set_t), &cpu_set);
+    if (result != 0)
+      {
+        RTC_ERROR(("pthread_getaffinity_np():"
+                   "CPU affinity mask setting failed"));
+      }
+    CPU_ZERO(&cpu_set);
+    tid = pthread_self();
+    result = pthread_getaffinity_np(tid, sizeof(cpu_set_t), &cpu_set);
+    if (result != 0)
+      {
+        RTC_ERROR(("pthread_getaffinity_np(): returned error."));
+      }
+    for (size_t j(0); j < CPU_SETSIZE; ++j)
+      {
+        if (CPU_ISSET(j, &cpu_set)) { RTC_DEBUG(("CPU %d is set.", j)); }
+      }
+#endif // RTM_OS_LINUX
+
     do
       {
         ExecutionContextBase::invokeWorkerPreDo();
@@ -555,6 +599,28 @@ namespace RTC_exp
           }
       }
     return RTC::RTC_OK;
+  }
+
+  void PeriodicExecutionContext::setCpuAffinity(coil::Properties& props)
+  {
+    RTC_TRACE(("setCpuAffinity()"));
+    std::cout << props;
+    std::string affinity;
+    getProperty(props, "cpu_affinity", affinity);
+    RTC_DEBUG(("CPU affinity property: %s", affinity.c_str()));
+
+    coil::vstring tmp = coil::split(affinity, ",", true);
+    m_cpu.clear();
+
+    for (size_t i(0); i < tmp.size(); ++i)
+      {
+        int num;
+        if (coil::stringTo(num, tmp[i].c_str()))
+          {
+            m_cpu.push_back(num);
+            RTC_DEBUG(("CPU affinity int value: %d added.", num));
+          }
+      }
   }
 
 }; // namespace RTC  

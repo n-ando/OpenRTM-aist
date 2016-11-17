@@ -2527,6 +2527,7 @@ namespace RTC
         "activation_timeout",
         "deactivation_timeout",
         "reset_timeout",
+        "cpu_affinity",
         ""
       };
     coil::Properties* p = m_properties.findNode("exec_cxt");
