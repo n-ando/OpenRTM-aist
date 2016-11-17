@@ -47,6 +47,21 @@ manager.shutdown_on_nortcs: YES
 manager.shutdown_auto: YES
 manager.auto_shutdown_duration: 10.0
 
+#------------------------------------------------------------
+# Manager process's CPU affinity setting
+#
+# This option make the process bound to specific CPU(s).  Options must
+# be one or more comma separated numbers to identify CPU ID.  CPU ID
+# is started from 0, and maximum number is number of CPU core -1.  If
+# invalid CPU ID is specified, all the CPU will be used for the
+# process.
+#
+# Example:
+#   manager.cpu_affinity: 0, 1, 2, ...
+#
+manager.cpu_affinity: 0
+
+
 #============================================================
 # CORBA configuration
 #============================================================

@@ -1581,6 +1581,8 @@ namespace RTC
      */
     bool initFactories();
 
+    void initCpuAffinity();
+    
     /*!
      * @if jp
      * @brief Timer の初期化
