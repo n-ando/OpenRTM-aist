@@ -149,7 +149,10 @@ namespace RTC_exp
       }
     for (size_t j(0); j < CPU_SETSIZE; ++j)
       {
-        if (CPU_ISSET(j, &cpu_set)) { RTC_DEBUG(("CPU %d is set.", j)); }
+        if (CPU_ISSET(j, &cpu_set))
+          {
+            RTC_DEBUG(("Current CPU affinity mask is %d.", j));
+          }
       }
 #endif // RTM_OS_LINUX
 
