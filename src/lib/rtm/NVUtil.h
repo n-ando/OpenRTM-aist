@@ -536,6 +536,58 @@ namespace NVUtil
   /*!
    * @if jp
    *
+   * @brief NameValue に設定されている内容を文字列として出力する。
+   *
+   * 指定された NVList に設定された内容を文字列として出力する。なお、設
+   * 定されている要素が文字列型以外の場合には、その旨(文字列ではない)を
+   * 出力する。
+   *
+   * @param nv 出力対象 NameValue
+   *
+   * @else
+   *
+   * @brief Print information configured in NameValue as string type
+   *
+   * Print configured information as string type in specified NVList.
+   * Also, print the reason (this is not string type) if the configured
+   * element is other than string type.
+   *
+   * @param nv The target NameValue for the print
+   *
+   * @endif
+   */
+  std::ostream& dump_to_stream(std::ostream& out,
+                               const SDOPackage::NameValue& nv);
+  std::ostream& operator<<(std::ostream& os, const SDOPackage::NameValue& nv);
+
+/*!
+   * @if jp
+   *
+   * @brief NVList に設定されている内容を文字列として出力する。
+   *
+   * 指定された NVList に設定された内容を文字列として出力する。なお、設
+   * 定されている要素が文字列型以外の場合には、その旨(文字列ではない)を
+   * 出力する。
+   *
+   * @param nv 出力対象 NVList
+   *
+   * @else
+   *
+   * @brief Print information configured in NVList as string type
+   *
+   * Print configured information as string type in specified NVList.
+   * Also, print the reason (this is not string type) if the configured
+   * element is other than string type.
+   *
+   * @param nv The target NVList for the print
+   *
+   * @endif
+   */
+  std::ostream& operator<<(std::ostream& os, const SDOPackage::NVList& nvlist);
+
+  /*!
+   * @if jp
+   *
    * @brief NVList に設定されている内容を文字列として出力する。
    *
    * 指定された NVList に設定された内容を文字列として出力する。
@@ -588,7 +640,7 @@ namespace NVUtil
    * @endif
    */
   std::string toString(const SDOPackage::NVList& nv);
-  
+
 
 };
 #endif // NVUTIL_NVUTIL_H
