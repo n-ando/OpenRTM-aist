@@ -169,15 +169,6 @@ libcoil_vc14.vcxproj: libcoil.vcproj.yaml $(COIL_ALL)
 		--header $(COIL_H)
 	qkc -O- -sm $(win32_builddir)/libcoil_vc14.vcxproj
 
-#------------------------------------------------------------
-# for wxs file
-#------------------------------------------------------------
-wxs:
-	$(top_srcdir)/../../../build/makewxs.py flist \
-		-c COILs \
-		-o $(top_srcdir)/../../../win32/OpenRTM-aist/installer/coils.yaml \
-		-p ..\\coil \
-		$(COIL_H) $(COIL_SRC)
 
-dist-hook: lst vcproj wxs
+dist-hook: lst vcproj
 

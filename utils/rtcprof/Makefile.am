@@ -93,17 +93,8 @@ vc14proj: rtcprof.yaml
 		--yaml rtcprof.yaml                                        \
 		--source $(rtcprof_SOURCES)
 				
-#------------------------------------------------------------
-# for wxs file
-#------------------------------------------------------------
-wxs:
-	$(top_srcdir)/build/makewxs.py flist \
-		-c Rtcprof \
-		-o $(win32_builddir)installer/rtcprof.yaml \
-		-p ..\\bin \
-		$(bin_PROGRAMS).exe
 
-dist-hook: lst vcproj wxs
+dist-hook: lst vcproj
 
 clean-local:
 	rm -rf rtcprof *.o *~ *core .libs *.lst

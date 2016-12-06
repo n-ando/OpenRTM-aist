@@ -11,10 +11,7 @@ clean-local:
 rtc.conf.sample:
 	cp -p $(top_srcdir)/etc/rtc.conf.sample .
 
-wxs:
-	cp -p etc.yaml ../installer/etc.yaml
-
-dist-hook: clean-local rtc.conf.sample wxs
+dist-hook: clean-local rtc.conf.sample
 
 EXTRA_DIST =                   \
 	rtc.conf.sample            \

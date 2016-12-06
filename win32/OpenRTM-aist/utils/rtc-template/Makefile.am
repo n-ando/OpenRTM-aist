@@ -12,11 +12,4 @@ src:
 	cp -p $(top_srcdir)/utils/rtc-template/rtc-template rtc-template.py
 	cp -p $(top_srcdir)/utils/rtc-template/*.py .
 
-wxs: src
-	$(top_srcdir)/build/makewxs.py flist \
-		-c RtcTemplate \
-		-o ../../installer/rtctemplate.yaml \
-		-p ..\\utils\\rtc-template \
-		*.py
-
-dist-hook: clean-local src wxs
+dist-hook: clean-local src

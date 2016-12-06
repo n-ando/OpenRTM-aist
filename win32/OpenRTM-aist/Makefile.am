@@ -4,7 +4,7 @@
 ##
 ## $Id$
 ##---------------------------------------------------------------------------
-SUBDIRS = bin etc cmake build docs examples ext utils coil rtm installer .
+SUBDIRS = bin etc cmake build docs examples ext utils coil rtm .
 
 
 clean-local:
@@ -103,9 +103,6 @@ dist-hook: clean-local sln vsprops build.bat
 
 EXTRA_DIST =                      \
 	OpenRTM-aist.sln.dep          \
-	autobuild_vc8.bat             \
-	autobuild_vc9.bat             \
-	autobuild_vc10.bat            \
 	coil_distbuild.vsprops        \
 	coil_config.vsprops           \
 	rtm_distbuild.vsprops         \

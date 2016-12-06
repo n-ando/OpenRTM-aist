@@ -285,17 +285,7 @@ vc14proj: librtmManipulator.vcproj.yaml librtmCamera.vcproj.yaml
 	qkc -O- -sm $(win32_builddir)/rtm/ext/librtmCamera_vc14.vcxproj
 
 
-#------------------------------------------------------------
-# for wxs file
-#------------------------------------------------------------
-wxs:
-	$(top_srcdir)/build/makewxs.py flist \
-		-c IDLs \
-		-o $(win32_builddir)installer/idls.yaml \
-		-p ..\\rtm\\idl \
-		$(IDL_SOURCES) $(ALL_SRC)
-
-dist-hook: lst vcproj wxs
+dist-hook: lst vcproj
 
 # Cleanup
 clean-local:

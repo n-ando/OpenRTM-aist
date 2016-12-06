@@ -248,19 +248,8 @@ vc14proj: libRTC.vcproj.yaml
 		--header $(rtmheader_HEADERS)
 	qkc -O- -sm $(win32_builddir)/rtm/libRTC_vc14.vcxproj
 
-#------------------------------------------------------------
-# for wxs file
-#------------------------------------------------------------
-wxs:
-	$(top_srcdir)/build/makewxs.py flist \
-		-c Headers \
-		-o $(win32_builddir)installer/headers.yaml \
-		-p ..\\rtm \
-		*.h version.txt
 
-
-
-dist-hook: lst vcproj wxs
+dist-hook: lst vcproj
 
 clean-local:
 	rm -f config_rtc.h.org

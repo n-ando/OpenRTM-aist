@@ -93,17 +93,8 @@ vc14proj: rtcd.yaml
 		--yaml rtcd.yaml                                     \
 		--source $(rtcd_SOURCES)
 				
-#------------------------------------------------------------
-# for wxs file
-#------------------------------------------------------------
-wxs:
-	$(top_srcdir)/build/makewxs.py flist \
-		-c Rtcd \
-		-o $(win32_builddir)installer/rtcd.yaml \
-		-p ..\\bin \
-		$(bin_PROGRAMS).exe
 
-dist-hook: lst vcproj wxs
+dist-hook: lst vcproj
 
 clean-local:
 	rm -rf rtcd
