@@ -88,20 +88,8 @@ clean-local:
 #------------------------------------------------------------
 win32_builddir = .
 
-vcproj: PortServiceProxy_vc8.vcproj PortServiceProxy_vc9.vcproj PortServiceProxy_vc10.vcproj
+vcproj: PortServiceProxy_vc9.vcproj PortServiceProxy_vc10.vcproj
 
-
-PortServiceProxy_vc8.vcproj:
-	$(top_builddir)/build/vcprojtool.py vcproj \
-		--projectname PortServiceProxyTest \
-		--type EXE \
-		--vcversion "8.00" \
-		--version $(COIL_VERSION) \
-		--out $(win32_builddir)/PortServiceProxy_vc8.vcproj \
-		--yaml ../coil_test.vcproj.yaml \
-		--source $(TEST_SRC)
-#		--header $(TEST_H)
-	qkc -O- -sm $(win32_builddir)/PortServiceProxy_vc8.vcproj
 
 PortServiceProxy_vc9.vcproj:
 	$(top_builddir)/build/vcprojtool.py vcproj \

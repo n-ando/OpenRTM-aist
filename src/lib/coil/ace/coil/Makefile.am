@@ -97,18 +97,7 @@ EXTRA_DIST =                \
 #------------------------------------------------------------
 win32_builddir = .
 
-vcproj: libcoil_vc8.vcproj libcoil_vc9.vcproj
-
-libcoil_vc8.vcproj: libcoil.vcproj.yaml $(COIL_ALL)
-	$(top_builddir)/build/vcprojtool.py vcproj \
-		--type DLL \
-		--vcversion "8.00" \
-		--version $(COIL_VERSION) \
-		--out $(win32_builddir)/libcoil_vc8.vcproj \
-		--yaml libcoil.vcproj.yaml \
-		--source $(COIL_SRC) \
-		--header $(COIL_H)
-	qkc -O- -sm $(win32_builddir)/libcoil_vc8.vcproj
+vcproj: libcoil_vc9.vcproj
 
 libcoil_vc9.vcproj: libcoil.vcproj.yaml $(COIL_ALL)
 	$(top_builddir)/build/vcprojtool.py vcproj \

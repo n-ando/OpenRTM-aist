@@ -63,21 +63,8 @@ clean-local:
 #------------------------------------------------------------
 win32_builddir = .
 
-vcproj: Factory_vc8.vcproj Factory_vc9.vcproj Factory_vc10.vcproj Factory_libPluginC_vc8.vcproj Factory_libPluginC_vc9.vcproj Factory_libPluginC_vc10.vcproj
+vcproj: Factory_vc9.vcproj Factory_vc10.vcproj Factory_libPluginC_vc9.vcproj Factory_libPluginC_vc10.vcproj
 
-
-
-Factory_vc8.vcproj:
-	$(top_builddir)/build/vcprojtool.py vcproj \
-		--projectname FactoryTest \
-		--type EXE \
-		--vcversion "8.00" \
-		--version $(COIL_VERSION) \
-		--out $(win32_builddir)/Factory_vc8.vcproj \
-		--yaml ../coil_test.vcproj.yaml \
-		--source $(TEST_SRC)
-#		--header $(TEST_H)
-	qkc -O- -sm $(win32_builddir)/Factory_vc8.vcproj
 
 Factory_vc9.vcproj:
 	$(top_builddir)/build/vcprojtool.py vcproj \
@@ -101,19 +88,6 @@ Factory_vc10.vcproj:
 		--yaml ../coil_test.vcproj.yaml \
 		--source $(TEST_SRC)
 	qkc -O- -sm $(win32_builddir)/Factory_vc10.vcproj
-
-Factory_libPluginC_vc8.vcproj:
-	$(top_builddir)/build/vcprojtool.py vcproj \
-		--projectname FactoryTest_libPluginC \
-		--type DLL \
-		--vcversion "8.00" \
-		--version $(COIL_VERSION) \
-		--out $(win32_builddir)/Factory_libPluginC_vc8.vcproj \
-		--yaml ./coil_test_dll.vcproj.yaml \
-		--source $(libPluginC_la_SOURCES)
-#		--header $(TEST_H)
-	qkc -O- -sm $(win32_builddir)/Factory_libPluginC_vc8.vcproj
-
 
 Factory_libPluginC_vc9.vcproj:
 	$(top_builddir)/build/vcprojtool.py vcproj \

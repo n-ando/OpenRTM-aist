@@ -87,20 +87,8 @@ clean-local:
 #------------------------------------------------------------
 win32_builddir = .
 
-vcproj: OrganizationProxy_vc8.vcproj OrganizationProxy_vc9.vcproj OrganizationProxy_vc10.vcproj
+vcproj: OrganizationProxy_vc9.vcproj OrganizationProxy_vc10.vcproj
 
-
-OrganizationProxy_vc8.vcproj:
-	$(top_builddir)/build/vcprojtool.py vcproj \
-		--projectname OrganizationProxyTest \
-		--type EXE \
-		--vcversion "8.00" \
-		--version $(COIL_VERSION) \
-		--out $(win32_builddir)/OrganizationProxy_vc8.vcproj \
-		--yaml ../coil_test.vcproj.yaml \
-		--source $(TEST_SRC)
-#		--header $(TEST_H)
-	qkc -O- -sm $(win32_builddir)/OrganizationProxy_vc8.vcproj
 
 OrganizationProxy_vc9.vcproj:
 	$(top_builddir)/build/vcprojtool.py vcproj \

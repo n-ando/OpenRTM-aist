@@ -55,19 +55,7 @@ clean-local:
 #------------------------------------------------------------
 win32_builddir = .
 
-vcproj: File_vc8.vcproj File_vc9.vcproj File_vc10.vcproj
-
-File_vc8.vcproj:
-	$(top_builddir)/build/vcprojtool.py vcproj \
-		--projectname FileTest \
-		--type EXE \
-		--vcversion "8.00" \
-		--version $(COIL_VERSION) \
-		--out $(win32_builddir)/File_vc8.vcproj \
-		--yaml ../coil_test.vcproj.yaml \
-		--source $(TEST_SRC)
-#		--header $(TEST_H)
-	qkc -O- -sm $(win32_builddir)/File_vc8.vcproj
+vcproj: File_vc9.vcproj File_vc10.vcproj
 
 File_vc9.vcproj:
 	$(top_builddir)/build/vcprojtool.py vcproj \

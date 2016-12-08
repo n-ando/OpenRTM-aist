@@ -154,18 +154,7 @@ lst:
 #------------------------------------------------------------
 win32_builddir=$(top_builddir)/win32/OpenRTM-aist/
 
-vcproj: vc8proj vc9proj  vc10proj
-
-vc8proj: libRTCSkel.vcproj.yaml
-	$(top_builddir)/build/vcprojtool.py vcproj \
-		--type LIB \
-		--vcversion "8.00" \
-		--version $(RTM_VERSION) \
-		--out $(win32_builddir)/rtm/idl/libRTCSkel_vc8.vcproj \
-		--yaml libRTCSkel.vcproj.yaml \
-		--source $(SKEL_CPP) \
-		--header $(SKEL_H)
-	qkc -O- -sm $(win32_builddir)/rtm/idl/libRTCSkel_vc8.vcproj
+vcproj: vc9proj  vc10proj
 
 vc9proj: libRTCSkel.vcproj.yaml
 	$(top_builddir)/build/vcprojtool.py vcproj \
