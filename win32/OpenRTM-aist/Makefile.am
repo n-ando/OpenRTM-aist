@@ -17,15 +17,7 @@ clean-local:
 	rm -f coil_config.props
 	rm -f build.bat
 
-sln: OpenRTM-aist_vc8.sln OpenRTM-aist_vc9.sln OpenRTM-aist_vc10.sln OpenRTM-aist_vc11.sln OpenRTM-aist_vc12.sln OpenRTM-aist_vc14.sln
-
-OpenRTM-aist_vc8.sln: OpenRTM-aist.sln.dep
-	$(top_srcdir)/build/slntool.py     \
-		--vcversion VC8            \
-		--dep OpenRTM-aist.sln.dep \
-		--out OpenRTM-aist_vc8.sln \
-		`find ./ -name '*_vc8.vcproj' \! -name 'USB*.vcproj' \! -name 'LTT*.vcproj' \! -name 'LogicalTime*.vcproj' \! -name 'FileName*.vcproj'`
-	qkc -O- -ms OpenRTM-aist_vc8.sln
+sln: OpenRTM-aist_vc9.sln OpenRTM-aist_vc10.sln OpenRTM-aist_vc11.sln OpenRTM-aist_vc12.sln OpenRTM-aist_vc14.sln
 
 OpenRTM-aist_vc9.sln:
 	$(top_srcdir)/build/slntool.py     \

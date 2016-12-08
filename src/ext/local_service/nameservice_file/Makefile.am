@@ -37,19 +37,7 @@ FILENAMESERVICE_H = $(FILENAMESERVICE_DIST_H)
 win32_builddir=$(top_builddir)/win32/OpenRTM-aist/ext/local_service/nameservice_file
 PROJNAME=FileNameservice
 
-vcproj: vc8proj vc9proj vc10proj vc11proj vc12proj vc14proj
-
-vc8proj: 
-	$(top_builddir)/build/vcprojtool.py vcproj              \
-		--type DLL                                      \
-		--vcversion "8.00"                              \
-		--projectname "$(PROJNAME)"                     \
-		--version $(RTM_VERSION)                        \
-		--out $(win32_builddir)/$(PROJNAME)Dll_vc8.vcproj  \
-		--yaml $(top_builddir)/examples/rtcdll.vcproj.yaml \
-		--source $(FILENAMESERVICE_SRC)                        \
-		--header $(FILENAMESERVICE_H)
-	qkc -O- -sm $(win32_builddir)/$(PROJNAME)Dll_vc8.vcproj
+vcproj: vc9proj vcxproj
 
 vc9proj:
 	$(top_builddir)/build/vcprojtool.py vcproj              \
@@ -63,54 +51,20 @@ vc9proj:
 		--header $(FILENAMESERVICE_H)
 	qkc -O- -sm $(win32_builddir)/$(PROJNAME)Dll_vc9.vcproj
 
-vc10proj:
-	$(top_builddir)/build/vcxprojtool.py vcxproj              \
-		--type DLL                                        \
-		--vcversion "10.00"                               \
-		--projectname "$(PROJNAME)"                       \
-		--version $(RTM_VERSION)                          \
-		--out $(win32_builddir)/$(PROJNAME)Dll_vc10.vcxproj \
-		--yaml $(top_builddir)/examples/rtcdll.vcproj.yaml  \
-		--source $(FILENAMESERVICE_SRC)                          \
-		--header $(FILENAMESERVICE_H)
-	qkc -O- -sm $(win32_builddir)/$(PROJNAME)Dll_vc10.vcxproj
+vcxproj:
+	for ver in $(VC_VERSION); do \
+		$(top_builddir)/build/vcxprojtool.py vcxproj              \
+			--type DLL                                        \
+			--vcversion "$${ver}.00"                               \
+			--projectname "$(PROJNAME)"                       \
+			--version $(RTM_VERSION)                          \
+			--out $(win32_builddir)/$(PROJNAME)Dll_vc$${ver}.vcxproj \
+			--yaml $(top_builddir)/examples/rtcdll.vcproj.yaml  \
+			--source $(FILENAMESERVICE_SRC)                          \
+			--header $(FILENAMESERVICE_H) ; \
+		qkc -O- -sm $(win32_builddir)/$(PROJNAME)Dll_vc$${ver}.vcxproj ; \
+	done
 
-vc11proj:
-	$(top_builddir)/build/vcxprojtool.py vcxproj              \
-		--type DLL                                        \
-		--vcversion "11.00"                               \
-		--projectname "$(PROJNAME)"                       \
-		--version $(RTM_VERSION)                          \
-		--out $(win32_builddir)/$(PROJNAME)Dll_vc11.vcxproj \
-		--yaml $(top_builddir)/examples/rtcdll.vcproj.yaml  \
-		--source $(FILENAMESERVICE_SRC)                          \
-		--header $(FILENAMESERVICE_H)
-	qkc -O- -sm $(win32_builddir)/$(PROJNAME)Dll_vc11.vcxproj
-
-vc12proj:
-	$(top_builddir)/build/vcxprojtool.py vcxproj              \
-		--type DLL                                        \
-		--vcversion "12.00"                               \
-		--projectname "$(PROJNAME)"                       \
-		--version $(RTM_VERSION)                          \
-		--out $(win32_builddir)/$(PROJNAME)Dll_vc12.vcxproj \
-		--yaml $(top_builddir)/examples/rtcdll.vcproj.yaml  \
-		--source $(FILENAMESERVICE_SRC)                          \
-		--header $(FILENAMESERVICE_H)
-	qkc -O- -sm $(win32_builddir)/$(PROJNAME)Dll_vc12.vcxproj
-
-vc14proj:
-	$(top_builddir)/build/vcxprojtool.py vcxproj              \
-		--type DLL                                        \
-		--vcversion "14.00"                               \
-		--projectname "$(PROJNAME)"                       \
-		--version $(RTM_VERSION)                          \
-		--out $(win32_builddir)/$(PROJNAME)Dll_vc14.vcxproj \
-		--yaml $(top_builddir)/examples/rtcdll.vcproj.yaml  \
-		--source $(FILENAMESERVICE_SRC)                          \
-		--header $(FILENAMESERVICE_H)
-	qkc -O- -sm $(win32_builddir)/$(PROJNAME)Dll_vc14.vcxproj
-	
 #dist-hook: vcproj
 
 clean-local:

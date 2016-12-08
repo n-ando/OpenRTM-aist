@@ -29,18 +29,7 @@ lst:
 #------------------------------------------------------------
 win32_builddir = $(top_builddir)/win32/OpenRTM-aist/
 
-vcproj: vc8proj vc9proj vc10proj vc11proj vc12proj vc14proj
-
-vc8proj: rtcprof.yaml
-	$(top_builddir)/build/vcprojtool.py vcproj                   \
-		--type RTCEXE                                            \
-		--vcversion "8.00"                                       \
-		--projectname "rtcprof"                                  \
-		--version $(RTM_VERSION)                                 \
-		--out $(win32_builddir)/utils/rtcprof/rtcprof_vc8.vcproj \
-		--yaml rtcprof.yaml                                      \
-		--source $(rtcprof_SOURCES)
-#	qkc -O- -sm $(win32_builddir)/rtm/libRTC_vc8.vcproj
+vcproj: vc9proj vcxproj
 
 vc9proj: rtcprof.yaml
 	$(top_builddir)/build/vcprojtool.py vcproj                   \
@@ -51,48 +40,18 @@ vc9proj: rtcprof.yaml
 		--out $(win32_builddir)/utils/rtcprof/rtcprof_vc9.vcproj \
 		--yaml rtcprof.yaml                                      \
 		--source $(rtcprof_SOURCES)
-#	qkc -O- -sm $(win32_builddir)/rtm/rtcprof_vc9.vcproj
 
-vc10proj: rtcprof.yaml
-	$(top_builddir)/build/vcxprojtool.py vcxproj                   \
-		--type RTCEXE                                              \
-		--vcversion "10.00"                                        \
-		--projectname "rtcprof"                                    \
-		--version $(RTM_VERSION)                                   \
-		--out $(win32_builddir)/utils/rtcprof/rtcprof_vc10.vcxproj \
-		--yaml rtcprof.yaml                                        \
-		--source $(rtcprof_SOURCES)
-
-vc11proj: rtcprof.yaml
-	$(top_builddir)/build/vcxprojtool.py vcxproj                   \
-		--type RTCEXE                                              \
-		--vcversion "11.00"                                        \
-		--projectname "rtcprof"                                    \
-		--version $(RTM_VERSION)                                   \
-		--out $(win32_builddir)/utils/rtcprof/rtcprof_vc11.vcxproj \
-		--yaml rtcprof.yaml                                        \
-		--source $(rtcprof_SOURCES)
-
-vc12proj: rtcprof.yaml
-	$(top_builddir)/build/vcxprojtool.py vcxproj                   \
-		--type RTCEXE                                              \
-		--vcversion "12.00"                                        \
-		--projectname "rtcprof"                                    \
-		--version $(RTM_VERSION)                                   \
-		--out $(win32_builddir)/utils/rtcprof/rtcprof_vc12.vcxproj \
-		--yaml rtcprof.yaml                                        \
-		--source $(rtcprof_SOURCES)
-		
-vc14proj: rtcprof.yaml
-	$(top_builddir)/build/vcxprojtool.py vcxproj                   \
-		--type RTCEXE                                              \
-		--vcversion "14.00"                                        \
-		--projectname "rtcprof"                                    \
-		--version $(RTM_VERSION)                                   \
-		--out $(win32_builddir)/utils/rtcprof/rtcprof_vc14.vcxproj \
-		--yaml rtcprof.yaml                                        \
-		--source $(rtcprof_SOURCES)
-				
+vcxproj: rtcprof.yaml
+	for ver in $(VC_VERSION); do \
+		$(top_builddir)/build/vcxprojtool.py vcxproj                   \
+			--type RTCEXE                                              \
+			--vcversion "$${ver}.00"                                        \
+			--projectname "rtcprof"                                    \
+			--version $(RTM_VERSION)                                   \
+			--out $(win32_builddir)/utils/rtcprof/rtcprof_vc$${ver}.vcxproj \
+			--yaml rtcprof.yaml                                        \
+			--source $(rtcprof_SOURCES) ; \
+	done
 
 dist-hook: lst vcproj
 

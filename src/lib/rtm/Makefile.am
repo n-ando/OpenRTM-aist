@@ -185,18 +185,7 @@ lst:
 #------------------------------------------------------------
 win32_builddir = $(top_builddir)/win32/OpenRTM-aist/
 
-vcproj: vc8proj vc9proj vc10proj vc11proj vc12proj vc14proj
-
-vc8proj: libRTC.vcproj.yaml
-	$(top_builddir)/build/vcprojtool.py vcproj \
-		--type DLL \
-		--vcversion "8.00" \
-		--version $(RTM_VERSION) \
-		--out $(win32_builddir)/rtm/libRTC_vc8.vcproj \
-		--yaml libRTC.vcproj.yaml \
-		--source $(RTC_SRC) \
-		--header $(rtmheader_HEADERS)
-	qkc -O- -sm $(win32_builddir)/rtm/libRTC_vc8.vcproj
+vcproj: vc9proj vcxproj
 
 vc9proj: libRTC.vcproj.yaml
 	$(top_builddir)/build/vcprojtool.py vcproj \
@@ -209,50 +198,18 @@ vc9proj: libRTC.vcproj.yaml
 		--header $(rtmheader_HEADERS)
 	qkc -O- -sm $(win32_builddir)/rtm/libRTC_vc9.vcproj
 
-vc10proj: libRTC.vcproj.yaml
-	$(top_builddir)/build/vcxprojtool.py vcxproj \
-		--type DLL \
-		--vcversion "10.00" \
-		--version $(RTM_VERSION) \
-		--out $(win32_builddir)/rtm/libRTC_vc10.vcxproj \
-		--yaml libRTC.vcproj.yaml \
-		--source $(RTC_SRC) \
-		--header $(rtmheader_HEADERS)
-	qkc -O- -sm $(win32_builddir)/rtm/libRTC_vc10.vcxproj
-
-vc11proj: libRTC.vcproj.yaml
-	$(top_builddir)/build/vcxprojtool.py vcxproj \
-		--type DLL \
-		--vcversion "11.00" \
-		--version $(RTM_VERSION) \
-		--out $(win32_builddir)/rtm/libRTC_vc11.vcxproj \
-		--yaml libRTC.vcproj.yaml \
-		--source $(RTC_SRC) \
-		--header $(rtmheader_HEADERS)
-	qkc -O- -sm $(win32_builddir)/rtm/libRTC_vc11.vcxproj
-
-vc12proj: libRTC.vcproj.yaml
-	$(top_builddir)/build/vcxprojtool.py vcxproj \
-		--type DLL \
-		--vcversion "12.00" \
-		--version $(RTM_VERSION) \
-		--out $(win32_builddir)/rtm/libRTC_vc12.vcxproj \
-		--yaml libRTC.vcproj.yaml \
-		--source $(RTC_SRC) \
-		--header $(rtmheader_HEADERS)
-	qkc -O- -sm $(win32_builddir)/rtm/libRTC_vc12.vcxproj
-
-vc14proj: libRTC.vcproj.yaml
-	$(top_builddir)/build/vcxprojtool.py vcxproj \
-		--type DLL \
-		--vcversion "14.00" \
-		--version $(RTM_VERSION) \
-		--out $(win32_builddir)/rtm/libRTC_vc14.vcxproj \
-		--yaml libRTC.vcproj.yaml \
-		--source $(RTC_SRC) \
-		--header $(rtmheader_HEADERS)
-	qkc -O- -sm $(win32_builddir)/rtm/libRTC_vc14.vcxproj
-
+vcxproj: libRTC.vcproj.yaml
+	for ver in $(VC_VERSION); do \
+		$(top_builddir)/build/vcxprojtool.py vcxproj \
+			--type DLL \
+			--vcversion "$${ver}.00" \
+			--version $(RTM_VERSION) \
+			--out $(win32_builddir)/rtm/libRTC_vc$${ver}.vcxproj \
+			--yaml libRTC.vcproj.yaml \
+			--source $(RTC_SRC) \
+			--header $(rtmheader_HEADERS) ; \
+		qkc -O- -sm $(win32_builddir)/rtm/libRTC_vc$${ver}.vcxproj ; \
+	done
 
 dist-hook: lst vcproj
 
