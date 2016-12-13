@@ -1,8 +1,0 @@
-module EchoCORBA
-{
-  interface EchoSample
-  {
-    void echo(in string msg);
-  };
-};
-
