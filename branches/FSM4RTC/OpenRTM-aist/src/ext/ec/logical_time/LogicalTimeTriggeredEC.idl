@@ -1,0 +1,34 @@
+// -*- IDL -*-
+/*!
+ * @file OpenRTM.idl
+ * @brief OpenRTM interface definition
+ * @date $Date: 2007-09-21 09:19:33 $
+ * @author Noriaki Ando <n-ando@aist.go.jp>
+ *
+ * Copyright (C) 2007
+ *     Task-intelligence Research Group,
+ *     Intelligent Systems Research Institute,
+ *     National Institute of
+ *         Advanced Industrial Science and Technology (AIST), Japan
+ *     All rights reserved.
+ *
+ * $Id: OpenRTM.idl 1338 2009-05-18 05:58:25Z n-ando $
+ *
+ */
+
+#include <RTC.idl>
+
+#pragma prefix "openrtm.org"
+
+module OpenRTM
+{
+
+  interface LogicalTimeTriggeredEC
+    : RTC::ExecutionContextService
+  {
+    void tick(in unsigned long sec, in unsigned long usec);
+    void get_time(out unsigned long sec, out unsigned long usec);
+  };
+
+};
+

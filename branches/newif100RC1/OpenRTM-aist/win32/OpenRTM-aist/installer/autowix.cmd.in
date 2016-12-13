@@ -1,0 +1,29 @@
+@rem
+@rem @brief WiX automatic build script
+@rem @date $Date: 2008-02-09 20:04:03 $
+@rem @author Norkai Ando <n-ando@aist.go.jp>
+@rem
+@rem Copyright (C) 2008
+@rem     Noriaki Ando
+@rem     Task-intelligence Research Group,
+@rem     Intelligent Systems Research Institute,
+@rem     National Institute of
+@rem         Advanced Industrial Science and Technology (AIST), Japan
+@rem     All rights reserved.
+@rem
+@rem $Id$
+@rem
+
+@set WIX_ROOT=C:\WiX
+@set VERSION=__VERSION__
+
+@rem ============================================================
+@rem compile wxs file
+@rem ============================================================
+%WIX_ROOT%\candle.exe OpenRTM-aist.wxs
+
+@rem ============================================================
+@rem link msi files
+@rem ============================================================
+%WIX_ROOT%\light.exe  OpenRTM-aist.wixobj -out OpenRTM-aist-%VERSION%_jp.msi %WIX_ROOT%\wixui.wixlib -loc WixUI_ja-jp.wxl
+%WIX_ROOT%\light.exe  OpenRTM-aist.wixobj -out OpenRTM-aist-%VERSION%_en.msi %WIX_ROOT%\wixui.wixlib -loc %WIX_ROOT%\WixUI_en-us.wxl

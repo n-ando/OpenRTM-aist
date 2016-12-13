@@ -1,0 +1,24 @@
+# -*- Makefile -*-
+
+CXXFLAGS = `rtm-config --cflags`
+LDFLAGS  = `rtm-config --libs`
+SHFLAGS  = -shared
+.SUFFIXES: .cpp .o .so
+
+all: SeqInComp SeqIn.so
+
+.cpp.o:
+	rm -f $@
+	$(CXX) $(CXXFLAGS) -c -o $@ $<
+
+.o.so:
+	rm -f $@
+	$(CXX) $(SHFLAGS) -o $@ $< $(LDFLAGS)
+
+SeqInComp: SeqIn.o SeqInComp.o
+	$(CXX) -o $@ SeqIn.o SeqInComp.o $(LDFLAGS) 
+
+clean:
+	rm -f *~ *.o *.so *Comp
+
+

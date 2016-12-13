@@ -1,0 +1,89 @@
+// -*- IDL -*-
+/*!
+ * @file RTCOutPort.idl
+ * @brief InPort interface
+ * @date $Date: 2005-05-27 07:40:47 $
+ * @author Noriaki Ando <n-ando@aist.go.jp>
+ *         Olivier Lemaire
+ *
+ * << Standard RT-Middleware Interface >>
+ *
+ * Copyright (C) 2003-2005
+ *     Task-intelligence Research Group,
+ *     Intelligent Systems Research Institute,
+ *     National Institute of
+ *         Advanced Industrial Science and Technology (AIST), Japan
+ *
+ *     Intelligent Mechanism Technology Laboratory,
+ *     Technology Fusion Laboratory,
+ *     Matsushita Electric Works, Ltd
+ *
+ *     All rights reserved.
+ *
+ * $Id: RTCOutPort.idl,v 1.2 2005-05-27 07:40:47 n-ando Exp $
+ *
+ */
+
+/*
+ * $Log: not supported by cvs2svn $
+ * Revision 1.1.1.1  2005/05/12 09:06:18  n-ando
+ * Public release.
+ *
+ *
+ */
+
+#ifndef __RTCOutPort_idl__
+#define __RTCOutPort_idl__
+
+
+#include "RTMBase.idl"
+#include "RTCInPort.idl"
+#include "RTCPortBase.idl"
+
+module RTM {
+  /*!
+   * @if jp
+   *
+   * @class OutPort
+   *
+   * @brief OutPort インターフェース
+   * 
+   * OutPort のインターフェースを定義。
+   *
+   * @else
+   *
+   * @class OutPort
+   *
+   * @brief Output interface 
+   *
+   * Definition of interface of OutPort.
+   *
+   * @endif
+   */
+  interface OutPort
+	: PortBase
+  {
+	/*!
+	 * @if jp
+	 * @brief OutPort の値をAny型で取得
+	 * @else
+	 * @brief Get data of Output as Any type value
+	 * @endif
+	 */
+    any get();
+  };
+  
+  /*!
+   * @if jp
+   * @brief OutPort のリスト
+   * @else
+   * @brief OutPort list
+   * @endif
+   */
+  typedef sequence<OutPort> OutPortList;
+  
+  
+}; // end of module RTM
+
+#endif // __RTCOutPort_idl__
+

@@ -1,0 +1,68 @@
+## -*- Makefile -*-
+##---------------------------------------------------------------------------
+## Makefile.am for rtc-template: rtm template code generator script
+##
+## $Id$
+##---------------------------------------------------------------------------
+
+AUTOMAKE_OPTIONS = 1.9
+
+bin_SCRIPTS = rtc-template
+
+yat.py:
+	cp $(top_srcdir)/build/yat.py .
+vcprojtool.py:
+	cp $(top_srcdir)/build/vcprojtool.py .
+slntool.py:
+	cp $(top_srcdir)/build/slntool.py .
+
+rtc-template: 
+
+cmakemodulesdir = @cmakemodulesdir@
+cmakemodules_DATA = \
+	CompileIDL.cmake \
+	MakeOrbSourceNames.cmake \
+	OpenRTM.cmake \
+	FindOmniORB4.cmake
+
+pyhelperdir = $(pkglibdir)/py_helper
+
+pyhelper_SCRIPTS =       \
+	yat.py           \
+	uuid.py          \
+	README_gen.py    \
+	profile_gen.py   \
+	gen_base.py      \
+	cxx_gen.py       \
+	cxx_cmake_gen.py \
+	cxx_svc_impl.py  \
+	vcproj_gen.py    \
+	python_gen.py    \
+	slntool.py       \
+	vcprojtool.py    \
+	test-template.py
+
+EXTRA_DIST =             \
+	rtc-template     \
+	yat.py           \
+	uuid.py          \
+	README_gen.py    \
+	profile_gen.py   \
+	gen_base.py      \
+	cxx_gen.py       \
+	cxx_cmake_gen.py \
+	cxx_svc_impl.py  \
+	vcproj_gen.py    \
+	python_gen.py    \
+	slntool.py       \
+	vcprojtool.py    \
+	test-template.py \
+	CompileIDL.cmake \
+	MakeOrbSourceNames.cmake \
+	OpenRTM.cmake \
+	FindOmniORB4.cmake
+
+
+clean-local:
+	rm -rf *~ *core *.pyc
+	rm -rf yat.py slntool.py vcprojtool.py

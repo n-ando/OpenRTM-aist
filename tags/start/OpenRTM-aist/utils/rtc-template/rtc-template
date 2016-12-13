@@ -1,0 +1,215 @@
+#!/usr/bin/env python
+# -*- python -*-
+# -*- coding: utf-8 -*-
+#
+#  @file rtc-template
+#  @brief rtc-template RTComponent source code generator tool
+#  @date $Date: 2005-05-12 09:06:18 $
+#  @author Noriaki Ando <n-ando@aist.go.jp>
+# 
+#  Copyright (C) 2004-2005
+#      Task-intelligence Research Group,
+#      Intelligent Systems Research Institute,
+#      National Institute of
+#          Advanced Industrial Science and Technology (AIST), Japan
+#      All rights reserved.
+# 
+#  $Id: rtc-template,v 1.1.1.1 2005-05-12 09:06:18 n-ando Exp $
+# 
+
+#
+#  $Log: not supported by cvs2svn $
+#
+
+import getopt, sys
+import re
+import os
+
+libdir_path = os.popen("rtm-config --libdir", "r").read().split("\n")
+pyhelper_path = libdir_path[0] + "/py_helper"
+sys.path.append(pyhelper_path)
+
+module_spec = {"module-name":["RTC_MODULE_NAME",""],
+			   "module-desc":["RTC_MODULE_DESC",""],
+			   "module-version":["RTC_MODULE_VERSION",""],
+			   "module-author":["RTC_MODULE_AUTHOR",""],
+			   "module-category":["RTC_MODULE_CATEGORY",""],
+			   "module-comp-type":["RTC_MODULE_COMP_TYPE",""],
+			   "module-act-type":["RTC_MODULE_ACT_TYPE",""],
+			   "module-max-inst":["RTC_MODULE_MAX_INST",""],
+			   "module-lang":["RTC_MODULE_LANG",""],
+			   "module-inport":["", {}],
+			   "module-outport":["", {}],
+			   }
+
+opt_args_fmt = ["help",
+				"c++",
+				"python",
+				"module-name=",
+				"module-desc=",
+				"module-version=",
+				"module-author=",
+				"module-category=",
+				"module-comp-type=",
+				"module-act-type=",
+				"module-max-inst=",
+				"module-lang=",
+				"module-inport=",
+				"module-outport="]
+
+
+def usage():
+	print """
+Usage: rtc-template [OPTIONS]
+Options:
+    [--help]                              Print this help.
+    [--c++]                               Generate C++ template code.
+    [--python]                            Generate Python tempalte code.
+    [--output[=output_file]]              Output base file name.
+    [--module-name[=name]]                Your module name.
+    [--module-desc[=description]]         Module description.
+    [--module-version[=version]]          Module version.
+    [--module-author[=author]]            Module author.
+    [--module-category[=category]]        Module category.
+    [--module-comp-type[=component_type]] Component type.
+    [--module-act-type[=activity_type]]   Component's activity type.
+    [--module-max-inst[=max_instance]]    Number of maximum instance.
+    [--module-lang[=language]]            Language.
+    [--module-inport[=PortName:Type]]     InPort's name and tyoe.
+    [--module-outport[=PortName:Type]]    OutPort's name and type
+
+    
+    --output[=output_file]:
+        Specify base name of output file. If 'XXX' is specified,
+        C++ source codes XXX.cpp, XXX.h, XXXComp.cpp Makefile.XXX is generated.
+
+    --module-name[=name]:
+        Your component's base name. This string is used as module's
+        name and component's base name. A generated new component
+        class name is also names as this RTC_MODULE_NAME.
+        Only alphabetical and numerical characters are acceptable.
+
+    --module-desc[=description]:
+        Short description. If space characters are included, string should be
+        quoted.
+
+    --module-version[=version]:
+        Your module version. ex. 1.0.0
+
+    --module-author[=author]:
+        Author's name of this component.
+
+    --module-category[=category]:
+        This component module's category. ex. Manipulator MobileRobot, etc...
+
+    --module-comp-type[=component_type]:
+        Specify component type.
+	    'STATIC', 'UNIQUE', 'COMMUTATIVE' are acceptable.
+
+    --module-act-type[=activity_type]:
+        Specify component activity's type.
+        'PERIODIC', 'SPORADIC', 'EVENT_DRIVEN' ace acceptable.
+
+    --module-max-inst[=max_instance]:
+        Specify maximum number of component instance.
+
+    --module-inport=[PortName:Type]:
+        Specify InPort's name and type. 'PortName' is used as this InPort's
+        name. This string is also used as variable name in soruce code.
+        'Type' is InPort's variable type. The acceptable types are,
+        Timed[ Short | Long | UShort | ULong | Float | Double | Char | Boolean
+        | Octet | String ] and its sequence types.
+
+    --module-outport=[PortName:Type]:
+        Specify OutPort's name and type. 'PortName' is used as this OutPort's
+        name. This string is also used as variable name in soruce code.
+        'Type' is OutPort's variable type. The acceptable types are,
+        Timed[ Short | Long | UShort | ULong | Float | Double | Char | Boolean
+        | Octet | String ] and its sequence types.
+		
+
+Example:
+    rtc-template --c++ --module-name=Sample --module-desc='Sample component' \\
+    --module-version=0.1 --module-author=DrSample --module-category=Generic \\
+    --module-comp-type=COMMUTATIVE --module-act-type=SPORADIC \\
+    --module-max-inst=10  \\
+    --module-inport=Ref:TimedFloat --module-inport=Sens:TimedFloat \\
+    --module-outport=Ctrl:TimedDouble --module-outport=Monitor:TimedShort
+
+"""
+
+
+def main():
+	try:
+		opts, args = getopt.getopt(sys.argv[1:],\
+								   "ho:v",\
+								   opt_args_fmt)
+	except getopt.GetoptError:
+		usage()
+		sys.exit(2)
+	output = None
+	verbose = False
+	output_cxx = False
+	output_python = False
+	for o, a in opts:
+		if o == "-v":
+			verbose = True
+		if o in ("-h", "--help"):
+			usage()
+			sys.exit()
+		if o in ("-o", "--output"):
+			output = a
+			# ...
+		if o in ("--c++"):
+			output_cxx = True
+		if o in ("--python"):
+			output_python = True
+		for lopt in module_spec:
+			opt_arg = "--" + lopt
+			if o in opt_arg:
+				# InPort opt
+				if o in "--module-inport":
+					inpname, inptype = a.split(":")
+					if module_spec["module-inport"][1].has_key(inpname):
+						print "InPort: %s is already used." % (inpname)
+						sys.exit(1)
+					module_spec["module-inport"][1][inpname] = inptype
+
+				# OutPort opt
+				elif o in "--module-outport":
+					outpname, outptype = a.split(":")
+					if module_spec["module-outport"][1].has_key(outpname):
+						print "OutPort: %s is already used." % (outpname)
+						sys.exit(1)
+					module_spec["module-outport"][1][outpname] = outptype
+
+				# Other opt
+				else:
+					module_spec[lopt][1] = a
+
+	if output == None:
+		output = module_spec["module-name"][1]
+				
+
+	if output_cxx == True:
+		import CXX_src
+		cxx_src = CXX_src.CXX_src(output, module_spec)
+		cxx_src.print_header()
+		cxx_src.print_source()
+		cxx_src.print_compsrc()
+		cxx_src.print_makefile()
+
+	if output_python == True:
+		import Py_src
+		pys = Py_src.Py_src(output, module_spec)
+		pys.print_pysrc()
+
+	import README_src
+	readme_src = README_src.README_src(output, module_spec)
+	readme_src.print_readme()
+		
+
+if __name__ == "__main__":
+	main()
+
+

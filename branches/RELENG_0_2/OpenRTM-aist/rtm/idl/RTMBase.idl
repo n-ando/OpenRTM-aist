@@ -1,0 +1,168 @@
+// -*- IDL -*-
+/*!
+ * @file RTMBase.idl
+ * @brief RTM basic type definition
+ * @author Noriaki Ando <n-ando@aist.go.jp>
+ *         Olivier Lemaire
+ *
+ * << Standard RT-Middleware Interface >>
+ *
+ * Copyright (C) 2003-2005
+ *     Task-intelligence Research Group,
+ *     Intelligent Systems Research Institute,
+ *     National Institute of
+ *         Advanced Industrial Science and Technology (AIST), Japan
+ *
+ *     Intelligent Mechanism Technology Laboratory,
+ *     Technology Fusion Laboratory,
+ *     Matsushita Electric Works, Ltd
+ *
+ *     All rights reserved.
+ *
+ * $Id: RTMBase.idl,v 1.1.1.1 2005-05-12 09:06:18 n-ando Exp $
+ *
+ */
+
+/*
+ * $Log: not supported by cvs2svn $
+ *
+ */
+
+#ifndef __RTMBase_idl__
+#define __RTMBase_idl__
+
+
+#ifdef TAO_IDL
+#include <orb.idl>
+#endif
+//#include "CosPropertyService.idl"
+
+module RTM
+{
+  /*!
+   * @if jp
+   * @brief RTComponent オペレーションの戻り値
+   *
+   * 戻り値に特定の型を持たないオペレーションは RtmRes 型の戻り値を返す。
+   * 戻り値には、RTM_OK , RTM_ERR , RTM_WARNING , RTM_FATAL_ERR が予め
+   * 定義されている。
+   *
+   *  const RtmRes RTM_OK        = 0;
+   *  const RtmRes RTM_ERR       = 1;
+   *  const RtmRes RTM_WARNING   = 2;
+   *  const RtmRes RTM_FATAL_ERR = 4;
+   *
+   * @else
+   *
+   * @brief Return value of standard RTComponent operation
+   *
+   * If operation have no specific return value, operation will return RtmRes 
+   * type return value. RtmRes have the following pre-defined values:
+   * RTM_OK , RTM_ERR , RTM_WARNING , RTM_FATAL_ERR.
+   *
+   *  const RtmRes RTM_OK        = 0;
+   *  const RtmRes RTM_ERR       = 1;
+   *  const RtmRes RTM_WARNING   = 2;
+   *  const RtmRes RTM_FATAL_ERR = 4;
+   *
+   * @endif
+   */
+  typedef short RtmRes;
+
+  /*!
+   * @if jp
+   * @brief オペレーションは正常終了した
+   * @else
+   * @brief The operation has returned normally
+   * @endif
+   */
+  const RtmRes RTM_OK        = 0;
+  /*!
+   * @if jp
+   * @brief オペレーションはエラー終了した
+   * @else
+   * @brief The operation has returned with error
+   * @endif
+   */
+  const RtmRes RTM_ERR       = 1;
+  /*!
+   * @if jp
+   * @brief オペレーションは警告終了した
+   * @else
+   * @brief The operation has returned with fatal error
+   * @endif
+   */
+  const RtmRes RTM_WARNING   = 2;
+  /*!
+   * @if jp
+   * @brief オペレーションは致命的エラー終了した
+   * @else
+   * @brief The operation has returned with fatal error
+   * @endif
+   */
+  const RtmRes RTM_FATAL_ERR = 4;
+
+
+
+  /*!
+   * @if jp
+   * @brief 名前付き変数値
+   *
+   * 任意の型の値を名前付きで格納する構造体
+   *
+   * @else
+   *
+   * @brief named value structure
+   *
+   * This structure store value of any type with name.
+   *
+   * @endif
+   */
+  struct NamedValue {
+	//! Name of calue
+	string name;
+	//! Any value
+	any value;
+	short flag;
+  };
+
+  /*!
+   * @if jp
+   * @brief 名前付き変数シーケンス
+   *
+   * 任意の型の値を名前付きで格納する構造体のシーケンス
+   *
+   * @else
+   *
+   * @brief named value structure sequence
+   *
+   * This sequence store named value
+   *
+   * @endif
+   */
+  typedef sequence<NamedValue> NVList;
+
+
+  /*!
+   * @if jp
+   * @brief 時刻構造体
+   *
+   * 時刻を格納する構造体。データのタイムスタンプなどに使用。
+   *
+   * @else
+   *
+   * @brief Time value structure
+   *
+   * A structure store time value.
+   *
+   * @endif
+   */
+  struct Time
+  {
+	unsigned long sec;    // sec
+	unsigned long nsec;   // nano sec
+  };
+};
+
+#endif // __RTMBase_idl__
+

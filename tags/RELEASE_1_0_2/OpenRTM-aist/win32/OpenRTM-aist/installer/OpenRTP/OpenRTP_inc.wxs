@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Include xmlns="http://schemas.microsoft.com/wix/2006/wi">
+  <Directory Id="OpenRTP" Name="OpenRTP">
+    <Directory Id="RTSystemEditor" Name="RTSystemEditor">
+      <Component Id="RTSystemEditor" DiskId="1" Guid="2748F847-387F-4AB8-AC7C-0557AA4DD742">
+        <File Id="_.eclipseproduct" Name=".eclipseproduct" Source="C:\distribution\OpenRTP\RTSystemEditor\.eclipseproduct" />
+        <File Id="RTSystemEditorRCP.exe"
+	      Name="RTSystemEditorRCP.exe"
+	      Source="C:\distribution\OpenRTP\RTSystemEditor\RTSystemEditorRCP.exe">
+	  <Shortcut Id="RTSystemEditorRCP.exe"
+		    Directory="ToolsMenuFolder"
+		    Name="RT System Editor"
+		    Show="normal" WorkingDirectory="USERPROFILEDIR"/>
+	</File>
+        <File Id="startup.jar" Name="startup.jar" Source="C:\distribution\OpenRTP\RTSystemEditor\startup.jar" />
+      </Component>
+      <Directory Id="configuration" Name="configuration">
+        <Component Id="configuration" DiskId="1" Guid="FBF727A3-5CBF-4AAA-B51F-430097A51090">
+          <File Id="config.ini" Name="config.ini" Source="C:\distribution\OpenRTP\RTSystemEditor\configuration\config.ini" />
+        </Component>
+      </Directory>
+      <Directory Id="plugins" Name="plugins">
+        <Component Id="plugins" DiskId="1" Guid="D96B7838-06D5-4281-93AE-A5A6F694350D">
+          <File Id="com.ibm.icu.nl1_3.4.5.v200609270227.jar" Name="com.ibm.icu.nl1_3.4.5.v200609270227.jar" Source="C:\distribution\OpenRTP\RTSystemEditor\plugins\com.ibm.icu.nl1_3.4.5.v200609270227.jar" />
+          <File Id="com.ibm.icu_3.4.5.20061213.jar" Name="com.ibm.icu_3.4.5.20061213.jar" Source="C:\distribution\OpenRTP\RTSystemEditor\plugins\com.ibm.icu_3.4.5.20061213.jar" />
+          <File Id="jp.go.aist.rtm.nameserviceview.nl1_1.0.0.jar" Name="jp.go.aist.rtm.nameserviceview.nl1_1.0.0.jar" Source="C:\distribution\OpenRTP\RTSystemEditor\plugins\jp.go.aist.rtm.nameserviceview.nl1_1.0.0.jar" />
+          <File Id="jp.go.aist.rtm.nameserviceview_1.0.0.jar" Name="jp.go.aist.rtm.nameserviceview_1.0.0.jar" Source="C:\distribution\OpenRTP\RTSystemEditor\plugins\jp.go.aist.rtm.nameserviceview_1.0.0.jar" />
+          <File Id="jp.go.aist.rtm.repositoryView.nl1_1.0.0.jar" Name="jp.go.aist.rtm.repositoryView.nl1_1.0.0.jar" Source="C:\distribution\OpenRTP\RTSystemEditor\plugins\jp.go.aist.rtm.repositoryView.nl1_1.0.0.jar" />
+          <File Id="jp.go.aist.rtm.repositoryView_1.0.0.jar" Name="jp.go.aist.rtm.repositoryView_1.0.0.jar" Source="C:\distribution\OpenRTP\RTSystemEditor\plugins\jp.go.aist.rtm.repositoryView_1.0.0.jar" />
+          <File Id="jp.go.aist.rtm.systemeditor.nl1_1.0.0.jar" Name="jp.go.aist.rtm.systemeditor.nl1_1.0.0.jar" Source="C:\distribution\OpenRTP\RTSystemEditor\plugins\jp.go.aist.rtm.systemeditor.nl1_1.0.0.jar" />
+          <File Id="jp.go.aist.rtm.systemeditor.RCP_1.0.0.jar" Name="jp.go.aist.rtm.systemeditor.RCP_1.0.0.jar" Source="C:\distribution\OpenRTP\RTSystemEditor\plugins\jp.go.aist.rtm.systemeditor.RCP_1.0.0.jar" />
+          <File Id="jp.go.aist.rtm.systemeditor_1.0.0.jar" Name="jp.go.aist.rtm.systemeditor_1.0.0.jar" Source="C:\distribution\OpenRTP\RTSystemEditor\plugins\jp.go.aist.rtm.systemeditor_1.0.0.jar" />
+          <File Id="jp.go.aist.rtm.toolscommon.nl1_1.0.0.jar" Name="jp.go.aist.rtm.toolscommon.nl1_1.0.0.jar" Source="C:\distribution\OpenRTP\RTSystemEditor\plugins\jp.go.aist.rtm.toolscommon.nl1_1.0.0.jar" />
+          <File Id="jp.go.aist.rtm.toolscommon.profiles.nl1_1.0.0.jar" Name="jp.go.aist.rtm.toolscommon.profiles.nl1_1.0.0.jar" Source="C:\distribution\OpenRTP\RTSystemEditor\plugins\jp.go.aist.rtm.toolscommon.profiles.nl1_1.0.0.jar" />
+          <File Id="jp.go.aist.rtm.toolscommon.profiles_1.0.0.jar" Name="jp.go.aist.rtm.toolscommon.profiles_1.0.0.jar" Source="C:\distribution\OpenRTP\RTSystemEditor\plugins\jp.go.aist.rtm.toolscommon.profiles_1.0.0.jar" />
+          <File Id="jp.go.aist.rtm.toolscommon_1.0.0.jar" Name="jp.go.aist.rtm.toolscommon_1.0.0.jar" Source="C:\distribution\OpenRTP\RTSystemEditor\plugins\jp.go.aist.rtm.toolscommon_1.0.0.jar" />
+          <File Id="org.eclipse.ant.core.nl1_3.1.100.v200609270227.jar" Name="org.eclipse.ant.core.nl1_3.1.100.v200609270227.jar" Source="C:\distribution\OpenRTP\RTSystemEditor\plugins\org.eclipse.ant.core.nl1_3.1.100.v200609270227.jar" />
+          <File Id="org.eclipse.ant.core_3.1.100.v20060531.jar" Name="org.eclipse.ant.core_3.1.100.v20060531.jar" Source="C:\distribution\OpenRTP\RTSystemEditor\plugins\org.eclipse.ant.core_3.1.100.v20060531.jar" />
+          <File Id="org.eclipse.core.commands.nl1_3.2.0.v200609270227.jar" Name="org.eclipse.core.commands.nl1_3.2.0.v200609270227.jar" Source="C:\distribution\OpenRTP\RTSystemEditor\plugins\org.eclipse.core.commands.nl1_3.2.0.v200609270227.jar" />
+          <File Id="org.eclipse.core.commands_3.2.0.I20060605_1400.jar" Name="org.eclipse.core.commands_3.2.0.I20060605-1400.jar" Source="C:\distribution\OpenRTP\RTSystemEditor\plugins\org.eclipse.core.commands_3.2.0.I20060605-1400.jar" />
+          <File Id="org.eclipse.core.contenttype.nl1_3.2.0.v200609270227.jar" Name="org.eclipse.core.contenttype.nl1_3.2.0.v200609270227.jar" Source="C:\distribution\OpenRTP\RTSystemEditor\plugins\org.eclipse.core.contenttype.nl1_3.2.0.v200609270227.jar" />
+          <File Id="org.eclipse.core.contenttype_3.2.0.v20060603.jar" Name="org.eclipse.core.contenttype_3.2.0.v20060603.jar" Source="C:\distribution\OpenRTP\RTSystemEditor\plugins\org.eclipse.core.contenttype_3.2.0.v20060603.jar" />
+          <File Id="org.eclipse.core.expressions.nl1_3.2.1.v200609270227.jar" Name="org.eclipse.core.expressions.nl1_3.2.1.v200609270227.jar" Source="C:\distribution\OpenRTP\RTSystemEditor\plugins\org.eclipse.core.expressions.nl1_3.2.1.v200609270227.jar" />
+          <File Id="org.eclipse.core.expressions_3.2.2.r322_v20070109a.jar" Name="org.eclipse.core.expressions_3.2.2.r322_v20070109a.jar" Source="C:\distribution\OpenRTP\RTSystemEditor\plugins\org.eclipse.core.expressions_3.2.2.r322_v20070109a.jar" />
+          <File Id="org.eclipse.core.filebuffers.nl1_3.2.1.v200609270227.jar" Name="org.eclipse.core.filebuffers.nl1_3.2.1.v200609270227.jar" Source="C:\distribution\OpenRTP\RTSystemEditor\plugins\org.eclipse.core.filebuffers.nl1_3.2.1.v200609270227.jar" />
+          <File Id="org.eclipse.core.filebuffers_3.2.1.r321_v20060721.jar" Name="org.eclipse.core.filebuffers_3.2.1.r321_v20060721.jar" Source="C:\distribution\OpenRTP\RTSystemEditor\plugins\org.eclipse.core.filebuffers_3.2.1.r321_v20060721.jar" />
+          <File Id="org.eclipse.core.filesystem.nl1_1.0.0.v200609270227.jar" Name="org.eclipse.core.filesystem.nl1_1.0.0.v200609270227.jar" Source="C:\distribution\OpenRTP\RTSystemEditor\plugins\org.eclipse.core.filesystem.nl1_1.0.0.v200609270227.jar" />
+          <File Id="org.eclipse.core.filesystem.win32.x86_1.0.0.v20060603.jar" Name="org.eclipse.core.filesystem.win32.x86_1.0.0.v20060603.jar" Source="C:\distribution\OpenRTP\RTSystemEditor\plugins\org.eclipse.core.filesystem.win32.x86_1.0.0.v20060603.jar" />
+          <File Id="org.eclipse.core.filesystem_1.0.0.v20060603.jar" Name="org.eclipse.core.filesystem_1.0.0.v20060603.jar" Source="C:\distribution\OpenRTP\RTSystemEditor\plugins\org.eclipse.core.filesystem_1.0.0.v20060603.jar" />
+          <File Id="org.eclipse.core.jobs.nl1_3.2.0.v200609270227.jar" Name="org.eclipse.core.jobs.nl1_3.2.0.v200609270227.jar" Source="C:\distribution\OpenRTP\RTSystemEditor\plugins\org.eclipse.core.jobs.nl1_3.2.0.v200609270227.jar" />
+          <File Id="org.eclipse.core.jobs_3.2.0.v20060603.jar" Name="org.eclipse.core.jobs_3.2.0.v20060603.jar" Source="C:\distribution\OpenRTP\RTSystemEditor\plugins\org.eclipse.core.jobs_3.2.0.v20060603.jar" />
+          <File Id="org.eclipse.core.resources.compatibility_3.2.0.v20060603.jar" Name="org.eclipse.core.resources.compatibility_3.2.0.v20060603.jar" Source="C:\distribution\OpenRTP\RTSystemEditor\plugins\org.eclipse.core.resources.compatibility_3.2.0.v20060603.jar" />
+          <File Id="org.eclipse.core.resources.nl1_3.2.1.v200609270227.jar" Name="org.eclipse.core.resources.nl1_3.2.1.v200609270227.jar" Source="C:\distribution\OpenRTP\RTSystemEditor\plugins\org.eclipse.core.resources.nl1_3.2.1.v200609270227.jar" />
+          <File Id="org.eclipse.core.resources.win32_3.2.0.v20060603.jar" Name="org.eclipse.core.resources.win32_3.2.0.v20060603.jar" Source="C:\distribution\OpenRTP\RTSystemEditor\plugins\org.eclipse.core.resources.win32_3.2.0.v20060603.jar" />
+          <File Id="org.eclipse.core.resources_3.2.2.R32x_v20061218.jar" Name="org.eclipse.core.resources_3.2.2.R32x_v20061218.jar" Source="C:\distribution\OpenRTP\RTSystemEditor\plugins\org.eclipse.core.resources_3.2.2.R32x_v20061218.jar" />
+          <File Id="org.eclipse.core.runtime.compatibility.auth.nl1_3.2.0.v200609270227.jar" Name="org.eclipse.core.runtime.compatibility.auth.nl1_3.2.0.v200609270227.jar" Source="C:\distribution\OpenRTP\RTSystemEditor\plugins\org.eclipse.core.runtime.compatibility.auth.nl1_3.2.0.v200609270227.jar" />
+          <File Id="org.eclipse.core.runtime.compatibility.auth_3.2.0.v20060601.jar" Name="org.eclipse.core.runtime.compatibility.auth_3.2.0.v20060601.jar" Source="C:\distribution\OpenRTP\RTSystemEditor\plugins\org.eclipse.core.runtime.compatibility.auth_3.2.0.v20060601.jar" />
+          <File Id="org.eclipse.core.runtime.compatibility.nl1_3.1.100.v200609270227.jar" Name="org.eclipse.core.runtime.compatibility.nl1_3.1.100.v200609270227.jar" Source="C:\distribution\OpenRTP\RTSystemEditor\plugins\org.eclipse.core.runtime.compatibility.nl1_3.1.100.v200609270227.jar" />
+          <File Id="org.eclipse.core.runtime.compatibility_3.1.100.v20060603.jar" Name="org.eclipse.core.runtime.compatibility_3.1.100.v20060603.jar" Source="C:\distribution\OpenRTP\RTSystemEditor\plugins\org.eclipse.core.runtime.compatibility_3.1.100.v20060603.jar" />
+          <File Id="org.eclipse.core.runtime.nl1_3.2.0.v200609270227.jar" Name="org.eclipse.core.runtime.nl1_3.2.0.v200609270227.jar" Source="C:\distribution\OpenRTP\RTSystemEditor\plugins\org.eclipse.core.runtime.nl1_3.2.0.v200609270227.jar" />
+          <File Id="org.eclipse.core.runtime_3.2.0.v20060603.jar" Name="org.eclipse.core.runtime_3.2.0.v20060603.jar" Source="C:\distribution\OpenRTP\RTSystemEditor\plugins\org.eclipse.core.runtime_3.2.0.v20060603.jar" />
+          <File Id="org.eclipse.core.variables.nl1_3.1.100.v200609270227.jar" Name="org.eclipse.core.variables.nl1_3.1.100.v200609270227.jar" Source="C:\distribution\OpenRTP\RTSystemEditor\plugins\org.eclipse.core.variables.nl1_3.1.100.v200609270227.jar" />
+          <File Id="org.eclipse.core.variables_3.1.100.v20060605.jar" Name="org.eclipse.core.variables_3.1.100.v20060605.jar" Source="C:\distribution\OpenRTP\RTSystemEditor\plugins\org.eclipse.core.variables_3.1.100.v20060605.jar" />
+          <File Id="org.eclipse.draw2d_3.2.2.v20070208.jar" Name="org.eclipse.draw2d_3.2.2.v20070208.jar" Source="C:\distribution\OpenRTP\RTSystemEditor\plugins\org.eclipse.draw2d_3.2.2.v20070208.jar" />
+          <File Id="org.eclipse.emf.common_2.2.2.v200808252119.jar" Name="org.eclipse.emf.common_2.2.2.v200808252119.jar" Source="C:\distribution\OpenRTP\RTSystemEditor\plugins\org.eclipse.emf.common_2.2.2.v200808252119.jar" />
+          <File Id="org.eclipse.emf.ecore.xmi_2.2.5.v200808252119.jar" Name="org.eclipse.emf.ecore.xmi_2.2.5.v200808252119.jar" Source="C:\distribution\OpenRTP\RTSystemEditor\plugins\org.eclipse.emf.ecore.xmi_2.2.5.v200808252119.jar" />
+          <File Id="org.eclipse.emf.ecore_2.2.4.v200808252119.jar" Name="org.eclipse.emf.ecore_2.2.4.v200808252119.jar" Source="C:\distribution\OpenRTP\RTSystemEditor\plugins\org.eclipse.emf.ecore_2.2.4.v200808252119.jar" />
+          <File Id="org.eclipse.equinox.common.nl1_3.2.0.v200609270227.jar" Name="org.eclipse.equinox.common.nl1_3.2.0.v200609270227.jar" Source="C:\distribution\OpenRTP\RTSystemEditor\plugins\org.eclipse.equinox.common.nl1_3.2.0.v200609270227.jar" />
+          <File Id="org.eclipse.equinox.common_3.2.0.v20060603.jar" Name="org.eclipse.equinox.common_3.2.0.v20060603.jar" Source="C:\distribution\OpenRTP\RTSystemEditor\plugins\org.eclipse.equinox.common_3.2.0.v20060603.jar" />
+          <File Id="org.eclipse.equinox.preferences.nl1_3.2.1.v200609270227.jar" Name="org.eclipse.equinox.preferences.nl1_3.2.1.v200609270227.jar" Source="C:\distribution\OpenRTP\RTSystemEditor\plugins\org.eclipse.equinox.preferences.nl1_3.2.1.v200609270227.jar" />
+          <File Id="org.eclipse.equinox.preferences_3.2.1.R32x_v20060717.jar" Name="org.eclipse.equinox.preferences_3.2.1.R32x_v20060717.jar" Source="C:\distribution\OpenRTP\RTSystemEditor\plugins\org.eclipse.equinox.preferences_3.2.1.R32x_v20060717.jar" />
+          <File Id="org.eclipse.equinox.registry.nl1_3.2.1.v200609270227.jar" Name="org.eclipse.equinox.registry.nl1_3.2.1.v200609270227.jar" Source="C:\distribution\OpenRTP\RTSystemEditor\plugins\org.eclipse.equinox.registry.nl1_3.2.1.v200609270227.jar" />
+          <File Id="org.eclipse.equinox.registry_3.2.1.R32x_v20060814.jar" Name="org.eclipse.equinox.registry_3.2.1.R32x_v20060814.jar" Source="C:\distribution\OpenRTP\RTSystemEditor\plugins\org.eclipse.equinox.registry_3.2.1.R32x_v20060814.jar" />
+          <File Id="org.eclipse.gef_3.2.2.v20070208.jar" Name="org.eclipse.gef_3.2.2.v20070208.jar" Source="C:\distribution\OpenRTP\RTSystemEditor\plugins\org.eclipse.gef_3.2.2.v20070208.jar" />
+          <File Id="org.eclipse.help.nl1_3.2.1.v200609270227.jar" Name="org.eclipse.help.nl1_3.2.1.v200609270227.jar" Source="C:\distribution\OpenRTP\RTSystemEditor\plugins\org.eclipse.help.nl1_3.2.1.v200609270227.jar" />
+          <File Id="org.eclipse.help_3.2.2.R322_v20061213.jar" Name="org.eclipse.help_3.2.2.R322_v20061213.jar" Source="C:\distribution\OpenRTP\RTSystemEditor\plugins\org.eclipse.help_3.2.2.R322_v20061213.jar" />
+          <File Id="org.eclipse.jface.nl1_3.2.1.v200609270227.jar" Name="org.eclipse.jface.nl1_3.2.1.v200609270227.jar" Source="C:\distribution\OpenRTP\RTSystemEditor\plugins\org.eclipse.jface.nl1_3.2.1.v200609270227.jar" />
+          <File Id="org.eclipse.jface.text.nl1_3.2.1.v200609270227.jar" Name="org.eclipse.jface.text.nl1_3.2.1.v200609270227.jar" Source="C:\distribution\OpenRTP\RTSystemEditor\plugins\org.eclipse.jface.text.nl1_3.2.1.v200609270227.jar" />
+          <File Id="org.eclipse.jface.text_3.2.2.r322_v20070104.jar" Name="org.eclipse.jface.text_3.2.2.r322_v20070104.jar" Source="C:\distribution\OpenRTP\RTSystemEditor\plugins\org.eclipse.jface.text_3.2.2.r322_v20070104.jar" />
+          <File Id="org.eclipse.jface_3.2.2.M20061214_1200.jar" Name="org.eclipse.jface_3.2.2.M20061214-1200.jar" Source="C:\distribution\OpenRTP\RTSystemEditor\plugins\org.eclipse.jface_3.2.2.M20061214-1200.jar" />
+          <File Id="org.eclipse.osgi.nl1_3.2.1.v200609270227.jar" Name="org.eclipse.osgi.nl1_3.2.1.v200609270227.jar" Source="C:\distribution\OpenRTP\RTSystemEditor\plugins\org.eclipse.osgi.nl1_3.2.1.v200609270227.jar" />
+          <File Id="org.eclipse.osgi_3.2.2.R32x_v20070118.jar" Name="org.eclipse.osgi_3.2.2.R32x_v20070118.jar" Source="C:\distribution\OpenRTP\RTSystemEditor\plugins\org.eclipse.osgi_3.2.2.R32x_v20070118.jar" />
+          <File Id="org.eclipse.pde.junit.runtime.nl1_3.2.0.v200609270227.jar" Name="org.eclipse.pde.junit.runtime.nl1_3.2.0.v200609270227.jar" Source="C:\distribution\OpenRTP\RTSystemEditor\plugins\org.eclipse.pde.junit.runtime.nl1_3.2.0.v200609270227.jar" />
+          <File Id="org.eclipse.pde.junit.runtime_3.2.0.v20060605.jar" Name="org.eclipse.pde.junit.runtime_3.2.0.v20060605.jar" Source="C:\distribution\OpenRTP\RTSystemEditor\plugins\org.eclipse.pde.junit.runtime_3.2.0.v20060605.jar" />
+          <File Id="org.eclipse.swt.nl1_3.2.1.v200609270227.jar" Name="org.eclipse.swt.nl1_3.2.1.v200609270227.jar" Source="C:\distribution\OpenRTP\RTSystemEditor\plugins\org.eclipse.swt.nl1_3.2.1.v200609270227.jar" />
+          <File Id="org.eclipse.swt.win32.win32.x86_3.2.2.v3236.jar" Name="org.eclipse.swt.win32.win32.x86_3.2.2.v3236.jar" Source="C:\distribution\OpenRTP\RTSystemEditor\plugins\org.eclipse.swt.win32.win32.x86_3.2.2.v3236.jar" />
+          <File Id="org.eclipse.swt_3.2.2.v3236b.jar" Name="org.eclipse.swt_3.2.2.v3236b.jar" Source="C:\distribution\OpenRTP\RTSystemEditor\plugins\org.eclipse.swt_3.2.2.v3236b.jar" />
+          <File Id="org.eclipse.text.nl1_3.2.0.v200609270227.jar" Name="org.eclipse.text.nl1_3.2.0.v200609270227.jar" Source="C:\distribution\OpenRTP\RTSystemEditor\plugins\org.eclipse.text.nl1_3.2.0.v200609270227.jar" />
+          <File Id="org.eclipse.text_3.2.0.v20060605_1400.jar" Name="org.eclipse.text_3.2.0.v20060605-1400.jar" Source="C:\distribution\OpenRTP\RTSystemEditor\plugins\org.eclipse.text_3.2.0.v20060605-1400.jar" />
+          <File Id="org.eclipse.ui.console.nl1_3.1.100.v200609270227.jar" Name="org.eclipse.ui.console.nl1_3.1.100.v200609270227.jar" Source="C:\distribution\OpenRTP\RTSystemEditor\plugins\org.eclipse.ui.console.nl1_3.1.100.v200609270227.jar" />
+          <File Id="org.eclipse.ui.console_3.1.100.v20060605.jar" Name="org.eclipse.ui.console_3.1.100.v20060605.jar" Source="C:\distribution\OpenRTP\RTSystemEditor\plugins\org.eclipse.ui.console_3.1.100.v20060605.jar" />
+          <File Id="org.eclipse.ui.editors.nl1_3.2.1.v200609270227.jar" Name="org.eclipse.ui.editors.nl1_3.2.1.v200609270227.jar" Source="C:\distribution\OpenRTP\RTSystemEditor\plugins\org.eclipse.ui.editors.nl1_3.2.1.v200609270227.jar" />
+          <File Id="org.eclipse.ui.editors_3.2.1.r321_v20060721.jar" Name="org.eclipse.ui.editors_3.2.1.r321_v20060721.jar" Source="C:\distribution\OpenRTP\RTSystemEditor\plugins\org.eclipse.ui.editors_3.2.1.r321_v20060721.jar" />
+          <File Id="org.eclipse.ui.forms.nl1_3.2.0.v200609270227.jar" Name="org.eclipse.ui.forms.nl1_3.2.0.v200609270227.jar" Source="C:\distribution\OpenRTP\RTSystemEditor\plugins\org.eclipse.ui.forms.nl1_3.2.0.v200609270227.jar" />
+          <File Id="org.eclipse.ui.forms_3.2.0.v20060602.jar" Name="org.eclipse.ui.forms_3.2.0.v20060602.jar" Source="C:\distribution\OpenRTP\RTSystemEditor\plugins\org.eclipse.ui.forms_3.2.0.v20060602.jar" />
+          <File Id="org.eclipse.ui.ide.nl1_3.2.1.v200609270227.jar" Name="org.eclipse.ui.ide.nl1_3.2.1.v200609270227.jar" Source="C:\distribution\OpenRTP\RTSystemEditor\plugins\org.eclipse.ui.ide.nl1_3.2.1.v200609270227.jar" />
+          <File Id="org.eclipse.ui.ide_3.2.1.M20060915_1030.jar" Name="org.eclipse.ui.ide_3.2.1.M20060915-1030.jar" Source="C:\distribution\OpenRTP\RTSystemEditor\plugins\org.eclipse.ui.ide_3.2.1.M20060915-1030.jar" />
+          <File Id="org.eclipse.ui.nl1_3.2.1.v200609270227.jar" Name="org.eclipse.ui.nl1_3.2.1.v200609270227.jar" Source="C:\distribution\OpenRTP\RTSystemEditor\plugins\org.eclipse.ui.nl1_3.2.1.v200609270227.jar" />
+          <File Id="org.eclipse.ui.views.nl1_3.2.1.v200609270227.jar" Name="org.eclipse.ui.views.nl1_3.2.1.v200609270227.jar" Source="C:\distribution\OpenRTP\RTSystemEditor\plugins\org.eclipse.ui.views.nl1_3.2.1.v200609270227.jar" />
+          <File Id="org.eclipse.ui.views_3.2.1.M20060906_0800.jar" Name="org.eclipse.ui.views_3.2.1.M20060906-0800.jar" Source="C:\distribution\OpenRTP\RTSystemEditor\plugins\org.eclipse.ui.views_3.2.1.M20060906-0800.jar" />
+          <File Id="org.eclipse.ui.win32_3.2.0.I20060605_1400.jar" Name="org.eclipse.ui.win32_3.2.0.I20060605-1400.jar" Source="C:\distribution\OpenRTP\RTSystemEditor\plugins\org.eclipse.ui.win32_3.2.0.I20060605-1400.jar" />
+          <File Id="org.eclipse.ui.workbench.nl1_3.2.1.v200609270227.jar" Name="org.eclipse.ui.workbench.nl1_3.2.1.v200609270227.jar" Source="C:\distribution\OpenRTP\RTSystemEditor\plugins\org.eclipse.ui.workbench.nl1_3.2.1.v200609270227.jar" />
+          <File Id="org.eclipse.ui.workbench.texteditor.nl1_3.2.0.v200609270227.jar" Name="org.eclipse.ui.workbench.texteditor.nl1_3.2.0.v200609270227.jar" Source="C:\distribution\OpenRTP\RTSystemEditor\plugins\org.eclipse.ui.workbench.texteditor.nl1_3.2.0.v200609270227.jar" />
+          <File Id="org.eclipse.ui.workbench.texteditor_3.2.0.v20060605_1400.jar" Name="org.eclipse.ui.workbench.texteditor_3.2.0.v20060605-1400.jar" Source="C:\distribution\OpenRTP\RTSystemEditor\plugins\org.eclipse.ui.workbench.texteditor_3.2.0.v20060605-1400.jar" />
+          <File Id="org.eclipse.ui.workbench_3.2.2.M20070119_0800.jar" Name="org.eclipse.ui.workbench_3.2.2.M20070119-0800.jar" Source="C:\distribution\OpenRTP\RTSystemEditor\plugins\org.eclipse.ui.workbench_3.2.2.M20070119-0800.jar" />
+          <File Id="org.eclipse.ui_3.2.1.M20061108.jar" Name="org.eclipse.ui_3.2.1.M20061108.jar" Source="C:\distribution\OpenRTP\RTSystemEditor\plugins\org.eclipse.ui_3.2.1.M20061108.jar" />
+          <File Id="org.eclipse.update.configurator.nl1_3.2.1.v200609270227.jar" Name="org.eclipse.update.configurator.nl1_3.2.1.v200609270227.jar" Source="C:\distribution\OpenRTP\RTSystemEditor\plugins\org.eclipse.update.configurator.nl1_3.2.1.v200609270227.jar" />
+          <File Id="org.eclipse.update.configurator_3.2.2.R32x_v20070111.jar" Name="org.eclipse.update.configurator_3.2.2.R32x_v20070111.jar" Source="C:\distribution\OpenRTP\RTSystemEditor\plugins\org.eclipse.update.configurator_3.2.2.R32x_v20070111.jar" />
+          <File Id="org.eclipse.update.core.nl1_3.2.1.v200609270227.jar" Name="org.eclipse.update.core.nl1_3.2.1.v200609270227.jar" Source="C:\distribution\OpenRTP\RTSystemEditor\plugins\org.eclipse.update.core.nl1_3.2.1.v200609270227.jar" />
+          <File Id="org.eclipse.update.core.win32_3.2.2.R32x_v20061214.jar" Name="org.eclipse.update.core.win32_3.2.2.R32x_v20061214.jar" Source="C:\distribution\OpenRTP\RTSystemEditor\plugins\org.eclipse.update.core.win32_3.2.2.R32x_v20061214.jar" />
+          <File Id="org.eclipse.update.core_3.2.3.R32x_v20070118.jar" Name="org.eclipse.update.core_3.2.3.R32x_v20070118.jar" Source="C:\distribution\OpenRTP\RTSystemEditor\plugins\org.eclipse.update.core_3.2.3.R32x_v20070118.jar" />
+          <File Id="org.eclipse.update.ui.nl1_3.2.1.v200609270227.jar" Name="org.eclipse.update.ui.nl1_3.2.1.v200609270227.jar" Source="C:\distribution\OpenRTP\RTSystemEditor\plugins\org.eclipse.update.ui.nl1_3.2.1.v200609270227.jar" />
+          <File Id="org.eclipse.update.ui_3.2.2.R32x_v20070111.jar" Name="org.eclipse.update.ui_3.2.2.R32x_v20070111.jar" Source="C:\distribution\OpenRTP\RTSystemEditor\plugins\org.eclipse.update.ui_3.2.2.R32x_v20070111.jar" />
+        </Component>
+        <Directory Id="org.eclipse.core.runtime.compatibility.registry_3.2.1.R32x_v20060907" Name="org.eclipse.core.runtime.compatibility.registry_3.2.1.R32x_v20060907">
+          <Component Id="org.eclipse.core.runtime.compatibility.registry_3.2.1.R32x_v20060907" DiskId="1" Guid="9B406546-ADAC-458F-8868-4D8E286A179F">
+            <File Id="about.html" Name="about.html" Source="C:\distribution\OpenRTP\RTSystemEditor\plugins\org.eclipse.core.runtime.compatibility.registry_3.2.1.R32x_v20060907\about.html" />
+            <File Id="fragment.properties" Name="fragment.properties" Source="C:\distribution\OpenRTP\RTSystemEditor\plugins\org.eclipse.core.runtime.compatibility.registry_3.2.1.R32x_v20060907\fragment.properties" />
+            <File Id="runtime_registry_compatibility.jar" Name="runtime_registry_compatibility.jar" Source="C:\distribution\OpenRTP\RTSystemEditor\plugins\org.eclipse.core.runtime.compatibility.registry_3.2.1.R32x_v20060907\runtime_registry_compatibility.jar" />
+          </Component>
+          <Directory Id="META_INF" Name="META-INF">
+            <Component Id="META_INF" DiskId="1" Guid="2FC7BBAC-7BE2-43A6-B281-45E5321BA6CD">
+              <File Id="eclipse.inf" Name="eclipse.inf" Source="C:\distribution\OpenRTP\RTSystemEditor\plugins\org.eclipse.core.runtime.compatibility.registry_3.2.1.R32x_v20060907\META-INF\eclipse.inf" />
+              <File Id="MANIFEST.MF" Name="MANIFEST.MF" Source="C:\distribution\OpenRTP\RTSystemEditor\plugins\org.eclipse.core.runtime.compatibility.registry_3.2.1.R32x_v20060907\META-INF\MANIFEST.MF" />
+            </Component>
+          </Directory>
+        </Directory>
+        <Directory Id="org.eclipse.jdt.junit.runtime.nl1_3.2.1.v200609270227" Name="org.eclipse.jdt.junit.runtime.nl1_3.2.1.v200609270227">
+          <Component Id="org.eclipse.jdt.junit.runtime.nl1_3.2.1.v200609270227" DiskId="1" Guid="F1928B56-E60D-4F13-8284-00E2B99BB2BB">
+            <File Id="about.html_1" Name="about.html" Source="C:\distribution\OpenRTP\RTSystemEditor\plugins\org.eclipse.jdt.junit.runtime.nl1_3.2.1.v200609270227\about.html" />
+            <File Id="nl1.jar" Name="nl1.jar" Source="C:\distribution\OpenRTP\RTSystemEditor\plugins\org.eclipse.jdt.junit.runtime.nl1_3.2.1.v200609270227\nl1.jar" />
+            <File Id="nl_fragment.properties" Name="nl_fragment.properties" Source="C:\distribution\OpenRTP\RTSystemEditor\plugins\org.eclipse.jdt.junit.runtime.nl1_3.2.1.v200609270227\nl_fragment.properties" />
+            <File Id="plugin_de.properties" Name="plugin_de.properties" Source="C:\distribution\OpenRTP\RTSystemEditor\plugins\org.eclipse.jdt.junit.runtime.nl1_3.2.1.v200609270227\plugin_de.properties" />
+            <File Id="plugin_es.properties" Name="plugin_es.properties" Source="C:\distribution\OpenRTP\RTSystemEditor\plugins\org.eclipse.jdt.junit.runtime.nl1_3.2.1.v200609270227\plugin_es.properties" />
+            <File Id="plugin_fr.properties" Name="plugin_fr.properties" Source="C:\distribution\OpenRTP\RTSystemEditor\plugins\org.eclipse.jdt.junit.runtime.nl1_3.2.1.v200609270227\plugin_fr.properties" />
+            <File Id="plugin_it.properties" Name="plugin_it.properties" Source="C:\distribution\OpenRTP\RTSystemEditor\plugins\org.eclipse.jdt.junit.runtime.nl1_3.2.1.v200609270227\plugin_it.properties" />
+            <File Id="plugin_ja.properties" Name="plugin_ja.properties" Source="C:\distribution\OpenRTP\RTSystemEditor\plugins\org.eclipse.jdt.junit.runtime.nl1_3.2.1.v200609270227\plugin_ja.properties" />
+            <File Id="plugin_ko.properties" Name="plugin_ko.properties" Source="C:\distribution\OpenRTP\RTSystemEditor\plugins\org.eclipse.jdt.junit.runtime.nl1_3.2.1.v200609270227\plugin_ko.properties" />
+            <File Id="plugin_pt_BR.properties" Name="plugin_pt_BR.properties" Source="C:\distribution\OpenRTP\RTSystemEditor\plugins\org.eclipse.jdt.junit.runtime.nl1_3.2.1.v200609270227\plugin_pt_BR.properties" />
+            <File Id="plugin_zh.properties" Name="plugin_zh.properties" Source="C:\distribution\OpenRTP\RTSystemEditor\plugins\org.eclipse.jdt.junit.runtime.nl1_3.2.1.v200609270227\plugin_zh.properties" />
+            <File Id="plugin_zh_HK.properties" Name="plugin_zh_HK.properties" Source="C:\distribution\OpenRTP\RTSystemEditor\plugins\org.eclipse.jdt.junit.runtime.nl1_3.2.1.v200609270227\plugin_zh_HK.properties" />
+            <File Id="plugin_zh_TW.properties" Name="plugin_zh_TW.properties" Source="C:\distribution\OpenRTP\RTSystemEditor\plugins\org.eclipse.jdt.junit.runtime.nl1_3.2.1.v200609270227\plugin_zh_TW.properties" />
+          </Component>
+          <Directory Id="META_INF_1" Name="META-INF">
+            <Component Id="META_INF_1" DiskId="1" Guid="845976BB-6E57-4504-B0E4-E92063791414">
+              <File Id="MANIFEST.MF_1" Name="MANIFEST.MF" Source="C:\distribution\OpenRTP\RTSystemEditor\plugins\org.eclipse.jdt.junit.runtime.nl1_3.2.1.v200609270227\META-INF\MANIFEST.MF" />
+            </Component>
+          </Directory>
+        </Directory>
+        <Directory Id="org.eclipse.jdt.junit.runtime_3.2.1.r321_v20060721" Name="org.eclipse.jdt.junit.runtime_3.2.1.r321_v20060721">
+          <Component Id="org.eclipse.jdt.junit.runtime_3.2.1.r321_v20060721" DiskId="1" Guid="8C9D2750-2CBE-4624-9765-E6E1C21334EA">
+            <File Id="about.html_2" Name="about.html" Source="C:\distribution\OpenRTP\RTSystemEditor\plugins\org.eclipse.jdt.junit.runtime_3.2.1.r321_v20060721\about.html" />
+            <File Id="junitruntime.jar" Name="junitruntime.jar" Source="C:\distribution\OpenRTP\RTSystemEditor\plugins\org.eclipse.jdt.junit.runtime_3.2.1.r321_v20060721\junitruntime.jar" />
+            <File Id="plugin.properties" Name="plugin.properties" Source="C:\distribution\OpenRTP\RTSystemEditor\plugins\org.eclipse.jdt.junit.runtime_3.2.1.r321_v20060721\plugin.properties" />
+            <File Id="plugin.xml" Name="plugin.xml" Source="C:\distribution\OpenRTP\RTSystemEditor\plugins\org.eclipse.jdt.junit.runtime_3.2.1.r321_v20060721\plugin.xml" />
+          </Component>
+          <Directory Id="META_INF_2" Name="META-INF">
+            <Component Id="META_INF_2" DiskId="1" Guid="995CB0A7-44B0-4096-B6FF-9F0DEAF351F1">
+              <File Id="eclipse.inf_1" Name="eclipse.inf" Source="C:\distribution\OpenRTP\RTSystemEditor\plugins\org.eclipse.jdt.junit.runtime_3.2.1.r321_v20060721\META-INF\eclipse.inf" />
+              <File Id="MANIFEST.MF_2" Name="MANIFEST.MF" Source="C:\distribution\OpenRTP\RTSystemEditor\plugins\org.eclipse.jdt.junit.runtime_3.2.1.r321_v20060721\META-INF\MANIFEST.MF" />
+            </Component>
+          </Directory>
+        </Directory>
+        <Directory Id="org.junit_3.8.1" Name="org.junit_3.8.1">
+          <Component Id="org.junit_3.8.1" DiskId="1" Guid="83E80B5D-F3C6-4070-B5F5-DBCE74479317">
+            <File Id="about.html_3" Name="about.html" Source="C:\distribution\OpenRTP\RTSystemEditor\plugins\org.junit_3.8.1\about.html" />
+            <File Id="junit.jar" Name="junit.jar" Source="C:\distribution\OpenRTP\RTSystemEditor\plugins\org.junit_3.8.1\junit.jar" />
+            <File Id="plugin.properties_1" Name="plugin.properties" Source="C:\distribution\OpenRTP\RTSystemEditor\plugins\org.junit_3.8.1\plugin.properties" />
+            <File Id="plugin.xml_1" Name="plugin.xml" Source="C:\distribution\OpenRTP\RTSystemEditor\plugins\org.junit_3.8.1\plugin.xml" />
+          </Component>
+          <Directory Id="META_INF_3" Name="META-INF">
+            <Component Id="META_INF_3" DiskId="1" Guid="4D8D5C2E-9D89-43F1-99BA-58E91902AFEA">
+              <File Id="eclipse.inf_2" Name="eclipse.inf" Source="C:\distribution\OpenRTP\RTSystemEditor\plugins\org.junit_3.8.1\META-INF\eclipse.inf" />
+              <File Id="MANIFEST.MF_3" Name="MANIFEST.MF" Source="C:\distribution\OpenRTP\RTSystemEditor\plugins\org.junit_3.8.1\META-INF\MANIFEST.MF" />
+            </Component>
+          </Directory>
+        </Directory>
+      </Directory>
+    </Directory>
+  </Directory>
+</Include>

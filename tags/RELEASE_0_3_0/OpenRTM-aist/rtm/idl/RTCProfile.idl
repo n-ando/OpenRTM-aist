@@ -1,0 +1,388 @@
+// -*- IDL -*-
+/*!
+ * @file RTCProfile.idl
+ * @brief RTCProfile structure
+ * @date $Date: 2005-05-12 09:06:18 $
+ * @author Noriaki Ando <n-ando@aist.go.jp>
+ *
+ * Copyright (C) 2003-2005
+ *     Task-intelligence Research Group,
+ *     Intelligent Systems Research Institute,
+ *     National Institute of
+ *         Advanced Industrial Science and Technology (AIST), Japan
+ *     All rights reserved.
+ *
+ * $Id: RTCProfile.idl,v 1.1.1.1 2005-05-12 09:06:18 n-ando Exp $
+ */
+
+/*
+ * $Log: not supported by cvs2svn $
+ *
+ */
+
+#ifndef __RTCProfile_idl__
+#define __RTCProfile_idl__
+
+#include "RTMBase.idl"
+#include "RTCDataType.idl"
+#include "RTComponent.idl"
+#include "RTCInPort.idl"
+#include "RTCOutPort.idl"
+
+
+
+module RTM {
+  interface RTComponent;
+  
+  /*------------------------------------------------------------
+   * RTCAuthor
+   *
+   * @brief Author profile in RTCModuleProfile
+   struct RTCAuthor {
+   string name;
+   string company;
+   };
+   *------------------------------------------------------------*/
+  
+  /*!
+   * @if jp
+   * @brief コンポーネントタイプ
+   * 生成されるコンポーネントのインスタンスの形式。
+   * @else
+   * @brief Component type
+   * @endif
+   */
+  enum RTComponentType {
+	/*!
+	 * @if jp
+	 * @brief コンポーネントはマネージャに登録されると同時にインスタンス化され
+	 * 、新たに生成することはできない。ハードウエアに密接に関係するコンポーネン
+	 * ト等はこのタイプにするとハードウエアとコンポーネントの対応がとりやすい。
+	 * @else
+	 * @brief STATIC Component. Statically instantiated and no dynamic instance.
+	 * @endif
+	 */
+	STATIC,
+	/*!
+	 * @if jp
+	 * @brief コンポーネントは動的に生成・削除するができるが、component0 
+	 * と component1 は異なる内部状態を持ち交換可能ではない。
+	 * @else
+	 * @brief UNIQUE Component.
+	 * Dynamically instantiated component. But each component should be handle
+	 * a unique it. For example, the compopnent is statically bound to
+	 * hardaware device.
+	 * @endif
+	 */
+	UNIQUE,
+	/*!
+	 * @if jp
+	 * @brief コンポーネントは、互いに交換可能。
+	 * ソフトウエアのロジックのみのコンポーネントはこのタイプになる。
+	 * @else
+	 * @brief COMMUTATIVE Component.
+	 * Dynamically instantiated component. Each component is commutative.
+	 * For example, logic components are commutative.
+	 * @endif
+	 */
+	COMMUTATIVE
+  };
+  
+  /*!
+   * @if jp
+   * @brief コンポーネントアクティビティタイプ
+   * 生成されるコンポーネントのアクティビティの形式。
+   * @else
+   * @brief Component activity type
+   * @endif
+   */
+  enum RTCActivityType {
+	/*!
+	 * @if jp
+	 * @brief コンポーネントの活動は一定周期で行われる。
+	 * ただし、動作周期を守れるか否かは、OSに依存である。
+	 * リアルタイムOS(ART-LINUX)を使用すれば一定周期動作を行わせることは
+	 * 可能であるが、非リアルタイムOSでは厳密な周期動作をさせることは不可能。
+	 * @else
+	 * @brief PERIDIC activity.
+	 * Periodic working activity. Period time is constant. For only realtime OS.
+	 * @endif
+	 */
+	PERIODIC,
+	/*!
+	 * @if jp
+	 * @brief コンポーネントの活動の周期は一定ではないが、繰り返し行われる。
+	 * @else
+	 * @brief SPORADIC activity.
+	 * Sporadic working activity. Activity works depending on outside event or
+	 * hardware event.
+	 * @endif
+	 */
+	SPORADIC,
+	/*!
+	 * @if jp
+	 * @brief 外部からのオペレーションにより受動的に動作します。
+	 * @else
+	 * @brief EVENT_DRIVEN activity.
+	 * Activity works as event driven task. Events will raised from other 
+	 * component, application software, etc...
+	 * @endif
+	 */
+	EVENT_DRIVEN
+  };
+  
+  /*!
+   * @if jp
+   * @brief コンポーネント記述言語型
+   * コンポーネントを記述する言語の型
+   * @else
+   * @brief Component description language type
+   * @endif
+   */
+  enum RTCLangType {
+	/*!
+	 * @if jp
+	 * @brief コンポーネントはコンパイル型言語で記述される。
+	 * @else
+	 * @brief Component is programmed in compile language
+	 * @endif
+	 */
+	COMPILE,
+	/*!
+	 * @if jp
+	 * @brief コンポーネントはスクリプト言語で記述される。
+	 * @else
+	 * @brief Component is programmed in script language
+	 * @endif
+	 */
+	SCRIPT
+  };
+  
+  /*!
+   * @if jp
+   * @brief コンポーネントのアイコンイメージ宣言
+   * @else
+   * @brief Component icon image type decleration
+   * @endif
+   */
+  typedef sequence<octet> RTCIconImage;
+  //  typedef sequence<OutPortProfile> RTCOutPortProfileList;
+  //  typedef sequence<InPortProfile> RTCInPortProfileList;
+  
+  /*!
+   * @if jp
+   * @brief コンポーネントプロファイル構造体
+   * @else
+   * @brief Component profile structure
+   * @endif
+   */
+  struct RTCProfile
+  {
+	string name;
+	/*!
+	 * @if jp
+	 * @brief コンポーネントのインスタンスID。
+	 * @else
+	 * @brief Component's instance ID.
+	 * @endif
+	 */
+	string instance_id;
+	/*!
+	 * @if jp
+	 * @brief コンポーネントのインプリメンテーションID。
+	 * @else
+	 * @brief Component's implementation ID.
+	 * @endif
+	 */
+	string implementation_id;
+	/*!
+	 * @if jp
+	 * @brief コンポーネントの概要説明。
+	 * @else
+	 * @brief Component description like "Mitsubishi PA10 endeffector
+	 *        velocity control component", "BL autotec NANO sensor",
+	 *        "Sensorble technology PHANToM desktop type", etc... 
+	 * @endif
+	 */
+	string description;
+	
+	/*!
+	 * @if jp
+	 * @brief コンポーネントのバージョン。
+	 * @else
+	 * @brief Version of this component.
+	 * @endif
+	 */
+	string version;
+	
+	/*!
+	 * @if jp
+	 * @brief コンポーネント作成者。
+	 * @else
+	 * @brief Component maker.
+	 * @endif
+	 */
+	string maker;
+	//	RTCAuthor author;
+	
+	/*!
+	 * @if jp
+	 * @brief コンポーネントカテゴリ。
+	 * @else
+	 * @brief Category of this component, like "Motor controller",
+	 *         "Image processing", etc..
+	 * @endif
+	 */
+	string category;
+	
+	/*!
+	 * @if jp
+	 * @brief コンポーネントタイプ
+	 * 生成されるコンポーネントのインスタンスの形式。
+	 * @else
+	 * @brief Instance type of this component.
+	 * @endif
+	 */
+	RTComponentType component_type;
+	
+	/*!
+	 * @if jp
+	 * @brief コンポーネントアクティビティタイプ
+	 * 生成されるコンポーネントのアクティビティの形式。
+	 * @else
+	 * @brief Activity type of the component.
+	 * @endif
+	 */
+	RTCActivityType activity_type;
+	
+	/*!
+	 * @if jp
+	 * @brief コンポーネント最大インスタンス数。
+	 * 同時に同一マネージャ上で生成できるコンポーネントの最大数。
+	 * @else
+	 * @brief Maximum number of instance.
+	 * Maximum number of instance, which is instantiated on a same manager.
+	 * @endif
+	 */
+	long max_instance;
+	
+	/*!
+	 * @if jp
+	 * @brief コンポーネント記述言語
+	 * @else
+	 * @brief Component description language
+	 * @endif
+	 */
+	string language;
+	
+	/*!
+	 * @if jp
+	 * @brief コンポーネント記述言語型
+	 * コンポーネントを記述する言語の型
+	 * @else
+	 * @brief Component description language type
+	 * @endif
+	 */
+	RTCLangType language_type;
+	
+	/*!
+	 * @if jp
+	 * @brief コンポーネントのアイコンイメージデータ
+	 * @else
+	 * @brief Component icon image data
+	 * @endif
+	 */
+	RTCIconImage iconimage;
+	
+	/*!
+	 * @if jp
+	 * @brief コンポーネントの設定ファイル名
+	 * @else
+	 * @brief Configuration file name
+	 * @endif
+	 */
+	string module_profile_file;
+	
+	/*!
+	 * @if jp
+	 * @brief OutPort のプロファイルのリスト
+	 * @else
+	 * @brief OutPort profile list
+	 * @endif
+	 */
+	PortProfileList outport_profile_list;
+	
+	/*!
+	 * @if jp
+	 * @brief InPort のプロファイルのリスト
+	 * @else
+	 * @brief InPort profile list
+	 * @endif
+	 */
+	PortProfileList inport_profile_list;
+	
+  }; // end of RTCModuleProfile
+  
+  
+  /*
+	struct RTCProfile
+	{
+	
+	//------------------------------------------------------------
+	// Component specific profile
+	//------------------------------------------------------------
+	//! Component instance name
+	string name;
+	
+	//! Module period
+	Time period;
+	
+	//! Estimated module exec time in a loop
+	Time exec_time;
+	
+	//! Parent's reference
+	RTComponent parent;
+	
+	//! Children's reference
+	RTComponentList child;
+	
+	}; // end of RTCProfile
+  */
+  
+  struct RTCManagerProfile
+  {
+	//------------------------------------------------------------
+	// Host on which component runs spesific profile
+	//------------------------------------------------------------
+	//! Operating system name
+	string sysname;
+	
+	//! Host name
+	string nodename;
+	
+	//! Host IP address
+	string ip_address;
+	
+	//! OS release
+	string release;
+	
+	//! OS version
+	string version;
+	
+	//! Host machine architecture
+	string architecture;
+	
+	//! Proccess ID
+	short  pid;
+  }; // end of RTCManagerProfile
+  
+  /*
+	struct RTCConfiguration
+	{
+	NVList configuration;
+	};
+  */
+  
+}; // end of namespace RTM
+
+#endif // __RTCProfile__
