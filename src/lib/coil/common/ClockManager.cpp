@@ -121,13 +121,13 @@ namespace coil
   ClockManager& ClockManager::instance()
   {
     if(!clockmgr)
-	  {
-		coil::Guard<coil::Mutex> guard(clockmgr_mutex);
+      {
+        coil::Guard<coil::Mutex> guard(clockmgr_mutex);
         if (!clockmgr)
-		  {
-			clockmgr = new ClockManager();
-		  }
-	  }
+          {
+            clockmgr = new ClockManager();
+          }
+      }
     return *clockmgr;
   }
 #endif

@@ -172,16 +172,16 @@ namespace coil
     }
 
     /* Convert the error code into the message. */
-	::FormatMessage(
-		FORMAT_MESSAGE_FROM_SYSTEM |
-		FORMAT_MESSAGE_IGNORE_INSERTS,
-		NULL,
-		dwcode,
-		MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),
-		(char *)cstr,
-		256,
-		NULL
-	);
+    ::FormatMessage(
+        FORMAT_MESSAGE_FROM_SYSTEM |
+        FORMAT_MESSAGE_IGNORE_INSERTS,
+        NULL,
+        dwcode,
+        MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),
+        (char *)cstr,
+        256,
+        NULL
+    );
     return cstr;
   }
 };

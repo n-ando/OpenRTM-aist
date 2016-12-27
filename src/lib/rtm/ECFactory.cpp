@@ -30,8 +30,8 @@ namespace RTC
    * @endif
    */
   ECFactoryCXX::ECFactoryCXX(const char* name,
-			     ECNewFunc new_func,
-			     ECDeleteFunc delete_func)
+                             ECNewFunc new_func,
+                             ECDeleteFunc delete_func)
     : m_name(name),
       m_New(new_func),
       m_Delete(delete_func)

@@ -183,17 +183,17 @@ namespace RTC
    * @endif
    */
   void CorbaNaming::rebind(const CosNaming::Name& name,
-			   CORBA::Object_ptr obj,
-			   const bool force)
+                           CORBA::Object_ptr obj,
+                           const bool force)
     throw (SystemException, NotFound, CannotProceed, InvalidName)
   {
     try
       {
-	m_rootContext->rebind(name, obj);
+        m_rootContext->rebind(name, obj);
       }
     catch (NotFound& e)
       {
-	force ? rebindRecursive(m_rootContext, name, obj) : throw e;
+        force ? rebindRecursive(m_rootContext, name, obj) : throw e;
       }
     catch (CannotProceed& e)
       {
@@ -436,11 +436,11 @@ namespace RTC
   {
     try
       {
-	return m_rootContext->bind_new_context(name);
+        return m_rootContext->bind_new_context(name);
       }
     catch (NotFound& e)
       {
-	force ? bindRecursive(m_rootContext, name, newContext()) : throw e;
+        force ? bindRecursive(m_rootContext, name, newContext()) : throw e;
       }
     catch (CannotProceed& e)
       {
@@ -510,7 +510,7 @@ namespace RTC
         for (CORBA::ULong i = 0; i < len; ++i)
           {
             if (bl[i].binding_type == CosNaming::ncontext)
-              {	// If Object is context, destroy recursive.
+              {        // If Object is context, destroy recursive.
                 CosNaming::NamingContext_var next_context;
                 next_context = CosNaming::NamingContext::
                   _narrow(context->resolve(bl[i].binding_name));
@@ -521,7 +521,7 @@ namespace RTC
                 next_context->destroy();
               }
             else if (bl[i].binding_type == CosNaming::nobject)
-              {	// If Object is object, unbind it.
+              {        // If Object is object, unbind it.
                 context->unbind(bl[i].binding_name);
               }
             else assert(0); // never comes here

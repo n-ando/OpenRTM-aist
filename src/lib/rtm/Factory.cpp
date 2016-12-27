@@ -77,9 +77,9 @@ namespace RTC
    * @endif
    */
   FactoryCXX::FactoryCXX(const coil::Properties& profile,
-			 RtcNewFunc new_func,
-			 RtcDeleteFunc delete_func,
-			 NumberingPolicy* policy)
+                         RtcNewFunc new_func,
+                         RtcDeleteFunc delete_func,
+                         NumberingPolicy* policy)
     : FactoryBase(profile),
       m_New(new_func),
       m_Delete(delete_func),
@@ -100,22 +100,22 @@ namespace RTC
   {
     try
       {
-	RTObject_impl* rtobj(m_New(mgr));
-	if (rtobj == 0) return NULL;
-	
-	++m_Number;
-	rtobj->setProperties(this->profile());
-	
-	// create instance_name
-	std::string instance_name(rtobj->getTypeName());
-	instance_name.append(m_policy->onCreate(rtobj));
-	rtobj->setInstanceName(instance_name.c_str());
-	
-	return rtobj;
+        RTObject_impl* rtobj(m_New(mgr));
+        if (rtobj == 0) return NULL;
+        
+        ++m_Number;
+        rtobj->setProperties(this->profile());
+        
+        // create instance_name
+        std::string instance_name(rtobj->getTypeName());
+        instance_name.append(m_policy->onCreate(rtobj));
+        rtobj->setInstanceName(instance_name.c_str());
+        
+        return rtobj;
       }
     catch (...)
       {
-	return NULL;
+        return NULL;
       }
   }
   

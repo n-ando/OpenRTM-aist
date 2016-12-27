@@ -162,9 +162,9 @@ namespace RTC
 
     if (index < 0)
       {
-	ConnectorProfile_var conn_prof;
-	conn_prof = new ConnectorProfile();
-	return conn_prof._retn();
+        ConnectorProfile_var conn_prof;
+        conn_prof = new ConnectorProfile();
+        return conn_prof._retn();
       }
     ConnectorProfile_var conn_prof;
     conn_prof = new ConnectorProfile(m_profile.connector_profiles[index]);
@@ -185,26 +185,26 @@ namespace RTC
     if (isEmptyId(connector_profile))
       {
         Guard gurad(m_profile_mutex);
-	// "connector_id" stores UUID which is generated at the initial Port
-	// in connection process.
-	setUUID(connector_profile);
-	assert(!isExistingConnId(connector_profile.connector_id));
+        // "connector_id" stores UUID which is generated at the initial Port
+        // in connection process.
+        setUUID(connector_profile);
+        assert(!isExistingConnId(connector_profile.connector_id));
       }
     else
       {
         Guard gurad(m_profile_mutex);
-	if (isExistingConnId(connector_profile.connector_id))
-	  {
+        if (isExistingConnId(connector_profile.connector_id))
+          {
             RTC_ERROR(("Connection already exists."));
-	    return RTC::PRECONDITION_NOT_MET;
-	  }
+            return RTC::PRECONDITION_NOT_MET;
+          }
       }
 
     try
       {
-	RTC::PortService_ptr p;
-	p = connector_profile.ports[(CORBA::ULong)0];
-	ReturnCode_t ret = p->notify_connect(connector_profile);
+        RTC::PortService_ptr p;
+        p = connector_profile.ports[(CORBA::ULong)0];
+        ReturnCode_t ret = p->notify_connect(connector_profile);
         if (ret != RTC::RTC_OK)
           {
             RTC_ERROR(("Connection failed. cleanup."));
@@ -214,7 +214,7 @@ namespace RTC
       }
     catch (...)
       {
-	return RTC::BAD_PARAMETER;
+        return RTC::BAD_PARAMETER;
       }
     return RTC::RTC_ERROR;
   }
@@ -283,7 +283,7 @@ namespace RTC
       }
     else
       {
-	m_profile.connector_profiles[index] = connector_profile;
+        m_profile.connector_profiles[index] = connector_profile;
         RTC_PARANOID(("Existing connector_id. Updated."));
       }
 
@@ -345,7 +345,7 @@ namespace RTC
     if (index < 0)
       {
         RTC_ERROR(("Invalid connector id: %s", connector_id));
-	return RTC::BAD_PARAMETER;
+        return RTC::BAD_PARAMETER;
       }
 
     ConnectorProfile prof;
@@ -405,7 +405,7 @@ namespace RTC
     if (index < 0) 
       {
         RTC_ERROR(("Invalid connector id: %s", connector_id));
-	return RTC::BAD_PARAMETER;
+        return RTC::BAD_PARAMETER;
       }
     
     ConnectorProfile& prof(m_profile.connector_profiles[(CORBA::ULong)index]);
@@ -627,15 +627,15 @@ namespace RTC
   {
     CORBA::Long index;
     index = CORBA_SeqUtil::find(connector_profile.ports,
-				find_port_ref(m_profile.port_ref));
+                                find_port_ref(m_profile.port_ref));
     
     if (index < 0) return RTC::BAD_PARAMETER;
     
     if (++index < static_cast<CORBA::Long>(connector_profile.ports.length()))
       {
-	RTC::PortService_ptr p;
-	p = connector_profile.ports[index];
-	return p->notify_connect(connector_profile);
+        RTC::PortService_ptr p;
+        p = connector_profile.ports[index];
+        return p->notify_connect(connector_profile);
       }
     return RTC::RTC_OK;
   }
@@ -651,7 +651,7 @@ namespace RTC
   {
     CORBA::ULong index;
     index = CORBA_SeqUtil::find(cprof.ports,
-				find_port_ref(m_profile.port_ref));
+                                find_port_ref(m_profile.port_ref));
     if (index < 0)
       {
         return RTC::BAD_PARAMETER;
@@ -757,7 +757,7 @@ namespace RTC
   bool PortBase::isExistingConnId(const char* id)
   {
     return CORBA_SeqUtil::find(m_profile.connector_profiles,
-			       find_conn_id(id)) >= 0;
+                               find_conn_id(id)) >= 0;
   }
   
   /*!
@@ -771,7 +771,7 @@ namespace RTC
   {
     CORBA::Long index;
     index = CORBA_SeqUtil::find(m_profile.connector_profiles,
-				find_conn_id(id));
+                                find_conn_id(id));
     return m_profile.connector_profiles[index];
   }
   
@@ -785,7 +785,7 @@ namespace RTC
   CORBA::Long PortBase::findConnProfileIndex(const char* id)
   {
     return CORBA_SeqUtil::find(m_profile.connector_profiles,
-			       find_conn_id(id));
+                               find_conn_id(id));
   }
   
   /*!
@@ -800,16 +800,16 @@ namespace RTC
   {
     CORBA::Long index;
     index = CORBA_SeqUtil::find(m_profile.connector_profiles,
-				find_conn_id(connector_profile.connector_id));
+                                find_conn_id(connector_profile.connector_id));
     
     if (index < 0)
       {
-	CORBA_SeqUtil::push_back(m_profile.connector_profiles,
-				 connector_profile);
+        CORBA_SeqUtil::push_back(m_profile.connector_profiles,
+                                 connector_profile);
       }
     else
       {
-	m_profile.connector_profiles[index] = connector_profile;
+        m_profile.connector_profiles[index] = connector_profile;
       }
   }
   
@@ -824,7 +824,7 @@ namespace RTC
   {
     CORBA::Long index;
     index = CORBA_SeqUtil::find(m_profile.connector_profiles,
-				find_conn_id(id));
+                                find_conn_id(id));
     if (index < 0) return false;
     
     CORBA_SeqUtil::erase(m_profile.connector_profiles, index);
@@ -839,12 +839,12 @@ namespace RTC
    * @endif
    */
   bool PortBase::appendInterface(const char* instance_name,
-				 const char* type_name,
-				 PortInterfacePolarity pol)
+                                 const char* type_name,
+                                 PortInterfacePolarity pol)
   {
     CORBA::Long index;
     index = CORBA_SeqUtil::find(m_profile.interfaces,
-				find_interface(instance_name, pol));
+                                find_interface(instance_name, pol));
     
     if (index >= 0) return false;
     // setup PortInterfaceProfile
@@ -868,7 +868,7 @@ namespace RTC
   {
     CORBA::Long index;
     index = CORBA_SeqUtil::find(m_profile.interfaces,
-				find_interface(name, pol));
+                                find_interface(name, pol));
     
     if (index < 0) return false;
     

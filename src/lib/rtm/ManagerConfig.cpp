@@ -106,12 +106,12 @@ namespace RTC
     prop.setDefaults(default_config);
     if (findConfigFile())
       {
-	std::ifstream f(m_configFile.c_str());
-	if (f.is_open())
-	  {
-	    prop.load(f);
-	    f.close();
-	  }
+        std::ifstream f(m_configFile.c_str());
+        if (f.is_open())
+          {
+            prop.load(f);
+            f.close();
+          }
       }
     setSystemInformation(prop);
     if (m_isMaster) { prop["manager.is_master"] = "YES"; }
@@ -137,21 +137,21 @@ namespace RTC
     
     while ((opt = get_opts()) > 0)
       {
-	switch (opt)
-	  {
+        switch (opt)
+          {
           case 'a':
             {
               m_argprop["manager.corba_servant"] = "NO";
             }
             break;
-	    // Specify configuration file not default
-	  case 'f':
-	    m_configFile = get_opts.optarg;
-	    break;
-	  case 'l':
-	    //	    m_configFile = get_opts.optarg;
-	    break;
-	  case 'o':
+            // Specify configuration file not default
+          case 'f':
+            m_configFile = get_opts.optarg;
+            break;
+          case 'l':
+            // m_configFile = get_opts.optarg;
+            break;
+          case 'o':
             {
               std::string optarg(get_opts.optarg);
               std::string::size_type pos(optarg.find(":"));
@@ -160,7 +160,7 @@ namespace RTC
                   m_argprop[optarg.substr(0, pos)] = optarg.substr(pos + 1);
                 }
             }
-	    break;
+            break;
           case 'p': // ORB's port number
             {
               int portnum;
@@ -171,12 +171,12 @@ namespace RTC
                 }
             }
             break;
-	  case 'd':
+          case 'd':
             m_isMaster = true;
-	    break;
-	  default:
-	    break;
-	  }
+            break;
+          default:
+            break;
+          }
       }
     return;
   }
@@ -193,32 +193,32 @@ namespace RTC
     // Check existance of configuration file given command arg
     if (m_configFile != "") 
       {
-	if (fileExist(m_configFile))
-	  {
-	    return true;
-	  }
+        if (fileExist(m_configFile))
+          {
+            return true;
+          }
       }
     
     // Search rtc configuration file from environment variable
     char* env = getenv(config_file_env);
     if (env != NULL)
       {
-	if (fileExist(env))
-	  {
-	    m_configFile = env;
-	    return true;
-	  }
+        if (fileExist(env))
+          {
+            m_configFile = env;
+            return true;
+          }
       }
     // Search rtc configuration file from default search path
     int i = 0;
     while (config_file_path[i] != NULL)
       {
-	if (fileExist(config_file_path[i]))
-	  {
-	    m_configFile = config_file_path[i];
-	    return true;
-	  }
-	++i;
+        if (fileExist(config_file_path[i]))
+          {
+            m_configFile = config_file_path[i];
+            return true;
+          }
+        ++i;
       }
     return false;
   }
@@ -238,7 +238,7 @@ namespace RTC
     coil::utsname  sysinfo;
     if (coil::uname(&sysinfo) != 0)
       {
-	return;
+        return;
       }
     
     //
@@ -272,13 +272,13 @@ namespace RTC
     // fial() 0: ok, !0: fail
     if (infile.fail() != 0) 
       {
-	infile.close();
-	return false;
+        infile.close();
+        return false;
       }
     else
       {
-	infile.close();
-	return true;
+        infile.close();
+        return true;
       }
     return false;
   }

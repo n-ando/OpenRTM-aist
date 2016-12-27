@@ -123,7 +123,7 @@ namespace NVUtil
 #else // ORB_IS_RTORB
         nv[i].name = (char *)keys[i].c_str();
 #endif // ORB_IS_RTORB
-	nv[i].value <<= prop[keys[i]].c_str();
+        nv[i].value <<= prop[keys[i]].c_str();
       }
   }
   
@@ -138,12 +138,12 @@ namespace NVUtil
   {
     for (CORBA::ULong i(0), len(nv.length()); i < len; ++i)
       {
-	const char* value;
-	if (nv[i].value >>= value)
-	  {
-	    const char* name(nv[i].name);
-	    prop[name] = value;
-	  };
+        const char* value;
+        if (nv[i].value >>= value)
+          {
+            const char* name(nv[i].name);
+            prop[name] = value;
+          };
       }
   }
   
@@ -163,9 +163,9 @@ namespace NVUtil
     {
       const char* value;
       if (nv.value >>= value)
-	{
-	  m_prop.setProperty(CORBA::string_dup(nv.name), value);
-	};
+        {
+          m_prop.setProperty(CORBA::string_dup(nv.name), value);
+        };
     }
     coil::Properties m_prop;
   };
@@ -240,14 +240,14 @@ namespace NVUtil
   {
     try
       {
-	CORBA::Any value;
-	value = find(nv, name);
-	const char* str_value;
-	return value >>= str_value;
+        CORBA::Any value;
+        value = find(nv, name);
+        const char* str_value;
+        return value >>= str_value;
       }
     catch (...)
       {
-	return false;
+        return false;
       }
   }
   
@@ -260,14 +260,14 @@ namespace NVUtil
    * @endif
    */
   bool isStringValue(const SDOPackage::NVList& nv,
-		     const char* name, const char* value)
+                     const char* name, const char* value)
   {
     if (isString(nv, name))
       {
-	if (toString(nv, name) == value)
-	  {
-	    return true;
-	  }
+        if (toString(nv, name) == value)
+          {
+            return true;
+          }
       }
     return false;
   }
@@ -284,19 +284,19 @@ namespace NVUtil
     const char* str_value;
     try
       {
-	if(!(find(nv, name) >>= str_value))
+        if(!(find(nv, name) >>= str_value))
           {
-	    str_value = "";
+            str_value = "";
           }
       }
     catch (...)
       {
-	str_value = "";
+        str_value = "";
       }
 
     if (str_value == NULL)
       {
-	str_value = "";
+        str_value = "";
       }
     
     return str_value;
@@ -324,22 +324,22 @@ namespace NVUtil
     
     if (index < 0)
       {
-	CORBA_SeqUtil::push_back(nv, newNV(name, value));
+        CORBA_SeqUtil::push_back(nv, newNV(name, value));
       }
     else
       {
-	const char* tmp_char;
-	nv[index].value >>= tmp_char;
-	std::string tmp_str(tmp_char);
-	
-	std::vector<std::string> values;
-	values = coil::split(tmp_str, ",");
-	if (values.end() == std::find(values.begin(), values.end(), value))
-	  {
-	    tmp_str.append(",");
-	    tmp_str.append(value);
-	    nv[index].value <<= tmp_str.c_str();
-	  }
+        const char* tmp_char;
+        nv[index].value >>= tmp_char;
+        std::string tmp_str(tmp_char);
+        
+        std::vector<std::string> values;
+        values = coil::split(tmp_str, ",");
+        if (values.end() == std::find(values.begin(), values.end(), value))
+          {
+            tmp_str.append(",");
+            tmp_str.append(value);
+            nv[index].value <<= tmp_str.c_str();
+          }
       }
     return true;
   }
@@ -355,7 +355,7 @@ namespace NVUtil
   {
     for (CORBA::ULong i = 0, len = src.length(); i < len; ++i)
       {
-	CORBA_SeqUtil::push_back(dest, src[i]);
+        CORBA_SeqUtil::push_back(dest, src[i]);
       }
   }
   
@@ -370,15 +370,15 @@ namespace NVUtil
   {
     for (CORBA::ULong i(0), n(nv.length()); i < n; ++i)
       {
-	const char* str_value;
-	if (nv[i].value >>= str_value)
-	  {
-	    out << nv[i].name << ": " << str_value << std::endl;
-	  }
-	else
-	  {
-	    out << nv[i].name << ": not a string value" << std::endl;
-	  }
+        const char* str_value;
+        if (nv[i].value >>= str_value)
+          {
+            out << nv[i].name << ": " << str_value << std::endl;
+          }
+        else
+          {
+            out << nv[i].name << ": not a string value" << std::endl;
+          }
       }
     return out;
   }

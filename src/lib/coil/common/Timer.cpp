@@ -71,7 +71,7 @@ namespace coil
     TimeValue t_curr, t_pre, tm;;
     while (m_running)
       {
-	invoke();
+        invoke();
         coil::sleep(m_interval);
       }
     return 0;
@@ -92,8 +92,8 @@ namespace coil
     Guard guard(m_runningMutex);
     if (!m_running) 
       {
-	m_running = true;
-	open(0);
+        m_running = true;
+        open(0);
       }
   }
   
@@ -122,12 +122,12 @@ namespace coil
     Guard guard(m_taskMutex);
     for (size_t i(0), len(m_tasks.size()); i < len; ++i)
       {
-	m_tasks[i].remains = m_tasks[i].remains - m_interval;
-	if (m_tasks[i].remains.sign() <= 0)
-	  {
-	    m_tasks[i].listener->invoke();
-	    m_tasks[i].remains = m_tasks[i].period;
-	  }
+        m_tasks[i].remains = m_tasks[i].remains - m_interval;
+        if (m_tasks[i].remains.sign() <= 0)
+          {
+            m_tasks[i].listener->invoke();
+            m_tasks[i].remains = m_tasks[i].period;
+          }
       }
   }
   
@@ -144,12 +144,12 @@ namespace coil
     
     for (size_t i(0), len(m_tasks.size()); i < len; ++i)
       {
-	if (m_tasks[i].listener == listener)
-	  {
-	    m_tasks[i].period = tm;
-	    m_tasks[i].remains = tm;
-	    return listener;
-	  }
+        if (m_tasks[i].listener == listener)
+          {
+            m_tasks[i].period = tm;
+            m_tasks[i].remains = tm;
+            return listener;
+          }
       }
     m_tasks.push_back(Task(listener, tm));
     return listener;
@@ -170,11 +170,11 @@ namespace coil
     
     for (size_t i(0), len(m_tasks.size()); i < len; ++i, ++it)
       {
-	if (m_tasks[i].listener == id)
-	  {
-	    m_tasks.erase(it);
-	    return true;
-	  }
+        if (m_tasks[i].listener == id)
+          {
+            m_tasks.erase(it);
+            return true;
+          }
       }
     return false;
   }

@@ -105,7 +105,7 @@ namespace coil
           {
             dest_if = vs[ifname_pos];
             pclose(fp);
-	    wait(NULL);
+            wait(NULL);
             return true;
           }
 #endif // COIL_OS_FREEBSD || COIL_OS_DARWIN || COIL_OS_CYGWIN || COIL_OS_QNX
@@ -160,7 +160,7 @@ namespace coil
           {
             ipaddr = vs[1];
             pclose(fp);
-	    wait(NULL);
+            wait(NULL);
             return true;
           }
       } while (!feof(fp));

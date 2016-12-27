@@ -74,10 +74,10 @@ namespace RTC
   bool OutPortProvider::publishInterface(SDOPackage::NVList& prop)
   {
     if (!NVUtil::isStringValue(prop,
-			       "dataport.interface_type",
-			       m_interfaceType.c_str()))
+                               "dataport.interface_type",
+                               m_interfaceType.c_str()))
       {
-	return false;
+        return false;
       }
     
     NVUtil::append(prop, m_properties);

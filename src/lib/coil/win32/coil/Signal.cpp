@@ -54,7 +54,7 @@ namespace coil
                              sigset_t *mask, int flags)
     : m_handle(handle), m_signum(signum), m_mask(mask), m_flags(flags)
   {
-	  ::signal(m_signum, m_handle);
+    ::signal(m_signum, m_handle);
   }
 
   /*!

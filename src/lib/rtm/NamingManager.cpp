@@ -218,7 +218,7 @@ namespace RTC
                                          const char* name_server)
   {
     RTC_TRACE(("NamingManager::registerNameServer(%s, %s)",
-	       method, name_server));
+               method, name_server));
     NamingBase* name;
     name = createNamingObj(method, name_server);
 
@@ -319,15 +319,15 @@ namespace RTC
                              "YES", "NO", false));
     for (int i(0), len(m_names.size()); i < len; ++i)
       {
-	if (m_names[i]->ns == 0) // if ns==NULL
-	  {
+        if (m_names[i]->ns == 0) // if ns==NULL
+          {
             RTC_DEBUG(("Retrying connection to %s/%s",
                        m_names[i]->method.c_str(),
                        m_names[i]->nsname.c_str()));
             retryConnection(m_names[i]);
-	  }
+          }
         else
-          {	
+          {
             try
               {
                 if (rebind) { bindCompsTo(m_names[i]->ns); }
@@ -366,9 +366,9 @@ namespace RTC
     Guard guard(m_namesMutex);
     for (int i(0), len(m_names.size()); i < len; ++i)
       {
-	if (m_names[i]->ns != NULL)
+        if (m_names[i]->ns != NULL)
         {
-	  m_names[i]->ns->unbindObject(name);
+          m_names[i]->ns->unbindObject(name);
         }
       }
     unregisterCompName(name);
@@ -428,7 +428,7 @@ namespace RTC
     
     for (int i(0), len(m_compNames.size()); i < len; ++i)
       {
-	comps.push_back(const_cast<RTObject_impl*>(m_compNames[i]->rtobj));
+        comps.push_back(const_cast<RTObject_impl*>(m_compNames[i]->rtobj));
       }
     return comps;
   }
@@ -482,7 +482,7 @@ namespace RTC
   {
     for (int i(0), len(m_compNames.size()); i < len; ++i)
       {
-	ns->bindObject(m_compNames[i]->name.c_str(), m_compNames[i]->rtobj);
+        ns->bindObject(m_compNames[i]->name.c_str(), m_compNames[i]->rtobj);
       }
   }
   
@@ -494,15 +494,15 @@ namespace RTC
    * @endif
    */
   void NamingManager::registerCompName(const char* name,
-				       const RTObject_impl* rtobj)
+                                       const RTObject_impl* rtobj)
   {
     for (int i(0), len(m_compNames.size()); i < len; ++i)
       {
-	if (m_compNames[i]->name == name)
-	  {
-	    m_compNames[i]->rtobj = rtobj;
-	    return;
-	  }
+        if (m_compNames[i]->name == name)
+          {
+            m_compNames[i]->rtobj = rtobj;
+            return;
+          }
       }
     m_compNames.push_back(new Comps(name, rtobj));
     return;
@@ -533,11 +533,11 @@ namespace RTC
   {
     for (int i(0), len(m_mgrNames.size()); i < len; ++i)
       {
-	if (m_mgrNames[i]->name == name)
-	  {
-	    m_mgrNames[i]->mgr = mgr;
-	    return;
-	  }
+        if (m_mgrNames[i]->name == name)
+          {
+            m_mgrNames[i]->mgr = mgr;
+            return;
+          }
       }
     m_mgrNames.push_back(new Mgr(name, mgr));
     return;
@@ -555,12 +555,12 @@ namespace RTC
     std::vector<Comps*>::iterator it(m_compNames.begin());
     for (int i(0), len(m_compNames.size()); i < len; ++i, ++it)
       {
-	if (m_compNames[i]->name == name)
-	  {
-	    delete m_compNames[i];
-	    m_compNames.erase(it);
-	    return;
-	  }
+        if (m_compNames[i]->name == name)
+          {
+            delete m_compNames[i];
+            m_compNames.erase(it);
+            return;
+          }
       }
     return;
   }
@@ -569,12 +569,12 @@ namespace RTC
     std::vector<Mgr*>::iterator it(m_mgrNames.begin());
     for (int i(0), len(m_mgrNames.size()); i < len; ++i, ++it)
       {
-	if (m_mgrNames[i]->name == name)
-	  {
-	    delete m_mgrNames[i];
-	    m_mgrNames.erase(it);
-	    return;
-	  }
+        if (m_mgrNames[i]->name == name)
+          {
+            delete m_mgrNames[i];
+            m_mgrNames.erase(it);
+            return;
+          }
       }
     return;
   }

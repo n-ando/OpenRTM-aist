@@ -90,8 +90,8 @@ namespace RTC
    */
   bool
   CorbaPort::registerProvider(const char* instance_name,
-			      const char* type_name,
-			      PortableServer::RefCountServantBase& provider)
+                              const char* type_name,
+                              PortableServer::RefCountServantBase& provider)
   {
     RTC_TRACE(("registerProvider(instance=%s, type_name=%s)",
                instance_name, type_name));
@@ -110,7 +110,7 @@ namespace RTC
     if (!appendInterface(instance_name, type_name, RTC::PROVIDED))
       {
         RTC_ERROR(("appending provider interface failed"));
-	return false;
+        return false;
       }
     
     return true;
@@ -125,14 +125,14 @@ namespace RTC
    */
   bool
   CorbaPort::registerConsumer(const char* instance_name,
-			      const char* type_name,
-			      CorbaConsumerBase& consumer)
+                              const char* type_name,
+                              CorbaConsumerBase& consumer)
   {
     RTC_TRACE(("registerConsumer()"));
 
     if (!appendInterface(instance_name, type_name, RTC::REQUIRED))
       {
-	return false;
+        return false;
       }
     
     m_consumers.push_back(CorbaConsumerHolder(type_name,
@@ -159,7 +159,7 @@ namespace RTC
     while(it != m_providers.end())
       {
         it->activate();
-	++it;
+        ++it;
       }
   }
   
@@ -176,7 +176,7 @@ namespace RTC
     while(it != m_providers.end())
       {
         it->deactivate();
-	++it;
+        ++it;
       }
   }
   

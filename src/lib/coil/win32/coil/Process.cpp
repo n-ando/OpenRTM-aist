@@ -32,12 +32,12 @@ namespace coil
   int launch_shell(std::string command)
   {
 #ifdef UNICODE
-	// std::string -> LPTSTR
+    // std::string -> LPTSTR
     std::wstring wcommand = string2wstring(command);
     LPTSTR lpcommand = new TCHAR[wcommand.size() + 1];
     _tcscpy(lpcommand, wcommand.c_str());
 #else
-	// std::string -> LPTSTR
+    // std::string -> LPTSTR
     LPTSTR lpcommand = new TCHAR[command.size() + 1];
     _tcscpy(lpcommand, command.c_str());
 #endif // UNICODE
@@ -53,7 +53,7 @@ namespace coil
                       NULL, NULL, &si, &pi) )
       {
         delete lpcommand;
-	return -1;
+        return -1;
       }
     CloseHandle(pi.hProcess);
     CloseHandle(pi.hThread);

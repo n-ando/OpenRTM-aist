@@ -56,8 +56,8 @@ namespace coil
     
     while (it != it_end)
       {
-	setDefault(it->first.c_str(), it->second.c_str());
-	++it;
+        setDefault(it->first.c_str(), it->second.c_str());
+        ++it;
       }
   }
   
@@ -90,12 +90,12 @@ namespace coil
     keys = prop.propertyNames();
     for (size_t i(0), len(keys.size()); i < len; ++i)
       {
-	const Properties* node(NULL);
-	if ((node = prop.findNode(keys[i])) != NULL)
-	  {
-	    setDefault(keys[i],  node->default_value);
-	    setProperty(keys[i], node->value);
-	  }
+        const Properties* node(NULL);
+        if ((node = prop.findNode(keys[i])) != NULL)
+          {
+            setDefault(keys[i],  node->default_value);
+            setProperty(keys[i], node->value);
+          }
       }
   }
   
@@ -117,12 +117,12 @@ namespace coil
     keys = prop.propertyNames();
     for (size_t i(0), len(keys.size()); i < len; ++i)
       {
-	const Properties* node(prop.findNode(keys[i]));
-	if (node != 0)
-	  {
-	    setDefault(keys[i],  node->default_value);
-	    setProperty(keys[i], node->value);
-	  }
+        const Properties* node(prop.findNode(keys[i]));
+        if (node != 0)
+          {
+            setDefault(keys[i],  node->default_value);
+            setProperty(keys[i], node->value);
+          }
       }
     
     return *this;
@@ -143,7 +143,7 @@ namespace coil
     // delete myself from parent
     if (root != NULL)
       {
-	root->removeNode(name.c_str());
+        root->removeNode(name.c_str());
       }
   };
   
@@ -164,7 +164,7 @@ namespace coil
     Properties* node(NULL);
     if ((node = _getNode(keys, 0, this)) != NULL)
       {
-	return (!node->value.empty()) ? node->value : node->default_value;
+        return (!node->value.empty()) ? node->value : node->default_value;
       }
     return m_empty;
   }
@@ -177,7 +177,7 @@ namespace coil
    * @endif
    */
   const std::string& Properties::getProperty(const std::string& key,
-					     const std::string& def) const
+                                             const std::string& def) const
   {
     const std::string& value((*this)[key]);
     
@@ -225,7 +225,7 @@ namespace coil
     Properties* node(NULL);
     if ((node = _getNode(keys, 0, this)) != NULL)
       {
-	return node->default_value;
+        return node->default_value;
       }
     return m_empty;
   }
@@ -238,7 +238,7 @@ namespace coil
    * @endif
    */
   std::string Properties::setProperty(const std::string& key,
-				      const std::string& value)
+                                      const std::string& value)
   {
     std::vector<std::string> keys;
     split(key, '.', keys);
@@ -246,14 +246,14 @@ namespace coil
     Properties* curr(this);
     for (size_t i(0), len(keys.size()); i < len; ++i)
       {
-	Properties* next(curr->hasKey(keys[i].c_str()));
-	if (next == NULL)
-	  {
-	    next = new Properties(keys[i].c_str());
-	    next->root = curr;
-	    curr->leaf.push_back(next);
-	  }
-	curr = next;
+        Properties* next(curr->hasKey(keys[i].c_str()));
+        if (next == NULL)
+          {
+            next = new Properties(keys[i].c_str());
+            next->root = curr;
+            curr->leaf.push_back(next);
+          }
+        curr = next;
       }
     std::string retval(curr->value);
     curr->value = value;
@@ -268,7 +268,7 @@ namespace coil
    * @endif
    */
   std::string Properties::setDefault(const std::string& key,
-				     const std::string& value)
+                                     const std::string& value)
   {
     std::vector<std::string> keys;
     split(key, '.', keys);
@@ -276,14 +276,14 @@ namespace coil
     Properties* curr(this);
     for (size_t i(0), len(keys.size()); i < len; ++i)
       {
-	Properties* next(curr->hasKey(keys[i].c_str()));
-	if (next == NULL)
-	  {
-	    next = new Properties(keys[i].c_str());
-	    next->root = curr;
-	    curr->leaf.push_back(next);
-	  }
-	curr = next;
+        Properties* next(curr->hasKey(keys[i].c_str()));
+        if (next == NULL)
+          {
+            next = new Properties(keys[i].c_str());
+            next->root = curr;
+            curr->leaf.push_back(next);
+          }
+        curr = next;
       }
     curr->default_value = value;
     return value;
@@ -300,16 +300,16 @@ namespace coil
   {
     for (long i = 0; i < num && defaults[i][0] != '\0' ; i += 2)
       {
-	std::string key(defaults[i]);
-	std::string value(defaults[i + 1]);
-	
-	coil::eraseHeadBlank(key);
-	coil::eraseTailBlank(key);
-	
-	coil::eraseHeadBlank(value);
-	coil::eraseTailBlank(value);
-	
-	setDefault(key.c_str(), value.c_str());
+        std::string key(defaults[i]);
+        std::string value(defaults[i + 1]);
+        
+        coil::eraseHeadBlank(key);
+        coil::eraseTailBlank(key);
+        
+        coil::eraseHeadBlank(value);
+        coil::eraseTailBlank(value);
+        
+        setDefault(key.c_str(), value.c_str());
       }
   }
   
@@ -341,38 +341,38 @@ namespace coil
     
     while(!inStream.eof())
       {
-	std::string tmp;
+        std::string tmp;
         coil::getlinePortable(inStream, tmp);
-	coil::eraseHeadBlank(tmp);
-	
-	// Skip comments or empty lines
-	if (tmp.empty()) { continue; }
-    if (tmp[0] == '#' || tmp[0] == '!') { continue; }
-	
-	// line-end '\' continues entry
-	if (tmp[tmp.size() - 1] == '\\' && !coil::isEscaped(tmp, tmp.size() - 1))
-	  {
-	    tmp.erase(tmp.size() - 1);
-	    pline += tmp;
-	    continue;
-	  }
-	pline += tmp;
-	
-	// Skip empty line (made of only ' ' or '\t')
-	if (pline.empty()) { continue; }
-	
-	std::string key, value;
-	splitKeyValue(pline, key, value);
-	key = coil::unescape(key);
-	coil::eraseHeadBlank(key);
-	coil::eraseTailBlank(key);
-	
-	value = coil::unescape(value);
-	coil::eraseHeadBlank(value);
-	coil::eraseTailBlank(value);
-	
-	setProperty(key.c_str(), value.c_str());
-	pline.clear();
+        coil::eraseHeadBlank(tmp);
+        
+        // Skip comments or empty lines
+        if (tmp.empty()) { continue; }
+        if (tmp[0] == '#' || tmp[0] == '!') { continue; }
+        
+        // line-end '\' continues entry
+        if (tmp[tmp.size() - 1] == '\\' && !coil::isEscaped(tmp, tmp.size() - 1))
+          {
+            tmp.erase(tmp.size() - 1);
+            pline += tmp;
+            continue;
+          }
+        pline += tmp;
+        
+        // Skip empty line (made of only ' ' or '\t')
+        if (pline.empty()) { continue; }
+        
+        std::string key, value;
+        splitKeyValue(pline, key, value);
+        key = coil::unescape(key);
+        coil::eraseHeadBlank(key);
+        coil::eraseTailBlank(key);
+        
+        value = coil::unescape(value);
+        coil::eraseHeadBlank(value);
+        coil::eraseTailBlank(value);
+        
+        setProperty(key.c_str(), value.c_str());
+        pline.clear();
       }
   }
   
@@ -417,7 +417,7 @@ namespace coil
     std::vector<std::string> names;
     for (size_t i(0), len(leaf.size()); i < len; ++i)
       {
-	_propertiyNames(names, leaf[i]->name, leaf[i]);
+        _propertiyNames(names, leaf[i]->name, leaf[i]);
       }
     return names;
   }
@@ -501,13 +501,13 @@ namespace coil
     Properties* prop;
     while (it != it_end)
       {
-	if ((*it)->name == leaf_name)
-	  {
-	    prop = *it;
-	    leaf.erase(it);
-	    return prop;
-	  }
-	++it;
+        if ((*it)->name == leaf_name)
+          {
+            prop = *it;
+            leaf.erase(it);
+            return prop;
+          }
+        ++it;
       }
     return NULL;
   }
@@ -523,8 +523,8 @@ namespace coil
   {
     for (size_t i(0), len(leaf.size()); i < len; ++i)
       {
-	if (leaf[i]->name == key)
-	  return leaf[i];
+        if (leaf[i]->name == key)
+          return leaf[i];
       }
     return NULL;
   }
@@ -540,8 +540,8 @@ namespace coil
   {
     while (!leaf.empty())
       {
-	if (leaf.back() != NULL) // recursive delete
-	  delete leaf.back();    // back() returns always new
+        if (leaf.back() != NULL) // recursive delete
+          delete leaf.back();    // back() returns always new
       }
   }
   
@@ -558,7 +558,7 @@ namespace coil
     keys = prop.propertyNames();
     for (size_t i(0), len(prop.size()); i < len; ++i)
       {
-	(*this)[keys[i]] = prop[keys[i]];
+        (*this)[keys[i]] = prop[keys[i]];
       }
     return (*this);
   }
@@ -574,41 +574,41 @@ namespace coil
    * @endif
    */
   void Properties::splitKeyValue(const std::string& str, std::string& key,
-				 std::string& value)
+                                 std::string& value)
   {
     std::string::size_type i(0);
     std::string::size_type len(str.size());
     
     while (i < len)
       {
-	if ((str[i] == ':' || str[i] == '=') && !coil::isEscaped(str, i))
-	  {
-	    key   = str.substr(0, i); // substr(0, i) returns 0...(i-1) chars.
-	    coil::eraseHeadBlank(key);
-	    coil::eraseTailBlank(key);
-	    value = str.substr(i + 1);
-	    coil::eraseHeadBlank(value);
-	    coil::eraseTailBlank(value);
-	    return;
-	  }
-	++i;
+        if ((str[i] == ':' || str[i] == '=') && !coil::isEscaped(str, i))
+          {
+            key   = str.substr(0, i); // substr(0, i) returns 0...(i-1) chars.
+            coil::eraseHeadBlank(key);
+            coil::eraseTailBlank(key);
+            value = str.substr(i + 1);
+            coil::eraseHeadBlank(value);
+            coil::eraseTailBlank(value);
+            return;
+          }
+        ++i;
       }
     
     // If no ':' or '=' exist, ' ' would be delimiter.
     i = 0;
     while (i < len)
       {
-	if ((str[i] == ' ') && !coil::isEscaped(str, i))
-	  {
-	    key   = str.substr(0, i); // substr(0, i) returns 0...(i-1) chars.
-	    coil::eraseHeadBlank(key);
-	    coil::eraseTailBlank(key);
-	    value = str.substr(i + 1);
-	    coil::eraseHeadBlank(value);
-	    coil::eraseTailBlank(value);
-	    return;
-	  }
-	++i;
+        if ((str[i] == ' ') && !coil::isEscaped(str, i))
+          {
+            key   = str.substr(0, i); // substr(0, i) returns 0...(i-1) chars.
+            coil::eraseHeadBlank(key);
+            coil::eraseTailBlank(key);
+            value = str.substr(i + 1);
+            coil::eraseHeadBlank(value);
+            coil::eraseTailBlank(value);
+            return;
+          }
+        ++i;
       }
     
     key = str;
@@ -624,7 +624,7 @@ namespace coil
    * @endif
    */
   bool Properties::split(const std::string& str, const char delim,
-			 std::vector<std::string>& value)
+                         std::vector<std::string>& value)
   {
     if (str.empty()) return false;
     
@@ -633,13 +633,13 @@ namespace coil
     
     while (end_it < len)
       {
-	if ((str[end_it] == delim) && !coil::isEscaped(str, end_it))
-	  {
-	    // substr(0, i) returns 0...(i-1) chars.
-	    value.push_back(str.substr(begin_it, end_it - begin_it));
-	    begin_it = end_it + 1;
-	  }
-	++end_it;
+        if ((str[end_it] == delim) && !coil::isEscaped(str, end_it))
+          {
+            // substr(0, i) returns 0...(i-1) chars.
+            value.push_back(str.substr(begin_it, end_it - begin_it));
+            begin_it = end_it + 1;
+          }
+        ++end_it;
       }
     value.push_back(str.substr(begin_it, end_it));
     return true;
@@ -654,23 +654,23 @@ namespace coil
    */
   Properties*
   Properties::_getNode(std::vector<std::string>& keys,
-		       std::vector<Properties*>::size_type index,
-		       const Properties* curr)
+                       std::vector<Properties*>::size_type index,
+                       const Properties* curr)
   {
     Properties* next(curr->hasKey(keys[index].c_str()));
     
     if (next == NULL)
       {
-	return NULL;
+        return NULL;
       }
     
     if (index < keys.size() - 1) // node
       {
-	return next->_getNode(keys, ++index, next);
+        return next->_getNode(keys, ++index, next);
       }
     else
       {
-	return next;
+        return next;
       }
     return NULL;
   }
@@ -684,22 +684,22 @@ namespace coil
    */
   void
   Properties::_propertiyNames(std::vector<std::string>& names,
-			      std::string curr_name,
-			      const Properties* curr)
+                              std::string curr_name,
+                              const Properties* curr)
   {
     if (!curr->leaf.empty())
       {
-	for (size_t i(0), len(curr->leaf.size()); i < len; ++i)
-	  {
-	    std::string next_name;
-	    //	    if (curr_name == "") next_name = curr->leaf[i]->name;
-	    next_name = curr_name + "." + curr->leaf[i]->name;
-	    _propertiyNames(names, next_name, curr->leaf[i]);
-	  }
+        for (size_t i(0), len(curr->leaf.size()); i < len; ++i)
+          {
+            std::string next_name;
+            //            if (curr_name == "") next_name = curr->leaf[i]->name;
+            next_name = curr_name + "." + curr->leaf[i]->name;
+            _propertiyNames(names, next_name, curr->leaf[i]);
+          }
       }
     else
       {
-	names.push_back(curr_name);
+        names.push_back(curr_name);
       }
     return;
   }
@@ -713,32 +713,32 @@ namespace coil
    */
   void
   Properties::_store(std::ostream& out, std::string curr_name,
-		     Properties* curr)
+                     Properties* curr)
   {
     if (!curr->leaf.empty())
       {
-	
-	for (size_t i(0), len(curr->leaf.size()); i < len; ++i)
-	  {
-	    std::string next_name;
-	    if (curr_name == "")
-	      {
-		next_name = curr->leaf[i]->name;
-	      }
-	    else
-	      {
-		next_name = curr_name + "." + curr->leaf[i]->name;
-	      }
-	    _store(out, next_name, curr->leaf[i]);
-	  }
+        
+        for (size_t i(0), len(curr->leaf.size()); i < len; ++i)
+          {
+            std::string next_name;
+            if (curr_name == "")
+              {
+                next_name = curr->leaf[i]->name;
+              }
+            else
+              {
+                next_name = curr_name + "." + curr->leaf[i]->name;
+              }
+            _store(out, next_name, curr->leaf[i]);
+          }
       }
     
     if (curr->root != NULL)
       {
-	if (curr->value.length() > 0)
-	  {
-	    out << curr_name << ": " << coil::escape(curr->value) << std::endl;
-	  }
+        if (curr->value.length() > 0)
+          {
+            out << curr_name << ": " << coil::escape(curr->value) << std::endl;
+          }
       }
   }
   
@@ -755,20 +755,20 @@ namespace coil
     if (index != 0) out << indent(index) << "- " << curr.name;
     if (curr.leaf.empty())
       {
-	if (curr.value.empty())
-	  {
-	    out << ": " << curr.default_value << std::endl;
-	  }
-	else
-	  {
-	    out << ": " << curr.value << std::endl;
-	  }
-	return out;
+        if (curr.value.empty())
+          {
+            out << ": " << curr.default_value << std::endl;
+          }
+        else
+          {
+            out << ": " << curr.value << std::endl;
+          }
+        return out;
       }
     if (index != 0) out << std::endl;
     for (size_t i(0), len(curr.leaf.size()); i < len ;++i)
       {
-	_dump(out, *(curr.leaf[i]), index + 1);
+        _dump(out, *(curr.leaf[i]), index + 1);
       }
     return out;
   }
@@ -785,7 +785,7 @@ namespace coil
     std::string space;
     for (int i(0); i < index - 1; ++i)
       {
-	space += "  ";
+        space += "  ";
       }
     return space;
   }
@@ -802,7 +802,7 @@ namespace coil
     std::string space;
     for (int i(0); i < index - 1; ++i)
       {
-	space += "  ";
+        space += "  ";
       }
     return space;
   }

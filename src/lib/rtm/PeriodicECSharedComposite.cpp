@@ -132,17 +132,17 @@ namespace SDOPackage
 #ifndef ORB_IS_RTORB
         const SDO_var sdo  = sdo_list[i];
         ::OpenRTM::DataFlowComponent_var dfc;
-	if (!sdoToDFC(sdo.in(), dfc.out())) { continue; }
+        if (!sdoToDFC(sdo.in(), dfc.out())) { continue; }
 #else // ORB_IS_RTORB
         const SDO_var sdo  = sdo_list[i].object();
 
         ::OpenRTM::DataFlowComponent_var dfc;
         ::OpenRTM::DataFlowComponent_ptr dfc_ptr(dfc);
 
-	if (!sdoToDFC(sdo.in(), dfc_ptr)) { continue; }
+        if (!sdoToDFC(sdo.in(), dfc_ptr)) { continue; }
 #endif // ORB_IS_RTORB
 
-	Member member(dfc.in());
+        Member member(dfc.in());
 
 
         stopOwnedEC(member);
@@ -529,11 +529,11 @@ namespace SDOPackage
     std::vector<std::string> createdPorts;   // newPorts - interPorts
 
     set_difference(oldPorts.begin(), oldPorts.end(),
-    		   newPorts.begin(), newPorts.end(),
-    		   std::back_inserter(removedPorts));
+                   newPorts.begin(), newPorts.end(),
+                   std::back_inserter(removedPorts));
     set_difference(newPorts.begin(), newPorts.end(),
-    		   oldPorts.begin(), oldPorts.end(),
-    		   std::back_inserter(createdPorts));
+                   oldPorts.begin(), oldPorts.end(),
+                   std::back_inserter(createdPorts));
 
     RTC_VERBOSE(("old    ports: %s", ::coil::flatten(oldPorts).c_str()));
     RTC_VERBOSE(("new    ports: %s", ::coil::flatten(newPorts).c_str()));
