@@ -5,7 +5,7 @@
  * @date $Date$
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
- * Copyright (C) 2011
+ * Copyright (C) 2016-2017
  *     Noriaki Ando
  *     Intelligent Systems Research Institute,
  *     National Institute of
@@ -41,12 +41,22 @@ namespace RTC
    * - FSMそのものの動作をフックするためのリスナ
    * - FSMに関するメタデータ変更等の動作をフックするためのリスナ
    *
-   * の2種類に分けられる。
+   * の2種類に分けられる。さらに前者は、FSMの状態遷移等のアクションの前
+   * 後それぞれをフックするための PreFsmActionListener と
+   * PostFsmActionListener の二つがあり、後者は、FSMのProfileの変更をフッ
+   * クする FsmProfileListener と FSMの構造 (Structure) の変更をフック
+   * する FsmStructureListener の二つに分けられる。以上、以下のFSMに関
+   * する以下の4種類のリスナークラス群が提供されている。
    *
    * - PreFsmActionListener
    * - PostFsmActionListener
    * - FsmProfileListner
    * - FsmStructureListener
+   *
+   * @else
+   *
+   *
+   * @endif
    */
 
   //============================================================
@@ -54,18 +64,30 @@ namespace RTC
    * @if jp
    * @brief PreFsmActionListener のタイプ
    *
-   * - PRE_ON_INIT:          on_init 直前
-   * - PRE_ON_ENTRY:         on_entry 直前
-   * - PRE_ON_DO:            on_do 直前
-   * - PRE_ON_EXIT:          on_exit 直前
+   * PreFsmActionListener には以下のフックポイントが定義されている。こ
+   * れらが呼び出されるかどうかは、FSMの実装に依存する。
+   *
+   * - PRE_ON_INIT:          init 直前
+   * - PRE_ON_ENTRY:         entry 直前
+   * - PRE_ON_DO:            do 直前
+   * - PRE_ON_EXIT:          exit 直前
    * - PRE_ON_STATE_CHANGE:  状態遷移直前
    *
    * @else
    * @brief The types of ConnectorDataListener
-   * 
+   *
+   * PreFsmActionListener has the following hook points. If these
+   * listeners are actually called or not called are depends on FSM
+   * implementations.
+   *
+   * - PRE_ON_INIT:          just before "init" action
+   * - PRE_ON_ENTRY:         just before "entry" action
+   * - PRE_ON_DO:            just before "do" action
+   * - PRE_ON_EXIT:          just before "exit" action
+   * - PRE_ON_STATE_CHANGE:  just before state transition action
+   *
    * @endif
    */
-
   enum PreFsmActionListenerType
     {
       PRE_ON_INIT,
@@ -81,27 +103,130 @@ namespace RTC
    * @class PreFsmActionListener クラス
    * @brief PreFsmActionListener クラス
    *
-   * - on_init()
-   * - on_entry()
-   * - on_do()
-   * - on_exit()
-   * - on_state_update()
+   * PreFsmActionListener クラスは、Fsmのアクションに関するコールバック
+   * を実現するリスナーオブジェクトの基底クラスである。FSMのアクション
+   * の直前の動作をフックしたい場合、以下の例のように、このクラスを継承
+   * したコールバックオブジェクトを定義し、適切なコールバック設定関数か
+   * らRTObjectに対してコールバックオブジェクトをセットする必要がある。
    *
-   * 各アクションに対応するユーザーコードが呼ばれる直前のタイミング
-   * でコールされるリスナクラスの基底クラス。
+   * <pre>
+   * class MyListener
+   *   : public PreFsmActionListener
+   * {
+   *   std::string m_name;
+   * public:
+   *   MyListener(const char* name) : m_name(name) {}
+   *   virtual ~MyListener() {}
    *
-   * - PRE_ON_INIT:
-   * - PRE_ON_ENTRY:
-   * - PRE_ON_DO:
-   * - PRE_ON_EXIT:
-   * - PRE_ON_STATE_CHANGE:
+   *   virtual void operator()(const char* state_name)
+   *   {
+   *     std::cout << "Listner name:  " m_name << std::endl;
+   *     std::cout << "Current state: " state_name << std::endl;
+   *   };
+   * };
+   * </pre>
+   *
+   * このようにして定義されたリスナクラスは、以下のようにRTObjectに対し
+   * て、セットされる。
+   *
+   * <pre>
+   * RTC::ReturnCode_t ConsoleIn::onInitialize()
+   * {
+   *     addPreFsmActionListener(PRE_ON_STATE_CHANGE,
+   *                             new MyListener("init listener"),
+   *                             true);
+   *    :
+   * </pre>
+   *
+   * 第1引数の "PRE_ON_STATE_CHANGE" は、コールバックをフックするポイン
+   * トであり、以下の値を取ることが可能である。なお、すべてのコールバッ
+   * クポイントが実装されているとは限らず、これらが呼び出されるかどうか
+   * は、FSMの実装に依存する。
+   *
+   * - PRE_ON_INIT:          init 直前
+   * - PRE_ON_ENTRY:         entry 直前
+   * - PRE_ON_DO:            do 直前
+   * - PRE_ON_EXIT:          exit 直前
+   * - PRE_ON_STATE_CHANGE:  状態遷移直前
+   *
+   * 第2引数はリスナオブジェクトのポインタである。第3引数はオブジェクト
+   * 自動削除フラグであり、true の場合は、RTObject削除時に自動的にリス
+   * ナオブジェクトが削除される。falseの場合は、オブジェクトの所有権は
+   * 呼び出し側に残り、削除は呼び出し側の責任で行わなければならない。
+   * RTObject のライフサイクル中にコールバックが必要ならば上記のような
+   * 呼び出し方で第3引数を true としておくとよい。逆に、コールバックを
+   * 状況等に応じてセットしたりアンセットしたりする必要がある場合は
+   * falseとして置き、リスナオブジェクトのポインタをメンバ変数などに保
+   * 持しておき、
+   * RTObject_impl::addPreFsmActionListener()/removePreFsmActionListener()
+   * により、セットとアンセットを管理するといった使い方も可能である。
    *
    * @else
    * @class PreFsmActionListener class
    * @brief PreFsmActionListener class
    *
-   * This class is abstract base class for listener classes that
-   * provides callbacks for various events in rtobject.
+   * PreFsmActionListener class is a base class for the listener
+   * objects which realize callback to hook FSM related pre-actions.
+   * To hook execution just before a FSM action, the callback object
+   * should be defined as follows, and set to RTObject through
+   * appropriate callback set function.
+   *
+   * <pre>
+   * class MyListener
+   *   : public PreFsmActionListener
+   * {
+   *   std::string m_name;
+   * public:
+   *   MyListener(const char* name) : m_name(name) {}
+   *   virtual ~MyListener() {}
+   *
+   *   virtual void operator()(const char* state_name)
+   *   {
+   *     std::cout << "Listner name:  " m_name << std::endl;
+   *     std::cout << "Current state: " state_name << std::endl;
+   *   };
+   * };
+   * </pre>
+   *
+   * The listener class defined above is set to RTObject as follows.
+   *
+   * <pre>
+   * RTC::ReturnCode_t ConsoleIn::onInitialize()
+   * {
+   *     addPreFsmActionListener(PRE_ON_STATE_CHANGE,
+   *                             new MyListener("init listener"),
+   *                             true);
+   *    :
+   * </pre>
+   *
+   * The first argument "PRE_ON_STATE_CHANGE" specifies callback hook
+   * point, and the following values are available. Not all the
+   * callback points are implemented. It depends on the FSM
+   * implementations.
+   *
+   * - PRE_ON_INIT:          just before "init" action
+   * - PRE_ON_ENTRY:         just before "entry" action
+   * - PRE_ON_DO:            just before "do" action
+   * - PRE_ON_EXIT:          just before "exit" action
+   * - PRE_ON_STATE_CHANGE:  just before state transition action
+   *
+   * The second argument is a pointers to the listener object. The
+   * third argument is a flag for automatic object destruction. When
+   * "true" is given to the third argument, the given object in second
+   * argument is automatically destructed with RTObject. In the "false
+   * " case, the ownership of the object is left in the caller side,
+   * and then destruction of the object must be done by users'
+   * responsibility.
+   *
+   * It is good for setting "true" as third argument, if the listener
+   * object life span is equals to the RTObject's life cycle.  On the
+   * otehr hand, if callbacks are required to set/unset depending on
+   * its situation, the third argument could be "false".  In that
+   * case, listener objects pointers must be stored to member
+   * variables, and set/unset of the listener objects shoud be
+   * paerformed throguh
+   * RTObject_impl::addPreFsmActionListener()/removePreFsmActionListener()
+   * functions.
    *
    * @endif
    */
@@ -177,17 +302,30 @@ namespace RTC
   //============================================================
   /*!
    * @if jp
-   * @brief PostCompoenntActionListener のタイプ
+   * @brief PreFsmActionListener のタイプ
    *
-   * - POST_ON_INIT:
-   * - POST_ON_ENTRY:
-   * - POST_ON_DO:
-   * - POST_ON_EXIT:
-   * - POST_ON_STATE_CHANGE:
+   * PreFsmActionListener には以下のフックポイントが定義されている。こ
+   * れらが呼び出されるかどうかは、FSMの実装に依存する。
+   *
+   * - POST_ON_INIT:          init 直後
+   * - POST_ON_ENTRY:         entry 直後
+   * - POST_ON_DO:            do 直後
+   * - POST_ON_EXIT:          exit 直後
+   * - POST_ON_STATE_CHANGE:  状態遷移直後
    *
    * @else
    * @brief The types of ConnectorDataListener
-   * 
+   *
+   * PreFsmActionListener has the following hook points. If these
+   * listeners are actually called or not called are depends on FSM
+   * implementations.
+   *
+   * - POST_ON_INIT:          just after "init" action
+   * - POST_ON_ENTRY:         just after "entry" action
+   * - POST_ON_DO:            just after "do" action
+   * - POST_ON_EXIT:          just after "exit" action
+   * - POST_ON_STATE_CHANGE:  just after state transition action
+   *
    * @endif
    */
   enum PostFsmActionListenerType
@@ -200,36 +338,135 @@ namespace RTC
       POST_FSM_ACTION_LISTENER_NUM
     };
 
-
   /*!
    * @if jp
    * @class PostFsmActionListener クラス
    * @brief PostFsmActionListener クラス
    *
-   * OMG RTC仕様で定義されている以下のコンポーネントアクショントについ
-   * て、
+   * PostFsmActionListener クラスは、Fsmのアクションに関するコールバック
+   * を実現するリスナーオブジェクトの基底クラスである。FSMのアクション
+   * の直後の動作をフックしたい場合、以下の例のように、このクラスを継承
+   * したコールバックオブジェクトを定義し、適切なコールバック設定関数か
+   * らRTObjectに対してコールバックオブジェクトをセットする必要がある。
    *
-   * - on_init()
-   * - on_entry()
-   * - on_do()
-   * - on_exit()
-   * - on_state_change()
+   * <pre>
+   * class MyListener
+   *   : public PostFsmActionListener
+   * {
+   *   std::string m_name;
+   * public:
+   *   MyListener(const char* name) : m_name(name) {}
+   *   virtual ~MyListener() {}
    *
-   * 各アクションに対応するユーザーコードが呼ばれる直前のタイミング
-   * でコールされるリスなクラスの基底クラス。
+   *   virtual void operator()(const char* state_name, ReturnCode_t ret)
+   *   {
+   *     std::cout << "Listner name:  " m_name << std::endl;
+   *     std::cout << "Current state: " state_name << std::endl;
+   *   };
+   * };
+   * </pre>
    *
-   * - POST_ON_INIT:
-   * - POST_ON_ENTRY:
-   * - POST_ON_DO:
-   * - POST_ON_EXIT:
-   * - POST_ON_STATE_CHANGE:
+   * このようにして定義されたリスナクラスは、以下のようにRTObjectに対し
+   * て、セットされる。
+   *
+   * <pre>
+   * RTC::ReturnCode_t ConsoleIn::onInitialize()
+   * {
+   *     addPostFsmActionListener(POST_ON_STATE_CHANGE,
+   *                             new MyListener("init listener"),
+   *                             true);
+   *    :
+   * </pre>
+   *
+   * 第1引数の "POST_ON_STATE_CHANGE" は、コールバックをフックするポイン
+   * トであり、以下の値を取ることが可能である。なお、すべてのコールバッ
+   * クポイントが実装されているとは限らず、これらが呼び出されるかどうか
+   * は、FSMの実装に依存する。
+   *
+   * - POST_ON_INIT:          init 直後
+   * - POST_ON_ENTRY:         entry 直後
+   * - POST_ON_DO:            do 直後
+   * - POST_ON_EXIT:          exit 直後
+   * - POST_ON_STATE_CHANGE:  状態遷移直後
+   *
+   * 第2引数はリスナオブジェクトのポインタである。第3引数はオブジェクト
+   * 自動削除フラグであり、true の場合は、RTObject削除時に自動的にリス
+   * ナオブジェクトが削除される。falseの場合は、オブジェクトの所有権は
+   * 呼び出し側に残り、削除は呼び出し側の責任で行わなければならない。
+   * RTObject のライフサイクル中にコールバックが必要ならば上記のような
+   * 呼び出し方で第3引数を true としておくとよい。逆に、コールバックを
+   * 状況等に応じてセットしたりアンセットしたりする必要がある場合は
+   * falseとして置き、リスナオブジェクトのポインタをメンバ変数などに保
+   * 持しておき、
+   * RTObject_impl::addPostFsmActionListener()/removePostFsmActionListener()
+   * により、セットとアンセットを管理するといった使い方も可能である。
    *
    * @else
    * @class PostFsmActionListener class
    * @brief PostFsmActionListener class
    *
-   * This class is abstract base class for listener classes that
-   * provides callbacks for various events in rtobject.
+   * PostFsmActionListener class is a base class for the listener
+   * objects which realize callback to hook FSM related post-actions.
+   * To hook execution just before a FSM action, the callback object
+   * should be defined as follows, and set to RTObject through
+   * appropriate callback set function.
+   *
+   * <pre>
+   * class MyListener
+   *   : public PostFsmActionListener
+   * {
+   *   std::string m_name;
+   * public:
+   *   MyListener(const char* name) : m_name(name) {}
+   *   virtual ~MyListener() {}
+   *
+   *   virtual void operator()(const char* state_name, ReturnCode\t ret)
+   *   {
+   *     std::cout << "Listner name:  " m_name << std::endl;
+   *     std::cout << "Current state: " state_name << std::endl;
+   *   };
+   * };
+   * </pre>
+   *
+   * The listener class defined above is set to RTObject as follows.
+   *
+   * <pre>
+   * RTC::ReturnCode_t ConsoleIn::onInitialize()
+   * {
+   *     addPostFsmActionListener(POST_ON_STATE_CHANGE,
+   *                             new MyListener("init listener"),
+   *                             true);
+   *    :
+   * </pre>
+   *
+   * The first argument "POST_ON_STATE_CHANGE" specifies callback hook
+   * point, and the following values are available. Not all the
+   * callback points are implemented. It depends on the FSM
+   * implementations.
+   *
+   * - POST_ON_INIT:          just after "init" action
+   * - POST_ON_ENTRY:         just after "entry" action
+   * - POST_ON_DO:            just after "do" action
+   * - POST_ON_EXIT:          just after "exit" action
+   * - POST_ON_STATE_CHANGE:  just after state transition action
+   *
+   * The second argument is a pointers to the listener object. The
+   * third argument is a flag for automatic object destruction. When
+   * "true" is given to the third argument, the given object in second
+   * argument is automatically destructed with RTObject. In the "false
+   * " case, the ownership of the object is left in the caller side,
+   * and then destruction of the object must be done by users'
+   * responsibility.
+   *
+   * It is good for setting "true" as third argument, if the listener
+   * object life span is equals to the RTObject's life cycle.  On the
+   * otehr hand, if callbacks are required to set/unset depending on
+   * its situation, the third argument could be "false".  In that
+   * case, listener objects pointers must be stored to member
+   * variables, and set/unset of the listener objects shoud be
+   * paerformed throguh
+   * RTObject_impl::addPostFsmActionListener()/removePostFsmActionListener()
+   * functions.
    *
    * @endif
    */
@@ -351,18 +588,133 @@ namespace RTC
    * @class FsmProfileListener クラス
    * @brief FsmProfileListener クラス
    *
-   * 各アクションに対応するユーザーコードが呼ばれる直前のタイミング
-   * でコールされるリスなクラスの基底クラス。
+   * FsmProfileListener クラスは、FSMのProfileに関連したアクションのコー
+   * ルバックを実現するリスナーオブジェクトの基底クラスである。FSM
+   * Profileのアクションの動作をフックしたい場合、以下の例のように、こ
+   * のクラスを継承したコールバックオブジェクトを定義し、適切なコールバッ
+   * ク設定関数からRTObjectに対してコールバックオブジェクトをセットする
+   * 必要がある。
    *
-   * - ADD_PORT:
-   * - REMOVE_PORT:
+   * <pre>
+   * class MyListener
+   *   : public FsmProfileListener
+   * {
+   *   std::string m_name;
+   * public:
+   *   MyListener(const char* name) : m_name(name) {}
+   *   virtual ~MyListener() {}
+   *
+   *   virtual void operator()(const ::RTC::FsmProfile& fsmprof)
+   *   {
+   *     std::cout << "Listner name:  " m_name << std::endl;
+   *   };
+   * };
+   * </pre>
+   *
+   * このようにして定義されたリスナクラスは、以下のようにRTObjectに対し
+   * て、セットされる。
+   *
+   * <pre>
+   * RTC::ReturnCode_t ConsoleIn::onInitialize()
+   * {
+   *     addFsmProfileListener(SET_FSM_PROFILE,
+   *                           new MyListener("prof listener"),
+   *                           true);
+   *    :
+   * </pre>
+   *
+   * 第1引数の "SET_FSM_PROFILE" は、コールバックをフックするポイン
+   * トであり、以下の値を取ることが可能である。なお、すべてのコールバッ
+   * クポイントが実装されているとは限らず、これらが呼び出されるかどうか
+   * は、FSMサービスの実装に依存する。
+   *
+   * - SET_FSM_PROFILE       : FSM Profile設定時
+   * - GET_FSM_PROFILE       : FSM Profile取得時
+   * - ADD_FSM_STATE         : FSMにStateが追加された
+   * - REMOVE_FSM_STATE      : FSMからStateが削除された
+   * - ADD_FSM_TRANSITION    : FSMに遷移が追加された
+   * - REMOVE_FSM_TRANSITION : FSMから遷移が削除された
+   * - BIND_FSM_EVENT        : FSMにイベントがバインドされた
+   * - UNBIND_FSM_EVENT      : FSMにイベントがアンバインドされた
+   *
+   * 第2引数はリスナオブジェクトのポインタである。第3引数はオブジェクト
+   * 自動削除フラグであり、true の場合は、RTObject削除時に自動的にリス
+   * ナオブジェクトが削除される。falseの場合は、オブジェクトの所有権は
+   * 呼び出し側に残り、削除は呼び出し側の責任で行わなければならない。
+   * RTObject のライフサイクル中にコールバックが必要ならば上記のような
+   * 呼び出し方で第3引数を true としておくとよい。逆に、コールバックを
+   * 状況等に応じてセットしたりアンセットしたりする必要がある場合は
+   * falseとして置き、リスナオブジェクトのポインタをメンバ変数などに保
+   * 持しておき、addFsmProfileListener()/removeFsmProfileListener() に
+   * より、セットとアンセットを管理するといった使い方も可能である。
    *
    * @else
    * @class FsmProfileListener class
    * @brief FsmProfileListener class
    *
-   * This class is abstract base class for listener classes that
-   * provides callbacks for various events in rtobject.
+   * FsmProfileListener class is a base class for the listener
+   * objects which realize callback to hook FSM Profile related actions.
+   * To hook execution just before a FSM profile action, the callback object
+   * should be defined as follows, and set to RTObject through
+   * appropriate callback set function.
+   *
+   * <pre>
+   * class MyListener
+   *   : public FsmProfileListener
+   * {
+   *   std::string m_name;
+   * public:
+   *   MyListener(const char* name) : m_name(name) {}
+   *   virtual ~MyListener() {}
+   *
+   *   virtual void operator()(const ::RTC::FsmProfile& fsmprof)
+   *   {
+   *     std::cout << "Listner name:  " m_name << std::endl;
+   *   };
+   * };
+   * </pre>
+   *
+   * The listener class defined above is set to RTObject as follows.
+   *
+   * <pre>
+   * RTC::ReturnCode_t ConsoleIn::onInitialize()
+   * {
+   *     addFsmProfileListener(SET_FSM_PROFILE,
+   *                           new MyListener("prof listener"),
+   *                           true);
+   *    :
+   * </pre>
+   *
+   * The first argument "SET_FSM_PROFILE" specifies callback hook
+   * point, and the following values are available. Not all the
+   * callback points are implemented. It depends on the FSM service
+   * implementations.
+   *
+   * - SET_FSM_PROFILE       : Setting FSM Profile
+   * - GET_FSM_PROFILE       : Getting FSM Profile
+   * - ADD_FSM_STATE         : A State added to the FSM
+   * - REMOVE_FSM_STATE      : A State removed from FSM
+   * - ADD_FSM_TRANSITION    : A transition added to the FSM
+   * - REMOVE_FSM_TRANSITION : A transition removed from FSM
+   * - BIND_FSM_EVENT        : An event bounded to the FSM
+   * - UNBIND_FSM_EVENT      : An event unbounded to the FSM
+   *
+   * The second argument is a pointers to the listener object. The
+   * third argument is a flag for automatic object destruction. When
+   * "true" is given to the third argument, the given object in second
+   * argument is automatically destructed with RTObject. In the "false
+   * " case, the ownership of the object is left in the caller side,
+   * and then destruction of the object must be done by users'
+   * responsibility.
+   *
+   * It is good for setting "true" as third argument, if the listener
+   * object life span is equals to the RTObject's life cycle.  On the
+   * otehr hand, if callbacks are required to set/unset depending on
+   * its situation, the third argument could be "false".  In that
+   * case, listener objects pointers must be stored to member
+   * variables, and set/unset of the listener objects shoud be
+   * paerformed throguh
+   * addFsmProfileListener()/removeFsmProfileListener() functions.
    *
    * @endif
    */
@@ -464,15 +816,121 @@ namespace RTC
    * @class FsmStructureListener クラス
    * @brief FsmStructureListener クラス
    *
-   * 各アクションに対応するユーザーコードが呼ばれる直前のタイミング
-   * でコールされるリスなクラスの基底クラス。
+   * FsmStructureListener クラスは、FSM Structureのアクションに関するコー
+   * ルバックを実現するリスナーオブジェクトの基底クラスである。FSM
+   * Structure のアクションの直後の動作をフックしたい場合、以下の例のよ
+   * うに、このクラスを継承したコールバックオブジェクトを定義し、適切な
+   * コールバック設定関数からRTObjectに対してコールバックオブジェクトを
+   * セットする必要がある。
+   *
+   * <pre>
+   * class MyListener
+   *   : public FsmStructureListener
+   * {
+   *   std::string m_name;
+   * public:
+   *   MyListener(const char* name) : m_name(name) {}
+   *   virtual ~MyListener() {}
+   *   virtual void operator()(::RTC::FsmStructure& pprof)
+   *   {
+   *     std::cout << "Listner name:  " m_name << std::endl;
+   *   };
+   * };
+   * </pre>
+   *
+   * このようにして定義されたリスナクラスは、以下のようにRTObjectに対し
+   * て、セットされる。
+   *
+   * <pre>
+   * RTC::ReturnCode_t ConsoleIn::onInitialize()
+   * {
+   *     addFsmStructureListener(SET_FSM_STRUCTURE,
+   *                             new MyListener("set structure listener"),
+   *                             true);
+   *    :
+   * </pre>
+   *
+   * 第1引数の "SET_FSM_STRUCTURE" は、コールバックをフックするポイン
+   * トであり、以下の値を取ることが可能である。なお、すべてのコールバッ
+   * クポイントが実装されているとは限らず、これらが呼び出されるかどうか
+   * は、FSMの実装に依存する。
+   *
+   * - SET_FSM_STRUCTURE: FSM構造の設定
+   * - GET_FSM_STRUCTURE: FSM構造の取得
+   *
+   * 第2引数はリスナオブジェクトのポインタである。第3引数はオブジェクト
+   * 自動削除フラグであり、true の場合は、RTObject削除時に自動的にリス
+   * ナオブジェクトが削除される。falseの場合は、オブジェクトの所有権は
+   * 呼び出し側に残り、削除は呼び出し側の責任で行わなければならない。
+   * RTObject のライフサイクル中にコールバックが必要ならば上記のような
+   * 呼び出し方で第3引数を true としておくとよい。逆に、コールバックを
+   * 状況等に応じてセットしたりアンセットしたりする必要がある場合は
+   * falseとして置き、リスナオブジェクトのポインタをメンバ変数などに保
+   * 持しておき、
+   * RTObject_impl::addPostFsmActionListener()/removePostFsmActionListener()
+   * により、セットとアンセットを管理するといった使い方も可能である。
    *
    * @else
    * @class FsmStructureListener class
    * @brief FsmStructureListener class
    *
-   * This class is abstract base class for listener classes that
-   * provides callbacks for various events in rtobject.
+   * PostFsmActionListener class is a base class for the listener
+   * objects which realize callback to hook FSM structure profile
+   * related actions. To hook execution just before a FSM action, the
+   * callback object should be defined as follows, and set to RTObject
+   * through appropriate callback set function.
+   *
+   * <pre>
+   * class MyListener
+   *   : public FsmStructureListener
+   * {
+   *   std::string m_name;
+   * public:
+   *   MyListener(const char* name) : m_name(name) {}
+   *   virtual ~MyListener() {}
+   *   virtual void operator()(::RTC::FsmStructure& pprof)
+   *   {
+   *     std::cout << "Listner name:  " m_name << std::endl;
+   *   };
+   * };
+   * </pre>
+   *
+   * The listener class defined above is set to RTObject as follows.
+   *
+   * <pre>
+   * RTC::ReturnCode_t ConsoleIn::onInitialize()
+   * {
+   *     addFsmStructureListener(SET_FSM_STRUCTURE,
+   *                             new MyListener("set structure listener"),
+   *                             true);
+   *    :
+   * </pre>
+   *
+   * The first argument "SET_FSM_STRUCTURE" specifies callback hook
+   * point, and the following values are available. Not all the
+   * callback points are implemented. It depends on the FSM
+   * implementations.
+   *
+   * - SET_FSM_STRUCTURE: Setting FSM structure
+   * - GET_FSM_STRUCTURE: Getting FSM structure
+   *
+   * The second argument is a pointers to the listener object. The
+   * third argument is a flag for automatic object destruction. When
+   * "true" is given to the third argument, the given object in second
+   * argument is automatically destructed with RTObject. In the "false
+   * " case, the ownership of the object is left in the caller side,
+   * and then destruction of the object must be done by users'
+   * responsibility.
+   *
+   * It is good for setting "true" as third argument, if the listener
+   * object life span is equals to the RTObject's life cycle.  On the
+   * otehr hand, if callbacks are required to set/unset depending on
+   * its situation, the third argument could be "false".  In that
+   * case, listener objects pointers must be stored to member
+   * variables, and set/unset of the listener objects shoud be
+   * paerformed throguh
+   * RTObject_impl::addPostFsmActionListener()/removePostFsmActionListener()
+   * functions.
    *
    * @endif
    */
@@ -540,7 +998,6 @@ namespace RTC
      */
     virtual void operator()(::RTC::FsmStructure& pprof) = 0;
   };
-
 
   //============================================================
   // Holder classes
