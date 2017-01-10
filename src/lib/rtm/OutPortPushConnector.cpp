@@ -187,8 +187,14 @@ namespace RTC
   PublisherBase* OutPortPushConnector::createPublisher(ConnectorInfo& info)
   {
     std::string pub_type;
-    pub_type = info.properties.getProperty("subscription_type",
-                                              "flush");
+    pub_type = info.properties.getProperty("io_mode");
+    if (pub_type.empty())
+      {
+        pub_type = info.properties.getProperty("subscription_type", "flush");
+        if (pub_type == "flush")    { info.properties["io_mode"] = "block";    }
+        else if (pub_type == "new") { info.properties["io_mode"] = "nonblock"; }
+        else                        { info.properties["io_mode"] = pub_type;   }
+      }
     coil::normalize(pub_type);
     return PublisherFactory::instance().createObject(pub_type);
   }
