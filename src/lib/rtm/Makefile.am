@@ -73,6 +73,7 @@ COMP_SRC =                       \
 	OpenHRPExecutionContext.cpp  \
 	PortAdmin.cpp                \
 	RTObject.cpp                 \
+	Macho.cpp                    \
 	ConfigAdmin.cpp              \
 	ComponentActionListener.cpp  \
 	FsmActionListener.cpp        \
