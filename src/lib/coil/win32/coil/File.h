@@ -398,7 +398,7 @@ namespace coil
           {
             const char* globc(glob_str);
             std::string fname(ent->d_name);
-            for (size_t i(0); i < fname.size() && globc != '\0'; ++i, ++globc)
+            for (size_t i(0); i < fname.size() && *globc != '\0'; ++i, ++globc)
               {
                 if (*globc == '*')
                   {
