@@ -180,7 +180,7 @@ namespace coil
       : optarg(::optarg), optind(1), opterr(1), optopt(0), m_argc(argc), m_argv(argv), m_opt(opt), m_flag(flag)
     {
       ::optind = 1;
-#ifdef __QNX___
+#ifdef __QNX__
       optind_last = 1;
 #endif
     }
