@@ -959,9 +959,9 @@ namespace RTC
                           prop); 
 #endif // ORB_IS_RTORB
 
-    OutPortConnector* connector(0);
     try
       {
+        OutPortConnector* connector(0);
         connector = new OutPortPushConnector(profile, consumer, m_listeners);
 
         if (connector == 0)
@@ -1029,9 +1029,9 @@ namespace RTC
                           prop); 
 #endif // ORB_IS_RTORB
 
-    OutPortConnector* connector(0);
     try
       {
+        OutPortConnector* connector(0);
         connector = new OutPortPullConnector(profile, provider, m_listeners);
 
         if (connector == 0)

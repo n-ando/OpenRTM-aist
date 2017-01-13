@@ -247,10 +247,10 @@ namespace RTC
             if (ret == PORT_OK) { continue; }
       
             result = false;
-            const char* id(m_connectors[i]->profile().id.c_str());
 
             if (ret == CONNECTION_LOST)
               {
+                const char* id(m_connectors[i]->profile().id.c_str());
                 RTC_WARN(("connection_lost id: %s", id));
                 if (m_onConnectionLost != 0)
                   {

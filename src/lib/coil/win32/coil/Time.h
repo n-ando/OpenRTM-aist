@@ -237,7 +237,6 @@ struct timezone {
 	  FILETIME        ftime;
 	  LARGE_INTEGER   lint;
 	  __int64         val64;
-	  static int      tzflag;
 	  if (tv != NULL)
 	  {
 		  ::GetSystemTimeAsFileTime(&ftime);
@@ -250,7 +249,8 @@ struct timezone {
 		  tv->tv_usec = (long)(val64 % 1000000);
 	  }
 	  if (tz)
-	  {
+	    {
+	      static int      tzflag;
 		  if (!tzflag)
 		  {
 			  ::_tzset();
@@ -320,11 +320,11 @@ struct timezone {
 	  FILETIME ftime;
 	  LARGE_INTEGER lint;
 	  __int64 val64;
-	  int bias(0);
 
 	// tv,tz -> ftime
 	if (tv != NULL)
 	{
+	   int bias(0);
 		if (tz != NULL)
 		{
 			bias = tz->tz_minuteswest;

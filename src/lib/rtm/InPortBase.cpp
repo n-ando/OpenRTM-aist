@@ -925,9 +925,9 @@ namespace RTC
                           prop); 
 #endif // ORB_IS_RTORB
 
-    InPortConnector* connector(0);
     try
       {
+        InPortConnector* connector(0);
         if (m_singlebuffer)
           {
             connector = new InPortPushConnector(profile, provider,
@@ -986,9 +986,9 @@ namespace RTC
                           prop); 
 #endif // ORB_IS_RTORB
 
-    InPortConnector* connector(0);
     try
       {
+        InPortConnector* connector(0);
         if (m_singlebuffer)
           {
             connector = new InPortPullConnector(profile, consumer,
