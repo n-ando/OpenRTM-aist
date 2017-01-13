@@ -163,7 +163,7 @@ namespace CORBA_IORUtil
           }
       }
     iorstr = result;
-    delete result;
+    delete[] result;
     return true;
 #else // ORB_IS_RTORB
     // RtORB does not this function.
