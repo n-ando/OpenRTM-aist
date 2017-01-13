@@ -1,4 +1,4 @@
-// -*- C++ -*-
+ï»¿// -*- C++ -*-
 /*!
  * @file ExecutionContextProfile.cpp
  * @brief ExecutionContextProfile class
@@ -28,7 +28,7 @@ namespace RTC_impl
 
   /*!
    * @if jp
-   * @brief ¥Ç¥Õ¥©¥ë¥È¥³¥ó¥¹¥È¥é¥¯¥¿
+   * @brief ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
    * @else
    * @brief Default constructor
    * @endif
@@ -52,7 +52,7 @@ namespace RTC_impl
 
   /*!
    * @if jp
-   * @brief ¥Ç¥¹¥È¥é¥¯¥¿
+   * @brief ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
    * @else
    * @brief Destructor
    * @endif
@@ -70,7 +70,7 @@ namespace RTC_impl
 
   /*!
    * @if jp
-   * @brief CORBA ¥ª¥Ö¥¸¥§¥¯¥È»²¾È¤Î¼èÆÀ
+   * @brief CORBA ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆå‚ç…§ã®å–å¾—
    * @else
    * @brief Get the reference to the CORBA object
    * @endif
@@ -86,7 +86,7 @@ namespace RTC_impl
 
   /*!
    * @if jp
-   * @brief CORBA ¥ª¥Ö¥¸¥§¥¯¥È»²¾È¤Î¼èÆÀ
+   * @brief CORBA ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆå‚ç…§ã®å–å¾—
    * @else
    * @brief Get the reference to the CORBA object
    * @endif
@@ -101,7 +101,7 @@ namespace RTC_impl
 
   /*!
    * @if jp
-   * @brief ExecutionContext ¤Î¼Â¹Ô¼ş´ü(Hz)¤òÀßÄê¤¹¤ë
+   * @brief ExecutionContext ã®å®Ÿè¡Œå‘¨æœŸ(Hz)ã‚’è¨­å®šã™ã‚‹
    * @else
    * @brief Set execution rate(Hz) of ExecutionContext
    * @endif
@@ -141,7 +141,7 @@ namespace RTC_impl
 
   /*!
    * @if jp
-   * @brief ExecutionContext ¤Î¼Â¹Ô¼ş´ü(Hz)¤ò¼èÆÀ¤¹¤ë
+   * @brief ExecutionContext ã®å®Ÿè¡Œå‘¨æœŸ(Hz)ã‚’å–å¾—ã™ã‚‹
    * @else
    * @brief Get execution rate(Hz) of ExecutionContext
    * @endif
@@ -160,7 +160,7 @@ namespace RTC_impl
 
   /*!
    * @if jp
-   * @brief ExecutionKind ¤òÊ¸»úÎó²½¤¹¤ë
+   * @brief ExecutionKind ã‚’æ–‡å­—åˆ—åŒ–ã™ã‚‹
    * @else
    * @brief Converting ExecutionKind enum to string
    * @endif
@@ -178,7 +178,7 @@ namespace RTC_impl
 
   /*!
    * @if jp
-   * @brief ExecutionKind ¤ò¼èÆÀ¤¹¤ë
+   * @brief ExecutionKind ã‚’å–å¾—ã™ã‚‹
    * @else
    * @brief Get the ExecutionKind
    * @endif
@@ -198,7 +198,7 @@ namespace RTC_impl
 
   /*!
    * @if jp
-   * @brief ExecutionKind ¤ò¼èÆÀ¤¹¤ë
+   * @brief ExecutionKind ã‚’å–å¾—ã™ã‚‹
    * @else
    * @brief Get the ExecutionKind
    * @endif
@@ -212,7 +212,7 @@ namespace RTC_impl
 
   /*!
    * @if jp
-   * @brief Owner¥³¥ó¥İ¡¼¥Í¥ó¥È¤ò¥»¥Ã¥È¤¹¤ë¡£
+   * @brief Ownerã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆã‚’ã‚»ãƒƒãƒˆã™ã‚‹ã€‚
    * @else
    * @brief Setting owner component of the execution context
    * @endif
@@ -235,7 +235,7 @@ namespace RTC_impl
 
   /*!
    * @if jp
-   * @brief Owner¥³¥ó¥İ¡¼¥Í¥ó¥È¤Î»²¾È¤ò¼èÆÀ¤¹¤ë
+   * @brief Ownerã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆã®å‚ç…§ã‚’å–å¾—ã™ã‚‹
    * @else
    * @brief Getting a reference of the owner component
    * @endif
@@ -249,7 +249,7 @@ namespace RTC_impl
 
   /*!
    * @if jp
-   * @brief RT¥³¥ó¥İ¡¼¥Í¥ó¥È¤òÄÉ²Ã¤¹¤ë
+   * @brief RTã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆã‚’è¿½åŠ ã™ã‚‹
    * @else
    * @brief Add an RT-component
    * @endif
@@ -281,7 +281,7 @@ namespace RTC_impl
 
   /*!
    * @if jp
-   * @brief RT¥³¥ó¥İ¡¼¥Í¥ó¥È¤ò»²²Ã¼Ô¥ê¥¹¥È¤«¤éºï½ü¤¹¤ë
+   * @brief RTã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆã‚’å‚åŠ è€…ãƒªã‚¹ãƒˆã‹ã‚‰å‰Šé™¤ã™ã‚‹
    * @else
    * @brief Remove the RT-Component from participant list
    * @endif
@@ -318,7 +318,7 @@ namespace RTC_impl
 
   /*!
    * @if jp
-   * @brief ExecutionKind ¤ò¼èÆÀ¤¹¤ë
+   * @brief ExecutionKind ã‚’å–å¾—ã™ã‚‹
    * @else
    * @brief Get the ExecutionKind
    * @endif
@@ -331,7 +331,7 @@ namespace RTC_impl
 
   /*!
    * @if jp
-   * @brief Properties¤ò¥»¥Ã¥È¤¹¤ë
+   * @brief Propertiesã‚’ã‚»ãƒƒãƒˆã™ã‚‹
    * @else
    * @brief Setting Properties
    * @endif
@@ -346,7 +346,7 @@ namespace RTC_impl
 
   /*!
    * @if jp
-   * @brief Properties¤ò¼èÆÀ¤¹¤ë
+   * @brief Propertiesã‚’å–å¾—ã™ã‚‹
    * @else
    * @brief Setting Properties
    * @endif
@@ -363,7 +363,7 @@ namespace RTC_impl
 
   /*!
    * @if jp
-   * @brief ExecutionContextProfile ¤ò¼èÆÀ¤¹¤ë
+   * @brief ExecutionContextProfile ã‚’å–å¾—ã™ã‚‹
    * @else
    * @brief Get the ExecutionContextProfile
    * @endif
@@ -381,7 +381,7 @@ namespace RTC_impl
 
   /*!
    * @if jp
-   * @brief ExecutionContextProfile ¤ò¼èÆÀ¤¹¤ë
+   * @brief ExecutionContextProfile ã‚’å–å¾—ã™ã‚‹
    * @else
    * @brief Get the ExecutionContextProfile
    * @endif
@@ -396,7 +396,7 @@ namespace RTC_impl
 
   /*!
    * @if jp
-   * @brief ExecutionContextProfile¤ò¥í¥Ã¥¯¤¹¤ë
+   * @brief ExecutionContextProfileã‚’ãƒ­ãƒƒã‚¯ã™ã‚‹
    * @else
    * @brief Getting a lock of RTC::ExecutionContextProfile
    * @endif
@@ -408,7 +408,7 @@ namespace RTC_impl
 
   /*!
    * @if jp
-   * @brief ExecutionContextProfile¤ò¥¢¥ó¥í¥Ã¥¯¤¹¤ë
+   * @brief ExecutionContextProfileã‚’ã‚¢ãƒ³ãƒ­ãƒƒã‚¯ã™ã‚‹
    * @else
    * @brief Release a lock of the RTC::ExecutionContextProfile
    * @endif

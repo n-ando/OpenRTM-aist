@@ -1,4 +1,4 @@
-// -*- C++ -*-
+ï»¿// -*- C++ -*-
 /*!
  * @file  PublisherPeriodic.cpp
  * @brief PublisherPeriodic class
@@ -32,7 +32,7 @@ namespace RTC
 {
   /*!
    * @if jp
-   * @brief ¥³¥ó¥¹¥È¥é¥¯¥¿
+   * @brief ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
    * @else
    * @brief Constructor
    * @endif
@@ -48,7 +48,7 @@ namespace RTC
 
   /*!
    * @if jp
-   * @brief ¥Ç¥¹¥È¥é¥¯¥¿
+   * @brief ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
    * @else
    * @brief Destructor
    * @endif
@@ -74,7 +74,7 @@ namespace RTC
 
   /*!
    * @if jp
-   * @brief ½é´ü²½
+   * @brief åˆæœŸåŒ–
    * @else
    * @brief initialization
    * @endif
@@ -100,7 +100,7 @@ namespace RTC
   
   /*!
    * @if jp
-   * @brief InPort¥³¥ó¥·¥å¡¼¥Ş¤Î¥»¥Ã¥È
+   * @brief InPortã‚³ãƒ³ã‚·ãƒ¥ãƒ¼ãƒã®ã‚»ãƒƒãƒˆ
    * @else
    * @brief Store InPort consumer
    * @endif
@@ -121,7 +121,7 @@ namespace RTC
 
   /*!
    * @if jp
-   * @brief ¥Ğ¥Ã¥Õ¥¡¤Î¥»¥Ã¥È
+   * @brief ãƒãƒƒãƒ•ã‚¡ã®ã‚»ãƒƒãƒˆ
    * @else
    * @brief Setting buffer pointer
    * @endif
@@ -141,7 +141,7 @@ namespace RTC
 
   /*!
    * @if jp
-   * @brief ¥ê¥¹¥Ê¤Î¥»¥Ã¥È
+   * @brief ãƒªã‚¹ãƒŠã®ã‚»ãƒƒãƒˆ
    * @else
    * @brief Setting buffer pointer
    * @endif
@@ -164,7 +164,7 @@ namespace RTC
 
   /*!
    * @if jp
-   * @brief ¥Ç¡¼¥¿¤ò½ñ¤­¹ş¤à
+   * @brief ãƒ‡ãƒ¼ã‚¿ã‚’æ›¸ãè¾¼ã‚€
    * @else
    * @brief Write data 
    * @endif
@@ -202,7 +202,7 @@ namespace RTC
 
   /*!
    * @if jp
-   * @brief ¥¢¥¯¥Æ¥£¥Ö²½³ÎÇ§
+   * @brief ã‚¢ã‚¯ãƒ†ã‚£ãƒ–åŒ–ç¢ºèª
    * @else
    * @brief Confirm to activate
    * @endif
@@ -214,7 +214,7 @@ namespace RTC
 
   /*!
    * @if jp
-   * @brief ¥¢¥¯¥Æ¥£¥Ö²½
+   * @brief ã‚¢ã‚¯ãƒ†ã‚£ãƒ–åŒ–
    * @else
    * @brief activation
    * @endif
@@ -230,7 +230,7 @@ namespace RTC
 
   /*!
    * @if jp
-   * @brief Èó¥¢¥¯¥Æ¥£¥Ö²½
+   * @brief éã‚¢ã‚¯ãƒ†ã‚£ãƒ–åŒ–
    * @else
    * @brief deactivation
    * @endif
@@ -245,7 +245,7 @@ namespace RTC
 
   /*!
    * @if jp
-   * @brief ¥¹¥ì¥Ã¥É¼Â¹Ô´Ø¿ô
+   * @brief ã‚¹ãƒ¬ãƒƒãƒ‰å®Ÿè¡Œé–¢æ•°
    * @else
    * @brief Thread execution function
    * @endif
@@ -400,7 +400,7 @@ namespace RTC
 
   /*!
    * @if jp
-   * @brief PushPolicy ¤ÎÀßÄê
+   * @brief PushPolicy ã®è¨­å®š
    * @else
    * @brief Setting PushPolicy
    * @endif
@@ -440,7 +440,7 @@ namespace RTC
 
   /*!
    * @if jp
-   * @brief Task ¤ÎÀßÄê
+   * @brief Task ã®è¨­å®š
    * @else
    * @brief Setting Task
    * @endif
@@ -507,7 +507,7 @@ namespace RTC
 
   /*!
    * @if jp
-   * @brief BufferStatus ¤«¤é DataPortStatus ¤Ø¤ÎÊÑ´¹
+   * @brief BufferStatus ã‹ã‚‰ DataPortStatus ã¸ã®å¤‰æ›
    * @else
    * @brief Convertion from BufferStatus to DataPortStatus
    * @endif
@@ -555,7 +555,7 @@ namespace RTC
 
   /*!
    * @if jp
-   * @brief DataPortStatus¤Ë½¾¤Ã¤Æ¥ê¥¹¥Ê¤ØÄÌÃÎ¤¹¤ë´Ø¿ô¤ò¸Æ¤Ó½Ğ¤¹¡£
+   * @brief DataPortStatusã«å¾“ã£ã¦ãƒªã‚¹ãƒŠã¸é€šçŸ¥ã™ã‚‹é–¢æ•°ã‚’å‘¼ã³å‡ºã™ã€‚
    * @else
    * @brief Call listeners according to the DataPortStatus
    * @endif

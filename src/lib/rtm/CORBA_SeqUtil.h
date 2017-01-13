@@ -1,4 +1,4 @@
-// -*- C++ -*-
+﻿// -*- C++ -*-
 /*!
  * @file CORBA_SeqUtil.h
  * @brief CORBA sequence utility template functions
@@ -26,11 +26,11 @@
  * @if jp
  * @namespace CORBA_SeqUtil
  *
- * @brief CORBA sequence �إ�ѡ��ƥ�ץ졼�ȴؿ�
+ * @brief CORBA sequence ヘルパーテンプレート関数
  *
- * CORBA sequence ���Ф��ưʲ��Υ桼�ƥ���ƥ��ƥ�ץ졼�ȴؿ����󶡤��롣
- * ���ϥ���åɥ����դǤϤʤ��Τǡ�����åɥ����դ����������ϡ�
- * �оݤȤʤ륷�������ͤ�Ŭ�ڤ�mutex�����ݸ��ɬ�פ����롣
+ * CORBA sequence に対して以下のユーティリティテンプレート関数を提供する。
+ * 操作はスレッドセーフではないので、スレッドセーフに操作したい場合は、
+ * 対象となるシーケンス値を適切にmutex等で保護する必要がある。
  *
  * - for_each()
  * - find()
@@ -68,15 +68,15 @@ namespace CORBA_SeqUtil
   /*!
    * @if jp
    *
-   * @brief CORBA sequence ���Ф��� functor ��Ŭ�Ѥ���
+   * @brief CORBA sequence に対して functor を適用する
    *
-   * CORBA sequence ���Ƥ����Ǥ��Ф��ơ�Ϳ����줿 functor ��Ŭ�Ѥ��롣
-   * functor �� void functor(CORBA sequence ������) �η�����Ȥ�ɬ�פ����롣
+   * CORBA sequence 全ての要素に対して、与えられた functor を適用する。
+   * functor は void functor(CORBA sequence の要素) の形式をとる必要がある。
    *
-   * @param seq Functor ��Ŭ�Ѥ��� CORBA sequence
-   * @param f CORBA sequence �����Ǥ�������� Functor
+   * @param seq Functor を適用する CORBA sequence
+   * @param f CORBA sequence の要素を処理する Functor
    *
-   * @return ���Ƥ����Ǥ�������� Functor
+   * @return 全ての要素を処理した Functor
    *
    * @since 0.4.0
    *
@@ -108,18 +108,18 @@ namespace CORBA_SeqUtil
 
   /*!
    * @if jp
-   * @brief CORBA sequence ���椫�� functor ��Ŭ�礹�����ǤΥ���ǥå������֤�
+   * @brief CORBA sequence の中から functor に適合する要素のインデックスを返す
    *
-   * CORBA sequence ���Ƥ����Ǥ��Ф��ơ�Ϳ����줿 functor ��Ŭ�Ѥ���
-   * functor �� true ���֤��褦���Υ���ǥå������֤���
-   * functor �� bool functor(const CORBA sequence ������) �η�����Ȥꡢ
-   * Ŭ�礹�����Ǥ��Ф��� true ���֤�ɬ�פ����롣
+   * CORBA sequence 全ての要素に対して、与えられた functor を適用し、
+   * functor が true を返すようそのインデックスを返す。
+   * functor は bool functor(const CORBA sequence の要素) の形式をとり、
+   * 適合する要素に対して true を返す必要がある。
    *
-   * @param seq Functor ��Ŭ�Ѥ��� CORBA sequence
-   * @param f CORBA sequence �������Ǥ򸫤Ĥ��� Functor
+   * @param seq Functor を適用する CORBA sequence
+   * @param f CORBA sequence から要素を見つける Functor
    *
-   * @return Functor ��Ŭ�礹�����ǤΥ���ǥå�����
-   *         ���Ĥ���ʤ��Ȥ��� -1 ���֤���
+   * @return Functor に適合する要素のインデックス。
+   *         見つからないときは -1 を返す。
    *
    * @else
    *
@@ -151,13 +151,13 @@ namespace CORBA_SeqUtil
 
   /*!
    * @if jp
-   * @brief CORBA sequence �κǸ�����Ǥ��ɲä���
+   * @brief CORBA sequence の最後に要素を追加する
    *
-   * CORBA sequence �κǸ��Ϳ����줿���Ǥ��ɲä��롣
-   * CORBA sequence ��Ĺ���ϼ�ưŪ�˳�ĥ����롣
+   * CORBA sequence の最後に与えられた要素を追加する。
+   * CORBA sequence の長さは自動的に拡張される。
    *
-   * @param seq ���Ǥ��ɲä��� CORBA sequence
-   * @param elem �ɲä�������
+   * @param seq 要素を追加する CORBA sequence
+   * @param elem 追加する要素
    *
    * @else
    *
@@ -181,12 +181,12 @@ namespace CORBA_SeqUtil
 
   /*!
    * @if jp
-   * @brief CORBA sequence ��ޡ�������
+   * @brief CORBA sequence をマージする
    *
-   * Ϳ����줿 CORBA sequence ��ޡ������롣
+   * 与えられた CORBA sequence をマージする。
    *
-   * @param seq1 �ޡ�������� CORBA sequence
-   * @param seq2 �ޡ�������� CORBA sequence
+   * @param seq1 マージされる CORBA sequence
+   * @param seq2 マージされる CORBA sequence
    *
    * @else
    *
@@ -215,16 +215,16 @@ namespace CORBA_SeqUtil
 
   /*!
    * @if jp
-   * @brief CORBA sequence �����Ǥ���������
+   * @brief CORBA sequence に要素を挿入する
    *
-   * CORBA sequence �� index �ΰ��֤����Ǥ�ä��롣
-   * index �� Ϳ����줿��CORBA sequence �κ���� index ����礭�����
-   * �Ǹ�����ǤȤ��Ʋä����롣
-   * CORBA sequence ��Ĺ���ϼ�ưŪ�˳�ĥ����롣
+   * CORBA sequence の index の位置に要素を加える。
+   * index が 与えられた　CORBA sequence の最大の index より大きい場合
+   * 最後の要素として加えられる。
+   * CORBA sequence の長さは自動的に拡張される。
    *
-   * @param seq ���Ǥ��ɲä��� CORBA sequence
-   * @param elem �ɲä�������
-   * @param index ���Ǥ��ɲä������
+   * @param seq 要素を追加する CORBA sequence
+   * @param elem 追加する要素
+   * @param index 要素を追加する位置
    *
    * @else
    *
@@ -261,14 +261,14 @@ namespace CORBA_SeqUtil
 
   /*!
    * @if jp
-   * @brief CORBA sequence ����Ƭ���Ǥ��������
+   * @brief CORBA sequence の先頭要素を取得する
    *
-   * CORBA sequence ����Ƭ���Ǥ�������롣
-   * seq[0] ��Ʊ����
+   * CORBA sequence の先頭要素を取得する。
+   * seq[0] と同じ。
    *
-   * @param seq ���Ǥ�������� CORBA sequence
+   * @param seq 要素を取得する CORBA sequence
    *
-   * @return ������������
+   * @return 取得した要素
    *
    * @else
    *
@@ -292,14 +292,14 @@ namespace CORBA_SeqUtil
 
   /*!
    * @if jp
-   * @brief CORBA sequence ���������Ǥ��������
+   * @brief CORBA sequence の末尾要素を取得する
    *
-   * CORBA sequence ���������Ǥ�������롣
-   * seq[seq.length() - 1] ��Ʊ����
+   * CORBA sequence の末尾要素を取得する。
+   * seq[seq.length() - 1] と同じ。
    *
-   * @param seq ���Ǥ�������� CORBA sequence
+   * @param seq 要素を取得する CORBA sequence
    *
-   * @return ������������
+   * @return 取得した要素
    *
    * @else
    *
@@ -321,13 +321,13 @@ namespace CORBA_SeqUtil
 
   /*!
    * @if jp
-   * @brief CORBA sequence �λ��ꤵ�줿���֤����Ǥ�������
+   * @brief CORBA sequence の指定された位置の要素を削除する
    *
-   * ���ꤵ�줿����ǥå��������Ǥ������롣
-   * ������줿���Ǥϵͤ��졢sequence ��Ĺ����1���롣
+   * 指定されたインデックスの要素を削除する。
+   * 削除された要素は詰められ、sequence の長さは1減る。
    *
-   * @param seq ���Ǥ������� CORBA sequence
-   * @param index ����������ǤΥ���ǥå���
+   * @param seq 要素を削除する CORBA sequence
+   * @param index 削除する要素のインデックス
    *
    * @else
    *
@@ -357,13 +357,13 @@ namespace CORBA_SeqUtil
   /*!
    * @if jp
    *
-   * @brief �������󥹤����Ǥ�Ҹ�ˤ������äƺ������
+   * @brief シーケンスの要素を述語にしたがって削除する
    *
-   * ���Υ��ڥ졼�����ϽҸ�Ȥ���Ϳ����줿�ؿ����֥������Ȥ�
-   * ��郎���ΤȤ������Υ������󥹤����Ǥ������롣
+   * このオペレーションは述語として与えられた関数オブジェクトの
+   * 条件が真のとき、そのシーケンスの要素を削除する。
    *
-   * @param seq ���Ǹ����оݤ� CORBA sequence
-   * @param f ������륷�����󥹤���ꤹ��Ѹ�
+   * @param seq 要素検索対象の CORBA sequence
+   * @param f 削除するシーケンスを決定する術語
    *
    * @else
    *
@@ -388,10 +388,10 @@ namespace CORBA_SeqUtil
 
   /*!
    * @if jp
-   * @brief CORBA sequence �������Ǥ���
+   * @brief CORBA sequence の全要素を削除
    *
-   * CORBA sequence �������Ǥ������롣
-   * seq.length(0) ��Ʊ����
+   * CORBA sequence の全要素を削除する。
+   * seq.length(0) と同じ。
    *
    * @else
    *

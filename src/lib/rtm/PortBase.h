@@ -1,4 +1,4 @@
-// -*- C++ -*-
+﻿// -*- C++ -*-
 /*!
  * @file PortBase.h
  * @brief RTC's Port base class
@@ -44,21 +44,21 @@ namespace RTC
   /*!
    * @if jp
    * @class PortBase
-   * @brief Port �δ��쥯�饹
+   * @brief Port の基底クラス
    *
-   * RTC::Port �δ���Ȥʤ륯�饹��
-   * RTC::Port �Ϥۤ� UML Port �γ�ǰ��Ѿ����Ƥ��ꡢ�ۤ�Ʊ���Τ�ΤȤߤʤ�
-   * ���Ȥ��Ǥ��롣RT ����ݡ��ͥ�ȤΥ��󥻥ץȤˤ����Ƥϡ�
-   * Port �ϥ���ݡ��ͥ�Ȥ���°��������ݡ��ͥ�Ȥ�¾�Υ���ݡ��ͥ�Ȥ���ߺ���
-   * ��Ԥ������Ǥ��ꡢ�̾���Ĥ��Υ��󥿡��ե������ȴ�Ϣ�դ����롣
-   * ����ݡ��ͥ�Ȥ� Port ���̤��Ƴ������Ф����󥿡��ե��������󶡤ޤ����׵�
-   * ���뤳�Ȥ��Ǥ���Port�Ϥ�����³�������������ô����
+   * RTC::Port の基底となるクラス。
+   * RTC::Port はほぼ UML Port の概念を継承しており、ほぼ同等のものとみなす
+   * ことができる。RT コンポーネントのコンセプトにおいては、
+   * Port はコンポーネントに付属し、コンポーネントが他のコンポーネントと相互作用
+   * を行う接点であり、通常幾つかのインターフェースと関連付けられる。
+   * コンポーネントは Port を通して外部に対しインターフェースを提供または要求
+   * することができ、Portはその接続を管理する役割を担う。
    * <p>
-   * Port �ζ�ݥ��饹�ϡ��̾� RT ����ݡ��ͥ�ȥ��󥹥�����������Ʊ����
-   * �������졢�󶡡��׵ᥤ�󥿡��ե���������Ͽ�����塢RT ����ݡ��ͥ�Ȥ�
-   * ��Ͽ���졢�������饢��������ǽ�� Port �Ȥ��Ƶ�ǽ���뤳�Ȥ����ꤷ�Ƥ��롣
+   * Port の具象クラスは、通常 RT コンポーネントインスタンス生成時に同時に
+   * 生成され、提供・要求インターフェースを登録した後、RT コンポーネントに
+   * 登録され、外部からアクセス可能な Port として機能することを想定している。
    * <p>
-   * RTC::Port �� CORBA ���󥿡��ե������Ȥ��ưʲ��Υ��ڥ졼�������󶡤��롣
+   * RTC::Port は CORBA インターフェースとして以下のオペレーションを提供する。
    *
    * - get_port_profile()
    * - get_connector_profiles()
@@ -69,19 +69,19 @@ namespace RTC
    * - notify_disconnect()
    * - disconnect_all()
    *
-   * ���Υ��饹�Ǥϡ������Υ��ڥ졼�����μ������󶡤��롣
+   * このクラスでは、これらのオペレーションの実装を提供する。
    * <p>
-   * �����Υ��ڥ졼�����Τ�����get_port_profile(), get_connector_profiles(),
-   * get_connector_profile(), connect(), disconnect(), disconnect_all() �ϡ�
-   * ���֥��饹�ˤ������ä˿����񤤤��ѹ�����ɬ�פ��ʤ����ᡢ�����С��饤��
-   * ���뤳�ȤϿ侩����ʤ���
+   * これらのオペレーションのうち、get_port_profile(), get_connector_profiles(),
+   * get_connector_profile(), connect(), disconnect(), disconnect_all() は、
+   * サブクラスにおいて特に振る舞いを変更する必要がないため、オーバーライド
+   * することは推奨されない。
    * <p>
-   * notify_connect(), notify_disconnect() �ˤĤ��Ƥϡ����֥��饹���󶡡��׵�
-   * ���륤�󥿡��ե������μ���˱����ơ������񤤤��ѹ�����ɬ�פ�������
-   * ��ǽ�������뤬��������ľ�ܥ����С��饤�ɤ��뤳�ȤϿ侩���줺��
-   * ��Ҥ� notify_connect(), notify_disconnect() �ι�ˤ����Ƥ�Ҥ٤����̤�
-   * �����δؿ��˴�Ϣ���� protected �ؿ��򥪡��С��饤�ɤ��뤳�Ȥˤ��
-   * �����񤤤��ѹ����뤳�Ȥ��侩����롣
+   * notify_connect(), notify_disconnect() については、サブクラスが提供・要求
+   * するインターフェースの種類に応じて、振る舞いを変更する必要が生ずる
+   * 可能性があるが、これらを直接オーバーライドすることは推奨されず、
+   * 後述の notify_connect(), notify_disconnect() の項においても述べられる通り
+   * これらの関数に関連した protected 関数をオーバーライドすることにより
+   * 振る舞いを変更することが推奨される。
    *
    * @since 0.4.0
    *
@@ -138,14 +138,14 @@ namespace RTC
   public:
     /*!
      * @if jp
-     * @brief ���󥹥ȥ饯��
+     * @brief コンストラクタ
      *
-     * PortBase �Υ��󥹥ȥ饯���� Port ̾ name ������˼��������Ԥ�
-     * ��Ʊ���ˡ���ʬ���Ȥ� CORBA Object �Ȥ��Ƴ������������Ȥ� PortProfile
-     * �� port_ref �˼��ȤΥ��֥������ȥ�ե���󥹤��Ǽ���롣
-     * ̾���ˤϡ�"." �ʳ���ʸ�������Ѥ��뤳�Ȥ��Ǥ��롣
+     * PortBase のコンストラクタは Port 名 name を引数に取り初期化を行う
+     * と同時に、自分自身を CORBA Object として活性化し、自身の PortProfile
+     * の port_ref に自身のオブジェクトリファレンスを格納する。
+     * 名前には、"." 以外の文字列を使用することができる。
      *
-     * @param name Port ��̾��(�ǥե������:"")
+     * @param name Port の名前(デフォルト値:"")
      *
      * @else
      *
@@ -166,10 +166,10 @@ namespace RTC
     /*!
      * @if jp
      *
-     * @brief �ǥ��ȥ饯��
+     * @brief デストラクタ
      *
-     * �ǥ��ȥ饯���Ǥϡ�PortService CORBA ���֥������Ȥ� deactivate ��
-     * �Ԥ���deactivate�˺ݤ����㳰���ꤲ�뤳�ȤϤʤ���
+     * デストラクタでは、PortService CORBA オブジェクトの deactivate を
+     * 行う。deactivateに際して例外を投げることはない。
      *
      * @else
      *
@@ -185,24 +185,24 @@ namespace RTC
     /*!
      * @if jp
      *
-     * @brief [CORBA interface] PortProfile���������
+     * @brief [CORBA interface] PortProfileを取得する
      *
-     * Port���ݻ�����PortProfile���֤������δؿ��� CORBA ���ڥ졼�����
-     * �Ǥ��ꡢCORBA �Υ��������§�˽������ƤӽФ�¦���֤����
-     * PortProfile ���֥������Ȥ���Τ�����Ǥ�����롣PortProfile ��¤��
-     * �ϰʲ��Υ��С�����ġ�
+     * Portが保持するPortProfileを返す。この関数は CORBA オペレーション
+     * であり、CORBA のメモリ管理規則に従い、呼び出し側は返される
+     * PortProfile オブジェクトを解体する責任がある。PortProfile 構造体
+     * は以下のメンバーを持つ。
      *
-     * - name              [string ��] Port ��̾����
-     * - interfaces        [PortInterfaceProfileList ��] Port ���ݻ�����
-     *                     PortInterfaceProfile �Υ�������
-     * - port_ref          [Port Object ��] Port ���ȤΥ��֥������ȥ�ե����
-     * - connector_profile [ConnectorProfileList ��] Port �������ݻ�����
-     *                     ConnectorProfile �Υ�������
-     * - owner             [RTObject Object ��] ���� Port ���ͭ����
-     *                     RTObject�Υ�ե����
-     * - properties        [NVList ��] ����¾�Υץ��ѥƥ���
+     * - name              [string 型] Port の名前。
+     * - interfaces        [PortInterfaceProfileList 型] Port が保持する
+     *                     PortInterfaceProfile のシーケンス
+     * - port_ref          [Port Object 型] Port 自身のオブジェクトリファレンス
+     * - connector_profile [ConnectorProfileList 型] Port が現在保持する
+     *                     ConnectorProfile のシーケンス
+     * - owner             [RTObject Object 型] この Port を所有する
+     *                     RTObjectのリファレンス
+     * - properties        [NVList 型] その他のプロパティ。
      *
-     * @post ���δؿ���ƤӽФ����Ȥˤ���������֤��ѹ�����뤳�ȤϤʤ���
+     * @post この関数を呼び出すことにより内部状態が変更されることはない。
      *
      * @return PortProfile
      *
@@ -239,12 +239,12 @@ namespace RTC
     /*!
      * @if jp
      *
-     * @brief PortProfile ��������롣
+     * @brief PortProfile を取得する。
      *
-     * ���δؿ��ϡ����֥��������������ݻ�����Ƥ��� PortProfile ��
-     * const ���Ȥ��֤� const �ؿ��Ǥ��롣
+     * この関数は、オブジェクト内部に保持されている PortProfile の
+     * const 参照を返す const 関数である。
      * 
-     * @post ���δؿ���ƤӽФ����Ȥˤ���������֤��ѹ�����뤳�ȤϤʤ���
+     * @post この関数を呼び出すことにより内部状態が変更されることはない。
      *
      * @return PortProfile
      *
@@ -266,27 +266,27 @@ namespace RTC
     /*!
      * @if jp
      *
-     * @brief [CORBA interface] ConnectorProfileList���������
+     * @brief [CORBA interface] ConnectorProfileListを取得する
      *
-     * Port���ݻ����� ConnectorProfile �� sequence ���֤������δؿ���
-     * CORBA ���ڥ졼�����Ǥ��ꡢCORBA �Υ��������§�˽������Ƥӽ�
-     * ��¦���֤���� ConnectorProfileList ���֥������Ȥ���Τ�����Ǥ��
-     * ���롣
+     * Portが保持する ConnectorProfile の sequence を返す。この関数は
+     * CORBA オペレーションであり、CORBA のメモリ管理規則に従い、呼び出
+     * し側は返される ConnectorProfileList オブジェクトを解体する責任が
+     * ある。
      *
-     * ConnectorProfile �� Port �֤���³�ץ��ե����������ݻ����빽¤�ΤǤ��ꡢ
-     * ��³����Port�֤Ǿ���򴹤�Ԥ�����Ϣ���뤹�٤Ƥ� Port ��Ʊ����ͤ�
-     * �ݻ�����롣
-     * ConnectorProfile �ϰʲ��Υ��С����ݻ����Ƥ��롣
+     * ConnectorProfile は Port 間の接続プロファイル情報を保持する構造体であり、
+     * 接続時にPort間で情報交換を行い、関連するすべての Port で同一の値が
+     * 保持される。
+     * ConnectorProfile は以下のメンバーを保持している。
      *
-     * - name         [string ��] ���Υ��ͥ�����̾����
-     * - connector_id [string ��] ��ˡ�����ID
-     * - ports        [Port sequnce] ���Υ��ͥ����˴�Ϣ���� Port �Υ��֥�������
-     *                ��ե���󥹤Υ������󥹡�
-     * - properties   [NVList ��] ����¾�Υץ��ѥƥ���
+     * - name         [string 型] このコネクタの名前。
+     * - connector_id [string 型] ユニークなID
+     * - ports        [Port sequnce] このコネクタに関連する Port のオブジェクト
+     *                リファレンスのシーケンス。
+     * - properties   [NVList 型] その他のプロパティ。
      *
-     * @post ���δؿ���ƤӽФ����Ȥˤ���������֤��ѹ�����뤳�ȤϤʤ���
+     * @post この関数を呼び出すことにより内部状態が変更されることはない。
      *
-     * @return ���� Port ���ݻ����� ConnectorProfile
+     * @return この Port が保持する ConnectorProfile
      *
      * @else
      *
@@ -321,21 +321,21 @@ namespace RTC
     /*!
      * @if jp
      *
-     * @brief [CORBA interface] ConnectorProfile ���������
+     * @brief [CORBA interface] ConnectorProfile を取得する
      *
-     * connector_id �ǻ��ꤵ�줿 ConnectorProfile ���֤������δؿ���
-     * CORBA ���ڥ졼�����Ǥ��ꡢCORBA �Υ��������§�˽������Ƥӽ�
-     * ��¦���֤���� ConnectorProfile ���֥������Ȥ���Τ�����Ǥ�����롣
+     * connector_id で指定された ConnectorProfile を返す。この関数は
+     * CORBA オペレーションであり、CORBA のメモリ管理規則に従い、呼び出
+     * し側は返される ConnectorProfile オブジェクトを解体する責任がある。
      *
-     * @pre ������Ϳ���� connector_id ��ͭ����ʸ����Ǥʤ���Фʤ�ʤ���
-     * ��ʸ������ꤷ����硢�ޤ��ϻ��ꤷ�� connector_id �����
-     * ConnectorProfile �����Ĥ���ʤ����ϡ����� ConnectorProfile ��
-     * �֤���
+     * @pre 引数に与える connector_id は有効な文字列でなければならない。
+     * 空文字を指定した場合、または指定した connector_id を持つ
+     * ConnectorProfile が見つからない場合は、空の ConnectorProfile を
+     * 返す。
      *
-     * @post ���δؿ���ƤӽФ����Ȥˤ���������֤��ѹ�����뤳�ȤϤʤ���
+     * @post この関数を呼び出すことにより内部状態が変更されることはない。
      *
-     * @param connector_id ConnectorProfile �� ID
-     * @return connector_id �ǻ��ꤵ�줿 ConnectorProfile
+     * @param connector_id ConnectorProfile の ID
+     * @return connector_id で指定された ConnectorProfile
      *
      * @else
      *
@@ -363,76 +363,76 @@ namespace RTC
     /*!
      * @if jp
      *
-     * @brief [CORBA interface] Port ����³��Ԥ�
+     * @brief [CORBA interface] Port の接続を行う
      *
-     * Ϳ����줿 ConnectoionProfile �ξ���˴�Ť���Port�֤���³���Ω
-     * ���롣���δؿ��ϼ�˥��ץꥱ�������ץ�������ġ��뤫��Ƥӽ�
-     * �����Ȥ�����Ȥ��Ƥ��롣
+     * 与えられた ConnectoionProfile の情報に基づき、Port間の接続を確立
+     * する。この関数は主にアプリケーションプログラムやツールから呼び出
+     * すことを前提としている。
      * 
-     * @pre ���ץꥱ�������ץ������ϡ�����ݡ��ͥ�ȴ֤�ʣ����
-     * Port ����³���뤿��ˡ�Ŭ�ڤ��ͤ򥻥åȤ��� ConnectorProfile ��
-     * connect() �ΰ����Ȥ���Ϳ���ƸƤӽФ��ʤ���Фʤ�ʤ���
+     * @pre アプリケーションプログラムは、コンポーネント間の複数の
+     * Port を接続するために、適切な値をセットした ConnectorProfile を
+     * connect() の引数として与えて呼び出さなければならない。
      *
-     * @pre connect() ��Ϳ���� ConnectorProfile �Υ��С��Τ�����
-     * name, ports, properties ���С����Ф��ƥǡ����򥻥åȤ��ʤ����
-     * �ʤ�ʤ���connector_id �ˤ��̾��ʸ�������ꤹ�뤫��Ŭ����UUID��
-     * ʸ��������ꤹ��ɬ�פ����롣
+     * @pre connect() に与える ConnectorProfile のメンバーのうち、
+     * name, ports, properties メンバーに対してデータをセットしなければ
+     * ならない。connector_id には通常空文字を設定するか、適当なUUIDを
+     * 文字列で設定する必要がある。
      *
-     * @pre ConnectorProfile::name ����³�ˤĤ���̾���� CORBA::string
-     * ���˳�Ǽ�Ǥ���Ǥ�դ�ʸ����Ǥ���ɬ�פ����롣
+     * @pre ConnectorProfile::name は接続につける名前で CORBA::string
+     * 型に格納できる任意の文字列である必要がある。
      * 
-     * @pre ConnectorProfile::connector_id �Ϥ��٤Ƥ���³���Ф��ư�դ�
-     * ID (�̾��UUID) ����Ǽ����롣UUID������� connect() �ؿ���ǹ�
-     * ����Τǡ��ƤӽФ�¦�϶�ʸ�������ꤹ�롣��¸����³��Ʊ��UUID��
-     * ���ꤷ connect() ��ƤӽФ������ˤ� PRECONDITION_NOT_MET ���顼
-     * ���֤���������������γ�ĥ�Ǵ�¸����³�ץ��ե�����򹹿����뤿��
-     * �˴�¸�� UUID �����ꤷ�ƸƤӽФ�����ˡ���Ѥ������ǽ�������롣
+     * @pre ConnectorProfile::connector_id はすべての接続に対して一意な
+     * ID (通常はUUID) が格納される。UUIDの設定は connect() 関数内で行
+     * われるので、呼び出し側は空文字を設定する。既存の接続と同じUUIDを
+     * 設定し connect() を呼び出した場合には PRECONDITION_NOT_MET エラー
+     * を返す。ただし、将来の拡張で既存の接続プロファイルを更新するため
+     * に既存の UUID を設定して呼び出す使用法が用いられる可能性がある。
      *
-     * @pre ConnectorProfile::ports �� RTC::PortService �Υ������󥹤ǡ�
-     * ��³���������̾�2�İʾ�Υݡ��ȤΥ��֥������Ȼ��Ȥ���������ɬ
-     * �פ����롣�㳰�Ȥ��ơ��ݡ��ȤΥ��֥������Ȼ��Ȥ�1�Ĥ�����Ǽ����
-     * connect()��ƤӽФ����Ȥǡ��ݡ��ȤΥ��󥿡��ե���������������
-     * ���ꡢ�ü�ʥݡ���(CORBA��RTC::PortService�ʳ������)���Ф�����
-     * ³��Ԥ����⤢�롣
+     * @pre ConnectorProfile::ports は RTC::PortService のシーケンスで、
+     * 接続を構成する通常2つ以上のポートのオブジェクト参照を代入する必
+     * 要がある。例外として、ポートのオブジェクト参照を1つだけ格納して
+     * connect()を呼び出すことで、ポートのインターフェース情報を取得し
+     * たり、特殊なポート(CORBAのRTC::PortService以外の相手)に対して接
+     * 続を行う場合もある。
      *
-     * @pre ConnectorProfile::properties �ϥݡ��Ȥ˴�Ϣ�դ���줿���󥿡�
-     * �ե��������Ф���ץ��ѥƥ���Ϳ���뤿��˻��Ѥ��롣�ץ��ѥƥ��ϡ�
-     * string ���򥭡���Any �����ͤȤ��Ƥ�ĥڥ��Υ������󥹤Ǥ��ꡢ��
-     * �ˤ�Ǥ�դ�CORBA�ǡ��������Ǽ�Ǥ��뤬����ǽ�ʸ¤� string ���Ȥ�
-     * �Ƴ�Ǽ����뤳�Ȥ��侩����롣
+     * @pre ConnectorProfile::properties はポートに関連付けられたインター
+     * フェースに対するプロパティを与えるために使用する。プロパティは、
+     * string 型をキー、Any 型を値としてもつペアのシーケンスであり、値
+     * には任意のCORBAデータ型を格納できるが、可能な限り string 型とし
+     * て格納されることが推奨される。
      *
-     * @pre �ʾ� connect() �ƤӽФ��������ꤹ�� ConnectorProfile �Υ��
-     * �Ф�ޤȤ��Ȱʲ��Τ褦�ˤʤ롣
+     * @pre 以上 connect() 呼び出し時に設定する ConnectorProfile のメン
+     * バをまとめると以下のようになる。
      *
-     * - ConnectorProfile::name: Ǥ�դ���³̾
-     * - ConnectorProfile::connector_id: ��ʸ��
-     * - ConnectorProfile::ports: 1�İʾ�Υݡ���
-     * - ConnectorProfile::properties: ���󥿡��ե��������Ф���ץ��ѥƥ�
+     * - ConnectorProfile::name: 任意の接続名
+     * - ConnectorProfile::connector_id: 空文字
+     * - ConnectorProfile::ports: 1つ以上のポート
+     * - ConnectorProfile::properties: インターフェースに対するプロパティ
      *
-     * @post connect() �ؿ��ϡ�ConnectorProfile::ports�˳�Ǽ���줿�ݡ�
-     * �ȥ������󥹤���Ƭ�Υݡ��Ȥ��Ф��� notify_connect() ��Ƥ֡�
+     * @post connect() 関数は、ConnectorProfile::portsに格納されたポー
+     * トシーケンスの先頭のポートに対して notify_connect() を呼ぶ。
      *
-     * @post notify_connect() �� ConnectorProfile::ports �˳�Ǽ���줿�ݡ�
-     * �Ƚ�� notify_connect() �򥫥������ɸƤӽФ����롣���Υ���������
-     * �ƤӽФ��ϡ������notify_connect() �ǥ��顼���ФƤ�ݡ��ȤΥ���
-     * �������Ȼ��Ȥ�ͭ���Ǥ���¤ꡢɬ�����٤ƤΥݡ��Ȥ��Ф��ƹԤ���
-     * ���Ȥ��ݾڤ���롣ͭ���Ǥʤ����֥������Ȼ��Ȥ������������¸��
-     * �����硢���Υݡ��Ȥ򥹥��åפ��ơ����Υݡ��Ȥ��Ф���
-     * notify_connect() ��ƤӽФ���
+     * @post notify_connect() は ConnectorProfile::ports に格納されたポー
+     * ト順に notify_connect() をカスケード呼び出しする。このカスケード
+     * 呼び出しは、途中のnotify_connect() でエラーが出てもポートのオブ
+     * ジェクト参照が有効である限り、必ずすべてのポートに対して行われる
+     * ことが保証される。有効でないオブジェクト参照がシーケンス中に存在
+     * する場合、そのポートをスキップして、次のポートに対して
+     * notify_connect() を呼び出す。
      *
-     * @post connect() �ؿ��ϡ�notify_connect()������ͤ�RTC_OK�Ǥ���С�
-     * RTC_OK ���֤������λ�������³�ϴ�λ���롣RTC_OK�ʳ�
-     * �ξ��ϡ�������³ID���Ф���disconnect()��ƤӽФ���³��������
-     * notify_connect() ���֤������顼�꥿���󥳡��ɤ򤽤Τޤ��֤���
+     * @post connect() 関数は、notify_connect()の戻り値がRTC_OKであれば、
+     * RTC_OK を返す。この時点で接続は完了する。RTC_OK以外
+     * の場合は、この接続IDに対してdisconnect()を呼び出し接続を解除し、
+     * notify_connect() が返したエラーリターンコードをそのまま返す。
      * 
-     * @post connect() �ΰ����Ȥ����Ϥ��� ConnectorProfile �ˤϡ�
-     * ConnectorProfile::connector_id ����ӡ�����Υݡ��Ȥ�
-     * publishInterfaces() �Ǹ��������ݡ��ȥ��󥿡��ե������γƼ����
-     * ��Ǽ����Ƥ��롣connect() ���������� notify_connect() ��
-     * ConnectorProfile::{name, ports} ���ѹ����뤳�ȤϤʤ���
+     * @post connect() の引数として渡した ConnectorProfile には、
+     * ConnectorProfile::connector_id および、途中のポートが
+     * publishInterfaces() で公開したポートインターフェースの各種情報が
+     * 格納されている。connect() および途中の notify_connect() が
+     * ConnectorProfile::{name, ports} を変更することはない。
      *  
      * @param connector_profile ConnectorProfile
-     * @return ReturnCode_t ���Υ꥿���󥳡���
+     * @return ReturnCode_t 型のリターンコード
      *
      * @else
      *
@@ -523,57 +523,57 @@ namespace RTC
     /*!
      * @if jp
      *
-     * @brief [CORBA interface] Port ����³���Τ�Ԥ�
+     * @brief [CORBA interface] Port の接続通知を行う
      *
-     * ���Υ��ڥ졼�����ϡ�Port�֤���³���Ԥ���ݤˡ�Port�֤�����Ū
-     * �˸ƤФ�륪�ڥ졼�����Ǥ��äơ��̾異�ץꥱ�������ץ������
-     * �䡢Port�ʳ���RTC��Ϣ���֥�������������ƤӽФ���뤳�Ȥ����ꤵ
-     * ��Ƥ��ʤ���
+     * このオペレーションは、Port間の接続が行われる際に、Port間で内部的
+     * に呼ばれるオペレーションであって、通常アプリケーションプログラム
+     * や、Port以外のRTC関連オブジェクト等から呼び出されることは想定さ
+     * れていない。
      *
-     * notify_connect() ���Τϥƥ�ץ졼�ȥ᥽�åɥѥ�����Ȥ��ơ�����
-     * ���饹�Ǽ�������뤳�Ȥ������ publishInterfaces(),
-     * subscribeInterfaces() ��2�Ĥδؿ��������ǸƤӽФ��������μ���
-     * �ʲ����̤�Ǥ��롣
+     * notify_connect() 自体はテンプレートメソッドパターンとして、サブ
+     * クラスで実装されることが前提の publishInterfaces(),
+     * subscribeInterfaces() の2つの関数を内部で呼び出す。処理の手順は
+     * 以下の通りである。
      *
-     * - publishInterfaces(): ���󥿡��ե���������θ���
-     * - connectNext(): ���� Port �� notify_connect() �θƤӽФ�
-     * - subscribeInterfaces(): ���󥿡��ե���������μ���
-     * - ��³�������¸
+     * - publishInterfaces(): インターフェース情報の公開
+     * - connectNext(): 次の Port の notify_connect() の呼び出し
+     * - subscribeInterfaces(): インターフェース情報の取得
+     * - 接続情報の保存
      *
-     * notify_connect() �� ConnectorProfile::ports �˳�Ǽ����Ƥ���
-     * Port �ν���˽��äơ����������ɾ��˸ƤӽФ���Ԥ����Ȥˤ�ꡢ��
-     * �󥿡��ե���������θ����ȼ������Ϣ�����٤ƤΥݡ��Ȥ��Ф��ƹԤ���
-     * ���Υ��������ɸƤӽФ�����������Ǥ���뤳�ȤϤʤ���ɬ��
-     * ConnectorProfile::ports �˳�Ǽ����Ƥ������ݡ��Ȥ��Ф��ƹԤ��롣
+     * notify_connect() は ConnectorProfile::ports に格納されている
+     * Port の順序に従って、カスケード状に呼び出しを行うことにより、イ
+     * ンターフェース情報の公開と取得を関連すすべてのポートに対して行う。
+     * このカスケード呼び出しは途中で中断されることはなく、必ず
+     * ConnectorProfile::ports に格納されている全ポートに対して行われる。
      *
-     * @pre notify_connect() �� ConnectorProfile::ports ��˳�Ǽ�����
-     * ���� Port ���ȥꥹ�ȤΤ��������� Port ���Ȥλ��Ȥμ��˳�Ǽ�����
-     * ���� Port ���Ф��� notify_connect() ��ƤӽФ����������ä�
-     * ConnectorProfile::ports �ˤ����� Port �λ��Ȥ���Ǽ����Ƥ���ɬ��
-     * �����롣�⤷�����Ȥλ��Ȥ���Ǽ����Ƥ��ʤ���硢����¾�ν����ˤ�
-     * �ꥨ�顼����񤭤���ʤ���С�BAD_PARAMETER ���顼���֤���롣
+     * @pre notify_connect() は ConnectorProfile::ports 内に格納されて
+     * いる Port 参照リストのうち、当該 Port 自身の参照の次に格納されて
+     * いる Port に対して notify_connect() を呼び出す。したがって
+     * ConnectorProfile::ports には当該 Port の参照が格納されている必要
+     * がある。もし、自身の参照が格納されていない場合、その他の処理によ
+     * りエラーが上書きされなければ、BAD_PARAMETER エラーが返される。
      *
-     * @pre �ƤӽФ����� ConnectorProfile::connector_id �ˤϰ�դ�ID��
-     * ���� UUID ���ݻ�����Ƥ���ɬ�פ����롣�̾� connector_id ��
-     * connect() �ؿ��ˤ��Ϳ����졢��ʸ���ξ���ư���̤����Ǥ��롣
+     * @pre 呼び出し時に ConnectorProfile::connector_id には一意なIDと
+     * して UUID が保持されている必要がある。通常 connector_id は
+     * connect() 関数により与えられ、空文字の場合は動作は未定義である。
      *
      * @post ConnectorProfile::name, ConnectorProfile::connector_id,
-     * ConnectorProfile::ports �� notify_connect() �θƤӽФ��ˤ��
-     * �񤭴������뤳�ȤϤʤ����ѤǤ��롣
+     * ConnectorProfile::ports は notify_connect() の呼び出しにより
+     * 書き換えられることはなく不変である。
      *
-     * @post ConnectorProfile::properties �� notify_connect() �������ǡ�
-     * ���� Port �����ĥ����ӥ����󥿡��ե������˴ؤ�������¾�� Port
-     * �������뤿��ˡ��ץ��ѥƥ����󤬽񤭹��ޤ�롣
+     * @post ConnectorProfile::properties は notify_connect() の内部で、
+     * 当該 Port が持つサービスインターフェースに関する情報を他の Port
+     * に伝えるために、プロパティ情報が書き込まれる。
      *
-     * @post �ʤ���ConnectorProfile::ports �Υꥹ�Ȥκǽ� Port ��
-     * notify_connet() ����λ���������Ǥϡ����٤Ƥδ�Ϣ���� Port ��
-     * notify_connect() �θƤӽФ�����λ���롣publishInterfaces(),
-     * connectNext(), subscribeInterfaces() �������³�������¸�Τ���
-     * �줫���ʳ��ǥ��顼��ȯ���������Ǥ⡢���顼�����ɤ�����Ū���ݻ�
-     * ����Ƥ��ꡢ�ǽ�����������顼�Υ��顼�����ɤ��֤���롣
+     * @post なお、ConnectorProfile::ports のリストの最初 Port の
+     * notify_connet() が終了した時点では、すべての関連する Port の
+     * notify_connect() の呼び出しが完了する。publishInterfaces(),
+     * connectNext(), subscribeInterfaces() および接続情報の保存のいず
+     * れかの段階でエラーが発生した場合でも、エラーコードは内部的に保持
+     * されており、最初に生じたエラーのエラーコードが返される。
      *
      * @param connector_profile ConnectorProfile
-     * @return ReturnCode_t ���Υ꥿���󥳡���
+     * @return ReturnCode_t 型のリターンコード
      *
      * @else
      *
@@ -641,33 +641,33 @@ namespace RTC
     /*!
      * @if jp
      *
-     * @brief [CORBA interface] Port ����³��������
+     * @brief [CORBA interface] Port の接続を解除する
      *
-     * ���Υ��ڥ졼������Ϳ����줿 connector_id ���б�������³����
-     * ���롣connector_id ���̾�����ƥ����Τˤ����ư�դ� UUID ��ʸ
-     * ����Ǥ��ꡢ������ connect()/notify_connect() �θƤӽФ��ˤ���
-     * Ω���줿��³�ץ��ե����� ConnectorProfile::connector_id ���б���
-     * �롣
+     * このオペレーションは与えられた connector_id に対応する接続を解除
+     * する。connector_id は通常、システム全体において一意な UUID の文
+     * 字列であり、事前に connect()/notify_connect() の呼び出しにより確
+     * 立された接続プロファイル ConnectorProfile::connector_id に対応す
+     * る。
      *
-     * @pre connector_id �� Port ���ݻ����� ConnectorProfile �ξ��ʤ���
-     * ���Ĥ� ID �˰��פ���ʸ����Ǥʤ���Фʤ�ʤ������� Port ������
-     * ConnectorProfile �Υꥹ����� connector_id ��Ʊ��� ID �����
-     * ConnectorProfile ��¸�ߤ��ʤ���Ф��δؿ��� BAD_PARAMETER ���顼
-     * ���֤���
+     * @pre connector_id は Port が保持する ConnectorProfile の少なくと
+     * も一つの ID に一致する文字列でなければならない。当該 Port が持つ
+     * ConnectorProfile のリスト内に connector_id と同一の ID を持つ
+     * ConnectorProfile が存在しなければこの関数は BAD_PARAMETER エラー
+     * を返す。
      *
-     * @pre connector_id ��Ʊ�� ID ����� ConnectorProfile::ports �ˤ�
-     * ͭ���� Port �λ��Ȥ��ޤޤ�Ƥ��ʤ���Фʤ�ʤ���
+     * @pre connector_id と同じ ID を持つ ConnectorProfile::ports には
+     * 有効な Port の参照が含まれていなければならない。
      *
-     * @post disconnect() �ؿ��ϡ�ConnectorProfile::ports �� Port �λ�
-     * �ȥꥹ�Ȥ���Ƭ���Ф��ơ�notify_disconnect() ��ƤӽФ������Ȥ�̵
-     * ���Ǥ���ʤɡ�notify_disconnect() �θƤӽФ��˼��Ԥ������ˤϡ�
-     * ���ȥꥹ�Ȥ���Ƭ������֤���������ޤ� notify_disconnect() �θ�
-     * �ӽФ�����notify_disconnect() �θƤӽФ��˰�ĤǤ���������С�
-     * notify_disconnect() ���ֵ��ͤ򤽤Τޤ��֤�����Ĥ��������ʤ��ä�
-     * ���ˤ� RTC_ERROR ���顼���֤���
+     * @post disconnect() 関数は、ConnectorProfile::ports の Port の参
+     * 照リストの先頭に対して、notify_disconnect() を呼び出す。参照が無
+     * 効であるなど、notify_disconnect() の呼び出しに失敗した場合には、
+     * 参照リストの先頭から順番に成功するまで notify_disconnect() の呼
+     * び出しを試す。notify_disconnect() の呼び出しに一つでも成功すれば、
+     * notify_disconnect() の返却値をそのまま返し、一つも成功しなかった
+     * 場合には RTC_ERROR エラーを返す。
      * 
-     * @param connector_id ConnectorProfile �� ID
-     * @return ReturnCode_t ���Υ꥿���󥳡���
+     * @param connector_id ConnectorProfile の ID
+     * @return ReturnCode_t 型のリターンコード
      *
      * @else
      *
@@ -709,45 +709,45 @@ namespace RTC
     /*!
      * @if jp
      *
-     * @brief [CORBA interface] Port ����³������Τ�Ԥ�
+     * @brief [CORBA interface] Port の接続解除通知を行う
      *
-     * ���Υ��ڥ졼�����ϡ�Port�֤���³������Ԥ���ݤˡ�Port�֤���
-     * ��Ū�˸ƤФ�륪�ڥ졼�����Ǥ��ꡢ�̾異�ץꥱ�������ץ�����
-     * ��䡢 Port �ʳ��� RTC ��Ϣ���֥�������������ƤӽФ���뤳�Ȥ�
-     * ���ꤵ��Ƥ��ʤ���
+     * このオペレーションは、Port間の接続解除が行われる際に、Port間で内
+     * 部的に呼ばれるオペレーションであり、通常アプリケーションプログラ
+     * ムや、 Port 以外の RTC 関連オブジェクト等から呼び出されることは
+     * 想定されていない。
      *
-     * notify_disconnect() ���Τϥƥ�ץ졼�ȥ᥽�åɥѥ�����Ȥ��ơ���
-     * �֥��饹�Ǽ�������뤳�Ȥ������ unsubscribeInterfaces() �ؿ���
-     * �����ǸƤӽФ��������μ��ϰʲ����̤�Ǥ��롣
+     * notify_disconnect() 自体はテンプレートメソッドパターンとして、サ
+     * ブクラスで実装されることが前提の unsubscribeInterfaces() 関数を
+     * 内部で呼び出す。処理の手順は以下の通りである。
      *
-     * - ConnectorProfile �θ���
-     * - ���� Port �� notify_disconnect() �ƤӽФ�
+     * - ConnectorProfile の検索
+     * - 次の Port の notify_disconnect() 呼び出し
      * - unsubscribeInterfaces()
-     * - ConnectorProfile �κ��
+     * - ConnectorProfile の削除
      *
-     * notify_disconnect() �� ConnectorProfile::ports �˳�Ǽ����Ƥ���
-     * Port �ν���˽��äơ����������ɾ��˸ƤӽФ���Ԥ����Ȥˤ�ꡢ��
-     * ³�β���򤹤٤Ƥ� Port �����Τ��롣
+     * notify_disconnect() は ConnectorProfile::ports に格納されている
+     * Port の順序に従って、カスケード状に呼び出しを行うことにより、接
+     * 続の解除をすべての Port に通知する。
      *
-     * @pre Port ��Ϳ����줿 connector_id ���б����� ConnectorProfile
-     * ���ݻ����Ƥ��ʤ���Фʤ�ʤ���
+     * @pre Port は与えられた connector_id に対応する ConnectorProfile
+     * を保持していなければならない。
      *
-     * @post connector_id ���б����� ConnectorProfile �����Ĥ���ʤ���
-     * ���BAD_PARAMETER ���顼���֤���
+     * @post connector_id に対応する ConnectorProfile が見つからない場
+     * 合はBAD_PARAMETER エラーを返す。
      *
-     * @post ���������ɸƤӽФ���Ԥ��ݤˤ� ConnectorProfile::ports ��
-     * �ݻ�����Ƥ��� Port �λ��ȥꥹ�ȤΤ��������Ȥλ��Ȥμ��λ��Ȥ���
-     * ���� notify_disconnect() ��ƤӽФ��������θƤӽФ����㳰��ȯ��
-     * �������ˤϡ��ƤӽФ��򥹥��åפ��ꥹ�Ȥμ��λ��Ȥ��Ф���
-     * notify_disconnect() ��ƤӽФ�����Ĥ�ƤӽФ����������ʤ���硢
-     * RTC_ERROR ���顼�����ɤ��֤���
+     * @post カスケード呼び出しを行う際には ConnectorProfile::ports に
+     * 保持されている Port の参照リストのうち、自身の参照の次の参照に対
+     * して notify_disconnect() を呼び出すが、その呼び出しで例外が発生
+     * した場合には、呼び出しをスキップしリストの次の参照に対して
+     * notify_disconnect() を呼び出す。一つも呼び出しに成功しない場合、
+     * RTC_ERROR エラーコードを返す。
      *
-     * @post �ʤ���ConnectorProfile::ports �Υꥹ�Ȥκǽ� Port ��
-     * notify_disconnet() ����λ���������Ǥϡ����٤Ƥδ�Ϣ���� Port ��
-     * notify_disconnect() �θƤӽФ�����λ���롣
+     * @post なお、ConnectorProfile::ports のリストの最初 Port の
+     * notify_disconnet() が終了した時点では、すべての関連する Port の
+     * notify_disconnect() の呼び出しが完了する。
      * 
-     * @param connector_id ConnectorProfile �� ID
-     * @return ReturnCode_t ���Υ꥿���󥳡���
+     * @param connector_id ConnectorProfile の ID
+     * @return ReturnCode_t 型のリターンコード
      *
      * @else
      *
@@ -800,11 +800,11 @@ namespace RTC
     /*!
      * @if jp
      *
-     * @brief [CORBA interface] Port ������³��������
+     * @brief [CORBA interface] Port の全接続を解除する
      *
-     * ���Υ��ڥ졼�����Ϥ��� Port �˴�Ϣ�������Ƥ���³�������롣
+     * このオペレーションはこの Port に関連した全ての接続を解除する。
      *
-     * @return ReturnCode_t ���Υ꥿���󥳡���
+     * @return ReturnCode_t 型のリターンコード
      *
      * @else
      *
@@ -825,9 +825,9 @@ namespace RTC
     /*!
      * @if jp
      *
-     * @brief Port �����ƤΥ��󥿡��ե������� activates ����
+     * @brief Port の全てのインターフェースを activates する
      *
-     * Port ����Ͽ����Ƥ������ƤΥ��󥿡��ե������� activate ���롣
+     * Port に登録されている全てのインターフェースを activate する。
      *
      * @else
      *
@@ -843,9 +843,9 @@ namespace RTC
     /*!
      * @if jp
      *
-     * @brief ���Ƥ� Port �Υ��󥿡��ե������� deactivates ����
+     * @brief 全ての Port のインターフェースを deactivates する
      *
-     * Port ����Ͽ����Ƥ������ƤΥ��󥿡��ե������� deactivate ���롣
+     * Port に登録されている全てのインターフェースを deactivate する。
      *
      * @else
      *
@@ -860,12 +860,12 @@ namespace RTC
 
     /*!
      * @if jp
-     * @brief Port ��̾�������ꤹ��
+     * @brief Port の名前を設定する
      *
-     * Port ��̾�������ꤹ�롣����̾���� Port ���ݻ����� PortProfile.name
-     * ��ȿ�Ǥ���롣
+     * Port の名前を設定する。この名前は Port が保持する PortProfile.name
+     * に反映される。
      *
-     * @param name Port ��̾��
+     * @param name Port の名前
      *
      * @else
      * @brief Set the name of this Port
@@ -881,11 +881,11 @@ namespace RTC
 
      /*!
      * @if jp
-     * @brief Port ��̾�����������
+     * @brief Port の名前を取得する
      *
-     * Port ��̾����������롣
+     * Port の名前を取得する。
      *
-     * @return Port ��̾��
+     * @return Port の名前
      *
      * @else
      * @brief Get the name of this Port
@@ -900,11 +900,11 @@ namespace RTC
 
     /*!
      * @if jp
-     * @brief PortProfile���������
+     * @brief PortProfileを取得する
      *
-     * Port���ݻ����� PortProfile �� const ���Ȥ��֤���
+     * Portが保持する PortProfile の const 参照を返す。
      *
-     * @return ���� Port �� PortProfile
+     * @return この Port の PortProfile
      *
      * @else
      * @brief Get the PortProfile of the Port
@@ -920,12 +920,12 @@ namespace RTC
     /*!
      * @if jp
      *
-     * @brief Port �Υ��֥������Ȼ��Ȥ����ꤹ��
+     * @brief Port のオブジェクト参照を設定する
      *
-     * ���Υ��ڥ졼������ Port �� PortProfile �ˤ��� Port ���Ȥ�
-     * ���֥������Ȼ��Ȥ����ꤹ�롣
+     * このオペレーションは Port の PortProfile にこの Port 自身の
+     * オブジェクト参照を設定する。
      *
-     * @param port_ref ���� Port �Υ��֥������Ȼ���
+     * @param port_ref この Port のオブジェクト参照
      *
      * @else
      *
@@ -943,12 +943,12 @@ namespace RTC
     /*!
      * @if jp
      *
-     * @brief Port �Υ��֥������Ȼ��Ȥ��������
+     * @brief Port のオブジェクト参照を取得する
      *
-     * ���Υ��ڥ졼������ Port �� PortProfile ���ݻ����Ƥ���
-     * ���� Port ���ȤΥ��֥������Ȼ��Ȥ�������롣
+     * このオペレーションは Port の PortProfile が保持している
+     * この Port 自身のオブジェクト参照を取得する。
      *
-     * @return ���� Port �Υ��֥������Ȼ���
+     * @return この Port のオブジェクト参照
      *
      * @else
      *
@@ -966,11 +966,11 @@ namespace RTC
     /*!
      * @if jp
      *
-     * @brief Port �� owner �� RTObject ����ꤹ��
+     * @brief Port の owner の RTObject を指定する
      *
-     * ���Υ��ڥ졼������ Port �� PortProfile.owner �����ꤹ�롣
+     * このオペレーションは Port の PortProfile.owner を設定する。
      *
-     * @param owner ���� Port ���ͭ���� RTObject �λ���
+     * @param owner この Port を所有する RTObject の参照
      *
      * @else
      *
@@ -990,23 +990,23 @@ namespace RTC
     /*!
      * @if jp
      *
-     * @brief ���󥿡��ե��������������ݤ˸ƤФ�륳����Хå��򥻥åȤ���
+     * @brief インターフェースを公開する際に呼ばれるコールバックをセットする
      *
-     * ���Υ��ڥ졼�����ϡ����Υݡ��Ȥ���³���ˡ��ݡ��ȼ��Ȥ����ĥ���
-     * �ӥ����󥿡��ե����������������륿���ߥ󥰤ǸƤФ�륳����Х�
-     * ���ե��󥯥��򥻥åȤ��롣
+     * このオペレーションは、このポートが接続時に、ポート自身が持つサー
+     * ビスインターフェース情報を公開するタイミングで呼ばれるコールバッ
+     * クファンクタをセットする。
      *
-     * ������Хå��ե��󥯥��ν�ͭ���ϡ��ƤӽФ�¦�ˤ��ꡢ���֥�������
-     * ��ɬ�פʤ��ʤä����˲��Τ���ΤϸƤӽФ�¦����Ǥ�Ǥ��롣
+     * コールバックファンクタの所有権は、呼び出し側にあり、オブジェクト
+     * が必要なくなった時に解体するのは呼び出し側の責任である。
      *
-     * ���Υ�����Хå��ե��󥯥��ϡ�PortBase���饹�β��۴ؿ��Ǥ���
-     * publishInterfaces() ���ƤФ줿���Ȥˡ�Ʊ������ ConnectorProfile ��
-     * �Ȥ�˸ƤӽФ���롣���Υ�����Хå������Ѥ��ơ�
-     * publishInterfaces() ���������� ConnectorProfile ���ѹ����뤳�Ȥ���
-     * ǽ�Ǥ��뤬����³�ط���������򾷤��ʤ��褦��ConnectorProfile ��
-     * �ѹ��ˤ����դ��פ��롣
+     * このコールバックファンクタは、PortBaseクラスの仮想関数である
+     * publishInterfaces() が呼ばれたあとに、同じ引数 ConnectorProfile と
+     * ともに呼び出される。このコールバックを利用して、
+     * publishInterfaces() が公開した ConnectorProfile を変更することが可
+     * 能であるが、接続関係の不整合を招かないよう、ConnectorProfile の
+     * 変更には注意を要する。
      *
-     * @param on_publish ConnectionCallback �Υ��֥��饹���֥������ȤΥݥ���
+     * @param on_publish ConnectionCallback のサブクラスオブジェクトのポインタ
      *
      * @else
      *
@@ -1036,23 +1036,23 @@ namespace RTC
     /*!
      * @if jp
      *
-     * @brief ���󥿡��ե��������������ݤ˸ƤФ�륳����Хå��򥻥åȤ���
+     * @brief インターフェースを取得する際に呼ばれるコールバックをセットする
      *
-     * ���Υ��ڥ졼�����ϡ����Υݡ��Ȥ���³���ˡ����Υݡ��Ȥ����ĥ���
-     * �ӥ����󥿡��ե����������������륿���ߥ󥰤ǸƤФ�륳����Х�
-     * ���ե��󥯥��򥻥åȤ��롣
+     * このオペレーションは、このポートが接続時に、相手のポートが持つサー
+     * ビスインターフェース情報を取得するタイミングで呼ばれるコールバッ
+     * クファンクタをセットする。
      *
-     * ������Хå��ե��󥯥��ν�ͭ���ϡ��ƤӽФ�¦�ˤ��ꡢ���֥�������
-     * ��ɬ�פʤ��ʤä����˲��Τ���ΤϸƤӽФ�¦����Ǥ�Ǥ��롣
+     * コールバックファンクタの所有権は、呼び出し側にあり、オブジェクト
+     * が必要なくなった時に解体するのは呼び出し側の責任である。
      *
-     * ���Υ�����Хå��ե��󥯥��ϡ�PortBase���饹�β��۴ؿ��Ǥ���
-     * subscribeInterfaces() ���ƤФ�����ˡ�Ʊ������ ConnectorProfile ��
-     * �Ȥ�˸ƤӽФ���롣���Υ�����Хå������Ѥ��ơ�
-     * subscribeInterfaces() ��Ϳ���� ConnectorProfile ���ѹ����뤳�Ȥ���
-     * ǽ�Ǥ��뤬����³�ط���������򾷤��ʤ��褦��ConnectorProfile ��
-     * �ѹ��ˤ����դ��פ��롣
+     * このコールバックファンクタは、PortBaseクラスの仮想関数である
+     * subscribeInterfaces() が呼ばれる前に、同じ引数 ConnectorProfile と
+     * ともに呼び出される。このコールバックを利用して、
+     * subscribeInterfaces() に与える ConnectorProfile を変更することが可
+     * 能であるが、接続関係の不整合を招かないよう、ConnectorProfile の
+     * 変更には注意を要する。
      *
-     * @param on_subscribe ConnectionCallback �Υ��֥��饹���֥������ȤΥݥ���
+     * @param on_subscribe ConnectionCallback のサブクラスオブジェクトのポインタ
      *
      * @else
      *
@@ -1082,27 +1082,27 @@ namespace RTC
     /*!
      * @if jp
      *
-     * @brief ��³��λ���˸ƤФ�륳����Хå��򥻥åȤ���
+     * @brief 接続完了時に呼ばれるコールバックをセットする
      *
-     * ���Υ��ڥ졼�����ϡ����Υݡ��Ȥ���³��λ���˸ƤФ�롢������Х�
-     * ���ե��󥯥��򥻥åȤ��롣
+     * このオペレーションは、このポートが接続完了時に呼ばれる、コールバッ
+     * クファンクタをセットする。
      *
-     * ������Хå��ե��󥯥��ν�ͭ���ϡ��ƤӽФ�¦�ˤ��ꡢ���֥�������
-     * ��ɬ�פʤ��ʤä����˲��Τ���ΤϸƤӽФ�¦����Ǥ�Ǥ��롣
+     * コールバックファンクタの所有権は、呼び出し側にあり、オブジェクト
+     * が必要なくなった時に解体するのは呼び出し側の責任である。
      *
-     * ���Υ�����Хå��ե��󥯥��ϡ��ݡ��Ȥ���³�¹Դؿ��Ǥ���
-     * notify_connect() �ν�λľ���ˡ���³���������ｪλ����ݤ˸¤ä�
-     * �ƤӽФ���륳����Хå��Ǥ��롣��³�����β����ǥ��顼��ȯ������
-     * ���ˤϸƤӽФ���ʤ���
+     * このコールバックファンクタは、ポートの接続実行関数である
+     * notify_connect() の終了直前に、接続処理が正常終了する際に限って
+     * 呼び出されるコールバックである。接続処理の過程でエラーが発生した
+     * 場合には呼び出されない。
      * 
-     * ���Υ�����Хå��ե��󥯥��� notify_connect() �� out �ѥ�᡼��
-     * �Ȥ����֤��Τ�Ʊ������ ConnectorProfile �ȤȤ�˸ƤӽФ����Τǡ�
-     * ������³�ˤ����Ƹ������줿���٤ƤΥ��󥿡��ե�������������뤳��
-     * ���Ǥ��롣���Υ�����Хå������Ѥ��ơ�notify_connect() ���֤�
-     * ConnectorProfile ���ѹ����뤳�Ȥ���ǽ�Ǥ��뤬����³�ط���������
-     * �򾷤��ʤ��褦��ConnectorProfile ���ѹ��ˤ����դ��פ��롣
+     * このコールバックファンクタは notify_connect() が out パラメータ
+     * として返すのと同じ引数 ConnectorProfile とともに呼び出されるので、
+     * この接続において公開されたすべてのインターフェース情報を得ること
+     * ができる。このコールバックを利用して、notify_connect() が返す
+     * ConnectorProfile を変更することが可能であるが、接続関係の不整合
+     * を招かないよう、ConnectorProfile の変更には注意を要する。
      *
-     * @param on_subscribe ConnectionCallback �Υ��֥��饹���֥������ȤΥݥ���
+     * @param on_subscribe ConnectionCallback のサブクラスオブジェクトのポインタ
      *
      * @else
      *
@@ -1135,24 +1135,24 @@ namespace RTC
     /*!
      * @if jp
      *
-     * @brief ���󥿡��ե��������������ݤ˸ƤФ�륳����Хå��򥻥åȤ���
+     * @brief インターフェースを解放する際に呼ばれるコールバックをセットする
      *
-     * ���Υ��ڥ졼�����ϡ����Υݡ��Ȥ���³���ˡ����Υݡ��Ȥ����ĥ���
-     * �ӥ����󥿡��ե����������������륿���ߥ󥰤ǸƤФ�륳����Х�
-     * ���ե��󥯥��򥻥åȤ��롣
+     * このオペレーションは、このポートが接続時に、相手のポートが持つサー
+     * ビスインターフェース情報を解放するタイミングで呼ばれるコールバッ
+     * クファンクタをセットする。
      *
-     * ������Хå��ե��󥯥��ν�ͭ���ϡ��ƤӽФ�¦�ˤ��ꡢ���֥�������
-     * ��ɬ�פʤ��ʤä����˲��Τ���ΤϸƤӽФ�¦����Ǥ�Ǥ��롣
+     * コールバックファンクタの所有権は、呼び出し側にあり、オブジェクト
+     * が必要なくなった時に解体するのは呼び出し側の責任である。
      *
-     * ���Υ�����Хå��ե��󥯥��ϡ�PortBase���饹�β��۴ؿ��Ǥ���
-     * unsubscribeInterfaces() ���ƤФ�����ˡ�Ʊ������ ConnectorProfile ��
-     * �Ȥ�˸ƤӽФ���롣���Υ�����Хå������Ѥ��ơ�
-     * unsubscribeInterfaces() ��Ϳ���� ConnectorProfile ���ѹ����뤳�Ȥ���
-     * ǽ�Ǥ��뤬����³�ط���������򾷤��ʤ��褦��ConnectorProfile ��
-     * �ѹ��ˤ����դ��פ��롣
+     * このコールバックファンクタは、PortBaseクラスの仮想関数である
+     * unsubscribeInterfaces() が呼ばれる前に、同じ引数 ConnectorProfile と
+     * ともに呼び出される。このコールバックを利用して、
+     * unsubscribeInterfaces() に与える ConnectorProfile を変更することが可
+     * 能であるが、接続関係の不整合を招かないよう、ConnectorProfile の
+     * 変更には注意を要する。
      *
-     * @param on_unsubscribe ConnectionCallback �Υ��֥��饹���֥�����
-     * �ȤΥݥ���
+     * @param on_unsubscribe ConnectionCallback のサブクラスオブジェク
+     * トのポインタ
      *
      * @else
      *
@@ -1182,23 +1182,23 @@ namespace RTC
     /*!
      * @if jp
      *
-     * @brief ��³����˸ƤФ�륳����Хå��򥻥åȤ���
+     * @brief 接続解除に呼ばれるコールバックをセットする
      *
-     * ���Υ��ڥ졼�����ϡ����Υݡ��Ȥ���³������˸ƤФ�롢������Х�
-     * ���ե��󥯥��򥻥åȤ��롣
+     * このオペレーションは、このポートの接続解除時に呼ばれる、コールバッ
+     * クファンクタをセットする。
      *
-     * ������Хå��ե��󥯥��ν�ͭ���ϡ��ƤӽФ�¦�ˤ��ꡢ���֥�������
-     * ��ɬ�פʤ��ʤä����˲��Τ���ΤϸƤӽФ�¦����Ǥ�Ǥ��롣
+     * コールバックファンクタの所有権は、呼び出し側にあり、オブジェクト
+     * が必要なくなった時に解体するのは呼び出し側の責任である。
      *
-     * ���Υ�����Хå��ե��󥯥��ϡ��ݡ��Ȥ���³����¹Դؿ��Ǥ���
-     * notify_disconnect() �ν�λľ���ˡ��ƤӽФ���륳����Хå��Ǥ��롣
+     * このコールバックファンクタは、ポートの接続解除実行関数である
+     * notify_disconnect() の終了直前に、呼び出されるコールバックである。
      * 
-     * ���Υ�����Хå��ե��󥯥�����³���б����� ConnectorProfile �Ȥ�
-     * ��˸ƤӽФ���롣���� ConnectorProfile �Ϥ��Υե��󥯥��ƽФ���
-     * ���˴������Τǡ��ѹ����ۤ��˱ƶ���Ϳ���뤳�ȤϤʤ���
+     * このコールバックファンクタは接続に対応する ConnectorProfile とと
+     * もに呼び出される。この ConnectorProfile はこのファンクタ呼出し後
+     * に破棄されるので、変更がほかに影響を与えることはない。
      *
-     * @param on_disconnected ConnectionCallback �Υ��֥��饹���֥�����
-     * �ȤΥݥ���
+     * @param on_disconnected ConnectionCallback のサブクラスオブジェク
+     * トのポインタ
      *
      * @else
      *
@@ -1226,17 +1226,17 @@ namespace RTC
 
     /*!
      * @if jp
-     * @brief �ݡ��Ȥ���³�������Ȥ������˸ƤӽФ���륳����Хå��򥻥åȤ���
+     * @brief ポートの接続がロストした場合に呼び出されるコールバックをセットする
      *
-     * ���Υ��ڥ졼�����ϡ����Υݡ��Ȥ���³�������Ȥ������˸ƤФ�롢
-     * ������Хå��ե��󥯥��򥻥åȤ��롣
+     * このオペレーションは、このポートの接続がロストした場合に呼ばれる、
+     * コールバックファンクタをセットする。
      *
-     * InPort�ϡ����¦OutPort�Ȥ�
-     * ��³������Ȥ�����硢��³����Ū�����Ǥ���Τǡ�
-     * ����³�� OnDisconnect ������Хå����ƤӽФ���롣
+     * InPortは、相手側OutPortとの
+     * 接続をロストした場合、接続を強制的に切断するので、
+     * 引き続き OnDisconnect コールバックが呼び出される。
      *
-     * @param on_connection_lost ConnectionCallback �Υ��֥��饹���֥�����
-     * �ȤΥݥ���
+     * @param on_connection_lost ConnectionCallback のサブクラスオブジェク
+     * トのポインタ
      *
      * @else
      * @brief Setting callback called on connection lost
@@ -1252,13 +1252,13 @@ namespace RTC
 
     /*!
      * @if jp
-     * @brief PortConnectListeners �Υۥ���򥻥åȤ���
+     * @brief PortConnectListeners のホルダをセットする
      *
-     * �ݡ��Ȥ���³�˴ؤ���ꥹ�ʷ����ݻ�����ۥ�����饹�ؤΥݥ��󥿤�
-     * ���åȤ��롣���δؿ����̾�Ƥ�RTObject����ƤФ졢RTObject������
-     * �ۥ�����饹�ؤΥݥ��󥿤����åȤ���롣
+     * ポートの接続に関するリスナ群を保持するホルダクラスへのポインタを
+     * セットする。この関数は通常親のRTObjectから呼ばれ、RTObjectが持つ
+     * ホルダクラスへのポインタがセットされる。
      *
-     * @param portconnListeners PortConnectListeners ���֥������ȤΥݥ���
+     * @param portconnListeners PortConnectListeners オブジェクトのポインタ
      *
      * @else
      * @brief Setting PortConnectListener holder
@@ -1278,36 +1278,36 @@ namespace RTC
   protected:
     /*! @if jp
      *
-     * @brief Interface ������������
+     * @brief Interface 情報を公開する
      *
-     * ���Υ��ڥ졼�����ϡ�notify_connect() �����������󥹤λϤ�˥�����
-     * ������貾�۴ؿ��Ǥ��롣
-     * notify_connect() �Ǥϡ�
+     * このオペレーションは、notify_connect() 処理シーケンスの始めにコール
+     * される純粋仮想関数である。
+     * notify_connect() では、
      *
      * - publishInterfaces()
      * - connectNext()
      * - subscribeInterfaces()
      * - updateConnectorProfile()
      *
-     * �ν�� protected �ؿ��������뤵����³�������Ԥ��롣
+     * の順に protected 関数がコールされ接続処理が行われる。
      * <br>
-     * ��� Port �ǤϤ��Υ��ڥ졼�����򥪡��С��饤�ɤ��������Ȥ���
-     * Ϳ����줿 ConnectorProfile �˽���������Ԥ����ѥ�᡼������Ŭ��
-     * �Ǥ���С�RteurnCode_t ���Υ��顼�����ɤ��֤���
-     * �̾� publishInterafaces() ��ˤ����Ƥϡ����� Port ��°����
-     * ���󥿡��ե������˴ؤ������� ConnectorProfile ���Ф���Ŭ�ڤ����ꤷ
-     * ¾�� Port �����Τ��ʤ���Фʤ�ʤ���
+     * 具象 Port ではこのオペレーションをオーバーライドし、引数として
+     * 与えられた ConnectorProfile に従い処理を行い、パラメータが不適切
+     * であれば、RteurnCode_t 型のエラーコードを返す。
+     * 通常 publishInterafaces() 内においては、この Port に属する
+     * インターフェースに関する情報を ConnectorProfile に対して適切に設定し
+     * 他の Port に通知しなければならない。
      * <br>
-     * �ޤ������δؿ��������뤵����ʳ��Ǥϡ�¾�� Port �� Interface �˴ؤ���
-     * ����Ϥ��٤ƴޤޤ�Ƥ��ʤ��Τǡ�¾�� Port �� Interface ������������
-     * �� subscribeInterfaces() ��ǹԤ���٤��Ǥ��롣
+     * また、この関数がコールされる段階では、他の Port の Interface に関する
+     * 情報はすべて含まれていないので、他の Port の Interface を取得する処理
+     * は subscribeInterfaces() 内で行われるべきである。
      * <br>
-     * ���Υ��ڥ졼�����ϡ������� connector_id ���Ф��Ƥ���³��������
-     * ��¸�� connector_id ���Ф��ƤϹ�����Ŭ�ڤ˹Ԥ���ɬ�פ����롣
+     * このオペレーションは、新規の connector_id に対しては接続の生成、
+     * 既存の connector_id に対しては更新が適切に行われる必要がある。
      *
-     * @param connector_profile ��³�˴ؤ���ץ��ե��������
+     * @param connector_profile 接続に関するプロファイル情報
      *
-     * @return ReturnCode_t ���Υ꥿���󥳡���
+     * @return ReturnCode_t 型のリターンコード
      *
      * @else
      *
@@ -1348,15 +1348,15 @@ namespace RTC
     /*!
      * @if jp
      *
-     * @brief ���� Port ���Ф��� notify_connect() �򥳡��뤹��
+     * @brief 次の Port に対して notify_connect() をコールする
      *
-     * ConnectorProfile �� port_ref ��˳�Ǽ����Ƥ��� Port �Υ��֥�������
-     * ��ե���󥹤Υ������󥹤��椫�顢���Ȥ� Port �μ��� Port ���Ф���
-     * notify_connect() �򥳡��뤹�롣
+     * ConnectorProfile の port_ref 内に格納されている Port のオブジェクト
+     * リファレンスのシーケンスの中から、自身の Port の次の Port に対して
+     * notify_connect() をコールする。
      *
-     * @param connector_profile ��³�˴ؤ���ץ��ե��������
+     * @param connector_profile 接続に関するプロファイル情報
      *
-     * @return ReturnCode_t ���Υ꥿���󥳡���
+     * @return ReturnCode_t 型のリターンコード
      *
      * @else
      *
@@ -1376,15 +1376,15 @@ namespace RTC
     /*!
      * @if jp
      *
-     * @brief ���� Port ���Ф��� notify_disconnect() �򥳡��뤹��
+     * @brief 次の Port に対して notify_disconnect() をコールする
      *
-     * ConnectorProfile �� port_ref ��˳�Ǽ����Ƥ��� Port �Υ��֥�������
-     * ��ե���󥹤Υ������󥹤��椫�顢���Ȥ� Port �μ��� Port ���Ф���
-     * notify_disconnect() �򥳡��뤹�롣
+     * ConnectorProfile の port_ref 内に格納されている Port のオブジェクト
+     * リファレンスのシーケンスの中から、自身の Port の次の Port に対して
+     * notify_disconnect() をコールする。
      *
-     * @param connector_profile ��³�˴ؤ���ץ��ե��������
+     * @param connector_profile 接続に関するプロファイル情報
      *
-     * @return ReturnCode_t ���Υ꥿���󥳡���
+     * @return ReturnCode_t 型のリターンコード
      *
      * @else
      *
@@ -1403,34 +1403,34 @@ namespace RTC
     
     /*! @if jp
      *
-     * @brief Interface ������������
+     * @brief Interface 情報を公開する
      *
-     * ���Υ��ڥ졼�����ϡ�notify_connect() �����������󥹤���֤˥�����
-     * ������貾�۴ؿ��Ǥ��롣
-     * notify_connect() �Ǥϡ�
+     * このオペレーションは、notify_connect() 処理シーケンスの中間にコール
+     * される純粋仮想関数である。
+     * notify_connect() では、
      *
      * - publishInterfaces()
      * - connectNext()
      * - subscribeInterfaces()
      * - updateConnectorProfile()
      *
-     * �ν�� protected �ؿ��������뤵����³�������Ԥ��롣
+     * の順に protected 関数がコールされ接続処理が行われる。
      * <br>
-     * ��� Port �ǤϤ��Υ��ڥ졼�����򥪡��С��饤�ɤ��������Ȥ���
-     * Ϳ����줿 ConnectorProfile �˽���������Ԥ����ѥ�᡼������Ŭ��
-     * �Ǥ���С�RteurnCode_t ���Υ��顼�����ɤ��֤���
-     * ���� ConnectorProfile �ˤ�¾�� Port �� Interface �˴ؤ������
-     * ���ƴޤޤ�Ƥ��롣
-     * �̾� subscribeInterafaces() ��ˤ����Ƥϡ����� Port �����Ѥ���
-     * Interface �˴ؤ���������������׵�¦�Υ��󥿡��ե��������Ф���
-     * ��������ꤷ�ʤ���Фʤ�ʤ���
+     * 具象 Port ではこのオペレーションをオーバーライドし、引数として
+     * 与えられた ConnectorProfile に従い処理を行い、パラメータが不適切
+     * であれば、RteurnCode_t 型のエラーコードを返す。
+     * 引数 ConnectorProfile には他の Port の Interface に関する情報が
+     * 全て含まれている。
+     * 通常 subscribeInterafaces() 内においては、この Port が使用する
+     * Interface に関する情報を取得し、要求側のインターフェースに対して
+     * 情報を設定しなければならない。
      * <br>
-     * ���Υ��ڥ졼�����ϡ������� connector_id ���Ф��Ƥ���³��������
-     * ��¸�� connector_id ���Ф��ƤϹ�����Ŭ�ڤ˹Ԥ���ɬ�פ����롣
+     * このオペレーションは、新規の connector_id に対しては接続の生成、
+     * 既存の connector_id に対しては更新が適切に行われる必要がある。
      *
-     * @param connector_profile ��³�˴ؤ���ץ��ե��������
+     * @param connector_profile 接続に関するプロファイル情報
      *
-     * @return ReturnCode_t ���Υ꥿���󥳡���
+     * @return ReturnCode_t 型のリターンコード
      *
      * @else
      *
@@ -1469,20 +1469,20 @@ namespace RTC
     
     /*! @if jp
      *
-     * @brief Interface ����³��������
+     * @brief Interface の接続を解除する
      *
-     * ���Υ��ڥ졼�����ϡ�notify_disconnect() �����������󥹤ν����˥�����
-     * ������貾�۴ؿ��Ǥ��롣
-     * notify_disconnect() �Ǥϡ�
+     * このオペレーションは、notify_disconnect() 処理シーケンスの終わりにコール
+     * される純粋仮想関数である。
+     * notify_disconnect() では、
      * - disconnectNext()
      * - unsubscribeInterfaces()
      * - eraseConnectorProfile()
-     * �ν�� protected �ؿ��������뤵����³����������Ԥ��롣
+     * の順に protected 関数がコールされ接続解除処理が行われる。
      * <br>
-     * ��� Port �ǤϤ��Υ��ڥ졼�����򥪡��С��饤�ɤ��������Ȥ���
-     * Ϳ����줿 ConnectorProfile �˽�����³���������Ԥ���
+     * 具象 Port ではこのオペレーションをオーバーライドし、引数として
+     * 与えられた ConnectorProfile に従い接続解除処理を行う。
      *
-     * @param connector_profile ��³�˴ؤ���ץ��ե��������
+     * @param connector_profile 接続に関するプロファイル情報
      *
      * @else
      *
@@ -1509,9 +1509,9 @@ namespace RTC
 
     /*! @if jp
      *
-     * @brief ��³�κ���������ꤹ�롣
+     * @brief 接続の最大数を設定する。
      *
-     * @param limit_value �����
+     * @param limit_value 最大数
      *
      * @else
      *
@@ -1526,13 +1526,13 @@ namespace RTC
     
     /*!
      * @if jp
-     * @brief Interface������������
+     * @brief Interface情報を公開する
      *
-     * Interface�����������롣
+     * Interface情報を公開する。
      *
      *  dataport.dataflow_type
      *
-     * @return ReturnCode_t ���Υ꥿���󥳡���
+     * @return ReturnCode_t 型のリターンコード
      *
      * @else
      * @brief Publish interface information
@@ -1551,15 +1551,15 @@ namespace RTC
     /*!
      * @if jp
      *
-     * @brief ConnectorProfile �� connector_id �ե�����ɤ������ɤ���Ƚ��
+     * @brief ConnectorProfile の connector_id フィールドが空かどうか判定
      *
-     * ���ꤵ�줿 ConnectorProfile �� connector_id �����Ǥ��뤫�ɤ�����Ƚ���
-     * �Ԥ���
+     * 指定された ConnectorProfile の connector_id が空であるかどうかの判定を
+     * 行う。
      *
-     * @param connector_profile Ƚ���оݥ��ͥ����ץ��ե�����
+     * @param connector_profile 判定対象コネクタプロファイル
      *
-     * @return ������Ϳ����줿 ConnectorProfile �� connector_id �����Ǥ���С�
-     *         true�������Ǥʤ���� false ���֤���
+     * @return 引数で与えられた ConnectorProfile の connector_id が空であれば、
+     *         true、そうでなければ false を返す。
      *
      * @else
      *
@@ -1579,9 +1579,9 @@ namespace RTC
     /*!
      * @if jp
      *
-     * @brief UUID����������
+     * @brief UUIDを生成する
      *
-     * ���Υ��ڥ졼������ UUID ���������롣
+     * このオペレーションは UUID を生成する。
      *
      * @return uuid
      *
@@ -1600,11 +1600,11 @@ namespace RTC
     /*!
      * @if jp
      *
-     * @brief UUID�������� ConnectorProfile �˥��åȤ���
+     * @brief UUIDを生成し ConnectorProfile にセットする
      *
-     * ���Υ��ڥ졼������ UUID ����������ConnectorProfile �˥��åȤ��롣
+     * このオペレーションは UUID を生成し、ConnectorProfile にセットする。
      *
-     * @param connector_profile connector_id �򥻥åȤ��� ConnectorProfile
+     * @param connector_profile connector_id をセットする ConnectorProfile
      *
      * @else
      *
@@ -1621,14 +1621,14 @@ namespace RTC
     /*!
      * @if jp
      *
-     * @brief id ����¸�� ConnectorProfile �Τ�Τ��ɤ���Ƚ�ꤹ��
+     * @brief id が既存の ConnectorProfile のものかどうか判定する
      *
-     * ���Υ��ڥ졼������Ϳ����줿 ID ����¸�� ConnectorProfile �Υꥹ�����
-     * ¸�ߤ��뤫�ɤ���Ƚ�ꤹ�롣
+     * このオペレーションは与えられた ID が既存の ConnectorProfile のリスト中に
+     * 存在するかどうか判定する。
      *
-     * @param id Ƚ�ꤹ�� connector_id
+     * @param id 判定する connector_id
      *
-     * @return id ��¸��Ƚ����
+     * @return id の存在判定結果
      *
      * @else
      *
@@ -1648,16 +1648,16 @@ namespace RTC
     /*!
      * @if jp
      *
-     * @brief id ����� ConnectorProfile ��õ��
+     * @brief id を持つ ConnectorProfile を探す
      *
-     * ���Υ��ڥ졼������Ϳ����줿 ID ����� ConnectorProfile �� Port ��
-     * ��� ConnectorProfile �Υꥹ���椫��õ����
-     * �⤷��Ʊ��� id ����� ConnectorProfile ���ʤ���С����� ConnectorProfile
-     * ���֤���롣
+     * このオペレーションは与えられた ID を持つ ConnectorProfile を Port が
+     * もつ ConnectorProfile のリスト中から探す。
+     * もし、同一の id を持つ ConnectorProfile がなければ、空の ConnectorProfile
+     * が返される。
      *
-     * @param id �������� connector_id
+     * @param id 検索する connector_id
      *
-     * @return connector_id ����� ConnectorProfile
+     * @return connector_id を持つ ConnectorProfile
      *
      * @else
      *
@@ -1679,15 +1679,15 @@ namespace RTC
     /*!
      * @if jp
      *
-     * @brief id ����� ConnectorProfile ��õ��
+     * @brief id を持つ ConnectorProfile を探す
      *
-     * ���Υ��ڥ졼������Ϳ����줿 ID ����� ConnectorProfile �� Port ��
-     * ��� ConnectorProfile �Υꥹ���椫��õ������ǥå������֤���
-     * �⤷��Ʊ��� id ����� ConnectorProfile ���ʤ���С�-1 ���֤���
+     * このオペレーションは与えられた ID を持つ ConnectorProfile を Port が
+     * もつ ConnectorProfile のリスト中から探しインデックスを返す。
+     * もし、同一の id を持つ ConnectorProfile がなければ、-1 を返す。
      *
-     * @param id �������� connector_id
+     * @param id 検索する connector_id
      *
-     * @return Port �� ConnectorProfile �ꥹ�ȤΥ���ǥå���
+     * @return Port の ConnectorProfile リストのインデックス
      *
      * @else
      *
@@ -1709,15 +1709,15 @@ namespace RTC
     /*!
      * @if jp
      *
-     * @brief ConnectorProfile ���ɲä⤷���Ϲ���
+     * @brief ConnectorProfile の追加もしくは更新
      *
-     * ���Υ��ڥ졼������Ϳ����줿 ConnectorProfile �� Port ���ɲä⤷����
-     * ������¸���롣
-     * Ϳ����줿 ConnectorProfile �� connector_id ��Ʊ�� ID �����
-     * ConnectorProfile ���ꥹ�Ȥˤʤ���С��ꥹ�Ȥ��ɲä���
-     * Ʊ�� ID ��¸�ߤ���� ConnectorProfile ������¸���롣
+     * このオペレーションは与えられた ConnectorProfile を Port に追加もしくは
+     * 更新保存する。
+     * 与えられた ConnectorProfile の connector_id と同じ ID を持つ
+     * ConnectorProfile がリストになければ、リストに追加し、
+     * 同じ ID が存在すれば ConnectorProfile を上書き保存する。
      *
-     * @param connector_profile �ɲä⤷���Ϲ������� ConnectorProfile
+     * @param connector_profile 追加もしくは更新する ConnectorProfile
      *
      * @else
      *
@@ -1738,16 +1738,16 @@ namespace RTC
     /*!
      * @if jp
      *
-     * @brief ConnectorProfile ��������
+     * @brief ConnectorProfile を削除する
      *
-     * ���Υ��ڥ졼������ Port �� PortProfile ���ݻ����Ƥ���
-     * ConnectorProfileList �Τ���Ϳ����줿 id ����� ConnectorProfile
-     * �������롣
+     * このオペレーションは Port の PortProfile が保持している
+     * ConnectorProfileList のうち与えられた id を持つ ConnectorProfile
+     * を削除する。
      *
-     * @param id ������� ConnectorProfile �� id
+     * @param id 削除する ConnectorProfile の id
      *
-     * @return ����˺���Ǥ������� true��
-     *         ���ꤷ�� ConnectorProfile �����Ĥ���ʤ����� false ���֤�
+     * @return 正常に削除できた場合は true、
+     *         指定した ConnectorProfile が見つからない場合は false を返す
      *
      * @else
      *
@@ -1769,26 +1769,26 @@ namespace RTC
     /*!
      * @if jp
      *
-     * @brief PortInterfaceProfile �� ���󥿡��ե���������Ͽ����
+     * @brief PortInterfaceProfile に インターフェースを登録する
      *
-     * ���Υ��ڥ졼������ Port ������ PortProfile �Ρ�PortInterfaceProfile
-     * �˥��󥿡��ե������ξ�����ɲä��롣
-     * ���ξ���ϡ�get_port_profile() �ˤ�ä������� PortProfile �Τ���
-     * PortInterfaceProfile ���ͤ��ѹ�����ΤߤǤ��ꡢ�ºݤ˥��󥿡��ե�������
-     * �󶡤������׵ᤷ���ꤹ����ˤϡ����֥��饹�ǡ� publishInterface() ,
-     *  subscribeInterface() ���δؿ���Ŭ�ڤ˥����С��饤�ɤ����󥿡��ե�������
-     * �󶡡��׵������Ԥ�ʤ���Фʤ�ʤ���
+     * このオペレーションは Port が持つ PortProfile の、PortInterfaceProfile
+     * にインターフェースの情報を追加する。
+     * この情報は、get_port_profile() によって得られる PortProfile のうち
+     * PortInterfaceProfile の値を変更するのみであり、実際にインターフェースを
+     * 提供したり要求したりする場合には、サブクラスで、 publishInterface() ,
+     *  subscribeInterface() 等の関数を適切にオーバーライドしインターフェースの
+     * 提供、要求処理を行わなければならない。
      *
-     * ���󥿡��ե�����(�Υ��󥹥���)̾�� Port ��ǰ�դǤʤ���Фʤ�ʤ���
-     * Ʊ̾�Υ��󥿡��ե����������Ǥ���Ͽ����Ƥ����硢���δؿ��� false ��
-     * �֤���
+     * インターフェース(のインスタンス)名は Port 内で一意でなければならない。
+     * 同名のインターフェースがすでに登録されている場合、この関数は false を
+     * 返す。
      *
-     * @param name ���󥿡��ե������Υ��󥹥��󥹤�̾��
-     * @param type_name ���󥿡��ե������η���̾��
-     * @param pol ���󥿡��ե�������°�� (RTC::PROVIDED �⤷���� RTC:REQUIRED)
+     * @param name インターフェースのインスタンスの名前
+     * @param type_name インターフェースの型の名前
+     * @param pol インターフェースの属性 (RTC::PROVIDED もしくは RTC:REQUIRED)
      *
-     * @return ���󥿡��ե�������Ͽ������̡�
-     *         Ʊ̾�Υ��󥿡��ե�������������Ͽ����Ƥ���� false ���֤���
+     * @return インターフェース登録処理結果。
+     *         同名のインターフェースが既に登録されていれば false を返す。
      *
      * @else
      *
@@ -1821,16 +1821,16 @@ namespace RTC
     /*!
      * @if jp
      *
-     * @brief PortInterfaceProfile ���饤�󥿡��ե�������Ͽ��������
+     * @brief PortInterfaceProfile からインターフェース登録を削除する
      *
-     * ���Υ��ڥ졼������ Port ������ PortProfile �Ρ�PortInterfaceProfile
-     * ���饤�󥿡��ե������ξ���������롣
+     * このオペレーションは Port が持つ PortProfile の、PortInterfaceProfile
+     * からインターフェースの情報を削除する。
      *
-     * @param name ���󥿡��ե������Υ��󥹥��󥹤�̾��
-     * @param pol ���󥿡��ե�������°�� (RTC::PROVIDED �⤷���� RTC:REQUIRED)
+     * @param name インターフェースのインスタンスの名前
+     * @param pol インターフェースの属性 (RTC::PROVIDED もしくは RTC:REQUIRED)
      *
-     * @return ���󥿡��ե��������������̡�
-     *         ���󥿡��ե���������Ͽ����Ƥ��ʤ���� false ���֤���
+     * @return インターフェース削除処理結果。
+     *         インターフェースが登録されていなければ false を返す。
      *
      * @else
      *
@@ -1852,13 +1852,13 @@ namespace RTC
     /*!
      * @if jp
      *
-     * @brief PortProfile �� properties �� NameValue �ͤ��ɲä���
+     * @brief PortProfile の properties に NameValue 値を追加する
      *
-     * PortProfile �� properties �� NameValue �ͤ��ɲä��롣
-     * �ɲä���ǡ����η���ValueType�ǻ��ꤹ�롣
+     * PortProfile の properties に NameValue 値を追加する。
+     * 追加するデータの型をValueTypeで指定する。
      *
-     * @param key properties �� name
-     * @param value properties �� value
+     * @param key properties の name
+     * @param value properties の value
      *
      * @else
      *
@@ -1882,14 +1882,14 @@ namespace RTC
     /*!
      * @if jp
      *
-     * @brief PortProfile �� properties �� NameValue �ͤ����Ǥ��ɲä���
+     * @brief PortProfile の properties に NameValue 値を要素に追加する
      *
-     * PortProfile �� properties �� NameValue �ͤ����Ǥ��ɲä��롣����
-     * �ؿ��ˤ�����ꤵ�줿 properties �� get_prot_profile() �ˤ�곰��
-     * ���黲�Ȥ���롣
+     * PortProfile の properties に NameValue 値を要素に追加する。この
+     * 関数により設定された properties は get_prot_profile() により外部
+     * から参照される。
      *
-     * @param key properties �� name
-     * @param value properties �� value
+     * @param key properties の name
+     * @param value properties の value
      *
      * @else
      *
@@ -1913,10 +1913,10 @@ namespace RTC
     /*!
      * @if jp
      *
-     * @brief ¸�ߤ��ʤ��ݡ��Ȥ�disconnect���롣
+     * @brief 存在しないポートをdisconnectする。
      *
-     * ����Port�򸡽Ф����⤷���Ǥ���ݡ��Ȥ����ä����ˤϡ���³��
-     * ������롣
+     * 死んだPortを検出し、もし死んでいるポートがあった場合には、接続を
+     * 解除する。
      *
      * @else
      *
@@ -1932,10 +1932,10 @@ namespace RTC
     /*!
      * @if jp
      *
-     * @brief �ݡ��Ȥ�¸�ߤ��ǧ���롣
+     * @brief ポートの存在を確認する。
      *
-     * @param ports ��ǧ����ݡ���
-     * @return true:¸�ߤ���,false:¸�ߤ��ʤ�
+     * @param ports 確認するポート
+     * @return true:存在する,false:存在しない
      *
      * @else
      *
@@ -2054,7 +2054,7 @@ namespace RTC
   protected:
     /*!
      * @if jp
-     * @brief ���������ȥ꡼��
+     * @brief ロガーストリーム
      * @else
      * @brief Logger stream
      * @endif
@@ -2062,7 +2062,7 @@ namespace RTC
     mutable Logger rtclog;
     /*!
      * @if jp
-     * @brief Port �� PortProfile
+     * @brief Port の PortProfile
      * @else
      * @brief PortProfile of the Port
      * @endif
@@ -2071,7 +2071,7 @@ namespace RTC
     
     /*!
      * @if jp
-     * @brief Port �� ���֥������Ȼ���
+     * @brief Port の オブジェクト参照
      * @else
      * @brief Object Reference of the Port
      * @endif
@@ -2079,7 +2079,7 @@ namespace RTC
     RTC::PortService_var m_objref;
     /*!
      * @if jp
-     * @brief PortProfile �� mutex
+     * @brief PortProfile の mutex
      * @else
      * @brief Mutex of PortProfile
      * @endif
@@ -2090,7 +2090,7 @@ namespace RTC
 
     /*!
      * @if jp
-     * @brief ���󥹥���̾
+     * @brief インスタンス名
      * @else
      * @brief Instance name
      * @endif
@@ -2099,7 +2099,7 @@ namespace RTC
 
     /*!
      * @if jp
-     * @brief Port ����³�κ����
+     * @brief Port の接続の最大数
      * @else
      * @brief The maximum number of connections
      * @endif
@@ -2108,9 +2108,9 @@ namespace RTC
     
     /*!
      * @if jp
-     * @brief Callback functor ���֥�������
+     * @brief Callback functor オブジェクト
      *
-     * ���󥿡��ե��������������ݤ˸ƤФ�륳����Хå����֥�������
+     * インターフェースを公開する際に呼ばれるコールバックオブジェクト
      *
      * @else
      * @brief Callback functor objects
@@ -2123,9 +2123,9 @@ namespace RTC
     ConnectionCallback* m_onPublishInterfaces;
     /*!
      * @if jp
-     * @brief Callback functor ���֥�������
+     * @brief Callback functor オブジェクト
      *
-     * ���󥿡��ե��������������ݤ˸ƤФ�륳����Хå����֥�������
+     * インターフェースを取得する際に呼ばれるコールバックオブジェクト
      *
      * @else
      * @brief Callback functor objects
@@ -2137,9 +2137,9 @@ namespace RTC
     ConnectionCallback* m_onSubscribeInterfaces;
     /*!
      * @if jp
-     * @brief Callback functor ���֥�������
+     * @brief Callback functor オブジェクト
      *
-     * ��³��λ���˸ƤФ�륳����Хå����֥�������
+     * 接続完了時に呼ばれるコールバックオブジェクト
      *
      * @else
      * @brief Callback functor objects
@@ -2152,9 +2152,9 @@ namespace RTC
     ConnectionCallback* m_onConnected;
     /*!
      * @if jp
-     * @brief Callback functor ���֥�������
+     * @brief Callback functor オブジェクト
      *
-     * ���󥿡��ե��������������ݤ˸ƤФ�륳����Хå����֥�������
+     * インターフェースを解放する際に呼ばれるコールバックオブジェクト
      *
      * @else
      * @brief Callback functor objects
@@ -2166,9 +2166,9 @@ namespace RTC
     ConnectionCallback* m_onUnsubscribeInterfaces;
     /*!
      * @if jp
-     * @brief Callback functor ���֥�������
+     * @brief Callback functor オブジェクト
      *
-     * ��³����˸ƤФ�륳����Хå����֥�������
+     * 接続解除に呼ばれるコールバックオブジェクト
      *
      * @else
      * @brief Callback functor objects
@@ -2181,9 +2181,9 @@ namespace RTC
 
     /*!
      * @if jp
-     * @brief Callback functor ���֥�������
+     * @brief Callback functor オブジェクト
      *
-     * �ݡ��Ȥ���³�������Ȥ������˸ƤӽФ���륳����Хå����֥�������
+     * ポートの接続がロストした場合に呼び出されるコールバックオブジェクト
      *
      * @else
      * @brief Callback functor objects
@@ -2197,9 +2197,9 @@ namespace RTC
 
     /*!
      * @if jp
-     * @brief PortConnectListener�ۥ��
+     * @brief PortConnectListenerホルダ
      *
-     * PortConnectListenr���ݻ�����ۥ��
+     * PortConnectListenrを保持するホルダ
      *
      * @else
      * @brief PortConnectListener holder
@@ -2215,7 +2215,7 @@ namespace RTC
     //============================================================
     /*!
      * @if jp
-     * @brief id ����� ConnectorProfile ��õ�� Functor
+     * @brief id を持つ ConnectorProfile を探す Functor
      * @else
      * @brief Functor to find a ConnectorProfile named id
      * @endif
@@ -2232,7 +2232,7 @@ namespace RTC
     
     /*!
      * @if jp
-     * @brief ���󥹥ȥ饯������ port_ref ��Ʊ�����֥������Ȼ��Ȥ�õ�� Functor
+     * @brief コンストラクタ引数 port_ref と同じオブジェクト参照を探す Functor
      * @else
      * @brief Functor to find the object reference that is identical port_ref
      * @endif
@@ -2249,7 +2249,7 @@ namespace RTC
     
     /*!
      * @if jp
-     * @brief name �� polarity ���� interface ��õ�� Functor
+     * @brief name と polarity から interface を探す Functor
      * @else
      * @brief Functor to find interface from name and polarity
      * @endif

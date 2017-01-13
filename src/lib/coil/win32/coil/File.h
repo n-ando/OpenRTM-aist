@@ -1,4 +1,4 @@
-// -*- C++ -*-
+ï»¿// -*- C++ -*-
 /*!
  * @file File_win32.h
  * @brief File functions
@@ -33,13 +33,13 @@ namespace coil
   /*!
    * @if jp
    *
-   * @brief ƒtƒ@ƒCƒ‹ƒpƒX‚æ‚èƒfƒBƒŒƒNƒgƒŠ•”•ª‚ðŽæ“¾‚·‚é
+   * @brief ãƒ•ã‚¡ã‚¤ãƒ«ãƒ‘ã‚¹ã‚ˆã‚Šãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªéƒ¨åˆ†ã‚’å–å¾—ã™ã‚‹
    *
-   * ƒtƒ@ƒCƒ‹ƒpƒX‚æ‚èƒfƒBƒŒƒNƒgƒŠ•”•ª‚ðŽæ“¾‚·‚éB
+   * ãƒ•ã‚¡ã‚¤ãƒ«ãƒ‘ã‚¹ã‚ˆã‚Šãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªéƒ¨åˆ†ã‚’å–å¾—ã™ã‚‹ã€‚
    *
-   * @param path ƒtƒ@ƒCƒ‹ƒpƒX
+   * @param path ãƒ•ã‚¡ã‚¤ãƒ«ãƒ‘ã‚¹
    *
-   * @return ƒfƒBƒŒƒNƒgƒŠ–¼Ì
+   * @return ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªåç§°
    *
    * @else
    *
@@ -100,13 +100,13 @@ namespace coil
   /*!
    * @if jp
    *
-   * @brief ƒtƒ@ƒCƒ‹ƒpƒX‚æ‚èƒtƒ@ƒCƒ‹–¼•”•ª‚ðŽæ“¾‚·‚é
+   * @brief ãƒ•ã‚¡ã‚¤ãƒ«ãƒ‘ã‚¹ã‚ˆã‚Šãƒ•ã‚¡ã‚¤ãƒ«åéƒ¨åˆ†ã‚’å–å¾—ã™ã‚‹
    *
-   * ƒtƒ@ƒCƒ‹ƒpƒX‚æ‚èƒtƒ@ƒCƒ‹–¼•”•ª‚ðŽæ“¾‚·‚éB
+   * ãƒ•ã‚¡ã‚¤ãƒ«ãƒ‘ã‚¹ã‚ˆã‚Šãƒ•ã‚¡ã‚¤ãƒ«åéƒ¨åˆ†ã‚’å–å¾—ã™ã‚‹ã€‚
    *
-   * @param path ƒtƒ@ƒCƒ‹ƒpƒX
+   * @param path ãƒ•ã‚¡ã‚¤ãƒ«ãƒ‘ã‚¹
    *
-   * @return ƒtƒ@ƒCƒ‹–¼Ì
+   * @return ãƒ•ã‚¡ã‚¤ãƒ«åç§°
    *
    * @else
    *
@@ -175,7 +175,7 @@ namespace coil
   /*!
    * @if jp
    *
-   * @brief ƒfƒBƒŒƒNƒgƒŠƒGƒ“ƒgƒŠ—p\‘¢‘Ì
+   * @brief ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªã‚¨ãƒ³ãƒˆãƒªç”¨æ§‹é€ ä½“
    *
    * @else
    *
@@ -192,7 +192,7 @@ namespace coil
   /*!
    * @if jp
    *
-   * @brief ƒfƒBƒŒƒNƒgƒŠƒXƒgƒŠ[ƒ€—p\‘¢‘Ì
+   * @brief ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªã‚¹ãƒˆãƒªãƒ¼ãƒ ç”¨æ§‹é€ ä½“
    *
    * @else
    *
@@ -212,13 +212,13 @@ namespace coil
   /*!
    * @if jp
    *
-   * @brief ƒfƒBƒŒƒNƒgƒŠƒXƒgƒŠ[ƒ€‚ðƒI[ƒvƒ“‚·‚é
+   * @brief ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªã‚¹ãƒˆãƒªãƒ¼ãƒ ã‚’ã‚ªãƒ¼ãƒ—ãƒ³ã™ã‚‹
    *
-   * ƒfƒBƒŒƒNƒgƒŠƒXƒgƒŠ[ƒ€‚ðƒI[ƒvƒ“‚·‚éB
+   * ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªã‚¹ãƒˆãƒªãƒ¼ãƒ ã‚’ã‚ªãƒ¼ãƒ—ãƒ³ã™ã‚‹ã€‚
    *
-   * @param name ƒtƒ@ƒCƒ‹ƒpƒX
+   * @param name ãƒ•ã‚¡ã‚¤ãƒ«ãƒ‘ã‚¹
    *
-   * @return DIR \‘¢‘Ìƒ|ƒCƒ“ƒ^
+   * @return DIR æ§‹é€ ä½“ãƒã‚¤ãƒ³ã‚¿
    *
    * @else
    *
@@ -283,13 +283,13 @@ namespace coil
   /*!
    * @if jp
    *
-   * @brief ƒfƒBƒŒƒNƒgƒŠƒGƒ“ƒgƒŠƒ|ƒCƒ“ƒ^‚ðŽæ“¾‚·‚é
+   * @brief ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªã‚¨ãƒ³ãƒˆãƒªãƒã‚¤ãƒ³ã‚¿ã‚’å–å¾—ã™ã‚‹
    *
-   * ƒfƒBƒŒƒNƒgƒŠƒGƒ“ƒgƒŠƒ|ƒCƒ“ƒ^‚ðŽæ“¾‚·‚éB
+   * ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªã‚¨ãƒ³ãƒˆãƒªãƒã‚¤ãƒ³ã‚¿ã‚’å–å¾—ã™ã‚‹ã€‚
    *
-   * @param dir DIR \‘¢‘Ìƒ|ƒCƒ“ƒ^
+   * @param dir DIR æ§‹é€ ä½“ãƒã‚¤ãƒ³ã‚¿
    *
-   * @return DIR ƒGƒ“ƒgƒŠƒ|ƒCƒ“ƒ^
+   * @return DIR ã‚¨ãƒ³ãƒˆãƒªãƒã‚¤ãƒ³ã‚¿
    *
    * @else
    *
@@ -318,13 +318,13 @@ namespace coil
   /*!
    * @if jp
    *
-   * @brief ƒfƒBƒŒƒNƒgƒŠƒXƒgƒŠ[ƒ€‚ð•Â‚¶‚é
+   * @brief ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªã‚¹ãƒˆãƒªãƒ¼ãƒ ã‚’é–‰ã˜ã‚‹
    *
-   * ƒfƒBƒŒƒNƒgƒŠƒXƒgƒŠ[ƒ€‚ð•Â‚¶‚éB
+   * ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªã‚¹ãƒˆãƒªãƒ¼ãƒ ã‚’é–‰ã˜ã‚‹ã€‚
    *
-   * @param dir DIR \‘¢‘Ìƒ|ƒCƒ“ƒ^
+   * @param dir DIR æ§‹é€ ä½“ãƒã‚¤ãƒ³ã‚¿
    *
-   * @return 0: ¬Œ÷, -1: Ž¸”s
+   * @return 0: æˆåŠŸ, -1: å¤±æ•—
    *
    * @else
    *
@@ -356,14 +356,14 @@ namespace coil
   /*!
    * @if jp
    *
-   * @brief ƒtƒ@ƒCƒ‹ƒŠƒXƒg‚ðŽæ“¾‚·‚é
+   * @brief ãƒ•ã‚¡ã‚¤ãƒ«ãƒªã‚¹ãƒˆã‚’å–å¾—ã™ã‚‹
    *
-   * ƒfƒBƒŒƒNƒgƒŠƒpƒX‚Ì’†‚ÅŽw’èƒtƒ@ƒCƒ‹‚Éƒ}ƒbƒ`‚·‚éƒŠƒXƒg‚ðŽæ“¾‚·‚éB
+   * ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªãƒ‘ã‚¹ã®ä¸­ã§æŒ‡å®šãƒ•ã‚¡ã‚¤ãƒ«ã«ãƒžãƒƒãƒã™ã‚‹ãƒªã‚¹ãƒˆã‚’å–å¾—ã™ã‚‹ã€‚
    *
-   * @param path ƒfƒBƒŒƒNƒgƒŠƒpƒX
-   * @param glob_str ƒtƒ@ƒCƒ‹–¼
+   * @param path ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªãƒ‘ã‚¹
+   * @param glob_str ãƒ•ã‚¡ã‚¤ãƒ«å
    *
-   * @return ƒtƒ@ƒCƒ‹ƒŠƒXƒg
+   * @return ãƒ•ã‚¡ã‚¤ãƒ«ãƒªã‚¹ãƒˆ
    *
    * @else
    *

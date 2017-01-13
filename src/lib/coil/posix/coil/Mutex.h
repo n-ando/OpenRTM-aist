@@ -1,4 +1,4 @@
-// -*- C++ -*-
+﻿// -*- C++ -*-
 /*!
  * @file  Mutex_posix.h
  * @brief coil POSIX mutex class
@@ -28,7 +28,7 @@ namespace coil
    * @if jp
    *
    * @class Mutex
-   * @brief Mutex ���饹
+   * @brief Mutex クラス
    *
    * @else
    *
@@ -43,11 +43,11 @@ namespace coil
     /*!
      * @if jp
      *
-     * @brief ���󥹥ȥ饯��
+     * @brief コンストラクタ
      *
-     * ���󥹥ȥ饯����
+     * コンストラクタ。
      *
-     * @param name ���֥�������̾
+     * @param name オブジェクト名
      *
      * @else
      *
@@ -67,9 +67,9 @@ namespace coil
     /*!
      * @if jp
      *
-     * @brief �ǥ��ȥ饯��
+     * @brief デストラクタ
      *
-     * �ǥ��ȥ饯����
+     * デストラクタ。
      *
      * @else
      *
@@ -87,9 +87,9 @@ namespace coil
     /*!
      * @if jp
      *
-     * @brief ��¾����Υ��å�
+     * @brief 排他制御のロック
      *
-     * ��¾����Υ��å���Ԥ���
+     * 排他制御のロックを行う。
      *
      * @else
      *
@@ -107,9 +107,9 @@ namespace coil
     /*!
      * @if jp
      *
-     * @brief ��¾����ΥΥ�֥��å��󥰥��å�
+     * @brief 排他制御のノンブロッキングロック
      *
-     * ��¾����Υ��å���Υ�֥��å��󥰤ǹԤ���
+     * 排他制御のロックをノンブロッキングで行う。
      *
      * @else
      *
@@ -127,9 +127,9 @@ namespace coil
     /*!
      * @if jp
      *
-     * @brief ��¾����Υ��å����
+     * @brief 排他制御のロック解除
      *
-     * ��¾����Υ��å������Ԥ���
+     * 排他制御のロック解除を行う。
      *
      * @else
      *
@@ -147,7 +147,7 @@ namespace coil
     /*!
      * @if jp
      *
-     * @brief ��¾���楪�֥�������
+     * @brief 排他制御オブジェクト
      *
      * @else
      *

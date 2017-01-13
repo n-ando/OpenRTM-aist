@@ -1,4 +1,4 @@
-// -*- C++ -*-
+ï»¿// -*- C++ -*-
 /*!
  * @file RTCUtil.h
  * @brief RTComponent utils
@@ -27,9 +27,9 @@
  * @if jp
  * @namespace RTC_Utils
  *
- * @brief RT¥³¥ó¥İ¡¼¥Í¥ó¥ÈÍÑ¥æ¡¼¥Æ¥£¥ê¥Æ¥£´Ø¿ô
+ * @brief RTã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆç”¨ãƒ¦ãƒ¼ãƒ†ã‚£ãƒªãƒ†ã‚£é–¢æ•°
  *
- * RT¥³¥ó¥İ¡¼¥Í¥ó¥È¤ËÂĞ¤·¤Æ°Ê²¼¤Î¥æ¡¼¥Æ¥£¥ê¥Æ¥£´Ø¿ô¤òÄó¶¡¤¹¤ë¡£
+ * RTã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆã«å¯¾ã—ã¦ä»¥ä¸‹ã®ãƒ¦ãƒ¼ãƒ†ã‚£ãƒªãƒ†ã‚£é–¢æ•°ã‚’æä¾›ã™ã‚‹ã€‚
  * 
  * - isDataFlowParticipant
  * - isFsmParticipant
@@ -55,16 +55,16 @@ namespace RTC_Utils
   /*!
    * @if jp
    *
-   * @brief DataFlowComponent ¤Ç¤¢¤ë¤«È½Äê¤¹¤ë
+   * @brief DataFlowComponent ã§ã‚ã‚‹ã‹åˆ¤å®šã™ã‚‹
    *
-   * »ØÄê¤µ¤ì¤¿RT¥³¥ó¥İ¡¼¥Í¥ó¥È¤¬ DataFlowComponent ¤Ç¤¢¤ë¤«È½Äê¤¹¤ë¡£
-   * DataFlowComponent¤Ï¡¢ ExecutionContext ¤Î Semantics ¤¬
-   * Periodic Sampled Data Processing ¤Î¾ì¹ç¤ËÍøÍÑ¤µ¤ì¤ëRT¥³¥ó¥İ¡¼¥Í¥ó¥È¤Î·¿
-   * ¤Ç¤¢¤ë¡£
+   * æŒ‡å®šã•ã‚ŒãŸRTã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆãŒ DataFlowComponent ã§ã‚ã‚‹ã‹åˆ¤å®šã™ã‚‹ã€‚
+   * DataFlowComponentã¯ã€ ExecutionContext ã® Semantics ãŒ
+   * Periodic Sampled Data Processing ã®å ´åˆã«åˆ©ç”¨ã•ã‚Œã‚‹RTã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆã®å‹
+   * ã§ã‚ã‚‹ã€‚
    *
-   * @param obj È½ÄêÂĞ¾İ¤Î CORBA ¥ª¥Ö¥¸¥§¥¯¥È
+   * @param obj åˆ¤å®šå¯¾è±¡ã® CORBA ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
    *
-   * @return DataFlowComponent È½Äê·ë²Ì
+   * @return DataFlowComponent åˆ¤å®šçµæœ
    *
    * @since 0.4.0
    *
@@ -89,16 +89,16 @@ namespace RTC_Utils
   /*!
    * @if jp
    *
-   * @brief FsmParticipant ¤Ç¤¢¤ë¤«È½Äê¤¹¤ë
+   * @brief FsmParticipant ã§ã‚ã‚‹ã‹åˆ¤å®šã™ã‚‹
    *
-   * »ØÄê¤µ¤ì¤¿RT¥³¥ó¥İ¡¼¥Í¥ó¥È¤¬ FsmParticipant ¤Ç¤¢¤ë¤«È½Äê¤¹¤ë¡£
-   * FsmParticipant ¤Ï¡¢ ExecutionContext ¤Î Semantics ¤¬
-   * Stimulus Response Processing ¤Î¾ì¹ç¤Ë¡¢¾õÂÖÆâ¤Î¥¢¥¯¥·¥ç¥ó¤òÄêµÁ¤¹¤ë¤¿¤á¤Ë
-   * ÍøÍÑ¤µ¤ì¤ëRT¥³¥ó¥İ¡¼¥Í¥ó¥È¤Î·¿¤Ç¤¢¤ë¡£
+   * æŒ‡å®šã•ã‚ŒãŸRTã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆãŒ FsmParticipant ã§ã‚ã‚‹ã‹åˆ¤å®šã™ã‚‹ã€‚
+   * FsmParticipant ã¯ã€ ExecutionContext ã® Semantics ãŒ
+   * Stimulus Response Processing ã®å ´åˆã«ã€çŠ¶æ…‹å†…ã®ã‚¢ã‚¯ã‚·ãƒ§ãƒ³ã‚’å®šç¾©ã™ã‚‹ãŸã‚ã«
+   * åˆ©ç”¨ã•ã‚Œã‚‹RTã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆã®å‹ã§ã‚ã‚‹ã€‚
    *
-   * @param obj È½ÄêÂĞ¾İ¤Î CORBA ¥ª¥Ö¥¸¥§¥¯¥È
+   * @param obj åˆ¤å®šå¯¾è±¡ã® CORBA ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
    *
-   * @return FsmParticipant È½Äê·ë²Ì
+   * @return FsmParticipant åˆ¤å®šçµæœ
    *
    * @since 0.4.0
    *
@@ -124,15 +124,15 @@ namespace RTC_Utils
   /*!
    * @if jp
    *
-   * @brief Fsm ¤Ç¤¢¤ë¤«È½Äê¤¹¤ë
+   * @brief Fsm ã§ã‚ã‚‹ã‹åˆ¤å®šã™ã‚‹
    *
-   * »ØÄê¤µ¤ì¤¿RT¥³¥ó¥İ¡¼¥Í¥ó¥È¤¬ Fsm ¤Ç¤¢¤ë¤«È½Äê¤¹¤ë¡£
-   * Fsm ¤Ï¡¢ ExecutionContext ¤Î Semantics ¤¬ Stimulus Response Processing ¤Î
-   * ¾ì¹ç¤Ë¡¢¾õÂÖÁ«°Ü¤òÄêµÁ¤¹¤ë¤¿¤á¤ËÍøÍÑ¤µ¤ì¤ëRT¥³¥ó¥İ¡¼¥Í¥ó¥È¤Î·¿¤Ç¤¢¤ë¡£
+   * æŒ‡å®šã•ã‚ŒãŸRTã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆãŒ Fsm ã§ã‚ã‚‹ã‹åˆ¤å®šã™ã‚‹ã€‚
+   * Fsm ã¯ã€ ExecutionContext ã® Semantics ãŒ Stimulus Response Processing ã®
+   * å ´åˆã«ã€çŠ¶æ…‹é·ç§»ã‚’å®šç¾©ã™ã‚‹ãŸã‚ã«åˆ©ç”¨ã•ã‚Œã‚‹RTã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆã®å‹ã§ã‚ã‚‹ã€‚
    *
-   * @param obj È½ÄêÂĞ¾İ¤Î CORBA ¥ª¥Ö¥¸¥§¥¯¥È
+   * @param obj åˆ¤å®šå¯¾è±¡ã® CORBA ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
    *
-   * @return Fsm È½Äê·ë²Ì
+   * @return Fsm åˆ¤å®šçµæœ
    *
    * @since 0.4.0
    *
@@ -158,15 +158,15 @@ namespace RTC_Utils
   /*!
    * @if jp
    *
-   * @brief multiModeComponent ¤Ç¤¢¤ë¤«È½Äê¤¹¤ë
+   * @brief multiModeComponent ã§ã‚ã‚‹ã‹åˆ¤å®šã™ã‚‹
    *
-   * »ØÄê¤µ¤ì¤¿RT¥³¥ó¥İ¡¼¥Í¥ó¥È¤¬ multiModeComponent ¤Ç¤¢¤ë¤«È½Äê¤¹¤ë¡£
-   * multiModeComponent ¤Ï¡¢ ExecutionContext ¤Î Semantics ¤¬ Modes of Operation 
-   * ¤Î¾ì¹ç¤Ë¡¢ Mode ¤òÄêµÁ¤¹¤ë¤¿¤á¤ËÍøÍÑ¤µ¤ì¤ëRT¥³¥ó¥İ¡¼¥Í¥ó¥È¤Î·¿¤Ç¤¢¤ë¡£
+   * æŒ‡å®šã•ã‚ŒãŸRTã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆãŒ multiModeComponent ã§ã‚ã‚‹ã‹åˆ¤å®šã™ã‚‹ã€‚
+   * multiModeComponent ã¯ã€ ExecutionContext ã® Semantics ãŒ Modes of Operation 
+   * ã®å ´åˆã«ã€ Mode ã‚’å®šç¾©ã™ã‚‹ãŸã‚ã«åˆ©ç”¨ã•ã‚Œã‚‹RTã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆã®å‹ã§ã‚ã‚‹ã€‚
    *
-   * @param obj È½ÄêÂĞ¾İ¤Î CORBA ¥ª¥Ö¥¸¥§¥¯¥È
+   * @param obj åˆ¤å®šå¯¾è±¡ã® CORBA ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
    *
-   * @return multiModeComponent È½Äê·ë²Ì
+   * @return multiModeComponent åˆ¤å®šçµæœ
    *
    * @since 0.4.0
    *

@@ -1,4 +1,4 @@
-// -*- C++ -*-
+﻿// -*- C++ -*-
 /*!
  * @file InPort.h
  * @brief InPort template class
@@ -44,26 +44,26 @@ namespace RTC
    *
    * @class InPort
    *
-   * @brief InPort �ƥ�ץ졼�ȥ��饹
+   * @brief InPort テンプレートクラス
    * 
-   * InPort �μ����Ǥ��� InPort<T> �Υƥ�ץ졼�ȥ��饹��
-   * <T> ��BasicDataType.idl �ˤ��������Ƥ��뷿�ǡ����ФȤ���
-   * Time ���� tm , ����� T���� data ����Ĺ�¤�ΤǤʤ��ƤϤʤ�ʤ���
-   * InPort �������˥�󥰥Хåե�����������������������줿�ǡ�����缡
-   * ���Υ�󥰥Хåե��˳�Ǽ���롣��󥰥Хåե��Υ������ϥǥե���Ȥ�64��
-   * �ʤäƤ��뤬�����󥹥ȥ饯�������ˤ�ꥵ��������ꤹ�뤳�Ȥ��Ǥ��롣
-   * �ǡ����ϥե饰�ˤ�ä�̤�ɡ����ɾ��֤��������졢isNew(), write(), read(),
-   * isFull(), isEmpty() ���Υ᥽�åɤˤ��ϥ�ɥ�󥰤��뤳�Ȥ��Ǥ��롣
+   * InPort の実装である InPort<T> のテンプレートクラス。
+   * <T> はBasicDataType.idl にて定義されている型で、メンバとして
+   * Time 型の tm , および T型の data を持つ構造体でなくてはならない。
+   * InPort は内部にリングバッファを持ち、外部から送信されたデータを順次
+   * このリングバッファに格納する。リングバッファのサイズはデフォルトで64と
+   * なっているが、コンストラクタ引数によりサイズを指定することができる。
+   * データはフラグによって未読、既読状態が管理され、isNew(), write(), read(),
+   * isFull(), isEmpty() 等のメソッドによりハンドリングすることができる。
    *   
-   * OnRead�ϥ�����Хå� (�ɤ߽Ф��˵������륤�٥�Ȥˤ�ꥳ���뤵���)
+   * OnRead系コールバック (読み出しに起因するイベントによりコールされる)
    *
    * - void OnRead::operator(): 
-   *     InPort::read() ��ƤӽФ��ɤ߽Ф���Ԥ��ݤ˥����뤵��롣
+   *     InPort::read() を呼び出し読み出しを行う際にコールされる。
    *
    * - DataType OnReadConvert::operator(DataType): 
-   *     InPort::read() ��ƤӽФ����ǡ�����Хåե������ɤߤ����ݤ˸ƤФ�
-   *     �ǡ������Ѵ���Ԥ��������ˤϥХåե������ɤ߽Ф��줿�ͤ�Ϳ����졢
-   *     �Ѵ���Υǡ���������ͤȤ����֤��������ͤ�read()���֤��ͤȤʤ롣
+   *     InPort::read() を呼び出し、データをバッファから読みだす際に呼ばれ
+   *     データの変換を行う。引数にはバッファから読み出された値が与えられ、
+   *     変換後のデータを戻り値として返す。この値がread()の返す値となる。
    *
    * @since 0.2.0
    *
@@ -96,24 +96,24 @@ namespace RTC
     /*!
      * @if jp
      *
-     * @brief ���󥹥ȥ饯��
+     * @brief コンストラクタ
      *
-     * ���󥹥ȥ饯����
-     * �ѥ�᡼���Ȥ���Ϳ������ T �����ѿ��˥Х���ɤ���롣
+     * コンストラクタ。
+     * パラメータとして与えられる T 型の変数にバインドされる。
      *
-     * @param name InPort ̾��InPortBase:name() �ˤ�껲�Ȥ���롣
-     * @param value ���� InPort �˥Х���ɤ���� T �����ѿ�
-     * @param bufsize InPort �����Υ�󥰥Хåե��ΥХåե�Ĺ(�ǥե������:64)
-     * @param read_block �ɹ��֥��å��ե饰��
-     *        �ǡ����ɹ�����̤�ɥǡ������ʤ���硢���Υǡ��������ޤǥ֥��å�����
-     *        ���ɤ���������(�ǥե������:false)
-     * @param write_block ����֥��å��ե饰��
-     *        �ǡ���������˥Хåե����ե�Ǥ��ä���硢�Хåե��˶������Ǥ���
-     *        �ޤǥ֥��å����뤫�ɤ���������(�ǥե������:false)
-     * @param read_timeout �ɹ��֥��å�����ꤷ�Ƥ��ʤ����Ρ��ǡ����ɼ西����
-     *        �����Ȼ���(�ߥ���)(�ǥե������:0)
-     * @param write_timeout ����֥��å�����ꤷ�Ƥ��ʤ����Ρ��ǡ������������
-     *        �����Ȼ���(�ߥ���)(�ǥե������:0)
+     * @param name InPort 名。InPortBase:name() により参照される。
+     * @param value この InPort にバインドされる T 型の変数
+     * @param bufsize InPort 内部のリングバッファのバッファ長(デフォルト値:64)
+     * @param read_block 読込ブロックフラグ。
+     *        データ読込時に未読データがない場合、次のデータ受信までブロックする
+     *        かどうかを設定(デフォルト値:false)
+     * @param write_block 書込ブロックフラグ。
+     *        データ書込時にバッファがフルであった場合、バッファに空きができる
+     *        までブロックするかどうかを設定(デフォルト値:false)
+     * @param read_timeout 読込ブロックを指定していない場合の、データ読取タイム
+     *        アウト時間(ミリ秒)(デフォルト値:0)
+     * @param write_timeout 書込ブロックを指定していない場合の、データ書込タイム
+     *        アウト時間(ミリ秒)(デフォルト値:0)
      *
      * @else
      *
@@ -162,9 +162,9 @@ namespace RTC
     /*!
      * @if jp
      *
-     * @brief �ǥ��ȥ饯��
+     * @brief デストラクタ
      *
-     * �ǥ��ȥ饯����
+     * デストラクタ。
      *
      * @else
      *
@@ -179,11 +179,11 @@ namespace RTC
     /*!
      * @if jp
      *
-     * @brief �ݡ���̾�Τ�������롣
+     * @brief ポート名称を取得する。
      *
-     * �ݡ���̾�Τ�������롣
+     * ポート名称を取得する。
      *
-     * @return �ݡ���̾��
+     * @return ポート名称
      *
      * @else
      *
@@ -204,14 +204,14 @@ namespace RTC
     /*!
      * @if jp
      *
-     * @brief �ǿ��ǡ�����¸�ߤ��뤫��ǧ����
+     * @brief 最新データが存在するか確認する
      * 
-     * InPort��̤�ɤκǿ��ǡ��������夷�Ƥ��뤫��bool�ͤ��֤���
-     * InPort��̤��³�ξ�硢�������³���ͥ����ΥХåե���Empty
-     * �ξ��ˤ�false���֤���
+     * InPortに未読の最新データが到着しているかをbool値で返す。
+     * InPortが未接続の場合、および接続コネクタのバッファがEmpty
+     * の場合にはfalseを返す。
      *
-     * @return true ̤�ɤκǿ��ǡ�����¸�ߤ���
-     *         false ̤��³�ޤ��ϥХåե��˥ǡ�����¸�ߤ��ʤ���
+     * @return true 未読の最新データが存在する
+     *         false 未接続またはバッファにデータが存在しない。
      * 
      * @else
      *
@@ -221,7 +221,7 @@ namespace RTC
      *
      * @return Newest data check result
      *         ( true:Newest data. Data has not been readout yet.
-     *          false:Past data��Data has already been readout.)
+     *          false:Past data．Data has already been readout.)
      * 
      * @endif
      */
@@ -264,13 +264,13 @@ namespace RTC
     /*!
      * @if jp
      *
-     * @brief �Хåե��������ɤ�����ǧ����
+     * @brief バッファが空かどうか確認する
      * 
-     * InPort�ΥХåե��������ɤ����� bool �ͤ��֤���
-     * ���ξ��� true, ̤�ɥǡ������������ false ���֤���
+     * InPortのバッファが空かどうかを bool 値で返す。
+     * 空の場合は true, 未読データがある場合は false を返す。
      *
-     * @return true  �Хåե��϶�
-     *         false �Хåե���̤�ɥǡ���������
+     * @return true  バッファは空
+     *         false バッファに未読データがある
      * 
      * @else
      *
@@ -280,7 +280,7 @@ namespace RTC
      *
      * @return Newest data check result
      *         ( true:Newest data. Data has not been readout yet.
-     *          false:Past data��Data has already been readout.)
+     *          false:Past data．Data has already been readout.)
      * 
      * @endif
      */
@@ -323,54 +323,54 @@ namespace RTC
     /*!
      * @if jp
      *
-     * @brief DataPort �����ͤ��ɤ߽Ф�
+     * @brief DataPort から値を読み出す
      *
-     * InPort�˽񤭹��ޤ줿�ǡ������ɤߤ�������³����0���ޤ��ϥХåե���
-     * �ǡ������񤭹��ޤ�Ƥ��ʤ����֤��ɤߤ�������������ͤ�����Ǥ��롣
-     * �Хåե������ξ��֤ΤȤ���
-     * ���������ꤵ�줿�⡼�� (readback, do_nothing, block) �˱����ơ�
-     * �ʲ��Τ褦��ư��򤹤롣
+     * InPortに書き込まれたデータを読みだす。接続数が0、またはバッファに
+     * データが書き込まれていない状態で読みだした場合の戻り値は不定である。
+     * バッファが空の状態のとき、
+     * 事前に設定されたモード (readback, do_nothing, block) に応じて、
+     * 以下のような動作をする。
      *
-     * - readback: �Ǹ���ͤ��ɤߤʤ�����
+     * - readback: 最後の値を読みなおす。
      *
-     * - do_nothing: ���⤷�ʤ�
+     * - do_nothing: 何もしない
      *
-     * - block: �֥��å����롣�����ॢ���Ȥ����ꤵ��Ƥ�����ϡ�
-     *       �����ॢ���Ȥ���ޤ��Ԥġ�
+     * - block: ブロックする。タイムアウトが設定されている場合は、
+     *       タイムアウトするまで待つ。
      *
-     * �Хåե������ξ��֤Ǥϡ�InPort�˥Х���ɤ��줿�ѿ����ͤ��֤���롣
-     * �������äơ�����ɤ߽Ф����ˤ������ͤ��֤���ǽ�������롣
-     * ���δؿ������Ѥ���ݤˤϡ�
+     * バッファが空の状態では、InPortにバインドされた変数の値が返される。
+     * したがって、初回読み出し時には不定値を返す可能性がある。
+     * この関数を利用する際には、
      *
-     * - isNew(), isEmpty() ��ʻ�Ѥ��������˥Хåե����֤�����å����롣
+     * - isNew(), isEmpty() と併用し、事前にバッファ状態をチェックする。
      * 
-     * - ����ɤ߽Ф����������ͤ��֤��ʤ��褦�˥Х�����ѿ�������˽��������
+     * - 初回読み出し時に不定値を返さないようにバインド変数を事前に初期化する
      * 
-     * - ReturnCode read(DataType& data) �ؿ������Ѥ�Ƥ���롣
+     * - ReturnCode read(DataType& data) 関数の利用を検討する。
      *
-     * ���Ȥ�˾�ޤ�����
+     * ことが望ましい。
      *
-     * �ƥ�����Хå��ؿ��ϰʲ��Τ褦�˸ƤӽФ���롣
-     * - OnRead: read() �ؿ����ƤФ��ݤ�ɬ���ƤФ�롣
+     * 各コールバック関数は以下のように呼び出される。
+     * - OnRead: read() 関数が呼ばれる際に必ず呼ばれる。
      * 
-     * - OnReadConvert: �ǡ������ɤ߽Ф�������������硢�ɤߤ������ǡ�����
-     *       �����Ȥ���OnReadConvert���ƤӽФ��졢����ͤ�read()�������
-     *       �Ȥ����֤���
+     * - OnReadConvert: データの読み出しが成功した場合、読みだしたデータを
+     *       引数としてOnReadConvertが呼び出され、戻り値をread()が戻り値
+     *       として返す。
      *
-     * - OnEmpty: �Хåե������Τ���ǡ������ɤ߽Ф��˼��Ԥ������ƤӽФ���롣
-     *        OnEmpty ������ͤ� read() ������ͤȤ����֤���
+     * - OnEmpty: バッファが空のためデータの読み出しに失敗した場合呼び出される。
+     *        OnEmpty の戻り値を read() の戻り値として返す。
      *
-     * - OnBufferTimeout: �ǡ����ե�������Push���ξ��ˡ��ɤ߽Ф�
-     *        �����ॢ���ȤΤ���˥ǡ������ɤ߽Ф��˼��Ԥ������˸ƤФ�롣
+     * - OnBufferTimeout: データフロー型がPush型の場合に、読み出し
+     *        タイムアウトのためにデータの読み出しに失敗した場合に呼ばれる。
      *
-     * - OnRecvTimeout: �ǡ����ե�������Pull���ξ��ˡ��ɤ߽Ф������ॢ����
-     *        �Τ���˥ǡ����ɤ߽Ф��˼��Ԥ������˸ƤФ�롣
+     * - OnRecvTimeout: データフロー型がPull型の場合に、読み出しタイムアウト
+     *        のためにデータ読み出しに失敗した場合に呼ばれる。
      *
-     * - OnReadError: �嵭�ʳ�����ͳ���ɤߤ����˼��Ԥ������˸ƤФ�롣
-     *        ��ͳ�Ȥ��Ƥϡ��Хåե�����������硢�㳰��ȯ���ʤɤ��ͤ�����
-     *        ���̾�ϵ����ꤨ�ʤ�����Х��β�ǽ�������롣
+     * - OnReadError: 上記以外の理由で読みだしに失敗した場合に呼ばれる。
+     *        理由としては、バッファ設定の不整合、例外の発生などが考えられる
+     *        が通常は起こりえないためバグの可能性がある。
      *
-     * @return �ɤ߽Ф����(�ɤ߽Ф�����:true, �ɤ߽Ф�����:false)
+     * @return 読み出し結果(読み出し成功:true, 読み出し失敗:false)
      *
      * @else
      *
@@ -467,12 +467,12 @@ namespace RTC
     /*!
      * @if jp
      *
-     * @brief �Х���ɤ��줿 T �����ѿ��� InPort �Хåե��κǿ��ͤ��ɤ߹���
+     * @brief バインドされた T 型の変数に InPort バッファの最新値を読み込む
      *
-     * �Х���ɤ��줿 T ���Υǡ����� InPort �κǿ��ͤ��ɤ߹��ࡣ
-     * ���󥹥ȥ饯���� T �����ѿ��� InPort ���Х���ɤ���Ƥ��ʤ���Фʤ�ʤ���
-     * ���Υ᥽�åɤϥݥ�⡼�ե��å��˻��Ѥ�����������Ȥ��Ƥ��뤿�ᡢ
-     * ���˰�¸���ʤ�����������ͤȤʤäƤ��롣
+     * バインドされた T 型のデータに InPort の最新値を読み込む。
+     * コンストラクタで T 型の変数と InPort がバインドされていなければならない。
+     * このメソッドはポリモーフィックに使用される事を前提としているため、
+     * 型に依存しない引数、戻り値となっている。
      *
      * @else
      *
@@ -494,12 +494,12 @@ namespace RTC
     /*!
      * @if jp
      *
-     * @brief T ���Υǡ����� InPort �κǿ��ͥǡ������ɤ߹���
+     * @brief T 型のデータへ InPort の最新値データを読み込む
      *
-     * InPort �����ꤵ��Ƥ���ǿ��ǡ������ɤ߹��ߡ�
-     * ���ꤵ�줿�ǡ����ѿ������ꤹ�롣
+     * InPort に設定されている最新データを読み込み、
+     * 指定されたデータ変数に設定する。
      *
-     * @param rhs InPort �Хåե������ͤ��ɤ߹��� T ���ѿ�
+     * @param rhs InPort バッファから値を読み込む T 型変数
      *
      * @else
      *
@@ -521,17 +521,17 @@ namespace RTC
     /*!
      * @if jp
      *
-     * @brief ����Υ��ͥ����ؤν񤭹��ߥ��ơ�����������
+     * @brief 特定のコネクタへの書き込みステータスを得る
      *
-     * InPort ����³���Ȥ� Connector �ȸƤФ�벾�ۥǡ�������ͥ���
-     * �ġ�write() �ؿ��Ϥ���� Connector ���Ф��ƥǡ�����񤭹��ब��
-     * �� Connector �Ͻ񤭹��ߤ��Ȥ˥��ơ��������֤���write() �ؿ��Ǥϡ�
-     * ���٤Ƥ� Connector �����ｪλ�����Ȥ��Τ� true ���֤�������ʳ�
-     * �Ǥ� false ���ֵѤ��롣���δؿ��� write() �� false �ξ�祹�ơ�
-     * ������Ĵ�٤�Τ˻��Ѥ��뤳�Ȥ��Ǥ��롣
+     * InPort は接続ごとに Connector と呼ばれる仮想データチャネルを持
+     * つ。write() 関数はこれら Connector に対してデータを書き込むが、
+     * 各 Connector は書き込みごとにステータスを返す。write() 関数では、
+     * すべての Connector が正常終了したときのみ true を返し、それ以外
+     * では false を返却する。この関数は write() が false の場合ステー
+     * タスを調べるのに使用することができる。
      *
-     * @param index Connector �� index
-     * @return ���ơ�����
+     * @param index Connector の index
+     * @return ステータス
      *
      * @else
      *
@@ -557,16 +557,16 @@ namespace RTC
     /*!
      * @if jp
      *
-     * @brief ����Υ��ͥ����ؤν񤭹��ߥ��ơ������ꥹ�Ȥ�����
+     * @brief 特定のコネクタへの書き込みステータスリストを得る
      *
-     * InPort ����³���Ȥ� Connector �ȸƤФ�벾�ۥǡ�������ͥ���
-     * �ġ�write() �ؿ��Ϥ���� Connector ���Ф��ƥǡ�����񤭹��ब��
-     * �� Connector �Ͻ񤭹��ߤ��Ȥ˥��ơ��������֤���write() �ؿ��Ǥϡ�
-     * ���٤Ƥ� Connector �����ｪλ�����Ȥ��Τ� true ���֤�������ʳ�
-     * �Ǥ� false ���ֵѤ��롣���δؿ��� write() �� false �ξ�祹�ơ�
-     * ������Ĵ�٤�Τ˻��Ѥ��뤳�Ȥ��Ǥ��롣
+     * InPort は接続ごとに Connector と呼ばれる仮想データチャネルを持
+     * つ。write() 関数はこれら Connector に対してデータを書き込むが、
+     * 各 Connector は書き込みごとにステータスを返す。write() 関数では、
+     * すべての Connector が正常終了したときのみ true を返し、それ以外
+     * では false を返却する。この関数は write() が false の場合ステー
+     * タスを調べるのに使用することができる。
      *
-     * @return ���ơ������ꥹ��
+     * @return ステータスリスト
      *
      * @else
      *
@@ -592,12 +592,12 @@ namespace RTC
     /*!
      * @if jp
      *
-     * @brief InPort �Хåե��إǡ����ɤ߹��߻��Υ�����Хå�������
+     * @brief InPort バッファへデータ読み込み時のコールバックの設定
      *
-     * InPort �����ĥХåե�����ǡ������ɤ߹��ޤ��ľ���˸ƤФ�륳����Хå�
-     * ���֥������Ȥ����ꤹ�롣
+     * InPort が持つバッファからデータが読み込まれる直前に呼ばれるコールバック
+     * オブジェクトを設定する。
      * 
-     * @param on_read OnRead&lt;DataType&gt;���Υ��֥�������
+     * @param on_read OnRead&lt;DataType&gt;型のオブジェクト
      *
      * @else
      *
@@ -618,13 +618,13 @@ namespace RTC
     /*!
      * @if jp
      *
-     * @brief InPort �Хåե��إǡ����ɤ߽Ф����Υ�����Хå�������
+     * @brief InPort バッファへデータ読み出し時のコールバックの設定
      *
-     * InPort �����ĥХåե�����ǡ������ɤ߽Ф����ݤ˸ƤФ�륳����Хå�
-     * ���֥������Ȥ����ꤹ�롣������Хå����֥������Ȥ�����ͤ�read()�᥽�å�
-     * �θƽз�̤Ȥʤ롣
+     * InPort が持つバッファからデータが読み出される際に呼ばれるコールバック
+     * オブジェクトを設定する。コールバックオブジェクトの戻り値がread()メソッド
+     * の呼出結果となる。
      * 
-     * @param on_rconvert OnReadConvert&lt;DataType&gt;���Υ��֥�������
+     * @param on_rconvert OnReadConvert&lt;DataType&gt;型のオブジェクト
      *
      * @else
      *
@@ -647,7 +647,7 @@ namespace RTC
     std::string m_typename;
     /*!
      * @if jp
-     * @brief �ݡ���̾
+     * @brief ポート名
      * @else
      * @berif Port's name
      * @endif
@@ -656,7 +656,7 @@ namespace RTC
     
     /*!
      * @if jp
-     * @brief �Х���ɤ���� T �����ѿ��ؤλ���
+     * @brief バインドされる T 型の変数への参照
      * @else
      * @brief The reference to type-T value bound this OutPort
      * @endif
@@ -666,7 +666,7 @@ namespace RTC
     
     /*!
      * @if jp
-     * @brief OnRead ������Хå��ե��󥯥��ؤΥݥ���
+     * @brief OnRead コールバックファンクタへのポインタ
      * @else
      * @brief Pointer to OnRead callback functor
      * @endif
@@ -675,7 +675,7 @@ namespace RTC
     
     /*!
      * @if jp
-     * @brief OnReadConvert ������Хå��ե��󥯥��ؤΥݥ���
+     * @brief OnReadConvert コールバックファンクタへのポインタ
      * @else
      * @brief Pointer to OnReadConvert callback functor
      * @endif
@@ -684,7 +684,7 @@ namespace RTC
 
     /*!
      * @if jp
-     * @brief ���ͥ������ȤΥ꡼�ɥ��ơ�����
+     * @brief コネクタごとのリードステータス
      * @else
      * @brief Read status of each connector
      * @endif
@@ -693,7 +693,7 @@ namespace RTC
 
     /*!
      * @if jp
-     * @brief �����쥯�ȥǡ���ž���ե饰
+     * @brief ダイレクトデータ転送フラグ
      * @else
      * @brief A flag for direct data transfer
      * @endif

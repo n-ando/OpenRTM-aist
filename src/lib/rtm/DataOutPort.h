@@ -1,4 +1,4 @@
-// -*- C++ -*-
+﻿// -*- C++ -*-
 /*!
  * @file DataOutPort.h
  * @brief Base class of OutPort

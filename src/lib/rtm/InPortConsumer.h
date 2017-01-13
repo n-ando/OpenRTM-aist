@@ -1,4 +1,4 @@
-// -*- C++ -*-
+﻿// -*- C++ -*-
 /*!
  * @file  InPortConsumer.h
  * @brief InPortConsumer class
@@ -45,14 +45,14 @@ namespace RTC
    *
    * @class InPortConsumer
    *
-   * @brief InPortConsumer ��ݥ��饹
+   * @brief InPortConsumer 抽象クラス
    *
-   * ���ϥݡ��ȥ��󥷥塼�ޤΤ������ݥ��󥿡��ե��������饹
-   * �ƶ�ݥ��饹�ϡ��ʲ��ν�貾�۴ؿ��μ������󶡤��ʤ���Фʤ�ʤ���
-   * - push(): �ǡ�������
-   * - clone(): �ݡ��ȤΥ��ԡ�
-   * - subscribeInterface(): �ǡ����������Τؤ���Ͽ
-   * - unsubscribeInterface(): �ǡ����������Τ���Ͽ���
+   * 入力ポートコンシューマのための抽象インターフェースクラス
+   * 各具象クラスは、以下の純粋仮想関数の実装を提供しなければならない。
+   * - push(): データ送信
+   * - clone(): ポートのコピー
+   * - subscribeInterface(): データ送出通知への登録
+   * - unsubscribeInterface(): データ送出通知の登録解除
    *
    * @since 0.4.0
    *
@@ -81,9 +81,9 @@ namespace RTC
     
     /*!
      * @if jp
-     * @brief �ǥ��ȥ饯��
+     * @brief デストラクタ
      *
-     * �ǥ��ȥ饯��
+     * デストラクタ
      *
      * @else
      * @brief Destructor
@@ -96,9 +96,9 @@ namespace RTC
 
     /*!
      * @if jp
-     * @brief ��������
+     * @brief 設定初期化
      *
-     * InPortConsumer�γƼ������Ԥ�
+     * InPortConsumerの各種設定を行う
      *
      * @else
      * @brief Initializing configuration
@@ -112,21 +112,21 @@ namespace RTC
 
     /*!
      * @if jp
-     * @brief ��³��ؤΥǡ�������
+     * @brief 接続先へのデータ送信
      *
-     * ��³��Υݡ��Ȥإǡ������������뤿��ν�貾�۴ؿ���
+     * 接続先のポートへデータを送信するための純粋仮想関数。
      * 
-     * ���δؿ��ϡ��ʲ��Υ꥿���󥳡��ɤ��֤���
+     * この関数は、以下のリターンコードを返す。
      *
-     * - PORT_OK:         ���ｪλ��
-     * - PORT_ERROR:      �ǡ��������β����ǲ��餫�Υ��顼��ȯ��������
-     * - SEND_FULL:       �ǡ��������������������¦�Хåե����ե���ä���
-     * - SEND_TIMEOUT:    �ǡ��������������������¦�Хåե��������ॢ���Ȥ�����
-     * - CONNECTION_LOST: ��³�����Ǥ��줿
-     * - UNKNOWN_ERROR:   ���������Υ��顼
+     * - PORT_OK:         正常終了。
+     * - PORT_ERROR:      データ送信の過程で何らかのエラーが発生した。
+     * - SEND_FULL:       データを送信したが、相手側バッファがフルだった。
+     * - SEND_TIMEOUT:    データを送信したが、相手側バッファがタイムアウトした。
+     * - CONNECTION_LOST: 接続が切断された
+     * - UNKNOWN_ERROR:   原因不明のエラー
      *
-     * @param data ��������ǡ���
-     * @return �꥿���󥳡���
+     * @param data 送信するデータ
+     * @return リターンコード
      *
      * @else
      * @brief Send data to the destination port
@@ -148,14 +148,14 @@ namespace RTC
 
     /*!
      * @if jp
-     * @brief InterfaceProfile������������
+     * @brief InterfaceProfile情報を公開する
      *
-     * InterfaceProfile�����������롣
-     * �����ǻ��ꤹ��ץ��ѥƥ�������� NameValue ���֥������Ȥ�
-     * dataport.interface_type �ͤ�Ĵ�١������ݡ��Ȥ����ꤵ��Ƥ���
-     * ���󥿡��ե����������פȰ��פ�����Τ߾����������롣
+     * InterfaceProfile情報を公開する。
+     * 引数で指定するプロパティ情報内の NameValue オブジェクトの
+     * dataport.interface_type 値を調べ、当該ポートに設定されている
+     * インターフェースタイプと一致する場合のみ情報を取得する。
      *
-     * @param properties InterfaceProfile�����������ץ��ѥƥ�
+     * @param properties InterfaceProfile情報を受け取るプロパティ
      *
      * @else
      * @brief Publish InterfaceProfile information
@@ -173,14 +173,14 @@ namespace RTC
 
     /*!
      * @if jp
-     * @brief �ǡ����������μ������ؤ���Ͽ
+     * @brief データ送出通知受け取りへの登録
      *
-     * ���ꤵ�줿�ץ��ѥƥ������Ƥ˴�Ť��ơ��ǡ����������Τμ���������Ͽ����
-     * ����ν�貾�۴ؿ���
+     * 指定されたプロパティの内容に基づいて、データ送出通知の受け取りに登録する
+     * ための純粋仮想関数。
      *
-     * @param properties ��Ͽ���˻��Ȥ���ץ��ѥƥ�
+     * @param properties 登録時に参照するプロパティ
      *
-     * @return ��Ͽ�������
+     * @return 登録処理結果
      *
      * @else
      * @brief Subscribe the data send notification
@@ -198,11 +198,11 @@ namespace RTC
     
     /*!
      * @if jp
-     * @brief �ǡ����������μ�����꤫�����Ͽ���
+     * @brief データ送出通知受け取りからの登録解除
      *
-     * �ǡ����������Τμ�����꤫����Ͽ������뤿��ν�貾�۴ؿ���
+     * データ送出通知の受け取りから登録解除するための純粋仮想関数。
      *
-     * @param properties ��Ͽ������˻��Ȥ���ץ��ѥƥ�
+     * @param properties 登録解除時に参照するプロパティ
      *
      * @else
      * @brief Unsubscribe the data send notification
@@ -217,7 +217,7 @@ namespace RTC
     
     /*!
      * @if jp
-     * @brief ���󥿡��ե������ץ��ե������������뤿�Υե��󥯥�
+     * @brief インターフェースプロファイルを公開するたのファンクタ
      * @else
      * @brief Functor to publish interface profile
      * @endif
@@ -234,7 +234,7 @@ namespace RTC
 
     /*!
      * @if jp
-     * @brief ���󥿡��ե������ץ��ե������������뤿�Υե��󥯥�
+     * @brief インターフェースプロファイルを公開するたのファンクタ
      * @else
      * @brief Functor to publish interface profile
      * @endif

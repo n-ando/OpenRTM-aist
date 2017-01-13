@@ -1,4 +1,4 @@
-// -*- C++ -*-
+ï»¿// -*- C++ -*-
 /*!
  * @file Manager.h
  * @brief RTComponent manager class
@@ -82,7 +82,7 @@ namespace RTC
   
   /*!
    * @if jp
-   * @brief Protected ¥³¥ó¥¹¥È¥é¥¯¥¿
+   * @brief Protected ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
    * @else
    * @brief Protected Constructor
    * @endif
@@ -97,7 +97,7 @@ namespace RTC
   
   /*!
    * @if jp
-   * @brief Protected ¥³¥Ô¡¼¥³¥ó¥¹¥È¥é¥¯¥¿
+   * @brief Protected ã‚³ãƒ”ãƒ¼ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
    * @else
    * @brief Protected Copy Constructor
    * @endif
@@ -112,7 +112,7 @@ namespace RTC
   
   /*!
    * @if jp
-   * @brief ¥Ş¥Í¡¼¥¸¥ã¤Î½é´ü²½
+   * @brief ãƒãƒãƒ¼ã‚¸ãƒ£ã®åˆæœŸåŒ–
    * @else
    * @brief Initialize manager
    * @endif
@@ -142,7 +142,7 @@ namespace RTC
   
   /*!
    * @if jp
-   * @brief ¥Ş¥Í¡¼¥¸¥ã¤Î¥¤¥ó¥¹¥¿¥ó¥¹¤Î¼èÆÀ
+   * @brief ãƒãƒãƒ¼ã‚¸ãƒ£ã®ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ã®å–å¾—
    * @else
    * @brief Get instance of the manager
    * @endif
@@ -172,7 +172,7 @@ namespace RTC
   
   /*!
    * @if jp
-   * @brief ¥Ş¥Í¡¼¥¸¥ã½ªÎ»½èÍı
+   * @brief ãƒãƒãƒ¼ã‚¸ãƒ£çµ‚äº†å‡¦ç†
    * @else
    * @brief Terminate Manager
    * @endif
@@ -185,7 +185,7 @@ namespace RTC
   
   /*!
    * @if jp
-   * @brief ¥Ş¥Í¡¼¥¸¥ã¡¦¥·¥ã¥Ã¥È¥À¥¦¥ó
+   * @brief ãƒãƒãƒ¼ã‚¸ãƒ£ãƒ»ã‚·ãƒ£ãƒƒãƒˆãƒ€ã‚¦ãƒ³
    * @else
    * @brief Shutdown Manager
    * @endif
@@ -198,7 +198,7 @@ namespace RTC
     shutdownNaming();
     shutdownORB();
     shutdownManager();
-    // ½ªÎ»ÂÔ¤Á¹ç¤ï¤»
+    // çµ‚äº†å¾…ã¡åˆã‚ã›
     if (m_runner != NULL)
       {
         m_runner->wait();
@@ -213,7 +213,7 @@ namespace RTC
   
   /*!
    * @if jp
-   * @brief ¥Ş¥Í¡¼¥¸¥ã½ªÎ»½èÍı¤ÎÂÔ¤Á¹ç¤ï¤»
+   * @brief ãƒãƒãƒ¼ã‚¸ãƒ£çµ‚äº†å‡¦ç†ã®å¾…ã¡åˆã‚ã›
    * @else
    * @brief Wait for Manager's termination
    * @endif
@@ -237,7 +237,7 @@ namespace RTC
   
   /*!
    * @if jp
-   * @brief ½é´ü²½¥×¥í¥·¡¼¥¸¥ã¤Î¥»¥Ã¥È
+   * @brief åˆæœŸåŒ–ãƒ—ãƒ­ã‚·ãƒ¼ã‚¸ãƒ£ã®ã‚»ãƒƒãƒˆ
    * @else
    * @brief Set initial procedure
    * @endif
@@ -249,7 +249,7 @@ namespace RTC
   
   /*!
    * @if jp
-   * @brief Manager¤Î¥¢¥¯¥Æ¥£¥Ö²½
+   * @brief Managerã®ã‚¢ã‚¯ãƒ†ã‚£ãƒ–åŒ–
    * @else
    * @brief Activate the Manager
    * @endif
@@ -508,7 +508,7 @@ namespace RTC
   
   /*!
    * @if jp
-   * @brief Manager¤Î¼Â¹Ô
+   * @brief Managerã®å®Ÿè¡Œ
    * @else
    * @brief Run the Manager
    * @endif
@@ -536,7 +536,7 @@ namespace RTC
   //============================================================
   /*!
    * @if jp
-   * @brief ¥â¥¸¥å¡¼¥ë¤Î¥í¡¼¥É
+   * @brief ãƒ¢ã‚¸ãƒ¥ãƒ¼ãƒ«ã®ãƒ­ãƒ¼ãƒ‰
    * @else
    * @brief Load module
    * @endif
@@ -568,7 +568,7 @@ namespace RTC
   
   /*!
    * @if jp
-   * @brief ¥â¥¸¥å¡¼¥ë¤Î¥¢¥ó¥í¡¼¥É
+   * @brief ãƒ¢ã‚¸ãƒ¥ãƒ¼ãƒ«ã®ã‚¢ãƒ³ãƒ­ãƒ¼ãƒ‰
    * @else
    * @brief Unload module
    * @endif
@@ -585,7 +585,7 @@ namespace RTC
   
   /*!
    * @if jp
-   * @brief Á´¥â¥¸¥å¡¼¥ë¤Î¥¢¥ó¥í¡¼¥É
+   * @brief å…¨ãƒ¢ã‚¸ãƒ¥ãƒ¼ãƒ«ã®ã‚¢ãƒ³ãƒ­ãƒ¼ãƒ‰
    * @else
    * @brief Unload all modules
    * @endif
@@ -599,7 +599,7 @@ namespace RTC
   
   /*!
    * @if jp
-   * @brief ¥í¡¼¥ÉºÑ¤ß¤Î¥â¥¸¥å¡¼¥ë¥ê¥¹¥È¤ò¼èÆÀ¤¹¤ë
+   * @brief ãƒ­ãƒ¼ãƒ‰æ¸ˆã¿ã®ãƒ¢ã‚¸ãƒ¥ãƒ¼ãƒ«ãƒªã‚¹ãƒˆã‚’å–å¾—ã™ã‚‹
    * @else
    * @brief Get a list of loaded modules
    * @endif
@@ -612,7 +612,7 @@ namespace RTC
   
   /*!
    * @if jp
-   * @brief ¥í¡¼¥É²ÄÇ½¤Ê¥â¥¸¥å¡¼¥ë¥ê¥¹¥È¤ò¼èÆÀ¤¹¤ë
+   * @brief ãƒ­ãƒ¼ãƒ‰å¯èƒ½ãªãƒ¢ã‚¸ãƒ¥ãƒ¼ãƒ«ãƒªã‚¹ãƒˆã‚’å–å¾—ã™ã‚‹
    * @else
    * @brief Get a list of loadable modules
    * @endif
@@ -628,7 +628,7 @@ std::vector<coil::Properties> Manager::getLoadableModules()
   //============================================================
   /*!
    * @if jp
-   * @brief RT¥³¥ó¥İ¡¼¥Í¥ó¥ÈÍÑ¥Õ¥¡¥¯¥È¥ê¤òÅĞÏ¿¤¹¤ë
+   * @brief RTã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆç”¨ãƒ•ã‚¡ã‚¯ãƒˆãƒªã‚’ç™»éŒ²ã™ã‚‹
    * @else
    * @brief Register RT-Component Factory
    * @endif
@@ -669,7 +669,7 @@ std::vector<coil::Properties> Manager::getLoadableModules()
   
   /*!
    * @if jp
-   * @brief ExecutionContextÍÑ¥Õ¥¡¥¯¥È¥ê¤òÅĞÏ¿¤¹¤ë
+   * @brief ExecutionContextç”¨ãƒ•ã‚¡ã‚¯ãƒˆãƒªã‚’ç™»éŒ²ã™ã‚‹
    * @else
    * @brief Register ExecutionContext Factory
    * @endif
@@ -697,7 +697,7 @@ std::vector<coil::Properties> Manager::getLoadableModules()
   
   /*!
    * @if jp
-   * @brief ¥Õ¥¡¥¯¥È¥êÁ´¥ê¥¹¥È¤ò¼èÆÀ¤¹¤ë
+   * @brief ãƒ•ã‚¡ã‚¯ãƒˆãƒªå…¨ãƒªã‚¹ãƒˆã‚’å–å¾—ã™ã‚‹
    * @else
    * @brief Get the list of all Factories
    * @endif
@@ -715,7 +715,7 @@ std::vector<coil::Properties> Manager::getLoadableModules()
   //============================================================
   /*!
    * @if jp
-   * @brief RT¥³¥ó¥İ¡¼¥Í¥ó¥È¤òÀ¸À®¤¹¤ë
+   * @brief RTã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆã‚’ç”Ÿæˆã™ã‚‹
    * @else
    * @brief Create RT-Components
    * @endif
@@ -894,7 +894,7 @@ std::vector<coil::Properties> Manager::getLoadableModules()
   
   /*!
    * @if jp
-   * @brief RT¥³¥ó¥İ¡¼¥Í¥ó¥È¤òÄ¾ÀÜ Manager ¤ËÅĞÏ¿¤¹¤ë
+   * @brief RTã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆã‚’ç›´æ¥ Manager ã«ç™»éŒ²ã™ã‚‹
    * @else
    * @brief Register RT-Component directly without Factory
    * @endif
@@ -902,7 +902,7 @@ std::vector<coil::Properties> Manager::getLoadableModules()
   bool Manager::registerComponent(RTObject_impl* comp)
   {
     RTC_TRACE(("Manager::registerComponent(%s)", comp->getInstanceName()));
-    // ### NamingManager ¤Î¤ß¤ÇÂåÍÑ²ÄÇ½
+    // ### NamingManager ã®ã¿ã§ä»£ç”¨å¯èƒ½
     m_compManager.registerObject(comp);
     
     coil::vstring names(comp->getNamingNames());
@@ -920,7 +920,7 @@ std::vector<coil::Properties> Manager::getLoadableModules()
   
   /*!
    * @if jp
-   * @brief RT¥³¥ó¥İ¡¼¥Í¥ó¥È¤ÎÅĞÏ¿¤ò²ò½ü¤¹¤ë
+   * @brief RTã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆã®ç™»éŒ²ã‚’è§£é™¤ã™ã‚‹
    * @else
    * @brief Unregister RT-Components
    * @endif
@@ -928,7 +928,7 @@ std::vector<coil::Properties> Manager::getLoadableModules()
   bool Manager::unregisterComponent(RTObject_impl* comp)
   {
     RTC_TRACE(("Manager::unregisterComponent(%s)", comp->getInstanceName()));
-    // ### NamingManager ¤Î¤ß¤ÇÂåÍÑ²ÄÇ½
+    // ### NamingManager ã®ã¿ã§ä»£ç”¨å¯èƒ½
     m_compManager.unregisterObject(comp->getInstanceName());
     
     coil::vstring names(comp->getNamingNames());
@@ -969,7 +969,7 @@ std::vector<coil::Properties> Manager::getLoadableModules()
   
   /*!
    * @if jp
-   * @brief Manager ¤ËÅĞÏ¿¤µ¤ì¤Æ¤¤¤ëRT¥³¥ó¥İ¡¼¥Í¥ó¥È¤òºï½ü¤¹¤ë
+   * @brief Manager ã«ç™»éŒ²ã•ã‚Œã¦ã„ã‚‹RTã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆã‚’å‰Šé™¤ã™ã‚‹
    * @else
    * @brief Unregister RT-Components that have been registered to Manager
    * @endif
@@ -1024,7 +1024,7 @@ std::vector<coil::Properties> Manager::getLoadableModules()
   
   /*!
    * @if jp
-   * @brief Manager ¤ËÅĞÏ¿¤µ¤ì¤Æ¤¤¤ëRT¥³¥ó¥İ¡¼¥Í¥ó¥È¤ò¸¡º÷¤¹¤ë
+   * @brief Manager ã«ç™»éŒ²ã•ã‚Œã¦ã„ã‚‹RTã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆã‚’æ¤œç´¢ã™ã‚‹
    * @else
    * @brief Get RT-Component's pointer
    * @endif
@@ -1037,7 +1037,7 @@ std::vector<coil::Properties> Manager::getLoadableModules()
   
   /*!
    * @if jp
-   * @brief Manager ¤ËÅĞÏ¿¤µ¤ì¤Æ¤¤¤ëÁ´RT¥³¥ó¥İ¡¼¥Í¥ó¥È¤ò¼èÆÀ¤¹¤ë
+   * @brief Manager ã«ç™»éŒ²ã•ã‚Œã¦ã„ã‚‹å…¨RTã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆã‚’å–å¾—ã™ã‚‹
    * @else
    * @brief Get all RT-Components registered in the Manager
    * @endif
@@ -1112,11 +1112,11 @@ std::vector<coil::Properties> Manager::getLoadableModules()
 
   
   //============================================================
-  // CORBA ´ØÏ¢
+  // CORBA é–¢é€£
   //============================================================
   /*!
    * @if jp
-   * @brief ORB ¤Î¥İ¥¤¥ó¥¿¤ò¼èÆÀ¤¹¤ë (½êÍ­¸¢Êİ»ı)
+   * @brief ORB ã®ãƒã‚¤ãƒ³ã‚¿ã‚’å–å¾—ã™ã‚‹ (æ‰€æœ‰æ¨©ä¿æŒ)
    * @else
    * @brief Get the pointer to the ORB (ownership retained)
    * @endif
@@ -1128,7 +1128,7 @@ std::vector<coil::Properties> Manager::getLoadableModules()
   }
   /*!
    * @if jp
-   * @brief ORB ¤Î¥İ¥¤¥ó¥¿¤ò¼èÆÀ¤¹¤ë (½êÍ­¸¢Ê£À½)
+   * @brief ORB ã®ãƒã‚¤ãƒ³ã‚¿ã‚’å–å¾—ã™ã‚‹ (æ‰€æœ‰æ¨©è¤‡è£½)
    * @else
    * @brief Get the pointer to the ORB (ownership duplicated)
    * @endif
@@ -1141,7 +1141,7 @@ std::vector<coil::Properties> Manager::getLoadableModules()
   
   /*!
    * @if jp
-   * @brief Manager ¤¬»ı¤Ä RootPOA ¤Î¥İ¥¤¥ó¥¿¤ò¼èÆÀ¤¹¤ë (½êÍ­¸¢Êİ»ı)
+   * @brief Manager ãŒæŒã¤ RootPOA ã®ãƒã‚¤ãƒ³ã‚¿ã‚’å–å¾—ã™ã‚‹ (æ‰€æœ‰æ¨©ä¿æŒ)
    * @else
    * @brief Get the pointer to the RootPOA (ownership retained)
    * @endif
@@ -1153,7 +1153,7 @@ std::vector<coil::Properties> Manager::getLoadableModules()
   }
   /*!
    * @if jp
-   * @brief Manager ¤¬»ı¤Ä RootPOA ¤Î¥İ¥¤¥ó¥¿¤ò¼èÆÀ¤¹¤ë (½êÍ­¸¢Ê£À½)
+   * @brief Manager ãŒæŒã¤ RootPOA ã®ãƒã‚¤ãƒ³ã‚¿ã‚’å–å¾—ã™ã‚‹ (æ‰€æœ‰æ¨©è¤‡è£½)
    * @else
    * @brief Get the pointer to the RootPOA (ownership duplicated)
    * @endif
@@ -1166,7 +1166,7 @@ std::vector<coil::Properties> Manager::getLoadableModules()
   
   /*!
    * @if jp
-   * @brief Manager ¤¬»ı¤Ä POAManager ¤ò¼èÆÀ¤¹¤ë (½êÍ­¸¢Êİ»ı)
+   * @brief Manager ãŒæŒã¤ POAManager ã‚’å–å¾—ã™ã‚‹ (æ‰€æœ‰æ¨©ä¿æŒ)
    * @else
    * @brief Get the pointer to the POAManager (ownership retained)
    * @endif
@@ -1179,7 +1179,7 @@ std::vector<coil::Properties> Manager::getLoadableModules()
   
   /*!
    * @if jp
-   * @brief Manager ¤¬»ı¤Ä POAManager ¤ò¼èÆÀ¤¹¤ë (½êÍ­¸¢Ê£À½)
+   * @brief Manager ãŒæŒã¤ POAManager ã‚’å–å¾—ã™ã‚‹ (æ‰€æœ‰æ¨©è¤‡è£½)
    * @else
    * @brief Get the pointer to the POAManager (ownership duplicated)
    * @endif
@@ -1199,7 +1199,7 @@ std::vector<coil::Properties> Manager::getLoadableModules()
   //============================================================
   /*!
    * @if jp
-   * @brief Manager ¤ÎÆâÉô½é´ü²½½èÍı
+   * @brief Manager ã®å†…éƒ¨åˆæœŸåŒ–å‡¦ç†
    * @else
    * @brief Manager internal initialization
    * @endif
@@ -1268,7 +1268,7 @@ std::vector<coil::Properties> Manager::getLoadableModules()
   
   /*!
    * @if jp
-   * @brief Manager ¤Î½ªÎ»½èÍı
+   * @brief Manager ã®çµ‚äº†å‡¦ç†
    * @else
    * @brief Manager internal finalization
    * @endif
@@ -1298,7 +1298,7 @@ std::vector<coil::Properties> Manager::getLoadableModules()
   //============================================================
   /*!
    * @if jp
-   * @brief System logger ¤Î½é´ü²½
+   * @brief System logger ã®åˆæœŸåŒ–
    * @else
    * @brief System logger initialization
    * @endif
@@ -1367,7 +1367,7 @@ std::vector<coil::Properties> Manager::getLoadableModules()
   
   /*!
    * @if jp
-   * @brief System Logger ¤Î½ªÎ»½èÍı
+   * @brief System Logger ã®çµ‚äº†å‡¦ç†
    * @else
    * @brief System Logger finalization
    * @endif
@@ -1394,7 +1394,7 @@ std::vector<coil::Properties> Manager::getLoadableModules()
   //============================================================
   /*!
    * @if jp
-   * @brief CORBA ORB ¤Î½é´ü²½½èÍı
+   * @brief CORBA ORB ã®åˆæœŸåŒ–å‡¦ç†
    * @else
    * @brief CORBA ORB initialization
    * @endif
@@ -1462,7 +1462,7 @@ std::vector<coil::Properties> Manager::getLoadableModules()
   
   /*!
    * @if jp
-   * @brief ORB ¤Î¥³¥Ş¥ó¥É¥é¥¤¥ó¥ª¥×¥·¥ç¥óºîÀ®
+   * @brief ORB ã®ã‚³ãƒãƒ³ãƒ‰ãƒ©ã‚¤ãƒ³ã‚ªãƒ—ã‚·ãƒ§ãƒ³ä½œæˆ
    * @else
    * @brief ORB command option creation
    * @endif
@@ -1565,7 +1565,7 @@ std::vector<coil::Properties> Manager::getLoadableModules()
   
   /*!
    * @if jp
-   * @brief ORB ¤Î½ªÎ»½èÍı
+   * @brief ORB ã®çµ‚äº†å‡¦ç†
    * @else
    * @brief ORB finalization
    * @endif
@@ -1645,7 +1645,7 @@ std::vector<coil::Properties> Manager::getLoadableModules()
   //============================================================
   /*!
    * @if jp
-   * @brief NamingManager ¤Î½é´ü²½
+   * @brief NamingManager ã®åˆæœŸåŒ–
    * @else
    * @brief NamingManager initialization
    * @endif
@@ -1700,7 +1700,7 @@ std::vector<coil::Properties> Manager::getLoadableModules()
   
   /*!
    * @if jp
-   * @brief NamingManager ¤Î½ªÎ»½èÍı
+   * @brief NamingManager ã®çµ‚äº†å‡¦ç†
    * @else
    * @brief NamingManager finalization
    * @endif
@@ -1730,7 +1730,7 @@ std::vector<coil::Properties> Manager::getLoadableModules()
   //============================================================
   /*!
    * @if jp
-   * @brief ExecutionContextManager ¤Î½é´ü²½
+   * @brief ExecutionContextManager ã®åˆæœŸåŒ–
    * @else
    * @brief ExecutionContextManager initialization
    * @endif
@@ -1813,7 +1813,7 @@ std::vector<coil::Properties> Manager::getLoadableModules()
   
   /*!
    * @if jp
-   * @brief Timer ¤Î½é´ü²½
+   * @brief Timer ã®åˆæœŸåŒ–
    * @else
    * @brief Timer initialization
    * @endif
@@ -1892,7 +1892,7 @@ std::vector<coil::Properties> Manager::getLoadableModules()
 
   /*!
    * @if jp
-   * @brief NamingManager ¤Î½ªÎ»½èÍı
+   * @brief NamingManager ã®çµ‚äº†å‡¦ç†
    * @else
    * @brief NamingManager finalization
    * @endif
@@ -1941,7 +1941,7 @@ std::vector<coil::Properties> Manager::getLoadableModules()
   
   /*!
    * @if jp
-   * @brief RT¥³¥ó¥İ¡¼¥Í¥ó¥È¤ÎÅĞÏ¿²ò½ü
+   * @brief RTã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆã®ç™»éŒ²è§£é™¤
    * @else
    * @brief Unregister RT-Components
    * @endif
@@ -1974,7 +1974,7 @@ std::vector<coil::Properties> Manager::getLoadableModules()
   
   /*!
    * @if jp
-   * @brief createComponent¤Î°ú¿ô¤ò½èÍı¤¹¤ë
+   * @brief createComponentã®å¼•æ•°ã‚’å‡¦ç†ã™ã‚‹
    * @else
    *
    * @endif
@@ -2070,7 +2070,7 @@ std::vector<coil::Properties> Manager::getLoadableModules()
   
   /*!
    * @if jp
-   * @brief RT¥³¥ó¥İ¡¼¥Í¥ó¥È¤Î¥³¥ó¥Õ¥£¥®¥å¥ì¡¼¥·¥ç¥ó½èÍı
+   * @brief RTã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆã®ã‚³ãƒ³ãƒ•ã‚£ã‚®ãƒ¥ãƒ¬ãƒ¼ã‚·ãƒ§ãƒ³å‡¦ç†
    * @else
    *
    * @endif
@@ -2169,7 +2169,7 @@ std::vector<coil::Properties> Manager::getLoadableModules()
   
   /*!
    * @if jp
-   * @brief ¥×¥í¥Ñ¥Æ¥£¾ğÊó¤Î¥Ş¡¼¥¸
+   * @brief ãƒ—ãƒ­ãƒ‘ãƒ†ã‚£æƒ…å ±ã®ãƒãƒ¼ã‚¸
    * @else
    * @brief Merge property information
    * @endif
@@ -2196,7 +2196,7 @@ std::vector<coil::Properties> Manager::getLoadableModules()
   
   /*!
    * @if jp
-   * @brief NamingServer ¤ËÅĞÏ¿¤¹¤ëºİ¤ÎÅĞÏ¿¾ğÊó¤òÁÈ¤ßÎ©¤Æ¤ë
+   * @brief NamingServer ã«ç™»éŒ²ã™ã‚‹éš›ã®ç™»éŒ²æƒ…å ±ã‚’çµ„ã¿ç«‹ã¦ã‚‹
    * @else
    * @brief Construct registration information when registering to Naming server
    * @endif

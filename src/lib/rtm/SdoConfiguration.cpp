@@ -1,4 +1,4 @@
-// -*- C++ -*-
+ï»¿// -*- C++ -*-
 /*!
  * @file SdoConfiguration.cpp
  * @brief SDO's Configuration implementation class
@@ -30,11 +30,11 @@ namespace SDOPackage
   /*!
    * @if jp
    *
-   * @brief SDO ConfigurationSet¤ò ¥×¥í¥Ñ¥Æ¥£¤Ë³ÊÇ¼
+   * @brief SDO ConfigurationSetã‚’ ãƒ—ãƒ­ãƒ‘ãƒ†ã‚£ã«æ ¼ç´
    * 
-   * SDO ConfigurationSet¤ò RTCÍÑ¥×¥í¥Ñ¥Æ¥£¤Ë³ÊÇ¼¤¹¤ë¡£
+   * SDO ConfigurationSetã‚’ RTCç”¨ãƒ—ãƒ­ãƒ‘ãƒ†ã‚£ã«æ ¼ç´ã™ã‚‹ã€‚
    *
-   * @param prop ³ÊÇ¼Àè¥×¥í¥Ñ¥Æ¥£
+   * @param prop æ ¼ç´å…ˆãƒ—ãƒ­ãƒ‘ãƒ†ã‚£
    * @param conf SDO ConfigurationSet
    * 
    * @else
@@ -57,12 +57,12 @@ namespace SDOPackage
   /*!
    * @if jp
    *
-   * @brief ¥×¥í¥Ñ¥Æ¥£¤ò SDO ConfigurationSet¤ËÊÑ´¹
+   * @brief ãƒ—ãƒ­ãƒ‘ãƒ†ã‚£ã‚’ SDO ConfigurationSetã«å¤‰æ›
    * 
-   * RTCÍÑ¥×¥í¥Ñ¥Æ¥£¤òSDO ConfigurationSet¤ËÊÑ´¹¤¹¤ë¡£
+   * RTCç”¨ãƒ—ãƒ­ãƒ‘ãƒ†ã‚£ã‚’SDO ConfigurationSetã«å¤‰æ›ã™ã‚‹ã€‚
    *
-   * @param conf ³ÊÇ¼Àè SDO ConfigurationSet
-   * @param prop ¥×¥í¥Ñ¥Æ¥£
+   * @param conf æ ¼ç´å…ˆ SDO ConfigurationSet
+   * @param prop ãƒ—ãƒ­ãƒ‘ãƒ†ã‚£
    * 
    * @else
    *
@@ -94,7 +94,7 @@ namespace SDOPackage
   //============================================================
   
   /* @if jp
-   * @brief ¥³¥ó¥¹¥È¥é¥¯¥¿
+   * @brief ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
    * @else
    * @brief Constructor
    * @endif
@@ -108,7 +108,7 @@ namespace SDOPackage
   }
   
   /* @if jp
-   * @brief ²¾ÁÛ¥Ç¥¹¥È¥é¥¯¥¿
+   * @brief ä»®æƒ³ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
    * @else
    * @brief Virtual destructor
    * @endif
@@ -122,7 +122,7 @@ namespace SDOPackage
   // Basic Configuration 
   //============================================================
   /* @if jp
-   * @brief [CORBA interface] SDO ¤Î DeviceProfile ¤ò¥»¥Ã¥È¤¹¤ë
+   * @brief [CORBA interface] SDO ã® DeviceProfile ã‚’ã‚»ãƒƒãƒˆã™ã‚‹
    * @else
    * @brief [CORBA interface] Set DeviceProfile of SDO
    * @endif
@@ -149,7 +149,7 @@ namespace SDOPackage
   
   /*!
    * @if jp
-   * @brief [CORBA interface] SDO ¤Î ServiceProfile ¤Î¥»¥Ã¥È
+   * @brief [CORBA interface] SDO ã® ServiceProfile ã®ã‚»ãƒƒãƒˆ
    * @else
    * @brief [CORBA interface] Set SDO's ServiceProfile
    * @endif
@@ -178,7 +178,7 @@ namespace SDOPackage
   
   /*!
    * @if jp
-   * @brief [CORBA interface] Organization ¤ÎÄÉ²Ã
+   * @brief [CORBA interface] Organization ã®è¿½åŠ 
    * @else
    * @brief [CORBA interface] Add Organization
    * @endif
@@ -205,7 +205,7 @@ namespace SDOPackage
   
   /*!
    * @if jp
-   * @brief [CORBA interface] ServiceProfile ¤Îºï½ü
+   * @brief [CORBA interface] ServiceProfile ã®å‰Šé™¤
    * @else
    * @brief [CORBA interface] Remove ServiceProfile
    * @endif
@@ -229,7 +229,7 @@ namespace SDOPackage
   
   /*!
    * @if jp
-   * @brief [CORBA interface] Organization ¤Î»²¾È¤Îºï½ü
+   * @brief [CORBA interface] Organization ã®å‚ç…§ã®å‰Šé™¤
    * @else
    * @brief [CORBA interface] Remove the reference of Organization 
    * @endif
@@ -259,7 +259,7 @@ namespace SDOPackage
   //============================================================
   /*!
    * @if jp
-   * @brief [CORBA interface] ÀßÄê¥Ñ¥é¥á¡¼¥¿¤Î¥ê¥¹¥È¤Î¼èÆÀ
+   * @brief [CORBA interface] è¨­å®šãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ã®ãƒªã‚¹ãƒˆã®å–å¾—
    * @else
    * @brief [CORBA interface] Get a list of configuration parameters
    * @endif
@@ -288,7 +288,7 @@ namespace SDOPackage
   
   /*!
    * @if jp
-   * @brief [CORBA interface] Configuration parameter ¤ÎÃÍ¤Î¥ê¥¹¥È¤Î¼èÆÀ
+   * @brief [CORBA interface] Configuration parameter ã®å€¤ã®ãƒªã‚¹ãƒˆã®å–å¾—
    * @else
    * @brief [CORBA interface] Get a list of the value of configuration parameters
    * @endif
@@ -316,7 +316,7 @@ namespace SDOPackage
   
   /*!
    * @if jp
-   * @brief [CORBA interface] Configuration parameter ¤ÎÃÍ¤Î¼èÆÀ
+   * @brief [CORBA interface] Configuration parameter ã®å€¤ã®å–å¾—
    * @else
    * @brief [CORBA interface] Get the value of configuration parameter
    * @endif
@@ -348,7 +348,7 @@ namespace SDOPackage
   
   /*!
    * @if jp
-   * @brief [CORBA interface] Configuration ¥Ñ¥é¥á¡¼¥¿¤ÎÊÑ¹¹
+   * @brief [CORBA interface] Configuration ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ã®å¤‰æ›´
    * @else
    * @brief [CORBA interface] Modify the configuration parameter value
    * @endif
@@ -378,7 +378,7 @@ namespace SDOPackage
   
   /*!
    * @if jp
-   * @brief [CORBA interface] ConfigurationSet ¥ê¥¹¥È¤Î¼èÆÀ 
+   * @brief [CORBA interface] ConfigurationSet ãƒªã‚¹ãƒˆã®å–å¾— 
    * @else
    * @brief [CORBA interface] Get a list of ConfigurationSet
    * @endif
@@ -427,7 +427,7 @@ namespace SDOPackage
   
   /*!
    * @if jp
-   * @brief [CORBA interface] ConfigurationSet ¤Î¼èÆÀ
+   * @brief [CORBA interface] ConfigurationSet ã®å–å¾—
    * @else
    * @brief [CORBA interface] Get a ConfigurationSet
    * @endif
@@ -480,7 +480,7 @@ namespace SDOPackage
   
   /*!
    * @if jp
-   * @brief [CORBA interface] ConfigurationSet ¤ò¥»¥Ã¥È¤¹¤ë
+   * @brief [CORBA interface] ConfigurationSet ã‚’ã‚»ãƒƒãƒˆã™ã‚‹
    * @else
    * @brief [CORBA interface] Set ConfigurationSet
    * @endif
@@ -540,7 +540,7 @@ namespace SDOPackage
   
   /*!
    * @if jp
-   * @brief [CORBA interface] ¥¢¥¯¥Æ¥£¥Ö¤Ê ConfigurationSet ¤ò¼èÆÀ¤¹¤ë
+   * @brief [CORBA interface] ã‚¢ã‚¯ãƒ†ã‚£ãƒ–ãª ConfigurationSet ã‚’å–å¾—ã™ã‚‹
    * @else
    * @brief [CORBA interface] Get active ConfigurationSet
    * @endif
@@ -551,13 +551,13 @@ namespace SDOPackage
            NotAvailable, InternalError)
   {
     RTC_TRACE(("get_active_configuration_set()"));
-    // active¤ÊConfigurationSet¤ÏÌµ¤¤
+    // activeãªConfigurationSetã¯ç„¡ã„
     if (!m_configsets.isActive()) throw NotAvailable();    
     
     try
       {
         Guard gurad(m_config_mutex);
-        // active¤ÊConfigurationSet¤òÊÖ¤¹
+        // activeãªConfigurationSetã‚’è¿”ã™
         ConfigurationSet_var config;
         config = new ConfigurationSet();
         toConfigurationSet(config, m_configsets.getActiveConfigurationSet());
@@ -573,7 +573,7 @@ namespace SDOPackage
   
   /*!
    * @if jp
-   * @brief [CORBA interface] ConfigurationSet ¤òÄÉ²Ã¤¹¤ë
+   * @brief [CORBA interface] ConfigurationSet ã‚’è¿½åŠ ã™ã‚‹
    * @else
    * @brief [CORBA interface] Add ConfigurationSet
    * @endif
@@ -607,7 +607,7 @@ namespace SDOPackage
   
   /*!
    * @if jp
-   * @brief [CORBA interface] ConfigurationSet ¤òºï½ü¤¹¤ë
+   * @brief [CORBA interface] ConfigurationSet ã‚’å‰Šé™¤ã™ã‚‹
    * @else
    * @brief [CORBA interface] Remove ConfigurationSet
    * @endif
@@ -636,7 +636,7 @@ namespace SDOPackage
   
   /*!
    * @if jp
-   * @brief [CORBA interface] ConfigurationSet ¤Î¥¢¥¯¥Æ¥£¥Ö²½
+   * @brief [CORBA interface] ConfigurationSet ã®ã‚¢ã‚¯ãƒ†ã‚£ãƒ–åŒ–
    * @else
    * @brief [CORBA interface] Activate ConfigurationSet
    * @endif
@@ -678,7 +678,7 @@ namespace SDOPackage
   
   /*!
    * @if jp
-   * @brief ¥ª¥Ö¥¸¥§¥¯¥È¡¡¥ê¥Õ¥¡¥ì¥ó¥¹¤ò¼èÆÀ¤¹¤ë
+   * @brief ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã€€ãƒªãƒ•ã‚¡ãƒ¬ãƒ³ã‚¹ã‚’å–å¾—ã™ã‚‹
    * @else
    * @brief Get object reference
    * @endif
@@ -690,7 +690,7 @@ namespace SDOPackage
   
   /*!
    * @if jp
-   * @brief SDO ¤Î DeviceProfile ¤ò¼èÆÀ¤¹¤ë
+   * @brief SDO ã® DeviceProfile ã‚’å–å¾—ã™ã‚‹
    * @else
    * @brief Get the DeviceProfile of SDO
    * @endif
@@ -702,7 +702,7 @@ namespace SDOPackage
   
   /*!
    * @if jp
-   * @brief SDO ¤Î Organization ¥ê¥¹¥È¤ò¼èÆÀ¤¹¤ë
+   * @brief SDO ã® Organization ãƒªã‚¹ãƒˆã‚’å–å¾—ã™ã‚‹
    * @else
    * @brief Get a list of Organization of SDO
    * @endif
@@ -714,7 +714,7 @@ namespace SDOPackage
   
   /*!
    * @if jp
-   * @brief UUID¤òÀ¸À®¤¹¤ë
+   * @brief UUIDã‚’ç”Ÿæˆã™ã‚‹
    * @else
    * @brief Generate UUID
    * @endif

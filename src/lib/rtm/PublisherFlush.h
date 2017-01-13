@@ -1,4 +1,4 @@
-// -*- C++ -*-
+﻿// -*- C++ -*-
 /*!
  * @file  PublisherFlush.h
  * @brief PublisherFlush class
@@ -38,11 +38,11 @@ namespace RTC
   /*!
    * @if jp
    * @class PublisherFlush
-   * @brief PublisherFlush ���饹
+   * @brief PublisherFlush クラス
    *
-   * Flush �� Publisher ���饹
-   * �Хåե���˳�Ǽ����Ƥ���̤�����ǡ������������롣
-   * �ǡ������Ф��Ԥĥ��󥷥塼�ޤ����Ф���¦��Ʊ������åɤ�ư����롣
+   * Flush 型 Publisher クラス
+   * バッファ内に格納されている未送信データを送信する。
+   * データ送出を待つコンシューマを、送出する側と同じスレッドで動作させる。
    *
    * @else
    * @class PublisherFlush
@@ -66,9 +66,9 @@ namespace RTC
 
     /*!
      * @if jp
-     * @brief ���󥹥ȥ饯��
+     * @brief コンストラクタ
      *
-     * ���󥹥ȥ饯��
+     * コンストラクタ
      *
      * @else
      * @brief Constructor
@@ -81,9 +81,9 @@ namespace RTC
     
     /*!
      * @if jp
-     * @brief �ǥ��ȥ饯��
+     * @brief デストラクタ
      *
-     * �ǥ��ȥ饯��
+     * デストラクタ
      *
      * @else
      * @brief Destructor
@@ -96,15 +96,15 @@ namespace RTC
 
     /*!
      * @if jp
-     * @brief �����
+     * @brief 初期化
      *
-     * ���Υ��饹�Υ��֥������Ȥ���Ѥ���Τ���Ω����ɬ�����δؿ���Ƥ�
-     * �Ф�ɬ�פ����롣������������ PublisherFlush �ϸ����ǽ���������
-     * ��᡼��������ʤ���
+     * このクラスのオブジェクトを使用するのに先立ち、必ずこの関数を呼び
+     * 出す必要がある。ただし、この PublisherFlush は現状で初期化するパ
+     * ラメータを持たない。
      *    
-     * @param property ��Publisher�ζ�ư�����������ꤷ��Property���֥�������
-     * @return ReturnCode PORT_OK ���ｪλ
-     *                    INVALID_ARGS Properties ���������ͤ�ޤ�
+     * @param property 本Publisherの駆動制御情報を設定したPropertyオブジェクト
+     * @return ReturnCode PORT_OK 正常終了
+     *                    INVALID_ARGS Properties が不正な値を含む
      *
      * @else
      * @brief initialization
@@ -122,15 +122,15 @@ namespace RTC
 
     /*!
      * @if jp
-     * @brief InPort���󥷥塼�ޤΥ��å�
+     * @brief InPortコンシューマのセット
      *
-     * ���δؿ��Ǥϡ����� Publisher �˴�Ϣ�դ����륳�󥷥塼�ޤ򥻥åȤ��롣
-     * ���󥷥塼�ޥ��֥������Ȥ��̥�ݥ��󥿤ξ�硢INVALID_ARGS���֤���롣
-     * ����ʳ��ξ��ϡ�PORT_OK ���֤���롣
+     * この関数では、この Publisher に関連付けられるコンシューマをセットする。
+     * コンシューマオブジェクトがヌルポインタの場合、INVALID_ARGSが返される。
+     * それ以外の場合は、PORT_OK が返される。
      *
-     * @param consumer Consumer �ؤΥݥ���
-     * @return ReturnCode PORT_OK ���ｪλ
-     *                    INVALID_ARGS �������������ͤ��ޤޤ�Ƥ���
+     * @param consumer Consumer へのポインタ
+     * @return ReturnCode PORT_OK 正常終了
+     *                    INVALID_ARGS 引数に不正な値が含まれている
      *
      * @else
      * @brief Store InPort consumer
@@ -149,13 +149,13 @@ namespace RTC
 
     /*!
      * @if jp
-     * @brief �Хåե��Υ��å�
+     * @brief バッファのセット
      * 
-     * PublisherFlush�Ǥϡ��Хåե�����Ѥ��ʤ����ᡢ�����ʤ����
-     * PORT_OK ���֤���
+     * PublisherFlushでは、バッファを使用しないため、いかなる場合も
+     * PORT_OK を返す。
      *
-     * @param buffer CDR�Хåե�
-     * @return PORT_OK ���ｪλ
+     * @param buffer CDRバッファ
+     * @return PORT_OK 正常終了
      *
      * @else
      * @brief Setting buffer pointer
@@ -172,19 +172,19 @@ namespace RTC
 
     /*!
      * @if jp
-     * @brief �ꥹ�ʤ����ꤹ�롣
+     * @brief リスナを設定する。
      *
-     * Publisher ���Ф��ƥꥹ�ʥ��֥������� ConnectorListeners �����ꤹ�롣
-     * �Ƽ�ꥹ�ʥ��֥������Ȥ�ޤ� ConnectorListeners �򥻥åȤ��뤳�Ȥǡ�
-     * �Хåե����ɤ߽񤭡��ǡ��������������ˤ����Υꥹ�ʤ򥳡��뤹�롣
-     * ConnectorListeners ���֥������Ȥν�ͭ���ϥݡ��Ȥޤ��� RTObject ������
-     * Publisher ������� ConnectorListeners �Ϻ������뤳�ȤϤʤ���
-     * ConnectorListeners ���̥�ݥ��󥿤ξ�� INVALID_ARGS ���֤���
+     * Publisher に対してリスナオブジェクト ConnectorListeners を設定する。
+     * 各種リスナオブジェクトを含む ConnectorListeners をセットすることで、
+     * バッファの読み書き、データの送信時等にこれらのリスナをコールする。
+     * ConnectorListeners オブジェクトの所有権はポートまたは RTObject が持ち
+     * Publisher 削除時に ConnectorListeners は削除されることはない。
+     * ConnectorListeners がヌルポインタの場合 INVALID_ARGS を返す。
      *
-     * @param info ConnectorProfile ��������벽�������֥������� ConnectorInfo
-     * @param listeners �ꥹ�ʤ�¿���ݻ����� ConnectorListeners ���֥�������
-     * @return PORT_OK      ���ｪλ
-     *         INVALID_ARGS �����ʰ���
+     * @param info ConnectorProfile をローカル化したオブジェクト ConnectorInfo
+     * @param listeners リスナを多数保持する ConnectorListeners オブジェクト
+     * @return PORT_OK      正常終了
+     *         INVALID_ARGS 不正な引数
      * @else
      * @brief Set the listener. 
      *
@@ -209,33 +209,33 @@ namespace RTC
 
     /*!
      * @if jp
-     * @brief �ǡ�����񤭹���
+     * @brief データを書き込む
      *
-     * Publisher ���ݻ����륳�󥷥塼�ޤ��Ф��ƥǡ�����񤭹��ࡣ����
-     * ���塼�ޡ��ꥹ������Ŭ�ڤ����ꤵ��Ƥ��ʤ�����Publisher ���֥���
-     * ���Ȥ����������������Ƥ��ʤ���硢���δؿ���ƤӽФ��ȥ��顼����
-     * �� PRECONDITION_NOT_MET ���֤��졢���󥷥塼�ޤؤν񤭹���������
-     * ��ϰ��ڹԤ��ʤ���
+     * Publisher が保持するコンシューマに対してデータを書き込む。コン
+     * シューマ、リスナ等が適切に設定されていない等、Publisher オブジェ
+     * クトが正しく初期化されていない場合、この関数を呼び出すとエラーコー
+     * ド PRECONDITION_NOT_MET が返され、コンシューマへの書き込み等の操
+     * 作は一切行われない。
      *
-     * ���󥷥塼�ޤؤν񤭹��ߤ��Ф��ơ����󥷥塼�ޤ��ե���֡�����
-     * ���塼�ޤΥ��顼�����󥷥塼�ޤؤν񤭹��ߤ������ॢ���Ȥ������
-     * �ˤϤ��줾�졢���顼������ SEND_FULL, SEND_ERROR, SEND_TIMEOUT
-     * ���֤���롣
+     * コンシューマへの書き込みに対して、コンシューマがフル状態、コン
+     * シューマのエラー、コンシューマへの書き込みがタイムアウトした場合
+     * にはそれぞれ、エラーコード SEND_FULL, SEND_ERROR, SEND_TIMEOUT
+     * が返される。
      *
-     * �����ʳ��Υ��顼�ξ�硢PORT_ERROR ���֤���롣
+     * これら以外のエラーの場合、PORT_ERROR が返される。
      * 
      *
-     * @param data �񤭹���ǡ��� 
-     * @param sec �����ॢ���Ȼ���
-     * @param nsec �����ॢ���Ȼ���
+     * @param data 書き込むデータ 
+     * @param sec タイムアウト時間
+     * @param nsec タイムアウト時間
      *
-     * @return PORT_OK             ���ｪλ
-     *         PRECONDITION_NO_MET consumer, buffer, listener����Ŭ�ڤ�����
-     *                             ����Ƥ��ʤ��������Υ��֥������Ȥλ������
-     *                             ���������ʤ���硣
-     *         SEND_FULL           �����褬�ե����
-     *         SEND_TIMEOUT        �����褬�����ॢ���Ȥ���
-     *         CONNECTION_LOST     ��³�����Ǥ��줿���Ȥ��Τ�����
+     * @return PORT_OK             正常終了
+     *         PRECONDITION_NO_MET consumer, buffer, listener等が適切に設定
+     *                             されていない等、このオブジェクトの事前条件
+     *                             を満たさない場合。
+     *         SEND_FULL           送信先がフル状態
+     *         SEND_TIMEOUT        送信先がタイムアウトした
+     *         CONNECTION_LOST     接続が切断されたことを検知した。
      *
      * @else
      * @brief Write data 
@@ -271,14 +271,14 @@ namespace RTC
     /*!
      * @if jp
      *
-     * @brief �����ƥ��ֲ���ǧ
+     * @brief アクティブ化確認
      * 
-     * Publisher �ϥǡ����ݡ��Ȥ�Ʊ������ activate/deactivate ����롣
-     * activate() / deactivate() �ؿ��ˤ�äơ������ƥ��־��֤��󥢥��ƥ�
-     * �־��֤��ڤ��ؤ�롣���δؿ��ˤ�ꡢ���ߥ����ƥ��־��֤����󥢥�
-     * �ƥ��־��֤����ǧ���뤳�Ȥ��Ǥ��롣
+     * Publisher はデータポートと同期して activate/deactivate される。
+     * activate() / deactivate() 関数によって、アクティブ状態と非アクティ
+     * ブ状態が切り替わる。この関数により、現在アクティブ状態か、非アク
+     * ティブ状態かを確認することができる。
      *
-     * @return ���ֳ�ǧ���(�����ƥ��־���:true���󥢥��ƥ��־���:false)
+     * @return 状態確認結果(アクティブ状態:true、非アクティブ状態:false)
      *
      * @else
      *
@@ -299,15 +299,15 @@ namespace RTC
 
     /*!
      * @if jp
-     * @brief �����ƥ��ֲ�����
+     * @brief アクティブ化する
      *
-     * Publisher �򥢥��ƥ��ֲ����롣���δؿ���ƤӽФ����Ȥˤ�ꡢ
-     * Publisher�����ġ��ǡ������������륹��åɤ�ư��򳫻Ϥ��롣���
-     * �����Ԥ��Ƥ��ʤ��ʤɤˤ�ꡢ���������������ʤ���硢���顼����
-     * �� PRECONDITION_NOT_MET ���֤���
+     * Publisher をアクティブ化する。この関数を呼び出すことにより、
+     * Publisherが持つ、データを送信するスレッドが動作を開始する。初期
+     * 化が行われていないなどにより、事前条件を満たさない場合、エラーコー
+     * ド PRECONDITION_NOT_MET を返す。
      *
-     * @return PORT_OK ���ｪλ
-     *         PRECONDITION_NOT_MET ���������������ʤ�
+     * @return PORT_OK 正常終了
+     *         PRECONDITION_NOT_MET 事前条件を満たさない
      *
      * @else
      * @brief activation
@@ -326,15 +326,15 @@ namespace RTC
 
     /*!
      * @if jp
-     * @brief �󥢥��ƥ��ֲ�����
+     * @brief 非アクティブ化する
      *
-     * Publisher ���󥢥��ƥ��ֲ����롣���δؿ���ƤӽФ����Ȥˤ�ꡢ
-     * Publisher�����ġ��ǡ������������륹��åɤ�ư�����ߤ��롣���
-     * �����Ԥ��Ƥ��ʤ��ʤɤˤ�ꡢ���������������ʤ���硢���顼����
-     * �� PRECONDITION_NOT_MET ���֤���
+     * Publisher を非アクティブ化する。この関数を呼び出すことにより、
+     * Publisherが持つ、データを送信するスレッドが動作を停止する。初期
+     * 化が行われていないなどにより、事前条件を満たさない場合、エラーコー
+     * ド PRECONDITION_NOT_MET を返す。
      *
-     * @return PORT_OK ���ｪλ
-     *         PRECONDITION_NOT_MET ���������������ʤ�
+     * @return PORT_OK 正常終了
+     *         PRECONDITION_NOT_MET 事前条件を満たさない
      *
      * @else
      * @brief deactivation
@@ -354,7 +354,7 @@ namespace RTC
   protected:
     /*!
      * @if jp
-     * @brief ON_SEND�Υꥹ�ʤ����Τ��롣 
+     * @brief ON_SENDのリスナへ通知する。 
      * @param data cdrMemoryStream
      * @else
      * @brief Notify an ON_SEND event to listners
@@ -369,7 +369,7 @@ namespace RTC
 
     /*!
      * @if jp
-     * @brief ON_RECEIVED�Υꥹ�ʤ����Τ��롣 
+     * @brief ON_RECEIVEDのリスナへ通知する。 
      * @param data cdrMemoryStream
      * @else
      * @brief Notify an ON_RECEIVED event to listeners
@@ -384,7 +384,7 @@ namespace RTC
 
     /*!
      * @if jp
-     * @brief ON_RECEIVER_FULL�Υꥹ�ʤ����Τ��롣 
+     * @brief ON_RECEIVER_FULLのリスナへ通知する。 
      * @param data cdrMemoryStream
      * @else
      * @brief Notify an ON_RECEIVER_FULL event to listeners
@@ -399,7 +399,7 @@ namespace RTC
 
     /*!
      * @if jp
-     * @brief ON_RECEIVER_TIMEOUT�Υꥹ�ʤ����Τ��롣 
+     * @brief ON_RECEIVER_TIMEOUTのリスナへ通知する。 
      * @param data cdrMemoryStream
      * @else
      * @brief Notify an ON_RECEIVER_TIMEOUT event to listeners
@@ -414,7 +414,7 @@ namespace RTC
 
     /*!
      * @if jp
-     * @brief ON_RECEIVER_ERROR�Υꥹ�ʤ����Τ��롣 
+     * @brief ON_RECEIVER_ERRORのリスナへ通知する。 
      * @param data cdrMemoryStream
      * @else
      * @brief Notify an ON_RECEIVER_ERROR event to listeners

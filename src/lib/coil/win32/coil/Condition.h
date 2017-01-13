@@ -1,4 +1,4 @@
-// -*- C++ -*-
+﻿// -*- C++ -*-
 /*!
  * @file  Condition_win32.h
  * @brief Condition variable class for Win32
@@ -70,7 +70,7 @@ namespace coil
    * @if jp
    *
    * @class Condition
-   * @brief Condition �e���v���[�g�N���X
+   * @brief Condition テンプレートクラス
    *
    * @else
    *
@@ -87,9 +87,9 @@ namespace coil
     /*!
      * @if jp
      *
-     * @brief �R���X�g���N�^
+     * @brief コンストラクタ
      *
-     * �R���X�g���N�^�B
+     * コンストラクタ。
      *
      * @else
      *
@@ -108,9 +108,9 @@ namespace coil
     /*!
      * @if jp
      *
-     * @brief �f�X�g���N�^
+     * @brief デストラクタ
      *
-     * �f�X�g���N�^�B
+     * デストラクタ。
      *
      * @else
      *
@@ -127,9 +127,9 @@ namespace coil
     /*!
      * @if jp
      *
-     * @brief �X���b�h���s�̍ĊJ
+     * @brief スレッド実行の再開
      *
-     * �ҋ@���Ă���X���b�h���s���ĊJ������B
+     * 待機しているスレッド実行を再開させる。
      *
      * @else
      *
@@ -147,9 +147,9 @@ namespace coil
     /*!
      * @if jp
      *
-     * @brief �S�X���b�h���s�̍ĊJ
+     * @brief 全スレッド実行の再開
      *
-     * �ҋ@���Ă���S�ẴX���b�h���s���ĊJ������B
+     * 待機している全てのスレッド実行を再開させる。
      *
      * @else
      *
@@ -167,11 +167,11 @@ namespace coil
     /*!
      * @if jp
      *
-     * @brief �X���b�h���s�̑ҋ@
+     * @brief スレッド実行の待機
      *
-     * �����ϐ������M�����܂ŃX���b�h�̎��s���~����B
+     * 条件変数が送信されるまでスレッドの実行を停止する。
      *
-     * @return true: ����, false: ���s
+     * @return true: 成功, false: 失敗
      *
      * @else
      *
@@ -191,14 +191,14 @@ namespace coil
     /*!
      * @if jp
      *
-     * @brief �ݒ莞�Ԃ̃X���b�h���s�ҋ@
+     * @brief 設定時間のスレッド実行待機
      *
-     * �ݒ肳�ꂽ���ԁA�X���b�h�̎��s���~����B
+     * 設定された時間、スレッドの実行を停止する。
      *
-     * @param second �b�P�ʂ̎���
-     * @param nano_second �i�m�b�P�ʂ̎���
+     * @param second 秒単位の時間
+     * @param nano_second ナノ秒単位の時間
      *
-     * @return true: ����, false: ���s
+     * @return true: 成功, false: 失敗
      *
      * @else
      *
@@ -224,11 +224,11 @@ namespace coil
     /*!
      * @if jp
      *
-     * @brief �X���b�h���s�̑ҋ@
+     * @brief スレッド実行の待機
      *
-     * �V�O�i����ԂɂȂ�܂ŃX���b�h�̎��s���~����B
+     * シグナル状態になるまでスレッドの実行を停止する。
      *
-     * @return ���s����(����:0�A���s:0�ȊO)
+     * @return 実行結果(成功:0、失敗:0以外)
      *
      * @else
      *
@@ -304,11 +304,11 @@ namespace coil
     /*!
      * @if jp
      *
-     * @brief �X���b�h���s�̍ĊJ
+     * @brief スレッド実行の再開
      *
-     * �ҋ@���Ă���X���b�h���s���ĊJ������B
+     * 待機しているスレッド実行を再開させる。
      *
-     * @return ���s����(����:0)
+     * @return 実行結果(成功:0)
      *
      * @else
      *
@@ -337,11 +337,11 @@ namespace coil
     /*!
      * @if jp
      *
-     * @brief �S�X���b�h���s�̍ĊJ
+     * @brief 全スレッド実行の再開
      *
-     * �ҋ@���Ă���S�ẴX���b�h���s���ĊJ������B
+     * 待機している全てのスレッド実行を再開させる。
      *
-     * @return ���s����(����:0)
+     * @return 実行結果(成功:0)
      *
      * @else
      *

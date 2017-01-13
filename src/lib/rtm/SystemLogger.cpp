@@ -1,4 +1,4 @@
-// -*- C++ -*-
+ï»¿// -*- C++ -*-
 /*!
  * @file SystemLogger.cpp
  * @brief RT component logger class
@@ -75,7 +75,7 @@ namespace RTC
 
   /*!
    * @if jp
-   * @brief ¥í¥°¥ì¥Ù¥ë¤òÊ¸»úÎó¤ÇÀßÄê¤¹¤ë
+   * @brief ãƒ­ã‚°ãƒ¬ãƒ™ãƒ«ã‚’æ–‡å­—åˆ—ã§è¨­å®šã™ã‚‹
    * @else
    * @brief Set log level by string
    * @endif
@@ -87,7 +87,7 @@ namespace RTC
 
   /*!
    * @if jp
-   * @brief ¥Ø¥Ã¥À¤ËÉÕ²Ã¤¹¤ëÆü»ş¥Õ¥©¡¼¥Ş¥Ã¥È¤ò»ØÄê¤¹¤ë¡£
+   * @brief ãƒ˜ãƒƒãƒ€ã«ä»˜åŠ ã™ã‚‹æ—¥æ™‚ãƒ•ã‚©ãƒ¼ãƒãƒƒãƒˆã‚’æŒ‡å®šã™ã‚‹ã€‚
    * @else
    * @brief Set date/time format for adding the header
    * @endif
@@ -105,7 +105,7 @@ namespace RTC
   }
   /*!
    * @if jp
-   * @brief ¥Ø¥Ã¥À¤ÎÆü»ş¤Î¸å¤ËÉÕ²Ã¤¹¤ëÊ¸»úÎó¤òÀßÄê¤¹¤ë¡£
+   * @brief ãƒ˜ãƒƒãƒ€ã®æ—¥æ™‚ã®å¾Œã«ä»˜åŠ ã™ã‚‹æ–‡å­—åˆ—ã‚’è¨­å®šã™ã‚‹ã€‚
    * @else
    * @brief Set suffix of date/time string of header.
    * @endif
@@ -117,7 +117,7 @@ namespace RTC
 
   /*!
    * @if jp
-   * @brief ¥á¥Ã¥»¡¼¥¸¤Î¥×¥ê¥Õ¥£¥Ã¥¯¥¹ÄÉ²Ã´Ø¿ô
+   * @brief ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ã®ãƒ—ãƒªãƒ•ã‚£ãƒƒã‚¯ã‚¹è¿½åŠ é–¢æ•°
    * @else
    * @brief Message prefix appender function
    * @endif
@@ -143,7 +143,7 @@ namespace RTC
 
   /*!
    * @if jp
-   * @brief ¥Õ¥©¡¼¥Ş¥Ã¥È¤µ¤ì¤¿¸½ºßÆü»şÊ¸»úÎó¤ò¼èÆÀ¤¹¤ë¡£
+   * @brief ãƒ•ã‚©ãƒ¼ãƒãƒƒãƒˆã•ã‚ŒãŸç¾åœ¨æ—¥æ™‚æ–‡å­—åˆ—ã‚’å–å¾—ã™ã‚‹ã€‚
    * @else
    * @brief Get the current formatted date/time string
    * @endif
@@ -191,7 +191,7 @@ namespace RTC
 
   /*!
    * @if jp
-   * @brief ¥í¥°¥ì¥Ù¥ëÀßÄê
+   * @brief ãƒ­ã‚°ãƒ¬ãƒ™ãƒ«è¨­å®š
    * @else
    * @brief Set the log level
    * @endif

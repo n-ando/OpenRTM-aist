@@ -1,4 +1,4 @@
-// -*- C++ -*-
+ï»¿// -*- C++ -*-
 /*!
  * @file PeriodicECSharedComposite.cpp
  * @brief DataFlowParticipant RT-Component base class
@@ -46,7 +46,7 @@ namespace SDOPackage
 {
   /*!
    * @if jp
-   * @brief ¥³¥ó¥¹¥È¥é¥¯¥¿
+   * @brief ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
    * @else
    * @brief Constructor
    * @endif
@@ -61,7 +61,7 @@ namespace SDOPackage
 
   /*!
    * @if jp
-   * @brief ¥Ç¥¹¥È¥é¥¯¥¿
+   * @brief ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
    * @else
    * @brief Destructor
    * @endif
@@ -73,7 +73,7 @@ namespace SDOPackage
 
   /*!
    * @if jp
-   * @brief [CORBA interface] Organization¥á¥ó¥Ğ¡¼¤òÄÉ²Ã¤¹¤ë
+   * @brief [CORBA interface] Organizationãƒ¡ãƒ³ãƒãƒ¼ã‚’è¿½åŠ ã™ã‚‹
    * @else
    * @brief [CORBA interface] Add Organization member
    * @endif
@@ -113,7 +113,7 @@ namespace SDOPackage
 
   /*!
    * @if jp
-   * @brief [CORBA interface] Organization¥á¥ó¥Ğ¡¼¤ò¥»¥Ã¥È¤¹¤ë
+   * @brief [CORBA interface] Organizationãƒ¡ãƒ³ãƒãƒ¼ã‚’ã‚»ãƒƒãƒˆã™ã‚‹
    * @else
    * @brief [CORBA interface] Set Organization member
    * @endif
@@ -160,7 +160,7 @@ namespace SDOPackage
 
   /*!
    * @if jp
-   * @brief [CORBA interface] Organization¥á¥ó¥Ğ¡¼¤òºï½ü¤¹¤ë
+   * @brief [CORBA interface] Organizationãƒ¡ãƒ³ãƒãƒ¼ã‚’å‰Šé™¤ã™ã‚‹
    * @else
    * @brief [CORBA interface] Remove a member of Organization
    * @endif
@@ -196,7 +196,7 @@ namespace SDOPackage
 
   /*!
    * @if jp
-   * @brief Organization¥á¥ó¥Ğ¡¼¤òºï½ü¤¹¤ë
+   * @brief Organizationãƒ¡ãƒ³ãƒãƒ¼ã‚’å‰Šé™¤ã™ã‚‹
    * @else
    * @brief Remove a member of Organization
    * @endif
@@ -223,7 +223,7 @@ namespace SDOPackage
 
   /*!
    * @if jp
-   * @brief SDO¤«¤éDFC¤Ø¤ÎÊÑ´¹
+   * @brief SDOã‹ã‚‰DFCã¸ã®å¤‰æ›
    * @else
    * @brief Conversion from SDO to DFC
    * @endif
@@ -242,7 +242,7 @@ namespace SDOPackage
   
   /*!
    * @if jp
-   * @brief Owned ExecutionContext ¤òÄä»ß¤µ¤»¤ë
+   * @brief Owned ExecutionContext ã‚’åœæ­¢ã•ã›ã‚‹
    * @else
    * @brief Stop Owned ExecutionContexts
    * @endif
@@ -260,7 +260,7 @@ namespace SDOPackage
 
   /*!
    * @if jp
-   * @brief Owned ExecutionContext ¤òµ¯Æ°¤¹¤ë
+   * @brief Owned ExecutionContext ã‚’èµ·å‹•ã™ã‚‹
    * @else
    * @brief Start Owned ExecutionContexts
    * @endif
@@ -278,7 +278,7 @@ namespace SDOPackage
 
   /*!
    * @if jp
-   * @brief DFC ¤Ë Organization ¥ª¥Ö¥¸¥§¥¯¥È¤òÍ¿¤¨¤ë
+   * @brief DFC ã« Organization ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’ä¸ãˆã‚‹
    * @else
    * @brief Set Organization object to target DFC 
    * @endif
@@ -296,7 +296,7 @@ namespace SDOPackage
 
   /*!
    * @if jp
-   * @brief Organization ¥ª¥Ö¥¸¥§¥¯¥È¤ò DFC¤«¤éºï½ü¤¹¤ë
+   * @brief Organization ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’ DFCã‹ã‚‰å‰Šé™¤ã™ã‚‹
    * @else
    * @brief Remove Organization object from a target DFC 
    * @endif
@@ -312,7 +312,7 @@ namespace SDOPackage
 
   /*!
    * @if jp
-   * @brief Composite ¤Î ExecutionContext ¤ò DFC ¤Ë¥»¥Ã¥È¤¹¤ë
+   * @brief Composite ã® ExecutionContext ã‚’ DFC ã«ã‚»ãƒƒãƒˆã™ã‚‹
    * @else
    * @brief Set CompositeRTC's ExecutionContext to the given DFC
    * @endif
@@ -357,7 +357,7 @@ namespace SDOPackage
 
   /*!
    * @if jp
-   * @brief Composite ¤Î ExecutionContext ¤«¤é DFC ¤òºï½ü¤¹¤ë
+   * @brief Composite ã® ExecutionContext ã‹ã‚‰ DFC ã‚’å‰Šé™¤ã™ã‚‹
    * @else
    * @brief Remove participant DFC from CompositeRTC's ExecutionContext
    * @endif
@@ -397,7 +397,7 @@ namespace SDOPackage
 
   /*!
    * @if jp
-   * @brief ¥İ¡¼¥È¤ò°Ñ¾ù¤¹¤ë
+   * @brief ãƒãƒ¼ãƒˆã‚’å§”è­²ã™ã‚‹
    * @else
    * @brief Delegate given RTC's ports to the Composite
    * @endif
@@ -448,7 +448,7 @@ namespace SDOPackage
 
   /*!
    * @if jp
-   * @brief °Ñ¾ù¤·¤Æ¤¤¤¿¥İ¡¼¥È¤òºï½ü¤¹¤ë
+   * @brief å§”è­²ã—ã¦ã„ãŸãƒãƒ¼ãƒˆã‚’å‰Šé™¤ã™ã‚‹
    * @else
    * @brief Remove delegated participatns's ports from the composite
    * @endif
@@ -499,7 +499,7 @@ namespace SDOPackage
 
   /*!
    * @if jp
-   * @brief PortsList¤ò¹¹¿·¤¹¤ë
+   * @brief PortsListã‚’æ›´æ–°ã™ã‚‹
    * @else
    * @brief PortsList is updated
    * @endif
@@ -512,7 +512,7 @@ namespace SDOPackage
 
   /*!
    * @if jp
-   * @brief Organization¥á¥ó¥Ğ¡¼¤ò¹¹¿·/ºï½ü¤¹¤ë
+   * @brief Organizationãƒ¡ãƒ³ãƒãƒ¼ã‚’æ›´æ–°/å‰Šé™¤ã™ã‚‹
    * @else
    * @brief Update/Remove a member of Organization
    * @endif
@@ -593,7 +593,7 @@ namespace RTC
 
   /*!
    * @if jp
-   * @brief ¥³¥ó¥¹¥È¥é¥¯¥¿
+   * @brief ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
    * @else
    * @brief Constructor
    * @endif
@@ -616,7 +616,7 @@ namespace RTC
 
   /*!
    * @if jp
-   * @brief ¥Ç¥¹¥È¥é¥¯¥¿
+   * @brief ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
    * @else
    * @brief Destructor
    * @endif
@@ -629,7 +629,7 @@ namespace RTC
 
   /*!
    * @if jp
-   * @brief ½é´ü²½
+   * @brief åˆæœŸåŒ–
    * @else
    * @brief Initialization
    * @endif
@@ -688,7 +688,7 @@ namespace RTC
 
   /*!
    * @if jp
-   * @brief ³èÀ­²½½èÍıÍÑ¥³¡¼¥ë¥Ğ¥Ã¥¯´Ø¿ô
+   * @brief æ´»æ€§åŒ–å‡¦ç†ç”¨ã‚³ãƒ¼ãƒ«ãƒãƒƒã‚¯é–¢æ•°
    * @else
    * @brief Callback function to activate
    * @endif
@@ -711,7 +711,7 @@ namespace RTC
 
   /*!
    * @if jp
-   * @brief Èó³èÀ­²½½èÍıÍÑ¥³¡¼¥ë¥Ğ¥Ã¥¯´Ø¿ô
+   * @brief éæ´»æ€§åŒ–å‡¦ç†ç”¨ã‚³ãƒ¼ãƒ«ãƒãƒƒã‚¯é–¢æ•°
    * @else
    * @brief Callback function to deactivate
    * @endif
@@ -732,7 +732,7 @@ namespace RTC
 
   /*!
    * @if jp
-   * @brief ¥ê¥»¥Ã¥È½èÍıÍÑ¥³¡¼¥ë¥Ğ¥Ã¥¯´Ø¿ô
+   * @brief ãƒªã‚»ãƒƒãƒˆå‡¦ç†ç”¨ã‚³ãƒ¼ãƒ«ãƒãƒƒã‚¯é–¢æ•°
    * @else
    * @brief Callback function to reset
    * @endif
@@ -753,7 +753,7 @@ namespace RTC
 
   /*!
    * @if jp
-   * @brief [ComponentAction CORBA interface] RTC ¤Î½ªÎ»
+   * @brief [ComponentAction CORBA interface] RTC ã®çµ‚äº†
    * @else
    * @brief [ComponentAction CORBA interface] Finalize RTC
    * @endif

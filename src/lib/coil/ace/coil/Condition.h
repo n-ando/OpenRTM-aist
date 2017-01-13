@@ -1,4 +1,4 @@
-// -*- C++ -*-
+﻿// -*- C++ -*-
 /*!
  * @file  Condition_ace.h
  * @brief Condition variable class using ACE

@@ -1,4 +1,4 @@
-// -*- C++ -*-
+﻿// -*- C++ -*-
 /*!
  * @file SdoOrganization.h
  * @brief SDO Organization implementation class
@@ -31,7 +31,7 @@
  * @if jp
  * @namespace SDOPackage
  *
- * @brief SDO �ѥå�����
+ * @brief SDO パッケージ
  *
  * @else
  *
@@ -52,10 +52,10 @@ namespace SDOPackage
    * @if jp
    *
    * @class Organization_impl
-   * @brief SDO Organization �������饹
+   * @brief SDO Organization 実装クラス
    *
-   * Organization interface �� Resource Data Model ��������줿�ǡ�����
-   * �ɲá������������Ԥ�����Υ��󥿡��ե������Ǥ��롣
+   * Organization interface は Resource Data Model で定義されたデータの
+   * 追加、削除等の操作を行うためのインターフェースである。
    *
    * @since 0.4.0
    *
@@ -81,9 +81,9 @@ namespace SDOPackage
     /*!
      * @if jp
      *
-     * @brief ���󥹥ȥ饯��
+     * @brief コンストラクタ
      * 
-     * ���󥹥ȥ饯��
+     * コンストラクタ
      *
      * @else
      *
@@ -101,9 +101,9 @@ namespace SDOPackage
     /*!
      * @if jp
      *
-     * @brief ���ۥǥ��ȥ饯��
+     * @brief 仮想デストラクタ
      * 
-     * ���ۥǥ��ȥ饯����
+     * 仮想デストラクタ。
      * 
      * @else
      *
@@ -123,16 +123,16 @@ namespace SDOPackage
     /*!
      * @if jp
      * 
-     * @brief [CORBA interface] Organization ID ���������
+     * @brief [CORBA interface] Organization ID を取得する
      *
-     * Organization �� ID ���֤����ڥ졼�����
+     * Organization の ID を返すオペレーション。
      *
-     * @return Resource Data Model ��������줿 Organization ID��
+     * @return Resource Data Model で定義された Organization ID。
      *
-     * @exception SDONotExists �������åȤ�SDO��¸�ߤ��ʤ���(���㳰�ϡ�CORBAɸ��
-     *                         �����ƥ��㳰��OBJECT_NOT_EXIST�˥ޥåԥ󥰤����)
-     * @exception NotAvailable SDO��¸�ߤ��뤬�������ʤ���
-     * @exception InternalError ����Ū���顼��ȯ��������
+     * @exception SDONotExists ターゲットのSDOが存在しない。(本例外は、CORBA標準
+     *                         システム例外のOBJECT_NOT_EXISTにマッピングされる)
+     * @exception NotAvailable SDOは存在するが応答がない。
+     * @exception InternalError 内部的エラーが発生した。
      * @else
      *
      * @brief [CORBA interface] Get Organization ID
@@ -156,22 +156,22 @@ namespace SDOPackage
     /*!
      * @if jp
      * 
-     * @brief [CORBA interface] OrganizationProperty �Υ��å�
+     * @brief [CORBA interface] OrganizationProperty のセット
      *
-     * �� SDO Specification �� PIM ���Ҥȥ��ڥ졼�����̾���ۤʤ롣
-     * �� addOrganizationProperty ���б�����<BR>
-     * OrganizationProperty �� Organization ���ɲä��륪�ڥ졼�����
-     * OrganizationProperty �� Organization �Υץ��ѥƥ����ҤǤ��롣
+     * ※ SDO Specification の PIM 記述とオペレーション名が異なる。
+     * ※ addOrganizationProperty に対応か？<BR>
+     * OrganizationProperty を Organization に追加するオペレーション。
+     * OrganizationProperty は Organization のプロパティ記述である。
      *
-     * @param org_property ���åȤ��� OrganizationProperty
+     * @param org_property セットする OrganizationProperty
      *
-     * @return ���ڥ졼����������������ɤ������֤���
+     * @return オペレーションが成功したかどうかを返す。
      *
-     * @exception SDONotExists �������åȤ�SDO��¸�ߤ��ʤ���(���㳰�ϡ�CORBAɸ��
-     *                         �����ƥ��㳰��OBJECT_NOT_EXIST�˥ޥåԥ󥰤����)
-     * @exception InvalidParameter "org_property" �� null��
-     * @exception NotAvailable SDO��¸�ߤ��뤬�������ʤ���
-     * @exception InternalError ����Ū���顼��ȯ��������
+     * @exception SDONotExists ターゲットのSDOが存在しない。(本例外は、CORBA標準
+     *                         システム例外のOBJECT_NOT_EXISTにマッピングされる)
+     * @exception InvalidParameter "org_property" が null。
+     * @exception NotAvailable SDOは存在するが応答がない。
+     * @exception InternalError 内部的エラーが発生した。
      * @else
      *
      * @brief [CORBA interface] Set OrganizationProperty
@@ -203,17 +203,17 @@ namespace SDOPackage
     /*!
      * @if jp
      * 
-     * @brief [CORBA interface] OrganizationProperty �μ���
+     * @brief [CORBA interface] OrganizationProperty の取得
      *
-     * Organization ����ͭ���� OrganizationProperty ���֤����ڥ졼�����
-     * Organization ���ץ��ѥƥ�������ʤ���ж��Υꥹ�Ȥ��֤���
+     * Organization が所有する OrganizationProperty を返すオペレーション。
+     * Organization がプロパティを持たなければ空のリストを返す。
      *
-     * @return Organization �Υץ��ѥƥ��Υꥹ�ȡ�
+     * @return Organization のプロパティのリスト。
      *
-     * @exception SDONotExists �������åȤ�SDO��¸�ߤ��ʤ���(���㳰�ϡ�CORBAɸ��
-     *                         �����ƥ��㳰��OBJECT_NOT_EXIST�˥ޥåԥ󥰤����)
-     * @exception NotAvailable SDO��¸�ߤ��뤬�������ʤ���
-     * @exception InternalError ����Ū���顼��ȯ��������
+     * @exception SDONotExists ターゲットのSDOが存在しない。(本例外は、CORBA標準
+     *                         システム例外のOBJECT_NOT_EXISTにマッピングされる)
+     * @exception NotAvailable SDOは存在するが応答がない。
+     * @exception InternalError 内部的エラーが発生した。
      * @else
      *
      * @brief [CORBA interface] Get OrganizationProperty
@@ -239,21 +239,21 @@ namespace SDOPackage
     /*!
      * @if jp
      * 
-     * @brief [CORBA interface] OrganizationProperty ��������ͤμ���
+     * @brief [CORBA interface] OrganizationProperty の特定の値の取得
      *
-     * OrganizationProperty �λ��ꤵ�줿�ͤ��֤����ڥ졼�����
-     * ���� "name" �ǻ��ꤵ�줿�ץ��ѥƥ����ͤ��֤���
+     * OrganizationProperty の指定された値を返すオペレーション。
+     * 引数 "name" で指定されたプロパティの値を返す。
      *
-     * @param name �ͤ��֤��ץ��ѥƥ���̾����
+     * @param name 値を返すプロパティの名前。
      *
-     * @return ���� "name" �ǻ��ꤵ�줿�ץ��ѥƥ����͡�
+     * @return 引数 "name" で指定されたプロパティの値。
      *
-     * @exception SDONotExists �������åȤ�SDO��¸�ߤ��ʤ���(���㳰�ϡ�CORBAɸ��
-     *                         �����ƥ��㳰��OBJECT_NOT_EXIST�˥ޥåԥ󥰤����)
-     * @exception InvalidParameter ���� "name" �ǻ��ꤵ�줿�ץ��ѥƥ���
-     *            ¸�ߤ��ʤ���
-     * @exception NotAvailable SDO��¸�ߤ��뤬�������ʤ���
-     * @exception InternalError ����Ū���顼��ȯ��������
+     * @exception SDONotExists ターゲットのSDOが存在しない。(本例外は、CORBA標準
+     *                         システム例外のOBJECT_NOT_EXISTにマッピングされる)
+     * @exception InvalidParameter 引数 "name" で指定されたプロパティが
+     *            存在しない。
+     * @exception NotAvailable SDOは存在するが応答がない。
+     * @exception InternalError 内部的エラーが発生した。
      * @else
      *
      * @brief [CORBA interface] Get specified value of OrganizationProperty
@@ -282,23 +282,23 @@ namespace SDOPackage
     /*!
      * @if jp
      * 
-     * @brief [CORBA interface] OrganizationProperty ���ͤΥ��å�
+     * @brief [CORBA interface] OrganizationProperty の値のセット
      *
-     * OrganizationProperty �� NVList �� name �� value �Υ��åȤ��ɲä⤷����
-     * �������륪�ڥ졼�����name �� value �ϰ��� "name" �� "value" �ˤ��
-     * ���ꤹ�롣
+     * OrganizationProperty の NVList に name と value のセットを追加もしくは
+     * 更新するオペレーション。name と value は引数 "name" と "value" により
+     * 指定する。
      *
-     * @param name �ɲá����������ץ��ѥƥ���̾����
-     * @param value �ɲá����������ץ��ѥƥ����͡�
+     * @param name 追加・更新されるプロパティの名前。
+     * @param value 追加・更新されるプロパティの値。
      *
-     * @return ���ڥ졼����������������ɤ������֤���
+     * @return オペレーションが成功したかどうかを返す。
      *
-     * @exception SDONotExists �������åȤ�SDO��¸�ߤ��ʤ���(���㳰�ϡ�CORBAɸ��
-     *                         �����ƥ��㳰��OBJECT_NOT_EXIST�˥ޥåԥ󥰤����)
-     * @exception InvalidParameter ���� "name" �ǻ��ꤵ�줿�ץ��ѥƥ���
-     *            ¸�ߤ��ʤ���
-     * @exception NotAvailable SDO��¸�ߤ��뤬�������ʤ���
-     * @exception InternalError ����Ū���顼��ȯ��������
+     * @exception SDONotExists ターゲットのSDOが存在しない。(本例外は、CORBA標準
+     *                         システム例外のOBJECT_NOT_EXISTにマッピングされる)
+     * @exception InvalidParameter 引数 "name" で指定されたプロパティは
+     *            存在しない。
+     * @exception NotAvailable SDOは存在するが応答がない。
+     * @exception InternalError 内部的エラーが発生した。
      * @else
      *
      * @brief [CORBA interface] Set specified value of OrganizationProperty
@@ -331,21 +331,21 @@ namespace SDOPackage
     /*!
      * @if jp
      * 
-     * @brief [CORBA interface] OrganizationProperty �κ��
+     * @brief [CORBA interface] OrganizationProperty の削除
      *
-     * OrganizationProperty �� NVList ��������Υץ��ѥƥ��������롣
-     * ��������ץ��ѥƥ���̾���ϰ��� "name" �ˤ����ꤵ��롣
+     * OrganizationProperty の NVList から特定のプロパティを削除する。
+     * 削除されるプロパティの名前は引数 "name" により指定される。
      *
-     * @param name �������ץ��ѥƥ���̾����
+     * @param name 削除するプロパティの名前。
      *
-     * @return ���ڥ졼����������������ɤ������֤���
+     * @return オペレーションが成功したかどうかを返す。
      *
-     * @exception SDONotExists �������åȤ�SDO��¸�ߤ��ʤ���(���㳰�ϡ�CORBAɸ��
-     *                         �����ƥ��㳰��OBJECT_NOT_EXIST�˥ޥåԥ󥰤����)
-     * @exception InvalidParameter ���� "name" �ǻ��ꤵ�줿�ץ��ѥƥ���
-     *            ¸�ߤ��ʤ���
-     * @exception NotAvailable SDO��¸�ߤ��뤬�������ʤ���
-     * @exception InternalError ����Ū���顼��ȯ��������
+     * @exception SDONotExists ターゲットのSDOが存在しない。(本例外は、CORBA標準
+     *                         システム例外のOBJECT_NOT_EXISTにマッピングされる)
+     * @exception InvalidParameter 引数 "name" で指定されたプロパティは
+     *            存在しない。
+     * @exception NotAvailable SDOは存在するが応答がない。
+     * @exception InternalError 内部的エラーが発生した。
      * @else
      *
      * @brief [CORBA interface] Remove specified OrganizationProperty
@@ -375,20 +375,20 @@ namespace SDOPackage
     /*!
      * @if jp
      * 
-     * @brief [CORBA interface] SDO ���С����ɲ�
+     * @brief [CORBA interface] SDO メンバーの追加
      *
-     * Organization �˥��С��Ȥ��� SDO ���ɲä��롣
-     * ���� "sdo" ���ɲä�����С� SDO ����ꤹ�롣
+     * Organization にメンバーとして SDO を追加する。
+     * 引数 "sdo" に追加するメンバー SDO を指定する。
      *
-     * @param sdo_list Organization ���ɲä���� SDO �Υꥹ�ȡ�
+     * @param sdo_list Organization に追加される SDO のリスト。
      *
-     * @return ���ڥ졼����������������ɤ������֤���
+     * @return オペレーションが成功したかどうかを返す。
      *
-     * @exception SDONotExists �������åȤ�SDO��¸�ߤ��ʤ���(���㳰�ϡ�CORBAɸ��
-     *                         �����ƥ��㳰��OBJECT_NOT_EXIST�˥ޥåԥ󥰤����)
-     * @exception InvalidParameter ���� "sdo" �� null�Ǥ��롣
-     * @exception NotAvailable SDO��¸�ߤ��뤬�������ʤ���
-     * @exception InternalError ����Ū���顼��ȯ��������
+     * @exception SDONotExists ターゲットのSDOが存在しない。(本例外は、CORBA標準
+     *                         システム例外のOBJECT_NOT_EXISTにマッピングされる)
+     * @exception InvalidParameter 引数 "sdo" が nullである。
+     * @exception NotAvailable SDOは存在するが応答がない。
+     * @exception InternalError 内部的エラーが発生した。
      * @else
      *
      * @brief [CORBA interface] Add the member SDOs
@@ -416,17 +416,17 @@ namespace SDOPackage
     /*!
      * @if jp
      * 
-     * @brief [CORBA interface] Organization �Υ��С����������
+     * @brief [CORBA interface] Organization のメンバーを取得する
      *
-     * Organization �Υ��С��� SDO �Υꥹ�Ȥ��֤���
-     * ���С���¸�ߤ��ʤ���ж��Υꥹ�Ȥ��֤���
+     * Organization のメンバーの SDO のリストを返す。
+     * メンバーが存在しなければ空のリストを返す。
      *
-     * @return Organization �˴ޤޤ����С� SDO �Υꥹ�ȡ�
+     * @return Organization に含まれるメンバー SDO のリスト。
      *
-     * @exception SDONotExists �������åȤ�SDO��¸�ߤ��ʤ���(���㳰�ϡ�CORBAɸ��
-     *                         �����ƥ��㳰��OBJECT_NOT_EXIST�˥ޥåԥ󥰤����)
-     * @exception NotAvailable SDO��¸�ߤ��뤬�������ʤ���
-     * @exception InternalError ����Ū���顼��ȯ��������
+     * @exception SDONotExists ターゲットのSDOが存在しない。(本例外は、CORBA標準
+     *                         システム例外のOBJECT_NOT_EXISTにマッピングされる)
+     * @exception NotAvailable SDOは存在するが応答がない。
+     * @exception InternalError 内部的エラーが発生した。
      * @else
      *
      * @brief [CORBA interface] Get the member list of the Organization
@@ -452,22 +452,22 @@ namespace SDOPackage
     /*!
      * @if jp
      * 
-     * @brief [CORBA interface] SDO �� ���å�
+     * @brief [CORBA interface] SDO の セット
      *
-     * SDO �Υꥹ�Ȥ� Organization �Υ��С��Ȥ��ƥ��åȤ��롣
-     * Organization �����Ǥ˥��С��� SDO ��������Ƥ�����ϡ�
-     * Ϳ����줿 SDO �Υꥹ�Ȥ��֤������롣
+     * SDO のリストを Organization のメンバーとしてセットする。
+     * Organization がすでにメンバーの SDO を管理している場合は、
+     * 与えられた SDO のリストに置き換える。
      *
-     * @param sdos ���С��� SDO��
+     * @param sdos メンバーの SDO。
      *
-     * @return ���ڥ졼����������������ɤ������֤���
+     * @return オペレーションが成功したかどうかを返す。
      *
-     * @exception SDONotExists �������åȤ�SDO��¸�ߤ��ʤ���(���㳰�ϡ�CORBAɸ��
-     *                         �����ƥ��㳰��OBJECT_NOT_EXIST�˥ޥåԥ󥰤����)
-     * @exception InvalidParameter ���� "SDOList" �� null�Ǥ��롢�⤷����
-     *            �����˻��ꤵ�줿 "SDOList" ��¸�ߤ��ʤ���
-     * @exception NotAvailable SDO��¸�ߤ��뤬�������ʤ���
-     * @exception InternalError ����Ū���顼��ȯ��������
+     * @exception SDONotExists ターゲットのSDOが存在しない。(本例外は、CORBA標準
+     *                         システム例外のOBJECT_NOT_EXISTにマッピングされる)
+     * @exception InvalidParameter 引数 "SDOList" が nullである、もしくは
+     *            引数に指定された "SDOList" が存在しない。
+     * @exception NotAvailable SDOは存在するが応答がない。
+     * @exception InternalError 内部的エラーが発生した。
      * @else
      *
      * @brief [CORBA interface] Set SDO
@@ -499,19 +499,19 @@ namespace SDOPackage
     /*!
      * @if jp
      * 
-     * @brief [CORBA interface] SDO ���С��κ��
+     * @brief [CORBA interface] SDO メンバーの削除
      *
-     * Organization ��������ǻ��ꤵ�줿 "id" �� SDO �������롣
+     * Organization から引数で指定された "id" の SDO を削除する。
      *
-     * @param id ������� SDO �� id��
+     * @param id 削除する SDO の id。
      *
-     * @return ���ڥ졼����������������ɤ������֤���
+     * @return オペレーションが成功したかどうかを返す。
      *
-     * @exception SDONotExists �������åȤ�SDO��¸�ߤ��ʤ���(���㳰�ϡ�CORBAɸ��
-     *                         �����ƥ��㳰��OBJECT_NOT_EXIST�˥ޥåԥ󥰤����)
-     * @exception InvalidParameter ���� "id" �� null �⤷����¸�ߤ��ʤ���
-     * @exception NotAvailable SDO��¸�ߤ��뤬�������ʤ���
-     * @exception InternalError ����Ū���顼��ȯ��������
+     * @exception SDONotExists ターゲットのSDOが存在しない。(本例外は、CORBA標準
+     *                         システム例外のOBJECT_NOT_EXISTにマッピングされる)
+     * @exception InvalidParameter 引数 "id" が null もしくは存在しない。
+     * @exception NotAvailable SDOは存在するが応答がない。
+     * @exception InternalError 内部的エラーが発生した。
      * @else
      *
      * @brief [CORBA interface] Remove member SDO from Organization
@@ -539,16 +539,16 @@ namespace SDOPackage
     /*!
      * @if jp
      * 
-     * @brief [CORBA interface] Organization �Υ����ʡ����������
+     * @brief [CORBA interface] Organization のオーナーを取得する
      *
-     * ���� Organization �Υ����ʡ��ؤλ��Ȥ��֤���
+     * この Organization のオーナーへの参照を返す。
      *
-     * @return �����ʡ����֥������Ȥؤλ��ȡ�
+     * @return オーナーオブジェクトへの参照。
      *
-     * @exception SDONotExists �������åȤ�SDO��¸�ߤ��ʤ���(���㳰�ϡ�CORBAɸ��
-     *                         �����ƥ��㳰��OBJECT_NOT_EXIST�˥ޥåԥ󥰤����)
-     * @exception NotAvailable SDO��¸�ߤ��뤬�������ʤ���
-     * @exception InternalError ����Ū���顼��ȯ��������
+     * @exception SDONotExists ターゲットのSDOが存在しない。(本例外は、CORBA標準
+     *                         システム例外のOBJECT_NOT_EXISTにマッピングされる)
+     * @exception NotAvailable SDOは存在するが応答がない。
+     * @exception InternalError 内部的エラーが発生した。
      * @else
      *
      * @brief [CORBA interface] Get the owner of Organization
@@ -573,21 +573,21 @@ namespace SDOPackage
     /*!
      * @if jp
      * 
-     * @brief [CORBA interface] Organization �˥����ʡ��򥻥åȤ���
+     * @brief [CORBA interface] Organization にオーナーをセットする
      *
-     * Organization ���Ф��� SDOSystemElement �򥪡��ʡ��Ȥ��ƥ��åȤ��롣
-     * ���� "sdo" �˥��åȤ��� SDOSystemElement ����ꤹ�롣
+     * Organization に対して SDOSystemElement をオーナーとしてセットする。
+     * 引数 "sdo" にセットする SDOSystemElement を指定する。
      *
-     * @param sdo �����ʡ����֥������Ȥλ��ȡ�
+     * @param sdo オーナーオブジェクトの参照。
      *
-     * @return ���ڥ졼����������������ɤ������֤���
+     * @return オペレーションが成功したかどうかを返す。
      *
-     * @exception SDONotExists �������åȤ�SDO��¸�ߤ��ʤ���(���㳰�ϡ�CORBAɸ��
-     *                         �����ƥ��㳰��OBJECT_NOT_EXIST�˥ޥåԥ󥰤����)
-     * @exception InvalidParameter ���� "sdo" �� null�Ǥ��롢�⤷���ϡ�
-     *                             "sdo" ��¸�ߤ��ʤ���
-     * @exception NotAvailable SDO��¸�ߤ��뤬�������ʤ���
-     * @exception InternalError ����Ū���顼��ȯ��������
+     * @exception SDONotExists ターゲットのSDOが存在しない。(本例外は、CORBA標準
+     *                         システム例外のOBJECT_NOT_EXISTにマッピングされる)
+     * @exception InvalidParameter 引数 "sdo" が nullである、もしくは、
+     *                             "sdo" が存在しない。
+     * @exception NotAvailable SDOは存在するが応答がない。
+     * @exception InternalError 内部的エラーが発生した。
      * @else
      *
      * @brief [CORBA interface] Set the owner to the Organization
@@ -618,18 +618,18 @@ namespace SDOPackage
     /*!
      * @if jp
      * 
-     * @brief [CORBA interface] Organization �� DependencyType �����
+     * @brief [CORBA interface] Organization の DependencyType を取得
      *
-     * Organization �δط���ɽ�� "DependencyType" ���֤���
+     * Organization の関係を表す "DependencyType" を返す。
      *
-     * @return Organization �ΰ�¸�ط� DependencyType ���֤���
-     *         DependencyType �� OMG SDO ���ͤ� Section 2.2.2 2-3 �ڡ�����
-     *         "Data Structures Used by Resource Data Model" �򻲾ȡ�
+     * @return Organization の依存関係 DependencyType を返す。
+     *         DependencyType は OMG SDO 仕様の Section 2.2.2 2-3 ページの
+     *         "Data Structures Used by Resource Data Model" を参照。
      *
-     * @exception SDONotExists �������åȤ�SDO��¸�ߤ��ʤ���(���㳰�ϡ�CORBAɸ��
-     *                         �����ƥ��㳰��OBJECT_NOT_EXIST�˥ޥåԥ󥰤����)
-     * @exception NotAvailable SDO��¸�ߤ��뤬�������ʤ���
-     * @exception InternalError ����Ū���顼��ȯ��������
+     * @exception SDONotExists ターゲットのSDOが存在しない。(本例外は、CORBA標準
+     *                         システム例外のOBJECT_NOT_EXISTにマッピングされる)
+     * @exception NotAvailable SDOは存在するが応答がない。
+     * @exception InternalError 内部的エラーが発生した。
      * @else
      *
      * @brief [CORBA interface] Get the DependencyType of the Organization
@@ -657,22 +657,22 @@ namespace SDOPackage
     /*!
      * @if jp
      * 
-     * @brief [CORBA interface] Organization �� DependencyType �򥻥åȤ���
+     * @brief [CORBA interface] Organization の DependencyType をセットする
      *
-     * Organization �ΰ�¸�ط� "DependencyType" �򥻥åȤ��롣
-     * ���� "dependency" �ˤ���¸�ط���Ϳ���롣
+     * Organization の依存関係 "DependencyType" をセットする。
+     * 引数 "dependency" により依存関係を与える。
      *
-     * @param dependency Organization �ΰ�¸�ط���ɽ�� DependencyType��
-     *        DependencyType �� OMG SDO ���ͤ� Section 2.2.2��2-3 �ڡ�����
-     *        "Data Structures Used by Resource Data Model" �򻲾ȡ�
+     * @param dependency Organization の依存関係を表す DependencyType。
+     *        DependencyType は OMG SDO 仕様の Section 2.2.2、2-3 ページの
+     *        "Data Structures Used by Resource Data Model" を参照。
      *
-     * @return ���ڥ졼����������������ɤ������֤���
+     * @return オペレーションが成功したかどうかを返す。
      *
-     * @exception SDONotExists �������åȤ�SDO��¸�ߤ��ʤ���(���㳰�ϡ�CORBAɸ��
-     *                         �����ƥ��㳰��OBJECT_NOT_EXIST�˥ޥåԥ󥰤����)
-     * @exception InvalidParameter ���� "sProfile" �� null�Ǥ��롣
-     * @exception NotAvailable SDO��¸�ߤ��뤬�������ʤ���
-     * @exception InternalError ����Ū���顼��ȯ��������
+     * @exception SDONotExists ターゲットのSDOが存在しない。(本例外は、CORBA標準
+     *                         システム例外のOBJECT_NOT_EXISTにマッピングされる)
+     * @exception InvalidParameter 引数 "sProfile" が nullである。
+     * @exception NotAvailable SDOは存在するが応答がない。
+     * @exception InternalError 内部的エラーが発生した。
      * @else
      *
      * @brief [CORBA interface] Set the DependencyType of the Organization
@@ -709,7 +709,7 @@ namespace SDOPackage
     Organization_var m_objref;
     /*!
      * @if jp
-     * @brief Organization �μ��̻�
+     * @brief Organization の識別子
      * @else
      * @brief The identifier of the Organization.
      * @endif
@@ -718,7 +718,7 @@ namespace SDOPackage
     
     /*!
      * @if jp
-     * @brief Organization �˴�Ϣ�դ���줿 SDO ���ФΥꥹ��
+     * @brief Organization に関連付けられた SDO メンバのリスト
      * @else
      * @brief A list of SDO members associated with the Organization
      * @endif
@@ -727,7 +727,7 @@ namespace SDOPackage
     
     /*!
      * @if jp
-     * @brief Organization �� owner
+     * @brief Organization の owner
      * @else
      * @brief The owner of the Organization
      * @endif
@@ -737,36 +737,36 @@ namespace SDOPackage
     /*!
      * @if jp
      * 
-     * @brief ��¸�ط��Υ�����
+     * @brief 依存関係のタイプ
      *
-     * Owner �� member �ΰ�¸�ط�����ꤹ��°����
-     * Organization �ϰʲ��Υȥݥ����ѥ������ɽ�����뤳�Ȥ��Ǥ��롣
+     * Owner と member の依存関係を指定する属性。
+     * Organization は以下のトポロジパターンを表現することができる。
      *
-     * -# owner �� member ��������볬��Ū��¤�����ξ�� DependencyType �� OWN
-     *    �Ȥ����ͤ���ġ�
-     * -# members �� owner ���������ո����γ���Ū��¤�����ξ���
-     *    DependencyType �� OWNER �Ȥ����ͤ���ġ�
-     * -# owner �� member �˰�¸�ط����ʤ��ե�åȤʹ�¤�����ξ���
-     *    DependencyType �� NO_DEPENDENCY �Ȥ����ͤ���ġ�
+     * -# owner が member を管理する階層的構造。この場合 DependencyType は OWN
+     *    という値を持つ。
+     * -# members が owner を管理する逆向きの階層的構造。この場合は
+     *    DependencyType は OWNER という値を持つ。
+     * -# owner と member に依存関係がないフラットな構造。この場合は
+     *    DependencyType は NO_DEPENDENCY という値を持つ。
      * 
-     * SDO ����� SDOSystemElement �Υ��֥��饹�� Organization �� owner �Ȥ���
-     * ���񤦤��Ȥ�����롣SDO �� owner �ξ��ˤ�Organization �Ͼ嵭��
-     * �����줫�Υȥݥ������ѥ������Ȥ롣
+     * SDO および SDOSystemElement のサブクラスは Organization の owner として
+     * 振舞うことが出来る。SDO が owner の場合にはOrganization は上記の
+     * いずれかのトポロジーパターンをとる。
      *
-     * - Organization �� 1. �Υȥݥ������ѥ��������ľ�硢ͣ��Ĥ� owner SDO
-     *   �� member SDO �����椹�롣���Ȥ��С���������(owner)�ϡ�
-     *   ���٥���(member)�����٥���(member)�����������(member)�����椹�롣
-     * - Organization �� 2. �Υȥݥ�������ľ��ϡ�ʣ���� SDO member ��ͣ���
-     *   SDO owner ��ͭ���롣���Ȥ��С������(owner)�Ϥ����Ĥ���AV
-     *   ����ݡ��ͥ��(member)���鶦ͭ����롣
-     * - SDO �ǤϤʤ� SDOSystemElement �Υ��֥��饹�� owner �ξ�硢
-     *   �ʲ��Τ褦�ʥȥݥ������㤬�ͤ����롣
-     * -- User(owner)-SDO(member): �桼��(owner) �ϰ�İʾ�� SDO(member)��
-     *   �������롣����Ͼ嵭�ȥݥ����ѥ���1.�ˤ����롣
-     * -- Location(owner)-SDO(members): ��İʾ�� SDO(member) ������ξ��
-     *   = location(owner) ��ư��Ƥ����硢Organization �Υȥݥ����ѥ�����
-     *   �� 3. �ξ��ˤʤ롣���Ȥ��С�ʣ���� PDA �����������ˤ��ꡢ�ߤ���Ʊ��
-     *   �ʴط��Ǥ�����ߤ��̿���ǽ�ʾ��Ϥ���ˤ����롣
+     * - Organization が 1. のトポロジーパターンを持つ場合、唯一つの owner SDO
+     *   は member SDO を制御する。たとえば、エアコン(owner)は、
+     *   温度センサ(member)、湿度センサ(member)、風量制御器(member)を制御する。
+     * - Organization が 2. のトポロジを持つ場合は、複数の SDO member が唯一の
+     *   SDO owner を共有する。たとえば、アンプ(owner)はいくつかのAV
+     *   コンポーネント(member)から共有される。
+     * - SDO ではない SDOSystemElement のサブクラスが owner の場合、
+     *   以下のようなトポロジー例が考えられる。
+     * -- User(owner)-SDO(member): ユーザ(owner) は一つ以上の SDO(member)を
+     *   管理する。これは上記トポロジパタン1.にあたる。
+     * -- Location(owner)-SDO(members): 一つ以上の SDO(member) が特定の場所
+     *   = location(owner) で動作している場合、Organization のトポロジパターン
+     *   は 3. の場合になる。たとえば、複数の PDA がある部屋にあり、互いに同等
+     *   な関係であり相互に通信可能な場合はこれにあたる。
      *
      * @else
      *
@@ -813,10 +813,10 @@ namespace SDOPackage
     /*!
      * @if jp
      *
-     * @brief Organization �ץ��ѥƥ�
+     * @brief Organization プロパティ
      *
-     * OrganizationProperty �� Organization �Υץ��ѥƥ�������ݻ����롣
-     * ��Ĥ� Organization ��0�Ĥ⤷����1�Ĥ� OrganizationProperty ���ġ�
+     * OrganizationProperty は Organization のプロパティ情報を保持する。
+     * 一つの Organization は0個もしくは1個の OrganizationProperty をもつ。
      *
      * @else
      *
@@ -833,7 +833,7 @@ namespace SDOPackage
     
     /*!
      * @if jp
-     * @brief  NameValue��functor
+     * @brief  NameValue用functor
      * @else
      * @brief  Functor for NameValue
      * @endif
@@ -850,7 +850,7 @@ namespace SDOPackage
     
     /*!
      * @if jp
-     * @brief  SDO��functor
+     * @brief  SDO用functor
      * @else
      * @brief  Functor for SDO
      * @endif

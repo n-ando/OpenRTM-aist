@@ -1,4 +1,4 @@
-// -*- C++ -*-
+﻿// -*- C++ -*-
 /*!
  * @file  InPortProvider.h
  * @brief InPortProvider class
@@ -41,48 +41,48 @@ namespace RTC
    * @class OutPortProvider
    * @brief OutPortProvider
    *
-   * InPort �� PROVIDED ���󥿡��ե�������������뤿�����ݴ��쥯�饹��
-   * InPort ���Ф��ƿ��������󥿡��ե����������������ˤϡ����Υ���
-   * ����Ѿ������ʲ��δؿ����������ɬ�פ����롣
+   * InPort の PROVIDED インターフェースを実装するための抽象基底クラス。
+   * InPort に対して新しいインターフェースを実装する場合には、このクラ
+   * スを継承し、以下の関数を実装する必要がある。
    *
    * - init()
    * - setBuffer()
    * - setListener()
    * - setConnector()
    * 
-   * ����ˡ����󥹥ȥ饯����ǰʲ��δؿ���Ƥӡ�����������������ɬ
-   * �פ����롣
+   * さらに、コンストラクタ内で以下の関数を呼び、設定情報を初期化する必
+   * 要がある。
    * 
    * - setInterfaceType()
    * - setDataFlowType()
    * - setSubscriptionType()
    *
-   * ���Τۤ���InPortProvider �Υץ��ѥƥ��Ȥ��Ƴ����˸�������ɬ�פΤ�
-   * ���ͤϡ�protected �ѿ� (SDOPackage::NVList) m_properties ���Ф���
-   * ���åȤ��뤳�ȡ����åȤ��줿�ͤϡ����󥿡��ե������Υץ��ե������
-   * ���ơ��ޤ�����³����¾�Υ��󥿡��ե������ˤ��Υ��󥿡��ե������˴�
-   * ��������Ϳ����ݤ����Ѥ���롣�ʲ��β��۴ؿ��ϡ��ݡ��ȤΥ��󥿡�
-   * �ե������ץ��ե�����������������³�������˥ݡ��Ȥ���ƤӽФ���롣
-   * ͽ�᥻�åȤ��줿���Υ��󥿡��ե������Υץ��ե��������Ϥ����δ�
-   * ���ƤӽФ��ˤ��ݡ��Ȥ��������롣
+   * そのほか、InPortProvider のプロパティとして外部に公開する必要のあ
+   * る値は、protected 変数 (SDOPackage::NVList) m_properties に対して
+   * セットすること。セットされた値は、インターフェースのプロファイルと
+   * して、また、接続時に他のインターフェースにこのインターフェースに関
+   * する情報を与える際に利用される。以下の仮想関数は、ポートのインター
+   * フェースプロファイル取得時および接続処理時にポートから呼び出される。
+   * 予めセットされたこのインターフェースのプロファイル情報はこれらの関
+   * 数呼び出しによりポートに伝えられる。
    *
    * - publishInterfaceProfile()
    * - publishInterface()
    *
-   * InPort �� InPortProvider �Υե����ȥ�������饹���Ф������Ѳ�ǽ
-   * �� InPortProvider ����礻���󶡲�ǽ�ʥ��󥿡��ե����������פ�
-   * ����������롣���äơ�InPort�����Ф��� PROVIDED ���󥿡��ե�����
-   * ���󶡤��� InPortProvider �Υ��֥��饹�ϡ�InPortProviderFactory
-   * �˥ե����ȥ�ؿ�����Ͽ����ɬ�פ����롣
+   * InPort は InPortProvider のファクトリ管理クラスに対して利用可能
+   * な InPortProvider を問合せ、提供可能なインターフェースタイプを外
+   * 部に宣言する。従って、InPort　に対して PROVIDED インターフェース
+   * を提供する InPortProvider のサブクラスは、InPortProviderFactory
+   * にファクトリ関数を登録する必要がある。
    *
-   * RTC::InPortProviderFactory::instance().addFactory() ��
+   * RTC::InPortProviderFactory::instance().addFactory() を、
    *
-   * - ��1����: �ץ��Х�����̾��, "corba_cdr" �ʤ�
-   * - ��2����: �ե����ȥ�ؿ� coil::Creator<B, T>
-   * - ��3����: ����ؿ� coil::Destructor<B, T>
+   * - 第1引数: プロバイダの名前, "corba_cdr" など
+   * - 第2引数: ファクトリ関数 coil::Creator<B, T>
+   * - 第3引数: 削除関数 coil::Destructor<B, T>
    * 
-   * ��Ϳ���ƸƤӽФ�ɬ�פ����롣�ʲ��ϡ��ե����ȥ�ؤ���Ͽ�ȡ�������
-   * �����ؿ��Ȥ�����Ǥ��롣
+   * を与えて呼び出す必要がある。以下は、ファクトリへの登録と、それを初
+   * 期化関数とした例である。
    * 
    * <pre>
    * extern "C"
@@ -100,10 +100,10 @@ namespace RTC
    * };
    * </pre>
    *
-   * ������Τ褦�ˡ��ե����ȥ�ؤ���Ͽ�������ؿ��Ȥ��ơ�extern "C"
-   * �ˤ�ꥷ��ܥ�򻲾Ȳ�ǽ�ˤ��Ƥ������������뤳�Ȥǡ�
-   * InPortProvider ��ͭ���֥������Ȳ� (DLL��) ����ưŪ�����ɲ�ǽ��
-   * �����ץ��Х����η���ưŪ���ɲä��뤳�Ȥ���ǽ�Ȥʤ롣
+   * この例のように、ファクトリへの登録を初期化関数として、extern "C"
+   * によりシンボルを参照可能にしておく。こうすることで、
+   * InPortProvider を共有オブジェクト化 (DLL化) して動的ロード可能に
+   * し、プロバイダの型を動的に追加することが可能となる。
    *
    * @since 0.4.0
    *
@@ -194,9 +194,9 @@ namespace RTC
     DATAPORTSTATUS_ENUM
     /*!
      * @if jp
-     * @brief ���󥹥ȥ饯��
+     * @brief コンストラクタ
      *
-     * ���󥹥ȥ饯��
+     * コンストラクタ
      *
      * @else
      * @brief Constructor
@@ -209,9 +209,9 @@ namespace RTC
     
     /*!
      * @if jp
-     * @brief �ǥ��ȥ饯��
+     * @brief デストラクタ
      *
-     * ���ۥǥ��ȥ饯��
+     * 仮想デストラクタ
      *
      * @else
      * @brief Destructor
@@ -224,15 +224,15 @@ namespace RTC
 
     /*!
      * @if jp
-     * @brief ��������
+     * @brief 設定初期化
      *
-     * OutPortProvider �γƼ������Ԥ����������饹�Ǥϡ�Ϳ����줿
-     * Properties����ɬ�פʾ����������ƳƼ������Ԥ������� init() ��
-     * ���ϡ�OutPortProvider����ľ�太��ӡ���³���ˤ��줾��ƤФ���
-     * ǽ�������롣�������äơ����δؿ���ʣ����ƤФ�뤳�Ȥ����ꤷ�Ƶ�
-     * �Ҥ����٤��Ǥ��롣
+     * OutPortProvider の各種設定を行う。実装クラスでは、与えられた
+     * Propertiesから必要な情報を取得して各種設定を行う。この init() 関
+     * 数は、OutPortProvider生成直後および、接続時にそれぞれ呼ばれる可
+     * 能性がある。したがって、この関数は複数回呼ばれることを想定して記
+     * 述されるべきである。
      * 
-     * @param prop �������
+     * @param prop 設定情報
      *
      * @else
      *
@@ -253,15 +253,15 @@ namespace RTC
 
     /*!
      * @if jp
-     * @brief �Хåե��򥻥åȤ���
+     * @brief バッファをセットする
      *
-     * OutPortProvider���ǡ�������Ф��Хåե��򥻥åȤ��롣
-     * ���Ǥ˥��åȤ��줿�Хåե��������硢�����ΥХåե��ؤ�
-     * �ݥ��󥿤��Ф��ƾ�񤭤���롣
-     * OutPortProvider�ϥХåե��ν�ͭ�����ꤷ�Ƥ��ʤ��Τǡ�
-     * �Хåե��κ���ϥ桼������Ǥ�ǹԤ�ʤ���Фʤ�ʤ���
+     * OutPortProviderがデータを取り出すバッファをセットする。
+     * すでにセットされたバッファがある場合、以前のバッファへの
+     * ポインタに対して上書きされる。
+     * OutPortProviderはバッファの所有権を仮定していないので、
+     * バッファの削除はユーザの責任で行わなければならない。
      *
-     * @param buffer OutPortProvider���ǡ�������Ф��Хåե��ؤΥݥ���
+     * @param buffer OutPortProviderがデータを取り出すバッファへのポインタ
      *
      * @else
      * @brief Setting outside buffer's pointer
@@ -280,17 +280,17 @@ namespace RTC
 
     /*!
      * @if jp
-     * @brief �ꥹ�ʤ����ꤹ�롣
+     * @brief リスナを設定する。
      *
-     * OutPort �ϥǡ������������ˤ�����Ƽ磻�٥�Ȥ��Ф�������Υꥹ��
-     * ���֥������Ȥ򥳡��뤹�륳����Хå��������󶡤��롣�ܺ٤�
-     * ConnectorListener.h �� ConnectorDataListener, ConnectorListener
-     * ���򻲾ȤΤ��ȡ�OutPortProvider �Υ��֥��饹�Ǥϡ�Ϳ����줿�ꥹ
-     * �ʤ�Ŭ�ڤʥ����ߥ󥰤ǸƤӽФ��٤��Ǥ��롣�����������٤ƤΥꥹ��
-     * ��ƤӽФ�ɬ�פϤʤ���
+     * OutPort はデータ送信処理における各種イベントに対して特定のリスナ
+     * オブジェクトをコールするコールバック機構を提供する。詳細は
+     * ConnectorListener.h の ConnectorDataListener, ConnectorListener
+     * 等を参照のこと。OutPortProvider のサブクラスでは、与えられたリス
+     * ナを適切なタイミングで呼び出すべきである。ただし、すべてのリスナ
+     * を呼び出す必要はない。
      *
-     * @param info ��³����
-     * @param listeners �ꥹ�ʥ��֥�������
+     * @param info 接続情報
+     * @param listeners リスナオブジェクト
      *
      * @else
      * @brief Set the listener. 
@@ -313,12 +313,12 @@ namespace RTC
 
     /*!
      * @if jp
-     * @brief Connector�����ꤹ�롣
+     * @brief Connectorを設定する。
      *
-     * OutPort ����³��Ω���� OutPortConnector ���֥������Ȥ�����������
-     * ���������֥������ȤΥݥ��󥿤ȶ��ˤ��δؿ���ƤӽФ�����ͭ����
-     * OutPort ���ݻ�����Τ� OutPortProvider �� OutPortConnector ���
-     * �����ƤϤ����ʤ���
+     * OutPort は接続確立時に OutPortConnector オブジェクトを生成し、生
+     * 成したオブジェクトのポインタと共にこの関数を呼び出す。所有権は
+     * OutPort が保持するので OutPortProvider は OutPortConnector を削
+     * 除してはいけない。
      *
      * @param connector OutPortConnector
      *
@@ -339,14 +339,14 @@ namespace RTC
 
     /*!
      * @if jp
-     * @brief InterfaceProfile������������
+     * @brief InterfaceProfile情報を公開する
      *
-     * InterfaceProfile�����������롣
-     * �����ǻ��ꤹ��ץ��ѥƥ�������� NameValue ���֥������Ȥ�
-     * dataport.interface_type �ͤ�Ĵ�١������ݡ��Ȥ����ꤵ��Ƥ���
-     * ���󥿡��ե����������פȰ��פ�����Τ߾����������롣
+     * InterfaceProfile情報を公開する。
+     * 引数で指定するプロパティ情報内の NameValue オブジェクトの
+     * dataport.interface_type 値を調べ、当該ポートに設定されている
+     * インターフェースタイプと一致する場合のみ情報を取得する。
      *
-     * @param properties InterfaceProfile�����������ץ��ѥƥ�
+     * @param properties InterfaceProfile情報を受け取るプロパティ
      *
      * @else
      * @brief Publish InterfaceProfile information
@@ -364,15 +364,15 @@ namespace RTC
     
     /*!
      * @if jp
-     * @brief Interface������������
+     * @brief Interface情報を公開する
      *
-     * Interface�����������롣�����ǻ��ꤹ��ץ��ѥƥ��������
-     * NameValue ���֥������Ȥ�dataport.interface_type �ͤ�Ĵ�١������ݡ�
-     * �Ȥ����ꤵ��Ƥ��ʤ����NameValue �˾�����ɲä��롣���Ǥ�Ʊ�쥤
-     * �󥿡��ե���������Ͽ�Ѥߤξ��ϲ���Ԥ�ʤ���
+     * Interface情報を公開する。引数で指定するプロパティ情報内の
+     * NameValue オブジェクトのdataport.interface_type 値を調べ、当該ポー
+     * トに設定されていなければNameValue に情報を追加する。すでに同一イ
+     * ンターフェースが登録済みの場合は何も行わない。
      *
-     * @param properties Interface�����������ץ��ѥƥ�
-     * @return true: ���ｪλ
+     * @param properties Interface情報を受け取るプロパティ
+     * @return true: 正常終了
      *
      * @else
      * @brief Publish interface information
@@ -394,11 +394,11 @@ namespace RTC
   protected:
     /*!
      * @if jp
-     * @brief ���󥿥ե����������פ����ꤹ��
+     * @brief インタフェースタイプを設定する
      *
-     * ���󥿥ե����������פ����ꤹ�롣
+     * インタフェースタイプを設定する。
      *
-     * @param interface_type �����оݥ��󥿥ե�����������
+     * @param interface_type 設定対象インタフェースタイプ
      *
      * @else
      * @brief Set the interface type
@@ -413,11 +413,11 @@ namespace RTC
     
     /*!
      * @if jp
-     * @brief �ǡ����ե��������פ����ꤹ��
+     * @brief データフロータイプを設定する
      *
-     * �ǡ����ե��������פ����ꤹ�롣
+     * データフロータイプを設定する。
      *
-     * @param dataflow_type �����оݥǡ����ե���������
+     * @param dataflow_type 設定対象データフロータイプ
      *
      * @else
      * @brief Set the dataflow type
@@ -432,11 +432,11 @@ namespace RTC
     
     /*!
      * @if jp
-     * @brief ���֥�����ץ���󥿥��פ����ꤹ��
+     * @brief サブスクリプションタイプを設定する
      *
-     * ���֥�����ץ���󥿥��פ����ꤹ�롣
+     * サブスクリプションタイプを設定する。
      *
-     * @param subs_type �����оݥ��֥�����ץ���󥿥���
+     * @param subs_type 設定対象サブスクリプションタイプ
      *
      * @else
      * @brief Set the subscription type
@@ -453,7 +453,7 @@ namespace RTC
   protected:
     /*!
      * @if jp
-     * @brief �ݡ��ȥץ��ե�������ݻ�����ץ��ѥƥ�
+     * @brief ポートプロファイルを保持するプロパティ
      * @else
      * @brief Properties to hold port profile
      * @endif
@@ -462,7 +462,7 @@ namespace RTC
 
     /*!
      * @if jp
-     * @brief ���������ȥ꡼��
+     * @brief ロガーストリーム
      * @else
      * @brief Logger stream
      * @endif
@@ -478,7 +478,7 @@ namespace RTC
     // functors
     /*!
      * @if jp
-     * @brief ���󥿡��ե������ץ��ե������������뤿�Υե��󥯥�
+     * @brief インターフェースプロファイルを公開するたのファンクタ
      * @else
      * @brief Functor to publish interface profile
      * @endif
@@ -495,7 +495,7 @@ namespace RTC
 
     /*!
      * @if jp
-     * @brief ���󥿡��ե������ץ��ե������������뤿�Υե��󥯥�
+     * @brief インターフェースプロファイルを公開するたのファンクタ
      * @else
      * @brief Functor to publish interface profile
      * @endif
@@ -520,7 +520,7 @@ namespace RTC
 
   /*!
    * @if jp
-   * @brief InPortProviderFactory�����
+   * @brief InPortProviderFactory型宣言
    * @else
    * @brief InPortProviderFactory type definition
    * @endif

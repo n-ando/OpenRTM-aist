@@ -1,4 +1,4 @@
-// -*- C++ -*-
+﻿// -*- C++ -*-
 /*!
  * @file StringUtil.h
  * @brief String operation utility
@@ -42,12 +42,12 @@ namespace coil
 
   /*!
    * @if jp
-   * @brief string ���� wstring �ؤ��Ѵ�
+   * @brief string から wstring への変換
    *
-   * Ϳ����줿 string ʸ����� wstring ʸ������Ѵ�
+   * 与えられた string 文字列を wstring 文字列に変換
    *
-   * @param str std::string ��������ʸ����
-   * @return std::wstring ���ν���ʸ����
+   * @param str std::string 型の入力文字列
+   * @return std::wstring 型の出力文字列
    *
    * @else
    * @brief string to wstring conversion
@@ -63,12 +63,12 @@ namespace coil
 
   /*!
    * @if jp
-   * @brief wstring ���� string �ؤ��Ѵ�
+   * @brief wstring から string への変換
    *
-   * Ϳ����줿 wstring ʸ����� string ʸ������Ѵ�
+   * 与えられた wstring 文字列を string 文字列に変換
    *
-   * @param str std::wstring ��������ʸ����
-   * @return std::string ���ν���ʸ����
+   * @param str std::wstring 型の入力文字列
+   * @return std::string 型の出力文字列
    *
    * @else
    * @brief wstring to string conversion
@@ -84,11 +84,11 @@ namespace coil
 
   /*!
    * @if jp
-   * @brief ��ʸ���ؤ��Ѵ�
+   * @brief 大文字への変換
    *
-   * Ϳ����줿ʸ�������ʸ�����Ѵ�
+   * 与えられた文字列を大文字に変換
    *
-   * @param str ����ʸ����
+   * @param str 入力文字列
    *
    * @else
    * @brief Uppercase String Transformation
@@ -103,11 +103,11 @@ namespace coil
 
   /*!
    * @if jp
-   * @brief ��ʸ���ؤ��Ѵ�
+   * @brief 小文字への変換
    *
-   * Ϳ����줿ʸ�����ʸ�����Ѵ�
+   * 与えられた文字列を小文字に変換
    *
-   * @param str ����ʸ����
+   * @param str 入力文字列
    *
    * @else
    * @brief Lowercase String Transformation
@@ -122,16 +122,16 @@ namespace coil
 
   /*!
    * @if jp
-   * @brief ���ϥ��ȥ꡼�फ��1���ɤ߹���
+   * @brief 入力ストリームから1行読み込む
    *
-   * ���ϥ��ȥ꡼�फ��1���ɤ߹��ࡣ
-   * ���ϥ��ȥ꡼��Ϥβ��ԥ����ɤ�UNIX, Windows�β��ԥ����ɤΤ����줫��
-   * �⤷���Ϻ��ߤ��Ƥ��Ƥ�褤��
+   * 入力ストリームから1行読み込む。
+   * 入力ストリームはの改行コードはUNIX, Windowsの改行コードのいずれか、
+   * もしくは混在していてもよい。
    *
-   * @param istr ���ϥ��ȥ꡼��
-   * @param line �ɤ߹����ʸ������Ǽ�����ѿ�
+   * @param istr 入力ストリーム
+   * @param line 読み込んだ文字列を格納する変数
    *
-   * @return ����ʸ��������ɤ߹����ʸ�����Ĺ��
+   * @return 改行文字を除く読み込んだ文字列の長さ
    *
    * @else
    * @brief Read a line from input stream
@@ -150,14 +150,14 @@ namespace coil
   
   /*!
    * @if jp
-   * @brief ʸ���󤬥��������פ���Ƥ��뤫Ƚ�Ǥ���
+   * @brief 文字列がエスケープされているか判断する
    *
-   * ���ꤵ�줿ʸ�������������פ���Ƥ��뤫�ɤ�����Ƚ�Ǥ��롣
+   * 指定された文字がエスケープされているかどうかを判断する。
    *
-   * @param str ���������פ���Ƥ��뤫�ɤ���Ƚ�Ǥ���ʸ����ޤ�ʸ����
-   * @param pos ���������פ���Ƥ��뤫�ɤ���Ƚ�Ǥ���ʸ���ΰ���
+   * @param str エスケープされているかどうか判断する文字を含む文字列
+   * @param pos エスケープされているかどうか判断する文字の位置
    *
-   * @return ���ꤷ��ʸ�������������פ���Ƥ���� true, ����ʳ��� false
+   * @return 指定した文字がエスケープされていれば true, それ以外は false
    *
    * @else
    * @brief Check whether the character is escaped or not
@@ -175,18 +175,18 @@ namespace coil
   
   /*!
    * @if jp
-   * @brief ʸ����򥨥������פ���
+   * @brief 文字列をエスケープする
    *
-   * ����ʸ���򥨥������ץ������󥹤��Ѵ����롣<br>
+   * 次の文字をエスケープシーケンスに変換する。<br>
    * HT -> "\t" <br>
    * LF -> "\n" <br>
    * CR -> "\r" <br>
    * FF -> "\f" <br>
-   * ���󥰥륯�����ȡ����֥륯�����ȤˤĤ��ƤϤȤ��˽����Ϥ��ʤ���
+   * シングルクオート、ダブルクオートについてはとくに処理はしない。
    *
-   * @param str ���������׽����о�ʸ����
+   * @param str エスケープ処理対象文字列
    *
-   * @return ���������׽������ʸ����
+   * @return エスケープ処理結果文字列
    *
    * @else
    *
@@ -209,20 +209,20 @@ namespace coil
   
   /*!
    * @if jp
-   * @brief ʸ����Υ��������פ��᤹
+   * @brief 文字列のエスケープを戻す
    *
-   * ���Υ��������ץ������󥹤�ʸ�����Ѵ����롣<br>
+   * 次のエスケープシーケンスを文字に変換する。<br>
    * "\t" -> HT <br>
    * "\n" -> LF <br>
    * "\r" -> CR <br>
    * "\f" -> FF <br>
    * "\"" -> "  <br>
    * "\'" -> '  <br>
-   * �����������׽����δ����ʵ��Ѵ��ˤϤʤäƤ��ʤ����ᡢ���դ�ɬ�ס�
+   * ※エスケープ処理の完全な逆変換にはなっていないため、注意が必要。
    *
-   * @param str ���󥨥������׽����о�ʸ����
+   * @param str アンエスケープ処理対象文字列
    *
-   * @return ���󥨥������׽������ʸ����
+   * @return アンエスケープ処理結果文字列
    *
    * @else
    *
@@ -247,12 +247,12 @@ namespace coil
 
   /*!
    * @if jp
-   * @brief ʸ����ζ���ʸ����������
+   * @brief 文字列の空白文字を削除する
    *
-   * Ϳ����줿ʸ����ζ���ʸ���������롣
-   * ����ʸ���Ȥ��ư����Τ�' '(���ڡ���)��'\\t'(����)��
+   * 与えられた文字列の空白文字を削除する。
+   * 空白文字として扱うのは' '(スペース)と'\\t'(タブ)。
    *
-   * @param str ����ʸ���������ʸ����
+   * @param str 空白文字削除処理文字列
    *
    * @else
    * @brief Erase blank characters of string
@@ -268,12 +268,12 @@ namespace coil
 
   /*!
    * @if jp
-   * @brief ʸ�������Ƭ�ζ���ʸ����������
+   * @brief 文字列の先頭の空白文字を削除する
    *
-   * Ϳ����줿ʸ�������Ƭ��¸�ߤ������ʸ���������롣
-   * ����ʸ���Ȥ��ư����Τ�' '(���ڡ���)��'\\t'(����)��
+   * 与えられた文字列の先頭に存在する空白文字を削除する。
+   * 空白文字として扱うのは' '(スペース)と'\\t'(タブ)。
    *
-   * @param str ��Ƭ����ʸ���������ʸ����
+   * @param str 先頭空白文字削除処理文字列
    *
    * @else
    * @brief Erase the head blank characters of string
@@ -289,12 +289,12 @@ namespace coil
   
   /*!
    * @if jp
-   * @brief ʸ����������ζ���ʸ����������
+   * @brief 文字列の末尾の空白文字を削除する
    *
-   * Ϳ����줿ʸ�����������¸�ߤ������ʸ���������롣
-   * ����ʸ���Ȥ��ư����Τ�' '(���ڡ���)��'\\t'(����)��
+   * 与えられた文字列の末尾に存在する空白文字を削除する。
+   * 空白文字として扱うのは' '(スペース)と'\\t'(タブ)。
    *
-   * @param str ��������ʸ���������ʸ����
+   * @param str 末尾空白文字削除処理文字列
    *
    * @else
    * @brief Erase the tail blank characters of string
@@ -311,12 +311,12 @@ namespace coil
 
   /*!
    * @if jp
-   * @brief ʸ�������Ƭ�������ζ���ʸ����������
+   * @brief 文字列の先頭・末尾の空白文字を削除する
    *
-   * Ϳ����줿ʸ�������Ƭ�����������¸�ߤ������ʸ���������롣
-   * ����ʸ���Ȥ��ư����Τ�' '(���ڡ���)��'\\t'(����)��
+   * 与えられた文字列の先頭および末尾に存在する空白文字を削除する。
+   * 空白文字として扱うのは' '(スペース)と'\\t'(タブ)。
    *
-   * @param str ��Ƭ��������ʸ���������ʸ����
+   * @param str 先頭末尾空白文字削除処理文字列
    *
    * @else
    * @brief Erase the head blank and the tail blank characters of string
@@ -333,12 +333,12 @@ namespace coil
 
   /*!
    * @if jp
-   * @brief ʸ���������������
+   * @brief 文字列を正規化する
    *
-   * Ϳ����줿ʸ�������Ƭ�����������¸�ߤ������ʸ����������
-   * �ѻ��򤹤٤ƾ�ʸ�����Ѵ����롣
+   * 与えられた文字列の先頭および末尾に存在する空白文字を削除し、
+   * 英字をすべて小文字に変換する。
    *
-   * @param str �����о�ʸ����
+   * @param str 処理対象文字列
    *
    * @else
    * @brief Erase the head/tail blank and replace upper case to lower case
@@ -356,13 +356,13 @@ namespace coil
   
   /*!
    * @if jp
-   * @brief ʸ������֤�������
+   * @brief 文字列を置き換える
    *
-   * Ϳ����줿ʸ������Ф��ơ����ꤷ��ʸ�����֤�������Ԥ���
+   * 与えられた文字列に対して、指定した文字の置き換えを行う。
    *
-   * @param str �֤����������о�ʸ����
-   * @param from �ִ���ʸ��
-   * @param to �ִ���ʸ��
+   * @param str 置き換え処理対象文字列
+   * @param from 置換元文字
+   * @param to 置換先文字
    *
    * @else
    * @brief Replace string
@@ -380,14 +380,14 @@ namespace coil
   
   /*!
    * @if jp
-   * @brief ʸ�����ʬ��ʸ����ʬ�䤹��
+   * @brief 文字列を分割文字で分割する
    * 
-   * ���ꤵ�줿ʸ�����Ϳ����줿�ǥ�ߥ���ʬ�䤹�롣
+   * 設定された文字列を与えられたデリミタで分割する。
    *
-   * @param input ʬ���о�ʸ����
-   * @param delimiter ʬ��ʸ����(�ǥ�ߥ�)
+   * @param input 分割対象文字列
+   * @param delimiter 分割文字列(デリミタ)
    *
-   * @return ʸ����ʬ���̥ꥹ��
+   * @return 文字列分割結果リスト
    *
    * @else
    * @brief Split string by delimiter
@@ -407,17 +407,17 @@ namespace coil
   
   /*!
    * @if jp
-   * @brief Ϳ����줿ʸ�����bool�ͤ��Ѵ�����
+   * @brief 与えられた文字列をbool値に変換する
    * 
-   * ���ꤵ�줿ʸ�����trueɽ��ʸ����falseɽ��ʸ�������Ӥ������η�̤�
-   * bool�ͤȤ����֤���
-   * ��Ӥη�̡�trueɽ��ʸ����falseɽ��ʸ����Τɤ���Ȥ���פ��ʤ����ϡ�
-   * Ϳ����줿�ǥե�����ͤ��֤���
+   * 指定された文字列を、true表現文字列、false表現文字列と比較し、その結果を
+   * bool値として返す。
+   * 比較の結果、true表現文字列、false表現文字列のどちらとも一致しない場合は、
+   * 与えられたデフォルト値を返す。
    *
-   * @param str Ƚ���о�ʸ����
-   * @param yes trueɽ��ʸ����
-   * @param no falseɽ��ʸ����
-   * @param default_value �ǥե������(�ǥե������:true)
+   * @param str 判断対象文字列
+   * @param yes true表現文字列
+   * @param no false表現文字列
+   * @param default_value デフォルト値(デフォルト値:true)
    * @else
    * @brief Convert given string into bool value
    * 
@@ -437,14 +437,14 @@ namespace coil
               bool default_value = true);
   /*!
    * @if jp
-   * @brief ʸ����ꥹ����ˤ���ʸ���󤬴ޤޤ�뤫�ɤ�����Ƚ�Ǥ���
+   * @brief 文字列リスト中にある文字列が含まれるかどうかを判断する
    * 
-   * ��1�����˥���޶��ڤ�Υꥹ�Ȥ���2������õ���о�ʸ�������ꤷ��
-   * ����ʸ������1��������˴ޤޤ�뤫��Ƚ�Ǥ��롣
+   * 第1引数にカンマ区切りのリストを、第2引数に探索対象文字列を指定し、
+   * その文字列が第1引数の中に含まれるかを判断する。
    *
-   * @param list �оݥꥹ��
-   * @param value õ��ʸ����
-   * @return true: �ޤޤ�롢false: �ޤޤ�ʤ�
+   * @param list 対象リスト
+   * @param value 探索文字列
+   * @return true: 含まれる、false: 含まれない
    *
    * @else
    * @brief Include if a string is included in string list
@@ -463,14 +463,14 @@ namespace coil
 
   /*!
    * @if jp
-   * @brief ʸ����ꥹ����ˤ���ʸ���󤬴ޤޤ�뤫�ɤ�����Ƚ�Ǥ���
+   * @brief 文字列リスト中にある文字列が含まれるかどうかを判断する
    * 
-   * ��1�����˥���޶��ڤ�Υꥹ�Ȥ���2������õ���о�ʸ�������ꤷ��
-   * ����ʸ������1��������˴ޤޤ�뤫��Ƚ�Ǥ��롣
+   * 第1引数にカンマ区切りのリストを、第2引数に探索対象文字列を指定し、
+   * その文字列が第1引数の中に含まれるかを判断する。
    *
-   * @param list �о�ʸ����
-   * @param value õ��ʸ����
-   * @return true: �ޤޤ�롢false: �ޤޤ�ʤ�
+   * @param list 対象文字列
+   * @param value 探索文字列
+   * @return true: 含まれる、false: 含まれない
    *
    * @else
    * @brief Include if a string is included in string list
@@ -489,17 +489,17 @@ namespace coil
   
   /*!
    * @if jp
-   * @brief Ϳ����줿ʸ�������Хѥ����ɤ�����Ƚ�Ǥ���
+   * @brief 与えられた文字列が絶対パスかどうかを判断する
    *
-   * Ϳ����줿ʸ�������Хѥ�ɽ���Ǥ��뤫�ɤ�����Ƚ�Ǥ��롣
-   * ʸ���󤬰ʲ��ξ��ˤ����Хѥ��Ȥ���Ƚ�Ǥ��롣
-   *  - ��Ƭʸ����'/' (UNIX�ξ��)
-   *  - ��Ƭ��ʸ��������ե��٥åȡ�'/'��'\\' (Windows�ξ��)
-   *  - ��Ƭ��ʸ����'\\\\' (Windows�ͥåȥ���ѥ��ξ��)
+   * 与えられた文字列が絶対パス表現であるかどうかを判断する。
+   * 文字列が以下の場合には絶対パスとして判断する。
+   *  - 先頭文字が'/' (UNIXの場合)
+   *  - 先頭３文字がアルファベット＋'/'＋'\\' (Windowsの場合)
+   *  - 先頭２文字が'\\\\' (Windowsネットワークパスの場合)
    *
-   * @param str Ƚ���о�ʸ����
+   * @param str 判定対象文字列
    *
-   * @return ���Хѥ�Ƚ����
+   * @return 絶対パス判定結果
    *
    * @else
    * @brief Investigate whether the given string is absolute path or not
@@ -507,7 +507,7 @@ namespace coil
    * Investigate whether the given string is absolute path or not.
    * Investigate it as an absolute path, if the string is as follows:
    *  - The first character '/' (UNIX)
-   *  - The first 3 characters are alphabet ��'/'��'\\' (Windows)
+   *  - The first 3 characters are alphabet ＋'/'＋'\\' (Windows)
    *  - The first 2 characters are '\\\\' (Windows network path)
    *
    * @param str The target string for the investigation
@@ -520,15 +520,15 @@ namespace coil
   
   /*!
    * @if jp
-   * @brief Ϳ����줿ʸ����URL���ɤ�����Ƚ�Ǥ���
+   * @brief 与えられた文字列がURLかどうかを判断する
    *
-   * Ϳ����줿ʸ����URLɽ�����ɤ�����Ƚ�Ǥ��롣
-   * Ϳ����줿ʸ������ˡ�'://'�Ȥ���ʸ���󤬴ޤޤ�Ƥ�����ˤ�
-   * URLɽ���Ȥ���Ƚ�Ǥ��롣
+   * 与えられた文字列がURL表現かどうかを判断する。
+   * 与えられた文字列中に、'://'という文字列が含まれている場合には
+   * URL表現として判断する。
    *
-   * @param str Ƚ���о�ʸ����
+   * @param str 判定対象文字列
    *
-   * @return URLȽ����
+   * @return URL判定結果
    *
    * @else
    * @brief Investigate whether the given string is URL or not
@@ -547,13 +547,13 @@ namespace coil
   
   /*!
    * @if jp
-   * @brief Ϳ����줿���֥������Ȥ�std::string���Ѵ�
+   * @brief 与えられたオブジェクトをstd::stringに変換
    *
-   * �����ǻ��ꤵ�줿���֥������Ȥ�ʸ������Ѵ����롣
+   * 引数で指定されたオブジェクトを文字列に変換する。
    *
-   * @param n �Ѵ��оݥ��֥�������
+   * @param n 変換対象オブジェクト
    *
-   * @return ʸ�����Ѵ����
+   * @return 文字列変換結果
    *
    * @else
    * @brief Convert the given object to std::string
@@ -576,14 +576,14 @@ namespace coil
   
   /*!
    * @if jp
-   * @brief Ϳ����줿std::string�򥪥֥������Ȥ��Ѵ�
+   * @brief 与えられたstd::stringをオブジェクトに変換
    *
-   * ������Ϳ����줿ʸ�������ꤵ�줿���֥������Ȥ��Ѵ����롣
+   * 引数で与えられた文字列を指定されたオブジェクトに変換する。
    *
-   * @param val �Ѵ��襪�֥�������
-   * @param str �Ѵ���ʸ����
+   * @param val 変換先オブジェクト
+   * @param str 変換元文字列
    *
-   * @return true: ����, false: ����
+   * @return true: 成功, false: 失敗
    *
    * @else
    * @brief Convert the given std::string to object.
@@ -610,14 +610,14 @@ namespace coil
   
   /*!
    * @if jp
-   * @brief Ϳ����줿ʸ�����std::string���Ѵ�
+   * @brief 与えられた文字列をstd::stringに変換
    *
-   * ������Ϳ����줿ʸ�����std::string���Ѵ����롣
+   * 引数で与えられた文字列をstd::stringに変換する。
    *
-   * @param val �Ѵ���ʸ����
-   * @param str �Ѵ���ʸ����
+   * @param val 変換先文字列
+   * @param str 変換元文字列
    *
-   * @return true: ����, false: ����
+   * @return true: 成功, false: 失敗
    *
    * @else
    * @brief Convert the given string to std::string.
@@ -636,18 +636,18 @@ namespace coil
 
   /*!
    * @if jp
-   * @brief Ϳ����줿ʸ�����bool���Ѵ�
+   * @brief 与えられた文字列をboolに変換
    *
-   * ������Ϳ����줿ʸ�����bool���Ѵ����롣true/false ����ꤹ�뤿��
-   * �˰ʲ���ʸ���󤬻��Ѳ�ǽ����ʸ���Ⱦ�ʸ���ζ��̤Ϥʤ���
+   * 引数で与えられた文字列をboolに変換する。true/false を指定するため
+   * に以下の文字列が使用可能。大文字と小文字の区別はない。
    *
    * - true: 1, true, yes, on
    * - true: 0, false, no, off
    *
-   * @param val �Ѵ���ʸ����
-   * @param str �Ѵ���ʸ����
+   * @param val 変換先文字列
+   * @param str 変換元文字列
    *
-   * @return true: ����, false: ����
+   * @return true: 成功, false: 失敗
    *
    * @else
    * @brief Convert the given string to bool
@@ -671,14 +671,14 @@ namespace coil
 
   /*!
    * @if jp
-   * @brief �ݥ��󥿤�16�ʿ�ʸ������Ѵ�����
+   * @brief ポインタを16進数文字列に変換する
    *
-   * ������Ϳ����줿ʸ�����16�ʿ�ʸ������Ѵ����롣�Ѵ����줿ʸ�����
-   * ��Ƭ�ˤ� "0x" ���ղä���롣
+   * 引数で与えられた文字列を16進数文字列に変換する。変換された文字列の
+   * 先頭には "0x" が付加される。
    *
-   * @param ptr �ݥ���
+   * @param ptr ポインタ
    *
-   * @return 16�ʿ�ʸ����
+   * @return 16進数文字列
    *
    * @else
    * @brief Converting a pointer to hexadecimal string
@@ -703,14 +703,14 @@ namespace coil
 
   /*!
    * @if jp
-   * @brief 16�ʿ�ʸ�����ݥ��󥿤��Ѵ�����
+   * @brief 16進数文字列をポインタに変換する
    *
-   * ������Ϳ����줿16�ʿ�ʸ�����ʸ�������Ѵ����롣ʸ�����
-   * ��Ƭ�ˤ� "0x" ���ղä���Ƥ���٤��Ǥ��롣
+   * 引数で与えられた16進数文字列を文字列をに変換する。文字列の
+   * 先頭には "0x" が付加されているべきである。
    *
-   * @param ptr �ݥ���
-   * @param str 16�ʿ�ʸ����
-   * @return �Ѵ������������� true������ʳ��� false
+   * @param ptr ポインタ
+   * @param str 16進数文字列
+   * @return 変換が成功したら true、それ以外は false
    *
    * @else
    * @brief Converting hexadecimal string to a pointer
@@ -739,13 +739,13 @@ namespace coil
 
   /*!
    * @if jp
-   * @brief Ϳ����줿ʸ����ꥹ�Ȥ����ʣ����
+   * @brief 与えられた文字列リストから重複を削除
    *
-   * ������Ϳ����줿ʸ����ꥹ�Ȥ����ʣ���������ꥹ�Ȥ�������롣
+   * 引数で与えられた文字列リストから重複を削除したリストを作成する。
    *
-   * @param sv ��ǧ��ʸ����ꥹ��
+   * @param sv 確認元文字列リスト
    *
-   * @return ��ʣ���������̥ꥹ��
+   * @return 重複削除処理結果リスト
    *
    * @else
    * @brief Eliminate duplication from the given string list
@@ -763,15 +763,15 @@ namespace coil
   
   /*!
    * @if jp
-   * @brief Ϳ����줿ʸ����ꥹ�Ȥ���CSV������
+   * @brief 与えられた文字列リストからCSVを生成
    *
-   * ������Ϳ����줿ʸ����ꥹ�Ȥγ����Ǥ��¤٤�CSV���������롣
-   * ʸ����ꥹ�Ȥ����ξ��ˤ϶���ʸ�����֤���
+   * 引数で与えられた文字列リストの各要素を並べたCSVを生成する。
+   * 文字列リストが空の場合には空白文字を返す。
    *
-   * @param sv CSV�Ѵ��о�ʸ����ꥹ��
-   * @param delimiter ��³�����ʸ����δ֤�ʸ�� (�ǥե����: ", ")
+   * @param sv CSV変換対象文字列リスト
+   * @param delimiter 接続される文字列の間の文字 (デフォルト: ", ")
    *
-   * @return CSV�Ѵ����ʸ����
+   * @return CSV変換結果文字列
    *
    * @else
    * @brief Create CSV file from the given string list
@@ -791,14 +791,14 @@ namespace coil
   
   /*!
    * @if jp
-   * @brief Ϳ����줿ʸ����ꥹ�Ȥ�����ꥹ�Ȥ��Ѵ�
+   * @brief 与えられた文字列リストを引数リストに変換
    *
-   * ������Ϳ����줿ʸ����ꥹ�Ȥγ�����������'\\0'��ä��������ꥹ��
-   * ���Ѵ����롣
+   * 引数で与えられた文字列リストの各要素末尾に'\\0'を加え、引数リスト
+   * に変換する。
    *
-   * @param args �Ѵ��о�ʸ����ꥹ��
+   * @param args 変換対象文字列リスト
    *
-   * @return �����Ѵ����ʸ����
+   * @return 引数変換結果文字列
    *
    * @else
    * @brief Convert the given string list into the argument list
@@ -817,13 +817,13 @@ namespace coil
 
   /*!
    * @if jp
-   * @brief ���ꤵ�줿�񼰤��Ѵ�
+   * @brief 指定された書式に変換
    *
-   * ������Ϳ����줿�񼰤��Ѵ������֤���
+   * 引数で与えられた書式に変換して返す。
    *
-   * @param fmt ��
+   * @param fmt 書式
    *
-   * @return �Ѵ����ʸ����
+   * @return 変換結果文字列
    *
    * @else
    * @brief Convert it into a format given with an argumen

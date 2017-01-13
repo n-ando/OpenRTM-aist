@@ -1,4 +1,4 @@
-// -*- C++ -*-
+ï»¿// -*- C++ -*-
 /*!
  * @file  Allocator.cpp
  * @brief Memory allocator class
@@ -24,7 +24,7 @@ namespace coil
   
   /*!
    * @if jp
-   * @brief ¥á¥â¥êÎÎ°è³ÎÊİ
+   * @brief ãƒ¡ãƒ¢ãƒªé ˜åŸŸç¢ºä¿
    * @else
    * @brief Create of memory allocation
    * @endif
@@ -36,7 +36,7 @@ namespace coil
   
   /*!
    * @if jp
-   * @brief ¥á¥â¥êÎÎ°è²òÊü
+   * @brief ãƒ¡ãƒ¢ãƒªé ˜åŸŸè§£æ”¾
    * @else
    * @brief Delete of memory allocation
    * @endif
@@ -48,7 +48,7 @@ namespace coil
 
   /*!
    * @if jp
-   * @brief ÇÛÎóÍÑ¥á¥â¥êÎÎ°è³ÎÊİ
+   * @brief é…åˆ—ç”¨ãƒ¡ãƒ¢ãƒªé ˜åŸŸç¢ºä¿
    * @else
    * @brief Create of array memory allocation
    * @endif
@@ -60,7 +60,7 @@ namespace coil
   
   /*!
    * @if jp
-   * @brief ÇÛÎóÍÑ¥á¥â¥êÎÎ°è²òÊü
+   * @brief é…åˆ—ç”¨ãƒ¡ãƒ¢ãƒªé ˜åŸŸè§£æ”¾
    * @else
    * @brief Delete of array memory allocation
    * @endif

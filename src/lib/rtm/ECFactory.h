@@ -1,4 +1,4 @@
-// -*- C++ -*-
+﻿// -*- C++ -*-
 /*!
  * @file ECFactory.h
  * @brief ExecutionContext Factory class
@@ -32,11 +32,11 @@ namespace RTC
   /*!
    * @if jp
    *
-   * @brief ExecutionContext�����ѥƥ�ץ졼�ȴؿ�
+   * @brief ExecutionContext生成用テンプレート関数
    * 
-   * ExecutionContext�Υ��󥹥��󥹤��������뤿��Υƥ�ץ졼�ȴؿ���
+   * ExecutionContextのインスタンスを生成するためのテンプレート関数。
    *
-   * @return ��������ExecutionContext���󥹥���
+   * @return 生成したExecutionContextインスタンス
    * 
    * @else
    *
@@ -57,11 +57,11 @@ namespace RTC
   /*!
    * @if jp
    *
-   * @brief ExecutionContext�˴��ѥƥ�ץ졼�ȴؿ�
+   * @brief ExecutionContext破棄用テンプレート関数
    * 
-   * ExecutionContext�Υ��󥹥��󥹤��˴����뤿��Υƥ�ץ졼�ȴؿ���
+   * ExecutionContextのインスタンスを破棄するためのテンプレート関数。
    *
-   * @param ec �˴��о�ExecutionContext�Υ��󥹥���
+   * @param ec 破棄対象ExecutionContextのインスタンス
    *
    * @else
    *
@@ -82,16 +82,16 @@ namespace RTC
   /*!
    * @if jp
    * @class ECFactoryBase
-   * @brief ECFactoryBase ��ݥ��饹
+   * @brief ECFactoryBase 抽象クラス
    * 
-   * ExecutionContext������Factory����ݥ��饹��
-   * ��ExecutionContext���������뤿��ζ��Factory���饹�ϡ�
-   * �ʲ��ν�貾�۴ؿ��μ������󶡤��ʤ���Фʤ�ʤ���
+   * ExecutionContext生成用Factoryの抽象クラス。
+   * 各ExecutionContextを生成するための具象Factoryクラスは、
+   * 以下の純粋仮想関数の実装を提供しなければならない。
    *
-   * public���󥿡��ե������Ȥ��ưʲ��Τ�Τ��󶡤��롣
-   * - name()   : �����о�ExecutionContext̾�Τμ���
-   * - create() : ExecutionContext���󥹥��󥹤�����
-   * - destroy(): ExecutionContext���󥹥��󥹤��˴�
+   * publicインターフェースとして以下のものを提供する。
+   * - name()   : 生成対象ExecutionContext名称の取得
+   * - create() : ExecutionContextインスタンスの生成
+   * - destroy(): ExecutionContextインスタンスの破棄
    *
    * @since 0.4.0
    *
@@ -118,9 +118,9 @@ namespace RTC
     /*!
      * @if jp
      *
-     * @brief ���ۥǥ��ȥ饯��
+     * @brief 仮想デストラクタ
      * 
-     * ���ۥǥ��ȥ饯����
+     * 仮想デストラクタ。
      *
      * @else
      *
@@ -135,11 +135,11 @@ namespace RTC
     /*!
      * @if jp
      *
-     * @brief �����о�ExecutionContext̾�μ����ѽ�貾�۴ؿ�
+     * @brief 生成対象ExecutionContext名称取得用純粋仮想関数
      * 
-     * �����о�ExecutionContext��̾�Τ�������뤿��ν�貾�۴ؿ���
+     * 生成対象ExecutionContextの名称を取得するための純粋仮想関数。
      *
-     * @return �����о�ExecutionContext̾��
+     * @return 生成対象ExecutionContext名称
      * 
      * @else
      *
@@ -158,11 +158,11 @@ namespace RTC
     /*!
      * @if jp
      *
-     * @brief ExecutionContext�����ѽ�貾�۴ؿ�
+     * @brief ExecutionContext生成用純粋仮想関数
      * 
-     * ExecutionContext�Υ��󥹥��󥹤��������뤿��ν�貾�۴ؿ���
+     * ExecutionContextのインスタンスを生成するための純粋仮想関数。
      *
-     * @return ��������ExecutionContext���󥹥���
+     * @return 生成したExecutionContextインスタンス
      * 
      * @else
      *
@@ -179,11 +179,11 @@ namespace RTC
     /*!
      * @if jp
      *
-     * @brief ExecutionContext�˴��ѽ�貾�۴ؿ�
+     * @brief ExecutionContext破棄用純粋仮想関数
      * 
-     * ExecutionContext�Υ��󥹥��󥹤��˴����뤿��ν�貾�۴ؿ���
+     * ExecutionContextのインスタンスを破棄するための純粋仮想関数。
      *
-     * @param comp �˴��оݤ�ExecutionContext���󥹥���
+     * @param comp 破棄対象のExecutionContextインスタンス
      * 
      * @else
      *
@@ -202,9 +202,9 @@ namespace RTC
   /*!
    * @if jp
    * @class ECFactoryCXX
-   * @brief ECFactoryCXX ���饹
+   * @brief ECFactoryCXX クラス
    * 
-   * C++������ExecutionContext���󥹥��󥹤���������Factory���饹��
+   * C++言語用ExecutionContextインスタンスを生成するFactoryクラス。
    *
    * @since 0.4.0
    *
@@ -225,13 +225,13 @@ namespace RTC
     /*!
      * @if jp
      *
-     * @brief ���󥹥ȥ饯��
+     * @brief コンストラクタ
      * 
-     * ���󥹥ȥ饯��
+     * コンストラクタ
      *
-     * @param name �����о�ExecutionContext̾��
-     * @param new_func ExecutionContext�����Ѵؿ�
-     * @param delete_func ExecutionContext�˴��Ѵؿ�
+     * @param name 生成対象ExecutionContext名称
+     * @param new_func ExecutionContext生成用関数
+     * @param delete_func ExecutionContext破棄用関数
      * 
      * @else
      *
@@ -252,9 +252,9 @@ namespace RTC
     /*!
      * @if jp
      *
-     * @brief ���ۥǥ��ȥ饯��
+     * @brief 仮想デストラクタ
      * 
-     * ���ۥǥ��ȥ饯����
+     * 仮想デストラクタ。
      *
      * @else
      *
@@ -269,11 +269,11 @@ namespace RTC
     /*!
      * @if jp
      *
-     * @brief �����о�ExecutionContext̾�Τ����
+     * @brief 生成対象ExecutionContext名称を取得
      * 
-     * �����оݤ�ExecutionContext̾�Τ�������롣
+     * 生成対象のExecutionContext名称を取得する。
      *
-     * @return �����о�ExecutionContext̾��
+     * @return 生成対象ExecutionContext名称
      * 
      * @else
      *
@@ -290,11 +290,11 @@ namespace RTC
     /*!
      * @if jp
      *
-     * @brief �����о�ExecutionContext���󥹥��󥹤�����
+     * @brief 生成対象ExecutionContextインスタンスを生成
      * 
-     * �����оݤ�ExecutionContext���饹�Υ��󥹥��󥹤��������롣
+     * 生成対象のExecutionContextクラスのインスタンスを生成する。
      *
-     * @return ��������ExecutionContext���󥹥���
+     * @return 生成したExecutionContextインスタンス
      * 
      * @else
      *
@@ -311,11 +311,11 @@ namespace RTC
     /*!
      * @if jp
      *
-     * @brief �о�ExecutionContext���󥹥��󥹤��˴�
+     * @brief 対象ExecutionContextインスタンスを破棄
      * 
-     * �о�ExecutionContext���饹�Υ��󥹥��󥹤��˴����롣
+     * 対象ExecutionContextクラスのインスタンスを破棄する。
      *
-     * @param comp �˴��о�ExecutionContext���󥹥���
+     * @param comp 破棄対象ExecutionContextインスタンス
      * 
      * @else
      *
@@ -332,7 +332,7 @@ namespace RTC
   protected:
     /*!
      * @if jp
-     * @brief  �����о�ExecutionContext̾��
+     * @brief  生成対象ExecutionContext名称
      * @else
      * @brief  Names of the target ExecutionContext for creation
      * @endif
@@ -341,7 +341,7 @@ namespace RTC
     
     /*!
      * @if jp
-     * @brief  �о�ExecutionContext�����Ѵؿ�
+     * @brief  対象ExecutionContext生成用関数
      * @else
      * @brief  Function to create the target ExecutionContext
      * @endif
@@ -350,7 +350,7 @@ namespace RTC
     
     /*!
      * @if jp
-     * @brief  �о�ExecutionContext�˴��Ѵؿ�
+     * @brief  対象ExecutionContext破棄用関数
      * @else
      * @brief  Function to destroy the target ExecutionContext
      * @endif

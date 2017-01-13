@@ -1,4 +1,4 @@
-// -*- C++ -*-
+﻿// -*- C++ -*-
 /*!
  * @file FactoryInit.cpp
  * @brief factory initialization function

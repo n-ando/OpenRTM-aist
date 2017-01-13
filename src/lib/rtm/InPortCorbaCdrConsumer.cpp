@@ -1,4 +1,4 @@
-// -*- C++ -*-
+ï»¿// -*- C++ -*-
 /*!
  * @file  InPortCorbaCdrConsumer.h
  * @brief InPortCorbaCdrConsumer class
@@ -24,7 +24,7 @@ namespace RTC
 {
   /*!
    * @if jp
-   * @brief ¥³¥ó¥¹¥È¥é¥¯¥¿
+   * @brief ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
    * @else
    * @brief Constructor
    * @param buffer The buffer object that is attached to this Consumer
@@ -37,7 +37,7 @@ namespace RTC
   
   /*!
    * @if jp
-   * @brief ¥Ç¥¹¥È¥é¥¯¥¿
+   * @brief ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
    * @else
    * @brief Destructor
    * @endif
@@ -49,7 +49,7 @@ namespace RTC
 
   /*!
    * @if jp
-   * @brief ÀßÄê½é´ü²½
+   * @brief è¨­å®šåˆæœŸåŒ–
    * @else
    * @brief Initializing configuration
    * @endif
@@ -61,7 +61,7 @@ namespace RTC
 
   /*!
    * @if jp
-   * @brief ¥Ğ¥Ã¥Õ¥¡¤Ø¤Î¥Ç¡¼¥¿½ñ¹ş
+   * @brief ãƒãƒƒãƒ•ã‚¡ã¸ã®ãƒ‡ãƒ¼ã‚¿æ›¸è¾¼
    * @else
    * @brief Write data into the buffer
    * @endif
@@ -97,7 +97,7 @@ namespace RTC
   
   /*!
    * @if jp
-   * @brief InterfaceProfile¾ğÊó¤ò¸ø³«¤¹¤ë
+   * @brief InterfaceProfileæƒ…å ±ã‚’å…¬é–‹ã™ã‚‹
    * @else
    * @brief Publish InterfaceProfile information
    * @endif
@@ -110,7 +110,7 @@ namespace RTC
 
   /*!
    * @if jp
-   * @brief ¥Ç¡¼¥¿Á÷¿®ÄÌÃÎ¤Ø¤ÎÅĞÏ¿
+   * @brief ãƒ‡ãƒ¼ã‚¿é€ä¿¡é€šçŸ¥ã¸ã®ç™»éŒ²
    * @else
    * @brief Subscribe to the data sending notification
    * @endif
@@ -132,7 +132,7 @@ namespace RTC
   
   /*!
    * @if jp
-   * @brief ¥Ç¡¼¥¿Á÷¿®ÄÌÃÎ¤«¤é¤ÎÅĞÏ¿²ò½ü
+   * @brief ãƒ‡ãƒ¼ã‚¿é€ä¿¡é€šçŸ¥ã‹ã‚‰ã®ç™»éŒ²è§£é™¤
    * @else
    * @brief Unsubscribe the data send notification
    * @endif
@@ -152,7 +152,7 @@ namespace RTC
 
   /*!
    * @if jp
-   * @brief IORÊ¸»úÎó¤«¤é¥ª¥Ö¥¸¥§¥¯¥È»²¾È¤ò¼èÆÀ¤¹¤ë
+   * @brief IORæ–‡å­—åˆ—ã‹ã‚‰ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆå‚ç…§ã‚’å–å¾—ã™ã‚‹
    * @else
    * @brief Getting object reference fromn IOR string
    * @endif
@@ -197,7 +197,7 @@ namespace RTC
   
   /*!
    * @if jp
-   * @brief Any¤«¤éÄ¾ÀÜ¥ª¥Ö¥¸¥§¥¯¥È»²¾È¤ò¼èÆÀ¤¹¤ë
+   * @brief Anyã‹ã‚‰ç›´æ¥ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆå‚ç…§ã‚’å–å¾—ã™ã‚‹
    * @else
    * @brief Getting object reference fromn Any directry
    * @endif
@@ -238,7 +238,7 @@ namespace RTC
   
   /*!
    * @if jp
-   * @brief ÀÜÂ³²ò½ü(IORÈÇ)
+   * @brief æ¥ç¶šè§£é™¤(IORç‰ˆ)
    * @else
    * @brief ubsubscribing (IOR version)
    * @endif
@@ -277,7 +277,7 @@ namespace RTC
   
   /*!
    * @if jp
-   * @brief ÀÜÂ³²ò½ü(Object referenceÈÇ)
+   * @brief æ¥ç¶šè§£é™¤(Object referenceç‰ˆ)
    * @else
    * @brief ubsubscribing (Object reference version)
    * @endif
@@ -305,7 +305,7 @@ namespace RTC
 
   /*!
    * @if jp
-   * @brief ¥ê¥¿¡¼¥ó¥³¡¼¥ÉÊÑ´¹
+   * @brief ãƒªã‚¿ãƒ¼ãƒ³ã‚³ãƒ¼ãƒ‰å¤‰æ›
    * @else
    * @brief Return codes conversion
    * @endif
@@ -343,7 +343,7 @@ extern "C"
 { 
   /*!
    * @if jp
-   * @brief ¥â¥¸¥å¡¼¥ë½é´ü²½´Ø¿ô
+   * @brief ãƒ¢ã‚¸ãƒ¥ãƒ¼ãƒ«åˆæœŸåŒ–é–¢æ•°
    * @else
    * @brief Module initialization
    * @endif

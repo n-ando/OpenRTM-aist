@@ -1,4 +1,4 @@
-// -*- C++ -*-
+ï»¿// -*- C++ -*-
 /*!
  * @file  Routing.cpp
  * @brief Network routing information handling functions
@@ -31,7 +31,7 @@ namespace coil
 {
   /*!
    * @if jp
-   * @brief °¸Àè¥¢¥É¥ì¥¹¤«¤éÍøÍÑ¤µ¤ì¤ë¥¨¥ó¥É¥İ¥¤¥ó¥È¥¢¥É¥ì¥¹¤òÆÀ¤ë
+   * @brief å®›å…ˆã‚¢ãƒ‰ãƒ¬ã‚¹ã‹ã‚‰åˆ©ç”¨ã•ã‚Œã‚‹ã‚¨ãƒ³ãƒ‰ãƒã‚¤ãƒ³ãƒˆã‚¢ãƒ‰ãƒ¬ã‚¹ã‚’å¾—ã‚‹
    * @else
    * @brief Getting network interface name from destination address
    * @endif
@@ -48,7 +48,7 @@ namespace coil
 
   /*!
    * @if jp
-   * @brief °¸Àè¥¢¥É¥ì¥¹¤«¤éÍøÍÑ¤µ¤ì¤ë¥Í¥Ã¥È¥ï¡¼¥¯¥¤¥ó¥¿¡¼¥Õ¥§¡¼¥¹Ì¾¤òÆÀ¤ë
+   * @brief å®›å…ˆã‚¢ãƒ‰ãƒ¬ã‚¹ã‹ã‚‰åˆ©ç”¨ã•ã‚Œã‚‹ãƒãƒƒãƒˆãƒ¯ãƒ¼ã‚¯ã‚¤ãƒ³ã‚¿ãƒ¼ãƒ•ã‚§ãƒ¼ã‚¹åã‚’å¾—ã‚‹
    * @else
    * @brief Getting network interface name from destination address
    * @endif
@@ -128,7 +128,7 @@ namespace coil
 
   /*!
    * @if jp
-   * @brief ¥Í¥Ã¥È¥ï¡¼¥¯¥¤¥ó¥¿¡¼¥Õ¥§¡¼¥¹Ì¾¤«¤éIP¥¢¥É¥ì¥¹¤òÆÀ¤ë
+   * @brief ãƒãƒƒãƒˆãƒ¯ãƒ¼ã‚¯ã‚¤ãƒ³ã‚¿ãƒ¼ãƒ•ã‚§ãƒ¼ã‚¹åã‹ã‚‰IPã‚¢ãƒ‰ãƒ¬ã‚¹ã‚’å¾—ã‚‹
    * @else
    * @brief Get IP address from a network interface name
    * @endif

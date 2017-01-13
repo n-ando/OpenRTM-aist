@@ -1,4 +1,4 @@
-// -*- C++ -*-
+ï»¿// -*- C++ -*-
 /*!
  * @file CorbaNaming.cpp
  * @brief CORBA naming service helper class
@@ -29,7 +29,7 @@ namespace RTC
 {
   /*!
    * @if jp
-   * @brief ¥³¥ó¥¹¥È¥é¥¯¥¿
+   * @brief ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
    * @else
    * @brief Constructor
    * @endif
@@ -43,7 +43,7 @@ namespace RTC
   
   /*!
    * @if jp
-   * @brief ¥³¥ó¥¹¥È¥é¥¯¥¿
+   * @brief ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
    * @else
    * @brief Constructor
    * @endif
@@ -69,7 +69,7 @@ namespace RTC
   
   /*!
    * @if jp
-   * @brief ¥Í¡¼¥ß¥ó¥°¥µ¡¼¥Ó¥¹¤Î½é´ü²½
+   * @brief ãƒãƒ¼ãƒŸãƒ³ã‚°ã‚µãƒ¼ãƒ“ã‚¹ã®åˆæœŸåŒ–
    * @else
    * @brief Initialize the Naming Service
    * @endif
@@ -100,7 +100,7 @@ namespace RTC
   
   /*!
    * @if jp
-   * @brief Object ¤ò bind ¤¹¤ë
+   * @brief Object ã‚’ bind ã™ã‚‹
    * @else
    * @brief Bind object on specified name component position
    * @endif
@@ -129,7 +129,7 @@ namespace RTC
   
   /*!
    * @if jp
-   * @brief Object ¤ò bind ¤¹¤ë
+   * @brief Object ã‚’ bind ã™ã‚‹
    * @else
    * @brief Bind object on specified string name position
    * @endif
@@ -143,7 +143,7 @@ namespace RTC
   
   /*!
    * @if jp
-   * @brief ÅÓÃæ¤Î¥³¥ó¥Æ¥­¥¹¥È¤òºÆµ¢Åª¤Ë bind ¤·¤Ê¤¬¤é Object ¤ò bind ¤¹¤ë
+   * @brief é€”ä¸­ã®ã‚³ãƒ³ãƒ†ã‚­ã‚¹ãƒˆã‚’å†å¸°çš„ã« bind ã—ãªãŒã‚‰ Object ã‚’ bind ã™ã‚‹
    * @else
    * @brief Bind intermediate context recursively and bind object
    * @endif
@@ -177,7 +177,7 @@ namespace RTC
   
   /*!
    * @if jp
-   * @brief Object ¤ò rebind ¤¹¤ë
+   * @brief Object ã‚’ rebind ã™ã‚‹
    * @else
    * @brief Rebind object
    * @endif
@@ -207,7 +207,7 @@ namespace RTC
   
   /*!
    * @if jp
-   * @brief Object ¤ò rebind ¤¹¤ë
+   * @brief Object ã‚’ rebind ã™ã‚‹
    * @else
    * @brief Rebind object
    * @endif
@@ -222,7 +222,7 @@ namespace RTC
   
   /*!
    * @if jp
-   * @brief ÅÓÃæ¤Î¥³¥ó¥Æ¥­¥¹¥È¤ò bind ¤·¤Ê¤¬¤é Object ¤ò rebind ¤¹¤ë
+   * @brief é€”ä¸­ã®ã‚³ãƒ³ãƒ†ã‚­ã‚¹ãƒˆã‚’ bind ã—ãªãŒã‚‰ Object ã‚’ rebind ã™ã‚‹
    * @else
    * @brief Bind intermediate context recursively and rebind object
    * @endif
@@ -268,7 +268,7 @@ namespace RTC
   
   /*!
    * @if jp
-   * @brief NamingContext ¤ò bind ¤¹¤ë
+   * @brief NamingContext ã‚’ bind ã™ã‚‹
    * @else
    * @brief Bind NamingContext
    * @endif
@@ -283,7 +283,7 @@ namespace RTC
   
   /*!
    * @if jp
-   * @brief NamingContext ¤ò bind ¤¹¤ë
+   * @brief NamingContext ã‚’ bind ã™ã‚‹
    * @else
    * @brief Bind NamingContext
    * @endif
@@ -298,7 +298,7 @@ namespace RTC
   
   /*!
    * @if jp
-   * @brief ÅÓÃæ¤Î¥³¥ó¥Æ¥­¥¹¥È¤òºÆµ¢Åª¤Ë bind ¤· NamingContext ¤ò bind ¤¹¤ë
+   * @brief é€”ä¸­ã®ã‚³ãƒ³ãƒ†ã‚­ã‚¹ãƒˆã‚’å†å¸°çš„ã« bind ã— NamingContext ã‚’ bind ã™ã‚‹
    * @else
    * @brief Bind intermediate context recursively and bind NamingContext
    * @endif
@@ -314,7 +314,7 @@ namespace RTC
   
   /*!
    * @if jp
-   * @brief NamingContext ¤ò rebind ¤¹¤ë
+   * @brief NamingContext ã‚’ rebind ã™ã‚‹
    * @else
    * @brief Rebind NamingContext
    * @endif
@@ -330,7 +330,7 @@ namespace RTC
   
   /*!
    * @if jp
-   * @brief NamingContext ¤ò rebind ¤¹¤ë
+   * @brief NamingContext ã‚’ rebind ã™ã‚‹
    * @else
    * @brief Rebind NamingContext
    * @endif
@@ -345,7 +345,7 @@ namespace RTC
   
   /*!
    * @if jp
-   * @brief ÅÓÃæ¤Î¥³¥ó¥Æ¥­¥¹¥È¤òºÆµ¢Åª¤Ë rebind ¤· NamingContext ¤ò rebind ¤¹¤ë
+   * @brief é€”ä¸­ã®ã‚³ãƒ³ãƒ†ã‚­ã‚¹ãƒˆã‚’å†å¸°çš„ã« rebind ã— NamingContext ã‚’ rebind ã™ã‚‹
    * @else
    * @brief Rebind intermediate context recursively and rebind NamingContext 
    * @endif
@@ -361,7 +361,7 @@ namespace RTC
   
   /*!
    * @if jp
-   * @brief Í¿¤¨¤é¤ì¤¿ NameComponent ¤Ë¥Ğ¥¤¥ó¥É¤µ¤ì¤Æ¤¤¤ë Object ¤òÊÖ¤¹
+   * @brief ä¸ãˆã‚‰ã‚ŒãŸ NameComponent ã«ãƒã‚¤ãƒ³ãƒ‰ã•ã‚Œã¦ã„ã‚‹ Object ã‚’è¿”ã™
    * @else
    * @brief Return object bound on the specified NameComponent
    * @endif
@@ -374,7 +374,7 @@ namespace RTC
   
   /*!
    * @if jp
-   * @brief Í¿¤¨¤é¤ì¤¿ NameComponent ¤Ë¥Ğ¥¤¥ó¥É¤µ¤ì¤Æ¤¤¤ë Object ¤òÊÖ¤¹
+   * @brief ä¸ãˆã‚‰ã‚ŒãŸ NameComponent ã«ãƒã‚¤ãƒ³ãƒ‰ã•ã‚Œã¦ã„ã‚‹ Object ã‚’è¿”ã™
    * @else
    * @brief Return object bound on the specified name
    * @endif
@@ -387,7 +387,7 @@ namespace RTC
   
   /*!
    * @if jp
-   * @brief Í¿¤¨¤é¤ì¤¿ NameComponent ¤Î¥Ğ¥¤¥ó¥Ç¥£¥ó¥°¤òºï½ü¤¹¤ë
+   * @brief ä¸ãˆã‚‰ã‚ŒãŸ NameComponent ã®ãƒã‚¤ãƒ³ãƒ‡ã‚£ãƒ³ã‚°ã‚’å‰Šé™¤ã™ã‚‹
    * @else
    * @brief Unbind a binding specified by NameComponent
    * @endif
@@ -400,7 +400,7 @@ namespace RTC
   
   /*!
    * @if jp
-   * @brief Í¿¤¨¤é¤ì¤¿ NameComponent ¤Î¥Ğ¥¤¥ó¥Ç¥£¥ó¥°¤òºï½ü¤¹¤ë
+   * @brief ä¸ãˆã‚‰ã‚ŒãŸ NameComponent ã®ãƒã‚¤ãƒ³ãƒ‡ã‚£ãƒ³ã‚°ã‚’å‰Šé™¤ã™ã‚‹
    * @else
    * @brief Unbind a binding specified by NameComponent
    * @endif
@@ -413,7 +413,7 @@ namespace RTC
   
   /*!
    * @if jp
-   * @brief ¿·¤·¤¤¥³¥ó¥Æ¥­¥¹¥È¤òÀ¸À®¤¹¤ë
+   * @brief æ–°ã—ã„ã‚³ãƒ³ãƒ†ã‚­ã‚¹ãƒˆã‚’ç”Ÿæˆã™ã‚‹
    * @else
    * @brief Create new NamingContext
    * @endif
@@ -425,7 +425,7 @@ namespace RTC
   
   /*!
    * @if jp
-   * @brief ¿·¤·¤¤¥³¥ó¥Æ¥­¥¹¥È¤ò bind ¤¹¤ë
+   * @brief æ–°ã—ã„ã‚³ãƒ³ãƒ†ã‚­ã‚¹ãƒˆã‚’ bind ã™ã‚‹
    * @else
    * pbrief Bind new namingContext
    * @endif
@@ -456,7 +456,7 @@ namespace RTC
   
   /*!
    * @if jp
-   * @brief ¿·¤·¤¤¥³¥ó¥Æ¥­¥¹¥È¤ò bind ¤¹¤ë
+   * @brief æ–°ã—ã„ã‚³ãƒ³ãƒ†ã‚­ã‚¹ãƒˆã‚’ bind ã™ã‚‹
    * @else
    * pbrief Bind new namingContext
    * @endif
@@ -470,7 +470,7 @@ namespace RTC
   
   /*!
    * @if jp
-   * @brief NamingContext ¤òÈó¥¢¥¯¥Æ¥£¥Ö²½¤¹¤ë
+   * @brief NamingContext ã‚’éã‚¢ã‚¯ãƒ†ã‚£ãƒ–åŒ–ã™ã‚‹
    * @else
    * @brief Destroy the naming context
    * @endif
@@ -483,7 +483,7 @@ namespace RTC
   
   /*!
    * @if jp
-   * @brief NamingContext ¤òºÆµ¢Åª¤Ë²¼¤Ã¤ÆÈó¥¢¥¯¥Æ¥£¥Ö²½¤¹¤ë
+   * @brief NamingContext ã‚’å†å¸°çš„ã«ä¸‹ã£ã¦éã‚¢ã‚¯ãƒ†ã‚£ãƒ–åŒ–ã™ã‚‹
    * @else
    * @brief Destroy the naming context recursively
    * @endif
@@ -538,7 +538,7 @@ namespace RTC
   
   /*!
    * @if jp
-   * @brief ¤¹¤Ù¤Æ¤Î Binding ¤òºï½ü¤¹¤ë
+   * @brief ã™ã¹ã¦ã® Binding ã‚’å‰Šé™¤ã™ã‚‹
    * @else
    * @brief Destroy all bindings
    * @endif
@@ -550,7 +550,7 @@ namespace RTC
   
   /*!
    * @if jp
-   * @brief Í¿¤¨¤é¤ì¤¿ NamingContext ¤Î Binding ¤ò¼èÆÀ¤¹¤ë
+   * @brief ä¸ãˆã‚‰ã‚ŒãŸ NamingContext ã® Binding ã‚’å–å¾—ã™ã‚‹
    * @else
    * @brief Get Binding on the given NamingContext
    * @endif
@@ -571,7 +571,7 @@ namespace RTC
   
   /*!
    * @if jp
-   * @brief Í¿¤¨¤é¤ì¤¿ Naming ¥Ñ¥¹°Ê²¼¤Î¤¹¤Ù¤Æ¤Î¥Ğ¥¤¥ó¥Ç¥£¥ó¥°¤ò¼èÆÀ¤¹¤ë
+   * @brief ä¸ãˆã‚‰ã‚ŒãŸ Naming ãƒ‘ã‚¹ä»¥ä¸‹ã®ã™ã¹ã¦ã®ãƒã‚¤ãƒ³ãƒ‡ã‚£ãƒ³ã‚°ã‚’å–å¾—ã™ã‚‹
    * @else
    * @brief Get all the binding under given naming path
    * @endif
@@ -621,7 +621,7 @@ namespace RTC
   
   /*!
    * @if jp
-   * @brief Í¿¤¨¤é¤ì¤¿¥Ñ¥¹°Ê²¼¤Î»ØÄê¤µ¤ì¤¿kind¤Î¥Ğ¥¤¥ó¥Ç¥£¥ó¥°¤ò¼èÆÀ¤¹¤ë
+   * @brief ä¸ãˆã‚‰ã‚ŒãŸãƒ‘ã‚¹ä»¥ä¸‹ã®æŒ‡å®šã•ã‚ŒãŸkindã®ãƒã‚¤ãƒ³ãƒ‡ã‚£ãƒ³ã‚°ã‚’å–å¾—ã™ã‚‹
    * @else
    * @brief Get all the binding with specified kind under given naming path
    * @endif
@@ -658,7 +658,7 @@ namespace RTC
 
   /*!
    * @if jp
-   * @brief Í¿¤¨¤é¤ì¤¿ NameComponent ¤ÎÊ¸»úÎóÉ½¸½¤òÊÖ¤¹
+   * @brief ä¸ãˆã‚‰ã‚ŒãŸ NameComponent ã®æ–‡å­—åˆ—è¡¨ç¾ã‚’è¿”ã™
    * @else
    * @brief Get string representation of given NameComponent
    * @endif
@@ -680,7 +680,7 @@ namespace RTC
   
   /*!
    * @if jp
-   * @brief Í¿¤¨¤é¤ì¤¿Ê¸»úÎóÉ½¸½¤ò NameComponent ¤ËÊ¬²ò¤¹¤ë
+   * @brief ä¸ãˆã‚‰ã‚ŒãŸæ–‡å­—åˆ—è¡¨ç¾ã‚’ NameComponent ã«åˆ†è§£ã™ã‚‹
    * @else
    * @brief Resolve given string representation to NameComponent
    * @endif
@@ -730,7 +730,7 @@ namespace RTC
   
   /*!
    * @if jp
-   * @brief Í¿¤¨¤é¤ì¤¿ addre ¤È string_name ¤«¤é URLÉ½¸½¤ò¼èÆÀ¤¹¤ë
+   * @brief ä¸ãˆã‚‰ã‚ŒãŸ addre ã¨ string_name ã‹ã‚‰ URLè¡¨ç¾ã‚’å–å¾—ã™ã‚‹
    * @else
    * @brief Get URL representation from given addr and string_name
    * @endif
@@ -743,7 +743,7 @@ namespace RTC
   
   /*!
    * @if jp
-   * @brief Í¿¤¨¤é¤ì¤¿Ê¸»úÎóÉ½¸½¤ò resolve ¤·¥ª¥Ö¥¸¥§¥¯¥È¤òÊÖ¤¹
+   * @brief ä¸ãˆã‚‰ã‚ŒãŸæ–‡å­—åˆ—è¡¨ç¾ã‚’ resolve ã—ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’è¿”ã™
    * @else
    * @brief Resolve from name of string representation and get object
    * @endif
@@ -759,7 +759,7 @@ namespace RTC
   //======================================================================
   /*!
    * @if jp
-   * @brief ¥ª¥Ö¥¸¥§¥¯¥È¤ÎÌ¾Á°¤ò¥Ğ¥¤¥ó¥É¤Ş¤¿¤Ï²ò·è¤¹¤ë
+   * @brief ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®åå‰ã‚’ãƒã‚¤ãƒ³ãƒ‰ã¾ãŸã¯è§£æ±ºã™ã‚‹
    * @else
    * @brief Bind or resolve the given name component
    * @endif
@@ -784,7 +784,7 @@ namespace RTC
   
   /*!
    * @if jp
-   * @brief Ì¾Á°¤ò¥Ğ¥¤¥ó¥É¤Ş¤¿¤Ï²ò·è¤¹¤ë
+   * @brief åå‰ã‚’ãƒã‚¤ãƒ³ãƒ‰ã¾ãŸã¯è§£æ±ºã™ã‚‹
    * @else
    * @brief Bind or resolve the given name component
    * @endif
@@ -800,7 +800,7 @@ namespace RTC
   
   /*!
    * @if jp
-   * @brief Ì¾Á°¤ò¥Ğ¥¤¥ó¥É¤Ş¤¿¤Ï²ò·è¤¹¤ë
+   * @brief åå‰ã‚’ãƒã‚¤ãƒ³ãƒ‰ã¾ãŸã¯è§£æ±ºã™ã‚‹
    * @else
    * @brief Bind or resolve the given name component
    * @endif
@@ -814,7 +814,7 @@ namespace RTC
   
   /*!
    * @if jp
-   * @brief ¥Í¡¼¥à¥µ¡¼¥Ğ¤ÎÌ¾Á°¤ò¼èÆÀ¤¹¤ë
+   * @brief ãƒãƒ¼ãƒ ã‚µãƒ¼ãƒã®åå‰ã‚’å–å¾—ã™ã‚‹
    * @else
    * @brief Get the name of naming server
    * @endif
@@ -826,7 +826,7 @@ namespace RTC
   
   /*!
    * @if jp
-   * @brief ¥ë¡¼¥È¥³¥ó¥Æ¥­¥¹¥È¤ò¼èÆÀ¤¹¤ë
+   * @brief ãƒ«ãƒ¼ãƒˆã‚³ãƒ³ãƒ†ã‚­ã‚¹ãƒˆã‚’å–å¾—ã™ã‚‹
    * @else
    * @brief Get the root context
    * @endif
@@ -838,7 +838,7 @@ namespace RTC
   
   /*!
    * @if jp
-   * @brief ¥ª¥Ö¥¸¥§¥¯¥È¤¬¥Í¡¼¥ß¥ó¥°¥³¥ó¥Æ¥­¥¹¥È¤«È½ÊÌ¤¹¤ë
+   * @brief ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆãŒãƒãƒ¼ãƒŸãƒ³ã‚°ã‚³ãƒ³ãƒ†ã‚­ã‚¹ãƒˆã‹åˆ¤åˆ¥ã™ã‚‹
    * @else
    * @brief Determine whether the object is NamingContext
    * @endif
@@ -852,7 +852,7 @@ namespace RTC
   
   /*!
    * @if jp
-   * @brief Í¿¤¨¤é¤ì¤¿Ì¾Á°¤¬¥Í¡¼¥ß¥ó¥°¥³¥ó¥Æ¥­¥¹¥È¤«¤É¤¦¤«
+   * @brief ä¸ãˆã‚‰ã‚ŒãŸåå‰ãŒãƒãƒ¼ãƒŸãƒ³ã‚°ã‚³ãƒ³ãƒ†ã‚­ã‚¹ãƒˆã‹ã©ã†ã‹
    * @else
    * @brief Determine whether the given name component is NamingContext
    * @endif
@@ -864,7 +864,7 @@ namespace RTC
   
   /*!
    * @if jp
-   * @brief Í¿¤¨¤é¤ì¤¿Ì¾Á°¤¬¥Í¡¼¥ß¥ó¥°¥³¥ó¥Æ¥­¥¹¥È¤«¤É¤¦¤«
+   * @brief ä¸ãˆã‚‰ã‚ŒãŸåå‰ãŒãƒãƒ¼ãƒŸãƒ³ã‚°ã‚³ãƒ³ãƒ†ã‚­ã‚¹ãƒˆã‹ã©ã†ã‹
    * @else
    * @brief Determine whether the given string name is NamingContext
    * @endif
@@ -876,7 +876,7 @@ namespace RTC
   
   /*!
    * @if jp
-   * @brief ¥Í¡¼¥à¥³¥ó¥İ¡¼¥Í¥ó¥È¤ÎÉôÊ¬¤òÊÖ¤¹
+   * @brief ãƒãƒ¼ãƒ ã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆã®éƒ¨åˆ†ã‚’è¿”ã™
    * @else
    * @brief Get subset of given name component
    * @endif
@@ -911,7 +911,7 @@ namespace RTC
   //------------------------------------------------------------
   /*!
    * @if jp
-   * @brief ¥Í¡¼¥à¥³¥ó¥İ¡¼¥Í¥ó¥È¤ÎÊ¸»úÎóÉ½¸½¤ò¼èÆÀ¤¹¤ë
+   * @brief ãƒãƒ¼ãƒ ã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆã®æ–‡å­—åˆ—è¡¨ç¾ã‚’å–å¾—ã™ã‚‹
    * @else
    * @brief Get string representation of name component
    * @endif
@@ -948,7 +948,7 @@ namespace RTC
   
   /*!
    * @if jp
-   * @brief ¥Í¡¼¥à¥³¥ó¥İ¡¼¥Í¥ó¥È¤ÎÊ¸»úÎóÉ½¸½»ş¤ÎÊ¸»úÄ¹¤ò¼èÆÀ¤¹¤ë
+   * @brief ãƒãƒ¼ãƒ ã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆã®æ–‡å­—åˆ—è¡¨ç¾æ™‚ã®æ–‡å­—é•·ã‚’å–å¾—ã™ã‚‹
    * @else
    * @brief Get string length of the name component's string representation
    * @endif
@@ -986,7 +986,7 @@ namespace RTC
   
   /*!
    * @if jp
-   * @brief Ê¸»úÎó¤ÎÊ¬³ä
+   * @brief æ–‡å­—åˆ—ã®åˆ†å‰²
    * @else
    * @brief Split of string
    * @endif

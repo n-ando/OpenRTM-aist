@@ -1,4 +1,4 @@
-// -*- C++ -*-
+ï»¿// -*- C++ -*-
 /*!
  * @file ManagerServant.cpp
  * @brief RTComponent manager servant implementation class
@@ -119,7 +119,7 @@ namespace RTM
   
   /*!
    * @if jp
-   * @brief ¥â¥¸¥å¡¼¥ë¤ò¥í¡¼¥É¤¹¤ë
+   * @brief ãƒ¢ã‚¸ãƒ¥ãƒ¼ãƒ«ã‚’ãƒ­ãƒ¼ãƒ‰ã™ã‚‹
    * @else
    * @brief Loading a module
    * @endig
@@ -136,7 +136,7 @@ namespace RTM
   
   /*!
    * @if jp
-   * @brief ¥â¥¸¥å¡¼¥ë¤ò¥¢¥ó¥í¡¼¥É¤¹¤ë
+   * @brief ãƒ¢ã‚¸ãƒ¥ãƒ¼ãƒ«ã‚’ã‚¢ãƒ³ãƒ­ãƒ¼ãƒ‰ã™ã‚‹
    * @else
    * @brief Unloading a module
    * @endig
@@ -152,7 +152,7 @@ namespace RTM
   
   /*!
    * @if jp
-   * @brief ¥í¡¼¥É²ÄÇ½¤Ê¥â¥¸¥å¡¼¥ë¤Î¥×¥í¥Õ¥¡¥¤¥ë¤ò¼èÆÀ¤¹¤ë
+   * @brief ãƒ­ãƒ¼ãƒ‰å¯èƒ½ãªãƒ¢ã‚¸ãƒ¥ãƒ¼ãƒ«ã®ãƒ—ãƒ­ãƒ•ã‚¡ã‚¤ãƒ«ã‚’å–å¾—ã™ã‚‹
    * @else
    * @brief Getting loadable module profiles
    * @endig
@@ -206,7 +206,7 @@ namespace RTM
   
   /*!
    * @if jp
-   * @brief ¥í¡¼¥ÉºÑ¤ß¤Î¥â¥¸¥å¡¼¥ë¤Î¥×¥í¥Õ¥¡¥¤¥ë¤ò¼èÆÀ¤¹¤ë
+   * @brief ãƒ­ãƒ¼ãƒ‰æ¸ˆã¿ã®ãƒ¢ã‚¸ãƒ¥ãƒ¼ãƒ«ã®ãƒ—ãƒ­ãƒ•ã‚¡ã‚¤ãƒ«ã‚’å–å¾—ã™ã‚‹
    * @else
    * @brief Getting loaded module profiles
    * @endig
@@ -260,7 +260,7 @@ namespace RTM
   
   /*!
    * @if jp
-   * @brief ¥³¥ó¥İ¡¼¥Í¥ó¥È¥Õ¥¡¥¯¥È¥ê¤Î¥×¥í¥Õ¥¡¥¤¥ë¤ò¼èÆÀ¤¹¤ë
+   * @brief ã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆãƒ•ã‚¡ã‚¯ãƒˆãƒªã®ãƒ—ãƒ­ãƒ•ã‚¡ã‚¤ãƒ«ã‚’å–å¾—ã™ã‚‹
    * @else
    * @brief Getting component factory profiles
    * @endig
@@ -314,7 +314,7 @@ namespace RTM
   
   /*!
    * @if jp
-   * @brief ¥³¥ó¥İ¡¼¥Í¥ó¥È¤òÀ¸À®¤¹¤ë
+   * @brief ã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆã‚’ç”Ÿæˆã™ã‚‹
    * @else
    * @brief Creating an RT-Component
    * @endig
@@ -422,7 +422,7 @@ namespace RTM
   
   /*!
    * @if jp
-   * @brief ¥³¥ó¥İ¡¼¥Í¥ó¥È¤òºï½ü¤¹¤ë
+   * @brief ã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆã‚’å‰Šé™¤ã™ã‚‹
    * @else
    * @brief Deleting an RT-Component
    * @endig
@@ -451,7 +451,7 @@ namespace RTM
   
   /*!
    * @if jp
-   * @brief µ¯Æ°Ãæ¤Î¥³¥ó¥İ¡¼¥Í¥ó¥È¤Î¥ê¥¹¥È¤ò¼èÆÀ¤¹¤ë
+   * @brief èµ·å‹•ä¸­ã®ã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆã®ãƒªã‚¹ãƒˆã‚’å–å¾—ã™ã‚‹
    * @else
    * @brief Getting RT-Component list running on this manager
    * @endig
@@ -500,7 +500,7 @@ namespace RTM
   
   /*!
    * @if jp
-   * @brief µ¯Æ°Ãæ¤Î¥³¥ó¥İ¡¼¥Í¥ó¥È¥×¥í¥Õ¥¡¥¤¥ë¤Î¥ê¥¹¥È¤ò¼èÆÀ¤¹¤ë
+   * @brief èµ·å‹•ä¸­ã®ã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆãƒ—ãƒ­ãƒ•ã‚¡ã‚¤ãƒ«ã®ãƒªã‚¹ãƒˆã‚’å–å¾—ã™ã‚‹
    * @else
    * @brief Getting RT-Component's profile list running on this manager
    * @endig
@@ -548,10 +548,10 @@ namespace RTM
     return cprofs._retn();
   }
   
-  // manager ´ğËÜ
+  // manager åŸºæœ¬
   /*!
    * @if jp
-   * @brief ¥Ş¥Í¡¼¥¸¥ã¤Î¥×¥í¥Õ¥¡¥¤¥ë¤ò¼èÆÀ¤¹¤ë
+   * @brief ãƒãƒãƒ¼ã‚¸ãƒ£ã®ãƒ—ãƒ­ãƒ•ã‚¡ã‚¤ãƒ«ã‚’å–å¾—ã™ã‚‹
    * @else
    * @brief Getting this manager's profile.
    * @endig
@@ -567,7 +567,7 @@ namespace RTM
   
   /*!
    * @if jp
-   * @brief ¥Ş¥Í¡¼¥¸¥ã¤Î¥³¥ó¥Õ¥£¥®¥å¥ì¡¼¥·¥ç¥ó¤ò¼èÆÀ¤¹¤ë
+   * @brief ãƒãƒãƒ¼ã‚¸ãƒ£ã®ã‚³ãƒ³ãƒ•ã‚£ã‚®ãƒ¥ãƒ¬ãƒ¼ã‚·ãƒ§ãƒ³ã‚’å–å¾—ã™ã‚‹
    * @else
    * @brief Getting this manager's configuration.
    * @endig
@@ -589,7 +589,7 @@ namespace RTM
   
   /*!
    * @if jp
-   * @brief ¥Ş¥Í¡¼¥¸¥ã¤Î¥³¥ó¥Õ¥£¥®¥å¥ì¡¼¥·¥ç¥ó¤òÀßÄê¤¹¤ë
+   * @brief ãƒãƒãƒ¼ã‚¸ãƒ£ã®ã‚³ãƒ³ãƒ•ã‚£ã‚®ãƒ¥ãƒ¬ãƒ¼ã‚·ãƒ§ãƒ³ã‚’è¨­å®šã™ã‚‹
    * @else
    * @brief Setting manager's configuration
    * @endig
@@ -603,7 +603,7 @@ namespace RTM
   }
   /*!
    * @if jp
-   * @brief ¥Ş¥Í¡¼¥¸¥ã¤¬¥Ş¥¹¥¿¡¼¤«¤É¤¦¤«
+   * @brief ãƒãƒãƒ¼ã‚¸ãƒ£ãŒãƒã‚¹ã‚¿ãƒ¼ã‹ã©ã†ã‹
    * @else
    * @brief Whether this manager is master or not
    * @endig
@@ -616,7 +616,7 @@ namespace RTM
   
   /*!
    * @if jp
-   * @brief ¥Ş¥¹¥¿¡¼¥Ş¥Í¡¼¥¸¥ã¤Î¼èÆÀ
+   * @brief ãƒã‚¹ã‚¿ãƒ¼ãƒãƒãƒ¼ã‚¸ãƒ£ã®å–å¾—
    * @else
    * @brief Getting master managers
    * @endig
@@ -630,7 +630,7 @@ namespace RTM
   
   /*!
    * @if jp
-   * @brief ¥Ş¥¹¥¿¡¼¥Ş¥Í¡¼¥¸¥ã¤ÎÄÉ²Ã
+   * @brief ãƒã‚¹ã‚¿ãƒ¼ãƒãƒãƒ¼ã‚¸ãƒ£ã®è¿½åŠ 
    * @else
    * @brief Getting a master manager
    * @endig
@@ -655,7 +655,7 @@ namespace RTM
   
   /*!
    * @if jp
-   * @brief ¥Ş¥¹¥¿¡¼¥Ş¥Í¡¼¥¸¥ã¤Îºï½ü
+   * @brief ãƒã‚¹ã‚¿ãƒ¼ãƒãƒãƒ¼ã‚¸ãƒ£ã®å‰Šé™¤
    * @else
    * @brief Removing a master manager
    * @endig
@@ -682,7 +682,7 @@ namespace RTM
   
   /*!
    * @if jp
-   * @brief ¥¹¥ì¡¼¥Ö¥Ş¥Í¡¼¥¸¥ã¤Î¼èÆÀ
+   * @brief ã‚¹ãƒ¬ãƒ¼ãƒ–ãƒãƒãƒ¼ã‚¸ãƒ£ã®å–å¾—
    * @else
    * @brief Getting slave managers
    * @endig
@@ -697,7 +697,7 @@ namespace RTM
 
   /*!
    * @if jp
-   * @brief ¥¹¥ì¡¼¥Ö¥Ş¥Í¡¼¥¸¥ã¤ÎÄÉ²Ã
+   * @brief ã‚¹ãƒ¬ãƒ¼ãƒ–ãƒãƒãƒ¼ã‚¸ãƒ£ã®è¿½åŠ 
    * @else
    * @brief Getting a slave manager
    * @endig
@@ -723,7 +723,7 @@ namespace RTM
   
   /*!
    * @if jp
-   * @brief ¥¹¥ì¡¼¥Ö¥Ş¥Í¡¼¥¸¥ã¤Îºï½ü
+   * @brief ã‚¹ãƒ¬ãƒ¼ãƒ–ãƒãƒãƒ¼ã‚¸ãƒ£ã®å‰Šé™¤
    * @else
    * @brief Removing a slave manager
    * @endig

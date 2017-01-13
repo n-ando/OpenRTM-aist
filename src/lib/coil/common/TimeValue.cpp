@@ -1,4 +1,4 @@
-// -*- C++ -*-
+ï»¿// -*- C++ -*-
 /*!
  * @file Timevalue.cpp
  * @brief Timevalue class
@@ -22,7 +22,7 @@ namespace coil
 {
   /*!
    * @if jp
-   * @brief ¥³¥ó¥¹¥È¥é¥¯¥¿
+   * @brief ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
    * @else
    * @brief Constructor
    * @endif
@@ -36,7 +36,7 @@ namespace coil
   
   /*!
    * @if jp
-   * @brief ¥³¥ó¥¹¥È¥é¥¯¥¿
+   * @brief ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
    * @else
    * @brief Constructor
    * @endif
@@ -60,7 +60,7 @@ namespace coil
   
   /*!
    * @if jp
-   * @brief »ş´Ö¸º»»
+   * @brief æ™‚é–“æ¸›ç®—
    * @else
    * @brief Time subtraction
    * @endif
@@ -70,12 +70,12 @@ namespace coil
     TimeValue res;
     if (m_sec >= tm.m_sec) // +
       {
-        if (m_usec >= tm.m_usec) /* ·«¤ê²¼¤¬¤êÌµ¤· */
+        if (m_usec >= tm.m_usec) /* ç¹°ã‚Šä¸‹ãŒã‚Šç„¡ã— */
           {
             res.m_sec  = m_sec  - tm.m_sec;  // -
             res.m_usec = m_usec - tm.m_usec; // +
           }
-        else /* m_usec < tm.m_usec ·«¤ê²¼¤¬¤êÍ­¤ê */
+        else /* m_usec < tm.m_usec ç¹°ã‚Šä¸‹ãŒã‚Šæœ‰ã‚Š */
           {
             res.m_sec  = m_sec  - tm.m_sec - 1;
             res.m_usec = (m_usec + 1000000) - tm.m_usec;
@@ -83,12 +83,12 @@ namespace coil
       }
     else // m_sec < tm.m_sec // -
       {
-          if (tm.m_usec >= m_usec) /* ·«¤ê²¼¤¬¤êÌµ¤· */
+          if (tm.m_usec >= m_usec) /* ç¹°ã‚Šä¸‹ãŒã‚Šç„¡ã— */
             {
               res.m_sec  = - (tm.m_sec  - m_sec); // +
               res.m_usec = - (tm.m_usec - m_usec);  // +
             }
-          else /* tm.m_usec < m_usec ·«¤ê²¼¤¬¤êÍ­¤ê */
+          else /* tm.m_usec < m_usec ç¹°ã‚Šä¸‹ãŒã‚Šæœ‰ã‚Š */
             {
               res.m_sec  = - (tm.m_sec - m_sec  - 1);
               res.m_usec = - (tm.m_usec + 1000000) + m_usec;
@@ -100,7 +100,7 @@ namespace coil
   
   /*!
    * @if jp
-   * @brief »ş´Ö²Ã»»
+   * @brief æ™‚é–“åŠ ç®—
    * @else
    * @brief Time addition
    * @endif
@@ -121,7 +121,7 @@ namespace coil
   
   /*!
    * @if jp
-   * @brief double·¿¢ª»ş´Ö·¿ÊÑ´¹
+   * @brief doubleå‹â†’æ™‚é–“å‹å¤‰æ›
    * @else
    * @brief Convert double type into time type
    * @endif
@@ -146,7 +146,7 @@ namespace coil
   
   /*!
    * @if jp
-   * @brief »ş´Ö·¿¢ªdouble·¿ÊÑ´¹
+   * @brief æ™‚é–“å‹â†’doubleå‹å¤‰æ›
    * @else
    * @brief Convert time type into double type
    * @endif
@@ -158,7 +158,7 @@ namespace coil
   
   /*!
    * @if jp
-   * @brief Éä¹æÈ½Äê
+   * @brief ç¬¦å·åˆ¤å®š
    * @else
    * @brief Sign judgment
    * @endif
@@ -174,7 +174,7 @@ namespace coil
   
   /*!
    * @if jp
-   * @brief Àµµ¬²½
+   * @brief æ­£è¦åŒ–
    * @else
    * @brief Normalize
    * @endif

@@ -1,4 +1,4 @@
-// -*- C++ -*-
+ï»¿// -*- C++ -*-
 /*!
  * @file  InPortProvider.h
  * @brief InPortProvider class
@@ -24,7 +24,7 @@ namespace RTC
 {
   /*!
    * @if jp
-   * @brief ¥³¥ó¥¹¥È¥é¥¯¥¿
+   * @brief ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
    * @else
    * @brief Destructor
    * @endif
@@ -36,7 +36,7 @@ namespace RTC
   
   /*!
    * @if jp
-   * @brief ¥Ç¥¹¥È¥é¥¯¥¿
+   * @brief ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
    * @else
    * @brief Destructor
    * @endif
@@ -47,7 +47,7 @@ namespace RTC
   
   /*!
    * @if jp
-   * @brief InterfaceProfile¾ğÊó¤ò¸ø³«¤¹¤ë
+   * @brief InterfaceProfileæƒ…å ±ã‚’å…¬é–‹ã™ã‚‹
    * @else
    * @brief Publish InterfaceProfile information
    * @endif
@@ -68,7 +68,7 @@ namespace RTC
   
   /*!
    * @if jp
-   * @brief Interface¾ğÊó¤ò¸ø³«¤¹¤ë
+   * @brief Interfaceæƒ…å ±ã‚’å…¬é–‹ã™ã‚‹
    * @else
    * @brief Publish Interface information
    * @endif
@@ -94,7 +94,7 @@ namespace RTC
   
   /*!
    * @if jp
-   * @brief ¥¤¥ó¥¿¡¼¥Õ¥§¡¼¥¹¥¿¥¤¥×¤òÀßÄê¤¹¤ë
+   * @brief ã‚¤ãƒ³ã‚¿ãƒ¼ãƒ•ã‚§ãƒ¼ã‚¹ã‚¿ã‚¤ãƒ—ã‚’è¨­å®šã™ã‚‹
    * @else
    * @brief Set the interface type
    * @endif
@@ -107,7 +107,7 @@ namespace RTC
   
   /*!
    * @if jp
-   * @brief ¥Ç¡¼¥¿¥Õ¥í¡¼¥¿¥¤¥×¤òÀßÄê¤¹¤ë
+   * @brief ãƒ‡ãƒ¼ã‚¿ãƒ•ãƒ­ãƒ¼ã‚¿ã‚¤ãƒ—ã‚’è¨­å®šã™ã‚‹
    * @else
    * @brief Set the dataflow type
    * @endif
@@ -120,7 +120,7 @@ namespace RTC
   
   /*!
    * @if jp
-   * @brief ¥µ¥Ö¥¹¥¯¥ê¥×¥·¥ç¥ó¥¿¥¤¥×¤òÀßÄê¤¹¤ë
+   * @brief ã‚µãƒ–ã‚¹ã‚¯ãƒªãƒ—ã‚·ãƒ§ãƒ³ã‚¿ã‚¤ãƒ—ã‚’è¨­å®šã™ã‚‹
    * @else
    * @brief Set the subscription type
    * @endif

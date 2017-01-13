@@ -1,4 +1,4 @@
-// -*- C++ -*-
+﻿// -*- C++ -*-
 /*!
  * @file Task_posix.h
  * @brief Task class
@@ -27,7 +27,7 @@ namespace coil
    * @if jp
    *
    * @class Task
-   * @brief Task ���饹
+   * @brief Task クラス
    *
    * @else
    *
@@ -42,9 +42,9 @@ namespace coil
     /*!
      * @if jp
      *
-     * @brief ���󥹥ȥ饯��
+     * @brief コンストラクタ
      *
-     * ���󥹥ȥ饯��
+     * コンストラクタ
      *
      * @else
      *
@@ -59,9 +59,9 @@ namespace coil
     /*!
      * @if jp
      *
-     * @brief �ǥ��ȥ饯��
+     * @brief デストラクタ
      *
-     * �ǥ��ȥ饯��
+     * デストラクタ
      *
      * @else
      *
@@ -76,11 +76,11 @@ namespace coil
     /*!
      * @if jp
      *
-     * @brief �����������ץ�
+     * @brief タスクオープン
      *
-     * �����������ץ�
+     * タスクオープン
      *
-     * @param args ����
+     * @param args 引数
      *
      * @else
      *
@@ -97,11 +97,11 @@ namespace coil
     /*!
      * @if jp
      *
-     * @brief ��������������
+     * @brief タスククローズ
      *
-     * ��������������
+     * タスククローズ
      *
-     * @param flags �ե饰
+     * @param flags フラグ
      *
      * @else
      *
@@ -118,9 +118,9 @@ namespace coil
     /*!
      * @if jp
      *
-     * @brief ����åɤ�¹Ԥ���
+     * @brief スレッドを実行する
      *
-     * ����åɤ�¹Ԥ���
+     * スレッドを実行する
      *
      * @else
      *
@@ -135,9 +135,9 @@ namespace coil
     /*!
      * @if jp
      *
-     * @brief ����åɤ���������
+     * @brief スレッドを生成する
      *
-     * ����åɤ���������
+     * スレッドを生成する
      *
      * @else
      *
@@ -152,9 +152,9 @@ namespace coil
     /*!
      * @if jp
      *
-     * @brief ����åɽ�λ���Ԥ�
+     * @brief スレッド終了を待つ
      *
-     * ����åɽ�λ���Ԥ�
+     * スレッド終了を待つ
      *
      * @else
      *
@@ -169,9 +169,9 @@ namespace coil
     /*!
      * @if jp
      *
-     * @brief �������¹Ԥ����Ǥ���
+     * @brief タスク実行を中断する
      *
-     * �������¹Ԥ����Ǥ���
+     * タスク実行を中断する
      *
      * @else
      *
@@ -186,9 +186,9 @@ namespace coil
     /*!
      * @if jp
      *
-     * @brief ���Ǥ���Ƥ��륿������Ƴ�����
+     * @brief 中断されているタスクを再開する
      *
-     * ���Ǥ���Ƥ��륿������Ƴ�����
+     * 中断されているタスクを再開する
      *
      * @else
      *
@@ -203,9 +203,9 @@ namespace coil
     /*!
      * @if jp
      *
-     * @brief ���������ꥻ�å�
+     * @brief タスク数リセット
      *
-     * ���������ꥻ�å�
+     * タスク数リセット
      *
      * @else
      *
@@ -220,9 +220,9 @@ namespace coil
     /*!
      * @if jp
      *
-     * @brief �������¹Ԥ�λ����
+     * @brief タスク実行を終了する
      *
-     * �������¹Ԥ�λ����
+     * タスク実行を終了する
      *
      * @else
      *
@@ -237,11 +237,11 @@ namespace coil
     /*!
      * @if jp
      *
-     * @brief ����åɼ¹Ԥ򳫻Ϥ���
+     * @brief スレッド実行を開始する
      *
-     * ����åɼ¹Ԥ򳫻Ϥ���
+     * スレッド実行を開始する
      *
-     * @param args ����åɰ���
+     * @param args スレッド引数
      *
      * @else
      *

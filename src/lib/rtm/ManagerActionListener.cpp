@@ -1,4 +1,4 @@
-// -*- C++ -*-
+ï»¿// -*- C++ -*-
 /*!
  * @file ManagerActionListener.cpp
  * @brief Component action listener class
@@ -24,7 +24,7 @@ namespace RTM
   //============================================================
   /*!
    * @if jp
-   * @class ManagerActionListener ¥¯¥é¥¹
+   * @class ManagerActionListener ã‚¯ãƒ©ã‚¹
    * @else
    * @class ManagerActionListener class
    * @endif
@@ -35,7 +35,7 @@ namespace RTM
   
   /*!
    * @if jp
-   * @class ManagerActionListenerHolder ¥¯¥é¥¹
+   * @class ManagerActionListenerHolder ã‚¯ãƒ©ã‚¹
    * @else
    * @class ManagerActionListenerHolder class
    * @endif
@@ -46,7 +46,7 @@ namespace RTM
   
   /*!
    * @if jp
-   * @brief preShutdown ¥³¡¼¥ë¥Ğ¥Ã¥¯´Ø¿ô
+   * @brief preShutdown ã‚³ãƒ¼ãƒ«ãƒãƒƒã‚¯é–¢æ•°
    * TODO: Documentation
    * @else
    * @brief preShutdown callback function
@@ -60,7 +60,7 @@ namespace RTM
   
   /*!
    * @if jp
-   * @brief postShutdown ¥³¡¼¥ë¥Ğ¥Ã¥¯´Ø¿ô
+   * @brief postShutdown ã‚³ãƒ¼ãƒ«ãƒãƒƒã‚¯é–¢æ•°
    * TODO: Documentation
    * @else
    * @brief postShutdown callback function
@@ -74,7 +74,7 @@ namespace RTM
   
   /*!
    * @if jp
-   * @brief preReinit ¥³¡¼¥ë¥Ğ¥Ã¥¯´Ø¿ô
+   * @brief preReinit ã‚³ãƒ¼ãƒ«ãƒãƒƒã‚¯é–¢æ•°
    * TODO: Documentation
    * @else
    * @brief preReinit callback function
@@ -88,7 +88,7 @@ namespace RTM
   
   /*!
    * @if jp
-   * @brief postReinit ¥³¡¼¥ë¥Ğ¥Ã¥¯´Ø¿ô
+   * @brief postReinit ã‚³ãƒ¼ãƒ«ãƒãƒƒã‚¯é–¢æ•°
    * TODO: Documentation
    * @else
    * @brief postReinit callback function
@@ -104,7 +104,7 @@ namespace RTM
   //============================================================
   /*!
    * @if jp
-   * @class ModuleActionListener ¥¯¥é¥¹
+   * @class ModuleActionListener ã‚¯ãƒ©ã‚¹
    * @else
    * @class ModuleActionListener class
    * @endif
@@ -115,7 +115,7 @@ namespace RTM
   
   /*!
    * @if jp
-   * @class ModuleActionListener ¥Û¥ë¥À¥¯¥é¥¹
+   * @class ModuleActionListener ãƒ›ãƒ«ãƒ€ã‚¯ãƒ©ã‚¹
    * @else
    * @class ModuleActionListener holder class
    * @endif
@@ -126,7 +126,7 @@ namespace RTM
   
   /*!
    * @if jp
-   * @brief preLoad ¥³¡¼¥ë¥Ğ¥Ã¥¯´Ø¿ô
+   * @brief preLoad ã‚³ãƒ¼ãƒ«ãƒãƒƒã‚¯é–¢æ•°
    * TODO: Documentation
    * @else
    * @brief preLoad callback function
@@ -141,7 +141,7 @@ namespace RTM
   
   /*!
    * @if jp
-   * @brief postLoad ¥³¡¼¥ë¥Ğ¥Ã¥¯´Ø¿ô
+   * @brief postLoad ã‚³ãƒ¼ãƒ«ãƒãƒƒã‚¯é–¢æ•°
    * TODO: Documentation
    * @else
    * @brief postLoad callback function
@@ -156,7 +156,7 @@ namespace RTM
   
   /*!
    * @if jp
-   * @brief preUnload ¥³¡¼¥ë¥Ğ¥Ã¥¯´Ø¿ô
+   * @brief preUnload ã‚³ãƒ¼ãƒ«ãƒãƒƒã‚¯é–¢æ•°
    * TODO: Documentation
    * @else
    * @brief preUnload callback function
@@ -170,7 +170,7 @@ namespace RTM
   
   /*!
    * @if jp
-   * @brief postUnload ¥³¡¼¥ë¥Ğ¥Ã¥¯´Ø¿ô
+   * @brief postUnload ã‚³ãƒ¼ãƒ«ãƒãƒƒã‚¯é–¢æ•°
    * TODO: Documentation
    * @else
    * @brief postUnload callback function
@@ -186,8 +186,8 @@ namespace RTM
   //============================================================
   /*!
    * @if jp
-   * @class RtcLifecycleActionListener ¥¯¥é¥¹
-   * @brief RtcLifecycleActionListener ¥¯¥é¥¹
+   * @class RtcLifecycleActionListener ã‚¯ãƒ©ã‚¹
+   * @brief RtcLifecycleActionListener ã‚¯ãƒ©ã‚¹
    * @else
    * @class RtcLifecycleActionListener class
    * @brief RtcLifecycleActionListener class
@@ -199,7 +199,7 @@ namespace RTM
   
   /*!
    * @if jp
-   * @brief ¥Ç¥¹¥È¥é¥¯¥¿
+   * @brief ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
    * @else
    * @brief Destructor
    * @endif
@@ -210,7 +210,7 @@ namespace RTM
   
   /*!
    * @if jp
-   * @brief preCreate ¥³¡¼¥ë¥Ğ¥Ã¥¯´Ø¿ô
+   * @brief preCreate ã‚³ãƒ¼ãƒ«ãƒãƒƒã‚¯é–¢æ•°
    * TODO: Documentation
    * @else
    * @brief preCreate callback function
@@ -224,7 +224,7 @@ namespace RTM
   
   /*!
    * @if jp
-   * @brief postCreate ¥³¡¼¥ë¥Ğ¥Ã¥¯´Ø¿ô
+   * @brief postCreate ã‚³ãƒ¼ãƒ«ãƒãƒƒã‚¯é–¢æ•°
    * TODO: Documentation
    * @else
    * @brief postCreate callback function
@@ -238,7 +238,7 @@ namespace RTM
   
   /*!
    * @if jp
-   * @brief preConfigure ¥³¡¼¥ë¥Ğ¥Ã¥¯´Ø¿ô
+   * @brief preConfigure ã‚³ãƒ¼ãƒ«ãƒãƒƒã‚¯é–¢æ•°
    * TODO: Documentation
    * @else
    * @brief preConfigure callback function
@@ -252,7 +252,7 @@ namespace RTM
   
   /*!
    * @if jp
-   * @brief postConfigure ¥³¡¼¥ë¥Ğ¥Ã¥¯´Ø¿ô
+   * @brief postConfigure ã‚³ãƒ¼ãƒ«ãƒãƒƒã‚¯é–¢æ•°
    * TODO: Documentation
    * @else
    * @brief postConfigure callback function
@@ -266,7 +266,7 @@ namespace RTM
   
   /*!
    * @if jp
-   * @brief preInitialize ¥³¡¼¥ë¥Ğ¥Ã¥¯´Ø¿ô
+   * @brief preInitialize ã‚³ãƒ¼ãƒ«ãƒãƒƒã‚¯é–¢æ•°
    * TODO: Documentation
    * @else
    * @brief preInitialize callback function
@@ -280,7 +280,7 @@ namespace RTM
   
   /*!
    * @if jp
-   * @brief postInitialize ¥³¡¼¥ë¥Ğ¥Ã¥¯´Ø¿ô
+   * @brief postInitialize ã‚³ãƒ¼ãƒ«ãƒãƒƒã‚¯é–¢æ•°
    * TODO: Documentation
    * @else
    * @brief postInitialize callback function
@@ -296,7 +296,7 @@ namespace RTM
   //============================================================
   /*!
    * @if jp
-   * @brief ¥Ç¥¹¥È¥é¥¯¥¿
+   * @brief ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
    * @else
    * @brief Destructor
    * @endif
@@ -307,7 +307,7 @@ namespace RTM
   
   /*!
    * @if jp
-   * @brief ¥Ç¥¹¥È¥é¥¯¥¿
+   * @brief ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
    * @else
    * @brief Destructor
    * @endif
@@ -318,7 +318,7 @@ namespace RTM
   
   /*!
    * @if jp
-   * @brief preBind ¥³¡¼¥ë¥Ğ¥Ã¥¯´Ø¿ô
+   * @brief preBind ã‚³ãƒ¼ãƒ«ãƒãƒƒã‚¯é–¢æ•°
    * TODO: Documentation
    * @else
    * @brief preBind callback function
@@ -333,7 +333,7 @@ namespace RTM
   
   /*!
    * @if jp
-   * @brief postBind ¥³¡¼¥ë¥Ğ¥Ã¥¯´Ø¿ô
+   * @brief postBind ã‚³ãƒ¼ãƒ«ãƒãƒƒã‚¯é–¢æ•°
    * TODO: Documentation
    * @else
    * @brief postBind callback function
@@ -348,7 +348,7 @@ namespace RTM
   
   /*!
    * @if jp
-   * @brief preUnbind ¥³¡¼¥ë¥Ğ¥Ã¥¯´Ø¿ô
+   * @brief preUnbind ã‚³ãƒ¼ãƒ«ãƒãƒƒã‚¯é–¢æ•°
    * TODO: Documentation
    * @else
    * @brief preUnbind callback function
@@ -363,7 +363,7 @@ namespace RTM
   
   /*!
    * @if jp
-   * @brief postUnbind ¥³¡¼¥ë¥Ğ¥Ã¥¯´Ø¿ô
+   * @brief postUnbind ã‚³ãƒ¼ãƒ«ãƒãƒƒã‚¯é–¢æ•°
    * TODO: Documentation
    * @else
    * @brief postUnbind callback function
@@ -380,7 +380,7 @@ namespace RTM
   //============================================================
   /*!
    * @if jp
-   * @brief ¥Ç¥¹¥È¥é¥¯¥¿
+   * @brief ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
    * @else
    * @brief Destructor
    * @endif
@@ -391,7 +391,7 @@ namespace RTM
   
   /*!
    * @if jp
-   * @brief ¥Ç¥¹¥È¥é¥¯¥¿
+   * @brief ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
    * @else
    * @brief Destructor
    * @endif
@@ -402,7 +402,7 @@ namespace RTM
   
   /*!
    * @if jp
-   * @brief preServiceRegister ¥³¡¼¥ë¥Ğ¥Ã¥¯´Ø¿ô
+   * @brief preServiceRegister ã‚³ãƒ¼ãƒ«ãƒãƒƒã‚¯é–¢æ•°
    * TODO: Documentation
    * @else
    * @brief preServiceRegister callback function
@@ -417,7 +417,7 @@ namespace RTM
   
   /*!
    * @if jp
-   * @brief postServiceRegister ¥³¡¼¥ë¥Ğ¥Ã¥¯´Ø¿ô
+   * @brief postServiceRegister ã‚³ãƒ¼ãƒ«ãƒãƒƒã‚¯é–¢æ•°
    * TODO: Documentation
    * @else
    * @brief postServiceRegister callback function
@@ -432,7 +432,7 @@ namespace RTM
   
   /*!
    * @if jp
-   * @brief preServiceInit ¥³¡¼¥ë¥Ğ¥Ã¥¯´Ø¿ô
+   * @brief preServiceInit ã‚³ãƒ¼ãƒ«ãƒãƒƒã‚¯é–¢æ•°
    * TODO: Documentation
    * @else
    * @brief preServiceInit callback function
@@ -447,7 +447,7 @@ namespace RTM
   
   /*!
    * @if jp
-   * @brief postServiceInit ¥³¡¼¥ë¥Ğ¥Ã¥¯´Ø¿ô
+   * @brief postServiceInit ã‚³ãƒ¼ãƒ«ãƒãƒƒã‚¯é–¢æ•°
    * TODO: Documentation
    * @else
    * @brief postServiceInit callback function
@@ -462,7 +462,7 @@ namespace RTM
   
   /*!
    * @if jp
-   * @brief preServiceReinit ¥³¡¼¥ë¥Ğ¥Ã¥¯´Ø¿ô
+   * @brief preServiceReinit ã‚³ãƒ¼ãƒ«ãƒãƒƒã‚¯é–¢æ•°
    * TODO: Documentation
    * @else
    * @brief preServiceReinit callback function
@@ -477,7 +477,7 @@ namespace RTM
   
   /*!
    * @if jp
-   * @brief postServiceReinit ¥³¡¼¥ë¥Ğ¥Ã¥¯´Ø¿ô
+   * @brief postServiceReinit ã‚³ãƒ¼ãƒ«ãƒãƒƒã‚¯é–¢æ•°
    * TODO: Documentation
    * @else
    * @brief postServiceReinit callback function
@@ -492,7 +492,7 @@ namespace RTM
   
   /*!
    * @if jp
-   * @brief postServiceFinalize ¥³¡¼¥ë¥Ğ¥Ã¥¯´Ø¿ô
+   * @brief postServiceFinalize ã‚³ãƒ¼ãƒ«ãƒãƒƒã‚¯é–¢æ•°
    * TODO: Documentation
    * @else
    * @brief postServiceFinalize callback function
@@ -507,7 +507,7 @@ namespace RTM
   
   /*!
    * @if jp
-   * @brief preServiceFinalize ¥³¡¼¥ë¥Ğ¥Ã¥¯´Ø¿ô
+   * @brief preServiceFinalize ã‚³ãƒ¼ãƒ«ãƒãƒƒã‚¯é–¢æ•°
    * TODO: Documentation
    * @else
    * @brief preServiceFinalize callback function

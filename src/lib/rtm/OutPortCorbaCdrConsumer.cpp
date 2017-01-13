@@ -1,4 +1,4 @@
-// -*- C++ -*-
+ï»¿// -*- C++ -*-
 /*!
  * @file  OutPortCorbaCdrConsumer.h
  * @brief OutPortCorbaCdrConsumer class
@@ -25,7 +25,7 @@ namespace RTC
 {
   /*!
    * @if jp
-   * @brief ¥³¥ó¥¹¥È¥é¥¯¥¿
+   * @brief ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
    * @else
    * @brief Constructor
    * @endif
@@ -37,7 +37,7 @@ namespace RTC
     
   /*!
    * @if jp
-   * @brief ¥Ç¥¹¥È¥é¥¯¥¿
+   * @brief ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
    * @else
    * @brief Destructor
    * @endif
@@ -48,7 +48,7 @@ namespace RTC
 
   /*!
    * @if jp
-   * @brief ÀßÄê½é´ü²½
+   * @brief è¨­å®šåˆæœŸåŒ–
    * @else
    * @brief Initializing configuration
    * @endif
@@ -60,7 +60,7 @@ namespace RTC
 
   /*!
    * @if jp
-   * @brief ¥Ğ¥Ã¥Õ¥¡¤ò¥»¥Ã¥È¤¹¤ë
+   * @brief ãƒãƒƒãƒ•ã‚¡ã‚’ã‚»ãƒƒãƒˆã™ã‚‹
    * @else
    * @brief Setting outside buffer's pointer
    * @endif
@@ -73,7 +73,7 @@ namespace RTC
 
   /*!
    * @if jp
-   * @brief ¥ê¥¹¥Ê¤òÀßÄê¤¹¤ë¡£
+   * @brief ãƒªã‚¹ãƒŠã‚’è¨­å®šã™ã‚‹ã€‚
    * @else
    * @brief Set the listener. 
    * @endif
@@ -88,7 +88,7 @@ namespace RTC
 
   /*!
    * @if jp
-   * @brief ¥Ç¡¼¥¿¤òÆÉ¤ß½Ğ¤¹
+   * @brief ãƒ‡ãƒ¼ã‚¿ã‚’èª­ã¿å‡ºã™
    * @else
    * @brief Read data
    * @endif
@@ -137,7 +137,7 @@ namespace RTC
     
   /*!
    * @if jp
-   * @brief ¥Ç¡¼¥¿¼õ¿®ÄÌÃÎ¤Ø¤ÎÅĞÏ¿
+   * @brief ãƒ‡ãƒ¼ã‚¿å—ä¿¡é€šçŸ¥ã¸ã®ç™»éŒ²
    * @else
    * @brief Subscribe the data receive notification
    * @endif
@@ -181,7 +181,7 @@ namespace RTC
   
   /*!
    * @if jp
-   * @brief ¥Ç¡¼¥¿¼õ¿®ÄÌÃÎ¤«¤é¤ÎÅĞÏ¿²ò½ü
+   * @brief ãƒ‡ãƒ¼ã‚¿å—ä¿¡é€šçŸ¥ã‹ã‚‰ã®ç™»éŒ²è§£é™¤
    * @else
    * @brief Unsubscribe the data receive notification
    * @endif
@@ -217,7 +217,7 @@ namespace RTC
 
   /*!
    * @if jp
-   * @brief ¥ê¥¿¡¼¥ó¥³¡¼¥ÉÊÑ´¹ (DataPortStatus -> BufferStatus)
+   * @brief ãƒªã‚¿ãƒ¼ãƒ³ã‚³ãƒ¼ãƒ‰å¤‰æ› (DataPortStatus -> BufferStatus)
    * @else
    * @brief Return codes conversion
    * @endif
@@ -274,7 +274,7 @@ extern "C"
 {
   /*!
    * @if jp
-   * @brief ¥â¥¸¥å¡¼¥ë½é´ü²½´Ø¿ô
+   * @brief ãƒ¢ã‚¸ãƒ¥ãƒ¼ãƒ«åˆæœŸåŒ–é–¢æ•°
    * @else
    * @brief Module initialization
    * @endif

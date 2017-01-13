@@ -1,4 +1,4 @@
-// -*- C++ -*-
+﻿// -*- C++ -*-
 /*!
  * @file PeriodicTaskFactory.h
  * @brief PeiodicTaskFactory class

@@ -1,4 +1,4 @@
-// -*- C++ -*-
+ï»¿// -*- C++ -*-
 /*!
  * @file ModuleManager.cpp
  * @brief Loadable modules manager class
@@ -38,7 +38,7 @@ namespace RTC
   
   /*!
    * @if jp
-   * @brief ¥³¥ó¥¹¥È¥é¥¯¥¿
+   * @brief ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
    * @else
    * @brief Constructor
    * @endif
@@ -58,7 +58,7 @@ namespace RTC
   
   /*!
    * @if jp
-   * @brief ¥Ç¥¹¥È¥é¥¯¥¿
+   * @brief ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
    * @else
    * @brief Destructor
    * @endif
@@ -70,7 +70,7 @@ namespace RTC
   
   /*!
    * @if jp
-   * @brief ¥â¥¸¥å¡¼¥ë¤Î¥í¡¼¥É
+   * @brief ãƒ¢ã‚¸ãƒ¥ãƒ¼ãƒ«ã®ãƒ­ãƒ¼ãƒ‰
    * @else
    * @brief Load the module
    * @endif
@@ -147,7 +147,7 @@ namespace RTC
   
   /*!
    * @if jp
-   * @brief ¥â¥¸¥å¡¼¥ë¤Î¥í¡¼¥É¡¢½é´ü²½
+   * @brief ãƒ¢ã‚¸ãƒ¥ãƒ¼ãƒ«ã®ãƒ­ãƒ¼ãƒ‰ã€åˆæœŸåŒ–
    * @else
    * @brief Load and initialize the module
    * @endif
@@ -178,7 +178,7 @@ namespace RTC
   
   /*!
    * @if jp
-   * @brief ¥â¥¸¥å¡¼¥ë¤Î¥¢¥ó¥í¡¼¥É
+   * @brief ãƒ¢ã‚¸ãƒ¥ãƒ¼ãƒ«ã®ã‚¢ãƒ³ãƒ­ãƒ¼ãƒ‰
    * @else
    * @brief Unload the module
    * @endif
@@ -201,7 +201,7 @@ namespace RTC
   
   /*!
    * @if jp
-   * @brief Á´¥â¥¸¥å¡¼¥ë¤Î¥¢¥ó¥í¡¼¥É
+   * @brief å…¨ãƒ¢ã‚¸ãƒ¥ãƒ¼ãƒ«ã®ã‚¢ãƒ³ãƒ­ãƒ¼ãƒ‰
    * @else
    * @brief Unload all modules
    * @endif
@@ -222,7 +222,7 @@ namespace RTC
   
   /*!
    * @if jp
-   * @brief ¥â¥¸¥å¡¼¥ë¤Î¥·¥ó¥Ü¥ë¤Î»²¾È
+   * @brief ãƒ¢ã‚¸ãƒ¥ãƒ¼ãƒ«ã®ã‚·ãƒ³ãƒœãƒ«ã®å‚ç…§
    * @else
    * @brief Refer to the symbol of the module
    * @endif
@@ -257,7 +257,7 @@ namespace RTC
   
   /*!
    * @if jp
-   * @brief ¥â¥¸¥å¡¼¥ë¥í¡¼¥É¥Ñ¥¹¤ò»ØÄê¤¹¤ë
+   * @brief ãƒ¢ã‚¸ãƒ¥ãƒ¼ãƒ«ãƒ­ãƒ¼ãƒ‰ãƒ‘ã‚¹ã‚’æŒ‡å®šã™ã‚‹
    * @else
    * @brief Set the module load path
    * @endif
@@ -271,7 +271,7 @@ namespace RTC
   
   /*!
    * @if jp
-   * @brief ¥â¥¸¥å¡¼¥ë¥í¡¼¥É¥Ñ¥¹¤òÄÉ²Ã¤¹¤ë
+   * @brief ãƒ¢ã‚¸ãƒ¥ãƒ¼ãƒ«ãƒ­ãƒ¼ãƒ‰ãƒ‘ã‚¹ã‚’è¿½åŠ ã™ã‚‹
    * @else
    * @brief Add the module load path
    * @endif
@@ -293,7 +293,7 @@ namespace RTC
   
   /*!
    * @if jp
-   * @brief ¥í¡¼¥ÉºÑ¤ß¤Î¥â¥¸¥å¡¼¥ë¥ê¥¹¥È¤ò¼èÆÀ¤¹¤ë
+   * @brief ãƒ­ãƒ¼ãƒ‰æ¸ˆã¿ã®ãƒ¢ã‚¸ãƒ¥ãƒ¼ãƒ«ãƒªã‚¹ãƒˆã‚’å–å¾—ã™ã‚‹
    * @else
    * @brief Get the module list that has been loaded
    * @endif
@@ -312,7 +312,7 @@ namespace RTC
   
   /*!
    * @if jp
-   * @brief ¥í¡¼¥É²ÄÇ½¤Ê¥â¥¸¥å¡¼¥ë¥ê¥¹¥È¤ò¼èÆÀ¤¹¤ë(Ì¤¼ÂÁõ)
+   * @brief ãƒ­ãƒ¼ãƒ‰å¯èƒ½ãªãƒ¢ã‚¸ãƒ¥ãƒ¼ãƒ«ãƒªã‚¹ãƒˆã‚’å–å¾—ã™ã‚‹(æœªå®Ÿè£…)
    * @else
    * @brief Get the loadable module list(not implemented)
    * @endif
@@ -351,7 +351,7 @@ namespace RTC
   
   /*!
    * @if jp
-   * @brief LoadPath ¤«¤é¤Î¥Õ¥¡¥¤¥ë¤Î¸¡º÷
+   * @brief LoadPath ã‹ã‚‰ã®ãƒ•ã‚¡ã‚¤ãƒ«ã®æ¤œç´¢
    * @else
    * @brief Search the file from the LoadPath
    * @endif
@@ -382,7 +382,7 @@ namespace RTC
   
   /*!
    * @if jp
-   * @brief ¥Õ¥¡¥¤¥ë¤¬Â¸ºß¤¹¤ë¤«¤É¤¦¤«¤Î¥Á¥§¥Ã¥¯
+   * @brief ãƒ•ã‚¡ã‚¤ãƒ«ãŒå­˜åœ¨ã™ã‚‹ã‹ã©ã†ã‹ã®ãƒã‚§ãƒƒã‚¯
    * @else
    * @brief Check whether the file exists
    * @endif
@@ -409,7 +409,7 @@ namespace RTC
   
   /*!
    * @if jp
-   * @brief ½é´ü²½´Ø¿ô¥·¥ó¥Ü¥ë¤òÀ¸À®¤¹¤ë
+   * @brief åˆæœŸåŒ–é–¢æ•°ã‚·ãƒ³ãƒœãƒ«ã‚’ç”Ÿæˆã™ã‚‹
    * @else
    * @brief Create initialization function symbol
    * @endif
@@ -425,7 +425,7 @@ namespace RTC
 
   /*!
    * @if jp
-   * @brief Ìµ¸ú¤Ê¥â¥¸¥å¡¼¥ë¥×¥í¥Õ¥¡¥¤¥ë¤òºï½ü¤¹¤ë
+   * @brief ç„¡åŠ¹ãªãƒ¢ã‚¸ãƒ¥ãƒ¼ãƒ«ãƒ—ãƒ­ãƒ•ã‚¡ã‚¤ãƒ«ã‚’å‰Šé™¤ã™ã‚‹
    * @else
    * @brief Removing incalid module profiles
    * @endif
@@ -446,7 +446,7 @@ namespace RTC
 
   /*!
    * @if jp
-   * @brief »ØÄê¸À¸ì¤Ë¤ª¤±¤ë¥í¡¼¥É¥Ñ¥¹¾å¤Î¥í¡¼¥À¥Ö¥ë¤Ê¥Õ¥¡¥¤¥ë¥ê¥¹¥È¤òÊÖ¤¹
+   * @brief æŒ‡å®šè¨€èªã«ãŠã‘ã‚‹ãƒ­ãƒ¼ãƒ‰ãƒ‘ã‚¹ä¸Šã®ãƒ­ãƒ¼ãƒ€ãƒ–ãƒ«ãªãƒ•ã‚¡ã‚¤ãƒ«ãƒªã‚¹ãƒˆã‚’è¿”ã™
    * @else
    * @brief Getting loadable file list on the loadpath for given language
    * @endif
@@ -498,7 +498,7 @@ namespace RTC
 
   /*!
    * @if jp
-   * @brief ¥­¥ã¥Ã¥·¥å¤ËÌµ¤¤¥Ñ¥¹¤À¤±modules¤ËÄÉ²Ã¤¹¤ë
+   * @brief ã‚­ãƒ£ãƒƒã‚·ãƒ¥ã«ç„¡ã„ãƒ‘ã‚¹ã ã‘modulesã«è¿½åŠ ã™ã‚‹
    * @else
    * @brief Adding file path not existing cache
    * @endif
@@ -526,7 +526,7 @@ namespace RTC
 
   /*!
    * @if jp
-   * @brief »ØÄê¸À¸ì¡¢¥Õ¥¡¥¤¥ë¥ê¥¹¥È¤«¤é¥â¥¸¥å¡¼¥ë¤Î¥×¥í¥Ñ¥Æ¥£¤òÊÖ¤¹
+   * @brief æŒ‡å®šè¨€èªã€ãƒ•ã‚¡ã‚¤ãƒ«ãƒªã‚¹ãƒˆã‹ã‚‰ãƒ¢ã‚¸ãƒ¥ãƒ¼ãƒ«ã®ãƒ—ãƒ­ãƒ‘ãƒ†ã‚£ã‚’è¿”ã™
    * @else
    * @brief Getting module properties from given language and file list
    * @endif

@@ -1,4 +1,4 @@
-// -*- C++ -*-
+ï»¿// -*- C++ -*-
 /*!
  * @file DynamicLib_win32.h
  * @brief DynamicLib class
@@ -46,7 +46,7 @@ namespace coil
    * @if jp
    *
    * @class DynamicLib
-   * @brief DynamicLib ƒNƒ‰ƒX
+   * @brief DynamicLib ã‚¯ãƒ©ã‚¹
    *
    * @else
    *
@@ -62,11 +62,11 @@ namespace coil
     /*!
      * @if jp
      *
-     * @brief ƒRƒ“ƒXƒgƒ‰ƒNƒ^
+     * @brief ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
      *
-     * ƒRƒ“ƒXƒgƒ‰ƒNƒ^B
+     * ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ã€‚
      *
-     * @param close_handle_on_destruction ƒNƒ[ƒYƒtƒ‰ƒO
+     * @param close_handle_on_destruction ã‚¯ãƒ­ãƒ¼ã‚ºãƒ•ãƒ©ã‚°
      *
      * @else
      *
@@ -83,13 +83,13 @@ namespace coil
     /*!
      * @if jp
      *
-     * @brief ƒRƒ“ƒXƒgƒ‰ƒNƒ^
+     * @brief ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
      *
-     * ƒRƒ“ƒXƒgƒ‰ƒNƒ^B
+     * ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ã€‚
      *
-     * @param dynlib_name “®“IƒŠƒ“ƒNƒ‰ƒCƒuƒ‰ƒŠ–¼Ì
-     * @param open_mode ƒI[ƒvƒ“ƒ‚[ƒh
-     * @param close_handle_on_destruction ƒNƒ[ƒYƒtƒ‰ƒO
+     * @param dynlib_name å‹•çš„ãƒªãƒ³ã‚¯ãƒ©ã‚¤ãƒ–ãƒ©ãƒªåç§°
+     * @param open_mode ã‚ªãƒ¼ãƒ—ãƒ³ãƒ¢ãƒ¼ãƒ‰
+     * @param close_handle_on_destruction ã‚¯ãƒ­ãƒ¼ã‚ºãƒ•ãƒ©ã‚°
      *
      * @else
      *
@@ -110,9 +110,9 @@ namespace coil
     /*!
      * @if jp
      *
-     * @brief ƒfƒXƒgƒ‰ƒNƒ^
+     * @brief ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
      *
-     * ƒfƒXƒgƒ‰ƒNƒ^B
+     * ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ã€‚
      *
      * @else
      *
@@ -127,11 +127,11 @@ namespace coil
     /*!
      * @if jp
      *
-     * @brief ƒRƒs[ƒRƒ“ƒXƒgƒ‰ƒNƒ^
+     * @brief ã‚³ãƒ”ãƒ¼ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
      *
-     * ƒRƒs[ƒRƒ“ƒXƒgƒ‰ƒNƒ^B
+     * ã‚³ãƒ”ãƒ¼ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ã€‚
      *
-     * @param rhs ƒRƒs[Œ³“®“IƒŠƒ“ƒNƒ‰ƒCƒuƒ‰ƒŠƒIƒuƒWƒFƒNƒg
+     * @param rhs ã‚³ãƒ”ãƒ¼å…ƒå‹•çš„ãƒªãƒ³ã‚¯ãƒ©ã‚¤ãƒ–ãƒ©ãƒªã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
      *
      * @else
      *
@@ -148,13 +148,13 @@ namespace coil
     /*!
      * @if jp
      *
-     * @brief ‘ã“ü‰‰Zq
+     * @brief ä»£å…¥æ¼”ç®—å­
      *
-     * “®“IƒŠƒ“ƒNƒ‰ƒCƒuƒ‰ƒŠƒIƒuƒWƒFƒNƒg‚ğƒRƒs[‚·‚éB
+     * å‹•çš„ãƒªãƒ³ã‚¯ãƒ©ã‚¤ãƒ–ãƒ©ãƒªã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’ã‚³ãƒ”ãƒ¼ã™ã‚‹ã€‚
      *
-     * @param rhs ‘ã“üŒ³“®“IƒŠƒ“ƒNƒ‰ƒCƒuƒ‰ƒŠƒIƒuƒWƒFƒNƒg
+     * @param rhs ä»£å…¥å…ƒå‹•çš„ãƒªãƒ³ã‚¯ãƒ©ã‚¤ãƒ–ãƒ©ãƒªã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
      *
-     * @return ‘ã“üŒ‹‰Ê
+     * @return ä»£å…¥çµæœ
      *
      * @else
      *
@@ -174,15 +174,15 @@ namespace coil
     /*!
      * @if jp
      *
-     * @brief “®“IƒŠƒ“ƒNƒ‰ƒCƒuƒ‰ƒŠ‚Ìƒ[ƒh
+     * @brief å‹•çš„ãƒªãƒ³ã‚¯ãƒ©ã‚¤ãƒ–ãƒ©ãƒªã®ãƒ­ãƒ¼ãƒ‰
      *
-     * “®“IƒŠƒ“ƒNƒ‰ƒCƒuƒ‰ƒŠ‚ğƒ[ƒh‚·‚éB
+     * å‹•çš„ãƒªãƒ³ã‚¯ãƒ©ã‚¤ãƒ–ãƒ©ãƒªã‚’ãƒ­ãƒ¼ãƒ‰ã™ã‚‹ã€‚
      *
-     * @param dll_name “®“IƒŠƒ“ƒNƒ‰ƒCƒuƒ‰ƒŠ–¼Ì
-     * @param open_mode ƒI[ƒvƒ“ƒ‚[ƒh
-     * @param close_handle_on_destruction ƒNƒ[ƒYƒtƒ‰ƒO
+     * @param dll_name å‹•çš„ãƒªãƒ³ã‚¯ãƒ©ã‚¤ãƒ–ãƒ©ãƒªåç§°
+     * @param open_mode ã‚ªãƒ¼ãƒ—ãƒ³ãƒ¢ãƒ¼ãƒ‰
+     * @param close_handle_on_destruction ã‚¯ãƒ­ãƒ¼ã‚ºãƒ•ãƒ©ã‚°
      *
-     * @return 0: ¬Œ÷, -1: ¸”s
+     * @return 0: æˆåŠŸ, -1: å¤±æ•—
      *
      * @else
      *
@@ -205,11 +205,11 @@ namespace coil
     /*!
      * @if jp
      *
-     * @brief “®“IƒŠƒ“ƒNƒ‰ƒCƒuƒ‰ƒŠ‚ÌƒAƒ“ƒ[ƒh
+     * @brief å‹•çš„ãƒªãƒ³ã‚¯ãƒ©ã‚¤ãƒ–ãƒ©ãƒªã®ã‚¢ãƒ³ãƒ­ãƒ¼ãƒ‰
      *
-     * “®“IƒŠƒ“ƒNƒ‰ƒCƒuƒ‰ƒŠ‚ğƒAƒ“ƒ[ƒh‚·‚éB
+     * å‹•çš„ãƒªãƒ³ã‚¯ãƒ©ã‚¤ãƒ–ãƒ©ãƒªã‚’ã‚¢ãƒ³ãƒ­ãƒ¼ãƒ‰ã™ã‚‹ã€‚
      *
-     * @return 0: ¬Œ÷, -1: ¸”s
+     * @return 0: æˆåŠŸ, -1: å¤±æ•—
      *
      * @else
      *
@@ -226,13 +226,13 @@ namespace coil
     /*!
      * @if jp
      *
-     * @brief ƒVƒ“ƒ{ƒ‹‚ªƒ[ƒh‚³‚ê‚½ƒƒ‚ƒŠƒAƒhƒŒƒX‚ğ•Ô‚·
+     * @brief ã‚·ãƒ³ãƒœãƒ«ãŒãƒ­ãƒ¼ãƒ‰ã•ã‚ŒãŸãƒ¡ãƒ¢ãƒªã‚¢ãƒ‰ãƒ¬ã‚¹ã‚’è¿”ã™
      *
-     * ƒVƒ“ƒ{ƒ‹‚ªƒ[ƒh‚³‚ê‚½ƒƒ‚ƒŠƒAƒhƒŒƒX‚ğ•Ô‚·B
+     * ã‚·ãƒ³ãƒœãƒ«ãŒãƒ­ãƒ¼ãƒ‰ã•ã‚ŒãŸãƒ¡ãƒ¢ãƒªã‚¢ãƒ‰ãƒ¬ã‚¹ã‚’è¿”ã™ã€‚
      *
-     * @param symbol_name ƒVƒ“ƒ{ƒ‹–¼Ì
+     * @param symbol_name ã‚·ãƒ³ãƒœãƒ«åç§°
      *
-     * @return ƒƒ‚ƒŠƒAƒhƒŒƒX(NULL: ¸”s)
+     * @return ãƒ¡ãƒ¢ãƒªã‚¢ãƒ‰ãƒ¬ã‚¹(NULL: å¤±æ•—)
      *
      * @else
      *
@@ -251,11 +251,11 @@ namespace coil
     /*!
      * @if jp
      *
-     * @brief ƒGƒ‰[‚É‚Â‚¢‚Ä‚Ìà–¾ƒƒbƒZ[ƒW‚ğ•Ô‚·
+     * @brief ã‚¨ãƒ©ãƒ¼ã«ã¤ã„ã¦ã®èª¬æ˜ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ã‚’è¿”ã™
      *
-     * ƒGƒ‰[‚É‚Â‚¢‚Ä‚Ìà–¾ƒƒbƒZ[ƒW‚ğ•Ô‚·B
+     * ã‚¨ãƒ©ãƒ¼ã«ã¤ã„ã¦ã®èª¬æ˜ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ã‚’è¿”ã™ã€‚
      *
-     * @return ƒGƒ‰[ƒƒbƒZ[ƒW(NULL: ƒGƒ‰[‚È‚µ)
+     * @return ã‚¨ãƒ©ãƒ¼ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸(NULL: ã‚¨ãƒ©ãƒ¼ãªã—)
      *
      * @else
      *
@@ -272,9 +272,9 @@ namespace coil
     /*!
      * @if jp
      *
-     * @brief ƒ†ƒjƒbƒgƒeƒXƒg
+     * @brief ãƒ¦ãƒ‹ãƒƒãƒˆãƒ†ã‚¹ãƒˆ
      *
-     * ƒ†ƒjƒbƒgƒeƒXƒg‚ğs‚¤B
+     * ãƒ¦ãƒ‹ãƒƒãƒˆãƒ†ã‚¹ãƒˆã‚’è¡Œã†ã€‚
      *
      * @return 0xdeadbeef
      *

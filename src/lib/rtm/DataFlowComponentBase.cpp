@@ -1,4 +1,4 @@
-// -*- C++ -*-
+Ôªø// -*- C++ -*-
 /*!
  * @file DataFlowComponentBase.cpp
  * @brief DataFlowParticipant RT-Component base class
@@ -25,7 +25,7 @@ namespace RTC
 {
   /*!
    * @if jp
-   * @brief •≥•Û•π•»•È•Ø•ø
+   * @brief „Ç≥„É≥„Çπ„Éà„É©„ÇØ„Çø
    * @else
    * @brief Constructor
    * @endif
@@ -40,7 +40,7 @@ namespace RTC
 
   /*!
    * @if jp
-   * @brief •«•π•»•È•Ø•ø
+   * @brief „Éá„Çπ„Éà„É©„ÇØ„Çø
    * @else
    * @brief Destructor
    * @endif
@@ -52,7 +52,7 @@ namespace RTC
 
   /*!
    * @if jp
-   * @brief ΩÈ¥¸≤Ω
+   * @brief ÂàùÊúüÂåñ
    * @else
    * @brief Initialization
    * @endif

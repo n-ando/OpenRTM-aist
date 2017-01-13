@@ -1,4 +1,4 @@
-// -*- C++ -*-
+﻿// -*- C++ -*-
 /*!
  * @file OutPortPullConnector.h
  * @brief OutPortPull type connector class
@@ -30,24 +30,24 @@ namespace RTC
   /*!
    * @if jp
    * @class OutPortPullConnector
-   * @brief OutPortPullConnector ���饹
+   * @brief OutPortPullConnector クラス
    *
-   * OutPort �� pull ���ǡ����ե����Τ���� Connector ���饹�����Υ���
-   * �������Ȥϡ���³���� dataflow_type �� pull �����ꤵ�줿��硢
-   * OutPort �ˤ�ä���������ͭ���졢InPortPullConnector ���Фˤʤäơ�
-   * �ǡ����ݡ��Ȥ� pull ���Υǡ����ե�����¸����롣��Ĥ���³���Ф��ơ�
-   * ��ĤΥǡ������ȥ꡼����󶡤���ͣ��� Connector ���б����롣
-   * Connector �� ��³������������� UUID ������ ID �ˤ����̤���롣
+   * OutPort の pull 型データフローのための Connector クラス。このオブ
+   * ジェクトは、接続時に dataflow_type に pull が指定された場合、
+   * OutPort によって生成・所有され、InPortPullConnector と対になって、
+   * データポートの pull 型のデータフローを実現する。一つの接続に対して、
+   * 一つのデータストリームを提供する唯一の Connector が対応する。
+   * Connector は 接続時に生成される UUID 形式の ID により区別される。
    *
-   * OutPortPullConnector �ϰʲ��λ��ĤΥ��֥������Ȥ��ͭ���������롣
+   * OutPortPullConnector は以下の三つのオブジェクトを所有し管理する。
    *
    * - InPortConsumer
    * - Buffer
    *
-   * OutPort �˽񤭹��ޤ줿�ǡ����� OutPortPullConnector::write() ����
-   * ���� Buffer �˽񤭹��ޤ�롣InPortPullConnector ��
-   * OutPortPullConnector ����ǡ������ɤ߽Ф����Ȥ� InPort �˥ǡ�����
-   * ž������롣
+   * OutPort に書き込まれたデータは OutPortPullConnector::write() に渡
+   * され Buffer に書き込まれる。InPortPullConnector が
+   * OutPortPullConnector からデータを読み出すことで InPort にデータが
+   * 転送される。
    *
    * @since 1.0.0
    *
@@ -86,21 +86,21 @@ namespace RTC
 
     /*!
      * @if jp
-     * @brief ���󥹥ȥ饯��
+     * @brief コンストラクタ
      *
-     * OutPortPullConnector �Υ��󥹥ȥ饯���ϥ��֥��������������˲���
-     * ������ˤȤ롣ConnectorInfo ����³�����ޤߡ����ξ���˽����Х�
-     * �ե������������롣OutPort ���󥿡��ե������Υץ��Х������֥�����
-     * �ȤؤΥݥ��󥿤��ꡢ��ͭ������ĤΤǡ�OutPortPullConnector ��
-     * OutPortProvider �β�����Ǥ����ġ��Ƽ磻�٥�Ȥ��Ф��륳����Х�
-     * ���������󶡤��� ConnectorListeners �������Ŭ�ڤʥ����ߥ󥰤ǥ���
-     * ��Хå���ƤӽФ����ǡ����Хåե����⤷ OutPortBase �����󶡤�
-     * �����Ϥ��Υݥ��󥿤��롣
+     * OutPortPullConnector のコンストラクタはオブジェクト生成時に下記
+     * を引数にとる。ConnectorInfo は接続情報を含み、この情報に従いバッ
+     * ファ等を生成する。OutPort インターフェースのプロバイダオブジェク
+     * トへのポインタを取り、所有権を持つので、OutPortPullConnector は
+     * OutPortProvider の解体責任を持つ。各種イベントに対するコールバッ
+     * ク機構を提供する ConnectorListeners を持ち、適切なタイミングでコー
+     * ルバックを呼び出す。データバッファがもし OutPortBase から提供さ
+     * れる場合はそのポインタを取る。
      *
      * @param info ConnectorInfo
      * @param provider OutPortProvider
-     * @param listeners ConnectorListeners ���Υꥹ�ʥ��֥������ȥꥹ��
-     * @param buffer CdrBufferBase ���ΥХåե�
+     * @param listeners ConnectorListeners 型のリスナオブジェクトリスト
+     * @param buffer CdrBufferBase 型のバッファ
      *
      * @else
      * @brief Constructor
@@ -131,9 +131,9 @@ namespace RTC
 
     /*!
      * @if jp
-     * @brief �ǥ��ȥ饯��
+     * @brief デストラクタ
      *
-     * disconnect() ���ƤФ졢provider, buffer �����Ρ��������롣
+     * disconnect() が呼ばれ、provider, buffer が解体・削除される。
      *
      * @else
      *
@@ -148,10 +148,10 @@ namespace RTC
 
     /*!
      * @if jp
-     * @brief �ǡ����ν񤭹���
+     * @brief データの書き込み
      *
-     * Publisher���Ф��ƥǡ�����񤭹��ߡ�����ˤ���б�����InPort��
-     * �ǡ�����ž������롣
+     * Publisherに対してデータを書き込み、これにより対応するInPortへ
+     * データが転送される。
      *
      * @else
      *
@@ -166,9 +166,9 @@ namespace RTC
 
     /*!
      * @if jp
-     * @brief ��³���
+     * @brief 接続解除
      *
-     * consumer, publisher, buffer �����Ρ��������롣
+     * consumer, publisher, buffer が解体・削除される。
      *
      * @else
      *
@@ -183,9 +183,9 @@ namespace RTC
 
     /*!
      * @if jp
-     * @brief Buffer ���������
+     * @brief Buffer を取得する
      *
-     * Connector ���ݻ����Ƥ��� Buffer ���֤�
+     * Connector が保持している Buffer を返す
      *
      * @else
      * @brief Getting Buffer
@@ -198,9 +198,9 @@ namespace RTC
 
     /*!
      * @if jp
-     * @brief �����ƥ��ֲ�
+     * @brief アクティブ化
      *
-     * ���Υ��ͥ����򥢥��ƥ��ֲ�����
+     * このコネクタをアクティブ化する
      *
      * @else
      *
@@ -214,9 +214,9 @@ namespace RTC
 
     /*!
      * @if jp
-     * @brief �󥢥��ƥ��ֲ�
+     * @brief 非アクティブ化
      *
-     * ���Υ��ͥ������󥢥��ƥ��ֲ�����
+     * このコネクタを非アクティブ化する
      *
      * @else
      *
@@ -230,7 +230,7 @@ namespace RTC
 
     /*!
      * @if jp
-     * @brief Buffer������
+     * @brief Bufferの生成
      * @else
      * @brief create buffer
      * @endif
@@ -239,7 +239,7 @@ namespace RTC
 
     /*!
      * @if jp
-     * @brief ��³��Ω���˥�����Хå���Ƥ�
+     * @brief 接続確立時にコールバックを呼ぶ
      * @else
      * @brief Invoke callback when connection is established
      * @endif
@@ -248,7 +248,7 @@ namespace RTC
 
     /*!
      * @if jp
-     * @brief ��³���ǻ��˥�����Хå���Ƥ�
+     * @brief 接続切断時にコールバックを呼ぶ
      * @else
      * @brief Invoke callback when connection is destroied
      * @endif
@@ -259,7 +259,7 @@ namespace RTC
 
     /*!
      * @if jp
-     * @brief OutPortProvider �ؤΥݥ���
+     * @brief OutPortProvider へのポインタ
      * @else
      * @brief the pointer to the OutPortProvider
      * @endif
@@ -268,7 +268,7 @@ namespace RTC
 
     /*!
      * @if jp
-     * @brief ConnectorListenrs �ؤλ���
+     * @brief ConnectorListenrs への参照
      * @else
      * @brief A reference to a ConnectorListener
      * @endif
@@ -277,7 +277,7 @@ namespace RTC
 
     /*!
      * @if jp
-     * @brief Buffer �ؤΥݥ���
+     * @brief Buffer へのポインタ
      * @else
      * @brief the pointer to the buffer
      * @endif

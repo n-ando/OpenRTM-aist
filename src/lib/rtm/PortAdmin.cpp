@@ -1,4 +1,4 @@
-// -*- C++ -*-
+ï»¿// -*- C++ -*-
 /*!
  * @file PortAdmin.cpp
  * @brief RTC's Port administration class
@@ -25,7 +25,7 @@ namespace RTC
 {
   /*!
    * @if jp
-   * @brief Port¸¡º÷ÍÑ¥Õ¥¡¥ó¥¯¥¿
+   * @brief Portæ¤œç´¢ç”¨ãƒ•ã‚¡ãƒ³ã‚¯ã‚¿
    * @else
    * @brief Functor to fing a Port
    * @endif
@@ -69,7 +69,7 @@ namespace RTC
   
   /*!
    * @if jp
-   * @brief Portºï½üÍÑ¥Õ¥¡¥ó¥¯¥¿
+   * @brief Portå‰Šé™¤ç”¨ãƒ•ã‚¡ãƒ³ã‚¯ã‚¿
    * @else
    * @brief Functor to delete the Port
    * @endif
@@ -86,7 +86,7 @@ namespace RTC
   
   /*!
    * @if jp
-   * @brief ¥³¥ó¥¹¥È¥é¥¯¥¿
+   * @brief ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
    * @else
    * @brief Constructor
    * @endif
@@ -100,7 +100,7 @@ namespace RTC
   
   /*!
    * @if jp
-   * @brief PortServiceList ¤Î¼èÆÀ
+   * @brief PortServiceList ã®å–å¾—
    * @else
    * @brief Get PortServiceList
    * @endif
@@ -114,7 +114,7 @@ namespace RTC
   
   /*!
    * @if jp
-   * @brief PortProfileList ¤Î¼èÆÀ
+   * @brief PortProfileList ã®å–å¾—
    * @else
    * @brief Get PortProfileList
    * @endif
@@ -153,7 +153,7 @@ namespace RTC
   
   /*!
    * @if jp
-   * @brief Port ¤Î¥ª¥Ö¥¸¥§¥¯¥È»²¾È¤Î¼èÆÀ
+   * @brief Port ã®ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆå‚ç…§ã®å–å¾—
    * @else
    * @brief Get the reference to the Port's object
    * @endif
@@ -171,7 +171,7 @@ namespace RTC
   
   /*!
    * @if jp
-   * @brief Port ¤Î¥µ¡¼¥Ğ¥ó¥È¤Î¥İ¥¤¥ó¥¿¤Î¼èÆÀ
+   * @brief Port ã®ã‚µãƒ¼ãƒãƒ³ãƒˆã®ãƒã‚¤ãƒ³ã‚¿ã®å–å¾—
    * @else
    * @brief Get pointer to the Port's servant
    * @endif
@@ -183,7 +183,7 @@ namespace RTC
   
   /*!
    * @if jp
-   * @brief Port ¤òÅĞÏ¿¤¹¤ë
+   * @brief Port ã‚’ç™»éŒ²ã™ã‚‹
    * @else
    * @brief Regsiter the Port
    * @endif
@@ -206,7 +206,7 @@ namespace RTC
 
   /*!
    * @if jp
-   * @brief Port ¤òÅĞÏ¿¤¹¤ë
+   * @brief Port ã‚’ç™»éŒ²ã™ã‚‹
    * @else
    * @brief Regsiter the Port
    * @endif
@@ -254,7 +254,7 @@ namespace RTC
   
   /*!
    * @if jp
-   * @brief Port ¤ÎÅĞÏ¿¤ò²ò½ü¤¹¤ë
+   * @brief Port ã®ç™»éŒ²ã‚’è§£é™¤ã™ã‚‹
    * @else
    * @brief Unregister the Port's registration
    * @endif
@@ -312,7 +312,7 @@ namespace RTC
   
   /*!
    * @if jp
-   * @brief Ì¾¾Î»ØÄê¤Ë¤è¤êPort ¤ÎÅĞÏ¿¤ò²ò½ü¤¹¤ë
+   * @brief åç§°æŒ‡å®šã«ã‚ˆã‚ŠPort ã®ç™»éŒ²ã‚’è§£é™¤ã™ã‚‹
    * @else
    * @brief Unregister the Port's registration by its name
    * @endif
@@ -326,7 +326,7 @@ namespace RTC
 
   /*!
    * @if jp
-   * @brief Á´¤Æ¤Î Port ¤Î¥¤¥ó¥¿¡¼¥Õ¥§¡¼¥¹¤ò activates ¤¹¤ë
+   * @brief å…¨ã¦ã® Port ã®ã‚¤ãƒ³ã‚¿ãƒ¼ãƒ•ã‚§ãƒ¼ã‚¹ã‚’ activates ã™ã‚‹
    * @else
    * @brief Activate all Port interfaces
    * @endif
@@ -343,7 +343,7 @@ namespace RTC
 
   /*!
    * @if jp
-   * @brief Á´¤Æ¤Î Port ¤Î¥¤¥ó¥¿¡¼¥Õ¥§¡¼¥¹¤ò deactivates ¤¹¤ë
+   * @brief å…¨ã¦ã® Port ã®ã‚¤ãƒ³ã‚¿ãƒ¼ãƒ•ã‚§ãƒ¼ã‚¹ã‚’ deactivates ã™ã‚‹
    * @else
    * @brief Deactivate all Port interfaces
    * @endif
@@ -360,7 +360,7 @@ namespace RTC
 
   /*!
    * @if jp
-   * @brief Á´¤Æ¤Î Port ¤òdeactivate¤·ÅĞÏ¿¤òºï½ü¤¹¤ë
+   * @brief å…¨ã¦ã® Port ã‚’deactivateã—ç™»éŒ²ã‚’å‰Šé™¤ã™ã‚‹
    * @else
    * @brief Deactivate all Ports and unregister them
    * @endif

@@ -1,4 +1,4 @@
-// -*- C++ -*-
+﻿// -*- C++ -*-
 /*!
  * @file  CorbaPort.h
  * @brief CorbaPort class
@@ -29,7 +29,7 @@
  * @if jp
  * @namespace RTC
  *
- * @brief RT����ݡ��ͥ��
+ * @brief RTコンポーネント
  *
  * @else
  *
@@ -44,85 +44,85 @@ namespace RTC
   /*!
    * @if jp
    * @class CorbaPort
-   * @brief RT ����ݡ��ͥ�� CORBA provider/consumer �� Port
+   * @brief RT コンポーネント CORBA provider/consumer 用 Port
    *
-   * CorbaPort �� RT ����ݡ��ͥ�Ȥˤ����ơ��桼������� CORBA ���֥���
-   * ���ȥ����ӥ�����ӥ��󥷥塼�ޤ��󶡤��� Port �����Ǥ��롣
+   * CorbaPort は RT コンポーネントにおいて、ユーザ定義の CORBA オブジェ
+   * クトサービスおよびコンシューマを提供する Port 実装である。
    *
-   * RT ����ݡ��ͥ�Ȥϡ�Port ��𤷤ƥ桼����������� CORBA �����ӥ�
-   * ���󶡤��뤳�Ȥ��Ǥ�������� RT Service (Provider) �ȸƤ֡��ޤ���
-   * ¾�� RT ����ݡ��ͥ�ȤΥ����ӥ������Ѥ��뤿��� CORBA ���֥�����
-   * �ȤΥץ졼���ۥ�����󶡤��뤳�Ȥ��Ǥ�������� RT Service
-   * Consumer �ȸƤ֡�
-   * CorbaPort ��Ǥ�դο��� Provider ����� Consumer ��������뤳�Ȥ���
-   * ����Port Ʊ�Τ���³����ݤ��б����� Provider �� Consumer ��Ŭ�ڤ�
-   * ��Ϣ�դ��뤳�Ȥ��Ǥ��롣
-   * CorbaPort ���̾�ʲ��Τ褦�����Ѥ���롣
+   * RT コンポーネントは、Port を介してユーザが定義した CORBA サービス
+   * を提供することができ、これを RT Service (Provider) と呼ぶ。また、
+   * 他の RT コンポーネントのサービスを利用するための CORBA オブジェク
+   * トのプレースホルダを提供することができ、これを RT Service
+   * Consumer と呼ぶ。
+   * CorbaPort は任意の数の Provider および Consumer を管理することがで
+   * き、Port 同士を接続する際に対応する Provider と Consumer を適切に
+   * 関連付けることができる。
+   * CorbaPort は通常以下のように利用される。
    *
    * <pre>
-   * RTC::CorbaPort m_port0; // Port �����
+   * RTC::CorbaPort m_port0; // Port の宣言
    *
-   * MyService_impl m_mysvc0; // ���� Port ���󶡤��� Serivce Provider
-   * RTC::CorbaConsumer<YourService> m_cons0; // ���� Port �� Consumer
+   * MyService_impl m_mysvc0; // この Port が提供する Serivce Provider
+   * RTC::CorbaConsumer<YourService> m_cons0; // この Port の Consumer
    *
-   * // Service Provider �� Port ����Ͽ
+   * // Service Provider を Port に登録
    * m_port0.registerProvider("MyService0", "Generic", m_mysvc0);
-   * // Service Consumer �� Port ����Ͽ
+   * // Service Consumer を Port に登録
    * m_port0.registerConsumer("YourService0", "Generic", m_cons0 );
    *
-   * // connect ���Ԥ�줿��
+   * // connect が行われた後
    *
-   * m_cons0->your_service_function(); // YourService �δؿ��򥳡���
+   * m_cons0->your_service_function(); // YourService の関数をコール
    *
-   * // connect ���줿 �̤Υ���ݡ��ͥ�Ȥˤ�����
-   * m_cons1->my_service_function(); // MyService �δؿ��򥳡���
+   * // connect された 別のコンポーネントにおいて
+   * m_cons1->my_service_function(); // MyService の関数をコール
    * </pre>
    *
-   * ���Τ褦�ˡ��󶡤����� Service Provider �� registerProvider() ����
-   * Ͽ���뤳�Ȥˤ�ꡢ¾�Υ���ݡ��ͥ�Ȥ������Ѳ�ǽ�ˤ���¾�������Ѥ�
-   * ���� Service Consumer �� registerConsumer() ����Ͽ���뤳�Ȥˤ��¾
-   * �Υ���ݡ��ͥ�Ȥ� Service �򥳥�ݡ��ͥ��������Ѳ�ǽ�ˤ��뤳��
-   * ���Ǥ��롣
+   * このように、提供したい Service Provider を registerProvider() で登
+   * 録することにより、他のコンポーネントから利用可能にし、他方、利用し
+   * たい Service Consumer を registerConsumer() で登録することにより他
+   * のコンポーネントの Service をコンポーネント内で利用可能にすること
+   * ができる。
    *
-   * PortInterfaceProfile �� Port �˽�°����ץ��Х����⤷���ϥ��󥷥塼
-   * �ޥ��󥿡��ե������ˤĤ��Ƥξ���򵭽Ҥ��뤿��Υץ��ե�����Ǥ��롣
-   * ��³��Ԥ��ġ������ϡ������ξ���˴�Ť� ConnectorProfile ��Ŭ��
-   * ������������³�������� Port �Τ���Ǥ�դΰ�Ĥ��Ф��ư�����
-   * ConnectorProfile ��Ϳ���� Port::connect() ��ƤӽФ�ɬ�פ����롣
+   * PortInterfaceProfile は Port に所属するプロバイダもしくはコンシュー
+   * マインターフェースについての情報を記述するためのプロファイルである。
+   * 接続を行うツール等は、これらの情報に基づき ConnectorProfile を適切
+   * に生成し、接続を構成する Port のうち任意の一つに対して引数に
+   * ConnectorProfile を与えて Port::connect() を呼び出す必要がある。
    *
-   * �ʤ���PortInterfaceProfile �Υ��󥹥���̾ "*" ���ü�ʥ��󥹥���
-   * ����ɽ����
+   * なお、PortInterfaceProfile のインスタンス名 "*" は特殊なインスタン
+   * スを表す。
    *
-   * PROVIDED���ʤ���ץ��Х����Υ��󥹥���̾�� "*" �ξ��ϡ���³��
-   * �ϻ����Ǥϥ��󥹥��󥹤�¸�ߤ��������󥷥塼�ޤ��׵�˱�����ưŪ��
-   * ���󥹥��󥹤��������륿���פΥץ��Х����Ǥ��뤳�Ȥ�ɽ������������
-   * �ơ���³���ϻ����Ǥϥ��󥹥���̾��¸�ߤ��ʤ�������³����������
-   * �Υ��󥿡��ե��������������ץ������ˤ����ơ��ץ��Х�������������
-   * ���󥹥��󥹤��б��������һҤ� ConnectorProfile ��Ŭ�������ꤹ���
-   * �ΤȤ��롣(̤����)
+   * PROVIDEDすなわちプロバイダのインスタンス名が "*" の場合は、接続開
+   * 始時点ではインスタンスが存在せず、コンシューマの要求に応じて動的に
+   * インスタンスを生成するタイプのプロバイダであることを表す。したがっ
+   * て、接続開始時点ではインスタンス名は存在しないが、接続シーケンス中
+   * のインターフェースを公開するプロセスにおいて、プロバイダは生成した
+   * インスタンスに対応した記述子を ConnectorProfile に適正に設定するも
+   * のとする。(未実装)
    *
-   * REQUIRED���ʤ�����󥷥塼�ޤΥ��󥹥���̾�� "*" �ξ��ϡ����
-   * �Υ��󥷥塼�ޤ�ʣ���Υץ��Х�������³��ǽ�ʥ����פΥ��󥷥塼�ޤ�
-   * ���뤳�Ȥ򼨤���(̤����)
+   * REQUIREDすなわちコンシューマのインスタンス名が "*" の場合は、一つ
+   * のコンシューマが複数のプロバイダと接続可能なタイプのコンシューマで
+   * あることを示す。(未実装)
    *
-   * �ʲ��ϡ�Port�֤Υ��󥿡��ե���������³���뤿��� ConnectorProfile ��
-   * �ޥåԥ󥰤򵭽Ҥ��뤿��Υ롼��򼨤���
+   * 以下は、Port間のインターフェースを接続するために ConnectorProfile に
+   * マッピングを記述するためのルールを示す。
    *
-   * Port����°���륤�󥿡��ե������λ���ҤΥե����ޥåȤ�ʲ��Τ褦��
-   * ���롣���󥿡��ե������˴ؤ���ץ��ѥƥ����ʲ��ξ��
+   * Portに付属するインターフェースの指定子のフォーマットを以下のように
+   * 定める。インターフェースに関するプロパティが以下の場合
    *
-   * - RTC���󥹥���̾:              rtc_iname
-   * - �ݡ���̾:                       port_name
-   * - ���󥿡��ե���������:           if_polarity
-   * - ���󥿡��ե�������̾:           if_tname
-   * - ���󥿡��ե��������󥹥���̾: if_iname
+   * - RTCインスタンス名:              rtc_iname
+   * - ポート名:                       port_name
+   * - インターフェース極性:           if_polarity
+   * - インターフェース型名:           if_tname
+   * - インターフェースインスタンス名: if_iname
    * 
-   * ���󥿡��ե������λ���Ҥ�ʲ���ʸ����̾�Τǻ��ꤹ���ΤȤ��롣
+   * インターフェースの指定子を以下の文字列名称で指定するものとする。
    *
    * <rtc_iname>.port.<port_name>.<if_polarity>.<if_tname>.<if_iname>
    *
-   * PROVIDED(��)�����ʤ���ץ��Х����Υ��󥿥ե������Υץ��ѥƥ�����
-   * ���ξ�硢
+   * PROVIDED(提供)型すなわちプロバイダのインタフェースのプロパティが以
+   * 下の場合、
    *
    * - rtc_iname   = MyComp0
    * - port_name   = myservice
@@ -130,12 +130,12 @@ namespace RTC
    * - if_tname    = echo_interface
    * - if_iname    = echo_interface2
    *
-   * ���󥿡��ե���������Ҥ�
+   * インターフェース指定子は
    *
    * MyComp0.port.myservice.provided.echo_interface.echo_interface2
    *
-   * �Τ褦�˵��Ҥ���롣�ޤ���Ʊ�ͤ�REQUIRED(�׵�)�����ʤ�����󥷥塼
-   * �ޤΥ��󥿡��ե������Υץ��ѥƥ����ʲ��ξ�硢
+   * のように記述される。また、同様にREQUIRED(要求)型すなわちコンシュー
+   * マのインターフェースのプロパティが以下の場合、
    *
    * - rtc_iname   = YourComp0
    * - port_name   = yourservice
@@ -143,27 +143,27 @@ namespace RTC
    * - if_tname    = hoge_interface
    * - if_iname    = hoge_interface1
    *
-   * ���󥿡��ե���������Ҥϡ�
+   * インターフェース指定子は、
    * 
    * YourComp0.port.myservice.required.hoge_interface.hoge_inteface1
    *
-   * �Τ褦�˵��Ҥ��뤳�Ȥ��Ǥ��롣
+   * のように記述することができる。
    * 
-   * �ʤ���������ưŪ�������󥿡��ե������Υ��󥹥��󥹤Τ�����ü�ʥ�
-   * ���פΥ��󥹥���̾���һ�
+   * なお、ここで動的生成インターフェースのインスタンスのための特殊なタ
+   * イプのインスタンス名記述子
    *
-   * - <type_name>*: ưŪ���������󥹥���̾���һ�
-   * - <type_name>+: ���󥯥��󥿥����������󥹥���̾���һ�
+   * - <type_name>*: 動的生成型インスタンス名記述子
+   * - <type_name>+: インクリメンタル生成型インスタンス名記述子
    *
-   * ��������롣ưŪ�������󥿡��ե������Ȥϡ���³���˥��󥹥��󥹤���
-   * ������륿���פΥ��󥿡��ե������Ǥ��롣(̤����)
+   * を定義する。動的生成インターフェースとは、接続時にインスタンスが生
+   * 成されるタイプのインターフェースである。(未実装)
    *
-   * ���󥷥塼�ޤ��׵᤹��ץ��Х������󥿡��ե��������һҤ�ưŪ������
-   * ���󥹥���̾���һ� "<type_name>*" �����ꤵ�줿��硢�ץ��Х�����
-   * ���󥹥��󥹤�1�Ŀ������������롣"<type_name>*" �ε��һҤˤ��ץ���
-   * �������׵᤹�� n �ĤΥ��󥷥塼�ޤ�¸�ߤ����硢����餫����׵�
-   * (���ڥ졼����󥳡���)��1 �ĤΥץ��Х����ˤ���������ط����ۤ�
-   * ��(����)��
+   * コンシューマが要求するプロバイダインターフェース記述子に動的生成型
+   * インスタンス名記述子 "<type_name>*" が指定された場合、プロバイダは
+   * インスタンスを1つ新規に生成する。"<type_name>*" の記述子によりプロバ
+   * イダを要求する n 個のコンシューマが存在する場合、これらからの要求
+   * (オペレーションコール)を1 つのプロバイダにより処理する関係を構築す
+   * る(下図)。
    *
    * <pre>
    * consumer0 ]---<
@@ -171,12 +171,12 @@ namespace RTC
    * consumer2 ]---<
    * </pre>
    *  
-   * ������Ф������󥷥塼�ޤ��׵᤹��ץ��Х������󥿡��ե��������һ�
-   * �˥��󥯥��󥿥����������󥹥���̾���һ� "<type_name>+" ������
-   * ���줿��硢���һ� "<type_name>+" �ο������ץ��Х����Υ��󥹥���
-   * ����ưŪ����������롣���ʤ����"<type_name>+" �ε��һҤˤ��ץ���
-   * �������׵᤹�� n �ĤΥ��󥷥塼�ޤ�¸�ߤ����硢n �ĤΥץ��Х���
-   * �����줾����׵���������ʲ��Τ褦�ʴط������ۤ���롣
+   * これに対し、コンシューマが要求するプロバイダインターフェース記述子
+   * にインクリメンタル生成型インスタンス名記述子 "<type_name>+" が指定
+   * された場合、記述子 "<type_name>+" の数だけプロバイダのインスタン
+   * スが動的に生成される。すなわち、"<type_name>+" の記述子によりプロバ
+   * イダを要求する n 個のコンシューマが存在する場合、n 個のプロバイダ
+   * がそれぞれの要求を処理する以下のような関係が構築される。
    *
    * <pre>
    * consumer0 ]---<  O----[ provider0
@@ -185,19 +185,19 @@ namespace RTC
    * </pre>
    *
    *
-   * ��³�˺ݤ��ơ��ġ��������� ConnectorProfile::properties ��Ŭ�ڤʥ�
-   * �󥿡��ե������ޥåԥ󥰻���򵭽Ҥ��뤳�Ȥǡ���ߤΥץ��Х���/��
-   * �󥷥塼�ޥ��󥿡��ե�������ͳ����³���뤳�Ȥ��Ǥ��롣����������
-   * ³�˴ؤ�� RTC ����ˡ��ۤʤ륤�󥹥��󥹤Ǥ���ʤ��顢Ʊ��Υ���
-   * ����̾��¸�ߤ����硢���󥿡��ե��������һҤΰ�������ݾڤǤ���
-   * ���Τǡ�������ˡ�ˤ����³�����ݾڤ���ʤ���
+   * 接続に際して、ツール等から ConnectorProfile::properties に適切なイ
+   * ンターフェースマッピング指定を記述することで、相互のプロバイダ/コ
+   * ンシューマインターフェースを自由に接続することができる。ただし、接
+   * 続に関わる RTC の中に、異なるインスタンスでありながら、同一のインス
+   * タンス名が存在する場合、インターフェース記述子の一意性が保証できな
+   * いので、この方法による接続性は保証されない。
    *
-   * �����ǥ��󥿡��ե��������һҤ��ñ�Τ���� <if_desc0>,
-   * <if_desc1>, ...  �Ȥ��롣�ޤ���ConnectorProfile::properties ��
-   * NVList�� key �� value �� key: value �Τ褦�˵��Ҥ����ΤȤ��롣
+   * ここでインターフェース記述子を簡単のために <if_desc0>,
+   * <if_desc1>, ...  とする。また、ConnectorProfile::properties の
+   * NVListの key と value を key: value のように記述するものとする。
    *
-   * ���ޡ�2�ĤΥ���ݡ��ͥ�ȤΥ����ӥ��ݡ��Ȥ���³�������ͤ��롣
-   * ���줾��Υ���ݡ��ͥ�ȤΥ����ӥ��ݡ��Ȥ��ʲ��ξ�硢
+   * いま、2つのコンポーネントのサービスポートを接続する場合を考える。
+   * それぞれのコンポーネントのサービスポートが以下の場合、
    *
    * - rtc_iname: MyComp0        <br>
    *   port_name: mycomp_service <br>
@@ -229,97 +229,97 @@ namespace RTC
    *            |                                 |
    * </pre>
    *
-   * MyComp0 �� echo0 (�ץ��Х���) �� YourComp0 �� echo9 (���󥷥塼��)��
-   * MyComp0 �� add0 (���󥷥塼��) �� YourComp0 �� echo9 (�ץ��Х���)
-   * �򤽤줾���Фˤ�����³�������ΤȲ��ꤹ�롣���ξ�硢
-   * ConnectorProfile �ϰʲ��Τ褦�����ꤹ�롣
+   * MyComp0 の echo0 (プロバイダ) と YourComp0 の echo9 (コンシューマ)、
+   * MyComp0 の add0 (コンシューマ) と YourComp0 の echo9 (プロバイダ)
+   * をそれぞれ対にして接続させるものと仮定する。この場合、
+   * ConnectorProfile は以下のように設定する。
    * 
    * <pre>
    * ConnectorProfile:
-   *   name: Ǥ�դΥ��ͥ���̾
-   *   connector_id: ��ʸ��
-   *   ports[]: mycomp_service �λ���, yourcomp_service �λ���
+   *   name: 任意のコネクタ名
+   *   connector_id: 空文字
+   *   ports[]: mycomp_service の参照, yourcomp_service の参照
    *   properties:
    *     <add0>: <add9>
    *     <echo9>: <echo0>
    * </pre>
    *
-   * �����������줾��
+   * ただし、それぞれ
    * 
    * <pre>
-   * <add0> �� MyComp0.port.mycomp_service.required.add.add0
-   * <add9> �� YourComp0.port.yourcomp_service.provided.add.add9
-   * <echo0> �� MyComp0.port.mycomp_service.provided.echo.echo0
-   * <echo9> �� YourComp0.port.yourcomp_service.required.echo.echo9
+   * <add0> は MyComp0.port.mycomp_service.required.add.add0
+   * <add9> は YourComp0.port.yourcomp_service.provided.add.add9
+   * <echo0> は MyComp0.port.mycomp_service.provided.echo.echo0
+   * <echo9> は YourComp0.port.yourcomp_service.required.echo.echo9
    * </pre>
    *
-   * �Ǥ��롣��³�ץ������ˤ����ơ��ƥݡ��ȤΥץ��Х�������ӥ��󥷥塼
-   * �ޤϡ����줾��ʲ��κ�Ȥ�CorbaPort::publishInterfaces(),
-   * CorbaPort::PortsubscribeInterfaces() ���۴ؿ��ˤ����ƹԤ���
+   * である。接続プロセスにおいて、各ポートのプロバイダおよびコンシュー
+   * マは、それぞれ以下の作業を、CorbaPort::publishInterfaces(),
+   * CorbaPort::PortsubscribeInterfaces() 仮想関数において行う。
    *
-   * �ץ��Х����ϡ�publishInterfaces() �ؿ��ˤ����ơ���ʬ�Υ��󥿡��ե���
-   * �����һҤ򥭡��Ȥ����ͤ�IOR��ʸ����ɽ��������Τ�
-   * ConnectorProfile::properties �����ꤹ�롣����Ȥ��ơ����Υ��󥿡�
-   * �ե��������һҤϺ��Ԥ����Ȥ��Ƥ��륳�ͥ����ˤ����Ƥϰ�դǤ��뤿�ᡢ
-   * Ʊ��������1�Ĥ���¸�ߤ��ƤϤ����ʤ���
+   * プロバイダは、publishInterfaces() 関数において、自分のインターフェー
+   * ス記述子をキーとし、値にIORの文字列表記したものを
+   * ConnectorProfile::properties に設定する。前提として、このインター
+   * フェース記述子は今行おうとしているコネクタにおいては一意であるため、
+   * 同じキーは1つしか存在してはいけない。
    *
-   * [������ʬ�ε��Ҥ�̤�����ε�ǽ] �ʤ���ưŪ�������󥿡��ե������ˤ�
-   * ���Ƥϡ��ʲ��μ�³���˽����������뤳�ȤȤʤ롣publishInterface()
-   * �ؿ��ˤ����ơ�ưŪ�������󥹥���̾���һ� "<type_name>*" �ޤ��ϡ�
-   * ���󥯥��󥿥����������󥹥���̾���һ� "<type_name>+" ��¸�ߤ�
-   * �뤫�ɤ������������롣ưŪ�������󥹥���̾���һ� "<type_name>*"
-   * ��¸�ߤ����硢�ץ��Х����Υ��󥹥��󥹤�1�������������Υ��󥿡�
-   * �ե���������Ҥ� key �ˡ�IORʸ����� value �����ꤹ��ȤȤ�ˡ�ư
-   * Ū�������󥹥���̾���һ� "<type_name>*" �� value �˴ޤह�٤Ƥ�
-   * value ��Υ��󥿡��ե���������Ҥ򡢤����������������󥿡��ե�����
-   * ����Ҥ��֤������롣
+   * [この部分の記述は未実装の機能] なお、動的生成インターフェースにつ
+   * いては、以下の手続きに従い処理することとなる。publishInterface()
+   * 関数において、動的生成インスタンス名記述子 "<type_name>*" または、
+   * インクリメンタル生成型インスタンス名記述子 "<type_name>+" が存在す
+   * るかどうかを走査する。動的生成インスタンス名記述子 "<type_name>*"
+   * が存在する場合、プロバイダのインスタンスを1つ生成し、そのインター
+   * フェース指定子を key に、IOR文字列を value に設定するとともに、動
+   * 的生成インスタンス名記述子 "<type_name>*" を value に含むすべての
+   * value 上のインターフェース指定子を、ここで生成したインターフェース
+   * 指定子に置き換える。
    * 
-   * ���󥯥��󥿥����������󥹥���̾���һ�"<type_name>+" ��¸�ߤ�
-   * ���硢���󥹥���̾���һҤο������ץ��Х����Υ��󥹥��󥹤�����
-   * �������줾��Υ��󥿡��ե���������Ҥ�key �ˡ�IORʸ����� value ��
-   * ���ꤹ��ȤȤ�ˡ����󥯥��󥿥����������󥹥���̾���һ�
-   * "<type_name>+" �� value �ޤह�٤Ƥ� value ��Υ��󥿡��ե�������
-   * ��Ҥ��Ф��ƽ�ˡ������������������줾��Υ��󥿡��ե���������Ҥ�
-   * �֤������롣
+   * インクリメンタル生成型インスタンス名記述子"<type_name>+" が存在す
+   * る場合、インスタンス名記述子の数だけプロバイダのインスタンスを生成
+   * し、それぞれのインターフェース指定子をkey に、IOR文字列を value に
+   * 設定するとともに、インクリメンタル生成型インスタンス名記述子
+   * "<type_name>+" を value 含むすべての value 上のインターフェース指
+   * 定子に対して順に、ここで生成したそれぞれのインターフェース指定子に
+   * 置き換える。
    *
-   * �ץ��Х����� subscribeInterfaces() �Ǥ��ä����ϹԤ�ʤ���
+   * プロバイダは subscribeInterfaces() では特に操作は行わない。
    *
-   * ���󥷥塼�ޤϡ� publishInterfaces() �ˤ����Ƥ��ä�����Ԥ�ʤ���
+   * コンシューマは、 publishInterfaces() においては特に操作を行わない。
    *
-   * ������ subscribeInterfaces() �Ǥϡ���ʬ�ε��һҤ� key �Ȥ���
-   * key-value �ڥ� ��¸�ߤ��뤫�ɤ���Ĵ�١��⤷¸�ߤ���С����� value
-   * �����ꤵ�줿�ץ��Х����Υ��󥿡��ե���������Ҥǻ��ꤵ��뻲�Ȥ�
-   * ����� ConnectorProfile::properties ����õ��������򥳥󥷥塼�ޤ�
-   * ��³��Ȥ������ꤹ�롣�ʤ����տ�Ū�˥��󥷥塼�ޤ˥ץ��Х����λ���
-   * �����ꤷ�ʤ����ϡ�ͽ��ʸ���� "nil" �ޤ��� "null" �����ꤹ����
-   * �Ȥ��롣
+   * 一方、 subscribeInterfaces() では、自分の記述子を key とする
+   * key-value ペア が存在するかどうか調べ、もし存在すれば、その value
+   * に設定されたプロバイダのインターフェース指定子で指定される参照を、
+   * さらに ConnectorProfile::properties から探し、それをコンシューマの
+   * 接続先として設定する。なお、意図的にコンシューマにプロバイダの参照
+   * を設定しない場合は、予約文字列 "nil" または "null" を設定するもの
+   * とする。
    *
-   * ���󥷥塼�ޤϡ��⤷��ʬ�ε��һҤ�¸�ߤ��ʤ���硢�ޤ��ϥץ��Х���
-   * �λ��Ȥ� Connector::properties ��¸�ߤ��ʤ���硢���󥷥塼�ޤϡ�
-   * ��ʬ�Υ��󥹥���̾����ӷ�̾��Ʊ��Υץ��Х�����õ�������λ��Ȥ�
-   * ��ʬ���Ȥ����ꤹ�롣����ϡ�OpenRTM-aist-0.4 �Ȥθߴ������ݻ�����
-   * ����Υ롼��Ǥ��ꡢ1.0�ʹߤǤϿ侩����ʤ���
+   * コンシューマは、もし自分の記述子が存在しない場合、またはプロバイダ
+   * の参照が Connector::properties に存在しない場合、コンシューマは、
+   * 自分のインスタンス名および型名と同一のプロバイダを探し、その参照を
+   * 自分自身に設定する。これは、OpenRTM-aist-0.4 との互換性を保持する
+   * ためのルールであり、1.0以降では推奨されない。
    *
-   * �ץ��Х����Х��󥷥塼�ޤ��б��ϰ��а�Ǥ���ɬ�פϤʤ����ץ��Х���
-   * 1 ���Ф��ơ����󥷥塼�� n���ޤ��ϥ��󥷥塼�� 1 ���Ф��ƥץ��Х�
-   * �� n �Υ������������롣�ץ��Х��� 1 ���Ф��ơ����󥷥塼�� n ��
-   * �������Ǥϡ�����ץ��Х����λ���Ҥ���ʣ���Υ��󥷥塼�ޤ��Ф��ơ�
-   * �嵭����ˡ�ǻ��ꤵ��뤳�Ȥˤ�ꡢ�¸�����롣���������󥷥塼��
-   * 1 ���Ф��ƥץ��Х��� n �Υ������Ǥϡ����󥷥塼�޻���Ҥ� key ����
-   * ���ơ�ʣ���Υץ��Х����λ���Ҥ�����޶��ڤ����󤵤������Ȥʤ�
-   * ��ΤȤ��롣
+   * プロバイダ対コンシューマの対応は一対一である必要はなく、プロバイダ
+   * 1 に対して、コンシューマ n、またはコンシューマ 1 に対してプロバイ
+   * ダ n のケースも許される。プロバイダ 1 に対して、コンシューマ n の
+   * ケースでは、あるプロバイダの指定子が、複数のコンシューマに対して、
+   * 上記の方法で指定されることにより、実現される。一方、コンシューマ
+   * 1 に対してプロバイダ n のケースでは、コンシューマ指定子の key に対
+   * して、複数のプロバイダの指定子がカンマ区切りで列挙される形式となる
+   * ものとする。
    *
-   * �ʤ������󥿡��ե��������б��ط��θ�̩������ꤹ�륪�ץ����Ȥ��ơ�
-   * �ʲ��Υ��ץ�������ꤹ�뤳�Ȥ��Ǥ��롣
+   * なお、インターフェースの対応関係の厳密さを指定するオプションとして、
+   * 以下のオプションを指定することができる。
    *
    * port.connection.strictness: strict, best_effort 
    *
-   * strict: ���٤ƤΥ��󥷥塼�ޤ˻��ꤷ�����Ȥ�¸�ߤ������ĥʥ�������
-   *         ���ˤ����������󥷥塼�ޤ�Ŭ�ڤ˥��åȤǤ������ˤΤ� Port
-   *         �֤���³���Ω���롣
+   * strict: すべてのコンシューマに指定した参照が存在し、かつナローイン
+   *         グにも成功しコンシューマに適切にセットできた場合にのみ Port
+   *         間の接続を確立する。
    *
-   * best_effort: �ʥ����������˼��Ԥ������Ǥ⡢���顼���֤����Ȥ�
-   *         �� Port �֤���³���Ω���롣
+   * best_effort: ナローイング等に失敗した場合でも、エラーを返すことな
+   *         く Port 間の接続を確立する。
    *
    * @since 0.4.0
    *
@@ -623,16 +623,16 @@ namespace RTC
   public:
     /*!
      * @if jp
-     * @brief ���󥹥ȥ饯��
+     * @brief コンストラクタ
      *
-     * ���󥹥ȥ饯���Ǥϡ�������Ϳ����줿̾���� PortBase ���Ф��ƥ���
-     * �Ȥ���ȤȤ�ˡ�PortProfile::properties ���Ф���
+     * コンストラクタでは、引数に与えられた名前を PortBase に対してセッ
+     * トするとともに、PortProfile::properties に対して
      *
      * - port.port_type: "CorbaPort"
      *
-     * ��ץ��ѥƥ��Ȥ����ɲä��롣
+     * をプロパティとして追加する。
      *
-     * @param name Port ��̾��
+     * @param name Port の名前
      *
      * @else
      *
@@ -652,7 +652,7 @@ namespace RTC
     /*!
      * @if jp
      *
-     * @brief ���ۥǥ��ȥ饯��
+     * @brief 仮想デストラクタ
      *
      * @else
      *
@@ -664,15 +664,15 @@ namespace RTC
     
     /*!
      * @if jp
-     * @brief �ץ��ѥƥ��ν����
+     * @brief プロパティの初期化
      *
-     * OutPort�Υץ��ѥƥ����������롣���Υݡ��Ȥؤ���³������ꤹ��
-     * �ץ��ѥƥ� "connection_limit" ���ޤޤ졢Ŭ�ڤʿ��ͤ����ꤵ��Ƥ�
-     * ���硢������³���Ȥ��Ƥ��ο��ͤ����ꤵ��롣�ץ��ѥƥ������ꤵ
-     * ��Ƥ��ʤ���硢�⤷����Ŭ�ڤ��ͤ����ꤵ��Ƥ��ʤ����ˤϡ�����
-     * ��³����̵���¤Ȥʤ롣
+     * OutPortのプロパティを初期化する。このポートへの接続数を指定する
+     * プロパティ "connection_limit" が含まれ、適切な数値が設定されてい
+     * る場合、最大接続数としてその数値が設定される。プロパティが設定さ
+     * れていない場合、もしくは適切な値が設定されていない場合には、最大
+     * 接続数は無制限となる。
      *
-     * @param prop CorbaPort �Υץ��ѥƥ�
+     * @param prop CorbaPort のプロパティ
      *
      * @else
      *
@@ -694,20 +694,20 @@ namespace RTC
     /*!
      * @if jp
      *
-     * @brief Provider ����Ͽ����
+     * @brief Provider を登録する
      *
-     * ���� Port �ˤ������󶡤����������Х�Ȥ򤳤� Port ���Ф�����Ͽ��
-     * �롣�����Х�Ȥϡ�������Ϳ������ instance_name, type_name ��
-     * �����Х�ȼ��ȤΥ��󥹥���̾����ӥ�����̾�Ȥ��ơ������Х�Ȥ�
-     * ��Ϣ�դ����롣���δؿ��ˤ�ꡢ�����Х�Ȥ� CorbaPort ��������
-     * �������ȤȤ�ˡ�PortInterfaceProfile ��RTC::PROVIDED ���󥿡�
-     * �ե������Ȥ�����Ͽ����롣
+     * この Port において提供したいサーバントをこの Port に対して登録す
+     * る。サーバントは、引数で与えられる instance_name, type_name を、
+     * サーバント自身のインスタンス名およびタイプ名として、サーバントに
+     * 関連付けられる。この関数により、サーバントは CorbaPort 内部に保
+     * 持されるとともに、PortInterfaceProfile にRTC::PROVIDED インター
+     * フェースとして登録される。
      *
-     * @param instance_name �����Х�ȤΥ��󥹥���̾
-     * @param type_name �����Х�ȤΥ�����̾
-     * @param provider CORBA �����Х��
+     * @param instance_name サーバントのインスタンス名
+     * @param type_name サーバントのタイプ名
+     * @param provider CORBA サーバント
      *
-     * @return ����Ʊ̾�� instance_name ����Ͽ����Ƥ���� false ���֤���
+     * @return 既に同名の instance_name が登録されていれば false を返す。
      *
      * @else
      *
@@ -735,21 +735,21 @@ namespace RTC
     /*!
      * @if jp
      *
-     * @brief Consumer ����Ͽ����
+     * @brief Consumer を登録する
      *
-     * ���� Port ���׵᤹�륵���ӥ��Υץ졼���ۥ���Ǥ��륳�󥷥塼��
-     * (Consumer) ����Ͽ���롣Consumer ����Ϣ�դ����륵���ӥ��Υ���
-     * ����̾����ӥ�����̾�Ȥ��ơ������� instance_name, type_name ��
-     * ��� Consumer ���Ȥ�Ϳ���뤳�Ȥˤ�ꡢ�����Ǥ���餬��Ϣ�դ����
-     * �롣Port �֤���³ (connect) �� �ˤϡ�subscribeInterfaces() �ǽ�
-     * �٤��Ƥ���롼��˴�Ť���Provider Interface �λ��Ȥ���ưŪ��
-     * Consumer �˥��åȤ���롣
+     * この Port が要求するサービスのプレースホルダであるコンシューマ
+     * (Consumer) を登録する。Consumer が関連付けられるサービスのインス
+     * タンス名およびタイプ名として、引数に instance_name, type_name お
+     * よび Consumer 自身を与えることにより、内部でこれらが関連付けられ
+     * る。Port 間の接続 (connect) 時 には、subscribeInterfaces() で述
+     * べられているルールに基づき、Provider Interface の参照が自動的に
+     * Consumer にセットされる。
      *
-     * @param instance_name Consumer ���׵᤹�륵���ӥ��Υ��󥹥���̾
-     * @param type_name Consumer ���׵᤹�륵���ӥ��Υ�����̾
-     * @param consumer CORBA �����ӥ����󥷥塼��
+     * @param instance_name Consumer が要求するサービスのインスタンス名
+     * @param type_name Consumer が要求するサービスのタイプ名
+     * @param consumer CORBA サービスコンシューマ
      *
-     * @return ����Ʊ̾�� instance_name ����Ͽ����Ƥ���� false ���֤���
+     * @return 既に同名の instance_name が登録されていれば false を返す。
      *
      * @else
      *
@@ -780,41 +780,41 @@ namespace RTC
     /*!
      * @if jp
      *
-     * @brief Provider Interface ������������
+     * @brief Provider Interface 情報を公開する
      *
-     * ���� Port ����ͭ���� Provider ���󥿡��ե������˴ؤ�������
-     * ConnectorProfile::properties ��������¾�� Port ���Ф��Ƹ������롣
-     * ����RTC�Υ��󥹥���̾���ξ��󤬰ʲ����̤�Ǥ���Ȥ��ơ�
+     * この Port が所有する Provider インターフェースに関する情報を
+     * ConnectorProfile::properties に代入し他の Port に対して公開する。
+     * 今、RTCのインスタンス名等の情報が以下の通りであるとして、
      *
-     * - RTC���󥹥���̾:              rtc_iname
-     * - �ݡ���̾:                       port_name
-     * - ���󥿡��ե���������:           if_polarity
-     * - ���󥿡��ե�������̾:           if_tname
-     * - ���󥿡��ե��������󥹥���̾: if_iname
+     * - RTCインスタンス名:              rtc_iname
+     * - ポート名:                       port_name
+     * - インターフェース極性:           if_polarity
+     * - インターフェース型名:           if_tname
+     * - インターフェースインスタンス名: if_iname
      *
-     * NameValue ���� ConnectorProfile::properties �� name �� value �Ȥ���
-     * �ʲ��Τ�Τ���Ǽ����롣
+     * NameValue 型の ConnectorProfile::properties の name と value として
+     * 以下のものが格納される。
      *
      * - name
      *   <rtc_iname>.port.<port_name>.provided.<if_tname>.<if_iname>
      * - value
-     *   Provider ���󥿡��ե������� IOR ʸ���� 
+     *   Provider インターフェースの IOR 文字列 
      * 
-     * �ʤ�����С������Ȥθߴ����Τ���ʲ���ɽ���� NameValue ��Ʊ��
-     * �˳�Ǽ����뤬������ΥС������ǤϺ��������ǽ�������롣
+     * なお、旧バージョンとの互換性のため以下の表記の NameValue も同時
+     * に格納されるが、将来のバージョンでは削除される可能性がある。
      * 
      * - name
      *   port.<if_tname>.<if_iname>
      * - value
-     *   Provider ���󥿡��ե������� IOR ʸ����
+     *   Provider インターフェースの IOR 文字列
      *
-     * �������ͤ� ConnectorProfile::properties �˳�Ǽ���졢¾�Υݡ��Ȥ��Ф���
-     * ��ã����롣¾�� Port �Ǥ��Υ��󥿡��ե���������Ѥ��� Consumer ��
-     * ¸�ߤ���С�ConnectorProfile ���餳�Υ������饪�֥������ȥ�ե���󥹤�
-     * ���������餫�η��ǻ��Ѥ���롣
+     * これらの値は ConnectorProfile::properties に格納され、他のポートに対して
+     * 伝達される。他の Port でこのインターフェースを使用する Consumer が
+     * 存在すれば、ConnectorProfile からこのキーからオブジェクトリファレンスを
+     * 取得し何らかの形で使用される。
      *
-     * @param connector_profile ���ͥ����ץ��ե�����
-     * @return ReturnCode_t ���Υ꥿���󥳡���
+     * @param connector_profile コネクタプロファイル
+     * @return ReturnCode_t 型のリターンコード
      *
      * @else
      *
@@ -864,35 +864,35 @@ namespace RTC
     /*!
      * @if jp
      *
-     * @brief Provider Interface ������������
+     * @brief Provider Interface 情報を取得する
      *
-     * ���� Port����ͭ���� Consumer Interface ��Ŭ�礹�� Provider
-     * Interface �˴ؤ�������ConnectorProfile::properties ������Ф�
-     * Consumer Interface �˥��֥������Ȼ��Ȥ򥻥åȤ��롣
+     * この Portが所有する Consumer Interface に適合する Provider
+     * Interface に関する情報をConnectorProfile::properties から抽出し
+     * Consumer Interface にオブジェクト参照をセットする。
      *
-     * ����RTC �Υ��󥹥���̾�� Consumer Interface ���ξ��󤬰ʲ��Τ�
-     * ����Ǥ���Ȳ��ꤹ��ȡ�
+     * 今、RTC のインスタンス名や Consumer Interface 等の情報が以下のと
+     * おりであると仮定すると、
      *
-     * - RTC���󥹥���̾:              rtc_iname
-     * - �ݡ���̾:                       port_name
-     * - ���󥿡��ե���������:           if_polarity
-     * - ���󥿡��ե�������̾:           if_tname
-     * - ���󥿡��ե��������󥹥���̾: if_iname
+     * - RTCインスタンス名:              rtc_iname
+     * - ポート名:                       port_name
+     * - インターフェース極性:           if_polarity
+     * - インターフェース型名:           if_tname
+     * - インターフェースインスタンス名: if_iname
      *
-     * ���� Consumer Interface ��ɽ�����󥿡��ե���������Ҥϰʲ��Τ褦
-     * ��ɽ����롣
+     * この Consumer Interface を表すインターフェース指定子は以下のよう
+     * に表される。
      *
      * <rtc_iname>.port.<port_name>.required.<if_tname>.<if_iname>
      *
-     * ���δؿ��ϡ��ޤ����� ConnectorProfile::properties �˾嵭���󥿡�
-     * �ե���������Ҥ򥭡��Ȥ��Ƴ�Ǽ����Ƥ��� Provider Interface ����
-     * �Ҥ�õ���Ф�������ˡ����� Provider Interface ����Ҥ򥭡��Ȥ���
-     * ��Ǽ����Ƥ��� Provider Interface �λ��Ȥ�ɽ�� IOR ʸ��������
-     * ����Consumer Interface �˥��åȤ��롣
+     * この関数は、まず引数 ConnectorProfile::properties に上記インター
+     * フェース指定子をキーとして格納されている Provider Interface 指定
+     * 子を探し出す。さらに、その Provider Interface 指定子をキーとして
+     * 格納されている Provider Interface の参照を表す IOR 文字列を取得
+     * し、Consumer Interface にセットする。
      *
-     * �������ˡ�Provider �� prov(n), ���λ��Ȥ�IOR(n) ����� Consumer
-     * ��cons(n) �Τ褦�˵��Ҥ�������餹�٤ƤΥ��󥿡��ե������η���Ʊ
-     * ��Ǥ��ꡢConnectorProfile �˰ʲ����ͤ����ꤵ��Ƥ���Ȥ��롣
+     * 今、仮に、Provider を prov(n), その参照をIOR(n) さらに Consumer
+     * をcons(n) のように記述し、これらすべてのインターフェースの型が同
+     * 一であり、ConnectorProfile に以下の値が設定されているとする。
      *
      * <pre>
      * ConnectorProfile::properties =
@@ -906,7 +906,7 @@ namespace RTC
      * }
      * </pre>
      *
-     * ���ΤȤ���cons(0..2) �ˤϤ��줾�졢���Ȥ��ʲ��Τ褦�˥��åȤ���롣
+     * このとき、cons(0..2) にはそれぞれ、参照が以下のようにセットされる。
      *
      * <pre>
      *   cons0 = IOR2
@@ -914,11 +914,11 @@ namespace RTC
      *   cons2 = IOR0
      * </pre>
      *
-     * �ʤ�����С������Ȥθߴ����Τ��ᡢ
-     * ConnectorProfile::properties �� Consumer Interface �򥭡��Ȥ���
-     * �ͤ����åȤ���Ƥ��ʤ����Ǥ⡢���Υ롼�뤬Ŭ�Ѥ���롣
+     * なお、旧バージョンとの互換性のため、
+     * ConnectorProfile::properties に Consumer Interface をキーとした
+     * 値がセットされていない場合でも、次のルールが適用される。
      *
-     * �������� Consumer Interface ��
+     * 今、仮に Consumer Interface が
      *
      * <pre>
      *  PortInterfaceProfile
@@ -929,7 +929,7 @@ namespace RTC
      *  }
      * </pre>
      *
-     * �Ȥ�����Ͽ����Ƥ���С�¾�� Port ��
+     * として登録されていれば、他の Port の
      *
      * <pre>
      *  PortInterfaceProfile
@@ -940,18 +940,18 @@ namespace RTC
      *  }
      * </pre> 
      *
-     * �Ȥ�����Ͽ����Ƥ��� Serivce Provider �Υ��֥������Ȼ��Ȥ�õ����
-     * Consumer �˥��åȤ��롣�ºݤˤϡ�ConnectorProfile::properties ��
+     * として登録されている Serivce Provider のオブジェクト参照を探し、
+     * Consumer にセットする。実際には、ConnectorProfile::properties に
      *
      * <pre>
      * NameValue = { "port.Manipulator.PA10_0": <Object reference> }
      * </pre>
      *
-     * �Ȥ�����Ͽ����Ƥ��� NameValue ��õ�������Υ��֥������Ȼ��Ȥ�
-     * Consumer �˥��åȤ��롣
+     * として登録されている NameValue を探し、そのオブジェクト参照を
+     * Consumer にセットする。
      *
-     * @param connector_profile ���ͥ����ץ��ե�����
-     * @return ReturnCode_t ���Υ꥿���󥳡���
+     * @param connector_profile コネクタプロファイル
+     * @return ReturnCode_t 型のリターンコード
      *
      * @else
      *
@@ -999,12 +999,12 @@ namespace RTC
     /*!
      * @if jp
      *
-     * @brief Interface �ؤ���³��������
+     * @brief Interface への接続を解除する
      *
-     * Ϳ����줿 ConnectorProfile �˴�Ϣ���� Consumer �˥��åȤ��줿
-     * ���٤Ƥ� Object ���������³�������롣
+     * 与えられた ConnectorProfile に関連する Consumer にセットされた
+     * すべての Object を解放し接続を解除する。
      *
-     * @param connector_profile ���ͥ����ץ��ե�����
+     * @param connector_profile コネクタプロファイル
      *
      * @else
      *
@@ -1026,9 +1026,9 @@ namespace RTC
     /*!
      * @if jp
      *
-     * @brief Port �����ƤΥ��󥿡��ե������� activates ����
+     * @brief Port の全てのインターフェースを activates する
      *
-     * Port ����Ͽ����Ƥ������ƤΥ��󥿡��ե������� activate ���롣
+     * Port に登録されている全てのインターフェースを activate する。
      *
      * @else
      *
@@ -1044,9 +1044,9 @@ namespace RTC
     /*!
      * @if jp
      *
-     * @brief ���Ƥ� Port �Υ��󥿡��ե������� deactivates ����
+     * @brief 全ての Port のインターフェースを deactivates する
      *
-     * Port ����Ͽ����Ƥ������ƤΥ��󥿡��ե������� deactivate ���롣
+     * Port に登録されている全てのインターフェースを deactivate する。
      *
      * @else
      *
@@ -1062,7 +1062,7 @@ namespace RTC
   protected:
     /*!
      * @if jp
-     * @brief �ץ��ѥƥ�
+     * @brief プロパティ
      * @else
      * @brief Properties
      * @endif
@@ -1073,17 +1073,17 @@ namespace RTC
     class CorbaConsumerHolder;
     /*!
      * @if jp
-     * @brief Consumer �˹��פ��� Provider �� NVList ���椫�鸫�Ĥ���
+     * @brief Consumer に合致する Provider を NVList の中から見つける
      *
-     * NVList �椫�� CorbaConsumerHolder ���ݻ�����Ƥ��� Consumer �˹�
-     * �פ��륭������� Provider �򸫤Ĥ���IOR ����Ф��ʥ������󥰤���
-     * Consumer �˥��åȤ��롣�б����륭����¸�ߤ��ʤ���IOR �����Ĥ���
-     * �ʤ����ʥ������󥰤˼��Ԥ�����硢false ���֤���
+     * NVList 中から CorbaConsumerHolder に保持されている Consumer に合
+     * 致するキーを持つ Provider を見つけ、IOR を抽出しナローイングして
+     * Consumer にセットする。対応するキーが存在しない、IOR が見つから
+     * ない、ナローイングに失敗した場合、false を返す。
      *
-     * @param nv Provider ���ޤޤ�Ƥ��� ConnectorProfile::properties �� NVList
-     * @param cons Provider ���б����� Consumer �Υۥ��
+     * @param nv Provider が含まれている ConnectorProfile::properties の NVList
+     * @param cons Provider と対応する Consumer のホルダ
      * 
-     * @retrun bool Consumer ���б����� Provider �����Ĥ���ʤ���� false
+     * @retrun bool Consumer に対応する Provider が見つからない場合 false
      *
      * @else
      * @brief Find out a provider corresponding to the consumer from NVList
@@ -1106,19 +1106,19 @@ namespace RTC
 
     /*!
      * @if jp
-     * @brief Consumer �˹��פ��� Provider �� NVList ���椫�鸫�Ĥ���
+     * @brief Consumer に合致する Provider を NVList の中から見つける
      *
-     * ���δؿ��ϡ��Ť��С������θߴ����Τ���δؿ��Ǥ��롣
+     * この関数は、古いバージョンの互換性のための関数である。
      *
-     * NVList �椫�� CorbaConsumerHolder ���ݻ�����Ƥ��� Consumer �˹�
-     * �פ��륭������� Provider �򸫤Ĥ��롣�б����륭����¸�ߤ��ʤ���
-     * IOR �����Ĥ���ʤ���硢false ���֤���
+     * NVList 中から CorbaConsumerHolder に保持されている Consumer に合
+     * 致するキーを持つ Provider を見つける。対応するキーが存在しない、
+     * IOR が見つからない場合、false を返す。
      *  
-     * @param nv Provider ���ޤޤ�Ƥ��� ConnectorProfile::properties �� NVList
-     * @param cons Provider ���б����� Consumer �Υۥ��
-     * @param iorstr ���Ĥ��ä�IORʸ������Ǽ�����ѿ�
+     * @param nv Provider が含まれている ConnectorProfile::properties の NVList
+     * @param cons Provider と対応する Consumer のホルダ
+     * @param iorstr 見つかったIOR文字列を格納する変数
      * 
-     * @retrun bool Consumer ���б����� Provider �����Ĥ���ʤ���� false
+     * @retrun bool Consumer に対応する Provider が見つからない場合 false
      *
      * @else
      * @brief Find out a provider corresponding to the consumer from NVList
@@ -1143,16 +1143,16 @@ namespace RTC
 
     /*!
      * @if jp
-     * @brief Consumer �� IOR �򥻥åȤ���
+     * @brief Consumer に IOR をセットする
      *
-     * IOR ��ʥ������󥰤���Consumer �˥��åȤ��롣�ʥ������󥰤˼���
-     * ������硢false ���֤�����������IORʸ���󤬡�null�ޤ���nil�ξ�硢
-     * ���֥������Ȥ˲��⥻�åȤ����� true ���֤���
+     * IOR をナローイングしてConsumer にセットする。ナローイングに失敗
+     * した場合、false を返す。ただし、IOR文字列が、nullまたはnilの場合、
+     * オブジェクトに何もセットせずに true を返す。
      *
-     * @param ior ���åȤ��� IOR ʸ����
-     * @param cons Consumer �Υۥ��
+     * @param ior セットする IOR 文字列
+     * @param cons Consumer のホルダ
      * 
-     * @retrun bool Consumer �ؤΥʥ������󥰤˼��Ԥ������ false
+     * @retrun bool Consumer へのナローイングに失敗した場合 false
      *
      * @else
      * @brief Setting IOR to Consumer
@@ -1172,15 +1172,15 @@ namespace RTC
 
     /*!
      * @if jp
-     * @brief Consumer �Υ��֥������Ȥ��꡼������
+     * @brief Consumer のオブジェクトをリリースする
      *
-     * Consumer �˥��åȤ��줿���Ȥ��꡼�����롣Consumer��IOR��Ϳ����
-     * �줿IORʸ����Ȱۤʤ��硢false���֤���
+     * Consumer にセットされた参照をリリースする。ConsumerのIORが与えら
+     * れたIOR文字列と異なる場合、falseを返す。
      *
-     * @param ior ���åȤ��� IOR ʸ����
-     * @param cons Consumer �Υۥ��
+     * @param ior セットする IOR 文字列
+     * @param cons Consumer のホルダ
      * 
-     * @retrun Consumer��IOR��Ϳ����줿IORʸ����Ȱۤʤ��硢false���֤���
+     * @retrun ConsumerのIORが与えられたIOR文字列と異なる場合、falseを返す。
      *
      * @else
      * @brief Releasing Consumer Object
@@ -1202,9 +1202,9 @@ namespace RTC
     /*!
      * @if jp
      * @class CorbaProviderHolder
-     * @brief Provider �ξ�����Ǽ���빽¤��
+     * @brief Provider の情報を格納する構造体
      *
-     * CORBA Provider �Υۥ�����饹
+     * CORBA Provider のホルダクラス
      *
      * @else
      * @class CorbaProviderHolder
@@ -1300,7 +1300,7 @@ namespace RTC
 
     /*!
      * @if jp
-     * @brief Provider �ξ�����Ǽ���� vector
+     * @brief Provider の情報を格納する vector
      * @else
      * @brief vector to stored Providers' information
      * @endif
@@ -1310,7 +1310,7 @@ namespace RTC
 
     /*!
      * @if jp
-     * @brief Consumer �ξ�����Ǽ���빽¤��
+     * @brief Consumer の情報を格納する構造体
      * @else
      * @brief The structure to be stored Consumer information.
      * @endif
@@ -1363,7 +1363,7 @@ namespace RTC
     // functors
     /*!
      * @if jp
-     * @brief Consumer �Υ��֥������Ȥ�������뤿��� Functor
+     * @brief Consumer のオブジェクトを解放するための Functor
      * @else
      * @brief Functor to release Consumer's object
      * @endif

@@ -1,4 +1,4 @@
-// -*- C++ -*-
+ï»¿// -*- C++ -*-
 /*!
  * @file LocalServiceAdmin.h
  * @brief SDO service administration class
@@ -39,7 +39,7 @@ namespace RTM
    * @if jp
    *
    * @class LocalService administration class
-   * @brief LocalService ´ÉÍı¥¯¥é¥¹
+   * @brief LocalService ç®¡ç†ã‚¯ãƒ©ã‚¹
    *
    * TODO: Documentation
    *
@@ -64,9 +64,9 @@ namespace RTM
     /*!
      * @if jp
      *
-     * @brief ¥³¥ó¥¹¥È¥é¥¯¥¿
+     * @brief ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
      * 
-     * ¥³¥ó¥¹¥È¥é¥¯¥¿
+     * ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
      *
      * @else
      *
@@ -81,9 +81,9 @@ namespace RTM
     /*!
      * @if jp
      *
-     * @brief ²¾ÁÛ¥Ç¥¹¥È¥é¥¯¥¿
+     * @brief ä»®æƒ³ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
      * 
-     * ²¾ÁÛ¥Ç¥¹¥È¥é¥¯¥¿¡£
+     * ä»®æƒ³ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ã€‚
      * 
      * @else
      *
@@ -98,7 +98,7 @@ namespace RTM
     /*!
      * @if jp
      *
-     * @brief LocaServiceAdmin¤Î½é´ü²½
+     * @brief LocaServiceAdminã®åˆæœŸåŒ–
      *
      * TODO: Documentation
      *
@@ -115,7 +115,7 @@ namespace RTM
     /*!
      * @if jp
      *
-     * @brief LocalserviceAdmin ¤Î½ªÎ»½èÍı
+     * @brief LocalserviceAdmin ã®çµ‚äº†å‡¦ç†
      *
      * TODO: Documentation
      *
@@ -132,7 +132,7 @@ namespace RTM
     /*!
      * @if jp
      *
-     * @brief LocalServiceProfileList¤Î¼èÆÀ
+     * @brief LocalServiceProfileListã®å–å¾—
      * 
      * TODO: Documentation
      *
@@ -149,14 +149,14 @@ namespace RTM
     /*!
      * @if jp
      *
-     * @brief LocalServiceProfile ¤ò¼èÆÀ¤¹¤ë
+     * @brief LocalServiceProfile ã‚’å–å¾—ã™ã‚‹
      *
-     * id ¤Ç»ØÄê¤µ¤ì¤¿ID¤ò»ı¤ÄLocalService ¤Î
-     * LocalServiceProfile ¤ò¼èÆÀ¤¹¤ë¡£id ¤¬ NULL ¥İ¥¤¥ó¥¿¤Î¾ì¹ç¡¢»ØÄê¤µ¤ì¤¿
-     * id ¤Ë³ºÅö¤¹¤ëServiceProfile ¤¬Â¸ºß¤·¤Ê¤¤¾ì¹ç¡¢false¤òÊÖ¤¹¡£
+     * id ã§æŒ‡å®šã•ã‚ŒãŸIDã‚’æŒã¤LocalService ã®
+     * LocalServiceProfile ã‚’å–å¾—ã™ã‚‹ã€‚id ãŒ NULL ãƒã‚¤ãƒ³ã‚¿ã®å ´åˆã€æŒ‡å®šã•ã‚ŒãŸ
+     * id ã«è©²å½“ã™ã‚‹ServiceProfile ãŒå­˜åœ¨ã—ãªã„å ´åˆã€falseã‚’è¿”ã™ã€‚
      *
-     * @param id LocalService ¤Î IFR ID
-     * @return »ØÄê¤µ¤ì¤¿ id ¤ò»ı¤Ä LocalServiceProfile
+     * @param id LocalService ã® IFR ID
+     * @return æŒ‡å®šã•ã‚ŒãŸ id ã‚’æŒã¤ LocalServiceProfile
      * 
      * @else
      *
@@ -178,14 +178,14 @@ namespace RTM
     /*!
      * @if jp
      *
-     * @brief LocalService ¤Î Service ¤ò¼èÆÀ¤¹¤ë
+     * @brief LocalService ã® Service ã‚’å–å¾—ã™ã‚‹
      *
-     * id ¤Ç»ØÄê¤µ¤ì¤¿ID¤ò»ı¤ÄLocalService ¤Î¥İ¥¤¥ó¥¿¤ò¼èÆÀ¤¹¤ë¡£id ¤¬
-     * NULL ¥İ¥¤¥ó¥¿¤Î¾ì¹ç¡¢»ØÄê¤µ¤ì¤¿ id ¤Ë³ºÅö¤¹¤ëServiceProfile ¤¬Â¸
-     * ºß¤·¤Ê¤¤¾ì¹ç¡¢NULL¤òÊÖ¤¹¡£
+     * id ã§æŒ‡å®šã•ã‚ŒãŸIDã‚’æŒã¤LocalService ã®ãƒã‚¤ãƒ³ã‚¿ã‚’å–å¾—ã™ã‚‹ã€‚id ãŒ
+     * NULL ãƒã‚¤ãƒ³ã‚¿ã®å ´åˆã€æŒ‡å®šã•ã‚ŒãŸ id ã«è©²å½“ã™ã‚‹ServiceProfile ãŒå­˜
+     * åœ¨ã—ãªã„å ´åˆã€NULLã‚’è¿”ã™ã€‚
      *
-     * @param id LocalService ¤Î ID
-     * @return »ØÄê¤µ¤ì¤¿ id ¤ò»ı¤Ä LocalService ¤Î¥İ¥¤¥ó¥¿
+     * @param id LocalService ã® ID
+     * @return æŒ‡å®šã•ã‚ŒãŸ id ã‚’æŒã¤ LocalService ã®ãƒã‚¤ãƒ³ã‚¿
      * 
      * @else
      *
@@ -205,7 +205,7 @@ namespace RTM
     
     /*!
      * @if jp
-     * @brief SDO service provider ¤ò¥»¥Ã¥È¤¹¤ë
+     * @brief SDO service provider ã‚’ã‚»ãƒƒãƒˆã™ã‚‹
      *
      * TODO: Documentation
      * 
@@ -220,7 +220,7 @@ namespace RTM
     
     /*!
      * @if jp
-     * @brief LocalService ¤òºï½ü¤¹¤ë
+     * @brief LocalService ã‚’å‰Šé™¤ã™ã‚‹
      *
      * TODO: Documentation
      *
@@ -236,7 +236,7 @@ namespace RTM
   private:
     /*!
      * @if jp
-     * @brief »ØÄê¤µ¤ì¤¿ID¤¬Í­¸ú¤«¤É¤¦¤«¥Á¥§¥Ã¥¯¤¹¤ë
+     * @brief æŒ‡å®šã•ã‚ŒãŸIDãŒæœ‰åŠ¹ã‹ã©ã†ã‹ãƒã‚§ãƒƒã‚¯ã™ã‚‹
      * @else
      * @brief Check if specified ID is enabled
      * @endif
@@ -245,7 +245,7 @@ namespace RTM
     
     /*!
      * @if jp
-     * @brief »ØÄê¤µ¤ì¤¿ID¤¬¤¹¤Ç¤ËÂ¸ºß¤¹¤ë¤«¤É¤¦¤«¥Á¥§¥Ã¥¯¤¹¤ë
+     * @brief æŒ‡å®šã•ã‚ŒãŸIDãŒã™ã§ã«å­˜åœ¨ã™ã‚‹ã‹ã©ã†ã‹ãƒã‚§ãƒƒã‚¯ã™ã‚‹
      * @else
      * @brief Check if specified ID is existing
      * @endif
@@ -254,7 +254,7 @@ namespace RTM
     
     /*!
      * @if jp
-     * @brief Lock ÉÕ¤­ SDO ServiceProfileList
+     * @brief Lock ä»˜ã SDO ServiceProfileList
      * @else
      * @brief SDO ServiceProfileList with mutex lock
      * @endif

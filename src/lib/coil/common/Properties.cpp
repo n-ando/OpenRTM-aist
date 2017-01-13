@@ -1,4 +1,4 @@
-// -*- C++ -*-
+ï»¿// -*- C++ -*-
 /*!
  * @file Properties.cpp
  * @brief Property list class (derived from Java Properties)
@@ -29,7 +29,7 @@ namespace coil
 {
   /*!
    * @if jp
-   * @brief ¥³¥ó¥¹¥È¥é¥¯¥¿(root¥Î¡¼¥É¤Î¤ßºîÀ®)
+   * @brief ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿(rootãƒãƒ¼ãƒ‰ã®ã¿ä½œæˆ)
    * @else
    * @brief Constructor(Create only root node)
    * @endif
@@ -42,7 +42,7 @@ namespace coil
   
   /*!
    * @if jp
-   * @brief ¥³¥ó¥¹¥È¥é¥¯¥¿(map¤Ç¥Ç¥Õ¥©¥ë¥ÈÃÍ¤òÍ¿¤¨¤ë)
+   * @brief ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿(mapã§ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆå€¤ã‚’ä¸ãˆã‚‹)
    * @else
    * @brief Constructor(Give the default value with map)
    * @endif
@@ -63,7 +63,7 @@ namespace coil
   
   /*!
    * @if jp
-   * @brief ¥³¥ó¥¹¥È¥é¥¯¥¿(char*[] ¤Ç¥Ç¥Õ¥©¥ë¥ÈÃÍ¤òÍ¿¤¨¤ë)
+   * @brief ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿(char*[] ã§ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆå€¤ã‚’ä¸ãˆã‚‹)
    * @else
    * @brief Constructor(Give the default value with char*[])
    * @endif
@@ -77,7 +77,7 @@ namespace coil
   
   /*!
    * @if jp
-   * @brief ¥³¥Ô¡¼¥³¥ó¥¹¥È¥é¥¯¥¿
+   * @brief ã‚³ãƒ”ãƒ¼ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
    * @else
    * @brief Copy Constructor
    * @endif
@@ -101,7 +101,7 @@ namespace coil
   
   /*!
    * @if jp
-   * @brief ÂåÆş±é»»»Ò
+   * @brief ä»£å…¥æ¼”ç®—å­
    * @else
    * @brief Assignment operator
    * @endif
@@ -130,7 +130,7 @@ namespace coil
   
   /*!
    * @if jp
-   * @brief ¥Ç¥¹¥È¥é¥¯¥¿
+   * @brief ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
    * @else
    * @brief Destructor
    * @endif
@@ -152,7 +152,7 @@ namespace coil
   //============================================================
   /*!
    * @if jp
-   * @brief »ØÄê¤µ¤ì¤¿¥­¡¼¤ò»ı¤Ä¥×¥í¥Ñ¥Æ¥£¤ò¡¢¥×¥í¥Ñ¥Æ¥£¥ê¥¹¥È¤«¤éÃµ¤¹
+   * @brief æŒ‡å®šã•ã‚ŒãŸã‚­ãƒ¼ã‚’æŒã¤ãƒ—ãƒ­ãƒ‘ãƒ†ã‚£ã‚’ã€ãƒ—ãƒ­ãƒ‘ãƒ†ã‚£ãƒªã‚¹ãƒˆã‹ã‚‰æ¢ã™
    * @else
    * @brief Search for the property with the specified key in the property list.
    * @endif
@@ -171,7 +171,7 @@ namespace coil
   
   /*!
    * @if jp
-   * @brief »ØÄê¤µ¤ì¤¿¥­¡¼¤ò»ı¤Ä¥×¥í¥Ñ¥Æ¥£¤ò¡¢¥×¥í¥Ñ¥Æ¥£¥ê¥¹¥È¤«¤éÃµ¤¹
+   * @brief æŒ‡å®šã•ã‚ŒãŸã‚­ãƒ¼ã‚’æŒã¤ãƒ—ãƒ­ãƒ‘ãƒ†ã‚£ã‚’ã€ãƒ—ãƒ­ãƒ‘ãƒ†ã‚£ãƒªã‚¹ãƒˆã‹ã‚‰æ¢ã™
    * @else
    * @brief Search for the property with the specified key in the property list
    * @endif
@@ -186,7 +186,7 @@ namespace coil
   
   /*!
    * @if jp
-   * @brief »ØÄê¤µ¤ì¤¿¥­¡¼¤ò»ı¤Ä¥×¥í¥Ñ¥Æ¥£¤ò¡¢¥×¥í¥Ñ¥Æ¥£¥ê¥¹¥È¤«¤éÃµ¤¹
+   * @brief æŒ‡å®šã•ã‚ŒãŸã‚­ãƒ¼ã‚’æŒã¤ãƒ—ãƒ­ãƒ‘ãƒ†ã‚£ã‚’ã€ãƒ—ãƒ­ãƒ‘ãƒ†ã‚£ãƒªã‚¹ãƒˆã‹ã‚‰æ¢ã™
    * @else
    * @brief Search for the property with the specified key in the property list
    * @endif
@@ -198,7 +198,7 @@ namespace coil
   
   /*!
    * @if jp
-   * @brief »ØÄê¤µ¤ì¤¿¥­¡¼¤ò»ı¤Ä¥×¥í¥Ñ¥Æ¥£¤ò¡¢¥×¥í¥Ñ¥Æ¥£¥ê¥¹¥È¤«¤éÃµ¤¹
+   * @brief æŒ‡å®šã•ã‚ŒãŸã‚­ãƒ¼ã‚’æŒã¤ãƒ—ãƒ­ãƒ‘ãƒ†ã‚£ã‚’ã€ãƒ—ãƒ­ãƒ‘ãƒ†ã‚£ãƒªã‚¹ãƒˆã‹ã‚‰æ¢ã™
    * @else
    * @brief Search for the property with the specified key in the property list
    * @endif
@@ -213,7 +213,7 @@ namespace coil
   
   /*!
    * @if jp
-   * @brief »ØÄê¤µ¤ì¤¿¥­¡¼¤ËÂĞ¤·¤Æ¥Ç¥Õ¥©¥ë¥ÈÃÍ¤ò¼èÆÀ¤¹¤ë
+   * @brief æŒ‡å®šã•ã‚ŒãŸã‚­ãƒ¼ã«å¯¾ã—ã¦ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆå€¤ã‚’å–å¾—ã™ã‚‹
    * @else
    * @brief Get the default value with specified key
    * @endif
@@ -232,7 +232,7 @@ namespace coil
   
   /*!
    * @if jp
-   * @brief Properties ¤Ë value ¤ò key ¤Ë¤Ä¤¤¤ÆÅĞÏ¿¤¹¤ë
+   * @brief Properties ã« value ã‚’ key ã«ã¤ã„ã¦ç™»éŒ²ã™ã‚‹
    * @else
    * @brief Set the value associated with key in the property list
    * @endif
@@ -262,7 +262,7 @@ namespace coil
   
   /*!
    * @if jp
-   * @brief ¥Ç¥Õ¥©¥ë¥ÈÃÍ¤òÅĞÏ¿¤¹¤ë
+   * @brief ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆå€¤ã‚’ç™»éŒ²ã™ã‚‹
    * @else
    * @brief Set the default value associated with key in the property list
    * @endif
@@ -291,7 +291,7 @@ namespace coil
   
   /*!
    * @if jp
-   * @brief Properties ¤Ë¥Ç¥Õ¥©¥ë¥ÈÃÍ¤ò¤Ş¤È¤á¤ÆÅĞÏ¿¤¹¤ë
+   * @brief Properties ã«ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆå€¤ã‚’ã¾ã¨ã‚ã¦ç™»éŒ²ã™ã‚‹
    * @else
    * @brief Set a default value together in the property list
    * @endif
@@ -318,7 +318,7 @@ namespace coil
   //============================================================
   /*!
    * @if jp
-   * @brief »ØÄê¤µ¤ì¤¿½ĞÎÏ¥¹¥È¥ê¡¼¥à¤Ë¡¢¥×¥í¥Ñ¥Æ¥£¥ê¥¹¥È¤ò½ĞÎÏ¤¹¤ë
+   * @brief æŒ‡å®šã•ã‚ŒãŸå‡ºåŠ›ã‚¹ãƒˆãƒªãƒ¼ãƒ ã«ã€ãƒ—ãƒ­ãƒ‘ãƒ†ã‚£ãƒªã‚¹ãƒˆã‚’å‡ºåŠ›ã™ã‚‹
    * @else
    * @brief Print this property list out to the specified output stream
    * @endif
@@ -330,7 +330,7 @@ namespace coil
   
   /*!
    * @if jp
-   * @brief ÆşÎÏ¥¹¥È¥ê¡¼¥à¤«¤é¥­¡¼¤ÈÍ×ÁÇ¤¬ÂĞ¤Ë¤Ê¤Ã¤¿¥×¥í¥Ñ¥Æ¥£¥ê¥¹¥È¤òÆÉ¤ß¹ş¤à
+   * @brief å…¥åŠ›ã‚¹ãƒˆãƒªãƒ¼ãƒ ã‹ã‚‰ã‚­ãƒ¼ã¨è¦ç´ ãŒå¯¾ã«ãªã£ãŸãƒ—ãƒ­ãƒ‘ãƒ†ã‚£ãƒªã‚¹ãƒˆã‚’èª­ã¿è¾¼ã‚€
    * @else
    * @brief Load property list that consists of key:value from input stream
    * @endif
@@ -378,7 +378,7 @@ namespace coil
   
   /*!
    * @if jp
-   * @brief ¥×¥í¥Ñ¥Æ¥£¥ê¥¹¥È¤ò»ØÄê¤µ¤ì¤¿¥¹¥È¥ê¡¼¥à¤ËÊİÂ¸¤¹¤ë
+   * @brief ãƒ—ãƒ­ãƒ‘ãƒ†ã‚£ãƒªã‚¹ãƒˆã‚’æŒ‡å®šã•ã‚ŒãŸã‚¹ãƒˆãƒªãƒ¼ãƒ ã«ä¿å­˜ã™ã‚‹
    * @else
    * @brief Save the property list to the specified stream
    * @endif
@@ -391,7 +391,7 @@ namespace coil
   
   /*!
    * @if jp
-   * @brief ¥×¥í¥Ñ¥Æ¥£¥ê¥¹¥È¤ò½ĞÎÏ¥¹¥È¥ê¡¼¥à¤ØÊİÂ¸¤¹¤ë
+   * @brief ãƒ—ãƒ­ãƒ‘ãƒ†ã‚£ãƒªã‚¹ãƒˆã‚’å‡ºåŠ›ã‚¹ãƒˆãƒªãƒ¼ãƒ ã¸ä¿å­˜ã™ã‚‹
    * @else
    * @brief Store the property list to the output stream
    * @endif
@@ -407,7 +407,7 @@ namespace coil
   //============================================================
   /*!
    * @if jp
-   * @brief ¥×¥í¥Ñ¥Æ¥£¤Î¥­¡¼¤Î¥ê¥¹¥È¤ò vector ¤ÇÊÖ¤¹
+   * @brief ãƒ—ãƒ­ãƒ‘ãƒ†ã‚£ã®ã‚­ãƒ¼ã®ãƒªã‚¹ãƒˆã‚’ vector ã§è¿”ã™
    * @else
    * @brief Return an vector of all the keys in this property
    * @endif
@@ -424,7 +424,7 @@ namespace coil
   
   /*!
    * @if jp
-   * @brief ¥×¥í¥Ñ¥Æ¥£¤Î¿ô¤ò¼èÆÀ¤¹¤ë
+   * @brief ãƒ—ãƒ­ãƒ‘ãƒ†ã‚£ã®æ•°ã‚’å–å¾—ã™ã‚‹
    * @else
    * @brief Get the number of properties
    * @endif
@@ -436,7 +436,7 @@ namespace coil
   
   /*!
    * @if jp
-   * @brief ¥Î¡¼¥É¤ò¸¡º÷¤¹¤ë
+   * @brief ãƒãƒ¼ãƒ‰ã‚’æ¤œç´¢ã™ã‚‹
    * @else
    * @brief Find node of properties
    * @endif
@@ -452,7 +452,7 @@ namespace coil
   
   /*!
    * @if jp
-   * @brief ¥Î¡¼¥É¤ò¼èÆÀ¤¹¤ë
+   * @brief ãƒãƒ¼ãƒ‰ã‚’å–å¾—ã™ã‚‹
    * @else
    * @brief Get node of properties
    * @endif
@@ -471,7 +471,7 @@ namespace coil
 
   /*!
    * @if jp
-   * @brief ¿·µ¬¥Î¡¼¥É¤òÀ¸À®¤¹¤ë
+   * @brief æ–°è¦ãƒãƒ¼ãƒ‰ã‚’ç”Ÿæˆã™ã‚‹
    * @else
    * @brief Create newly node of Properties
    * @endif
@@ -490,7 +490,7 @@ namespace coil
 
   /*!
    * @if jp
-   * @brief ¥Î¡¼¥É¤òºï½ü¤¹¤ë
+   * @brief ãƒãƒ¼ãƒ‰ã‚’å‰Šé™¤ã™ã‚‹
    * @else
    * @brief Remove node of properties
    * @endif
@@ -514,7 +514,7 @@ namespace coil
   
   /*!
    * @if jp
-   * @brief »Ò¥Î¡¼¥É¤Ëkey¤¬¤¢¤ë¤«¤É¤¦¤«
+   * @brief å­ãƒãƒ¼ãƒ‰ã«keyãŒã‚ã‚‹ã‹ã©ã†ã‹
    * @else
    * @brief Check whether key exists in the children
    * @endif
@@ -531,7 +531,7 @@ namespace coil
   
   /*!
    * @if jp
-   * @brief »Ò¥Î¡¼¥É¤òÁ´¤Æºï½ü¤¹¤ë
+   * @brief å­ãƒãƒ¼ãƒ‰ã‚’å…¨ã¦å‰Šé™¤ã™ã‚‹
    * @else
    * @brief Clear the children
    * @endif
@@ -547,7 +547,7 @@ namespace coil
   
   /*!
    * @if jp
-   * @brief Property¤ò¥Ş¡¼¥¸¤¹¤ë
+   * @brief Propertyã‚’ãƒãƒ¼ã‚¸ã™ã‚‹
    * @else
    * @brief Merge properties
    * @endif
@@ -568,7 +568,7 @@ namespace coil
   //------------------------------------------------------------
   /*!
    * @if jp
-   * @brief Ê¸»úÎó¤ò¥­¡¼¤ÈÃÍ¤Î¥Ú¥¢¤ËÊ¬³ä¤¹¤ë
+   * @brief æ–‡å­—åˆ—ã‚’ã‚­ãƒ¼ã¨å€¤ã®ãƒšã‚¢ã«åˆ†å‰²ã™ã‚‹
    * @else
    * @brief Split the string into a pair of the key and the value.
    * @endif
@@ -618,7 +618,7 @@ namespace coil
   
   /*!
    * @if jp
-   * @brief Ê¸»úÎó¤òÊ¬³ä¤¹¤ë
+   * @brief æ–‡å­—åˆ—ã‚’åˆ†å‰²ã™ã‚‹
    * @else
    * @brief Split the string
    * @endif
@@ -647,7 +647,7 @@ namespace coil
   
   /*!
    * @if jp
-   * @brief ¥×¥í¥Ñ¥Æ¥£¤ò¼èÆÀ¤¹¤ë
+   * @brief ãƒ—ãƒ­ãƒ‘ãƒ†ã‚£ã‚’å–å¾—ã™ã‚‹
    * @else
    * @brief Get properties
    * @endif
@@ -677,7 +677,7 @@ namespace coil
   
   /*!
    * @if jp
-   * @brief ¥×¥í¥Ñ¥Æ¥£¤ÎÌ¾¾Î¥ê¥¹¥È¤ò¼èÆÀ¤¹¤ë
+   * @brief ãƒ—ãƒ­ãƒ‘ãƒ†ã‚£ã®åç§°ãƒªã‚¹ãƒˆã‚’å–å¾—ã™ã‚‹
    * @else
    * @brief Get a property name list
    * @endif
@@ -706,7 +706,7 @@ namespace coil
   
   /*!
    * @if jp
-   * @brief ¥×¥í¥Ñ¥Æ¥£¤ÎÌ¾¾Î¥ê¥¹¥È¤òÊİÂ¸¤¹¤ë
+   * @brief ãƒ—ãƒ­ãƒ‘ãƒ†ã‚£ã®åç§°ãƒªã‚¹ãƒˆã‚’ä¿å­˜ã™ã‚‹
    * @else
    * @brief Store the property name list
    * @endif
@@ -744,7 +744,7 @@ namespace coil
   
   /*!
    * @if jp
-   * @brief ¥×¥í¥Ñ¥Æ¥£¤ÎÆâÍÆ¤òÊİÂ¸¤¹¤ë
+   * @brief ãƒ—ãƒ­ãƒ‘ãƒ†ã‚£ã®å†…å®¹ã‚’ä¿å­˜ã™ã‚‹
    * @else
    * @brief Save property's contents
    * @endif
@@ -775,7 +775,7 @@ namespace coil
   
   /*!
    * @if jp
-   * @brief ¥¤¥ó¥Ç¥ó¥È¤òÀ¸À®¤¹¤ë
+   * @brief ã‚¤ãƒ³ãƒ‡ãƒ³ãƒˆã‚’ç”Ÿæˆã™ã‚‹
    * @else
    * @brief Create indents
    * @endif
@@ -792,7 +792,7 @@ namespace coil
   
   /*!
    * @if jp
-   * @brief ¥¤¥ó¥Ç¥ó¥È¤òÀ¸À®¤¹¤ë
+   * @brief ã‚¤ãƒ³ãƒ‡ãƒ³ãƒˆã‚’ç”Ÿæˆã™ã‚‹
    * @else
    * @brief Create indents
    * @endif
@@ -809,7 +809,7 @@ namespace coil
   
   /*!
    * @if jp
-   * @brief Property¤ò¥¹¥È¥ê¡¼¥à¤Ë½ĞÎÏ¤¹¤ë
+   * @brief Propertyã‚’ã‚¹ãƒˆãƒªãƒ¼ãƒ ã«å‡ºåŠ›ã™ã‚‹
    * @else
    * @brief Output Properties to stream
    * @endif

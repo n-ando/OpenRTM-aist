@@ -1,4 +1,4 @@
-// -*- C++ -*-
+﻿// -*- C++ -*-
 /*!
  * @file RingBuffer.h
  * @brief Defautl Buffer class
@@ -38,7 +38,7 @@
  * @if jp
  * @namespace RTC
  *
- * @brief RT����ݡ��ͥ��
+ * @brief RTコンポーネント
  *
  * @else
  *
@@ -53,16 +53,16 @@ namespace RTC
   /*!
    * @if jp
    * @class RingBuffer
-   * @brief ��󥰥Хåե��������饹
+   * @brief リングバッファ実装クラス
    * 
-   * ���ꤷ��Ĺ���Υ�󥰾��Хåե�����ĥХåե��������饹��
-   * �Хåե����Τ˥ǡ�������Ǽ���줿��硢�ʹߤΥǡ����ϸŤ��ǡ�������
-   * �缡��񤭤���롣
-   * ���äơ��Хåե���ˤ�ľ��ΥХåե�Ĺʬ�Υǡ����Τ��ݻ�����롣
+   * 指定した長さのリング状バッファを持つバッファ実装クラス。
+   * バッファ全体にデータが格納された場合、以降のデータは古いデータから
+   * 順次上書きされる。
+   * 従って、バッファ内には直近のバッファ長分のデータのみ保持される。
    *
-   * ��)���ߤμ����Ǥϡ����ֺǸ�˳�Ǽ�����ǡ����ΤߥХåե������ɤ߽Ф���ǽ
+   * 注)現在の実装では、一番最後に格納したデータのみバッファから読み出し可能
    *
-   * @param DataType �Хåե��˳�Ǽ����ǡ�����
+   * @param DataType バッファに格納するデータ型
    *
    * @since 0.4.0
    *
@@ -95,12 +95,12 @@ namespace RTC
     /*!
      * @if jp
      *
-     * @brief ���󥹥ȥ饯��
+     * @brief コンストラクタ
      * 
-     * ���󥹥ȥ饯��
-     * ���ꤵ�줿�Хåե�Ĺ�ǥХåե����������롣
+     * コンストラクタ
+     * 指定されたバッファ長でバッファを初期化する。
      *
-     * @param length �Хåե�Ĺ
+     * @param length バッファ長
      * 
      * @else
      *
@@ -129,9 +129,9 @@ namespace RTC
     /*!
      * @if jp
      *
-     * @brief ���ۥǥ��ȥ饯��
+     * @brief 仮想デストラクタ
      * 
-     * ���ۥǥ��ȥ饯����
+     * 仮想デストラクタ。
      * 
      * @else
      *
@@ -147,38 +147,38 @@ namespace RTC
     
     /*!
      * @if jp
-     * @brief �Хåե�������
+     * @brief バッファの設定
      *
-     * coil::Properties ��Ϳ������ץ��ѥƥ��ˤ�ꡢ
-     * �Хåե���������������롣
-     * ���ѤǤ��륪�ץ����Ȱ�̣�ϰʲ����̤�
+     * coil::Properties で与えられるプロパティにより、
+     * バッファの設定を初期化する。
+     * 使用できるオプションと意味は以下の通り
      *
      * - buffer.length:
-     *     �Хåե���Ĺ�����������ʳ��ο��ͤ����ꤵ��Ƥ�̵�뤵��롣��
-     *     �Ǥ˥Хåե������Ѿ��֤Ǥ⡢Ĺ���������ꤵ�줿�Τ������٤Ƥ�
-     *     �ݥ��󥿤����������롣
+     *     バッファの長さ。自然数以外の数値が指定されても無視される。す
+     *     でにバッファが使用状態でも、長さが再設定されたのち、すべての
+     *     ポインタが初期化される。
      *
      * - buffer.write.full_policy:
-     *     ��񤭤��뤫�ɤ����Υݥꥷ����
-     *     overwrite (���), do_nothing (���⤷�ʤ�), block (�֥��å�����)
-     *     block ����ꤷ����硢���� timeout �ͤ���ꤹ��С�������ָ�
-     *     �񤭹����Բ�ǽ�Ǥ���Х����ॢ���Ȥ��롣
-     *     �ǥե���Ȥ�  overwrite (���)��
+     *     上書きするかどうかのポリシー。
+     *     overwrite (上書き), do_nothing (何もしない), block (ブロックする)
+     *     block を指定した場合、次の timeout 値を指定すれば、指定時間後
+     *     書き込み不可能であればタイムアウトする。
+     *     デフォルトは  overwrite (上書き)。
      *
      * - buffer.write.timeout:
-     *     �����ॢ���Ȼ��֤� [sec] �ǻ��ꤹ�롣�ǥե���Ȥ� 1.0 [sec]��
-     *     1 sec -> 1.0, 1 ms -> 0.001, �����ॢ���Ȥ��ʤ� -> 0.0
+     *     タイムアウト時間を [sec] で指定する。デフォルトは 1.0 [sec]。
+     *     1 sec -> 1.0, 1 ms -> 0.001, タイムアウトしない -> 0.0
      *
      * - buffer.read.empty_policy:
-     *     �Хåե������ΤȤ����ɤ߽Ф��ݥꥷ����
-     *     readback (�Ǹ������), do_nothing (���⤷�ʤ�), block (�֥��å�����)
-     *     block ����ꤷ����硢���� timeout �ͤ���ꤹ��С�������ָ�
-     *     �ɤ߽Ф��Բ�ǽ�Ǥ���Х����ॢ���Ȥ��롣
-     *     �ǥե���Ȥ� readback (�Ǹ������)��
+     *     バッファが空のときの読み出しポリシー。
+     *     readback (最後の要素), do_nothing (何もしない), block (ブロックする)
+     *     block を指定した場合、次の timeout 値を指定すれば、指定時間後
+     *     読み出し不可能であればタイムアウトする。
+     *     デフォルトは readback (最後の要素)。
      *
      * - buffer.read.timeout:
-     *     �����ॢ���Ȼ��� [sec] �ǻ��ꤹ�롣�ǥե���Ȥ� 1.0 [sec]��
-     *     1sec -> 1.0, 1ms -> 0.001, �����ॢ���Ȥ��ʤ� -> 0.0
+     *     タイムアウト時間 [sec] で指定する。デフォルトは 1.0 [sec]。
+     *     1sec -> 1.0, 1ms -> 0.001, タイムアウトしない -> 0.0
      *
      * @else
      *
@@ -194,11 +194,11 @@ namespace RTC
     /*!
      * @if jp
      *
-     * @brief �Хåե�Ĺ���������
+     * @brief バッファ長を取得する
      * 
-     * �Хåե�Ĺ��������롣
+     * バッファ長を取得する。
      * 
-     * @return �Хåե�Ĺ
+     * @return バッファ長
      * 
      * @else
      *
@@ -220,14 +220,14 @@ namespace RTC
     /*!
      * @if jp
      *
-     * @brief �Хåե���Ĺ���򥻥åȤ���
+     * @brief バッファの長さをセットする
      * 
-     * �Хåե�Ĺ�����ꤹ�롣�����ԲĤʾ���NOT_SUPPORTED���֤롣
-     * ���μ����Ǥ� BUFFER_OK �����֤��ʤ���
+     * バッファ長を設定する。設定不可な場合はNOT_SUPPORTEDが返る。
+     * この実装では BUFFER_OK しか返さない。
      * 
-     * @return BUFFER_OK: ���ｪλ
-     *         NOT_SUPPORTED: �Хåե�Ĺ�ѹ��Բ�
-     *         BUFFER_ERROR: �۾ｪλ
+     * @return BUFFER_OK: 正常終了
+     *         NOT_SUPPORTED: バッファ長変更不可
+     *         BUFFER_ERROR: 異常終了
      * 
      * @else
      *
@@ -250,14 +250,14 @@ namespace RTC
     /*!
      * @if jp
      *
-     * @brief �Хåե��ξ��֤�ꥻ�åȤ���
+     * @brief バッファの状態をリセットする
      * 
-     * �Хåե����ɤ߽Ф��ݥ��󥿤Ƚ񤭹��ߥݥ��󥿤ΰ��֤�ꥻ�åȤ��롣
-     * ���μ����Ǥ� BUFFER_OK �����֤��ʤ���
+     * バッファの読み出しポインタと書き込みポインタの位置をリセットする。
+     * この実装では BUFFER_OK しか返さない。
      * 
-     * @return BUFFER_OK: ���ｪλ
-     *         NOT_SUPPORTED: �ꥻ�å��Բ�ǽ
-     *         BUFFER_ERROR: �۾ｪλ
+     * @return BUFFER_OK: 正常終了
+     *         NOT_SUPPORTED: リセット不可能
+     *         BUFFER_ERROR: 異常終了
      * 
      * @else
      *
@@ -285,12 +285,12 @@ namespace RTC
     /*!
      * @if jp
      *
-     * @brief �Хåե��θ��ߤν�������ǤΥݥ���
+     * @brief バッファの現在の書込み要素のポインタ
      * 
-     * �Хåե��θ��ߤν�������ǤΥݥ��󥿤ޤ��ϡ�n����Υݥ��󥿤��֤�
+     * バッファの現在の書込み要素のポインタまたは、n個先のポインタを返す
      * 
-     * @param  n ����ߥݥ��� + n �ΰ��֤Υݥ��� 
-     * @return ����߰��֤Υݥ���
+     * @param  n 書込みポインタ + n の位置のポインタ 
+     * @return 書込み位置のポインタ
      * 
      * @else
      *
@@ -311,14 +311,14 @@ namespace RTC
     /*!
      * @if jp
      *
-     * @brief ����ߥݥ��󥿤�ʤ��
+     * @brief 書込みポインタを進める
      * 
-     * ���ߤν񤭹��߰��֤Υݥ��󥿤� n �Ŀʤ�롣
-     * �񤭹��߲�ǽ�����ǿ��ʾ�ο��ͤ���ꤷ����硢PRECONDITION_NOT_MET
-     * ���֤���
+     * 現在の書き込み位置のポインタを n 個進める。
+     * 書き込み可能な要素数以上の数値を指定した場合、PRECONDITION_NOT_MET
+     * を返す。
      * 
-     * @param  n ����ߥݥ��� + n �ΰ��֤Υݥ��� 
-     * @return BUFFER_OK:            ���ｪλ
+     * @param  n 書込みポインタ + n の位置のポインタ 
+     * @return BUFFER_OK:            正常終了
      *         PRECONDITION_NOT_MET: n > writable()
      * 
      * @else
@@ -355,15 +355,15 @@ namespace RTC
     /*!
      * @if jp
      *
-     * @brief �Хåե��˥ǡ�����񤭹���
+     * @brief バッファにデータを書き込む
      * 
-     * �Хåե��˥ǡ�����񤭹��ࡣ�񤭹��ߥݥ��󥿤ΰ��֤��ѹ�����ʤ���
-     * ���μ����ǤϾ�� BUFFER_OK ���֤���
+     * バッファにデータを書き込む。書き込みポインタの位置は変更されない。
+     * この実装では常に BUFFER_OK を返す。
      * 
-     * @param value �񤭹����оݥǡ���
+     * @param value 書き込み対象データ
      *
-     * @return BUFFER_OK: ���ｪλ
-     *         BUFFER_ERROR: �۾ｪλ
+     * @return BUFFER_OK: 正常終了
+     *         BUFFER_ERROR: 異常終了
      * 
      * @else
      *
@@ -389,31 +389,31 @@ namespace RTC
     /*!
      * @if jp
      *
-     * @brief �Хåե��˽񤭹���
+     * @brief バッファに書き込む
      * 
-     * ������Ϳ����줿�ǡ�����Хåե��˽񤭹��ࡣ
+     * 引数で与えられたデータをバッファに書き込む。
      *
-     * ��2����(sec)����3����(nsec)�����ꤵ��Ƥ��ʤ���硢�Хåե��ե�
-     * ���ν���ߥ⡼�� (overwrite, do_nothing, block) �� init() ������
-     * ���줿�⡼�ɤ˽�����
+     * 第2引数(sec)、第3引数(nsec)が指定されていない場合、バッファフル
+     * 時の書込みモード (overwrite, do_nothing, block) は init() で設定
+     * されたモードに従う。
      *
-     * ��2����(sec) �˰��������ꤵ�줿���ϡ�init() �����ꤵ�줿�⡼��
-     * �˴ؤ�餺��block �⡼�ɤȤʤꡢ�Хåե����ե���֤Ǥ���л����
-     * �֤ޤ��������ॢ���Ȥ��롣��3����(nsec)�ϻ��ꤵ��ʤ����0�Ȥ���
-     * �����롣�����ॢ�����Ԥ���ˡ��ɤ߽Ф�����å�¦�ǥХåե�����
-     * �ɤ߽Ф��С��֥��å��󥰤ϲ������ǡ������񤭹��ޤ�롣
+     * 第2引数(sec) に引数が指定された場合は、init() で設定されたモード
+     * に関わらず、block モードとなり、バッファがフル状態であれば指定時
+     * 間まち、タイムアウトする。第3引数(nsec)は指定されない場合0として
+     * 扱われる。タイムアウト待ち中に、読み出しスレッド側でバッファから
+     * 読み出せば、ブロッキングは解除されデータが書き込まれる。
      *
-     * �񤭹��߻��˥Хåե�����(empty)���֤ǡ��̤Υ���åɤ�block�⡼��
-     * ���ɤ߽Ф��Ԥ��򤷤Ƥ����硢signal��ȯ�Ԥ����ɤ߽Ф�¦�Υ֥���
-     * ���󥰤��������롣
+     * 書き込み時にバッファが空(empty)状態で、別のスレッドがblockモード
+     * で読み出し待ちをしている場合、signalを発行して読み出し側のブロッ
+     * キングが解除される。
      * 
-     * @param value �񤭹����оݥǡ���
-     * @param sec   �����ॢ���Ȼ��� sec  (default -1: ̵��)
-     * @param nsec  �����ॢ���Ȼ��� nsec (default 0)
-     * @return BUFFER_OK            ���ｪλ
-     *         BUFFER_FULL          �Хåե����ե����
-     *         TIMEOUT              ����ߤ������ॢ���Ȥ���
-     *         PRECONDITION_NOT_MET ����۾�
+     * @param value 書き込み対象データ
+     * @param sec   タイムアウト時間 sec  (default -1: 無効)
+     * @param nsec  タイムアウト時間 nsec (default 0)
+     * @return BUFFER_OK            正常終了
+     *         BUFFER_FULL          バッファがフル状態
+     *         TIMEOUT              書込みがタイムアウトした
+     *         PRECONDITION_NOT_MET 設定異常
      * 
      * @else
      *
@@ -494,11 +494,11 @@ namespace RTC
     /*!
      * @if jp
      *
-     * @brief �Хåե��˽���߲�ǽ�����ǿ�
+     * @brief バッファに書込み可能な要素数
      * 
-     * �Хåե��˽���߲�ǽ�����ǿ����֤���
+     * バッファに書込み可能な要素数を返す。
      * 
-     * @return �񤭹��߲�ǽ�����ǿ�
+     * @return 書き込み可能な要素数
      * 
      * @else
      *
@@ -521,11 +521,11 @@ namespace RTC
     /*!
      * @if jp
      *
-     * @brief �Хåե�full�����å�
+     * @brief バッファfullチェック
      * 
-     * �Хåե�full�����å��ѽ�貾�۴ؿ�
+     * バッファfullチェック用純粋仮想関数
      *
-     * @return full�����å����(true:�Хåե�full��false:�Хåե���������)
+     * @return fullチェック結果(true:バッファfull，false:バッファ空きあり)
      * 
      * @else
      *
@@ -547,12 +547,12 @@ namespace RTC
     /*!
      * @if jp
      *
-     * @brief �Хåե��θ��ߤ��ɤ߽Ф����ǤΥݥ���
+     * @brief バッファの現在の読み出し要素のポインタ
      * 
-     * �Хåե��θ��ߤ��ɤ߽Ф����ǤΥݥ��󥿤ޤ��ϡ�n����Υݥ��󥿤��֤�
+     * バッファの現在の読み出し要素のポインタまたは、n個先のポインタを返す
      * 
-     * @param  n �ɤ߽Ф��ݥ��� + n �ΰ��֤Υݥ��� 
-     * @return �ɤ߽Ф����֤Υݥ���
+     * @param  n 読み出しポインタ + n の位置のポインタ 
+     * @return 読み出し位置のポインタ
      * 
      * @else
      *
@@ -573,13 +573,13 @@ namespace RTC
     /*!
      * @if jp
      *
-     * @brief �ɤ߽Ф��ݥ��󥿤�ʤ��
+     * @brief 読み出しポインタを進める
      * 
-     * ���ߤ��ɤ߽Ф����֤Υݥ��󥿤� n �Ŀʤ�롣
+     * 現在の読み出し位置のポインタを n 個進める。
      * 
-     * @param  n �ɤ߽Ф��ݥ��� + n �ΰ��֤Υݥ��� 
-     * @return BUFFER_OK: ���ｪλ
-     *         BUFFER_ERROR: �۾ｪλ
+     * @param  n 読み出しポインタ + n の位置のポインタ 
+     * @return BUFFER_OK: 正常終了
+     *         BUFFER_ERROR: 異常終了
      * 
      * @else
      *
@@ -614,14 +614,14 @@ namespace RTC
     /*!
      * @if jp
      *
-     * @brief �Хåե�����ǡ������ɤ߽Ф�
+     * @brief バッファからデータを読み出す
      * 
-     * �Хåե�����ǡ������ɤߤ������ɤ߽Ф��ݥ��󥿤ΰ��֤��ѹ�����ʤ���
+     * バッファからデータを読みだす。読み出しポインタの位置は変更されない。
      * 
-     * @param value �ɤ߽Ф��ǡ���
+     * @param value 読み出しデータ
      *
-     * @return BUFFER_OK: ���ｪλ
-     *         BUFFER_ERROR: �۾ｪλ
+     * @return BUFFER_OK: 正常終了
+     *         BUFFER_ERROR: 異常終了
      * 
      * @else
      *
@@ -646,11 +646,11 @@ namespace RTC
     /*!
      * @if jp
      *
-     * @brief �Хåե�����ǡ������ɤ߽Ф�
+     * @brief バッファからデータを読み出す
      * 
-     * �Хåե�����ǡ������ɤߤ������ɤ߽Ф��ݥ��󥿤ΰ��֤��ѹ�����ʤ���
+     * バッファからデータを読みだす。読み出しポインタの位置は変更されない。
      *
-     * @return �ɤ߽Ф��ǡ���
+     * @return 読み出しデータ
      * 
      * @else
      *
@@ -670,31 +670,31 @@ namespace RTC
     /*!
      * @if jp
      *
-     * @brief �Хåե������ɤ߽Ф�
+     * @brief バッファから読み出す
      * 
-     * �Хåե��˳�Ǽ���줿�ǡ������ɤ߽Ф���
+     * バッファに格納されたデータを読み出す。
      *
-     * ��2����(sec)����3����(nsec)�����ꤵ��Ƥ��ʤ���硢�Хåե�����
-     * �֤Ǥ��ɤ߽Ф��⡼�� (readback, do_nothing, block) �� init() ����
-     * �ꤵ�줿�⡼�ɤ˽�����
+     * 第2引数(sec)、第3引数(nsec)が指定されていない場合、バッファ空状
+     * 態での読み出しモード (readback, do_nothing, block) は init() で設
+     * 定されたモードに従う。
      *
-     * ��2����(sec) �˰��������ꤵ�줿���ϡ�init() �����ꤵ�줿�⡼��
-     * �˴ؤ�餺��block �⡼�ɤȤʤꡢ�Хåե��������֤Ǥ���л������
-     * �Ԥ��������ॢ���Ȥ��롣��3����(nsec)�ϻ��ꤵ��ʤ����0�Ȥ��ư�
-     * ���롣�����ॢ�����Ԥ���ˡ�����ߥ���å�¦�ǥХåե��ؽ����
-     * ������С��֥��å��󥰤ϲ������ǡ������ɤߤ�����롣
+     * 第2引数(sec) に引数が指定された場合は、init() で設定されたモード
+     * に関わらず、block モードとなり、バッファが空状態であれば指定時間
+     * 待ち、タイムアウトする。第3引数(nsec)は指定されない場合0として扱
+     * われる。タイムアウト待ち中に、書込みスレッド側でバッファへ書込み
+     * があれば、ブロッキングは解除されデータが読みだされる。
      *
-     * �ɤ߽Ф����˥Хåե�����(empty)���֤ǡ��̤Υ���åɤ�block�⡼��
-     * �ǽ�����Ԥ��򤷤Ƥ����硢signal��ȯ�Ԥ��ƽ����¦�Υ֥��å���
-     * �����������롣
+     * 読み出し時にバッファが空(empty)状態で、別のスレッドがblockモード
+     * で書込み待ちをしている場合、signalを発行して書込み側のブロッキン
+     * グが解除される。
      * 
-     * @param value �ɤ߽Ф��оݥǡ���
-     * @param sec   �����ॢ���Ȼ��� sec  (default -1: ̵��)
-     * @param nsec  �����ॢ���Ȼ��� nsec (default 0)
-     * @return BUFFER_OK            ���ｪλ
-     *         BUFFER_EMPTY         �Хåե���������
-     *         TIMEOUT              ����ߤ������ॢ���Ȥ���
-     *         PRECONDITION_NOT_MET ����۾�
+     * @param value 読み出し対象データ
+     * @param sec   タイムアウト時間 sec  (default -1: 無効)
+     * @param nsec  タイムアウト時間 nsec (default 0)
+     * @return BUFFER_OK            正常終了
+     *         BUFFER_EMPTY         バッファが空状態
+     *         TIMEOUT              書込みがタイムアウトした
+     *         PRECONDITION_NOT_MET 設定異常
      * 
      * @else
      *
@@ -780,14 +780,14 @@ namespace RTC
     /*!
      * @if jp
      *
-     * @brief �Хåե������ɤ߽Ф���ǽ�����ǿ�
+     * @brief バッファから読み出し可能な要素数
      * 
-     * �Хåե������ɤ߽Ф���ǽ�����ǿ����֤���
+     * バッファから読み出し可能な要素数を返す。
      * 
-     * @return �ɤ߽Ф���ǽ�����ǿ�
+     * @return 読み出し可能な要素数
      *
-     * @return BUFFER_OK: ���ｪλ
-     *         BUFFER_ERROR: �۾ｪλ
+     * @return BUFFER_OK: 正常終了
+     *         BUFFER_ERROR: 異常終了
      * 
      * @else
      *
@@ -810,11 +810,11 @@ namespace RTC
     /*!
      * @if jp
      *
-     * @brief �Хåե�empty�����å�
+     * @brief バッファemptyチェック
      * 
-     * �Хåե�empty�����å��ѽ�貾�۴ؿ�
+     * バッファemptyチェック用純粋仮想関数
      *
-     * @return empty�����å����(true:�Хåե�empty��false:�Хåե��ǡ�������)
+     * @return emptyチェック結果(true:バッファempty，false:バッファデータあり)
      * 
      * @else
      *
@@ -906,7 +906,7 @@ namespace RTC
   private:
     /*!
      * @if jp
-     * @brief ��񤭥ե饰
+     * @brief 上書きフラグ
      * @else
      * @brief Overwrite flag
      * @endif
@@ -915,7 +915,7 @@ namespace RTC
 
     /*!
      * @if jp
-     * @brief �ɤ��ᤷ�ե饰
+     * @brief 読み戻しフラグ
      * @else
      * @brief Readback flag
      * @endif
@@ -924,7 +924,7 @@ namespace RTC
 
     /*!
      * @if jp
-     * @brief �����ॢ�����դ��񤭹��ߥե饰
+     * @brief タイムアウト付き書き込みフラグ
      * @else
      * @brief Timedwrite flag
      * @endif
@@ -932,7 +932,7 @@ namespace RTC
     bool m_timedwrite;
     /*!
      * @if jp
-     * @brief �����ॢ�����դ��ɤ߽Ф��ե饰
+     * @brief タイムアウト付き読み出しフラグ
      * @else
      * @brief Timedread flag
      * @endif
@@ -941,7 +941,7 @@ namespace RTC
 
     /*!
      * @if jp
-     * @brief �񤭹��߻������ॢ����
+     * @brief 書き込み時タイムアウト
      * @else
      * @brief Timeout time for writing
      * @endif
@@ -950,7 +950,7 @@ namespace RTC
 
     /*!
      * @if jp
-     * @brief �ɤ߽Ф��������ॢ����
+     * @brief 読み出し時タイムアウト
      * @else
      * @brief Timeout time of reading
      * @endif
@@ -959,7 +959,7 @@ namespace RTC
 
     /*!
      * @if jp
-     * @brief �Хåե�Ĺ
+     * @brief バッファ長
      * @else
      * @brief Buffer length
      * @endif
@@ -968,7 +968,7 @@ namespace RTC
 
     /*!
      * @if jp
-     * @brief �񤭹��ߥݥ���
+     * @brief 書き込みポインタ
      * @else
      * @brief pointer to write
      * @endif
@@ -977,7 +977,7 @@ namespace RTC
 
     /*!
      * @if jp
-     * @brief �ɤ߽Ф��ݥ���
+     * @brief 読み出しポインタ
      * @else
      * @brief poitner to read
      * @endif
@@ -986,7 +986,7 @@ namespace RTC
 
     /*!
      * @if jp
-     * @brief Fill�������
+     * @brief Fillカウント
      * @else
      * @brief Fill count
      * @endif
@@ -995,7 +995,7 @@ namespace RTC
 
     /*!
      * @if jp
-     * @brief �񤭹��ߥ������
+     * @brief 書き込みカウント
      * @else
      * @brief Counter for writing
      * @endif
@@ -1004,7 +1004,7 @@ namespace RTC
 
     /*!
      * @if jp
-     * @brief �Хåե�����
+     * @brief バッファ配列
      * @else
      * @brief baffer array
      * @endif
@@ -1013,7 +1013,7 @@ namespace RTC
     
     /*!
      * @if jp
-     * @brief ����ѿ���¤��
+     * @brief 条件変数構造体
      * @else
      * @brief struct for condition variable
      * @endif
@@ -1027,7 +1027,7 @@ namespace RTC
     
     /*!
      * @if jp
-     * @brief �����ѿ��ߥ塼�ƥå���
+     * @brief 位置変数ミューテックス
      * @else
      * @brief mutex for position variable
      * @endif
@@ -1036,7 +1036,7 @@ namespace RTC
 
     /*!
      * @if jp
-     * @brief ������ѿ�
+     * @brief 空条件変数
      * @else
      * @brief empty condition variable
      * @endif
@@ -1045,7 +1045,7 @@ namespace RTC
 
     /*!
      * @if jp
-     * @brief ���վ���ѿ�
+     * @brief 満杯条件変数
      * @else
      * @brief full condition variable
      * @endif

@@ -1,4 +1,4 @@
-// -*- C++ -*-
+ï»¿// -*- C++ -*-
 /*!
  * @file SdoOrganization.cpp
  * @brief SDO Organization class
@@ -26,7 +26,7 @@
 namespace SDOPackage
 {
   /* @if jp
-   * @brief ¥³¥ó¥¹¥È¥é¥¯¥¿
+   * @brief ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
    * @else
    * @brief Constructor
    * @endif
@@ -64,7 +64,7 @@ namespace SDOPackage
   }
   
   /* @if jp
-   * @brief ²¾ÁÛ¥Ç¥¹¥È¥é¥¯¥¿
+   * @brief ä»®æƒ³ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
    * @else
    * @brief Virtual destructor
    * @endif
@@ -75,7 +75,7 @@ namespace SDOPackage
   
   /*!
    * @if jp
-   * @brief [CORBA interface] Organization ID ¤ò¼èÆÀ¤¹¤ë
+   * @brief [CORBA interface] Organization ID ã‚’å–å¾—ã™ã‚‹
    * @else
    * @brief [CORBA interface] Get Organization Id
    * @endif
@@ -90,7 +90,7 @@ namespace SDOPackage
   
   /*!
    * @if jp
-   * @brief [CORBA interface] OrganizationProperty ¤Î¼èÆÀ
+   * @brief [CORBA interface] OrganizationProperty ã®å–å¾—
    * @else
    * @brief [CORBA interface] Get OrganizationProperty
    * @endif
@@ -108,7 +108,7 @@ namespace SDOPackage
   
   /*!
    * @if jp
-   * @brief [CORBA interface] OrganizationProperty ¤ÎÆÃÄê¤ÎÃÍ¤Î¼èÆÀ
+   * @brief [CORBA interface] OrganizationProperty ã®ç‰¹å®šã®å€¤ã®å–å¾—
    * @else
    * @brief [CORBA interface] Get specified value of OrganizationProperty
    * @endif
@@ -144,7 +144,7 @@ namespace SDOPackage
   
   /*!
    * @if jp
-   * @brief [CORBA interface] OrganizationProperty ¤Î¥»¥Ã¥È
+   * @brief [CORBA interface] OrganizationProperty ã®ã‚»ãƒƒãƒˆ
    * @else
    * @brief [CORBA interface] Set OrganizationProperty
    * @endif
@@ -171,7 +171,7 @@ namespace SDOPackage
   
   /*!
    * @if jp
-   * @brief [CORBA interface] OrganizationProperty ¤ÎÃÍ¤Î¥»¥Ã¥È
+   * @brief [CORBA interface] OrganizationProperty ã®å€¤ã®ã‚»ãƒƒãƒˆ
    * @else
    * @brief [CORBA interface] Set specified value of OrganizationProperty
    * @endif
@@ -206,7 +206,7 @@ namespace SDOPackage
   
   /*!
    * @if jp
-   * @brief [CORBA interface] OrganizationProperty ¤Îºï½ü
+   * @brief [CORBA interface] OrganizationProperty ã®å‰Šé™¤
    * @else
    * @brief [CORBA interface] Remove specified OrganizationProperty
    * @endif
@@ -239,7 +239,7 @@ namespace SDOPackage
   
   /*!
    * @if jp
-   * @brief [CORBA interface] Organization ¤Î¥ª¡¼¥Ê¡¼¤ò¼èÆÀ¤¹¤ë
+   * @brief [CORBA interface] Organization ã®ã‚ªãƒ¼ãƒŠãƒ¼ã‚’å–å¾—ã™ã‚‹
    * @else
    * @brief [CORBA interface] Get the owner of Organization
    * @endif
@@ -254,7 +254,7 @@ namespace SDOPackage
   
   /*!
    * @if jp
-   * @brief [CORBA interface] Organization ¤Ë¥ª¡¼¥Ê¡¼¤ò¥»¥Ã¥È¤¹¤ë
+   * @brief [CORBA interface] Organization ã«ã‚ªãƒ¼ãƒŠãƒ¼ã‚’ã‚»ãƒƒãƒˆã™ã‚‹
    * @else
    * @brief [CORBA interface] Set the owner to the Organization
    * @endif
@@ -280,7 +280,7 @@ namespace SDOPackage
   
   /*!
    * @if jp
-   * @brief [CORBA interface] Organization ¤Î¥á¥ó¥Ğ¡¼¤ò¼èÆÀ¤¹¤ë
+   * @brief [CORBA interface] Organization ã®ãƒ¡ãƒ³ãƒãƒ¼ã‚’å–å¾—ã™ã‚‹
    * @else
    * @brief [CORBA interface] Get the member of the Organization
    * @endif
@@ -304,7 +304,7 @@ namespace SDOPackage
   
   /*!
    * @if jp
-   * @brief [CORBA interface] SDO ¤Î ¥»¥Ã¥È
+   * @brief [CORBA interface] SDO ã® ã‚»ãƒƒãƒˆ
    * @else
    * @brief [CORBA interface] Set SDO
    * @endif
@@ -330,7 +330,7 @@ namespace SDOPackage
   
   /*!
    * @if jp
-   * @brief [CORBA interface] SDO ¥á¥ó¥Ğ¡¼¤ÎÄÉ²Ã
+   * @brief [CORBA interface] SDO ãƒ¡ãƒ³ãƒãƒ¼ã®è¿½åŠ 
    * @else
    * @brief [CORBA interface] Add the member of SDO
    * @endif
@@ -357,7 +357,7 @@ namespace SDOPackage
   
   /*!
    * @if jp
-   * @brief [CORBA interface] SDO ¥á¥ó¥Ğ¡¼¤Îºï½ü
+   * @brief [CORBA interface] SDO ãƒ¡ãƒ³ãƒãƒ¼ã®å‰Šé™¤
    * @else
    * @brief [CORBA interface] Remove member SDO from Organization
    * @endif
@@ -398,7 +398,7 @@ namespace SDOPackage
   
   /*!
    * @if jp
-   * @brief [CORBA interface] Organization ¤Î DependencyType ¤ò¼èÆÀ
+   * @brief [CORBA interface] Organization ã® DependencyType ã‚’å–å¾—
    * @else
    * @brief [CORBA interface] Get the DependencyType of the Organization
    * @endif
@@ -413,7 +413,7 @@ namespace SDOPackage
   
   /*!
    * @if jp
-   * @brief [CORBA interface] Organization ¤Î DependencyType ¤ò¥»¥Ã¥È¤¹¤ë
+   * @brief [CORBA interface] Organization ã® DependencyType ã‚’ã‚»ãƒƒãƒˆã™ã‚‹
    * @else
    * @brief [CORBA interface] Set the DependencyType of the Organization
    * @endif

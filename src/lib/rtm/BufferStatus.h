@@ -1,4 +1,4 @@
-// -*- C++ -*-
+﻿// -*- C++ -*-
 /*!
  *
  * @file BufferStatus.h
@@ -25,15 +25,15 @@ namespace RTC
   /*!
    * @if jp
    * @class BufferStatus mixin class
-   * @brief BufferStatus mixin ���饹
+   * @brief BufferStatus mixin クラス
    *
-   * ���Υ��饹�ϡ�enum������줿�꥿���󥳡��ɤ򡢥Хåե���Ϣ���֥���
-   * ���Ƕ������Ѥ��뤿��� mixin ���饹�Ǥ��롣���Υ꥿���󥳡��ɤ��
-   * �Ѥ��륯�饹�Ǥϡ�BufferStatus ���饹��public �Ѿ��������� define
-   * ���Ƥ��� BUFFERSTATUS_ENUM �򥯥饹��˵��Ҥ��뤳�Ȥ����Ѳ�ǽ�Ȥ�
-   * �롣����ˤ�ꡢenum �� ReturnCode_t ���Ȥ��� typedef �����ʸ�
-   * ReturnCode_t �����ѤǤ���褦�ˤ���ȤȤ�ˡ�̾�����֤� enum ���
-   * ���줿�Ƽ��̻Ҥ��������饹̾���������Ƴ�����롣
+   * このクラスは、enum定義されたリターンコードを、バッファ関連サブクラ
+   * スで共通利用するための mixin クラスである。このリターンコードを使
+   * 用するクラスでは、BufferStatus クラスをpublic 継承し、下に define
+   * してある BUFFERSTATUS_ENUM をクラス内に記述することで利用可能とな
+   * る。これにより、enum を ReturnCode_t 型として typedef し、以後
+   * ReturnCode_t を利用できるようにするとともに、名前空間に enum 定義
+   * された各識別子を当該クラス名前空間内に導入する。
    *
    * @else
    * @class BufferStatus mixin class
@@ -54,17 +54,17 @@ namespace RTC
   public:
     /*!
      * @if jp
-     * @brief BufferStatus �꥿���󥳡���
+     * @brief BufferStatus リターンコード
      *
-     * �Хåե���Ϣ�Υ��饹�Ƕ��̤Υ꥿���󥳡���
+     * バッファ関連のクラスで共通のリターンコード
      *
-     * - BUFFER_OK:            ���ｪλ
-     * - BUFFER_ERROR:         �Хåե����顼
-     * - BUFFER_FULL:          �Хåե��ե�
-     * - BUFFER_EMPTY:         �Хåե�����ץƥ�
-     * - NOT_SUPPORTED:        ̤���ݡ��ȵ�ǽ
-     * - TIMEOUT:              �����ॢ����
-     * - PRECONDITION_NOT_MET: ���������������Ƥ��ʤ�
+     * - BUFFER_OK:            正常終了
+     * - BUFFER_ERROR:         バッファエラー
+     * - BUFFER_FULL:          バッファフル
+     * - BUFFER_EMPTY:         バッファエンプティ
+     * - NOT_SUPPORTED:        未サポート機能
+     * - TIMEOUT:              タイムアウト
+     * - PRECONDITION_NOT_MET: 事前条件を満たしていない
      *
      * @else
      * @brief DataPortStatus return codes
@@ -95,13 +95,13 @@ namespace RTC
     /*!
      * @if jp
      *
-     * @brief BufferStatus �꥿���󥳡��ɤ�ʸ������Ѵ�
+     * @brief BufferStatus リターンコードを文字列に変換
      *
-     * BufferStatus �꥿���󥳡��ɤ�ʸ������Ѵ�����
+     * BufferStatus リターンコードを文字列に変換する
      *
-     * @param status �Ѵ��о� BufferStatus �꥿���󥳡���
+     * @param status 変換対象 BufferStatus リターンコード
      *
-     * @return ʸ�����Ѵ����
+     * @return 文字列変換結果
      *
      * @else
      *
@@ -134,13 +134,13 @@ namespace RTC
 /*!
  * @if jp
  *
- * @brief ::RTC::BufferStatus Ƴ��
+ * @brief ::RTC::BufferStatus 導入
  * 
- * ::RTC::BufferStatus ���������Ƥ��� Enum �Τ��٤ƤΥ��Ф�͡���
- * ���ڡ�����Ƴ�����뤿��Υޥ�����BufferStatus �����Ѥ��륯�饹�ˤ�
- * ���ơ����饹�������Ƭ�ˤ����� DATAPORTSTATUS_ENUM �򵭺ܤ�������ǡ�
- * BufferStatus ���������Ƥ��� enum ���Ф�̾�����黻�Ҥʤ��˥�
- * ��������ǽ�ˤʤ롣
+ * ::RTC::BufferStatus で宣言されている Enum のすべてのメンバをネーム
+ * スペースに導入するためのマクロ。BufferStatus を利用するクラスにお
+ * いて、クラス宣言の先頭において DATAPORTSTATUS_ENUM を記載するだけで、
+ * BufferStatus で宣言されている enum メンバが名前解決演算子なしにア
+ * クセス可能になる。
  *
  * @else
  *

@@ -1,4 +1,4 @@
-// -*- C++ -*-
+﻿// -*- C++ -*-
 /*!
  * @file CorbaNaming.h
  * @brief CORBA naming service helper class
@@ -31,7 +31,7 @@
  * @if jp
  * @namespace RTC
  *
- * @brief RT����ݡ��ͥ��
+ * @brief RTコンポーネント
  *
  * @else
  *
@@ -51,19 +51,19 @@ namespace RTC
   /*!
    * @if jp
    * @class CorbaNaming
-   * @brief CORBA Naming Service �إ�ѡ����饹
+   * @brief CORBA Naming Service ヘルパークラス
    *
-   * ���Υ��饹�ϡ�CosNaming::NamingContext ���Ф����åѡ����饹�Ǥ��롣
-   * CosNaming::NamingContext �����ĥ��ڥ졼�����Ȥۤ�Ʊ����ǽ��
-   * ���ڥ졼�������󶡤���ȤȤ�ˡ��͡��ॳ��ݡ��ͥ�� CosNaming::Name
-   * �������ʸ����ˤ��̾��ɽ��������դ��륪�ڥ졼�������󶡤��롣
+   * このクラスは、CosNaming::NamingContext に対するラッパークラスである。
+   * CosNaming::NamingContext が持つオペレーションとほぼ同じ機能の
+   * オペレーションを提供するとともに、ネームコンポーネント CosNaming::Name
+   * の代わりに文字列による名前表現を受け付けるオペレーションも提供する。
    *
-   * ���֥������Ȥ������������뤤������ľ��� CORBA �͡��ॵ���Ф���³��
-   * �ʸ塢���Υ͡��ॵ���ФΥ롼�ȥ���ƥ����Ȥ��Ф��Ƽ�Υ��ڥ졼�����
-   * ��������롣
-   * �������ؤΥ͡��ߥ󥰥���ƥ����Ȥκ����䥪�֥������ȤΥХ���ɤˤ����ơ�
-   * ����Υ���ƥ����Ȥ�¸�ߤ��ʤ����Ǥ⡢����Ū�˥���ƥ����Ȥ�Х����
-   * ����Ū�Υ���ƥ����Ȥ䥪�֥������ȤΥХ���ɤ�Ԥ����Ȥ�Ǥ��롣
+   * オブジェクトは生成時、あるいは生成直後に CORBA ネームサーバに接続し
+   * 以後、このネームサーバのルートコンテキストに対して種々のオペレーション
+   * を処理する。
+   * 深い階層のネーミングコンテキストの作成やオブジェクトのバインドにおいて、
+   * 途中のコンテキストが存在しない場合でも、強制的にコンテキストをバインド
+   * し目的のコンテキストやオブジェクトのバインドを行うこともできる。
    *
    * @since 0.4.0
    *
@@ -92,7 +92,7 @@ namespace RTC
     /*!
      * @if jp
      *
-     * @brief ���󥹥ȥ饯��
+     * @brief コンストラクタ
      *
      * @param orb ORB
      *
@@ -109,10 +109,10 @@ namespace RTC
     /*!
      * @if jp
      *
-     * @brief ���󥹥ȥ饯��
+     * @brief コンストラクタ
      *
      * @param orb ORB
-     * @param name_server �͡��ॵ���Ф�̾��
+     * @param name_server ネームサーバの名称
      *
      * @else
      *
@@ -128,7 +128,7 @@ namespace RTC
     /*!
      * @if jp
      *
-     * @brief ���ۥǥ��ȥ饯��
+     * @brief 仮想デストラクタ
      * 
      * @else
      * 
@@ -141,11 +141,11 @@ namespace RTC
     /*!
      * @if jp
      *
-     * @brief �͡��ߥ󥰥����ӥ��ν����
+     * @brief ネーミングサービスの初期化
      * 
-     * ���ꤵ�줿�͡��ॵ���о�Υ͡��ߥ󥰥����ӥ����������ޤ���
+     * 指定されたネームサーバ上のネーミングサービスを初期化します。
      * 
-     * @param name_server �͡��ॵ���Ф�̾��
+     * @param name_server ネームサーバの名称
      * 
      * @else
      *
@@ -173,42 +173,42 @@ namespace RTC
     /*!
      * @if jp
      *
-     * @brief Object �� bind ����
+     * @brief Object を bind する
      *
-     * CosNaming::bind() �Ȥۤ�Ʊ����Ư���򤹤뤬�����Ϳ����줿�͡��ॵ���Ф�
-     * �롼�ȥ���ƥ����Ȥ��Ф���bind()���ƤӽФ���������ۤʤ롣
+     * CosNaming::bind() とほぼ同等の働きをするが、常に与えられたネームサーバの
+     * ルートコンテキストに対してbind()が呼び出される点が異なる。
      *
-     * Name <name> �� Object <obj> ������ NamingContext ��˥Х���ɤ��롣
-     * c_n �� n ���ܤ� NameComponent �򤢤�魯�Ȥ���ȡ�
-     * name �� n �Ĥ� NameComponent ��������Ȥ����ʲ��Τ褦�˰����롣
+     * Name <name> と Object <obj> を当該 NamingContext 上にバインドする。
+     * c_n が n 番目の NameComponent をあらわすとすると、
+     * name が n 個の NameComponent から成るとき、以下のように扱われる。
      *
-     * cxt->bind(<c_1, c_2, ... c_n>, obj) �ϰʲ�������Ʊ���Ǥ��롣
+     * cxt->bind(<c_1, c_2, ... c_n>, obj) は以下の操作と同等である。
      * cxt->resolve(<c_1, ... c_(n-1)>)->bind(<c_n>, obj)
      *
-     * ���ʤ����1���ܤ���n-1���ܤΥ���ƥ����Ȥ��褷��n-1���ܤΥ���ƥ�����
-     * ��� name <n> �Ȥ��ơ�obj �� bind ���롣
-     * ̾�����˻��ä��� <c_1, ... c_(n-1)> �� NemingContext �ϡ�
-     * bindContext() �� rebindContext() �Ǵ��˥Х���ɺѤߤǤʤ���Фʤ�ʤ���
-     * �⤷ <c_1, ... c_(n-1)> �� NamingContext ��¸�ߤ��ʤ����ˤϡ�
-     * NotFound �㳰��ȯ�����롣
+     * すなわち、1番目からn-1番目のコンテキストを解決し、n-1番目のコンテキスト
+     * 上に name <n> として　obj を bind する。
+     * 名前解決に参加する <c_1, ... c_(n-1)> の NemingContext は、
+     * bindContext() や rebindContext() で既にバインド済みでなければならない。
+     * もし <c_1, ... c_(n-1)> の NamingContext が存在しない場合には、
+     * NotFound 例外が発生する。
      *
-     * �������������Х���ɥե饰 force �� true �λ��ϡ�<c_1, ... c_(n-1)>
-     * ��¸�ߤ��ʤ����ˤ⡢�Ƶ�Ū�˥���ƥ����Ȥ�Х���ɤ��ʤ��顢
-     * �ǽ�Ū�� obj ��̾�� name <c_n> �˥Х���ɤ��롣
+     * ただし、強制バインドフラグ force が true の時は、<c_1, ... c_(n-1)>
+     * が存在しない場合にも、再帰的にコンテキストをバインドしながら、
+     * 最終的に obj を名前 name <c_n> にバインドする。
      *
-     * ������ξ��Ǥ⡢n-1���ܤΥ���ƥ����Ⱦ�� name<n> �Υ��֥�������
-     * (Object ���뤤�� ����ƥ�����) ���Х���ɤ���Ƥ����
-     * AlreadyBound �㳰��ȯ�����롣
+     * いずれの場合でも、n-1番目のコンテキスト上に name<n> のオブジェクト
+     * (Object あるいは コンテキスト) がバインドされていれば
+     * AlreadyBound 例外が発生する。
      *
-     * @param name ���֥������Ȥ��դ���̾���� NameComponent
-     * @param obj ��Ϣ�դ����� Object
-     * @param force true�ξ�硢����Υ���ƥ����Ȥ���Ū�˥Х���ɤ���
-     *              (�ǥե������:true)
+     * @param name オブジェクトに付ける名前の NameComponent
+     * @param obj 関連付けられる Object
+     * @param force trueの場合、途中のコンテキストを強制的にバインドする
+     *              (デフォルト値:true)
      *
-     * @exception NotFound ����� <c_1, c_2, ..., c_(n-1)> ��¸�ߤ��ʤ���
-     * @exception CannotProceed ���餫����ͳ�ǽ������³�Ǥ��ʤ���
-     * @exception InvalidName ���� name ��̾����������
-     * @exception AlreadyBound name <c_n> �� Object �����Ǥ˥Х���ɤ���Ƥ��롣
+     * @exception NotFound 途中の <c_1, c_2, ..., c_(n-1)> が存在しない。
+     * @exception CannotProceed 何らかの理由で処理を継続できない。
+     * @exception InvalidName 引数 name の名前が不正。
+     * @exception AlreadyBound name <c_n> の Object がすでにバインドされている。
      *
      * @else
      *
@@ -260,20 +260,20 @@ namespace RTC
     /*!
      * @if jp
      *
-     * @brief Object �� bind ����
+     * @brief Object を bind する
      *
-     * Object �� bind ����ݤ�Ϳ����̾����ʸ����ɽ���Ǥ��뤳�Ȱʳ��ϡ�bind()
-     * ��Ʊ���Ǥ��롣bind(toName(string_name), obj) ��������
+     * Object を bind する際に与える名前が文字列表現であること以外は、bind()
+     * と同じである。bind(toName(string_name), obj) と等価。
      *
-     * @param string_name ���֥������Ȥ��դ���̾����ʸ����ɽ��
-     * @param obj ��Ϣ�դ����륪�֥�������
-     * @param force true�ξ�硢����Υ���ƥ����Ȥ���Ū�˥Х���ɤ���
-     *              (�ǥե������:true)
+     * @param string_name オブジェクトに付ける名前の文字列表現
+     * @param obj 関連付けられるオブジェクト
+     * @param force trueの場合、途中のコンテキストを強制的にバインドする
+     *              (デフォルト値:true)
      *
-     * @exception NotFound ����� <c_1, c_2, ..., c_(n-1)> ��¸�ߤ��ʤ���
-     * @exception CannotProceed ���餫����ͳ�ǽ������³�Ǥ��ʤ���
-     * @exception InvalidName ���� name ��̾����������
-     * @exception AlreadyBound name <n> �� Object �����Ǥ˥Х���ɤ���Ƥ��롣
+     * @exception NotFound 途中の <c_1, c_2, ..., c_(n-1)> が存在しない。
+     * @exception CannotProceed 何らかの理由で処理を継続できない。
+     * @exception InvalidName 引数 name の名前が不正。
+     * @exception AlreadyBound name <n> の Object がすでにバインドされている。
      *
      * @else
      *
@@ -303,32 +303,32 @@ namespace RTC
     /*!
      * @if jp
      *
-     * @brief ����Υ���ƥ����Ȥ�Ƶ�Ū�� bind ���ʤ��� Object �� bind ����
+     * @brief 途中のコンテキストを再帰的に bind しながら Object を bind する
      *
-     * context ��Ϳ����줿 NamingContext ���Ф��ơ�name �ǻ��ꤵ�줿
-     * �͡��ॳ��ݡ��ͥ�� <c_1, ... c_(n-1)> �� NamingContext �Ȥ���
-     * ��褷�ʤ��顢̾�� <c_n> ���Ф��� obj �� bind ���롣
-     * �⤷��<c_1, ... c_(n-1)> ���б����� NamingContext ���ʤ����ˤ�
-     * ������ NamingContext ��Х���ɤ��롣
+     * context で与えられた NamingContext に対して、name で指定された
+     * ネームコンポーネント <c_1, ... c_(n-1)> を NamingContext として
+     * 解決しながら、名前 <c_n> に対して obj を bind する。
+     * もし、<c_1, ... c_(n-1)> に対応する NamingContext がない場合には
+     * 新たな NamingContext をバインドする。
      *
-     * �ǽ�Ū�� <c_1, c_2, ..., c_(n-1)> ���б����� NamingContext ������
-     * �ޤ��ϲ�褵�줿��ǡ�CosNaming::bind(<c_n>, object) ���ƤӽФ���롣
-     * ���ΤȤ������Ǥ˥Х���ǥ��󥰤�¸�ߤ���� AlreadyBound�㳰��ȯ�����롣
+     * 最終的に <c_1, c_2, ..., c_(n-1)> に対応する NamingContext が生成
+     * または解決された上で、CosNaming::bind(<c_n>, object) が呼び出される。
+     * このとき、すでにバインディングが存在すれば AlreadyBound例外が発生する。
      *
-     * ����Υ���ƥ����Ȥ��褹������ǡ���褷�褦�Ȥ��륳��ƥ����Ȥ�
-     * Ʊ��̾���� NamingContext �ǤϤʤ� Binding ��¸�ߤ����硢
-     * CannotProceed �㳰��ȯ������������ߤ��롣
+     * 途中のコンテキストを解決する過程で、解決しようとするコンテキストと
+     * 同じ名前の NamingContext ではない Binding が存在する場合、
+     * CannotProceed 例外が発生し処理を中止する。
      *
-     * @param context bind �򳫻Ϥ��롡NamingContext
-     * @param name ���֥������Ȥ��դ���̾���Υ͡��ॳ��ݡ��ͥ��
-     * @param obj ��Ϣ�դ����륪�֥�������
+     * @param context bind を開始する　NamingContext
+     * @param name オブジェクトに付ける名前のネームコンポーネント
+     * @param obj 関連付けられるオブジェクト
      *
-     * @exception CannotProceed <c_1, ..., c_(n-1)> ���б����� NamingContext 
-     *            �Τ����ҤȤĤ������Ǥ� NamingContext �ʳ��� object �˥Х����
-     *            ����Ƥ��ꡢ�������³�Ǥ��ʤ���
-     * @exception InvalidName ̾�� name ������
-     * @exception AlreadyBound name <c_n> �ˤ��Ǥ˲��餫�� object ���Х����
-     *            ����Ƥ��롣
+     * @exception CannotProceed <c_1, ..., c_(n-1)> に対応する NamingContext 
+     *            のうちひとつが、すでに NamingContext 以外の object にバインド
+     *            されており、処理を継続できない。
+     * @exception InvalidName 名前 name が不正
+     * @exception AlreadyBound name <c_n> にすでに何らかの object がバインド
+     *            されている。
      * @else
      *
      * @brief Bind intermediate context recursively and bind object
@@ -368,20 +368,20 @@ namespace RTC
     /*!
      * @if jp
      *
-     * @brief Object �� rebind ����
+     * @brief Object を rebind する
      *
-     * name �ǻ��ꤵ�줿 Binding �����Ǥ�¸�ߤ����������� bind() ��Ʊ��
-     * �Ǥ��롣�Х���ǥ��󥰤����Ǥ�¸�ߤ�����ˤϡ��������Х���ǥ��󥰤�
-     * �֤��������롣
+     * name で指定された Binding がすでに存在する場合を除いて bind() と同じ
+     * である。バインディングがすでに存在する場合には、新しいバインディングに
+     * 置き換えられる。
      *
-     * @param name ���֥������Ȥ��դ���̾���� NameComponent
-     * @param obj ��Ϣ�դ����륪�֥�������
-     * @param force true�ξ�硢����Υ���ƥ����Ȥ���Ū�˥Х���ɤ���
-     *              (�ǥե������:true)
+     * @param name オブジェクトに付ける名前の NameComponent
+     * @param obj 関連付けられるオブジェクト
+     * @param force trueの場合、途中のコンテキストを強制的にバインドする
+     *              (デフォルト値:true)
      *
-     * @exception NotFound ����� <c_1, c_2, ..., c_(n-1)> ��¸�ߤ��ʤ���
-     * @exception CannotProceed ���餫����ͳ�ǽ������³�Ǥ��ʤ���
-     * @exception InvalidName ̾�� name ������
+     * @exception NotFound 途中の <c_1, c_2, ..., c_(n-1)> が存在しない。
+     * @exception CannotProceed 何らかの理由で処理を継続できない。
+     * @exception InvalidName 名前 name が不正
      *
      * @else
      *
@@ -409,19 +409,19 @@ namespace RTC
     /*!
      * @if jp
      *
-     * @brief Object �� rebind ����
+     * @brief Object を rebind する
      *
-     * Object �� rebind ����ݤ�Ϳ����̾����ʸ����ɽ���Ǥ��뤳�Ȱʳ��� rebind()
-     * ��Ʊ���Ǥ��롣rebind(toName(string_name), obj) ��������
+     * Object を rebind する際に与える名前が文字列表現であること以外は rebind()
+     * と同じである。rebind(toName(string_name), obj) と等価。
      *
-     * @param string_name ���֥������Ȥ��դ���̾����ʸ����ɽ��
-     * @param obj ��Ϣ�դ����륪�֥�������
-     * @param force true�ξ�硢����Υ���ƥ����Ȥ���Ū�˥Х���ɤ���
-     *              (�ǥե������:true)
+     * @param string_name オブジェクトに付ける名前の文字列表現
+     * @param obj 関連付けられるオブジェクト
+     * @param force trueの場合、途中のコンテキストを強制的にバインドする
+     *              (デフォルト値:true)
      *
-     * @exception NotFound ����� <c_1, c_2, ..., c_(n-1)> ��¸�ߤ��ʤ���
-     * @exception CannotProceed ���餫����ͳ�ǽ������³�Ǥ��ʤ���
-     * @exception InvalidName ���� name ��̾����������
+     * @exception NotFound 途中の <c_1, c_2, ..., c_(n-1)> が存在しない。
+     * @exception CannotProceed 何らかの理由で処理を継続できない。
+     * @exception InvalidName 引数 name の名前が不正。
      *
      * @else
      *
@@ -449,20 +449,20 @@ namespace RTC
     /*!
      * @if jp
      *
-     * @brief ����Υ���ƥ����Ȥ� bind ���ʤ��� Object �� rebind ����
+     * @brief 途中のコンテキストを bind しながら Object を rebind する
      *
-     * name <c_n> �ǻ��ꤵ�줿 NamingContext �⤷���� Object �����Ǥ�¸�ߤ���
-     * ��������� bindRecursive() ��Ʊ���Ǥ��롣
+     * name <c_n> で指定された NamingContext もしくは Object がすでに存在する
+     * 場合を除いて bindRecursive() と同じである。
      *
-     * name <c_n> �ǻ��ꤵ�줿�Х���ǥ��󥰤����Ǥ�¸�ߤ�����ˤϡ�
-     * �������Х���ǥ��󥰤��֤��������롣
+     * name <c_n> で指定されたバインディングがすでに存在する場合には、
+     * 新しいバインディングに置き換えられる。
      *
-     * @param context bind �򳫻Ϥ��롡NamingContext
-     * @param name ���֥������Ȥ��դ���̾���� NameComponent
-     * @param obj ��Ϣ�դ����륪�֥�������
+     * @param context bind を開始する　NamingContext
+     * @param name オブジェクトに付ける名前の NameComponent
+     * @param obj 関連付けられるオブジェクト
      *
-     * @exception CannotProceed ����Υ���ƥ����Ȥ����Ǥ��ʤ���
-     * @exception InvalidName Ϳ����줿 name ��������
+     * @exception CannotProceed 途中のコンテキストが解決できない。
+     * @exception InvalidName 与えられた name が不正。
      *
      * @else
      *
@@ -491,20 +491,20 @@ namespace RTC
     /*!
      * @if jp
      *
-     * @brief NamingContext �� bind ����
+     * @brief NamingContext を bind する
      *
-     * bind ����륪�֥������Ȥ� NamingContext �Ǥ��뤳�Ȥ������ bind() 
-     * ��Ʊ���Ǥ��롣
+     * bind されるオブジェクトが NamingContext であることを除いて bind() 
+     * と同じである。
      *
-     * @param name ���֥������Ȥ��դ���̾���Υ͡��ॳ��ݡ��ͥ��
-     * @param name_cxt ��Ϣ�դ����� NamingContext
-     * @param force true�ξ�硢����Υ���ƥ����Ȥ���Ū�˥Х���ɤ���
-     *              (�ǥե������:true)
+     * @param name オブジェクトに付ける名前のネームコンポーネント
+     * @param name_cxt 関連付けられる NamingContext
+     * @param force trueの場合、途中のコンテキストを強制的にバインドする
+     *              (デフォルト値:true)
      *
-     * @exception NotFound ����� <c_1, c_2, ..., c_(n-1)> ��¸�ߤ��ʤ���
-     * @exception CannotProceed ���餫����ͳ�ǽ������³�Ǥ��ʤ���
-     * @exception InvalidName ���� name ��̾����������
-     * @exception AlreadyBound name <c_n> �� Object �����Ǥ˥Х���ɤ���Ƥ��롣
+     * @exception NotFound 途中の <c_1, c_2, ..., c_(n-1)> が存在しない。
+     * @exception CannotProceed 何らかの理由で処理を継続できない。
+     * @exception InvalidName 引数 name の名前が不正。
+     * @exception AlreadyBound name <c_n> の Object がすでにバインドされている。
      *
      * @else
      *
@@ -533,20 +533,20 @@ namespace RTC
     /*!
      * @if jp
      *
-     * @brief NamingContext �� bind ����
+     * @brief NamingContext を bind する
      *
-     * bind ����륪�֥������Ȥ� NamingContext �Ǥ��뤳�Ȥ������
-     * bindByString() ��Ʊ���Ǥ��롣
+     * bind されるオブジェクトが NamingContext であることを除いて
+     * bindByString() と同じである。
      *
-     * @param string_name ���֥������Ȥ��դ���̾����ʸ����ɽ��
-     * @param name_cxt ��Ϣ�դ����� NamingContext
-     * @param force true�ξ�硢����Υ���ƥ����Ȥ���Ū�˥Х���ɤ���
-     *              (�ǥե������:true)
+     * @param string_name オブジェクトに付ける名前の文字列表現
+     * @param name_cxt 関連付けられる NamingContext
+     * @param force trueの場合、途中のコンテキストを強制的にバインドする
+     *              (デフォルト値:true)
      *
-     * @exception NotFound ����� <c_1, c_2, ..., c_(n-1)> ��¸�ߤ��ʤ���
-     * @exception CannotProceed ���餫����ͳ�ǽ������³�Ǥ��ʤ���
-     * @exception InvalidName ���� name ��̾����������
-     * @exception AlreadyBound name <n> �� Object �����Ǥ˥Х���ɤ���Ƥ��롣
+     * @exception NotFound 途中の <c_1, c_2, ..., c_(n-1)> が存在しない。
+     * @exception CannotProceed 何らかの理由で処理を継続できない。
+     * @exception InvalidName 引数 name の名前が不正。
+     * @exception AlreadyBound name <n> の Object がすでにバインドされている。
      *
      * @else
      *
@@ -576,14 +576,14 @@ namespace RTC
     /*!
      * @if jp
      *
-     * @brief ����Υ���ƥ����Ȥ�Ƶ�Ū�� bind �� NamingContext �� bind ����
+     * @brief 途中のコンテキストを再帰的に bind し NamingContext を bind する
      *
-     * bind ����륪�֥������Ȥ� NamingContext �Ǥ��뤳�Ȥ������
-     * bindRecursive() ��Ʊ���Ǥ��롣
+     * bind されるオブジェクトが NamingContext であることを除いて
+     * bindRecursive() と同じである。
      *
-     * @param context bind �򳫻Ϥ��롡NamingContext
-     * @param name ���֥������Ȥ��դ���̾���Υ͡��ॳ��ݡ��ͥ��
-     * @param name_cxt ��Ϣ�դ����� NamingContext
+     * @param context bind を開始する　NamingContext
+     * @param name オブジェクトに付ける名前のネームコンポーネント
+     * @param name_cxt 関連付けられる NamingContext
      *
      * @else
      *
@@ -605,21 +605,21 @@ namespace RTC
     /*!
      * @if jp
      *
-     * @brief NamingContext �� rebind ����
+     * @brief NamingContext を rebind する
      *
-     * name �ǻ��ꤵ�줿����ƥ����Ȥ����Ǥ�¸�ߤ����������� bindContext() 
-     * ��Ʊ���Ǥ��롣
-     * �Х���ǥ��󥰤����Ǥ�¸�ߤ�����ˤϡ��������Х���ǥ��󥰤�
-     * �֤��������롣
+     * name で指定されたコンテキストがすでに存在する場合を除いて bindContext() 
+     * と同じである。
+     * バインディングがすでに存在する場合には、新しいバインディングに
+     * 置き換えられる。
      *
-     * @param name ���֥������Ȥ��դ���̾���Υ͡��ॳ��ݡ��ͥ��
-     * @param name_cxt ��Ϣ�դ����� NamingContext
-     * @param force true�ξ�硢����Υ���ƥ����Ȥ���Ū�˥Х���ɤ���
-     *              (�ǥե������:true)
+     * @param name オブジェクトに付ける名前のネームコンポーネント
+     * @param name_cxt 関連付けられる NamingContext
+     * @param force trueの場合、途中のコンテキストを強制的にバインドする
+     *              (デフォルト値:true)
      *
-     * @exception NotFound ����� <c_1, c_2, ..., c_(n-1)> ��¸�ߤ��ʤ���
-     * @exception CannotProceed ���餫����ͳ�ǽ������³�Ǥ��ʤ���
-     * @exception InvalidName ���� name ��̾����������
+     * @exception NotFound 途中の <c_1, c_2, ..., c_(n-1)> が存在しない。
+     * @exception CannotProceed 何らかの理由で処理を継続できない。
+     * @exception InvalidName 引数 name の名前が不正。
      *
      * @else
      *
@@ -648,21 +648,21 @@ namespace RTC
     /*!
      * @if jp
      *
-     * @brief NamingContext �� rebind ����
+     * @brief NamingContext を rebind する
      *
-     * name �ǻ��ꤵ�줿����ƥ����Ȥ����Ǥ�¸�ߤ����������� bindContext() 
-     * ��Ʊ���Ǥ��롣
-     * �Х���ǥ��󥰤����Ǥ�¸�ߤ�����ˤϡ��������Х���ǥ��󥰤�
-     * �֤��������롣
+     * name で指定されたコンテキストがすでに存在する場合を除いて bindContext() 
+     * と同じである。
+     * バインディングがすでに存在する場合には、新しいバインディングに
+     * 置き換えられる。
      *
-     * @param string_name ���֥������Ȥ��դ���̾����ʸ����ɽ��
-     * @param name_cxt ��Ϣ�դ����� NamingContext
-     * @param force true�ξ�硢����Υ���ƥ����Ȥ���Ū�˥Х���ɤ���
-     *              (�ǥե������:true)
+     * @param string_name オブジェクトに付ける名前の文字列表現
+     * @param name_cxt 関連付けられる NamingContext
+     * @param force trueの場合、途中のコンテキストを強制的にバインドする
+     *              (デフォルト値:true)
      *
-     * @exception NotFound ����� <c_1, c_2, ..., c_(n-1)> ��¸�ߤ��ʤ���
-     * @exception CannotProceed ���餫����ͳ�ǽ������³�Ǥ��ʤ���
-     * @exception InvalidName ���� name ��̾����������
+     * @exception NotFound 途中の <c_1, c_2, ..., c_(n-1)> が存在しない。
+     * @exception CannotProceed 何らかの理由で処理を継続できない。
+     * @exception InvalidName 引数 name の名前が不正。
      *
      * @else
      *
@@ -691,14 +691,14 @@ namespace RTC
     /*!
      * @if jp
      *
-     * @brief ����Υ���ƥ����Ȥ�Ƶ�Ū�� rebind �� NamingContext �� rebind ����
+     * @brief 途中のコンテキストを再帰的に rebind し NamingContext を rebind する
      *
-     * bind ����륪�֥������Ȥ� NamingContext �Ǥ��뤳�Ȥ������
-     * rebindRecursive() ��Ʊ���Ǥ��롣
+     * bind されるオブジェクトが NamingContext であることを除いて
+     * rebindRecursive() と同じである。
      *
-     * @param context bind �򳫻Ϥ��롡NamingContext
-     * @param name ���֥������Ȥ��դ���̾���� NameComponent
-     * @param name_cxt ��Ϣ�դ����� NamingContext
+     * @param context bind を開始する　NamingContext
+     * @param name オブジェクトに付ける名前の NameComponent
+     * @param name_cxt 関連付けられる NamingContext
      *
      * @else
      *
@@ -720,22 +720,22 @@ namespace RTC
     /*!
      * @if jp
      *
-     * @brief Ϳ����줿 NameComponent �˥Х���ɤ���Ƥ��� Object ���֤�
+     * @brief 与えられた NameComponent にバインドされている Object を返す
      *
-     * name �� bind ����Ƥ��륪�֥������Ȼ��Ȥ��֤���
-     * �͡��ॳ��ݡ��ͥ�� <c_1, c_2, ... c_n> �ϺƵ�Ū�˲�褵��롣
+     * name に bind されているオブジェクト参照を返す。
+     * ネームコンポーネント <c_1, c_2, ... c_n> は再帰的に解決される。
      * 
-     * CosNaming::resolve() �Ȥۤ�Ʊ����Ư���򤹤뤬�����Ϳ����줿
-     * �͡��ॵ���ФΥ롼�ȥ���ƥ����Ȥ��Ф��� resolve() ���ƤӽФ��������
-     * �ۤʤ롣
+     * CosNaming::resolve() とほぼ同等の働きをするが、常に与えられた
+     * ネームサーバのルートコンテキストに対して resolve() が呼び出される点が
+     * 異なる。
      *
-     * @param name ��褹�٤����֥������Ȥ�̾���Υ͡��ॳ��ݡ��ͥ��
+     * @param name 解決すべきオブジェクトの名前のネームコンポーネント
      *
-     * @return ��褵�줿���֥������Ȼ���
+     * @return 解決されたオブジェクト参照
      *
-     * @exception NotFound ����� <c_1, c_2, ..., c_(n-1)> ��¸�ߤ��ʤ���
-     * @exception CannotProceed ���餫����ͳ�ǽ������³�Ǥ��ʤ���
-     * @exception InvalidName ���� name ��̾����������
+     * @exception NotFound 途中の <c_1, c_2, ..., c_(n-1)> が存在しない。
+     * @exception CannotProceed 何らかの理由で処理を継続できない。
+     * @exception InvalidName 引数 name の名前が不正。
      *
      * @else
      *
@@ -764,22 +764,22 @@ namespace RTC
     /*!
      * @if jp
      *
-     * @brief Ϳ����줿 NameComponent �˥Х���ɤ���Ƥ��� Object ���֤�
+     * @brief 与えられた NameComponent にバインドされている Object を返す
      *
-     * name �� bind ����Ƥ��륪�֥������Ȼ��Ȥ��֤���
-     * �͡��ॳ��ݡ��ͥ�� <c_1, c_2, ... c_n> �ϺƵ�Ū�˲�褵��롣
+     * name に bind されているオブジェクト参照を返す。
+     * ネームコンポーネント <c_1, c_2, ... c_n> は再帰的に解決される。
      * 
-     * CosNaming::resolve() �Ȥۤ�Ʊ����Ư���򤹤뤬�����Ϳ����줿
-     * �͡��ॵ���ФΥ롼�ȥ���ƥ����Ȥ��Ф��� resolve() ���ƤӽФ��������
-     * �ۤʤ롣
+     * CosNaming::resolve() とほぼ同等の働きをするが、常に与えられた
+     * ネームサーバのルートコンテキストに対して resolve() が呼び出される点が
+     * 異なる。
      *
-     * @param string_name ��褹�٤����֥������Ȥ�̾����ʸ����ɽ��
+     * @param string_name 解決すべきオブジェクトの名前の文字列表現
      *
-     * @return ��褵�줿���֥������Ȼ���
+     * @return 解決されたオブジェクト参照
      *
-     * @exception NotFound ����� <c_1, c_2, ..., c_(n-1)> ��¸�ߤ��ʤ���
-     * @exception CannotProceed ���餫����ͳ�ǽ������³�Ǥ��ʤ���
-     * @exception InvalidName ���� name ��̾����������
+     * @exception NotFound 途中の <c_1, c_2, ..., c_(n-1)> が存在しない。
+     * @exception CannotProceed 何らかの理由で処理を継続できない。
+     * @exception InvalidName 引数 name の名前が不正。
      *
      * @else
      *
@@ -809,20 +809,20 @@ namespace RTC
     /*!
      * @if jp
      *
-     * @brief Ϳ����줿 NameComponent �ΥХ���ǥ��󥰤�������
+     * @brief 与えられた NameComponent のバインディングを削除する
      *
-     * name �� bind ����Ƥ��륪�֥������Ȼ��Ȥ��֤���
-     * �͡��ॳ��ݡ��ͥ�� <c_1, c_2, ... c_n> �ϺƵ�Ū�˲�褵��롣
+     * name に bind されているオブジェクト参照を返す。
+     * ネームコンポーネント <c_1, c_2, ... c_n> は再帰的に解決される。
      * 
-     * CosNaming::unbind() �Ȥۤ�Ʊ����Ư���򤹤뤬�����Ϳ����줿
-     * �͡��ॵ���ФΥ롼�ȥ���ƥ����Ȥ��Ф��� unbind() ���ƤӽФ��������
-     * �ۤʤ롣
+     * CosNaming::unbind() とほぼ同等の働きをするが、常に与えられた
+     * ネームサーバのルートコンテキストに対して unbind() が呼び出される点が
+     * 異なる。
      *
-     * @param name ������륪�֥������ȤΥ͡��ॳ��ݡ��ͥ��
+     * @param name 削除するオブジェクトのネームコンポーネント
      *
-     * @exception NotFound ����� <c_1, c_2, ..., c_(n-1)> ��¸�ߤ��ʤ���
-     * @exception CannotProceed ���餫����ͳ�ǽ������³�Ǥ��ʤ���
-     * @exception InvalidName ���� name ��̾����������
+     * @exception NotFound 途中の <c_1, c_2, ..., c_(n-1)> が存在しない。
+     * @exception CannotProceed 何らかの理由で処理を継続できない。
+     * @exception InvalidName 引数 name の名前が不正。
      *
      * @else
      *
@@ -849,22 +849,22 @@ namespace RTC
     /*!
      * @if jp
      *
-     * @brief Ϳ����줿 NameComponent �ΥХ���ǥ��󥰤�������
+     * @brief 与えられた NameComponent のバインディングを削除する
      *
-     * name �� bind ����Ƥ��륪�֥������Ȼ��Ȥ��֤���
-     * �͡��ॳ��ݡ��ͥ�� <c_1, c_2, ... c_n> �ϺƵ�Ū�˲�褵��롣
+     * name に bind されているオブジェクト参照を返す。
+     * ネームコンポーネント <c_1, c_2, ... c_n> は再帰的に解決される。
      * 
-     * CosNaming::unbind() �Ȥۤ�Ʊ����Ư���򤹤뤬�����Ϳ����줿
-     * �͡��ॵ���ФΥ롼�ȥ���ƥ����Ȥ��Ф��� unbind() ���ƤӽФ��������
-     * �ۤʤ롣
+     * CosNaming::unbind() とほぼ同等の働きをするが、常に与えられた
+     * ネームサーバのルートコンテキストに対して unbind() が呼び出される点が
+     * 異なる。
      *
-     * @param string_name ��褹�٤����֥������Ȥ�̾����ʸ����ɽ��
+     * @param string_name 解決すべきオブジェクトの名前の文字列表現
      *
-     * @return ��褵�줿���֥������Ȼ���
+     * @return 解決されたオブジェクト参照
      *
-     * @exception NotFound ����� <c_1, c_2, ..., c_(n-1)> ��¸�ߤ��ʤ���
-     * @exception CannotProceed ���餫����ͳ�ǽ������³�Ǥ��ʤ���
-     * @exception InvalidName ���� name ��̾����������
+     * @exception NotFound 途中の <c_1, c_2, ..., c_(n-1)> が存在しない。
+     * @exception CannotProceed 何らかの理由で処理を継続できない。
+     * @exception InvalidName 引数 name の名前が不正。
      *
      * @else
      *
@@ -894,12 +894,12 @@ namespace RTC
     /*!
      * @if jp
      *
-     * @brief ����������ƥ����Ȥ���������
+     * @brief 新しいコンテキストを生成する
      *
-     * Ϳ����줿�͡��ॵ���о���������줿 NamingContext ���֤���
-     * �֤��줿 NamingContext �� bind ����Ƥ��ʤ���
+     * 与えられたネームサーバ上で生成された NamingContext を返す。
+     * 返された NamingContext は bind されていない。
      * 
-     * @return �������줿������ NamingContext
+     * @return 生成された新しい NamingContext
      *
      * @else
      *
@@ -917,21 +917,21 @@ namespace RTC
     /*!
      * @if jp
      *
-     * @brief ����������ƥ����Ȥ� bind ����
+     * @brief 新しいコンテキストを bind する
      *
-     * Ϳ����줿 name ���Ф��ƿ���������ƥ����Ȥ�Х���ɤ��롣
-     * �������줿��NamingContext �ϥ͡��ॵ���о���������줿��ΤǤ��롣
+     * 与えられた name に対して新しいコンテキストをバインドする。
+     * 生成された　NamingContext はネームサーバ上で生成されたものである。
      * 
-     * @param name NamingContext���դ���̾���Υ͡��ॳ��ݡ��ͥ��
-     * @param force true�ξ�硢����Υ���ƥ����Ȥ���Ū�˥Х���ɤ���
-     *              (�ǥե������:true)
+     * @param name NamingContextに付ける名前のネームコンポーネント
+     * @param force trueの場合、途中のコンテキストを強制的にバインドする
+     *              (デフォルト値:true)
      *
-     * @return �������줿������ NamingContext
+     * @return 生成された新しい NamingContext
      *
-     * @exception NotFound ����� <c_1, c_2, ..., c_(n-1)> ��¸�ߤ��ʤ���
-     * @exception CannotProceed ���餫����ͳ�ǽ������³�Ǥ��ʤ���
-     * @exception InvalidName ���� name ��̾����������
-     * @exception AlreadyBound name <n> �� Object �����Ǥ˥Х���ɤ���Ƥ��롣
+     * @exception NotFound 途中の <c_1, c_2, ..., c_(n-1)> が存在しない。
+     * @exception CannotProceed 何らかの理由で処理を継続できない。
+     * @exception InvalidName 引数 name の名前が不正。
+     * @exception AlreadyBound name <n> の Object がすでにバインドされている。
      *
      * @else
      *
@@ -961,21 +961,21 @@ namespace RTC
     /*!
      * @if jp
      *
-     * @brief ����������ƥ����Ȥ� bind ����
+     * @brief 新しいコンテキストを bind する
      *
-     * Ϳ����줿ʸ������б����뿷��������ƥ����Ȥ�Х���ɤ��롣
-     * �������줿��NamingContext �ϥ͡��ॵ���о���������줿��ΤǤ��롣
+     * 与えられた文字列に対応する新しいコンテキストをバインドする。
+     * 生成された　NamingContext はネームサーバ上で生成されたものである。
      * 
-     * @param string_name NamingContext���դ���̾����ʸ����ɽ��
-     * @param force true�ξ�硢����Υ���ƥ����Ȥ���Ū�˥Х���ɤ���
-     *              (�ǥե������:true)
+     * @param string_name NamingContextに付ける名前の文字列表現
+     * @param force trueの場合、途中のコンテキストを強制的にバインドする
+     *              (デフォルト値:true)
      * 
-     * @return �������줿������ NamingContext
+     * @return 生成された新しい NamingContext
      *
-     * @exception NotFound ����� <c_1, c_2, ..., c_(n-1)> ��¸�ߤ��ʤ���
-     * @exception CannotProceed ���餫����ͳ�ǽ������³�Ǥ��ʤ���
-     * @exception InvalidName ���� name ��̾����������
-     * @exception AlreadyBound name <n> �� Object �����Ǥ˥Х���ɤ���Ƥ��롣
+     * @exception NotFound 途中の <c_1, c_2, ..., c_(n-1)> が存在しない。
+     * @exception CannotProceed 何らかの理由で処理を継続できない。
+     * @exception InvalidName 引数 name の名前が不正。
+     * @exception AlreadyBound name <n> の Object がすでにバインドされている。
      *
      * @else
      *
@@ -1006,15 +1006,15 @@ namespace RTC
     /*!
      * @if jp
      *
-     * @brief NamingContext ���󥢥��ƥ��ֲ�����
+     * @brief NamingContext を非アクティブ化する
      *
-     * context �ǻ��ꤵ�줿 NamingContext ���󥢥��ƥ��ֲ����롣
-     * context ��¾�Υ���ƥ����Ȥ��Х���ɤ���Ƥ������ NotEmpty �㳰��
-     * ȯ�����롣
+     * context で指定された NamingContext を非アクティブ化する。
+     * context に他のコンテキストがバインドされている場合は NotEmpty 例外が
+     * 発生する。
      * 
-     * @param context �󥢥��ƥ��ֲ����� NamingContext
+     * @param context 非アクティブ化する NamingContext
      *
-     * @exception NotEmpty �о�context ��¾�Υ���ƥ����Ȥ��Х���ɤ���Ƥ��롣
+     * @exception NotEmpty 対象context に他のコンテキストがバインドされている。
      *
      * @else
      *
@@ -1035,18 +1035,18 @@ namespace RTC
     
     /*!
      * @if jp
-     * @brief NamingContext ��Ƶ�Ū�˲��ä��󥢥��ƥ��ֲ�����
+     * @brief NamingContext を再帰的に下って非アクティブ化する
      *
-     * context ��Ϳ����줿 NamingContext ���Ф��ơ�name �ǻ��ꤵ�줿
-     * �͡��ॳ��ݡ��ͥ�� <c_1, ... c_(n-1)> �� NamingContext �Ȥ���
-     * ��褷�ʤ��顢̾�� <c_n> ���Ф��� �󥢥��ƥ��ֲ���Ԥ���
+     * context で与えられた NamingContext に対して、name で指定された
+     * ネームコンポーネント <c_1, ... c_(n-1)> を NamingContext として
+     * 解決しながら、名前 <c_n> に対して 非アクティブ化を行う。
      *
-     * @param context �󥢥��ƥ��ֲ����� NamingContext
+     * @param context 非アクティブ化する NamingContext
      *
-     * @exception NotEmpty �о�context ��¾�Υ���ƥ����Ȥ��Х���ɤ���Ƥ��롣
-     * @exception NotFound ����� <c_1, c_2, ..., c_(n-1)> ��¸�ߤ��ʤ���
-     * @exception CannotProceed ���餫����ͳ�ǽ������³�Ǥ��ʤ���
-     * @exception InvalidName ���� name ��̾����������
+     * @exception NotEmpty 対象context に他のコンテキストがバインドされている。
+     * @exception NotFound 途中の <c_1, c_2, ..., c_(n-1)> が存在しない。
+     * @exception CannotProceed 何らかの理由で処理を継続できない。
+     * @exception InvalidName 引数 name の名前が不正。
      *
      * @else
      *
@@ -1069,9 +1069,9 @@ namespace RTC
     
     /*!
      * @if jp
-     * @brief ���٤Ƥ� Binding ��������
+     * @brief すべての Binding を削除する
      *
-     * ��Ͽ����Ƥ������Ƥ�Binding �������롣
+     * 登録されている全てのBinding を削除する。
      *
      * @else
      * @brief Destroy all bindings
@@ -1084,14 +1084,14 @@ namespace RTC
     
     /*!
      * @if jp
-     * @brief Ϳ����줿 NamingContext �� Binding ���������
+     * @brief 与えられた NamingContext の Binding を取得する
      *
-     * ���ꤵ�줿 NamingContext �� Binding ��������롣
+     * 指定された NamingContext の Binding を取得する。
      *
-     * @param name_cxt Binding �����о� NamingContext
-     * @param how_many Binding ��������볬�ؤο���
-     * @param bl �������� Binding ���ݻ�����ۥ��
-     * @param bi �������� Binding �򤿤ɤ뤿��Υ��ƥ졼��
+     * @param name_cxt Binding 取得対象 NamingContext
+     * @param how_many Binding を取得する階層の深さ
+     * @param bl 取得した Binding を保持するホルダ
+     * @param bi 取得した Binding をたどるためのイテレータ
      *
      * @else
      * @brief Get Binding of the given NamingContext
@@ -1111,20 +1111,20 @@ namespace RTC
               CosNaming::BindingIterator_var& bi);
     /*!
      * @if jp
-     * @brief Ϳ����줿 Naming �ѥ��ʲ��Τ��٤ƤΥХ���ǥ��󥰤��������
+     * @brief 与えられた Naming パス以下のすべてのバインディングを取得する
      *
-     * ʸ����ǻ��ꤵ�줿�͡��ߥ����Хѥ��ʲ��Τ��٤ƤΥХ���ǥ���
-     * ���ʤ���Х���ǥ��󥰤Υ����פȻ��ȤΥ��åȤ�������롣�ѥ��ϡ�
-     * �롼�ȥ���ƥ����Ȥ��鳬�ؤ� "/"��̾���ȥ���ƥ����Ȥ� "." �Ƕ�
-     * �ڤä�ʸ����Ǥ��롣
+     * 文字列で指定されたネーミング絶対パス以下のすべてのバインディング
+     * すなわちバインディングのタイプと参照のセットを取得する。パスは、
+     * ルートコンテキストから階層を "/"、名前とコンテキストを "." で区
+     * 切った文字列である。
      *
-     * �㤨�С�<name0>.<context0>/.../<name[n]>.<context[n]> ����ꤹ��
-     * ��<name[n]>.<context[n]> �β��˥Х���ɤ���Ƥ��륳��ƥ����Ȥ�
-     * ���ϥ��֥������ȥ�ե���󥹤Υꥹ�Ȥ� BindingList �Ȥ����֤���
-     * �롣
+     * 例えば、<name0>.<context0>/.../<name[n]>.<context[n]> を指定する
+     * と<name[n]>.<context[n]> の下にバインドされているコンテキストま
+     * たはオブジェクトリファレンスのリストが BindingList として返され
+     * る。
      *
-     * @param string_name [in] ʸ����ǻ��ꤵ��륿�����åȤΥѥ�
-     * @param bl [out] ���ꤵ�줿�ѥ��β��ΥХ���ǥ��󥰥ꥹ��
+     * @param string_name [in] 文字列で指定されるターゲットのパス
+     * @param bl [out] 指定されたパスの下のバインディングリスト
      *
      * @else
      *
@@ -1150,27 +1150,27 @@ namespace RTC
 
     /*!
      * @if jp
-     * @brief Ϳ����줿�ѥ��ʲ��λ��ꤵ�줿kind�ΥХ���ǥ��󥰤��������
+     * @brief 与えられたパス以下の指定されたkindのバインディングを取得する
      *
-     * ʸ����ǻ��ꤵ�줿�͡��ߥ����Хѥ��ʲ��Τ��������ꤵ�줿 kind
-     * ����Ĥ��٤ƤΥХ���ǥ��󥰤�������롣�ѥ��ϡ��롼�ȥ���ƥ���
-     * �Ȥ��鳬�ؤ� "/"��̾���ȥ���ƥ����Ȥ� "." �Ƕ��ڤä�ʸ����Ǥ�
-     * �롣
+     * 文字列で指定されたネーミング絶対パス以下のうち、指定された kind
+     * を持つすべてのバインディングを取得する。パスは、ルートコンテキス
+     * トから階層を "/"、名前とコンテキストを "." で区切った文字列であ
+     * る。
      *
-     * �㤨�С���1�����˥ѥ�
-     * <name0>.<context0>/.../<name[n]>.<context[n]> ����ꤷ����2����
-     * �� kind "hoge" ����ꤹ��ȡ���<name[n]>.<context[n]> �β��˥Х�
-     * ��ɤ���Ƥ��륳��ƥ����Ȥޤ��ϥ��֥������ȥ�ե���󥹤Υꥹ��
-     * �Τ��� kind �� "hoge" �Τ�Τ� BindingList �Ȥ����֤���롣
+     * 例えば、第1引数にパス
+     * <name0>.<context0>/.../<name[n]>.<context[n]> を指定し、第2引数
+     * の kind "hoge" を指定すると、と<name[n]>.<context[n]> の下にバイ
+     * ンドされているコンテキストまたはオブジェクトリファレンスのリスト
+     * のうち kind が "hoge" のものが BindingList として返される。
      *
-     * �㤨�С�<name0>.<context0>/.../<name[n]>.<context[n]> ����ꤹ��
-     * ��<name[n]>.<context[n]> �β��˥Х���ɤ���Ƥ��륳��ƥ����Ȥ�
-     * ���ϥ��֥������ȥ�ե���󥹤Υꥹ�Ȥ� BindingList �Ȥ����֤���
-     * �롣
+     * 例えば、<name0>.<context0>/.../<name[n]>.<context[n]> を指定する
+     * と<name[n]>.<context[n]> の下にバインドされているコンテキストま
+     * たはオブジェクトリファレンスのリストが BindingList として返され
+     * る。
      *
-     * @param string_name [in] ʸ����ǻ��ꤵ��륿�����åȤΥѥ�
-     * @param string_kind [in] ʸ����ǻ��ꤵ��륿�����åȤ�kind
-     * @param bl [out] ���ꤵ�줿�ѥ��β��ΥХ���ǥ��󥰥ꥹ��
+     * @param string_name [in] 文字列で指定されるターゲットのパス
+     * @param string_kind [in] 文字列で指定されるターゲットのkind
+     * @param bl [out] 指定されたパスの下のバインディングリスト
      *
      * @else
      *
@@ -1203,15 +1203,15 @@ namespace RTC
     //============================================================
     /*!
      * @if jp
-     * @brief Ϳ����줿 NameComponent ��ʸ����ɽ�����֤�
+     * @brief 与えられた NameComponent の文字列表現を返す
      *
-     * ���ꤵ�줿 NameComponent ��ʸ�����Ѵ����롣
+     * 指定された NameComponent を文字に変換する。
      *
-     * @param name �Ѵ��о� NameComponent
+     * @param name 変換対象 NameComponent
      *
-     * @return ʸ�����Ѵ����
+     * @return 文字列変換結果
      *
-     * @exception InvalidName ���� name ��̾����������
+     * @exception InvalidName 引数 name の名前が不正。
      *
      * @else
      * @brief Get string representation of given NameComponent
@@ -1231,15 +1231,15 @@ namespace RTC
     
     /*!
      * @if jp
-     * @brief Ϳ����줿ʸ����ɽ���� NameComponent ��ʬ�򤹤�
+     * @brief 与えられた文字列表現を NameComponent に分解する
      *
-     * ���ꤵ�줿ʸ����� NameComponent ���Ѵ����롣
+     * 指定された文字列を NameComponent に変換する。
      *
-     * @param string_name �Ѵ��о�ʸ����
+     * @param string_name 変換対象文字列
      *
-     * @return NameComponent �Ѵ����
+     * @return NameComponent 変換結果
      *
-     * @exception InvalidName ���� string_name ��������
+     * @exception InvalidName 引数 string_name が不正。
      *
      * @else
      * @brief Resolve given string representation to NameComponent
@@ -1259,17 +1259,17 @@ namespace RTC
     
     /*!
      * @if jp
-     * @brief Ϳ����줿 addre �� string_name ���� URLɽ�����������
+     * @brief 与えられた addre と string_name から URL表現を取得する
      *
-     * ���ꤵ�줿���ɥ쥹��̾�Τ�URL���Ѵ����롣
+     * 指定されたアドレスと名称をURLに変換する。
      *
-     * @param addr �Ѵ��оݥ��ɥ쥹
-     * @param string_name �Ѵ��о�̾��
+     * @param addr 変換対象アドレス
+     * @param string_name 変換対象名称
      *
-     * @return URL �Ѵ����
+     * @return URL 変換結果
      *
-     * @exception InvalidAddress ���� addr ��������
-     * @exception InvalidName ���� string_name ��������
+     * @exception InvalidAddress 引数 addr が不正。
+     * @exception InvalidName 引数 string_name が不正。
      *
      * @else
      * @brief Get URL representation from given addr and string_name
@@ -1291,18 +1291,18 @@ namespace RTC
     
     /*!
      * @if jp
-     * @brief Ϳ����줿ʸ����ɽ���� resolve �����֥������Ȥ��֤�
+     * @brief 与えられた文字列表現を resolve しオブジェクトを返す
      *
-     * ���ꤵ�줿ʸ����ɽ����resolve�������֥������Ȥ�������롣
+     * 指定された文字列表現をresolveし，オブジェクトを取得する。
      *
-     * @param string_name �����оݥ��֥�������ʸ����ɽ��
+     * @param string_name 取得対象オブジェクト文字列表現
      *
-     * @return ��褵�줿���֥�������
+     * @return 解決されたオブジェクト
      *
-     * @exception NotFound ����� <c_1, c_2, ..., c_(n-1)> ��¸�ߤ��ʤ���
-     * @exception CannotProceed ���餫����ͳ�ǽ������³�Ǥ��ʤ���
-     * @exception InvalidName ���� name ��̾����������
-     * @exception AlreadyBound name <n> �� Object �����Ǥ˥Х���ɤ���Ƥ��롣
+     * @exception NotFound 途中の <c_1, c_2, ..., c_(n-1)> が存在しない。
+     * @exception CannotProceed 何らかの理由で処理を継続できない。
+     * @exception InvalidName 引数 name の名前が不正。
+     * @exception AlreadyBound name <n> の Object がすでにバインドされている。
      *
      * @else
      * @brief Resolve from name of string representation and get object
@@ -1335,18 +1335,18 @@ namespace RTC
     /*!
      * @if jp
      *
-     * @brief ���֥������Ȥ�̾����Х���ɤޤ��ϲ�褹��
+     * @brief オブジェクトの名前をバインドまたは解決する
      *
-     * ���ꤵ�줿����ƥ����Ȥ��Ф��ƥ��֥������Ȥ� NameComponent �ǻ��ꤵ�줿
-     * ���֤˥Х���ɤ��롣
-     * Ʊ��ս�˴���¾�����Ǥ��Х���ɺѤߤξ��ϡ���¸�ΥХ���ɺѤ����Ǥ�
-     * �������롣
+     * 指定されたコンテキストに対してオブジェクトを NameComponent で指定された
+     * 位置にバインドする。
+     * 同一箇所に既に他の要素がバインド済みの場合は、既存のバインド済み要素を
+     * 取得する。
      *
-     * @param context bind �⤷���� resole �оݥ���ƥ�����
-     * @param name ���֥������Ȥ��դ���̾���� NameComponent
-     * @param obj ��Ϣ�դ����� Object
+     * @param context bind もしくは resole 対象コンテキスト
+     * @param name オブジェクトに付ける名前の NameComponent
+     * @param obj 関連付けられる Object
      *
-     * @return NameComponent �ǻ��ꤵ�줿���֤˥Х���ɤ���Ƥ��륪�֥�������
+     * @return NameComponent で指定された位置にバインドされているオブジェクト
      *
      * @else
      * @brief Bind or resolve the given name component
@@ -1371,18 +1371,18 @@ namespace RTC
     /*!
      * @if jp
      *
-     * @brief ̾����Х���ɤޤ��ϲ�褹��
+     * @brief 名前をバインドまたは解決する
      *
-     * ���ꤵ�줿����ƥ����Ȥ��Ф��� Context�� NameComponent �ǻ��ꤵ�줿���֤�
-     * �Х���ɤ��롣
-     * Ʊ��ս�˴���¾�����Ǥ��Х���ɺѤߤξ��ϡ���¸�ΥХ���ɺѤ����Ǥ�
-     * �������롣
+     * 指定されたコンテキストに対して Contextを NameComponent で指定された位置に
+     * バインドする。
+     * 同一箇所に既に他の要素がバインド済みの場合は、既存のバインド済み要素を
+     * 取得する。
      *
-     * @param context bind �⤷���� resole �оݥ���ƥ�����
-     * @param name ����ƥ����Ȥ��դ���̾���� NameComponent
-     * @param new_context ��Ϣ�դ����� Context
+     * @param context bind もしくは resole 対象コンテキスト
+     * @param name コンテキストに付ける名前の NameComponent
+     * @param new_context 関連付けられる Context
      *
-     * @return NameComponent �ǻ��ꤵ�줿���֤˥Х���ɤ���Ƥ���Context
+     * @return NameComponent で指定された位置にバインドされているContext
      *
      * @else
      * @brief Bind or resolve the given name component
@@ -1408,17 +1408,17 @@ namespace RTC
     
     /*!
      * @if jp
-     * @brief ̾����Х���ɤޤ��ϲ�褹��
+     * @brief 名前をバインドまたは解決する
      *
-     * ���ꤵ�줿����ƥ����Ȥ��Ф��� NameComponent �ǻ��ꤵ�줿���֤�
-     * ��������ƥ����Ȥ�Х���ɤ��롣
-     * Ʊ��ս�˴���¾�����Ǥ��Х���ɺѤߤξ��ϡ���¸�ΥХ���ɺѤ����Ǥ�
-     * �������롣
+     * 指定されたコンテキストに対して NameComponent で指定された位置に
+     * 新規コンテキストをバインドする。
+     * 同一箇所に既に他の要素がバインド済みの場合は、既存のバインド済み要素を
+     * 取得する。
      *
-     * @param context bind �⤷���� resole �оݥ���ƥ�����
-     * @param name �����������륳��ƥ����Ȥΰ��֤�ɽ�� NameComponent
+     * @param context bind もしくは resole 対象コンテキスト
+     * @param name 新規作成するコンテキストの位置を表す NameComponent
      *
-     * @return NameComponent �ǻ��ꤵ�줿���֤˥Х���ɤ���Ƥ���Context
+     * @return NameComponent で指定された位置にバインドされているContext
      *
      * @else
      * @brief Bind or resolve the given name component
@@ -1442,11 +1442,11 @@ namespace RTC
     
     /*!
      * @if jp
-     * @brief �͡��ॵ���Ф�̾�����������
+     * @brief ネームサーバの名前を取得する
      *
-     * ���ꤷ���͡��ॵ���Ф�̾����������롣
+     * 設定したネームサーバの名前を取得する。
      *
-     * @return �͡��ॵ���Ф�̾��
+     * @return ネームサーバの名前
      *
      * @else
      * @brief Get the name of name server
@@ -1461,11 +1461,11 @@ namespace RTC
     
     /*!
      * @if jp
-     * @brief �롼�ȥ���ƥ����Ȥ��������
+     * @brief ルートコンテキストを取得する
      *
-     * ���ꤷ���͡��ॵ���ФΥ롼�ȥ���ƥ����Ȥ�������롣
+     * 設定したネームサーバのルートコンテキストを取得する。
      *
-     * @return �͡��ॵ���ФΥ롼�ȥ���ƥ�����
+     * @return ネームサーバのルートコンテキスト
      *
      * @else
      * @brief Get the root context
@@ -1480,13 +1480,13 @@ namespace RTC
     
     /*!
      * @if jp
-     * @brief ���֥������Ȥ��͡��ߥ󥰥���ƥ����Ȥ�Ƚ�̤���
+     * @brief オブジェクトがネーミングコンテキストか判別する
      *
-     * ���ꤷ�����Ǥ��͡��ߥ󥰥���ƥ����Ȥ�Ƚ�̤���
+     * 指定した要素がネーミングコンテキストか判別する
      *
-     * @param obj Ƚ���о�����
+     * @param obj 判別対象要素
      *
-     * @return Ƚ�̷��(�͡��ߥ󥰥���ƥ�����:true������ʳ�:false)
+     * @return 判別結果(ネーミングコンテキスト:true、それ以外:false)
      *
      * @else
      * @brief Determine whether the object is NamingContext
@@ -1503,13 +1503,13 @@ namespace RTC
     
     /*!
      * @if jp
-     * @brief Ϳ����줿̾�����͡��ߥ󥰥���ƥ����Ȥ��ɤ���
+     * @brief 与えられた名前がネーミングコンテキストかどうか
      *
-     * NameComponent�ǻ��ꤷ�����Ǥ��͡��ߥ󥰥���ƥ����Ȥ�Ƚ�̤���
+     * NameComponentで指定した要素がネーミングコンテキストか判別する
      *
-     * @param name Ƚ���о�NameComponent
+     * @param name 判別対象NameComponent
      *
-     * @return Ƚ�̷��(�͡��ߥ󥰥���ƥ�����:true������ʳ�:false)
+     * @return 判別結果(ネーミングコンテキスト:true、それ以外:false)
      *
      * @else
      * @brief Determine whether the given name component is NamingContext
@@ -1526,13 +1526,13 @@ namespace RTC
     
     /*!
      * @if jp
-     * @brief Ϳ����줿̾�����͡��ߥ󥰥���ƥ����Ȥ��ɤ���
+     * @brief 与えられた名前がネーミングコンテキストかどうか
      *
-     * ʸ����ǻ��ꤷ�����Ǥ��͡��ߥ󥰥���ƥ����Ȥ�Ƚ�̤���
+     * 文字列で指定した要素がネーミングコンテキストか判別する
      *
-     * @param string_name Ƚ���о�ʸ����
+     * @param string_name 判別対象文字列
      *
-     * @return Ƚ�̷��(�͡��ߥ󥰥���ƥ�����:true������ʳ�:false)
+     * @return 判別結果(ネーミングコンテキスト:true、それ以外:false)
      *
      * @else
      * @brief Determine whether the given string name is NamingContext
@@ -1549,17 +1549,17 @@ namespace RTC
     
     /*!
      * @if jp
-     * @brief �͡��ॳ��ݡ��ͥ�Ȥ���ʬ���֤�
+     * @brief ネームコンポーネントの部分を返す
      *
-     * ���ꤵ�줿�ϰϤΥ͡��ॳ��ݡ��ͥ�Ȥ�������롣
-     * ��λ���֤����ꤵ��Ƥ��ʤ����ϡ��Ǹ�����Ǥ�������͡��ॳ��ݡ��ͥ��
-     * ���֤���
+     * 指定された範囲のネームコンポーネントを取得する。
+     * 終了位置が指定されていない場合は、最後の要素を除いたネームコンポーネント
+     * を返す。
      *
-     * @param name �����о�NameComponent
-     * @param begin �����ϰϳ��ϰ���
-     * @param end �����ϰϽ�λ����(�ǥե������:-1)
+     * @param name 検索対象NameComponent
+     * @param begin 取得範囲開始位置
+     * @param end 取得範囲終了位置(デフォルト値:-1)
      *
-     * @return NameComponent �������
+     * @return NameComponent 取得結果
      *
      * @else
      * @brief Get subset of given name component
@@ -1583,18 +1583,18 @@ namespace RTC
   protected:
     /*!
      * @if jp
-     * @brief �͡��ॳ��ݡ��ͥ�Ȥ�ʸ����ɽ�����������
+     * @brief ネームコンポーネントの文字列表現を取得する
      *
-     * ���ꤷ���ϰϤΥ͡��ॳ��ݡ��ͥ�Ȥ�ʸ����ɽ����������롣
-     * ʸ����ɽ���ϡ�NameComponent�ι�����{Nc[0], Nc[1], Nc[2]...}�ξ�硢
+     * 指定した範囲のネームコンポーネントの文字列表現を取得する。
+     * 文字列表現は、NameComponentの構成が{Nc[0], Nc[1], Nc[2]...}の場合、
      *   Nc[0]id.Nc[0].kind/Nc[1]id.Nc[1].kind/Nc[2].id/Nc[2].kind...
-     * �Ȥ��������Ǽ����Ǥ��롣
-     * ��������ʸ�����Ĺ�������ꤷ��Ĺ���ʾ�ξ��ϡ�
-     * ���ꤷ��Ĺ�����ڤ�ΤƤ��롣
+     * という形式で取得できる。
+     * 取得した文字列の長さが指定した長さ以上の場合は、
+     * 指定した長さで切り捨てられる。
      *
-     * @param name �����о�NameComponent
-     * @param string_name �������ʸ����
-     * @param slen �����о�ʸ���������
+     * @param name 取得対象NameComponent
+     * @param string_name 取得結果文字列
+     * @param slen 取得対象文字列最大値
      *
      * @else
      * @brief Get string representation of name component
@@ -1617,24 +1617,24 @@ namespace RTC
 		      CORBA::ULong slen);
     /*!
      * @if jp
-     * @brief �͡��ॳ��ݡ��ͥ�Ȥ�ʸ����ɽ������ʸ��Ĺ���������
+     * @brief ネームコンポーネントの文字列表現時の文字長を取得する
      *
-     * ���ꤷ���͡��ॳ��ݡ��ͥ�Ȥ�ʸ�����ɽ����������Ĺ����������롣
-     * ʸ����ɽ���ϡ�NameComponent�ι�����{Nc[0],Nc[1],Nc[2]...}�ξ�硢
+     * 指定したネームコンポーネントを文字列で表現した場合の長さを取得する。
+     * 文字列表現は、NameComponentの構成が{Nc[0],Nc[1],Nc[2]...}の場合、
      *   Nc[0]id.Nc[0].kind/Nc[1]id.Nc[1].kind/Nc[2].id/Nc[2].kind...
-     * �Ȥ��������Ǽ����Ǥ��롣
+     * という形式で取得できる。
      *
-     * @param name �����о�NameComponent
+     * @param name 取得対象NameComponent
      *
-     * @return ���ꤷ���͡��ॳ��ݡ��ͥ�Ȥ�ʸ����Ĺ��
+     * @return 指定したネームコンポーネントの文字列長さ
      *
      * @else
      * @brief Get string length of the name component's string representation
      *
      * Get string length of the name component's string representation.
      * In string representation, if NameComponent consists of 
-     * {Nc[0],Nc[1],Nc[2]������}, the format of 
-     * Nc[0]id.Nc[0].kind/Nc[1]id.Nc[1].kind/Nc[2].id/Nc[2].kind������
+     * {Nc[0],Nc[1],Nc[2]・・・}, the format of 
+     * Nc[0]id.Nc[0].kind/Nc[1]id.Nc[1].kind/Nc[2].id/Nc[2].kind・・・
      * will be got.
      *
      * @param name The getting target NameComponent
@@ -1647,15 +1647,15 @@ namespace RTC
     
     /*!
      * @if jp
-     * @brief ʸ�����ʬ��
+     * @brief 文字列の分割
      *
-     * ʸ�������ꤷ���ǥ�ߥ���ʬ�䤹�롣
+     * 文字列を指定したデリミタで分割する。
      *
-     * @param input ʬ���о�ʸ����
-     * @param delimiter ʬ���ѥǥ�ߥ�
-     * @param results ʬ����
+     * @param input 分割対象文字列
+     * @param delimiter 分割用デリミタ
+     * @param results 分割結果
      *
-     * @return ʬ�䤷��ʸ��������ǿ�
+     * @return 分割した文字列の要素数
      *
      * @else
      * @brief Split of string
@@ -1685,7 +1685,7 @@ namespace RTC
     
     /*!
      * @if jp
-     * @brief �͡��ॵ����̾��
+     * @brief ネームサーバ名称
      * @else
      * @brief Name of the name server
      * @endif
@@ -1693,7 +1693,7 @@ namespace RTC
     std::string m_nameServer;
     /*!
      * @if jp
-     * @brief ���ꤷ���͡��ॵ���ФΥ롼�ȥ���ƥ�����
+     * @brief 指定したネームサーバのルートコンテキスト
      * @else
      * @brief The root context of specified name server
      * @endif

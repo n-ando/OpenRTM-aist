@@ -1,4 +1,4 @@
-// -*- C++ -*-
+﻿// -*- C++ -*-
 /*!
  * @file  Mutex_ace.h
  * @brief Mutex class using ACE

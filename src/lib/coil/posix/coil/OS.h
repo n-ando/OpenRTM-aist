@@ -1,4 +1,4 @@
-// -*- C++ -*-
+﻿// -*- C++ -*-
 /*!
  * @file OS_posix.h
  * @brief OS class
@@ -35,13 +35,13 @@ namespace coil
   /*!
    * @if jp
    *
-   * @brief �����ƥ�������
+   * @brief システム情報取得
    *
-   * �����ƥ�����¤�Τ����ꤷ���֤���
+   * システム情報を構造体に設定して返す。
    *
-   * @param name ��¤��̾��
+   * @param name 構造体名称
    *
-   * @return 0: ����, -1: ����
+   * @return 0: 成功, -1: 失敗
    *
    * @else
    *
@@ -64,11 +64,11 @@ namespace coil
   /*!
    * @if jp
    *
-   * @brief �ƤӽФ����ץ������Υץ�����ID����
+   * @brief 呼び出し元プロセスのプロセスID取得
    *
-   * �ƤӽФ����ץ������Υץ�����ID���֤���
+   * 呼び出し元プロセスのプロセスIDを返す。
    *
-   * @return �ץ�����ID
+   * @return プロセスID
    *
    * @else
    *
@@ -89,11 +89,11 @@ namespace coil
   /*!
    * @if jp
    *
-   * @brief �ƤӽФ����ץ������οƥץ������Υץ�����ID����
+   * @brief 呼び出し元プロセスの親プロセスのプロセスID取得
    *
-   * �ƤӽФ����ץ������οƥץ������Υץ�����ID���֤���
+   * 呼び出し元プロセスの親プロセスのプロセスIDを返す。
    *
-   * @return �ץ�����ID
+   * @return プロセスID
    *
    * @else
    *
@@ -113,13 +113,13 @@ namespace coil
   /*!
    * @if jp
    *
-   * @brief �Ķ��ѿ�����
+   * @brief 環境変数取得
    *
-   * �Ķ��ѿ����֤���
+   * 環境変数を返す。
    *
-   * @param name �Ķ��ѿ�̾��
+   * @param name 環境変数名称
    *
-   * @return �Ķ��ѿ�����(NULL: �����ʤ�)
+   * @return 環境変数の値(NULL: 該当なし)
    *
    * @else
    *
@@ -145,7 +145,7 @@ namespace coil
    * @if jp
    *
    * @class GetOpt
-   * @brief GetOpt ���饹
+   * @brief GetOpt クラス
    *
    * @else
    *
@@ -160,11 +160,11 @@ namespace coil
     /*!
      * @if jp
      *
-     * @brief ���󥹥ȥ饯��
+     * @brief コンストラクタ
      *
-     * ���󥹥ȥ饯����
+     * コンストラクタ。
      *
-     * @param name ���֥�������̾
+     * @param name オブジェクト名
      *
      * @else
      *
@@ -188,9 +188,9 @@ namespace coil
     /*!
      * @if jp
      *
-     * @brief �ǥ��ȥ饯��
+     * @brief デストラクタ
      *
-     * �ǥ��ȥ饯����
+     * デストラクタ。
      *
      * @else
      *
@@ -211,11 +211,11 @@ namespace coil
     /*!
      * @if jp
      *
-     * @brief ���ޥ�ɥ饤���������
+     * @brief コマンドライン引数解析
      *
-     * ���ޥ�ɥ饤���������Ϥ��롣
+     * コマンドライン引数を解析する。
      *
-     * @return ���Ϸ��
+     * @return 解析結果
      *
      * @else
      *
@@ -254,10 +254,10 @@ namespace coil
       return result;
     }
 
-    char* optarg;     //! ���ץ�������
-    int optind;       //! �����оݰ���
-    int opterr;       //! ���顼ɽ�� 0:�޻ߡ�1:ɽ��
-    int optopt;       //! ���ץ����ʸ����­��ʤ�����¿�����˥��åȤ����
+    char* optarg;     //! オプション引数
+    int optind;       //! 処理対象引数
+    int opterr;       //! エラー表示 0:抑止、1:表示
+    int optopt;       //! オプション文字が足りない時、多い時にセットされる
 #ifdef __QNX__
     int optind_last;
 #endif

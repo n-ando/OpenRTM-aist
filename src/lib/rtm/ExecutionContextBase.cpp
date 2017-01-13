@@ -1,4 +1,4 @@
-// -*- C++ -*-
+ï»¿// -*- C++ -*-
 /*!
  * @file ExecutionContextBase.cpp
  * @brief ExecutionContext base class
@@ -31,7 +31,7 @@ namespace RTC
   }
   /*!
    * @if jp
-   * @brief ²¾ÁÛ¥Ç¥¹¥È¥é¥¯¥¿
+   * @brief ä»®æƒ³ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
    * @else
    * @brief Virtual Destructor
    * @endif
@@ -42,7 +42,7 @@ namespace RTC
   
   /*!
    * @if jp
-   * @brief ExecutionContext¤Î½èÍı¤ò¿Ê¤á¤ë
+   * @brief ExecutionContextã®å‡¦ç†ã‚’é€²ã‚ã‚‹
    * @else
    * @brief Proceed with tick of ExecutionContext
    * @endif
@@ -96,9 +96,9 @@ namespace RTC
   
   /*!
    * @if jp
-   * @brief ¥³¥ó¥İ¡¼¥Í¥ó¥È¤ò¥Ğ¥¤¥ó¥É¤¹¤ë¡£
+   * @brief ã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆã‚’ãƒã‚¤ãƒ³ãƒ‰ã™ã‚‹ã€‚
    *
-   * ¥³¥ó¥İ¡¼¥Í¥ó¥È¤ò¥Ğ¥¤¥ó¥É¤¹¤ë¡£
+   * ã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆã‚’ãƒã‚¤ãƒ³ãƒ‰ã™ã‚‹ã€‚
    *
    * @else
    * @brief Bind the component.
@@ -117,7 +117,7 @@ namespace RTC
   // Functions to be delegated by EC's CORBA operations
   /*!
    * @if jp
-   * @brief ExecutionContext ¼Â¹Ô¾õÂÖ³ÎÇ§´Ø¿ô
+   * @brief ExecutionContext å®Ÿè¡ŒçŠ¶æ…‹ç¢ºèªé–¢æ•°
    * @else
    * @brief Check for ExecutionContext running state
    * @endif
@@ -130,7 +130,7 @@ namespace RTC
   
   /*!
    * @if jp
-   * @brief ExecutionContext ¤Î¼Â¹Ô¤ò³«»Ï
+   * @brief ExecutionContext ã®å®Ÿè¡Œã‚’é–‹å§‹
    * @else
    * @brief Start the ExecutionContext
    * @endif
@@ -163,7 +163,7 @@ namespace RTC
   
   /*!
    * @if jp
-   * @brief ExecutionContext ¤Î¼Â¹Ô¤òÄä»ß
+   * @brief ExecutionContext ã®å®Ÿè¡Œã‚’åœæ­¢
    * @else
    * @brief Stopping the ExecutionContext
    * @endif
@@ -194,7 +194,7 @@ namespace RTC
   
   /*!
    * @if jp
-   * @brief ExecutionContext ¤Î¼Â¹Ô¼ş´ü(Hz)¤ò¼èÆÀ¤¹¤ë
+   * @brief ExecutionContext ã®å®Ÿè¡Œå‘¨æœŸ(Hz)ã‚’å–å¾—ã™ã‚‹
    * @else
    * @brief Get execution rate(Hz) of ExecutionContext
    * @return Execution cycle(Unit:Hz)
@@ -214,7 +214,7 @@ namespace RTC
   
   /*!
    * @if jp
-   * @brief ExecutionContext ¤Î¼Â¹Ô¼ş´ü(Hz)¤òÀßÄê¤¹¤ë
+   * @brief ExecutionContext ã®å®Ÿè¡Œå‘¨æœŸ(Hz)ã‚’è¨­å®šã™ã‚‹
    * @else
    * @brief Set execution rate(Hz) of ExecutionContext
    * @endif
@@ -246,7 +246,7 @@ namespace RTC
   
   /*!
    * @if jp
-   * @brief RT¥³¥ó¥İ¡¼¥Í¥ó¥È¤òÄÉ²Ã¤¹¤ë
+   * @brief RTã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆã‚’è¿½åŠ ã™ã‚‹
    * @else
    * @brief Add an RT-component
    * @endif
@@ -288,7 +288,7 @@ namespace RTC
   
   /*!
    * @if jp
-   * @brief RT¥³¥ó¥İ¡¼¥Í¥ó¥È¤ò»²²Ã¼Ô¥ê¥¹¥È¤«¤éºï½ü¤¹¤ë
+   * @brief RTã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆã‚’å‚åŠ è€…ãƒªã‚¹ãƒˆã‹ã‚‰å‰Šé™¤ã™ã‚‹
    * @else
    * @brief Remove the RT-Component from participant list
    * @endif
@@ -331,7 +331,7 @@ namespace RTC
   
   /*!
    * @if jp
-   * @brief RT¥³¥ó¥İ¡¼¥Í¥ó¥È¤ò¥¢¥¯¥Æ¥£¥Ö²½¤¹¤ë
+   * @brief RTã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆã‚’ã‚¢ã‚¯ãƒ†ã‚£ãƒ–åŒ–ã™ã‚‹
    * @else
    * @brief Activate an RT-component
    * @endif
@@ -418,7 +418,7 @@ namespace RTC
 
   /*!
    * @if jp
-   * @brief RT¥³¥ó¥İ¡¼¥Í¥ó¥È¤òÈó¥¢¥¯¥Æ¥£¥Ö²½¤¹¤ë
+   * @brief RTã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆã‚’éã‚¢ã‚¯ãƒ†ã‚£ãƒ–åŒ–ã™ã‚‹
    * @else
    * @brief Deactivate an RT-component
    * @endif
@@ -506,7 +506,7 @@ namespace RTC
   
   /*!
    * @if jp
-   * @brief RT¥³¥ó¥İ¡¼¥Í¥ó¥È¤ò¥ê¥»¥Ã¥È¤¹¤ë
+   * @brief RTã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆã‚’ãƒªã‚»ãƒƒãƒˆã™ã‚‹
    * @else
    * @brief Reset the RT-component
    * @endif
@@ -593,15 +593,15 @@ namespace RTC
 
   /*!
    * @if jp
-   * @brief RT¥³¥ó¥İ¡¼¥Í¥ó¥È¤Î¾õÂÖ¤ò¼èÆÀ¤¹¤ë
+   * @brief RTã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆã®çŠ¶æ…‹ã‚’å–å¾—ã™ã‚‹
    *
-   * »ØÄê¤·¤¿RT¥³¥ó¥İ¡¼¥Í¥ó¥È¤Î¾õÂÖ(LifeCycleState)¤ò¼èÆÀ¤¹¤ë¡£»ØÄê¤·
-   * ¤¿RT¥³¥ó¥İ¡¼¥Í¥ó¥È¤¬»²²Ã¼Ô¥ê¥¹¥È¤Ë´Ş¤Ş¤ì¤Ê¤¤¾ì¹ç¤Ï¡¢
-   * UNKNOWN_STATE ¤¬ÊÖ¤µ¤ì¤ë¡£
+   * æŒ‡å®šã—ãŸRTã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆã®çŠ¶æ…‹(LifeCycleState)ã‚’å–å¾—ã™ã‚‹ã€‚æŒ‡å®šã—
+   * ãŸRTã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆãŒå‚åŠ è€…ãƒªã‚¹ãƒˆã«å«ã¾ã‚Œãªã„å ´åˆã¯ã€
+   * UNKNOWN_STATE ãŒè¿”ã•ã‚Œã‚‹ã€‚
    *
-   * @param comp ¾õÂÖ¼èÆÀÂĞ¾İRT¥³¥ó¥İ¡¼¥Í¥ó¥È
+   * @param comp çŠ¶æ…‹å–å¾—å¯¾è±¡RTã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆ
    *
-   * @return ¸½ºß¤Î¾õÂÖ(LifeCycleState)
+   * @return ç¾åœ¨ã®çŠ¶æ…‹(LifeCycleState)
    *
    * @else
    *
@@ -636,9 +636,9 @@ namespace RTC
   }
   /*!
    * @if jp
-   * @brief ExecutionKind ¤ò¼èÆÀ¤¹¤ë
+   * @brief ExecutionKind ã‚’å–å¾—ã™ã‚‹
    *
-   * ËÜ ExecutionContext ¤Î ExecutionKind ¤ò¼èÆÀ¤¹¤ë
+   * æœ¬ ExecutionContext ã® ExecutionKind ã‚’å–å¾—ã™ã‚‹
    *
    * @return ExecutionKind
    *
@@ -664,11 +664,11 @@ namespace RTC
   
   /*!
    * @if jp
-   * @brief Profile¤ò¼èÆÀ¤¹¤ë
+   * @brief Profileã‚’å–å¾—ã™ã‚‹
    *
-   * RTC::ExecutionContextProfile ¤ò¼èÆÀ¤¹¤ë¡£¼èÆÀ¤·¤¿
-   * ExecutionContextProfile ¤Î½êÍ­¸¢¤Ï¸Æ¤Ó½Ğ¤·Â¦¤Ë¤¢¤ë¡£¼èÆÀ¤µ¤ì¤¿¥ª
-   * ¥Ö¥¸¥§¥¯¥È¤¬ÉÔÍ×¤Ë¤Ê¤Ã¤¿¾ì¹ç¡¢¸Æ¤Ó½Ğ¤·Â¦¤¬³«Êü¤¹¤ëÀÕÇ¤¤òÉé¤¦¡£
+   * RTC::ExecutionContextProfile ã‚’å–å¾—ã™ã‚‹ã€‚å–å¾—ã—ãŸ
+   * ExecutionContextProfile ã®æ‰€æœ‰æ¨©ã¯å‘¼ã³å‡ºã—å´ã«ã‚ã‚‹ã€‚å–å¾—ã•ã‚ŒãŸã‚ª
+   * ãƒ–ã‚¸ã‚§ã‚¯ãƒˆãŒä¸è¦ã«ãªã£ãŸå ´åˆã€å‘¼ã³å‡ºã—å´ãŒé–‹æ”¾ã™ã‚‹è²¬ä»»ã‚’è² ã†ã€‚
    *
    * @return RTC::ExecutionContextProfile
    *
@@ -702,7 +702,7 @@ namespace RTC
   //============================================================
   /*!
    * @if jp
-   * @brief CORBA ¥ª¥Ö¥¸¥§¥¯¥È»²¾È¤Î¼èÆÀ
+   * @brief CORBA ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆå‚ç…§ã®å–å¾—
    * @else
    * @brief Get the reference to the CORBA object
    * @endif
@@ -714,7 +714,7 @@ namespace RTC
   }
   /*!
    * @if jp
-   * @brief CORBA ¥ª¥Ö¥¸¥§¥¯¥È»²¾È¤Î¼èÆÀ
+   * @brief CORBA ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆå‚ç…§ã®å–å¾—
    * @else
    * @brief Getting object reference
    * @endif
@@ -726,7 +726,7 @@ namespace RTC
   
   /*!
    * @if jp
-   * @brief ExecutionKind ¤òÊ¸»úÎó²½¤¹¤ë
+   * @brief ExecutionKind ã‚’æ–‡å­—åˆ—åŒ–ã™ã‚‹
    * @else
    * @brief Converting ExecutionKind enum to string 
    * @endif
@@ -738,7 +738,7 @@ namespace RTC
   
   /*!
    * @if jp
-   * @brief ExecutionKind ¤òÀßÄê¤¹¤ë
+   * @brief ExecutionKind ã‚’è¨­å®šã™ã‚‹
    * @else
    * @brief Set the ExecutionKind
    * @endif
@@ -750,7 +750,7 @@ namespace RTC
   
   /*!
    * @if jp
-   * @brief Owner¥³¥ó¥İ¡¼¥Í¥ó¥È¤ò¥»¥Ã¥È¤¹¤ë¡£
+   * @brief Ownerã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆã‚’ã‚»ãƒƒãƒˆã™ã‚‹ã€‚
    * @else
    * @brief Setting owner component of the execution context
    * @endif
@@ -763,7 +763,7 @@ namespace RTC
   
   /*!
    * @if jp
-   * @brief Owner¥³¥ó¥İ¡¼¥Í¥ó¥È¤Î»²¾È¤ò¼èÆÀ¤¹¤ë
+   * @brief Ownerã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆã®å‚ç…§ã‚’å–å¾—ã™ã‚‹
    * @else
    * @brief Getting a reference of the owner component
    * @endif
@@ -775,7 +775,7 @@ namespace RTC
   
   /*!
    * @if jp
-   * @brief RT¥³¥ó¥İ¡¼¥Í¥ó¥È¤Î»²²Ã¼Ô¥ê¥¹¥È¤ò¼èÆÀ¤¹¤ë
+   * @brief RTã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆã®å‚åŠ è€…ãƒªã‚¹ãƒˆã‚’å–å¾—ã™ã‚‹
    * @else
    * @brief Getting participant RTC list
    * @endif
@@ -787,7 +787,7 @@ namespace RTC
   
   /*!
    * @if jp
-   * @brief Properties¤ò¥»¥Ã¥È¤¹¤ë
+   * @brief Propertiesã‚’ã‚»ãƒƒãƒˆã™ã‚‹
    * @else
    * @brief Setting Properties
    * @endif
@@ -799,7 +799,7 @@ namespace RTC
   
   /*!
    * @if jp
-   * @brief Properties¤ò¼èÆÀ¤¹¤ë
+   * @brief Propertiesã‚’å–å¾—ã™ã‚‹
    * @else
    * @brief Setting Properties
    * @endif
@@ -811,7 +811,7 @@ namespace RTC
   
   /*!
    * @if jp
-   * @brief Profile¤ò¼èÆÀ¤¹¤ë
+   * @brief Profileã‚’å–å¾—ã™ã‚‹
    * @else
    * @brief Getting Profile
    * @endif
@@ -829,7 +829,7 @@ namespace RTC
   // private functions
   /*!
    * @if jp
-   * @brief Properties¤«¤é¼Â¹Ô¥³¥ó¥Æ¥­¥¹¥È¤ò¥»¥Ã¥È¤¹¤ë
+   * @brief Propertiesã‹ã‚‰å®Ÿè¡Œã‚³ãƒ³ãƒ†ã‚­ã‚¹ãƒˆã‚’ã‚»ãƒƒãƒˆã™ã‚‹
    * @else
    * @brief Setting execution rate from given properties.
    * @endif
@@ -850,7 +850,7 @@ namespace RTC
   
   /*!
    * @if jp
-   * @brief Properties¤«¤é¾õÂÖÁ«°Ü¥â¡¼¥É¤ò¥»¥Ã¥È¤¹¤ë
+   * @brief Propertiesã‹ã‚‰çŠ¶æ…‹é·ç§»ãƒ¢ãƒ¼ãƒ‰ã‚’ã‚»ãƒƒãƒˆã™ã‚‹
    * @else
    * @brief Setting state transition mode from given properties.
    * @endif
@@ -872,7 +872,7 @@ namespace RTC
   
   /*!
    * @if jp
-   * @brief Properties¤«¤é¾õÂÖÁ«°ÜTimeout¤ò¥»¥Ã¥È¤¹¤ë
+   * @brief Propertiesã‹ã‚‰çŠ¶æ…‹é·ç§»Timeoutã‚’ã‚»ãƒƒãƒˆã™ã‚‹
    * @else
    * @brief Setting state transition timeout from given properties.
    * @endif

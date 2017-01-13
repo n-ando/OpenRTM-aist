@@ -1,4 +1,4 @@
-// -*- C++ -*-
+ï»¿// -*- C++ -*-
 /*!
  * @file  Routing.cpp
  * @brief Network routing information handling functions
@@ -61,7 +61,7 @@ namespace coil
 
   /*!
    * @if jp
-   * @brief ˆ¶æƒAƒhƒŒƒX‚©‚ç—˜—p‚³‚ê‚éƒGƒ“ƒhƒ|ƒCƒ“ƒgƒAƒhƒŒƒX‚ğ“¾‚é
+   * @brief å®›å…ˆã‚¢ãƒ‰ãƒ¬ã‚¹ã‹ã‚‰åˆ©ç”¨ã•ã‚Œã‚‹ã‚¨ãƒ³ãƒ‰ãƒã‚¤ãƒ³ãƒˆã‚¢ãƒ‰ãƒ¬ã‚¹ã‚’å¾—ã‚‹
    * @else
    * @brief Getting network interface name from destination address
    * @endif

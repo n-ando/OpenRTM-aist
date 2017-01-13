@@ -1,4 +1,4 @@
-// -*- C++ -*-
+ï»¿// -*- C++ -*-
 /*!
  * @file ECFactory.cpp
  * @brief ExecutionContext fuctory class
@@ -24,7 +24,7 @@ namespace RTC
   
   /*!
    * @if jp
-   * @brief ¥³¥ó¥¹¥È¥é¥¯¥¿
+   * @brief ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
    * @else
    * @brief Constructor
    * @endif
@@ -40,7 +40,7 @@ namespace RTC
   
   /*!
    * @if jp
-   * @brief ²¾ÁÛ¥Ç¥¹¥È¥é¥¯¥¿
+   * @brief ä»®æƒ³ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
    * @else
    * @brief Virtual destructor
    * @endif
@@ -51,7 +51,7 @@ namespace RTC
   
   /*!
    * @if jp
-   * @brief À¸À®ÂĞ¾İExecutionContextÌ¾¾Î¤ò¼èÆÀ
+   * @brief ç”Ÿæˆå¯¾è±¡ExecutionContextåç§°ã‚’å–å¾—
    * @else
    * @brief Get names of the target ExecutionContext for creation
    * @endif
@@ -63,7 +63,7 @@ namespace RTC
   
   /*!
    * @if jp
-   * @brief À¸À®ÂĞ¾İExecutionContext¥¤¥ó¥¹¥¿¥ó¥¹¤òÀ¸À®
+   * @brief ç”Ÿæˆå¯¾è±¡ExecutionContextã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ã‚’ç”Ÿæˆ
    * @else
    * @brief Create the target ExecutionContext's instances
    * @endif
@@ -75,7 +75,7 @@ namespace RTC
   
   /*!
    * @if jp
-   * @brief ÂĞ¾İExecutionContext¥¤¥ó¥¹¥¿¥ó¥¹¤òÇË´ş
+   * @brief å¯¾è±¡ExecutionContextã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ã‚’ç ´æ£„
    * @else
    * @brief Destroy the target ExecutionContext's instances
    * @endif

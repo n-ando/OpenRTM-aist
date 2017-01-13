@@ -1,4 +1,4 @@
-// -*- C++ -*-
+﻿// -*- C++ -*-
 /*!
  * @file  Condition_posix.h
  * @brief Condition variable for POSIX
@@ -31,7 +31,7 @@ namespace coil
    * @if jp
    *
    * @class Condition
-   * @brief Condition �ƥ�ץ졼�ȥ��饹
+   * @brief Condition テンプレートクラス
    *
    * @else
    *
@@ -48,9 +48,9 @@ namespace coil
     /*!
      * @if jp
      *
-     * @brief ���󥹥ȥ饯��
+     * @brief コンストラクタ
      *
-     * ���󥹥ȥ饯����
+     * コンストラクタ。
      *
      * @else
      *
@@ -69,9 +69,9 @@ namespace coil
     /*!
      * @if jp
      *
-     * @brief �ǥ��ȥ饯��
+     * @brief デストラクタ
      *
-     * �ǥ��ȥ饯����
+     * デストラクタ。
      *
      * @else
      *
@@ -89,9 +89,9 @@ namespace coil
     /*!
      * @if jp
      *
-     * @brief ����åɼ¹ԤκƳ�
+     * @brief スレッド実行の再開
      *
-     * �Ե����Ƥ��륹��åɼ¹Ԥ�Ƴ������롣
+     * 待機しているスレッド実行を再開させる。
      *
      * @else
      *
@@ -109,9 +109,9 @@ namespace coil
     /*!
      * @if jp
      *
-     * @brief ������åɼ¹ԤκƳ�
+     * @brief 全スレッド実行の再開
      *
-     * �Ե����Ƥ������ƤΥ���åɼ¹Ԥ�Ƴ������롣
+     * 待機している全てのスレッド実行を再開させる。
      *
      * @else
      *
@@ -129,11 +129,11 @@ namespace coil
     /*!
      * @if jp
      *
-     * @brief ����åɼ¹Ԥ��Ե�
+     * @brief スレッド実行の待機
      *
-     * ����ѿ������������ޤǥ���åɤμ¹Ԥ���ߤ��롣
+     * 条件変数が送信されるまでスレッドの実行を停止する。
      *
-     * @return true: ����, false: ����
+     * @return true: 成功, false: 失敗
      *
      * @else
      *
@@ -153,14 +153,14 @@ namespace coil
     /*!
      * @if jp
      *
-     * @brief ������֤Υ���åɼ¹��Ե�
+     * @brief 設定時間のスレッド実行待機
      *
-     * ���ꤵ�줿���֡�����åɤμ¹Ԥ���ߤ��롣
+     * 設定された時間、スレッドの実行を停止する。
      *
-     * @param second ��ñ�̤λ���
-     * @param nano_second �ʥ���ñ�̤λ���
+     * @param second 秒単位の時間
+     * @param nano_second ナノ秒単位の時間
      *
-     * @return true: ����, false: ����
+     * @return true: 成功, false: 失敗
      *
      * @else
      *

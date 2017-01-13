@@ -1,4 +1,4 @@
-// -*- C++ -*-
+ï»¿// -*- C++ -*-
 /*!
  * @file PortProfileHelper.cpp
  * @brief RTC's PortProfile helper class
@@ -34,7 +34,7 @@ namespace RTC
 
   /*!
    * @if jp
-   * @brief PortProfile ¤òÀßÄê¤¹¤ë
+   * @brief PortProfile ã‚’è¨­å®šã™ã‚‹
    * @else
    * @brief Set PortProfile
    * @endif
@@ -56,7 +56,7 @@ namespace RTC
 
   /*!
    * @if jp
-   * @brief PortProfile ¤ò¼èÆÀ¤¹¤ë
+   * @brief PortProfile ã‚’å–å¾—ã™ã‚‹
    * @else
    * @brief Get PortProfile
    * @endif
@@ -79,7 +79,7 @@ namespace RTC
 
   /*!
    * @if jp
-   * @brief PortProfile.name ¤òÀßÄê¤¹¤ë
+   * @brief PortProfile.name ã‚’è¨­å®šã™ã‚‹
    * @else
    * @brief Set PortProfile.name
    * @endif
@@ -94,7 +94,7 @@ namespace RTC
 
   /*!
    * @if jp
-   * @brief PortProfile.name ¤ò¼èÆÀ¤¹¤ë
+   * @brief PortProfile.name ã‚’å–å¾—ã™ã‚‹
    * @else
    * @brief Get PortProfile.name
    * @endif
@@ -109,7 +109,7 @@ namespace RTC
 
   /*!
    * @if jp
-   * @brief PortInterfaceProfile ¤òÄÉ²Ã¤¹¤ë
+   * @brief PortInterfaceProfile ã‚’è¿½åŠ ã™ã‚‹
    * @else
    * @brief Append PortInterfaceProfile to the PortProfile
    * @endif
@@ -126,7 +126,7 @@ namespace RTC
 
   /*!
    * @if jp
-   * @brief PortInterfaceProfileList ¤ò¼èÆÀ¤¹¤ë
+   * @brief PortInterfaceProfileList ã‚’å–å¾—ã™ã‚‹
    * @else
    * @brief Get PortInterfaceProfileList
    * @endif
@@ -142,7 +142,7 @@ namespace RTC
 
   /*!
    * @if jp
-   * @brief PortInterfaceProfile ¤ò¼èÆÀ¤¹¤ë
+   * @brief PortInterfaceProfile ã‚’å–å¾—ã™ã‚‹
    * @else
    * @brief Get PortInterfaceProfile
    * @endif
@@ -158,7 +158,7 @@ namespace RTC
 
   /*!
    * @if jp
-   * @brief PortInterfaceProfile ¤òºï½ü¤¹¤ë
+   * @brief PortInterfaceProfile ã‚’å‰Šé™¤ã™ã‚‹
    * @else
    * @brief Erase PortInterfaceProfile from the PortProfile
    * @endif
@@ -174,7 +174,7 @@ namespace RTC
 
   /*!
    * @if jp
-   * @brief Port ¤Î¥ª¥Ö¥¸¥§¥¯¥È»²¾È¤ò¥»¥Ã¥È¤¹¤ë
+   * @brief Port ã®ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆå‚ç…§ã‚’ã‚»ãƒƒãƒˆã™ã‚‹
    * @else
    * @brief Set Port's object reference
    * @endif
@@ -189,7 +189,7 @@ namespace RTC
 
   /*!
    * @if jp
-   * @brief Port ¤Î¥ª¥Ö¥¸¥§¥¯¥È»²¾È¤ò¼èÆÀ¤¹¤ë
+   * @brief Port ã®ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆå‚ç…§ã‚’å–å¾—ã™ã‚‹
    * @else
    * @brief Get Port's object reference
    * @endif
@@ -204,7 +204,7 @@ namespace RTC
 
   /*!
    * @if jp
-   * @brief ConnectorProfile ¤òÄÉ²Ã¤¹¤ë
+   * @brief ConnectorProfile ã‚’è¿½åŠ ã™ã‚‹
    * @else
    * @brief Append ConnectorProfile
    * @endif
@@ -219,7 +219,7 @@ namespace RTC
 
   /*!
    * @if jp
-   * @brief ConnectorProfileList ¤ò¼èÆÀ¤¹¤ë
+   * @brief ConnectorProfileList ã‚’å–å¾—ã™ã‚‹
    * @else
    * @brief Get ConnectorProfileList
    * @endif
@@ -235,7 +235,7 @@ namespace RTC
 
   /*!
    * @if jp
-   * @brief ConnectorProfile ¤ò¼èÆÀ¤¹¤ë
+   * @brief ConnectorProfile ã‚’å–å¾—ã™ã‚‹
    * @else
    * @brief Get ConnectorProfile
    * @endif
@@ -251,7 +251,7 @@ namespace RTC
 
   /*!
    * @if jp
-   * @brief ConnectorProfile ¤ò¼èÆÀ¤¹¤ë
+   * @brief ConnectorProfile ã‚’å–å¾—ã™ã‚‹
    * @else
    * @brief Get ConnectorProfile
    * @endif
@@ -267,8 +267,8 @@ namespace RTC
 
   /*!
    * @if jp
-   * @brief ConnectorProfile ¤òºï½ü¤¹¤ë
-   * @param naem ConnectorProfile ¤ÎÌ¾Á°
+   * @brief ConnectorProfile ã‚’å‰Šé™¤ã™ã‚‹
+   * @param naem ConnectorProfile ã®åå‰
    * @else
    * @brief Erase ConnectorProfile
    * @endif
@@ -284,7 +284,7 @@ namespace RTC
 
   /*!
    * @if jp
-   * @brief ConnectorProfile ¤òºï½ü¤¹¤ë
+   * @brief ConnectorProfile ã‚’å‰Šé™¤ã™ã‚‹
    * @else
    * @brief Erase ConnectorProfile
    * @endif
@@ -300,7 +300,7 @@ namespace RTC
 
   /*!
    * @if jp
-   * @brief PortProfile ¤Î owner ¤òÀßÄê¤¹¤ë
+   * @brief PortProfile ã® owner ã‚’è¨­å®šã™ã‚‹
    * @else
    * @brief Set owner's object reference to the PortProfile
    * @endif
@@ -315,7 +315,7 @@ namespace RTC
 
   /*!
    * @if jp
-   * @brief PortProfile ¤Î owner ¤ò¼èÆÀ¤¹¤ë
+   * @brief PortProfile ã® owner ã‚’å–å¾—ã™ã‚‹
    * @else
    * @endif
    */
@@ -329,7 +329,7 @@ namespace RTC
 
   /*!
    * @if jp
-   * @brief PortProfile ¤Î properties ¤òÀßÄê¤¹¤ë
+   * @brief PortProfile ã® properties ã‚’è¨­å®šã™ã‚‹
    * @else
    * @brief Set properties to the PortProfile
    * @endif
@@ -344,7 +344,7 @@ namespace RTC
 
   /*!
    * @if jp
-   * @brief PortProfile ¤Î properties ¤ò¼èÆÀ¤¹¤ë
+   * @brief PortProfile ã® properties ã‚’å–å¾—ã™ã‚‹
    * @else
    * @brief Get properties of the PortProfile
    * @endif

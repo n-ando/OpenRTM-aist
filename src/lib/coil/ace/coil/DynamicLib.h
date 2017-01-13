@@ -1,4 +1,4 @@
-// -*- C++ -*-
+﻿// -*- C++ -*-
 /*!
  * @file DynamicLib_ace.h
  * @brief DynamicLib class using ACE

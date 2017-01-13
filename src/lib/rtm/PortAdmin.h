@@ -1,4 +1,4 @@
-// -*- C++ -*-
+﻿// -*- C++ -*-
 /*!
  * @file PortAdmin.h
  * @brief RTC's Port administration class
@@ -30,10 +30,10 @@ namespace RTC
   /*!
    * @if jp
    * @class PortAdmin
-   * @brief PortAdmin ���饹
+   * @brief PortAdmin クラス
    *
-   * �Ƽ� Port �δ�����Ԥ����饹��Port ����Ͽ/��Ͽ����ʤɳƼ�������
-   * ��¹Ԥ���ȤȤ�ˡ���Ͽ����Ƥ��� Port Port �δ�����Ԥ����饹��
+   * 各種 Port の管理を行うクラス。Port の登録/登録解除など各種管理操作
+   * を実行するとともに、登録されている Port Port の管理を行うクラス。
    *
    * @since 0.4.0
    *
@@ -54,9 +54,9 @@ namespace RTC
   public:
     /*!
      * @if jp
-     * @brief ���󥹥ȥ饯��
+     * @brief コンストラクタ
      *
-     * ���󥹥ȥ饯��
+     * コンストラクタ
      *
      * @param orb ORB
      * @param poa POA
@@ -75,9 +75,9 @@ namespace RTC
     
     /*!
      * @if jp
-     * @brief �ǥ��ȥ饯��
+     * @brief デストラクタ
      *
-     * �ǥ��ȥ饯��
+     * デストラクタ
      *
      * @else
      * @brief Destructor
@@ -91,11 +91,11 @@ namespace RTC
     /*!
      * @if jp
      *
-     * @brief Port �ꥹ�Ȥμ���
+     * @brief Port リストの取得
      *
-     * addPort() �ˤ����Ͽ���줿 Port �� �ꥹ�Ȥ�������롣
+     * addPort() により登録された Port の リストを取得する。
      *
-     * @return Port �ꥹ��
+     * @return Port リスト
      *
      * @else
      *
@@ -113,11 +113,11 @@ namespace RTC
     /*!
      * @if jp
      *
-     * @brief PorProfile �ꥹ�Ȥμ���
+     * @brief PorProfile リストの取得
      *
-     * addPort() �ˤ����Ͽ���줿 Port �� Profile �ꥹ�Ȥ�������롣
+     * addPort() により登録された Port の Profile リストを取得する。
      *
-     * @return PortProfile �ꥹ��
+     * @return PortProfile リスト
      *
      * @else
      *
@@ -135,14 +135,14 @@ namespace RTC
     /*!
      * @if jp
      *
-     * @brief Port �Υ��֥������Ȼ��Ȥμ���
+     * @brief Port のオブジェクト参照の取得
      *
-     * port_name �ǻ��ꤷ�� Port �Υ��֥������Ȼ��Ȥ��֤���
-     * port_name �ǻ��ꤹ�� Port �Ϥ��餫���� addPort() ����Ͽ����Ƥ�
-     * �ʤ���Фʤ�ʤ���
+     * port_name で指定した Port のオブジェクト参照を返す。
+     * port_name で指定する Port はあらかじめ addPort() で登録されてい
+     * なければならない。
      *
-     * @param port_name ���Ȥ��֤�Port��̾��
-     * @return PortService_ptr Port�Υ��֥������Ȼ���
+     * @param port_name 参照を返すPortの名前
+     * @return PortService_ptr Portのオブジェクト参照
      *
      * @else
      *
@@ -163,14 +163,14 @@ namespace RTC
     /*!
      * @if jp
      *
-     * @brief Port �Υ����Х�ȤΥݥ��󥿤μ���
+     * @brief Port のサーバントのポインタの取得
      *
-     * port_name �ǻ��ꤷ�� Port �Υ����Х�ȤΥݥ��󥿤��֤���
-     * port_name �ǻ��ꤹ�� Port �Ϥ��餫���� addPort() ����Ͽ����Ƥ�
-     * �ʤ���Фʤ�ʤ���
+     * port_name で指定した Port のサーバントのポインタを返す。
+     * port_name で指定する Port はあらかじめ addPort() で登録されてい
+     * なければならない。
      *
-     * @param port_name ���Ȥ��֤�Port��̾��
-     * @return PortBase* Port�����Х�ȴ��쥯�饹�Υݥ���
+     * @param port_name 参照を返すPortの名前
+     * @return PortBase* Portサーバント基底クラスのポインタ
      *
      * @else
      *
@@ -191,14 +191,14 @@ namespace RTC
     /*!
      * @if jp
      *
-     * @brief Port ����Ͽ����
+     * @brief Port を登録する
      *
-     * ���� port �ǻ��ꤵ�줿 Port �Υ����Х�Ȥ���Ͽ���롣
-     * ��Ͽ���줿 Port �Υ����Х�Ȥϥ��󥹥ȥ饯����Ϳ����줿POA ���
-     * activate ���졢���Υ��֥������Ȼ��Ȥ�Port��Profile�˥��åȤ���롣
+     * 引数 port で指定された Port のサーバントを登録する。
+     * 登録された Port のサーバントはコンストラクタで与えられたPOA 上で
+     * activate され、そのオブジェクト参照はPortのProfileにセットされる。
      *
-     * @param port Port �����Х��
-     * @return ��Ͽ���(��Ͽ����:true����Ͽ����:false)
+     * @param port Port サーバント
+     * @return 登録結果(登録成功:true，登録失敗:false)
      *
      * @else
      *
@@ -219,14 +219,14 @@ namespace RTC
     /*!
      * @if jp
      *
-     * @brief Port ����Ͽ����
+     * @brief Port を登録する
      *
-     * ���� port �ǻ��ꤵ�줿 Port �Υ����Х�Ȥ���Ͽ���롣
-     * ��Ͽ���줿 Port �Υ����Х�Ȥϥ��󥹥ȥ饯����Ϳ����줿POA ���
-     * activate ���졢���Υ��֥������Ȼ��Ȥ�Port��Profile�˥��åȤ���롣
+     * 引数 port で指定された Port のサーバントを登録する。
+     * 登録された Port のサーバントはコンストラクタで与えられたPOA 上で
+     * activate され、そのオブジェクト参照はPortのProfileにセットされる。
      *
-     * @param port Port �����Х��
-     * @return ��Ͽ���(��Ͽ����:true����Ͽ����:false)
+     * @param port Port サーバント
+     * @return 登録結果(登録成功:true，登録失敗:false)
      *
      * @else
      *
@@ -247,13 +247,13 @@ namespace RTC
     /*!
      * @if jp
      *
-     * @brief Port ����Ͽ����
+     * @brief Port を登録する
      *
-     * ���� port �ǻ��ꤵ�줿 Port �Υ����Х�Ȥ���Ͽ���롣
-     * ��Ͽ���줿 Port �Υ����Х�Ȥϥ��󥹥ȥ饯����Ϳ����줿POA ���
-     * activate ���졢���Υ��֥������Ȼ��Ȥ�Port��Profile�˥��åȤ���롣
+     * 引数 port で指定された Port のサーバントを登録する。
+     * 登録された Port のサーバントはコンストラクタで与えられたPOA 上で
+     * activate され、そのオブジェクト参照はPortのProfileにセットされる。
      *
-     * @param port Port �����Х��
+     * @param port Port サーバント
      *
      * @else
      *
@@ -273,13 +273,13 @@ namespace RTC
     /*!
      * @if jp
      *
-     * @brief Port ����Ͽ����
+     * @brief Port を登録する
      *
-     * ���� port �ǻ��ꤵ�줿 Port �Υ����Х�Ȥ���Ͽ���롣
-     * ��Ͽ���줿 Port �Υ����Х�Ȥϥ��󥹥ȥ饯����Ϳ����줿POA ���
-     * activate ���졢���Υ��֥������Ȼ��Ȥ�Port��Profile�˥��åȤ���롣
+     * 引数 port で指定された Port のサーバントを登録する。
+     * 登録された Port のサーバントはコンストラクタで与えられたPOA 上で
+     * activate され、そのオブジェクト参照はPortのProfileにセットされる。
      *
-     * @param port Port �����Х��
+     * @param port Port サーバント
      *
      * @else
      *
@@ -299,14 +299,14 @@ namespace RTC
     /*!
      * @if jp
      *
-     * @brief Port ����Ͽ��������
+     * @brief Port の登録を解除する
      *
-     * ���� port �ǻ��ꤵ�줿 Port ����Ͽ�������롣
-     * ������� Port �� deactivate ���졢Port��Profile�Υ�ե���󥹤ˤϡ�
-     * nil�ͤ���������롣
+     * 引数 port で指定された Port の登録を解除する。
+     * 削除時に Port は deactivate され、PortのProfileのリファレンスには、
+     * nil値が代入される。
      *
-     * @param port Port �����Х��
-     * @return ������(�������:true���������:false)
+     * @param port Port サーバント
+     * @return 削除結果(削除成功:true，削除失敗:false)
      *
      * @else
      *
@@ -326,14 +326,14 @@ namespace RTC
     /*!
      * @if jp
      *
-     * @brief Port ����Ͽ��������
+     * @brief Port の登録を解除する
      *
-     * ���� port �ǻ��ꤵ�줿 Port ����Ͽ�������롣
-     * ������� Port �� deactivate ���졢Port��Profile�Υ�ե���󥹤ˤϡ�
-     * nil�ͤ���������롣
+     * 引数 port で指定された Port の登録を解除する。
+     * 削除時に Port は deactivate され、PortのProfileのリファレンスには、
+     * nil値が代入される。
      *
-     * @param port Port �����Х��
-     * @return ������(�������:true���������:false)
+     * @param port Port サーバント
+     * @return 削除結果(削除成功:true，削除失敗:false)
      *
      * @else
      *
@@ -353,13 +353,13 @@ namespace RTC
     /*!
      * @if jp
      *
-     * @brief Port ����Ͽ��������
+     * @brief Port の登録を解除する
      *
-     * ���� port �ǻ��ꤵ�줿 Port ����Ͽ�������롣
-     * ������� Port �� deactivate ���졢Port��Profile�Υ�ե���󥹤ˤϡ�
-     * nil�ͤ���������롣
+     * 引数 port で指定された Port の登録を解除する。
+     * 削除時に Port は deactivate され、PortのProfileのリファレンスには、
+     * nil値が代入される。
      *
-     * @param port Port �����Х��
+     * @param port Port サーバント
      *
      * @else
      *
@@ -378,13 +378,13 @@ namespace RTC
     /*!
      * @if jp
      *
-     * @brief Port ����Ͽ��������
+     * @brief Port の登録を解除する
      *
-     * ���� port �ǻ��ꤵ�줿 Port ����Ͽ�������롣
-     * ������� Port �� deactivate ���졢Port��Profile�Υ�ե���󥹤ˤϡ�
-     * nil�ͤ���������롣
+     * 引数 port で指定された Port の登録を解除する。
+     * 削除時に Port は deactivate され、PortのProfileのリファレンスには、
+     * nil値が代入される。
      *
-     * @param port Port �����Х��
+     * @param port Port サーバント
      *
      * @else
      *
@@ -403,13 +403,13 @@ namespace RTC
     /*!
      * @if jp
      *
-     * @brief ̾�λ���ˤ��Port ����Ͽ��������
+     * @brief 名称指定によりPort の登録を解除する
      *
-     * �����ǻ��ꤵ�줿̾������� Port ����Ͽ�������롣
-     * ������� Port �� deactivate ���졢Port��Profile�Υ�ե���󥹤ˤϡ�
-     * nil�ͤ���������롣
+     * 引数で指定された名前を持つ Port の登録を削除する。
+     * 削除時に Port は deactivate され、PortのProfileのリファレンスには、
+     * nil値が代入される。
      *
-     * @param port_name Port ��̾��
+     * @param port_name Port の名前
      *
      * @else
      *
@@ -429,11 +429,11 @@ namespace RTC
     /*!
      * @if jp
      *
-     * @brief ���Ƥ� Port �Υ��󥿡��ե������� activates ����
+     * @brief 全ての Port のインターフェースを activates する
      *
-     * ��Ͽ����Ƥ������Ƥ� Port �Υ��󥿡��ե��������Ф��ơ�
-     * activate ���롣
-     * ���δؿ��ϡ�ComponentAction �� on_activate() ��ǸƤФ�롣
+     * 登録されている全ての Port のインターフェースに対して、
+     * activate する。
+     * この関数は、ComponentAction の on_activate() 内で呼ばれる。
      *
      * @else
      *
@@ -449,11 +449,11 @@ namespace RTC
     /*!
      * @if jp
      *
-     * @brief ���Ƥ� Port �Υ��󥿡��ե������� deactivates ����
+     * @brief 全ての Port のインターフェースを deactivates する
      *
-     * ��Ͽ����Ƥ������Ƥ� Port �Υ��󥿡��ե��������Ф��ơ�
-     * deactivate ���롣
-     * ���δؿ��ϡ�ComponentAction �� on_deactivate() ��ǸƤФ�롣
+     * 登録されている全ての Port のインターフェースに対して、
+     * deactivate する。
+     * この関数は、ComponentAction の on_deactivate() 内で呼ばれる。
      *
      * @else
      *
@@ -469,10 +469,10 @@ namespace RTC
     /*!
      * @if jp
      *
-     * @brief ���Ƥ� Port ��deactivate����Ͽ��������
+     * @brief 全ての Port をdeactivateし登録を削除する
      *
-     * ��Ͽ����Ƥ������Ƥ�Port���Ф��ơ������Х�Ȥ�deactivate��Ԥ���
-     * ��Ͽ�ꥹ�Ȥ��������롣
+     * 登録されている全てのPortに対して、サーバントのdeactivateを行い、
+     * 登録リストから削除する。
      *
      * @else
      *
@@ -488,7 +488,7 @@ namespace RTC
   private:
     /*!
      * @if jp
-     * @brief ORB �ؤλ���
+     * @brief ORB への参照
      * @else
      * @brief Reference to ORB
      * @endif
@@ -497,7 +497,7 @@ namespace RTC
     
     /*!
      * @if jp
-     * @brief POA �ؤλ���
+     * @brief POA への参照
      * @else
      * @brief Reference to POA
      * @endif
@@ -506,7 +506,7 @@ namespace RTC
     
     /*!
      * @if jp
-     * @brief Port�Υ��֥������ȥ�ե���󥹤Υꥹ��
+     * @brief Portのオブジェクトリファレンスのリスト
      * @else
      * @brief List of Port's object references
      * @endif
@@ -515,7 +515,7 @@ namespace RTC
 
     /*!
      * @if jp
-     * @brief ���������ȥ꡼��
+     * @brief ロガーストリーム
      * @else
      * @brief Logger stream
      * @endif
@@ -524,7 +524,7 @@ namespace RTC
 
     /*!
      * @if jp
-     * @brief comp_op �ե��󥯥� (̤����?)
+     * @brief comp_op ファンクタ (未使用?)
      * @else
      * @brief comp_op functor
      * @endif
@@ -552,7 +552,7 @@ namespace RTC
 
     /*!
      * @if jp
-     * @brief PortProfileList �����ե��󥯥� (̤����?)
+     * @brief PortProfileList 収集ファンクタ (未使用?)
      * @else
      * @brief PortProfileList corerection functor
      * @endif
@@ -571,7 +571,7 @@ namespace RTC
 
     /*!
      * @if jp
-     * @brief PortProfileList �����ե��󥯥�
+     * @brief PortProfileList 収集ファンクタ
      * @else
      * @brief PortProfileList corerection functor
      * @endif
@@ -594,7 +594,7 @@ namespace RTC
     struct find_port;
     struct del_port;
     
-    // �����Х�Ȥ�ľ�ܳ�Ǽ���륪�֥������ȥޥ͡�����
+    // サーバントを直接格納するオブジェクトマネージャ
     ObjectManager<const char*, PortBase, comp_op<PortBase> > m_portServants;
     
   };

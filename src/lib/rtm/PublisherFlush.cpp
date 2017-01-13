@@ -1,4 +1,4 @@
-// -*- C++ -*-
+ï»¿// -*- C++ -*-
 /*!
  * @file  PublisherFlush.cpp
  * @brief PublisherFlush class
@@ -28,7 +28,7 @@ namespace RTC
 {
   /*!
    * @if jp
-   * @brief ¥³¥ó¥¹¥È¥é¥¯¥¿
+   * @brief ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
    * @else
    * @brief Constructor
    * @endif
@@ -42,7 +42,7 @@ namespace RTC
 
   /*!
    * @if jp
-   * @brief ¥Ç¥¹¥È¥é¥¯¥¿
+   * @brief ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
    * @else
    * @brief Destructor
    * @endif
@@ -56,7 +56,7 @@ namespace RTC
   
   /*!
    * @if jp
-   * @brief ½é´ü²½
+   * @brief åˆæœŸåŒ–
    * @else
    * @brief initialization
    * @endif
@@ -69,7 +69,7 @@ namespace RTC
 
   /*!
    * @if jp
-   * @brief InPort¥³¥ó¥·¥å¡¼¥Ş¤Î¥»¥Ã¥È
+   * @brief InPortã‚³ãƒ³ã‚·ãƒ¥ãƒ¼ãƒã®ã‚»ãƒƒãƒˆ
    * @else
    * @brief Store InPort consumer
    * @endif
@@ -89,7 +89,7 @@ namespace RTC
 
   /*!
    * @if jp
-   * @brief ¥Ğ¥Ã¥Õ¥¡¤Î¥»¥Ã¥È
+   * @brief ãƒãƒƒãƒ•ã‚¡ã®ã‚»ãƒƒãƒˆ
    * @else
    * @brief Setting buffer pointer
    * @endif
@@ -103,7 +103,7 @@ namespace RTC
 
   /*!
    * @if jp
-   * @brief ¥ê¥¹¥Ê¤Î¥»¥Ã¥È
+   * @brief ãƒªã‚¹ãƒŠã®ã‚»ãƒƒãƒˆ
    * @else
    * @brief Setting buffer pointer
    * @endif
@@ -128,7 +128,7 @@ namespace RTC
 
   /*!
    * @if jp
-   * @brief ¥Ç¡¼¥¿¤ò½ñ¤­¹ş¤à
+   * @brief ãƒ‡ãƒ¼ã‚¿ã‚’æ›¸ãè¾¼ã‚€
    * @else
    * @brief Write data 
    * @endif
@@ -182,7 +182,7 @@ namespace RTC
 
   /*!
    * @if jp
-   * @brief ¥¢¥¯¥Æ¥£¥Ö²½³ÎÇ§
+   * @brief ã‚¢ã‚¯ãƒ†ã‚£ãƒ–åŒ–ç¢ºèª
    * @else
    * @brief Confirm to activate
    * @endif
@@ -194,7 +194,7 @@ namespace RTC
 
   /*!
    * @if jp
-   * @brief ¥¢¥¯¥Æ¥£¥Ö²½
+   * @brief ã‚¢ã‚¯ãƒ†ã‚£ãƒ–åŒ–
    * @else
    * @brief activation
    * @endif
@@ -207,7 +207,7 @@ namespace RTC
 
   /*!
    * @if jp
-   * @brief Èó¥¢¥¯¥Æ¥£¥Ö²½
+   * @brief éã‚¢ã‚¯ãƒ†ã‚£ãƒ–åŒ–
    * @else
    * @brief deactivation
    * @endif

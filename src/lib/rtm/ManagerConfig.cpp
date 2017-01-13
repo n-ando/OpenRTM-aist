@@ -1,4 +1,4 @@
-// -*- C++ -*-
+ï»¿// -*- C++ -*-
 /*!
  * @file ManagerConfig.cpp
  * @brief RTC manager configuration
@@ -48,7 +48,7 @@ namespace RTC
   
   /*!
    * @if jp
-   * @brief ¥³¥ó¥¹¥È¥é¥¯¥¿
+   * @brief ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
    * @else
    * @brief Constructor
    * @endif
@@ -60,7 +60,7 @@ namespace RTC
   
   /*!
    * @if jp
-   * @brief ¥³¥ó¥¹¥È¥é¥¯¥¿
+   * @brief ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
    * @else
    * @brief Constructor
    * @endif
@@ -73,7 +73,7 @@ namespace RTC
   
   /*!
    * @if jp
-   * @brief ¥Ç¥¹¥È¥é¥¯¥¿
+   * @brief ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
    * @else
    * @brief Destructor
    * @endif
@@ -84,7 +84,7 @@ namespace RTC
   
   /*!
    * @if jp
-   * @brief ½é´ü²½
+   * @brief åˆæœŸåŒ–
    * @else
    * @brief Initialization
    * @endif
@@ -96,7 +96,7 @@ namespace RTC
   
   /*!
    * @if jp
-   * @brief Configuration ¾ğÊó¤ò Property ¤ËÀßÄê¤¹¤ë
+   * @brief Configuration æƒ…å ±ã‚’ Property ã«è¨­å®šã™ã‚‹
    * @else
    * @brief Specify the configuration information to the Property
    * @endif
@@ -123,7 +123,7 @@ namespace RTC
   
   /*!
    * @if jp
-   * @brief ¥³¥Ş¥ó¥É°ú¿ô¤ò¥Ñ¡¼¥¹¤¹¤ë
+   * @brief ã‚³ãƒãƒ³ãƒ‰å¼•æ•°ã‚’ãƒ‘ãƒ¼ã‚¹ã™ã‚‹
    * @else
    * @brief Parse the command arguments
    * @endif
@@ -183,7 +183,7 @@ namespace RTC
   
   /*!
    * @if jp
-   * @brief Configuration file ¤Î¸¡º÷
+   * @brief Configuration file ã®æ¤œç´¢
    * @else
    * @brief Find the configuration file
    * @endif
@@ -225,7 +225,7 @@ namespace RTC
   
   /*!
    * @if jp
-   * @brief ¥·¥¹¥Æ¥à¾ğÊó¤òÀßÄê¤¹¤ë
+   * @brief ã‚·ã‚¹ãƒ†ãƒ æƒ…å ±ã‚’è¨­å®šã™ã‚‹
    * @else
    * @brief Set system information
    * @endif
@@ -260,7 +260,7 @@ namespace RTC
   
   /*!
    * @if jp
-   * @brief ¥Õ¥¡¥¤¥ë¤ÎÂ¸ºß³ÎÇ§
+   * @brief ãƒ•ã‚¡ã‚¤ãƒ«ã®å­˜åœ¨ç¢ºèª
    * @else
    * @brief Check the file existence
    * @endif

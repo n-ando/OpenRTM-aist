@@ -1,4 +1,4 @@
-// -*- C++ -*-
+ï»¿// -*- C++ -*-
 /*!
  * @file NVUtil.h
  * @brief NameValue and NVList utility functions
@@ -29,9 +29,9 @@
  * @if jp
  * @namespace NVUtil
  *
- * @brief NameValue ÍÑ¥æ¡¼¥Æ¥£¥ê¥Æ¥£
+ * @brief NameValue ç”¨ãƒ¦ãƒ¼ãƒ†ã‚£ãƒªãƒ†ã‚£
  *
- * NameValue ¤ËÂĞ¤·¤Æ¤Î¥æ¡¼¥Æ¥£¥ê¥Æ¥£´Ø¿ô¤òÄó¶¡¤¹¤ë¡£
+ * NameValue ã«å¯¾ã—ã¦ã®ãƒ¦ãƒ¼ãƒ†ã‚£ãƒªãƒ†ã‚£é–¢æ•°ã‚’æä¾›ã™ã‚‹ã€‚
  *
  * @else
  *
@@ -48,14 +48,14 @@ namespace NVUtil
   /*!
    * @if jp
    *
-   * @brief NameValue ¤òÀ¸À®¤¹¤ë
+   * @brief NameValue ã‚’ç”Ÿæˆã™ã‚‹
    *
-   * ¤³¤Î¥ª¥Ú¥ì¡¼¥·¥ç¥ó¤ÏNameValue¤òºîÀ®¤¹¤ë¡£
-   * CORBA::Char, CORBA::Boolean, CORBA::Octet ¤ÏºîÀ®¤Ç¤­¤Ê¤¤¡£
-   * ¤³¤ì¤é¤ÎÃÍ¤Ï newNVChar(), newNVBool(), newNVOctet() ¤ÇºîÀ®¤¹¤ë¡£
+   * ã“ã®ã‚ªãƒšãƒ¬ãƒ¼ã‚·ãƒ§ãƒ³ã¯NameValueã‚’ä½œæˆã™ã‚‹ã€‚
+   * CORBA::Char, CORBA::Boolean, CORBA::Octet ã¯ä½œæˆã§ããªã„ã€‚
+   * ã“ã‚Œã‚‰ã®å€¤ã¯ newNVChar(), newNVBool(), newNVOctet() ã§ä½œæˆã™ã‚‹ã€‚
    *
-   * @param name NameValue ¤Î name
-   * @param value NameValue ¤Î value
+   * @param name NameValue ã® name
+   * @param value NameValue ã® value
    *
    * @return NameValue
    *
@@ -87,12 +87,12 @@ namespace NVUtil
   /***
    * @if jp
    *
-   * @brief value ¤¬ CORBA::string ¤Î NameValue ¤òÀ¸À®¤¹¤ë
+   * @brief value ãŒ CORBA::string ã® NameValue ã‚’ç”Ÿæˆã™ã‚‹
    *
-   * ¤³¤Î¥ª¥Ú¥ì¡¼¥·¥ç¥ó¤Ïf value ¤¬ CORBA::string ¤Î NameValue¤òºîÀ®¤¹¤ë¡£
+   * ã“ã®ã‚ªãƒšãƒ¬ãƒ¼ã‚·ãƒ§ãƒ³ã¯f value ãŒ CORBA::string ã® NameValueã‚’ä½œæˆã™ã‚‹ã€‚
    *
-   * @param name NameValue ¤Î name
-   * @param value NameValue ¤Î value
+   * @param name NameValue ã® name
+   * @param value NameValue ã® value
    *
    * @return NameValue
    *
@@ -123,12 +123,12 @@ namespace NVUtil
   /*!
    * @if jp
    *
-   * @brief value ¤¬ CORBA::Char ¤Î NameValue ¤òÀ¸À®¤¹¤ë
+   * @brief value ãŒ CORBA::Char ã® NameValue ã‚’ç”Ÿæˆã™ã‚‹
    *
-   * ¤³¤Î¥ª¥Ú¥ì¡¼¥·¥ç¥ó¤Ïf value ¤¬ CORBA::Char ¤Î NameValue¤òºîÀ®¤¹¤ë¡£
+   * ã“ã®ã‚ªãƒšãƒ¬ãƒ¼ã‚·ãƒ§ãƒ³ã¯f value ãŒ CORBA::Char ã® NameValueã‚’ä½œæˆã™ã‚‹ã€‚
    *
-   * @param name NameValue ¤Î name
-   * @param value NameValue ¤Î value
+   * @param name NameValue ã® name
+   * @param value NameValue ã® value
    *
    * @return NameValue
    *
@@ -150,12 +150,12 @@ namespace NVUtil
   /*!
    * @if jp
    *
-   * @brief value ¤¬ CORBA::Boolean ¤Î NameValue ¤òÀ¸À®¤¹¤ë
+   * @brief value ãŒ CORBA::Boolean ã® NameValue ã‚’ç”Ÿæˆã™ã‚‹
    *
-   * ¤³¤Î¥ª¥Ú¥ì¡¼¥·¥ç¥ó¤Ïf value ¤¬ CORBA::Boolean ¤Î NameValue¤òºîÀ®¤¹¤ë¡£
+   * ã“ã®ã‚ªãƒšãƒ¬ãƒ¼ã‚·ãƒ§ãƒ³ã¯f value ãŒ CORBA::Boolean ã® NameValueã‚’ä½œæˆã™ã‚‹ã€‚
    *
-   * @param name NameValue ¤Î name
-   * @param value NameValue ¤Î value
+   * @param name NameValue ã® name
+   * @param value NameValue ã® value
    *
    * @return NameValue
    *
@@ -178,12 +178,12 @@ namespace NVUtil
   /*!
    * @if jp
    *
-   * @brief value ¤¬ CORBA::Octet ¤Î NameValue ¤òÀ¸À®¤¹¤ë
+   * @brief value ãŒ CORBA::Octet ã® NameValue ã‚’ç”Ÿæˆã™ã‚‹
    *
-   * ¤³¤Î¥ª¥Ú¥ì¡¼¥·¥ç¥ó¤Ï value ¤¬ CORBA::Octet ¤Î NameValue¤òºîÀ®¤¹¤ë¡£
+   * ã“ã®ã‚ªãƒšãƒ¬ãƒ¼ã‚·ãƒ§ãƒ³ã¯ value ãŒ CORBA::Octet ã® NameValueã‚’ä½œæˆã™ã‚‹ã€‚
    *
-   * @param name NameValue ¤Î name
-   * @param value NameValue ¤Î value
+   * @param name NameValue ã® name
+   * @param value NameValue ã® value
    *
    * @return NameValue
    *
@@ -205,12 +205,12 @@ namespace NVUtil
   /*!
    * @if jp
    *
-   * @brief value ¤¬ CORBA::Any ¤Î NameValue ¤òÀ¸À®¤¹¤ë
+   * @brief value ãŒ CORBA::Any ã® NameValue ã‚’ç”Ÿæˆã™ã‚‹
    *
-   * ¤³¤Î¥ª¥Ú¥ì¡¼¥·¥ç¥ó¤Ïf value ¤¬ CORBA::Any ¤Î NameValue¤òºîÀ®¤¹¤ë¡£
+   * ã“ã®ã‚ªãƒšãƒ¬ãƒ¼ã‚·ãƒ§ãƒ³ã¯f value ãŒ CORBA::Any ã® NameValueã‚’ä½œæˆã™ã‚‹ã€‚
    *
-   * @param name NameValue ¤Î name
-   * @param value NameValue ¤Î value
+   * @param name NameValue ã® name
+   * @param value NameValue ã® value
    *
    * @return NameValue
    *
@@ -232,13 +232,13 @@ namespace NVUtil
   /*!
    * @if jp
    *
-   * @brief Properties ¤ò NVList ¤Ø¥³¥Ô¡¼¤¹¤ë
+   * @brief Properties ã‚’ NVList ã¸ã‚³ãƒ”ãƒ¼ã™ã‚‹
    *
-   * ¤³¤Î¥ª¥Ú¥ì¡¼¥·¥ç¥ó¤Ï Properties ¤ò NVList ¤Ø¥³¥Ô¡¼¤¹¤ë¡£
-   * NVList ¤Î value ¤ÏÁ´¤Æ CORBA::string ·¿¤È¤·¤Æ¥³¥Ô¡¼¤¹¤ë¡£
+   * ã“ã®ã‚ªãƒšãƒ¬ãƒ¼ã‚·ãƒ§ãƒ³ã¯ Properties ã‚’ NVList ã¸ã‚³ãƒ”ãƒ¼ã™ã‚‹ã€‚
+   * NVList ã® value ã¯å…¨ã¦ CORBA::string å‹ã¨ã—ã¦ã‚³ãƒ”ãƒ¼ã™ã‚‹ã€‚
    *
-   * @param nv Properties ¤ÎÃÍ¤ò³ÊÇ¼¤¹¤ë NVList
-   * @param prop ¥³¥Ô¡¼¸µ¤Î Properties
+   * @param nv Properties ã®å€¤ã‚’æ ¼ç´ã™ã‚‹ NVList
+   * @param prop ã‚³ãƒ”ãƒ¼å…ƒã® Properties
    *
    * @else
    *
@@ -261,12 +261,12 @@ namespace NVUtil
   /*!
    * @if jp
    *
-   * @brief NVList ¤ò Properties ¤Ø¥³¥Ô¡¼¤¹¤ë
+   * @brief NVList ã‚’ Properties ã¸ã‚³ãƒ”ãƒ¼ã™ã‚‹
    *
-   * ¤³¤Î¥ª¥Ú¥ì¡¼¥·¥ç¥ó¤Ï NVList ¤ò Properties ¤Ø¥³¥Ô¡¼¤¹¤ë¡£
+   * ã“ã®ã‚ªãƒšãƒ¬ãƒ¼ã‚·ãƒ§ãƒ³ã¯ NVList ã‚’ Properties ã¸ã‚³ãƒ”ãƒ¼ã™ã‚‹ã€‚
    *
-   * @param prop NVList ¤ÎÃÍ¤ò³ÊÇ¼¤¹¤ë Properties
-   * @param nv ¥³¥Ô¡¼¸µ¤Î NVList
+   * @param prop NVList ã®å€¤ã‚’æ ¼ç´ã™ã‚‹ Properties
+   * @param nv ã‚³ãƒ”ãƒ¼å…ƒã® NVList
    *
    * @else
    *
@@ -284,13 +284,13 @@ namespace NVUtil
   /*!
    * @if jp
    *
-   * @brief NVList ¤ò Properties ¤ØÊÑ´¹¤¹¤ë
+   * @brief NVList ã‚’ Properties ã¸å¤‰æ›ã™ã‚‹
    *
-   * ¤³¤Î¥ª¥Ú¥ì¡¼¥·¥ç¥ó¤Ï NVList ¤ò Properties ¤ØÊÑ´¹¤¹¤ë¡£
+   * ã“ã®ã‚ªãƒšãƒ¬ãƒ¼ã‚·ãƒ§ãƒ³ã¯ NVList ã‚’ Properties ã¸å¤‰æ›ã™ã‚‹ã€‚
    *
-   * @param nv ÊÑ´¹¸µ¤Î NVList
+   * @param nv å¤‰æ›å…ƒã® NVList
    *
-   * @return ÊÑ´¹·ë²ÌProperty
+   * @return å¤‰æ›çµæœProperty
    *
    * @else
    *
@@ -309,15 +309,15 @@ namespace NVUtil
   /*!
    * @if jp
    *
-   * @brief NVList ¤«¤é name ¤Ç»ØÄê¤µ¤ì¤¿ value ¤òÊÖ¤¹
+   * @brief NVList ã‹ã‚‰ name ã§æŒ‡å®šã•ã‚ŒãŸ value ã‚’è¿”ã™
    *
-   * ¤³¤Î¥ª¥Ú¥ì¡¼¥·¥ç¥ó¤Ï name ¤Ç»ØÄê¤µ¤ì¤¿ value ¤ò Any ·¿¤ÇÊÖ¤¹¡£
-   * »ØÄê¤·¤¿Ì¾¾Î¤ÎÍ×ÁÇ¤¬Â¸ºß¤·¤Ê¤¤¾ì¹ç¤ÏÎã³°¤òÈ¯À¸¤µ¤»¤ë¡£
+   * ã“ã®ã‚ªãƒšãƒ¬ãƒ¼ã‚·ãƒ§ãƒ³ã¯ name ã§æŒ‡å®šã•ã‚ŒãŸ value ã‚’ Any å‹ã§è¿”ã™ã€‚
+   * æŒ‡å®šã—ãŸåç§°ã®è¦ç´ ãŒå­˜åœ¨ã—ãªã„å ´åˆã¯ä¾‹å¤–ã‚’ç™ºç”Ÿã•ã›ã‚‹ã€‚
    *
-   * @param nv ¸¡º÷ÂĞ¾İ¤Î NVList
-   * @param name ¸¡º÷¤¹¤ëÌ¾Á°
+   * @param nv æ¤œç´¢å¯¾è±¡ã® NVList
+   * @param name æ¤œç´¢ã™ã‚‹åå‰
    *
-   * @return ¸¡º÷·ë²Ì
+   * @return æ¤œç´¢çµæœ
    *
    * @else
    *
@@ -338,15 +338,15 @@ namespace NVUtil
   /*!
    * @if jp
    *
-   * @brief name ¤Ç»ØÄê¤µ¤ì¤¿Í×ÁÇ¤Î¥¤¥ó¥Ç¥Ã¥¯¥¹¤òÊÖ¤¹
+   * @brief name ã§æŒ‡å®šã•ã‚ŒãŸè¦ç´ ã®ã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹ã‚’è¿”ã™
    *
-   * ¤³¤Î¥ª¥Ú¥ì¡¼¥·¥ç¥ó¤Ï name ¤Ç»ØÄê¤µ¤ì¤¿Í×ÁÇ¤¬³ÊÇ¼¤µ¤ì¤Æ¤¤¤ë°ÌÃÖ¤Î
-   * ¥¤¥ó¥Ç¥Ã¥¯¥¹¤òÊÖ¤¹¡£
+   * ã“ã®ã‚ªãƒšãƒ¬ãƒ¼ã‚·ãƒ§ãƒ³ã¯ name ã§æŒ‡å®šã•ã‚ŒãŸè¦ç´ ãŒæ ¼ç´ã•ã‚Œã¦ã„ã‚‹ä½ç½®ã®
+   * ã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹ã‚’è¿”ã™ã€‚
    *
-   * @param nv ¸¡º÷ÂĞ¾İ¤Î NVList
-   * @param name ¸¡º÷¤¹¤ëÌ¾Á°
+   * @param nv æ¤œç´¢å¯¾è±¡ã® NVList
+   * @param name æ¤œç´¢ã™ã‚‹åå‰
    *
-   * @return ¸¡º÷ÂĞ¾İ¤Î¥¤¥ó¥Ç¥Ã¥¯¥¹
+   * @return æ¤œç´¢å¯¾è±¡ã®ã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹
    *
    * @else
    *
@@ -367,15 +367,15 @@ namespace NVUtil
   /*!
    * @if jp
    *
-   * @brief »ØÄê¤µ¤ì¤¿ name ¤Î value ¤Î·¿¤¬ string ¤Ç¤¢¤ë¤«¸¡¾Ú¤¹¤ë
+   * @brief æŒ‡å®šã•ã‚ŒãŸ name ã® value ã®å‹ãŒ string ã§ã‚ã‚‹ã‹æ¤œè¨¼ã™ã‚‹
    *
-   * ¤³¤Î¥ª¥Ú¥ì¡¼¥·¥ç¥ó¤Ï name ¤Ç»ØÄê¤µ¤ì¤¿ value ¤Î·¿¤¬ CORBA::string
-   * ¤«¤É¤¦¤«¤ò bool ÃÍ¤ÇÊÖ¤¹¡£
+   * ã“ã®ã‚ªãƒšãƒ¬ãƒ¼ã‚·ãƒ§ãƒ³ã¯ name ã§æŒ‡å®šã•ã‚ŒãŸ value ã®å‹ãŒ CORBA::string
+   * ã‹ã©ã†ã‹ã‚’ bool å€¤ã§è¿”ã™ã€‚
    *
-   * @param nv ¸¡º÷ÂĞ¾İ¤Î NVList
-   * @param name ¸¡º÷¤¹¤ëÌ¾Á°
+   * @param nv æ¤œç´¢å¯¾è±¡ã® NVList
+   * @param name æ¤œç´¢ã™ã‚‹åå‰
    *
-   * @return string¸¡¾Ú·ë²Ì(string:true¡¢¤½¤ì°Ê³°:false)
+   * @return stringæ¤œè¨¼çµæœ(string:trueã€ãã‚Œä»¥å¤–:false)
    *
    * @else
    *
@@ -396,17 +396,17 @@ namespace NVUtil
   /*!
    * @if jp
    *
-   * @brief »ØÄê¤µ¤ì¤¿ name ¤Î value ¤ÎÃÍ¤¬»ØÄê¤·¤¿Ê¸»úÎó¤È°ìÃ×¤¹¤ë¤«¸¡¾Ú¤¹¤ë
+   * @brief æŒ‡å®šã•ã‚ŒãŸ name ã® value ã®å€¤ãŒæŒ‡å®šã—ãŸæ–‡å­—åˆ—ã¨ä¸€è‡´ã™ã‚‹ã‹æ¤œè¨¼ã™ã‚‹
    *
-   * ¤³¤Î¥ª¥Ú¥ì¡¼¥·¥ç¥ó¤Ï name ¤Ç»ØÄê¤µ¤ì¤¿ value ¤Î·¿¤¬ CORBA::string
-   * ¤«¤É¤¦¤«¤òÈ½ÃÇ¤·¡¢  CORBA::string ¤Ç¤¢¤ë¾ì¹ç¤Ë¤Ï»ØÄê¤·¤¿Ê¸»úÎó¤È°ìÃ×¤¹¤ë¤«
-   * ¤òbool ÃÍ¤ÇÊÖ¤¹¡£
+   * ã“ã®ã‚ªãƒšãƒ¬ãƒ¼ã‚·ãƒ§ãƒ³ã¯ name ã§æŒ‡å®šã•ã‚ŒãŸ value ã®å‹ãŒ CORBA::string
+   * ã‹ã©ã†ã‹ã‚’åˆ¤æ–­ã—ã€  CORBA::string ã§ã‚ã‚‹å ´åˆã«ã¯æŒ‡å®šã—ãŸæ–‡å­—åˆ—ã¨ä¸€è‡´ã™ã‚‹ã‹
+   * ã‚’bool å€¤ã§è¿”ã™ã€‚
    *
-   * @param nv ¸¡º÷ÂĞ¾İ¤Î NVList
-   * @param name ¸¡º÷¤¹¤ëÌ¾Á°
-   * @param value Èæ³ÓÂĞ¾İÊ¸»úÎó
+   * @param nv æ¤œç´¢å¯¾è±¡ã® NVList
+   * @param name æ¤œç´¢ã™ã‚‹åå‰
+   * @param value æ¯”è¼ƒå¯¾è±¡æ–‡å­—åˆ—
    *
-   * @return ¸¡¾Ú·ë²Ì(Ê¸»úÎó¤È°ìÃ×:true¡¢Èó°ìÃ×:false)
+   * @return æ¤œè¨¼çµæœ(æ–‡å­—åˆ—ã¨ä¸€è‡´:trueã€éä¸€è‡´:false)
    *
    * @else
    *
@@ -430,16 +430,16 @@ namespace NVUtil
   /*!
    * @if jp
    *
-   * @brief »ØÄê¤µ¤ì¤¿ name ¤Î NVList ¤ò string ¤È¤·¤ÆÊÖ¤¹¡£
+   * @brief æŒ‡å®šã•ã‚ŒãŸ name ã® NVList ã‚’ string ã¨ã—ã¦è¿”ã™ã€‚
    *
-   * ¤³¤Î¥ª¥Ú¥ì¡¼¥·¥ç¥ó¤Ï name ¤Ç»ØÄê¤µ¤ì¤¿ NVList ¤ÎÃÍ¤ò string ¤ÇÊÖ¤¹¡£
-   * ¤â¤·¡¢name ¤Ç»ØÄê¤·¤¿ value ¤ÎÃÍ¤¬ CORBA::string ¤Ç¤Ê¤±¤ì¤Ğ¡¢
-   * ¶õ¤ÎÊ¸»úÎó¤Îstring¤òÊÖ¤¹¡£
+   * ã“ã®ã‚ªãƒšãƒ¬ãƒ¼ã‚·ãƒ§ãƒ³ã¯ name ã§æŒ‡å®šã•ã‚ŒãŸ NVList ã®å€¤ã‚’ string ã§è¿”ã™ã€‚
+   * ã‚‚ã—ã€name ã§æŒ‡å®šã—ãŸ value ã®å€¤ãŒ CORBA::string ã§ãªã‘ã‚Œã°ã€
+   * ç©ºã®æ–‡å­—åˆ—ã®stringã‚’è¿”ã™ã€‚
    *
-   * @param nv ¸¡º÷ÂĞ¾İ¤Î NVList
-   * @param name ¸¡º÷¤¹¤ëÌ¾Á°
+   * @param nv æ¤œç´¢å¯¾è±¡ã® NVList
+   * @param name æ¤œç´¢ã™ã‚‹åå‰
    *
-   * @return name ¤ËÂĞ±ş¤¹¤ëÃÍ¤Îstring·¿¤ÎÃÍ
+   * @return name ã«å¯¾å¿œã™ã‚‹å€¤ã®stringå‹ã®å€¤
    *
    * @else
    *
@@ -461,22 +461,22 @@ namespace NVUtil
   /*!
    * @if jp
    *
-   * @brief »ØÄê¤µ¤ì¤¿Ê¸»úÎó¤ò NVList ¤ÎÍ×ÁÇ¤ËÄÉ²Ã¤¹¤ë¡£
+   * @brief æŒ‡å®šã•ã‚ŒãŸæ–‡å­—åˆ—ã‚’ NVList ã®è¦ç´ ã«è¿½åŠ ã™ã‚‹ã€‚
    *
-   * ¤³¤Î¥ª¥Ú¥ì¡¼¥·¥ç¥ó¤Ï name ¤Ç»ØÄê¤µ¤ì¤¿Í×ÁÇ¤Ë value ¤Ç»ØÄê¤µ¤ì¤¿Ê¸»úÎó¤ò
-   * ÄÉ²Ã¤¹¤ë¡£
-   * name ¤Ç»ØÄê¤·¤¿Í×ÁÇ¤Ë´û¤Ë value ¤ÎÃÍ¤¬ÀßÄê¤µ¤ì¤Æ¤¤¤ë¾ì¹ç¤Ë¤Ï²¿¤â¤·¤Ê¤¤¡£
-   * name ¤Ç»ØÄê¤·¤¿Í×ÁÇ¤Ë value ¤ÎÃÍ¤¬ÀßÄê¤µ¤ì¤Æ¤¤¤Ê¤¤¾ì¹ç¤Ï¡¢ ","¶èÀÚ¤ê¤Ç
-   * value ¤ÎÃÍ¤òÄÉ²Ã¤¹¤ë¡£
-   * »ØÄê¤µ¤ì¤¿ÃÍ¤òÀßÄê¤¹¤ë¡£
-   * name ¤Ç»ØÄê¤·¤¿Í×ÁÇ¤¬Â¸ºß¤·¤Ê¤¤¾ì¹ç¤Ï¡¢ NVList ¤ÎºÇ¸å¤Ë¿·¤¿¤ÊÍ×ÁÇ¤òÄÉ²Ã¤·¡¢
-   * »ØÄê¤µ¤ì¤¿ÃÍ¤òÀßÄê¤¹¤ë¡£
+   * ã“ã®ã‚ªãƒšãƒ¬ãƒ¼ã‚·ãƒ§ãƒ³ã¯ name ã§æŒ‡å®šã•ã‚ŒãŸè¦ç´ ã« value ã§æŒ‡å®šã•ã‚ŒãŸæ–‡å­—åˆ—ã‚’
+   * è¿½åŠ ã™ã‚‹ã€‚
+   * name ã§æŒ‡å®šã—ãŸè¦ç´ ã«æ—¢ã« value ã®å€¤ãŒè¨­å®šã•ã‚Œã¦ã„ã‚‹å ´åˆã«ã¯ä½•ã‚‚ã—ãªã„ã€‚
+   * name ã§æŒ‡å®šã—ãŸè¦ç´ ã« value ã®å€¤ãŒè¨­å®šã•ã‚Œã¦ã„ãªã„å ´åˆã¯ã€ ","åŒºåˆ‡ã‚Šã§
+   * value ã®å€¤ã‚’è¿½åŠ ã™ã‚‹ã€‚
+   * æŒ‡å®šã•ã‚ŒãŸå€¤ã‚’è¨­å®šã™ã‚‹ã€‚
+   * name ã§æŒ‡å®šã—ãŸè¦ç´ ãŒå­˜åœ¨ã—ãªã„å ´åˆã¯ã€ NVList ã®æœ€å¾Œã«æ–°ãŸãªè¦ç´ ã‚’è¿½åŠ ã—ã€
+   * æŒ‡å®šã•ã‚ŒãŸå€¤ã‚’è¨­å®šã™ã‚‹ã€‚
    *
-   * @param nv ¸¡º÷ÂĞ¾İ¤Î NVList
-   * @param name ÄÉ²ÃÂĞ¾İÍ×ÁÇÌ¾
-   * @param value ÄÉ²Ã¤¹¤ëÊ¸»úÎó
+   * @param nv æ¤œç´¢å¯¾è±¡ã® NVList
+   * @param name è¿½åŠ å¯¾è±¡è¦ç´ å
+   * @param value è¿½åŠ ã™ã‚‹æ–‡å­—åˆ—
    *
-   * @return ÄÉ²ÃÁàºî·ë²Ì
+   * @return è¿½åŠ æ“ä½œçµæœ
    *
    * @else
    *
@@ -511,13 +511,13 @@ namespace NVUtil
   /*!
    * @if jp
    *
-   * @brief NVList ¤ËÍ×ÁÇ¤òÄÉ²Ã¤¹¤ë¡£
+   * @brief NVList ã«è¦ç´ ã‚’è¿½åŠ ã™ã‚‹ã€‚
    *
-   * ¤³¤Î¥ª¥Ú¥ì¡¼¥·¥ç¥ó¤Ï dest ¤Ç»ØÄê¤µ¤ì¤¿ NVList ¤Ë src ¤Ç»ØÄê¤µ¤ì¤¿Í×ÁÇ¤ò
-   * ÄÉ²Ã¤¹¤ë¡£
+   * ã“ã®ã‚ªãƒšãƒ¬ãƒ¼ã‚·ãƒ§ãƒ³ã¯ dest ã§æŒ‡å®šã•ã‚ŒãŸ NVList ã« src ã§æŒ‡å®šã•ã‚ŒãŸè¦ç´ ã‚’
+   * è¿½åŠ ã™ã‚‹ã€‚
    *
-   * @param dest ÄÉ²Ã¤µ¤ì¤ë NVList
-   * @param src ÄÉ²Ã¤¹¤ë NVList
+   * @param dest è¿½åŠ ã•ã‚Œã‚‹ NVList
+   * @param src è¿½åŠ ã™ã‚‹ NVList
    *
    * @else
    *
@@ -536,13 +536,13 @@ namespace NVUtil
   /*!
    * @if jp
    *
-   * @brief NVList ¤ËÀßÄê¤µ¤ì¤Æ¤¤¤ëÆâÍÆ¤òÊ¸»úÎó¤È¤·¤Æ½ĞÎÏ¤¹¤ë¡£
+   * @brief NVList ã«è¨­å®šã•ã‚Œã¦ã„ã‚‹å†…å®¹ã‚’æ–‡å­—åˆ—ã¨ã—ã¦å‡ºåŠ›ã™ã‚‹ã€‚
    *
-   * »ØÄê¤µ¤ì¤¿ NVList ¤ËÀßÄê¤µ¤ì¤¿ÆâÍÆ¤òÊ¸»úÎó¤È¤·¤Æ½ĞÎÏ¤¹¤ë¡£
-   * ¤Ê¤ª¡¢ÀßÄê¤µ¤ì¤Æ¤¤¤ëÍ×ÁÇ¤¬Ê¸»úÎó·¿°Ê³°¤Î¾ì¹ç¤Ë¤Ï¡¢¤½¤Î»İ(Ê¸»úÎó¤Ç¤Ï¤Ê¤¤)¤ò
-   * ½ĞÎÏ¤¹¤ë¡£
+   * æŒ‡å®šã•ã‚ŒãŸ NVList ã«è¨­å®šã•ã‚ŒãŸå†…å®¹ã‚’æ–‡å­—åˆ—ã¨ã—ã¦å‡ºåŠ›ã™ã‚‹ã€‚
+   * ãªãŠã€è¨­å®šã•ã‚Œã¦ã„ã‚‹è¦ç´ ãŒæ–‡å­—åˆ—å‹ä»¥å¤–ã®å ´åˆã«ã¯ã€ãã®æ—¨(æ–‡å­—åˆ—ã§ã¯ãªã„)ã‚’
+   * å‡ºåŠ›ã™ã‚‹ã€‚
    *
-   * @param nv ½ĞÎÏÂĞ¾İ NVList
+   * @param nv å‡ºåŠ›å¯¾è±¡ NVList
    *
    * @else
    *
@@ -560,9 +560,9 @@ namespace NVUtil
 
   /*!
    * @if jp
-   * @brief NVList ¤ËÀßÄê¤µ¤ì¤Æ¤¤¤ëÆâÍÆ¤òÊ¸»úÎó¤È¤·¤ÆÉ¸½à½ĞÎÏ¤¹¤ë¡£
+   * @brief NVList ã«è¨­å®šã•ã‚Œã¦ã„ã‚‹å†…å®¹ã‚’æ–‡å­—åˆ—ã¨ã—ã¦æ¨™æº–å‡ºåŠ›ã™ã‚‹ã€‚
    *
-   * @param nv ½ĞÎÏÂĞ¾İ NVList
+   * @param nv å‡ºåŠ›å¯¾è±¡ NVList
    *
    * @else
    * @brief Print information configured in NVList as a string type 
@@ -576,9 +576,9 @@ namespace NVUtil
 
   /*!
    * @if jp
-   * @brief NVList ¤ËÀßÄê¤µ¤ì¤Æ¤¤¤ëÆâÍÆ¤òÊ¸»úÎó¤Ë¤¹¤ë
+   * @brief NVList ã«è¨­å®šã•ã‚Œã¦ã„ã‚‹å†…å®¹ã‚’æ–‡å­—åˆ—ã«ã™ã‚‹
    *
-   * @param nv ½ĞÎÏÂĞ¾İ NVList
+   * @param nv å‡ºåŠ›å¯¾è±¡ NVList
    *
    * @else
    * @brief Get information configured in NVList as a string type.

@@ -1,4 +1,4 @@
-// -*- C++ -*-
+﻿// -*- C++ -*-
 /*!
  * @file PortProfileHelper.h
  * @brief RTC's PortProfile helper class
@@ -39,10 +39,10 @@ namespace RTC
    * @if jp
    *
    * @class PortProfileHelper
-   * @brief PortProfile �إ�ѡ����饹
+   * @brief PortProfile ヘルパークラス
    *
-   * RTC::Port �μ�Υץ��ե�������ݻ����� PortProfile ��������륯�饹��
-   * ��Ȥ��� PortBase �������ǻ��Ѥ���롣
+   * RTC::Port の種々のプロファイルを保持する PortProfile を管理するクラス。
+   * 主として PortBase の内部で使用される。
    *
    * @else
    *
@@ -61,9 +61,9 @@ namespace RTC
   public:
     /*!
      * @if jp
-     * @brief ���󥹥ȥ饯��
+     * @brief コンストラクタ
      *
-     * ���󥹥ȥ饯��
+     * コンストラクタ
      *
      * @else
      * @brief Constructor
@@ -76,9 +76,9 @@ namespace RTC
     /*!
      * @if jp
      *
-     * @brief �ǥ��ȥ饯��
+     * @brief デストラクタ
      *
-     * �ǥ��ȥ饯��
+     * デストラクタ
      *
      * @else
      *
@@ -94,12 +94,12 @@ namespace RTC
     /*!
      * @if jp
      *
-     * @brief PortProfile �����ꤹ��
+     * @brief PortProfile を設定する
      *
-     * ���Υ��֥������Ȥ��ݻ����� PortProfile �������Ϳ����줿 PortProfile
-     * �򥳥ԡ�����񤭤�����¸���롣
+     * このオブジェクトが保持する PortProfile を引数で与えられた PortProfile
+     * をコピーし上書きして保存する。
      *
-     * @param PortProfile ��񤭤��� PortProfile
+     * @param PortProfile 上書きする PortProfile
      *
      * @else
      *
@@ -118,11 +118,11 @@ namespace RTC
     /*!
      * @if jp
      *
-     * @brief PortProfile ���������
+     * @brief PortProfile を取得する
      *
-     * ���Υ��֥������Ȥ��ݻ����� PortProfile ���֤���
+     * このオブジェクトが保持する PortProfile を返す。
      *
-     * @return ���Υ��֥������Ȥ��ݻ����� PortProfile
+     * @return このオブジェクトが保持する PortProfile
      *
      * @else
      *
@@ -140,12 +140,12 @@ namespace RTC
     /*!
      * @if jp
      *
-     * @brief PortProfile.name �����ꤹ��
+     * @brief PortProfile.name を設定する
      *
-     * ���Υ��ڥ졼�����ϰ�����Ϳ����줿ʸ����򥳥ݡ�����
-     * PortProfile.name �Ȥ����ݻ����롣
+     * このオペレーションは引数で与えられた文字列をコポーし、
+     * PortProfile.name として保持する。
      *
-     * @param name PortProfile.name �˳�Ǽ���� Port ��̾��
+     * @param name PortProfile.name に格納する Port の名前
      *
      * @else
      *
@@ -163,11 +163,11 @@ namespace RTC
     /*!
      * @if jp
      *
-     * @brief PortProfile.name ���������
+     * @brief PortProfile.name を取得する
      *
-     * ���Υ��ڥ졼������ PortProfile.name ��������롣
+     * このオペレーションは PortProfile.name を取得する。
      *
-     * @return PortProfile.name �ؤΥݥ���
+     * @return PortProfile.name へのポインタ
      *
      * @else
      *
@@ -185,11 +185,11 @@ namespace RTC
     /*!
      * @if jp
      *
-     * @brief PortInterfaceProfile ���ɲä���
+     * @brief PortInterfaceProfile を追加する
      *
-     * ���Υ��ڥ졼������ PortProfile �� PortInterfaceProfile ���ɲä��롣
+     * このオペレーションは PortProfile に PortInterfaceProfile を追加する。
      *
-     * @param if_profile PortProfile ���ɲä��� PortInterfaceProfile
+     * @param if_profile PortProfile に追加する PortInterfaceProfile
      *
      * @else
      *
@@ -207,9 +207,9 @@ namespace RTC
     /*!
      * @if jp
      *
-     * @brief PortInterfaceProfileList ���������
+     * @brief PortInterfaceProfileList を取得する
      *
-     * ���Υ��ڥ졼������ PortInterfaceProfileList ���֤���
+     * このオペレーションは PortInterfaceProfileList を返す。
      *
      * @return PortInterfaceProfileList
      *
@@ -229,12 +229,12 @@ namespace RTC
     /*!
      * @if jp
      *
-     * @brief PortInterfaceProfile ���������
+     * @brief PortInterfaceProfile を取得する
      *
-     * ���Υ��ڥ졼������ instance_name �ǻ��ꤵ�줿 PortInterfaceProfile
-     * ���֤���
+     * このオペレーションは instance_name で指定された PortInterfaceProfile
+     * を返す。
      *
-     * @param instance_name PortInterfaceProfile �� instance_name
+     * @param instance_name PortInterfaceProfile の instance_name
      * @return PortInterfaceProfile
      *
      * @else
@@ -256,13 +256,13 @@ namespace RTC
     /*!
      * @if jp
      *
-     * @brief PortInterfaceProfile ��������
+     * @brief PortInterfaceProfile を削除する
      *
-     * ���Υ��ڥ졼������ instance_name �ǻ��ꤵ�줿��PortInterfaceProfile
-     * �������롣���ꤷ��̾���� PortInterfaceProfile ��¸�ߤ��ʤ����ˤϡ�
-     * NotFound exception ���֤���
+     * このオペレーションは instance_name で指定された　PortInterfaceProfile
+     * を削除する。指定した名前の PortInterfaceProfile が存在しない場合には、
+     * NotFound exception を返す。
      *
-     * @param instance_name ������� PortInterfaceProfile ��̾��
+     * @param instance_name 削除する PortInterfaceProfile の名前
      *
      * @else
      *
@@ -281,12 +281,12 @@ namespace RTC
     /*!
      * @if jp
      *
-     * @brief Port �Υ��֥������Ȼ��Ȥ򥻥åȤ���
+     * @brief Port のオブジェクト参照をセットする
      *
-     * ���Υ��ڥ졼������ PortProfile �ˡ���Ϣ���� Port �Υ��֥������Ȼ���
-     * �����ꤹ�롣
+     * このオペレーションは PortProfile に、関連する Port のオブジェクト参照
+     * を設定する。
      *
-     * @param port ���ꤹ�� Port �Υ��֥������ȥ�ե����
+     * @param port 設定する Port のオブジェクトリファレンス
      *
      * @else
      *
@@ -304,12 +304,12 @@ namespace RTC
     /*!
      * @if jp
      *
-     * @brief Port �Υ��֥������Ȼ��Ȥ��������
+     * @brief Port のオブジェクト参照を取得する
      *
-     * ���Υ��ڥ졼������ PortProfile �˴�Ϣ�դ���줿 Port ��
-     * ���֥������Ȼ��Ȥ��֤���
+     * このオペレーションは PortProfile に関連付けられた Port の
+     * オブジェクト参照を返す。
      *
-     * @return ��Ϣ�դ���줿 Port �Υ��֥������Ȼ���
+     * @return 関連付けられた Port のオブジェクト参照
      *
      * @else
      *
@@ -327,9 +327,9 @@ namespace RTC
     /*!
      * @if jp
      *
-     * @brief ConnectorProfile ���ɲä���
+     * @brief ConnectorProfile を追加する
      *
-     * ���Υ��ڥ졼������ PortProfile �� ConnectorProfile ���ɲä��롣
+     * このオペレーションは PortProfile に ConnectorProfile を追加する。
      *
      * @param conn_profile ConnectorProfile 
      *
@@ -349,12 +349,12 @@ namespace RTC
     /*!
      * @if jp
      *
-     * @brief ConnectorProfileList ���������
+     * @brief ConnectorProfileList を取得する
      *
-     * ���Υ��ڥ졼������ PortProfile �˴�Ϣ�դ���줿 ConnectorProfile ��
-     * �ꥹ�� ConnectorProfileList ���֤���
+     * このオペレーションは PortProfile に関連付けられた ConnectorProfile の
+     * リスト ConnectorProfileList を返す。
      *
-     * @return ��Ϣ�դ���줿 ConnectorProfileList
+     * @return 関連付けられた ConnectorProfileList
      *
      * @else
      *
@@ -372,11 +372,11 @@ namespace RTC
     /*!
      * @if jp
      *
-     * @brief ConnectorProfile ���������
+     * @brief ConnectorProfile を取得する
      *
-     * ���Υ��ڥ졼�����ϰ����ǻ��ꤵ�줿̾������� ConnectorProfile ���֤���
+     * このオペレーションは引数で指定された名前を持つ ConnectorProfile を返す。
      *
-     * @param name ConnectorProfile ��̾��
+     * @param name ConnectorProfile の名前
      * @return ConnectorProfile
      *
      * @else
@@ -396,11 +396,11 @@ namespace RTC
      /*!
      * @if jp
      *
-     * @brief ConnectorProfile ���������
+     * @brief ConnectorProfile を取得する
      *
-     * ���Υ��ڥ졼�����ϰ����ǻ��ꤵ�줿ID����� ConnectorProfile ���֤���
+     * このオペレーションは引数で指定されたIDを持つ ConnectorProfile を返す。
      *
-     * @param id ConnectorProfile ��ID
+     * @param id ConnectorProfile のID
      * @return ConnectorProfile
      *
      * @else
@@ -420,12 +420,12 @@ namespace RTC
      /*!
      * @if jp
      *
-     * @brief ConnectorProfile ��������
+     * @brief ConnectorProfile を削除する
      *
-     * ���Υ��ڥ졼������ PortProfile �� ConnectorProfile ��
-     * ̾���ǻ��ꤷ�ƺ�����롣
+     * このオペレーションは PortProfile の ConnectorProfile を
+     * 名前で指定して削除する。
      *
-     * @param naem ConnectorProfile ��̾��
+     * @param naem ConnectorProfile の名前
      *
      * @else
      *
@@ -443,12 +443,12 @@ namespace RTC
      /*!
      * @if jp
      *
-     * @brief ConnectorProfile ��������
+     * @brief ConnectorProfile を削除する
      *
-     * ���Υ��ڥ졼������ PortProfile �� ConnectorProfile ��
-     * ID �ǻ��ꤷ�ƺ�����롣
+     * このオペレーションは PortProfile の ConnectorProfile を
+     * ID で指定して削除する。
      *
-     * @param id ConnectorProfile ��ID
+     * @param id ConnectorProfile のID
      *
      * @else
      *
@@ -466,11 +466,11 @@ namespace RTC
      /*!
      * @if jp
      *
-     * @brief PortProfile �� owner �����ꤹ��
+     * @brief PortProfile の owner を設定する
      *
-     * ���Υ��ڥ졼������ PortProfile �� owner �����ꤹ�롣
+     * このオペレーションは PortProfile の owner を設定する。
      *
-     * @param owner PortProfile �� owner �Υ��֥������Ȼ���
+     * @param owner PortProfile の owner のオブジェクト参照
      *
      * @else
      *
@@ -488,11 +488,11 @@ namespace RTC
     /*!
      * @if jp
      *
-     * @brief PortProfile �� owner ���������
+     * @brief PortProfile の owner を取得する
      *
-     * ���Υ��ڥ졼������ PortProfile �� owner �Υ��֥������Ȼ��Ȥ��֤���
+     * このオペレーションは PortProfile の owner のオブジェクト参照を返す。
      *
-     * @return PortProfile �� owner �Υ��֥������Ȼ���
+     * @return PortProfile の owner のオブジェクト参照
      *
      * @else
      *
@@ -510,11 +510,11 @@ namespace RTC
     /*!
      * @if jp
      *
-     * @brief PortProfile �� properties �����ꤹ��
+     * @brief PortProfile の properties を設定する
      *
-     * ���Υ��ڥ졼������ PortProfile �� properties �����ꤹ�롣
+     * このオペレーションは PortProfile に properties を設定する。
      *
-     * @param prop PortProfile �� properties �� NVList
+     * @param prop PortProfile の properties の NVList
      *
      * @else
      *
@@ -532,11 +532,11 @@ namespace RTC
     /*!
      * @if jp
      *
-     * @brief PortProfile �� properties ���������
+     * @brief PortProfile の properties を取得する
      *
-     * ���Υ��ڥ졼������ PortProfile �� properties���֤���
+     * このオペレーションは PortProfile の propertiesを返す。
      *
-     * @return PortProfile �� properties �� NVList
+     * @return PortProfile の properties の NVList
      *
      * @else
      *

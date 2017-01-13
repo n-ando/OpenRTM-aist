@@ -1,4 +1,4 @@
-// -*- C++ -*-
+﻿// -*- C++ -*-
 /*!
  * @file PeriodicExecutionContext.h
  * @brief PeriodicExecutionContext class
@@ -39,9 +39,9 @@ namespace RTC_exp
   /*!
    * @if jp
    * @class PeriodicExecutionContext
-   * @brief PeriodicExecutionContext ���饹
+   * @brief PeriodicExecutionContext クラス
    *
-   * Periodic Sampled Data Processing(�����¹���)ExecutionContext���饹��
+   * Periodic Sampled Data Processing(周期実行用)ExecutionContextクラス。
    *
    * @since 0.4.0
    *
@@ -66,10 +66,10 @@ namespace RTC_exp
   public:
     /*!
      * @if jp
-     * @brief �ǥե���ȥ��󥹥ȥ饯��
+     * @brief デフォルトコンストラクタ
      *
-     * �ǥե���ȥ��󥹥ȥ饯��
-     * �ץ��ե�����˰ʲ��ι��ܤ����ꤹ�롣
+     * デフォルトコンストラクタ
+     * プロファイルに以下の項目を設定する。
      *  - kind : PERIODIC
      *  - rate : 0.0
      *
@@ -87,9 +87,9 @@ namespace RTC_exp
 
     /*!
      * @if jp
-     * @brief �ǥ��ȥ饯��
+     * @brief デストラクタ
      *
-     * �ǥ��ȥ饯��
+     * デストラクタ
      *
      * @else
      * @brief Destructor
@@ -102,9 +102,9 @@ namespace RTC_exp
 
     /*!
      * @if jp
-     * @brief ExecutionContext�ν������Ԥ�
+     * @brief ExecutionContextの初期化を行う
      *
-     * ExecutionContext�ν��������
+     * ExecutionContextの初期化処理
      *
      * @else
      * @brief Initialize the ExecutionContext
@@ -117,14 +117,14 @@ namespace RTC_exp
 
     /*!
      * @if jp
-     * @brief ExecutionContext�ѥ����ƥ��ӥƥ�����åɤ���������
+     * @brief ExecutionContext用アクティビティスレッドを生成する
      *
-     * Executioncontext �Ѥ����������ƥ��ӥƥ�����åɤ���������ư���롣
-     * ����� coil::Task �����ӥ����饹�᥽�åɤΥ����С��饤�ɡ�
+     * Executioncontext 用の内部アクティビティスレッドを生成し起動する。
+     * これは coil::Task サービスクラスメソッドのオーバーライド。
      *
-     * @param args �̾��0
+     * @param args 通常は0
      *
-     * @return ���������¹Է��
+     * @return 生成処理実行結果
      *
      * @else
      *
@@ -143,12 +143,12 @@ namespace RTC_exp
 
     /*!
      * @if jp
-     * @brief ExecutionContext �ѤΥ���åɼ¹Դؿ�
+     * @brief ExecutionContext 用のスレッド実行関数
      *
-     * ExecutionContext �ѤΥ���åɼ¹Դؿ�����Ͽ���줿����ݡ��ͥ��
-     * �ν�����ƤӽФ���
+     * ExecutionContext 用のスレッド実行関数。登録されたコンポーネント
+     * の処理を呼び出す。
      *
-     * @return �¹Է��
+     * @return 実行結果
      *
      * @else
      * @brief Thread execution function for ExecutionContext
@@ -164,15 +164,15 @@ namespace RTC_exp
 
     /*!
      * @if jp
-     * @brief ExecutionContext �ѤΥ���åɼ¹Դؿ�
+     * @brief ExecutionContext 用のスレッド実行関数
      *
-     * ExecutionContext �ѤΥ���åɽ�λ���˸ƤФ�롣����ݡ��ͥ�ȥ�
-     * �֥������Ȥ��󥢥��ƥ��ֲ����ޥ͡�����ؤ����Τ�Ԥ��������
-     * coil::Task �����ӥ����饹�᥽�åɤΥ����С��饤�ɡ�
+     * ExecutionContext 用のスレッド終了時に呼ばれる。コンポーネントオ
+     * ブジェクトの非アクティブ化、マネージャへの通知を行う。これは
+     * coil::Task サービスクラスメソッドのオーバーライド。
      *
-     * @param flags ��λ�����ե饰
+     * @param flags 終了処理フラグ
      *
-     * @return ��λ�������
+     * @return 終了処理結果
      *
      * @else
      *
@@ -196,14 +196,14 @@ namespace RTC_exp
     //============================================================
     /*!
      * @if jp
-     * @brief ExecutionContext �¹Ծ��ֳ�ǧ�ؿ�
+     * @brief ExecutionContext 実行状態確認関数
      *
-     * �������� ExecutionContext �� Runnning ���֤ξ��� true ���֤���
-     * Executioncontext �� Running �δ֡����� Executioncontext �˻��ä�
-     * �Ƥ������ƤΥ����ƥ���RT����ݡ��ͥ�Ȥ���ExecutionContext �μ�
-     * �Լ���˱����Ƽ¹Ԥ���롣
+     * この操作は ExecutionContext が Runnning 状態の場合に true を返す。
+     * Executioncontext が Running の間、当該 Executioncontext に参加し
+     * ている全てのアクティブRTコンポーネントが、ExecutionContext の実
+     * 行種類に応じて実行される。
      *
-     * @return ���ֳ�ǧ�ؿ�(ư����:true�������:false)
+     * @return 状態確認関数(動作中:true、停止中:false)
      *
      * @else
      *
@@ -212,9 +212,9 @@ namespace RTC_exp
      * This operation shall return true if the context is in the
      * Running state.  While the context is Running, all Active RTCs
      * participating in the context shall be executed according to the
-     * context��s execution kind.
+     * context’s execution kind.
      *
-     * @return Check state function (Running:true��Stopping:false)
+     * @return Check state function (Running:true、Stopping:false)
      *
      * @endif
      */
@@ -223,15 +223,15 @@ namespace RTC_exp
 
     /*!
      * @if jp
-     * @brief ExecutionContext �μ¹Ԥ򳫻�
+     * @brief ExecutionContext の実行を開始
      *
-     * ExecutionContext �μ¹Ծ��֤� Runnning �Ȥ��뤿��Υꥯ�����Ȥ�
-     * ȯ�Ԥ��롣ExecutionContext �ξ��֤����ܤ����
-     * ComponentAction::on_startup ���ƤӽФ���롣���ä��Ƥ���RT����ݡ�
-     * �ͥ�Ȥ�������������ޤ� ExecutionContext �򳫻Ϥ��뤳�ȤϤǤ�
-     * �ʤ���ExecutionContext ��ʣ���󳫻�/��ߤ򷫤��֤����Ȥ��Ǥ��롣
+     * ExecutionContext の実行状態を Runnning とするためのリクエストを
+     * 発行する。ExecutionContext の状態が遷移すると
+     * ComponentAction::on_startup が呼び出される。参加しているRTコンポー
+     * ネントが、初期化されるまで ExecutionContext を開始することはでき
+     * ない。ExecutionContext は複数回開始/停止を繰り返すことができる。
      *
-     * @return ReturnCode_t ���Υ꥿���󥳡���
+     * @return ReturnCode_t 型のリターンコード
      *
      * @else
      *
@@ -253,15 +253,15 @@ namespace RTC_exp
 
     /*!
      * @if jp
-     * @brief ExecutionContext �μ¹Ԥ����
+     * @brief ExecutionContext の実行を停止
      *
-     * ExecutionContext �ξ��֤� Stopped �Ȥ��뤿��Υꥯ�����Ȥ�ȯ�Ԥ�
-     * �롣���ܤ�ȯ���������ϡ�ComponentAction::on_shutdown ���Ƥӽ�
-     * ����롣���ä��Ƥ���RT����ݡ��ͥ�Ȥ���λ��������
-     * ExecutionContext ����ߤ���ɬ�פ����롣ExecutionContext ��ʣ����
-     * ����/��ߤ򷫤��֤����Ȥ��Ǥ��롣
+     * ExecutionContext の状態を Stopped とするためのリクエストを発行す
+     * る。遷移が発生した場合は、ComponentAction::on_shutdown が呼び出
+     * される。参加しているRTコンポーネントが終了する前に
+     * ExecutionContext を停止する必要がある。ExecutionContext は複数回
+     * 開始/停止を繰り返すことができる。
      *
-     * @return ReturnCode_t ���Υ꥿���󥳡���
+     * @return ReturnCode_t 型のリターンコード
      *
      * @else
      *
@@ -282,12 +282,12 @@ namespace RTC_exp
 
     /*!
      * @if jp
-     * @brief ExecutionContext �μ¹Լ���(Hz)���������
+     * @brief ExecutionContext の実行周期(Hz)を取得する
      *
-     * Active ���֤ˤ�RT����ݡ��ͥ�Ȥ��¹Ԥ�������(ñ��:Hz)�������
-     * �롣
+     * Active 状態にてRTコンポーネントが実行される周期(単位:Hz)を取得す
+     * る。
      *
-     * @return ��������(ñ��:Hz)
+     * @return 処理周期(単位:Hz)
      *
      * @else
      *
@@ -305,22 +305,22 @@ namespace RTC_exp
 
     /*!
      * @if jp
-     * @brief ExecutionContext �μ¹Լ���(Hz)�����ꤹ��
+     * @brief ExecutionContext の実行周期(Hz)を設定する
      *
-     * Active ���֤ˤ�RT����ݡ��ͥ�Ȥ��¹Ԥ�������(ñ��:Hz)�����ꤹ
-     * �롣�¹Լ������ѹ��ϡ�DataFlowComponentAction ��
-     * on_rate_changed �ˤ�äƳ�RT����ݡ��ͥ�Ȥ���ã����롣
+     * Active 状態にてRTコンポーネントが実行される周期(単位:Hz)を設定す
+     * る。実行周期の変更は、DataFlowComponentAction の
+     * on_rate_changed によって各RTコンポーネントに伝達される。
      *
-     * @param rate ��������(ñ��:Hz)
+     * @param rate 処理周期(単位:Hz)
      *
-     * @return ReturnCode_t ���Υ꥿���󥳡���
+     * @return ReturnCode_t 型のリターンコード
      *
      * @else
      *
      * @brief Set execution rate(Hz) of ExecutionContext
      *
      * This operation shall set the rate (in hertz) at which this
-     * context��s Active participating RTCs are being called.  If the
+     * context’s Active participating RTCs are being called.  If the
      * execution kind of the context is PERIODIC, a rate change shall
      * result in the invocation of on_rate_changed on any RTCs
      * realizing DataFlowComponentAction that are registered with any
@@ -337,24 +337,24 @@ namespace RTC_exp
 
     /*!
      * @if jp
-     * @brief RT����ݡ��ͥ�Ȥ򥢥��ƥ��ֲ�����
+     * @brief RTコンポーネントをアクティブ化する
      *
-     * Inactive ���֤ˤ���RT����ݡ��ͥ�Ȥ�Active �����ܤ����������ƥ�
-     * �ֲ����롣�������ƤФ줿��̡�on_activate ���ƤӽФ���롣��
-     * �ꤷ��RT����ݡ��ͥ�Ȥ����üԥꥹ�Ȥ˴ޤޤ�ʤ����ϡ�
-     * BAD_PARAMETER ���֤���롣���ꤷ��RT����ݡ��ͥ�Ȥξ��֤�
-     * Inactive �ʳ��ξ��ϡ�PRECONDITION_NOT_MET ���֤���롣
+     * Inactive 状態にあるRTコンポーネントをActive に遷移させ、アクティ
+     * ブ化する。この操作が呼ばれた結果、on_activate が呼び出される。指
+     * 定したRTコンポーネントが参加者リストに含まれない場合は、
+     * BAD_PARAMETER が返される。指定したRTコンポーネントの状態が
+     * Inactive 以外の場合は、PRECONDITION_NOT_MET が返される。
      *
-     * @param comp �����ƥ��ֲ��о�RT����ݡ��ͥ��
+     * @param comp アクティブ化対象RTコンポーネント
      *
-     * @return ReturnCode_t ���Υ꥿���󥳡���
+     * @return ReturnCode_t 型のリターンコード
      *
      * @else
      *
      * @brief Activate an RT-component
      *
      * The given participant RTC is Inactive and is therefore not
-     * being invoked according to the execution context��s execution
+     * being invoked according to the execution context’s execution
      * kind. This operation shall cause the RTC to transition to the
      * Active state such that it may subsequently be invoked in this
      * execution context.  The callback on_activate shall be called as
@@ -374,17 +374,17 @@ namespace RTC_exp
     
     /*!
      * @if jp
-     * @brief RT����ݡ��ͥ�Ȥ��󥢥��ƥ��ֲ�����
+     * @brief RTコンポーネントを非アクティブ化する
      *
-     * Inactive ���֤ˤ���RT����ݡ��ͥ�Ȥ��󥢥��ƥ��ֲ�����Inactive
-     * �����ܤ����롣�������ƤФ줿��̡�on_deactivate ���ƤӽФ���
-     * �롣���ꤷ��RT����ݡ��ͥ�Ȥ����üԥꥹ�Ȥ˴ޤޤ�ʤ����ϡ�
-     * BAD_PARAMETER ���֤���롣���ꤷ��RT����ݡ��ͥ�Ȥξ��֤�
-     * Active �ʳ��ξ��ϡ�PRECONDITION_NOT_MET ���֤���롣
+     * Inactive 状態にあるRTコンポーネントを非アクティブ化し、Inactive
+     * に遷移させる。この操作が呼ばれた結果、on_deactivate が呼び出され
+     * る。指定したRTコンポーネントが参加者リストに含まれない場合は、
+     * BAD_PARAMETER が返される。指定したRTコンポーネントの状態が
+     * Active 以外の場合は、PRECONDITION_NOT_MET が返される。
      *
-     * @param comp �󥢥��ƥ��ֲ��о�RT����ݡ��ͥ��
+     * @param comp 非アクティブ化対象RTコンポーネント
      *
-     * @return ReturnCode_t ���Υ꥿���󥳡���
+     * @return ReturnCode_t 型のリターンコード
      *
      * @else
      *
@@ -410,17 +410,17 @@ namespace RTC_exp
 
     /*!
      * @if jp
-     * @brief RT����ݡ��ͥ�Ȥ�ꥻ�åȤ���
+     * @brief RTコンポーネントをリセットする
      *
-     * Error ���֤�RT����ݡ��ͥ�Ȥ��������ߤ롣�������ƤФ줿��
-     * �̡�on_reset ���ƤӽФ���롣���ꤷ��RT����ݡ��ͥ�Ȥ����üԥ�
-     * ���Ȥ˴ޤޤ�ʤ����ϡ�BAD_PARAMETER ���֤���롣���ꤷ��RT����
-     * �ݡ��ͥ�Ȥξ��֤� Error �ʳ��ξ��ϡ�PRECONDITION_NOT_MET ����
-     * ����롣
+     * Error 状態のRTコンポーネントの復帰を試みる。この操作が呼ばれた結
+     * 果、on_reset が呼び出される。指定したRTコンポーネントが参加者リ
+     * ストに含まれない場合は、BAD_PARAMETER が返される。指定したRTコン
+     * ポーネントの状態が Error 以外の場合は、PRECONDITION_NOT_MET が返
+     * される。
      *
-     * @param comp �ꥻ�å��о�RT����ݡ��ͥ��
+     * @param comp リセット対象RTコンポーネント
      *
-     * @return ReturnCode_t ���Υ꥿���󥳡���
+     * @return ReturnCode_t 型のリターンコード
      *
      * @else
      *
@@ -445,15 +445,15 @@ namespace RTC_exp
 
     /*!
      * @if jp
-     * @brief RT����ݡ��ͥ�Ȥξ��֤��������
+     * @brief RTコンポーネントの状態を取得する
      *
-     * ���ꤷ��RT����ݡ��ͥ�Ȥξ���(LifeCycleState)��������롣���ꤷ
-     * ��RT����ݡ��ͥ�Ȥ����üԥꥹ�Ȥ˴ޤޤ�ʤ����ϡ�
-     * UNKNOWN_STATE ���֤���롣
+     * 指定したRTコンポーネントの状態(LifeCycleState)を取得する。指定し
+     * たRTコンポーネントが参加者リストに含まれない場合は、
+     * UNKNOWN_STATE が返される。
      *
-     * @param comp ���ּ����о�RT����ݡ��ͥ��
+     * @param comp 状態取得対象RTコンポーネント
      *
-     * @return ���ߤξ���(LifeCycleState)
+     * @return 現在の状態(LifeCycleState)
      *
      * @else
      *
@@ -475,9 +475,9 @@ namespace RTC_exp
 
     /*!
      * @if jp
-     * @brief ExecutionKind ���������
+     * @brief ExecutionKind を取得する
      *
-     * �� ExecutionContext �� ExecutionKind ���������
+     * 本 ExecutionContext の ExecutionKind を取得する
      *
      * @return ExecutionKind
      *
@@ -497,17 +497,17 @@ namespace RTC_exp
 
     /*!
      * @if jp
-     * @brief RT����ݡ��ͥ�Ȥ��ɲä���
+     * @brief RTコンポーネントを追加する
      *
-     * ���ꤷ��RT����ݡ��ͥ�Ȥ򻲲üԥꥹ�Ȥ��ɲä��롣�ɲä��줿RT��
-     * ��ݡ��ͥ�Ȥ� attach_context ���ƤФ졢Inactive ���֤����ܤ��롣
-     * ���ꤵ�줿RT����ݡ��ͥ�Ȥ�null�ξ��ϡ�BAD_PARAMETER ���֤���
-     * �롣���ꤵ�줿RT����ݡ��ͥ�Ȥ� DataFlowComponent �ʳ��ξ��ϡ�
-     * BAD_PARAMETER ���֤���롣
+     * 指定したRTコンポーネントを参加者リストに追加する。追加されたRTコ
+     * ンポーネントは attach_context が呼ばれ、Inactive 状態に遷移する。
+     * 指定されたRTコンポーネントがnullの場合は、BAD_PARAMETER が返され
+     * る。指定されたRTコンポーネントが DataFlowComponent 以外の場合は、
+     * BAD_PARAMETER が返される。
      *
-     * @param comp �ɲ��о�RT����ݡ��ͥ��
+     * @param comp 追加対象RTコンポーネント
      *
-     * @return ReturnCode_t ���Υ꥿���󥳡���
+     * @return ReturnCode_t 型のリターンコード
      *
      * @else
      *
@@ -531,16 +531,16 @@ namespace RTC_exp
 
     /*!
      * @if jp
-     * @brief RT����ݡ��ͥ�Ȥ򻲲üԥꥹ�Ȥ���������
+     * @brief RTコンポーネントを参加者リストから削除する
      *
-     * ���ꤷ��RT����ݡ��ͥ�Ȥ򻲲üԥꥹ�Ȥ��������롣������줿
-     * RT����ݡ��ͥ�Ȥ� detach_context ���ƤФ�롣���ꤵ�줿RT����ݡ�
-     * �ͥ�Ȥ����üԥꥹ�Ȥ���Ͽ����Ƥ��ʤ����ϡ�BAD_PARAMETER ����
-     * ����롣
+     * 指定したRTコンポーネントを参加者リストから削除する。削除された
+     * RTコンポーネントは detach_context が呼ばれる。指定されたRTコンポー
+     * ネントが参加者リストに登録されていない場合は、BAD_PARAMETER が返
+     * される。
      *
-     * @param comp ����о�RT����ݡ��ͥ��
+     * @param comp 削除対象RTコンポーネント
      *
-     * @return ReturnCode_t ���Υ꥿���󥳡���
+     * @return ReturnCode_t 型のリターンコード
      *
      * @else
      *
@@ -565,9 +565,9 @@ namespace RTC_exp
 
     /*!
      * @if jp
-     * @brief ExecutionContextProfile ���������
+     * @brief ExecutionContextProfile を取得する
      *
-     * �� ExecutionContext �Υץ��ե������������롣
+     * 本 ExecutionContext のプロファイルを取得する。
      *
      * @return ExecutionContextProfile
      *
@@ -575,7 +575,7 @@ namespace RTC_exp
      *
      * @brief Get the ExecutionContextProfile
      *
-     * This operation provides a profile ��descriptor�� for the execution
+     * This operation provides a profile “descriptor” for the execution
      * context.
      *
      * @return ExecutionContextProfile
@@ -662,7 +662,7 @@ namespace RTC_exp
   protected:
     /*!
      * @if jp
-     * @brief ���������ȥ꡼��
+     * @brief ロガーストリーム
      * @else
      * @brief Logger stream
      * @endif
@@ -671,7 +671,7 @@ namespace RTC_exp
 
     /*!
      * @if jp
-     * @brief ExecutionContext �Υ���åɼ¹ԥե饰
+     * @brief ExecutionContext のスレッド実行フラグ
      * @else
      * @brief The thread running flag of ExecutionContext
      * @endif
@@ -681,7 +681,7 @@ namespace RTC_exp
     
     /*!
      * @if jp
-     * @brief worker �Ѿ����ѿ����饹
+     * @brief worker 用状態変数クラス
      * @else
      * @brief Condition variable class for worker
      * @endif
@@ -696,7 +696,7 @@ namespace RTC_exp
 
     /*!
      * @if jp
-     * @brief svn�Ѥξ����ѿ� 
+     * @brief svn用の状態変数 
      * @else
      * @brief A condition variable for external triggered worker
      * @endif
@@ -705,7 +705,7 @@ namespace RTC_exp
 
     /*!
      * @if jp
-     * @brief ExecutionContext ¨���¹�(wait̵���¹�)�ե饰
+     * @brief ExecutionContext 即時実行(wait無し実行)フラグ
      * @else
      * @brief Flag of ExecutionContext to run immediately
      *        (to run without waiting)
@@ -730,7 +730,7 @@ extern "C"
 {
   /*!
    * @if jp
-   * @brief ECFactory�ؤ���Ͽ�Τ���ν�����ؿ�
+   * @brief ECFactoryへの登録のための初期化関数
    * @else
    * @brief Initialization function to register to ECFactory
    * @endif

@@ -1,4 +1,4 @@
-// -*- C++ -*-
+ï»¿// -*- C++ -*-
 /*!
  * @file  Signal_win32.h
  * @brief SignalAction class
@@ -38,7 +38,7 @@ namespace coil
    * @if jp
    *
    * @class SignalAction
-   * @brief SignalAction ƒNƒ‰ƒX
+   * @brief SignalAction ã‚¯ãƒ©ã‚¹
    *
    * @else
    *
@@ -53,9 +53,9 @@ namespace coil
     /*!
      * @if jp
      *
-     * @brief ƒRƒ“ƒXƒgƒ‰ƒNƒ^
+     * @brief ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
      *
-     * ƒRƒ“ƒXƒgƒ‰ƒNƒ^B
+     * ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ã€‚
      *
      * @else
      *
@@ -70,14 +70,14 @@ namespace coil
     /*!
      * @if jp
      *
-     * @brief ƒRƒ“ƒXƒgƒ‰ƒNƒ^
+     * @brief ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
      *
-     * ƒRƒ“ƒXƒgƒ‰ƒNƒ^B
+     * ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ã€‚
      *
-     * @param handle ƒVƒOƒiƒ‹ƒnƒ“ƒhƒ‰
-     * @param signum ƒVƒOƒiƒ‹”Ô†
-     * @param mask ƒ}ƒXƒN
-     * @param flags ƒtƒ‰ƒO
+     * @param handle ã‚·ã‚°ãƒŠãƒ«ãƒãƒ³ãƒ‰ãƒ©
+     * @param signum ã‚·ã‚°ãƒŠãƒ«ç•ªå·
+     * @param mask ãƒã‚¹ã‚¯
+     * @param flags ãƒ•ãƒ©ã‚°
      *
      * @else
      *
@@ -98,9 +98,9 @@ namespace coil
     /*!
      * @if jp
      *
-     * @brief ƒfƒXƒgƒ‰ƒNƒ^
+     * @brief ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
      *
-     * ƒfƒXƒgƒ‰ƒNƒ^B
+     * ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ã€‚
      *
      * @else
      *

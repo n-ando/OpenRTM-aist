@@ -1,4 +1,4 @@
-// -*- C++ -*-
+ï»¿// -*- C++ -*-
 /*!
  * @file  NonCopyable.h
  * @brief Non Copyable mixin class
@@ -26,13 +26,13 @@ namespace coil
   /*!
    * @if jp
    * @class NonCopyable
-   * @brief ¥³¥Ô¡¼¶Ø»ß¥ß¥Ã¥¯¥¹¥¤¥ó
+   * @brief ã‚³ãƒ”ãƒ¼ç¦æ­¢ãƒŸãƒƒã‚¯ã‚¹ã‚¤ãƒ³
    * 
-   * ÂĞ¾İ¥¯¥é¥¹¤Î¥ª¥Ö¥¸¥§¥¯¥È¤Î¥³¥Ô¡¼¤ò¶Ø»ß¤¹¤ë¡£¥³¥Ô¡¼¤ò¶Ø»ß¤·¤¿¤¤¥¯¥é
-   * ¥¹¤Ç¤Ï¡¢NonCopyable¤òprivate·Ñ¾µ¤¹¤ë¤³¤È¤Ç¥ª¥Ö¥¸¥§¥¯¥È¤Î¥³¥Ô¡¼¤ò¶Ø
-   * »ß¤¹¤ë¤³¤È¤¬¤Ç¤­¤ë¡£
+   * å¯¾è±¡ã‚¯ãƒ©ã‚¹ã®ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®ã‚³ãƒ”ãƒ¼ã‚’ç¦æ­¢ã™ã‚‹ã€‚ã‚³ãƒ”ãƒ¼ã‚’ç¦æ­¢ã—ãŸã„ã‚¯ãƒ©
+   * ã‚¹ã§ã¯ã€NonCopyableã‚’privateç¶™æ‰¿ã™ã‚‹ã“ã¨ã§ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®ã‚³ãƒ”ãƒ¼ã‚’ç¦
+   * æ­¢ã™ã‚‹ã“ã¨ãŒã§ãã‚‹ã€‚
    *
-   * -Îã:
+   * -ä¾‹:
    * class CopyProhibitedClass : private NonCopyable {};
    *
    * @else
@@ -56,9 +56,9 @@ namespace coil
     /*!
      * @if jp
      *
-     * @brief ¥³¥ó¥¹¥È¥é¥¯¥¿
+     * @brief ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
      *
-     * ¥³¥ó¥¹¥È¥é¥¯¥¿¡£
+     * ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ã€‚
      *
      * @else
      *
@@ -73,9 +73,9 @@ namespace coil
     /*!
      * @if jp
      *
-     * @brief ¥Ç¥¹¥È¥é¥¯¥¿
+     * @brief ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
      *
-     * ¥Ç¥¹¥È¥é¥¯¥¿¡£
+     * ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ã€‚
      *
      * @else
      *
@@ -94,15 +94,15 @@ namespace coil
   /*!
    * @if jp
    * @class NonCopyableCRTP
-   * @brief ¥³¥Ô¡¼¶Ø»ß¥ß¥Ã¥¯¥¹¥¤¥ó(CRTPÈÇ)
+   * @brief ã‚³ãƒ”ãƒ¼ç¦æ­¢ãƒŸãƒƒã‚¯ã‚¹ã‚¤ãƒ³(CRTPç‰ˆ)
    * 
-   * ÂĞ¾İ¥¯¥é¥¹¤Î¥ª¥Ö¥¸¥§¥¯¥È¤Î¥³¥Ô¡¼¤ò¶Ø»ß¤¹¤ë¡£¥³¥Ô¡¼¤ò¶Ø»ß¤·¤¿¤¤¥¯¥é
-   * ¥¹¤Ç¤Ï¡¢NonCopyable¤òprivate·Ñ¾µ¤¹¤ë¤³¤È¤Ç¥ª¥Ö¥¸¥§¥¯¥È¤Î¥³¥Ô¡¼¤ò¶Ø
-   * »ß¤¹¤ë¤³¤È¤¬¤Ç¤­¤ë¡£¤³¤ÎCRTP (Curiously Recursive Template
-   * Pattern) ÈÇ¤Ï¡¢¶õ¤Î´ğÄì¥¯¥é¥¹¤ËÂĞ¤¹¤ëºÇÅ¬²½ (Empty Base
-   * Optimization) ¤ò¹Ô¤ï¤»¤¿¤¤¾ì¹ç¤ËÍøÍÑ¤¹¤ë¡£
+   * å¯¾è±¡ã‚¯ãƒ©ã‚¹ã®ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®ã‚³ãƒ”ãƒ¼ã‚’ç¦æ­¢ã™ã‚‹ã€‚ã‚³ãƒ”ãƒ¼ã‚’ç¦æ­¢ã—ãŸã„ã‚¯ãƒ©
+   * ã‚¹ã§ã¯ã€NonCopyableã‚’privateç¶™æ‰¿ã™ã‚‹ã“ã¨ã§ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®ã‚³ãƒ”ãƒ¼ã‚’ç¦
+   * æ­¢ã™ã‚‹ã“ã¨ãŒã§ãã‚‹ã€‚ã“ã®CRTP (Curiously Recursive Template
+   * Pattern) ç‰ˆã¯ã€ç©ºã®åŸºåº•ã‚¯ãƒ©ã‚¹ã«å¯¾ã™ã‚‹æœ€é©åŒ– (Empty Base
+   * Optimization) ã‚’è¡Œã‚ã›ãŸã„å ´åˆã«åˆ©ç”¨ã™ã‚‹ã€‚
    *
-   * -Îã:
+   * -ä¾‹:
    * struct A : NonCopyableCRTP<A> {};
    * struct B : NonCopyableCRTP<B> {};
    * struct C: A, B {};
@@ -115,7 +115,7 @@ namespace coil
    * This mix-in class prevents objects of a class from being
    * copy-constructed or assigned to each other. User can prohibit the
    * class copying by inheriting from NonCopyable class as a private
-   * base class.¡¡The CRTP (Curiously Recursive Template Pattern)
+   * base class.ã€€The CRTP (Curiously Recursive Template Pattern)
    * version would be used for empty base optimization for
    * multipe-inherited.
    *
@@ -131,9 +131,9 @@ namespace coil
     /*!
      * @if jp
      *
-     * @brief ¥³¥ó¥¹¥È¥é¥¯¥¿
+     * @brief ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
      *
-     * ¥³¥ó¥¹¥È¥é¥¯¥¿¡£
+     * ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ã€‚
      *
      * @else
      *
@@ -148,9 +148,9 @@ namespace coil
     /*!
      * @if jp
      *
-     * @brief ¥Ç¥¹¥È¥é¥¯¥¿
+     * @brief ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
      *
-     * ¥Ç¥¹¥È¥é¥¯¥¿¡£
+     * ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ã€‚
      *
      * @else
      *

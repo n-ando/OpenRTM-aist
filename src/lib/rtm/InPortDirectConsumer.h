@@ -1,4 +1,4 @@
-// -*- C++ -*-
+﻿// -*- C++ -*-
 /*!
  * @file  InPortDirectConsumer.h
  * @brief InPortDirectConsumer class
@@ -33,12 +33,12 @@ namespace RTC
   /*!
    * @if jp
    * @class InPortDirectConsumer
-   * @brief InPortDirectConsumer ���饹
+   * @brief InPortDirectConsumer クラス
    *
    * InPortConsumer 
    *
-   * �ǡ���ž���� CORBA �� OpenRTM::InPortCdr ���󥿡��ե����������Ѥ�
-   * ����push ���ǡ����ե�������¸����� InPort ���󥷥塼�ޥ��饹��
+   * データ転送に CORBA の OpenRTM::InPortCdr インターフェースを利用し
+   * た、push 型データフロー型を実現する InPort コンシューマクラス。
    *
    * @since 0.4.0
    *
@@ -61,11 +61,11 @@ namespace RTC
     DATAPORTSTATUS_ENUM
     /*!
      * @if jp
-     * @brief ���󥹥ȥ饯��
+     * @brief コンストラクタ
      *
-     * ���󥹥ȥ饯��
+     * コンストラクタ
      *
-     * @param buffer �������󥷥塼�ޤ˳�����Ƥ�Хåե����֥�������
+     * @param buffer 当該コンシューマに割り当てるバッファオブジェクト
      *
      * @else
      * @brief Constructor
@@ -80,9 +80,9 @@ namespace RTC
     
     /*!
      * @if jp
-     * @brief �ǥ��ȥ饯��
+     * @brief デストラクタ
      *
-     * �ǥ��ȥ饯��
+     * デストラクタ
      *
      * @else
      * @brief Destructor
@@ -95,15 +95,15 @@ namespace RTC
 
     /*!
      * @if jp
-     * @brief ��������
+     * @brief 設定初期化
      *
-     * InPortConsumer�γƼ������Ԥ����������饹�Ǥϡ�Ϳ����줿
-     * Properties����ɬ�פʾ����������ƳƼ������Ԥ������� init() ��
-     * ���ϡ�InPortProvider����ľ�太��ӡ���³���ˤ��줾��ƤФ���
-     * ǽ�������롣�������äơ����δؿ���ʣ����ƤФ�뤳�Ȥ����ꤷ�Ƶ�
-     * �Ҥ����٤��Ǥ��롣
+     * InPortConsumerの各種設定を行う。実装クラスでは、与えられた
+     * Propertiesから必要な情報を取得して各種設定を行う。この init() 関
+     * 数は、InPortProvider生成直後および、接続時にそれぞれ呼ばれる可
+     * 能性がある。したがって、この関数は複数回呼ばれることを想定して記
+     * 述されるべきである。
      * 
-     * @param prop �������
+     * @param prop 設定情報
      *
      * @else
      *
@@ -124,20 +124,20 @@ namespace RTC
 
     /*!
      * @if jp
-     * @brief ��³��ؤΥǡ�������
+     * @brief 接続先へのデータ送信
      *
-     * ��³��Υݡ��Ȥإǡ������������뤿��ν�貾�۴ؿ���
+     * 接続先のポートへデータを送信するための純粋仮想関数。
      * 
-     * ���δؿ��ϡ��ʲ��Υ꥿���󥳡��ɤ��֤���
+     * この関数は、以下のリターンコードを返す。
      *
-     * - PORT_OK:       ���ｪλ��
-     * - PORT_ERROR:    �ǡ��������β����ǲ��餫�Υ��顼��ȯ��������
-     * - SEND_FULL:     �ǡ��������������������¦�Хåե����ե���ä���
-     * - SEND_TIMEOUT:  �ǡ��������������������¦�Хåե��������ॢ���Ȥ�����
-     * - UNKNOWN_ERROR: ���������Υ��顼
+     * - PORT_OK:       正常終了。
+     * - PORT_ERROR:    データ送信の過程で何らかのエラーが発生した。
+     * - SEND_FULL:     データを送信したが、相手側バッファがフルだった。
+     * - SEND_TIMEOUT:  データを送信したが、相手側バッファがタイムアウトした。
+     * - UNKNOWN_ERROR: 原因不明のエラー
      *
-     * @param data ��������ǡ���
-     * @return �꥿���󥳡���
+     * @param data 送信するデータ
+     * @return リターンコード
      *
      * @else
      * @brief Send data to the destination port
@@ -158,14 +158,14 @@ namespace RTC
 
     /*!
      * @if jp
-     * @brief InterfaceProfile������������
+     * @brief InterfaceProfile情報を公開する
      *
-     * InterfaceProfile�����������롣
-     * �����ǻ��ꤹ��ץ��ѥƥ�������� NameValue ���֥������Ȥ�
-     * dataport.interface_type �ͤ�Ĵ�١������ݡ��Ȥ����ꤵ��Ƥ���
-     * ���󥿡��ե����������פȰ��פ�����Τ߾����������롣
+     * InterfaceProfile情報を公開する。
+     * 引数で指定するプロパティ情報内の NameValue オブジェクトの
+     * dataport.interface_type 値を調べ、当該ポートに設定されている
+     * インターフェースタイプと一致する場合のみ情報を取得する。
      *
-     * @param properties InterfaceProfile�����������ץ��ѥƥ�
+     * @param properties InterfaceProfile情報を受け取るプロパティ
      *
      * @else
      * @brief Publish InterfaceProfile information
@@ -183,13 +183,13 @@ namespace RTC
 
     /*!
      * @if jp
-     * @brief �ǡ����������Τؤ���Ͽ
+     * @brief データ送信通知への登録
      *
-     * ���ꤵ�줿�ץ��ѥƥ��˴�Ť��ơ��ǡ����������Τμ���������Ͽ���롣
+     * 指定されたプロパティに基づいて、データ送出通知の受け取りに登録する。
      *
-     * @param properties ��Ͽ����
+     * @param properties 登録情報
      *
-     * @return ��Ͽ�������(��Ͽ����:true����Ͽ����:false)
+     * @return 登録処理結果(登録成功:true、登録失敗:false)
      *
      * @else
      * @brief Subscribe to the data sending notification
@@ -207,11 +207,11 @@ namespace RTC
     
     /*!
      * @if jp
-     * @brief �ǡ����������Τ������Ͽ���
+     * @brief データ送信通知からの登録解除
      *
-     * �ǡ����������Τμ�����꤫����Ͽ�������롣
+     * データ送出通知の受け取りから登録を解除する。
      *
-     * @param properties ��Ͽ�������
+     * @param properties 登録解除情報
      *
      * @else
      * @brief Unsubscribe the data send notification
@@ -234,9 +234,9 @@ extern "C"
 {
   /*!
    * @if jp
-   * @brief �⥸�塼�������ؿ�
+   * @brief モジュール初期化関数
    *
-   * InPortDirectConsumer �Υե����ȥ����Ͽ���������ؿ���
+   * InPortDirectConsumer のファクトリを登録する初期化関数。
    *
    * @else
    * @brief Module initialization

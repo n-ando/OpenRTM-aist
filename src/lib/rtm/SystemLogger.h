@@ -1,4 +1,4 @@
-// -*- C++ -*-
+﻿// -*- C++ -*-
 /*!
  * @file SystemLogger.h
  * @brief RT component logger class
@@ -37,23 +37,23 @@ namespace RTC
   /*!
    * @if jp
    * @class Logger
-   * @brief Logger ���饹
+   * @brief Logger クラス
    *
-   * - �������Ϥ򥷥ꥢ�饤��������ʬ�ۤ���Хåե����饹
-   * - ������ե����ޥåȤ���ե����ޥåȥ��饹
-   * �ǹ����������������饹
+   * - ログ出力をシリアライズしかつ分配するバッファクラス
+   * - ログをフォーマットするフォーマットクラス
+   * で構成されるロガークラス
    * 
-   * - �Хåե����饹
-   *  - �ޥ������åɽ񤭹��ߤ��Ф��ƥ��ꥢ�饤�����ƥХåե���󥰤���
-   *  - ʣ���ν�����˥�������ϤǤ���
-   *  - ���������Ȥ��Ƥϡ��ե����롢ɸ����ϡ���⡼�ȤΥ�����������
-   *  - �Хåե����Ф���addStream�ǽ�������ɲäǤ���
-   * - �ե����ޥåȥ��饹
-   *  - ������٥����ꤷ�ƽ��ϤǤ���
-   *  - �񼰤ϡ�[����] [������٥�] [���ե��å���] [��å�����]
-   *  - [����] [������٥�] [���ե��å���]�ϼ�ư�ղ�
-   *  - [���ե��å���] �����Ǥ���ؿ����Ѱ�
-   *  - ������٥�ϰʲ��ΤȤ���
+   * - バッファクラス
+   *  - マルチスレッド書き込みに対してシリアライズしてバッファリングする
+   *  - 複数の出力先にログを出力できる
+   *  - 出力先の例としては、ファイル、標準出力、リモートのログサーバ等
+   *  - バッファに対してaddStreamで出力先を追加できる
+   * - フォーマットクラス
+   *  - ログレベルを指定して出力できる
+   *  - 書式は、[時間] [ログレベル] [サフィックス] [メッセージ]
+   *  - [時間] [ログレベル] [サフィックス]は自動付加
+   *  - [サフィックス] を指定できる関数を用意
+   *  - ログレベルは以下のとおり
    *   - RTL_SILENT
    *   - RTL_FATAL
    *   - RTL_ERROR
@@ -63,7 +63,7 @@ namespace RTC
    *   - RTL_TRACE
    *   - RTL_VERBOSE
    *   - RTL_PARANOID
-   *  - ���Υե����ޥåȥ��֥������Ȥ��Ф�����å���������å���ǽ
+   *  - このフォーマットオブジェクトに対するロック・アンロック機能
    *
    * @else
    * @class Logger
@@ -115,11 +115,11 @@ namespace RTC
  
     /*!
      * @if jp
-     * @brief ���󥹥ȥ饯��
+     * @brief コンストラクタ
      *
-     * ���󥹥ȥ饯��
+     * コンストラクタ
      *
-     * @param name �إå��������θ���ղä���ʸ����
+     * @param name ヘッダの日時の後に付加する文字列
      *
      * @else
      *
@@ -134,11 +134,11 @@ namespace RTC
     Logger(const char* name = "");
     /*!
      * @if jp
-     * @brief ���󥹥ȥ饯��
+     * @brief コンストラクタ
      *
-     * ���󥹥ȥ饯��
+     * コンストラクタ
      *
-     * @param streambuf LogStream ���֥������� 
+     * @param streambuf LogStream オブジェクト 
      *
      * @else
      *
@@ -154,7 +154,7 @@ namespace RTC
     /*!
      * @if jp
      *
-     * @brief ���ۥǥ��ȥ饯��
+     * @brief 仮想デストラクタ
      * 
      * @else
      * 
@@ -167,9 +167,9 @@ namespace RTC
     /*!
      * @if jp
      *
-     * @brief ������٥��ʸ��������ꤹ��
+     * @brief ログレベルを文字列で設定する
      *
-     * @param level ������٥�
+     * @param level ログレベル
      *
      * @else
      *
@@ -184,9 +184,9 @@ namespace RTC
     /*!
      * @if jp
      *
-     * @brief �إå����ղä��������ե����ޥåȤ���ꤹ�롣
+     * @brief ヘッダに付加する日時フォーマットを指定する。
      *
-     * �ե����ޥåȻ���ʸ����ϰʲ��ΤȤ��ꡣ
+     * フォーマット指定文字列は以下のとおり。
      * <pre>
      * @%a abbreviated weekday name 
      * @%A full weekday name 
@@ -216,7 +216,7 @@ namespace RTC
      * %% a percent sign 
      * </pre>
      *
-     * @param fmt �����ե����ޥå�
+     * @param fmt 日時フォーマット
      *
      * @else
      *
@@ -261,20 +261,20 @@ namespace RTC
     /*!
      * @if jp
      *
-     * @brief ������Ͽ���˻��Ѥ��륯���å�����ꤹ��
+     * @brief ログ記録時に使用するクロックを指定する
      *
-     * ������Ͽ���˻����������뤿��Υ����å��μ������ꤹ�뤳�Ȥ��Ǥ��롣
-     * - system: �����ƥ९���å����ǥե����
-     * - logical: �������֥����å���
-     * - adjusted: Ĵ���Ѥߥ����å���
+     * ログ記録時に時刻を取得するためのクロックの種類を指定することができる。
+     * - system: システムクロック。デフォルト
+     * - logical: 論理時間クロック。
+     * - adjusted: 調整済みクロック。
      *
-     * �������֥����å��ˤĤ��Ƥ�
+     * 論理時間クロックについては
      * <pre>
      * coil::ClockManager::instance().getClock("logical").settime()
      * </pre>
-     * �ǻ�������ꤹ��ɬ�פ����롣
+     * で時刻を設定する必要がある。
      *
-     * @param clocktype ��ҤΥ����å�������
+     * @param clocktype 上述のクロックタイプ
      *
      * @else
      *
@@ -301,11 +301,11 @@ namespace RTC
     /*!
      * @if jp
      *
-     * @brief �إå��������θ���ղä���ʸ��������ꤹ�롣
+     * @brief ヘッダの日時の後に付加する文字列を設定する。
      *
-     * �إå��������θ���ղä�����Ƭ��ʸ��������ꤹ�롣
+     * ヘッダの日時の後に付加する接頭語文字列を設定する。
      *
-     * @param suffix ��Ƭ��ʸ����
+     * @param suffix 接頭語文字列
      *
      * @else
      *
@@ -323,10 +323,10 @@ namespace RTC
     /*!
      * @if jp
      *
-     * @brief ��å������Υץ�ե��å����ɲôؿ�
+     * @brief メッセージのプリフィックス追加関数
      *
-     * ���֥��饹�ˤ����Ƥ��δؿ��򥪡��С��饤�ɤ���
-     * ������å�������Ŭ���ʥץ�ե��å�������ɲä��롣
+     * サブクラスにおいてこの関数をオーバーライドし、
+     * ログメッセージに適当なプリフィックスるを追加する。
      *
      * @else
      *
@@ -342,10 +342,10 @@ namespace RTC
 
     /*!
      * @if jp
-     * @brief �ե����ޥåȤ��줿��������ʸ�����������롣
-     * ���ꤵ�줿�񼰤ǵ��Ҥ�������������������롣
+     * @brief フォーマットされた現在日時文字列を取得する。
+     * 指定された書式で記述した現在日時を取得する。
      *
-     * @return �񼰻��긽������
+     * @return 書式指定現在日時
      *
      * @else
      * @brief Get the current formatted date/time string
@@ -359,11 +359,11 @@ namespace RTC
 
     /*!
      * @if jp
-     * @brief ������٥�����
-     * Ϳ����줿ʸ������б�����������٥�����ꤹ�롣
+     * @brief ログレベル設定
+     * 与えられた文字列に対応したログレベルを設定する。
      *
-     * @param lv ������٥�ʸ����
-     * @return ���ꤷ��������٥�
+     * @param lv ログレベル文字列
+     * @return 設定したログレベル
      *
      * @else
      * @brief Set the log level
@@ -390,9 +390,9 @@ namespace RTC
 /*!
  * @if jp
  *
- * @brief ���ѥ������ϥޥ���
+ * @brief 汎用ログ出力マクロ
  *
- * ������٥뤪��ӽ��ϥե����ޥå�ʸ���������Ȥ��ƤȤ롣
+ * ログレベルおよび出力フォーマット文字列を引数としてとる。
  *
  * @else
  *
@@ -422,11 +422,11 @@ namespace RTC
    /*!
    * @if jp
    *
-   * @brief ���顼�������ϥޥ�����
+   * @brief エラーログ出力マクロ。
    *
-   * ���顼��٥�Υ������ϥޥ�����<BR>������٥뤬
+   * エラーレベルのログ出力マクロ。<BR>ログレベルが
    * ERROR, WARN, INFO, NORMAL, DEBUG, TRACE, VERBOSE, PARANOID
-   * �ξ��˥������Ϥ���롣
+   * の場合にログ出力される。
    *
    * @else
    *
@@ -444,11 +444,11 @@ namespace RTC
   /*!
    * @if jp
    *
-   * @brief ���顼�������ϥޥ�����
+   * @brief エラーログ出力マクロ。
    *
-   * ���顼��٥�Υ������ϥޥ�����<BR>������٥뤬
+   * エラーレベルのログ出力マクロ。<BR>ログレベルが
    * ERROR, WARN, INFO, NORMAL, DEBUG, TRACE, VERBOSE, PARANOID
-   * �ξ��˥������Ϥ���롣
+   * の場合にログ出力される。
    *
    * @else
    *
@@ -466,11 +466,11 @@ namespace RTC
   /*!
    * @if jp
    *
-   * @brief ��˥󥰥������ϥޥ�����
+   * @brief ワーニングログ出力マクロ。
    *
-   * ��˥󥰥�٥�Υ������ϥޥ�����<BR>������٥뤬
+   * ワーニングレベルのログ出力マクロ。<BR>ログレベルが
    * ( WARN, INFO, NORMAL, DEBUG, TRACE, VERBOSE, PARANOID )
-   * �ξ��˥������Ϥ���롣
+   * の場合にログ出力される。
    *
    * @else
    *
@@ -488,11 +488,11 @@ namespace RTC
   /*!
    * @if jp
    *
-   * @brief ����ե��������ϥޥ�����
+   * @brief インフォログ出力マクロ。
    *
-   * ����ե���٥�Υ������ϥޥ�����<BR>������٥뤬
+   * インフォレベルのログ出力マクロ。<BR>ログレベルが
    * ( INFO, NORMAL, DEBUG, TRACE, VERBOSE, PARANOID )
-   * �ξ��˥������Ϥ���롣
+   * の場合にログ出力される。
    *
    * @else
    *
@@ -510,11 +510,11 @@ namespace RTC
   /*!
    * @if jp
    *
-   * @brief �ǥХå��������ϥޥ�����
+   * @brief デバッグログ出力マクロ。
    *
-   * �ǥХå���٥�Υ������ϥޥ�����<BR>������٥뤬
+   * デバッグレベルのログ出力マクロ。<BR>ログレベルが
    * ( DEBUG, TRACE, VERBOSE, PARANOID )
-   * �ξ��˥������Ϥ���롣
+   * の場合にログ出力される。
    *
    * @else
    *
@@ -532,11 +532,11 @@ namespace RTC
   /*!
    * @if jp
    *
-   * @brief �ȥ졼���������ϥޥ�����
+   * @brief トレースログ出力マクロ。
    *
-   * �ȥ졼����٥�Υ������ϥޥ�����<BR>������٥뤬
+   * トレースレベルのログ出力マクロ。<BR>ログレベルが
    * ( TRACE, VERBOSE, PARANOID )
-   * �ξ��˥������Ϥ���롣
+   * の場合にログ出力される。
    *
    * @else
    *
@@ -555,11 +555,11 @@ namespace RTC
   /*!
    * @if jp
    *
-   * @brief �٥�ܡ����������ϥޥ�����
+   * @brief ベルボーズログ出力マクロ。
    *
-   * �٥�ܡ�����٥�Υ������ϥޥ�����<BR>������٥뤬
+   * ベルボーズレベルのログ出力マクロ。<BR>ログレベルが
    * ( VERBOSE, PARANOID )
-   * �ξ��˥������Ϥ���롣
+   * の場合にログ出力される。
    *
    * @else
    *
@@ -577,11 +577,11 @@ namespace RTC
   /*!
    * @if jp
    *
-   * @brief �ѥ�Υ��ɥ������ϥޥ�����
+   * @brief パラノイドログ出力マクロ。
    *
-   * �ѥ�Υ��ɥ�٥�Υ������ϥޥ�����<BR>������٥뤬
+   * パラノイドレベルのログ出力マクロ。<BR>ログレベルが
    * ( PARANOID )
-   * �ξ��˥������Ϥ���롣
+   * の場合にログ出力される。
    *
    * @else
    *

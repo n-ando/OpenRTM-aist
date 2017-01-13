@@ -1,4 +1,4 @@
-// -*- C++ -*-
+﻿// -*- C++ -*-
 /*!
  * @file ConnectorListener.h
  * @brief connector listener class
@@ -35,18 +35,18 @@ namespace RTC
 
   /*!
    * @if jp
-   * @brief ConnectorDataListener �Υ�����
+   * @brief ConnectorDataListener のタイプ
    *
-   * - ON_BUFFER_WRITE:          �Хåե��񤭹��߻�
-   * - ON_BUFFER_FULL:           �Хåե��ե��
-   * - ON_BUFFER_WRITE_TIMEOUT:  �Хåե��񤭹��ߥ����ॢ���Ȼ�
-   * - ON_BUFFER_OVERWRITE:      �Хåե���񤭻�
-   * - ON_BUFFER_READ:           �Хåե��ɤ߽Ф���
-   * - ON_SEND:                  InProt�ؤ�������
-   * - ON_RECEIVED:              InProt�ؤ�������λ��
-   * - ON_RECEIVER_FULL:         InProt¦�Хåե��ե��
-   * - ON_RECEIVER_TIMEOUT:      InProt¦�Хåե������ॢ���Ȼ�
-   * - ON_RECEIVER_ERROR:        InProt¦���顼��
+   * - ON_BUFFER_WRITE:          バッファ書き込み時
+   * - ON_BUFFER_FULL:           バッファフル時
+   * - ON_BUFFER_WRITE_TIMEOUT:  バッファ書き込みタイムアウト時
+   * - ON_BUFFER_OVERWRITE:      バッファ上書き時
+   * - ON_BUFFER_READ:           バッファ読み出し時
+   * - ON_SEND:                  InProtへの送信時
+   * - ON_RECEIVED:              InProtへの送信完了時
+   * - ON_RECEIVER_FULL:         InProt側バッファフル時
+   * - ON_RECEIVER_TIMEOUT:      InProt側バッファタイムアウト時
+   * - ON_RECEIVER_ERROR:        InProt側エラー時
    *
    * @else
    * @brief The types of ConnectorDataListener
@@ -81,32 +81,32 @@ namespace RTC
 
   /*!
    * @if jp
-   * @class ConnectorDataListener ���饹
-   * @brief ConnectorDataListener ���饹
+   * @class ConnectorDataListener クラス
+   * @brief ConnectorDataListener クラス
    *
-   * �ǡ����ݡ��Ȥ� Connector �ˤ�����ȯ������Ƽ磻�٥�Ȥ��Ф��륳��
-   * ��Хå���¸�����ꥹ�ʥ��饹�δ��쥯�饹��
+   * データポートの Connector において発生する各種イベントに対するコー
+   * ルバックを実現するリスナクラスの基底クラス。
    *
-   * ���������å���OutPort���Ф��ƥǡ����񤭹��ߡ�InPort¦�ǥǡ�������
-   * �������ޤǤδ֤�ȯ������Ƽ磻�٥�Ȥ�եå����륳����Хå�����
-   * �ꤹ�뤳�Ȥ��Ǥ��롣�ʤ����ꥹ�ʡ����饹��2����¸�ߤ����Хåե���
-   * ����������Υ�����Хå��ǡ����λ�����ͭ���ʥǡ�����ե��󥯥��ΰ�
-   * ���Ȥ��Ƽ������ ConnectorDataListener �Ǥ��ꡢ�⤦�����ϥǡ�����
-   * ��ץƥ���Хåե��ɤ߹��߻��Υ����ॢ���Ȥʤɥǡ����������Ǥ��ʤ�
-   * ���ʤɤ˥����뤵���ե��󥯥��ΰ����˲���Ȥ�ʤ餤
-   * ConnecotorListener �����롣
+   * コアロジックがOutPortに対してデータ書き込み、InPort側でデータが取
+   * 得されるまでの間で発生する各種イベントをフックするコールバックを設
+   * 定することができる。なお、リスナークラスは2種類存在し、バッファフ
+   * ルや送信時のコールバックで、その時点で有効なデータをファンクタの引
+   * 数として受け取る ConnectorDataListener であり、もう一方はデータエ
+   * ンプティやバッファ読み込み時のタイムアウトなどデータが取得できない
+   * 場合などにコールされるファンクタの引数に何もとらならい
+   * ConnecotorListener がある。
    *
-   * �ǡ����ݡ��Ȥˤϡ���³���˥ǡ�������������ˡ�ˤĤ��ƥǡ����ե�������
-   * ���֥�����ץ�����������ꤹ�뤳�Ȥ��Ǥ��롣
-   * ConnectorDaataListener/ConnectorListener �ϤȤ�ˡ��͡��ʥ��٥��
-   * ���Ф��륳����Хå������ꤹ�뤳�Ȥ��Ǥ��뤬�������ǡ����ե�����
-   * ����ӥ��֥�����ץ���󷿤�����˱����ơ����Ѳ�ǽ�ʤ�������Բ�ǽ
-   * �ʤ�Τ䡢�ƤӽФ���륿���ߥ󥰤��ۤʤ롣
-   * �ʲ��ˡ����󥿡��ե�������CORBA CDR���ξ��Υ�����Хå������򼨤���
+   * データポートには、接続時にデータの送受信方法についてデータフロー型、
+   * サブスクリプション型等を設定することができる。
+   * ConnectorDaataListener/ConnectorListener はともに、様々なイベント
+   * に対するコールバックを設定することができるが、これらデータフロー型
+   * およびサブスクリプション型の設定に応じて、利用可能なもの利用不可能
+   * なものや、呼び出されるタイミングが異なる。
+   * 以下に、インターフェースがCORBA CDR型の場合のコールバック一覧を示す。
    *
    * OutPort:
-   * -  Push��: Subscription Type�ˤ�ꤵ��˥��٥�Ȥμ��बʬ����롣
-   *   - Flush: Flush���ˤϥХåե����ʤ����� ON_BUFFER �ϤΥ��٥�Ȥ�ȯ�����ʤ�
+   * -  Push型: Subscription Typeによりさらにイベントの種類が分かれる。
+   *   - Flush: Flush型にはバッファがないため ON_BUFFER 系のイベントは発生しない
    *     - ON_SEND
    *     - ON_RECEIVED
    *     - ON_RECEIVER_FULL
@@ -115,7 +115,7 @@ namespace RTC
    *     - ON_CONNECT
    *     - ON_DISCONNECT
    *     .
-   *   - New��
+   *   - New型
    *     - ON_BUFFER_WRITE
    *     - ON_BUFFER_FULL
    *     - ON_BUFFER_WRITE_TIMEOUT
@@ -130,7 +130,7 @@ namespace RTC
    *     - ON_CONNECT
    *     - ON_DISCONNECT
    *     .
-   *   - Periodic��
+   *   - Periodic型
    *     - ON_BUFFER_WRITE
    *     - ON_BUFFER_FULL
    *     - ON_BUFFER_WRITE_TIMEOUT
@@ -147,7 +147,7 @@ namespace RTC
    *     - ON_DISCONNECT
    *     .
    *   .
-   * - Pull��
+   * - Pull型
    *   - ON_BUFFER_READ
    *   - ON_SEND
    *   - ON_BUFFER_EMPTY
@@ -159,7 +159,7 @@ namespace RTC
    *   - ON_DISCONNECT
    *
    * InPort:
-   * - Push��:
+   * - Push型:
    *     - ON_BUFFER_WRITE
    *     - ON_BUFFER_FULL
    *     - ON_BUFFER_WRITE_TIMEOUT
@@ -171,7 +171,7 @@ namespace RTC
    *     - ON_CONNECT
    *     - ON_DISCONNECT
    *     .
-   * - Pull��
+   * - Pull型
    *     - ON_CONNECT
    *     - ON_DISCONNECT
    *
@@ -191,13 +191,13 @@ namespace RTC
     /*!
      * @if jp
      *
-     * @brief ConnectorDataListenerType ��ʸ������Ѵ�
+     * @brief ConnectorDataListenerType を文字列に変換
      *
-     * ConnectorDataListenerType ��ʸ������Ѵ�����
+     * ConnectorDataListenerType を文字列に変換する
      *
-     * @param type �Ѵ��о� ConnectorDataListenerType
+     * @param type 変換対象 ConnectorDataListenerType
      *
-     * @return ʸ�����Ѵ����
+     * @return 文字列変換結果
      *
      * @else
      *
@@ -233,7 +233,7 @@ namespace RTC
 
     /*!
      * @if jp
-     * @brief �ǥ��ȥ饯��
+     * @brief デストラクタ
      * @else
      * @brief Destructor
      * @endif
@@ -243,10 +243,10 @@ namespace RTC
     /*!
      * @if jp
      *
-     * @brief ���ۥ�����Хå��᥽�å�
+     * @brief 仮想コールバックメソッド
      *
-     * �ǡ����ݡ��Ȥ� Connector �ˤ�����ȯ������Ƽ磻�٥�Ȥ��Ф��륳��
-     * ��Хå��᥽�å�
+     * データポートの Connector において発生する各種イベントに対するコー
+     * ルバックメソッド
      *
      * @else
      *
@@ -262,15 +262,15 @@ namespace RTC
 
   /*!
    * @if jp
-   * @class ConnectorDataListenerT ���饹
-   * @brief ConnectorDataListenerT ���饹
+   * @class ConnectorDataListenerT クラス
+   * @brief ConnectorDataListenerT クラス
    *
-   * �ǡ����ݡ��Ȥ� Connector �ˤ�����ȯ������Ƽ磻�٥�Ȥ��Ф��륳��
-   * ��Хå���¸�����ꥹ�ʥ��饹�δ��쥯�饹��
+   * データポートの Connector において発生する各種イベントに対するコー
+   * ルバックを実現するリスナクラスの基底クラス。
    * 
-   * ���Υ��饹�ϡ�operator()() ����2������ cdrMemoryStream ���ǤϤʤ���
-   * �ºݤ˥ǡ����ݡ��Ȥǻ��Ѥ�����ѿ�����ƥ�ץ졼�Ȱ����Ȥ���
-   * �Ϥ����Ȥ��Ǥ��롣
+   * このクラスは、operator()() の第2引数に cdrMemoryStream 型ではなく、
+   * 実際にデータポートで使用される変数型をテンプレート引数として
+   * 渡すことができる。
    *
    * @else
    * @class ConnectorDataListenerT class
@@ -293,7 +293,7 @@ namespace RTC
   public:
     /*!
      * @if jp
-     * @brief �ǥ��ȥ饯��
+     * @brief デストラクタ
      * @else
      * @brief Destructor
      * @endif
@@ -303,13 +303,13 @@ namespace RTC
     /*!
      * @if jp
      *
-     * @brief ������Хå��᥽�å�
+     * @brief コールバックメソッド
      *
-     * �ǡ�����ǡ����ݡ��Ȥǻ��Ѥ�����ѿ������Ѵ����� ConnectorDataListenerT
-     * �Υ�����Хå��᥽�åɤ�ƤӽФ���
+     * データをデータポートで使用される変数型に変換して ConnectorDataListenerT
+     * のコールバックメソッドを呼び出す。
      *
      * @param info ConnectorInfo 
-     * @param cdrdata cdrMemoryStream���Υǡ���
+     * @param cdrdata cdrMemoryStream型のデータ
      *
      * @else
      *
@@ -350,10 +350,10 @@ namespace RTC
     /*!
      * @if jp
      *
-     * @brief ���ۥ�����Хå��᥽�å�
+     * @brief 仮想コールバックメソッド
      *
-     * �ǡ����ݡ��Ȥ� Connector �ˤ�����ȯ������Ƽ磻�٥�Ȥ��Ф��륳��
-     * ��Хå��᥽�å�
+     * データポートの Connector において発生する各種イベントに対するコー
+     * ルバックメソッド
      *
      * @else
      *
@@ -372,15 +372,15 @@ namespace RTC
 
   /*!
    * @if jp
-   * @brief ConnectorListener �Υ�����
+   * @brief ConnectorListener のタイプ
    *  
-   * - ON_BUFFER_EMPTY:       �Хåե������ξ��
-   * - ON_BUFFER_READTIMEOUT: �Хåե������ǥ����ॢ���Ȥ������
-   * - ON_SENDER_EMPTY:       OutPort¦�Хåե�����
-   * - ON_SENDER_TIMEOUT:     OutPort¦�����ॢ���Ȼ�
-   * - ON_SENDER_ERROR:       OutPort¦���顼��
-   * - ON_CONNECT:            ��³��Ω��
-   * - ON_DISCONNECT:         ��³���ǻ�
+   * - ON_BUFFER_EMPTY:       バッファが空の場合
+   * - ON_BUFFER_READTIMEOUT: バッファが空でタイムアウトした場合
+   * - ON_SENDER_EMPTY:       OutPort側バッファが空
+   * - ON_SENDER_TIMEOUT:     OutPort側タイムアウト時
+   * - ON_SENDER_ERROR:       OutPort側エラー時
+   * - ON_CONNECT:            接続確立時
+   * - ON_DISCONNECT:         接続切断時
    *
    * @else
    * @brief The types of ConnectorListener
@@ -409,32 +409,32 @@ namespace RTC
 
   /*!
    * @if jp
-   * @class ConnectorListener ���饹
-   * @brief ConnectorListener ���饹
+   * @class ConnectorListener クラス
+   * @brief ConnectorListener クラス
    *
-   * �ǡ����ݡ��Ȥ� Connector �ˤ�����ȯ������Ƽ磻�٥�Ȥ��Ф��륳��
-   * ��Хå���¸�����ꥹ�ʥ��饹�δ��쥯�饹��
+   * データポートの Connector において発生する各種イベントに対するコー
+   * ルバックを実現するリスナクラスの基底クラス。
    *
-   * ���������å���OutPort���Ф��ƥǡ����񤭹��ߡ�InPort¦�ǥǡ�������
-   * �������ޤǤδ֤�ȯ������Ƽ磻�٥�Ȥ�եå����륳����Хå�����
-   * �ꤹ�뤳�Ȥ��Ǥ��롣�ʤ����ꥹ�ʡ����饹��2����¸�ߤ����Хåե���
-   * ����������Υ�����Хå��ǡ����λ�����ͭ���ʥǡ�����ե��󥯥��ΰ�
-   * ���Ȥ��Ƽ������ ConnectorDataListener �Ǥ��ꡢ�⤦�����ϥǡ�����
-   * ��ץƥ���Хåե��ɤ߹��߻��Υ����ॢ���Ȥʤɥǡ����������Ǥ��ʤ�
-   * ���ʤɤ˥����뤵���ե��󥯥��ΰ����˲���Ȥ�ʤ餤
-   * ConnecotorListener �����롣
+   * コアロジックがOutPortに対してデータ書き込み、InPort側でデータが取
+   * 得されるまでの間で発生する各種イベントをフックするコールバックを設
+   * 定することができる。なお、リスナークラスは2種類存在し、バッファフ
+   * ルや送信時のコールバックで、その時点で有効なデータをファンクタの引
+   * 数として受け取る ConnectorDataListener であり、もう一方はデータエ
+   * ンプティやバッファ読み込み時のタイムアウトなどデータが取得できない
+   * 場合などにコールされるファンクタの引数に何もとらならい
+   * ConnecotorListener がある。
    *
-   * �ǡ����ݡ��Ȥˤϡ���³���˥ǡ�������������ˡ�ˤĤ��ƥǡ����ե�������
-   * ���֥�����ץ�����������ꤹ�뤳�Ȥ��Ǥ��롣
-   * ConnectorDaataListener/ConnectorListener �϶��ˤˡ��͡��ʥ��٥��
-   * ���Ф��륳����Хå������ꤹ�뤳�Ȥ��Ǥ��뤬�������ǡ����ե�����
-   * ����ӥ��֥�����ץ���󷿤�����˱����ơ����ѤǤ����Ρ��Ǥ��ʤ�
-   * ��Ρ��ޤ��ƤӽФ���륿���ߥ󥰤��ۤʤ롣�ʲ��ˡ����󥿡��ե�����
-   * ��CORBA CDR���ξ��Υ�����Хå������򼨤���
+   * データポートには、接続時にデータの送受信方法についてデータフロー型、
+   * サブスクリプション型等を設定することができる。
+   * ConnectorDaataListener/ConnectorListener は共にに、様々なイベント
+   * に対するコールバックを設定することができるが、これらデータフロー型
+   * およびサブスクリプション型の設定に応じて、利用できるもの、できない
+   * もの、また呼び出されるタイミングが異なる。以下に、インターフェース
+   * がCORBA CDR型の場合のコールバック一覧を示す。
    *
    * OutPort:
-   * -  Push��: Subscription Type�ˤ�ꤵ��˥��٥�Ȥμ��बʬ����롣
-   *   - Flush: Flush���ˤϥХåե����ʤ����� ON_BUFFER �ϤΥ��٥�Ȥ�ȯ�����ʤ�
+   * -  Push型: Subscription Typeによりさらにイベントの種類が分かれる。
+   *   - Flush: Flush型にはバッファがないため ON_BUFFER 系のイベントは発生しない
    *     - ON_SEND
    *     - ON_RECEIVED
    *     - ON_RECEIVER_FULL
@@ -443,7 +443,7 @@ namespace RTC
    *     - ON_CONNECT
    *     - ON_DISCONNECT
    *     .
-   *   - New��
+   *   - New型
    *     - ON_BUFFER_WRITE
    *     - ON_BUFFER_FULL
    *     - ON_BUFFER_WRITE_TIMEOUT
@@ -458,7 +458,7 @@ namespace RTC
    *     - ON_CONNECT
    *     - ON_DISCONNECT
    *     .
-   *   - Periodic��
+   *   - Periodic型
    *     - ON_BUFFER_WRITE
    *     - ON_BUFFER_FULL
    *     - ON_BUFFER_WRITE_TIMEOUT
@@ -475,7 +475,7 @@ namespace RTC
    *     - ON_DISCONNECT
    *     .
    *   .
-   * - Pull��
+   * - Pull型
    *   - ON_BUFFER_READ
    *   - ON_SEND
    *   - ON_BUFFER_EMPTY
@@ -487,7 +487,7 @@ namespace RTC
    *   - ON_DISCONNECT
    *
    * InPort:
-   * - Push��:
+   * - Push型:
    *     - ON_BUFFER_WRITE
    *     - ON_BUFFER_FULL
    *     - ON_BUFFER_WRITE_TIMEOUT
@@ -499,7 +499,7 @@ namespace RTC
    *     - ON_CONNECT
    *     - ON_DISCONNECT
    *     .
-   * - Pull��
+   * - Pull型
    *     - ON_CONNECT
    *     - ON_DISCONNECT
    *
@@ -519,13 +519,13 @@ namespace RTC
     /*!
      * @if jp
      *
-     * @brief ConnectorListenerType ��ʸ������Ѵ�
+     * @brief ConnectorListenerType を文字列に変換
      *
-     * ConnectorListenerType ��ʸ������Ѵ�����
+     * ConnectorListenerType を文字列に変換する
      *
-     * @param type �Ѵ��о� ConnectorListenerType
+     * @param type 変換対象 ConnectorListenerType
      *
-     * @return ʸ�����Ѵ����
+     * @return 文字列変換結果
      *
      * @else
      *
@@ -558,7 +558,7 @@ namespace RTC
 
     /*!
      * @if jp
-     * @brief �ǥ��ȥ饯��
+     * @brief デストラクタ
      * @else
      * @brief Destructor
      * @endif
@@ -568,10 +568,10 @@ namespace RTC
     /*!
      * @if jp
      *
-     * @brief ���ۥ�����Хå��᥽�å�
+     * @brief 仮想コールバックメソッド
      *
-     * �ǡ����ݡ��Ȥ� Connector �ˤ�����ȯ������Ƽ磻�٥�Ȥ��Ф��륳��
-     * ��Хå��᥽�å�
+     * データポートの Connector において発生する各種イベントに対するコー
+     * ルバックメソッド
      *
      * @else
      *
@@ -589,9 +589,9 @@ namespace RTC
   /*!
    * @if jp
    * @class ConnectorDataListenerHolder
-   * @brief ConnectorDataListener �ۥ�����饹
+   * @brief ConnectorDataListener ホルダクラス
    *
-   * ʣ���� ConnectorDataListener ���ݻ����������륯�饹��
+   * 複数の ConnectorDataListener を保持し管理するクラス。
    *
    * @else
    * @class ConnectorDataListenerHolder
@@ -608,7 +608,7 @@ namespace RTC
   public:
     /*!
      * @if jp
-     * @brief ���󥹥ȥ饯��
+     * @brief コンストラクタ
      * @else
      * @brief Constructor
      * @endif
@@ -616,7 +616,7 @@ namespace RTC
     ConnectorDataListenerHolder();
     /*!
      * @if jp
-     * @brief �ǥ��ȥ饯��
+     * @brief デストラクタ
      * @else
      * @brief Destructor
      * @endif
@@ -626,13 +626,13 @@ namespace RTC
     /*!
      * @if jp
      *
-     * @brief �ꥹ�ʡ����ɲ�
+     * @brief リスナーの追加
      *
-     * �ꥹ�ʡ����ɲä��롣
+     * リスナーを追加する。
      *
-     * @param listener �ɲä���ꥹ��
-     * @param autoclean true:�ǥ��ȥ饯���Ǻ������,
-     *                  false:�ǥ��ȥ饯���Ǻ�����ʤ�
+     * @param listener 追加するリスナ
+     * @param autoclean true:デストラクタで削除する,
+     *                  false:デストラクタで削除しない
      * @else
      *
      * @brief Add the listener.
@@ -649,11 +649,11 @@ namespace RTC
     /*!
      * @if jp
      *
-     * @brief �ꥹ�ʡ��κ��
+     * @brief リスナーの削除
      *
-     * �ꥹ�ʤ������롣
+     * リスナを削除する。
      *
-     * @param listener �������ꥹ��
+     * @param listener 削除するリスナ
      * @else
      *
      * @brief Remove the listener. 
@@ -668,11 +668,11 @@ namespace RTC
     /*!
      * @if jp
      *
-     * @brief �ꥹ�ʡ��ο�������
+     * @brief リスナーの数を得る
      *
-     * ������Ͽ����Ƥ���ꥹ�ʡ��������롣
+     * 現在登録されているリスナー数を得る。
      *
-     * @return listener��
+     * @return listener数
      * @else
      *
      * @brief Getting number of listeners.
@@ -687,12 +687,12 @@ namespace RTC
     /*!
      * @if jp
      *
-     * @brief �ꥹ�ʡ������Τ���
+     * @brief リスナーへ通知する
      *
-     * ��Ͽ����Ƥ���ꥹ�ʤΥ�����Хå��᥽�åɤ�ƤӽФ���
+     * 登録されているリスナのコールバックメソッドを呼び出す。
      *
      * @param info ConnectorInfo
-     * @param cdrdata �ǡ���
+     * @param cdrdata データ
      * @else
      *
      * @brief Notify listeners. 
@@ -709,13 +709,13 @@ namespace RTC
     /*!
      * @if jp
      *
-     * @brief �ꥹ�ʡ������Τ���(�ǡ�����������)
+     * @brief リスナーへ通知する(データ型指定版)
      *
-     * ��Ͽ����Ƥ���ꥹ�ʤΥ�����Хå��᥽�åɤ�ƤӽФ���
-     * COnnectorDataListenerT ���Υ�����Хå��Τߥ����뤵��롣
+     * 登録されているリスナのコールバックメソッドを呼び出す。
+     * COnnectorDataListenerT 型のコールバックのみコールされる。
      *
      * @param info ConnectorInfo
-     * @param typeddata �ǡ����ʥǡ��������ꤢ���
+     * @param typeddata データ（データ型指定あり）
      * @else
      *
      * @brief Notify listeners. (Typed data version)
@@ -752,9 +752,9 @@ namespace RTC
   /*!
    * @if jp
    * @class ConnectorListenerHolder 
-   * @brief ConnectorListener �ۥ�����饹
+   * @brief ConnectorListener ホルダクラス
    *
-   * ʣ���� ConnectorListener ���ݻ����������륯�饹��
+   * 複数の ConnectorListener を保持し管理するクラス。
    *
    * @else
    * @class ConnectorListenerHolder
@@ -771,7 +771,7 @@ namespace RTC
   public:
     /*!
      * @if jp
-     * @brief ���󥹥ȥ饯��
+     * @brief コンストラクタ
      * @else
      * @brief Constructor
      * @endif
@@ -780,7 +780,7 @@ namespace RTC
     
     /*!
      * @if jp
-     * @brief �ǥ��ȥ饯��
+     * @brief デストラクタ
      * @else
      * @brief Destructor
      * @endif
@@ -790,13 +790,13 @@ namespace RTC
     /*!
      * @if jp
      *
-     * @brief �ꥹ�ʡ����ɲ�
+     * @brief リスナーの追加
      *
-     * �ꥹ�ʡ����ɲä��롣
+     * リスナーを追加する。
      *
-     * @param listener �ɲä���ꥹ��
-     * @param autoclean true:�ǥ��ȥ饯���Ǻ������,
-     *                  false:�ǥ��ȥ饯���Ǻ�����ʤ�
+     * @param listener 追加するリスナ
+     * @param autoclean true:デストラクタで削除する,
+     *                  false:デストラクタで削除しない
      * @else
      *
      * @brief Add the listener.
@@ -813,11 +813,11 @@ namespace RTC
     /*!
      * @if jp
      *
-     * @brief �ꥹ�ʡ��κ��
+     * @brief リスナーの削除
      *
-     * �ꥹ�ʤ������롣
+     * リスナを削除する。
      *
-     * @param listener �������ꥹ��
+     * @param listener 削除するリスナ
      * @else
      *
      * @brief Remove the listener. 
@@ -832,11 +832,11 @@ namespace RTC
     /*!
      * @if jp
      *
-     * @brief �ꥹ�ʡ��ο�������
+     * @brief リスナーの数を得る
      *
-     * ������Ͽ����Ƥ���ꥹ�ʡ��������롣
+     * 現在登録されているリスナー数を得る。
      *
-     * @return listener��
+     * @return listener数
      * @else
      *
      * @brief Getting number of listeners.
@@ -851,9 +851,9 @@ namespace RTC
     /*!
      * @if jp
      *
-     * @brief �ꥹ�ʡ������Τ���
+     * @brief リスナーへ通知する
      *
-     * ��Ͽ����Ƥ���ꥹ�ʤΥ�����Хå��᥽�åɤ�ƤӽФ���
+     * 登録されているリスナのコールバックメソッドを呼び出す。
      *
      * @param info ConnectorInfo
      * @else
@@ -875,7 +875,7 @@ namespace RTC
   /*!
    * @if jp
    * @class ConnectorListeners
-   * @brief ConnectorListeners ���饹
+   * @brief ConnectorListeners クラス
    *
    *
    * @else
@@ -890,8 +890,8 @@ namespace RTC
   public:
     /*!
      * @if jp
-     * @brief ConnectorDataListenerType�ꥹ������
-     * ConnectorDataListenerType�ꥹ�ʤ��Ǽ
+     * @brief ConnectorDataListenerTypeリスナ配列
+     * ConnectorDataListenerTypeリスナを格納
      * @else
      * @brief ConnectorDataListenerType listener array
      * The ConnectorDataListenerType listener is stored.
@@ -900,8 +900,8 @@ namespace RTC
     ConnectorDataListenerHolder connectorData_[CONNECTOR_DATA_LISTENER_NUM];
     /*!
      * @if jp
-     * @brief ConnectorListenerType�ꥹ������
-     * ConnectorListenerType�ꥹ�ʤ��Ǽ
+     * @brief ConnectorListenerTypeリスナ配列
+     * ConnectorListenerTypeリスナを格納
      * @else
      * @brief ConnectorListenerType listener array
      * The ConnectorListenerType listener is stored. 

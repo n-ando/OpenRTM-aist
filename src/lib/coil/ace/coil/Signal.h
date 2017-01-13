@@ -1,4 +1,4 @@
-// -*- C++ -*-
+﻿// -*- C++ -*-
 /*!
  * @file  SignalPosix.h
  * @brief RT-Middleware Service interface

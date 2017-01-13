@@ -1,4 +1,4 @@
-// -*- C++ -*-
+ï»¿// -*- C++ -*-
 /*!
  * @file Task_win32.cpp
  * @brief Task class
@@ -23,7 +23,7 @@ namespace coil
 
   /*!
    * @if jp
-   * @brief ƒRƒ“ƒXƒgƒ‰ƒNƒ^
+   * @brief ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
    * @else
    * @brief Constructor
    * @endif
@@ -35,7 +35,7 @@ namespace coil
 
   /*!
    * @if jp
-   * @brief ƒfƒXƒgƒ‰ƒNƒ^
+   * @brief ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
    * @else
    * @brief Destructor
    * @endif
@@ -47,7 +47,7 @@ namespace coil
 
   /*!
    * @if jp
-   * @brief ƒ^ƒXƒNƒI[ƒvƒ“
+   * @brief ã‚¿ã‚¹ã‚¯ã‚ªãƒ¼ãƒ—ãƒ³
    * @else
    * @brief Task open
    * @endif
@@ -59,7 +59,7 @@ namespace coil
 
   /*!
    * @if jp
-   * @brief ƒ^ƒXƒNƒNƒ[ƒY
+   * @brief ã‚¿ã‚¹ã‚¯ã‚¯ãƒ­ãƒ¼ã‚º
    * @else
    * @brief Task close
    * @endif
@@ -71,7 +71,7 @@ namespace coil
 
   /*!
    * @if jp
-   * @brief ƒXƒŒƒbƒh‚ğÀs‚·‚é
+   * @brief ã‚¹ãƒ¬ãƒƒãƒ‰ã‚’å®Ÿè¡Œã™ã‚‹
    * @else
    * @brief Execute thread
    * @endif
@@ -83,7 +83,7 @@ namespace coil
 
   /*!
    * @if jp
-   * @brief ƒXƒŒƒbƒh‚ğ¶¬‚·‚é
+   * @brief ã‚¹ãƒ¬ãƒƒãƒ‰ã‚’ç”Ÿæˆã™ã‚‹
    * @else
    * @brief Create a thread
    * @endif
@@ -105,7 +105,7 @@ namespace coil
 
   /*!
    * @if jp
-   * @brief ƒXƒŒƒbƒhI—¹‚ğ‘Ò‚Â
+   * @brief ã‚¹ãƒ¬ãƒƒãƒ‰çµ‚äº†ã‚’å¾…ã¤
    * @else
    * @brief Waiting for the thread terminate
    * @endif
@@ -122,7 +122,7 @@ namespace coil
 
   /*!
    * @if jp
-   * @brief ƒ^ƒXƒNÀs‚ğ’†’f‚·‚é
+   * @brief ã‚¿ã‚¹ã‚¯å®Ÿè¡Œã‚’ä¸­æ–­ã™ã‚‹
    * @else
    * @brief Suspending the task
    * @endif
@@ -134,7 +134,7 @@ namespace coil
 
   /*!
    * @if jp
-   * @brief ’†’f‚³‚ê‚Ä‚¢‚éƒ^ƒXƒN‚ğÄŠJ‚·‚é
+   * @brief ä¸­æ–­ã•ã‚Œã¦ã„ã‚‹ã‚¿ã‚¹ã‚¯ã‚’å†é–‹ã™ã‚‹
    * @else
    * @brief Resuming the suspended task
    * @endif
@@ -146,7 +146,7 @@ namespace coil
 
   /*!
    * @if jp
-   * @brief ƒ^ƒXƒN”ƒŠƒZƒbƒg
+   * @brief ã‚¿ã‚¹ã‚¯æ•°ãƒªã‚»ãƒƒãƒˆ
    * @else
    * @brief Reset of task count
    * @endif
@@ -158,7 +158,7 @@ namespace coil
 
   /*!
    * @if jp
-   * @brief ƒ^ƒXƒNÀs‚ğI—¹‚·‚é
+   * @brief ã‚¿ã‚¹ã‚¯å®Ÿè¡Œã‚’çµ‚äº†ã™ã‚‹
    * @else
    * @brief Finalizing the task
    * @endif
@@ -170,7 +170,7 @@ namespace coil
  
   /*!
    * @if jp
-   * @brief ƒXƒŒƒbƒhÀs‚ğŠJn‚·‚é
+   * @brief ã‚¹ãƒ¬ãƒƒãƒ‰å®Ÿè¡Œã‚’é–‹å§‹ã™ã‚‹
    * @else
    * @brief Start thread Execution
    * @endif

@@ -1,4 +1,4 @@
-// -*- C++ -*-
+ï»¿// -*- C++ -*-
 /*!
  * @file NamingManager.h
  * @brief naming Service helper class
@@ -32,7 +32,7 @@ namespace RTC
 {
   /*!
    * @if jp
-   * @brief ¥³¥ó¥¹¥È¥é¥¯¥¿
+   * @brief ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
    * @else
    * @brief Constructor
    * @endif
@@ -63,7 +63,7 @@ namespace RTC
   }
   /*!
    * @if jp
-   * @brief »ØÄê¤·¤¿ CORBA ¥ª¥Ö¥¸¥§¥¯¥È¤ÎNamingService¤Ø¥Ğ¥¤¥ó¥É
+   * @brief æŒ‡å®šã—ãŸ CORBA ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®NamingServiceã¸ãƒã‚¤ãƒ³ãƒ‰
    * @else
    * @brief Bind the specified CORBA objects to NamingService
    * @endif
@@ -163,7 +163,7 @@ namespace RTC
   
   /*!
    * @if jp
-   * @brief »ØÄê¤·¤¿ CORBA ¥ª¥Ö¥¸¥§¥¯¥È¤òNamingService¤«¤é¥¢¥ó¥Ğ¥¤¥ó¥É
+   * @brief æŒ‡å®šã—ãŸ CORBA ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’NamingServiceã‹ã‚‰ã‚¢ãƒ³ãƒã‚¤ãƒ³ãƒ‰
    * @else
    * @brief Unbind the specified CORBA object from NamingService
    * @endif
@@ -186,7 +186,7 @@ namespace RTC
   //============================================================
   /*!
    * @if jp
-   * @brief ¥³¥ó¥¹¥È¥é¥¯¥¿
+   * @brief ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
    * @else
    * @brief Constructor
    * @endif
@@ -198,7 +198,7 @@ namespace RTC
   
   /*!
    * @if jp
-   * @brief ¥Ç¥¹¥È¥é¥¯¥¿
+   * @brief ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
    * @else
    * @brief Destructor
    * @endif
@@ -209,7 +209,7 @@ namespace RTC
   
   /*!
    * @if jp
-   * @brief NameServer ¤ÎÅĞÏ¿
+   * @brief NameServer ã®ç™»éŒ²
    * @else
    * @brief Register the NameServer
    * @endif
@@ -228,7 +228,7 @@ namespace RTC
   
   /*!
    * @if jp
-   * @brief »ØÄê¤·¤¿¥ª¥Ö¥¸¥§¥¯¥È¤ÎNamingService¤Ø¥Ğ¥¤¥ó¥É
+   * @brief æŒ‡å®šã—ãŸã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®NamingServiceã¸ãƒã‚¤ãƒ³ãƒ‰
    * @else
    * @brief Bind the specified objects to NamingService
    * @endif
@@ -305,7 +305,7 @@ namespace RTC
   
   /*!
    * @if jp
-   * @brief NamingServer ¤Î¾ğÊó¤Î¹¹¿·
+   * @brief NamingServer ã®æƒ…å ±ã®æ›´æ–°
    * @else
    * @brief Update information of NamingServer
    * @endif
@@ -354,7 +354,7 @@ namespace RTC
   
   /*!
    * @if jp
-   * @brief »ØÄê¤·¤¿¥ª¥Ö¥¸¥§¥¯¥È¤òNamingService¤«¤é¥¢¥ó¥Ğ¥¤¥ó¥É
+   * @brief æŒ‡å®šã—ãŸã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’NamingServiceã‹ã‚‰ã‚¢ãƒ³ãƒã‚¤ãƒ³ãƒ‰
    * @else
    * @brief Unbind the specified object from NamingService
    * @endif
@@ -377,7 +377,7 @@ namespace RTC
   
   /*!
    * @if jp
-   * @brief Á´¤Æ¤Î¥ª¥Ö¥¸¥§¥¯¥È¤òNamingService¤«¤é¥¢¥ó¥Ğ¥¤¥ó¥É
+   * @brief å…¨ã¦ã®ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’NamingServiceã‹ã‚‰ã‚¢ãƒ³ãƒã‚¤ãƒ³ãƒ‰
    * @else
    * @brief Unbind all objects from NamingService
    * @endif
@@ -416,7 +416,7 @@ namespace RTC
   
   /*!
    * @if jp
-   * @brief ¥Ğ¥¤¥ó¥É¤µ¤ì¤Æ¤¤¤ëÁ´¤Æ¤Î¥ª¥Ö¥¸¥§¥¯¥È¤ò¼èÆÀ
+   * @brief ãƒã‚¤ãƒ³ãƒ‰ã•ã‚Œã¦ã„ã‚‹å…¨ã¦ã®ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’å–å¾—
    * @else
    * @brief Get all bound objects
    * @endif
@@ -438,7 +438,7 @@ namespace RTC
   //============================================================
   /*!
    * @if jp
-   * @brief NameServer ´ÉÍıÍÑ¥ª¥Ö¥¸¥§¥¯¥È¤ÎÀ¸À®
+   * @brief NameServer ç®¡ç†ç”¨ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®ç”Ÿæˆ
    * @else
    * @brief Create objects for NameServer management
    * @endif
@@ -473,7 +473,7 @@ namespace RTC
   
   /*!
    * @if jp
-   * @brief ÀßÄêºÑ¤ß¥³¥ó¥İ¡¼¥Í¥ó¥È¤ò NameServer ¤ËÅĞÏ¿
+   * @brief è¨­å®šæ¸ˆã¿ã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆã‚’ NameServer ã«ç™»éŒ²
    * @else
    * @brief Register the configured component to NameServer
    * @endif
@@ -488,7 +488,7 @@ namespace RTC
   
   /*!
    * @if jp
-   * @brief NameServer ¤ËÅĞÏ¿¤¹¤ë¥³¥ó¥İ¡¼¥Í¥ó¥È¤ÎÀßÄê
+   * @brief NameServer ã«ç™»éŒ²ã™ã‚‹ã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆã®è¨­å®š
    * @else
    * @brief Configure the components that will be registered to NameServer
    * @endif
@@ -509,7 +509,7 @@ namespace RTC
   }
   /*!
    * @if jp
-   * @brief NameServer ¤ËÅĞÏ¿¤¹¤ë¥³¥ó¥İ¡¼¥Í¥ó¥È¤ÎÀßÄê
+   * @brief NameServer ã«ç™»éŒ²ã™ã‚‹ã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆã®è¨­å®š
    * @else
    * @brief Configure the components that will be registered to NameServer
    * @endif
@@ -545,7 +545,7 @@ namespace RTC
   
   /*!
    * @if jp
-   * @brief NameServer ¤ËÅĞÏ¿¤¹¤ë¥³¥ó¥İ¡¼¥Í¥ó¥È¤ÎÀßÄê²ò½ü
+   * @brief NameServer ã«ç™»éŒ²ã™ã‚‹ã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆã®è¨­å®šè§£é™¤
    * @else
    * @brief Unregister the components that will be registered to NameServer
    * @endif

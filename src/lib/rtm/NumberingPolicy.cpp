@@ -1,4 +1,4 @@
-// -*- C++ -*-
+ï»¿// -*- C++ -*-
 /*!
  * @file NumberingPolicy.cpp
  * @brief Object numbering policy class
@@ -25,7 +25,7 @@
 //============================================================
 /*!
  * @if jp
- * @brief ¥ª¥Ö¥¸¥§¥¯¥ÈÀ¸À®»ş¤ÎÌ¾¾ÎºîÀ®
+ * @brief ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆç”Ÿæˆæ™‚ã®åç§°ä½œæˆ
  * @else
  * @brief Create the name when creating objects
  * @endif
@@ -52,7 +52,7 @@ std::string DefaultNumberingPolicy::onCreate(void* obj)
 
 /*!
  * @if jp
- * @brief ¥ª¥Ö¥¸¥§¥¯¥Èºï½ü»ş¤ÎÌ¾¾Î²òÊü
+ * @brief ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆå‰Šé™¤æ™‚ã®åç§°è§£æ”¾
  * @else
  * @brief Delete the name when deleting objects
  * @endif
@@ -70,7 +70,7 @@ void DefaultNumberingPolicy::onDelete(void* obj)
 
 /*!
  * @if jp
- * @brief ¥ª¥Ö¥¸¥§¥¯¥È¤Î¸¡º÷
+ * @brief ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®æ¤œç´¢
  * @else
  * @brief Find the object
  * @endif

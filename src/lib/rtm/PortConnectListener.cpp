@@ -1,4 +1,4 @@
-// -*- C++ -*-
+ï»¿// -*- C++ -*-
 /*!
  * @file PortConnectListener.cpp
  * @brief port's internal action listener classes
@@ -24,7 +24,7 @@ namespace RTC
   //============================================================
   /*!
    * @if jp
-   * @brief PortConnectListenerType ¤òÊ¸»úÎó¤ËÊÑ´¹
+   * @brief PortConnectListenerType ã‚’æ–‡å­—åˆ—ã«å¤‰æ›
    * @else
    * @brief Convert PortConnectListenerType into the string.
    * @endif
@@ -45,7 +45,7 @@ namespace RTC
 
   /*!
    * @if jp
-   * @class PortConnectListener ¥¯¥é¥¹
+   * @class PortConnectListener ã‚¯ãƒ©ã‚¹
    * @else
    * @class PortConnectListener class
    * @endif
@@ -54,7 +54,7 @@ namespace RTC
 
   /*!
    * @if jp
-   * @brief PortConnectRetListenerType ¤òÊ¸»úÎó¤ËÊÑ´¹
+   * @brief PortConnectRetListenerType ã‚’æ–‡å­—åˆ—ã«å¤‰æ›
    * @else
    * @brief Convert PortConnectRetListenerType into the string.
    * @endif
@@ -79,7 +79,7 @@ namespace RTC
 
   /*!
    * @if jp
-   * @class PortConnectRetListener ¥¯¥é¥¹
+   * @class PortConnectRetListener ã‚¯ãƒ©ã‚¹
    * @else
    * @class PortConnectRetListener class
    * @endif
@@ -89,7 +89,7 @@ namespace RTC
   //============================================================
   /*!
    * @if jp
-   * @class PortConnectListener ¥Û¥ë¥À¥¯¥é¥¹
+   * @class PortConnectListener ãƒ›ãƒ«ãƒ€ã‚¯ãƒ©ã‚¹
    * @else
    * @class PortConnectListener holder class
    * @endif
@@ -154,7 +154,7 @@ namespace RTC
   //============================================================
   /*!
    * @if jp
-   * @class PortConnectRetListener ¥Û¥ë¥À¥¯¥é¥¹
+   * @class PortConnectRetListener ãƒ›ãƒ«ãƒ€ã‚¯ãƒ©ã‚¹
    * @else
    * @class PortConnectRetListener holder class
    * @endif

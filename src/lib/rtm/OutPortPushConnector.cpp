@@ -1,4 +1,4 @@
-// -*- C++ -*-
+ï»¿// -*- C++ -*-
 /*!
  * @file OutPortPushConnector.cpp
  * @brief OutPortPush type connector class
@@ -26,7 +26,7 @@ namespace RTC
 {
   /*!
    * @if jp
-   * @brief ¥³¥ó¥¹¥È¥é¥¯¥¿
+   * @brief ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
    * @else
    * @brief Constructor
    * @endif
@@ -64,7 +64,7 @@ namespace RTC
   
   /*!
    * @if jp
-   * @brief ¥Ç¥¹¥È¥é¥¯¥¿
+   * @brief ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
    * @else
    * @brief Destructor
    * @endif
@@ -77,7 +77,7 @@ namespace RTC
   
   /*!
    * @if jp
-   * @brief ¥Ç¡¼¥¿¤Î½ñ¤­¹ş¤ß
+   * @brief ãƒ‡ãƒ¼ã‚¿ã®æ›¸ãè¾¼ã¿
    * @else
    * @brief Writing data
    * @endif
@@ -93,7 +93,7 @@ namespace RTC
   
   /*!
    * @if jp
-   * @brief ÀÜÂ³²ò½ü
+   * @brief æ¥ç¶šè§£é™¤
    * @else
    * @brief disconnect
    * @endif
@@ -133,8 +133,8 @@ namespace RTC
 
   /*!
    * @if jp
-   * @brief ¥¢¥¯¥Æ¥£¥Ö²½
-   * ¤³¤Î¥³¥Í¥¯¥¿¤ò¥¢¥¯¥Æ¥£¥Ö²½¤¹¤ë
+   * @brief ã‚¢ã‚¯ãƒ†ã‚£ãƒ–åŒ–
+   * ã“ã®ã‚³ãƒã‚¯ã‚¿ã‚’ã‚¢ã‚¯ãƒ†ã‚£ãƒ–åŒ–ã™ã‚‹
    * @else
    * @brief Connector activation
    * This operation activates this connector
@@ -147,8 +147,8 @@ namespace RTC
 
   /*!
    * @if jp
-   * @brief Èó¥¢¥¯¥Æ¥£¥Ö²½
-   * ¤³¤Î¥³¥Í¥¯¥¿¤òÈó¥¢¥¯¥Æ¥£¥Ö²½¤¹¤ë
+   * @brief éã‚¢ã‚¯ãƒ†ã‚£ãƒ–åŒ–
+   * ã“ã®ã‚³ãƒã‚¯ã‚¿ã‚’éã‚¢ã‚¯ãƒ†ã‚£ãƒ–åŒ–ã™ã‚‹
    * @else
    * @brief Connector deactivation
    * This operation deactivates this connector
@@ -161,9 +161,9 @@ namespace RTC
   
   /*!
    * @if jp
-   * @brief Buffer ¤ò¼èÆÀ¤¹¤ë
+   * @brief Buffer ã‚’å–å¾—ã™ã‚‹
    *
-   * Connector ¤¬Êİ»ı¤·¤Æ¤¤¤ë Buffer ¤òÊÖ¤¹
+   * Connector ãŒä¿æŒã—ã¦ã„ã‚‹ Buffer ã‚’è¿”ã™
    *
    * @else
    * @brief Getting Buffer
@@ -179,7 +179,7 @@ namespace RTC
   
   /*!
    * @if jp
-   * @brief Publisher¤ÎÀ¸À®
+   * @brief Publisherã®ç”Ÿæˆ
    * @else
    * @brief create publisher
    * @endif
@@ -195,7 +195,7 @@ namespace RTC
   
   /*!
    * @if jp
-   * @brief Buffer¤ÎÀ¸À®
+   * @brief Bufferã®ç”Ÿæˆ
    * @else
    * @brief create buffer
    * @endif
@@ -210,7 +210,7 @@ namespace RTC
 
   /*!
    * @if jp
-   * @brief ÀÜÂ³³ÎÎ©»ş¤Ë¥³¡¼¥ë¥Ğ¥Ã¥¯¤ò¸Æ¤Ö
+   * @brief æ¥ç¶šç¢ºç«‹æ™‚ã«ã‚³ãƒ¼ãƒ«ãƒãƒƒã‚¯ã‚’å‘¼ã¶
    * @else
    * @brief Invoke callback when connection is established
    * @endif
@@ -222,7 +222,7 @@ namespace RTC
 
   /*!
    * @if jp
-   * @brief ÀÜÂ³ÀÚÃÇ»ş¤Ë¥³¡¼¥ë¥Ğ¥Ã¥¯¤ò¸Æ¤Ö
+   * @brief æ¥ç¶šåˆ‡æ–­æ™‚ã«ã‚³ãƒ¼ãƒ«ãƒãƒƒã‚¯ã‚’å‘¼ã¶
    * @else
    * @brief Invoke callback when connection is destroied
    * @endif

@@ -1,4 +1,4 @@
-// -*- C++ -*-
+﻿// -*- C++ -*-
 /*!
  * @file Typename.h
  * @brief Typename function
@@ -138,21 +138,21 @@ namespace CORBA_Util
   
   /*!
    * @if jp
-   * @brief CORBA���Υ�����̾��ʸ����Ǽ�������
+   * @brief CORBA型のタイプ名を文字列で取得する
    *
-   * CORBA IDL�ˤ�ä�������줿���饹�ޤ��Ϲ�¤�Τʤɤη�̾��������롣
-   * �ƥ�ץ졼�Ȱ����ˤϡ������ץ����ɤ���������뷿��Ϳ���뤳�Ȥ��Ǥ��롣
+   * CORBA IDLによって定義されたクラスまたは構造体などの型名を取得する。
+   * テンプレート引数には、タイプコードが生成される型を与えることができる。
    *
    * <pre> 
    * std::cout << toTypename<RTC::TimedFloat>() << std::endl;
    * std::cout << toTypename<RTC::RTObject>() << std::endl;
    * </pre>
-   * ��¹Ԥ���ȷ�̤�
+   * を実行すると結果は
    * <pre>
    * TimedFloat
    * RTObject
    * </pre>
-   * �Ȥʤ롣
+   * となる。
    * 
    * @else
    * @brief Getting CORBA defined type as characters
@@ -193,21 +193,21 @@ namespace CORBA_Util
   
   /*!
    * @if jp
-   * @brief CORBA���Υ�ݥ��ȥ�ID��ʸ����Ǽ�������
+   * @brief CORBA型のリポジトリIDを文字列で取得する
    *
-   * CORBA IDL�ˤ�ä�������줿���饹�ޤ��Ϲ�¤�ΤʤɤΥ�ݥ��ȥ�ID��������롣
-   * �ƥ�ץ졼�Ȱ����ˤϡ������ץ����ɤ���������뷿��Ϳ���뤳�Ȥ��Ǥ��롣
+   * CORBA IDLによって定義されたクラスまたは構造体などのリポジトリIDを取得する。
+   * テンプレート引数には、タイプコードが生成される型を与えることができる。
    *
    * <pre> 
    * std::cout << toRepositoryId<RTC::TimedFloat>() << std::endl;
    * std::cout << toRepositoryId<RTC::RTObject>() << std::endl;
    * </pre>
-   * ��¹Ԥ���ȷ�̤�
+   * を実行すると結果は
    * <pre>
    * IDL:RTC/TimedFloat:1.0
    * IDL:omg.org/RTC/RTObject:1.0
    * </pre>
-   * �Ȥʤ롣
+   * となる。
    * 
    * @else
    * @brief Getting CORBA defined type as characters

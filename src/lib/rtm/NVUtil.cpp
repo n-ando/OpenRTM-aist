@@ -1,4 +1,4 @@
-// -*- C++ -*-
+ï»¿// -*- C++ -*-
 /*!
  * @file NVUtil.cpp
  * @brief NameValue and NVList utility functions
@@ -39,7 +39,7 @@ namespace NVUtil
 {
   /*!
    * @if jp
-   * @brief value ¤¬ CORBA::Char ¤Î NameValue ¤òÀ¸À®¤¹¤ë
+   * @brief value ãŒ CORBA::Char ã® NameValue ã‚’ç”Ÿæˆã™ã‚‹
    * @else
    * @brief Create NameValue typed CORBA::Char
    * @endif
@@ -54,7 +54,7 @@ namespace NVUtil
   
   /*!
    * @if jp
-   * @brief value ¤¬ CORBA::Boolean ¤Î NameValue ¤òÀ¸À®¤¹¤ë
+   * @brief value ãŒ CORBA::Boolean ã® NameValue ã‚’ç”Ÿæˆã™ã‚‹
    * @else
    * @brief This operation creates NameValue typed CORBA::Boolean.
    * @endif
@@ -69,7 +69,7 @@ namespace NVUtil
   
   /*!
    * @if jp
-   * @brief value ¤¬ CORBA::Octet ¤Î NameValue ¤òÀ¸À®¤¹¤ë
+   * @brief value ãŒ CORBA::Octet ã® NameValue ã‚’ç”Ÿæˆã™ã‚‹
    * @else
    * @brief Create NameValue typed CORBA::Octet
    * @endif
@@ -84,7 +84,7 @@ namespace NVUtil
   
   /*!
    * @if jp
-   * @brief value ¤¬ CORBA::Any ¤Î NameValue ¤òÀ¸À®¤¹¤ë
+   * @brief value ãŒ CORBA::Any ã® NameValue ã‚’ç”Ÿæˆã™ã‚‹
    * @else
    * @brief Create NameValue typed CORBA::Any
    * @endif
@@ -99,7 +99,7 @@ namespace NVUtil
   
   /*!
    * @if jp
-   * @brief Properties ¤ò NVList ¤Ø¥³¥Ô¡¼¤¹¤ë
+   * @brief Properties ã‚’ NVList ã¸ã‚³ãƒ”ãƒ¼ã™ã‚‹
    * @else
    * @brief Copy the properties to NVList
    * @endif
@@ -129,7 +129,7 @@ namespace NVUtil
   
   /*!
    * @if jp
-   * @brief NVList ¤ò Properties ¤Ø¥³¥Ô¡¼¤¹¤ë
+   * @brief NVList ã‚’ Properties ã¸ã‚³ãƒ”ãƒ¼ã™ã‚‹
    * @else
    * @brief Copy NVList to the Proeprties
    * @endif
@@ -149,7 +149,7 @@ namespace NVUtil
   
   /*!
    * @if jp
-   * @brief NVList ¤ò Properties ¤ËÊÑ´¹¤¹¤ë¤¿¤á¤Î¥Õ¥¡¥ó¥¯¥¿
+   * @brief NVList ã‚’ Properties ã«å¤‰æ›ã™ã‚‹ãŸã‚ã®ãƒ•ã‚¡ãƒ³ã‚¯ã‚¿
    * @else
    * @brief Functor to transform NVList into the properties
    * @endif
@@ -172,7 +172,7 @@ namespace NVUtil
   
   /*!
    * @if jp
-   * @brief NVList ¤ò Properties ¤ØÊÑ´¹¤¹¤ë
+   * @brief NVList ã‚’ Properties ã¸å¤‰æ›ã™ã‚‹
    * @else
    * @brief Transform NVList to the properties
    * @endif
@@ -186,7 +186,7 @@ namespace NVUtil
   
   /*!
    * @if jp
-   * @brief NVList ¤ò¸¡º÷¤¹¤ë¤¿¤á¤Î¥Õ¥¡¥ó¥¯¥¿
+   * @brief NVList ã‚’æ¤œç´¢ã™ã‚‹ãŸã‚ã®ãƒ•ã‚¡ãƒ³ã‚¯ã‚¿
    * @else
    * @brief Functor to find a NVList
    * @endif
@@ -204,7 +204,7 @@ namespace NVUtil
   
   /*!
    * @if jp
-   * @brief NVList ¤«¤é name ¤Ç»ØÄê¤µ¤ì¤¿ value ¤òÊÖ¤¹
+   * @brief NVList ã‹ã‚‰ name ã§æŒ‡å®šã•ã‚ŒãŸ value ã‚’è¿”ã™
    * @else
    * @brief Return the value specified by name from NVList
    * @endif
@@ -219,7 +219,7 @@ namespace NVUtil
   
   /*!
    * @if jp
-   * @brief name ¤Ç»ØÄê¤µ¤ì¤¿Í×ÁÇ¤Î¥¤¥ó¥Ç¥Ã¥¯¥¹¤òÊÖ¤¹
+   * @brief name ã§æŒ‡å®šã•ã‚ŒãŸè¦ç´ ã®ã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹ã‚’è¿”ã™
    * @else
    * @brief Return the index of element specified by name from NVList
    * @endif
@@ -231,7 +231,7 @@ namespace NVUtil
   
   /*!
    * @if jp
-   * @brief »ØÄê¤µ¤ì¤¿ name ¤Î value ¤Î·¿¤¬ string ¤Ç¤¢¤ë¤«¸¡¾Ú¤¹¤ë
+   * @brief æŒ‡å®šã•ã‚ŒãŸ name ã® value ã®å‹ãŒ string ã§ã‚ã‚‹ã‹æ¤œè¨¼ã™ã‚‹
    * @else
    * @brief Validate whether value type specified by name is string type
    * @endif
@@ -253,7 +253,7 @@ namespace NVUtil
   
   /*!
    * @if jp
-   * @brief »ØÄê¤µ¤ì¤¿ name ¤Î value ¤ÎÃÍ¤¬»ØÄê¤·¤¿Ê¸»úÎó¤È°ìÃ×¤¹¤ë¤«¸¡¾Ú¤¹¤ë
+   * @brief æŒ‡å®šã•ã‚ŒãŸ name ã® value ã®å€¤ãŒæŒ‡å®šã—ãŸæ–‡å­—åˆ—ã¨ä¸€è‡´ã™ã‚‹ã‹æ¤œè¨¼ã™ã‚‹
    * @else
    * @brief Check whether the value of specified name specified matches
    *        the specified string
@@ -274,7 +274,7 @@ namespace NVUtil
   
   /*!
    * @if jp
-   * @brief »ØÄê¤µ¤ì¤¿ name ¤Î NVList ¤ò string ¤È¤·¤ÆÊÖ¤¹¡£
+   * @brief æŒ‡å®šã•ã‚ŒãŸ name ã® NVList ã‚’ string ã¨ã—ã¦è¿”ã™ã€‚
    * @else
    * @brief Get NVList of specifid name as string
    * @endif
@@ -304,7 +304,7 @@ namespace NVUtil
   
   /*!
    * @if jp
-   * @brief »ØÄê¤µ¤ì¤¿Ê¸»úÎó¤ò NVList ¤ÎÍ×ÁÇ¤ËÄÉ²Ã¤¹¤ë¡£
+   * @brief æŒ‡å®šã•ã‚ŒãŸæ–‡å­—åˆ—ã‚’ NVList ã®è¦ç´ ã«è¿½åŠ ã™ã‚‹ã€‚
    * @else
    * @brief Append the specified string to element of NVList
    * @endif
@@ -346,7 +346,7 @@ namespace NVUtil
   
   /*!
    * @if jp
-   * @brief NVList ¤ËÍ×ÁÇ¤òÄÉ²Ã¤¹¤ë¡£
+   * @brief NVList ã«è¦ç´ ã‚’è¿½åŠ ã™ã‚‹ã€‚
    * @else
    * @brief Append an element to NVList
    * @endif
@@ -361,7 +361,7 @@ namespace NVUtil
   
   /*!
    * @if jp
-   * @brief NVList ¤ËÀßÄê¤µ¤ì¤Æ¤¤¤ëÆâÍÆ¤òÊ¸»úÎó¤È¤·¤Æ½ĞÎÏ¤¹¤ë¡£
+   * @brief NVList ã«è¨­å®šã•ã‚Œã¦ã„ã‚‹å†…å®¹ã‚’æ–‡å­—åˆ—ã¨ã—ã¦å‡ºåŠ›ã™ã‚‹ã€‚
    * @else
    * @brief Print information configured in NVList as a string type
    * @endif
@@ -385,7 +385,7 @@ namespace NVUtil
 
   /*!
    * @if jp
-   * @brief NVList ¤ËÀßÄê¤µ¤ì¤Æ¤¤¤ëÆâÍÆ¤òÊ¸»úÎó¤È¤·¤ÆÉ¸½à½ĞÎÏ¤¹¤ë¡£
+   * @brief NVList ã«è¨­å®šã•ã‚Œã¦ã„ã‚‹å†…å®¹ã‚’æ–‡å­—åˆ—ã¨ã—ã¦æ¨™æº–å‡ºåŠ›ã™ã‚‹ã€‚
    * @else
    * @brief Print information configured in NVList as a string type 
    *        to Standard Outport.
@@ -398,7 +398,7 @@ namespace NVUtil
 
   /*!
    * @if jp
-   * @brief NVList ¤ËÀßÄê¤µ¤ì¤Æ¤¤¤ëÆâÍÆ¤òÊ¸»úÎó¤Ë¤¹¤ë
+   * @brief NVList ã«è¨­å®šã•ã‚Œã¦ã„ã‚‹å†…å®¹ã‚’æ–‡å­—åˆ—ã«ã™ã‚‹
    * @else
    * @brief Get information configured in NVList as a string type
    * @endif

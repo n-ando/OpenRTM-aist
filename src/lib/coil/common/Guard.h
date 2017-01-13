@@ -1,4 +1,4 @@
-// -*- C++ -*-
+ï»¿// -*- C++ -*-
 /*!
  * @file  Guard.h
  * @brief Guard template class
@@ -28,7 +28,7 @@ namespace coil
    * @if jp
    *
    * @class Guard
-   * @brief Guard ¥Æ¥ó¥×¥ì¡¼¥È¥¯¥é¥¹
+   * @brief Guard ãƒ†ãƒ³ãƒ—ãƒ¬ãƒ¼ãƒˆã‚¯ãƒ©ã‚¹
    *
    * @else
    *
@@ -45,11 +45,11 @@ namespace coil
     /*!
      * @if jp
      *
-     * @brief ¥³¥ó¥¹¥È¥é¥¯¥¿
+     * @brief ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
      *
-     * ¥³¥ó¥¹¥È¥é¥¯¥¿¡£
+     * ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ã€‚
      *
-     * @param mutex ¥¹¥ì¥Ã¥É
+     * @param mutex ã‚¹ãƒ¬ãƒƒãƒ‰
      *
      * @else
      *
@@ -69,9 +69,9 @@ namespace coil
     /*!
      * @if jp
      *
-     * @brief ¥Ç¥¹¥È¥é¥¯¥¿
+     * @brief ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
      *
-     * ¥Ç¥¹¥È¥é¥¯¥¿¡£
+     * ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ã€‚
      *
      * @else
      *

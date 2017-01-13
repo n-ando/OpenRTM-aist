@@ -1,4 +1,4 @@
-// -*- C++ -*-
+ï»¿// -*- C++ -*-
 /*!
  * @file ConfigurationListener.cpp
  * @brief Configuration related event listener classes
@@ -24,7 +24,7 @@ namespace RTC
   //============================================================
   /*!
    * @if jp
-   * @class ConfigurationParamListener ¥¯¥é¥¹
+   * @class ConfigurationParamListener ã‚¯ãƒ©ã‚¹
    * @else
    * @class ConfigurationParamListener class
    * @endif
@@ -33,7 +33,7 @@ namespace RTC
 
   /*!
    * @if jp
-   * @class ConfigurationSetNameListener ¥¯¥é¥¹
+   * @class ConfigurationSetNameListener ã‚¯ãƒ©ã‚¹
    * @else
    * @class ConfigurationSetNameListener class
    * @endif
@@ -42,7 +42,7 @@ namespace RTC
 
   /*!
    * @if jp
-   * @class ConfigurationSetListener ¥¯¥é¥¹
+   * @class ConfigurationSetListener ã‚¯ãƒ©ã‚¹
    * @else
    * @class ConfigurationSetListener class
    * @endif
@@ -53,7 +53,7 @@ namespace RTC
   //============================================================
   /*!
    * @if jp
-   * @class ConfigurationParamListener ¥Û¥ë¥À¥¯¥é¥¹
+   * @class ConfigurationParamListener ãƒ›ãƒ«ãƒ€ã‚¯ãƒ©ã‚¹
    * @else
    * @class ConfigurationParamListener holder class
    * @endif
@@ -121,7 +121,7 @@ namespace RTC
   //============================================================
   /*!
    * @if jp
-   * @class ConfigurationSetListener ¥Û¥ë¥À¥¯¥é¥¹
+   * @class ConfigurationSetListener ãƒ›ãƒ«ãƒ€ã‚¯ãƒ©ã‚¹
    * @else
    * @class ConfigurationSetListener holder class
    * @endif
@@ -188,7 +188,7 @@ namespace RTC
   //============================================================
   /*!
    * @if jp
-   * @class ConfigurationSetNameListener ¥Û¥ë¥À¥¯¥é¥¹
+   * @class ConfigurationSetNameListener ãƒ›ãƒ«ãƒ€ã‚¯ãƒ©ã‚¹
    * @else
    * @class ConfigurationSetNameListener holder class
    * @endif

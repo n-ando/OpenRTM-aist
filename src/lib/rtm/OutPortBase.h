@@ -1,4 +1,4 @@
-// -*- C++ -*-
+﻿// -*- C++ -*-
 /*!
  * @file OutPortBase.h
  * @brief InPortBase base class
@@ -45,25 +45,25 @@ namespace RTC
    *
    * @class OutPortBase
    *
-   * @brief OutPort ���쥯�饹
+   * @brief OutPort 基底クラス
    * 
-   * OutPort �δ��쥯�饹��
+   * OutPort の基底クラス。
    *
    *
    *
    * Properties: port.outport
-   * �ץ��ѥƥ���
+   * プロパティは
    *
    * - port.outport
    * - port.outport.[name]
    *
-   * ConnectorProfile.properties �ξ���
+   * ConnectorProfile.properties の場合は
    * - dataport.outport
    *
-   * �ʲ��˻��ꤷ����Τ��Ϥ���롣
-   * (port.outport.[name]��ͥ�褵���)
-   * ����ˡ������Υץ��ѥƥ�����³���� ConnectorProfile �ˤ��
-   * �Ϥ�����礬���ꡢ���ξ��� ConnectorProfile ��ͥ�褵��롣
+   * 以下に指定したものが渡される。
+   * (port.outport.[name]が優先される)
+   * さらに、一部のプロパティは接続時に ConnectorProfile により
+   * 渡される場合があり、その場合は ConnectorProfile が優先される。
    *
    * - input.throughput.profile: enable
    * - input.throughput.update_rate: count [n/count]
@@ -93,60 +93,60 @@ namespace RTC
    * [buffer]
    *
    * - buffer.type: <br>
-   *     ���Ѳ�ǽ�ʥХåե��Υ����� <br>
-   *     ConnectorProfile �ξ������Ѥ���Хåե��Υ�����
-   *     ̵����ξ��ϥǥե���Ȥ� ringbuffer �����Ѥ���롣<br>
+   *     利用可能なバッファのタイプ <br>
+   *     ConnectorProfile の場合は利用するバッファのタイプ
+   *     無指定の場合はデフォルトの ringbuffer が使用される。<br>
    *     ex. ringbuffer, shmbuffer, doublebuffer, etc.
-   *     ������Consumer, Publisher �Υ����פˤ�äƤ�����ΥХåե�����
-   *     �׵᤹���Τ����뤿��Ρ����ξ��ϻ����̵���Ȥʤ롣
+   *     正し、Consumer, Publisher のタイプによっては特定のバッファ型を
+   *     要求するものがあるための、その場合は指定は無効となる。
    *
    * - buffer.length: <br>
-   *     �Хåե���Ĺ��
+   *     バッファの長さ
    *
    * - buffer.write.full_policy: <br>
-   *     ��񤭤��뤫�ɤ����Υݥꥷ�� <br>
-   *     overwrite (���), do_nothing (���⤷�ʤ�), block (�֥��å�����)
-   *     block ����ꤷ����硢���� timeout �ͤ���ꤹ��С�������ָ�
-   *     �񤭹����Բ�ǽ�Ǥ���Х����ॢ���Ȥ��롣
+   *     上書きするかどうかのポリシー <br>
+   *     overwrite (上書き), do_nothing (何もしない), block (ブロックする)
+   *     block を指定した場合、次の timeout 値を指定すれば、指定時間後
+   *     書き込み不可能であればタイムアウトする。
    *
    * - buffer.write.timeout: <br>
-   *     �����ॢ���Ȼ��֤� [sec] �ǻ��ꤹ�롣
-   *     1 sec -> 1.0, 1 ms -> 0.001, �����ॢ���Ȥ��ʤ� -> 0.0
+   *     タイムアウト時間を [sec] で指定する。
+   *     1 sec -> 1.0, 1 ms -> 0.001, タイムアウトしない -> 0.0
    *
    * - buffer.read.empty_policy: <br>
-   *     �Хåե������ΤȤ����ɤ߽Ф��ݥꥷ�� <br>
-   *     last (�Ǹ������), do_nothing (���⤷�ʤ�), block (�֥��å�����)
-   *     block ����ꤷ����硢���� timeout �ͤ���ꤹ��С�������ָ�
-   *     �ɤ߽Ф��Բ�ǽ�Ǥ���Х����ॢ���Ȥ��롣
+   *     バッファが空のときの読み出しポリシー <br>
+   *     last (最後の要素), do_nothing (何もしない), block (ブロックする)
+   *     block を指定した場合、次の timeout 値を指定すれば、指定時間後
+   *     読み出し不可能であればタイムアウトする。
    *
    * - buffer.read.timeout: <br>
-   *     �����ॢ���Ȼ��� [sec] �ǻ��ꤹ�롣
-   *     1sec -> 1.0, 1ms -> 0.001, �����ॢ���Ȥ��ʤ� -> 0.0
+   *     タイムアウト時間 [sec] で指定する。
+   *     1sec -> 1.0, 1ms -> 0.001, タイムアウトしない -> 0.0
    *
-   * - ����¾�Хåե���˸�ͭ�ʥ��ץ����
+   * - その他バッファ毎に固有なオプション
    *
    *
    * [publihser]
    *
    * - publisher.types: <br>
-   *      ���Ѳ�ǽ�� Publisher �Υ����� <br>
+   *      利用可能な Publisher のタイプ <br>
    *      new, periodic, flush, etc..
    *
    * - publisher.push_policy: <br>
-   *      InPort�إǡ�������������ݥꥷ�� <br>
-   *      - all: �Хåե��ˤ��ޤäƤ���ǡ����򤹤٤�����
-   *      - fifo: �Хåե���FIFO�Ȥߤʤ�������
-   *      - skip: �Ť��ǡ�������������ְ���������
-   *      - new: ��˿������ǡ����Τߤ�����
+   *      InPortへデータを送信するポリシー <br>
+   *      - all: バッファにたまっているデータをすべて送信
+   *      - fifo: バッファをFIFOとみなして送信
+   *      - skip: 古いデータから一定数を間引いて送信
+   *      - new: 常に新しいデータのみを送信
    *
    * - publisher.skip_count: <br>
    *      publisher.skip_count = n<br>
-   *      n: n������ˤҤȤ�����
+   *      n: n要素毎にひとつ送信
    *
    * - publisher.push_rate:
    *
    * - publisher.thread.type: <br>
-   *       Publisher �Υ���åɤΥ����� <br>
+   *       Publisher のスレッドのタイプ <br>
    * - publisher.thread.measurement.exec_time: yes/no
    * - publisher.thread.measurement.exec_count: number
    * - publisher.thread.measurement.period_time: yes/no
@@ -155,59 +155,59 @@ namespace RTC
    * [interface]
    *
    * - interface.types: <br>
-   *     OutPort interface�Υ����� <br>
-   *     ex. corba_cdr, corba_any, raw_tcp �ʤɥ���޶��ڤ�ǻ��ꡣ����
-   *     ���ꤷ�ʤ�������Ѳ�ǽ�ʤ��٤ƤΥץ��Х��������Ѥ����
+   *     OutPort interfaceのタイプ <br>
+   *     ex. corba_cdr, corba_any, raw_tcp などカンマ区切りで指定。何も
+   *     指定しなければ利用可能なすべてのプロバイダが使用される
    *
    *
    *
    *   
-   * OutPort ¦�� connect() �Ǥϰʲ��Υ������󥹤ǽ������Ԥ��롣
+   * OutPort 側の connect() では以下のシーケンスで処理が行われる。
    *
-   * 1. OutPort �˴�Ϣ���� connector �������������ӥ��å�
+   * 1. OutPort に関連する connector 情報の生成およびセット
    *
-   * 2. InPort�˴�Ϣ���� connector ����μ���
-   *  - ConnectorProfile::properties["dataport.corba_any.inport_ref"]��
-   *    OutPortAny �Υ��֥������ȥ�ե���󥹤����ꤵ��Ƥ����硢
-   *    ��ե���󥹤��������Consumer���֥������Ȥ˥��åȤ��롣
-   *    ��ե���󥹤����åȤ���Ƥ��ʤ����̵�뤷�Ʒ�³��
-   *    (OutPort��connect() �ƤӽФ��Υ���ȥ�ݥ���Ȥξ��ϡ�
-   *    InPort�Υ��֥������ȥ�ե���󥹤ϥ��åȤ���Ƥ��ʤ��Ϥ��Ǥ��롣)
+   * 2. InPortに関連する connector 情報の取得
+   *  - ConnectorProfile::properties["dataport.corba_any.inport_ref"]に
+   *    OutPortAny のオブジェクトリファレンスが設定されている場合、
+   *    リファレンスを取得してConsumerオブジェクトにセットする。
+   *    リファレンスがセットされていなければ無視して継続。
+   *    (OutPortがconnect() 呼び出しのエントリポイントの場合は、
+   *    InPortのオブジェクトリファレンスはセットされていないはずである。)
    *
-   * 3. PortBase::connect() �򥳡���
-   *    Port����³�δ��ܽ������Ԥ��롣
+   * 3. PortBase::connect() をコール
+   *    Portの接続の基本処理が行われる。
    *
-   * 4. �嵭2.��InPort�Υ�ե���󥹤������Ǥ��ʤ���С�����InPort��
-   *    ��Ϣ���� connector �����������롣
+   * 4. 上記2.でInPortのリファレンスが取得できなければ、再度InPortに
+   *    関連する connector 情報を取得する。
    *
-   * 5. ConnectorProfile::properties ��Ϳ����줿���󤫤顢
-   *    OutPort¦�ν����������Ԥ���
+   * 5. ConnectorProfile::properties で与えられた情報から、
+   *    OutPort側の初期化処理を行う。
    *
    * - [dataport.interface_type]
-   *  - CORBA_Any �ξ��: 
-   *    InPortAny ���̤��ƥǡ����򴹤���롣
-   *    ConnectorProfile::properties["dataport.corba_any.inport_ref"]��
-   *    InPortAny �Υ��֥������ȥ�ե���󥹤򥻥åȤ��롣
-   *  - RawTCP �ξ��: Raw TCP socket ���̤��ƥǡ����򴹤���롣
+   *  - CORBA_Any の場合: 
+   *    InPortAny を通してデータ交換される。
+   *    ConnectorProfile::properties["dataport.corba_any.inport_ref"]に
+   *    InPortAny のオブジェクトリファレンスをセットする。
+   *  - RawTCP の場合: Raw TCP socket を通してデータ交換される。
    *    ConnectorProfile::properties["dataport.raw_tcp.server_addr"]
-   *    ��InPort¦�Υ����Х��ɥ쥹�򥻥åȤ��롣
+   *    にInPort側のサーバアドレスをセットする。
    *
    * - [dataport.dataflow_type]
-   *  - Push�ξ��: Subscriber���������롣Subscriber�Υ����פϡ�
-   *    dataport.subscription_type �����ꤵ��Ƥ��롣
-   *  - Pull�ξ��: InPort¦���ǡ�����Pull���Ǽ������뤿�ᡢ
-   *    �ä˲��⤹��ɬ�פ�̵����
+   *  - Pushの場合: Subscriberを生成する。Subscriberのタイプは、
+   *    dataport.subscription_type に設定されている。
+   *  - Pullの場合: InPort側がデータをPull型で取得するため、
+   *    特に何もする必要が無い。
    *
    * - [dataport.subscription_type]
-   *  - Once�ξ��: SubscriberOnce���������롣
-   *  - New�ξ��: SubscriberNew���������롣
-   *  - Periodic�ξ��: SubscriberPeriodic���������롣
+   *  - Onceの場合: SubscriberOnceを生成する。
+   *  - Newの場合: SubscriberNewを生成する。
+   *  - Periodicの場合: SubscriberPeriodicを生成する。
    *
    * - [dataport.publisher.push_rate]
-   *  - dataport.subscription_type=Periodic�ξ����������ꤹ�롣
+   *  - dataport.subscription_type=Periodicの場合周期を設定する。
    *
-   * 6. �嵭�ν����Τ�����ĤǤ⥨�顼�Ǥ���С����顼�꥿���󤹤롣
-   *    ����˽������Ԥ�줿����RTC::RTC_OK�ǥ꥿���󤹤롣
+   * 6. 上記の処理のうち一つでもエラーであれば、エラーリターンする。
+   *    正常に処理が行われた場合はRTC::RTC_OKでリターンする。
    *
    * @since 0.2.0
    *
@@ -237,12 +237,12 @@ namespace RTC
 
     /*!
      * @if jp
-     * @brief ���󥹥ȥ饯��
+     * @brief コンストラクタ
      *
-     * ���󥹥ȥ饯����
+     * コンストラクタ。
      *
-     * @param name �ݡ���̾
-     * @param data_type �ǡ���������
+     * @param name ポート名
+     * @param data_type データタイプ
      *
      * @else
      * @brief Constructor
@@ -258,10 +258,10 @@ namespace RTC
     
     /*!
      * @if jp
-     * @brief �ǥ��ȥ饯��
+     * @brief デストラクタ
      *
-     * �ǥ��ȥ饯����
-     * ��Ͽ���줿���Ƥ� Publisher �������롣
+     * デストラクタ。
+     * 登録された全ての Publisher を削除する。
      *
      * @else
      *
@@ -276,11 +276,11 @@ namespace RTC
     
     /*!
      * @if jp
-     * @brief �ץ��ѥƥ��ν����
+     * @brief プロパティの初期化
      *
-     * OutPort�Υץ��ѥƥ�����������
+     * OutPortのプロパティを初期化する
      *
-     * @param prop ���ꤹ��ץ��ѥƥ�
+     * @param prop 設定するプロパティ
      * @else
      *
      * @brief Initializing properties
@@ -295,12 +295,12 @@ namespace RTC
     /*!
      * @if jp
      *
-     * @brief �ǡ����񤭹���
+     * @brief データ書き込み
      *
-     * �ݡ��Ȥإǡ�����񤭹��ࡣ
-     * �Х���ɤ��줿�ѿ������ꤵ�줿�ͤ�ݡ��Ȥ˽񤭹��ࡣ
+     * ポートへデータを書き込む。
+     * バインドされた変数に設定された値をポートに書き込む。
      *
-     * @return �񤭹��߽������(�񤭹�������:true���񤭹��߼���:false)
+     * @return 書き込み処理結果(書き込み成功:true、書き込み失敗:false)
      *
      * @else
      *
@@ -317,11 +317,11 @@ namespace RTC
 
     /*!
      * @if jp
-     * @brief �ץ��ѥƥ����������
+     * @brief プロパティを取得する
      *
-     * OutPort�Υץ��ѥƥ���������롣
+     * OutPortのプロパティを取得する。
      *
-     * @return �ץ��ѥƥ�
+     * @return プロパティ
      *
      * @else
      *
@@ -337,11 +337,11 @@ namespace RTC
 
     /*!
      * @if jp
-     * @brief Connector �����
+     * @brief Connector を取得
      *
-     * ���߽�ͭ���Ƥ��륳�ͥ�����������롣
+     * 現在所有しているコネクタを取得する。
      *
-     * @return connector �Υꥹ��
+     * @return connector のリスト
      *
      * @else
      *
@@ -357,11 +357,11 @@ namespace RTC
 
     /*!
      * @if jp
-     * @brief ConnectorProfile �����
+     * @brief ConnectorProfile を取得
      *
-     * ���߽�ͭ���Ƥ��륳�ͥ�����Profile��������롣
+     * 現在所有しているコネクタのProfileを取得する。
      *
-     * @return ConnectorProfile �Υꥹ��
+     * @return ConnectorProfile のリスト
      *
      * @else
      *
@@ -377,11 +377,11 @@ namespace RTC
 
     /*!
      * @if jp
-     * @brief ConnectorId �����
+     * @brief ConnectorId を取得
      *
-     * ���߽�ͭ���Ƥ��륳�ͥ�����ID��������롣
+     * 現在所有しているコネクタのIDを取得する。
      *
-     * @return ConnectorId �Υꥹ��
+     * @return ConnectorId のリスト
      *
      * @else
      *
@@ -397,11 +397,11 @@ namespace RTC
 
     /*!
      * @if jp
-     * @brief Connector��̾�������
+     * @brief Connectorの名前を取得
      *
-     * ���߽�ͭ���Ƥ��륳�ͥ�����̾����������롣
+     * 現在所有しているコネクタの名前を取得する。
      *
-     * @return Connector̾�Υꥹ��
+     * @return Connector名のリスト
      *
      * @else
      *
@@ -417,12 +417,12 @@ namespace RTC
 
     /*!
      * @if jp
-     * @brief ConnectorProfile��ID�Ǽ���
+     * @brief ConnectorProfileをIDで取得
      *
-     * ���߽�ͭ���Ƥ��륳�ͥ�����ID�Ǽ������롣
+     * 現在所有しているコネクタをIDで取得する。
      *
      * @param id Connector ID
-     * @return ���ͥ����ؤΥݥ���
+     * @return コネクタへのポインタ
      *
      * @else
      *
@@ -439,12 +439,12 @@ namespace RTC
 
      /*!
      * @if jp
-     * @brief ConnectorProfile��̾���Ǽ���
+     * @brief ConnectorProfileを名前で取得
      *
-     * ���߽�ͭ���Ƥ��륳�ͥ�����̾���Ǽ������롣
+     * 現在所有しているコネクタを名前で取得する。
      *
      * @param name Connector name
-     * @return ���ͥ����ؤΥݥ���
+     * @return コネクタへのポインタ
      *
      * @else
      *
@@ -461,13 +461,13 @@ namespace RTC
 
     /*!
      * @if jp
-     * @brief ConnectorProfile��ID�Ǽ���
+     * @brief ConnectorProfileをIDで取得
      *
-     * ���߽�ͭ���Ƥ��륳�ͥ�����ID�Ǽ������롣
+     * 現在所有しているコネクタをIDで取得する。
      *
      * @param id Connector ID
      * @param prof ConnectorProfile
-     * @return false ���ꤷ��ID���ʤ�
+     * @return false 指定したIDがない
      *
      * @else
      *
@@ -477,7 +477,7 @@ namespace RTC
      *
      * @param id Connector ID
      * @param prof ConnectorProfile
-     * @return false��specified ID does not exist
+     * @return false　specified ID does not exist
      *
      * @endif
      */
@@ -486,13 +486,13 @@ namespace RTC
 
     /*!
      * @if jp
-     * @brief ConnectorProfile��̾���Ǽ���
+     * @brief ConnectorProfileを名前で取得
      *
-     * ���߽�ͭ���Ƥ��륳�ͥ�����̾���Ǽ������롣
+     * 現在所有しているコネクタを名前で取得する。
      *
      * @param name Connector name
      * @param prof ConnectorProfile
-     * @return false ���ꤷ��̾�����ʤ�
+     * @return false 指定した名前がない
      *
      * @else
      *
@@ -513,9 +513,9 @@ namespace RTC
     /*!
      * @if jp
      *
-     * @brief ���Ƥ� Port �Υ��󥿡��ե������� activate ����
+     * @brief 全ての Port のインターフェースを activate する
      *
-     * Port ����Ͽ����Ƥ������ƤΥ��󥿡��ե������� activate ���롣
+     * Port に登録されている全てのインターフェースを activate する。
      *
      * @else
      *
@@ -531,9 +531,9 @@ namespace RTC
     /*!
      * @if jp
      *
-     * @brief ���Ƥ� Port �Υ��󥿡��ե������� deactivate ����
+     * @brief 全ての Port のインターフェースを deactivate する
      *
-     * Port ����Ͽ����Ƥ������ƤΥ��󥿡��ե������� deactivate ���롣
+     * Port に登録されている全てのインターフェースを deactivate する。
      *
      * @else
      *
@@ -549,40 +549,40 @@ namespace RTC
 
     /*!
      * @if jp
-     * @brief ConnectorDataListener �ꥹ�ʤ��ɲä���
+     * @brief ConnectorDataListener リスナを追加する
      *
-     * �Хåե��񤭹��ߤޤ����ɤ߽Ф����٥�Ȥ˴�Ϣ����Ƽ�ꥹ�ʤ����ꤹ�롣
+     * バッファ書き込みまたは読み出しイベントに関連する各種リスナを設定する。
      *
-     * ����Ǥ���ꥹ�ʤΥ����פȥ�����Хå����٥�Ȥϰʲ����̤�
+     * 設定できるリスナのタイプとコールバックイベントは以下の通り
      *
-     * - ON_BUFFER_WRITE:          �Хåե��񤭹��߻�
-     * - ON_BUFFER_FULL:           �Хåե��ե��
-     * - ON_BUFFER_WRITE_TIMEOUT:  �Хåե��񤭹��ߥ����ॢ���Ȼ�
-     * - ON_BUFFER_OVERWRITE:      �Хåե���񤭻�
-     * - ON_BUFFER_READ:           �Хåե��ɤ߽Ф���
-     * - ON_SEND:                  InProt�ؤ�������
-     * - ON_RECEIVED:              InProt�ؤ�������λ��
-     * - ON_SEND_ERTIMEOUT:        OutPort¦�����ॢ���Ȼ�
-     * - ON_SEND_ERERROR:          OutPort¦���顼��
-     * - ON_RECEIVER_FULL:         InProt¦�Хåե��ե��
-     * - ON_RECEIVER_TIMEOUT:      InProt¦�Хåե������ॢ���Ȼ�
-     * - ON_RECEIVER_ERROR:        InProt¦���顼��
+     * - ON_BUFFER_WRITE:          バッファ書き込み時
+     * - ON_BUFFER_FULL:           バッファフル時
+     * - ON_BUFFER_WRITE_TIMEOUT:  バッファ書き込みタイムアウト時
+     * - ON_BUFFER_OVERWRITE:      バッファ上書き時
+     * - ON_BUFFER_READ:           バッファ読み出し時
+     * - ON_SEND:                  InProtへの送信時
+     * - ON_RECEIVED:              InProtへの送信完了時
+     * - ON_SEND_ERTIMEOUT:        OutPort側タイムアウト時
+     * - ON_SEND_ERERROR:          OutPort側エラー時
+     * - ON_RECEIVER_FULL:         InProt側バッファフル時
+     * - ON_RECEIVER_TIMEOUT:      InProt側バッファタイムアウト時
+     * - ON_RECEIVER_ERROR:        InProt側エラー時
      *
-     * �ꥹ�ʤ� ConnectorDataListener ��Ѿ������ʲ��Υ����˥�������
-     * operator() ��������Ƥ���ɬ�פ����롣
+     * リスナは ConnectorDataListener を継承し、以下のシグニチャを持つ
+     * operator() を実装している必要がある。
      *
      * ConnectorDataListener::
      *         operator()(const ConnectorProfile&, const cdrStream&)
      *
-     * �ǥե���ȤǤϡ����δؿ���Ϳ�����ꥹ�ʥ��֥������Ȥν�ͭ����
-     * OutPort�˰ܤꡢOutPort���λ��⤷���ϡ�
-     * removeConnectorDataListener() �ˤ�������˼�ưŪ�˲��Τ���롣
-     * �ꥹ�ʥ��֥������Ȥν�ͭ����ƤӽФ�¦�ǰݻ����������ϡ���3��
-     * ���� false ����ꤷ����ưŪ�ʲ��Τ��������뤳�Ȥ��Ǥ��롣
+     * デフォルトでは、この関数に与えたリスナオブジェクトの所有権は
+     * OutPortに移り、OutPort解体時もしくは、
+     * removeConnectorDataListener() により削除時に自動的に解体される。
+     * リスナオブジェクトの所有権を呼び出し側で維持したい場合は、第3引
+     * 数に false を指定し、自動的な解体を抑制することができる。
      *
-     * @param listener_type �ꥹ�ʥ�����
-     * @param listener �ꥹ�ʥ��֥������ȤؤΥݥ���
-     * @param autoclean �ꥹ�ʥ��֥������Ȥμ�ưŪ���Τ�Ԥ����ɤ����Υե饰
+     * @param listener_type リスナタイプ
+     * @param listener リスナオブジェクトへのポインタ
+     * @param autoclean リスナオブジェクトの自動的解体を行うかどうかのフラグ
      *
      * @else
      * @brief Adding BufferDataListener type listener
@@ -629,12 +629,12 @@ namespace RTC
 
     /*!
      * @if jp
-     * @brief ConnectorDataListener �ꥹ�ʤ�������
+     * @brief ConnectorDataListener リスナを削除する
      *
-     * ���ꤷ���Ƽ�ꥹ�ʤ������롣
+     * 設定した各種リスナを削除する。
      * 
-     * @param listener_type �ꥹ�ʥ�����
-     * @param listener �ꥹ�ʥ��֥������ȤؤΥݥ���
+     * @param listener_type リスナタイプ
+     * @param listener リスナオブジェクトへのポインタ
      *
      * @else
      * @brief Removing BufferDataListener type listener
@@ -652,28 +652,28 @@ namespace RTC
 
     /*!
      * @if jp
-     * @brief ConnectorListener �ꥹ�ʤ��ɲä���
+     * @brief ConnectorListener リスナを追加する
      *
-     * �Хåե��񤭹��ߤޤ����ɤ߽Ф����٥�Ȥ˴�Ϣ����Ƽ�ꥹ�ʤ����ꤹ�롣
+     * バッファ書き込みまたは読み出しイベントに関連する各種リスナを設定する。
      *
-     * ����Ǥ���ꥹ�ʤΥ����פ�
+     * 設定できるリスナのタイプは
      *
-     * - ON_BUFFER_EMPTY:       �Хåե������ξ��
-     * - ON_BUFFER_READTIMEOUT: �Хåե������ǥ����ॢ���Ȥ������
+     * - ON_BUFFER_EMPTY:       バッファが空の場合
+     * - ON_BUFFER_READTIMEOUT: バッファが空でタイムアウトした場合
      *
-     * �ꥹ�ʤϰʲ��Υ����˥������� operator() ��������Ƥ���ɬ�פ����롣
+     * リスナは以下のシグニチャを持つ operator() を実装している必要がある。
      *
      * ConnectorListener::operator()(const ConnectorProfile&)
      *
-     * �ǥե���ȤǤϡ����δؿ���Ϳ�����ꥹ�ʥ��֥������Ȥν�ͭ����
-     * OutPort�˰ܤꡢOutPort���λ��⤷���ϡ�
-     * removeConnectorListener() �ˤ�������˼�ưŪ�˲��Τ���롣
-     * �ꥹ�ʥ��֥������Ȥν�ͭ����ƤӽФ�¦�ǰݻ����������ϡ���3��
-     * ���� false ����ꤷ����ưŪ�ʲ��Τ��������뤳�Ȥ��Ǥ��롣
+     * デフォルトでは、この関数に与えたリスナオブジェクトの所有権は
+     * OutPortに移り、OutPort解体時もしくは、
+     * removeConnectorListener() により削除時に自動的に解体される。
+     * リスナオブジェクトの所有権を呼び出し側で維持したい場合は、第3引
+     * 数に false を指定し、自動的な解体を抑制することができる。
      *
-     * @param listener_type �ꥹ�ʥ�����
-     * @param listener �ꥹ�ʥ��֥������ȤؤΥݥ���
-     * @param autoclean �ꥹ�ʥ��֥������Ȥμ�ưŪ���Τ�Ԥ����ɤ����Υե饰
+     * @param listener_type リスナタイプ
+     * @param listener リスナオブジェクトへのポインタ
+     * @param autoclean リスナオブジェクトの自動的解体を行うかどうかのフラグ
      *
      * @else
      * @brief Adding ConnectorListener type listener
@@ -708,12 +708,12 @@ namespace RTC
 
     /*!
      * @if jp
-     * @brief ConnectorDataListener �ꥹ�ʤ�������
+     * @brief ConnectorDataListener リスナを削除する
      *
-     * ���ꤷ���Ƽ�ꥹ�ʤ������롣
+     * 設定した各種リスナを削除する。
      * 
-     * @param listener_type �ꥹ�ʥ�����
-     * @param listener �ꥹ�ʥ��֥������ȤؤΥݥ���
+     * @param listener_type リスナタイプ
+     * @param listener リスナオブジェクトへのポインタ
      *
      * @else
      * @brief Removing BufferDataListener type listener
@@ -730,11 +730,11 @@ namespace RTC
 
     /*!
      * @if jp
-     * @brief endian ������֤�
+     * @brief endian 設定を返す
      *
-     * endian �����bool�ͤ��֤���
+     * endian 設定のbool値を返す。
      *
-     * @return m_littleEndian ��little�ξ��true��big�ξ��false ���֤���
+     * @return m_littleEndian がlittleの場合true、bigの場合false を返す。
      *
      * @else
      * @brief
@@ -750,14 +750,14 @@ namespace RTC
     /*!
      * @if jp
      *
-     * @brief [CORBA interface] Port ����³��Ԥ�
+     * @brief [CORBA interface] Port の接続を行う
      *
-     * Ϳ����줿 ConnectoionProfile �ξ���˴�Ť���Port�֤���³���Ω
-     * ���롣���δؿ��ϼ�˥��ץꥱ�������ץ�������ġ��뤫��Ƥӽ�
-     * �����Ȥ�����Ȥ��Ƥ��롣
+     * 与えられた ConnectoionProfile の情報に基づき、Port間の接続を確立
+     * する。この関数は主にアプリケーションプログラムやツールから呼び出
+     * すことを前提としている。
      * 
      * @param connector_profile ConnectorProfile
-     * @return ReturnCode_t ���Υ꥿���󥳡���
+     * @return ReturnCode_t 型のリターンコード
      *
      * @else
      *
@@ -780,9 +780,9 @@ namespace RTC
   protected:
     /*!
      * @if jp
-     * @brief OutPort�������Ԥ�
+     * @brief OutPortの設定を行う
      *
-     * properties�ξ���˴�Ť�OutPort�γƼ������Ԥ�
+     * propertiesの情報に基づきOutPortの各種設定を行う
      *
      * @else
      *
@@ -797,25 +797,25 @@ namespace RTC
     /*!
      * @if jp
      *
-     * @brief Interface ������������
+     * @brief Interface 情報を公開する
      *
-     * ���Υ��ڥ졼�����ϡ�notify_connect() �����������󥹤λϤ�˥�����
-     * ������貾�۴ؿ��Ǥ��롣
-     * notify_connect() �Ǥϡ�
+     * このオペレーションは、notify_connect() 処理シーケンスの始めにコール
+     * される純粋仮想関数である。
+     * notify_connect() では、
      *
      * - publishInterfaces()
      * - connectNext()
      * - subscribeInterfaces()
      * - updateConnectorProfile()
      *
-     * �ν�� protected �ؿ��������뤵����³�������Ԥ��롣
+     * の順に protected 関数がコールされ接続処理が行われる。
      * <br>
-     * ���Υ��ڥ졼�����ϡ������� connector_id ���Ф��Ƥ���³��������
-     * ��¸�� connector_id ���Ф��ƤϹ�����Ŭ�ڤ˹Ԥ���ɬ�פ����롣
+     * このオペレーションは、新規の connector_id に対しては接続の生成、
+     * 既存の connector_id に対しては更新が適切に行われる必要がある。
      *
-     * @param connector_profile ��³�˴ؤ���ץ��ե��������
+     * @param connector_profile 接続に関するプロファイル情報
      *
-     * @return ReturnCode_t ���Υ꥿���󥳡���
+     * @return ReturnCode_t 型のリターンコード
      *
      * @else
      *
@@ -845,22 +845,22 @@ namespace RTC
     
     /*! @if jp
      *
-     * @brief Interface ����³����
+     * @brief Interface に接続する
      *
-     * ���Υ��ڥ졼�����ϡ�notify_connect() �����������󥹤���֤˥�����
-     * ������貾�۴ؿ��Ǥ��롣
-     * notify_connect() �Ǥϡ�
+     * このオペレーションは、notify_connect() 処理シーケンスの中間にコール
+     * される純粋仮想関数である。
+     * notify_connect() では、
      *
      * - publishInterfaces()
      * - connectNext()
      * - subscribeInterfaces()
      * - updateConnectorProfile()
      *
-     * �ν�� protected �ؿ��������뤵����³�������Ԥ��롣
+     * の順に protected 関数がコールされ接続処理が行われる。
      *
-     * @param connector_profile ��³�˴ؤ���ץ��ե��������
+     * @param connector_profile 接続に関するプロファイル情報
      *
-     * @return ReturnCode_t ���Υ꥿���󥳡���
+     * @return ReturnCode_t 型のリターンコード
      *
      * @else
      *
@@ -887,17 +887,17 @@ namespace RTC
     /*!
      * @if jp
      *
-     * @brief Interface ����³��������
+     * @brief Interface の接続を解除する
      *
-     * ���Υ��ڥ졼�����ϡ�notify_disconnect() �����������󥹤ν����˥�����
-     * ������貾�۴ؿ��Ǥ��롣
-     * notify_disconnect() �Ǥϡ�
+     * このオペレーションは、notify_disconnect() 処理シーケンスの終わりにコール
+     * される純粋仮想関数である。
+     * notify_disconnect() では、
      * - disconnectNext()
      * - unsubscribeInterfaces()
      * - eraseConnectorProfile()
-     * �ν�� protected �ؿ��������뤵����³����������Ԥ��롣
+     * の順に protected 関数がコールされ接続解除処理が行われる。
      *
-     * @param connector_profile ��³�˴ؤ���ץ��ե��������
+     * @param connector_profile 接続に関するプロファイル情報
      *
      * @else
      *
@@ -920,7 +920,7 @@ namespace RTC
 
     /*!
      * @if jp
-     * @brief OutPort provider �ν����
+     * @brief OutPort provider の初期化
      * @else
      * @brief OutPort provider initialization
      * @endif
@@ -929,7 +929,7 @@ namespace RTC
 
     /*!
      * @if jp
-     * @brief InPort consumer �ν����
+     * @brief InPort consumer の初期化
      * @else
      * @brief InPort consumer initialization
      * @endif
@@ -938,18 +938,18 @@ namespace RTC
 
     /*!
      * @if jp
-     * @brief ���ꥢ�饤���Υ���ǥ����������å�����
+     * @brief シリアライザのエンディアンをチェックする
      *
-     * Ϳ����줿�ץ��ѥƥ������ꤵ��Ƥ��롢�ǡ����Υ��ꥢ�饤���Υ���
-     * �ǥ�������������å����롣����������ǥ�������꤬�ʤ���Ƥ���
-     * �С�true ���֤������� littleEndian �ˡ������ͤ���ȥ륨��ǥ���
-     * ��Ǥ���� true �����ӥå�����ǥ�����Ǥ���� false ���֤���롣
+     * 与えられたプロパティに設定されている、データのシリアライザのエン
+     * ディアン指定をチェックする。正しいエンディアン指定がなされていれ
+     * ば、true を返し、引数 littleEndian に、設定値がリトルエンディア
+     * ンであれば true が、ビッグエンディアンであれば false が返される。
      *
-     * @param prop �����å�����ץ��ѥƥ�
-     * @param littleEndian ����ǥ���������true:little,false:big��
-     * @return true:"serializer"������¸�ߤ��ʤ� �ޤ��� ¸�ߤ��Ƥ������Ƥ����롣
-     *         false:"serializer"������¸�ߤ��Ƥ��뤬���Ƥ��� �ޤ��� ¸
-     *         �ߤ��Ƥ��뤬���Ƥ�"little","big" �ʳ���
+     * @param prop チェックするプロパティ
+     * @param littleEndian エンディアン情報（true:little,false:big）
+     * @return true:"serializer"キーが存在しない または 存在していて内容がある。
+     *         false:"serializer"キーが存在しているが内容が空 または 存
+     *         在しているが内容が"little","big" 以外。
      *
      * @else
      *
@@ -975,7 +975,7 @@ namespace RTC
 
     /*!
      * @if jp
-     * @brief OutPort provider ������
+     * @brief OutPort provider の生成
      * @else
      * @brief OutPort provider creation
      * @endif
@@ -984,7 +984,7 @@ namespace RTC
                                     coil::Properties& prop);
     /*!
      * @if jp
-     * @brief InPort consumer ������
+     * @brief InPort consumer の生成
      * @else
      * @brief InPort consumer creation
      * @endif
@@ -994,7 +994,7 @@ namespace RTC
     
     /*!
      * @if jp
-     * @brief OutPortPushConnector ������
+     * @brief OutPortPushConnector の生成
      * @else
      * @brief OutPortPushConnector creation
      * @endif
@@ -1004,7 +1004,7 @@ namespace RTC
                                       InPortConsumer* consumer);
     /*!
      * @if jp
-     * @brief OutPortPullConnector ������
+     * @brief OutPortPullConnector の生成
      * @else
      * @brief OutPortPullConnector creation
      * @endif
@@ -1016,7 +1016,7 @@ namespace RTC
   protected:
     /*!
      * @if jp
-     * @brief ��������Υԥ�InPort�����
+     * @brief ローカルのピアInPortを取得
      * @else
      * @brief Getting local peer InPort if available
      * @endif
@@ -1025,7 +1025,7 @@ namespace RTC
     
     /*!
      * @if jp
-     * @brief �ץ��ѥƥ�
+     * @brief プロパティ
      * @else
      * @brief Properties
      * @endif
@@ -1033,7 +1033,7 @@ namespace RTC
     coil::Properties m_properties;
     /*!
      * @if jp
-     * @brief ��³�ꥹ��
+     * @brief 接続リスト
      * @else
      * @brief Connection list
      * @endif
@@ -1041,7 +1041,7 @@ namespace RTC
     std::vector<OutPortConnector*> m_connectors;
     /*!
      * @if jp
-     * @brief ���Ѳ�ǽprovider
+     * @brief 利用可能provider
      * @else
      * @brief Available providers
      * @endif
@@ -1049,7 +1049,7 @@ namespace RTC
     coil::vstring m_providerTypes;
     /*!
      * @if jp
-     * @brief ���Ѳ�ǽconsumer
+     * @brief 利用可能consumer
      * @else
      * @brief Available consumers
      * @endif
@@ -1057,7 +1057,7 @@ namespace RTC
     coil::vstring m_consumerTypes;
     /*!
      * @if jp
-     * @brief ��³����ǥ����� 
+     * @brief 接続エンディアン 
      * @else
      * @brief Connected Endian
      * @endif
@@ -1065,7 +1065,7 @@ namespace RTC
     bool m_littleEndian;
     /*!
      * @if jp
-     * @brief ConnectorDataListener �ꥹ��
+     * @brief ConnectorDataListener リスナ
      * @else
      * @brief ConnectorDataListener listener
      * @endif
@@ -1074,7 +1074,7 @@ namespace RTC
    
     /*!
      * @if jp
-     * @brief provider �������뤿��� Functor
+     * @brief provider を削除するための Functor
      * @else
      * @brief Functor to delete providers
      * @endif
@@ -1083,7 +1083,7 @@ namespace RTC
 
     /*!
      * @if jp
-     * @brief connector �������뤿��� Functor
+     * @brief connector を削除するための Functor
      * @else
      * @brief Functor to delete connectors
      * @endif

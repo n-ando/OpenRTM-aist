@@ -1,4 +1,4 @@
-// -*- C++ -*-
+ï»¿// -*- C++ -*-
 /*!
  * @file PeriodicECSharedComposite.h
  * @brief Periodic Execution Context Shared Composite Component class
@@ -31,7 +31,7 @@
  * @if jp
  * @namespace SDOPackage
  *
- * @brief SDO ¥Ñ¥Ã¥±¡¼¥¸
+ * @brief SDO ãƒ‘ãƒƒã‚±ãƒ¼ã‚¸
  *
  * @else
  *
@@ -51,9 +51,9 @@ namespace SDOPackage
   /*!
    * @if jp
    * @class PeriodicECOrganization
-   * @brief PeriodicECOrganization ¥¯¥é¥¹
+   * @brief PeriodicECOrganization ã‚¯ãƒ©ã‚¹
    *
-   * Organization_imp ¤Î¼ÂÁõ
+   * Organization_imp ã®å®Ÿè£…
    *
    * @else
    * @class PeriodicECOrganization
@@ -71,11 +71,11 @@ namespace SDOPackage
   public:
     /*!
      * @if jp
-     * @brief ¥³¥ó¥¹¥È¥é¥¯¥¿
+     * @brief ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
      *
-     * ¥³¥ó¥¹¥È¥é¥¯¥¿
+     * ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
      *
-     * @param rtobj ¥ª¥Ö¥¸¥§¥¯¥È
+     * @param rtobj ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
      *
      * @else
      * @brief Constructor
@@ -89,9 +89,9 @@ namespace SDOPackage
     PeriodicECOrganization(::RTC::RTObject_impl* rtobj);
     /*!
      * @if jp
-     * @brief ¥Ç¥¹¥È¥é¥¯¥¿
+     * @brief ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
      *
-     * ¥Ç¥¹¥È¥é¥¯¥¿
+     * ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
      *
      * @else
      * @brief Destructor
@@ -105,12 +105,12 @@ namespace SDOPackage
     /*!
      * @if jp
      * 
-     * @brief [CORBA interface] Organization¥á¥ó¥Ğ¡¼¤òÄÉ²Ã¤¹¤ë
+     * @brief [CORBA interface] Organizationãƒ¡ãƒ³ãƒãƒ¼ã‚’è¿½åŠ ã™ã‚‹
      *
-     * Organization ¤¬Êİ»ı¤¹¤ë¥á¥ó¥Ğ¡¼¥ê¥¹¥È¤ËÍ¿¤¨¤é¤ì¤¿SDOList¤òÄÉ²Ã¤¹¤ë¡£
+     * Organization ãŒä¿æŒã™ã‚‹ãƒ¡ãƒ³ãƒãƒ¼ãƒªã‚¹ãƒˆã«ä¸ãˆã‚‰ã‚ŒãŸSDOListã‚’è¿½åŠ ã™ã‚‹ã€‚
      * 
-     * @param sdo_list ÄÉ²Ã¤µ¤ì¤ë SDO ¥á¥ó¥Ğ¡¼¤Î¥ê¥¹¥È
-     * @return ÄÉ²Ã¤¬À®¸ù¤·¤¿¤«¤É¤¦¤«¤¬bool¤ÇÊÖ¤µ¤ì¤ë
+     * @param sdo_list è¿½åŠ ã•ã‚Œã‚‹ SDO ãƒ¡ãƒ³ãƒãƒ¼ã®ãƒªã‚¹ãƒˆ
+     * @return è¿½åŠ ãŒæˆåŠŸã—ãŸã‹ã©ã†ã‹ãŒboolã§è¿”ã•ã‚Œã‚‹
      *
      * @else
      * 
@@ -131,13 +131,13 @@ namespace SDOPackage
     /*!
      * @if jp
      * 
-     * @brief [CORBA interface] Organization¥á¥ó¥Ğ¡¼¤ò¥»¥Ã¥È¤¹¤ë
+     * @brief [CORBA interface] Organizationãƒ¡ãƒ³ãƒãƒ¼ã‚’ã‚»ãƒƒãƒˆã™ã‚‹
      *
-     * Organization ¤¬Êİ»ı¤¹¤ë¥á¥ó¥Ğ¡¼¥ê¥¹¥È¤òºï½ü¤·¡¢Í¿¤¨¤é¤ì¤¿
-     * SDOList¤ò¿·µ¬¤Ë¥»¥Ã¥È¤¹¤ë¡£
+     * Organization ãŒä¿æŒã™ã‚‹ãƒ¡ãƒ³ãƒãƒ¼ãƒªã‚¹ãƒˆã‚’å‰Šé™¤ã—ã€ä¸ãˆã‚‰ã‚ŒãŸ
+     * SDOListã‚’æ–°è¦ã«ã‚»ãƒƒãƒˆã™ã‚‹ã€‚
      * 
-     * @param sdo_list ¿·µ¬¤Ë¥»¥Ã¥È¤µ¤ì¤ë SDO ¥á¥ó¥Ğ¡¼¤Î¥ê¥¹¥È
-     * @return ÄÉ²Ã¤¬À®¸ù¤·¤¿¤«¤É¤¦¤«¤¬bool¤ÇÊÖ¤µ¤ì¤ë
+     * @param sdo_list æ–°è¦ã«ã‚»ãƒƒãƒˆã•ã‚Œã‚‹ SDO ãƒ¡ãƒ³ãƒãƒ¼ã®ãƒªã‚¹ãƒˆ
+     * @return è¿½åŠ ãŒæˆåŠŸã—ãŸã‹ã©ã†ã‹ãŒboolã§è¿”ã•ã‚Œã‚‹
      *
      * @else
      * 
@@ -158,12 +158,12 @@ namespace SDOPackage
     /*!
      * @if jp
      * 
-     * @brief [CORBA interface] Organization¥á¥ó¥Ğ¡¼¤òºï½ü¤¹¤ë
+     * @brief [CORBA interface] Organizationãƒ¡ãƒ³ãƒãƒ¼ã‚’å‰Šé™¤ã™ã‚‹
      *
-     * Organization ¤¬Êİ»ı¤¹¤ë¥á¥ó¥Ğ¡¼¥ê¥¹¥ÈÆâ¤ÎÆÃÄê¤ÎSDO¤òºï½ü¤¹¤ë¡£
+     * Organization ãŒä¿æŒã™ã‚‹ãƒ¡ãƒ³ãƒãƒ¼ãƒªã‚¹ãƒˆå†…ã®ç‰¹å®šã®SDOã‚’å‰Šé™¤ã™ã‚‹ã€‚
      * 
-     * @param id ºï½ü¤µ¤ì¤ë SDO ¤Î ID
-     * @return ÄÉ²Ã¤¬À®¸ù¤·¤¿¤«¤É¤¦¤«¤¬bool¤ÇÊÖ¤µ¤ì¤ë
+     * @param id å‰Šé™¤ã•ã‚Œã‚‹ SDO ã® ID
+     * @return è¿½åŠ ãŒæˆåŠŸã—ãŸã‹ã©ã†ã‹ãŒboolã§è¿”ã•ã‚Œã‚‹
      *
      * @else
      * 
@@ -182,7 +182,7 @@ namespace SDOPackage
 
     /*!
      * @if jp
-     * @brief Organization¥á¥ó¥Ğ¡¼¤òºï½ü¤¹¤ë
+     * @brief Organizationãƒ¡ãƒ³ãƒãƒ¼ã‚’å‰Šé™¤ã™ã‚‹
      * @else
      * @brief Remove a member of Organization
      * @endif
@@ -190,7 +190,7 @@ namespace SDOPackage
     void removeAllMembers(void);
     /*!
      * @if jp
-     * @brief Organization¥á¥ó¥Ğ¡¼¤ò¹¹¿·/ºï½ü¤¹¤ë
+     * @brief Organizationãƒ¡ãƒ³ãƒãƒ¼ã‚’æ›´æ–°/å‰Šé™¤ã™ã‚‹
      * @else
      * @brief Update/Remove a member of Organization
      * @endif
@@ -201,7 +201,7 @@ namespace SDOPackage
     class Member;
     /*!
      * @if jp
-     * @brief SDO¤«¤éDFC¤Ø¤ÎÊÑ´¹
+     * @brief SDOã‹ã‚‰DFCã¸ã®å¤‰æ›
      * @else
      * @brief Conversion from SDO to DFC
      * @endif
@@ -210,7 +210,7 @@ namespace SDOPackage
 
     /*!
      * @if jp
-     * @brief Owned ExecutionContext ¤òÄä»ß¤µ¤»¤ë
+     * @brief Owned ExecutionContext ã‚’åœæ­¢ã•ã›ã‚‹
      * @else
      * @brief Stop Owned ExecutionContexts
      * @endif
@@ -219,7 +219,7 @@ namespace SDOPackage
 
     /*!
      * @if jp
-     * @brief Owned ExecutionContext ¤òµ¯Æ°¤¹¤ë
+     * @brief Owned ExecutionContext ã‚’èµ·å‹•ã™ã‚‹
      * @else
      * @brief Start Owned ExecutionContexts
      * @endif
@@ -228,7 +228,7 @@ namespace SDOPackage
 
     /*!
      * @if jp
-     * @brief DFC ¤Ë Organization ¥ª¥Ö¥¸¥§¥¯¥È¤òÍ¿¤¨¤ë
+     * @brief DFC ã« Organization ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’ä¸ãˆã‚‹
      * @else
      * @brief Set Organization object to target DFC 
      * @endif
@@ -237,7 +237,7 @@ namespace SDOPackage
 
     /*!
      * @if jp
-     * @brief Organization ¥ª¥Ö¥¸¥§¥¯¥È¤ò DFC¤«¤éºï½ü¤¹¤ë
+     * @brief Organization ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’ DFCã‹ã‚‰å‰Šé™¤ã™ã‚‹
      * @else
      * @brief Remove Organization object from a target DFC 
      * @endif
@@ -246,7 +246,7 @@ namespace SDOPackage
 
     /*!
      * @if jp
-     * @brief Composite ¤Î ExecutionContext ¤ò DFC ¤Ë¥»¥Ã¥È¤¹¤ë
+     * @brief Composite ã® ExecutionContext ã‚’ DFC ã«ã‚»ãƒƒãƒˆã™ã‚‹
      * @else
      * @brief Set CompositeRTC's ExecutionContext to the given DFC
      * @endif
@@ -255,7 +255,7 @@ namespace SDOPackage
 
     /*!
      * @if jp
-     * @brief Composite ¤Î ExecutionContext ¤«¤é DFC ¤òºï½ü¤¹¤ë
+     * @brief Composite ã® ExecutionContext ã‹ã‚‰ DFC ã‚’å‰Šé™¤ã™ã‚‹
      * @else
      * @brief Remove participant DFC from CompositeRTC's ExecutionContext
      * @endif
@@ -264,7 +264,7 @@ namespace SDOPackage
 
     /*!
      * @if jp
-     * @brief ¥İ¡¼¥È¤ò°Ñ¾ù¤¹¤ë
+     * @brief ãƒãƒ¼ãƒˆã‚’å§”è­²ã™ã‚‹
      * @else
      * @brief Delegate given RTC's ports to the Composite
      * @endif
@@ -273,7 +273,7 @@ namespace SDOPackage
 
     /*!
      * @if jp
-     * @brief °Ñ¾ù¤·¤Æ¤¤¤¿¥İ¡¼¥È¤òºï½ü¤¹¤ë
+     * @brief å§”è­²ã—ã¦ã„ãŸãƒãƒ¼ãƒˆã‚’å‰Šé™¤ã™ã‚‹
      * @else
      * @brief Remove delegated participatns's ports from the composite
      * @endif
@@ -282,7 +282,7 @@ namespace SDOPackage
 
     /*!
      * @if jp
-     * @brief PortsList¤ò¹¹¿·¤¹¤ë
+     * @brief PortsListã‚’æ›´æ–°ã™ã‚‹
      * @else
      * @brief PortsList is updated. 
      * @endif
@@ -292,7 +292,7 @@ namespace SDOPackage
   protected:
     /*!
      * @if jp
-     * @brief ¥í¥¬¡¼¥¹¥È¥ê¡¼¥à
+     * @brief ãƒ­ã‚¬ãƒ¼ã‚¹ãƒˆãƒªãƒ¼ãƒ 
      * @else
      * @brief Logger stream
      * @endif
@@ -301,7 +301,7 @@ namespace SDOPackage
 
     /*!
      * @if jp
-     * @brief RT ¥ª¥Ö¥¸¥§¥¯¥È
+     * @brief RT ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
      * @else
      * @brief RT Object
      * @endif
@@ -310,7 +310,7 @@ namespace SDOPackage
 
     /*!
      * @if jp
-     * @brief ExecutionContext ¥ª¥Ö¥¸¥§¥¯¥È¥ê¥Õ¥¡¥ì¥ó¥¹
+     * @brief ExecutionContext ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆãƒªãƒ•ã‚¡ãƒ¬ãƒ³ã‚¹
      * @else
      * @brief ExecutionContext Object reference
      * @endif
@@ -388,7 +388,7 @@ namespace SDOPackage
 
     /*!
      * @if jp
-     * @brief RTC¥á¥ó¥Ğ¡¼¥ê¥¹¥È
+     * @brief RTCãƒ¡ãƒ³ãƒãƒ¼ãƒªã‚¹ãƒˆ
      * @else
      * @brief Member list
      * @endif
@@ -407,7 +407,7 @@ namespace SDOPackage
     
     /*!
      * @if jp
-     * @brief PortList¤òÉ¸½à½ĞÎÏ¤¹¤ë¡£
+     * @brief PortListã‚’æ¨™æº–å‡ºåŠ›ã™ã‚‹ã€‚
      * @else
      * @brief Output PortList to StandardOutput. 
      * @endif
@@ -427,7 +427,7 @@ namespace SDOPackage
  * @if jp
  * @namespace RTC
  *
- * @brief RT¥³¥ó¥İ¡¼¥Í¥ó¥È
+ * @brief RTã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆ
  *
  * @else
  *
@@ -444,11 +444,11 @@ namespace RTC
   /*!
    * @if jp
    * @class PeriodicECSharedComposite
-   * @brief PeriodicECSharedComposite ¥¯¥é¥¹
+   * @brief PeriodicECSharedComposite ã‚¯ãƒ©ã‚¹
    *
-   * ¥Ç¡¼¥¿¥Õ¥í¡¼·¿RTComponent¤Î´ğÄì¥¯¥é¥¹¡£
-   * ³Æ¼ï¥Ç¡¼¥¿¥Õ¥í¡¼·¿RTComponent¤ò¼ÂÁõ¤¹¤ë¾ì¹ç¤Ï¡¢ËÜ¥¯¥é¥¹¤ò·Ñ¾µ¤¹¤ë·Á¤Ç¼ÂÁõ
-   * ¤¹¤ë¡£
+   * ãƒ‡ãƒ¼ã‚¿ãƒ•ãƒ­ãƒ¼å‹RTComponentã®åŸºåº•ã‚¯ãƒ©ã‚¹ã€‚
+   * å„ç¨®ãƒ‡ãƒ¼ã‚¿ãƒ•ãƒ­ãƒ¼å‹RTComponentã‚’å®Ÿè£…ã™ã‚‹å ´åˆã¯ã€æœ¬ã‚¯ãƒ©ã‚¹ã‚’ç¶™æ‰¿ã™ã‚‹å½¢ã§å®Ÿè£…
+   * ã™ã‚‹ã€‚
    *
    * @since 0.4.0
    *
@@ -469,11 +469,11 @@ namespace RTC
   public:
     /*!
      * @if jp
-     * @brief ¥³¥ó¥¹¥È¥é¥¯¥¿
+     * @brief ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
      *
-     * ¥³¥ó¥¹¥È¥é¥¯¥¿
+     * ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
      *
-     * @param manager ¥Ş¥Í¡¼¥¸¥ã¥ª¥Ö¥¸¥§¥¯¥È
+     * @param manager ãƒãƒãƒ¼ã‚¸ãƒ£ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
      *
      * @else
      * @brief Constructor
@@ -488,9 +488,9 @@ namespace RTC
     
     /*!
      * @if jp
-     * @brief ¥Ç¥¹¥È¥é¥¯¥¿
+     * @brief ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
      *
-     * ¥Ç¥¹¥È¥é¥¯¥¿
+     * ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
      *
      * @else
      * @brief Destructor
@@ -503,10 +503,10 @@ namespace RTC
     
     /*!
      * @if jp
-     * @brief ½é´ü²½
+     * @brief åˆæœŸåŒ–
      *
-     * ¥Ç¡¼¥¿¥Õ¥í¡¼·¿ RTComponent ¤Î½é´ü²½¤ò¼Â¹Ô¤¹¤ë¡£
-     * ¼Âºİ¤Î½é´ü²½½èÍı¤Ï¡¢³Æ¶ñ¾İ¥¯¥é¥¹Æâ¤Ëµ­½Ò¤¹¤ë¡£
+     * ãƒ‡ãƒ¼ã‚¿ãƒ•ãƒ­ãƒ¼å‹ RTComponent ã®åˆæœŸåŒ–ã‚’å®Ÿè¡Œã™ã‚‹ã€‚
+     * å®Ÿéš›ã®åˆæœŸåŒ–å‡¦ç†ã¯ã€å„å…·è±¡ã‚¯ãƒ©ã‚¹å†…ã«è¨˜è¿°ã™ã‚‹ã€‚
      *
      * @else
      * @brief Initialization
@@ -520,17 +520,17 @@ namespace RTC
     /*!
      * @if jp
      *
-     * @brief ³èÀ­²½½èÍıÍÑ¥³¡¼¥ë¥Ğ¥Ã¥¯´Ø¿ô
+     * @brief æ´»æ€§åŒ–å‡¦ç†ç”¨ã‚³ãƒ¼ãƒ«ãƒãƒƒã‚¯é–¢æ•°
      * 
-     * ComponentAction::on_activated ¤¬¸Æ¤Ğ¤ì¤¿ºİ¤Ë¼Â¹Ô¤µ¤ì¤ë¥³¡¼¥ë¥Ğ¥Ã¥¯
-     * ´Ø¿ô¡£<BR>
-     * ËÜ´Ø¿ô¤ÏÌµ¾ò·ï¤Ë RTC::RTC_OK ¤òÊÖ¤¹¤è¤¦¤Ë¥À¥ß¡¼¼ÂÁõ¤µ¤ì¤Æ¤¤¤ë¤Î¤Ç¡¢
-     * ³Æ¥³¥ó¥İ¡¼¥Í¥ó¥È¤Î¼Âºİ¤Î³èÀ­²½½èÍı¤Ï¡¢ËÜ´Ø¿ô¤ò¥ª¡¼¥Ğ¡¼¥é¥¤¥É¤·¤Æ¼ÂÁõ¤¹¤ë
-     * É¬Í×¤¬¤¢¤ë¡£
+     * ComponentAction::on_activated ãŒå‘¼ã°ã‚ŒãŸéš›ã«å®Ÿè¡Œã•ã‚Œã‚‹ã‚³ãƒ¼ãƒ«ãƒãƒƒã‚¯
+     * é–¢æ•°ã€‚<BR>
+     * æœ¬é–¢æ•°ã¯ç„¡æ¡ä»¶ã« RTC::RTC_OK ã‚’è¿”ã™ã‚ˆã†ã«ãƒ€ãƒŸãƒ¼å®Ÿè£…ã•ã‚Œã¦ã„ã‚‹ã®ã§ã€
+     * å„ã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆã®å®Ÿéš›ã®æ´»æ€§åŒ–å‡¦ç†ã¯ã€æœ¬é–¢æ•°ã‚’ã‚ªãƒ¼ãƒãƒ¼ãƒ©ã‚¤ãƒ‰ã—ã¦å®Ÿè£…ã™ã‚‹
+     * å¿…è¦ãŒã‚ã‚‹ã€‚
      * 
-     * @param exec_handle »²²Ã¤·¤Æ¤¤¤ë ExecutionContext ¤Î ID
+     * @param exec_handle å‚åŠ ã—ã¦ã„ã‚‹ ExecutionContext ã® ID
      *
-     * @return ReturnCode_t ·¿¤Î¥ê¥¿¡¼¥ó¥³¡¼¥É
+     * @return ReturnCode_t å‹ã®ãƒªã‚¿ãƒ¼ãƒ³ã‚³ãƒ¼ãƒ‰
      * 
      * @else
      *
@@ -552,17 +552,17 @@ namespace RTC
     /*!
      * @if jp
      *
-     * @brief Èó³èÀ­²½½èÍıÍÑ¥³¡¼¥ë¥Ğ¥Ã¥¯´Ø¿ô
+     * @brief éæ´»æ€§åŒ–å‡¦ç†ç”¨ã‚³ãƒ¼ãƒ«ãƒãƒƒã‚¯é–¢æ•°
      * 
-     * ComponentAction::on_deactivated ¤¬¸Æ¤Ğ¤ì¤¿ºİ¤Ë¼Â¹Ô¤µ¤ì¤ë¥³¡¼¥ë¥Ğ¥Ã¥¯
-     * ´Ø¿ô¡£<BR>
-     * ËÜ´Ø¿ô¤ÏÌµ¾ò·ï¤Ë RTC::RTC_OK ¤òÊÖ¤¹¤è¤¦¤Ë¥À¥ß¡¼¼ÂÁõ¤µ¤ì¤Æ¤¤¤ë¤Î¤Ç¡¢
-     * ³Æ¥³¥ó¥İ¡¼¥Í¥ó¥È¤Î¼Âºİ¤ÎÈó³èÀ­²½½èÍı¤Ï¡¢ËÜ´Ø¿ô¤ò¥ª¡¼¥Ğ¡¼¥é¥¤¥É¤·¤Æ¼ÂÁõ¤¹¤ë
-     * É¬Í×¤¬¤¢¤ë¡£
+     * ComponentAction::on_deactivated ãŒå‘¼ã°ã‚ŒãŸéš›ã«å®Ÿè¡Œã•ã‚Œã‚‹ã‚³ãƒ¼ãƒ«ãƒãƒƒã‚¯
+     * é–¢æ•°ã€‚<BR>
+     * æœ¬é–¢æ•°ã¯ç„¡æ¡ä»¶ã« RTC::RTC_OK ã‚’è¿”ã™ã‚ˆã†ã«ãƒ€ãƒŸãƒ¼å®Ÿè£…ã•ã‚Œã¦ã„ã‚‹ã®ã§ã€
+     * å„ã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆã®å®Ÿéš›ã®éæ´»æ€§åŒ–å‡¦ç†ã¯ã€æœ¬é–¢æ•°ã‚’ã‚ªãƒ¼ãƒãƒ¼ãƒ©ã‚¤ãƒ‰ã—ã¦å®Ÿè£…ã™ã‚‹
+     * å¿…è¦ãŒã‚ã‚‹ã€‚
      * 
-     * @param exec_handle »²²Ã¤·¤Æ¤¤¤ë ExecutionContext ¤Î ID
+     * @param exec_handle å‚åŠ ã—ã¦ã„ã‚‹ ExecutionContext ã® ID
      *
-     * @return ReturnCode_t ·¿¤Î¥ê¥¿¡¼¥ó¥³¡¼¥É
+     * @return ReturnCode_t å‹ã®ãƒªã‚¿ãƒ¼ãƒ³ã‚³ãƒ¼ãƒ‰
      * 
      * @else
      *
@@ -585,16 +585,16 @@ namespace RTC
     /*!
      * @if jp
      *
-     * @brief ¥ê¥»¥Ã¥È½èÍıÍÑ¥³¡¼¥ë¥Ğ¥Ã¥¯´Ø¿ô
+     * @brief ãƒªã‚»ãƒƒãƒˆå‡¦ç†ç”¨ã‚³ãƒ¼ãƒ«ãƒãƒƒã‚¯é–¢æ•°
      * 
-     * ComponentAction::on_reset ¤¬¸Æ¤Ğ¤ì¤¿ºİ¤Ë¼Â¹Ô¤µ¤ì¤ë¥³¡¼¥ë¥Ğ¥Ã¥¯´Ø¿ô¡£<BR>
-     * ËÜ´Ø¿ô¤ÏÌµ¾ò·ï¤Ë RTC::RTC_OK ¤òÊÖ¤¹¤è¤¦¤Ë¥À¥ß¡¼¼ÂÁõ¤µ¤ì¤Æ¤¤¤ë¤Î¤Ç¡¢
-     * ³Æ¥³¥ó¥İ¡¼¥Í¥ó¥È¤Î¼Âºİ¤Î¥ê¥»¥Ã¥È½èÍı¤Ï¡¢ËÜ´Ø¿ô¤ò¥ª¡¼¥Ğ¡¼¥é¥¤¥É¤·¤Æ¼ÂÁõ¤¹¤ë
-     * É¬Í×¤¬¤¢¤ë¡£
+     * ComponentAction::on_reset ãŒå‘¼ã°ã‚ŒãŸéš›ã«å®Ÿè¡Œã•ã‚Œã‚‹ã‚³ãƒ¼ãƒ«ãƒãƒƒã‚¯é–¢æ•°ã€‚<BR>
+     * æœ¬é–¢æ•°ã¯ç„¡æ¡ä»¶ã« RTC::RTC_OK ã‚’è¿”ã™ã‚ˆã†ã«ãƒ€ãƒŸãƒ¼å®Ÿè£…ã•ã‚Œã¦ã„ã‚‹ã®ã§ã€
+     * å„ã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆã®å®Ÿéš›ã®ãƒªã‚»ãƒƒãƒˆå‡¦ç†ã¯ã€æœ¬é–¢æ•°ã‚’ã‚ªãƒ¼ãƒãƒ¼ãƒ©ã‚¤ãƒ‰ã—ã¦å®Ÿè£…ã™ã‚‹
+     * å¿…è¦ãŒã‚ã‚‹ã€‚
      * 
-     * @param exec_handle »²²Ã¤·¤Æ¤¤¤ë ExecutionContext ¤Î ID
+     * @param exec_handle å‚åŠ ã—ã¦ã„ã‚‹ ExecutionContext ã® ID
      *
-     * @return ReturnCode_t ·¿¤Î¥ê¥¿¡¼¥ó¥³¡¼¥É
+     * @return ReturnCode_t å‹ã®ãƒªã‚¿ãƒ¼ãƒ³ã‚³ãƒ¼ãƒ‰
      * 
      * @else
      *
@@ -616,14 +616,14 @@ namespace RTC
     /*!
      * @if jp
      *
-     * @brief [ComponentAction CORBA interface] RTC ¤Î½ªÎ»
+     * @brief [ComponentAction CORBA interface] RTC ã®çµ‚äº†
      *
-     * RTC ¤¬ÇË´ş¤µ¤ì¤ë¡£
-     * RTC ¸ÇÍ­¤Î½ªÎ»½èÍı¤Ï¤³¤³¤Ç¼Â¹Ô¤¹¤ë¡£
-     * ¤³¤Î¥ª¥Ú¥ì¡¼¥·¥ç¥ó¸Æ¤Ó½Ğ¤·¤Î·ë²Ì¤È¤·¤Æ onFinalize() ¥³¡¼¥ë¥Ğ¥Ã¥¯´Ø¿ô¤¬
-     * ¸Æ¤Ó½Ğ¤µ¤ì¤ë¡£
+     * RTC ãŒç ´æ£„ã•ã‚Œã‚‹ã€‚
+     * RTC å›ºæœ‰ã®çµ‚äº†å‡¦ç†ã¯ã“ã“ã§å®Ÿè¡Œã™ã‚‹ã€‚
+     * ã“ã®ã‚ªãƒšãƒ¬ãƒ¼ã‚·ãƒ§ãƒ³å‘¼ã³å‡ºã—ã®çµæœã¨ã—ã¦ onFinalize() ã‚³ãƒ¼ãƒ«ãƒãƒƒã‚¯é–¢æ•°ãŒ
+     * å‘¼ã³å‡ºã•ã‚Œã‚‹ã€‚
      *
-     * @return ReturnCode_t ·¿¤Î¥ê¥¿¡¼¥ó¥³¡¼¥É
+     * @return ReturnCode_t å‹ã®ãƒªã‚¿ãƒ¼ãƒ³ã‚³ãƒ¼ãƒ‰
      *
      * @else
      *
@@ -642,7 +642,7 @@ namespace RTC
   protected:
     /*!
      * @if jp
-     * @brief ¥³¥ó¥İ¡¼¥Í¥ó¥È
+     * @brief ã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆ
      * @else
      * @brief Components
      * @endif
@@ -651,7 +651,7 @@ namespace RTC
 
     /*!
      * @if jp
-     * @brief ¥ª¥Ö¥¸¥§¥¯¥È¤Î¥ê¥Õ¥¡¥ì¥ó¥¹
+     * @brief ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®ãƒªãƒ•ã‚¡ãƒ¬ãƒ³ã‚¹
      * @else
      * @brief Reference of object
      * @endif
@@ -661,7 +661,7 @@ namespace RTC
 //    ExecutionContextService_var m_ecref;
     /*!
      * @if jp
-     * @brief Organization¤Î¥ê¥Õ¥¡¥ì¥ó¥¹
+     * @brief Organizationã®ãƒªãƒ•ã‚¡ãƒ¬ãƒ³ã‚¹
      * @else
      * @brief Reference of Organization
      * @endif

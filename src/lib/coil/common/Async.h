@@ -1,4 +1,4 @@
-// -*- C++ -*-
+﻿// -*- C++ -*-
 /*!
  * @file Async.h
  * @brief Asynchronous function invocation helper class
@@ -29,7 +29,7 @@ namespace coil
    * @if jp
    *
    * @class Async
-   * @brief Async ���饹
+   * @brief Async クラス
    *
    * @else
    *
@@ -45,9 +45,9 @@ namespace coil
     /*!
      * @if jp
      *
-     * @brief ���󥹥ȥ饯��
+     * @brief コンストラクタ
      *
-     * ���󥹥ȥ饯����
+     * コンストラクタ。
      *
      * @else
      *
@@ -62,9 +62,9 @@ namespace coil
     /*!
      * @if jp
      *
-     * @brief �ǥ��ȥ饯��
+     * @brief デストラクタ
      *
-     * �ǥ��ȥ饯����
+     * デストラクタ。
      *
      * @else
      *
@@ -79,9 +79,9 @@ namespace coil
     /*!
      * @if jp
      *
-     * @brief ��Ʊ���¹��ѽ�貾�۴ؿ�
+     * @brief 非同期実行用純粋仮想関数
      *
-     * ��Ʊ���¹��ѽ�貾�۴ؿ���
+     * 非同期実行用純粋仮想関数。
      *
      * @else
      *
@@ -96,11 +96,11 @@ namespace coil
     /*!
      * @if jp
      *
-     * @brief ��λ���֥����å��ѽ�貾�۴ؿ�
+     * @brief 完了状態チェック用純粋仮想関数
      *
-     * ��λ���֥����å��ѽ�貾�۴ؿ���
+     * 完了状態チェック用純粋仮想関数。
      *
-     * @return true: ��λ, false: ̤��λ
+     * @return true: 完了, false: 未完了
      *
      * @else
      *
@@ -119,7 +119,7 @@ namespace coil
    * @if jp
    *
    * @class Async_t
-   * @brief Async_t �ƥ�ץ졼�ȥ��饹
+   * @brief Async_t テンプレートクラス
    *
    * @else
    *
@@ -137,13 +137,13 @@ namespace coil
     /*!
      * @if jp
      *
-     * @brief ���󥹥ȥ饯��
+     * @brief コンストラクタ
      *
-     * ���󥹥ȥ饯����
+     * コンストラクタ。
      *
-     * @param obj ��Ͽ�оݥ��֥�������
-     * @param func ��Ʊ���¹��Ѵؿ�
-     * @param auto_delete ��Ʊ���¹Խ�λ���˼�ưŪ�˥��󥹥��󥹺����Ԥ����ɤ����Υե饰
+     * @param obj 登録対象オブジェクト
+     * @param func 非同期実行用関数
+     * @param auto_delete 非同期実行終了時に自動的にインスタンス削除を行うかどうかのフラグ
      *
      * @else
      *
@@ -165,9 +165,9 @@ namespace coil
     /*!
      * @if jp
      *
-     * @brief �ǥ��ȥ饯��
+     * @brief デストラクタ
      *
-     * �ǥ��ȥ饯����
+     * デストラクタ。
      *
      * @else
      *
@@ -184,11 +184,11 @@ namespace coil
     /*!
      * @if jp
      *
-     * @brief ��Ʊ�������ѤΥ���åɼ¹Դؿ�
+     * @brief 非同期処理用のスレッド実行関数
      *
-     * ��Ͽ���줿���֥������Ȥ���Ʊ��������ƤӽФ���
+     * 登録されたオブジェクトの非同期処理を呼び出す。
      *
-     * @return �¹Է��
+     * @return 実行結果
      *
      * @else
      *
@@ -214,9 +214,9 @@ namespace coil
     /*!
      * @if jp
      *
-     * @brief ��Ʊ��������λ
+     * @brief 非同期処理終了
      *
-     * ��Ʊ��������λ�������󥹥��󥹤������롣
+     * 非同期処理を終了し、インスタンスを削除する。
      *
      * @else
      *
@@ -235,9 +235,9 @@ namespace coil
     /*!
      * @if jp
      *
-     * @brief ��Ʊ������������
+     * @brief 非同期処理活性化
      *
-     * ��Ʊ����������������롣
+     * 非同期処理を活性化する。
      *
      * @else
      *
@@ -255,11 +255,11 @@ namespace coil
     /*!
      * @if jp
      *
-     * @brief ��λ���֥����å�
+     * @brief 完了状態チェック
      *
-     * ��λ���֤��֤���
+     * 完了状態を返す。
      *
-     * @return true: ��λ, false: ̤��λ
+     * @return true: 完了, false: 未完了
      *
      * @else
      *
@@ -288,7 +288,7 @@ namespace coil
    * @if jp
    *
    * @class Async_ref_t
-   * @brief Async_ref_t �ƥ�ץ졼�ȥ��饹
+   * @brief Async_ref_t テンプレートクラス
    *
    * @else
    *
@@ -306,13 +306,13 @@ namespace coil
     /*!
      * @if jp
      *
-     * @brief ���󥹥ȥ饯��
+     * @brief コンストラクタ
      *
-     * ���󥹥ȥ饯����
+     * コンストラクタ。
      *
-     * @param obj ��Ͽ�оݥ��֥�������
-     * @param func ��Ʊ���¹��Ѵؿ�
-     * @param auto_delete ��Ʊ���¹Խ�λ���˼�ưŪ�˥��󥹥��󥹺����Ԥ����ɤ����Υե饰
+     * @param obj 登録対象オブジェクト
+     * @param func 非同期実行用関数
+     * @param auto_delete 非同期実行終了時に自動的にインスタンス削除を行うかどうかのフラグ
      *
      * @else
      *
@@ -334,9 +334,9 @@ namespace coil
     /*!
      * @if jp
      *
-     * @brief �ǥ��ȥ饯��
+     * @brief デストラクタ
      *
-     * �ǥ��ȥ饯����
+     * デストラクタ。
      *
      * @else
      *
@@ -353,11 +353,11 @@ namespace coil
     /*!
      * @if jp
      *
-     * @brief ��Ʊ�������ѤΥ���åɼ¹Դؿ�
+     * @brief 非同期処理用のスレッド実行関数
      *
-     * ��Ͽ���줿���֥������Ȥ���Ʊ��������ƤӽФ���
+     * 登録されたオブジェクトの非同期処理を呼び出す。
      *
-     * @return �¹Է��
+     * @return 実行結果
      *
      * @else
      *
@@ -379,9 +379,9 @@ namespace coil
     /*!
      * @if jp
      *
-     * @brief ��Ʊ������������
+     * @brief 非同期処理活性化
      *
-     * ��Ʊ����������������롣
+     * 非同期処理を活性化する。
      *
      * @else
      *
@@ -399,11 +399,11 @@ namespace coil
     /*!
      * @if jp
      *
-     * @brief ��λ���֥����å�
+     * @brief 完了状態チェック
      *
-     * ��λ���֤��֤���
+     * 完了状態を返す。
      *
-     * @return true: ��λ, false: ̤��λ
+     * @return true: 完了, false: 未完了
      *
      * @else
      *
@@ -423,9 +423,9 @@ namespace coil
     /*!
      * @if jp
      *
-     * @brief ��Ʊ��������λ
+     * @brief 非同期処理終了
      *
-     * ��Ʊ��������λ�������󥹥��󥹤������롣
+     * 非同期処理を終了し、インスタンスを削除する。
      *
      * @else
      *
@@ -450,22 +450,22 @@ namespace coil
   
   /*!
    * @if jp
-   * @brief ��Ʊ�����С��ؿ��ƤӽФ��إ�ѡ��ؿ�
+   * @brief 非同期メンバー関数呼び出しヘルパー関数
    *
-   * ���С��ؿ�����Ʊ���˸Ƥ֤���Υإ�ѡ��ؿ�
-   * ��
+   * メンバー関数を非同期に呼ぶためのヘルパー関数
+   * 例
    *
    *  class A
    *  {
    *  public:
-   *    // ���֤Τ�����ؿ�
+   *    // 時間のかかる関数
    *    void hoge() {
    *      for (int i(0); i < 5; ++i) {
    *        std::cout << "hoge" << std::endl;
    *        sleep(1);
    *      }
    *    }
-   *    // ���֤Τ�����ؿ�
+   *    // 時間のかかる関数
    *    void munya(const char* msg) {
    *      for (int i(0); i < 10; ++i) {
    *        std::cout << "message is: " << msg << std::endl;
@@ -476,22 +476,22 @@ namespace coil
    *      return val + 1;
    *    }
    *  };
-   * �����ͤʥ��饹�Υ��֥������Ȥ��Ф��ơ�
+   * この様なクラスのオブジェクトに対して、
    *
    *  A a;
    *  Async* invoker0(AsyncInvoker(&a,
    *                               std::mem_fun(&A::hoge)));
    *  Async* invoker1(AsyncInvoker(&a,
    *                               std::bind2nd(std::mem_fun(&A::munya),
-   *                                            "�ۤ�")));
-   *  invoker0->invoke(); // ���������
-   *  invoker1->invoke(); // ���������
+   *                                            "ほげ")));
+   *  invoker0->invoke(); // すぐに戻る
+   *  invoker1->invoke(); // すぐに戻る
    *
-   *  delete invoker0; // ɬ��������뤳��
-   *  delete invoker1; // ɬ��������뤳��
+   *  delete invoker0; // 必ず削除すること
+   *  delete invoker1; // 必ず削除すること
    *
-   * �Τ褦����Ʊ���θƤӽФ����Ǥ��롣
-   * �ƤӽФ�������ͤ�������������ϡ������δؿ����֥������Ȥ��Ѱդ��롣
+   * のように非同期の呼び出しができる。
+   * 呼び出しの戻り値を取得したい場合は、自前の関数オブジェクトを用意する。
    *
    *  class add_one_functor
    *  {
@@ -506,7 +506,7 @@ namespace coil
    *    }
    *  };
    *
-   * �嵭�δؿ����֥������ȤΥ��󥹥��󥹤�����������Υݥ��󥿤��Ϥ���
+   * 上記の関数オブジェクトのインスタンスを作成し、そのポインタを渡す。
    *
    *  add_one_functor aof(100);
    *  Async* invoker2(AsyncInvoker(&a, &aof));
@@ -515,21 +515,21 @@ namespace coil
    *  std::cout << "result: " << aof.get_ret() << std::endl;
    *  delete invoker2;
    *
-   * �̾AsyncInvoker ���֤����֥������Ȥ�����Ū�˺�����ʤ����
-   * �ʤ�ʤ������軰������ true ���Ϥ����Ȥǡ���Ʊ���¹Ԥ���λ�����Ʊ����
-   * ��ưŪ�˥��󥹥��󥹤��������롣
+   * 通常、AsyncInvoker が返すオブジェクトは明示的に削除しなければ
+   * ならないが、第三引数に true を渡すことで、非同期実行が終了すると同時に
+   * 自動的にインスタンスが削除される。
    *
-   * // invoker3 �Ϻ�� (delete invoker3) ���ƤϤ����ʤ�
+   * // invoker3 は削除 (delete invoker3) してはいけない
    * Async* invoker3(AsyncInvoker(&a, std::mem_fun(&A::hoge), true));
    *
-   * // ���󥹥���������Ʊ���˼¹Ԥ��뤳�Ȥ�Ǥ��롣
+   * // インスタンス生成と同時に実行することもできる。
    * AsyncInvoker(&a, std::mem_fun(&A::hoge))->invoke();
    *
-   * @param obj ��Ͽ�оݥ��֥�������
-   * @param func ��Ʊ���¹��Ѵؿ�
-   * @param auto_delete ��Ʊ���¹Խ�λ���˼�ưŪ�˥��󥹥��󥹺����Ԥ����ɤ����Υե饰
+   * @param obj 登録対象オブジェクト
+   * @param func 非同期実行用関数
+   * @param auto_delete 非同期実行終了時に自動的にインスタンス削除を行うかどうかのフラグ
    *
-   * @return Async_t ���󥹥���
+   * @return Async_t インスタンス
    *
    * @else
    *
@@ -555,15 +555,15 @@ namespace coil
   /*!
    * @if jp
    *
-   * @brief ��Ʊ�����С��ؿ��ƤӽФ��إ�ѡ��ؿ�
+   * @brief 非同期メンバー関数呼び出しヘルパー関数
    *
-   * ���С��ؿ�����Ʊ���˸Ƥ֤���Υإ�ѡ��ؿ�
+   * メンバー関数を非同期に呼ぶためのヘルパー関数
    *
-   * @param obj ��Ͽ�оݥ��֥�������
-   * @param func ��Ʊ���¹��Ѵؿ�
-   * @param auto_delete ��Ʊ���¹Խ�λ���˼�ưŪ�˥��󥹥��󥹺����Ԥ����ɤ����Υե饰
+   * @param obj 登録対象オブジェクト
+   * @param func 非同期実行用関数
+   * @param auto_delete 非同期実行終了時に自動的にインスタンス削除を行うかどうかのフラグ
    *
-   * @return Async_ref_t ���󥹥���
+   * @return Async_ref_t インスタンス
    *
    * @else
    *

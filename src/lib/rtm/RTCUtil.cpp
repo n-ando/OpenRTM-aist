@@ -1,4 +1,4 @@
-// -*- C++ -*-
+﻿// -*- C++ -*-
 /*!
  * @file RTCUtil.h
  * @brief RTComponent utils
@@ -23,7 +23,7 @@ namespace RTC_Utils
 {
   /*!
    * @if jp
-   * @brief DataFlowComponent �Ǥ��뤫Ƚ�ꤹ��
+   * @brief DataFlowComponent であるか判定する
    * @else
    * @brief Confirm whether specified RT-Component is DataFlowComponent
    * @endif
@@ -37,7 +37,7 @@ namespace RTC_Utils
   
   /*!
    * @if jp
-   * @brief FsmParticipant �Ǥ��뤫Ƚ�ꤹ��
+   * @brief FsmParticipant であるか判定する
    * @else
    * @brief Confirm whether specified RT-Component is FsmParticipant
    * @endif
@@ -51,7 +51,7 @@ namespace RTC_Utils
   
   /*!
    * @if jp
-   * @brief Fsm �Ǥ��뤫Ƚ�ꤹ��
+   * @brief Fsm であるか判定する
    * @else
    * @brief Confirm whether specified RT-Component is Fsm
    * @endif
@@ -65,7 +65,7 @@ namespace RTC_Utils
   
   /*!
    * @if jp
-   * @brief multiModeComponent �Ǥ��뤫Ƚ�ꤹ��
+   * @brief multiModeComponent であるか判定する
    * @else
    * @brief Confirm whether specified RT-Component is multiModeComponent
    * @endif
