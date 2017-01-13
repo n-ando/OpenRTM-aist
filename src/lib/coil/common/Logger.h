@@ -163,7 +163,7 @@ namespace coil
     bool removeStream(streambuf_type* stream)
     {
       std::vector<coil::log_streambuf<char>::Stream>::iterator it;
-      for( it = m_streams.begin(); it != m_streams.end(); it++ )
+      for( it = m_streams.begin(); it != m_streams.end(); ++it )
       {
           if (it->stream_ == stream)
             {
