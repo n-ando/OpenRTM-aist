@@ -39,7 +39,7 @@ namespace coil
   class Condition
   {
   public:
-    Condition(Mutex& mutex)
+    explicit Condition(Mutex& mutex)
       : m_mutex(mutex)
     {
       ACE_OS::cond_init(&m_cond, 0);
@@ -79,7 +79,7 @@ namespace coil
     }
 
   private:
-    Condition(const Mutex&);
+    explicit Condition(const Mutex&);
     Condition& operator=(const Mutex &);
     ACE_cond_t m_cond;
     Mutex& m_mutex;

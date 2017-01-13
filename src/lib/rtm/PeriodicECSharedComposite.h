@@ -86,7 +86,7 @@ namespace SDOPackage
      *
      * @endif
      */
-    PeriodicECOrganization(::RTC::RTObject_impl* rtobj);
+    explicit PeriodicECOrganization(::RTC::RTObject_impl* rtobj);
     /*!
      * @if jp
      * @brief デストラクタ
@@ -320,7 +320,7 @@ namespace SDOPackage
     class Member
     {
     public:
-      Member(RTC::RTObject_ptr rtobj)
+      explicit Member(RTC::RTObject_ptr rtobj)
       //        : rtobj_(rtobj),
       //          profile_(rtobj->get_component_profile()),
       //          eclist_(rtobj->get_owned_contexts()),
@@ -484,7 +484,7 @@ namespace RTC
      *
      * @endif
      */
-    PeriodicECSharedComposite(Manager* manager);
+    explicit PeriodicECSharedComposite(Manager* manager);
     
     /*!
      * @if jp

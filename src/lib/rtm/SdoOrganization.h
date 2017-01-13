@@ -94,9 +94,9 @@ namespace SDOPackage
      * @endif
      */
 #ifdef ORB_IS_RTORB
-    Organization_impl(RTC::RTObject_ptr sdo);
+    explicit Organization_impl(RTC::RTObject_ptr sdo);
 #endif // ORB_IS_RTROB
-    Organization_impl(SDOSystemElement_ptr sdo);
+    explicit Organization_impl(SDOSystemElement_ptr sdo);
     
     /*!
      * @if jp
@@ -840,7 +840,7 @@ namespace SDOPackage
      */
     struct nv_name
     {
-      nv_name(const char* name) : m_name(name) {};
+      explicit nv_name(const char* name) : m_name(name) {};
       bool operator()(const NameValue& nv)
       {
 	return m_name == std::string(nv.name);
@@ -857,7 +857,7 @@ namespace SDOPackage
      */
     struct sdo_id
     {
-      sdo_id(const char* id) : m_id(id) {};
+      explicit sdo_id(const char* id) : m_id(id) {};
       bool operator()(const SDO_ptr sdo)
       {
         CORBA::String_var id(sdo->get_sdo_id());

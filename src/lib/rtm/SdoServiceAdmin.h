@@ -167,7 +167,7 @@ namespace RTC
      *
      * @endif
      */
-    SdoServiceAdmin(::RTC::RTObject_impl& rtobj);
+    explicit SdoServiceAdmin(::RTC::RTObject_impl& rtobj);
 
     /*!
      * @if jp

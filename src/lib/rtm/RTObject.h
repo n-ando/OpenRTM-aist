@@ -109,7 +109,7 @@ namespace RTC
      *
      * @endif
      */
-    RTObject_impl(Manager* manager);
+    explicit RTObject_impl(Manager* manager);
     
     /*!
      * @if jp
@@ -4633,7 +4633,7 @@ namespace RTC
      */
     struct svc_name
     {
-      svc_name (const char* id) : m_id(id) {};
+      explicit svc_name (const char* id) : m_id(id) {};
       bool operator()(const SDOPackage::ServiceProfile& prof)
       {
 	return m_id == std::string(prof.id);
@@ -4902,7 +4902,7 @@ namespace RTC
      */
     struct nv_name
     {
-      nv_name(const char* name) : m_name(name) {};
+      explicit nv_name(const char* name) : m_name(name) {};
       bool operator()(const SDOPackage::NameValue& nv)
       {
 	return m_name == std::string(nv.name);
@@ -4919,7 +4919,7 @@ namespace RTC
      */
     struct ec_copy
     {
-      ec_copy(ExecutionContextList& eclist)
+      explicit ec_copy(ExecutionContextList& eclist)
 	: m_eclist(eclist)
       {
       }
@@ -4942,7 +4942,7 @@ namespace RTC
      */
     struct ec_find
     {
-      ec_find(ExecutionContext_ptr& ec)
+      explicit ec_find(ExecutionContext_ptr& ec)
 	: m_ec(ExecutionContext::_duplicate(ec))
       {
       }
@@ -4977,7 +4977,7 @@ namespace RTC
      */
     struct deactivate_comps
     {
-      deactivate_comps(LightweightRTObject_ptr comp)
+      explicit deactivate_comps(LightweightRTObject_ptr comp)
 	: m_comp(RTC::LightweightRTObject::_duplicate(comp))
       {
       }

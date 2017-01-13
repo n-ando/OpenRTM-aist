@@ -574,7 +574,7 @@ namespace RTC
      * 
      * @endif
      */
-    NullBuffer(long int size = 1)
+    explicit NullBuffer(long int size = 1)
       : m_length(1)
     {
     }

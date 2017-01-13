@@ -78,7 +78,7 @@ namespace coil
      *
      * @endif
      */
-    DynamicLib(int close_handle_on_destruction = 1);
+    explicit DynamicLib(int close_handle_on_destruction = 1);
 
     /*!
      * @if jp

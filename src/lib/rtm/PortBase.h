@@ -161,7 +161,7 @@ namespace RTC
      *
      * @endif
      */
-    PortBase(const char* name = "");
+    explicit PortBase(const char* name = "");
     
     /*!
      * @if jp
@@ -2222,7 +2222,7 @@ namespace RTC
      */
     struct find_conn_id
     {
-      find_conn_id(const char* id) : m_id(id) {};
+      explicit find_conn_id(const char* id) : m_id(id) {};
       bool operator()(const ConnectorProfile& cprof)
       {
 	return m_id == std::string(cprof.connector_id);
@@ -2239,7 +2239,7 @@ namespace RTC
      */
     struct find_port_ref
     {
-      find_port_ref(PortService_ptr port_ref) : m_port(port_ref) {};
+      explicit find_port_ref(PortService_ptr port_ref) : m_port(port_ref) {};
       bool operator()(PortService_ptr port_ref)
       {
 	return m_port->_is_equivalent(port_ref);

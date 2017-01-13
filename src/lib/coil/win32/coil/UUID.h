@@ -63,7 +63,7 @@ namespace coil
      *
      * @endif
      */
-    UUID(const uuid_t& uuid);
+    explicit UUID(const uuid_t& uuid);
 
     /*!
      * @if jp

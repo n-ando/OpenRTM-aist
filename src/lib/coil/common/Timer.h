@@ -73,7 +73,7 @@ namespace coil
      *
      * @endif
      */
-    Timer(TimeValue& interval);
+    explicit Timer(TimeValue& interval);
     
     /*!
      * @if jp

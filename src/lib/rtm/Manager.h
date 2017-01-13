@@ -1862,9 +1862,9 @@ namespace RTC
     // ObjectManager へ渡す述語クラス
     struct InstanceName
     {
-      InstanceName(RTObject_impl* comp);
-      InstanceName(const char* name);
-      InstanceName(const std::string name);
+      explicit InstanceName(RTObject_impl* comp);
+      explicit InstanceName(const char* name);
+      explicit InstanceName(const std::string name);
       bool operator()(RTObject_impl* comp);
       std::string m_name;
     };
@@ -1887,18 +1887,18 @@ namespace RTC
     class FactoryPredicate
     {
     public:
-      FactoryPredicate(const char* imple_id)
+      explicit FactoryPredicate(const char* imple_id)
         : m_vendor(""), m_category(""), m_impleid(imple_id), m_version("")
       {
       }
-      FactoryPredicate(const coil::Properties& prop)
+      explicit FactoryPredicate(const coil::Properties& prop)
         : m_vendor(prop["vendor"]),
           m_category(prop["category"]),
           m_impleid(prop["implementation_id"]),
           m_version(prop["version"])
       {
       }
-      FactoryPredicate(FactoryBase* factory)
+      explicit FactoryPredicate(FactoryBase* factory)
 	: m_vendor(factory->profile()["vendor"]),
           m_category(factory->profile()["category"]),
           m_impleid(factory->profile()["implementation_id"]),
@@ -1934,7 +1934,7 @@ namespace RTC
     {
       coil::Properties& m_prop;
     public:
-      ModulePredicate(coil::Properties& prop)
+      explicit ModulePredicate(coil::Properties& prop)
       : m_prop(prop)
       {
       }
@@ -1979,8 +1979,8 @@ namespace RTC
     // ECファクトリへ渡す述語クラス
     struct ECFactoryPredicate
     {
-      ECFactoryPredicate(const char* name) : m_name(name){};
-      ECFactoryPredicate(ECFactoryBase* factory)
+      explicit ECFactoryPredicate(const char* name) : m_name(name){};
+      explicit ECFactoryPredicate(ECFactoryBase* factory)
 	: m_name(factory->name()) {};
       bool operator()(ECFactoryBase* factory)
       {
@@ -2059,7 +2059,7 @@ namespace RTC
        *
        * @endif
        */
-      OrbRunner(CORBA::ORB_ptr orb) : m_pORB(orb)
+      explicit OrbRunner(CORBA::ORB_ptr orb) : m_pORB(orb)
       {
 	open(0);
       };
@@ -2195,7 +2195,7 @@ namespace RTC
        *
        * @endif
        */
-      Terminator(Manager* manager) : m_manager(manager) {};
+      explicit Terminator(Manager* manager) : m_manager(manager) {};
       
       /*!
        * @if jp

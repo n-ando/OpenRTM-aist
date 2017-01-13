@@ -39,7 +39,7 @@ namespace RTC
    */
   struct service_id
   {
-    service_id(const char* id) : m_id(id) {};
+    explicit service_id(const char* id) : m_id(id) {};
     bool operator()(const SDOPackage::ServiceProfile& s)
     {
       std::string id(s.id);

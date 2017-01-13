@@ -533,11 +533,11 @@ namespace RTC
     class comp_op
     {
     public:
-      comp_op(const char* _name)
+      explicit comp_op(const char* _name)
 	: m_name(_name)
       {
       }
-      comp_op(T* obj) 
+      explicit comp_op(T* obj) 
 	: m_name((const char*)(obj->getProfile().name))
       {
       }
@@ -560,7 +560,7 @@ namespace RTC
     class port_prof_collect
     {
     public:
-      port_prof_collect(PortProfileList& p) : m_p(p) {}
+      explicit port_prof_collect(PortProfileList& p) : m_p(p) {}
       void operator()(const PortBase* port)
       {
 	CORBA_SeqUtil::push_back(m_p, port->getPortProfile());
@@ -579,7 +579,7 @@ namespace RTC
     class port_prof_collect2
     {
     public:
-      port_prof_collect2(PortProfileList& p) : m_p(p) {}
+      explicit port_prof_collect2(PortProfileList& p) : m_p(p) {}
       void operator()(const PortService_ptr port)
       {
         PortProfile* pp(port->get_port_profile());

@@ -660,7 +660,7 @@ namespace RTM
     {
       RTM::Manager_var m_mgr;
     public:
-      is_equiv(RTM::Manager_ptr mgr)
+      explicit is_equiv(RTM::Manager_ptr mgr)
         : m_mgr(RTM::Manager::_duplicate(mgr)) {}
       bool operator()(RTM::Manager_ptr mgr)
       {

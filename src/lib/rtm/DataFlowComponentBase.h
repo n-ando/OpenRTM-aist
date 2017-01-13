@@ -87,7 +87,7 @@ namespace RTC
      *
      * @endif
      */
-    DataFlowComponentBase(Manager* manager);
+    explicit DataFlowComponentBase(Manager* manager);
     
     /*!
      * @if jp

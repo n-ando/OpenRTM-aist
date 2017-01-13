@@ -76,7 +76,7 @@ namespace RTC_impl
      *
      * @endif
      */
-    ExecutionContextProfile(RTC::ExecutionKind kind = RTC::PERIODIC);
+    explicit ExecutionContextProfile(RTC::ExecutionKind kind = RTC::PERIODIC);
 
     /*!
      * @if jp
@@ -568,7 +568,7 @@ namespace RTC_impl
     {
       RTC::RTObject_var m_comp;
     public:      
-      find_participant(RTC::RTObject_ptr comp)
+      explicit find_participant(RTC::RTObject_ptr comp)
         : m_comp(RTC::RTObject::_duplicate(comp)) {}
       bool operator()(RTC::RTObject_ptr comp)
       {

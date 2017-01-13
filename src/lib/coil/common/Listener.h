@@ -204,7 +204,7 @@ public:
    *
    * @endif
    */
-  ListenerFunc(CallbackFunc cbf)
+  explicit ListenerFunc(CallbackFunc cbf)
     : m_cbf(cbf)
   {
   }

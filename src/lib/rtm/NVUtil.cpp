@@ -193,7 +193,7 @@ namespace NVUtil
    */
   struct nv_find
   {
-    nv_find(const char* name) : m_name(name) {};
+    explicit nv_find(const char* name) : m_name(name) {};
     bool operator()(const SDOPackage::NameValue& nv)
     {
       std::string name(nv.name);

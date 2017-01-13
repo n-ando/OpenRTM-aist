@@ -283,7 +283,7 @@ namespace RTC_Utils
      *
      * @endif
      */
-    StateMachine(int num_of_state)
+    explicit StateMachine(int num_of_state)
       : m_num(num_of_state),
         m_listener(NULL),
         m_entry(m_num, (Callback)NULL),

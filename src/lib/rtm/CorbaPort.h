@@ -647,7 +647,7 @@ namespace RTC
      *
      * @endif
      */
-    CorbaPort(const char* name);
+    explicit CorbaPort(const char* name);
     
     /*!
      * @if jp
@@ -1370,7 +1370,7 @@ namespace RTC
      */
     struct unsubscribe
     {
-      unsubscribe(CorbaConsumerList& consumers)
+      explicit unsubscribe(CorbaConsumerList& consumers)
         : m_consumers(consumers)
       {
       }

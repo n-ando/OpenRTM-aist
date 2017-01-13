@@ -378,7 +378,7 @@ namespace RTC
      */
     struct subscribe
     {
-      subscribe(const SDOPackage::NVList& prop) : m_prop(prop) {}
+      explicit subscribe(const SDOPackage::NVList& prop) : m_prop(prop) {}
       void operator()(OutPortConsumer* consumer)
       {
         consumer->subscribeInterface(m_prop);
@@ -395,7 +395,7 @@ namespace RTC
      */
     struct unsubscribe
     {
-      unsubscribe(const SDOPackage::NVList& prop) : m_prop(prop) {}
+      explicit unsubscribe(const SDOPackage::NVList& prop) : m_prop(prop) {}
       void operator()(OutPortConsumer* consumer)
       {
         consumer->unsubscribeInterface(m_prop);

@@ -104,7 +104,7 @@ namespace RTC
      *
      * @endif
      */
-    CorbaNaming(CORBA::ORB_ptr orb);
+    explicit CorbaNaming(CORBA::ORB_ptr orb);
     
     /*!
      * @if jp
