@@ -192,9 +192,7 @@ namespace RTC
     dll->dll.close();
     m_modules.unregisterObject(file_name.c_str());
     
-    if (dll != NULL) {
-      delete dll;
-    }
+    delete dll;
     
     return;
   }
