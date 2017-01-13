@@ -1273,7 +1273,7 @@ namespace RTC
     catch (SDOPackage::InvalidParameter &e)
       {
         RTC_ERROR(("InvalidParameter exception: name (%s) is not found", id));
-        throw e;
+        throw;
       }
     catch (...)
       {
@@ -1308,7 +1308,7 @@ namespace RTC
       }
     catch (SDOPackage::InvalidParameter &e)
       {
-        throw e;
+        throw;
       }
     catch (...)
       {
