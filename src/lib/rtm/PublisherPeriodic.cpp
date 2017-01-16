@@ -22,7 +22,6 @@
 #include <coil/stringutil.h>
 #include <rtm/PublisherPeriodic.h>
 #include <rtm/InPortConsumer.h>
-#include <rtm/RTC.h>
 #include <stdlib.h>
 #include <rtm/idl/DataPortSkel.h>
 #include <rtm/PeriodicTaskFactory.h>
