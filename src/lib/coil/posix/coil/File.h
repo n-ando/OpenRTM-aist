@@ -127,7 +127,6 @@ namespace coil
     struct dirent* ent; 
     coil::vstring flist;
     bool has_glob(false);
-    std::string pattern;
 
     if (path == 0) { return flist; }
     if (glob_str[0] != '\0') { has_glob = true; }

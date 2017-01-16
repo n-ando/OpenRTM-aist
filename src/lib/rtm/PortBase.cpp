@@ -917,7 +917,6 @@ namespace RTC
       delete clist;
 #endif // ORB_IS_RTORB
     }
-    std::vector<std::string>::iterator it, it_end;
 
     for (std::vector<std::string>::iterator it(connector_ids.begin());
          it != connector_ids.end(); ++it)

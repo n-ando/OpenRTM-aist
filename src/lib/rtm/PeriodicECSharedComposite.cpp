@@ -409,7 +409,6 @@ namespace SDOPackage
     RTC_TRACE(("addPort(%s)", ::coil::flatten(portlist).c_str()));
     if (portlist.size() == 0) { return; }
 
-    std::string comp_name(member.profile_->instance_name);
 #ifndef ORB_IS_RTORB
     ::RTC::PortProfileList& plist(member.profile_->port_profiles);
 #else // ORB_IS_RTORB
@@ -459,7 +458,6 @@ namespace SDOPackage
     RTC_TRACE(("removePort(%s)", coil::flatten(portlist).c_str()));
     if (portlist.size() == 0) { return; }
 
-    std::string comp_name(member.profile_->instance_name);
 #ifndef ORB_IS_RTORB
     ::RTC::PortProfileList& plist(member.profile_->port_profiles);
 #else // ORB_IS_RTORB
@@ -652,7 +650,7 @@ namespace RTC
 
     ::RTC::Manager& mgr(::RTC::Manager::instance());
 
-    std::vector<RTObject_impl*> comps = mgr.getComponents();
+    mgr.getComponents();
 
     ::SDOPackage::SDOList sdos;
     for (int i(0), len(m_members.size()); i < len; ++i)

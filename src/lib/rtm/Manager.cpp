@@ -422,7 +422,6 @@ namespace RTC
             { RTC_ERROR(("%s not found.", comp0_name.c_str())); continue; }
           if (comp1 == NULL)
             { RTC_ERROR(("%s not found.", comp1_name.c_str())); continue; }
-          std::string port0 = comp_ports[0];
           std::string port1 = comp_ports[1];
           
           PortServiceList_var ports0 = comp0->get_ports();
@@ -463,7 +462,6 @@ namespace RTC
               continue;
             }
           ConnectorProfile conn_prof;
-          std::string prof_name;
           conn_prof.name = CORBA::string_dup(connectors[i].c_str());
           conn_prof.connector_id = CORBA::string_dup("");
           conn_prof.ports.length(2);

@@ -1380,7 +1380,6 @@ namespace RTC
         for (CorbaConsumerList::iterator it(m_consumers.begin());
              it != m_consumers.end(); ++it)
           {
-            std::string name(nv.name);
             if (it->descriptor() == (const char*)nv.name)
               {
                 it->releaseObject();
