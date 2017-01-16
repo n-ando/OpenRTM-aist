@@ -171,7 +171,7 @@ namespace coil
    * @brief Escape string
    * @endif
    */
-  std::string escape(const std::string str)
+  std::string escape(const std::string& str)
   {
     return for_each(str.begin(), str.end(), escape_functor()).str;
   }
@@ -227,7 +227,7 @@ namespace coil
    * @brief Unescape string
    * @endif
    */
-  std::string unescape(const std::string str)
+  std::string unescape(const std::string& str)
   {
     return for_each(str.begin(), str.end(), unescape_functor()).str;
   }
@@ -319,8 +319,8 @@ namespace coil
    * @brief Replace string
    * @endif
    */
-  unsigned int replaceString(std::string& str, const std::string from,
-                     const std::string to)
+  unsigned int replaceString(std::string& str, const std::string& from,
+                     const std::string& to)
   {
     std::string::size_type pos(0);
     unsigned int cnt(0);
