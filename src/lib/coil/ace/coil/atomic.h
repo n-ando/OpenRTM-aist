@@ -17,6 +17,7 @@
  *
  */
 #ifndef COIL_ATOMIC_H
+#define COIL_ATOMIC_H
 
 #include <coil/Mutex.h>
 #include <coil/Guard.h>

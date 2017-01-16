@@ -15,5 +15,7 @@
  * $Id: Manager.cpp 1296 2009-04-27 08:43:24Z n-ando $
  *
  */
-
+#ifndef RTM_FACTORYINIT_H
+#define RTM_FACTORYINIT_H
 void FactoryInit();
+#endif //RTM_FACTORYINIT_H

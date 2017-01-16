@@ -1,6 +1,7 @@
 ﻿/* config_coil.h.  Generated from config_coil.h.in by configure.  */
 /* config_coil.h.in.  Generated from configure.ac by autoheader.  */
-
+#ifndef COIL_CONFIG_COIL_H
+#define COIL_CONFIG_COIL_H
 /* ACE version 5.6.1 or earlier */
 /* #undef ACE_5_6_1_OR_EARLIER */
 
@@ -125,3 +126,4 @@
 
 /* Multi Thread Support */
 #define _REENTRANT TRUE
+#endif //COIL_CONFIG_COIL_H
