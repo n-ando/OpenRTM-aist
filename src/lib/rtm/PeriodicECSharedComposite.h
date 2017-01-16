@@ -126,7 +126,7 @@ namespace SDOPackage
      */
     virtual ::CORBA::Boolean add_members(const SDOList& sdo_list)
       throw (::CORBA::SystemException,
-	     InvalidParameter, NotAvailable, InternalError);
+             InvalidParameter, NotAvailable, InternalError);
 
     /*!
      * @if jp
@@ -153,7 +153,7 @@ namespace SDOPackage
      */
     virtual ::CORBA::Boolean set_members(const SDOList& sdos)
       throw (::CORBA::SystemException,
-	     InvalidParameter, NotAvailable, InternalError);
+             InvalidParameter, NotAvailable, InternalError);
 
     /*!
      * @if jp
@@ -178,7 +178,7 @@ namespace SDOPackage
      */
     virtual ::CORBA::Boolean remove_member(const char* id)
       throw (::CORBA::SystemException,
-	     InvalidParameter, NotAvailable, InternalError);
+             InvalidParameter, NotAvailable, InternalError);
 
     /*!
      * @if jp
@@ -327,19 +327,19 @@ namespace SDOPackage
       //          config_(rtobj->get_configuration())
       {
         rtobj_   = RTC::RTObject::_duplicate(rtobj);
-	profile_ = rtobj->get_component_profile();
-	eclist_  = rtobj->get_owned_contexts();
-	config_  = rtobj->get_configuration();
+        profile_ = rtobj->get_component_profile();
+        eclist_  = rtobj->get_owned_contexts();
+        config_  = rtobj->get_configuration();
       }
 
       virtual ~Member(void)
       {
-	/*
+        /*
         rtobj_.out();
         profile_.out();
         eclist_.out();
         config_.out();
-	*/
+        */
       }
 
       Member(const Member& x)

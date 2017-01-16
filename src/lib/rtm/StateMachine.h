@@ -257,10 +257,10 @@ namespace RTC_Utils
    * @endif
    */
   template <class State,
-	    class Listener,
-	    class States = StateHolder<State>, 
-	    class Callback = void (Listener::*)(const States& states)
-	    >
+            class Listener,
+            class States = StateHolder<State>, 
+            class Callback = void (Listener::*)(const States& states)
+            >
   class StateMachine
   {
     typedef coil::Mutex Mutex;

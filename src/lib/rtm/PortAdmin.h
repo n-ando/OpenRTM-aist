@@ -534,17 +534,17 @@ namespace RTC
     {
     public:
       explicit comp_op(const char* _name)
-	: m_name(_name)
+        : m_name(_name)
       {
       }
       explicit comp_op(T* obj) 
-	: m_name((const char*)(obj->getProfile().name))
+        : m_name((const char*)(obj->getProfile().name))
       {
       }
       bool operator()(T* obj)
       {
-	std::string name((const char*)obj->getProfile().name);
-	return m_name == name;
+        std::string name((const char*)obj->getProfile().name);
+        return m_name == name;
       }
     private:
       std::string m_name;
@@ -563,7 +563,7 @@ namespace RTC
       explicit port_prof_collect(PortProfileList& p) : m_p(p) {}
       void operator()(const PortBase* port)
       {
-	CORBA_SeqUtil::push_back(m_p, port->getPortProfile());
+        CORBA_SeqUtil::push_back(m_p, port->getPortProfile());
       }
     private:
       PortProfileList& m_p;
@@ -583,7 +583,7 @@ namespace RTC
       void operator()(const PortService_ptr port)
       {
         PortProfile* pp(port->get_port_profile());
-	CORBA_SeqUtil::push_back(m_p, *(pp));
+        CORBA_SeqUtil::push_back(m_p, *(pp));
         delete pp;
       }
     private:

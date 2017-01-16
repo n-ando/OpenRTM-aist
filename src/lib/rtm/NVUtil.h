@@ -173,7 +173,7 @@ namespace NVUtil
    * @endif
    */
   SDOPackage::NameValue newNVBool(const char* name,
-				  const CORBA::Boolean value);
+                                  const CORBA::Boolean value);
   
   /*!
    * @if jp
@@ -425,7 +425,7 @@ namespace NVUtil
    * @endif
    */
   bool isStringValue(const SDOPackage::NVList& nv, const char* name,
-		     const char* value);
+                     const char* value);
   
   /*!
    * @if jp

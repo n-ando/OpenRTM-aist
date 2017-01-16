@@ -475,19 +475,19 @@ namespace RTC
     
       put(value);
 
-	  {
-		Guard eguard(m_empty.mutex);
-		if (empty())
-		  {
-			// Guard eguard(m_empty.mutex);
-			advanceWptr(1);
-			m_empty.cond.signal();
-		  }
-		else
-		  {
-			advanceWptr(1);
-		  }
-	  }
+      {
+        Guard eguard(m_empty.mutex);
+        if (empty())
+          {
+            // Guard eguard(m_empty.mutex);
+            advanceWptr(1);
+            m_empty.cond.signal();
+          }
+        else
+          {
+            advanceWptr(1);
+          }
+        }
       return ::RTC::BufferStatus::BUFFER_OK;
     }
     
@@ -761,19 +761,19 @@ namespace RTC
       
       get(value);
 
-	  {
-		Guard fguard(m_full.mutex);
-		if (full())
-		  {
-			// Guard fguard(m_full.mutex);
-			advanceRptr(1);
-			m_full.cond.signal();
-		  }
-		else
-		  {
-			advanceRptr(1);
-		  }
-	  }
+      {
+        Guard fguard(m_full.mutex);
+        if (full())
+          {
+            // Guard fguard(m_full.mutex);
+            advanceRptr(1);
+            m_full.cond.signal();
+          }
+        else
+          {
+            advanceRptr(1);
+          }
+        }
       return ::RTC::BufferStatus::BUFFER_OK;
     }
     

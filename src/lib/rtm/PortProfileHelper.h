@@ -561,8 +561,8 @@ namespace RTC
 
     // PortProfile.interfaces
     typedef SequenceEx<PortInterfaceProfileList,
-		       PortInterfaceProfile,
-		       Mutex> IfProfiles;
+                       PortInterfaceProfile,
+                       Mutex> IfProfiles;
     IfProfiles m_ifProfiles;
 
     // PortProfile.port_ref
@@ -570,8 +570,8 @@ namespace RTC
 
     // PortProfile.connector_profile
     typedef SequenceEx<ConnectorProfileList,
-		       ConnectorProfile,
-		       Mutex> ConnProfiles;
+                       ConnectorProfile,
+                       Mutex> ConnProfiles;
     ConnProfiles m_connProfiles ;
 
     // PortProfile.owner
@@ -590,8 +590,8 @@ namespace RTC
       explicit if_name(const char* name) :  m_name(name) {};
       bool operator()(const PortInterfaceProfile& p)
       {
-	std::string name(p.instance_name);
-	return m_name == name;
+        std::string name(p.instance_name);
+        return m_name == name;
       }
       const std::string m_name;
     };
@@ -602,8 +602,8 @@ namespace RTC
       explicit conn_name(const char* name) :  m_name(name) {};
       bool operator()(const ConnectorProfile& c)
       {
-	std::string name(c.name);
-	return m_name == name;
+        std::string name(c.name);
+        return m_name == name;
       }
       const std::string m_name;
     };
@@ -614,8 +614,8 @@ namespace RTC
       explicit conn_id(const char* id) :  m_id(id) {};
       bool operator()(const ConnectorProfile& c)
       {
-	std::string id(c.connector_id);
-	return m_id == id;
+        std::string id(c.connector_id);
+        return m_id == id;
       }
       const std::string m_id;
     };

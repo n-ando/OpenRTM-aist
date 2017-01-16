@@ -244,7 +244,7 @@ namespace SDOPackage
      */
     virtual CORBA::Boolean set_device_profile(const DeviceProfile& dProfile)
       throw (CORBA::SystemException,
-	     InvalidParameter, NotAvailable, InternalError);
+             InvalidParameter, NotAvailable, InternalError);
     
     /*!
      * @if jp
@@ -293,7 +293,7 @@ namespace SDOPackage
      */
     virtual CORBA::Boolean add_service_profile(const ServiceProfile& sProfile)
       throw (CORBA::SystemException,
-	     InvalidParameter, NotAvailable, InternalError);
+             InvalidParameter, NotAvailable, InternalError);
     
     /*!
      * @if jp
@@ -332,7 +332,7 @@ namespace SDOPackage
      */
     virtual CORBA::Boolean add_organization(Organization_ptr org)
       throw (CORBA::SystemException,
-	     InvalidParameter, NotAvailable, InternalError);
+             InvalidParameter, NotAvailable, InternalError);
     
     /*!
      * @if jp
@@ -378,7 +378,7 @@ namespace SDOPackage
      */
     virtual CORBA::Boolean remove_service_profile(const char* id)
       throw (CORBA::SystemException,
-	     InvalidParameter, NotAvailable, InternalError);
+             InvalidParameter, NotAvailable, InternalError);
     
     /*!
      * @if jp
@@ -421,7 +421,7 @@ namespace SDOPackage
      */
     virtual CORBA::Boolean remove_organization(const char* organization_id)
       throw (CORBA::SystemException,
-	     InvalidParameter, NotAvailable, InternalError);
+             InvalidParameter, NotAvailable, InternalError);
     
     /*!
      * @if jp
@@ -457,7 +457,7 @@ namespace SDOPackage
      */
     virtual ParameterList* get_configuration_parameters()
       throw (CORBA::SystemException,
-	     NotAvailable, InternalError);
+             NotAvailable, InternalError);
     
     /*!
      * @if jp
@@ -491,7 +491,7 @@ namespace SDOPackage
      */
     virtual NVList* get_configuration_parameter_values()
       throw (CORBA::SystemException,
-	     NotAvailable, InternalError);
+             NotAvailable, InternalError);
     
     /*!
      * @if jp
@@ -535,7 +535,7 @@ namespace SDOPackage
      */
     virtual CORBA::Any* get_configuration_parameter_value(const char* name)
       throw (CORBA::SystemException,
-	     InvalidParameter, NotAvailable, InternalError);
+             InvalidParameter, NotAvailable, InternalError);
     
     /*!
      * @if jp
@@ -580,9 +580,9 @@ namespace SDOPackage
      * @endif
      */
     virtual CORBA::Boolean set_configuration_parameter(const char* name,
-						       const CORBA::Any& value)
+                                                       const CORBA::Any& value)
       throw (CORBA::SystemException,
-	     InvalidParameter, NotAvailable, InternalError);
+             InvalidParameter, NotAvailable, InternalError);
         
     /*!
      * @if jp
@@ -620,7 +620,7 @@ namespace SDOPackage
      */
     virtual ConfigurationSetList* get_configuration_sets()
       throw (CORBA::SystemException,
-	     NotAvailable, InternalError);
+             NotAvailable, InternalError);
     
     /*!
      * @if jp
@@ -664,7 +664,7 @@ namespace SDOPackage
      */
     virtual ConfigurationSet* get_configuration_set(const char* config_id)
       throw (CORBA::SystemException,
-	     NotAvailable, InternalError);
+             NotAvailable, InternalError);
     
     /*!
      * @if jp
@@ -716,7 +716,7 @@ namespace SDOPackage
      */
     virtual ConfigurationSet* get_active_configuration_set()
       throw (CORBA::SystemException,
-	     NotAvailable, InternalError);
+             NotAvailable, InternalError);
     
     /*!
      * @if jp
@@ -762,7 +762,7 @@ namespace SDOPackage
     virtual CORBA::Boolean
     add_configuration_set(const ConfigurationSet& configuration_set)
       throw (CORBA::SystemException,
-	     InvalidParameter, NotAvailable, InternalError);
+             InvalidParameter, NotAvailable, InternalError);
     
     /*!
      * @if jp
@@ -818,7 +818,7 @@ namespace SDOPackage
     virtual CORBA::Boolean
     set_configuration_set_values(const ConfigurationSet& configuration_set)
       throw (CORBA::SystemException,
-	     InvalidParameter, NotAvailable, InternalError);
+             InvalidParameter, NotAvailable, InternalError);
     
     /*!
      * @if jp
@@ -860,7 +860,7 @@ namespace SDOPackage
      */
     virtual CORBA::Boolean remove_configuration_set(const char* config_id)
       throw (CORBA::SystemException,
-	     InvalidParameter, NotAvailable, InternalError);
+             InvalidParameter, NotAvailable, InternalError);
     
     /*!
      * @if jp
@@ -914,7 +914,7 @@ namespace SDOPackage
      */
     virtual CORBA::Boolean activate_configuration_set(const char* config_id)
       throw (CORBA::SystemException,
-	     InvalidParameter, NotAvailable, InternalError);
+             InvalidParameter, NotAvailable, InternalError);
     
     // end of CORBA interface definition
     //============================================================
@@ -1138,7 +1138,7 @@ namespace SDOPackage
       explicit nv_name(const char* name) : m_name(name) {};
       bool operator()(const NameValue& nv)
       {
-	return m_name == std::string(nv.name);
+        return m_name == std::string(nv.name);
       }
       std::string m_name;
     };
@@ -1155,8 +1155,8 @@ namespace SDOPackage
       explicit org_id(const char* id) : m_id(id) {};
       bool operator()(const Organization_ptr& o)
       {
-	CORBA::String_var id(o->get_organization_id());
-	return m_id == (const char *)id;
+        CORBA::String_var id(o->get_organization_id());
+        return m_id == (const char *)id;
       }
       const std::string m_id;
     };
@@ -1173,8 +1173,8 @@ namespace SDOPackage
       explicit config_id(const char* id) :  m_id(id) {};
       bool operator()(const ConfigurationSet& c)
       {
-	std::string id(c.id);
-	return m_id == id;
+        std::string id(c.id);
+        return m_id == id;
       }
       const std::string m_id;
     };

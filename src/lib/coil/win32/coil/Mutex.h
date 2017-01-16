@@ -67,12 +67,10 @@ namespace coil
         ::InitializeSecurityDescriptor(&sd_buffer, 
                                        SECURITY_DESCRIPTOR_REVISION);
         ::SetSecurityDescriptorDacl (&sd_buffer, TRUE, 0, FALSE);
-		m_Security_attr.nLength = sizeof(SECURITY_ATTRIBUTES);
-		m_Security_attr.lpSecurityDescriptor = &sd_buffer;
-		m_Security_attr.bInheritHandle = TRUE;
-		mutex_ = ::CreateMutexA( &m_Security_attr,
-		                         FALSE,
-                                         name );
+        m_Security_attr.nLength = sizeof(SECURITY_ATTRIBUTES);
+        m_Security_attr.lpSecurityDescriptor = &sd_buffer;
+        m_Security_attr.bInheritHandle = TRUE;
+        mutex_ = ::CreateMutexA( &m_Security_attr,FALSE,name );
 
 
     }
@@ -94,8 +92,7 @@ namespace coil
      */
     ~Mutex()
     {
-		::CloseHandle(mutex_);
-		
+      ::CloseHandle(mutex_);    
     }
 
     /*!
@@ -115,7 +112,7 @@ namespace coil
      */
     inline void lock()
     {
-		::WaitForSingleObject(mutex_,INFINITE);
+      ::WaitForSingleObject(mutex_,INFINITE);
     }
 
     /*!
@@ -135,20 +132,20 @@ namespace coil
      */
     inline bool trylock()
     {
-        unsigned long dwret;
-		dwret = ::WaitForSingleObject(mutex_,0);
-        switch(dwret)
-		{
-		  case WAIT_ABANDONED:
-			  return true;
-			  break;
-		  case WAIT_OBJECT_0:
-			  return false;
-		  case WAIT_TIMEOUT:
-			  return true;
-		  default:
-			  return true;
-		}
+      unsigned long dwret;
+      dwret = ::WaitForSingleObject(mutex_,0);
+      switch(dwret)
+        {
+        case WAIT_ABANDONED:
+          return true;
+          break;
+        case WAIT_OBJECT_0:
+          return false;
+        case WAIT_TIMEOUT:
+          return true;
+        default:
+          return true;
+        }
     }
 
     /*!
@@ -168,14 +165,14 @@ namespace coil
      */
     inline void unlock()
     {
-		::ReleaseMutex(mutex_);
+      ::ReleaseMutex(mutex_);
     }
     HANDLE mutex_;
     
   private:
     SECURITY_ATTRIBUTES m_Security_attr;
 
-	Mutex(const Mutex&);
+    Mutex(const Mutex&);
     Mutex& operator=(const Mutex &);
   };
 };

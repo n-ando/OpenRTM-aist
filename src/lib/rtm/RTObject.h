@@ -977,7 +977,7 @@ namespace RTC
      * @brief [RTObject CORBA interface] Get ExecutionContextAdmin
      *
      * This operation returns a list containing an ExecutionContextAdmin for
-     * every ExecutionContext owned by the RTC.	
+     * every ExecutionContext owned by the RTC.        
      *
      * @return ExecutionContextService List
      *
@@ -1498,7 +1498,7 @@ namespace RTC
      */
     virtual char* get_sdo_id()
       throw (CORBA::SystemException,
-	     SDOPackage::NotAvailable, SDOPackage::InternalError);
+             SDOPackage::NotAvailable, SDOPackage::InternalError);
     
     /*!
      * @if jp
@@ -1535,7 +1535,7 @@ namespace RTC
      */
     virtual char* get_sdo_type()
       throw (CORBA::SystemException, 
-	     SDOPackage::NotAvailable, SDOPackage::InternalError);
+             SDOPackage::NotAvailable, SDOPackage::InternalError);
     
     /*!
      * @if jp
@@ -1575,7 +1575,7 @@ namespace RTC
      */
     virtual SDOPackage::DeviceProfile* get_device_profile()
       throw (CORBA::SystemException, 
-	     SDOPackage::NotAvailable, SDOPackage::InternalError);
+             SDOPackage::NotAvailable, SDOPackage::InternalError);
     
     /*!
      * @if jp
@@ -1615,7 +1615,7 @@ namespace RTC
      */
     virtual SDOPackage::ServiceProfileList* get_service_profiles()
       throw (CORBA::SystemException, 
-	     SDOPackage::NotAvailable, SDOPackage::InternalError);
+             SDOPackage::NotAvailable, SDOPackage::InternalError);
     
     /*!
      * @if jp
@@ -1660,8 +1660,8 @@ namespace RTC
      */
     virtual SDOPackage::ServiceProfile* get_service_profile(const char* id)
       throw (CORBA::SystemException, 
-	     SDOPackage::InvalidParameter, SDOPackage::NotAvailable,
-	     SDOPackage::InternalError);
+             SDOPackage::InvalidParameter, SDOPackage::NotAvailable,
+             SDOPackage::InternalError);
     
     /*!
      * @if jp
@@ -1712,8 +1712,8 @@ namespace RTC
      */
     virtual SDOPackage::SDOService_ptr get_sdo_service(const char* id)
       throw (CORBA::SystemException, 
-	     SDOPackage::InvalidParameter, SDOPackage::NotAvailable,
-	     SDOPackage::InternalError);
+             SDOPackage::InvalidParameter, SDOPackage::NotAvailable,
+             SDOPackage::InternalError);
     
     /*!
      * @if jp
@@ -1761,8 +1761,8 @@ namespace RTC
      */
     virtual SDOPackage::Configuration_ptr get_configuration()
       throw (CORBA::SystemException, 
-	     SDOPackage::InterfaceNotImplemented, SDOPackage::NotAvailable,
-	     SDOPackage::InternalError);
+             SDOPackage::InterfaceNotImplemented, SDOPackage::NotAvailable,
+             SDOPackage::InternalError);
     
     /*!
      * @if jp
@@ -1809,8 +1809,8 @@ namespace RTC
      */
     virtual SDOPackage::Monitoring_ptr get_monitoring()
       throw (CORBA::SystemException, 
-	     SDOPackage::InterfaceNotImplemented, SDOPackage::NotAvailable,
-	     SDOPackage::InternalError);
+             SDOPackage::InterfaceNotImplemented, SDOPackage::NotAvailable,
+             SDOPackage::InternalError);
     
     /*!
      * @if jp
@@ -1849,7 +1849,7 @@ namespace RTC
      */
     virtual SDOPackage::OrganizationList* get_organizations()
       throw (CORBA::SystemException, 
-	     SDOPackage::NotAvailable, SDOPackage::InternalError);
+             SDOPackage::NotAvailable, SDOPackage::InternalError);
     
     /*!
      * @if jp
@@ -1884,7 +1884,7 @@ namespace RTC
      */
     virtual SDOPackage::NVList* get_status_list()
       throw (CORBA::SystemException, 
-	     SDOPackage::NotAvailable, SDOPackage::InternalError);
+             SDOPackage::NotAvailable, SDOPackage::InternalError);
     
     /*!
      * @if jp
@@ -1924,8 +1924,8 @@ namespace RTC
      */
     virtual CORBA::Any* get_status(const char* name)
       throw (CORBA::SystemException, 
-	     SDOPackage::InvalidParameter, SDOPackage::NotAvailable,
-	     SDOPackage::InternalError);
+             SDOPackage::InvalidParameter, SDOPackage::NotAvailable,
+             SDOPackage::InternalError);
     
     //============================================================
     // Local interfaces
@@ -2249,8 +2249,8 @@ namespace RTC
      */
     template <typename VarType>
     bool bindParameter(const char* param_name, VarType& var,
-		       const char* def_val,
-		       bool (*trans)(VarType&, const char*) = coil::stringTo)
+                       const char* def_val,
+                       bool (*trans)(VarType&, const char*) = coil::stringTo)
     {
       RTC_TRACE(("bindParameter(%s (default: %s))", param_name, def_val));
       m_configsets.bindParameter(param_name, var, def_val, trans);
@@ -4636,7 +4636,7 @@ namespace RTC
       explicit svc_name (const char* id) : m_id(id) {};
       bool operator()(const SDOPackage::ServiceProfile& prof)
       {
-	return m_id == std::string(prof.id);
+        return m_id == std::string(prof.id);
       }
       std::string m_id;
     };  // struct svc_name
@@ -4905,7 +4905,7 @@ namespace RTC
       explicit nv_name(const char* name) : m_name(name) {};
       bool operator()(const SDOPackage::NameValue& nv)
       {
-	return m_name == std::string(nv.name);
+        return m_name == std::string(nv.name);
       }
       std::string m_name;
     };  // struct nv_name
@@ -4920,14 +4920,14 @@ namespace RTC
     struct ec_copy
     {
       explicit ec_copy(ExecutionContextList& eclist)
-	: m_eclist(eclist)
+        : m_eclist(eclist)
       {
       }
       void operator()(ExecutionContextService_ptr ecs)
       {
         if (!::CORBA::is_nil(ecs))
           {
-	    CORBA_SeqUtil::push_back(m_eclist,
+            CORBA_SeqUtil::push_back(m_eclist,
                                      ExecutionContext::_duplicate(ecs));
           }
       }
@@ -4943,25 +4943,25 @@ namespace RTC
     struct ec_find
     {
       explicit ec_find(ExecutionContext_ptr& ec)
-	: m_ec(ExecutionContext::_duplicate(ec))
+        : m_ec(ExecutionContext::_duplicate(ec))
       {
       }
       bool operator()(ExecutionContextService_ptr ecs)
       {
-	try
-	  {
+        try
+          {
             if (!::CORBA::is_nil(ecs))
               {
-  	        ExecutionContext_var ec;
-	        ec = ExecutionContext::_narrow(ecs);
-	        return m_ec->_is_equivalent(ec);
+                ExecutionContext_var ec;
+                ec = ExecutionContext::_narrow(ecs);
+                return m_ec->_is_equivalent(ec);
               }
-	  }
-	catch (...)
-	  {
-	    return false;
-	  }
-	return false;
+          }
+        catch (...)
+          {
+            return false;
+          }
+        return false;
       }
       ExecutionContext_var m_ec;
 
@@ -4978,7 +4978,7 @@ namespace RTC
     struct deactivate_comps
     {
       explicit deactivate_comps(LightweightRTObject_ptr comp)
-	: m_comp(RTC::LightweightRTObject::_duplicate(comp))
+        : m_comp(RTC::LightweightRTObject::_duplicate(comp))
       {
       }
       void operator()(ExecutionContextService_ptr ec)
@@ -4986,7 +4986,7 @@ namespace RTC
         if (!::CORBA::is_nil(ec) && !ec->_non_existent())
           {
             
-	    ec->deactivate_component(RTC::LightweightRTObject::_duplicate(m_comp));
+            ec->deactivate_component(RTC::LightweightRTObject::_duplicate(m_comp));
             ec->stop();
           }
       }

@@ -732,14 +732,14 @@ namespace coil
     ostream_type& level(int level)
     {
       if (m_minLevel <= level && level <= m_logLevel)
-	{
+        {
           header(level);
-	  return *this;
-	}
+          return *this;
+        }
       else
-	{
-	  return m_dummy;
-	}
+        {
+          return m_dummy;
+        }
     }
     
     /*!

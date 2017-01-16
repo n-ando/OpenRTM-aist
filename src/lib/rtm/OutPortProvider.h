@@ -510,7 +510,7 @@ namespace RTC
       explicit publishInterfaceProfileFunc(SDOPackage::NVList& prop) : m_prop(prop) {}
       void operator()(OutPortProvider* provider)
       {
-	provider->publishInterfaceProfile(m_prop);
+        provider->publishInterfaceProfile(m_prop);
       }
       SDOPackage::NVList& m_prop;
     };
@@ -528,7 +528,7 @@ namespace RTC
         : m_prop(prop), provider_(0) {}
       void operator()(OutPortProvider* provider)
       {
-	if (provider->publishInterface(m_prop))
+        if (provider->publishInterface(m_prop))
           {
             provider_ = provider;
           }

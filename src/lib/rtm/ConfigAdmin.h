@@ -347,7 +347,7 @@ namespace RTC
    * @endif
    */
   template <typename VarType,
-	    typename TransFunc = bool (*)(VarType&, const char*)>
+            typename TransFunc = bool (*)(VarType&, const char*)>
   class Config
     : public ConfigBase
   {
@@ -378,7 +378,7 @@ namespace RTC
      * @endif
      */
     Config(const char* name, VarType& var, const char* def_val,
-	   TransFunc trans = coil::stringTo)
+           TransFunc trans = coil::stringTo)
       : ConfigBase(name, def_val), m_var(var), m_trans(trans)
     {
     }
@@ -690,8 +690,8 @@ namespace RTC
      */
     template <typename VarType>
     bool bindParameter(const char* param_name, VarType& var,
-		       const char* def_val,
-		       bool (*trans)(VarType&, const char*) = coil::stringTo)
+                       const char* def_val,
+                       bool (*trans)(VarType&, const char*) = coil::stringTo)
     {
       if (param_name == 0) { return false; }
       if (def_val == 0) { return false; }
@@ -1549,7 +1549,7 @@ namespace RTC
       bool operator()(ConfigBase* conf)
       {
         if (conf == 0) { return false; }
-	return (m_name == conf->name);
+        return (m_name == conf->name);
       }
     };
     

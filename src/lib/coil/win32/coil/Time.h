@@ -30,10 +30,10 @@
 
 namespace coil
 {
-	#define EPOCHFILETIME (116444736000000000i64)
-struct timezone {
-	  int tz_minuteswest;
-	  int tz_dsttime;
+  #define EPOCHFILETIME (116444736000000000i64)
+  struct timezone {
+    int tz_minuteswest;
+    int tz_dsttime;
   };
 
   /*!
@@ -234,36 +234,36 @@ struct timezone {
    */
   inline int gettimeofday(struct timeval *tv, struct timezone *tz)
   {
-	  FILETIME        ftime;
-	  LARGE_INTEGER   lint;
-	  __int64         val64;
-	  if (tv != NULL)
-	  {
-		  ::GetSystemTimeAsFileTime(&ftime);
-		  lint.LowPart  = ftime.dwLowDateTime;
-		  lint.HighPart = ftime.dwHighDateTime;
-		  val64 = lint.QuadPart;
-		  val64 = val64 - EPOCHFILETIME;
-		  val64 = val64 / 10;
-		  tv->tv_sec  = (long)(val64 / 1000000);
-		  tv->tv_usec = (long)(val64 % 1000000);
-	  }
-	  if (tz)
-	    {
-	      static int      tzflag;
-		  if (!tzflag)
-		  {
-			  ::_tzset();
-			  ++tzflag;
-		  }
-		  long tzone = 0;
-		  ::_get_timezone(&tzone);
-		  tz->tz_minuteswest = tzone / 60;
-		  int dlight = 0;
-		  ::_get_daylight(&dlight);
-		  tz->tz_dsttime = dlight;
-	  }
-	  return 0;
+    FILETIME        ftime;
+    LARGE_INTEGER   lint;
+    __int64         val64;
+    if (tv != NULL)
+      {
+        ::GetSystemTimeAsFileTime(&ftime);
+        lint.LowPart  = ftime.dwLowDateTime;
+        lint.HighPart = ftime.dwHighDateTime;
+        val64 = lint.QuadPart;
+        val64 = val64 - EPOCHFILETIME;
+        val64 = val64 / 10;
+        tv->tv_sec  = (long)(val64 / 1000000);
+        tv->tv_usec = (long)(val64 % 1000000);
+      }
+    if (tz)
+      {
+        static int      tzflag;
+        if (!tzflag)
+          {
+            ::_tzset();
+            ++tzflag;
+          }
+        long tzone = 0;
+        ::_get_timezone(&tzone);
+        tz->tz_minuteswest = tzone / 60;
+        int dlight = 0;
+        ::_get_daylight(&dlight);
+        tz->tz_dsttime = dlight;
+      }
+    return 0;
   }
 
   /*!
@@ -316,28 +316,28 @@ struct timezone {
   inline int settimeofday(const struct timeval *tv , const struct timezone *tz)
   {
 
-	  SYSTEMTIME systime;
-	  FILETIME ftime;
-	  LARGE_INTEGER lint;
-	  __int64 val64;
+    SYSTEMTIME systime;
+    FILETIME ftime;
+    LARGE_INTEGER lint;
+    __int64 val64;
 
-	// tv,tz -> ftime
-	if (tv != NULL)
-	{
-	   int bias(0);
-		if (tz != NULL)
-		{
-			bias = tz->tz_minuteswest;
-		}
+    // tv,tz -> ftime
+    if (tv != NULL)
+      {
+        int bias(0);
+        if (tz != NULL)
+          {
+            bias = tz->tz_minuteswest;
+          }
 
-		val64 = (tv->tv_sec + bias * 60) * 1000000;
-		val64 = val64 + tv->tv_usec;
-		lint.QuadPart = val64;
-		ftime.dwHighDateTime = lint.LowPart;
-		ftime.dwHighDateTime = lint.HighPart;
-		::FileTimeToSystemTime(&ftime, &systime);
-		::SetSystemTime(&systime);
-	}
+        val64 = (tv->tv_sec + bias * 60) * 1000000;
+        val64 = val64 + tv->tv_usec;
+        lint.QuadPart = val64;
+        ftime.dwHighDateTime = lint.LowPart;
+        ftime.dwHighDateTime = lint.HighPart;
+        ::FileTimeToSystemTime(&ftime, &systime);
+        ::SetSystemTime(&systime);
+      }
 
     return 0;
   }

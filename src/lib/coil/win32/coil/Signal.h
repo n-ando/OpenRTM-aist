@@ -31,8 +31,8 @@ namespace coil
 
   typedef void (*SignalHandler)(int);
   typedef struct __sigset {
-	  unsigned int __bits[_SIG_WORDS];
-  } sigset_t;	
+    unsigned int __bits[_SIG_WORDS];
+  } sigset_t;    
 
   /*!
    * @if jp

@@ -151,7 +151,7 @@ namespace SDOPackage
      */
     virtual char* get_organization_id()
       throw (CORBA::SystemException,
-	     InvalidParameter, NotAvailable, InternalError);
+             InvalidParameter, NotAvailable, InternalError);
     
     /*!
      * @if jp
@@ -198,7 +198,7 @@ namespace SDOPackage
     virtual CORBA::Boolean
     add_organization_property(const OrganizationProperty& org_property)
       throw (CORBA::SystemException,
-	     InvalidParameter, NotAvailable, InternalError);
+             InvalidParameter, NotAvailable, InternalError);
     
     /*!
      * @if jp
@@ -234,7 +234,7 @@ namespace SDOPackage
      */
     virtual OrganizationProperty* get_organization_property()
       throw (CORBA::SystemException,
-	     NotAvailable, InternalError);
+             NotAvailable, InternalError);
     
     /*!
      * @if jp
@@ -277,7 +277,7 @@ namespace SDOPackage
      */
     virtual CORBA::Any* get_organization_property_value(const char* name)
       throw (CORBA::SystemException,
-	     InvalidParameter, NotAvailable, InternalError);
+             InvalidParameter, NotAvailable, InternalError);
     
     /*!
      * @if jp
@@ -326,7 +326,7 @@ namespace SDOPackage
     virtual CORBA::Boolean
     set_organization_property_value(const char* name, const CORBA::Any& value)
       throw (CORBA::SystemException,
-	     InvalidParameter, NotAvailable, InternalError);
+             InvalidParameter, NotAvailable, InternalError);
     
     /*!
      * @if jp
@@ -370,7 +370,7 @@ namespace SDOPackage
      */
     virtual CORBA::Boolean remove_organization_property(const char* name)
       throw (CORBA::SystemException,
-	     InvalidParameter, NotAvailable, InternalError);
+             InvalidParameter, NotAvailable, InternalError);
     
     /*!
      * @if jp
@@ -411,7 +411,7 @@ namespace SDOPackage
      */
     virtual CORBA::Boolean add_members(const SDOList& sdo_list)
       throw (CORBA::SystemException,
-	     InvalidParameter, NotAvailable, InternalError);
+             InvalidParameter, NotAvailable, InternalError);
     
     /*!
      * @if jp
@@ -447,7 +447,7 @@ namespace SDOPackage
      */
     virtual SDOList* get_members()
       throw (CORBA::SystemException,
-	     NotAvailable, InternalError);
+             NotAvailable, InternalError);
     
     /*!
      * @if jp
@@ -494,7 +494,7 @@ namespace SDOPackage
      */
     virtual CORBA::Boolean set_members(const SDOList& sdos)
       throw (CORBA::SystemException,
-	     InvalidParameter, NotAvailable, InternalError);
+             InvalidParameter, NotAvailable, InternalError);
     
     /*!
      * @if jp
@@ -534,7 +534,7 @@ namespace SDOPackage
      */
     virtual CORBA::Boolean remove_member(const char* id)
       throw (CORBA::SystemException,
-	     InvalidParameter, NotAvailable, InternalError);
+             InvalidParameter, NotAvailable, InternalError);
     
     /*!
      * @if jp
@@ -568,7 +568,7 @@ namespace SDOPackage
      */
     virtual SDOSystemElement_ptr get_owner()
       throw (CORBA::SystemException,
-	     NotAvailable, InternalError);
+             NotAvailable, InternalError);
     
     /*!
      * @if jp
@@ -613,7 +613,7 @@ namespace SDOPackage
      */
     virtual CORBA::Boolean set_owner(SDOSystemElement_ptr sdo)
       throw (CORBA::SystemException,
-	     InvalidParameter, NotAvailable, InternalError);
+             InvalidParameter, NotAvailable, InternalError);
     
     /*!
      * @if jp
@@ -652,7 +652,7 @@ namespace SDOPackage
      */
     virtual DependencyType get_dependency()
       throw (CORBA::SystemException,
-	     NotAvailable, InternalError);
+             NotAvailable, InternalError);
     
     /*!
      * @if jp
@@ -698,7 +698,7 @@ namespace SDOPackage
      */
     virtual CORBA::Boolean set_dependency(DependencyType dependency)
       throw (CORBA::SystemException,
-	     NotAvailable, InternalError);
+             NotAvailable, InternalError);
     
     // end of CORBA interface definition
     //============================================================
@@ -843,7 +843,7 @@ namespace SDOPackage
       explicit nv_name(const char* name) : m_name(name) {};
       bool operator()(const NameValue& nv)
       {
-	return m_name == std::string(nv.name);
+        return m_name == std::string(nv.name);
       }
       std::string m_name;
     };  // struct nv_name
@@ -861,7 +861,7 @@ namespace SDOPackage
       bool operator()(const SDO_ptr sdo)
       {
         CORBA::String_var id(sdo->get_sdo_id());
-	return m_id == (const char*)id;
+        return m_id == (const char*)id;
       }
       std::string m_id;
     };  // struct sdo_id

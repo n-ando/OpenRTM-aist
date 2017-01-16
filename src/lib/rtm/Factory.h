@@ -321,9 +321,9 @@ namespace RTC
      * @endif
      */
     FactoryCXX(const coil::Properties& profile,
-	       RtcNewFunc new_func,
-	       RtcDeleteFunc delete_func,
-	       NumberingPolicy* policy = new DefaultNumberingPolicy());
+               RtcNewFunc new_func,
+               RtcDeleteFunc delete_func,
+               NumberingPolicy* policy = new DefaultNumberingPolicy());
     
     virtual ~FactoryCXX()
     {

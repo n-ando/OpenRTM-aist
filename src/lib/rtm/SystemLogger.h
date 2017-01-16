@@ -402,7 +402,7 @@ namespace RTC
  *
  * @endif
  */
-#define RTC_LOG(LV, fmt)			            \
+#define RTC_LOG(LV, fmt)                                    \
   if (rtclog.isValid(LV))                                   \
     {                                                       \
       std::string str = ::coil::sprintf fmt;                \
@@ -411,7 +411,7 @@ namespace RTC
       rtclog.unlock();                                      \
     }
 
-#define RTC_LOG_STR(LV, str)			            \
+#define RTC_LOG_STR(LV, str)                                \
   if (rtclog.isValid(LV))                                   \
     {                                                       \
       rtclog.lock();                                        \
