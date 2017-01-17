@@ -33,14 +33,14 @@ namespace RTC
    * @endif
    */
   InPortCorbaCdrProvider::InPortCorbaCdrProvider(void)
-   : m_buffer(0) 
+  : m_buffer(0)
   {
     // PortProfile setting
     setInterfaceType("corba_cdr");
-    
+
     // ConnectorProfile setting
     m_objref = this->_this();
-    
+
     // set InPort's reference
     CORBA::ORB_var orb = ::RTC::Manager::instance().getORB();
     CORBA::String_var ior = orb->object_to_string(m_objref.in());
@@ -51,7 +51,7 @@ namespace RTC
       push_back(m_properties,
                 NVUtil::newNV("dataport.corba_cdr.inport_ref", m_objref));
   }
-  
+
   /*!
    * @if jp
    * @brief デストラクタ

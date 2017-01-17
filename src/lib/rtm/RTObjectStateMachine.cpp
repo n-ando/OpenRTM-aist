@@ -472,4 +472,4 @@ namespace RTC_impl
   {
     return m_sm.worker_post();
   }
-}; // namespace RTC_impl
+};  // namespace RTC_impl

@@ -16,8 +16,6 @@
  *
  */
 
-#include <memory>
-#include <algorithm>
 
 #include <coil/UUID.h>
 #include <coil/Guard.h>
@@ -27,6 +25,10 @@
 #include <rtm/CORBA_SeqUtil.h>
 #include <rtm/LocalServiceAdmin.h>
 #include <rtm/LocalServiceBase.h>
+#include <memory>
+#include <algorithm>
+#include <string.h>
+#include <vector>
 
 namespace RTM
 {
@@ -42,7 +44,7 @@ namespace RTM
   {
     RTC_TRACE(("LocalServiceAdmin::LocalServiceAdmin()"));
   }
-  
+
   /*!
    * @if jp
    * @brief 仮想デストラクタ
@@ -54,7 +56,7 @@ namespace RTM
   {
     finalize();
   }
-  
+
   /*!
    * @if jp
    * @brief "all" 文字列探索Functor
@@ -70,7 +72,7 @@ namespace RTM
       return coil::normalize(a) == "all" ? true : false;
     }
   };
-  
+
   /*!
    * @if jp
    *
@@ -91,11 +93,11 @@ namespace RTM
         RTC_INFO(("All the local services are enabled."));
         all_enable = true;
       }
-    
+
     RTM::LocalServiceFactory& factory(RTM::LocalServiceFactory::instance());
     coil::vstring ids = factory.getIdentifiers();
     RTC_DEBUG(("Available services: %s", coil::flatten(ids).c_str()));
-    
+
     for (size_t i(0); i < ids.size(); ++i)
       {
         if (all_enable || isEnabled(ids[i], svcs))
@@ -111,7 +113,7 @@ namespace RTM
           }
       }
   }
-  
+
   /*!
    * @if jp
    * @brief LocalserviceAdmin の終了処理
@@ -129,7 +131,7 @@ namespace RTM
       }
     m_services.clear();
   }
-  
+
   /*!
    * @if jp
    * @brief LocalServiceProfileListの取得
@@ -146,7 +148,7 @@ namespace RTM
       }
     return profs;
   }
-  
+
   /*!
    * @if jp
    * @brief LocalServiceProfile を取得する
@@ -169,7 +171,7 @@ namespace RTM
       }
     return false;
   }
-  
+
   /*!
    * @if jp
    * @brief LocalService の Service を取得する
@@ -188,7 +190,7 @@ namespace RTM
       }
     return NULL;
   }
-  
+
   /*!
    * @if jp
    * @brief SDO service provider をセットする
@@ -210,7 +212,7 @@ namespace RTM
     m_services.push_back(service);
     return true;
   }
-  
+
   /*!
    * @if jp
    * @brief LocalService を削除する
@@ -222,7 +224,7 @@ namespace RTM
   {
     RTC_TRACE(("removeLocalService(%d)", name.c_str()));
     Guard gurad(m_services_mutex);
-    
+
     std::vector<LocalServiceBase*>::iterator it = m_services.begin();
     std::vector<LocalServiceBase*>::iterator it_end = m_services.end();
     while (it != it_end)
@@ -242,7 +244,7 @@ namespace RTM
     RTC_WARN(("Specified SDO service  not found: %s", name.c_str()));
     return false;
   }
-  
+
   //============================================================
   // private functions
   /*!
@@ -260,8 +262,8 @@ namespace RTM
                ret ? "is" : "is not"));
     return ret;
   }
-  
-  
+
+
   /*!
    * @if jp
    * @brief 指定されたIDがすでに存在するかどうかチェックする
@@ -283,5 +285,5 @@ namespace RTM
     RTC_DEBUG(("Local service %s does not exist.", id.c_str()));
     return true;
   }
-  
-}; // end of namepsace RTM
+
+};  // namepsace RTM

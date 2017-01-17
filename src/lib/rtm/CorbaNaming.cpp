@@ -19,7 +19,7 @@
 
 #ifdef WIN32
 #define ACE_HAS_WINSOCK2 0
-#endif //WIN32
+#endif  // WIN32
 
 #include <assert.h>
 #include <rtm/CorbaNaming.h>
@@ -40,7 +40,7 @@ namespace RTC
       m_blLength(100)
   {
   }
-  
+
   /*!
    * @if jp
    * @brief コンストラクタ
@@ -66,7 +66,7 @@ namespace RTC
         throw std::bad_alloc();
       }
   }
-  
+
   /*!
    * @if jp
    * @brief ネーミングサービスの初期化
@@ -97,7 +97,7 @@ namespace RTC
       }
     return false;
   }
-  
+
   /*!
    * @if jp
    * @brief Object を bind する
@@ -121,12 +121,12 @@ namespace RTC
       {
 #ifndef ORB_IS_RTORB
         force ? bindRecursive(e.cxt, e.rest_of_name, obj) : throw;
-#else // ORB_IS_RTORB
+#else  // ORB_IS_RTORB
         force ? bindRecursive(e.cxt(), e.rest_of_name(), obj) : throw;
-#endif // ORB_IS_RTORB
+#endif  // ORB_IS_RTORB
       }
   }
-  
+
   /*!
    * @if jp
    * @brief Object を bind する
@@ -140,7 +140,7 @@ namespace RTC
   {
     this->bind(toName(string_name), obj, force);
   }
-  
+
   /*!
    * @if jp
    * @brief 途中のコンテキストを再帰的に bind しながら Object を bind する
@@ -156,11 +156,11 @@ namespace RTC
     CORBA::ULong len(name.length());
     CosNaming::NamingContext_var cxt;
     cxt = CosNaming::NamingContext::_duplicate(context);
-    
+
     for (CORBA::ULong i = 0; i < len; ++i)
       {
         if (i == (len - 1))
-          { // this operation may throw AlreadyBound, 
+          { // this operation may throw AlreadyBound,
             cxt->bind(subName(name, i, i), obj);
             return;
           }
@@ -174,7 +174,7 @@ namespace RTC
       }
     return;
   }
-  
+
   /*!
    * @if jp
    * @brief Object を rebind する
@@ -199,12 +199,12 @@ namespace RTC
       {
 #ifndef ORB_IS_RTORB
         force ? rebindRecursive(e.cxt, e.rest_of_name, obj) : throw;
-#else // ORB_IS_RTORB
+#else  // ORB_IS_RTORB
         force ? rebindRecursive(e.cxt(), e.rest_of_name(), obj) : throw;
-#endif // ORB_IS_RTORB
+#endif  // ORB_IS_RTORB
       }
   }
-  
+
   /*!
    * @if jp
    * @brief Object を rebind する
@@ -219,7 +219,7 @@ namespace RTC
   {
     rebind(toName(string_name), obj, force);
   }
-  
+
   /*!
    * @if jp
    * @brief 途中のコンテキストを bind しながら Object を rebind する
@@ -235,7 +235,7 @@ namespace RTC
     CORBA::ULong len(name.length());
     CosNaming::NamingContext_var cxt;
     cxt = CosNaming::NamingContext::_duplicate(context);
-    
+
     for (CORBA::ULong i = 0; i < len; ++i)
       {
         if (i == (len - 1))
@@ -265,7 +265,7 @@ namespace RTC
       }
     return;
   }
-  
+
   /*!
    * @if jp
    * @brief NamingContext を bind する
@@ -280,7 +280,7 @@ namespace RTC
   {
     bind(name, name_cxt, force);
   }
-  
+
   /*!
    * @if jp
    * @brief NamingContext を bind する
@@ -295,7 +295,7 @@ namespace RTC
   {
     bindContext(toName(string_name), name_cxt, force);
   }
-  
+
   /*!
    * @if jp
    * @brief 途中のコンテキストを再帰的に bind し NamingContext を bind する
@@ -311,7 +311,7 @@ namespace RTC
     bindRecursive(context, name, name_cxt);
     return;
   }
-  
+
   /*!
    * @if jp
    * @brief NamingContext を rebind する
@@ -327,7 +327,7 @@ namespace RTC
     rebind(name, name_cxt, force);
     return;
   }
-  
+
   /*!
    * @if jp
    * @brief NamingContext を rebind する
@@ -342,12 +342,12 @@ namespace RTC
   {
     rebindContext(toName(string_name), name_cxt, force);
   }
-  
+
   /*!
    * @if jp
    * @brief 途中のコンテキストを再帰的に rebind し NamingContext を rebind する
    * @else
-   * @brief Rebind intermediate context recursively and rebind NamingContext 
+   * @brief Rebind intermediate context recursively and rebind NamingContext
    * @endif
    */
   void
@@ -358,7 +358,7 @@ namespace RTC
     rebindRecursive(context, name, name_cxt);
     return;
   }
-  
+
   /*!
    * @if jp
    * @brief 与えられた NameComponent にバインドされている Object を返す
@@ -368,10 +368,10 @@ namespace RTC
    */
   CORBA::Object_ptr CorbaNaming::resolve(const CosNaming::Name& name)
     throw (SystemException, NotFound, CannotProceed, InvalidName)
-  { 
+  {
     return m_rootContext->resolve(name);
   }
-  
+
   /*!
    * @if jp
    * @brief 与えられた NameComponent にバインドされている Object を返す
@@ -381,23 +381,23 @@ namespace RTC
    */
   CORBA::Object_ptr CorbaNaming::resolve(const char* string_name)
     throw (SystemException, NotFound, CannotProceed, InvalidName)
-  { 
+  {
     return resolve(toName(string_name));
   }
-  
+
   /*!
    * @if jp
    * @brief 与えられた NameComponent のバインディングを削除する
    * @else
    * @brief Unbind a binding specified by NameComponent
    * @endif
-   */   
+   */
   void CorbaNaming::unbind(const CosNaming::Name& name)
     throw (SystemException, NotFound, CannotProceed, InvalidName)
   {
     m_rootContext->unbind(name);
   }
-  
+
   /*!
    * @if jp
    * @brief 与えられた NameComponent のバインディングを削除する
@@ -410,7 +410,7 @@ namespace RTC
   {
     unbind(toName(string_name));
   }
-  
+
   /*!
    * @if jp
    * @brief 新しいコンテキストを生成する
@@ -422,7 +422,7 @@ namespace RTC
   {
     return m_rootContext->new_context();
   }
-  
+
   /*!
    * @if jp
    * @brief 新しいコンテキストを bind する
@@ -446,14 +446,14 @@ namespace RTC
       {
 #ifndef ORB_IS_RTORB
         force ? bindRecursive(e.cxt, e.rest_of_name, newContext()) : throw;
-#else // ORB_IS_RTORB
-        force ? 
+#else  // ORB_IS_RTORB
+        force ?
           bindRecursive(e.cxt(), e.rest_of_name(), newContext()) : throw;
-#endif // ORB_IS_RTORB
+#endif  // ORB_IS_RTORB
       }
     return CosNaming::NamingContext::_nil();
   }
-  
+
   /*!
    * @if jp
    * @brief 新しいコンテキストを bind する
@@ -467,7 +467,7 @@ namespace RTC
   {
     return bindNewContext(toName(string_name));
   }
-  
+
   /*!
    * @if jp
    * @brief NamingContext を非アクティブ化する
@@ -480,7 +480,7 @@ namespace RTC
   {
     context->destroy();
   }
-  
+
   /*!
    * @if jp
    * @brief NamingContext を再帰的に下って非アクティブ化する
@@ -494,48 +494,54 @@ namespace RTC
     CosNaming::BindingList_var     bl;
     CosNaming::BindingIterator_var bi;
     CORBA::Boolean cont(true);
-    
+
 #ifndef ORB_IS_RTORB
     context->list(m_blLength, bl.out(), bi.out());
-#else // ORB_IS_RTORB
-    //    context->list(m_blLength, bl, bi);
+#else  // ORB_IS_RTORB
+    // context->list(m_blLength, bl, bi);
     context->list(m_blLength, (CosNaming::BindingList_out)bl,
                   (CosNaming::BindingIterator_ptr)bi);
-#endif // ORB_IS_RTORB
-    
+#endif  // ORB_IS_RTORB
+
     while (cont)
       {
         CORBA::ULong len(bl->length());
-        
+
         for (CORBA::ULong i = 0; i < len; ++i)
           {
             if (bl[i].binding_type == CosNaming::ncontext)
-              {        // If Object is context, destroy recursive.
+              {  // If Object is context, destroy recursive.
                 CosNaming::NamingContext_var next_context;
                 next_context = CosNaming::NamingContext::
                   _narrow(context->resolve(bl[i].binding_name));
-                
+
                 // Recursive function call
-                destroyRecursive(next_context); // +++ Recursive call +++
+                destroyRecursive(next_context);  // +++ Recursive call +++
                 context->unbind(bl[i].binding_name);
                 next_context->destroy();
               }
             else if (bl[i].binding_type == CosNaming::nobject)
-              {        // If Object is object, unbind it.
+              {  // If Object is object, unbind it.
                 context->unbind(bl[i].binding_name);
               }
-            else assert(0); // never comes here
+            else assert(0);  // never comes here
           }
-        
+
         // no more binding -> do-while loop will be finished
-        if (CORBA::is_nil(bi)) cont = false;
-        else bi->next_n(m_blLength, bl);
-      }
-    
+        if (CORBA::is_nil(bi))
+          {
+            cont = false;
+          }
+        else
+          {
+            bi->next_n(m_blLength, bl);
+          }
+     }
+
     if (!CORBA::is_nil(bi)) bi->destroy();
     return;
   }
-  
+
   /*!
    * @if jp
    * @brief すべての Binding を削除する
@@ -547,7 +553,7 @@ namespace RTC
   {
     destroyRecursive(m_rootContext);
   }
-  
+
   /*!
    * @if jp
    * @brief 与えられた NamingContext の Binding を取得する
@@ -562,13 +568,13 @@ namespace RTC
   {
 #ifndef ORB_IS_RTORB
     name_cxt->list(how_many, bl.out(), bi.out());
-#else // ORB_IS_RTORB
+#else  // ORB_IS_RTORB
     name_cxt->list(how_many, (CosNaming::BindingList_out)bl,
                    (CosNaming::BindingIterator_ptr)bi);
-#endif // ORB_IS_RTORB
+#endif  // ORB_IS_RTORB
 
   }
-  
+
   /*!
    * @if jp
    * @brief 与えられた Naming パス以下のすべてのバインディングを取得する
@@ -592,20 +598,20 @@ namespace RTC
     CosNaming::BindingIterator_var bi;
 #ifndef ORB_IS_RTORB
     nc->list(max_list_size, bl.out(), bi.out());
-#else // ORB_IS_RTORB
+#else  // ORB_IS_RTORB
     nc->list(max_list_size, (CosNaming::BindingList_out)bl,
              (CosNaming::BindingIterator_ptr)bi);
-#endif // ORB_IS_RTORB
+#endif  // ORB_IS_RTORB
     CORBA::Long   max_remaining = max_list_size - bl->length();
     CORBA::Boolean more_bindings = !CORBA::is_nil(bi);
-    
+
     if (more_bindings)
       {
         while (more_bindings && (max_remaining > 0))
           {
             CosNaming::BindingList_var tmp_bl;
             more_bindings = bi->next_n(max_remaining, tmp_bl.out());
-            //Append 'tmp_bl' to 'bl'
+            // Append 'tmp_bl' to 'bl'
             CORBA::ULong bl_len = bl->length();
             bl->length(bl_len + tmp_bl->length());
             for (CORBA::ULong i(0); i < tmp_bl->length(); ++i)
@@ -618,7 +624,7 @@ namespace RTC
       }
     return;
   }
-  
+
   /*!
    * @if jp
    * @brief 与えられたパス以下の指定されたkindのバインディングを取得する
@@ -634,7 +640,7 @@ namespace RTC
     if (string_kind == 0) { bl->length(0); return; }
     std::string kind(string_kind);
 
-    CosNaming::BindingList_var tmp_bl; // = new CosNaming::BindingList();
+    CosNaming::BindingList_var tmp_bl;  // = new CosNaming::BindingList();
     list(string_name, tmp_bl);
 
     CORBA::ULong tmp_len(tmp_bl->length());
@@ -668,16 +674,16 @@ namespace RTC
   {
     if (name.length() == 0)
       throw InvalidName();
-    
+
     CORBA::ULong slen = 0;
     slen = getNameLength(name);
-    
+
     CORBA::String_var string_name = CORBA::string_alloc(slen);
-    nameToString(name, (char*)string_name, slen);
-    
+    nameToString(name, <char*>string_name, slen);
+
     return string_name._retn();
   }
-  
+
   /*!
    * @if jp
    * @brief 与えられた文字列表現を NameComponent に分解する
@@ -690,19 +696,19 @@ namespace RTC
   {
     if (!sname)         throw InvalidName();
     if (*sname == '\0') throw InvalidName();
-    
+
     std::string string_name(sname);
     std::vector<std::string> name_comps;
-    
+
     // String name should include 1 or more names
     CORBA::ULong nc_length = 0;
     nc_length = split(string_name, std::string("/"), name_comps);
     if (!(nc_length > 0)) throw InvalidName();
-    
+
     // Name components are allocated
     CosNaming::Name_var    name = new CosNaming::Name();
     name->length(nc_length);
-    
+
     // Insert id and kind to name components
     for (CORBA::ULong i = 0; i < nc_length; ++i)
       {
@@ -710,9 +716,9 @@ namespace RTC
         pos = name_comps[i].find_last_of(".");
         if (pos != name_comps[i].npos)
           {
-            name[i].id   = 
+            name[i].id   =
               CORBA::string_dup(name_comps[i].substr(0, pos).c_str());
-            name[i].kind = 
+            name[i].kind =
               CORBA::string_dup(name_comps[i].substr(pos + 1).c_str());
           }
         else
@@ -720,14 +726,14 @@ namespace RTC
             name[i].id   = CORBA::string_dup(name_comps[i].c_str());
 #ifndef ORB_IS_RTORB
             name[i].kind = "";
-#else // ORB_IS_RTORB
-            name[i].kind = (char*)"";
-#endif // ORB_IS_RTORB
+#else  // ORB_IS_RTORB
+            name[i].kind = <char*>"";
+#endif  // ORB_IS_RTORB
           }
       }
     return name;
   }
-  
+
   /*!
    * @if jp
    * @brief 与えられた addre と string_name から URL表現を取得する
@@ -740,7 +746,7 @@ namespace RTC
   {
     return m_rootContext->to_url(addr, string_name);
   }
-  
+
   /*!
    * @if jp
    * @brief 与えられた文字列表現を resolve しオブジェクトを返す
@@ -753,7 +759,7 @@ namespace RTC
   {
     return resolve(string_name);
   }
-  
+
   //======================================================================
   // Util functions
   //======================================================================
@@ -781,7 +787,7 @@ namespace RTC
       }
     return CORBA::Object::_nil();
   }
-  
+
   /*!
    * @if jp
    * @brief 名前をバインドまたは解決する
@@ -797,7 +803,7 @@ namespace RTC
     return CosNaming::NamingContext
       ::_narrow(bindOrResolve(context, name, new_context));
   }
-  
+
   /*!
    * @if jp
    * @brief 名前をバインドまたは解決する
@@ -811,7 +817,7 @@ namespace RTC
   {
     return bindOrResolveContext(context, name, newContext());
   }
-  
+
   /*!
    * @if jp
    * @brief ネームサーバの名前を取得する
@@ -823,7 +829,7 @@ namespace RTC
   {
     return m_nameServer.c_str();
   }
-  
+
   /*!
    * @if jp
    * @brief ルートコンテキストを取得する
@@ -835,7 +841,7 @@ namespace RTC
   {
     return m_rootContext;
   }
-  
+
   /*!
    * @if jp
    * @brief オブジェクトがネーミングコンテキストか判別する
@@ -849,7 +855,7 @@ namespace RTC
     nc = CosNaming::NamingContext::_narrow(obj);
     return CORBA::is_nil(nc) ? false : true;
   }
-  
+
   /*!
    * @if jp
    * @brief 与えられた名前がネーミングコンテキストかどうか
@@ -861,7 +867,7 @@ namespace RTC
   {
     return isNamingContext(resolve(name));
   }
-  
+
   /*!
    * @if jp
    * @brief 与えられた名前がネーミングコンテキストかどうか
@@ -873,7 +879,7 @@ namespace RTC
   {
     return isNamingContext(resolve(string_name));
   }
-  
+
   /*!
    * @if jp
    * @brief ネームコンポーネントの部分を返す
@@ -886,7 +892,7 @@ namespace RTC
                                        CORBA::Long end)
   {
     if (end < 0) end = name.length() - 1;
-    
+
     CosNaming::Name sub_name;
     CORBA::ULong sub_len(end - (begin - 1));
     if (sub_len > 0)
@@ -898,14 +904,14 @@ namespace RTC
         sub_name.length(0);
         return sub_name;
       }
-    
+
     for (CORBA::ULong i = 0; i < sub_len; ++i)
       {
         sub_name[i] = name[begin + i];
       }
     return sub_name;
   }
-  
+
   //------------------------------------------------------------
   // Protected member functions
   //------------------------------------------------------------
@@ -930,7 +936,7 @@ namespace RTC
             *s++ = *id;
           }
         // '.' if there is a kind, or no id
-        if (((const char*)(name[i].id  ))[0] == '\0' || 
+        if (((const char*)(name[i].id  ))[0] == '\0' ||
             ((const char*)(name[i].kind))[0] != '\0')
           *s++ = '.';
         // Copy kind to string_name
@@ -945,7 +951,7 @@ namespace RTC
       }
     string_name[slen-1] = '\0';
   }
-  
+
   /*!
    * @if jp
    * @brief ネームコンポーネントの文字列表現時の文字長を取得する
@@ -956,7 +962,7 @@ namespace RTC
   CORBA::ULong CorbaNaming::getNameLength(const CosNaming::Name& name)
   {
     CORBA::ULong slen = 0;
-    
+
     for (CORBA::ULong i = 0; i < name.length(); ++i)
       {
         // Count string length of id(s)
@@ -967,7 +973,7 @@ namespace RTC
             slen++;
           }
         // If kind exists, space for '.' is counted
-        if (((const char*)(name[i].id  ))[0] == '\0' || 
+        if (((const char*)(name[i].id  ))[0] == '\0' ||
             ((const char*)(name[i].kind))[0] != '\0')
           {
             slen++;
@@ -983,7 +989,7 @@ namespace RTC
       }
     return slen;
   }
-  
+
   /*!
    * @if jp
    * @brief 文字列の分割
@@ -998,15 +1004,15 @@ namespace RTC
     typedef std::string::size_type size;
     size delim_size = delimiter.size();
     size found_pos(0), begin_pos(0), pre_pos(0), substr_size(0);
-    
+
     if (input.substr(0, delim_size) == delimiter)
       begin_pos = pre_pos = delim_size;
-    
+
     while (1)
       {
       REFIND:
         found_pos = input.find(delimiter, begin_pos);
-        if (found_pos == std::string::npos) 
+        if (found_pos == std::string::npos)
           {
             results.push_back(input.substr(pre_pos));
             break;
@@ -1016,9 +1022,9 @@ namespace RTC
             begin_pos = found_pos + delim_size;
             goto REFIND;
           }
-        
+
         substr_size = found_pos - pre_pos;
-        
+
         if (substr_size > 0)
           {
             results.push_back(input.substr(pre_pos, substr_size));
@@ -1028,4 +1034,4 @@ namespace RTC
       }
     return results.size();
   }
-}; // namespace RTC
+};  // namespace RTC

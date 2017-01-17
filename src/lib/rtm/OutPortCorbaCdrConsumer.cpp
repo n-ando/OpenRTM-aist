@@ -34,7 +34,7 @@ namespace RTC
   {
     rtclog.setName("OutPortCorbaCdrConsumer");
   }
-    
+
   /*!
    * @if jp
    * @brief デストラクタ
@@ -44,7 +44,7 @@ namespace RTC
    */
   OutPortCorbaCdrConsumer::~OutPortCorbaCdrConsumer(void)
   {
-  } 
+  }
 
   /*!
    * @if jp
@@ -75,7 +75,7 @@ namespace RTC
    * @if jp
    * @brief リスナを設定する。
    * @else
-   * @brief Set the listener. 
+   * @brief Set the listener.
    * @endif
    */
   void OutPortCorbaCdrConsumer::setListener(ConnectorInfo& info,
@@ -106,7 +106,7 @@ namespace RTC
         if (ret == ::OpenRTM::PORT_OK)
           {
             RTC_DEBUG(("get() successful"));
-            data.put_octet_array(&(cdr_data[0]), (int)cdr_data->length());
+            data.put_octet_array(&(cdr_data[0]), <int>cdr_data->length());
             RTC_PARANOID(("CDR data length: %d", cdr_data->length()));
 
             onReceived(data);
@@ -134,7 +134,7 @@ namespace RTC
     RTC_ERROR(("OutPortCorbaCdrConsumer::get(): Never comes here."));
     return UNKNOWN_ERROR;
   }
-    
+
   /*!
    * @if jp
    * @brief データ受信通知への登録
@@ -154,7 +154,7 @@ namespace RTC
         RTC_DEBUG(("dataport.corba_cdr.outport_ior not found."));
         return false;
       }
-    
+
     if (NVUtil::isString(properties,
                          "dataport.corba_cdr.outport_ior"))
       {
@@ -175,10 +175,10 @@ namespace RTC
           }
         return ret;
       }
-    
+
     return false;
   }
-  
+
   /*!
    * @if jp
    * @brief データ受信通知からの登録解除
@@ -198,7 +198,7 @@ namespace RTC
         RTC_DEBUG(("dataport.corba_cdr.outport_ior not found."));
         return;
       }
-    
+
     const char* ior;
     if (properties[index].value >>= ior)
       {
@@ -232,7 +232,7 @@ namespace RTC
         // never comes here
         return PORT_OK;
         break;
-        
+
       case ::OpenRTM::PORT_ERROR:
         onSenderError();
         return PORT_ERROR;

@@ -21,12 +21,13 @@
 #ifdef RTM_OS_LINUX
 #define _GNU_SOURCE
 #include <pthread.h>
-#endif // RTM_OS_LINUX
+#endif  // RTM_OS_LINUX
 #include <coil/Time.h>
 #include <coil/TimeValue.h>
 
 #include <rtm/PeriodicExecutionContext.h>
 #include <rtm/RTObjectStateMachine.h>
+#include <string.h>
 
 #define DEEFAULT_PERIOD 0.000001
 namespace RTC_exp
@@ -51,7 +52,7 @@ namespace RTC_exp
 
     // profile initialization
     setKind(RTC::PERIODIC);
-    setRate(1.0 / (double)DEEFAULT_PERIOD);
+    setRate(1.0 / <double>DEEFAULT_PERIOD);
 
     RTC_DEBUG(("Actual period: %d [sec], %d [usec]",
                m_profile.getPeriod().sec(), m_profile.getPeriod().usec()));
@@ -154,7 +155,7 @@ namespace RTC_exp
             RTC_DEBUG(("Current CPU affinity mask is %d.", j));
           }
       }
-#endif // RTM_OS_LINUX
+#endif  // RTM_OS_LINUX
 
     do
       {
@@ -177,9 +178,9 @@ namespace RTC_exp
         coil::TimeValue period(getPeriod());
         if (count > 1000)
           {
-            RTC_PARANOID(("Period:    %f [s]", (double)period));
-            RTC_PARANOID(("Execution: %f [s]", (double)(t1 - t0)));
-            RTC_PARANOID(("Sleep:     %f [s]", (double)(period - (t1 - t0))));
+            RTC_PARANOID(("Period:    %f [s]", <double>period));
+            RTC_PARANOID(("Execution: %f [s]", <double>(t1 - t0)));
+            RTC_PARANOID(("Sleep:     %f [s]", <double>(period - (t1 - t0))));
           }
         coil::TimeValue t2(coil::gettimeofday());
         if (!m_nowait && period > (t1 - t0))
@@ -190,7 +191,7 @@ namespace RTC_exp
         if (count > 1000)
           {
             coil::TimeValue t3(coil::gettimeofday());
-            RTC_PARANOID(("Slept:     %f [s]", (double)(t3 - t2)));
+            RTC_PARANOID(("Slept:     %f [s]", <double>(t3 - t2)));
             count = 0;
           }
         ++count;
@@ -626,7 +627,7 @@ namespace RTC_exp
       }
   }
 
-}; // namespace RTC  
+};  // namespace RTC_exp
 
 extern "C"
 {

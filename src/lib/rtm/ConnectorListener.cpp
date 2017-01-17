@@ -49,7 +49,7 @@ namespace RTC
   ConnectorDataListenerHolder::ConnectorDataListenerHolder()
   {
   }
-  
+
 
   ConnectorDataListenerHolder::~ConnectorDataListenerHolder()
   {
@@ -63,7 +63,7 @@ namespace RTC
       }
   }
 
-  
+
   void ConnectorDataListenerHolder::
   addListener(ConnectorDataListener* listener, bool autoclean)
   {
@@ -71,7 +71,7 @@ namespace RTC
     m_listeners.push_back(Entry(listener, autoclean));
   }
 
-  
+
   void ConnectorDataListenerHolder::
   removeListener(ConnectorDataListener* listener)
   {
@@ -89,7 +89,7 @@ namespace RTC
             return;
           }
       }
-    
+
   }
 
   size_t ConnectorDataListenerHolder::size()
@@ -97,7 +97,7 @@ namespace RTC
     Guard guard(m_mutex);
     return m_listeners.size();
   }
-    
+
   void ConnectorDataListenerHolder::notify(const ConnectorInfo& info,
                                            const cdrMemoryStream& cdrdata)
   {
@@ -119,8 +119,8 @@ namespace RTC
   ConnectorListenerHolder::ConnectorListenerHolder()
   {
   }
-    
-  
+
+
   ConnectorListenerHolder::~ConnectorListenerHolder()
   {
     Guard guard(m_mutex);
@@ -133,20 +133,20 @@ namespace RTC
       }
   }
 
-  
+
   void ConnectorListenerHolder::addListener(ConnectorListener* listener,
                                             bool autoclean)
   {
     Guard guard(m_mutex);
     m_listeners.push_back(Entry(listener, autoclean));
   }
-  
+
 
   void ConnectorListenerHolder::removeListener(ConnectorListener* listener)
   {
     Guard guard(m_mutex);
     std::vector<Entry>::iterator it(m_listeners.begin());
-    
+
     for (; it != m_listeners.end(); ++it)
       {
         if ((*it).first == listener)
@@ -159,15 +159,15 @@ namespace RTC
             return;
           }
       }
-    
+
   }
-  
+
   size_t ConnectorListenerHolder::size()
   {
     Guard guard(m_mutex);
     return m_listeners.size();
   }
-  
+
   void ConnectorListenerHolder::notify(const ConnectorInfo& info)
   {
     Guard guard(m_mutex);
@@ -176,6 +176,6 @@ namespace RTC
         m_listeners[i].first->operator()(info);
       }
   }
-};
+};  //namespace RTC
 
 

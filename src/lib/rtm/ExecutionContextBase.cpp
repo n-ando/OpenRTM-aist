@@ -39,7 +39,7 @@ namespace RTC
   ExecutionContextBase::~ExecutionContextBase(void)
   {
   }
-  
+
   /*!
    * @if jp
    * @brief ExecutionContextの処理を進める
@@ -51,10 +51,10 @@ namespace RTC
   {
     RTC_TRACE(("init()"));
     RTC_DEBUG_STR((props));
-    
+
     // getting rate
     setExecutionRate(props);
-    
+
     // getting sync/async mode flag
     bool transitionMode;
     if (setTransitionMode(props, "sync_transition", transitionMode))
@@ -66,7 +66,7 @@ namespace RTC
     setTransitionMode(props, "sync_activation", m_syncActivation);
     setTransitionMode(props, "sync_deactivation", m_syncDeactivation);
     setTransitionMode(props, "sync_reset", m_syncReset);
-    
+
     // getting transition timeout
     coil::TimeValue timeout;
     if (setTimeout(props, "transition_timeout", timeout))
@@ -83,17 +83,17 @@ namespace RTC
     RTC_DEBUG(("Exec rate   : %f [Hz]", getRate()));
     RTC_DEBUG(("Activation  : Sync = %s, Timeout = %f",
                m_syncActivation ? "YES" : "NO",
-               (double)m_activationTimeout));
+               <double>m_activationTimeout));
     RTC_DEBUG(("Deactivation: Sync = %s, Timeout = %f",
                m_syncDeactivation ? "YES" : "NO",
-               (double)m_deactivationTimeout));
+               <double>m_deactivationTimeout));
     RTC_DEBUG(("Reset       : Sync = %s, Timeout = %f",
                m_syncReset ? "YES" : "NO",
-               (double)m_resetTimeout));
+               <double>m_resetTimeout));
     // Setting given Properties to EC's profile::properties
     setProperties(props);
   }
-  
+
   /*!
    * @if jp
    * @brief コンポーネントをバインドする。
@@ -112,7 +112,7 @@ namespace RTC
   {
     return m_worker.bindComponent(rtc);
   }
-  
+
   //============================================================
   // Functions to be delegated by EC's CORBA operations
   /*!
@@ -127,7 +127,7 @@ namespace RTC
     RTC_TRACE(("isRunning()"));
     return m_worker.isRunning();
   }
-  
+
   /*!
    * @if jp
    * @brief ExecutionContext の実行を開始
@@ -138,19 +138,19 @@ namespace RTC
   RTC::ReturnCode_t ExecutionContextBase::start()
   {
     RTC_TRACE(("start()"));
-    RTC::ReturnCode_t ret = onStarting(); // Template
+    RTC::ReturnCode_t ret = onStarting();  // Template
     if (ret != RTC::RTC_OK)
       {
         RTC_ERROR(("onStarting() failed. Starting EC aborted."));
         return ret;
       }
-    ret = m_worker.start(); // Actual start()
+    ret = m_worker.start();  // Actual start()
     if (ret != RTC::RTC_OK)
       {
         RTC_ERROR(("Invoking on_startup() for each RTC failed."));
         return ret;
       }
-    ret = onStarted(); // Template
+    ret = onStarted();  // Template
     if (ret != RTC::RTC_OK)
       {
         RTC_ERROR(("Invoking on_startup() for each RTC failed."));
@@ -160,7 +160,7 @@ namespace RTC
       }
     return ret;
   }
-  
+
   /*!
    * @if jp
    * @brief ExecutionContext の実行を停止
@@ -171,19 +171,19 @@ namespace RTC
   RTC::ReturnCode_t ExecutionContextBase::stop()
   {
     RTC_TRACE(("stop()"));
-    RTC::ReturnCode_t ret = onStopping(); // Template
+    RTC::ReturnCode_t ret = onStopping();  // Template
     if (ret != RTC::RTC_OK)
       {
         RTC_ERROR(("onStopping() failed. Stopping EC aborted."));
         return ret;
       }
-    ret = m_worker.stop(); // Actual stop()
+    ret = m_worker.stop();  // Actual stop()
     if (ret != RTC::RTC_OK)
       {
         RTC_ERROR(("Invoking on_shutdown() for each RTC failed."));
         return ret;
       }
-    ret = onStopped(); // Template
+    ret = onStopped();  // Template
     if (ret != RTC::RTC_OK)
       {
         RTC_ERROR(("Invoking on_shutdown() for each RTC failed."));
@@ -191,7 +191,7 @@ namespace RTC
       }
     return ret;
   }
-  
+
   /*!
    * @if jp
    * @brief ExecutionContext の実行周期(Hz)を取得する
@@ -202,16 +202,16 @@ namespace RTC
    */
   double ExecutionContextBase::getRate(void) const
   {
-    double rate = m_profile.getRate(); // Actual getRate()
-    return onGetRate(rate); // Template
+    double rate = m_profile.getRate();  // Actual getRate()
+    return onGetRate(rate);  // Template
   }
-  
+
   coil::TimeValue ExecutionContextBase::getPeriod(void) const
   {
     coil::TimeValue period = m_profile.getPeriod();
     return period;
   }
-  
+
   /*!
    * @if jp
    * @brief ExecutionContext の実行周期(Hz)を設定する
@@ -243,7 +243,7 @@ namespace RTC
     RTC_INFO(("setRate(%f) done", rate));
     return ret;
   }
-  
+
   /*!
    * @if jp
    * @brief RTコンポーネントを追加する
@@ -255,25 +255,25 @@ namespace RTC
   addComponent(RTC::LightweightRTObject_ptr comp)
   {
     RTC_TRACE(("addComponent()"));
-    RTC::ReturnCode_t ret = onAddingComponent(comp); // Template
+    RTC::ReturnCode_t ret = onAddingComponent(comp);  // Template
     if (ret != RTC::RTC_OK)
       {
         RTC_ERROR(("Error: onAddingComponent(). RTC is not attached."));
         return ret;
       }
-    ret = m_worker.addComponent(comp); // Actual addComponent()
+    ret = m_worker.addComponent(comp);  // Actual addComponent()
     if (ret != RTC::RTC_OK)
       {
         RTC_ERROR(("Error: ECWorker addComponent() faild."));
         return ret;
       }
-    ret = m_profile.addComponent(comp); // Actual addComponent()
+    ret = m_profile.addComponent(comp);  // Actual addComponent()
     if (ret != RTC::RTC_OK)
       {
         RTC_ERROR(("Error: ECProfile addComponent() faild."));
         return ret;
       }
-    ret = onAddedComponent(comp); // Template
+    ret = onAddedComponent(comp);  // Template
     if (ret != RTC::RTC_OK)
       {
         RTC_ERROR(("Error: onAddedComponent() faild."));
@@ -285,7 +285,7 @@ namespace RTC
     RTC_INFO(("Component has been added to this EC."));
     return RTC::RTC_OK;
   }
-  
+
   /*!
    * @if jp
    * @brief RTコンポーネントを参加者リストから削除する
@@ -297,26 +297,26 @@ namespace RTC
   removeComponent(RTC::LightweightRTObject_ptr comp)
   {
     RTC_TRACE(("removeComponent()"));
-    RTC::ReturnCode_t ret = onRemovingComponent(comp); // Template
+    RTC::ReturnCode_t ret = onRemovingComponent(comp);  // Template
     if (ret != RTC::RTC_OK)
       {
         RTC_ERROR(("Error: onRemovingComponent(). "
                    "RTC will not not attached."));
         return ret;
       }
-    ret = m_worker.removeComponent(comp); // Actual removeComponent()
+    ret = m_worker.removeComponent(comp);  // Actual removeComponent()
     if (ret != RTC::RTC_OK)
       {
         RTC_ERROR(("Error: ECWorker removeComponent() faild."));
         return ret;
       }
-    ret = m_profile.removeComponent(comp); // Actual removeComponent()
+    ret = m_profile.removeComponent(comp);  // Actual removeComponent()
     if (ret != RTC::RTC_OK)
       {
         RTC_ERROR(("Error: ECProfile removeComponent() faild."));
         return ret;
       }
-    ret = onRemovedComponent(comp); // Template
+    ret = onRemovedComponent(comp);  // Template
     if (ret != RTC::RTC_OK)
       {
         RTC_ERROR(("Error: onRemovedComponent() faild."));
@@ -328,7 +328,7 @@ namespace RTC
     RTC_INFO(("Component has been removeed to this EC."));
     return RTC::RTC_OK;
   }
-  
+
   /*!
    * @if jp
    * @brief RTコンポーネントをアクティブ化する
@@ -340,16 +340,16 @@ namespace RTC
   activateComponent(RTC::LightweightRTObject_ptr comp)
   {
     RTC_TRACE(("activateComponent()"));
-    RTC::ReturnCode_t ret = onActivating(comp); // Template
+    RTC::ReturnCode_t ret = onActivating(comp);  // Template
     if (ret != RTC::RTC_OK)
       {
         RTC_ERROR(("onActivating() failed."));
         return ret;
       }
     RTC_impl::RTObjectStateMachine* rtobj;
-    ret = m_worker.activateComponent(comp, rtobj); // Actual activateComponent()
+    ret = m_worker.activateComponent(comp, rtobj);  // Actual activateComponent()
     if (ret != RTC::RTC_OK) { return ret; }
-    if (!m_syncActivation) // Asynchronous activation mode
+    if (!m_syncActivation)  // Asynchronous activation mode
       {
         ret = onActivated(rtobj, -1);
         if (ret != RTC::RTC_OK)
@@ -376,14 +376,14 @@ namespace RTC
         return ret;
       }
     long int cycle =
-      (long int)((double)m_activationTimeout / (double)getPeriod());
+      (long int)(<double>m_activationTimeout / <double>getPeriod());
     RTC_DEBUG(("Timeout is %f [s] (%f [s] in %d times)",
-               (double)m_activationTimeout, getRate(), cycle));
+               <double>m_activationTimeout, getRate(), cycle));
     // Wating INACTIVE -> ACTIVE
     coil::TimeValue starttime(coil::gettimeofday());
     while (rtobj->isCurrentState(RTC::INACTIVE_STATE))
       {
-        ret = onWaitingActivated(rtobj, count); // Template method
+        ret = onWaitingActivated(rtobj, count);  // Template method
         if (ret != RTC::RTC_OK)
           {
             RTC_ERROR(("onWaitingActivated failed."));
@@ -392,7 +392,7 @@ namespace RTC
         coil::sleep(getPeriod());
         coil::TimeValue delta(coil::gettimeofday() - starttime);
         RTC_DEBUG(("Waiting to be ACTIVE state. %f [s] slept (%d/%d)",
-                   (double)delta, count, cycle));
+                   <double>delta, count, cycle));
         ++count;
         if (delta > m_activationTimeout || count > cycle)
           {
@@ -407,7 +407,7 @@ namespace RTC
         return RTC::RTC_ERROR;
       }
     RTC_DEBUG(("Current state is %s", getStateString(rtobj->getState())));
-    ret = onActivated(rtobj, count); // Template method
+    ret = onActivated(rtobj, count);  // Template method
     if (ret != RTC::RTC_OK)
       {
         RTC_ERROR(("onActivated() failed."));
@@ -427,7 +427,7 @@ namespace RTC
   deactivateComponent(RTC::LightweightRTObject_ptr comp)
   {
     RTC_TRACE(("deactivateComponent()"));
-    RTC::ReturnCode_t ret = onDeactivating(comp); // Template
+    RTC::ReturnCode_t ret = onDeactivating(comp);  // Template
     if (ret != RTC::RTC_OK)
       {
         RTC_ERROR(("onDeactivatingComponent() failed."));
@@ -464,14 +464,14 @@ namespace RTC
         return ret;
       }
     long int cycle =
-      (long int)((double)m_deactivationTimeout / (double)getPeriod());
+      (long int)(<double>m_deactivationTimeout / <double>getPeriod());
     RTC_DEBUG(("Timeout is %f [s] (%f [s] in %d times)",
-               (double)m_deactivationTimeout, getRate(), cycle));
+               <double>m_deactivationTimeout, getRate(), cycle));
     // Wating ACTIVE -> INACTIVE
     coil::TimeValue starttime(coil::gettimeofday());
     while (rtobj->isCurrentState(RTC::ACTIVE_STATE))
       {
-        ret = onWaitingDeactivated(rtobj, count); // Template method
+        ret = onWaitingDeactivated(rtobj, count);  // Template method
         if (ret != RTC::RTC_OK)
           {
             RTC_ERROR(("onWaitingDeactivated failed."));
@@ -480,7 +480,7 @@ namespace RTC
         coil::sleep(getPeriod());
         coil::TimeValue delta(coil::gettimeofday() - starttime);
         RTC_DEBUG(("Waiting to be INACTIVE state. Sleeping %f [s] (%d/%d)",
-                   (double)delta, count, cycle));
+                   <double>delta, count, cycle));
         ++count;
         if (delta > m_deactivationTimeout || count > cycle)
           {
@@ -503,7 +503,7 @@ namespace RTC
     RTC_DEBUG(("onDeactivated() done."))
     return ret;
   }
-  
+
   /*!
    * @if jp
    * @brief RTコンポーネントをリセットする
@@ -515,14 +515,14 @@ namespace RTC
   resetComponent(RTC::LightweightRTObject_ptr comp)
   {
     RTC_TRACE(("resetComponent()"));
-    RTC::ReturnCode_t ret = onResetting(comp); // Template
+    RTC::ReturnCode_t ret = onResetting(comp);  // Template
     if (ret != RTC::RTC_OK)
       {
         RTC_ERROR(("onResetting() failed."));
         return ret;
       }
     RTC_impl::RTObjectStateMachine* rtobj;
-    ret = m_worker.resetComponent(comp, rtobj); // Actual resetComponent()
+    ret = m_worker.resetComponent(comp, rtobj);  // Actual resetComponent()
     if (ret != RTC::RTC_OK) { return ret; }
     if (!m_syncReset)
       {
@@ -539,7 +539,7 @@ namespace RTC
                "Waiting for the RTC to be INACTIVE state. "));
     return waitForReset(rtobj);
   }
-  
+
   RTC::ReturnCode_t ExecutionContextBase::
   waitForReset(RTC_impl::RTObjectStateMachine* rtobj)
   {
@@ -551,14 +551,14 @@ namespace RTC
         return ret;
       }
     long int cycle =
-      (long int)((double)m_resetTimeout / (double)getPeriod());
+      (long int)(<double>m_resetTimeout / <double>getPeriod());
     RTC_DEBUG(("Timeout is %f [s] (%f [s] in %d times)",
-               (double)m_resetTimeout, getRate(), cycle));
+               <double>m_resetTimeout, getRate(), cycle));
     // Wating ERROR -> INACTIVE
     coil::TimeValue starttime(coil::gettimeofday());
     while (rtobj->isCurrentState(RTC::ERROR_STATE))
       {
-        ret = onWaitingReset(rtobj, count); // Template
+        ret = onWaitingReset(rtobj, count);  // Template
         if (ret != RTC::RTC_OK)
           {
             RTC_ERROR(("onWaitingReset failed."));
@@ -567,7 +567,7 @@ namespace RTC
         coil::sleep(getPeriod());
         coil::TimeValue delta(coil::gettimeofday() - starttime);
         RTC_DEBUG(("Waiting to be INACTIVE state. Sleeping %f [s] (%d/%d)",
-                   (double)delta, count, cycle));
+                   <double>delta, count, cycle));
         ++count;
         if (delta > m_resetTimeout || count > cycle)
           {
@@ -582,7 +582,7 @@ namespace RTC
         return RTC::RTC_ERROR;
       }
     RTC_DEBUG(("Current state is %s", getStateString(rtobj->getState())));
-    ret = onReset(rtobj, count); // Template method
+    ret = onReset(rtobj, count);  // Template method
     if (ret != RTC::RTC_OK)
       {
         RTC_ERROR(("onResetd() failed."));
@@ -661,7 +661,7 @@ namespace RTC
     RTC_DEBUG(("onGetKind() returns %s", getKindString(kind)));
     return kind;
   }
-  
+
   /*!
    * @if jp
    * @brief Profileを取得する
@@ -696,7 +696,7 @@ namespace RTC
     RTC_DEBUG_STR((props));
     return onGetProfile(prof);
   }
-  
+
   //============================================================
   // Delegated functions to ExecutionContextProfile
   //============================================================
@@ -723,19 +723,19 @@ namespace RTC
   {
     return m_profile.getObjRef();
   }
-  
+
   /*!
    * @if jp
    * @brief ExecutionKind を文字列化する
    * @else
-   * @brief Converting ExecutionKind enum to string 
+   * @brief Converting ExecutionKind enum to string
    * @endif
    */
   const char* ExecutionContextBase::getKindString(RTC::ExecutionKind kind) const
   {
     return m_profile.getKindString(kind);
   }
-  
+
   /*!
    * @if jp
    * @brief ExecutionKind を設定する
@@ -747,7 +747,7 @@ namespace RTC
   {
     return m_profile.setKind(kind);
   }
-  
+
   /*!
    * @if jp
    * @brief Ownerコンポーネントをセットする。
@@ -760,7 +760,7 @@ namespace RTC
   {
     return m_profile.setOwner(comp);
   }
-  
+
   /*!
    * @if jp
    * @brief Ownerコンポーネントの参照を取得する
@@ -772,7 +772,7 @@ namespace RTC
   {
     return m_profile.getOwner();
   }
-  
+
   /*!
    * @if jp
    * @brief RTコンポーネントの参加者リストを取得する
@@ -784,7 +784,7 @@ namespace RTC
   {
     return m_profile.getComponentList();
   }
-  
+
   /*!
    * @if jp
    * @brief Propertiesをセットする
@@ -796,7 +796,7 @@ namespace RTC
   {
     m_profile.setProperties(props);
   }
-  
+
   /*!
    * @if jp
    * @brief Propertiesを取得する
@@ -808,7 +808,7 @@ namespace RTC
   {
     return m_profile.getProperties();
   }
-  
+
   /*!
    * @if jp
    * @brief Profileを取得する
@@ -823,8 +823,8 @@ namespace RTC
   }
   // end of delegated functions to ExecutionContextProfile
   //============================================================
-  
-  
+
+
   //============================================================
   // private functions
   /*!
@@ -847,7 +847,7 @@ namespace RTC
       }
     return false;
   }
-  
+
   /*!
    * @if jp
    * @brief Propertiesから状態遷移モードをセットする
@@ -869,7 +869,7 @@ namespace RTC
     RTC_DEBUG(("Configuration %s not found.", key));
     return false;
   }
-  
+
   /*!
    * @if jp
    * @brief Propertiesから状態遷移Timeoutをセットする

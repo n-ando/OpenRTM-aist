@@ -16,10 +16,12 @@
  *
  */
 
-#include <functional>
 #include <rtm/RTC.h>
 #include <rtm/PortAdmin.h>
 #include <rtm/CORBA_SeqUtil.h>
+#include <functional>
+#include <string.h>
+#include <vector>
 
 namespace RTC
 {
@@ -40,12 +42,12 @@ namespace RTC
 #ifndef ORB_IS_RTORB
           PortProfile_var prof(p->get_port_profile());
           std::string name(prof->name);
-#else // ORB_IS_RTORB
+#else  // ORB_IS_RTORB
           PortProfile *pp;
           pp = p->get_port_profile();
           std::string name( pp->name);
           delete pp;
-#endif // ORB_IS_RTORB
+#endif  // ORB_IS_RTORB
           return m_name == name;
         }
       catch (...)
@@ -66,7 +68,7 @@ namespace RTC
     }
     const PortService_ptr m_port;
   };
-  
+
   /*!
    * @if jp
    * @brief Port削除用ファンクタ
@@ -83,7 +85,7 @@ namespace RTC
       m_pa->removePort(*p);
     }
   };
-  
+
   /*!
    * @if jp
    * @brief コンストラクタ
@@ -97,7 +99,7 @@ namespace RTC
       rtclog("portadmin")
   {
   }
-  
+
   /*!
    * @if jp
    * @brief PortServiceList の取得
@@ -111,7 +113,7 @@ namespace RTC
     ports = new PortServiceList(m_portRefs);
     return ports._retn();
   }
-  
+
   /*!
    * @if jp
    * @brief PortProfileList の取得
@@ -128,7 +130,7 @@ namespace RTC
     port_prof_collect2 p(port_profs);
     //    m_portServants.for_each(p);
     ::CORBA_SeqUtil::for_each(m_portRefs, p);
-#else // ORB_IS_RTORB
+#else  // ORB_IS_RTORB
     CORBA::ULong len = m_portRefs.length();
 
     PortProfileList port_profs = PortProfileList(len);
@@ -144,13 +146,12 @@ namespace RTC
           }
         catch (...)
           {
-            ;
           }
       }
-#endif // ORB_IS_RTORB
+#endif  // ORB_IS_RTORB
     return port_profs;
   }
-  
+
   /*!
    * @if jp
    * @brief Port のオブジェクト参照の取得
@@ -162,13 +163,13 @@ namespace RTC
   {
     CORBA::Long index;
     index = CORBA_SeqUtil::find(m_portRefs, find_port_name(port_name));
-    if (index >= 0) 
-      {//throw NotFound(port_name);
+    if (index >= 0)
+      {  // throw NotFound(port_name);
         return m_portRefs[index];
       }
     return RTC::PortService::_nil();
   }
-  
+
   /*!
    * @if jp
    * @brief Port のサーバントのポインタの取得
@@ -180,7 +181,7 @@ namespace RTC
   {
     return m_portServants.find(port_name);
   }
-  
+
   /*!
    * @if jp
    * @brief Port を登録する
@@ -199,7 +200,7 @@ namespace RTC
     // Store Port's ref to PortServiceList
     CORBA_SeqUtil::push_back(m_portRefs,
                              RTC::PortService::_duplicate(port.getPortRef()));
-    
+
     // Store Port servant
     return m_portServants.registerObject(&port);
   }
@@ -218,7 +219,7 @@ namespace RTC
       {
         PortProfile_var prof(port->get_port_profile());
         std::string name(prof->name);
-        
+
 // Why RtORB delete _var object explicitly?
 #ifdef ORB_IS_RTORB
         delete prof._retn();
@@ -243,7 +244,7 @@ namespace RTC
         RTC_ERROR(("registerPort(PortBase&) failed."));
       }
   }
-  
+
   void PortAdmin::registerPort(PortService_ptr port)
   {
     if (!addPort(port))
@@ -251,7 +252,7 @@ namespace RTC
         RTC_ERROR(("registerPort(PortService_ptr) failed."));
       }
   }
-  
+
   /*!
    * @if jp
    * @brief Port の登録を解除する
@@ -265,14 +266,14 @@ namespace RTC
       {
         port.disconnect_all();
         // port.shutdown();
-        
+
         const char* tmp(port.getProfile().name);
         CORBA_SeqUtil::erase_if(m_portRefs, find_port_name(tmp));
-        
+
         PortableServer::ObjectId_var oid = m_pPOA->servant_to_id(&port);
         m_pPOA->deactivate_object(oid);
         port.setPortRef(RTC::PortService::_nil());
-        
+
         return m_portServants.unregisterObject(tmp) == NULL ? false : true;
       }
     catch (...)
@@ -309,7 +310,7 @@ namespace RTC
       }
   }
 
-  
+
   /*!
    * @if jp
    * @brief 名称指定によりPort の登録を解除する
@@ -372,4 +373,4 @@ namespace RTC
     ports = m_portServants.getObjects();
     for_each(ports.begin(), ports.end(), del_port(this));
   }
-};
+};  // namespace RTC

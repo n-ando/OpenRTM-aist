@@ -34,7 +34,7 @@ namespace RTC
     : rtclog("InPortDirectConsumer")
   {
   }
-  
+
   /*!
    * @if jp
    * @brief デストラクタ
@@ -99,7 +99,7 @@ namespace RTC
     RTC_TRACE(("subscribeInterface(): do nothing"));
     return true;
   }
-  
+
   /*!
    * @if jp
    * @brief データ送信通知からの登録解除

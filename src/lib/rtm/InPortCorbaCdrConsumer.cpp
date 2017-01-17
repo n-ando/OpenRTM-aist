@@ -34,7 +34,7 @@ namespace RTC
     : rtclog("InPortCorbaCdrConsumer")
   {
   }
-  
+
   /*!
    * @if jp
    * @brief デストラクタ
@@ -74,14 +74,14 @@ namespace RTC
 #ifndef ORB_IS_RTORB
     ::OpenRTM::CdrData tmp(data.bufSize(), data.bufSize(),
                            static_cast<CORBA::Octet*>(data.bufPtr()), 0);
-#else // ORB_IS_RTORB
+#else  // ORB_IS_RTORB
     OpenRTM_CdrData *cdrdata_tmp = new OpenRTM_CdrData();
-    cdrdata_tmp->_buffer = 
-      (CORBA_octet *)RtORB_alloc(data.bufSize(), "InPortCorbaCdrComsumer::put");
+    cdrdata_tmp->_buffer =
+      <CORBA_octet *>RtORB_alloc(data.bufSize(), "InPortCorbaCdrComsumer::put");
     memcpy(cdrdata_tmp->_buffer, data.bufPtr(), data.bufSize());
     cdrdata_tmp->_length = cdrdata_tmp->_maximum = data.bufSize();
     ::OpenRTM::CdrData tmp(cdrdata_tmp);
-#endif // ORB_IS_RTORB
+#endif  // ORB_IS_RTORB
     try
       {
         // return code conversion
@@ -94,7 +94,7 @@ namespace RTC
       }
     return UNKNOWN_ERROR;
   }
-  
+
   /*!
    * @if jp
    * @brief InterfaceProfile情報を公開する
@@ -120,16 +120,16 @@ namespace RTC
   {
     RTC_TRACE(("subscribeInterface()"));
     RTC_DEBUG_STR((NVUtil::toString(properties)));
-    
+
     // getting InPort's ref from IOR string
     if (subscribeFromIor(properties)) { return true; }
-    
+
     // getting InPort's ref from Object reference
     if (subscribeFromRef(properties)) { return true; }
-    
+
     return false;;
   }
-  
+
   /*!
    * @if jp
    * @brief データ送信通知からの登録解除
@@ -142,11 +142,11 @@ namespace RTC
   {
     RTC_TRACE(("unsubscribeInterface()"));
     RTC_DEBUG_STR((NVUtil::toString(properties)));
-    
+
     if (unsubscribeFromIor(properties)) { return; }
     unsubscribeFromRef(properties);
   }
-  
+
   //----------------------------------------------------------------------
   // private functions
 
@@ -161,7 +161,7 @@ namespace RTC
   subscribeFromIor(const SDOPackage::NVList& properties)
   {
     RTC_TRACE(("subscribeFromIor()"));
-    
+
     CORBA::Long index;
     index = NVUtil::find_index(properties,
                                "dataport.corba_cdr.inport_ior");
@@ -170,23 +170,23 @@ namespace RTC
         RTC_ERROR(("inport_ior not found"));
         return false;
       }
-    
+
     const char* ior(0);
     if (!(properties[index].value >>= ior))
       {
         RTC_ERROR(("inport_ior has no string"));
         return false;
       }
-    
+
     CORBA::ORB_var orb = ::RTC::Manager::instance().getORB();
     CORBA::Object_var obj = orb->string_to_object(ior);
-    
+
     if (CORBA::is_nil(obj))
       {
         RTC_ERROR(("invalid IOR string has been passed"));
         return false;
       }
-    
+
     if (!setObject(obj.in()))
       {
         RTC_WARN(("Setting object to consumer failed."));
@@ -194,7 +194,7 @@ namespace RTC
       }
     return true;
   }
-  
+
   /*!
    * @if jp
    * @brief Anyから直接オブジェクト参照を取得する
@@ -214,20 +214,20 @@ namespace RTC
         RTC_ERROR(("inport_ref not found"));
         return false;
       }
-    
+
     CORBA::Object_var obj;
     if (!(properties[index].value >>= CORBA::Any::to_object(obj.out())))
       {
         RTC_ERROR(("prop[inport_ref] is not objref"));
         return true;
       }
-    
+
     if (CORBA::is_nil(obj))
       {
         RTC_ERROR(("prop[inport_ref] is not objref"));
         return false;
       }
-    
+
     if (!setObject(obj.in()))
       {
         RTC_ERROR(("Setting object to consumer failed."));
@@ -235,7 +235,7 @@ namespace RTC
       }
     return true;
   }
-  
+
   /*!
    * @if jp
    * @brief 接続解除(IOR版)
@@ -255,14 +255,14 @@ namespace RTC
         RTC_ERROR(("inport_ior not found"));
         return false;
       }
-    
+
     const char* ior;
     if (!(properties[index].value >>= ior))
       {
         RTC_ERROR(("prop[inport_ior] is not string"));
         return false;
       }
-    
+
     CORBA::ORB_var orb = ::RTC::Manager::instance().getORB();
     CORBA::Object_var var = orb->string_to_object(ior);
     if (!(_ptr()->_is_equivalent(var)))
@@ -270,11 +270,11 @@ namespace RTC
         RTC_ERROR(("connector property inconsistency"));
         return false;
       }
-    
+
     releaseObject();
     return true;
   }
-  
+
   /*!
    * @if jp
    * @brief 接続解除(Object reference版)
@@ -290,15 +290,15 @@ namespace RTC
     index = NVUtil::find_index(properties,
                                "dataport.corba_cdr.inport_ref");
     if (index < 0) { return false; }
-    
+
     CORBA::Object_var obj;
-    if (!(properties[index].value >>= CORBA::Any::to_object(obj.out()))) 
+    if (!(properties[index].value >>= CORBA::Any::to_object(obj.out())))
       {
         return false;
       }
-    
+
     if (!(_ptr()->_is_equivalent(obj.in()))) { return false; }
-    
+
     releaseObject();
     return true;
   }
@@ -336,11 +336,11 @@ namespace RTC
       }
     return InPortConsumer::UNKNOWN_ERROR;
   }
-  
+
 };     // namespace RTC
 
 extern "C"
-{ 
+{
   /*!
    * @if jp
    * @brief モジュール初期化関数

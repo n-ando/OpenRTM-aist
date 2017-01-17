@@ -16,6 +16,8 @@
  *
  */
 
+#include <rtm/FactoryInit.h>
+
 // Buffers
 #include <rtm/CdrRingBuffer.h>
 
