@@ -61,7 +61,7 @@ namespace coil
      *
      * @endif
      */
-    Mutex(const char * const name = 0)
+    explicit Mutex(const char * const name = 0)
     {
         SECURITY_DESCRIPTOR sd_buffer;
         ::InitializeSecurityDescriptor(&sd_buffer, 
