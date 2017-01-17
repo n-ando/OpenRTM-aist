@@ -19,6 +19,7 @@
 #ifndef RTC_SYSTEMLOGGER_H
 #define RTC_SYSTEMLOGGER_H
 
+#include <string>
 #include <rtm/config_rtc.h>
 
 // COIL

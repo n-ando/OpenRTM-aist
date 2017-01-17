@@ -130,7 +130,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual ~ECFactoryBase(void){};
+    virtual ~ECFactoryBase(void) {}
 
     /*!
      * @if jp

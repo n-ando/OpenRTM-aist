@@ -76,7 +76,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual ~PublisherBase(void){};
+    virtual ~PublisherBase(void) {}
 
     /*!
      * @if jp

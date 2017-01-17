@@ -20,6 +20,8 @@
 #ifndef RTC_CONNECTORBASE_H
 #define RTC_CONNECTORBASE_H
 
+#include <string>
+#include <vector>
 #include <coil/stringutil.h>
 #include <coil/Properties.h>
 
@@ -188,7 +190,7 @@ namespace RTC
      * @brief Destructor
      * @endif
      */
-    virtual ~ConnectorBase(){};
+    virtual ~ConnectorBase() {}
 
    /*!
      * @if jp

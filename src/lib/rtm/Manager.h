@@ -1980,9 +1980,9 @@ namespace RTC
     // ECファクトリへ渡す述語クラス
     struct ECFactoryPredicate
     {
-      explicit ECFactoryPredicate(const char* name) : m_name(name){};
+      explicit ECFactoryPredicate(const char* name) : m_name(name){}
       explicit ECFactoryPredicate(ECFactoryBase* factory)
-        : m_name(factory->name()) {};
+        : m_name(factory->name()) {}
       bool operator()(ECFactoryBase* factory)
       {
         return m_name == factory->name();
@@ -2196,7 +2196,7 @@ namespace RTC
        *
        * @endif
        */
-      explicit Terminator(Manager* manager) : m_manager(manager) {};
+      explicit Terminator(Manager* manager) : m_manager(manager) {}
 
       /*!
        * @if jp

@@ -20,9 +20,10 @@
 #define COIL_FILE_H
 
 #include <cstring>
-#include <sys/types.h>
 #include <dirent.h>
 #include <libgen.h>
+#include <string>
+#include <sys/types.h>
 
 #include <coil/config_coil.h>
 #include <coil/stringutil.h>

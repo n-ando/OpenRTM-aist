@@ -20,6 +20,7 @@
 #ifndef RTC_CORBACONSUMER_H
 #define RTC_CORBACONSUMER_H
 
+#include <utility>
 #include <iostream>
 #ifdef ORB_IS_MICO
 #include <CORBA.h>
@@ -105,7 +106,7 @@ namespace RTC
      *
      * @endif
      */
-    CorbaConsumerBase(){};
+    CorbaConsumerBase() {}
 
     /*!
      * @if jp
@@ -350,7 +351,7 @@ namespace RTC
      *
      * @endif
      */
-    CorbaConsumer(){};
+    CorbaConsumer() {}
 
     /*!
      * @if jp

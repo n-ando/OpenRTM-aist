@@ -20,6 +20,9 @@
 #ifndef RTC_PERIODICECSHAREDCOMPOSITE_H
 #define RTC_PERIODICECSHAREDCOMPOSITE_H
 
+#include <string>
+#include <utility>
+#include <vector>
 #include <rtm/idl/RTCSkel.h>
 #include <rtm/idl/OpenRTMSkel.h>
 #include <rtm/RTObject.h>
@@ -680,4 +683,4 @@ extern "C"
   DLL_EXPORT void PeriodicECSharedCompositeInit(RTC::Manager* manager);
 };
 
-#endif // RTC_PERIODICECSHAREDCOMPOSITE_H
+#endif  // RTC_PERIODICECSHAREDCOMPOSITE_H

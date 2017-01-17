@@ -19,6 +19,7 @@
 #ifndef RTM_LOCALSERVICEBASE_H
 #define RTM_LOCALSERVICEBASE_H
 
+#include <string>
 #include <vector>
 
 #include <coil/Mutex.h>

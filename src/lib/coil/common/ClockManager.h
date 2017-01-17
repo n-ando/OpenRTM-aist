@@ -184,7 +184,7 @@ namespace coil
     static ClockManager* clockmgr;
     static coil::Mutex clockmgr_mutex;
   private:
-    ClockManager() {};
+    ClockManager() {}
 #endif
   private:
     SystemClock   m_systemClock;

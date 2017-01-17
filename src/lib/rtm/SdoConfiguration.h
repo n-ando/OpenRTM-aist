@@ -1135,7 +1135,7 @@ namespace SDOPackage
      */
     struct nv_name
     {
-      explicit nv_name(const char* name) : m_name(name) {};
+      explicit nv_name(const char* name) : m_name(name) {}
       bool operator()(const NameValue& nv)
       {
         return m_name == std::string(nv.name);
@@ -1152,7 +1152,7 @@ namespace SDOPackage
      */
     struct org_id
     {
-      explicit org_id(const char* id) : m_id(id) {};
+      explicit org_id(const char* id) : m_id(id) {}
       bool operator()(const Organization_ptr& o)
       {
         CORBA::String_var id(o->get_organization_id());
@@ -1170,7 +1170,7 @@ namespace SDOPackage
      */
     struct config_id
     {
-      explicit config_id(const char* id) :  m_id(id) {};
+      explicit config_id(const char* id) :  m_id(id) {}
       bool operator()(const ConfigurationSet& c)
       {
         std::string id(c.id);

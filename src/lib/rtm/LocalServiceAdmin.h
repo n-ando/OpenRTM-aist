@@ -19,6 +19,8 @@
 #ifndef RTC_LOCALSERVICEADMIN_H
 #define RTC_LOCALSERVICEADMIN_H
 
+#include <string>
+#include <vector>
 #include <coil/Mutex.h>
 #include <coil/Factory.h>
 #include <coil/Singleton.h>

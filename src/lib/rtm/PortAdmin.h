@@ -20,6 +20,7 @@
 #ifndef RTC_PORTADMIN_H
 #define RTC_PORTADMIN_H
 
+#include <string>
 #include <rtm/idl/RTCSkel.h>
 #include <rtm/PortBase.h>
 #include <rtm/ObjectManager.h>
@@ -86,7 +87,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual ~PortAdmin(void){};
+    virtual ~PortAdmin(void) {}
 
     /*!
      * @if jp

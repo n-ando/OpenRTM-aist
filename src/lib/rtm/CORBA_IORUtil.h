@@ -18,6 +18,7 @@
 #ifndef CORBA_IORUTIL_H
 #define CORBA_IORUTIL_H
 
+#include <string>
 #include <rtm/RTC.h>
 
 /*!

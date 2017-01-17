@@ -19,6 +19,8 @@
 #ifndef RTC_NAMINGMANAGER_H
 #define RTC_NAMINGMANAGER_H
 
+#include <string>
+#include <vector>
 #include <rtm/RTC.h>
 
 #include <coil/Task.h>
@@ -76,7 +78,7 @@ namespace RTC
      *
      * @endif
      */
-    NamingBase() {};
+    NamingBase() {}
 
     /*!
      * @if jp
@@ -89,7 +91,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual ~NamingBase(void) {};
+    virtual ~NamingBase(void) {}
 
     /*!
      * @if jp
@@ -261,7 +263,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual ~NamingOnCorba(void){};
+    virtual ~NamingOnCorba(void) {}
 
     /*!
      * @if jp

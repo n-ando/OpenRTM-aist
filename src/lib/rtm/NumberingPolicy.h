@@ -165,7 +165,7 @@ public:
    *
    * @endif
    */
-  DefaultNumberingPolicy() : m_num(0) {};
+  DefaultNumberingPolicy() : m_num(0) {}
 
   /*!
    * @if jp
@@ -178,7 +178,7 @@ public:
    *
    * @endif
    */
-  virtual ~DefaultNumberingPolicy(void){};
+  virtual ~DefaultNumberingPolicy(void) {}
 
   /*!
    * @if jp

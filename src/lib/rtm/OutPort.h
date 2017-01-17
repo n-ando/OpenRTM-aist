@@ -22,6 +22,7 @@
 
 #include <functional>
 #include <string>
+#include <vector>
 
 #include <coil/TimeValue.h>
 #include <coil/Time.h>

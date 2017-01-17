@@ -702,7 +702,9 @@ namespace SDOPackage
 
     // end of CORBA interface definition
     //============================================================
-    Organization_ptr getObjRef() {return m_objref;};
+    Organization_ptr getObjRef() {
+      return m_objref;
+    }
 
   protected:
     ::RTC::Logger rtclog;
@@ -840,7 +842,7 @@ namespace SDOPackage
      */
     struct nv_name
     {
-      explicit nv_name(const char* name) : m_name(name) {};
+      explicit nv_name(const char* name) : m_name(name) {}
       bool operator()(const NameValue& nv)
       {
         return m_name == std::string(nv.name);
@@ -857,7 +859,7 @@ namespace SDOPackage
      */
     struct sdo_id
     {
-      explicit sdo_id(const char* id) : m_id(id) {};
+      explicit sdo_id(const char* id) : m_id(id) {}
       bool operator()(const SDO_ptr sdo)
       {
         CORBA::String_var id(sdo->get_sdo_id());

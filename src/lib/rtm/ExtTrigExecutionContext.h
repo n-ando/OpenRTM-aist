@@ -650,7 +650,7 @@ namespace RTC
      */
     struct Worker
     {
-      Worker() : cond_(mutex_), ticked_(false) {};
+      Worker() : cond_(mutex_), ticked_(false) {}
       Mutex mutex_;
       Condition cond_;
       bool ticked_;

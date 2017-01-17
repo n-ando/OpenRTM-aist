@@ -143,7 +143,7 @@ namespace RTC
      * @brief virtual destructor
      * @endif
      */
-    virtual ~SdoServiceProviderBase() {};
+    virtual ~SdoServiceProviderBase() {}
 
     /*!
      * @if jp

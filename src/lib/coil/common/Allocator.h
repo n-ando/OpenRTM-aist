@@ -58,7 +58,7 @@ namespace coil
      *
      * @endif
      */
-    virtual ~Allocator(){};
+    virtual ~Allocator() {}
 
     /*!
      * @if jp

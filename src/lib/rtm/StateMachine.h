@@ -20,6 +20,7 @@
 #define RTC_STATEMACHINE_H
 
 #include <cassert>
+#include <utility>
 #include <vector>
 #include <coil/Mutex.h>
 #include <coil/Guard.h>
