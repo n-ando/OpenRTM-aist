@@ -71,7 +71,7 @@ namespace RTC
   Manager::InstanceName::InstanceName(const char* name)
     : m_name(name)
   {}
-  Manager::InstanceName::InstanceName(const std::string name)
+  Manager::InstanceName::InstanceName(const std::string& name)
     : m_name(name)
   {}
   bool Manager::InstanceName::operator()(RTObject_impl* comp)
