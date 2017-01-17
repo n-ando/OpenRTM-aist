@@ -52,7 +52,7 @@ namespace RTC_exp
 
     // profile initialization
     setKind(RTC::PERIODIC);
-    setRate(1.0 / <double>DEEFAULT_PERIOD);
+    setRate(1.0 / static_cast<double>(DEEFAULT_PERIOD));
 
     RTC_DEBUG(("Actual period: %d [sec], %d [usec]",
                m_profile.getPeriod().sec(), m_profile.getPeriod().usec()));
@@ -178,9 +178,9 @@ namespace RTC_exp
         coil::TimeValue period(getPeriod());
         if (count > 1000)
           {
-            RTC_PARANOID(("Period:    %f [s]", <double>period));
-            RTC_PARANOID(("Execution: %f [s]", <double>(t1 - t0)));
-            RTC_PARANOID(("Sleep:     %f [s]", <double>(period - (t1 - t0))));
+            RTC_PARANOID(("Period:    %f [s]", static_cast<double>(period)));
+            RTC_PARANOID(("Execution: %f [s]", static_cast<double>(t1 - t0)));
+            RTC_PARANOID(("Sleep:     %f [s]", static_cast<double>(period - (t1 - t0))));
           }
         coil::TimeValue t2(coil::gettimeofday());
         if (!m_nowait && period > (t1 - t0))
@@ -191,7 +191,7 @@ namespace RTC_exp
         if (count > 1000)
           {
             coil::TimeValue t3(coil::gettimeofday());
-            RTC_PARANOID(("Slept:     %f [s]", <double>(t3 - t2)));
+            RTC_PARANOID(("Slept:     %f [s]", static_cast<double>(t3 - t2)));
             count = 0;
           }
         ++count;

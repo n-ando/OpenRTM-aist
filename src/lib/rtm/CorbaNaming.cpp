@@ -679,7 +679,7 @@ namespace RTC
     slen = getNameLength(name);
 
     CORBA::String_var string_name = CORBA::string_alloc(slen);
-    nameToString(name, <char*>string_name, slen);
+    nameToString(name, static_cast<char*>(string_name), slen);
 
     return string_name._retn();
   }

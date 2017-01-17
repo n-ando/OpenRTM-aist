@@ -36,7 +36,7 @@ namespace RTC_impl
   ExecutionContextProfile::
   ExecutionContextProfile(RTC::ExecutionKind kind)
     : rtclog("periodic_ecprofile"),
-      m_period(<double>DEEFAULT_PERIOD),
+      m_period(static_cast<double>(DEEFAULT_PERIOD)),
       m_ref(RTC::ExecutionContextService::_nil())
   {
     RTC_TRACE(("ExecutionContextProfile()"));
@@ -130,11 +130,14 @@ namespace RTC_impl
 
   RTC::ReturnCode_t ExecutionContextProfile::setPeriod(coil::TimeValue period)
   {
-    RTC_TRACE(("setPeriod(%f [sec])", <double>period));
-    if (<double>period <= 0.0) { return RTC::BAD_PARAMETER; }
+    RTC_TRACE(("setPeriod(%f [sec])", static_cast<double>(period)));
+    if (static_cast<double>(period) <= 0.0)
+      {
+        return RTC::BAD_PARAMETER;
+      }
 
     Guard guard(m_profileMutex);
-    m_profile.rate = 1.0 / <double>period;
+    m_profile.rate = 1.0 / static_cast<double>(period);
     m_period = period;
     return RTC::RTC_OK;
   }
