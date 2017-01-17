@@ -45,7 +45,7 @@ namespace coil
   std::wstring string2wstring(std::string str)
   {
     std::wstring wstr(str.length(), L' ');
-    std::copy(str.begin(),str.end(),wstr.begin());
+    std::copy(str.begin(), str.end(), wstr.begin());
     return wstr;
   }
 
@@ -149,7 +149,7 @@ namespace coil
    */
   struct escape_functor
   {
-    escape_functor() {};
+    escape_functor() {}
     void operator()(const char c)
     {
       if      (c == '\t')  str += "\\t";
@@ -185,7 +185,7 @@ namespace coil
    */
   struct unescape_functor
   {
-    unescape_functor() : count(0) {};
+    unescape_functor() : count(0) {}
     void operator()(char c)
     {
       if (c == '\\')

@@ -269,7 +269,7 @@ namespace coil
         place = EMSG;
         return(-1);
       }
-      for(;;)
+      for (;;)
       {
         /* Check that the scanning reached the last element. */
         if (optind >= nargc)
@@ -317,33 +317,36 @@ namespace coil
       }
       return(BADCH);
     }
-    if (*++oli != ':') {            /* don't need argument */
-      optarg = NULL;
-      if (!*place)
-        ++optind;
-    }
-    else {                    /* need an argument */
-      if (*place)            /* no white space */
-        optarg = place;
-      else if (nargc <= ++optind) {    /* no arg */
-        place = EMSG;
-        if (!(p = strrchr(*nargv, '/')))
-          p = *nargv;
-        else
-          ++p;
-        if (*ostr == ':')
-          return(BADARG);
-        if (opterr)
-          fprintf(stderr,
-                  "%s: option requires an argument -- %c\n",
-                  p, optopt);
-        return(BADCH);
+    if (*++oli != ':')             /* don't need argument */
+      {
+        optarg = NULL;
+        if (!*place)
+          ++optind;
       }
-      else                /* white space */
-        optarg = nargv[optind];
-      place = EMSG;
-      ++optind;
-    }
+    else
+      {                    /* need an argument */
+        if (*place)            /* no white space */
+          optarg = place;
+        else if (nargc <= ++optind)
+          {    /* no arg */
+            place = EMSG;
+            if (!(p = strrchr(*nargv, '/')))
+              p = *nargv;
+            else
+              ++p;
+            if (*ostr == ':')
+              return(BADARG);
+            if (opterr)
+              fprintf(stderr,
+                      "%s: option requires an argument -- %c\n",
+                      p, optopt);
+              return(BADCH);
+          }
+        else                /* white space */
+          optarg = nargv[optind];
+        place = EMSG;
+        ++optind;
+      }
     return(optopt);       /* dump back option letter */
   }
 
@@ -383,7 +386,8 @@ namespace coil
      * @endif
      */
     GetOpt(int argc, char* const argv[], const char* opt, int flag)
-      : m_argc(argc), m_argv(argv), m_opt(opt), m_flag(flag), optind(1), opterr(1), optopt(0)
+      : m_argc(argc), m_argv(argv), m_opt(opt), 
+        m_flag(flag), optind(1), opterr(1), optopt(0)
 
     {
       this->optarg = coil::optarg;

@@ -101,25 +101,29 @@ namespace coil
 
 #if defined(COIL_OS_LINUX) || defined(COIL_OS_DARWIN) || defined(COIL_OS_CYGWIN)
 
-  UUID_Generator::UUID_Generator(){}
+  UUID_Generator::UUID_Generator() {}
   
-  void UUID_Generator::init(){}
-  UUID* UUID_Generator::generateUUID(int varsion, int variant){
+  void UUID_Generator::init() {}
+  UUID* UUID_Generator::generateUUID(int varsion, int variant)
+  {
     uuid_t uuid;
     
     uuid_generate(uuid);
     return new UUID(&uuid);
   }
   
-  UUID::UUID(){
+  UUID::UUID()
+  {
     uuid_clear(this->_uuid);
   }
   
-  UUID::UUID(uuid_t *uuid){
+  UUID::UUID(uuid_t *uuid)
+  {
     strncpy((char *)this->_uuid, (char *)(*uuid), sizeof(this->_uuid));
   }
   
-  const char* UUID::to_string(){
+  const char* UUID::to_string()
+  {
     uuid_unparse(this->_uuid, buf);
     return buf;
   }

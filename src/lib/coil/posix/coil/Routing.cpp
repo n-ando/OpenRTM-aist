@@ -64,7 +64,9 @@ namespace coil
     addr.sin_addr.s_addr = **(unsigned int **)(hostent->h_addr_list);
     dest_addr = inet_ntoa(addr.sin_addr);
     
-#if defined(COIL_OS_FREEBSD) || defined(COIL_OS_DARWIN) || defined(COIL_OS_CYGWIN) || defined(COIL_OS_QNX)
+#if defined(COIL_OS_FREEBSD) || defined(COIL_OS_DARWIN) \
+                             || defined(COIL_OS_CYGWIN) \
+                             || defined(COIL_OS_QNX)
     std::string cmd("PATH=/bin:/sbin:/usr/bin:/usr/sbin "
                     "route get ");
     const char* match_str = "interface";
@@ -99,7 +101,9 @@ namespace coil
         line.erase(line.end() - 1);
         coil::vstring vs(coil::split(line, delimiter));
 
-#if defined(COIL_OS_FREEBSD) || defined(COIL_OS_DARWIN) || defined(COIL_OS_CYGWIN) || defined(COIL_OS_QNX)
+#if defined(COIL_OS_FREEBSD) || defined(COIL_OS_DARWIN) \
+                             || defined(COIL_OS_CYGWIN) \
+                             || defined(COIL_OS_QNX)
         if (vs.size() > ifname_pos)
           {
             dest_if = vs[ifname_pos];

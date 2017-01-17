@@ -70,8 +70,8 @@ namespace RTC
       m_created(true), m_exiting(false),
       m_properties(default_conf), m_configsets(m_properties.getNode("conf")),
       m_sdoservice(*this),
-      m_readAll(false),m_writeAll(false),
-      m_readAllCompletion(false),m_writeAllCompletion(false)
+      m_readAll(false), m_writeAll(false),
+      m_readAllCompletion(false), m_writeAllCompletion(false)
   {
     m_objref = this->_this();
     m_pSdoConfigImpl = new SDOPackage::Configuration_impl(m_configsets,
@@ -96,8 +96,8 @@ namespace RTC
       m_created(true), m_exiting(false),
       m_properties(default_conf), m_configsets(m_properties.getNode("conf")),
       m_sdoservice(*this),
-      m_readAll(false),m_writeAll(false),
-      m_readAllCompletion(false),m_writeAllCompletion(false)
+      m_readAll(false), m_writeAll(false),
+      m_readAllCompletion(false), m_writeAllCompletion(false)
   {
     m_objref = this->_this();
     m_pSdoConfigImpl = new SDOPackage::Configuration_impl(m_configsets,
@@ -369,18 +369,18 @@ namespace RTC
     // Return RTC::PRECONDITION_NOT_MET,
     // When the component is registered in ExecutionContext.
     // m_ecMine.length() != 0 || 
-    if(m_ecOther.length() != 0)
-    {
+    if (m_ecOther.length() != 0)
+      {
 
         for (CORBA::ULong ic(0), len(m_ecOther.length()); ic < len; ++ic)
           {
-            if(! CORBA::is_nil(m_ecOther[ic]))
+            if (! CORBA::is_nil(m_ecOther[ic]))
               {
                 return RTC::PRECONDITION_NOT_MET;
               }
           }
         CORBA_SeqUtil::clear(m_ecOther);
-    }
+      }
     
     ReturnCode_t ret(on_finalize());
 
@@ -517,7 +517,7 @@ namespace RTC
     execlist = new ExecutionContextList();
 
     int n = m_ecMine.length();
-    for(int i(0), j(0); i < n ; ++i)
+    for (int i(0), j(0); i < n ; ++i)
       {
         RTC_ExecutionContext ec_mine = m_ecMine.cobj()->_buffer[i];
 
@@ -2008,7 +2008,7 @@ namespace RTC
     std::vector<InPortBase*>::iterator it_end = m_inports.end(); 
     bool ret(true);
 
-    while( it != it_end )
+    while ( it != it_end )
       {
 
         if (!((*it)->read()))
@@ -2041,7 +2041,7 @@ namespace RTC
 
     bool ret(true);
 
-    while( it != it_end )
+    while ( it != it_end )
       {
         if (!((*it)->write()))
           {
@@ -2594,7 +2594,10 @@ namespace RTC
             RTC_DEBUG_STR((*p_type));
             p << *p_type;
           }
-        else { RTC_DEBUG(("p_type none")); }
+        else
+          {
+            RTC_DEBUG(("p_type none"));
+          }
 
         // EC name specified
         RTC_DEBUG(("size: %d, name: %s", type_and_name.size(),
@@ -2611,7 +2614,10 @@ namespace RTC
                 RTC_DEBUG_STR((*p_name));
                 p << *p_name;
               }
-            else { RTC_DEBUG(("p_name none")); }
+            else
+              {
+                RTC_DEBUG(("p_name none"));
+              }
           }
         ec_args.push_back(p);
         RTC_DEBUG(("New EC properties stored:"));

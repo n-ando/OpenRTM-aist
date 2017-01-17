@@ -49,7 +49,7 @@ namespace coil
     PROCESS_INFORMATION pi;
     ZeroMemory( &pi, sizeof(pi) );
 
-    if(!CreateProcess(NULL, lpcommand, NULL, NULL, FALSE, 0,
+    if (!CreateProcess(NULL, lpcommand, NULL, NULL, FALSE, 0,
                       NULL, NULL, &si, &pi) )
       {
         delete lpcommand;

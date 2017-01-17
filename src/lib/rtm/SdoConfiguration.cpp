@@ -650,7 +650,7 @@ namespace SDOPackage
     if (std::string(id).empty())
       throw InvalidParameter("ID is empty.");
     
-    if(m_configsets.activateConfigurationSet(id))
+    if (m_configsets.activateConfigurationSet(id))
       {
         return true;
       }
@@ -723,7 +723,7 @@ namespace SDOPackage
   {
     coil::UUID_Generator uugen;
     uugen.init();
-    std::auto_ptr<coil::UUID> uuid(uugen.generateUUID(2,0x01));
+    std::auto_ptr<coil::UUID> uuid(uugen.generateUUID(2, 0x01));
     
     return (const char*) uuid->to_string();
   }

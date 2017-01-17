@@ -314,9 +314,10 @@ namespace RTC
    */
   ReturnCode_t PortBase::_publishInterfaces(void)
   {
-    if(!(m_connectionLimit < 0))
+    if (!(m_connectionLimit < 0))
       {
-        if((::CORBA::ULong)m_connectionLimit<=m_profile.connector_profiles.length())
+        if ((::CORBA::ULong)m_connectionLimit <=
+            m_profile.connector_profiles.length())
           {
             RTC_PARANOID(("Connected number has reached the limitation."));
             RTC_PARANOID(("Can connect the port up to %d ports.",
@@ -437,7 +438,7 @@ namespace RTC
             m_profile.connector_profiles[i] = 
               m_profile.connector_profiles[i + 1] ;
           }
-        m_profile.connector_profiles._length=len-1;
+        m_profile.connector_profiles._length = len-1;
       }
 #endif // ORB_IS_RTORB
     onDisconnected(getName(), prof, retval);
@@ -468,7 +469,7 @@ namespace RTC
     for (CORBA::ULong i(0); i < len; ++i)
       {
         ReturnCode_t tmpret;
-        tmpret =this->disconnect(plist[i].connector_id);
+        tmpret = this->disconnect(plist[i].connector_id);
         if (tmpret != RTC::RTC_OK) retcode = tmpret;
       }
     
@@ -729,7 +730,7 @@ namespace RTC
   {
     coil::UUID_Generator uugen;
     uugen.init();
-    std::auto_ptr<coil::UUID> uuid(uugen.generateUUID(2,0x01));
+    std::auto_ptr<coil::UUID> uuid(uugen.generateUUID(2, 0x01));
     
     return std::string((const char*)uuid->to_string());
   }

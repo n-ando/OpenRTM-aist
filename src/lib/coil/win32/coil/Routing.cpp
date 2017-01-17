@@ -76,7 +76,7 @@ namespace coil
       int i(0);
       while (hp->h_addr_list[i] != 0)
         {
-          if(hp->h_addrtype == AF_INET)
+          if (hp->h_addrtype == AF_INET)
             {
               struct sockaddr_in addr;
               memset((char*)&addr, 0, sizeof(addr));

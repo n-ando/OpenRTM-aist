@@ -110,7 +110,8 @@ namespace RTC
         RTL_DEBUG,   // 5: (FATAL, ERROR, WARN, INFO, DEBUG)
         RTL_TRACE,   // 6: (FATAL, ERROR, WARN, INFO, DEBUG, TRACE)
         RTL_VERBOSE, // 7: (FATAL, ERROR, WARN, INFO, DEBUG, TRACE, VERBOSE)
-        RTL_PARANOID // 8: (FATAL, ERROR, WARN, INFO, DEBUG, TRACE, VERBOSE, PARA)
+        RTL_PARANOID // 8: (FATAL, ERROR, WARN, INFO, 
+                     //     DEBUG, TRACE, VERBOSE, PARA)
       };
  
     /*!

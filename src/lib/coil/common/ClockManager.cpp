@@ -120,7 +120,7 @@ namespace coil
   coil::Mutex ClockManager::clockmgr_mutex;
   ClockManager& ClockManager::instance()
   {
-    if(!clockmgr)
+    if (!clockmgr)
       {
         coil::Guard<coil::Mutex> guard(clockmgr_mutex);
         if (!clockmgr)

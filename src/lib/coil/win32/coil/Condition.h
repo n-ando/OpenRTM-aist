@@ -240,7 +240,8 @@ namespace coil
      *
      * @endif
      */
-  int pthread_cond_wait (coil::pthread_cond_t *cv, coil::Mutex *external_mutex, DWORD aMilliSecond)
+  int pthread_cond_wait (coil::pthread_cond_t *cv, 
+                         coil::Mutex *external_mutex, DWORD aMilliSecond)
   {
     DWORD result;
 
@@ -252,8 +253,10 @@ namespace coil
     // This call atomically releases the mutex and waits on the
     // semaphore until <pthread_cond_signal> or <pthread_cond_broadcast>
     // are called by another thread.
-//    std::cout << "Before SignalObjectAndWait [wait with time(" << milliSecond << ")]" << std::endl << std::flush ; 
-    result = SignalObjectAndWait (external_mutex->mutex_, cv->sema_, aMilliSecond, FALSE);
+//    std::cout << "Before SignalObjectAndWait [wait with time(" << milliSecond 
+//              << ")]" << std::endl << std::flush ; 
+    result = SignalObjectAndWait (external_mutex->mutex_, 
+                                  cv->sema_, aMilliSecond, FALSE);
 
 //    char * p;
 //    switch (result) {
@@ -270,7 +273,8 @@ namespace coil
 //        p = "Other !?";
 //        break;
 //    }
-//      std::cout << "After SignalObjectAndWait [wait with time(" << milliSecond << ")]" 
+//      std::cout << "After SignalObjectAndWait [wait with time(" 
+//                << milliSecond << ")]" 
 //        << " result(" << result << ":" << p << ")"
 //        << std::endl << std::flush ; 
 
@@ -291,7 +295,9 @@ namespace coil
       // This call atomically signals the <waiters_done_> event and
       // waits until it can acquire the <external_mutex>.  This is
       // required to ensure fairness.
-      DWORD result = SignalObjectAndWait (cv->waiters_done_, external_mutex->mutex_, INFINITE, FALSE);
+      DWORD result = SignalObjectAndWait (cv->waiters_done_, 
+                                          external_mutex->mutex_, 
+                                          INFINITE, FALSE);
 //      std::cout << "result " << result << std::endl;
     } else {
       // Always regain the external mutex since that's the guarantee we
@@ -360,31 +366,37 @@ namespace coil
     cv->waiters_count_lock_.lock();
     int have_waiters = 0;
     
-    if (cv->waiters_count_ > 0) {
-      // We are broadcasting, even if there is just one waiter...
-      // Record that we are broadcasting, which helps optimize
-      // <pthread_cond_wait> for the non-broadcast case.
-      cv->was_broadcast_ = 1;
-      have_waiters = 1;
-    }
+    if (cv->waiters_count_ > 0)
+      {
+        // We are broadcasting, even if there is just one waiter...
+        // Record that we are broadcasting, which helps optimize
+        // <pthread_cond_wait> for the non-broadcast case.
+        cv->was_broadcast_ = 1;
+        have_waiters = 1;
+      }
     
-    if (have_waiters) {
-      // Wake up all the waiters atomically.
-//    std::cout << "Before ReleaseSemaphore(" << cv->waiters_count_ << ")" << std::endl << std::flush ; 
-      ReleaseSemaphore (cv->sema_, cv->waiters_count_, 0);
-//    std::cout << "After ReleaseSemaphore(" << cv->waiters_count_ << ")" << std::endl << std::flush ; 
+    if (have_waiters)
+      {
+        // Wake up all the waiters atomically.
+//      std::cout << "Before ReleaseSemaphore(" << cv->waiters_count_ << ")" 
+//                << std::endl << std::flush ; 
+        ReleaseSemaphore (cv->sema_, cv->waiters_count_, 0);
+//      std::cout << "After ReleaseSemaphore(" << cv->waiters_count_ << ")" 
+//                << std::endl << std::flush ; 
       
-    cv->waiters_count_lock_.unlock();
+        cv->waiters_count_lock_.unlock();
 
-      // Wait for all the awakened threads to acquire the counting
-      // semaphore. 
-      WaitForSingleObject (cv->waiters_done_, INFINITE);
-      // This assignment is okay, even without the <waiters_count_lock_> held 
-      // because no other waiter threads can wake up to access it.
-      cv->was_broadcast_ = 0;
-    }
+        // Wait for all the awakened threads to acquire the counting
+        // semaphore. 
+        WaitForSingleObject (cv->waiters_done_, INFINITE);
+        // This assignment is okay, even without the <waiters_count_lock_> held 
+        // because no other waiter threads can wake up to access it.
+        cv->was_broadcast_ = 0;
+      }
     else
-    cv->waiters_count_lock_.unlock();
+      {
+        cv->waiters_count_lock_.unlock();
+      }
     return 0;
   }
 

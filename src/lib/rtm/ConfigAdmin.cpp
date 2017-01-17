@@ -45,7 +45,7 @@ namespace RTC
    */
   void ConfigBase::notifyUpdate(const char* key, const char* val)
   {
-    if(m_admin == 0 || m_callback == 0) return;
+    if (m_admin == 0 || m_callback == 0) return;
     (m_admin->*m_callback)(key, val);
   }
 
@@ -372,7 +372,7 @@ namespace RTC
   void
   ConfigAdmin::setOnRemoveConfigurationSet(OnRemoveConfigurationSetCallback* cb)
   {
-    std::cerr << "setOnRemoveConfigurationSet function is obsolete."<<std::endl;
+    std::cerr << "setOnRemoveConfigurationSet function is obsolete." <<std::endl;
     std::cerr << "Use addConfigurationSetNameListener instead." << std::endl;
     m_listeners.configsetname_[ON_REMOVE_CONFIG_SET].addListener(cb, false);
   }

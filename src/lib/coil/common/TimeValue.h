@@ -63,7 +63,7 @@ namespace coil
      * 
      * @endif
      */
-    TimeValue(long sec=0, long usec=0);
+    TimeValue(long sec = 0, long usec = 0);
 
     /*!
      * @if jp

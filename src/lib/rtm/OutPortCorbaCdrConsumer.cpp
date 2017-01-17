@@ -226,7 +226,7 @@ namespace RTC
   OutPortCorbaCdrConsumer::convertReturn(::OpenRTM::PortStatus status,
                                          const cdrMemoryStream& data)
   {
-    switch(status)
+    switch (status)
       {
       case ::OpenRTM::PORT_OK:
         // never comes here

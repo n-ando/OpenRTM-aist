@@ -318,7 +318,10 @@ namespace coil
      *
      * @endif
      */
-    inline const char* getDefaultValue(void) const {return default_value.c_str();}
+    inline const char* getDefaultValue(void) const
+    {
+      return default_value.c_str();
+    }
     
     /*!
      * @if jp

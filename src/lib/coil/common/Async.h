@@ -74,7 +74,7 @@ namespace coil
      *
      * @endif
      */
-    virtual ~Async(){}
+    virtual ~Async() {}
 
     /*!
      * @if jp

@@ -339,7 +339,7 @@ namespace coil
   {
     std::string pline;
     
-    while(!inStream.eof())
+    while (!inStream.eof())
       {
         std::string tmp;
         coil::getlinePortable(inStream, tmp);
@@ -766,7 +766,7 @@ namespace coil
         return out;
       }
     if (index != 0) out << std::endl;
-    for (size_t i(0), len(curr.leaf.size()); i < len ;++i)
+    for (size_t i(0), len(curr.leaf.size()); i < len; ++i)
       {
         _dump(out, *(curr.leaf[i]), index + 1);
       }

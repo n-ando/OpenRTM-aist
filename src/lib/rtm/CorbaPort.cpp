@@ -156,7 +156,7 @@ namespace RTC
   void CorbaPort::activateInterfaces()
   {
     CorbaProviderList::iterator it(m_providers.begin());
-    while(it != m_providers.end())
+    while (it != m_providers.end())
       {
         it->activate();
         ++it;
@@ -173,7 +173,7 @@ namespace RTC
   void CorbaPort::deactivateInterfaces()
   {
     CorbaProviderList::iterator it(m_providers.begin());
-    while(it != m_providers.end())
+    while (it != m_providers.end())
       {
         it->deactivate();
         ++it;
@@ -196,7 +196,7 @@ namespace RTC
     RTC_TRACE(("publishInterfaces()"));
 
     ReturnCode_t returnvalue = _publishInterfaces();
-    if(returnvalue != RTC::RTC_OK)
+    if (returnvalue != RTC::RTC_OK)
       {
         return returnvalue;
       }
@@ -268,8 +268,14 @@ namespace RTC
       {
         const char* strictness;
         nv[index].value >>= strictness;
-        if (std::string("best_effort") == strictness) { strict = false; }
-        else if (std::string("strict") == strictness) { strict = true; }
+        if (std::string("best_effort") == strictness)
+          {
+            strict = false;
+          }
+        else if (std::string("strict") == strictness)
+          {
+            strict = true;
+          }
         RTC_DEBUG(("Connetion strictness is: %s",
                    strict ? "strict" : "best_effort"))
       }

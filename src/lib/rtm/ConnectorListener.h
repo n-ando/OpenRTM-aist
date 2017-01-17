@@ -301,7 +301,7 @@ namespace RTC
      * @brief Destructor
      * @endif
      */
-    virtual ~ConnectorDataListenerT(){}
+    virtual ~ConnectorDataListenerT() {}
 
     /*!
      * @if jp

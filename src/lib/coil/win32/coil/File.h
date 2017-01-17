@@ -70,30 +70,30 @@ namespace coil
 
     std::string dir_name;
     if (p)
-    {
-      if(p != return_dirname)
       {
-        if(*(p+1) == '\0')
-        {
-           *p = '\0';
-           dir_name = dirname(return_dirname);
-        }
-        else
-        {
-           *p = '\0';
-           dir_name = return_dirname;
-        }
+        if (p != return_dirname)
+          {
+            if (*(p+1) == '\0')
+              {
+                *p = '\0';
+                dir_name = dirname(return_dirname);
+              }
+            else
+              {
+                *p = '\0';
+                dir_name = return_dirname;
+              }
+          }
+        else 
+          {
+            *(p+1) = '\0';
+            dir_name = return_dirname;
+          }
       }
-      else 
-      {
-        *(p+1) = '\0';
-        dir_name = return_dirname;
-      }
-    }
     else
-    {
-      dir_name = ".";
-    }
+      {
+        dir_name = ".";
+      }
     return dir_name;
   }
 
@@ -137,34 +137,34 @@ namespace coil
 
     std::string base_name(p);
     if (pdelimiter)
-    {
-      if(pdelimiter != p)
       {
-        if(*(pdelimiter+1) == '\0')
-        {
-          *pdelimiter = '\0';
-          base_name = basename(p);
-        }
+        if (pdelimiter != p)
+          {
+            if (*(pdelimiter+1) == '\0')
+              {
+                *pdelimiter = '\0';
+                base_name = basename(p);
+              }
+            else
+              {
+                pdelimiter++;
+                base_name = pdelimiter;
+              }
+          }
         else
-        {
-          pdelimiter++;
-          base_name = pdelimiter;
-        }
-      }
-      else
-      {
-        if(*(pdelimiter+1) != '\0')
-        {
-          pdelimiter++;
-          base_name = pdelimiter;
-        }
-        else
-        {
-          base_name = pdelimiter;
-        }
+          {
+            if (*(pdelimiter+1) != '\0')
+              {
+                pdelimiter++;
+                base_name = pdelimiter;
+              }
+            else
+              {
+                base_name = pdelimiter;
+              }
 
+          }
       }
-    }
     return base_name;
   }
 
@@ -242,8 +242,14 @@ namespace coil
     if (*(path.end() - 1) != '\\' && *(path.end() - 1) != '/')
       {
         std::string::size_type pos(path.find("/"));
-        if (pos == std::string::npos) { path.push_back('\\'); } // delim = '\'
-        else                          { path.push_back('/');  } // delim = '/'
+        if (pos == std::string::npos)
+          {
+            path.push_back('\\'); // delim = '\'
+          } 
+        else
+          {
+            path.push_back('/'); // delim = '/'
+          } 
       }
     path.push_back('*'); // now path is "/dir/dir/../*"
 

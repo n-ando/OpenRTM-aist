@@ -50,7 +50,7 @@ namespace coil
    *
    * @endif
    */
-  template <typename _CharT, typename _Traits=std::char_traits<_CharT> >
+  template <typename _CharT, typename _Traits = std::char_traits<_CharT> >
   class log_streambuf
     : public ::std::basic_streambuf<_CharT, _Traits>
   {
@@ -163,14 +163,14 @@ namespace coil
     bool removeStream(streambuf_type* stream)
     {
       std::vector<coil::log_streambuf<char>::Stream>::iterator it;
-      for( it = m_streams.begin(); it != m_streams.end(); ++it )
-      {
+      for ( it = m_streams.begin(); it != m_streams.end(); ++it )
+        {
           if (it->stream_ == stream)
             {
               m_streams.erase(it);
               return true;
             }
-      }
+        }
       return false;
     }
 
@@ -536,7 +536,7 @@ namespace coil
    *
    * @endif
    */
-  template <typename _CharT, typename _Traits=std::char_traits<_CharT> >
+  template <typename _CharT, typename _Traits = std::char_traits<_CharT> >
   class log_stream
     : public std::basic_ostream<_CharT, _Traits>
   {
@@ -924,10 +924,10 @@ namespace coil
   };
 
   template <typename _CharT, typename _Traits >
-  bool log_stream<_CharT,_Traits >::m_lockEnable = true;
+  bool log_stream<_CharT, _Traits >::m_lockEnable = true;
 
   template <typename _CharT, typename _Traits >
-  coil::Mutex log_stream<_CharT,_Traits>::m_mutex("Mutex for Logger.");
+  coil::Mutex log_stream<_CharT, _Traits>::m_mutex("Mutex for Logger.");
 
   typedef log_streambuf<char> LogStreamBuffer;
   typedef log_stream<char> LogStream;

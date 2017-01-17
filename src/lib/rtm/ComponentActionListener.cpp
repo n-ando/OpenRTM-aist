@@ -29,7 +29,7 @@ namespace RTC
    * @class PostComponentActionListener class
    * @endif
    */
-  PostComponentActionListener::~PostComponentActionListener(){}
+  PostComponentActionListener::~PostComponentActionListener() {}
 
   /*!
    * @if jp
@@ -38,7 +38,7 @@ namespace RTC
    * @class PreComponentActionListener class
    * @endif
    */
-  PreComponentActionListener::~PreComponentActionListener(){}
+  PreComponentActionListener::~PreComponentActionListener() {}
 
   /*!
    * @if jp
@@ -47,7 +47,7 @@ namespace RTC
    * @class PortActionListener class
    * @endif
    */
-  PortActionListener::~PortActionListener(){}
+  PortActionListener::~PortActionListener() {}
   
   /*!
    * @if jp
@@ -56,7 +56,7 @@ namespace RTC
    * @class ExecutionContextActionListener class
    * @endif
    */
-  ExecutionContextActionListener::~ExecutionContextActionListener(){}
+  ExecutionContextActionListener::~ExecutionContextActionListener() {}
   
 
 

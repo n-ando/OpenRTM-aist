@@ -3302,7 +3302,7 @@ namespace RTC
      *
      * @endif
      */
-    void setReadAll(bool read=true, bool completion=false);
+    void setReadAll(bool read = true, bool completion = false);
 
     /*!
      * @if jp

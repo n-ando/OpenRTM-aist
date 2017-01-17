@@ -281,10 +281,22 @@ namespace RTC
     RTC_DEBUG(("push_policy: %s", push_policy.c_str()));
 
     coil::normalize(push_policy);
-    if      (push_policy == "all")  { m_pushPolicy = ALL;  }
-    else if (push_policy == "fifo") { m_pushPolicy = FIFO; }
-    else if (push_policy == "skip") { m_pushPolicy = SKIP; }
-    else if (push_policy == "new")  { m_pushPolicy = NEW;  }
+    if (push_policy == "all")
+      {
+        m_pushPolicy = ALL;
+      }
+    else if (push_policy == "fifo")
+      {
+        m_pushPolicy = FIFO;
+      }
+    else if (push_policy == "skip")
+      {
+        m_pushPolicy = SKIP;
+      }
+    else if (push_policy == "new")
+      {
+        m_pushPolicy = NEW;
+      }
     else
       {
         RTC_ERROR(("invalid push_policy value: %s", push_policy.c_str()));

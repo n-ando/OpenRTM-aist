@@ -172,7 +172,7 @@ namespace RTC
   InPortCorbaCdrProvider::convertReturn(BufferStatus::Enum status,
                                         const cdrMemoryStream& data)
   {
-    switch(status)
+    switch (status)
       {
       case BufferStatus::BUFFER_OK:
         onBufferWrite(data);

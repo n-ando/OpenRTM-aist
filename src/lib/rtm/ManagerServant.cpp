@@ -844,7 +844,7 @@ namespace RTM
         RTM::Manager_var mgr = ::RTM::Manager::_narrow(mobj);
 #else // ORB_IS_RTORB
         RTM::Manager_var mgr;
-        if(!make_client_connection(mobj->impl()->connection))
+        if (!make_client_connection(mobj->impl()->connection))
           {
             return RTM::Manager_ptr();
           }

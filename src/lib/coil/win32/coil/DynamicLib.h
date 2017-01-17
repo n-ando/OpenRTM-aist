@@ -289,7 +289,7 @@ namespace coil
      * @endif
      */
     static int ForExternTest(void) { 
-        std::cout<<"ForExternTest"<<std::endl;
+        std::cout << "ForExternTest" << std::endl;
         return 0xdeadbeef; 
 
     }

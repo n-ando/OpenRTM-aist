@@ -177,7 +177,8 @@ namespace coil
      * @endif
      */
     GetOpt(int argc, char* const argv[], const char* opt, int flag)
-      : optarg(::optarg), optind(1), opterr(1), optopt(0), m_argc(argc), m_argv(argv), m_opt(opt), m_flag(flag)
+      : optarg(::optarg), optind(1), opterr(1), optopt(0), 
+        m_argc(argc), m_argv(argv), m_opt(opt), m_flag(flag)
     {
       ::optind = 1;
 #ifdef __QNX__
@@ -238,7 +239,7 @@ namespace coil
 #endif
       int result = getopt(m_argc, m_argv, m_opt);
 #ifdef __QNX__
-        if(::optind == optind_last)
+        if (::optind == optind_last)
           {
             ::optind++;
             result = getopt(m_argc, m_argv, m_opt);
@@ -249,7 +250,10 @@ namespace coil
       optind = ::optind;
       optopt = ::optopt;
 #if __QNX__
-      if(optind_last < m_argc) { ++optind_last; }
+      if (optind_last < m_argc)
+        {
+          ++optind_last;
+        }
 #endif
       return result;
     }

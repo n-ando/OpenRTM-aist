@@ -415,7 +415,7 @@ namespace RTC_impl
     Guard guard(m_mutex);
     for (size_t i(0); i < m_comps.size() ; ++i)
       {
-        if(m_comps.at(i)->isEquivalent(comp))
+        if (m_comps.at(i)->isEquivalent(comp))
           {
             return m_comps.at(i);
           }

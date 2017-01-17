@@ -32,7 +32,7 @@ namespace RTC
    */
   struct PortAdmin::find_port_name
   {
-    explicit find_port_name(const char* name) : m_name(name) {};
+    explicit find_port_name(const char* name) : m_name(name) {}
     bool operator()(const PortService_ptr& p)
     {
       try
@@ -59,7 +59,7 @@ namespace RTC
 
   struct PortAdmin::find_port
   {
-    explicit find_port(const PortService_ptr& p) : m_port(p) {};
+    explicit find_port(const PortService_ptr& p) : m_port(p) {}
     bool operator()(const PortService_ptr& p)
     {
       return m_port->_is_equivalent(p);
@@ -77,7 +77,7 @@ namespace RTC
   struct PortAdmin::del_port
   {
     PortAdmin* m_pa;
-    explicit del_port(PortAdmin* pa) : m_pa(pa) {};
+    explicit del_port(PortAdmin* pa) : m_pa(pa) {}
     void operator()(PortBase* p)
     {
       m_pa->removePort(*p);

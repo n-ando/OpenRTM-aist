@@ -29,7 +29,7 @@ namespace RTC
    * @class ConfigurationParamListener class
    * @endif
    */
-  ConfigurationParamListener::~ConfigurationParamListener(){}
+  ConfigurationParamListener::~ConfigurationParamListener() {}
 
   /*!
    * @if jp
@@ -38,7 +38,7 @@ namespace RTC
    * @class ConfigurationSetNameListener class
    * @endif
    */
-  ConfigurationSetNameListener::~ConfigurationSetNameListener(){}
+  ConfigurationSetNameListener::~ConfigurationSetNameListener() {}
 
   /*!
    * @if jp
@@ -47,7 +47,7 @@ namespace RTC
    * @class ConfigurationSetListener class
    * @endif
    */
-  ConfigurationSetListener::~ConfigurationSetListener(){}
+  ConfigurationSetListener::~ConfigurationSetListener() {}
 
 
   //============================================================

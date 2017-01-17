@@ -689,7 +689,8 @@ namespace RTC
       std::string m_filepath;
     public:
       explicit DllPred(const char* filepath) : m_filepath(filepath) {}
-      explicit DllPred(const DLLEntity* dll) : m_filepath(dll->properties["file_path"]) {}
+      explicit DllPred(const DLLEntity* dll)
+               : m_filepath(dll->properties["file_path"]) {}
       bool operator()(DLLEntity* dllentity)
       {
         return m_filepath == dllentity->properties.getProperty("file_path");
@@ -765,7 +766,7 @@ namespace RTC
     class UnloadPred
     {
     public:
-      UnloadPred(){}
+      UnloadPred() {}
       void operator()(DLLEntity* dll)
       {
         dll->dll.close();

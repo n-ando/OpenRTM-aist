@@ -125,7 +125,7 @@ namespace RTC
     initConsumers();
     int num(-1);
     if (!coil::stringTo(num, 
-                     m_properties.getProperty("connection_limit","-1").c_str()))
+                     m_properties.getProperty("connection_limit", "-1").c_str()))
       {
         RTC_ERROR(("invalid connection_limit value: %s", 
                    m_properties.getProperty("connection_limit").c_str()));
@@ -474,7 +474,7 @@ namespace RTC
     RTC_TRACE(("publishInterfaces()"));
 
     ReturnCode_t returnvalue = _publishInterfaces();
-    if(returnvalue!=RTC::RTC_OK)
+    if (returnvalue != RTC::RTC_OK)
       {
         return returnvalue;
       }
@@ -774,7 +774,7 @@ namespace RTC
                                bool& littleEndian)
   {
         // old version check
-    if(prop.hasKey("serializer") == NULL)
+    if (prop.hasKey("serializer") == NULL)
       {
         littleEndian = true;
         return true;
@@ -786,13 +786,13 @@ namespace RTC
     coil::normalize(endian_type);
     std::vector<std::string> endian(coil::split(endian_type, ","));
 
-    if(endian.empty()) { return false; }
-    if(endian[0] == "little")
+    if (endian.empty()) { return false; }
+    if (endian[0] == "little")
       {
         littleEndian = true;
         return true;
       }
-    else if(endian[0] == "big")
+    else if (endian[0] == "big")
       {
         littleEndian = false;
         return true;

@@ -145,7 +145,7 @@ namespace RTC
      * @endif
      */
     InPort(const char* name, DataType& value,
-           int bufsize=64, 
+           int bufsize = 64, 
            bool read_block = false, bool write_block = false,
            int read_timeout = 0, int write_timeout = 0)
 #if defined(__GNUC__) && (__GNUC__ <= 3 && __GNUC_MINOR__ <= 3) 

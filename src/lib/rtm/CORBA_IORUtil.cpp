@@ -61,7 +61,7 @@ namespace CORBA_IORUtil
     if (size < 4)
       {
         return false;
-        throw CORBA::MARSHAL(0,CORBA::COMPLETED_NO);
+        throw CORBA::MARSHAL(0, CORBA::COMPLETED_NO);
       }
 
     const char* p = iorstr;
@@ -69,7 +69,7 @@ namespace CORBA_IORUtil
     if (p[0] != 'I' || p[1] != 'O' || p[2] != 'R' || p[3] != ':')
       {
         return false;
-        throw CORBA::MARSHAL(0,CORBA::COMPLETED_NO);
+        throw CORBA::MARSHAL(0, CORBA::COMPLETED_NO);
       }
 
     // IOR:xxyyzz......
@@ -84,16 +84,40 @@ namespace CORBA_IORUtil
         CORBA::Octet v;
         // upper digit
         int j(i * 2);
-        if      (p[j] >= '0' && p[j] <= '9') { v = ((p[j] - '0') << 4);      }
-        else if (p[j] >= 'a' && p[j] <= 'f') { v = ((p[j] - 'a' + 10) << 4); }
-        else if (p[j] >= 'A' && p[j] <= 'F') { v = ((p[j] - 'A' + 10) << 4); }
-        else                                 { return false;                 }
+        if (p[j] >= '0' && p[j] <= '9')
+          {
+            v = ((p[j] - '0') << 4);
+          }
+        else if (p[j] >= 'a' && p[j] <= 'f')
+          {
+            v = ((p[j] - 'a' + 10) << 4);
+          }
+        else if (p[j] >= 'A' && p[j] <= 'F')
+          {
+            v = ((p[j] - 'A' + 10) << 4);
+          }
+        else
+          {
+            return false;
+          }
         // lower digit
         int k(j + 1);
-        if      (p[k] >= '0' && p[k] <= '9') { v += (p[k] - '0');            }
-        else if (p[k] >= 'a' && p[k] <= 'f') { v += (p[k] - 'a' + 10);       }
-        else if (p[k] >= 'A' && p[k] <= 'F') { v += (p[k] - 'A' + 10);       }
-        else                                 { return false;                 }
+        if (p[k] >= '0' && p[k] <= '9')
+          {
+            v += (p[k] - '0');
+          }
+        else if (p[k] >= 'a' && p[k] <= 'f')
+          {
+            v += (p[k] - 'a' + 10);
+          }
+        else if (p[k] >= 'A' && p[k] <= 'F')
+          {
+            v += (p[k] - 'A' + 10);
+          }
+        else
+          {
+            return false;
+          }
         // push_back to buffer
         buf.marshalOctet(v);
       }
@@ -121,7 +145,7 @@ namespace CORBA_IORUtil
   bool toString(IOP::IOR& ior, std::string& iorstr)
   {
 #ifndef ORB_IS_RTORB
-    cdrMemoryStream buf(CORBA::ULong(0),CORBA::Boolean(1));
+    cdrMemoryStream buf(CORBA::ULong(0), CORBA::Boolean(1));
     buf.marshalBoolean(omni::myByteOrder);
     buf.marshalRawString(ior.type_id);
     ior.profiles >>= buf;
@@ -296,9 +320,9 @@ namespace CORBA_IORUtil
   {
     // Output key as text
     sstr << "       Object Key: \"";
-    for(unsigned int j = 0; j < key.length(); ++j)
+    for (unsigned int j = 0; j < key.length(); ++j)
       {
-        if( (char) key[j] >= ' ' && (char) key[j] <= '~')
+        if ( (char) key[j] >= ' ' && (char) key[j] <= '~')
           {
             sstr << (char) key[j];
           }
@@ -311,11 +335,17 @@ namespace CORBA_IORUtil
 
     // Output key in hexadecimal form.
     sstr << " = 0x";
-    for(unsigned int j(0); j < key.length(); ++j)
+    for (unsigned int j(0); j < key.length(); ++j)
       {
         int v = (key[j] & 0xf0) >> 4;
-        if (v < 10) { sstr << (char)('0' + v); }
-        else        { sstr << (char)('a' + (v - 10)); }
+        if (v < 10)
+          {
+            sstr << (char)('0' + v);
+          }
+        else
+          {
+            sstr << (char)('a' + (v - 10));
+          }
         v = key[j] & 0xf;
         if (v < 10) { sstr << (char)('0' + v); }
         else        { sstr << (char)('a' + (v - 10)); }
@@ -329,10 +359,10 @@ namespace CORBA_IORUtil
     int is_transient;
     OctetUSequence id;
     
-    if(get_poa_info(key, poas, is_transient, id))
+    if (get_poa_info(key, poas, is_transient, id))
       {
         sstr << "       POA(" << (char*)poas[0];
-        for(unsigned i(1); i < poas.length(); ++i)
+        for (unsigned i(1); i < poas.length(); ++i)
           {
             sstr << '/' << (char*)poas[i];
           }
@@ -340,7 +370,7 @@ namespace CORBA_IORUtil
       }
     else
       {
-        if(key.length() != sizeof(omniOrbBoaKey))
+        if (key.length() != sizeof(omniOrbBoaKey))
           {
             return;
           }
@@ -359,19 +389,19 @@ namespace CORBA_IORUtil
     poas_out.length(1);
     poas_out[0] = CORBA::string_dup("root");
     
-    if(*k != TRANSIENT_SUFFIX_SEP && *k != POA_NAME_SEP) { return 0; }
+    if (*k != TRANSIENT_SUFFIX_SEP && *k != POA_NAME_SEP) { return 0; }
     
-    while(k < kend && *k == POA_NAME_SEP)
+    while (k < kend && *k == POA_NAME_SEP)
       {
         ++k;
         const char* name = k;
         
-        while(k < kend && *k && *k != POA_NAME_SEP 
+        while (k < kend && *k && *k != POA_NAME_SEP 
               && *k != TRANSIENT_SUFFIX_SEP)
           {
             ++k;
           }
-        if(k == kend)  { return 0; }
+        if (k == kend)  { return 0; }
     
         char* nm = new char[k - name + 1];
         memcpy(nm, name, k - name);
@@ -379,15 +409,15 @@ namespace CORBA_IORUtil
         poas_out.length(poas_out.length() + 1);
         poas_out[poas_out.length() - 1] = nm;
       }
-    if(k == kend)  { return 0; }
+    if (k == kend)  { return 0; }
     
     transient_out = 0;
-    if(*k == TRANSIENT_SUFFIX_SEP)
+    if (*k == TRANSIENT_SUFFIX_SEP)
       {
         transient_out = 1;
         k += TRANSIENT_SUFFIX_SIZE + 1;
       }
-    if(k >= kend || *k)  { return 0; }
+    if (k >= kend || *k)  { return 0; }
     k++;
 
     id_out.length(kend - k);
@@ -412,7 +442,7 @@ namespace CORBA_IORUtil
             char* q;
             do
               {
-                q = strchr(p,'\n');
+                q = strchr(p, '\n');
                 if (q)
                   {
                     *q++ = '\0';
