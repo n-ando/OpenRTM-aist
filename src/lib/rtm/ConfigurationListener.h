@@ -35,7 +35,7 @@ namespace RTC
    *
    * @else
    * @brief The types of ConnectorDataListener
-   * 
+   *
    * - ON_UPDATE_CONFIG_PARAM,
    *
    * @endif
@@ -148,8 +148,8 @@ namespace RTC
    *
    * @else
    * @brief The types of ConfigurationSetListener
-   * 
-   * - ON_SET_CONFIG_SET: Value list has been set as a configuration set 
+   *
+   * - ON_SET_CONFIG_SET: Value list has been set as a configuration set
    * - ON_ADD_CONFIG_SET: A new configuration set has been added
    *
    * @endif
@@ -180,7 +180,7 @@ namespace RTC
    * This class is abstract base class for listener classes that
    * provides callbacks for configuration set's related events.
    *
-   * - ON_SET_CONFIG_SET: Value list has been set as a configuration set 
+   * - ON_SET_CONFIG_SET: Value list has been set as a configuration set
    * - ON_ADD_CONFIG_SET: A new configuration set has been added
    *
    * @endif
@@ -215,7 +215,7 @@ namespace RTC
     static const char* toString(ConfigurationSetListenerType type)
     {
       if (type < CONFIG_SET_LISTENER_NUM)
-        { 
+        {
           static const char* typeString[] =
           {
             "ON_SET_CONFIG_SET",
@@ -263,7 +263,7 @@ namespace RTC
    *
    * @else
    * @brief The types of ConfigurationSetNameListener
-   * 
+   *
    * @endif
    */
   enum ConfigurationSetNameListenerType
@@ -328,7 +328,7 @@ namespace RTC
     static const char* toString(ConfigurationSetNameListenerType type)
     {
       if (type < CONFIG_SET_NAME_LISTENER_NUM)
-        { 
+        {
           static const char* typeString[] =
           {
             "ON_UPDATE_CONFIG_SET",
@@ -406,7 +406,7 @@ namespace RTC
      * @endif
      */
     virtual ~ConfigurationParamListenerHolder();
-    
+
     /*!
      * @if jp
      *
@@ -421,15 +421,15 @@ namespace RTC
      *
      * @brief Add the listener.
      *
-     * This method adds the listener. 
+     * This method adds the listener.
      *
      * @param listener Added listener
      * @param autoclean true:The listener is deleted at the destructor.,
-     *                  false:The listener is not deleted at the destructor. 
+     *                  false:The listener is not deleted at the destructor.
      * @endif
      */
     void addListener(ConfigurationParamListener* listener, bool autoclean);
-    
+
     /*!
      * @if jp
      *
@@ -440,15 +440,15 @@ namespace RTC
      * @param listener 削除するリスナ
      * @else
      *
-     * @brief Remove the listener. 
+     * @brief Remove the listener.
      *
-     * This method removes the listener. 
+     * This method removes the listener.
      *
      * @param listener Removed listener
      * @endif
      */
     void removeListener(ConfigurationParamListener* listener);
-    
+
     /*!
      * @if jp
      *
@@ -460,16 +460,16 @@ namespace RTC
      * @param cdrdata データ
      * @else
      *
-     * @brief Notify listeners. 
+     * @brief Notify listeners.
      *
-     * This calls the Callback method of the registered listener. 
+     * This calls the Callback method of the registered listener.
      *
      * @param info ConnectorInfo
      * @param cdrdata Data
      * @endif
      */
     void notify(const char* config_set_name, const char* config_param_name);
-    
+
   private:
     std::vector<Entry> m_listeners;
     coil::Mutex m_mutex;
@@ -514,7 +514,7 @@ namespace RTC
      * @endif
      */
     virtual ~ConfigurationSetListenerHolder();
-    
+
     /*!
      * @if jp
      *
@@ -529,15 +529,15 @@ namespace RTC
      *
      * @brief Add the listener.
      *
-     * This method adds the listener. 
+     * This method adds the listener.
      *
      * @param listener Added listener
      * @param autoclean true:The listener is deleted at the destructor.,
-     *                  false:The listener is not deleted at the destructor. 
+     *                  false:The listener is not deleted at the destructor.
      * @endif
      */
     void addListener(ConfigurationSetListener* listener, bool autoclean);
-    
+
     /*!
      * @if jp
      *
@@ -548,15 +548,15 @@ namespace RTC
      * @param listener 削除するリスナ
      * @else
      *
-     * @brief Remove the listener. 
+     * @brief Remove the listener.
      *
-     * This method removes the listener. 
+     * This method removes the listener.
      *
      * @param listener Removed listener
      * @endif
      */
     void removeListener(ConfigurationSetListener* listener);
-    
+
     /*!
      * @if jp
      *
@@ -568,16 +568,16 @@ namespace RTC
      * @param cdrdata データ
      * @else
      *
-     * @brief Notify listeners. 
+     * @brief Notify listeners.
      *
-     * This calls the Callback method of the registered listener. 
+     * This calls the Callback method of the registered listener.
      *
      * @param info ConnectorInfo
      * @param cdrdata Data
      * @endif
      */
     void notify(const coil::Properties& config_set);
-    
+
   private:
     std::vector<Entry> m_listeners;
     coil::Mutex m_mutex;
@@ -587,7 +587,7 @@ namespace RTC
   //============================================================
   /*!
    * @if jp
-   * @class ConfigurationSetNameListenerHolder 
+   * @class ConfigurationSetNameListenerHolder
    * @brief ConfigurationSetNameListener ホルダクラス
    *
    * 複数の ConfigurationSetNameListener を保持し管理するクラス。
@@ -614,7 +614,7 @@ namespace RTC
      * @endif
      */
     ConfigurationSetNameListenerHolder();
-    
+
     /*!
      * @if jp
      * @brief デストラクタ
@@ -623,7 +623,7 @@ namespace RTC
      * @endif
      */
     virtual ~ConfigurationSetNameListenerHolder();
-    
+
     /*!
      * @if jp
      *
@@ -638,15 +638,15 @@ namespace RTC
      *
      * @brief Add the listener.
      *
-     * This method adds the listener. 
+     * This method adds the listener.
      *
      * @param listener Added listener
      * @param autoclean true:The listener is deleted at the destructor.,
-     *                  false:The listener is not deleted at the destructor. 
+     *                  false:The listener is not deleted at the destructor.
      * @endif
      */
     void addListener(ConfigurationSetNameListener* listener, bool autoclean);
-    
+
     /*!
      * @if jp
      *
@@ -657,9 +657,9 @@ namespace RTC
      * @param listener 削除するリスナ
      * @else
      *
-     * @brief Remove the listener. 
+     * @brief Remove the listener.
      *
-     * This method removes the listener. 
+     * This method removes the listener.
      *
      * @param listener Removed listener
      * @endif
@@ -676,15 +676,15 @@ namespace RTC
      * @param info ConnectorInfo
      * @else
      *
-     * @brief Notify listeners. 
+     * @brief Notify listeners.
      *
-     * This calls the Callback method of the registered listener. 
+     * This calls the Callback method of the registered listener.
      *
      * @param info ConnectorInfo
      * @endif
      */
     void notify(const char* config_set_name);
-      
+
   private:
     std::vector<Entry> m_listeners;
     coil::Mutex m_mutex;
@@ -716,7 +716,7 @@ namespace RTC
      * The ConfigurationParamType listener is stored.
      * @endif
      */
-    ConfigurationParamListenerHolder 
+    ConfigurationParamListenerHolder
     configparam_[CONFIG_PARAM_LISTENER_NUM];
     /*!
      * @if jp
@@ -735,10 +735,10 @@ namespace RTC
      * ConfigurationSetNameListenerTypeリスナを格納
      * @else
      * @brief ConfigurationSetNameListenerType listener array
-     * The ConfigurationSetNameListenerType listener is stored. 
+     * The ConfigurationSetNameListenerType listener is stored.
      * @endif
      */
-    ConfigurationSetNameListenerHolder 
+    ConfigurationSetNameListenerHolder
     configsetname_[CONFIG_SET_NAME_LISTENER_NUM];
   };
 

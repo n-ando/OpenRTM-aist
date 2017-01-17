@@ -45,7 +45,7 @@ namespace RTC
    * @class InPort
    *
    * @brief InPort テンプレートクラス
-   * 
+   *
    * InPort の実装である InPort<T> のテンプレートクラス。
    * <T> はBasicDataType.idl にて定義されている型で、メンバとして
    * Time 型の tm , および T型の data を持つ構造体でなくてはならない。
@@ -54,13 +54,13 @@ namespace RTC
    * なっているが、コンストラクタ引数によりサイズを指定することができる。
    * データはフラグによって未読、既読状態が管理され、isNew(), write(), read(),
    * isFull(), isEmpty() 等のメソッドによりハンドリングすることができる。
-   *   
+   *
    * OnRead系コールバック (読み出しに起因するイベントによりコールされる)
    *
-   * - void OnRead::operator(): 
+   * - void OnRead::operator():
    *     InPort::read() を呼び出し読み出しを行う際にコールされる。
    *
-   * - DataType OnReadConvert::operator(DataType): 
+   * - DataType OnReadConvert::operator(DataType):
    *     InPort::read() を呼び出し、データをバッファから読みだす際に呼ばれ
    *     データの変換を行う。引数にはバッファから読み出された値が与えられ、
    *     変換後のデータを戻り値として返す。この値がread()の返す値となる。
@@ -129,13 +129,13 @@ namespace RTC
      *                (The default value:64)
      * @param read_block Flag of reading block.
      *                   When there are not unread data at reading data,
-     *                   set whether to block data until receiving the next 
+     *                   set whether to block data until receiving the next
      *                   data. (The default value:false)
      * @param write_block Flag of writing block.
-     *                    If the buffer was full at writing data, set whether 
-     *                    to block data until the buffer has space. 
+     *                    If the buffer was full at writing data, set whether
+     *                    to block data until the buffer has space.
      *                    (The default value:false)
-     * @param read_timeout Data reading timeout time (millisecond) 
+     * @param read_timeout Data reading timeout time (millisecond)
      *                     when not specifying read blocking.
      *                     (The default value:0)
      * @param write_timeout Data writing timeout time (millisecond)
@@ -145,10 +145,10 @@ namespace RTC
      * @endif
      */
     InPort(const char* name, DataType& value,
-           int bufsize = 64, 
+           int bufsize = 64,
            bool read_block = false, bool write_block = false,
            int read_timeout = 0, int write_timeout = 0)
-#if defined(__GNUC__) && (__GNUC__ <= 3 && __GNUC_MINOR__ <= 3) 
+#if defined(__GNUC__) && (__GNUC__ <= 3 && __GNUC_MINOR__ <= 3)
       : InPortBase(name, ::CORBA_Util::toRepositoryIdOfStruct<DataType>()),
 #else
       : InPortBase(name, ::CORBA_Util::toRepositoryId<DataType>()),
@@ -158,7 +158,7 @@ namespace RTC
         m_status(1), m_directNewData(false)
     {
     }
-    
+
     /*!
      * @if jp
      *
@@ -200,29 +200,29 @@ namespace RTC
       return m_name.c_str();
     }
 
-    
+
     /*!
      * @if jp
      *
      * @brief 最新データが存在するか確認する
-     * 
+     *
      * InPortに未読の最新データが到着しているかをbool値で返す。
      * InPortが未接続の場合、および接続コネクタのバッファがEmpty
      * の場合にはfalseを返す。
      *
      * @return true 未読の最新データが存在する
      *         false 未接続またはバッファにデータが存在しない。
-     * 
+     *
      * @else
      *
      * @brief Check whether the data is newest
-     * 
+     *
      * Check whether the data stored at a current buffer position is newest.
      *
      * @return Newest data check result
      *         ( true:Newest data. Data has not been readout yet.
      *          false:Past data．Data has already been readout.)
-     * 
+     *
      * @endif
      */
     virtual bool isNew()
@@ -250,13 +250,13 @@ namespace RTC
           }
         r = m_connectors[0]->getBuffer()->readable();
       }
-      
+
       if (r > 0)
         {
           RTC_DEBUG(("isNew() = true, readable data: %d", r));
           return true;
         }
-      
+
       RTC_DEBUG(("isNew() = false, no readable data"));
       return false;
     }
@@ -265,23 +265,23 @@ namespace RTC
      * @if jp
      *
      * @brief バッファが空かどうか確認する
-     * 
+     *
      * InPortのバッファが空かどうかを bool 値で返す。
      * 空の場合は true, 未読データがある場合は false を返す。
      *
      * @return true  バッファは空
      *         false バッファに未読データがある
-     * 
+     *
      * @else
      *
      * @brief Check whether the data is newest
-     * 
+     *
      * Check whether the data stored at a current buffer position is newest.
      *
      * @return Newest data check result
      *         ( true:Newest data. Data has not been readout yet.
      *          false:Past data．Data has already been readout.)
-     * 
+     *
      * @endif
      */
     virtual bool isEmpty()
@@ -308,7 +308,7 @@ namespace RTC
           RTC_DEBUG(("isEmpty() = true, buffer is empty"));
           return true;
         }
-      
+
       RTC_DEBUG(("isEmpty() = false, data exists in the buffer"));
       return false;
     }
@@ -343,16 +343,16 @@ namespace RTC
      * この関数を利用する際には、
      *
      * - isNew(), isEmpty() と併用し、事前にバッファ状態をチェックする。
-     * 
+     *
      * - 初回読み出し時に不定値を返さないようにバインド変数を事前に初期化する
-     * 
+     *
      * - ReturnCode read(DataType& data) 関数の利用を検討する。
      *
      * ことが望ましい。
      *
      * 各コールバック関数は以下のように呼び出される。
      * - OnRead: read() 関数が呼ばれる際に必ず呼ばれる。
-     * 
+     *
      * - OnReadConvert: データの読み出しが成功した場合、読みだしたデータを
      *       引数としてOnReadConvertが呼び出され、戻り値をread()が戻り値
      *       として返す。
@@ -387,7 +387,7 @@ namespace RTC
      *   operator() of OnReadConvert will be the return value of read().
      * - When timeout of reading is already set by setReadTimeout(),
      *   it waits for only timeout time until the state of the buffer underflow
-     *   is reset, and if OnUnderflow is already set, this will be invoked to 
+     *   is reset, and if OnUnderflow is already set, this will be invoked to
      *   return.
      *
      * @return Readout result (Successful:true, Failed:false)
@@ -398,7 +398,7 @@ namespace RTC
     {
       RTC_TRACE(("DataType read()"));
 
-      if (m_OnRead != NULL) 
+      if (m_OnRead != NULL)
         {
           (*m_OnRead)();
           RTC_TRACE(("OnRead called"));
@@ -409,7 +409,7 @@ namespace RTC
         if (m_directNewData == true)
           {
             RTC_DEBUG(("Direct data transfer"));
-            if (m_OnReadConvert != 0) 
+            if (m_OnReadConvert != 0)
               {
                 m_value = (*m_OnReadConvert)(m_value);
                 RTC_DEBUG(("OnReadConvert for direct data called"));
@@ -441,7 +441,7 @@ namespace RTC
           Guard guard(m_valueMutex);
           RTC_DEBUG(("data read succeeded"));
           m_value <<= cdr;
-          if (m_OnReadConvert != 0) 
+          if (m_OnReadConvert != 0)
             {
               m_value = (*m_OnReadConvert)(m_value);
               RTC_DEBUG(("OnReadConvert called"));
@@ -462,7 +462,7 @@ namespace RTC
       RTC_ERROR(("unknown retern value from buffer.read()"));
       return false;
     }
-    
+
 
     /*!
      * @if jp
@@ -490,7 +490,7 @@ namespace RTC
     {
       this->read();
     };
-    
+
     /*!
      * @if jp
      *
@@ -587,8 +587,8 @@ namespace RTC
     DataPortStatusList getStatusList()
     {
       return m_status;
-    }    
-    
+    }
+
     /*!
      * @if jp
      *
@@ -596,16 +596,16 @@ namespace RTC
      *
      * InPort が持つバッファからデータが読み込まれる直前に呼ばれるコールバック
      * オブジェクトを設定する。
-     * 
+     *
      * @param on_read OnRead&lt;DataType&gt;型のオブジェクト
      *
      * @else
      *
      * @brief Set callback when data is read from the InPort buffer
      *
-     * Set the callback object that is invoked right before data is read from 
+     * Set the callback object that is invoked right before data is read from
      * the InPort's buffer
-     * 
+     *
      * @param on_read OnRead&lt;DataType&gt; type object
      *
      * @endif
@@ -614,7 +614,7 @@ namespace RTC
     {
       m_OnRead = on_read;
     }
-    
+
     /*!
      * @if jp
      *
@@ -623,7 +623,7 @@ namespace RTC
      * InPort が持つバッファからデータが読み出される際に呼ばれるコールバック
      * オブジェクトを設定する。コールバックオブジェクトの戻り値がread()メソッド
      * の呼出結果となる。
-     * 
+     *
      * @param on_rconvert OnReadConvert&lt;DataType&gt;型のオブジェクト
      *
      * @else
@@ -633,7 +633,7 @@ namespace RTC
      * Set the callback object that is invoked when data is readout to
      * the InPort's buffer. The return value of callback object is the return
      * result of the read() method.
-     * 
+     *
      * @param on_rconvert OnReadConvert&lt;DataType&gt; type object
      *
      * @endif
@@ -642,7 +642,7 @@ namespace RTC
     {
       m_OnReadConvert = on_rconvert;
     }
-    
+
   private:
     std::string m_typename;
     /*!
@@ -653,7 +653,7 @@ namespace RTC
      * @endif
      */
     std::string m_name;
-    
+
     /*!
      * @if jp
      * @brief バインドされる T 型の変数への参照
@@ -663,7 +663,7 @@ namespace RTC
      */
     DataType& m_value;
     mutable coil::Mutex m_valueMutex;
-    
+
     /*!
      * @if jp
      * @brief OnRead コールバックファンクタへのポインタ
@@ -672,7 +672,7 @@ namespace RTC
      * @endif
      */
     OnRead<DataType>* m_OnRead;
-    
+
     /*!
      * @if jp
      * @brief OnReadConvert コールバックファンクタへのポインタ

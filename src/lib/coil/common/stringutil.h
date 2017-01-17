@@ -53,7 +53,7 @@ namespace coil
    * @brief string to wstring conversion
    *
    * This function convert from a string to a wstring.
-   * 
+   *
    * @param str The input std::string type string
    * @return Converted std::wstring type string
    *
@@ -74,7 +74,7 @@ namespace coil
    * @brief wstring to string conversion
    *
    * This function convert from a wstring to a string.
-   * 
+   *
    * @param str The input std::wstring type string
    * @return Converted std::string type string
    *
@@ -94,7 +94,7 @@ namespace coil
    * @brief Uppercase String Transformation
    *
    * This function transforms a given string to uppercase letters
-   * 
+   *
    * @param str The input string
    *
    * @endif
@@ -113,7 +113,7 @@ namespace coil
    * @brief Lowercase String Transformation
    *
    * This function transforms a given string to lowercase letters
-   * 
+   *
    * @param str The input string
    *
    * @endif
@@ -147,7 +147,7 @@ namespace coil
    * @endif
    */
   int getlinePortable(std::istream& istr, std::string& line);
-  
+
   /*!
    * @if jp
    * @brief 文字列がエスケープされているか判断する
@@ -172,7 +172,7 @@ namespace coil
    * @endif
    */
   bool isEscaped(const std::string& str, std::string::size_type pos);
-  
+
   /*!
    * @if jp
    * @brief 文字列をエスケープする
@@ -206,7 +206,7 @@ namespace coil
    * @endif
    */
   std::string escape(const std::string& str);
-  
+
   /*!
    * @if jp
    * @brief 文字列のエスケープを戻す
@@ -286,7 +286,7 @@ namespace coil
    * @endif
    */
   void eraseHeadBlank(std::string& str);
-  
+
   /*!
    * @if jp
    * @brief 文字列の末尾の空白文字を削除する
@@ -353,7 +353,7 @@ namespace coil
    * @endif
    */
   std::string normalize(std::string& str);
-  
+
   /*!
    * @if jp
    * @brief 文字列を置き換える
@@ -377,11 +377,11 @@ namespace coil
    */
   unsigned int replaceString(std::string& str, const std::string& from,
                              const std::string& to);
-  
+
   /*!
    * @if jp
    * @brief 文字列を分割文字で分割する
-   * 
+   *
    * 設定された文字列を与えられたデリミタで分割する。
    *
    * @param input 分割対象文字列
@@ -391,7 +391,7 @@ namespace coil
    *
    * @else
    * @brief Split string by delimiter
-   * 
+   *
    * Split the set string by the given delimiter
    *
    * @param input The target characters of string for split
@@ -404,11 +404,11 @@ namespace coil
   vstring split(const std::string& input,
                 const std::string& delimiter,
                 bool ignore_empty = false);
-  
+
   /*!
    * @if jp
    * @brief 与えられた文字列をbool値に変換する
-   * 
+   *
    * 指定された文字列を、true表現文字列、false表現文字列と比較し、その結果を
    * bool値として返す。
    * 比較の結果、true表現文字列、false表現文字列のどちらとも一致しない場合は、
@@ -420,7 +420,7 @@ namespace coil
    * @param default_value デフォルト値(デフォルト値:true)
    * @else
    * @brief Convert given string into bool value
-   * 
+   *
    * Compare the specified string with the true representation string and
    * the false representation string, and return the result as bool value.
    * If it matches neither the true representation string nor the false
@@ -433,12 +433,12 @@ namespace coil
    * @param default_value The default value (The default value:true)
    * @endif
    */
-  bool toBool(std::string str, std::string yes, std::string no, 
+  bool toBool(std::string str, std::string yes, std::string no,
               bool default_value = true);
   /*!
    * @if jp
    * @brief 文字列リスト中にある文字列が含まれるかどうかを判断する
-   * 
+   *
    * 第1引数にカンマ区切りのリストを、第2引数に探索対象文字列を指定し、
    * その文字列が第1引数の中に含まれるかを判断する。
    *
@@ -448,7 +448,7 @@ namespace coil
    *
    * @else
    * @brief Include if a string is included in string list
-   * 
+   *
    * if the second argument is included in the comma separated string
    * list of the first argument, This operation returns "true value".
    *
@@ -464,7 +464,7 @@ namespace coil
   /*!
    * @if jp
    * @brief 文字列リスト中にある文字列が含まれるかどうかを判断する
-   * 
+   *
    * 第1引数にカンマ区切りのリストを、第2引数に探索対象文字列を指定し、
    * その文字列が第1引数の中に含まれるかを判断する。
    *
@@ -474,7 +474,7 @@ namespace coil
    *
    * @else
    * @brief Include if a string is included in string list
-   * 
+   *
    * if the second argument is included in the comma separated string
    * list of the first argument, This operation returns "true value".
    *
@@ -486,7 +486,7 @@ namespace coil
    */
   bool includes(const std::string& list, std::string value,
                 bool ignore_case = true);
-  
+
   /*!
    * @if jp
    * @brief 与えられた文字列が絶対パスかどうかを判断する
@@ -517,7 +517,7 @@ namespace coil
    * @endif
    */
   bool isAbsolutePath(const std::string& str);
-  
+
   /*!
    * @if jp
    * @brief 与えられた文字列がURLかどうかを判断する
@@ -544,7 +544,7 @@ namespace coil
    * @endif
    */
   bool isURL(const std::string& str);
-  
+
   /*!
    * @if jp
    * @brief 与えられたオブジェクトをstd::stringに変換
@@ -573,7 +573,7 @@ namespace coil
     str_stream << n;
     return str_stream.str();
   };
-  
+
   /*!
    * @if jp
    * @brief 与えられたstd::stringをオブジェクトに変換
@@ -607,7 +607,7 @@ namespace coil
     if ((s >> val).fail()) { return false; }
     return true;
   }
-  
+
   /*!
    * @if jp
    * @brief 与えられた文字列をstd::stringに変換
@@ -760,7 +760,7 @@ namespace coil
    * @endif
    */
   vstring unique_sv(vstring sv);
-  
+
   /*!
    * @if jp
    * @brief 与えられた文字列リストからCSVを生成
@@ -788,7 +788,7 @@ namespace coil
    * @endif
    */
   std::string flatten(vstring sv, std::string delimiter = ", ");
-  
+
   /*!
    * @if jp
    * @brief 与えられた文字列リストを引数リストに変換
@@ -812,7 +812,7 @@ namespace coil
    *
    * @endif
    */
-  char** toArgv(const vstring& args); 
+  char** toArgv(const vstring& args);
 
 
   /*!
@@ -837,6 +837,6 @@ namespace coil
    * @endif
    */
   std::string sprintf(char const * __restrict fmt, ...);
-  
+
 }; // namepsace coil
 #endif // COIL_STRINGUTIL_H

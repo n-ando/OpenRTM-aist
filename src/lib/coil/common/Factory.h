@@ -36,7 +36,7 @@
 #      define EXTERN extern
 #      define DLL_PLUGIN __declspec(dllimport)
 #   endif
-#else 
+#else
 #   define DLL_PLUGIN
 #   define EXTERN
 #endif /* Windows */
@@ -111,7 +111,7 @@ namespace coil
     typedef typename FactoryMap::iterator      FactoryMapIt;
     typedef std::map<AbstractClass*, FactoryEntry> ObjectMap;
     typedef typename ObjectMap::iterator           ObjectMapIt;
-    
+
     enum ReturnCode
       {
         FACTORY_OK,

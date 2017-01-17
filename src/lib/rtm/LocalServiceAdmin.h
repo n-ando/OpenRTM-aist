@@ -65,26 +65,26 @@ namespace RTM
      * @if jp
      *
      * @brief コンストラクタ
-     * 
+     *
      * コンストラクタ
      *
      * @else
      *
      * @brief Constructor
-     * 
+     *
      * Constructor
      *
      * @endif
      */
     LocalServiceAdmin();
-    
+
     /*!
      * @if jp
      *
      * @brief 仮想デストラクタ
-     * 
+     *
      * 仮想デストラクタ。
-     * 
+     *
      * @else
      *
      * @brief Virtual destractor
@@ -94,7 +94,7 @@ namespace RTM
      * @endif
      */
     virtual ~LocalServiceAdmin();
-    
+
     /*!
      * @if jp
      *
@@ -111,7 +111,7 @@ namespace RTM
      * @endif
      */
     void init(coil::Properties& props);
-    
+
     /*!
      * @if jp
      *
@@ -128,12 +128,12 @@ namespace RTM
      * @endif
      */
     void finalize();
-    
+
     /*!
      * @if jp
      *
      * @brief LocalServiceProfileListの取得
-     * 
+     *
      * TODO: Documentation
      *
      * @else
@@ -145,7 +145,7 @@ namespace RTM
      * @endif
      */
     ::RTM::LocalServiceProfileList getServiceProfiles();
-    
+
     /*!
      * @if jp
      *
@@ -157,7 +157,7 @@ namespace RTM
      *
      * @param id LocalService の IFR ID
      * @return 指定された id を持つ LocalServiceProfile
-     * 
+     *
      * @else
      *
      * @brief Get LocalServiceProfile of an LocalService
@@ -174,7 +174,7 @@ namespace RTM
      */
     bool getServiceProfile(std::string name,
                            ::RTM::LocalServiceProfile& prof);
-    
+
     /*!
      * @if jp
      *
@@ -186,7 +186,7 @@ namespace RTM
      *
      * @param id LocalService の ID
      * @return 指定された id を持つ LocalService のポインタ
-     * 
+     *
      * @else
      *
      * @brief Get a pointer of a LocalService
@@ -202,13 +202,13 @@ namespace RTM
      * @endif
      */
     ::RTM::LocalServiceBase* getService(const char* id);
-    
+
     /*!
      * @if jp
      * @brief SDO service provider をセットする
      *
      * TODO: Documentation
-     * 
+     *
      * @else
      * @brief Set a SDO service provider
      *
@@ -217,7 +217,7 @@ namespace RTM
      * @endif
      */
     bool addLocalService(::RTM::LocalServiceBase* service);
-    
+
     /*!
      * @if jp
      * @brief LocalService を削除する
@@ -232,7 +232,7 @@ namespace RTM
      * @endif
      */
     bool removeLocalService(const std::string& name);
-    
+
   private:
     /*!
      * @if jp
@@ -242,7 +242,7 @@ namespace RTM
      * @endif
      */
     bool isEnabled(const std::string& id, const coil::vstring& enabled);
-    
+
     /*!
      * @if jp
      * @brief 指定されたIDがすでに存在するかどうかチェックする
@@ -251,7 +251,7 @@ namespace RTM
      * @endif
      */
     bool notExisting(const std::string& id);
-    
+
     /*!
      * @if jp
      * @brief Lock 付き SDO ServiceProfileList
@@ -261,7 +261,7 @@ namespace RTM
      */
     std::vector<LocalServiceBase*> m_services;
     coil::Mutex m_services_mutex;
-    
+
     /*!
      * @if jp
      * @brief logger

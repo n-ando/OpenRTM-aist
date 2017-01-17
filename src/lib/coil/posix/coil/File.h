@@ -124,7 +124,7 @@ namespace coil
    */
   inline coil::vstring filelist(const char* path, const char* glob_str = "")
   {
-    struct dirent* ent; 
+    struct dirent* ent;
     coil::vstring flist;
     bool has_glob(false);
 
@@ -133,7 +133,7 @@ namespace coil
 
     DIR* dir_ptr(::opendir(path));
     if (dir_ptr == 0) { return flist; }
-    
+
     while ((ent = ::readdir(dir_ptr)) != 0)
       {
         bool match(true);
@@ -175,10 +175,10 @@ namespace coil
                   {
                     if (fname[i] != *globc) { match = false; }
                   }
-                
+
                 // in the last fname character, if glob is not end,
                 // or *, fname is not matched.
-                if (i + 1 == fname.size() && 
+                if (i + 1 == fname.size() &&
                     globc[1] != '\0' && globc[1] != '*') { match = false; }
               }
           }

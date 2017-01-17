@@ -35,7 +35,7 @@ namespace RTC
    * @class InPortDirectConsumer
    * @brief InPortDirectConsumer クラス
    *
-   * InPortConsumer 
+   * InPortConsumer
    *
    * データ転送に CORBA の OpenRTM::InPortCdr インターフェースを利用し
    * た、push 型データフロー型を実現する InPort コンシューマクラス。
@@ -77,7 +77,7 @@ namespace RTC
      * @endif
      */
     InPortDirectConsumer(void);
-    
+
     /*!
      * @if jp
      * @brief デストラクタ
@@ -102,7 +102,7 @@ namespace RTC
      * 数は、InPortProvider生成直後および、接続時にそれぞれ呼ばれる可
      * 能性がある。したがって、この関数は複数回呼ばれることを想定して記
      * 述されるべきである。
-     * 
+     *
      * @param prop 設定情報
      *
      * @else
@@ -127,7 +127,7 @@ namespace RTC
      * @brief 接続先へのデータ送信
      *
      * 接続先のポートへデータを送信するための純粋仮想関数。
-     * 
+     *
      * この関数は、以下のリターンコードを返す。
      *
      * - PORT_OK:       正常終了。
@@ -171,7 +171,7 @@ namespace RTC
      * @brief Publish InterfaceProfile information
      *
      * Publish interfaceProfile information.
-     * Check the dataport.interface_type value of the NameValue object 
+     * Check the dataport.interface_type value of the NameValue object
      * specified by an argument in property information and get information
      * only when the interface type of the specified port is matched.
      *
@@ -194,7 +194,7 @@ namespace RTC
      * @else
      * @brief Subscribe to the data sending notification
      *
-     * Subscribe to the data sending notification based on specified 
+     * Subscribe to the data sending notification based on specified
      * property information.
      *
      * @param properties Information for subscription
@@ -204,7 +204,7 @@ namespace RTC
      * @endif
      */
     virtual bool subscribeInterface(const SDOPackage::NVList& properties);
-    
+
     /*!
      * @if jp
      * @brief データ送信通知からの登録解除

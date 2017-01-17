@@ -175,7 +175,7 @@ namespace coil
      *
      * @else
      *
-     * @brief Load of the Dynamic link library 
+     * @brief Load of the Dynamic link library
      *
      * Load of the Dynamic link library.
      *
@@ -202,7 +202,7 @@ namespace coil
      *
      * @else
      *
-     * @brief Unload of the Dynamic link library 
+     * @brief Unload of the Dynamic link library
      *
      * Unload of the Dynamic link library.
      *

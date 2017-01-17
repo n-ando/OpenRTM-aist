@@ -89,15 +89,15 @@ static const char* default_config[] =
     "manager.supported_languages",           "C++, Python, Java",
     "manager.modules.C++.manager_cmd",       "rtcd",
     "manager.modules.C++.profile_cmd",       "rtcprof",
-#ifdef WIN32                                 
+#ifdef WIN32
     "manager.modules.C++.suffixes",          "dll",
-#else                                        
-#ifdef RTM_OS_DARWIN                         
+#else
+#ifdef RTM_OS_DARWIN
     "manager.modules.C++.suffixes",          "dylib",
-#else                                        
+#else
     "manager.modules.C++.suffixes",          "so",
-#endif                                       
-#endif                                       
+#endif
+#endif
     "manager.modules.C++.load_paths",        "./",
     "manager.modules.Python.manager_cmd",    "rtcd_python",
     "manager.modules.Python.profile_cmd",    "rtcprof_python",

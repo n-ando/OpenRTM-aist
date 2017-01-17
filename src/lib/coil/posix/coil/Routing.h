@@ -21,13 +21,13 @@
 #define COIL_ROUTING_H
 
 #include <string>
- 
+
 namespace coil
 {
   /*!
    * @if jp
    * @brief 宛先アドレスから利用されるエンドポイントアドレスを得る
-   * 
+   *
    * 宛先アドレスを与えると、その際に利用されるエンドポイントのアドレス
    * が返される。宛先アドレス dest_addr には、IPアドレスまたはFQDNホス
    * ト名を与えることができる。宛先アドレスが到
@@ -37,7 +37,7 @@ namespace coil
    * @param dest_addr 宛先アドレスまたはホスト名
    * @param dest_if 宛先と通信を行う際に使用されるインターフェース名
    * @return 成功 true, 失敗 false
-   * 
+   *
    * @else
    * @brief Getting network interface name from destination address
    *
@@ -60,7 +60,7 @@ namespace coil
   /*!
    * @if jp
    * @brief 宛先アドレスから利用されるネットワークインターフェース名を得る
-   * 
+   *
    * 宛先アドレスを与えると、その際に利用されるネットワークインターフェー
    * ス名をルーティングテーブルから取得する。宛先アドレス dest_addr に
    * は、IPアドレスまたはFQDNホスト名を与えることができる。返される
@@ -71,7 +71,7 @@ namespace coil
    * @param dest_addr 宛先アドレスまたはホスト名
    * @param dest_if 宛先と通信を行う際に使用されるインターフェース名
    * @return 成功 true, 失敗 false
-   * 
+   *
    * @else
    * @brief Getting network interface name from destination address
    *
@@ -94,7 +94,7 @@ namespace coil
   /*!
    * @if jp
    * @brief ネットワークインターフェース名からIPアドレスを得る
-   * 
+   *
    * ネットワークインターフェース名を与えると、当該インターフェースに割
    * り当てられたIPアドレスを返す。IPアドレスが割り当てられていない場合
    * は、falseが返される。
@@ -102,7 +102,7 @@ namespace coil
    * @param ifname ネットワークインターフェース名
    * @param ipaddr ネットワークインターフェースに割り当てられたIPアドレス
    * @return 成功 true, 失敗 false
-   * 
+   *
    * @else
    * @brief Get IP address from a network interface name
    *
@@ -110,7 +110,7 @@ namespace coil
    * given network interface. If IP address could be obtained from the
    * network interface name, this operation returns true, otherwise
    * false.
-   * 
+   *
    * @param ifname a network interface name
    * @param ipaddr IP address that is assigned to the network interface
    * @return successful: true, failed: false

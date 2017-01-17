@@ -284,7 +284,7 @@ namespace RTC
     ConnectorInfo m_profile;
     /*!
      * @if jp
-     * @brief 接続エンディアン 
+     * @brief 接続エンディアン
      * @else
      * @brief Connected Endian
      * @endif

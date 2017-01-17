@@ -202,7 +202,7 @@ namespace coil
         }
       return buffs;
     }
-   
+
   protected:
     /*!
      * @if jp
@@ -239,11 +239,11 @@ namespace coil
      *
      * @brief ストリームへ出力する。
      *
-     * @return 出力した文字数 
+     * @return 出力した文字数
      *
      * @else
      *
-     * @brief Write the stream buffer in stream.  
+     * @brief Write the stream buffer in stream.
      *
      * @return The number of characters written.
      *
@@ -281,7 +281,7 @@ namespace coil
      *
      * @else
      *
-     * @brief Writes up to n characters from the array pointed by s 
+     * @brief Writes up to n characters from the array pointed by s
      *        to the output sequence controlled by the stream buffer.
      *
      * @param s a pointer to input characters
@@ -292,7 +292,7 @@ namespace coil
      */
     virtual std::streamsize stream_sputn(const char_type* s, std::streamsize n)
     {
-      
+
       for (int i(0), len(m_streams.size()); i < len; ++i)
         {
           Guard gaurd(m_streams[i].mutex_);
@@ -369,7 +369,7 @@ namespace coil
         return traits_type::not_eof(c);
       else
         return c;
-    } 
+    }
 
     /*!
      * @if jp
@@ -459,7 +459,7 @@ namespace coil
         bool cleanup = x.cleanup_;
 
         x.stream_ = this->stream_;
-        x.cleanup_ = this->cleanup_; 
+        x.cleanup_ = this->cleanup_;
 
         this->stream_ = stream;
         this->cleanup_ = cleanup;
@@ -657,7 +657,7 @@ namespace coil
     {
       return m_logLevel;
     }
-    
+
     /*!
      * @if jp
      *
@@ -677,7 +677,7 @@ namespace coil
     {
       m_lockEnable = true;
     }
-    
+
     /*!
      * @if jp
      *
@@ -697,7 +697,7 @@ namespace coil
     {
       m_lockEnable = false;
     }
-    
+
     /*!
      * @if jp
      *
@@ -741,7 +741,7 @@ namespace coil
           return m_dummy;
         }
     }
-    
+
     /*!
      * @if jp
      *
@@ -757,7 +757,7 @@ namespace coil
      *
      * @brief Log level effective check
      *
-     * Check it whether an appointed log level is an effective range 
+     * Check it whether an appointed log level is an effective range
      * and return effective or invalidity.
      *
      * @param level Log level
@@ -788,7 +788,7 @@ namespace coil
     {
       if (m_lockEnable) m_mutex.lock();
     }
-    
+
     /*!
      * @if jp
      *
@@ -807,7 +807,7 @@ namespace coil
       if (m_lockEnable) m_mutex.unlock();
     }
 
-    
+
   protected:
 
     /*!

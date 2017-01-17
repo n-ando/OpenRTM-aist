@@ -37,7 +37,7 @@ namespace RTM
 {
   // forward decl
   class LocalServiceBase;
-  
+
   //============================================================
   /*!
    * @if jp
@@ -115,8 +115,8 @@ namespace RTM
      */
     virtual void postReinit() = 0;
   };
-  
-  
+
+
   /*!
    * @if jp
    * @class ManagerActionListenerHolder クラス
@@ -174,8 +174,8 @@ namespace RTM
      */
     virtual void postReinit();
   };
-  
-  
+
+
   //============================================================
   /*!
    * @if jp
@@ -199,7 +199,7 @@ namespace RTM
      * @endif
      */
     virtual ~ModuleActionListener();
-    
+
     /*!
      * @if jp
      * @brief preLoad コールバック関数
@@ -211,7 +211,7 @@ namespace RTM
      */
     virtual void preLoad(std::string& modname,
                          std::string& funcname) = 0;
-    
+
     /*!
      * @if jp
      * @brief postLoad コールバック関数
@@ -223,7 +223,7 @@ namespace RTM
      */
     virtual void postLoad(std::string& modname,
                           std::string& funcname) = 0;
-    
+
     /*!
      * @if jp
      * @brief preUnload コールバック関数
@@ -234,7 +234,7 @@ namespace RTM
      * @endif
      */
     virtual void preUnload(std::string& modname) = 0;
-    
+
     /*!
      * @if jp
      * @brief postUnload コールバック関数
@@ -246,8 +246,8 @@ namespace RTM
      */
     virtual void postUnload(std::string& modname) = 0;
   };
-  
-  
+
+
   /*!
    * @if jp
    * @class ModuleActionListenerHolder クラス
@@ -271,7 +271,7 @@ namespace RTM
      * @endif
      */
     virtual ~ModuleActionListenerHolder();
-    
+
     /*!
      * @if jp
      * @brief preLoad コールバック関数
@@ -283,7 +283,7 @@ namespace RTM
      */
     virtual void preLoad(std::string& modname,
                          std::string& funcname);
-    
+
     /*!
      * @if jp
      * @brief postLoad コールバック関数
@@ -295,7 +295,7 @@ namespace RTM
      */
     virtual void postLoad(std::string& modname,
                           std::string& funcname);
-    
+
     /*!
      * @if jp
      * @brief preUnload コールバック関数
@@ -306,7 +306,7 @@ namespace RTM
      * @endif
      */
     virtual void preUnload(std::string& modname);
-    
+
     /*!
      * @if jp
      * @brief postUnload コールバック関数
@@ -318,9 +318,9 @@ namespace RTM
      */
     virtual void postUnload(std::string& modname);
   };
-  
-  
-  
+
+
+
   //============================================================
   /*!
    * @if jp
@@ -361,7 +361,7 @@ namespace RTM
      * @endif
      */
     virtual ~RtcLifecycleActionListener();
-    
+
     /*!
      * @if jp
      * @brief preCreate コールバック関数
@@ -372,7 +372,7 @@ namespace RTM
      * @endif
      */
     virtual void preCreate(std::string& args) = 0;
-    
+
     /*!
      * @if jp
      * @brief postCreate コールバック関数
@@ -383,7 +383,7 @@ namespace RTM
      * @endif
      */
     virtual void postCreate(RTC::RTObject_impl*) = 0;
-    
+
     /*!
      * @if jp
      * @brief preConfigure コールバック関数
@@ -394,7 +394,7 @@ namespace RTM
      * @endif
      */
     virtual void preConfigure(coil::Properties& prop) = 0;
-    
+
     /*!
      * @if jp
      * @brief postConfigure コールバック関数
@@ -405,7 +405,7 @@ namespace RTM
      * @endif
      */
     virtual void postConfigure(coil::Properties& prop) = 0;
-    
+
     /*!
      * @if jp
      * @brief preInitialize コールバック関数
@@ -416,7 +416,7 @@ namespace RTM
      * @endif
      */
     virtual void preInitialize(void) = 0;
-    
+
     /*!
      * @if jp
      * @brief postInitialize コールバック関数
@@ -428,8 +428,8 @@ namespace RTM
      */
     virtual void postInitialize(void) = 0;
   };
-  
-  
+
+
   /*!
    * @if jp
    * @class RtcLifecycleActionListenerHolder クラス
@@ -456,8 +456,8 @@ namespace RTM
      * @endif
      */
     virtual ~RtcLifecycleActionListenerHolder();
-    
-    
+
+
     /*!
      * @if jp
      * @brief preCreate コールバック関数
@@ -468,7 +468,7 @@ namespace RTM
      * @endif
      */
     virtual void preCreate(std::string& args);
-    
+
     /*!
      * @if jp
      * @brief postCreate コールバック関数
@@ -479,7 +479,7 @@ namespace RTM
      * @endif
      */
     virtual void postCreate(RTC::RTObject_impl* rtobj);
-    
+
     /*!
      * @if jp
      * @brief preConfigure コールバック関数
@@ -490,7 +490,7 @@ namespace RTM
      * @endif
      */
     virtual void preConfigure(coil::Properties& prop);
-    
+
     /*!
      * @if jp
      * @brief postConfigure コールバック関数
@@ -501,7 +501,7 @@ namespace RTM
      * @endif
      */
     virtual void postConfigure(coil::Properties& prop);
-    
+
     /*!
      * @if jp
      * @brief preInitialize コールバック関数
@@ -512,7 +512,7 @@ namespace RTM
      * @endif
      */
     virtual void preInitialize(void);
-    
+
     /*!
      * @if jp
      * @brief postInitialize コールバック関数
@@ -524,8 +524,8 @@ namespace RTM
      */
     virtual void postInitialize(void);
   };
-  
-  
+
+
   //============================================================
   /*!
    * @if jp
@@ -564,7 +564,7 @@ namespace RTM
      * @endif
      */
     virtual ~NamingActionListener();
-    
+
     /*!
      * @if jp
      * @brief preBind コールバック関数
@@ -587,7 +587,7 @@ namespace RTM
      */
     virtual void postBind(RTC::RTObject_impl* rtobj,
                           coil::vstring& name) = 0;
-    
+
     /*!
      * @if jp
      * @brief preUnbind コールバック関数
@@ -599,7 +599,7 @@ namespace RTM
      */
     virtual void preUnbind(RTC::RTObject_impl* rtobj,
                            coil::vstring& name) = 0;
-    
+
     /*!
      * @if jp
      * @brief postUnbind コールバック関数
@@ -612,8 +612,8 @@ namespace RTM
     virtual void postUnbind(RTC::RTObject_impl* rtobj,
                             coil::vstring& name) = 0;
   };
-  
-  
+
+
   /*!
    * @if jp
    * @class NamingActionListenerHolder クラス
@@ -640,7 +640,7 @@ namespace RTM
      * @endif
      */
     virtual ~NamingActionListenerHolder();
-    
+
     /*!
      * @if jp
      * @brief preBind コールバック関数
@@ -663,7 +663,7 @@ namespace RTM
      */
     virtual void postBind(RTC::RTObject_impl* rtobj,
                           coil::vstring& name);
-    
+
     /*!
      * @if jp
      * @brief preUnbind コールバック関数
@@ -675,7 +675,7 @@ namespace RTM
      */
     virtual void preUnbind(RTC::RTObject_impl* rtobj,
                            coil::vstring& name);
-    
+
     /*!
      * @if jp
      * @brief postUnbind コールバック関数
@@ -688,8 +688,8 @@ namespace RTM
     virtual void postUnbind(RTC::RTObject_impl* rtobj,
                             coil::vstring& name);
   };
-  
-  
+
+
   //============================================================
   /*!
    * @if jp
@@ -722,7 +722,7 @@ namespace RTM
      * @endif
      */
     virtual ~LocalServiceActionListener();
-    
+
     /*!
      * @if jp
      * @brief preServiceRegister コールバック関数
@@ -733,7 +733,7 @@ namespace RTM
      * @endif
      */
     virtual void preServiceRegister(std::string service_name) = 0;
-    
+
     /*!
      * @if jp
      * @brief postServiceRegister コールバック関数
@@ -757,7 +757,7 @@ namespace RTM
      */
     virtual void preServiceInit(coil::Properties& prop,
                                 RTM::LocalServiceBase* service) = 0;
-    
+
     /*!
      * @if jp
      * @brief postServiceInit コールバック関数
@@ -769,7 +769,7 @@ namespace RTM
      */
     virtual void postServiceInit(coil::Properties& prop,
                                  RTM::LocalServiceBase* service) = 0;
-    
+
     /*!
      * @if jp
      * @brief preServiceReinit コールバック関数
@@ -781,7 +781,7 @@ namespace RTM
      */
     virtual void preServiceReinit(coil::Properties& prop,
                                   RTM::LocalServiceBase* service) = 0;
-    
+
     /*!
      * @if jp
      * @brief postServiceReinit コールバック関数
@@ -793,7 +793,7 @@ namespace RTM
      */
     virtual void postServiceReinit(coil::Properties& prop,
                                    RTM::LocalServiceBase* service) = 0;
-    
+
     /*!
      * @if jp
      * @brief postServiceFinalize コールバック関数
@@ -805,7 +805,7 @@ namespace RTM
      */
     virtual void postServiceFinalize(std::string service_name,
                                      RTM::LocalServiceBase* service) = 0;
-    
+
     /*!
      * @if jp
      * @brief preServiceFinalize コールバック関数
@@ -818,8 +818,8 @@ namespace RTM
     virtual void preServiceFinalize(std::string service_name,
                                     RTM::LocalServiceBase* service) = 0;
   };
-  
-  
+
+
   /*!
    * @if jp
    * @class LocalServiceActionListenerHolder クラス
@@ -852,7 +852,7 @@ namespace RTM
      * @endif
      */
     virtual ~LocalServiceActionListenerHolder();
-    
+
     // registration instance of service to svc admin
     /*!
      * @if jp
@@ -864,7 +864,7 @@ namespace RTM
      * @endif
      */
     virtual void preServiceRegister(std::string service_name);
-    
+
     /*!
      * @if jp
      * @brief postServiceRegister コールバック関数
@@ -876,7 +876,7 @@ namespace RTM
      */
     virtual void postServiceRegister(std::string service_name,
                                      RTM::LocalServiceBase* service);
-    
+
     /*!
      * @if jp
      * @brief preServiceInit コールバック関数
@@ -899,7 +899,7 @@ namespace RTM
      */
     virtual void postServiceInit(coil::Properties& prop,
                                  RTM::LocalServiceBase* service);
-    
+
     /*!
      * @if jp
      * @brief preServiceReinit コールバック関数
@@ -946,9 +946,9 @@ namespace RTM
     virtual void preServiceFinalize(std::string service_name,
                                     RTM::LocalServiceBase* service);
   };
-  
-  
-  
+
+
+
   /*!
    * @if jp
    * @class ManagerActionListeners

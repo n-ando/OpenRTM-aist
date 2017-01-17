@@ -47,18 +47,18 @@ namespace RTC
      * @if jp
      *
      * @brief コンストラクタ
-     * 
+     *
      * コンストラクタ
      *
      * @param name_ 接続名前
      * @param id_ 接続ID
      * @param ports_ 接続ポートIOR
      * @param properties_ プロパティ
-     * 
+     *
      * @else
      *
      * @brief Constructor
-     * 
+     *
      * Constructor
      *
      * @param name_ connection name
@@ -78,13 +78,13 @@ namespace RTC
      * @if jp
      *
      * @brief コンストラクタ
-     * 
+     *
      * コンストラクタ
      *
      * @else
      *
      * @brief Constructor
-     * 
+     *
      * Constructor
      *
      * @endif
@@ -104,7 +104,7 @@ namespace RTC
      * @if jp
      * @brief  接続ID
      * @else
-     * @brief  ConnectionID 
+     * @brief  ConnectionID
      * @endif
      */
     std::string id;
@@ -120,7 +120,7 @@ namespace RTC
      * @if jp
      * @brief  プロパティ
      * @else
-     * @brief  Connection properties 
+     * @brief  Connection properties
      * @endif
      */
     coil::Properties properties;
@@ -130,7 +130,7 @@ namespace RTC
 
   class ConnectorBase;
   typedef std::vector<ConnectorBase*> ConnectorList;
-  
+
 
   /*!
    * @if jp

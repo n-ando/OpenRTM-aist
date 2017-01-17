@@ -25,19 +25,19 @@
 #include <rtm/NumberingPolicy.h>
 
 
-namespace RTC 
+namespace RTC
 {
   class RTObject_impl;
   class Manager;
-  
+
   typedef RTObject_impl* (*RtcNewFunc)(Manager* manager);
   typedef void (*RtcDeleteFunc)(RTObject_impl* rtc);
-  
+
   /*!
    * @if jp
    *
    * @brief RTコンポーネント生成用テンプレート関数
-   * 
+   *
    * RTコンポーネントのインスタンスを生成するためのテンプレート関数。
    * RTコンポーネント管理用マネージャから呼び出される。
    * 実際には各コンポーネントのコンストラクタが呼び出される。
@@ -46,10 +46,10 @@ namespace RTC
    * @param manager マネージャオブジェクト
    *
    * @return 生成した RTコンポーネント インスタンス
-   * 
+   *
    * @else
    * @brief Template function to create RT-Components
-   * 
+   *
    * This is the template function to create RT-Component's instances.
    * This is invoked from RT-Components manager.
    * Actually, each component's constructor is invoked.
@@ -66,12 +66,12 @@ namespace RTC
   {
     return new _New(manager);
   }
-  
+
   /*!
    * @if jp
    *
    * @brief RTコンポーネント破棄用テンプレート関数
-   * 
+   *
    * RTコンポーネントのインスタンスを破棄するためのテンプレート関数。
    * \<_Delete\>にて破棄対象RTコンポーネントの型を指定する。
    *
@@ -80,7 +80,7 @@ namespace RTC
    * @else
    *
    * @brief Template function to destroy RT-Components
-   * 
+   *
    * This is the template function to destroy RT-Component's instances.
    * Specify the type of the target RT-Components for destroy by \<_Delete\>.
    *
@@ -93,13 +93,13 @@ namespace RTC
   {
     delete rtc;
   }
-  
+
   /*!
    * @if jp
    *
    * @class FactoryBase
    * @brief FactoryBase 基底クラス
-   * 
+   *
    * コンポーネントファクトリの基底クラス。
    *
    * @since 0.2.0
@@ -138,7 +138,7 @@ namespace RTC
      * @endif
      */
     explicit FactoryBase(const coil::Properties& profile);
-    
+
     /*!
      * @if jp
      * @brief デストラクタ
@@ -153,7 +153,7 @@ namespace RTC
      * @endif
      */
     virtual ~FactoryBase(void);
-    
+
     /*!
      * @if jp
      *
@@ -178,7 +178,7 @@ namespace RTC
      * @endif
      */
     virtual RTObject_impl* create(Manager* mgr) = 0;
-    
+
     /*!
      * @if jp
      *
@@ -199,7 +199,7 @@ namespace RTC
      * @endif
      */
     virtual void destroy(RTObject_impl* comp) = 0;
-    
+
     /*!
      * @if jp
      *
@@ -220,7 +220,7 @@ namespace RTC
      * @endif
      */
     virtual coil::Properties& profile();
-    
+
     /*!
      * @if jp
      *
@@ -241,7 +241,7 @@ namespace RTC
      * @endif
      */
     virtual int number();
-    
+
   protected:
     /*!
      * @if jp
@@ -251,7 +251,7 @@ namespace RTC
      * @endif
      */
     coil::Properties m_Profile;
-    
+
     /*!
      * @if jp
      * @brief 現在のインスタンス数
@@ -261,12 +261,12 @@ namespace RTC
      */
     int m_Number;
   };
-  
+
   /*!
    * @if jp
    * @class FactoryCXX
    * @brief FactoryCXX クラス
-   * 
+   *
    * C++用コンポーネントファクトリクラス。
    *
    * @since 0.2.0
@@ -324,7 +324,7 @@ namespace RTC
                RtcNewFunc new_func,
                RtcDeleteFunc delete_func,
                NumberingPolicy* policy = new DefaultNumberingPolicy());
-    
+
     virtual ~FactoryCXX()
     {
       delete m_policy;
@@ -354,7 +354,7 @@ namespace RTC
      * @endif
      */
     virtual RTObject_impl* create(Manager* mgr);
-    
+
     /*!
      * @if jp
      *
@@ -375,7 +375,7 @@ namespace RTC
      * @endif
      */
     virtual void destroy(RTObject_impl* comp);
-    
+
   protected:
     /*!
      * @if jp
@@ -385,7 +385,7 @@ namespace RTC
      * @endif
      */
     RtcNewFunc m_New;
-    
+
     /*!
      * @if jp
      * @brief コンポーネントオブジェクト破棄関数へのポインタ
@@ -394,7 +394,7 @@ namespace RTC
      * @endif
      */
     RtcDeleteFunc m_Delete;
-    
+
     /*!
      * @if jp
      * @brief コンポーネント生成時の命名ポリシー

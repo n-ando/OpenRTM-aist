@@ -69,7 +69,7 @@ namespace RTC
      * @if jp
      * @brief デストラクタ
      * @else
-     * @brief Destructor 
+     * @brief Destructor
      * @endif
      */
     virtual ~OpenHRPExecutionContext(void);
@@ -93,7 +93,7 @@ namespace RTC
      */
     virtual void tick()
       throw (CORBA::SystemException);
-    
+
     //============================================================
     // ExecutionContextService
     //============================================================
@@ -274,7 +274,7 @@ namespace RTC
     virtual RTC::ReturnCode_t
     activate_component(RTC::LightweightRTObject_ptr comp)
       throw (CORBA::SystemException);
-    
+
     /*!
      * @if jp
      * @brief RTコンポーネントを非アクティブ化する

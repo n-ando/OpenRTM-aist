@@ -78,7 +78,7 @@ namespace RTC
   {
   public:
     DATAPORTSTATUS_ENUM
-    
+
     /*!
      * @if jp
      * @brief デストラクタ
@@ -115,7 +115,7 @@ namespace RTC
      * @brief 接続先へのデータ送信
      *
      * 接続先のポートへデータを送信するための純粋仮想関数。
-     * 
+     *
      * この関数は、以下のリターンコードを返す。
      *
      * - PORT_OK:         正常終了。
@@ -161,7 +161,7 @@ namespace RTC
      * @brief Publish InterfaceProfile information
      *
      * Publish interfaceProfile information.
-     * Check the dataport.interface_type value of the NameValue object 
+     * Check the dataport.interface_type value of the NameValue object
      * specified by an argument in property information and get information
      * only when the interface type of the specified port is matched.
      *
@@ -195,7 +195,7 @@ namespace RTC
      * @endif
      */
     virtual bool subscribeInterface(const SDOPackage::NVList& properties) = 0;
-    
+
     /*!
      * @if jp
      * @brief データ送出通知受け取りからの登録解除
@@ -214,7 +214,7 @@ namespace RTC
      * @endif
      */
     virtual void unsubscribeInterface(const SDOPackage::NVList& properties) = 0;
-    
+
     /*!
      * @if jp
      * @brief インターフェースプロファイルを公開するたのファンクタ
@@ -249,7 +249,7 @@ namespace RTC
       SDOPackage::NVList& m_prop;
     };
 
-  
+
   };
 
   typedef ::coil::GlobalFactory<InPortConsumer> InPortConsumerFactory;

@@ -58,7 +58,7 @@ namespace RTC
    * @class ManagerConfig
    * @brief Manager configuration class
    *
-   * Modify Manager's configuration. 
+   * Modify Manager's configuration.
    * This class receives the command line arguments and will be instantiated.
    * Set property information of Manager with the configuration file specified
    * by the command line argument or the environment variable etc.
@@ -93,7 +93,7 @@ namespace RTC
      * @endif
      */
     static const char* config_file_path[];
-    
+
     // Environment value to specify configuration file
     /*!
      * @if jp
@@ -105,7 +105,7 @@ namespace RTC
      * @endif
      */
     static const char* config_file_env;
-    
+
     /*!
      * @if jp
      *
@@ -122,7 +122,7 @@ namespace RTC
      * @endif
      */
     ManagerConfig();
-    
+
     /*!
      * @if jp
      *
@@ -145,7 +145,7 @@ namespace RTC
      * @endif
      */
     ManagerConfig(int argc, char** argv);
-    
+
     /*!
      * @if jp
      *
@@ -158,7 +158,7 @@ namespace RTC
      * @endif
      */
     virtual ~ManagerConfig(void);
-    
+
     /*!
      * @if jp
      *
@@ -193,26 +193,26 @@ namespace RTC
      * @endif
      */
     void init(int argc, char** argv);
-    
+
     /*!
      * @if jp
      * @brief Configuration 情報を Property に設定する
-     * 
+     *
      * Manager のConfiguration 情報を指定された Property に設定する。
      *
      * @param prop Configuration 設定対象 Property
-     * 
+     *
      * @else
      * @brief Specify the configuration information to the Property
-     * 
+     *
      * Configure to the properties specified by Manager's configuration
      *
      * @param prop The target properties to configure
-     * 
+     *
      * @endif
      */
     void configure(coil::Properties& prop);
-    
+
     /*!
      * @if jp
      *
@@ -243,7 +243,7 @@ namespace RTC
      * @endif
      */
     coil::Properties getConfig() const;
-    
+
   protected:
     /*!
      * @if jp
@@ -273,7 +273,7 @@ namespace RTC
      * @endif
      */
     void parseArgs(int argc, char** argv);
-    
+
     /*!
      * @if jp
      *
@@ -295,14 +295,14 @@ namespace RTC
      * @brief Find the configuration file
      *
      * Find the configuration file and configure it.
-     * Confirm the file existence when the configuration file has 
+     * Confirm the file existence when the configuration file has
      * already configured.
      *
      * The priority of the configuration file<br>
      * The command option＞the environment variable＞the default file＞
      * the default configuration
      *
-     * Default force option(-d): Ignore any default files and use the default 
+     * Default force option(-d): Ignore any default files and use the default
      * configuration.
      *
      * @return Configuration file search result
@@ -310,7 +310,7 @@ namespace RTC
      * @endif
      */
     bool findConfigFile();
-    
+
     /*!
      * @if jp
      *
@@ -323,12 +323,12 @@ namespace RTC
      *  - os.arch    : OSアーキテクチャ
      *  - os.hostname: ホスト名
      *  - manager.pid        : プロセスID
-     * 
+     *
      * @param prop システム情報を設定したプロパティ
      * @else
-     * 
+     *
      * @brief Set system information
-     * 
+     *
      * Get the following system info. and set them to Manager's properties.
      *  - os.name    : OS name
      *  - os.release : OS release name
@@ -342,7 +342,7 @@ namespace RTC
      * @endif
      */
     void setSystemInformation(coil::Properties& prop);
-    
+
     /*!
      * @if jp
      * @brief ファイルの存在確認
@@ -365,7 +365,7 @@ namespace RTC
      * @endif
      */
     bool fileExist(const std::string& filename);
-    
+
     /*!
      * @if jp
      * @brief 引数から渡されるプロパティ
@@ -399,5 +399,5 @@ namespace RTC
      */
     bool m_isMaster;
   };
-}; // namespace RTC  
+}; // namespace RTC
 #endif // RTC_MANAGERCONFIG_H

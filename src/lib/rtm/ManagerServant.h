@@ -55,8 +55,8 @@ namespace RTM
    * @brief Manager CORBA class
    *
    * This class changes Manager to CORBA Servant.
-   * Generation/deletion of the component, to get the state of the system, 
-   * etc. can be done from the outside. 
+   * Generation/deletion of the component, to get the state of the system,
+   * etc. can be done from the outside.
    *
    * @endif
    */
@@ -85,11 +85,11 @@ namespace RTM
      * @if jp
      *
      * @brief 仮想デストラクタ
-     * 
+     *
      * @else
-     * 
+     *
      * @brief Virtual destructor
-     * 
+     *
      * @endif
      */
     virtual ~ManagerServant(void);
@@ -334,7 +334,7 @@ namespace RTM
      * @brief Setting manager's configuration
      *
      * This operation sets managers configuration.
-     *  
+     *
      * @param name A configuration key name to be set
      * @param value A configuration value to be set
      * @return Return code
@@ -357,7 +357,7 @@ namespace RTM
      *
      * It returns "True" if this manager is a master, and it returns
      * "False" in other cases.
-     *  
+     *
      * @return A boolean value that means it is master or not.
      *
      * @endif
@@ -380,7 +380,7 @@ namespace RTM
      * This operation returns master manager list if this manager is
      * slave. If this manager is master, an empty sequence would be
      * returned.
-     *  
+     *
      * @return Master manager list
      *
      * @endif
@@ -405,7 +405,7 @@ namespace RTM
      * This operation returns a master manager with specified id. If
      * the manager with the specified id does not exist, nil object
      * reference would be returned.
-     *  
+     *
      * @return A master manager
      *
      * @endif
@@ -425,9 +425,9 @@ namespace RTM
      * @brief Removing a master manager
      *
      * This operation removes a master manager from this manager.
-     * 
+     *
      * @param mgr A master manager
-     * @return ReturnCode_t 
+     * @return ReturnCode_t
      *
      * @endif
      */
@@ -449,7 +449,7 @@ namespace RTM
      * This operation returns slave manager list if this manager is
      * slave. If this manager is slave, an empty sequence would be
      * returned.
-     *  
+     *
      * @return Slave manager list
      *
      * @endif
@@ -469,7 +469,7 @@ namespace RTM
      * @brief Getting a slave manager
      *
      * This operation add a slave manager to this manager.
-     *  
+     *
      * @param mgr A slave manager
      * @return ReturnCode_t
      *
@@ -490,9 +490,9 @@ namespace RTM
      * @brief Removing a slave manager
      *
      * This operation removes a slave manager from this manager.
-     * 
+     *
      * @param mgr A slave manager
-     * @return ReturnCode_t 
+     * @return ReturnCode_t
      *
      * @endif
      */
@@ -505,8 +505,8 @@ namespace RTM
      * @brief プロセスのコピーを生成する
      * @return ReturnCode_t
      * @else
-     * @brief The copy of the process is generated. 
-     * @return ReturnCode_t 
+     * @brief The copy of the process is generated.
+     * @return ReturnCode_t
      * @endif
      */
     RTC::ReturnCode_t fork();
@@ -515,8 +515,8 @@ namespace RTM
      * @brief shutdownする
      * @return ReturnCode_t
      * @else
-     * @brief This method shutdowns RTC. 
-     * @return ReturnCode_t 
+     * @brief This method shutdowns RTC.
+     * @return ReturnCode_t
      * @endif
      */
     RTC::ReturnCode_t shutdown();
@@ -525,8 +525,8 @@ namespace RTM
      * @brief 再起動する。
      * @return ReturnCode_t
      * @else
-     * @brief This method restarts RTC.  
-     * @return ReturnCode_t 
+     * @brief This method restarts RTC.
+     * @return ReturnCode_t
      * @endif
      */
     RTC::ReturnCode_t restart();
@@ -536,7 +536,7 @@ namespace RTM
      * @brief RTCのリファレンスを取得する。
      * @return RTCのリファレンス
      * @else
-     * @brief Get the reference of RTC. 
+     * @brief Get the reference of RTC.
      * @return RTC reference
      * @endif
      */
@@ -547,7 +547,7 @@ namespace RTM
      * @brief Managerのリファレンスを取得する。
      * @return Managerのリファレンス
      * @else
-     * @brief Get the reference of Manager. 
+     * @brief Get the reference of Manager.
      * @return Manager reference
      * @endif
      */
@@ -556,9 +556,9 @@ namespace RTM
     /*!
      * @if jp
      * @brief INSManagerの生成
-     * @return 
+     * @return
      * @else 成功:true, 失敗:false
-     * @brief Generate INSManager. 
+     * @brief Generate INSManager.
      * @return Successful:true, Failed:false
      * @endif
      */
@@ -569,7 +569,7 @@ namespace RTM
      * @brief Managerのリファレンスを検索する。
      * @return Managerのリファレンス
      * @else
-     * @brief Find the reference of Manager. 
+     * @brief Find the reference of Manager.
      * @return Manager reference
      * @endif
      */

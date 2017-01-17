@@ -63,7 +63,7 @@ namespace RTC
    *    されるので、ここでリソースの解放など終了処理を行う。
    *
    * <pre>
-   * 
+   *
    *   [RTC]      [SDO service]               [Other]
    *     |              :                        |
    *     | instantiate  :                        |
@@ -101,7 +101,7 @@ namespace RTC
    * イル名の basename + "Init" にしておく。以下に、クラス名、ファイル
    * 名、エントリポイント関数名の推奨例を示す。
    *
-   * - 実装クラス名: MySdoServiceConusmer 
+   * - 実装クラス名: MySdoServiceConusmer
    * - ファイル名: MySdoServiceProvider.h. MySdoServiceProvider.cpp
    * - 共有オブジェクト名: MySdoServiceProvider.so (or DLL)
    * - エントリポイント関数名: MySdoServiceProviderInit()
@@ -125,7 +125,7 @@ namespace RTC
    *   }
    * };
    * </pre>
-   * 
+   *
    * @else
    *
    * @endif
@@ -202,7 +202,7 @@ namespace RTC
      * で保持される。SDO Service 管理フレームワークは管理上このオブジェ
      * クトに対応する ServiceProfile を必要とするので、この関数では保持
      * されている ServiceProfile を返す。
-     * 
+     *
      * @return このオブジェクトが保持している ServiceProfile
      *
      * @else
@@ -245,9 +245,9 @@ namespace RTC
      * @brief Explicit instantiation of class template
      * @endif
      */
-  EXTERN template class DLL_PLUGIN 
+  EXTERN template class DLL_PLUGIN
                      ::coil::GlobalFactory< ::RTC::SdoServiceProviderBase >;
-#endif  
+#endif
 }; // namespace RTC
 
 #endif // RTC_SDOSERVICEPROVIDERBASE_H

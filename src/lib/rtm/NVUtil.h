@@ -39,7 +39,7 @@
  *
  * @brief Utility for NameValue
  *
- * This class provides the utility function of NameValue. 
+ * This class provides the utility function of NameValue.
  *
  * @endif
  */
@@ -65,7 +65,7 @@ namespace NVUtil
    *
    * This operation creates NameValue.
    * CORBA::Char, CORBA::Boolean, CORBA::Octet creation is not supported.
-   * These type of NameValue should be created by using 
+   * These type of NameValue should be created by using
    * newNVChar(), newNVBool(), newNVOctet() functions.
    *
    * @param name Name of NameValue
@@ -83,7 +83,7 @@ namespace NVUtil
     nv.value <<= value;
     return nv;
   }
-  
+
   /***
    * @if jp
    *
@@ -118,8 +118,8 @@ namespace NVUtil
     nv.value <<= value;
     return nv;
     }
-  */ 
-  
+  */
+
   /*!
    * @if jp
    *
@@ -146,7 +146,7 @@ namespace NVUtil
    * @endif
    */
   SDOPackage::NameValue newNVChar(const char* name, const CORBA::Char value);
-  
+
   /*!
    * @if jp
    *
@@ -174,7 +174,7 @@ namespace NVUtil
    */
   SDOPackage::NameValue newNVBool(const char* name,
                                   const CORBA::Boolean value);
-  
+
   /*!
    * @if jp
    *
@@ -201,7 +201,7 @@ namespace NVUtil
    * @endif
    */
   SDOPackage::NameValue newNVOctet(const char* name, const CORBA::Octet value);
-  
+
   /*!
    * @if jp
    *
@@ -228,7 +228,7 @@ namespace NVUtil
    * @endif
    */
   SDOPackage::NameValue newNVAny(const char* name, const CORBA::Any& value);
-  
+
   /*!
    * @if jp
    *
@@ -257,7 +257,7 @@ namespace NVUtil
 #else // ORB_IS_RTORB
   void copyFromProperties(SDOPackage_NVList& nv, const coil::Properties& prop);
 #endif // ORB_IS_RTORB
-  
+
   /*!
    * @if jp
    *
@@ -280,7 +280,7 @@ namespace NVUtil
    * @endif
    */
   void copyToProperties(coil::Properties& prop, const SDOPackage::NVList& nv);
-  
+
   /*!
    * @if jp
    *
@@ -305,7 +305,7 @@ namespace NVUtil
    * @endif
    */
   coil::Properties toProperties(const SDOPackage::NVList& nv);
-  
+
   /*!
    * @if jp
    *
@@ -334,7 +334,7 @@ namespace NVUtil
    * @endif
    */
   const CORBA::Any& find(const SDOPackage::NVList& nv, const char* name);
-  
+
   /*!
    * @if jp
    *
@@ -363,7 +363,7 @@ namespace NVUtil
    * @endif
    */
   const CORBA::Long find_index(const SDOPackage::NVList& nv, const char* name);
-  
+
   /*!
    * @if jp
    *
@@ -392,7 +392,7 @@ namespace NVUtil
    * @endif
    */
   bool isString(const SDOPackage::NVList& nv, const char* name);
-  
+
   /*!
    * @if jp
    *
@@ -413,7 +413,7 @@ namespace NVUtil
    * @brief Check whether the value of specified name matches the specified
    *        string
    *
-   * This operation checks whether the value specified with name is 
+   * This operation checks whether the value specified with name is
    * CORBA::string and returns the bool value which matches spcified string.
    *
    * @param nv The target NVList for the search
@@ -426,7 +426,7 @@ namespace NVUtil
    */
   bool isStringValue(const SDOPackage::NVList& nv, const char* name,
                      const char* value);
-  
+
   /*!
    * @if jp
    *
@@ -457,7 +457,7 @@ namespace NVUtil
    * @endif
    */
   std::string toString(const SDOPackage::NVList& nv, const char* name);
-  
+
   /*!
    * @if jp
    *
@@ -507,7 +507,7 @@ namespace NVUtil
   bool appendStringValue(SDOPackage_NVList& nv, const char* name,
                          const char* value);
 #endif // ORB_IS_RTORB
-  
+
   /*!
    * @if jp
    *
@@ -532,7 +532,7 @@ namespace NVUtil
    * @endif
    */
   void append(SDOPackage::NVList& dest, const SDOPackage::NVList& src);
-  
+
   /*!
    * @if jp
    *
@@ -565,7 +565,7 @@ namespace NVUtil
    * @param nv 出力対象 NVList
    *
    * @else
-   * @brief Print information configured in NVList as a string type 
+   * @brief Print information configured in NVList as a string type
    *        to Standard Outport.
    *
    * @param nv The target NVList for the print
@@ -588,7 +588,7 @@ namespace NVUtil
    * @endif
    */
   std::string toString(const SDOPackage::NVList& nv);
-  
+
 
 };
 #endif // NVUTIL_NVUTIL_H

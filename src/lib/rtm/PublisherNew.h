@@ -74,7 +74,7 @@ namespace RTC
     typedef coil::Condition<Mutex> Condition;
     typedef coil::Guard<coil::Mutex> Guard;
     DATAPORTSTATUS_ENUM
-    
+
     /*!
      * @if jp
      * @brief コンストラクタ
@@ -89,7 +89,7 @@ namespace RTC
      * @endif
      */
     PublisherNew();
-    
+
     /*!
      * @if jp
      * @brief デストラクタ
@@ -114,9 +114,9 @@ namespace RTC
      * Properties を与える。データをプッシュする際のポリシーとして
      * publisher.push_policy をキーとする値に、all, fifo, skip, new の
      * いずれかを与えることができる。
-     * 
+     *
      * 以下のオプションを与えることができる。
-     * 
+     *
      * - thread_type: スレッドのタイプ (文字列、デフォルト: default)
      * - publisher.push_policy: Pushポリシー (all, fifo, skip, new)
      * - publisher.skip_count: 上記ポリシが skip のときのスキップ数
@@ -139,7 +139,7 @@ namespace RTC
      * "publisher.push_policy."
      *
      * The following options are available.
-     * 
+     *
      * - thread_type: Thread type (string, default: default)
      * - publisher.push_policy: Push policy (all, fifo, skip, new)
      * - publisher.skip_count: The number of skip count in the "skip" policy
@@ -147,7 +147,7 @@ namespace RTC
      * - measurement.exec_count: Task execution time measurement count
      *                           (numerical, number of times)
      * - measurement.period_time: Task period time measurement (enable/disable)
-     * - measurement.period_count: Task period time measurement count 
+     * - measurement.period_count: Task period time measurement count
      *                             (number, count)
      *
      * @param property Property objects that includes the control information
@@ -228,7 +228,7 @@ namespace RTC
      * @return PORT_OK      正常終了
      *         INVALID_ARGS 不正な引数
      * @else
-     * @brief Set the listener. 
+     * @brief Set the listener.
      *
      * This function sets ConnectorListeners listener object to the
      * Publisher. By setting ConnectorListeners containing various
@@ -269,9 +269,9 @@ namespace RTC
      * BUFFER_ERROR, BUFFER_TIMEOUT, PRECONDITION_NOT_MET が返される。
      *
      * これら以外のエラーの場合、PORT_ERROR が返される。
-     * 
      *
-     * @param data 書き込むデータ 
+     *
+     * @param data 書き込むデータ
      * @param sec タイムアウト時間
      * @param nsec タイムアウト時間
      *
@@ -286,7 +286,7 @@ namespace RTC
      *         TIMEOUT             タイムアウトした。
      *
      * @else
-     * @brief Write data 
+     * @brief Write data
      *
      * This function writes data into the buffer associated with this
      * Publisher.  If a Publisher object calls this function, without
@@ -331,7 +331,7 @@ namespace RTC
      * @if jp
      *
      * @brief アクティブ化確認
-     * 
+     *
      * Publisher はデータポートと同期して activate/deactivate される。
      * activate() / deactivate() 関数によって、アクティブ状態と非アクティ
      * ブ状態が切り替わる。この関数により、現在アクティブ状態か、非アク
@@ -342,7 +342,7 @@ namespace RTC
      * @else
      *
      * @brief If publisher is active state
-     * 
+     *
      * A Publisher can be activated/deactivated synchronized with the
      * data port.  The active state and the non-active state are made
      * transition by the "activate()" and the "deactivate()" functions
@@ -409,7 +409,7 @@ namespace RTC
      * @endif
      */
     virtual ReturnCode deactivate();
-    
+
     /*!
      * @if jp
      * @brief スレッド実行関数
@@ -424,7 +424,7 @@ namespace RTC
      * @endif
      */
     virtual int svc(void);
-    
+
   protected:
     enum Policy
       {
@@ -479,7 +479,7 @@ namespace RTC
      * バッファからの戻り値を DataPortStatus::Enum 型へ変換する関数。そ
      * れぞれ、以下のように変換される。変換時にコールバックを呼ぶ場合、
      * コールバク関数も付記する。
-     * 
+     *
      * - BUFFER_OK: PORT_OK
      *  - None
      * - BUFFER_ERROR: BUFFER_ERROR
@@ -501,11 +501,11 @@ namespace RTC
      *
      * @else
      * @brief Convertion from BufferStatus to DataPortStatus
-     * 
+     *
      * This function converts return value from the buffer to
      * DataPortStatus::Enum typed return value. The conversion rule is
      * as follows. Callback functions are also shown, if it exists.
-     * 
+     *
      * - BUFFER_OK: PORT_OK
      *  - None
      * - BUFFER_ERROR: BUFFER_ERROR
@@ -549,10 +549,10 @@ namespace RTC
      */
     ReturnCode invokeListener(DataPortStatus::Enum status,
                               const cdrMemoryStream& data);
-    
+
     /*!
      * @if jp
-     * @brief ON_BUFFER_WRITEのリスナへ通知する。 
+     * @brief ON_BUFFER_WRITEのリスナへ通知する。
      * @param data cdrMemoryStream
      * @else
      * @brief Notify an ON_BUFFER_WRITE event to listeners
@@ -567,7 +567,7 @@ namespace RTC
 
     /*!
      * @if jp
-     * @brief ON_BUFFER_FULLリスナへイベントを通知する。 
+     * @brief ON_BUFFER_FULLリスナへイベントを通知する。
      * @param data cdrMemoryStream
      * @else
      * @brief Notify an ON_BUFFER_FULL event to listeners
@@ -582,7 +582,7 @@ namespace RTC
 
     /*!
      * @if jp
-     * @brief ON_BUFFER_WRITE_TIMEOUTのリスナへ通知する。 
+     * @brief ON_BUFFER_WRITE_TIMEOUTのリスナへ通知する。
      * @param data cdrMemoryStream
      * @else
      * @brief Notify an ON_BUFFER_WRITE_TIMEOUT event to listeners
@@ -597,7 +597,7 @@ namespace RTC
 
     /*!
      * @if jp
-     * @brief ON_BUFFER_OVERWRITEのリスナへ通知する。 
+     * @brief ON_BUFFER_OVERWRITEのリスナへ通知する。
      * @param data cdrMemoryStream
      * @else
      * @brief Notify an ON_BUFFER_OVERWRITE event to listeners
@@ -612,7 +612,7 @@ namespace RTC
 
     /*!
      * @if jp
-     * @brief ON_BUFFER_READのリスナへ通知する。 
+     * @brief ON_BUFFER_READのリスナへ通知する。
      * @param data cdrMemoryStream
      * @else
      * @brief Notify an ON_BUFFER_READ event to listeners
@@ -627,7 +627,7 @@ namespace RTC
 
     /*!
      * @if jp
-     * @brief ON_SENDのリスナへ通知する。 
+     * @brief ON_SENDのリスナへ通知する。
      * @param data cdrMemoryStream
      * @else
      * @brief Notify an ON_SEND event to listners
@@ -642,7 +642,7 @@ namespace RTC
 
     /*!
      * @if jp
-     * @brief ON_RECEIVEDのリスナへ通知する。 
+     * @brief ON_RECEIVEDのリスナへ通知する。
      * @param data cdrMemoryStream
      * @else
      * @brief Notify an ON_RECEIVED event to listeners
@@ -657,7 +657,7 @@ namespace RTC
 
     /*!
      * @if jp
-     * @brief ON_RECEIVER_FULLのリスナへ通知する。 
+     * @brief ON_RECEIVER_FULLのリスナへ通知する。
      * @param data cdrMemoryStream
      * @else
      * @brief Notify an ON_RECEIVER_FULL event to listeners
@@ -672,7 +672,7 @@ namespace RTC
 
     /*!
      * @if jp
-     * @brief ON_RECEIVER_TIMEOUTのリスナへ通知する。 
+     * @brief ON_RECEIVER_TIMEOUTのリスナへ通知する。
      * @param data cdrMemoryStream
      * @else
      * @brief Notify an ON_RECEIVER_TIMEOUT event to listeners
@@ -687,7 +687,7 @@ namespace RTC
 
     /*!
      * @if jp
-     * @brief ON_RECEIVER_ERRORのリスナへ通知する。 
+     * @brief ON_RECEIVER_ERRORのリスナへ通知する。
      * @param data cdrMemoryStream
      * @else
      * @brief Notify an ON_RECEIVER_ERROR event to listeners
@@ -702,7 +702,7 @@ namespace RTC
 
     /*!
      * @if jp
-     * @brief ON_SENDER_ERRORのリスナへ通知する。 
+     * @brief ON_SENDER_ERRORのリスナへ通知する。
      * @param data cdrMemoryStream
      * @else
      * @brief Notify an ON_SENDER_ERROR event to listeners

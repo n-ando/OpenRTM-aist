@@ -44,7 +44,7 @@ namespace RTC
    * @if jp
    * @class BufferBase
    * @brief BufferBase 抽象クラス
-   * 
+   *
    * 種々のバッファのための抽象インターフェースクラス。
    * 具象バッファクラスは、以下の純粋仮想関数の実装を提供しなければならない。
    * \<DataType\>としてバッファ内で保持するデータ型を指定する。
@@ -111,7 +111,7 @@ namespace RTC
      * @if jp
      *
      * @brief 仮想デストラクタ
-     * 
+     *
      * @else
      *
      * @brief Virtual destructor
@@ -121,7 +121,7 @@ namespace RTC
     virtual ~BufferBase(void)
     {
     };
-    
+
     /*!
      * @if jp
      *
@@ -139,11 +139,11 @@ namespace RTC
      * @if jp
      *
      * @brief バッファの長さを取得する
-     * 
+     *
      * バッファ長を取得するための純粋仮想関数
-     * 
+     *
      * @return バッファ長
-     * 
+     *
      * @else
      *
      * @brief Get the buffer length
@@ -151,7 +151,7 @@ namespace RTC
      * Pure virtual function to get the buffer length.
      *
      * @return buffer length
-     * 
+     *
      * @endif
      */
     virtual size_t length(void) const = 0;
@@ -160,13 +160,13 @@ namespace RTC
      * @if jp
      *
      * @brief バッファの長さをセットする
-     * 
+     *
      * バッファ長を設定する。設定不可な場合はNOT_SUPPORTEDが返る。
-     * 
+     *
      * @return BUFFER_OK: 正常終了
      *         NOT_SUPPORTED: バッファ長変更不可
      *         BUFFER_ERROR: 異常終了
-     * 
+     *
      * @else
      *
      * @brief Set the buffer length
@@ -176,23 +176,23 @@ namespace RTC
      * @return BUFFER_OK: Successful
      *         NOT_SUPPORTED: The buffer length cannot be set.
      *         BUFFER_ERROR: Failed
-     *         
-     * 
+     *
+     *
      * @endif
-     */    
+     */
     virtual ReturnCode length(size_t n) = 0;
 
     /*!
      * @if jp
      *
      * @brief バッファの状態をリセットする
-     * 
+     *
      * バッファの読み出しポインタと書き込みポインタの位置をリセットする。
-     * 
+     *
      * @return BUFFER_OK: 正常終了
      *         NOT_SUPPORTED: リセット不可能
      *         BUFFER_ERROR: 異常終了
-     * 
+     *
      * @else
      *
      * @brief Reset the buffer status
@@ -202,9 +202,9 @@ namespace RTC
      * @return BUFFER_OK: Successful
      *         NOT_SUPPORTED: The buffer status cannot be reset.
      *         BUFFER_ERROR: Failed
-     * 
+     *
      * @endif
-     */ 
+     */
     virtual ReturnCode reset() = 0;
 
 
@@ -213,12 +213,12 @@ namespace RTC
      * @if jp
      *
      * @brief バッファの現在の書込み要素のポインタ
-     * 
+     *
      * バッファの現在の書込み要素のポインタまたは、n個先のポインタを返す
-     * 
-     * @param  n 書込みポインタ + n の位置のポインタ 
+     *
+     * @param  n 書込みポインタ + n の位置のポインタ
      * @return 書込み位置のポインタ
-     * 
+     *
      * @else
      *
      * @brief Get the writing pointer
@@ -227,22 +227,22 @@ namespace RTC
      *
      * @param writeing pinter or n previous pointer
      * @return writing pointer
-     * 
+     *
      * @endif
-     */ 
+     */
     virtual DataType* wptr(long int n = 0) = 0;
 
     /*!
      * @if jp
      *
      * @brief 書込みポインタを進める
-     * 
+     *
      * 現在の書き込み位置のポインタを n 個進める。
-     * 
-     * @param  n 書込みポインタ + n の位置のポインタ 
+     *
+     * @param  n 書込みポインタ + n の位置のポインタ
      * @return BUFFER_OK: 正常終了
      *         BUFFER_ERROR: 異常終了
-     * 
+     *
      * @else
      *
      * @brief Forward n writing pointers.
@@ -251,23 +251,23 @@ namespace RTC
      *
      * @return BUFFER_OK: Successful
      *         BUFFER_ERROR: Failed
-     * 
+     *
      * @endif
-     */ 
+     */
     virtual ReturnCode advanceWptr(long int n = 1) = 0;
 
     /*!
      * @if jp
      *
      * @brief バッファにデータを書き込む
-     * 
+     *
      * バッファにデータを書き込む。書き込みポインタの位置は変更されない。
-     * 
+     *
      * @param value 書き込み対象データ
      *
      * @return BUFFER_OK: 正常終了
      *         BUFFER_ERROR: 異常終了
-     * 
+     *
      * @else
      *
      * @brief Write data into the buffer
@@ -287,14 +287,14 @@ namespace RTC
      * @if jp
      *
      * @brief バッファにデータを書き込む
-     * 
+     *
      * バッファにデータを書き込む。書き込みポインタの位置は1つすすむ。
-     * 
+     *
      * @param value 書き込み対象データ
      *
      * @return BUFFER_OK: 正常終了
      *         BUFFER_ERROR: 異常終了
-     * 
+     *
      * @else
      *
      * @brief Write data into the buffer
@@ -315,15 +315,15 @@ namespace RTC
      * @if jp
      *
      * @brief バッファに書込み可能な要素数
-     * 
+     *
      * バッファに書込み可能な要素数を返す。
-     * 
+     *
      * @return 書き込み可能な要素数
      *
-     * 
+     *
      * @else
      *
-     * @brief Get a writable number. 
+     * @brief Get a writable number.
      *
      * Pure virtual function to get a writable number.
      *
@@ -338,11 +338,11 @@ namespace RTC
      * @if jp
      *
      * @brief バッファfullチェック
-     * 
+     *
      * バッファfullチェック用純粋仮想関数
      *
      * @return fullチェック結果(true:バッファfull，false:バッファ空きあり)
-     * 
+     *
      * @else
      *
      * @brief Check on whether the buffer is full.
@@ -360,12 +360,12 @@ namespace RTC
      * @if jp
      *
      * @brief バッファの現在の読み出し要素のポインタ
-     * 
+     *
      * バッファの現在の読み出し要素のポインタまたは、n個先のポインタを返す
-     * 
-     * @param  n 読み出しポインタ + n の位置のポインタ 
+     *
+     * @param  n 読み出しポインタ + n の位置のポインタ
      * @return 読み出し位置のポインタ
-     * 
+     *
      * @else
      *
      * @brief Get the reading pointer
@@ -373,22 +373,22 @@ namespace RTC
      * Pure virtual function to get the reading pointer.
      *
      * @return reading pointer
-     * 
+     *
      * @endif
-     */ 
+     */
     virtual DataType* rptr(long int n = 0) = 0;
 
     /*!
      * @if jp
      *
      * @brief 読み出しポインタを進める
-     * 
+     *
      * 現在の読み出し位置のポインタを n 個進める。
-     * 
-     * @param  n 読み出しポインタ + n の位置のポインタ 
+     *
+     * @param  n 読み出しポインタ + n の位置のポインタ
      * @return BUFFER_OK: 正常終了
      *         BUFFER_ERROR: 異常終了
-     * 
+     *
      * @else
      *
      * @brief Forward n reading pointers.
@@ -397,23 +397,23 @@ namespace RTC
      *
      * @return BUFFER_OK: Successful
      *         BUFFER_ERROR: Failed
-     * 
+     *
      * @endif
-     */ 
+     */
     virtual ReturnCode advanceRptr(long int n = 1) = 0;
 
     /*!
      * @if jp
      *
      * @brief バッファからデータを読み出す
-     * 
+     *
      * バッファからデータを読みだす。読み出しポインタの位置は変更されない。
-     * 
+     *
      * @param value 読み出しデータ
      *
      * @return BUFFER_OK: 正常終了
      *         BUFFER_ERROR: 異常終了
-     * 
+     *
      * @else
      *
      * @brief Read data from the buffer
@@ -433,11 +433,11 @@ namespace RTC
      * @if jp
      *
      * @brief バッファからデータを読み出す
-     * 
+     *
      * バッファからデータを読みだす。読み出しポインタの位置は変更されない。
-     * 
+     *
      * @return 読み出しデータ
-     * 
+     *
      * @else
      *
      * @brief Read data from the buffer
@@ -454,13 +454,13 @@ namespace RTC
      * @if jp
      *
      * @brief バッファからデータを読み出す
-     * 
+     *
      * バッファからデータを読み出すための純粋仮想関数
-     * 
+     *
      * @param value 読み出しデータ
      *
      * @return データ読み出し結果(true:読み出し成功，false:読み出し失敗)
-     * 
+     *
      * @else
      *
      * @brief Read data from the buffer
@@ -475,17 +475,17 @@ namespace RTC
      */
     virtual ReturnCode read(DataType& value,
                             long int sec = -1, long int nsec = -1) = 0;
-    
+
     /*!
      * @if jp
      *
      * @brief バッファから読み出し可能な要素数
-     * 
+     *
      * バッファから読み出し可能な要素数を返す。
-     * 
+     *
      * @return 読み出し可能な要素数
      *
-     * 
+     *
      * @else
      *
      * @brief Write data into the buffer
@@ -503,11 +503,11 @@ namespace RTC
      * @if jp
      *
      * @brief バッファemptyチェック
-     * 
+     *
      * バッファemptyチェック用純粋仮想関数
      *
      * @return emptyチェック結果(true:バッファempty，false:バッファデータあり)
-     * 
+     *
      * @else
      *
      * @brief Check on whether the buffer is empty.
@@ -521,12 +521,12 @@ namespace RTC
     virtual bool empty(void) const = 0;
 
   };
-  
+
   /*!
    * @if jp
    * @class NullBuffer
    * @brief ダミーバッファ実装クラス
-   * 
+   *
    * バッファ長が１固定のダミーバッファ実装クラス。
    * \<DataType\>としてバッファ内で保持するデータ型を指定する。
    *
@@ -538,7 +538,7 @@ namespace RTC
    *
    * @class NullBuffer
    * @brief Concrete buffer class for dummy
-   * 
+   *
    * Concrete buffer class for dummy. Buffer length is fixed to 1.
    * The users specify data type to hold it in a buffer as \<DataType\>.
    *
@@ -557,33 +557,33 @@ namespace RTC
      * @if jp
      *
      * @brief コンストラクタ
-     * 
+     *
      * コンストラクタ
      * バッファ長を1(固定)で初期化する。
      *
      * @param size バッファ長(ただし無効)
-     * 
+     *
      * @else
      *
      * @brief Constructer
-     * 
+     *
      * Constructer.
      * Initialize buffer length to always 1.
      *
      * @param size Buffer length(Not use)
-     * 
+     *
      * @endif
      */
     explicit NullBuffer(long int size = 1)
       : m_length(1)
     {
     }
-    
+
     /*!
      * @if jp
      *
      * @brief デストラクタ
-     * 
+     *
      * デストラクタ。
      *
      * @else
@@ -597,16 +597,16 @@ namespace RTC
     virtual ~NullBuffer(void)
     {
     }
-    
+
     /*!
      * @if jp
      *
      * @brief バッファ長(1固定)を取得する
-     * 
+     *
      * バッファ長を取得する。(常に1を返す。)
-     * 
+     *
      * @return バッファ長(1固定)
-     * 
+     *
      * @else
      *
      * @brief Get the buffer length (always 1)
@@ -614,25 +614,25 @@ namespace RTC
      * Get the buffer length. (Return always 1.)
      *
      * @return buffer length(always 1)
-     * 
+     *
      * @endif
      */
     virtual long int length(void) const
     {
       return 1;
     }
-    
+
     /*!
      * @if jp
      *
      * @brief バッファにデータを書き込む
-     * 
+     *
      * 引数で与えられたデータをバッファに書き込む。
-     * 
+     *
      * @param value 書き込み対象データ
      *
      * @return データ書き込み結果(true:書き込み成功，false:書き込み失敗)
-     * 
+     *
      * @else
      *
      * @brief Write data into the buffer
@@ -650,18 +650,18 @@ namespace RTC
       m_data = value;
       return true;
     }
-    
+
     /*!
      * @if jp
      *
      * @brief バッファからデータを読み出す
-     * 
+     *
      * バッファに格納されたデータを読み出す。
-     * 
+     *
      * @param value 読み出したデータ
      *
      * @return データ読み出し結果(true:読み出し成功，false:読み出し失敗)
-     * 
+     *
      * @else
      *
      * @brief Read data from the buffer
@@ -679,16 +679,16 @@ namespace RTC
       value = m_data;
       return true;
     }
-    
+
     /*!
      * @if jp
      *
      * @brief バッファfullチェック
-     * 
+     *
      * バッファfullをチェックする。(常にfalseを返す。)
      *
      * @return fullチェック結果(常にfalse)
-     * 
+     *
      * @else
      *
      * @brief Check on whether the buffer is full.
@@ -703,16 +703,16 @@ namespace RTC
     {
       return false;
     }
-    
+
     /*!
      * @if jp
      *
      * @brief バッファemptyチェック
-     * 
+     *
      * バッファemptyをチェックする。(常にfalseを返す。)
      *
      * @return emptyチェック結果(常にfalse)
-     * 
+     *
      * @else
      *
      * @brief Check on whether the buffer is empty.
@@ -727,17 +727,17 @@ namespace RTC
     {
       return false;
     }
-    
+
   protected:
     /*!
      * @if jp
      *
      * @brief バッファにデータを格納
-     * 
+     *
      * 引数で与えられたデータをバッファに格納する。
-     * 
+     *
      * @param data 対象データ
-     * 
+     *
      * @else
      *
      * @brief Store data into the buffer
@@ -752,16 +752,16 @@ namespace RTC
     {
       m_data = data;
     }
-    
+
     /*!
      * @if jp
      *
      * @brief バッファからデータを取得する
-     * 
+     *
      * バッファに格納されたデータを取得する。
      *
      * @return 取得データ
-     * 
+     *
      * @else
      *
      * @brief Get data from the buffer
@@ -776,18 +776,18 @@ namespace RTC
     {
       return m_data;
     }
-    
+
     /*!
      * @if jp
      *
      * @brief 次に書き込むバッファへの参照を取得する
-     * 
+     *
      * 書き込みバッファへの参照を取得する。
      * 本バッファ実装ではバッファ長は固定で１であるため，
      * 常に同じ位置への参照を返す。
      *
      * @return 次の書き込み対象バッファへの参照(固定)
-     * 
+     *
      * @else
      *
      * @brief Get the buffer's reference to be written the next
@@ -803,7 +803,7 @@ namespace RTC
     {
       return m_data;
     }
-    
+
   private:
     DataType m_data;
     long int m_length;

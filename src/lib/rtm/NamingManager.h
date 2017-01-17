@@ -51,7 +51,7 @@ namespace RTC
    * @brief NamingService management abstract class
    *
    * This is the abstract interface class for NamingServer management.
-   * Concrete management classes must implement the following pure virtual 
+   * Concrete management classes must implement the following pure virtual
    * functions.
    * - bindObject() : Bind the specified object to NamingService
    * - unbindObject() : Unbind the specified object from NamingService
@@ -77,7 +77,7 @@ namespace RTC
      * @endif
      */
     NamingBase() {};
-    
+
     /*!
      * @if jp
      *
@@ -90,7 +90,7 @@ namespace RTC
      * @endif
      */
     virtual ~NamingBase(void) {};
-    
+
     /*!
      * @if jp
      *
@@ -101,7 +101,7 @@ namespace RTC
      *
      * @else
      *
-     * @brief Pure virtual function to bind the specified objects 
+     * @brief Pure virtual function to bind the specified objects
      *        to the NamingService
      *
      * @param name The name to be bound to the NamingService
@@ -122,7 +122,7 @@ namespace RTC
      *
      * @else
      *
-     * @brief Pure virtual function to bind the specified ManagerServants 
+     * @brief Pure virtual function to bind the specified ManagerServants
      *        to NamingService
      *
      * @param name The name to be bound to the NamingService
@@ -132,7 +132,7 @@ namespace RTC
      */
     virtual void bindObject(const char* name,
                             const RTM::ManagerServant* mgr) = 0;
-    
+
     /*!
      * @if jp
      *
@@ -143,7 +143,7 @@ namespace RTC
      *
      * @else
      *
-     * @brief Pure virtual function to unbind the specified objects from 
+     * @brief Pure virtual function to unbind the specified objects from
      *        NamingService
      *
      * @param name The name of the object released from NamingService
@@ -156,20 +156,20 @@ namespace RTC
      * @if jp
      *
      * @brief ネームサーバの生存を確認する。
-     * 
+     *
      * @return true:生存している, false:生存していない
      *
      * @else
      *
      * @brief Check if the name service is alive
-     * 
+     *
      * @return true: alive, false:non not alive
      *
      * @endif
      */
     virtual bool isAlive() = 0;
   };
-  
+
   /*!
    * @if jp
    * @brief NameServer 管理用構造体
@@ -184,17 +184,17 @@ namespace RTC
       : method(meth), nsname(name), ns(naming)
     {
     }
-    
+
     ~NamingService()
     {
       delete ns;
     }
-    
+
     std::string method;
     std::string nsname;
     NamingBase* ns;
   };
-  
+
   /*!
    * @if jp
    *
@@ -249,7 +249,7 @@ namespace RTC
      * @endif
      */
     NamingOnCorba(CORBA::ORB_ptr orb, const char* names);
-    
+
     /*!
      * @if jp
      *
@@ -262,25 +262,25 @@ namespace RTC
      * @endif
      */
     virtual ~NamingOnCorba(void){};
-    
+
     /*!
      * @if jp
      *
      * @brief 指定した CORBA オブジェクトのNamingServiceへバインド
-     * 
+     *
      * 指定した CORBA オブジェクトを指定した名称で CORBA NamingService へ
      * バインドする。
-     * 
+     *
      * @param name バインド時の名称
      * @param rtobj バインド対象オブジェクト
      *
      * @else
      *
      * @brief Bind the specified CORBA objects to NamingService
-     * 
+     *
      * Bind the specified CORBA objects to CORBA NamingService
      * by specified names.
-     * 
+     *
      * @param name Names at the binding
      * @param rtobj The target objects for the binding
      *
@@ -312,17 +312,17 @@ namespace RTC
      * @if jp
      *
      * @brief 指定した CORBA オブジェクトをNamingServiceからアンバインド
-     * 
+     *
      * 指定した CORBA オブジェクトを CORBA NamingService からアンバインドする。
-     * 
+     *
      * @param name アンバインド対象オブジェクト
      *
      * @else
      *
      * @brief Unbind the specified CORBA objects from NamingService
-     * 
+     *
      * Unbind the specified CORBA objects from CORBA NamingService.
-     * 
+     *
      * @param name The target objects for the unbinding
      *
      * @endif
@@ -333,13 +333,13 @@ namespace RTC
      * @if jp
      *
      * @brief ネームサーバの生存を確認する。
-     * 
+     *
      * @return true:生存している, false:生存していない
      *
      * @else
      *
      * @brief Check if the name service is alive
-     * 
+     *
      * @return true: alive, false:non not alive
      *
      * @endif
@@ -354,7 +354,7 @@ namespace RTC
     bool m_replaceEndpoint;
     //    std::map<std::string, RTObject_impl*> m_names;
   };
-  
+
   /*!
    * @if jp
    *
@@ -403,7 +403,7 @@ namespace RTC
      * @endif
      */
     explicit NamingManager(Manager* manager);
-    
+
     /*!
      * @if jp
      *
@@ -416,7 +416,7 @@ namespace RTC
      * @endif
      */
     virtual ~NamingManager(void);
-    
+
     /*!
      * @if jp
      *
@@ -441,24 +441,24 @@ namespace RTC
      * @endif
      */
     void registerNameServer(const char* method, const char* name_server);
-    
+
     /*!
      * @if jp
      *
      * @brief 指定したオブジェクトのNamingServiceへバインド
-     * 
+     *
      * 指定したオブジェクトを指定した名称で CORBA NamingService へバイ
      * ンドする。
-     * 
+     *
      * @param name バインド時の名称
      * @param rtobj バインド対象オブジェクト
      *
      * @else
      *
      * @brief Bind the specified objects to NamingService
-     * 
+     *
      * Bind the specified objects to CORBA NamingService by specified names.
-     * 
+     *
      * @param name Names at the binding
      * @param rtobj The target objects for the binding
      *
@@ -471,173 +471,173 @@ namespace RTC
      * @if jp
      *
      * @brief 指定したManagerServantのNamingServiceへバインド
-     * 
+     *
      * 指定したManagerServantを指定した名称で CORBA NamingService へバ
      * インドする。
-     * 
+     *
      * @param name バインド時の名称
      * @param mgr バインド対象ManagerServant
      *
      * @else
      *
      * @brief Bind the specified ManagerServants to NamingService
-     * 
-     * Bind the specified ManagerServants to CORBA NamingService 
+     *
+     * Bind the specified ManagerServants to CORBA NamingService
      * by specified names.
-     * 
+     *
      * @param name Names at the binding
      * @param mgr The target ManagerServants for the binding
      *
      * @endif
      */
     void bindObject(const char* name, const RTM::ManagerServant* mgr);
-    
+
     /*!
      * @if jp
      *
      * @brief NamingServer の情報の更新
-     * 
+     *
      * 設定されている NameServer 内に登録されているオブジェクトの情報を
      * 更新する。
-     * 
+     *
      * @else
      *
      * @brief Update information of NamingServer
-     * 
+     *
      * Update the object information registered in the specified NameServer.
-     * 
+     *
      * @endif
      */
     void update();
-    
+
     /*!
      * @if jp
      *
      * @brief 指定したオブジェクトをNamingServiceからアンバインド
-     * 
+     *
      * 指定したオブジェクトを NamingService からアンバインドする。
-     * 
+     *
      * @param name アンバインド対象オブジェクト
      *
      * @else
      *
      * @brief Unbind the specified objects from NamingService
-     * 
+     *
      * Unbind the specified objects from NamingService.
-     * 
+     *
      * @param name The target objects for the unbinding
      *
      * @endif
      */
     void unbindObject(const char* name);
-    
+
     /*!
      * @if jp
      *
      * @brief 全てのオブジェクトをNamingServiceからアンバインド
-     * 
+     *
      * 全てのオブジェクトを CORBA NamingService からアンバインドする。
-     * 
+     *
      * @else
      *
      * @brief Unbind all objects from NamingService
-     * 
+     *
      * Unbind all objects from CORBA NamingService.
-     * 
+     *
      * @endif
      */
     void unbindAll();
-    
+
     /*!
      * @if jp
      *
      * @brief バインドされている全てのオブジェクトを取得
-     * 
+     *
      * バインドされている全てのオブジェクトを 取得する。
      *
      * @return バインド済みオブジェクト リスト
-     * 
+     *
      * @else
      *
      * @brief Get all bound objects
-     * 
+     *
      * Get all bound objects.
      *
      * @return Bound object list
-     * 
+     *
      * @endif
      */
     std::vector<RTObject_impl*> getObjects();
     std::vector<NamingService*>& getNameServices() { return m_names; }
-    
+
   protected:
     /*!
      * @if jp
      *
      * @brief NameServer 管理用オブジェクトの生成
-     * 
+     *
      * 指定した型のNameServer 管理用オブジェクトを生成する。
      *
      * @param method NamingService 形式
      * @param name_server NameServer 名称
-     * 
+     *
      * @return 生成した NameServer オブジェクト
-     * 
+     *
      * @else
      *
      * @brief Create objects for NameServer management
-     * 
+     *
      * Create objects of specified type for NameServer management.
      *
      * @param method NamingService format
      * @param name_server NameServer name
-     * 
+     *
      * @return Created NameServer objects
-     * 
+     *
      * @endif
      */
     NamingBase* createNamingObj(const char* method, const char* name_server);
-    
+
     /*!
      * @if jp
      *
      * @brief 設定済みコンポーネントを NameServer に登録
-     * 
+     *
      * 設定済みコンポーネントを指定した NameServer に登録する。
      *
      * @param ns 登録対象 NameServer
-     * 
+     *
      * @else
      *
      * @brief Register the configured component to NameServer
-     * 
+     *
      * Register the already configured components to NameServer.
      *
      * @param ns The target NameServer for the registration
-     * 
+     *
      * @endif
      */
     void bindCompsTo(NamingBase* ns);
-    
+
     /*!
      * @if jp
      *
      * @brief NameServer に登録するコンポーネントの設定
-     * 
+     *
      * NameServer に登録するコンポーネントを設定する。
      *
      * @param name コンポーネントの登録時名称
      * @param rtobj 登録対象オブジェクト
-     * 
+     *
      * @else
      *
      * @brief Configure the components that will be registered to NameServer
-     * 
+     *
      * Configure the components that will be registered to NameServer.
      *
      * @param name Names of components at the registration
      * @param rtobj The target objects for registration
-     * 
+     *
      * @endif
      */
     void registerCompName(const char* name, const RTObject_impl* rtobj);
@@ -646,21 +646,21 @@ namespace RTC
      * @if jp
      *
      * @brief NameServer に登録するコンポーネントの設定
-     * 
+     *
      * NameServer に登録するコンポーネントを設定する。
      *
      * @param name コンポーネントの登録時名称
      * @param rtobj 登録対象オブジェクト
-     * 
+     *
      * @else
      *
      * @brief Configure the components that will be registered to NameServer
-     * 
+     *
      * Configure the components that will be registered to NameServer.
      *
      * @param name Names of components at the registration
      * @param rtobj The target objects for registration
-     * 
+     *
      * @endif
      */
     void registerPortName(const char* name, const PortBase* port);
@@ -669,43 +669,43 @@ namespace RTC
      * @if jp
      *
      * @brief NameServer に登録するManagerServantの設定
-     * 
+     *
      * NameServer に登録するManagerServantを設定する。
      *
      * @param name ManagerServantの登録時名称
      * @param mgr 登録対象ManagerServant
-     * 
+     *
      * @else
      *
-     * @brief Configure the ManagerServants that will be registered 
+     * @brief Configure the ManagerServants that will be registered
      * to NameServer
-     * 
+     *
      * Configure the ManagerServants that will be registered to NameServer.
      *
      * @param name Names of ManagerServants at the registration
      * @param mgr The target ManagerServants for registration
-     * 
+     *
      * @endif
      */
     void registerMgrName(const char* name, const RTM::ManagerServant* mgr);
-    
+
     /*!
      * @if jp
      *
      * @brief NameServer に登録するコンポーネントの設定解除
-     * 
+     *
      * NameServer に登録するコンポーネントの設定を解除する。
      *
      * @param name 設定解除対象コンポーネントの名称
-     * 
+     *
      * @else
      *
      * @brief Unregister the components that will be registered to NameServer
-     * 
+     *
      * Unregister the components that will be registered to NameServer.
      *
      * @param name Names of the target components for unregistration
-     * 
+     *
      * @endif
      */
     void unregisterCompName(const char* name);
@@ -715,20 +715,20 @@ namespace RTC
      * @if jp
      *
      * @brief NameServer に登録するManagerServantの設定解除
-     * 
+     *
      * NameServer に登録するManagerServantの設定を解除する。
      *
      * @param name 設定解除対象ManagerServantの名称
-     * 
+     *
      * @else
      *
-     * @brief Unregister the ManagerServants that will be registered 
+     * @brief Unregister the ManagerServants that will be registered
      * to NameServer
-     * 
+     *
      * Unregister the ManagerServants that will be registered to NameServer.
      *
      * @param name Names of the target ManagerServants for unregistration
-     * 
+     *
      * @endif
      */
     void unregisterMgrName(const char* name);
@@ -737,19 +737,19 @@ namespace RTC
      * @if jp
      *
      * @brief コンポネントをリバインドする
-     * 
+     *
      * ネームサーバと接続してコンポネントをリバインドする。
      *
      * @param ns NameServer
-     * 
+     *
      * @else
      *
      * @brief Rebind the component to NameServer
-     * 
-     * Connect with the NameServer and rebind the component. 
+     *
+     * Connect with the NameServer and rebind the component.
      *
      * @param ns NameServer
-     * 
+     *
      * @endif
      */
     void retryConnection(NamingService* ns);
@@ -772,7 +772,7 @@ namespace RTC
      * @endif
      */
     Mutex m_namesMutex;
-    
+
     // Components' name and object
     /*!
      * @if jp
@@ -867,7 +867,7 @@ namespace RTC
      * @endif
      */
     Mutex m_mgrNamesMutex;
-    
+
     /*!
      * @if jp
      * @brief マネージャオブジェクト
@@ -876,7 +876,7 @@ namespace RTC
      * @endif
      */
     Manager* m_manager;
-    
+
     /*!
      * @if jp
      * @brief ロガーストリーム

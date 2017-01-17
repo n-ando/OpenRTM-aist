@@ -68,7 +68,7 @@ namespace SDOPackage
    * DeviceProfile, ServiceProfile, ConfigurationProfile および Organization
    * の変更を行うためのオペレーションを備えている。SDO の仕様ではアクセス制御
    * およびセキュリティに関する詳細については規定していない。
-   * 
+   *
    * 複数の設定 (Configuration) を保持することにより、容易かつ素早くある設定
    * を反映させることができる。事前に定義された複数の設定を ConfigurationSets
    * および configuration profile として保持することができる。ひとつの
@@ -124,13 +124,13 @@ namespace SDOPackage
    * help manage these ConfigurationSets.
    *
    *
-   * - ConfigurationSet: id, description, one configuration set to consist 
-   *                     of NVList 
+   * - ConfigurationSet: id, description, one configuration set to consist
+   *                     of NVList
    * - ConfigurationSetList: List of ConfigurationSet
    * - Parameter: Parameter definition consist of name, type and allowed_values
    * - ActiveConfigurationSet: One set of configuration set that is valid.
    *
-   * The following functions do processing to ParameterList. 
+   * The following functions do processing to ParameterList.
    * - get_configuration_parameters()
    *
    * The following functions do processing to active ConfigurationSet
@@ -162,15 +162,15 @@ namespace SDOPackage
      * @if jp
      *
      * @brief コンストラクタ
-     * 
+     *
      * コンストラクタ
      *
      * @param configAdmin ConfigurationSetList
-     * 
+     *
      * @else
      *
      * @brief Constructor
-     * 
+     *
      * Constructor
      *
      * @param configAdmin ConfigurationSetList
@@ -179,24 +179,24 @@ namespace SDOPackage
      */
     Configuration_impl(RTC::ConfigAdmin& configAdmin,
                        RTC::SdoServiceAdmin& sdoServiceAdmin);
-    
+
     /*!
      * @if jp
      *
      * @brief 仮想デストラクタ
-     * 
+     *
      * 仮想デストラクタ。
-     * 
+     *
      * @else
      *
      * @brief Virtual destractor
      *
      * Virtual destractor.
-     
+
      * @endif
      */
     virtual ~Configuration_impl(void);
-    
+
     //============================================================
     //
     // <<< CORBA interfaces >>>
@@ -204,7 +204,7 @@ namespace SDOPackage
     //============================================================
     /*!
      * @if jp
-     * 
+     *
      * @brief [CORBA interface] SDO の DeviceProfile のセット
      *
      * このオペレーションは SDO の DeviceProfile をセットする。SDO が
@@ -220,7 +220,7 @@ namespace SDOPackage
      * @exception NotAvailable SDOは存在するが応答がない。
      * @exception InvalidParameter 引数 "dProfile" が null である。
      * @exception InternalError 内部的エラーが発生した。
-     * 
+     *
      * @else
      *
      * @brief [CORBA interface] Set DeviceProfile of SDO
@@ -233,7 +233,7 @@ namespace SDOPackage
      *
      * @return If the operation was successfully completed.
      *
-     * @exception SDONotExists The target SDO does not exist.(This exception 
+     * @exception SDONotExists The target SDO does not exist.(This exception
      *                         is mapped to CORBA standard system exception
      *                         OBJECT_NOT_EXIST.)
      * @exception NotAvailable The target SDO is reachable but cannot respond.
@@ -245,10 +245,10 @@ namespace SDOPackage
     virtual CORBA::Boolean set_device_profile(const DeviceProfile& dProfile)
       throw (CORBA::SystemException,
              InvalidParameter, NotAvailable, InternalError);
-    
+
     /*!
      * @if jp
-     * 
+     *
      * @brief [CORBA interface] SDO の ServiceProfile のセット
      *
      * このオペレーションはこの Configuration interface を所有する対象 SDO の
@@ -282,7 +282,7 @@ namespace SDOPackage
      *
      * @return If the operation was successfully completed.
      *
-     * @exception SDONotExists The target SDO does not exist.(This exception 
+     * @exception SDONotExists The target SDO does not exist.(This exception
      *                         is mapped to CORBA standard system exception
      *                         OBJECT_NOT_EXIST.)
      * @exception NotAvailable The target SDO is reachable but cannot respond.
@@ -294,10 +294,10 @@ namespace SDOPackage
     virtual CORBA::Boolean add_service_profile(const ServiceProfile& sProfile)
       throw (CORBA::SystemException,
              InvalidParameter, NotAvailable, InternalError);
-    
+
     /*!
      * @if jp
-     * 
+     *
      * @brief [CORBA interface] Organization の追加
      *
      * このオペレーションは Organization object のリファレンスを追加する。
@@ -321,7 +321,7 @@ namespace SDOPackage
      *
      * @return If the operation was successfully completed.
      *
-     * @exception SDONotExists The target SDO does not exist.(This exception 
+     * @exception SDONotExists The target SDO does not exist.(This exception
      *                         is mapped to CORBA standard system exception
      *                         OBJECT_NOT_EXIST.)
      * @exception NotAvailable The target SDO is reachable but cannot respond.
@@ -333,10 +333,10 @@ namespace SDOPackage
     virtual CORBA::Boolean add_organization(Organization_ptr org)
       throw (CORBA::SystemException,
              InvalidParameter, NotAvailable, InternalError);
-    
+
     /*!
      * @if jp
-     * 
+     *
      * @brief [CORBA interface] ServiceProfile の削除
      *
      * このオペレーションはこの Configuration interface を持つ SDO の
@@ -365,7 +365,7 @@ namespace SDOPackage
      *
      * @return If the operation was successfully completed.
      *
-     * @exception SDONotExists The target SDO does not exist.(This exception 
+     * @exception SDONotExists The target SDO does not exist.(This exception
      *                         is mapped to CORBA standard system exception
      *                         OBJECT_NOT_EXIST.)
      * @exception InvalidParameter The argument "sProfile" is null, or if the
@@ -379,10 +379,10 @@ namespace SDOPackage
     virtual CORBA::Boolean remove_service_profile(const char* id)
       throw (CORBA::SystemException,
              InvalidParameter, NotAvailable, InternalError);
-    
+
     /*!
      * @if jp
-     * 
+     *
      * @brief [CORBA interface] Organization の参照の削除
      *
      * このオペレーションは Organization の参照を削除する。
@@ -394,13 +394,13 @@ namespace SDOPackage
      * @exception SDONotExists ターゲットのSDOが存在しない。(本例外は、CORBA標準
      *                         システム例外のOBJECT_NOT_EXISTにマッピングされる)
      * @exception InvalidParameter 引数 "organization_id" が null である。
-     *                             もしくは "organization_id" に関連付けられた 
+     *                             もしくは "organization_id" に関連付けられた
      *                             OrganizationProfile が存在しない。
      * @exception NotAvailable SDOは存在するが応答がない。
      * @exception InternalError 内部的エラーが発生した。
      * @else
      *
-     * @brief [CORBA interface] Remove the reference of Organization 
+     * @brief [CORBA interface] Remove the reference of Organization
      *
      * This operation removes the reference of an Organization object.
      *
@@ -408,7 +408,7 @@ namespace SDOPackage
      *
      * @return If the operation was successfully completed.
      *
-     * @exception SDONotExists The target SDO does not exist.(This exception 
+     * @exception SDONotExists The target SDO does not exist.(This exception
      *                         is mapped to CORBA standard system exception
      *                         OBJECT_NOT_EXIST.)
      * @exception InvalidParameter The argument "organizationID" is null,
@@ -422,10 +422,10 @@ namespace SDOPackage
     virtual CORBA::Boolean remove_organization(const char* organization_id)
       throw (CORBA::SystemException,
              InvalidParameter, NotAvailable, InternalError);
-    
+
     /*!
      * @if jp
-     * 
+     *
      * @brief [CORBA interface] 設定パラメータのリストの取得
      *
      * このオペレーションは configuration parameter のリストを返す。
@@ -447,7 +447,7 @@ namespace SDOPackage
      * @return The list with definitions of parameters characterizing the
      *          configuration.
      *
-     * @exception SDONotExists The target SDO does not exist.(This exception 
+     * @exception SDONotExists The target SDO does not exist.(This exception
      *                         is mapped to CORBA standard system exception
      *                         OBJECT_NOT_EXIST.)
      * @exception NotAvailable The target SDO is reachable but cannot respond.
@@ -458,10 +458,10 @@ namespace SDOPackage
     virtual ParameterList* get_configuration_parameters()
       throw (CORBA::SystemException,
              NotAvailable, InternalError);
-    
+
     /*!
      * @if jp
-     * 
+     *
      * @brief [CORBA interface] Configuration parameter の値のリストの取得
      *
      * このオペレーションは全ての configuration パラメータおよび値を返す。
@@ -474,14 +474,14 @@ namespace SDOPackage
      * @exception InternalError 内部的エラーが発生した。
      * @else
      *
-     * @brief [CORBA interface] Get a list of the value of configuration 
+     * @brief [CORBA interface] Get a list of the value of configuration
      *                          parameters
      *
      * This operation returns all configuration parameters and their values.
      *
      * @return List of all configuration parameters and their values.
      *
-     * @exception SDONotExists The target SDO does not exist.(This exception 
+     * @exception SDONotExists The target SDO does not exist.(This exception
      *                         is mapped to CORBA standard system exception
      *                         OBJECT_NOT_EXIST.)
      * @exception NotAvailable The target SDO is reachable but cannot respond.
@@ -492,10 +492,10 @@ namespace SDOPackage
     virtual NVList* get_configuration_parameter_values()
       throw (CORBA::SystemException,
              NotAvailable, InternalError);
-    
+
     /*!
      * @if jp
-     * 
+     *
      * @brief [CORBA interface] Configuration parameter の値の取得
      *
      * このオペレーションは引数 "name" で指定されたパラメータ値を返す。
@@ -521,7 +521,7 @@ namespace SDOPackage
      *
      * @return The value of the specified parameter.
      *
-     * @exception SDONotExists The target SDO does not exist.(This exception 
+     * @exception SDONotExists The target SDO does not exist.(This exception
      *                         is mapped to CORBA standard system exception
      *                         OBJECT_NOT_EXIST.)
      * @exception InvalidParameter The value of the argument "name" is
@@ -536,10 +536,10 @@ namespace SDOPackage
     virtual CORBA::Any* get_configuration_parameter_value(const char* name)
       throw (CORBA::SystemException,
              InvalidParameter, NotAvailable, InternalError);
-    
+
     /*!
      * @if jp
-     * 
+     *
      * @brief [CORBA interface] Configuration パラメータの変更
      *
      * このオペレーションは "name" で指定したパラメータの値を "value" に
@@ -568,7 +568,7 @@ namespace SDOPackage
      *
      * @return If the operation was successfully completed.
      *
-     * @exception SDONotExists The target SDO does not exist.(This exception 
+     * @exception SDONotExists The target SDO does not exist.(This exception
      *                         is mapped to CORBA standard system exception
      *                         OBJECT_NOT_EXIST.)
      * @exception InvalidParameter The arguments ("name" and/or "value") is
@@ -583,11 +583,11 @@ namespace SDOPackage
                                                        const CORBA::Any& value)
       throw (CORBA::SystemException,
              InvalidParameter, NotAvailable, InternalError);
-        
+
     /*!
      * @if jp
-     * 
-     * @brief [CORBA interface] ConfigurationSet リストの取得 
+     *
+     * @brief [CORBA interface] ConfigurationSet リストの取得
      *
      * このオペレーションは ConfigurationProfile が持つ ConfigurationSet の
      * リストを返す。 SDO が ConfigurationSet を持たなければ空のリストを返す。
@@ -610,7 +610,7 @@ namespace SDOPackage
      *
      * @return The list of stored configuration with their current values.
      *
-     * @exception SDONotExists The target SDO does not exist.(This exception 
+     * @exception SDONotExists The target SDO does not exist.(This exception
      *                         is mapped to CORBA standard system exception
      *                         OBJECT_NOT_EXIST.)
      * @exception NotAvailable The target SDO is reachable but cannot respond.
@@ -621,10 +621,10 @@ namespace SDOPackage
     virtual ConfigurationSetList* get_configuration_sets()
       throw (CORBA::SystemException,
              NotAvailable, InternalError);
-    
+
     /*!
      * @if jp
-     * 
+     *
      * @brief [CORBA interface] ConfigurationSet の取得
      *
      * このオペレーションは引数で指定された ConfigurationSet の ID に関連
@@ -651,10 +651,10 @@ namespace SDOPackage
      *
      * @return The configuration set specified by the parameter config_id.
      *
-     * @exception SDONotExists The target SDO does not exist.(This exception 
+     * @exception SDONotExists The target SDO does not exist.(This exception
      *                         is mapped to CORBA standard system exception
      *                         OBJECT_NOT_EXIST.)
-     * @exception InvalidParameter The parameter 'config_id' is null or 
+     * @exception InvalidParameter The parameter 'config_id' is null or
      *                             there are no ConfigurationSets stored with
      *                             such id.
      * @exception NotAvailable The target SDO is reachable but cannot respond.
@@ -665,10 +665,10 @@ namespace SDOPackage
     virtual ConfigurationSet* get_configuration_set(const char* config_id)
       throw (CORBA::SystemException,
              NotAvailable, InternalError);
-    
+
     /*!
      * @if jp
-     * 
+     *
      * @brief [CORBA interface] アクティブな ConfigurationSet を取得する
      *
      * このオペレーションは当該SDOの現在アクティブな ConfigurationSet を返す。
@@ -679,7 +679,7 @@ namespace SDOPackage
      * - 現在の設定が予め定義された ConfigurationSet によりセットされていない、
      * - SDO の設定がアクティブになった後に変更された、
      * - SDO を設定する ConfigurationSet が変更された、
-     * 
+     *
      * これらの場合には、空の ConfigurationSet が返される。
      *
      * @return 現在アクティブな ConfigurationSet。
@@ -706,7 +706,7 @@ namespace SDOPackage
      *
      * @return The active ConfigurationSet.
      *
-     * @exception SDONotExists The target SDO does not exist.(This exception 
+     * @exception SDONotExists The target SDO does not exist.(This exception
      *                         is mapped to CORBA standard system exception
      *                         OBJECT_NOT_EXIST.)
      * @exception NotAvailable The target SDO is reachable but cannot respond.
@@ -717,10 +717,10 @@ namespace SDOPackage
     virtual ConfigurationSet* get_active_configuration_set()
       throw (CORBA::SystemException,
              NotAvailable, InternalError);
-    
+
     /*!
      * @if jp
-     * 
+     *
      * @brief [CORBA interface] ConfigurationSet を追加する
      *
      * ConfigurationProfile に ConfigurationSet を追加するオペレーション。
@@ -746,12 +746,12 @@ namespace SDOPackage
      *
      * @return If the operation was successfully completed.
      *
-     * @exception SDONotExists The target SDO does not exist.(This exception 
+     * @exception SDONotExists The target SDO does not exist.(This exception
      *                         is mapped to CORBA standard system exception
      *                         OBJECT_NOT_EXIST.)
      * @exception InvalidParameter The argument "configurationSet" is null,
      *                             or one of the attributes defining
-     *                             "configurationSet" is invalid, or the 
+     *                             "configurationSet" is invalid, or the
      *                             specified identifier of the configuration
      *                             set already exists.
      * @exception NotAvailable The target SDO is reachable but cannot respond.
@@ -763,10 +763,10 @@ namespace SDOPackage
     add_configuration_set(const ConfigurationSet& configuration_set)
       throw (CORBA::SystemException,
              InvalidParameter, NotAvailable, InternalError);
-    
+
     /*!
      * @if jp
-     * 
+     *
      * @brief [CORBA interface] ConfigurationSet をセットする
      *
      * このオペレーションは指定された id の ConfigurationSet を更新する。
@@ -796,18 +796,18 @@ namespace SDOPackage
      * @param config_id The ID of ConfigurationSet to be modified.
      * @param configuration_set ConfigurationSet to be replaced.
      *
-     * @return A flag indicating if the ConfigurationSet was modified 
+     * @return A flag indicating if the ConfigurationSet was modified
      *         successfully. "true" - The ConfigurationSet was modified
      *         successfully. "false" - The ConfigurationSet could not be
      *         modified successfully.
      *
      * @exception InvalidParameter The parameter 'configurationSetID' is null
-     *                             or there is no ConfigurationSet stored with 
+     *                             or there is no ConfigurationSet stored with
      *                             such id.
-     *                             This exception is also raised if one of the 
-     *                             attributes defining ConfigurationSet is not 
+     *                             This exception is also raised if one of the
+     *                             attributes defining ConfigurationSet is not
      *                             valid.
-     * @exception SDONotExists The target SDO does not exist.(This exception 
+     * @exception SDONotExists The target SDO does not exist.(This exception
      *                         is mapped to CORBA standard system exception
      *                         OBJECT_NOT_EXIST.)
      * @exception NotAvailable The target SDO is reachable but cannot respond.
@@ -819,10 +819,10 @@ namespace SDOPackage
     set_configuration_set_values(const ConfigurationSet& configuration_set)
       throw (CORBA::SystemException,
              InvalidParameter, NotAvailable, InternalError);
-    
+
     /*!
      * @if jp
-     * 
+     *
      * @brief [CORBA interface] ConfigurationSet を削除する
      *
      * ConfigurationProfile から ConfigurationSet を削除する。
@@ -847,7 +847,7 @@ namespace SDOPackage
      *
      * @return If the operation was successfully completed.
      *
-     * @exception SDONotExists The target SDO does not exist.(This exception 
+     * @exception SDONotExists The target SDO does not exist.(This exception
      *                         is mapped to CORBA standard system exception
      *                         OBJECT_NOT_EXIST.)
      * @exception InvalidParameter The arguments "configurationSetID" is null,
@@ -861,10 +861,10 @@ namespace SDOPackage
     virtual CORBA::Boolean remove_configuration_set(const char* config_id)
       throw (CORBA::SystemException,
              InvalidParameter, NotAvailable, InternalError);
-    
+
     /*!
      * @if jp
-     * 
+     *
      * @brief [CORBA interface] ConfigurationSet のアクティブ化
      *
      * ConfigurationProfile に格納された ConfigurationSet のうち一つを
@@ -901,7 +901,7 @@ namespace SDOPackage
      *
      * @return If the operation was successfully completed.
      *
-     * @exception SDONotExists The target SDO does not exist.(This exception 
+     * @exception SDONotExists The target SDO does not exist.(This exception
      *                         is mapped to CORBA standard system exception
      *                         OBJECT_NOT_EXIST.)
      * @exception InvalidParameter The argument ("configID") is null or
@@ -915,96 +915,96 @@ namespace SDOPackage
     virtual CORBA::Boolean activate_configuration_set(const char* config_id)
       throw (CORBA::SystemException,
              InvalidParameter, NotAvailable, InternalError);
-    
+
     // end of CORBA interface definition
     //============================================================
-    
+
     /*!
      * @if jp
      *
      * @brief オブジェクト　リファレンスを取得する
-     * 
+     *
      * 対象のオブジェクトリファレンスを取得する
-     * 
+     *
      * @return オブジェクトリファレンス
-     * 
+     *
      * @else
      *
      * @brief Get object reference
-     * 
+     *
      * Get the target object reference.
-     * 
+     *
      * @return Object reference
-     * 
+     *
      * @endif
      */
     Configuration_ptr getObjRef();
-    
+
     /*!
      * @if jp
      *
      * @brief SDO の DeviceProfile を取得する
-     * 
+     *
      * SDO の DeviceProfile を取得する
-     * 
+     *
      * @return SDO の DeviceProfile
-     * 
+     *
      * @else
      *
      * @brief Get the DeviceProfile of SDO
-     * 
+     *
      * Get the DeviceProfile of SDO.
-     * 
+     *
      * @return DeviceProfile of SDO
-     * 
+     *
      * @endif
      */
     const DeviceProfile getDeviceProfile();
-    
+
     /*!
      * @if jp
      *
      * @brief SDO の Organization リストを取得する
-     * 
+     *
      * SDO の Organization リストを取得する
-     * 
+     *
      * @return SDO の Organization リスト
-     * 
+     *
      * @else
      *
      * @brief Get a list of Organization of SDO
-     * 
+     *
      * Get a list of Organization of SDO.
-     * 
+     *
      * @return List of Organization of SDO
-     * 
+     *
      * @endif
      */
     const OrganizationList getOrganizations();
-    
+
   protected:
     ::RTC::Logger rtclog;
     /*!
      * @if jp
      *
      * @brief UUIDを生成する
-     * 
+     *
      * UUIDを生成する
-     * 
+     *
      * @return 生成したUUID
-     * 
+     *
      * @else
      *
      * @brief Generate UUID
-     * 
+     *
      * Generate UUID.
-     * 
+     *
      * @return UUID that has been generated
-     * 
+     *
      * @endif
      */
     const std::string getUUID() const;
-    
+
     /*!
      * @if jp
      * @brief CORBA オブジェクトへの参照
@@ -1013,7 +1013,7 @@ namespace SDOPackage
      * @endif
      */
     Configuration_var m_objref;
-    
+
     /*!
      * @if jp
      * @brief Lock 付き SDO DeviceProfile
@@ -1023,11 +1023,11 @@ namespace SDOPackage
      */
     DeviceProfile m_deviceProfile;
     Mutex m_dprofile_mutex;
-    
+
     /*!
      * @if jp
      * @brief SDO Parameter
-     * 
+     *
      * 実装技術に非依存な変数(パラメータ)を定義するデータ構造。
      * パラメータ構造は、変数の名前と型を定義する。
      * 定義されている属性は以下のとおり。
@@ -1044,17 +1044,17 @@ namespace SDOPackage
      *                   もしもパラメータに対する制約がない場合は、allowedValues
      *                   属性はnullとなる。すなわち、パラメータ型に固有の範囲
      *                   であればどのような値も取ることができる。
-     * 
+     *
      * @else
      * @brief SDO Parameter
-     * 
-     * Data structure to define a variable (parameter) independently 
-     * of implementation technologies. The Parameter structure defines 
+     *
+     * Data structure to define a variable (parameter) independently
+     * of implementation technologies. The Parameter structure defines
      * the name and type of a variable.
      * Attributes defined in Parameter.
      *  - name : Parameter’s name.
-     *  - type : Name of parameter's type. The original value scope of 
-     *           parameter data type can be constrained by definitions 
+     *  - type : Name of parameter's type. The original value scope of
+     *           parameter data type can be constrained by definitions
      *           allocated in the attribute allowedValues.
      * - allowedValues : Values that the parameter can accept.
      *           This attribute is used only when the value scope
@@ -1087,7 +1087,7 @@ namespace SDOPackage
      */
     ParameterList m_parameters;
     Mutex m_params_mutex;
-    
+
     /*!
      * @if jp
      * @brief Lock 付き SDO ConfigurationSetList
@@ -1115,7 +1115,7 @@ namespace SDOPackage
      */
     RTC::SdoServiceAdmin& m_sdoservice;
     Mutex m_sdoservice_mutex;
-    
+
     /*!
      * @if jp
      * @brief  Lock 付き SDO OrganizationList
@@ -1125,7 +1125,7 @@ namespace SDOPackage
      */
     OrganizationList m_organizations;
     Mutex m_org_mutex;
-    
+
     /*!
      * @if jp
      * @brief  NVList用functor
@@ -1142,7 +1142,7 @@ namespace SDOPackage
       }
       std::string m_name;
     };
-    
+
     /*!
      * @if jp
      * @brief  Organization用functor
@@ -1160,7 +1160,7 @@ namespace SDOPackage
       }
       const std::string m_id;
     };
-    
+
     /*!
      * @if jp
      * @brief  ConfigurationSet用functor

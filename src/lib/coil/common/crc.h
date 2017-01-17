@@ -60,7 +60,7 @@ namespace coil
    * @endif
    */
   unsigned short crc16(const char* str, size_t len);
-  
+
   /*!
    * @if jp
    *
@@ -82,7 +82,7 @@ namespace coil
    * @else
    *
    * @brief CRC-32 calculation function
-   * 
+   *
    * CRC type: RFC2083 Appendix 15
    *          http://www.faqs.org/rfcs/rfc2083.html
    *          http://www.efg2.com/Lab/Mathematics/CRC.htm
@@ -92,7 +92,7 @@ namespace coil
    * Input bit inversion: None
    * Output bit inversion: None
    * Bit shift: right
-   * 
+   *
    * @param str Data stream
    * @param len Data length
    *

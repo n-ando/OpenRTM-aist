@@ -78,7 +78,7 @@ namespace RTC
      * @endif
      */
     ExtTrigExecutionContext();
-    
+
     /*!
      * @if jp
      * @brief デストラクタ
@@ -93,7 +93,7 @@ namespace RTC
      * @endif
      */
     virtual ~ExtTrigExecutionContext(void);
-    
+
     /*!
      * @if jp
      * @brief ExecutionContext用アクティビティスレッドを生成する
@@ -189,7 +189,7 @@ namespace RTC
      */
     virtual void tick()
       throw (CORBA::SystemException);
-    
+
     //============================================================
     // ExecutionContextService
     //============================================================
@@ -370,7 +370,7 @@ namespace RTC
     virtual RTC::ReturnCode_t
     activate_component(RTC::LightweightRTObject_ptr comp)
       throw (CORBA::SystemException);
-    
+
     /*!
      * @if jp
      * @brief RTコンポーネントを非アクティブ化する

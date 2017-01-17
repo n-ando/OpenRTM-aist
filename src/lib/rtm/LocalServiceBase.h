@@ -28,10 +28,10 @@
 
 namespace RTM
 {
-  
+
   // forward decl
   class LocalServiceBase;
-  
+
   /*!
    * @if jp
    * @brief LocalServiceのプロファイルデータ
@@ -75,7 +75,7 @@ namespace RTM
      */
     LocalServiceBase* service;
   };
-  
+
   /*!
    * @if jp
    * @brief LocalServiceのリスト
@@ -84,7 +84,7 @@ namespace RTM
    * @endif
    */
   typedef std::vector<LocalServiceProfile> LocalServiceProfileList;
-  
+
   /*!
    * @if jp
    *
@@ -199,7 +199,7 @@ namespace RTM
     virtual ~LocalServiceBase()
     {
     }
-    
+
     /*!
      * @if jp
      * @brief LocalServiceクラスの初期化関数
@@ -235,7 +235,7 @@ namespace RTM
      */
     virtual bool
     reinit(const coil::Properties& props) = 0;
-    
+
     /*!
      * @if jp
      * @brief LocalServiceProfile を返す
@@ -255,7 +255,7 @@ namespace RTM
      */
     virtual const LocalServiceProfile&
     getProfile() const = 0;
-    
+
     /*!
      * @if jp
      * @brief 終了処理
@@ -273,7 +273,7 @@ namespace RTM
     virtual void
     finalize() = 0;
   };
-  
+
   /*!
    * @if jp
    * @brief LocalServiceFactory の typedef
@@ -282,7 +282,7 @@ namespace RTM
    * @endif
    */
   typedef ::coil::GlobalFactory< ::RTM::LocalServiceBase > LocalServiceFactory;
-  
+
 #if defined(WIN32) || defined(_WIN32) || defined(__WIN32__) || defined(__NT__)
   /*!
    * @if jp

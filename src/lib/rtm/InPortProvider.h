@@ -49,10 +49,10 @@ namespace RTC
    * - setBuffer()
    * - setListener()
    * - setConnector()
-   * 
+   *
    * さらに、コンストラクタ内で以下の関数を呼び、設定情報を初期化する必
    * 要がある。
-   * 
+   *
    * - setInterfaceType()
    * - setDataFlowType()
    * - setSubscriptionType()
@@ -80,10 +80,10 @@ namespace RTC
    * - 第1引数: プロバイダの名前, "corba_cdr" など
    * - 第2引数: ファクトリ関数 coil::Creator<B, T>
    * - 第3引数: 削除関数 coil::Destructor<B, T>
-   * 
+   *
    * を与えて呼び出す必要がある。以下は、ファクトリへの登録と、それを初
    * 期化関数とした例である。
-   * 
+   *
    * <pre>
    * extern "C"
    * {
@@ -120,7 +120,7 @@ namespace RTC
    * - setBuffer()
    * - setListener()
    * - setConnector()
-   * 
+   *
    * Moreover, calling the following functions in the constructor, and
    * properties have to be set.
    *
@@ -206,7 +206,7 @@ namespace RTC
      * @endif
      */
     InPortProvider();
-    
+
     /*!
      * @if jp
      * @brief デストラクタ
@@ -231,7 +231,7 @@ namespace RTC
      * 数は、OutPortProvider生成直後および、接続時にそれぞれ呼ばれる可
      * 能性がある。したがって、この関数は複数回呼ばれることを想定して記
      * 述されるべきである。
-     * 
+     *
      * @param prop 設定情報
      *
      * @else
@@ -271,7 +271,7 @@ namespace RTC
      * overwritten by the given pointer to a buffer.  Since
      * OutPortProvider does not assume ownership of the buffer
      * pointer, destructor of the buffer should be done by user.
-     * 
+     *
      * @param buffer A pointer to a data buffer to be used by OutPortProvider
      *
      * @endif
@@ -293,7 +293,7 @@ namespace RTC
      * @param listeners リスナオブジェクト
      *
      * @else
-     * @brief Set the listener. 
+     * @brief Set the listener.
      *
      * OutPort provides callback functionality that calls specific
      * listener objects according to the events in the data publishing
@@ -352,7 +352,7 @@ namespace RTC
      * @brief Publish InterfaceProfile information
      *
      * Publish interfaceProfile information.
-     * Check the dataport.interface_type value of the NameValue object 
+     * Check the dataport.interface_type value of the NameValue object
      * specified by an argument in property information and get information
      * only when the interface type of the specified port is matched.
      *
@@ -361,7 +361,7 @@ namespace RTC
      * @endif
      */
     virtual void publishInterfaceProfile(SDOPackage::NVList& properties);
-    
+
     /*!
      * @if jp
      * @brief Interface情報を公開する
@@ -390,7 +390,7 @@ namespace RTC
      * @endif
      */
     virtual bool publishInterface(SDOPackage::NVList& properties);
-    
+
   protected:
     /*!
      * @if jp
@@ -410,7 +410,7 @@ namespace RTC
      * @endif
      */
     void setInterfaceType(const char* interface_type);
-    
+
     /*!
      * @if jp
      * @brief データフロータイプを設定する
@@ -429,7 +429,7 @@ namespace RTC
      * @endif
      */
     void setDataFlowType(const char* dataflow_type);
-    
+
     /*!
      * @if jp
      * @brief サブスクリプションタイプを設定する

@@ -353,7 +353,7 @@ namespace RTC
    *  |          +--(1 0..) [RTObjectStateMachine] : StateMachine
    *  |
    *  +--(1 1) [ExecutionContextProfile] : EC Profileの管理
-   * 
+   *
    * @since 0.4.0
    *
    * @else
@@ -536,7 +536,7 @@ namespace RTC
      */
     double getRate(void) const;
     coil::TimeValue getPeriod(void) const;
- 
+
     /*!
      * @if jp
      * @brief ExecutionContext の実行周期(Hz)を設定する
@@ -689,7 +689,7 @@ namespace RTC
      * |
 
 
-     
+
      * @param comp 非アクティブ化対象RTコンポーネント
      *
      * @return ReturnCode_t 型のリターンコード
@@ -775,7 +775,7 @@ namespace RTC
      */
     RTC::LifeCycleState getComponentState(RTC::LightweightRTObject_ptr comp);
     const char* getStateString(RTC::LifeCycleState state);
-    
+
     /*!
      * @if jp
      * @brief ExecutionKind を取得する
@@ -877,7 +877,7 @@ namespace RTC
      *
      * @else
      *
-     * @brief Converting ExecutionKind enum to string 
+     * @brief Converting ExecutionKind enum to string
      *
      * This function converts enumeration (PERIODIC, EVENT_DRIVEN,
      * OTHER) defined in RTC::ExecutionKind to string.
@@ -1049,7 +1049,7 @@ namespace RTC
     {
       return m_worker.isOneOfNextState(state);
     };
-    
+
     void invokeWorker()       { m_worker.invokeWorker(); }
     void invokeWorkerPreDo()  { m_worker.invokeWorkerPreDo(); }
     void invokeWorkerDo()     { m_worker.invokeWorkerDo(); }
@@ -1185,7 +1185,7 @@ namespace RTC
     RTC::ReturnCode_t waitForActivated(RTC_impl::RTObjectStateMachine* rtobj);
     RTC::ReturnCode_t waitForDeactivated(RTC_impl::RTObjectStateMachine* rtobj);
     RTC::ReturnCode_t waitForReset(RTC_impl::RTObjectStateMachine* rtobj);
-    
+
   protected:
     mutable RTC::Logger rtclog;
 

@@ -44,7 +44,7 @@ namespace RTC_impl
   typedef RTC_Utils::StateHolder<ExecContextState> ExecContextStates;
 
   class RTObjectStateMachine
-    : private coil::NonCopyable 
+    : private coil::NonCopyable
   {
   public:
     RTObjectStateMachine(RTC::ExecutionContextHandle_t id,

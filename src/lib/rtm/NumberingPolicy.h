@@ -63,12 +63,12 @@ public:
    * @endif
    */
   struct ObjectNotFound {};
-  
+
   /*!
    * @if jp
    *
    * @brief 仮想デストラクタ
-   * 
+   *
    * @else
    *
    * @brief Virtual destractor
@@ -76,14 +76,14 @@ public:
    * @endif
    */
   virtual ~NumberingPolicy(void){};
-  
+
   /*!
    * @if jp
    *
    * @brief オブジェクト生成時の名称作成
    *
    * オブジェクト生成時の名称を生成するための純粋仮想関数
-   * 
+   *
    * @param obj 名称生成対象オブジェクト
    *
    * @return 生成したオブジェクト名称
@@ -93,7 +93,7 @@ public:
    * @brief Create the name when creating objects
    *
    * Pure virtual function to create the name when creating objects.
-   * 
+   *
    * @param obj The target object for the creation
    *
    * @return Name of the created object
@@ -101,14 +101,14 @@ public:
    * @endif
    */
   virtual std::string onCreate(void* obj) = 0;
-  
+
   /*!
    * @if jp
    *
    * @brief オブジェクト削除時の名称解放
    *
    * オブジェクト削除時に名称を解放するための純粋仮想関数
-   * 
+   *
    * @param obj 名称解放対象オブジェクト
    *
    * @else
@@ -116,7 +116,7 @@ public:
    * @brief Delete the name when deleting objects
    *
    * Pure virtual function to delete the name when deleting object.
-   * 
+   *
    * @param obj The target object of the delete
    *
    * @endif
@@ -147,31 +147,31 @@ public:
  * @endif
  */
 class DefaultNumberingPolicy
-  : public NumberingPolicy 
+  : public NumberingPolicy
 {
 public:
   /*!
    * @if jp
    *
    * @brief コンストラクタ
-   * 
+   *
    * コンストラクタ
-   * 
+   *
    * @else
    *
    * @brief Constructor
-   * 
+   *
    * Constructor
-   * 
+   *
    * @endif
    */
   DefaultNumberingPolicy() : m_num(0) {};
-  
+
   /*!
    * @if jp
    *
    * @brief デストラクタ
-   * 
+   *
    * @else
    *
    * @brief Destractor
@@ -179,7 +179,7 @@ public:
    * @endif
    */
   virtual ~DefaultNumberingPolicy(void){};
-  
+
   /*!
    * @if jp
    *
@@ -187,7 +187,7 @@ public:
    *
    * オブジェクト生成時の名称を生成する。
    * 生成済みインスタンスの数に応じた名称を生成する。
-   * 
+   *
    * @param obj 名称生成対象オブジェクト
    *
    * @return 生成したオブジェクト名称
@@ -198,7 +198,7 @@ public:
    *
    * Create the name when creating object.
    * Create the name corresponding to the number of generated instances.
-   * 
+   *
    * @param obj The target object for the name creation
    *
    * @return Names of the created object
@@ -206,7 +206,7 @@ public:
    * @endif
    */
   virtual std::string onCreate(void* obj);
-  
+
   /*!
    * @if jp
    *
@@ -214,7 +214,7 @@ public:
    *
    * オブジェクト削除時に名称を解放する。
    * オブジェクト削除時に生成済みインスタンス数を減算する。
-   * 
+   *
    * @param obj 名称解放対象オブジェクト
    *
    * @else
@@ -223,13 +223,13 @@ public:
    *
    * Delete the name when deleting object.
    * Substract the generated number of instances when deleting the object.
-   * 
+   *
    * @param obj The target object for the name delete
    *
    * @endif
    */
   virtual void onDelete(void* obj);
-  
+
 protected:
   /*!
    * @if jp
@@ -238,7 +238,7 @@ protected:
    *
    * オブジェクトリストから指定されたオブジェクトを検索し、
    * 該当するオブジェクトが格納されている場合にはインデックスを返す。
-   * 
+   *
    * @param obj 検索対象オブジェクト
    *
    * @return オブジェクト格納インデックス
@@ -249,7 +249,7 @@ protected:
    *
    * Find the specified object in the object list and return its index
    * when it is stored.
-   * 
+   *
    * @param obj The target object for the find
    *
    * @return Object index for storage
@@ -257,7 +257,7 @@ protected:
    * @endif
    */
   long int find(void* obj);
-  
+
 private:
   int m_num;
   std::vector<void*> m_objects;

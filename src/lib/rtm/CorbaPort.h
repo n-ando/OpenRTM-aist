@@ -116,7 +116,7 @@ namespace RTC
    * - インターフェース極性:           if_polarity
    * - インターフェース型名:           if_tname
    * - インターフェースインスタンス名: if_iname
-   * 
+   *
    * インターフェースの指定子を以下の文字列名称で指定するものとする。
    *
    * <rtc_iname>.port.<port_name>.<if_polarity>.<if_tname>.<if_iname>
@@ -144,11 +144,11 @@ namespace RTC
    * - if_iname    = hoge_interface1
    *
    * インターフェース指定子は、
-   * 
+   *
    * YourComp0.port.myservice.required.hoge_interface.hoge_inteface1
    *
    * のように記述することができる。
-   * 
+   *
    * なお、ここで動的生成インターフェースのインスタンスのための特殊なタ
    * イプのインスタンス名記述子
    *
@@ -170,7 +170,7 @@ namespace RTC
    * consumer1 ]---<  O----[ provider0
    * consumer2 ]---<
    * </pre>
-   *  
+   *
    * これに対し、コンシューマが要求するプロバイダインターフェース記述子
    * にインクリメンタル生成型インスタンス名記述子 "<type_name>+" が指定
    * された場合、記述子 "<type_name>+" の数だけプロバイダのインスタン
@@ -233,7 +233,7 @@ namespace RTC
    * MyComp0 の add0 (コンシューマ) と YourComp0 の echo9 (プロバイダ)
    * をそれぞれ対にして接続させるものと仮定する。この場合、
    * ConnectorProfile は以下のように設定する。
-   * 
+   *
    * <pre>
    * ConnectorProfile:
    *   name: 任意のコネクタ名
@@ -245,7 +245,7 @@ namespace RTC
    * </pre>
    *
    * ただし、それぞれ
-   * 
+   *
    * <pre>
    * <add0> は MyComp0.port.mycomp_service.required.add.add0
    * <add9> は YourComp0.port.yourcomp_service.provided.add.add9
@@ -273,7 +273,7 @@ namespace RTC
    * 的生成インスタンス名記述子 "<type_name>*" を value に含むすべての
    * value 上のインターフェース指定子を、ここで生成したインターフェース
    * 指定子に置き換える。
-   * 
+   *
    * インクリメンタル生成型インスタンス名記述子"<type_name>+" が存在す
    * る場合、インスタンス名記述子の数だけプロバイダのインスタンスを生成
    * し、それぞれのインターフェース指定子をkey に、IOR文字列を value に
@@ -312,7 +312,7 @@ namespace RTC
    * なお、インターフェースの対応関係の厳密さを指定するオプションとして、
    * 以下のオプションを指定することができる。
    *
-   * port.connection.strictness: strict, best_effort 
+   * port.connection.strictness: strict, best_effort
    *
    * strict: すべてのコンシューマに指定した参照が存在し、かつナローイン
    *         グにも成功しコンシューマに適切にセットできた場合にのみ Port
@@ -385,7 +385,7 @@ namespace RTC
    * If REQUIRED interface name that is Consumer interface name is
    * "*", it shows that one Consumer interface is able to connect with
    * multiple Provider interfaces. (This feature is not implemented.)
-   * 
+   *
    * The following describes the rules that specify interface
    * connection between ports.
    *
@@ -423,7 +423,7 @@ namespace RTC
    * - if_tname    = hoge_interface
    * - if_iname    = hoge_interface1
    *
-   * interface descriptor is as follows. 
+   * interface descriptor is as follows.
    *
    * YourComp0.port.myservice.required.hoge_interface.hoge_inteface1
    *
@@ -445,7 +445,7 @@ namespace RTC
    * consumer1 ]---<  O----[ provider0
    * consumer2 ]---<
    * </pre>
-   *  
+   *
    * On the other hand, when incremental generated type instance name
    * descriptor "<type_name>+" is specified as the provider interface
    * descriptor whom consumers demand, provider's instances are
@@ -477,7 +477,7 @@ namespace RTC
    * Now the case where the service ports of two components are
    * connected is considered. When the service port of each component
    * is the following,
-   * 
+   *
    * - rtc_iname: MyComp0          <br>
    *   port_name: mycomp_service   <br>
    *   interfaces:
@@ -508,7 +508,7 @@ namespace RTC
    *           ~T~                               ~T~
    *            |                                 |
    * </pre>
-   * 
+   *
    *
    *
    * Assume that connection between echo0 (provider) of MyComp0
@@ -516,7 +516,7 @@ namespace RTC
    * (consumer) of MyComp0 and add0 (provider) of YourComp0 is
    * established.  In this case, ConnectorProfile is set up as
    * follows.
-   * 
+   *
    * <pre>
    * ConnectorProfile:
    *   name: any connector name
@@ -528,7 +528,7 @@ namespace RTC
    * </pre>
    *
    * Please note that <add0>, <add9>, <echo0> and <echo9> are the following.
-   * 
+   *
    * <pre>
    * <add0> is MyComp0.port.mycomp_service.required.add.add0
    * <add9> is YourComp0.port.yourcomp_service.provided.add.add9
@@ -540,7 +540,7 @@ namespace RTC
    * port carries out the following process respectively in the
    * virtual functions such as CorbaPort::publishInterfaces() and
    * CorbaPort::subscribeInerfaces().
-   * 
+   *
    * A provider sets its IOR string as a value and its interface
    * descriptor as a key in the ConnectorProfile::properties in a
    * publishInterfaces() function. Since this interface descriptor's
@@ -607,7 +607,7 @@ namespace RTC
    *
    * strict: The connection is established, if only all the specified
    *         consumers are set appropriate references and narrowed
-   *         successfully.  
+   *         successfully.
    *
    * best_effort: The connection is established without any errors,
    *         even if appropriate reference does not exist or reference
@@ -643,12 +643,12 @@ namespace RTC
      *
      * - port.port_type: "CorbaPort"
      *
-     * @param name The name of Port 
+     * @param name The name of Port
      *
      * @endif
      */
     explicit CorbaPort(const char* name);
-    
+
     /*!
      * @if jp
      *
@@ -661,7 +661,7 @@ namespace RTC
      * @endif
      */
     virtual ~CorbaPort(void);
-    
+
     /*!
      * @if jp
      * @brief プロパティの初期化
@@ -724,14 +724,14 @@ namespace RTC
      * @param type_name Type name of the servant
      * @param provider CORBA servant
      *
-     * @return Return false if the same name of instance_name is already 
+     * @return Return false if the same name of instance_name is already
      *         registered.
      *
      * @endif
      */
     bool registerProvider(const char* instance_name, const char* type_name,
                           PortableServer::RefCountServantBase& provider);
-    
+
     /*!
      * @if jp
      *
@@ -775,7 +775,7 @@ namespace RTC
      */
     bool registerConsumer(const char* instance_name, const char* type_name,
                           CorbaConsumerBase& consumer);
-    
+
   protected:
     /*!
      * @if jp
@@ -798,11 +798,11 @@ namespace RTC
      * - name
      *   <rtc_iname>.port.<port_name>.provided.<if_tname>.<if_iname>
      * - value
-     *   Provider インターフェースの IOR 文字列 
-     * 
+     *   Provider インターフェースの IOR 文字列
+     *
      * なお、旧バージョンとの互換性のため以下の表記の NameValue も同時
      * に格納されるが、将来のバージョンでは削除される可能性がある。
-     * 
+     *
      * - name
      *   port.<if_tname>.<if_iname>
      * - value
@@ -838,7 +838,7 @@ namespace RTC
      *   <rtc_iname>.port.<port_name>.provided.<if_tname>.<if_iname>
      * - value
      *   IOR string value of interface reference
-     * 
+     *
      * In addition, although the following NameValue values are also
      * stored for the backward compatibility, this will be deleted in
      * the future version.
@@ -860,7 +860,7 @@ namespace RTC
      */
     virtual ReturnCode_t
     publishInterfaces(ConnectorProfile& connector_profile);
-    
+
     /*!
      * @if jp
      *
@@ -938,7 +938,7 @@ namespace RTC
      *    type_name     = "Manipulator";
      *    polarity      = PROVIDED;
      *  }
-     * </pre> 
+     * </pre>
      *
      * として登録されている Serivce Provider のオブジェクト参照を探し、
      * Consumer にセットする。実際には、ConnectorProfile::properties に
@@ -978,9 +978,9 @@ namespace RTC
      *    type_name     = "Manipulator";
      *    polarity      = PROVIDED;
      *  }
-     * </pre> 
+     * </pre>
      * and set to Consumer.
-     * In fact, find NameValue that is registered as the following to 
+     * In fact, find NameValue that is registered as the following to
      * ConnectorProfile::properties:
      * <pre>
      * NameValue = { "port.Manipulator.PA10_0": <Object reference> }
@@ -995,7 +995,7 @@ namespace RTC
      */
     virtual ReturnCode_t
     subscribeInterfaces(const ConnectorProfile& connector_profile);
-    
+
     /*!
      * @if jp
      *
@@ -1010,7 +1010,7 @@ namespace RTC
      *
      * @brief Unsubscribe interfaces
      *
-     * Release all Objects that was set in Consumer associated with the given 
+     * Release all Objects that was set in Consumer associated with the given
      * ConnectorProfile.
      *
      * @param connector_profile Connector profile
@@ -1068,7 +1068,7 @@ namespace RTC
      * @endif
      */
     coil::Properties m_properties;
-    
+
   private:
     class CorbaConsumerHolder;
     /*!
@@ -1082,7 +1082,7 @@ namespace RTC
      *
      * @param nv Provider が含まれている ConnectorProfile::properties の NVList
      * @param cons Provider と対応する Consumer のホルダ
-     * 
+     *
      * @retrun bool Consumer に対応する Provider が見つからない場合 false
      *
      * @else
@@ -1093,10 +1093,10 @@ namespace RTC
      * and performs narrowing into the Consumer and set it to the
      * Consumer. False is returned when there is no corresponding key
      * and IOR and the narrowing failed.
-     *  
+     *
      * @param nv NVlist of ConnectorProfile::properties that includes Provider
      * @param cons a Consumer holder to be matched with a Provider
-     * 
+     *
      * @return bool false is returned if there is no provider for the consumer
      *
      * @endif
@@ -1113,11 +1113,11 @@ namespace RTC
      * NVList 中から CorbaConsumerHolder に保持されている Consumer に合
      * 致するキーを持つ Provider を見つける。対応するキーが存在しない、
      * IOR が見つからない場合、false を返す。
-     *  
+     *
      * @param nv Provider が含まれている ConnectorProfile::properties の NVList
      * @param cons Provider と対応する Consumer のホルダ
      * @param iorstr 見つかったIOR文字列を格納する変数
-     * 
+     *
      * @retrun bool Consumer に対応する Provider が見つからない場合 false
      *
      * @else
@@ -1129,11 +1129,11 @@ namespace RTC
      * with Cosumer's name in the CorbaConsumerHolder and extracts
      * IOR.  False is returned when there is no corresponding key and
      * IOR.
-     *  
+     *
      * @param nv NVlist of ConnectorProfile::properties that includes Provider
      * @param cons a Consumer holder to be matched with a Provider
      * @param iorstr variable which is set IOR string
-     * 
+     *
      * @return bool false is returned if there is no provider for the consumer
      *
      * @endif
@@ -1151,7 +1151,7 @@ namespace RTC
      *
      * @param ior セットする IOR 文字列
      * @param cons Consumer のホルダ
-     * 
+     *
      * @retrun bool Consumer へのナローイングに失敗した場合 false
      *
      * @else
@@ -1160,10 +1160,10 @@ namespace RTC
      * This function performs narrowing into the Consumer and set it to the
      * Consumer. False is returned when the narrowing failed. But, if IOR
      * string is "null" or "nil", this function returns true.
-     *  
+     *
      * @param ior IOR string
      * @param cons Consumer holder
-     * 
+     *
      * @retrun bool false if narrowing failed.
      *
      * @endif
@@ -1179,7 +1179,7 @@ namespace RTC
      *
      * @param ior セットする IOR 文字列
      * @param cons Consumer のホルダ
-     * 
+     *
      * @retrun ConsumerのIORが与えられたIOR文字列と異なる場合、falseを返す。
      *
      * @else
@@ -1188,10 +1188,10 @@ namespace RTC
      * This function releases object reference of Consumer. If the
      * given IOR string is different from Consumer's IOR string, it
      * returns false.
-     *  
+     *
      * @param ior IOR string
      * @param cons Consumer holder
-     * 
+     *
      * @retrun bool False if IOR and Consumer's IOR are different
      *
      * @endif
@@ -1224,7 +1224,7 @@ namespace RTC
           m_instanceName(instance_name),
           m_servant(servant),
           m_ior()
-      {  
+      {
 #ifndef ORB_IS_RTORB
         PortableServer::POA_var poa = ::RTC::Manager::instance().getPOA();
         m_oid = poa->servant_to_id(m_servant);
@@ -1359,7 +1359,7 @@ namespace RTC
     };
     typedef std::vector<CorbaConsumerHolder> CorbaConsumerList;
     CorbaConsumerList m_consumers;
-    
+
     // functors
     /*!
      * @if jp
@@ -1374,7 +1374,7 @@ namespace RTC
         : m_consumers(consumers)
       {
       }
-      
+
       void operator()(const SDOPackage::NameValue& nv)
       {
         for (CorbaConsumerList::iterator it(m_consumers.begin());

@@ -73,17 +73,17 @@ namespace RTC
    * @class OutPort
    *
    * @brief OutPort テンプレートクラス
-   * 
+   *
    * OutPort テンプレートクラス、テンプレートの引数として、OutPortが
    * 扱うデータ型 DataType をとる。
    *
    *
    * OnWrite系コールバック (書込みに起因するイベントによりコールされる)
    *
-   * - void OnWrite<DataType>::operator()(const DataType): 
+   * - void OnWrite<DataType>::operator()(const DataType):
    *     OutPort::write() を呼び出し書き込みを行う際にコールされる。
    *
-   * - DataType OnWriteConvert<DataType>::operator()(const DataType): 
+   * - DataType OnWriteConvert<DataType>::operator()(const DataType):
    *     OutPort::write() を呼び出し、データをバッファに書き込む前に呼ばれ
    *     データの変換を行う。operator()()の戻り値がシリアライズされバッファに
    *     書き込まれる。
@@ -93,8 +93,8 @@ namespace RTC
    * @else
    *
    * @brief OutPort template class
-   * 
-   * This is the OutPort template class. 
+   *
+   * This is the OutPort template class.
    * The data type "DateType" supported by OutPort and the buffer type
    * "BufferType" are used as template arguments.
    *
@@ -131,7 +131,7 @@ namespace RTC
      * @endif
      */
     OutPort(const char* name, DataType& value)
-#if defined(__GNUC__) && (__GNUC__ <= 3 && __GNUC_MINOR__ <= 3) 
+#if defined(__GNUC__) && (__GNUC__ <= 3 && __GNUC_MINOR__ <= 3)
       : OutPortBase(name, ::CORBA_Util::toRepositoryIdOfStruct<DataType>()),
 #else
       : OutPortBase(name, ::CORBA_Util::toRepositoryId<DataType>()),
@@ -145,26 +145,26 @@ namespace RTC
                                               "dataport.data_value");
       }
     }
-    
+
     /*!
      * @if jp
      *
      * @brief デストラクタ
-     * 
+     *
      * デストラクタ
-     * 
+     *
      * @else
      *
      * @brief Destructor
-     * 
+     *
      * Destructor
-     * 
+     *
      * @endif
      */
     virtual ~OutPort(void)
     {
     }
-    
+
     /*!
      * @if jp
      *
@@ -196,7 +196,7 @@ namespace RTC
      * - When the buffer held by OutPort can detect the overflow,
      *   and when it detected the overflow at writing, callback functor
      *   OnOverflow will be invoked.
-     * - When callback functor OnWriteConvert is already set, 
+     * - When callback functor OnWriteConvert is already set,
      *   the return value of operator() of OnWriteConvert will be written
      *   into the buffer at the writing.
      *
@@ -227,7 +227,7 @@ namespace RTC
         // check number of connectors
         size_t conn_size(m_connectors.size());
         if (!(conn_size > 0)) { return false; }
-        
+
         m_status.resize(conn_size);
 
         for (size_t i(0), len(conn_size); i < len; ++i)
@@ -245,7 +245,7 @@ namespace RTC
               }
             m_status[i] = ret;
             if (ret == PORT_OK) { continue; }
-      
+
             result = false;
 
             if (ret == CONNECTION_LOST)
@@ -265,7 +265,7 @@ namespace RTC
                     std::bind1st(std::mem_fun(&PortBase::disconnect), this));
       return result;
     }
-    
+
     /*!
      * @if jp
      *
@@ -291,7 +291,7 @@ namespace RTC
     {
       return write(m_value);
     }
-    
+
     /*!
      * @if jp
      *
@@ -333,7 +333,7 @@ namespace RTC
      * すべての Connector が正常終了したときのみ true を返し、それ以外
      * では false を返却する。この関数は write() が false の場合ステー
      * タスを調べるのに使用することができる。
-     * 
+     *
      * @param index Connector の index
      * @return ステータス
      *
@@ -369,7 +369,7 @@ namespace RTC
      * すべての Connector が正常終了したときのみ true を返し、それ以外
      * では false を返却する。この関数は write() が false の場合ステー
      * タスを調べるのに使用することができる。
-     * 
+     *
      * @return ステータスリスト
      *
      * @else
@@ -426,7 +426,7 @@ namespace RTC
     {
       m_onWrite = on_write;
     }
-    
+
     /*!
      * @if jp
      *
@@ -467,7 +467,7 @@ namespace RTC
     {
       m_onWriteConvert = on_wconvert;
     }
-    
+
   private:
     std::string m_typename;
     /*!
@@ -478,7 +478,7 @@ namespace RTC
      * @endif
      */
     DataType& m_value;
-    
+
     /*!
      * @if jp
      * @brief OnWrite コールバックファンクタへのポインタ
@@ -487,7 +487,7 @@ namespace RTC
      * @endif
      */
     OnWrite<DataType>* m_onWrite;
-    
+
     /*!
      * @if jp
      * @brief OnWriteConvert コールバックファンクタへのポインタ

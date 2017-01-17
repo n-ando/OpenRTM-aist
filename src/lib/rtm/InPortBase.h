@@ -92,7 +92,7 @@ namespace RTC
      * @endif
      */
     InPortBase(const char* name, const char* data_type);
-    
+
     /*!
      * @if jp
      * @brief デストラクタ
@@ -118,7 +118,7 @@ namespace RTC
      * @else
      * @brief Initializing properties
      *
-     * This method initializes the port in the specified property. 
+     * This method initializes the port in the specified property.
      *
      * @param prop Property for setting ports
      * @endif
@@ -134,7 +134,7 @@ namespace RTC
      * @return true:成功,false:失敗
      * @else
      * @brief It is a virtual method that is called from RTObject_impl::readAll().
-     * This method reads out data from DataPort. 
+     * This method reads out data from DataPort.
      *
      * @return true:Success,false:Failure
      * @endif
@@ -151,7 +151,7 @@ namespace RTC
      * @else
      * @brief Get properties
      *
-     * This method gets properties in the port. 
+     * This method gets properties in the port.
      *
      * @return Properties
      * @endif
@@ -454,7 +454,7 @@ namespace RTC
      * @brief ConnectorDataListener リスナを削除する
      *
      * 設定した各種リスナを削除する。
-     * 
+     *
      * @param listener_type リスナタイプ
      * @param listener リスナオブジェクトへのポインタ
      *
@@ -462,7 +462,7 @@ namespace RTC
      * @brief Removing BufferDataListener type listener
      *
      * This operation removes a specified listener.
-     *     
+     *
      * @param listener_type A listener type
      * @param listener A pointer to a listener object
      *
@@ -470,7 +470,7 @@ namespace RTC
      */
     void removeConnectorDataListener(ConnectorDataListenerType listener_type,
                                      ConnectorDataListener* listener);
-    
+
 
     /*!
      * @if jp
@@ -510,7 +510,7 @@ namespace RTC
      * Listeners should have the following function operator().
      *
      * ConnectorListener::operator()(const ConnectorProfile&)
-     *  
+     *
      * The ownership of the given listener object is transferred to
      * this OutPort object in default.  The given listener object will
      * be destroied automatically in the OutPort's dtor or if the
@@ -533,7 +533,7 @@ namespace RTC
      * @brief ConnectorDataListener リスナを削除する
      *
      * 設定した各種リスナを削除する。
-     * 
+     *
      * @param listener_type リスナタイプ
      * @param listener リスナオブジェクトへのポインタ
      *
@@ -541,7 +541,7 @@ namespace RTC
      * @brief Removing BufferDataListener type listener
      *
      * This operation removes a specified listener.
-     *     
+     *
      * @param listener_type A listener type
      * @param listener A pointer to a listener object
      *
@@ -577,7 +577,7 @@ namespace RTC
      * 与えられた ConnectoionProfile の情報に基づき、Port間の接続を確立
      * する。この関数は主にアプリケーションプログラムやツールから呼び出
      * すことを前提としている。
-     * 
+     *
      * @param connector_profile ConnectorProfile
      * @return ReturnCode_t 型のリターンコード
      *
@@ -649,13 +649,13 @@ namespace RTC
      */
     virtual ReturnCode_t
     publishInterfaces(ConnectorProfile& connector_profile);
-    
+
     /*!
      * @if jp
      * @brief Interfaceに接続する
      *
      * Interfaceに接続する。
-     * Portが所有するConsumerに適合するProviderに関する情報を 
+     * Portが所有するConsumerに適合するProviderに関する情報を
      * ConnectorProfile#properties から抽出し、
      * ConsumerにCORBAオブジェクト参照を設定する。
      *
@@ -667,8 +667,8 @@ namespace RTC
      * @brief Subscribe to the interface
      *
      * Subscribe to interface.
-     * Derive Provider information that matches Consumer owned by the Port 
-     * from ConnectorProfile#properties and 
+     * Derive Provider information that matches Consumer owned by the Port
+     * from ConnectorProfile#properties and
      * set the Consumer to the reference of the CORBA object.
      *
      * @param connector_profile The connector profile
@@ -679,7 +679,7 @@ namespace RTC
      */
     virtual ReturnCode_t
     subscribeInterfaces(const ConnectorProfile& connector_profile);
-    
+
     /*!
      * @if jp
      * @brief Interfaceへの接続を解除する
@@ -694,7 +694,7 @@ namespace RTC
      * @brief Disconnect the interface connection
      *
      * Disconnect the interface connection.
-     * Release all objects set in Consumer associated with 
+     * Release all objects set in Consumer associated with
      * given ConnectorProfile and unscribe the interface.
      *
      * @param connector_profile The connector profile
@@ -871,7 +871,7 @@ namespace RTC
     ConnectorList m_connectors;
     /*!
      * @if jp
-     * @brief 接続エンディアン 
+     * @brief 接続エンディアン
      * @else
      * @brief Connected Endian
      * @endif

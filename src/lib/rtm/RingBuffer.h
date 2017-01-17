@@ -54,7 +54,7 @@ namespace RTC
    * @if jp
    * @class RingBuffer
    * @brief リングバッファ実装クラス
-   * 
+   *
    * 指定した長さのリング状バッファを持つバッファ実装クラス。
    * バッファ全体にデータが格納された場合、以降のデータは古いデータから
    * 順次上書きされる。
@@ -69,7 +69,7 @@ namespace RTC
    * @else
    * @class RingBuffer
    * @brief Ring buffer implementation class
-   * 
+   *
    * This is the buffer implementation class with ring shaped buffer of
    * specified length.
    * If data is stored in the entire buffer, data from now on will be
@@ -96,23 +96,23 @@ namespace RTC
      * @if jp
      *
      * @brief コンストラクタ
-     * 
+     *
      * コンストラクタ
      * 指定されたバッファ長でバッファを初期化する。
      *
      * @param length バッファ長
-     * 
+     *
      * @else
      *
      * @brief Constructor
-     * 
+     *
      * Constructor.
      * Initialize the buffer by specified buffer length.
      * However, if the specified length is less than two, the buffer should
      * be initialized by two in length.
      *
      * @param length Buffer length
-     * 
+     *
      * @endif
      */
     explicit RingBuffer(long int length = RINGBUFFER_DEFAULT_LENGTH)
@@ -125,26 +125,26 @@ namespace RTC
     {
       this->reset();
     }
-    
+
     /*!
      * @if jp
      *
      * @brief 仮想デストラクタ
-     * 
+     *
      * 仮想デストラクタ。
-     * 
+     *
      * @else
      *
      * @brief Virtual destractor
-     * 
+     *
      * Virtual destractor
-     * 
+     *
      * @endif
      */
     virtual ~RingBuffer(void)
     {
     }
-    
+
     /*!
      * @if jp
      * @brief バッファの設定
@@ -190,24 +190,24 @@ namespace RTC
       initWritePolicy(prop);
       initReadPolicy(prop);
     }
-    
+
     /*!
      * @if jp
      *
      * @brief バッファ長を取得する
-     * 
+     *
      * バッファ長を取得する。
-     * 
+     *
      * @return バッファ長
-     * 
+     *
      * @else
      *
      * @brief Get the buffer length
-     * 
+     *
      * Get the buffer length.
-     * 
+     *
      * @return Buffer length
-     * 
+     *
      *
      * @endif
      */
@@ -216,19 +216,19 @@ namespace RTC
       Guard guard(m_posmutex);
       return m_length;
     }
-    
+
     /*!
      * @if jp
      *
      * @brief バッファの長さをセットする
-     * 
+     *
      * バッファ長を設定する。設定不可な場合はNOT_SUPPORTEDが返る。
      * この実装では BUFFER_OK しか返さない。
-     * 
+     *
      * @return BUFFER_OK: 正常終了
      *         NOT_SUPPORTED: バッファ長変更不可
      *         BUFFER_ERROR: 異常終了
-     * 
+     *
      * @else
      *
      * @brief Get the buffer length
@@ -236,7 +236,7 @@ namespace RTC
      * Pure virtual function to get the buffer length.
      *
      * @return buffer length
-     * 
+     *
      * @endif
      */
     virtual ReturnCode length(size_t n)
@@ -246,19 +246,19 @@ namespace RTC
       this->reset();
       return ::RTC::BufferStatus::BUFFER_OK; //BUFFER_OK;
     }
-    
+
     /*!
      * @if jp
      *
      * @brief バッファの状態をリセットする
-     * 
+     *
      * バッファの読み出しポインタと書き込みポインタの位置をリセットする。
      * この実装では BUFFER_OK しか返さない。
-     * 
+     *
      * @return BUFFER_OK: 正常終了
      *         NOT_SUPPORTED: リセット不可能
      *         BUFFER_ERROR: 異常終了
-     * 
+     *
      * @else
      *
      * @brief Get the buffer length
@@ -266,9 +266,9 @@ namespace RTC
      * Pure virtual function to get the buffer length.
      *
      * @return buffer length
-     * 
+     *
      * @endif
-     */ 
+     */
     virtual ReturnCode reset()
     {
       Guard guard(m_posmutex);
@@ -278,20 +278,20 @@ namespace RTC
       m_rpos = 0;
       return ::RTC::BufferStatus::BUFFER_OK;
     }
-    
-    
-    
+
+
+
     //----------------------------------------------------------------------
     /*!
      * @if jp
      *
      * @brief バッファの現在の書込み要素のポインタ
-     * 
+     *
      * バッファの現在の書込み要素のポインタまたは、n個先のポインタを返す
-     * 
-     * @param  n 書込みポインタ + n の位置のポインタ 
+     *
+     * @param  n 書込みポインタ + n の位置のポインタ
      * @return 書込み位置のポインタ
-     * 
+     *
      * @else
      *
      * @brief Get the buffer length
@@ -299,28 +299,28 @@ namespace RTC
      * Pure virtual function to get the buffer length.
      *
      * @return buffer length
-     * 
+     *
      * @endif
-     */ 
-    virtual DataType* wptr(long int n = 0) 
+     */
+    virtual DataType* wptr(long int n = 0)
     {
       Guard guard(m_posmutex);
       return &m_buffer[(m_wpos + n + m_length) % m_length];
     }
-    
+
     /*!
      * @if jp
      *
      * @brief 書込みポインタを進める
-     * 
+     *
      * 現在の書き込み位置のポインタを n 個進める。
      * 書き込み可能な要素数以上の数値を指定した場合、PRECONDITION_NOT_MET
      * を返す。
-     * 
-     * @param  n 書込みポインタ + n の位置のポインタ 
+     *
+     * @param  n 書込みポインタ + n の位置のポインタ
      * @return BUFFER_OK:            正常終了
      *         PRECONDITION_NOT_MET: n > writable()
-     * 
+     *
      * @else
      *
      * @brief Get the buffer length
@@ -328,9 +328,9 @@ namespace RTC
      * Pure virtual function to get the buffer length.
      *
      * @return buffer length
-     * 
+     *
      * @endif
-     */ 
+     */
     virtual ReturnCode advanceWptr(long int n = 1)
     {
       // n > 0 :
@@ -356,15 +356,15 @@ namespace RTC
      * @if jp
      *
      * @brief バッファにデータを書き込む
-     * 
+     *
      * バッファにデータを書き込む。書き込みポインタの位置は変更されない。
      * この実装では常に BUFFER_OK を返す。
-     * 
+     *
      * @param value 書き込み対象データ
      *
      * @return BUFFER_OK: 正常終了
      *         BUFFER_ERROR: 異常終了
-     * 
+     *
      * @else
      *
      * @brief Write data into the buffer
@@ -385,12 +385,12 @@ namespace RTC
       m_buffer[m_wpos] = value;
       return ::RTC::BufferStatus::BUFFER_OK;
     }
-    
+
     /*!
      * @if jp
      *
      * @brief バッファに書き込む
-     * 
+     *
      * 引数で与えられたデータをバッファに書き込む。
      *
      * 第2引数(sec)、第3引数(nsec)が指定されていない場合、バッファフル
@@ -406,7 +406,7 @@ namespace RTC
      * 書き込み時にバッファが空(empty)状態で、別のスレッドがblockモード
      * で読み出し待ちをしている場合、signalを発行して読み出し側のブロッ
      * キングが解除される。
-     * 
+     *
      * @param value 書き込み対象データ
      * @param sec   タイムアウト時間 sec  (default -1: 無効)
      * @param nsec  タイムアウト時間 nsec (default 0)
@@ -414,17 +414,17 @@ namespace RTC
      *         BUFFER_FULL          バッファがフル状態
      *         TIMEOUT              書込みがタイムアウトした
      *         PRECONDITION_NOT_MET 設定異常
-     * 
+     *
      * @else
      *
      * @brief Write data into the buffer
-     * 
+     *
      * Write data which is given argument into the buffer.
      *
      * @param value Target data for writing
      *
      * @return Writing result (Always true: writing success is returned)
-     * 
+     *
      * @endif
      */
     virtual ReturnCode write(const DataType& value,
@@ -432,10 +432,10 @@ namespace RTC
     {
       {
       Guard guard(m_full.mutex);
-        
+
       if (full())
         {
-          
+
           bool timedwrite(m_timedwrite);
           bool overwrite(m_overwrite);
 
@@ -471,8 +471,8 @@ namespace RTC
               return ::RTC::BufferStatus::PRECONDITION_NOT_MET;
             }
         }
-      }      
-    
+      }
+
       put(value);
 
       {
@@ -490,16 +490,16 @@ namespace RTC
         }
       return ::RTC::BufferStatus::BUFFER_OK;
     }
-    
+
     /*!
      * @if jp
      *
      * @brief バッファに書込み可能な要素数
-     * 
+     *
      * バッファに書込み可能な要素数を返す。
-     * 
+     *
      * @return 書き込み可能な要素数
-     * 
+     *
      * @else
      *
      * @brief Write data into the buffer
@@ -517,16 +517,16 @@ namespace RTC
       Guard guard(m_posmutex);
       return m_length - m_fillcount;
     }
-    
+
     /*!
      * @if jp
      *
      * @brief バッファfullチェック
-     * 
+     *
      * バッファfullチェック用純粋仮想関数
      *
      * @return fullチェック結果(true:バッファfull，false:バッファ空きあり)
-     * 
+     *
      * @else
      *
      * @brief Check on whether the buffer is full.
@@ -542,18 +542,18 @@ namespace RTC
       Guard guard(m_posmutex);
       return m_length == m_fillcount;
     }
-    
+
     //----------------------------------------------------------------------
     /*!
      * @if jp
      *
      * @brief バッファの現在の読み出し要素のポインタ
-     * 
+     *
      * バッファの現在の読み出し要素のポインタまたは、n個先のポインタを返す
-     * 
-     * @param  n 読み出しポインタ + n の位置のポインタ 
+     *
+     * @param  n 読み出しポインタ + n の位置のポインタ
      * @return 読み出し位置のポインタ
-     * 
+     *
      * @else
      *
      * @brief Get the buffer length
@@ -561,26 +561,26 @@ namespace RTC
      * Pure virtual function to get the buffer length.
      *
      * @return buffer length
-     * 
+     *
      * @endif
-     */ 
+     */
     virtual DataType* rptr(long int n = 0)
     {
       Guard guard(m_posmutex);
       return &(m_buffer[(m_rpos + n + m_length) % m_length]);
     }
-    
+
     /*!
      * @if jp
      *
      * @brief 読み出しポインタを進める
-     * 
+     *
      * 現在の読み出し位置のポインタを n 個進める。
-     * 
-     * @param  n 読み出しポインタ + n の位置のポインタ 
+     *
+     * @param  n 読み出しポインタ + n の位置のポインタ
      * @return BUFFER_OK: 正常終了
      *         BUFFER_ERROR: 異常終了
-     * 
+     *
      * @else
      *
      * @brief Get the buffer length
@@ -588,14 +588,14 @@ namespace RTC
      * Pure virtual function to get the buffer length.
      *
      * @return buffer length
-     * 
+     *
      * @endif
-     */ 
+     */
     virtual ReturnCode advanceRptr(long int n = 1)
     {
       // n > 0 :
       //     n satisfies n <= readable elements
-      //                 n <= m_fillcout 
+      //                 n <= m_fillcout
       // n < 0 : -n = n'
       //     n satisfies n'<= m_length - m_fillcount
       //                 n >= m_fillcount - m_length
@@ -610,19 +610,19 @@ namespace RTC
       m_fillcount -= n;
       return ::RTC::BufferStatus::BUFFER_OK;
     }
-    
+
     /*!
      * @if jp
      *
      * @brief バッファからデータを読み出す
-     * 
+     *
      * バッファからデータを読みだす。読み出しポインタの位置は変更されない。
-     * 
+     *
      * @param value 読み出しデータ
      *
      * @return BUFFER_OK: 正常終了
      *         BUFFER_ERROR: 異常終了
-     * 
+     *
      * @else
      *
      * @brief Write data into the buffer
@@ -641,17 +641,17 @@ namespace RTC
       value = m_buffer[m_rpos];
       return ::RTC::BufferStatus::BUFFER_OK;
     }
-    
-    
+
+
     /*!
      * @if jp
      *
      * @brief バッファからデータを読み出す
-     * 
+     *
      * バッファからデータを読みだす。読み出しポインタの位置は変更されない。
      *
      * @return 読み出しデータ
-     * 
+     *
      * @else
      *
      * @brief Reading data from the buffer
@@ -665,13 +665,13 @@ namespace RTC
       Guard gaurd(m_posmutex);
       return m_buffer[m_rpos];
     }
-    
-    
+
+
     /*!
      * @if jp
      *
      * @brief バッファから読み出す
-     * 
+     *
      * バッファに格納されたデータを読み出す。
      *
      * 第2引数(sec)、第3引数(nsec)が指定されていない場合、バッファ空状
@@ -687,7 +687,7 @@ namespace RTC
      * 読み出し時にバッファが空(empty)状態で、別のスレッドがblockモード
      * で書込み待ちをしている場合、signalを発行して書込み側のブロッキン
      * グが解除される。
-     * 
+     *
      * @param value 読み出し対象データ
      * @param sec   タイムアウト時間 sec  (default -1: 無効)
      * @param nsec  タイムアウト時間 nsec (default 0)
@@ -695,17 +695,17 @@ namespace RTC
      *         BUFFER_EMPTY         バッファが空状態
      *         TIMEOUT              書込みがタイムアウトした
      *         PRECONDITION_NOT_MET 設定異常
-     * 
+     *
      * @else
      *
      * @brief Readout data from the buffer
-     * 
+     *
      * Readout data stored into the buffer.
-     * 
+     *
      * @param value Readout data
      *
      * @return Readout result (Always true: readout success is returned)
-     * 
+     *
      * @endif
      */
     virtual ReturnCode read(DataType& value,
@@ -713,7 +713,7 @@ namespace RTC
     {
       {
       Guard gaurd(m_empty.mutex);
-      
+
       if (empty())
         {
           bool timedread(m_timedread);
@@ -758,7 +758,7 @@ namespace RTC
             }
         }
       }
-      
+
       get(value);
 
       {
@@ -776,19 +776,19 @@ namespace RTC
         }
       return ::RTC::BufferStatus::BUFFER_OK;
     }
-    
+
     /*!
      * @if jp
      *
      * @brief バッファから読み出し可能な要素数
-     * 
+     *
      * バッファから読み出し可能な要素数を返す。
-     * 
+     *
      * @return 読み出し可能な要素数
      *
      * @return BUFFER_OK: 正常終了
      *         BUFFER_ERROR: 異常終了
-     * 
+     *
      * @else
      *
      * @brief Write data into the buffer
@@ -806,16 +806,16 @@ namespace RTC
       Guard guard(m_posmutex);
       return m_fillcount;
     }
-    
+
     /*!
      * @if jp
      *
      * @brief バッファemptyチェック
-     * 
+     *
      * バッファemptyチェック用純粋仮想関数
      *
      * @return emptyチェック結果(true:バッファempty，false:バッファデータあり)
-     * 
+     *
      * @else
      *
      * @brief Check on whether the buffer is empty.
@@ -831,7 +831,7 @@ namespace RTC
       Guard guard(m_posmutex);
       return m_fillcount == 0;
     }
-    
+
   private:
     inline void initLength(const coil::Properties& prop)
     {
@@ -847,7 +847,7 @@ namespace RTC
             }
         }
     }
-    
+
     inline void initWritePolicy(const coil::Properties& prop)
     {
       std::string policy(prop["write.full_policy"]);
@@ -866,7 +866,7 @@ namespace RTC
         {
           m_overwrite = false;
           m_timedwrite = true;
-          
+
           double tm;
           if (coil::stringTo(tm, prop["write.timeout"].c_str()))
             {
@@ -877,7 +877,7 @@ namespace RTC
             }
         }
     }
-    
+
     inline void initReadPolicy(const coil::Properties& prop)
     {
       std::string policy(prop["read.empty_policy"]);
@@ -902,7 +902,7 @@ namespace RTC
             }
         }
     }
-    
+
   private:
     /*!
      * @if jp
@@ -1010,7 +1010,7 @@ namespace RTC
      * @endif
      */
     std::vector<DataType> m_buffer;
-    
+
     /*!
      * @if jp
      * @brief 条件変数構造体
@@ -1024,7 +1024,7 @@ namespace RTC
       coil::Condition<coil::Mutex> cond;
       coil::Mutex mutex;
     };
-    
+
     /*!
      * @if jp
      * @brief 位置変数ミューテックス

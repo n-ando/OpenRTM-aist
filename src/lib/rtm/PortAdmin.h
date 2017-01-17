@@ -72,7 +72,7 @@ namespace RTC
      * @endif
      */
     PortAdmin(CORBA::ORB_ptr orb, PortableServer::POA_ptr poa);
-    
+
     /*!
      * @if jp
      * @brief デストラクタ
@@ -87,7 +87,7 @@ namespace RTC
      * @endif
      */
     virtual ~PortAdmin(void){};
-    
+
     /*!
      * @if jp
      *
@@ -109,7 +109,7 @@ namespace RTC
      * @endif
      */
     PortServiceList* getPortServiceList() const;
-    
+
     /*!
      * @if jp
      *
@@ -123,7 +123,7 @@ namespace RTC
      *
      * @brief Get PorProfileList
      *
-     * This operation gets the Profile list of Ports registered by 
+     * This operation gets the Profile list of Ports registered by
      * addPort().
      *
      * @return The pointer points PortProfile list
@@ -131,7 +131,7 @@ namespace RTC
      * @endif
      */
     PortProfileList getPortProfileList() const;
-    
+
     /*!
      * @if jp
      *
@@ -150,7 +150,7 @@ namespace RTC
      *
      * This operation returns the reference of Port object specified
      * by port_name.
-     * The port specified by port_name must be already registered in 
+     * The port specified by port_name must be already registered in
      * addPort().
      *
      * @param port_name The name of Port to be returned the reference.
@@ -159,7 +159,7 @@ namespace RTC
      * @endif
      */
     PortService_ptr getPortRef(const char* port_name) const;
-    
+
     /*!
      * @if jp
      *
@@ -178,7 +178,7 @@ namespace RTC
      *
      * This operation returns the pointer to the PortBase servant registered
      * by addPort().
-     * The port specified by port_name must be already registered in 
+     * The port specified by port_name must be already registered in
      * addPort().
      *
      * @param port_name The name of Port to be returned the servant pointer.
@@ -187,7 +187,7 @@ namespace RTC
      * @endif
      */
     PortBase* getPort(const char* port_name) const;
-    
+
     /*!
      * @if jp
      *
@@ -295,7 +295,7 @@ namespace RTC
      * @endif
      */
     void registerPort(PortService_ptr port);
-    
+
     /*!
      * @if jp
      *
@@ -399,7 +399,7 @@ namespace RTC
      * @endif
      */
     void deletePort(PortService_ptr port);
-    
+
     /*!
      * @if jp
      *
@@ -484,7 +484,7 @@ namespace RTC
      * @endif
      */
     void finalizePorts();
-    
+
   private:
     /*!
      * @if jp
@@ -494,7 +494,7 @@ namespace RTC
      * @endif
      */
     CORBA::ORB_var m_pORB;
-    
+
     /*!
      * @if jp
      * @brief POA への参照
@@ -503,7 +503,7 @@ namespace RTC
      * @endif
      */
     PortableServer::POA_var m_pPOA;
-    
+
     /*!
      * @if jp
      * @brief Portのオブジェクトリファレンスのリスト
@@ -537,7 +537,7 @@ namespace RTC
         : m_name(_name)
       {
       }
-      explicit comp_op(T* obj) 
+      explicit comp_op(T* obj)
         : m_name((const char*)(obj->getProfile().name))
       {
       }
@@ -589,14 +589,14 @@ namespace RTC
     private:
       PortProfileList& m_p;
     };
-    
+
     struct find_port_name;
     struct find_port;
     struct del_port;
-    
+
     // サーバントを直接格納するオブジェクトマネージャ
     ObjectManager<const char*, PortBase, comp_op<PortBase> > m_portServants;
-    
+
   };
 };     // namespace RTC
 #endif // RTC_PORTADMIN_H

@@ -82,13 +82,13 @@ namespace SDOPackage
      * @if jp
      *
      * @brief コンストラクタ
-     * 
+     *
      * コンストラクタ
      *
      * @else
      *
      * @brief Constructor
-     * 
+     *
      * Constructor
      *
      * @endif
@@ -97,24 +97,24 @@ namespace SDOPackage
     explicit Organization_impl(RTC::RTObject_ptr sdo);
 #endif // ORB_IS_RTROB
     explicit Organization_impl(SDOSystemElement_ptr sdo);
-    
+
     /*!
      * @if jp
      *
      * @brief 仮想デストラクタ
-     * 
+     *
      * 仮想デストラクタ。
-     * 
+     *
      * @else
      *
      * @brief Virtual destructor
-     * 
+     *
      * Virtual Virtual destructor
      *
      * @endif
      */
     virtual ~Organization_impl(void);
-    
+
     //============================================================
     //
     // <<< CORBA interfaces >>>
@@ -122,7 +122,7 @@ namespace SDOPackage
     //============================================================
     /*!
      * @if jp
-     * 
+     *
      * @brief [CORBA interface] Organization ID を取得する
      *
      * Organization の ID を返すオペレーション。
@@ -141,7 +141,7 @@ namespace SDOPackage
      *
      * @return The id of the Organization defined in the resource data model.
      *
-     * @exception SDONotExists The target SDO does not exist.(This exception 
+     * @exception SDONotExists The target SDO does not exist.(This exception
      *                         is mapped to CORBA standard system exception
      *                         OBJECT_NOT_EXIST.)
      * @exception NotAvailable The target SDO is reachable but cannot respond.
@@ -152,10 +152,10 @@ namespace SDOPackage
     virtual char* get_organization_id()
       throw (CORBA::SystemException,
              InvalidParameter, NotAvailable, InternalError);
-    
+
     /*!
      * @if jp
-     * 
+     *
      * @brief [CORBA interface] OrganizationProperty のセット
      *
      * ※ SDO Specification の PIM 記述とオペレーション名が異なる。
@@ -186,7 +186,7 @@ namespace SDOPackage
      *
      * @return If the operation was successfully completed.
      *
-     * @exception SDONotExists The target SDO does not exist.(This exception 
+     * @exception SDONotExists The target SDO does not exist.(This exception
      *                         is mapped to CORBA standard system exception
      *                         OBJECT_NOT_EXIST.)
      * @exception InvalidParameter The argument "organizationProperty" is null.
@@ -199,10 +199,10 @@ namespace SDOPackage
     add_organization_property(const OrganizationProperty& org_property)
       throw (CORBA::SystemException,
              InvalidParameter, NotAvailable, InternalError);
-    
+
     /*!
      * @if jp
-     * 
+     *
      * @brief [CORBA interface] OrganizationProperty の取得
      *
      * Organization が所有する OrganizationProperty を返すオペレーション。
@@ -224,7 +224,7 @@ namespace SDOPackage
      *
      * @return The list with properties of the organization.
      *
-     * @exception SDONotExists The target SDO does not exist.(This exception 
+     * @exception SDONotExists The target SDO does not exist.(This exception
      *                         is mapped to CORBA standard system exception
      *                         OBJECT_NOT_EXIST.)
      * @exception NotAvailable The target SDO is reachable but cannot respond.
@@ -235,10 +235,10 @@ namespace SDOPackage
     virtual OrganizationProperty* get_organization_property()
       throw (CORBA::SystemException,
              NotAvailable, InternalError);
-    
+
     /*!
      * @if jp
-     * 
+     *
      * @brief [CORBA interface] OrganizationProperty の特定の値の取得
      *
      * OrganizationProperty の指定された値を返すオペレーション。
@@ -265,7 +265,7 @@ namespace SDOPackage
      *
      * @return The value of property which is specified by argument "name".
      *
-     * @exception SDONotExists The target SDO does not exist.(This exception 
+     * @exception SDONotExists The target SDO does not exist.(This exception
      *                         is mapped to CORBA standard system exception
      *                         OBJECT_NOT_EXIST.)
      * @exception InvalidParameter There are no Property stored with argument
@@ -278,10 +278,10 @@ namespace SDOPackage
     virtual CORBA::Any* get_organization_property_value(const char* name)
       throw (CORBA::SystemException,
              InvalidParameter, NotAvailable, InternalError);
-    
+
     /*!
      * @if jp
-     * 
+     *
      * @brief [CORBA interface] OrganizationProperty の値のセット
      *
      * OrganizationProperty の NVList に name と value のセットを追加もしくは
@@ -313,7 +313,7 @@ namespace SDOPackage
      *
      * @return If the operation was successfully completed.
      *
-     * @exception SDONotExists The target SDO does not exist.(This exception 
+     * @exception SDONotExists The target SDO does not exist.(This exception
      *                         is mapped to CORBA standard system exception
      *                         OBJECT_NOT_EXIST.)
      * @exception NotAvailable The target SDO is reachable but cannot respond.
@@ -327,10 +327,10 @@ namespace SDOPackage
     set_organization_property_value(const char* name, const CORBA::Any& value)
       throw (CORBA::SystemException,
              InvalidParameter, NotAvailable, InternalError);
-    
+
     /*!
      * @if jp
-     * 
+     *
      * @brief [CORBA interface] OrganizationProperty の削除
      *
      * OrganizationProperty の NVList から特定のプロパティを削除する。
@@ -358,7 +358,7 @@ namespace SDOPackage
      *
      * @return If the operation was successfully completed.
      *
-     * @exception SDONotExists The target SDO does not exist.(This exception 
+     * @exception SDONotExists The target SDO does not exist.(This exception
      *                         is mapped to CORBA standard system exception
      *                         OBJECT_NOT_EXIST.)
      * @exception NotAvailable The target SDO is reachable but cannot respond.
@@ -371,10 +371,10 @@ namespace SDOPackage
     virtual CORBA::Boolean remove_organization_property(const char* name)
       throw (CORBA::SystemException,
              InvalidParameter, NotAvailable, InternalError);
-    
+
     /*!
      * @if jp
-     * 
+     *
      * @brief [CORBA interface] SDO メンバーの追加
      *
      * Organization にメンバーとして SDO を追加する。
@@ -400,7 +400,7 @@ namespace SDOPackage
      *
      * @return If the operation was successfully completed.
      *
-     * @exception SDONotExists The target SDO does not exist.(This exception 
+     * @exception SDONotExists The target SDO does not exist.(This exception
      *                         is mapped to CORBA standard system exception
      *                         OBJECT_NOT_EXIST.)
      * @exception NotAvailable The target SDO is reachable but cannot respond.
@@ -412,10 +412,10 @@ namespace SDOPackage
     virtual CORBA::Boolean add_members(const SDOList& sdo_list)
       throw (CORBA::SystemException,
              InvalidParameter, NotAvailable, InternalError);
-    
+
     /*!
      * @if jp
-     * 
+     *
      * @brief [CORBA interface] Organization のメンバーを取得する
      *
      * Organization のメンバーの SDO のリストを返す。
@@ -437,7 +437,7 @@ namespace SDOPackage
      *
      * @return Member SDOs that are contained in the Organization object.
      *
-     * @exception SDONotExists The target SDO does not exist.(This exception 
+     * @exception SDONotExists The target SDO does not exist.(This exception
      *                         is mapped to CORBA standard system exception
      *                         OBJECT_NOT_EXIST.)
      * @exception NotAvailable The target SDO is reachable but cannot respond.
@@ -448,10 +448,10 @@ namespace SDOPackage
     virtual SDOList* get_members()
       throw (CORBA::SystemException,
              NotAvailable, InternalError);
-    
+
     /*!
      * @if jp
-     * 
+     *
      * @brief [CORBA interface] SDO の セット
      *
      * SDO のリストを Organization のメンバーとしてセットする。
@@ -481,7 +481,7 @@ namespace SDOPackage
      *
      * @return If the operation was successfully completed.
      *
-     * @exception SDONotExists The target SDO does not exist.(This exception 
+     * @exception SDONotExists The target SDO does not exist.(This exception
      *                         is mapped to CORBA standard system exception
      *                         OBJECT_NOT_EXIST.)
      * @exception NotAvailable The target SDO is reachable but cannot respond.
@@ -495,10 +495,10 @@ namespace SDOPackage
     virtual CORBA::Boolean set_members(const SDOList& sdos)
       throw (CORBA::SystemException,
              InvalidParameter, NotAvailable, InternalError);
-    
+
     /*!
      * @if jp
-     * 
+     *
      * @brief [CORBA interface] SDO メンバーの削除
      *
      * Organization から引数で指定された "id" の SDO を削除する。
@@ -523,7 +523,7 @@ namespace SDOPackage
      *
      * @return If the operation was successfully completed.
      *
-     * @exception SDONotExists The target SDO does not exist.(This exception 
+     * @exception SDONotExists The target SDO does not exist.(This exception
      *                         is mapped to CORBA standard system exception
      *                         OBJECT_NOT_EXIST.)
      * @exception NotAvailable The target SDO is reachable but cannot respond.
@@ -535,10 +535,10 @@ namespace SDOPackage
     virtual CORBA::Boolean remove_member(const char* id)
       throw (CORBA::SystemException,
              InvalidParameter, NotAvailable, InternalError);
-    
+
     /*!
      * @if jp
-     * 
+     *
      * @brief [CORBA interface] Organization のオーナーを取得する
      *
      * この Organization のオーナーへの参照を返す。
@@ -558,7 +558,7 @@ namespace SDOPackage
      *
      * @return Reference of owner object.
      *
-     * @exception SDONotExists The target SDO does not exist.(This exception 
+     * @exception SDONotExists The target SDO does not exist.(This exception
      *                         is mapped to CORBA standard system exception
      *                         OBJECT_NOT_EXIST.)
      * @exception NotAvailable The target SDO is reachable but cannot respond.
@@ -569,10 +569,10 @@ namespace SDOPackage
     virtual SDOSystemElement_ptr get_owner()
       throw (CORBA::SystemException,
              NotAvailable, InternalError);
-    
+
     /*!
      * @if jp
-     * 
+     *
      * @brief [CORBA interface] Organization にオーナーをセットする
      *
      * Organization に対して SDOSystemElement をオーナーとしてセットする。
@@ -600,7 +600,7 @@ namespace SDOPackage
      *
      * @return If the operation was successfully completed.
      *
-     * @exception SDONotExists The target SDO does not exist.(This exception 
+     * @exception SDONotExists The target SDO does not exist.(This exception
      *                         is mapped to CORBA standard system exception
      *                         OBJECT_NOT_EXIST.)
      * @exception NotAvailable The target SDO is reachable but cannot respond.
@@ -614,10 +614,10 @@ namespace SDOPackage
     virtual CORBA::Boolean set_owner(SDOSystemElement_ptr sdo)
       throw (CORBA::SystemException,
              InvalidParameter, NotAvailable, InternalError);
-    
+
     /*!
      * @if jp
-     * 
+     *
      * @brief [CORBA interface] Organization の DependencyType を取得
      *
      * Organization の関係を表す "DependencyType" を返す。
@@ -642,7 +642,7 @@ namespace SDOPackage
      *         Used by Resource Data Model," on page 2-3
      *         of OMG SDO Specification.
      *
-     * @exception SDONotExists The target SDO does not exist.(This exception 
+     * @exception SDONotExists The target SDO does not exist.(This exception
      *                         is mapped to CORBA standard system exception
      *                         OBJECT_NOT_EXIST.)
      * @exception NotAvailable The target SDO is reachable but cannot respond.
@@ -653,10 +653,10 @@ namespace SDOPackage
     virtual DependencyType get_dependency()
       throw (CORBA::SystemException,
              NotAvailable, InternalError);
-    
+
     /*!
      * @if jp
-     * 
+     *
      * @brief [CORBA interface] Organization の DependencyType をセットする
      *
      * Organization の依存関係 "DependencyType" をセットする。
@@ -687,7 +687,7 @@ namespace SDOPackage
      *
      * @return If the operation was successfully completed.
      *
-     * @exception SDONotExists The target SDO does not exist.(This exception 
+     * @exception SDONotExists The target SDO does not exist.(This exception
      *                         is mapped to CORBA standard system exception
      *                         OBJECT_NOT_EXIST.)
      * @exception NotAvailable The target SDO is reachable but cannot respond.
@@ -699,7 +699,7 @@ namespace SDOPackage
     virtual CORBA::Boolean set_dependency(DependencyType dependency)
       throw (CORBA::SystemException,
              NotAvailable, InternalError);
-    
+
     // end of CORBA interface definition
     //============================================================
     Organization_ptr getObjRef() {return m_objref;};
@@ -715,7 +715,7 @@ namespace SDOPackage
      * @endif
      */
     std::string m_pId;
-    
+
     /*!
      * @if jp
      * @brief Organization に関連付けられた SDO メンバのリスト
@@ -724,19 +724,19 @@ namespace SDOPackage
      * @endif
      */
     SDOPackage::SDOList m_memberList;
-    
+
     /*!
      * @if jp
      * @brief Organization の owner
      * @else
      * @brief The owner of the Organization
      * @endif
-     */   
+     */
     SDOPackage::SDOSystemElement_var m_varOwner;
-    
+
     /*!
      * @if jp
-     * 
+     *
      * @brief 依存関係のタイプ
      *
      * Owner と member の依存関係を指定する属性。
@@ -748,7 +748,7 @@ namespace SDOPackage
      *    DependencyType は OWNER という値を持つ。
      * -# owner と member に依存関係がないフラットな構造。この場合は
      *    DependencyType は NO_DEPENDENCY という値を持つ。
-     * 
+     *
      * SDO および SDOSystemElement のサブクラスは Organization の owner として
      * 振舞うことが出来る。SDO が owner の場合にはOrganization は上記の
      * いずれかのトポロジーパターンをとる。
@@ -809,7 +809,7 @@ namespace SDOPackage
      * @endif
      */
     SDOPackage::DependencyType m_dependency;
-    
+
     /*!
      * @if jp
      *
@@ -830,7 +830,7 @@ namespace SDOPackage
      */
     SDOPackage::OrganizationProperty m_orgProperty;
     Mutex m_org_mutex;
-    
+
     /*!
      * @if jp
      * @brief  NameValue用functor
@@ -847,7 +847,7 @@ namespace SDOPackage
       }
       std::string m_name;
     };  // struct nv_name
-    
+
     /*!
      * @if jp
      * @brief  SDO用functor

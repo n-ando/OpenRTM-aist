@@ -34,7 +34,7 @@ namespace coil
    * @if jp
    * @class Timer
    * @brief Timerクラス
-   * 
+   *
    * 登録されたリスナーのコールバック関数を、設定された周期で定期的に呼び出す。
    *
    * @since 0.4.0
@@ -42,7 +42,7 @@ namespace coil
    * @else
    * @class Timer
    * @brief Timer class
-   * 
+   *
    * Invoke the callback function of registered listener periodically
    * at the set cycle.
    *
@@ -59,14 +59,14 @@ namespace coil
     /*!
      * @if jp
      * @brief コンストラクタ
-     * 
+     *
      * コンストラクタ
      *
      * @param interval タイマ起動周期
      *
      * @else
      * @brief Constructor
-     * 
+     *
      * Constructor
      *
      * @param interval The interval of timer
@@ -74,24 +74,24 @@ namespace coil
      * @endif
      */
     explicit Timer(TimeValue& interval);
-    
+
     /*!
      * @if jp
      * @brief デストラクタ
-     * 
+     *
      * デストラクタ
      *
      * @else
      * @brief Destructor
-     * 
+     *
      * Destructor
      *
      * @endif
      */
     virtual ~Timer();
-    
+
     //============================================================
-    // ACE_Task 
+    // ACE_Task
     //============================================================
     /*!
      * @if jp
@@ -115,9 +115,9 @@ namespace coil
      * @return Creation processing result
      *
      * @endif
-     */     
+     */
     virtual int open(void *args);
-    
+
     /*!
      * @if jp
      * @brief Timer 用のスレッド実行関数
@@ -136,9 +136,9 @@ namespace coil
      * @return Execution result
      *
      * @endif
-     */     
+     */
     virtual int svc(void);
-    
+
     //============================================================
     // public functions
     //============================================================
@@ -156,7 +156,7 @@ namespace coil
      * @endif
      */
     void start();
-    
+
     /*!
      * @if jp
      * @brief Timer タスク停止
@@ -171,7 +171,7 @@ namespace coil
      * @endif
      */
     void stop();
-    
+
     /*!
      * @if jp
      * @brief Timer タスク実行
@@ -191,7 +191,7 @@ namespace coil
      * @endif
      */
     void invoke();
-    
+
     /*!
      * @if jp
      * @brief リスナー登録
@@ -213,7 +213,7 @@ namespace coil
      * specifying the interval.
      * If the same listener has already been regiseterd, the value specified
      * the invocation interval of listener will be updated.
-     * 
+     *
      *
      * @param listener Listener for the registration
      * @param tm The invocation interval of listener
@@ -223,7 +223,7 @@ namespace coil
      * @endif
      */
     ListenerId registerListener(ListenerBase* listener, TimeValue tm);
-    
+
     /*!
      * @if jp
      * @brief リスナー登録
@@ -258,7 +258,7 @@ namespace coil
     {
       return registerListener(new ListenerObject<ListenerClass>(obj, cbf), tm);
     }
-    
+
     /*!
      * @if jp
      * @brief リスナー登録
@@ -287,7 +287,7 @@ namespace coil
     {
       return registerListener(new ListenerFunc(cbf), tm);
     }
-    
+
     /*!
      * @if jp
      * @brief リスナー登録解除
@@ -312,13 +312,13 @@ namespace coil
      * @endif
      */
     bool unregisterListener(ListenerId id);
-    
+
   private:
     TimeValue m_interval;
-    
+
     Mutex m_runningMutex;
     bool m_running;
-    
+
     struct Task
     {
       Task(ListenerBase* l, TimeValue p)
@@ -329,7 +329,7 @@ namespace coil
       TimeValue period;
       TimeValue remains;
     };
-    
+
     std::vector<Task> m_tasks;
     Mutex  m_taskMutex;
   };

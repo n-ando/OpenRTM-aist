@@ -114,7 +114,7 @@ namespace coil
      */
     virtual bool finished() = 0;
   };
-  
+
   /*!
    * @if jp
    *
@@ -180,7 +180,7 @@ namespace coil
     virtual ~Async_t()
     {
     }
-    
+
     /*!
      * @if jp
      *
@@ -207,7 +207,7 @@ namespace coil
         Guard<Mutex> guard(m_mutex);
         m_finished = true;
       }
-      
+
       return 0;
     }
 
@@ -283,7 +283,7 @@ namespace coil
     const bool m_autodelete;
     Mutex m_mutex;
   };
-  
+
   /*!
    * @if jp
    *
@@ -349,7 +349,7 @@ namespace coil
     virtual ~Async_ref_t()
     {
     }
-    
+
     /*!
      * @if jp
      *
@@ -445,9 +445,9 @@ namespace coil
     Func& m_func;
     bool m_finished;
     bool m_autodelete;
-    
+
   };
-  
+
   /*!
    * @if jp
    * @brief 非同期メンバー関数呼び出しヘルパー関数

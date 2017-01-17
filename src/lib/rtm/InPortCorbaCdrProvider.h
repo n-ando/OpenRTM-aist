@@ -39,7 +39,7 @@ namespace RTC
    * @class InPortCorbaCdrProvider
    * @brief InPortCorbaCdrProvider クラス
    *
-   * InPortProvider 
+   * InPortProvider
    *
    * データ転送に CORBA の OpenRTM::InPortCdr インターフェースを利用し
    * た、push 型データフロー型を実現する InPort プロバイダクラス。
@@ -78,7 +78,7 @@ namespace RTC
      * @endif
      */
     InPortCorbaCdrProvider(void);
-    
+
     /*!
      * @if jp
      * @brief デストラクタ
@@ -103,7 +103,7 @@ namespace RTC
      * 数は、InPortProvider生成直後および、接続時にそれぞれ呼ばれる可
      * 能性がある。したがって、この関数は複数回呼ばれることを想定して記
      * 述されるべきである。
-     * 
+     *
      * @param prop 設定情報
      *
      * @else
@@ -143,7 +143,7 @@ namespace RTC
      * overwritten by the given pointer to a buffer.  Since
      * OutPortProvider does not assume ownership of the buffer
      * pointer, destructor of the buffer should be done by user.
-     * 
+     *
      * @param buffer A pointer to a data buffer to be used by OutPortProvider
      *
      * @endif
@@ -159,7 +159,7 @@ namespace RTC
      * ConnectorListener.h の ConnectorDataListener, ConnectorListener
      * 等を参照のこと。InPortCorbaCdrProvider では、以下のコールバック
      * が提供される。
-     * 
+     *
      * - ON_BUFFER_WRITE
      * - ON_BUFFER_FULL
      * - ON_BUFFER_WRITE_TIMEOUT
@@ -174,7 +174,7 @@ namespace RTC
      * @param listeners リスナオブジェクト
      *
      * @else
-     * @brief Set the listener. 
+     * @brief Set the listener.
      *
      * InPort provides callback functionality that calls specific
      * listener objects according to the events in the data publishing
@@ -182,7 +182,7 @@ namespace RTC
      * ConnectorDataListener class and ConnectorListener class in
      * ConnectorListener.h. In this InPortCorbaCdrProvider provides
      * the following callbacks.
-     * 
+     *
      * - ON_BUFFER_WRITE
      * - ON_BUFFER_FULL
      * - ON_BUFFER_WRITE_TIMEOUT
@@ -246,7 +246,7 @@ namespace RTC
      */
     virtual ::OpenRTM::PortStatus put(const ::OpenRTM::CdrData& data)
       throw (CORBA::SystemException);
-    
+
   private:
     /*!
      * @if jp
@@ -259,10 +259,10 @@ namespace RTC
     convertReturn(BufferStatus::Enum status,
                   const cdrMemoryStream& data);
 
-    
+
     /*!
      * @if jp
-     * @brief ON_BUFFER_WRITE のリスナへ通知する。 
+     * @brief ON_BUFFER_WRITE のリスナへ通知する。
      * @param data cdrMemoryStream
      * @else
      * @brief Notify an ON_BUFFER_WRITE event to listeners
@@ -277,7 +277,7 @@ namespace RTC
 
     /*!
      * @if jp
-     * @brief ON_BUFFER_FULL のリスナへ通知する。 
+     * @brief ON_BUFFER_FULL のリスナへ通知する。
      * @param data cdrMemoryStream
      * @else
      * @brief Notify an ON_BUFFER_FULL event to listeners
@@ -292,7 +292,7 @@ namespace RTC
 
     /*!
      * @if jp
-     * @brief ON_BUFFER_WRITE_TIMEOUT のリスナへ通知する。 
+     * @brief ON_BUFFER_WRITE_TIMEOUT のリスナへ通知する。
      * @param data cdrMemoryStream
      * @else
      * @brief Notify an ON_BUFFER_WRITE_TIMEOUT event to listeners
@@ -307,7 +307,7 @@ namespace RTC
 
     /*!
      * @if jp
-     * @brief ON_BUFFER_WRITE_OVERWRITE のリスナへ通知する。 
+     * @brief ON_BUFFER_WRITE_OVERWRITE のリスナへ通知する。
      * @param data cdrMemoryStream
      * @else
      * @brief Notify an ON_BUFFER_WRITE_OVERWRITE event to listeners
@@ -322,7 +322,7 @@ namespace RTC
 
     /*!
      * @if jp
-     * @brief ON_RECEIVED のリスナへ通知する。 
+     * @brief ON_RECEIVED のリスナへ通知する。
      * @param data cdrMemoryStream
      * @else
      * @brief Notify an ON_RECEIVED event to listeners
@@ -337,7 +337,7 @@ namespace RTC
 
     /*!
      * @if jp
-     * @brief ON_RECEIVER_FULL のリスナへ通知する。 
+     * @brief ON_RECEIVER_FULL のリスナへ通知する。
      * @param data cdrMemoryStream
      * @else
      * @brief Notify an ON_RECEIVER_FULL event to listeners
@@ -352,7 +352,7 @@ namespace RTC
 
     /*!
      * @if jp
-     * @brief ON_RECEIVER_TIMEOUT のリスナへ通知する。 
+     * @brief ON_RECEIVER_TIMEOUT のリスナへ通知する。
      * @else
      * @brief Notify an ON_RECEIVER_TIMEOUT event to listeners
      * @endif
@@ -365,7 +365,7 @@ namespace RTC
 
     /*!
      * @if jp
-     * @brief ON_RECEIVER_ERRORのリスナへ通知する。 
+     * @brief ON_RECEIVER_ERRORのリスナへ通知する。
      * @else
      * @Brief Notify an ON_RECEIVER_ERROR event to listeners
      * @endif

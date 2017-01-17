@@ -331,7 +331,7 @@ namespace RTC
      *
      * このオペレーションは PortProfile に ConnectorProfile を追加する。
      *
-     * @param conn_profile ConnectorProfile 
+     * @param conn_profile ConnectorProfile
      *
      * @else
      *
@@ -607,7 +607,7 @@ namespace RTC
       }
       const std::string m_name;
     };
-    
+
     // Functor to find ConnectorProfile by id
     struct conn_id
     {

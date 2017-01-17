@@ -42,7 +42,7 @@ namespace RTC
    * @class PublisherBase
    *
    * @brief Publisher 基底クラス
-   * 
+   *
    * データ送出タイミングを管理して送出を駆動するPublisher* の基底クラス。
    * 各種 Publisher はこのクラスを継承して詳細を実装する。
    *
@@ -87,7 +87,7 @@ namespace RTC
      * 数は、OutPortProvider生成直後および、接続時にそれぞれ呼ばれる可
      * 能性がある。したがって、この関数は複数回呼ばれることを想定して記
      * 述されるべきである。
-     * 
+     *
      * @param prop 設定情報
      *
      * @else
@@ -177,7 +177,7 @@ namespace RTC
      * @return PORT_OK      正常終了
      *         INVALID_ARGS 不正な引数
      * @else
-     * @brief Set the listener. 
+     * @brief Set the listener.
      *
      * This function sets ConnectorListeners listener object to the
      * Publisher. By setting ConnectorListeners containing various
@@ -211,9 +211,9 @@ namespace RTC
      * コード SEND_FULL, SEND_ERROR, SEND_TIMEOUT が返される。
      *
      * これら以外のエラーの場合、PORT_ERROR が返される。
-     * 
      *
-     * @param data 書き込むデータ 
+     *
+     * @param data 書き込むデータ
      * @param sec タイムアウト時間
      * @param nsec タイムアウト時間
      *
@@ -226,7 +226,7 @@ namespace RTC
      *         CONNECTION_LOST     接続が切断されたことを検知した。
      *
      * @else
-     * @brief Write data 
+     * @brief Write data
      *
      * This function writes data into the Publisher. If this function
      * is called without initializing correctly such as a consumer,
@@ -261,7 +261,7 @@ namespace RTC
      * @if jp
      *
      * @brief アクティブ化確認
-     * 
+     *
      * Publisher はデータポートと同期して activate/deactivate される。
      * activate() / deactivate() 関数によって、アクティブ状態と非アクティ
      * ブ状態が切り替わる。この関数により、現在アクティブ状態か、非アク
@@ -272,7 +272,7 @@ namespace RTC
      * @else
      *
      * @brief If publisher is active state
-     * 
+     *
      * A Publisher can be activated/deactivated synchronized with the
      * data port.  The active state and the non-active state are made
      * transition by the "activate()" and the "deactivate()" functions
@@ -339,7 +339,7 @@ namespace RTC
      * @endif
      */
     virtual ReturnCode deactivate() = 0;
-  
+
     /*!
      * @if jp
      *
@@ -354,7 +354,7 @@ namespace RTC
      *
      * Release this Publisher.
      * When Publisher becomes unnecessary, this is invoked from
-     * PublisherFactory. 
+     * PublisherFactory.
      *
      * @endif
      */

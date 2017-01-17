@@ -371,7 +371,7 @@ namespace RTC_exp
     virtual RTC::ReturnCode_t
     activate_component(RTC::LightweightRTObject_ptr comp)
       throw (CORBA::SystemException);
-    
+
     /*!
      * @if jp
      * @brief RTコンポーネントを非アクティブ化する
@@ -636,7 +636,7 @@ namespace RTC_exp
     /*!
      * @brief onDeactivated() template function
      */
-    virtual RTC::ReturnCode_t 
+    virtual RTC::ReturnCode_t
     onDeactivated(RTC_impl::RTObjectStateMachine* comp, long int count);
     /*!
      * @brief onWaitingReset() template function
@@ -646,7 +646,7 @@ namespace RTC_exp
     /*!
      * @brief onReset() template function
      */
-    virtual RTC::ReturnCode_t 
+    virtual RTC::ReturnCode_t
     onReset(RTC_impl::RTObjectStateMachine* comp, long int count);
 
     /*!
@@ -678,7 +678,7 @@ namespace RTC_exp
      */
     bool m_svc;
     coil::Mutex m_svcmutex;
-    
+
     /*!
      * @if jp
      * @brief worker 用状態変数クラス
@@ -696,7 +696,7 @@ namespace RTC_exp
 
     /*!
      * @if jp
-     * @brief svn用の状態変数 
+     * @brief svn用の状態変数
      * @else
      * @brief A condition variable for external triggered worker
      * @endif

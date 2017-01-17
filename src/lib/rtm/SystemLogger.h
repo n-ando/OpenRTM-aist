@@ -42,7 +42,7 @@ namespace RTC
    * - ログ出力をシリアライズしかつ分配するバッファクラス
    * - ログをフォーマットするフォーマットクラス
    * で構成されるロガークラス
-   * 
+   *
    * - バッファクラス
    *  - マルチスレッド書き込みに対してシリアライズしてバッファリングする
    *  - 複数の出力先にログを出力できる
@@ -69,19 +69,19 @@ namespace RTC
    * @class Logger
    * @brief Logger class
    *
-   * This class is composed of the buffer class and the format class. 
+   * This class is composed of the buffer class and the format class.
    * - The buffer class
-   *  - The buffer class serializes to the MultiThreading writing and 
+   *  - The buffer class serializes to the MultiThreading writing and
    *    does buffering.
    *  - The buffer class can output the log at two or more output destination.
-   *    As the example of the output destination, filing, the standard, 
-   *    the log server etc. 
-   *  - The output destination can be added to the buffer with addStream. 
+   *    As the example of the output destination, filing, the standard,
+   *    the log server etc.
+   *  - The output destination can be added to the buffer with addStream.
    * - The format class
-   *  - The format class can output it by specifying the log level. 
+   *  - The format class can output it by specifying the log level.
    *  - The format is [Time] [Loglevel] [Ssuffix] [Message].
-   *  - [Time] [Loglevel] [Suffix] are added by the automatic operation. 
-   *  - [Suffix] can be specified. 
+   *  - [Time] [Loglevel] [Suffix] are added by the automatic operation.
+   *  - [Suffix] can be specified.
    *  - Loglevel
    *   - RTL_SILENT
    *   - RTL_FATAL
@@ -92,7 +92,7 @@ namespace RTC
    *   - RTL_TRACE
    *   - RTL_VERBOSE
    *   - RTL_PARANOID
-   *  - The format class can be locked/unlocked to this format object. 
+   *  - The format class can be locked/unlocked to this format object.
    *
    * @endif
    */
@@ -110,10 +110,10 @@ namespace RTC
         RTL_DEBUG,   // 5: (FATAL, ERROR, WARN, INFO, DEBUG)
         RTL_TRACE,   // 6: (FATAL, ERROR, WARN, INFO, DEBUG, TRACE)
         RTL_VERBOSE, // 7: (FATAL, ERROR, WARN, INFO, DEBUG, TRACE, VERBOSE)
-        RTL_PARANOID // 8: (FATAL, ERROR, WARN, INFO, 
+        RTL_PARANOID // 8: (FATAL, ERROR, WARN, INFO,
                      //     DEBUG, TRACE, VERBOSE, PARA)
       };
- 
+
     /*!
      * @if jp
      * @brief コンストラクタ
@@ -139,7 +139,7 @@ namespace RTC
      *
      * コンストラクタ
      *
-     * @param streambuf LogStream オブジェクト 
+     * @param streambuf LogStream オブジェクト
      *
      * @else
      *
@@ -156,11 +156,11 @@ namespace RTC
      * @if jp
      *
      * @brief 仮想デストラクタ
-     * 
+     *
      * @else
-     * 
+     *
      * @brief Virtual destructor
-     * 
+     *
      * @endif
      */
     virtual ~Logger(void);
@@ -189,32 +189,32 @@ namespace RTC
      *
      * フォーマット指定文字列は以下のとおり。
      * <pre>
-     * @%a abbreviated weekday name 
-     * @%A full weekday name 
-     * @%b abbreviated month name 
-     * @%B full month name 
-     * @%c the standard date and time string 
-     * @%d day of the month, as a number (1-31) 
-     * @%H hour, 24 hour format (0-23) 
-     * @%I hour, 12 hour format (1-12) 
-     * @%j day of the year, as a number (1-366) 
+     * @%a abbreviated weekday name
+     * @%A full weekday name
+     * @%b abbreviated month name
+     * @%B full month name
+     * @%c the standard date and time string
+     * @%d day of the month, as a number (1-31)
+     * @%H hour, 24 hour format (0-23)
+     * @%I hour, 12 hour format (1-12)
+     * @%j day of the year, as a number (1-366)
      * @%m month as a number (1-12).
      *    Note: some versions of Microsoft Visual C++ may use values that range
-     *    from 0-11. 
-     * @%M minute as a number (0-59) 
-     * @%p locale's equivalent of AM or PM 
+     *    from 0-11.
+     * @%M minute as a number (0-59)
+     * @%p locale's equivalent of AM or PM
      * @%Q millisecond as a number (0-999) from ver 1.1
      * @%q microsecond as a number (0-999) from ver 1.1
-     * @%S second as a number (0-59) 
-     * @%U week of the year, sunday as the first day 
-     * @%w weekday as a decimal (0-6, sunday=0) 
-     * @%W week of the year, monday as the first day 
-     * @%x standard date string 
-     * @%X standard time string 
-     * @%y year in decimal, without the century (0-99) 
-     * @%Y year in decimal, with the century 
-     * @%Z time zone name 
-     * %% a percent sign 
+     * @%S second as a number (0-59)
+     * @%U week of the year, sunday as the first day
+     * @%w weekday as a decimal (0-6, sunday=0)
+     * @%W week of the year, monday as the first day
+     * @%x standard date string
+     * @%X standard time string
+     * @%y year in decimal, without the century (0-99)
+     * @%Y year in decimal, with the century
+     * @%Z time zone name
+     * %% a percent sign
      * </pre>
      *
      * @param fmt 日時フォーマット
@@ -225,32 +225,32 @@ namespace RTC
      *
      * The format specification string is as follows:
      * <pre>
-     * @%a abbreviated weekday name 
-     * @%A full weekday name 
-     * @%b abbreviated month name 
-     * @%B full month name 
-     * @%c the standard date and time string 
-     * @%d day of the month, as a number (1-31) 
-     * @%H hour, 24 hour format (0-23) 
-     * @%I hour, 12 hour format (1-12) 
-     * @%j day of the year, as a number (1-366) 
+     * @%a abbreviated weekday name
+     * @%A full weekday name
+     * @%b abbreviated month name
+     * @%B full month name
+     * @%c the standard date and time string
+     * @%d day of the month, as a number (1-31)
+     * @%H hour, 24 hour format (0-23)
+     * @%I hour, 12 hour format (1-12)
+     * @%j day of the year, as a number (1-366)
      * @%m month as a number (1-12).
      *    Note: some versions of Microsoft Visual C++ may use values that range
-     *    from 0-11. 
-     * @%M minute as a number (0-59) 
-     * @%p locale's equivalent of AM or PM 
+     *    from 0-11.
+     * @%M minute as a number (0-59)
+     * @%p locale's equivalent of AM or PM
      * @%Q millisecond as a number (0-999) from ver 1.1
      * @%q microsecond as a number (0-999) from ver 1.1
-     * @%S second as a number (0-59) 
-     * @%U week of the year, sunday as the first day 
-     * @%w weekday as a decimal (0-6, sunday=0) 
-     * @%W week of the year, monday as the first day 
-     * @%x standard date string 
-     * @%X standard time string 
-     * @%y year in decimal, without the century (0-99) 
-     * @%Y year in decimal, with the century 
-     * @%Z time zone name 
-     * %% a percent sign 
+     * @%S second as a number (0-59)
+     * @%U week of the year, sunday as the first day
+     * @%w weekday as a decimal (0-6, sunday=0)
+     * @%W week of the year, monday as the first day
+     * @%x standard date string
+     * @%X standard time string
+     * @%y year in decimal, without the century (0-99)
+     * @%Y year in decimal, with the century
+     * @%Z time zone name
+     * %% a percent sign
      * </pre>
      *
      * @param fmt Datetime format
@@ -384,7 +384,7 @@ namespace RTC
     static const char* m_levelString[];
     int m_msEnable;
     int m_usEnable;
-  };    
+  };
 
 
 #ifndef NO_LOGGING
@@ -441,7 +441,7 @@ namespace RTC
    */
 #define RTC_FATAL(fmt) RTC_LOG(::RTC::Logger::RTL_FATAL, fmt)
 #define RTC_FATAL_STR(str) RTC_LOG_STR(::RTC::Logger::RTL_FATAL, str)
- 
+
   /*!
    * @if jp
    *
@@ -463,7 +463,7 @@ namespace RTC
    */
 #define RTC_ERROR(fmt) RTC_LOG(::RTC::Logger::RTL_ERROR, fmt)
 #define RTC_ERROR_STR(str) RTC_LOG_STR(::RTC::Logger::RTL_ERROR, str)
-  
+
   /*!
    * @if jp
    *
@@ -485,7 +485,7 @@ namespace RTC
    */
 #define RTC_WARN(fmt) RTC_LOG(::RTC::Logger::RTL_WARN, fmt)
 #define RTC_WARN_STR(str) RTC_LOG_STR(::RTC::Logger::RTL_WARN, str)
-  
+
   /*!
    * @if jp
    *
@@ -529,7 +529,7 @@ namespace RTC
    */
 #define RTC_DEBUG(fmt) RTC_LOG(::RTC::Logger::RTL_DEBUG, fmt)
 #define RTC_DEBUG_STR(str) RTC_LOG_STR(::RTC::Logger::RTL_DEBUG, str)
-  
+
   /*!
    * @if jp
    *
@@ -574,7 +574,7 @@ namespace RTC
    */
 #define RTC_VERBOSE(fmt) RTC_LOG(::RTC::Logger::RTL_VERBOSE, fmt)
 #define RTC_VERBOSE_STR(str) RTC_LOG_STR(::RTC::Logger::RTL_VERBOSE, str)
-  
+
   /*!
    * @if jp
    *
@@ -596,7 +596,7 @@ namespace RTC
    */
 #define RTC_PARANOID(fmt) RTC_LOG(::RTC::Logger::RTL_PARANOID, fmt)
 #define RTC_PARANOID_STR(str) RTC_LOG_STR(::RTC::Logger::RTL_PARANOID, str)
-  
+
 #else
 #define RTC_ERROR(fmt)
 #define RTC_ERROR_STR(str)
@@ -615,7 +615,7 @@ namespace RTC
 #define RTC_PARANOID(fmt)
 #define RTC_PARANOID_STR(str)
 #endif
-  
+
 }; // namespace RTC
 
 #endif  // RTC_SYSTEMLOGGER_H

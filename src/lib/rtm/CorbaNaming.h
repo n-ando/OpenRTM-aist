@@ -105,7 +105,7 @@ namespace RTC
      * @endif
      */
     explicit CorbaNaming(CORBA::ORB_ptr orb);
-    
+
     /*!
      * @if jp
      *
@@ -124,43 +124,43 @@ namespace RTC
      * @endif
      */
     CorbaNaming(CORBA::ORB_ptr orb, const char* name_server);
-    
+
     /*!
      * @if jp
      *
      * @brief 仮想デストラクタ
-     * 
+     *
      * @else
-     * 
+     *
      * @brief Virtual destructor
-     * 
+     *
      * @endif
      */
     virtual ~CorbaNaming(void){};
-    
+
     /*!
      * @if jp
      *
      * @brief ネーミングサービスの初期化
-     * 
+     *
      * 指定されたネームサーバ上のネーミングサービスを初期化します。
-     * 
+     *
      * @param name_server ネームサーバの名称
-     * 
+     *
      * @else
      *
      * @brief Initialize the Naming Service
-     * 
+     *
      * Initialize the Naming Service on the specified name server.
-     * 
+     *
      * @param name_server Name of the name server
-     * 
+     *
      * @endif
      */
     void init(const char* name_server);
 
     bool isAlive();
-    
+
     typedef CORBA::SystemException SystemException;
     typedef CosNaming::NamingContext::NotFound      NotFound;
     typedef CosNaming::NamingContext::CannotProceed CannotProceed;
@@ -169,7 +169,7 @@ namespace RTC
     typedef CosNaming::NamingContext::NotEmpty      NotEmpty;
     typedef CosNaming::NamingContextExt::InvalidAddress InvalidAddress;
     typedef std::vector<CORBA::Object_ptr> ObjectList;
-    
+
     /*!
      * @if jp
      *
@@ -214,27 +214,27 @@ namespace RTC
      *
      * @brief Bind object on specified name component position
      *
-     * Almost the same operation as CosNaming::bind(), but there is a difference 
+     * Almost the same operation as CosNaming::bind(), but there is a difference
      * that bind() is invoked for the root context of the given name server.
      *
      * Bind between Name <name> and Object <obj> on this NamingContext.
      * If c_n indicates the n-th of NameComponent,
-     * when name consists of n pieces of NameComponent, it is handled as 
-     * follows. 
+     * when name consists of n pieces of NameComponent, it is handled as
+     * follows.
      *
      * cxt->bind(<c_1, c_2, ... c_n>, obj) is the same as the following
      * operation.
      * cxt->resolve(<c_1, ... c_(n-1)>)->bind(<c_n>, obj)
      *
-     * In other word, resolve from the first to the (n-1)th context and bind 
+     * In other word, resolve from the first to the (n-1)th context and bind
      * obj as name<n> on the (n-1)th context.
-     * NemingContext of <c_1, ... c_(n-1)> for resolving name must be already 
+     * NemingContext of <c_1, ... c_(n-1)> for resolving name must be already
      * bound in bindContext() or rebindContext().
      * If NamingContext of <c_1, ... c_(n-1)> does not exist, NotFound excption
      * will occur.
      *
      * However, when flag of forced bind is true, even if <c_1, ... c_(n-1)> does
-     * not exist, finally obj will be bound to name name <c_n> by binding to 
+     * not exist, finally obj will be bound to name name <c_n> by binding to
      * the context recursively.
      *
      * Even in any case, if the object of name<n> (Object or context) is bound
@@ -256,7 +256,7 @@ namespace RTC
               const bool force = 1)
       throw (SystemException, NotFound, CannotProceed,
              InvalidName, AlreadyBound);
-    
+
     /*!
      * @if jp
      *
@@ -279,9 +279,9 @@ namespace RTC
      *
      * @brief Bind object on specified string name position
      *
-     * This is the same as bind() except as the given name is string 
-     * representation when Object is bound. 
-     * bind(toName(string_name),obj) is the same. 
+     * This is the same as bind() except as the given name is string
+     * representation when Object is bound.
+     * bind(toName(string_name),obj) is the same.
      *
      * @param string_name The string representation of name applied to object
      * @param obj Object that is associated
@@ -299,7 +299,7 @@ namespace RTC
                       const bool force = 1)
       throw (SystemException, NotFound, CannotProceed,
              InvalidName, AlreadyBound);
-    
+
     /*!
      * @if jp
      *
@@ -323,7 +323,7 @@ namespace RTC
      * @param name オブジェクトに付ける名前のネームコンポーネント
      * @param obj 関連付けられるオブジェクト
      *
-     * @exception CannotProceed <c_1, ..., c_(n-1)> に対応する NamingContext 
+     * @exception CannotProceed <c_1, ..., c_(n-1)> に対応する NamingContext
      *            のうちひとつが、すでに NamingContext 以外の object にバインド
      *            されており、処理を継続できない。
      * @exception InvalidName 名前 name が不正
@@ -338,9 +338,9 @@ namespace RTC
      * Bind new NamingContext when there is no NamingContext corresponding to
      * c_(n-1) >.
      *
-     * Finally, NamingContext corresponding to <c_1, c_2, ..., c_(n-1)> 
+     * Finally, NamingContext corresponding to <c_1, c_2, ..., c_(n-1)>
      * will be generated, or CosNaming::bind(<c_n>, object) will be invoked
-     * after solving. At this time, if the binding already exists, 
+     * after solving. At this time, if the binding already exists,
      * the AlreadyBound exception will occur.
      *
      * During process, when Binding that is not NamingContext of the same name
@@ -353,7 +353,7 @@ namespace RTC
      *
      * @exception CannotProceed Since one of NamingContext corresponding to
      *                          <c_1, ..., c_(n-1)> is already bound to object
-     *                          other than NamingContext and processing cannot 
+     *                          other than NamingContext and processing cannot
      *                          be continued
      * @exception InvalidName name 'name' is invalid.
      * @exception AlreadyBound The object of name<c_n> is already bound.
@@ -364,7 +364,7 @@ namespace RTC
                        const CosNaming::Name& name,
                        CORBA::Object_ptr obj)
       throw (SystemException, CannotProceed, InvalidName, AlreadyBound);
-    
+
     /*!
      * @if jp
      *
@@ -387,8 +387,8 @@ namespace RTC
      *
      * @brief Rebind object
      *
-     * This is the same as bind() except as Binding specified by name 
-     * already exists. If the binding already exists, new binding will be 
+     * This is the same as bind() except as Binding specified by name
+     * already exists. If the binding already exists, new binding will be
      * replaced.
      *
      * @param name NameComponent of name applied to object
@@ -405,7 +405,7 @@ namespace RTC
     void rebind(const CosNaming::Name& name, CORBA::Object_ptr obj,
                 const bool force = 1)
       throw (SystemException, NotFound, CannotProceed, InvalidName);
-    
+
     /*!
      * @if jp
      *
@@ -428,7 +428,7 @@ namespace RTC
      * @brief Rebind Object
      *
      * This is the same as rebind() except as the given name is string
-     * representation when object is rebound. rebind(toName(string_name), obj) 
+     * representation when object is rebound. rebind(toName(string_name), obj)
      * is the same.
      *
      * @param string_name NameComponent of name applied to object
@@ -445,7 +445,7 @@ namespace RTC
     void rebindByString(const char* string_name, CORBA::Object_ptr obj,
                         const bool force = 1)
       throw (SystemException, NotFound, CannotProceed, InvalidName);
-    
+
     /*!
      * @if jp
      *
@@ -468,10 +468,10 @@ namespace RTC
      *
      * @brief Bind intermediate context recursively and rebind object
      *
-     * This is the same as bindRecursive() except as NamingContext 
+     * This is the same as bindRecursive() except as NamingContext
      * or Object specified by name <c_n> already exists.
      *
-     * If the binding specified by name <c_n> already exists, 
+     * If the binding specified by name <c_n> already exists,
      * new binding will be replaced.
      *
      * @param context NamingContext that starts the bind
@@ -487,13 +487,13 @@ namespace RTC
                          const CosNaming::Name& name,
                          CORBA::Object_ptr obj)
       throw (SystemException, CannotProceed, InvalidName);
-    
+
     /*!
      * @if jp
      *
      * @brief NamingContext を bind する
      *
-     * bind されるオブジェクトが NamingContext であることを除いて bind() 
+     * bind されるオブジェクトが NamingContext であることを除いて bind()
      * と同じである。
      *
      * @param name オブジェクトに付ける名前のネームコンポーネント
@@ -529,7 +529,7 @@ namespace RTC
                      const bool force = 1)
       throw (SystemException, NotFound, CannotProceed,
              InvalidName, AlreadyBound);
-    
+
     /*!
      * @if jp
      *
@@ -572,7 +572,7 @@ namespace RTC
                      const bool force = 1)
       throw (SystemException, NotFound, CannotProceed,
              InvalidName, AlreadyBound);
-    
+
     /*!
      * @if jp
      *
@@ -601,13 +601,13 @@ namespace RTC
     void bindContextRecursive(CosNaming::NamingContext_ptr context,
                               const CosNaming::Name& name,
                               CosNaming::NamingContext_ptr name_cxt);
-    
+
     /*!
      * @if jp
      *
      * @brief NamingContext を rebind する
      *
-     * name で指定されたコンテキストがすでに存在する場合を除いて bindContext() 
+     * name で指定されたコンテキストがすでに存在する場合を除いて bindContext()
      * と同じである。
      * バインディングがすでに存在する場合には、新しいバインディングに
      * 置き換えられる。
@@ -644,13 +644,13 @@ namespace RTC
                        CosNaming::NamingContext_ptr name_cxt,
                        const bool force = 1)
       throw (SystemException, NotFound, CannotProceed, InvalidName);
-    
+
     /*!
      * @if jp
      *
      * @brief NamingContext を rebind する
      *
-     * name で指定されたコンテキストがすでに存在する場合を除いて bindContext() 
+     * name で指定されたコンテキストがすでに存在する場合を除いて bindContext()
      * と同じである。
      * バインディングがすでに存在する場合には、新しいバインディングに
      * 置き換えられる。
@@ -687,7 +687,7 @@ namespace RTC
                        CosNaming::NamingContext_ptr name_cxt,
                        const bool force = 1)
       throw (SystemException, NotFound, CannotProceed, InvalidName);
-    
+
     /*!
      * @if jp
      *
@@ -704,7 +704,7 @@ namespace RTC
      *
      * @brief Rebind intermediate context recursively and rebind NamingContext
      *
-     * This is the same as rebindRecursive() except as the bound object is 
+     * This is the same as rebindRecursive() except as the bound object is
      * NamingContext.
      *
      * @param context NamingContext that starts the bind
@@ -716,7 +716,7 @@ namespace RTC
     void rebindContextRecursive(CosNaming::NamingContext_ptr context,
                                 const CosNaming::Name& name,
                                 CosNaming::NamingContext_ptr name_cxt);
-    
+
     /*!
      * @if jp
      *
@@ -724,7 +724,7 @@ namespace RTC
      *
      * name に bind されているオブジェクト参照を返す。
      * ネームコンポーネント <c_1, c_2, ... c_n> は再帰的に解決される。
-     * 
+     *
      * CosNaming::resolve() とほぼ同等の働きをするが、常に与えられた
      * ネームサーバのルートコンテキストに対して resolve() が呼び出される点が
      * 異なる。
@@ -743,8 +743,8 @@ namespace RTC
      *
      * Return the object reference that is bound to name.
      * Resolve the name component<c_1, c_2, ... c_n> recursively.
-     * 
-     * Almost the same operation as CosNaming::resolve(), 
+     *
+     * Almost the same operation as CosNaming::resolve(),
      * but there is a difference that resolve() is invoked for the root context
      * of the given name server.
      *
@@ -760,7 +760,7 @@ namespace RTC
      */
     CORBA::Object_ptr resolve(const CosNaming::Name& name)
       throw (SystemException, NotFound, CannotProceed, InvalidName);
-    
+
     /*!
      * @if jp
      *
@@ -768,7 +768,7 @@ namespace RTC
      *
      * name に bind されているオブジェクト参照を返す。
      * ネームコンポーネント <c_1, c_2, ... c_n> は再帰的に解決される。
-     * 
+     *
      * CosNaming::resolve() とほぼ同等の働きをするが、常に与えられた
      * ネームサーバのルートコンテキストに対して resolve() が呼び出される点が
      * 異なる。
@@ -787,12 +787,12 @@ namespace RTC
      *
      * Return the object reference that is bound to name.
      * Resolve the name component<c_1, c_2, ... c_n> recursively.
-     * 
-     * Almost the same operation as CosNaming::resolve(), 
+     *
+     * Almost the same operation as CosNaming::resolve(),
      * but there is a difference that resolve() is invoked for the root context
      * of the given name server.
      *
-     * @param string_name The string representation of object name 
+     * @param string_name The string representation of object name
      *             that should be resolved
      *
      * @return The reference to the resolved object
@@ -805,7 +805,7 @@ namespace RTC
      */
     CORBA::Object_ptr resolve(const char* string_name)
       throw (SystemException, NotFound, CannotProceed, InvalidName);
-    
+
     /*!
      * @if jp
      *
@@ -813,7 +813,7 @@ namespace RTC
      *
      * name に bind されているオブジェクト参照を返す。
      * ネームコンポーネント <c_1, c_2, ... c_n> は再帰的に解決される。
-     * 
+     *
      * CosNaming::unbind() とほぼ同等の働きをするが、常に与えられた
      * ネームサーバのルートコンテキストに対して unbind() が呼び出される点が
      * 異なる。
@@ -830,8 +830,8 @@ namespace RTC
      *
      * Return the object reference that is bound to name.
      * Resolve the name component<c_1, c_2, ... c_n> recursively.
-     * 
-     * Almost the same operation as CosNaming::unbind(), 
+     *
+     * Almost the same operation as CosNaming::unbind(),
      * but there is a difference that unbind() is invoked for the root context
      * of the always given name server.
      *
@@ -845,7 +845,7 @@ namespace RTC
      */
     void unbind(const CosNaming::Name& name)
       throw (SystemException, NotFound, CannotProceed, InvalidName);
-    
+
     /*!
      * @if jp
      *
@@ -853,7 +853,7 @@ namespace RTC
      *
      * name に bind されているオブジェクト参照を返す。
      * ネームコンポーネント <c_1, c_2, ... c_n> は再帰的に解決される。
-     * 
+     *
      * CosNaming::unbind() とほぼ同等の働きをするが、常に与えられた
      * ネームサーバのルートコンテキストに対して unbind() が呼び出される点が
      * 異なる。
@@ -872,8 +872,8 @@ namespace RTC
      *
      * Return the object reference that is bound to name.
      * Resolve the name component<c_1, c_2, ... c_n> recursively.
-     * 
-     * Almost the same operation as CosNaming::unbind(), 
+     *
+     * Almost the same operation as CosNaming::unbind(),
      * but there is a difference that unbind() is invoked for the root context
      * of the always given name server.
      *
@@ -890,7 +890,7 @@ namespace RTC
      */
     void unbind(const char* string_name)
       throw (SystemException, NotFound, CannotProceed, InvalidName);
-    
+
     /*!
      * @if jp
      *
@@ -898,7 +898,7 @@ namespace RTC
      *
      * 与えられたネームサーバ上で生成された NamingContext を返す。
      * 返された NamingContext は bind されていない。
-     * 
+     *
      * @return 生成された新しい NamingContext
      *
      * @else
@@ -907,13 +907,13 @@ namespace RTC
      *
      * Return NamingContext that has been created on the given name server.
      * The returned NamingContext has not bound yet.
-     * 
+     *
      * @return New created NamingContext
      *
      * @endif
      */
     CosNaming::NamingContext_ptr newContext();
-    
+
     /*!
      * @if jp
      *
@@ -921,7 +921,7 @@ namespace RTC
      *
      * 与えられた name に対して新しいコンテキストをバインドする。
      * 生成された　NamingContext はネームサーバ上で生成されたものである。
-     * 
+     *
      * @param name NamingContextに付ける名前のネームコンポーネント
      * @param force trueの場合、途中のコンテキストを強制的にバインドする
      *              (デフォルト値:true)
@@ -939,7 +939,7 @@ namespace RTC
      *
      * Bind new context for the given name.
      * The created NamingContext is a creation on the name server.
-     * 
+     *
      * @param name NameComponent applied to NamingContext
      * @param force If true, the intermediate context is bound forcibly.
      *              (The default value:true)
@@ -957,7 +957,7 @@ namespace RTC
     bindNewContext(const CosNaming::Name& name, bool force = true)
       throw (SystemException, NotFound, CannotProceed,
              InvalidName, AlreadyBound);
-    
+
     /*!
      * @if jp
      *
@@ -965,11 +965,11 @@ namespace RTC
      *
      * 与えられた文字列に対応する新しいコンテキストをバインドする。
      * 生成された　NamingContext はネームサーバ上で生成されたものである。
-     * 
+     *
      * @param string_name NamingContextに付ける名前の文字列表現
      * @param force trueの場合、途中のコンテキストを強制的にバインドする
      *              (デフォルト値:true)
-     * 
+     *
      * @return 生成された新しい NamingContext
      *
      * @exception NotFound 途中の <c_1, c_2, ..., c_(n-1)> が存在しない。
@@ -983,12 +983,12 @@ namespace RTC
      *
      * Bind new context corresponding to the given string.
      * The created NamingContext is a creation on the name server.
-     * 
-     * @param string_name The string representation of name applied to 
+     *
+     * @param string_name The string representation of name applied to
      *                    NamingContext
      * @param force If true, the intermediate context is bound forcibly.
      *              (The default value:true)
-     * 
+     *
      * @return New created NamingContext
      *
      * @exception NotFound There is not <c_1, c_2, ..., c_(n-1)>.
@@ -1002,7 +1002,7 @@ namespace RTC
     bindNewContext(const char* string_name, bool force = true)
       throw (SystemException, NotFound, CannotProceed,
              InvalidName, AlreadyBound);
-    
+
     /*!
      * @if jp
      *
@@ -1011,7 +1011,7 @@ namespace RTC
      * context で指定された NamingContext を非アクティブ化する。
      * context に他のコンテキストがバインドされている場合は NotEmpty 例外が
      * 発生する。
-     * 
+     *
      * @param context 非アクティブ化する NamingContext
      *
      * @exception NotEmpty 対象context に他のコンテキストがバインドされている。
@@ -1022,17 +1022,17 @@ namespace RTC
      *
      * Destroy the specified naming context.
      * Any bindings should be <unbind> in which the given context is bound to
-     * some names before invoking <destroy> operation on it. 
+     * some names before invoking <destroy> operation on it.
      *
      * @param context NamingContext which is destroied.
-     *     
+     *
      * @exception NotEmpty The target context is bound to the other context.
      *
      * @endif
      */
     void destroy(CosNaming::NamingContext_ptr context)
       throw (SystemException, NotEmpty);
-    
+
     /*!
      * @if jp
      * @brief NamingContext を再帰的に下って非アクティブ化する
@@ -1052,7 +1052,7 @@ namespace RTC
      *
      * @brief Destroy the naming context recursively
      *
-     * For NamingContext given by Context, Destroy name <c_n> with 
+     * For NamingContext given by Context, Destroy name <c_n> with
      * solving the name component specified by name as NamingContext recursively.
      *
      * @param context NamingContext which is Destroied.
@@ -1066,7 +1066,7 @@ namespace RTC
      */
     void destroyRecursive(CosNaming::NamingContext_ptr context)
       throw (SystemException, NotEmpty, NotFound, CannotProceed, InvalidName);
-    
+
     /*!
      * @if jp
      * @brief すべての Binding を削除する
@@ -1081,7 +1081,7 @@ namespace RTC
      * @endif
      */
     void clearAll();
-    
+
     /*!
      * @if jp
      * @brief 与えられた NamingContext の Binding を取得する
@@ -1197,7 +1197,7 @@ namespace RTC
     void listByKind(const char* string_name,
                     const char* string_kind,
                     CosNaming::BindingList_var& bl);
-    
+
     //============================================================
     // interface of NamingContextExt
     //============================================================
@@ -1228,7 +1228,7 @@ namespace RTC
      */
     char* toString(const CosNaming::Name& name)
       throw (SystemException, InvalidName);
-    
+
     /*!
      * @if jp
      * @brief 与えられた文字列表現を NameComponent に分解する
@@ -1256,7 +1256,7 @@ namespace RTC
      */
     CosNaming::Name toName(const char* string_name)
       throw (SystemException, InvalidName);
-    
+
     /*!
      * @if jp
      * @brief 与えられた addre と string_name から URL表現を取得する
@@ -1288,7 +1288,7 @@ namespace RTC
      */
     char* toUrl(char* addr, char* string_name)
       throw (SystemException, InvalidAddress, InvalidName);
-    
+
     /*!
      * @if jp
      * @brief 与えられた文字列表現を resolve しオブジェクトを返す
@@ -1323,15 +1323,15 @@ namespace RTC
     CORBA::Object_ptr resolveStr(const char* string_name)
       throw (SystemException, NotFound, CannotProceed,
              InvalidName, AlreadyBound);
-    
+
     //============================================================
     // Find functions
     //============================================================
-    
+
     //    ObjectList find(const char* name, const char* kind);
     //    ObjectList findById(const char* name, const char* kind);
     //    ObjectList findByKind(const char* name, const char* kind);
-    
+
     /*!
      * @if jp
      *
@@ -1351,9 +1351,9 @@ namespace RTC
      * @else
      * @brief Bind or resolve the given name component
      *
-     * Bind object at the position that specified in NameComponent for the 
+     * Bind object at the position that specified in NameComponent for the
      * specified context.
-     * When other elements are already bound at the same position, get the 
+     * When other elements are already bound at the same position, get the
      * already bound element.
      *
      * @param context The context to bind or resole
@@ -1367,7 +1367,7 @@ namespace RTC
     CORBA::Object_ptr bindOrResolve(CosNaming::NamingContext_ptr context,
                                     const CosNaming::Name& name,
                                     CORBA::Object_ptr obj);
-    
+
     /*!
      * @if jp
      *
@@ -1387,16 +1387,16 @@ namespace RTC
      * @else
      * @brief Bind or resolve the given name component
      *
-     * Bind Context at the position that specified in NameComponent for the 
+     * Bind Context at the position that specified in NameComponent for the
      * specified context.
-     * When other elements are already bound at the same position, get the 
+     * When other elements are already bound at the same position, get the
      * already bound element.
      *
      * @param context The context to bind or resole
      * @param name NameComponent applied to object
      * @param new_context Context that is associated
      *
-     * @return The Context that is bound at the position specified with 
+     * @return The Context that is bound at the position specified with
      *         NameComponent
      *
      * @endif
@@ -1405,7 +1405,7 @@ namespace RTC
     bindOrResolveContext(CosNaming::NamingContext_ptr context,
                          const CosNaming::Name& name,
                          CosNaming::NamingContext_ptr new_context);
-    
+
     /*!
      * @if jp
      * @brief 名前をバインドまたは解決する
@@ -1423,15 +1423,15 @@ namespace RTC
      * @else
      * @brief Bind or resolve the given name component
      *
-     * Bind new Context at the position that specified in NameComponent for the 
+     * Bind new Context at the position that specified in NameComponent for the
      * specified context.
-     * When other elements are already bound at the same position, get the 
+     * When other elements are already bound at the same position, get the
      * already bound element.
      *
      * @param context The context to bind or resole
      * @param name NameComponent that indicates the position of new context
      *
-     * @return The Context that is bound at the position specified with 
+     * @return The Context that is bound at the position specified with
      *         NameComponent
      *
      * @endif
@@ -1439,7 +1439,7 @@ namespace RTC
     CosNaming::NamingContext_ptr
     bindOrResolveContext(CosNaming::NamingContext_ptr context,
                          const CosNaming::Name& name);
-    
+
     /*!
      * @if jp
      * @brief ネームサーバの名前を取得する
@@ -1458,7 +1458,7 @@ namespace RTC
      * @endif
      */
     const char* getNameServer();
-    
+
     /*!
      * @if jp
      * @brief ルートコンテキストを取得する
@@ -1477,7 +1477,7 @@ namespace RTC
      * @endif
      */
     CosNaming::NamingContext_ptr getRootContext();
-    
+
     /*!
      * @if jp
      * @brief オブジェクトがネーミングコンテキストか判別する
@@ -1500,7 +1500,7 @@ namespace RTC
      * @endif
      */
     bool isNamingContext(CORBA::Object_ptr obj);
-    
+
     /*!
      * @if jp
      * @brief 与えられた名前がネーミングコンテキストかどうか
@@ -1523,7 +1523,7 @@ namespace RTC
      * @endif
      */
     bool isNamingContext(const CosNaming::Name& name);
-    
+
     /*!
      * @if jp
      * @brief 与えられた名前がネーミングコンテキストかどうか
@@ -1546,7 +1546,7 @@ namespace RTC
      * @endif
      */
     bool isNamingContext(const char* string_name);
-    
+
     /*!
      * @if jp
      * @brief ネームコンポーネントの部分を返す
@@ -1565,7 +1565,7 @@ namespace RTC
      * @brief Get subset of given name component
      *
      * Get the name component in specified range.
-     * Return the name component except the last element if the end 
+     * Return the name component except the last element if the end
      * position is not specified.
      *
      * @param name The target NameComponent for search
@@ -1579,7 +1579,7 @@ namespace RTC
     CosNaming::Name subName(const CosNaming::Name& name,
                             CORBA::Long begin,
                             CORBA::Long end = -1);
-    
+
   protected:
     /*!
      * @if jp
@@ -1600,12 +1600,12 @@ namespace RTC
      * @brief Get string representation of name component
      *
      * Get string representation of the name component in specified range.
-     * In string representation, if NameComponent consists of 
-     * {Nc[0],Nc[1],Nc[2]...}, the format of 
+     * In string representation, if NameComponent consists of
+     * {Nc[0],Nc[1],Nc[2]...}, the format of
      * Nc[0]id.Nc[0].kind/Nc[1]id.Nc[1].kind/Nc[2].id/Nc[2].kind...
      * will be got.
      * It is rounded by the specified length when the length of the got
-     * string is over the specified length. 
+     * string is over the specified length.
      *
      * @param name The getting target NameComponent
      * @param string_name The string of getting result
@@ -1632,8 +1632,8 @@ namespace RTC
      * @brief Get string length of the name component's string representation
      *
      * Get string length of the name component's string representation.
-     * In string representation, if NameComponent consists of 
-     * {Nc[0],Nc[1],Nc[2]・・・}, the format of 
+     * In string representation, if NameComponent consists of
+     * {Nc[0],Nc[1],Nc[2]・・・}, the format of
      * Nc[0]id.Nc[0].kind/Nc[1]id.Nc[1].kind/Nc[2].id/Nc[2].kind・・・
      * will be got.
      *
@@ -1644,7 +1644,7 @@ namespace RTC
      * @endif
      */
     CORBA::ULong getNameLength(const CosNaming::Name& name);
-    
+
     /*!
      * @if jp
      * @brief 文字列の分割
@@ -1673,7 +1673,7 @@ namespace RTC
     unsigned int split(const std::string& input,
                        const std::string& delimiter,
                        std::vector<std::string>& results);
-    
+
     /*!
      * @if jp
      * @brief ORB
@@ -1682,7 +1682,7 @@ namespace RTC
      * @endif
      */
     CORBA::ORB_var m_varORB;
-    
+
     /*!
      * @if jp
      * @brief ネームサーバ名称
@@ -1699,10 +1699,10 @@ namespace RTC
      * @endif
      */
     CosNaming::NamingContextExt_var m_rootContext;
-    
+
   private:
     CORBA::ULong m_blLength;
-    
+
   }; // class CorbaNaming
 }; // namespace RTC
 

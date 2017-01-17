@@ -211,7 +211,7 @@ namespace RTC_impl
      *
      * @else
      *
-     * @brief Converting ExecutionKind enum to string 
+     * @brief Converting ExecutionKind enum to string
      *
      * This function converts enumeration (PERIODIC, EVENT_DRIVEN,
      * OTHER) defined in RTC::ExecutionKind to string.
@@ -567,7 +567,7 @@ namespace RTC_impl
     class find_participant
     {
       RTC::RTObject_var m_comp;
-    public:      
+    public:
       explicit find_participant(RTC::RTObject_ptr comp)
         : m_comp(RTC::RTObject::_duplicate(comp)) {}
       bool operator()(RTC::RTObject_ptr comp)

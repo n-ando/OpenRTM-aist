@@ -29,7 +29,7 @@
 
 /*!
  * @if jp
- * @namespace coil 
+ * @namespace coil
  *
  * @brief Common Object Interface Layer
  *
@@ -56,7 +56,7 @@ namespace coil
    *
    * プロパティリストには、その「デフォルト値」として別のプロパティリストを持つ
    * ことができる。元のプロパティリストでプロパティキーが見つからないと、この
-   * 2番目のプロパティリストが検索される。 
+   * 2番目のプロパティリストが検索される。
    *
    * プロパティの取得には getProperty() 、プロパティのセットには setProperty() と
    * いったメソッドを使用することが推奨される。
@@ -78,21 +78,21 @@ namespace coil
    *
    * The Properties class represents a persistent set of properties. The
    * Properties can be saved to a stream or loaded from a stream. Each key and
-   * its corresponding value in the property list is a string. 
+   * its corresponding value in the property list is a string.
    *
    * A property list can contain another property list as its "defaults". This
    * second property list is searched if the property key is not found in the
-   * original property list. 
+   * original property list.
    *
    * It is recommended to use these method; setProperty() to get properties,
-   * setProperty() to set properties. 
+   * setProperty() to set properties.
    *
    * When propertis are stored in a stream or when they are loaded from
    * the stream, the ISO 8859-1 character encoding is used.
    * Characters that cannot be directly represented in this encoding can be used.
    *
    * This class has almost same methods of Java's Properties class
-   * (java.util.Properties). Also, input and output files are compatible with 
+   * (java.util.Properties). Also, input and output files are compatible with
    * outputs of Java's Properties class, but Unicode encoded property file
    * is not be supported.
    *
@@ -111,7 +111,7 @@ namespace coil
      *
      * @param key プロパティのキー(デフォルト値:"")
      * @param value プロパティの値(デフォルト値:"")
-     * 
+     *
      * @else
      *
      * @brief Constructor(Create only root node)
@@ -121,11 +121,11 @@ namespace coil
      *
      * @param key Properties's keys(The default values:"")
      * @param value Properties's values(The default values:"")
-     * 
+     *
      * @endif
      */
     Properties(const char* key = "", const char* value = "");
-    
+
     /*!
      * @if jp
      *
@@ -133,22 +133,22 @@ namespace coil
      *
      * std::string の std::map をデフォルト値にもつ Properties を作成する。
      * 値は全てデフォルト値として設定される。
-     * 
+     *
      * @param defaults デフォルト値として指定されるmap
-     * 
+     *
      * @else
      *
      * @brief Constructor(Give the default value with map)
      *
      * Create Properties with default value of std::string map.
      * All values are set as default value.
-     * 
+     *
      * @param defaults map that is spcified as the default value
-     * 
+     *
      * @endif
      */
     explicit Properties(std::map<std::string, std::string>& defaults);
-    
+
     /*!
      * @if jp
      *
@@ -173,10 +173,10 @@ namespace coil
      * // もしくは
      * Properties p(defaults, 10);
      * </pre>
-     * 
+     *
      * @param defaults デフォルト値を指定する配列
      * @param num デフォルト値を設定する要素数(デフォルト値:LONG_MAX)
-     * 
+     *
      * @else
      *
      * @brief Constructor(Give the default value with char*[])
@@ -200,15 +200,15 @@ namespace coil
      * // or
      * Properties p(defaults, 10);
      * </pre>
-     * 
+     *
      * @param defaults Array that specifies the default values
      * @param num Number of elements that specifies the default value
      *            (The default value:LONG_MAX)
-     * 
+     *
      * @endif
      */
     Properties(const char* defaults[], long num = LONG_MAX);
-    
+
     /*!
      * @if jp
      * @brief コピーコンストラクタ
@@ -220,13 +220,13 @@ namespace coil
      *
      * @brief Copy Constructor
      *
-     * All of given Properties's keys, values and default values 
+     * All of given Properties's keys, values and default values
      * are copied to new Properties.
-     * 
+     *
      * @endif
      */
     Properties(const Properties& prop);
-    
+
     /*!
      * @if jp
      * @brief 代入演算子
@@ -245,7 +245,7 @@ namespace coil
      * @endif
      */
     Properties& operator=(const Properties& prop);
-    
+
     /*!
      * @if jp
      *
@@ -258,11 +258,11 @@ namespace coil
      * @endif
      */
     virtual ~Properties(void);
-    
+
     //============================================================
     // public functions
     //============================================================
-    
+
     /*!
      * @if jp
      * @brief Name の取得
@@ -281,7 +281,7 @@ namespace coil
      * @endif
      */
     inline const char* getName(void) const          {return name.c_str();}
-    
+
     /*!
      * @if jp
      * @brief 値の取得
@@ -300,7 +300,7 @@ namespace coil
      * @endif
      */
     inline const char* getValue(void) const         {return value.c_str();}
-    
+
     /*!
      * @if jp
      * @brief デフォルト値の取得
@@ -322,7 +322,7 @@ namespace coil
     {
       return default_value.c_str();
     }
-    
+
     /*!
      * @if jp
      * @brief 子要素の取得
@@ -341,7 +341,7 @@ namespace coil
      * @endif
      */
     inline const std::vector<Properties*>& getLeaf(void) const {return leaf;}
-    
+
     /*!
      * @if jp
      * @brief ルート要素の取得
@@ -360,7 +360,7 @@ namespace coil
      * @endif
      */
     inline const Properties* getRoot(void) const    {return root;}
-    
+
     /*!
      * @if jp
      *
@@ -369,7 +369,7 @@ namespace coil
      * 指定されたキーを持つプロパティを、プロパティリストから探す。
      * そのキーがプロパティリストにないと、デフォルトのプロパティリスト、
      * さらにそのデフォルト値が繰り返し調べられる。
-     * そのプロパティが見つからない場合は、null が返される。 
+     * そのプロパティが見つからない場合は、null が返される。
      *
      * @param key プロパティキー
      *
@@ -382,7 +382,7 @@ namespace coil
      * Search for the property with the specified key in this property list.
      * If the key is not found in this property list, the default property list,
      * and its defaults, recursively, are then checked. The method returns null
-     * if the property is not found. 
+     * if the property is not found.
      *
      * @param key The property key.
      *
@@ -391,14 +391,14 @@ namespace coil
      * @endif
      */
     const std::string& getProperty(const std::string& key) const;
-    
+
     /*!
      * @if jp
      *
      * @brief 指定されたキーを持つプロパティを、プロパティリストから探す
      *
      * 指定されたキーを持つプロパティを、プロパティリストから探す。
-     * そのキーがプロパティリストにない場合は、デフォルト値の引数が返される。 
+     * そのキーがプロパティリストにない場合は、デフォルト値の引数が返される。
      *
      * @param key プロパティキー
      * @param def デフォルト値
@@ -410,11 +410,11 @@ namespace coil
      * @brief Search for the property with the specified key in property list
      *
      * Search for the property with the specified key in this property list.
-     * The method returns the default value argument if the property is not 
+     * The method returns the default value argument if the property is not
      * found.
      *
      * @param key The property key
-     * @param def The  default value. 
+     * @param def The  default value.
      *
      * @return The value in this property list with the specified key value.
      *
@@ -422,7 +422,7 @@ namespace coil
      */
     const std::string& getProperty(const std::string& key,
                                    const std::string& def) const;
-    
+
     /*!
      * @if jp
      *
@@ -442,8 +442,8 @@ namespace coil
      *
      * Search for the property with the specified key in this property list.
      * If the key is not found in this property list, the default property list,
-     * and its defaults, recursively, are then checked. The method returns 
-     * empty string if the property is not found. 
+     * and its defaults, recursively, are then checked. The method returns
+     * empty string if the property is not found.
      *
      * @param key The property key
      *
@@ -452,7 +452,7 @@ namespace coil
      * @endif
      */
     const std::string& operator[](const std::string& key) const;
-    
+
     /*!
      * @if jp
      *
@@ -474,7 +474,7 @@ namespace coil
      *
      * Search for the property with the specified key in this property list.
      * If the key is not found in this property list, the default property list,
-     * and its defaults, recursively, are then checked. The method returns 
+     * and its defaults, recursively, are then checked. The method returns
      * empty string if the property is not found.
      * If there is no element with the same value in the left value, insert the
      * right value in corresponding property.
@@ -486,7 +486,7 @@ namespace coil
      * @endif
      */
     std::string& operator[](const std::string& key);
-    
+
     /*!
      * @if jp
      * @brief 指定されたキーに対してデフォルト値を取得する
@@ -512,7 +512,7 @@ namespace coil
      * @endif
      */
     const std::string& getDefault(const std::string& key) const;
-    
+
     /*!
      * @if jp
      *
@@ -522,7 +522,7 @@ namespace coil
      * すでに key に対する値を持っている場合、戻り値に古い値を返す。
      *
      * @param key プロパティリストに配置されるキー
-     * @param value key に対応する値 
+     * @param value key に対応する値
      *
      * @return プロパティリストの指定されたキーの前の値。それがない場合は null
      *
@@ -534,7 +534,7 @@ namespace coil
      * If the property list has a value of "key", old value is returned.
      *
      * @param key The key to be placed into this property list.
-     * @param value The value corresponding to key. 
+     * @param value The value corresponding to key.
      *
      * @return The previous value of the specified key in this property list,
      *         or null if it did not have one.
@@ -542,7 +542,7 @@ namespace coil
      *@endif
      */
     std::string setProperty(const std::string& key, const std::string& value);
-    
+
     /*!
      * @if jp
      * @brief デフォルト値を登録する
@@ -567,7 +567,7 @@ namespace coil
      * @endif
      */
     std::string setDefault(const std::string& key, const std::string& value);
-    
+
     /*!
      * @if jp
      * @brief Properties にデフォルト値をまとめて登録する
@@ -576,10 +576,10 @@ namespace coil
      * デフォルト値は char* の配列により与えられ、key と value の対になって
      * おり、リストの終端は配列の数を表す引数 num か、空文字の key で与えらられ
      * なければならない。
-     * 
+     *
      * @param defaults デフォルト値を指定する配列
      * @param num デフォルト値を設定する要素数(デフォルト値:LONG_MAX)
-     * 
+     *
      * @else
      * @brief Set a default value together in the property list
      *
@@ -588,15 +588,15 @@ namespace coil
      * The default values are given by array of char*, which should be pairs
      * of "key" and "value". The end of list is specified by argument "num",
      * which specifies number of array or null character of key.
-     * 
+     *
      * @param defaults Array that specifies the default values
      * @param num Number of elements that specifies the default value
      *            (Default value:LONG_MAX)
-     * 
+     *
      * @endif
      */
     void setDefaults(const char* defaults[], long num = LONG_MAX);
-    
+
     //============================================================
     // load and save functions
     //============================================================
@@ -622,7 +622,7 @@ namespace coil
      * @endif
      */
     void list(std::ostream& out);
-    
+
     /*!
      * @if jp
      *
@@ -653,31 +653,31 @@ namespace coil
      * される。
      * また、行の最後の文字が \ である場合は、次の行は現在の行の継続として
      * 扱われる。その場合、\ と行区切り文字が破棄され、継続行の先頭に空白が
-     * あればそれもすべて破棄され、要素文字列の一部にはならない。 
+     * あればそれもすべて破棄され、要素文字列の一部にはならない。
      *
      * たとえば、次の 3 行はそれぞれキー Truth と関連した要素値 Beauty を表す。
-     * 
+     *
      * Truth = Beauty <BR>
      * Truth:Beauty <BR>
      * Truth\\t\\t\\t:Beauty <BR>
      *
-     * また、次の 3 行は 1 つのプロパティを表す。 
+     * また、次の 3 行は 1 つのプロパティを表す。
      *
      * fruits\\t\\t\\t\\tapple, banana, pear, \ <BR>
      *                                  cantaloupe, watermelon, \ <BR>
      *                                  kiwi, mango <BR>
-     * キーは fruits で、次の要素に関連付けれられる。 
+     * キーは fruits で、次の要素に関連付けれられる。
      * "apple, banana, pear, cantaloupe, watermelon, kiwi, mango"
      * 最終的な結果でコンマのあとに必ずスペースが表示されるように、
      * 各 \ の前にスペースがある。行の終わりを示す \ と、継続行の先頭にある
-     * 空白は破棄され、他の文字に置換されない。 
+     * 空白は破棄され、他の文字に置換されない。
      * また、次の 3 番目の例では、キーが cheeses で、関連した要素が空の文字列
-     * であることを表す。 
+     * であることを表す。
      *
      * cheeses <BR>
-     * キーは、cheeses で、関連要素は空の文字列であることを指定している。 
+     * キーは、cheeses で、関連要素は空の文字列であることを指定している。
      *
-     * @param inStream 入力ストリーム 
+     * @param inStream 入力ストリーム
      *
      * @else
      *
@@ -688,58 +688,58 @@ namespace coil
      * Each property is assumed to be registered in the input stream by each
      * line, and each line terminator is should be a line break characters
      * (\\n or \\r or \\r\\n).
-     * Lines are read from the input stream until end of file is reached. 
+     * Lines are read from the input stream until end of file is reached.
      *
      * A line that contains only white space characters or a line that its
      * first non-white space character is an ASCII '#' or '!' is ignored.
      * In a word, '#' or '!' represents comment lines.
      *
      * All lines except the blank line or comment line is described the property
-     * that added to the table. However, if the line terminator is '\' and the 
+     * that added to the table. However, if the line terminator is '\' and the
      * next line continues, it is treated as a continuation line (See below).
      * The key is composed of all characters.
-     * All of these key termination characters in the line starting with the 
+     * All of these key termination characters in the line starting with the
      * first non-white space character and up to, but not including, the first
-     * unescaped '=', ':', or white space character other than a line 
-     * terminator. 
-     * 
+     * unescaped '=', ':', or white space character other than a line
+     * terminator.
+     *
      * Line terminator characters can be included using \ escape sequences.
      * Any white space after the key is skipped.
      * If the first non-white space character after the key is '=' or ':',
-     * then it is ignored and any white space characters after it are also 
+     * then it is ignored and any white space characters after it are also
      * skipped.
      * All remaining characters on the line become part of the associated element
      * string.
      * In element string, ASCII escape sequence such as \\t and \\n and \\r
-     * and \\\\ and \\" and \\' and \\ (backslash character and space) 
-     * and \\uxxxx have affect and they will be converted into a single 
+     * and \\\\ and \\" and \\' and \\ (backslash character and space)
+     * and \\uxxxx have affect and they will be converted into a single
      * character.
-     * Also, if termination character in the line is \, the next line will be  
-     * treated as continuing. In that case, \ and break character will be 
-     * destroyed, and also its first space character will be destroyed, 
-     * so these characters on the line will not become part of the element 
+     * Also, if termination character in the line is \, the next line will be
+     * treated as continuing. In that case, \ and break character will be
+     * destroyed, and also its first space character will be destroyed,
+     * so these characters on the line will not become part of the element
      * string.
      *
-     * As an example, each of the following three lines specifies the key 
-     * "Truth" and the associated element value "Beauty": 
-     * 
+     * As an example, each of the following three lines specifies the key
+     * "Truth" and the associated element value "Beauty":
+     *
      * Truth = Beauty <BR>
      * Truth:Beauty <BR>
      * Truth\\t\\t\\t:Beauty <BR>
      *
-     * As another example, the following three lines specify a single 
-     * property: 
+     * As another example, the following three lines specify a single
+     * property:
      *
      * fruits\\t\\t\\t\\tapple, banana, pear, \ <BR>
      *                                  cantaloupe, watermelon, \ <BR>
      *                                  kiwi, mango <BR>
-     * The key is "fruits" and the associated element is: 
+     * The key is "fruits" and the associated element is:
      * "apple, banana, pear, cantaloupe, watermelon, kiwi, mango".
      * Note that a space appears before each \ so that a space will
      * each comma in the final result; the \, line terminator, and leading white
      * space on the continuation line are merely discarded and are not replaced
-     * by one or more other characters. 
-     * As a third example, the line: 
+     * by one or more other characters.
+     * As a third example, the line:
      *
      * cheeses <BR>
      * specifies that the key is "cheeses" and the associated element is the
@@ -750,7 +750,7 @@ namespace coil
      * @endif
      */
     void load(std::istream& inStream);
-    
+
     /*!
      * @if jp
      *
@@ -761,7 +761,7 @@ namespace coil
      * このメソッドは Java Properties との互換性のために定義されている。
      *
      * @param out 出力ストリーム
-     * @param header プロパティリストの記述 
+     * @param header プロパティリストの記述
      *
      * @else
      *
@@ -777,7 +777,7 @@ namespace coil
      * @endif
      */
     void save(std::ostream& out, const std::string& header);
-    
+
     /*!
      * @if jp
      *
@@ -785,22 +785,22 @@ namespace coil
      *
      * Properties テーブル内のプロパティリスト (キーと要素のペア) を、load
      * メソッドを使って Properties テーブルにロードするのに適切なフォーマットで
-     * 出力ストリームに書き込む。 
+     * 出力ストリームに書き込む。
      *
      * Properties テーブル内のプロパティリスト (キーと要素のペア) を、load
      * メソッドを使って Properties テーブルにロードするのに適切なフォーマットで
      * 出力ストリームに書き込む。ストリームは、ISO 8859-1 文字
-     * エンコーディングを使用して書き込まれる。 
+     * エンコーディングを使用して書き込まれる。
      * Properties テーブル (存在する場合) のデフォルトテーブルからの
-     * プロパティは、このメソッドによっては書き込まれない。 
+     * プロパティは、このメソッドによっては書き込まれない。
      *
      * header 引数が null でない場合は、ASCII 文字の #、header の文字列、
      * および行区切り文字が最初に出力ストリームに書き込まれます。このため、
-     * header は識別コメントとして使うことができる。 
+     * header は識別コメントとして使うことができる。
      *
      * 次に、ASCII 文字の #、現在の日時 (Date の toString メソッドによって
      * 現在時刻が生成されるのと同様)、および Writer によって生成される行区切り
-     * からなるコメント行が書き込まれる。 
+     * からなるコメント行が書き込まれる。
      *
      * 続いて、 Properties テーブル内のすべてのエントリが 1 行ずつ書き出される。
      * 各エントリのキー文字列、ASCII 文字の=、関連した要素文字列が書き込まれる。
@@ -810,33 +810,33 @@ namespace coil
      * \\u007E より大きい文字は、対応する 16 進値 xxxx を使って \\uxxxx として
      * 書き込まれる。埋め込み空白文字でも後書き空白文字でもない先行空白文字は、
      * 前に \ を付けて書き込まれる。キーと値の文字 #、!、=、および : は、
-     * 必ず正しくロードされるように、前にスラッシュを付けて書き込まれる。 
+     * 必ず正しくロードされるように、前にスラッシュを付けて書き込まれる。
      *
      * エントリが書き込まれたあとで、出力ストリームがフラッシュされる。
-     * 出力ストリームはこのメソッドから復帰したあとも開いたままとなる。 
+     * 出力ストリームはこのメソッドから復帰したあとも開いたままとなる。
      *
      * @param out 出力ストリーム
-     * @param header プロパティリストの記述 
+     * @param header プロパティリストの記述
      *
      * @else
      *
      * @brief Stores property list to the output stream
      *
-     * Write this property list (key and element pairs) in this Properties 
-     * table to the output stream in a format suitable for loading into a 
-     * Properties table using the load method. The stream is written using the 
-     * ISO 8859-1 character encoding. 
+     * Write this property list (key and element pairs) in this Properties
+     * table to the output stream in a format suitable for loading into a
+     * Properties table using the load method. The stream is written using the
+     * ISO 8859-1 character encoding.
      * Properties from the defaults table of this Properties table (if any) are
-     * not written out by this method. 
+     * not written out by this method.
      *
      * If the header argument is not null, then an ASCII # character, the
      * comments string, and a line separator are first written to the output
-     * stream. Thus, the header can serve as an identifying comment. 
+     * stream. Thus, the header can serve as an identifying comment.
      *
      * Next, a comment line is always written, consisting of an ASCII #
      * character, the current date and time (as if produced by the toString
      * method of Date for the current time), and a line separator as generated
-     * by the Writer. 
+     * by the Writer.
      *
      * Then every entry in this Properties table is written out, one per line.
      * For each entry the key string is written, then an ASCII =, then the
@@ -850,10 +850,10 @@ namespace coil
      * characters, but not embedded or trailing space characters, are written
      * with a preceding \ character. The key and element characters #, !, =, and
      * : are written with a preceding backslash to ensure that they are properly
-     * loaded. 
+     * loaded.
      *
      * After the entries have been written, the output stream is flushed. The
-     * output stream remains open after this method returns. 
+     * output stream remains open after this method returns.
      *
      * @param out An output stream.
      * @param header The description of the property list.
@@ -861,7 +861,7 @@ namespace coil
      * @endif
      */
     void store(std::ostream& out, const std::string& header);
-    
+
     //============================================================
     // other util functions
     //============================================================
@@ -872,7 +872,7 @@ namespace coil
      *
      * メインプロパティリストに同じ名前のキーが見つからない場合は、デフォルトの
      * プロパティリストにある個別のキーを含む、このプロパティリストにあるすべて
-     * のキーのリストを返す。 
+     * のキーのリストを返す。
      *
      * @return プロパティリストにあるすべてのキーのリスト。
      *         デフォルトのプロパティリストにあるキーを含む
@@ -891,7 +891,7 @@ namespace coil
      * @endif
      */
     std::vector<std::string> propertyNames(void) const;
-    
+
     /*!
      * @if jp
      * @brief プロパティの数を取得する
@@ -910,7 +910,7 @@ namespace coil
      * @endif
      */
     int size(void) const;
-    
+
     /*!
      * @if jp
      * @brief ノードを取得する
@@ -957,7 +957,7 @@ namespace coil
      * @endif
      */
     Properties& getNode(const std::string& key);
-    
+
     /*!
      * @if jp
      * @brief 新規ノードを生成する
@@ -985,7 +985,7 @@ namespace coil
      * @endif
      */
     bool createNode(const std::string& key);
-    
+
     /*!
      * @if jp
      * @brief ノードを削除する
@@ -1010,7 +1010,7 @@ namespace coil
      * @endif
      */
     Properties* removeNode(const char* leaf_name);
-    
+
     /*!
      * @if jp
      * @brief 子ノードにkeyがあるかどうか
@@ -1035,7 +1035,7 @@ namespace coil
      * @endif
      */
     Properties* hasKey(const char* key) const;
-    
+
     /*!
      * @if jp
      * @brief 子ノードを全て削除する
@@ -1044,7 +1044,7 @@ namespace coil
      * @endif
      */
     void clear(void);
-    
+
     /*!
      * @if jp
      * @brief Propertyをマージする
@@ -1067,7 +1067,7 @@ namespace coil
      * @endif
      */
     Properties& operator<<(const Properties& prop);
-    
+
   protected:
     /*!
      * @if jp
@@ -1091,7 +1091,7 @@ namespace coil
      *
      * Split the given string into a pair of the key and the value with
      * the set delimiter.
-     * First, search whether the fist given string includes ':' or '=', and 
+     * First, search whether the fist given string includes ':' or '=', and
      * if either character is included, it is used as delimiter.
      * If neither is included, try to divide it with ' '(space).
      * When all delimiter candidates are not included, set the given string
@@ -1107,7 +1107,7 @@ namespace coil
      */
     static void splitKeyValue(const std::string& str, std::string& key,
                               std::string& value);
-    
+
     /*!
      * @if jp
      * @brief 文字列を分割する
@@ -1141,7 +1141,7 @@ namespace coil
      */
     static bool split(const std::string& str, const char delim,
                       std::vector<std::string>& value);
-    
+
     /*!
      * @if jp
      * @brief プロパティを取得する
@@ -1177,7 +1177,7 @@ namespace coil
     static Properties* _getNode(std::vector<std::string>& keys,
                                 std::vector<Properties*>::size_type index,
                                 const Properties* curr);
-    
+
     /*!
      * @if jp
      * @brief プロパティの名称リストを取得する
@@ -1202,7 +1202,7 @@ namespace coil
     static void _propertiyNames(std::vector<std::string>& names,
                                 std::string curr_name,
                                 const Properties* curr);
-    
+
     /*!
      * @if jp
      * @brief プロパティの名称リストを保存する
@@ -1226,7 +1226,7 @@ namespace coil
      */
     static void _store(std::ostream& out, std::string curr_name,
                        Properties* curr);
-    
+
     /*!
      * @if jp
      * @brief プロパティの内容を保存する
@@ -1256,7 +1256,7 @@ namespace coil
      */
     static std::ostream& _dump(std::ostream& out, const Properties& curr,
                                int index);
-    
+
     /*!
      * @if jp
      * @brief インデントを生成する
@@ -1281,7 +1281,7 @@ namespace coil
      * @endif
      */
     static std::string indent(int index);
-    
+
   private:
     std::string name;
     std::string value;
@@ -1316,6 +1316,6 @@ namespace coil
     friend std::ostream& operator<<(std::ostream& lhs, const Properties& rhs);
 
   };   // class Properties
-};     // namespace coil  
+};     // namespace coil
 #endif // COIL_PROPERTIES_H
 

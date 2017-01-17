@@ -84,7 +84,7 @@ namespace RTC
    *
    * @brief Placeholder base class to hold remote object reference.
    *
-   * A base class for consumer implementation when chose CORBA 
+   * A base class for consumer implementation when chose CORBA
    * as a communication tool.
    *
    * @since 0.4.0
@@ -106,7 +106,7 @@ namespace RTC
      * @endif
      */
     CorbaConsumerBase(){};
-    
+
     /*!
      * @if jp
      *
@@ -126,7 +126,7 @@ namespace RTC
       : m_objref(CORBA::Object::_duplicate(x.m_objref))
     {
     }
-    
+
     /*!
      * @if jp
      *
@@ -174,23 +174,23 @@ namespace RTC
       x.m_objref = this->m_objref;
       this->m_objref = tmpref;
     }
-    
+
     /*!
      * @if jp
      *
      * @brief 仮想デストラクタ
-     * 
+     *
      * @else
-     * 
+     *
      * @brief Virtual destructor
-     * 
+     *
      * @endif
      */
     virtual ~CorbaConsumerBase(void)
     {
       releaseObject();
     };
-    
+
     /*!
      * @if jp
      *
@@ -198,7 +198,7 @@ namespace RTC
      *
      * 与えられたオブジェクトリファレンスは、ConsumerBase オブジェクト内に
      * CORBA::Object_var 型として保持される。
-     * _var 型変数を引数に渡す場合は var.in() を渡すこと。 
+     * _var 型変数を引数に渡す場合は var.in() を渡すこと。
      *
      * @param obj CORBA オブジェクトのリファレンス
      *
@@ -227,7 +227,7 @@ namespace RTC
       m_objref = CORBA::Object::_duplicate(obj);
       return true;
     }
-    
+
     /*!
      * @if jp
      *
@@ -236,7 +236,7 @@ namespace RTC
      * ConsumerBase オブジェクト内に CORBA::Object_var 型として保持されている
      * オブジェクトリファレンスを取得する。
      * 呼び出し側はvar型変数で受けるか、使用後CORBA::release()を呼び出して
-     * 参照カウントをデクリメントすること。 
+     * 参照カウントをデクリメントすること。
      *
      * @return obj CORBA オブジェクトのリファレンス
      *
@@ -255,7 +255,7 @@ namespace RTC
     {
       return m_objref;
     }
-    
+
     /*!
      * @if jp
      *
@@ -277,7 +277,7 @@ namespace RTC
     {
       m_objref = CORBA::Object::_nil();
     }
-    
+
   protected:
     /*!
      * @if jp
@@ -288,19 +288,19 @@ namespace RTC
      */
     CORBA::Object_var m_objref;
   };
-  
+
   /*!
    * @if jp
    *
    * @class CorbaConsumer
    * @brief オブジェクトリファレンスを保持するプレースホルダテンプレートクラス
-   * 
+   *
    * テンプレート引数で与えられた型のCORBAオブジェクトを保持する。
    * オブジェクトがセットされたときに、与えられた型で narrow されるので、
    * _ptr() で取得するリファレンスは、narrow 済みのリファレンスである。
    * 内部的な使用のために、_ptr 型, _var型も同時にテンプレート引数として
    * 与える必要がある。(下記注意事項参照)
-   * <br>  
+   * <br>
    * 注意: ObjectTypePtr = ObjectType::_ptr_type としているか、
    *       _ptr_type は標準では規定されていない。
    *       ただし、omniORB, TAO, MICO では、プロキシクラス内部で、
@@ -327,7 +327,7 @@ namespace RTC
    *       However, omniORB, TAO, MICO, ORBit, ORBacus define _ptr_type and
    *       _var_type as _ptr type and _var type in stub code.
    *       Usually, you don't need to specify 2nd and 3rd template arguments.
-   *       
+   *
    * @since 0.4.0
    *
    * @endif
@@ -351,7 +351,7 @@ namespace RTC
      * @endif
      */
     CorbaConsumer(){};
-    
+
     /*!
      * @if jp
      *
@@ -371,7 +371,7 @@ namespace RTC
       : m_var(ObjectType::_duplicate(x.m_var))
     {
     }
-    
+
     /*!
      * @if jp
      *
@@ -404,9 +404,9 @@ namespace RTC
       ObjectTypeVar tmpref = x.m_var;
       x.m_var = this->m_var;
       this->m_var = tmpref;
-      
+
     }
-    
+
     /*!
      * @if jp
      *
@@ -422,7 +422,7 @@ namespace RTC
     {
       releaseObject();
     };
-    
+
     /*!
      * @if jp
      * @brief オブジェクトをセットする
@@ -430,17 +430,17 @@ namespace RTC
      * ConsumerBase のオーバーライド。CORBA::Object_var にオブジェクトをセット
      * するとともに、templateパラメータの型で narrow したオブジェクトを
      * メンバ変数に保持する。
-     * _var 型変数を引数に渡す場合は var.in() を渡すこと。 
+     * _var 型変数を引数に渡す場合は var.in() を渡すこと。
      *
      * @param [in] obj CORBA Objecct
      *
      * @return オブジェクト設定結果
      *         設定対象オブジェクトが null の場合は false が返ってくる
-     * 
+     *
      * @else
      * @brief Set Object
      *
-     * Override function of ConsumerBase. This operation set an Object to 
+     * Override function of ConsumerBase. This operation set an Object to
      * CORBA:Object_var in the class, and this object is narrowed to
      * given template parameter and stored in the member variable.
      *
@@ -460,7 +460,7 @@ namespace RTC
         }
 
       ObjectTypeVar var = ObjectType::_narrow(m_objref);
- 
+
       if (CORBA::is_nil(var))
         {
           releaseObject();
@@ -482,7 +482,7 @@ namespace RTC
      * 返される。
      *
      * @return ObjectType に narrow 済みのオブジェクトのリファレンス
-     * 
+     *
      * @else
      * @brief Get Object reference narrowed as ObjectType
      *
@@ -499,7 +499,7 @@ namespace RTC
     {
       return m_var.inout();
     }
-    
+
     /*!
      * @if jp
      * @brief ObjectType 型のオブジェクトのリファレンスを取得
@@ -511,7 +511,7 @@ namespace RTC
      * 返される。
      *
      * @return ObjectType に narrow 済みのオブジェクトのリファレンス
-     * 
+     *
      * @else
      * @brief Get Object reference narrowed as ObjectType
      *
@@ -528,7 +528,7 @@ namespace RTC
     {
       return m_var.inout();
     }
-    
+
     /*!
      * @if jp
      *
@@ -551,7 +551,7 @@ namespace RTC
       CorbaConsumerBase::releaseObject();
       m_var = ObjectType::_nil();
     }
-    
+
   protected:
     /*!
      * @if jp
