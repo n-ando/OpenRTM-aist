@@ -1413,7 +1413,7 @@ std::vector<coil::Properties> Manager::getLoadableModules()
         m_pORB = CORBA::ORB_init(argc, argv);
         // Get the RootPOA
         CORBA::Object_var obj =
-        m_pORB->resolve_initial_references((char*)"RootPOA");
+        m_pORB->resolve_initial_references(const_cast<char*>("RootPOA"));
         m_pPOA = PortableServer::POA::_narrow(obj);
         if (CORBA::is_nil(m_pPOA))
           {

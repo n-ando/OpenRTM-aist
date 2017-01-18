@@ -129,9 +129,9 @@ namespace RTC
         coil::TimeValue period(getPeriod());
         if (1) //count > 1000)
           {
-            RTC_PARANOID(("Period:    %f [s]", (double)period));
-            RTC_PARANOID(("Execution: %f [s]", (double)(t1 - t0)));
-            RTC_PARANOID(("Sleep:     %f [s]", (double)(period - (t1 - t0))));
+            RTC_PARANOID(("Period:    %f [s]", static_cast<double>(period)));
+            RTC_PARANOID(("Execution: %f [s]", static_cast<double>(t1 - t0)));
+            RTC_PARANOID(("Sleep:     %f [s]", static_cast<double>(period - (t1 - t0))));
           }
         coil::TimeValue t2(coil::gettimeofday());
         if (period > (t1 - t0))
@@ -142,7 +142,7 @@ namespace RTC
         if (1) //count > 1000)
           {
             coil::TimeValue t3(coil::gettimeofday());
-            RTC_PARANOID(("Slept:       %f [s]", (double)(t3 - t2)));
+            RTC_PARANOID(("Slept:       %f [s]", static_cast<double>(t3 - t2)));
             count = 0;
           }
         ++count;

@@ -724,12 +724,18 @@ namespace RTC
           CORBA::string_dup(m_properties["category"].c_str());
         profile->port_profiles = m_portAdmin.getPortProfileList();
 #else // ORB_IS_RTORB
-        profile->instance_name = (char *)m_properties["instance_name"].c_str();
-        profile->type_name     = (char *)m_properties["type_name"].c_str();
-        profile->description   = (char *)m_properties["description"].c_str();
-        profile->version       = (char *)m_properties["version"].c_str();
-        profile->vendor        = (char *)m_properties["vendor"].c_str();
-        profile->category      = (char *)m_properties["category"].c_str();
+        profile->instance_name =
+               reinterpret_cast<char *>(m_properties["instance_name"].c_str());
+        profile->type_name     =
+               reinterpret_cast<char *>(m_properties["type_name"].c_str());
+        profile->description   =
+               reinterpret_cast<char *>(m_properties["description"].c_str());
+        profile->version       =
+               reinterpret_cast<char *>(m_properties["version"].c_str());
+        profile->vendor        =
+               reinterpret_cast<char *>(m_properties["vendor"].c_str());
+        profile->category      =
+               reinterpret_cast<char *>(m_properties["category"].c_str());
         PortProfileList ppl    = m_portAdmin.getPortProfileList();
         profile->port_profiles = ppl._retn();
 #endif // ORB_IS_RTORB
@@ -1466,7 +1472,8 @@ namespace RTC
 #ifndef ORB_IS_RTORB
     m_profile.instance_name = m_properties["instance_name"].c_str();
 #else // ORB_IS_RTORB
-    m_profile.instance_name = (char *)m_properties["instance_name"].c_str();
+    m_profile.instance_name =
+            reinterpret_cast<char *>(m_properties["instance_name"].c_str());
 #endif // ORB_IS_RTORB
   }
 
@@ -1529,12 +1536,18 @@ namespace RTC
     m_profile.vendor        = m_properties["vendor"].c_str();
     m_profile.category      = m_properties["category"].c_str();
 #else // ORB_IS_RTORB
-    m_profile.instance_name = (char*)m_properties["instance_name"].c_str();
-    m_profile.type_name     = (char*)m_properties["type_name"].c_str();
-    m_profile.description   = (char*)m_properties["description"].c_str();
-    m_profile.version       = (char*)m_properties["version"].c_str();
-    m_profile.vendor        = (char*)m_properties["vendor"].c_str();
-    m_profile.category      = (char*)m_properties["category"].c_str();
+    m_profile.instance_name =
+            reinterpret_cast<char*>(m_properties["instance_name"].c_str());
+    m_profile.type_name     =
+            reinterpret_cast<char*>(m_properties["type_name"].c_str());
+    m_profile.description   =
+            reinterpret_cast<char*>(m_properties["description"].c_str());
+    m_profile.version       =
+            reinterpret_cast<char*>(m_properties["version"].c_str());
+    m_profile.vendor        =
+            reinterpret_cast<char*>(m_properties["vendor"].c_str());
+    m_profile.category      =
+            reinterpret_cast<char*>(m_properties["category"].c_str());
 #endif //ORB_IS_RTORB
   }
 

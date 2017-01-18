@@ -83,8 +83,8 @@ namespace SDOPackage
     conf.description = CORBA::string_dup(prop["description"].c_str());
     conf.id = CORBA::string_dup(prop.getName());
 #else // ORB_IS_RTORB
-    conf.description = (char *)prop["description"].c_str();
-    conf.id = (char *)prop.getName();
+    conf.description = reinterpret_cast<char *>(prop["description"].c_str());
+    conf.id = reinterpret_cast<char *>(prop.getName());
 #endif // ORB_IS_RTORB
     NVUtil::copyFromProperties(conf.configuration_data, prop);
   }

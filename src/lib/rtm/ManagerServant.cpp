@@ -786,7 +786,7 @@ namespace RTM
 #ifndef ORB_IS_RTORB
         obj = m_mgr.theORB()->resolve_initial_references("omniINSPOA");
 #else // ROB_IS_RTORB
-        obj = m_mgr.theORB()->resolve_initial_references((char*)"omniINSPOA");
+        obj = m_mgr.theORB()->resolve_initial_references(const_cast<char*>("omniINSPOA"));
 #endif // ORB_IS_RTORB
         PortableServer::POA_ptr poa = PortableServer::POA::_narrow(obj);
         poa->the_POAManager()->activate();
@@ -798,7 +798,7 @@ namespace RTM
         id = PortableServer::string_to_ObjectId(config["manager.name"].c_str());
 #else // ORB_IS_RTORB
         id = PortableServer::
-          string_to_ObjectId((char *)config["manager.name"].c_str());
+          string_to_ObjectId(reinterpret_cast<char*>(config["manager.name"].c_str()));
 #endif // ORB_IS_RTORB
 
         // Object activation

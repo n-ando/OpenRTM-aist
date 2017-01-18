@@ -79,8 +79,9 @@ namespace coil
           if (hp->h_addrtype == AF_INET)
             {
               struct sockaddr_in addr;
-              memset((char*)&addr, 0, sizeof(addr));
-              memcpy((char*)&addr.sin_addr, hp->h_addr_list[i], hp->h_length);
+              memset(reinterpret_cast<char*>(&addr), 0, sizeof(addr));
+              memcpy(reinterpret_cast<char*>(&addr.sin_addr),
+                              hp->h_addr_list[i], hp->h_length);
               dest_addr = inet_ntoa(addr.sin_addr);
               break;
             }
@@ -95,7 +96,8 @@ namespace coil
     if (NO_ERROR != GetBestInterface(ipaddress, &bestifindex)) { return false; }
         
     PMIB_IPADDRTABLE ipaddr_table;
-    ipaddr_table = (MIB_IPADDRTABLE *) MALLOC(sizeof (MIB_IPADDRTABLE));
+    ipaddr_table = 
+          reinterpret_cast<MIB_IPADDRTABLE *>(MALLOC(sizeof (MIB_IPADDRTABLE)));
     if (ipaddr_table == 0) { return false; }
 
     // Make an initial call to GetIpAddrTable to get the
@@ -104,12 +106,12 @@ namespace coil
     if (GetIpAddrTable(ipaddr_table, &size, 0) == ERROR_INSUFFICIENT_BUFFER)
       {
         FREE(ipaddr_table);
-        ipaddr_table = (MIB_IPADDRTABLE *) MALLOC(size);
+        ipaddr_table = reinterpret_cast<MIB_IPADDRTABLE *>(MALLOC(size));
       }
     if (ipaddr_table == 0) { return false; }
     if (GetIpAddrTable(ipaddr_table, &size, 0) != NO_ERROR) { return false; }
     
-    for (int i(0); i < (int) ipaddr_table->dwNumEntries; ++i)
+    for (int i(0); i < static_cast<int>(ipaddr_table->dwNumEntries); ++i)
       {
         if (bestifindex == ipaddr_table->table[i].dwIndex)
           {

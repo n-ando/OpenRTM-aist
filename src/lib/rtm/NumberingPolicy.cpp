@@ -46,7 +46,7 @@ std::string DefaultNumberingPolicy::onCreate(void* obj)
     {
       (void)(e);
       m_objects.push_back(obj);
-      return coil::otos((int)(m_objects.size() - 1));
+      return coil::otos(static_cast<int>(m_objects.size() - 1));
     }
 }
 

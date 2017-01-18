@@ -57,7 +57,7 @@ namespace coil
    */
   UUID::~UUID()
   {
-    ::RpcStringFreeA((RPC_CSTR*)&m_uuidstr);
+    ::RpcStringFreeA(reinterpret_cast<RPC_CSTR*>(&m_uuidstr));
   }
 
   /*!
@@ -69,7 +69,7 @@ namespace coil
    */
   const char* UUID::to_string()
   {
-    if (::UuidToStringA(&m_uuid, (RPC_CSTR*)&m_uuidstr)
+    if (::UuidToStringA(&m_uuid, reinterpret_cast<RPC_CSTR*>(&m_uuidstr))
        != RPC_S_OK)
       {
         return 0;
