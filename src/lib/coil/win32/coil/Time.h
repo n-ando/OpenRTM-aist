@@ -98,7 +98,7 @@ namespace coil
     int iret;
 
     //The WSAStartup function initiates use of the Winsock DLL by a process.
-    ver = MAKEWORD(2,2);
+    ver = MAKEWORD(2, 2);
     iret = ::WSAStartup(ver, &wsa);
     if ( iret != 0 ) 
       {
@@ -349,6 +349,6 @@ namespace coil
   }
 
 
-};
+};  // namespace coil
 
 #endif // COIL_TIME_H

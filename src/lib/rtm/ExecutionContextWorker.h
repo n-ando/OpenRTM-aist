@@ -37,7 +37,7 @@
 namespace RTC
 {
   class RTObject_impl;
-};
+};  // namespace RTC
 namespace RTC_impl
 {
   class RTObjectStateMachine;
@@ -600,7 +600,7 @@ namespace RTC_impl
     typedef std::vector<RTC_impl::RTObjectStateMachine*>::iterator CompItr;
 
   }; // class PeriodicExecutionContext
-}; // namespace RTC
+};  // namespace RTC_impl
 
 #ifdef WIN32
 #pragma warning( default : 4290 )

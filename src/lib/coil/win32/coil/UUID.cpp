@@ -127,7 +127,7 @@ namespace coil
   UUID* UUID_Generator::generateUUID(int n, int h)
   {
     uuid_t uuid;
-    if(::UuidCreate(&uuid) != RPC_S_OK)
+    if (::UuidCreate(&uuid) != RPC_S_OK)
       {
         return 0;
       }
@@ -136,4 +136,4 @@ namespace coil
         return new UUID(uuid);
       }
   }
-}; // coil
+};  // namespace coil

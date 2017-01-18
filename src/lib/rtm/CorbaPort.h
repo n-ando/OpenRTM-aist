@@ -1236,7 +1236,6 @@ namespace RTC
           }
         catch(...)
           {
-            ;
           }
         CORBA::Object_var obj;
         obj = poa->id_to_reference(m_oid);
@@ -1274,11 +1273,9 @@ namespace RTC
           }
         catch(const ::PortableServer::POA::ServantAlreadyActive &)
           {
-            ; // do nothing
           }
         catch(...)
           {
-            ; // do nothing
           }
       }
       void deactivate()
@@ -1289,7 +1286,6 @@ namespace RTC
           }
         catch(...)
           {
-            ; // do nothing
           }
       }
     private:
@@ -1391,5 +1387,5 @@ namespace RTC
       CorbaConsumerList& m_consumers;
     };
   };
-};
+};  // namespace RTC
 #endif // RTC_CORBAPORT_H

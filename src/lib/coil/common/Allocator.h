@@ -153,5 +153,5 @@ namespace coil
     virtual void DeleteArray(void* p) throw ();
 
   };
-};
+};  // namespace coil
 #endif // COIL_ALLOCATOR_H

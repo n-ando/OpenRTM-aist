@@ -453,6 +453,6 @@ namespace coil
   }
 
 
-};
+};  // namespace coil
 
 #endif // COIL_FILE_H

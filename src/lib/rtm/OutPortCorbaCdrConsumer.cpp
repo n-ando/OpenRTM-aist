@@ -106,7 +106,8 @@ namespace RTC
         if (ret == ::OpenRTM::PORT_OK)
           {
             RTC_DEBUG(("get() successful"));
-            data.put_octet_array(&(cdr_data[0]), static_cast<int>(cdr_data->length()));
+            data.put_octet_array(&(cdr_data[0]),
+                            static_cast<int>(cdr_data->length()));
             RTC_PARANOID(("CDR data length: %d", cdr_data->length()));
 
             onReceived(data);

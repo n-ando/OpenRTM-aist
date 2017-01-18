@@ -160,6 +160,6 @@ namespace coil
      */
     coil::UUID* generateUUID(int n, int h);
   }; // class UUID_Generator
-}; // coil
+};  // namespace coil
 
 #endif // COIL_UUID_H

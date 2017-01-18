@@ -719,7 +719,7 @@ namespace RTC_exp
     std::vector<int> m_cpu;
 
   }; // class PeriodicExecutionContext
-}; // namespace RTC
+};  // namespace RTC_exp
 
 #ifdef WIN32
 #pragma warning( default : 4290 )

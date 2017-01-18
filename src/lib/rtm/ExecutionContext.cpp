@@ -1,4 +1,5 @@
-﻿/*!
+﻿// -*- C++ -*-
+/*!
  * @file ExecutionContext.h
  * @brief ExecutionContext class
  * @date $Date: 2007-04-13 15:45:29 $

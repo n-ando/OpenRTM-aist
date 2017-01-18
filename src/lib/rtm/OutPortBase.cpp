@@ -142,7 +142,7 @@ namespace RTC
     initProviders();
     int num(-1);
     if (!coil::stringTo(num,
-                     m_properties.getProperty("connection_limit", "-1").c_str()))
+               m_properties.getProperty("connection_limit", "-1").c_str()))
       {
         RTC_ERROR(("invalid connection_limit value: %s",
                    m_properties.getProperty("connection_limit").c_str()));

@@ -33,7 +33,7 @@
 namespace std
 {
   typedef basic_string<wchar_t> wstring;
-}
+}  // namespace std
 #endif
 
 namespace coil
@@ -838,5 +838,5 @@ namespace coil
    */
   std::string sprintf(char const * __restrict fmt, ...);
 
-}; // namepsace coil
+};  // namespace coil
 #endif // COIL_STRINGUTIL_H

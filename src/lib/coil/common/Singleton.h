@@ -209,6 +209,6 @@ namespace coil
   template <class SingletonClass>
   typename Singleton<SingletonClass>::Mutex
   Singleton<SingletonClass>::m_mutex;
-}; // namepsace coil
+};  // namespace coil
 
 #endif // COIL_SINGLETON_H

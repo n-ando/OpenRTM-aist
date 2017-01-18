@@ -69,5 +69,5 @@ namespace coil
   {
     operator delete[](p);
   }
-};
+};  // namespace coil
 

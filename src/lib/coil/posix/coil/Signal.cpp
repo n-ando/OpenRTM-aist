@@ -84,4 +84,4 @@ namespace coil
     m_flags  = 0;
   }
 
-};
+};  // namespace coil

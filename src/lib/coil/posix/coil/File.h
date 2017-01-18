@@ -189,6 +189,6 @@ namespace coil
 
     return flist;
   }
-};
+};  // namespace coil
 
 #endif // COIL_FILE_H

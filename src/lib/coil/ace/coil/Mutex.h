@@ -66,5 +66,5 @@ namespace coil
     Mutex(const Mutex&);
     Mutex& operator=(const Mutex &);
   };
-};
+};  // namespace coil
 #endif // COIL_MUTEX_H

@@ -47,7 +47,7 @@ namespace coil
     void init();
     coil::UUID* generateUUID(int n, int h);
   };
-};
+};  // namespace coil
 #endif
 #if defined(COIL_OS_LINUX) || defined(COIL_OS_DARWIN) || defined(COIL_OS_CYGWIN)
 #include <uuid/uuid.h>

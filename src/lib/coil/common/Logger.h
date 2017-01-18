@@ -933,5 +933,5 @@ namespace coil
   typedef log_streambuf<char> LogStreamBuffer;
   typedef log_stream<char> LogStream;
 
-};
+};  // namespace coil
 #endif // LOGGER_H

@@ -108,5 +108,5 @@ namespace coil
     int m_flags;
 
   };
-};
+};  // namespace coil
 #endif // COIL_SIGNAL_H

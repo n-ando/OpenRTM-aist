@@ -25,7 +25,7 @@ namespace coil
   public:
     libDllTest(){};
     ~libDllTest(){};
-    static int FuncTest(void); 
+    static int FuncTest(void);
   };
 };
 

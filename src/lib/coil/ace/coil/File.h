@@ -34,6 +34,6 @@ namespace coil
   {
     return ACE::basename(path);
   }
-};
+};  // namespace coil
 
 #endif // COIL_FILE_H

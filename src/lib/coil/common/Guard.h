@@ -91,5 +91,5 @@ namespace coil
     Guard& operator=(const Guard&);
     M& m_mutex;
   };
-};
+};  // namespace coil
 #endif // COIL_GUARD_H

@@ -213,4 +213,4 @@ namespace coil
       }
   }
   
-};
+};  // namespace coil

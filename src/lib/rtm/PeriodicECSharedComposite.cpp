@@ -68,7 +68,6 @@ namespace SDOPackage
    */
   PeriodicECOrganization::~PeriodicECOrganization()
   {
-    ;
   }
 
   /*!
@@ -520,8 +519,7 @@ namespace SDOPackage
   {
     std::vector<std::string>& oldPorts(m_expPorts);
     std::sort(oldPorts.begin(), oldPorts.end());
-    std::vector<std::string>
-      newPorts(coil::split(m_rtobj->getProperties()["conf.default.exported_ports"], ","));
+    std::vector<std::string> newPorts(coil::split(m_rtobj->getProperties()["conf.default.exported_ports"], ","));
     std::sort(newPorts.begin(), newPorts.end());
 
     std::vector<std::string> removedPorts; // oldPorts - interPorts
@@ -548,7 +546,7 @@ namespace SDOPackage
     m_expPorts = newPorts;
   }
 
-};
+};  // namespace SDOPackage
 
 
 
@@ -565,8 +563,9 @@ namespace RTC
     : public OnSetConfigurationSetCallback
   {
   public:
-    explicit setCallback(::SDOPackage::PeriodicECOrganization* org) : m_org(org) {}
-    virtual ~setCallback(){}
+    explicit setCallback(::SDOPackage::PeriodicECOrganization* org)
+           : m_org(org) {}
+    virtual ~setCallback() {}
     virtual void operator()(const coil::Properties& config_set)
     {
       m_org->updateDelegatedPorts();
@@ -580,8 +579,9 @@ namespace RTC
     : public OnAddConfigurationAddCallback
   {
   public:
-    explicit addCallback(::SDOPackage::PeriodicECOrganization* org) : m_org(org) {}
-    virtual ~addCallback(){}
+    explicit addCallback(::SDOPackage::PeriodicECOrganization* org)
+           : m_org(org) {}
+    virtual ~addCallback() {}
     virtual void operator()(const coil::Properties& config_set)
     {
       m_org->updateDelegatedPorts();
@@ -767,7 +767,7 @@ namespace RTC
     return RTC::RTC_OK;
   }
 
-}; // namespace RTC
+};  // namespace RTC
 
 extern "C"
 {

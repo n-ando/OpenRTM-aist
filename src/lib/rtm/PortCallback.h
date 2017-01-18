@@ -431,5 +431,5 @@ namespace RTC
   };
 
 
-};
+};  // namespace RTC
 #endif // RTC_PORTCALLBACK_H

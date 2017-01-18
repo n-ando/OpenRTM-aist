@@ -681,7 +681,7 @@ std::vector<coil::Properties> Manager::getLoadableModules()
       {    
         ECFactoryBase* factory;
         factory = new ECFactoryCXX(name, new_func, delete_func);
-        if(m_ecfactory.registerObject(factory))
+        if (m_ecfactory.registerObject(factory))
           {
             return true;
           }
@@ -1913,7 +1913,6 @@ std::vector<coil::Properties> Manager::getLoadableModules()
           }
         catch (...)
           {
-            ;
           }
       }
     for (CORBA::ULong i(0), len(m_ecs.size()); i < len; ++i)
@@ -1931,7 +1930,6 @@ std::vector<coil::Properties> Manager::getLoadableModules()
         }
         catch (...)
           {
-            ;
           }
       }
     return;
@@ -2268,4 +2266,4 @@ std::vector<coil::Properties> Manager::getLoadableModules()
     return str;
   }
   
-};
+};  // namespace RTC

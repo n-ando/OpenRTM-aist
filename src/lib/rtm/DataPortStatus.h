@@ -205,7 +205,7 @@ namespace RTC
 
   typedef std::vector<DataPortStatus::Enum> DataPortStatusList;
 
-};
+};  // namespace RTC
 
 /*!
  * @if jp

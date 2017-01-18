@@ -162,7 +162,7 @@ namespace coil
   {
     return ::dlerror();
   }
-};
+};  // namespace coil
 
 /*!
  * for unit test.

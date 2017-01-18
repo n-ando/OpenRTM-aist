@@ -485,7 +485,8 @@ namespace RTC
      */
     struct publishInterfaceProfileFunc
     {
-      explicit publishInterfaceProfileFunc(SDOPackage::NVList& prop) : m_prop(prop) {}
+      explicit publishInterfaceProfileFunc(SDOPackage::NVList& prop)
+             : m_prop(prop) {}
       void operator()(InPortProvider* provider)
       {
         provider->publishInterfaceProfile(m_prop);

@@ -261,6 +261,6 @@ namespace coil
     int m_count;
     HANDLE m_thread;
   };
-};
+};  // namespace coil
 
 #endif // COIL_TASK_H

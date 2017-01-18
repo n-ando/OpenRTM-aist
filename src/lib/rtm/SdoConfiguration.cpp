@@ -727,4 +727,4 @@ namespace SDOPackage
     
     return (const char*) uuid->to_string();
   }
-};
+};  // namespace SDOPackage

@@ -738,7 +738,6 @@ namespace RTC
       }
     catch (...)
       {
-        ; // This operation throws no exception.
       }
     assert(false);
     return 0;
@@ -761,7 +760,6 @@ namespace RTC
       }
     catch (...)
       {
-        ; // This operation throws no exception.
       }
     assert(false);
     return 0;
@@ -2818,4 +2816,4 @@ namespace RTC
   }
 
 
-}
+};  // namespace RTC

@@ -166,10 +166,10 @@ namespace coil
 
     /* Because it is a normal termination when the error code is 0, */
     /* return NULL. */
-    if (dwcode == 0 ) 
-    {
-      return NULL;
-    }
+    if (dwcode == 0) 
+      {
+        return NULL;
+      }
 
     /* Convert the error code into the message. */
     ::FormatMessage(
@@ -184,7 +184,7 @@ namespace coil
     );
     return cstr;
   }
-};
+};  // namespace coil
 
 /*!
  * for Testing UnitTest.

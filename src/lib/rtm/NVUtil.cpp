@@ -284,7 +284,7 @@ namespace NVUtil
     const char* str_value;
     try
       {
-        if(!(find(nv, name) >>= str_value))
+        if (!(find(nv, name) >>= str_value))
           {
             str_value = "";
           }
@@ -409,4 +409,4 @@ namespace NVUtil
     dump_to_stream(s, nv);
     return s.str();
   }
-};
+};  // namespace NVUtil

@@ -20,6 +20,7 @@
 #define RTC_SDOSERVICEADMIN_H
 
 #include <string>
+#include <vector>
 #include <coil/Mutex.h>
 #include <coil/Factory.h>
 
@@ -371,6 +372,6 @@ protected:
   };
 
 
-};
+};  // namespace RTC
 
 #endif // RTC_SDOSERVICEADMIN_H

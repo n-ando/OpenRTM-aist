@@ -700,6 +700,6 @@ namespace RTC
      */
     bool m_directNewData;
   };
-}; // End of namesepace RTM
+};  // namespace RTC
 
 #endif // RTC_INPORT_H

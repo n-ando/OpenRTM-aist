@@ -273,6 +273,6 @@ namespace RTM
      */
     ::RTC::Logger rtclog;
   };
-}; // RTM
+};  // namespace RTM
 
 #endif // RTC_LOCALSERVICEADMIN_H
