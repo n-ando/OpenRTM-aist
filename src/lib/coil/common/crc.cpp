@@ -15,7 +15,7 @@
  *
  */
 
-#include "crc.h"
+#include <coil/crc.h>
 
 namespace coil
 {
