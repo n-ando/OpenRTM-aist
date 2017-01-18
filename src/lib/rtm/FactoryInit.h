@@ -18,4 +18,4 @@
 #ifndef RTM_FACTORYINIT_H
 #define RTM_FACTORYINIT_H
 void FactoryInit();
-#endif //RTM_FACTORYINIT_H
+#endif  // RTM_FACTORYINIT_H

@@ -917,6 +917,6 @@ namespace RTC
      */
     ConnectorListenerHolder connector_[CONNECTOR_LISTENER_NUM];
   };
-};
+};  // namespace RTC
 
-#endif // RTC_CONNECTORLISTENER_H
+#endif  // RTC_CONNECTORLISTENER_H
