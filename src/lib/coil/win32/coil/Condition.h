@@ -52,18 +52,18 @@ namespace coil
   } pthread_cond_t;
 
 
-  static int pthread_cond_init (pthread_cond_t *cv)
+  static int pthread_cond_init(pthread_cond_t *cv)
   {
     cv->waiters_count_ = 0;
     cv->was_broadcast_ = 0;
-    cv->sema_ = ::CreateSemaphore (NULL,       // no security
+    cv->sema_ = ::CreateSemaphore(NULL,       // no security
                                   0,           // initially 0
                                   0x7fffffff,  // max count
                                   NULL);      // unnamed
-    cv->waiters_done_ = ::CreateEvent (NULL,  // no security
-                                     FALSE,  // auto-reset
-                                     FALSE,  // non-signaled initially
-                                     NULL);  // unnamed
+    cv->waiters_done_ = ::CreateEvent(NULL,  // no security
+                                      FALSE,  // auto-reset
+                                      FALSE,  // non-signaled initially
+                                      NULL);  // unnamed
     return 0;
   }
 
@@ -239,8 +239,8 @@ namespace coil
      *
      * @endif
      */
-  int pthread_cond_wait (coil::pthread_cond_t *cv,
-                         coil::Mutex *external_mutex, DWORD aMilliSecond)
+  int pthread_cond_wait(coil::pthread_cond_t *cv,
+                        coil::Mutex *external_mutex, DWORD aMilliSecond)
   {
     DWORD result;
 
@@ -254,8 +254,8 @@ namespace coil
     // are called by another thread.
 //    std::cout << "Before SignalObjectAndWait [wait with time(" << milliSecond
 //              << ")]" << std::endl << std::flush ;
-    result = SignalObjectAndWait (external_mutex->mutex_,
-                                  cv->sema_, aMilliSecond, FALSE);
+    result = SignalObjectAndWait(external_mutex->mutex_,
+                                 cv->sema_, aMilliSecond, FALSE);
 
 //    char * p;
 //    switch (result) {
@@ -290,20 +290,23 @@ namespace coil
 
     // If we're the last waiter thread during this particular broadcast
     // then let all the other threads proceed.
-    if (last_waiter) {
-      // This call atomically signals the <waiters_done_> event and
-      // waits until it can acquire the <external_mutex>.  This is
-      // required to ensure fairness.
-      DWORD result = SignalObjectAndWait (cv->waiters_done_,
-                                          external_mutex->mutex_,
-                                          INFINITE, FALSE);
-//      std::cout << "result " << result << std::endl;
-    } else {
-      // Always regain the external mutex since that's the guarantee we
-      // give to our callers.
-      ::WaitForSingleObject (external_mutex->mutex_, 0);
-    }
-  return result;
+    if (last_waiter)
+      {
+        // This call atomically signals the <waiters_done_> event and
+        // waits until it can acquire the <external_mutex>.  This is
+        // required to ensure fairness.
+        DWORD result = SignalObjectAndWait(cv->waiters_done_,
+                                           external_mutex->mutex_,
+                                           INFINITE, FALSE);
+//        std::cout << "result " << result << std::endl;
+      }
+    else
+      {
+        // Always regain the external mutex since that's the guarantee we
+        // give to our callers.
+        ::WaitForSingleObject(external_mutex->mutex_, 0);
+      }
+    return result;
   }
 
     /*!
@@ -325,7 +328,7 @@ namespace coil
      *
      * @endif
      */
-  int pthread_cond_signal (pthread_cond_t *cv)
+  int pthread_cond_signal(pthread_cond_t *cv)
   {
     cv->waiters_count_lock_.lock();
     int have_waiters = cv->waiters_count_ > 0;
@@ -334,7 +337,7 @@ namespace coil
     // If there aren't any waiters, then this is a no-op.
     if (have_waiters)
 //    std::cout << "Before ReleaseSemaphore(1)" << std::endl << std::flush ;
-      ReleaseSemaphore (cv->sema_, 1, 0);
+      ReleaseSemaphore(cv->sema_, 1, 0);
 //    std::cout << "After ReleaseSemaphore(1)" << std::endl << std::flush ;
     return 0;
   }
@@ -358,7 +361,7 @@ namespace coil
      *
      * @endif
      */
-  int pthread_cond_broadcast (pthread_cond_t *cv)
+  int pthread_cond_broadcast(pthread_cond_t *cv)
   {
     // This is needed to ensure that <waiters_count_> and <was_broadcast_> are
     // consistent relative to each other.
@@ -379,7 +382,7 @@ namespace coil
         // Wake up all the waiters atomically.
 //      std::cout << "Before ReleaseSemaphore(" << cv->waiters_count_ << ")"
 //                << std::endl << std::flush ;
-        ReleaseSemaphore (cv->sema_, cv->waiters_count_, 0);
+        ReleaseSemaphore(cv->sema_, cv->waiters_count_, 0);
 //      std::cout << "After ReleaseSemaphore(" << cv->waiters_count_ << ")"
 //                << std::endl << std::flush ;
 
@@ -387,7 +390,7 @@ namespace coil
 
         // Wait for all the awakened threads to acquire the counting
         // semaphore.
-        WaitForSingleObject (cv->waiters_done_, INFINITE);
+        WaitForSingleObject(cv->waiters_done_, INFINITE);
         // This assignment is okay, even without the <waiters_count_lock_> held
         // because no other waiter threads can wake up to access it.
         cv->was_broadcast_ = 0;

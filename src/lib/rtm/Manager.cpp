@@ -56,7 +56,7 @@
 #endif
 
 //static sig_atomic_t g_mgrActive = true;
-extern "C" void handler (int)
+extern "C" void handler(int)
 {
   ::RTC::Manager::instance().terminate();
 }

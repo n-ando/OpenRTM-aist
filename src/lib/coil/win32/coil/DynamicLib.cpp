@@ -142,7 +142,7 @@ namespace coil
    * @brief Return an address of the memory where a symbol was loaded
    * @endif
    */
-  void* DynamicLib::symbol (const char* symbol_name)
+  void* DynamicLib::symbol(const char* symbol_name)
   {
     if (m_handle == NULL) return NULL;
     return ::GetProcAddress(m_handle, symbol_name);
