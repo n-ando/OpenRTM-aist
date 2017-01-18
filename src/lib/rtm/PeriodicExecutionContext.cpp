@@ -183,7 +183,8 @@ namespace RTC_exp
           {
             RTC_PARANOID(("Period:    %f [s]", static_cast<double>(period)));
             RTC_PARANOID(("Execution: %f [s]", static_cast<double>(t1 - t0)));
-            RTC_PARANOID(("Sleep:     %f [s]", static_cast<double>(period - (t1 - t0))));
+            RTC_PARANOID(("Sleep:     %f [s]",
+                                    static_cast<double>(period - (t1 - t0))));
           }
         coil::TimeValue t2(coil::gettimeofday());
         if (!m_nowait && period > (t1 - t0))

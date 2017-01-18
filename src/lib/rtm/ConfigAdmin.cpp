@@ -373,7 +373,8 @@ namespace RTC
   void
   ConfigAdmin::setOnRemoveConfigurationSet(OnRemoveConfigurationSetCallback* cb)
   {
-    std::cerr << "setOnRemoveConfigurationSet function is obsolete." <<std::endl;
+    std::cerr << 
+            "setOnRemoveConfigurationSet function is obsolete." <<std::endl;
     std::cerr << "Use addConfigurationSetNameListener instead." << std::endl;
     m_listeners.configsetname_[ON_REMOVE_CONFIG_SET].addListener(cb, false);
   }
