@@ -20,10 +20,10 @@
 #ifndef COIL_CONDITION_H
 #define COIL_CONDITION_H
 
+#include <sys/time.h>
 #include <pthread.h>
 #include <algorithm>
 #include <ctime>
-#include <sys/time.h>
 
 namespace coil
 {

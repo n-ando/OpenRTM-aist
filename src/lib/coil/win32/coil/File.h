@@ -19,10 +19,11 @@
 #ifndef COIL_FILE_H
 #define COIL_FILE_H
 
-#include <string>
-#include <windows.h>
 #include <coil/config_coil.h>
 #include <coil/stringutil.h>
+
+#include <windows.h>
+#include <string>
 
 namespace coil
 {

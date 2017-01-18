@@ -19,8 +19,8 @@
 #include <rtm/RTC.h>
 #include <rtm/PortAdmin.h>
 #include <rtm/CORBA_SeqUtil.h>
-#include <functional>
 #include <string.h>
+#include <functional>
 #include <vector>
 
 namespace RTC

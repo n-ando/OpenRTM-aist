@@ -19,13 +19,16 @@
 #include <coil/UUID.h>
 #include <coil/Guard.h>
 #include <coil/stringutil.h>
+
 #include <rtm/RTObject.h>
 #include <rtm/CORBA_SeqUtil.h>
 #include <rtm/SdoServiceAdmin.h>
 #include <rtm/SdoServiceProviderBase.h>
 #include <rtm/SdoServiceConsumerBase.h>
-#include <memory>
+
 #include <string.h>
+
+#include <memory>
 #include <vector>
 
 namespace RTC

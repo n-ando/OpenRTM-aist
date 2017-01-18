@@ -20,9 +20,6 @@
 #ifndef RTC_OUTPORTBASE_H
 #define RTC_OUTPORTBASE_H
 
-#include <vector>
-#include <string>
-
 #include <coil/Properties.h>
 #include <coil/stringutil.h>
 
@@ -33,6 +30,9 @@
 #include <rtm/CdrBufferBase.h>
 #include <rtm/SystemLogger.h>
 #include <rtm/ConnectorListener.h>
+
+#include <vector>
+#include <string>
 
 namespace RTC
 {

@@ -16,11 +16,13 @@
  *
  */
 
-#include <coil/UUID.h>
 #include "rtm/SdoConfiguration.h"
+
+#include <coil/UUID.h>
 #include <rtm/CORBA_SeqUtil.h>
 #include <rtm/NVUtil.h>
 #include <rtm/ExecutionContextBase.h>
+
 #include <memory>
 #include <iostream>
 // ACE

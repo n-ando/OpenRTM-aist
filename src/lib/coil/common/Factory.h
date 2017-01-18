@@ -20,13 +20,14 @@
 #ifndef COIL_FACTORY_H
 #define COIL_FACTORY_H
 
+#include <coil/Singleton.h>
+
 #include <assert.h>
 #include <algorithm>
 #include <functional>
 #include <string>
 #include <map>
 #include <vector>
-#include <coil/Singleton.h>
 
 // for Windows DLL export
 #if defined(WIN32) || defined(_WIN32) || defined(__WIN32__) || defined(__NT__)

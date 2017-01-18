@@ -20,9 +20,10 @@
 #ifndef COIL_CONDITION_H
 #define COIL_CONDITION_H
 
+#include <coil/Mutex.h>
+
 #include <windows.h>
 #include <algorithm>
-#include <coil/Mutex.h>
 #include <iostream>
 
 namespace coil

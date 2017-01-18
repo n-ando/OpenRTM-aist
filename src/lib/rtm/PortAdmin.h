@@ -20,11 +20,12 @@
 #ifndef RTC_PORTADMIN_H
 #define RTC_PORTADMIN_H
 
-#include <string>
 #include <rtm/idl/RTCSkel.h>
 #include <rtm/PortBase.h>
 #include <rtm/ObjectManager.h>
 #include <rtm/SystemLogger.h>
+
+#include <string>
 
 namespace RTC
 {

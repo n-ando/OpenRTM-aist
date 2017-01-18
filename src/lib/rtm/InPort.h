@@ -20,10 +20,6 @@
 #ifndef RTC_INPORT_H
 #define RTC_INPORT_H
 
-#include <string>
-#include <vector>
-#include <iostream>
-
 #include <coil/TimeValue.h>
 #include <coil/Time.h>
 #include <coil/OS.h>
@@ -36,6 +32,10 @@
 #include <rtm/CdrBufferBase.h>
 #include <rtm/PortCallback.h>
 #include <rtm/InPortConnector.h>
+
+#include <string>
+#include <vector>
+#include <iostream>
 
 namespace RTC
 {

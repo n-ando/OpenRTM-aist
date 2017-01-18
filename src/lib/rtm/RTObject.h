@@ -18,8 +18,6 @@
 #ifndef RTC_RTOBJECT_H
 #define RTC_RTOBJECT_H
 
-#include <string>
-#include <vector>
 // CORBA header include
 #include <coil/Properties.h>
 
@@ -36,6 +34,9 @@
 #include <rtm/ComponentActionListener.h>
 #include <rtm/SdoServiceAdmin.h>
 #include <rtm/PortConnectListener.h>
+
+#include <string>
+#include <vector>
 
 #define ECOTHER_OFFSET 1000
 

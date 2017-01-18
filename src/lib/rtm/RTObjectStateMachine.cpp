@@ -19,8 +19,8 @@
 #include <rtm/RTObjectStateMachine.h>
 #include <rtm/Manager.h>
 #include <rtm/RTObject.h>
-#include <iostream>
 #include <stdio.h>
+#include <iostream>
 
 namespace RTC_impl
 {

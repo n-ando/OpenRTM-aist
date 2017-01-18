@@ -20,13 +20,14 @@
 #ifndef RTC_CONNECTORLISTENER_H
 #define RTC_CONNECTORLISTENER_H
 
-#include <string>
-#include <vector>
-#include <utility>
 #include <coil/Mutex.h>
 #include <coil/Guard.h>
 #include <rtm/RTC.h>
 #include <rtm/ConnectorBase.h>
+
+#include <string>
+#include <vector>
+#include <utility>
 
 class cdrMemoryStream;
 

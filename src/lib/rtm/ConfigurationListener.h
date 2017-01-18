@@ -19,11 +19,12 @@
 #ifndef RTC_CONFIGURATIONLISTENER_H
 #define RTC_CONFIGURATIONLISTENER_H
 
-#include <utility>
-#include <vector>
 #include <coil/Properties.h>
 #include <coil/Mutex.h>
 #include <coil/Guard.h>
+
+#include <utility>
+#include <vector>
 
 namespace RTC
 {

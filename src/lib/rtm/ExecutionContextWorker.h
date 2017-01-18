@@ -21,12 +21,12 @@
 
 #include <coil/Mutex.h>
 #include <coil/Condition.h>
-#include <vector>
 
 #include <rtm/idl/RTCSkel.h>
 #include <rtm/SystemLogger.h>
 //#include <rtm/StateMachine.h>
 //#include <rtm/RTObjectStateMachine.h>
+#include <vector>
 
 #define NUM_OF_LIFECYCLESTATE 4
 

@@ -20,10 +20,11 @@
 #ifndef COIL_PROCESS_H
 #define COIL_PROCESS_H
 
+#include <coil/stringutil.h>
+
+#include <string>
 #include <windows.h>
 #include <tchar.h>
-#include <string>
-#include <coil/stringutil.h>
 
 namespace coil
 {

@@ -23,9 +23,11 @@
 #include <rtm/RTC.h>
 #include <rtm/idl/SDOPackageSkel.h>
 #include <rtm/SystemLogger.h>
-#include <string>
+
 #include <coil/Mutex.h>
 #include <coil/Guard.h>
+
+#include <string>
 
 /*!
  * @if jp

@@ -25,8 +25,9 @@
 #include <rtm/CORBA_SeqUtil.h>
 #include <rtm/LocalServiceAdmin.h>
 #include <rtm/LocalServiceBase.h>
-#include <memory>
+
 #include <algorithm>
+#include <memory>
 #include <string.h>
 #include <vector>
 

@@ -19,14 +19,14 @@
 #ifndef COIL_FILE_H
 #define COIL_FILE_H
 
-#include <cstring>
-#include <dirent.h>
-#include <libgen.h>
-#include <string>
-#include <sys/types.h>
-
 #include <coil/config_coil.h>
 #include <coil/stringutil.h>
+
+#include <dirent.h>
+#include <libgen.h>
+#include <sys/types.h>
+#include <string>
+#include <cstring>
 
 #ifdef __QNX__
 using std::strlen;

@@ -20,12 +20,13 @@
 #ifndef RTM_MANAGERSERVANT_H
 #define RTM_MANAGERSERVANT_H
 
-#include <iostream>
 #include <coil/Mutex.h>
 #include <coil/Guard.h>
 #include <rtm/idl/ManagerSkel.h>
 #include <rtm/Manager.h>
 #include <rtm/SystemLogger.h>
+
+#include <iostream>
 
 /*!
  * @if jp

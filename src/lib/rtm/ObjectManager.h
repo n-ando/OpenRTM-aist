@@ -21,12 +21,13 @@
 
 #include <rtm/RTC.h>
 
-#include <vector>
-#include <string>
-#include <algorithm>
-
 #include <coil/Mutex.h>
 #include <coil/Guard.h>
+
+#include <algorithm>
+#include <vector>
+#include <string>
+
 
 /*!
  * @if jp

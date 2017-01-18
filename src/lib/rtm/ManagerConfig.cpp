@@ -19,11 +19,12 @@
 
 #include <rtm/RTC.h>
 #include <rtm/ManagerConfig.h>
-#include <fstream>
-#include <iostream>
 #include <coil/OS.h>
 #include <coil/stringutil.h>
 #include <rtm/DefaultConfiguration.h>
+
+#include <fstream>
+#include <iostream>
 
 #ifdef __QNX__
 using std::sprintf;

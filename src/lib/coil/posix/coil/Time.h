@@ -19,13 +19,14 @@
 #ifndef COIL_TIME_H
 #define COIL_TIME_H
 
-#include <unistd.h>
+#include <coil/config_coil.h>
+#include <coil/TimeValue.h>
+
 #include <sys/time.h>
 #include <sys/types.h>
 #include <time.h>
 #include <iostream>
-#include <coil/config_coil.h>
-#include <coil/TimeValue.h>
+#include <unistd.h>
 
 namespace coil
 {

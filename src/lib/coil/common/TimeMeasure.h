@@ -20,8 +20,8 @@
 #ifndef COIL_TIMEMEASURE_H
 #define COIL_TIMEMEASURE_H
 
-#include <vector>
 #include <coil/TimeValue.h>
+#include <vector>
 
 namespace coil
 {

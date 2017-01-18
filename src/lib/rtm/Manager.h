@@ -22,10 +22,6 @@
 
 #include <rtm/RTC.h>
 
-#include <iostream>
-#include <string>
-#include <vector>
-
 #include <coil/Mutex.h>
 #include <coil/Guard.h>
 #include <coil/Task.h>
@@ -35,6 +31,11 @@
 #include <rtm/ObjectManager.h>
 #include <rtm/SystemLogger.h>
 #include <rtm/ManagerActionListener.h>
+
+#include <iostream>
+#include <string>
+#include <vector>
+
 
 namespace RTM
 {

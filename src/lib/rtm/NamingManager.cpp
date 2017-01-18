@@ -17,16 +17,16 @@
  *
  */
 
-#include <functional>
-#include <algorithm>
-#include <iostream>
-
 #include <coil/Routing.h>
 #include <coil/stringutil.h>
 
 #include <rtm/NamingManager.h>
 #include <rtm/Manager.h>
 #include <rtm/CORBA_IORUtil.h>
+
+#include <algorithm>
+#include <functional>
+#include <iostream>
 
 namespace RTC
 {

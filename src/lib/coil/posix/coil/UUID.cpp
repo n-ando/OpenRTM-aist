@@ -18,8 +18,10 @@
  */
 
 #include <coil/UUID.h>
-#include <iostream>
+
 #include <string.h>
+#include <iostream>
+
 
 #ifdef COIL_OS_FREEBSD
 void error_code(uint32_t status)

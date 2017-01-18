@@ -20,9 +20,9 @@
 #ifndef RTC_MANAGERCONFIG_H
 #define RTC_MANAGERCONFIG_H
 
-#include <string>
 #include <coil/Properties.h>
 
+#include <string>
 
 namespace RTC
 {

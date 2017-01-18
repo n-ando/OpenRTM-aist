@@ -20,15 +20,16 @@
 #ifndef RTC_PERIODICECSHAREDCOMPOSITE_H
 #define RTC_PERIODICECSHAREDCOMPOSITE_H
 
-#include <string>
-#include <utility>
-#include <vector>
 #include <rtm/idl/RTCSkel.h>
 #include <rtm/idl/OpenRTMSkel.h>
 #include <rtm/RTObject.h>
 #include <rtm/PeriodicExecutionContext.h>
 #include <rtm/SdoOrganization.h>
 #include <coil/stringutil.h>
+
+#include <string>
+#include <utility>
+#include <vector>
 
 /*!
  * @if jp

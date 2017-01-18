@@ -16,13 +16,14 @@
  *
  */
 
-#include <algorithm>
-#include <iostream>
 #include <coil/Time.h>
 #include <coil/TimeValue.h>
 #include <rtm/RTObject.h>
 #include <rtm/RTObjectStateMachine.h>
 #include <rtm/ExecutionContextWorker.h>
+
+#include <algorithm>
+#include <iostream>
 
 #define DEEFAULT_PERIOD 0.000001
 namespace RTC_impl

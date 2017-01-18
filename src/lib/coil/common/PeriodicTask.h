@@ -20,17 +20,17 @@
 #ifndef COIL_PERIODICTASK_H
 #define COIL_PERIODICTASK_H
 
-#include <map>
-#include <string>
-#include <vector>
-#include <algorithm>
-
 #include <coil/Mutex.h>
 #include <coil/Guard.h>
 #include <coil/Condition.h>
 #include <coil/TimeValue.h>
 #include <coil/TimeMeasure.h>
 #include <coil/PeriodicTaskBase.h>
+
+#include <algorithm>
+#include <map>
+#include <string>
+#include <vector>
 
 namespace coil
 {

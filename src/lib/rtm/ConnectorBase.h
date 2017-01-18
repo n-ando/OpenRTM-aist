@@ -20,8 +20,6 @@
 #ifndef RTC_CONNECTORBASE_H
 #define RTC_CONNECTORBASE_H
 
-#include <string>
-#include <vector>
 #include <coil/stringutil.h>
 #include <coil/Properties.h>
 
@@ -29,6 +27,9 @@
 #include <rtm/CdrBufferBase.h>
 #include <rtm/DataPortStatus.h>
 #include <rtm/SystemLogger.h>
+
+#include <string>
+#include <vector>
 
 namespace RTC
 {

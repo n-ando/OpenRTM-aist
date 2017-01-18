@@ -20,8 +20,9 @@
 #ifndef RTC_TYPENAME_H
 #define RTC_TYPENAME_H
 
-#include <iostream>
 #include <rtm/RTC.h>
+
+#include <iostream>
 
 namespace CORBA_Util
 {

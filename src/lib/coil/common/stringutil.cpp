@@ -17,14 +17,15 @@
  *
  */
 
-#include <algorithm>
-#include <iostream>
-#include <cstring>
+#include <coil/stringutil.h>
+
 #include <stdio.h>
 #include <stdarg.h>
 #include <limits.h>
-#include <coil/stringutil.h>
 #include <string.h>
+#include <algorithm>
+#include <iostream>
+#include <cstring>
 #include <cctype>
 #include <cstdio>
 

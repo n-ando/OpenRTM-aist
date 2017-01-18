@@ -25,11 +25,12 @@
 #pragma warning( disable : 4312 )
 #endif // WIN32
 
-#include <map>
-#include <algorithm>
 #include <coil/stringutil.h>
 #include <rtm/NVUtil.h>
 #include <rtm/CORBA_SeqUtil.h>
+
+#include <map>
+#include <algorithm>
 
 #ifdef WIN32
 #pragma warning( pop )
