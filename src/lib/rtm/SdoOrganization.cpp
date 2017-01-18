@@ -17,7 +17,7 @@
  *
  */
 
-#include <coil/UUID.h> 
+#include <coil/UUID.h>
 #include <rtm/SdoOrganization.h>
 #include <rtm/CORBA_SeqUtil.h>
 #include <memory>
@@ -62,7 +62,7 @@ namespace SDOPackage
     m_dependency = OWN;
     m_objref = this->_this();
   }
-  
+
   /* @if jp
    * @brief 仮想デストラクタ
    * @else
@@ -72,7 +72,7 @@ namespace SDOPackage
   Organization_impl::~Organization_impl()
   {
   }
-  
+
   /*!
    * @if jp
    * @brief [CORBA interface] Organization ID を取得する
@@ -87,7 +87,7 @@ namespace SDOPackage
     RTC_TRACE(("get_organization_id() = %s", m_pId.c_str()));
     return CORBA::string_dup(m_pId.c_str());
   }
-  
+
   /*!
    * @if jp
    * @brief [CORBA interface] OrganizationProperty の取得
@@ -105,7 +105,7 @@ namespace SDOPackage
     prop = new OrganizationProperty(m_orgProperty);
     return prop._retn();
   }
-  
+
   /*!
    * @if jp
    * @brief [CORBA interface] OrganizationProperty の特定の値の取得
@@ -121,13 +121,13 @@ namespace SDOPackage
     RTC_TRACE(("get_organization_property_value(%s)", name));
     if (std::string(name).empty())
       throw InvalidParameter("Empty name.");
-    
+
     CORBA::Long index;
     index = CORBA_SeqUtil::find(m_orgProperty.properties, nv_name(name));
-    
+
     if (index < 0)
       throw InvalidParameter("Not found.");
-    
+
     try
       {
         CORBA::Any_var value;
@@ -141,7 +141,7 @@ namespace SDOPackage
     // never reach here
     return new CORBA::Any();
   }
-  
+
   /*!
    * @if jp
    * @brief [CORBA interface] OrganizationProperty のセット
@@ -168,7 +168,7 @@ namespace SDOPackage
       }
     return false;
   }
-  
+
   /*!
    * @if jp
    * @brief [CORBA interface] OrganizationProperty の値のセット
@@ -187,7 +187,7 @@ namespace SDOPackage
       {
         throw InvalidParameter("set_organization_property_value(): Enpty name.");
       }
-    
+
     CORBA::Long index;
     index = CORBA_SeqUtil::find(m_orgProperty.properties, nv_name(name));
     if (index < 0)
@@ -203,14 +203,14 @@ namespace SDOPackage
       }
     return true;
   }
-  
+
   /*!
    * @if jp
    * @brief [CORBA interface] OrganizationProperty の削除
    * @else
    * @brief [CORBA interface] Remove specified OrganizationProperty
    * @endif
-   */   
+   */
   CORBA::Boolean
   Organization_impl::remove_organization_property(const char* name)
     throw (CORBA::SystemException,
@@ -219,12 +219,12 @@ namespace SDOPackage
     RTC_TRACE(("remove_organization_property(%s)", name));
     if (std::string(name).empty())
       throw InvalidParameter("remove_organization_property(): Enpty name.");
-    
+
     CORBA::Long index;
     index = CORBA_SeqUtil::find(m_orgProperty.properties, nv_name(name));
     if (index < 0)
       throw InvalidParameter("remove_organization_property(): Not found.");
-    
+
     try
       {
         CORBA_SeqUtil::erase(m_orgProperty.properties, index);
@@ -236,7 +236,7 @@ namespace SDOPackage
       }
     return false;
   }
-  
+
   /*!
    * @if jp
    * @brief [CORBA interface] Organization のオーナーを取得する
@@ -251,7 +251,7 @@ namespace SDOPackage
     RTC_TRACE(("get_owner()"));
     return m_varOwner._retn();
   }
-  
+
   /*!
    * @if jp
    * @brief [CORBA interface] Organization にオーナーをセットする
@@ -277,7 +277,7 @@ namespace SDOPackage
       }
     return true;
   }
-  
+
   /*!
    * @if jp
    * @brief [CORBA interface] Organization のメンバーを取得する
@@ -301,7 +301,7 @@ namespace SDOPackage
         throw InternalError("get_members()");
       }
   }
-  
+
   /*!
    * @if jp
    * @brief [CORBA interface] SDO の セット
@@ -327,7 +327,7 @@ namespace SDOPackage
       }
     return true;
   }
-  
+
   /*!
    * @if jp
    * @brief [CORBA interface] SDO メンバーの追加
@@ -354,7 +354,7 @@ namespace SDOPackage
       }
     return false;
   }
-  
+
   /*!
    * @if jp
    * @brief [CORBA interface] SDO メンバーの削除
@@ -373,16 +373,16 @@ namespace SDOPackage
         RTC_ERROR(("remove_member(): Enpty name."));
         throw InvalidParameter("remove_member(): Enpty name.");
       }
-    
+
     CORBA::Long index;
     index = CORBA_SeqUtil::find(m_memberList, sdo_id(id));
-    
+
     if (index < 0)
       {
         RTC_ERROR(("remove_member(): Not found."));
         throw InvalidParameter("remove_member(): Not found.");
       }
-    
+
     try
       {
         CORBA_SeqUtil::erase(m_memberList, index);
@@ -395,7 +395,7 @@ namespace SDOPackage
       }
     return false;
   }
-  
+
   /*!
    * @if jp
    * @brief [CORBA interface] Organization の DependencyType を取得
@@ -410,7 +410,7 @@ namespace SDOPackage
     RTC_TRACE(("get_dependency()"));
     return m_dependency;
   }
-  
+
   /*!
    * @if jp
    * @brief [CORBA interface] Organization の DependencyType をセットする

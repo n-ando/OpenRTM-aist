@@ -35,7 +35,7 @@ using std::feof;
 
 namespace RTC
 {
-  
+
   /*!
    * @if jp
    * @brief コンストラクタ
@@ -55,7 +55,7 @@ namespace RTC
     m_initFuncSuffix  = prop[INITFUNC_SFX];
     m_initFuncPrefix  = prop[INITFUNC_PFX];
   }
-  
+
   /*!
    * @if jp
    * @brief デストラクタ
@@ -67,7 +67,7 @@ namespace RTC
   {
     unloadAll();
   }
-  
+
   /*!
    * @if jp
    * @brief モジュールのロード
@@ -79,7 +79,7 @@ namespace RTC
   {
     RTC_TRACE(("load(fname = %s)", file_name.c_str()));
     if (file_name == "") throw InvalidArguments("Invalid file name.");
-    
+
     if (coil::isURL(file_name))
       {
         if (!m_downloadAllowed)
@@ -92,7 +92,7 @@ namespace RTC
             throw NotFound("Not implemented.");
           }
       }
-    
+
     // Find local file from load path or absolute directory
     std::string file_path;
     if (coil::isAbsolutePath(file_name))
@@ -111,7 +111,7 @@ namespace RTC
       {
         file_path = findFile(file_name, m_loadPath);
       }
-    
+
     // Now file_name is valid full path to module
     if (file_path == "")
       {
@@ -123,9 +123,9 @@ namespace RTC
         RTC_ERROR(("Module file not found: %s", file_path.c_str()));
         throw FileNotFound(file_path.c_str());
       }
-    
+
     DLLEntity* dll(new DLLEntity());
-    
+
     int retval =  dll->dll.open(file_path.c_str());
     if (retval != 0)
       {
@@ -141,10 +141,10 @@ namespace RTC
         RTC_ERROR(("Module registration failed: %s", file_path.c_str()));
         delete dll;
       }
-    
+
     return file_path;
   }
-  
+
   /*!
    * @if jp
    * @brief モジュールのロード、初期化
@@ -159,23 +159,23 @@ namespace RTC
                file_name.c_str(), init_func.c_str()));
     std::string name;
     name = load(file_name);
-    
+
     if (name == "")
       {
         throw InvalidOperation("Invalid file name");
       }
-    
+
     //  if (!init_func)
-    
+
     ModuleInitFunc init;
-    
+
     init = (ModuleInitFunc)this->symbol(name.c_str(), init_func);
 
     init(&(Manager::instance()));
-    
+
     return name;
   }
-  
+
   /*!
    * @if jp
    * @brief モジュールのアンロード
@@ -188,15 +188,15 @@ namespace RTC
     DLLEntity* dll(m_modules.find(file_name.c_str()));
     if (dll == NULL)
       throw NotFound(file_name.c_str());
-    
+
     dll->dll.close();
     m_modules.unregisterObject(file_name.c_str());
-    
+
     delete dll;
-    
+
     return;
   }
-  
+
   /*!
    * @if jp
    * @brief 全モジュールのアンロード
@@ -208,7 +208,7 @@ namespace RTC
   {
     RTC_TRACE(("unloadAll()"));
     std::vector<DLLEntity*> dlls(m_modules.getObjects());
-    
+
     for (int i(0), len(dlls.size()); i < len; ++i)
       {
         std::string ident(dlls[i]->properties["file_path"]);
@@ -217,7 +217,7 @@ namespace RTC
       }
     return;
   }
-  
+
   /*!
    * @if jp
    * @brief モジュールのシンボルの参照
@@ -243,16 +243,16 @@ namespace RTC
                func_name.c_str(), file_name.c_str()));
     void* func;
     func = dll->dll.symbol(func_name.c_str());
-    
+
     if (!func)
       {
         RTC_ERROR(("Specified symbol %s not found.", func_name.c_str()));
         throw SymbolNotFound(func_name);
       }
-    
+
     return func;
   }
-  
+
   /*!
    * @if jp
    * @brief モジュールロードパスを指定する
@@ -266,7 +266,7 @@ namespace RTC
     m_loadPath = load_path;
     return;
   }
-  
+
   /*!
    * @if jp
    * @brief モジュールロードパスを追加する
@@ -279,16 +279,16 @@ namespace RTC
     RTC_TRACE(("addLoadpath(%s)", coil::flatten(load_path, ", ").c_str()));
     StringVectorConstItr it(load_path.begin());
     StringVectorConstItr it_end(load_path.end());
-    
+
     while (it != it_end)
       {
         m_loadPath.push_back(*it);
         ++it;
       }
-    
+
     return;
   }
-  
+
   /*!
    * @if jp
    * @brief ロード済みのモジュールリストを取得する
@@ -307,7 +307,7 @@ namespace RTC
       }
     return modules;
   }
-  
+
   /*!
    * @if jp
    * @brief ロード可能なモジュールリストを取得する(未実装)
@@ -346,7 +346,7 @@ namespace RTC
                m_modprofs.size()));
     return m_modprofs;
   }
-  
+
   /*!
    * @if jp
    * @brief LoadPath からのファイルの検索
@@ -361,10 +361,10 @@ namespace RTC
                coil::flatten(load_path, ", ").c_str()));
     StringVectorConstItr it, it_end;
     std::string file_name(fname);
-    
+
     it     = load_path.begin();
     it_end = load_path.end();
-    
+
     while (it != it_end)
       {
         std::string f((*it) + "/" + file_name);
@@ -374,10 +374,10 @@ namespace RTC
           }
         ++it;
       }
-    
+
     return std::string("");
   }
-  
+
   /*!
    * @if jp
    * @brief ファイルが存在するかどうかのチェック
@@ -391,7 +391,7 @@ namespace RTC
     std::ifstream infile;
     infile.open(filename.c_str(), std::ios::in);
     // fial() 0: ok, !0: fail
-    if (infile.fail() != 0) 
+    if (infile.fail() != 0)
       {
         infile.close();
         return false;
@@ -401,10 +401,10 @@ namespace RTC
         infile.close();
         return true;
       }
-    
+
     return false;
   }
-  
+
   /*!
    * @if jp
    * @brief 初期化関数シンボルを生成する
@@ -416,7 +416,7 @@ namespace RTC
   {
     RTC_TRACE(("getInitFuncName(%s)", file_path.c_str()));
     std::string base_name(coil::basename(file_path.c_str()));
-    
+
     return m_initFuncPrefix + base_name + m_initFuncSuffix;
   }
 
@@ -483,7 +483,7 @@ namespace RTC
                        suffixes[s].c_str(), coil::flatten(tmp).c_str()));
             flist.insert(flist.end(), tmp.begin(), tmp.end());
           }
-        
+
         // reformat file path and remove cached files
         for (size_t j(0); j < flist.size(); ++j)
           {

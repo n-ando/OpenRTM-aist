@@ -40,7 +40,7 @@ namespace RTC_impl
   {
     RTC_TRACE(("ExecutionContextWorker()"));
   }
-  
+
   /*!
    * @if jp
    * @brief デストラクタ
@@ -64,7 +64,7 @@ namespace RTC_impl
   {
     return RTC::ExecutionContextService::_duplicate(m_ref);
   }
-  
+
   //============================================================
   // ExecutionContext
   //============================================================
@@ -80,7 +80,7 @@ namespace RTC_impl
     RTC_TRACE(("isRunning()"));
     return m_running;
   }
-  
+
   /*!
    * @if jp
    * @brief ExecutionContext の実行を開始
@@ -108,7 +108,7 @@ namespace RTC_impl
 
     return RTC::RTC_OK;
   }
-  
+
   /*!
    * @if jp
    * @brief ExecutionContext の実行を停止
@@ -312,7 +312,7 @@ namespace RTC_impl
    * @else
    * @brief Bind the component.
    * @endif
-   */  
+   */
   RTC::ReturnCode_t ExecutionContextWorker::
   bindComponent(RTC::RTObject_impl* rtc)
   {
@@ -325,14 +325,14 @@ namespace RTC_impl
       }
     RTC::ExecutionContextService_var ec = getECRef();
     RTC::ExecutionContextHandle_t id = rtc->bindContext(ec);
-    if (id < 0 || id > ECOTHER_OFFSET) 
+    if (id < 0 || id > ECOTHER_OFFSET)
       {
         // id should be owned context id < ECOTHER_OFFSET
         RTC_ERROR(("bindContext returns invalid id: %d", id));
         return RTC::RTC_ERROR;
       }
     RTC_DEBUG(("bindContext returns id = %d", id));
-    
+
     // rtc is owner of this EC
     RTC::LightweightRTObject_var comp
       = RTC::LightweightRTObject::_duplicate(rtc->getObjRef());
@@ -342,7 +342,7 @@ namespace RTC_impl
 
     return RTC::RTC_OK;
   }
-  
+
   /*!
    * @if jp
    * @brief コンポーネントをコンポーネントリストから削除する
@@ -431,7 +431,7 @@ namespace RTC_impl
       {
         if (!m_comps[i]->isCurrentState(state)) { return false; }
       }
-    return true; 
+    return true;
   }
 
   bool ExecutionContextWorker::
@@ -453,7 +453,7 @@ namespace RTC_impl
       {
         if (m_comps[i]->isCurrentState(state)) { return true; }
       }
-    return false; 
+    return false;
   }
 
   bool ExecutionContextWorker::

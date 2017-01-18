@@ -128,7 +128,7 @@ namespace RTC
   {
     return m_buffer;
   }
-  
+
   /*!
    * @if jp
    * @brief Bufferの生成

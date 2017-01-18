@@ -30,13 +30,13 @@ namespace RTC
    * @brief Constructor
    * @endif
    */
-  InPortPushConnector::InPortPushConnector(ConnectorInfo info, 
+  InPortPushConnector::InPortPushConnector(ConnectorInfo info,
                                            InPortProvider* provider,
                                            ConnectorListeners& listeners,
                                            CdrBufferBase* buffer)
     : InPortConnector(info, listeners, buffer),
-      m_provider(provider), 
-      m_listeners(listeners), 
+      m_provider(provider),
+      m_listeners(listeners),
       m_deleteBuffer(buffer == 0 ? true : false)
   {
     // publisher/buffer creation. This may throw std::bad_alloc;
@@ -137,7 +137,7 @@ namespace RTC
 
     return PORT_OK;
   }
-  
+
   /*!
    * @if jp
    * @brief Bufferの生成

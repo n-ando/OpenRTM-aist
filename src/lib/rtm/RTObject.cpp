@@ -54,7 +54,7 @@ namespace RTC
       "conf",              "",
       ""
     };
-  
+
   /*!
    * @if jp
    * @brief コンストラクタ
@@ -79,7 +79,7 @@ namespace RTC
     m_pSdoConfig = SDOPackage::Configuration::
       _duplicate(m_pSdoConfigImpl->getObjRef());
   }
-  
+
   /*!
    * @if jp
    * @brief コンストラクタ
@@ -105,7 +105,7 @@ namespace RTC
     m_pSdoConfig = SDOPackage::Configuration::
       _duplicate(m_pSdoConfigImpl->getObjRef());
   }
-  
+
   /*!
    * @if jp
    * @brief 仮想デストラクタ
@@ -118,7 +118,7 @@ namespace RTC
     RTC_TRACE(("~RTObject_impl()"));
     m_pSdoConfigImpl->_remove_ref();
   }
-  
+
   //============================================================
   // Overridden functions
   //============================================================
@@ -130,13 +130,13 @@ namespace RTC
    * @endif
    */
   // The initialize action (on CREATED->ALIVE transition)
-  // former rtc_init_entry() 
+  // former rtc_init_entry()
   ReturnCode_t RTObject_impl::onInitialize()
   {
     RTC_TRACE(("onInitialize()"));
     return RTC::RTC_OK;
   }
-  
+
   /*!
    * @if jp
    * @brief 終了処理用コールバック関数
@@ -151,7 +151,7 @@ namespace RTC
     RTC_TRACE(("onFinalize()"));
     return RTC::RTC_OK;
   }
-  
+
   /*!
    * @if jp
    * @brief 開始処理用コールバック関数
@@ -166,7 +166,7 @@ namespace RTC
     RTC_TRACE(("onStartup(%d)", ec_id));
     return RTC::RTC_OK;
   }
-  
+
   /*!
    * @if jp
    * @brief 停止処理用コールバック関数
@@ -181,7 +181,7 @@ namespace RTC
     RTC_TRACE(("onShutdown(%d)", ec_id));
     return RTC::RTC_OK;
   }
-  
+
   /*!
    * @if jp
    * @brief 活性化処理用コールバック関数
@@ -196,7 +196,7 @@ namespace RTC
     RTC_TRACE(("onActivated(%d)", ec_id));
     return RTC::RTC_OK;
   }
-  
+
   /*!
    * @if jp
    * @brief 非活性化処理用コールバック関数
@@ -211,7 +211,7 @@ namespace RTC
     RTC_TRACE(("onDeactivated(%d)", ec_id));
     return RTC::RTC_OK;
   }
-  
+
   /*!
    * @if jp
    * @brief 周期処理用コールバック関数
@@ -226,7 +226,7 @@ namespace RTC
     RTC_PARANOID(("onExecute(%d)", ec_id));
     return RTC::RTC_OK;
   }
-  
+
   /*!
    * @if jp
    * @brief 中断処理用コールバック関数
@@ -241,7 +241,7 @@ namespace RTC
     RTC_TRACE(("onAborting(%d)", ec_id));
     return RTC::RTC_OK;
   }
-  
+
   /*!
    * @if jp
    * @brief エラー処理用コールバック関数
@@ -256,7 +256,7 @@ namespace RTC
     RTC_TRACE(("onError(%d)", ec_id));
     return RTC::RTC_OK;
   }
-  
+
   /*!
    * @if jp
    * @brief リセット処理用コールバック関数
@@ -271,7 +271,7 @@ namespace RTC
     RTC_TRACE(("onReset(%d)", ec_id));
     return RTC::RTC_OK;
   }
-  
+
   /*!
    * @if jp
    * @brief 状態変更処理用コールバック関数
@@ -286,7 +286,7 @@ namespace RTC
     RTC_PARANOID(("onStateUpdate(%d)", ec_id));
     return RTC::RTC_OK;
   }
-  
+
   /*!
    * @if jp
    * @brief 動作周期変更通知用コールバック関数
@@ -301,7 +301,7 @@ namespace RTC
     RTC_TRACE(("onRatechanged(%d)", ec_id));
     return RTC::RTC_OK;
   }
-  
+
   //============================================================
   // RTC::LightweightRTObject
   //============================================================
@@ -352,7 +352,7 @@ namespace RTC
     assert(ret == RTC::RTC_OK);
     return ret;
   }
- 
+
   /*!
    * @if jp
    * @brief [CORBA interface] RTC を終了する
@@ -368,7 +368,7 @@ namespace RTC
     if (!m_exiting) { return RTC::PRECONDITION_NOT_MET; }
     // Return RTC::PRECONDITION_NOT_MET,
     // When the component is registered in ExecutionContext.
-    // m_ecMine.length() != 0 || 
+    // m_ecMine.length() != 0 ||
     if (m_ecOther.length() != 0)
       {
 
@@ -381,13 +381,13 @@ namespace RTC
           }
         CORBA_SeqUtil::clear(m_ecOther);
       }
-    
+
     ReturnCode_t ret(on_finalize());
 
     shutdown();
     return ret;
   }
-  
+
   /*!
    * @if jp
    * @brief [CORBA interface] RTC がオーナーである ExecutionContext を
@@ -428,7 +428,7 @@ namespace RTC
 
     return ret;
   }
-  
+
   /*!
    * @if jp
    * @brief [CORBA interface] RTC が Alive 状態であるかどうか確認する。
@@ -456,7 +456,7 @@ namespace RTC
       }
     return false;
   }
-  
+
   /*!
    * @if jp
    * @brief [CORBA interface] ExecutionContextを取得する
@@ -494,7 +494,7 @@ namespace RTC
 
     return ExecutionContext::_nil();
   }
-    
+
   /*!
    * @if jp
    * @brief [CORBA interface] ExecutionContextListを取得する
@@ -510,7 +510,7 @@ namespace RTC
 #ifndef ORB_IS_RTORB
     ExecutionContextList_var execlist;
     execlist = new ExecutionContextList();
-    
+
     CORBA_SeqUtil::for_each(m_ecMine, ec_copy(execlist));
 #else // ORB_IS_RTORB
     ExecutionContextList_var execlist;
@@ -528,7 +528,7 @@ namespace RTC
             ++j;
           }
       }
-#endif // ORB_IS_RTORB 
+#endif // ORB_IS_RTORB
     return execlist._retn();
   }
 
@@ -545,9 +545,9 @@ namespace RTC
     RTC_TRACE(("get_participating_contexts()"));
     ExecutionContextList_var execlist;
     execlist = new ExecutionContextList();
-    
+
     CORBA_SeqUtil::for_each(m_ecOther, ec_copy(execlist));
-    
+
     return execlist._retn();
   }
 
@@ -567,12 +567,12 @@ namespace RTC
     CORBA::Long num;
     num = CORBA_SeqUtil::find(m_ecMine, ec_find(cxt));
     if (num != -1)
-      { 
+      {
         return (ExecutionContextHandle_t)num;
       }
     num = CORBA_SeqUtil::find(m_ecOther, ec_find(cxt));
     if (num != -1)
-      { 
+      {
         return (ExecutionContextHandle_t)(ECOTHER_OFFSET + num);
       }
     return (ExecutionContextHandle_t)(-1);
@@ -600,7 +600,7 @@ namespace RTC
       {
         return -1;
       }
-    
+
     // if m_ecOther has nil element, insert attached ec to there.
     for (::CORBA::ULong i(0), len(m_ecOther.length()); i < len; ++i)
       {
@@ -616,12 +616,12 @@ namespace RTC
     // no space in the list, push back ec to the last.
     CORBA_SeqUtil::
       push_back(m_ecOther, ExecutionContextService::_duplicate(ecs));
-    
+
     UniqueId ec_id((m_ecOther.length() - 1) + ECOTHER_OFFSET);
     onAttachExecutionContext(ec_id);
     return ec_id;
   }
-  
+
   UniqueId
   RTObject_impl::bindContext(ExecutionContext_ptr exec_context)
   {
@@ -636,7 +636,7 @@ namespace RTC
       {
         return -1;
       }
-    
+
     // if m_ecMine has nil element, insert attached ec to there.
     for (::CORBA::ULong i(0), len(m_ecMine.length()); i < len; ++i)
       {
@@ -651,7 +651,7 @@ namespace RTC
     // no space in the list, push back ec to the last.
     CORBA_SeqUtil::
       push_back(m_ecMine, ExecutionContextService::_duplicate(ecs));
-    
+
     UniqueId ec_id(m_ecMine.length() - 1);
     return ec_id;
   }
@@ -673,7 +673,7 @@ namespace RTC
     // ID: offset -       : participating ec
     // owned       ec index = ID
     // participate ec index = ID - offset
-    if ((CORBA::ULong)ec_id < ECOTHER_OFFSET || 
+    if ((CORBA::ULong)ec_id < ECOTHER_OFFSET ||
         (CORBA::ULong)(ec_id - ECOTHER_OFFSET) > len)
       {
         return RTC::BAD_PARAMETER;
@@ -684,16 +684,16 @@ namespace RTC
       {
         return RTC::BAD_PARAMETER;
       }
-    
+
     m_ecOther[index] = ::RTC::ExecutionContextService::_nil();
     onDetachExecutionContext(ec_id);
     return RTC::RTC_OK;
   }
-  
+
   //============================================================
   // RTC::RTObject
   //============================================================
-  
+
   /*!
    * @if jp
    * @brief [RTObject CORBA interface] コンポーネントプロファイルを取得する
@@ -710,17 +710,17 @@ namespace RTC
         ComponentProfile_var profile
           = new ComponentProfile();
 #ifndef ORB_IS_RTORB
-        profile->instance_name = 
+        profile->instance_name =
           CORBA::string_dup(m_properties["instance_name"].c_str());
-        profile->type_name     = 
+        profile->type_name     =
           CORBA::string_dup(m_properties["type_name"].c_str());
-        profile->description   = 
+        profile->description   =
           CORBA::string_dup(m_properties["description"].c_str());
-        profile->version       = 
+        profile->version       =
           CORBA::string_dup(m_properties["version"].c_str());
-        profile->vendor        = 
+        profile->vendor        =
           CORBA::string_dup(m_properties["vendor"].c_str());
-        profile->category      = 
+        profile->category      =
           CORBA::string_dup(m_properties["category"].c_str());
         profile->port_profiles = m_portAdmin.getPortProfileList();
 #else // ORB_IS_RTORB
@@ -742,7 +742,7 @@ namespace RTC
     assert(false);
     return 0;
   }
-  
+
   /*!
    * @if jp
    * @brief [RTObject CORBA interface] ポートを取得する
@@ -764,8 +764,8 @@ namespace RTC
     assert(false);
     return 0;
   }
-  
-  
+
+
   //============================================================
   // RTC::ComponentAction
   //============================================================
@@ -823,7 +823,7 @@ namespace RTC
     postOnInitialize(0, ret);
     return ret;
   }
-  
+
   /*!
    * @if jp
    * @brief [ComponentAction CORBA interface] RTC の終了
@@ -848,7 +848,7 @@ namespace RTC
     postOnFinalize(0, ret);
     return ret;
   }
-  
+
   /*!
    * @if jp
    * @brief [ComponentAction CORBA interface] RTC の開始
@@ -873,7 +873,7 @@ namespace RTC
     postOnStartup(ec_id, ret);
     return ret;
   }
-  
+
   /*!
    * @if jp
    * @brief [ComponentAction CORBA interface] RTC の停止
@@ -898,7 +898,7 @@ namespace RTC
     postOnShutdown(ec_id, ret);
     return ret;
   }
-  
+
   /*!
    * @if jp
    * @brief [ComponentAction CORBA interface] RTC の活性化
@@ -925,7 +925,7 @@ namespace RTC
     postOnActivated(ec_id, ret);
     return ret;
   }
-  
+
   /*!
    * @if jp
    * @brief [ComponentAction CORBA interface] RTC の非活性化
@@ -951,7 +951,7 @@ namespace RTC
     postOnDeactivated(ec_id, ret);
     return ret;
   }
-  
+
   /*!
    * @if jp
    * @brief [ComponentAction CORBA interface] RTC のエラー状態への遷移
@@ -976,7 +976,7 @@ namespace RTC
     postOnAborting(ec_id, ret);
     return ret;
   }
-  
+
   /*!
    * @if jp
    * @brief [ComponentAction CORBA interface] RTC のエラー処理
@@ -1002,7 +1002,7 @@ namespace RTC
     postOnError(ec_id, ret);
     return ret;
   }
-  
+
   /*!
    * @if jp
    * @brief [ComponentAction CORBA interface] RTC のリセット
@@ -1027,12 +1027,12 @@ namespace RTC
     postOnReset(ec_id, ret);
     return ret;
   }
-  
+
   /*!
    * @if jp
    * @brief [DataFlowComponentAction CORBA interface] RTC の定常処理(第一周期)
    * @else
-   * @brief [DataFlowComponentAction CORBA interface] Primary Periodic 
+   * @brief [DataFlowComponentAction CORBA interface] Primary Periodic
    *        Operation of RTC
    * @endif
    */
@@ -1055,12 +1055,12 @@ namespace RTC
     postOnExecute(ec_id, ret);
     return ret;
   }
-  
+
   /*!
    * @if jp
    * @brief [DataFlowComponentAction CORBA interface] RTC の定常処理(第二周期)
    * @else
-   * @brief [DataFlowComponentAction CORBA interface] Secondary Periodic 
+   * @brief [DataFlowComponentAction CORBA interface] Secondary Periodic
    *        Operation of RTC
    * @endif
    */
@@ -1082,7 +1082,7 @@ namespace RTC
     postOnStateUpdate(ec_id, ret);
     return ret;
   }
-  
+
   /*!
    * @if jp
    * @brief [DataFlowComponentAction CORBA interface] 実行周期変更通知
@@ -1107,13 +1107,13 @@ namespace RTC
     postOnRateChanged(ec_id, ret);
     return ret;
   }
-  
+
   //============================================================
   // SDO interfaces
   //============================================================
   /*!
    * @if jp
-   * @brief [SDO interface] Organization リストの取得 
+   * @brief [SDO interface] Organization リストの取得
    * @else
    * @brief [SDO interface] Get Organization list
    * @endif
@@ -1135,7 +1135,7 @@ namespace RTC
       }
     return new SDOPackage::OrganizationList();
   }
-  
+
   // SDOPackage::SDO
   /*!
    * @if jp
@@ -1145,7 +1145,7 @@ namespace RTC
    * @endif
    */
   char* RTObject_impl::get_sdo_id()
-    throw (CORBA::SystemException, 
+    throw (CORBA::SystemException,
            SDOPackage::NotAvailable, SDOPackage::InternalError)
   {
     RTC_TRACE(("get_sdo_id()"));
@@ -1160,7 +1160,7 @@ namespace RTC
         throw SDOPackage::InternalError("get_sdo_id()");
       }
   }
-  
+
   /*!
    * @if jp
    * @brief [SDO interface] SDO タイプの取得
@@ -1169,7 +1169,7 @@ namespace RTC
    * @endif
    */
   char* RTObject_impl::get_sdo_type()
-    throw (CORBA::SystemException, 
+    throw (CORBA::SystemException,
            SDOPackage::NotAvailable, SDOPackage::InternalError)
   {
     RTC_TRACE(("get_sdo_type()"));
@@ -1186,16 +1186,16 @@ namespace RTC
     sdo_type = "";
     return sdo_type._retn();
   }
-  
+
   /*!
    * @if jp
-   * @brief [SDO interface] SDO DeviceProfile リストの取得 
+   * @brief [SDO interface] SDO DeviceProfile リストの取得
    * @else
    * @brief [SDO interface] Get SDO DeviceProfile list
    * @endif
    */
   SDOPackage::DeviceProfile* RTObject_impl::get_device_profile()
-    throw (CORBA::SystemException, 
+    throw (CORBA::SystemException,
            SDOPackage::NotAvailable, SDOPackage::InternalError)
   {
     RTC_TRACE(("get_device_profile()"));
@@ -1218,13 +1218,13 @@ namespace RTC
   //------------------------------------------------------------
   /*!
    * @if jp
-   * @brief [SDO interface] SDO ServiceProfile の取得 
+   * @brief [SDO interface] SDO ServiceProfile の取得
    * @else
    * @brief [SDO interface] Get SDO ServiceProfile
    * @endif
    */
   SDOPackage::ServiceProfileList* RTObject_impl::get_service_profiles()
-    throw (CORBA::SystemException, 
+    throw (CORBA::SystemException,
            SDOPackage::NotAvailable, SDOPackage::InternalError)
   {
     RTC_TRACE(("get_service_profiles()"));
@@ -1242,17 +1242,17 @@ namespace RTC
       }
     return sprofiles._retn();
   }
-  
+
   /*!
    * @if jp
-   * @brief [SDO interface] 特定のServiceProfileの取得 
+   * @brief [SDO interface] 特定のServiceProfileの取得
    * @else
    * @brief [SDO interface] Get specified ServiceProfile
    * @endif
    */
   SDOPackage::ServiceProfile*
   RTObject_impl::get_service_profile(const char* id)
-    throw (CORBA::SystemException, 
+    throw (CORBA::SystemException,
            SDOPackage::InvalidParameter, SDOPackage::NotAvailable,
            SDOPackage::InternalError)
   {
@@ -1262,7 +1262,7 @@ namespace RTC
           InvalidParameter("get_service_profile(): Empty name.");
       }
     RTC_TRACE(("get_service_profile(%s))", id));
-    
+
     SDOPackage::ServiceProfile_var prof;
     try
       {
@@ -1280,7 +1280,7 @@ namespace RTC
       }
     return prof._retn();
   }
-  
+
   /*!
    * @if jp
    * @brief [SDO interface] 指定された SDO Service の取得
@@ -1289,7 +1289,7 @@ namespace RTC
    * @endif
    */
   SDOPackage::SDOService_ptr RTObject_impl::get_sdo_service(const char* id)
-    throw (CORBA::SystemException, 
+    throw (CORBA::SystemException,
            SDOPackage::InvalidParameter, SDOPackage::NotAvailable,
            SDOPackage::InternalError)
   {
@@ -1314,16 +1314,16 @@ namespace RTC
       }
     return sdo;
   }
-  
+
   /*!
    * @if jp
-   * @brief [SDO interface] Configuration オブジェクトの取得 
+   * @brief [SDO interface] Configuration オブジェクトの取得
    * @else
    * @brief [SDO interface] Get Configuration object
    * @endif
    */
   SDOPackage::Configuration_ptr RTObject_impl::get_configuration()
-    throw (CORBA::SystemException, 
+    throw (CORBA::SystemException,
            SDOPackage::InterfaceNotImplemented, SDOPackage::NotAvailable,
            SDOPackage::InternalError)
   {
@@ -1348,16 +1348,16 @@ namespace RTC
       }
     return SDOPackage::Configuration::_nil();
   }
-  
+
   /*!
    * @if jp
-   * @brief [SDO interface] Monitoring オブジェクトの取得 
+   * @brief [SDO interface] Monitoring オブジェクトの取得
    * @else
    * @brief [SDO interface] Get Monitoring object
    * @endif
    */
   SDOPackage::Monitoring_ptr RTObject_impl::get_monitoring()
-    throw (CORBA::SystemException, 
+    throw (CORBA::SystemException,
            SDOPackage::InterfaceNotImplemented, SDOPackage::NotAvailable,
            SDOPackage::InternalError)
   {
@@ -1365,16 +1365,16 @@ namespace RTC
     throw SDOPackage::InterfaceNotImplemented();
     return SDOPackage::Monitoring::_nil();
   }
-  
+
   /*!
    * @if jp
-   * @brief [SDO interface] Organization リストの取得 
+   * @brief [SDO interface] Organization リストの取得
    * @else
    * @brief [SDO interface] Get Organization list
    * @endif
    */
   SDOPackage::OrganizationList* RTObject_impl::get_organizations()
-    throw (CORBA::SystemException, 
+    throw (CORBA::SystemException,
            SDOPackage::NotAvailable, SDOPackage::InternalError)
   {
     RTC_TRACE(("get_organizations()"));
@@ -1391,16 +1391,16 @@ namespace RTC
       }
     return new SDOPackage::OrganizationList(0);
   }
-  
+
   /*!
    * @if jp
-   * @brief [SDO interface] SDO Status リストの取得 
+   * @brief [SDO interface] SDO Status リストの取得
    * @else
    * @brief [SDO interface] Get SDO Status list
    * @endif
    */
   SDOPackage::NVList* RTObject_impl::get_status_list()
-    throw (CORBA::SystemException, 
+    throw (CORBA::SystemException,
            SDOPackage::NotAvailable, SDOPackage::InternalError)
   {
     RTC_TRACE(("get_status_list()"));
@@ -1416,16 +1416,16 @@ namespace RTC
       }
     return new SDOPackage::NVList(0);
   }
-  
+
   /*!
    * @if jp
-   * @brief [SDO interface] SDO Status の取得 
+   * @brief [SDO interface] SDO Status の取得
    * @else
    * @brief [SDO interface] Get SDO Status
    * @endif
    */
   CORBA::Any* RTObject_impl::get_status(const char* name)
-    throw (CORBA::SystemException, 
+    throw (CORBA::SystemException,
            SDOPackage::InvalidParameter, SDOPackage::NotAvailable,
            SDOPackage::InternalError)
   {
@@ -1446,7 +1446,7 @@ namespace RTC
       }
     return new CORBA::Any();
   }
-  
+
   //============================================================
   // Local methods
   //============================================================
@@ -1469,7 +1469,7 @@ namespace RTC
     m_profile.instance_name = (char *)m_properties["instance_name"].c_str();
 #endif // ORB_IS_RTORB
   }
-  
+
   /*!
    * @if jp
    * @brief [local interface] Naming Server 情報の取得
@@ -1482,7 +1482,7 @@ namespace RTC
     RTC_TRACE(("getNamingNames()"));
     return coil::split(m_properties["naming.names"], ",");
   }
-  
+
   /*!
    * @if jp
    * @brief [local interface] オブジェクトリファレンスの設定
@@ -1495,7 +1495,7 @@ namespace RTC
     RTC_TRACE(("setObjRef()"));
     m_objref = RTC::RTObject::_duplicate(rtobj);
   }
-  
+
   /*!
    * @if jp
    * @brief [local interface] オブジェクトリファレンスの取得
@@ -1509,7 +1509,7 @@ namespace RTC
 
     return m_objref;
   }
-  
+
   /*!
    * @if jp
    * @brief [local interface] RTC のプロパティを設定する
@@ -1537,7 +1537,7 @@ namespace RTC
     m_profile.category      = (char*)m_properties["category"].c_str();
 #endif //ORB_IS_RTORB
   }
-  
+
   /*!
    * @if jp
    * @brief [local interface] RTC のプロパティを取得する
@@ -1550,7 +1550,7 @@ namespace RTC
     RTC_TRACE(("getProperties()"));
     return m_properties;
   }
-  
+
   /*!
    * @if jp
    * @brief コンフィギュレーションパラメータの更新(ID指定)
@@ -1564,7 +1564,7 @@ namespace RTC
     m_configsets.update(config_set);
     return;
   }
-  
+
   /*!
    * @if jp
    * @brief [local interface] Port を登録する
@@ -1586,7 +1586,7 @@ namespace RTC
     onAddPort(port.getPortProfile());
     return m_portAdmin.addPort(port);
   }
-  
+
   void RTObject_impl::registerPort(PortService_ptr port)
   {
     RTC_TRACE(("registerPort(PortBase&)"));
@@ -1613,9 +1613,9 @@ namespace RTC
     std::string tmp(port.getName());
     coil::vstring vtmp = coil::split(tmp, ".");
     propkey += vtmp.back();
-    m_properties.getNode(propkey) 
+    m_properties.getNode(propkey)
       << m_properties.getNode("port.corba");
-    
+
     port.init(m_properties.getNode(propkey));
     return addPort((PortBase&)port);
   }
@@ -1638,7 +1638,7 @@ namespace RTC
       << m_properties.getNode("port.inport.dataport");
 
     bool ret(addPort(inport));
-    
+
     if (!ret)
       {
         RTC_ERROR(("addInPort() failed."));
@@ -1672,14 +1672,14 @@ namespace RTC
                                  OutPortBase& outport)
   {
     RTC_TRACE(("addOutPort(%s)", name));
-    
+
     std::string propkey("port.outport.");
     propkey += name;
-    m_properties.getNode(propkey) 
+    m_properties.getNode(propkey)
       << m_properties.getNode("port.outport.dataport");
-    
+
     bool ret(addPort(outport));
-    
+
     if (!ret)
       {
         RTC_ERROR(("addOutPort() failed."));
@@ -1690,7 +1690,7 @@ namespace RTC
     m_outports.push_back(&outport);
     return ret;
   }
-  
+
   void RTObject_impl::registerOutPort(const char* name,
                                       OutPortBase& outport)
   {
@@ -1701,7 +1701,7 @@ namespace RTC
         RTC_ERROR(("addOutPort(%s) failed.", name));
       }
   }
-  
+
   /*!
    * @if jp
    * @brief [local interface] DataInPort を削除する
@@ -1996,14 +1996,14 @@ namespace RTC
    * @return 読み込み結果(全ポートの読み込み成功:true，失敗:false)
    * @else
    * @brief Readout the value from All InPorts.
-   * @return result (Successful:true, Failed:false) 
+   * @return result (Successful:true, Failed:false)
   * @endif
    */
   bool RTObject_impl::readAll()
   {
     RTC_TRACE(("readAll()"));
-    std::vector<InPortBase*>::iterator it     = m_inports.begin(); 
-    std::vector<InPortBase*>::iterator it_end = m_inports.end(); 
+    std::vector<InPortBase*>::iterator it     = m_inports.begin();
+    std::vector<InPortBase*>::iterator it_end = m_inports.end();
     bool ret(true);
 
     while ( it != it_end )
@@ -2027,15 +2027,15 @@ namespace RTC
    * @brief 全 OutPort のwrite()メソッドをコールする。
    * @return 読み込み結果(全ポートへの書き込み成功:true，失敗:false)
    * @else
-   * @brief The write() method of all OutPort is called. 
+   * @brief The write() method of all OutPort is called.
    * @return result (Successful:true, Failed:false)
    * @endif
    */
   bool RTObject_impl::writeAll()
   {
     RTC_TRACE(("writeAll()"));
-    std::vector<OutPortBase*>::iterator it     = m_outports.begin(); 
-    std::vector<OutPortBase*>::iterator it_end = m_outports.end(); 
+    std::vector<OutPortBase*>::iterator it     = m_outports.begin();
+    std::vector<OutPortBase*>::iterator it_end = m_outports.end();
 
     bool ret(true);
 
@@ -2062,14 +2062,14 @@ namespace RTC
    * readAll()が呼出されるようになる。
    * パラメータがfalseの場合は、readAll()呼出を無効にする。
    *
-   * @param read(default:true) 
+   * @param read(default:true)
    *        (readAll()メソッド呼出あり:true, readAll()メソッド呼出なし:false)
    *
    * @else
    *
-   * @brief Set whether to execute the readAll() method. 
+   * @brief Set whether to execute the readAll() method.
    *
-   * Set whether to execute the readAll() method. 
+   * Set whether to execute the readAll() method.
    *
    * @param read(default:true)
    *        (readAll() is called:true, readAll() isn't called:false)
@@ -2092,14 +2092,14 @@ namespace RTC
    * writeAll()が呼出されるようになる。
    * パラメータがfalseの場合は、writeAll()呼出を無効にする。
    *
-   * @param write(default:true) 
+   * @param write(default:true)
    *        (writeAll()メソッド呼出あり:true, writeAll()メソッド呼出なし:false)
    *
    * @else
    *
-   * @brief Set whether to execute the writeAll() method. 
+   * @brief Set whether to execute the writeAll() method.
    *
-   * Set whether to execute the writeAll() method. 
+   * Set whether to execute the writeAll() method.
    *
    * @param write(default:true)
    *        (writeAll() is called:true, writeAll() isn't called:false)
@@ -2170,7 +2170,7 @@ namespace RTC
         m_eclist.clear();
       }
   }
-  
+
   /*!
    * @if jp
    * @brief PreComponentActionListener リスナを追加する
@@ -2188,8 +2188,8 @@ namespace RTC
     m_actionListeners.
       preaction_[listener_type].addListener(listener, autoclean);
   }
-  
-  
+
+
   /*!
    * @if jp
    * @brief PreComponentActionListener リスナを削除する
@@ -2386,7 +2386,7 @@ namespace RTC
    * @if jp
    * @brief ConfigurationParamListener を追加する
    * @else
-   * @brief Adding ConfigurationParamListener 
+   * @brief Adding ConfigurationParamListener
    * @endif
    */
   void RTObject_impl::
@@ -2401,7 +2401,7 @@ namespace RTC
    * @if jp
    * @brief ConfigurationParamListener を削除する
    * @else
-   * @brief Removing ConfigurationParamListener 
+   * @brief Removing ConfigurationParamListener
    * @endif
    */
   void RTObject_impl::
@@ -2415,7 +2415,7 @@ namespace RTC
    * @if jp
    * @brief ConfigurationSetListener を追加する
    * @else
-   * @brief Adding ConfigurationSetListener 
+   * @brief Adding ConfigurationSetListener
    * @endif
    */
   void RTObject_impl::
@@ -2430,7 +2430,7 @@ namespace RTC
    * @if jp
    * @brief ConfigurationSetListener を削除する
    * @else
-   * @brief Removing ConfigurationSetListener 
+   * @brief Removing ConfigurationSetListener
    * @endif
    */
   void RTObject_impl::
@@ -2444,7 +2444,7 @@ namespace RTC
    * @if jp
    * @brief ConfigurationSetNameListener を追加する
    * @else
-   * @brief Adding ConfigurationSetNameListener 
+   * @brief Adding ConfigurationSetNameListener
    * @endif
    */
   void RTObject_impl::
@@ -2459,7 +2459,7 @@ namespace RTC
    * @if jp
    * @brief ConfigurationSetNameListener を削除する
    * @else
-   * @brief Removing ConfigurationSetNameListener 
+   * @brief Removing ConfigurationSetNameListener
    * @endif
    */
   void RTObject_impl::
@@ -2468,8 +2468,8 @@ namespace RTC
   {
     m_configsets.removeConfigurationSetNameListener(type, listener);
   }
-  
-  
+
+
   /*!
    * @if jp
    * @brief RTC を終了する
@@ -2671,7 +2671,7 @@ namespace RTC
       }
     return RTC::RTC_OK;
   }
-  
+
   /*!
    * @brief finding existing EC from the factory
    */

@@ -103,7 +103,7 @@ namespace RTC
 
     return m_name.c_str();
   }
-  
+
 
   /*!
    * @if jp

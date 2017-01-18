@@ -31,48 +31,48 @@ namespace SDOPackage
    * @if jp
    *
    * @brief SDO ConfigurationSetを プロパティに格納
-   * 
+   *
    * SDO ConfigurationSetを RTC用プロパティに格納する。
    *
    * @param prop 格納先プロパティ
    * @param conf SDO ConfigurationSet
-   * 
+   *
    * @else
    *
    * @brief Store SDO ConfigurationSet to properties
-   * 
+   *
    * Store SDO ConfigurationSet to properties for RTC.
    *
    * @param prop Properties to store
    * @param conf SDO ConfigurationSet
-   * 
+   *
    * @endif
    */
-  void 
+  void
   toProperties(coil::Properties& prop, const SDOPackage::ConfigurationSet& conf)
   {
     NVUtil::copyToProperties(prop, conf.configuration_data);
   }
-  
+
   /*!
    * @if jp
    *
    * @brief プロパティを SDO ConfigurationSetに変換
-   * 
+   *
    * RTC用プロパティをSDO ConfigurationSetに変換する。
    *
    * @param conf 格納先 SDO ConfigurationSet
    * @param prop プロパティ
-   * 
+   *
    * @else
    *
    * @brief Convert properties into SDO ConfigurationSet
-   * 
+   *
    * Convert properties for RTC into SDO ConfigurationSet.
    *
    * @param conf SDO ConfigurationSet to store
    * @param prop Properties
-   * 
+   *
    * @endif
    */
   void
@@ -88,11 +88,11 @@ namespace SDOPackage
 #endif // ORB_IS_RTORB
     NVUtil::copyFromProperties(conf.configuration_data, prop);
   }
-  
+
   //============================================================
   // Ctor and Dtor
   //============================================================
-  
+
   /* @if jp
    * @brief コンストラクタ
    * @else
@@ -106,7 +106,7 @@ namespace SDOPackage
   {
     m_objref = this->_this();
   }
-  
+
   /* @if jp
    * @brief 仮想デストラクタ
    * @else
@@ -117,9 +117,9 @@ namespace SDOPackage
   {
   }
 
-  
+
   //============================================================
-  // Basic Configuration 
+  // Basic Configuration
   //============================================================
   /* @if jp
    * @brief [CORBA interface] SDO の DeviceProfile をセットする
@@ -146,7 +146,7 @@ namespace SDOPackage
       }
     return true;
   }
-  
+
   /*!
    * @if jp
    * @brief [CORBA interface] SDO の ServiceProfile のセット
@@ -175,14 +175,14 @@ namespace SDOPackage
       }
     return false;
   }
-  
+
   /*!
    * @if jp
    * @brief [CORBA interface] Organization の追加
    * @else
    * @brief [CORBA interface] Add Organization
    * @endif
-   */ 
+   */
   CORBA::Boolean
   Configuration_impl::add_organization(Organization_ptr org)
     throw (CORBA::SystemException,
@@ -202,14 +202,14 @@ namespace SDOPackage
       }
     return true;
   }
-  
+
   /*!
    * @if jp
    * @brief [CORBA interface] ServiceProfile の削除
    * @else
    * @brief [CORBA interface] Remove ServiceProfile
    * @endif
-   */  
+   */
   CORBA::Boolean
   Configuration_impl::remove_service_profile(const char* id)
     throw (CORBA::SystemException,
@@ -226,12 +226,12 @@ namespace SDOPackage
       }
     return false;
   }
-  
+
   /*!
    * @if jp
    * @brief [CORBA interface] Organization の参照の削除
    * @else
-   * @brief [CORBA interface] Remove the reference of Organization 
+   * @brief [CORBA interface] Remove the reference of Organization
    * @endif
    */
   CORBA::Boolean
@@ -253,7 +253,7 @@ namespace SDOPackage
       }
     return true;
   }
-  
+
   //============================================================
   // Configuration Parameter manipulation
   //============================================================
@@ -263,7 +263,7 @@ namespace SDOPackage
    * @else
    * @brief [CORBA interface] Get a list of configuration parameters
    * @endif
-   */ 
+   */
   ParameterList*
   Configuration_impl::get_configuration_parameters()
     throw (CORBA::SystemException,
@@ -285,7 +285,7 @@ namespace SDOPackage
     // never reach here
     return new ParameterList(0);
   }
-  
+
   /*!
    * @if jp
    * @brief [CORBA interface] Configuration parameter の値のリストの取得
@@ -302,7 +302,7 @@ namespace SDOPackage
     Guard guard(m_config_mutex);
     NVList_var nvlist;
     nvlist = new NVList((CORBA::ULong)0);
-    
+
     /*
       CORBA::Long index;
       index = getActiveConfigIndex();
@@ -313,7 +313,7 @@ namespace SDOPackage
     */
     return nvlist._retn();
   }
-  
+
   /*!
    * @if jp
    * @brief [CORBA interface] Configuration parameter の値の取得
@@ -328,24 +328,24 @@ namespace SDOPackage
   {
     RTC_TRACE(("get_configuration_parameter_value(%s)", name));
     if (std::string(name).empty()) throw InvalidParameter("Name is empty.");
-    
+
     //    CORBA::Long index;
     CORBA::Any_var value;
     value = new CORBA::Any();
     /*
       index = getActiveConfigIndex();
       if (index < 0) throw InternalError("No active configuration.");
-      
+
       CORBA::Long item;
       item = CORBA_SeqUtil::find(m_configurations[index].configuration_data,
       nv_name(name));
-      if (item < 0) throw InvalidParameter("No such name."); 
-      
+      if (item < 0) throw InvalidParameter("No such name.");
+
       value = new CORBA::Any(m_configurations[index].configuration_data[item].value);
     */
     return value._retn();
   }
-  
+
   /*!
    * @if jp
    * @brief [CORBA interface] Configuration パラメータの変更
@@ -362,23 +362,23 @@ namespace SDOPackage
     RTC_TRACE(("set_configuration_parameter(%s, value)", name));
     /*
       if (name == "") throw InvalidParameter("Name is empty.");
-      
+
       CORBA::Long index(getActiveConfigIndex());
       if (index < 0) throw InternalError("No active config.");
-      
+
       CORBA::Long item;
       item = CORBA_SeqUtil::find(m_configurations[index].configuration_data,
       nv_name(name));
       if (item < 0) throw InvalidParameter("No such name.");
-      
+
       m_configurations[index].configuration_data[item].value = value;
     */
     return true;
   }
-  
+
   /*!
    * @if jp
-   * @brief [CORBA interface] ConfigurationSet リストの取得 
+   * @brief [CORBA interface] ConfigurationSet リストの取得
    * @else
    * @brief [CORBA interface] Get a list of ConfigurationSet
    * @endif
@@ -392,9 +392,9 @@ namespace SDOPackage
     try
       {
         Guard guard(m_config_mutex);
-        
+
         std::vector<coil::Properties*> cf(m_configsets.getConfigurationSets());
-        ConfigurationSetList_var config_sets = 
+        ConfigurationSetList_var config_sets =
           new ConfigurationSetList((CORBA::ULong)cf.size());
         // Ctor's first arg is max length. Actual length has to be set.
         config_sets->length((CORBA::ULong)cf.size());
@@ -403,7 +403,7 @@ namespace SDOPackage
           {
             toConfigurationSet(config_sets[i], *(cf[i]));
           }
-        
+
         return config_sets._retn();
       }
     catch (CORBA::SystemException& e)
@@ -424,7 +424,7 @@ namespace SDOPackage
     // never reach here
     return new ConfigurationSetList(0);
   }
-  
+
   /*!
    * @if jp
    * @brief [CORBA interface] ConfigurationSet の取得
@@ -439,11 +439,11 @@ namespace SDOPackage
   {
     RTC_TRACE(("get_configuration_set(%s)", id));
     if (std::string(id).empty()) throw InternalError("ID is empty");
-    // Originally getConfigurationSet raises InvalidParameter according to the 
+    // Originally getConfigurationSet raises InvalidParameter according to the
     // SDO specification. However, SDO's IDL lacks InvalidParameter.
-    
+
     Guard guard(m_config_mutex);
-    
+
     try
       {
         if (!m_configsets.haveConfig(id))
@@ -457,9 +457,9 @@ namespace SDOPackage
         RTC_ERROR(("Unknown exception"));
         throw InternalError("Unknown exception");
       }
-    
+
     const coil::Properties& configset(m_configsets.getConfigurationSet(id));
-    
+
     try
       {
         ConfigurationSet_var config;
@@ -477,7 +477,7 @@ namespace SDOPackage
     RTC_FATAL(("never reach here"));
     return new ConfigurationSet();
   }
-  
+
   /*!
    * @if jp
    * @brief [CORBA interface] ConfigurationSet をセットする
@@ -494,12 +494,12 @@ namespace SDOPackage
     RTC_TRACE(("set_configuration_set_values()"));
     std::string id(configuration_set.id);
     if (id.empty()) throw InvalidParameter("ID is empty.");
-    
+
     try
       {
         coil::Properties conf(id.c_str());
         toProperties(conf, configuration_set);
-        
+
         //------------------------------------------------------------
         // Because the format of port-name had been changed from
         // <port_name> to <instance_name>.<port_name>, the following
@@ -537,14 +537,14 @@ namespace SDOPackage
       }
     return true;
   }
-  
+
   /*!
    * @if jp
    * @brief [CORBA interface] アクティブな ConfigurationSet を取得する
    * @else
    * @brief [CORBA interface] Get active ConfigurationSet
    * @endif
-   */ 
+   */
   ConfigurationSet*
   Configuration_impl::get_active_configuration_set()
     throw (CORBA::SystemException,
@@ -552,8 +552,8 @@ namespace SDOPackage
   {
     RTC_TRACE(("get_active_configuration_set()"));
     // activeなConfigurationSetは無い
-    if (!m_configsets.isActive()) throw NotAvailable();    
-    
+    if (!m_configsets.isActive()) throw NotAvailable();
+
     try
       {
         Guard gurad(m_config_mutex);
@@ -570,7 +570,7 @@ namespace SDOPackage
     // never reach here
     return new ConfigurationSet();
   }
-  
+
   /*!
    * @if jp
    * @brief [CORBA interface] ConfigurationSet を追加する
@@ -604,7 +604,7 @@ namespace SDOPackage
       }
     return true;
   }
-  
+
   /*!
    * @if jp
    * @brief [CORBA interface] ConfigurationSet を削除する
@@ -620,7 +620,7 @@ namespace SDOPackage
     RTC_TRACE(("remove_configuration_set(%s)", id));
     if (std::string(id).empty())
       throw InvalidParameter("ID is empty.");
-    
+
     try
       {
         Guard guard(m_config_mutex);
@@ -633,14 +633,14 @@ namespace SDOPackage
       }
     return false;
   }
-  
+
   /*!
    * @if jp
    * @brief [CORBA interface] ConfigurationSet のアクティブ化
    * @else
    * @brief [CORBA interface] Activate ConfigurationSet
    * @endif
-   */ 
+   */
   CORBA::Boolean
   Configuration_impl::activate_configuration_set(const char* id)
     throw (CORBA::SystemException,
@@ -649,7 +649,7 @@ namespace SDOPackage
     RTC_TRACE(("activate_configuration_set(%s)", id));
     if (std::string(id).empty())
       throw InvalidParameter("ID is empty.");
-    
+
     if (m_configsets.activateConfigurationSet(id))
       {
         return true;
@@ -671,11 +671,11 @@ namespace SDOPackage
 */
     return false;
   }
-  
+
   //============================================================
   // Local interfaces
   //============================================================
-  
+
   /*!
    * @if jp
    * @brief オブジェクト　リファレンスを取得する
@@ -687,7 +687,7 @@ namespace SDOPackage
   {
     return m_objref;
   }
-  
+
   /*!
    * @if jp
    * @brief SDO の DeviceProfile を取得する
@@ -699,7 +699,7 @@ namespace SDOPackage
   {
     return m_deviceProfile;
   }
-  
+
   /*!
    * @if jp
    * @brief SDO の Organization リストを取得する
@@ -711,7 +711,7 @@ namespace SDOPackage
   {
     return m_organizations;
   }
-  
+
   /*!
    * @if jp
    * @brief UUIDを生成する
@@ -724,7 +724,7 @@ namespace SDOPackage
     coil::UUID_Generator uugen;
     uugen.init();
     std::auto_ptr<coil::UUID> uuid(uugen.generateUUID(2, 0x01));
-    
+
     return (const char*) uuid->to_string();
   }
 };  // namespace SDOPackage

@@ -33,9 +33,9 @@
 std::string DefaultNumberingPolicy::onCreate(void* obj)
 {
   std::vector<void*>::size_type pos;
-  
+
   ++m_num;
-  
+
   try
     {
       pos = find(NULL);

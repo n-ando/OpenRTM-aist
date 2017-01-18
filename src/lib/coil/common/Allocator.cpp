@@ -21,7 +21,7 @@
 
 namespace coil
 {
-  
+
   /*!
    * @if jp
    * @brief メモリ領域確保
@@ -33,7 +33,7 @@ namespace coil
   {
     return operator new(t);
   }
-  
+
   /*!
    * @if jp
    * @brief メモリ領域解放
@@ -57,7 +57,7 @@ namespace coil
   {
     return operator new[](t);
   }
-  
+
   /*!
    * @if jp
    * @brief 配列用メモリ領域解放

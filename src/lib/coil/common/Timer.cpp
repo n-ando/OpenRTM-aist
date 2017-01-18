@@ -32,7 +32,7 @@ namespace coil
     : m_interval(interval), m_running(false)
   {
   }
-  
+
   /*!
    * @if jp
    * @brief デストラクタ
@@ -45,7 +45,7 @@ namespace coil
     stop();
     wait();
   }
-  
+
   /*!
    * @if jp
    * @brief Timer 用スレッド生成
@@ -58,7 +58,7 @@ namespace coil
     activate();
     return 0;
   }
-  
+
   /*!
    * @if jp
    * @brief Timer 用スレッド実行関数
@@ -76,7 +76,7 @@ namespace coil
       }
     return 0;
   }
-  
+
   //============================================================
   // public functions
   //============================================================
@@ -90,13 +90,13 @@ namespace coil
   void Timer::start()
   {
     Guard guard(m_runningMutex);
-    if (!m_running) 
+    if (!m_running)
       {
         m_running = true;
         open(0);
       }
   }
-  
+
   /*!
    * @if jp
    * @brief Timer タスク停止
@@ -109,7 +109,7 @@ namespace coil
     Guard guard(m_runningMutex);
     m_running = false;
   }
-  
+
   /*!
    * @if jp
    * @brief Timer タスク実行
@@ -130,7 +130,7 @@ namespace coil
           }
       }
   }
-  
+
   /*!
    * @if jp
    * @brief リスナー登録
@@ -141,7 +141,7 @@ namespace coil
   ListenerId Timer::registerListener(ListenerBase* listener, TimeValue tm)
   {
     Guard guard(m_taskMutex);
-    
+
     for (size_t i(0), len(m_tasks.size()); i < len; ++i)
       {
         if (m_tasks[i].listener == listener)
@@ -154,7 +154,7 @@ namespace coil
     m_tasks.push_back(Task(listener, tm));
     return listener;
   }
-  
+
   /*!
    * @if jp
    * @brief リスナー登録解除
@@ -167,7 +167,7 @@ namespace coil
     Guard guard(m_taskMutex);
     std::vector<Task>::iterator it;
     it = m_tasks.begin();
-    
+
     for (size_t i(0), len(m_tasks.size()); i < len; ++i, ++it)
       {
         if (m_tasks[i].listener == id)

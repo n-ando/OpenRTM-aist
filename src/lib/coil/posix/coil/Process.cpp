@@ -45,9 +45,9 @@ namespace coil
     pid_t pid;
     if ((pid = fork()) < 0 )
       { // fork failed
-        return -1; 
+        return -1;
       }
-    
+
     if (pid == 0) // I'm child process
       {
         //        signal(SIGCHLD, SIG_IGN);
@@ -68,7 +68,7 @@ namespace coil
         char* const * argv = ::coil::toArgv(vstr);
 
         execvp(vstr.front().c_str(), argv);
-        
+
         return -1;
       }
     return 0;

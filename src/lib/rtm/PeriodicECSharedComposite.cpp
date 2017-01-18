@@ -172,12 +172,12 @@ namespace SDOPackage
     for (MemIt it(m_rtcMembers.begin()); it != m_rtcMembers.end();)
       {
         Member& member(*it);
-        if (strncmp(id, member.profile_->instance_name, strlen(id))) 
+        if (strncmp(id, member.profile_->instance_name, strlen(id)))
           {
             ++it;
             continue;
           }
-        
+
         removePort(member, m_expPorts);
         m_rtobj->getProperties()["conf.default.exported_ports"] =
           ::coil::flatten(m_expPorts);
@@ -214,7 +214,7 @@ namespace SDOPackage
         removeOrganizationFromTarget(member);
         startOwnedEC(member);
         ::SDOPackage::Organization_impl::
-                      remove_member(member.profile_->instance_name); 
+                      remove_member(member.profile_->instance_name);
         ++it;
      }
     m_rtcMembers.clear();
@@ -233,13 +233,13 @@ namespace SDOPackage
                                    ::OpenRTM::DataFlowComponent_ptr& dfc)
   {
     if (::CORBA::is_nil(sdo)) return false;
-    
+
     // narrowing: SDO -> RTC (DataFlowComponent)
     dfc = ::OpenRTM::DataFlowComponent::_narrow(sdo);
     if (::CORBA::is_nil(dfc)) return false;
     return true;
   }
-  
+
   /*!
    * @if jp
    * @brief Owned ExecutionContext を停止させる
@@ -280,7 +280,7 @@ namespace SDOPackage
    * @if jp
    * @brief DFC に Organization オブジェクトを与える
    * @else
-   * @brief Set Organization object to target DFC 
+   * @brief Set Organization object to target DFC
    * @endif
    */
   void PeriodicECOrganization::addOrganizationToTarget(Member& member)
@@ -289,7 +289,7 @@ namespace SDOPackage
     //    Configuration_var conf(member.config_.in());
     Configuration_var conf(member.config_);
     if (::CORBA::is_nil(conf)) return;
-    
+
     // set organization to target RTC's conf
     conf->add_organization(m_objref);
   }
@@ -298,14 +298,14 @@ namespace SDOPackage
    * @if jp
    * @brief Organization オブジェクトを DFCから削除する
    * @else
-   * @brief Remove Organization object from a target DFC 
+   * @brief Remove Organization object from a target DFC
    * @endif
    */
   void PeriodicECOrganization::removeOrganizationFromTarget(Member& member)
   {
     // get given RTC's configuration object
     if (::CORBA::is_nil(member.config_)) { return; }
-    
+
     // set organization to target RTC's conf
     member.config_->remove_organization(m_pId.c_str());
   }
@@ -363,7 +363,7 @@ namespace SDOPackage
    * @endif
    */
   void PeriodicECOrganization::removeParticipantFromEC(Member& member)
-  { 
+  {
     if (::CORBA::is_nil(m_ec))
       {
         ::RTC::ExecutionContextList_var ecs(m_rtobj->get_owned_contexts());
@@ -414,7 +414,7 @@ namespace SDOPackage
 #else // ORB_IS_RTORB
     ::RTC::PortProfileList plist(member.profile_->port_profiles);
 #endif // ORB_IS_RTORB
-    
+
     // port delegation
     for (::CORBA::ULong i(0), len(plist.length()); i < len; ++i)
       {
@@ -424,9 +424,9 @@ namespace SDOPackage
                    port_name.c_str(),
                    ::coil::flatten(portlist).c_str()));
 
-        std::vector<std::string>::iterator pos = 
+        std::vector<std::string>::iterator pos =
           std::find(portlist.begin(), portlist.end(), port_name);
-        if (pos == portlist.end()) 
+        if (pos == portlist.end())
           {
             RTC_DEBUG(("Not found: %s is in %s?",
                        port_name.c_str(),
@@ -474,9 +474,9 @@ namespace SDOPackage
                    port_name.c_str(),
                    ::coil::flatten(portlist).c_str()));
 
-        std::vector<std::string>::iterator pos = 
+        std::vector<std::string>::iterator pos =
           std::find(portlist.begin(), portlist.end(), port_name);
-        if (pos == portlist.end()) 
+        if (pos == portlist.end())
           {
             RTC_DEBUG(("Not found: %s is in %s?",
                        port_name.c_str(),
@@ -490,7 +490,7 @@ namespace SDOPackage
 
         m_rtobj->removePort(plist[i].port_ref);
         portlist.erase(pos);
-        
+
         RTC_DEBUG(("Port %s was deleted.", port_name.c_str()));
       }
   }
@@ -675,7 +675,7 @@ namespace RTC
         ::CORBA_SeqUtil::push_back(sdos, ::SDOPackage::SDO_ptr(sdo));
 #endif // ORB_IS_RTORB
       }
-    
+
     try
       {
         m_org->set_members(sdos);

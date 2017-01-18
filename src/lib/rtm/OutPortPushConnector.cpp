@@ -31,7 +31,7 @@ namespace RTC
    * @brief Constructor
    * @endif
    */
-  OutPortPushConnector::OutPortPushConnector(ConnectorInfo info, 
+  OutPortPushConnector::OutPortPushConnector(ConnectorInfo info,
                                              InPortConsumer* consumer,
                                              ConnectorListeners& listeners,
                                              CdrBufferBase* buffer)
@@ -45,23 +45,23 @@ namespace RTC
       {
         m_buffer = createBuffer(info);
       }
-    if (m_publisher == 0 || m_buffer == 0 || m_consumer == 0) 
+    if (m_publisher == 0 || m_buffer == 0 || m_consumer == 0)
       { throw std::bad_alloc(); }
-    
+
     if (m_publisher->init(info.properties) != PORT_OK)
       {
         throw std::bad_alloc();
       }
     m_buffer->init(info.properties.getNode("buffer"));
     m_consumer->init(info.properties);
-    
+
     m_publisher->setConsumer(m_consumer);
     m_publisher->setBuffer(m_buffer);
     m_publisher->setListener(m_profile, &m_listeners);
 
     onConnect();
   }
-  
+
   /*!
    * @if jp
    * @brief デストラクタ
@@ -74,7 +74,7 @@ namespace RTC
     onDisconnect();
     disconnect();
   }
-  
+
   /*!
    * @if jp
    * @brief データの書き込み
@@ -87,10 +87,10 @@ namespace RTC
   {
     RTC_TRACE(("write()"));
     RTC_PARANOID(("data size = %d bytes", data.bufSize()));
-    
+
     return m_publisher->write(data, 0, 0);
   }
-  
+
   /*!
    * @if jp
    * @brief 接続解除
@@ -109,7 +109,7 @@ namespace RTC
         pfactory.deleteObject(m_publisher);
       }
     m_publisher = 0;
-    
+
     // delete consumer
     if (m_consumer != 0)
       {
@@ -118,7 +118,7 @@ namespace RTC
         cfactory.deleteObject(m_consumer);
       }
     m_consumer = 0;
-    
+
     // delete buffer
     if (m_buffer != 0)
       {
@@ -158,7 +158,7 @@ namespace RTC
   {
     m_publisher->deactivate();
   }
-  
+
   /*!
    * @if jp
    * @brief Buffer を取得する
@@ -176,7 +176,7 @@ namespace RTC
   {
     return m_buffer;
   }
-  
+
   /*!
    * @if jp
    * @brief Publisherの生成
@@ -192,7 +192,7 @@ namespace RTC
     coil::normalize(pub_type);
     return PublisherFactory::instance().createObject(pub_type);
   }
-  
+
   /*!
    * @if jp
    * @brief Bufferの生成

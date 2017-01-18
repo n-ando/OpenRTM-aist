@@ -73,7 +73,7 @@ namespace coil
   void toUpper(std::string& str)
   {
     std::transform(str.begin(), str.end(), str.begin(),
-                   (int (*)(int))std::toupper); 
+                   (int (*)(int))std::toupper);
   }
 
   /*!
@@ -86,7 +86,7 @@ namespace coil
   void toLower(std::string& str)
   {
     std::transform(str.begin(), str.end(), str.begin(),
-                   (int (*)(int))std::tolower); 
+                   (int (*)(int))std::tolower);
   }
 
   /*!
@@ -100,7 +100,7 @@ namespace coil
   {
     char c;
     std::stringstream s;
-    
+
     while (istr.get(c))
       {
         if (c == '\n')
@@ -123,7 +123,7 @@ namespace coil
     line = s.str();
     return static_cast<int>(line.size());
   }
-  
+
   /*!
    * @if jp
    * @brief 文字列がエスケープされているか判断する
@@ -139,7 +139,7 @@ namespace coil
     // If the number of \ is odd, delimiter is escaped.
     return (i % 2) == 1;
   }
-  
+
   /*!
    * @if jp
    * @brief 文字列をエスケープするためのFunctor
@@ -163,7 +163,7 @@ namespace coil
     }
     std::string str;
   };
-  
+
   /*!
    * @if jp
    * @brief 文字列をエスケープする
@@ -175,7 +175,7 @@ namespace coil
   {
     return for_each(str.begin(), str.end(), escape_functor()).str;
   }
-  
+
   /*!
    * @if jp
    * @brief 文字列をアンエスケープするためのFunctor
@@ -219,7 +219,7 @@ namespace coil
     std::string str;
     int count;
   };
-  
+
   /*!
    * @if jp
    * @brief 文字列のエスケープを戻す
@@ -256,7 +256,7 @@ namespace coil
       }
 
   }
-  
+
   /*!
    * @if jp
    * @brief 文字列の先頭の空白文字を削除する
@@ -269,7 +269,7 @@ namespace coil
     if (str.empty()) return;
     while (str[0] == ' ' || str[0] == '\t') str.erase(0, 1);
   }
-  
+
   /*!
    * @if jp
    * @brief 文字列の末尾の空白文字を削除する
@@ -311,7 +311,7 @@ namespace coil
     toLower(str);
     return str;
   }
-  
+
   /*!
    * @if jp
    * @brief 文字列を置き換える
@@ -335,7 +335,7 @@ namespace coil
       }
     return cnt;
   }
-  
+
   /*!
    * @if jp
    * @brief 文字列を分割文字で分割する
@@ -351,17 +351,17 @@ namespace coil
     vstring results;
     size delim_size = delimiter.size();
     size found_pos(0), begin_pos(0), pre_pos(0), substr_size(0);
-    
+
     if (input.empty()) return results;
-    
+
     //  if (input.substr(0, delim_size) == delimiter)
     //    begin_pos = pre_pos = delim_size;
-    
+
     while (1)
       {
         //    REFIND:
         found_pos = input.find(delimiter, begin_pos);
-        if (found_pos == std::string::npos) 
+        if (found_pos == std::string::npos)
           {
             std::string substr(input.substr(pre_pos));
             eraseHeadBlank(substr);
@@ -389,7 +389,7 @@ namespace coil
       }
     return results;
   }
-  
+
   /*!
    * @if jp
    * @brief 大文字に変換する Functor
@@ -404,7 +404,7 @@ namespace coil
       c = toupper(c);
     }
   };
-  
+
   /*!
    * @if jp
    * @brief 与えられた文字列をbool値に変換する
@@ -412,13 +412,13 @@ namespace coil
    * @brief Convert given string into bool value
    * @endif
    */
-  bool toBool(std::string str, std::string yes, std::string no, 
+  bool toBool(std::string str, std::string yes, std::string no,
               bool default_value)
   {
     std::for_each(str.begin(), str.end(), Toupper());
     std::for_each(yes.begin(), yes.end(), Toupper());
     std::for_each(no.begin(),  no.end(),  Toupper());
-    
+
     if (str.find(yes) != std::string::npos)
       return true;
     else if (str.find(no) != std::string::npos)
@@ -459,7 +459,7 @@ namespace coil
     vstring vlist(split(list, ","));
     return includes(vlist, value, ignore_case);
   }
-  
+
   /*!
    * @if jp
    * @brief 与えられた文字列が絶対パスかどうかを判断する
@@ -475,10 +475,10 @@ namespace coil
     if (isalpha(str[0]) && (str[1] == ':') && str[2] == '\\') return true;
     // Windows network file path is begun from '\\'
     if (str[0] == '\\' && str[1] == '\\') return true;
-    
+
     return false;
   }
-  
+
   /*!
    * @if jp
    * @brief 与えられた文字列がURLかどうかを判断する
@@ -499,7 +499,7 @@ namespace coil
       return true;
     return false;
   }
-  
+
   /*!
    * @if jp
    * @brief リスト内の文字列を検索する Functor
@@ -531,7 +531,7 @@ namespace coil
     val = str;
     return true;
   }
-  
+
   /*!
    * @if jp
    * @brief 与えられた文字列をboolに変換
@@ -560,7 +560,7 @@ namespace coil
     return false;
   }
 
-  
+
   /*!
    * @if jp
    * @brief 与えられた文字列リストから重複を削除
@@ -572,7 +572,7 @@ namespace coil
   {
     return std::for_each(sv.begin(), sv.end(), unique_strvec()).str;
   }
-  
+
   /*!
    * @if jp
    * @brief 与えられた文字列リストからCSVを生成
@@ -583,7 +583,7 @@ namespace coil
   std::string flatten(vstring sv, std::string delimiter)
   {
     if (sv.size() == 0) return "";
-    
+
     std::string str;
     for (size_t i(0), len(sv.size() - 1); i < len; ++i)
       {
@@ -591,7 +591,7 @@ namespace coil
       }
     return str + sv.back();
   }
-  
+
   /*!
    * @if jp
    * @brief 与えられた文字列リストを引数リストに変換
@@ -603,9 +603,9 @@ namespace coil
   {
     char** argv;
     size_t argc(args.size());
-    
+
     argv = new char*[argc + 1];
-    
+
     for (size_t i(0); i < argc; ++i)
       {
         size_t sz(args[i].size());
@@ -631,7 +631,7 @@ namespace coil
 #endif
     char str[LINE_MAX];
     va_list ap;
-    
+
     va_start(ap, fmt);
 #ifdef WIN32
     _vsnprintf(str, LINE_MAX - 1, fmt, ap);

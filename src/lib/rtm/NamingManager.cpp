@@ -43,7 +43,7 @@ namespace RTC
   {
     rtclog.setName("NamingOnCorba");
     coil::Properties& prop(Manager::instance().getConfig());
-    m_replaceEndpoint = 
+    m_replaceEndpoint =
       coil::toBool(prop["corba.nameservice.replace_endpoint"].c_str(),
                    "YES", "NO", true);
 
@@ -160,7 +160,7 @@ namespace RTC
       }
 #endif // ORB_IS_OMNIORB
   }
-  
+
   /*!
    * @if jp
    * @brief 指定した CORBA オブジェクトをNamingServiceからアンバインド
@@ -180,7 +180,7 @@ namespace RTC
     return m_cosnaming.isAlive();
   }
 
-  
+
   //============================================================
   // NamingManager
   //============================================================
@@ -195,7 +195,7 @@ namespace RTC
     :m_manager(manager), rtclog("NamingManager")
   {
   }
-  
+
   /*!
    * @if jp
    * @brief デストラクタ
@@ -206,7 +206,7 @@ namespace RTC
   NamingManager::~NamingManager()
   {
   }
-  
+
   /*!
    * @if jp
    * @brief NameServer の登録
@@ -225,7 +225,7 @@ namespace RTC
     Guard guard(m_namesMutex);
     m_names.push_back(new NamingService(method, name_server, name));
   }
-  
+
   /*!
    * @if jp
    * @brief 指定したオブジェクトのNamingServiceへバインド
@@ -237,7 +237,7 @@ namespace RTC
                                  const RTObject_impl* rtobj)
   {
     RTC_TRACE(("NamingManager::bindObject(%s)", name));
-    
+
     Guard guard(m_namesMutex);
     for (int i(0), len(m_names.size()); i < len; ++i)
       {
@@ -260,7 +260,7 @@ namespace RTC
                                  const PortBase* port)
   {
     RTC_TRACE(("NamingManager::bindObject(%s)", name));
-    
+
     Guard guard(m_namesMutex);
     for (int i(0), len(m_names.size()); i < len; ++i)
       {
@@ -279,11 +279,11 @@ namespace RTC
       }
     registerPortName(name, port);
   }
-  void NamingManager::bindObject(const char* name, 
+  void NamingManager::bindObject(const char* name,
                                  const RTM::ManagerServant* mgr)
   {
     RTC_TRACE(("NamingManager::bindObject(%s)", name));
-    
+
     Guard guard(m_namesMutex);
     for (int i(0), len(m_names.size()); i < len; ++i)
       {
@@ -302,7 +302,7 @@ namespace RTC
       }
     registerMgrName(name, mgr);
   }
-  
+
   /*!
    * @if jp
    * @brief NamingServer の情報の更新
@@ -335,7 +335,7 @@ namespace RTC
                   {
                     RTC_INFO(("Name server: %s (%s) disappeared.",
                               m_names[i]->nsname.c_str(),
-                              m_names[i]->method.c_str()));  
+                              m_names[i]->method.c_str()));
                     delete m_names[i]->ns;
                     m_names[i]->ns = 0;
                   }
@@ -347,11 +347,11 @@ namespace RTC
                           m_names[i]->method.c_str()));
                 delete m_names[i]->ns;
                 m_names[i]->ns = 0;
-              } 
-          } 
+              }
+          }
       }
   }
-  
+
   /*!
    * @if jp
    * @brief 指定したオブジェクトをNamingServiceからアンバインド
@@ -362,7 +362,7 @@ namespace RTC
   void NamingManager::unbindObject(const char* name)
   {
     RTC_TRACE(("NamingManager::unbindObject(%s)", name));
-    
+
     Guard guard(m_namesMutex);
     for (int i(0), len(m_names.size()); i < len; ++i)
       {
@@ -374,7 +374,7 @@ namespace RTC
     unregisterCompName(name);
     unregisterMgrName(name);
   }
-  
+
   /*!
    * @if jp
    * @brief 全てのオブジェクトをNamingServiceからアンバインド
@@ -413,7 +413,7 @@ namespace RTC
         }
     }
   }
-  
+
   /*!
    * @if jp
    * @brief バインドされている全てのオブジェクトを取得
@@ -425,14 +425,14 @@ namespace RTC
   {
     std::vector<RTObject_impl*> comps;
     Guard guard(m_compNamesMutex);
-    
+
     for (int i(0), len(m_compNames.size()); i < len; ++i)
       {
         comps.push_back(const_cast<RTObject_impl*>(m_compNames[i]->rtobj));
       }
     return comps;
   }
-  
+
   //============================================================
   // Protected
   //============================================================
@@ -470,7 +470,7 @@ namespace RTC
       }
     return NULL;
   }
-  
+
   /*!
    * @if jp
    * @brief 設定済みコンポーネントを NameServer に登録
@@ -485,7 +485,7 @@ namespace RTC
         ns->bindObject(m_compNames[i]->name.c_str(), m_compNames[i]->rtobj);
       }
   }
-  
+
   /*!
    * @if jp
    * @brief NameServer に登録するコンポーネントの設定
@@ -542,7 +542,7 @@ namespace RTC
     m_mgrNames.push_back(new Mgr(name, mgr));
     return;
   }
-  
+
   /*!
    * @if jp
    * @brief NameServer に登録するコンポーネントの設定解除
@@ -611,7 +611,7 @@ namespace RTC
           {
             delete ns->ns;
             ns->ns = 0;
-          } 
+          }
       }
   }
 }; // namespace RTC

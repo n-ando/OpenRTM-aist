@@ -20,7 +20,7 @@
 #include <rtm/Factory.h>
 #include <rtm/RTObject.h>
 
-namespace RTC 
+namespace RTC
 {
   /*!
    * @if jp
@@ -33,7 +33,7 @@ namespace RTC
     : m_Profile(profile), m_Number(-1)
   {
   }
-  
+
   /*!
    * @if jp
    * @brief デストラクタ
@@ -44,7 +44,7 @@ namespace RTC
   FactoryBase::~FactoryBase()
   {
   }
-  
+
   /*!
    * @if jp
    * @brief コンポーネントプロファイルの取得
@@ -56,7 +56,7 @@ namespace RTC
   {
     return m_Profile;
   }
-  
+
   /*!
    * @if jp
    * @brief 現在のインスタンス数の取得
@@ -68,7 +68,7 @@ namespace RTC
   {
     return m_Number;
   }
-  
+
   /*!
    * @if jp
    * @brief コンストラクタ
@@ -88,7 +88,7 @@ namespace RTC
     if (m_policy == NULL)
       throw std::bad_alloc();
   }
-  
+
   /*!
    * @if jp
    * @brief コンポーネントの生成
@@ -102,15 +102,15 @@ namespace RTC
       {
         RTObject_impl* rtobj(m_New(mgr));
         if (rtobj == 0) return NULL;
-        
+
         ++m_Number;
         rtobj->setProperties(this->profile());
-        
+
         // create instance_name
         std::string instance_name(rtobj->getTypeName());
         instance_name.append(m_policy->onCreate(rtobj));
         rtobj->setInstanceName(instance_name.c_str());
-        
+
         return rtobj;
       }
     catch (...)
@@ -118,7 +118,7 @@ namespace RTC
         return NULL;
       }
   }
-  
+
   /*!
    * @if jp
    * @brief コンポーネントの破棄
@@ -136,7 +136,7 @@ namespace RTC
       }
     catch (...)
       {
-        
+
       }
   }
 };  // namespace RTC

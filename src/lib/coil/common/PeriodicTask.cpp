@@ -37,7 +37,7 @@ namespace coil
       m_periodCount(0), m_periodCountMax(10)
   {
   }
-  
+
   /*!
    * @if jp
    * @brief デストラクタ
@@ -148,7 +148,7 @@ namespace coil
     m_func = func;
     return true;
   }
-  
+
   /*!
    * @if jp
    * @brief タスク実行周期をセットする
@@ -317,7 +317,7 @@ namespace coil
    * @endif
    */
   void PeriodicTask::sleep()
-  { 
+  {
     if (m_nowait)
       {
         return;

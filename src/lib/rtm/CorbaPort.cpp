@@ -38,7 +38,7 @@ namespace RTC
   {
     addProperty("port.port_type", "CorbaPort");
   }
-  
+
   /*!
    * @if jp
    * @brief 仮想デストラクタ
@@ -74,13 +74,13 @@ namespace RTC
     if (!coil::stringTo(num, m_properties.getProperty("connection_limit",
                                                       "-1").c_str()))
       {
-        RTC_ERROR(("invalid connection_limit value: %s", 
+        RTC_ERROR(("invalid connection_limit value: %s",
                    m_properties.getProperty("connection_limit").c_str()));
       }
 
     setConnectionLimit(num);
   }
-  
+
   /*!
    * @if jp
    * @brief Provider を登録する
@@ -112,10 +112,10 @@ namespace RTC
         RTC_ERROR(("appending provider interface failed"));
         return false;
       }
-    
+
     return true;
   };
-  
+
   /*!
    * @if jp
    * @brief Consumer を登録する
@@ -134,11 +134,11 @@ namespace RTC
       {
         return false;
       }
-    
+
     m_consumers.push_back(CorbaConsumerHolder(type_name,
                                               instance_name,
                                               &consumer));
-    
+
     return true;
   }
 
@@ -162,7 +162,7 @@ namespace RTC
         ++it;
       }
   }
-  
+
   /*!
    * @if jp
    * @brief 全ての Port のインターフェースを deactivates する
@@ -179,7 +179,7 @@ namespace RTC
         ++it;
       }
   }
-  
+
   //============================================================
   // protected functions
   //============================================================
@@ -232,7 +232,7 @@ namespace RTC
       CORBA::ULong len2(properties.length());
       CORBA::ULong len(len1 + len2);
       connector_profile.properties.length(len);
-      
+
       for (CORBA::ULong i = 0; i < len2; ++i)
         {
           connector_profile.properties[len1 + i] = properties[i];
@@ -241,12 +241,12 @@ namespace RTC
 #else // ORB_IS_RTORB
     CORBA_SeqUtil::push_back_list(connector_profile.properties, properties);
 #endif
-    
-    RTC_DEBUG_STR((NVUtil::toString(properties)));                         
+
+    RTC_DEBUG_STR((NVUtil::toString(properties)));
 
     return RTC::RTC_OK;
   }
-  
+
   /*!
    * @if jp
    * @brief Interface に接続する
@@ -300,7 +300,7 @@ namespace RTC
         if (strict)
           {
             RTC_ERROR(("subscribeInterfaces() failed."));
-            return RTC::RTC_ERROR; 
+            return RTC::RTC_ERROR;
           }
       }
 
@@ -308,7 +308,7 @@ namespace RTC
 
     return RTC::RTC_OK;
   }
-  
+
   /*!
    * @if jp
    * @brief Interface への接続を解除する
@@ -342,7 +342,7 @@ namespace RTC
           }
       }
   }
-  
+
   /*!
    * @if jp
    * @brief Consumer に合致する Provider を NVList の中から見つける
@@ -459,5 +459,5 @@ namespace RTC
     RTC_WARN(("IORs between Consumer and Connector are different."));
     return false;
   }
-  
+
 };  // namespace RTC

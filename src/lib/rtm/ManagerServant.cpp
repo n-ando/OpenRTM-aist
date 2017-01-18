@@ -37,8 +37,8 @@ namespace RTM
       m_isMaster(false)
   {
     rtclog.setName("ManagerServant");
-    coil::Properties config(m_mgr.getConfig());    
-    
+    coil::Properties config(m_mgr.getConfig());
+
     if (coil::toBool(config["manager.is_master"], "YES", "NO", true))
       { // this is master manager
         RTC_TRACE(("This manager is master."));
@@ -47,7 +47,7 @@ namespace RTM
           {
             RTC_WARN(("Manager CORBA servant creation failed."));
             return;
-            
+
           }
         m_isMaster = true;
         RTC_WARN(("Manager CORBA servant was successfully created."));
@@ -80,7 +80,7 @@ namespace RTM
           }
       }
   }
-  
+
   ManagerServant::~ManagerServant()
   {
     Guard guardm(m_masterMutex);
@@ -116,7 +116,7 @@ namespace RTM
     m_slaves.length(0);
 
   }
-  
+
   /*!
    * @if jp
    * @brief モジュールをロードする
@@ -130,26 +130,26 @@ namespace RTM
     RTC_TRACE(("ManagerServant::load_module(%s, %s)", pathname, initfunc));
 
     m_mgr.load(pathname, initfunc);
-    
+
     return ::RTC::RTC_OK;
   }
-  
+
   /*!
    * @if jp
    * @brief モジュールをアンロードする
    * @else
    * @brief Unloading a module
    * @endig
-   */  
+   */
   RTC::ReturnCode_t ManagerServant::unload_module(const char* pathname)
   {
     RTC_TRACE(("ManagerServant::unload_module(%s)", pathname));
-    
+
     m_mgr.unload(pathname);
-    
+
     return ::RTC::RTC_OK;
   }
-  
+
   /*!
    * @if jp
    * @brief ロード可能なモジュールのプロファイルを取得する
@@ -160,7 +160,7 @@ namespace RTM
   RTM::ModuleProfileList* ManagerServant::get_loadable_modules()
   {
     RTC_TRACE(("get_loadable_modules()"));
-    
+
     // copy local module profiles
     ::RTM::ModuleProfileList_var cprof = new ::RTM::ModuleProfileList();
     std::vector<coil::Properties> prof(m_mgr.getLoadableModules());
@@ -190,20 +190,20 @@ namespace RTM
 #else // ORB_IS_RTORB
                     CORBA_SeqUtil::push_back_list(cprof, sprof);
 #endif // ORB_IS_RTORB
-                    continue; 
+                    continue;
                   }
               }
             catch (...)
               {
-            RTC_INFO(("slave (%d) has disappeared.", i));
-            m_slaves[i] = RTM::Manager::_nil();
+                RTC_INFO(("slave (%d) has disappeared.", i));
+                m_slaves[i] = RTM::Manager::_nil();
               }
             CORBA_SeqUtil::erase(m_slaves, i); --i;
           }
       }
     return cprof._retn();
   }
-  
+
   /*!
    * @if jp
    * @brief ロード済みのモジュールのプロファイルを取得する
@@ -214,11 +214,11 @@ namespace RTM
   RTM::ModuleProfileList* ManagerServant::get_loaded_modules()
   {
     RTC_TRACE(("get_loaded_modules()"));
-    
+
     // copy local module profiles
     ::RTM::ModuleProfileList_var cprof = new RTM::ModuleProfileList();
     std::vector<coil::Properties> prof(m_mgr.getLoadedModules());
-    
+
     cprof->length(prof.size());
     for (int i(0), len(prof.size()); i < len; ++i)
       {
@@ -257,7 +257,7 @@ namespace RTM
       }
     return cprof._retn();
   }
-  
+
   /*!
    * @if jp
    * @brief コンポーネントファクトリのプロファイルを取得する
@@ -272,7 +272,7 @@ namespace RTM
     // copy local factory profiles
     ::RTM::ModuleProfileList_var cprof = new RTM::ModuleProfileList();
     std::vector<coil::Properties> prof(m_mgr.getFactoryProfiles());
-    
+
     cprof->length(prof.size());
     for (int i(0), len(prof.size()); i < len; ++i)
       {
@@ -311,7 +311,7 @@ namespace RTM
       }
     return cprof._retn();
   }
-  
+
   /*!
    * @if jp
    * @brief コンポーネントを生成する
@@ -322,7 +322,7 @@ namespace RTM
   RTC::RTObject_ptr ManagerServant::create_component(const char* module_name)
   {
     RTC_TRACE(("create_component(%s)", module_name));
-    
+
     std::string arg(module_name);
     std::string::size_type pos0(arg.find("&manager="));
     std::string::size_type pos1(arg.find("?manager="));
@@ -348,7 +348,7 @@ namespace RTM
     // extract manager's location
     std::string::size_type pos;
     pos = (pos0 != std::string::npos) ? pos0 : pos1;
-    
+
     std::string::size_type endpos;
     endpos = arg.find('&', pos + 1);
     std::string mgrstr(arg.substr(pos + 1, endpos - 1 - pos));
@@ -400,8 +400,8 @@ namespace RTM
         RTC_WARN(("Manager cannot be found."));
         return RTC::RTObject::_nil();
       }
-    
-    // create component on the manager    
+
+    // create component on the manager
     arg.erase(pos + 1, endpos - pos);
     RTC_DEBUG(("Creating component on %s",  mgrstr.c_str()));
     RTC_DEBUG(("arg: %s", arg.c_str()));
@@ -419,7 +419,7 @@ namespace RTM
       }
     return RTC::RTObject::_nil();
   }
-  
+
   /*!
    * @if jp
    * @brief コンポーネントを削除する
@@ -448,7 +448,7 @@ namespace RTM
       }
     return ::RTC::RTC_OK;
   }
-  
+
   /*!
    * @if jp
    * @brief 起動中のコンポーネントのリストを取得する
@@ -497,14 +497,14 @@ namespace RTM
       }
     return crtcs._retn();
   }
-  
+
   /*!
    * @if jp
    * @brief 起動中のコンポーネントプロファイルのリストを取得する
    * @else
    * @brief Getting RT-Component's profile list running on this manager
    * @endig
-   */  
+   */
   RTC::ComponentProfileList* ManagerServant::get_component_profiles()
   {
     RTC_TRACE(("get_component_profiles()"));
@@ -547,7 +547,7 @@ namespace RTM
       }
     return cprofs._retn();
   }
-  
+
   // manager 基本
   /*!
    * @if jp
@@ -564,7 +564,7 @@ namespace RTM
                                m_mgr.getConfig().getNode("manager"));
     return prof;
   }
-  
+
   /*!
    * @if jp
    * @brief マネージャのコンフィギュレーションを取得する
@@ -586,7 +586,7 @@ namespace RTM
 #endif
     return nvlist;
   }
-  
+
   /*!
    * @if jp
    * @brief マネージャのコンフィギュレーションを設定する
@@ -613,7 +613,7 @@ namespace RTM
     RTC_TRACE(("is_master(): %s", m_isMaster ? "YES" : "NO"));
     return m_isMaster;
   }
-  
+
   /*!
    * @if jp
    * @brief マスターマネージャの取得
@@ -627,7 +627,7 @@ namespace RTM
     Guard guard(m_masterMutex);
     return new ManagerList(m_masters);
   }
-  
+
   /*!
    * @if jp
    * @brief マスターマネージャの追加
@@ -641,18 +641,18 @@ namespace RTM
     CORBA::Long index;
     RTC_TRACE(("add_master_manager(), %d masters", m_masters.length()));
     index = CORBA_SeqUtil::find(m_masters, is_equiv(mgr));
-    
+
     if (!(index < 0)) // found in my list
       {
         RTC_ERROR(("Already exists."));
         return RTC::BAD_PARAMETER;
       }
-    
+
     CORBA_SeqUtil::push_back(m_masters, RTM::Manager::_duplicate(mgr));
     RTC_TRACE(("add_master_manager() done, %d masters", m_masters.length()));
     return RTC::RTC_OK;
   }
-  
+
   /*!
    * @if jp
    * @brief マスターマネージャの削除
@@ -668,18 +668,18 @@ namespace RTM
 
     CORBA::Long index;
     index = CORBA_SeqUtil::find(m_masters, is_equiv(mgr));
-    
+
     if (index < 0) // not found in my list
       {
         RTC_ERROR(("Not found."));
         return RTC::BAD_PARAMETER;
       }
-    
+
     CORBA_SeqUtil::erase(m_masters, index);
     RTC_TRACE(("remove_master_manager() done, %d masters", m_masters.length()));
     return RTC::RTC_OK;
   }
-  
+
   /*!
    * @if jp
    * @brief スレーブマネージャの取得
@@ -691,7 +691,7 @@ namespace RTM
   {
     Guard guard(m_slaveMutex);
     RTC_TRACE(("get_slave_managers(), %d slaves", m_slaves.length()));
-    
+
     return new ManagerList(m_slaves);
   }
 
@@ -706,21 +706,21 @@ namespace RTM
   {
     Guard guard(m_slaveMutex);
     RTC_TRACE(("add_slave_manager(), %d slaves", m_slaves.length()));
-    
+
     CORBA::Long index;
     index = CORBA_SeqUtil::find(m_slaves, is_equiv(mgr));
-    
+
     if (!(index < 0)) // found in my list
       {
         RTC_ERROR(("Already exists."));
         return RTC::BAD_PARAMETER;
       }
-    
+
     CORBA_SeqUtil::push_back(m_slaves, RTM::Manager::_duplicate(mgr));
     RTC_TRACE(("add_slave_manager() done, %d slaves", m_slaves.length()));
     return RTC::RTC_OK;;
   }
-  
+
   /*!
    * @if jp
    * @brief スレーブマネージャの削除
@@ -734,43 +734,43 @@ namespace RTM
     RTC_TRACE(("remove_slave_manager(), %d slaves", m_slaves.length()));
     CORBA::Long index;
     index = CORBA_SeqUtil::find(m_slaves, is_equiv(mgr));
-    
+
     if (index < 0) // not found in my list
       {
         RTC_ERROR(("Not found."));
         return RTC::BAD_PARAMETER;
       }
-    
+
     CORBA_SeqUtil::erase(m_slaves, index);
     RTC_TRACE(("remove_slave_manager() done, %d slaves", m_slaves.length()));
     return RTC::RTC_OK;
   }
-  
-  
-  
+
+
+
   RTC::ReturnCode_t ManagerServant::fork()
   {
     //    m_mgr.fork();
     return ::RTC::RTC_OK;
   }
-  
+
   RTC::ReturnCode_t ManagerServant::shutdown()
   {
     m_mgr.terminate();
     return ::RTC::RTC_OK;
   }
-  
+
   RTC::ReturnCode_t ManagerServant::restart()
   {
     //    m_mgr.restart();
     return ::RTC::RTC_OK;
   }
-  
+
   CORBA::Object_ptr ManagerServant::get_service(const char* name)
   {
     return ::CORBA::Object::_nil();
   }
-  
+
   RTM::Manager_ptr ManagerServant::getObjRef() const
   {
     return m_objref;
@@ -793,7 +793,7 @@ namespace RTM
 
         // Create readable object ID
         coil::Properties config(m_mgr.getConfig());
-        PortableServer::ObjectId_var id; 
+        PortableServer::ObjectId_var id;
 #ifndef ORB_IS_RTORB
         id = PortableServer::string_to_ObjectId(config["manager.name"].c_str());
 #else // ORB_IS_RTORB
@@ -805,7 +805,7 @@ namespace RTM
         poa->activate_object_with_id(id.in(), this);
         CORBA::Object_var mgrobj = poa->id_to_reference(id);
 
-        // Set m_objref 
+        // Set m_objref
         m_objref = ::RTM::Manager::_narrow(mgrobj);
 
         CORBA::String_var ior;
@@ -859,7 +859,7 @@ namespace RTM
         std::string iorstr((const char*)ior);
         RTC_DEBUG(("Manager's IOR information:\n %s",
                    CORBA_IORUtil::formatIORinfo(iorstr.c_str()).c_str()));
-     
+
         return mgr._retn();
       }
     catch(CORBA::SystemException& e)
@@ -875,6 +875,6 @@ namespace RTM
     return RTM::Manager::_nil();
   }
 
-  
+
 
 };  // namespace RTM

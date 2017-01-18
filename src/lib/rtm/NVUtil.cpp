@@ -51,7 +51,7 @@ namespace NVUtil
     nv.value <<= CORBA::Any::from_char(value);
     return nv;
   }
-  
+
   /*!
    * @if jp
    * @brief value が CORBA::Boolean の NameValue を生成する
@@ -66,7 +66,7 @@ namespace NVUtil
     nv.value <<= CORBA::Any::from_boolean(value);
     return nv;
   }
-  
+
   /*!
    * @if jp
    * @brief value が CORBA::Octet の NameValue を生成する
@@ -81,7 +81,7 @@ namespace NVUtil
     nv.value <<= CORBA::Any::from_octet(value);
     return nv;
   }
-  
+
   /*!
    * @if jp
    * @brief value が CORBA::Any の NameValue を生成する
@@ -96,7 +96,7 @@ namespace NVUtil
     nv.value = value;
     return nv;
   }
-  
+
   /*!
    * @if jp
    * @brief Properties を NVList へコピーする
@@ -114,7 +114,7 @@ namespace NVUtil
     keys = prop.propertyNames();
     CORBA::ULong len((CORBA::ULong)keys.size());
     nv.length(len);
-    
+
     for (CORBA::ULong i = 0; i < len; ++i)
       {
 // Why RtORB does not copy string to Properties.
@@ -126,7 +126,7 @@ namespace NVUtil
         nv[i].value <<= prop[keys[i]].c_str();
       }
   }
-  
+
   /*!
    * @if jp
    * @brief NVList を Properties へコピーする
@@ -146,7 +146,7 @@ namespace NVUtil
           };
       }
   }
-  
+
   /*!
    * @if jp
    * @brief NVList を Properties に変換するためのファンクタ
@@ -169,7 +169,7 @@ namespace NVUtil
     }
     coil::Properties m_prop;
   };
-  
+
   /*!
    * @if jp
    * @brief NVList を Properties へ変換する
@@ -183,7 +183,7 @@ namespace NVUtil
     p = CORBA_SeqUtil::for_each(nv, p);
     return p.m_prop;
   }
-  
+
   /*!
    * @if jp
    * @brief NVList を検索するためのファンクタ
@@ -201,7 +201,7 @@ namespace NVUtil
     }
     std::string m_name;
   };
-  
+
   /*!
    * @if jp
    * @brief NVList から name で指定された value を返す
@@ -216,7 +216,7 @@ namespace NVUtil
     if (index < 0) throw std::string("Not found");
     return nv[index].value;
   }
-  
+
   /*!
    * @if jp
    * @brief name で指定された要素のインデックスを返す
@@ -228,7 +228,7 @@ namespace NVUtil
   {
     return  CORBA_SeqUtil::find(nv, NVUtil::nv_find(name));
   }
-  
+
   /*!
    * @if jp
    * @brief 指定された name の value の型が string であるか検証する
@@ -250,7 +250,7 @@ namespace NVUtil
         return false;
       }
   }
-  
+
   /*!
    * @if jp
    * @brief 指定された name の value の値が指定した文字列と一致するか検証する
@@ -271,7 +271,7 @@ namespace NVUtil
       }
     return false;
   }
-  
+
   /*!
    * @if jp
    * @brief 指定された name の NVList を string として返す。
@@ -298,10 +298,10 @@ namespace NVUtil
       {
         str_value = "";
       }
-    
+
     return str_value;
   }
-  
+
   /*!
    * @if jp
    * @brief 指定された文字列を NVList の要素に追加する。
@@ -318,10 +318,10 @@ namespace NVUtil
 #endif // ORB_IS_RTORB
   {
     //    if (!isString(nv, name)) return false;
-    
+
     CORBA::Long index;
     index = find_index(nv, name);
-    
+
     if (index < 0)
       {
         CORBA_SeqUtil::push_back(nv, newNV(name, value));
@@ -331,7 +331,7 @@ namespace NVUtil
         const char* tmp_char;
         nv[index].value >>= tmp_char;
         std::string tmp_str(tmp_char);
-        
+
         std::vector<std::string> values;
         values = coil::split(tmp_str, ",");
         if (values.end() == std::find(values.begin(), values.end(), value))
@@ -343,7 +343,7 @@ namespace NVUtil
       }
     return true;
   }
-  
+
   /*!
    * @if jp
    * @brief NVList に要素を追加する。
@@ -358,7 +358,7 @@ namespace NVUtil
         CORBA_SeqUtil::push_back(dest, src[i]);
       }
   }
-  
+
   /*!
    * @if jp
    * @brief NVList に設定されている内容を文字列として出力する。
@@ -387,7 +387,7 @@ namespace NVUtil
    * @if jp
    * @brief NVList に設定されている内容を文字列として標準出力する。
    * @else
-   * @brief Print information configured in NVList as a string type 
+   * @brief Print information configured in NVList as a string type
    *        to Standard Outport.
    * @endif
    */

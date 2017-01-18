@@ -53,7 +53,7 @@ namespace RTC
 
     addProperty("dataport.subscription_type", "Any");
   }
-  
+
   /*!
    * @if jp
    * @brief デストラクタ
@@ -64,7 +64,7 @@ namespace RTC
   InPortBase::~InPortBase()
   {
     RTC_TRACE(("~InPortBase()"));
-    
+
     if (m_connectors.size() != 0)
       {
         RTC_ERROR(("connector.size should be 0 in InPortBase's dtor."));
@@ -74,7 +74,7 @@ namespace RTC
             delete m_connectors[i];
           }
       }
-    
+
     if (m_thebuffer != 0)
       {
         CdrBufferFactory::instance().deleteObject(m_thebuffer);
@@ -83,7 +83,7 @@ namespace RTC
             RTC_ERROR(("Although singlebuffer flag is true, the buffer != 0"));
           }
       }
-    
+
   }
 
   /*!
@@ -124,16 +124,16 @@ namespace RTC
     initProviders();
     initConsumers();
     int num(-1);
-    if (!coil::stringTo(num, 
+    if (!coil::stringTo(num,
                m_properties.getProperty("connection_limit", "-1").c_str()))
       {
-        RTC_ERROR(("invalid connection_limit value: %s", 
+        RTC_ERROR(("invalid connection_limit value: %s",
                    m_properties.getProperty("connection_limit").c_str()));
       }
 
     setConnectionLimit(num);
   }
-  
+
   /*!
    * @if jp
    * @brief プロパティを取得する
@@ -144,7 +144,7 @@ namespace RTC
   coil::Properties& InPortBase::properties()
   {
     RTC_TRACE(("properties()"));
-    
+
     return m_properties;
   }
 
@@ -312,7 +312,7 @@ namespace RTC
   void InPortBase::activateInterfaces()
   {
     RTC_TRACE(("activateInterfaces()"));
-    
+
     for (int i(0), len(m_connectors.size()); i < len; ++i)
       {
         m_connectors[i]->activate();
@@ -383,7 +383,7 @@ namespace RTC
     RTC_ERROR(("removeConnectorDataListener(): Invalid listener type."));
     return;
   }
-  
+
   /*!
    * @if jp
    * @brief ConnectorListener リスナを追加する
@@ -407,7 +407,7 @@ namespace RTC
     RTC_ERROR(("addConnectorListener(): Invalid listener type."));
     return;
   }
-  
+
   void InPortBase::removeConnectorListener(ConnectorListenerType type,
                                             ConnectorListener* listener)
   {
@@ -457,11 +457,11 @@ namespace RTC
       }
     return PortBase::connect(connector_profile);
   }
-  
+
   //============================================================
   // protected interfaces
   //============================================================
-  
+
   /*!
    * @if jp
    * @brief Interface情報を公開する
@@ -470,7 +470,7 @@ namespace RTC
    * @endif
    */
   ReturnCode_t InPortBase::publishInterfaces(ConnectorProfile& cprof)
-  {    
+  {
     RTC_TRACE(("publishInterfaces()"));
 
     ReturnCode_t returnvalue = _publishInterfaces();
@@ -540,7 +540,7 @@ namespace RTC
     RTC_ERROR(("unsupported dataflow_type: %s", dflow_type.c_str()));
     return RTC::BAD_PARAMETER;
   }
-  
+
   /*!
    * @if jp
    * @brief Interfaceに接続する
@@ -628,7 +628,7 @@ namespace RTC
     RTC_ERROR(("unsupported dataflow_type: %s", dflow_type.c_str()));
     return RTC::BAD_PARAMETER;
   }
-  
+
   /*!
    * @if jp
    * @brief Interfaceへの接続を解除する
@@ -701,7 +701,7 @@ namespace RTC
                               std::back_inserter(provider_types));
       }
 #endif
-    
+
     // InPortProvider supports "push" dataflow type
     if (provider_types.size() > 0)
       {
@@ -821,12 +821,12 @@ namespace RTC
                    coil::flatten(m_providerTypes).c_str()));
         return 0;
       }
-    
+
     RTC_DEBUG(("interface_type: %s", prop["interface_type"].c_str()));
     InPortProvider* provider;
     provider = InPortProviderFactory::
       instance().createObject(prop["interface_type"].c_str());
-    
+
     if (provider != 0)
       {
         RTC_DEBUG(("provider created"));
@@ -876,12 +876,12 @@ namespace RTC
                    coil::flatten(m_consumerTypes).c_str()));
         return 0;
       }
-    
+
     RTC_DEBUG(("interface_type: %s", prop["interface_type"].c_str()));
     OutPortConsumer* consumer;
     consumer = OutPortConsumerFactory::
       instance().createObject(prop["interface_type"].c_str());
-    
+
     if (consumer != 0)
       {
         RTC_DEBUG(("consumer created"));
@@ -898,9 +898,9 @@ namespace RTC
       }
 
     RTC_ERROR(("consumer creation failed"));
-    return 0; 
+    return 0;
   }
-  
+
   /*!
    * @if jp
    * @brief InPortPushConnector の生成
@@ -916,13 +916,13 @@ namespace RTC
     ConnectorInfo profile(cprof.name,
                           cprof.connector_id,
                           CORBA_SeqUtil::refToVstring(cprof.ports),
-                          prop); 
+                          prop);
 #else // ORB_IS_RTORB
     ConnectorInfo profile(cprof.name,
                           cprof.connector_id,
                           CORBA_SeqUtil::
                           refToVstring(RTC::PortServiceList(cprof.ports)),
-                          prop); 
+                          prop);
 #endif // ORB_IS_RTORB
 
     try
@@ -936,7 +936,7 @@ namespace RTC
           }
         else
           {
-            connector = new InPortPushConnector(profile, 
+            connector = new InPortPushConnector(profile,
                                                 provider,
                                                 m_listeners);
           }
@@ -977,13 +977,13 @@ namespace RTC
     ConnectorInfo profile(cprof.name,
                           cprof.connector_id,
                           CORBA_SeqUtil::refToVstring(cprof.ports),
-                          prop); 
+                          prop);
 #else // ORB_IS_RTORB
     ConnectorInfo profile(cprof.name,
                           cprof.connector_id,
                           CORBA_SeqUtil::
                           refToVstring(RTC::PortServiceList(cprof.ports)),
-                          prop); 
+                          prop);
 #endif // ORB_IS_RTORB
 
     try
@@ -1024,6 +1024,6 @@ namespace RTC
 
   ConnectorListeners& InPortBase::getListeners()
   {
-    return m_listeners; 
+    return m_listeners;
   }
 };  // namespace RTC
