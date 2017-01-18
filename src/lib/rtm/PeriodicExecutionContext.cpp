@@ -16,18 +16,21 @@
  *
  */
 
-#include <algorithm>
-#include <iostream>
-#ifdef RTM_OS_LINUX
-#define _GNU_SOURCE
-#include <pthread.h>
-#endif  // RTM_OS_LINUX
 #include <coil/Time.h>
 #include <coil/TimeValue.h>
 
 #include <rtm/PeriodicExecutionContext.h>
 #include <rtm/RTObjectStateMachine.h>
+
+#ifdef RTM_OS_LINUX
+#define _GNU_SOURCE
+#include <pthread.h>
+#endif  // RTM_OS_LINUX
+
 #include <string.h>
+#include <algorithm>
+#include <iostream>
+#include <string>
 
 #define DEEFAULT_PERIOD 0.000001
 namespace RTC_exp

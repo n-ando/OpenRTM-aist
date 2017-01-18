@@ -19,15 +19,16 @@
 
 #include <coil/stringutil.h>
 
-#include <stdio.h>
-#include <stdarg.h>
 #include <limits.h>
+#include <stdarg.h>
+#include <stdio.h>
 #include <string.h>
 #include <algorithm>
 #include <iostream>
 #include <cstring>
 #include <cctype>
 #include <cstdio>
+#include <string>
 
 #ifdef __QNX__
 using std::toupper;

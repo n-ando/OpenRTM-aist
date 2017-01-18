@@ -20,6 +20,8 @@
 #include <rtm/OutPortPullConnector.h>
 #include <rtm/OutPortProvider.h>
 
+#include <string>
+
 namespace RTC
 {
   /*!

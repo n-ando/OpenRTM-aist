@@ -28,6 +28,7 @@
 
 #include <algorithm>
 #include <iterator>
+#include <string>
 
 namespace RTC
 {

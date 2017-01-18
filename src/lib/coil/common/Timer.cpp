@@ -19,6 +19,9 @@
 #include <coil/Listener.h>
 #include <coil/Timer.h>
 #include <coil/Time.h>
+
+#include <vector>
+
 namespace coil
 {
   /*!

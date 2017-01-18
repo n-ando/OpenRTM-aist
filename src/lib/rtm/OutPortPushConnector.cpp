@@ -22,6 +22,8 @@
 #include <rtm/OutPortPushConnector.h>
 #include <rtm/ConnectorListener.h>
 
+#include <string>
+
 namespace RTC
 {
   /*!

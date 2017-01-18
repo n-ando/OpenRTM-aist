@@ -24,6 +24,9 @@
 #include <rtm/CORBA_SeqUtil.h>
 #include <rtm/CORBA_IORUtil.h>
 
+#include <vector>
+#include <string>
+
 namespace RTM
 {
   //

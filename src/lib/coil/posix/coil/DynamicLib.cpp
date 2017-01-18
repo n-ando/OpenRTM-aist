@@ -18,6 +18,8 @@
 
 #include <coil/DynamicLib.h>
 
+#include <utility>
+
 namespace coil
 {
   /*!

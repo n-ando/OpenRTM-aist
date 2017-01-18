@@ -19,6 +19,7 @@
 
 #include <rtm/Factory.h>
 #include <rtm/RTObject.h>
+#include <string>
 
 namespace RTC
 {

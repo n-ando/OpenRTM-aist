@@ -26,9 +26,9 @@
 #include <rtm/LocalServiceAdmin.h>
 #include <rtm/LocalServiceBase.h>
 
+#include <string.h>
 #include <algorithm>
 #include <memory>
-#include <string.h>
 #include <vector>
 
 namespace RTM

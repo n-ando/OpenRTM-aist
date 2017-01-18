@@ -19,6 +19,8 @@
 #define TEST_DYNAMIC_LIB  1   // Test for DLL export.
 #include <coil/DynamicLib.h>
 
+#include <utility>
+
 namespace coil
 {
   /*!
@@ -180,8 +182,7 @@ namespace coil
         MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),
         reinterpret_cast<char *>(cstr),
         256,
-        NULL
-    );
+        NULL);
     return cstr;
   }
 };  // namespace coil

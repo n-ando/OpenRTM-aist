@@ -19,7 +19,11 @@
 
 #include <coil/Properties.h>
 #include <coil/stringutil.h>
+
 #include <iostream>
+#include <map>
+#include <string>
+#include <vector>
 
 #ifdef __QNX__
 using std::size_t;
