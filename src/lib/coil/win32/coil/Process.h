@@ -22,9 +22,9 @@
 
 #include <coil/stringutil.h>
 
-#include <string>
 #include <windows.h>
 #include <tchar.h>
+#include <string>
 
 namespace coil
 {
