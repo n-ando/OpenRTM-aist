@@ -133,7 +133,6 @@ namespace coil
     : public Async
   {
   public:
-
     /*!
      * @if jp
      *
@@ -302,7 +301,6 @@ namespace coil
     : public Async
   {
   public:
-
     /*!
      * @if jp
      *

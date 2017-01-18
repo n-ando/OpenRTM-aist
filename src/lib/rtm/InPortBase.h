@@ -281,7 +281,7 @@ namespace RTC
      *
      * @endif
      */
-   InPortConnector* getConnectorByName(const char* name);
+    InPortConnector* getConnectorByName(const char* name);
 
     /*!
      * @if jp
@@ -619,7 +619,6 @@ namespace RTC
     virtual ConnectorListeners& getListeners();
 
   protected:
-
     /*!
      * @if jp
      * @brief Interface情報を公開する

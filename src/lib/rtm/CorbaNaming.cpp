@@ -524,7 +524,10 @@ namespace RTC
               {  // If Object is object, unbind it.
                 context->unbind(bl[i].binding_name);
               }
-            else assert(0);  // never comes here
+            else
+              {
+                assert(0);  // never comes here
+              }
           }
 
         // no more binding -> do-while loop will be finished

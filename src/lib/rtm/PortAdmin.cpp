@@ -45,7 +45,7 @@ namespace RTC
 #else  // ORB_IS_RTORB
           PortProfile *pp;
           pp = p->get_port_profile();
-          std::string name( pp->name);
+          std::string name(pp->name);
           delete pp;
 #endif  // ORB_IS_RTORB
           return m_name == name;

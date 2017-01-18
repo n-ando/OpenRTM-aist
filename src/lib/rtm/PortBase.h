@@ -896,7 +896,7 @@ namespace RTC
      *
      * @endif
      */
-   const char* getName() const;
+    const char* getName() const;
 
     /*!
      * @if jp

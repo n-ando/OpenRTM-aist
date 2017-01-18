@@ -639,7 +639,7 @@ extern "C"
    * @endif
    */
 
- void PeriodicExecutionContextInit(RTC::Manager* manager)
+  void PeriodicExecutionContextInit(RTC::Manager* manager)
   {
     RTC::ExecutionContextFactory::
       instance().addFactory("PeriodicExecutionContext",

@@ -573,7 +573,7 @@ namespace RTC
     typedef SequenceEx<ConnectorProfileList,
                        ConnectorProfile,
                        Mutex> ConnProfiles;
-    ConnProfiles m_connProfiles ;
+    ConnProfiles m_connProfiles;
 
     // PortProfile.owner
     RTObject_var m_owner;

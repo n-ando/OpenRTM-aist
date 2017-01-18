@@ -762,13 +762,13 @@ namespace RTC_Utils
         {
           // pre-do
           if (m_predo[state.curr] != NULL)
-            (m_listener->*m_predo [state.curr])(state);
+            (m_listener->*m_predo[state.curr])(state);
 
           if (need_trans()) return;
 
           // do
           if (m_do[state.curr] != NULL)
-            (m_listener->*m_do    [state.curr])(state);
+            (m_listener->*m_do[state.curr])(state);
 
           if (need_trans()) return;
 

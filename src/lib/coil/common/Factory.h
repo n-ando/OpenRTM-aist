@@ -20,7 +20,6 @@
 #ifndef COIL_FACTORY_H
 #define COIL_FACTORY_H
 
-#include <functional>
 #include <assert.h>
 #include <algorithm>
 #include <functional>
@@ -108,7 +107,6 @@ namespace coil
   {
     class FactoryEntry;
   public:
-
     typedef std::map<Identifier, FactoryEntry> FactoryMap;
     typedef typename FactoryMap::iterator      FactoryMapIt;
     typedef std::map<AbstractClass*, FactoryEntry> ObjectMap;
@@ -500,7 +498,6 @@ namespace coil
     }
 
   private:
-
     /*!
      * @if jp
      *
@@ -585,7 +582,6 @@ namespace coil
                                            Destructor> >
   {
   public:
-
   private:
     /*!
      * @if jp

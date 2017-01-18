@@ -55,7 +55,7 @@ namespace coil
    */
   void* Allocator::NewArray(size_t t) throw (std::bad_alloc)
   {
-    return operator new [](t);
+    return operator new[](t);
   }
   
   /*!

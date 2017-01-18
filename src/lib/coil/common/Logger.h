@@ -419,7 +419,6 @@ namespace coil
     }
 
   public:
-
     /*!
      * @if jp
      *
@@ -433,7 +432,7 @@ namespace coil
      */
     struct Stream
     {
-      Stream(streambuf_type* stream, bool cleanup = false)
+      explicit Stream(streambuf_type* stream, bool cleanup = false)
         : stream_(stream), cleanup_(cleanup)
       {
       }
@@ -471,7 +470,6 @@ namespace coil
     };
 
   private:
-
     /*!
      * @if jp
      *
@@ -810,7 +808,6 @@ namespace coil
 
 
   protected:
-
     /*!
      * @if jp
      *
@@ -904,7 +901,6 @@ namespace coil
      */
     std::ofstream m_dummy;
   public:
-
     /*!
      * @if jp
      * @brief ロック有効モード

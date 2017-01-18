@@ -348,8 +348,14 @@ namespace CORBA_IORUtil
             sstr << static_cast<char>('a' + (v - 10));
           }
         v = key[j] & 0xf;
-        if (v < 10) { sstr << static_cast<char>('0' + v); }
-        else        { sstr << static_cast<char>('a' + (v - 10)); }
+        if (v < 10)
+          {
+            sstr << static_cast<char>('0' + v);
+          }
+        else
+          {
+            sstr << static_cast<char>('a' + (v - 10));
+          }
       }
     sstr << "  (" << key.length() << " bytes)" << std::endl;
   }

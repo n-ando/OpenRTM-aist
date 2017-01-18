@@ -54,7 +54,7 @@ namespace coil
     }
     m_sec = (long int)timeval;
     m_usec = (long)((timeval - (double)m_sec)
-                    * TIMEVALUE_ONE_SECOND_IN_USECS + dbHalfAdj );
+                    * TIMEVALUE_ONE_SECOND_IN_USECS + dbHalfAdj);
     normalize();
   }
   
@@ -128,15 +128,15 @@ namespace coil
    */
   TimeValue TimeValue::operator=(double time)
   {
-   double dbHalfAdj;
-   if ( time >= 0 ) 
-     {
-       dbHalfAdj = +0.5;
-     }
-   else
-     {
-       dbHalfAdj = -0.5;
-     }
+    double dbHalfAdj;
+    if ( time >= 0 ) 
+      {
+        dbHalfAdj = +0.5;
+      }
+    else
+      {
+        dbHalfAdj = -0.5;
+      }
 
     m_sec = (long)time;
     m_usec = (long)((time - 
@@ -189,7 +189,7 @@ namespace coil
             ++m_sec;
             m_usec -= TIMEVALUE_ONE_SECOND_IN_USECS;
           }
-        while (m_usec >= TIMEVALUE_ONE_SECOND_IN_USECS);
+        while (m_usec >= TIMEVALUE_ONE_SECOND_IN_USECS) {}
       }
     else if (m_usec <= -TIMEVALUE_ONE_SECOND_IN_USECS)
       {
@@ -198,7 +198,7 @@ namespace coil
             --m_sec;
             m_usec += TIMEVALUE_ONE_SECOND_IN_USECS;
           }
-        while (m_usec <= -TIMEVALUE_ONE_SECOND_IN_USECS);
+        while (m_usec <= -TIMEVALUE_ONE_SECOND_IN_USECS) {}
       }
     
     if (m_sec >= 1 && m_usec < 0)

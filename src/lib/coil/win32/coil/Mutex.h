@@ -70,7 +70,7 @@ namespace coil
         m_Security_attr.nLength = sizeof(SECURITY_ATTRIBUTES);
         m_Security_attr.lpSecurityDescriptor = &sd_buffer;
         m_Security_attr.bInheritHandle = TRUE;
-        mutex_ = ::CreateMutexA( &m_Security_attr, FALSE,name );
+        mutex_ = ::CreateMutexA(&m_Security_attr, FALSE,name);
 
 
     }

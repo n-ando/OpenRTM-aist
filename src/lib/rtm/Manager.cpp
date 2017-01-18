@@ -757,8 +757,8 @@ std::vector<coil::Properties> Manager::getLoadableModules()
               }
           }
                                 
-        comp_prop["exported_ports"] = exported_ports_str;
-        comp_prop["conf.default.exported_ports"] = exported_ports_str;
+         comp_prop["exported_ports"] = exported_ports_str;
+         comp_prop["conf.default.exported_ports"] = exported_ports_str;
  
       }
     //------------------------------------------------------------
@@ -1452,7 +1452,7 @@ std::vector<coil::Properties> Manager::getLoadableModules()
       }
     catch (...)
       {
-        RTC_ERROR(("Exception: Caught unknown exception in initORB()." ));
+        RTC_ERROR(("Exception: Caught unknown exception in initORB()."));
         return false;
       }
     return true;

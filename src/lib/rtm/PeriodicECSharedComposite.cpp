@@ -493,7 +493,7 @@ namespace SDOPackage
         
         RTC_DEBUG(("Port %s was deleted.", port_name.c_str()));
       }
-   }
+  }
 
   /*!
    * @if jp

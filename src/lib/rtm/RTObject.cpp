@@ -374,7 +374,7 @@ namespace RTC
 
         for (CORBA::ULong ic(0), len(m_ecOther.length()); ic < len; ++ic)
           {
-            if (! CORBA::is_nil(m_ecOther[ic]))
+            if (!CORBA::is_nil(m_ecOther[ic]))
               {
                 return RTC::PRECONDITION_NOT_MET;
               }
@@ -418,7 +418,7 @@ namespace RTC
       {
         //        m_ecOther[ic]->stop();
         RTC::LightweightRTObject_var comp(this->_this());
-        if (! ::CORBA::is_nil(m_ecOther[ic]))
+        if (!::CORBA::is_nil(m_ecOther[ic]))
           {
             m_ecOther[ic]->remove_component(comp.in());
           }
@@ -448,7 +448,7 @@ namespace RTC
 
     for (::CORBA::ULong i(0), len(m_ecOther.length()); i < len; ++i)
       {
-        if (! ::CORBA::is_nil(m_ecOther[i]))
+        if (!::CORBA::is_nil(m_ecOther[i]))
           {
             if (exec_context->_is_equivalent(m_ecOther[i]))
                 return true;
@@ -486,7 +486,7 @@ namespace RTC
 
     if (index < m_ecOther.length())
       {
-        if (! ::CORBA::is_nil(m_ecOther[index]))
+        if (!::CORBA::is_nil(m_ecOther[index]))
           {
             return ExecutionContext::_duplicate(m_ecOther[index]);
           }
@@ -1879,7 +1879,7 @@ namespace RTC
    * @brief [local interface] Checking if the current context is own context
    * @endif
    */
- bool RTObject_impl::isOwnExecutionContext(RTC::UniqueId ec_id)
+  bool RTObject_impl::isOwnExecutionContext(RTC::UniqueId ec_id)
   {
     if (ec_id < ECOTHER_OFFSET)
       {

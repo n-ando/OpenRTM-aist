@@ -44,7 +44,6 @@ namespace coil
   class Condition
   {
   public:
-
     /*!
      * @if jp
      *
@@ -185,7 +184,7 @@ namespace coil
       abstime.tv_nsec = tv.tv_usec * 1000 + nano_second;
       if (abstime.tv_nsec >= 1000000000) {
         abstime.tv_nsec -= 1000000000;
-        abstime.tv_sec ++;
+        abstime.tv_sec++;
       }
       return 0 == ::pthread_cond_timedwait(&m_cond, &m_mutex.mutex_, &abstime);
     }
