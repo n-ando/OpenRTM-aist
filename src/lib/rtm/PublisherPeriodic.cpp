@@ -22,10 +22,12 @@
 #include <coil/stringutil.h>
 #include <rtm/PublisherPeriodic.h>
 #include <rtm/InPortConsumer.h>
-#include <stdlib.h>
 #include <rtm/idl/DataPortSkel.h>
 #include <rtm/PeriodicTaskFactory.h>
 #include <rtm/SystemLogger.h>
+
+#include <stdlib.h>
+#include <string>
 
 namespace RTC
 {
@@ -298,8 +300,8 @@ namespace RTC
         m_buffer->advanceRptr();
 
       }
-     return PORT_OK;
-   }
+    return PORT_OK;
+  }
 
   /*!
    * @brief push "fifo" policy
