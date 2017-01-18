@@ -479,7 +479,8 @@ namespace RTC
     // Extracting publisher's period time
     double hz;
     if (!coil::stringTo(hz, prop["publisher.push_rate"].c_str()) &&
-        !coil::stringTo(hz, prop["push_rate"].c_str()))  // for 0.4 compatibility
+        // for 0.4 compatibility
+        !coil::stringTo(hz, prop["push_rate"].c_str()))
       {
         RTC_ERROR(("publisher.push_rate/push_rate were not found."));
         return false;
