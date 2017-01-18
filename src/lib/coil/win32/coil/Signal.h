@@ -32,7 +32,7 @@ namespace coil
   typedef void (*SignalHandler)(int);
   typedef struct __sigset {
     unsigned int __bits[_SIG_WORDS];
-  } sigset_t;    
+  } sigset_t;
 
   /*!
    * @if jp
@@ -94,7 +94,7 @@ namespace coil
      */
     SignalAction(SignalHandler handle, int signum, sigset_t *mask = 0,
                  int flags = 0);
-    
+
     /*!
      * @if jp
      *

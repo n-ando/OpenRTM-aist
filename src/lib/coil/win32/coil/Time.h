@@ -100,25 +100,26 @@ namespace coil
     // The WSAStartup function initiates use of the Winsock DLL by a process.
     ver = MAKEWORD(2, 2);
     iret = ::WSAStartup(ver, &wsa);
-    if ( iret != 0 ) 
+    if ( iret != 0 )
       {
         return iret;
       }
 
-    // The socket function creates a socket that is bound to 
+    // The socket function creates a socket that is bound to
     // a specific transport service provider.
     // It is assumed AF_INET because there is no AF_UNIX for Windows.
-    ssoc = ::socket(AF_INET, 
-                    SOCK_STREAM, 
+    ssoc = ::socket(AF_INET,
+                    SOCK_STREAM,
                     0);
-    if (ssoc == INVALID_SOCKET) {
-      iret = ::WSAGetLastError();
-      ::WSACleanup();
-      return iret;  
-    }
+    if (ssoc == INVALID_SOCKET)
+      {
+        iret = ::WSAGetLastError();
+        ::WSACleanup();
+        return iret;
+      }
 
 
-    // Initialize fd_set. 
+    // Initialize fd_set.
     FD_ZERO(&mask);
     // Register the reading socket.
     FD_SET(ssoc, &mask);
@@ -126,16 +127,16 @@ namespace coil
     tv.tv_sec = interval.sec();
     tv.tv_usec = interval.usec();
     iret = ::select(static_cast<int>(ssoc+1), &mask, NULL, NULL, &tv);
-    if ( iret == SOCKET_ERROR ) 
-    {
-      iret = ::WSAGetLastError();
-      // The closesocket function closes an existing socket.
-      ::closesocket(ssoc);
-      // The WSACleanup function terminates 
-      // use of the Winsock 2 DLL (Ws2_32.dll).
-      ::WSACleanup();
-      return iret;  
-    }
+    if ( iret == SOCKET_ERROR )
+      {
+        iret = ::WSAGetLastError();
+        // The closesocket function closes an existing socket.
+        ::closesocket(ssoc);
+        // The WSACleanup function terminates
+        // use of the Winsock 2 DLL (Ws2_32.dll).
+        ::WSACleanup();
+        return iret;
+      }
 
     // The closesocket function closes an existing socket.
     ::closesocket(ssoc);
@@ -178,35 +179,36 @@ namespace coil
     // The WSAStartup function initiates use of the Winsock DLL by a process.
     ver = MAKEWORD(2, 2);
     iret = ::WSAStartup(ver, &wsa);
-    if ( iret != 0 ) 
-    {
+    if ( iret != 0 )
+      {
         return iret;
-    }
+      }
 
-    // The socket function creates a socket that is 
+    // The socket function creates a socket that is
     // bound to a specific transport service provider.
     ssoc = ::socket(AF_INET, SOCK_STREAM, 0);
-    if (ssoc == INVALID_SOCKET) {
-      iret = ::WSAGetLastError();
-      ::WSACleanup();
-      return iret;  
-    }
+    if (ssoc == INVALID_SOCKET)
+      {
+        iret = ::WSAGetLastError();
+        ::WSACleanup();
+        return iret;
+      }
     FD_ZERO(&mask);
     FD_SET(ssoc, &mask);
-    
+
     tv.tv_sec = usec / 1000000;
     tv.tv_usec = usec % 1000000;
     iret = ::select(static_cast<int>(ssoc+1), &mask, NULL, NULL, &tv);
-    if ( iret == SOCKET_ERROR ) 
-    {
-      iret = ::WSAGetLastError();
-      // The closesocket function closes an existing socket.
-      ::closesocket(ssoc);
-      // The WSACleanup function terminates 
-      // use of the Winsock 2 DLL (Ws2_32.dll).
-      ::WSACleanup();
-      return iret;  
-    }
+    if ( iret == SOCKET_ERROR )
+      {
+        iret = ::WSAGetLastError();
+        // The closesocket function closes an existing socket.
+        ::closesocket(ssoc);
+        // The WSACleanup function terminates
+        // use of the Winsock 2 DLL (Ws2_32.dll).
+        ::WSACleanup();
+        return iret;
+      }
     // The closesocket function closes an existing socket.
     ::closesocket(ssoc);
     // The WSACleanup function terminates use of the Winsock 2 DLL (Ws2_32.dll).

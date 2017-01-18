@@ -25,7 +25,7 @@
 namespace coil
 {
   typedef HANDLE pthread_mutex_t;
-  
+
   /*!
    * @if jp
    *
@@ -64,7 +64,7 @@ namespace coil
     explicit Mutex(const char * const name = 0)
     {
       SECURITY_DESCRIPTOR sd_buffer;
-      ::InitializeSecurityDescriptor(&sd_buffer, 
+      ::InitializeSecurityDescriptor(&sd_buffer,
                                      SECURITY_DESCRIPTOR_REVISION);
       ::SetSecurityDescriptorDacl (&sd_buffer, TRUE, 0, FALSE);
       m_Security_attr.nLength = sizeof(SECURITY_ATTRIBUTES);
@@ -92,7 +92,7 @@ namespace coil
      */
     ~Mutex()
     {
-      ::CloseHandle(mutex_);    
+      ::CloseHandle(mutex_);
     }
 
     /*!
@@ -167,7 +167,7 @@ namespace coil
       ::ReleaseMutex(mutex_);
     }
     HANDLE mutex_;
-    
+
   private:
     SECURITY_ATTRIBUTES m_Security_attr;
 
