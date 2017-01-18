@@ -126,15 +126,15 @@ namespace RTC
   {
     const char* color[] =
       {
-        "\x1b[0m",         // SLILENT  (none)
-        "\x1b[0m\x1b[31m", // FATAL    (red)
-        "\x1b[0m\x1b[35m", // ERROR    (magenta)
-        "\x1b[0m\x1b[33m", // WARN     (yellow)
-        "\x1b[0m\x1b[34m", // INFO     (blue)
-        "\x1b[0m\x1b[32m", // DEBUG    (green)
-        "\x1b[0m\x1b[36m", // TRACE    (cyan)
-        "\x1b[0m\x1b[39m", // VERBOSE  (default)
-        "\x1b[0m\x1b[37m"  // PARANOID (white)
+        "\x1b[0m",          // SLILENT  (none)
+        "\x1b[0m\x1b[31m",  // FATAL    (red)
+        "\x1b[0m\x1b[35m",  // ERROR    (magenta)
+        "\x1b[0m\x1b[33m",  // WARN     (yellow)
+        "\x1b[0m\x1b[34m",  // INFO     (blue)
+        "\x1b[0m\x1b[32m",  // DEBUG    (green)
+        "\x1b[0m\x1b[36m",  // TRACE    (cyan)
+        "\x1b[0m\x1b[39m",  // VERBOSE  (default)
+        "\x1b[0m\x1b[37m"   // PARANOID (white)
       };
     *this << color[level];
     *this << getDate() + m_levelString[level] + m_name + ": ";
@@ -221,4 +221,4 @@ namespace RTC
       return RTL_SILENT;
   }
 
-}; // namespace RTC
+};  // namespace RTC

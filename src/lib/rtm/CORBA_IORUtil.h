@@ -79,5 +79,5 @@ namespace CORBA_IORUtil
    */
   std::string formatIORinfo(const char* iorstr);
 
-}; // namespace CORBA_IORUtil
-#endif // CORBA_IORUTIL_H
+};  // namespace CORBA_IORUtil
+#endif  // CORBA_IORUTIL_H

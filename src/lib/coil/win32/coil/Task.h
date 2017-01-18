@@ -263,4 +263,4 @@ namespace coil
   };
 };  // namespace coil
 
-#endif // COIL_TASK_H
+#endif  // COIL_TASK_H

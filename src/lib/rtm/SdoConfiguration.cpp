@@ -85,10 +85,10 @@ namespace SDOPackage
 #ifndef ORB_IS_RTORB
     conf.description = CORBA::string_dup(prop["description"].c_str());
     conf.id = CORBA::string_dup(prop.getName());
-#else // ORB_IS_RTORB
+#else  // ORB_IS_RTORB
     conf.description = reinterpret_cast<char *>(prop["description"].c_str());
     conf.id = reinterpret_cast<char *>(prop.getName());
-#endif // ORB_IS_RTORB
+#endif  // ORB_IS_RTORB
     NVUtil::copyFromProperties(conf.configuration_data, prop);
   }
 
@@ -283,7 +283,7 @@ namespace SDOPackage
     catch (...)
       {
         throw InternalError("Configuration::get_configuration_parameters()");
-        //never reach here
+        // never reach here
       }
     // never reach here
     return new ParameterList(0);

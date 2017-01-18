@@ -76,5 +76,5 @@ namespace RTC_Utils
     mmc = RTC::MultiModeObject::_narrow(obj);
     return !CORBA::is_nil(mmc);
   }
-}; // namespace RTC_Utils
+};  // namespace RTC_Utils
 

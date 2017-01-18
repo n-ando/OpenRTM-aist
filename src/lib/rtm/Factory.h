@@ -405,4 +405,4 @@ namespace RTC
     NumberingPolicy* m_policy;
   };
 };  // namespace RTC
-#endif // RTC_FACTORY_H
+#endif  // RTC_FACTORY_H

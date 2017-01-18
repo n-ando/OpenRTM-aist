@@ -30,7 +30,7 @@ namespace SDOPackage
 {
   class NVList;
 };
-#endif // ORB_IS_RTORB
+#endif  // ORB_IS_RTORB
 
 namespace coil
 {
@@ -416,6 +416,6 @@ namespace RTC
 #if defined(WIN32) || defined(_WIN32) || defined(__WIN32__) || defined(__NT__)
   EXTERN template class DLL_PLUGIN ::coil::GlobalFactory<OutPortConsumer>;
 #endif
-};     // namespace RTC
-#endif // RTC_OUTPORTCONSUMER_H
+};  // namespace RTC
+#endif  // RTC_OUTPORTCONSUMER_H
 

@@ -599,11 +599,11 @@ namespace RTC_impl
     mutable coil::Mutex m_removedMutex;
     typedef std::vector<RTC_impl::RTObjectStateMachine*>::iterator CompItr;
 
-  }; // class PeriodicExecutionContext
+  };  // class PeriodicExecutionContext
 };  // namespace RTC_impl
 
 #ifdef WIN32
 #pragma warning( default : 4290 )
 #endif
 
-#endif // RTC_PERIODICEXECUTIONCONTEXT_H
+#endif  // RTC_PERIODICEXECUTIONCONTEXT_H

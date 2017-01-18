@@ -153,4 +153,4 @@ namespace RTC
     return m_littleEndian;
   }
 
-}; // namespace RTC
+};  // namespace RTC

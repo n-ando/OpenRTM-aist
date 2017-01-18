@@ -670,5 +670,5 @@ namespace RTM
     };
 
   };
-}; // namespace RTM
-#endif // RTM_MANAGERSERVANT_H
+};  // namespace RTM
+#endif  // RTM_MANAGERSERVANT_H

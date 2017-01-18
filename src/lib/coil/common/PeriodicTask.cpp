@@ -275,10 +275,10 @@ namespace coil
    */
   int PeriodicTask::svc()
   {
-    while (m_alive.value) // needs lock?
+    while (m_alive.value)  // needs lock?
       {
         if (m_periodMeasure) { m_periodTime.tack(); }
-        { // wait if suspended
+        {  // wait if suspended
           Guard suspend_gaurd(m_suspend.mutex);
           if (m_suspend.suspend)
             {
@@ -361,5 +361,5 @@ namespace coil
     ++m_periodCount;
   }
 
-}; // namespace coil
+};  // namespace coil
 

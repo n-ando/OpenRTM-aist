@@ -191,4 +191,4 @@ namespace coil
   }
 };  // namespace coil
 
-#endif // COIL_FILE_H
+#endif  // COIL_FILE_H

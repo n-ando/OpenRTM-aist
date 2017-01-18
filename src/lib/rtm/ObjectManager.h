@@ -288,4 +288,4 @@ protected:
    */
   Objects m_objects;
 };
-#endif // RTC_OBJECTMANAGER_H
+#endif  // RTC_OBJECTMANAGER_H

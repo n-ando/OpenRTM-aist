@@ -382,4 +382,4 @@ extern "C"
 #pragma warning( default : 4290 )
 #endif
 
-#endif // RTC_OUTPORTCORBACDRPROVIDER_H
+#endif  // RTC_OUTPORTCORBACDRPROVIDER_H

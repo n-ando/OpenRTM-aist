@@ -505,6 +505,6 @@ namespace RTC
 
     CORBA::Long m_propValueIndex;
   };
-}; // namespace RTC
+};  // namespace RTC
 
-#endif // RTC_OUTPORT_H
+#endif  // RTC_OUTPORT_H

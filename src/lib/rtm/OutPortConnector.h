@@ -237,7 +237,7 @@ namespace RTC
             connectorData_[ON_BUFFER_WRITE].notify(m_profile, data);
           RTC_PARANOID(("ON_BUFFER_WRITE(InPort,OutPort), "
                             "callback called in direct mode."));
-          inport->write(data); // write to InPort variable!!
+          inport->write(data);  // write to InPort variable!!
           // ON_RECEIVED(In,Out) callback
           m_listeners.
             connectorData_[ON_RECEIVED].notify(m_profile, data);
@@ -327,6 +327,6 @@ namespace RTC
     ConnectorListeners* m_inPortListeners;
 
   };
-}; // namespace RTC
+};  // namespace RTC
 
-#endif // RTC_CONNECTORBASE_H
+#endif  // RTC_CONNECTORBASE_H

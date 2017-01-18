@@ -255,9 +255,9 @@ namespace NVUtil
    */
 #ifndef ORB_IS_RTORB
   void copyFromProperties(SDOPackage::NVList& nv, const coil::Properties& prop);
-#else // ORB_IS_RTORB
+#else  // ORB_IS_RTORB
   void copyFromProperties(SDOPackage_NVList& nv, const coil::Properties& prop);
-#endif // ORB_IS_RTORB
+#endif  // ORB_IS_RTORB
 
   /*!
    * @if jp
@@ -504,10 +504,10 @@ namespace NVUtil
 #ifndef ORB_IS_RTORB
   bool appendStringValue(SDOPackage::NVList& nv, const char* name,
                          const char* value);
-#else // ORB_IS_RTORB
+#else  // ORB_IS_RTORB
   bool appendStringValue(SDOPackage_NVList& nv, const char* name,
                          const char* value);
-#endif // ORB_IS_RTORB
+#endif  // ORB_IS_RTORB
 
   /*!
    * @if jp
@@ -592,4 +592,4 @@ namespace NVUtil
 
 
 };  // namespace NVUtil
-#endif // NVUTIL_NVUTIL_H
+#endif  // NVUTIL_NVUTIL_H

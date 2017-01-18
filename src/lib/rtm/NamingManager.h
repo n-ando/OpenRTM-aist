@@ -888,7 +888,7 @@ namespace RTC
      * @endif
      */
     Logger rtclog;
-  }; // class NamingManager
-}; // namespace RTC
+  };  // class NamingManager
+};  // namespace RTC
 
-#endif // RTC_NAMINGMANAGER_H
+#endif  // RTC_NAMINGMANAGER_H

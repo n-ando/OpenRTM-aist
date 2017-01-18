@@ -1,4 +1,4 @@
-﻿// -*- C++ -*-
+﻿// -*-  C++ -*-
 /*!
  * @file InPortBase.cpp
  * @brief Base class of InPort
@@ -485,7 +485,7 @@ namespace RTC
     {
       coil::Properties conn_prop;
       NVUtil::copyToProperties(conn_prop, cprof.properties);
-      prop << conn_prop.getNode("dataport"); // marge ConnectorProfile
+      prop << conn_prop.getNode("dataport");  // marge ConnectorProfile
       /*
        * marge ConnectorProfile for buffer property.
        * e.g.
@@ -558,7 +558,7 @@ namespace RTC
     {
       coil::Properties conn_prop;
       NVUtil::copyToProperties(conn_prop, cprof.properties);
-      prop << conn_prop.getNode("dataport"); // marge ConnectorProfile
+      prop << conn_prop.getNode("dataport");  // marge ConnectorProfile
       /*
        * marge ConnectorProfile for buffer property.
        * e.g.
@@ -570,7 +570,7 @@ namespace RTC
     RTC_DEBUG(("ConnectorProfile::properties are as follows."));
     RTC_DEBUG_STR((prop));
 
-    bool littleEndian; // true: little, false: big
+    bool littleEndian;  // true: little, false: big
     if (!checkEndian(prop, littleEndian))
       {
         RTC_ERROR(("unsupported endian"));
@@ -840,7 +840,7 @@ namespace RTC
             InPortProviderFactory::instance().deleteObject(provider);
             return 0;
           }
-#else // ORB_IS_RTORB
+#else  // ORB_IS_RTORB
         // RtORB's copy ctor's bug?
         ::SDOPackage::NVList_ptr prop_ref(cprof.properties);
         if (!provider->publishInterface(*prop_ref))
@@ -849,7 +849,7 @@ namespace RTC
             InPortProviderFactory::instance().deleteObject(provider);
             return 0;
           }
-#endif // ORB_IS_RTORB
+#endif  // ORB_IS_RTORB
         return provider;
       }
 
@@ -918,13 +918,13 @@ namespace RTC
                           cprof.connector_id,
                           CORBA_SeqUtil::refToVstring(cprof.ports),
                           prop);
-#else // ORB_IS_RTORB
+#else  // ORB_IS_RTORB
     ConnectorInfo profile(cprof.name,
                           cprof.connector_id,
                           CORBA_SeqUtil::
                           refToVstring(RTC::PortServiceList(cprof.ports)),
                           prop);
-#endif // ORB_IS_RTORB
+#endif  // ORB_IS_RTORB
 
     try
       {
@@ -979,13 +979,13 @@ namespace RTC
                           cprof.connector_id,
                           CORBA_SeqUtil::refToVstring(cprof.ports),
                           prop);
-#else // ORB_IS_RTORB
+#else  // ORB_IS_RTORB
     ConnectorInfo profile(cprof.name,
                           cprof.connector_id,
                           CORBA_SeqUtil::
                           refToVstring(RTC::PortServiceList(cprof.ports)),
                           prop);
-#endif // ORB_IS_RTORB
+#endif  // ORB_IS_RTORB
 
     try
       {

@@ -22,11 +22,11 @@
 #define WINVER _WIN32_WINNT
 #ifdef _WIN32_WINNT
 #undef _WIN32_WINNT
-#endif // _WIN32_WINNT
+#endif  // _WIN32_WINNT
 #define _WIN32_WINNT 0x0500
 #define _WIN32_WINDOWS _WIN32_WINNT
 #define _WIN32_IE 0x0501
-#endif // NTDDI_VERSION
+#endif  // NTDDI_VERSION
 
 #include <winsock2.h>
 #include <ws2tcpip.h>
@@ -88,15 +88,15 @@ namespace coil
           ++i;
         }
     }
-    
+
     UINT ipaddress(inet_addr(dest_addr.c_str()));
     if (ipaddress == INADDR_NONE) { return false; }
-    
+
     DWORD bestifindex;
     if (NO_ERROR != GetBestInterface(ipaddress, &bestifindex)) { return false; }
-        
+
     PMIB_IPADDRTABLE ipaddr_table;
-    ipaddr_table = 
+    ipaddr_table =
           reinterpret_cast<MIB_IPADDRTABLE *>(MALLOC(sizeof (MIB_IPADDRTABLE)));
     if (ipaddr_table == 0) { return false; }
 
@@ -110,7 +110,7 @@ namespace coil
       }
     if (ipaddr_table == 0) { return false; }
     if (GetIpAddrTable(ipaddr_table, &size, 0) != NO_ERROR) { return false; }
-    
+
     for (int i(0); i < static_cast<int>(ipaddr_table->dwNumEntries); ++i)
       {
         if (bestifindex == ipaddr_table->table[i].dwIndex)
@@ -123,6 +123,6 @@ namespace coil
       }
     return false;
   }
-  
-  
-}; // namespace coil
+
+
+};  // namespace coil

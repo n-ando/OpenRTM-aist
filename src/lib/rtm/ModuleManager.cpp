@@ -571,4 +571,4 @@ namespace RTC
         modprops.push_back(p);
       }
   }
-}; // namespace RTC
+};  // namespace RTC

@@ -97,7 +97,7 @@ namespace SDOPackage
      */
 #ifdef ORB_IS_RTORB
     explicit Organization_impl(RTC::RTObject_ptr sdo);
-#endif // ORB_IS_RTROB
+#endif  // ORB_IS_RTROB
     explicit Organization_impl(SDOSystemElement_ptr sdo);
 
     /*!
@@ -876,4 +876,4 @@ namespace SDOPackage
 #pragma warning( default : 4290 )
 #endif
 
-#endif // RTC_NAMESPACE SDOPACKAGE
+#endif  // RTC_NAMESPACE SDOPACKAGE

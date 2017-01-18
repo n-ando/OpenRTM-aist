@@ -367,4 +367,4 @@ namespace RTC
   EXTERN template class DLL_PLUGIN coil::GlobalFactory<PublisherBase>;
 #endif
 };  // namespace RTC
-#endif // RTC_PUBLISHERBASE_H
+#endif  // RTC_PUBLISHERBASE_H

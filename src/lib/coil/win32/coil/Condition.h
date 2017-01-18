@@ -57,13 +57,13 @@ namespace coil
     cv->waiters_count_ = 0;
     cv->was_broadcast_ = 0;
     cv->sema_ = ::CreateSemaphore (NULL,       // no security
-                                  0,          // initially 0
-                                  0x7fffffff, // max count
+                                  0,           // initially 0
+                                  0x7fffffff,  // max count
                                   NULL);      // unnamed
     cv->waiters_done_ = ::CreateEvent (NULL,  // no security
-                                     FALSE, // auto-reset
-                                     FALSE, // non-signaled initially
-                                     NULL); // unnamed
+                                     FALSE,  // auto-reset
+                                     FALSE,  // non-signaled initially
+                                     NULL);  // unnamed
     return 0;
   }
 
@@ -406,4 +406,4 @@ namespace coil
   };  // class Condition
 
 };  // namespace coil
-#endif // COIL_CONDITION_H
+#endif  // COIL_CONDITION_H

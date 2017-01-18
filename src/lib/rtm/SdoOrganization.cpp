@@ -43,11 +43,11 @@ namespace SDOPackage
     m_pId = uuid->to_string();
 #ifdef WIN32
     uuid->~UUID();
-#endif // WIN32
+#endif  // WIN32
     m_dependency = OWN;
     m_objref = this->_this();
   }
-#endif // ORB_IS_RTORB
+#endif  // ORB_IS_RTORB
 
   Organization_impl::Organization_impl(SDOSystemElement_ptr sdo)
     : rtclog("organization"), m_varOwner(SDOSystemElement::_duplicate(sdo))
@@ -58,7 +58,7 @@ namespace SDOPackage
     m_pId = uuid->to_string();
 #ifdef WIN32
     uuid->~UUID();
-#endif // WIN32
+#endif  // WIN32
     m_dependency = OWN;
     m_objref = this->_this();
   }

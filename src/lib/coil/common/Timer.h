@@ -334,5 +334,5 @@ namespace coil
     Mutex  m_taskMutex;
   };
 };  // namespace coil
-#endif // Timer_h
+#endif  // Timer_h
 

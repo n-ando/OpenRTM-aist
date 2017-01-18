@@ -295,6 +295,6 @@ namespace RTM
   EXTERN template class DLL_PLUGIN
   ::coil::GlobalFactory< ::RTM::LocalServiceBase >;
 #endif
-}; // namespace RTM
+};  // namespace RTM
 
-#endif // RTM_LOCALSERVICEBASE_H
+#endif  // RTM_LOCALSERVICEBASE_H

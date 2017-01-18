@@ -440,17 +440,17 @@ namespace RTC
           bool timedwrite(m_timedwrite);
           bool overwrite(m_overwrite);
 
-          if (!(sec < 0)) // if second arg is set -> block mode
+          if (!(sec < 0))  // if second arg is set -> block mode
             {
               timedwrite = true;
               overwrite  = false;
             }
 
-          if (overwrite && !timedwrite)       // "overwrite" mode
+          if (overwrite && !timedwrite)  // "overwrite" mode
             {
               advanceRptr();
             }
-          else if (!overwrite && !timedwrite) // "do_nothing" mode
+          else if (!overwrite && !timedwrite)  // "do_nothing" mode
             {
               return ::RTC::BufferStatus::BUFFER_FULL;
             }
@@ -720,7 +720,7 @@ namespace RTC
           bool timedread(m_timedread);
           bool readback(m_readback);
 
-          if (!(sec < 0)) // if second arg is set -> block mode
+          if (!(sec < 0))  // if second arg is set -> block mode
             {
               timedread = true;
               readback  = false;
@@ -736,7 +736,7 @@ namespace RTC
                 }
               advanceRptr(-1);
             }
-          else if (!readback && !timedread) // "do_nothing" mode
+          else if (!readback && !timedread)  // "do_nothing" mode
             {
               return ::RTC::BufferStatus::BUFFER_EMPTY;
             }
@@ -1053,6 +1053,6 @@ namespace RTC
      */
     condition m_full;
   };
-}; // namespace RTC
+};  // namespace RTC
 
-#endif // RTC_RINGBUFFER_H
+#endif  // RTC_RINGBUFFER_H

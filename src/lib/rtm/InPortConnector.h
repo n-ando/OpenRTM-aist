@@ -283,6 +283,6 @@ namespace RTC
     ConnectorListeners* m_outPortListeners;
 
   };
-}; // namespace RTC
+};  // namespace RTC
 
-#endif // RTC_INPORTCONNECTOR_H
+#endif  // RTC_INPORTCONNECTOR_H

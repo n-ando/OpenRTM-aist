@@ -22,4 +22,4 @@
 
 #include <rtm/InPort.h>
 
-#endif // RTC_DATAINPORT_H
+#endif  // RTC_DATAINPORT_H

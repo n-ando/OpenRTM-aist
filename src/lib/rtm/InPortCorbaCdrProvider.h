@@ -384,7 +384,7 @@ namespace RTC
     InPortConnector* m_connector;
 
   };  // class InPortCorCdrbaProvider
-};    // namespace RTC
+};  // namespace RTC
 
 extern "C"
 {
@@ -408,5 +408,5 @@ extern "C"
 #pragma warning( default : 4290 )
 #endif
 
-#endif // RTC_INPORTCORBACDRPROVIDER_H
+#endif  // RTC_INPORTCORBACDRPROVIDER_H
 

@@ -162,7 +162,7 @@ namespace RTC
                 }
             }
             break;
-          case 'p': // ORB's port number
+          case 'p':  // ORB's port number
             {
               int portnum;
               if (coil::stringTo(portnum, get_opts.optarg))

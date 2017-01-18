@@ -90,7 +90,7 @@ namespace coil
       return line;
     }
   };
-}; // namespace coil
+};  // namespace coil
 
 inline FILE* popen(const char* cmd, const char* mode)
 {
@@ -102,4 +102,4 @@ inline void pclose(FILE* fd)
   _pclose(fd);
 }
 
-#endif // COIL_PROCESS_H
+#endif  // COIL_PROCESS_H

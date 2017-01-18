@@ -718,7 +718,7 @@ namespace RTC_exp
      */
     std::vector<int> m_cpu;
 
-  }; // class PeriodicExecutionContext
+  };  // class PeriodicExecutionContext
 };  // namespace RTC_exp
 
 #ifdef WIN32
@@ -738,4 +738,4 @@ extern "C"
   void PeriodicExecutionContextInit(RTC::Manager* manager);
 };
 
-#endif // RTC_PERIODICEXECUTIONCONTEXT_H
+#endif  // RTC_PERIODICEXECUTIONCONTEXT_H

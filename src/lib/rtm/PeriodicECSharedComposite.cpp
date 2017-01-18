@@ -93,10 +93,10 @@ namespace SDOPackage
         ::OpenRTM::DataFlowComponent_var dfc;
 #ifndef ORB_IS_RTORB
         if (!sdoToDFC(sdo.in(), dfc.out())) { continue; }
-#else // ORB_IS_RTORB
+#else  // ORB_IS_RTORB
         ::OpenRTM::DataFlowComponent_ptr dfc_ptr(dfc.object());
         if (!sdoToDFC(sdo.in(), dfc_ptr)) { continue; }
-#endif // ORB_IS_RTORB
+#endif  // ORB_IS_RTORB
 
         Member member(dfc.in());
         stopOwnedEC(member);
@@ -134,14 +134,14 @@ namespace SDOPackage
         const SDO_var sdo  = sdo_list[i];
         ::OpenRTM::DataFlowComponent_var dfc;
         if (!sdoToDFC(sdo.in(), dfc.out())) { continue; }
-#else // ORB_IS_RTORB
+#else  // ORB_IS_RTORB
         const SDO_var sdo  = sdo_list[i].object();
 
         ::OpenRTM::DataFlowComponent_var dfc;
         ::OpenRTM::DataFlowComponent_ptr dfc_ptr(dfc);
 
         if (!sdoToDFC(sdo.in(), dfc_ptr)) { continue; }
-#endif // ORB_IS_RTORB
+#endif  // ORB_IS_RTORB
 
         Member member(dfc.in());
 
@@ -345,11 +345,11 @@ namespace SDOPackage
 #ifndef ORB_IS_RTORB
             ::OpenRTM::DataFlowComponent_var dfc;
             if (!sdoToDFC(sdos[j].in(), dfc.out())) { continue; }
-#else // ORB_IS_RTORB
+#else  // ORB_IS_RTORB
             ::OpenRTM::DataFlowComponent_var dfc;
             ::OpenRTM::DataFlowComponent_ptr dfc_ptr(dfc);
             if (!sdoToDFC(sdos[j].in(), dfc_ptr)) { continue; }
-#endif // ORB_IS_RTORB
+#endif  // ORB_IS_RTORB
             m_ec->add_component(dfc.in());
           }
       }
@@ -387,11 +387,11 @@ namespace SDOPackage
 #ifndef ORB_IS_RTORB
             ::OpenRTM::DataFlowComponent_var dfc;
             if (!sdoToDFC(sdos[j].in(), dfc.out())) { continue; }
-#else // ORB_IS_RTORB
+#else  // ORB_IS_RTORB
             ::OpenRTM::DataFlowComponent_var dfc;
             ::OpenRTM::DataFlowComponent_ptr dfc_ptr(dfc);
             if (!sdoToDFC(sdos[j].in(), dfc_ptr)) { continue; }
-#endif // ORB_IS_RTORB
+#endif  // ORB_IS_RTORB
             m_ec->remove_component(dfc.in());
           }
       }
@@ -413,9 +413,9 @@ namespace SDOPackage
 
 #ifndef ORB_IS_RTORB
     ::RTC::PortProfileList& plist(member.profile_->port_profiles);
-#else // ORB_IS_RTORB
+#else  // ORB_IS_RTORB
     ::RTC::PortProfileList plist(member.profile_->port_profiles);
-#endif // ORB_IS_RTORB
+#endif  // ORB_IS_RTORB
 
     // port delegation
     for (::CORBA::ULong i(0), len(plist.length()); i < len; ++i)
@@ -462,9 +462,9 @@ namespace SDOPackage
 
 #ifndef ORB_IS_RTORB
     ::RTC::PortProfileList& plist(member.profile_->port_profiles);
-#else // ORB_IS_RTORB
+#else  // ORB_IS_RTORB
     ::RTC::PortProfileList plist(member.profile_->port_profiles);
-#endif // ORB_IS_RTORB
+#endif  // ORB_IS_RTORB
 
     // port delegation
     for (::CORBA::ULong i(0), len(plist.length()); i < len; ++i)
@@ -524,8 +524,8 @@ namespace SDOPackage
     std::vector<std::string> newPorts(coil::split(m_rtobj->getProperties()["conf.default.exported_ports"], ","));
     std::sort(newPorts.begin(), newPorts.end());
 
-    std::vector<std::string> removedPorts; // oldPorts - interPorts
-    std::vector<std::string> createdPorts;   // newPorts - interPorts
+    std::vector<std::string> removedPorts;  // oldPorts - interPorts
+    std::vector<std::string> createdPorts;  // newPorts - interPorts
 
     set_difference(oldPorts.begin(), oldPorts.end(),
                    newPorts.begin(), newPorts.end(),
@@ -670,12 +670,12 @@ namespace RTC
         if (::CORBA::is_nil(sdo)) continue;
 
         ::CORBA_SeqUtil::push_back(sdos, sdo);
-#else // ORB_IS_RTORB
+#else  // ORB_IS_RTORB
         sdo = ::SDOPackage::SDO::_duplicate((rtc->getObjRef()).in());
         if (::CORBA::is_nil(sdo)) continue;
 
         ::CORBA_SeqUtil::push_back(sdos, ::SDOPackage::SDO_ptr(sdo));
-#endif // ORB_IS_RTORB
+#endif  // ORB_IS_RTORB
       }
 
     try

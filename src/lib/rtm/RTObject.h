@@ -5003,4 +5003,4 @@ namespace RTC
 #pragma warning( default : 4290 )
 #endif
 
-#endif // RTC_RTOBJECT
+#endif  // RTC_RTOBJECT

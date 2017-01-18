@@ -129,7 +129,7 @@ namespace RTC
       return str[status];
     }
   };
-}; // namespace RTC
+};  // namespace RTC
 
 /*!
  * @if jp
@@ -164,4 +164,4 @@ namespace RTC
   using ::RTC::BufferStatus::TIMEOUT;                 \
   using ::RTC::BufferStatus::PRECONDITION_NOT_MET;
 
-#endif // RTC_BUFFERSTATUS_H
+#endif  // RTC_BUFFERSTATUS_H

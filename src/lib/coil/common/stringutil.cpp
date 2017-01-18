@@ -644,4 +644,4 @@ namespace coil
     return std::string(str);
   }
 
-}; // namespace coil
+};  // namespace coil

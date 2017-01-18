@@ -437,12 +437,12 @@ namespace RTC
     bool m_active;
   };
 
-};     // namespace RTC
+};  // namespace RTC
 
 extern "C"
 {
   void DLL_EXPORT PublisherFlushInit();
 };
 
-#endif // RTC_PUBLISHERFLUSH_H
+#endif  // RTC_PUBLISHERFLUSH_H
 

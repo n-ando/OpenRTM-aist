@@ -1212,4 +1212,4 @@ namespace RTC
 #pragma warning( default : 4290 )
 #endif
 
-#endif // RTC_EXECUTIONCONTEXTBASE_H
+#endif  // RTC_EXECUTIONCONTEXTBASE_H

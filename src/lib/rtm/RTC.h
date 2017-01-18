@@ -34,7 +34,7 @@
 
 #ifdef ORB_IS_RTORB
 #include <RtORB/cdrStream.h>
-#endif // ORB_IS_RTORB
+#endif  // ORB_IS_RTORB
 
 #ifdef ORB_IS_OMNIORB
 
@@ -43,7 +43,7 @@
 #pragma warning( disable : 4290 )
 #pragma warning( disable : 4311 )
 #pragma warning( disable : 4312 )
-#endif // WIN32
+#endif  // WIN32
 
 #include <omniORB4/CORBA.h>
 #include <omnithread.h>
@@ -53,9 +53,9 @@
 #pragma warning( default : 4290 )
 #pragma warning( default : 4311 )
 #pragma warning( default : 4312 )
-#endif // WIN32
+#endif  // WIN32
 
-#endif // ORB_IS_OMNIORB
+#endif  // ORB_IS_OMNIORB
 
 #include <rtm/idl/OpenRTMSkel.h>
 

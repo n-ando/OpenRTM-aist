@@ -190,9 +190,9 @@ namespace RTM
                     sprof = m_slaves[i]->get_loadable_modules();
 #ifndef ORB_IS_RTORB
                     CORBA_SeqUtil::push_back_list(cprof.inout(), sprof.in());
-#else // ORB_IS_RTORB
+#else  // ORB_IS_RTORB
                     CORBA_SeqUtil::push_back_list(cprof, sprof);
-#endif // ORB_IS_RTORB
+#endif  // ORB_IS_RTORB
                     continue;
                   }
               }
@@ -244,9 +244,9 @@ namespace RTM
                     sprof = m_slaves[i]->get_loaded_modules();
 #ifndef ORB_IS_RTORB
                     CORBA_SeqUtil::push_back_list(cprof.inout(), sprof.in());
-#else // ORB_IS_RTORB
+#else  // ORB_IS_RTORB
                     CORBA_SeqUtil::push_back_list(cprof, sprof);
-#endif // ORB_IS_RTORB
+#endif  // ORB_IS_RTORB
                     continue;
                   }
               }
@@ -298,9 +298,9 @@ namespace RTM
                     sprof = m_slaves[i]->get_factory_profiles();
 #ifndef ORB_IS_RTORB
                     CORBA_SeqUtil::push_back_list(cprof.inout(), sprof.in());
-#else // ORB_IS_RTORB
+#else  // ORB_IS_RTORB
                     CORBA_SeqUtil::push_back_list(cprof, sprof);
-#endif // ORB_IS_RTORB
+#endif  // ORB_IS_RTORB
                     continue;
                   }
               }
@@ -332,7 +332,7 @@ namespace RTM
 
     if (pos0 == std::string::npos && pos1 == std::string::npos)
       {
-        if (false) //is_master())
+        if (false)  // is_master())
           {
             RTC_ERROR(("Master manager cannot create component: %s",
                        module_name));
@@ -376,7 +376,7 @@ namespace RTM
     if (CORBA::is_nil(mgrobj))
       {
         std::string cmd("rtcd -p ");
-        cmd += mgrvstr[1]; // port number
+        cmd += mgrvstr[1];  // port number
 
         RTC_DEBUG(("Invoking command: %s.", cmd.c_str()));
         int ret(coil::launch_shell(cmd.c_str()));
@@ -485,9 +485,9 @@ namespace RTM
                 srtcs = m_slaves[i]->get_components();
 #ifndef ORB_IS_RTORB
                 CORBA_SeqUtil::push_back_list(crtcs.inout(), srtcs.in());
-#else // ORB_IS_RTORB
+#else  // ORB_IS_RTORB
                 CORBA_SeqUtil::push_back_list(srtcs, crtcs);
-#endif // ORB_IS_RTORB
+#endif  // ORB_IS_RTORB
                 continue;
               }
           }
@@ -535,9 +535,9 @@ namespace RTM
                 sprofs = m_slaves[i]->get_component_profiles();
 #ifndef ORB_IS_RTORB
                 CORBA_SeqUtil::push_back_list(cprofs.inout(), sprofs.in());
-#else // ORB_IS_RTORB
+#else  // ORB_IS_RTORB
                 CORBA_SeqUtil::push_back_list(cprofs, sprofs);
-#endif // ORB_IS_RTORB
+#endif  // ORB_IS_RTORB
                 continue;
               }
           }
@@ -645,7 +645,7 @@ namespace RTM
     RTC_TRACE(("add_master_manager(), %d masters", m_masters.length()));
     index = CORBA_SeqUtil::find(m_masters, is_equiv(mgr));
 
-    if (!(index < 0)) // found in my list
+    if (!(index < 0))  // found in my list
       {
         RTC_ERROR(("Already exists."));
         return RTC::BAD_PARAMETER;
@@ -672,7 +672,7 @@ namespace RTM
     CORBA::Long index;
     index = CORBA_SeqUtil::find(m_masters, is_equiv(mgr));
 
-    if (index < 0) // not found in my list
+    if (index < 0)  // not found in my list
       {
         RTC_ERROR(("Not found."));
         return RTC::BAD_PARAMETER;
@@ -713,7 +713,7 @@ namespace RTM
     CORBA::Long index;
     index = CORBA_SeqUtil::find(m_slaves, is_equiv(mgr));
 
-    if (!(index < 0)) // found in my list
+    if (!(index < 0))  // found in my list
       {
         RTC_ERROR(("Already exists."));
         return RTC::BAD_PARAMETER;
@@ -738,7 +738,7 @@ namespace RTM
     CORBA::Long index;
     index = CORBA_SeqUtil::find(m_slaves, is_equiv(mgr));
 
-    if (index < 0) // not found in my list
+    if (index < 0)  // not found in my list
       {
         RTC_ERROR(("Not found."));
         return RTC::BAD_PARAMETER;
@@ -784,13 +784,13 @@ namespace RTM
   {
     try
       {
-        //Ppreparing INS POA
+        // Ppreparing INS POA
         CORBA::Object_var obj;
 #ifndef ORB_IS_RTORB
         obj = m_mgr.theORB()->resolve_initial_references("omniINSPOA");
-#else // ROB_IS_RTORB
+#else  // ROB_IS_RTORB
         obj = m_mgr.theORB()->resolve_initial_references(const_cast<char*>("omniINSPOA"));
-#endif // ORB_IS_RTORB
+#endif  // ORB_IS_RTORB
         PortableServer::POA_ptr poa = PortableServer::POA::_narrow(obj);
         poa->the_POAManager()->activate();
 
@@ -799,10 +799,10 @@ namespace RTM
         PortableServer::ObjectId_var id;
 #ifndef ORB_IS_RTORB
         id = PortableServer::string_to_ObjectId(config["manager.name"].c_str());
-#else // ORB_IS_RTORB
+#else  // ORB_IS_RTORB
         id = PortableServer::
           string_to_ObjectId(reinterpret_cast<char*>(config["manager.name"].c_str()));
-#endif // ORB_IS_RTORB
+#endif  // ORB_IS_RTORB
 
         // Object activation
         poa->activate_object_with_id(id.in(), this);
@@ -845,7 +845,7 @@ namespace RTM
         mobj = m_mgr.theORB()->string_to_object(mgrloc.c_str());
 #ifndef ORB_IS_RTORB
         RTM::Manager_var mgr = ::RTM::Manager::_narrow(mobj);
-#else // ORB_IS_RTORB
+#else  // ORB_IS_RTORB
         RTM::Manager_var mgr;
         if (!make_client_connection(mobj->impl()->connection))
           {
@@ -855,7 +855,7 @@ namespace RTM
           {
             mgr = ::RTM::Manager::_narrow(mobj);
           }
-#endif // ORB_IS_RTORB
+#endif  // ORB_IS_RTORB
 
         CORBA::String_var ior;
         ior = m_mgr.theORB()->object_to_string(RTM::Manager::_duplicate(mgr));
@@ -869,7 +869,7 @@ namespace RTM
       {
 #ifndef ORB_IS_RTORB
         RTC_DEBUG(("CORBA SystemException cought (CORBA::%s)", e._name()));
-#endif // ORB_IS_RTORB
+#endif  // ORB_IS_RTORB
       }
     catch (...)
       {

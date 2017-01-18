@@ -1090,5 +1090,5 @@ namespace RTC
      */
     struct connector_cleanup;
   };
-}; // End of namespace RTC
-#endif // RTC_RTCOUTPORTBASE_H
+};  // End of namespace RTC
+#endif  // RTC_RTCOUTPORTBASE_H

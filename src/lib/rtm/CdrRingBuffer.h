@@ -26,10 +26,10 @@
 namespace RTC
 {
   typedef RingBuffer<cdrMemoryStream> CdrRingBuffer;
-}; // namespace RTC
+};  // namespace RTC
 
 extern "C"
 {
   void CdrRingBufferInit();
 };
-#endif // RTC_CDRRINGBUFFER_H
+#endif  // RTC_CDRRINGBUFFER_H

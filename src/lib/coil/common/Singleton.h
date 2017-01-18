@@ -211,4 +211,4 @@ namespace coil
   Singleton<SingletonClass>::m_mutex;
 };  // namespace coil
 
-#endif // COIL_SINGLETON_H
+#endif  // COIL_SINGLETON_H

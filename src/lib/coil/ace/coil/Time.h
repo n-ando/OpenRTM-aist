@@ -73,10 +73,10 @@ namespace coil
 
   inline int settimeofday(const struct timeval *tv , const struct timezone *tz)
   {
-    return 0; // no implementation
+    return 0;  // no implementation
   }
 
 
 };  // namespace coil
 
-#endif // COIL_TIME_H
+#endif  // COIL_TIME_H

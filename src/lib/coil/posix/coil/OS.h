@@ -275,4 +275,4 @@ namespace coil
 
 };  // namespace coil
 
-#endif // COIL_OS_H
+#endif  // COIL_OS_H

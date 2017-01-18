@@ -375,4 +375,4 @@ protected:
 
 };  // namespace RTC
 
-#endif // RTC_SDOSERVICEADMIN_H
+#endif  // RTC_SDOSERVICEADMIN_H

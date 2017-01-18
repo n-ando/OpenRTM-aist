@@ -246,14 +246,14 @@ namespace coil
         std::string::size_type pos(path.find("/"));
         if (pos == std::string::npos)
           {
-            path.push_back('\\'); // delim = '\'
+            path.push_back('\\');  // delim = '\'
           }
         else
           {
-            path.push_back('/'); // delim = '/'
+            path.push_back('/');  // delim = '/'
           }
       }
-    path.push_back('*'); // now path is "/dir/dir/../*"
+    path.push_back('*');  // now path is "/dir/dir/../*"
 
     // fd will be held by DIR structure
     HANDLE dhandle;
@@ -456,4 +456,4 @@ namespace coil
 
 };  // namespace coil
 
-#endif // COIL_FILE_H
+#endif  // COIL_FILE_H

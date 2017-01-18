@@ -262,4 +262,4 @@ private:
   int m_num;
   std::vector<void*> m_objects;
 };
-#endif // RTC_NUMBERINGPOLICY_H
+#endif  // RTC_NUMBERINGPOLICY_H

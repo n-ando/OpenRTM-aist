@@ -2305,7 +2305,7 @@ namespace RTC
     Finalized m_finalized;
 
     ::RTM::ManagerActionListeners m_listeners;
-  }; // class Manager
-}; // namespace RTC
+  };  // class Manager
+};  // namespace RTC
 
-#endif // RTC_MANAGER_H
+#endif  // RTC_MANAGER_H

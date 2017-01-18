@@ -983,6 +983,6 @@ namespace RTC_Utils
       m_states.curr = curr;
     }
   };
-}; // namespace RTC_Utils
+};  // namespace RTC_Utils
 
-#endif // RTC_STATEMACHINE_H
+#endif  // RTC_STATEMACHINE_H

@@ -33,4 +33,4 @@ extern "C"
   void DefaultPeriodicTaskInit();
 };
 
-#endif // RTC_DEFAULTPERIODICTASK_H
+#endif  // RTC_DEFAULTPERIODICTASK_H

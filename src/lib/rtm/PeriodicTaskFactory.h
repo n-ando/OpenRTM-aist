@@ -34,4 +34,4 @@ namespace RTC
 #endif
 };
 
-#endif // RTC_PERIODICTASKFACTORY_H
+#endif  // RTC_PERIODICTASKFACTORY_H

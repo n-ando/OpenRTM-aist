@@ -526,5 +526,5 @@ extern "C"
   DLL_EXPORT void OpenHRPExecutionContextInit(RTC::Manager* manager);
 };
 
-#endif // RTC_OPENHRPEXECUTIONCONTEXT_H
+#endif  // RTC_OPENHRPEXECUTIONCONTEXT_H
 

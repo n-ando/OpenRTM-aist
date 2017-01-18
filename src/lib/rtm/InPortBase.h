@@ -888,6 +888,6 @@ namespace RTC
      */
     ConnectorListeners m_listeners;
   };
-}; // namespace RTC
+};  // namespace RTC
 
-#endif // RTC_INPORTBASE_H
+#endif  // RTC_INPORTBASE_H

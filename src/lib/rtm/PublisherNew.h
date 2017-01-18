@@ -730,12 +730,12 @@ namespace RTC
     bool m_active;
     int m_leftskip;
   };
-};     // namespace RTC
+};  // namespace RTC
 
 extern "C"
 {
   void DLL_EXPORT PublisherNewInit();
 };
 
-#endif // RTC_PUBLISHERNEW_H
+#endif  // RTC_PUBLISHERNEW_H
 

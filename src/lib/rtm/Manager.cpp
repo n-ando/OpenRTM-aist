@@ -44,9 +44,9 @@
 #ifdef RTM_OS_LINUX
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE
-#endif // _GNU_SOURCE
+#endif  // _GNU_SOURCE
 #include <pthread.h>
-#endif // RTM_OS_LINUX
+#endif  // RTM_OS_LINUX
 
 #include <fstream>
 #include <iostream>
@@ -484,9 +484,9 @@ namespace RTC
                          connectors[i].c_str()));
             }
         }
-    } // end of pre-connection
+    }  // end of pre-connection
 
-    { // pre-activation
+    {  // pre-activation
       RTC_TRACE(("Components pre-activation: %s",
                  m_config["manager.components.preactivation"].c_str()));
       std::vector<std::string> comps;
@@ -501,7 +501,7 @@ namespace RTC
           ExecutionContextList_var ecs = comp->get_owned_contexts();
           ecs[0]->activate_component(comp->getObjRef());
         }
-    } // end of pre-activation
+    }  // end of pre-activation
     return true;
   }
 
@@ -1445,11 +1445,11 @@ std::vector<coil::Properties> Manager::getLoadableModules()
                     omniIOR::add_IIOP_ADDRESS(iiop_addr);
 #else
                     omniIOR::add_IIOP_ADDRESS(iiop_addr, 0);
-#endif // defined(RTC_OMNIORB_40) and defined(RTC_OMNIORB_41)
+#endif  // defined(RTC_OMNIORB_40) and defined(RTC_OMNIORB_41)
                   }
               }
           }
-#endif // ORB_IS_OMNIORB
+#endif  // ORB_IS_OMNIORB
       }
     catch (...)
       {
@@ -1542,8 +1542,8 @@ std::vector<coil::Properties> Manager::getLoadableModules()
 #else
                 // omniORB 4.0
                 opt += " -ORBendPointPublishAllIFs 1";
-#endif // RTC_CORBA_CXXMAPPING1
-#endif // ORB_IS_OMNIORB
+#endif  // RTC_CORBA_CXXMAPPING1
+#endif  // ORB_IS_OMNIORB
               }
             else
               {
@@ -1607,7 +1607,7 @@ std::vector<coil::Properties> Manager::getLoadableModules()
             RTC_ERROR(("Exception cought during root POA destruction"));
 #ifndef ORB_IS_RTORB
             RTC_ERROR(("CORBA::SystemException(minor=%d)", ex.minor()));
-#endif // ORB_IS_RTORB
+#endif  // ORB_IS_RTORB
           }
         catch (...)
           {
@@ -1630,7 +1630,7 @@ std::vector<coil::Properties> Manager::getLoadableModules()
             RTC_ERROR(("Exception caught during ORB shutdown"));
 #ifndef ORB_IS_RTORB
             RTC_ERROR(("CORBA::SystemException(minodor=%d)", ex.minor()));
-#endif // ORB_IS_RTORB
+#endif  // ORB_IS_RTORB
           }
         catch (...)
           {
@@ -1682,7 +1682,7 @@ std::vector<coil::Properties> Manager::getLoadableModules()
     // NamingManager Timer update initialization
     if (coil::toBool(m_config["naming.update.enable"], "YES", "NO", true))
       {
-        coil::TimeValue tm(10, 0); // default interval = 10sec for safty
+        coil::TimeValue tm(10, 0);  // default interval = 10sec for safty
         std::string intr(m_config["naming.update.interval"]);
         if (!intr.empty())
           {
@@ -1744,7 +1744,7 @@ std::vector<coil::Properties> Manager::getLoadableModules()
     // initialize CPU affinity
 #ifdef RTM_OS_LINUX
     initCpuAffinity();
-#endif // RTM_OS_LINUX
+#endif  // RTM_OS_LINUX
 
     return true;
   }
@@ -1807,7 +1807,7 @@ std::vector<coil::Properties> Manager::getLoadableModules()
             RTC_DEBUG(("Current CPU affinity mask is %d.", j));
           }
       }
-#endif // RTM_OS_LINUX
+#endif  // RTM_OS_LINUX
   }
 
   /*!

@@ -685,4 +685,4 @@ extern "C"
   void ExtTrigExecutionContextInit(RTC::Manager* manager);
 };
 
-#endif // RTC_EXTTRIGEXECUTIONCONTEXT_H
+#endif  // RTC_EXTTRIGEXECUTIONCONTEXT_H

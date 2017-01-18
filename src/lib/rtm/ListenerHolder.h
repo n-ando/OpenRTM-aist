@@ -255,4 +255,4 @@ namespace util
       }                                                   \
   }
 
-#endif // RTM_UITL_LISTENERHOLDER_H
+#endif  // RTM_UITL_LISTENERHOLDER_H

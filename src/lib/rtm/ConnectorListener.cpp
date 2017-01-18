@@ -176,6 +176,6 @@ namespace RTC
         m_listeners[i].first->operator()(info);
       }
   }
-};  //namespace RTC
+};  // namespace RTC
 
 

@@ -31,14 +31,14 @@
 #pragma warning( disable : 4290 )
 #pragma warning( disable : 4311 )
 #pragma warning( disable : 4312 )
-#endif // WIN32
+#endif  // WIN32
 #include <omniORB4/CORBA.h>
 #ifdef WIN32
 #pragma warning( default : 4267 )
 #pragma warning( default : 4290 )
 #pragma warning( default : 4311 )
 #pragma warning( default : 4312 )
-#endif // WIN32
+#endif  // WIN32
 #endif
 #ifdef ORB_IS_ORBACUS
 #include <OB/CORBA.h>
@@ -457,7 +457,7 @@ namespace RTC
       if (!CorbaConsumerBase::setObject(obj))
         {
           releaseObject();
-          return false; // object is nil
+          return false;  // object is nil
         }
 
       ObjectTypeVar var = ObjectType::_narrow(m_objref);
@@ -563,5 +563,5 @@ namespace RTC
      */
     ObjectTypeVar m_var;
   };
-}; // namespace RTC
-#endif // RTC_CORBACONSUMER_H
+};  // namespace RTC
+#endif  // RTC_CORBACONSUMER_H

@@ -244,5 +244,5 @@ namespace coil
 
     bool m_recurred;
   };
-}; // namespace coil
-#endif // COIL_TIMEMEASURE_H
+};  // namespace coil
+#endif  // COIL_TIMEMEASURE_H

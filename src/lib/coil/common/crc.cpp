@@ -188,4 +188,4 @@ namespace coil
       }
     return c ^ 0xffffffffL;
   }
-}; //namespace coil
+};   // namespace coil

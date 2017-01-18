@@ -24,7 +24,7 @@
 #include <vector>
 #include <sstream>
 
-#if defined (_MSC_VER) && (_MSC_VER <=1500) // VC2008(VC9.0) or before
+#if defined (_MSC_VER) && (_MSC_VER <=1500)  // VC2008(VC9.0) or before
 #else
 #include <stdint.h>
 #endif
@@ -839,4 +839,4 @@ namespace coil
   std::string sprintf(char const * __restrict fmt, ...);
 
 };  // namespace coil
-#endif // COIL_STRINGUTIL_H
+#endif  // COIL_STRINGUTIL_H

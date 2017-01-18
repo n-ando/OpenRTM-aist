@@ -1244,7 +1244,7 @@ namespace RTC
         CORBA::String_var ior_var = orb->object_to_string(obj);
         m_ior = ior_var;
         deactivate();
-#else // ORB_IS_RTORB
+#else  // ORB_IS_RTORB
         // why RtORB does not activate object by __this()
         // and does not deactivate at the end of ctor?
         PortableServer::POA_var poa = ::RTC::Manager::instance().getPOA();
@@ -1254,7 +1254,7 @@ namespace RTC
         CORBA::ORB_var orb = Manager::instance().getORB();
         CORBA::String_var ior_var = orb->object_to_string(obj);
         m_ior = ior_var;
-#endif // ORB_IS_RTORB
+#endif  // ORB_IS_RTORB
       }
       virtual ~CorbaProviderHolder()
       {
@@ -1389,4 +1389,4 @@ namespace RTC
     };
   };
 };  // namespace RTC
-#endif // RTC_CORBAPORT_H
+#endif  // RTC_CORBAPORT_H

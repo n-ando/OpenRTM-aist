@@ -102,17 +102,17 @@ namespace RTC
   {
   public:
     enum
-      {              // No: Write out messages include the following.
-        RTL_SILENT,  // 0: ()
-        RTL_FATAL,   // 1: (FATAL)
-        RTL_ERROR,   // 2: (FATAL, ERROR)
-        RTL_WARN,    // 3: (FATAL, ERROR, WARN)
-        RTL_INFO,    // 4: (FATAL, ERROR, WARN, INFO)
-        RTL_DEBUG,   // 5: (FATAL, ERROR, WARN, INFO, DEBUG)
-        RTL_TRACE,   // 6: (FATAL, ERROR, WARN, INFO, DEBUG, TRACE)
-        RTL_VERBOSE, // 7: (FATAL, ERROR, WARN, INFO, DEBUG, TRACE, VERBOSE)
-        RTL_PARANOID // 8: (FATAL, ERROR, WARN, INFO,
-                     //     DEBUG, TRACE, VERBOSE, PARA)
+      {               // No: Write out messages include the following.
+        RTL_SILENT,   // 0: ()
+        RTL_FATAL,    // 1: (FATAL)
+        RTL_ERROR,    // 2: (FATAL, ERROR)
+        RTL_WARN,     // 3: (FATAL, ERROR, WARN)
+        RTL_INFO,     // 4: (FATAL, ERROR, WARN, INFO)
+        RTL_DEBUG,    // 5: (FATAL, ERROR, WARN, INFO, DEBUG)
+        RTL_TRACE,    // 6: (FATAL, ERROR, WARN, INFO, DEBUG, TRACE)
+        RTL_VERBOSE,  // 7: (FATAL, ERROR, WARN, INFO, DEBUG, TRACE, VERBOSE)
+        RTL_PARANOID  // 8: (FATAL, ERROR, WARN, INFO,
+                      //     DEBUG, TRACE, VERBOSE, PARA)
       };
 
     /*!
@@ -617,6 +617,6 @@ namespace RTC
 #define RTC_PARANOID_STR(str)
 #endif
 
-}; // namespace RTC
+};  // namespace RTC
 
 #endif  // RTC_SYSTEMLOGGER_H

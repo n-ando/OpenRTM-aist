@@ -22,4 +22,4 @@
 
 #include <rtm/OutPort.h>
 
-#endif // RTC_DATAOUTPORT_H
+#endif  // RTC_DATAOUTPORT_H

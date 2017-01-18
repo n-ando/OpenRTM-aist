@@ -29,4 +29,4 @@ namespace coil
   typedef ACE_DLL DynamicLib;
 };
 
-#endif // DynamicLib_h
+#endif  // DynamicLib_h

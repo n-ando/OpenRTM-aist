@@ -354,6 +354,6 @@ namespace RTC
     CdrBufferBase* m_buffer;
 
   };
-}; // namespace RTC
+};  // namespace RTC
 
 #endif  // RTC_PUSH_CONNECTOR_H

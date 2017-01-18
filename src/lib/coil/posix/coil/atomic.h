@@ -63,5 +63,5 @@ int exchange_add(int* x, int y, coil::Mutex* mutex)
 #define atomic_exchange_add(x, y)               \
   exchange_add(x, y, &__mutex)
 
-#endif // COIL_HAS_ATOMIC_ADD
-#endif // COIL_ATOMIC_H
+#endif  // COIL_HAS_ATOMIC_ADD
+#endif  // COIL_ATOMIC_H

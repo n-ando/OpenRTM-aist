@@ -621,5 +621,5 @@ namespace coil
     friend class Singleton<GlobalFactory>;
   };
 
-}; // namespace coil
-#endif // COIL_FACTORY_H
+};  // namespace coil
+#endif  // COIL_FACTORY_H

@@ -1315,7 +1315,7 @@ namespace coil
      */
     friend std::ostream& operator<<(std::ostream& lhs, const Properties& rhs);
 
-  };   // class Properties
-};     // namespace coil
-#endif // COIL_PROPERTIES_H
+  };  // class Properties
+};  // namespace coil
+#endif  // COIL_PROPERTIES_H
 

@@ -575,11 +575,11 @@ namespace RTC_impl
         return m_comp->_is_equivalent(comp);
       }
     };
-  }; // class ExecutionContextProfile
+  };  // class ExecutionContextProfile
 };  // namespace RTC_impl
 
 #ifdef WIN32
 #pragma warning( default : 4290 )
 #endif
 
-#endif // RTC_EXECUTIONCONTEXTPROFILE_H
+#endif  // RTC_EXECUTIONCONTEXTPROFILE_H

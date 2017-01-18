@@ -29,5 +29,5 @@ namespace RTC
 {
   typedef BufferBase<cdrMemoryStream> CdrBufferBase;
   typedef ::coil::GlobalFactory<CdrBufferBase> CdrBufferFactory;
-};     // namespace RTC
-#endif // RTC_CDRBUFFERBASE_H
+};  // namespace RTC
+#endif  // RTC_CDRBUFFERBASE_H
