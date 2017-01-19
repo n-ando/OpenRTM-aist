@@ -83,7 +83,7 @@ namespace RTC
    * @endif
    */
   ConnectorBase::ReturnCode
-  OutPortPushConnector::write(const cdrMemoryStream& data)
+  OutPortPushConnector::write(cdrMemoryStream& data)
   {
     RTC_TRACE(("write()"));
     RTC_PARANOID(("data size = %d bytes", data.bufSize()));

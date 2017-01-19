@@ -67,7 +67,7 @@ namespace RTC
    * @endif
    */
   InPortConsumer::ReturnCode InPortCorbaCdrConsumer::
-  put(const cdrMemoryStream& data)
+  put(cdrMemoryStream& data)
   {
     RTC_PARANOID(("put()"));
 

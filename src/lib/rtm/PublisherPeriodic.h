@@ -323,7 +323,7 @@ namespace RTC
      *
      * @endif
      */
-    virtual ReturnCode write(const cdrMemoryStream& data,
+    virtual ReturnCode write(cdrMemoryStream& data,
                              unsigned long sec,
                              unsigned long usec);
     /*!
@@ -527,7 +527,7 @@ namespace RTC
      * @endif
      */
     ReturnCode convertReturn(BufferStatus::Enum status,
-                             const cdrMemoryStream& data);
+                             cdrMemoryStream& data);
 
 
     /*!
@@ -548,7 +548,7 @@ namespace RTC
      * @endif
      */
     ReturnCode invokeListener(DataPortStatus::Enum status,
-                              const cdrMemoryStream& data);
+                              cdrMemoryStream& data);
 
     /*!
      * @if jp
@@ -559,7 +559,7 @@ namespace RTC
      * @param data cdrMemoryStream
      * @endif
      */
-    inline void onBufferWrite(const cdrMemoryStream& data)
+    inline void onBufferWrite(cdrMemoryStream& data)
     {
       m_listeners->
         connectorData_[ON_BUFFER_WRITE].notify(m_profile, data);
@@ -574,7 +574,7 @@ namespace RTC
      * @param data cdrMemoryStream
      * @endif
      */
-    inline void onBufferFull(const cdrMemoryStream& data)
+    inline void onBufferFull(cdrMemoryStream& data)
     {
       m_listeners->
         connectorData_[ON_BUFFER_FULL].notify(m_profile, data);
@@ -589,7 +589,7 @@ namespace RTC
      * @param data cdrMemoryStream
      * @endif
      */
-    inline void onBufferWriteTimeout(const cdrMemoryStream& data)
+    inline void onBufferWriteTimeout(cdrMemoryStream& data)
     {
       m_listeners->
         connectorData_[ON_BUFFER_WRITE_TIMEOUT].notify(m_profile, data);
@@ -604,7 +604,7 @@ namespace RTC
      * @param data cdrMemoryStream
      * @endif
      */
-    inline void onBufferRead(const cdrMemoryStream& data)
+    inline void onBufferRead(cdrMemoryStream& data)
     {
       m_listeners->
         connectorData_[ON_BUFFER_READ].notify(m_profile, data);
@@ -619,7 +619,7 @@ namespace RTC
      * @param data cdrMemoryStream
      * @endif
      */
-    inline void onSend(const cdrMemoryStream& data)
+    inline void onSend(cdrMemoryStream& data)
     {
       m_listeners->
         connectorData_[ON_SEND].notify(m_profile, data);
@@ -634,7 +634,7 @@ namespace RTC
      * @param data cdrMemoryStream
      * @endif
      */
-    inline void onReceived(const cdrMemoryStream& data)
+    inline void onReceived(cdrMemoryStream& data)
     {
       m_listeners->
         connectorData_[ON_RECEIVED].notify(m_profile, data);
@@ -649,7 +649,7 @@ namespace RTC
      * @param data cdrMemoryStream
      * @endif
      */
-    inline void onReceiverFull(const cdrMemoryStream& data)
+    inline void onReceiverFull(cdrMemoryStream& data)
     {
       m_listeners->
         connectorData_[ON_RECEIVER_FULL].notify(m_profile, data);
@@ -664,7 +664,7 @@ namespace RTC
      * @param data cdrMemoryStream
      * @endif
      */
-    inline void onReceiverTimeout(const cdrMemoryStream& data)
+    inline void onReceiverTimeout(cdrMemoryStream& data)
     {
       m_listeners->
         connectorData_[ON_RECEIVER_TIMEOUT].notify(m_profile, data);
@@ -679,7 +679,7 @@ namespace RTC
      * @param data cdrMemoryStream
      * @endif
      */
-    inline void onReceiverError(const cdrMemoryStream& data)
+    inline void onReceiverError(cdrMemoryStream& data)
     {
       m_listeners->
         connectorData_[ON_RECEIVER_ERROR].notify(m_profile, data);
