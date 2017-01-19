@@ -244,7 +244,7 @@ namespace NVUtil
       {
         CORBA::Any value;
         value = find(nv, name);
-        const char* str_value;
+        const char* str_value = NULL;
         return value >>= str_value;
       }
     catch (...)

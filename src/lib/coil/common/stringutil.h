@@ -730,7 +730,7 @@ namespace coil
   {
     std::stringstream s;
     if ((s << std::hex << str).fail()) { return false; }
-    uintptr_t intval;
+    uintptr_t intval = 0;
     if ((s >> intval).fail()) { return false; }
     ptr = reinterpret_cast<T*>(intval);
     if (ptr == NULL) { return false; }
