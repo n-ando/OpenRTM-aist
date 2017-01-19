@@ -23,6 +23,8 @@
 #define snprintf _snprintf
 #endif
 
+#define MAXSIZE 256
+
 namespace RTC
 {
   const char* Logger::m_levelString[] =
@@ -150,8 +152,7 @@ namespace RTC
    */
   std::string Logger::getDate(void)
   {
-    const int maxsize = 256;
-    char buf[maxsize];
+    char buf[MAXSIZE];
     coil::TimeValue tm(m_clock->gettime());
 
     time_t timer;
@@ -167,9 +168,11 @@ namespace RTC
       {
         char msec[4];
 #ifdef WIN32
-        _snprintf(msec, sizeof(msec), "%03d", static_cast<int>(tm.usec() / 1000));
+        _snprintf(msec, sizeof(msec), "%03d",
+                        static_cast<int>(tm.usec() / 1000));
 #else
-        snprintf(msec, sizeof(msec), "%03d", static_cast<int>(tm.usec() / 1000));
+        snprintf(msec, sizeof(msec), "%03d",
+                        static_cast<int>(tm.usec() / 1000));
 #endif
         coil::replaceString(fmt, "#m#", msec);
       }
