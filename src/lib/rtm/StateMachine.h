@@ -293,7 +293,8 @@ namespace RTC_Utils
         m_do(m_num, (Callback)NULL),
         m_postdo(m_num, (Callback)NULL),
         m_exit(m_num, (Callback)NULL),
-        m_transit(NULL)
+        m_transit(NULL),
+        m_selftrans(false)
     {
     };
 
