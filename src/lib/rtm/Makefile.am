@@ -160,6 +160,7 @@ rtmheader_HEADERS = \
 	SdoServiceConsumerBase.h \
 	StateMachine.h 		 \
 	Typename.h               \
+	Timestamp.h			\
 	LocalServiceBase.h	 \
 	ListenerHolder.h         \
 	config_rtc.h
