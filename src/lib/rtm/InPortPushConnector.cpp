@@ -93,12 +93,15 @@ namespace RTC
     switch (ret)
       {
       case BufferStatus::BUFFER_OK:
+        onBufferRead(data);
         return PORT_OK;
         break;
       case BufferStatus::BUFFER_EMPTY:
+        onBufferEmpty(data);
         return BUFFER_EMPTY;
         break;
       case BufferStatus::TIMEOUT:
+        onBufferReadTimeout(data);
         return BUFFER_TIMEOUT;
         break;
       case BufferStatus::PRECONDITION_NOT_MET:
