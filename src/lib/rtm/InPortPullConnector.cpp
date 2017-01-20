@@ -46,7 +46,6 @@ namespace RTC
     if (m_buffer == 0 || m_consumer == 0)
       {
         throw std::bad_alloc();
-        return;
       }
     m_buffer->init(info.properties.getNode("buffer"));
     m_consumer->setBuffer(m_buffer);

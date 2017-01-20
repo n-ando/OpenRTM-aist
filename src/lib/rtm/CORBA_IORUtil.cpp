@@ -62,7 +62,6 @@ namespace CORBA_IORUtil
     if (size < 4)
       {
         return false;
-        throw CORBA::MARSHAL(0, CORBA::COMPLETED_NO);
       }
 
     const char* p = iorstr;
@@ -70,7 +69,6 @@ namespace CORBA_IORUtil
     if (p[0] != 'I' || p[1] != 'O' || p[2] != 'R' || p[3] != ':')
       {
         return false;
-        throw CORBA::MARSHAL(0, CORBA::COMPLETED_NO);
       }
 
     // IOR:xxyyzz......
