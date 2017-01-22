@@ -38,7 +38,9 @@
 #   endif
 #else 
 #   define DLL_PLUGIN
+#ifndef EXTERN
 #   define EXTERN
+#endif // ifndef EXTERN
 #endif /* Windows */
 
 
