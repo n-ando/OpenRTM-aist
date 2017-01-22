@@ -501,6 +501,12 @@ namespace coil
   }
   bool isIPv4(const std::string& str)
   {
+    for (size_t i(0); i < str.size(); ++i)
+      {
+        if (!((str[i] >= '0' && str[i] <= '9') ||
+              str[i] == '.' || str[i] == ':'))
+          { return false; }
+      }
     coil::vstring tmp = coil::split(str, ":");
     coil::vstring ipv4 = coil::split(str, ".");
     if (ipv4.size() != 4) { return false; }
@@ -517,6 +523,14 @@ namespace coil
     // IPv6 address must be
     // 1111:1111:1111:1111:1111:1111:1111:1111 (addr)
     // [1111:1111:1111:1111:1111:1111:1111:1111]:11111 (addr, port)
+    for (size_t i(0); i < str.size(); ++i)
+      {
+        if (!((str[i] >= '0' && str[i] <= '9') ||
+             (str[i] >= 'a' && str[i] <= 'f') ||
+             (str[i] >= 'A' && str[i] <= 'F') ||
+              str[i] == ':' || str[i] == '[' || str[i] == ']'))
+          { return false; }
+      }
     coil::vstring tmp = coil::split(str, "]:");
     if (tmp.size() > 2) { return false; }
     if (tmp.size() == 2)
