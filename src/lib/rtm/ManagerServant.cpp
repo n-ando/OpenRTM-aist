@@ -34,17 +34,17 @@ namespace RTM
   {
     rtclog.setName("ManagerServant");
     coil::Properties config(m_mgr.getConfig());    
-    
+
+    if (!createINSManager())
+      {
+        RTC_WARN(("Manager CORBA servant creation failed."));
+        return;
+      }
+
     if (coil::toBool(config["manager.is_master"], "YES", "NO", true))
       { // this is master manager
         RTC_TRACE(("This manager is master."));
 
-        if (!createINSManager())
-          {
-            RTC_WARN(("Manager CORBA servant creation failed."));
-            return;
-            
-          }
         m_isMaster = true;
         RTC_WARN(("Manager CORBA servant was successfully created."));
         return;
