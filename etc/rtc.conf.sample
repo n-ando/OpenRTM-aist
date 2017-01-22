@@ -75,7 +75,7 @@ corba.args:
 #   corba.endpoint: :9876        (use default addr and port 9876)
 #   corba.endpoint: myhost:9876  (use myhost and port 9876)
 #
-corba.endpoint:
+corba.endpoint: [obsolete]
 
 #
 # Multiple endpoint options (experimental)
@@ -88,7 +88,19 @@ corba.endpoint:
 #   corba.endpoints: all
 #
 corba.endpoints:
+corba.endpoints_ipv4: [readonly]
+corba.endpoints_ipv6: [readonly]
 
+#
+# Specify what kind of IP addresses will be set to corba.endpoints
+#
+# Examples:
+# corba.endpoint_property: ipv4
+# corba.endpoint_property: ipv4, ipv6(0)
+# corba.endpoint_property: ipv6
+# corba.endpoint_property: ipv4(0,1), ipv6(2,3)
+#
+corba.endpoint_property:
 
 #
 # CORBA name server setting
