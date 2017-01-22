@@ -5,7 +5,7 @@
  * @date $Date: 2007-12-31 03:06:24 $
  * @author Noriaki Ando <n-ando@aist.go.jp>
  *
- * Copyright (C) 2010
+ * Copyright (C) 2010-2016
  *     Intelligent Systems Research Institute,
  *     National Institute of
  *         Advanced Industrial Science and Technology (AIST), Japan
@@ -253,24 +253,20 @@ namespace CORBA_IORUtil
                    << (int) pBody.version.minor << " ";
             retstr << (const char*) pBody.address.host 
                    << " " << pBody.address.port << std::endl;
-            
+
             print_omni_key(retstr, pBody.object_key);
             print_key(retstr, pBody.object_key);
             print_tagged_components(retstr, pBody.components);
-            
             retstr << std::endl;
           }
         else if (ior.profiles[count].tag == IOP::TAG_MULTIPLE_COMPONENTS)
           {
-            
             retstr << "Multiple Component Profile ";
             IIOP::ProfileBody pBody;
             IIOP::unmarshalMultiComponentProfile(ior.profiles[count],
                                                  pBody.components);
             print_tagged_components(retstr, pBody.components);
-            
             retstr << std::endl;
-            
           }
         else
           {
@@ -287,6 +283,65 @@ namespace CORBA_IORUtil
     return retstr.str();
   }
 
+  std::vector<IIOP::Address> getEndpoints(IOP::IOR& ior)
+  {
+    std::vector<IIOP::Address> addr;
+#ifndef ORB_IS_RTORB
+    if (ior.profiles.length() == 0 && strlen(ior.type_id) == 0)
+      {
+        std::cerr << "IOR is a nil object reference." << std::endl;
+        return addr;
+      }
+
+    for (CORBA::ULong i(0); i < ior.profiles.length(); ++i)
+      {
+        if (ior.profiles[i].tag == IOP::TAG_INTERNET_IOP)
+          {
+            IIOP::ProfileBody pBody;
+            IIOP::unmarshalProfile(ior.profiles[i], pBody);
+            addr.push_back(pBody.address);
+            extractAddrs(pBody.components, addr);
+          }
+        else if (ior.profiles[i].tag == IOP::TAG_MULTIPLE_COMPONENTS)
+          {
+            IIOP::ProfileBody pBody;
+            IIOP::unmarshalMultiComponentProfile(ior.profiles[i],
+                                                 pBody.components);
+            extractAddrs(pBody.components, addr);
+          }
+        else
+          {
+            std::cerr << "Unrecognised profile tag: 0x"
+                     << std::hex << (unsigned)(ior.profiles[i].tag)
+                     << std::dec << std::endl;
+          }
+      }
+#else // ORB_IS_RTORB
+    retstr << "RtORB does't support formatIORinfo() function." << std::endl;
+#endif // ORB_IS_RTORB
+    return addr;
+  }
+
+  void extractAddrs(IOP::MultipleComponentProfile& comp,
+                    std::vector<IIOP::Address>& addr)
+  {
+#ifndef ORB_IS_RTORB
+    for (CORBA::ULong i(0); i < comp.length(); ++i)
+      {
+        if (comp[i].tag == IOP::TAG_ALTERNATE_IIOP_ADDRESS)
+          {
+            cdrEncapsulationStream e(comp[i].component_data.get_buffer(),
+                                     comp[i].component_data.length(), 1);
+            IIOP::Address v;
+            v.host = e.unmarshalRawString();
+            v.port <<= e;
+            addr.push_back(v);
+          }
+      }
+#else // ORB_IS_RTORB
+#endif // ORB_IS_RTORB
+    return;
+  }
 
 #ifndef ORB_IS_RTORB
   //------------------------------------------------------------
