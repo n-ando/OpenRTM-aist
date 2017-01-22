@@ -23,6 +23,9 @@
 #include <string>
 #include <vector>
 #include <sstream>
+#include <cassert>
+#include <errno.h>
+#include <cstdlib>
 
 #if defined (_MSC_VER) && (_MSC_VER <=1500) // VC2008(VC9.0) or before
 #else
@@ -544,7 +547,9 @@ namespace coil
    * @endif
    */
   bool isURL(const std::string& str);
-  
+  bool isIPv4(const std::string& str);
+  bool isIPv6(const std::string& str);
+
   /*!
    * @if jp
    * @brief 与えられたオブジェクトをstd::stringに変換
@@ -607,7 +612,7 @@ namespace coil
     if ((s >> val).fail()) { return false; }
     return true;
   }
-  
+
   /*!
    * @if jp
    * @brief 与えられた文字列をstd::stringに変換

@@ -499,6 +499,51 @@ namespace coil
       return true;
     return false;
   }
+  bool isIPv4(const std::string& str)
+  {
+    coil::vstring tmp = coil::split(str, ":");
+    coil::vstring ipv4 = coil::split(str, ".");
+    if (ipv4.size() != 4) { return false; }
+    for (size_t i(0); i < ipv4.size(); ++i)
+      {
+        unsigned short int dec;
+        if (!coil::stringTo(dec, ipv4[i].c_str())) { return false; }
+        if (dec < 0 || dec > 255) { return false; }
+      }
+    return true;
+  }
+  bool isIPv6(const std::string& str)
+  {
+    // IPv6 address must be
+    // 1111:1111:1111:1111:1111:1111:1111:1111 (addr)
+    // [1111:1111:1111:1111:1111:1111:1111:1111]:11111 (addr, port)
+    coil::vstring tmp = coil::split(str, "]:");
+    if (tmp.size() > 2) { return false; }
+    if (tmp.size() == 2)
+      {
+        if (tmp[0][0] != '[') { return false; }
+        tmp[0].erase(0, 1);
+      }
+    
+    coil::vstring ipv6 = coil::split(tmp[0], ":");
+    if (ipv6.size() > 8) { return false; }
+    for (size_t i(0); i < ipv6.size(); ++i)
+      {
+        try
+          {
+            if (ipv6[i].empty()) { continue; }
+            char* endptr = 0;
+            long int hexval = std::strtol(ipv6[i].c_str(), &endptr, 16);
+            if (errno == ERANGE) { return false; }
+            if (hexval < 0x0 || hexval > 0xFFFF) { return false; }
+          }
+        catch (...)
+          {
+            return false;
+          }
+      }
+    return true;
+  }
   
   /*!
    * @if jp
