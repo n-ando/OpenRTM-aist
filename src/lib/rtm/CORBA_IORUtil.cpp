@@ -262,8 +262,8 @@ namespace CORBA_IORUtil
 
     retstr << "IOR information" << std::endl;
     retstr << "  Type ID: \"" << (const char*) ior.type_id
-           << "\"" << std::endl;;
-    retstr << "  Profiles:" << std::endl;;
+           << "\"" << std::endl;
+    retstr << "  Profiles:" << std::endl;
     for (unsigned long count=0; count < ior.profiles.length(); ++count)
       {
         retstr << "    " << count + 1 << ". ";

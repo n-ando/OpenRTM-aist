@@ -145,7 +145,7 @@ namespace NVUtil
           {
             const char* name(nv[i].name);
             prop[name] = value;
-          };
+          }
       }
   }
 
@@ -167,7 +167,7 @@ namespace NVUtil
       if (nv.value >>= value)
         {
           m_prop.setProperty(CORBA::string_dup(nv.name), value);
-        };
+        }
     }
     coil::Properties m_prop;
   };

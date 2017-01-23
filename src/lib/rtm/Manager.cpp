@@ -1361,7 +1361,7 @@ std::vector<coil::Properties> Manager::getLoadableModules()
     RTC_INFO(("Manager starting."));
     RTC_INFO(("Starting local logging."));
 
-    return true;;
+    return true;
   }
 
   /*!

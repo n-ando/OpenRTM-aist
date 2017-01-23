@@ -371,7 +371,7 @@ namespace RTC
         catch (CORBA::SystemException &e)
           {
 #ifndef ORB_IS_RTORB
-            RTC_WARN(("Exception caught: minor code(%d).", e.minor()));;
+            RTC_WARN(("Exception caught: minor code(%d).", e.minor()));
 #else  // ORB_IS_RTORB
             RTC_WARN(("Exception caught"));
 #endif  // ORB_IS_RTORB
@@ -379,7 +379,7 @@ namespace RTC
           }
         catch (...)
           {
-            RTC_WARN(("Unknown exception caught."));;
+            RTC_WARN(("Unknown exception caught."));
             continue;
           }
       }

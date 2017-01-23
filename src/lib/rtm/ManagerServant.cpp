@@ -721,7 +721,7 @@ namespace RTM
 
     CORBA_SeqUtil::push_back(m_slaves, RTM::Manager::_duplicate(mgr));
     RTC_TRACE(("add_slave_manager() done, %d slaves", m_slaves.length()));
-    return RTC::RTC_OK;;
+    return RTC::RTC_OK;
   }
 
   /*!
