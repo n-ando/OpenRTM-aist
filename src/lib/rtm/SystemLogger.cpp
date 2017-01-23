@@ -157,9 +157,10 @@ namespace RTC
 
     time_t timer;
     struct tm* date;
+    struct tm datearg;
 
     timer = tm.sec();
-    date = gmtime_r(&timer, date);
+    date = gmtime_r(&timer, &datearg);
 
     strftime(buf, sizeof(buf), m_dateFormat.c_str(), date);
     std::string fmt(buf);
