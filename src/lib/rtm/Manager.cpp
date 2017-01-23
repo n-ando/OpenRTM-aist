@@ -807,6 +807,8 @@ std::vector<coil::Properties> Manager::getLoadableModules()
       "os.arch",
       "os.hostname",
       "corba.endpoints",
+      "corba.endpoints_ipv4",
+      "corba.endpoints_ipv6",
       "corba.id",
       "exec_cxt.periodic.type",
       "exec_cxt.periodic.rate",
