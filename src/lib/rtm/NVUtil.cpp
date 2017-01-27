@@ -397,7 +397,7 @@ namespace NVUtil
   {
     for (CORBA::ULong i(0), n(nv.length()); i < n; ++i)
       {
-        out << nv[i] << std::endl;
+        out << nv[i];
       }
     return out;
   }
