@@ -1367,11 +1367,11 @@ namespace Macho {
 	class _MachineBase {
 	public:
 		class Alias currentState() const;
-
+      
 	protected:
 		_MachineBase();
-		~_MachineBase();
-
+		virtual ~_MachineBase();
+      
 		// Transition to new state.
 		void setState(_StateInstance & instance, _Initializer * init);
 
