@@ -35,6 +35,89 @@ namespace RTC
 
   /*!
    * @if jp
+   * @class ComponentObserverConsumer クラス
+   * @brief ComponentObserver モジュール
+   *
+   * コンポーネントの各種状態をComponentObserverサービスに対してコール
+   * バックするためのクラス。ツール等、コンポーネントの状態変化を知りた
+   * いエンティティがサービスプロバイダを当該コンポーネントに対してセッ
+   * トすると、対応する本コンシューマがアタッチされ、コンポーネントの状
+   * 態変化に応じて、update_status() オペレーションをSTATUS_KIND とヒン
+   * トを引数に呼び出す。本機能は、OMG の FSM4RTC仕様
+   * (formal/16-04-01) 7.2.4.2 ComponentObserver Interface に記述されて
+   * いる。
+   *
+   * STATUS_KIND には以下の種類がある。
+   *
+   * - COMPONENT_PROFILE: コンポーネントのプロファイル情報が変化
+   * - RTC_STATUS       : コンポーネントの状態 (Init, Alive) が変化
+   * - EC_STATUS        : ECの状態 (Inavtive, Active, Error) が変化
+   * - PORT_PROFILE     : ポートのプロファイルが変化
+   * - CONFIGURATION    : コンフィギュレーションが変化
+   * - RTC_HEARTBEAT    : RTCの生存確認のハートビード
+   * - EC_HEARTBEAT     : ECの生存確認のハートビート
+   * - FSM_PROFILE      : FSMのプロファイルが変化
+   * - FSM_STATUS       : FSMの状態が変化
+   * - FSM_STRUCTURE    : FSMの構造が変化
+   * - USER_DEFINED     : ユーザ定義
+   *
+   * \subsection COMPONENT_PROFILE COMPONENT_PROFILE
+   * コンポーネントのプロファイル情報が変化した際にこのタグ名(enum値)を
+   * 第1引数にして update_status() オペレーションが呼び出される。(未実装)
+   *
+   * \subsection RTC_STATUS RTC_STATUS
+   *
+   * コンポーネントの状態 (Init, Alive) が変化した際にこのタグ名
+   * (enum値)を第1引数にして update_status() オペレーションが呼び出され
+   * る。厳密にはECの状態であるが、Inavtive, Active, Error, Finalize の
+   * 4つの状態に変化したことを検知することができる。以下の状態変化時に、
+   * それぞれヒントとして以下の文字列とともにコールバックされる。
+   *
+   * - onActivated 呼び出し成功時:   ACTIVE: <EC id>
+   * - onDeactivated 呼び出し成功時: INACTIVE: <EC id>
+   * - onReset 呼び出し成功時:       INACTIVE: <EC id>
+   * - onAborting 呼び出し成功時:    ERROR: <EC id>
+   * - onFinalize 呼び出し成功時:    FINALIZE: <EC id>
+   *
+   * \subsection EC_STATUS EC_STATUS
+   *
+   * ECの状態 (Inavtive, Active, Error) が変化した際にこのタグ名(enum値)を
+   * 第1引数にして update_status() オペレーションが呼び出される。
+   *
+   * \subsection PORT_PROFILE PORT_PROFILE
+   * ポートのプロファイルが変化した際にこのタグ名(enum値)を
+   * 第1引数にして update_status() オペレーションが呼び出される。
+   *
+   * \subsection CONFIGURATION CONFIGURATION
+   * コンフィギュレーションが変化した際にこのタグ名(enum値)を
+   * 第1引数にして update_status() オペレーションが呼び出される。
+   *
+   * \subsection RTC_HEARTBEAT RTC_HEARTBEAT
+   * RTCの生存確認のハートビードした際にこのタグ名(enum値)を
+   * 第1引数にして update_status() オペレーションが呼び出される。
+   *
+   * \subsection EC_HEARTBEAT EC_HEARTBEAT
+   * ECの生存確認のハートビートした際にこのタグ名(enum値)を
+   * 第1引数にして update_status() オペレーションが呼び出される。
+   *
+   * \subsection FSM_PROFILE FSM_PROFILE
+   * FSMのプロファイルが変化した際にこのタグ名(enum値)を
+   * 第1引数にして update_status() オペレーションが呼び出される。
+   *
+   * \subsection FSM_STATUS FSM_STATUS
+   * FSMの状態が変化した際にこのタグ名(enum値)を
+   * 第1引数にして update_status() オペレーションが呼び出される。
+   *
+   * \subsection FSM_STRUCTURE FSM_STRUCTURE
+   * FSMの構造が変化した際にこのタグ名(enum値)を
+   * 第1引数にして update_status() オペレーションが呼び出される。
+   *
+   * \subsection USER_DEFINED USER_DEFINED
+   * ユーザ定義した際にこのタグ名(enum値)を
+   * 第1引数にして update_status() オペレーションが呼び出される。
+   *
+   *
+   *
    * @else
    * @endif
    */
@@ -631,9 +714,71 @@ namespace RTC
         std::cout << "ComponentObserver::updateFsmStatus(" << state << ")" << std::endl; 
         m_coc.updateStatus(RTC::FSM_STATUS, state);
       }
-      
+
+      void preInit(const char* state)
+      {
+        std::string msg(state); msg += " PRE_ON_INIT";
+        m_coc.updateStatus(RTC::FSM_STATUS, msg.c_str());
+      }
+      void preEntry(const char* state)
+      {
+        std::string msg(state); msg += " PRE_ONENTRY";
+        m_coc.updateStatus(RTC::FSM_STATUS, msg.c_str());
+      }
+      void preDo(const char* state)
+      {
+        std::string msg(state); msg += " PRE_ON_DO";
+        m_coc.updateStatus(RTC::FSM_STATUS, msg.c_str());
+      }
+      void preExit(const char* state)
+      {
+        std::string msg(state); msg += " PRE_ON_EXIT";
+        m_coc.updateStatus(RTC::FSM_STATUS, msg.c_str());
+      }
+      void preStateChange(const char* state)
+      {
+        std::string msg(state); msg += " PRE_ON_STATE_CHANGE";
+        m_coc.updateStatus(RTC::FSM_STATUS, msg.c_str());
+      }
+
+      void postInit(const char* state, ReturnCode_t ret)
+      {
+        std::string msg(state); msg += " POST_ON_INIT";
+        m_coc.updateStatus(RTC::FSM_STATUS, msg.c_str());
+      }
+      void postEntry(const char* state, ReturnCode_t ret)
+      {
+        std::string msg(state); msg += " POST_ONENTRY";
+        m_coc.updateStatus(RTC::FSM_STATUS, msg.c_str());
+      }
+      void postDo(const char* state, ReturnCode_t ret)
+      {
+        std::string msg(state); msg += " POST_ON_DO";
+        m_coc.updateStatus(RTC::FSM_STATUS, msg.c_str());
+      }
+      void postExit(const char* state, ReturnCode_t ret)
+      {
+        std::string msg(state); msg += " POST_ON_EXIT";
+        m_coc.updateStatus(RTC::FSM_STATUS, msg.c_str());
+      }
+      void postStateChange(const char* state, ReturnCode_t ret)
+      {
+        std::string msg(state); msg += " POST_ON_STATE_CHNAGE";
+        m_coc.updateStatus(RTC::FSM_STATUS, msg.c_str());
+      }
+
       // Listener object's pointer holder
-      PreFsmActionListener* fsmActionListener;
+      PreFsmActionListener* preOnFsmInitListener;
+      PreFsmActionListener* preOnFsmEntryListener;
+      PreFsmActionListener* preOnFsmDoListener;
+      PreFsmActionListener* preOnFsmExitListener;
+      PreFsmActionListener* preOnFsmStateChangeListener;
+      
+      PostFsmActionListener* postOnFsmInitListener;
+      PostFsmActionListener* postOnFsmEntryListener;
+      PostFsmActionListener* postOnFsmDoListener;
+      PostFsmActionListener* postOnFsmExitListener;
+      PostFsmActionListener* postOnFsmStateChangeListener;
 
     private:
       ComponentObserverConsumer& m_coc;
