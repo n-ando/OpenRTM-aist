@@ -146,6 +146,7 @@ rtmheader_HEADERS = \
 	DataPortStatus.h 	 \
 	DefaultConfiguration.h 	 \
 	ExecutionContextBase.h 	 \
+	EventPort.h				 \
 	InPort.h 		 \
 	InPortConsumer.h 	 \
 	ObjectManager.h 	 \
