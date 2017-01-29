@@ -1,4 +1,4 @@
-/// -*- C++ -*-
+// -*- C++ -*-
 /*!
  * @file  ConsoleOut.h
  * @brief Console output component
@@ -17,8 +17,6 @@
 #include <rtm/DataInPort.h>
 #include <rtm/DataOutPort.h>
 #include <rtm/ConnectorListener.h>
-#include <rtm/Macho.h>
-#pragma GCC diagnostic ignored "-Wunused-but-set-variable"
 
 #include <iostream>
 // Service implementation headers
@@ -32,79 +30,6 @@
 // </rtc-template>
 
 using namespace RTC;
-using namespace std;
-class ConsoleOut;
-
-namespace Example {
-
-	////////////////////////////////////////////////////////
-	// State declarations
-
-	// Machine's top state
-	TOPSTATE(Top) {
-		// Top state variables (visible to all substates)
-		struct Box {
-			Box() : data(0) {}
-			long data;
-		};
-
-		STATE(Top)
-
-		// Machine's event protocol
-		virtual void event1(int i) {}
-		virtual void event2(long l) {}
-
-	private:
-		// special actions
-		void entry();
-		void exit();
-		void init();
-		void init(int);
-	};
-
-	// A superstate
-	SUBSTATE(Super, Top) {
-		STATE(Super)
-
-		// This state has history
-		HISTORY()
-
-	private:
-		// Entry and exit actions of state
-		void entry();
-		void exit();
-	};
-
-	// A substate
-	SUBSTATE(StateA, Super) {
-		// State variables
-		struct Box {
-			Box() : data(0) {}
-			int data;
-		};
-
-		STATE(StateA)
-
-		// Event handler
-		void event1(int i);
-
-	private:
-		void entry();
-		void init(int);
-		void exit();
-	};
-
-	// A substate
-	SUBSTATE(StateB, Super) {
-		STATE(StateB)
-
-		void event2(long l);
-
-	private:
-		void entry();
-		void exit();
-	};
-};
 
 class DataListener
   : public ConnectorDataListenerT<RTC::TimedLong>
@@ -118,10 +43,10 @@ public:
   }
 
   virtual ReturnCode operator()(ConnectorInfo& info,
-                          TimedLong& data)
+                                TimedLong& data)
   {
     std::cout << "------------------------------"   << std::endl;
-    std::cout << "Data Listener: " << m_name       << std::endl;
+    std::cout << "Data Listener: " << m_name << "(OutPort)"  << std::endl;
     std::cout << "Profile::name: " << info.name    << std::endl;
     std::cout << "Profile::id:   " << info.id      << std::endl;
 //    std::cout << "Profile::properties: "            << std::endl;
@@ -133,7 +58,6 @@ public:
   };
   std::string m_name;
 };
-
 
 class ConnListener
   : public ConnectorListener
@@ -217,7 +141,7 @@ class ConsoleOut
   // no corresponding operation exists in OpenRTm-aist-0.2.0
   // virtual RTC::ReturnCode_t onRateChanged(RTC::UniqueId ec_id);
 
-  CORBA::Long getInPortValue() { return m_in.data; }
+
  protected:
   // DataInPort declaration
   // <rtc-template block="inport_declare">
@@ -247,142 +171,9 @@ class ConsoleOut
   
   // </rtc-template>
 
-  Macho::Machine<Example::Top> m_machine;
-
  private:
 
 };
-
-
-
-//namespace Example {
-//
-//  ////////////////////////////////////////////////////////
-//  // State declarations
-//  
-//  // Machine's top state
-//  TOPSTATE(Top) {
-//    // Top state variables (visible to all substates)
-//    struct Box {
-//      Box() : comp(0), data(0) {}
-//      ConsoleOut* comp;
-//      long data;
-//    };
-//    
-//    STATE(Top)
-//      
-//    // Machine's event protocol
-//    virtual void event1(int i, ConsoleOut* c) {}
-//    virtual void event2(long l, ConsoleOut* c) {}
-//    
-//  private:
-//    // special actions
-//    void entry();
-//    void exit();
-//    void init();
-//    void init(int i);
-//  };
-//  
-//  // A superstate
-//  SUBSTATE(Super, Top) {
-//    STATE(Super)
-//    
-//    // This state has history
-//    HISTORY()
-//    
-//  private:
-//    // Entry and exit actions of state
-//    void entry();
-//    void exit();
-//  };
-//
-//  // A substate
-//  SUBSTATE(StateA, Super) {
-//    // State variables
-//    struct Box {
-//      Box() : data(0) {}
-//      int data;
-//    };
-//    
-//    STATE(StateA)
-//
-//    // Event handler
-//    virtual void event1(int i, ConsoleOut* c);
-//
-//  private:
-//    void entry();
-//    void init(int i, ConsoleOut* c);
-//    void exit();
-//  };
-//  
-//  // A substate
-//  SUBSTATE(StateB, Super) {
-//    STATE(StateB)
-//      
-//    virtual void event2(long l, ConsoleOut* c);
-//    
-//  private:
-//    void entry();
-//    void exit();
-//  };
-//  
-//  ////////////////////////////////////////////////////////
-//  // Event handler implementations
-//  
-//  // Top state
-//  void Top::entry() { std::cout << "Top::entry" <<std::endl; }
-//  void Top::exit() { std::cout << "Top::exit" <<std::endl; }
-//  void Top::init() {
-//    // Initialize state with box
-//    setState<StateA>(44);
-//  }
-//  void Top::init(int i) {
-//    box().data = i;
-//    //    box().comp = c;
-//    init();
-//  }
-//  
-//  // Super state
-//  void Super::entry() { std::cout << "Super::entry" << std::endl; }
-//  void Super::exit() { std::cout << "Super::exit" << std::endl; }
-//  
-//  // StateA state
-//  void StateA::entry() { std::cout << "StateA::entry" << std::endl; }
-//  void StateA::init(int i, ConsoleOut* c)
-//  {
-//    std::cout << "StateA::init " << i << std::endl;
-//  }
-//  void StateA::exit()
-//  {
-//    std::cout << "In StateA" << std::endl;
-//    std::cout << "box().data:  " << TOP::box().data << std::endl;
-//    std::cout << "comp's data: " << TOP::box().comp->getInPortValue() << std::endl;
-//    std::cout << "StateA::exit" <<std::endl;
-//  }
-//  void StateA::event1(int i, ConsoleOut* c)
-//  {
-//    box().data = i;
-//    std::cout << "StateA::box().data: " << TOP::box().data << std::endl;
-//    setState<StateB>(i, c);
-//  }
-//  
-//  // StateB state
-//  void StateB::entry() { std::cout << "StateB::entry" << std::endl; }
-//  void StateB::exit()
-//  {
-//    std::cout << "In StateB" << std::endl;
-//    std::cout << "box().data:  " << TOP::box().data << std::endl;
-//    std::cout << "comp's data: " << TOP::box().comp->getInPortValue() << std::endl;
-//    std::cout << "StateB::exit" << std::endl;
-//  }
-//
-//  void StateB::event2(long l, ConsoleOut* c) {
-//    Top::box().data = l;
-//    std::cout << "Top::box().data: " << TOP::box().data << std::endl;
-//    setState<StateA>(l, c);
-//  }
-//  
-//} // namespace Example
 
 
 extern "C"
