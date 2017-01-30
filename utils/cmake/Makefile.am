@@ -74,7 +74,7 @@ IDLC = @IDLC@
 IDLFLAGS = @IDL_FLAGS@
 
 cmakedir = ${rtm_libdir}/cmake
-cmake_DATA = OpenRTMConfig.cmake FindOpenRTM.cmake
+cmake_DATA = OpenRTMConfig.cmake 
 
 # basic compiler/linker options
 OPENRTM_CFLAGS=`echo "${CXXFLAGS}" | sed -e 's/\-I[^ ]*//g'`
@@ -196,8 +196,6 @@ OpenRTMConfig.cmake: Makefile.am
 	echo 'message(STATUS "OpenRTM-aist configuration done")' >> $@
 	echo "# end of OpenRTMConfig.cmake" >> $@
 
-
-EXTRA_DIST = FindOpenRTM.cmake
 
 clean-local:
 	rm -f OpenRTMConfig.cmake

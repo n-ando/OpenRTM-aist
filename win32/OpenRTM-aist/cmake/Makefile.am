@@ -68,14 +68,10 @@
 #
 
 clean-local:
-	rm -f OpenRTMConfig.cmake FindOpenRTM.cmake
+	rm -f OpenRTMConfig.cmake 
 	rm -rf *~
 
-FindOpenRTM.cmake:
-	cp $(top_srcdir)/utils/cmake/FindOpenRTM.cmake .
-
-dist-hook: clean-local FindOpenRTM.cmake
+dist-hook: clean-local
 
 EXTRA_DIST =              \
-	FindOpenRTM.cmake \
 	cmake.yaml
