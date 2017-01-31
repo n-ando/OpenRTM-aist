@@ -13,7 +13,6 @@ clean-local:
 src:
 	cp -p $(top_srcdir)/src/ext/sdo/extended_fsm/*.cpp .
 	cp -p $(top_srcdir)/src/ext/sdo/extended_fsm/*.h .
-	cp -p $(top_srcdir)/src/ext/sdo/extended_fsm/*.idl .
 	qkc -O- -ms *.cpp
 	qkc -O- -ms *.h
 	qkc -O- -ms *.idl
