@@ -18,7 +18,7 @@
 
 #include <coil/stringutil.h>
 #include <rtm/Typename.h>
-#include "ExtendedFsmServiceStub.h"
+#include <rtm/idl/ExtendedFsmServiceStub.h>
 #include "ExtendedFsmServiceProvider.h"
 #include <iostream>
 
@@ -89,7 +89,7 @@ namespace RTC
    */
   bool
   ExtendedFsmServiceProvider::init(RTObject_impl& rtobj,
-                                  const SDOPackage::ServiceProfile& profile)
+                                   const SDOPackage::ServiceProfile& profile)
   {
     m_rtobj = &rtobj;
     m_profile = profile;

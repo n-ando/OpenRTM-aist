@@ -15,49 +15,15 @@ AM_CPPFLAGS=-I$(top_srcdir)/src/lib -I$(top_srcdir)/src/lib/coil/include -I$(top
 AM_LDFLAGS=-L$(top_builddir) -L$(top_builddir)/src/lib/rtm -L$(top_builddir)/src/lib/rtm/idl
 
 #------------------------------------------------------------
-# Some rules for IDL compile
-#------------------------------------------------------------
-SUFFIXES = .o .so .idl Skel.cpp Stub.cpp Stub.o Skel.o
-
-WRAPPER  = $(top_builddir)/utils/rtm-skelwrapper/rtm-skelwrapper
-WRAPPER_FLAGS = --include-dir="" --skel-suffix=Skel --stub-suffix=Stub
-
-idl-stamp: $(IDL_SOURCES)
-	@touch idl-stamp
-	mkdir -p idl
-	(cd $(top_builddir)/utils/rtm-config; $(MAKE))
-	@for f in $(IDL_SOURCES) ; do \
-		cp $$f idl/ ; \
-		(cd idl ; $(IDLC) $(IDLFLAGS) $$f ; cd ..) ; \
-		PYTHONPATH="$(top_srcdir)/build:$(PYTHONPATH)" \
-		PATH="$(top_srcdir)/utils/rtm-config:$(PATH)"  \
-		$(WRAPPER) $(WRAPPER_FLAGS) --idl-file=$$f --include-dir=idl/ ; \
-	done ;
-
-$(ALL_SRC): idl-stamp
-	@if test -f $@ ; then \
-		touch $@ ; \
-	else \
-		rm -f idl-stamp ; \
-		$(MAKE) $(AM_MAKEFLAGS) idl-stamp ; \
-	fi ;
-
-#------------------------------------------------------------
 # Source list
 #------------------------------------------------------------
-IDL_SOURCES = ExtendedFsmService.idl
-
 EXT_FSM_SVC_DIST_SRC   = ExtendedFsmServiceProvider.cpp
-EXT_FSM_SVC_NODIST_SRC = $(IDL_SOURCES:.idl=Stub.cpp)
-EXT_FSM_SVC_NDWIN_SRC   = $(IDL_SOURCES:.idl=Stub.cpp)
-EXT_FSM_SVC_SRC        = $(EXT_FSM_SVC_DIST_SRC) $(EXT_FSM_SVC_NODIST_SRC)
-EXT_FSM_SVC_WIN_SRC     = $(EXT_FSM_SVC_DIST_SRC) $(EXT_FSM_SVC_NDWIN_SRC)
+EXT_FSM_SVC_SRC        = $(EXT_FSM_SVC_DIST_SRC)
+EXT_FSM_SVC_WIN_SRC    = $(EXT_FSM_SVC_DIST_SRC)
 
 EXT_FSM_SVC_DIST_H     = $(EXT_FSM_SVC_DIST_SRC:.cpp=.h)
-EXT_FSM_SVC_NODIST_H   = $(EXT_FSM_SVC_NODIST_SRC:.cpp=.h)
-EXT_FSM_SVC_NODWIN_H    = $(EXT_FSM_SVC_NODWIN_SRC:.cpp=.h)
-EXT_FSM_SVC_H          = $(EXT_FSM_SVC_DIST_H) $(EXT_FSM_SVC_NODIST_H)
-EXT_FSM_SVC_WIN_H       = $(EXT_FSM_SVC_DIST_H) $(EXT_FSM_SVC_NOWIN__H)
+EXT_FSM_SVC_H          = $(EXT_FSM_SVC_DIST_H)
+EXT_FSM_SVC_WIN_H      = $(EXT_FSM_SVC_DIST_H)
 
 #------------------------------------------------------------
 # Object list
@@ -71,25 +37,19 @@ EXT_FSM_SVC_OBJ=$(EXT_FSM_SVC_DIST_SRC:.cpp=.o)
 socompdir = $(rtm_sdodir)
 
 # Loadable Module
-noinst_LTLIBRARIES = libExtendedFsmServiceStub.la
-nodist_libExtendedFsmServiceStub_la_SOURCES =  $(IDL_SOURCES:.idl=Stub.cpp)
 
 socomp_LTLIBRARIES = ExtendedFsmServiceProvider.la
 
 dist_ExtendedFsmServiceProvider_la_SOURCES = \
 	$(EXT_FSM_SVC_DIST_SRC) $(EXT_FSM_SVC_DIST_H)
 ExtendedFsmServiceProvider_la_LDFLAGS = -module
-ExtendedFsmServiceProvider_la_DEPENDENCIES = libExtendedFsmServiceStub.la
 ExtendedFsmServiceProvider_la_LIBADD  =                \
-	libExtendedFsmServiceStub.la                   \
 	$(top_builddir)/src/lib/rtm/libRTC.la         \
 	$(top_builddir)/src/lib/coil/lib/libcoil.la
 
 #------------------------------------------------------------
 # Extra distributed files
 #------------------------------------------------------------
-EXTRA_DIST = $(IDL_SOURCES)
-
 ALL_SRC = $(EXT_FSM_SVC_SRC)
 
 #------------------------------------------------------------
