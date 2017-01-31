@@ -160,6 +160,7 @@ rtmheader_HEADERS = \
 	SdoServiceProviderBase.h \
 	SdoServiceConsumerBase.h \
 	StateMachine.h 		 \
+	StaticFSM.h			\
 	Typename.h               \
 	Timestamp.h			\
 	LocalServiceBase.h	 \
