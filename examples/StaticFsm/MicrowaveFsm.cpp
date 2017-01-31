@@ -6,9 +6,7 @@
 
 
 #include <iostream>
-#include <rtm/Macho.h>
 #include "MicrowaveFsm.h"
-#include "Microwave.h"
 
 namespace MicrowaveFsm
 {
