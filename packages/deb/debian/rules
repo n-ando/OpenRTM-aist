@@ -24,6 +24,9 @@ DEB_BUILD_GNU_TYPE  ?= $(shell dpkg-architecture -qDEB_BUILD_GNU_TYPE)
 # Multiarch support
 DEB_HOST_MULTIARCH ?= $(shell dpkg-architecture -qDEB_HOST_MULTIARCH)
 
+# short version number
+SHORT_VER := $(shell dpkg-parsechangelog | sed -n 's/^Version: //p' | cut -b 1-3)
+
 CFLAGS = -Wall -g
 
 ifneq (,$(findstring noopt,$(DEB_BUILD_OPTIONS)))
@@ -106,6 +109,7 @@ install-arch:
 	(cd $(CURDIR)/utils/rtm-naming   ; $(MAKE) DESTDIR=$(CURDIR)/debian/openrtm-aist install)
 	(cd $(CURDIR)/utils/rtm-config   ; $(MAKE) DESTDIR=$(CURDIR)/debian/openrtm-aist install)
 	(cd $(CURDIR)/src/ext            ; $(MAKE) DESTDIR=$(CURDIR)/debian/openrtm-aist install)
+	(rm -r $(CURDIR)/debian/openrtm-aist/usr/share/openrtm-$(SHORT_VER))
 
 	# for openrtm-dev package
 	#$(MAKE)
