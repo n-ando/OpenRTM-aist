@@ -1515,8 +1515,9 @@ rtm_ecdir=$rtm_libdir"/ec"
 rtm_rtmdir=$rtm_libdir"/rtm"
 rtm_svcdir=$rtm_libdir"/svc"
 rtm_sdodir=$rtm_libdir"/sdo"
-rtm_docdir=$rtm_datadir"/doc"
-rtm_exampledir=$rtm_datadir"/example"
+rtm_cxx_docdir=$rtm_datadir"/doc/c++"
+rtm_idl_docdir=$rtm_datadir"/doc/idl"
+rtm_exampledir=$rtm_datadir"/components/c++/examples"
 
 AC_SUBST(rtm_libdir)
 AC_SUBST(rtm_datadir)
@@ -1528,7 +1529,8 @@ AC_SUBST(rtm_ecdir)
 AC_SUBST(rtm_rtmdir)
 AC_SUBST(rtm_svcdir)
 AC_SUBST(rtm_sdodir)
-AC_SUBST(rtm_docdir)
+AC_SUBST(rtm_cxx_docdir)
+AC_SUBST(rtm_idl_docdir)
 AC_SUBST(rtm_exampledir)
 
 dnl ------------------------------------------------------------

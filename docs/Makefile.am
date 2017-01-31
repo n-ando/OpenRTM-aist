@@ -30,7 +30,7 @@ IDLReference-en:
 doxygen_classref.conf:
 	sed -e 's/__VERSION__/$(VERSION)/g' doxygen_classref.conf.in > doxygen_classref.conf
 
-docdir = $(rtm_docdir)
+#docdir = $(rtm_docdir)
 
 EXTRA_DIST = \
 	doxygen_classref.conf \
@@ -52,40 +52,40 @@ EXTRA_DIST = \
 
 install-class-reference:
 	if test -d ClassReference; then \
-	  $(mkinstalldirs) $(DESTDIR)$(rtm_docdir)/ClassReference/html; \
+	  $(mkinstalldirs) $(DESTDIR)$(rtm_cxx_docdir)/ClassReference/html; \
 	  for x in ClassReference/html/*; do \
 	    if test -f $$x; then \
-	      $(INSTALL_DATA) $$x $(DESTDIR)$(rtm_docdir)/ClassReference/html/;\
+	      $(INSTALL_DATA) $$x $(DESTDIR)$(rtm_cxx_docdir)/ClassReference/html/;\
 	    fi \
 	  done \
 	fi
 
 install-class-reference-en:
 	if test -d ClassReference-en; then \
-	  $(mkinstalldirs) $(DESTDIR)$(rtm_docdir)/ClassReference-en/html; \
+	  $(mkinstalldirs) $(DESTDIR)$(rtm_cxx_docdir)/ClassReference-en/html; \
 	  for x in ClassReference-en/html/*; do \
 	    if test -f $$x; then \
-	      $(INSTALL_DATA) $$x $(DESTDIR)$(rtm_docdir)/ClassReference-en/html/;\
+	      $(INSTALL_DATA) $$x $(DESTDIR)$(rtm_cxx_docdir)/ClassReference-en/html/;\
 	    fi \
 	  done \
 	fi
 
 install-idl-reference:
 	if test -d IDLReference; then \
-	  $(mkinstalldirs) $(DESTDIR)$(rtm_docdir)/IDLReference/html; \
+	  $(mkinstalldirs) $(DESTDIR)$(rtm_idl_docdir)/IDLReference/html; \
 	  for x in IDLReference/html/*; do \
 	    if test -f $$x; then \
-	      $(INSTALL_DATA) $$x $(DESTDIR)$(rtm_docdir)/IDLReference/html/;\
+	      $(INSTALL_DATA) $$x $(DESTDIR)$(rtm_idl_docdir)/IDLReference/html/;\
 	    fi \
 	  done \
 	fi
 
 install-idl-reference-en:
 	if test -d IDLReference-en; then \
-	  $(mkinstalldirs) $(DESTDIR)$(rtm_docdir)/IDLReference-en/html; \
+	  $(mkinstalldirs) $(DESTDIR)$(rtm_idl_docdir)/IDLReference-en/html; \
 	  for x in IDLReference-en/html/*; do \
 	    if test -f $$x; then \
-	      $(INSTALL_DATA) $$x $(DESTDIR)$(rtm_docdir)/IDLReference-en/html/;\
+	      $(INSTALL_DATA) $$x $(DESTDIR)$(rtm_idl_docdir)/IDLReference-en/html/;\
 	    fi \
 	  done \
 	fi
