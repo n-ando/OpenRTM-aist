@@ -180,8 +180,8 @@ namespace util
             {
               delete (*it).first;
             }
-          m_listeners.erase(it);
         }
+      m_listners.clear();
     }
 
     /*!
