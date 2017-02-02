@@ -62,7 +62,7 @@ namespace RTC
    * @endif
    */
   SdoServiceAdmin::SdoServiceAdmin(::RTC::RTObject_impl& rtobj)
-    : m_rtobj(rtobj), m_allConsumerEnabled(true),
+    : m_rtobj(rtobj), m_allConsumerEnabled(false),
       rtclog("SdoServiceAdmin")
   {
     RTC_TRACE(("SdoServiceAdmin::SdoServiceAdmin(%s)",
