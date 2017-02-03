@@ -181,7 +181,7 @@ namespace util
               delete (*it).first;
             }
         }
-      m_listners.clear();
+      m_listeners.clear();
     }
 
     /*!
