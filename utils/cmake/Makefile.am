@@ -85,7 +85,7 @@ OPENRTM_INCLUDE_DIRS=        \
 	${rtm_includedir}/rtm/idl
 OPENRTM_LDFLAGS_=`echo "${LDFLAGS}" | sed -e 's/\-L[^ ]*//g'`
 OPENRTM_LIBRARY_DIRS=${prefix}/lib
-OPENRTM_LIBRARIES_=`echo ${LIBS} RTC coil | sed -e 's/\-l\([^ ]*\)/\1/g'`
+OPENRTM_LIBRARIES_=`echo ${LIBS} RTC coil rtmCamera rtmManipulator | sed -e 's/\-l\([^ ]*\)/\1/g'`
 
 # OpenRTM-aist specific directory
 COIL_INCLUDE_DIR=${coil_includedir}

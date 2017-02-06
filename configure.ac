@@ -243,8 +243,6 @@ for lpath in $more_libs ; do
 	LDFLAGS="-L$lpath $LDFLAGS"
 done
 
-LIBS="$LIBS -lrtmCamera -lrtmManipulator"
-
 dnl this is needed for creating libraries using libtool
 dnl AC_LIBTOOL_WIN32_DLL
 dnl AC_LIBLTDL_CONVENIENCE
