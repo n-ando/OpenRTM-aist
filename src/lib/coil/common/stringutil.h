@@ -22,6 +22,7 @@
 
 #include <string>
 #include <vector>
+#include <map>
 #include <sstream>
 
 #if defined (_MSC_VER) && (_MSC_VER <=1500) // VC2008(VC9.0) or before
@@ -39,7 +40,7 @@ namespace std
 namespace coil
 {
   typedef std::vector<std::string> vstring;
-
+  typedef std::map<std::string, std::string> mapstring;
   /*!
    * @if jp
    * @brief string から wstring への変換
@@ -544,7 +545,39 @@ namespace coil
    * @endif
    */
   bool isURL(const std::string& str);
-  
+
+  /*!
+   * @if jp
+   * @brief URLパラメータをmapstringに分解して返す
+   *
+   * URLパラメータ表現 something?key0=value0&key1=value1.... のうち
+   * '?' 以降の部分を分解して、std::map<std::string, std::string> 形式
+   * に変換する。与えられた文字列を左からサーチし、'?' より右側の部分に
+   * ついて解析を行う。'&'で分割し、左から '=' を検索し、最初の '=' の
+   * 右辺と左辺をそれぞれ、key と value として map に格納する。
+   *
+   * @param str 分解対象文字列
+   * @return mapstring 型の key/valueデータ
+   *
+   * @else
+   * @brief Investigate whether the given string is URL or not
+   *
+   * URL parameter description such as
+   * something?key0=value0&key1=value1.... is analyzed. Right hand
+   * side string of '?' character is decomposed and it is converted
+   * into std::map<std::string, std::string> type.The following string
+   * are devided by '&' and then '=' character is
+   * searched. Right-hand-side value and left-hand-side value of '='
+   * are stored as key and value in the map.
+   *
+   * @param str The target string for decomposed
+   *
+   * @return decomposed key-values in map
+   *
+   * @endif
+   */
+  coil::mapstring urlparam2map(const std::string& str);
+
   /*!
    * @if jp
    * @brief 与えられたオブジェクトをstd::stringに変換
