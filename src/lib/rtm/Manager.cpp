@@ -42,6 +42,7 @@
 #include <rtm/SdoServiceConsumerBase.h>
 #include <rtm/LocalServiceAdmin.h>
 #include <rtm/SystemLogger.h>
+#include <rtm/LogstreamBase.h>
 
 #ifdef RTM_OS_LINUX
 #ifndef _GNU_SOURCE
@@ -127,10 +128,10 @@ namespace RTC
           {
             manager = new Manager();
             manager->initManager(argc, argv);
+            manager->initFactories();
             manager->initLogger();
             manager->initORB();
             manager->initNaming();
-            manager->initFactories();
             manager->initExecContext();
             manager->initComposite();
             manager->initTimer();
@@ -157,10 +158,10 @@ namespace RTC
           {
             manager = new Manager();
             manager->initManager(0, NULL);
+            manager->initFactories();
             manager->initLogger();
             manager->initORB();
             manager->initNaming();
-            manager->initFactories();
             manager->initExecContext();
             manager->initComposite();
             manager->initTimer();
@@ -1209,8 +1210,6 @@ std::vector<coil::Properties> Manager::getLoadableModules()
     // load configurations
     ManagerConfig config(argc, argv);
     config.configure(m_config);
-    m_config["logger.file_name"] = 
-      formatString(m_config["logger.file_name"].c_str(), m_config);
     
     // initialize ModuleManager
     m_module = new ModuleManager(m_config);
@@ -1298,6 +1297,96 @@ std::vector<coil::Properties> Manager::getLoadableModules()
   //============================================================
   /*!
    * @if jp
+   * @brief File logger 初期化
+   * initLoggerから呼ばれる
+   * @else
+   * @brief File logger initialization
+   * This function is called from initLogger.
+   * @endif
+   */
+  void Manager::initLogstreamFile()
+  {
+    // format logger file name
+    m_config["logger.file_name"] = 
+      formatString(m_config["logger.file_name"].c_str(), m_config);
+
+    std::vector<std::string> logouts =
+      coil::split(m_config["logger.file_name"], ",");
+    coil::Properties& logprop = m_config.getNode("logger");
+
+    for (int i(0), len(logouts.size()); i < len; ++i)
+      {
+        if (logouts[i].empty()) { continue; }
+
+        LogstreamBase* logstream =
+          LogstreamFactory::instance().createObject("file");
+        if (logstream == NULL)
+          {
+            std::cerr << "\"file\" logger creation failed" << std::endl;
+            continue;
+          }
+        if (!logstream->init(logprop))
+          {
+            std::cerr << "\"file\" logger initialization failed" << std::endl;
+            LogstreamFactory::instance().deleteObject("file", logstream);
+            continue;
+          }
+        m_logStreamBuf.addStream(logstream->getStreamBuffer());
+      }
+  }
+
+  void Manager::initLogstreamPlugins()
+  {
+    // loading logstream module
+    // create logstream object and attach to the logger
+    coil::vstring mods = coil::split(m_config["logger.plugins"], ",");
+    for (size_t i(0); i < mods.size(); ++i)
+      {
+        std::string basename = mods[i].substr(0, mods[i].find('.'));
+        basename += "Init";
+        try
+          {
+            m_module->load(mods[i], basename);
+          }
+        catch (...)
+          {
+            RTC_WARN(("Logstream plugin module load failed: %s",
+                      mods[i].c_str()));
+            continue;
+          }
+      }
+  }
+
+  void Manager::initLogstreamOthers()
+  {
+    LogstreamFactory& factory(LogstreamFactory::instance());
+
+    coil::Properties pp(m_config.getNode("logger.logstream"));
+
+    const std::vector<Properties*>& leaf0 = pp.getLeaf();
+    for (size_t i(0); i < leaf0.size(); ++i)
+      {
+        std::string lstype = leaf0[i]->getName();
+        LogstreamBase* logstream = factory.createObject(lstype);
+        if (logstream == NULL)
+          {
+            RTC_WARN(("Logstream %s creation failed.", lstype.c_str()));
+            continue;
+          }
+        RTC_INFO(("Logstream %s created.", lstype.c_str()));
+        if (!logstream->init(*leaf0[i]))
+          {
+            RTC_WARN(("Logstream %s init failed.", lstype.c_str()));
+            factory.deleteObject(lstype.c_str(), logstream);
+            RTC_WARN(("Logstream %s deleted.", lstype.c_str()));
+          }
+        RTC_INFO(("Logstream %s added.", lstype.c_str()));
+        m_logStreamBuf.addStream(logstream->getStreamBuffer());
+      }
+  }
+
+  /*!
+   * @if jp
    * @brief System logger の初期化
    * @else
    * @brief System logger initialization
@@ -1305,66 +1394,40 @@ std::vector<coil::Properties> Manager::getLoadableModules()
    */
   bool Manager::initLogger()
   {
+    // Enable logger or not
     rtclog.setLevel("SILENT");
     rtclog.setName("manager");
-    
     if (!coil::toBool(m_config["logger.enable"], "YES", "NO", true))
       {
         return true;
       }
-
-    std::vector<std::string> logouts;
-    logouts = coil::split(m_config["logger.file_name"], ",");
-
-    for (int i(0), len(logouts.size()); i < len; ++i)
-      {
-        std::string logfile(logouts[i]);
-        if (logfile == "") continue;
-	
-        // Open logfile
-        if (logfile == "STDOUT" || logfile == "stdout")
-          {
-            m_logStreamBuf.addStream(std::cout.rdbuf());
-            continue;
-          }
-        
-        std::filebuf* of = new std::filebuf();
-        of->open(logfile.c_str(), std::ios::out | std::ios::app);
-
-        if (!of->is_open())
-          {
-            std::cerr << "Error: cannot open logfile: "
-                      << logfile << std::endl;
-            delete of;
-            continue;
-          }
-        m_logStreamBuf.addStream(of, true);
-        m_logfiles.push_back(of);
-      }
-	
 
     // Set date format for log entry header
     rtclog.setDateFormat(m_config["logger.date_format"].c_str());
     rtclog.setClockType(m_config["logger.clock_type"]);
     // Loglevel was set from configuration file.
     rtclog.setLevel(m_config["logger.log_level"].c_str());
-	
     // Log stream mutex locking mode
-    coil::toBool(m_config["logger.stream_lock"],
-                 "enable", "disable", false) ? 
+    coil::toBool(m_config["logger.stream_lock"], "enable", "disable", false) ?
       rtclog.enableLock() : rtclog.disableLock();
-                 
-	
+
+    // File Logstream init
+    initLogstreamFile();
+    // Load logstream plugin
+    initLogstreamPlugins();
+    // Initialize other logstreams
+    initLogstreamOthers();
+
     RTC_INFO(("%s", m_config["openrtm.version"].c_str()));
-    RTC_INFO(("Copyright (C) 2003-2012"));
+    RTC_INFO(("Copyright (C) 2003-2017"));
     RTC_INFO(("  Noriaki Ando"));
     RTC_INFO(("  Intelligent Systems Research Institute, AIST"));
     RTC_INFO(("Manager starting."));
     RTC_INFO(("Starting local logging."));
 
-    return true;;
+    return true;
   }
-  
+
   /*!
    * @if jp
    * @brief System Logger の終了処理

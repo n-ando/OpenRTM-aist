@@ -1187,6 +1187,9 @@ namespace RTC
     //============================================================
     // Logger initialize and terminator
     //============================================================
+    void initLogstreamFile();
+    void initLogstreamPlugins();
+    void initLogstreamOthers();
     /*!
      * @if jp
      * @brief System logger の初期化
