@@ -1510,6 +1510,7 @@ coil_includedir=$includedir"/coil-"$major_version"."$minor_version
 dnl under lib/openrtm-x.y directories
 rtm_rtcdir=$rtm_libdir"/rtc"
 rtm_ecdir=$rtm_libdir"/ec"
+rtm_loggerdir=$rtm_libdir"/logger"
 rtm_rtmdir=$rtm_libdir"/rtm"
 rtm_svcdir=$rtm_libdir"/svc"
 rtm_sdodir=$rtm_libdir"/sdo"
@@ -1524,6 +1525,7 @@ AC_SUBST(rtm_idldir)
 AC_SUBST(coil_includedir)
 AC_SUBST(rtm_rtcdir)
 AC_SUBST(rtm_ecdir)
+AC_SUBST(rtm_loggerdir)
 AC_SUBST(rtm_rtmdir)
 AC_SUBST(rtm_svcdir)
 AC_SUBST(rtm_sdodir)
@@ -1660,6 +1662,8 @@ AC_OUTPUT([Makefile
 	src/ext/sdo/observer/Makefile
 	src/ext/local_service/Makefile
 	src/ext/local_service/nameservice_file/Makefile
+	src/ext/logger/Makefile
+	src/ext/logger/fluentbit_stream/Makefile
 	utils/Makefile
 	utils/rtm-config/Makefile
 	utils/cmake/Makefile
