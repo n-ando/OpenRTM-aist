@@ -41,6 +41,10 @@
 #   define EXTERN
 #endif /* Windows */
 
+#if defined(WIN32) || defined(_WIN32) || defined(__WIN32__) || defined(__NT__)
+#pragma warning( push )
+#pragma warning( disable : 4251 )
+#endif
 
 namespace coil
 {
@@ -623,4 +627,10 @@ namespace coil
   };
 
 }; // namespace coil
+
+
+#if defined(WIN32) || defined(_WIN32) || defined(__WIN32__) || defined(__NT__)
+#pragma warning( pop )
+#endif
+
 #endif // COIL_FACTORY_H
