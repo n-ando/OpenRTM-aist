@@ -34,6 +34,11 @@
 #include <rtm/SystemLogger.h>
 #include <rtm/ConnectorListener.h>
 
+#ifdef WIN32
+#pragma warning( push ) 
+#pragma warning( disable : 4290 )
+#endif
+
 namespace RTC
 {
   class PublisherBase;
@@ -1091,4 +1096,9 @@ namespace RTC
     struct connector_cleanup;
   };
 }; // End of namespace RTC
+
+#ifdef WIN32
+#pragma warning( pop )
+#endif
+
 #endif // RTC_RTCOUTPORTBASE_H
