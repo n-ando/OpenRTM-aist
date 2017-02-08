@@ -191,6 +191,17 @@ namespace RTC
 
     /*!
      * @if jp
+     * @brief 初期化処理
+     *
+     * @else
+     * @brief Initialization
+     *
+     * @endif
+     */
+    virtual void init(const coil::Properties& prop);
+
+    /*!
+     * @if jp
      *
      * @brief SDO Service Provider の ServiceProfileList を取得する
      *
@@ -306,6 +317,28 @@ namespace RTC
     bool removeSdoServiceConsumer(const char* id);
 
 protected:
+    /*!
+     * @if jp
+     * @brief Provider 初期化処理
+     *
+     * @else
+     * @brief Provider Initialization
+     *
+     * @endif
+     */
+    void initProvider(const coil::Properties& prop);
+    /*!
+     * @if jp
+     * @brief Consumer 初期化処理
+     *
+     * @else
+     * @brief Consumer Initialization
+     *
+     * @endif
+     */
+    void initConsumer(const coil::Properties& prop);
+
+
     /*!
      * @if jp
      *

@@ -317,6 +317,9 @@ namespace RTC
   {
     RTC_TRACE(("initialize()"));
 
+    // SDO service admin initialization
+    m_sdoservice.init(m_properties);
+
     // EC creation
     std::vector<coil::Properties> ec_args;
     if (getContextOptions(ec_args) != RTC::RTC_OK)
