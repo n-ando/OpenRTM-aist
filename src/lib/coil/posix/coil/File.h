@@ -24,6 +24,7 @@
 
 #include <dirent.h>
 #include <libgen.h>
+#include <stdio.h>
 #include <sys/types.h>
 #include <string>
 #include <cstring>
@@ -62,7 +63,7 @@ namespace coil
   inline std::string dirname(char* path)
   {
     char path_name[strlen(path)+1];
-    strcpy(path_name, path);
+    snprintf(path_name, sizeof(path_name), "%s", path);
     std::string dir_name = ::dirname(path);
     return dir_name;
   }
@@ -93,7 +94,7 @@ namespace coil
   inline std::string basename(const char* path)
   {
     char path_name[strlen(path)+1];
-    strcpy(path_name, path);
+    snprintf(path_name, sizeof(path_name), "%s", path);
     std::string base_name = ::basename(path_name);
     return base_name;
   }

@@ -120,23 +120,23 @@ namespace coil
     switch (arch)
       {
       case PROCESSOR_ARCHITECTURE_INTEL:
-        strcpy(cputype, "Intel");
+        snprintf(cputype, sizeof(cputype), "Intel");
         if (sys_info.wProcessorLevel == 3)
-          strcpy(subtype, "80386");
+          snprintf(subtype, sizeof(subtype), "80386");
         else if (sys_info.wProcessorLevel == 4)
-          strcpy(subtype, "80486");
+          snprintf(subtype, sizeof(subtype), "80486");
         else if (sys_info.wProcessorLevel == 5)
-          strcpy(subtype, "Pentium");
+          snprintf(subtype, sizeof(subtype), "Pentium");
         else if (sys_info.wProcessorLevel == 6)
-          strcpy(subtype, "Pentium Pro");
+          snprintf(subtype, sizeof(subtype), "Pentium Pro");
         else if (sys_info.wProcessorLevel == 7)
-          strcpy(subtype, "Pentium II");
+          snprintf(subtype, sizeof(subtype), "Pentium II");
         else
-          strcpy(subtype, "Pentium Family");
+          snprintf(subtype, sizeof(subtype), "Pentium Family");
         break;
       default:
-        strcpy(cputype, "Unknown");
-        strcpy(subtype, "Unknown");
+        snprintf(cputype, sizeof(cputype), "Unknown");
+        snprintf(subtype, sizeof(subtype), "Unknown");
       }
     sprintf(name->machine, "%s %s", cputype, subtype);
 
