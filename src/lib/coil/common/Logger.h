@@ -24,6 +24,7 @@
 #include <coil/Guard.h>
 
 #include <limits.h>
+#include <string.h>
 #include <fstream>
 #include <iostream>
 #include <string>
@@ -80,6 +81,7 @@ namespace coil
     log_streambuf()
       : streambuf_type()
     {
+      memset(m_buf, 0, BUFFER_LEN);
       char *pStart = m_buf;
       char *pEnd = m_buf + (BUFFER_LEN - 1);
       this->setp(pStart, pEnd);
@@ -518,7 +520,7 @@ namespace coil
 
     std::vector<Stream> m_streams;
     Mutex m_mutex;
-    char m_buf[BUFFER_LEN] = {'\0'};
+    char m_buf[BUFFER_LEN];
   };
 
 
