@@ -247,7 +247,7 @@ namespace RTC
     //
     coil::pid_t pid = coil::getpid();
     char pidc[8];
-    snprintf(pidc, sizeof(pidc), "%d", pid);
+    sprintf(pidc, "%d", pid);
 
     prop.setProperty("os.name",     sysinfo.sysname);
     prop.setProperty("os.release",  sysinfo.release);
