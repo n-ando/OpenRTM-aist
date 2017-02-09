@@ -9,6 +9,7 @@ AUTOMAKE_OPTIONS = 1.4
 
 AM_CPPFLAGS= \
 	-I$(top_srcdir)/src/ext/logger/fluentbit_stream/fluent-bit/include \
+	-I$(top_srcdir)/src/ext/logger/fluentbit_stream/fluent-bit/lib/monkey/include \
 	-I$(top_srcdir)/src/lib \
 	-I$(top_srcdir)/src/lib/coil/include \
 	-I$(top_srcdir)/src/lib/rtm/idl
