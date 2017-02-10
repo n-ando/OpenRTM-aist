@@ -356,11 +356,11 @@ namespace coil
                 bool ignore_empty)
   {
     typedef std::string::size_type size;
-    vstring results;
+    vstring results(0);
     size delim_size = delimiter.size();
     size found_pos(0), begin_pos(0), pre_pos(0), substr_size(0);
 
-    if (input.empty()) return results;
+    if (input.empty()) { return results; }
 
     //  if (input.substr(0, delim_size) == delimiter)
     //    begin_pos = pre_pos = delim_size;
@@ -374,7 +374,10 @@ namespace coil
             std::string substr(input.substr(pre_pos));
             eraseHeadBlank(substr);
             eraseTailBlank(substr);
-            if (!(substr.empty() && ignore_empty)) results.push_back(substr);
+            if (!(substr.empty() && ignore_empty))
+              {
+                results.push_back(substr);
+              }
             break;
           }
         /*
@@ -390,7 +393,10 @@ namespace coil
             std::string substr(input.substr(pre_pos, substr_size));
             eraseHeadBlank(substr);
             eraseTailBlank(substr);
-            if (!(substr.empty() && ignore_empty)) results.push_back(substr);
+            if (!(substr.empty() && ignore_empty))
+              {
+                results.push_back(substr);
+              }
           }
         begin_pos = found_pos + delim_size;
         pre_pos   = found_pos + delim_size;
@@ -595,7 +601,7 @@ namespace coil
   {
     if (sv.size() == 0) return "";
 
-    std::string str;
+    std::string str = std::string();
     for (size_t i(0), len(sv.size() - 1); i < len; ++i)
       {
         str += sv[i] + delimiter;

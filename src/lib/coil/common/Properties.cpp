@@ -341,11 +341,11 @@ namespace coil
    */
   void Properties::load(std::istream& inStream)
   {
-    std::string pline;
+    std::string pline = std:s:tring();
 
     while (!inStream.eof())
       {
-        std::string tmp;
+        std::string tmp = std:s:tring();
         coil::getlinePortable(inStream, tmp);
         coil::eraseHeadBlank(tmp);
 
@@ -807,7 +807,7 @@ namespace coil
    */
   std::string Properties::indent(int index)
   {
-    std::string space;
+    std::string space = std::string();
     for (int i(0); i < index - 1; ++i)
       {
         space += "  ";
