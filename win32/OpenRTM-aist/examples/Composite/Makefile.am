@@ -17,8 +17,5 @@ src:
 	cp -p $(top_srcdir)/examples/Composite/*.cpp .
 	cp -p $(top_srcdir)/examples/Composite/*.h .
 	cp -p $(top_srcdir)/examples/Composite/*.conf .
-	qkc -O- -ms *.cpp
-	qkc -O- -ms *.h
-	qkc -O- -ms *.conf
 
 dist-hook: src

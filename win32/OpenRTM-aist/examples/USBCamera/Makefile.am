@@ -27,7 +27,6 @@ USBCameraAcquireComp_vc9.vcproj:
 		--out USBCameraAcquireComp_vc9.vcproj                   \
 		--source USBCameraAcquire.cpp USBCameraAcquireComp.cpp  \
 		--header USBCameraAcquire.h
-	qkc -O- -sm USBCameraAcquireComp_vc9.vcproj
 USBCameraAcquire_vc9.vcproj:
 	$(top_srcdir)/build/vcprojtool.py vcproj                 \
 		--type RTCDLL                                    \
@@ -37,7 +36,6 @@ USBCameraAcquire_vc9.vcproj:
 		--out USBCameraAcquire_vc9.vcproj                \
 		--source USBCameraAcquire.cpp                    \
 		--header USBCameraAcquire.h
-	qkc -O- -sm USBCameraAcquire_vc9.vcproj
 USBCameraMonitorComp_vc9.vcproj:
 	$(top_srcdir)/build/vcprojtool.py vcproj                       \
 		--type RTCEXE                                          \
@@ -47,7 +45,6 @@ USBCameraMonitorComp_vc9.vcproj:
 		--out USBCameraMonitorComp_vc9.vcproj                  \
 		--source USBCameraMonitor.cpp USBCameraMonitorComp.cpp \
 		--header USBCameraMonitor.h
-	qkc -O- -sm USBCameraMonitorComp_vc9.vcproj
 USBCameraMonitor_vc9.vcproj:
 	$(top_srcdir)/build/vcprojtool.py vcproj                 \
 		--type RTCDLL                                    \
@@ -57,7 +54,6 @@ USBCameraMonitor_vc9.vcproj:
 		--out USBCameraMonitor_vc9.vcproj                \
 		--source USBCameraMonitor.cpp                    \
 		--header USBCameraMonitor.h
-	qkc -O- -sm USBCameraMonitor_vc9.vcproj
 
 USBCameraAcquireComp_vc10.vcxproj:
 	$(top_srcdir)/build/vcxprojtool.py vcxproj                        \
@@ -68,7 +64,6 @@ USBCameraAcquireComp_vc10.vcxproj:
 		--out USBCameraAcquireComp_vc10.vcxproj                   \
 		--source USBCameraAcquire.cpp USBCameraAcquireComp.cpp  \
 		--header USBCameraAcquire.h
-	qkc -O- -sm USBCameraAcquireComp_vc10.vcxproj
 USBCameraAcquire_vc10.vcxproj:
 	$(top_srcdir)/build/vcxprojtool.py vcxproj                 \
 		--type RTCDLL                                    \
@@ -78,7 +73,6 @@ USBCameraAcquire_vc10.vcxproj:
 		--out USBCameraAcquire_vc10.vcxproj                \
 		--source USBCameraAcquire.cpp                    \
 		--header USBCameraAcquire.h
-	qkc -O- -sm USBCameraAcquire_vc10.vcxproj
 USBCameraMonitorComp_vc10.vcxproj:
 	$(top_srcdir)/build/vcxprojtool.py vcxproj                       \
 		--type RTCEXE                                          \
@@ -88,7 +82,6 @@ USBCameraMonitorComp_vc10.vcxproj:
 		--out USBCameraMonitorComp_vc10.vcxproj                  \
 		--source USBCameraMonitor.cpp USBCameraMonitorComp.cpp \
 		--header USBCameraMonitor.h
-	qkc -O- -sm USBCameraMonitorComp_vc10.vcxproj
 USBCameraMonitor_vc10.vcxproj:
 	$(top_srcdir)/build/vcxprojtool.py vcxproj                 \
 		--type RTCDLL                                    \
@@ -98,7 +91,6 @@ USBCameraMonitor_vc10.vcxproj:
 		--out USBCameraMonitor_vc10.vcxproj                \
 		--source USBCameraMonitor.cpp                    \
 		--header USBCameraMonitor.h
-	qkc -O- -sm USBCameraMonitor_vc10.vcxproj
 
 sln: USBCamera_vc9.sln USBCamera_vc10.sln
 
@@ -107,14 +99,12 @@ USBCamera_vc9.sln: vc9proj
 		--vcversion VC9         \
 		--out USBCamera_vc9.sln \
 		`find ./ -name '*_vc9.vcproj'`
-	qkc -O- -ms USBCamera_vc9.sln
 
 USBCamera_vc10.sln: vc10proj
 	$(top_srcdir)/build/slntool.py  \
 		--vcversion VC10         \
 		--out USBCamera_vc10.sln \
 		`find ./ -name '*_vc10.vcxproj'`
-	qkc -O- -ms USBCamera_vc10.sln
 
 dist-hook: vcproj sln lst
 

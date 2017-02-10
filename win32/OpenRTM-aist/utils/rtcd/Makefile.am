@@ -12,6 +12,5 @@ clean-local:
 
 src:
 	cp -p $(top_srcdir)/utils/rtcd/*.cpp .
-	qkc -O- -ms *.cpp
 
 dist-hook: src

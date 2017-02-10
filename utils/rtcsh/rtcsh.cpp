@@ -1,4 +1,4 @@
-// -*- C++ -*-
+﻿// -*- C++ -*-
 /*!
  * @file rtcsh.cpp
  * @brief RTComponent manager shell

@@ -1,4 +1,4 @@
-// -*- C++ -*-
+ï»¿// -*- C++ -*-
 /*!
  * @file  USBCameraAcquire.h
  * @brief USB Camera Acquire component
@@ -124,7 +124,7 @@ protected:
 private:
   int dummy;
   
-  CvCapture* m_capture;	//ƒJƒƒ‰—pƒƒ‚ƒŠ
+  CvCapture* m_capture;	//ã‚«ãƒ¡ãƒ©ç”¨ãƒ¡ãƒ¢ãƒª
 };
 
 

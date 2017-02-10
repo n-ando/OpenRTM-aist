@@ -1,4 +1,4 @@
-// -*- C++ -*-
+ï»¿// -*- C++ -*-
 /*!
  * @file  USBCameraMonitor.cpp
  * @brief 'hellow
@@ -102,7 +102,7 @@ RTC::ReturnCode_t USBCameraMonitor::onActivated(RTC::UniqueId ec_id)
 {
   m_img=cvCreateImage(cvSize(m_img_width,m_img_height),IPL_DEPTH_8U,3);
   
-  //‰æ‘œ•\¦—pƒEƒBƒ“ƒhƒE‚Ìì¬
+  //ç”»åƒè¡¨ç¤ºç”¨ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã®ä½œæˆ
   cvNamedWindow("CaptureImage", CV_WINDOW_AUTOSIZE);
   
   std::cout << "m_img->nChannels :" << m_img->nChannels << std::endl;
@@ -117,7 +117,7 @@ RTC::ReturnCode_t USBCameraMonitor::onActivated(RTC::UniqueId ec_id)
 RTC::ReturnCode_t USBCameraMonitor::onDeactivated(RTC::UniqueId ec_id)
 {
   cvReleaseImage(&m_img);
-  //•\¦ƒEƒBƒ“ƒhƒE‚ÌÁ‹
+  //è¡¨ç¤ºã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã®æ¶ˆå»
   cvDestroyWindow("CaptureImage");
   return RTC::RTC_OK;
 }
@@ -142,7 +142,7 @@ RTC::ReturnCode_t USBCameraMonitor::onExecute(RTC::UniqueId ec_id)
   
   memcpy(m_img->imageData,(void *)&(m_in.data[0]),m_in.data.length());
   
-  //‰æ‘œ•\¦
+  //ç”»åƒè¡¨ç¤º
   cvShowImage("CaptureImage", m_img);
   
   cvWaitKey(1);

@@ -1,4 +1,4 @@
-// -*- C++ -*-
+﻿// -*- C++ -*-
 /*!
  * @file USBCameraMonitorComp.cpp
  * @brief Standalone component

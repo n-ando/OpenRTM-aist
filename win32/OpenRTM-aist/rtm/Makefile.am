@@ -19,8 +19,6 @@ src:
 	cp -p $(top_srcdir)/src/lib/rtm/*.h .
 	cp -p $(top_srcdir)/src/lib/rtm/version.txt .
 	cp -p config_rtc.h.in config_rtc.h
-	qkc -O- -ms *.cpp
-	qkc -O- -ms *.h
 
 dist-hook: src
 

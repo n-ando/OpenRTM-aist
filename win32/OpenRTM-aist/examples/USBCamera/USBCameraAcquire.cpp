@@ -1,4 +1,4 @@
-// -*- C++ -*-
+ï»¿// -*- C++ -*-
 /*!
  * @file  USBCameraAcquire.cpp
  * @brief USB Camera Acquire component
@@ -86,9 +86,9 @@ RTC::ReturnCode_t USBCameraAcquire::onFinalize()
 
 RTC::ReturnCode_t USBCameraAcquire::onActivated(RTC::UniqueId ec_id)
 {
-  //ƒJƒƒ‰ƒfƒoƒCƒX‚Ì’Tõ
+  //ã‚«ãƒ¡ãƒ©ãƒ‡ãƒã‚¤ã‚¹ã®æ¢ç´¢
   if(NULL==(m_capture = cvCreateCameraCapture(CV_CAP_ANY))){
-    cout<<"ƒJƒƒ‰‚ª‚İ‚Â‚©‚è‚Ü‚¹‚ñ"<<endl;
+    cout<<"ã‚«ãƒ¡ãƒ©ãŒã¿ã¤ã‹ã‚Šã¾ã›ã‚“"<<endl;
     return RTC::RTC_ERROR;
   }
   return RTC::RTC_OK;
@@ -98,7 +98,7 @@ RTC::ReturnCode_t USBCameraAcquire::onActivated(RTC::UniqueId ec_id)
 
 RTC::ReturnCode_t USBCameraAcquire::onDeactivated(RTC::UniqueId ec_id)
 {
-  //ƒJƒƒ‰—pƒƒ‚ƒŠ‚Ì‰ğ•ú
+  //ã‚«ãƒ¡ãƒ©ç”¨ãƒ¡ãƒ¢ãƒªã®è§£æ”¾
   cvReleaseCapture(&m_capture);
   return RTC::RTC_OK;
 }
@@ -114,7 +114,7 @@ RTC::ReturnCode_t USBCameraAcquire::onExecute(RTC::UniqueId ec_id)
   cam_frame = cvQueryFrame(m_capture);
   if(NULL == cam_frame)
     {
-      std::cout << "‰æ‘œ‚ªƒLƒƒƒvƒ`ƒƒ‚Å‚«‚Ü‚¹‚ñ!!" << std::endl;
+      std::cout << "ç”»åƒãŒã‚­ãƒ£ãƒ—ãƒãƒ£ã§ãã¾ã›ã‚“!!" << std::endl;
       return RTC::RTC_ERROR;
     }
   
