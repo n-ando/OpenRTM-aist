@@ -164,7 +164,7 @@ namespace RTC
             break;
           case 'p':  // ORB's port number
             {
-              int portnum;
+              int portnum(2810);
               if (coil::stringTo(portnum, get_opts.optarg))
                 {
                   std::string arg(":"); arg += get_opts.optarg;

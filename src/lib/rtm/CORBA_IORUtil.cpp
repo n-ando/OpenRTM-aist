@@ -185,7 +185,7 @@ namespace CORBA_IORUtil
             result[j+1] = 'a' + (v - 10);
           }
       }
-    iorstr = result;
+    iorstr = std::string(result);
     delete[] result;
     return true;
 #else  // ORB_IS_RTORB
@@ -248,7 +248,7 @@ namespace CORBA_IORUtil
    */
   std::string formatIORinfo(const char* iorstr)
   {
-    std::stringstream retstr;
+    std::stringstream retstr("");
 #ifndef ORB_IS_RTORB
     IOP::IOR ior;
     toIOR(iorstr, ior);
@@ -264,7 +264,7 @@ namespace CORBA_IORUtil
     retstr << "  Type ID: \"" << (const char*) ior.type_id
            << "\"" << std::endl;
     retstr << "  Profiles:" << std::endl;
-    for (unsigned long count=0; count < ior.profiles.length(); ++count)
+    for (CORBA::ULong count(0); count < ior.profiles.length(); ++count)
       {
         retstr << "    " << count + 1 << ". ";
         if (ior.profiles[count].tag == IOP::TAG_INTERNET_IOP)
@@ -319,7 +319,7 @@ namespace CORBA_IORUtil
   {
     // Output key as text
     sstr << "       Object Key: \"";
-    for (unsigned int j = 0; j < key.length(); ++j)
+    for (CORBA::ULong j(0); j < key.length(); ++j)
       {
         if (static_cast<char>(key[j]) >= ' '
          && static_cast<char>(key[j]) <= '~')
@@ -376,7 +376,7 @@ namespace CORBA_IORUtil
       }
     else
       {
-        if (key.length() != sizeof(omniOrbBoaKey))
+        if (key.length() != static_cast<CORBA::ULong>(sizeof(omniOrbBoaKey)))
           {
             return;
           }
@@ -389,7 +389,7 @@ namespace CORBA_IORUtil
                           int& transient_out, OctetUSequence& id_out)
   {
     const char* k = (const char*) key.NP_data();
-    int len = key.length();
+    size_t len = static_cast<size_t>(key.length());
     const char* kend = k + len;
 
     poas_out.length(1);

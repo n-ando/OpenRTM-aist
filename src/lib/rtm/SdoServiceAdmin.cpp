@@ -489,7 +489,7 @@ namespace RTC
 
   const std::string SdoServiceAdmin::getUUID() const
   {
-    coil::UUID_Generator uugen;
+    coil::UUID_Generator uugen = coil::UUID_Generator();
     uugen.init();
     std::auto_ptr<coil::UUID> uuid(uugen.generateUUID(2, 0x01));
 

@@ -158,7 +158,7 @@ namespace RTC
         return ::OpenRTM::UNKNOWN_ERROR;
       }
 
-    cdrMemoryStream cdr;
+    cdrMemoryStream cdr = cdrMemoryStream();
     CdrBufferBase::ReturnCode ret(m_buffer->read(cdr));
 
     if (ret == CdrBufferBase::BUFFER_OK)

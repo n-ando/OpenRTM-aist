@@ -358,7 +358,7 @@ namespace RTC_impl
   {
     RTC_TRACE(("getProperties()"));
     Guard guard(m_profileMutex);
-    coil::Properties props;
+    coil::Properties props = coil::Properties();
     NVUtil::copyToProperties(props, m_profile.properties);
     RTC_DEBUG_STR((props));
     return props;

@@ -430,7 +430,7 @@ namespace RTC
           RTC_DEBUG(("%s has %d ports.", comp0_name.c_str(), ports0->length()));
           RTC_DEBUG(("%s has %d ports.", comp1_name.c_str(), ports1->length()));
 
-          PortService_var port0_var;
+          PortService_var port0_var = PortService::_nil();
           for (size_t p(0); p < ports0->length(); ++p)
             {
               PortProfile_var pp = ports0[p]->get_port_profile();
@@ -441,7 +441,7 @@ namespace RTC
                   port0_var = ports0[p];
                 }
             }
-          PortService_var port1_var;
+          PortService_var port1_var = PortService::_nil();
           for (size_t p(0); p < ports1->length(); ++p)
             {
               PortProfile_var pp = ports1[p]->get_port_profile();
@@ -726,7 +726,8 @@ std::vector<coil::Properties> Manager::getLoadableModules()
     m_listeners.rtclifecycle_.preCreate(argstr);
     //------------------------------------------------------------
     // extract "comp_type" and "comp_prop" from comp_arg
-    coil::Properties comp_prop, comp_id;
+    coil::Properties comp_prop = coil::Properties();
+    coil::Properties comp_id   = coil::Properties();
     if (!procComponentArgs(argstr.c_str(), comp_id, comp_prop)) return NULL;
 
     //------------------------------------------------------------
@@ -952,8 +953,8 @@ std::vector<coil::Properties> Manager::getLoadableModules()
     RTC_TRACE(("ExecutionContext type: %s",
                m_config.getProperty("exec_cxt.periodic.type").c_str()));
 
-    std::string ec_id;
-    coil::Properties ec_prop;
+    std::string ec_id = std::string();
+    coil::Properties ec_prop = coil::Properties();
     if (!procContextArgs(ec_args, ec_id, ec_prop)) return NULL;
 
     ECFactoryBase* factory(m_ecfactory.find(ec_id.c_str()));
@@ -1242,7 +1243,7 @@ std::vector<coil::Properties> Manager::getLoadableModules()
         coil::TimeValue tm(10, 0);
         if (m_config.findNode("manager.auto_shutdown_duration") != NULL)
           {
-            double duration;
+            double duration(10.0);
             const char* s = m_config["manager.auto_shutdown_duration"].c_str();
             if (coil::stringTo(duration, s))
               {
@@ -1475,7 +1476,7 @@ std::vector<coil::Properties> Manager::getLoadableModules()
 
     RTC_DEBUG_STR((m_config));
 
-    coil::vstring endpoints;
+    coil::vstring endpoints(0);
     createORBEndpoints(endpoints);
     createORBEndpointOption(opt, endpoints);
 
@@ -1861,7 +1862,7 @@ std::vector<coil::Properties> Manager::getLoadableModules()
       }
     else
       {
-        std::string refstring;
+        std::string refstring = std::string();
         otherref >> refstring;
         otherref.close();
 
@@ -2229,7 +2230,7 @@ std::vector<coil::Properties> Manager::getLoadableModules()
             if (*it == '{' || *it == '(')
               {
                 ++it;
-                std::string env;
+                std::string env = std::string();
                 for ( ; it != it_end && (*it) != '}' && (*it) != ')'; ++it)
                   {
                     env += *it;

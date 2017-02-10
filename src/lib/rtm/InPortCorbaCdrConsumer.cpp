@@ -215,7 +215,7 @@ namespace RTC
         return false;
       }
 
-    CORBA::Object_var obj;
+    CORBA::Object_var obj = CORBA::Object::_nil();
     if (!(properties[index].value >>= CORBA::Any::to_object(obj.out())))
       {
         RTC_ERROR(("prop[inport_ref] is not objref"));
@@ -256,7 +256,7 @@ namespace RTC
         return false;
       }
 
-    const char* ior;
+    const char* ior = NULL;
     if (!(properties[index].value >>= ior))
       {
         RTC_ERROR(("prop[inport_ior] is not string"));
@@ -291,7 +291,7 @@ namespace RTC
                                "dataport.corba_cdr.inport_ref");
     if (index < 0) { return false; }
 
-    CORBA::Object_var obj;
+    CORBA::Object_var obj = CORBA::Object::_nil();
     if (!(properties[index].value >>= CORBA::Any::to_object(obj.out())))
       {
         return false;

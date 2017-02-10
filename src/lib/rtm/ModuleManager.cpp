@@ -300,7 +300,7 @@ namespace RTC
   {
     RTC_TRACE(("getLoadedModules()"));
     std::vector< DLLEntity* > dlls(m_modules.getObjects());
-    std::vector<coil::Properties> modules;
+    std::vector<coil::Properties> modules(0);
     for (int i(0), len(dlls.size()); i < len; ++i)
       {
         modules.push_back(dlls[i]->properties);
@@ -328,12 +328,12 @@ namespace RTC
     for (size_t l(0); l < langs.size(); ++l)
       {
         // 1. getting loadable files list
-        coil::vstring modules;
+        coil::vstring modules(0);
         getModuleList(langs[l], modules);
         RTC_DEBUG(("%s: %s", langs[l].c_str(), coil::flatten(modules).c_str()));
 
         // 2. getting module properties from loadable modules
-        vProperties tmpprops;
+        vProperties tmpprops(0);
         getModuleProfiles(langs[l], modules, tmpprops);
         RTC_DEBUG(("Modile profile size: %d (newly founded modules)",
                    tmpprops.size()));
@@ -474,7 +474,7 @@ namespace RTC
         RTC_DEBUG(("Module load path: %s", path.c_str()));
 
         // get file list for each suffixes
-        coil::vstring flist;
+        coil::vstring flist(0);
         for (size_t s(0); s < suffixes.size(); ++s)
           {
             std::string glob("*."); glob += suffixes[s];

@@ -140,7 +140,7 @@ namespace NVUtil
   {
     for (CORBA::ULong i(0), len(nv.length()); i < len; ++i)
       {
-        const char* value;
+        const char* value(NULL);
         if (nv[i].value >>= value)
           {
             const char* name(nv[i].name);
@@ -159,11 +159,12 @@ namespace NVUtil
   struct to_prop
   {
     to_prop()
+      : m_prop(coil::Properties())
     {
     };
     void operator()(const SDOPackage::NameValue& nv)
     {
-      const char* value;
+      const char* value(NULL);
       if (nv.value >>= value)
         {
           m_prop.setProperty(CORBA::string_dup(nv.name), value);
@@ -244,7 +245,7 @@ namespace NVUtil
       {
         CORBA::Any value;
         value = find(nv, name);
-        const char* str_value = NULL;
+        const char* str_value(NULL);
         return value >>= str_value;
       }
     catch (...)
@@ -283,7 +284,7 @@ namespace NVUtil
    */
   std::string toString(const SDOPackage::NVList& nv, const char* name)
   {
-    const char* str_value;
+    const char* str_value(NULL);
     try
       {
         if (!(find(nv, name) >>= str_value))
@@ -330,7 +331,7 @@ namespace NVUtil
       }
     else
       {
-        const char* tmp_char;
+        const char* tmp_char(NULL);
         nv[index].value >>= tmp_char;
         std::string tmp_str(tmp_char);
 
@@ -372,7 +373,7 @@ namespace NVUtil
   {
     for (CORBA::ULong i(0), n(nv.length()); i < n; ++i)
       {
-        const char* str_value;
+        const char* str_value(NULL);
         if (nv[i].value >>= str_value)
           {
             out << nv[i].name << ": " << str_value << std::endl;

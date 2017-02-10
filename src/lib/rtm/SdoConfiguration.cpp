@@ -592,12 +592,8 @@ namespace SDOPackage
       {
         Guard gurad(m_config_mutex);
         const char* config_id(configuration_set.id);
-//        const char* config_value(configuration_set.description);
-//        RTC::Properties config(config_id);
         coil::Properties config(config_id);
-//        coil::Properties config(config_id,config_value);
         toProperties(config, configuration_set);
-//        config["description"] = configuration_set.description;
         return m_configsets.addConfigurationSet(config);
       }
     catch (...)
@@ -724,7 +720,7 @@ namespace SDOPackage
    */
   const std::string Configuration_impl::getUUID() const
   {
-    coil::UUID_Generator uugen;
+    coil::UUID_Generator uugen = coil::UUID_Generator();
     uugen.init();
     std::auto_ptr<coil::UUID> uuid(uugen.generateUUID(2, 0x01));
 

@@ -125,7 +125,7 @@ namespace RTC
   {
 
 #ifndef ORB_IS_RTORB
-    PortProfileList port_profs;
+    PortProfileList port_profs(0);
     //    port_prof_collect p(port_profs);
     port_prof_collect2 p(port_profs);
     //    m_portServants.for_each(p);

@@ -348,7 +348,7 @@ namespace RTC
     m_task->executionMeasure(coil::toBool(prop["measurement.exec_time"],
                                     "enable", "disable", true));
 
-    int ecount;
+    int ecount(1000);
     if (coil::stringTo(ecount, prop["measurement.exec_count"].c_str()))
       {
         m_task->executionMeasureCount(ecount);
@@ -356,7 +356,7 @@ namespace RTC
 
     m_task->periodicMeasure(coil::toBool(prop["measurement.period_time"],
                                    "enable", "disable", true));
-    int pcount;
+    int pcount(1000);
     if (coil::stringTo(pcount, prop["measurement.period_count"].c_str()))
       {
         m_task->periodicMeasureCount(pcount);
