@@ -1,4 +1,4 @@
-// -*- C++ -*-
+﻿// -*- C++ -*-
 /*!
  * @file  MyServiceConsumer.h
  * @brief MyService Consumer Sample component

@@ -1,4 +1,4 @@
-// -*- C++ -*-
+ï»¿// -*- C++ -*-
 /*!
  * @file   PortAdminTests.cpp
  * @brief  PortAdmin test class
@@ -199,15 +199,15 @@ namespace PortAdmin
     }
 		
     /*!
-     * @brief getPortList()¥á¥½¥Ã¥É¤Î¥Æ¥¹¥È
+     * @brief getPortList()ãƒ¡ã‚½ãƒƒãƒ‰ã®ãƒ†ã‚¹ãƒˆ
      * 
-     * - ¼èÆÀ¤µ¤ì¤¿Port¤¬¡¢¤¢¤é¤«¤¸¤áÅÐÏ¿¤·¤¿¤â¤Î¤È°ìÃ×¤¹¤ë¤«¡©
+     * - å–å¾—ã•ã‚ŒãŸPortãŒã€ã‚ã‚‰ã‹ã˜ã‚ç™»éŒ²ã—ãŸã‚‚ã®ã¨ä¸€è‡´ã™ã‚‹ã‹ï¼Ÿ
      */
     void test_getPortList()
     {
       RTC::PortAdmin portAdmin(m_orb, m_poa);
 			
-      // Port¤òÅÐÏ¿¤·¤Æ¤ª¤¯
+      // Portã‚’ç™»éŒ²ã—ã¦ãŠã
       PortMock* port0 = new PortMock();
       port0->setName("port0");
       CPPUNIT_ASSERT_EQUAL(true, portAdmin.addPort(*port0));
@@ -216,10 +216,10 @@ namespace PortAdmin
       port1->setName("port1");
       CPPUNIT_ASSERT_EQUAL(true, portAdmin.addPort(*port1));
 			
-      // getPortList()¤ÇÅÐÏ¿¤µ¤ì¤Æ¤¤¤ëÁ´Port¤ò¼èÆÀ¤¹¤ë
+      // getPortList()ã§ç™»éŒ²ã•ã‚Œã¦ã„ã‚‹å…¨Portã‚’å–å¾—ã™ã‚‹
       RTC::PortServiceList* portList = portAdmin.getPortServiceList();
 			
-      // ¼èÆÀ¤µ¤ì¤¿Port¤¬¡¢¤¢¤é¤«¤¸¤áÅÐÏ¿¤·¤¿¤â¤Î¤È°ìÃ×¤¹¤ë¤«¡©
+      // å–å¾—ã•ã‚ŒãŸPortãŒã€ã‚ã‚‰ã‹ã˜ã‚ç™»éŒ²ã—ãŸã‚‚ã®ã¨ä¸€è‡´ã™ã‚‹ã‹ï¼Ÿ
       RTC::PortProfile* portProf0 = (*portList)[0]->get_port_profile();
       CPPUNIT_ASSERT(portProf0 != NULL);
       CPPUNIT_ASSERT_EQUAL(std::string("port0"), std::string(portProf0->name));
@@ -234,16 +234,16 @@ namespace PortAdmin
     }
 		
     /*!
-     * @brief getPortRef()¥á¥½¥Ã¥É¤Î¥Æ¥¹¥È
+     * @brief getPortRef()ãƒ¡ã‚½ãƒƒãƒ‰ã®ãƒ†ã‚¹ãƒˆ
      * 
-     * - ÅÐÏ¿¤µ¤ì¤Æ¤¤¤ëPort¤Î»²¾È¤òÀµ¤·¤¯¼èÆÀ¤Ç¤­¤ë¤«¡©
-     * - ÅÐÏ¿¤µ¤ì¤Æ¤¤¤Ê¤¤Port¤ÎÌ¾¾Î¤ò»ØÄê¤·¤¿¾ì¹ç¡¢°Õ¿Þ¤É¤ª¤ênil»²¾È¤¬ÆÀ¤é¤ì¤ë¤«¡©
+     * - ç™»éŒ²ã•ã‚Œã¦ã„ã‚‹Portã®å‚ç…§ã‚’æ­£ã—ãå–å¾—ã§ãã‚‹ã‹ï¼Ÿ
+     * - ç™»éŒ²ã•ã‚Œã¦ã„ãªã„Portã®åç§°ã‚’æŒ‡å®šã—ãŸå ´åˆã€æ„å›³ã©ãŠã‚Šnilå‚ç…§ãŒå¾—ã‚‰ã‚Œã‚‹ã‹ï¼Ÿ
      */
     void test_getPortRef()
     {
       RTC::PortAdmin portAdmin(m_orb, m_poa);
 			
-      // Port¤òÅÐÏ¿¤·¤Æ¤ª¤¯
+      // Portã‚’ç™»éŒ²ã—ã¦ãŠã
       PortMock* port0 = new PortMock();
       port0->setName("port0");
       CPPUNIT_ASSERT_EQUAL(true, portAdmin.addPort(*port0));
@@ -252,7 +252,7 @@ namespace PortAdmin
       port1->setName("port1");
       CPPUNIT_ASSERT_EQUAL(true, portAdmin.addPort(*port1));
 			
-      // ÅÐÏ¿¤µ¤ì¤Æ¤¤¤ëPort¤Î»²¾È¤òÀµ¤·¤¯¼èÆÀ¤Ç¤­¤ë¤«¡©
+      // ç™»éŒ²ã•ã‚Œã¦ã„ã‚‹Portã®å‚ç…§ã‚’æ­£ã—ãå–å¾—ã§ãã‚‹ã‹ï¼Ÿ
       RTC::PortService_var portRef0 = portAdmin.getPortRef("port0");
       CPPUNIT_ASSERT(! CORBA::is_nil(portRef0));
       RTC::PortProfile* portProf0 = portRef0->get_port_profile();
@@ -263,22 +263,22 @@ namespace PortAdmin
       RTC::PortProfile* portProf1 = portRef1->get_port_profile();
       CPPUNIT_ASSERT_EQUAL(std::string("port1"), std::string(portProf1->name));
 			
-      // ÅÐÏ¿¤µ¤ì¤Æ¤¤¤Ê¤¤Port¤ÎÌ¾¾Î¤ò»ØÄê¤·¤¿¾ì¹ç¡¢°Õ¿Þ¤É¤ª¤ênil»²¾È¤¬ÆÀ¤é¤ì¤ë¤«¡©
+      // ç™»éŒ²ã•ã‚Œã¦ã„ãªã„Portã®åç§°ã‚’æŒ‡å®šã—ãŸå ´åˆã€æ„å›³ã©ãŠã‚Šnilå‚ç…§ãŒå¾—ã‚‰ã‚Œã‚‹ã‹ï¼Ÿ
       CPPUNIT_ASSERT(CORBA::is_nil(portAdmin.getPortRef("inexist")));
       delete port1;
       delete port0;
     }
 		
     /*!
-     * @brief getPort()¥á¥½¥Ã¥É¤Î¥Æ¥¹¥È
+     * @brief getPort()ãƒ¡ã‚½ãƒƒãƒ‰ã®ãƒ†ã‚¹ãƒˆ
      * 
-     * - ¥Ý¡¼¥ÈÌ¾¾Î¤ò»ØÄê¤·¤Æ¡¢ÅÐÏ¿¤µ¤ì¤Æ¤¤¤ëPort¥ª¥Ö¥¸¥§¥¯¥È¤òÀµ¤·¤¯¼èÆÀ¤Ç¤­¤ë¤«¡©
+     * - ãƒãƒ¼ãƒˆåç§°ã‚’æŒ‡å®šã—ã¦ã€ç™»éŒ²ã•ã‚Œã¦ã„ã‚‹Portã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’æ­£ã—ãå–å¾—ã§ãã‚‹ã‹ï¼Ÿ
      */
     void test_getPort()
     {
       RTC::PortAdmin portAdmin(m_orb, m_poa);
 			
-      // Port¤òÅÐÏ¿¤·¤Æ¤ª¤¯
+      // Portã‚’ç™»éŒ²ã—ã¦ãŠã
       PortMock* port0 = new PortMock();
       port0->setName("port0");
       CPPUNIT_ASSERT_EQUAL(true, portAdmin.addPort(*port0));
@@ -287,7 +287,7 @@ namespace PortAdmin
       port1->setName("port1");
       CPPUNIT_ASSERT_EQUAL(true, portAdmin.addPort(*port1));
 
-      // ¥Ý¡¼¥ÈÌ¾¾Î¤ò»ØÄê¤·¤Æ¡¢ÅÐÏ¿¤µ¤ì¤Æ¤¤¤ëPort¥ª¥Ö¥¸¥§¥¯¥È¤òÀµ¤·¤¯¼èÆÀ¤Ç¤­¤ë¤«¡©
+      // ãƒãƒ¼ãƒˆåç§°ã‚’æŒ‡å®šã—ã¦ã€ç™»éŒ²ã•ã‚Œã¦ã„ã‚‹Portã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’æ­£ã—ãå–å¾—ã§ãã‚‹ã‹ï¼Ÿ
       RTC::PortBase* portRet0 = portAdmin.getPort("port0");
       RTC::PortProfile* portProf0 = portRet0->get_port_profile();
       CPPUNIT_ASSERT_EQUAL(std::string("port0"), std::string(portProf0->name));
@@ -300,13 +300,13 @@ namespace PortAdmin
     }
 		
     /*!
-     * @brief addPort()¥á¥½¥Ã¥É¤Î¥Æ¥¹¥È
+     * @brief addPort()ãƒ¡ã‚½ãƒƒãƒ‰ã®ãƒ†ã‚¹ãƒˆ
      */
     void test_addPort()
     {
       RTC::PortAdmin portAdmin(m_orb, m_poa);
 			
-      // Port¤òÅÐÏ¿¤·¤Æ¤ª¤¯
+      // Portã‚’ç™»éŒ²ã—ã¦ãŠã
       PortMock* port0 = new PortMock();
       port0->setName("port0");
       // test for addPort(PortBase&)
@@ -323,13 +323,13 @@ namespace PortAdmin
     }
 
     /*!
-     * @brief registerPort(),deletePort()¥á¥½¥Ã¥É¤Î¥Æ¥¹¥È
+     * @brief registerPort(),deletePort()ãƒ¡ã‚½ãƒƒãƒ‰ã®ãƒ†ã‚¹ãƒˆ
      */
     void test_registerPort()
     {
       RTC::PortAdmin portAdmin(m_orb, m_poa);
 			
-      // Port¤òÅÐÏ¿¤·¤Æ¤ª¤¯
+      // Portã‚’ç™»éŒ²ã—ã¦ãŠã
       PortMock* port0 = new PortMock();
       port0->setName("port0");
       // test for registerPort(PortBase&)
@@ -340,18 +340,18 @@ namespace PortAdmin
       // test for registerPort(PortService_ptr)
       portAdmin.registerPort(port1->getPortRef());
 
-      // ÅÐÏ¿¤µ¤ì¤Æ¤¤¤ë¤¦¤Á¡¢£±¤Ä¤ÎPort¤òºï½ü¤¹¤ë
+      // ç™»éŒ²ã•ã‚Œã¦ã„ã‚‹ã†ã¡ã€ï¼‘ã¤ã®Portã‚’å‰Šé™¤ã™ã‚‹
       portAdmin.deletePort(*port0);
 
-      // getPortList()¤Ë¤Æ¡¢ÅÐÏ¿¤µ¤ì¤Æ¤¤¤ëÁ´Port¤ò¼èÆÀ¤¹¤ë
+      // getPortList()ã«ã¦ã€ç™»éŒ²ã•ã‚Œã¦ã„ã‚‹å…¨Portã‚’å–å¾—ã™ã‚‹
       RTC::PortServiceList* portList = portAdmin.getPortServiceList();
 			
-      // ºï½ü¤·¤¿Port¤¬¡¢¼èÆÀ¤·¤¿PortListÆâ¤Ë´Þ¤Þ¤ì¤Æ¤¤¤Ê¤¤¤³¤È¤ò³ÎÇ§¤¹¤ë
+      // å‰Šé™¤ã—ãŸPortãŒã€å–å¾—ã—ãŸPortListå†…ã«å«ã¾ã‚Œã¦ã„ãªã„ã“ã¨ã‚’ç¢ºèªã™ã‚‹
       CPPUNIT_ASSERT_EQUAL(CORBA::ULong(1), portList->length());
       RTC::PortProfile* portProf1 = (*portList)[0]->get_port_profile();
       CPPUNIT_ASSERT_EQUAL(std::string("port1"), std::string(portProf1->name));
 			
-      // ºï½ü¤·¤¿Port¤ÎProfile¤Î¥ê¥Õ¥¡¥ì¥ó¥¹¤¬nil¤Ë¤Ê¤Ã¤Æ¤¤¤ë¤«¡©
+      // å‰Šé™¤ã—ãŸPortã®Profileã®ãƒªãƒ•ã‚¡ãƒ¬ãƒ³ã‚¹ãŒnilã«ãªã£ã¦ã„ã‚‹ã‹ï¼Ÿ
       const RTC::PortProfile& portProf0 = port0->getProfile();
       CPPUNIT_ASSERT(CORBA::is_nil(portProf0.port_ref));
       delete port1;
@@ -360,16 +360,16 @@ namespace PortAdmin
 
 		
     /*!
-     * @brief removePort()¤Î¥Æ¥¹¥È
+     * @brief removePort()ã®ãƒ†ã‚¹ãƒˆ
      * 
-     * - Port¤òÀµ¤·¤¯ºï½ü¤Ç¤­¤ë¤«¡©
-     * - ºï½ü¤·¤¿Port¤ÎProfile¤Î¥ê¥Õ¥¡¥ì¥ó¥¹¤¬nil¤Ë¤Ê¤Ã¤Æ¤¤¤ë¤«¡©
+     * - Portã‚’æ­£ã—ãå‰Šé™¤ã§ãã‚‹ã‹ï¼Ÿ
+     * - å‰Šé™¤ã—ãŸPortã®Profileã®ãƒªãƒ•ã‚¡ãƒ¬ãƒ³ã‚¹ãŒnilã«ãªã£ã¦ã„ã‚‹ã‹ï¼Ÿ
      */
     void test_removePort()
     {
       RTC::PortAdmin portAdmin(m_orb, m_poa);
 			
-      // Port¤òÅÐÏ¿¤·¤Æ¤ª¤¯
+      // Portã‚’ç™»éŒ²ã—ã¦ãŠã
       PortMock* port0 = new PortMock();
       port0->setName("port0");
       portAdmin.addPort(*port0);
@@ -378,19 +378,19 @@ namespace PortAdmin
       port1->setName("port1");
       portAdmin.addPort(*port1);
 
-      // ÅÐÏ¿¤µ¤ì¤Æ¤¤¤ë¤¦¤Á¡¢£±¤Ä¤ÎPort¤òºï½ü¤¹¤ë
+      // ç™»éŒ²ã•ã‚Œã¦ã„ã‚‹ã†ã¡ã€ï¼‘ã¤ã®Portã‚’å‰Šé™¤ã™ã‚‹
       CPPUNIT_ASSERT_EQUAL(true, portAdmin.removePort(*port0));
       CPPUNIT_ASSERT_EQUAL(false, portAdmin.removePort(*port0));
 			
-      // getPortList()¤Ë¤Æ¡¢ÅÐÏ¿¤µ¤ì¤Æ¤¤¤ëÁ´Port¤ò¼èÆÀ¤¹¤ë
+      // getPortList()ã«ã¦ã€ç™»éŒ²ã•ã‚Œã¦ã„ã‚‹å…¨Portã‚’å–å¾—ã™ã‚‹
       RTC::PortServiceList* portList = portAdmin.getPortServiceList();
 			
-      // ºï½ü¤·¤¿Port¤¬¡¢¼èÆÀ¤·¤¿PortListÆâ¤Ë´Þ¤Þ¤ì¤Æ¤¤¤Ê¤¤¤³¤È¤ò³ÎÇ§¤¹¤ë
+      // å‰Šé™¤ã—ãŸPortãŒã€å–å¾—ã—ãŸPortListå†…ã«å«ã¾ã‚Œã¦ã„ãªã„ã“ã¨ã‚’ç¢ºèªã™ã‚‹
       CPPUNIT_ASSERT_EQUAL(CORBA::ULong(1), portList->length());
       RTC::PortProfile* portProf1 = (*portList)[0]->get_port_profile();
       CPPUNIT_ASSERT_EQUAL(std::string("port1"), std::string(portProf1->name));
 			
-      // ºï½ü¤·¤¿Port¤ÎProfile¤Î¥ê¥Õ¥¡¥ì¥ó¥¹¤¬nil¤Ë¤Ê¤Ã¤Æ¤¤¤ë¤«¡©
+      // å‰Šé™¤ã—ãŸPortã®Profileã®ãƒªãƒ•ã‚¡ãƒ¬ãƒ³ã‚¹ãŒnilã«ãªã£ã¦ã„ã‚‹ã‹ï¼Ÿ
       const RTC::PortProfile& portProf0 = port0->getProfile();
       CPPUNIT_ASSERT(CORBA::is_nil(portProf0.port_ref));
       delete port1;
@@ -398,16 +398,16 @@ namespace PortAdmin
     }
 		
     /*!
-     * @brief deletePortByName()¥á¥½¥Ã¥É¤Î¥Æ¥¹¥È
+     * @brief deletePortByName()ãƒ¡ã‚½ãƒƒãƒ‰ã®ãƒ†ã‚¹ãƒˆ
      * 
-     * - »ØÄê¤·¤¿Ì¾¾Î¤ò»ý¤ÄPort¤òÀµ¤·¤¯ºï½ü¤Ç¤­¤ë¤«¡©
-     * - ºï½ü¤·¤¿Port¤ÎProfile¤Î¥ê¥Õ¥¡¥ì¥ó¥¹¤¬nil¤Ë¤Ê¤Ã¤Æ¤¤¤ë¤«¡©
+     * - æŒ‡å®šã—ãŸåç§°ã‚’æŒã¤Portã‚’æ­£ã—ãå‰Šé™¤ã§ãã‚‹ã‹ï¼Ÿ
+     * - å‰Šé™¤ã—ãŸPortã®Profileã®ãƒªãƒ•ã‚¡ãƒ¬ãƒ³ã‚¹ãŒnilã«ãªã£ã¦ã„ã‚‹ã‹ï¼Ÿ
      */
     void test_deletePortByName()
     {
       RTC::PortAdmin portAdmin(m_orb, m_poa);
 			
-      // Port¤òÅÐÏ¿¤·¤Æ¤ª¤¯
+      // Portã‚’ç™»éŒ²ã—ã¦ãŠã
       PortMock* port0 = new PortMock();
       port0->setName("port0");
       portAdmin.addPort(*port0);
@@ -416,18 +416,18 @@ namespace PortAdmin
       port1->setName("port1");
       portAdmin.addPort(*port1);
 
-      // ÅÐÏ¿¤µ¤ì¤Æ¤¤¤ë¤¦¤Á¡¢£±¤Ä¤ÎPort¤òºï½ü¤¹¤ë
+      // ç™»éŒ²ã•ã‚Œã¦ã„ã‚‹ã†ã¡ã€ï¼‘ã¤ã®Portã‚’å‰Šé™¤ã™ã‚‹
       portAdmin.deletePortByName("port0");
 			
-      // getPortList()¤Ë¤Æ¡¢ÅÐÏ¿¤µ¤ì¤Æ¤¤¤ëÁ´Port¤ò¼èÆÀ¤¹¤ë
+      // getPortList()ã«ã¦ã€ç™»éŒ²ã•ã‚Œã¦ã„ã‚‹å…¨Portã‚’å–å¾—ã™ã‚‹
       RTC::PortServiceList* portList = portAdmin.getPortServiceList();
 			
-      // ºï½ü¤·¤¿Port¤¬¡¢¼èÆÀ¤·¤¿PortListÆâ¤Ë´Þ¤Þ¤ì¤Æ¤¤¤Ê¤¤¤³¤È¤ò³ÎÇ§¤¹¤ë
+      // å‰Šé™¤ã—ãŸPortãŒã€å–å¾—ã—ãŸPortListå†…ã«å«ã¾ã‚Œã¦ã„ãªã„ã“ã¨ã‚’ç¢ºèªã™ã‚‹
       CPPUNIT_ASSERT_EQUAL(CORBA::ULong(1), portList->length());
       RTC::PortProfile* portProf1 = (*portList)[0]->get_port_profile();
       CPPUNIT_ASSERT_EQUAL(std::string("port1"), std::string(portProf1->name));
 			
-      // ºï½ü¤·¤¿Port¤ÎProfile¤Î¥ê¥Õ¥¡¥ì¥ó¥¹¤¬nil¤Ë¤Ê¤Ã¤Æ¤¤¤ë¤«¡©
+      // å‰Šé™¤ã—ãŸPortã®Profileã®ãƒªãƒ•ã‚¡ãƒ¬ãƒ³ã‚¹ãŒnilã«ãªã£ã¦ã„ã‚‹ã‹ï¼Ÿ
       const RTC::PortProfile& portProf0 = port0->getProfile();
       CPPUNIT_ASSERT(CORBA::is_nil(portProf0.port_ref));
       delete port1;
@@ -435,16 +435,16 @@ namespace PortAdmin
     }
 		
     /*!
-     * @brief finalizePorts()¥á¥½¥Ã¥É¤Î¥Æ¥¹¥È
+     * @brief finalizePorts()ãƒ¡ã‚½ãƒƒãƒ‰ã®ãƒ†ã‚¹ãƒˆ
      * 
-     * - ÅÐÏ¿¤µ¤ì¤Æ¤¤¤ë¤¹¤Ù¤Æ¤ÎPort¤ò¡¢PortAdmin¤«¤éºï½ü¤Ç¤­¤ë¤«¡©
-     * - ¤¹¤Ù¤Æ¤ÎPort¤ÎProfile¤Î¥ê¥Õ¥¡¥ì¥ó¥¹¤¬nil¤Ë¤Ê¤Ã¤Æ¤¤¤ë¤«¡©
+     * - ç™»éŒ²ã•ã‚Œã¦ã„ã‚‹ã™ã¹ã¦ã®Portã‚’ã€PortAdminã‹ã‚‰å‰Šé™¤ã§ãã‚‹ã‹ï¼Ÿ
+     * - ã™ã¹ã¦ã®Portã®Profileã®ãƒªãƒ•ã‚¡ãƒ¬ãƒ³ã‚¹ãŒnilã«ãªã£ã¦ã„ã‚‹ã‹ï¼Ÿ
      */
     void test_finalizePorts()
     {
       RTC::PortAdmin portAdmin(m_orb, m_poa);
 			
-      // Port¤òÅÐÏ¿¤·¤Æ¤ª¤¯
+      // Portã‚’ç™»éŒ²ã—ã¦ãŠã
       PortMock* port0 = new PortMock();
       port0->setName("port0");
       portAdmin.addPort(*port0);
@@ -453,16 +453,16 @@ namespace PortAdmin
       port1->setName("port1");
       portAdmin.addPort(*port1);
 
-      // finalizePorts()¤ò¸Æ½Ð¤¹
+      // finalizePorts()ã‚’å‘¼å‡ºã™
       portAdmin.finalizePorts();
 			
-      // getPortList()¤Ë¤Æ¡¢ÅÐÏ¿¤µ¤ì¤Æ¤¤¤ëÁ´Port¤ò¼èÆÀ¤¹¤ë
+      // getPortList()ã«ã¦ã€ç™»éŒ²ã•ã‚Œã¦ã„ã‚‹å…¨Portã‚’å–å¾—ã™ã‚‹
       RTC::PortServiceList* portList = portAdmin.getPortServiceList();
 			
-      // ¼èÆÀ¤·¤¿PortList¤¬¶õ¤Ç¤¢¤ë¤³¤È¤ò³ÎÇ§¤¹¤ë
+      // å–å¾—ã—ãŸPortListãŒç©ºã§ã‚ã‚‹ã“ã¨ã‚’ç¢ºèªã™ã‚‹
       CPPUNIT_ASSERT_EQUAL(CORBA::ULong(0), portList->length());
 			
-      // ¤¹¤Ù¤Æ¤ÎPort¤ÎProfile¤Î¥ê¥Õ¥¡¥ì¥ó¥¹¤¬nil¤Ë¤Ê¤Ã¤Æ¤¤¤ë¤«¡©
+      // ã™ã¹ã¦ã®Portã®Profileã®ãƒªãƒ•ã‚¡ãƒ¬ãƒ³ã‚¹ãŒnilã«ãªã£ã¦ã„ã‚‹ã‹ï¼Ÿ
       const RTC::PortProfile& portProf0 = port0->getProfile();
       CPPUNIT_ASSERT(CORBA::is_nil(portProf0.port_ref));
       const RTC::PortProfile& portProf1 = port1->getProfile();
@@ -481,7 +481,7 @@ namespace PortAdmin
 
       Logger logger;
 			
-      // Port¤òÅÐÏ¿¤·¤Æ¤ª¤¯
+      // Portã‚’ç™»éŒ²ã—ã¦ãŠã
       PortMock* port0 = new PortMock();
       port0->setName("port0");
       port0->setLogger(&logger);

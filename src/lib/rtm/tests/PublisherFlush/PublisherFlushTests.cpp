@@ -1,4 +1,4 @@
-// -*- C++ -*-
+ï»¿// -*- C++ -*-
 /*!
  * @file   PublisherFlushTests.cpp
  * @brief  PublisherFlush test class
@@ -220,7 +220,7 @@ namespace PublisherFlush
     }
 		
     /*!
-     * @brief setConsumer()¥á¥½¥Ã¥É¤Î¥Æ¥¹¥È
+     * @brief setConsumer()ãƒ¡ã‚½ãƒƒãƒ‰ã®ãƒ†ã‚¹ãƒˆ
      * 
      */
     void test_setConsumer(void)
@@ -231,7 +231,7 @@ namespace PublisherFlush
                                      = new RTC::InPortCorbaCdrConsumer();
         RTC::PublisherFlush publisher;
 
-        //NULL¤òÅÏ¤·¤¿¾ì¹çINVALID_ARGS¤È¤Ê¤ë¤³¤È¤ò³ÎÇ§¤¹¤ë¡£
+        //NULLã‚’æ¸¡ã—ãŸå ´åˆINVALID_ARGSã¨ãªã‚‹ã“ã¨ã‚’ç¢ºèªã™ã‚‹ã€‚
         CPPUNIT_ASSERT_EQUAL(RTC::PublisherFlush::INVALID_ARGS, 
                              publisher.setConsumer(NULL));
 
@@ -248,7 +248,7 @@ namespace PublisherFlush
  
     }
     /*!
-     * @brief activate(),deactivate(),isActive¥á¥½¥Ã¥É¤Î¥Æ¥¹¥È
+     * @brief activate(),deactivate(),isActiveãƒ¡ã‚½ãƒƒãƒ‰ã®ãƒ†ã‚¹ãƒˆ
      * 
      */
     void test_activate_deactivate_isActive(void)
@@ -267,9 +267,9 @@ namespace PublisherFlush
         CPPUNIT_ASSERT_EQUAL(true, 
                              publisher.isActive());
         
-        //´û¤Ë activate ¤µ¤ì¤Æ¤¤¤ë¾ì¹ç¤Ï 
-        //activate¤¹¤ë¤È
-        //PORT_OK ¤òÊÖ¤¹¤³¤È¤ò³ÎÇ§¤¹¤ë¡£
+        //æ—¢ã« activate ã•ã‚Œã¦ã„ã‚‹å ´åˆã¯ 
+        //activateã™ã‚‹ã¨
+        //PORT_OK ã‚’è¿”ã™ã“ã¨ã‚’ç¢ºèªã™ã‚‹ã€‚
         CPPUNIT_ASSERT_EQUAL(RTC::PublisherFlush::PORT_OK, 
                              publisher.activate());
 
@@ -282,9 +282,9 @@ namespace PublisherFlush
         CPPUNIT_ASSERT_EQUAL(false, 
                              publisher.isActive());
         
-        //activate ¤µ¤ì¤Æ¤¤¤Ê¤¤¾õÂÖ¤Ç¡¢
-        //deactivate¤¹¤ë¤È
-        //PORT_OK ¤òÊÖ¤¹¤³¤È¤ò³ÎÇ§¤¹¤ë¡£
+        //activate ã•ã‚Œã¦ã„ãªã„çŠ¶æ…‹ã§ã€
+        //deactivateã™ã‚‹ã¨
+        //PORT_OK ã‚’è¿”ã™ã“ã¨ã‚’ç¢ºèªã™ã‚‹ã€‚
         CPPUNIT_ASSERT_EQUAL(RTC::PublisherFlush::PORT_OK, 
                              publisher.deactivate());
         
@@ -294,7 +294,7 @@ namespace PublisherFlush
         delete consumer;
     }
     /*!
-     * @brief write()¥á¥½¥Ã¥É¤Î¥Æ¥¹¥È
+     * @brief write()ãƒ¡ã‚½ãƒƒãƒ‰ã®ãƒ†ã‚¹ãƒˆ
      * 
      */
     void test_write(void)
@@ -337,7 +337,7 @@ namespace PublisherFlush
         CPPUNIT_ASSERT_EQUAL(RTC::DataPortStatus::PORT_OK, 
                              publisher.setListener(info, &m_listeners));
 
-        //Consumer¤òÀßÄê¤·¤Ê¤¤¾õÂÖ¤Çwrite¤ò¥³¡¼¥ë
+        //Consumerã‚’è¨­å®šã—ãªã„çŠ¶æ…‹ã§writeã‚’ã‚³ãƒ¼ãƒ«
         {
         cdrMemoryStream cdr;
         RTC::TimedLong td;
@@ -349,7 +349,7 @@ namespace PublisherFlush
 
         publisher.setConsumer(consumer);
 
-        //activate¤¹¤ëÁ°¤Ëwrite¤ò¥³¡¼¥ë
+        //activateã™ã‚‹å‰ã«writeã‚’ã‚³ãƒ¼ãƒ«
         {
         cdrMemoryStream cdr;
         RTC::TimedLong td;
@@ -376,7 +376,7 @@ namespace PublisherFlush
 
         }
 
-        //full ¤Î¾õÂÖ¤Ç¥³¡¼¥ë(full)
+        //full ã®çŠ¶æ…‹ã§ã‚³ãƒ¼ãƒ«(full)
         {
         cdrMemoryStream cdr;
         RTC::TimedLong td;
@@ -399,7 +399,7 @@ namespace PublisherFlush
             CPPUNIT_ASSERT_EQUAL((long)testdata[icc], (long)rtd.data);
         }
 
-        //deactivate¤·¤Æ¤«¤éwrite¤ò¥³¡¼¥ë
+        //deactivateã—ã¦ã‹ã‚‰writeã‚’ã‚³ãƒ¼ãƒ«
         publisher.deactivate();
         {
         cdrMemoryStream cdr;
@@ -430,12 +430,12 @@ namespace PublisherFlush
     }
 
     /*!
-     * @brief update()¥á¥½¥Ã¥É¸Æ½Ğ¼şÊÕ¤ÎÂ¨»şÀ­¤Î¥Æ¥¹¥È
+     * @brief update()ãƒ¡ã‚½ãƒƒãƒ‰å‘¼å‡ºå‘¨è¾ºã®å³æ™‚æ€§ã®ãƒ†ã‚¹ãƒˆ
      * 
-     * - Publisher¤Îupdate()¥á¥½¥Ã¥É¸Æ½Ğ¸å¡¢½êÄê»ş´ÖÆâ¤ËConsumer¤Îpush()¥á¥½¥Ã¥É¤¬¸Æ¤Ó½Ğ¤µ¤ì¤ë¤«¡©
-     * - Consumer¤Îpush()¥á¥½¥Ã¥É½ªÎ»¸å¡¢½êÄê»ş´ÖÆâ¤ËPublihser¤Îupdate()¥á¥½¥Ã¥É¸Æ½Ğ¤«¤éÉüµ¢¤¹¤ë¤«¡©
+     * - Publisherã®update()ãƒ¡ã‚½ãƒƒãƒ‰å‘¼å‡ºå¾Œã€æ‰€å®šæ™‚é–“å†…ã«Consumerã®push()ãƒ¡ã‚½ãƒƒãƒ‰ãŒå‘¼ã³å‡ºã•ã‚Œã‚‹ã‹ï¼Ÿ
+     * - Consumerã®push()ãƒ¡ã‚½ãƒƒãƒ‰çµ‚äº†å¾Œã€æ‰€å®šæ™‚é–“å†…ã«Publihserã®update()ãƒ¡ã‚½ãƒƒãƒ‰å‘¼å‡ºã‹ã‚‰å¾©å¸°ã™ã‚‹ã‹ï¼Ÿ
      * 
-     * @attention ¥ê¥¢¥ë¥¿¥¤¥àÀ­¤¬Êİ¾Ú¤µ¤ì¤Æ¤¤¤ë¤ï¤±¤Ç¤â¤Ê¤¯¡¢»ÅÍÍ¾å¤â¸Æ½Ğ¤Ş¤Ç¤Î»ş´Ö¤òÌÀµ­¤·¤Æ¤¤¤ë¤ï¤±¤Ç¤Ï¤Ê¤¤¤Î¤Ç¡¢¤³¤³¤Ç¤Î½êÄê»ş´Ö¤Ï¥Æ¥¹¥ÈºîÀ®¼Ô¤Î¼ç´Ñ¤Ë¤è¤ë¤â¤Î¤Ë²á¤®¤Ê¤¤¡£
+     * @attention ãƒªã‚¢ãƒ«ã‚¿ã‚¤ãƒ æ€§ãŒä¿è¨¼ã•ã‚Œã¦ã„ã‚‹ã‚ã‘ã§ã‚‚ãªãã€ä»•æ§˜ä¸Šã‚‚å‘¼å‡ºã¾ã§ã®æ™‚é–“ã‚’æ˜è¨˜ã—ã¦ã„ã‚‹ã‚ã‘ã§ã¯ãªã„ã®ã§ã€ã“ã“ã§ã®æ‰€å®šæ™‚é–“ã¯ãƒ†ã‚¹ãƒˆä½œæˆè€…ã®ä¸»è¦³ã«ã‚ˆã‚‹ã‚‚ã®ã«éããªã„ã€‚
      */
 /*
     void test_update_immediacy()

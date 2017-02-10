@@ -1,4 +1,4 @@
-// -*- C++ -*-
+﻿// -*- C++ -*-
 /*!
  * @file   OutPortPullConnectorTests.cpp
  * @brief  OutPortPullConnector test class
@@ -508,7 +508,7 @@ namespace OutPortPullConnector
     }
 		
     /*!
-     * @brief Constructor �᥽�åɥƥ���
+     * @brief Constructor メソッドテスト
      * 
      */
     void test_OutPortPullConnector()
@@ -565,7 +565,7 @@ namespace OutPortPullConnector
     }
 
     /*!
-     * @brief write �᥽�åɥƥ���
+     * @brief write メソッドテスト
      * 
      */
     void test_write()
@@ -612,7 +612,7 @@ namespace OutPortPullConnector
     }
 
     /*!
-     * @brief disconnect �᥽�åɥƥ���
+     * @brief disconnect メソッドテスト
      * 
      */
     void test_disconnect_getBuffer()
@@ -655,7 +655,7 @@ namespace OutPortPullConnector
     }
 
     /*!
-     * @brief activate �᥽�åɥƥ���
+     * @brief activate メソッドテスト
      * 
      */
     void test_activate_deactivate()

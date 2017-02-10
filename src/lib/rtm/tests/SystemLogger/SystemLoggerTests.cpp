@@ -1,4 +1,4 @@
-// -*- C++ -*-
+ï»¿// -*- C++ -*-
 /*!
  * @file   SystemLoggerTests.cpp
  * @brief  SystemLogger test class
@@ -42,11 +42,11 @@
  */
 namespace Tests
 {
-  // protected: ´Ø¿ô¤Î¥Æ¥¹¥ÈÍÑ
+  // protected: é–¢æ•°ã®ãƒ†ã‚¹ãƒˆç”¨
   class LoggerMock : public RTC::Logger
   {
   public:
-    // ¥³¥ó¥¹¥È¥é¥¯¥¿
+    // ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
     LoggerMock(RTC::LogStreamBuf* streambuf)
       : RTC::Logger(streambuf) {}
     virtual ~LoggerMock(void) {}
@@ -87,7 +87,7 @@ namespace Tests
       return RTC::Logger::strToLevel(level);
     }
 
-    // ¥Ç¥Ã¥É¥í¥Ã¥¯³ÎÇ§ÍÑ
+    // ãƒ‡ãƒƒãƒ‰ãƒ­ãƒƒã‚¯ç¢ºèªç”¨
     std::string test_string(void)
     {
 //      std::cout << "LoggerMock::test_string() IN" << std::endl;
@@ -168,9 +168,9 @@ namespace Tests
     }
 
     /*!
-     * @brief setLevel()¥á¥½¥Ã¥É¤Î¥Æ¥¹¥È
+     * @brief setLevel()ãƒ¡ã‚½ãƒƒãƒ‰ã®ãƒ†ã‚¹ãƒˆ
      * 
-     * - ¥í¥°¥ì¥Ù¥ë¤ÎÊ¸»úÎó¤òÀµ¤·¤¯ÀßÄê¤Ç¤­¤ë¤«¡©
+     * - ãƒ­ã‚°ãƒ¬ãƒ™ãƒ«ã®æ–‡å­—åˆ—ã‚’æ­£ã—ãè¨­å®šã§ãã‚‹ã‹ï¼Ÿ
      */
     void test_setLevel(void)
     {
@@ -181,8 +181,8 @@ namespace Tests
       logger.addStream(s0.rdbuf());
       LoggerMock rtclog(&logger);
 
-      // ¥í¥°¥ì¥Ù¥ëÀßÄê¤Ç¡¢°ú¿ô¤Ëµ¬ÄêÃÍ¡¦µ¬Äê³°¤òÀßÄê¤·¤ÆÀµ¤·¤¯Æ°ºî¤¹¤ë¤«¡©
-      CPPUNIT_ASSERT(rtclog.setLevel("SILENT"));  //µ¬ÄêÃÍ
+      // ãƒ­ã‚°ãƒ¬ãƒ™ãƒ«è¨­å®šã§ã€å¼•æ•°ã«è¦å®šå€¤ãƒ»è¦å®šå¤–ã‚’è¨­å®šã—ã¦æ­£ã—ãå‹•ä½œã™ã‚‹ã‹ï¼Ÿ
+      CPPUNIT_ASSERT(rtclog.setLevel("SILENT"));  //è¦å®šå€¤
       CPPUNIT_ASSERT(rtclog.setLevel("FATAL"));
       CPPUNIT_ASSERT(rtclog.setLevel("ERROR"));
       CPPUNIT_ASSERT(rtclog.setLevel("WARN"));
@@ -191,14 +191,14 @@ namespace Tests
       CPPUNIT_ASSERT(rtclog.setLevel("TRACE"));
       CPPUNIT_ASSERT(rtclog.setLevel("VERBOSE"));
       CPPUNIT_ASSERT(rtclog.setLevel("PARANOID"));
-      CPPUNIT_ASSERT(rtclog.setLevel("other"));  //µ¬Äê³°
+      CPPUNIT_ASSERT(rtclog.setLevel("other"));  //è¦å®šå¤–
 //      std::cout << "test_setLevel() OUT" << std::endl;
     }
 
     /*!
-     * @brief setDateFormat()¥á¥½¥Ã¥É¤Î¥Æ¥¹¥È
+     * @brief setDateFormat()ãƒ¡ã‚½ãƒƒãƒ‰ã®ãƒ†ã‚¹ãƒˆ
      * 
-     * - ¥Ø¥Ã¥À¤ËÉÕ²Ã¤¹¤ëÆü»ş¥Õ¥©¡¼¥Ş¥Ã¥È¤òÀµ¤·¤¯»ØÄê¤Ç¤­¤ë¤«¡©
+     * - ãƒ˜ãƒƒãƒ€ã«ä»˜åŠ ã™ã‚‹æ—¥æ™‚ãƒ•ã‚©ãƒ¼ãƒãƒƒãƒˆã‚’æ­£ã—ãæŒ‡å®šã§ãã‚‹ã‹ï¼Ÿ
      */
     void test_setDateFormat(void)
     {
@@ -210,7 +210,7 @@ namespace Tests
       logger.addStream(s0.rdbuf());
       LoggerMock rtclog(&logger);
 
-      // ¥Ø¥Ã¥À¤ËÉÕ²Ã¤¹¤ëÆü»ş¥Õ¥©¡¼¥Ş¥Ã¥È¤òÀµ¤·¤¯»ØÄê¤Ç¤­¤ë¤«¡©
+      // ãƒ˜ãƒƒãƒ€ã«ä»˜åŠ ã™ã‚‹æ—¥æ™‚ãƒ•ã‚©ãƒ¼ãƒãƒƒãƒˆã‚’æ­£ã—ãæŒ‡å®šã§ãã‚‹ã‹ï¼Ÿ
       rtclog.setDateFormat("");
       rstr = rtclog.getDate();
       CPPUNIT_ASSERT(rstr.size() == 0);
@@ -224,9 +224,9 @@ namespace Tests
     }
 
     /*!
-     * @brief setName()¥á¥½¥Ã¥É¤Î¥Æ¥¹¥È
+     * @brief setName()ãƒ¡ã‚½ãƒƒãƒ‰ã®ãƒ†ã‚¹ãƒˆ
      * 
-     * - ¥Ø¥Ã¥À¤ÎÆü»ş¤Î¸å¤ËÉÕ²Ã¤¹¤ëÊ¸»úÎó¤òÀµ¤·¤¯ÀßÄê¤Ç¤­¤ë¤«¡©
+     * - ãƒ˜ãƒƒãƒ€ã®æ—¥æ™‚ã®å¾Œã«ä»˜åŠ ã™ã‚‹æ–‡å­—åˆ—ã‚’æ­£ã—ãè¨­å®šã§ãã‚‹ã‹ï¼Ÿ
      */
     void test_setName(void)
     {
@@ -237,14 +237,14 @@ namespace Tests
       logger.addStream(s0.rdbuf());
       LoggerMock rtclog(&logger);
       rtclog.setDateFormat("");
-      // ¥Ø¥Ã¥À¤ÎÆü»ş¤Î¸å¤ËÉÕ²Ã¤¹¤ëÊ¸»úÎó¤òÀµ¤·¤¯ÀßÄê¤Ç¤­¤ë¤«¡©
-      rtclog.setName("");  		// ÉÕ²ÃÊ¸»úÎó¡§¤Ê¤·
+      // ãƒ˜ãƒƒãƒ€ã®æ—¥æ™‚ã®å¾Œã«ä»˜åŠ ã™ã‚‹æ–‡å­—åˆ—ã‚’æ­£ã—ãè¨­å®šã§ãã‚‹ã‹ï¼Ÿ
+      rtclog.setName("");  		// ä»˜åŠ æ–‡å­—åˆ—ï¼šãªã—
       rtclog.header(rtclog.RTL_DEBUG);
       CPPUNIT_ASSERT_EQUAL(std::string(""), rtclog.mock_m_name);
       CPPUNIT_ASSERT_EQUAL(std::string(" DEBUG: : "), s0.str());
 
       s0.str("");
-      rtclog.setName("TestName");  	// ÉÕ²ÃÊ¸»úÎó¡§¤¢¤ê
+      rtclog.setName("TestName");  	// ä»˜åŠ æ–‡å­—åˆ—ï¼šã‚ã‚Š
       rtclog.header(rtclog.RTL_DEBUG);
       CPPUNIT_ASSERT_EQUAL(std::string("TestName"), rtclog.mock_m_name);
       CPPUNIT_ASSERT_EQUAL(std::string(" DEBUG: TestName: "), s0.str());
@@ -252,9 +252,9 @@ namespace Tests
     }
 
     /*!
-     * @brief header()¥á¥½¥Ã¥É¤Î¥Æ¥¹¥È
+     * @brief header()ãƒ¡ã‚½ãƒƒãƒ‰ã®ãƒ†ã‚¹ãƒˆ
      * 
-     * - ¥á¥Ã¥»¡¼¥¸¤Î¥×¥ê¥Õ¥£¥Ã¥¯¥¹ÄÉ²Ã¤òÀµ¤·¤¯ÀßÄê¤Ç¤­¤ë¤«¡©
+     * - ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ã®ãƒ—ãƒªãƒ•ã‚£ãƒƒã‚¯ã‚¹è¿½åŠ ã‚’æ­£ã—ãè¨­å®šã§ãã‚‹ã‹ï¼Ÿ
      */
     void test_header(void)
     {
@@ -265,7 +265,7 @@ namespace Tests
       logger.addStream(s0.rdbuf());
       LoggerMock rtclog(&logger);
 
-      // ¥á¥Ã¥»¡¼¥¸¤Î¥×¥ê¥Õ¥£¥Ã¥¯¥¹ÄÉ²Ã¤òÀµ¤·¤¯ÀßÄê¤Ç¤­¤ë¤«¡©
+      // ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ã®ãƒ—ãƒªãƒ•ã‚£ãƒƒã‚¯ã‚¹è¿½åŠ ã‚’æ­£ã—ãè¨­å®šã§ãã‚‹ã‹ï¼Ÿ
       rtclog.setDateFormat("");
       rtclog.setName("");
       rtclog.header(rtclog.RTL_SILENT);
@@ -298,9 +298,9 @@ namespace Tests
     }
 
     /*!
-     * @brief getDate()¥á¥½¥Ã¥É¤Î¥Æ¥¹¥È
+     * @brief getDate()ãƒ¡ã‚½ãƒƒãƒ‰ã®ãƒ†ã‚¹ãƒˆ
      * 
-     * - ¥Õ¥©¡¼¥Ş¥Ã¥È¤µ¤ì¤¿¸½ºßÆü»şÊ¸»úÎó¤òÀµ¤·¤¯¼èÆÀ¤Ç¤­¤ë¤«¡©
+     * - ãƒ•ã‚©ãƒ¼ãƒãƒƒãƒˆã•ã‚ŒãŸç¾åœ¨æ—¥æ™‚æ–‡å­—åˆ—ã‚’æ­£ã—ãå–å¾—ã§ãã‚‹ã‹ï¼Ÿ
      */
     void test_getDate(void)
     {
@@ -312,7 +312,7 @@ namespace Tests
       logger.addStream(s0.rdbuf());
       LoggerMock rtclog(&logger);
 
-      // ¥Õ¥©¡¼¥Ş¥Ã¥È¤µ¤ì¤¿¸½ºßÆü»şÊ¸»úÎó¤òÀµ¤·¤¯¼èÆÀ¤Ç¤­¤ë¤«¡©
+      // ãƒ•ã‚©ãƒ¼ãƒãƒƒãƒˆã•ã‚ŒãŸç¾åœ¨æ—¥æ™‚æ–‡å­—åˆ—ã‚’æ­£ã—ãå–å¾—ã§ãã‚‹ã‹ï¼Ÿ
       rtclog.setDateFormat("");
       rstr = rtclog.getDate();
       CPPUNIT_ASSERT(rstr.size() == 0);
@@ -324,9 +324,9 @@ namespace Tests
     }
 
     /*!
-     * @brief strToLevel()¥á¥½¥Ã¥É¤Î¥Æ¥¹¥È
+     * @brief strToLevel()ãƒ¡ã‚½ãƒƒãƒ‰ã®ãƒ†ã‚¹ãƒˆ
      * 
-     * - ¥í¥°¥ì¥Ù¥ë¤òÀµ¤·¤¯ÀßÄê¤Ç¤­¤ë¤«¡©
+     * - ãƒ­ã‚°ãƒ¬ãƒ™ãƒ«ã‚’æ­£ã—ãè¨­å®šã§ãã‚‹ã‹ï¼Ÿ
      */
     void test_strToLevel(void)
     {
@@ -337,8 +337,8 @@ namespace Tests
       logger.addStream(s0.rdbuf());
       LoggerMock rtclog(&logger);
 
-      // ¥í¥°¥ì¥Ù¥ëÀßÄê¤Ç¡¢°ú¿ô¤Ëµ¬ÄêÃÍ¡¦µ¬Äê³°¤òÀßÄê¤·¤ÆÀµ¤·¤¯Æ°ºî¤¹¤ë¤«¡©
-      CPPUNIT_ASSERT(rtclog.strToLevel("SILENT") == rtclog.RTL_SILENT);  //µ¬ÄêÃÍ
+      // ãƒ­ã‚°ãƒ¬ãƒ™ãƒ«è¨­å®šã§ã€å¼•æ•°ã«è¦å®šå€¤ãƒ»è¦å®šå¤–ã‚’è¨­å®šã—ã¦æ­£ã—ãå‹•ä½œã™ã‚‹ã‹ï¼Ÿ
+      CPPUNIT_ASSERT(rtclog.strToLevel("SILENT") == rtclog.RTL_SILENT);  //è¦å®šå€¤
       CPPUNIT_ASSERT(rtclog.strToLevel("FATAL") == rtclog.RTL_FATAL);
       CPPUNIT_ASSERT(rtclog.strToLevel("ERROR") == rtclog.RTL_ERROR);
       CPPUNIT_ASSERT(rtclog.strToLevel("WARN") == rtclog.RTL_WARN);
@@ -347,14 +347,14 @@ namespace Tests
       CPPUNIT_ASSERT(rtclog.strToLevel("TRACE") == rtclog.RTL_TRACE);
       CPPUNIT_ASSERT(rtclog.strToLevel("VERBOSE") == rtclog.RTL_VERBOSE);
       CPPUNIT_ASSERT(rtclog.strToLevel("PARANOID") == rtclog.RTL_PARANOID);
-      CPPUNIT_ASSERT(rtclog.strToLevel("other") == rtclog.RTL_SILENT);  //µ¬Äê³°
+      CPPUNIT_ASSERT(rtclog.strToLevel("other") == rtclog.RTL_SILENT);  //è¦å®šå¤–
 //      std::cout << "test_strToLevel() OUT" << std::endl;
     }
 
     /*!
-     * @brief logfile½ĞÎÏ¤Î¥Æ¥¹¥È
+     * @brief logfileå‡ºåŠ›ã®ãƒ†ã‚¹ãƒˆ
      * 
-     * - ¥í¥°¥ì¥Ù¥ë¤ò PARANOID ¤Ë¤·¤¿¾ì¹ç¤Î¥Õ¥¡¥¤¥ë½ĞÎÏ¤¬Àµ¤·¤¯¹Ô¤ï¤ì¤ë¤«¡©
+     * - ãƒ­ã‚°ãƒ¬ãƒ™ãƒ«ã‚’ PARANOID ã«ã—ãŸå ´åˆã®ãƒ•ã‚¡ã‚¤ãƒ«å‡ºåŠ›ãŒæ­£ã—ãè¡Œã‚ã‚Œã‚‹ã‹ï¼Ÿ
      */
     void test_logfile_PARANOID(void)
     {
@@ -376,7 +376,7 @@ namespace Tests
       rtclog.setDateFormat("%b %d %H:%M:%S");
       rtclog.setLevel("PARANOID");
 
-      // ÈÆÍÑ¥í¥°½ĞÎÏ¥Ş¥¯¥í¡¢³Æ¼ï¥í¥°½ĞÎÏ¥Ş¥¯¥í¤ÇÀµ¤·¤¯¥Õ¥¡¥¤¥ë½ĞÎÏ¤µ¤ì¤ë¤«¡©
+      // æ±ç”¨ãƒ­ã‚°å‡ºåŠ›ãƒã‚¯ãƒ­ã€å„ç¨®ãƒ­ã‚°å‡ºåŠ›ãƒã‚¯ãƒ­ã§æ­£ã—ããƒ•ã‚¡ã‚¤ãƒ«å‡ºåŠ›ã•ã‚Œã‚‹ã‹ï¼Ÿ
       RTC_LOG(    ::RTC::Logger::RTL_PARANOID,("RTL_PARANOID tests %s","fmt"));
       RTC_LOG_STR(::RTC::Logger::RTL_PARANOID, "RTL_PARANOID tests str");
       RTC_PARANOID(   ("Macro RTL_PARANOID tests %s","fmt"));
@@ -422,7 +422,7 @@ namespace Tests
 
       of.close();
 
-      // ¥Õ¥¡¥¤¥ë½ĞÎÏ¤¬¤¢¤ë¤«¡©
+      // ãƒ•ã‚¡ã‚¤ãƒ«å‡ºåŠ›ãŒã‚ã‚‹ã‹ï¼Ÿ
       std::string rstr;
       std::ifstream ifs(logfile.c_str());
       ifs >> rstr;
@@ -444,9 +444,9 @@ namespace Tests
     }
 
     /*!
-     * @brief logfile½ĞÎÏ¤Î¥Æ¥¹¥È
+     * @brief logfileå‡ºåŠ›ã®ãƒ†ã‚¹ãƒˆ
      * 
-     * - ¥í¥°¥ì¥Ù¥ë¤ò VERBOSE ¤Ë¤·¤¿¾ì¹ç¤Î¥Õ¥¡¥¤¥ë½ĞÎÏ¤¬Àµ¤·¤¯¹Ô¤ï¤ì¤ë¤«¡©
+     * - ãƒ­ã‚°ãƒ¬ãƒ™ãƒ«ã‚’ VERBOSE ã«ã—ãŸå ´åˆã®ãƒ•ã‚¡ã‚¤ãƒ«å‡ºåŠ›ãŒæ­£ã—ãè¡Œã‚ã‚Œã‚‹ã‹ï¼Ÿ
      */
     void test_logfile_VERBOSE(void)
     {
@@ -468,7 +468,7 @@ namespace Tests
       rtclog.setDateFormat("%b %d %H:%M:%S");
       rtclog.setLevel("VERBOSE");
 
-      // ÈÆÍÑ¥í¥°½ĞÎÏ¥Ş¥¯¥í¡¢³Æ¼ï¥í¥°½ĞÎÏ¥Ş¥¯¥í¤ÇÀµ¤·¤¯¥Õ¥¡¥¤¥ë½ĞÎÏ¤µ¤ì¤ë¤«¡©
+      // æ±ç”¨ãƒ­ã‚°å‡ºåŠ›ãƒã‚¯ãƒ­ã€å„ç¨®ãƒ­ã‚°å‡ºåŠ›ãƒã‚¯ãƒ­ã§æ­£ã—ããƒ•ã‚¡ã‚¤ãƒ«å‡ºåŠ›ã•ã‚Œã‚‹ã‹ï¼Ÿ
       RTC_LOG(    ::RTC::Logger::RTL_PARANOID,("RTL_PARANOID tests %s","fmt"));
       RTC_LOG_STR(::RTC::Logger::RTL_PARANOID, "RTL_PARANOID tests str");
       RTC_PARANOID(   ("Macro RTL_PARANOID tests %s","fmt"));
@@ -514,7 +514,7 @@ namespace Tests
 
       of.close();
 
-      // ¥Õ¥¡¥¤¥ë½ĞÎÏ¤¬¤¢¤ë¤«¡©
+      // ãƒ•ã‚¡ã‚¤ãƒ«å‡ºåŠ›ãŒã‚ã‚‹ã‹ï¼Ÿ
       std::string rstr;
       std::ifstream ifs(logfile.c_str());
       ifs >> rstr;
@@ -536,9 +536,9 @@ namespace Tests
     }
 
     /*!
-     * @brief logfile½ĞÎÏ¤Î¥Æ¥¹¥È
+     * @brief logfileå‡ºåŠ›ã®ãƒ†ã‚¹ãƒˆ
      * 
-     * - ¥í¥°¥ì¥Ù¥ë¤ò TRACE ¤Ë¤·¤¿¾ì¹ç¤Î¥Õ¥¡¥¤¥ë½ĞÎÏ¤¬Àµ¤·¤¯¹Ô¤ï¤ì¤ë¤«¡©
+     * - ãƒ­ã‚°ãƒ¬ãƒ™ãƒ«ã‚’ TRACE ã«ã—ãŸå ´åˆã®ãƒ•ã‚¡ã‚¤ãƒ«å‡ºåŠ›ãŒæ­£ã—ãè¡Œã‚ã‚Œã‚‹ã‹ï¼Ÿ
      */
     void test_logfile_TRACE(void)
     {
@@ -560,7 +560,7 @@ namespace Tests
       rtclog.setDateFormat("%b %d %H:%M:%S");
       rtclog.setLevel("TRACE");
 
-      // ÈÆÍÑ¥í¥°½ĞÎÏ¥Ş¥¯¥í¡¢³Æ¼ï¥í¥°½ĞÎÏ¥Ş¥¯¥í¤ÇÀµ¤·¤¯¥Õ¥¡¥¤¥ë½ĞÎÏ¤µ¤ì¤ë¤«¡©
+      // æ±ç”¨ãƒ­ã‚°å‡ºåŠ›ãƒã‚¯ãƒ­ã€å„ç¨®ãƒ­ã‚°å‡ºåŠ›ãƒã‚¯ãƒ­ã§æ­£ã—ããƒ•ã‚¡ã‚¤ãƒ«å‡ºåŠ›ã•ã‚Œã‚‹ã‹ï¼Ÿ
       RTC_LOG(    ::RTC::Logger::RTL_PARANOID,("RTL_PARANOID tests %s","fmt"));
       RTC_LOG_STR(::RTC::Logger::RTL_PARANOID, "RTL_PARANOID tests str");
       RTC_PARANOID(   ("Macro RTL_PARANOID tests %s","fmt"));
@@ -606,7 +606,7 @@ namespace Tests
 
       of.close();
 
-      // ¥Õ¥¡¥¤¥ë½ĞÎÏ¤¬¤¢¤ë¤«¡©
+      // ãƒ•ã‚¡ã‚¤ãƒ«å‡ºåŠ›ãŒã‚ã‚‹ã‹ï¼Ÿ
       std::string rstr;
       std::ifstream ifs(logfile.c_str());
       ifs >> rstr;
@@ -628,9 +628,9 @@ namespace Tests
     }
 
     /*!
-     * @brief logfile½ĞÎÏ¤Î¥Æ¥¹¥È
+     * @brief logfileå‡ºåŠ›ã®ãƒ†ã‚¹ãƒˆ
      * 
-     * - ¥í¥°¥ì¥Ù¥ë¤ò DEBUG ¤Ë¤·¤¿¾ì¹ç¤Î¥Õ¥¡¥¤¥ë½ĞÎÏ¤¬Àµ¤·¤¯¹Ô¤ï¤ì¤ë¤«¡©
+     * - ãƒ­ã‚°ãƒ¬ãƒ™ãƒ«ã‚’ DEBUG ã«ã—ãŸå ´åˆã®ãƒ•ã‚¡ã‚¤ãƒ«å‡ºåŠ›ãŒæ­£ã—ãè¡Œã‚ã‚Œã‚‹ã‹ï¼Ÿ
      */
     void test_logfile_DEBUG(void)
     {
@@ -652,7 +652,7 @@ namespace Tests
       rtclog.setDateFormat("%b %d %H:%M:%S");
       rtclog.setLevel("DEBUG");
 
-      // ÈÆÍÑ¥í¥°½ĞÎÏ¥Ş¥¯¥í¡¢³Æ¼ï¥í¥°½ĞÎÏ¥Ş¥¯¥í¤ÇÀµ¤·¤¯¥Õ¥¡¥¤¥ë½ĞÎÏ¤µ¤ì¤ë¤«¡©
+      // æ±ç”¨ãƒ­ã‚°å‡ºåŠ›ãƒã‚¯ãƒ­ã€å„ç¨®ãƒ­ã‚°å‡ºåŠ›ãƒã‚¯ãƒ­ã§æ­£ã—ããƒ•ã‚¡ã‚¤ãƒ«å‡ºåŠ›ã•ã‚Œã‚‹ã‹ï¼Ÿ
       RTC_LOG(    ::RTC::Logger::RTL_PARANOID,("RTL_PARANOID tests %s","fmt"));
       RTC_LOG_STR(::RTC::Logger::RTL_PARANOID, "RTL_PARANOID tests str");
       RTC_PARANOID(   ("Macro RTL_PARANOID tests %s","fmt"));
@@ -698,7 +698,7 @@ namespace Tests
 
       of.close();
 
-      // ¥Õ¥¡¥¤¥ë½ĞÎÏ¤¬¤¢¤ë¤«¡©
+      // ãƒ•ã‚¡ã‚¤ãƒ«å‡ºåŠ›ãŒã‚ã‚‹ã‹ï¼Ÿ
       std::string rstr;
       std::ifstream ifs(logfile.c_str());
       ifs >> rstr;
@@ -720,9 +720,9 @@ namespace Tests
     }
 
     /*!
-     * @brief logfile½ĞÎÏ¤Î¥Æ¥¹¥È
+     * @brief logfileå‡ºåŠ›ã®ãƒ†ã‚¹ãƒˆ
      * 
-     * - ¥í¥°¥ì¥Ù¥ë¤ò INFO ¤Ë¤·¤¿¾ì¹ç¤Î¥Õ¥¡¥¤¥ë½ĞÎÏ¤¬Àµ¤·¤¯¹Ô¤ï¤ì¤ë¤«¡©
+     * - ãƒ­ã‚°ãƒ¬ãƒ™ãƒ«ã‚’ INFO ã«ã—ãŸå ´åˆã®ãƒ•ã‚¡ã‚¤ãƒ«å‡ºåŠ›ãŒæ­£ã—ãè¡Œã‚ã‚Œã‚‹ã‹ï¼Ÿ
      */
     void test_logfile_INFO(void)
     {
@@ -744,7 +744,7 @@ namespace Tests
       rtclog.setDateFormat("%b %d %H:%M:%S");
       rtclog.setLevel("INFO");
 
-      // ÈÆÍÑ¥í¥°½ĞÎÏ¥Ş¥¯¥í¡¢³Æ¼ï¥í¥°½ĞÎÏ¥Ş¥¯¥í¤ÇÀµ¤·¤¯¥Õ¥¡¥¤¥ë½ĞÎÏ¤µ¤ì¤ë¤«¡©
+      // æ±ç”¨ãƒ­ã‚°å‡ºåŠ›ãƒã‚¯ãƒ­ã€å„ç¨®ãƒ­ã‚°å‡ºåŠ›ãƒã‚¯ãƒ­ã§æ­£ã—ããƒ•ã‚¡ã‚¤ãƒ«å‡ºåŠ›ã•ã‚Œã‚‹ã‹ï¼Ÿ
       RTC_LOG(    ::RTC::Logger::RTL_PARANOID,("RTL_PARANOID tests %s","fmt"));
       RTC_LOG_STR(::RTC::Logger::RTL_PARANOID, "RTL_PARANOID tests str");
       RTC_PARANOID(   ("Macro RTL_PARANOID tests %s","fmt"));
@@ -790,7 +790,7 @@ namespace Tests
 
       of.close();
 
-      // ¥Õ¥¡¥¤¥ë½ĞÎÏ¤¬¤¢¤ë¤«¡©
+      // ãƒ•ã‚¡ã‚¤ãƒ«å‡ºåŠ›ãŒã‚ã‚‹ã‹ï¼Ÿ
       std::string rstr;
       std::ifstream ifs(logfile.c_str());
       ifs >> rstr;
@@ -812,9 +812,9 @@ namespace Tests
     }
 
     /*!
-     * @brief logfile½ĞÎÏ¤Î¥Æ¥¹¥È
+     * @brief logfileå‡ºåŠ›ã®ãƒ†ã‚¹ãƒˆ
      * 
-     * - ¥í¥°¥ì¥Ù¥ë¤ò WARNING ¤Ë¤·¤¿¾ì¹ç¤Î¥Õ¥¡¥¤¥ë½ĞÎÏ¤¬Àµ¤·¤¯¹Ô¤ï¤ì¤ë¤«¡©
+     * - ãƒ­ã‚°ãƒ¬ãƒ™ãƒ«ã‚’ WARNING ã«ã—ãŸå ´åˆã®ãƒ•ã‚¡ã‚¤ãƒ«å‡ºåŠ›ãŒæ­£ã—ãè¡Œã‚ã‚Œã‚‹ã‹ï¼Ÿ
      */
     void test_logfile_WARNING(void)
     {
@@ -836,7 +836,7 @@ namespace Tests
       rtclog.setDateFormat("%b %d %H:%M:%S");
       rtclog.setLevel("WARN");
 
-      // ÈÆÍÑ¥í¥°½ĞÎÏ¥Ş¥¯¥í¡¢³Æ¼ï¥í¥°½ĞÎÏ¥Ş¥¯¥í¤ÇÀµ¤·¤¯¥Õ¥¡¥¤¥ë½ĞÎÏ¤µ¤ì¤ë¤«¡©
+      // æ±ç”¨ãƒ­ã‚°å‡ºåŠ›ãƒã‚¯ãƒ­ã€å„ç¨®ãƒ­ã‚°å‡ºåŠ›ãƒã‚¯ãƒ­ã§æ­£ã—ããƒ•ã‚¡ã‚¤ãƒ«å‡ºåŠ›ã•ã‚Œã‚‹ã‹ï¼Ÿ
       RTC_LOG(    ::RTC::Logger::RTL_PARANOID,("RTL_PARANOID tests %s","fmt"));
       RTC_LOG_STR(::RTC::Logger::RTL_PARANOID, "RTL_PARANOID tests str");
       RTC_PARANOID(   ("Macro RTL_PARANOID tests %s","fmt"));
@@ -882,7 +882,7 @@ namespace Tests
 
       of.close();
 
-      // ¥Õ¥¡¥¤¥ë½ĞÎÏ¤¬¤¢¤ë¤«¡©
+      // ãƒ•ã‚¡ã‚¤ãƒ«å‡ºåŠ›ãŒã‚ã‚‹ã‹ï¼Ÿ
       std::string rstr;
       std::ifstream ifs(logfile.c_str());
       ifs >> rstr;
@@ -904,9 +904,9 @@ namespace Tests
     }
 
     /*!
-     * @brief logfile½ĞÎÏ¤Î¥Æ¥¹¥È
+     * @brief logfileå‡ºåŠ›ã®ãƒ†ã‚¹ãƒˆ
      * 
-     * - ¥í¥°¥ì¥Ù¥ë¤ò ERROR ¤Ë¤·¤¿¾ì¹ç¤Î¥Õ¥¡¥¤¥ë½ĞÎÏ¤¬Àµ¤·¤¯¹Ô¤ï¤ì¤ë¤«¡©
+     * - ãƒ­ã‚°ãƒ¬ãƒ™ãƒ«ã‚’ ERROR ã«ã—ãŸå ´åˆã®ãƒ•ã‚¡ã‚¤ãƒ«å‡ºåŠ›ãŒæ­£ã—ãè¡Œã‚ã‚Œã‚‹ã‹ï¼Ÿ
      */
     void test_logfile_ERROR(void)
     {
@@ -928,7 +928,7 @@ namespace Tests
       rtclog.setDateFormat("%b %d %H:%M:%S");
       rtclog.setLevel("ERROR");
 
-      // ÈÆÍÑ¥í¥°½ĞÎÏ¥Ş¥¯¥í¡¢³Æ¼ï¥í¥°½ĞÎÏ¥Ş¥¯¥í¤ÇÀµ¤·¤¯¥Õ¥¡¥¤¥ë½ĞÎÏ¤µ¤ì¤ë¤«¡©
+      // æ±ç”¨ãƒ­ã‚°å‡ºåŠ›ãƒã‚¯ãƒ­ã€å„ç¨®ãƒ­ã‚°å‡ºåŠ›ãƒã‚¯ãƒ­ã§æ­£ã—ããƒ•ã‚¡ã‚¤ãƒ«å‡ºåŠ›ã•ã‚Œã‚‹ã‹ï¼Ÿ
       RTC_LOG(    ::RTC::Logger::RTL_PARANOID,("RTL_PARANOID tests %s","fmt"));
       RTC_LOG_STR(::RTC::Logger::RTL_PARANOID, "RTL_PARANOID tests str");
       RTC_PARANOID(   ("Macro RTL_PARANOID tests %s","fmt"));
@@ -974,7 +974,7 @@ namespace Tests
 
       of.close();
 
-      // ¥Õ¥¡¥¤¥ë½ĞÎÏ¤¬¤¢¤ë¤«¡©
+      // ãƒ•ã‚¡ã‚¤ãƒ«å‡ºåŠ›ãŒã‚ã‚‹ã‹ï¼Ÿ
       std::string rstr;
       std::ifstream ifs(logfile.c_str());
       ifs >> rstr;
@@ -996,9 +996,9 @@ namespace Tests
     }
 
     /*!
-     * @brief logfile½ĞÎÏ¤Î¥Æ¥¹¥È
+     * @brief logfileå‡ºåŠ›ã®ãƒ†ã‚¹ãƒˆ
      * 
-     * - ¥í¥°¥ì¥Ù¥ë¤ò FATAL ¤Ë¤·¤¿¾ì¹ç¤Î¥Õ¥¡¥¤¥ë½ĞÎÏ¤¬Àµ¤·¤¯¹Ô¤ï¤ì¤ë¤«¡©
+     * - ãƒ­ã‚°ãƒ¬ãƒ™ãƒ«ã‚’ FATAL ã«ã—ãŸå ´åˆã®ãƒ•ã‚¡ã‚¤ãƒ«å‡ºåŠ›ãŒæ­£ã—ãè¡Œã‚ã‚Œã‚‹ã‹ï¼Ÿ
      */
     void test_logfile_FATAL(void)
     {
@@ -1020,7 +1020,7 @@ namespace Tests
       rtclog.setDateFormat("%b %d %H:%M:%S");
       rtclog.setLevel("FATAL");
 
-      // ÈÆÍÑ¥í¥°½ĞÎÏ¥Ş¥¯¥í¡¢³Æ¼ï¥í¥°½ĞÎÏ¥Ş¥¯¥í¤ÇÀµ¤·¤¯¥Õ¥¡¥¤¥ë½ĞÎÏ¤µ¤ì¤ë¤«¡©
+      // æ±ç”¨ãƒ­ã‚°å‡ºåŠ›ãƒã‚¯ãƒ­ã€å„ç¨®ãƒ­ã‚°å‡ºåŠ›ãƒã‚¯ãƒ­ã§æ­£ã—ããƒ•ã‚¡ã‚¤ãƒ«å‡ºåŠ›ã•ã‚Œã‚‹ã‹ï¼Ÿ
       RTC_LOG(    ::RTC::Logger::RTL_PARANOID,("RTL_PARANOID tests %s","fmt"));
       RTC_LOG_STR(::RTC::Logger::RTL_PARANOID, "RTL_PARANOID tests str");
       RTC_PARANOID(   ("Macro RTL_PARANOID tests %s","fmt"));
@@ -1066,7 +1066,7 @@ namespace Tests
 
       of.close();
 
-      // ¥Õ¥¡¥¤¥ë½ĞÎÏ¤¬¤¢¤ë¤«¡©
+      // ãƒ•ã‚¡ã‚¤ãƒ«å‡ºåŠ›ãŒã‚ã‚‹ã‹ï¼Ÿ
       std::string rstr;
       std::ifstream ifs(logfile.c_str());
       ifs >> rstr;
@@ -1088,9 +1088,9 @@ namespace Tests
     }
 
     /*!
-     * @brief logfile½ĞÎÏ¤Î¥Æ¥¹¥È
+     * @brief logfileå‡ºåŠ›ã®ãƒ†ã‚¹ãƒˆ
      * 
-     * - ¥í¥°¥ì¥Ù¥ë¤ò SILENT ¤Ë¤·¤¿¾ì¹ç¤Î¥Õ¥¡¥¤¥ë½ĞÎÏ¤¬Àµ¤·¤¯¹Ô¤ï¤ì¤ë¤«¡©
+     * - ãƒ­ã‚°ãƒ¬ãƒ™ãƒ«ã‚’ SILENT ã«ã—ãŸå ´åˆã®ãƒ•ã‚¡ã‚¤ãƒ«å‡ºåŠ›ãŒæ­£ã—ãè¡Œã‚ã‚Œã‚‹ã‹ï¼Ÿ
      */
     void test_logfile_SILENT(void)
     {
@@ -1112,7 +1112,7 @@ namespace Tests
       rtclog.setDateFormat("%b %d %H:%M:%S");
       rtclog.setLevel("SILENT");
 
-      // ÈÆÍÑ¥í¥°½ĞÎÏ¥Ş¥¯¥í¡¢³Æ¼ï¥í¥°½ĞÎÏ¥Ş¥¯¥í¤ÇÀµ¤·¤¯¥Õ¥¡¥¤¥ë½ĞÎÏ¤µ¤ì¤ë¤«¡©
+      // æ±ç”¨ãƒ­ã‚°å‡ºåŠ›ãƒã‚¯ãƒ­ã€å„ç¨®ãƒ­ã‚°å‡ºåŠ›ãƒã‚¯ãƒ­ã§æ­£ã—ããƒ•ã‚¡ã‚¤ãƒ«å‡ºåŠ›ã•ã‚Œã‚‹ã‹ï¼Ÿ
       RTC_LOG(    ::RTC::Logger::RTL_PARANOID,("RTL_PARANOID tests %s","fmt"));
       RTC_LOG_STR(::RTC::Logger::RTL_PARANOID, "RTL_PARANOID tests str");
       RTC_PARANOID(   ("Macro RTL_PARANOID tests %s","fmt"));
@@ -1158,7 +1158,7 @@ namespace Tests
 
       of.close();
 
-      // ¥Õ¥¡¥¤¥ë½ĞÎÏ¤¬¤¢¤ë¤«¡©
+      // ãƒ•ã‚¡ã‚¤ãƒ«å‡ºåŠ›ãŒã‚ã‚‹ã‹ï¼Ÿ
       std::string rstr;
       std::ifstream ifs(logfile.c_str());
       ifs >> rstr;
@@ -1180,9 +1180,9 @@ namespace Tests
     }
 
     /*!
-     * @brief ¥³¥ó¥¹¥È¥é¥¯¥¿¥í¥°¥ì¥Ù¥ë¤Î¥Æ¥¹¥È
+     * @brief ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ãƒ­ã‚°ãƒ¬ãƒ™ãƒ«ã®ãƒ†ã‚¹ãƒˆ
      * 
-     * - ¥³¥ó¥¹¥È¥é¥¯¥¿¡Êname)¤Î¾ì¹ç¡¢Manager¤ÎÀßÄê¥í¥°¥ì¥Ù¥ë(INFO)¤ÇÆ°ºî¤¹¤ë¤«¡©
+     * - ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ï¼ˆname)ã®å ´åˆã€Managerã®è¨­å®šãƒ­ã‚°ãƒ¬ãƒ™ãƒ«(INFO)ã§å‹•ä½œã™ã‚‹ã‹ï¼Ÿ
      */
     void test_constract_name(void)
     {
@@ -1198,7 +1198,7 @@ namespace Tests
       coil::Properties m_config = m_mgr->getConfig();
       std::vector<std::string> logouts = coil::split(m_config["logger.file_name"], ",");
 
-      // ÈÆÍÑ¥í¥°½ĞÎÏ¥Ş¥¯¥í¡¢³Æ¼ï¥í¥°½ĞÎÏ¥Ş¥¯¥í¤Ç¥Õ¥¡¥¤¥ë½ĞÎÏ
+      // æ±ç”¨ãƒ­ã‚°å‡ºåŠ›ãƒã‚¯ãƒ­ã€å„ç¨®ãƒ­ã‚°å‡ºåŠ›ãƒã‚¯ãƒ­ã§ãƒ•ã‚¡ã‚¤ãƒ«å‡ºåŠ›
       RTC_LOG(    ::RTC::Logger::RTL_PARANOID,("RTL_PARANOID tests %s","fmt"));
       RTC_LOG_STR(::RTC::Logger::RTL_PARANOID, "RTL_PARANOID tests str");
       RTC_PARANOID(   ("Macro RTL_PARANOID tests %s","fmt"));
@@ -1244,8 +1244,8 @@ namespace Tests
 
       m_mgr->terminate();
 
-      // rtc*.log ¥Õ¥¡¥¤¥ë¤¬ºîÀ®¤µ¤ì¡¢£´ÎóÌÜ¤Î¥í¥°¥ì¥Ù¥ë¤¬ INFO°Ê²¼¤«¡©
-      // INFO WARNING ERROR FATAL SILENT ¤À¤±¤¬µ­Ï¿¤µ¤ì¤Æ¤¤¤ë¤«¡©
+      // rtc*.log ãƒ•ã‚¡ã‚¤ãƒ«ãŒä½œæˆã•ã‚Œã€ï¼”åˆ—ç›®ã®ãƒ­ã‚°ãƒ¬ãƒ™ãƒ«ãŒ INFOä»¥ä¸‹ã‹ï¼Ÿ
+      // INFO WARNING ERROR FATAL SILENT ã ã‘ãŒè¨˜éŒ²ã•ã‚Œã¦ã„ã‚‹ã‹ï¼Ÿ
       // Aug 03 14:03:09 INFO: manager: OpenRTM-aist-1.0.0
       // [0] 1  2        3     4        5
       std::string rstr;
@@ -1256,14 +1256,14 @@ namespace Tests
         {
           if(rstr.size() == 0) break;
           vstr = coil::split(rstr, " ");
-          // ¥í¥°¥ì¥Ù¥ëÈ½Äê
+          // ãƒ­ã‚°ãƒ¬ãƒ™ãƒ«åˆ¤å®š
           bret = false;
           if( (vstr[3] == "INFO:") || (vstr[3] == "WARNING:") || (vstr[3] == "ERROR:") ||
               (vstr[3] == "FATAL:") || (vstr[3] == "SILENT:") )
               bret = true;
           CPPUNIT_ASSERT(bret);
 
-          // nameÈ½Äê
+          // nameåˆ¤å®š
           bret = false;
           if( (vstr[4] == "manager:") || (vstr[4] == "TestName:") ||
               (vstr[4] == "NamingOnCorba:") || (vstr[4] == "NamingManager:") ||
@@ -1275,9 +1275,9 @@ namespace Tests
     }
 
     /*!
-     * @brief ¥í¥°½ĞÎÏ¤Î¥Ç¥Ã¥É¥í¥Ã¥¯¥Æ¥¹¥È
+     * @brief ãƒ­ã‚°å‡ºåŠ›ã®ãƒ‡ãƒƒãƒ‰ãƒ­ãƒƒã‚¯ãƒ†ã‚¹ãƒˆ
      * 
-     * - RTC_LOG½ĞÎÏ»ş¡¢°ú¿ô¤Î´Ø¿ôÆâ¤Ç¥í¥°½ĞÎÏ¤¬¤¢¤ë¾ì¹ç¤Ë¥Ç¥Ã¥É¥í¥Ã¥¯¤·¤Ê¤¤¤«¡©
+     * - RTC_LOGå‡ºåŠ›æ™‚ã€å¼•æ•°ã®é–¢æ•°å†…ã§ãƒ­ã‚°å‡ºåŠ›ãŒã‚ã‚‹å ´åˆã«ãƒ‡ãƒƒãƒ‰ãƒ­ãƒƒã‚¯ã—ãªã„ã‹ï¼Ÿ
      */
     void test_deadlock(void)
     {
@@ -1291,7 +1291,7 @@ namespace Tests
       rtclog.setDateFormat("");
       rtclog.setLevel("TRACE");
       s0.str("");
-      // ¥í¥Ã¥¯¥â¡¼¥ÉÀßÄê
+      // ãƒ­ãƒƒã‚¯ãƒ¢ãƒ¼ãƒ‰è¨­å®š
       rtclog.enableLock();
       RTC_TRACE(("RTC_TRACE1 %s", rtclog.test_string().c_str()));
 
@@ -1301,7 +1301,7 @@ namespace Tests
       getline(s0, rstr);
       CPPUNIT_ASSERT_EQUAL(std::string(" TRACE: Test: RTC_TRACE1 TestString"), rstr);
 
-      // ¥í¥Ã¥¯¥â¡¼¥É²ò½ü
+      // ãƒ­ãƒƒã‚¯ãƒ¢ãƒ¼ãƒ‰è§£é™¤
       rtclog.disableLock();
 //      std::cout << "test_deadlock() OUT" << std::endl;
     }

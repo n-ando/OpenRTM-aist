@@ -150,7 +150,6 @@ vc9proj:
 		--yaml ../rtc.vcproj.yaml                            \
 		--source $(PROVIDER_COMP_SRC)                        \
 		--header $(PROVIDER_H)
-	qkc -O- -sm $(win32_builddir)/AutoTestIn_vc9.vcproj
 	$(top_builddir)/build/vcprojtool.py vcproj                      \
 		--type DLL                                              \
 		--vcversion "9.00"                                      \
@@ -160,7 +159,6 @@ vc9proj:
 		--yaml ../rtcdll.vcproj.yaml                            \
 		--source $(PROVIDER_SRC)                                \
 		--header $(PROVIDER_H)
-	qkc -O- -sm $(win32_builddir)/AutoTestInDll_vc9.vcproj
 	$(top_builddir)/build/vcprojtool.py vcproj                   \
 		--type EXE                                           \
 		--vcversion "9.00"                                   \
@@ -170,7 +168,6 @@ vc9proj:
 		--yaml ../rtc.vcproj.yaml                            \
 		--source $(CONSUMER_COMP_SRC)                        \
 		--header $(CONSUMER_H)
-	qkc -O- -sm $(win32_builddir)/AutoTestOut_vc9.vcproj
 	$(top_builddir)/build/vcprojtool.py vcproj                      \
 		--type DLL                                              \
 		--vcversion "9.00"                                      \
@@ -180,7 +177,6 @@ vc9proj:
 		--yaml ../rtcdll.vcproj.yaml                            \
 		--source $(CONSUMER_COMP_SRC)                           \
 		--header $(CONSUMER_H)
-	qkc -O- -sm $(win32_builddir)/AutoTestOutDll_vc9.vcproj
 
 vcxproj:
 	for ver in $(VC_VERSION); do \
@@ -193,7 +189,6 @@ vcxproj:
 			--yaml ../rtc.vcproj.yaml                            \
 			--source $(PROVIDER_COMP_SRC)                        \
 			--header $(PROVIDER_H) ; \
-		qkc -O- -sm $(win32_builddir)/AutoTestIn_vc$${ver}.vcxproj ; \
 		$(top_builddir)/build/vcxprojtool.py vcxproj                      \
 			--type DLL                                              \
 			--vcversion "$${ver}.00"                                      \
@@ -203,7 +198,6 @@ vcxproj:
 			--yaml ../rtcdll.vcproj.yaml                            \
 			--source $(PROVIDER_SRC)                                \
 			--header $(PROVIDER_H) ; \
-		qkc -O- -sm $(win32_builddir)/AutoTestInDll_vc$${ver}.vcxproj ; \
 		$(top_builddir)/build/vcxprojtool.py vcxproj                   \
 			--type EXE                                           \
 			--vcversion "$${ver}.00"                                   \
@@ -213,7 +207,6 @@ vcxproj:
 			--yaml ../rtc.vcproj.yaml                            \
 			--source $(CONSUMER_COMP_SRC)                        \
 			--header $(CONSUMER_H) ; \
-		qkc -O- -sm $(win32_builddir)/AutoTestOut_vc$${ver}.vcxproj ; \
 		$(top_builddir)/build/vcxprojtool.py vcxproj                      \
 			--type DLL                                              \
 			--vcversion "$${ver}.00"                                      \
@@ -223,7 +216,6 @@ vcxproj:
 			--yaml ../rtcdll.vcproj.yaml                            \
 			--source $(CONSUMER_COMP_SRC)                           \
 			--header $(CONSUMER_H) ; \
-		qkc -O- -sm $(win32_builddir)/AutoTestOutDll_vc$${ver}.vcxproj ; \
 	done
 	
 dist-hook:

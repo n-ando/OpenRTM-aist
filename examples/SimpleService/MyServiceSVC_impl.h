@@ -1,4 +1,4 @@
-// -*-C++-*-
+﻿// -*-C++-*-
 /*!
  * @file  MyServiceSVC_impl.h
  * @brief Service implementation header of MyService.idl

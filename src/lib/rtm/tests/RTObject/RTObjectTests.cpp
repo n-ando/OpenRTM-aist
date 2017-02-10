@@ -1,4 +1,4 @@
-// -*- C++ -*-
+ï»¿// -*- C++ -*-
 /*!
  * @file   RTObjectTests.cpp
  * @brief  RTObject test class
@@ -76,13 +76,13 @@ namespace RTObject
     }
     RTC::ExecutionContextServiceList ecMine;
 
-    // protected: m_ecMine¤ÎÀßÄê
+    // protected: m_ecMineã®è¨­å®š
     void set_ecMine()
     {
       RTC::RTObject_impl::m_ecMine = ecMine;
     }
 
-    // protected: m_ecMine¤ÎÈ½Äê
+    // protected: m_ecMineã®åˆ¤å®š
     bool chk_ecMine(int id, RTC::ExecutionContext_ptr exec_context)
     {
       RTC::ExecutionContextService_var ecs;
@@ -98,7 +98,7 @@ namespace RTObject
     }
 
     std::vector<RTC::ExecutionContextBase*> eclist;
-    // protected: m_eclist¤Î¼èÆÀ
+    // protected: m_eclistã®å–å¾—
     int get_eclist()
     {
       int len(RTC::RTObject_impl::m_eclist.size());
@@ -699,9 +699,9 @@ namespace RTObject
     }
 		
     /*!
-     * @brief initialize()¥á¥½¥Ã¥É¤Î¥Æ¥¹¥È
+     * @brief initialize()ãƒ¡ã‚½ãƒƒãƒ‰ã®ãƒ†ã‚¹ãƒˆ
      * 
-     * - initialize()¥á¥½¥Ã¥É¸Æ½Ğ¤Ë¤è¤ê¡¢on_initialize()¥³¡¼¥ë¥Ğ¥Ã¥¯¤¬¸Æ¤Ó½Ğ¤µ¤ì¤ë¤«¡©
+     * - initialize()ãƒ¡ã‚½ãƒƒãƒ‰å‘¼å‡ºã«ã‚ˆã‚Šã€on_initialize()ã‚³ãƒ¼ãƒ«ãƒãƒƒã‚¯ãŒå‘¼ã³å‡ºã•ã‚Œã‚‹ã‹ï¼Ÿ
      */
     void test_initialize_invoking_on_initialize()
     {
@@ -715,7 +715,7 @@ namespace RTObject
 
       RTObjectMock* rto = new RTObjectMock(m_pORB, m_pPOA); // will be deleted automatically
 			
-      // initialize()¥á¥½¥Ã¥É¸Æ½Ğ¤Ë¤è¤ê¡¢on_initialize()¥³¡¼¥ë¥Ğ¥Ã¥¯¤¬¸Æ¤Ó½Ğ¤µ¤ì¤ë¤«¡©
+      // initialize()ãƒ¡ã‚½ãƒƒãƒ‰å‘¼å‡ºã«ã‚ˆã‚Šã€on_initialize()ã‚³ãƒ¼ãƒ«ãƒãƒƒã‚¯ãŒå‘¼ã³å‡ºã•ã‚Œã‚‹ã‹ï¼Ÿ
       CPPUNIT_ASSERT_EQUAL(0, rto->countLog("on_initialize"));
       coil::Properties prop;
       prop.setProperty("exec_cxt.periodic.type","PeriodicExecutionContext");
@@ -730,9 +730,9 @@ namespace RTObject
     }
 		
     /*!
-     * @brief initialize()¥á¥½¥Ã¥É¤Î¥Æ¥¹¥È
+     * @brief initialize()ãƒ¡ã‚½ãƒƒãƒ‰ã®ãƒ†ã‚¹ãƒˆ
      * 
-     * - Alive¾õÂÖ¤Î»ş¤Ëinitialize()¥á¥½¥Ã¥É¤ò¸Æ½Ğ¤¿¾ì¹ç¡¢Àµ¾ï¤ËÆ°ºî¤¹¤ë¤«¡©
+     * - AliveçŠ¶æ…‹ã®æ™‚ã«initialize()ãƒ¡ã‚½ãƒƒãƒ‰ã‚’å‘¼å‡ºãŸå ´åˆã€æ­£å¸¸ã«å‹•ä½œã™ã‚‹ã‹ï¼Ÿ
      */
     void test_initialize_in_Alive()
     {
@@ -746,7 +746,7 @@ namespace RTObject
 
       RTObjectMock* rto = new RTObjectMock(m_pORB, m_pPOA); // will be deleted automatically
 			
-      // initialize()¥á¥½¥Ã¥É¸Æ½Ğ¤·¤ò¹Ô¤¤¡¢Alive¾õÂÖ¤ËÁ«°Ü¤µ¤»¤ë
+      // initialize()ãƒ¡ã‚½ãƒƒãƒ‰å‘¼å‡ºã—ã‚’è¡Œã„ã€AliveçŠ¶æ…‹ã«é·ç§»ã•ã›ã‚‹
       coil::Properties prop;
       prop.setProperty("exec_cxt.periodic.type","PeriodicExecutionContext");
       prop.setProperty("exec_cxt.periodic.rate","1000");
@@ -758,7 +758,7 @@ namespace RTObject
       ec = rto->get_context(0);
       CPPUNIT_ASSERT_EQUAL(true, rto->is_alive(ec));
 			
-      // Alive¾õÂÖ¤Çinitialize()¥á¥½¥Ã¥É¸Æ½Ğ¤·¤ò¹Ô¤Ã¤¿¾ì¹ç¡¢Àµ¾ï¤ËÆ°ºî¤¹¤ë¤«¡©
+      // AliveçŠ¶æ…‹ã§initialize()ãƒ¡ã‚½ãƒƒãƒ‰å‘¼å‡ºã—ã‚’è¡Œã£ãŸå ´åˆã€æ­£å¸¸ã«å‹•ä½œã™ã‚‹ã‹ï¼Ÿ
       std::cout << "\ntest_initialize_in_Alive() rto->initialize() 2" << std::endl;
       CPPUNIT_ASSERT_EQUAL(RTC::RTC_OK, rto->initialize());
       RTC::ExecutionContextFactory::instance().removeFactory("PeriodicExecutionContext"); /////
@@ -771,9 +771,9 @@ namespace RTObject
     }
 		
     /*!
-     * @brief finalize()¥á¥½¥Ã¥É¤Î¥Æ¥¹¥È
+     * @brief finalize()ãƒ¡ã‚½ãƒƒãƒ‰ã®ãƒ†ã‚¹ãƒˆ
      * 
-     * - finalize()¸Æ½Ğ¤Ë¤è¤ê¡¢on_finalize()¥³¡¼¥ë¥Ğ¥Ã¥¯¤¬¸Æ¤Ó½Ğ¤µ¤ì¤ë¤«¡©
+     * - finalize()å‘¼å‡ºã«ã‚ˆã‚Šã€on_finalize()ã‚³ãƒ¼ãƒ«ãƒãƒƒã‚¯ãŒå‘¼ã³å‡ºã•ã‚Œã‚‹ã‹ï¼Ÿ
      */
     void test_finalize_invoking_on_finalize()
     {
@@ -787,7 +787,7 @@ namespace RTObject
 
       RTObjectMock* rto = new RTObjectMock(m_pORB, m_pPOA); // will be deleted automatically
 			
-      // initialize()¥á¥½¥Ã¥É¸Æ½Ğ¤·¤ò¹Ô¤¤¡¢Alive¾õÂÖ¤ËÁ«°Ü¤µ¤»¤ë
+      // initialize()ãƒ¡ã‚½ãƒƒãƒ‰å‘¼å‡ºã—ã‚’è¡Œã„ã€AliveçŠ¶æ…‹ã«é·ç§»ã•ã›ã‚‹
       coil::Properties prop;
       prop.setProperty("exec_cxt.periodic.type","PeriodicExecutionContext");
       prop.setProperty("exec_cxt.periodic.rate","1000");
@@ -798,11 +798,11 @@ namespace RTObject
       ec = rto->get_context(0);
       CPPUNIT_ASSERT_EQUAL(true, rto->is_alive(ec));
 			
-      // finalize()¸Æ½Ğ¤·¤Ë¤è¤ê¡¢on_finalize()¥³¡¼¥ë¥Ğ¥Ã¥¯¤¬¸Æ¤Ó½Ğ¤µ¤ì¤ë¤«¡©
+      // finalize()å‘¼å‡ºã—ã«ã‚ˆã‚Šã€on_finalize()ã‚³ãƒ¼ãƒ«ãƒãƒƒã‚¯ãŒå‘¼ã³å‡ºã•ã‚Œã‚‹ã‹ï¼Ÿ
       CPPUNIT_ASSERT_EQUAL(0, rto->countLog("on_finalize"));
 			
       CPPUNIT_ASSERT_EQUAL(true, rto->is_alive(ec));
-      // exit()¸Æ¤Ó½Ğ¤·¤Ç¡¢finalize()¤¬Í­¸ú¤È¤Ê¤ê¼Â¹Ô¤µ¤ì¤ë
+      // exit()å‘¼ã³å‡ºã—ã§ã€finalize()ãŒæœ‰åŠ¹ã¨ãªã‚Šå®Ÿè¡Œã•ã‚Œã‚‹
       RTC::ExecutionContextFactory::instance().removeFactory("PeriodicExecutionContext"); /////
 
       // std::cout << "\ntest_finalize_invoking_on_finalize() rto->finalizeContexts()" << std::endl;
@@ -816,9 +816,9 @@ namespace RTObject
     }
 		
     /*!
-     * @brief finalize()¥á¥½¥Ã¥É¤Î¥Æ¥¹¥È
+     * @brief finalize()ãƒ¡ã‚½ãƒƒãƒ‰ã®ãƒ†ã‚¹ãƒˆ
      * 
-     * - ExecutionContext¤ËÅĞÏ¿¤µ¤ì¤¿¾õÂÖ¤Çfinalize()¤ò¸Æ¤Ó½Ğ¤·¤¿¾ì¹ç¡¢°Õ¿Ş¤É¤ª¤ê¤Î¥¨¥é¡¼¤òÊÖ¤¹¤«¡©
+     * - ExecutionContextã«ç™»éŒ²ã•ã‚ŒãŸçŠ¶æ…‹ã§finalize()ã‚’å‘¼ã³å‡ºã—ãŸå ´åˆã€æ„å›³ã©ãŠã‚Šã®ã‚¨ãƒ©ãƒ¼ã‚’è¿”ã™ã‹ï¼Ÿ
      */
     void test_finalize_participating_in_execution_context()
     {
@@ -833,7 +833,7 @@ namespace RTObject
       RTObjectMock* rto = new RTObjectMock(m_pORB, m_pPOA); // will be deleted automatically
       RTObjectMock* rtoOther = new RTObjectMock(m_pORB, m_pPOA); // will be deleted automatically
 			
-      // initialize()¥á¥½¥Ã¥É¸Æ½Ğ¤·¤ò¹Ô¤¤¡¢Alive¾õÂÖ¤ËÁ«°Ü¤µ¤»¤ë
+      // initialize()ãƒ¡ã‚½ãƒƒãƒ‰å‘¼å‡ºã—ã‚’è¡Œã„ã€AliveçŠ¶æ…‹ã«é·ç§»ã•ã›ã‚‹
       coil::Properties prop;
       prop.setProperty("exec_cxt.periodic.type","PeriodicExecutionContext");
       prop.setProperty("exec_cxt.periodic.rate","1");
@@ -846,7 +846,7 @@ namespace RTObject
       std::cout << "\ntest_finalize_participating_ rto->is_alive(ec)" << std::endl;
       CPPUNIT_ASSERT_EQUAL(true, rto->is_alive(ec));
 			
-      // ExecutionContext¤ËÅĞÏ¿¤·¤Æ¤ª¤¯
+      // ExecutionContextã«ç™»éŒ²ã—ã¦ãŠã
       std::cout << "\ntest_finalize_participating_ ec->add_component(..)" << std::endl;
       CPPUNIT_ASSERT_EQUAL(RTC::RTC_OK, ec->add_component(rtoOther->_this()));//
       std::cout << "\ntest_finalize_participating_: ec->activate_component(rto->_this())" << std::endl;
@@ -855,7 +855,7 @@ namespace RTObject
       std::cout << "\ntest_finalize_participating_: coil::sleep(...)" << std::endl;
       coil::sleep(2);//
 
-      // ExecutionContext¤ËÅĞÏ¿¤µ¤ì¤¿¾õÂÖ¤Çfinalize()¤ò¸Æ¤Ó½Ğ¤·¤¿¾ì¹ç¡¢°Õ¿Ş¤É¤ª¤ê¤Î¥¨¥é¡¼¤òÊÖ¤¹¤«¡©
+      // ExecutionContextã«ç™»éŒ²ã•ã‚ŒãŸçŠ¶æ…‹ã§finalize()ã‚’å‘¼ã³å‡ºã—ãŸå ´åˆã€æ„å›³ã©ãŠã‚Šã®ã‚¨ãƒ©ãƒ¼ã‚’è¿”ã™ã‹ï¼Ÿ
       std::cout << "\ntest_finalize_participating_ rto->finalize()" << std::endl;
       CPPUNIT_ASSERT_EQUAL(RTC::PRECONDITION_NOT_MET, rto->finalize());//
 
@@ -885,9 +885,9 @@ namespace RTObject
     }
 		
     /*!
-     * @brief finalize()¥á¥½¥Ã¥É¤Î¥Æ¥¹¥È
+     * @brief finalize()ãƒ¡ã‚½ãƒƒãƒ‰ã®ãƒ†ã‚¹ãƒˆ
      * 
-     * - Created¾õÂÖ¤Çfinalize()¤ò¸Æ½Ğ¤·¤¿¾ì¹ç¡¢°Õ¿Ş¤É¤ª¤ê¤Î¥¨¥é¡¼¤ÇÊÖ¤ë¤«¡©
+     * - CreatedçŠ¶æ…‹ã§finalize()ã‚’å‘¼å‡ºã—ãŸå ´åˆã€æ„å›³ã©ãŠã‚Šã®ã‚¨ãƒ©ãƒ¼ã§è¿”ã‚‹ã‹ï¼Ÿ
      */
     void test_finalize_in_Created()
     {
@@ -901,7 +901,7 @@ namespace RTObject
 
       RTObjectMock* rto = new RTObjectMock(m_pORB, m_pPOA); // will be deleted automatically
 			
-      // Created¾õÂÖ¤Çfinalize()¤ò¸Æ½Ğ¤·¤¿¾ì¹ç¡¢°Õ¿Ş¤É¤ª¤ê¤Î¥¨¥é¡¼¤ÇÊÖ¤ë¤«¡©
+      // CreatedçŠ¶æ…‹ã§finalize()ã‚’å‘¼å‡ºã—ãŸå ´åˆã€æ„å›³ã©ãŠã‚Šã®ã‚¨ãƒ©ãƒ¼ã§è¿”ã‚‹ã‹ï¼Ÿ
       CPPUNIT_ASSERT_EQUAL(RTC::PRECONDITION_NOT_MET, rto->finalize());
       RTC::ExecutionContextFactory::instance().removeFactory("PeriodicExecutionContext"); /////
       rto->shutdown();
@@ -909,18 +909,18 @@ namespace RTObject
     }
 		
     /*!
-     * @brief is_alive()¥á¥½¥Ã¥É¤Î¥Æ¥¹¥È
+     * @brief is_alive()ãƒ¡ã‚½ãƒƒãƒ‰ã®ãƒ†ã‚¹ãƒˆ
      */
     void test_is_alive()
     {
-      // test_initialize_in_Alive()¤Ë¤Æ¥Æ¥¹¥È¤ò·ó¤Í¤Æ¤¤¤ë
+      // test_initialize_in_Alive()ã«ã¦ãƒ†ã‚¹ãƒˆã‚’å…¼ã­ã¦ã„ã‚‹
     }
 		
     /*!
-     * @brief exit()¥á¥½¥Ã¥É¤Î¥Æ¥¹¥È
+     * @brief exit()ãƒ¡ã‚½ãƒƒãƒ‰ã®ãƒ†ã‚¹ãƒˆ
      * 
-     * - exit()¸Æ½Ğ¤·¤Ë¤è¤ê¡¢Åö³º¥³¥ó¥İ¡¼¥Í¥ó¥È¤¬finalize()¤µ¤ì¤ë¤«¡©
-     * - exit()¸Æ½Ğ¤·¤Ë¤è¤ê¡¢Åö³º¥³¥ó¥İ¡¼¥Í¥ó¥È¤¬½ª¾õÂÖ¤ËÁ«°Ü¤¹¤ë¤«¡©
+     * - exit()å‘¼å‡ºã—ã«ã‚ˆã‚Šã€å½“è©²ã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆãŒfinalize()ã•ã‚Œã‚‹ã‹ï¼Ÿ
+     * - exit()å‘¼å‡ºã—ã«ã‚ˆã‚Šã€å½“è©²ã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆãŒçµ‚çŠ¶æ…‹ã«é·ç§»ã™ã‚‹ã‹ï¼Ÿ
      */
     void test_exit()
     {
@@ -938,7 +938,7 @@ namespace RTObject
       CPPUNIT_ASSERT(! CORBA::is_nil(rto->getObjRef()));///
       CPPUNIT_ASSERT(! CORBA::is_nil(rto->_this()));///
 			
-      // initialize()¥á¥½¥Ã¥É¸Æ½Ğ¤·¤ò¹Ô¤¤¡¢Alive¾õÂÖ¤ËÁ«°Ü¤µ¤»¤ë
+      // initialize()ãƒ¡ã‚½ãƒƒãƒ‰å‘¼å‡ºã—ã‚’è¡Œã„ã€AliveçŠ¶æ…‹ã«é·ç§»ã•ã›ã‚‹
       coil::Properties prop;
       prop.setProperty("exec_cxt.periodic.type","PeriodicExecutionContext2");
       ///prop.setProperty("exec_cxt.periodic.rate","1000"); /// 1ms 
@@ -952,7 +952,7 @@ namespace RTObject
       ec = rto->get_context(0);
       CPPUNIT_ASSERT_EQUAL(true, rto->is_alive(ec));
 			
-      // ¥³¥ó¥İ¡¼¥Í¥ó¥È¤òExecutionContext¤ËÅĞÏ¿¤·¤Æ¥¢¥¯¥Æ¥£¥Ö²½¤¹¤ë
+      // ã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆã‚’ExecutionContextã«ç™»éŒ²ã—ã¦ã‚¢ã‚¯ãƒ†ã‚£ãƒ–åŒ–ã™ã‚‹
       std::cout << "\ntest_exit(): ec->add_component(rto->_this())" << std::endl;
       CPPUNIT_ASSERT_EQUAL(RTC::RTC_OK, ec->add_component(rtoOther->_this()));//
       //Call activate_component() for the state machine drive ???. 
@@ -966,8 +966,8 @@ namespace RTObject
       std::cout << "\ntest_exit(): coil::sleep(1)" << std::endl;
       coil::sleep(1);//
 			
-      // exit()¸Æ½Ğ¤·¤Ë¤è¤ê¡¢Åö³º¥³¥ó¥İ¡¼¥Í¥ó¥È¤¬finalize()¤µ¤ì¤ë¤«¡©
-      // exit()¸Æ½Ğ¤·¤Ë¤è¤ê¡¢Åö³º¥³¥ó¥İ¡¼¥Í¥ó¥È¤¬½ª¾õÂÖ¤ËÁ«°Ü¤¹¤ë¤«¡©
+      // exit()å‘¼å‡ºã—ã«ã‚ˆã‚Šã€å½“è©²ã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆãŒfinalize()ã•ã‚Œã‚‹ã‹ï¼Ÿ
+      // exit()å‘¼å‡ºã—ã«ã‚ˆã‚Šã€å½“è©²ã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆãŒçµ‚çŠ¶æ…‹ã«é·ç§»ã™ã‚‹ã‹ï¼Ÿ
       std::cout << "\ntest_exit(): rto->countLog() 0" << std::endl;
       CPPUNIT_ASSERT_EQUAL(0, rto->countLog("on_finalize"));
       std::cout << "\ntest_exit(): ec->get_component_state(rto->_this())" << std::endl;
@@ -994,16 +994,16 @@ namespace RTObject
     }
 
     /*!
-     * @brief exit()¥á¥½¥Ã¥É¤Î¥Æ¥¹¥È
+     * @brief exit()ãƒ¡ã‚½ãƒƒãƒ‰ã®ãƒ†ã‚¹ãƒˆ
      * 
-     * - Create¾õÂÖ¤Çexit()¤ò¸Æ½Ğ¤·¤¿¾ì¹ç¡¢°Õ¿Ş¤É¤ª¤ê¤Î¥¨¥é¡¼¤òÊÖ¤¹¤«¡©
+     * - CreateçŠ¶æ…‹ã§exit()ã‚’å‘¼å‡ºã—ãŸå ´åˆã€æ„å›³ã©ãŠã‚Šã®ã‚¨ãƒ©ãƒ¼ã‚’è¿”ã™ã‹ï¼Ÿ
      */
     void test_exit_in_Created()
     {
       RTObjectMock* rto = new RTObjectMock(m_pORB, m_pPOA); // will be deleted automatically
       rto->setObjRef(rto->_this());
 			
-      // Create¾õÂÖ¤Çexit()¤ò¸Æ½Ğ¤·¤¿¾ì¹ç¡¢°Õ¿Ş¤É¤ª¤ê¤Î¥¨¥é¡¼¤òÊÖ¤¹¤«¡©
+      // CreateçŠ¶æ…‹ã§exit()ã‚’å‘¼å‡ºã—ãŸå ´åˆã€æ„å›³ã©ãŠã‚Šã®ã‚¨ãƒ©ãƒ¼ã‚’è¿”ã™ã‹ï¼Ÿ
       CPPUNIT_ASSERT_EQUAL(RTC::PRECONDITION_NOT_MET, rto->exit());
 
       rto->shutdown();
@@ -1011,23 +1011,23 @@ namespace RTObject
     }
 		
     /*!
-     * @brief detach_executioncontext()¥á¥½¥Ã¥É¤Î¥Æ¥¹¥È
+     * @brief detach_executioncontext()ãƒ¡ã‚½ãƒƒãƒ‰ã®ãƒ†ã‚¹ãƒˆ
      * 
-     * - attachºÑ¤ß¤ÎRTC¤òÀµ¾ï¤Ëdetach¤Ç¤­¤ë¤«¡©
+     * - attachæ¸ˆã¿ã®RTCã‚’æ­£å¸¸ã«detachã§ãã‚‹ã‹ï¼Ÿ
      */
     void test_detach_executioncontext()
     {
       RTObjectMock* rto = new RTObjectMock(m_pORB, m_pPOA); // will be deleted automatically
 			
-      // ExecutionContext¤òÀ¸À®¤¹¤ë
+      // ExecutionContextã‚’ç”Ÿæˆã™ã‚‹
       RTC_exp::PeriodicExecutionContext* ec
 	= new RTC_exp::PeriodicExecutionContext(); // will be deleted automatically
 			
-      // ExecutionContext¤Ëattach¤·¤Æ¤ª¤¯
+      // ExecutionContextã«attachã—ã¦ãŠã
       RTC::UniqueId id = rto->attach_context(ec->_this());
       CPPUNIT_ASSERT(RTC::UniqueId(-1) != id);
 			
-      // Àµ¾ï¤Ëdetach¤Ç¤­¤ë¤«¡©
+      // æ­£å¸¸ã«detachã§ãã‚‹ã‹ï¼Ÿ
       CPPUNIT_ASSERT_EQUAL(RTC::RTC_OK, rto->detach_context(id));
       m_pPOA->deactivate_object(*m_pPOA->servant_to_id(ec));
       delete ec;
@@ -1036,15 +1036,15 @@ namespace RTObject
     }
 		
     /*!
-     * @brief detach_executioncontext()¥á¥½¥Ã¥É¤Î¥Æ¥¹¥È
+     * @brief detach_executioncontext()ãƒ¡ã‚½ãƒƒãƒ‰ã®ãƒ†ã‚¹ãƒˆ
      * 
-     * - Â¸ºß¤·¤Ê¤¤ID¤ÇRTC¤Îdetach¤ò»î¤ß¤¿¾ì¹ç¡¢°Õ¿Ş¤É¤ª¤ê¤Î¥¨¥é¡¼¤òÊÖ¤¹¤«¡©
+     * - å­˜åœ¨ã—ãªã„IDã§RTCã®detachã‚’è©¦ã¿ãŸå ´åˆã€æ„å›³ã©ãŠã‚Šã®ã‚¨ãƒ©ãƒ¼ã‚’è¿”ã™ã‹ï¼Ÿ
      */
     void test_detach_executioncontext_with_illegal_id()
     {
       RTObjectMock* rto = new RTObjectMock(m_pORB, m_pPOA); // will be deleted automatically
 			
-      // Â¸ºß¤·¤Ê¤¤ID¤ÇRTC¤Îdetach¤ò»î¤ß¤¿¾ì¹ç¡¢°Õ¿Ş¤É¤ª¤ê¤Î¥¨¥é¡¼¤òÊÖ¤¹¤«¡©
+      // å­˜åœ¨ã—ãªã„IDã§RTCã®detachã‚’è©¦ã¿ãŸå ´åˆã€æ„å›³ã©ãŠã‚Šã®ã‚¨ãƒ©ãƒ¼ã‚’è¿”ã™ã‹ï¼Ÿ
       CPPUNIT_ASSERT_EQUAL(RTC::BAD_PARAMETER,
 			   rto->detach_context(RTC::UniqueId(1)));
       rto->shutdown();
@@ -1052,28 +1052,28 @@ namespace RTObject
     }
 		
     /*!
-     * @brief get_context()¥á¥½¥Ã¥É¤Î¥Æ¥¹¥È
+     * @brief get_context()ãƒ¡ã‚½ãƒƒãƒ‰ã®ãƒ†ã‚¹ãƒˆ
      * 
-     * - »ØÄê¤·¤¿ID¤ÎExecutionContext¤òÀµ¤·¤¯¼èÆÀ¤Ç¤­¤ë¤«¡©
+     * - æŒ‡å®šã—ãŸIDã®ExecutionContextã‚’æ­£ã—ãå–å¾—ã§ãã‚‹ã‹ï¼Ÿ
      */
     void test_get_context()
     {
       RTObjectMock* rto = new RTObjectMock(m_pORB, m_pPOA); // will be deleted automatically
 			
-      // ExecutionContext¤òÀ¸À®¤¹¤ë
+      // ExecutionContextã‚’ç”Ÿæˆã™ã‚‹
       RTC_exp::PeriodicExecutionContext* ec1
 	= new RTC_exp::PeriodicExecutionContext(); // will be deleted automatically
       RTC_exp::PeriodicExecutionContext* ec2
 	= new RTC_exp::PeriodicExecutionContext(); // will be deleted automatically
 			
-      // ExecutionContext¤Ëattach¤·¤Æ¤ª¤¯
+      // ExecutionContextã«attachã—ã¦ãŠã
       RTC::UniqueId id1 = rto->attach_context(ec1->_this());
       CPPUNIT_ASSERT(RTC::UniqueId(-1) != id1);
       RTC::UniqueId id2 = rto->attach_context(ec2->_this());
       CPPUNIT_ASSERT(RTC::UniqueId(-1) != id2);
       CPPUNIT_ASSERT(id1 != id2);
 			
-      // »ØÄê¤·¤¿ID¤ÎExecutionContext¤òÀµ¤·¤¯¼èÆÀ¤Ç¤­¤ë¤«¡©
+      // æŒ‡å®šã—ãŸIDã®ExecutionContextã‚’æ­£ã—ãå–å¾—ã§ãã‚‹ã‹ï¼Ÿ
       RTC::ExecutionContext_ptr ecPtr1 = rto->get_context(id1);
       CPPUNIT_ASSERT(ecPtr1->_is_equivalent(ec1->_this()));
       RTC::ExecutionContext_ptr ecPtr2 = rto->get_context(id2);
@@ -1092,27 +1092,27 @@ namespace RTObject
     }
 		
     /*!
-     * @brief get_contexts()¥á¥½¥Ã¥É¤Î¥Æ¥¹¥È
+     * @brief get_contexts()ãƒ¡ã‚½ãƒƒãƒ‰ã®ãƒ†ã‚¹ãƒˆ
      * 
-     * - attach¤µ¤ì¤Æ¤¤¤ëExecutionContext¤ò¤¹¤Ù¤ÆÀµ¤·¤¯¼èÆÀ¤Ç¤­¤ë¤«¡©
+     * - attachã•ã‚Œã¦ã„ã‚‹ExecutionContextã‚’ã™ã¹ã¦æ­£ã—ãå–å¾—ã§ãã‚‹ã‹ï¼Ÿ
      */
     void test_get_contexts()
     {
       RTObjectMock* rto = new RTObjectMock(m_pORB, m_pPOA); // will be deleted automatically
 			
-      // ExecutionContext¤òÀ¸À®¤¹¤ë
+      // ExecutionContextã‚’ç”Ÿæˆã™ã‚‹
       RTC_exp::PeriodicExecutionContext* ec1
 	= new RTC_exp::PeriodicExecutionContext(); // will be deleted automatically
       RTC_exp::PeriodicExecutionContext* ec2
 	= new RTC_exp::PeriodicExecutionContext(); // will be deleted automatically
 
-      // ExecutionContext¤Ëattach¤·¤Æ¤ª¤¯
+      // ExecutionContextã«attachã—ã¦ãŠã
       RTC::UniqueId id1 = rto->attach_context(ec1->_this());
       CPPUNIT_ASSERT(RTC::UniqueId(-1) != id1);
       RTC::UniqueId id2 = rto->attach_context(ec2->_this());
       CPPUNIT_ASSERT(RTC::UniqueId(-1) != id2);
 			
-      // attach¤µ¤ì¤Æ¤¤¤ëExecutionContext¤ò¤¹¤Ù¤ÆÀµ¤·¤¯¼èÆÀ¤Ç¤­¤ë¤«¡©
+      // attachã•ã‚Œã¦ã„ã‚‹ExecutionContextã‚’ã™ã¹ã¦æ­£ã—ãå–å¾—ã§ãã‚‹ã‹ï¼Ÿ
       RTC::ExecutionContextList* ecList = rto->get_participating_contexts();
       CPPUNIT_ASSERT(ecList != NULL);
       CPPUNIT_ASSERT_EQUAL(CORBA::ULong(2), ecList->length());
@@ -1136,15 +1136,15 @@ namespace RTObject
     }
 		
     /*!
-     * @brief get_component_profile()¥á¥½¥Ã¥É¤Î¥Æ¥¹¥È
+     * @brief get_component_profile()ãƒ¡ã‚½ãƒƒãƒ‰ã®ãƒ†ã‚¹ãƒˆ
      * 
-     * - ComponentProfile¤òÀµ¤·¤¯¼èÆÀ¤Ç¤­¤ë¤«¡©
+     * - ComponentProfileã‚’æ­£ã—ãå–å¾—ã§ãã‚‹ã‹ï¼Ÿ
      */
     void test_get_component_profile()
     {
       RTObjectMock* rto = new RTObjectMock(m_pORB, m_pPOA); // will be deleted automatically
 			
-      // ComponentProfile¤È¤·¤Æ¼èÆÀ¤µ¤ì¤ë¤Ù¤­¾ğÊó¤ò¤¢¤é¤«¤¸¤áÀßÄê¤·¤Æ¤ª¤¯
+      // ComponentProfileã¨ã—ã¦å–å¾—ã•ã‚Œã‚‹ã¹ãæƒ…å ±ã‚’ã‚ã‚‰ã‹ã˜ã‚è¨­å®šã—ã¦ãŠã
       coil::Properties prop;
       prop.setProperty("instance_name", "INSTANCE_NAME");
       prop.setProperty("type_name", "TYPE_NAME");
@@ -1154,7 +1154,7 @@ namespace RTObject
       prop.setProperty("category", "CATEGORY");
       rto->setProperties(prop);
 			
-      // ComponentProfile¤òÀµ¤·¤¯¼èÆÀ¤Ç¤­¤ë¤«¡©
+      // ComponentProfileã‚’æ­£ã—ãå–å¾—ã§ãã‚‹ã‹ï¼Ÿ
       RTC::ComponentProfile* compProf = rto->get_component_profile();
       CPPUNIT_ASSERT(compProf != NULL);
 			
@@ -1176,11 +1176,11 @@ namespace RTObject
     }
 		
     /*!
-     * @brief add[In/Out]Port(),addPort()¥á¥½¥Ã¥É¤Î¥Æ¥¹¥È
+     * @brief add[In/Out]Port(),addPort()ãƒ¡ã‚½ãƒƒãƒ‰ã®ãƒ†ã‚¹ãƒˆ
      * 
-     * - Port¤òÀµ¤·¤¯ÅĞÏ¿¤Ç¤­¤ë¤«¡©
-     * - ´û¤ËÅĞÏ¿ºÑ¤ß¤Î¥İ¡¼¥È¤ÈÆ±¤¸¥İ¡¼¥ÈÌ¾¤ÎPort¤òÅĞÏ¿¤·¤è¤¦¤È¤·¤¿¾ì¹ç¤Ë¼ºÇÔ¤¹¤ë¤«¡©
-     * - ÅĞÏ¿ºÑ¤ß¤ÎPort¤òÀµ¤·¤¯ºï½ü¤Ç¤­¤ë¤«¡©
+     * - Portã‚’æ­£ã—ãç™»éŒ²ã§ãã‚‹ã‹ï¼Ÿ
+     * - æ—¢ã«ç™»éŒ²æ¸ˆã¿ã®ãƒãƒ¼ãƒˆã¨åŒã˜ãƒãƒ¼ãƒˆåã®Portã‚’ç™»éŒ²ã—ã‚ˆã†ã¨ã—ãŸå ´åˆã«å¤±æ•—ã™ã‚‹ã‹ï¼Ÿ
+     * - ç™»éŒ²æ¸ˆã¿ã®Portã‚’æ­£ã—ãå‰Šé™¤ã§ãã‚‹ã‹ï¼Ÿ
      */
     void test_add_removePort()
     {
@@ -1190,11 +1190,11 @@ namespace RTObject
 
       PortMock* port0 = new PortMock();
       port0->setName("port0");
-      // Port¤òÀµ¤·¤¯ÅĞÏ¿¤Ç¤­¤ë¤«¡©
+      // Portã‚’æ­£ã—ãç™»éŒ²ã§ãã‚‹ã‹ï¼Ÿ
       CPPUNIT_ASSERT_EQUAL(true, rto->addPort(*port0));
-      // ´û¤ËÅĞÏ¿ºÑ¤ß¤Î¥İ¡¼¥È¤ÈÆ±¤¸¥İ¡¼¥ÈÌ¾¤ÎPort¤òÅĞÏ¿¤·¤è¤¦¤È¤·¤¿¾ì¹ç¤Ë¼ºÇÔ¤¹¤ë¤«¡©
-      // PortBase::updateConnectors()Æâ¡¢Guard guard(m_profile_mutex);¤Ç¥í¥Ã¥¯¤µ¤ì¡¢
-      // ½èÍı¤¬Ìá¤Ã¤Æ¤³¤Ê¤¤¡£(¥Ç¥Ã¥É¥í¥Ã¥¯???)
+      // æ—¢ã«ç™»éŒ²æ¸ˆã¿ã®ãƒãƒ¼ãƒˆã¨åŒã˜ãƒãƒ¼ãƒˆåã®Portã‚’ç™»éŒ²ã—ã‚ˆã†ã¨ã—ãŸå ´åˆã«å¤±æ•—ã™ã‚‹ã‹ï¼Ÿ
+      // PortBase::updateConnectors()å†…ã€Guard guard(m_profile_mutex);ã§ãƒ­ãƒƒã‚¯ã•ã‚Œã€
+      // å‡¦ç†ãŒæˆ»ã£ã¦ã“ãªã„ã€‚(ãƒ‡ãƒƒãƒ‰ãƒ­ãƒƒã‚¯???)
       // CPPUNIT_ASSERT_EQUAL(false, rto->addPort(*port0));
       CPPUNIT_ASSERT_EQUAL(false, rto->addPort(*port0));/////
 
@@ -1202,23 +1202,23 @@ namespace RTObject
       port1->setName("port1");
       CPPUNIT_ASSERT_EQUAL(true, rto->addPort(*port1));
 			
-      // ÅĞÏ¿¤·¤¿Port»²¾È¤ò¤¹¤Ù¤ÆÀµ¤·¤¯¼èÆÀ¤Ç¤­¤ë¤«¡©
+      // ç™»éŒ²ã—ãŸPortå‚ç…§ã‚’ã™ã¹ã¦æ­£ã—ãå–å¾—ã§ãã‚‹ã‹ï¼Ÿ
       RTC::PortServiceList* portList = rto->get_ports();
       CPPUNIT_ASSERT(portList != NULL);
       CPPUNIT_ASSERT_EQUAL(CORBA::ULong(2), portList->length());
 
-      // ÅĞÏ¿ºÑ¤ß¤ÎPort¤òÀµ¤·¤¯ºï½ü¤Ç¤­¤ë¤«¡©
+      // ç™»éŒ²æ¸ˆã¿ã®Portã‚’æ­£ã—ãå‰Šé™¤ã§ãã‚‹ã‹ï¼Ÿ
       CPPUNIT_ASSERT_EQUAL(true, rto->removePort(*port1));
       CPPUNIT_ASSERT_EQUAL(true, rto->removePort(*port0));
 
       InPortMock*  inport0  = new InPortMock("in","TimedLong");
       OutPortMock* outport0 = new OutPortMock("out","TimedLong");
-      // InPort, OutPort¤òÀµ¤·¤¯ÅĞÏ¿¤Ç¤­¤ë¤«¡©
+      // InPort, OutPortã‚’æ­£ã—ãç™»éŒ²ã§ãã‚‹ã‹ï¼Ÿ
       CPPUNIT_ASSERT_EQUAL(true, rto->addInPort("in",*inport0));
       CPPUNIT_ASSERT_EQUAL(true, rto->addOutPort("out", *outport0));
-      // ´û¤ËÅĞÏ¿ºÑ¤ß¤Î¥İ¡¼¥È¤ÈÆ±¤¸¥İ¡¼¥ÈÌ¾¤ÎPort¤òÅĞÏ¿¤·¤è¤¦¤È¤·¤¿¾ì¹ç¤Ë¼ºÇÔ¤¹¤ë¤«¡©
-      // PortBase::updateConnectors()Æâ¡¢Guard guard(m_profile_mutex);¤Ç¥í¥Ã¥¯¤µ¤ì¡¢
-      // ½èÍı¤¬Ìá¤Ã¤Æ¤³¤Ê¤¤¡£(¥Ç¥Ã¥É¥í¥Ã¥¯???)
+      // æ—¢ã«ç™»éŒ²æ¸ˆã¿ã®ãƒãƒ¼ãƒˆã¨åŒã˜ãƒãƒ¼ãƒˆåã®Portã‚’ç™»éŒ²ã—ã‚ˆã†ã¨ã—ãŸå ´åˆã«å¤±æ•—ã™ã‚‹ã‹ï¼Ÿ
+      // PortBase::updateConnectors()å†…ã€Guard guard(m_profile_mutex);ã§ãƒ­ãƒƒã‚¯ã•ã‚Œã€
+      // å‡¦ç†ãŒæˆ»ã£ã¦ã“ãªã„ã€‚(ãƒ‡ãƒƒãƒ‰ãƒ­ãƒƒã‚¯???)
       // CPPUNIT_ASSERT_EQUAL(false, rto->addInPort("in",*inport0));
       // CPPUNIT_ASSERT_EQUAL(false, rto->addOutPort("out", *outport0));
       std::cerr << "\n test_add_removePort() rto->addInPort(in,*inport0)" << std::endl;
@@ -1226,12 +1226,12 @@ namespace RTObject
       std::cerr << "\n test_add_removePort() rto->addOutPort(out, *outport0)" << std::endl;
       CPPUNIT_ASSERT_EQUAL(false, rto->addOutPort("out", *outport0));/////
 
-      // ÅĞÏ¿¤·¤¿Port»²¾È¤ò¤¹¤Ù¤ÆÀµ¤·¤¯¼èÆÀ¤Ç¤­¤ë¤«¡©
+      // ç™»éŒ²ã—ãŸPortå‚ç…§ã‚’ã™ã¹ã¦æ­£ã—ãå–å¾—ã§ãã‚‹ã‹ï¼Ÿ
       portList = rto->get_ports();
       CPPUNIT_ASSERT(portList != NULL);
       CPPUNIT_ASSERT_EQUAL(CORBA::ULong(2), portList->length());
 
-      // ÅĞÏ¿ºÑ¤ß¤ÎPort¤òÀµ¤·¤¯ºï½ü¤Ç¤­¤ë¤«¡©
+      // ç™»éŒ²æ¸ˆã¿ã®Portã‚’æ­£ã—ãå‰Šé™¤ã§ãã‚‹ã‹ï¼Ÿ
       CPPUNIT_ASSERT_EQUAL(true, rto->removeInPort(*inport0));
       CPPUNIT_ASSERT_EQUAL(true, rto->removeOutPort(*outport0));
 
@@ -1255,11 +1255,11 @@ namespace RTObject
     }
 
     /*!
-     * @brief readAll(),setReadAll()¥á¥½¥Ã¥É¤Î¥Æ¥¹¥È
+     * @brief readAll(),setReadAll()ãƒ¡ã‚½ãƒƒãƒ‰ã®ãƒ†ã‚¹ãƒˆ
      * 
-     * - readAll()¤ÇÁ´¤Æ¤ÎInPort¤Îread()¤¬¥³¡¼¥ë¤µ¤ì¤ë¤«¡©
-     * - setReadAll()¤ÇÁ´¤Æ¤ÎInPort¤Îread()¤¬¥³¡¼¥ë¤µ¤ì¤ë¤«¡©
-     * - setReadAll()¤¬Àµ¤·¤¯µ¡Ç½¤·¤Æ¤¤¤ë¤«¡©
+     * - readAll()ã§å…¨ã¦ã®InPortã®read()ãŒã‚³ãƒ¼ãƒ«ã•ã‚Œã‚‹ã‹ï¼Ÿ
+     * - setReadAll()ã§å…¨ã¦ã®InPortã®read()ãŒã‚³ãƒ¼ãƒ«ã•ã‚Œã‚‹ã‹ï¼Ÿ
+     * - setReadAll()ãŒæ­£ã—ãæ©Ÿèƒ½ã—ã¦ã„ã‚‹ã‹ï¼Ÿ
      */
     void test_readAll()
     {
@@ -1275,18 +1275,18 @@ namespace RTObject
       rto->addInPort("in2",*inport1);
       rto->addOutPort("out", *outport0);
 
-      // readAll()¤ÇÁ´¤Æ¤ÎInPort¤Îread()¤¬¥³¡¼¥ë¤µ¤ì¤ë¤«¡©
+      // readAll()ã§å…¨ã¦ã®InPortã®read()ãŒã‚³ãƒ¼ãƒ«ã•ã‚Œã‚‹ã‹ï¼Ÿ
       CPPUNIT_ASSERT_EQUAL(true, rto->readAll());
       CPPUNIT_ASSERT_EQUAL(1, inport0->get_counter());
       CPPUNIT_ASSERT_EQUAL(1, inport1->get_counter());
 
-      // setReadAll()¤ÇÁ´¤Æ¤ÎInPort¤Îread()¤¬¥³¡¼¥ë¤µ¤ì¤ë¤«¡©
+      // setReadAll()ã§å…¨ã¦ã®InPortã®read()ãŒã‚³ãƒ¼ãƒ«ã•ã‚Œã‚‹ã‹ï¼Ÿ
       rto->setReadAll();
       rto->on_execute(0);
       CPPUNIT_ASSERT_EQUAL(2, inport0->get_counter());
       CPPUNIT_ASSERT_EQUAL(2, inport1->get_counter());
 
-      // setReadAll(),readAll()¤¬Àµ¤·¤¯µ¡Ç½¤·¤Æ¤¤¤ë¤«¡©
+      // setReadAll(),readAll()ãŒæ­£ã—ãæ©Ÿèƒ½ã—ã¦ã„ã‚‹ã‹ï¼Ÿ
       inport0->set_return(false);
       rto->setReadAll(true,false);
       CPPUNIT_ASSERT_EQUAL(false, rto->readAll());
@@ -1332,11 +1332,11 @@ namespace RTObject
 
 
     /*!
-     * @brief writeAll(),setWriteAll()¥á¥½¥Ã¥É¤Î¥Æ¥¹¥È
+     * @brief writeAll(),setWriteAll()ãƒ¡ã‚½ãƒƒãƒ‰ã®ãƒ†ã‚¹ãƒˆ
      * 
-     * - setWriteAll()¤ÇÁ´¤Æ¤ÎOutPort¤Îwrite()¤¬¥³¡¼¥ë¤µ¤ì¤ë¤«¡©
-     * - writeAll()¤ÇÁ´¤Æ¤ÎOutPort¤Îwrite()¤¬¥³¡¼¥ë¤µ¤ì¤ë¤«¡©
-     * - setWriteAll()¤¬Àµ¤·¤¯µ¡Ç½¤·¤Æ¤¤¤ë¤«¡©
+     * - setWriteAll()ã§å…¨ã¦ã®OutPortã®write()ãŒã‚³ãƒ¼ãƒ«ã•ã‚Œã‚‹ã‹ï¼Ÿ
+     * - writeAll()ã§å…¨ã¦ã®OutPortã®write()ãŒã‚³ãƒ¼ãƒ«ã•ã‚Œã‚‹ã‹ï¼Ÿ
+     * - setWriteAll()ãŒæ­£ã—ãæ©Ÿèƒ½ã—ã¦ã„ã‚‹ã‹ï¼Ÿ
      */
     void test_writeAll()
     {
@@ -1352,18 +1352,18 @@ namespace RTObject
       rto->addOutPort("out2",*outport1);
       rto->addInPort("in", *inport0);
 
-      // writeAll()¤ÇÁ´¤Æ¤ÎOutPort¤Îwrite()¤¬¥³¡¼¥ë¤µ¤ì¤ë¤«¡©
+      // writeAll()ã§å…¨ã¦ã®OutPortã®write()ãŒã‚³ãƒ¼ãƒ«ã•ã‚Œã‚‹ã‹ï¼Ÿ
       CPPUNIT_ASSERT_EQUAL(true, rto->writeAll());
       CPPUNIT_ASSERT_EQUAL(1, outport0->get_counter());
       CPPUNIT_ASSERT_EQUAL(1, outport1->get_counter());
 
-      // setWriteAll()¤ÇÁ´¤Æ¤ÎOutPort¤Îwrite()¤¬¥³¡¼¥ë¤µ¤ì¤ë¤«¡©
+      // setWriteAll()ã§å…¨ã¦ã®OutPortã®write()ãŒã‚³ãƒ¼ãƒ«ã•ã‚Œã‚‹ã‹ï¼Ÿ
       rto->setWriteAll();
       rto->on_execute(0);
       CPPUNIT_ASSERT_EQUAL(2, outport0->get_counter());
       CPPUNIT_ASSERT_EQUAL(2, outport1->get_counter());
 
-      // setWriteAll(),writeAll()¤¬Àµ¤·¤¯µ¡Ç½¤·¤Æ¤¤¤ë¤«¡©
+      // setWriteAll(),writeAll()ãŒæ­£ã—ãæ©Ÿèƒ½ã—ã¦ã„ã‚‹ã‹ï¼Ÿ
       outport0->set_return(false);
       rto->setWriteAll(true,false);
       CPPUNIT_ASSERT_EQUAL(false, rto->writeAll());
@@ -1409,15 +1409,15 @@ namespace RTObject
 
 
     /*!
-     * @brief get_ports()¥á¥½¥Ã¥É¤Î¥Æ¥¹¥È
+     * @brief get_ports()ãƒ¡ã‚½ãƒƒãƒ‰ã®ãƒ†ã‚¹ãƒˆ
      * 
-     * - ÅĞÏ¿¤·¤¿Port»²¾È¤ò¤¹¤Ù¤ÆÀµ¤·¤¯¼èÆÀ¤Ç¤­¤ë¤«¡©
+     * - ç™»éŒ²ã—ãŸPortå‚ç…§ã‚’ã™ã¹ã¦æ­£ã—ãå–å¾—ã§ãã‚‹ã‹ï¼Ÿ
      */
     void test_get_ports()
     {
       RTObjectMock* rto = new RTObjectMock(m_pORB, m_pPOA); // will be deleted automatically
 
-      // Port¤òÅĞÏ¿¤·¤Æ¤ª¤¯
+      // Portã‚’ç™»éŒ²ã—ã¦ãŠã
       PortMock* port0 = new PortMock();
       port0->setName("port0");
       rto->addPort(*port0);
@@ -1426,7 +1426,7 @@ namespace RTObject
       port1->setName("port1");
       rto->addPort(*port1);
 			
-      // ÅĞÏ¿¤·¤¿Port»²¾È¤ò¤¹¤Ù¤ÆÀµ¤·¤¯¼èÆÀ¤Ç¤­¤ë¤«¡©
+      // ç™»éŒ²ã—ãŸPortå‚ç…§ã‚’ã™ã¹ã¦æ­£ã—ãå–å¾—ã§ãã‚‹ã‹ï¼Ÿ
       RTC::PortServiceList* portList = rto->get_ports();
       CPPUNIT_ASSERT(portList != NULL);
       CPPUNIT_ASSERT_EQUAL(CORBA::ULong(2), portList->length());
@@ -1447,29 +1447,29 @@ namespace RTObject
     }
 		
     /*!
-     * @brief get_execution_context_services()¥á¥½¥Ã¥É¤Î¥Æ¥¹¥È
+     * @brief get_execution_context_services()ãƒ¡ã‚½ãƒƒãƒ‰ã®ãƒ†ã‚¹ãƒˆ
      * 
-     * - ExecutionContextService¤ò¤¹¤Ù¤ÆÀµ¤·¤¯¼èÆÀ¤Ç¤­¤ë¤«¡©
+     * - ExecutionContextServiceã‚’ã™ã¹ã¦æ­£ã—ãå–å¾—ã§ãã‚‹ã‹ï¼Ÿ
      */
 /*
     void test_get_execution_context_services()
     {
       RTObjectMock* rto = new RTObjectMock(m_pORB, m_pPOA); // will be deleted automatically
 
-      // ExecutionContext¤òÀ¸À®¤¹¤ë
+      // ExecutionContextã‚’ç”Ÿæˆã™ã‚‹
       RTC_exp::PeriodicExecutionContext* ec1
 	= new RTC_exp::PeriodicExecutionContext(); // will be deleted automatically
       RTC_exp::PeriodicExecutionContext* ec2
 	= new RTC_exp::PeriodicExecutionContext(); // will be deleted automatically
 
-      // ExecutionContext¤Ëattach¤·¤Æ¤ª¤¯
+      // ExecutionContextã«attachã—ã¦ãŠã
       RTC::UniqueId id1 = rto->attach_context(ec1->_this());
       CPPUNIT_ASSERT(RTC::UniqueId(-1) != id1);
       RTC::UniqueId id2 = rto->attach_context(ec2->_this());
       CPPUNIT_ASSERT(RTC::UniqueId(-1) != id2);
 
-      // ExecutionContextService¤ò¤¹¤Ù¤ÆÀµ¤·¤¯¼èÆÀ¤Ç¤­¤ë¤«¡©
-      // (Ãí) RTC::PeriodicExecutionContext¤ÏExecutionContextService¤Î¥µ¥Ö¥¯¥é¥¹¤Ë¤Ê¤Ã¤Æ¤¤¤ë¡£
+      // ExecutionContextServiceã‚’ã™ã¹ã¦æ­£ã—ãå–å¾—ã§ãã‚‹ã‹ï¼Ÿ
+      // (æ³¨) RTC::PeriodicExecutionContextã¯ExecutionContextServiceã®ã‚µãƒ–ã‚¯ãƒ©ã‚¹ã«ãªã£ã¦ã„ã‚‹ã€‚
       RTC::ExecutionContextServiceList* ecSvcList
 //	= rto->get_execution_context_services();
 	= rto->get_owned_contexts();
@@ -1482,14 +1482,14 @@ namespace RTObject
 */		
     void test_get_owned_organizations()
     {
-      // ¥Æ¥¹¥ÈÂĞ¾İ¤¬Ì¤¼ÂÁõ¤Ë¤Ä¤­¡¢¥Æ¥¹¥ÈÌ¤¼ÂÁõ
+      // ãƒ†ã‚¹ãƒˆå¯¾è±¡ãŒæœªå®Ÿè£…ã«ã¤ãã€ãƒ†ã‚¹ãƒˆæœªå®Ÿè£…
     }
 		
     /*!
-     * @brief get_sdo_id()¥á¥½¥Ã¥É¤Î¥Æ¥¹¥È
+     * @brief get_sdo_id()ãƒ¡ã‚½ãƒƒãƒ‰ã®ãƒ†ã‚¹ãƒˆ
      * 
-     * - SDO ID¤ò¼èÆÀ¤Ç¤­¤ë¤«¡©
-     * - ¼èÆÀ¤µ¤ì¤¿SDO ID¤Ï°ì°Õ¤«¡©
+     * - SDO IDã‚’å–å¾—ã§ãã‚‹ã‹ï¼Ÿ
+     * - å–å¾—ã•ã‚ŒãŸSDO IDã¯ä¸€æ„ã‹ï¼Ÿ
      */
     void test_get_sdo_id()
     {
@@ -1502,16 +1502,16 @@ namespace RTObject
       std::string str2(rto2->getInstanceName());
       CPPUNIT_ASSERT("INSTANCE_NAME 2" == str2);
 
-      // SDO ID¤ò¼èÆÀ¤Ç¤­¤ë¤«¡©
+      // SDO IDã‚’å–å¾—ã§ãã‚‹ã‹ï¼Ÿ
       char* id1 = rto1->get_sdo_id();
       CPPUNIT_ASSERT(id1 != NULL);
       char* id2 = rto2->get_sdo_id();
       CPPUNIT_ASSERT(id2 != NULL);
 			
-      // ¼èÆÀ¤µ¤ì¤¿SDO ID¤Ï°ì°Õ¤«¡©
-      // (Ãí) instance_name¤¬SDO ID¤È¤·¤Æ¤½¤Î¤Ş¤Ş»ÈÍÑ¤µ¤ì¤ë¤³¤È¤ËÃí°Õ¡£
-      //      ¤Ä¤Ş¤ê¡¢¼ÂÁõ¾å¡¢SDO ID¤Î°ì°ÕÀ­¤Ïinstance_name¤Î°ì°ÕÀ­¤Ë´ğ¤Å¤¤¤Æ¤¤¤ë¡£
-      //      »ÅÍÍ¾å¡¢instance_name¤Ï°ì°Õ¤Ç¤Ê¤±¤ì¤Ğ¤Ê¤é¤Ê¤¤¤Î¤Ç¡¢¼óÈø°ì´Ó¤·¤Æ¤¤¤ë¡£
+      // å–å¾—ã•ã‚ŒãŸSDO IDã¯ä¸€æ„ã‹ï¼Ÿ
+      // (æ³¨) instance_nameãŒSDO IDã¨ã—ã¦ãã®ã¾ã¾ä½¿ç”¨ã•ã‚Œã‚‹ã“ã¨ã«æ³¨æ„ã€‚
+      //      ã¤ã¾ã‚Šã€å®Ÿè£…ä¸Šã€SDO IDã®ä¸€æ„æ€§ã¯instance_nameã®ä¸€æ„æ€§ã«åŸºã¥ã„ã¦ã„ã‚‹ã€‚
+      //      ä»•æ§˜ä¸Šã€instance_nameã¯ä¸€æ„ã§ãªã‘ã‚Œã°ãªã‚‰ãªã„ã®ã§ã€é¦–å°¾ä¸€è²«ã—ã¦ã„ã‚‹ã€‚
       CPPUNIT_ASSERT(id1 != id2);
 
       rto2->shutdown();
@@ -1521,20 +1521,20 @@ namespace RTObject
     }
 		
     /*!
-     * @brief get_sdo_type()¥á¥½¥Ã¥É¤Î¥Æ¥¹¥È
+     * @brief get_sdo_type()ãƒ¡ã‚½ãƒƒãƒ‰ã®ãƒ†ã‚¹ãƒˆ
      * 
-     * - SDO¥¿¥¤¥×¤ò¼èÆÀ¤Ç¤­¤ë¤«¡©
+     * - SDOã‚¿ã‚¤ãƒ—ã‚’å–å¾—ã§ãã‚‹ã‹ï¼Ÿ
      */
     void test_get_sdo_type()
     {
       RTObjectMock* rto = new RTObjectMock(m_pORB, m_pPOA); // will be deleted automatically
 				
-      // ¢¨ ¼ÂÁõ¾å¡¢type_name¤¬SDO¥¿¥¤¥×¤È¤·¤Æ»ÈÍÑ¤µ¤ì¤Æ¤¤¤ë¤¿¤á¡¢¤³¤³¤Ç½àÈ÷ÀßÄê¤·¤Æ¤¤¤ë
+      // â€» å®Ÿè£…ä¸Šã€type_nameãŒSDOã‚¿ã‚¤ãƒ—ã¨ã—ã¦ä½¿ç”¨ã•ã‚Œã¦ã„ã‚‹ãŸã‚ã€ã“ã“ã§æº–å‚™è¨­å®šã—ã¦ã„ã‚‹
       coil::Properties prop;
       prop.setProperty("type_name", "TYPE_NAME");
       rto->setProperties(prop);
 			
-      // SDO¥¿¥¤¥×¤ò¼èÆÀ¤Ç¤­¤ë¤«¡©
+      // SDOã‚¿ã‚¤ãƒ—ã‚’å–å¾—ã§ãã‚‹ã‹ï¼Ÿ
       char* sdoType = rto->get_sdo_type();
       CPPUNIT_ASSERT(sdoType != NULL);
 
@@ -1543,32 +1543,32 @@ namespace RTObject
     }
 		
     /*!
-     * @brief get_device_profile()¥á¥½¥Ã¥É¤Î¥Æ¥¹¥È
+     * @brief get_device_profile()ãƒ¡ã‚½ãƒƒãƒ‰ã®ãƒ†ã‚¹ãƒˆ
      * 
-     * - DeviceProfile¤òÀµ¤·¤¯¼èÆÀ¤Ç¤­¤ë¤«¡©
+     * - DeviceProfileã‚’æ­£ã—ãå–å¾—ã§ãã‚‹ã‹ï¼Ÿ
      */
     void test_get_device_profile()
     {
-      // test_get_configuration_and_set_device_profile_and_get_device_profile¤Ç·ó¤Í¤ë
+      // test_get_configuration_and_set_device_profile_and_get_device_profileã§å…¼ã­ã‚‹
     }
 		
     /*!
-     * @brief get_service_profile()¥á¥½¥Ã¥É¤Î¥Æ¥¹¥È
+     * @brief get_service_profile()ãƒ¡ã‚½ãƒƒãƒ‰ã®ãƒ†ã‚¹ãƒˆ
      * 
-     * - »ØÄê¤·¤¿ID¤ÎServiceProfile¤òÀµ¤·¤¯¼èÆÀ¤Ç¤­¤ë¤«¡©
+     * - æŒ‡å®šã—ãŸIDã®ServiceProfileã‚’æ­£ã—ãå–å¾—ã§ãã‚‹ã‹ï¼Ÿ
      */
     void test_get_service_profile()
     {
-      // test_get_configuration_and_set_service_profile_and_get_service_profile¤Ç·ó¤Í¤ë
+      // test_get_configuration_and_set_service_profile_and_get_service_profileã§å…¼ã­ã‚‹
     }
 
     /////--------
     /////----consumer test----
     /*!
-     * @brief add_service_profile(), remove_service_profile()¥á¥½¥Ã¥É¤Î¥Æ¥¹¥È
+     * @brief add_service_profile(), remove_service_profile()ãƒ¡ã‚½ãƒƒãƒ‰ã®ãƒ†ã‚¹ãƒˆ
      * 
-     * - Configuration::add_service_profile()¤òÄÌ¤·¤Æ¡¢SDOServiceConsumer¤òÀµ¤·¤¯ÀßÄê¤Ç¤­¤ë¤«¡©
-     * - remove_service_profile()¤òÍÑ¤¤¤Æ¡¢ÀßÄê¤µ¤ì¤Æ¤¤¤ëSDPServiceConsumer¤òÀµ¤·¤¯ºï½ü¤Ç¤­¤ë¤«¡©
+     * - Configuration::add_service_profile()ã‚’é€šã—ã¦ã€SDOServiceConsumerã‚’æ­£ã—ãè¨­å®šã§ãã‚‹ã‹ï¼Ÿ
+     * - remove_service_profile()ã‚’ç”¨ã„ã¦ã€è¨­å®šã•ã‚Œã¦ã„ã‚‹SDPServiceConsumerã‚’æ­£ã—ãå‰Šé™¤ã§ãã‚‹ã‹ï¼Ÿ
      */
     void test_consumer_add_service_profile_remove_it()
     {
@@ -1578,11 +1578,11 @@ namespace RTObject
 
       RTObjectMock *rto = new RTObjectMock(m_pORB, m_pPOA); // will be deleted automatically
 
-      // 1. ¥×¥í¥Ğ¥¤¥À¤òºîÀ®¤¹¤ë¡ÊOther's Provier¡Ë
-      // Consumer¤Ë³ä¤êÅö¤Æ¤ë¥ª¥Ö¥¸¥§¥¯¥È¤òÀ¸À®¤¹¤ë
+      // 1. ãƒ—ãƒ­ãƒã‚¤ãƒ€ã‚’ä½œæˆã™ã‚‹ï¼ˆOther's Provierï¼‰
+      // Consumerã«å‰²ã‚Šå½“ã¦ã‚‹ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’ç”Ÿæˆã™ã‚‹
       MyIncrementProvider* svcPrv = new MyIncrementProvider();
 
-      // 2. ¥³¥ó¥·¥å¡¼¥Ş¤ò¥Õ¥¡¥¯¥È¥ê¤ËÅĞÏ¿¤¹¤ë
+      // 2. ã‚³ãƒ³ã‚·ãƒ¥ãƒ¼ãƒã‚’ãƒ•ã‚¡ã‚¯ãƒˆãƒªã«ç™»éŒ²ã™ã‚‹
       std::string prof_name("Test Consumer");
 
       RTC::SdoServiceConsumerFactory& factory = RTC::SdoServiceConsumerFactory::instance();
@@ -1592,7 +1592,7 @@ namespace RTObject
 			 ::coil::Destructor< ::RTC::SdoServiceConsumerBase,
 			 ::RTObject::MyIncrementConsumer>);
 
-      // 3. ¥×¥í¥Õ¥¡¥¤¥ë¤òRTC¤Î1.¤Ç¤Ä¤¯¤Ã¤¿¥µ¡¼¥Ó¥¹¥×¥í¥Ğ¥¤¥À¤Î¥ê¥Õ¥¡¥ì¥ó¥¹¤È¤È¤â¤Ë¥»¥Ã¥È¤¹¤ë
+      // 3. ãƒ—ãƒ­ãƒ•ã‚¡ã‚¤ãƒ«ã‚’RTCã®1.ã§ã¤ãã£ãŸã‚µãƒ¼ãƒ“ã‚¹ãƒ—ãƒ­ãƒã‚¤ãƒ€ã®ãƒªãƒ•ã‚¡ãƒ¬ãƒ³ã‚¹ã¨ã¨ã‚‚ã«ã‚»ãƒƒãƒˆã™ã‚‹
       SDOPackage::ServiceProfile svcPrvProf;
       svcPrvProf.id             = prof_name.c_str();
       svcPrvProf.interface_type = prof_name.c_str();
@@ -1601,22 +1601,22 @@ namespace RTObject
       svcPrvProf.properties[0].name = "Provider PROPERTIES";
       svcPrvProf.properties[0].value <<= "3.14159";
 
-      // 4. RTC¤ÎÆâÉô¤Ç¥Õ¥¡¥¯¥È¥ê¤«¤é¥³¥ó¥·¥å¡¼¥Ş¤Î¥¤¥ó¥¹¥¿¥ó¥¹¤¬°ì¤Äcreate¤µ¤ì¡¢
-      //    init()Æâ¤Ç¡¢CorbaConsumer¤Ë1.¤Î¥×¥í¥Ğ¥¤¥À¤Î¥ê¥Õ¥¡¥ì¥ó¥¹¤¬¥»¥Ã¥È¤µ¤ì¤ë¡£
+      // 4. RTCã®å†…éƒ¨ã§ãƒ•ã‚¡ã‚¯ãƒˆãƒªã‹ã‚‰ã‚³ãƒ³ã‚·ãƒ¥ãƒ¼ãƒã®ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ãŒä¸€ã¤createã•ã‚Œã€
+      //    init()å†…ã§ã€CorbaConsumerã«1.ã®ãƒ—ãƒ­ãƒã‚¤ãƒ€ã®ãƒªãƒ•ã‚¡ãƒ¬ãƒ³ã‚¹ãŒã‚»ãƒƒãƒˆã•ã‚Œã‚‹ã€‚
       //
-      // Configuration¥¤¥ó¥¿¥Õ¥§¡¼¥¹¤ò¼èÆÀ¤¹¤ë
+      // Configurationã‚¤ãƒ³ã‚¿ãƒ•ã‚§ãƒ¼ã‚¹ã‚’å–å¾—ã™ã‚‹
       SDOPackage::Configuration_ptr cfg = rto->get_configuration();
       CPPUNIT_ASSERT(! CORBA::is_nil(cfg));
 
-      // Configuration¥¤¥ó¥¿¥Õ¥§¡¼¥¹¤Ë¡¢ServiceProfile¤òÀßÄê¤¹¤ë
-      // À¸À®¤·¤¿¥ª¥Ö¥¸¥§¥¯¥È¤òConsumer¤Ë¥»¥Ã¥È¤¹¤ë
+      // Configurationã‚¤ãƒ³ã‚¿ãƒ•ã‚§ãƒ¼ã‚¹ã«ã€ServiceProfileã‚’è¨­å®šã™ã‚‹
+      // ç”Ÿæˆã—ãŸã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’Consumerã«ã‚»ãƒƒãƒˆã™ã‚‹
       CPPUNIT_ASSERT_EQUAL(true, cfg->add_service_profile(svcPrvProf));
 
       // 
-      // 5. RTCÆâÉô¤ÇConsumer¤Îoperation¤ò¸Æ¤Ö¤È¡¢CorbaConsuemr·ĞÍ³¤Ç
-      //    Provider¤Î´Ø¿ô¤¬¸Æ¤Ğ¤ì¤ë¡£
-      //    (¤³¤ì¤«¤é¡¢SdoService¤ò·Ñ¾µ¤·,operation¤ò¤¤¤¯¤Ä¤«ÄÉ²Ã¤·¤¿SdoService¤ò¼ÂÁõ¤·¤Æ¡¢
-      //     ¤½¤ì¤òÍøÍÑ¤¹¤ëÁÛÄê¤Ç¥Æ¥¹¥È¤ò½ñ¤¯)
+      // 5. RTCå†…éƒ¨ã§Consumerã®operationã‚’å‘¼ã¶ã¨ã€CorbaConsuemrçµŒç”±ã§
+      //    Providerã®é–¢æ•°ãŒå‘¼ã°ã‚Œã‚‹ã€‚
+      //    (ã“ã‚Œã‹ã‚‰ã€SdoServiceã‚’ç¶™æ‰¿ã—,operationã‚’ã„ãã¤ã‹è¿½åŠ ã—ãŸSdoServiceã‚’å®Ÿè£…ã—ã¦ã€
+      //     ãã‚Œã‚’åˆ©ç”¨ã™ã‚‹æƒ³å®šã§ãƒ†ã‚¹ãƒˆã‚’æ›¸ã)
       CPPUNIT_ASSERT_EQUAL(true, testConsumer != NULL);
       SDOPackage::ServiceProfile gotSvcPrvProf = testConsumer->getProfile();
 
@@ -1630,12 +1630,12 @@ namespace RTObject
       }
 
       CPPUNIT_ASSERT_EQUAL(0, svcPrv->get_invoked_count());
-      // Consumer¤Ë³ä¤êÅö¤Æ¤¿¥ª¥Ö¥¸¥§¥¯¥È¤Î¥á¥½¥Ã¥É¤òÀµ¤·¤¯¸Æ¤Ó½Ğ¤»¤ë¤«¡©
+      // Consumerã«å‰²ã‚Šå½“ã¦ãŸã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®ãƒ¡ã‚½ãƒƒãƒ‰ã‚’æ­£ã—ãå‘¼ã³å‡ºã›ã‚‹ã‹ï¼Ÿ
       ((MyIncrementConsumer* )testConsumer)->consumerIncrementCount();
       CPPUNIT_ASSERT_EQUAL(1, svcPrv->get_invoked_count());
 
       //
-      // ÀßÄê¤·¤¿¤¦¤Á¡¢remove¤·¤Æ¡¢Àµ¤·¤¯remove¤µ¤ì¤¿¤³¤È¤ò³ÎÇ§¤¹¤ë
+      // è¨­å®šã—ãŸã†ã¡ã€removeã—ã¦ã€æ­£ã—ãremoveã•ã‚ŒãŸã“ã¨ã‚’ç¢ºèªã™ã‚‹
       CPPUNIT_ASSERT_EQUAL(true, cfg->remove_service_profile(prof_name.c_str()));
 
       m_pPOA->deactivate_object(*m_pPOA->servant_to_id(svcPrv));
@@ -1644,11 +1644,11 @@ namespace RTObject
     }
 
     /*!
-     * @brief add_service_profile(), remove_service_profile()¥á¥½¥Ã¥É¤Î¥Æ¥¹¥È
+     * @brief add_service_profile(), remove_service_profile()ãƒ¡ã‚½ãƒƒãƒ‰ã®ãƒ†ã‚¹ãƒˆ
      * 
-     * - Configuration::add_service_profile()¤òÄÌ¤·¤Æ¡¢SDOServiceConsumer¤òÀµ¤·¤¯ÀßÄê¤Ç¤­¤ë¤«¡©
-     * - remove_service_profile()¤òÍÑ¤¤¤Æ¡¢"illegal_arguments"¤Ç¡¢ÀßÄê¤µ¤ì¤Æ¤¤¤ë
-     * - SDPServiceConsumer¤òºï½ü¤Ç¤­¤Ê¤¤¤«¡©
+     * - Configuration::add_service_profile()ã‚’é€šã—ã¦ã€SDOServiceConsumerã‚’æ­£ã—ãè¨­å®šã§ãã‚‹ã‹ï¼Ÿ
+     * - remove_service_profile()ã‚’ç”¨ã„ã¦ã€"illegal_arguments"ã§ã€è¨­å®šã•ã‚Œã¦ã„ã‚‹
+     * - SDPServiceConsumerã‚’å‰Šé™¤ã§ããªã„ã‹ï¼Ÿ
      */
     void test_consumer_add_service_profile_remove_it_with_illegal_arguments()
     {
@@ -1656,11 +1656,11 @@ namespace RTObject
 
       RTObjectMock *rto = new RTObjectMock(m_pORB, m_pPOA); // will be deleted automatically
 
-      // 1. ¥×¥í¥Ğ¥¤¥À¤òºîÀ®¤¹¤ë¡ÊOther's Provier¡Ë
-      // Consumer¤Ë³ä¤êÅö¤Æ¤ë¥ª¥Ö¥¸¥§¥¯¥È¤òÀ¸À®¤¹¤ë
+      // 1. ãƒ—ãƒ­ãƒã‚¤ãƒ€ã‚’ä½œæˆã™ã‚‹ï¼ˆOther's Provierï¼‰
+      // Consumerã«å‰²ã‚Šå½“ã¦ã‚‹ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’ç”Ÿæˆã™ã‚‹
       MyIncrementProvider* svcPrv = new MyIncrementProvider();
 
-      // 2. ¥³¥ó¥·¥å¡¼¥Ş¤ò¥Õ¥¡¥¯¥È¥ê¤ËÅĞÏ¿¤¹¤ë
+      // 2. ã‚³ãƒ³ã‚·ãƒ¥ãƒ¼ãƒã‚’ãƒ•ã‚¡ã‚¯ãƒˆãƒªã«ç™»éŒ²ã™ã‚‹
       std::string prof_name("Test Provider");
 
       RTC::SdoServiceConsumerFactory& factory = RTC::SdoServiceConsumerFactory::instance();
@@ -1670,7 +1670,7 @@ namespace RTObject
 			 ::coil::Destructor< ::RTC::SdoServiceConsumerBase,
 			 ::RTObject::MyIncrementConsumer>);
 
-      // 3. ¥×¥í¥Õ¥¡¥¤¥ë¤òRTC¤Î1.¤Ç¤Ä¤¯¤Ã¤¿¥µ¡¼¥Ó¥¹¥×¥í¥Ğ¥¤¥À¤Î¥ê¥Õ¥¡¥ì¥ó¥¹¤È¤È¤â¤Ë¥»¥Ã¥È¤¹¤ë
+      // 3. ãƒ—ãƒ­ãƒ•ã‚¡ã‚¤ãƒ«ã‚’RTCã®1.ã§ã¤ãã£ãŸã‚µãƒ¼ãƒ“ã‚¹ãƒ—ãƒ­ãƒã‚¤ãƒ€ã®ãƒªãƒ•ã‚¡ãƒ¬ãƒ³ã‚¹ã¨ã¨ã‚‚ã«ã‚»ãƒƒãƒˆã™ã‚‹
       SDOPackage::ServiceProfile svcPrvProf;
       svcPrvProf.id             = prof_name.c_str();
       svcPrvProf.interface_type = prof_name.c_str();
@@ -1679,19 +1679,19 @@ namespace RTObject
       svcPrvProf.properties[0].name = "Provider PROPERTIES";
       svcPrvProf.properties[0].value <<= "3.14159";
 
-      // 4. RTC¤ÎÆâÉô¤Ç¥Õ¥¡¥¯¥È¥ê¤«¤é¥³¥ó¥·¥å¡¼¥Ş¤Î¥¤¥ó¥¹¥¿¥ó¥¹¤¬°ì¤Äcreate¤µ¤ì¡¢
-      //    init()Æâ¤Ç¡¢CorbaConsumer¤Ë1.¤Î¥×¥í¥Ğ¥¤¥À¤Î¥ê¥Õ¥¡¥ì¥ó¥¹¤¬¥»¥Ã¥È¤µ¤ì¤ë¡£
+      // 4. RTCã®å†…éƒ¨ã§ãƒ•ã‚¡ã‚¯ãƒˆãƒªã‹ã‚‰ã‚³ãƒ³ã‚·ãƒ¥ãƒ¼ãƒã®ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ãŒä¸€ã¤createã•ã‚Œã€
+      //    init()å†…ã§ã€CorbaConsumerã«1.ã®ãƒ—ãƒ­ãƒã‚¤ãƒ€ã®ãƒªãƒ•ã‚¡ãƒ¬ãƒ³ã‚¹ãŒã‚»ãƒƒãƒˆã•ã‚Œã‚‹ã€‚
       //
-      // Configuration¥¤¥ó¥¿¥Õ¥§¡¼¥¹¤ò¼èÆÀ¤¹¤ë
+      // Configurationã‚¤ãƒ³ã‚¿ãƒ•ã‚§ãƒ¼ã‚¹ã‚’å–å¾—ã™ã‚‹
       SDOPackage::Configuration_ptr cfg = rto->get_configuration();
       CPPUNIT_ASSERT(! CORBA::is_nil(cfg));
 
-      // Configuration¥¤¥ó¥¿¥Õ¥§¡¼¥¹¤Ë¡¢ServiceProfile¤òÀßÄê¤¹¤ë
-      // À¸À®¤·¤¿¥ª¥Ö¥¸¥§¥¯¥È¤òConsumer¤Ë¥»¥Ã¥È¤¹¤ë
+      // Configurationã‚¤ãƒ³ã‚¿ãƒ•ã‚§ãƒ¼ã‚¹ã«ã€ServiceProfileã‚’è¨­å®šã™ã‚‹
+      // ç”Ÿæˆã—ãŸã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’Consumerã«ã‚»ãƒƒãƒˆã™ã‚‹
       CPPUNIT_ASSERT_EQUAL(true, cfg->add_service_profile(svcPrvProf));
 
       //
-      // ÀßÄê¤·¤¿¤¦¤Á¡¢remove¤·¤Æ¡¢Àµ¤·¤¯remove¤µ¤ì¤¿¤³¤È¤ò³ÎÇ§¤¹¤ë
+      // è¨­å®šã—ãŸã†ã¡ã€removeã—ã¦ã€æ­£ã—ãremoveã•ã‚ŒãŸã“ã¨ã‚’ç¢ºèªã™ã‚‹
       CPPUNIT_ASSERT_EQUAL(false, cfg->remove_service_profile("Test Provider NG"));
       CPPUNIT_ASSERT_EQUAL(true, cfg->remove_service_profile(prof_name.c_str()));
       try {
@@ -1699,7 +1699,7 @@ namespace RTObject
 	CPPUNIT_FAIL("Exception not thrown.");
       }
       catch(...){
-	  // °Õ¿Ş¤É¤ª¤ê¤ÎÎã³°¤ò¥­¥ã¥Ã¥Á¤·¤¿
+	  // æ„å›³ã©ãŠã‚Šã®ä¾‹å¤–ã‚’ã‚­ãƒ£ãƒƒãƒã—ãŸ
 	std::cout << "\nSDO Service Consumer is completely removed." << std::endl;
       }
 
@@ -1711,9 +1711,9 @@ namespace RTObject
     /////----provider test----
 #define FACTORY_OK 0
     /*!
-     * @brief get_service_profile()¥á¥½¥Ã¥É¤Î¥Æ¥¹¥È
+     * @brief get_service_profile()ãƒ¡ã‚½ãƒƒãƒ‰ã®ãƒ†ã‚¹ãƒˆ
      * 
-     * - get_service_profile()¤òÍÑ¤¤¤ÆServiceProfile¤ò¼èÆÀ¤·¤Æ¡¢Àµ¤·¤¯ÀßÄê¤µ¤ì¤¿¤³¤È¤ò³ÎÇ§¤¹¤ë
+     * - get_service_profile()ã‚’ç”¨ã„ã¦ServiceProfileã‚’å–å¾—ã—ã¦ã€æ­£ã—ãè¨­å®šã•ã‚ŒãŸã“ã¨ã‚’ç¢ºèªã™ã‚‹
      *
      */
     void test_provider_get_service_profile()
@@ -1722,7 +1722,7 @@ namespace RTObject
 
       RTObjectMock *rto = new RTObjectMock(m_pORB, m_pPOA); // will be deleted automatically
 
-      // SDOServiceProvider¤Îfactory¤ò½àÈ÷¤¹¤ë
+      // SDOServiceProviderã®factoryã‚’æº–å‚™ã™ã‚‹
       std::string prof_name("Test Provider");
       RTC::SdoServiceProviderFactory& factoryPrv = RTC::SdoServiceProviderFactory::instance();
 
@@ -1732,10 +1732,10 @@ namespace RTObject
       			    ::coil::Destructor< ::RTC::SdoServiceProviderBase,
       			    ::RTObject::MySDOServiceProvider>);
 
-      // SDOServiceProvider¤Îobject¤ò½àÈ÷¤¹¤ë
+      // SDOServiceProviderã®objectã‚’æº–å‚™ã™ã‚‹
       RTC::SdoServiceProviderBase* svcPrv = factoryPrv.createObject(prof_name);
 
-      // ServiceProfile¤ò½àÈ÷¤·¤Æ¤ª¤¯
+      // ServiceProfileã‚’æº–å‚™ã—ã¦ãŠã
       SDOPackage::ServiceProfile svcPrvProf;
       svcPrvProf.id             = CORBA::string_dup(prof_name.c_str());
       svcPrvProf.interface_type = CORBA::string_dup(prof_name.c_str());
@@ -1744,14 +1744,14 @@ namespace RTObject
       svcPrvProf.properties[0].name = "PROPERTIES NAME 1";
       svcPrvProf.properties[0].value <<= "3.14159";
 
-      // SDOServiceProvider¤ò½é´ü²½¤¹¤ë
+      // SDOServiceProviderã‚’åˆæœŸåŒ–ã™ã‚‹
       (RTObject::MySDOServiceProvider*)(svcPrv)->init((RTC::RTObject_impl& )rto, svcPrvProf);
       ///svcPrv->init((RTC::RTObject_impl& )rto, svcPrvProf);
       
       CORBA::Boolean retn = rto->addSdoServiceProvider(svcPrvProf, svcPrv);
       CPPUNIT_ASSERT_EQUAL(true, retn);
 
-      // get_service_profile()¤òÍÑ¤¤¤ÆServiceProfile¤ò¼èÆÀ¤·¤Æ¡¢Àµ¤·¤¯ÀßÄê¤µ¤ì¤¿¤³¤È¤ò³ÎÇ§¤¹¤ë
+      // get_service_profile()ã‚’ç”¨ã„ã¦ServiceProfileã‚’å–å¾—ã—ã¦ã€æ­£ã—ãè¨­å®šã•ã‚ŒãŸã“ã¨ã‚’ç¢ºèªã™ã‚‹
       SDOPackage::ServiceProfile* tmp_prof = rto->get_service_profile(prof_name.c_str());
       ///std::cerr << "\n-----test_provider_get_service_profile():rto->get_service_profile() End\n" << std::endl;
       CPPUNIT_ASSERT(tmp_prof != NULL);
@@ -1766,7 +1766,7 @@ namespace RTObject
 	CPPUNIT_ASSERT_EQUAL(std::string("3.14159"), std::string(value));
       }
 
-      // get_sdo_service()¤òÍÑ¤¤¤ÆService¤ò¼èÆÀ¤·¤Æ¡¢Àµ¤·¤¯ÀßÄê¤µ¤ì¤¿¤³¤È¤ò³ÎÇ§¤¹¤ë
+      // get_sdo_service()ã‚’ç”¨ã„ã¦Serviceã‚’å–å¾—ã—ã¦ã€æ­£ã—ãè¨­å®šã•ã‚ŒãŸã“ã¨ã‚’ç¢ºèªã™ã‚‹
       SDOPackage::SDOService_ptr tmp_svcPtr = rto->get_sdo_service(prof_name.c_str());
       CPPUNIT_ASSERT(tmp_svcPtr != NULL);
       CPPUNIT_ASSERT_EQUAL(true, tmp_svcPtr == tmp_prof->service);
@@ -1784,9 +1784,9 @@ namespace RTObject
     }
 
     /*!
-     * @brief get_service_profiles()¥á¥½¥Ã¥É¤Î¥Æ¥¹¥È
+     * @brief get_service_profiles()ãƒ¡ã‚½ãƒƒãƒ‰ã®ãƒ†ã‚¹ãƒˆ
      * 
-     * - get_service_profiles()¤òÍÑ¤¤¤Æ¤¹¤Ù¤Æ¤ÎServiceProfile¤ò¼èÆÀ¤·¤Æ¡¢Àµ¤·¤¯ÀßÄê¤µ¤ì¤¿¤³¤È¤ò³ÎÇ§¤¹¤ë
+     * - get_service_profiles()ã‚’ç”¨ã„ã¦ã™ã¹ã¦ã®ServiceProfileã‚’å–å¾—ã—ã¦ã€æ­£ã—ãè¨­å®šã•ã‚ŒãŸã“ã¨ã‚’ç¢ºèªã™ã‚‹
      *
      */
     void test_provider_get_service_profiles()
@@ -1795,7 +1795,7 @@ namespace RTObject
 
       RTObjectMock *rto = new RTObjectMock(m_pORB, m_pPOA); // will be deleted automatically
 
-      // SDOServiceProvider¤Îfactory¤ò½àÈ÷¤¹¤ë
+      // SDOServiceProviderã®factoryã‚’æº–å‚™ã™ã‚‹
       std::string prof_name("Test Provider 1");
       RTC::SdoServiceProviderFactory& factoryPrv = RTC::SdoServiceProviderFactory::instance();
       factoryPrv.addFactory(prof_name.c_str(),
@@ -1804,10 +1804,10 @@ namespace RTObject
 			    ::coil::Destructor< ::RTC::SdoServiceProviderBase,
 			    ::RTObject::MySDOServiceProvider>);
 
-      // SDOServiceProvider¤Îobject¤ò½àÈ÷¤¹¤ë
+      // SDOServiceProviderã®objectã‚’æº–å‚™ã™ã‚‹
       RTC::SdoServiceProviderBase* svcPrv = factoryPrv.createObject(prof_name);
 
-      // ServiceProfile¤ò½àÈ÷¤·¤Æ¤ª¤¯
+      // ServiceProfileã‚’æº–å‚™ã—ã¦ãŠã
       SDOPackage::ServiceProfile svcPrvProf;
       svcPrvProf.id             = CORBA::string_dup(prof_name.c_str());
       svcPrvProf.interface_type = CORBA::string_dup(prof_name.c_str());
@@ -1816,7 +1816,7 @@ namespace RTObject
       svcPrvProf.properties[0].name = "PROPERTIES NAME 1";
       svcPrvProf.properties[0].value <<= "3.14159";
 
-      // SDOServiceProvider¤Îfactory¤Î£²¤ò½àÈ÷¤¹¤ë
+      // SDOServiceProviderã®factoryã®ï¼’ã‚’æº–å‚™ã™ã‚‹
       std::string prof_name2("Test Provider 2");
       RTC::SdoServiceProviderFactory& factoryPrv2 = RTC::SdoServiceProviderFactory::instance();
       factoryPrv2.addFactory(prof_name2.c_str(),
@@ -1825,10 +1825,10 @@ namespace RTObject
 			    ::coil::Destructor< ::RTC::SdoServiceProviderBase,
 			    ::RTObject::MySDOServiceProvider>);
 
-      // SDOServiceProvider¤Îobject¤ò½àÈ÷¤¹¤ë
+      // SDOServiceProviderã®objectã‚’æº–å‚™ã™ã‚‹
       RTC::SdoServiceProviderBase* svcPrv2 = factoryPrv2.createObject(prof_name2);
 
-      // ServiceProfile¤ò½àÈ÷¤·¤Æ¤ª¤¯
+      // ServiceProfileã‚’æº–å‚™ã—ã¦ãŠã
       SDOPackage::ServiceProfile svcPrvProf2;
       svcPrvProf2.id             = CORBA::string_dup(prof_name2.c_str());
       svcPrvProf2.interface_type = CORBA::string_dup(prof_name2.c_str());
@@ -1837,7 +1837,7 @@ namespace RTObject
       svcPrvProf2.properties[0].name = "PROPERTIES NAME 2";
       svcPrvProf2.properties[0].value <<= "2.7182818";
 
-      // SDOServiceProvider¤ò½é´ü²½¤¹¤ë
+      // SDOServiceProviderã‚’åˆæœŸåŒ–ã™ã‚‹
       (RTObject::MySDOServiceProvider*)(svcPrv)->init((RTC::RTObject_impl& )rto, svcPrvProf);
       (RTObject::MySDOServiceProvider*)(svcPrv2)->init((RTC::RTObject_impl& )rto, svcPrvProf2);
 
@@ -1846,7 +1846,7 @@ namespace RTObject
       retn = rto->addSdoServiceProvider(svcPrvProf2, svcPrv2);
       CPPUNIT_ASSERT_EQUAL(true, retn);
 
-      // get_service_profiles()¤òÍÑ¤¤¤Æ¤¹¤Ù¤Æ¤ÎServiceProfile¤ò¼èÆÀ¤·¤Æ¡¢Àµ¤·¤¯ÀßÄê¤µ¤ì¤¿¤³¤È¤ò³ÎÇ§¤¹¤ë
+      // get_service_profiles()ã‚’ç”¨ã„ã¦ã™ã¹ã¦ã®ServiceProfileã‚’å–å¾—ã—ã¦ã€æ­£ã—ãè¨­å®šã•ã‚ŒãŸã“ã¨ã‚’ç¢ºèªã™ã‚‹
       SDOPackage::ServiceProfileList_var tmp_profiles = rto->get_service_profiles();
       long int iCnt = tmp_profiles->length();
       std::cerr << "\ntest_provider_get_service_profiles():tmp_profiles->length() = " << iCnt << std::endl;
@@ -1895,9 +1895,9 @@ namespace RTObject
     }
 
     /*!
-     * @brief get_sdo_service()¥á¥½¥Ã¥É¤Î¥Æ¥¹¥È
+     * @brief get_sdo_service()ãƒ¡ã‚½ãƒƒãƒ‰ã®ãƒ†ã‚¹ãƒˆ
      * 
-     * - get_sdo_service()¤òÍÑ¤¤¤ÆService¤ò¼èÆÀ¤·¤Æ¡¢Àµ¤·¤¯ÀßÄê¤µ¤ì¤¿¤³¤È¤ò³ÎÇ§¤¹¤ë
+     * - get_sdo_service()ã‚’ç”¨ã„ã¦Serviceã‚’å–å¾—ã—ã¦ã€æ­£ã—ãè¨­å®šã•ã‚ŒãŸã“ã¨ã‚’ç¢ºèªã™ã‚‹
      *
      */
     void test_provider_get_sdo_service()
@@ -1906,7 +1906,7 @@ namespace RTObject
 
       RTObjectMock *rto = new RTObjectMock(m_pORB, m_pPOA); // will be deleted automatically
 
-      // SDOServiceProvider¤Îfactory¤ò½àÈ÷¤¹¤ë
+      // SDOServiceProviderã®factoryã‚’æº–å‚™ã™ã‚‹
       std::string prof_name("Test Provider SDO Service");
       RTC::SdoServiceProviderFactory& factoryPrv = RTC::SdoServiceProviderFactory::instance();
       factoryPrv.addFactory(prof_name.c_str(),
@@ -1915,29 +1915,29 @@ namespace RTObject
 			    ::coil::Destructor< ::RTC::SdoServiceProviderBase,
 			    ::RTObject::MySDOServiceProvider>);
 
-      // SDOServiceProvider¤Îobject¤ò½àÈ÷¤¹¤ë
+      // SDOServiceProviderã®objectã‚’æº–å‚™ã™ã‚‹
       RTC::SdoServiceProviderBase* svcPrv = factoryPrv.createObject(prof_name);
 
-      // ServiceProfile¤ò½àÈ÷¤·¤Æ¤ª¤¯
+      // ServiceProfileã‚’æº–å‚™ã—ã¦ãŠã
       SDOPackage::ServiceProfile svcPrvProf;
       svcPrvProf.id             = CORBA::string_dup(prof_name.c_str());
       svcPrvProf.interface_type = CORBA::string_dup(prof_name.c_str());
       svcPrvProf.service        = svcPrv->_this();
 
-      // SDOServiceProvider¤ò½é´ü²½¤¹¤ë
+      // SDOServiceProviderã‚’åˆæœŸåŒ–ã™ã‚‹
       (RTObject::MySDOServiceProvider*)(svcPrv)->init((RTC::RTObject_impl& )rto, svcPrvProf);
       
       CORBA::Boolean retn = rto->addSdoServiceProvider(svcPrvProf, svcPrv);
       CPPUNIT_ASSERT_EQUAL(true, retn);
 
-      // get_service_profile()¤òÍÑ¤¤¤ÆServiceProfile¤ò¼èÆÀ¤·¤Æ¡¢Àµ¤·¤¯ÀßÄê¤µ¤ì¤¿¤³¤È¤ò³ÎÇ§¤¹¤ë
+      // get_service_profile()ã‚’ç”¨ã„ã¦ServiceProfileã‚’å–å¾—ã—ã¦ã€æ­£ã—ãè¨­å®šã•ã‚ŒãŸã“ã¨ã‚’ç¢ºèªã™ã‚‹
       SDOPackage::ServiceProfile* tmp_prof = rto->get_service_profile(prof_name.c_str());
       CPPUNIT_ASSERT(tmp_prof != NULL);
 
       CPPUNIT_ASSERT_EQUAL(prof_name, std::string(tmp_prof->id));
       CPPUNIT_ASSERT_EQUAL(prof_name, std::string(tmp_prof->interface_type));
 
-      // get_sdo_service()¤òÍÑ¤¤¤ÆService¤ò¼èÆÀ¤·¤Æ¡¢Àµ¤·¤¯ÀßÄê¤µ¤ì¤¿¤³¤È¤ò³ÎÇ§¤¹¤ë
+      // get_sdo_service()ã‚’ç”¨ã„ã¦Serviceã‚’å–å¾—ã—ã¦ã€æ­£ã—ãè¨­å®šã•ã‚ŒãŸã“ã¨ã‚’ç¢ºèªã™ã‚‹
       SDOPackage::SDOService_ptr tmp_svcPtr = rto->get_sdo_service(prof_name.c_str());
       CPPUNIT_ASSERT(tmp_svcPtr != NULL);
       CPPUNIT_ASSERT_EQUAL(true, tmp_svcPtr == tmp_prof->service);
@@ -1954,9 +1954,9 @@ namespace RTObject
     }
 
     /*!
-     * @brief get_service_profile()¥á¥½¥Ã¥É¤Î¥Æ¥¹¥È
+     * @brief get_service_profile()ãƒ¡ã‚½ãƒƒãƒ‰ã®ãƒ†ã‚¹ãƒˆ
      * 
-     * - get_service_profile()¤òÍÑ¤¤¡¢"illegal_arguments"¤Ç¡¢ServiceProfile¤ò¼èÆÀ¤Ç¤­¤ë¤«¤ò³ÎÇ§¤¹¤ë
+     * - get_service_profile()ã‚’ç”¨ã„ã€"illegal_arguments"ã§ã€ServiceProfileã‚’å–å¾—ã§ãã‚‹ã‹ã‚’ç¢ºèªã™ã‚‹
      *
      */
     void test_provider_get_service_profile_with_illegal_arguments()
@@ -1965,7 +1965,7 @@ namespace RTObject
 
       RTObjectMock *rto = new RTObjectMock(m_pORB, m_pPOA); // will be deleted automatically
 
-      // SDOServiceProvider¤Îfactory¤ò½àÈ÷¤¹¤ë
+      // SDOServiceProviderã®factoryã‚’æº–å‚™ã™ã‚‹
       std::string prof_name("Test Provider Argument");
       RTC::SdoServiceProviderFactory& factoryPrv = RTC::SdoServiceProviderFactory::instance();
       factoryPrv.addFactory(prof_name.c_str(),
@@ -1974,10 +1974,10 @@ namespace RTObject
 			    ::coil::Destructor< ::RTC::SdoServiceProviderBase,
 			    ::RTObject::MySDOServiceProvider>);
 
-      // SDOServiceProvider¤Îobject¤ò½àÈ÷¤¹¤ë
+      // SDOServiceProviderã®objectã‚’æº–å‚™ã™ã‚‹
       RTC::SdoServiceProviderBase* svcPrv = factoryPrv.createObject(prof_name);
 
-      // ServiceProfile¤ò½àÈ÷¤·¤Æ¤ª¤¯
+      // ServiceProfileã‚’æº–å‚™ã—ã¦ãŠã
       SDOPackage::ServiceProfile svcPrvProf;
       svcPrvProf.id             = CORBA::string_dup(prof_name.c_str());
       svcPrvProf.interface_type = CORBA::string_dup(prof_name.c_str());
@@ -1986,20 +1986,20 @@ namespace RTObject
       svcPrvProf.properties[0].name = "PROPERTIES NAME 1";
       svcPrvProf.properties[0].value <<= "3.14159";
 
-      // SDOServiceProvider¤ò½é´ü²½¤¹¤ë
+      // SDOServiceProviderã‚’åˆæœŸåŒ–ã™ã‚‹
       (RTObject::MySDOServiceProvider*)(svcPrv)->init((RTC::RTObject_impl& )rto, svcPrvProf);
       
       CORBA::Boolean retn = rto->addSdoServiceProvider(svcPrvProf, svcPrv);
       CPPUNIT_ASSERT_EQUAL(true, retn);
 
       //
-      // get_service_profile()¤òÍÑ¤¤¡¢"illegal_arguments"¤Ç¡¢ServiceProfile¤ò¼èÆÀ¤Ç¤­¤ë¤«¤ò³ÎÇ§¤¹¤ë
+      // get_service_profile()ã‚’ç”¨ã„ã€"illegal_arguments"ã§ã€ServiceProfileã‚’å–å¾—ã§ãã‚‹ã‹ã‚’ç¢ºèªã™ã‚‹
       try {
 	SDOPackage::ServiceProfile* tmp_prof = rto->get_service_profile("Test Provider Illegal Argument");
 	CPPUNIT_FAIL("Exception not thrown.");
       }
       catch(...){
-	  // °Õ¿Ş¤É¤ª¤ê¤ÎÎã³°¤ò¥­¥ã¥Ã¥Á¤·¤¿
+	  // æ„å›³ã©ãŠã‚Šã®ä¾‹å¤–ã‚’ã‚­ãƒ£ãƒƒãƒã—ãŸ
 	std::cout << "\nWith Illegal Argument can not get Service Profile." << std::endl;
       }
 
@@ -2014,9 +2014,9 @@ namespace RTObject
     }
 
     /*!
-     * @brief get_sdo_service()¥á¥½¥Ã¥É¤Î¥Æ¥¹¥È
+     * @brief get_sdo_service()ãƒ¡ã‚½ãƒƒãƒ‰ã®ãƒ†ã‚¹ãƒˆ
      * 
-     * - get_sdo_service()¤òÍÑ¤¤¡¢"illegal_arguments"¤Ç¡¢Service¤ò¼èÆÀ¤Ç¤­¤ë¤«¤ò³ÎÇ§¤¹¤ë
+     * - get_sdo_service()ã‚’ç”¨ã„ã€"illegal_arguments"ã§ã€Serviceã‚’å–å¾—ã§ãã‚‹ã‹ã‚’ç¢ºèªã™ã‚‹
      *
      */
     void test_provider_get_sdo_service_with_illegal_arguments()
@@ -2025,7 +2025,7 @@ namespace RTObject
 
       RTObjectMock *rto = new RTObjectMock(m_pORB, m_pPOA); // will be deleted automatically
 
-      // SDOServiceProvider¤Îfactory¤ò½àÈ÷¤¹¤ë
+      // SDOServiceProviderã®factoryã‚’æº–å‚™ã™ã‚‹
       std::string prof_name("Test Provider Get Service with Argument");
       RTC::SdoServiceProviderFactory& factoryPrv = RTC::SdoServiceProviderFactory::instance();
       factoryPrv.addFactory(prof_name.c_str(),
@@ -2034,35 +2034,35 @@ namespace RTObject
 			    ::coil::Destructor< ::RTC::SdoServiceProviderBase,
 			    ::RTObject::MySDOServiceProvider>);
 
-      // SDOServiceProvider¤Îobject¤ò½àÈ÷¤¹¤ë
+      // SDOServiceProviderã®objectã‚’æº–å‚™ã™ã‚‹
       RTC::SdoServiceProviderBase* svcPrv = factoryPrv.createObject(prof_name);
 
-      // ServiceProfile¤ò½àÈ÷¤·¤Æ¤ª¤¯
+      // ServiceProfileã‚’æº–å‚™ã—ã¦ãŠã
       SDOPackage::ServiceProfile svcPrvProf;
       svcPrvProf.id             = CORBA::string_dup(prof_name.c_str());
       svcPrvProf.interface_type = CORBA::string_dup(prof_name.c_str());
       svcPrvProf.service        = svcPrv->_this();
 
-      // SDOServiceProvider¤ò½é´ü²½¤¹¤ë
+      // SDOServiceProviderã‚’åˆæœŸåŒ–ã™ã‚‹
       (RTObject::MySDOServiceProvider*)(svcPrv)->init((RTC::RTObject_impl& )rto, svcPrvProf);
       
       CORBA::Boolean retn = rto->addSdoServiceProvider(svcPrvProf, svcPrv);
       CPPUNIT_ASSERT_EQUAL(true, retn);
 
-      // get_service_profile()¤òÍÑ¤¤¤ÆServiceProfile¤ò¼èÆÀ¤·¤Æ¡¢Àµ¤·¤¯ÀßÄê¤µ¤ì¤¿¤³¤È¤ò³ÎÇ§¤¹¤ë
+      // get_service_profile()ã‚’ç”¨ã„ã¦ServiceProfileã‚’å–å¾—ã—ã¦ã€æ­£ã—ãè¨­å®šã•ã‚ŒãŸã“ã¨ã‚’ç¢ºèªã™ã‚‹
       SDOPackage::ServiceProfile* tmp_prof = rto->get_service_profile(prof_name.c_str());
       CPPUNIT_ASSERT(tmp_prof != NULL);
 
       CPPUNIT_ASSERT_EQUAL(prof_name, std::string(tmp_prof->id));
       CPPUNIT_ASSERT_EQUAL(prof_name, std::string(tmp_prof->interface_type));
 
-      // get_sod_service()¤òÍÑ¤¤¡¢"illegal_arguments"¤Ç¡¢Service¤ò¼èÆÀ¤Ç¤­¤ë¤«¤ò³ÎÇ§¤¹¤ë
+      // get_sod_service()ã‚’ç”¨ã„ã€"illegal_arguments"ã§ã€Serviceã‚’å–å¾—ã§ãã‚‹ã‹ã‚’ç¢ºèªã™ã‚‹
       try {
 	SDOPackage::SDOService_ptr tmp_svcPtr = rto->get_sdo_service("Test Provider Get Service with Illegal Argument");
 	CPPUNIT_FAIL("Exception not thrown.");
       }
       catch(...){
-	  // °Õ¿Ş¤É¤ª¤ê¤ÎÎã³°¤ò¥­¥ã¥Ã¥Á¤·¤¿
+	  // æ„å›³ã©ãŠã‚Šã®ä¾‹å¤–ã‚’ã‚­ãƒ£ãƒƒãƒã—ãŸ
 	std::cout << "\nWith Illegal Argument can not get Service Profile." << std::endl;
       }
 
@@ -2078,16 +2078,16 @@ namespace RTObject
     /////--------END
 
     /*!
-     * @brief get_service_profile()¥á¥½¥Ã¥É¤Î¥Æ¥¹¥È
+     * @brief get_service_profile()ãƒ¡ã‚½ãƒƒãƒ‰ã®ãƒ†ã‚¹ãƒˆ
      * 
-     * - °ú¿ô¤ËNULL¤ò»ØÄê¤·¤¿¾ì¹ç¡¢°Õ¿Ş¤É¤ª¤ê¤ÎÎã³°¤¬¥¹¥í¡¼¤µ¤ì¤ë¤«¡©
-     * - °ú¿ô¤ËÂ¸ºß¤·¤Ê¤¤ID¤ò»ØÄê¤·¤¿¾ì¹ç¡¢°Õ¿Ş¤É¤ª¤ê¤ÎÎã³°¤¬¥¹¥í¡¼¤µ¤ì¤ë¤«¡©
+     * - å¼•æ•°ã«NULLã‚’æŒ‡å®šã—ãŸå ´åˆã€æ„å›³ã©ãŠã‚Šã®ä¾‹å¤–ãŒã‚¹ãƒ­ãƒ¼ã•ã‚Œã‚‹ã‹ï¼Ÿ
+     * - å¼•æ•°ã«å­˜åœ¨ã—ãªã„IDã‚’æŒ‡å®šã—ãŸå ´åˆã€æ„å›³ã©ãŠã‚Šã®ä¾‹å¤–ãŒã‚¹ãƒ­ãƒ¼ã•ã‚Œã‚‹ã‹ï¼Ÿ
      */
     void test_get_service_profile_with_illegal_arguments()
     {
       RTObjectMock* rto = new RTObjectMock(m_pORB, m_pPOA); // will be deleted automatically
 			
-      // °ú¿ô¤ËNULL¤ò»ØÄê¤·¤¿¾ì¹ç¡¢°Õ¿Ş¤É¤ª¤ê¤ÎÎã³°¤¬¥¹¥í¡¼¤µ¤ì¤ë¤«¡©
+      // å¼•æ•°ã«NULLã‚’æŒ‡å®šã—ãŸå ´åˆã€æ„å›³ã©ãŠã‚Šã®ä¾‹å¤–ãŒã‚¹ãƒ­ãƒ¼ã•ã‚Œã‚‹ã‹ï¼Ÿ
       try
 	{
 	  rto->get_service_profile(NULL);
@@ -2095,15 +2095,15 @@ namespace RTObject
 	}
       catch (SDOPackage::InvalidParameter expected)
 	{
-	  // °Õ¿Ş¤É¤ª¤ê¤ÎÎã³°¤ò¥­¥ã¥Ã¥Á¤·¤¿
+	  // æ„å›³ã©ãŠã‚Šã®ä¾‹å¤–ã‚’ã‚­ãƒ£ãƒƒãƒã—ãŸ
 	}
       catch (...)
 	{
-	  // °Õ¿Ş¤·¤Ê¤¤Îã³°¤ò¥­¥ã¥Ã¥Á¤·¤¿
+	  // æ„å›³ã—ãªã„ä¾‹å¤–ã‚’ã‚­ãƒ£ãƒƒãƒã—ãŸ
 	  CPPUNIT_FAIL("Unexpected exception caught.");
 	}
 			
-      // °ú¿ô¤ËÂ¸ºß¤·¤Ê¤¤ID¤ò»ØÄê¤·¤¿¾ì¹ç¡¢°Õ¿Ş¤É¤ª¤ê¤ÎÎã³°¤¬¥¹¥í¡¼¤µ¤ì¤ë¤«¡©
+      // å¼•æ•°ã«å­˜åœ¨ã—ãªã„IDã‚’æŒ‡å®šã—ãŸå ´åˆã€æ„å›³ã©ãŠã‚Šã®ä¾‹å¤–ãŒã‚¹ãƒ­ãƒ¼ã•ã‚Œã‚‹ã‹ï¼Ÿ
       try
 	{
 	  rto->get_service_profile("INEXIST ID");
@@ -2111,11 +2111,11 @@ namespace RTObject
 	}
       catch (SDOPackage::InvalidParameter expected)
 	{
-	  // °Õ¿Ş¤É¤ª¤ê¤ÎÎã³°¤ò¥­¥ã¥Ã¥Á¤·¤¿
+	  // æ„å›³ã©ãŠã‚Šã®ä¾‹å¤–ã‚’ã‚­ãƒ£ãƒƒãƒã—ãŸ
 	}
       catch (...)
 	{
-	  // °Õ¿Ş¤·¤Ê¤¤Îã³°¤ò¥­¥ã¥Ã¥Á¤·¤¿
+	  // æ„å›³ã—ãªã„ä¾‹å¤–ã‚’ã‚­ãƒ£ãƒƒãƒã—ãŸ
 	  CPPUNIT_FAIL("Unexpected exception caught.");
 	}
       rto->shutdown();
@@ -2123,20 +2123,20 @@ namespace RTObject
     }
 		
     /*!
-     * @brief get_sdo_service()¥á¥½¥Ã¥É¤Î¥Æ¥¹¥È
+     * @brief get_sdo_service()ãƒ¡ã‚½ãƒƒãƒ‰ã®ãƒ†ã‚¹ãƒˆ
      * 
-     * - »ØÄê¤·¤¿ID¤ÎSDOService¤òÀµ¤·¤¯¼èÆÀ¤Ç¤­¤ë¤«¡©
+     * - æŒ‡å®šã—ãŸIDã®SDOServiceã‚’æ­£ã—ãå–å¾—ã§ãã‚‹ã‹ï¼Ÿ
      */
     void test_get_sdo_service()
     {
-      // test_get_configuration_and_set_service_profile_and_get_sdo_service¤Ç·ó¤Í¤ë
+      // test_get_configuration_and_set_service_profile_and_get_sdo_serviceã§å…¼ã­ã‚‹
     }
 		
     void test_get_sdo_service_with_illegal_arguments()
     {
       RTObjectMock* rto = new RTObjectMock(m_pORB, m_pPOA); // will be deleted automatically
 			
-      // °ú¿ô¤ËNULL¤ò»ØÄê¤·¤¿¾ì¹ç¡¢°Õ¿Ş¤É¤ª¤ê¤ÎÎã³°¤¬¥¹¥í¡¼¤µ¤ì¤ë¤«¡©
+      // å¼•æ•°ã«NULLã‚’æŒ‡å®šã—ãŸå ´åˆã€æ„å›³ã©ãŠã‚Šã®ä¾‹å¤–ãŒã‚¹ãƒ­ãƒ¼ã•ã‚Œã‚‹ã‹ï¼Ÿ
       try
 	{
 	  rto->get_sdo_service(NULL);
@@ -2144,15 +2144,15 @@ namespace RTObject
 	}
       catch (SDOPackage::InvalidParameter expected)
 	{
-	  // °Õ¿Ş¤É¤ª¤ê¤ÎÎã³°¤ò¥­¥ã¥Ã¥Á¤·¤¿
+	  // æ„å›³ã©ãŠã‚Šã®ä¾‹å¤–ã‚’ã‚­ãƒ£ãƒƒãƒã—ãŸ
 	}
       catch (...)
 	{
-	  // °Õ¿Ş¤·¤Ê¤¤Îã³°¤ò¥­¥ã¥Ã¥Á¤·¤¿
+	  // æ„å›³ã—ãªã„ä¾‹å¤–ã‚’ã‚­ãƒ£ãƒƒãƒã—ãŸ
 	  CPPUNIT_FAIL("Unexpected exception caught.");
 	}
 			
-      // °ú¿ô¤Ë¡¢Â¸ºß¤·¤Ê¤¤ID¤ò»ØÄê¤·¤¿¾ì¹ç¡¢°Õ¿Ş¤É¤ª¤ê¤ÎÎã³°¤¬¥¹¥í¡¼¤µ¤ì¤ë¤«¡©
+      // å¼•æ•°ã«ã€å­˜åœ¨ã—ãªã„IDã‚’æŒ‡å®šã—ãŸå ´åˆã€æ„å›³ã©ãŠã‚Šã®ä¾‹å¤–ãŒã‚¹ãƒ­ãƒ¼ã•ã‚Œã‚‹ã‹ï¼Ÿ
       try
 	{
 	  rto->get_sdo_service("INEXIST ID");
@@ -2160,11 +2160,11 @@ namespace RTObject
 	}
       catch (SDOPackage::InvalidParameter expected)
 	{
-	  // °Õ¿Ş¤É¤ª¤ê¤ÎÎã³°¤ò¥­¥ã¥Ã¥Á¤·¤¿
+	  // æ„å›³ã©ãŠã‚Šã®ä¾‹å¤–ã‚’ã‚­ãƒ£ãƒƒãƒã—ãŸ
 	}
       catch (...)
 	{
-	  // °Õ¿Ş¤·¤Ê¤¤Îã³°¤ò¥­¥ã¥Ã¥Á¤·¤¿
+	  // æ„å›³ã—ãªã„ä¾‹å¤–ã‚’ã‚­ãƒ£ãƒƒãƒã—ãŸ
 	  CPPUNIT_FAIL("Unexpected exception caught.");
 	}
 
@@ -2173,16 +2173,16 @@ namespace RTObject
     }
 		
     /*!
-     * @brief get_configuration()¥á¥½¥Ã¥É¤Î¥Æ¥¹¥È
+     * @brief get_configuration()ãƒ¡ã‚½ãƒƒãƒ‰ã®ãƒ†ã‚¹ãƒˆ
      * 
-     * - Configuration::set_device_profile()¤òÄÌ¤·¤Æ¡¢DeviceProfile¤òÀµ¤·¤¯ÀßÄê¤Ç¤­¤ë¤«¡©
-     * - ÀßÄê¤µ¤ì¤¿DeviceProfile¤ò¡¢get_device_profile()¤ÇÀµ¤·¤¯¼èÆÀ¤Ç¤­¤ë¤«¡©
+     * - Configuration::set_device_profile()ã‚’é€šã—ã¦ã€DeviceProfileã‚’æ­£ã—ãè¨­å®šã§ãã‚‹ã‹ï¼Ÿ
+     * - è¨­å®šã•ã‚ŒãŸDeviceProfileã‚’ã€get_device_profile()ã§æ­£ã—ãå–å¾—ã§ãã‚‹ã‹ï¼Ÿ
      */
     void test_get_configuration_and_set_device_profile_and_get_device_profile()
     {
       RTObjectMock* rto = new RTObjectMock(m_pORB, m_pPOA); // will be deleted automatically
 			
-      // DeviceProfile¤ò½àÈ÷¤·¤Æ¤ª¤¯
+      // DeviceProfileã‚’æº–å‚™ã—ã¦ãŠã
       SDOPackage::DeviceProfile devProf;
       devProf.device_type = "DEVICE_TYPE";
       devProf.manufacturer = "MANUFACTURER";
@@ -2192,10 +2192,10 @@ namespace RTObject
       devProf.properties[0].name = "PROPERTIES NAME";
       devProf.properties[0].value <<= "PROPERTIES VALUE";
 			
-      // Configuration¥¤¥ó¥¿¥Õ¥§¡¼¥¹¤ò¼èÆÀ¤·¡¢DeviceProfile¤òÀßÄê¤¹¤ë
+      // Configurationã‚¤ãƒ³ã‚¿ãƒ•ã‚§ãƒ¼ã‚¹ã‚’å–å¾—ã—ã€DeviceProfileã‚’è¨­å®šã™ã‚‹
       SDOPackage::Configuration_ptr cfg = rto->get_configuration();
       cfg->set_device_profile(devProf);
-      // DeviceProfile¤ò¼èÆÀ¤·¤Æ¡¢Àµ¤·¤¯ÀßÄê¤µ¤ì¤¿¤³¤È¤ò³ÎÇ§¤¹¤ë
+      // DeviceProfileã‚’å–å¾—ã—ã¦ã€æ­£ã—ãè¨­å®šã•ã‚ŒãŸã“ã¨ã‚’ç¢ºèªã™ã‚‹
       SDOPackage::DeviceProfile* devProfRet = rto->get_device_profile();
       CPPUNIT_ASSERT_EQUAL(std::string("DEVICE_TYPE"),
 			   std::string(devProfRet->device_type));
@@ -2218,20 +2218,20 @@ namespace RTObject
     }
 		
     /*!
-     * @brief get_configuration()¥á¥½¥Ã¥É¤Èget_serivce_profile()¥á¥½¥Ã¥É¤Î¥Æ¥¹¥È
+     * @brief get_configuration()ãƒ¡ã‚½ãƒƒãƒ‰ã¨get_serivce_profile()ãƒ¡ã‚½ãƒƒãƒ‰ã®ãƒ†ã‚¹ãƒˆ
      * 
-     * - Configuration::set_service_profile()¤òÄÌ¤·¤Æ¡¢ServiceProfile¤òÀµ¤·¤¯ÀßÄê¤Ç¤­¤ë¤«¡©
-     * - ÀßÄê¤µ¤ì¤¿ServiceProfile¤ò¡¢get_service_profile()¤ÇÀµ¤·¤¯¼èÆÀ¤Ç¤­¤ë¤«¡©
+     * - Configuration::set_service_profile()ã‚’é€šã—ã¦ã€ServiceProfileã‚’æ­£ã—ãè¨­å®šã§ãã‚‹ã‹ï¼Ÿ
+     * - è¨­å®šã•ã‚ŒãŸServiceProfileã‚’ã€get_service_profile()ã§æ­£ã—ãå–å¾—ã§ãã‚‹ã‹ï¼Ÿ
      */
     void test_get_configuration_and_set_service_profile_and_get_service_profile()
     {
       RTObjectMock* rto = new RTObjectMock(m_pORB, m_pPOA); // will be deleted automatically
 
-      // SDOService¤ò½àÈ÷¤¹¤ë
+      // SDOServiceã‚’æº–å‚™ã™ã‚‹
       SDOServiceMock* sdoSvc1 = new SDOServiceMock();
       SDOServiceMock* sdoSvc2 = new SDOServiceMock();
 			
-      // ServiceProfile¤ò½àÈ÷¤·¤Æ¤ª¤¯
+      // ServiceProfileã‚’æº–å‚™ã—ã¦ãŠã
       SDOPackage::ServiceProfile svcProf1;
       svcProf1.id = "ID 1";
       svcProf1.interface_type = "INTERFACE_TYPE 1";
@@ -2248,13 +2248,13 @@ namespace RTObject
       svcProf2.properties[0].value <<= "2.71828";
       svcProf2.service = sdoSvc2->_this();
 			
-      // Configuration¥¤¥ó¥¿¥Õ¥§¡¼¥¹¤ò¼èÆÀ¤·¡¢ServiceProfile¤òÀßÄê¤¹¤ë
+      // Configurationã‚¤ãƒ³ã‚¿ãƒ•ã‚§ãƒ¼ã‚¹ã‚’å–å¾—ã—ã€ServiceProfileã‚’è¨­å®šã™ã‚‹
       SDOPackage::Configuration_ptr cfg = rto->get_configuration();
       CPPUNIT_ASSERT(! CORBA::is_nil(cfg));
       cfg->add_service_profile(svcProf1);
       cfg->add_service_profile(svcProf2);
 			
-      // get_service_profile()¤òÍÑ¤¤¤ÆServiceProfile¤ò¼èÆÀ¤·¤Æ¡¢Àµ¤·¤¯ÀßÄê¤µ¤ì¤¿¤³¤È¤ò³ÎÇ§¤¹¤ë
+      // get_service_profile()ã‚’ç”¨ã„ã¦ServiceProfileã‚’å–å¾—ã—ã¦ã€æ­£ã—ãè¨­å®šã•ã‚ŒãŸã“ã¨ã‚’ç¢ºèªã™ã‚‹
       SDOPackage::ServiceProfile* svcProfRet1 = rto->get_service_profile("ID 1");
       CPPUNIT_ASSERT(svcProfRet1 != NULL);
       CPPUNIT_ASSERT_EQUAL(std::string("ID 1"),	std::string(svcProfRet1->id));
@@ -2291,19 +2291,19 @@ namespace RTObject
     }
 		
     /*!
-     * @brief get_configuration()¥á¥½¥Ã¥É¤Èget_service_profiles()¥á¥½¥Ã¥É¤Î¥Æ¥¹¥È
+     * @brief get_configuration()ãƒ¡ã‚½ãƒƒãƒ‰ã¨get_service_profiles()ãƒ¡ã‚½ãƒƒãƒ‰ã®ãƒ†ã‚¹ãƒˆ
      * 
-     * - ÀßÄê¤µ¤ì¤¿ServiceProfile¤ò¡¢get_service_profiles()¤ÇÀµ¤·¤¯¼èÆÀ¤Ç¤­¤ë¤«¡©
+     * - è¨­å®šã•ã‚ŒãŸServiceProfileã‚’ã€get_service_profiles()ã§æ­£ã—ãå–å¾—ã§ãã‚‹ã‹ï¼Ÿ
      */
     void test_get_configuration_and_set_service_profile_and_get_service_profiles()
     {
       RTObjectMock* rto = new RTObjectMock(m_pORB, m_pPOA); // will be deleted automatically
 
-      // SDOService¤ò½àÈ÷¤¹¤ë
+      // SDOServiceã‚’æº–å‚™ã™ã‚‹
       SDOServiceMock* sdoSvc1 = new SDOServiceMock();
       SDOServiceMock* sdoSvc2 = new SDOServiceMock();
 			
-      // ServiceProfile¤ò½àÈ÷¤·¤Æ¤ª¤¯
+      // ServiceProfileã‚’æº–å‚™ã—ã¦ãŠã
       SDOPackage::ServiceProfile svcProf1;
       svcProf1.id = "ID 1";
       svcProf1.interface_type = "INTERFACE_TYPE 1";
@@ -2320,13 +2320,13 @@ namespace RTObject
       svcProf2.properties[0].value <<= "2.71828";
       svcProf2.service = sdoSvc2->_this();
 			
-      // Configuration¥¤¥ó¥¿¥Õ¥§¡¼¥¹¤ò¼èÆÀ¤·¡¢ServiceProfile¤òÀßÄê¤¹¤ë
+      // Configurationã‚¤ãƒ³ã‚¿ãƒ•ã‚§ãƒ¼ã‚¹ã‚’å–å¾—ã—ã€ServiceProfileã‚’è¨­å®šã™ã‚‹
       SDOPackage::Configuration_ptr cfg = rto->get_configuration();
       CPPUNIT_ASSERT(! CORBA::is_nil(cfg));
       cfg->add_service_profile(svcProf1);
       cfg->add_service_profile(svcProf2);
 			
-      // get_service_profiles()¤ò»È¤Ã¤ÆServiceProfile·²¤ò¼èÆÀ¤·¤Æ¡¢Àµ¤·¤¯ÀßÄê¤µ¤ì¤¿¤³¤È¤ò³ÎÇ§¤¹¤ë
+      // get_service_profiles()ã‚’ä½¿ã£ã¦ServiceProfileç¾¤ã‚’å–å¾—ã—ã¦ã€æ­£ã—ãè¨­å®šã•ã‚ŒãŸã“ã¨ã‚’ç¢ºèªã™ã‚‹
       SDOPackage::ServiceProfileList* svcProfList = rto->get_service_profiles();
       CPPUNIT_ASSERT(svcProfList != NULL);
 			
@@ -2372,20 +2372,20 @@ namespace RTObject
     }
 		
     /*!
-     * @brief get_configuration()¥á¥½¥Ã¥É¤Èget_sdo_service()¥á¥½¥Ã¥É¤Î¥Æ¥¹¥È
+     * @brief get_configuration()ãƒ¡ã‚½ãƒƒãƒ‰ã¨get_sdo_service()ãƒ¡ã‚½ãƒƒãƒ‰ã®ãƒ†ã‚¹ãƒˆ
      * 
-     * - Configuration::set_service_profile()¤òÄÌ¤·¤Æ¡¢SDOService¤òÀµ¤·¤¯ÀßÄê¤Ç¤­¤ë¤«¡©
-     * - get_sdo_service()¤òÍÑ¤¤¤Æ¡¢ÀßÄê¤µ¤ì¤Æ¤¤¤ëSDPService¤òÀµ¤·¤¯¼èÆÀ¤Ç¤­¤ë¤«¡©
+     * - Configuration::set_service_profile()ã‚’é€šã—ã¦ã€SDOServiceã‚’æ­£ã—ãè¨­å®šã§ãã‚‹ã‹ï¼Ÿ
+     * - get_sdo_service()ã‚’ç”¨ã„ã¦ã€è¨­å®šã•ã‚Œã¦ã„ã‚‹SDPServiceã‚’æ­£ã—ãå–å¾—ã§ãã‚‹ã‹ï¼Ÿ
      */
     void test_get_configuration_and_set_service_profile_and_get_sdo_service()
     {
       RTObjectMock* rto = new RTObjectMock(m_pORB, m_pPOA); // will be deleted automatically
 
-      // SDOService¤ò½àÈ÷¤¹¤ë
+      // SDOServiceã‚’æº–å‚™ã™ã‚‹
       SDOServiceMock* sdoSvc1 = new SDOServiceMock();
       SDOServiceMock* sdoSvc2 = new SDOServiceMock();
 			
-      // ServiceProfile¤ò½àÈ÷¤·¤Æ¤ª¤¯
+      // ServiceProfileã‚’æº–å‚™ã—ã¦ãŠã
       SDOPackage::ServiceProfile svcProf1;
       svcProf1.id = "ID 1";
       svcProf1.interface_type = "INTERFACE_TYPE 1";
@@ -2402,13 +2402,13 @@ namespace RTObject
       svcProf2.properties[0].value <<= "2.71828";
       svcProf2.service = sdoSvc2->_this();
 			
-      // Configuration¥¤¥ó¥¿¥Õ¥§¡¼¥¹¤ò¼èÆÀ¤·¡¢ServiceProfile¤òÀßÄê¤¹¤ë
+      // Configurationã‚¤ãƒ³ã‚¿ãƒ•ã‚§ãƒ¼ã‚¹ã‚’å–å¾—ã—ã€ServiceProfileã‚’è¨­å®šã™ã‚‹
       SDOPackage::Configuration_ptr cfg = rto->get_configuration();
       CPPUNIT_ASSERT(! CORBA::is_nil(cfg));
       cfg->add_service_profile(svcProf1);
       cfg->add_service_profile(svcProf2);
 			
-      // »ØÄê¤·¤¿ID¤ÎSDOService¤òÀµ¤·¤¯¼èÆÀ¤Ç¤­¤ë¤«¡©
+      // æŒ‡å®šã—ãŸIDã®SDOServiceã‚’æ­£ã—ãå–å¾—ã§ãã‚‹ã‹ï¼Ÿ
       SDOPackage::SDOService_ptr sdoSvcRet1 = rto->get_sdo_service("ID 1");
       CPPUNIT_ASSERT(! CORBA::is_nil(sdoSvcRet1));
       CPPUNIT_ASSERT(sdoSvcRet1->_is_equivalent(sdoSvc1->_this()));
@@ -2428,19 +2428,19 @@ namespace RTObject
     }
 		
     /*!
-     * @brief Configuration::remove_service_profile()¥á¥½¥Ã¥É¤Î¥Æ¥¹¥È
+     * @brief Configuration::remove_service_profile()ãƒ¡ã‚½ãƒƒãƒ‰ã®ãƒ†ã‚¹ãƒˆ
      * 
-     * - »ØÄê¤·¤¿ID¤ÎServiceProfile¤òÀµ¤·¤¯ºï½ü¤Ç¤­¤ë¤«¡©
+     * - æŒ‡å®šã—ãŸIDã®ServiceProfileã‚’æ­£ã—ãå‰Šé™¤ã§ãã‚‹ã‹ï¼Ÿ
      */
     void test_get_configuration_and_remove_service_profile()
     {
       RTObjectMock* rto = new RTObjectMock(m_pORB, m_pPOA); // will be deleted automatically
 
-      // SDOService¤ò½àÈ÷¤¹¤ë
+      // SDOServiceã‚’æº–å‚™ã™ã‚‹
       SDOServiceMock* sdoSvc1 = new SDOServiceMock();
       SDOServiceMock* sdoSvc2 = new SDOServiceMock();
 			
-      // ServiceProfile¤ò½àÈ÷¤·¤Æ¤ª¤¯
+      // ServiceProfileã‚’æº–å‚™ã—ã¦ãŠã
       SDOPackage::ServiceProfile svcProf1;
       svcProf1.id = "ID 1";
       svcProf1.interface_type = "INTERFACE_TYPE 1";
@@ -2457,7 +2457,7 @@ namespace RTObject
       svcProf2.properties[0].value <<= "2.71828";
       svcProf2.service = sdoSvc2->_this();
 			
-      // Configuration¥¤¥ó¥¿¥Õ¥§¡¼¥¹¤ò¼èÆÀ¤·¡¢ServiceProfile¤òÀßÄê¤¹¤ë
+      // Configurationã‚¤ãƒ³ã‚¿ãƒ•ã‚§ãƒ¼ã‚¹ã‚’å–å¾—ã—ã€ServiceProfileã‚’è¨­å®šã™ã‚‹
       SDOPackage::Configuration_ptr cfg = rto->get_configuration();
       CPPUNIT_ASSERT(! CORBA::is_nil(cfg));
       cfg->add_service_profile(svcProf1);
@@ -2465,7 +2465,7 @@ namespace RTObject
       CPPUNIT_ASSERT(rto->get_service_profile("ID 1") != NULL);
       CPPUNIT_ASSERT(rto->get_service_profile("ID 2") != NULL);
 			
-      // ÀßÄê¤·¤¿¤¦¤Á¡¢ÊÒÊı¤ÎServiceProfile¤òremove¤·¤Æ¡¢Àµ¤·¤¯remove¤µ¤ì¤¿¤³¤È¤ò³ÎÇ§¤¹¤ë
+      // è¨­å®šã—ãŸã†ã¡ã€ç‰‡æ–¹ã®ServiceProfileã‚’removeã—ã¦ã€æ­£ã—ãremoveã•ã‚ŒãŸã“ã¨ã‚’ç¢ºèªã™ã‚‹
       CPPUNIT_ASSERT_EQUAL(true, cfg->remove_service_profile("ID 1"));
       try
 	{
@@ -2485,26 +2485,26 @@ namespace RTObject
     }
 		
     /*!
-     * @brief get_configuration()¥á¥½¥Ã¥É¤Èget_organizations()¥á¥½¥Ã¥É¤Î¥Æ¥¹¥È
+     * @brief get_configuration()ãƒ¡ã‚½ãƒƒãƒ‰ã¨get_organizations()ãƒ¡ã‚½ãƒƒãƒ‰ã®ãƒ†ã‚¹ãƒˆ
      * 
-     * - Configuration::add_organization()¤ÇOrganization¤òÀµ¤·¤¯ÄÉ²Ã¤Ç¤­¤ë¤«¡©
-     * - get_organizations()¤Ç¡¢ÅĞÏ¿¤µ¤ì¤Æ¤¤¤ëOrganization¤òÀµ¤·¤¯¼èÆÀ¤Ç¤­¤ë¤«¡©
+     * - Configuration::add_organization()ã§Organizationã‚’æ­£ã—ãè¿½åŠ ã§ãã‚‹ã‹ï¼Ÿ
+     * - get_organizations()ã§ã€ç™»éŒ²ã•ã‚Œã¦ã„ã‚‹Organizationã‚’æ­£ã—ãå–å¾—ã§ãã‚‹ã‹ï¼Ÿ
      */
     void test_get_configuration_and_add_organization_and_get_organizations()
     {
       RTObjectMock* rto = new RTObjectMock(m_pORB, m_pPOA); // will be deleted automatically
 			
-      // Organization¤ò½àÈ÷¤¹¤ë
+      // Organizationã‚’æº–å‚™ã™ã‚‹
       OrganizationMock* org1 = new OrganizationMock("ORG 1");
       OrganizationMock* org2 = new OrganizationMock("ORG 2");
 
-      // Configuration¥¤¥ó¥¿¥Õ¥§¡¼¥¹¤ò¼èÆÀ¤·¡¢Organization¤òÄÉ²Ã¤¹¤ë
+      // Configurationã‚¤ãƒ³ã‚¿ãƒ•ã‚§ãƒ¼ã‚¹ã‚’å–å¾—ã—ã€Organizationã‚’è¿½åŠ ã™ã‚‹
       SDOPackage::Configuration_ptr cfg = rto->get_configuration();
       CPPUNIT_ASSERT(! CORBA::is_nil(cfg));
       CPPUNIT_ASSERT_EQUAL(true, cfg->add_organization(org1->_this()));
       CPPUNIT_ASSERT_EQUAL(true, cfg->add_organization(org2->_this()));
 			
-      // get_organizations()¤òÍÑ¤¤¤ÆOrganization·²¤òÀµ¤·¤¯¼èÆÀ¤Ç¤­¤ë¤«¡©
+      // get_organizations()ã‚’ç”¨ã„ã¦Organizationç¾¤ã‚’æ­£ã—ãå–å¾—ã§ãã‚‹ã‹ï¼Ÿ
       SDOPackage::OrganizationList* orgList = rto->get_organizations();
       CPPUNIT_ASSERT(orgList != NULL);
       CPPUNIT_ASSERT_EQUAL(CORBA::ULong(2), orgList->length());
@@ -2529,30 +2529,30 @@ namespace RTObject
     }
 		
     /*!
-     * @brief Configuration::remove_organization()¥á¥½¥Ã¥É¤Î¥Æ¥¹¥È
+     * @brief Configuration::remove_organization()ãƒ¡ã‚½ãƒƒãƒ‰ã®ãƒ†ã‚¹ãƒˆ
      * 
-     * - »ØÄê¤·¤¿ID¤ÎOrganization¤òÀµ¤·¤¯ºï½ü¤Ç¤­¤ë¤«¡©
+     * - æŒ‡å®šã—ãŸIDã®Organizationã‚’æ­£ã—ãå‰Šé™¤ã§ãã‚‹ã‹ï¼Ÿ
      */
     void test_get_configuration_and_remove_organization()
     {
       RTObjectMock* rto = new RTObjectMock(m_pORB, m_pPOA); // will be deleted automatically
 			
-      // Organization¤ò½àÈ÷¤¹¤ë
+      // Organizationã‚’æº–å‚™ã™ã‚‹
       OrganizationMock* org1 = new OrganizationMock("ORG 1");
       OrganizationMock* org2 = new OrganizationMock("ORG 2");
 
-      // Configuration¥¤¥ó¥¿¥Õ¥§¡¼¥¹¤ò¼èÆÀ¤·¡¢Organization¤òÄÉ²Ã¤¹¤ë
+      // Configurationã‚¤ãƒ³ã‚¿ãƒ•ã‚§ãƒ¼ã‚¹ã‚’å–å¾—ã—ã€Organizationã‚’è¿½åŠ ã™ã‚‹
       SDOPackage::Configuration_ptr cfg = rto->get_configuration();
       CPPUNIT_ASSERT(! CORBA::is_nil(cfg));
       CPPUNIT_ASSERT_EQUAL(true, cfg->add_organization(org1->_this()));
       CPPUNIT_ASSERT_EQUAL(true, cfg->add_organization(org2->_this()));
 			
-      // ÄÉ²Ã¤µ¤ì¤Æ¤¤¤ë¤³¤È¤ò³ÎÇ§¤·¤Æ¤ª¤¯
+      // è¿½åŠ ã•ã‚Œã¦ã„ã‚‹ã“ã¨ã‚’ç¢ºèªã—ã¦ãŠã
       SDOPackage::OrganizationList* orgList = rto->get_organizations();
       CPPUNIT_ASSERT(orgList != NULL);
       CPPUNIT_ASSERT_EQUAL(CORBA::ULong(2), orgList->length());
 			
-      // ÄÉ²Ã¤·¤¿¤¦¤Á¡¢ÊÒÊı¤ÎOrganization¤òremove¤·¡¢Àµ¤·¤¯remove¤µ¤ì¤Æ¤¤¤ë¤³¤È¤ò³ÎÇ§¤¹¤ë
+      // è¿½åŠ ã—ãŸã†ã¡ã€ç‰‡æ–¹ã®Organizationã‚’removeã—ã€æ­£ã—ãremoveã•ã‚Œã¦ã„ã‚‹ã“ã¨ã‚’ç¢ºèªã™ã‚‹
       CPPUNIT_ASSERT_EQUAL(true, cfg->remove_organization("ORG 1"));
       orgList = rto->get_organizations();
       CPPUNIT_ASSERT(orgList != NULL);
@@ -2568,30 +2568,30 @@ namespace RTObject
     }
 		
     /*!
-     * @brief get_monitoring()¥á¥½¥Ã¥É¤Î¥Æ¥¹¥È
+     * @brief get_monitoring()ãƒ¡ã‚½ãƒƒãƒ‰ã®ãƒ†ã‚¹ãƒˆ
      */
     void test_get_monitoring()
     {
-      // ¥Æ¥¹¥ÈÂĞ¾İ¤¬Ì¤¼ÂÁõ¤Ë¤Ä¤­¡¢¥Æ¥¹¥È¤âÌ¤¼ÂÁõ
+      // ãƒ†ã‚¹ãƒˆå¯¾è±¡ãŒæœªå®Ÿè£…ã«ã¤ãã€ãƒ†ã‚¹ãƒˆã‚‚æœªå®Ÿè£…
     }
 		
     /*!
-     * @brief get_status()¥á¥½¥Ã¥É¤Î¥Æ¥¹¥È
+     * @brief get_status()ãƒ¡ã‚½ãƒƒãƒ‰ã®ãƒ†ã‚¹ãƒˆ
      * 
-     * - »ØÄê¤·¤¿Ì¾¾Î¤ÎstatusÃÍ¤òÀµ¤·¤¯¼èÆÀ¤Ç¤­¤ë¤«¡©
+     * - æŒ‡å®šã—ãŸåç§°ã®statuså€¤ã‚’æ­£ã—ãå–å¾—ã§ãã‚‹ã‹ï¼Ÿ
      */
     void test_get_status()
     {
       RTObjectMock* rto = new RTObjectMock(m_pORB, m_pPOA); // will be deleted automatically
 			
-      // Mock¤Îµ¡Ç½¤òÍÑ¤¤¤Æstatus¤òÀßÄê¤·¤Æ¤ª¤¯
+      // Mockã®æ©Ÿèƒ½ã‚’ç”¨ã„ã¦statusã‚’è¨­å®šã—ã¦ãŠã
       CORBA::Any valueAny1; valueAny1 <<= CORBA::Float(3.14159);
       rto->set_status("STATUS 1", valueAny1);
 			
       CORBA::Any valueAny2; valueAny2 <<= CORBA::Float(2.71828);
       rto->set_status("STATUS 2", valueAny2);
 			
-      // ÀßÄê¤·¤¿status¤òÀµ¤·¤¯¼èÆÀ¤Ç¤­¤ë¤«¡©
+      // è¨­å®šã—ãŸstatusã‚’æ­£ã—ãå–å¾—ã§ãã‚‹ã‹ï¼Ÿ
       CORBA::Any* valueAnyRet1 = rto->get_status("STATUS 1");
       CPPUNIT_ASSERT(valueAnyRet1 != NULL);
       {
@@ -2612,22 +2612,22 @@ namespace RTObject
     }
 		
     /*!
-     * @brief get_status_list()¥á¥½¥Ã¥É¤Î¥Æ¥¹¥È
+     * @brief get_status_list()ãƒ¡ã‚½ãƒƒãƒ‰ã®ãƒ†ã‚¹ãƒˆ
      * 
-     * - ÀßÄê¤µ¤ì¤Æ¤¤¤ë¤¹¤Ù¤Æ¤Îstatus¤òÀµ¤·¤¯¼èÆÀ¤Ç¤­¤ë¤«¡©
+     * - è¨­å®šã•ã‚Œã¦ã„ã‚‹ã™ã¹ã¦ã®statusã‚’æ­£ã—ãå–å¾—ã§ãã‚‹ã‹ï¼Ÿ
      */
     void test_get_status_list()
     {
       RTObjectMock* rto = new RTObjectMock(m_pORB, m_pPOA); // will be deleted automatically
 			
-      // Mock¤Îµ¡Ç½¤òÍÑ¤¤¤Æstatus¤òÀßÄê¤·¤Æ¤ª¤¯
+      // Mockã®æ©Ÿèƒ½ã‚’ç”¨ã„ã¦statusã‚’è¨­å®šã—ã¦ãŠã
       CORBA::Any valueAny1; valueAny1 <<= CORBA::Float(3.14159);
       rto->set_status("STATUS 1", valueAny1);
 			
       CORBA::Any valueAny2; valueAny2 <<= CORBA::Float(2.71828);
       rto->set_status("STATUS 2", valueAny2);
 			
-      // ÀßÄê¤·¤¿status¤òÀµ¤·¤¯¼èÆÀ¤Ç¤­¤ë¤«¡©
+      // è¨­å®šã—ãŸstatusã‚’æ­£ã—ãå–å¾—ã§ãã‚‹ã‹ï¼Ÿ
       SDOPackage::NVList* statusList = rto->get_status_list();
       CPPUNIT_ASSERT(statusList != NULL);
       CPPUNIT_ASSERT_EQUAL(CORBA::ULong(2), statusList->length());
@@ -2649,9 +2649,9 @@ namespace RTObject
     }
 		
     /*!
-     * @brief finalizeContexts()¥á¥½¥Ã¥É¤Î¥Æ¥¹¥È
+     * @brief finalizeContexts()ãƒ¡ã‚½ãƒƒãƒ‰ã®ãƒ†ã‚¹ãƒˆ
      * 
-     * - Á´¥³¥ó¥Æ¥­¥¹¥È¤ÎÅĞÏ¿¤òºï½ü¤Ç¤­¤ë¤«¡©
+     * - å…¨ã‚³ãƒ³ãƒ†ã‚­ã‚¹ãƒˆã®ç™»éŒ²ã‚’å‰Šé™¤ã§ãã‚‹ã‹ï¼Ÿ
      */
     void test_finalizeContexts()
     {
@@ -2668,7 +2668,7 @@ namespace RTObject
       prop.setProperty("exec_cxt.periodic.type","PeriodicExecutionContext");
       prop.setProperty("exec_cxt.periodic.rate","1000");
       rto->setProperties(prop);
-      // initialize()¤Ç¡¢m_eclist¤ØÅĞÏ¿¤·¡¢m_ecMine¤òstart
+      // initialize()ã§ã€m_eclistã¸ç™»éŒ²ã—ã€m_ecMineã‚’start
       std::cout << "\ntest_finalizeContexts() initialize() 1" << std::endl;
       CPPUNIT_ASSERT_EQUAL(RTC::RTC_OK, rto->initialize());
       CPPUNIT_ASSERT_EQUAL(1, rto->get_eclist());
@@ -2687,7 +2687,7 @@ namespace RTObject
       std::cout << "\ntest_finalizeContexts() rto->finalizeContexts()" << std::endl;
       rto->finalizeContexts();
 
-      // Á´¥³¥ó¥Æ¥­¥¹¥È¤¬ºï½ü¤µ¤ì¤¿¤«¡©
+      // å…¨ã‚³ãƒ³ãƒ†ã‚­ã‚¹ãƒˆãŒå‰Šé™¤ã•ã‚ŒãŸã‹ï¼Ÿ
       std::cout << "\ntest_finalizeContexts() rto->get_eclist() 0" << std::endl;
       CPPUNIT_ASSERT_EQUAL(0, rto->get_eclist());
       std::cout << "\ntest_finalizeContexts() removeFactory(PeriodicExecutionContext)" << std::endl;
@@ -2701,9 +2701,9 @@ namespace RTObject
     }
 		
     /*!
-     * @brief bindContext()¥á¥½¥Ã¥É¤Î¥Æ¥¹¥È
+     * @brief bindContext()ãƒ¡ã‚½ãƒƒãƒ‰ã®ãƒ†ã‚¹ãƒˆ
      * 
-     * - ExecutionContext¤òÀµ¤·¤¯ÀßÄê¤Ç¤­¤ë¤«¡©
+     * - ExecutionContextã‚’æ­£ã—ãè¨­å®šã§ãã‚‹ã‹ï¼Ÿ
      */
     void test_bindContext()
     {
@@ -2717,26 +2717,26 @@ namespace RTObject
 
       RTC::ExecutionContext_ptr ec;
 
-      // nil¤òÀßÄê¤·¤¿¾ì¹ç¡¢-1¤òÊÖ¤¹¤«¡©
+      // nilã‚’è¨­å®šã—ãŸå ´åˆã€-1ã‚’è¿”ã™ã‹ï¼Ÿ
       ec = RTC::ExecutionContext::_nil();
       int id = (int)(rto->bindContext(ec));
       std::cout << "\ntest_bindContext() EQUAL(-1, id)" << std::endl;
       CPPUNIT_ASSERT_EQUAL(-1, id);
 
-      // m_ecMine Ì¤ÅĞÏ¿¤Î¾ì¹ç¡¢m_ecMine¤ÎÈÖ¹æ¤òÊÖ¤¹¤«¡©
+      // m_ecMine æœªç™»éŒ²ã®å ´åˆã€m_ecMineã®ç•ªå·ã‚’è¿”ã™ã‹ï¼Ÿ
       RTC_exp::PeriodicExecutionContext* pec = new RTC_exp::PeriodicExecutionContext();
       ec = pec->getObjRef();
       id = (int)(rto->bindContext(ec));
 
-      // [0]¤ËÅĞÏ¿¤µ¤ì¤ë¤«¡©
+      // [0]ã«ç™»éŒ²ã•ã‚Œã‚‹ã‹ï¼Ÿ
       std::cout << "\ntest_bindContext() EQUAL(0, id)" << std::endl;
       CPPUNIT_ASSERT_EQUAL(0, id);
 
-      // Àµ¤·¤¯ÅĞÏ¿¤µ¤ì¤Æ¤¤¤ë¤«¡©
+      // æ­£ã—ãç™»éŒ²ã•ã‚Œã¦ã„ã‚‹ã‹ï¼Ÿ
       std::cout << "\ntest_bindContext() rto->chk_ecMine(id,ec)" << std::endl;
       CPPUNIT_ASSERT(rto->chk_ecMine(id,ec));
 
-      // m_ecMine ÅĞÏ¿ºÑ¤ß¤Ç nil ¤Î¾ì¹ç¡¢m_ecMine¤ÎÈÖ¹æ¤òÊÖ¤¹¤«¡©
+      // m_ecMine ç™»éŒ²æ¸ˆã¿ã§ nil ã®å ´åˆã€m_ecMineã®ç•ªå·ã‚’è¿”ã™ã‹ï¼Ÿ
       rto->ecMine[0] = RTC::ExecutionContextService::_nil();
       std::cout << "\ntest_bindContext() rto->set_ecMine()" << std::endl;
       rto->set_ecMine();
@@ -2744,11 +2744,11 @@ namespace RTObject
       ec = pec2->getObjRef();
       id = (int)(rto->bindContext(ec));
 
-      // [0]¤ËÅĞÏ¿¤µ¤ì¤ë¤«¡©
+      // [0]ã«ç™»éŒ²ã•ã‚Œã‚‹ã‹ï¼Ÿ
       std::cout << "\ntest_bindContext() EQUAL(0, id)" << std::endl;
       CPPUNIT_ASSERT_EQUAL(0, id);
 
-      // Àµ¤·¤¯ÅĞÏ¿¤µ¤ì¤Æ¤¤¤ë¤«¡©
+      // æ­£ã—ãç™»éŒ²ã•ã‚Œã¦ã„ã‚‹ã‹ï¼Ÿ
       std::cout << "\ntest_bindContext() rto->chk_ecMine(id,ec)" << std::endl;
       CPPUNIT_ASSERT(rto->chk_ecMine(id,ec));
 

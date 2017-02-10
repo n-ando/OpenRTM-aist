@@ -1,4 +1,4 @@
-// -*- C++ -*-
+ï»¿// -*- C++ -*-
 /*!
  * @file  IPortService.h
  * @brief IPortService interface class
@@ -65,7 +65,7 @@ namespace Local
   /*!
    * @if jp
    * @class IPortService
-   * @brief IPortService ¥¤¥ó¥¿¡¼¥Õ¥§¡¼¥¹¥¯¥é¥¹
+   * @brief IPortService ã‚¤ãƒ³ã‚¿ãƒ¼ãƒ•ã‚§ãƒ¼ã‚¹ã‚¯ãƒ©ã‚¹
    * @else
    * @class IPortService
    * @brief IPortService itnerface class

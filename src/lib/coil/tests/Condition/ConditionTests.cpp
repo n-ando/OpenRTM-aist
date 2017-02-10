@@ -1,4 +1,4 @@
-// -*- C++ -*-
+ï»¿// -*- C++ -*-
 /*!
  * @file   ConditionTests.cpp
  * @brief  Condition test class
@@ -57,7 +57,7 @@ namespace Condition
 {
 
 /*!
- *  @brief »î¸³ÍÑ¥¿¥¹¥¯¡£µ¯Æ°¤¹¤ë¤Èwait¤·¤Æ¡¢µ¯¤³¤µ¤ì¤ë¤ÈÀ¸À®»ş¤ËÅÏ¤µ¤ì¤¿ÃÍ¤òConditionStatus¤Ë²Ã»»¤¹¤ë¡£
+ *  @brief è©¦é¨“ç”¨ã‚¿ã‚¹ã‚¯ã€‚èµ·å‹•ã™ã‚‹ã¨waitã—ã¦ã€èµ·ã“ã•ã‚Œã‚‹ã¨ç”Ÿæˆæ™‚ã«æ¸¡ã•ã‚ŒãŸå€¤ã‚’ConditionStatusã«åŠ ç®—ã™ã‚‹ã€‚
  */
   class ConditionCheckTask : public coil::Task
   {
@@ -84,11 +84,11 @@ namespace Condition
       return ConditionStatus;
     }
     /*!
-     *  @brief ·ë²Ì¾ğÊó¤ÎConditionStatus¤ò¥¯¥ê¥¢¤¹¤ë
+     *  @brief çµæœæƒ…å ±ã®ConditionStatusã‚’ã‚¯ãƒªã‚¢ã™ã‚‹
      */
     static void resteStatus() { ConditionStatus =  0; }
     /*!
-     *  @brief ·ë²Ì¾ğÊó¤ÎConditionStatus¤Î¸½ºßÃÍ¤òÊÖ¤¹
+     *  @brief çµæœæƒ…å ±ã®ConditionStatusã®ç¾åœ¨å€¤ã‚’è¿”ã™
      */
     static int getStatus() { return ConditionStatus; }
   private:

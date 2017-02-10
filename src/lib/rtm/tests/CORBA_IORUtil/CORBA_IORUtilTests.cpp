@@ -1,4 +1,4 @@
-// -*- C++ -*-
+﻿// -*- C++ -*-
 /*!
  * @file   CORBA_IORUtilTests.cpp
  * @brief  CORBA_IORUtil test class
@@ -77,7 +77,7 @@ namespace CORBA_IORUtil
     }
   
     /*!
-     * @brief toIOR(), toString(), replaceEndpoint(), formatIORinfo() �᥽�åɥƥ���
+     * @brief toIOR(), toString(), replaceEndpoint(), formatIORinfo() メソッドテスト
      */
     void test_case0()
     {

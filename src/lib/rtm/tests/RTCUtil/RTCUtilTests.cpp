@@ -1,4 +1,4 @@
-// -*- C++ -*-
+﻿// -*- C++ -*-
 /*!
  * @file   RTCUtilTests.cpp
  * @brief  RTCUtil test class

@@ -1,4 +1,4 @@
-// -*- C++ -*-
+﻿// -*- C++ -*-
 /*!
  * @file   OrganizationProxyTests.cpp
  * @brief  OrganizationProxy test class

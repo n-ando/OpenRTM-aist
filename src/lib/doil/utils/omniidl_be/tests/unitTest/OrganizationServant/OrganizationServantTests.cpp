@@ -1,4 +1,4 @@
-// -*- C++ -*-
+﻿// -*- C++ -*-
 /*!
  * @file   OrganizationServantTests.cpp
  * @brief  OrganizationServant test class

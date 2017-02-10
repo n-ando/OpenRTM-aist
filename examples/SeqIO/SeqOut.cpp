@@ -1,4 +1,4 @@
-// -*- C++ -*-
+﻿// -*- C++ -*-
 /*!
  * @file  SeqOut.cpp
  * @brief Sequence OutPort component

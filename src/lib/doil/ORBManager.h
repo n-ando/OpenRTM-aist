@@ -1,4 +1,4 @@
-// -*- C++ -*-
+﻿// -*- C++ -*-
 /*!
  * @file OrbManager.h
  * @brief Generic ORB manager
@@ -33,7 +33,7 @@ namespace doil
   public:
     /*!
      * @if jp
-     * @brief ������ؿ�
+     * @brief 初期化関数
      * @else
      * @brief initializer
      * @endif
@@ -43,7 +43,7 @@ namespace doil
     
     /*!
      * @if jp
-     * @brief ���󥹥��󥹼����ؿ�
+     * @brief インスタンス取得関数
      * @else
      * @brief getting instance
      * @endif
@@ -53,10 +53,10 @@ namespace doil
 
     /*!
      * @if jp
-     * @brief ORBManager �� shutdown ����
+     * @brief ORBManager を shutdown する
      *
-     * ��Ͽ�ѤߤΤ��٤Ƥ� ORB ���Ф��ơ�IOR::shutdown() ��ƤӽФ�
-     * shutdown ���롣
+     * 登録済みのすべての ORB に対して、IOR::shutdown() を呼び出し
+     * shutdown する。
      *
      * @else
      * @brief shutdown ORBManager
@@ -70,9 +70,9 @@ namespace doil
 
     /*!
      * @if jp
-     * @brief ORBManager �� ORB ����Ͽ����
+     * @brief ORBManager に ORB を登録する
      *
-     * ORBManager �� IORB ��Ѿ����� ORB ���֥������Ȥ���Ͽ���롣
+     * ORBManager に IORB を継承した ORB オブジェクトを登録する。
      *
      * @else
      * @brief Register an ORB to the ORBManager
@@ -86,10 +86,10 @@ namespace doil
 
     /*!
      * @if jp
-     * @brief ��Ͽ�Ѥߤ� ORB ���������
+     * @brief 登録済みの ORB を取得する
      *
-     * ̾������ꤷ��Ͽ�Ѥߤ� ORB ��������롣
-     * ���ꤷ��̾���� ORB ���ʤ����� NULL ���֤���롣
+     * 名前を指定し登録済みの ORB を取得する。
+     * 指定した名前の ORB がない場合は NULL が返される。
      *
      * @else
      * @brief Get an ORB that is registered in this ORBManager
@@ -103,10 +103,10 @@ namespace doil
 
     /*!
      * @if jp
-     * @brief ��Ͽ�ѤߤΤ��٤Ƥ� ORB ���������
+     * @brief 登録済みのすべての ORB を取得する
      *
-     * ��Ͽ�ѤߤΤ��٤Ƥ� ORB ��������롣
-     * ORB ����Ĥ���Ͽ����Ƥ��ʤ����Ĺ��0�Υꥹ�Ȥ��֤���롣
+     * 登録済みのすべての ORB を取得する。
+     * ORB が一つも登録されていない場合長さ0のリストが返される。
      *
      * @else
      * @brief Get all the ORBs that are registered in this ORBManager
@@ -120,10 +120,10 @@ namespace doil
 
     /*!
      * @if jp
-     * @brief ��Ͽ�ѤߤΤ��٤Ƥ� ORB ��̾�����������
+     * @brief 登録済みのすべての ORB を名前を取得する
      *
-     * ��Ͽ�ѤߤΤ��٤Ƥ� ORB ��̾����������롣
-     * ORB ����Ĥ���Ͽ����Ƥ��ʤ����Ĺ��0�Υꥹ�Ȥ��֤���롣
+     * 登録済みのすべての ORB を名前を取得する。
+     * ORB が一つも登録されていない場合長さ0のリストが返される。
      *
      * @else
      * @brief Get all the ORBs' name that are registered in this ORBManager
@@ -137,13 +137,13 @@ namespace doil
 
     /*!
      * @if jp
-     * @brief ��Ͽ�Ѥߤ� ORB �� ORBManager �Υꥹ�Ȥ���������
+     * @brief 登録済みの ORB を ORBManager のリストから削除する
      *
-     * ��Ͽ�Ѥߤ� ORB �� ORBManager �Υꥹ�Ȥ��������롣
-     * ���δؿ��Ǥϡ�ORB��ꥹ�Ȥ���������ΤߤǼ��ΤϺ������ʤ���
-     * ����ͤˤϰ�����Ϳ����̾�Τ� ORB �Υݥ��󥿤��֤���롣
-     * ORB �μ��Τ�������Τϥ桼������Ǥ�Ǥ��롣
-     * ���ꤷ��̾���� ORB ��¸�ߤ��ʤ����ˤ� NULL ���֤���롣
+     * 登録済みの ORB を ORBManager のリストから削除する。
+     * この関数では、ORBをリストから削除するのみで実体は削除されない。
+     * 戻り値には引数で与えた名称の ORB のポインタが返される。
+     * ORB の実体を削除するのはユーザの責任である。
+     * 指定した名前の ORB が存在しない場合には NULL が返される。
      *
      * @else
      * @brief Delete registered ORB by name.
@@ -161,10 +161,10 @@ namespace doil
 
     /*!
      * @if jp
-     * @brief ���֥������Ȥ򥢥��ƥ��ֲ�����
+     * @brief オブジェクトをアクティブ化する
      *
-     * Ϳ����줿���֥������Ȥ� ORB ��ǥ����ƥ��ֲ����롣
-     * ���֥������Ȥϥ����ƥ��ֲ���Ʊ���� ORBManager ����Ͽ����롣
+     * 与えられたオブジェクトを ORB 上でアクティブ化する。
+     * オブジェクトはアクティブ化と同時に ORBManager に登録される。
      *
      * @else
      * @brief Activate object
@@ -177,9 +177,9 @@ namespace doil
                                          const char* orbname = "") throw();
     /*!
      * @if jp
-     * @brief ���֥������Ȥ��󥢥��ƥ��ֲ�����
+     * @brief オブジェクトを非アクティブ化する
      *
-     * Ϳ����줿���֥������Ȥ� ORB ����󥢥��ƥ��ֲ����롣
+     * 与えられたオブジェクトを ORB 上で非アクティブ化する。
      *
      * @else
      * @brief Deactivate object
@@ -193,9 +193,9 @@ namespace doil
 
     /*!
      * @if jp
-     * @brief ���֥������Ȥ��󥢥��ƥ��ֲ�����
+     * @brief オブジェクトを非アクティブ化する
      *
-     * Ϳ����줿���֥������Ȥ� ORB ����󥢥��ƥ��ֲ����롣
+     * 与えられたオブジェクトを ORB 上で非アクティブ化する。
      *
      * @else
      * @brief Deactivate object
@@ -209,14 +209,14 @@ namespace doil
 
     /*!
      * @if jp
-     * @brief ���֥������Ȥ�������
+     * @brief オブジェクトを削除する
      *
-     * Ϳ����줿���֥������Ȥ� ORBManager �Υꥹ�Ȥ��������롣
+     * 与えられたオブジェクトを ORBManager のリストから削除する。
      *
-     * @param impl �ꥹ�Ȥ��������륪�֥������ȤΥݥ���
-     * @return ReturnCode_t OK:        ���ｪλ
-     *                      NOT_FOUND: �������륪�֥������Ȥ����Ĥ���ʤ�
-     *                      UNKNOWN:   �����ʥ��顼
+     * @param impl リストから削除するオブジェクトのポインタ
+     * @return ReturnCode_t OK:        正常終了
+     *                      NOT_FOUND: 該当するオブジェクトが見つからない
+     *                      UNKNOWN:   不明なエラー
      *
      * @else
      * @brief Delete object
@@ -229,14 +229,14 @@ namespace doil
 
     /*!
      * @if jp
-     * @brief ���֥������Ȥ�������
+     * @brief オブジェクトを削除する
      *
-     * Ϳ����줿���֥������Ȥ� ORBManager �Υꥹ�Ȥ��������롣
+     * 与えられたオブジェクトを ORBManager のリストから削除する。
      *
-     * @param  name �ꥹ�Ȥ��������륪�֥������Ȥ�̾��
-     * @return ReturnCode_t OK:        ���ｪλ
-     *                      NOT_FOUND: �������륪�֥������Ȥ����Ĥ���ʤ�
-     *                      UNKNOWN:   �����ʥ��顼
+     * @param  name リストから削除するオブジェクトの名前
+     * @return ReturnCode_t OK:        正常終了
+     *                      NOT_FOUND: 該当するオブジェクトが見つからない
+     *                      UNKNOWN:   不明なエラー
      *
      * @else
      * @brief Delete object
@@ -249,9 +249,9 @@ namespace doil
 
     /*!
      * @if jp
-     * @brief ���֥������Ȥ��������
+     * @brief オブジェクトを取得する
      *
-     * ��Ͽ�ѤߤΥ��֥������Ȥ��������
+     * 登録済みのオブジェクトを取得する
      *
      * @else
      * @brief Delete object
@@ -264,9 +264,9 @@ namespace doil
 
     /*!
      * @if jp
-     * @brief ���֥������Ȥ��������
+     * @brief オブジェクトを取得する
      *
-     * ��Ͽ�ѤߤΥ��֥������Ȥ��������
+     * 登録済みのオブジェクトを取得する
      *
      * @else
      * @brief Delete object
@@ -403,7 +403,7 @@ namespace doil
 
     /*!
      * @if jp
-     * @brief Impl��activate����functor
+     * @brief Implをactivateするfunctor
      * @else
      * @brief A functor to activate a given impl object
      * @endif
@@ -433,7 +433,7 @@ namespace doil
 
     /*!
      * @if jp
-     * @brief Impl��deactivate����functor
+     * @brief Implをdeactivateするfunctor
      * @else
      * @brief A functor to deactivate a given impl object
      * @endif

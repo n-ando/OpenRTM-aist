@@ -1,4 +1,4 @@
-// -*- C++ -*-
+﻿// -*- C++ -*-
 /*!
  * @file HelloRTWorld.cpp
  * @brief Hello RT world component

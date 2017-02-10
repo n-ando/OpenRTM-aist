@@ -1,4 +1,4 @@
-// -*- C++ -*-
+ï»¿// -*- C++ -*-
 /*!
  * @file RTObjectServant.cpp
  * @brief RTObject corba servant class
@@ -83,7 +83,7 @@ namespace CORBA
   
   /*!
    * @if jp
-   * @brief [CORBA interface] ExecutionContext¤ò¼èÆÀ¤¹¤ë
+   * @brief [CORBA interface] ExecutionContextã‚’å–å¾—ã™ã‚‹
    * @else
    * @brief [CORBA interface] Get ExecutionContext
    * @endif
@@ -99,7 +99,7 @@ namespace CORBA
     
   /*!
    * @if jp
-   * @brief [CORBA interface] ExecutionContextList¤ò¼èÆÀ¤¹¤ë
+   * @brief [CORBA interface] ExecutionContextListã‚’å–å¾—ã™ã‚‹
    * @else
    * @brief [CORBA interface] Get ExecutionContextList
    * @endif
@@ -118,7 +118,7 @@ namespace CORBA
 
   /*!
    * @if jp
-   * @brief [CORBA interface] »²²Ã¤·¤Æ¤¤¤ë ExecutionContextList ¤ò¼èÆÀ¤¹¤ë
+   * @brief [CORBA interface] å‚åŠ ã—ã¦ã„ã‚‹ ExecutionContextList ã‚’å–å¾—ã™ã‚‹
    * @else
    * @brief [CORBA interface] Get participating ExecutionContextList.
    * @endif
@@ -137,7 +137,7 @@ namespace CORBA
 
   /*!
    * @if jp
-   * @brief [CORBA interface] ExecutionContext ¤Î¥Ï¥ó¥É¥ë¤òÊÖ¤¹
+   * @brief [CORBA interface] ExecutionContext ã®ãƒãƒ³ãƒ‰ãƒ«ã‚’è¿”ã™
    * @else
    * @brief [CORBA interface] Return a handle of a ExecutionContext
    * @endif
@@ -153,7 +153,7 @@ namespace CORBA
 
   /*!
    * @if jp
-   * @brief [CORBA interface] ExecutionContext¤òattach¤¹¤ë
+   * @brief [CORBA interface] ExecutionContextã‚’attachã™ã‚‹
    * @else
    * @brief [CORBA interface] Attach ExecutionContext
    * @endif
@@ -166,7 +166,7 @@ namespace CORBA
   
   /*!
    * @if jp
-   * @brief [CORBA interface] ExecutionContext¤òdetach¤¹¤ë
+   * @brief [CORBA interface] ExecutionContextã‚’detachã™ã‚‹
    * @else
    * @brief [CORBA interface] Detach ExecutionContext
    * @endif
@@ -183,7 +183,7 @@ namespace CORBA
   
   /*!
    * @if jp
-   * @brief [RTObject CORBA interface] ¥³¥ó¥İ¡¼¥Í¥ó¥È¥×¥í¥Õ¥¡¥¤¥ë¤ò¼èÆÀ¤¹¤ë
+   * @brief [RTObject CORBA interface] ã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆãƒ—ãƒ­ãƒ•ã‚¡ã‚¤ãƒ«ã‚’å–å¾—ã™ã‚‹
    * @else
    * @brief [RTCObject CORBA interface] Get RTC's profile
    * @endif
@@ -196,7 +196,7 @@ namespace CORBA
   
   /*!
    * @if jp
-   * @brief [RTObject CORBA interface] ¥İ¡¼¥È¤ò¼èÆÀ¤¹¤ë
+   * @brief [RTObject CORBA interface] ãƒãƒ¼ãƒˆã‚’å–å¾—ã™ã‚‹
    * @else
    * @brief [RTCObject CORBA interface] Get Ports
    * @endif
@@ -212,7 +212,7 @@ namespace CORBA
   //============================================================
   /*!
    * @if jp
-   * @brief [ComponentAction CORBA interface] RTC ¤Î½é´ü²½
+   * @brief [ComponentAction CORBA interface] RTC ã®åˆæœŸåŒ–
    * @else
    * @brief [ComponentAction CORBA interface] Initialize RTC
    * @endif
@@ -225,7 +225,7 @@ namespace CORBA
   
   /*!
    * @if jp
-   * @brief [ComponentAction CORBA interface] RTC ¤Î½ªÎ»
+   * @brief [ComponentAction CORBA interface] RTC ã®çµ‚äº†
    * @else
    * @brief [ComponentAction CORBA interface] Finalize RTC
    * @endif
@@ -238,7 +238,7 @@ namespace CORBA
   
   /*!
    * @if jp
-   * @brief [ComponentAction CORBA interface] RTC ¤Î³«»Ï
+   * @brief [ComponentAction CORBA interface] RTC ã®é–‹å§‹
    * @else
    * @brief [ComponentAction CORBA interface] Startup RTC
    * @endif
@@ -251,7 +251,7 @@ namespace CORBA
   
   /*!
    * @if jp
-   * @brief [ComponentAction CORBA interface] RTC ¤ÎÄä»ß
+   * @brief [ComponentAction CORBA interface] RTC ã®åœæ­¢
    * @else
    * @brief [ComponentAction CORBA interface] Shutdown RTC
    * @endif
@@ -264,7 +264,7 @@ namespace CORBA
   
   /*!
    * @if jp
-   * @brief [ComponentAction CORBA interface] RTC ¤Î³èÀ­²½
+   * @brief [ComponentAction CORBA interface] RTC ã®æ´»æ€§åŒ–
    * @else
    * @brief [ComponentAction CORBA interface] Activate RTC
    * @endif
@@ -277,7 +277,7 @@ namespace CORBA
   
   /*!
    * @if jp
-   * @brief [ComponentAction CORBA interface] RTC ¤ÎÈó³èÀ­²½
+   * @brief [ComponentAction CORBA interface] RTC ã®éæ´»æ€§åŒ–
    * @else
    * @brief [ComponentAction CORBA interface] Deactivate RTC
    * @endif
@@ -290,7 +290,7 @@ namespace CORBA
   
   /*!
    * @if jp
-   * @brief [ComponentAction CORBA interface] RTC ¤Î¥¨¥é¡¼¾õÂÖ¤Ø¤ÎÁ«°Ü
+   * @brief [ComponentAction CORBA interface] RTC ã®ã‚¨ãƒ©ãƒ¼çŠ¶æ…‹ã¸ã®é·ç§»
    * @else
    * @brief [ComponentAction interface] Transition to the error state
    * @endif
@@ -303,7 +303,7 @@ namespace CORBA
   
   /*!
    * @if jp
-   * @brief [ComponentAction CORBA interface] RTC ¤Î¥¨¥é¡¼½èÍı
+   * @brief [ComponentAction CORBA interface] RTC ã®ã‚¨ãƒ©ãƒ¼å‡¦ç†
    * @else
    * @brief [ComponentAction CORBA interface] Error Processing of RTC
    * @endif
@@ -316,7 +316,7 @@ namespace CORBA
   
   /*!
    * @if jp
-   * @brief [ComponentAction CORBA interface] RTC ¤Î¥ê¥»¥Ã¥È
+   * @brief [ComponentAction CORBA interface] RTC ã®ãƒªã‚»ãƒƒãƒˆ
    * @else
    * @brief [ComponentAction CORBA interface] Resetting RTC
    * @endif
@@ -329,7 +329,7 @@ namespace CORBA
   
   /*!
    * @if jp
-   * @brief [DataFlowComponentAction CORBA interface] RTC ¤ÎÄê¾ï½èÍı(Âè°ì¼ş´ü)
+   * @brief [DataFlowComponentAction CORBA interface] RTC ã®å®šå¸¸å‡¦ç†(ç¬¬ä¸€å‘¨æœŸ)
    * @else
    * @brief [DataFlowComponentAction CORBA interface] Primary Periodic 
    *        Operation of RTC
@@ -343,7 +343,7 @@ namespace CORBA
   
   /*!
    * @if jp
-   * @brief [DataFlowComponentAction CORBA interface] RTC ¤ÎÄê¾ï½èÍı(ÂèÆó¼ş´ü)
+   * @brief [DataFlowComponentAction CORBA interface] RTC ã®å®šå¸¸å‡¦ç†(ç¬¬äºŒå‘¨æœŸ)
    * @else
    * @brief [DataFlowComponentAction CORBA interface] Secondary Periodic 
    *        Operation of RTC
@@ -357,7 +357,7 @@ namespace CORBA
   
   /*!
    * @if jp
-   * @brief [DataFlowComponentAction CORBA interface] ¼Â¹Ô¼ş´üÊÑ¹¹ÄÌÃÎ
+   * @brief [DataFlowComponentAction CORBA interface] å®Ÿè¡Œå‘¨æœŸå¤‰æ›´é€šçŸ¥
    * @else
    * @brief [DataFlowComponentAction CORBA interface] Notify rate changed
    * @endif
@@ -373,7 +373,7 @@ namespace CORBA
   //============================================================
   /*!
    * @if jp
-   * @brief [SDO interface] Organization ¥ê¥¹¥È¤Î¼èÆÀ 
+   * @brief [SDO interface] Organization ãƒªã‚¹ãƒˆã®å–å¾— 
    * @else
    * @brief [SDO interface] Get Organization list
    * @endif
@@ -387,7 +387,7 @@ namespace CORBA
   // SDOPackage::SDO
   /*!
    * @if jp
-   * @brief [SDO interface] SDO ID ¤Î¼èÆÀ
+   * @brief [SDO interface] SDO ID ã®å–å¾—
    * @else
    * @brief [SDO interface] Get the SDO ID
    * @endif
@@ -401,7 +401,7 @@ namespace CORBA
   
   /*!
    * @if jp
-   * @brief [SDO interface] SDO ¥¿¥¤¥×¤Î¼èÆÀ
+   * @brief [SDO interface] SDO ã‚¿ã‚¤ãƒ—ã®å–å¾—
    * @else
    * @brief [SDO interface] Get SDO type
    * @endif
@@ -415,7 +415,7 @@ namespace CORBA
   
   /*!
    * @if jp
-   * @brief [SDO interface] SDO DeviceProfile ¥ê¥¹¥È¤Î¼èÆÀ 
+   * @brief [SDO interface] SDO DeviceProfile ãƒªã‚¹ãƒˆã®å–å¾— 
    * @else
    * @brief [SDO interface] Get SDO DeviceProfile list
    * @endif
@@ -444,7 +444,7 @@ namespace CORBA
   
   /*!
    * @if jp
-   * @brief [SDO interface] SDO ServiceProfile ¤Î¼èÆÀ 
+   * @brief [SDO interface] SDO ServiceProfile ã®å–å¾— 
    * @else
    * @brief [SDO interface] Get SDO ServiceProfile
    * @endif
@@ -468,7 +468,7 @@ namespace CORBA
   
   /*!
    * @if jp
-   * @brief [SDO interface] ÆÃÄê¤ÎServiceProfile¤Î¼èÆÀ 
+   * @brief [SDO interface] ç‰¹å®šã®ServiceProfileã®å–å¾— 
    * @else
    * @brief [SDO interface] Get specified ServiceProfile
    * @endif
@@ -500,7 +500,7 @@ namespace CORBA
   
   /*!
    * @if jp
-   * @brief [SDO interface] »ØÄê¤µ¤ì¤¿ SDO Service ¤Î¼èÆÀ
+   * @brief [SDO interface] æŒ‡å®šã•ã‚ŒãŸ SDO Service ã®å–å¾—
    * @else
    * @brief [SDO interface] Get specified SDO Service's reference
    * @endif
@@ -531,7 +531,7 @@ namespace CORBA
   
   /*!
    * @if jp
-   * @brief [SDO interface] Configuration ¥ª¥Ö¥¸¥§¥¯¥È¤Î¼èÆÀ 
+   * @brief [SDO interface] Configuration ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®å–å¾— 
    * @else
    * @brief [SDO interface] Get Configuration object
    * @endif
@@ -558,7 +558,7 @@ namespace CORBA
   
   /*!
    * @if jp
-   * @brief [SDO interface] Monitoring ¥ª¥Ö¥¸¥§¥¯¥È¤Î¼èÆÀ 
+   * @brief [SDO interface] Monitoring ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®å–å¾— 
    * @else
    * @brief [SDO interface] Get Monitoring object
    * @endif
@@ -574,7 +574,7 @@ namespace CORBA
   
   /*!
    * @if jp
-   * @brief [SDO interface] Organization ¥ê¥¹¥È¤Î¼èÆÀ 
+   * @brief [SDO interface] Organization ãƒªã‚¹ãƒˆã®å–å¾— 
    * @else
    * @brief [SDO interface] Get Organization list
    * @endif
@@ -598,7 +598,7 @@ namespace CORBA
   
   /*!
    * @if jp
-   * @brief [SDO interface] SDO Status ¥ê¥¹¥È¤Î¼èÆÀ 
+   * @brief [SDO interface] SDO Status ãƒªã‚¹ãƒˆã®å–å¾— 
    * @else
    * @brief [SDO interface] Get SDO Status list
    * @endif
@@ -622,7 +622,7 @@ namespace CORBA
   
   /*!
    * @if jp
-   * @brief [SDO interface] SDO Status ¤Î¼èÆÀ 
+   * @brief [SDO interface] SDO Status ã®å–å¾— 
    * @else
    * @brief [SDO interface] Get SDO Status
    * @endif
@@ -654,7 +654,7 @@ namespace CORBA
   //============================================================
   /*!
    * @if jp
-   * @brief [local interface] ¥¤¥ó¥¹¥¿¥ó¥¹Ì¾¤ÎÀßÄê
+   * @brief [local interface] ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹åã®è¨­å®š
    * @else
    * @brief [local interface] Set instance name
    * @endif
@@ -667,7 +667,7 @@ namespace CORBA
   
   /*!
    * @if jp
-   * @brief [local interface] Naming Server ¾ğÊó¤Î¼èÆÀ
+   * @brief [local interface] Naming Server æƒ…å ±ã®å–å¾—
    * @else
    * @brief [local interface] Get Naming Server information
    * @endif
@@ -679,7 +679,7 @@ namespace CORBA
   
   /*!
    * @if jp
-   * @brief [local interface] ¥ª¥Ö¥¸¥§¥¯¥È¥ê¥Õ¥¡¥ì¥ó¥¹¤ÎÀßÄê
+   * @brief [local interface] ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆãƒªãƒ•ã‚¡ãƒ¬ãƒ³ã‚¹ã®è¨­å®š
    * @else
    * @brief [local interface] Set the object reference
    * @endif
@@ -691,7 +691,7 @@ namespace CORBA
   
   /*!
    * @if jp
-   * @brief [local interface] ¥ª¥Ö¥¸¥§¥¯¥È¥ê¥Õ¥¡¥ì¥ó¥¹¤Î¼èÆÀ
+   * @brief [local interface] ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆãƒªãƒ•ã‚¡ãƒ¬ãƒ³ã‚¹ã®å–å¾—
    * @else
    * @brief [local interface] Get the object reference
    * @endif
@@ -703,7 +703,7 @@ namespace CORBA
   
   /*!
    * @if jp
-   * @brief [local interface] RTC ¤Î¥×¥í¥Ñ¥Æ¥£¤òÀßÄê¤¹¤ë
+   * @brief [local interface] RTC ã®ãƒ—ãƒ­ãƒ‘ãƒ†ã‚£ã‚’è¨­å®šã™ã‚‹
    * @else
    * @brief [local interface] Set RTC property
    * @endif
@@ -721,7 +721,7 @@ namespace CORBA
   
   /*!
    * @if jp
-   * @brief [local interface] RTC ¤Î¥×¥í¥Ñ¥Æ¥£¤ò¼èÆÀ¤¹¤ë
+   * @brief [local interface] RTC ã®ãƒ—ãƒ­ãƒ‘ãƒ†ã‚£ã‚’å–å¾—ã™ã‚‹
    * @else
    * @brief [local interface] Get RTC property
    * @endif
@@ -733,7 +733,7 @@ namespace CORBA
   
   /*!
    * @if jp
-   * @brief ¥³¥ó¥Õ¥£¥®¥å¥ì¡¼¥·¥ç¥ó¥Ñ¥é¥á¡¼¥¿¤Î¹¹¿·(ID»ØÄê)
+   * @brief ã‚³ãƒ³ãƒ•ã‚£ã‚®ãƒ¥ãƒ¬ãƒ¼ã‚·ãƒ§ãƒ³ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ã®æ›´æ–°(IDæŒ‡å®š)
    * @else
    * @brief Update configuration parameters (by ID)
    * @endif
@@ -746,7 +746,7 @@ namespace CORBA
   
   /*!
    * @if jp
-   * @brief [local interface] Port ¤òÅĞÏ¿¤¹¤ë
+   * @brief [local interface] Port ã‚’ç™»éŒ²ã™ã‚‹
    * @else
    * @brief [local interface] Register Port
    * @endif
@@ -760,7 +760,7 @@ namespace CORBA
   
   /*!
    * @if jp
-   * @brief [local interface] Port ¤ÎÅĞÏ¿¤òºï½ü¤¹¤ë
+   * @brief [local interface] Port ã®ç™»éŒ²ã‚’å‰Šé™¤ã™ã‚‹
    * @else
    * @brief [local interface] Unregister Port
    * @endif
@@ -773,7 +773,7 @@ namespace CORBA
   
   /*!
    * @if jp
-   * @brief [local interface] Ì¾Á°»ØÄê¤Ë¤è¤ê Port ¤ÎÅĞÏ¿¤òºï½ü¤¹¤ë
+   * @brief [local interface] åå‰æŒ‡å®šã«ã‚ˆã‚Š Port ã®ç™»éŒ²ã‚’å‰Šé™¤ã™ã‚‹
    * @else
    * @brief [local interface] Delete Port by specifying its name
    * @endif
@@ -786,7 +786,7 @@ namespace CORBA
   
   /*!
    * @if jp
-   * @brief Á´ Port ¤ÎÅĞÏ¿¤òºï½ü¤¹¤ë
+   * @brief å…¨ Port ã®ç™»éŒ²ã‚’å‰Šé™¤ã™ã‚‹
    * @else
    * @brief Unregister All Ports
    * @endif
@@ -798,7 +798,7 @@ namespace CORBA
   
   /*!
    * @if jp
-   * @brief RTC ¤ò½ªÎ»¤¹¤ë
+   * @brief RTC ã‚’çµ‚äº†ã™ã‚‹
    * @else
    * @brief Shutdown RTC
    * @endif

@@ -1,4 +1,4 @@
-// -*- C++ -*-
+﻿// -*- C++ -*-
 /*!
  * @file   ModuleManagerTests.cpp
  * @brief  ModuleManager test class
@@ -129,10 +129,10 @@ namespace ModuleManager
       coil::Properties prop(default_properties);
       m_pModMgr = new RTC::ModuleManager(prop);
 			
-      // �����ɥѥ����libRTC.so��¸�ߤ��뤳�Ȥ��ǧ���Ƥ���
+      // ロードパス上にlibRTC.soが存在することを確認しておく
       m_pModMgr->load("libRTC.so");
 			
-      // �����ɥѥ����libm.so��¸�ߤ��뤳�Ȥ��ǧ���Ƥ���
+      // ロードパス上にlibm.soが存在することを確認しておく
       m_pModMgr->load("libm.so");
     }
 		
@@ -147,23 +147,23 @@ namespace ModuleManager
 		
     /* tests for string load(const string& file_name) */
     /*!
-     * @brief load()�᥽�åɤΥƥ���
+     * @brief load()メソッドのテスト
      * 
-     * - �ե�����̾�������ꤷ�����ˡ�����˥����ɤǤ��뤫��
-     * - �ե�����̾�����Хѥ��ǻ��ꤷ�����ˡ�����˥����ɤǤ��뤫��
-     * - �ѥ���ˡ���//�פ��../�פ��ޤޤ����ˡ�����˥����ɤǤ��뤫��
-     * - �����ɥѥ���˥ե������¸�ߤ��뤬����ĥ�Ҥ�Ŭ�ѳ��Ǥ�����ˡ��տޤɤ�������ɼ��Ԥ��뤫��
-     * - ¸�ߤ��ʤ��ե��������ꤷ�����ˡ��տޤɤ���˥����ɼ��Ԥ��뤫��
+     * - ファイル名だけ指定した場合に、正常にロードできるか？
+     * - ファイル名を絶対パスで指定した場合に、正常にロードできるか？
+     * - パス内に、「//」や「../」が含まれる場合に、正常にロードできるか？
+     * - ロードパス上にファイルは存在するが、拡張子が適用外である場合に、意図どおりロード失敗するか？
+     * - 存在しないファイルを指定した場合に、意図どおりにロード失敗するか？
      */
     void test_load()
     {
       try
 	{
 	  // Success case
-	  // �ե�����̾�������ꤷ�����ˡ������ɤǤ��뤫��
+	  // ファイル名だけ指定した場合に、ロードできるか？
 	  //std::string str = m_pModMgr->load("libRTC.so");
 	  //std::cout << "\nstr=(" << str << std::endl;
-	  // ���󥹥ȡ���Ķ��ˤ�äơ��ե�����ѥ����Ѳ�����Τǥ����Ȥˤ���
+	  // インストール環境によって、ファイルパスが変化するのでコメントにする
 //	  CPPUNIT_ASSERT_EQUAL(
 //			       std::string("/usr/local/lib/libRTC.so"),
 //			       std::string("../../.libs/libRTC.so"),
@@ -171,13 +171,13 @@ namespace ModuleManager
 //			       m_pModMgr->load("libRTC.so"));
 				
 /*
-	  // �ե�����̾�����Хѥ��ǻ��ꤷ�����ˡ�����˥����ɤǤ��뤫��
+	  // ファイル名を絶対パスで指定した場合に、正常にロードできるか？
 	  CPPUNIT_ASSERT_EQUAL(
 //			       std::string("/usr/local/lib/libRTC.so"),
 			       std::string("../../.libs/libRTC.so"),
 			       m_pModMgr->load("/usr/local/lib/libRTC.so"));
 				
-	  // �ǥ��쥯�ȥ�ζ��ڤ�ʸ����"//"��"../"��������
+	  // ディレクトリの区切り文字に"//"や"../"がある場合
 	  CPPUNIT_ASSERT_EQUAL(
 //			       std::string("/usr/local//lib/../lib/libRTC.so"),
 //			       m_pModMgr->load("/usr/local//lib/../lib/libRTC.so"));
@@ -213,7 +213,7 @@ namespace ModuleManager
       // Failure case
       bool notThrown;
 
-      // �����ɥѥ���˥ե������¸�ߤ��뤬����ĥ�Ҥ�Ŭ�ѳ��Ǥ�����ˡ��տޤɤ�������ɼ��Ԥ��뤫��
+      // ロードパス上にファイルは存在するが、拡張子が適用外である場合に、意図どおりロード失敗するか？
       notThrown = false;
       try
 	{
@@ -223,7 +223,7 @@ namespace ModuleManager
       catch (...) {}
       if (notThrown) CPPUNIT_FAIL("Exception not thrown.");
 
-      // ¸�ߤ��ʤ��ե�����ξ��
+      // 存在しないファイルの場合
       notThrown = false;
       try
 	{
@@ -235,21 +235,21 @@ namespace ModuleManager
     }
 		
     /*!
-     * @brief load()�᥽�åɤΥƥ���
+     * @brief load()メソッドのテスト
      * 
-     * - �����ɥѥ����¸�ߤ��ʤ��⥸�塼��Υ����ɤ��ߤ���硢�տޤɤ�������ɼ��Ԥ��뤫��
+     * - ロードパス上に存在しないモジュールのロードを試みた場合、意図どおりロード失敗するか？
      */
     void test_load_inexistent_on_load_path()
     {
 
       std::vector<std::string> loadPath = m_pModMgr->getLoadPath();
 			
-      // setLoadPath()�����Ѥ��ơ������ɥѥ��򥯥ꥢ����
+      // setLoadPath()を利用して、ロードパスをクリアする
       std::vector<std::string> emptyPath;
       m_pModMgr->setLoadpath(emptyPath);
 			
-      // �����ɥѥ����¸�ߤ��ʤ��⥸�塼��Υ����ɤ��ߤ���硢�տޤɤ�������ɼ��Ԥ��뤫��
-      // �ʥ����ɥѥ��򥯥ꥢ�������֤ʤΤǡ��⥸�塼������ɤ˼��Ԥ���Ϥ���
+      // ロードパス上に存在しないモジュールのロードを試みた場合、意図どおりロード失敗するか？
+      // （ロードパスをクリアした状態なので、モジュールロードに失敗するはず）
       bool notThrown = false;
       try
 	{
@@ -259,27 +259,27 @@ namespace ModuleManager
       catch (...) {}
       if (notThrown) CPPUNIT_FAIL("Exception not thrown.");
 			
-      // ���Υ����ɥѥ������ꤷ�ʤ���
+      // 元のロードパスを設定しなおす
       m_pModMgr->setLoadpath(loadPath);
 			
-      // �⥸�塼��Υ����ɤ���������Ϥ�
+      // モジュールのロードに成功するはず
       std::string modName = m_pModMgr->load("libm.so");
       CPPUNIT_ASSERT(isFound(m_pModMgr->getLoadedModules(), modName));
     }
 		
     /*!
-     * @brief unload()�᥽�åɤΥƥ���
+     * @brief unload()メソッドのテスト
      * 
-     * - �����ɤ��Ƥ������⥸�塼�����������������ɤǤ��뤫��
-     * - ��������ɤ��Ƥ��ʤ��⥸�塼��ϡ��ʤ���������ɤ��줺�˻ĤäƤ��뤫��
-     * - ���Хѥ�����ꤻ�����ե�����̾�������ꤷ�����ˡ��տޤɤ���˥�������ɼ��Ԥ��뤫��
-     * - �����ɤ��Ƥ��ʤ��⥸�塼��Υ�������ɤ��ߤ���硢�տޤɤ���˼��Ԥ��뤫��
-     * - ��������ɺѤߤΥ⥸�塼��򡢤���˥�������ɤ��褦�Ȼ�ߤ���硢�տޤɤ���˼��Ԥ��뤫��
+     * - ロードしておいたモジュールを正しくアンロードできるか？
+     * - アンロードしていないモジュールは、なおアンロードされずに残っているか？
+     * - 絶対パスを指定せず、ファイル名だけ指定した場合に、意図どおりにアンロード失敗するか？
+     * - ロードしていないモジュールのアンロードを試みた場合、意図どおりに失敗するか？
+     * - アンロード済みのモジュールを、さらにアンロードしようと試みた場合、意図どおりに失敗するか？
      */
     void test_unload()
     {
 
-      // �⥸�塼�������ɤ��Ƥ���
+      // モジュールをロードしておく
       std::string modName1 = m_pModMgr->load("libRTC.so");
       CPPUNIT_ASSERT(isFound(m_pModMgr->getLoadedModules(), modName1));
 			
@@ -287,16 +287,16 @@ namespace ModuleManager
       CPPUNIT_ASSERT(isFound(m_pModMgr->getLoadedModules(), modName2));
 			
       // Success case
-      // �����ɤ��Ƥ������⥸�塼�����������������ɤǤ��뤫��
+      // ロードしておいたモジュールを正しくアンロードできるか？
       m_pModMgr->unload(modName1);
       CPPUNIT_ASSERT(! isFound(m_pModMgr->getLoadedModules(), modName1));
 			
-      // ��������ɤ��Ƥ��ʤ��⥸�塼��ϡ��ʤ���������ɤ��줺�˻ĤäƤ��뤫��
+      // アンロードしていないモジュールは、なおアンロードされずに残っているか？
       CPPUNIT_ASSERT(isFound(m_pModMgr->getLoadedModules(), modName2));
 			
 			
       // Failure case
-      // ���Хѥ�����ꤻ�����ե�����̾�������ꤷ�����ˡ��տޤɤ���˥�������ɼ��Ԥ��뤫��
+      // 絶対パスを指定せず、ファイル名だけ指定した場合に、意図どおりにアンロード失敗するか？
       try
 	{
 	  m_pModMgr->unload("libm.so");
@@ -304,7 +304,7 @@ namespace ModuleManager
 	}
       catch (RTC::ModuleManager::NotFound expected) {}
 			
-      // �����ɤ��Ƥ��ʤ��⥸�塼��Υ�������ɤ��ߤ���硢�տޤɤ���˼��Ԥ��뤫��
+      // ロードしていないモジュールのアンロードを試みた場合、意図どおりに失敗するか？
       try
 	{
 	  m_pModMgr->unload("non-loaded-module.so");
@@ -312,7 +312,7 @@ namespace ModuleManager
 	}
       catch (RTC::ModuleManager::NotFound expected) {}
 			
-      // ��������ɺѤߤΥ⥸�塼��򡢤���˥�������ɤ��褦�Ȼ�ߤ���硢�տޤɤ���˼��Ԥ��뤫��
+      // アンロード済みのモジュールを、さらにアンロードしようと試みた場合、意図どおりに失敗するか？
       try
 	{
 	  m_pModMgr->unload(modName1);
@@ -322,58 +322,58 @@ namespace ModuleManager
     }
 		
     /*!
-     * @brief unloadAll()�᥽�åɤΥƥ���
+     * @brief unloadAll()メソッドのテスト
      * 
-     * - �����ɺѤߤΥ⥸�塼�뤬���٤ƥ�������ɤ���뤫��
+     * - ロード済みのモジュールがすべてアンロードされるか？
      */
     void test_unloadAll()
     {
-      // �⥸�塼�������ɤ��Ƥ���
+      // モジュールをロードしておく
       std::string modName1 = m_pModMgr->load("libRTC.so");
       CPPUNIT_ASSERT(isFound(m_pModMgr->getLoadedModules(), modName1));
 			
       std::string modName2 = m_pModMgr->load("libm.so");
       CPPUNIT_ASSERT(isFound(m_pModMgr->getLoadedModules(), modName2));
 			
-      // unloadAll()�ˤ�äơ������ɺѤߤΥ⥸�塼�뤬���٤ƥ�������ɤ���뤫��
+      // unloadAll()によって、ロード済みのモジュールがすべてアンロードされるか？
       m_pModMgr->unloadAll();
       CPPUNIT_ASSERT(! isFound(m_pModMgr->getLoadedModules(), modName1));
       CPPUNIT_ASSERT(! isFound(m_pModMgr->getLoadedModules(), modName2));
     }
 		
     /*!
-     * @brief symbol()�᥽�åɤΥƥ���
+     * @brief symbol()メソッドのテスト
      * 
-     * - �⥸�塼�뤬���ĥ���ܥ�ʴؿ��ݥ��󥿡ˤ�����˼����Ǥ��뤫��
-     * - ������������ܥ���Ф���ƽФ�����˹Ԥ��뤫��
+     * - モジュールが持つシンボル（関数ポインタ）を正常に取得できるか？
+     * - 取得したシンボルに対する呼出を正常に行えるか？
      */
     void test_symbol()
     {
       typedef double (*FUNCTION_COS)(double);
       typedef double (*FUNCTION_SIN)(double);
 
-      // �⥸�塼�������ɤ��Ƥ���
+      // モジュールをロードしておく
       std::string modName = m_pModMgr->load("libm.so");
       CPPUNIT_ASSERT(isFound(m_pModMgr->getLoadedModules(), modName));
 			
-      // "cos"�ؿ��ؤΥ���ܥ���������
+      // "cos"関数へのシンボルを取得する
       FUNCTION_COS func_cos = (FUNCTION_COS) m_pModMgr->symbol(modName, "cos");
       CPPUNIT_ASSERT(func_cos != NULL);
 			
-      // "sin"�ؿ��ؤΥ���ܥ���������
+      // "sin"関数へのシンボルを取得する
       FUNCTION_SIN func_sin = (FUNCTION_SIN) m_pModMgr->symbol(modName, "sin");
       CPPUNIT_ASSERT(func_sin != NULL);
 			
-      // ������������ܥ�ؤθƽФ�����˹Ԥ��뤫��
+      // 取得したシンボルへの呼出を正常に行えるか？
       CPPUNIT_ASSERT_EQUAL(1.0, (*func_cos)(0.0));
       CPPUNIT_ASSERT_EQUAL(0.0, (*func_sin)(0.0));
     }
 		
     /*!
-     * @brief setLoadpath()��getLoadPath()�Υƥ���
+     * @brief setLoadpath()とgetLoadPath()のテスト
      * 
-     * - �����ɥѥ�������������Ǥ��뤫��
-     * - �����ɥѥ��������������Ǥ��뤫��
+     * - ロードパスを正しく設定できるか？
+     * - ロードパスを正しく取得できるか？
      */
     void test_setLoadpath_and_getLoadPath()
     {
@@ -382,7 +382,7 @@ namespace ModuleManager
       loadPath.push_back("/usr");
       loadPath.push_back("/usr/lib");
 			
-      // setLoadpath()�����ꤷ���ѥ���getLoadPath()�Ǽ����Ǥ��뤫��
+      // setLoadpath()で設定したパスを、getLoadPath()で取得できるか？
       m_pModMgr->setLoadpath(loadPath);
       std::vector<std::string> loadPathRet = m_pModMgr->getLoadPath();
       CPPUNIT_ASSERT_EQUAL(2, (int) loadPathRet.size());
@@ -392,9 +392,9 @@ namespace ModuleManager
     }
 		
     /*!
-     * @brief addLoadpath()�᥽�åɤΥƥ���
+     * @brief addLoadpath()メソッドのテスト
      * 
-     * - �����������ɥѥ����ɲäǤ��뤫��
+     * - 正しくロードパスを追加できるか？
      */
     void test_addLoadpath()
     {
@@ -415,7 +415,7 @@ namespace ModuleManager
       expectedPath.push_back("/usr/local/lib/rtc");
       std::sort(expectedPath.begin(), expectedPath.end());
 			
-      // �ޤ�������֤Υ����ɥѥ������ꤷ�Ƥ���
+      // まず初期状態のロードパスを設定しておく
       std::vector<std::string> loadPathRet;
       m_pModMgr->setLoadpath(loadPath1);
       loadPathRet = m_pModMgr->getLoadPath();
@@ -424,7 +424,7 @@ namespace ModuleManager
 	CPPUNIT_ASSERT_EQUAL(loadPath1[i], loadPathRet[i]);
       }
 			
-      // �����������ɥѥ����ɲäǤ��뤫��
+      // 正しくロードパスを追加できるか？
       m_pModMgr->addLoadpath(loadPath2);
       loadPathRet = m_pModMgr->getLoadPath();
       CPPUNIT_ASSERT_EQUAL(4, (int) loadPathRet.size());
@@ -434,15 +434,15 @@ namespace ModuleManager
     }
 		
     /*!
-     * @brief getLoadedModules()�᥽�åɤΥƥ���
+     * @brief getLoadedModules()メソッドのテスト
      */
     void test_getLoadedModules()
     {
-      // ¾�ƥ�����ǻ��Ѥ���Ƥ��ꡢ�����Ƿ�ͤ��ΤȤ���
+      // 他テスト内で使用されており、それらで兼ねるものとする
     }
 		
     /*!
-     * @brief getLoadableModules()�᥽�åɤΥƥ���
+     * @brief getLoadableModules()メソッドのテスト
      */
     void test_getLoadableModules()
     {
@@ -463,20 +463,20 @@ namespace ModuleManager
     }
 		
     /*!
-     * @brief allowAbsolutePath()�᥽�åɤ�disallowAbsolutePath()�᥽�åɤΥƥ���
+     * @brief allowAbsolutePath()メソッドとdisallowAbsolutePath()メソッドのテスト
      * 
-     * - ���Хѥ��������Ĥ������֤ǡ����Хѥ�����ǥ⥸�塼������ɤǤ��뤫��
-     * - ���Хѥ������ػߤ������֤ǡ����Хѥ�����ǥ⥸�塼������ɤ��ߤơ��տޤɤ��꼺�Ԥ��뤫��
+     * - 絶対パス指定を許可した状態で、絶対パス指定でモジュールロードできるか？
+     * - 絶対パス指定を禁止した状態で、絶対パス指定でモジュールロードを試みて、意図どおり失敗するか？
      */
     void test_allowAbsolutePath_and_disallowAbsolutePath()
     {
-      // ���Хѥ��������Ĥ������֤ǡ����Хѥ�����ǥ⥸�塼������ɤǤ��뤫��
+      // 絶対パス指定を許可した状態で、絶対パス指定でモジュールロードできるか？
       m_pModMgr->allowAbsolutePath();
       std::string modName = m_pModMgr->load("/usr/lib/libm.so");
       CPPUNIT_ASSERT(isFound(m_pModMgr->getLoadedModules(), modName));
 			
-      // ���Хѥ������ػߤ������֤ǡ����Хѥ�����ǥ⥸�塼������ɤ��ߤơ��տޤɤ��꼺�Ԥ��뤫��
-      m_pModMgr->unloadAll(); // ���ä��󥢥�����ɤ��Ƥ���
+      // 絶対パス指定を禁止した状態で、絶対パス指定でモジュールロードを試みて、意図どおり失敗するか？
+      m_pModMgr->unloadAll(); // いったんアンロードしておく
       m_pModMgr->disallowAbsolutePath();
       try
 	{
@@ -487,26 +487,26 @@ namespace ModuleManager
     }
 		
     /*!
-     * @brief allowModuleDownload()�᥽�åɤΥƥ���
+     * @brief allowModuleDownload()メソッドのテスト
      */
     void test_allowModuleDownload()
     {
-      // ����������ɤˤ��⥸�塼������ɽ�����̤�����Τ��ᡢ�ƥ��Ȥ�̤����
+      // ダウンロードによるモジュールロード処理が未実装のため、テストも未実装
     }
 		
     /*!
-     * @brief disallowModuleDownload()�᥽�åɤΥƥ���
+     * @brief disallowModuleDownload()メソッドのテスト
      */
     void test_disallowModuleDownload()
     {
-      // ����������ɤˤ��⥸�塼������ɽ�����̤�����Τ��ᡢ�ƥ��Ȥ�̤����
+      // ダウンロードによるモジュールロード処理が未実装のため、テストも未実装
     }
 		
     /*!
-     * @brief findFile()�᥽�åɤΥƥ���
+     * @brief findFile()メソッドのテスト
      * 
-     * - ���ꤷ���ѥ���˥ե����뤬¸�ߤ����硢������̵ͭȽ�ꤷ���ѥ�������Ǥ��뤫��
-     * - ���ꤷ���ѥ���˥ե����뤬¸�ߤ��ʤ���硢������̵ͭȽ�ꤷ����ʸ���������Ǥ��뤫��
+     * - 指定したパス上にファイルが存在する場合、正しく有無判定し、パスを取得できるか？
+     * - 指定したパス上にファイルが存在しない場合、正しく有無判定し、空文字列を取得できるか？
      */
     void test_findFile()
     {
@@ -514,42 +514,42 @@ namespace ModuleManager
       std::vector<std::string> path;
       path.push_back("/usr/lib");
 			
-      // ���ꤷ���ѥ���˥ե����뤬¸�ߤ����硢������̵ͭȽ�ꤷ���ѥ�������Ǥ��뤫��
+      // 指定したパス上にファイルが存在する場合、正しく有無判定し、パスを取得できるか？
       CPPUNIT_ASSERT_EQUAL(std::string("/usr/lib/libm.so"),
 			   m_pModMgr->findFile("libm.so", path));
 			
-      // ���ꤷ���ѥ���˥ե����뤬¸�ߤ��ʤ���硢������̵ͭȽ�ꤷ����ʸ���������Ǥ��뤫��
+      // 指定したパス上にファイルが存在しない場合、正しく有無判定し、空文字列を取得できるか？
       CPPUNIT_ASSERT_EQUAL(std::string(""),
 			   m_pModMgr->findFile("inexist-file.so", path));
     }
 		
     /*!
-     * @brief fileExist()�᥽�åɤΥƥ���
+     * @brief fileExist()メソッドのテスト
      * 
-     * - ¸�ߤ���ե��������ꤷ�����ˡ�������Ƚ�ꤵ��뤫��
-     * - ¸�ߤ��ʤ��ե��������ꤷ�����ˡ�������Ƚ�ꤵ��뤫��
-     * - ¸�ߤ���ե�������//�ס�../�פ������ä��ѥ�ɽ���ǻ��ꤷ����硢������Ƚ�ꤵ��뤫��
+     * - 存在するファイルを指定した場合に、正しく判定されるか？
+     * - 存在しないファイルを指定した場合に、正しく判定されるか？
+     * - 存在するファイルを「//」「../」が混じったパス表記で指定した場合、正しく判定されるか？
      */
     void test_fileExist()
     {
-      // ¸�ߤ���ե��������ꤷ�����ˡ�������Ƚ�ꤵ��뤫��
+      // 存在するファイルを指定した場合に、正しく判定されるか？
       CPPUNIT_ASSERT(m_pModMgr->fileExist("/usr/lib/libm.so"));
 
-      // ¸�ߤ��ʤ��ե��������ꤷ�����ˡ�������Ƚ�ꤵ��뤫��
+      // 存在しないファイルを指定した場合に、正しく判定されるか？
       CPPUNIT_ASSERT(! m_pModMgr->fileExist("/usr/lib/inexistent-file.so"));
 			
-      // ¸�ߤ���ե�������//�ס�../�פ������ä��ѥ�ɽ���ǻ��ꤷ����硢������Ƚ�ꤵ��뤫��
+      // 存在するファイルを「//」「../」が混じったパス表記で指定した場合、正しく判定されるか？
       CPPUNIT_ASSERT(m_pModMgr->fileExist("/usr//lib/../lib/libm.so"));
     }
 		
     /*!
-     * @brief getInitFuncName()�᥽�åɤΥƥ���
+     * @brief getInitFuncName()メソッドのテスト
      * 
-     * - ������ؿ�̾�������������Ǥ��뤫��
+     * - 初期化関数名を正しく取得できるか？
      */
     void test_getInitFuncName()
     {
-      // ������ؿ�̾�������������Ǥ��뤫��
+      // 初期化関数名を正しく取得できるか？
       CPPUNIT_ASSERT_EQUAL(std::string("ManipulatorInit"),
 			   m_pModMgr->getInitFuncName("Manipulator"));
 			

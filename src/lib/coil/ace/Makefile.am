@@ -35,7 +35,6 @@ coil_ace_vc9.sln: coil_ace.sln.dep vcproj
 		--dep coil_ace.sln.dep \
 		--out coil_ace_vc9.sln \
 		`find ./ -name '*_vc9.vcproj'`
-	qkc -O- -ms coil_ace_vc9.sln
 
 coil_ace_vc10.sln: coil_ace.sln.dep vcproj
 	$(top_srcdir)/build/slntool.py     \
@@ -43,5 +42,4 @@ coil_ace_vc10.sln: coil_ace.sln.dep vcproj
 		--dep coil_ace.sln.dep \
 		--out coil_ace_vc10.sln \
 		`find ./ -name '*_vc10.vcproj'`
-	qkc -O- -ms coil_ace_vc10.sln
 

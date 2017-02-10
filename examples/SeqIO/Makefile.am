@@ -98,7 +98,6 @@ vc9proj:
 		--yaml ../rtc.vcproj.yaml                \
 		--source SeqIn.cpp SeqInComp.cpp         \
 		--header SeqIn.h
-	qkc -O- -sm $(win32_builddir)/SeqIn_vc9.vcproj
 	$(top_builddir)/build/vcprojtool.py vcproj          \
 		--type DLL                                  \
 		--vcversion "9.00"                          \
@@ -108,7 +107,6 @@ vc9proj:
 		--yaml ../rtcdll.vcproj.yaml                \
 		--source SeqIn.cpp                          \
 		--header SeqIn.h
-	qkc -O- -sm $(win32_builddir)/SeqInDll_vc9.vcproj
 	$(top_builddir)/build/vcprojtool.py vcproj        \
 		--type EXE                                \
 		--vcversion "9.00"                        \
@@ -118,7 +116,6 @@ vc9proj:
 		--yaml ../rtc.vcproj.yaml                 \
 		--source SeqOut.cpp SeqOutComp.cpp        \
 		--header SeqOut.h
-	qkc -O- -sm $(win32_builddir)/SeqOut_vc9.vcproj
 	$(top_builddir)/build/vcprojtool.py vcproj           \
 		--type DLL                                   \
 		--vcversion "9.00"                           \
@@ -128,7 +125,6 @@ vc9proj:
 		--yaml ../rtcdll.vcproj.yaml                 \
 		--source SeqOut.cpp                          \
 		--header SeqOut.h
-	qkc -O- -sm $(win32_builddir)/SeqOutDll_vc9.vcproj
 
 vcxproj:
 	for ver in $(VC_VERSION); do \
@@ -141,7 +137,6 @@ vcxproj:
 			--yaml ../rtc.vcproj.yaml                \
 			--source SeqIn.cpp SeqInComp.cpp         \
 			--header SeqIn.h ; \
-		qkc -O- -sm $(win32_builddir)/SeqIn_vc$${ver}.vcxproj ; \
 		$(top_builddir)/build/vcxprojtool.py vcxproj          \
 			--type DLL                                  \
 			--vcversion "$${ver}.00"                          \
@@ -151,7 +146,6 @@ vcxproj:
 			--yaml ../rtcdll.vcproj.yaml                \
 			--source SeqIn.cpp                          \
 			--header SeqIn.h ; \
-		qkc -O- -sm $(win32_builddir)/SeqInDll_vc$${ver}.vcxproj ; \
 		$(top_builddir)/build/vcxprojtool.py vcxproj        \
 			--type EXE                                \
 			--vcversion "$${ver}.00"                        \
@@ -161,7 +155,6 @@ vcxproj:
 			--yaml ../rtc.vcproj.yaml                 \
 			--source SeqOut.cpp SeqOutComp.cpp        \
 			--header SeqOut.h ; \
-		qkc -O- -sm $(win32_builddir)/SeqOut_vc$${ver}.vcxproj ; \
 		$(top_builddir)/build/vcxprojtool.py vcxproj           \
 			--type DLL                                   \
 			--vcversion "$${ver}.00"                           \
@@ -171,7 +164,6 @@ vcxproj:
 			--yaml ../rtcdll.vcproj.yaml                 \
 			--source SeqOut.cpp                          \
 			--header SeqOut.h ; \
-		qkc -O- -sm $(win32_builddir)/SeqOutDll_vc$${ver}.vcxproj ; \
 	done
 
 dist-hook: lst vcproj

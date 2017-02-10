@@ -1,4 +1,4 @@
-// -*- C++ -*-
+﻿// -*- C++ -*-
 /*!
  * @file   DataInOutPortTests.cpp
  * @brief  DataInOutPort test class

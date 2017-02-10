@@ -1,4 +1,4 @@
-// -*- C++ -*-
+﻿// -*- C++ -*-
 /*!
  * @file   ModeCapableServantTests.cpp
  * @brief  ModeCapableServant test class

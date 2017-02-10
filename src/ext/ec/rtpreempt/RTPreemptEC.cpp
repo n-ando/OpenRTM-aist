@@ -1,4 +1,4 @@
-// -*- C++ -*-
+ï»¿// -*- C++ -*-
 /*!
  * @file RTPreemptEC.cpp
  * @brief RTPreemptEC class
@@ -39,7 +39,7 @@ namespace RTC_exp
 {
   /*!
    * @if jp
-   * @brief ¥Ç¥Õ¥©¥ë¥È¥³¥ó¥¹¥È¥é¥¯¥¿
+   * @brief ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
    * @else
    * @brief Default constructor
    * @endif
@@ -65,7 +65,7 @@ namespace RTC_exp
 
   /*!
    * @if jp
-   * @brief ¥Ç¥¹¥È¥é¥¯¥¿
+   * @brief ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
    * @else
    * @brief Destructor
    * @endif
@@ -104,7 +104,7 @@ namespace RTC_exp
    *------------------------------------------------------------*/
   /*!
    * @if jp
-   * @brief ExecutionContextÍÑ¥¢¥¯¥Æ¥£¥Ó¥Æ¥£¥¹¥ì¥Ã¥É¤òÀ¸À®¤¹¤ë
+   * @brief ExecutionContextç”¨ã‚¢ã‚¯ãƒ†ã‚£ãƒ“ãƒ†ã‚£ã‚¹ãƒ¬ãƒƒãƒ‰ã‚’ç”Ÿæˆã™ã‚‹
    * @else
    * @brief Generate internal activity thread for ExecutionContext
    * @endif
@@ -122,7 +122,7 @@ namespace RTC_exp
    *------------------------------------------------------------*/
   /*!
    * @if jp
-   * @brief ExecutionContext ÍÑ¤Î¥¹¥ì¥Ã¥É¼Â¹Ô´Ø¿ô
+   * @brief ExecutionContext ç”¨ã®ã‚¹ãƒ¬ãƒƒãƒ‰å®Ÿè¡Œé–¢æ•°
    * @else
    * @brief Thread execution function for ExecutionContext
    * @endif
@@ -205,7 +205,7 @@ namespace RTC_exp
 
   /*!
    * @if jp
-   * @brief ExecutionContext ÍÑ¤Î¥¹¥ì¥Ã¥É¼Â¹Ô´Ø¿ô
+   * @brief ExecutionContext ç”¨ã®ã‚¹ãƒ¬ãƒƒãƒ‰å®Ÿè¡Œé–¢æ•°
    * @else
    * @brief Thread execution function for ExecutionContext
    * @endif
@@ -224,7 +224,7 @@ namespace RTC_exp
   //============================================================
   /*!
    * @if jp
-   * @brief ExecutionContext ¼Â¹Ô¾õÂÖ³ÎÇ§´Ø¿ô
+   * @brief ExecutionContext å®Ÿè¡ŒçŠ¶æ…‹ç¢ºèªé–¢æ•°
    * @else
    * @brief Check for ExecutionContext running state
    * @endif
@@ -237,7 +237,7 @@ namespace RTC_exp
 
   /*!
    * @if jp
-   * @brief ExecutionContext ¤Î¼Â¹Ô¤ò³«»Ï
+   * @brief ExecutionContext ã®å®Ÿè¡Œã‚’é–‹å§‹
    * @else
    * @brief Start the ExecutionContext
    * @endif
@@ -250,7 +250,7 @@ namespace RTC_exp
 
   /*!
    * @if jp
-   * @brief ExecutionContext ¤Î¼Â¹Ô¤òÄä»ß
+   * @brief ExecutionContext ã®å®Ÿè¡Œã‚’åœæ­¢
    * @else
    * @brief Stop the ExecutionContext
    * @endif
@@ -265,7 +265,7 @@ namespace RTC_exp
 
   /*!
    * @if jp
-   * @brief ExecutionContext ¤Î¼Â¹Ô¼ş´ü(Hz)¤ò¼èÆÀ¤¹¤ë
+   * @brief ExecutionContext ã®å®Ÿè¡Œå‘¨æœŸ(Hz)ã‚’å–å¾—ã™ã‚‹
    * @else
    * @brief Get execution rate(Hz) of ExecutionContext
    * @endif
@@ -278,7 +278,7 @@ namespace RTC_exp
 
   /*!
    * @if jp
-   * @brief ExecutionContext ¤Î¼Â¹Ô¼ş´ü(Hz)¤òÀßÄê¤¹¤ë
+   * @brief ExecutionContext ã®å®Ÿè¡Œå‘¨æœŸ(Hz)ã‚’è¨­å®šã™ã‚‹
    * @else
    * @brief Set execution rate(Hz) of ExecutionContext
    * @endif
@@ -291,7 +291,7 @@ namespace RTC_exp
 
   /*!
    * @if jp
-   * @brief RT¥³¥ó¥İ¡¼¥Í¥ó¥È¤òÄÉ²Ã¤¹¤ë
+   * @brief RTã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆã‚’è¿½åŠ ã™ã‚‹
    * @else
    * @brief Add an RT-Component
    * @endif
@@ -305,7 +305,7 @@ namespace RTC_exp
 
   /*!
    * @if jp
-   * @brief ¥³¥ó¥İ¡¼¥Í¥ó¥È¤ò¥³¥ó¥İ¡¼¥Í¥ó¥È¥ê¥¹¥È¤«¤éºï½ü¤¹¤ë
+   * @brief ã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆã‚’ã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆãƒªã‚¹ãƒˆã‹ã‚‰å‰Šé™¤ã™ã‚‹
    * @else
    * @brief Remove the RT-Component from participant list
    * @endif
@@ -319,7 +319,7 @@ namespace RTC_exp
 
   /*!
    * @if jp
-   * @brief RT¥³¥ó¥İ¡¼¥Í¥ó¥È¤ò¥¢¥¯¥Æ¥£¥Ö²½¤¹¤ë
+   * @brief RTã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆã‚’ã‚¢ã‚¯ãƒ†ã‚£ãƒ–åŒ–ã™ã‚‹
    * @else
    * @brief Activate an RT-Component
    * @endif
@@ -333,7 +333,7 @@ namespace RTC_exp
 
   /*!
    * @if jp
-   * @brief RT¥³¥ó¥İ¡¼¥Í¥ó¥È¤òÈó¥¢¥¯¥Æ¥£¥Ö²½¤¹¤ë
+   * @brief RTã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆã‚’éã‚¢ã‚¯ãƒ†ã‚£ãƒ–åŒ–ã™ã‚‹
    * @else
    * @brief Deactivate an RT-Component
    * @endif
@@ -347,7 +347,7 @@ namespace RTC_exp
 
   /*!
    * @if jp
-   * @brief RT¥³¥ó¥İ¡¼¥Í¥ó¥È¤ò¥ê¥»¥Ã¥È¤¹¤ë
+   * @brief RTã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆã‚’ãƒªã‚»ãƒƒãƒˆã™ã‚‹
    * @else
    * @brief Reset the RT-Component
    * @endif
@@ -361,7 +361,7 @@ namespace RTC_exp
 
   /*!
    * @if jp
-   * @brief RT¥³¥ó¥İ¡¼¥Í¥ó¥È¤Î¾õÂÖ¤ò¼èÆÀ¤¹¤ë
+   * @brief RTã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆã®çŠ¶æ…‹ã‚’å–å¾—ã™ã‚‹
    * @else
    * @brief Get RT-Component's state
    * @endif
@@ -376,7 +376,7 @@ namespace RTC_exp
 
   /*!
    * @if jp
-   * @brief ExecutionKind ¤ò¼èÆÀ¤¹¤ë
+   * @brief ExecutionKind ã‚’å–å¾—ã™ã‚‹
    * @else
    * @brief Get the ExecutionKind
    * @endif
@@ -392,7 +392,7 @@ namespace RTC_exp
   //------------------------------------------------------------
   /*!
    * @if jp
-   * @brief ExecutionContextProfile ¤ò¼èÆÀ¤¹¤ë
+   * @brief ExecutionContextProfile ã‚’å–å¾—ã™ã‚‹
    * @else
    * @brief Get the ExecutionContextProfile
    * @endif
@@ -656,7 +656,7 @@ extern "C"
 {
   /*!
    * @if jp
-   * @brief ECFactory¤Ø¤ÎÅĞÏ¿¤Î¤¿¤á¤Î½é´ü²½´Ø¿ô
+   * @brief ECFactoryã¸ã®ç™»éŒ²ã®ãŸã‚ã®åˆæœŸåŒ–é–¢æ•°
    * @else
    * @brief Initialization function to register to ECFactory
    * @endif

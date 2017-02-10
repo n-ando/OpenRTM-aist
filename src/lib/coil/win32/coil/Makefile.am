@@ -65,11 +65,9 @@ COIL_ALL = $(COIL_SRC) $(COIL_H)
 
 $(COIL_COMMON_SRC):
 	cp -p $(top_srcdir)/common/*.cpp .
-	qkc -O- -ms *.cpp
 
 $(COIL_COMMON_H):
 	cp -p $(top_srcdir)/common/*.h .
-	qkc -O- -ms *.h
 
 
 clean-local:
@@ -111,7 +109,6 @@ libcoil_vc9.vcproj: libcoil.vcproj.yaml $(COIL_ALL)
 		--yaml libcoil.vcproj.yaml \
 		--source $(COIL_SRC) \
 		--header $(COIL_H)
-	qkc -O- -sm $(win32_builddir)/libcoil_vc9.vcproj
 
 libcoil.vcxproj: libcoil.vcproj.yaml $(COIL_ALL)
 	for ver in $(VC_VERSION); do \
@@ -123,7 +120,6 @@ libcoil.vcxproj: libcoil.vcproj.yaml $(COIL_ALL)
 			--yaml libcoil.vcproj.yaml \
 			--source $(COIL_SRC) \
 			--header $(COIL_H) ; \
-		qkc -O- -sm $(win32_builddir)/libcoil_vc$${ver}.vcxproj ; \
 	done
 
 dist-hook: lst vcproj

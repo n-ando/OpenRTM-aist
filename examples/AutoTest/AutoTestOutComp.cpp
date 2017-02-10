@@ -1,4 +1,4 @@
-// -*- C++ -*-
+﻿// -*- C++ -*-
 /*!
  * @file AutoTestOutComp.cpp
  * @brief Standalone component

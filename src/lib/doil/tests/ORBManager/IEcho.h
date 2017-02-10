@@ -1,4 +1,4 @@
-#ifndef IECHO_H
+﻿#ifndef IECHO_H
 #define IECHO_H
 #include <doil/ImplBase.h>
 #include <string>

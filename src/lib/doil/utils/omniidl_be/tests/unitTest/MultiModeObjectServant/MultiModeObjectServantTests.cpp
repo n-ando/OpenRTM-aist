@@ -1,4 +1,4 @@
-// -*- C++ -*-
+﻿// -*- C++ -*-
 /*!
  * @file   MultiModeObjectServantTests.cpp
  * @brief  MultiModeObjectServant test class

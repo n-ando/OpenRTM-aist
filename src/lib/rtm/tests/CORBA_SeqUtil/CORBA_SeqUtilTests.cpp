@@ -1,4 +1,4 @@
-// -*- C++ -*-
+﻿// -*- C++ -*-
 /*!
  * @file   CORBA_SeqUtilTests.cpp
  * @brief  CORBA_SeqUtil test class
@@ -166,7 +166,7 @@ namespace CORBA_SeqUtil
     }
 		
     /*!
-     * @brief test_for_each()�ǻ��Ѥ���ե��󥯥�
+     * @brief test_for_each()で使用するファンクタ
      */
     struct functor_for_each
     {
@@ -182,16 +182,16 @@ namespace CORBA_SeqUtil
     };
 		
     /*!
-     * @brief for_each()�᥽�åɤΥƥ���
+     * @brief for_each()メソッドのテスト
      * 
      * <ul>
-     * <li>�����ǻ��ꤵ�줿NVList��Τ��٤Ƥ����ǤˤĤ��ơ�����������ǥե��󥯥����ƤӽФ���뤫��</li>
-     * <li>�ե��󥯥��ƽл��˰������Ϥ����NameValue����������Τ���</li>
+     * <li>引数で指定されたNVList内のすべての要素について、正しい順序でファンクタが呼び出されるか？</li>
+     * <li>ファンクタ呼出時に引数で渡されるNameValueは正しいものか？</li>
      * </ul>
      */
     void test_for_each()
     {
-      // �ƥ����Ѥ�NVList���������
+      // テスト用のNVListを作成する
       NVList nvlist;
       nvlist.length(4);
 			
@@ -215,11 +215,11 @@ namespace CORBA_SeqUtil
       nvDouble.value <<= (CORBA::Double) 987654.321987;
       nvlist[3] = nvDouble;
 			
-      // for_each()��ƤӽФ�
+      // for_each()を呼び出す
       vector<NameValue> receivedNameValues;
       CORBA_SeqUtil::for_each(nvlist, functor_for_each(receivedNameValues));
 			
-      // �ե��󥯥����ƤӽФ��줿���������˵�Ͽ����NameValue�Υ٥�����������������ͤ���Ӥ���
+      // ファンクタが呼び出された時に内部に記録したNameValueのベクタを取得し、期待値と比較する
       CPPUNIT_ASSERT_EQUAL(4, (int) receivedNameValues.size());
       CPPUNIT_ASSERT_EQUAL((string) nvlist[0].name, (string) receivedNameValues[0].name);
       CPPUNIT_ASSERT_EQUAL((string) nvlist[1].name, (string) receivedNameValues[1].name);
@@ -248,7 +248,7 @@ namespace CORBA_SeqUtil
     }
 		
     /*!
-     * @brief test_find()�ǻ��Ѥ���ե��󥯥�
+     * @brief test_find()で使用するファンクタ
      */
     struct functor_find
     {
@@ -263,15 +263,15 @@ namespace CORBA_SeqUtil
     };
 		
     /*!
-     * @brief find()�᥽�åɤΥƥ���
+     * @brief find()メソッドのテスト
      * 
      * <ul>
-     * <li>�ե��󥯥����Ѥ���NVList������Ǥ������������Ǥ��뤫��</li>
+     * <li>ファンクタを用いたNVList内の要素を正しく検索できるか？</li>
      * </ul>
      */
     void test_find()
     {
-      // �ƥ����Ѥ�NVList���������
+      // テスト用のNVListを作成する
       NVList nvlist;
       nvlist.length(4);
 			
@@ -295,59 +295,59 @@ namespace CORBA_SeqUtil
       nvDouble.value <<= (CORBA::Double) 987654.321987;
       nvlist[3] = nvDouble;
 
-      // ̾��"short"�����NameValue�Υ���ǥ����������������Ǥ��뤫��
+      // 名称"short"を持つNameValueのインデクスを正しく検索できるか？
       CPPUNIT_ASSERT_EQUAL((CORBA::Long) 0, CORBA_SeqUtil::find(nvlist, functor_find("short")));
 			
-      // ̾��"long"�����NameValue�Υ���ǥ����������������Ǥ��뤫��
+      // 名称"long"を持つNameValueのインデクスを正しく検索できるか？
       CPPUNIT_ASSERT_EQUAL((CORBA::Long) 1, CORBA_SeqUtil::find(nvlist, functor_find("long")));
 
-      // ̾��"float"�����NameValue�Υ���ǥ����������������Ǥ��뤫��
+      // 名称"float"を持つNameValueのインデクスを正しく検索できるか？
       CPPUNIT_ASSERT_EQUAL((CORBA::Long) 2, CORBA_SeqUtil::find(nvlist, functor_find("float")));
 			
-      // ̾��"double"�����NameValue�Υ���ǥ����������������Ǥ��뤫��
+      // 名称"double"を持つNameValueのインデクスを正しく検索できるか？
       CPPUNIT_ASSERT_EQUAL((CORBA::Long) 3, CORBA_SeqUtil::find(nvlist, functor_find("double")));
     }
 
     /*!
-     * @brief push_back()�᥽�åɤΥƥ���
+     * @brief push_back()メソッドのテスト
      * 
      * <ul>
-     * <li>push_back�ˤ���ɲä��������Ǥ����Ƥ������줾����������Ǽ����뤫��</li>
+     * <li>push_backにより追加した各要素の内容が、それぞれ正しく格納されるか？</li>
      * </ul>
      */
     void test_push_back()
     {
       NVList nvlist;
 
-      // ���Ĥ�����Ǥ�push_back���ơ����ǿ����������������å�����
+      // １つめの要素をpush_backして、要素数が正しいかチェックする
       NameValue nvShort;
       nvShort.name = "short";
       nvShort.value <<= (CORBA::Short) 123;
       CORBA_SeqUtil::push_back(nvlist, nvShort);
       CPPUNIT_ASSERT_EQUAL((CORBA::ULong) 1, nvlist.length());
 			
-      // ���Ĥ�����Ǥ�push_back���ơ����ǿ����������������å�����
+      // ２つめの要素をpush_backして、要素数が正しいかチェックする
       NameValue nvLong;
       nvLong.name = "long";
       nvLong.value <<= (CORBA::Long) 123456;
       CORBA_SeqUtil::push_back(nvlist, nvLong);
       CPPUNIT_ASSERT_EQUAL((CORBA::ULong) 2, nvlist.length());
 			
-      // ���Ĥ�����Ǥ�push_back���ơ����ǿ����������������å�����
+      // ３つめの要素をpush_backして、要素数が正しいかチェックする
       NameValue nvFloat;
       nvFloat.name = "float";
       nvFloat.value <<= (CORBA::Float) 987.654;
       CORBA_SeqUtil::push_back(nvlist, nvFloat);
       CPPUNIT_ASSERT_EQUAL((CORBA::ULong) 3, nvlist.length());
 			
-      // ���Ĥ�����Ǥ�push_back���ơ����ǿ����������������å�����
+      // ４つめの要素をpush_backして、要素数が正しいかチェックする
       NameValue nvDouble;
       nvDouble.name = "double";
       nvDouble.value <<= (CORBA::Double) 987654.321987;
       CORBA_SeqUtil::push_back(nvlist, nvDouble);
       CPPUNIT_ASSERT_EQUAL((CORBA::ULong) 4, nvlist.length());
 			
-      // push_back���������Ǥ����Ƥ���NVList�����������Ǽ����Ƥ��뤳�Ȥ��ǧ����
+      // push_backした各要素の内容が、NVList内に正しく格納されていることを確認する
       CPPUNIT_ASSERT_EQUAL((string) "short", (string) nvlist[0].name);
       CPPUNIT_ASSERT_EQUAL((string) "long", (string) nvlist[1].name);
       CPPUNIT_ASSERT_EQUAL((string) "float", (string) nvlist[2].name);
@@ -371,15 +371,15 @@ namespace CORBA_SeqUtil
     }
 		
     /*!
-     * @brief push_back_list()�᥽�åɤΥƥ���
+     * @brief push_back_list()メソッドのテスト
      * 
      * <ul>
-     * <li>������NVList�����Ƥ�¾����NVList�θ�������������ڥ�ɤǤ��뤫��</li>
+     * <li>一方のNVListの内容を、他方のNVListの後ろに正しくアペンドできるか？</li>
      * </ul>
      */
     void test_push_back_list()
     {
-      // ���Ĥ��NVList���������
+      // １つめのNVListを作成する
       NVList nvlist1;
       nvlist1.length(2);
 			
@@ -393,7 +393,7 @@ namespace CORBA_SeqUtil
       nvLong.value <<= (CORBA::Long) 123456;
       nvlist1[1] = nvLong;
 			
-      // ���Ĥ��NVList���������
+      // ２つめのNVListを作成する
       NVList nvlist2;
       nvlist2.length(2);
 			
@@ -407,10 +407,10 @@ namespace CORBA_SeqUtil
       nvDouble.value <<= (CORBA::Double) 987654.321987;
       nvlist2[1] = nvDouble;
 			
-      // push_back_list���ơ����Ĥ��NVList�ˣ��Ĥ��NVList�򥢥ڥ�ɤ���
+      // push_back_listして、１つめのNVListに２つめのNVListをアペンドする
       CORBA_SeqUtil::push_back_list(nvlist1, nvlist2);
 			
-      // ���������ڥ�ɤ��줿���Ȥ��ǧ����
+      // 正しくアペンドされたことを確認する
       CPPUNIT_ASSERT_EQUAL((string) "short", (string) nvlist1[0].name);
       CPPUNIT_ASSERT_EQUAL((string) "long", (string) nvlist1[1].name);
       CPPUNIT_ASSERT_EQUAL((string) "float", (string) nvlist1[2].name);
@@ -434,17 +434,17 @@ namespace CORBA_SeqUtil
     }
 		
     /*!
-     * @brief insert()�᥽�åɤΥƥ���
+     * @brief insert()メソッドのテスト
      * 
      * <ul>
-     * <li>��Ƭ���֤ؤ��������������Ԥ��뤫��</li>
-     * <li>�Ǹ������֤ؤ��������������Ԥ��뤫��</li>
-     * <li>��ְ��֤ؤ��������������Ԥ��뤫��</li>
+     * <li>先頭位置への挿入を正しく行えるか？</li>
+     * <li>最後尾位置への挿入を正しく行えるか？</li>
+     * <li>中間位置への挿入を正しく行えるか？</li>
      * </ul>
      */
     void test_insert()
     {
-      // �����оݤȤʤ�NVList���������
+      // 挿入対象となるNVListを作成する
       NVList nvlist;
       nvlist.length(1);
 
@@ -453,25 +453,25 @@ namespace CORBA_SeqUtil
       nvLong.value <<= (CORBA::Long) 123456;
       nvlist[0] = nvLong;
 			
-      // (1) ��Ƭ�ؤ�������Ԥ�
+      // (1) 先頭への挿入を行う
       NameValue nvShort;
       nvShort.name = "short";
       nvShort.value <<= (CORBA::Short) 123;
       CORBA_SeqUtil::insert(nvlist, nvShort, 0);
 			
-      // (2) �Ǹ����ؤ�������Ԥ�
+      // (2) 最後尾への挿入を行う
       NameValue nvDouble;
       nvDouble.name = "double";
       nvDouble.value <<= (CORBA::Double) 987654.321987;
       CORBA_SeqUtil::insert(nvlist, nvDouble, 2);
 			
-      // (3) ��֤ؤ�������Ԥ�
+      // (3) 中間への挿入を行う
       NameValue nvFloat;
       nvFloat.name = "float";
       nvFloat.value <<= (CORBA::Float) 987.654;
       CORBA_SeqUtil::insert(nvlist, nvFloat, 2);
 			
-      // ������̤����������Ȥ��ǧ����
+      // 挿入結果が正しいことを確認する
       CPPUNIT_ASSERT_EQUAL((string) "short", (string) nvlist[0].name);
       CPPUNIT_ASSERT_EQUAL((string) "long", (string) nvlist[1].name);
       CPPUNIT_ASSERT_EQUAL((string) "float", (string) nvlist[2].name);
@@ -495,16 +495,16 @@ namespace CORBA_SeqUtil
     }
 		
     /*!
-     * @brief front()�᥽�åɤΥƥ���
+     * @brief front()メソッドのテスト
      * 
      * <ul>
-     * <li>�����оݤ�NVList�����ǿ������ξ�硢�㳰������������뤫��</li>
-     * <li>�����оݤ�NVList�����ǿ������ʾ�ξ�硢��Ƭ�����Ǥ�����Ǥ��뤫��</li>
+     * <li>取得対象のNVListの要素数が０の場合、例外がスローされるか？</li>
+     * <li>取得対象のNVListの要素数が１以上の場合、先頭の要素を取得できるか？</li>
      * </ul>
      */
     void test_front()
     {
-      // (1) �����оݤ�NVList�����ǿ������ξ�硢�㳰������������뤫
+      // (1) 取得対象のNVListの要素数が０の場合、例外がスローされるか
       NVList nvlistEmpty;
       try {
 	CORBA_SeqUtil::front<NVList, NameValue>(nvlistEmpty);
@@ -513,7 +513,7 @@ namespace CORBA_SeqUtil
 	// expected
       }
 			
-      // (2) �����оݤ�NVList�����ǿ������ʾ�ξ�硢��Ƭ�����Ǥ�����Ǥ��뤫��
+      // (2) 取得対象のNVListの要素数が１以上の場合、先頭の要素を取得できるか？
       NVList nvlist;
       nvlist.length(4);
 			
@@ -537,7 +537,7 @@ namespace CORBA_SeqUtil
       nvDouble.value <<= (CORBA::Double) 987654.321987;
       nvlist[3] = nvDouble;
 			
-      // ��Ƭ�����Ǥ�������ơ������ͤ���Ӥ��ƥ����å�����
+      // 先頭の要素を取得して、期待値と比較してチェックする
       NameValue nvFront = CORBA_SeqUtil::front<NVList, NameValue>(nvlist);
 			
       CPPUNIT_ASSERT_EQUAL((string) "short", (string) nvFront.name);
@@ -548,16 +548,16 @@ namespace CORBA_SeqUtil
     }
 		
     /*!
-     * @brief back()�᥽�åɤΥƥ���
+     * @brief back()メソッドのテスト
      * 
      * <ul>
-     * <li>�����оݤ�NVList�����ǿ������ξ�硢�㳰������������뤫��</li>
-     * <li>�����оݤ�NVList�����ǿ������ʾ�ξ�硢�Ǹ��������Ǥ�����Ǥ��뤫��</li>
+     * <li>取得対象のNVListの要素数が０の場合、例外がスローされるか？</li>
+     * <li>取得対象のNVListの要素数が１以上の場合、最後尾の要素を取得できるか？</li>
      * </ul>
      */
     void test_back()
     {
-      // (1) �����оݤ�NVList�����ǿ������ξ�硢�㳰������������뤫��
+      // (1) 取得対象のNVListの要素数が０の場合、例外がスローされるか？
       NVList nvlistEmpty;
       try {
 	CORBA_SeqUtil::back<NVList, NameValue>(nvlistEmpty);
@@ -566,7 +566,7 @@ namespace CORBA_SeqUtil
 	// expected
       }
 			
-      // (2) �����оݤ�NVList�����ǿ������ʾ�ξ�硢�Ǹ��������Ǥ�����Ǥ��뤫��
+      // (2) 取得対象のNVListの要素数が１以上の場合、最後尾の要素を取得できるか？
       NVList nvlist;
       nvlist.length(4);
 			
@@ -590,7 +590,7 @@ namespace CORBA_SeqUtil
       nvDouble.value <<= (CORBA::Double) 987654.321987;
       nvlist[3] = nvDouble;
 
-      // �Ǹ�����Ǥ�������ơ������ͤ���Ӥ��ƥ����å�����
+      // 最後の要素を取得して、期待値と比較してチェックする
       NameValue nvBack = CORBA_SeqUtil::back<NVList, NameValue>(nvlist);
 			
       CPPUNIT_ASSERT_EQUAL((string) "double", (string) nvBack.name);
@@ -601,17 +601,17 @@ namespace CORBA_SeqUtil
     }
 		
     /*!
-     * @brief erase()�᥽�åɤΥƥ���
+     * @brief erase()メソッドのテスト
      * 
      * <ul>
-     * <li>��Ƭ�����ǤΤߤ���������硢¾���ǤϤ��Τޤ��ݤ���뤫��</li>
-     * <li>��֤����ǤΤߤ���������硢¾���ǤϤ��Τޤ��ݤ���뤫��</li>
-     * <li>�Ǹ��������ǤΤߤ���������硢¾���ǤϤ��Τޤ��ݤ���뤫��</li>
+     * <li>先頭の要素のみを削除した場合、他要素はそのまま保たれるか？</li>
+     * <li>中間の要素のみを削除した場合、他要素はそのまま保たれるか？</li>
+     * <li>最後尾の要素のみを削除した場合、他要素はそのまま保たれるか？</li>
      * </ul>
      */
     void test_erase()
     {
-      // �ƥ����Ѥ�NVList���������
+      // テスト用のNVListを作成する
       NVList nvlist1, nvlist2, nvlist3;
       nvlist1.length(4);
       nvlist2.length(4);
@@ -645,7 +645,7 @@ namespace CORBA_SeqUtil
       nvlist2[3] = nvDouble;
       nvlist3[3] = nvDouble;
 			
-      // (1) ��Ƭ�����ǤΤߤ���������硢¾���ǤϤ��Τޤ��ݤ���뤫��
+      // (1) 先頭の要素のみを削除した場合、他要素はそのまま保たれるか？
       CORBA_SeqUtil::erase(nvlist1, 0);
       CPPUNIT_ASSERT_EQUAL((CORBA::ULong) 3, nvlist1.length());
       CPPUNIT_ASSERT_EQUAL((string) "long", (string) nvlist1[0].name);
@@ -664,7 +664,7 @@ namespace CORBA_SeqUtil
       nvlist1[2].value >>= actualDouble1;
       CPPUNIT_ASSERT_EQUAL((CORBA::Double) 987654.321987, actualDouble1);
 			
-      // (2) ��֤����ǤΤߤ���������硢¾���ǤϤ��Τޤ��ݤ���뤫��
+      // (2) 中間の要素のみを削除した場合、他要素はそのまま保たれるか？
       CORBA_SeqUtil::erase(nvlist2, 1);
       CPPUNIT_ASSERT_EQUAL((CORBA::ULong) 3, nvlist2.length());
       CPPUNIT_ASSERT_EQUAL((string) "short", (string) nvlist2[0].name);
@@ -683,7 +683,7 @@ namespace CORBA_SeqUtil
       nvlist2[2].value >>= actualDouble2;
       CPPUNIT_ASSERT_EQUAL((CORBA::Double) 987654.321987, actualDouble2);
 
-      // (3) �Ǹ��������ǤΤߤ���������硢¾���ǤϤ��Τޤ��ݤ���뤫��
+      // (3) 最後尾の要素のみを削除した場合、他要素はそのまま保たれるか？
       CORBA_SeqUtil::erase(nvlist3, 3);
       CPPUNIT_ASSERT_EQUAL((CORBA::ULong) 3, nvlist3.length());
       CPPUNIT_ASSERT_EQUAL((string) "short", (string) nvlist3[0].name);
@@ -704,7 +704,7 @@ namespace CORBA_SeqUtil
     }
 
     /*!
-     * @brief test_erase_if()�ǻ��Ѥ���ե��󥯥�
+     * @brief test_erase_if()で使用するファンクタ
      */
     struct functor_erase_if
     {
@@ -720,11 +720,11 @@ namespace CORBA_SeqUtil
     };
 		
     /*!
-     * @brief erase_if()�᥽�åɤΥƥ���
+     * @brief erase_if()メソッドのテスト
      * 
      * <ul>
-     * <li>���˹��פ������Ǥ��ʤ���硢���������줺���ݤ���뤫��</li>
-     * <li>���˹��פ������Ǥ������硢�������Ǥ�������졢¾���Ǥ��ݤ���뤫��</li>
+     * <li>条件に合致する要素がない場合、何も削除されずに保たれるか？</li>
+     * <li>条件に合致する要素がある場合、その要素が削除され、他要素は保たれるか？</li>
      * </ul>
      */
     void test_erase_if()
@@ -757,7 +757,7 @@ namespace CORBA_SeqUtil
       nvlist1[3] = nvDouble;
       nvlist2[3] = nvDouble;
 			
-      // (1) ���˹��פ������Ǥ��ʤ���硢���������줺���ݤ���뤫��
+      // (1) 条件に合致する要素がない場合、何も削除されずに保たれるか？
       CORBA_SeqUtil::erase_if(nvlist1, functor_erase_if("no-match-name"));
 			
       CPPUNIT_ASSERT_EQUAL((string) "short", (string) nvlist1[0].name);
@@ -781,7 +781,7 @@ namespace CORBA_SeqUtil
       nvlist1[3].value >>= actualDouble1;
       CPPUNIT_ASSERT_EQUAL((CORBA::Double) 987654.321987, actualDouble1);
 			
-      // (2) ���˹��פ������Ǥ������硢�������Ǥ�������졢¾���Ǥ��ݤ���뤫��
+      // (2) 条件に合致する要素がある場合、その要素が削除され、他要素は保たれるか？
       CORBA_SeqUtil::erase_if(nvlist2, functor_erase_if("float"));
 			
       CPPUNIT_ASSERT_EQUAL((string) "short", (string) nvlist2[0].name);
@@ -802,15 +802,15 @@ namespace CORBA_SeqUtil
     }
 		
     /*!
-     * @brief clear()�᥽�åɤΥƥ���
+     * @brief clear()メソッドのテスト
      * 
      * <ul>
-     * <li>���ꥢ�ˤ�����ǿ������ˤʤ뤫��</li>
+     * <li>クリアにより要素数が０になるか？</li>
      * </ul>
      */
     void test_clear()
     {
-      // �ƥ����Ѥ�NVList���������
+      // テスト用のNVListを作成する
       NVList nvlist;
       nvlist.length(4);
 			
@@ -834,16 +834,16 @@ namespace CORBA_SeqUtil
       nvDouble.value <<= (CORBA::Double) 987654.321987;
       nvlist[3] = nvDouble;
 			
-      // clear()��ƽФ������ꥢ���줿���ȡ����ǿ����ˤʤä����ȡˤ��ǧ����
+      // clear()を呼出し、クリアされたこと（要素数０になったこと）を確認する
       CORBA_SeqUtil::clear(nvlist);
       CPPUNIT_ASSERT_EQUAL((CORBA::ULong) 0, nvlist.length());
     }
     
     /*!
-     * @brief refToVstring()�᥽�åɤΥƥ���
+     * @brief refToVstring()メソッドのテスト
      * 
      * <ul>
-     * <li>���֥������ȥ�ե���󥹤�ʸ�����֤���뤫��</li>
+     * <li>オブジェクトリファレンスの文字列が返されるか？</li>
      * </ul>
      */
     void test_refToVstring()
@@ -884,7 +884,7 @@ namespace CORBA_SeqUtil
       CPPUNIT_ASSERT(pos != string::npos);
 
 //      delete port0;
-      // PortBase �ǥ��ȥ饯���ǡ�deactivate_object ��¹Ԥ��Ƥ��ޤ���
+      // PortBase デストラクタで、deactivate_object を実行しています。
     }
     
   };

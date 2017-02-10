@@ -1,4 +1,4 @@
-// -*- C++ -*-
+﻿// -*- C++ -*-
 /*!
  * @file   PortServiceProxyTests.cpp
  * @brief  PortServiceProxy test class

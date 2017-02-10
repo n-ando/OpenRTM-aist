@@ -1,4 +1,4 @@
-// -*- C++ -*-
+ï»¿// -*- C++ -*-
 /*!
  * @file   NamingManagerTests.cpp
  * @brief  NamingManager test class
@@ -70,16 +70,16 @@ namespace RTC
  */
 namespace NamingManager
 {
-  // protected: ´Ø¿ô¤Î¥Æ¥¹¥ÈÍÑ
+  // protected: é–¢æ•°ã®ãƒ†ã‚¹ãƒˆç”¨
   class NamingManagerMock : public RTC::NamingManager
   {
   public:
-    // ¥³¥ó¥¹¥È¥é¥¯¥¿
+    // ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
     NamingManagerMock(RTC::Manager* manager)
       : RTC::NamingManager(manager) {}
     virtual ~NamingManagerMock(void) {}
 
-    // NamingManager::registerMgrName ¤Ï¡¢protected: ¤Î°Ù¤³¤³¤ØÄêµÁ¡£
+    // NamingManager::registerMgrName ã¯ã€protected: ã®ç‚ºã“ã“ã¸å®šç¾©ã€‚
     void registerMgrName(const char* name,
                          const RTM::ManagerServant* mgr)
     {
@@ -89,7 +89,7 @@ namespace NamingManager
 //    std::cout << "registerMgrName() out" << std::endl;
     }
 
-    // NamingManager::unregisterMgrName ¤Ï¡¢protected: ¤Î°Ù¤³¤³¤ØÄêµÁ¡£
+    // NamingManager::unregisterMgrName ã¯ã€protected: ã®ç‚ºã“ã“ã¸å®šç¾©ã€‚
     void unregisterMgrName(const char* name)
     {
 //    std::cout << "unregisterMgrName() in name=" << name << std::endl;
@@ -170,10 +170,10 @@ namespace NamingManager
     }
 		
     /*!
-     * @brief bindObject()¥á¥½¥Ã¥É¤ª¤è¤ÓunbindObject()¥á¥½¥Ã¥É¤Î¥Æ¥¹¥È
+     * @brief bindObject()ãƒ¡ã‚½ãƒƒãƒ‰ãŠã‚ˆã³unbindObject()ãƒ¡ã‚½ãƒƒãƒ‰ã®ãƒ†ã‚¹ãƒˆ
      * 
-     * - ¥ª¥Ö¥¸¥§¥¯¥È¤òÀµ¤·¤¯¥Ğ¥¤¥ó¥É¤Ç¤­¤ë¤«¡©
-     * - ¥ª¥Ö¥¸¥§¥¯¥È¤òÀµ¤·¤¯¥¢¥ó¥Ğ¥¤¥ó¥É¤Ç¤­¤ë¤«¡©
+     * - ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’æ­£ã—ããƒã‚¤ãƒ³ãƒ‰ã§ãã‚‹ã‹ï¼Ÿ
+     * - ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’æ­£ã—ãã‚¢ãƒ³ãƒã‚¤ãƒ³ãƒ‰ã§ãã‚‹ã‹ï¼Ÿ
      */
     void test_bindObject_and_unbindObject()
     {
@@ -181,16 +181,16 @@ namespace NamingManager
       const char* name_server = "localhost:2809";
       RTC::NamingOnCorba noc(m_pORB, name_server);
 
-      // ¥Ğ¥¤¥ó¥É¤¹¤ë¥ª¥Ö¥¸¥§¥¯¥È¤òºîÀ®¤·¤Æ¤ª¤¯
+      // ãƒã‚¤ãƒ³ãƒ‰ã™ã‚‹ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’ä½œæˆã—ã¦ãŠã
       RTC::CorbaObjectManager objMgr(m_pORB, m_pPOA);
       RTC::RTObject_impl* rto = new RTC::RTObject_impl(m_pORB, m_pPOA);
       objMgr.activate(rto);
       CPPUNIT_ASSERT(! CORBA::is_nil(rto->getObjRef()));
 			
-      // ¥ª¥Ö¥¸¥§¥¯¥È¤ò¥Ğ¥¤¥ó¥É¤Ç¤­¤ë¤«¡©
+      // ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’ãƒã‚¤ãƒ³ãƒ‰ã§ãã‚‹ã‹ï¼Ÿ
       noc.bindObject("id.kind", rto);
 			
-      // ¥Ğ¥¤¥ó¥É¤·¤¿¥ª¥Ö¥¸¥§¥¯¥È¤òÀµ¤·¤¯resolve¤Ç¤­¤ë¤«¡©
+      // ãƒã‚¤ãƒ³ãƒ‰ã—ãŸã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’æ­£ã—ãresolveã§ãã‚‹ã‹ï¼Ÿ
       CosNaming::NamingContext_var nc = getRootContext(name_server);
       CosNaming::Name name;
       name.length(1);
@@ -199,10 +199,10 @@ namespace NamingManager
       CORBA::Object_ptr obj = nc->resolve(name);
       CPPUNIT_ASSERT(! CORBA::is_nil(obj));
 			
-      // ¥Ğ¥¤¥ó¥É¤·¤¿¥ª¥Ö¥¸¥§¥¯¥È¤ò¥¢¥ó¥Ğ¥¤¥ó¥É¤Ç¤­¤ë¤«¡©
+      // ãƒã‚¤ãƒ³ãƒ‰ã—ãŸã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’ã‚¢ãƒ³ãƒã‚¤ãƒ³ãƒ‰ã§ãã‚‹ã‹ï¼Ÿ
       noc.unbindObject("id.kind");
 			
-      // ¥¢¥ó¥Ğ¥¤¥ó¥É¤·¤¿¥ª¥Ö¥¸¥§¥¯¥È¤Îresolve¤¬°Õ¿Ş¤É¤ª¤ê¼ºÇÔ¤¹¤ë¤«¡©
+      // ã‚¢ãƒ³ãƒã‚¤ãƒ³ãƒ‰ã—ãŸã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®resolveãŒæ„å›³ã©ãŠã‚Šå¤±æ•—ã™ã‚‹ã‹ï¼Ÿ
       try
 	{
 	  nc->resolve(name);
@@ -216,10 +216,10 @@ namespace NamingManager
     }
 
     /*!
-     * @brief bindObject()¥á¥½¥Ã¥É¤ÈunbindObject()¥á¥½¥Ã¥É¤Î¥Æ¥¹¥È
+     * @brief bindObject()ãƒ¡ã‚½ãƒƒãƒ‰ã¨unbindObject()ãƒ¡ã‚½ãƒƒãƒ‰ã®ãƒ†ã‚¹ãƒˆ
      * 
-     * - °ú¿ôManagerServant¤Ç¡¢¥ª¥Ö¥¸¥§¥¯¥È¤òÀµ¤·¤¯¥Ğ¥¤¥ó¥É¤Ç¤­¤ë¤«¡©
-     * - ¥ª¥Ö¥¸¥§¥¯¥È¤òÀµ¤·¤¯¥¢¥ó¥Ğ¥¤¥ó¥É¤Ç¤­¤ë¤«¡©
+     * - å¼•æ•°ManagerServantã§ã€ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’æ­£ã—ããƒã‚¤ãƒ³ãƒ‰ã§ãã‚‹ã‹ï¼Ÿ
+     * - ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’æ­£ã—ãã‚¢ãƒ³ãƒã‚¤ãƒ³ãƒ‰ã§ãã‚‹ã‹ï¼Ÿ
      */
     void test_bindObject_and_unbindObject3()
     {
@@ -227,16 +227,16 @@ namespace NamingManager
       const char* name_server = "localhost:2809";
       RTC::NamingOnCorba noc(m_pORB, name_server);
 
-      // ¥Ğ¥¤¥ó¥É¤¹¤ë¥ª¥Ö¥¸¥§¥¯¥È¤òºîÀ®¤·¤Æ¤ª¤¯
+      // ãƒã‚¤ãƒ³ãƒ‰ã™ã‚‹ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’ä½œæˆã—ã¦ãŠã
       RTC::CorbaObjectManager objMgr(m_pORB, m_pPOA);
       RTM::ManagerServant* mgrs = new RTM::ManagerServant();
       objMgr.activate(mgrs);
       //CPPUNIT_ASSERT(! CORBA::is_nil(mgrs->getObjRef()));
 
-      // ¥ª¥Ö¥¸¥§¥¯¥È¤ò¥Ğ¥¤¥ó¥É¤Ç¤­¤ë¤«¡©
+      // ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’ãƒã‚¤ãƒ³ãƒ‰ã§ãã‚‹ã‹ï¼Ÿ
       noc.bindObject("id.kind", mgrs);
 
-      // ¥Ğ¥¤¥ó¥É¤·¤¿¥ª¥Ö¥¸¥§¥¯¥È¤òÀµ¤·¤¯resolve¤Ç¤­¤ë¤«¡©
+      // ãƒã‚¤ãƒ³ãƒ‰ã—ãŸã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’æ­£ã—ãresolveã§ãã‚‹ã‹ï¼Ÿ
       CosNaming::NamingContext_var nc = getRootContext(name_server);
       CosNaming::Name name;
       name.length(1);
@@ -245,10 +245,10 @@ namespace NamingManager
       CORBA::Object_ptr obj = nc->resolve(name);
       //CPPUNIT_ASSERT(! CORBA::is_nil(obj));
 
-      // ¥Ğ¥¤¥ó¥É¤·¤¿¥ª¥Ö¥¸¥§¥¯¥È¤ò¥¢¥ó¥Ğ¥¤¥ó¥É¤Ç¤­¤ë¤«¡©
+      // ãƒã‚¤ãƒ³ãƒ‰ã—ãŸã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’ã‚¢ãƒ³ãƒã‚¤ãƒ³ãƒ‰ã§ãã‚‹ã‹ï¼Ÿ
       noc.unbindObject("id.kind");
 
-      // ¥¢¥ó¥Ğ¥¤¥ó¥É¤·¤¿¥ª¥Ö¥¸¥§¥¯¥È¤Îresolve¤¬°Õ¿Ş¤É¤ª¤ê¼ºÇÔ¤¹¤ë¤«¡©
+      // ã‚¢ãƒ³ãƒã‚¤ãƒ³ãƒ‰ã—ãŸã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®resolveãŒæ„å›³ã©ãŠã‚Šå¤±æ•—ã™ã‚‹ã‹ï¼Ÿ
       try
 	{
 	  nc->resolve(name);
@@ -354,42 +354,42 @@ namespace NamingManager
     }
 		
     /*!
-     * @brief registerNameServer()¥á¥½¥Ã¥É¤Î¥Æ¥¹¥È
+     * @brief registerNameServer()ãƒ¡ã‚½ãƒƒãƒ‰ã®ãƒ†ã‚¹ãƒˆ
      */
     void test_registerNameServer()
     {
-      // test_bindObject_and_unbindObject¤Ç»ÈÍÑ¤·¤Æ¤¤¤ë¤Î¤Ç¾ÊÎ¬
+      // test_bindObject_and_unbindObjectã§ä½¿ç”¨ã—ã¦ã„ã‚‹ã®ã§çœç•¥
     }
 		
     /*!
-     * @brief bindObject()¥á¥½¥Ã¥É¤ÈunbindObject()¥á¥½¥Ã¥É¤Î¥Æ¥¹¥È
+     * @brief bindObject()ãƒ¡ã‚½ãƒƒãƒ‰ã¨unbindObject()ãƒ¡ã‚½ãƒƒãƒ‰ã®ãƒ†ã‚¹ãƒˆ
      * 
-     * - ¥ª¥Ö¥¸¥§¥¯¥È¤òÀµ¤·¤¯¥Ğ¥¤¥ó¥É¤Ç¤­¤ë¤«¡©
-     * - ¥ª¥Ö¥¸¥§¥¯¥È¤òÀµ¤·¤¯¥¢¥ó¥Ğ¥¤¥ó¥É¤Ç¤­¤ë¤«¡©
+     * - ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’æ­£ã—ããƒã‚¤ãƒ³ãƒ‰ã§ãã‚‹ã‹ï¼Ÿ
+     * - ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’æ­£ã—ãã‚¢ãƒ³ãƒã‚¤ãƒ³ãƒ‰ã§ãã‚‹ã‹ï¼Ÿ
      */
     void test_bindObject_and_unbindObject()
     {
-      // ¥Ğ¥¤¥ó¥É¤¹¤ë¥ª¥Ö¥¸¥§¥¯¥È¤òºîÀ®¤·¤Æ¤ª¤¯
+      // ãƒã‚¤ãƒ³ãƒ‰ã™ã‚‹ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’ä½œæˆã—ã¦ãŠã
       RTC::CorbaObjectManager objMgr(m_pORB, m_pPOA);
 			
       RTC::RTObject_impl* rto = new RTC::RTObject_impl(m_pORB, m_pPOA);
       objMgr.activate(rto);
       CPPUNIT_ASSERT(! CORBA::is_nil(rto->getObjRef()));
 
-      // NamingManager¤òÀ¸À®¤¹¤ë¡ÊËÜÍè¤Ï¡¢ManagerÆâÉô¤«¤é¼èÆÀ¤·¤¿¤¤¤¬...¡Ë
+      // NamingManagerã‚’ç”Ÿæˆã™ã‚‹ï¼ˆæœ¬æ¥ã¯ã€Managerå†…éƒ¨ã‹ã‚‰å–å¾—ã—ãŸã„ãŒ...ï¼‰
       RTC::NamingManager nmgr(m_mgr);
 //      const char* name_server = "localhost:9876";
       const char* name_server = "localhost:2809";
       nmgr.registerNameServer("corba", name_server);
 			
-      // ¥ª¥Ö¥¸¥§¥¯¥È¤ò¥Ğ¥¤¥ó¥É¤Ç¤­¤ë¤«¡©
+      // ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’ãƒã‚¤ãƒ³ãƒ‰ã§ãã‚‹ã‹ï¼Ÿ
       nmgr.bindObject("id.kind", rto);
       CPPUNIT_ASSERT(canResolve(name_server, "id", "kind"));
 			
-      // ¥Ğ¥¤¥ó¥É¤·¤¿¥ª¥Ö¥¸¥§¥¯¥È¤ò¥¢¥ó¥Ğ¥¤¥ó¥É¤Ç¤­¤ë¤«¡©
+      // ãƒã‚¤ãƒ³ãƒ‰ã—ãŸã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’ã‚¢ãƒ³ãƒã‚¤ãƒ³ãƒ‰ã§ãã‚‹ã‹ï¼Ÿ
       nmgr.unbindObject("id.kind");
 			
-      // ¥¢¥ó¥Ğ¥¤¥ó¥É¤·¤¿¥ª¥Ö¥¸¥§¥¯¥È¤Îresolve¤¬°Õ¿Ş¤É¤ª¤ê¼ºÇÔ¤¹¤ë¤«¡©
+      // ã‚¢ãƒ³ãƒã‚¤ãƒ³ãƒ‰ã—ãŸã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®resolveãŒæ„å›³ã©ãŠã‚Šå¤±æ•—ã™ã‚‹ã‹ï¼Ÿ
       CPPUNIT_ASSERT(! canResolve(name_server, "id", "kind"));
       objMgr.deactivate(rto);
 
@@ -398,13 +398,13 @@ namespace NamingManager
     }
 		
     /*!
-     * @brief unbindAll()¥á¥½¥Ã¥É¤Î¥Æ¥¹¥È
+     * @brief unbindAll()ãƒ¡ã‚½ãƒƒãƒ‰ã®ãƒ†ã‚¹ãƒˆ
      * 
-     * - ¥Ğ¥¤¥ó¥É¤µ¤ì¤Æ¤¤¤ë¤¹¤Ù¤Æ¤Î¥ª¥Ö¥¸¥§¥¯¥È¤òÀµ¾ï¤Ë¥¢¥ó¥Ğ¥¤¥ó¥É¤Ç¤­¤ë¤«¡©
+     * - ãƒã‚¤ãƒ³ãƒ‰ã•ã‚Œã¦ã„ã‚‹ã™ã¹ã¦ã®ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’æ­£å¸¸ã«ã‚¢ãƒ³ãƒã‚¤ãƒ³ãƒ‰ã§ãã‚‹ã‹ï¼Ÿ
      */
     void test_unbindAll()
     {
-      // ¥Ğ¥¤¥ó¥É¤¹¤ë¥ª¥Ö¥¸¥§¥¯¥È¤òºîÀ®¤·¤Æ¤ª¤¯
+      // ãƒã‚¤ãƒ³ãƒ‰ã™ã‚‹ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’ä½œæˆã—ã¦ãŠã
       RTC::CorbaObjectManager objMgr(m_pORB, m_pPOA);
 
       RTC::RTObject_impl* rto1 = new RTC::RTObject_impl(m_pORB, m_pPOA);
@@ -415,23 +415,23 @@ namespace NamingManager
       objMgr.activate(rto2);
       CPPUNIT_ASSERT(! CORBA::is_nil(rto2->getObjRef()));
 
-      // NamingManager¤òÀ¸À®¤¹¤ë¡ÊËÜÍè¤Ï¡¢ManagerÆâÉô¤«¤é¼èÆÀ¤·¤¿¤¤¤¬...¡Ë
+      // NamingManagerã‚’ç”Ÿæˆã™ã‚‹ï¼ˆæœ¬æ¥ã¯ã€Managerå†…éƒ¨ã‹ã‚‰å–å¾—ã—ãŸã„ãŒ...ï¼‰
       RTC::NamingManager nmgr(m_mgr);
 //      const char* name_server = "localhost:9876";
       const char* name_server = "localhost:2809";
       nmgr.registerNameServer("corba", name_server);
 			
-      // ¥ª¥Ö¥¸¥§¥¯¥È¤ò£²¤Ä¥Ğ¥¤¥ó¥É¤·¤Æ¤ª¤¯
+      // ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’ï¼’ã¤ãƒã‚¤ãƒ³ãƒ‰ã—ã¦ãŠã
       nmgr.bindObject("id1.kind1", rto1);
       CPPUNIT_ASSERT(canResolve(name_server, "id1", "kind1"));
 
       nmgr.bindObject("id2.kind2", rto2);
       CPPUNIT_ASSERT(canResolve(name_server, "id2", "kind2"));
 			
-      // unbindAll()¤ò¹Ô¤¦
+      // unbindAll()ã‚’è¡Œã†
       nmgr.unbindAll();
 			
-      // ¥¢¥ó¥Ğ¥¤¥ó¥É¤·¤¿¥ª¥Ö¥¸¥§¥¯¥È¤Îresolve¤¬°Õ¿Ş¤É¤ª¤ê¼ºÇÔ¤¹¤ë¤«¡©
+      // ã‚¢ãƒ³ãƒã‚¤ãƒ³ãƒ‰ã—ãŸã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®resolveãŒæ„å›³ã©ãŠã‚Šå¤±æ•—ã™ã‚‹ã‹ï¼Ÿ
       CPPUNIT_ASSERT(! canResolve(name_server, "id1", "kind1"));
       CPPUNIT_ASSERT(! canResolve(name_server, "id2", "kind2"));
       objMgr.deactivate(rto2);
@@ -444,13 +444,13 @@ namespace NamingManager
     }
 		
     /*!
-     * @brief getObjects()¥á¥½¥Ã¥É¤Î¥Æ¥¹¥È
+     * @brief getObjects()ãƒ¡ã‚½ãƒƒãƒ‰ã®ãƒ†ã‚¹ãƒˆ
      * 
-     * - ¥Ğ¥¤¥ó¥É¤µ¤ì¤Æ¤¤¤ë¤¹¤Ù¤Æ¤Î¥ª¥Ö¥¸¥§¥¯¥È¤òÀµ¤·¤¯¼èÆÀ¤Ç¤­¤ë¤«¡©
+     * - ãƒã‚¤ãƒ³ãƒ‰ã•ã‚Œã¦ã„ã‚‹ã™ã¹ã¦ã®ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’æ­£ã—ãå–å¾—ã§ãã‚‹ã‹ï¼Ÿ
      */
     void test_getObjects()
     {
-      // ¥Ğ¥¤¥ó¥É¤¹¤ë¥ª¥Ö¥¸¥§¥¯¥È¤òºîÀ®¤·¤Æ¤ª¤¯
+      // ãƒã‚¤ãƒ³ãƒ‰ã™ã‚‹ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’ä½œæˆã—ã¦ãŠã
       RTC::CorbaObjectManager objMgr(m_pORB, m_pPOA);
 
       RTC::RTObject_impl* rto1 = new RTC::RTObject_impl(m_pORB, m_pPOA);
@@ -461,24 +461,24 @@ namespace NamingManager
       objMgr.activate(rto2);
       CPPUNIT_ASSERT(! CORBA::is_nil(rto2->getObjRef()));
 
-      // NamingManager¤òÀ¸À®¤¹¤ë¡ÊËÜÍè¤Ï¡¢ManagerÆâÉô¤«¤é¼èÆÀ¤·¤¿¤¤¤¬...¡Ë
+      // NamingManagerã‚’ç”Ÿæˆã™ã‚‹ï¼ˆæœ¬æ¥ã¯ã€Managerå†…éƒ¨ã‹ã‚‰å–å¾—ã—ãŸã„ãŒ...ï¼‰
       RTC::NamingManager nmgr(m_mgr);
 //      const char* name_server = "localhost:9876";
       const char* name_server = "localhost:2809";
       nmgr.registerNameServer("corba", name_server);
 			
-      // ¥ª¥Ö¥¸¥§¥¯¥È¤ò£²¤Ä¥Ğ¥¤¥ó¥É¤·¤Æ¤ª¤¯
+      // ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’ï¼’ã¤ãƒã‚¤ãƒ³ãƒ‰ã—ã¦ãŠã
       nmgr.bindObject("id1.kind1", rto1);
       CPPUNIT_ASSERT(canResolve(name_server, "id1", "kind1"));
 
       nmgr.bindObject("id2.kind2", rto2);
       CPPUNIT_ASSERT(canResolve(name_server, "id2", "kind2"));
 			
-      // getObjects()¤Ç¡¢¥Ğ¥¤¥ó¥É¤µ¤ì¤Æ¤¤¤ë¤¹¤Ù¤Æ¤Î¥ª¥Ö¥¸¥§¥¯¥È¤Î¼èÆÀ¤ò¹Ô¤¦
+      // getObjects()ã§ã€ãƒã‚¤ãƒ³ãƒ‰ã•ã‚Œã¦ã„ã‚‹ã™ã¹ã¦ã®ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®å–å¾—ã‚’è¡Œã†
       std::vector<RTC::RTObject_impl*> objs = nmgr.getObjects();
       CPPUNIT_ASSERT_EQUAL(2, (int) objs.size());
 			
-      // ¼èÆÀ¤·¤¿¥ª¥Ö¥¸¥§¥¯¥È·²¤ÎÆâÍÆ¤ÏÀµ¤·¤¤¤«¡©
+      // å–å¾—ã—ãŸã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆç¾¤ã®å†…å®¹ã¯æ­£ã—ã„ã‹ï¼Ÿ
       CPPUNIT_ASSERT(objs.end() != std::find(objs.begin(), objs.end(), rto1));
       CPPUNIT_ASSERT(objs.end() != std::find(objs.begin(), objs.end(), rto2));
       objMgr.deactivate(rto2);
@@ -491,10 +491,10 @@ namespace NamingManager
     }
 		
     /*!
-     * @brief update()¥á¥½¥Ã¥É¤Î¥Æ¥¹¥È
+     * @brief update()ãƒ¡ã‚½ãƒƒãƒ‰ã®ãƒ†ã‚¹ãƒˆ
      * 
-     * - ¥Í¡¼¥à¥µ¡¼¥Ó¥¹¤òÅĞÏ¿¤·¤¿¸å¤Ç¡¢¤«¤Äupdate()¸Æ½Ğ¤ÎÁ°¤Ï¡¢¤Ş¤À¥Í¡¼¥à¥µ¡¼¥Ó¥¹¤Ë¥Ğ¥¤¥ó¥É¤µ¤ì¤Æ¤¤¤Ê¤¤¤³¤È¤ò³ÎÇ§¤¹¤ë
-     * - ¥Í¡¼¥à¥µ¡¼¥Ó¥¹¤òÅĞÏ¿¤·¤¿¸å¤Ç¡¢¤«¤Äupdate()¸Æ½Ğ¤Î¸å¤Ï¡¢¥Í¡¼¥à¥µ¡¼¥Ó¥¹¤ËÀµ¤·¤¯¥Ğ¥¤¥ó¥É¤µ¤ì¤Æ¤¤¤ë¤³¤È¤ò³ÎÇ§¤¹¤ë
+     * - ãƒãƒ¼ãƒ ã‚µãƒ¼ãƒ“ã‚¹ã‚’ç™»éŒ²ã—ãŸå¾Œã§ã€ã‹ã¤update()å‘¼å‡ºã®å‰ã¯ã€ã¾ã ãƒãƒ¼ãƒ ã‚µãƒ¼ãƒ“ã‚¹ã«ãƒã‚¤ãƒ³ãƒ‰ã•ã‚Œã¦ã„ãªã„ã“ã¨ã‚’ç¢ºèªã™ã‚‹
+     * - ãƒãƒ¼ãƒ ã‚µãƒ¼ãƒ“ã‚¹ã‚’ç™»éŒ²ã—ãŸå¾Œã§ã€ã‹ã¤update()å‘¼å‡ºã®å¾Œã¯ã€ãƒãƒ¼ãƒ ã‚µãƒ¼ãƒ“ã‚¹ã«æ­£ã—ããƒã‚¤ãƒ³ãƒ‰ã•ã‚Œã¦ã„ã‚‹ã“ã¨ã‚’ç¢ºèªã™ã‚‹
      */
     void test_update()
     {
@@ -502,26 +502,26 @@ namespace NamingManager
       const char* name_server = "localhost:2809";
       RTC::NamingManager nmgr(m_mgr);
 
-      // ¥Ğ¥¤¥ó¥É¤¹¤ë¥ª¥Ö¥¸¥§¥¯¥È¤òºîÀ®¤·¤Æ¤ª¤¯
+      // ãƒã‚¤ãƒ³ãƒ‰ã™ã‚‹ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’ä½œæˆã—ã¦ãŠã
       RTC::CorbaObjectManager objMgr(m_pORB, m_pPOA);
 			
       RTC::RTObject_impl* rto = new RTC::RTObject_impl(m_pORB, m_pPOA);
       objMgr.activate(rto);
       CPPUNIT_ASSERT(! CORBA::is_nil(rto->getObjRef()));
 
-      // registerNameServer()¸Æ½ĞÁ°¤Ë¥ª¥Ö¥¸¥§¥¯¥È¤òÅĞÏ¿¤·¤¿¾ì¹ç¡¢
-      // ¤³¤Î»şÅÀ¤Ç¤Ï¡¢¤Ş¤À¥Í¡¼¥à¥µ¡¼¥Ó¥¹¤Ë¥Ğ¥¤¥ó¥É¤µ¤ì¤Æ¤¤¤Ê¤¤¤Ï¤º
+      // registerNameServer()å‘¼å‡ºå‰ã«ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’ç™»éŒ²ã—ãŸå ´åˆã€
+      // ã“ã®æ™‚ç‚¹ã§ã¯ã€ã¾ã ãƒãƒ¼ãƒ ã‚µãƒ¼ãƒ“ã‚¹ã«ãƒã‚¤ãƒ³ãƒ‰ã•ã‚Œã¦ã„ãªã„ã¯ãš
       nmgr.bindObject("id.kind", rto);
       // Cannot do bind because it is not registered. 
       CPPUNIT_ASSERT(! canResolve(name_server, "id", "kind"));
 			
-      // ¥Í¡¼¥à¥µ¡¼¥Ó¥¹¤òÅĞÏ¿¤·¤¿¸å¤Ç¡¢¤«¤Äupdate()¸Æ½Ğ¤ÎÁ°¤Ï¡¢
-      // ¤ä¤Ï¤ê¡¢¤Ş¤À¥Í¡¼¥à¥µ¡¼¥Ó¥¹¤Ë¥Ğ¥¤¥ó¥É¤µ¤ì¤Æ¤¤¤Ê¤¤¤Ï¤º
+      // ãƒãƒ¼ãƒ ã‚µãƒ¼ãƒ“ã‚¹ã‚’ç™»éŒ²ã—ãŸå¾Œã§ã€ã‹ã¤update()å‘¼å‡ºã®å‰ã¯ã€
+      // ã‚„ã¯ã‚Šã€ã¾ã ãƒãƒ¼ãƒ ã‚µãƒ¼ãƒ“ã‚¹ã«ãƒã‚¤ãƒ³ãƒ‰ã•ã‚Œã¦ã„ãªã„ã¯ãš
       nmgr.registerNameServer("corba", name_server);
       // Only registered. 
       CPPUNIT_ASSERT(! canResolve(name_server, "id", "kind"));
 			
-      // update()¸Æ½Ğ¸å¤Ï¡¢Àµ¤·¤¯¥Í¡¼¥à¥µ¡¼¥Ó¥¹¤Ë¥Ğ¥¤¥ó¥É¤µ¤ì¤Æ¤¤¤ë¤«¡©
+      // update()å‘¼å‡ºå¾Œã¯ã€æ­£ã—ããƒãƒ¼ãƒ ã‚µãƒ¼ãƒ“ã‚¹ã«ãƒã‚¤ãƒ³ãƒ‰ã•ã‚Œã¦ã„ã‚‹ã‹ï¼Ÿ
       //
       m_mgr->getConfig()["naming.update.rebind"] = "NO";
       nmgr.update();
@@ -537,13 +537,13 @@ namespace NamingManager
     }
 
     /*!
-     * @brief registerMgrName()¥á¥½¥Ã¥É¤ÈunregisterMgrName()¥á¥½¥Ã¥É¤Î¥Æ¥¹¥È
+     * @brief registerMgrName()ãƒ¡ã‚½ãƒƒãƒ‰ã¨unregisterMgrName()ãƒ¡ã‚½ãƒƒãƒ‰ã®ãƒ†ã‚¹ãƒˆ
      * 
-     * - °ú¿ôManagerServant¤Ç¡¢¥Ş¥Í¡¼¥¸¥ã¡¼¥µ¡¼¥Ğ¥ó¥È¤òÀµ¤·¤¯ÀßÄê¤Ç¤­¤ë¤«¡©
+     * - å¼•æ•°ManagerServantã§ã€ãƒãƒãƒ¼ã‚¸ãƒ£ãƒ¼ã‚µãƒ¼ãƒãƒ³ãƒˆã‚’æ­£ã—ãè¨­å®šã§ãã‚‹ã‹ï¼Ÿ
      */
     void test_registerMgrName_and_unregisterMgrName()
     {
-      // ¥µ¡¼¥Ğ¥ó¥ÈºîÀ®
+      // ã‚µãƒ¼ãƒãƒ³ãƒˆä½œæˆ
       RTC::CorbaObjectManager objMgr(m_pORB, m_pPOA);
       RTM::ManagerServant* mgrs1 = new RTM::ManagerServant();
       RTM::ManagerServant* mgrs2 = new RTM::ManagerServant();
@@ -553,10 +553,10 @@ namespace NamingManager
       objMgr.activate(mgrs3);
       NamingManagerMock nmm(m_mgr);
 
-      // ¥Ş¥Í¡¼¥¸¥ã¡¼¥µ¡¼¥Ğ¥ó¥È¤ÎÀßÄê
-      nmm.registerMgrName("id.kind", mgrs1);    // ½é²óÀßÄê
+      // ãƒãƒãƒ¼ã‚¸ãƒ£ãƒ¼ã‚µãƒ¼ãƒãƒ³ãƒˆã®è¨­å®š
+      nmm.registerMgrName("id.kind", mgrs1);    // åˆå›è¨­å®š
 
-      // ½é²óÀßÄê¤¬ÅĞÏ¿¤µ¤ì¤Æ¤¤¤ë¤«¡©
+      // åˆå›è¨­å®šãŒç™»éŒ²ã•ã‚Œã¦ã„ã‚‹ã‹ï¼Ÿ
       bool bret(false);
       for (int i(0), len(nmm.mgrNames.size()); i < len; ++i)
         {
@@ -570,9 +570,9 @@ namespace NamingManager
         }
       CPPUNIT_ASSERT(bret);
 
-      nmm.registerMgrName("id.kind", mgrs2);   // ¾å½ñÀßÄê
+      nmm.registerMgrName("id.kind", mgrs2);   // ä¸Šæ›¸è¨­å®š
 
-      // ¾å½ñÀßÄê¤¬ÅĞÏ¿¤µ¤ì¤Æ¤¤¤ë¤«¡©
+      // ä¸Šæ›¸è¨­å®šãŒç™»éŒ²ã•ã‚Œã¦ã„ã‚‹ã‹ï¼Ÿ
       bret = false;
       for (int i(0), len(nmm.mgrNames.size()); i < len; ++i)
         {
@@ -586,9 +586,9 @@ namespace NamingManager
         }
       CPPUNIT_ASSERT(bret);
 
-      nmm.registerMgrName("id2.kind2", mgrs3);   // ÄÉ²ÃÀßÄê
+      nmm.registerMgrName("id2.kind2", mgrs3);   // è¿½åŠ è¨­å®š
 
-      // ÄÉ²ÃÀßÄê¤¬ÅĞÏ¿¤µ¤ì¤Æ¤¤¤ë¤«¡©
+      // è¿½åŠ è¨­å®šãŒç™»éŒ²ã•ã‚Œã¦ã„ã‚‹ã‹ï¼Ÿ
       bret = false;
       for (int i(0), len(nmm.mgrNames.size()); i < len; ++i)
         {
@@ -602,10 +602,10 @@ namespace NamingManager
         }
       CPPUNIT_ASSERT(bret);
 
-      // ¥Ş¥Í¡¼¥¸¥ã¡¼¥µ¡¼¥Ğ¥ó¥È¤ÎÀßÄê²ò½ü
+      // ãƒãƒãƒ¼ã‚¸ãƒ£ãƒ¼ã‚µãƒ¼ãƒãƒ³ãƒˆã®è¨­å®šè§£é™¤
       nmm.unregisterMgrName("id2.kind2");
 
-      // ÄÉ²ÃÀßÄê¤Îname¤¬ºï½ü¤µ¤ì¤Æ¤¤¤ë¤«¡©
+      // è¿½åŠ è¨­å®šã®nameãŒå‰Šé™¤ã•ã‚Œã¦ã„ã‚‹ã‹ï¼Ÿ
       bret = false;
       for (int i(0), len(nmm.mgrNames.size()); i < len; ++i)
         {
@@ -616,7 +616,7 @@ namespace NamingManager
         }
       CPPUNIT_ASSERT(!bret);
 
-      // ÄÉ²ÃÀßÄê¤Îmgr¤¬ºï½ü¤µ¤ì¤Æ¤¤¤ë¤«¡©
+      // è¿½åŠ è¨­å®šã®mgrãŒå‰Šé™¤ã•ã‚Œã¦ã„ã‚‹ã‹ï¼Ÿ
       bret = false;
       for (int i(0), len(nmm.mgrNames.size()); i < len; ++i)
         {
@@ -627,10 +627,10 @@ namespace NamingManager
         }
       CPPUNIT_ASSERT(!bret);
 
-      // ¥Ş¥Í¡¼¥¸¥ã¡¼¥µ¡¼¥Ğ¥ó¥È¤ÎÀßÄê²ò½ü
+      // ãƒãƒãƒ¼ã‚¸ãƒ£ãƒ¼ã‚µãƒ¼ãƒãƒ³ãƒˆã®è¨­å®šè§£é™¤
       nmm.unregisterMgrName("id.kind");
 
-      // ½é²ó¡¦¾å½ñÀßÄê¤Îname¤¬ºï½ü¤µ¤ì¤Æ¤¤¤ë¤«¡©
+      // åˆå›ãƒ»ä¸Šæ›¸è¨­å®šã®nameãŒå‰Šé™¤ã•ã‚Œã¦ã„ã‚‹ã‹ï¼Ÿ
       bret = false;
       for (int i(0), len(nmm.mgrNames.size()); i < len; ++i)
         {
@@ -641,7 +641,7 @@ namespace NamingManager
         }
       CPPUNIT_ASSERT(!bret);
 
-      // ½é²ó¡¦¾å½ñÀßÄê¤Îmgr¤¬ºï½ü¤µ¤ì¤Æ¤¤¤ë¤«¡©
+      // åˆå›ãƒ»ä¸Šæ›¸è¨­å®šã®mgrãŒå‰Šé™¤ã•ã‚Œã¦ã„ã‚‹ã‹ï¼Ÿ
       bret = false;
       for (int i(0), len(nmm.mgrNames.size()); i < len; ++i)
         {
@@ -661,34 +661,34 @@ namespace NamingManager
     }
 
     /*!
-     * @brief bindObject()¥á¥½¥Ã¥É¤ÈunbindObject()¥á¥½¥Ã¥É¤Î¥Æ¥¹¥È
+     * @brief bindObject()ãƒ¡ã‚½ãƒƒãƒ‰ã¨unbindObject()ãƒ¡ã‚½ãƒƒãƒ‰ã®ãƒ†ã‚¹ãƒˆ
      * 
-     * - °ú¿ôManagerServant¤Ç¡¢¥ª¥Ö¥¸¥§¥¯¥È¤òÀµ¤·¤¯¥Ğ¥¤¥ó¥É¤Ç¤­¤ë¤«¡©
-     * - ¥ª¥Ö¥¸¥§¥¯¥È¤òÀµ¤·¤¯¥¢¥ó¥Ğ¥¤¥ó¥É¤Ç¤­¤ë¤«¡©
+     * - å¼•æ•°ManagerServantã§ã€ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’æ­£ã—ããƒã‚¤ãƒ³ãƒ‰ã§ãã‚‹ã‹ï¼Ÿ
+     * - ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’æ­£ã—ãã‚¢ãƒ³ãƒã‚¤ãƒ³ãƒ‰ã§ãã‚‹ã‹ï¼Ÿ
      */
     void test_bindObject_and_unbindObject2()
     {
-      // ¥Ğ¥¤¥ó¥É¤¹¤ë¥ª¥Ö¥¸¥§¥¯¥È¤òºîÀ®¤·¤Æ¤ª¤¯
+      // ãƒã‚¤ãƒ³ãƒ‰ã™ã‚‹ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’ä½œæˆã—ã¦ãŠã
       RTC::CorbaObjectManager objMgr(m_pORB, m_pPOA);
 
       RTM::ManagerServant* mgrs = new RTM::ManagerServant();
       objMgr.activate(mgrs);
       //CPPUNIT_ASSERT(! CORBA::is_nil(mgrs->getObjRef()));
 
-      // NamingManager¤òÀ¸À®¤¹¤ë¡ÊËÜÍè¤Ï¡¢ManagerÆâÉô¤«¤é¼èÆÀ¤·¤¿¤¤¤¬...¡Ë
+      // NamingManagerã‚’ç”Ÿæˆã™ã‚‹ï¼ˆæœ¬æ¥ã¯ã€Managerå†…éƒ¨ã‹ã‚‰å–å¾—ã—ãŸã„ãŒ...ï¼‰
       RTC::NamingManager nmgr(m_mgr);
 //      const char* name_server = "localhost:9876";
       const char* name_server = "localhost:2809";
       nmgr.registerNameServer("corba", name_server);
 
-      // ¥ª¥Ö¥¸¥§¥¯¥È¤ò¥Ğ¥¤¥ó¥É¤Ç¤­¤ë¤«¡©
+      // ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’ãƒã‚¤ãƒ³ãƒ‰ã§ãã‚‹ã‹ï¼Ÿ
       nmgr.bindObject("id.kind", mgrs);
       //CPPUNIT_ASSERT(canResolve(name_server, "id", "kind"));
 
-      // ¥Ğ¥¤¥ó¥É¤·¤¿¥ª¥Ö¥¸¥§¥¯¥È¤ò¥¢¥ó¥Ğ¥¤¥ó¥É¤Ç¤­¤ë¤«¡©
+      // ãƒã‚¤ãƒ³ãƒ‰ã—ãŸã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’ã‚¢ãƒ³ãƒã‚¤ãƒ³ãƒ‰ã§ãã‚‹ã‹ï¼Ÿ
       nmgr.unbindObject("id.kind");
 
-      // ¥¢¥ó¥Ğ¥¤¥ó¥É¤·¤¿¥ª¥Ö¥¸¥§¥¯¥È¤Îresolve¤¬°Õ¿Ş¤É¤ª¤ê¼ºÇÔ¤¹¤ë¤«¡©
+      // ã‚¢ãƒ³ãƒã‚¤ãƒ³ãƒ‰ã—ãŸã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®resolveãŒæ„å›³ã©ãŠã‚Šå¤±æ•—ã™ã‚‹ã‹ï¼Ÿ
       CPPUNIT_ASSERT(! canResolve(name_server, "id", "kind"));
       objMgr.deactivate(mgrs);
 

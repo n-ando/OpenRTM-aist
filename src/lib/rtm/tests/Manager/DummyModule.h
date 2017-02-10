@@ -1,4 +1,4 @@
-/*
+﻿/*
  * How to compile:
  * gcc -shared -fPIC -o DummyModule.so DummyModule.cpp
  */

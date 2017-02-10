@@ -49,7 +49,6 @@ vc9proj:
 		--yaml $(top_builddir)/examples/rtcdll.vcproj.yaml \
 		--source $(FILENAMESERVICE_SRC)                        \
 		--header $(FILENAMESERVICE_H)
-	qkc -O- -sm $(win32_builddir)/$(PROJNAME)Dll_vc9.vcproj
 
 vcxproj:
 	for ver in $(VC_VERSION); do \
@@ -62,7 +61,6 @@ vcxproj:
 			--yaml $(top_builddir)/examples/rtcdll.vcproj.yaml  \
 			--source $(FILENAMESERVICE_SRC)                          \
 			--header $(FILENAMESERVICE_H) ; \
-		qkc -O- -sm $(win32_builddir)/$(PROJNAME)Dll_vc$${ver}.vcxproj ; \
 	done
 
 #dist-hook: vcproj

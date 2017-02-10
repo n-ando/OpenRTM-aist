@@ -1,4 +1,4 @@
-// -*- C++ -*-
+ï»¿// -*- C++ -*-
 /*!
  * @file   ManagerServantTests.cpp
  * @brief  ManagerServant test class
@@ -657,8 +657,8 @@ namespace ManagerServant
         ret = pman->delete_component(profiles[0].instance_name);
         CPPUNIT_ASSERT_EQUAL(::RTC::RTC_OK, ret);
 
-        // deleteComponent()¤Çexit()¤ò¼Â¹Ô¤·¤Æ¤¤¤ë¤¿¤á¡¢¤³¤ì°Ê¹ß¤Î¥Æ¥¹¥È¤Ï¤Ç¤­¤Ş¤»¤ó¡£
-        // °Ê¹ß¤Îdelete_component ¤Ï¡¢¼Â»Ü¤»¤º¡£
+        // deleteComponent()ã§exit()ã‚’å®Ÿè¡Œã—ã¦ã„ã‚‹ãŸã‚ã€ã“ã‚Œä»¥é™ã®ãƒ†ã‚¹ãƒˆã¯ã§ãã¾ã›ã‚“ã€‚
+        // ä»¥é™ã®delete_component ã¯ã€å®Ÿæ–½ã›ãšã€‚
 //        m_pPOA->deactivate_object(*m_pPOA->reference_to_id(outobj));
 //        ret = pman->delete_component(profiles[1].instance_name);
 //        CPPUNIT_ASSERT_EQUAL(::RTC::RTC_OK, ret);
@@ -1101,10 +1101,10 @@ namespace ManagerServant
     {
         ::RTM::ManagerServant *pman = new ::RTM::ManagerServant();
 
-        //¥í¡¼¥É²ÄÇ½¤Ê¥â¥¸¥å¡¼¥ë¥ê¥¹¥È¤ò¼èÆÀ¤¹¤ë
+        //ãƒ­ãƒ¼ãƒ‰å¯èƒ½ãªãƒ¢ã‚¸ãƒ¥ãƒ¼ãƒ«ãƒªã‚¹ãƒˆã‚’å–å¾—ã™ã‚‹
         ::RTC::ReturnCode_t ret;
 //        ret = pman->set_configuration("manager.modules.load_path", "./.libs");
-// rtc.conf ¤ËÆş¤ì¤Ê¤¤¤ÈÍ­¸ú¤Ë¤Ê¤é¤Ê¤¤¤Í¡ª
+// rtc.conf ã«å…¥ã‚Œãªã„ã¨æœ‰åŠ¹ã«ãªã‚‰ãªã„ã­ï¼
 
         try
         {

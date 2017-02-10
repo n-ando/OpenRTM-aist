@@ -1,4 +1,4 @@
-// -*- C++ -*-
+﻿// -*- C++ -*-
 /*!
  * @file  AutoTestOut.h
  * @brief Sample component for auto-test

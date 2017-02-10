@@ -1,4 +1,4 @@
-// -*- C++ -*-
+﻿// -*- C++ -*-
 /*!
  * @file  Sensor.cpp * @brief Sensor component * $Date$ 
  *

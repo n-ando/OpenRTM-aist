@@ -1,4 +1,4 @@
-// -*- C++ -*-
+ï»¿// -*- C++ -*-
 /*!
  * @file  IFsmParticipantAction.h
  * @brief IFsmParticipantAction class
@@ -29,7 +29,7 @@ namespace Local
   /*!
    * @if jp
    * @class IFsmParticipantAction
-   * @brief IFsmParticipantAction ¥¤¥ó¥¿¡¼¥Õ¥§¡¼¥¹¥¯¥é¥¹
+   * @brief IFsmParticipantAction ã‚¤ãƒ³ã‚¿ãƒ¼ãƒ•ã‚§ãƒ¼ã‚¹ã‚¯ãƒ©ã‚¹
    * @else
    * @class IFsmParticipantAction
    * @brief IFsmParticipantAction interface class
@@ -40,7 +40,7 @@ namespace Local
   public:
     /*!
      * @if jp
-     * @brief ¥Ç¥¹¥È¥é¥¯¥¿
+     * @brief ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
      * @else
      * @brief Destructor
      * @endif

@@ -1,4 +1,4 @@
-// -*- C++ -*-
+ï»¿// -*- C++ -*-
 /*!
  * @file   CorbaPortTests.cpp
  * @brief  CorbaPort test class
@@ -185,16 +185,16 @@ namespace CorbaPort
     }
 		
     /*!
-     * @brief get_port_profile()¥á¥½¥Ã¥É¤Î¥Æ¥¹¥È
+     * @brief get_port_profile()ãƒ¡ã‚½ãƒƒãƒ‰ã®ãƒ†ã‚¹ãƒˆ
      * 
-     * - ¥×¥í¥Õ¥¡¥¤¥ëÆâ¤Î¡¢¥İ¡¼¥ÈÌ¾¾Î¤òÀµ¤·¤¯¼èÆÀ¤Ç¤­¤ë¤«¡©
-     * - ¥¤¥ó¥¿¥Õ¥§¡¼¥¹¥×¥í¥Õ¥¡¥¤¥ëÆâ¤Î¡¢instance_name¤òÀµ¤·¤¯¼èÆÀ¤Ç¤­¤ë¤«¡©
-     * - ¥¤¥ó¥¿¥Õ¥§¡¼¥¹¥×¥í¥Õ¥¡¥¤¥ëÆâ¤Î¡¢type_name¤òÀµ¤·¤¯¼èÆÀ¤Ç¤­¤ë¤«¡©
-     * - ¥¤¥ó¥¿¥Õ¥§¡¼¥¹¥×¥í¥Õ¥¡¥¤¥ëÆâ¤Î¡¢polarity¤òÀµ¤·¤¯¼èÆÀ¤Ç¤­¤ë¤«¡©
+     * - ãƒ—ãƒ­ãƒ•ã‚¡ã‚¤ãƒ«å†…ã®ã€ãƒãƒ¼ãƒˆåç§°ã‚’æ­£ã—ãå–å¾—ã§ãã‚‹ã‹ï¼Ÿ
+     * - ã‚¤ãƒ³ã‚¿ãƒ•ã‚§ãƒ¼ã‚¹ãƒ—ãƒ­ãƒ•ã‚¡ã‚¤ãƒ«å†…ã®ã€instance_nameã‚’æ­£ã—ãå–å¾—ã§ãã‚‹ã‹ï¼Ÿ
+     * - ã‚¤ãƒ³ã‚¿ãƒ•ã‚§ãƒ¼ã‚¹ãƒ—ãƒ­ãƒ•ã‚¡ã‚¤ãƒ«å†…ã®ã€type_nameã‚’æ­£ã—ãå–å¾—ã§ãã‚‹ã‹ï¼Ÿ
+     * - ã‚¤ãƒ³ã‚¿ãƒ•ã‚§ãƒ¼ã‚¹ãƒ—ãƒ­ãƒ•ã‚¡ã‚¤ãƒ«å†…ã®ã€polarityã‚’æ­£ã—ãå–å¾—ã§ãã‚‹ã‹ï¼Ÿ
      */
     void test_get_port_profile()
     {
-      // ¥Æ¥¹¥ÈÂĞ¾İ¤È¤Ê¤ëCorbaPort¤ò¹½À®¤¹¤ë
+      // ãƒ†ã‚¹ãƒˆå¯¾è±¡ã¨ãªã‚‹CorbaPortã‚’æ§‹æˆã™ã‚‹
       MyService_impl* pMyServiceImpl
 	= new MyService_impl(); // will be deleted automatically
       RTC::CorbaConsumer<MyService>* pMyServiceConsumer
@@ -209,36 +209,36 @@ namespace CorbaPort
       RTC::PortService_var portRef = port->getPortRef();
       RTC::PortProfile* profile = portRef->get_port_profile();
 
-      // ¥İ¡¼¥ÈÌ¾¾Î¤òÀµ¤·¤¯¼èÆÀ¤Ç¤­¤ë¤«¡©
+      // ãƒãƒ¼ãƒˆåç§°ã‚’æ­£ã—ãå–å¾—ã§ãã‚‹ã‹ï¼Ÿ
       CPPUNIT_ASSERT_EQUAL(std::string("unknown.name of port"), std::string(profile->name));
 			
-      // ¥¤¥ó¥¿¥Õ¥§¡¼¥¹¥×¥í¥Õ¥¡¥¤¥ë¤ò¼èÆÀ¤·¡¢¤¢¤é¤«¤¸¤áÀßÄê¤·¤Æ¤ª¤¤¤¿ÆâÍÆ¤È°ìÃ×¤¹¤ë¤³¤È¤ò³ÎÇ§¤¹¤ë
+      // ã‚¤ãƒ³ã‚¿ãƒ•ã‚§ãƒ¼ã‚¹ãƒ—ãƒ­ãƒ•ã‚¡ã‚¤ãƒ«ã‚’å–å¾—ã—ã€ã‚ã‚‰ã‹ã˜ã‚è¨­å®šã—ã¦ãŠã„ãŸå†…å®¹ã¨ä¸€è‡´ã™ã‚‹ã“ã¨ã‚’ç¢ºèªã™ã‚‹
       RTC::PortInterfaceProfileList& profiles = profile->interfaces;
       for (CORBA::ULong i = 0; i < profile->interfaces.length(); ++i)
 	{
 	  if (std::string(profiles[i].instance_name)
 	      == std::string("MyService (provided)"))
 	    {
-	      // type_name¤òÀµ¤·¤¯¼èÆÀ¤Ç¤­¤ë¤«¡©
+	      // type_nameã‚’æ­£ã—ãå–å¾—ã§ãã‚‹ã‹ï¼Ÿ
 	      CPPUNIT_ASSERT_EQUAL(std::string("Generic (provided)"),
 				   std::string(profiles[i].type_name));
 					
-	      // polarity¤òÀµ¤·¤¯¼èÆÀ¤Ç¤­¤ë¤«¡©
+	      // polarityã‚’æ­£ã—ãå–å¾—ã§ãã‚‹ã‹ï¼Ÿ
 	      CPPUNIT_ASSERT_EQUAL(RTC::PROVIDED, profiles[i].polarity);
 	    }
 	  else if (std::string(profiles[i].instance_name)
 		   == std::string("MyService (required)"))
 	    {
-	      // type_name¤òÀµ¤·¤¯¼èÆÀ¤Ç¤­¤ë¤«¡©
+	      // type_nameã‚’æ­£ã—ãå–å¾—ã§ãã‚‹ã‹ï¼Ÿ
 	      CPPUNIT_ASSERT_EQUAL(std::string("Generic (required)"),
 				   std::string(profiles[i].type_name));
 
-	      // polarity¤òÀµ¤·¤¯¼èÆÀ¤Ç¤­¤ë¤«¡©
+	      // polarityã‚’æ­£ã—ãå–å¾—ã§ãã‚‹ã‹ï¼Ÿ
 	      CPPUNIT_ASSERT_EQUAL(RTC::REQUIRED, profiles[i].polarity);
 	    }
 	  else
 	    {
-	      // Í½´ü¤·¤Ê¤¤instance_name¤¬¼èÆÀ¤µ¤ì¤¿¾ì¹ç
+	      // äºˆæœŸã—ãªã„instance_nameãŒå–å¾—ã•ã‚ŒãŸå ´åˆ
 	      std::string msg("Unexpected instance_name:");
 	      msg += std::string(profiles[i].instance_name);
 	      CPPUNIT_FAIL(msg);
@@ -252,14 +252,14 @@ namespace CorbaPort
     }
 		
     /*!
-     * connect()¥á¥½¥Ã¥É¡¢¤ª¤è¤Ó¡¢¤½¤³¤«¤é¸Æ¤Ó½Ğ¤µ¤ì¤ë³Æprotected¥á¥½¥Ã¥É¤Î¥Æ¥¹¥È
+     * connect()ãƒ¡ã‚½ãƒƒãƒ‰ã€ãŠã‚ˆã³ã€ãã“ã‹ã‚‰å‘¼ã³å‡ºã•ã‚Œã‚‹å„protectedãƒ¡ã‚½ãƒƒãƒ‰ã®ãƒ†ã‚¹ãƒˆ
      * 
-     * - ¥İ¡¼¥È1¤Î¥³¥ó¥·¥å¡¼¥ŞÂ¦¤«¤é¥á¥½¥Ã¥É¤ò¸Æ¤Ó½Ğ¤¹¤È¡¢¥İ¡¼¥È0¤Î¥×¥í¥Ğ¥¤¥ÀÂ¦¤¬°Õ¿Ş¤É¤ª¤ê¸Æ¤Ó½Ğ¤µ¤ì¤ë¤«¡©
-     * - ¥İ¡¼¥È0¤Î¥³¥ó¥·¥å¡¼¥ŞÂ¦¤«¤é¥á¥½¥Ã¥É¤ò¸Æ¤Ó½Ğ¤¹¤È¡¢¥İ¡¼¥È1¤Î¥×¥í¥Ğ¥¤¥ÀÂ¦¤¬°Õ¿Ş¤É¤ª¤ê¸Æ¤Ó½Ğ¤µ¤ì¤ë¤«¡©
+     * - ãƒãƒ¼ãƒˆ1ã®ã‚³ãƒ³ã‚·ãƒ¥ãƒ¼ãƒå´ã‹ã‚‰ãƒ¡ã‚½ãƒƒãƒ‰ã‚’å‘¼ã³å‡ºã™ã¨ã€ãƒãƒ¼ãƒˆ0ã®ãƒ—ãƒ­ãƒã‚¤ãƒ€å´ãŒæ„å›³ã©ãŠã‚Šå‘¼ã³å‡ºã•ã‚Œã‚‹ã‹ï¼Ÿ
+     * - ãƒãƒ¼ãƒˆ0ã®ã‚³ãƒ³ã‚·ãƒ¥ãƒ¼ãƒå´ã‹ã‚‰ãƒ¡ã‚½ãƒƒãƒ‰ã‚’å‘¼ã³å‡ºã™ã¨ã€ãƒãƒ¼ãƒˆ1ã®ãƒ—ãƒ­ãƒã‚¤ãƒ€å´ãŒæ„å›³ã©ãŠã‚Šå‘¼ã³å‡ºã•ã‚Œã‚‹ã‹ï¼Ÿ
      */
     void test_connect()
     {
-      // ¥İ¡¼¥È0¤ò¹½À®¤¹¤ë
+      // ãƒãƒ¼ãƒˆ0ã‚’æ§‹æˆã™ã‚‹
       MyService_impl* pMyServiceImplA
 	= new MyService_impl(); // will be deleted automatically
       RTC::CorbaConsumer<MyService>* pMyServiceConsumerB
@@ -269,7 +269,7 @@ namespace CorbaPort
       port0->registerProvider("MyServiceA", "Generic", *pMyServiceImplA);
       port0->registerConsumer("MyServiceB", "Generic", *pMyServiceConsumerB);
 
-      // ¥İ¡¼¥È1¤ò¹½À®¤¹¤ë
+      // ãƒãƒ¼ãƒˆ1ã‚’æ§‹æˆã™ã‚‹
       MyService_impl* pMyServiceImplB
 	= new MyService_impl(); // will be deleted automatically
       RTC::CorbaConsumer<MyService>* pMyServiceConsumerA
@@ -279,7 +279,7 @@ namespace CorbaPort
       port1->registerProvider("MyServiceB", "Generic", *pMyServiceImplB);
       port1->registerConsumer("MyServiceA", "Generic", *pMyServiceConsumerA);
 			
-      // ÀÜÂ³¥×¥í¥Õ¥¡¥¤¥ë¤ò¹½À®¤¹¤ë
+      // æ¥ç¶šãƒ—ãƒ­ãƒ•ã‚¡ã‚¤ãƒ«ã‚’æ§‹æˆã™ã‚‹
       RTC::ConnectorProfile connProfile;
       connProfile.connector_id = "";
       connProfile.name = CORBA::string_dup("name of connector profile");
@@ -287,18 +287,18 @@ namespace CorbaPort
       connProfile.ports[0] = port0->getPortRef();
       connProfile.ports[1] = port1->getPortRef();
 
-      // ÀÜÂ³¤¹¤ë
+      // æ¥ç¶šã™ã‚‹
       port0->getPortRef()->connect(connProfile);
 
       port0->activateInterfaces_public();
       port1->activateInterfaces_public();
 
-      // ¥İ¡¼¥È1¤Î¥³¥ó¥·¥å¡¼¥ŞÂ¦¤«¤é¥á¥½¥Ã¥É¤ò¸Æ¤Ó½Ğ¤¹¤È¡¢¥İ¡¼¥È0¤Î¥×¥í¥Ğ¥¤¥ÀÂ¦¤¬°Õ¿Ş¤É¤ª¤ê¸Æ¤Ó½Ğ¤µ¤ì¤ë¤«¡©
+      // ãƒãƒ¼ãƒˆ1ã®ã‚³ãƒ³ã‚·ãƒ¥ãƒ¼ãƒå´ã‹ã‚‰ãƒ¡ã‚½ãƒƒãƒ‰ã‚’å‘¼ã³å‡ºã™ã¨ã€ãƒãƒ¼ãƒˆ0ã®ãƒ—ãƒ­ãƒã‚¤ãƒ€å´ãŒæ„å›³ã©ãŠã‚Šå‘¼ã³å‡ºã•ã‚Œã‚‹ã‹ï¼Ÿ
       CPPUNIT_ASSERT(! pMyServiceImplA->is_hello_world_called());
       (*pMyServiceConsumerA)->hello_world();
       CPPUNIT_ASSERT(pMyServiceImplA->is_hello_world_called());
 
-      // ¥İ¡¼¥È0¤Î¥³¥ó¥·¥å¡¼¥ŞÂ¦¤«¤é¥á¥½¥Ã¥É¤ò¸Æ¤Ó½Ğ¤¹¤È¡¢¥İ¡¼¥È1¤Î¥×¥í¥Ğ¥¤¥ÀÂ¦¤¬°Õ¿Ş¤É¤ª¤ê¸Æ¤Ó½Ğ¤µ¤ì¤ë¤«¡©
+      // ãƒãƒ¼ãƒˆ0ã®ã‚³ãƒ³ã‚·ãƒ¥ãƒ¼ãƒå´ã‹ã‚‰ãƒ¡ã‚½ãƒƒãƒ‰ã‚’å‘¼ã³å‡ºã™ã¨ã€ãƒãƒ¼ãƒˆ1ã®ãƒ—ãƒ­ãƒã‚¤ãƒ€å´ãŒæ„å›³ã©ãŠã‚Šå‘¼ã³å‡ºã•ã‚Œã‚‹ã‹ï¼Ÿ
       CPPUNIT_ASSERT(! pMyServiceImplB->is_hello_world_called());
       (*pMyServiceConsumerB)->hello_world();
       CPPUNIT_ASSERT(pMyServiceImplB->is_hello_world_called());
@@ -314,13 +314,13 @@ namespace CorbaPort
     }
     
     /*!
-     * @brief disconnect()¥á¥½¥Ã¥É¡¢¤ª¤è¤Ó¡¢¤½¤³¤«¤é¸Æ¤Ó½Ğ¤µ¤ì¤ë³Æprotected¥á¥½¥Ã¥É¤Î¥Æ¥¹¥È
+     * @brief disconnect()ãƒ¡ã‚½ãƒƒãƒ‰ã€ãŠã‚ˆã³ã€ãã“ã‹ã‚‰å‘¼ã³å‡ºã•ã‚Œã‚‹å„protectedãƒ¡ã‚½ãƒƒãƒ‰ã®ãƒ†ã‚¹ãƒˆ
      * 
-     * - ÀÜÂ³¤¬À®¸ù¤·¤¿¸å¤ËÀÚÃÇ¤ò¹Ô¤¤¡¢¥ê¥â¡¼¥È¥á¥½¥Ã¥É¤Î¸Æ½Ğ¤·¤¬°Õ¿Ş¤É¤ª¤ê¼ºÇÔ¤¹¤ë¤³¤È¤ò³ÎÇ§¤¹¤ë
+     * - æ¥ç¶šãŒæˆåŠŸã—ãŸå¾Œã«åˆ‡æ–­ã‚’è¡Œã„ã€ãƒªãƒ¢ãƒ¼ãƒˆãƒ¡ã‚½ãƒƒãƒ‰ã®å‘¼å‡ºã—ãŒæ„å›³ã©ãŠã‚Šå¤±æ•—ã™ã‚‹ã“ã¨ã‚’ç¢ºèªã™ã‚‹
      */
     void test_disconnect()
     {
-      // ¥İ¡¼¥È0¤ò¹½À®¤¹¤ë
+      // ãƒãƒ¼ãƒˆ0ã‚’æ§‹æˆã™ã‚‹
       MyService_impl* pMyServiceImplA
 	= new MyService_impl(); // will be deleted automatically
       RTC::CorbaConsumer<MyService>* pMyServiceConsumerB
@@ -330,7 +330,7 @@ namespace CorbaPort
       port0->registerProvider("MyServiceA-1", "Generic", *pMyServiceImplA);
       port0->registerConsumer("MyServiceB-1", "Generic", *pMyServiceConsumerB);
 
-      // ¥İ¡¼¥È1¤ò¹½À®¤¹¤ë
+      // ãƒãƒ¼ãƒˆ1ã‚’æ§‹æˆã™ã‚‹
       MyService_impl* pMyServiceImplB
 	= new MyService_impl(); // will be deleted automatically
       RTC::CorbaConsumer<MyService>* pMyServiceConsumerA
@@ -340,7 +340,7 @@ namespace CorbaPort
       port1->registerProvider("MyServiceB-1", "Generic", *pMyServiceImplB);
       port1->registerConsumer("MyServiceA-1", "Generic", *pMyServiceConsumerA);
 			
-      // ÀÜÂ³¥×¥í¥Õ¥¡¥¤¥ë¤ò¹½À®¤¹¤ë
+      // æ¥ç¶šãƒ—ãƒ­ãƒ•ã‚¡ã‚¤ãƒ«ã‚’æ§‹æˆã™ã‚‹
       RTC::ConnectorProfile connProfile;
       connProfile.connector_id = "id1";
       connProfile.name = CORBA::string_dup("name of connector profile-1");
@@ -348,21 +348,21 @@ namespace CorbaPort
       connProfile.ports[0] = port0->getPortRef();
       connProfile.ports[1] = port1->getPortRef();
 
-      // ÀÜÂ³¤¹¤ë
+      // æ¥ç¶šã™ã‚‹
       port0->getPortRef()->connect(connProfile);
 
       port0->activateInterfaces_public();
       port1->activateInterfaces_public();
 
-      // ¥İ¡¼¥È1¤Î¥³¥ó¥·¥å¡¼¥ŞÂ¦¤«¤é¥á¥½¥Ã¥É¤ò¸Æ¤Ó½Ğ¤¹¤È¡¢¥İ¡¼¥È0¤Î¥×¥í¥Ğ¥¤¥ÀÂ¦¤¬°Õ¿Ş¤É¤ª¤ê¸Æ¤Ó½Ğ¤µ¤ì¤ë¤«¡©
+      // ãƒãƒ¼ãƒˆ1ã®ã‚³ãƒ³ã‚·ãƒ¥ãƒ¼ãƒå´ã‹ã‚‰ãƒ¡ã‚½ãƒƒãƒ‰ã‚’å‘¼ã³å‡ºã™ã¨ã€ãƒãƒ¼ãƒˆ0ã®ãƒ—ãƒ­ãƒã‚¤ãƒ€å´ãŒæ„å›³ã©ãŠã‚Šå‘¼ã³å‡ºã•ã‚Œã‚‹ã‹ï¼Ÿ
       CPPUNIT_ASSERT(! pMyServiceImplA->is_hello_world_called());
       (*pMyServiceConsumerA)->hello_world();
       CPPUNIT_ASSERT(pMyServiceImplA->is_hello_world_called());
 			
-      // ÀÚÃÇ¤¹¤ë
+      // åˆ‡æ–­ã™ã‚‹
       port0->getPortRef()->disconnect(connProfile.connector_id);
 			
-      // ¥İ¡¼¥È0¤Î¥³¥ó¥·¥å¡¼¥ŞÂ¦¤«¤é¥á¥½¥Ã¥É¤ò¸Æ¤Ó½Ğ¤·¤ò»î¤ß¤ë¤È¡¢°Õ¿Ş¤É¤ª¤ê¤Ë¼ºÇÔ¤¹¤ë¤«¡©
+      // ãƒãƒ¼ãƒˆ0ã®ã‚³ãƒ³ã‚·ãƒ¥ãƒ¼ãƒå´ã‹ã‚‰ãƒ¡ã‚½ãƒƒãƒ‰ã‚’å‘¼ã³å‡ºã—ã‚’è©¦ã¿ã‚‹ã¨ã€æ„å›³ã©ãŠã‚Šã«å¤±æ•—ã™ã‚‹ã‹ï¼Ÿ
       try
 	{
 	  CPPUNIT_ASSERT(! pMyServiceImplB->is_hello_world_called());
@@ -385,7 +385,7 @@ namespace CorbaPort
       delete pMyServiceImplA;
     }
     /*!
-     * @brief registerProvider()¥á¥½¥Ã¥É¤Î¥Æ¥¹¥È
+     * @brief registerProvider()ãƒ¡ã‚½ãƒƒãƒ‰ã®ãƒ†ã‚¹ãƒˆ
      * 
      */
     void test_registerProvider(void)
@@ -402,20 +402,20 @@ namespace CorbaPort
       ret = port0->registerProvider("registerProvider0", "Generic", *pImpl0);
       CPPUNIT_ASSERT_EQUAL(true,ret);
 
-      //´û¤ËÅĞÏ¿¤·¤Æ¤¢¤ë¥¤¥ó¥¹¥¿¥ó¥¹Ì¾¤È¥ª¥Ö¥¸¥§¥¯¥È¤òÅĞÏ¿¤·¤¿¾ì¹ç¡¢false¤òÊÖ¤¹¡£
+      //æ—¢ã«ç™»éŒ²ã—ã¦ã‚ã‚‹ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹åã¨ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’ç™»éŒ²ã—ãŸå ´åˆã€falseã‚’è¿”ã™ã€‚
       ret = port0->registerProvider("registerProvider0", "Generic", *pImpl0);
       CPPUNIT_ASSERT_EQUAL(false,ret);
 
-      //´û¤ËÅĞÏ¿¤·¤Æ¤¢¤ë¥¤¥ó¥¹¥¿¥ó¥¹Ì¾¤òÅĞÏ¿¤·¤¿¾ì¹ç¡¢false¤òÊÖ¤¹¡£
+      //æ—¢ã«ç™»éŒ²ã—ã¦ã‚ã‚‹ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹åã‚’ç™»éŒ²ã—ãŸå ´åˆã€falseã‚’è¿”ã™ã€‚
       ret = port0->registerProvider("registerProvider0", "Generic", *pImpl1);
       CPPUNIT_ASSERT_EQUAL(false,ret);
      
-      //ÊÌ¤Ê¥¤¥ó¥¹¥¿¥ó¥¹Ì¾¤Ç´û¤ËÅĞÏ¿¤·¤Æ¤¢¤ë¥ª¥Ö¥¸¥§¥¯¥È¤òÅĞÏ¿¤·¤¿¾ì¹ç¡¢true¤òÊÖ¤¹¡£
-      //   false¤òÊÖ¤¹¤¬ÅĞÏ¿¤µ¤ì¤ë¡£
+      //åˆ¥ãªã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹åã§æ—¢ã«ç™»éŒ²ã—ã¦ã‚ã‚‹ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’ç™»éŒ²ã—ãŸå ´åˆã€trueã‚’è¿”ã™ã€‚
+      //   falseã‚’è¿”ã™ãŒç™»éŒ²ã•ã‚Œã‚‹ã€‚
       ret = port0->registerProvider("registerProvider1", "Generic", *pImpl0);
       CPPUNIT_ASSERT_EQUAL(true,ret);
 
-      //ÅĞÏ¿¤·¤Æ¤Ê¤¤¥¤¥ó¥¹¥¿¥ó¥¹Ì¾¤È¥ª¥Ö¥¸¥§¥¯¥È¤òÅĞÏ¿¤·¤¿¾ì¹ç¡¢true¤òÊÖ¤¹¡£
+      //ç™»éŒ²ã—ã¦ãªã„ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹åã¨ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’ç™»éŒ²ã—ãŸå ´åˆã€trueã‚’è¿”ã™ã€‚
       ret = port0->registerProvider("registerProvider2", "Generic", *pImpl1);
       CPPUNIT_ASSERT_EQUAL(true,ret);
 
@@ -428,12 +428,12 @@ namespace CorbaPort
       delete pImpl0;
     }
     /*!
-     * @brief registerProvider()¥á¥½¥Ã¥É¤Î¥Æ¥¹¥È
+     * @brief registerProvider()ãƒ¡ã‚½ãƒƒãƒ‰ã®ãƒ†ã‚¹ãƒˆ
      * 
      */
     void test_activateInterfaces_deactivateInterfaces(void)
     {
-      // ¥İ¡¼¥È0¤ò¹½À®¤¹¤ë
+      // ãƒãƒ¼ãƒˆ0ã‚’æ§‹æˆã™ã‚‹
       MyService_impl* pMyServiceImplA
 	= new MyService_impl(); // will be deleted automatically
       RTC::CorbaConsumer<MyService>* pMyServiceConsumerB
@@ -443,7 +443,7 @@ namespace CorbaPort
       port0->registerProvider("MyServiceAA", "Generic", *pMyServiceImplA);
       port0->registerConsumer("MyServiceBB", "Generic", *pMyServiceConsumerB);
 
-      // ¥İ¡¼¥È1¤ò¹½À®¤¹¤ë
+      // ãƒãƒ¼ãƒˆ1ã‚’æ§‹æˆã™ã‚‹
       MyService_impl* pMyServiceImplB
 	= new MyService_impl(); // will be deleted automatically
       RTC::CorbaConsumer<MyService>* pMyServiceConsumerA
@@ -453,7 +453,7 @@ namespace CorbaPort
       port1->registerProvider("MyServiceBB", "Generic", *pMyServiceImplB);
       port1->registerConsumer("MyServiceAA", "Generic", *pMyServiceConsumerA);
 			
-      // ÀÜÂ³¥×¥í¥Õ¥¡¥¤¥ë¤ò¹½À®¤¹¤ë
+      // æ¥ç¶šãƒ—ãƒ­ãƒ•ã‚¡ã‚¤ãƒ«ã‚’æ§‹æˆã™ã‚‹
       RTC::ConnectorProfile connProfile;
       connProfile.connector_id = "";
       connProfile.name = CORBA::string_dup("name of connector profile");
@@ -461,27 +461,27 @@ namespace CorbaPort
       connProfile.ports[0] = port0->getPortRef();
       connProfile.ports[1] = port1->getPortRef();
 
-      // ÀÜÂ³¤¹¤ë
+      // æ¥ç¶šã™ã‚‹
       port0->getPortRef()->connect(connProfile);
 
       port0->activateInterfaces_public();
       port1->activateInterfaces_public();
 
-      // ¥İ¡¼¥È1¤Î¥³¥ó¥·¥å¡¼¥ŞÂ¦¤«¤é¥á¥½¥Ã¥É¤ò¸Æ¤Ó½Ğ¤¹¤È¡¢¥İ¡¼¥È0¤Î¥×¥í¥Ğ¥¤¥ÀÂ¦¤¬°Õ¿Ş¤É¤ª¤ê¸Æ¤Ó½Ğ¤µ¤ì¤ë¤«¡©
+      // ãƒãƒ¼ãƒˆ1ã®ã‚³ãƒ³ã‚·ãƒ¥ãƒ¼ãƒå´ã‹ã‚‰ãƒ¡ã‚½ãƒƒãƒ‰ã‚’å‘¼ã³å‡ºã™ã¨ã€ãƒãƒ¼ãƒˆ0ã®ãƒ—ãƒ­ãƒã‚¤ãƒ€å´ãŒæ„å›³ã©ãŠã‚Šå‘¼ã³å‡ºã•ã‚Œã‚‹ã‹ï¼Ÿ
       CPPUNIT_ASSERT(! pMyServiceImplA->is_hello_world_called());
       (*pMyServiceConsumerA)->hello_world();
       CPPUNIT_ASSERT(pMyServiceImplA->is_hello_world_called());
 			
-      // ÀÚÃÇ¤¹¤ë
+      // åˆ‡æ–­ã™ã‚‹
       port0->getPortRef()->disconnect(connProfile.connector_id);
 
-      //Á´¤Ædeactivate obuject¤¹¤ë
+      //å…¨ã¦deactivate obujectã™ã‚‹
       port0->deactivateInterfaces_public();
       port1->deactivateInterfaces_public();
 
       port0->getPortRef()->connect(connProfile);
 
-      //deactivate object ¤¬¼Â¹Ô¤µ¤ì¤Æ¤¿¤¿¤á¡¢¥¨¥é¡¼¤È¤Ê¤ë¡£
+      //deactivate object ãŒå®Ÿè¡Œã•ã‚Œã¦ãŸãŸã‚ã€ã‚¨ãƒ©ãƒ¼ã¨ãªã‚‹ã€‚
       try
       {
          (*pMyServiceConsumerA)->hello_world();
@@ -491,7 +491,7 @@ namespace CorbaPort
       {
       }
 			
-      // ÀÚÃÇ¤¹¤ë
+      // åˆ‡æ–­ã™ã‚‹
       port0->getPortRef()->disconnect(connProfile.connector_id);
 
       port0->activateInterfaces_public();
@@ -499,10 +499,10 @@ namespace CorbaPort
 
       port0->getPortRef()->connect(connProfile);
 
-      //activate object ¤¬¼Â¹Ô¤µ¤ì¤Æ¤¿¤¿¤á¡¢Àµ¾ï¤ËÆ°ºî¤¹¤ë ¡£
+      //activate object ãŒå®Ÿè¡Œã•ã‚Œã¦ãŸãŸã‚ã€æ­£å¸¸ã«å‹•ä½œã™ã‚‹ ã€‚
       (*pMyServiceConsumerA)->hello_world();
 
-      // ÀÚÃÇ¤¹¤ë
+      // åˆ‡æ–­ã™ã‚‹
       port0->getPortRef()->disconnect(connProfile.connector_id);
 
 //      delete port1;

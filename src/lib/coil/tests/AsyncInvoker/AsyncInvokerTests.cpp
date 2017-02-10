@@ -1,4 +1,4 @@
-// -*- C++ -*-
+﻿// -*- C++ -*-
 /*!
  * @file   AsyncInvokerTests.cpp
  * @brief  AsyncInvoker test class

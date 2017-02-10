@@ -1,4 +1,4 @@
-// -*- C++ -*-
+ï»¿// -*- C++ -*-
 /*!
  * @file ProxyFactory.h
  * @brief doil implementation base class for debag
@@ -24,20 +24,20 @@
 
 namespace doil
 {
-  // Servant À¸À®¡¦ºï½ü´Ø¿ô¤Îtypedef
+  // Servant ç”Ÿæˆãƒ»å‰Šé™¤é–¢æ•°ã®typedef
 //  typedef ImplBase* (*ProxyNewFunc)(::CORBA::Object_ptr obj);
 //  typedef void (*ProxyDeleteFunc)(ImplBase*);
   typedef ProxyBase* (*ProxyNewFunc)(::CORBA::Object_ptr obj);
   typedef void (*ProxyDeleteFunc)(ProxyBase*);
 
-  // Servant À¸À®¤Î¤¿¤á¤Î¥Æ¥ó¥×¥ì¡¼¥È´Ø¿ô
+  // Servant ç”Ÿæˆã®ãŸã‚ã®ãƒ†ãƒ³ãƒ—ãƒ¬ãƒ¼ãƒˆé–¢æ•°
   template <class Proxy>
   ProxyBase* New(::CORBA::Object_ptr obj)
   {
     return new Proxy(obj);
   }
 
-  // Servant ºï½ü¤Î¤¿¤á¤Î¥Æ¥ó¥×¥ì¡¼¥È´Ø¿ô
+  // Servant å‰Šé™¤ã®ãŸã‚ã®ãƒ†ãƒ³ãƒ—ãƒ¬ãƒ¼ãƒˆé–¢æ•°
   template <class Proxy>
 //  void Delete(ImplBase* impl)
   void Delete(ProxyBase* impl)

@@ -1,4 +1,4 @@
-// -*- C++ -*-
+﻿// -*- C++ -*-
 /*!
  * @file CorbaServantBase.h
  * @brief RTM CORBA servant base class

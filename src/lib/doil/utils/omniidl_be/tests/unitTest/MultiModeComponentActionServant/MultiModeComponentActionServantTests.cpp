@@ -1,4 +1,4 @@
-// -*- C++ -*-
+﻿// -*- C++ -*-
 /*!
  * @file   MultiModeComponentActionServantTests.cpp
  * @brief  MultiModeComponentActionServant test class

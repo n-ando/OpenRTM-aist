@@ -1,4 +1,4 @@
-// -*- C++ -*-
+﻿// -*- C++ -*-
 /*!
  * @file RTObjectServant.h
  * @brief RTObject corba servant class

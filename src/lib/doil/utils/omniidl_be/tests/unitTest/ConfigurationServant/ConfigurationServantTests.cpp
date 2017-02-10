@@ -1,4 +1,4 @@
-// -*- C++ -*-
+ï»¿// -*- C++ -*-
 /*!
  * @file   ConfigurationServantTests.cpp
  * @brief  ConfigurationServant test class
@@ -111,9 +111,9 @@ namespace ConfigurationServant
 
     /* test case */
     /*!
-     * @brief ˆÈ‰º‚Ì—vŒ‚ğŠm”F‚·‚é
-     * @brief Impl‚Ìƒƒ\ƒh‚ªŒÄ‚Ño‚³‚ê‚Ä‚¢‚é‚±‚Æ
-     * @brief –ß‚è’l‚ª‘Ã“–‚Å‚ ‚é‚±‚Æ
+     * @brief ä»¥ä¸‹ã®è¦ä»¶ã‚’ç¢ºèªã™ã‚‹
+     * @brief Implã®ãƒ¡ã‚½ãƒ‰ãŒå‘¼ã³å‡ºã•ã‚Œã¦ã„ã‚‹ã“ã¨
+     * @brief æˆ»ã‚Šå€¤ãŒå¦¥å½“ã§ã‚ã‚‹ã“ã¨
      */
     void test_call_set_device_profile()
     {
@@ -128,9 +128,9 @@ namespace ConfigurationServant
     }
 
     /*!
-     * @brief ˆÈ‰º‚Ì—vŒ‚ğŠm”F‚·‚é
-     * @brief Impl‚Ìƒƒ\ƒh‚ªŒÄ‚Ño‚³‚ê‚Ä‚¢‚é‚±‚Æ
-     * @brief –ß‚è’l‚ª‘Ã“–‚Å‚ ‚é‚±‚Æ
+     * @brief ä»¥ä¸‹ã®è¦ä»¶ã‚’ç¢ºèªã™ã‚‹
+     * @brief Implã®ãƒ¡ã‚½ãƒ‰ãŒå‘¼ã³å‡ºã•ã‚Œã¦ã„ã‚‹ã“ã¨
+     * @brief æˆ»ã‚Šå€¤ãŒå¦¥å½“ã§ã‚ã‚‹ã“ã¨
      */
     void test_call_set_service_profile()
     {
@@ -145,9 +145,9 @@ namespace ConfigurationServant
     }
 
     /*!
-     * @brief ˆÈ‰º‚Ì—vŒ‚ğŠm”F‚·‚é
-     * @brief Impl‚Ìƒƒ\ƒh‚ªŒÄ‚Ño‚³‚ê‚Ä‚¢‚é‚±‚Æ
-     * @brief –ß‚è’l‚ª‘Ã“–‚Å‚ ‚é‚±‚Æ
+     * @brief ä»¥ä¸‹ã®è¦ä»¶ã‚’ç¢ºèªã™ã‚‹
+     * @brief Implã®ãƒ¡ã‚½ãƒ‰ãŒå‘¼ã³å‡ºã•ã‚Œã¦ã„ã‚‹ã“ã¨
+     * @brief æˆ»ã‚Šå€¤ãŒå¦¥å½“ã§ã‚ã‚‹ã“ã¨
      */
     void test_call_add_organization()
     {
@@ -162,10 +162,10 @@ namespace ConfigurationServant
     }
 
     /*!
-     * @brief ˆÈ‰º‚Ì—vŒ‚ğŠm”F‚·‚é
-     * @brief Impl‚Ìƒƒ\ƒh‚ªŒÄ‚Ño‚³‚ê‚Ä‚¢‚é‚±‚Æ
-     * @brief ˆø”‚ªImpl‚É“n‚³‚ê‚Ä‚¢‚é‚±‚Æ
-     * @brief –ß‚è’l‚ª‘Ã“–‚Å‚ ‚é‚±‚Æ
+     * @brief ä»¥ä¸‹ã®è¦ä»¶ã‚’ç¢ºèªã™ã‚‹
+     * @brief Implã®ãƒ¡ã‚½ãƒ‰ãŒå‘¼ã³å‡ºã•ã‚Œã¦ã„ã‚‹ã“ã¨
+     * @brief å¼•æ•°ãŒImplã«æ¸¡ã•ã‚Œã¦ã„ã‚‹ã“ã¨
+     * @brief æˆ»ã‚Šå€¤ãŒå¦¥å½“ã§ã‚ã‚‹ã“ã¨
      */
     void test_call_remove_service_profile()
     {
@@ -181,10 +181,10 @@ namespace ConfigurationServant
     }
 
     /*!
-     * @brief ˆÈ‰º‚Ì—vŒ‚ğŠm”F‚·‚é
-     * @brief Impl‚Ìƒƒ\ƒh‚ªŒÄ‚Ño‚³‚ê‚Ä‚¢‚é‚±‚Æ
-     * @brief ˆø”‚ªImpl‚É“n‚³‚ê‚Ä‚¢‚é‚±‚Æ
-     * @brief –ß‚è’l‚ª‘Ã“–‚Å‚ ‚é‚±‚Æ
+     * @brief ä»¥ä¸‹ã®è¦ä»¶ã‚’ç¢ºèªã™ã‚‹
+     * @brief Implã®ãƒ¡ã‚½ãƒ‰ãŒå‘¼ã³å‡ºã•ã‚Œã¦ã„ã‚‹ã“ã¨
+     * @brief å¼•æ•°ãŒImplã«æ¸¡ã•ã‚Œã¦ã„ã‚‹ã“ã¨
+     * @brief æˆ»ã‚Šå€¤ãŒå¦¥å½“ã§ã‚ã‚‹ã“ã¨
      */
     void test_call_remove_organization()
     {
@@ -200,9 +200,9 @@ namespace ConfigurationServant
     }
 
     /*!
-     * @brief ˆÈ‰º‚Ì—vŒ‚ğŠm”F‚·‚é
-     * @brief Impl‚Ìƒƒ\ƒh‚ªŒÄ‚Ño‚³‚ê‚Ä‚¢‚é‚±‚Æ
-     * @brief –ß‚è’l‚ªnull‚Å‚È‚¢‚±‚Æ
+     * @brief ä»¥ä¸‹ã®è¦ä»¶ã‚’ç¢ºèªã™ã‚‹
+     * @brief Implã®ãƒ¡ã‚½ãƒ‰ãŒå‘¼ã³å‡ºã•ã‚Œã¦ã„ã‚‹ã“ã¨
+     * @brief æˆ»ã‚Šå€¤ãŒnullã§ãªã„ã“ã¨
      */
     void test_call_get_configuration_parameters()
     {
@@ -216,9 +216,9 @@ namespace ConfigurationServant
     }
 
     /*!
-     * @brief ˆÈ‰º‚Ì—vŒ‚ğŠm”F‚·‚é
-     * @brief Impl‚Ìƒƒ\ƒh‚ªŒÄ‚Ño‚³‚ê‚Ä‚¢‚é‚±‚Æ
-     * @brief –ß‚è’l‚ªnull‚Å‚È‚¢‚±‚Æ
+     * @brief ä»¥ä¸‹ã®è¦ä»¶ã‚’ç¢ºèªã™ã‚‹
+     * @brief Implã®ãƒ¡ã‚½ãƒ‰ãŒå‘¼ã³å‡ºã•ã‚Œã¦ã„ã‚‹ã“ã¨
+     * @brief æˆ»ã‚Šå€¤ãŒnullã§ãªã„ã“ã¨
      */
     void test_call_get_configuration_parameter_values()
     {
@@ -232,9 +232,9 @@ namespace ConfigurationServant
     }
 
     /*!
-     * @brief ˆÈ‰º‚Ì—vŒ‚ğŠm”F‚·‚é
-     * @brief Impl‚Ìƒƒ\ƒh‚ªŒÄ‚Ño‚³‚ê‚Ä‚¢‚é‚±‚Æ
-     * @brief –ß‚è’l‚ªnull‚Å‚È‚¢‚±‚Æ
+     * @brief ä»¥ä¸‹ã®è¦ä»¶ã‚’ç¢ºèªã™ã‚‹
+     * @brief Implã®ãƒ¡ã‚½ãƒ‰ãŒå‘¼ã³å‡ºã•ã‚Œã¦ã„ã‚‹ã“ã¨
+     * @brief æˆ»ã‚Šå€¤ãŒnullã§ãªã„ã“ã¨
      */
     void test_call_get_configuration_parameter_value()
     {
@@ -250,10 +250,10 @@ namespace ConfigurationServant
     }
 
     /*!
-     * @brief ˆÈ‰º‚Ì—vŒ‚ğŠm”F‚·‚é
-     * @brief Impl‚Ìƒƒ\ƒh‚ªŒÄ‚Ño‚³‚ê‚Ä‚¢‚é‚±‚Æ
-     * @brief ˆø”‚ªImpl‚É“n‚³‚ê‚Ä‚¢‚é‚±‚Æ
-     * @brief –ß‚è’l‚ª‘Ã“–‚Å‚ ‚é‚±‚Æ
+     * @brief ä»¥ä¸‹ã®è¦ä»¶ã‚’ç¢ºèªã™ã‚‹
+     * @brief Implã®ãƒ¡ã‚½ãƒ‰ãŒå‘¼ã³å‡ºã•ã‚Œã¦ã„ã‚‹ã“ã¨
+     * @brief å¼•æ•°ãŒImplã«æ¸¡ã•ã‚Œã¦ã„ã‚‹ã“ã¨
+     * @brief æˆ»ã‚Šå€¤ãŒå¦¥å½“ã§ã‚ã‚‹ã“ã¨
      */
     void test_call_set_configuration_parameter()
     {
@@ -271,9 +271,9 @@ namespace ConfigurationServant
     }
 
     /*!
-     * @brief ˆÈ‰º‚Ì—vŒ‚ğŠm”F‚·‚é
-     * @brief Impl‚Ìƒƒ\ƒh‚ªŒÄ‚Ño‚³‚ê‚Ä‚¢‚é‚±‚Æ
-     * @brief –ß‚è’l‚ª‘Ã“–‚Å‚ ‚é‚±‚Æ
+     * @brief ä»¥ä¸‹ã®è¦ä»¶ã‚’ç¢ºèªã™ã‚‹
+     * @brief Implã®ãƒ¡ã‚½ãƒ‰ãŒå‘¼ã³å‡ºã•ã‚Œã¦ã„ã‚‹ã“ã¨
+     * @brief æˆ»ã‚Šå€¤ãŒå¦¥å½“ã§ã‚ã‚‹ã“ã¨
      */
     void test_call_get_configuration_sets()
     {
@@ -287,10 +287,10 @@ namespace ConfigurationServant
     }
 
     /*!
-     * @brief ˆÈ‰º‚Ì—vŒ‚ğŠm”F‚·‚é
-     * @brief Impl‚Ìƒƒ\ƒh‚ªŒÄ‚Ño‚³‚ê‚Ä‚¢‚é‚±‚Æ
-     * @brief ˆø”‚ªImpl‚É“n‚³‚ê‚Ä‚¢‚é‚±‚Æ
-     * @brief –ß‚è’l‚ª‘Ã“–‚Å‚ ‚é‚±‚Æ
+     * @brief ä»¥ä¸‹ã®è¦ä»¶ã‚’ç¢ºèªã™ã‚‹
+     * @brief Implã®ãƒ¡ã‚½ãƒ‰ãŒå‘¼ã³å‡ºã•ã‚Œã¦ã„ã‚‹ã“ã¨
+     * @brief å¼•æ•°ãŒImplã«æ¸¡ã•ã‚Œã¦ã„ã‚‹ã“ã¨
+     * @brief æˆ»ã‚Šå€¤ãŒå¦¥å½“ã§ã‚ã‚‹ã“ã¨
      */
     void test_call_get_configuration_set()
     {
@@ -306,10 +306,10 @@ namespace ConfigurationServant
     }
 
     /*!
-     * @brief ˆÈ‰º‚Ì—vŒ‚ğŠm”F‚·‚é
-     * @brief Impl‚Ìƒƒ\ƒh‚ªŒÄ‚Ño‚³‚ê‚Ä‚¢‚é‚±‚Æ
-     * @brief ˆø”‚ªImpl‚É“n‚³‚ê‚Ä‚¢‚é‚±‚Æ
-     * @brief –ß‚è’l‚ª‘Ã“–‚Å‚ ‚é‚±‚Æ
+     * @brief ä»¥ä¸‹ã®è¦ä»¶ã‚’ç¢ºèªã™ã‚‹
+     * @brief Implã®ãƒ¡ã‚½ãƒ‰ãŒå‘¼ã³å‡ºã•ã‚Œã¦ã„ã‚‹ã“ã¨
+     * @brief å¼•æ•°ãŒImplã«æ¸¡ã•ã‚Œã¦ã„ã‚‹ã“ã¨
+     * @brief æˆ»ã‚Šå€¤ãŒå¦¥å½“ã§ã‚ã‚‹ã“ã¨
      */
     void test_call_set_configuration_set_values()
     {
@@ -326,9 +326,9 @@ namespace ConfigurationServant
     }
 
     /*!
-     * @brief ˆÈ‰º‚Ì—vŒ‚ğŠm”F‚·‚é
-     * @brief Impl‚Ìƒƒ\ƒh‚ªŒÄ‚Ño‚³‚ê‚Ä‚¢‚é‚±‚Æ
-     * @brief –ß‚è’l‚ª‘Ã“–‚Å‚ ‚é‚±‚Æ
+     * @brief ä»¥ä¸‹ã®è¦ä»¶ã‚’ç¢ºèªã™ã‚‹
+     * @brief Implã®ãƒ¡ã‚½ãƒ‰ãŒå‘¼ã³å‡ºã•ã‚Œã¦ã„ã‚‹ã“ã¨
+     * @brief æˆ»ã‚Šå€¤ãŒå¦¥å½“ã§ã‚ã‚‹ã“ã¨
      */
     void test_call_get_active_configuration_set()
     {
@@ -342,10 +342,10 @@ namespace ConfigurationServant
     }
 
     /*!
-     * @brief ˆÈ‰º‚Ì—vŒ‚ğŠm”F‚·‚é
-     * @brief Impl‚Ìƒƒ\ƒh‚ªŒÄ‚Ño‚³‚ê‚Ä‚¢‚é‚±‚Æ
-     * @brief ˆø”‚ªImpl‚É“n‚³‚ê‚Ä‚¢‚é‚±‚Æ
-     * @brief –ß‚è’l‚ª‘Ã“–‚Å‚ ‚é‚±‚Æ
+     * @brief ä»¥ä¸‹ã®è¦ä»¶ã‚’ç¢ºèªã™ã‚‹
+     * @brief Implã®ãƒ¡ã‚½ãƒ‰ãŒå‘¼ã³å‡ºã•ã‚Œã¦ã„ã‚‹ã“ã¨
+     * @brief å¼•æ•°ãŒImplã«æ¸¡ã•ã‚Œã¦ã„ã‚‹ã“ã¨
+     * @brief æˆ»ã‚Šå€¤ãŒå¦¥å½“ã§ã‚ã‚‹ã“ã¨
      */
     void test_call_add_configuration_set()
     {
@@ -360,10 +360,10 @@ namespace ConfigurationServant
     }
 
     /*!
-     * @brief ˆÈ‰º‚Ì—vŒ‚ğŠm”F‚·‚é
-     * @brief Impl‚Ìƒƒ\ƒh‚ªŒÄ‚Ño‚³‚ê‚Ä‚¢‚é‚±‚Æ
-     * @brief ˆø”‚ªImpl‚É“n‚³‚ê‚Ä‚¢‚é‚±‚Æ
-     * @brief –ß‚è’l‚ª‘Ã“–‚Å‚ ‚é‚±‚Æ
+     * @brief ä»¥ä¸‹ã®è¦ä»¶ã‚’ç¢ºèªã™ã‚‹
+     * @brief Implã®ãƒ¡ã‚½ãƒ‰ãŒå‘¼ã³å‡ºã•ã‚Œã¦ã„ã‚‹ã“ã¨
+     * @brief å¼•æ•°ãŒImplã«æ¸¡ã•ã‚Œã¦ã„ã‚‹ã“ã¨
+     * @brief æˆ»ã‚Šå€¤ãŒå¦¥å½“ã§ã‚ã‚‹ã“ã¨
      */
     void test_call_remove_configuration_set()
     {
@@ -379,10 +379,10 @@ namespace ConfigurationServant
     }
 
     /*!
-     * @brief ˆÈ‰º‚Ì—vŒ‚ğŠm”F‚·‚é
-     * @brief Impl‚Ìƒƒ\ƒh‚ªŒÄ‚Ño‚³‚ê‚Ä‚¢‚é‚±‚Æ
-     * @brief ˆø”‚ªImpl‚É“n‚³‚ê‚Ä‚¢‚é‚±‚Æ
-     * @brief –ß‚è’l‚ª‘Ã“–‚Å‚ ‚é‚±‚Æ
+     * @brief ä»¥ä¸‹ã®è¦ä»¶ã‚’ç¢ºèªã™ã‚‹
+     * @brief Implã®ãƒ¡ã‚½ãƒ‰ãŒå‘¼ã³å‡ºã•ã‚Œã¦ã„ã‚‹ã“ã¨
+     * @brief å¼•æ•°ãŒImplã«æ¸¡ã•ã‚Œã¦ã„ã‚‹ã“ã¨
+     * @brief æˆ»ã‚Šå€¤ãŒå¦¥å½“ã§ã‚ã‚‹ã“ã¨
      */
     void test_call_activate_configuration_set()
     {

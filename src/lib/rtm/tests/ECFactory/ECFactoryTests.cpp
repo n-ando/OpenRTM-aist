@@ -1,4 +1,4 @@
-// -*- C++ -*-
+ï»¿// -*- C++ -*-
 /*!
  * @file   ECFactoryTests.cpp
  * @brief  ECFactory test class
@@ -83,9 +83,9 @@ namespace ECFactory
     }
 		
     /*!
-     * @brief name()¥á¥½¥Ã¥É¤Î¥Æ¥¹¥È
+     * @brief name()ãƒ¡ã‚½ãƒƒãƒ‰ã®ãƒ†ã‚¹ãƒˆ
      * 
-     * - ¥³¥ó¥¹¥È¥é¥¯¥¿¤Ç»ØÄê¤·¤¿Ì¾¾Î¤ò¡¢name()¥á¥½¥Ã¥É¤ÇÀµ¤·¤¯¼èÆÀ¤Ç¤­¤ë¤«¡©
+     * - ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ã§æŒ‡å®šã—ãŸåç§°ã‚’ã€name()ãƒ¡ã‚½ãƒƒãƒ‰ã§æ­£ã—ãå–å¾—ã§ãã‚‹ã‹ï¼Ÿ
      */
     void test_name()
     {
@@ -97,15 +97,15 @@ namespace ECFactory
 				      RTC::ECCreate<RTC::ExecutionContextBase>,
 				      RTC::ECDelete<RTC::ExecutionContextBase>));
 			
-      // ¥³¥ó¥¹¥È¥é¥¯¥¿¤Ç»ØÄê¤·¤¿Ì¾¾Î¤ò¡¢name()¥á¥½¥Ã¥É¤ÇÀµ¤·¤¯¼èÆÀ¤Ç¤­¤ë¤«¡©
+      // ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ã§æŒ‡å®šã—ãŸåç§°ã‚’ã€name()ãƒ¡ã‚½ãƒƒãƒ‰ã§æ­£ã—ãå–å¾—ã§ãã‚‹ã‹ï¼Ÿ
       CPPUNIT_ASSERT_EQUAL(name, std::string(factory->name()));
     }
 		
     /*!
-     * @brief create()¥á¥½¥Ã¥É¤Èdestroy()¥á¥½¥Ã¥É¤Î¥Æ¥¹¥È
+     * @brief create()ãƒ¡ã‚½ãƒƒãƒ‰ã¨destroy()ãƒ¡ã‚½ãƒƒãƒ‰ã®ãƒ†ã‚¹ãƒˆ
      * 
-     * - create()¸Æ½Ğ¤·¤Ë¤è¤ê¡¢½êÄê¤ÎExcecutionContext¤Î¥¤¥ó¥¹¥¿¥ó¥¹¤¬À¸À®¤µ¤ì¤ë¤«¡©
-     * - destroy()¸Æ½Ğ¤·¤Ë¤è¤ê¡¢½êÄê¤ÎExecutionContext¥¤¥ó¥¹¥¿¥ó¥¹¤¬ºï½ü¤µ¤ì¤ë¤«¡©
+     * - create()å‘¼å‡ºã—ã«ã‚ˆã‚Šã€æ‰€å®šã®ExcecutionContextã®ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ãŒç”Ÿæˆã•ã‚Œã‚‹ã‹ï¼Ÿ
+     * - destroy()å‘¼å‡ºã—ã«ã‚ˆã‚Šã€æ‰€å®šã®ExecutionContextã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ãŒå‰Šé™¤ã•ã‚Œã‚‹ã‹ï¼Ÿ
      */
     void test_create_and_destroy()
     {
@@ -115,11 +115,11 @@ namespace ECFactory
 				      RTC::ECCreate<RTC::ExecutionContextBase>,
 				      RTC::ECDelete<RTC::ExecutionContextBase>));
 			
-      // create()¸Æ½Ğ¤·¤Ë¤è¤ê¡¢½êÄê¤ÎExcecutionContext¤Î¥¤¥ó¥¹¥¿¥ó¥¹¤¬À¸À®¤µ¤ì¤ë¤«¡©
+      // create()å‘¼å‡ºã—ã«ã‚ˆã‚Šã€æ‰€å®šã®ExcecutionContextã®ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ãŒç”Ÿæˆã•ã‚Œã‚‹ã‹ï¼Ÿ
       RTC::ExecutionContextBase* ec = factory->create();
       CPPUNIT_ASSERT(dynamic_cast<RTC::ExecutionContextBase*>(ec) != 0);
 			
-      // destroy()¸Æ½Ğ¤·¤Ë¤è¤ê¡¢½êÄê¤ÎExecutionContext¥¤¥ó¥¹¥¿¥ó¥¹¤¬ºï½ü¤µ¤ì¤ë¤«¡©
+      // destroy()å‘¼å‡ºã—ã«ã‚ˆã‚Šã€æ‰€å®šã®ExecutionContextã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ãŒå‰Šé™¤ã•ã‚Œã‚‹ã‹ï¼Ÿ
       m_pPOA->deactivate_object(*m_pPOA->servant_to_id(ec));
       factory->destroy(ec);
       CPPUNIT_ASSERT(dynamic_cast<RTC::ExecutionContextBase*>(ec) == 0);

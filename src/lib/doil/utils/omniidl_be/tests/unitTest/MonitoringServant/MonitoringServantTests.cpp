@@ -1,4 +1,4 @@
-// -*- C++ -*-
+﻿// -*- C++ -*-
 /*!
  * @file   MonitoringServantTests.cpp
  * @brief  MonitoringServant test class

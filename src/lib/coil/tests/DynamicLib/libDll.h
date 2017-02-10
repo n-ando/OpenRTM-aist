@@ -1,4 +1,4 @@
-#ifndef COIL_LIBDLLTEST_H
+﻿#ifndef COIL_LIBDLLTEST_H
 #define COIL_LIBDLLTEST_H
 
 #include <coil/DynamicLib.h>

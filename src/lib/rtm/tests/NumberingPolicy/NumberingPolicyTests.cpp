@@ -1,4 +1,4 @@
-// -*- C++ -*-
+ï»¿// -*- C++ -*-
 /*!
  * @file   NumberingPolicyTests.cpp
  * @brief  NumberingPolicy test class
@@ -68,11 +68,11 @@ namespace Tests
     }
 		
     /*!
-     * @brief DefaultNumberingPolicy::onCreate()¤ÈDefaultNumberingPolicy::onDelete()¤Î¥Æ¥¹¥È
+     * @brief DefaultNumberingPolicy::onCreate()ã¨DefaultNumberingPolicy::onDelete()ã®ãƒ†ã‚¹ãƒˆ
      * 
-     * - onCreate()¤Ï°Õ¿Ş¤É¤ª¤ê¤ËÌ¾¾Î¤òÀ¸À®¤·¤ÆÊÖ¤¹¤«¡©
-     * - onDelete()¤ÇÀµ¤·¤¯ÅĞÏ¿²ò½ü¤µ¤ì¤ë¤«¡©
-     * - ÅĞÏ¿²ò½ü¸å¤Ë¡¢onCreate()¤ÇÅĞÏ¿¤·¤¿¾ì¹ç¡¢²ò½ü¤µ¤ì¤¿¥ª¥Ö¥¸¥§¥¯¥È¤ÎÈÖ¹æ¤¬ºÆÍøÍÑ¤µ¤ì¤ë¤«¡©
+     * - onCreate()ã¯æ„å›³ã©ãŠã‚Šã«åç§°ã‚’ç”Ÿæˆã—ã¦è¿”ã™ã‹ï¼Ÿ
+     * - onDelete()ã§æ­£ã—ãç™»éŒ²è§£é™¤ã•ã‚Œã‚‹ã‹ï¼Ÿ
+     * - ç™»éŒ²è§£é™¤å¾Œã«ã€onCreate()ã§ç™»éŒ²ã—ãŸå ´åˆã€è§£é™¤ã•ã‚ŒãŸã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®ç•ªå·ãŒå†åˆ©ç”¨ã•ã‚Œã‚‹ã‹ï¼Ÿ
      */
     void test_onCreate_and_onDelete()
     {
@@ -83,17 +83,17 @@ namespace Tests
 			
       std::auto_ptr<NumberingPolicy> policy(new DefaultNumberingPolicy());
 			
-      // onCreate()¤Ï°Õ¿Ş¤É¤ª¤ê¤ËÌ¾¾Î¤òÀ¸À®¤·¤ÆÊÖ¤¹¤«¡©
+      // onCreate()ã¯æ„å›³ã©ãŠã‚Šã«åç§°ã‚’ç”Ÿæˆã—ã¦è¿”ã™ã‹ï¼Ÿ
       CPPUNIT_ASSERT_EQUAL(std::string("0"), policy->onCreate(&object1));
       CPPUNIT_ASSERT_EQUAL(std::string("1"), policy->onCreate(&object2));
       CPPUNIT_ASSERT_EQUAL(std::string("2"), policy->onCreate(&object3));
 			
-      // onDelete¤Ç¡¢¤¤¤Ã¤¿¤óÅĞÏ¿²ò½ü¤¹¤ë
+      // onDeleteã§ã€ã„ã£ãŸã‚“ç™»éŒ²è§£é™¤ã™ã‚‹
       policy->onDelete(&object1);
       policy->onDelete(&object2);
 			
-      // ÅĞÏ¿½ç¤òÆş¤ì´¹¤¨¤ÆºÆÅÙonCreate¤ò¸Æ¤Ó½Ğ¤·¤¿¾ì¹ç¡¢°Õ¿Ş¤É¤ª¤ê¤ÎÌ¾¾Î¤¬¥¢¥µ¥¤¥ó¤µ¤ì¤ë¤«¡©
-      // ¡ÊÅĞÏ¿²ò½ü¸å¤Ë¡¢onCreate()¤ÇÅĞÏ¿¤·¤¿¾ì¹ç¡¢²ò½ü¤µ¤ì¤¿¥ª¥Ö¥¸¥§¥¯¥È¤ÎÈÖ¹æ¤¬ºÆÍøÍÑ¤µ¤ì¤ë¤«¡©¡Ë
+      // ç™»éŒ²é †ã‚’å…¥ã‚Œæ›ãˆã¦å†åº¦onCreateã‚’å‘¼ã³å‡ºã—ãŸå ´åˆã€æ„å›³ã©ãŠã‚Šã®åç§°ãŒã‚¢ã‚µã‚¤ãƒ³ã•ã‚Œã‚‹ã‹ï¼Ÿ
+      // ï¼ˆç™»éŒ²è§£é™¤å¾Œã«ã€onCreate()ã§ç™»éŒ²ã—ãŸå ´åˆã€è§£é™¤ã•ã‚ŒãŸã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®ç•ªå·ãŒå†åˆ©ç”¨ã•ã‚Œã‚‹ã‹ï¼Ÿï¼‰
       CPPUNIT_ASSERT_EQUAL(std::string("0"), policy->onCreate(&object2));
       CPPUNIT_ASSERT_EQUAL(std::string("1"), policy->onCreate(&object1));
     }

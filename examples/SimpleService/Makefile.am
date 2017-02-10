@@ -166,7 +166,6 @@ vc9proj:
 		--yaml ../rtc.vcproj.yaml                            \
 		--source $(PROVIDER_COMP_SRC)                        \
 		--header $(PROVIDER_H)
-	qkc -O- -sm $(win32_builddir)/MyServiceProvider_vc9.vcproj
 	$(top_builddir)/build/vcprojtool.py vcproj                      \
 		--type DLL                                              \
 		--vcversion "9.00"                                      \
@@ -176,7 +175,6 @@ vc9proj:
 		--yaml ../rtcdll.vcproj.yaml                            \
 		--source $(PROVIDER_SRC)                                \
 		--header $(PROVIDER_H)
-	qkc -O- -sm $(win32_builddir)/MyServiceProviderDll_vc9.vcproj
 	$(top_builddir)/build/vcprojtool.py vcproj                   \
 		--type EXE                                           \
 		--vcversion "9.00"                                   \
@@ -186,7 +184,6 @@ vc9proj:
 		--yaml ../rtc.vcproj.yaml                            \
 		--source $(CONSUMER_COMP_SRC)                        \
 		--header $(CONSUMER_H)
-	qkc -O- -sm $(win32_builddir)/MyServiceConsumer_vc9.vcproj
 	$(top_builddir)/build/vcprojtool.py vcproj                      \
 		--type DLL                                              \
 		--vcversion "9.00"                                      \
@@ -196,7 +193,6 @@ vc9proj:
 		--yaml ../rtcdll.vcproj.yaml                            \
 		--source $(CONSUMER_COMP_SRC)                           \
 		--header $(CONSUMER_H)
-	qkc -O- -sm $(win32_builddir)/MyServiceConsumerDll_vc9.vcproj
 
 vcxproj:
 	for ver in $(VC_VERSION); do \
@@ -209,7 +205,6 @@ vcxproj:
 			--yaml ../rtc.vcproj.yaml                            \
 			--source $(PROVIDER_COMP_SRC)                        \
 			--header $(PROVIDER_H) ; \
-		qkc -O- -sm $(win32_builddir)/MyServiceProvider_vc$${ver}.vcxproj ; \
 		$(top_builddir)/build/vcxprojtool.py vcxproj                      \
 			--type DLL                                              \
 			--vcversion "$${ver}.00"                                      \
@@ -219,7 +214,6 @@ vcxproj:
 			--yaml ../rtcdll.vcproj.yaml                            \
 			--source $(PROVIDER_SRC)                                \
 			--header $(PROVIDER_H) ; \
-		qkc -O- -sm $(win32_builddir)/MyServiceProviderDll_vc$${ver}.vcxproj ; \
 		$(top_builddir)/build/vcxprojtool.py vcxproj                   \
 			--type EXE                                           \
 			--vcversion "$${ver}.00"                                   \
@@ -229,7 +223,6 @@ vcxproj:
 			--yaml ../rtc.vcproj.yaml                            \
 			--source $(CONSUMER_COMP_SRC)                        \
 			--header $(CONSUMER_H) ; \
-		qkc -O- -sm $(win32_builddir)/MyServiceConsumer_vc$${ver}.vcxproj ; \
 		$(top_builddir)/build/vcxprojtool.py vcxproj                      \
 			--type DLL                                              \
 			--vcversion "$${ver}.00"                                      \
@@ -239,7 +232,6 @@ vcxproj:
 			--yaml ../rtcdll.vcproj.yaml                            \
 			--source $(CONSUMER_COMP_SRC)                           \
 			--header $(CONSUMER_H) ; \
-		qkc -O- -sm $(win32_builddir)/MyServiceConsumerDll_vc$${ver}.vcxproj ; \
 	done
 
 dist-hook: lst vcproj

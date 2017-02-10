@@ -64,11 +64,9 @@ COIL_ALL = $(COIL_SRC) $(COIL_H)
 $(COIL_COMMON_SRC):
 	cp -p $(top_srcdir)/common/*.cpp .
 	cp -p $(top_srcdir)/common/*.h .
-	qkc -O- -ms *.cpp *.h
 
 $(COIL_COMMON_H):
 	cp -p $(top_srcdir)/common/*.h .
-	qkc -O- -ms *.cpp *.h
 
 
 coilheaderdir = $(prefix)/include/coil
@@ -108,4 +106,3 @@ libcoil_vc9.vcproj: libcoil.vcproj.yaml $(COIL_ALL)
 		--yaml libcoil.vcproj.yaml \
 		--source $(COIL_SRC) \
 		--header $(COIL_H)
-	qkc -O- -sm $(win32_builddir)/libcoil_vc9.vcproj

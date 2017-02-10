@@ -1,4 +1,4 @@
-// -*- C++ -*-
+ï»¿// -*- C++ -*-
 /*!
  * @file   InPortTests.cpp
  * @brief  InPort test class
@@ -847,7 +847,7 @@ namespace RTC
 
   /*!
    * @if jp
-   * @brief ¥í¥°¥ì¥Ù¥ë¤òÊ¸»úÎó¤ÇÀßÄê¤¹¤ë
+   * @brief ãƒ­ã‚°ãƒ¬ãƒ™ãƒ«ã‚’æ–‡å­—åˆ—ã§è¨­å®šã™ã‚‹
    * @else
    * @brief Set log level by string
    * @endif
@@ -859,7 +859,7 @@ namespace RTC
 
   /*!
    * @if jp
-   * @brief ¥Ø¥Ã¥À¤ËÉÕ²Ã¤¹¤ëÆü»ş¥Õ¥©¡¼¥Ş¥Ã¥È¤ò»ØÄê¤¹¤ë¡£
+   * @brief ãƒ˜ãƒƒãƒ€ã«ä»˜åŠ ã™ã‚‹æ—¥æ™‚ãƒ•ã‚©ãƒ¼ãƒãƒƒãƒˆã‚’æŒ‡å®šã™ã‚‹ã€‚
    * @else
    * @brief Set date/time format for adding the header
    * @endif
@@ -870,7 +870,7 @@ namespace RTC
 
   /*!
    * @if jp
-   * @brief ¥Ø¥Ã¥À¤ÎÆü»ş¤Î¸å¤ËÉÕ²Ã¤¹¤ëÊ¸»úÎó¤òÀßÄê¤¹¤ë¡£
+   * @brief ãƒ˜ãƒƒãƒ€ã®æ—¥æ™‚ã®å¾Œã«ä»˜åŠ ã™ã‚‹æ–‡å­—åˆ—ã‚’è¨­å®šã™ã‚‹ã€‚
    * @else
    * @brief Set suffix of date/time string of header.
    * @endif
@@ -881,7 +881,7 @@ namespace RTC
 
   /*!
    * @if jp
-   * @brief ¥á¥Ã¥»¡¼¥¸¤Î¥×¥ê¥Õ¥£¥Ã¥¯¥¹ÄÉ²Ã´Ø¿ô
+   * @brief ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ã®ãƒ—ãƒªãƒ•ã‚£ãƒƒã‚¯ã‚¹è¿½åŠ é–¢æ•°
    * @else
    * @brief Message prefix appender function
    * @endif
@@ -892,7 +892,7 @@ namespace RTC
 
   /*!
    * @if jp
-   * @brief ¥Õ¥©¡¼¥Ş¥Ã¥È¤µ¤ì¤¿¸½ºßÆü»şÊ¸»úÎó¤ò¼èÆÀ¤¹¤ë¡£
+   * @brief ãƒ•ã‚©ãƒ¼ãƒãƒƒãƒˆã•ã‚ŒãŸç¾åœ¨æ—¥æ™‚æ–‡å­—åˆ—ã‚’å–å¾—ã™ã‚‹ã€‚
    * @else
    * @brief Get the current formatted date/time string
    * @endif
@@ -907,7 +907,7 @@ namespace RTC
 
   /*!
    * @if jp
-   * @brief ¥í¥°¥ì¥Ù¥ëÀßÄê
+   * @brief ãƒ­ã‚°ãƒ¬ãƒ™ãƒ«è¨­å®š
    * @else
    * @brief Set the log level
    * @endif
@@ -927,7 +927,7 @@ namespace RTC
   */
   /*!
    * @if jp
-   * @brief ¥³¥ó¥¹¥È¥é¥¯¥¿
+   * @brief ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
    * @else
    * @brief Destructor
    * @endif
@@ -938,7 +938,7 @@ namespace RTC
   
   /*!
    * @if jp
-   * @brief ¥Ç¥¹¥È¥é¥¯¥¿
+   * @brief ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
    * @else
    * @brief Destructor
    * @endif
@@ -949,7 +949,7 @@ namespace RTC
   
   /*!
    * @if jp
-   * @brief InterfaceProfile¾ğÊó¤ò¸ø³«¤¹¤ë
+   * @brief InterfaceProfileæƒ…å ±ã‚’å…¬é–‹ã™ã‚‹
    * @else
    * @brief Publish InterfaceProfile information
    * @endif
@@ -960,7 +960,7 @@ namespace RTC
   
   /*!
    * @if jp
-   * @brief Interface¾ğÊó¤ò¸ø³«¤¹¤ë
+   * @brief Interfaceæƒ…å ±ã‚’å…¬é–‹ã™ã‚‹
    * @else
    * @brief Publish Interface information
    * @endif
@@ -975,7 +975,7 @@ namespace RTC
   
   /*!
    * @if jp
-   * @brief ¥¤¥ó¥¿¡¼¥Õ¥§¡¼¥¹¥¿¥¤¥×¤òÀßÄê¤¹¤ë
+   * @brief ã‚¤ãƒ³ã‚¿ãƒ¼ãƒ•ã‚§ãƒ¼ã‚¹ã‚¿ã‚¤ãƒ—ã‚’è¨­å®šã™ã‚‹
    * @else
    * @brief Set the interface type
    * @endif
@@ -986,7 +986,7 @@ namespace RTC
   
   /*!
    * @if jp
-   * @brief ¥Ç¡¼¥¿¥Õ¥í¡¼¥¿¥¤¥×¤òÀßÄê¤¹¤ë
+   * @brief ãƒ‡ãƒ¼ã‚¿ãƒ•ãƒ­ãƒ¼ã‚¿ã‚¤ãƒ—ã‚’è¨­å®šã™ã‚‹
    * @else
    * @brief Set the dataflow type
    * @endif
@@ -997,7 +997,7 @@ namespace RTC
   
   /*!
    * @if jp
-   * @brief ¥µ¥Ö¥¹¥¯¥ê¥×¥·¥ç¥ó¥¿¥¤¥×¤òÀßÄê¤¹¤ë
+   * @brief ã‚µãƒ–ã‚¹ã‚¯ãƒªãƒ—ã‚·ãƒ§ãƒ³ã‚¿ã‚¤ãƒ—ã‚’è¨­å®šã™ã‚‹
    * @else
    * @brief Set the subscription type
    * @endif
@@ -1205,12 +1205,12 @@ namespace InPort
      */
     virtual void setUp()
     {
-        //´û¤Ë "corba_cdr" ¤ÇÅĞÏ¿¤µ¤ì¤Æ¤¤¤ë¾ì¹ç¤Ïºï½ü¤¹¤ë¡£
+        //æ—¢ã« "corba_cdr" ã§ç™»éŒ²ã•ã‚Œã¦ã„ã‚‹å ´åˆã¯å‰Šé™¤ã™ã‚‹ã€‚
         if( RTC::InPortProviderFactory::instance().hasFactory("corba_cdr") )
         {
             RTC::InPortProviderFactory::instance().removeFactory("corba_cdr");
         }
-        //"corba_cdr" ¤Ë InPortCorbaCdrProviderMock ¤òÅĞÏ¿¤¹¤ë¡£
+        //"corba_cdr" ã« InPortCorbaCdrProviderMock ã‚’ç™»éŒ²ã™ã‚‹ã€‚
         RTC::InPortProviderFactory::instance().
         addFactory("corba_cdr",
                    ::coil::Creator< ::RTC::InPortProvider, 
@@ -1218,12 +1218,12 @@ namespace InPort
                    ::coil::Destructor< ::RTC::InPortProvider, 
                                        InPortCorbaCdrProviderMock>);
 
-        //´û¤Ë "corba_cdr" ¤ÇÅĞÏ¿¤µ¤ì¤Æ¤¤¤ë¾ì¹ç¤Ïºï½ü¤¹¤ë¡£
+        //æ—¢ã« "corba_cdr" ã§ç™»éŒ²ã•ã‚Œã¦ã„ã‚‹å ´åˆã¯å‰Šé™¤ã™ã‚‹ã€‚
         if( RTC::OutPortConsumerFactory::instance().hasFactory("corba_cdr") )
         {
             RTC::OutPortConsumerFactory::instance().removeFactory("corba_cdr");
         }
-        //"corba_cdr" ¤Ë InPortCorbaCdrProviderMock ¤òÅĞÏ¿¤¹¤ë¡£
+        //"corba_cdr" ã« InPortCorbaCdrProviderMock ã‚’ç™»éŒ²ã™ã‚‹ã€‚
         RTC::OutPortConsumerFactory::instance().
         addFactory("corba_cdr",
                    ::coil::Creator< ::RTC::OutPortConsumer, 
@@ -1231,12 +1231,12 @@ namespace InPort
                    ::coil::Destructor< ::RTC::OutPortConsumer, 
                                        OutPortCorbaCdrConsumerMock>);
 
-        //´û¤Ë "ring_buffer" ¤ÇÅĞÏ¿¤µ¤ì¤Æ¤¤¤ë¾ì¹ç¤Ïºï½ü¤¹¤ë¡£
+        //æ—¢ã« "ring_buffer" ã§ç™»éŒ²ã•ã‚Œã¦ã„ã‚‹å ´åˆã¯å‰Šé™¤ã™ã‚‹ã€‚
         if( RTC::CdrBufferFactory::instance().hasFactory("ring_buffer") )
         {
             RTC::CdrBufferFactory::instance().removeFactory("ring_buffer");
         }
-        //"ring_buffer" ¤Ë CdrRingBufferMock ¤òÅĞÏ¿¤¹¤ë¡£
+        //"ring_buffer" ã« CdrRingBufferMock ã‚’ç™»éŒ²ã™ã‚‹ã€‚
         RTC::CdrBufferFactory::instance().
         addFactory("ring_buffer",
                    coil::Creator<RTC::CdrBufferBase, CdrRingBufferMock>,
@@ -1251,7 +1251,7 @@ namespace InPort
     {
     }
     /*!
-     * @brief name()¥á¥½¥Ã¥É¤Î¥Æ¥¹¥È
+     * @brief name()ãƒ¡ã‚½ãƒƒãƒ‰ã®ãƒ†ã‚¹ãƒˆ
      * 
      */
     void test_name(void)
@@ -1265,7 +1265,7 @@ namespace InPort
     }
 
     /*!
-     * @brief isNew()¥á¥½¥Ã¥É¤Î¥Æ¥¹¥È
+     * @brief isNew()ãƒ¡ã‚½ãƒƒãƒ‰ã®ãƒ†ã‚¹ãƒˆ
      * 
      */
     void test_isNew(void)
@@ -1304,7 +1304,7 @@ namespace InPort
         delete provider;
     }
     /*!
-     * @brief isEmpty()¥á¥½¥Ã¥É¤Î¥Æ¥¹¥È
+     * @brief isEmpty()ãƒ¡ã‚½ãƒƒãƒ‰ã®ãƒ†ã‚¹ãƒˆ
      * 
      */
     void test_isEmpty(void)
@@ -1345,7 +1345,7 @@ namespace InPort
         delete provider;
     }
     /*!
-     * @brief read(),operator>>(DataType&),setOnRead(),setOnReadConvert()¥á¥½¥Ã¥É¤Î¥Æ¥¹¥È
+     * @brief read(),operator>>(DataType&),setOnRead(),setOnReadConvert()ãƒ¡ã‚½ãƒƒãƒ‰ã®ãƒ†ã‚¹ãƒˆ
      * 
      */
     void test_read(void)
@@ -1466,14 +1466,14 @@ namespace InPort
         delete provider;
     }
     /*!
-     * @brief setOnWrite()¥á¥½¥Ã¥É¤Î¥Æ¥¹¥È
+     * @brief setOnWrite()ãƒ¡ã‚½ãƒƒãƒ‰ã®ãƒ†ã‚¹ãƒˆ
      * 
      */
     void test_setOnWrite(void)
     {
     }
     /*!
-     * @brief setOnUnderflow()¥á¥½¥Ã¥É¤Î¥Æ¥¹¥È
+     * @brief setOnUnderflow()ãƒ¡ã‚½ãƒƒãƒ‰ã®ãƒ†ã‚¹ãƒˆ
      * 
      */
     void test_setOnUnderflow()
@@ -1481,9 +1481,9 @@ namespace InPort
     }
 
     /*!
-     * @brief write()¥á¥½¥Ã¥É¤Èread()¥á¥½¥Ã¥É¤Î¥Æ¥¹¥È
+     * @brief write()ãƒ¡ã‚½ãƒƒãƒ‰ã¨read()ãƒ¡ã‚½ãƒƒãƒ‰ã®ãƒ†ã‚¹ãƒˆ
      * 
-     * - write()¤Ç½ñ¤­¹ş¤ó¤ÀÃÍ¤¬¡¢read()¤ÇÀµ¤·¤¯ÆÉ¤ß½Ğ¤µ¤ì¤ë¤«¡©
+     * - write()ã§æ›¸ãè¾¼ã‚“ã å€¤ãŒã€read()ã§æ­£ã—ãèª­ã¿å‡ºã•ã‚Œã‚‹ã‹ï¼Ÿ
      */
 /*
     void test_write_and_read()
@@ -1497,7 +1497,7 @@ namespace InPort
 	  double writeValue = i * 3.14159265;
 	  CPPUNIT_ASSERT(inPort->write(writeValue));
 				
-	  // write()¤Ç½ñ¤­¹ş¤ó¤ÀÃÍ¤¬¡¢read()¤ÇÀµ¤·¤¯ÆÉ¤ß½Ğ¤µ¤ì¤ë¤«¡©
+	  // write()ã§æ›¸ãè¾¼ã‚“ã å€¤ãŒã€read()ã§æ­£ã—ãèª­ã¿å‡ºã•ã‚Œã‚‹ã‹ï¼Ÿ
 	  double readValue = inPort->read();
 	  CPPUNIT_ASSERT_EQUAL(writeValue, readValue);
 	}
@@ -1505,9 +1505,9 @@ namespace InPort
 */
 		
     /*!
-     * @brief write()¥á¥½¥Ã¥É¤ÎOnWrite¥³¡¼¥ë¥Ğ¥Ã¥¯¸Æ½Ğ¥Æ¥¹¥È
+     * @brief write()ãƒ¡ã‚½ãƒƒãƒ‰ã®OnWriteã‚³ãƒ¼ãƒ«ãƒãƒƒã‚¯å‘¼å‡ºãƒ†ã‚¹ãƒˆ
      * 
-     * - ¤¢¤é¤«¤¸¤áÀßÄê¤µ¤ì¤¿OnWrite¥³¡¼¥ë¥Ğ¥Ã¥¯¤¬Àµ¤·¤¯¸Æ¤Ó½Ğ¤µ¤ì¤ë¤«¡©
+     * - ã‚ã‚‰ã‹ã˜ã‚è¨­å®šã•ã‚ŒãŸOnWriteã‚³ãƒ¼ãƒ«ãƒãƒƒã‚¯ãŒæ­£ã—ãå‘¼ã³å‡ºã•ã‚Œã‚‹ã‹ï¼Ÿ
      */
 /*
     void test_write_OnWrite()
@@ -1520,19 +1520,19 @@ namespace InPort
       onWrite.m_value = 0;
       inPort->setOnWrite(&onWrite);
 			
-      // write()¥á¥½¥Ã¥É¤ÏÀ®¸ù¤¹¤ë¤«¡©
+      // write()ãƒ¡ã‚½ãƒƒãƒ‰ã¯æˆåŠŸã™ã‚‹ã‹ï¼Ÿ
       double writeValue = 3.14159265;
       CPPUNIT_ASSERT(inPort->write(writeValue));
 			
-      // ¤¢¤é¤«¤¸¤áÀßÄê¤µ¤ì¤¿OnWrite¥³¡¼¥ë¥Ğ¥Ã¥¯¤¬Àµ¤·¤¯¸Æ¤Ó½Ğ¤µ¤ì¤¿¤«¡©
+      // ã‚ã‚‰ã‹ã˜ã‚è¨­å®šã•ã‚ŒãŸOnWriteã‚³ãƒ¼ãƒ«ãƒãƒƒã‚¯ãŒæ­£ã—ãå‘¼ã³å‡ºã•ã‚ŒãŸã‹ï¼Ÿ
       CPPUNIT_ASSERT_EQUAL(writeValue, onWrite.m_value);
     }
 */
 
     /*!
-     * @brief ¥Ğ¥Ã¥Õ¥¡¥Õ¥ë»ş¤Îwrite()¥á¥½¥Ã¥É¤ÎOnWrite¥³¡¼¥ë¥Ğ¥Ã¥¯¸Æ½Ğ¥Æ¥¹¥È
+     * @brief ãƒãƒƒãƒ•ã‚¡ãƒ•ãƒ«æ™‚ã®write()ãƒ¡ã‚½ãƒƒãƒ‰ã®OnWriteã‚³ãƒ¼ãƒ«ãƒãƒƒã‚¯å‘¼å‡ºãƒ†ã‚¹ãƒˆ
      * 
-     * - ¤¢¤é¤«¤¸¤áÀßÄê¤µ¤ì¤¿OnWrite¥³¡¼¥ë¥Ğ¥Ã¥¯¤¬Àµ¤·¤¯¸Æ¤Ó½Ğ¤µ¤ì¤ë¤«¡©
+     * - ã‚ã‚‰ã‹ã˜ã‚è¨­å®šã•ã‚ŒãŸOnWriteã‚³ãƒ¼ãƒ«ãƒãƒƒã‚¯ãŒæ­£ã—ãå‘¼ã³å‡ºã•ã‚Œã‚‹ã‹ï¼Ÿ
      */
 /* 
    void test_write_OnWrite_full()
@@ -1545,24 +1545,24 @@ namespace InPort
       onWrite.m_value = 0;
       inPort->setOnWrite(&onWrite);
 			
-      // ¥Ğ¥Ã¥Õ¥¡¥Õ¥ë¤Ë¤è¤êwrite()¥á¥½¥Ã¥É¤Ï°Õ¿Ş¤É¤ª¤ê¼ºÇÔ¤¹¤ë¤«¡©
+      // ãƒãƒƒãƒ•ã‚¡ãƒ•ãƒ«ã«ã‚ˆã‚Šwrite()ãƒ¡ã‚½ãƒƒãƒ‰ã¯æ„å›³ã©ãŠã‚Šå¤±æ•—ã™ã‚‹ã‹ï¼Ÿ
       double writeValue = 3.14159265;
       CPPUNIT_ASSERT(! inPort->write(writeValue));
 			
-      // ¤¢¤é¤«¤¸¤áÀßÄê¤µ¤ì¤¿OnWrite¥³¡¼¥ë¥Ğ¥Ã¥¯¤¬Àµ¤·¤¯¸Æ¤Ó½Ğ¤µ¤ì¤¿¤«¡©
+      // ã‚ã‚‰ã‹ã˜ã‚è¨­å®šã•ã‚ŒãŸOnWriteã‚³ãƒ¼ãƒ«ãƒãƒƒã‚¯ãŒæ­£ã—ãå‘¼ã³å‡ºã•ã‚ŒãŸã‹ï¼Ÿ
       CPPUNIT_ASSERT_EQUAL(writeValue, onWrite.m_value);
     }
 */
 
     /*!
-     * @brief write()¥á¥½¥Ã¥É¤ÎOnOverflow¥³¡¼¥ë¥Ğ¥Ã¥¯¸Æ½Ğ¥Æ¥¹¥È
+     * @brief write()ãƒ¡ã‚½ãƒƒãƒ‰ã®OnOverflowã‚³ãƒ¼ãƒ«ãƒãƒƒã‚¯å‘¼å‡ºãƒ†ã‚¹ãƒˆ
      * 
-     * - ¥Ğ¥Ã¥Õ¥¡¤¬¥Õ¥ë¤Î¾ì¹ç¤Ë¡¢¤¢¤é¤«¤¸¤áÀßÄê¤µ¤ì¤¿OnOverflow¥³¡¼¥ë¥Ğ¥Ã¥¯¤¬Àµ¤·¤¯¸Æ¤Ó½Ğ¤µ¤ì¤ë¤«¡©
+     * - ãƒãƒƒãƒ•ã‚¡ãŒãƒ•ãƒ«ã®å ´åˆã«ã€ã‚ã‚‰ã‹ã˜ã‚è¨­å®šã•ã‚ŒãŸOnOverflowã‚³ãƒ¼ãƒ«ãƒãƒƒã‚¯ãŒæ­£ã—ãå‘¼ã³å‡ºã•ã‚Œã‚‹ã‹ï¼Ÿ
      */
 /* 
    void test_write_OnOverflow()
     {
-      // ¾ï¤Ë¥Õ¥ë¾õÂÖ¤Ç¤¢¤ë¥Ğ¥Ã¥Õ¥¡¤òÍÑ¤¤¤ÆInPort¥ª¥Ö¥¸¥§¥¯¥È¤òÀ¸À®¤¹¤ë
+      // å¸¸ã«ãƒ•ãƒ«çŠ¶æ…‹ã§ã‚ã‚‹ãƒãƒƒãƒ•ã‚¡ã‚’ç”¨ã„ã¦InPortã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’ç”Ÿæˆã™ã‚‹
       double bindValue;
       std::auto_ptr<RTC::InPort<double, FullBuffer> > inPort(
 							     new RTC::InPort<double, FullBuffer>("InPort", bindValue, 8));
@@ -1571,19 +1571,19 @@ namespace InPort
       onOverflow.m_value = 0;
       inPort->setOnOverflow(&onOverflow);
 
-      // ¥Ğ¥Ã¥Õ¥¡¥Õ¥ë¤Ë¤è¤êwrite()¥á¥½¥Ã¥É¤Ï°Õ¿Ş¤É¤ª¤ê¼ºÇÔ¤¹¤ë¤«¡©
+      // ãƒãƒƒãƒ•ã‚¡ãƒ•ãƒ«ã«ã‚ˆã‚Šwrite()ãƒ¡ã‚½ãƒƒãƒ‰ã¯æ„å›³ã©ãŠã‚Šå¤±æ•—ã™ã‚‹ã‹ï¼Ÿ
       double writeValue = 3.14159265;
       CPPUNIT_ASSERT(! inPort->write(writeValue));
 			
-      // OutPort¤Ë³ä¤êÅö¤Æ¤µ¤ì¤¿¥Ğ¥Ã¥Õ¥¡¤¬¥Õ¥ë¤Î¾ì¹ç¤Ë¡¢¤¢¤é¤«¤¸¤áÀßÄê¤µ¤ì¤¿OnOverflow¥³¡¼¥ë¥Ğ¥Ã¥¯¤¬Àµ¤·¤¯¸Æ¤Ó½Ğ¤µ¤ì¤¿¤«¡©
+      // OutPortã«å‰²ã‚Šå½“ã¦ã•ã‚ŒãŸãƒãƒƒãƒ•ã‚¡ãŒãƒ•ãƒ«ã®å ´åˆã«ã€ã‚ã‚‰ã‹ã˜ã‚è¨­å®šã•ã‚ŒãŸOnOverflowã‚³ãƒ¼ãƒ«ãƒãƒƒã‚¯ãŒæ­£ã—ãå‘¼ã³å‡ºã•ã‚ŒãŸã‹ï¼Ÿ
       CPPUNIT_ASSERT_EQUAL(writeValue, onOverflow.m_value);
     }
 */
 
     /*!
-     * @brief ¥Ğ¥Ã¥Õ¥¡¥Õ¥ë¤Ç¤Ê¤¤»ş¤Î¡¢write()¥á¥½¥Ã¥É¤ÎOnOverflow¥³¡¼¥ë¥Ğ¥Ã¥¯¸Æ½Ğ¥Æ¥¹¥È
+     * @brief ãƒãƒƒãƒ•ã‚¡ãƒ•ãƒ«ã§ãªã„æ™‚ã®ã€write()ãƒ¡ã‚½ãƒƒãƒ‰ã®OnOverflowã‚³ãƒ¼ãƒ«ãƒãƒƒã‚¯å‘¼å‡ºãƒ†ã‚¹ãƒˆ
      * 
-     * - ¥Ğ¥Ã¥Õ¥¡¥Õ¥ë¤Ç¤Ê¤¤¾ì¹ç¡¢OnOverflow¥³¡¼¥ë¥Ğ¥Ã¥¯¤¬°Õ¿Ş¤É¤ª¤êÌ¤¸Æ½Ğ¤Î¤Ş¤Ş¤«¡©
+     * - ãƒãƒƒãƒ•ã‚¡ãƒ•ãƒ«ã§ãªã„å ´åˆã€OnOverflowã‚³ãƒ¼ãƒ«ãƒãƒƒã‚¯ãŒæ„å›³ã©ãŠã‚Šæœªå‘¼å‡ºã®ã¾ã¾ã‹ï¼Ÿ
      */
 /*
     void test_write_OnOverflow_not_full()
@@ -1596,19 +1596,19 @@ namespace InPort
       onOverflow.m_value = 0;
       inPort->setOnOverflow(&onOverflow);
 
-      // write()¥á¥½¥Ã¥É¤ÏÀ®¸ù¤¹¤ë¤«¡©
+      // write()ãƒ¡ã‚½ãƒƒãƒ‰ã¯æˆåŠŸã™ã‚‹ã‹ï¼Ÿ
       double writeValue = 3.14159265;
       CPPUNIT_ASSERT(inPort->write(writeValue));
 			
-      // ¥Ğ¥Ã¥Õ¥¡¥Õ¥ë¤Ç¤Ê¤¤¾ì¹ç¡¢OnOverflow¥³¡¼¥ë¥Ğ¥Ã¥¯¤¬°Õ¿Ş¤É¤ª¤êÌ¤¸Æ½Ğ¤Î¤Ş¤Ş¤«¡©
+      // ãƒãƒƒãƒ•ã‚¡ãƒ•ãƒ«ã§ãªã„å ´åˆã€OnOverflowã‚³ãƒ¼ãƒ«ãƒãƒƒã‚¯ãŒæ„å›³ã©ãŠã‚Šæœªå‘¼å‡ºã®ã¾ã¾ã‹ï¼Ÿ
       CPPUNIT_ASSERT_EQUAL((double) 0, onOverflow.m_value);
     }
 */
 		
     /*!
-     * @brief write()¥á¥½¥Ã¥É¤ÎOnWriteConvert¥³¡¼¥ë¥Ğ¥Ã¥¯¸Æ½Ğ¥Æ¥¹¥È
+     * @brief write()ãƒ¡ã‚½ãƒƒãƒ‰ã®OnWriteConvertã‚³ãƒ¼ãƒ«ãƒãƒƒã‚¯å‘¼å‡ºãƒ†ã‚¹ãƒˆ
      * 
-     * - °Õ¿Ş¤·¤¿¤È¤ª¤ê¡¢OnWriteConvert¥³¡¼¥ë¥Ğ¥Ã¥¯¤ÇÊÑ´¹¤·¤¿ÃÍ¤¬¥Ğ¥Ã¥Õ¥¡¤Ë½ñ¤­¹ş¤Ş¤ì¤ë¤«¡©
+     * - æ„å›³ã—ãŸã¨ãŠã‚Šã€OnWriteConvertã‚³ãƒ¼ãƒ«ãƒãƒƒã‚¯ã§å¤‰æ›ã—ãŸå€¤ãŒãƒãƒƒãƒ•ã‚¡ã«æ›¸ãè¾¼ã¾ã‚Œã‚‹ã‹ï¼Ÿ
      */
 /*
     void test_write_OnWriteConvert()
@@ -1628,7 +1628,7 @@ namespace InPort
 				
 	  double readValue = inPort->read();
 				
-	  // write()¤Ç½ñ¤­¹ş¤ó¤ÀÃÍ¤¬¡¢read()¤ÇÀµ¤·¤¯ÆÉ¤ß½Ğ¤µ¤ì¤ë¤«¡©
+	  // write()ã§æ›¸ãè¾¼ã‚“ã å€¤ãŒã€read()ã§æ­£ã—ãèª­ã¿å‡ºã•ã‚Œã‚‹ã‹ï¼Ÿ
 	  double expectedValue = amplitude * writeValue;
 	  CPPUNIT_ASSERT_EQUAL(expectedValue, readValue);
 	}
@@ -1636,19 +1636,19 @@ namespace InPort
 */
 
     /*!
-     * @brief write()¥á¥½¥Ã¥É¤Î¥¿¥¤¥à¥¢¥¦¥È½èÍı¥Æ¥¹¥È
+     * @brief write()ãƒ¡ã‚½ãƒƒãƒ‰ã®ã‚¿ã‚¤ãƒ ã‚¢ã‚¦ãƒˆå‡¦ç†ãƒ†ã‚¹ãƒˆ
      * 
-     * - ¥Ğ¥Ã¥Õ¥¡¤¬¥Õ¥ë¤Î¾ì¹ç¤Ë¡¢»ØÄê¤·¤¿»ş´Ö¤É¤ª¤ê¤Ëwrite()¥á¥½¥Ã¥É¤¬¥¿¥¤¥à¥¢¥¦¥È¤¹¤ë¤«¡©
-     * - ¥Ğ¥Ã¥Õ¥¡¤¬¥Õ¥ë¤Î¾ì¹ç¤Ë¡¢write()¥á¥½¥Ã¥É¤¬°Õ¿Ş¤É¤ª¤ê¼ºÇÔ¤¹¤ë¤«¡©
+     * - ãƒãƒƒãƒ•ã‚¡ãŒãƒ•ãƒ«ã®å ´åˆã«ã€æŒ‡å®šã—ãŸæ™‚é–“ã©ãŠã‚Šã«write()ãƒ¡ã‚½ãƒƒãƒ‰ãŒã‚¿ã‚¤ãƒ ã‚¢ã‚¦ãƒˆã™ã‚‹ã‹ï¼Ÿ
+     * - ãƒãƒƒãƒ•ã‚¡ãŒãƒ•ãƒ«ã®å ´åˆã«ã€write()ãƒ¡ã‚½ãƒƒãƒ‰ãŒæ„å›³ã©ãŠã‚Šå¤±æ•—ã™ã‚‹ã‹ï¼Ÿ
      */
 /*
     void test_write_timeout()
     {
-      // ¾ï¤Ë¥Õ¥ë¾õÂÖ¤Ç¤¢¤ë¥Ğ¥Ã¥Õ¥¡¤òÍÑ¤¤¤ÆInPort¥ª¥Ö¥¸¥§¥¯¥È¤òÀ¸À®¤¹¤ë
+      // å¸¸ã«ãƒ•ãƒ«çŠ¶æ…‹ã§ã‚ã‚‹ãƒãƒƒãƒ•ã‚¡ã‚’ç”¨ã„ã¦InPortã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’ç”Ÿæˆã™ã‚‹
       bool readBlock = false;
-      bool writeBlock = true; // ¥Ö¥í¥Ã¥­¥ó¥°¥â¡¼¥ÉON
+      bool writeBlock = true; // ãƒ–ãƒ­ãƒƒã‚­ãƒ³ã‚°ãƒ¢ãƒ¼ãƒ‰ON
       int readTimeout = 0;
-      int writeTimeout = WTIMEOUT_USEC; // ¥¿¥¤¥à¥¢¥¦¥ÈÃÍ¤ò»ØÄê¤¹¤ë
+      int writeTimeout = WTIMEOUT_USEC; // ã‚¿ã‚¤ãƒ ã‚¢ã‚¦ãƒˆå€¤ã‚’æŒ‡å®šã™ã‚‹
 
       double bindValue;
       std::auto_ptr<RTC::InPort<double, FullBuffer> > inPort(
@@ -1662,10 +1662,10 @@ namespace InPort
 				
 	double writeValue = i * 3.14159265;
 				
-	// OutPort¤Ë³ä¤êÅö¤Æ¤é¤ì¤¿¥Ğ¥Ã¥Õ¥¡¤¬¥Õ¥ë¤Î¾ì¹ç¤Ë¡¢write()¥á¥½¥Ã¥É¤¬°Õ¿Ş¤É¤ª¤ê¼ºÇÔ¤¹¤ë¤«¡©
+	// OutPortã«å‰²ã‚Šå½“ã¦ã‚‰ã‚ŒãŸãƒãƒƒãƒ•ã‚¡ãŒãƒ•ãƒ«ã®å ´åˆã«ã€write()ãƒ¡ã‚½ãƒƒãƒ‰ãŒæ„å›³ã©ãŠã‚Šå¤±æ•—ã™ã‚‹ã‹ï¼Ÿ
 	CPPUNIT_ASSERT(! inPort->write(writeValue));
 				
-	// OutPort¤Ë³ä¤êÅö¤Æ¤µ¤ì¤¿¥Ğ¥Ã¥Õ¥¡¤¬¥Õ¥ë¤Î¾ì¹ç¤Ë¡¢»ØÄê¤·¤¿»ş´Ö¤É¤ª¤ê¤Ëwrite()¥á¥½¥Ã¥É¤¬¥¿¥¤¥à¥¢¥¦¥È¤·¤Æ¤¤¤ë¤«¡©
+	// OutPortã«å‰²ã‚Šå½“ã¦ã•ã‚ŒãŸãƒãƒƒãƒ•ã‚¡ãŒãƒ•ãƒ«ã®å ´åˆã«ã€æŒ‡å®šã—ãŸæ™‚é–“ã©ãŠã‚Šã«write()ãƒ¡ã‚½ãƒƒãƒ‰ãŒã‚¿ã‚¤ãƒ ã‚¢ã‚¦ãƒˆã—ã¦ã„ã‚‹ã‹ï¼Ÿ
 	timeval tm_cur;
 	gettimeofday(&tm_cur, 0);
 				

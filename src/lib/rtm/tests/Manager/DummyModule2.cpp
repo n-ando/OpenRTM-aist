@@ -1,4 +1,4 @@
-#include <rtm/DataFlowComponentBase.h>
+﻿#include <rtm/DataFlowComponentBase.h>
 #include "DummyModule2.h"
 
 namespace RTC

@@ -1,4 +1,4 @@
-// -*- C++ -*-
+﻿// -*- C++ -*-
 /*!
  * @file   SingletonTests.cpp
  * @brief  Singleton test class

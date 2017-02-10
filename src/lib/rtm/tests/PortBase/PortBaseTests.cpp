@@ -1,4 +1,4 @@
-// -*- C++ -*-
+ï»¿// -*- C++ -*-
 /*!
  * @file   PortBaseTests.cpp
  * @brief  PortBase test class
@@ -250,16 +250,16 @@ namespace PortBase
     }
 		
     /*!
-     * @brief ½é´ü²½
-     *    (1) ORB¤Î½é´ü²½,POA¤Îactivate
-     *    (2) PortBase¤Î¥¤¥ó¥¹¥¿¥ó¥¹À¸À®
-     *    (3) PortInterfaceProfile¥ª¥Ö¥¸¥§¥¯¥ÈÍ×ÁÇ¤Î¥»¥Ã¥È
-     *    (4) PortInterfaceProfileList¥ª¥Ö¥¸¥§¥¯¥ÈÍ×ÁÇ
-     *        (PortProfile¤ÎÍ×ÁÇ)¤Î¥»¥Ã¥È
-     *    (5) ConnectorProfile¥ª¥Ö¥¸¥§¥¯¥ÈÍ×ÁÇ¤Î¥»¥Ã¥È
-     *    (6) ConnectorProfileList¥ª¥Ö¥¸¥§¥¯¥ÈÍ×ÁÇ(PortProfile¤ÎÍ×ÁÇ)¤Î¥»¥Ã¥È
-     *    (7) PortProfile¥ª¥Ö¥¸¥§¥¯¥ÈÍ×ÁÇ¤Î¥»¥Ã¥È
-     *    (8) PortProfile¥ª¥Ö¥¸¥§¥¯¥È¤Î¥»¥Ã¥È
+     * @brief åˆæœŸåŒ–
+     *    (1) ORBã®åˆæœŸåŒ–,POAã®activate
+     *    (2) PortBaseã®ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ç”Ÿæˆ
+     *    (3) PortInterfaceProfileã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆè¦ç´ ã®ã‚»ãƒƒãƒˆ
+     *    (4) PortInterfaceProfileListã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆè¦ç´ 
+     *        (PortProfileã®è¦ç´ )ã®ã‚»ãƒƒãƒˆ
+     *    (5) ConnectorProfileã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆè¦ç´ ã®ã‚»ãƒƒãƒˆ
+     *    (6) ConnectorProfileListã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆè¦ç´ (PortProfileã®è¦ç´ )ã®ã‚»ãƒƒãƒˆ
+     *    (7) PortProfileã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆè¦ç´ ã®ã‚»ãƒƒãƒˆ
+     *    (8) PortProfileã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®ã‚»ãƒƒãƒˆ
      */
     virtual void setUp()
     {
@@ -268,12 +268,12 @@ namespace PortBase
 	argv[i] = (char *)g_argv[i].c_str();
       }
 
-      // ORB¤Î½é´ü²½
+      // ORBã®åˆæœŸåŒ–
       m_orb = CORBA::ORB_init(g_argc, argv);
       PortableServer::POA_ptr poa = PortableServer::POA::_narrow(
 				m_orb->resolve_initial_references("RootPOA"));
 			
-      // PortProfile.interfaces¤Î¹½ÃÛ½àÈ÷
+      // PortProfile.interfacesã®æ§‹ç¯‰æº–å‚™
       RTC::PortInterfaceProfile portIfProfile;
       portIfProfile.instance_name = "PortInterfaceProfile-instance_name";
       portIfProfile.type_name = "PortInterfaceProfile-type_name";
@@ -283,7 +283,7 @@ namespace PortBase
       portIfProfiles.length(1);
       portIfProfiles[0] = portIfProfile;
 
-      // PortProfile.connector_profiles¤Î¹½ÃÛ½àÈ÷
+      // PortProfile.connector_profilesã®æ§‹ç¯‰æº–å‚™
       SDOPackage::NameValue connProfileProperty;
       connProfileProperty.name = "ConnectorProfile-properties0-name";
       connProfileProperty.value <<= CORBA::Float(1.1);
@@ -300,7 +300,7 @@ namespace PortBase
       connProfiles.length(1);
       connProfiles[0] = connProfile;
 
-      // PortProfile.properties¤Î¹½ÃÛ½àÈ÷
+      // PortProfile.propertiesã®æ§‹ç¯‰æº–å‚™
       SDOPackage::NameValue portProfileProperty;
       portProfileProperty.name = "PortProfile-properties0-name";
       portProfileProperty.value <<= CORBA::Float(2.2);
@@ -308,19 +308,19 @@ namespace PortBase
       portProfileProperties.length(1);
       portProfileProperties[0] = portProfileProperty;
 
-      // PortProfile¤ò¹½ÃÛ¤¹¤ë
+      // PortProfileã‚’æ§‹ç¯‰ã™ã‚‹
       RTC::PortProfile portProfile;
       portProfile.name = "inport0";
       portProfile.interfaces = portIfProfiles;
       portProfile.connector_profiles = connProfiles;
       portProfile.properties = portProfileProperties;
 
-      // PortBase¤Î¥¤¥ó¥¹¥¿¥ó¥¹¤òÀ¸À®¤¹¤ë
+      // PortBaseã®ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ã‚’ç”Ÿæˆã™ã‚‹
       m_pPortBase = new PortBaseMock(portProfile);
       m_pPortBase_2 = new PortBaseMock(portProfile);
       m_pPortBase_3 = new PortBaseMock(portProfile);
 
-      // POA¤ò³èÀ­²½¤¹¤ë			
+      // POAã‚’æ´»æ€§åŒ–ã™ã‚‹			
       PortableServer::POAManager_var poaMgr = poa->the_POAManager();
       poaMgr->activate();
 
@@ -364,55 +364,55 @@ namespace PortBase
     }
 		
     /*!
-     * @brief get_port_profile()¥á¥½¥Ã¥É¤Î¥Æ¥¹¥È
+     * @brief get_port_profile()ãƒ¡ã‚½ãƒƒãƒ‰ã®ãƒ†ã‚¹ãƒˆ
      * 
-     * - ¥ª¥Ö¥¸¥§¥¯¥È»²¾È·ĞÍ³¤Ç¡¢get_port_profile()¤ËÀµ¤·¤¯¥¢¥¯¥»¥¹¤Ç¤­¤ë¤«¡©
-     * - PortProfile.name¤òÀµ¤·¤¯¼èÆÀ¤Ç¤­¤ë¤«¡©
-     * - PortProfile.interface¤òÀµ¤·¤¯¼èÆÀ¤Ç¤­¤ë¤«¡©
-     * - PortProfile.connector_profiles¤òÀµ¤·¤¯¼èÆÀ¤Ç¤­¤ë¤«¡©
-     * - PortProfile.properties¤òÀµ¤·¤¯¼èÆÀ¤Ç¤­¤ë¤«¡©
+     * - ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆå‚ç…§çµŒç”±ã§ã€get_port_profile()ã«æ­£ã—ãã‚¢ã‚¯ã‚»ã‚¹ã§ãã‚‹ã‹ï¼Ÿ
+     * - PortProfile.nameã‚’æ­£ã—ãå–å¾—ã§ãã‚‹ã‹ï¼Ÿ
+     * - PortProfile.interfaceã‚’æ­£ã—ãå–å¾—ã§ãã‚‹ã‹ï¼Ÿ
+     * - PortProfile.connector_profilesã‚’æ­£ã—ãå–å¾—ã§ãã‚‹ã‹ï¼Ÿ
+     * - PortProfile.propertiesã‚’æ­£ã—ãå–å¾—ã§ãã‚‹ã‹ï¼Ÿ
      */
     void test_get_port_profile()
     {
-      // (1) ¥ª¥Ö¥¸¥§¥¯¥È»²¾È·ĞÍ³¤Ç¡¢get_port_profile()¤ËÀµ¤·¤¯¥¢¥¯¥»¥¹¤Ç¤­¤ë¤«¡©
-      // get_port_profile()¤ÏCORBA¥¤¥ó¥¿¥Õ¥§¡¼¥¹¤Ê¤Î¤Ç¡¢¥ª¥Ö¥¸¥§¥¯¥È»²¾È·ĞÍ³¤Ç¥¢¥¯¥»¥¹¤·¡¢
-      // CORBA¥¤¥ó¥¿¥Õ¥§¡¼¥¹¤È¤·¤Æµ¡Ç½¤·¤Æ¤¤¤ë¤³¤È¤ò³ÎÇ§¤¹¤ë
+      // (1) ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆå‚ç…§çµŒç”±ã§ã€get_port_profile()ã«æ­£ã—ãã‚¢ã‚¯ã‚»ã‚¹ã§ãã‚‹ã‹ï¼Ÿ
+      // get_port_profile()ã¯CORBAã‚¤ãƒ³ã‚¿ãƒ•ã‚§ãƒ¼ã‚¹ãªã®ã§ã€ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆå‚ç…§çµŒç”±ã§ã‚¢ã‚¯ã‚»ã‚¹ã—ã€
+      // CORBAã‚¤ãƒ³ã‚¿ãƒ•ã‚§ãƒ¼ã‚¹ã¨ã—ã¦æ©Ÿèƒ½ã—ã¦ã„ã‚‹ã“ã¨ã‚’ç¢ºèªã™ã‚‹
       const RTC::PortService_ptr portRef = m_pPortBase->getPortRef();
       const RTC::PortProfile* pPortProfile = portRef->get_port_profile();
 			
-      // (2) PortProfile.name¤òÀµ¤·¤¯¼èÆÀ¤Ç¤­¤ë¤«¡©
+      // (2) PortProfile.nameã‚’æ­£ã—ãå–å¾—ã§ãã‚‹ã‹ï¼Ÿ
       CPPUNIT_ASSERT_EQUAL(
 			   std::string("inport0"),
 			   std::string(pPortProfile->name));
 
-      // (3) PortProfile.interface¤òÀµ¤·¤¯¼èÆÀ¤Ç¤­¤ë¤«¡©
+      // (3) PortProfile.interfaceã‚’æ­£ã—ãå–å¾—ã§ãã‚‹ã‹ï¼Ÿ
       const RTC::PortInterfaceProfile& portIfProfile = pPortProfile->interfaces[0];
-      // (3-a) PortInterfaceProfile.instance_name¤òÀµ¤·¤¯¼èÆÀ¤Ç¤­¤ë¤«¡©
+      // (3-a) PortInterfaceProfile.instance_nameã‚’æ­£ã—ãå–å¾—ã§ãã‚‹ã‹ï¼Ÿ
       CPPUNIT_ASSERT_EQUAL(
 			   std::string("PortInterfaceProfile-instance_name"),
 			   std::string(portIfProfile.instance_name));
 
-      // (3-b) PortInterfaceProfile.type_name¤òÀµ¤·¤¯¼èÆÀ¤Ç¤­¤ë¤«¡©
+      // (3-b) PortInterfaceProfile.type_nameã‚’æ­£ã—ãå–å¾—ã§ãã‚‹ã‹ï¼Ÿ
       CPPUNIT_ASSERT_EQUAL(
 			   std::string("PortInterfaceProfile-type_name"),
 			   std::string(portIfProfile.type_name));
 
-      // (3-c) PortInterfaceProfile.polarity¤òÀµ¤·¤¯¼èÆÀ¤Ç¤­¤ë¤«¡©
+      // (3-c) PortInterfaceProfile.polarityã‚’æ­£ã—ãå–å¾—ã§ãã‚‹ã‹ï¼Ÿ
       CPPUNIT_ASSERT_EQUAL(RTC::REQUIRED, portIfProfile.polarity);
 
-      // (4) PortProfile.connector_profiles¤òÀµ¤·¤¯¼èÆÀ¤Ç¤­¤ë¤«¡©
+      // (4) PortProfile.connector_profilesã‚’æ­£ã—ãå–å¾—ã§ãã‚‹ã‹ï¼Ÿ
       const RTC::ConnectorProfile& connProfile = pPortProfile->connector_profiles[0];
-      // (4-a) ConnectorProfile.name¤òÀµ¤·¤¯¼èÆÀ¤Ç¤­¤ë¤«¡©
+      // (4-a) ConnectorProfile.nameã‚’æ­£ã—ãå–å¾—ã§ãã‚‹ã‹ï¼Ÿ
       CPPUNIT_ASSERT_EQUAL(
 			   std::string("ConnectorProfile-name"),
 			   std::string(connProfile.name));
       
-      // (4-b) ConnectorProfile.connector_id¤òÀµ¤·¤¯¼èÆÀ¤Ç¤­¤ë¤«¡©
+      // (4-b) ConnectorProfile.connector_idã‚’æ­£ã—ãå–å¾—ã§ãã‚‹ã‹ï¼Ÿ
       CPPUNIT_ASSERT_EQUAL(
 			   std::string("connect_id0"),
 			   std::string(connProfile.connector_id));
 			
-      // (4-c) ConnectorProfile.properties¤òÀµ¤·¤¯¼èÆÀ¤Ç¤­¤ë¤«¡©
+      // (4-c) ConnectorProfile.propertiesã‚’æ­£ã—ãå–å¾—ã§ãã‚‹ã‹ï¼Ÿ
       CPPUNIT_ASSERT_EQUAL(
 			   std::string("ConnectorProfile-properties0-name"),
 			   std::string(connProfile.properties[0].name));
@@ -423,7 +423,7 @@ namespace PortBase
 	CPPUNIT_ASSERT_EQUAL(CORBA::Float(1.1), value);
       }
 			
-      // (5) PortProfile.properties¤òÀµ¤·¤¯¼èÆÀ¤Ç¤­¤ë¤«¡©
+      // (5) PortProfile.propertiesã‚’æ­£ã—ãå–å¾—ã§ãã‚‹ã‹ï¼Ÿ
       CPPUNIT_ASSERT_EQUAL(
 			   std::string("PortProfile-properties0-name"),
 			   std::string(pPortProfile->properties[0].name));
@@ -436,50 +436,50 @@ namespace PortBase
     }
 		
     /*!
-     * @brief getPortProfile()¥á¥½¥Ã¥É¤Î¥Æ¥¹¥È
+     * @brief getPortProfile()ãƒ¡ã‚½ãƒƒãƒ‰ã®ãƒ†ã‚¹ãƒˆ
      * 
-     * - PortProfile.name¤òÀµ¤·¤¯¼èÆÀ¤Ç¤­¤ë¤«¡©
-     * - PortProfile.interface¤òÀµ¤·¤¯¼èÆÀ¤Ç¤­¤ë¤«¡©
-     * - PortProfile.connector_profiles¤òÀµ¤·¤¯¼èÆÀ¤Ç¤­¤ë¤«¡©
-     * - PortProfile.properties¤òÀµ¤·¤¯¼èÆÀ¤Ç¤­¤ë¤«¡©
+     * - PortProfile.nameã‚’æ­£ã—ãå–å¾—ã§ãã‚‹ã‹ï¼Ÿ
+     * - PortProfile.interfaceã‚’æ­£ã—ãå–å¾—ã§ãã‚‹ã‹ï¼Ÿ
+     * - PortProfile.connector_profilesã‚’æ­£ã—ãå–å¾—ã§ãã‚‹ã‹ï¼Ÿ
+     * - PortProfile.propertiesã‚’æ­£ã—ãå–å¾—ã§ãã‚‹ã‹ï¼Ÿ
      */
     void test_getPortProfile()
     {
       const RTC::PortProfile& portProfile = m_pPortBase->getPortProfile();
 			
-      // (1) PortProfile.name¤òÀµ¤·¤¯¼èÆÀ¤Ç¤­¤ë¤«¡©
+      // (1) PortProfile.nameã‚’æ­£ã—ãå–å¾—ã§ãã‚‹ã‹ï¼Ÿ
       CPPUNIT_ASSERT_EQUAL(
 			   std::string("inport0"),
 			   std::string(portProfile.name));
 
-      // (2) PortProfile.interface¤òÀµ¤·¤¯¼èÆÀ¤Ç¤­¤ë¤«¡©
+      // (2) PortProfile.interfaceã‚’æ­£ã—ãå–å¾—ã§ãã‚‹ã‹ï¼Ÿ
       const RTC::PortInterfaceProfile& portIfProfile = portProfile.interfaces[0];
-      // (2-a) PortInterfaceProfile.instance_name¤òÀµ¤·¤¯¼èÆÀ¤Ç¤­¤ë¤«¡©
+      // (2-a) PortInterfaceProfile.instance_nameã‚’æ­£ã—ãå–å¾—ã§ãã‚‹ã‹ï¼Ÿ
       CPPUNIT_ASSERT_EQUAL(
 			   std::string("PortInterfaceProfile-instance_name"),
 			   std::string(portIfProfile.instance_name));
 
-      // (2-b) PortInterfaceProfile.type_name¤òÀµ¤·¤¯¼èÆÀ¤Ç¤­¤ë¤«¡©
+      // (2-b) PortInterfaceProfile.type_nameã‚’æ­£ã—ãå–å¾—ã§ãã‚‹ã‹ï¼Ÿ
       CPPUNIT_ASSERT_EQUAL(
 			   std::string("PortInterfaceProfile-type_name"),
 			   std::string(portIfProfile.type_name));
 
-      // (2-c) PortInterfaceProfile.polarity¤òÀµ¤·¤¯¼èÆÀ¤Ç¤­¤ë¤«¡©
+      // (2-c) PortInterfaceProfile.polarityã‚’æ­£ã—ãå–å¾—ã§ãã‚‹ã‹ï¼Ÿ
       CPPUNIT_ASSERT_EQUAL(RTC::REQUIRED, portIfProfile.polarity);
 
-      // (3) PortProfile.connector_profiles¤òÀµ¤·¤¯¼èÆÀ¤Ç¤­¤ë¤«¡©
+      // (3) PortProfile.connector_profilesã‚’æ­£ã—ãå–å¾—ã§ãã‚‹ã‹ï¼Ÿ
       const RTC::ConnectorProfile& connProfile = portProfile.connector_profiles[0];
-      // (3-a) ConnectorProfile.name¤òÀµ¤·¤¯¼èÆÀ¤Ç¤­¤ë¤«¡©
+      // (3-a) ConnectorProfile.nameã‚’æ­£ã—ãå–å¾—ã§ãã‚‹ã‹ï¼Ÿ
       CPPUNIT_ASSERT_EQUAL(
 			   std::string("ConnectorProfile-name"),
 			   std::string(connProfile.name));
       
-      // (3-b) ConnectorProfile.connector_id¤òÀµ¤·¤¯¼èÆÀ¤Ç¤­¤ë¤«¡©
+      // (3-b) ConnectorProfile.connector_idã‚’æ­£ã—ãå–å¾—ã§ãã‚‹ã‹ï¼Ÿ
       CPPUNIT_ASSERT_EQUAL(
 			   std::string("connect_id0"),
 			   std::string(connProfile.connector_id));
 			
-      // (3-c) ConnectorProfile.properties¤òÀµ¤·¤¯¼èÆÀ¤Ç¤­¤ë¤«¡©
+      // (3-c) ConnectorProfile.propertiesã‚’æ­£ã—ãå–å¾—ã§ãã‚‹ã‹ï¼Ÿ
       CPPUNIT_ASSERT_EQUAL(
 			   std::string("ConnectorProfile-properties0-name"),
 			   std::string(connProfile.properties[0].name));
@@ -490,7 +490,7 @@ namespace PortBase
 	CPPUNIT_ASSERT_EQUAL(CORBA::Float(1.1), value);
       }
 			
-      // (4) PortProfile.properties¤òÀµ¤·¤¯¼èÆÀ¤Ç¤­¤ë¤«¡©
+      // (4) PortProfile.propertiesã‚’æ­£ã—ãå–å¾—ã§ãã‚‹ã‹ï¼Ÿ
       CPPUNIT_ASSERT_EQUAL(
 			   std::string("PortProfile-properties0-name"),
 			   std::string(portProfile.properties[0].name));
@@ -503,41 +503,41 @@ namespace PortBase
     }
 		
     /*!
-     * @brief get_connector_profiles()¥á¥½¥Ã¥É¤Î¥Æ¥¹¥È
+     * @brief get_connector_profiles()ãƒ¡ã‚½ãƒƒãƒ‰ã®ãƒ†ã‚¹ãƒˆ
      * 
-     * - ¥ª¥Ö¥¸¥§¥¯¥È»²¾È·ĞÍ³¤Ç¡¢get_connector_profiles()¤ËÀµ¤·¤¯¥¢¥¯¥»¥¹¤Ç¤­¤ë¤«¡©
-     * - ConnectorProfile.name¤òÀµ¤·¤¯¼èÆÀ¤Ç¤­¤ë¤«¡©
-     * - ConnectorProfile.connector_id¤òÀµ¤·¤¯¼èÆÀ¤Ç¤­¤ë¤«¡©
-     * - ConnectorProfile.properties¤òÀµ¤·¤¯¼èÆÀ¤Ç¤­¤ë¤«¡©
+     * - ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆå‚ç…§çµŒç”±ã§ã€get_connector_profiles()ã«æ­£ã—ãã‚¢ã‚¯ã‚»ã‚¹ã§ãã‚‹ã‹ï¼Ÿ
+     * - ConnectorProfile.nameã‚’æ­£ã—ãå–å¾—ã§ãã‚‹ã‹ï¼Ÿ
+     * - ConnectorProfile.connector_idã‚’æ­£ã—ãå–å¾—ã§ãã‚‹ã‹ï¼Ÿ
+     * - ConnectorProfile.propertiesã‚’æ­£ã—ãå–å¾—ã§ãã‚‹ã‹ï¼Ÿ
      */
     void test_get_connector_profiles()
     {
-      // (1) ¥ª¥Ö¥¸¥§¥¯¥È»²¾È·ĞÍ³¤Ç¡¢get_connector_profiles()¤ËÀµ¤·¤¯¥¢¥¯¥»¥¹¤Ç¤­¤ë¤«¡©
-      // get_connector_profiles()¤ÏCORBA¥¤¥ó¥¿¥Õ¥§¡¼¥¹¤Ê¤Î¤Ç¡¢¥ª¥Ö¥¸¥§¥¯¥È»²¾È·ĞÍ³¤Ç¥¢¥¯¥»¥¹¤·¡¢
-      // CORBA¥¤¥ó¥¿¥Õ¥§¡¼¥¹¤È¤·¤Æµ¡Ç½¤·¤Æ¤¤¤ë¤³¤È¤ò³ÎÇ§¤¹¤ë
+      // (1) ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆå‚ç…§çµŒç”±ã§ã€get_connector_profiles()ã«æ­£ã—ãã‚¢ã‚¯ã‚»ã‚¹ã§ãã‚‹ã‹ï¼Ÿ
+      // get_connector_profiles()ã¯CORBAã‚¤ãƒ³ã‚¿ãƒ•ã‚§ãƒ¼ã‚¹ãªã®ã§ã€ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆå‚ç…§çµŒç”±ã§ã‚¢ã‚¯ã‚»ã‚¹ã—ã€
+      // CORBAã‚¤ãƒ³ã‚¿ãƒ•ã‚§ãƒ¼ã‚¹ã¨ã—ã¦æ©Ÿèƒ½ã—ã¦ã„ã‚‹ã“ã¨ã‚’ç¢ºèªã™ã‚‹
       const RTC::PortService_ptr portRef = m_pPortBase->getPortRef();
       const RTC::ConnectorProfileList* pConnProfList = portRef->get_connector_profiles();
 
-      // ConnectorProfileListÆâ¤ÎConnectorProfile¤Î¥Á¥§¥Ã¥¯
+      // ConnectorProfileListå†…ã®ConnectorProfileã®ãƒã‚§ãƒƒã‚¯
       const RTC::ConnectorProfile& connProfile = (*pConnProfList)[0];
-      // (2) ConnectorProfile.name¤òÀµ¤·¤¯¼èÆÀ¤Ç¤­¤ë¤«¡©
+      // (2) ConnectorProfile.nameã‚’æ­£ã—ãå–å¾—ã§ãã‚‹ã‹ï¼Ÿ
       CPPUNIT_ASSERT_EQUAL(
 			   std::string("ConnectorProfile-name"),
 			   std::string(connProfile.name));
 			
-      // (3) ConnectorProfile.connector_id¤òÀµ¤·¤¯¼èÆÀ¤Ç¤­¤ë¤«¡©
+      // (3) ConnectorProfile.connector_idã‚’æ­£ã—ãå–å¾—ã§ãã‚‹ã‹ï¼Ÿ
       CPPUNIT_ASSERT_EQUAL(
 			   std::string("connect_id0"),
 			   std::string(connProfile.connector_id));
 
-      // (4) ConnectorProfile.properties¤òÀµ¤·¤¯¼èÆÀ¤Ç¤­¤ë¤«¡©
+      // (4) ConnectorProfile.propertiesã‚’æ­£ã—ãå–å¾—ã§ãã‚‹ã‹ï¼Ÿ
       const SDOPackage::NameValue& property = connProfile.properties[0];
-      // (4-a) name¤òÀµ¤·¤¯¼èÆÀ¤Ç¤­¤ë¤«¡©
+      // (4-a) nameã‚’æ­£ã—ãå–å¾—ã§ãã‚‹ã‹ï¼Ÿ
       CPPUNIT_ASSERT_EQUAL(
 			   std::string("ConnectorProfile-properties0-name"),
 			   std::string(property.name));
 			
-      // (4-b) value¤òÀµ¤·¤¯¼èÆÀ¤Ç¤­¤ë¤«¡©
+      // (4-b) valueã‚’æ­£ã—ãå–å¾—ã§ãã‚‹ã‹ï¼Ÿ
       {
 	CORBA::Float value;
 	property.value >>= value;
@@ -546,39 +546,39 @@ namespace PortBase
     }
 		
     /*!
-     * @brief get_connector_profile()¥á¥½¥Ã¥É¤Î¥Æ¥¹¥È
+     * @brief get_connector_profile()ãƒ¡ã‚½ãƒƒãƒ‰ã®ãƒ†ã‚¹ãƒˆ
      * 
-     * - ¥ª¥Ö¥¸¥§¥¯¥È»²¾È·ĞÍ³¤Ç¡¢get_connector_profile()¤ËÀµ¤·¤¯¥¢¥¯¥»¥¹¤Ç¤­¤ë¤«¡©
-     * - ConnectorProfile.name¤òÀµ¤·¤¯¼èÆÀ¤Ç¤­¤ë¤«¡©
-     * - ConnectorProfile.connector_id¤òÀµ¤·¤¯¼èÆÀ¤Ç¤­¤ë¤«¡©
-     * - ConnectorProfile.properties¤òÀµ¤·¤¯¼èÆÀ¤Ç¤­¤ë¤«¡©
+     * - ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆå‚ç…§çµŒç”±ã§ã€get_connector_profile()ã«æ­£ã—ãã‚¢ã‚¯ã‚»ã‚¹ã§ãã‚‹ã‹ï¼Ÿ
+     * - ConnectorProfile.nameã‚’æ­£ã—ãå–å¾—ã§ãã‚‹ã‹ï¼Ÿ
+     * - ConnectorProfile.connector_idã‚’æ­£ã—ãå–å¾—ã§ãã‚‹ã‹ï¼Ÿ
+     * - ConnectorProfile.propertiesã‚’æ­£ã—ãå–å¾—ã§ãã‚‹ã‹ï¼Ÿ
      */
     void test_get_connector_profile()
     {
-      // (1) ¥ª¥Ö¥¸¥§¥¯¥È»²¾È·ĞÍ³¤Ç¡¢get_connector_profile()¤ËÀµ¤·¤¯¥¢¥¯¥»¥¹¤Ç¤­¤ë¤«¡©
-      // get_connector_profile()¤ÏCORBA¥¤¥ó¥¿¥Õ¥§¡¼¥¹¤Ê¤Î¤Ç¡¢¥ª¥Ö¥¸¥§¥¯¥È»²¾È·ĞÍ³¤Ç¥¢¥¯¥»¥¹¤·¡¢
-      // CORBA¥¤¥ó¥¿¥Õ¥§¡¼¥¹¤È¤·¤Æµ¡Ç½¤·¤Æ¤¤¤ë¤³¤È¤ò³ÎÇ§¤¹¤ë
+      // (1) ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆå‚ç…§çµŒç”±ã§ã€get_connector_profile()ã«æ­£ã—ãã‚¢ã‚¯ã‚»ã‚¹ã§ãã‚‹ã‹ï¼Ÿ
+      // get_connector_profile()ã¯CORBAã‚¤ãƒ³ã‚¿ãƒ•ã‚§ãƒ¼ã‚¹ãªã®ã§ã€ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆå‚ç…§çµŒç”±ã§ã‚¢ã‚¯ã‚»ã‚¹ã—ã€
+      // CORBAã‚¤ãƒ³ã‚¿ãƒ•ã‚§ãƒ¼ã‚¹ã¨ã—ã¦æ©Ÿèƒ½ã—ã¦ã„ã‚‹ã“ã¨ã‚’ç¢ºèªã™ã‚‹
       const RTC::PortService_ptr portRef = m_pPortBase->getPortRef();
       const RTC::ConnectorProfile* pConnProfile = portRef->get_connector_profile("connect_id0");
 
-      // (2) ConnectorProfile.name¤òÀµ¤·¤¯¼èÆÀ¤Ç¤­¤ë¤«¡©
+      // (2) ConnectorProfile.nameã‚’æ­£ã—ãå–å¾—ã§ãã‚‹ã‹ï¼Ÿ
       CPPUNIT_ASSERT_EQUAL(
 			   std::string("ConnectorProfile-name"),
 			   std::string(pConnProfile->name));
 
-      // (3) ConnectorProfile.connector_id¤òÀµ¤·¤¯¼èÆÀ¤Ç¤­¤ë¤«¡©
+      // (3) ConnectorProfile.connector_idã‚’æ­£ã—ãå–å¾—ã§ãã‚‹ã‹ï¼Ÿ
       CPPUNIT_ASSERT_EQUAL(
 			   std::string("connect_id0"),
 			   std::string(pConnProfile->connector_id));
 
-      // (4) ConnectorProfile.properties¤òÀµ¤·¤¯¼èÆÀ¤Ç¤­¤ë¤«¡©
+      // (4) ConnectorProfile.propertiesã‚’æ­£ã—ãå–å¾—ã§ãã‚‹ã‹ï¼Ÿ
       const SDOPackage::NameValue& property = pConnProfile->properties[0];
-      // (4-a) name¤òÀµ¤·¤¯¼èÆÀ¤Ç¤­¤ë¤«¡©
+      // (4-a) nameã‚’æ­£ã—ãå–å¾—ã§ãã‚‹ã‹ï¼Ÿ
       CPPUNIT_ASSERT_EQUAL(
 			   std::string("ConnectorProfile-properties0-name"),
 			   std::string(property.name));
 
-      // (4-b) value¤òÀµ¤·¤¯¼èÆÀ¤Ç¤­¤ë¤«¡©
+      // (4-b) valueã‚’æ­£ã—ãå–å¾—ã§ãã‚‹ã‹ï¼Ÿ
       {
 	CORBA::Float value;
 	property.value >>= value;
@@ -587,71 +587,71 @@ namespace PortBase
     }
 		
     /*!
-     * @brief connect()¥á¥½¥Ã¥É¤Î¥Æ¥¹¥È
+     * @brief connect()ãƒ¡ã‚½ãƒƒãƒ‰ã®ãƒ†ã‚¹ãƒˆ
      * 
-     * - ¥ª¥Ö¥¸¥§¥¯¥È»²¾È·ĞÍ³¤Ç¡¢connect()¤ËÀµ¤·¤¯¥¢¥¯¥»¥¹¤Ç¤­¤ë¤«¡©
-     * - ÀÜÂ³¤¬À®¸ù¤¹¤ë¤«¡©
-     * - ÀÜÂ³»ş¤Ënotify_connect()¤¬°Õ¿Ş¤É¤ª¤ê¤Ë£±²ó¤À¤±¸Æ¤Ó½Ğ¤µ¤ì¤¿¤«¡©
+     * - ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆå‚ç…§çµŒç”±ã§ã€connect()ã«æ­£ã—ãã‚¢ã‚¯ã‚»ã‚¹ã§ãã‚‹ã‹ï¼Ÿ
+     * - æ¥ç¶šãŒæˆåŠŸã™ã‚‹ã‹ï¼Ÿ
+     * - æ¥ç¶šæ™‚ã«notify_connect()ãŒæ„å›³ã©ãŠã‚Šã«ï¼‘å›ã ã‘å‘¼ã³å‡ºã•ã‚ŒãŸã‹ï¼Ÿ
      */
     void test_connect()
     {
-      // (1) ¥ª¥Ö¥¸¥§¥¯¥È»²¾È·ĞÍ³¤Ç¡¢connect()¤ËÀµ¤·¤¯¥¢¥¯¥»¥¹¤Ç¤­¤ë¤«¡©
-      // connect()¤ÏCORBA¥¤¥ó¥¿¥Õ¥§¡¼¥¹¤Ê¤Î¤Ç¡¢¥ª¥Ö¥¸¥§¥¯¥È»²¾È·ĞÍ³¤Ç¥¢¥¯¥»¥¹¤·¡¢
-      // CORBA¥¤¥ó¥¿¥Õ¥§¡¼¥¹¤È¤·¤Æµ¡Ç½¤·¤Æ¤¤¤ë¤³¤È¤ò³ÎÇ§¤¹¤ë
+      // (1) ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆå‚ç…§çµŒç”±ã§ã€connect()ã«æ­£ã—ãã‚¢ã‚¯ã‚»ã‚¹ã§ãã‚‹ã‹ï¼Ÿ
+      // connect()ã¯CORBAã‚¤ãƒ³ã‚¿ãƒ•ã‚§ãƒ¼ã‚¹ãªã®ã§ã€ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆå‚ç…§çµŒç”±ã§ã‚¢ã‚¯ã‚»ã‚¹ã—ã€
+      // CORBAã‚¤ãƒ³ã‚¿ãƒ•ã‚§ãƒ¼ã‚¹ã¨ã—ã¦æ©Ÿèƒ½ã—ã¦ã„ã‚‹ã“ã¨ã‚’ç¢ºèªã™ã‚‹
       RTC::PortService_ptr portRef = m_pPortBase->getPortRef();
 			
-      // ÀÜÂ³»ş¤ËÉ¬Í×¤È¤Ê¤ëConnectorProfile¤ò¹½ÃÛ¤¹¤ë
+      // æ¥ç¶šæ™‚ã«å¿…è¦ã¨ãªã‚‹ConnectorProfileã‚’æ§‹ç¯‰ã™ã‚‹
       RTC::ConnectorProfile connProfile;
       connProfile.name = "ConnectorProfile-name";
       connProfile.connector_id = "connect_id1";
       connProfile.ports.length(1);
       connProfile.ports[0] = portRef;
 
-      // (2) ÀÜÂ³¤¬À®¸ù¤¹¤ë¤«¡©
+      // (2) æ¥ç¶šãŒæˆåŠŸã™ã‚‹ã‹ï¼Ÿ
       CPPUNIT_ASSERT_EQUAL(RTC::RTC_OK, portRef->connect(connProfile));
       
-      // (3) ÀÜÂ³»ş¤Ënotify_connect()¤¬°Õ¿Ş¤É¤ª¤ê¤Ë£±²ó¤À¤±¸Æ¤Ó½Ğ¤µ¤ì¤¿¤«¡©
+      // (3) æ¥ç¶šæ™‚ã«notify_connect()ãŒæ„å›³ã©ãŠã‚Šã«ï¼‘å›ã ã‘å‘¼ã³å‡ºã•ã‚ŒãŸã‹ï¼Ÿ
       const PortBaseMock* pPortBaseMock = dynamic_cast<const PortBaseMock*>(m_pPortBase);
       CPPUNIT_ASSERT(pPortBaseMock != 0);
       CPPUNIT_ASSERT_EQUAL(1, (int) pPortBaseMock->getNotifyConnectTimes().size());
     }
 		
     /*!
-     * @brief notify_connect()¥á¥½¥Ã¥É¤Î¥Æ¥¹¥È
+     * @brief notify_connect()ãƒ¡ã‚½ãƒƒãƒ‰ã®ãƒ†ã‚¹ãƒˆ
      */
     void test_notify_connect()
     {
-      // notify_connect()¥á¥½¥Ã¥É¤Ï¡¢test_connect¤Ë¤Æ´ÖÀÜÅª¤Ë¥Æ¥¹¥È¤µ¤ì¤Æ¤¤¤ë¤Î¤Ç¡¢¤³¤³¤Ç¤Ï¥Æ¥¹¥ÈÉÔÍ×¤Ç¤¢¤ë
+      // notify_connect()ãƒ¡ã‚½ãƒƒãƒ‰ã¯ã€test_connectã«ã¦é–“æ¥çš„ã«ãƒ†ã‚¹ãƒˆã•ã‚Œã¦ã„ã‚‹ã®ã§ã€ã“ã“ã§ã¯ãƒ†ã‚¹ãƒˆä¸è¦ã§ã‚ã‚‹
     }
 		
     /*!
-     * @brief disconnect()¥á¥½¥Ã¥É¤Î¥Æ¥¹¥È
+     * @brief disconnect()ãƒ¡ã‚½ãƒƒãƒ‰ã®ãƒ†ã‚¹ãƒˆ
      * 
-     * - ¥ª¥Ö¥¸¥§¥¯¥È»²¾È·ĞÍ³¤Ç¡¢disconnect()¤ËÀµ¤·¤¯¥¢¥¯¥»¥¹¤Ç¤­¤ë¤«¡©
-     * - ÀÚÃÇ¤¬À®¸ù¤¹¤ë¤«¡©
-     * - ÀÚÃÇ»ş¤Ënotify_disconnect()¤¬¡¢°Õ¿Ş¤É¤ª¤ê£±²ó¤À¤±¸Æ¤Ó½Ğ¤µ¤ì¤Æ¤¤¤ë¤«¡©
+     * - ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆå‚ç…§çµŒç”±ã§ã€disconnect()ã«æ­£ã—ãã‚¢ã‚¯ã‚»ã‚¹ã§ãã‚‹ã‹ï¼Ÿ
+     * - åˆ‡æ–­ãŒæˆåŠŸã™ã‚‹ã‹ï¼Ÿ
+     * - åˆ‡æ–­æ™‚ã«notify_disconnect()ãŒã€æ„å›³ã©ãŠã‚Šï¼‘å›ã ã‘å‘¼ã³å‡ºã•ã‚Œã¦ã„ã‚‹ã‹ï¼Ÿ
      */
     void test_disconnect()
     {
-      // (1) ¥ª¥Ö¥¸¥§¥¯¥È»²¾È·ĞÍ³¤Ç¡¢disconnect()¤ËÀµ¤·¤¯¥¢¥¯¥»¥¹¤Ç¤­¤ë¤«¡©
-      // disconnect()¤ÏCORBA¥¤¥ó¥¿¥Õ¥§¡¼¥¹¤Ê¤Î¤Ç¡¢¥ª¥Ö¥¸¥§¥¯¥È»²¾È·ĞÍ³¤Ç¥¢¥¯¥»¥¹¤·¡¢
-      // CORBA¥¤¥ó¥¿¥Õ¥§¡¼¥¹¤È¤·¤Æµ¡Ç½¤·¤Æ¤¤¤ë¤³¤È¤ò³ÎÇ§¤¹¤ë
+      // (1) ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆå‚ç…§çµŒç”±ã§ã€disconnect()ã«æ­£ã—ãã‚¢ã‚¯ã‚»ã‚¹ã§ãã‚‹ã‹ï¼Ÿ
+      // disconnect()ã¯CORBAã‚¤ãƒ³ã‚¿ãƒ•ã‚§ãƒ¼ã‚¹ãªã®ã§ã€ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆå‚ç…§çµŒç”±ã§ã‚¢ã‚¯ã‚»ã‚¹ã—ã€
+      // CORBAã‚¤ãƒ³ã‚¿ãƒ•ã‚§ãƒ¼ã‚¹ã¨ã—ã¦æ©Ÿèƒ½ã—ã¦ã„ã‚‹ã“ã¨ã‚’ç¢ºèªã™ã‚‹
       RTC::PortService_ptr portRef = m_pPortBase->getPortRef();
 			
-      // ÀÜÂ³»ş¤ËÉ¬Í×¤È¤Ê¤ëConnectorProfile¤ò¹½ÃÛ¤¹¤ë
+      // æ¥ç¶šæ™‚ã«å¿…è¦ã¨ãªã‚‹ConnectorProfileã‚’æ§‹ç¯‰ã™ã‚‹
       RTC::ConnectorProfile connProfile;
       connProfile.name = "ConnectorProfile-name";
       connProfile.connector_id = "connect_id2";
       connProfile.ports.length(1);
       connProfile.ports[0] = portRef;
 
-      // ¤Ş¤º¤ÏÀÜÂ³¤¹¤ë
+      // ã¾ãšã¯æ¥ç¶šã™ã‚‹
       CPPUNIT_ASSERT_EQUAL(RTC::RTC_OK, portRef->connect(connProfile));
       
-      // (2) ÀÚÃÇ¤¬À®¸ù¤¹¤ë¤«¡©
+      // (2) åˆ‡æ–­ãŒæˆåŠŸã™ã‚‹ã‹ï¼Ÿ
       CPPUNIT_ASSERT_EQUAL(RTC::RTC_OK, portRef->disconnect(connProfile.connector_id));
       
-      // (3) ÀÚÃÇ»ş¤Ënotify_disconnect()¤¬¡¢°Õ¿Ş¤É¤ª¤ê£±²ó¤À¤±¸Æ¤Ó½Ğ¤µ¤ì¤Æ¤¤¤ë¤«¡©
+      // (3) åˆ‡æ–­æ™‚ã«notify_disconnect()ãŒã€æ„å›³ã©ãŠã‚Šï¼‘å›ã ã‘å‘¼ã³å‡ºã•ã‚Œã¦ã„ã‚‹ã‹ï¼Ÿ
       const PortBaseMock* pPortBaseMock = dynamic_cast<const PortBaseMock*>(m_pPortBase);
       CPPUNIT_ASSERT(pPortBaseMock != 0);
       CPPUNIT_ASSERT_EQUAL(1, (int) pPortBaseMock->getNotifyDisconnectTimes().size());
@@ -663,11 +663,11 @@ namespace PortBase
       RTC::PortService_ptr portRef_2 = m_pPortBase_2->getPortRef();
       RTC::PortService_ptr portRef_3 = m_pPortBase_3->getPortRef();
 
-      // ¤³¤³¤Ç¤Ï¡¢  setUp() ¤Î PortBaseMock¤Î¥³¥ó¥¹¥È¥é¥¯¥¿Æâ¤Ç
-      // ¥Æ¥¹¥È¤Î°ÙÀßÄê¤µ¤ì¤Æ¤¤¤ë connect_id0 ¤ÏÉÔÍ×¤Ê¤¿¤áºï½ü¤¹¤ë
-      // connect_id0 ¤Ï
+      // ã“ã“ã§ã¯ã€  setUp() ã® PortBaseMockã®ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿å†…ã§
+      // ãƒ†ã‚¹ãƒˆã®ç‚ºè¨­å®šã•ã‚Œã¦ã„ã‚‹ connect_id0 ã¯ä¸è¦ãªãŸã‚å‰Šé™¤ã™ã‚‹
+      // connect_id0 ã¯
       //  get_port_profile(),getPortProfile(),get_connector_profiles() 
-      // ¤Î¥Æ¥¹¥È¤Ç»ÈÍÑ¤·¤Æ¤¤¤ë
+      // ã®ãƒ†ã‚¹ãƒˆã§ä½¿ç”¨ã—ã¦ã„ã‚‹
       PortBaseMock* pPBMock
                  = dynamic_cast<PortBaseMock*>(m_pPortBase);
       pPBMock->erase_m_profile();
@@ -699,75 +699,75 @@ namespace PortBase
     }
 		
     /*!
-     * @brief setName()¥á¥½¥Ã¥É¤Î¥Æ¥¹¥È
+     * @brief setName()ãƒ¡ã‚½ãƒƒãƒ‰ã®ãƒ†ã‚¹ãƒˆ
      * 
-     * - setName()¤Ë¤è¤ê¡¢°Õ¿Ş¤É¤ª¤ê¤ËPortProfile.name¤¬½ñ¤­´¹¤¨¤é¤ì¤Æ¤¤¤ë¤«¡©
+     * - setName()ã«ã‚ˆã‚Šã€æ„å›³ã©ãŠã‚Šã«PortProfile.nameãŒæ›¸ãæ›ãˆã‚‰ã‚Œã¦ã„ã‚‹ã‹ï¼Ÿ
      */
     void test_setName()
     {
-      // setName()¤òÍÑ¤¤¤Æ¡¢PortProfile.name¤ò½ñ¤­´¹¤¨¤ë
+      // setName()ã‚’ç”¨ã„ã¦ã€PortProfile.nameã‚’æ›¸ãæ›ãˆã‚‹
       m_pPortBase->setName("inport0-changed");
 			
-      // setName()¤òÍÑ¤¤¤Æ¡¢PortProfile.name¤ò½ñ¤­´¹¤¨¤ë
+      // setName()ã‚’ç”¨ã„ã¦ã€PortProfile.nameã‚’æ›¸ãæ›ãˆã‚‹
       std::string str(m_pPortBase->getName());
       CPPUNIT_ASSERT_EQUAL(std::string("inport0-changed"), str);
 			
-      // setName()¤Ë¤è¤ê¡¢°Õ¿Ş¤É¤ª¤ê¤ËPortProfile.name¤¬½ñ¤­´¹¤¨¤é¤ì¤Æ¤¤¤ë¤«¡©
+      // setName()ã«ã‚ˆã‚Šã€æ„å›³ã©ãŠã‚Šã«PortProfile.nameãŒæ›¸ãæ›ãˆã‚‰ã‚Œã¦ã„ã‚‹ã‹ï¼Ÿ
       const RTC::PortProfile& portProfile = m_pPortBase->getPortProfile();
       CPPUNIT_ASSERT_EQUAL(std::string("inport0-changed"), std::string(portProfile.name));
     }
 		
     /*!
-     * @brief getProfile()¥á¥½¥Ã¥É¤Î¥Æ¥¹¥È
+     * @brief getProfile()ãƒ¡ã‚½ãƒƒãƒ‰ã®ãƒ†ã‚¹ãƒˆ
      * 
-     * - PortProfile.name¤òÀµ¤·¤¯¼èÆÀ¤Ç¤­¤ë¤«¡©
-     * - PortProfile.interfaces¤òÀµ¤·¤¯¼èÆÀ¤Ç¤­¤ë¤«¡©
-     * - PortProfile.connector_profiles¤òÀµ¤·¤¯¼èÆÀ¤Ç¤­¤ë¤«¡©
-     * - PortProfile.properties¤òÀµ¤·¤¯¼èÆÀ¤Ç¤­¤ë¤«¡©
+     * - PortProfile.nameã‚’æ­£ã—ãå–å¾—ã§ãã‚‹ã‹ï¼Ÿ
+     * - PortProfile.interfacesã‚’æ­£ã—ãå–å¾—ã§ãã‚‹ã‹ï¼Ÿ
+     * - PortProfile.connector_profilesã‚’æ­£ã—ãå–å¾—ã§ãã‚‹ã‹ï¼Ÿ
+     * - PortProfile.propertiesã‚’æ­£ã—ãå–å¾—ã§ãã‚‹ã‹ï¼Ÿ
      */
     void test_getProfile()
     {
       const RTC::PortProfile& portProfile = m_pPortBase->getProfile();
 
-      // (1) PortProfile.name¤òÀµ¤·¤¯¼èÆÀ¤Ç¤­¤ë¤«¡©
+      // (1) PortProfile.nameã‚’æ­£ã—ãå–å¾—ã§ãã‚‹ã‹ï¼Ÿ
       CPPUNIT_ASSERT_EQUAL(std::string("inport0"), std::string(portProfile.name));
 
-      // (2) PortProfile.interfaces¤òÀµ¤·¤¯¼èÆÀ¤Ç¤­¤ë¤«¡©
+      // (2) PortProfile.interfacesã‚’æ­£ã—ãå–å¾—ã§ãã‚‹ã‹ï¼Ÿ
       const RTC::PortInterfaceProfile& portIfProfile = portProfile.interfaces[0];
-      // (2-a) PortInterfaceProfile.instance_name¤òÀµ¤·¤¯¼èÆÀ¤Ç¤­¤ë¤«¡©
+      // (2-a) PortInterfaceProfile.instance_nameã‚’æ­£ã—ãå–å¾—ã§ãã‚‹ã‹ï¼Ÿ
       CPPUNIT_ASSERT_EQUAL(
 			   std::string("PortInterfaceProfile-instance_name"),
 			   std::string(portIfProfile.instance_name));
 
-      // (2-b) PortInterfaceProfile.type_name¤òÀµ¤·¤¯¼èÆÀ¤Ç¤­¤ë¤«¡©
+      // (2-b) PortInterfaceProfile.type_nameã‚’æ­£ã—ãå–å¾—ã§ãã‚‹ã‹ï¼Ÿ
       CPPUNIT_ASSERT_EQUAL(
 			   std::string("PortInterfaceProfile-type_name"),
 			   std::string(portIfProfile.type_name));
 			
-      // (2-c) PortInterfaceProfile.polarity¤òÀµ¤·¤¯¼èÆÀ¤Ç¤­¤ë¤«¡©
+      // (2-c) PortInterfaceProfile.polarityã‚’æ­£ã—ãå–å¾—ã§ãã‚‹ã‹ï¼Ÿ
       CPPUNIT_ASSERT_EQUAL(RTC::REQUIRED, portIfProfile.polarity);
 
-      // (3) PortProfile.connector_profiles¤òÀµ¤·¤¯¼èÆÀ¤Ç¤­¤ë¤«¡©
+      // (3) PortProfile.connector_profilesã‚’æ­£ã—ãå–å¾—ã§ãã‚‹ã‹ï¼Ÿ
       const RTC::ConnectorProfile& connProfile = portProfile.connector_profiles[0];
-      // (3-a) ConnectorProfile.name¤òÀµ¤·¤¯¼èÆÀ¤Ç¤­¤ë¤«¡©
+      // (3-a) ConnectorProfile.nameã‚’æ­£ã—ãå–å¾—ã§ãã‚‹ã‹ï¼Ÿ
       CPPUNIT_ASSERT_EQUAL(
 			   std::string("ConnectorProfile-name"),
 			   std::string(connProfile.name));
 			
-      // (3-b) ConnectorProfile.connector_id¤òÀµ¤·¤¯¼èÆÀ¤Ç¤­¤ë¤«¡©
+      // (3-b) ConnectorProfile.connector_idã‚’æ­£ã—ãå–å¾—ã§ãã‚‹ã‹ï¼Ÿ
       CPPUNIT_ASSERT_EQUAL(
 			   std::string("connect_id0"),
 			   std::string(connProfile.connector_id));
 
-      // (3-c) ConnectorPofile.properties¤òÀµ¤·¤¯¼èÆÀ¤Ç¤­¤ë¤«¡©
+      // (3-c) ConnectorPofile.propertiesã‚’æ­£ã—ãå–å¾—ã§ãã‚‹ã‹ï¼Ÿ
       {
 	const SDOPackage::NameValue& property = connProfile.properties[0];
-	// (3-c-1) name¤òÀµ¤·¤¯¼èÆÀ¤Ç¤­¤ë¤«¡©
+	// (3-c-1) nameã‚’æ­£ã—ãå–å¾—ã§ãã‚‹ã‹ï¼Ÿ
 	CPPUNIT_ASSERT_EQUAL(
 			     std::string("ConnectorProfile-properties0-name"),
 			     std::string(property.name));
 			
-	// (3-c-2) value¤òÀµ¤·¤¯¼èÆÀ¤Ç¤­¤ë¤«¡©
+	// (3-c-2) valueã‚’æ­£ã—ãå–å¾—ã§ãã‚‹ã‹ï¼Ÿ
 	{
 	  CORBA::Float value;
 	  property.value >>= value;
@@ -775,15 +775,15 @@ namespace PortBase
 	}
       }
 
-      // (4) PortProfile.properties¤òÀµ¤·¤¯¼èÆÀ¤Ç¤­¤ë¤«¡©
+      // (4) PortProfile.propertiesã‚’æ­£ã—ãå–å¾—ã§ãã‚‹ã‹ï¼Ÿ
       {
 	const SDOPackage::NameValue& property = portProfile.properties[0];
-	// (4-a) name¤òÀµ¤·¤¯¼èÆÀ¤Ç¤­¤ë¤«¡©
+	// (4-a) nameã‚’æ­£ã—ãå–å¾—ã§ãã‚‹ã‹ï¼Ÿ
 	CPPUNIT_ASSERT_EQUAL(
 			     std::string("PortProfile-properties0-name"),
 			     std::string(property.name));
 				
-	// (4-b) value¤òÀµ¤·¤¯¼èÆÀ¤Ç¤­¤ë¤«¡©
+	// (4-b) valueã‚’æ­£ã—ãå–å¾—ã§ãã‚‹ã‹ï¼Ÿ
 	{
 	  CORBA::Float value;
 	  property.value >>= value;
@@ -793,18 +793,18 @@ namespace PortBase
     }
 		
     /*!
-     * @brief setPortRef()¥á¥½¥Ã¥É¤Î¥Æ¥¹¥È
+     * @brief setPortRef()ãƒ¡ã‚½ãƒƒãƒ‰ã®ãƒ†ã‚¹ãƒˆ
      * 
-     * - setPortRef()¤òÍÑ¤¤¤Æ¡¢PortBase¥ª¥Ö¥¸¥§¥¯¥È»²¾È¤òÀµ¤·¤¯ÀßÄê¤Ç¤­¤ë¤«¡©
+     * - setPortRef()ã‚’ç”¨ã„ã¦ã€PortBaseã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆå‚ç…§ã‚’æ­£ã—ãè¨­å®šã§ãã‚‹ã‹ï¼Ÿ
      */
     void test_setPortRef()
     {
-      // °ìÃ¶¡¢ÀßÄêºÑ¤ß¤ÎPortBase¥ª¥Ö¥¸¥§¥¯¥È»²¾È¤ò¥ê¥»¥Ã¥È¤·¤Æ¤ª¤¯
+      // ä¸€æ—¦ã€è¨­å®šæ¸ˆã¿ã®PortBaseã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆå‚ç…§ã‚’ãƒªã‚»ãƒƒãƒˆã—ã¦ãŠã
       m_pPortBase->_remove_ref();
 
-      // setPortRef()¤òÍÑ¤¤¤Æ¡¢PortBase¥ª¥Ö¥¸¥§¥¯¥È»²¾È¤òÀµ¤·¤¯ÀßÄê¤Ç¤­¤ë¤«¡©
-      // (getPortRef()¤òÍÑ¤¤¤Æ¡¢Port¥¤¥ó¥¿¥Õ¥§¡¼¥¹¤Î¥ª¥Ö¥¸¥§¥¯¥È»²¾È¤ò¼èÆÀ¤·¡¢
-      // ¼èÆÀ¤·¤¿»²¾È¤¬¡¢¤¢¤é¤«¤¸¤áÀßÄê¤·¤¿»²¾È¤È°ìÃ×¤¹¤ë¤³¤È¤ò³ÎÇ§¤¹¤ë)
+      // setPortRef()ã‚’ç”¨ã„ã¦ã€PortBaseã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆå‚ç…§ã‚’æ­£ã—ãè¨­å®šã§ãã‚‹ã‹ï¼Ÿ
+      // (getPortRef()ã‚’ç”¨ã„ã¦ã€Portã‚¤ãƒ³ã‚¿ãƒ•ã‚§ãƒ¼ã‚¹ã®ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆå‚ç…§ã‚’å–å¾—ã—ã€
+      // å–å¾—ã—ãŸå‚ç…§ãŒã€ã‚ã‚‰ã‹ã˜ã‚è¨­å®šã—ãŸå‚ç…§ã¨ä¸€è‡´ã™ã‚‹ã“ã¨ã‚’ç¢ºèªã™ã‚‹)
       RTC::PortService_var port = m_pPortBase->_this();
       RTC::PortService_ptr portRef = port._retn();
       m_pPortBase->setPortRef(portRef);
@@ -813,31 +813,31 @@ namespace PortBase
     }
 
     /*!
-     * @brief getPortRef()¥á¥½¥Ã¥É¤Î¥Æ¥¹¥È
+     * @brief getPortRef()ãƒ¡ã‚½ãƒƒãƒ‰ã®ãƒ†ã‚¹ãƒˆ
      */
     void test_getPortRef()
     {
-      // test_setPortRef()¤Ë¤è¤ê¥Æ¥¹¥È¤µ¤ì¤Æ¤¤¤ë
+      // test_setPortRef()ã«ã‚ˆã‚Šãƒ†ã‚¹ãƒˆã•ã‚Œã¦ã„ã‚‹
     }
 		
     /*!
-     * @brief getUUID()¥á¥½¥Ã¥É¤Î¥Æ¥¹¥È
+     * @brief getUUID()ãƒ¡ã‚½ãƒƒãƒ‰ã®ãƒ†ã‚¹ãƒˆ
      * 
-     * - UUID¤ò¼èÆÀ¤Ç¤­¤ë¤«¡©¡Ê¶õÊ¸»úÎó¤Ç¤Ê¤¤¤«¤É¤¦¤«¤Î¤ß¤Ç¥Á¥§¥Ã¥¯¡Ë
+     * - UUIDã‚’å–å¾—ã§ãã‚‹ã‹ï¼Ÿï¼ˆç©ºæ–‡å­—åˆ—ã§ãªã„ã‹ã©ã†ã‹ã®ã¿ã§ãƒã‚§ãƒƒã‚¯ï¼‰
      */
     void test_getUUID()
     {
-      // getUUID()¥á¥½¥Ã¥É¤Ïprotected¤Ç¤¢¤ë¤¿¤á¡¢PortBaseMock¤Ë¥À¥¦¥ó¥­¥ã¥¹¥È¤·¤Æ¤«¤é¥¢¥¯¥»¥¹¤¹¤ë
+      // getUUID()ãƒ¡ã‚½ãƒƒãƒ‰ã¯protectedã§ã‚ã‚‹ãŸã‚ã€PortBaseMockã«ãƒ€ã‚¦ãƒ³ã‚­ãƒ£ã‚¹ãƒˆã—ã¦ã‹ã‚‰ã‚¢ã‚¯ã‚»ã‚¹ã™ã‚‹
       PortBaseMock* pPortBase = dynamic_cast<PortBaseMock*>(m_pPortBase);
       CPPUNIT_ASSERT(pPortBase != 0);
 			
-      // UUID¤ò¼èÆÀ¤Ç¤­¤ë¤«¡©¡Ê¶õÊ¸»úÎó¤Ç¤Ê¤¤¤«¤É¤¦¤«¤Î¤ß¤Ç¥Á¥§¥Ã¥¯¡Ë
+      // UUIDã‚’å–å¾—ã§ãã‚‹ã‹ï¼Ÿï¼ˆç©ºæ–‡å­—åˆ—ã§ãªã„ã‹ã©ã†ã‹ã®ã¿ã§ãƒã‚§ãƒƒã‚¯ï¼‰
       std::string uuid = pPortBase->getUUID();
       CPPUNIT_ASSERT(uuid.length() > 0);
       //std::cout << std::endl << "uuid: " << uuid << std::endl;
     }
     /*!
-     * @brief setOwner()¥á¥½¥Ã¥É¤Î¥Æ¥¹¥È
+     * @brief setOwner()ãƒ¡ã‚½ãƒƒãƒ‰ã®ãƒ†ã‚¹ãƒˆ
      * 
      */
     void test_setOwner()

@@ -1,4 +1,4 @@
-
+﻿
 #include <Logger.h>
 
 namespace UnitTest

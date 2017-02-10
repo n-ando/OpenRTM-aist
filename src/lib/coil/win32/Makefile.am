@@ -41,7 +41,6 @@ coil_vc9.sln: coil.sln.dep vcproj
 		--dep coil.sln.dep \
 		--out coil_vc9.sln \
 		`find ./ -name '*_vc9.vcproj'`
-	qkc -O- -ms coil_vc9.sln
 
 coil_vc10.sln: coil.sln.dep vcproj
 	$(top_srcdir)/build/slntool.py     \
@@ -49,7 +48,6 @@ coil_vc10.sln: coil.sln.dep vcproj
 		--dep coil.sln.dep \
 		--out coil_vc10.sln \
 		`find ./ -name '*_vc10.vcxproj'`
-	qkc -O- -ms coil_vc10.sln
 
 coil_vc11.sln: coil.sln.dep vcproj
 	$(top_srcdir)/build/slntool.py     \
@@ -57,7 +55,6 @@ coil_vc11.sln: coil.sln.dep vcproj
 		--dep coil.sln.dep \
 		--out coil_vc11.sln \
 		`find ./ -name '*_vc11.vcxproj'`
-	qkc -O- -ms coil_vc11.sln
 
 coil_vc12.sln: coil.sln.dep vcproj
 	$(top_srcdir)/build/slntool.py     \
@@ -65,7 +62,6 @@ coil_vc12.sln: coil.sln.dep vcproj
 		--dep coil.sln.dep \
 		--out coil_vc12.sln \
 		`find ./ -name '*_vc12.vcxproj'`
-	qkc -O- -ms coil_vc12.sln
 	
 coil_vc14.sln: coil.sln.dep vcproj
 	$(top_srcdir)/build/slntool.py     \
@@ -73,5 +69,4 @@ coil_vc14.sln: coil.sln.dep vcproj
 		--dep coil.sln.dep \
 		--out coil_vc14.sln \
 		`find ./ -name '*_vc14.vcxproj'`
-	qkc -O- -ms coil_vc14.sln
 

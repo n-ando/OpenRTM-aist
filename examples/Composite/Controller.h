@@ -1,4 +1,4 @@
-// -*- C++ -*-
+﻿// -*- C++ -*-
 /*!
  * @file  Controller.h * @brief Controller component * @date  $Date$ 
  *

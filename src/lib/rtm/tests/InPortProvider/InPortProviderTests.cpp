@@ -1,4 +1,4 @@
-// -*- C++ -*-
+ï»¿// -*- C++ -*-
 /*!
  * @file   InPortProviderTests.cpp
  * @brief  InPortProvider test class
@@ -139,7 +139,7 @@ namespace InPortProvider
       std::auto_ptr<InPortProviderMock> provider(
           new InPortProviderMock("INTERFACE_TYPE", "DATA_FLOW_TYPE", "SUBSCRIPTION_TYPE"));
 
-      //m_properties¤ØÀßÄê
+      //m_propertiesã¸è¨­å®š
       provider->setDummydataInProperties();
 
       SDOPackage::NVList prop;
@@ -164,7 +164,7 @@ namespace InPortProvider
       std::auto_ptr<InPortProviderMock> provider(
           new InPortProviderMock("INTERFACE_TYPE", "DATA_FLOW_TYPE", "SUBSCRIPTION_TYPE"));
 
-      //m_properties¤ØÀßÄê
+      //m_propertiesã¸è¨­å®š
       provider->setDummydataInProperties();
 
       SDOPackage::NVList props;
@@ -186,7 +186,7 @@ namespace InPortProvider
       std::auto_ptr<InPortProviderMock> provider(
           new InPortProviderMock("INTERFACE_TYPE", "DATA_FLOW_TYPE", "SUBSCRIPTION_TYPE"));
 
-      //m_properties¤ØÀßÄê
+      //m_propertiesã¸è¨­å®š
       provider->setDummydataInProperties();
 
       SDOPackage::NVList props;

@@ -1,4 +1,4 @@
-// -*- C++ -*-
+ï»¿// -*- C++ -*-
 /*!
  * @file ServantBase.h
  * @brief doil implementation base class
@@ -24,18 +24,18 @@
 
 namespace doil
 {
-  // Servant À¸À®¡¦ºï½ü´Ø¿ô¤Îtypedef
+  // Servant ç”Ÿæˆãƒ»å‰Šé™¤é–¢æ•°ã®typedef
   typedef ServantBase* (*ServantNewFunc)(ImplBase*);
   typedef void (*ServantDeleteFunc)(ServantBase*);
 
-  // Servant À¸À®¤Î¤¿¤á¤Î¥Æ¥ó¥×¥ì¡¼¥È´Ø¿ô
+  // Servant ç”Ÿæˆã®ãŸã‚ã®ãƒ†ãƒ³ãƒ—ãƒ¬ãƒ¼ãƒˆé–¢æ•°
   template <class Servant>
   ServantBase* New(ImplBase* impl)
   {
     return new Servant(impl);
   }
 
-  // Servant ºï½ü¤Î¤¿¤á¤Î¥Æ¥ó¥×¥ì¡¼¥È´Ø¿ô
+  // Servant å‰Šé™¤ã®ãŸã‚ã®ãƒ†ãƒ³ãƒ—ãƒ¬ãƒ¼ãƒˆé–¢æ•°
   template <class Servant>
   void Delete(ServantBase* servant)
   {

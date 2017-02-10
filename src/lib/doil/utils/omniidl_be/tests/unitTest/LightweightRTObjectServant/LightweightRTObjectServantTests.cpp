@@ -1,4 +1,4 @@
-// -*- C++ -*-
+﻿// -*- C++ -*-
 /*!
  * @file   LightweightRTObjectServantTests.cpp
  * @brief  LightweightRTObjectServant test class

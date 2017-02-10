@@ -71,7 +71,6 @@ Signal_vc9.vcproj:
 		--yaml ../coil_test.vcproj.yaml \
 		--source $(TEST_SRC)
 #		--header $(TEST_H)
-	qkc -O- -sm $(win32_builddir)/Signal_vc9.vcproj
 
 Signal_vc10.vcproj:
 	$(top_builddir)/build/vcprojtool.py vcproj \
@@ -82,7 +81,6 @@ Signal_vc10.vcproj:
 		--out $(win32_builddir)/Signal_vc10.vcproj \
 		--yaml ../coil_test.vcproj.yaml \
 		--source $(TEST_SRC)
-	qkc -O- -sm $(win32_builddir)/Signal_vc10.vcproj
 
 
 

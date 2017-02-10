@@ -1,4 +1,4 @@
-// -*- C++ -*-
+﻿// -*- C++ -*-
 /*!
  * @file   OutPortProviderTests.cpp
  * @brief  OutPortProvider test class
@@ -222,12 +222,12 @@ namespace OutPortProvider
     }
 		
     /*!
-     * @brief publishInterfaceProfile()�᥽�åɤΥƥ��ȡ�
+     * @brief publishInterfaceProfile()メソッドのテスト。
      * 
-     * - dataport.interface_type�ץ��ѥƥ��������������Ǥ��뤫��
-     * - dataport.data_type�ץ��ѥƥ��϶�����
-     * - dataport.dataflow_type�ץ��ѥƥ��϶�����
-     * - dataport.subscription_type�ץ��ѥƥ��϶�����
+     * - dataport.interface_typeプロパティを正しく取得できるか？
+     * - dataport.data_typeプロパティは空か？
+     * - dataport.dataflow_typeプロパティは空か？
+     * - dataport.subscription_typeプロパティは空か？
      */
     void test_publishInterfaceProfile()
     {
@@ -238,7 +238,7 @@ namespace OutPortProvider
       SDOPackage::NVList prop;
       provider->publishInterfaceProfile(prop);
 
-      // dataport.data_type�ץ��ѥƥ��϶�����
+      // dataport.data_typeプロパティは空か？
       {
 	const char* value;
         try {
@@ -252,14 +252,14 @@ namespace OutPortProvider
         }
       }
 			
-      // dataport.interface_type�ץ��ѥƥ��������������Ǥ��뤫��
+      // dataport.interface_typeプロパティを正しく取得できるか？
       {
 	const char* value;
 	NVUtil::find(prop, "dataport.interface_type") >>= value;
 	CPPUNIT_ASSERT_EQUAL(std::string("INTERFACE_TYPE"), std::string(value));
       }
 			
-      // dataport.dataflow_type�ץ��ѥƥ��϶�����
+      // dataport.dataflow_typeプロパティは空か？
       {
 	const char* value;
         try {
@@ -273,7 +273,7 @@ namespace OutPortProvider
         }
       }
 			
-      // dataport.subscription_type�ץ��ѥƥ��϶�����
+      // dataport.subscription_typeプロパティは空か？
       {
 	const char* value;
         try {
@@ -289,12 +289,12 @@ namespace OutPortProvider
     }
 
     /*!
-     * @brief publishInterface()�᥽�åɤΥƥ���
+     * @brief publishInterface()メソッドのテスト
      * 
-     * - �������Ϥ���NameValue���֥������ȤΥ��󥿥ե����������פ����ݡ��ȤΤ���Ȱ��פ��ʤ����ˡ�
-     * Interface���󤬼�������ʤ����Ȥ��ǧ���롣
-     * - �������Ϥ���NameValue���֥������ȤΥ��󥿥ե����������פ����ݡ��ȤΤ���Ȱ��פ�����ˡ�
-     * Interface���������Ǥ������줬�����ͤȰ��פ��뤳�Ȥ��ǧ���롣
+     * - 引数で渡したNameValueオブジェクトのインタフェースタイプが、ポートのそれと一致しない場合に、
+     * Interface情報が取得されないことを確認する。
+     * - 引数で渡したNameValueオブジェクトのインタフェースタイプが、ポートのそれと一致する場合に、
+     * Interface情報を取得でき、それが期待値と一致することを確認する。
      */
     void test_publishInterface()
     {
@@ -305,30 +305,30 @@ namespace OutPortProvider
       SDOPackage::NVList prop;
       provider->publishInterfaceProfile(prop);
 			        
-      // (1) ���󥿥ե����������פ��԰��פξ�硧
+      // (1) インタフェースタイプが不一致の場合：
       SDOPackage::NVList prop_dummy = prop;
       for (CORBA::ULong i(0); i < prop_dummy.length(); ++i)
 	{
 	  if (std::string(prop_dummy[i].name) == std::string("dataport.interface_type"))
 	    {
-	      // ���󥿥ե����������פ����פ��ʤ��褦�ˡ��񤭴�����
+	      // インタフェースタイプが一致しないように、書き換える
 	      prop_dummy[i].value <<= "DUMMY";
 	    }
 	}
 
-      //m_properties��"PROPERTY_NAME1",��PROPERTY_NAME2�ɤ�����
+      //m_propertiesへ"PROPERTY_NAME1",”PROPERTY_NAME2”を設定
       provider->setDummydataInProperties();
 			
       provider->publishInterface(prop_dummy);
 			
-      // ���󥿥ե��������󤬼�������ʤ����Ȥ��ǧ����
+      // インタフェース情報が取得されないことを確認する
       CPPUNIT_ASSERT_EQUAL(CORBA::Long(-1), NVUtil::find_index(prop_dummy, "PROPERTY_NAME1"));
       CPPUNIT_ASSERT_EQUAL(CORBA::Long(-1), NVUtil::find_index(prop_dummy, "PROPERTY_NAME2"));
 			
-      // (2) ���󥿥ե����������װ��פξ�硧
+      // (2) インタフェースタイプ一致の場合：
       provider->publishInterface(prop);
 			
-      // ���󥿥ե��������󤬼�������뤳�Ȥ��ǧ����
+      // インタフェース情報が取得されることを確認する
       CORBA::Long index1 = NVUtil::find_index(prop, "PROPERTY_NAME1");
       CORBA::Long index2 = NVUtil::find_index(prop, "PROPERTY_NAME2");
       CPPUNIT_ASSERT(CORBA::Long(-1) != index1);
@@ -343,9 +343,9 @@ namespace OutPortProvider
       CPPUNIT_ASSERT_EQUAL(std::string("PROPERTY_VALUE2"), std::string(value2));
     }
     /*!
-     * @brief publishInterfaceProfile()�᥽�åɤΥƥ���
+     * @brief publishInterfaceProfile()メソッドのテスト
      * 
-     * - publishInterfaceProfile�᥽�åɤ�m_properties���ɤ߹���Ǥ��뤳�Ȥ��ǧ���롣
+     * - publishInterfaceProfileメソッドでm_propertiesを読み込んでいることを確認する。
      */
     void test_publishInterfaceProfile2()
     {
@@ -354,12 +354,12 @@ namespace OutPortProvider
                                   "DATA_FLOW_TYPE", "SUBSCRIPTION_TYPE"));
 
 
-      //m_properties��"PROPERTY_NAME1",��PROPERTY_NAME2�ɤ�����
+      //m_propertiesへ"PROPERTY_NAME1",”PROPERTY_NAME2”を設定
       provider->setDummydataInProperties();
 
       SDOPackage::NVList prop;
       provider->publishInterfaceProfile(prop);
-      // ���󥿥ե��������󤬼�������뤳�Ȥ��ǧ����
+      // インタフェース情報が取得されることを確認する
       CORBA::Long index1 = NVUtil::find_index(prop, "PROPERTY_NAME1");
       CORBA::Long index2 = NVUtil::find_index(prop, "PROPERTY_NAME2");
       CPPUNIT_ASSERT(CORBA::Long(-1) != index1);

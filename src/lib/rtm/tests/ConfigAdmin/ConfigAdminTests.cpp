@@ -1,4 +1,4 @@
-// -*- C++ -*-
+﻿// -*- C++ -*-
 /*!
  * @file   ConfigAdminTests.cpp
  * @brief  ConfigAdmin test class
@@ -76,7 +76,7 @@ namespace Config
     }
 		
     /*!
-     * @brief ���󥹥ȥ饯���Υƥ���
+     * @brief コンストラクタのテスト
      */
     void test_constructor()
     {
@@ -86,17 +86,17 @@ namespace Config
 			
       RTC::Config<double> config(name.c_str(), value, default_value.c_str());
 			
-      // ���ꤷ��̾�Τ����������ꤵ��Ƥ��뤫��
+      // 指定した名称が正しく設定されているか？
       CPPUNIT_ASSERT_EQUAL(name, std::string(config.name));
 			
-      // ���ꤷ���ǥե�����͡ʤ�ʸ����ɽ���ˤ����������ꤵ��Ƥ��뤫��
+      // 指定したデフォルト値（の文字列表現）が正しく設定されているか？
       CPPUNIT_ASSERT_EQUAL(default_value, std::string(config.default_value));
     }
 		
     /*!
-     * @brief update()�᥽�åɤΥƥ���
+     * @brief update()メソッドのテスト
      * 
-     * - �Х���ɤ����ѿ�����update()�ǻ��ꤵ�줿�ͤ���������������뤫��
+     * - バインドした変数が、update()で指定された値に正しく更新されるか？
      */
     void test_update()
     {
@@ -106,21 +106,21 @@ namespace Config
 			
       RTC::Config<double> config(name.c_str(), value, default_value.c_str());
 			
-      // update()���ϡ��ѿ��ͤ�������֤ΤޤޤΤϤ�
+      // update()前は、変数値が初期状態のままのはず
       CPPUNIT_ASSERT_EQUAL(0.0, value);
 			
-      // update()����
+      // update()する
       CPPUNIT_ASSERT_EQUAL(true, config.update("1.41421356"));
 			
-      // �Х���ɤ����ѿ�����update()�ǻ��ꤵ�줿�ͤ���������������뤫��
+      // バインドした変数が、update()で指定された値に正しく更新されるか？
       CPPUNIT_ASSERT_EQUAL(1.41421356, value);
     }
 		
     /*!
-     * @brief update()�᥽�åɤΥƥ���
+     * @brief update()メソッドのテスト
      * 
-     * - ����η����Ѵ��Ǥ��ʤ����Ƥ�update()��ƽФ����տޤɤ��꼺�Ԥ��뤫��
-     * - �Х���ɤ����ѿ����ͤ������󥹥ȥ饯���ǻ��ꤷ���ǥե�����ͤ���������������뤫��
+     * - 指定の型に変換できない内容でupdate()を呼出し、意図どおり失敗するか？
+     * - バインドした変数の値が、コンストラクタで指定したデフォルト値に正しく更新されるか？
      */
     void test_update_with_illegal_value()
     {
@@ -130,21 +130,21 @@ namespace Config
 			
       RTC::Config<double> config(name.c_str(), value, default_value.c_str());
 			
-      // update()���ϡ��ѿ��ͤ�������֤ΤޤޤΤϤ�
+      // update()前は、変数値が初期状態のままのはず
       CPPUNIT_ASSERT_EQUAL(0.0, value);
 			
-      // ��ư�������ͤ��Ѵ��Ǥ��ʤ����Ƥ�update()��ƽФ����տޤɤ��꼺�Ԥ��뤫��
+      // 浮動小数点値に変換できない内容でupdate()を呼出し、意図どおり失敗するか？
       CPPUNIT_ASSERT_EQUAL(false, config.update("Not float value"));
 			
-      // �Х���ɤ����ѿ����ͤ������󥹥ȥ饯���ǻ��ꤷ���ǥե�����ͤ���������������뤫��
+      // バインドした変数の値が、コンストラクタで指定したデフォルト値に正しく更新されるか？
       CPPUNIT_ASSERT_EQUAL(3.14159, value);
     }
 		
     /*!
-     * @brief update()�᥽�åɤΥƥ���
+     * @brief update()メソッドのテスト
      * 
-     * - ��ư�������ͤ��Ѵ��Ǥ��ʤ��ǥե�����ͤ����ꤵ�졢������ư�������ͤ��Ѵ��Ǥ��ʤ����Ƥ�update()��ƽФ�����硢
-     * �Х���ɤ����ѿ����ͤϡ���������뤳�Ȥʤ������ͤ�α�ޤ뤫��
+     * - 浮動小数点値に変換できないデフォルト値が指定され、かつ浮動小数点値に変換できない内容でupdate()を呼出した場合、
+     * バインドした変数の値は、更新されることなく元の値に留まるか？
      */
     void test_update_with_illegal_default_value()
     {
@@ -154,12 +154,12 @@ namespace Config
 			
       RTC::Config<double> config(name.c_str(), value, illegal_default_value.c_str());
 
-      // update()���ϡ��ѿ��ͤ�������֤ΤޤޤΤϤ�
+      // update()前は、変数値が初期状態のままのはず
       CPPUNIT_ASSERT_EQUAL(0.0, value);
 			
-      // ��ư�������ͤ��Ѵ��Ǥ��ʤ��ǥե�����ͤ����ꤵ�졢
-      // ������ư�������ͤ��Ѵ��Ǥ��ʤ����Ƥ�update()��ƽФ�����硢
-      // �Х���ɤ����ѿ����ͤϡ���������뤳�Ȥʤ������ͤ�α�ޤ뤫��
+      // 浮動小数点値に変換できないデフォルト値が指定され、
+      // かつ浮動小数点値に変換できない内容でupdate()を呼出した場合、
+      // バインドした変数の値は、更新されることなく元の値に留まるか？
       CPPUNIT_ASSERT_EQUAL(false, config.update("Not float value too"));
       CPPUNIT_ASSERT_EQUAL(0.0, value);
     }
@@ -180,7 +180,7 @@ namespace ConfigAdmin
     virtual ~OnUpdateCallbackMock(void){}
     void operator()(const char* config_set)
       {
-        // ���ν��Ϥ�������������ƤФ�Ƥ���
+        // この出力があれば正しく呼ばれている
 //      std::cout << "OnUpdateCallbackMock1 config_set=" << config_set << std::endl;
         result = true;
       }
@@ -253,7 +253,7 @@ namespace ConfigAdmin
     bool result;
   };
 
-  // ConfigAdmin ��Ѿ����ơ�protected: �ؿ��򥪡��С������ɤ���
+  // ConfigAdmin を継承して、protected: 関数をオーバーロードする
   class ConfigAdminMock : public RTC::ConfigAdmin
   {
   public:
@@ -384,9 +384,9 @@ namespace ConfigAdmin
     }
 		
     /*!
-     * @brief ���󥹥ȥ饯���Υƥ���
+     * @brief コンストラクタのテスト
      * 
-     * - �����ǻ��ꤷ������ե����졼����󥻥åȤ������������ꤵ��뤫��
+     * - 引数で指定したコンフィグレーションセットが、正しく設定されるか？
      */
     void test_constructor()
     {
@@ -395,44 +395,44 @@ namespace ConfigAdmin
 			
       RTC::ConfigAdmin configAdmin(configSet);
 			
-      // �����ǻ��ꤷ������ե����졼����󥻥åȤ������������ꤵ��뤫��
+      // 引数で指定したコンフィグレーションセットが、正しく設定されるか？
       const coil::Properties& activeConfigSet = configAdmin.getConfigurationSet("config_id");
       CPPUNIT_ASSERT_EQUAL(std::string("value"), activeConfigSet.getProperty("key"));
     }
 		
     /*!
-     * @brief bindParameter()�᥽�åɤΥƥ���
+     * @brief bindParameter()メソッドのテスト
      * 
-     * - bindParameter()�ǡ�������ѿ���Х���ɤǤ��뤫��
-     * - �Х���ɤ����ѿ��ϡ����ꤷ���ǥե�����ͤ���������������Ƥ��뤫��
+     * - bindParameter()で、正常に変数をバインドできるか？
+     * - バインドした変数は、指定したデフォルト値に正しく更新されているか？
      */		
     void test_bindParameter()
     {
       coil::Properties nullProp;
       RTC::ConfigAdmin configAdmin(nullProp);
 			
-      // bindParameter()�ǡ�������ѿ���Х���ɤǤ��뤫��
+      // bindParameter()で、正常に変数をバインドできるか？
       const char* varName = "name";
       double var = 0.0;
       const char* default_value = "3.14159";
       CPPUNIT_ASSERT_EQUAL(
 			   true, configAdmin.bindParameter(varName, var, default_value));
 			
-      // �Х���ɤ����ѿ��ϡ����ꤷ���ǥե�����ͤ���������������Ƥ��뤫��
+      // バインドした変数は、指定したデフォルト値に正しく更新されているか？
       CPPUNIT_ASSERT_EQUAL(3.14159, var);
     }
 		
     /*!
-     * @brief bindParameter()�᥽�åɤΥƥ���
+     * @brief bindParameter()メソッドのテスト
      * 
-     * - Ʊ��̾�Τ��ѿ��Х���ɤ��ߤơ��տޤɤ��꼺�Ԥ��뤫��
+     * - 同一名称の変数バインドを試みて、意図どおり失敗するか？
      */
     void test_bindParameter_already_exist()
     {
       coil::Properties nullProp;
       RTC::ConfigAdmin configAdmin(nullProp);
 			
-      // �ޤ��ϡ����ΥХ���ɤ�Ԥ�
+      // まずは、初回のバインドを行う
       const char* varName1 = "name";
       double var1 = 0.0;
       const char* default_value1 = "3.14159";
@@ -440,28 +440,28 @@ namespace ConfigAdmin
 			   true, configAdmin.bindParameter(varName1, var1, default_value1));
       CPPUNIT_ASSERT_EQUAL(3.14159, var1);
 			
-      // Ʊ��̾�Τ��ѿ��Х���ɤ��ߤơ��տޤɤ��꼺�Ԥ��뤫��
+      // 同一名称の変数バインドを試みて、意図どおり失敗するか？
       const char* varName2 = varName1;
       double var2 = 1.0;
       const char* default_value2 = "1.41421356";
       CPPUNIT_ASSERT_EQUAL(
 			   false, configAdmin.bindParameter(varName2, var2, default_value2));
 				
-      // �Х�����ѿ����ͤϹ�������뤳�Ȥʤ��ݻ�����Ƥ��뤫��
+      // バインド変数の値は更新されることなく保持されているか？
       CPPUNIT_ASSERT_EQUAL(3.14159, var1);
     }
 		
     /*!
-     * @brief bindParameter()�᥽�åɤΥƥ���
+     * @brief bindParameter()メソッドのテスト
      * 
-     * - ����Υǡ��������Ѵ��Ǥ��ʤ��ǥե�����ͤ���ꤷ�ơ��տޤɤ��꼺�Ԥ��뤫��
+     * - 指定のデータ型に変換できないデフォルト値を指定して、意図どおり失敗するか？
      */
     void test_bindParameter_illegal_default_value()
     {
       coil::Properties nullProp;
       RTC::ConfigAdmin configAdmin(nullProp);
 			
-      // ����Υǡ��������Ѵ��Ǥ��ʤ��ǥե�����ͤ���ꤷ�ơ��տޤɤ��꼺�Ԥ��뤫��
+      // 指定のデータ型に変換できないデフォルト値を指定して、意図どおり失敗するか？
       const char* varName = "name";
       double var = 0.0;
       const char* default_value = "Illegal default value";
@@ -470,63 +470,63 @@ namespace ConfigAdmin
     }
 		
     /*!
-     * @brief update()�᥽�åɤΥƥ���
+     * @brief update()メソッドのテスト
      * 
-     * - ����ե����졼����󥻥åȤ���ꤷ��update()�����������ƤǥХ�����ѿ��ͤ���������������뤫��
+     * - コンフィグレーションセットを指定してupdate()し、その内容でバインド変数値が正しく更新されるか？
      */
     void test_update()
     {
       coil::Properties nullProp;
       RTC::ConfigAdmin configAdmin(nullProp);
 			
-      // ����ե����졼����󥻥åȣ����������
+      // コンフィグレーションセット１を準備する
       coil::Properties configSet1("set 1");
       configSet1.setProperty("name", "1.41421356");
 			
-      // ����ե����졼����󥻥åȣ����������
+      // コンフィグレーションセット２を準備する
       coil::Properties configSet2("set 2");
       configSet2.setProperty("name", "1.7320508");
 			
-      // �����������ĤΥ���ե����졼����󥻥åȤ��ɲä��Ƥ���
+      // 準備した２つのコンフィグレーションセットを追加しておく
       CPPUNIT_ASSERT_EQUAL(true, configAdmin.addConfigurationSet(configSet1));
       CPPUNIT_ASSERT_EQUAL(true, configAdmin.addConfigurationSet(configSet2));
 			
-      // �ѿ���Х���ɤ���
+      // 変数をバインドする
       const char* varName = "name";
       double var = 0.0;
       const char* default_value = "3.14159";
       CPPUNIT_ASSERT_EQUAL(
 			   true, configAdmin.bindParameter(varName, var, default_value));
 			
-      // update()���ϡ��ޤ��ѿ����ǥե�����ͤΤޤޤǤ��뤳�Ȥ��ǧ����
+      // update()前は、まだ変数がデフォルト値のままであることを確認する
       CPPUNIT_ASSERT_EQUAL(3.14159, var);
 			
-      // ����ե����졼����󥻥åȣ�����ꤷ��update()�����������ƤǥХ�����ѿ��ͤ���������������뤫��
+      // コンフィグレーションセット１を指定してupdate()し、その内容でバインド変数値が正しく更新されるか？
       configAdmin.update("set 1");
       CPPUNIT_ASSERT_EQUAL(1.41421356, var);
 
-      // ����ե����졼����󥻥åȣ�����ꤷ��update()�����������ƤǥХ�����ѿ��ͤ���������������뤫��
+      // コンフィグレーションセット２を指定してupdate()し、その内容でバインド変数値が正しく更新されるか？
       configAdmin.update("set 2");
       CPPUNIT_ASSERT_EQUAL(1.7320508, var);
     }
 		
     /*!
-     * @brief update()�᥽�åɤΥƥ���
+     * @brief update()メソッドのテスト
      * 
-     * - ¸�ߤ��ʤ�����ե����졼�����ID����ꤷ��update()��ƽФ������ˡ�
-     * �Х�����ѿ����������줺�ˡ����Τޤ��ݻ�����뤫��
+     * - 存在しないコンフィグレーションIDを指定してupdate()を呼出した場合に、
+     * バインド変数が更新されずに、そのまま保持されるか？
      */
     void test_update_by_inexist_configuration_set()
     {
       coil::Properties nullProp;
       RTC::ConfigAdmin configAdmin(nullProp);
 			
-      // ����ե����졼����󥻥åȤ���������ɲä��Ƥ���
+      // コンフィグレーションセットを準備し、追加しておく
       coil::Properties configSet("set");
       configSet.setProperty("name", "1.41421356");
       CPPUNIT_ASSERT_EQUAL(true, configAdmin.addConfigurationSet(configSet));
 			
-      // �ѿ���Х���ɤ���
+      // 変数をバインドする
       const char* varName = "name";
       double var = 0.0;
       const char* default_value = "3.14159";
@@ -534,23 +534,23 @@ namespace ConfigAdmin
 			   true, configAdmin.bindParameter(varName, var, default_value));
       CPPUNIT_ASSERT_EQUAL(3.14159, var);
 			
-      // ¸�ߤ��ʤ�����ե����졼�����ID����ꤷ��update()��ƽФ������ˡ�
-      // �Х�����ѿ����������줺�ˡ����Τޤ��ݻ�����뤫��
+      // 存在しないコンフィグレーションIDを指定してupdate()を呼出した場合に、
+      // バインド変数が更新されずに、そのまま保持されるか？
       configAdmin.update("inexist set");
       CPPUNIT_ASSERT_EQUAL(3.14159, var);
     }
 		
     /*!
-     * @brief update()�᥽�åɡ�̾�λ���ˤΥƥ���
+     * @brief update()メソッド（名称指定）のテスト
      * 
-     * - ���ꤷ������ե����졼����󥻥åȤλ��ꤷ��̾�Τ��ѿ�����������������������뤫��
+     * - 指定したコンフィグレーションセットの指定した名称の変数だけが、正しく更新されるか？
      */
     void test_update_with_specified_parameter_name()
     {
       coil::Properties nullProp;
       RTC::ConfigAdmin configAdmin(nullProp);
 			
-      // ���ĤΥѥ�᡼���ͤ�ޤॳ��ե����졼����󥻥åȤ���������ɲä��Ƥ���
+      // ２つのパラメータ値を含むコンフィグレーションセットを準備し、追加しておく
       coil::Properties configSet1("set 1");
       configSet1.setProperty("name 1", "1.41421356");
       configSet1.setProperty("name 2", "1.7320508");
@@ -561,7 +561,7 @@ namespace ConfigAdmin
       configSet2.setProperty("name 2", "2.71828");
       CPPUNIT_ASSERT_EQUAL(true, configAdmin.addConfigurationSet(configSet2));
 			
-      // ���Ĥ��ѿ���Х���ɤ���
+      // ２つの変数をバインドする
       const char* varName1 = "name 1";
       double var1 = 0.0;
       const char* default_value1 = "2.23620679";
@@ -576,23 +576,23 @@ namespace ConfigAdmin
 			   true, configAdmin.bindParameter(varName2, var2, default_value2));
       CPPUNIT_ASSERT_EQUAL(2.4494897, var2);
 			
-      // ���ĤΤ������������ѿ��Τߤ�̾�λ��ꤷ��update()��Ԥ������ꤷ���ѿ���������������������뤫��
+      // ２つのうち、片方の変数のみを名称指定してupdate()を行い、指定した変数だけが正しく更新されるか？
       configAdmin.update("set 2", "name 1");
       CPPUNIT_ASSERT_EQUAL(3.14159, var1);
       CPPUNIT_ASSERT_EQUAL(2.4494897, var2);
     }
 		
     /*!
-     * @brief update()�᥽�åɡʥ����ƥ��֥���ե����졼����󥻥åȡˤΥƥ���
+     * @brief update()メソッド（アクティブコンフィグレーションセット）のテスト
      * 
-     * - update()�ƽФ��ˤ�ꡢ�Х�����ѿ��������ƥ��֤ʥ���ե����졼����󥻥åȤ��ͤǹ�������뤫��
+     * - update()呼出しにより、バインド変数がアクティブなコンフィグレーションセットの値で更新されるか？
      */
     void test_update_by_active_configuration_set()
     {
       coil::Properties nullProp;
       RTC::ConfigAdmin configAdmin(nullProp);
 			
-      // ����ե����졼����󥻥åȤ���������ɲä��Ƥ���
+      // コンフィグレーションセットを準備し、追加しておく
       coil::Properties configSet1("set 1");
       configSet1.setProperty("name", "1.41421356");
       CPPUNIT_ASSERT_EQUAL(true, configAdmin.addConfigurationSet(configSet1));
@@ -601,7 +601,7 @@ namespace ConfigAdmin
       configSet2.setProperty("name", "1.7320508");
       CPPUNIT_ASSERT_EQUAL(true, configAdmin.addConfigurationSet(configSet2));
 			
-      // �ѿ���Х���ɤ���
+      // 変数をバインドする
       const char* varName = "name";
       double var = 0.0;
       const char* default_value = "3.14159";
@@ -609,39 +609,39 @@ namespace ConfigAdmin
 			   true, configAdmin.bindParameter(varName, var, default_value));
       CPPUNIT_ASSERT_EQUAL(3.14159, var);
 			
-      // "set 1"�Τۤ��򥢥��ƥ��֤ˤ���
+      // "set 1"のほうをアクティブにする
       CPPUNIT_ASSERT_EQUAL(true, configAdmin.activateConfigurationSet("set 1"));
 			
-      // �����ƥ��֤ˤ��������Ǥϡ��ޤ��Х�����ѿ��Ϲ�������Ƥ��ʤ��Ϥ�
+      // アクティブにしただけでは、まだバインド変数は更新されていないはず
       CPPUNIT_ASSERT_EQUAL(3.14159, var);
 			
-      // update()�ƽФ��ˤ�ꡢ�Х�����ѿ��������ƥ��֤ʥ���ե����졼����󥻥åȤ��ͤǹ�������뤫��
+      // update()呼出しにより、バインド変数がアクティブなコンフィグレーションセットの値で更新されるか？
       configAdmin.update();
       CPPUNIT_ASSERT_EQUAL(1.41421356, var);
 
-      // "set 2"�Τۤ��򥢥��ƥ��֤ˤ���
+      // "set 2"のほうをアクティブにする
       CPPUNIT_ASSERT_EQUAL(true, configAdmin.activateConfigurationSet("set 2"));
 			
-      // �����ƥ��֤ˤ��������Ǥϡ��ޤ��Х�����ѿ��Ϲ�������Ƥ��ʤ��Ϥ�
+      // アクティブにしただけでは、まだバインド変数は更新されていないはず
       CPPUNIT_ASSERT_EQUAL(1.41421356, var);
 
-      // update()�ƽФ��ˤ�ꡢ�Х�����ѿ��������ƥ��֤ʥ���ե����졼����󥻥åȤ��ͤǹ�������뤫��
+      // update()呼出しにより、バインド変数がアクティブなコンフィグレーションセットの値で更新されるか？
       configAdmin.update();
       CPPUNIT_ASSERT_EQUAL(1.7320508, var);
     }
 		
     /*!
-     * @brief isExist()�᥽�åɤΥƥ���
+     * @brief isExist()メソッドのテスト
      * 
-     * - �Х���ɤ����ѿ���̾�Τ�isExist()��ƽФ������ͤ������뤫��
-     * - �Х���ɤ��Ƥ��ʤ�̾�Τ�isExist()��ƽФ������ͤ������뤫��
+     * - バインドした変数の名称でisExist()を呼出し、真値が得られるか？
+     * - バインドしていない名称でisExist()を呼出し、偽値が得られるか？
      */
     void test_isExist()
     {
       coil::Properties nullProp;
       RTC::ConfigAdmin configAdmin(nullProp);
 			
-      // �ѿ���Х���ɤ���
+      // 変数をバインドする
       const char* varName = "name";
       double var = 0.0;
       const char* default_value = "3.14159";
@@ -649,215 +649,215 @@ namespace ConfigAdmin
 			   true, configAdmin.bindParameter(varName, var, default_value));
       CPPUNIT_ASSERT_EQUAL(3.14159, var);
 			
-      // �Х���ɤ����ѿ���̾�Τ�isExist()��ƽФ������ͤ������뤫��
+      // バインドした変数の名称でisExist()を呼出し、真値が得られるか？
       CPPUNIT_ASSERT_EQUAL(true, configAdmin.isExist("name"));
 			
-      // �Х���ɤ��Ƥ��ʤ�̾�Τ�isExist()��ƽФ������ͤ������뤫��
+      // バインドしていない名称でisExist()を呼出し、偽値が得られるか？
       CPPUNIT_ASSERT_EQUAL(false, configAdmin.isExist("inexist name"));
     }
 		
     /*!
-     * @brief isChanged()�᥽�åɤΥƥ���
+     * @brief isChanged()メソッドのテスト
      * 
-     * - addConfigurationSet()�ƽи�ϡ�isChanged()�Ͽ��ͤȤʤ뤫��
+     * - addConfigurationSet()呼出後は、isChanged()は真値となるか？
      */
     void test_isChanged_on_addConfigurationSet()
     {
       coil::Properties nullProp;
       RTC::ConfigAdmin configAdmin(nullProp);
 			
-      // update()��ƽФ��ƥХ�����ѿ���Ʊ����Ԥ���isChanged()�����Ȥʤ���֤ˤ���
+      // update()を呼出してバインド変数と同期を行い、isChanged()が偽となる状態にする
       configAdmin.update();
       CPPUNIT_ASSERT_EQUAL(false, configAdmin.isChanged());
 			
-      // addConfigurationSet()��ƽФ�
+      // addConfigurationSet()を呼出す
       coil::Properties configSet("id");
       configSet.setProperty("key", "value");
       CPPUNIT_ASSERT_EQUAL(true, configAdmin.addConfigurationSet(configSet));
 
-      // addConfigurationSet()�ƽи�ϡ�isChanged()�Ͽ��ͤȤʤ뤫��
+      // addConfigurationSet()呼出後は、isChanged()は真値となるか？
       CPPUNIT_ASSERT_EQUAL(true, configAdmin.isChanged());
     }
 		
     /*!
-     * @brief isChanged()�᥽�åɤΥƥ���
+     * @brief isChanged()メソッドのテスト
      * 
-     * - removeConfigurationSet()�ƽи�ϡ�isChanged()�Ͽ��ͤȤʤ뤫��
+     * - removeConfigurationSet()呼出後は、isChanged()は真値となるか？
      */
     void test_isChanged_on_removeConfigurationSet()
     {
       coil::Properties nullProp;
       RTC::ConfigAdmin configAdmin(nullProp);
 			
-      // addConfigurationSet()��ƽФ�
+      // addConfigurationSet()を呼出す
       coil::Properties configSet("id");
       configSet.setProperty("key", "value");
       CPPUNIT_ASSERT_EQUAL(true, configAdmin.addConfigurationSet(configSet));
 
-      // update()��ƽФ��ƥХ�����ѿ���Ʊ����Ԥ���isChanged()�����Ȥʤ���֤ˤ���
+      // update()を呼出してバインド変数と同期を行い、isChanged()が偽となる状態にする
       CPPUNIT_ASSERT_EQUAL(true, configAdmin.activateConfigurationSet("id"));
       configAdmin.update();
       CPPUNIT_ASSERT_EQUAL(false, configAdmin.isChanged());
 			
-      // removeConfigurationSet()�θƽи�ϡ�isChanged()�Ͽ��ͤȤʤ뤫��
+      // removeConfigurationSet()の呼出後は、isChanged()は真値となるか？
       //CPPUNIT_ASSERT_EQUAL(true, configAdmin.removeConfigurationSet("id"));
       //CPPUNIT_ASSERT_EQUAL(true, configAdmin.isChanged());
     }
 		
     /*!
-     * @brief isChanged()�᥽�åɤΥƥ���
+     * @brief isChanged()メソッドのテスト
      * 
-     * - activateConfigurationSet()�ƽи�ϡ�isChanged()�Ͽ��ͤȤʤ뤫��
+     * - activateConfigurationSet()呼出後は、isChanged()は真値となるか？
      */
     void test_isChanged_on_activateConfigurationSet()
     {
       coil::Properties nullProp;
       RTC::ConfigAdmin configAdmin(nullProp);
 			
-      // ����ե����졼����󥻥åȤ���������ɲä��Ƥ���
+      // コンフィグレーションセットを準備し、追加しておく
       coil::Properties configSet1("set 1");
       CPPUNIT_ASSERT_EQUAL(true, configAdmin.addConfigurationSet(configSet1));
 
       coil::Properties configSet2("set 2");
       CPPUNIT_ASSERT_EQUAL(true, configAdmin.addConfigurationSet(configSet2));
 			
-      // "set 1"�Τۤ��򥢥��ƥ��֤ˤ���
+      // "set 1"のほうをアクティブにする
       CPPUNIT_ASSERT_EQUAL(true, configAdmin.activateConfigurationSet("set 1"));
 			
-      // update()��Ԥ���isChanged()�����ͤξ��֤ˤ��Ƥ���
+      // update()を行い、isChanged()が偽値の状態にしておく
       configAdmin.update();
       CPPUNIT_ASSERT_EQUAL(false, configAdmin.isChanged());
 
-      // "set 2"�Τۤ��򥢥��ƥ��֤ˤ���ȡ�isChanged()�����ͤȤʤ뤫��
+      // "set 2"のほうをアクティブにすると、isChanged()が真値となるか？
       CPPUNIT_ASSERT_EQUAL(true, configAdmin.activateConfigurationSet("set 2"));
       CPPUNIT_ASSERT_EQUAL(true, configAdmin.isChanged());
     }
 		
     void test_isChanged_on_setConfigurationSetValues()
     {
-      // TODO �������뤳��
+      // TODO 実装すること
     }
 		
     /*!
-     * @brief getActiveId()�᥽�åɤΥƥ���
+     * @brief getActiveId()メソッドのテスト
      * 
-     * - �����ƥ��ֲ���������ե����졼����󥻥åȤ�ID�������������Ǥ��뤫��
+     * - アクティブ化したコンフィグレーションセットのIDを正しく取得できるか？
      */
     void test_getActiveId()
     {
       coil::Properties nullProp;
       RTC::ConfigAdmin configAdmin(nullProp);
 			
-      // ����ե����졼����󥻥åȤ���������ɲä��Ƥ���
+      // コンフィグレーションセットを準備し、追加しておく
       coil::Properties configSet1("set 1");
       CPPUNIT_ASSERT_EQUAL(true, configAdmin.addConfigurationSet(configSet1));
 
       coil::Properties configSet2("set 2");
       CPPUNIT_ASSERT_EQUAL(true, configAdmin.addConfigurationSet(configSet2));
 			
-      // ������֤Ǥϡ������ƥ���ID��"default"�ΤϤ�
+      // 初期状態では、アクティブIDは"default"のはず
       CPPUNIT_ASSERT_EQUAL(std::string("default"), std::string(configAdmin.getActiveId()));
 			
-      // "set 1"�򥢥��ƥ��֤ˤ����塢�տޤɤ���Υ����ƥ���ID������Ǥ��뤫��
+      // "set 1"をアクティブにした後、意図どおりのアクティブIDを取得できるか？
       CPPUNIT_ASSERT_EQUAL(true, configAdmin.activateConfigurationSet("set 1"));
       CPPUNIT_ASSERT_EQUAL(std::string("set 1"), std::string(configAdmin.getActiveId()));
 			
-      // "set 2"�򥢥��ƥ��֤ˤ����塢�տޤɤ���Υ����ƥ���ID������Ǥ��뤫��
+      // "set 2"をアクティブにした後、意図どおりのアクティブIDを取得できるか？
       CPPUNIT_ASSERT_EQUAL(true, configAdmin.activateConfigurationSet("set 2"));
       CPPUNIT_ASSERT_EQUAL(std::string("set 2"), std::string(configAdmin.getActiveId()));
     }
 		
     /*!
-     * @brief haveConfig()�᥽�åɤΥƥ���
+     * @brief haveConfig()メソッドのテスト
      * 
-     * - ¸�ߤ��륳��ե����졼����󥻥å�ID����ꤷ�����ˡ�haveConfig()�����������ͤ����뤫��
-     * - ¸�ߤ��ʤ�����ե����졼����󥻥å�ID����ꤷ�����ˡ�haveConfig()�����������ͤ����뤫��
+     * - 存在するコンフィグレーションセットIDを指定した場合に、haveConfig()で正しく真値を得るか？
+     * - 存在しないコンフィグレーションセットIDを指定した場合に、haveConfig()で正しく偽値を得るか？
      */
     void test_haveConfig()
     {
       coil::Properties nullProp;
       RTC::ConfigAdmin configAdmin(nullProp);
 			
-      // ����ե����졼����󥻥åȤ���������ɲä��Ƥ���
+      // コンフィグレーションセットを準備し、追加しておく
       coil::Properties configSet1("id");
       CPPUNIT_ASSERT_EQUAL(true, configAdmin.addConfigurationSet(configSet1));
 			
-      // ¸�ߤ��륳��ե����졼����󥻥å�ID����ꤷ�����ˡ�haveConfig()�����������ͤ����뤫��
+      // 存在するコンフィグレーションセットIDを指定した場合に、haveConfig()で正しく真値を得るか？
       CPPUNIT_ASSERT_EQUAL(true, configAdmin.haveConfig("id"));
 			
-      // ¸�ߤ��ʤ�����ե����졼����󥻥å�ID����ꤷ�����ˡ�haveConfig()�����������ͤ����뤫��
+      // 存在しないコンフィグレーションセットIDを指定した場合に、haveConfig()で正しく偽値を得るか？
       CPPUNIT_ASSERT_EQUAL(false, configAdmin.haveConfig("inexist id"));
     }
 		
     /*!
-     * @brief isActive()�᥽�åɤΥƥ���
+     * @brief isActive()メソッドのテスト
      * 
-     * - addConfigurationSet()�ƽи�ϡ�isActive()�����������ͤ����뤫��
-     * - activateConfigurationSet()�ǥ����ƥ��ֲ�������ϡ�isActive()�����������ͤ����뤫��
+     * - addConfigurationSet()呼出後は、isActive()は正しく偽値を得るか？
+     * - activateConfigurationSet()でアクティブ化した後は、isActive()は正しく真値を得るか？
      */
     void test_isActive_on_addConfigurationSet()
     {
       coil::Properties nullProp;
       RTC::ConfigAdmin configAdmin(nullProp);
 			
-      // addConfigurationSet()�ƽи�ϡ�isActive()�����������ͤ����뤫��
+      // addConfigurationSet()呼出後は、isActive()は正しく偽値を得るか？
       coil::Properties configSet("id");
       CPPUNIT_ASSERT_EQUAL(true, configAdmin.addConfigurationSet(configSet));
       CPPUNIT_ASSERT_EQUAL(false, configAdmin.isActive());
 			
-      // activateConfigurationSet()�ǥ����ƥ��ֲ�������ϡ�isActive()�����������ͤ����뤫��
+      // activateConfigurationSet()でアクティブ化した後は、isActive()は正しく真値を得るか？
       CPPUNIT_ASSERT_EQUAL(true, configAdmin.activateConfigurationSet("id"));
       CPPUNIT_ASSERT_EQUAL(true, configAdmin.isActive());
     }
 		
     /*!
-     * @brief isActive()�᥽�åɤΥƥ���
+     * @brief isActive()メソッドのテスト
      * 
-     * - removeConfigurationSet()�ƽи�ϡ�isActive()�����������ͤ����뤫��
+     * - removeConfigurationSet()呼出後は、isActive()は正しく偽値を得るか？
      */
     void test_isActive_on_removeConfigurationSet()
     {
       coil::Properties nullProp;
       RTC::ConfigAdmin configAdmin(nullProp);
 
-      // ����ե����졼����󥻥åȤ��ɲä��ƥ����ƥ��ֲ����Ƥ���
+      // コンフィグレーションセットを追加してアクティブ化しておく
       coil::Properties configSet("id");
       CPPUNIT_ASSERT_EQUAL(true, configAdmin.addConfigurationSet(configSet));
       CPPUNIT_ASSERT_EQUAL(true, configAdmin.activateConfigurationSet("id"));
       CPPUNIT_ASSERT_EQUAL(true, configAdmin.isActive());
 			
-      // ��Ͽ����Ƥ��륳��ե����졼����󥻥åȤ�removeConfigurationSet()�ǲ��������硢
-      // isActive()�����������ͤ����뤫��
+      // 登録されているコンフィグレーションセットをremoveConfigurationSet()で解除した場合、
+      // isActive()は正しく偽値を得るか？
       //CPPUNIT_ASSERT_EQUAL(true, configAdmin.removeConfigurationSet("id"));
       //CPPUNIT_ASSERT_EQUAL(false, configAdmin.isActive());
     }
 		
     /*!
-     * @brief isActive()�᥽�åɤΥƥ���
+     * @brief isActive()メソッドのテスト
      * 
-     * - activateConfigurationSet()�ǥ����ƥ��ֲ�������ϡ�isActive()�����������ͤ����뤫��
+     * - activateConfigurationSet()でアクティブ化した後は、isActive()は正しく真値を得るか？
      */
     void test_isActive_on_activateConfigurationSet()
     {
-      // test_isActive_on_addConfigurationSet()�Ƿ���
+      // test_isActive_on_addConfigurationSet()で兼用
     }
 		
     void test_isActive_on_setConfigurationSetValues()
     {
-      // TODO �������뤳��
+      // TODO 実装すること
     }
 		
     /*!
-     * @brief getConfigurationSets()�᥽�åɤΥƥ���
+     * @brief getConfigurationSets()メソッドのテスト
      * 
-     * - ��Ͽ����Ƥ������ƤΥ���ե����졼����󥻥åȤ������������Ǥ��뤫��
+     * - 登録されている全てのコンフィグレーションセットを正しく取得できるか？
      */
     void test_getConfigurationSets()
     {
       coil::Properties nullProp;
       RTC::ConfigAdmin configAdmin(nullProp);
 			
-      // ���ĤΥѥ�᡼���ͤ�ޤॳ��ե����졼����󥻥åȤ���������ɲä��Ƥ���
+      // ２つのパラメータ値を含むコンフィグレーションセットを準備し、追加しておく
       coil::Properties configSet1("set 1");
       configSet1.setProperty("name 1", "1.41421356");
       configSet1.setProperty("name 2", "1.7320508");
@@ -868,8 +868,8 @@ namespace ConfigAdmin
       configSet2.setProperty("name 2", "2.71828");
       CPPUNIT_ASSERT_EQUAL(true, configAdmin.addConfigurationSet(configSet2));
 			
-      // getConfigurationSets()����Ͽ����Ƥ������ƤΥ���ե����졼����󥻥åȤ��������
-      // ��Ͽ������ΤȰ��פ��Ƥ��뤳�Ȥ��ǧ����
+      // getConfigurationSets()で登録されている全てのコンフィグレーションセットを取得し、
+      // 登録したものと一致していることを確認する
       std::vector<coil::Properties*> expectedConfigSets;
       expectedConfigSets.push_back(&configSet1);
       expectedConfigSets.push_back(&configSet2);
@@ -893,30 +893,30 @@ namespace ConfigAdmin
     }
 		
     /*!
-     * addConfigurationSet()�᥽�åɤ�getConfigurationSet()�᥽�åɤΥƥ���
+     * addConfigurationSet()メソッドとgetConfigurationSet()メソッドのテスト
      * 
-     * - addConfigurationSet()�ǡ�����ե����졼����󥻥åȤ��ɲäǤ��뤫��
-     * - getConfigurationSet()�ǡ��ɲä�������ե����졼����󥻥åȤ������������Ǥ��뤫��
+     * - addConfigurationSet()で、コンフィグレーションセットを追加できるか？
+     * - getConfigurationSet()で、追加したコンフィグレーションセットを正しく取得できるか？
      */
     void test_addConfigurationSet_and_getConfigurationSet()
     {
       coil::Properties nullProp;
       RTC::ConfigAdmin configAdmin(nullProp);
 			
-      // addConfigurationSet()�ǡ�����ե����졼����󥻥åȤ��ɲäǤ��뤫��
+      // addConfigurationSet()で、コンフィグレーションセットを追加できるか？
       coil::Properties configSet("id");
       configSet.setProperty("key", "value");
       configAdmin.addConfigurationSet(configSet);
 			
-      // getConfigurationSet()�ǡ��ɲä�������ե����졼����󥻥åȤ������������Ǥ��뤫��
+      // getConfigurationSet()で、追加したコンフィグレーションセットを正しく取得できるか？
       const coil::Properties& configSetRet = configAdmin.getConfigurationSet("id");
       CPPUNIT_ASSERT_EQUAL(std::string("value"), configSetRet.getProperty("key"));
     }
 		
     /*!
-     * setConfigurationSetValues()�᥽�åɤΥƥ���
+     * setConfigurationSetValues()メソッドのテスト
      * 
-     * - ���ꤷ���ץ��ѥƥ��������������ꤷ������ե����졼����󥻥åȤ��ɲä���뤫��
+     * - 指定したプロパティが、正しく指定したコンフィグレーションセットに追加されるか？
      */
     void test_setConfigurationSetValues()
     {
@@ -927,22 +927,22 @@ namespace ConfigAdmin
       configSet1.setProperty("name 1", "1.41421356");
       CPPUNIT_ASSERT_EQUAL(true, configAdmin.addConfigurationSet(configSet1));
 			
-      // ��Ͽ�ѤߤΥ���ե����졼����󥻥åȤ��Ф��ơ��ץ��ѥƥ����ɲä���
+      // 登録済みのコンフィグレーションセットに対して、プロパティを追加する
       coil::Properties configSet2("id");
       configSet2.setProperty("name 2", "1.7320508");
       CPPUNIT_ASSERT_EQUAL(true, configAdmin.setConfigurationSetValues(configSet2));
 			
-      // ��������ե����졼����󥻥åȤ�������ơ��ץ��ѥƥ����տޤɤ����ɲä���Ƥ��뤳�Ȥ��ǧ����
+      // 当該コンフィグレーションセットを取得して、プロパティが意図どおり追加されていることを確認する
       const coil::Properties& configSetRet = configAdmin.getConfigurationSet("id");
       CPPUNIT_ASSERT_EQUAL(std::string("1.41421356"), configSetRet.getProperty("name 1"));
       CPPUNIT_ASSERT_EQUAL(std::string("1.7320508"), configSetRet.getProperty("name 2"));
     }
 		
     /*!
-     * @brief setConfigurationSetValues()�᥽�åɤΥƥ���
+     * @brief setConfigurationSetValues()メソッドのテスト
      * 
-     * - ¸�ߤ��ʤ�����ե����졼����󥻥åȤ��Ф��ƥץ��ѥƥ��ɲä��ߤơ��տޤɤ��꼺�Ԥ��뤫��
-     * - ���Ը�ˡ���Ͽ�ѤߤΥ���ե����졼����󥻥åȤ��ƶ�������Ƥ��ʤ�����
+     * - 存在しないコンフィグレーションセットに対してプロパティ追加を試みて、意図どおり失敗するか？
+     * - 失敗後に、登録済みのコンフィグレーションセットが影響を受けていないか？
      */
     void test_setConfigurationSetValues_with_inexist_configuration_set()
     {
@@ -953,28 +953,28 @@ namespace ConfigAdmin
       configSet1.setProperty("name 1", "1.41421356");
       CPPUNIT_ASSERT_EQUAL(true, configAdmin.addConfigurationSet(configSet1));
 			
-      // ¸�ߤ��ʤ�����ե����졼����󥻥åȤ��Ф��ƥץ��ѥƥ��ɲä��ߤơ��տޤɤ��꼺�Ԥ��뤫��
+      // 存在しないコンフィグレーションセットに対してプロパティ追加を試みて、意図どおり失敗するか？
       coil::Properties configSet2("inexist id");
       configSet2.setProperty("name 2", "1.7320508");
       CPPUNIT_ASSERT_EQUAL(true, configAdmin.setConfigurationSetValues(configSet2));
 			
-      // ���Ը�ˡ���Ͽ�ѤߤΥ���ե����졼����󥻥åȤ��ƶ�������Ƥ��ʤ�����
+      // 失敗後に、登録済みのコンフィグレーションセットが影響を受けていないか？
       const coil::Properties& configSetRet = configAdmin.getConfigurationSet("id");
       CPPUNIT_ASSERT_EQUAL(std::string("1.41421356"), configSetRet.getProperty("name 1"));
       CPPUNIT_ASSERT_EQUAL(std::string(""), configSetRet.getProperty("name 2"));
     }
 		
     /*!
-     * @brief getActiveConfigurationSet()�᥽�åɤΥƥ���
+     * @brief getActiveConfigurationSet()メソッドのテスト
      * 
-     * - �����ƥ��֥���ե����졼����󥻥åȤ������������Ǥ��뤫��
+     * - アクティブコンフィグレーションセットを正しく取得できるか？
      */
     void test_getActiveConfigurationSet()
     {
       coil::Properties nullProp;
       RTC::ConfigAdmin configAdmin(nullProp);
 			
-      // ����ե����졼����󥻥åȤ���������ɲä��Ƥ���
+      // コンフィグレーションセットを準備し、追加しておく
       coil::Properties configSet1("set 1");
       configSet1.setProperty("name 1", "1.41421356");
       configSet1.setProperty("name 2", "1.7320508");
@@ -985,13 +985,13 @@ namespace ConfigAdmin
       configSet2.setProperty("name 2", "2.71828");
       CPPUNIT_ASSERT_EQUAL(true, configAdmin.addConfigurationSet(configSet2));
 			
-      // "set 1"�򥢥��ƥ��ֲ������塢�����ƥ��֥���ե����졼����󥻥åȤȤ��������������Ǥ��뤫��
+      // "set 1"をアクティブ化した後、アクティブコンフィグレーションセットとして正しく取得できるか？
       CPPUNIT_ASSERT_EQUAL(true, configAdmin.activateConfigurationSet("set 1"));
       const coil::Properties& activeConfigSet1 = configAdmin.getActiveConfigurationSet();
       CPPUNIT_ASSERT_EQUAL(std::string("1.41421356"), activeConfigSet1.getProperty("name 1"));
       CPPUNIT_ASSERT_EQUAL(std::string("1.7320508"), activeConfigSet1.getProperty("name 2"));
 
-      // "set 2"�򥢥��ƥ��ֲ������塢�����ƥ��֥���ե����졼����󥻥åȤȤ��������������Ǥ��뤫��
+      // "set 2"をアクティブ化した後、アクティブコンフィグレーションセットとして正しく取得できるか？
       CPPUNIT_ASSERT_EQUAL(true, configAdmin.activateConfigurationSet("set 2"));
       const coil::Properties& activeConfigSet2 = configAdmin.getActiveConfigurationSet();
       CPPUNIT_ASSERT_EQUAL(std::string("3.14159"), activeConfigSet2.getProperty("name 1"));
@@ -999,58 +999,58 @@ namespace ConfigAdmin
     }
 		
     /*!
-     * @brief removeConfigurationSet()�Υƥ���
+     * @brief removeConfigurationSet()のテスト
      * 
-     * - ��Ͽ����Ƥ��륳��ե����졼����󥻥åȤ���������Ͽ����Ǥ��뤫��
+     * - 登録されているコンフィグレーションセットを正しく登録解除できるか？
      */
     void test_removeConfigurationSet()
     {
       coil::Properties nullProp;
       RTC::ConfigAdmin configAdmin(nullProp);
 			
-      // ����ե����졼����󥻥åȤ��ɲä��Ƥ���
+      // コンフィグレーションセットを追加しておく
       coil::Properties configSet("id");
       configSet.setProperty("key", "value");
       CPPUNIT_ASSERT_EQUAL(true, configAdmin.addConfigurationSet(configSet));
       CPPUNIT_ASSERT_EQUAL(true, configAdmin.haveConfig("id"));
 			
-      // ���ä�����Ͽ��������ե����졼����󥻥åȤ���Ͽ�������
+      // いったん登録したコンフィグレーションセットを登録解除する
       CPPUNIT_ASSERT_EQUAL(true, configAdmin.removeConfigurationSet("id"));
 			
-      // ��������ե����졼����󥻥åȤ�¸�ߤ��ʤ����Ȥ��ǧ����
+      // 当該コンフィグレーションセットが存在しないことを確認する
       CPPUNIT_ASSERT_EQUAL(false, configAdmin.haveConfig("id"));
     }
 		
     /*!
-     * @brief removeConfigurationSet()�Υƥ���
+     * @brief removeConfigurationSet()のテスト
      * 
-     * - ¸�ߤ��ʤ�����ե����졼����󥻥å�ID����ꤷ�����ˡ��տޤɤ���˼��Ԥ��뤫��
+     * - 存在しないコンフィグレーションセットIDを指定した場合に、意図どおりに失敗するか？
      */
     void test_removeConfigurationSet_with_inexist_configuration_id()
     {
       coil::Properties nullProp;
       RTC::ConfigAdmin configAdmin(nullProp);
 			
-      // ����ե����졼����󥻥åȤ��ɲä��Ƥ���
+      // コンフィグレーションセットを追加しておく
       coil::Properties configSet("id");
       configSet.setProperty("key", "value");
       CPPUNIT_ASSERT_EQUAL(true, configAdmin.addConfigurationSet(configSet));
       CPPUNIT_ASSERT_EQUAL(true, configAdmin.haveConfig("id"));
 			
-      // ¸�ߤ��ʤ�����ե����졼����󥻥å�ID����ꤷ�����ˡ��տޤɤ���˼��Ԥ��뤫��
+      // 存在しないコンフィグレーションセットIDを指定した場合に、意図どおりに失敗するか？
       CPPUNIT_ASSERT_EQUAL(false, configAdmin.removeConfigurationSet("inexist id"));
 			
-      // ��Ͽ����Ƥ��륳��ե����졼����󥻥åȤϡ����ɤ���¸�ߤ��Ƥ��뤫��
+      // 登録されているコンフィグレーションセットは、元どおり存在しているか？
       CPPUNIT_ASSERT_EQUAL(true, configAdmin.haveConfig("id"));
     }
 		
     void test_activateConfigurationSet()
     {
-      // test_getActiveConfigurationSet()�Ƿ�ͤ�
+      // test_getActiveConfigurationSet()で兼ねる
     }
 		
     /*!
-     * @brief setOnUpdate()�᥽�åɤΥƥ���
+     * @brief setOnUpdate()メソッドのテスト
      * 
      * - 
      */
@@ -1063,25 +1063,25 @@ namespace ConfigAdmin
       OnUpdateCallbackMock* cdm1 = new OnUpdateCallbackMock();
       OnUpdateCallbackMock* cdm2 = new OnUpdateCallbackMock();
 
-      // 1���ܤ�set�ǥ��С��ѿ�������
+      // 1回目のsetでメンバー変数へ設定
       RTC::ConfigurationSetNameListenerType csnltype = RTC::ON_UPDATE_CONFIG_SET;
       configAdmin.addConfigurationSetNameListener(csnltype, cdm1, false);
       CPPUNIT_ASSERT(!cdm1->result);
       configAdmin.onUpdateMock("config_id");
       CPPUNIT_ASSERT(cdm1->result);
 
-      // 2���ܤ�set��delete���ƤФ��
+      // 2回目のsetでdeleteが呼ばれる
       configAdmin.addConfigurationSetNameListener(csnltype, cdm2, false);
       CPPUNIT_ASSERT(!cdm2->result);
       configAdmin.onUpdateMock("config_id");
       CPPUNIT_ASSERT(cdm2->result);
 
-      // delete cdm1; delete cdm2 �����פǤ���
-      // ConfigAdmin::setOn*()����ǡ�delete m_* ��¹Ԥ��Ƥ��ޤ���
+      // delete cdm1; delete cdm2 は不要です。
+      // ConfigAdmin::setOn*()の中で、delete m_* を実行しています。
     }
 		
     /*!
-     * @brief setOnUpdateParam()�᥽�åɤΥƥ���
+     * @brief setOnUpdateParam()メソッドのテスト
      * 
      * - 
      */
@@ -1094,25 +1094,25 @@ namespace ConfigAdmin
       OnUpdateParamCallbackMock* cdm1 = new OnUpdateParamCallbackMock();
       OnUpdateParamCallbackMock* cdm2 = new OnUpdateParamCallbackMock();
 
-      // 1���ܤ�set�ǥ��С��ѿ�������
+      // 1回目のsetでメンバー変数へ設定
       RTC::ConfigurationParamListenerType cpltype = RTC::ON_UPDATE_CONFIG_PARAM;
       configAdmin.addConfigurationParamListener(cpltype, cdm1, false);
       CPPUNIT_ASSERT(!cdm1->result);
       configAdmin.onUpdateParamMock("config_id", "param1");
       CPPUNIT_ASSERT(cdm1->result);
 
-      // 2���ܤ�set��delete���ƤФ��
+      // 2回目のsetでdeleteが呼ばれる
       configAdmin.addConfigurationParamListener(cpltype, cdm2, false);
       CPPUNIT_ASSERT(!cdm2->result);
       configAdmin.onUpdateParamMock("config_id", "param2");
       CPPUNIT_ASSERT(cdm2->result);
 
-      // delete cdm1; delete cdm2 �����פǤ���
-      // ConfigAdmin::setOn*()����ǡ�delete m_* ��¹Ԥ��Ƥ��ޤ���
+      // delete cdm1; delete cdm2 は不要です。
+      // ConfigAdmin::setOn*()の中で、delete m_* を実行しています。
     }
 		
     /*!
-     * @brief setOnSetConfigurationSet()�᥽�åɤΥƥ���
+     * @brief setOnSetConfigurationSet()メソッドのテスト
      * 
      * - 
      */
@@ -1127,25 +1127,25 @@ namespace ConfigAdmin
       OnSetConfigurationSetCallbackMock* cdm1 = new OnSetConfigurationSetCallbackMock();
       OnSetConfigurationSetCallbackMock* cdm2 = new OnSetConfigurationSetCallbackMock();
 
-      // 1���ܤ�set�ǥ��С��ѿ�������
+      // 1回目のsetでメンバー変数へ設定
       RTC::ConfigurationSetListenerType csltype = RTC::ON_SET_CONFIG_SET;
       configAdmin.addConfigurationSetListener(csltype, cdm1, false);
       CPPUNIT_ASSERT(!cdm1->result);
       configAdmin.onSetConfigurationSetMock(configSet);
       CPPUNIT_ASSERT(cdm1->result);
 
-      // 2���ܤ�set��delete���ƤФ��
+      // 2回目のsetでdeleteが呼ばれる
       configAdmin.addConfigurationSetListener(csltype, cdm2, false);
       CPPUNIT_ASSERT(!cdm2->result);
       configAdmin.onSetConfigurationSetMock(configSet2);
       CPPUNIT_ASSERT(cdm2->result);
 
-      // delete cdm1; delete cdm2 �����פǤ���
-      // ConfigAdmin::setOn*()����ǡ�delete m_* ��¹Ԥ��Ƥ��ޤ���
+      // delete cdm1; delete cdm2 は不要です。
+      // ConfigAdmin::setOn*()の中で、delete m_* を実行しています。
     }
 		
     /*!
-     * @brief setOnAddConfigurationSet()�᥽�åɤΥƥ���
+     * @brief setOnAddConfigurationSet()メソッドのテスト
      * 
      * - 
      */
@@ -1160,25 +1160,25 @@ namespace ConfigAdmin
       OnAddConfigurationAddCallbackMock* cdm1 = new OnAddConfigurationAddCallbackMock();
       OnAddConfigurationAddCallbackMock* cdm2 = new OnAddConfigurationAddCallbackMock();
 
-      // 1���ܤ�set�ǥ��С��ѿ�������
+      // 1回目のsetでメンバー変数へ設定
       RTC::ConfigurationSetListenerType csltype = RTC::ON_ADD_CONFIG_SET;
       configAdmin.addConfigurationSetListener(csltype, cdm1, false);
       CPPUNIT_ASSERT(!cdm1->result);
       configAdmin.onAddConfigurationSetMock(configSet);
       CPPUNIT_ASSERT(cdm1->result);
 
-      // 2���ܤ�set��delete���ƤФ��
+      // 2回目のsetでdeleteが呼ばれる
       configAdmin.addConfigurationSetListener(csltype, cdm2, false);
       CPPUNIT_ASSERT(!cdm2->result);
       configAdmin.onAddConfigurationSetMock(configSet2);
       CPPUNIT_ASSERT(cdm2->result);
 
-      // delete cdm1; delete cdm2 �����פǤ���
-      // ConfigAdmin::setOn*()����ǡ�delete m_* ��¹Ԥ��Ƥ��ޤ���
+      // delete cdm1; delete cdm2 は不要です。
+      // ConfigAdmin::setOn*()の中で、delete m_* を実行しています。
     }
 		
     /*!
-     * @brief setOnRemoveConfigurationSet()�᥽�åɤΥƥ���
+     * @brief setOnRemoveConfigurationSet()メソッドのテスト
      * 
      * - 
      */
@@ -1191,25 +1191,25 @@ namespace ConfigAdmin
       OnRemoveConfigurationSetCallbackMock* cdm1 = new OnRemoveConfigurationSetCallbackMock();
       OnRemoveConfigurationSetCallbackMock* cdm2 = new OnRemoveConfigurationSetCallbackMock();
 
-      // 1���ܤ�set�ǥ��С��ѿ�������
+      // 1回目のsetでメンバー変数へ設定
       RTC::ConfigurationSetNameListenerType csnltype = RTC::ON_REMOVE_CONFIG_SET;
       configAdmin.addConfigurationSetNameListener(csnltype, cdm1, false);
       CPPUNIT_ASSERT(!cdm1->result);
       configAdmin.onRemoveConfigurationSetMock("config_id");
       CPPUNIT_ASSERT(cdm1->result);
 
-      // 2���ܤ�set��delete���ƤФ��
+      // 2回目のsetでdeleteが呼ばれる
       configAdmin.addConfigurationSetNameListener(csnltype, cdm2, false);
       CPPUNIT_ASSERT(!cdm2->result);
       configAdmin.onRemoveConfigurationSetMock("config_id2");
       CPPUNIT_ASSERT(cdm2->result);
 
-      // delete cdm1; delete cdm2 �����פǤ���
-      // ConfigAdmin::setOn*()����ǡ�delete m_* ��¹Ԥ��Ƥ��ޤ���
+      // delete cdm1; delete cdm2 は不要です。
+      // ConfigAdmin::setOn*()の中で、delete m_* を実行しています。
     }
 		
     /*!
-     * @brief setOnActivateSet()�᥽�åɤΥƥ���
+     * @brief setOnActivateSet()メソッドのテスト
      * 
      * - 
      */
@@ -1222,21 +1222,21 @@ namespace ConfigAdmin
       OnActivateSetCallbackMock* cdm1 = new OnActivateSetCallbackMock();
       OnActivateSetCallbackMock* cdm2 = new OnActivateSetCallbackMock();
 
-      // 1���ܤ�set�ǥ��С��ѿ�������
+      // 1回目のsetでメンバー変数へ設定
       RTC::ConfigurationSetNameListenerType csnltype = RTC::ON_ACTIVATE_CONFIG_SET;
       configAdmin.addConfigurationSetNameListener(csnltype, cdm1, false);
       CPPUNIT_ASSERT(!cdm1->result);
       configAdmin.onActivateSetMock("config_id");
       CPPUNIT_ASSERT(cdm1->result);
 
-      // 2���ܤ�set��delete���ƤФ��
+      // 2回目のsetでdeleteが呼ばれる
       configAdmin.addConfigurationSetNameListener(csnltype, cdm2, false);
       CPPUNIT_ASSERT(!cdm2->result);
       configAdmin.onActivateSetMock("config_id2");
       CPPUNIT_ASSERT(cdm2->result);
 
-      // delete cdm1; delete cdm2 �����פǤ���
-      // ConfigAdmin::setOn*()����ǡ�delete m_* ��¹Ԥ��Ƥ��ޤ���
+      // delete cdm1; delete cdm2 は不要です。
+      // ConfigAdmin::setOn*()の中で、delete m_* を実行しています。
     }
 		
 

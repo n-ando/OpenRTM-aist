@@ -1,4 +1,4 @@
-// -*- C++ -*-
+﻿// -*- C++ -*-
 /*!
  * @file   DataFlowComponentServantTests.cpp
  * @brief  DataFlowComponentServant test class

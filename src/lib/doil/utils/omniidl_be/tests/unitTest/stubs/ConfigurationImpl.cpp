@@ -1,4 +1,4 @@
-// -*- C++ -*-
+ï»¿// -*- C++ -*-
 /*!
  * @file ConfigurationImpl.cpp 
  * @brief ConfigurationImpl C++ implementation sample for doil
@@ -20,7 +20,7 @@ namespace Servant
   /*!
    * @if jp
    * @class ConfigurationImpl
-   * @brief ConfigurationServantŒ±—pƒCƒ“ƒvƒŠƒƒ“ƒgƒNƒ‰ƒX
+   * @brief ConfigurationServantè©¦é¨“ç”¨ã‚¤ãƒ³ãƒ—ãƒªãƒ¡ãƒ³ãƒˆã‚¯ãƒ©ã‚¹
    * @else
    * @class ConfigurationImpl
    * @brief Configuration implementation class for ConfigurationServant' unittest.

@@ -1,4 +1,4 @@
-// -*- C++ -*-
+ï»¿// -*- C++ -*-
 /*!
  * @file  IComponentAction.h
  * @brief IComponentAction interface class
@@ -29,7 +29,7 @@ namespace Local
   /*!
    * @if jp
    * @class IComponentAction
-   * @brief IComponentAction ¥¤¥ó¥¿¡¼¥Õ¥§¡¼¥¹¥¯¥é¥¹
+   * @brief IComponentAction ã‚¤ãƒ³ã‚¿ãƒ¼ãƒ•ã‚§ãƒ¼ã‚¹ã‚¯ãƒ©ã‚¹
    * @else
    * @class IComponentAction
    * @brief IComponentAction interface class

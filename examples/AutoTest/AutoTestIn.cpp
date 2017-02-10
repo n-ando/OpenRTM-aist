@@ -1,4 +1,4 @@
-// -*- C++ -*-
+ï»¿// -*- C++ -*-
 /*!
  * @file  AutoTestIn.cpp
  * @brief Sample component for auto-test
@@ -100,7 +100,7 @@ RTC::ReturnCode_t AutoTestIn::onShutdown(RTC::UniqueId ec_id)
 
 RTC::ReturnCode_t AutoTestIn::onActivated(RTC::UniqueId ec_id)
 {
- //‘‚«o‚·ƒtƒ@ƒCƒ‹‚ğŠJ‚­
+ //æ›¸ãå‡ºã™ãƒ•ã‚¡ã‚¤ãƒ«ã‚’é–‹ã
   fout.open("received-data");
   if (!fout){
     std::cout << "Can not open received-data..." << std::endl;

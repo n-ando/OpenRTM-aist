@@ -1,4 +1,4 @@
-// -*- C++ -*-
+ï»¿// -*- C++ -*-
 /*!
  * @file   InPortCorbaCdrConsumerTests.cpp
  * @brief  InPortCorbaCdrConsumer test class
@@ -109,7 +109,7 @@ namespace InPortCorbaCdrConsumer
       {
       }
       /*!
-       *  ³ÎÇ§ÍÑ 
+       *  ç¢ºèªç”¨ 
        * 
        */
       CORBA::Object_var get_m_objre()
@@ -226,7 +226,7 @@ namespace InPortCorbaCdrConsumer
 
         consumer.init(prop);
         ret = consumer.subscribeInterface(prof.properties);
-        //ior ¤òÀßÄê¤·¤Æ¤¤¤Ê¤¤¤Î¤Çfalse¤È¤Ê¤ë¤³¤È¤ò³ÎÇ§¤¹¤ë¡£
+        //ior ã‚’è¨­å®šã—ã¦ã„ãªã„ã®ã§falseã¨ãªã‚‹ã“ã¨ã‚’ç¢ºèªã™ã‚‹ã€‚
         CPPUNIT_ASSERT_EQUAL(false, ret);
 
         RTC::InPortCorbaCdrProvider provider;
@@ -252,7 +252,7 @@ namespace InPortCorbaCdrConsumer
             td >>= indata;
         }
 
-        //provider Â¦¤Î buffer ¤¬¤Ê¤¤¾õÂÖ¤Ç¥³¡¼¥ë(error)
+        //provider å´ã® buffer ãŒãªã„çŠ¶æ…‹ã§ã‚³ãƒ¼ãƒ«(error)
         retcode = consumer.put(indata);
         CPPUNIT_ASSERT_EQUAL((::RTC::DataPortStatus::Enum)1, retcode);
 
@@ -273,7 +273,7 @@ namespace InPortCorbaCdrConsumer
             CPPUNIT_ASSERT_EQUAL((::RTC::DataPortStatus::Enum)0, retcode);
          }
 
-        //full ¤Î¾õÂÖ¤Ç¥³¡¼¥ë(full)
+        //full ã®çŠ¶æ…‹ã§ã‚³ãƒ¼ãƒ«(full)
         retcode = consumer.put(indata);
         CPPUNIT_ASSERT_EQUAL((::RTC::DataPortStatus::Enum)0, retcode);
 
@@ -305,7 +305,7 @@ namespace InPortCorbaCdrConsumer
          }
 
         // delete connector;
-        // ¤³¤³¤Ç delete ¤¹¤ë¤ÈÍî¤Á¤ë¤Î¤Ç¡¢¥Ç¥¹¥È¥é¥¯¥¿¤Ç¹Ô¤¦¡£
+        // ã“ã“ã§ delete ã™ã‚‹ã¨è½ã¡ã‚‹ã®ã§ã€ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ã§è¡Œã†ã€‚
     }
     
   };

@@ -1,4 +1,4 @@
-// -*- C++ -*-
+ï»¿// -*- C++ -*-
 /*!
  * @file  IFsmObject.h
  * @brief IFsmObject interface class
@@ -29,7 +29,7 @@ namespace Local
     /*!
      * @if jp
      * @class IFsmObject
-     * @brief IFsmObject ¥¤¥ó¥¿¡¼¥Õ¥§¡¼¥¹¥¯¥é¥¹
+     * @brief IFsmObject ã‚¤ãƒ³ã‚¿ãƒ¼ãƒ•ã‚§ãƒ¼ã‚¹ã‚¯ãƒ©ã‚¹
      * @else
      * @class IFsmObject
      * @brief IFsmObject interface class

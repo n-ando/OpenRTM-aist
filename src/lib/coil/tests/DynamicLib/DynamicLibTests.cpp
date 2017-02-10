@@ -1,4 +1,4 @@
-// -*- C++ -*-
+﻿// -*- C++ -*-
 /*!
  * @file   DynamicLibTests.cpp
  * @brief  DynamicLib test class
@@ -100,11 +100,11 @@ namespace DynamicLib
     /* test case */
 
      /*!
-     * @brief ���󥹥ȥ饯�����Σ�
+     * @brief コンストラクタその１
      */
 	void test_DynamicLib_1()
 	{
-	  /* �㳰�������ʤ���УϣˤȤ��� */
+	  /* 例外が起きなければＯＫとする */
       coil::DynamicLib * dl1 = new coil::DynamicLib(1);
       int result = dl1->open(LibName, COIL_DEFAULT_DYNLIB_MODE, 1);
       CPPUNIT_ASSERT_EQUAL(0, result);
@@ -112,33 +112,33 @@ namespace DynamicLib
 	}
 
      /*!
-     * @brief ���󥹥ȥ饯�����Σ�
+     * @brief コンストラクタその２
      */
 	void test_DynamicLib_2()
 	{
-	  /* �㳰�������ʤ���УϣˤȤ��� */
+	  /* 例外が起きなければＯＫとする */
       coil::DynamicLib * dl1 = new coil::DynamicLib(LibName, COIL_DEFAULT_DYNLIB_MODE, 1);
 	  delete dl1;
 	}
 
      /*!
-     * @brief ���󥹥ȥ饯�����Σ�
+     * @brief コンストラクタその３
      */
 	void test_DynamicLib_3()
 	{
-	  /* �㳰�������ʤ���УϣˤȤ��� */
+	  /* 例外が起きなければＯＫとする */
 	  coil::DynamicLib dl1(LibName, COIL_DEFAULT_DYNLIB_MODE, 1);
-      coil::DynamicLib dl2(dl1);   // <--- �����ǡ�std::bad_alloc������� Kz.080930 �� fix 081006.
+      coil::DynamicLib dl2(dl1);   // <--- ここで、std::bad_allocに落ちる Kz.080930 ← fix 081006.
 	}
 
      /*!
-     * @brief ���󥹥ȥ饯�����Σ�
+     * @brief コンストラクタその４
      */
 	void test_DynamicLib_4()
 	{
-	  /* �㳰�������ʤ���УϣˤȤ��� */
+	  /* 例外が起きなければＯＫとする */
       coil::DynamicLib * dl1 = new coil::DynamicLib(LibName, COIL_DEFAULT_DYNLIB_MODE, 1);
-       coil::DynamicLib dl2 = *dl1;   // <--- �����ǡ�std::bad_alloc������� Kz.080930 �� fix 081006.
+       coil::DynamicLib dl2 = *dl1;   // <--- ここで、std::bad_allocに落ちる Kz.080930 ← fix 081006.
 	  delete dl1;
 	}
 
@@ -169,7 +169,7 @@ namespace DynamicLib
 
      /*!
      * @brief do symbol
-     * note ¸�ߤ��ʤ�����ܥ���ɤ߽Ф���
+     * note 存在しないシンボルを読み出す。
      */
 	void test_DynamicLib_symbol_failure()
 	{
@@ -189,7 +189,7 @@ namespace DynamicLib
 
      /*!
      * @brief do symbol
-     * note ¸�ߤ��륷��ܥ���ɤ߽Ф���
+     * note 存在するシンボルを読み出す。
      */
 	void test_DynamicLib_symbol()
 	{
@@ -216,19 +216,19 @@ namespace DynamicLib
 
      /*!
      * @brief do error
-     * note ���顼ȯ������error()���󣰤��֤�����
+     * note エラー発生時にerror()が非０を返すこと
      */
 	void test_DynamicLib_error()
 	{
-//      coil::DynamicLib * dl1 = new coil::DynamicLib(1);  // ���ɤ���Ǥ��㳰�ϵ����ʤ�
+//      coil::DynamicLib * dl1 = new coil::DynamicLib(1);  // ↓どちらでも例外は起きない
       coil::DynamicLib * dl1 = new coil::DynamicLib(LibName, COIL_DEFAULT_DYNLIB_MODE, 1);
       dl1->error();
 
       dl1->open(LibName, COIL_DEFAULT_DYNLIB_MODE, 1);
-      CPPUNIT_ASSERT(!dl1->error());    // ������ˤϣ����֤�
+      CPPUNIT_ASSERT(!dl1->error());    // 正常時には０を返す
 
       dl1->symbol("HogeHogeHoge");
-      CPPUNIT_ASSERT(dl1->error());    // ��������ˤ��󣰤��֤�
+      CPPUNIT_ASSERT(dl1->error());    // 非正常時には非０を返す
 //      std::cout << "error() : " << err2 << "." << std::endl;
 
       dl1->close();

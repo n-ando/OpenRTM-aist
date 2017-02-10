@@ -1,4 +1,4 @@
-// -*- C++ -*-
+﻿// -*- C++ -*-
 /*!
  * @file   ManagerConfigTests.cpp
  * @brief  ManagerConfig test class
@@ -118,24 +118,24 @@ namespace ManagerConfig
     }
 		
     /*!
-     * @brief init()�᥽�åɤ�configure()�᥽�åɤΥƥ���
+     * @brief init()メソッドとconfigure()メソッドのテスト
      * 
-     * - ���ޥ�ɰ�����-f���ץ����ǻ��ꤷ���ե������������������Ǥ��뤫��
-     * - ���ꤵ��Ƥ������Ƥ������������Ǥ��뤫��
-     * - �����ƥ����Υץ��ѥƥ������������Ƥ˴ޤޤ�Ƥ��뤫��
+     * - コマンド引数の-fオプションで指定したファイルで正しく初期化できるか？
+     * - 設定されている内容を正しく取得できるか？
+     * - システム情報のプロパティが、取得内容に含まれているか？
      */
     void test_init_and_configure()
     {
       ManagerConfigMock mgrCfg;
       CPPUNIT_ASSERT(mgrCfg.fileExist("./rtc.conf"));
 
-      // ���ޥ�ɰ�����-f���ץ����ǻ��ꤷ���ե������������������Ǥ��뤫��
+      // コマンド引数の-fオプションで指定したファイルで正しく初期化できるか？
 //      char* argv[] = { "command", "-f", "./rtc.conf" };
       char* argv[] = { "command", "-d", "./rtc.conf" };
       int argc = sizeof(argv) / sizeof(char*);
       mgrCfg.init(argc, argv);
 			
-      // ���ꤵ��Ƥ������Ƥ������������Ǥ��뤫��
+      // 設定されている内容を正しく取得できるか？
       coil::Properties properties;
       mgrCfg.configure(properties);
 
@@ -170,8 +170,8 @@ namespace ManagerConfig
       CPPUNIT_ASSERT_EQUAL(std::string("DEFAULT.RTC.OPENRTM.VERSION"),
 			   properties.getProperty("rtc.openrtm.version"));
 			
-      // �����ƥ����Υץ��ѥƥ������������Ƥ˴ޤޤ�Ƥ��뤫��
-      // �ʥ����ƥ�����ư��Ķ��˰�¸����Τǡ��ץ��ѥƥ��������Ǥ��Ƥ��뤳�Ȥ������ǧ�����
+      // システム情報のプロパティが、取得内容に含まれているか？
+      // （システム情報は動作環境に依存するので、プロパティが取得できていることだけを確認する）
       CPPUNIT_ASSERT(std::string("")
 		     != properties.getProperty("manager.os.name"));
       CPPUNIT_ASSERT(std::string("")
@@ -187,8 +187,8 @@ namespace ManagerConfig
       CPPUNIT_ASSERT(std::string("YES")
 		     == properties.getProperty("manager.is_master"));
 
-      // ���ޥ�ɰ�����-a���ץ������꤬������ȿ�Ǥ���뤫��
-      // corba.corba_servant ����γ�ǧ
+      // コマンド引数の-aオプション指定が正しく反映されるか？
+      // corba.corba_servant 指定の確認
       argv[1] = "-a";
       argc = sizeof(argv) / sizeof(char*);
       mgrCfg.init(argc, argv);
@@ -196,8 +196,8 @@ namespace ManagerConfig
       CPPUNIT_ASSERT_EQUAL(std::string("NO"),
 			   properties.getProperty("manager.corba_servant"));
 
-      // ���ޥ�ɰ�����-o���ץ������꤬������ȿ�Ǥ���뤫��
-      // configuration ��񤭻���γ�ǧ
+      // コマンド引数の-oオプション指定が正しく反映されるか？
+      // configuration 上書き指定の確認
       argv[1] = "-omanager.is_master:NO";
       argc = sizeof(argv) / sizeof(char*);
       mgrCfg.init(argc, argv);
@@ -205,8 +205,8 @@ namespace ManagerConfig
       CPPUNIT_ASSERT_EQUAL(std::string("NO"),
 			   properties.getProperty("manager.is_master"));
 
-      // ���ޥ�ɰ�����-p���ץ������꤬������ȿ�Ǥ���뤫��
-      // corba.endpoints �ݡ����ֹ����γ�ǧ
+      // コマンド引数の-pオプション指定が正しく反映されるか？
+      // corba.endpoints ポート番号指定の確認
       argv[1] = "-p9876";
       argc = sizeof(argv) / sizeof(char*);
       mgrCfg.init(argc, argv);
@@ -216,19 +216,19 @@ namespace ManagerConfig
     }
 		
     /*!
-     * @brief init()�᥽�åɤΥƥ���
+     * @brief init()メソッドのテスト
      * 
-     * - ����ե����ե�����λ��ꥪ�ץ����ʤ��ǽ����������硢�ǥե���ȤΥ���ե����졼�����ե���������Ƥǽ��������뤫��
+     * - コンフィグファイルの指定オプションなしで初期化した場合、デフォルトのコンフィグレーションファイルの内容で初期化されるか？
      */
     void test_init_default()
     {
 
       ManagerConfigMock mgrCfg;
 
-      // ���ץ�������ʤ��ǽ��������
+      // オプション指定なしで初期化する
       mgrCfg.init(0, NULL);
 			
-      // ���ꤵ��Ƥ������Ƥ������������Ǥ��뤫��
+      // 設定されている内容を正しく取得できるか？
       coil::Properties properties;
       mgrCfg.configure(properties);
 
@@ -263,8 +263,8 @@ namespace ManagerConfig
       CPPUNIT_ASSERT_EQUAL(std::string("DEFAULT.RTC.OPENRTM.VERSION"),
 			   properties.getProperty("rtc.openrtm.version"));
 			
-      // �����ƥ����Υץ��ѥƥ������������Ƥ˴ޤޤ�Ƥ��뤫��
-      // �ʥ����ƥ�����ư��Ķ��˰�¸����Τǡ��ץ��ѥƥ��������Ǥ��Ƥ��뤳�Ȥ������ǧ�����
+      // システム情報のプロパティが、取得内容に含まれているか？
+      // （システム情報は動作環境に依存するので、プロパティが取得できていることだけを確認する）
       CPPUNIT_ASSERT(std::string("")
 		     != properties.getProperty("manager.os.name"));
       CPPUNIT_ASSERT(std::string("")

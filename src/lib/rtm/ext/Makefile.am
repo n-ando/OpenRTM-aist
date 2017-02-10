@@ -193,7 +193,6 @@ vc9proj: librtmManipulator.vcproj.yaml librtmCamera.vcproj.yaml
 		--yaml librtmManipulator.vcproj.yaml \
 		--source $(MANIPULATORSKEL_CPP) \
 		--header $(MANIPULATORSKEL_H)
-	qkc -O- -sm $(win32_builddir)/rtm/ext/librtmManipulator_vc9.vcproj
 	$(top_builddir)/build/vcprojtool.py vcproj \
 		--type DLL \
 		--vcversion "9.00" \
@@ -202,7 +201,6 @@ vc9proj: librtmManipulator.vcproj.yaml librtmCamera.vcproj.yaml
 		--yaml librtmCamera.vcproj.yaml \
 		--source $(CAMERASKEL_CPP) \
 		--header $(CAMERASKEL_H)
-	qkc -O- -sm $(win32_builddir)/rtm/ext/librtmCamera_vc9.vcproj
 
 vcxproj: librtmManipulator.vcproj.yaml librtmCamera.vcproj.yaml
 	for ver in $(VC_VERSION); do \
@@ -214,7 +212,6 @@ vcxproj: librtmManipulator.vcproj.yaml librtmCamera.vcproj.yaml
 			--yaml librtmManipulator.vcproj.yaml \
 			--source $(MANIPULATORSKEL_CPP) \
 			--header $(MANIPULATORSKEL_H) ; \
-		qkc -O- -sm $(win32_builddir)/rtm/ext/librtmManipulator_vc$${ver}.vcxproj ; \
 		$(top_builddir)/build/vcxprojtool.py vcxproj \
 			--type DLL \
 			--vcversion "$${ver}.00" \
@@ -223,7 +220,6 @@ vcxproj: librtmManipulator.vcproj.yaml librtmCamera.vcproj.yaml
 			--yaml librtmCamera.vcproj.yaml \
 			--source $(CAMERASKEL_CPP) \
 			--header $(CAMERASKEL_H) ; \
-		qkc -O- -sm $(win32_builddir)/rtm/ext/librtmCamera_vc$${ver}.vcxproj ; \
 	done
 
 dist-hook: lst vcproj

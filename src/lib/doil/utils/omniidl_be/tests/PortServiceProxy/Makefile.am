@@ -101,7 +101,6 @@ PortServiceProxy_vc9.vcproj:
 		--yaml ../coil_test.vcproj.yaml \
 		--source $(TEST_SRC)
 #		--header $(TEST_H)
-	qkc -O- -sm $(win32_builddir)/PortServiceProxy_vc9.vcproj
 
 
 PortServiceProxy_vc10.vcproj:
@@ -113,6 +112,5 @@ PortServiceProxy_vc10.vcproj:
 		--out $(win32_builddir)/PortServiceProxy_vc10.vcproj \
 		--yaml ../coil_test.vcproj.yaml \
 		--source $(TEST_SRC)
-	qkc -O- -sm $(win32_builddir)/PortServiceProxy_vc10.vcproj
 
 

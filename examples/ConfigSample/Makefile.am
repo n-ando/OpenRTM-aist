@@ -82,7 +82,6 @@ vc9proj:
 		--yaml ../rtc.vcproj.yaml                       \
 		--source ConfigSample.cpp ConfigSampleComp.cpp  \
 		--header ConfigSample.h VectorConvert.h
-	qkc -O- -sm $(win32_builddir)/ConfigSample_vc9.vcproj
 	$(top_builddir)/build/vcprojtool.py vcproj                 \
 		--type DLL                                         \
 		--vcversion "9.00"                                 \
@@ -92,7 +91,6 @@ vc9proj:
 		--yaml ../rtcdll.vcproj.yaml                       \
 		--source ConfigSample.cpp                          \
 		--header ConfigSample.h VectorConvert.h
-	qkc -O- -sm $(win32_builddir)/ConfigSampleDll_vc9.vcproj
 
 vcxproj:
 	for ver in $(VC_VERSION); do \
@@ -105,7 +103,6 @@ vcxproj:
 			--yaml ../rtc.vcproj.yaml                       \
 			--source ConfigSample.cpp ConfigSampleComp.cpp  \
 			--header ConfigSample.h VectorConvert.h ; \
-		qkc -O- -sm $(win32_builddir)/ConfigSample_vc$${ver}.vcxproj ; \
 		$(top_builddir)/build/vcxprojtool.py vcxproj                 \
 			--type DLL                                         \
 			--vcversion "$${ver}.00"                                 \
@@ -115,7 +112,6 @@ vcxproj:
 			--yaml ../rtcdll.vcproj.yaml                       \
 			--source ConfigSample.cpp                          \
 			--header ConfigSample.h VectorConvert.h ; \
-		qkc -O- -sm $(win32_builddir)/ConfigSampleDll_vc$${ver}.vcxproj ; \
 	done
 
 dist-hook: lst vcproj
