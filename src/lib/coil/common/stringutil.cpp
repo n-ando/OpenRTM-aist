@@ -135,9 +135,14 @@ namespace coil
    */
   bool isEscaped(const std::string& str, std::string::size_type pos)
   {
+    if (pos == 0) { return false; }
     --pos;
-    unsigned int i;
-    for (i = 0; (pos >= 0) && str[pos] == '\\'; --pos, ++i) ;
+    size_t i = 0;
+    for ( ; (pos >= 0) && str[pos] == '\\'; ++i)
+      {
+        if (pos == 0) { break; }
+        --pos;
+      }
     // If the number of \ is odd, delimiter is escaped.
     return (i % 2) == 1;
   }

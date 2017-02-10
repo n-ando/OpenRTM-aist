@@ -44,7 +44,7 @@ namespace coil
       m_recurred(false)
   {
     m_record.reserve(m_countMax);
-    for (unsigned long i(0); i < m_countMax; ++i)
+    for (unsigned long int i(0); i < m_countMax; ++i)
       {
         m_record.push_back(TimeValue(0, 0));
       }
@@ -118,7 +118,8 @@ namespace coil
    */
   unsigned long int TimeMeasure::count() const
   {
-    return m_recurred ? m_record.size() : m_count;
+    return m_recurred ?
+      static_cast<unsigned long int>(m_record.size()) : m_count;
   }
 
   /*!
@@ -140,7 +141,7 @@ namespace coil
     double sq_sum = 0;
     unsigned long int len(count());
 
-    if (len == 0) return false;
+    if (len == 0UL) { return false; }
 
     for (unsigned long int i(0); i < len; ++i)
       {

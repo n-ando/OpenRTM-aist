@@ -341,11 +341,11 @@ namespace coil
    */
   void Properties::load(std::istream& inStream)
   {
-    std::string pline = std:s:tring();
+    std::string pline = std::string();
 
     while (!inStream.eof())
       {
-        std::string tmp = std:s:tring();
+        std::string tmp = std::string();
         coil::getlinePortable(inStream, tmp);
         coil::eraseHeadBlank(tmp);
 

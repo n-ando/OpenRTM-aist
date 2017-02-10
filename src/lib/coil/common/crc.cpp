@@ -182,7 +182,7 @@ namespace coil
         0xb40bbe37, 0xc30c8ea1, 0x5a05df1b, 0x2d02ef8d,
       };
     unsigned long c(0xffffffffL);
-    for (int i(0); i < len; ++i)
+    for (size_t i(0); i < len; ++i)
       {
         c = crc32tab[(c ^ str[i]) & 0xff] ^ (c >> 8);
       }
