@@ -382,7 +382,7 @@ namespace RTC
         RTC_WARN(("Cannot extract Provider IOR string"));
         return false;
       }
-    iorstr = ior;
+    iorstr = std::string(ior);
     RTC_DEBUG(("interface matched with new descriptor: %s", newdesc.c_str()));
     return true;
   }
