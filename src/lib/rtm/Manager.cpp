@@ -955,7 +955,7 @@ std::vector<coil::Properties> Manager::getLoadableModules()
 
     std::string ec_id = std::string();
     coil::Properties ec_prop = coil::Properties();
-    if (!procContextArgs(ec_args, ec_id, ec_prop)) return NULL;
+    if (!procContextArgs(ec_args, ec_id, ec_prop)) { return NULL; }
 
     ECFactoryBase* factory(m_ecfactory.find(ec_id.c_str()));
     if (factory == NULL)
