@@ -246,15 +246,14 @@ namespace RTC
     // Getting current proccess pid by using ACE_OS::getpid() (UNIX/Windows)
     //
     coil::pid_t pid = coil::getpid();
-    char pidc[8];
-    sprintf(pidc, "%d", pid);
+    std::string pidc = coil::otos(pid);
 
     prop.setProperty("os.name",     sysinfo.sysname);
     prop.setProperty("os.release",  sysinfo.release);
     prop.setProperty("os.version",  sysinfo.version);
     prop.setProperty("os.arch",     sysinfo.machine);
     prop.setProperty("os.hostname", sysinfo.nodename);
-    prop.setProperty("manager.pid",         pidc);
+    prop.setProperty("manager.pid", pidc);
 
     return;
   }

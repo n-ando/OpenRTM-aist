@@ -15,9 +15,11 @@
  * $Id: SystemLogger.cpp 845 2008-09-25 11:10:40Z n-ando $
  *
  */
-
 #include <rtm/SystemLogger.h>
 #include <rtm/Manager.h>
+
+#include <sstream>
+#include <iomanip>
 
 #if defined(_MSC_VER)
 #define snprintf _snprintf
@@ -166,27 +168,17 @@ namespace RTC
 
     if (m_msEnable > 0)
       {
-        char msec[4];
-#ifdef WIN32
-        _snprintf(msec, sizeof(msec), "%03d",
-                        static_cast<int>(tm.usec() / 1000));
-#else
-        snprintf(msec, sizeof(msec), "%03d",
-                        static_cast<int>(tm.usec() / 1000));
-#endif
-        coil::replaceString(fmt, "#m#", msec);
+        std::stringstream msec("");
+        msec << std::setfill('0') << std::setw(3);
+        msec << static_cast<int>(tm.usec() / 1000);
+        coil::replaceString(fmt, "#m#", msec.str());
       }
     if (m_usEnable > 0)
       {
-        char usec[4];
-#ifdef WIN32
-        _snprintf(usec, sizeof(usec), "%03d",
-                 static_cast<int>(tm.usec() - ((tm.usec() / 1000) * 1000)));
-#else
-        snprintf(usec, sizeof(usec), "%03d",
-                 static_cast<int>(tm.usec() - ((tm.usec() / 1000) * 1000)));
-#endif
-        coil::replaceString(fmt, "#u#", usec);
+        std::stringstream usec("");
+        usec << std::setfill('0') << std::setw(3);
+        usec << static_cast<int>(tm.usec() - ((tm.usec() / 1000) * 1000));
+        coil::replaceString(fmt, "#u#", usec.str());
       }
 
     return fmt;

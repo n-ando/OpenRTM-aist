@@ -72,7 +72,7 @@ namespace coil
    * @brief Constructor(Give the default value with char*[])
    * @endif
    */
-  Properties::Properties(const char* defaults[], long num)
+  Properties::Properties(const char** defaults, long num)
     : name(""), value(""), default_value(""), root(NULL), m_empty("")
   {
     leaf.clear();

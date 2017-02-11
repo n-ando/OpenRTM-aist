@@ -207,7 +207,7 @@ namespace coil
      *
      * @endif
      */
-    explicit Properties(const char* defaults[], long num = LONG_MAX);
+    explicit Properties(const char** defaults, long num = LONG_MAX);
 
     /*!
      * @if jp
