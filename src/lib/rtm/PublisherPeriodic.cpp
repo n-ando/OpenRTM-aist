@@ -338,11 +338,13 @@ namespace RTC
     if (bufferIsEmpty()) { return BUFFER_EMPTY; }
 
     ReturnCode ret(PORT_OK);
-    int readable = m_buffer->readable();
-    int preskip(readable + m_leftskip);
-    int loopcnt(preskip/(m_skipn +1));
-    int postskip(m_skipn - m_leftskip);
-    for (int i(0); i < loopcnt; ++i)
+    size_t readable = m_buffer->readable();
+    size_t preskip(readable + m_leftskip);
+    assert(m_skipn >= 0);
+    size_t loopcnt(preskip / (m_skipn + 1));
+    assert(m_skipn >= m_leftskip);
+    size_t postskip(m_skipn - m_leftskip);
+    for (size_t i(0); i < loopcnt; ++i)
       {
         m_buffer->advanceRptr(postskip);
         readable -= postskip;
@@ -363,6 +365,7 @@ namespace RTC
       }
 
     m_buffer->advanceRptr(readable);
+    assert(m_skipn >= 0);
     m_leftskip = preskip % (m_skipn +1);
 
     return ret;
