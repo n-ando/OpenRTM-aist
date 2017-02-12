@@ -260,11 +260,11 @@ namespace coil
               Guard gaurd(m_streams[i].mutex_);
               m_streams[i].stream_->sputn(this->gptr(), bytes_to_write);
             }
-          this->gbump((int)bytes_to_write);
+          this->gbump(static_cast<int>(bytes_to_write));
           if (this->gptr() >= this->pptr())
             {
-              this->pbump((int)(this->pbase() - this->pptr()));
-              this->gbump((int)(this->pbase() - this->gptr()));
+              this->pbump(static_cast<int>(this->pbase() - this->pptr()));
+              this->gbump(static_cast<int>(this->pbase() - this->gptr()));
             }
         }
       return bytes_to_write;
@@ -350,8 +350,8 @@ namespace coil
               if (stream_sputn(this->gptr(), bytes_to_write) != bytes_to_write)
                 return traits_type::eof();
               // Reset next pointer to point to pbase on success
-              this->pbump((int)(this->pbase() - this->pptr()));
-              this->gbump((int)(this->pbase() - this->gptr()));
+              this->pbump(static_cast<int>(this->pbase() - this->pptr()));
+              this->gbump(static_cast<int>(this->pbase() - this->gptr()));
             }
         }
       // Write extra character to file if not EOF
@@ -402,11 +402,11 @@ namespace coil
                 {
                   return -1;
                 }
-              this->gbump((int)bytes_to_write);
+              this->gbump(static_cast<int>(bytes_to_write));
               if (this->gptr() >= this->pptr())
                 {
-                  this->pbump((int)(this->pbase() - this->pptr()));
-                  this->gbump((int)(this->pbase() - this->gptr()));
+                  this->pbump(static_cast<int>(this->pbase() - this->pptr()));
+                  this->gbump(static_cast<int>(this->pbase() - this->gptr()));
                 }
             }
         }
