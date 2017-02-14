@@ -323,7 +323,7 @@ namespace RTC
     FactoryCXX(const coil::Properties& profile,
                RtcNewFunc new_func,
                RtcDeleteFunc delete_func,
-               NumberingPolicy* policy = new DefaultNumberingPolicy());
+               RTM::NumberingPolicy* policy = new RTM::DefaultNumberingPolicy());
 
     virtual ~FactoryCXX()
     {
@@ -402,7 +402,7 @@ namespace RTC
      * @brief The naming policy on creating the components
      * @endif
      */
-    NumberingPolicy* m_policy;
+    RTM::NumberingPolicy* m_policy;
   };
 };  // namespace RTC
 #endif  // RTC_FACTORY_H

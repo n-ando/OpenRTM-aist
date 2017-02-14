@@ -23,6 +23,8 @@
 #include <string>
 #include <vector>
 
+namespace RTM
+{
 /*!
  * @if jp
  *
@@ -262,4 +264,5 @@ private:
   int m_num;
   std::vector<void*> m_objects;
 };
+}; // namespace RTM
 #endif  // RTC_NUMBERINGPOLICY_H

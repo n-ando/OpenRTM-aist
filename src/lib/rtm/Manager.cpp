@@ -1766,7 +1766,7 @@ std::vector<coil::Properties> Manager::getLoadableModules()
   bool Manager::initFactories()
   {
     RTC_TRACE(("Manager::initFactories()"));
-    FactoryInit();
+    RTM::FactoryInit();
     return true;
   }
 

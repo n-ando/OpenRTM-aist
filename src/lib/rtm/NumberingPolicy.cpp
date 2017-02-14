@@ -20,6 +20,8 @@
 #include <rtm/NumberingPolicy.h>
 #include <coil/stringutil.h>
 
+namespace RTM
+{
 //============================================================
 // DefaultNumberingPolicy
 //============================================================
@@ -86,4 +88,4 @@ long int DefaultNumberingPolicy::find(void* obj)
   throw ObjectNotFound();
   return i;
 }
-
+}; // namespace RTM

@@ -25,25 +25,6 @@
 #include <iterator>
 #include <string>
 
-
-static const char* periodicecsharedcomposite_spec[] =
-  {
-    "implementation_id", "PeriodicECSharedComposite",
-    "type_name",         "PeriodicECSharedComposite",
-    "description",       "PeriodicECSharedComposite",
-    "version",           "1.0",
-    "vendor",            "jp.go.aist",
-    "category",          "composite.PeriodicECShared",
-    "activity_type",     "DataFlowComponent",
-    "max_instance",      "0",
-    "language",          "C++",
-    "lang_type",         "compile",
-    "exported_ports",    "",
-    "conf.default.members", "",
-    "conf.default.exported_ports", "",
-    ""
-  };
-
 namespace SDOPackage
 {
   /*!
@@ -562,6 +543,24 @@ bool stringToStrVec(std::vector<std::string>& v, const char* is)
 
 namespace RTC
 {
+  static const char* periodicecsharedcomposite_spec[] =
+  {
+    "implementation_id", "PeriodicECSharedComposite",
+    "type_name",         "PeriodicECSharedComposite",
+    "description",       "PeriodicECSharedComposite",
+    "version",           "1.0",
+    "vendor",            "jp.go.aist",
+    "category",          "composite.PeriodicECShared",
+    "activity_type",     "DataFlowComponent",
+    "max_instance",      "0",
+    "language",          "C++",
+    "lang_type",         "compile",
+    "exported_ports",    "",
+    "conf.default.members", "",
+    "conf.default.exported_ports", "",
+    ""
+  };
+
   class setCallback
     : public OnSetConfigurationSetCallback
   {
@@ -776,7 +775,7 @@ extern "C"
 {
   void PeriodicECSharedCompositeInit(RTC::Manager* manager)
   {
-    coil::Properties profile(periodicecsharedcomposite_spec);
+    coil::Properties profile(RTC::periodicecsharedcomposite_spec);
     manager->registerFactory(profile,
                              RTC::Create<RTC::PeriodicECSharedComposite>,
                              RTC::Delete<RTC::PeriodicECSharedComposite>);

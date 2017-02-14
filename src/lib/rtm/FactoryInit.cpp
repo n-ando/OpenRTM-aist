@@ -37,6 +37,8 @@
 #include <rtm/InPortDirectProvider.h>
 #include <rtm/InPortDirectConsumer.h>
 
+namespace RTM
+{
 void FactoryInit()
 {
     // Buffers
@@ -58,3 +60,4 @@ void FactoryInit()
     InPortDirectProviderInit();
     InPortDirectConsumerInit();
 }
+}; // namespace RTM
