@@ -537,3 +537,34 @@ sdo.service.provider.providing_services: [read only]
 #
 sdo.service.consumer.available_services: [read only]
 sdo.service.consumer.enabled_services: ALL
+
+
+#============================================================
+# Fluent-bit logger plugin setting
+#============================================================
+#
+# This is fluentbit logger plugin example in rtc.conf
+#
+logger.enable: YES
+logger.log_level: PARANOID
+logger.file_name: rtc%p.log, stderr
+
+# fluentbit specific configurations
+logger.plugins: FluentBit.so
+
+# Output example (forward)
+logger.logstream.fluentd.output0.plugin: forward
+logger.logstream.fluentd.output0.tag: fluent_forward
+logger.logstream.fluentd.output0.match: *
+#logger.logstream.fluentd.output0.host: 127.0.0.1 (default)
+#logger.logstream.fluentd.output0.port: 24224 (default)
+
+# Output example (stdout)
+logger.logstream.fluentd.output1.plugin: stdout
+logger.logstream.fluentd.output1.tag: fluent_stdout
+logger.logstream.fluentd.output1.match: *
+
+# Input example (CPU)
+logger.logstream.fluentd.input0.plugin: cpu
+logger.logstream.fluentd.input0.tag: fluent_cpu
+
