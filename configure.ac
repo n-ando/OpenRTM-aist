@@ -1681,7 +1681,6 @@ AC_OUTPUT([Makefile
 	examples/SeqIO/Makefile
 	examples/SimpleService/Makefile
 	examples/ExtTrigger/Makefile
-	examples/MultiInPort/Makefile
 	examples/Templates/Makefile
 	examples/tests/Makefile
 	examples/Fsm/Makefile
