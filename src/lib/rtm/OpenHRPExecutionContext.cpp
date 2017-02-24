@@ -289,6 +289,33 @@ namespace RTC
   {
     return ExecutionContextBase::getProfile();
   }
+
+
+  // template virtual functions adding/removing component
+  /*!
+  * @brief onAddedComponent() template function
+  */
+  RTC::ReturnCode_t OpenHRPExecutionContext::
+	  onAddedComponent(RTC::LightweightRTObject_ptr rtobj)
+  {
+	  Guard guard(m_tickmutex);
+
+	  ExecutionContextBase::m_worker.updateComponentList();
+
+	  return RTC::RTC_OK;
+  }
+  /*!
+  * @brief onRemovedComponent() template function
+  */
+  RTC::ReturnCode_t OpenHRPExecutionContext::
+	  onRemovedComponent(RTC::LightweightRTObject_ptr rtobj)
+  {
+	  Guard guard(m_tickmutex);
+
+	  ExecutionContextBase::m_worker.updateComponentList();
+
+	  return RTC::RTC_OK;
+  }
 };
 
 
