@@ -11,6 +11,7 @@ AM_CPPFLAGS= \
 	-I$(top_srcdir)/src/ext/logger/fluentbit_stream/fluent-bit/include \
 	-I$(top_srcdir)/src/ext/logger/fluentbit_stream/fluent-bit/lib/monkey/include \
 	-I$(top_srcdir)/src/ext/logger/fluentbit_stream/fluent-bit/lib/mbedtls-2.4.1/include \
+	-I$(top_srcdir)/src/ext/logger/fluentbit_stream/fluent-bit/lib/msgpack-c-0b7cabd/include/ \
 	-I$(top_srcdir)/src/ext/logger/fluentbit_stream/fluent-bit/lib/flb_libco \
 	-I$(top_srcdir)/src/lib \
 	-I$(top_srcdir)/src/lib/coil/include \
