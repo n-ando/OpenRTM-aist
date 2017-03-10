@@ -18,8 +18,8 @@
     <rtm_libdir>$(rtm_root)\bin</rtm_libdir>
     <rtm_bin>$(rtm_root)\bin;$(rtm_root)\build</rtm_bin>
     <rtm_path>$(rtm_bin);$(omni_bin)</rtm_path>
-    <rtm_libd>RTC$(rtm_dllver)d.lib;$(coil_libd);$(omni_libd);advapi32.lib;ws2_32.lib;mswsock.lib;$(user_libd)</rtm_libd>
-    <rtm_lib>RTC$(rtm_dllver).lib;$(coil_lib);$(omni_lib);advapi32.lib;ws2_32.lib;mswsock.lib;$(user_lib)</rtm_lib>
+    <rtm_libd>RTC$(rtm_dllver)d.lib;$(coil_libd);$(omni_libd);$(rtm_ext_libd);advapi32.lib;ws2_32.lib;mswsock.lib;$(user_libd)</rtm_libd>
+    <rtm_lib>RTC$(rtm_dllver).lib;$(coil_lib);$(omni_lib);$(rtm_ext_lib);advapi32.lib;ws2_32.lib;mswsock.lib;$(user_lib)</rtm_lib>
     <rtm_idlc>omniidl</rtm_idlc>
     <rtm_idlflags>-bcxx -Wba -nf -I $(SolutionDir)\rtm\idl</rtm_idlflags>
   </PropertyGroup>
