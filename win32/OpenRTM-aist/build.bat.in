@@ -127,7 +127,7 @@ if %VC_VERSION% == 14 (
 if %VC_VERSION% == 15 (
    call "C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Auxiliary\Build\vcvarsall.bat" x86
    set VCTOOLSET=15.0
-   set PLATFORMTOOL=/p:PlatformToolset=v150
+   set PLATFORMTOOL=/p:PlatformToolset=v141
    goto MSBUILDx86
    )
 
@@ -196,7 +196,7 @@ if /i %VC_VERSION% == 14 (
 if /i %VC_VERSION% == 15 (
    call "C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Auxiliary\Build\vcvarsall.bat" amd64
    set VCTOOLSET=15.0
-   set PLATFORMTOOL=/p:PlatformToolset=v150
+   set PLATFORMTOOL=/p:PlatformToolset=v141
    goto MSBUILDx64
    )
 
