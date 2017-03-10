@@ -9,7 +9,7 @@ AUTOMAKE_OPTIONS = 1.4
 
 SUBDIRS = build src utils examples etc $(DOCS) win32
 
-export VC_VERSION := 10 11 12 14
+export VC_VERSION := 10 11 12 14 15
 
 DIST_SUBDIRS = packages $(SUBDIRS)
 
