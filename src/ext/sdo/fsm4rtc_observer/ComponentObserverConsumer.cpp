@@ -801,7 +801,7 @@ namespace RTC
                                         m_fsmaction,
                                         &FSMAction::postExit);
     m_fsmaction.postOnFsmStateChangeListener =
-      m_rtobj->addPostFsmActionListener(POST_ON_EXIT,
+      m_rtobj->addPostFsmActionListener(POST_ON_STATE_CHANGE,
                                         m_fsmaction,
                                         &FSMAction::postStateChange);
   }
