@@ -14,8 +14,8 @@ Configurations:
 # Debug Configuration
 #------------------------------------------------------------
   - Name: "Debug|Win32"
-    OutputDirectory: "$(ProjectDir)$(TargetName)\\$(ConfigurationName)"
-    IntermediateDirectory: "$(ConfigurationName)"
+    OutputDirectory: "$(ProjectDir)$(ProjectName)\\$(ConfigurationName)"
+    IntermediateDirectory: "$(ProjectName)\\$(ConfigurationName)"
     ConfigurationType: "2"
     InheritedPropertySheets: "$(SolutionDir)rtm_config.vsprops;$(SolutionDir)rtm_distbuild.vsprops"
     CharacterSet: "0"
@@ -72,8 +72,8 @@ Configurations:
         Value: |
           copy "$(OutDir)\\$(TargetName).lib" "$(SolutionDir)bin\\"
           copy "$(OutDir)\\$(TargetName).dll" "$(SolutionDir)bin\\"
-    VC10_OutputDirectory: "$(ProjectDir)$(TargetName)\\$(Configuration)"
-    VC10_IntermediateDirectory: "$(Configuration)"
+    VC10_OutputDirectory: "$(ProjectDir)$(ProjectName)\\$(Configuration)"
+    VC10_IntermediateDirectory: "$(ProjectName)\\$(Configuration)"
     VC10_InheritedPropertySheets: 
       - "$(SolutionDir)rtm_config.props"
       - "$(SolutionDir)rtm_distbuild.props"
@@ -132,8 +132,8 @@ Configurations:
           copy "$(OutDir)\\$(TargetName).lib" "$(SolutionDir)bin\\rtmCamera$(rtm_dllver)d.lib"
           copy "$(OutDir)\\rtmCamera$(rtm_dllver)d.dll" "$(SolutionDir)bin\\"
   - Name: "Debug|x64"
-    OutputDirectory: "$(ProjectDir)$(TargetName)\\$(ConfigurationName)"
-    IntermediateDirectory: "$(ConfigurationName)"
+    OutputDirectory: "$(ProjectDir)$(ProjectName)\\$(ConfigurationName)"
+    IntermediateDirectory: "$(ProjectName)\\$(ConfigurationName)"
     ConfigurationType: "2"
     InheritedPropertySheets: "$(SolutionDir)rtm_config.vsprops;$(SolutionDir)rtm_distbuild.vsprops"
     CharacterSet: "0"
@@ -190,8 +190,8 @@ Configurations:
         Value: |
           copy "$(OutDir)\\$(TargetName).lib" "$(SolutionDir)bin\\"
           copy "$(OutDir)\\$(TargetName).dll" "$(SolutionDir)bin\\"
-    VC10_OutputDirectory: "$(ProjectDir)$(TargetName)\\$(Configuration)"
-    VC10_IntermediateDirectory: "$(Configuration)"
+    VC10_OutputDirectory: "$(ProjectDir)$(ProjectName)\\$(Configuration)"
+    VC10_IntermediateDirectory: "$(ProjectName)\\$(Configuration)"
     VC10_InheritedPropertySheets: 
       - "$(SolutionDir)rtm_config.props"
       - "$(SolutionDir)rtm_distbuild.props"
@@ -253,8 +253,8 @@ Configurations:
 # Release Configuration
 #------------------------------------------------------------
   - Name: "Release|Win32"
-    OutputDirectory: "$(ProjectDir)$(TargetName)\\$(ConfigurationName)"
-    IntermediateDirectory: "$(ConfigurationName)"
+    OutputDirectory: "$(ProjectDir)$(ProjectName)\\$(ConfigurationName)"
+    IntermediateDirectory: "$(ProjectName)\\$(ConfigurationName)"
     ConfigurationType: "2"
     InheritedPropertySheets: "$(SolutionDir)rtm_config.vsprops;$(SolutionDir)rtm_distbuild.vsprops"
     CharacterSet: "0"
@@ -308,8 +308,8 @@ Configurations:
         Value: |
           copy "$(OutDir)\\$(TargetName).lib" "$(SolutionDir)bin\\"
           copy "$(OutDir)\\$(TargetName).dll" "$(SolutionDir)bin\\"
-    VC10_OutputDirectory: "$(ProjectDir)$(TargetName)\\$(Configuration)"
-    VC10_IntermediateDirectory: "$(Configuration)"
+    VC10_OutputDirectory: "$(ProjectDir)$(ProjectName)\\$(Configuration)"
+    VC10_IntermediateDirectory: "$(ProjectName)\\$(Configuration)"
     VC10_InheritedPropertySheets: 
       - "$(SolutionDir)rtm_config.props"
       - "$(SolutionDir)rtm_distbuild.props"
@@ -364,8 +364,8 @@ Configurations:
           copy "$(OutDir)\\$(TargetName).lib" "$(SolutionDir)bin\\rtmCamera$(rtm_dllver).lib"
           copy "$(OutDir)\\rtmCamera$(rtm_dllver).dll" "$(SolutionDir)bin\\"
   - Name: "Release|x64"
-    OutputDirectory: "$(ProjectDir)$(TargetName)\\$(ConfigurationName)"
-    IntermediateDirectory: "$(ConfigurationName)"
+    OutputDirectory: "$(ProjectDir)$(ProjectName)\\$(ConfigurationName)"
+    IntermediateDirectory: "$(ProjectName)\\$(ConfigurationName)"
     ConfigurationType: "2"
     InheritedPropertySheets: "$(SolutionDir)rtm_config.vsprops;$(SolutionDir)rtm_distbuild.vsprops"
     CharacterSet: "0"
@@ -419,8 +419,8 @@ Configurations:
         Value: |
           copy "$(OutDir)\\$(TargetName).lib" "$(SolutionDir)bin\\"
           copy "$(OutDir)\\$(TargetName).dll" "$(SolutionDir)bin\\"
-    VC10_OutputDirectory: "$(ProjectDir)$(TargetName)\\$(Configuration)"
-    VC10_IntermediateDirectory: "$(Configuration)"
+    VC10_OutputDirectory: "$(ProjectDir)$(ProjectName)\\$(Configuration)"
+    VC10_IntermediateDirectory: "$(ProjectName)\\$(Configuration)"
     VC10_InheritedPropertySheets: 
       - "$(SolutionDir)rtm_config.props"
       - "$(SolutionDir)rtm_distbuild.props"
