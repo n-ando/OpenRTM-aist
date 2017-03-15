@@ -108,7 +108,8 @@ namespace RTC
    *
    */
   template<class TOP>
-  class Machine : public Macho::Machine<TOP>
+  class Machine
+    : public Macho::Machine<TOP>
   {
   public:
     Machine(RTC::RTObject_impl* comp)
@@ -151,52 +152,67 @@ namespace RTC
     Link(_StateInstance & instance)
       : Macho::Link<C, P>(instance), rtComponent(NULL)
     {
-      const RTC::Machine<C>* machine;
-      machine = dynamic_cast<const RTC::Machine<C>*>(&P::machine());
-      if (machine != NULL)
-        {
-          rtComponent = machine->rtComponent;
-        }
+    }
+    virtual ~Link()
+    {
+    }
+
+    void setrtc()
+    {
+      if (rtComponent != NULL) { return; }
+      const RTC::Machine<typename P::TOP>* machine =
+        dynamic_cast<const RTC::Machine<typename P::TOP>*>(&P::machine());
+      if (machine != NULL) { rtComponent = machine->rtComponent; }
     }
   public:
     typedef Link<C, P> LINK;
     
     virtual void entry()
     {
+      setrtc();
       if (rtComponent == NULL)
         {
           onEntry();
-          return;
         }
-      rtComponent->preOnFsmEntry(C::_state_name());
-      rtComponent->postOnFsmEntry(C::_state_name(), onEntry());
+      else
+        {
+          rtComponent->postOnFsmStateChange(C::_state_name(), RTC::RTC_OK);
+          rtComponent->preOnFsmEntry(C::_state_name());
+          rtComponent->postOnFsmEntry(C::_state_name(), onEntry());
+        }
     }
     virtual void init()
     {
+      setrtc();
       if (rtComponent == NULL)
         {
           onInit();
-          return;
         }
-      rtComponent->preOnFsmInit(C::_state_name());
-      rtComponent->postOnFsmInit(C::_state_name(), onInit());
+      else
+        {
+          rtComponent->preOnFsmInit(C::_state_name());
+          rtComponent->postOnFsmInit(C::_state_name(), onInit());
+        }
     }
     virtual void exit()
     {
+      setrtc();
       if (rtComponent == NULL)
         {
           onExit();
-          return;
         }
-      rtComponent->preOnFsmExit(C::_state_name());
-      rtComponent->postOnFsmExit(C::_state_name(), onExit());
+      else
+        {
+          rtComponent->preOnFsmExit(C::_state_name());
+          rtComponent->postOnFsmExit(C::_state_name(), onExit());
+          rtComponent->preOnFsmStateChange(C::_state_name());
+        }
     }
 
     virtual ReturnCode_t onEntry() { return RTC::RTC_OK; }
     virtual ReturnCode_t onInit()  { return RTC::RTC_OK; }
     virtual ReturnCode_t onExit()  { return RTC::RTC_OK; }
 
-  private:
     RTObject_impl* rtComponent;
   };
 };
