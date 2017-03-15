@@ -1,37 +1,38 @@
 libcoil:
-libRTC: libcoil libRTCSkel librtmCamera librtmManipulator
-librtmCamera: libcoil libRTCSkel librtmManipulator
-librtmManipulator: libRTCSkel
-rtcd: libcoil libRTC
-rtcprof: libcoil libRTC
-ComponentObserverConsumer: libcoil libRTC
-ConfigSampleComp: libcoil libRTC
-ConfigSample: libcoil libRTC
-ConsoleInComp: libcoil libRTC
-ConsoleIn: libcoil libRTC
-ConsoleOutComp: libcoil libRTC
-ConsoleOut: libcoil libRTC
-SeqInComp: libcoil libRTC
-SeqIn: libcoil libRTC
-SeqOutComp: libcoil libRTC
-SeqOut: libcoil libRTC
+libRTCSkel: libcoil
+librtmCamera: libcoil libRTCSkel
+librtmManipulator: libcoil libRTCSkel
+libRTC: libcoil libRTCSkel
+rtcd: libcoil libRTCSkel libRTC
+rtcprof: libcoil libRTCSkel libRTC
+ComponentObserverConsumer: libcoil libRTCSkel libRTC
+ConfigSampleComp: libcoil libRTCSkel libRTC
+ConfigSample: libcoil libRTCSkel libRTC
+ConsoleInComp: libcoil libRTCSkel libRTC
+ConsoleIn: libcoil libRTCSkel libRTC
+ConsoleOutComp: libcoil libRTCSkel libRTC
+ConsoleOut: libcoil libRTCSkel libRTC
+SeqInComp: libcoil libRTCSkel libRTC
+SeqIn: libcoil libRTCSkel libRTC
+SeqOutComp: libcoil libRTCSkel libRTC
+SeqOut: libcoil libRTCSkel libRTC
 MyServiceConsumerComp: libcoil libRTC
 MyServiceConsumer: libcoil libRTC MyServiceConsumerComp
 MyServiceProviderComp: libcoil libRTC MyServiceConsumerComp MyServiceConsumer
 MyServiceProvider: libcoil libRTC MyServiceConsumerComp MyServiceConsumer MyServiceProviderComp
-Motor: libcoil libRTC
-MotorComp: libcoil libRTC
-Controller: libcoil libRTC
-ControllerComp: libcoil libRTC
-Sensor: libcoil libRTC
-SensorComp: libcoil libRTC
-Composite: libcoil libRTC
-FileNameservice: libcoil libRTC
-LogicalTimeTriggeredEC: libcoil libRTC
-LTTSample: libcoil libRTC
-LTTSampleComp: libcoil libRTC
-ExtConsoleIn: libcoil libRTC
-ExtConsoleInComp: libcoil libRTC
-ExtConsoleOut: libcoil libRTC
-ExtConsoleOutComp: libcoil libRTC
-ExtConnectorComp: libcoil libRTC
+Motor: libcoil libRTCSkel libRTC
+MotorComp: libcoil libRTCSkel libRTC
+Controller: libcoil libRTCSkel libRTC
+ControllerComp: libcoil libRTCSkel libRTC
+Sensor: libcoil libRTCSkel libRTC
+SensorComp: libcoil libRTCSkel libRTC
+Composite: libcoil libRTCSkel libRTC
+FileNameservice: libcoil libRTCSkel libRTC
+LogicalTimeTriggeredEC: libcoil libRTCSkel libRTC
+LTTSample: libcoil libRTCSkel libRTC
+LTTSampleComp: libcoil libRTCSkel libRTC
+ExtConsoleIn: libcoil libRTCSkel libRTC
+ExtConsoleInComp: libcoil libRTCSkel libRTC
+ExtConsoleOut: libcoil libRTCSkel libRTC
+ExtConsoleOutComp: libcoil libRTCSkel libRTC
+ExtConnectorComp: libcoil libRTCSkel libRTC
