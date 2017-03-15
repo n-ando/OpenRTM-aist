@@ -1,0 +1,36 @@
+#ifndef _COMPONENT_OBSERVER_IDL_
+#define _COMPONENT_OBSERVER_IDL_
+
+#include <SDOPackage.idl>
+
+#pragma prefix "omg.org"
+
+module RTC
+{
+    enum StatusKind
+    {
+        COMPONENT_PROFILE,
+        RTC_STATUS,
+        EC_STATUS,
+        PORT_PROFILE,
+        CONFIGURATION,
+        RTC_HEARTBEAT,
+        EC_HEARTBEAT,
+        FSM_PROFILE,
+        FSM_STATUS,
+        FSM_STRUCTURE,
+        USER_DEFINED,
+        STATUS_KIND_NUM
+    };
+    #pragma version StatusKind 1.0
+
+    interface ComponentObserver : SDOPackage::SDOService
+    {
+        oneway void update_status(in StatusKind status_kind,
+                                  in string     hint);
+    };
+    #pragma version ComponentObserver 1.0
+};
+
+#endif // _COMPONENT_OBSERVER_IDL_
+
