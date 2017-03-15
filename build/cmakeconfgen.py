@@ -221,7 +221,9 @@ if __name__ == '__main__':
     omni_libs  = process_lib(dict["omni_lib"], "optimized")
     omni_libs += ";" + process_lib(dict["omni_libd"], "debug")
     rtm_libs   = process_lib(dict["rtm_lib"], "optimized")
+    rtm_libs  += ";" process_lib(dict["rtm_ext_lib"], "optimized")
     rtm_libs  += ";" + process_lib(dict["rtm_libd"], "debug")
+    rtm_libs  += ";" + process_lib(dict["rtm_ext_libd"], "debug")
 
     dict["omniorb_cflags"] = omni_cflags
     dict["omniorb_include_dirs"] = dict["omni_includes"] 

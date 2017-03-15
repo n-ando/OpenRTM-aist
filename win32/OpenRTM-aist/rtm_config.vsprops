@@ -85,19 +85,19 @@
 	/>
 	<UserMacro
 		Name="rtm_libd"
-		Value="RTC$(rtm_dllver)d.lib $(coil_libd) $(omni_libd) $(rtm_ext_libd) advapi32.lib ws2_32.lib mswsock.lib $(user_libd)"
+		Value="RTC$(rtm_dllver)d.lib $(coil_libd) $(omni_libd) advapi32.lib ws2_32.lib mswsock.lib $(user_libd)"
 	/>
 	<UserMacro
 		Name="rtm_libd_x64"
-		Value="RTC$(rtm_dllver_x64)d.lib $(coil_libd_x64) $(omni_libd) $(rtm_ext_libd_x64) advapi32.lib ws2_32.lib mswsock.lib $(user_libd)"
+		Value="RTC$(rtm_dllver_x64)d.lib $(coil_libd_x64) $(omni_libd) advapi32.lib ws2_32.lib mswsock.lib $(user_libd)"
 	/>
 	<UserMacro
 		Name="rtm_lib"
-		Value="RTC$(rtm_dllver).lib $(coil_lib) $(omni_lib) $(rtm_ext_lib) advapi32.lib ws2_32.lib mswsock.lib $(user_lib)"
+		Value="RTC$(rtm_dllver).lib $(coil_lib) $(omni_lib) advapi32.lib ws2_32.lib mswsock.lib $(user_lib)"
 	/>
 	<UserMacro
 		Name="rtm_lib_x64"
-		Value="RTC$(rtm_dllver_x64).lib $(coil_lib_x64) $(omni_lib) $(rtm_ext_lib_x64) advapi32.lib ws2_32.lib mswsock.lib $(user_lib)"
+		Value="RTC$(rtm_dllver_x64).lib $(coil_lib_x64) $(omni_lib) advapi32.lib ws2_32.lib mswsock.lib $(user_lib)"
 	/>
 	<UserMacro
 		Name="rtm_idlc"
