@@ -14,7 +14,7 @@ Configurations:
 # Debug Configuration
 #------------------------------------------------------------
   - Name: "Debug|Win32"
-    OutputDirectory: "$(ProjectDir)$(ConfigurationName)"
+    OutputDirectory: "$(ProjectDir)$(TargetName)\\$(ConfigurationName)"
     IntermediateDirectory: "$(ConfigurationName)"
     ConfigurationType: "2"
     InheritedPropertySheets: "$(SolutionDir)rtm_config.vsprops;$(SolutionDir)rtm_distbuild.vsprops"
@@ -72,7 +72,7 @@ Configurations:
         Value: |
           copy "$(OutDir)\\$(TargetName).lib" "$(SolutionDir)bin\\"
           copy "$(OutDir)\\$(TargetName).dll" "$(SolutionDir)bin\\"
-    VC10_OutputDirectory: "$(ProjectDir)$(Configuration)"
+    VC10_OutputDirectory: "$(ProjectDir)$(TargetName)\\$(Configuration)"
     VC10_IntermediateDirectory: "$(Configuration)"
     VC10_InheritedPropertySheets: 
       - "$(SolutionDir)rtm_config.props"
@@ -132,7 +132,7 @@ Configurations:
           copy "$(OutDir)\\$(TargetName).lib" "$(SolutionDir)bin\\rtmManipulator$(rtm_dllver)d.lib"
           copy "$(OutDir)\\rtmManipulator$(rtm_dllver)d.dll" "$(SolutionDir)bin\\"
   - Name: "Debug|x64"
-    OutputDirectory: "$(ProjectDir)$(ConfigurationName)"
+    OutputDirectory: "$(ProjectDir)$(TargetName)\\$(ConfigurationName)"
     IntermediateDirectory: "$(ConfigurationName)"
     ConfigurationType: "2"
     InheritedPropertySheets: "$(SolutionDir)rtm_config.vsprops;$(SolutionDir)rtm_distbuild.vsprops"
@@ -190,7 +190,7 @@ Configurations:
         Value: |
           copy "$(OutDir)\\$(TargetName).lib" "$(SolutionDir)bin\\"
           copy "$(OutDir)\\$(TargetName).dll" "$(SolutionDir)bin\\"
-    VC10_OutputDirectory: "$(ProjectDir)$(Configuration)"
+    VC10_OutputDirectory: "$(ProjectDir)$(TargetName)\\$(Configuration)"
     VC10_IntermediateDirectory: "$(Configuration)"
     VC10_InheritedPropertySheets: 
       - "$(SolutionDir)rtm_config.props"
@@ -253,7 +253,7 @@ Configurations:
 # Release Configuration
 #------------------------------------------------------------
   - Name: "Release|Win32"
-    OutputDirectory: "$(ProjectDir)$(ConfigurationName)"
+    OutputDirectory: "$(ProjectDir)$(TargetName)\\$(ConfigurationName)"
     IntermediateDirectory: "$(ConfigurationName)"
     ConfigurationType: "2"
     InheritedPropertySheets: "$(SolutionDir)rtm_config.vsprops;$(SolutionDir)rtm_distbuild.vsprops"
@@ -308,7 +308,7 @@ Configurations:
         Value: |
           copy "$(OutDir)\\$(TargetName).lib" "$(SolutionDir)bin\\"
           copy "$(OutDir)\\$(TargetName).dll" "$(SolutionDir)bin\\"
-    VC10_OutputDirectory: "$(ProjectDir)$(Configuration)"
+    VC10_OutputDirectory: "$(ProjectDir)$(TargetName)\\$(Configuration)"
     VC10_IntermediateDirectory: "$(Configuration)"
     VC10_InheritedPropertySheets: 
       - "$(SolutionDir)rtm_config.props"
@@ -364,7 +364,7 @@ Configurations:
           copy "$(OutDir)\\$(TargetName).lib" "$(SolutionDir)bin\\rtmManipulator$(rtm_dllver).lib"
           copy "$(OutDir)\\rtmManipulator$(rtm_dllver).dll" "$(SolutionDir)bin\\"
   - Name: "Release|x64"
-    OutputDirectory: "$(ProjectDir)$(ConfigurationName)"
+    OutputDirectory: "$(ProjectDir)$(TargetName)\\$(ConfigurationName)"
     IntermediateDirectory: "$(ConfigurationName)"
     ConfigurationType: "2"
     InheritedPropertySheets: "$(SolutionDir)rtm_config.vsprops;$(SolutionDir)rtm_distbuild.vsprops"
@@ -419,7 +419,7 @@ Configurations:
         Value: |
           copy "$(OutDir)\\$(TargetName).lib" "$(SolutionDir)bin\\"
           copy "$(OutDir)\\$(TargetName).dll" "$(SolutionDir)bin\\"
-    VC10_OutputDirectory: "$(ProjectDir)$(Configuration)"
+    VC10_OutputDirectory: "$(ProjectDir)$(TargetName)\\$(Configuration)"
     VC10_IntermediateDirectory: "$(Configuration)"
     VC10_InheritedPropertySheets: 
       - "$(SolutionDir)rtm_config.props"
