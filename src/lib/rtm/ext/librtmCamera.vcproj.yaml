@@ -15,7 +15,7 @@ Configurations:
 #------------------------------------------------------------
   - Name: "Debug|Win32"
     OutputDirectory: "$(ProjectDir)$(TargetName)\\$(ConfigurationName)"
-    IntermediateDirectory: "$(ConfigurationName)"
+    IntermediateDirectory: "$(TargetName)\\$(ConfigurationName)"
     ConfigurationType: "2"
     InheritedPropertySheets: "$(SolutionDir)rtm_config.vsprops;$(SolutionDir)rtm_distbuild.vsprops"
     CharacterSet: "0"
@@ -49,7 +49,7 @@ Configurations:
           set PATH=%PATH%;$(rtm_path)
           cd "$(TargetDir)"
           start /wait cmd /c makedeffile.py rtmCamera_static.lib rtmCamera$(rtm_dllver)d $(rtm_shortver) rtmCamera$(rtm_dllver)d.def
-          move rtmCamera$(rtm_dllver)d.def ..\
+          move rtmCamera$(rtm_dllver)d.def ..\\..\\
     VCLinkerTool:
       - Key: AdditionalDependencies
         Value: "libRTCSkeld.lib $(rtm_depend_libd)"
@@ -73,7 +73,7 @@ Configurations:
           copy "$(OutDir)\\$(TargetName).lib" "$(SolutionDir)bin\\"
           copy "$(OutDir)\\$(TargetName).dll" "$(SolutionDir)bin\\"
     VC10_OutputDirectory: "$(ProjectDir)$(TargetName)\\$(Configuration)"
-    VC10_IntermediateDirectory: "$(Configuration)"
+    VC10_IntermediateDirectory: "$(TargetName)\\$(Configuration)"
     VC10_InheritedPropertySheets: 
       - "$(SolutionDir)rtm_config.props"
       - "$(SolutionDir)rtm_distbuild.props"
@@ -108,7 +108,7 @@ Configurations:
           set PATH=%PATH%;$(rtm_path)
           cd "$(TargetDir)"
           start /wait cmd /c makedeffile.py rtmCamera_static.lib rtmCamera$(rtm_dllver)d $(rtm_shortver) rtmCamera$(rtm_dllver)d.def
-          move rtmCamera$(rtm_dllver)d.def ..\
+          move rtmCamera$(rtm_dllver)d.def ..\\..\\
     VC10_VCLinkerTool:
       - Key: AdditionalDependencies
         Value: "libRTCSkeld.lib;$(rtm_depend_libd);%(AdditionalDependencies)"
@@ -133,7 +133,7 @@ Configurations:
           copy "$(OutDir)\\rtmCamera$(rtm_dllver)d.dll" "$(SolutionDir)bin\\"
   - Name: "Debug|x64"
     OutputDirectory: "$(ProjectDir)$(TargetName)\\$(ConfigurationName)"
-    IntermediateDirectory: "$(ConfigurationName)"
+    IntermediateDirectory: "$(TargetName)\\$(ConfigurationName)"
     ConfigurationType: "2"
     InheritedPropertySheets: "$(SolutionDir)rtm_config.vsprops;$(SolutionDir)rtm_distbuild.vsprops"
     CharacterSet: "0"
@@ -167,7 +167,7 @@ Configurations:
           set PATH=%PATH%;$(rtm_path)
           cd "$(TargetDir)"
           start /wait cmd /c makedeffile.py rtmCamera_static.lib rtmCamera$(rtm_dllver)d $(rtm_shortver) rtmCamera$(rtm_dllver)d.def
-          move rtmCamera$(rtm_dllver)d.def ..\
+          move rtmCamera$(rtm_dllver)d.def ..\\..\\
     VCLinkerTool:
       - Key: AdditionalDependencies
         Value: "libRTCSkeld.lib $(rtm_depend_libd)"
@@ -191,7 +191,7 @@ Configurations:
           copy "$(OutDir)\\$(TargetName).lib" "$(SolutionDir)bin\\"
           copy "$(OutDir)\\$(TargetName).dll" "$(SolutionDir)bin\\"
     VC10_OutputDirectory: "$(ProjectDir)$(TargetName)\\$(Configuration)"
-    VC10_IntermediateDirectory: "$(Configuration)"
+    VC10_IntermediateDirectory: "$(TargetName)\\$(Configuration)"
     VC10_InheritedPropertySheets: 
       - "$(SolutionDir)rtm_config.props"
       - "$(SolutionDir)rtm_distbuild.props"
@@ -226,7 +226,7 @@ Configurations:
           set PATH=%PATH%;$(rtm_path)
           cd "$(TargetDir)"
           start /wait cmd /c makedeffile.py rtmCamera_static.lib rtmCamera$(rtm_dllver)d $(rtm_shortver) rtmCamera$(rtm_dllver)d.def
-          move rtmCamera$(rtm_dllver)d.def ..\
+          move rtmCamera$(rtm_dllver)d.def ..\\..\\
     VC10_VCLinkerTool:
       - Key: AdditionalDependencies
         Value: "libRTCSkeld.lib;$(rtm_depend_libd);%(AdditionalDependencies)"
@@ -254,7 +254,7 @@ Configurations:
 #------------------------------------------------------------
   - Name: "Release|Win32"
     OutputDirectory: "$(ProjectDir)$(TargetName)\\$(ConfigurationName)"
-    IntermediateDirectory: "$(ConfigurationName)"
+    IntermediateDirectory: "$(TargetName)\\$(ConfigurationName)"
     ConfigurationType: "2"
     InheritedPropertySheets: "$(SolutionDir)rtm_config.vsprops;$(SolutionDir)rtm_distbuild.vsprops"
     CharacterSet: "0"
@@ -283,7 +283,7 @@ Configurations:
           set PATH=%PATH%;$(rtm_path)
           cd "$(OutDir)"
           start /wait cmd /c makedeffile.py rtmCamera_static.lib $(TargetName) $(rtm_shortver) $(TargetName).def
-          move rtmCamera$(rtm_dllver).def ..\\
+          move rtmCamera$(rtm_dllver).def ..\\..\\
     VCLinkerTool:
       - Key: AdditionalDependencies
         Value: "libRTCSkel.lib $(rtm_depend_lib)"
@@ -309,7 +309,7 @@ Configurations:
           copy "$(OutDir)\\$(TargetName).lib" "$(SolutionDir)bin\\"
           copy "$(OutDir)\\$(TargetName).dll" "$(SolutionDir)bin\\"
     VC10_OutputDirectory: "$(ProjectDir)$(TargetName)\\$(Configuration)"
-    VC10_IntermediateDirectory: "$(Configuration)"
+    VC10_IntermediateDirectory: "$(TargetName)\\$(Configuration)"
     VC10_InheritedPropertySheets: 
       - "$(SolutionDir)rtm_config.props"
       - "$(SolutionDir)rtm_distbuild.props"
@@ -338,7 +338,7 @@ Configurations:
           set PATH=%PATH%;$(rtm_path)
           cd "$(OutDir)"
           start /wait cmd /c makedeffile.py rtmCamera_static.lib rtmCamera$(rtm_dllver) $(rtm_shortver) rtmCamera$(rtm_dllver).def
-          move rtmCamera$(rtm_dllver).def ..\\
+          move rtmCamera$(rtm_dllver).def ..\\..\\
     VC10_VCLinkerTool:
       - Key: AdditionalDependencies
         Value: "libRTCSkel.lib;$(rtm_depend_lib);%(AdditionalDependencies)"
@@ -365,7 +365,7 @@ Configurations:
           copy "$(OutDir)\\rtmCamera$(rtm_dllver).dll" "$(SolutionDir)bin\\"
   - Name: "Release|x64"
     OutputDirectory: "$(ProjectDir)$(TargetName)\\$(ConfigurationName)"
-    IntermediateDirectory: "$(ConfigurationName)"
+    IntermediateDirectory: "$(TargetName)\\$(ConfigurationName)"
     ConfigurationType: "2"
     InheritedPropertySheets: "$(SolutionDir)rtm_config.vsprops;$(SolutionDir)rtm_distbuild.vsprops"
     CharacterSet: "0"
@@ -394,7 +394,7 @@ Configurations:
           set PATH=%PATH%;$(rtm_path)
           cd "$(OutDir)"
           start /wait cmd /c makedeffile.py rtmCamera_static.lib $(TargetName) $(rtm_shortver) $(TargetName).def
-          move rtmCamera$(rtm_dllver).def ..\\
+          move rtmCamera$(rtm_dllver).def ..\\..\\
     VCLinkerTool:
       - Key: AdditionalDependencies
         Value: "libRTCSkel.lib $(rtm_depend_lib)"
@@ -420,7 +420,7 @@ Configurations:
           copy "$(OutDir)\\$(TargetName).lib" "$(SolutionDir)bin\\"
           copy "$(OutDir)\\$(TargetName).dll" "$(SolutionDir)bin\\"
     VC10_OutputDirectory: "$(ProjectDir)$(TargetName)\\$(Configuration)"
-    VC10_IntermediateDirectory: "$(Configuration)"
+    VC10_IntermediateDirectory: "$(TargetName)\\$(Configuration)"
     VC10_InheritedPropertySheets: 
       - "$(SolutionDir)rtm_config.props"
       - "$(SolutionDir)rtm_distbuild.props"
@@ -449,7 +449,7 @@ Configurations:
           set PATH=%PATH%;$(rtm_path)
           cd "$(OutDir)"
           start /wait cmd /c makedeffile.py rtmCamera_static.lib rtmCamera$(rtm_dllver) $(rtm_shortver) rtmCamera$(rtm_dllver).def
-          move rtmCamera$(rtm_dllver).def ..\\
+          move rtmCamera$(rtm_dllver).def ..\\..\\
     VC10_VCLinkerTool:
       - Key: AdditionalDependencies
         Value: "libRTCSkel.lib;$(rtm_depend_lib);%(AdditionalDependencies)"
