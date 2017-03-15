@@ -180,6 +180,8 @@ def parse_args(argv):
         i += 1
     return (vcversion, depfile, outfile, flist)
 
+
+
 def get_slnyaml(depfile, projfiles, vcversion="VC8"):
     depdict = get_dependencies(depfile)
     projs = []
@@ -227,7 +229,20 @@ def get_slnyaml(depfile, projfiles, vcversion="VC8"):
             return -1
         return 0
 
-    projs.sort(depsort)
+    #projs.sort(depsort)
+    
+    def insertProj(pj, projs):
+        for num in range(0, len(projs)):
+            if depsort(pj, projs[num]) == -1:
+                projs.insert(num, pj)
+                return
+        projs.append(pj)
+
+    ret_projs = []
+    for pj in projs:
+        insertProj(pj, ret_projs)
+    projs = ret_projs
+        
     for pj in projs:
         list = """  - Name: %s
     FileName: %s
