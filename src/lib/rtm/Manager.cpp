@@ -1791,7 +1791,19 @@ std::vector<coil::Properties> Manager::getLoadableModules()
     m_namingManager->unbindAll();
     delete m_namingManager;
   }
-  
+
+  /*!
+   * @if jp
+   * @brief NamingManagerを取得する
+   * @else
+   * @brief Getting NamingManager
+   * @endif
+   */
+  NamingManager& Manager::getNamingManager()
+  {
+    return *m_namingManager;
+  }
+
   //============================================================
   // Naming initialization and finalization
   //============================================================
@@ -1937,7 +1949,19 @@ std::vector<coil::Properties> Manager::getLoadableModules()
 
     return true;
   }
-  
+
+  /*!
+   * @if jp
+   * @brief ManagerServantを取得する
+   * @else
+   * @brief Getting ManagerServant
+   * @endif
+   */
+  RTM::ManagerServant& Manager::getManagerServant()
+  {
+    return *m_mgrservant;
+  }
+
   bool Manager::initLocalService()
   {
     RTC_TRACE(("Manager::initLocalService()"));

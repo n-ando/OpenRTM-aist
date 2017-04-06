@@ -396,7 +396,7 @@ namespace RTC
      * @endif
      */
     void runManager(bool no_block = false);
-    
+
     //============================================================
     // Module management
     //============================================================
@@ -1381,6 +1381,18 @@ namespace RTC
      * @endif
      */
     void shutdownNaming();
+
+    /*!
+     * @if jp
+     * @brief NamingManagerを取得する
+     *
+     * @else
+     *
+     * @brief Getting NamingManager
+     *
+     * @endif
+     */
+     NamingManager& getNamingManager();
     
     //============================================================
     // Component management
@@ -1621,6 +1633,18 @@ namespace RTC
      * @endif
      */
     bool initManagerServant();
+
+    /*!
+     * @if jp
+     * @brief ManagerServantを取得する
+     *
+     * @else
+     *
+     * @brief Getting ManagerServant
+     *
+     * @endif
+     */
+    RTM::ManagerServant& getManagerServant();
 
     /*!
      * @if jp
