@@ -450,6 +450,28 @@ module RTM
     RTC::ReturnCode_t shutdown();
     RTC::ReturnCode_t restart();
 
+
+     /*!
+     * @if jp
+     * @brief 指定名のRTCオブジェクトリファレンスを取得
+     *
+     * 
+     *
+     * @param name RTC名
+     * @return RTCリスト
+     *
+     * @else
+     * @brief 
+     *
+     *
+     * 
+     * @param name name
+     * @return list of RTC
+     *
+     * @endig
+     */
+    RTC::RTCList get_components_by_name(in string name);
+
     Object get_service(in string name);
     //    ServiceProfileList get_service_profiles();
   };
