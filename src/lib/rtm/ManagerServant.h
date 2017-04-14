@@ -498,8 +498,6 @@ namespace RTM
      */
     RTC::ReturnCode_t remove_slave_manager(RTM::Manager_ptr mgr);
 
-
-
     /*!
      * @if jp
      * @brief プロセスのコピーを生成する
@@ -530,6 +528,23 @@ namespace RTM
      * @endif
      */
     RTC::ReturnCode_t restart();
+
+     /*!
+     * @if jp
+     * @brief 指定名のRTCオブジェクトリファレンスを取得
+     *
+     * @param name RTC名
+     * @return RTCリスト
+     *
+     * @else
+     * @brief 
+     *
+     * @param name name
+     * @return list of RTC
+     *
+     * @endig
+     */
+    RTC::RTCList* get_components_by_name(const char* name);
 
     /*!
      * @if jp

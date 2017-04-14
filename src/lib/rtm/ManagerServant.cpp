@@ -765,6 +765,61 @@ namespace RTM
     //    m_mgr.restart();
     return ::RTC::RTC_OK;
   }
+
+  /*!
+   * @if jp
+   * @brief 指定名のRTCオブジェクトリファレンスを取得
+     * @else
+     * @brief Obtain specific RTObject reference by name
+     * @endig
+     */
+  RTC::RTCList* ManagerServant::get_components_by_name(const char* name)
+  {
+    RTC_TRACE(("get_components_by_name()"));
+    ::RTC::RTCList_var crtcs = new ::RTC::RTCList();
+
+    // check argument
+    std::string tmp(name);
+    coil::eraseHeadBlank(tmp);
+    if (tmp.empty()) { return crtcs._retn(); }
+
+    std::vector<RTC::RTObject_impl*> rtcs = m_mgr.getComponents();
+    coil::vstring rtc_name = coil::split(tmp, "/");
+    for (size_t i(0); i < rtcs.size(); ++i)
+      {
+        // name = ConsoleIn0, instancename = ConsoleIn0
+        if (rtc_name.size() == 1 &&
+            rtc_name[0] == rtcs[i]->getInstanceName())
+          {
+            RTC::RTObject_var rtcref =
+              RTC::RTObject::_duplicate(rtcs[i]->getObjRef());
+#ifndef ORB_IS_RTORB
+            CORBA_SeqUtil::push_back(crtcs.inout(), rtcref.in());
+#else // ORB_IS_RTORB
+            CORBA_SeqUtil::push_back(crtcs, rtcref);
+#endif // ORB_IS_RTORB
+            continue;
+          }
+        if (rtc_name.size() < 2) { continue; } // size != 0
+
+        // name = */ConsoleIn0 instancename = ConsoleIn0   OR
+        // naem = sample/ConsoleIn0 category = sample && instance == ConsoleIn0
+        if ((rtc_name[0] == "*" &&
+             rtc_name[1] == rtcs[i]->getInstanceName()) ||
+            (rtc_name[0] == rtcs[i]->getCategory() &&
+             rtc_name[1] == rtcs[i]->getInstanceName()))
+          {
+            RTC::RTObject_var rtcref =
+              RTC::RTObject::_duplicate(rtcs[i]->getObjRef());
+#ifndef ORB_IS_RTORB
+            CORBA_SeqUtil::push_back(crtcs.inout(), rtcref.in());
+#else // ORB_IS_RTORB
+            CORBA_SeqUtil::push_back(crtcs, rtcref);
+#endif // ORB_IS_RTORB
+          }
+      }
+    return crtcs._retn();
+  }
   
   CORBA::Object_ptr ManagerServant::get_service(const char* name)
   {
