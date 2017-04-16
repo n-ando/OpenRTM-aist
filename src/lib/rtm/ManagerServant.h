@@ -588,7 +588,107 @@ namespace RTM
      * @return Manager reference
      * @endif
      */
-    RTM::Manager_ptr findManager(const char* host_port);
+    RTM::Manager_ptr findManager(const std::string& host_port);
+
+    /*!
+      * @if jp
+      * @brief 指定名のマネージャを取得
+      *
+      * マネージャがマスターの場合は登録されているスレーブマネージャか
+      * ら検索する。マネージャがスレーブの場合は登録されているマスター
+      * マネージャからスレーブマネージャを検索する
+      *
+      * @param manager_name マネージャ名
+      * @return マネージャの参照
+      *
+      * @else
+      * @brief Obtain Manager's reference by name
+      *
+      * If this is master manager, find it from the registered slave managers.
+      * If this is slave manager, request it to its master manager.
+      *
+      * @param manager_name Manager's name
+      * @return Manager's object reference 
+      * @endif
+      */
+    RTM::Manager_ptr findManagerByName(const std::string mgr_name);
+
+    /*!
+      * @if jp
+      * @brief マネージャのリストから指定名を持つマネージャを取得
+      *
+      * 引数に与えられたマネージャに対して、指定されたマネージャ名を持
+      * つマネージャの参照を返すとともに、もしなければ、再帰的にスレー
+      * ブマネージャを探索して、指定された名称を持つマネージャの参照を
+      * 返す。この関数はクラス内から呼ぶための内部関数である。引数に与
+      * えるマネージャリストは必要に応じてMutexで保護すること。
+      *
+      * @param manager_name マネージャ名
+      * @param mlist マネージャのリスト
+      * @return マネージャの参照
+      *
+      * @else
+      * @brief Obtain Manager's reference by name
+      *
+      * This function search a specified name manager from the given
+      * manager list. And if it is not found, this function also
+      * search from its slave managers recursively. This function is
+      * internal function. The given manager list must be guarded by
+      * mutex.
+      *
+      * @param manager_name Manager's name
+      * @param mlist Manager list
+      * @return Manager's object reference 
+      * @endif
+      */
+    RTM::Manager_ptr findManagerFromList(const std::string name,
+                                         RTM::ManagerList& mlist);
+
+    /*!
+     * @if jp
+     * @brief 指定のマネージャでRTCを起動する
+     *
+     * comp&manager_name=mgr のようにRTC名&manager_name=マネージャ名と
+     * 指定する
+     *
+     * @param module_name 起動するRTC、マネージャ名
+     * @return 生成されたRTCのオブジェクト参照
+     *
+     * @else
+     *
+     * @brief Launch RTC on specified manager
+     *
+     * Manager is specified with "manager_name" key such as
+     * "comp&manager_name=mgr" in the RTC launch parameter.
+     *
+     * @param module_name Given parameter to create RTC
+     * @return created RTObject object reference
+     *
+     * @endif
+     */
+    RTC::RTObject_ptr
+    createComponentByManagerName(const std::string module_name);
+
+    /*
+     * @if jp
+     * @brief 指定アドレスのマネージャでRTCを起動する
+     *
+     * comp&manager_address=localhost:2810 のようにRTC名
+     * &manager_address=マネージャのホスト名、ポート番号を指定する
+     *
+     * @param module_name 起動するRTC、マネージャのホストアドレス
+     * @return 生成されたRTCのオブジェクト参照
+     *
+     * @else
+     * @brief Launch a RTC on the specified IP/Port address manager
+     *
+     * @param module_name Given parameter to create RTC
+     * @return created RTObject object reference
+     *
+     * @endif
+     */
+    RTC::RTObject_ptr
+    createComponentByAddress(const std::string module_name);
 
   private:
     typedef coil::Guard<coil::Mutex> Guard;
