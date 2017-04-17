@@ -438,7 +438,10 @@ namespace RTC
           {
             it = m_modprofs.erase(it);
           }
-        ++it;
+        else
+          {
+            ++it;
+          }
       }
   }
 
