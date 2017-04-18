@@ -84,6 +84,7 @@ static const char* default_config[] =
     "manager.shutdown_auto",                 "YES",
     "manager.auto_shutdown_duration",        "10.0",
     "manager.name",                          "manager",
+    "manager.components.naming_policy",      "process_unique",
     "manager.command",                       "rtcd",
     "manager.supported_languages",           "C++, Python, Java",
     "manager.modules.C++.manager_cmd",       "rtcd",

@@ -38,6 +38,10 @@
 #include <rtm/InPortDirectProvider.h>
 #include <rtm/InPortDirectConsumer.h>
 
+// RTC name numbering policy
+#include <rtm/NumberingPolicy.h>
+#include <NodeUniquePolicy.h>
+
 void FactoryInit()
 {
     // Logstream
@@ -61,4 +65,9 @@ void FactoryInit()
     OutPortCorbaCdrProviderInit();
     InPortDirectProviderInit();
     InPortDirectConsumerInit();
+
+    // Naming Policy
+    ProcessUniquePolicyInit();
+    //    NodeUniquePolicyInit();
+    //    NamingServiceUniquePolicyInit();
 }

@@ -21,7 +21,7 @@
 #define RTC_FACTORY_H
 
 #include <coil/Properties.h>
-//#include <rtm/RTObject.h>
+#include <rtm/NumberingPolicyBase.h>
 #include <rtm/NumberingPolicy.h>
 
 
@@ -321,9 +321,9 @@ namespace RTC
      * @endif
      */
     FactoryCXX(const coil::Properties& profile,
-	       RtcNewFunc new_func,
-	       RtcDeleteFunc delete_func,
-	       NumberingPolicy* policy = new DefaultNumberingPolicy());
+               RtcNewFunc new_func,
+               RtcDeleteFunc delete_func,
+               RTM::NumberingPolicyBase* policy = new RTM::ProcessUniquePolicy());
     
     virtual ~FactoryCXX()
     {
@@ -402,7 +402,7 @@ namespace RTC
      * @brief The naming policy on creating the components
      * @endif
      */
-    NumberingPolicy* m_policy;
+    RTM::NumberingPolicyBase* m_policy;
   };
 };
 #endif // RTC_FACTORY_H
