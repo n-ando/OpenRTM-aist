@@ -43,6 +43,7 @@
 #include <rtm/LocalServiceAdmin.h>
 #include <rtm/SystemLogger.h>
 #include <rtm/LogstreamBase.h>
+#include <rtm/NumberingPolicyBase.h>
 
 #ifdef RTM_OS_LINUX
 #ifndef _GNU_SOURCE
@@ -635,25 +636,37 @@ std::vector<coil::Properties> Manager::getLoadableModules()
    * @endif
    */
   bool Manager::registerFactory(coil::Properties& profile,
-				RtcNewFunc new_func,
-				RtcDeleteFunc delete_func)
+                                RtcNewFunc new_func,
+                                RtcDeleteFunc delete_func)
   {
     RTC_TRACE(("Manager::registerFactory(%s)", profile["type_name"].c_str()));
+
+    std::string policy_name =
+      m_config.getProperty("manager.components.naming_policy", "default");
+    RTM::NumberingPolicyBase* policy =
+      RTM::NumberingPolicyFactory::instance().createObject(policy_name);
     FactoryBase* factory;
-    factory = new FactoryCXX(profile, new_func, delete_func);
+    if (policy == NULL)
+      {
+        factory = new FactoryCXX(profile, new_func, delete_func);
+      }
+    else
+      {
+        factory = new FactoryCXX(profile, new_func, delete_func, policy);
+      }
     try
-      {    
-	bool ret = m_factory.registerObject(factory);
-	if (!ret) {
-	  delete factory;
-	  return false;
-	}
-	return true;
+      {
+        bool ret = m_factory.registerObject(factory);
+        if (!ret) {
+          delete factory;
+          return false;
+        }
+        return true;
       }
     catch (...)
       {
-	delete factory;
-	return false;
+        delete factory;
+        return false;
       }
   }
   
