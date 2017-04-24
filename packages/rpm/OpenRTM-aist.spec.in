@@ -35,15 +35,15 @@ BuildRequires: omniORB-devel
 BuildRequires: python
 
 %description
-OpenRTM-aist is a reference implementation of RTC (Robotic Technology 
-Component) specification which is OMG standard. OpenRTM-aist includes
+OpenRTM-aist is a reference implementation of RTC (Robotic Technology
+Component Version 1.1, formal/12-09-01) specification which is OMG
+standard (http://www.omg.org/spec/RTC/). OpenRTM-aist includes
 RT-Middleware runtime environment and RTC framework. The OMG standard
-defines a component model and certain important infrastructure services
-applicable to the domain of robotics software development.
-OpenRTM-aist is being developed and distributed by 
-Task Intelligence Research Group, Intelligent Systems Research Institute, 
-National Institute of Advanced Industrial Science and Technology (AIST), Japan. 
-Please see http://www.is.aist.go.jp/rt/OpenRTM-aist/html/ for more detail. 
+defines a component model and certain important infrastructure
+services applicable to the domain of robotics software
+development. OpenRTM-aist is being developed and distributed by
+National Institute of Advanced Industrial Science and Technology
+(AIST), Japan. Please see http://www.openrtm.org/ for more detail.
 
 #------------------------------------------------------------
 # devel package
@@ -51,8 +51,8 @@ Please see http://www.is.aist.go.jp/rt/OpenRTM-aist/html/ for more detail.
 Summary: Header files
 Group: Development/Libraries
 %description devel
-The header files and libraries needed for developing programs using
-OpenRTM-aist.
+The header files and libraries needed for developing RT-Components
+using OpenRTM-aist.
 
 #------------------------------------------------------------
 # doc package
@@ -60,7 +60,7 @@ OpenRTM-aist.
 Summary: Documentation
 Group: Development/Libraries
 %description doc
-Developer documentation.
+Class reference manual of OpenRTM-aist.
 
 #------------------------------------------------------------
 # example package
@@ -68,7 +68,7 @@ Developer documentation.
 Summary: Example
 Group: Development/Libraries
 %description example
-Example components and sources
+Example components and sources of OpenRTM-aist.
 
 #------------------------------------------------------------
 # prep section
