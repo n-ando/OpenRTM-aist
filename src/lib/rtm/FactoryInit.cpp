@@ -40,7 +40,6 @@
 
 // RTC name numbering policy
 #include <rtm/NumberingPolicy.h>
-#include <NodeUniquePolicy.h>
 
 void FactoryInit()
 {
