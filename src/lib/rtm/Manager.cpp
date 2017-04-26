@@ -543,10 +543,12 @@ namespace RTC
    * @brief Load module
    * @endif
    */
-  void Manager::load(const char* fname, const char* initfunc)
+  ReturnCode_t Manager::load(const std::string& fname,
+                             const std::string& initfunc)
   {
     RTC_TRACE(("Manager::load(fname = %s, initfunc = %s)",
-               fname, initfunc));
+               fname.c_str(), initfunc.c_str()));
+
     std::string file_name(fname);
     std::string init_func(initfunc);
     m_listeners.module_.preLoad(file_name, init_func);
@@ -554,18 +556,42 @@ namespace RTC
       {
         if (init_func.empty())
           {
-            coil::vstring mod(coil::split(fname, "."));
+            coil::vstring mod(coil::split(file_name, "."));
             init_func = mod[0] + "Init";
           }
         std::string path(m_module->load(file_name, init_func));
         RTC_DEBUG(("module path: %s", path.c_str()));
         m_listeners.module_.postLoad(path, init_func);
       }
+    catch(RTC::ModuleManager::NotAllowedOperation& e)
+      {
+        RTC_ERROR(("Operation not allowed: %s",
+                   e.reason.c_str()));
+        return RTC::PRECONDITION_NOT_MET;
+      }
+    catch(RTC::ModuleManager::NotFound& e)
+      {
+        RTC_ERROR(("Not found: %s",
+                   e.name.c_str()));
+        return RTC::RTC_ERROR;
+      }
+    catch(RTC::ModuleManager::InvalidArguments& e)
+      {
+        RTC_ERROR(("Invalid argument: %s",
+                   e.reason.c_str()));
+        return RTC::BAD_PARAMETER;
+      }
+    catch(RTC::ModuleManager::Error& e)
+      {
+        RTC_ERROR(("Error: %s", e.reason.c_str()));
+        return RTC::RTC_ERROR;
+      }
     catch (...)
       {
-        RTC_ERROR(("module load error."));
+        RTC_ERROR(("Unknown error."));
+        return RTC::RTC_ERROR;
       }
-    return;
+    return RTC::RTC_OK;
   }
   
   /*!
