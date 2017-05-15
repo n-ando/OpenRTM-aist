@@ -1,0 +1,14 @@
+[Unit]
+Description=OpenRTM-aist master manager daemon
+After=network.target omniorb4-nameserver.service
+
+[Service]
+ExecStart=/usr/bin/rtcd -d -f /etc/rtcd/rtcd.conf
+ExecReload=/bin/kill -HUP $MAINPID
+#KillMode=process
+#Restart=on-failure
+Restart=always
+Type=simple
+
+[Install]
+WantedBy=multi-user.target
