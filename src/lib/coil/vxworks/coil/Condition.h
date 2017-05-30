@@ -23,7 +23,11 @@
 #include <pthread.h>
 #include <algorithm>
 #include <ctime>
+#if defined(VXWORKS_66) && !defined(__RTP__)
+#include <timers.h>
+#else
 #include <sys/time.h>
+#endif
 
 namespace coil
 {
@@ -177,12 +181,19 @@ namespace coil
      */
     bool wait(long second, long nano_second = 0)
     {
+#if defined(VXWORKS_66) && !defined(__RTP__)
+      timespec abstime;
+      ::clock_gettime(CLOCK_REALTIME, &abstime);
+      abstime.tv_sec  += second;
+      abstime.tv_nsec += nano_second;
+#else
       struct timeval tv;
       timespec abstime;
 
       ::gettimeofday(&tv, NULL);
       abstime.tv_sec  = tv.tv_sec + second;
       abstime.tv_nsec = tv.tv_usec * 1000 + nano_second;
+#endif
       if (abstime.tv_nsec >= 1000000000) {
         abstime.tv_nsec -= 1000000000;
         abstime.tv_sec ++;

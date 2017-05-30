@@ -19,6 +19,9 @@
 #define CORBA_IORUTIL_H
 
 #include <rtm/RTC.h>
+#ifdef ORB_IS_ORBEXPRESS
+#include <IOP.h>
+#endif
 
 /*!
  * @if jp
@@ -35,6 +38,7 @@
  *
  * @endif
  */
+
 namespace CORBA_IORUtil
 {
   /*!
@@ -46,7 +50,9 @@ namespace CORBA_IORUtil
    *
    * @endif
    */
+#ifndef ORB_IS_ORBEXPRESS
   bool toIOR(const char* iorstr, IOP::IOR& ior);
+#endif
 
   /*!
    * @if jp
@@ -57,7 +63,9 @@ namespace CORBA_IORUtil
    *
    * @endif
    */
+#ifndef ORB_IS_ORBEXPRESS
   bool toString(IOP::IOR& ior, std::string& iorstr);
+#endif
   
   /*!
    * @if jp

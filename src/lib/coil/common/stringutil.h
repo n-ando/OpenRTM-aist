@@ -26,6 +26,7 @@
 #include <sstream>
 
 #if defined (_MSC_VER) && (_MSC_VER <=1500) // VC2008(VC9.0) or before
+#elif defined(VXWORKS_66) && !defined(__RTP__)
 #else
 #include <stdint.h>
 #endif
@@ -728,10 +729,14 @@ namespace coil
   template<class T>
   std::string ptrToHex(T* n)
   {
+#if defined(VXWORKS_66) && !defined(__RTP__)
+    return "";
+#else
     std::stringstream ss;
     ss << std::hex << std::showbase;
     ss << reinterpret_cast<uintptr_t>(n);
     return ss.str();
+#endif
   };
 
   /*!
@@ -761,6 +766,9 @@ namespace coil
   template <class T>
   bool hexToPtr(T*& ptr, const std::string str)
   {
+#if defined(VXWORKS_66) && !defined(__RTP__)
+    return false;
+#else
     std::stringstream s;
     if ((s << std::hex << str).fail()) { return false; }
     uintptr_t intval;
@@ -768,6 +776,7 @@ namespace coil
     ptr = reinterpret_cast<T*>(intval);
     if (ptr == NULL) { return false; }
     return true;
+#endif
   }
 
   /*!

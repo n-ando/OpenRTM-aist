@@ -501,8 +501,13 @@ namespace RTC
           if (comp == NULL)
             { RTC_ERROR(("%s not found.", comps[i].c_str())); continue; }
 
+#ifdef ORB_IS_ORBEXPRESS
+          ExecutionContextList* ecs = comp->get_owned_contexts();
+          (*ecs)[0]->activate_component(comp->getObjRef());
+#else
           ExecutionContextList_var ecs = comp->get_owned_contexts();
           ecs[0]->activate_component(comp->getObjRef());
+#endif
         }
     } // end of pre-activation
     return true;
@@ -2051,8 +2056,13 @@ std::vector<coil::Properties> Manager::getLoadableModules()
     for (CORBA::ULong i(0), len(m_ecs.size()); i < len; ++i)
       {
 	try{
+#ifdef ORB_IS_ORBEXPRESS
+      PortableServer::ServantBase* servant;
+      servant = dynamic_cast<PortableServer::ServantBase*>(m_ecs[i]);
+#else
       PortableServer::RefCountServantBase* servant;
       servant = dynamic_cast<PortableServer::RefCountServantBase*>(m_ecs[i]);
+#endif
       if (servant == NULL)
         {
           RTC_ERROR(("Invalid dynamic cast. EC->RefCountServantBase failed."));

@@ -440,7 +440,11 @@ namespace RTC
         {
           Guard guard(m_valueMutex);
           RTC_DEBUG(("data read succeeded"));
+#ifdef ORB_IS_ORBEXPRESS
+          cdr >> m_value;
+#else
           m_value <<= cdr;
+#endif
           if (m_OnReadConvert != 0) 
             {
               m_value = (*m_OnReadConvert)(m_value);

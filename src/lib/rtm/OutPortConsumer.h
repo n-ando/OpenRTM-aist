@@ -25,7 +25,7 @@
 #include <rtm/CdrBufferBase.h>
 
 // Why RtORB does not allow the following foward declaration?
-#ifndef ORB_IS_RTORB
+#if not defined(ORB_IS_RTORB) && not defined(ORB_IS_ORBEXPRESS)
 namespace SDOPackage
 {
   class NVList;

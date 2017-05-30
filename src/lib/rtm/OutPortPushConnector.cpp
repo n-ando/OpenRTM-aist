@@ -83,10 +83,18 @@ namespace RTC
    * @endif
    */
   ConnectorBase::ReturnCode
+#ifdef ORB_IS_ORBEXPRESS
+  OutPortPushConnector::write(CORBA::Stream& data)
+#else
   OutPortPushConnector::write(const cdrMemoryStream& data)
+#endif
   {
     RTC_TRACE(("write()"));
+#ifdef ORB_IS_ORBEXPRESS
+    RTC_PARANOID(("data size = %d bytes", data.size_written()));
+#else
     RTC_PARANOID(("data size = %d bytes", data.bufSize()));
+#endif
     
     return m_publisher->write(data, 0, 0);
   }

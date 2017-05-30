@@ -18,11 +18,17 @@
 
 #include <coil/DynamicLib.h>
 
+#ifndef __RTP__
+#include <unldLib.h>
+#include <ioLib.h>
+#include <sysSymTbl.h>
+#endif
+
 namespace coil
 {
   /*!
    * @if jp
-   * @brief ¥³¥ó¥¹¥È¥é¥¯¥¿
+   * @brief ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
    * @else
    * @brief Constructor
    * @endif
@@ -34,7 +40,7 @@ namespace coil
 
   /*!
    * @if jp
-   * @brief ¥³¥ó¥¹¥È¥é¥¯¥¿
+   * @brief ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
    * @else
    * @brief Constructor
    * @endif
@@ -53,7 +59,7 @@ namespace coil
 
   /*!
    * @if jp
-   * @brief ¥Ç¥¹¥È¥é¥¯¥¿
+   * @brief ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
    * @else
    * @brief Destructor
    * @endif
@@ -65,13 +71,17 @@ namespace coil
 
   /*!
    * @if jp
-   * @brief ¥³¥Ô¡¼¥³¥ó¥¹¥È¥é¥¯¥¿
+   * @brief ã‚³ãƒ”ãƒ¼ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
    * @else
    * @brief Copy Constructor
    * @endif
    */
   DynamicLib::DynamicLib(const DynamicLib& rhs)
+#ifdef __RTP__
     : m_name(""), m_mode(0), m_closeflag(0), m_handle(0)
+#else
+  : m_name(""), m_mode(0), m_fd(-1), m_id(0)
+#endif
   {
     if (!rhs.m_name.empty() &&
         open(rhs.m_name.c_str(), rhs.m_mode, rhs.m_closeflag) == 0)
@@ -81,7 +91,7 @@ namespace coil
 
   /*!
    * @if jp
-   * @brief ÂåÆş±é»»»Ò
+   * @brief ä»£å…¥æ¼”ç®—å­
    * @else
    * @brief Assignment operator
    * @endif
@@ -92,13 +102,18 @@ namespace coil
     std::swap(this->m_name, tmp.m_name);
     std::swap(this->m_mode, tmp.m_mode);
     std::swap(this->m_closeflag, tmp.m_closeflag);
+#ifdef __RTP__
     std::swap(this->m_handle, tmp.m_handle);
+#else
+    std::swap(this->m_fd, tmp.m_fd);
+    std::swap(this->m_id, tmp.m_id);
+#endif
     return *this;
   }
 
   /*!
    * @if jp
-   * @brief Æ°Åª¥ê¥ó¥¯¥é¥¤¥Ö¥é¥ê¤Î¥í¡¼¥É
+   * @brief å‹•çš„ãƒªãƒ³ã‚¯ãƒ©ã‚¤ãƒ–ãƒ©ãƒªã®ãƒ­ãƒ¼ãƒ‰
    * @else
    * @brief Load of the Dynamic link library 
    * @endif
@@ -107,25 +122,41 @@ namespace coil
                    int open_mode,
                    int close_handle_on_destruction)
   {
+#ifdef __RTP__
     void* handle = ::dlopen(dll_name, open_mode);
     if (handle == NULL)
       {
         return -1;
       }
     m_handle = handle;
+    
+#else
+    m_fd = ::open(const_cast<char*>(dll_name), O_RDONLY, 0);
+    if (!m_fd)
+    {
+    	return -1;
+    }
+    m_id = loadModule(m_fd, open_mode);
+    if (!m_id)
+    {
+    	::close(m_fd);
+    	return -1;
+    }
+#endif
     m_name = dll_name;
     return 0;
   }
 
   /*!
    * @if jp
-   * @brief Æ°Åª¥ê¥ó¥¯¥é¥¤¥Ö¥é¥ê¤Î¥¢¥ó¥í¡¼¥É
+   * @brief å‹•çš„ãƒªãƒ³ã‚¯ãƒ©ã‚¤ãƒ–ãƒ©ãƒªã®ã‚¢ãƒ³ãƒ­ãƒ¼ãƒ‰
    * @else
    * @brief Unload of the Dynamic link library 
    * @endif
    */
   int DynamicLib::close(void)
   {
+#ifdef __RTP__
     if (m_handle == NULL)
       return -1;
     if (m_name.empty())
@@ -134,34 +165,73 @@ namespace coil
       }
     ::dlclose(m_handle);
     m_handle = NULL;
+#else
+    if (!m_id)
+          return -1;
+    if (m_name.empty())
+          {
+            return -1;
+          }
+    unldByModuleId(m_id, 0);
+    m_id = 0;
+#endif
     m_name = "";
     return 0;
   }
 
   /*!
    * @if jp
-   * @brief ¥·¥ó¥Ü¥ë¤¬¥í¡¼¥É¤µ¤ì¤¿¥á¥â¥ê¥¢¥É¥ì¥¹¤òÊÖ¤¹
+   * @brief ã‚·ãƒ³ãƒœãƒ«ãŒãƒ­ãƒ¼ãƒ‰ã•ã‚ŒãŸãƒ¡ãƒ¢ãƒªã‚¢ãƒ‰ãƒ¬ã‚¹ã‚’è¿”ã™
    * @else
    * @brief Return an address of the memory where a symbol was loaded
    * @endif
    */
   void* DynamicLib::symbol(const char* symbol_name)
   {
+#ifdef __RTP__
     if (m_handle == NULL) return NULL;
     return ::dlsym(m_handle, symbol_name);
+#else
+    if (!m_id) return NULL;
+    MODULE_INFO mi;
+    if (!moduleInfoGet(m_id, &mi)) return 0;
+    SymbolObj symbolObj;
+    symbolObj.name  = const_cast<char*>(symbol_name);
+    symbolObj.group = mi.group;
+    symbolObj.addr  = 0;
+    symEach(sysSymTbl, reinterpret_cast<FUNCPTR>(SymbolIterator), reinterpret_cast<int>(&symbolObj));
+    return symbolObj.addr;
+#endif
   }
 
   /*!
    * @if jp
-   * @brief ¥¨¥é¡¼¤Ë¤Ä¤¤¤Æ¤ÎÀâÌÀ¥á¥Ã¥»¡¼¥¸¤òÊÖ¤¹
+   * @brief ã‚¨ãƒ©ãƒ¼ã«ã¤ã„ã¦ã®èª¬æ˜ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ã‚’è¿”ã™
    * @else
    * @brief Return the explanation message about the error
    * @endif
    */
   const char* DynamicLib::error(void) const
   {
+#ifdef __RTP__
     return ::dlerror();
+#else
+    return "";
+#endif
   }
+  
+#ifndef __RTP__
+  extern "C" bool SymbolIterator(char* name, int val, SYM_TYPE type, int arg, UINT16 group)
+   {
+	  SymbolObj* symbolObj = reinterpret_cast<SymbolObj*>(arg);
+   	if (group == symbolObj->group && std::strcmp(name, symbolObj->name) == 0)
+   	{
+   		symbolObj->addr = reinterpret_cast<void*>(val);
+   		return true;
+   	}
+   	else return false;
+   };
+#endif
 };
 
 /*!

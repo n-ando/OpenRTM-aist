@@ -1505,7 +1505,11 @@ namespace RTC
    * @brief [local interface] Get the object reference
    * @endif
    */
+#ifdef ORB_IS_ORBEXPRESS
+  RTObject_ptr RTObject_impl::getObjRef()
+#else
   RTObject_ptr RTObject_impl::getObjRef() const
+#endif
   {
     RTC_TRACE(("getObjRef()"));
 
@@ -2138,9 +2142,15 @@ namespace RTC
         m_eclist[i]->getObjRef()->stop();
         try
           {
+#ifdef ORB_IS_ORBEXPRESS
+            PortableServer::ServantBase* servant(NULL);
+            servant =
+              dynamic_cast<PortableServer::ServantBase*>(m_eclist[i]);
+#else
             PortableServer::RefCountServantBase* servant(NULL);
             servant =
               dynamic_cast<PortableServer::RefCountServantBase*>(m_eclist[i]);
+#endif
             if (servant == NULL)
               {
                 RTC_ERROR(("Dynamic cast error: ECBase -> Servant."));
@@ -2154,11 +2164,19 @@ namespace RTC
           }
         catch (PortableServer::POA::ServantNotActive &e)
           {
+#ifdef ORB_IS_ORBEXPRESS
+            oe_out << e << oe_endl << oe_flush;
+#else
             RTC_ERROR(("%s", e._name()));
+#endif
           }
         catch (PortableServer::POA::WrongPolicy &e)
           {
+#ifdef ORB_IS_ORBEXPRESS
+            oe_out << e << oe_endl << oe_flush;
+#else
             RTC_ERROR(("%s", e._name()));
+#endif
           }
         catch (...)
           {
@@ -2495,11 +2513,19 @@ namespace RTC
       }
     catch (PortableServer::POA::ServantNotActive &e)
       {
+#ifdef ORB_IS_ORBEXPRESS
+        oe_out << e << oe_endl << oe_flush;
+#else
         RTC_ERROR(("%s", e._name()));
+#endif
       }
     catch (PortableServer::POA::WrongPolicy &e)
       {
+#ifdef ORB_IS_ORBEXPRESS
+        oe_out << e << oe_endl << oe_flush;
+#else
         RTC_ERROR(("%s", e._name()));
+#endif
       }
     catch (...)
       {

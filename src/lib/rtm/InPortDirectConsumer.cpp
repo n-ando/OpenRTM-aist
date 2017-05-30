@@ -67,7 +67,11 @@ namespace RTC
    * @endif
    */
   InPortConsumer::ReturnCode InPortDirectConsumer::
+#ifdef ORB_IS_ORBEXPRESS
+  put(CORBA::Stream& data)
+#else
   put(const cdrMemoryStream& data)
+#endif
   {
     RTC_PARANOID(("put(): never called."));
     return UNKNOWN_ERROR;

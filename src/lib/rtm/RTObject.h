@@ -2163,7 +2163,11 @@ namespace RTC
      *
      * @endif
      */
+#ifdef ORB_IS_ORBEXPRESS
+    RTObject_ptr getObjRef();
+#else
     RTObject_ptr getObjRef() const;
+#endif
     
     /*!
      * @if jp

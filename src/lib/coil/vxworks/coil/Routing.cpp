@@ -27,11 +27,15 @@
 #include <coil/stringutil.h>
 #include <coil/config_coil.h>
 
+#ifndef __RTP__
+#include <wrapper/wrapperHostLib.h>
+#endif
+
 namespace coil
 {
   /*!
    * @if jp
-   * @brief °¸Àè¥¢¥É¥ì¥¹¤«¤éÍøÍÑ¤µ¤ì¤ë¥¨¥ó¥É¥Ý¥¤¥ó¥È¥¢¥É¥ì¥¹¤òÆÀ¤ë
+   * @brief å®›å…ˆã‚¢ãƒ‰ãƒ¬ã‚¹ã‹ã‚‰åˆ©ç”¨ã•ã‚Œã‚‹ã‚¨ãƒ³ãƒ‰ãƒã‚¤ãƒ³ãƒˆã‚¢ãƒ‰ãƒ¬ã‚¹ã‚’å¾—ã‚‹
    * @else
    * @brief Getting network interface name from destination address
    * @endif
@@ -48,32 +52,26 @@ namespace coil
 
   /*!
    * @if jp
-   * @brief °¸Àè¥¢¥É¥ì¥¹¤«¤éÍøÍÑ¤µ¤ì¤ë¥Í¥Ã¥È¥ï¡¼¥¯¥¤¥ó¥¿¡¼¥Õ¥§¡¼¥¹Ì¾¤òÆÀ¤ë
+   * @brief å®›å…ˆã‚¢ãƒ‰ãƒ¬ã‚¹ã‹ã‚‰åˆ©ç”¨ã•ã‚Œã‚‹ãƒãƒƒãƒˆãƒ¯ãƒ¼ã‚¯ã‚¤ãƒ³ã‚¿ãƒ¼ãƒ•ã‚§ãƒ¼ã‚¹åã‚’å¾—ã‚‹
    * @else
    * @brief Getting network interface name from destination address
    * @endif
    */
   bool find_dest_ifname(std::string dest_addr, std::string& dest_if)
   {
+#ifdef __RTP__
     // This logic should be replaced by direct retrieving using
     // routing interface like AFROUTE or sysctl.
     struct ::hostent *hostent;
     struct ::sockaddr_in addr;
     
+
     hostent = gethostbyname(dest_addr.c_str());
     addr.sin_addr.s_addr = **(unsigned int **)(hostent->h_addr_list);
     dest_addr = inet_ntoa(addr.sin_addr);
     
-#if defined(COIL_OS_FREEBSD) || defined(COIL_OS_DARWIN) || defined(COIL_OS_CYGWIN) || defined(COIL_OS_QNX)
-    std::string cmd("PATH=/bin:/sbin:/usr/bin:/usr/sbin "
-                    "route get ");
-    const char* match_str = "interface";
-    const char* delimiter = ":";
-    size_t ifname_pos(1);
-    cmd += dest_addr;
-    cmd += " 2> /dev/null";
-#endif // COIL_OS_IS_FREEBSD || COIL_OS_DARWIN || COIL_OS_CYGWIN || COIL_OS_QNX
-#if defined(COIL_OS_LINUX)
+
+
     std::string cmd("PATH=/bin:/sbin:/usr/bin:/usr/sbin "
                     "ip route get ");
     const char* match_str = "dev ";
@@ -81,7 +79,7 @@ namespace coil
     size_t ifname_pos(2);
     cmd += dest_addr;
     cmd += " 2> /dev/null";
-#endif // COIL_OS_IS_LINUX    
+ 
     
     FILE* fp;
     if ((fp = popen(cmd.c_str(), "r")) == NULL)
@@ -100,16 +98,8 @@ namespace coil
         line.erase(line.end() - 1);
         coil::vstring vs(coil::split(line, delimiter));
 
-#if defined(COIL_OS_FREEBSD) || defined(COIL_OS_DARWIN) || defined(COIL_OS_CYGWIN) || defined(COIL_OS_QNX)
-        if (vs.size() > ifname_pos)
-          {
-            dest_if = vs[ifname_pos];
-            pclose(fp);
-	    wait(NULL);
-            return true;
-          }
-#endif // COIL_OS_FREEBSD || COIL_OS_DARWIN || COIL_OS_CYGWIN || COIL_OS_QNX
-#if defined(COIL_OS_LINUX)
+
+
         for (int i(0); i < vs.size(); ++i)
           {
             if (vs[i] == "dev")
@@ -119,27 +109,30 @@ namespace coil
                 return true;
               }
           }
-#endif // COIL_OS_LINUX
+
       } while (!feof(fp));
     pclose(fp);
     wait(NULL);
+#endif
     return false;
   }
 
   /*!
    * @if jp
-   * @brief ¥Í¥Ã¥È¥ï¡¼¥¯¥¤¥ó¥¿¡¼¥Õ¥§¡¼¥¹Ì¾¤«¤éIP¥¢¥É¥ì¥¹¤òÆÀ¤ë
+   * @brief ãƒãƒƒãƒˆãƒ¯ãƒ¼ã‚¯ã‚¤ãƒ³ã‚¿ãƒ¼ãƒ•ã‚§ãƒ¼ã‚¹åã‹ã‚‰IPã‚¢ãƒ‰ãƒ¬ã‚¹ã‚’å¾—ã‚‹
    * @else
    * @brief Get IP address from a network interface name
    * @endif
    */
   bool ifname_to_ipaddr(std::string ifname, std::string& ipaddr)
   {
+#ifdef __RTP__
     std::string cmd("ifconfig ");
     cmd += ifname;
     cmd += " 2> /dev/null";
     
     FILE* fp;
+
     if ((fp = popen(cmd.c_str(), "r")) == NULL)
       {
         return false;
@@ -166,6 +159,8 @@ namespace coil
       } while (!feof(fp));
     pclose(fp);
     wait(NULL);
+#else
+#endif
     return false;
   }
   

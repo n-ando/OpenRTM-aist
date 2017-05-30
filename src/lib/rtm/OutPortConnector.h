@@ -159,7 +159,11 @@ namespace RTC
      *
      * @endif
      */
+#ifdef ORB_IS_ORBEXPRESS
+    virtual ReturnCode write(CORBA::Stream& data) = 0;
+#else
     virtual ReturnCode write(const cdrMemoryStream& data) = 0;
+#endif
 
     /*!
      * @if jp
@@ -248,10 +252,19 @@ namespace RTC
           return PORT_OK;
         }
       // normal case
+#ifdef ORB_IS_ORBEXPRESS
+      m_cdr.rewind();
+
+      RTC_TRACE(("connector endian: %s", isLittleEndian() ? "little":"big"));
+      m_cdr.is_little_endian(isLittleEndian());
+      m_cdr << data;
+#else
       m_cdr.rewindPtrs();
+
       RTC_TRACE(("connector endian: %s", isLittleEndian() ? "little":"big"));
       m_cdr.setByteSwapFlag(isLittleEndian());
       data >>= m_cdr;
+#endif
       return write(m_cdr);
     }
 

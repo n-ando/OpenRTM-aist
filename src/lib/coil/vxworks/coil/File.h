@@ -22,15 +22,12 @@
 #include <cstring>
 #include <sys/types.h>
 #include <dirent.h>
-#include <libgen.h>
+
 
 #include <coil/config_coil.h>
 #include <coil/stringutil.h>
 
-#ifdef __QNX__
-using std::strlen;
-using std::strcpy;
-#endif
+
 
 namespace coil
 {
@@ -60,10 +57,7 @@ namespace coil
    */
   inline std::string dirname(char* path)
   {
-    char path_name[strlen(path)+1];
-    strcpy(path_name, path);
-    std::string dir_name = ::dirname(path);
-    return dir_name;
+    return "";
   }
 
   /*!
@@ -91,10 +85,8 @@ namespace coil
    */
   inline std::string basename(const char* path)
   {
-    char path_name[strlen(path)+1];
-    strcpy(path_name, path);
-    std::string base_name = ::basename(path_name);
-    return base_name;
+
+    return "";
   }
 
   /*!

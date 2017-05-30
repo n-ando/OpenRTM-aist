@@ -961,7 +961,11 @@ namespace RTC
      *
      * @endif
      */
+#ifdef ORB_IS_ORBEXPRESS
+    PortService_ptr getPortRef();
+#else
     PortService_ptr getPortRef() const;
+#endif
     
     /*!
      * @if jp

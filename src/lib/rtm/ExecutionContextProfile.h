@@ -137,7 +137,11 @@ namespace RTC_impl
      *
      * @endif
      */
+#ifdef ORB_IS_ORBEXPRESS
+    RTC::ExecutionContextService_ptr getObjRef(void);
+#else
     RTC::ExecutionContextService_ptr getObjRef(void) const;
+#endif
 
     /*!
      * @if jp
@@ -303,7 +307,11 @@ namespace RTC_impl
      * @return a reference of the owner RT-Component
      * @endif
      */
+#ifdef ORB_IS_ORBEXPRESS
+    const RTC::RTObject_ptr getOwner();
+#else
     const RTC::RTObject_ptr getOwner() const;
+#endif
 
     /*!
      * @if jp

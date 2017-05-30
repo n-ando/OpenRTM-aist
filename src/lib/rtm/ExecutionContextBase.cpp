@@ -719,7 +719,11 @@ namespace RTC
    * @brief Getting object reference
    * @endif
    */
+#ifdef ORB_IS_ORBEXPRESS
+  RTC::ExecutionContextService_ptr ExecutionContextBase::getObjRef(void)
+#else
   RTC::ExecutionContextService_ptr ExecutionContextBase::getObjRef(void) const
+#endif
   {
     return m_profile.getObjRef();
   }
@@ -768,7 +772,11 @@ namespace RTC
    * @brief Getting a reference of the owner component
    * @endif
    */
+#ifdef ORB_IS_ORBEXPRESS
+  const RTC::RTObject_ptr ExecutionContextBase::getOwner()
+#else
   const RTC::RTObject_ptr ExecutionContextBase::getOwner() const
+#endif
   {
     return m_profile.getOwner();
   }

@@ -409,7 +409,11 @@ namespace SDOPackage
     catch (CORBA::SystemException& e)
       {
 #ifndef ORB_IS_RTORB
+#ifdef ORB_IS_ORBEXPRESS
+	oe_out << e << oe_endl << oe_flush;
+#else
         RTC_ERROR(("CORBA::SystemException cought: %s", e._name()));
+#endif
 #else
         RTC_ERROR(("CORBA::SystemException cought."));
 #endif

@@ -20,25 +20,34 @@
 #define COIL_TIME_H
 
 #include <unistd.h>
+#if defined(VXWORKS_66) && !defined(__RTP__)
+#include <timers.h>
+#else
 #include <sys/time.h>
+#endif
+
 #include <sys/types.h>
 #include <time.h>
 #include <iostream>
 #include <coil/config_coil.h>
 #include <coil/TimeValue.h>
 
+#ifndef __RTP__
+#include <selectLib.h>
+#endif
+
 namespace coil
 {
 
   /*!
    * @if jp
-   * @brief »ØÄê¤µ¤ì¤¿ÉÃ´Ö¤Ï½èÍı¤òµÙ»ß¤¹¤ë
+   * @brief æŒ‡å®šã•ã‚ŒãŸç§’é–“ã¯å‡¦ç†ã‚’ä¼‘æ­¢ã™ã‚‹
    *
-   * »ØÄê¤µ¤ì¤¿ÉÃ´Ö¤Ï½èÍı¤òµÙ»ß¤¹¤ë¡£
+   * æŒ‡å®šã•ã‚ŒãŸç§’é–“ã¯å‡¦ç†ã‚’ä¼‘æ­¢ã™ã‚‹ã€‚
    *
-   * @param seconds ÉÃ¿ô
+   * @param seconds ç§’æ•°
    *
-   * @return 0: À®¸ù, >0: ¼ºÇÔ
+   * @return 0: æˆåŠŸ, >0: å¤±æ•—
    *
    * @else
    * @brief Stop a processing at specified second time
@@ -58,13 +67,13 @@ namespace coil
 
   /*!
    * @if jp
-   * @brief »ØÄê¤µ¤ì¤¿ÉÃ´Ö¤Ï½èÍı¤òµÙ»ß¤¹¤ë
+   * @brief æŒ‡å®šã•ã‚ŒãŸç§’é–“ã¯å‡¦ç†ã‚’ä¼‘æ­¢ã™ã‚‹
    *
-   * »ØÄê¤µ¤ì¤¿ÉÃ´Ö¤Ï½èÍı¤òµÙ»ß¤¹¤ë¡£
+   * æŒ‡å®šã•ã‚ŒãŸç§’é–“ã¯å‡¦ç†ã‚’ä¼‘æ­¢ã™ã‚‹ã€‚
    *
-   * @param interval TimeValue¥ª¥Ö¥¸¥§¥¯¥È
+   * @param interval TimeValueã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
    *
-   * @return 0: À®¸ù, >0: ¼ºÇÔ
+   * @return 0: æˆåŠŸ, >0: å¤±æ•—
    *
    * @else
    * @brief Stop a processing at specified second time
@@ -87,13 +96,13 @@ namespace coil
 
   /*!
    * @if jp
-   * @brief »ØÄê¤µ¤ì¤¿¥Ş¥¤¥¯¥íÉÃ´Ö¤Ï½èÍı¤òµÙ»ß¤¹¤ë
+   * @brief æŒ‡å®šã•ã‚ŒãŸãƒã‚¤ã‚¯ãƒ­ç§’é–“ã¯å‡¦ç†ã‚’ä¼‘æ­¢ã™ã‚‹
    *
-   * »ØÄê¤µ¤ì¤¿¥Ş¥¤¥¯¥íÉÃ´Ö¤Ï½èÍı¤òµÙ»ß¤¹¤ë¡£
+   * æŒ‡å®šã•ã‚ŒãŸãƒã‚¤ã‚¯ãƒ­ç§’é–“ã¯å‡¦ç†ã‚’ä¼‘æ­¢ã™ã‚‹ã€‚
    *
-   * @param usec ¥Ş¥¤¥¯¥íÉÃ¿ô
+   * @param usec ãƒã‚¤ã‚¯ãƒ­ç§’æ•°
    *
-   * @return 0: À®¸ù, -1: ¼ºÇÔ
+   * @return 0: æˆåŠŸ, -1: å¤±æ•—
    *
    * @else
    * @brief Stop a processing at specified micro second time
@@ -106,21 +115,22 @@ namespace coil
    *
    * @endif
    */
-  inline int usleep(useconds_t usec)
+  inline int usleep(unsigned int usec)
   {
-    return ::usleep(usec);
+	  struct timespec req = {0,usec * 1000};
+	  return ::nanosleep(&req, NULL);
   }
 
   /*!
    * @if jp
-   * @brief »ş¹ï¤È¥¿¥¤¥à¥¾¡¼¥ó¤ò¼èÆÀ¤¹¤ë
+   * @brief æ™‚åˆ»ã¨ã‚¿ã‚¤ãƒ ã‚¾ãƒ¼ãƒ³ã‚’å–å¾—ã™ã‚‹
    *
-   * »ş¹ï¤È¥¿¥¤¥à¥¾¡¼¥ó¤ò¼èÆÀ¤¹¤ë¡£
+   * æ™‚åˆ»ã¨ã‚¿ã‚¤ãƒ ã‚¾ãƒ¼ãƒ³ã‚’å–å¾—ã™ã‚‹ã€‚
    *
-   * @param tv »ş¹ï¹½Â¤ÂÎ
-   * @param tz ¥¿¥¤¥à¥¾¡¼¥ó¹½Â¤ÂÎ
+   * @param tv æ™‚åˆ»æ§‹é€ ä½“
+   * @param tz ã‚¿ã‚¤ãƒ ã‚¾ãƒ¼ãƒ³æ§‹é€ ä½“
    *
-   * @return 0: À®¸ù, -1: ¼ºÇÔ
+   * @return 0: æˆåŠŸ, -1: å¤±æ•—
    *
    * @else
    * @brief Get the time and timezone
@@ -134,18 +144,25 @@ namespace coil
    *
    * @endif
    */
+#if defined(VXWORKS_66) && !defined(__RTP__)
+  inline int gettimeofday(struct timespec *tv)
+  {
+    return ::clock_gettime(CLOCK_REALTIME, tv);
+  }
+#else
   inline int gettimeofday(struct timeval *tv, struct timezone *tz)
   {
     return ::gettimeofday(tv, tz);
   }
+#endif
 
   /*!
    * @if jp
-   * @brief »ş¹ï¤ò¼èÆÀ¤¹¤ë
+   * @brief æ™‚åˆ»ã‚’å–å¾—ã™ã‚‹
    *
-   * »ş¹ï¤ò¼èÆÀ¤¹¤ë¡£
+   * æ™‚åˆ»ã‚’å–å¾—ã™ã‚‹ã€‚
    *
-   * @return TimeValue¥ª¥Ö¥¸¥§¥¯¥È
+   * @return TimeValueã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
    *
    * @else
    * @brief Get the time
@@ -158,21 +175,30 @@ namespace coil
    */
   inline TimeValue gettimeofday()
   {
+#if defined(VXWORKS_66) && !defined(__RTP__)
+    timespec tv;
+    ::clock_gettime(CLOCK_REALTIME, &tv);
+    return TimeValue(tv.tv_sec, tv.tv_nsec/1000);
+#else
     timeval tv;
     ::gettimeofday(&tv, 0);
     return TimeValue(tv.tv_sec, tv.tv_usec);
+#endif
+    
   }
+
+
 
   /*!
    * @if jp
-   * @brief »ş¹ï¤È¥¿¥¤¥à¥¾¡¼¥ó¤òÀßÄê¤¹¤ë
+   * @brief æ™‚åˆ»ã¨ã‚¿ã‚¤ãƒ ã‚¾ãƒ¼ãƒ³ã‚’è¨­å®šã™ã‚‹
    *
-   * »ş¹ï¤È¥¿¥¤¥à¥¾¡¼¥ó¤òÀßÄê¤¹¤ë¡£
+   * æ™‚åˆ»ã¨ã‚¿ã‚¤ãƒ ã‚¾ãƒ¼ãƒ³ã‚’è¨­å®šã™ã‚‹ã€‚
    *
-   * @param tv »ş¹ï¹½Â¤ÂÎ
-   * @param tz ¥¿¥¤¥à¥¾¡¼¥ó¹½Â¤ÂÎ
+   * @param tv æ™‚åˆ»æ§‹é€ ä½“
+   * @param tz ã‚¿ã‚¤ãƒ ã‚¾ãƒ¼ãƒ³æ§‹é€ ä½“
    *
-   * @return 0: À®¸ù, -1: ¼ºÇÔ
+   * @return 0: æˆåŠŸ, -1: å¤±æ•—
    *
    * @else
    * @brief Set the time and timezone
@@ -186,10 +212,17 @@ namespace coil
    *
    * @endif
    */
-  inline int settimeofday(const struct timeval *tv , const struct timezone *tz)
+#if defined(VXWORKS_66) && !defined(__RTP__)
+  inline int settimeofday(struct timespec *tv)
+  {
+    return ::clock_settime(CLOCK_REALTIME, tv);
+  }
+#else
+  inline int settimeofday(struct timeval *tv , struct timezone *tz)
   {
     return ::settimeofday(tv, tz);
   }
+#endif
 
 
 };

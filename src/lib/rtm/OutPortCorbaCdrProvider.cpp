@@ -75,11 +75,20 @@ namespace RTC
       }
     catch (PortableServer::POA::ServantNotActive &e)
       {
+#ifdef ORB_IS_ORBEXPRESS
+        oe_out << e << oe_endl << oe_flush;
+#else
         RTC_ERROR(("%s", e._name()));
+#endif
+
       }
     catch (PortableServer::POA::WrongPolicy &e)
       {
+#ifdef ORB_IS_ORBEXPRESS
+        oe_out << e << oe_endl << oe_flush;
+#else
         RTC_ERROR(("%s", e._name()));
+#endif
       }
     catch (...)
       {
@@ -163,7 +172,11 @@ namespace RTC
     
     if (ret == CdrBufferBase::BUFFER_OK)
       {
+#ifdef ORB_IS_ORBEXPRESS
+        CORBA::ULong len((CORBA::ULong)cdr.size_written());
+#else
         CORBA::ULong len((CORBA::ULong)cdr.bufSize());
+#endif
         RTC_PARANOID(("converted CDR data size: %d", len));
 
 	if (len == (CORBA::ULong)0) {
@@ -172,7 +185,11 @@ namespace RTC
 	}
 #ifndef ORB_IS_RTORB
         data->length(len);
+#ifdef ORB_IS_ORBEXPRESS
+        cdr.read_array_1(data->get_buffer(), len);
+#else
         cdr.get_octet_array(&((*data)[0]), len);
+#endif
 #else
         data->length(len);
         cdr.get_octet_array((char *)&((*data)[0]), (int)len);

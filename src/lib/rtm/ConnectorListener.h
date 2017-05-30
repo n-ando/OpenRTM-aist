@@ -27,7 +27,12 @@
 #include <rtm/RTC.h>
 #include <rtm/ConnectorBase.h>
 
+#ifdef ORB_IS_ORBEXPRESS
+class CORBA::Stream;
+typedef CORBA::Stream cdrMemoryStream;
+#else
 class cdrMemoryStream;
+#endif
 
 namespace RTC
 {
@@ -258,6 +263,8 @@ namespace RTC
      */
     virtual void operator()(const ConnectorInfo& info,
                             const cdrMemoryStream& data) = 0;
+
+
   };
 
   /*!
@@ -327,7 +334,11 @@ namespace RTC
                             const cdrMemoryStream& cdrdata)
     {
       DataType data;
+#ifdef ORB_IS_ORBEXPRESS
+      CORBA::Stream cdr(&cdrdata.read_octet(), cdrdata.size_written());
+#else
       cdrMemoryStream cdr(cdrdata.bufPtr(), cdrdata.bufSize());
+#endif
       
       // endian type check
       std::string endian_type;
@@ -335,6 +346,18 @@ namespace RTC
                                                 "little");
       coil::normalize(endian_type);
       std::vector<std::string> endian(coil::split(endian_type, ","));
+
+#ifdef ORB_IS_ORBEXPRESS
+      if (endian[0] == "little")
+        {
+          cdr.is_little_endian(true);
+        }
+      else if (endian[0] == "big")
+        {
+          cdr.is_little_endian(false);
+        }
+       cdr >> data;
+#else
       if (endian[0] == "little")
         {
           cdr.setByteSwapFlag(true);
@@ -344,6 +367,12 @@ namespace RTC
           cdr.setByteSwapFlag(false);
         }
       data <<= cdr;
+#endif
+
+
+
+
+
       this->operator()(info, data);
     }
 

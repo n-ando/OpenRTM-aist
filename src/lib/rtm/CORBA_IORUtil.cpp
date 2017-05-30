@@ -23,6 +23,7 @@
 #define TRANSIENT_SUFFIX_SEP    '\xfe'
 #define TRANSIENT_SUFFIX_SIZE   8
 
+
 namespace CORBA_IORUtil
 {
 
@@ -31,7 +32,7 @@ namespace CORBA_IORUtil
   typedef _CORBA_Unbounded_Sequence_String StringUSequence;
 #endif
 
-#ifndef ORB_IS_RTORB
+#if not defined(ORB_IS_RTORB) && not defined(ORB_IS_ORBEXPRESS)
   // prototype of static functions 
   static void print_key(std::stringstream& s, OctetUSequence& key);
   
@@ -52,6 +53,7 @@ namespace CORBA_IORUtil
    * @brief Convert from IOR string to IOR structure
    * @endif
    */
+#ifndef ORB_IS_ORBEXPRESS
   bool toIOR(const char* iorstr, IOP::IOR& ior)
   {
 #ifndef ORB_IS_RTORB
@@ -110,6 +112,7 @@ namespace CORBA_IORUtil
     return false;
 #endif // ORB_IS_RTORB
   }
+#endif //ORB_IS_ORBEXPRESS
 
   /*!
    * @if jp
@@ -118,6 +121,7 @@ namespace CORBA_IORUtil
    * @brief Convert from IOR structure to IOR string 
    * @endif
    */
+#ifndef ORB_IS_ORBEXPRESS
   bool toString(IOP::IOR& ior, std::string& iorstr)
   {
 #ifndef ORB_IS_RTORB
@@ -170,6 +174,7 @@ namespace CORBA_IORUtil
     return false;
 #endif // ORB_IS_RTORB
   }
+#endif //ORB_IS_ORBEXPRESS
 
   /*!
    * @if jp
@@ -180,7 +185,7 @@ namespace CORBA_IORUtil
    */
   bool replaceEndpoint(std::string& iorstr, const std::string& endpoint)
   {
-#ifndef ORB_IS_RTORB
+#if not defined(ORB_IS_RTORB) && not defined(ORB_IS_ORBEXPRESS)
     try
       {
         IOP::IOR ior;
@@ -226,7 +231,7 @@ namespace CORBA_IORUtil
   std::string formatIORinfo(const char* iorstr)
   {
     std::stringstream retstr;
-#ifndef ORB_IS_RTORB
+#if not defined(ORB_IS_RTORB) && not defined(ORB_IS_ORBEXPRESS)
     IOP::IOR ior;
     toIOR(iorstr, ior);
 
@@ -282,13 +287,13 @@ namespace CORBA_IORUtil
           }
       }
 #else // ORB_IS_RTORB
-    retstr << "RtORB does't support formatIORinfo() function." << std::endl;
+    retstr << "RtORB and ORBexpress does't support formatIORinfo() function." << std::endl;
 #endif // ORB_IS_RTORB
     return retstr.str();
   }
 
 
-#ifndef ORB_IS_RTORB
+#if not defined(ORB_IS_RTORB) && not defined(ORB_IS_ORBEXPRESS)
   //------------------------------------------------------------
   // static functions
 
@@ -430,3 +435,4 @@ namespace CORBA_IORUtil
   }
 #endif // ORB_IS_RTORB
 };
+

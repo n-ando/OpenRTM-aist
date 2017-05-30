@@ -74,6 +74,10 @@ BOOL WINAPI DllMain (HINSTANCE hinstDll, DWORD fdwReason, LPVOID lpvReserved);
 #   define WINAPI
 #endif /* Windows */
 
+#ifdef ORB_IS_ORBEXPRESS
+#include <CosNaming.h>
+#endif
+
 
 //#if defined(COMPAT_OPENRTM_0_4)
 #include <coil/Properties.h>
@@ -81,6 +85,9 @@ BOOL WINAPI DllMain (HINSTANCE hinstDll, DWORD fdwReason, LPVOID lpvReserved);
 namespace RTC
 {
   typedef coil::Properties Properties;
+#ifdef ORB_IS_ORBEXPRESS
+  typedef CORBA::Stream cdrMemoryStream;
+#endif
 };
 
 //#endif // COMPAT_OPENRTM_0_4

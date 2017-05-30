@@ -820,7 +820,11 @@ namespace RTM
    * @brief Get the reference of Manager. 
    * @endif
    */  
+#ifdef ORB_IS_ORBEXPRESS
+  RTM::Manager_ptr ManagerServant::getObjRef()
+#else
   RTM::Manager_ptr ManagerServant::getObjRef() const
+#endif
   {
     return m_objref;
   }
@@ -928,7 +932,11 @@ namespace RTM
     catch(CORBA::SystemException& e)
       {
 #ifndef ORB_IS_RTORB
+#ifdef ORB_IS_ORBEXPRESS
+        oe_out << e << oe_endl << oe_flush;
+#else
         RTC_DEBUG(("CORBA SystemException cought (CORBA::%s)", e._name()));
+#endif
 #endif // ORB_IS_RTORB
       }
     catch (...)

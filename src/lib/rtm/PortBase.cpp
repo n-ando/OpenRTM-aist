@@ -78,11 +78,19 @@ namespace RTC
       }
     catch (PortableServer::POA::ServantNotActive &e)
       {
+#ifdef ORB_IS_ORBEXPRESS
+        oe_out << e << oe_endl << oe_flush;
+#else
         RTC_ERROR(("%s", e._name()));
+#endif
       }
     catch (PortableServer::POA::WrongPolicy &e)
       {
+#ifdef ORB_IS_ORBEXPRESS
+        oe_out << e << oe_endl << oe_flush;
+#else
         RTC_ERROR(("%s", e._name()));
+#endif
       }
     catch (...)
       {
@@ -370,7 +378,11 @@ namespace RTC
         catch (CORBA::SystemException &e)
           {
 #ifndef ORB_IS_RTORB
+#ifdef ORB_IS_ORBEXPRESS
+            oe_out << e << oe_endl << oe_flush;
+#else
             RTC_WARN(("Exception caught: minor code(%d).", e.minor()));;
+#endif
 #else // ORB_IS_RTORB
             RTC_WARN(("Exception caught"));
 #endif // ORB_IS_RTORB
@@ -542,7 +554,11 @@ namespace RTC
    * @brief Get the object reference of the Port
    * @endif
    */
+#ifdef ORB_IS_ORBEXPRESS
+  PortService_ptr PortBase::getPortRef()
+#else
   PortService_ptr PortBase::getPortRef() const
+#endif
   {
     RTC_TRACE(("getPortRef()"));
     Guard gurad(m_profile_mutex);
@@ -675,7 +691,11 @@ namespace RTC
         catch (CORBA::SystemException& e)
           {
 #ifndef ORB_IS_RTORB
+#ifdef ORB_IS_ORBEXPRESS
+            oe_out << e << oe_endl << oe_flush;
+#else
             RTC_WARN(("Exception caught: minor code.", e.minor()));
+#endif
 #else // ORB_IS_RTORB
             RTC_WARN(("Exception caught"));
 #endif // ORB_IS_RTORB

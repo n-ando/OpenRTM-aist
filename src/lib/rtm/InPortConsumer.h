@@ -29,14 +29,19 @@ namespace coil
 };
 
 // Why RtORB does not allow forward declaration?
-#ifndef ORB_IS_RTORB
+#if not defined ORB_IS_RTORB && not defined ORB_IS_ORBEXPRESS
 namespace SDOPackage
 {
   class NVList;
 };
 #endif // ORB_IS_RTORB
 
+#ifdef ORB_IS_ORBEXPRESS
+class CORBA::Stream;
+typedef CORBA::Stream cdrMemoryStream;
+#else
 class cdrMemoryStream;
+#endif
 
 namespace RTC
 {
@@ -144,7 +149,11 @@ namespace RTC
      *
      * @endif
      */
+#ifdef ORB_IS_ORBEXPRESS
+    virtual ReturnCode put(CORBA::Stream& data) = 0;
+#else
     virtual ReturnCode put(const cdrMemoryStream& data) = 0;
+#endif
 
     /*!
      * @if jp

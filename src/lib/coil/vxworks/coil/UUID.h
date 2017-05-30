@@ -1,14 +1,13 @@
 // -*- C++ -*-
 /*!
- * @file  MutexPosix.h
- * @brief RT-Middleware Service interface
+ * @file  UUID.h
+ * @brief UUID Generator for VxWorks
  * @date  $Date$
- * @author Noriaki Ando <n-ando@aist.go.jp>
+ * @author Nobuhiko Miyamoto <n-miyamoto@aist.go.jp>
  *
- * Copyright (C) 2008
- *     Noriaki Ando
- *     Task-intelligence Research Group,
- *     Intelligent Systems Research Institute,
+ * Copyright (C) 2017
+ *     Nobuhiko Miyamoto
+ *     Robot Innovation Research Center
  *     National Institute of
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
@@ -21,38 +20,46 @@
 #define COIL_UUID_H
 
 #include <coil/config_coil.h>
-#ifdef COIL_OS_FREEBSD
-#include <uuid.h>
+#include <stdlib.h>
+#include <sstream>
+#include <vxWorks.h>
+
+
+
+
 
 namespace coil
 {
-  class UUID
-  {
+  class uuid_t {
   public:
-    UUID();
-    UUID(const uuid_t& uuid);
-    ~UUID();
-    const char* to_string();
-  private:
-    uuid_t m_uuid;
-    char* m_uuidstr;
+    uuid_t();
+    uint32_t time_low;
+    uint16_t time_mid;
+    uint16_t time_hi_version;
+    uint8_t clock_seq_low;
+    uint8_t clock_seq_hi_variant;
+    uint32_t node_low;
+    uint16_t node_high;
   };
 
 
-  class UUID_Generator
+  template <typename DataType>
+  std::string StringToUUID(DataType v, unsigned int size)
   {
-  public:
-    UUID_Generator();
-    ~UUID_Generator();
-    void init();
-    coil::UUID* generateUUID(int n, int h);
-  };
-};
-#endif
-#if defined(COIL_OS_LINUX) || defined(COIL_OS_DARWIN) || defined(COIL_OS_CYGWIN)
-#include <uuid/uuid.h>
-namespace coil
-{
+    std::stringstream stream;
+    stream << std::hex << v;
+    std::string ret(stream.str());
+	
+    if(ret.size() < size)
+    {
+      for(unsigned int i=ret.size();i < size;i++)
+      {
+        ret = "0" + ret;
+      }
+    }
+    return ret;
+  }
+
   class UUID
   {
     uuid_t _uuid;
@@ -72,6 +79,6 @@ namespace coil
     UUID* generateUUID(int n, int h);
   };
 };
-#endif
+
 
 #endif // COIL_UUID_H

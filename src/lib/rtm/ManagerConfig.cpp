@@ -235,6 +235,7 @@ namespace RTC
     //
     // Get system information by using ACE_OS::uname (UNIX/Windows)
     // 
+#if not defined(VXWORKS) || defined(__RTP__)
     coil::utsname  sysinfo;
     if (coil::uname(&sysinfo) != 0)
       {
@@ -254,7 +255,7 @@ namespace RTC
     prop.setProperty("os.arch",     sysinfo.machine);
     prop.setProperty("os.hostname", sysinfo.nodename);
     prop.setProperty("manager.pid",         pidc);
-    
+#endif
     return;
   }
   

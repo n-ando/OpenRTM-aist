@@ -566,7 +566,11 @@ namespace RTM
      * @return Manager reference
      * @endif
      */
+#ifdef ORB_IS_ORBEXPRESS
+    RTM::Manager_ptr getObjRef();
+#else
     RTM::Manager_ptr getObjRef() const;
+#endif
 
     /*!
      * @if jp

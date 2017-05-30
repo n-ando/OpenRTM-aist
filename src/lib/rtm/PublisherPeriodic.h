@@ -323,7 +323,11 @@ namespace RTC
      *
      * @endif
      */
+#ifdef ORB_IS_ORBEXPRESS
+    virtual ReturnCode write(CORBA::Stream& data,
+#else
     virtual ReturnCode write(const cdrMemoryStream& data,
+#endif
                              unsigned long sec,
                              unsigned long usec);
     /*!
@@ -427,10 +431,10 @@ namespace RTC
   protected:
     enum Policy
       {
-        ALL,
-        FIFO,
-        SKIP,
-        NEW
+        PUBLISHER_POLICY_ALL,
+        PUBLISHER_POLICY_FIFO,
+        PUBLISHER_POLICY_SKIP,
+        PUBLISHER_POLICY_NEW
       };
 
     /*!

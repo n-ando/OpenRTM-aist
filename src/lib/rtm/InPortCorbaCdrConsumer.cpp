@@ -67,13 +67,24 @@ namespace RTC
    * @endif
    */
   InPortConsumer::ReturnCode InPortCorbaCdrConsumer::
+#ifdef ORB_IS_ORBEXPRESS
+  put(CORBA::Stream& data)
+#else
   put(const cdrMemoryStream& data)
+#endif
   {
     RTC_PARANOID(("put()"));
 
 #ifndef ORB_IS_RTORB
+#ifdef ORB_IS_ORBEXPRESS
+    CORBA::Octet* to;
+    *static_cast<CORBA::Octet*>(to) = data.read_octet();
+    ::OpenRTM::CdrData tmp(data.size_written(), data.size_written(),
+                           to, 0);
+#else
     ::OpenRTM::CdrData tmp(data.bufSize(), data.bufSize(),
                            static_cast<CORBA::Octet*>(data.bufPtr()), 0);
+#endif
 #else // ORB_IS_RTORB
     OpenRTM_CdrData *cdrdata_tmp = new OpenRTM_CdrData();
     cdrdata_tmp->_buffer = 
@@ -216,7 +227,11 @@ namespace RTC
       }
     
     CORBA::Object_var obj;
+#ifdef ORB_IS_ORBEXPRESS
+   if (!(properties[index].value >>= obj))
+#else
     if (!(properties[index].value >>= CORBA::Any::to_object(obj.out())))
+#endif
       {
         RTC_ERROR(("prop[inport_ref] is not objref"));
         return true;
@@ -292,7 +307,11 @@ namespace RTC
     if (index < 0) { return false; }
     
     CORBA::Object_var obj;
+#ifdef ORB_IS_ORBEXPRESS
+    if (!(properties[index].value >>= obj)) 
+#else
     if (!(properties[index].value >>= CORBA::Any::to_object(obj.out()))) 
+#endif
       {
         return false;
       }

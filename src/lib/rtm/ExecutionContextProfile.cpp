@@ -92,7 +92,11 @@ namespace RTC_impl
    * @endif
    */
   RTC::ExecutionContextService_ptr
+#ifdef ORB_IS_ORBEXPRESS
+  ExecutionContextProfile::getObjRef(void)
+#else
   ExecutionContextProfile::getObjRef(void) const
+#endif
   {
     RTC_TRACE(("getObjRef()"));
     Guard guard(m_profileMutex);
@@ -240,7 +244,11 @@ namespace RTC_impl
    * @brief Getting a reference of the owner component
    * @endif
    */
+#ifdef ORB_IS_ORBEXPRESS
+  const RTC::RTObject_ptr ExecutionContextProfile::getOwner()
+#else
   const RTC::RTObject_ptr ExecutionContextProfile::getOwner() const
+#endif
   {
     RTC_TRACE(("getOwner()"));
     Guard guard(m_profileMutex);

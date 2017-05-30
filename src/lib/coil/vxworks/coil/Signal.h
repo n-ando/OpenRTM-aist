@@ -20,6 +20,9 @@
 #ifndef COIL_SIGNAL_H
 #define COIL_SIGNAL_H
 
+#ifndef __RTP__
+#include <vxWorks.h>
+#endif
 #include <signal.h>
 
 namespace coil
@@ -109,4 +112,5 @@ namespace coil
 
   };
 };
+
 #endif // COIL_SIGNAL_H

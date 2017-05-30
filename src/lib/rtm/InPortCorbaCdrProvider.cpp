@@ -69,11 +69,19 @@ namespace RTC
       }
     catch (PortableServer::POA::ServantNotActive &e)
       {
+#ifdef ORB_IS_ORBEXPRESS
+        oe_out << e << oe_endl << oe_flush;
+#else
         RTC_ERROR(("%s", e._name()));
+#endif
       }
     catch (PortableServer::POA::WrongPolicy &e)
       {
+#ifdef ORB_IS_ORBEXPRESS
+        oe_out << e << oe_endl << oe_flush;
+#else
         RTC_ERROR(("%s", e._name()));
+#endif
       }
     catch (...)
       {
@@ -141,7 +149,12 @@ namespace RTC
     if (m_buffer == 0)
       {
         cdrMemoryStream cdr;
+#ifdef ORB_IS_ORBEXPRESS
+        cdr.write_array_1(data.get_buffer(), data.length());
+#else
         cdr.put_octet_array(&(data[0]), data.length());
+#endif
+
         onReceiverError(cdr);
         return ::OpenRTM::PORT_ERROR;
       }
@@ -151,10 +164,18 @@ namespace RTC
     // set endian type
     bool endian_type = m_connector->isLittleEndian();
     RTC_TRACE(("connector endian: %s", endian_type ? "little":"big"));
+
+#ifdef ORB_IS_ORBEXPRESS
+    cdr.is_little_endian(endian_type);
+    cdr.write_array_1(data.get_buffer(), data.length());
+    RTC_PARANOID(("converted CDR data size: %d", cdr.size_written()));
+#else
     cdr.setByteSwapFlag(endian_type);
     cdr.put_octet_array(&(data[0]), data.length());
-
     RTC_PARANOID(("converted CDR data size: %d", cdr.bufSize()));
+#endif
+
+
     onReceived(cdr);
     BufferStatus::Enum ret = m_buffer->write(cdr);
 

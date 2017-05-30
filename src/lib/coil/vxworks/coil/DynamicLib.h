@@ -19,11 +19,20 @@
 #ifndef COIL_DYNAMICLIB_H
 #define COIL_DYNAMICLIB_H
 
+#ifdef __RTP__
 #include <dlfcn.h>
+#define COIL_DEFAULT_DYNLIB_MODE RTLD_LAZY
+#else
+#include <moduleLib.h>
+#include <loadLib.h>
+#include <symLib.h>
+#define COIL_DEFAULT_DYNLIB_MODE LOAD_GLOBAL_SYMBOLS
+#endif
 #include <string>
 #include <coil/config_coil.h>
 
-#define COIL_DEFAULT_DYNLIB_MODE RTLD_LAZY
+
+
 
 extern "C"
 {
@@ -36,7 +45,7 @@ namespace coil
    * @if jp
    *
    * @class DynamicLib
-   * @brief DynamicLib епеще╣
+   * @brief DynamicLib уВпуГйуВ╣
    *
    * @else
    *
@@ -52,11 +61,11 @@ namespace coil
     /*!
      * @if jp
      *
-     * @brief е│еєе╣е╚ещепе┐
+     * @brief уВ│уГ│уВ╣уГИуГйуВпуВ┐
      *
-     * е│еєе╣е╚ещепе┐бг
+     * уВ│уГ│уВ╣уГИуГйуВпуВ┐уАВ
      *
-     * @param close_handle_on_destruction епеэб╝е║е╒еще░
+     * @param close_handle_on_destruction уВпуГнуГ╝уВ║уГХуГйуВ░
      *
      * @else
      *
@@ -73,13 +82,13 @@ namespace coil
     /*!
      * @if jp
      *
-     * @brief е│еєе╣е╚ещепе┐
+     * @brief уВ│уГ│уВ╣уГИуГйуВпуВ┐
      *
-     * е│еєе╣е╚ещепе┐бг
+     * уВ│уГ│уВ╣уГИуГйуВпуВ┐уАВ
      *
-     * @param dynlib_name ╞░┼кеъеєепещеде╓ещеъ╠╛╛╬
-     * @param open_mode екб╝е╫еєетб╝е╔
-     * @param close_handle_on_destruction епеэб╝е║е╒еще░
+     * @param dynlib_name хЛХчЪДуГкуГ│уВпуГйуВдуГЦуГйуГкхРНчз░
+     * @param open_mode уВкуГ╝уГЧуГ│уГвуГ╝уГЙ
+     * @param close_handle_on_destruction уВпуГнуГ╝уВ║уГХуГйуВ░
      *
      * @else
      *
@@ -100,9 +109,9 @@ namespace coil
     /*!
      * @if jp
      *
-     * @brief е╟е╣е╚ещепе┐
+     * @brief уГЗуВ╣уГИуГйуВпуВ┐
      *
-     * е╟е╣е╚ещепе┐бг
+     * уГЗуВ╣уГИуГйуВпуВ┐уАВ
      *
      * @else
      *
@@ -117,11 +126,11 @@ namespace coil
     /*!
      * @if jp
      *
-     * @brief е│е╘б╝е│еєе╣е╚ещепе┐
+     * @brief уВ│уГФуГ╝уВ│уГ│уВ╣уГИуГйуВпуВ┐
      *
-     * е│е╘б╝е│еєе╣е╚ещепе┐бг
+     * уВ│уГФуГ╝уВ│уГ│уВ╣уГИуГйуВпуВ┐уАВ
      *
-     * @param rhs е│е╘б╝╕╡╞░┼кеъеєепещеде╓ещеъеке╓е╕езепе╚
+     * @param rhs уВ│уГФуГ╝хЕГхЛХчЪДуГкуГ│уВпуГйуВдуГЦуГйуГкуВкуГЦуВ╕уВзуВпуГИ
      *
      * @else
      *
@@ -138,13 +147,13 @@ namespace coil
     /*!
      * @if jp
      *
-     * @brief ┬х╞■▒щ╗╗╗╥
+     * @brief ф╗гхЕец╝ФчоЧхнР
      *
-     * ╞░┼кеъеєепещеде╓ещеъеке╓е╕езепе╚дЄе│е╘б╝д╣дыбг
+     * хЛХчЪДуГкуГ│уВпуГйуВдуГЦуГйуГкуВкуГЦуВ╕уВзуВпуГИуВТуВ│уГФуГ╝уБЩуВЛуАВ
      *
-     * @param rhs ┬х╞■╕╡╞░┼кеъеєепещеде╓ещеъеке╓е╕езепе╚
+     * @param rhs ф╗гхЕехЕГхЛХчЪДуГкуГ│уВпуГйуВдуГЦуГйуГкуВкуГЦуВ╕уВзуВпуГИ
      *
-     * @return ┬х╞■╖ы▓╠
+     * @return ф╗гхЕеч╡РцЮЬ
      *
      * @else
      *
@@ -163,15 +172,15 @@ namespace coil
     /*!
      * @if jp
      *
-     * @brief ╞░┼кеъеєепещеде╓ещеъд╬еэб╝е╔
+     * @brief хЛХчЪДуГкуГ│уВпуГйуВдуГЦуГйуГкуБоуГнуГ╝уГЙ
      *
-     * ╞░┼кеъеєепещеде╓ещеъдЄеэб╝е╔д╣дыбг
+     * хЛХчЪДуГкуГ│уВпуГйуВдуГЦуГйуГкуВТуГнуГ╝уГЙуБЩуВЛуАВ
      *
-     * @param dll_name ╞░┼кеъеєепещеде╓ещеъ╠╛╛╬
-     * @param open_mode екб╝е╫еєетб╝е╔
-     * @param close_handle_on_destruction епеэб╝е║е╒еще░
+     * @param dll_name хЛХчЪДуГкуГ│уВпуГйуВдуГЦуГйуГкхРНчз░
+     * @param open_mode уВкуГ╝уГЧуГ│уГвуГ╝уГЙ
+     * @param close_handle_on_destruction уВпуГнуГ╝уВ║уГХуГйуВ░
      *
-     * @return 0: └о╕∙, -1: ╝║╟╘
+     * @return 0: цИРхКЯ, -1: хд▒цХЧ
      *
      * @else
      *
@@ -194,11 +203,11 @@ namespace coil
     /*!
      * @if jp
      *
-     * @brief ╞░┼кеъеєепещеде╓ещеъд╬евеєеэб╝е╔
+     * @brief хЛХчЪДуГкуГ│уВпуГйуВдуГЦуГйуГкуБоуВвуГ│уГнуГ╝уГЙ
      *
-     * ╞░┼кеъеєепещеде╓ещеъдЄевеєеэб╝е╔д╣дыбг
+     * хЛХчЪДуГкуГ│уВпуГйуВдуГЦуГйуГкуВТуВвуГ│уГнуГ╝уГЙуБЩуВЛуАВ
      *
-     * @return 0: └о╕∙, -1: ╝║╟╘
+     * @return 0: цИРхКЯ, -1: хд▒цХЧ
      *
      * @else
      *
@@ -215,13 +224,13 @@ namespace coil
     /*!
      * @if jp
      *
-     * @brief е╖еєе▄еыдмеэб╝е╔д╡дьд┐есетеъеве╔еье╣дЄ╩╓д╣
+     * @brief уВ╖уГ│уГЬуГлуБМуГнуГ╝уГЙуБХуВМуБЯуГбуГвуГкуВвуГЙуГмуВ╣уВТш┐ФуБЩ
      *
-     * е╖еєе▄еыдмеэб╝е╔д╡дьд┐есетеъеве╔еье╣дЄ╩╓д╣бг
+     * уВ╖уГ│уГЬуГлуБМуГнуГ╝уГЙуБХуВМуБЯуГбуГвуГкуВвуГЙуГмуВ╣уВТш┐ФуБЩуАВ
      *
-     * @param symbol_name е╖еєе▄еы╠╛╛╬
+     * @param symbol_name уВ╖уГ│уГЬуГлхРНчз░
      *
-     * @return есетеъеве╔еье╣(NULL: ╝║╟╘)
+     * @return уГбуГвуГкуВвуГЙуГмуВ╣(NULL: хд▒цХЧ)
      *
      * @else
      *
@@ -240,11 +249,11 @@ namespace coil
     /*!
      * @if jp
      *
-     * @brief еиещб╝д╦д─ддд╞д╬└т╠└есе├е╗б╝е╕дЄ╩╓д╣
+     * @brief уВиуГйуГ╝уБлуБдуБДуБжуБошкмцШОуГбуГГуВ╗уГ╝уВ╕уВТш┐ФуБЩ
      *
-     * еиещб╝д╦д─ддд╞д╬└т╠└есе├е╗б╝е╕дЄ╩╓д╣бг
+     * уВиуГйуГ╝уБлуБдуБДуБжуБошкмцШОуГбуГГуВ╗уГ╝уВ╕уВТш┐ФуБЩуАВ
      *
-     * @return еиещб╝есе├е╗б╝е╕(NULL: еиещб╝д╩д╖)
+     * @return уВиуГйуГ╝уГбуГГуВ╗уГ╝уВ╕(NULL: уВиуГйуГ╝уБкуБЧ)
      *
      * @else
      *
@@ -261,9 +270,9 @@ namespace coil
     /*!
      * @if jp
      *
-     * @brief еце╦е├е╚е╞е╣е╚
+     * @brief уГжуГЛуГГуГИуГЖуВ╣уГИ
      *
-     * еце╦е├е╚е╞е╣е╚дЄ╣╘джбг
+     * уГжуГЛуГГуГИуГЖуВ╣уГИуВТшбМуБЖуАВ
      *
      * @return 0xdeadbeef
      *
@@ -283,9 +292,25 @@ namespace coil
     std::string m_name;
     int m_mode;
     int m_closeflag;
+#ifdef __RTP__
     void* m_handle;
+#else
+    int m_fd;
+    MODULE_ID m_id;
+#endif
     int m_error;
   };
+  
+#ifndef __RTP__
+  typedef struct
+  {
+  	const char* name;
+  	int         group;
+  	void*       addr;
+  }SymbolObj;
+  
+  extern "C" bool SymbolIterator(char* name, int val, SYM_TYPE type, int arg, UINT16 group);
+#endif
 
 };
 

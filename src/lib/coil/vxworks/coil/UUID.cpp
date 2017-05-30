@@ -1,14 +1,13 @@
 // -*- C++ -*-
 /*!
- * @file  MutexPosix.h
- * @brief RT-Middleware Service interface
+ * @file  UUID.h
+ * @brief UUID Generator for VxWorks
  * @date  $Date$
- * @author Noriaki Ando <n-ando@aist.go.jp>
+ * @author Nobuhiko Miyamoto <n-miyamoto@aist.go.jp>
  *
- * Copyright (C) 2008
- *     Noriaki Ando
- *     Task-intelligence Research Group,
- *     Intelligent Systems Research Institute,
+ * Copyright (C) 2017
+ *     Nobuhiko Miyamoto
+ *     Robot Innovation Research Center
  *     National Institute of
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
@@ -21,108 +20,111 @@
 #include <iostream>
 #include <string.h>
 
-#ifdef COIL_OS_FREEBSD
-void error_code(uint32_t status)
-{
-  if (status == uuid_s_ok)
-    std::cout << "uuid_s_ok" << std::endl;
-  else if (status == uuid_s_bad_version)
-    std::cout << "uuid_s_bad_version" << std::endl;
-  else if (status == uuid_s_invalid_string_uuid)
-    std::cout << "uuid_s_invalid_string_uuid" << std::endl;
-  else if (status == uuid_s_no_memory)
-    std::cout << "uuid_s_no_memory" << std::endl;
-  else
-    std::cout << "other error" << std::endl;
-}
-
-void uuid_clear(uuid_t& uu)
-{
-  uint32_t status;
-  uuid_create_nil(&uu, &status);
-}
-void uuid_unparse(uuid_t& uu, char*& uuidstr)
-{
-  uint32_t status;
-  uuid_to_string(&uu, &uuidstr, &status);
-}
-void uuid_generate(uuid_t& out)
-{
-  uint32_t status;
-  uuid_create(&out, &status);
-}
+#if defined(VXWORKS_66) && !defined(__RTP__)
+#include <timers.h>
+#else
+#include <sys/time.h>
 #endif
+
+#include <coil/TimeValue.h>
+#include <coil/Time.h>
+
+#ifndef __RTP__
+#include <muxLib.h>
+#endif
+
 
 namespace coil
 {
 
-#ifdef COIL_OS_FREEBSD
-  UUID::UUID()
-    : m_uuidstr(0)
-  {
-    ::uuid_clear(m_uuid);
-  }
-  UUID::UUID(const uuid_t& uuid)
-    : m_uuid(uuid), m_uuidstr(0)
-  {
-  }
 
-  UUID::~UUID()
+
+
+
+
+  uuid_t::uuid_t()
   {
-    free(m_uuidstr);
+	    time_low = 0;
+	    time_mid = 0;
+	    time_hi_version = 0;
+	    clock_seq_low = 0;
+	    clock_seq_hi_variant = 0;
+	    node_low = 0;
+	    node_high = 0;
   }
-
-  const char* UUID::to_string()
-  {
-    uuid_unparse(m_uuid, m_uuidstr);
-    return m_uuidstr;
-  }
-    
-
-  UUID_Generator::UUID_Generator()
-  {
-  }
-
-  UUID_Generator::~UUID_Generator()
-  {
-  }
-
-  void UUID_Generator::init()
-  {
-  }
-
-  UUID* UUID_Generator::generateUUID(int n, int h)
-  {
-    uuid_t uuid;
-    uuid_generate(uuid);
-    return new UUID(uuid);
-  }
-#endif
-
-#if defined(COIL_OS_LINUX) || defined(COIL_OS_DARWIN) || defined(COIL_OS_CYGWIN)
-
   UUID_Generator::UUID_Generator(){}
   
   void UUID_Generator::init(){}
-  UUID* UUID_Generator::generateUUID(int varsion, int variant){
+  UUID* UUID_Generator::generateUUID(int version, int variant){
     uuid_t uuid;
+    //timeval tv;
+    //::gettimeofday(&tv, 0);
+    coil::TimeValue tv = coil::gettimeofday();
     
-    uuid_generate(uuid);
+    
+    //uint64_t timestamp = ((long long)tv.tv_sec*10000000LL + (long long)tv.tv_usec/100LL) + 0x01b21dd213814000LL;
+    uint64_t timestamp = ((uint64_t)tv.sec()*10000000LL + (uint64_t)tv.usec()/100LL) + 0x01b21dd213814000LL;
+    srand(tv.sec() + tv.usec());
+    uint64_t clock_seq = rand() * (1E14+ 1.0) / (1.0 + RAND_MAX);
+    
+    uuid.time_low = timestamp & 0xffffffffL;
+    uuid.time_mid = (timestamp >> 32L) & 0xffffL;
+    uuid.time_hi_version = ((timestamp >> 48L) & 0x0fffL) | version << 12L;
+    uuid.clock_seq_low = clock_seq & 0xffL;
+    uuid.clock_seq_hi_variant = (clock_seq >> 8L) & 0x3fL;
+    
+#if defined(__RTP__) || defined(VXWORKS_66)
+    uint64_t node = rand() * (281474976710655LL + 1.0) / (1.0 + RAND_MAX);
+#else
+    char mData[6];
+    PROTO_COOKIE muxCookie = muxBind ("eth0",1,NULL,NULL,NULL,NULL,MUX_PROTO_SNARF,"IEEE802.2 LLC",NULL); 
+    muxIoctl(muxCookie, EIOCGADDR, mData);
+    uint64_t node = (uint64_t)mData[0] + ((uint64_t)mData[1] >> 8) + ((uint64_t)mData[2] >> 16) + ((uint64_t)mData[3] >> 24) + ((uint64_t)mData[4] >> 32) + ((uint64_t)mData[5] >> 40);
+#endif
+    uuid.node_low = node & 0xffffffffL;
+    uuid.node_high = (node >> 32L) & 0xffffL;
+    
+    
+
     return new UUID(&uuid);
   }
   
+
+  
   UUID::UUID(){
-    uuid_clear(this->_uuid);
+    
   }
   
   UUID::UUID(uuid_t *uuid){
-    strncpy((char *)this->_uuid, (char *)(*uuid), sizeof(this->_uuid));
+	  _uuid.time_low = uuid->time_low;
+	  _uuid.time_mid = uuid->time_mid;
+	  _uuid.time_hi_version = uuid->time_hi_version;
+	  _uuid.clock_seq_low = uuid->clock_seq_low;
+	  _uuid.clock_seq_hi_variant = uuid->clock_seq_hi_variant;
+	  
+	  _uuid.node_low = uuid->node_low;
+	  _uuid.node_high = uuid->node_high;
   }
   
-  const char* UUID::to_string(){
-    uuid_unparse(this->_uuid, buf);
-    return buf;
+  const char* UUID::to_string()
+  {
+	  std::string result;
+	  
+	  result += StringToUUID<uint32_t>(_uuid.time_low,8);
+	  result += "-";
+	  result += StringToUUID<uint16_t>(_uuid.time_mid,4);
+	  result += "-";
+	  result += StringToUUID<uint16_t>(_uuid.time_hi_version,4);
+	  result += "-";
+	  result += StringToUUID<uint8_t>(_uuid.clock_seq_low,2);
+	  result += StringToUUID<uint8_t>(_uuid.clock_seq_hi_variant,2);
+	  result += "-";
+	  result += StringToUUID<uint32_t>(_uuid.node_low,8);
+	  result += StringToUUID<uint16_t>(_uuid.node_high,4);
+	  
+	  return result.c_str();
   }
 
-#endif
+
+
 };

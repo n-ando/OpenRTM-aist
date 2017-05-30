@@ -40,7 +40,7 @@ namespace RTC
   PublisherPeriodic::PublisherPeriodic()
     : rtclog("PublisherPeriodic"),
       m_consumer(0), m_buffer(0), m_task(0), m_listeners(0),
-      m_retcode(PORT_OK), m_pushPolicy(NEW),
+      m_retcode(PORT_OK), m_pushPolicy(PUBLISHER_POLICY_NEW),
       m_skipn(0), m_active(false), m_readback(false), m_leftskip(0)
   {
   }
@@ -170,7 +170,11 @@ namespace RTC
    * @endif
    */
   PublisherBase::ReturnCode
+#ifdef ORB_IS_ORBEXPRESS
+  PublisherPeriodic::write(CORBA::Stream& data,
+#else
   PublisherPeriodic::write(const cdrMemoryStream& data,
+#endif
                            unsigned long sec,
                            unsigned long usec)
   {
@@ -255,16 +259,16 @@ namespace RTC
     Guard guard(m_retmutex);
     switch (m_pushPolicy)
       {
-      case ALL:
+      case PUBLISHER_POLICY_ALL:
         m_retcode = pushAll();
         break;
-      case FIFO:
+      case PUBLISHER_POLICY_FIFO:
         m_retcode = pushFifo();
         break;
-      case SKIP:
+      case PUBLISHER_POLICY_SKIP:
         m_retcode = pushSkip();
         break;
-      case NEW:
+      case PUBLISHER_POLICY_NEW:
         m_retcode = pushNew();
         break;
       default:
@@ -284,7 +288,11 @@ namespace RTC
 
     while (m_buffer->readable() > 0)
       {
+#ifdef ORB_IS_ORBEXPRESS
+        CORBA::Stream& cdr(m_buffer->get());
+#else
         const cdrMemoryStream& cdr(m_buffer->get());
+#endif
         onBufferRead(cdr);
 
         onSend(cdr);
@@ -310,7 +318,11 @@ namespace RTC
     RTC_TRACE(("pushFifo()"));
     if (bufferIsEmpty()) { return BUFFER_EMPTY; }
 
+#ifdef ORB_IS_ORBEXPRESS
+    CORBA::Stream& cdr(m_buffer->get());
+#else
     const cdrMemoryStream& cdr(m_buffer->get());
+#endif
     onBufferRead(cdr);
 
     onSend(cdr);
@@ -345,8 +357,11 @@ namespace RTC
       {
         m_buffer->advanceRptr(postskip);
         readable -= postskip;
-
+#ifdef ORB_IS_ORBEXPRESS
+        CORBA::Stream& cdr(m_buffer->get());
+#else
         const cdrMemoryStream& cdr(m_buffer->get());
+#endif
         onBufferRead(cdr);
 
         onSend(cdr);
@@ -381,7 +396,11 @@ namespace RTC
     m_readback = true;
     m_buffer->advanceRptr(m_buffer->readable() - 1);
     
+#ifdef ORB_IS_ORBEXPRESS
+    CORBA::Stream& cdr(m_buffer->get());
+#else
     const cdrMemoryStream& cdr(m_buffer->get());
+#endif
     onBufferRead(cdr);
 
     onSend(cdr);
@@ -412,14 +431,14 @@ namespace RTC
     RTC_DEBUG(("push_policy: %s", push_policy.c_str()));
 
     coil::normalize(push_policy);
-    if      (push_policy == "all")  { m_pushPolicy = ALL;  }
-    else if (push_policy == "fifo") { m_pushPolicy = FIFO; }
-    else if (push_policy == "skip") { m_pushPolicy = SKIP; }
-    else if (push_policy == "new")  { m_pushPolicy = NEW;  }
+    if      (push_policy == "all")  { m_pushPolicy = PUBLISHER_POLICY_ALL;  }
+    else if (push_policy == "fifo") { m_pushPolicy = PUBLISHER_POLICY_FIFO; }
+    else if (push_policy == "skip") { m_pushPolicy = PUBLISHER_POLICY_SKIP; }
+    else if (push_policy == "new")  { m_pushPolicy = PUBLISHER_POLICY_NEW;  }
     else
       {
         RTC_ERROR(("invalid push_policy value: %s", push_policy.c_str()));
-        m_pushPolicy = NEW;     // default push policy
+        m_pushPolicy = PUBLISHER_POLICY_NEW;     // default push policy
       }
 
     // skip_count default: 0
