@@ -30,6 +30,9 @@
 #ifndef    _SDO_PACKAGE_IDL_
 #define    _SDO_PACKAGE_IDL_
 
+#ifdef OE_IDL
+#include <orb.idl>
+#endif
 #ifdef TAO_IDL
 #include <orb.idl>
 #endif
