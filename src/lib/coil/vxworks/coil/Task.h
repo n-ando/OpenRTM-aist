@@ -19,7 +19,12 @@
 #ifndef COIL_TASK_H
 #define COIL_TASK_H
 
+#ifdef __RTP__
+#include <vxWorks.h>
+#include <taskLib.h>
+#else
 #include <pthread.h>
+#endif
 
 namespace coil
 {
@@ -255,13 +260,59 @@ namespace coil
      */
     static void* svc_run(void* args = 0);
 
+#ifdef __RTP__
+    /*!
+     * @if jp
+     *
+     * @brief タスクの優先度を設定
+     *
+     *
+     * @param priority 優先度
+     *
+     * @else
+     *
+     * @brief 
+     *
+     *
+     * @param priority 
+     *
+     * @endif
+     */
+    void set_priority(int priority);
+    /*!
+     * @if jp
+     *
+     * @brief スタックサイズの設定
+     *
+     *
+     * @param stacksize スタックサイズ
+     *
+     * @else
+     *
+     * @brief 
+     *
+     *
+     * @param stacksize 
+     *
+     * @endif
+     */
+    void set_stacksize(int stacksize);
+#endif
+
   private:
     int m_count;
+#ifdef __RTP__
+    int m_tid;
+    int m_priority;
+    int m_stacksize;
+#else
     pthread_t m_thread;
     pthread_attr_t m_attr;
+#endif
     void* m_args;
 
   };
+
 };
 
 #endif // COIL_TASK_H
