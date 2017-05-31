@@ -1505,15 +1505,14 @@ namespace RTC
    * @brief [local interface] Get the object reference
    * @endif
    */
-#ifdef ORB_IS_ORBEXPRESS
-  RTObject_ptr RTObject_impl::getObjRef()
-#else
   RTObject_ptr RTObject_impl::getObjRef() const
-#endif
   {
     RTC_TRACE(("getObjRef()"));
-
+#ifdef ORB_IS_ORBEXPRESS
+    return m_objref.in();
+#else
     return m_objref;
+#endif
   }
   
   /*!

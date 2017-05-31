@@ -33,7 +33,11 @@ namespace RTC
   struct PortAdmin::find_port_name
   {
     find_port_name(const char* name) : m_name(name) {};
+#ifdef ORB_IS_ORBEXPRESS
+    bool operator()(const PortService_var& p)
+#else
     bool operator()(const PortService_ptr& p)
+#endif
     {
       try
         {
@@ -60,9 +64,15 @@ namespace RTC
   struct PortAdmin::find_port
   {
     find_port(const PortService_ptr& p) : m_port(p) {};
+#ifdef ORB_IS_ORBEXPRESS
+    bool operator()(const PortService_var& p)
+    {
+      return m_port->_is_equivalent(p.in());
+#else
     bool operator()(const PortService_ptr& p)
     {
       return m_port->_is_equivalent(p);
+#endif
     }
     const PortService_ptr m_port;
   };
@@ -119,11 +129,7 @@ namespace RTC
    * @brief Get PortProfileList
    * @endif
    */
-#ifdef ORB_IS_ORBEXPRESS
-  PortProfileList PortAdmin::getPortProfileList()
-#else
   PortProfileList PortAdmin::getPortProfileList() const
-#endif
   {
 
 #ifndef ORB_IS_RTORB
@@ -162,17 +168,17 @@ namespace RTC
    * @brief Get the reference to the Port's object
    * @endif
    */
-#ifdef ORB_IS_ORBEXPRESS
-  PortService_ptr PortAdmin::getPortRef(const char* port_name)
-#else
   PortService_ptr PortAdmin::getPortRef(const char* port_name) const
-#endif
   {
     CORBA::Long index;
     index = CORBA_SeqUtil::find(m_portRefs, find_port_name(port_name));
     if (index >= 0) 
       {//throw NotFound(port_name);
+#ifdef ORB_IS_ORBEXPRESS
+	return m_portRefs[index].in();
+#else
 	return m_portRefs[index];
+#endif
       }
     return RTC::PortService::_nil();
   }

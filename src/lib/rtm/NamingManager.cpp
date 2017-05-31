@@ -69,11 +69,7 @@ namespace RTC
    * @endif
    */
   void NamingOnCorba::bindObject(const char* name,
-#ifdef ORB_IS_ORBEXPRESS
-                                 RTObject_impl* rtobj)
-#else
                                  const RTObject_impl* rtobj)
-#endif
   {
     RTC_TRACE(("bindObject(name = %s, rtobj)", name));
 #ifdef ORB_IS_OMNIORB
@@ -104,11 +100,7 @@ namespace RTC
   }
 
   void NamingOnCorba::bindObject(const char* name,
-#ifdef ORB_IS_ORBEXPRESS
-                                 PortBase* port)
-#else
                                  const PortBase* port)
-#endif
   {
     RTC_TRACE(("bindObject(name = %s, rtobj)", name));
 #ifdef ORB_IS_OMNIORB
@@ -139,11 +131,7 @@ namespace RTC
   }
 
   void NamingOnCorba::bindObject(const char* name,
-#ifdef ORB_IS_ORBEXPRESS
-                                 RTM::ManagerServant* mgr)
-#else
                                  const RTM::ManagerServant* mgr)
-#endif
   {
     RTC_TRACE(("bindObject(name = %s, mgr)", name));
 #ifdef ORB_IS_OMNIORB
@@ -246,11 +234,7 @@ namespace RTC
    * @endif
    */
   void NamingManager::bindObject(const char* name,
-#ifdef ORB_IS_ORBEXPRESS
-                                 RTObject_impl* rtobj)
-#else
                                  const RTObject_impl* rtobj)
-#endif
   {
     RTC_TRACE(("NamingManager::bindObject(%s)", name));
     
@@ -273,11 +257,7 @@ namespace RTC
     registerCompName(name, rtobj);
   }
   void NamingManager::bindObject(const char* name,
-#ifdef ORB_IS_ORBEXPRESS
-                                 PortBase* port)
-#else
                                  const PortBase* port)
-#endif
   {
     RTC_TRACE(("NamingManager::bindObject(%s)", name));
     
@@ -300,11 +280,7 @@ namespace RTC
     registerPortName(name, port);
   }
   void NamingManager::bindObject(const char* name, 
-#ifdef ORB_IS_ORBEXPRESS
-                                 RTM::ManagerServant* mgr)
-#else
                                  const RTM::ManagerServant* mgr)
-#endif
   {
     RTC_TRACE(("NamingManager::bindObject(%s)", name));
     
@@ -518,11 +494,7 @@ namespace RTC
    * @endif
    */
   void NamingManager::registerCompName(const char* name,
-#ifdef ORB_IS_ORBEXPRESS
-				       RTObject_impl* rtobj)
-#else
 				       const RTObject_impl* rtobj)
-#endif
   {
     for (int i(0), len(m_compNames.size()); i < len; ++i)
       {

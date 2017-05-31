@@ -66,20 +66,16 @@ namespace RTC
    * @brief Write data into the buffer
    * @endif
    */
-  InPortConsumer::ReturnCode InPortCorbaCdrConsumer::
-#ifdef ORB_IS_ORBEXPRESS
-  put(CORBA::Stream& data)
-#else
-  put(const cdrMemoryStream& data)
-#endif
+  InPortConsumer::ReturnCode InPortCorbaCdrConsumer::put(const cdrMemoryStream& data)
   {
     RTC_PARANOID(("put()"));
 
 #ifndef ORB_IS_RTORB
 #ifdef ORB_IS_ORBEXPRESS
     CORBA::Octet* to;
-    *static_cast<CORBA::Octet*>(to) = data.read_octet();
-    ::OpenRTM::CdrData tmp(data.size_written(), data.size_written(),
+    cdrMemoryStream data_tmp = data;
+    *static_cast<CORBA::Octet*>(to) = data_tmp.read_octet();
+    ::OpenRTM::CdrData tmp(data_tmp.size_written(), data_tmp.size_written(),
                            to, 0);
 #else
     ::OpenRTM::CdrData tmp(data.bufSize(), data.bufSize(),

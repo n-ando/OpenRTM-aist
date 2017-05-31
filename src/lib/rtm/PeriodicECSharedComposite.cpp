@@ -321,29 +321,17 @@ namespace SDOPackage
   {
     if (::CORBA::is_nil(m_ec))
       {
-#ifdef ORB_IS_ORBEXPRESS
-        ::RTC::ExecutionContextList* ecs(m_rtobj->get_owned_contexts());
-        if (ecs->length() > 0)
-          {
-            m_ec = (*ecs)[0];
-          }
-        else
-          {
-            return;
-          }
-      }
-#else
         ::RTC::ExecutionContextList_var ecs(m_rtobj->get_owned_contexts());
         if (ecs->length() > 0)
           {
-            m_ec = ecs[0];
+            m_ec = ecs[CORBA::ULong(0)];
           }
         else
           {
             return;
           }
       }
-#endif
+
 
     // set ec to target RTC
     m_ec->add_component(member.rtobj_.in());
@@ -380,23 +368,16 @@ namespace SDOPackage
   { 
     if (::CORBA::is_nil(m_ec))
       {
-#ifdef ORB_IS_ORBEXPRESS
-        ::RTC::ExecutionContextList* ecs(m_rtobj->get_owned_contexts());
-        if (ecs->length() == 0)
-          {
-            RTC_FATAL(("no owned EC"));
-            return;
-          }
-        m_ec = (*ecs)[0];
-#else
+
+
+
         ::RTC::ExecutionContextList_var ecs(m_rtobj->get_owned_contexts());
         if (ecs->length() == 0)
           {
             RTC_FATAL(("no owned EC"));
             return;
           }
-        m_ec = ecs[0];
-#endif
+        m_ec = ecs[CORBA::ULong(0)];
       }
     m_ec->remove_component(member.rtobj_.in());
 
@@ -720,21 +701,13 @@ namespace RTC
   ReturnCode_t PeriodicECSharedComposite::onActivated(RTC::UniqueId exec_handle)
   {
     RTC_TRACE(("onActivated(%d)", exec_handle));
-#ifdef ORB_IS_ORBEXPRESS
-    ::RTC::ExecutionContextList* ecs(get_owned_contexts());
-#else
     ::RTC::ExecutionContextList_var ecs(get_owned_contexts());
-#endif
     ::SDOPackage::SDOList_var sdos(m_org->get_members());
 
     for (::CORBA::ULong i(0), len(sdos->length()); i < len; ++i)
       {
         ::RTC::RTObject_var rtc(::RTC::RTObject::_narrow(sdos[i]));
-#ifdef ORB_IS_ORBEXPRESS
-        (*ecs)[0]->activate_component(rtc.in());
-#else
-        ecs[0]->activate_component(rtc.in());
-#endif
+        ecs[CORBA::ULong(0)]->activate_component(rtc.in());
       }
     RTC_DEBUG(("%d member RTC%s activated.", sdos->length(),
                sdos->length() == 1 ? " was" : "s were"));
@@ -751,21 +724,13 @@ namespace RTC
   ReturnCode_t PeriodicECSharedComposite::onDeactivated(RTC::UniqueId exec_handle)
   {
     RTC_TRACE(("onDeactivated(%d)", exec_handle));
-#ifdef ORB_IS_ORBEXPRESS
-    ::RTC::ExecutionContextList* ecs(get_owned_contexts());
-#else
     ::RTC::ExecutionContextList_var ecs(get_owned_contexts());
-#endif
     ::SDOPackage::SDOList_var sdos(m_org->get_members());
 
     for (::CORBA::ULong i(0), len(sdos->length()); i < len; ++i)
       {
         ::RTC::RTObject_var rtc(::RTC::RTObject::_narrow(sdos[i]));
-#ifdef ORB_IS_ORBEXPRESS
-        (*ecs)[0]->deactivate_component(rtc.in());
-#else
-        ecs[0]->deactivate_component(rtc.in());
-#endif
+        ecs[CORBA::ULong(0)]->deactivate_component(rtc.in());
       }
     return ::RTC::RTC_OK;
   }
@@ -780,21 +745,13 @@ namespace RTC
   ReturnCode_t PeriodicECSharedComposite::onReset(RTC::UniqueId exec_handle)
   {
     RTC_TRACE(("onReset(%d)", exec_handle));
-#ifdef ORB_IS_ORBEXPRESS
-    ::RTC::ExecutionContextList* ecs(get_owned_contexts());
-#else
     ::RTC::ExecutionContextList_var ecs(get_owned_contexts());
-#endif
     ::SDOPackage::SDOList_var sdos(m_org->get_members());
 
     for (::CORBA::ULong i(0), len(sdos->length()); i < len; ++i)
       {
         ::RTC::RTObject_var rtc(::RTC::RTObject::_narrow(sdos[i]));
-#ifdef ORB_IS_ORBEXPRESS
-        (*ecs)[0]->reset_component(rtc.in());
-#else
-        ecs[0]->reset_component(rtc.in());
-#endif
+        ecs[CORBA::ULong(0)]->reset_component(rtc.in());
       }
     return ::RTC::RTC_OK;
   }

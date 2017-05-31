@@ -159,11 +159,7 @@ namespace RTC
      *
      * @endif
      */
-#ifdef ORB_IS_ORBEXPRESS
-    virtual ReturnCode write(CORBA::Stream& data) = 0;
-#else
     virtual ReturnCode write(const cdrMemoryStream& data) = 0;
-#endif
 
     /*!
      * @if jp
@@ -311,6 +307,7 @@ namespace RTC
      * @endif
      */
     cdrMemoryStream m_cdr;
+
 
     /*!
      * @if jp

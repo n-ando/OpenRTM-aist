@@ -130,11 +130,7 @@ namespace RTC
      *
      * @endif
      */
-#ifdef ORB_IS_ORBEXPRESS
-    PortProfileList getPortProfileList();
-#else
     PortProfileList getPortProfileList() const;
-#endif
     
     /*!
      * @if jp
@@ -162,11 +158,7 @@ namespace RTC
      *
      * @endif
      */
-#ifdef ORB_IS_ORBEXPRESS
-    PortService_ptr getPortRef(const char* port_name);
-#else
     PortService_ptr getPortRef(const char* port_name) const;
-#endif
     
     /*!
      * @if jp
@@ -569,11 +561,7 @@ namespace RTC
     {
     public:
       port_prof_collect(PortProfileList& p) : m_p(p) {}
-#ifdef ORB_IS_ORBEXPRESS
-      void operator()(PortBase* port)
-#else
       void operator()(const PortBase* port)
-#endif
       {
 	CORBA_SeqUtil::push_back(m_p, port->getPortProfile());
       }
@@ -593,7 +581,7 @@ namespace RTC
     public:
       port_prof_collect2(PortProfileList& p) : m_p(p) {}
 #ifdef ORB_IS_ORBEXPRESS
-      void operator()(PortService_ptr port)
+      void operator()(const PortService_var port)
 #else
       void operator()(const PortService_ptr port)
 #endif

@@ -1153,7 +1153,11 @@ namespace SDOPackage
     struct org_id
     {
       org_id(const char* id) : m_id(id) {};
+#ifdef ORB_IS_ORBEXPRESS
+      bool operator()(const Organization_var& o)
+#else
       bool operator()(const Organization_ptr& o)
+#endif
       {
 	CORBA::String_var id(o->get_organization_id());
 	return m_id == (const char *)id;

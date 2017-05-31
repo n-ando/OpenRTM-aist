@@ -139,11 +139,7 @@ namespace CORBA_SeqUtil
    * @endif
    */
   template <class CorbaSequence, class Functor>
-#ifdef ORB_IS_ORBEXPRESS
-  CORBA::Long find(CorbaSequence& seq, Functor f)
-#else
   CORBA::Long find(const CorbaSequence& seq, Functor f)
-#endif
   {
     CORBA::ULong len(seq.length());
     for (CORBA::ULong i = 0; i < len; ++i)

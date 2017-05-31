@@ -162,11 +162,7 @@ namespace RTC
    * @brief Write data 
    * @endif
    */
-#ifdef ORB_IS_ORBEXPRESS
-  PublisherBase::ReturnCode PublisherNew::write(CORBA::Stream& data,
-#else
   PublisherBase::ReturnCode PublisherNew::write(const cdrMemoryStream& data,
-#endif
                                                 unsigned long sec,
                                                 unsigned long usec)
   {
@@ -428,11 +424,8 @@ namespace RTC
       {
         m_buffer->advanceRptr(postskip);
         
-#ifdef ORB_IS_ORBEXPRESS
-        CORBA::Stream& cdr(m_buffer->get());
-#else
         const cdrMemoryStream& cdr(m_buffer->get());
-#endif
+
         onBufferRead(cdr);
         
         onSend(cdr);
@@ -474,11 +467,7 @@ namespace RTC
 
     m_buffer->advanceRptr(m_buffer->readable() - 1);
         
-#ifdef ORB_IS_ORBEXPRESS
-    CORBA::Stream& cdr(m_buffer->get());
-#else
     cdrMemoryStream& cdr(m_buffer->get());
-#endif
     onBufferRead(cdr);
 
     onSend(cdr);

@@ -858,9 +858,14 @@ namespace SDOPackage
     struct sdo_id
     {
       sdo_id(const char* id) : m_id(id) {};
+#ifdef ORB_IS_ORBEXPRESS
+      bool operator()(const SDO_var sdo)
+#else
       bool operator()(const SDO_ptr sdo)
+#endif
       {
         CORBA::String_var id(sdo->get_sdo_id());
+
 	return m_id == (const char*)id;
       }
       std::string m_id;

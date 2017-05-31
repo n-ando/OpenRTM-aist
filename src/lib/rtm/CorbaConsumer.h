@@ -122,12 +122,12 @@ namespace RTC
      *
      * @endif
      */
-#ifdef ORB_IS_ORBEXPRESS
-    CorbaConsumerBase(CorbaConsumerBase& x)
-#else
     CorbaConsumerBase(const CorbaConsumerBase& x)
-#endif
+#ifdef ORB_IS_ORBEXPRESS
+      : m_objref(CORBA::Object::_duplicate(x.m_objref.in()))
+#else
       : m_objref(CORBA::Object::_duplicate(x.m_objref))
+#endif
     {
     }
     
@@ -150,11 +150,7 @@ namespace RTC
      *
      * @endif
      */
-#ifdef ORB_IS_ORBEXPRESS
-    CorbaConsumerBase& operator=(CorbaConsumerBase& x)
-#else
     CorbaConsumerBase& operator=(const CorbaConsumerBase& x)
-#endif
     {
       CorbaConsumerBase tmp(x);
       tmp.swap(*this);
@@ -375,12 +371,12 @@ namespace RTC
      *
      * @endif
      */
-#ifdef ORB_IS_ORBEXPRESS
-    CorbaConsumer(CorbaConsumer& x)
-#else
     CorbaConsumer(const CorbaConsumer& x)
-#endif
+#ifdef ORB_IS_ORBEXPRESS
+      : m_var(ObjectType::_duplicate(x.m_var.in()))
+#else
       : m_var(ObjectType::_duplicate(x.m_var))
+#endif
     {
     }
     
@@ -403,11 +399,7 @@ namespace RTC
      *
      * @endif
      */
-#ifdef ORB_IS_ORBEXPRESS
-    CorbaConsumer& operator=(CorbaConsumer& x)
-#else
     CorbaConsumer& operator=(const CorbaConsumer& x)
-#endif
     {
       CorbaConsumer tmp(x);
       tmp.swap(*this);

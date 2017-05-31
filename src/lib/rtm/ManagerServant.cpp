@@ -820,13 +820,13 @@ namespace RTM
    * @brief Get the reference of Manager. 
    * @endif
    */  
-#ifdef ORB_IS_ORBEXPRESS
-  RTM::Manager_ptr ManagerServant::getObjRef()
-#else
   RTM::Manager_ptr ManagerServant::getObjRef() const
-#endif
   {
+#ifdef ORB_IS_ORBEXPRESS
+    return m_objref.in();
+#else
     return m_objref;
+#endif
   }
 
   /*!

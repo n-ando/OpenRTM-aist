@@ -133,11 +133,7 @@ namespace RTC
    * @brief Write data 
    * @endif
    */
-#ifdef ORB_IS_ORBEXPRESS
-  PublisherBase::ReturnCode PublisherFlush::write(CORBA::Stream& data,
-#else
   PublisherBase::ReturnCode PublisherFlush::write(const cdrMemoryStream& data,
-#endif
                                                   unsigned long sec,
                                                   unsigned long usec)
   {

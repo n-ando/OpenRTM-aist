@@ -554,15 +554,15 @@ namespace RTC
    * @brief Get the object reference of the Port
    * @endif
    */
-#ifdef ORB_IS_ORBEXPRESS
-  PortService_ptr PortBase::getPortRef()
-#else
   PortService_ptr PortBase::getPortRef() const
-#endif
   {
     RTC_TRACE(("getPortRef()"));
     Guard gurad(m_profile_mutex);
+#ifdef ORB_IS_ORBEXPRESS
+    return m_profile.port_ref.in();
+#else
     return m_profile.port_ref;
+#endif
   }
   
   /*!

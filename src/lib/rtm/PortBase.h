@@ -961,11 +961,7 @@ namespace RTC
      *
      * @endif
      */
-#ifdef ORB_IS_ORBEXPRESS
-    PortService_ptr getPortRef();
-#else
     PortService_ptr getPortRef() const;
-#endif
     
     /*!
      * @if jp
@@ -2244,10 +2240,17 @@ namespace RTC
     struct find_port_ref
     {
       find_port_ref(PortService_ptr port_ref) : m_port(port_ref) {};
+#ifdef ORB_IS_ORBEXPRESS
+      bool operator()(PortService_var port_ref)
+      {
+	return m_port->_is_equivalent(port_ref.in());
+      }
+#else
       bool operator()(PortService_ptr port_ref)
       {
 	return m_port->_is_equivalent(port_ref);
       }
+#endif
       PortService_ptr m_port;
     };  // struct find_port_ref
     

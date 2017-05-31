@@ -137,11 +137,7 @@ namespace RTC_impl
      *
      * @endif
      */
-#ifdef ORB_IS_ORBEXPRESS
-    RTC::ExecutionContextService_ptr getObjRef(void);
-#else
     RTC::ExecutionContextService_ptr getObjRef(void) const;
-#endif
 
     /*!
      * @if jp
@@ -307,11 +303,7 @@ namespace RTC_impl
      * @return a reference of the owner RT-Component
      * @endif
      */
-#ifdef ORB_IS_ORBEXPRESS
-    const RTC::RTObject_ptr getOwner();
-#else
     const RTC::RTObject_ptr getOwner() const;
-#endif
 
     /*!
      * @if jp
@@ -578,10 +570,17 @@ namespace RTC_impl
     public:      
       find_participant(RTC::RTObject_ptr comp)
         : m_comp(RTC::RTObject::_duplicate(comp)) {}
+#ifdef ORB_IS_ORBEXPRESS
+      bool operator()(RTC::RTObject_var comp)
+      {
+        return m_comp->_is_equivalent(comp.in());
+      }
+#else
       bool operator()(RTC::RTObject_ptr comp)
       {
         return m_comp->_is_equivalent(comp);
       }
+#endif
     };
   }; // class ExecutionContextProfile
 }; // namespace RTC

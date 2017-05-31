@@ -2163,11 +2163,7 @@ namespace RTC
      *
      * @endif
      */
-#ifdef ORB_IS_ORBEXPRESS
-    RTObject_ptr getObjRef();
-#else
     RTObject_ptr getObjRef() const;
-#endif
     
     /*!
      * @if jp
@@ -4950,6 +4946,19 @@ namespace RTC
 	: m_ec(ExecutionContext::_duplicate(ec))
       {
       }
+#ifdef ORB_IS_ORBEXPRESS
+      bool operator()(ExecutionContextService_var ecs)
+      {
+	try
+	  {
+            if (!::CORBA::is_nil(ecs.in()))
+              {
+  	        ExecutionContext_var ec;
+	        ec = ExecutionContext::_narrow(ecs.in());
+	        return m_ec->_is_equivalent(ec);
+              }
+	  }
+#else
       bool operator()(ExecutionContextService_ptr ecs)
       {
 	try
@@ -4961,6 +4970,7 @@ namespace RTC
 	        return m_ec->_is_equivalent(ec);
               }
 	  }
+#endif
 	catch (...)
 	  {
 	    return false;

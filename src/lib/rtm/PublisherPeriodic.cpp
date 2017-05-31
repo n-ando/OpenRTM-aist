@@ -170,11 +170,7 @@ namespace RTC
    * @endif
    */
   PublisherBase::ReturnCode
-#ifdef ORB_IS_ORBEXPRESS
-  PublisherPeriodic::write(CORBA::Stream& data,
-#else
   PublisherPeriodic::write(const cdrMemoryStream& data,
-#endif
                            unsigned long sec,
                            unsigned long usec)
   {
@@ -288,11 +284,7 @@ namespace RTC
 
     while (m_buffer->readable() > 0)
       {
-#ifdef ORB_IS_ORBEXPRESS
-        CORBA::Stream& cdr(m_buffer->get());
-#else
         const cdrMemoryStream& cdr(m_buffer->get());
-#endif
         onBufferRead(cdr);
 
         onSend(cdr);
@@ -318,11 +310,7 @@ namespace RTC
     RTC_TRACE(("pushFifo()"));
     if (bufferIsEmpty()) { return BUFFER_EMPTY; }
 
-#ifdef ORB_IS_ORBEXPRESS
-    CORBA::Stream& cdr(m_buffer->get());
-#else
     const cdrMemoryStream& cdr(m_buffer->get());
-#endif
     onBufferRead(cdr);
 
     onSend(cdr);
@@ -357,11 +345,7 @@ namespace RTC
       {
         m_buffer->advanceRptr(postskip);
         readable -= postskip;
-#ifdef ORB_IS_ORBEXPRESS
-        CORBA::Stream& cdr(m_buffer->get());
-#else
         const cdrMemoryStream& cdr(m_buffer->get());
-#endif
         onBufferRead(cdr);
 
         onSend(cdr);
@@ -396,11 +380,8 @@ namespace RTC
     m_readback = true;
     m_buffer->advanceRptr(m_buffer->readable() - 1);
     
-#ifdef ORB_IS_ORBEXPRESS
-    CORBA::Stream& cdr(m_buffer->get());
-#else
     const cdrMemoryStream& cdr(m_buffer->get());
-#endif
+
     onBufferRead(cdr);
 
     onSend(cdr);

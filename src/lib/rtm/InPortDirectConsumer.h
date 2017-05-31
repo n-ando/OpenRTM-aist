@@ -154,11 +154,7 @@ namespace RTC
      *
      * @endif
      */
-#ifdef ORB_IS_ORBEXPRESS
-    virtual ReturnCode put(CORBA::Stream& data);
-#else
     virtual ReturnCode put(const cdrMemoryStream& data);
-#endif
 
     /*!
      * @if jp

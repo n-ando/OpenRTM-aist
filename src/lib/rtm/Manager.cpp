@@ -501,13 +501,8 @@ namespace RTC
           if (comp == NULL)
             { RTC_ERROR(("%s not found.", comps[i].c_str())); continue; }
 
-#ifdef ORB_IS_ORBEXPRESS
-          ExecutionContextList* ecs = comp->get_owned_contexts();
-          (*ecs)[0]->activate_component(comp->getObjRef());
-#else
           ExecutionContextList_var ecs = comp->get_owned_contexts();
-          ecs[0]->activate_component(comp->getObjRef());
-#endif
+          ecs[CORBA::ULong(0)]->activate_component(comp->getObjRef());
         }
     } // end of pre-activation
     return true;

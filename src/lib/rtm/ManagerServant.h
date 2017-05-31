@@ -566,11 +566,7 @@ namespace RTM
      * @return Manager reference
      * @endif
      */
-#ifdef ORB_IS_ORBEXPRESS
-    RTM::Manager_ptr getObjRef();
-#else
     RTM::Manager_ptr getObjRef() const;
-#endif
 
     /*!
      * @if jp
@@ -779,13 +775,22 @@ namespace RTM
     {
       RTM::Manager_var m_mgr;
     public:
+
       is_equiv(RTM::Manager_ptr mgr)
         : m_mgr(RTM::Manager::_duplicate(mgr)) {}
+#ifdef ORB_IS_ORBEXPRESS
+      bool operator()(RTM::Manager_var mgr)
+      {
+        return m_mgr->_is_equivalent(mgr.in());
+      }
+#else
       bool operator()(RTM::Manager_ptr mgr)
       {
         return m_mgr->_is_equivalent(mgr);
       }
+#endif
     };
+
 
   };
 }; // namespace RTM

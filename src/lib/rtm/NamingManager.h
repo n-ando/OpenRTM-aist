@@ -109,14 +109,8 @@ namespace RTC
      *
      * @endif
      */
-
-#ifdef ORB_IS_ORBEXPRESS
-    virtual void bindObject(const char* name, PortBase* port) = 0;
-    virtual void bindObject(const char* name, RTObject_impl* rtobj) = 0;
-#else
     virtual void bindObject(const char* name, const PortBase* port) = 0;
     virtual void bindObject(const char* name, const RTObject_impl* rtobj) = 0;
-#endif
 
     /*!
      * @if jp
@@ -139,11 +133,7 @@ namespace RTC
 
 
     virtual void bindObject(const char* name,
-#ifdef ORB_IS_ORBEXPRESS
-                            RTM::ManagerServant* mgr) = 0;
-#else
                             const RTM::ManagerServant* mgr) = 0;
-#endif
     
     /*!
      * @if jp
@@ -298,14 +288,8 @@ namespace RTC
      *
      * @endif
      */
-
-#ifdef ORB_IS_ORBEXPRESS
-    virtual void bindObject(const char* name, RTObject_impl* rtobj);
-    virtual void bindObject(const char* name, PortBase* port);
-#else
     virtual void bindObject(const char* name, const RTObject_impl* rtobj);
     virtual void bindObject(const char* name, const PortBase* port);
-#endif
 
     /*!
      * @if jp
@@ -324,11 +308,7 @@ namespace RTC
      *
      * @endif
      */
-#ifdef ORB_IS_ORBEXPRESS
-    virtual void bindObject(const char* name,  RTM::ManagerServant* mgr);
-#else
     virtual void bindObject(const char* name, const RTM::ManagerServant* mgr);
-#endif
 
     /*!
      * @if jp
@@ -486,14 +466,8 @@ namespace RTC
      *
      * @endif
      */
-
-#ifdef ORB_IS_ORBEXPRESS
-    void bindObject(const char* name, PortBase* port);
-    void bindObject(const char* name, RTObject_impl* rtobj);
-#else
     void bindObject(const char* name, const PortBase* port);
     void bindObject(const char* name, const RTObject_impl* rtobj);
-#endif
 
     /*!
      * @if jp
@@ -518,11 +492,7 @@ namespace RTC
      *
      * @endif
      */
-#ifdef ORB_IS_ORBEXPRESS
-    void bindObject(const char* name, RTM::ManagerServant* mgr);
-#else
     void bindObject(const char* name, const RTM::ManagerServant* mgr);
-#endif
     
     /*!
      * @if jp
@@ -672,11 +642,7 @@ namespace RTC
      * 
      * @endif
      */
-#ifdef ORB_IS_ORBEXPRESS
-    void registerCompName(const char* name, RTObject_impl* rtobj);
-#else
     void registerCompName(const char* name, const RTObject_impl* rtobj);
-#endif
 
     /*!
      * @if jp
@@ -819,19 +785,11 @@ namespace RTC
      */
     struct Comps
     {
-#ifdef ORB_IS_ORBEXPRESS
-      Comps(const char* n, RTObject_impl* obj)
-#else
       Comps(const char* n, const RTObject_impl* obj)
-#endif
 	: name(n), rtobj(obj)
       {}
       std::string name;
-#ifdef ORB_IS_ORBEXPRESS
-      RTObject_impl* rtobj;
-#else
       const RTObject_impl* rtobj;
-#endif
     };
     /*!
      * @if jp
