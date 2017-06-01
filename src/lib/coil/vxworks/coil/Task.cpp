@@ -1,13 +1,13 @@
 // -*- C++ -*-
 /*!
- * @file Task_posix.cpp
+ * @file Task_vxworks.cpp
  * @brief Task class
  * @date $Date$
- * @author Noriaki Ando <n-ando@aist.go.jp>
+ * @author Nobuhiko Miyamoto <n-miyamoto@aist.go.jp>
  *
- * Copyright (C) 2008
- *     Task-intelligence Research Group,
- *     Intelligent Systems Research Institute,
+ * Copyright (C) 2017
+ *     Nobuhiko Miyamoto
+ *     Robot Innovation Research Center
  *     National Institute of
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.

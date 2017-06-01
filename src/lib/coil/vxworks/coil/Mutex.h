@@ -1,14 +1,13 @@
 // -*- C++ -*-
 /*!
- * @file  Mutex_posix.h
- * @brief coil POSIX mutex class
+ * @file  Mutex_vxworks.h
+ * @brief coil VxWorks mutex class
  * @date  $Date$
- * @author Noriaki Ando <n-ando@aist.go.jp>
+ * @author Nobuhiko Miyamoto <n-miyamoto@aist.go.jp>
  *
- * Copyright (C) 2008
- *     Noriaki Ando
- *     Task-intelligence Research Group,
- *     Intelligent Systems Research Institute,
+ * Copyright (C) 2017
+ *     Nobuhiko Miyamoto
+ *     Robot Innovation Research Center
  *     National Institute of
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
@@ -17,10 +16,15 @@
  *
  */
 
+
 #ifndef COIL_MUTEX_H
 #define COIL_MUTEX_H
 
+
 #include <pthread.h>
+#ifdef __RTP__
+#include <semLib.h>
+#endif
 
 namespace coil
 {
@@ -61,7 +65,11 @@ namespace coil
      */
     Mutex(const char * const name = 0)
     {
+#ifdef __RTP__
+      mutex_ = semMCreate(SEM_Q_PRIORITY | SEM_INVERSION_SAFE);
+#else
       ::pthread_mutex_init(&mutex_, 0);
+#endif
     }
 
     /*!
@@ -81,7 +89,11 @@ namespace coil
      */
     ~Mutex()
     {
+#ifdef __RTP__
+      semDelete(mutex_);
+#else
       ::pthread_mutex_destroy(&mutex_);
+#endif
     }
 
     /*!
@@ -101,7 +113,11 @@ namespace coil
      */
     inline void lock()
     {
+#ifdef __RTP__
+      semTake(mutex_, WAIT_FOREVER);
+#else
       ::pthread_mutex_lock(&mutex_);
+#endif
     }
 
     /*!
@@ -121,7 +137,12 @@ namespace coil
      */
     inline bool trylock()
     {
+#ifdef __RTP__
+      STATUS status = semTake(mutex_, NO_WAIT);
+      return (status == OK);
+#else
       return ::pthread_mutex_trylock(&mutex_);
+#endif
     }
 
     /*!
@@ -141,7 +162,11 @@ namespace coil
      */
     inline void unlock()
     {
+#ifdef __RTP__
+      semGive(mutex_);
+#else
       ::pthread_mutex_unlock(&mutex_);
+#endif
     }
 
     /*!
@@ -155,7 +180,11 @@ namespace coil
      *
      * @endif
      */
+#ifdef __RTP__
+    SEM_ID mutex_;
+#else
     pthread_mutex_t mutex_;
+#endif
 
   private:
     Mutex(const Mutex&);

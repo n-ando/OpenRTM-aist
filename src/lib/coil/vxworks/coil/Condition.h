@@ -1,14 +1,13 @@
 // -*- C++ -*-
 /*!
- * @file  Condition_posix.h
- * @brief Condition variable for POSIX
+ * @file  Condition_vxworks.h
+ * @brief Condition variable for VxWorks
  * @date  $Date$
- * @author Noriaki Ando <n-ando@aist.go.jp>
+ * @author Nobuhiko Miyamoto <n-miyamoto@aist.go.jp>
  *
- * Copyright (C) 2008
- *     Noriaki Ando
- *     Task-intelligence Research Group,
- *     Intelligent Systems Research Institute,
+ * Copyright (C) 2017
+ *     Nobuhiko Miyamoto
+ *     Robot Innovation Research Center
  *     National Institute of
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
@@ -23,11 +22,20 @@
 #include <pthread.h>
 #include <algorithm>
 #include <ctime>
-#if defined(VXWORKS_66) && !defined(__RTP__)
+
+#ifdef __RTP__
+#include <semLib.h>
+#include <sysLib.h>
+#include <taskLib.h>
+#else
+#ifdef VXWORKS_66
 #include <timers.h>
 #else
 #include <sys/time.h>
 #endif
+#endif
+
+
 
 namespace coil
 {
@@ -67,7 +75,11 @@ namespace coil
     Condition(M& mutex)
       : m_mutex(mutex)
     {
+#ifdef __RTP__
+      m_cond = semCCreate(SEM_Q_PRIORITY, 0);
+#else
       ::pthread_cond_init(&m_cond, 0);
+#endif
     }
 
     /*!
@@ -87,7 +99,11 @@ namespace coil
      */
     ~Condition()
     {
+#ifdef __RTP__
+      semDelete(m_cond);
+#else
       ::pthread_cond_destroy(&m_cond);
+#endif
     }
 
     /*!
@@ -107,7 +123,11 @@ namespace coil
      */
     inline void signal()
     {
+#ifdef __RTP__
+      semGive(m_cond);
+#else
       ::pthread_cond_signal(&m_cond);
+#endif
     }
 
     /*!
@@ -127,7 +147,11 @@ namespace coil
      */
     inline void broadcast()
     {
+#ifdef __RTP__
+      semFlush(m_cond);
+#else
       ::pthread_cond_broadcast(&m_cond);
+#endif
     }
 
     /*!
@@ -151,7 +175,20 @@ namespace coil
      */
     bool wait()
     {
+#ifdef __RTP__
+      //taskLock();
+      m_mutex.unlock();
+      STATUS status = semTake(m_cond, WAIT_FOREVER);
+      //taskUnlock();
+      if(status != OK)
+      {
+            return -1;
+      }
+      m_mutex.lock();
+      return 0;
+#else
       return 0 == ::pthread_cond_wait(&m_cond, &m_mutex.mutex_);
+#endif
     }
 
     /*!
@@ -181,7 +218,25 @@ namespace coil
      */
     bool wait(long second, long nano_second = 0)
     {
-#if defined(VXWORKS_66) && !defined(__RTP__)
+#ifdef __RTP__
+      //taskLock();
+      m_mutex.unlock();
+      long timeout = (second*1000 + nano_second/1000000l);
+      int ticks = (timeout*sysClkRateGet()) / 1000l;
+      STATUS status = semTake(m_cond, ticks);
+      //taskUnlock();
+
+      m_mutex.lock();
+      if(status != OK)
+      {
+            return -1;
+      }
+      else
+      {
+            return 0;
+      }
+#else
+#ifdef VXWORKS_66
       timespec abstime;
       ::clock_gettime(CLOCK_REALTIME, &abstime);
       abstime.tv_sec  += second;
@@ -199,12 +254,17 @@ namespace coil
         abstime.tv_sec ++;
       }
       return 0 == ::pthread_cond_timedwait(&m_cond, &m_mutex.mutex_, &abstime);
+#endif
     }
 
   private:
     Condition(const M&);
     Condition& operator=(const M &);
+#ifdef __RTP__
+    SEM_ID m_cond;
+#else
     pthread_cond_t m_cond;
+#endif
     M& m_mutex;
   };
 };

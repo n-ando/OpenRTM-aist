@@ -1,13 +1,13 @@
 // -*- C++ -*-
 /*!
- * @file Time_posix.h
+ * @file Time_vxworks.h
  * @brief Time functions
  * @date $Date$
- * @author Noriaki Ando <n-ando@aist.go.jp>
+ * @author Nobuhiko Miyamoto <n-miyamoto@aist.go.jp>
  *
- * Copyright (C) 2008
- *     Task-intelligence Research Group,
- *     Intelligent Systems Research Institute,
+ * Copyright (C) 2017
+ *     Nobuhiko Miyamoto
+ *     Robot Innovation Research Center
  *     National Institute of
  *         Advanced Industrial Science and Technology (AIST), Japan
  *     All rights reserved.
@@ -28,11 +28,13 @@
 
 #include <sys/types.h>
 #include <time.h>
-#include <iostream>
 #include <coil/config_coil.h>
 #include <coil/TimeValue.h>
 
-#ifndef __RTP__
+#ifdef __RTP__
+#include <taskLib.h>
+#include <sysLib.h>
+#else
 #include <selectLib.h>
 #endif
 
@@ -62,7 +64,19 @@ namespace coil
    */
   inline unsigned int sleep(unsigned int seconds)
   {
+#ifdef __RTP__
+    int tps = sysClkRateGet();
+    if(taskDelay(seconds*tps) == OK)
+    {
+        return 0;
+    }
+    else
+    {
+        return -1;
+    }
+#else
     return ::sleep(seconds);
+#endif
   }
 
   /*!
@@ -88,10 +102,22 @@ namespace coil
    */
   inline int sleep(TimeValue interval)
   {
+#ifdef __RTP__
+    int tps = sysClkRateGet();
+    if(taskDelay((double)interval.sec()*tps + (double)(interval.usec()*tps)/1000000l) == OK)
+    {
+        return 0;
+    }
+    else
+    {
+        return -1;
+    }
+#else
     timeval tv;
     tv.tv_sec = interval.sec();
     tv.tv_usec = interval.usec();
     return ::select(0, 0, 0, 0, &tv);
+#endif
   }
 
   /*!
@@ -117,8 +143,20 @@ namespace coil
    */
   inline int usleep(unsigned int usec)
   {
-	  struct timespec req = {0,usec * 1000};
-	  return ::nanosleep(&req, NULL);
+#ifdef __RTP__
+    int tps = sysClkRateGet();
+    if(taskDelay((double)(usec*tps)/1000000000l) == OK)
+    {
+        return 0;
+    }
+    else
+    {
+        return -1;
+    }
+#else
+    struct timespec req = {0,usec * 1000};
+    return ::nanosleep(&req, NULL);
+#endif
   }
 
   /*!
