@@ -19,10 +19,11 @@ set(coil_srcs
 	common/coil/Timer.cpp
 	common/coil/crc.cpp
 	common/coil/stringutil.cpp
+	vxworks/coil/Affinity.cpp
 	vxworks/coil/Condition.cpp
 	vxworks/coil/DynamicLib.cpp
 	vxworks/coil/Mutex.cpp
-#	vxworks/coil/Routing.cpp
+	vxworks/coil/Routing.cpp
 	vxworks/coil/Process.cpp
 	vxworks/coil/Signal.cpp
 	vxworks/coil/Task.cpp
