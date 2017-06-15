@@ -49,7 +49,13 @@ reposervers="openrtm.org"
 reposerver=""
 
 #--------------------------------------- C++
-autotools="autoconf libtool libtool-bin"
+res=`grep wheezy /etc/os-release`
+if test ! "x$res" = "x" ; then
+  # wheezy
+  autotools="autoconf libtool"
+else
+  autotools="autoconf libtool libtool-bin"
+fi
 base_tools="bc iputils-ping net-tools"
 cxx_devel="gcc g++ make python-yaml"
 cmake_tools="cmake doxygen"
