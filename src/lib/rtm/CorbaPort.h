@@ -730,11 +730,7 @@ namespace RTC
      * @endif
      */
     bool registerProvider(const char* instance_name, const char* type_name,
-#ifdef ORB_IS_ORBEXPRESS
-                          PortableServer::ServantBase& provider);
-#else
                           PortableServer::RefCountServantBase& provider);
-#endif
     
     /*!
      * @if jp
@@ -1223,11 +1219,7 @@ namespace RTC
     public:
       CorbaProviderHolder(const char* type_name,
                           const char* instance_name,
-#ifdef ORB_IS_ORBEXPRESS
-                          PortableServer::ServantBase* servant)
-#else
                           PortableServer::RefCountServantBase* servant)
-#endif
         : m_typeName(type_name),
           m_instanceName(instance_name),
           m_servant(servant),
@@ -1301,11 +1293,7 @@ namespace RTC
     private:
       std::string m_typeName;
       std::string m_instanceName;
-#ifdef ORB_IS_ORBEXPRESS
-      PortableServer::ServantBase* m_servant;
-#else
       PortableServer::RefCountServantBase* m_servant;
-#endif
       PortableServer::ObjectId_var m_oid;
       std::string m_ior;
     };

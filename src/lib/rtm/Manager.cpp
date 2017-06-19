@@ -2051,13 +2051,8 @@ std::vector<coil::Properties> Manager::getLoadableModules()
     for (CORBA::ULong i(0), len(m_ecs.size()); i < len; ++i)
       {
 	try{
-#ifdef ORB_IS_ORBEXPRESS
-      PortableServer::ServantBase* servant;
-      servant = dynamic_cast<PortableServer::ServantBase*>(m_ecs[i]);
-#else
       PortableServer::RefCountServantBase* servant;
       servant = dynamic_cast<PortableServer::RefCountServantBase*>(m_ecs[i]);
-#endif
       if (servant == NULL)
         {
           RTC_ERROR(("Invalid dynamic cast. EC->RefCountServantBase failed."));

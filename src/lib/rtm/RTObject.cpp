@@ -2141,15 +2141,9 @@ namespace RTC
         m_eclist[i]->getObjRef()->stop();
         try
           {
-#ifdef ORB_IS_ORBEXPRESS
-            PortableServer::ServantBase* servant(NULL);
-            servant =
-              dynamic_cast<PortableServer::ServantBase*>(m_eclist[i]);
-#else
             PortableServer::RefCountServantBase* servant(NULL);
             servant =
               dynamic_cast<PortableServer::RefCountServantBase*>(m_eclist[i]);
-#endif
             if (servant == NULL)
               {
                 RTC_ERROR(("Dynamic cast error: ECBase -> Servant."));

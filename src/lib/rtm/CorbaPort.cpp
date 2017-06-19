@@ -91,11 +91,7 @@ namespace RTC
   bool
   CorbaPort::registerProvider(const char* instance_name,
 			      const char* type_name,
-#ifdef ORB_IS_ORBEXPRESS
-			      PortableServer::ServantBase& provider)
-#else
 			      PortableServer::RefCountServantBase& provider)
-#endif
   {
     RTC_TRACE(("registerProvider(instance=%s, type_name=%s)",
                instance_name, type_name));
