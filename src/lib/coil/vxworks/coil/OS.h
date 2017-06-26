@@ -23,6 +23,9 @@
 
 #if defined(__RTP__)
 #include <sys/utsname.h>
+#else
+#include <hostLib.h>
+#include <kernelLib.h>
 #endif
 #include <sys/types.h> 
 #include <unistd.h> 
@@ -60,11 +63,41 @@ namespace coil
    */
 #if defined(__RTP__)
   typedef ::utsname utsname;
+#else
+  #define COIL_UTSNAME_LENGTH 256
+  struct utsname
+  {
+    char sysname[COIL_UTSNAME_LENGTH];
+    char nodename[COIL_UTSNAME_LENGTH];
+    char release[COIL_UTSNAME_LENGTH];
+    char version[COIL_UTSNAME_LENGTH];
+    char machine[COIL_UTSNAME_LENGTH];
+  };
+  
+#endif
   inline int uname(utsname* name)
   {
+#if defined(__RTP__)
     return ::uname(name);
-  }
+#else
+    if(!name)
+    {
+        return -1;
+    }
+
+    if (gethostname(name->nodename, MAXHOSTNAMELEN) < 0) {
+        return -1;
+    }
+
+    ::strcpy(name->machine, kernelVersion());
+    ::strcpy(name->release, RUNTIME_VERSION);
+    ::strcpy(name->sysname, RUNTIME_NAME);
+    ::strcpy(name->version, "reserved");
+
+    return 0;
 #endif
+  }
+
 
   /*!
    * @if jp
@@ -85,7 +118,7 @@ namespace coil
    *
    * @endif
    */
-  typedef wind_rtp* pid_t;
+  typedef RTP_ID pid_t;
   inline pid_t getpid()
   {
     return ::getpid();
@@ -110,12 +143,16 @@ namespace coil
    *
    * @endif
    */
-#if defined(__RTP__)
+
   inline pid_t getppid()
   {
+#if defined(__RTP__)
     return ::getppid();
-  }
+#else
+    return 0;
 #endif
+  }
+
 
   /*!
    * @if jp

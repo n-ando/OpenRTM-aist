@@ -2,7 +2,13 @@ cmake_minimum_required (VERSION 2.6)
 project (coil)
 
 
-
+if(VXWORKS)
+	set(COIL_OS_DIR "vxworks")
+elseif(UNIX)
+	set(COIL_OS_DIR "posix")
+elseif(WIN32)
+	set(COIL_OS_DIR "win32")
+endif()
 
 
 
@@ -19,24 +25,25 @@ set(coil_srcs
 	common/coil/Timer.cpp
 	common/coil/crc.cpp
 	common/coil/stringutil.cpp
-	vxworks/coil/Affinity.cpp
-	vxworks/coil/Condition.cpp
-	vxworks/coil/DynamicLib.cpp
-	vxworks/coil/Mutex.cpp
-	vxworks/coil/Routing.cpp
-	vxworks/coil/Process.cpp
-	vxworks/coil/Signal.cpp
-	vxworks/coil/Task.cpp
-	vxworks/coil/Time.cpp
-	vxworks/coil/UUID.cpp
+	${COIL_OS_DIR}/coil/Affinity.cpp
+	${COIL_OS_DIR}/coil/Condition.cpp
+	${COIL_OS_DIR}/coil/DynamicLib.cpp
+	${COIL_OS_DIR}/coil/Mutex.cpp
+	${COIL_OS_DIR}/coil/Routing.cpp
+	${COIL_OS_DIR}/coil/Process.cpp
+	${COIL_OS_DIR}/coil/Signal.cpp
+	${COIL_OS_DIR}/coil/Task.cpp
+	${COIL_OS_DIR}/coil/Time.cpp
+	${COIL_OS_DIR}/coil/UUID.cpp
 
 
 )
 
 
+
 include_directories(
 		${PROJECT_SOURCE_DIR}/common 
-		${PROJECT_SOURCE_DIR}/vxworks
+		${PROJECT_SOURCE_DIR}/${COIL_OS_DIR}
 		)
 message(STATUS ${CMAKE_INCLUDE_DIRECTORIES_BEFORE})
 

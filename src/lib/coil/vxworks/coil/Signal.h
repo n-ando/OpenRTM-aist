@@ -107,7 +107,7 @@ namespace coil
     SignalHandler m_handle;
     int m_signum;
     sigset_t* m_mask;
-    int m_flags;
+    int m_vxflags;
 
   };
 };

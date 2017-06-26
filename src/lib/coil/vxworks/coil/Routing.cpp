@@ -42,12 +42,15 @@ namespace coil
    */
   bool dest_to_endpoint(std::string dest_addr, std::string& endpoint)
   {
+/*
     std::string dest_if;
     if (!find_dest_ifname(dest_addr, dest_if))
       {
         return false;
       }
     return ifname_to_ipaddr(dest_if, endpoint);
+*/
+    return false;
   }
 
   /*!
@@ -59,7 +62,8 @@ namespace coil
    */
   bool find_dest_ifname(std::string dest_addr, std::string& dest_if)
   {
-#ifdef __RTP__
+#ifndef __RTP__
+/*
     // This logic should be replaced by direct retrieving using
     // routing interface like AFROUTE or sysctl.
     struct ::hostent *hostent;
@@ -113,7 +117,9 @@ namespace coil
       } while (!feof(fp));
     pclose(fp);
     wait(NULL);
+*/
 #endif
+
     return false;
   }
 
@@ -127,6 +133,7 @@ namespace coil
   bool ifname_to_ipaddr(std::string ifname, std::string& ipaddr)
   {
 #ifdef __RTP__
+/*
     std::string cmd("ifconfig ");
     cmd += ifname;
     cmd += " 2> /dev/null";
@@ -159,6 +166,7 @@ namespace coil
       } while (!feof(fp));
     pclose(fp);
     wait(NULL);
+*/
 #else
 #endif
     return false;

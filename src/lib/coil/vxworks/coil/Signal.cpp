@@ -32,7 +32,7 @@ namespace coil
    * @endif
    */
   SignalAction::SignalAction()
-    : m_handle(0), m_signum(0), m_mask(0), m_flags(0)
+    : m_handle(0), m_signum(0), m_mask(0), m_vxflags(0)
   {
   }
 
@@ -48,7 +48,7 @@ namespace coil
    * @endif
    */
   SignalAction::SignalAction(SignalHandler handle, int signum)
-    : m_handle(handle), m_signum(signum), m_mask(0), m_flags(0)
+    : m_handle(handle), m_signum(signum), m_mask(0), m_vxflags(0)
   {
     struct sigaction action;
     memset(&action, 0, sizeof(action));  // clear.
@@ -61,7 +61,7 @@ namespace coil
         m_handle = 0;
         m_signum = 0;
         m_mask   = 0;
-        m_flags  = 0;
+        m_vxflags  = 0;
       }
   }
 
@@ -78,7 +78,7 @@ namespace coil
     m_handle = 0;
     m_signum = 0;
     m_mask   = 0;
-    m_flags  = 0;
+    m_vxflags  = 0;
   }
 
 };
