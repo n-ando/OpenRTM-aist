@@ -137,7 +137,8 @@ namespace coil
     if (m_count > 0)
       {
 #ifdef __RTP__
-        taskExit(m_tid);
+        Guard guard(m_waitmutex);
+        //taskExit(0);
 #else
         void* retval;
         ::pthread_join(m_thread, &retval);
@@ -208,6 +209,9 @@ namespace coil
 #endif
   {
     Task* t = (coil::Task*)args;
+#ifdef __RTP__
+    Guard guard(t->m_waitmutex);
+#endif
     int status;
     status = t->svc();
     t->finalize();

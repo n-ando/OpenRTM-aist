@@ -110,7 +110,7 @@ namespace coil
   {
 	  std::string result;
 	  
-	  result += StringToUUID<uint32_t>(_uuid.time_low,8);
+	  result = StringToUUID<uint32_t>(_uuid.time_low,8);
 	  result += "-";
 	  result += StringToUUID<uint16_t>(_uuid.time_mid,4);
 	  result += "-";
@@ -122,7 +122,7 @@ namespace coil
 	  result += StringToUUID<uint32_t>(_uuid.node_low,8);
 	  result += StringToUUID<uint16_t>(_uuid.node_high,4);
 	  
-	  return result.c_str();
+	  return strdup(result.c_str());
   }
 
 

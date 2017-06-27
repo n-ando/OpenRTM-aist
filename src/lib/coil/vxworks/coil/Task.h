@@ -22,6 +22,8 @@
 #ifdef __RTP__
 #include <vxWorks.h>
 #include <taskLib.h>
+#include <coil/Mutex.h>
+#include <coil/Guard.h>
 #else
 #include <pthread.h>
 #endif
@@ -43,6 +45,9 @@ namespace coil
    */
   class Task
   {
+#ifdef __RTP__
+  typedef coil::Guard<coil::Mutex> Guard;
+#endif
   public:
     /*!
      * @if jp
@@ -298,7 +303,9 @@ namespace coil
      */
     void set_stacksize(int stacksize);
 #endif
-
+#ifdef __RTP__
+    coil::Mutex m_waitmutex;
+#endif
   private:
     int m_count;
 #ifdef __RTP__
