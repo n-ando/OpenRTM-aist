@@ -19,7 +19,7 @@ usage()
   Usage: 
 
     $(basename ${0}) [-l all/c++] [-r/-d/-s/-c] [-u]
-    $(basename ${0}) [-l python/java] [-d/-c] [-u]
+    $(basename ${0}) [-l python/java] [-r/-d/-c] [-u]
     $(basename ${0}) [-l openrtp/rtshell] [-d] [-u]                           
 
   Example:
@@ -53,7 +53,7 @@ reposerver=""
 autotools="autoconf libtool libtool-bin"
 base_tools="bc iputils-ping net-tools"
 cxx_devel="gcc g++ make python-yaml"
-cmake_tools="cmake doxygen"
+cmake_tools="cmake doxygen graphviz nkf"
 build_tools="subversion"
 deb_pkg="uuid-dev libboost-filesystem-dev"
 pkg_tools="build-essential debhelper devscripts"
@@ -76,28 +76,32 @@ u_core_pkgs="$u_src_pkgs"
 
 #--------------------------------------- Python
 omnipy="omniidl-python"
-python_devel="python python-pip python-pyorbit-omg"
+python_runtime="python python-pyorbit-omg"
+python_devel="python-pip $cmake_tools $omnipy"
 openrtm_py_devel="openrtm-aist-python-doc"
 openrtm_py_runtime="openrtm-aist-python openrtm-aist-python-example"
 
-python_base="$python_devel $cmake_tools"
-python_omni="$omni_runtime $omnipy"
+python_runtime_pkgs="$omni_runtime $python_runtime $openrtm_py_runtime"
+u_python_runtime_pkgs="$omni_runtime $openrtm_py_runtime"
 
-python_dev_pkgs="$python_base $python_omni $openrtm_py_runtime $openrtm_py_devel"
-u_python_dev_pkgs="$python_omni $openrtm_py_runtime $openrtm_py_devel"
+python_dev_pkgs="$python_runtime_pkgs $python_devel $openrtm_py_devel"
+u_python_dev_pkgs="$u_python_runtime_pkgs $omnipy $openrtm_py_devel"
 
-python_core_pkgs="$python_base $python_omni $build_tools"
-u_python_core_pkgs="$python_omni"
+python_core_pkgs="$omni_runtime $python_runtime $python_devel $build_tools"
+u_python_core_pkgs="$omni_runtime $omnipy"
 
 #--------------------------------------- Java
 java_devel="default-jdk"
 openrtm_java_devel="openrtm-aist-java-doc"
 openrtm_java_runtime="openrtm-aist-java openrtm-aist-java-example"
 
-java_dev_pkgs="$java_devel $omni_runtime $cmake_tools $openrtm_java_runtime $openrtm_java_devel"
+java_runtime_pkgs="$omni_runtime $java_devel $openrtm_java_runtime"
+u_java_runtime_pkgs="$omni_runtime $openrtm_java_runtime"
+
+java_dev_pkgs="$java_runtime_pkgs $cmake_tools $openrtm_java_runtime $openrtm_java_devel"
 u_java_dev_pkgs="$omni_runtime $openrtm_java_runtime $openrtm_java_devel"
 
-java_core_pkgs="$java_devel $omni_runtime $cmake_tools $build_tools"
+java_core_pkgs="$omni_runtime $java_devel $cmake_tools $build_tools"
 u_java_core_pkgs="$omni_runtime"
 
 #--------------------------------------- OpenRTP
@@ -389,6 +393,9 @@ install_branch()
     if test "x$OPT_CORE" = "xtrue" ; then
       select_opt_p="[python] install tool_packages for core developer"
       install_packages $python_core_pkgs
+    elif test "x$OPT_RT" = "xtrue" ; then
+      select_opt_p="[python] install robot component runtime"
+      install_packages $python_runtime_pkgs
     else
       select_opt_p="[python] install robot component developer"
       install_packages $python_dev_pkgs
@@ -399,6 +406,9 @@ install_branch()
     if test "x$OPT_CORE" = "xtrue" ; then
       select_opt_j="[java] install tool_packages for core developer"
       install_packages $java_core_pkgs
+    elif test "x$OPT_RT" = "xtrue" ; then
+      select_opt_j="[java] install robot component runtime"
+      install_packages $java_runtime_pkgs
     else
       select_opt_j="[java] install robot component developer"
       install_packages $java_dev_pkgs
@@ -442,6 +452,9 @@ uninstall_branch()
     if test "x$OPT_CORE" = "xtrue" ; then
       select_opt_p="[python] uninstall tool_packages for core developer"
       uninstall_packages `reverse $u_python_core_pkgs`
+    elif test "x$OPT_RT" = "xtrue" ; then
+      select_opt_p="[python] uninstall robot component runtime"
+      uninstall_packages `reverse $u_python_runtime_pkgs`
     else
       select_opt_p="[python] uninstall robot component developer"
       uninstall_packages `reverse $u_python_dev_pkgs`
@@ -452,6 +465,9 @@ uninstall_branch()
     if test "x$OPT_CORE" = "xtrue" ; then
       select_opt_j="[java] uninstall tool_packages for core developer"
       uninstall_packages `reverse $u_java_core_pkgs`
+    elif test "x$OPT_RT" = "xtrue" ; then
+      select_opt_j="[java] uninstall robot component runtime"
+      uninstall_packages `reverse $u_java_runtime_pkgs`
     else
       select_opt_j="[java] uninstall robot component developer"
       uninstall_packages `reverse $u_java_dev_pkgs`
@@ -537,7 +553,7 @@ uninstall_result()
 =============================================
 EOF
   if [ $# -eq 0 ] && test "x$OPT_FLG" = "xtrue"; then
-    echo "There is no installation package."
+    echo "There is no uninstall package."
     return
   fi
 
