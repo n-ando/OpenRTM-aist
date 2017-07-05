@@ -50,7 +50,13 @@ reposervers="openrtm.org"
 reposerver=""
 
 #--------------------------------------- C++
-autotools="autoconf libtool libtool-bin"
+res=`grep 14.04 /etc/lsb-release`
+if test ! "x$res" = "x" ; then
+  # 14.04
+  autotools="autoconf libtool"
+else
+  autotools="autoconf libtool libtool-bin"
+fi
 base_tools="bc iputils-ping net-tools"
 cxx_devel="gcc g++ make python-yaml"
 cmake_tools="cmake doxygen graphviz nkf"
