@@ -104,7 +104,7 @@ openrtm_java_runtime="openrtm-aist-java openrtm-aist-java-example"
 java_runtime_pkgs="$omni_runtime $java_devel $openrtm_java_runtime"
 u_java_runtime_pkgs="$omni_runtime $openrtm_java_runtime"
 
-java_dev_pkgs="$java_runtime_pkgs $cmake_tools $openrtm_java_runtime $openrtm_java_devel"
+java_dev_pkgs="$java_runtime_pkgs $cmake_tools $openrtm_java_devel"
 u_java_dev_pkgs="$omni_runtime $openrtm_java_runtime $openrtm_java_devel"
 
 java_core_pkgs="$omni_runtime $java_devel $cmake_tools $build_tools"
@@ -428,7 +428,7 @@ install_branch()
 
   if test "x$arg_rtshell" = "xtrue" ; then
     select_opt_shl="[rtshell] install"
-    install_packages $python_devel
+    install_packages python-pip
     rtshell_ret=`pip install rtshell`
   fi
 }
