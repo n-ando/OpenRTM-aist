@@ -12,6 +12,24 @@
 #include "Sensor.h"
 
 
+#if defined(RTM_OS_VXWORKS) && not defined(__RTP__)
+int sensor_main()
+{
+  RTC::Manager* manager = &RTC::Manager::instance();
+  RTC::RtcBase* comp;
+  SensorInit(manager);
+
+  comp = manager->createComponent("Sensor");
+  if(comp)
+  {
+    return 0;
+  }
+  else
+  {
+    return 1;
+  }
+}
+#else
 void MyModuleInit(RTC::Manager* manager)
 {
   SensorInit(manager);
@@ -89,3 +107,4 @@ int main (int argc, char** argv)
   return 0;
 }
 
+#endif

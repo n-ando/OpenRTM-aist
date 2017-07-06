@@ -12,6 +12,26 @@
 #include "Motor.h"
 
 
+#if defined(RTM_OS_VXWORKS) && not defined(__RTP__)
+int motor_main()
+{
+  RTC::Manager* manager = &RTC::Manager::instance();
+  RTC::RtcBase* comp;
+  MotorInit(manager);
+
+  comp = manager->createComponent("Motor");
+  if(comp)
+  {
+    return 0;
+  }
+  else
+  {
+    return 1;
+  }
+}
+#else
+
+
 void MyModuleInit(RTC::Manager* manager)
 {
   MotorInit(manager);
@@ -89,3 +109,4 @@ int main (int argc, char** argv)
   return 0;
 }
 
+#endif

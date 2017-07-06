@@ -14,6 +14,26 @@
 #include <string>
 #include "StringOut.h"
 
+#if defined(RTM_OS_VXWORKS) && not defined(__RTP__)
+int stringout_main()
+{
+  RTC::Manager* manager = &RTC::Manager::instance();
+  RTC::RtcBase* comp;
+  StringOutInit(manager);
+
+  std::string name;
+  comp = manager->createComponent("StringOut", "Generic", name);
+  if(comp)
+  {
+    return 0;
+  }
+  else
+  {
+    return 1;
+  }
+}
+#else
+
 
 void MyModuleInit(RtcManager* manager)
 {
@@ -43,4 +63,4 @@ int main (int argc, char** argv)
   return 0;
 }
 
-
+#endif

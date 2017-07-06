@@ -1,37 +1,34 @@
 cmake_minimum_required (VERSION 2.6)
 
 
+project (RTCSkel)
 
 
 
 
 
-
-set(IDL_COMPILE_COMMAND ${ORB_ROOT}/host/x86_linux_2.6/bin/idl2cpp)
 
 
 macro(idl_compile idl_name)
 
-	if(UNIX)
-		set(skelwrapper_commend ${OPENRTM_DIRS}/utils/rtm-skelwrapper/rtm-skelwrapper)
-	elseif(VXWORKS)
-		set(skelwrapper_commend ${OPENRTM_DIRS}/utils/rtm-skelwrapper/rtm-skelwrapper)
-	elseif(MSVC)
-		set(skelwrapper_commend ${OPENRTM_DIRS}/utils/rtm-skelwrapper/rtm-skelwrapper.py)
-	endif()
+
 	add_custom_command(
 		OUTPUT ${idl_name}Skel.cpp
 		#COMMAND mkdir -p include/rtm/idl
 		#COMMAND cd include/rtm/idl
-		COMMAND ${IDL_COMPILE_COMMAND}  -m -a -ex -fhh -fxcc -fc_c -fs -q -dOE_IDL -I${PROJECT_SOURCE_DIR}/idl -I${ORB_ROOT}/idl ${PROJECT_SOURCE_DIR}/idl/${idl_name}.idl
-		COMMAND python ${skelwrapper_commend} --include-dir="" --skel-suffix=Skel --stub-suffix=Stub --idl-file=${idl_name}.idl
+		#COMMAND ${IDL_COMPILE_COMMAND} ${IDLCOMMAND_FLAGS} -I${PROJECT_SOURCE_DIR}/idl ${PROJECT_SOURCE_DIR}/idl/${idl_name}.idl
+		COMMAND ${IDL_COMPILE_COMMAND} ${IDLCOMMAND_FLAGS} -I${PROJECT_SOURCE_DIR} ${PROJECT_SOURCE_DIR}/${idl_name}.idl
+		COMMAND python ${SKELWRAPPER_COMMAND} --include-dir="" --skel-suffix=Skel --stub-suffix=Stub --idl-file=${idl_name}.idl
 		#WORKING_DIRECTORY ${CURRENT_BINARY_DIR}/include/rtm/idl
-		WORKING_DIRECTORY ${CURRENT_BINARY_DIR}
+		WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
 	)
 	
 
 	add_custom_target(${idl_name}_TGT DEPENDS ${idl_name}Skel.cpp)
-	set(ALL_IDL_SRCS ${ALL_IDL_SRCS} idl/${idl_name}Skel.cpp)
+	#set(ALL_IDL_SRCS ${ALL_IDL_SRCS} idl/${idl_name}Skel.cpp)
+	#set(ALL_IDL_SRCS ${ALL_IDL_SRCS} idl/${idl_name}SKel.h)
+	set(ALL_IDL_SRCS ${ALL_IDL_SRCS} ${idl_name}Skel.cpp)
+	set(ALL_IDL_SRCS ${ALL_IDL_SRCS} ${idl_name}SKel.h)
 
 	if(NOT TARGET ALL_IDL_TGT)
 		add_custom_target(ALL_IDL_TGT)
@@ -59,16 +56,28 @@ foreach(idl ${idls})
 endforeach(idl)
 
 
+link_directories(${ORB_LINK_DIR})
+include_directories(
+		${RTM_INCLUDE_DIR}
+		${ORB_INCLUDE_DIR}
+		)
+ADD_DEFINITIONS(${ORB_C_FLAGS_LIST})
 
 
 
 
 
+#set(ALL_IDL_SRCS ${ALL_IDL_SRCS} PARENT_SCOPE)
 
+set_source_files_properties(${ALL_IDL_SRCS} PROPERTIES GENERATED 1)
 
-set(ALL_IDL_SRCS ${ALL_IDL_SRCS} PARENT_SCOPE)
+add_library(RTCSkel STATIC ${ALL_IDL_SRCS} )
 
+if(NOT TARGET ALL_IDL_TGT)
+  add_custom_target(ALL_IDL_TGT)
 
+endif(NOT TARGET ALL_IDL_TGT)
+add_dependencies(RTCSkel ALL_IDL_TGT)
 
 
 

@@ -2,16 +2,65 @@ cmake_minimum_required (VERSION 2.6)
 project (coil)
 
 
+
+
+
+
+option (ACE_5_6_1_OR_EARLIER "ACE version 5.6.1 or earlier" OFF)
+option (COIL_OS_DARWIN "OS is Max OS X" OFF)
+option (COIL_OS_FREEBSD "OS is FreeBSD" OFF)
+option (COIL_OS_HPUX "OS is HP-UX" OFF)
+option (COIL_OS_IRIX "OS is IRIX" OFF)
+option (COIL_OS_LINUX "OS is Linux" OFF)
+option (COIL_OS_OSF1 "OS is OSF1" OFF)
+option (COIL_OS_QNX "OS is QNX" OFF)
+option (COIL_OS_SUNOS "OS is SunOS" OFF)
+option (COIL_OS_VXWORKS "OS is VxWorks" OFF)
+option (HAVE_DLFCN_H "Define to 1 if you have the <dlfcn.h> header file." ON)
+option (HAVE_INTTYPES_H "Define to 1 if you have the <inttypes.h> header file." ON)
+option (HAVE_MEMORY_H "Define to 1 if you have the <memory.h> header file." ON)
+option (HAVE_NLIST_H "Define to 1 if you have the <nlist.h> header file." OFF)
+option (HAVE_STDINT_H "Define to 1 if you have the <stdint.h> header file." ON)
+option (HAVE_STDLIB_H "Define to 1 if you have the <stdlib.h> header file." ON)
+option (HAVE_STRINGS_H "Define to 1 if you have the <strings.h> header file." ON)
+option (HAVE_STRING_H "Define to 1 if you have the <string.h> header file." ON)
+option (HAVE_SYS_STAT_H "Define to 1 if you have the <sys/stat.h> header file." ON)
+option (HAVE_SYS_TYPES_H "Define to 1 if you have the <sys/types.h> header file." ON)
+option (HAVE_UNAME "Define to 1 if you have the `uname' function." ON)
+option (HAVE_UNISTD_H "Define to 1 if you have the <unistd.h> header file." ON)
+option (STDC_HEADERS "Define to 1 if you have the ANSI C header files." ON)
+option (WITH_ACE "compiled with ACE" OFF)
+option (WITH_DMALLOC "Define if using the dmalloc debugging malloc package" OFF)
+option (_REENTRANT "Multi Thread Support" ON)
+
+set(COIL_MAJOR_VERSION "1.0" CACHE STRING "COIL major version")
+set(COIL_MINOR_VERSION "1.0" CACHE STRING "COIL minor version")
+set(COIL_PLATFORM "POSIX" CACHE STRING "coil platform is ACE")
+set(COIL_REVISION_NUM "1.0" CACHE STRING "")
+set(COIL_SHORT_VERSION "1.01.01.0" CACHE STRING "COIL version")
+set(COIL_VERSION "1.0" CACHE STRING "COIL version")
+set(PACKAGE "coil" CACHE STRING "Name of package")
+set(PACKAGE_BUGREPORT "n-ando@aist.go.jp" CACHE STRING "Define to the address where bug reports for this package should be sent.")
+set(PACKAGE_NAME "coil" CACHE STRING "Define to the full name of this package.")
+set(PACKAGE_STRING "coil 1.0" CACHE STRING "Define to the full name and version of this package.")
+set(PACKAGE_TARNAME "coil" CACHE STRING "Define to the one symbol short name of this package.")
+set(PACKAGE_VERSION "1.0" CACHE STRING "Define to the version of this package.")
+
+
+
+
 if(VXWORKS)
 	set(COIL_OS_DIR "vxworks")
+	set (RTM_OS_VXWORKS ON)
 elseif(UNIX)
 	set(COIL_OS_DIR "posix")
+	set (RTM_OS_LINUX ON)
 elseif(WIN32)
 	set(COIL_OS_DIR "win32")
 endif()
 
 
-
+configure_file(${CMAKE_CURRENT_SOURCE_DIR}/config_coil.h.in ${PROJECT_BINARY_DIR}/config_coil.h)
 
 
 
@@ -44,8 +93,9 @@ set(coil_srcs
 include_directories(
 		${PROJECT_SOURCE_DIR}/common 
 		${PROJECT_SOURCE_DIR}/${COIL_OS_DIR}
+		${PROJECT_BINARY_DIR}/..
 		)
-message(STATUS ${CMAKE_INCLUDE_DIRECTORIES_BEFORE})
+#message(STATUS ${CMAKE_INCLUDE_DIRECTORIES_BEFORE})
 
 add_library(coil STATIC ${coil_srcs} )
 #add_executable(coil  ${coil_srcs} )

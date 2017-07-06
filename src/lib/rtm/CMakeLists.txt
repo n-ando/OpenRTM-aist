@@ -2,7 +2,7 @@ cmake_minimum_required (VERSION 2.6)
 project (rtm)
 
 
-add_subdirectory(idl)
+
 
 
 
@@ -89,41 +89,58 @@ endif()
 
 
 
-if(CORBA MATCHES "ORBExpress")
+if(CORBA MATCHES "ORBexpress")
 	if(RTP)
-		link_directories(${ORB_ROOT}/target/ppc_8xx-vxworks_6.6/gcc_4.1.2_Rp/config_rt_fast/lib)
-		include_directories(${ORB_ROOT}/target/ppc_8xx-vxworks_6.6/gcc_4.1.2_Rp/config_rt_fast/include)
-		set(ORB_LIBRARIES OEtcp OEmirror OEbridge OEudp OEipmc OEshrmem OEudp OEorb )
+		set(ORB_LINK_DIR ${ORB_ROOT}/target/ppc_8xx-vxworks_6.6/gcc_4.1.2_Rp/config_rt_fast/lib)
+		set(ORB_INCLUDE_DIR ${ORB_ROOT}/target/ppc_8xx-vxworks_6.6/gcc_4.1.2_Rp/config_rt_fast/include)
+		link_directories(${ORB_LINK_DIR})
+		include_directories(${ORB_INCLUDE_DIR})
+		set(ORB_LIBRARIES OEtcp OEmirror OEbridge OEudp OEipmc OEshrmem OEudp OEorb)
 
 	else(RTP)
+		set(ORB_LINK_DIR ${ORB_ROOT}/target/ppc_8xx-vxworks_6.6/gcc_4.1.2_ExLcRi/config_rt_full/lib ${ORB_ROOT}/target/ppc_8xx-vxworks_6.6/gcc_4.1.2_ExLcRi/config_rt_full/OENames_2.1.6/lib)
+		set(ORB_INCLUDE_DIR ${ORB_ROOT}/target/ppc_8xx-vxworks_6.6/gcc_4.1.2_ExLcRi/config_rt_full/include)
+		set(ORB_INCLUDE_DIR ${ORB_INCLUDE_DIR} ${ORB_ROOT}/target/ppc_8xx-vxworks_6.6/gcc_4.1.2_ExLcRi/config_rt_full/OENames_2.1.6/include)
 
-		link_directories(${ORB_ROOT}/target/ppc_8xx-vxworks_6.6/gcc_4.1.2_ExLcRi/config_rt_full/lib)
-		include_directories(${ORB_ROOT}/target/ppc_8xx-vxworks_6.6/gcc_4.1.2_ExLcRi/config_rt_full/include)
 
-
-		link_directories(${ORB_ROOT}/target/ppc_8xx-vxworks_6.6/gcc_4.1.2_ExLcRi/config_rt_full/OENames_2.1.6/lib)
-		include_directories(${ORB_ROOT}/target/ppc_8xx-vxworks_6.6/gcc_4.1.2_ExLcRi/config_rt_full/OENames_2.1.6/include)
+		
+		link_directories(${ORB_LINK_DIR})
+		include_directories(${ORB_INCLUDE_DIR})
+		#include_directories(${ORB_ROOT}/target/ppc_8xx-vxworks_6.6/gcc_4.1.2_ExLcRi/config_rt_full/OENames_2.1.6/include)
 	
-		set(ORB_LIBRARIES OEtcp OEmirror OEbridge OEudp OEipmc OEshrmem OEudp OEorb )
+		set(ORB_LIBRARIES OEtcp OEmirror OEbridge OEudp OEipmc OEshrmem OEudp OEorb)
 		
 	endif()
-	ADD_DEFINITIONS("-Wpointer-arith -Wwrite-strings -Waggregate-return -Wredundant-decls -Wno-unused -Wshadow -Wundef -Wold-style-cast -fno-implement-inlines -fvolatile  -ansi -msoft-float  ")
+	SET (ORB_C_FLAGS_LIST
+		-Wpointer-arith -Wwrite-strings -Waggregate-return -Wredundant-decls -Wno-unused -Wshadow -Wundef -Wold-style-cast -fno-implement-inlines -fvolatile  -ansi -msoft-float
+	)
+	ADD_DEFINITIONS(${ORB_C_FLAGS_LIST})
 	set (ORB_IS_ORBEXPRESS ON)
+	set (ORB_IS_ORBEXPRESS ON PARENT_SCOPE)
 elseif(CORBA MATCHES "omniORB")
 	if(RTP)
-		link_directories(${ORB_ROOT}/lib/simpentium_vxWorks_RTP_6.9)
+		set(ORB_LINK_DIR ${ORB_ROOT}/lib/${CPU_TYPE}_vxWorks_RTP_${VXWORKS_MAJOR}.${VXWORKS_MINOR})
 	else(RTP)
-		link_directories(${ORB_ROOT}/lib/simlinux_vxWorks_kernel_6.9)
+		set(ORB_LINK_DIR ${ORB_ROOT}/lib/${CPU_TYPE}_vxWorks_kernel_${VXWORKS_MAJOR}.${VXWORKS_MINOR})
 	endif()
-	include_directories(${ORB_ROOT}/include)
-	set(ORB_LIBRARIES omniDynamic4 omniORB4 omnithread )
+	link_directories(${ORB_LINK_DIR})
+	set(ORB_INCLUDE_DIR ${ORB_ROOT}/include)
+	
+	include_directories(${ORB_INCLUDE_DIR})
+	set(ORB_LIBRARIES omniDynamic4 omniORB4 omnithread)
 	SET (ORB_C_FLAGS_LIST
 		-D__vxWorks__
 		-D__x86__
 	)
 	ADD_DEFINITIONS(${ORB_C_FLAGS_LIST})
 	set (ORB_IS_OMNIORB ON)
+	set (ORB_IS_OMNIORB ON PARENT_SCOPE)
 endif()
+
+set(ORB_C_FLAGS_LIST ${ORB_C_FLAGS_LIST} PARENT_SCOPE)
+set(ORB_LINK_DIR ${ORB_LINK_DIR} PARENT_SCOPE)
+set(ORB_INCLUDE_DIR ${ORB_INCLUDE_DIR} PARENT_SCOPE)
+set(ORB_LIBRARIES ${ORB_LIBRARIES} PARENT_SCOPE)
 
 
 #ADD_DEFINITIONS(-DRTC_CORBA_CXXMAPPING11)
@@ -157,13 +174,19 @@ set(OPENRTM_VERSION 1.2.0 CACHE STRING "RTM version.")
 set(CORBA_NAME omniORB CACHE STRING "CORBA name.")
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/version.h.in ${PROJECT_BINARY_DIR}/version.h)
 
-include_directories(
-		${CMAKE_SOURCE_DIR}
+
+set(RTM_INCLUDE_DIR ${CMAKE_SOURCE_DIR}
 		${CMAKE_SOURCE_DIR}/coil/common
 		${PROJECT_BINARY_DIR}/idl
 		${CMAKE_SOURCE_DIR}/coil/${COIL_OS_DIR}
-		${PROJECT_BINARY_DIR}/..
+		${PROJECT_BINARY_DIR}/..)
+
+include_directories(
+		${RTM_INCLUDE_DIR}
 		)
+
+
+set(RTM_INCLUDE_DIR ${RTM_INCLUDE_DIR}  PARENT_SCOPE)
 
 
 
@@ -234,22 +257,25 @@ set(rtm_srcs
 #message(STATUS ${ORB_LIBRARIES})
 
 #add_executable(rtm rtcd.cpp TestRTC.cpp ${rtm_srcs} ${ALL_IDL_SRCS})
-add_library(rtm STATIC ${rtm_srcs} ${ALL_IDL_SRCS} )
+#add_library(rtm STATIC ${rtm_srcs} ${ALL_IDL_SRCS} )
+add_library(rtm STATIC ${rtm_srcs})
 
-set_source_files_properties(${ALL_IDL_SRCS} PROPERTIES GENERATED 1)
 
-if(NOT TARGET ALL_IDL_TGT)
-  add_custom_target(ALL_IDL_TGT)
 
-endif(NOT TARGET ALL_IDL_TGT)
+
 add_dependencies(rtm coil)
-add_dependencies(rtm ALL_IDL_TGT)
+#add_dependencies(rtm ALL_IDL_TGT)
+
+
+
+add_subdirectory(idl)
+add_dependencies(rtm RTCSkel)
 
 
 
 
 
-target_link_libraries(rtm ${ORB_LIBRARIES} coil)
+#target_link_libraries(rtm ${ORB_LIBRARIES} coil)
 
 
 

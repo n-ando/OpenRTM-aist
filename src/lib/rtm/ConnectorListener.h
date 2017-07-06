@@ -335,7 +335,7 @@ namespace RTC
     {
       DataType data;
 #ifdef ORB_IS_ORBEXPRESS
-      CORBA::Stream cdr(&cdrdata.read_octet(), cdrdata.size_written());
+      cdrMemoryStream cdr(cdrdata);
 #else
       cdrMemoryStream cdr(cdrdata.bufPtr(), cdrdata.bufSize());
 #endif

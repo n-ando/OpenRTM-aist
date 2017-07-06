@@ -19,6 +19,11 @@
 #ifndef COIL_TASK_H
 #define COIL_TASK_H
 
+#include <vxWorks.h>
+#include <taskLib.h>
+#include <coil/Mutex.h>
+#include <coil/Guard.h>
+/*
 #ifdef __RTP__
 #include <vxWorks.h>
 #include <taskLib.h>
@@ -27,6 +32,7 @@
 #else
 #include <pthread.h>
 #endif
+*/
 
 namespace coil
 {
@@ -45,9 +51,12 @@ namespace coil
    */
   class Task
   {
+/*
 #ifdef __RTP__
   typedef coil::Guard<coil::Mutex> Guard;
 #endif
+*/
+  typedef coil::Guard<coil::Mutex> Guard;
   public:
     /*!
      * @if jp
@@ -264,8 +273,9 @@ namespace coil
      * @endif
      */
     static void* svc_run(void* args = 0);
-
+/*
 #ifdef __RTP__
+*/
     /*!
      * @if jp
      *
@@ -302,7 +312,16 @@ namespace coil
      * @endif
      */
     void set_stacksize(int stacksize);
+    coil::Mutex m_waitmutex;
+  private:
+    int m_count;
+    int m_tid;
+    int m_priority;
+    int m_stacksize;
+
+/*
 #endif
+
 #ifdef __RTP__
     coil::Mutex m_waitmutex;
 #endif
@@ -316,6 +335,7 @@ namespace coil
     pthread_t m_thread;
     pthread_attr_t m_attr;
 #endif
+*/
     void* m_args;
 
   };

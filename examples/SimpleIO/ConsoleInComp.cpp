@@ -14,6 +14,25 @@
 #include <rtm/NVUtil.h>
 
 
+
+#if defined(RTM_OS_VXWORKS) && not defined(__RTP__)
+int consolein_main()
+{
+  RTC::Manager* manager = &RTC::Manager::instance();
+  RTC::RtcBase* comp;
+  ConsoleInInit(manager);
+  comp = manager->createComponent("ConsoleIn");
+  if(comp)
+  {
+    return 0;
+  }
+  else
+  {
+    return 1;
+  }
+}
+#else
+
 void MyModuleInit(RTC::Manager* manager)
 {
   ConsoleInInit(manager);
@@ -77,7 +96,10 @@ void MyModuleInit(RTC::Manager* manager)
 int main (int argc, char** argv)
 {
   RTC::Manager* manager;
-  manager = RTC::Manager::init(argc, argv);
+  const int argc_ = 5;
+  const char *argv_[argc_] = { "ManagerTest", "-f", "/home/openrtm/testRTM/rtc.conf", "-o", "corba.nameservers:192.168.200.254" };
+  manager = RTC::Manager::init(argc_, const_cast<char**>(argv_));
+  //manager = RTC::Manager::init(argc, argv);
 
   // Set module initialization proceduer
   // This procedure will be invoked in activateManager() function.
@@ -95,3 +117,5 @@ int main (int argc, char** argv)
 
   return 0;
 }
+
+#endif

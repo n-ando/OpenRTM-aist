@@ -13,6 +13,23 @@
 #include "ConfigSample.h"
 
 
+#if defined(RTM_OS_VXWORKS) && not defined(__RTP__)
+int configsample_main()
+{
+  RTC::Manager* manager = &RTC::Manager::instance();
+  RTC::RtcBase* comp;
+  ConfigSampleInit(manager);
+  comp = manager->createComponent("ConfigSample");
+  if(comp)
+  {
+    return 0;
+  }
+  else
+  {
+    return 1;
+  }
+}
+#else
 void MyModuleInit(RTC::Manager* manager)
 {
   ConfigSampleInit(manager);
@@ -58,3 +75,4 @@ int main (int argc, char** argv)
 
   return 0;
 }
+#endif

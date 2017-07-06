@@ -12,6 +12,27 @@
 #include "Controller.h"
 
 
+
+#if defined(RTM_OS_VXWORKS) && not defined(__RTP__)
+int controller_main()
+{
+  RTC::Manager* manager = &RTC::Manager::instance();
+  RTC::RtcBase* comp;
+  ControllerInit(manager);
+
+  comp = manager->createComponent("Controller");
+  if(comp)
+  {
+    return 0;
+  }
+  else
+  {
+    return 1;
+  }
+}
+#else
+
+
 void MyModuleInit(RTC::Manager* manager)
 {
   ControllerInit(manager);
@@ -88,4 +109,6 @@ int main (int argc, char** argv)
 
   return 0;
 }
+
+#endif
 

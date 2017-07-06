@@ -18,10 +18,14 @@
 
 #include <coil/Task.h>
 
+/*
 #ifdef __RTP__
 #define DEFAULT_PRIORITY 110
 #define DEFAULT_STACKSIZE 60000
 #endif
+*/
+#define DEFAULT_PRIORITY 110
+#define DEFAULT_STACKSIZE 60000
 
 namespace coil
 {
@@ -35,6 +39,11 @@ namespace coil
    */
   Task::Task()
     : m_count(0)
+    ,m_priority(DEFAULT_PRIORITY)
+    ,m_stacksize(DEFAULT_STACKSIZE)
+  {
+  }
+/*
 #ifdef __RTP__
     ,m_priority(DEFAULT_PRIORITY)
     ,m_stacksize(DEFAULT_STACKSIZE)
@@ -45,7 +54,7 @@ namespace coil
     ::pthread_attr_init(&m_attr);
 #endif
   }
-
+*/
   /*!
    * @if jp
    * @brief デストラクタ
@@ -105,6 +114,16 @@ namespace coil
   {
     if (m_count == 0)
       {
+        m_tid = taskSpawn(
+                         0,
+                         m_priority,
+                         VX_FP_TASK | VX_NO_STACK_FILL,
+                         m_stacksize,
+                         (FUNCPTR)Task::svc_run,
+                         (int)this,
+                         0,0,0,0,0,0,0,0,0
+                         );
+/*
 #ifdef __RTP__
         m_tid = taskSpawn(
                          0,
@@ -121,6 +140,7 @@ namespace coil
                          (void* (*)(void*))Task::svc_run,
                          this);
 #endif
+*/
         ++m_count;
       };
   }
@@ -136,6 +156,8 @@ namespace coil
   {
     if (m_count > 0)
       {
+        Guard guard(m_waitmutex);
+/*
 #ifdef __RTP__
         Guard guard(m_waitmutex);
         //taskExit(0);
@@ -143,6 +165,7 @@ namespace coil
         void* retval;
         ::pthread_join(m_thread, &retval);
 #endif
+*/
       }
     return 0;
   }
@@ -202,6 +225,18 @@ namespace coil
    * @brief Start thread Execution
    * @endif
    */
+
+
+  extern "C" void* Task::svc_run(void* args)
+  {
+    Task* t = (coil::Task*)args;
+    Guard guard(t->m_waitmutex);
+    int status;
+    status = t->svc();
+    t->finalize();
+    return 0;
+  }
+/*
 #ifdef __RTP__
   extern "C" void* Task::svc_run(void* args)
 #else
@@ -217,9 +252,11 @@ namespace coil
     t->finalize();
     return 0;
   }
+*/
 
-
+/*
 #ifdef __RTP__
+*/
   /*!
    * @if jp
    *
@@ -262,7 +299,9 @@ namespace coil
   {
     m_stacksize = stacksize;
   }
+/*
 #endif
+*/
 };
 
 

@@ -14,6 +14,26 @@
 #include "AutoTestIn.h"
 
 
+
+#if defined(RTM_OS_VXWORKS) && not defined(__RTP__)
+int autotestin_main()
+{
+  RTC::Manager* manager = &RTC::Manager::instance();
+  RTC::RtcBase* comp;
+  AutoTestInInit(manager);
+
+  comp = manager->createComponent("AutoTestIn");
+  if(comp)
+  {
+    return 0;
+  }
+  else
+  {
+    return 1;
+  }
+}
+#else
+
 void MyModuleInit(RTC::Manager* manager)
 {
   AutoTestInInit(manager);
@@ -95,3 +115,5 @@ int main (int argc, char** argv)
 
   return 0;
 }
+
+#endif

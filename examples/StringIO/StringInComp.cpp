@@ -16,6 +16,26 @@
 
 
 
+#if defined(RTM_OS_VXWORKS) && not defined(__RTP__)
+int stringin_main()
+{
+  RTC::Manager* manager = &RTC::Manager::instance();
+  RTC::RtcBase* comp;
+  StringInInit(manager);
+  std::string name;
+
+  comp = manager->createComponent("StringIn", "Generic", name);
+  if(comp)
+  {
+    return 0;
+  }
+  else
+  {
+    return 1;
+  }
+}
+#else
+
 void MyModuleInit(RtcManager* manager)
 {
   StringInInit(manager);
@@ -44,3 +64,5 @@ int main (int argc, char** argv)
   return 0;
 }
 
+
+#endif
