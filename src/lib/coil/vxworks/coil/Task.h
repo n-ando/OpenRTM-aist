@@ -293,7 +293,25 @@ namespace coil
      *
      * @endif
      */
-    void set_priority(int priority);
+    STATUS set_priority(int priority);
+    /*!
+     * @if jp
+     *
+     * @brief タスクの優先度を所得
+     *
+     *
+     * @return priority 優先度
+     *
+     * @else
+     *
+     * @brief 
+     *
+     *
+     * @return priority 
+     *
+     * @endif
+     */
+     int get_priority();
     /*!
      * @if jp
      *

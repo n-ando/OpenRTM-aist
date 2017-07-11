@@ -41,6 +41,7 @@ namespace coil
     : m_count(0)
     ,m_priority(DEFAULT_PRIORITY)
     ,m_stacksize(DEFAULT_STACKSIZE)
+    ,m_tid(-1)
   {
   }
 /*
@@ -264,6 +265,8 @@ namespace coil
    *
    *
    * @param priority 優先度
+   * 
+   * @return 
    *
    * @else
    *
@@ -271,12 +274,53 @@ namespace coil
    *
    *
    * @param priority 
+   * 
+   * @return 
    *
    * @endif
    */
-  void Task::set_priority(int priority)
+  STATUS Task::set_priority(int priority)
   {
-    m_priority = priority;
+        if(m_tid == -1)
+        {
+            m_priority = priority;
+            return OK;
+        }
+        else
+        {
+            m_priority = priority;
+            return taskPrioritySet(m_tid, m_priority);
+        }
+  }
+  /*!
+   * @if jp
+   *
+   * @brief タスクの優先度を所得
+   *
+   *
+   * @return priority 優先度
+   *
+   * @else
+   *
+   * @brief 
+   *
+   *
+   * @return priority 
+   *
+   * @endif
+   */
+  int Task::get_priority()
+  {
+        if(m_tid == -1)
+        {
+            return m_priority;
+        }
+        else
+        {
+            int priority = -1;
+            taskPriorityGet(m_tid, &priority);
+            return priority;
+        }
   }
   /*!
    * @if jp

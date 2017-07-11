@@ -45,6 +45,13 @@
 #include <rtm/LogstreamBase.h>
 #include <rtm/NumberingPolicyBase.h>
 
+#ifdef RTM_OS_VXWORKS
+#include <rtm/VxWorksRTExecutionContext.h>
+#ifndef __RTP__
+#include <rtm/VxWorksInterruptExecutionContext.h>
+#endif
+#endif
+
 #ifdef RTM_OS_LINUX
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE
@@ -872,6 +879,9 @@ std::vector<coil::Properties> Manager::getLoadableModules()
       "exec_cxt.deactivation_timeout",
       "exec_cxt.reset_timeout",
       "exec_cxt.cpu_affinity",
+      "exec_cxt.priority",
+      "exec_cxt.stack_size",
+      "exec_cxt.interrupt",
       "logger.enable",
       "logger.log_level",
       "naming.enable",
@@ -1859,7 +1869,12 @@ std::vector<coil::Properties> Manager::getLoadableModules()
     PeriodicExecutionContextInit(this);
     ExtTrigExecutionContextInit(this);
     OpenHRPExecutionContextInit(this);
-
+#ifdef RTM_OS_VXWORKS
+    VxWorksRTExecutionContextInit(this);
+#ifndef __RTP__
+    VxWorksInterruptExecutionContextInit(this);
+#endif
+#endif
     // initialize CPU affinity
 #ifdef RTM_OS_LINUX
     initCpuAffinity();

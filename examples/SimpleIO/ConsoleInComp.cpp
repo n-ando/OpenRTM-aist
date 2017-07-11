@@ -96,10 +96,7 @@ void MyModuleInit(RTC::Manager* manager)
 int main (int argc, char** argv)
 {
   RTC::Manager* manager;
-  const int argc_ = 5;
-  const char *argv_[argc_] = { "ManagerTest", "-f", "/home/openrtm/testRTM/rtc.conf", "-o", "corba.nameservers:192.168.200.254" };
-  manager = RTC::Manager::init(argc_, const_cast<char**>(argv_));
-  //manager = RTC::Manager::init(argc, argv);
+  manager = RTC::Manager::init(argc, argv);
 
   // Set module initialization proceduer
   // This procedure will be invoked in activateManager() function.

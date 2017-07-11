@@ -23,6 +23,10 @@
 #include <algorithm>
 #include <ctime>
 
+#include <semLib.h>
+#include <sysLib.h>
+#include <taskLib.h>
+/*
 #ifdef __RTP__
 #include <semLib.h>
 #include <sysLib.h>
@@ -34,6 +38,7 @@
 #include <sys/time.h>
 #endif
 #endif
+*/
 
 
 
@@ -75,11 +80,14 @@ namespace coil
     Condition(M& mutex)
       : m_mutex(mutex)
     {
+      m_cond = semCCreate(SEM_Q_PRIORITY, 0);
+/*
 #ifdef __RTP__
       m_cond = semCCreate(SEM_Q_PRIORITY, 0);
 #else
       ::pthread_cond_init(&m_cond, 0);
 #endif
+*/
     }
 
     /*!
@@ -99,11 +107,14 @@ namespace coil
      */
     ~Condition()
     {
+      semDelete(m_cond);
+/*
 #ifdef __RTP__
       semDelete(m_cond);
 #else
       ::pthread_cond_destroy(&m_cond);
 #endif
+*/
     }
 
     /*!
@@ -123,11 +134,14 @@ namespace coil
      */
     inline void signal()
     {
+      semGive(m_cond);
+/*
 #ifdef __RTP__
       semGive(m_cond);
 #else
       ::pthread_cond_signal(&m_cond);
 #endif
+*/
     }
 
     /*!
@@ -147,11 +161,14 @@ namespace coil
      */
     inline void broadcast()
     {
+      semFlush(m_cond);
+/*
 #ifdef __RTP__
       semFlush(m_cond);
 #else
       ::pthread_cond_broadcast(&m_cond);
 #endif
+*/
     }
 
     /*!
@@ -175,6 +192,21 @@ namespace coil
      */
     bool wait()
     {
+#ifndef __RTP__
+      taskLock();
+#endif
+      m_mutex.unlock();
+      STATUS status = semTake(m_cond, WAIT_FOREVER);
+#ifndef __RTP__
+      taskUnlock();
+#endif
+      if(status != OK)
+      {
+            return -1;
+      }
+      m_mutex.lock();
+      return 0;
+/*
 #ifdef __RTP__
       //taskLock();
       m_mutex.unlock();
@@ -189,6 +221,7 @@ namespace coil
 #else
       return 0 == ::pthread_cond_wait(&m_cond, &m_mutex.mutex_);
 #endif
+*/
     }
 
     /*!
@@ -218,6 +251,27 @@ namespace coil
      */
     bool wait(long second, long nano_second = 0)
     {
+#ifndef __RTP__
+      taskLock();
+#endif
+      m_mutex.unlock();
+      long timeout = (second*1000 + nano_second/1000000l);
+      int ticks = (timeout*sysClkRateGet()) / 1000l;
+      STATUS status = semTake(m_cond, ticks);
+#ifndef __RTP__
+      taskUnlock();
+#endif
+
+      m_mutex.lock();
+      if(status != OK)
+      {
+            return -1;
+      }
+      else
+      {
+            return 0;
+      }
+/*
 #ifdef __RTP__
       //taskLock();
       m_mutex.unlock();
@@ -255,16 +309,20 @@ namespace coil
       }
       return 0 == ::pthread_cond_timedwait(&m_cond, &m_mutex.mutex_, &abstime);
 #endif
+*/
     }
 
   private:
     Condition(const M&);
     Condition& operator=(const M &);
+    SEM_ID m_cond;
+/*
 #ifdef __RTP__
     SEM_ID m_cond;
 #else
     pthread_cond_t m_cond;
 #endif
+*/
     M& m_mutex;
   };
 };

@@ -31,6 +31,7 @@ endif()
 
 
 
+
 #message(STATUS "test")
 #message(STATUS ${VX_CPU_FAMILY})
 
@@ -40,17 +41,9 @@ SET (VX_CPU_CARD    ADS8572)
 SET (VX_CPU_VARIANT _ppc85XX_e500v2)
 
 
-if(NOT VX_VERSION)
-	SET (VX_VERSION     vxworks-6.9)
-endif()
 
-if("${VX_VERSION}" STREQUAL "vxworks-6.9")
-	SET (GNU_VERSION 4.3.3)
-	ADD_DEFINITIONS (-DVXWORKS_69)
-else()
-	SET (GNU_VERSION 4.1.2)	
-	ADD_DEFINITIONS (-DVXWORKS_66)
-endif()
+
+
 
 # ホストOSの判定
 FIND_PROGRAM (UNAME uname)
@@ -69,6 +62,27 @@ ELSEIF (VXWORKS_HOST_OS MATCHES "Linux")
   SET (WIND_HOME "$ENV{WIND_HOME}")
 ENDIF (VXWORKS_HOST_OS MATCHES "SunOS")
 
+
+if(NOT VX_VERSION)
+	SET (VX_VERSION     vxworks-6.9)
+endif()
+
+if("${VX_VERSION}" STREQUAL "vxworks-6.9")
+	SET (GNU_VERSION 4.3.3)
+	ADD_DEFINITIONS (-DVXWORKS_69)
+	SET (WIND_UTIL_PATH ${WIND_HOME}/utilities-1.0/x86-linux2/bin)
+	SET (VXWORKS_MAJOR 6)
+	SET (VXWORKS_MINOR 9)
+else()
+	SET (GNU_VERSION 4.1.2)	
+	ADD_DEFINITIONS (-DVXWORKS_66)
+	SET (WIND_UTIL_PATH ${WIND_HOME}/workbench-3.0/x86-linux2/bin)
+	SET (VXWORKS_MAJOR 6)
+	SET (VXWORKS_MINOR 6)
+endif()
+
+
+
 # Path Settings
 SET (WIND_BASE ${WIND_HOME}/${VX_VERSION})
 SET (WIND_GNU_BASE ${WIND_HOME}/gnu/${GNU_VERSION}-${VX_VERSION}/${WIND_HOST_TYPE})
@@ -80,8 +94,7 @@ SET (WIND_ENV "WIND_HOME=${WIND_HOME} WIND_HOST_TYPE=${WIND_HOST_TYPE} WIND_BASE
 ################################################################################
 
 SET (VXWORKS ON)
-SET (VXWORKS_MAJOR 6)
-SET (VXWORKS_MINOR 6)
+
 
 SET (CMAKE_SYSTEM_NAME VxWorks)
 SET (CMAKE_SYSTEM_VERSION ${VX_VERSION})
@@ -94,31 +107,34 @@ if("${VX_CPU_FAMILY}" STREQUAL "ppc")
 	CMAKE_FORCE_CXX_COMPILER(${WIND_GNU_BASE}/bin/c++ppc GNU)
 	SET (CMAKE_LINKER ${WIND_GNU_BASE}/bin/ldppc CACHE FILEPATH "vxworks linker")
 	SET (CMAKE_AR ${WIND_GNU_BASE}/bin/arppc CACHE FILEPATH "vxworks ar")
-	SET (CMAKE_NM ${WIND_GNU_BASE}/bin/nmppc CACHE FILEPATH "vxworks nm")
-	SET (CMAKE_STRIP ${WIND_GNU_BASE}/bin/stripppc CACHE FILEPATH "vxworks strip")
-	SET (CMAKE_OBJCOPY ${WIND_GNU_BASE}/bin/objcopyppc CACHE FILEPATH "vxworks objcopy")
-	SET (CMAKE_OBJDUMP ${WIND_GNU_BASE}/bin/objdumpppc CACHE FILEPATH "vxworks objdump")
+	SET (CMAKE_NM ${WIND_UTIL_PATH}/nmppc CACHE FILEPATH "vxworks nm")
+	SET (CMAKE_STRIP ${WIND_UTIL_PATH}/stripppc CACHE FILEPATH "vxworks strip")
+	SET (CMAKE_OBJCOPY ${WIND_UTIL_PATH}/objcopyppc CACHE FILEPATH "vxworks objcopy")
+	SET (CMAKE_OBJDUMP ${WIND_UTIL_PATH}/objdumpppc CACHE FILEPATH "vxworks objdump")
 	SET (CMAKE_RANLIB ${WIND_GNU_BASE}/bin/ranlibppc CACHE FILEPATH "vxworks ranlib")
+	SET (CPU_TYPE powerpc)
 elseif("${VX_CPU_FAMILY}" STREQUAL "simpentium")
 	CMAKE_FORCE_C_COMPILER(${WIND_GNU_BASE}/bin/ccpentium GNU)
 	CMAKE_FORCE_CXX_COMPILER(${WIND_GNU_BASE}/bin/c++pentium GNU)
 	SET (CMAKE_LINKER ${WIND_GNU_BASE}/bin/ldpentium CACHE FILEPATH "vxworks linker")
 	SET (CMAKE_AR ${WIND_GNU_BASE}/bin/arpentium CACHE FILEPATH "vxworks ar")
-	SET (CMAKE_NM ${WIND_GNU_BASE}/bin/nmpentium CACHE FILEPATH "vxworks nm")
-	SET (CMAKE_STRIP ${WIND_GNU_BASE}/bin/strippentium CACHE FILEPATH "vxworks strip")
-	SET (CMAKE_OBJCOPY ${WIND_GNU_BASE}/bin/objcopypentium CACHE FILEPATH "vxworks objcopy")
-	SET (CMAKE_OBJDUMP ${WIND_GNU_BASE}/bin/objdumppentium CACHE FILEPATH "vxworks objdump")
+	SET (CMAKE_NM ${WIND_UTIL_PATH}/nmpentium CACHE FILEPATH "vxworks nm")
+	SET (CMAKE_STRIP ${WIND_UTIL_PATH}/strippentium CACHE FILEPATH "vxworks strip")
+	SET (CMAKE_OBJCOPY ${WIND_UTIL_PATH}/objcopypentium CACHE FILEPATH "vxworks objcopy")
+	SET (CMAKE_OBJDUMP ${WIND_UTIL_PATH}/objdumppentium CACHE FILEPATH "vxworks objdump")
 	SET (CMAKE_RANLIB ${WIND_GNU_BASE}/bin/ranlibpentium CACHE FILEPATH "vxworks ranlib")
+	SET (CPU_TYPE simpentium)
 elseif("${VX_CPU_FAMILY}" STREQUAL "simlinux")
 	CMAKE_FORCE_C_COMPILER(${WIND_GNU_BASE}/bin/ccpentium GNU)
 	CMAKE_FORCE_CXX_COMPILER(${WIND_GNU_BASE}/bin/c++pentium GNU)
 	SET (CMAKE_LINKER ${WIND_GNU_BASE}/bin/ldpentium CACHE FILEPATH "vxworks linker")
 	SET (CMAKE_AR ${WIND_GNU_BASE}/bin/arpentium CACHE FILEPATH "vxworks ar")
-	SET (CMAKE_NM ${WIND_GNU_BASE}/bin/nmpentium CACHE FILEPATH "vxworks nm")
-	SET (CMAKE_STRIP ${WIND_GNU_BASE}/bin/strippentium CACHE FILEPATH "vxworks strip")
-	SET (CMAKE_OBJCOPY ${WIND_GNU_BASE}/bin/objcopypentium CACHE FILEPATH "vxworks objcopy")
-	SET (CMAKE_OBJDUMP ${WIND_GNU_BASE}/bin/objdumppentium CACHE FILEPATH "vxworks objdump")
+	SET (CMAKE_NM ${WIND_UTIL_PATH}/nmpentium CACHE FILEPATH "vxworks nm")
+	SET (CMAKE_STRIP ${WIND_UTIL_PATH}/strippentium CACHE FILEPATH "vxworks strip")
+	SET (CMAKE_OBJCOPY ${WIND_UTIL_PATH}/objcopypentium CACHE FILEPATH "vxworks objcopy")
+	SET (CMAKE_OBJDUMP ${WIND_UTIL_PATH}/objdumppentium CACHE FILEPATH "vxworks objdump")
 	SET (CMAKE_RANLIB ${WIND_GNU_BASE}/bin/ranlibpentium CACHE FILEPATH "vxworks ranlib")
+	SET (CPU_TYPE simlinux)
 endif()
 
 
@@ -128,11 +144,16 @@ SET(CMAKE_SHARED_LIBRARY_LINK_CXX_FLAGS "")
 SET (CMAKE_EXE_LINKER_FLAGS_INIT -r)
 
 
+SET (VSB_DIR ${WIND_BASE}/target/lib)
+SET (VSB_CONFIG_FILE ${VSB_DIR}/h/config/vsbConfig.h)
 
 
 
 FIND_PROGRAM (SH sh REQUIRED)
-SET (MUNCH ${WIND_BASE}/host/${WIND_HOST_TYPE}/bin/munch CACHE FILEPATH "munch")
+
+
+
+
 
 SET (CMAKE_C_COMPILE_OBJECT
   "${WIND_ENV} <CMAKE_C_COMPILER> <DEFINES> <FLAGS> -o <OBJECT> -c <SOURCE>")
@@ -158,6 +179,7 @@ if("${VX_CPU_FAMILY}" STREQUAL "ppc")
 	SET (CMAKE_CXX_FLAGS_RELEASE ${CMAKE_C_FLAGS_RELEASE} CACHE STRING "")
 
 	SET (CC_ARCH_SPEC "-mhard-float -fno-implicit-fp -mstrict-align -mregnames -D_WRS_HARDWARE_FP")
+	SET (NM_FLAG ppc)
 
 elseif("${VX_CPU_FAMILY}" STREQUAL "simpentium")
 
@@ -171,6 +193,7 @@ elseif("${VX_CPU_FAMILY}" STREQUAL "simpentium")
 	SET (CMAKE_CXX_FLAGS_RELEASE ${CMAKE_C_FLAGS_RELEASE} CACHE STRING "")
 
 	SET (CC_ARCH_SPEC "-mtune=i486 -march=i486")
+	SET (NM_FLAG pentium)
 
 
 elseif("${VX_CPU_FAMILY}" STREQUAL "simlinux")
@@ -185,21 +208,44 @@ elseif("${VX_CPU_FAMILY}" STREQUAL "simlinux")
 	SET (CMAKE_CXX_FLAGS_RELEASE ${CMAKE_C_FLAGS_RELEASE} CACHE STRING "")
 
 	SET (CC_ARCH_SPEC "-mtune=i486 -march=i486")
+	SET (NM_FLAG pentium)
 
 endif()
 
 if(RTP)
 	#set(CMAKE_EXE_LINKER_FLAGS "${CC_ARCH_SPEC} ${RTP_C_FLAGS} -fno-strict-aliasing -fasm -Wall" )
-	set(CMAKE_EXE_LINKER_FLAGS "${CC_ARCH_SPEC} ${RTP_C_FLAGS} -fno-strict-aliasing -lstdc++ -fasm -D_WRS_HARDWARE_FP -Wall" )
+	set(CMAKE_EXE_LINKER_FLAGS "${CC_ARCH_SPEC} ${RTP_C_FLAGS} -Xbind-lazy -non-static -fno-strict-aliasing -lstdc++ -fasm -D_WRS_HARDWARE_FP -Wall" )
 else(RTP)
+	set(CMAKE_PARTICALIMAGE_LINKER_FLAGS "-nostdlib -Wl,-X " )
 	set(CMAKE_EXE_LINKER_FLAGS "-nostdlib -Wl,-X -T ${WIND_BASE}/target/h/tool/gnu/ldscripts/link.OUT " )
 endif()
 
-
-SET (CMAKE_C_LINK_EXECUTABLE
-	  "${CMAKE_C_COMPILER} ${CMAKE_EXE_LINKER_FLAGS} <OBJECTS> -o <TARGET> <LINK_LIBRARIES>")
-SET (CMAKE_CXX_LINK_EXECUTABLE
-	  "${CMAKE_CXX_COMPILER} ${CMAKE_EXE_LINKER_FLAGS} <OBJECTS> -o <TARGET> <LINK_LIBRARIES>")
+if(RTP)
+	SET (CMAKE_C_LINK_EXECUTABLE
+		  "${CMAKE_C_COMPILER} ${CMAKE_EXE_LINKER_FLAGS} <OBJECTS> -o <TARGET> <LINK_LIBRARIES>")
+	SET (CMAKE_CXX_LINK_EXECUTABLE
+		  "${CMAKE_CXX_COMPILER} ${CMAKE_EXE_LINKER_FLAGS} <OBJECTS> -o <TARGET> <LINK_LIBRARIES>")
+else(RTP)
+#SET (MUNCH ${WIND_BASE}/host/${WIND_HOST_TYPE}/bin/munch CACHE FILEPATH "munch")
+SET (MUNCH ${WIND_BASE}/host/resource/hutils/tcl/munch.tcl CACHE FILEPATH "munch")
+	if("${VX_VERSION}" STREQUAL "vxworks-6.9")
+		SET (TCLSH ${WIND_HOME}/workbench-3.3/foundation/x86-linux2/bin/tclsh CACHE FILEPATH "tclsh")
+	else()
+		SET (TCLSH ${WIND_HOME}/workbench-3.0/foundation/4.1.1/x86-linux2/bin/tclsh CACHE FILEPATH "tclsh")
+		
+	endif()
+	SET (TAGS ${VSB_DIR}/tags/${VX_CPU_FAMILY}/${VX_CPU}/common/dkm.tags CACHE FILEPATH "tags")
+	string(REPLACE ";" " " VXWORKS_C_FLAGS_LIST_STR "${VXWORKS_C_FLAGS_LIST}")
+	SET (RUN_MUNCH_SCRIPT ${CMAKE_SOURCE_DIR}/run_munch.sh)
+	SET (CMAKE_C_LINK_EXECUTABLE
+		  "${CMAKE_C_COMPILER} ${CMAKE_PARTICALIMAGE_LINKER_FLAGS} -o <TARGET>_partialImage.o <OBJECTS> <LINK_LIBRARIES>"
+		  "sh ${RUN_MUNCH_SCRIPT} ${CMAKE_NM} <TARGET>_partialImage.o ${TCLSH} ${MUNCH} ${NM_FLAG} ${TAGS} ctdt.c"
+#		  "${CMAKE_NM} <TARGET>_partialImage.o | ${TCLSH} ${MUNCH} -c ${VX_CPU_FAMILY} -tags ${TAGS} > ctdt.c"
+		  "${CMAKE_C_COMPILER} ${CC_ARCH_SPEC} -nostdlib -fno-builtin  -fdollars-in-identifiers -Wall ${VXWORKS_C_FLAGS_LIST_STR} -o ctdt.o -c ctdt.c"
+		  "${CMAKE_C_COMPILER} ${CMAKE_EXE_LINKER_FLAGS} -o <TARGET>  <TARGET>_partialImage.o ctdt.o <LINK_LIBRARIES> -lstdc++"
+		)
+	SET (CMAKE_CXX_LINK_EXECUTABLE ${CMAKE_C_LINK_EXECUTABLE})
+endif()
 
 
 #if(RTP)
@@ -225,12 +271,11 @@ else(RTP)
 INCLUDE_DIRECTORIES (
   ${VX_VW_BASE}/h
   ${VX_VW_BASE}/h/wrn/coreip)
-message(STATUS ${VX_VW_BASE}/h/wrn/coreip)
+#message(STATUS ${VX_VW_BASE}/h/wrn/coreip)
 endif()
 
 
-SET (VSB_DIR ${WIND_BASE}/target/lib)
-SET (VSB_CONFIG_FILE ${VSB_DIR}/h/config/vsbConfig.h)
+
 
 
 
@@ -238,28 +283,22 @@ SET (VSB_CONFIG_FILE ${VSB_DIR}/h/config/vsbConfig.h)
 
 
 SET (VXWORKS_C_FLAGS_LIST
+  -DCPU=${VX_CPU}  -DVX_CPU_CARD=${VX_CPU_CARD} -DTOOL_FAMILY=${VX_TOOL_FAMILY} -DTOOL=${VX_TOOL} -DCPU_VARIANT=${VX_CPU_VARIANT} -DVXWORKS_MAJOR=${VXWORKS_MAJOR} -DVXWORKS_MINOR=${VXWORKS_MINOR} -DVXWORKS )
+
+
 #  -D_VX_CPU=_VX_${VX_CPU}
 #  -D_VX_CPU_FAMILY=_VX_${VX_CPU}
 #  -D_VX_TOOL_FAMILY=${VX_TOOL_FAMILY}
 #  -D_VX_TOOL=${VX_TOOL}
-  -DCPU=${VX_CPU}
-  -DVX_CPU_CARD=${VX_CPU_CARD}
 #  -DCPU_FAMILY=_${CPU_FAMILY}
-  -DTOOL_FAMILY=${VX_TOOL_FAMILY}
-  -DTOOL=${VX_TOOL}
-  -D_WRS_KERNEL
-  -DCPU_VARIANT=${VX_CPU_VARIANT}
 #  -D_VSB_CONFIG_FILE="${VSB_CONFIG_FILE}"
-  -DVXWORKS_MAJOR=${VXWORKS_MAJOR}
-  -DVXWORKS_MINOR=${VXWORKS_MINOR}
-  -DVXWORKS
+#  -D_WRS_KERNEL
 #  ${CC_ARCH_SPEC}
 #  -ansi
 #  -mrtp
-  )
 
 
-ADD_DEFINITIONS (${VXWORKS_C_FLAGS_LIST})
+ADD_DEFINITIONS (${VXWORKS_C_FLAGS_LIST} -Xbind-lazy -non-static)
 
 
 
@@ -269,12 +308,6 @@ ADD_DEFINITIONS (${VXWORKS_C_FLAGS_LIST})
 
 if("${VX_CPU_FAMILY}" STREQUAL "ppc")
 	if(RTP)
-		SET (CPU_C_FLAGS_LIST
-		  ${RTP_C_FLAGS}
-		  -mregnames
-		  -msoft-float
-		  )
-	else(RTP)
 		SET (CPU_C_FLAGS_LIST
 		  -mlongcall
 		  -fstrength-reduce
@@ -287,6 +320,13 @@ if("${VX_CPU_FAMILY}" STREQUAL "ppc")
 		  -mstrict-align
 		  -fno-implicit-fp
 		  ${RTP_C_FLAGS}
+		  )
+	else(RTP)
+		SET (CPU_C_FLAGS_LIST
+		  ${RTP_C_FLAGS}
+		  -mregnames
+		  -msoft-float
+		  -D_WRS_KERNEL
 		  )
 	endif()
 elseif("${VX_CPU_FAMILY}" STREQUAL "simpentium")
@@ -302,6 +342,7 @@ elseif("${VX_CPU_FAMILY}" STREQUAL "simlinux")
 	  -march=i486
 	  -ansi
 	  ${RTP_C_FLAGS}
+	  -D_WRS_KERNEL
 	  )
 endif()
 

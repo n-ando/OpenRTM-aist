@@ -28,7 +28,7 @@ option (HAVE_SYS_STAT_H "Define to 1 if you have the <sys/stat.h> header file." 
 option (HAVE_SYS_TYPES_H "Define to 1 if you have the <sys/types.h> header file." ON)
 option (HAVE_UNAME "Define to 1 if you have the `uname' function." ON)
 option (HAVE_UNISTD_H "Define to 1 if you have the <unistd.h> header file." ON)
-option (STDC_HEADERS "Define to 1 if you have the ANSI C header files." ON)
+option (STDC_HEADERS "Define to 1 if you have the ANSI C header files." OFF)
 option (WITH_ACE "compiled with ACE" OFF)
 option (WITH_DMALLOC "Define if using the dmalloc debugging malloc package" OFF)
 option (_REENTRANT "Multi Thread Support" ON)

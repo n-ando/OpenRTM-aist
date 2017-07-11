@@ -22,9 +22,12 @@
 
 
 #include <pthread.h>
+#include <semLib.h>
+/*
 #ifdef __RTP__
 #include <semLib.h>
 #endif
+*/
 
 namespace coil
 {
@@ -65,11 +68,14 @@ namespace coil
      */
     Mutex(const char * const name = 0)
     {
+      mutex_ = semMCreate(SEM_Q_PRIORITY | SEM_INVERSION_SAFE);
+/*
 #ifdef __RTP__
       mutex_ = semMCreate(SEM_Q_PRIORITY | SEM_INVERSION_SAFE);
 #else
       ::pthread_mutex_init(&mutex_, 0);
 #endif
+*/
     }
 
     /*!
@@ -89,11 +95,14 @@ namespace coil
      */
     ~Mutex()
     {
+      semDelete(mutex_);
+/*
 #ifdef __RTP__
       semDelete(mutex_);
 #else
       ::pthread_mutex_destroy(&mutex_);
 #endif
+*/
     }
 
     /*!
@@ -113,11 +122,14 @@ namespace coil
      */
     inline void lock()
     {
+      semTake(mutex_, WAIT_FOREVER);
+/*
 #ifdef __RTP__
       semTake(mutex_, WAIT_FOREVER);
 #else
       ::pthread_mutex_lock(&mutex_);
 #endif
+*/
     }
 
     /*!
@@ -137,12 +149,16 @@ namespace coil
      */
     inline bool trylock()
     {
+      STATUS status = semTake(mutex_, NO_WAIT);
+      return (status == OK);
+/*
 #ifdef __RTP__
       STATUS status = semTake(mutex_, NO_WAIT);
       return (status == OK);
 #else
       return ::pthread_mutex_trylock(&mutex_);
 #endif
+*/
     }
 
     /*!
@@ -162,11 +178,14 @@ namespace coil
      */
     inline void unlock()
     {
+      semGive(mutex_);
+/*
 #ifdef __RTP__
       semGive(mutex_);
 #else
       ::pthread_mutex_unlock(&mutex_);
 #endif
+*/
     }
 
     /*!
@@ -180,11 +199,14 @@ namespace coil
      *
      * @endif
      */
+    SEM_ID mutex_;
+/*
 #ifdef __RTP__
     SEM_ID mutex_;
 #else
     pthread_mutex_t mutex_;
 #endif
+*/
 
   private:
     Mutex(const Mutex&);

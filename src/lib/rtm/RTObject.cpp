@@ -2144,6 +2144,7 @@ namespace RTC
             PortableServer::RefCountServantBase* servant(NULL);
             servant =
               dynamic_cast<PortableServer::RefCountServantBase*>(m_eclist[i]);
+
             if (servant == NULL)
               {
                 RTC_ERROR(("Dynamic cast error: ECBase -> Servant."));
@@ -2547,6 +2548,9 @@ namespace RTC
         "deactivation_timeout",
         "reset_timeout",
         "cpu_affinity",
+        "priority",
+        "stack_size",
+        "interrupt",
         ""
       };
     coil::Properties* p = m_properties.findNode("exec_cxt");
@@ -2805,6 +2809,10 @@ namespace RTC
             "activation_timeout",
             "deactivation_timeout",
             "reset_timeout",
+            "cpu_affinity",
+            "priority",
+            "stack_size",
+            "interrupt",
             ""
           };
 

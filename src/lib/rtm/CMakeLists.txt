@@ -128,10 +128,17 @@ elseif(CORBA MATCHES "omniORB")
 	
 	include_directories(${ORB_INCLUDE_DIR})
 	set(ORB_LIBRARIES omniDynamic4 omniORB4 omnithread)
-	SET (ORB_C_FLAGS_LIST
-		-D__vxWorks__
-		-D__x86__
-	)
+	if("${VX_CPU_FAMILY}" STREQUAL "ppc")
+		SET (ORB_C_FLAGS_LIST
+			-D__vxWorks__
+			-D__powerpc__
+		)
+	else()
+		SET (ORB_C_FLAGS_LIST
+			-D__vxWorks__
+			-D__x86__
+		)
+	endif()
 	ADD_DEFINITIONS(${ORB_C_FLAGS_LIST})
 	set (ORB_IS_OMNIORB ON)
 	set (ORB_IS_OMNIORB ON PARENT_SCOPE)
@@ -251,6 +258,14 @@ set(rtm_srcs
 	OutPortConnector.cpp
 	NumberingPolicy.cpp
 )
+
+if(VXWORKS)
+	set(rtm_srcs ${rtm_srcs} VxWorksRTExecutionContext.cpp)
+	if(RTP)
+	else(RTP)
+		set(rtm_srcs ${rtm_srcs} VxWorksInterruptExecutionContext.cpp)
+	endif(RTP)
+endif(VXWORKS)
 
 #message(STATUS ${ALL_IDL_SRCS})
 

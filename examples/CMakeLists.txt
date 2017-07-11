@@ -5,5 +5,5 @@ add_subdirectory(AutoTest)
 add_subdirectory(ExtTrigger)
 add_subdirectory(SimpleService)
 #add_subdirectory(StringIO)
-
+add_subdirectory(ConfigSample)
 
