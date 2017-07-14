@@ -30,7 +30,7 @@ namespace RTC_exp
 {
   /*!
    * @if jp
-   * @brief ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
+   * @brief ¥Ç¥Õ¥©¥ë¥È¥³¥ó¥¹¥È¥é¥¯¥¿
    * @else
    * @brief Default constructor
    * @endif
@@ -46,7 +46,7 @@ namespace RTC_exp
 
   /*!
    * @if jp
-   * @brief ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
+   * @brief ¥Ç¥¹¥È¥é¥¯¥¿
    * @else
    * @brief Destructor
    * @endif
@@ -78,7 +78,7 @@ namespace RTC_exp
    *------------------------------------------------------------*/
   /*!
    * @if jp
-   * @brief ExecutionContext ç”¨ã®ã‚¹ãƒ¬ãƒƒãƒ‰å®Ÿè¡Œé–¢æ•°
+   * @brief ExecutionContext ÍÑ¤Î¥¹¥ì¥Ã¥É¼Â¹Ô´Ø¿ô
    * @else
    * @brief Thread execution function for ExecutionContext
    * @endif
@@ -210,12 +210,12 @@ namespace RTC_exp
     TimeValue_nano res;
     if (m_sec >= tm.m_sec) // +
       {
-        if (m_nsec >= tm.m_nsec) /* ç¹°ã‚Šä¸‹ãŒã‚Šç„¡ã— */
+        if (m_nsec >= tm.m_nsec) /* ·«¤ê²¼¤¬¤êÌµ¤· */
           {
             res.m_sec  = m_sec  - tm.m_sec;  // -
             res.m_nsec = m_nsec - tm.m_nsec; // +
           }
-        else /* m_usec < tm.m_usec ç¹°ã‚Šä¸‹ãŒã‚Šæœ‰ã‚Š */
+        else /* m_usec < tm.m_usec ·«¤ê²¼¤¬¤êÍ­¤ê */
           {
             res.m_sec  = m_sec  - tm.m_sec - 1;
             res.m_nsec = (m_nsec + TIMEVALUE_ONE_SECOND_IN_NSECS) - tm.m_nsec;
@@ -223,12 +223,12 @@ namespace RTC_exp
       }
     else // m_sec < tm.m_sec // -
       {
-          if (tm.m_nsec >= m_nsec) /* ç¹°ã‚Šä¸‹ãŒã‚Šç„¡ã— */
+          if (tm.m_nsec >= m_nsec) /* ·«¤ê²¼¤¬¤êÌµ¤· */
             {
               res.m_sec  = - (tm.m_sec  - m_sec); // +
               res.m_nsec = - (tm.m_nsec - m_nsec);  // +
             }
-          else /* tm.m_usec < m_usec ç¹°ã‚Šä¸‹ãŒã‚Šæœ‰ã‚Š */
+          else /* tm.m_usec < m_usec ·«¤ê²¼¤¬¤êÍ­¤ê */
             {
               res.m_sec  = - (tm.m_sec - m_sec  - 1);
               res.m_nsec = - (tm.m_nsec + TIMEVALUE_ONE_SECOND_IN_NSECS) + m_nsec;
@@ -318,7 +318,7 @@ extern "C"
 {
   /*!
    * @if jp
-   * @brief ECFactoryã¸ã®ç™»éŒ²ã®ãŸã‚ã®åˆæœŸåŒ–é–¢æ•°
+   * @brief ECFactory¤Ø¤ÎÅÐÏ¿¤Î¤¿¤á¤Î½é´ü²½´Ø¿ô
    * @else
    * @brief Initialization function to register to ECFactory
    * @endif
