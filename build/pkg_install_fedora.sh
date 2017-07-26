@@ -52,7 +52,7 @@ reposerver=""
 autotools="autoconf automake libtool"
 cxx_devel="gcc-c++ make PyYAML"
 cmake_tools="cmake doxygen graphviz nkf"
-build_tools="subversion"
+build_tools="subversion git"
 rpm_pkg="uuid-devel libuuid-devel boost boost-devel"
 rpm_tools="createrepo rpm-build"
 omni_devel="omniORB-devel omniORB-doc  omniORB-utils"
@@ -85,21 +85,22 @@ u_python_runtime_pkgs="$omni_runtime $openrtm_py_runtime"
 python_dev_pkgs="$python_runtime_pkgs $python_devel $openrtm_py_devel"
 u_python_dev_pkgs="$u_python_runtime_pkgs $omnipy $openrtm_py_devel"
 
-python_core_pkgs="$omni_runtime $python_runtime $python_devel $build_tools"
+python_core_pkgs="$omni_runtime $python_runtime $python_devel $build_tools $rpm_tools"
 u_python_core_pkgs="$omni_runtime $omnipy"
 
 #--------------------------------------- Java
 java_devel="java-1.8.0-openjdk-devel"
-openrtm_java_devel="OpenRTM-aist-Java-doc"
-openrtm_java_runtime="OpenRTM-aist-Java OpenRTM-aist-Java-example"
+java_build="ant"
+openrtm_j_devel="OpenRTM-aist-Java-doc"
+openrtm_j_runtime="OpenRTM-aist-Java OpenRTM-aist-Java-example"
 
-java_runtime_pkgs="$omni_runtime $java_devel $openrtm_java_runtime"
-u_java_runtime_pkgs="$omni_runtime $openrtm_java_runtime"
+java_runtime_pkgs="$omni_runtime $java_devel $openrtm_j_runtime"
+u_java_runtime_pkgs="$omni_runtime $openrtm_j_runtime"
 
-java_dev_pkgs="$java_runtime_pkgs $cmake_tools $openrtm_java_devel"
-u_java_dev_pkgs="$omni_runtime $openrtm_java_runtime $openrtm_java_devel"
+java_dev_pkgs="$java_runtime_pkgs $cmake_tools $openrtm_j_devel"
+u_java_dev_pkgs="$omni_runtime $openrtm_j_runtime $openrtm_j_devel"
 
-java_core_pkgs="$omni_runtime $java_devel $cmake_tools $build_tools"
+java_core_pkgs="$omni_runtime $java_devel $cmake_tools $build_tools $java_build $rpm_tools"
 u_java_core_pkgs="$omni_runtime"
 
 #--------------------------------------- OpenRTP
