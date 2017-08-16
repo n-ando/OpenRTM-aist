@@ -119,7 +119,11 @@ RTC::ReturnCode_t MyServiceConsumer::onExecute(RTC::UniqueId ec_id)
       std::string args;
       std::string::size_type pos;
       std::vector<std::string> argv;
+#if defined(RTM_OS_VXWORKS) && not defined(__RTP__)
+      args = "echo test";
+#else
       std::getline(std::cin, args);
+#endif
       
       pos = args.find_first_of(" ");
       if (pos != std::string::npos)

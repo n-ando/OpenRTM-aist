@@ -27,6 +27,11 @@
 #include <coil/config_coil.h>
 #include <coil/stringutil.h>
 
+#ifdef __RTP__
+#else
+#include <pathLib.h>
+#endif
+
 
 
 namespace coil
@@ -57,7 +62,39 @@ namespace coil
    */
   inline std::string dirname(char* path)
   {
+#ifdef __RTP__
     return "";
+#else
+    unsigned int len = strlen(path);
+    char path_name[len+1];
+    memset( path_name , '\0' , len+1 );
+    char dir_name[len+1];
+    memset( dir_name , '\0' , len+1 );
+    char file_name[len+1];
+    memset( file_name , '\0' , len+1 );
+    if(len>1 && strncmp("/", &path[len-1], 1)==0)
+    {
+      strncpy(path_name, path, len-1);   
+    }
+    else
+    {
+      strcpy(path_name, path);
+    }
+    pathSplit(path_name, dir_name, file_name);
+    std::string ret = dir_name;
+    if(ret == "")
+    {
+      if(strncmp("/", &path_name[0], 1) == 0)
+      {
+        ret = "/";
+      }
+      else
+      {
+        ret = ".";
+      }
+    }
+    return ret;
+#endif
   }
 
   /*!
@@ -85,8 +122,39 @@ namespace coil
    */
   inline std::string basename(const char* path)
   {
-
+#ifdef __RTP__
     return "";
+#else
+    unsigned int len = strlen(path);
+    char path_name[len+1];
+    memset( path_name , '\0' , len+1 );
+    char dir_name[len+1];
+    memset( dir_name , '\0' , len+1 );
+    char file_name[len+1];
+    memset( file_name , '\0' , len+1 );
+    if(len>1 && strncmp("/", &path[len-1], 1)==0)
+    {
+      strncpy(path_name, path, len-1);   
+    }
+    else
+    {
+      strcpy(path_name, path);
+    }
+    pathSplit(path_name, dir_name, file_name);
+    std::string ret = file_name;
+    if(ret == "")
+    {
+      if(strncmp("/", &path_name[0], 1) == 0)
+      {
+        ret = "/";
+      }
+      else
+      {
+        ret = ".";
+      }
+    }
+    return ret;
+#endif
   }
 
   /*!

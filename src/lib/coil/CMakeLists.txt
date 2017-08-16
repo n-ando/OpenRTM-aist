@@ -1,5 +1,5 @@
 cmake_minimum_required (VERSION 2.6)
-project (coil)
+project (${COIL_PROJECT_NAME})
 
 
 
@@ -50,18 +50,48 @@ set(PACKAGE_VERSION "1.0" CACHE STRING "Define to the version of this package.")
 
 
 if(VXWORKS)
-	set(COIL_OS_DIR "vxworks")
-	set (RTM_OS_VXWORKS ON)
+	set (COIL_OS_VXWORKS ON)
 elseif(UNIX)
-	set(COIL_OS_DIR "posix")
-	set (RTM_OS_LINUX ON)
+	set (COIL_OS_LINUX ON)
 elseif(WIN32)
-	set(COIL_OS_DIR "win32")
 endif()
 
 
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/config_coil.h.in ${PROJECT_BINARY_DIR}/config_coil.h)
 
+
+set(coil_headers
+	common/coil/Allocator.h
+	common/coil/Async.h
+	common/coil/ClockManager.h
+	common/coil/Factory.h
+	common/coil/Guard.h
+	common/coil/Listener.h
+	common/coil/Logger.h
+	common/coil/NonCopyable.h
+	common/coil/PeriodicTask.h
+	common/coil/PeriodicTaskBase.h
+	common/coil/Properties.h
+	common/coil/Singleton.h
+	common/coil/TimeMeasure.h
+	common/coil/TimeValue.h
+	common/coil/Timer.h
+	common/coil/crc.h
+	common/coil/stringutil.h
+	${COIL_OS_DIR}/coil/Affinity.h
+	${COIL_OS_DIR}/coil/Condition.h
+	${COIL_OS_DIR}/coil/DynamicLib.h
+	${COIL_OS_DIR}/coil/Mutex.h
+	${COIL_OS_DIR}/coil/OS.h
+	${COIL_OS_DIR}/coil/Routing.h
+	${COIL_OS_DIR}/coil/Process.h
+	${COIL_OS_DIR}/coil/Signal.h
+	${COIL_OS_DIR}/coil/Task.h
+	${COIL_OS_DIR}/coil/Time.h
+	${COIL_OS_DIR}/coil/UUID.h
+	${COIL_OS_DIR}/coil/atomic.h
+	${PROJECT_BINARY_DIR}/config_coil.h
+)
 
 
 set(coil_srcs
@@ -84,7 +114,7 @@ set(coil_srcs
 	${COIL_OS_DIR}/coil/Task.cpp
 	${COIL_OS_DIR}/coil/Time.cpp
 	${COIL_OS_DIR}/coil/UUID.cpp
-
+	${coil_headers}
 
 )
 
@@ -97,7 +127,15 @@ include_directories(
 		)
 #message(STATUS ${CMAKE_INCLUDE_DIRECTORIES_BEFORE})
 
-add_library(coil STATIC ${coil_srcs} )
+if(VXWORKS)
+	add_library(${COIL_PROJECT_NAME} STATIC ${coil_srcs} )
+	install(TARGETS ${COIL_PROJECT_NAME} ARCHIVE DESTINATION lib)
+else(VXWORKS)
+	add_library(${COIL_PROJECT_NAME} SHARED ${coil_srcs} )
+	target_link_libraries(${COIL_PROJECT_NAME} ${RTM_LINKER_OPTION})
+	install(TARGETS ${COIL_PROJECT_NAME} LIBRARY DESTINATION lib)
+endif(VXWORKS)
+install(FILES  ${coil_headers} DESTINATION include/coil)
 #add_executable(coil  ${coil_srcs} )
 
 

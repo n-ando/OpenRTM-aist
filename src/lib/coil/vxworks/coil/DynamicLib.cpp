@@ -24,6 +24,8 @@
 #include <sysSymTbl.h>
 #endif
 
+
+
 namespace coil
 {
   /*!
@@ -194,12 +196,13 @@ namespace coil
 #else
     if (!m_id) return NULL;
     MODULE_INFO mi;
-    if (!moduleInfoGet(m_id, &mi)) return 0;
+    if (moduleInfoGet(m_id, &mi) != OK) return 0;
     SymbolObj symbolObj;
     symbolObj.name  = const_cast<char*>(symbol_name);
     symbolObj.group = mi.group;
     symbolObj.addr  = 0;
     symEach(sysSymTbl, reinterpret_cast<FUNCPTR>(SymbolIterator), reinterpret_cast<int>(&symbolObj));
+
     return symbolObj.addr;
 #endif
   }
@@ -227,9 +230,9 @@ namespace coil
    	if (group == symbolObj->group && std::strcmp(name, symbolObj->name) == 0)
    	{
    		symbolObj->addr = reinterpret_cast<void*>(val);
-   		return true;
+   		return false;
    	}
-   	else return false;
+   	else return true;
    };
 #endif
 };

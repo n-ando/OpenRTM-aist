@@ -1,5 +1,6 @@
 cmake_minimum_required (VERSION 2.6)
-project (rtm)
+
+project (${RTM_PROJECT_NAME})
 
 
 
@@ -56,103 +57,52 @@ option (WITH_DMALLOC "Define if using the dmalloc debugging malloc package" OFF)
 option (_REENTRANT "Multi Thread Support" ON)
 
 
-
 set(LT_OBJDIR .libs/ CACHE STRING "Define to the sub-directory in which libtool stores uninstalled libraries.")
-set(RTM_MAJOR_VERSION 1 CACHE STRING "RTM major version")
-set(RTM_MINOR_VERSION 2 CACHE STRING "RTM minor version")
-set(RTM_REVISION_NUM 0 CACHE STRING "RTM revision numver")
-set(RTM_SHORT_VERSION 120 CACHE STRING "RTM short version")
-set(RTM_VERSION 1.2.0 CACHE STRING "RTM version")
-set(STDC_HEADERS 1 CACHE STRING "Define to 1 if you have the ANSI C header files.")
-set(OSVERSION 69 CACHE STRING "OS version.")
 
-
-
-
-
-
-
-set(CORBA ${CORBA} CACHE PATH "set CORBA ")
-
-if(NOT CORBA)
-	message(FATAL_ERROR "Please set CORBA.")
-endif()
-
-
-
-set(ORB_ROOT ${ORB_ROOT} CACHE STRING "set ORB_ROOT")
-
-
-if(NOT ORB_ROOT)
-	message(FATAL_ERROR "Please set ORB_ROOT.")
+if(VXWORKS)
+	set (OSVERSION ON)
+	set(OSVERSION ${VXWORKS_MAJOR}${VXWORKS_MINOR} CACHE STRING "OS version.")
+	set (RTM_OS_VXWORKS ON)
+	set (STDC_HEADERS ON)
+#	set　(STDC_HEADERS_VALUE 1 CACHE STRING "Define to 1 if you have the ANSI C header files.")
+elseif(UNIX)
+	set (STDC_HEADERS OFF)
+	set (OSVERSION OFF)
+	set (RTM_OS_LINUX ON)
+elseif(WIN32)
+	set (STDC_HEADERS OFF)
+	set (OSVERSION OFF)
 endif()
 
 
 
 if(CORBA MATCHES "ORBexpress")
-	if(RTP)
-		set(ORB_LINK_DIR ${ORB_ROOT}/target/ppc_8xx-vxworks_6.6/gcc_4.1.2_Rp/config_rt_fast/lib)
-		set(ORB_INCLUDE_DIR ${ORB_ROOT}/target/ppc_8xx-vxworks_6.6/gcc_4.1.2_Rp/config_rt_fast/include)
-		link_directories(${ORB_LINK_DIR})
-		include_directories(${ORB_INCLUDE_DIR})
-		set(ORB_LIBRARIES OEtcp OEmirror OEbridge OEudp OEipmc OEshrmem OEudp OEorb)
-
-	else(RTP)
-		set(ORB_LINK_DIR ${ORB_ROOT}/target/ppc_8xx-vxworks_6.6/gcc_4.1.2_ExLcRi/config_rt_full/lib ${ORB_ROOT}/target/ppc_8xx-vxworks_6.6/gcc_4.1.2_ExLcRi/config_rt_full/OENames_2.1.6/lib)
-		set(ORB_INCLUDE_DIR ${ORB_ROOT}/target/ppc_8xx-vxworks_6.6/gcc_4.1.2_ExLcRi/config_rt_full/include)
-		set(ORB_INCLUDE_DIR ${ORB_INCLUDE_DIR} ${ORB_ROOT}/target/ppc_8xx-vxworks_6.6/gcc_4.1.2_ExLcRi/config_rt_full/OENames_2.1.6/include)
-
-
-		
-		link_directories(${ORB_LINK_DIR})
-		include_directories(${ORB_INCLUDE_DIR})
-		#include_directories(${ORB_ROOT}/target/ppc_8xx-vxworks_6.6/gcc_4.1.2_ExLcRi/config_rt_full/OENames_2.1.6/include)
-	
-		set(ORB_LIBRARIES OEtcp OEmirror OEbridge OEudp OEipmc OEshrmem OEudp OEorb)
-		
-	endif()
-	SET (ORB_C_FLAGS_LIST
-		-Wpointer-arith -Wwrite-strings -Waggregate-return -Wredundant-decls -Wno-unused -Wshadow -Wundef -Wold-style-cast -fno-implement-inlines -fvolatile  -ansi -msoft-float
-	)
-	ADD_DEFINITIONS(${ORB_C_FLAGS_LIST})
 	set (ORB_IS_ORBEXPRESS ON)
-	set (ORB_IS_ORBEXPRESS ON PARENT_SCOPE)
 elseif(CORBA MATCHES "omniORB")
-	if(RTP)
-		set(ORB_LINK_DIR ${ORB_ROOT}/lib/${CPU_TYPE}_vxWorks_RTP_${VXWORKS_MAJOR}.${VXWORKS_MINOR})
-	else(RTP)
-		set(ORB_LINK_DIR ${ORB_ROOT}/lib/${CPU_TYPE}_vxWorks_kernel_${VXWORKS_MAJOR}.${VXWORKS_MINOR})
-	endif()
-	link_directories(${ORB_LINK_DIR})
-	set(ORB_INCLUDE_DIR ${ORB_ROOT}/include)
-	
-	include_directories(${ORB_INCLUDE_DIR})
-	set(ORB_LIBRARIES omniDynamic4 omniORB4 omnithread)
-	if("${VX_CPU_FAMILY}" STREQUAL "ppc")
-		SET (ORB_C_FLAGS_LIST
-			-D__vxWorks__
-			-D__powerpc__
-		)
+	if(OMNI_VERSION MATCHES "40")
+		set (RTM_OMNIORB_40 ON)
+	elseif(OMNI_VERSION MATCHES "41")
+		set (RTM_OMNIORB_41 ON)
 	else()
-		SET (ORB_C_FLAGS_LIST
-			-D__vxWorks__
-			-D__x86__
-		)
+		set (RTM_OMNIORB_42 ON)
 	endif()
-	ADD_DEFINITIONS(${ORB_C_FLAGS_LIST})
-	set (ORB_IS_OMNIORB ON)
-	set (ORB_IS_OMNIORB ON PARENT_SCOPE)
+		set (ORB_IS_OMNIORB ON)
 endif()
 
-set(ORB_C_FLAGS_LIST ${ORB_C_FLAGS_LIST} PARENT_SCOPE)
-set(ORB_LINK_DIR ${ORB_LINK_DIR} PARENT_SCOPE)
-set(ORB_INCLUDE_DIR ${ORB_INCLUDE_DIR} PARENT_SCOPE)
-set(ORB_LIBRARIES ${ORB_LIBRARIES} PARENT_SCOPE)
+
+
+
+
+
+
+set (RTC_CORBA_CXXMAPPING11 ON)
+
+
 
 
 #ADD_DEFINITIONS(-DRTC_CORBA_CXXMAPPING11)
 
-set (RTC_CORBA_CXXMAPPING11 ON)
+
 
 
 
@@ -161,32 +111,29 @@ set (RTC_CORBA_CXXMAPPING11 ON)
 
 
 
-if(VXWORKS)
-	set(COIL_OS_DIR "vxworks")
-	set (RTM_OS_VXWORKS ON)
-elseif(UNIX)
-	set(COIL_OS_DIR "posix")
-	set (RTM_OS_LINUX ON)
-elseif(WIN32)
-	set(COIL_OS_DIR "win32")
-endif()
 
+
+
+if(VXWORKS)
+else(VXWORKS)
+	link_directories(${ORB_LINK_DIR})
+endif(VXWORKS)
+
+include_directories(${ORB_INCLUDE_DIR})
 
 
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/config_rtc.h.in ${PROJECT_BINARY_DIR}/config_rtc.h)
 
-
-set(OPENRTM_NAME OpenRTM-aist-1.2.0 CACHE STRING "RTM name.")
-set(OPENRTM_VERSION 1.2.0 CACHE STRING "RTM version.")
-set(CORBA_NAME omniORB CACHE STRING "CORBA name.")
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/version.h.in ${PROJECT_BINARY_DIR}/version.h)
 
 
 set(RTM_INCLUDE_DIR ${CMAKE_SOURCE_DIR}
-		${CMAKE_SOURCE_DIR}/coil/common
+		${CMAKE_SOURCE_DIR}/src/lib/coil/common
 		${PROJECT_BINARY_DIR}/idl
-		${CMAKE_SOURCE_DIR}/coil/${COIL_OS_DIR}
-		${PROJECT_BINARY_DIR}/..)
+		${CMAKE_SOURCE_DIR}/src/lib/coil/${COIL_OS_DIR}
+		${PROJECT_BINARY_DIR}/..
+		${CMAKE_CURRENT_SOURCE_DIR}/..
+		)
 
 include_directories(
 		${RTM_INCLUDE_DIR}
@@ -196,6 +143,95 @@ include_directories(
 set(RTM_INCLUDE_DIR ${RTM_INCLUDE_DIR}  PARENT_SCOPE)
 
 
+set(rtm_headers
+	ConfigAdmin.h
+	ModuleManager.h
+	CorbaNaming.h
+	NVUtil.h
+	ManagerActionListener.h
+	LocalServiceAdmin.h
+	Factory.h
+	PublisherPeriodic.h
+	ECFactory.h
+	OutPortCorbaCdrConsumer.h
+	PeriodicExecutionContext.h
+	InPortPushConnector.h
+	CORBA_IORUtil.h
+	ManagerServant.h
+	OpenHRPExecutionContext.h
+	RTObjectStateMachine.h
+	InPortProvider.h
+	PortConnectListener.h
+	DefaultPeriodicTask.h
+	NamingManager.h
+	OutPortCorbaCdrProvider.h
+	InPortDirectProvider.h
+	PortBase.h
+	OutPortProvider.h
+	ExecutionContextProfile.h
+	PublisherFlush.h
+	OutPortPushConnector.h
+	CorbaPort.h
+	SdoConfiguration.h
+	RTObject.h
+	DataFlowComponentBase.h
+	ManagerConfig.h
+	SystemLogger.h
+	ExecutionContextWorker.h
+	ExecutionContextBase.h
+	ExtTrigExecutionContext.h
+	InPortBase.h
+	SdoOrganization.h
+	PortAdmin.h
+	InPortPullConnector.h
+	ConfigurationListener.h
+	OutPortPullConnector.h
+	LogstreamFile.h
+	RTCUtil.h
+	CdrRingBuffer.h
+	InPortCorbaCdrProvider.h
+	ConnectorListener.h
+	PeriodicECSharedComposite.h
+	PublisherNew.h
+	ComponentActionListener.h
+	InPortDirectConsumer.h
+	OutPortBase.h
+	Manager.h
+	InPortCorbaCdrConsumer.h
+	FactoryInit.h
+	SdoServiceAdmin.h
+	InPortConnector.h
+	OutPortConnector.h
+	NumberingPolicy.h
+	BufferBase.h
+	BufferStatus.h
+	CORBA_SeqUtil.h
+	CdrBufferBase.h
+	ConnectorBase.h
+	CorbaConsumer.h
+	DataInPort.h
+	DataOutPort.h
+	DataPortStatus.h
+	DefaultConfiguration.h
+	InPort.h
+	InPortConsumer.h
+	ListenerHolder.h
+	LocalServiceBase.h
+	ObjectManager.h
+	OutPort.h
+	OutPortConsumer.h
+	PeriodicTaskFactory.h
+	PortCallback.h
+	PublisherBase.h
+	RTC.h
+	RingBuffer.h
+	SdoServiceConsumerBase.h
+	SdoServiceProviderBase.h
+	StateMachine.h
+	Typename.h
+	${PROJECT_BINARY_DIR}/config_rtc.h
+	${PROJECT_BINARY_DIR}/version.h
+)
 
 set(rtm_srcs
 	ConfigAdmin.cpp
@@ -257,6 +293,7 @@ set(rtm_srcs
 	InPortConnector.cpp
 	OutPortConnector.cpp
 	NumberingPolicy.cpp
+	${rtm_headers}
 )
 
 if(VXWORKS)
@@ -273,18 +310,28 @@ endif(VXWORKS)
 
 #add_executable(rtm rtcd.cpp TestRTC.cpp ${rtm_srcs} ${ALL_IDL_SRCS})
 #add_library(rtm STATIC ${rtm_srcs} ${ALL_IDL_SRCS} )
-add_library(rtm STATIC ${rtm_srcs})
+
+
+if(VXWORKS)
+	add_library(${RTM_PROJECT_NAME} STATIC ${rtm_srcs})
+	install(TARGETS ${RTM_PROJECT_NAME} ARCHIVE DESTINATION lib)
+else(VXWORKS)
+	add_library(${RTM_PROJECT_NAME} SHARED ${rtm_srcs})
+	target_link_libraries(${RTM_PROJECT_NAME} ${ORB_LIBRARIES} ${COIL_PROJECT_NAME} ${RTCSKEL_PROJECT_NAME} ${RTM_LINKER_OPTION})
+	install(TARGETS ${RTM_PROJECT_NAME} LIBRARY DESTINATION lib)
+endif(VXWORKS)
+
+install(FILES  ${rtm_headers} DESTINATION include/rtm)
 
 
 
-
-add_dependencies(rtm coil)
+add_dependencies(${RTM_PROJECT_NAME} ${COIL_PROJECT_NAME})
 #add_dependencies(rtm ALL_IDL_TGT)
 
 
 
 add_subdirectory(idl)
-add_dependencies(rtm RTCSkel)
+add_dependencies(${RTM_PROJECT_NAME} ${RTCSKEL_PROJECT_NAME})
 
 
 

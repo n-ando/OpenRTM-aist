@@ -69,13 +69,13 @@ endif()
 
 if("${VX_VERSION}" STREQUAL "vxworks-6.9")
 	SET (GNU_VERSION 4.3.3)
-	ADD_DEFINITIONS (-DVXWORKS_69)
+	SET (VXWORKS_VERSION_FLAG -DVXWORKS_69)
 	SET (WIND_UTIL_PATH ${WIND_HOME}/utilities-1.0/x86-linux2/bin)
 	SET (VXWORKS_MAJOR 6)
 	SET (VXWORKS_MINOR 9)
 else()
 	SET (GNU_VERSION 4.1.2)	
-	ADD_DEFINITIONS (-DVXWORKS_66)
+	SET (VXWORKS_VERSION_FLAG -DVXWORKS_66)
 	SET (WIND_UTIL_PATH ${WIND_HOME}/workbench-3.0/x86-linux2/bin)
 	SET (VXWORKS_MAJOR 6)
 	SET (VXWORKS_MINOR 6)
@@ -139,6 +139,7 @@ endif()
 
 
 
+
 SET(CMAKE_SHARED_LIBRARY_LINK_C_FLAGS "")
 SET(CMAKE_SHARED_LIBRARY_LINK_CXX_FLAGS "")
 SET (CMAKE_EXE_LINKER_FLAGS_INIT -r)
@@ -178,7 +179,7 @@ if("${VX_CPU_FAMILY}" STREQUAL "ppc")
 	SET (CMAKE_C_FLAGS_RELEASE "-O2  -fstrength-reduce -fno-builtin" CACHE STRING "")
 	SET (CMAKE_CXX_FLAGS_RELEASE ${CMAKE_C_FLAGS_RELEASE} CACHE STRING "")
 
-	SET (CC_ARCH_SPEC "-mhard-float -fno-implicit-fp -mstrict-align -mregnames -D_WRS_HARDWARE_FP")
+	SET (CC_ARCH_SPEC "-fno-implicit-fp -mstrict-align")
 	SET (NM_FLAG ppc)
 
 elseif("${VX_CPU_FAMILY}" STREQUAL "simpentium")
@@ -216,35 +217,10 @@ if(RTP)
 	#set(CMAKE_EXE_LINKER_FLAGS "${CC_ARCH_SPEC} ${RTP_C_FLAGS} -fno-strict-aliasing -fasm -Wall" )
 	set(CMAKE_EXE_LINKER_FLAGS "${CC_ARCH_SPEC} ${RTP_C_FLAGS} -Xbind-lazy -non-static -fno-strict-aliasing -lstdc++ -fasm -D_WRS_HARDWARE_FP -Wall" )
 else(RTP)
-	set(CMAKE_PARTICALIMAGE_LINKER_FLAGS "-nostdlib -Wl,-X " )
-	set(CMAKE_EXE_LINKER_FLAGS "-nostdlib -Wl,-X -T ${WIND_BASE}/target/h/tool/gnu/ldscripts/link.OUT " )
-endif()
-
-if(RTP)
-	SET (CMAKE_C_LINK_EXECUTABLE
-		  "${CMAKE_C_COMPILER} ${CMAKE_EXE_LINKER_FLAGS} <OBJECTS> -o <TARGET> <LINK_LIBRARIES>")
-	SET (CMAKE_CXX_LINK_EXECUTABLE
-		  "${CMAKE_CXX_COMPILER} ${CMAKE_EXE_LINKER_FLAGS} <OBJECTS> -o <TARGET> <LINK_LIBRARIES>")
-else(RTP)
-#SET (MUNCH ${WIND_BASE}/host/${WIND_HOST_TYPE}/bin/munch CACHE FILEPATH "munch")
-SET (MUNCH ${WIND_BASE}/host/resource/hutils/tcl/munch.tcl CACHE FILEPATH "munch")
 	if("${VX_VERSION}" STREQUAL "vxworks-6.9")
-		SET (TCLSH ${WIND_HOME}/workbench-3.3/foundation/x86-linux2/bin/tclsh CACHE FILEPATH "tclsh")
-	else()
-		SET (TCLSH ${WIND_HOME}/workbench-3.0/foundation/4.1.1/x86-linux2/bin/tclsh CACHE FILEPATH "tclsh")
-		
+		set(CMAKE_PARTICALIMAGE_LINKER_FLAGS "-nostdlib -Wl,-X " )
+		set(CMAKE_EXE_LINKER_FLAGS "-nostdlib -Wl,-X -T ${WIND_BASE}/target/h/tool/gnu/ldscripts/link.OUT " )
 	endif()
-	SET (TAGS ${VSB_DIR}/tags/${VX_CPU_FAMILY}/${VX_CPU}/common/dkm.tags CACHE FILEPATH "tags")
-	string(REPLACE ";" " " VXWORKS_C_FLAGS_LIST_STR "${VXWORKS_C_FLAGS_LIST}")
-	SET (RUN_MUNCH_SCRIPT ${CMAKE_SOURCE_DIR}/run_munch.sh)
-	SET (CMAKE_C_LINK_EXECUTABLE
-		  "${CMAKE_C_COMPILER} ${CMAKE_PARTICALIMAGE_LINKER_FLAGS} -o <TARGET>_partialImage.o <OBJECTS> <LINK_LIBRARIES>"
-		  "sh ${RUN_MUNCH_SCRIPT} ${CMAKE_NM} <TARGET>_partialImage.o ${TCLSH} ${MUNCH} ${NM_FLAG} ${TAGS} ctdt.c"
-#		  "${CMAKE_NM} <TARGET>_partialImage.o | ${TCLSH} ${MUNCH} -c ${VX_CPU_FAMILY} -tags ${TAGS} > ctdt.c"
-		  "${CMAKE_C_COMPILER} ${CC_ARCH_SPEC} -nostdlib -fno-builtin  -fdollars-in-identifiers -Wall ${VXWORKS_C_FLAGS_LIST_STR} -o ctdt.o -c ctdt.c"
-		  "${CMAKE_C_COMPILER} ${CMAKE_EXE_LINKER_FLAGS} -o <TARGET>  <TARGET>_partialImage.o ctdt.o <LINK_LIBRARIES> -lstdc++"
-		)
-	SET (CMAKE_CXX_LINK_EXECUTABLE ${CMAKE_C_LINK_EXECUTABLE})
 endif()
 
 
@@ -283,7 +259,7 @@ endif()
 
 
 SET (VXWORKS_C_FLAGS_LIST
-  -DCPU=${VX_CPU}  -DVX_CPU_CARD=${VX_CPU_CARD} -DTOOL_FAMILY=${VX_TOOL_FAMILY} -DTOOL=${VX_TOOL} -DCPU_VARIANT=${VX_CPU_VARIANT} -DVXWORKS_MAJOR=${VXWORKS_MAJOR} -DVXWORKS_MINOR=${VXWORKS_MINOR} -DVXWORKS )
+  -DCPU=${VX_CPU}  -DVX_CPU_CARD=${VX_CPU_CARD} -DTOOL_FAMILY=${VX_TOOL_FAMILY} -DTOOL=${VX_TOOL} -DCPU_VARIANT=${VX_CPU_VARIANT} -DVXWORKS_MAJOR=${VXWORKS_MAJOR} -DVXWORKS_MINOR=${VXWORKS_MINOR} -DVXWORKS ${VXWORKS_VERSION_FLAG} )
 
 
 #  -D_VX_CPU=_VX_${VX_CPU}
@@ -297,8 +273,11 @@ SET (VXWORKS_C_FLAGS_LIST
 #  -ansi
 #  -mrtp
 
-
-ADD_DEFINITIONS (${VXWORKS_C_FLAGS_LIST} -Xbind-lazy -non-static)
+if(RTP)
+	ADD_DEFINITIONS (${VXWORKS_C_FLAGS_LIST} -Xbind-lazy -non-static)
+else(RTP)
+	ADD_DEFINITIONS (${VXWORKS_C_FLAGS_LIST})
+endif(RTP)
 
 
 
@@ -324,9 +303,17 @@ if("${VX_CPU_FAMILY}" STREQUAL "ppc")
 	else(RTP)
 		SET (CPU_C_FLAGS_LIST
 		  ${RTP_C_FLAGS}
-		  -mregnames
-		  -msoft-float
 		  -D_WRS_KERNEL
+		  -mlongcall
+		  -fstrength-reduce
+		  -fno-builtin
+		  -te500v2
+		  -mcpu=8548
+		  -mfloat-gprs=double
+		  -mspe=yes
+		  -mabi=spe
+		  -mstrict-align
+		  -fno-implicit-fp
 		  )
 	endif()
 elseif("${VX_CPU_FAMILY}" STREQUAL "simpentium")
@@ -376,6 +363,44 @@ endif()
 #link_directories(${WIND_BASE}/target/usr/lib/${VX_CPU_FAMILY}/${VX_CPU}/common)
 #link_directories(${WIND_BASE}/target/lib/${VX_CPU_FAMILY}/${VX_CPU}/e500v2common)
 #link_directories(${WIND_BASE}/target/usr/lib/simpentium/SIMPENTIUM/common)
+
+
+if(RTP)
+	SET (CMAKE_C_LINK_EXECUTABLE
+		  "${CMAKE_C_COMPILER} ${CMAKE_EXE_LINKER_FLAGS} <OBJECTS> -o <TARGET> <LINK_LIBRARIES>")
+	SET (CMAKE_CXX_LINK_EXECUTABLE
+		  "${CMAKE_CXX_COMPILER} ${CMAKE_EXE_LINKER_FLAGS} <OBJECTS> -o <TARGET> <LINK_LIBRARIES>")
+else(RTP)
+	if("${VX_VERSION}" STREQUAL "vxworks-6.9")
+		SET (MUNCH ${WIND_BASE}/host/resource/hutils/tcl/munch.tcl CACHE FILEPATH "munch")
+		SET (TCLSH ${WIND_HOME}/workbench-3.3/foundation/x86-linux2/bin/tclsh CACHE FILEPATH "tclsh")
+		SET (TAGS ${VSB_DIR}/tags/${VX_CPU_FAMILY}/${VX_CPU}/common/dkm.tags CACHE FILEPATH "tags")
+		string(REPLACE ";" " " VXWORKS_C_FLAGS_LIST_STR "${VXWORKS_C_FLAGS_LIST}")
+		SET (RUN_MUNCH_SCRIPT ${CMAKE_SOURCE_DIR}/run_munch_69.sh)
+		SET (CMAKE_C_LINK_EXECUTABLE
+		  "${CMAKE_C_COMPILER} ${CMAKE_PARTICALIMAGE_LINKER_FLAGS} -o <TARGET>_partialImage.o <OBJECTS> <LINK_LIBRARIES>"
+		  "sh ${RUN_MUNCH_SCRIPT} ${CMAKE_NM} <TARGET>_partialImage.o ${TCLSH} ${MUNCH} ${NM_FLAG} ${TAGS} ctdt.c"
+		  "${CMAKE_C_COMPILER} ${CC_ARCH_SPEC} -nostdlib -fno-builtin  -fdollars-in-identifiers -Wall ${VXWORKS_C_FLAGS_LIST_STR} -o ctdt.o -c ctdt.c"
+		  "${CMAKE_C_COMPILER} ${CMAKE_EXE_LINKER_FLAGS} -o <TARGET>  <TARGET>_partialImage.o ctdt.o <LINK_LIBRARIES> -lstdc++"
+		)
+		SET (CMAKE_CXX_LINK_EXECUTABLE ${CMAKE_C_LINK_EXECUTABLE})
+	else()
+#		SET (TCLSH ${WIND_HOME}/workbench-3.0/foundation/4.1.1/x86-linux2/bin/tclsh CACHE FILEPATH "tclsh")
+		SET (MUNCH ${WIND_BASE}/host/${WIND_HOST_TYPE}/bin/munch CACHE FILEPATH "munch")
+		string(REPLACE ";" " " VXWORKS_C_FLAGS_LIST_STR "${VXWORKS_C_FLAGS_LIST};${CPU_C_FLAGS_LIST}")
+		SET (RUN_MUNCH_SCRIPT ${CMAKE_SOURCE_DIR}/run_munch.sh)
+		SET (CMAKE_C_LINK_EXECUTABLE
+		  "${CMAKE_LINKER}  <LINK_FLAGS> <CMAKE_CXX_LINK_FLAGS> -warn-common -S <OBJECTS> -o <TARGET>_partialImage.o  <LINK_LIBRARIES>"
+		  "sh ${RUN_MUNCH_SCRIPT} ${CMAKE_NM} <TARGET>_partialImage.o ${MUNCH} ctdt.c"
+		  "${CMAKE_C_COMPILER} ${VXWORKS_C_FLAGS_LIST_STR} -o ctdt.o -c ctdt.c"
+		  "${CMAKE_LINKER} <LINK_FLAGS> <CMAKE_CXX_LINK_FLAGS> -S -warn-common -o <TARGET> <TARGET>_partialImage.o ctdt.o "
+		)
+	endif()
+	
+
+	SET (CMAKE_CXX_LINK_EXECUTABLE ${CMAKE_C_LINK_EXECUTABLE})
+endif(RTP)
+
 
 
 MARK_AS_ADVANCED (CMAKE_LINKER CMAKE_AR CMAKE_NM CMAKE_STRIP

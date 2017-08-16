@@ -99,7 +99,13 @@ RTC::ReturnCode_t ConsoleIn::onInitialize()
 RTC::ReturnCode_t ConsoleIn::onExecute(RTC::UniqueId ec_id)
 {
   std::cout << "Please input number: ";
+#if defined(RTM_OS_VXWORKS) && not defined(__RTP__)
+  static int count = 0;
+  m_out.data = count;
+  count++;
+#else
   std::cin >> m_out.data;
+#endif
   if (m_out.data == 666) return RTC::RTC_ERROR;
   m_outOut.write();
 
@@ -119,5 +125,6 @@ extern "C"
   }
   
 };
+
 
 

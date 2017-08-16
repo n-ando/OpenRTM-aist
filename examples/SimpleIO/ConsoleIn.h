@@ -180,3 +180,4 @@ extern "C"
 };
 
 #endif // CONSOLEIN_H
+

@@ -11,7 +11,7 @@ project (RTCSkel)
 
 macro(idl_compile idl_name)
 
-
+	set(ALL_IDL_FILES ${ALL_IDL_FILES} ${idl_name}.idl)
 	add_custom_command(
 		OUTPUT ${idl_name}Skel.cpp
 		#COMMAND mkdir -p include/rtm/idl
@@ -28,7 +28,16 @@ macro(idl_compile idl_name)
 	#set(ALL_IDL_SRCS ${ALL_IDL_SRCS} idl/${idl_name}Skel.cpp)
 	#set(ALL_IDL_SRCS ${ALL_IDL_SRCS} idl/${idl_name}SKel.h)
 	set(ALL_IDL_SRCS ${ALL_IDL_SRCS} ${idl_name}Skel.cpp)
-	set(ALL_IDL_SRCS ${ALL_IDL_SRCS} ${idl_name}SKel.h)
+	set(ALL_IDL_SRCS ${ALL_IDL_SRCS} ${idl_name}Skel.h)
+	set(ALL_IDL_SRCS ${ALL_IDL_SRCS} ${idl_name}Stub.cpp)
+	set(ALL_IDL_SRCS ${ALL_IDL_SRCS} ${idl_name}Stub.h)
+
+	set(ALL_IDL_HEADERS ${ALL_IDL_HEADERS} ${PROJECT_BINARY_DIR}/${idl_name}Skel.h)
+	set(ALL_IDL_HEADERS ${ALL_IDL_HEADERS} ${PROJECT_BINARY_DIR}/${idl_name}Stub.h)
+	#set(ALL_IDL_SRCS ${ALL_IDL_SRCS} ${idl_name}_c.cc)
+	#set(ALL_IDL_SRCS ${ALL_IDL_SRCS} ${idl_name}_c.h)
+	#set(ALL_IDL_SRCS ${ALL_IDL_SRCS} ${idl_name}.cc)
+	#set(ALL_IDL_SRCS ${ALL_IDL_SRCS} ${idl_name}.h)
 
 	if(NOT TARGET ALL_IDL_TGT)
 		add_custom_target(ALL_IDL_TGT)
@@ -79,5 +88,8 @@ if(NOT TARGET ALL_IDL_TGT)
 endif(NOT TARGET ALL_IDL_TGT)
 add_dependencies(RTCSkel ALL_IDL_TGT)
 
+
+install(FILES ${ALL_IDL_FILES} ${ALL_IDL_HEADERS} DESTINATION include/rtm/idl)
+ 
 
 

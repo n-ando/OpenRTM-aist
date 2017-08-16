@@ -96,6 +96,7 @@ void MyModuleInit(RTC::Manager* manager)
 int main (int argc, char** argv)
 {
   RTC::Manager* manager;
+
   manager = RTC::Manager::init(argc, argv);
 
   // Set module initialization proceduer

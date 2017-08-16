@@ -18,6 +18,7 @@
 
 #include <coil/Task.h>
 
+
 /*
 #ifdef __RTP__
 #define DEFAULT_PRIORITY 110
@@ -115,6 +116,7 @@ namespace coil
   {
     if (m_count == 0)
       {
+//        m_waitmutex.lock();
         m_tid = taskSpawn(
                          0,
                          m_priority,
@@ -157,7 +159,21 @@ namespace coil
   {
     if (m_count > 0)
       {
+        int task_priority = get_priority();
+        int current_priority = -1;
+        taskPriorityGet(taskIdSelf(), &current_priority);
+        if(task_priority >= current_priority)
+        {
+          set_priority(current_priority-1);
+        }
+
+
+
+//taskDelete(m_tid);
         Guard guard(m_waitmutex);
+//m_waitmutex.lock();
+//m_waitmutex.unlock();
+
 /*
 #ifdef __RTP__
         Guard guard(m_waitmutex);
@@ -180,7 +196,7 @@ namespace coil
    */
   int Task::suspend(void)
   {
-    return 0;
+    return (OK == taskSuspend(m_tid));
   }
 
   /*!
@@ -192,7 +208,7 @@ namespace coil
    */
   int Task::resume(void)
   {
-    return 0;
+    return (OK == taskResume(m_tid));
   }
 
   /*!
@@ -231,10 +247,14 @@ namespace coil
   extern "C" void* Task::svc_run(void* args)
   {
     Task* t = (coil::Task*)args;
+
     Guard guard(t->m_waitmutex);
+
+    //t->m_waitmutex.lock();
     int status;
     status = t->svc();
     t->finalize();
+    //t->m_waitmutex.unlock();
     return 0;
   }
 /*

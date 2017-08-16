@@ -56,8 +56,8 @@ namespace coil
   typedef coil::Guard<coil::Mutex> Guard;
 #endif
 */
-  typedef coil::Guard<coil::Mutex> Guard;
   public:
+  typedef coil::Guard<coil::Mutex> Guard;
     /*!
      * @if jp
      *

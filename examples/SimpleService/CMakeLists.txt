@@ -1,3 +1,9 @@
+cmake_minimum_required (VERSION 2.6)
+
+project (SimpleService)
+
+
+
 set(idl_name MyService)
 
 
@@ -20,8 +26,108 @@ add_custom_target(${idl_name}_TGT DEPENDS ${idl_name}Skel.cpp ${idl_name}Stub.cp
 
 
 
+link_directories(${ORB_LINK_DIR})
+include_directories(
+		${RTM_INCLUDE_DIR}
+		${ORB_INCLUDE_DIR}
+		${${idl_name}_DIR}
+		)
 
-add_subdirectory(MyServiceConsumer)
-add_subdirectory(MyServiceProvider)
+ADD_DEFINITIONS(${ORB_C_FLAGS_LIST})
 
 
+set(target MyServiceConsumer)
+
+set(srcs MyServiceConsumer.cpp MyServiceConsumer.h ${${idl_name}_STUB})
+set(standalone_srcs MyServiceConsumerComp.cpp ${srcs})
+
+if(VXWORKS AND NOT RTP)
+	set(standalone_srcs ${standalone_srcs} ${CMAKE_SOURCE_DIR}/src/lib/rtm/DataFlowComponentBase.cpp)
+	set(libs ${RTCSKEL_PROJECT_NAME})
+
+	add_executable(${target} ${standalone_srcs})
+	target_link_libraries(${target} ${libs})
+	add_dependencies(${target} ${RTM_PROJECT_NAME})
+	add_dependencies(${target} ${idl_name}_TGT)
+
+	install(TARGETS ${target} RUNTIME DESTINATION examples)
+else()
+	set(libs ${RTM_PROJECT_NAME} ${ORB_LIBRARIES} ${COIL_PROJECT_NAME} ${RTCSKEL_PROJECT_NAME})
+
+	add_executable(${target}Comp ${standalone_srcs})
+	target_link_libraries(${target}Comp ${libs} ${RTM_LINKER_OPTION})
+	add_dependencies(${target}Comp ${RTM_PROJECT_NAME})
+	add_dependencies(${target}Comp ${idl_name}_TGT)
+
+	add_library(${target} SHARED ${srcs})
+	target_link_libraries(${target} ${libs} ${RTM_LINKER_OPTION})
+	add_dependencies(${target} ${RTM_PROJECT_NAME})
+	add_dependencies(${target} ${idl_name}_TGT)
+	set_target_properties(${target} PROPERTIES PREFIX "")
+
+	install(TARGETS ${target}Comp RUNTIME DESTINATION examples)
+	install(TARGETS ${target} LIBRARY DESTINATION examples)
+endif()
+
+
+set_source_files_properties(${${idl_name}_STUB} PROPERTIES GENERATED 1)
+
+
+
+
+if(VXWORKS)
+	if(RTP)
+		set_target_properties(${target}Comp PROPERTIES SUFFIX ".vxe")
+	else(RTP)	
+		set_target_properties(${target} PROPERTIES SUFFIX ".out")
+	endif(RTP)
+endif(VXWORKS)
+
+
+
+
+set(target MyServiceProvider)
+
+
+
+set(srcs MyServiceProvider.cpp MyServiceProvider.h MyServiceSVC_impl.cpp MyServiceSVC_impl.h ${${idl_name}_SKEL})
+set(standalone_srcs MyServiceProviderComp.cpp ${srcs})
+
+if(VXWORKS AND NOT RTP)
+	set(standalone_srcs ${standalone_srcs} ${CMAKE_SOURCE_DIR}/src/lib/rtm/DataFlowComponentBase.cpp)
+	set(libs ${RTCSKEL_PROJECT_NAME})
+
+	add_executable(${target} ${standalone_srcs})
+	target_link_libraries(${target} ${libs})
+	add_dependencies(${target} ${RTM_PROJECT_NAME})
+	add_dependencies(${target} ${idl_name}_TGT)
+
+	install(TARGETS ${target} RUNTIME DESTINATION examples)
+else()
+	set(libs ${RTM_PROJECT_NAME} ${ORB_LIBRARIES} ${COIL_PROJECT_NAME} ${RTCSKEL_PROJECT_NAME})
+
+	add_executable(${target}Comp ${standalone_srcs})
+	target_link_libraries(${target}Comp ${libs} ${RTM_LINKER_OPTION})
+	add_dependencies(${target}Comp ${RTM_PROJECT_NAME})
+	add_dependencies(${target}Comp ${idl_name}_TGT)
+
+	add_library(${target} SHARED ${srcs})
+	target_link_libraries(${target} ${libs} ${RTM_LINKER_OPTION})
+	add_dependencies(${target} ${RTM_PROJECT_NAME})
+	add_dependencies(${target} ${idl_name}_TGT)
+	set_target_properties(${target} PROPERTIES PREFIX "")
+
+	install(TARGETS ${target}Comp RUNTIME DESTINATION examples)
+	install(TARGETS ${target} LIBRARY DESTINATION examples)
+endif()
+
+set_source_files_properties(${${idl_name}_SKEL} PROPERTIES GENERATED 1)
+
+
+if(VXWORKS)
+	if(RTP)
+		set_target_properties(${target}Comp PROPERTIES SUFFIX ".vxe")
+	else(RTP)	
+		set_target_properties(${target} PROPERTIES SUFFIX ".out")
+	endif(RTP)
+endif(VXWORKS)

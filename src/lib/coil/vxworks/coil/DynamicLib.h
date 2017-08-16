@@ -1,6 +1,6 @@
 // -*- C++ -*-
 /*!
- * @file DynamicLib_posix.h
+ * @file DynamicLib.h
  * @brief DynamicLib class
  * @date $Date$
  * @author Nobuhiko Miyamoto <n-miyamoto@aist.go.jp>

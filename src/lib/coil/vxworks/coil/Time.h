@@ -31,12 +31,16 @@
 #include <coil/config_coil.h>
 #include <coil/TimeValue.h>
 
+#include <taskLib.h>
+#include <sysLib.h>
+/*
 #ifdef __RTP__
 #include <taskLib.h>
 #include <sysLib.h>
 #else
 #include <selectLib.h>
 #endif
+*/
 
 namespace coil
 {
@@ -64,6 +68,16 @@ namespace coil
    */
   inline unsigned int sleep(unsigned int seconds)
   {
+    int tps = sysClkRateGet();
+    if(taskDelay(seconds*tps) == OK)
+    {
+        return 0;
+    }
+    else
+    {
+        return -1;
+    }
+/*
 #ifdef __RTP__
     int tps = sysClkRateGet();
     if(taskDelay(seconds*tps) == OK)
@@ -77,6 +91,7 @@ namespace coil
 #else
     return ::sleep(seconds);
 #endif
+*/
   }
 
   /*!
@@ -102,6 +117,17 @@ namespace coil
    */
   inline int sleep(TimeValue interval)
   {
+    int tps = sysClkRateGet();
+
+    if(taskDelay(interval.sec()*tps + (interval.usec()*tps)/1000000l) == OK)
+    {
+        return 0;
+    }
+    else
+    {
+        return -1;
+    }
+/*
 #ifdef __RTP__
     int tps = sysClkRateGet();
     if(taskDelay((double)interval.sec()*tps + (double)(interval.usec()*tps)/1000000l) == OK)
@@ -118,6 +144,7 @@ namespace coil
     tv.tv_usec = interval.usec();
     return ::select(0, 0, 0, 0, &tv);
 #endif
+*/
   }
 
   /*!
@@ -143,6 +170,16 @@ namespace coil
    */
   inline int usleep(unsigned int usec)
   {
+    int tps = sysClkRateGet();
+    if(taskDelay(usec*tps/1000000l) == OK)
+    {
+        return 0;
+    }
+    else
+    {
+        return -1;
+    }
+/*
 #ifdef __RTP__
     int tps = sysClkRateGet();
     if(taskDelay((double)(usec*tps)/1000000000l) == OK)
@@ -157,6 +194,7 @@ namespace coil
     struct timespec req = {0,usec * 1000};
     return ::nanosleep(&req, NULL);
 #endif
+*/
   }
 
   /*!

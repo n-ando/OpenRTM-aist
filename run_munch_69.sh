@@ -1,0 +1,13 @@
+#!/bin/bash
+
+NM=$1
+TARGET_NAME=$2
+TCLSH=$3
+MUNCH=$4
+NM_FLAG=$5
+TAGS=$6
+OUTPUT=$7
+
+
+#echo "$NM $TARGET_NAME | $TCLSH $MUNCH -c $NM_FLAG -tags $TAGS > $OUTPUT"
+$NM $TARGET_NAME | $TCLSH $MUNCH -c $NM_FLAG -tags $TAGS > $OUTPUT

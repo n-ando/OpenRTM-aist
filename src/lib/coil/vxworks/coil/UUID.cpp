@@ -116,8 +116,10 @@ namespace coil
 	  result += "-";
 	  result += StringToUUID<uint16_t>(_uuid.time_hi_version,4);
 	  result += "-";
-	  result += StringToUUID<uint8_t>(_uuid.clock_seq_low,2);
-	  result += StringToUUID<uint8_t>(_uuid.clock_seq_hi_variant,2);
+	  result += StringToUUID<uint16_t>((uint16_t)_uuid.clock_seq_low,2);
+	  result += StringToUUID<uint16_t>((uint16_t)_uuid.clock_seq_hi_variant,2);
+	  //result += StringToUUID<uint8_t>(_uuid.clock_seq_low,2);
+	  //result += StringToUUID<uint8_t>(_uuid.clock_seq_hi_variant,2);
 	  result += "-";
 	  result += StringToUUID<uint32_t>(_uuid.node_low,8);
 	  result += StringToUUID<uint16_t>(_uuid.node_high,4);
