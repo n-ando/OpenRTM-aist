@@ -229,7 +229,7 @@ fi
 # コードネーム取得
 #---------------------------------------
 check_codename () {
-  cnames="wheezy jessie"
+  cnames="wheezy jessie stretch"
   for c in $cnames; do
     if test -f "/etc/apt/sources.list"; then
       res=`grep $c /etc/apt/sources.list`
