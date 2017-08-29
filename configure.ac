@@ -1674,6 +1674,7 @@ AC_OUTPUT([Makefile
 	utils/rtcprof/Makefile
 	etc/Makefile
 	examples/Makefile
+	examples/Analyzer/Makefile
 	examples/AutoTest/Makefile
 	examples/Composite/Makefile
 	examples/ConfigSample/Makefile
