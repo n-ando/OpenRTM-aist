@@ -35,8 +35,7 @@ Analyzer_test_la_LIBADD  = $(top_builddir)/src/lib/rtm/libRTC.la \
 
 # Standalone RTCs
 example_PROGRAMS = AnalyzerComp Analyzer_testComp
-noinst_PROGRAMS = ConnectorComp
-example_DATA = rtc.conf consin.conf consout.conf component.conf
+example_DATA = rtc.conf
 
 AnalyzerComp_SOURCES = AnalyzerComp.cpp 
 AnalyzerComp_DEPENDENCIES = Analyzer.la
@@ -52,11 +51,6 @@ Analyzer_testComp_LDADD   =  Analyzer_test.o \
 	$(top_builddir)/src/lib/rtm/libRTC.la \
 	$(top_builddir)/src/lib/coil/lib/libcoil.la
 
-ConnectorComp_SOURCES = ConnectorComp.cpp
-ConnectorComp_LDFLAGS = -L$(top_builddir)/src/lib/rtm/.libs
-ConnectorComp_LDADD   = $(top_builddir)/src/lib/rtm/libRTC.la \
-	$(top_builddir)/src/lib/coil/lib/libcoil.la
-
 # Example sources
 source_DATA = $(ALL_SRC) $(EXTRA_DIST)
 
@@ -64,25 +58,17 @@ source_DATA = $(ALL_SRC) $(EXTRA_DIST)
 # Extra distributed files
 #------------------------------------------------------------
 EXTRA_DIST =                \
-	run.sh              \
-	gen.sh              \
-	Makefile.Analyzer  \
-	Makefile.Analyzer_test \
-	README.Analyzer    \
-	README.Analyzer_test   \
-	rtc.conf            \
-	consin.conf         \
-	consout.conf        \
-	component.conf      
+	CMakeLists.txt      \
+	rtc.conf
 
-ALL_SRC =                  \
-	AnalyzerComp.cpp  \
-	Analyzer.cpp      \
-	Analyzer.h        \
+ALL_SRC =                     \
+	AnalyzerComp.cpp      \
+	Analyzer.cpp          \
+	Analyzer.h            \
 	Analyzer_testComp.cpp \
 	Analyzer_test.cpp     \
-	Analyzer_test.h       \
-	ConnectorComp.cpp
+	Analyzer_test.h
+
 
 #------------------------------------------------------------
 # File list for deb/ports packages
