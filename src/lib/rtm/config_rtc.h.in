@@ -1,0 +1,172 @@
+/* ARTLinux is avaiable */
+#cmakedefine ARTLINUX
+
+/* Define to 1 if you have the <dlfcn.h> header file. */
+#cmakedefine HAVE_DLFCN_H 1
+
+/* Define to 1 if you have the <inttypes.h> header file. */
+#cmakedefine HAVE_INTTYPES_H 1
+
+/* Define to 1 if you have the <memory.h> header file. */
+#cmakedefine HAVE_MEMORY_H 1
+
+/* Define to 1 if you have the <nlist.h> header file. */
+#cmakedefine HAVE_NLIST_H
+
+/* Define to 1 if you have the <stdint.h> header file. */
+#cmakedefine HAVE_STDINT_H 1
+
+/* Define to 1 if you have the <stdlib.h> header file. */
+#cmakedefine HAVE_STDLIB_H 1
+
+/* Define to 1 if you have the <strings.h> header file. */
+#cmakedefine HAVE_STRINGS_H 1
+
+/* Define to 1 if you have the <string.h> header file. */
+#cmakedefine HAVE_STRING_H 1
+
+/* Define to 1 if you have the <sys/stat.h> header file. */
+#cmakedefine HAVE_SYS_STAT_H 1
+
+/* Define to 1 if you have the <sys/types.h> header file. */
+#cmakedefine HAVE_SYS_TYPES_H 1
+
+/* Define to 1 if you have the `uname' function. */
+#cmakedefine HAVE_UNAME 1
+
+/* Define to 1 if you have the <unistd.h> header file. */
+#cmakedefine HAVE_UNISTD_H 1
+
+/* Define to the sub-directory in which libtool stores uninstalled libraries.
+   */
+#define LT_OBJDIR "@LT_OBJDIR@"
+
+/* ORB is MICO */
+#cmakedefine ORB_IS_MICO TRUE
+
+/* ORB is omniORB */
+#cmakedefine ORB_IS_OMNIORB TRUE
+
+/* ORB is ORBexpresds */
+#cmakedefine ORB_IS_ORBEXPRESS TRUE
+
+/* ORB is ORBacus */
+#cmakedefine ORB_IS_ORBACUS TRUE
+
+/* ORB is ORBit2 */
+#cmakedefine ORB_IS_ORBIT2 TRUE
+
+/* ORB is Orbix */
+#cmakedefine ORB_IS_ORBIX TRUE
+
+/* ORB is RtORB */
+#cmakedefine ORB_IS_RTORB TRUE
+
+/* ORB is TAO */
+#cmakedefine ORB_IS_TAO TRUE
+
+/* Name of package */
+#cmakedefine RTM_PACKAGE
+
+/* Define to the address where bug reports for this package should be sent. */
+#cmakedefine RTM_PACKAGE_BUGREPORT
+
+/* Define to the full name of this package. */
+#cmakedefine RTM_PACKAGE_NAME
+
+/* Define to the full name and version of this package. */
+#cmakedefine RTM_PACKAGE_STRING
+
+/* Define to the one symbol short name of this package. */
+#cmakedefine RTM_PACKAGE_TARNAME
+
+/* Define to the home page for this package. */
+#cmakedefine RTM_PACKAGE_URL
+
+/* Define to the version of this package. */
+#cmakedefine RTM_PACKAGE_VERSION
+
+/* Python wrapper is enable */
+#cmakedefine PYTHON_WRAPPER
+
+/* CORBA C++ mapping is ver1.1 */
+#cmakedefine RTC_CORBA_CXXMAPPING11 TRUE
+
+/* Socket DataPort is enable */
+#cmakedefine RTC_SOCK_DATAPORT
+
+/* RTM is compiled with gcc2 */
+#cmakedefine RTM_GCC2
+
+/* RTM major version */
+#define RTM_MAJOR_VERSION @RTM_MAJOR_VERSION@
+
+/* RTM minor version */
+#define RTM_MINOR_VERSION @RTM_MINOR_VERSION@
+
+/* omniORB version is 4.0 */
+#cmakedefine RTM_OMNIORB_40
+
+/* omniORB version is 4.1 */
+#cmakedefine RTM_OMNIORB_41
+
+/* omniORB version is 4.2 */
+#cmakedefine RTM_OMNIORB_42
+
+/* OS is Cygwin */
+#cmakedefine RTM_OS_CYGWIN TRUE
+
+/* OS is Max OS X */
+#cmakedefine RTM_OS_DARWIN TRUE
+
+/* OS is FreeBSD */
+#cmakedefine RTM_OS_FREEBSD TRUE
+
+/* OS is HP-UX */
+#cmakedefine RTM_OS_HPUX TRUE
+
+/* OS is IRIX */
+#cmakedefine RTM_OS_IRIX TRUE
+
+/* OS is Linux */
+#cmakedefine RTM_OS_LINUX TRUE
+
+/* OS is VxWorks */
+#cmakedefine RTM_OS_VXWORKS TRUE
+
+/* OS is OSF1 */
+#cmakedefine RTM_OS_OSF1 TRUE
+
+/* OS is QNX */
+#cmakedefine RTM_OS_QNX TRUE
+
+/* OS is SunOS */
+#cmakedefine RTM_OS_SUNOS TRUE
+
+/* OS version */
+#cmakedefine __OSVERSION__ @OSVERSION_VALUE@
+
+/* RTM revision numver */
+#define RTM_REVISION_NUM @RTM_REVISION_NUM@
+
+/* RDTSC is enable */
+#cmakedefine RTM_RTDSC
+
+/* RTM short version */
+#define RTM_SHORT_VERSION "@RTM_SHORT_VERSION@"
+
+/* RTM version */
+#define RTM_VERSION "@RTM_VERSION@"
+
+/* Define to 1 if you have the ANSI C header files. */
+#cmakedefine STDC_HEADERS 1
+
+/* Version number of package */
+
+
+/* Define if using the dmalloc debugging malloc package */
+#cmakedefine WITH_DMALLOC
+
+/* Multi Thread Support */
+#cmakedefine _REENTRANT TRUE
+
