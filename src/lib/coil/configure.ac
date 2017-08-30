@@ -445,6 +445,14 @@ AC_SUBST(LDSOOPTS)
 AC_SUBST(LDSOLIBS)
 AC_SUBST(pkgconfigdir)
 
+dnl Adding -C/-p option to header install command
+install_exists=`which install`
+if test "x$install_exists" = "x" ; then
+   AC_SUBST([INSTALL_HEADER], ['${INSTALL} -c -C -m 644'])
+else
+   AC_SUBST([INSTALL_HEADER], ['${INSTALL} -c -p -m 644'])
+fi
+
 dnl RTM version related options
 AC_SUBST(COIL_VERSION)
 AC_SUBST(COIL_MAJOR_VERSION)
