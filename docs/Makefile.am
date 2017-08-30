@@ -7,7 +7,7 @@
 
 AUTOMAKE_OPTIONS = 1.4
 
-all:   doxygen_classref.conf
+all:   doxygen_classref.conf  doxygen_idlref.conf
 
 ClassReference:
 	make -f Makefile.docs ClassReference
@@ -30,10 +30,14 @@ IDLReference-en:
 doxygen_classref.conf:
 	sed -e 's/__VERSION__/$(VERSION)/g' doxygen_classref.conf.in > doxygen_classref.conf
 
+doxygen_idlref.conf:
+	sed -e 's/__VERSION__/$(RTM_MAJOR_VERSION).$(RTM_MINOR_VERSION)/g' doxygen_idlref.conf.in > doxygen_idlref.conf
+
 #docdir = $(rtm_docdir)
 
 EXTRA_DIST = \
 	doxygen_classref.conf \
+	doxygen_idlref.conf \
 	ClassReference \
 	ClassReference-en \
 	IDLReference \
@@ -105,6 +109,7 @@ maintainer-clean:
 	rm -rf \
 	Makefile \
 	doxygen_classref.conf \
+	doxygen_idlref.conf \
 	ClassReference \
 	ClassReference-en \
 	IDLReference \
