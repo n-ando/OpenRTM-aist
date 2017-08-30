@@ -57,7 +57,7 @@ elseif(WIN32)
 endif()
 
 
-configure_file(${CMAKE_CURRENT_SOURCE_DIR}/config_coil.h.in ${PROJECT_BINARY_DIR}/config_coil.h)
+configure_file(${CMAKE_CURRENT_SOURCE_DIR}/config_coil_cmake.h.in ${PROJECT_BINARY_DIR}/config_coil.h)
 
 
 set(coil_headers

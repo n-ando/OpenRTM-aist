@@ -122,9 +122,9 @@ endif(VXWORKS)
 include_directories(${ORB_INCLUDE_DIR})
 
 
-configure_file(${CMAKE_CURRENT_SOURCE_DIR}/config_rtc.h.in ${PROJECT_BINARY_DIR}/config_rtc.h)
+configure_file(${CMAKE_CURRENT_SOURCE_DIR}/config_rtc_cmake.h.in ${PROJECT_BINARY_DIR}/config_rtc.h)
 
-configure_file(${CMAKE_CURRENT_SOURCE_DIR}/version.h.in ${PROJECT_BINARY_DIR}/version.h)
+configure_file(${CMAKE_CURRENT_SOURCE_DIR}/version_cmake.h.in ${PROJECT_BINARY_DIR}/version.h)
 
 
 set(RTM_INCLUDE_DIR ${CMAKE_SOURCE_DIR}
