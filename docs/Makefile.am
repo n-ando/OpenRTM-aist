@@ -7,6 +7,8 @@
 
 AUTOMAKE_OPTIONS = 1.4
 
+all:   doxygen_classref.conf
+
 ClassReference:
 	make -f Makefile.docs ClassReference
 
