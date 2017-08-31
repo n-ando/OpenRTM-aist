@@ -7,8 +7,6 @@
 
 AUTOMAKE_OPTIONS = 1.4
 
-#all:   doxygen_classref.conf  doxygen_idlref.conf
-
 ClassReference: doxygen_classref.conf
 	make -f Makefile.docs ClassReference
 
@@ -110,6 +108,7 @@ maintainer-clean:
 	Makefile \
 	doxygen_classref.conf \
 	doxygen_idlref.conf \
+	*.tag \
 	ClassReference \
 	ClassReference-en \
 	IDLReference \
