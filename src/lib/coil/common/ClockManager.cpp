@@ -34,7 +34,13 @@ namespace coil
   }
   bool SystemClock::settime(coil::TimeValue clocktime)
   {
-#if defined(VXWORKS_66) && !defined(__RTP__)
+#if defined(__powerpc__) && !defined(__RTP__)
+    if (coil::settimeofday(clocktime.sec(), clocktime.usec()*1000) == 0)
+      {
+        return true;
+      }
+    return false;
+#elif defined(VXWORKS_66) && !defined(__RTP__)
     timespec tv;
     tv.tv_sec = clocktime.sec();
     tv.tv_nsec = clocktime.usec()*1000;

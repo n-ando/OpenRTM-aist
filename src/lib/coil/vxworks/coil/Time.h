@@ -33,6 +33,8 @@
 
 #include <taskLib.h>
 #include <sysLib.h>
+
+
 /*
 #ifdef __RTP__
 #include <taskLib.h>
@@ -69,7 +71,7 @@ namespace coil
   inline unsigned int sleep(unsigned int seconds)
   {
     int tps = sysClkRateGet();
-    if(taskDelay(seconds*tps) == OK)
+    if(taskDelay(seconds*tps+1) == OK)
     {
         return 0;
     }
@@ -119,7 +121,7 @@ namespace coil
   {
     int tps = sysClkRateGet();
 
-    if(taskDelay(interval.sec()*tps + (interval.usec()*tps)/1000000l) == OK)
+    if(taskDelay(interval.sec()*tps + (interval.usec()*tps)/1000000l + 1) == OK)
     {
         return 0;
     }
@@ -171,7 +173,7 @@ namespace coil
   inline int usleep(unsigned int usec)
   {
     int tps = sysClkRateGet();
-    if(taskDelay(usec*tps/1000000l) == OK)
+    if(taskDelay(usec*tps/1000000l + 1) == OK)
     {
         return 0;
     }
@@ -220,7 +222,9 @@ namespace coil
    *
    * @endif
    */
-#if defined(VXWORKS_66) && !defined(__RTP__)
+#if defined(__powerpc__) && !defined(__RTP__)
+  int gettimeofday(UINT32 &s, UINT32 &ns);
+#elif defined(VXWORKS_66) && !defined(__RTP__)
   inline int gettimeofday(struct timespec *tv)
   {
     return ::clock_gettime(CLOCK_REALTIME, tv);
@@ -249,19 +253,23 @@ namespace coil
    *
    * @endif
    */
+#if defined(__powerpc__) && !defined(__RTP__)
+  TimeValue gettimeofday();
+#elif defined(VXWORKS_66) && !defined(__RTP__)
   inline TimeValue gettimeofday()
   {
-#if defined(VXWORKS_66) && !defined(__RTP__)
     timespec tv;
     ::clock_gettime(CLOCK_REALTIME, &tv);
     return TimeValue(tv.tv_sec, tv.tv_nsec/1000);
+  }
 #else
+  inline TimeValue gettimeofday()
+  {
     timeval tv;
     ::gettimeofday(&tv, 0);
     return TimeValue(tv.tv_sec, tv.tv_usec);
-#endif
-    
   }
+#endif
 
 
 
@@ -288,7 +296,9 @@ namespace coil
    *
    * @endif
    */
-#if defined(VXWORKS_66) && !defined(__RTP__)
+#if defined(__powerpc__) && !defined(__RTP__)
+  int settimeofday(UINT32 s, UINT32 ns);
+#elif defined(VXWORKS_66) && !defined(__RTP__)
   inline int settimeofday(struct timespec *tv)
   {
     return ::clock_settime(CLOCK_REALTIME, tv);
