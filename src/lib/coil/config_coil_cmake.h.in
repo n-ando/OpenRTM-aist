@@ -34,8 +34,11 @@
 /* OS is SunOS */
 #cmakedefine COIL_OS_SUNOS TRUE
 
-/* OS is VxWorks */
+/* OS is Windows */
 #cmakedefine COIL_OS_VXWORKS TRUE
+
+/* OS is VxWorks */
+#cmakedefine COIL_OS_WIN32 TRUE
 
 /* coil platform is ACE */
 #define COIL_PLATFORM @COIL_PLATFORM@

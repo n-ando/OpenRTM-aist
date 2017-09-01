@@ -16,6 +16,7 @@ option (COIL_OS_OSF1 "OS is OSF1" OFF)
 option (COIL_OS_QNX "OS is QNX" OFF)
 option (COIL_OS_SUNOS "OS is SunOS" OFF)
 option (COIL_OS_VXWORKS "OS is VxWorks" OFF)
+option (COIL_OS_WIN32 "OS is Windows" OFF)
 option (HAVE_DLFCN_H "Define to 1 if you have the <dlfcn.h> header file." ON)
 option (HAVE_INTTYPES_H "Define to 1 if you have the <inttypes.h> header file." ON)
 option (HAVE_MEMORY_H "Define to 1 if you have the <memory.h> header file." ON)
@@ -54,6 +55,7 @@ if(VXWORKS)
 elseif(UNIX)
 	set (COIL_OS_LINUX ON)
 elseif(WIN32)
+	set (COIL_OS_WIN32 ON)
 endif()
 
 
@@ -78,7 +80,6 @@ set(coil_headers
 	common/coil/Timer.h
 	common/coil/crc.h
 	common/coil/stringutil.h
-	${COIL_OS_DIR}/coil/Affinity.h
 	${COIL_OS_DIR}/coil/Condition.h
 	${COIL_OS_DIR}/coil/DynamicLib.h
 	${COIL_OS_DIR}/coil/Mutex.h
@@ -104,7 +105,6 @@ set(coil_srcs
 	common/coil/Timer.cpp
 	common/coil/crc.cpp
 	common/coil/stringutil.cpp
-	${COIL_OS_DIR}/coil/Affinity.cpp
 	${COIL_OS_DIR}/coil/Condition.cpp
 	${COIL_OS_DIR}/coil/DynamicLib.cpp
 	${COIL_OS_DIR}/coil/Mutex.cpp
@@ -119,6 +119,36 @@ set(coil_srcs
 )
 
 
+if(WIN32)
+	if(CMAKE_BUILD_TYPE MATCHES RELEASE)
+		set(DEF_FILE_NAME  ${COIL_PROJECT_NAME}.def)
+	else()
+		set(DEF_FILE_NAME  ${COIL_PROJECT_NAME}d.def)
+	endif()
+	add_library(${COIL_PROJECT_NAME}_static STATIC ${coil_srcs})
+	get_property(coil_static_location TARGET ${COIL_PROJECT_NAME}_static PROPERTY LOCATION)
+	add_custom_command(OUTPUT ${DEF_FILE_NAME}
+		COMMAND python ${MAKE_DEF_COMMAND} ${coil_static_location} ${COIL_PROJECT_NAME} ${RTM_SHORT_VERSION} ${DEF_FILE_NAME}
+		
+		WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
+	)
+	add_custom_target(${COIL_PROJECT_NAME}_TGT DEPENDS ${DEF_FILE_NAME})
+	add_dependencies(${COIL_PROJECT_NAME}_TGT ${COIL_PROJECT_NAME}_static)
+	set(coil_srcs ${coil_srcs} ${CMAKE_CURRENT_BINARY_DIR}/${DEF_FILE_NAME})
+#	add_custom_command(OUTPUT ${COIL_PROJECT_NAME}.def
+#		COMMAND lib -out:"coil_static.lib" "$(IntDir)Skel*.obj"
+#		COMMAND python ${MAKE_DEF_COMMAND} coil_static.lib ${COIL_PROJECT_NAME} ${RTM_SHORT_VERSION} ${COIL_PROJECT_NAME}.def
+#		PRE_LINK
+#		WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
+#		DEPENDS ${COIL_PROJECT_NAME}
+#	)
+#	set(coil_srcs ${coil_srcs} ${CMAKE_CURRENT_BINARY_DIR}/${COIL_PROJECT_NAME}.def)
+	
+else(WIN32)
+	set(coil_srcs ${coil_srcs} ${COIL_OS_DIR}/coil/Affinity.cpp)
+	set(coil_headers ${coil_headers} ${COIL_OS_DIR}/coil/Affinity.h)
+endif()
+
 
 include_directories(
 		${PROJECT_SOURCE_DIR}/common 
@@ -132,8 +162,15 @@ if(VXWORKS)
 	install(TARGETS ${COIL_PROJECT_NAME} ARCHIVE DESTINATION lib)
 else(VXWORKS)
 	add_library(${COIL_PROJECT_NAME} SHARED ${coil_srcs} )
+	set_target_properties(${COIL_PROJECT_NAME} PROPERTIES DEBUG_POSTFIX d)
 	target_link_libraries(${COIL_PROJECT_NAME} ${RTM_LINKER_OPTION})
-	install(TARGETS ${COIL_PROJECT_NAME} LIBRARY DESTINATION lib)
+	if(UNIX)
+		install(TARGETS ${COIL_PROJECT_NAME} LIBRARY DESTINATION lib)
+	elseif(WIN32)
+		set_source_files_properties(${DEF_FILE_NAME} PROPERTIES GENERATED 1)
+		add_dependencies(${COIL_PROJECT_NAME} ${COIL_PROJECT_NAME}_TGT)
+		install(TARGETS ${COIL_PROJECT_NAME} RUNTIME DESTINATION bin)
+	endif()
 endif(VXWORKS)
 install(FILES  ${coil_headers} DESTINATION include/coil)
 #add_executable(coil  ${coil_srcs} )

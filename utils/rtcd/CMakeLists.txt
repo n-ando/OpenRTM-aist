@@ -22,7 +22,15 @@ endif(VXWORKS)
 
 add_dependencies(${target} ${RTM_PROJECT_NAME})
 
-target_link_libraries(${target} ${RTM_PROJECT_NAME} ${RTCSKEL_PROJECT_NAME} ${COIL_PROJECT_NAME} ${ORB_LIBRARIES} ${RTM_LINKER_OPTION})
+
+if(VXWORKS)
+	set(libs ${RTM_PROJECT_NAME} ${ORB_LIBRARIES} ${COIL_PROJECT_NAME} ${RTCSKEL_PROJECT_NAME})
+else(VXWORKS)
+	set(libs ${RTM_PROJECT_NAME} ${ORB_LIBRARIES} ${COIL_PROJECT_NAME})
+endif(VXWORKS)
+
+target_link_libraries(${target} ${libs} ${RTM_LINKER_OPTION})
+
 #target_link_libraries(${target} ${ORB_LIBRARIES})
 
 

@@ -143,7 +143,7 @@ RTC::ReturnCode_t Analyzer_test::onExecute(RTC::UniqueId ec_id)
 		coil::TimeValue end(coil::gettimeofday());
 		double diff = (double)(end - start);
 		//std::cout << "Analyzer_test: " << m_sleep_time - diff << std::endl;
-		if(diff < m_sleep_time)
+		if (diff < m_sleep_time)
 		{
 			coil::sleep(coil::TimeValue(m_sleep_time - diff));
 		}

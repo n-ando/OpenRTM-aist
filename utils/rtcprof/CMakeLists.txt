@@ -29,7 +29,12 @@ set(srcs rtcprof.cpp)
 #	endif(RTP)
 #endif(VXWORKS)
 
-set(libs ${RTM_PROJECT_NAME} ${ORB_LIBRARIES} ${COIL_PROJECT_NAME} ${RTCSKEL_PROJECT_NAME})
+if(VXWORKS)
+	set(libs ${RTM_PROJECT_NAME} ${ORB_LIBRARIES} ${COIL_PROJECT_NAME} ${RTCSKEL_PROJECT_NAME})
+else(VXWORKS)
+	set(libs ${RTM_PROJECT_NAME} ${ORB_LIBRARIES} ${COIL_PROJECT_NAME})
+endif(VXWORKS)
+
 
 add_executable(${target} ${srcs})
 target_link_libraries(${target} ${libs} ${RTM_LINKER_OPTION})

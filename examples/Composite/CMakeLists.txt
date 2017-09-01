@@ -57,7 +57,11 @@ if(VXWORKS AND NOT RTP)
 
 	install(TARGETS ${target} RUNTIME DESTINATION examples)
 else()
-	set(libs ${RTM_PROJECT_NAME} ${ORB_LIBRARIES} ${COIL_PROJECT_NAME} ${RTCSKEL_PROJECT_NAME})
+	if(VXWORKS)
+		set(libs ${RTM_PROJECT_NAME} ${ORB_LIBRARIES} ${COIL_PROJECT_NAME} ${RTCSKEL_PROJECT_NAME})
+	else(VXWORKS)
+		set(libs ${RTM_PROJECT_NAME} ${ORB_LIBRARIES} ${COIL_PROJECT_NAME})
+	endif(VXWORKS)
 
 	add_executable(${target}Comp ${standalone_srcs})
 	target_link_libraries(${target}Comp ${libs} ${RTM_LINKER_OPTION})
@@ -69,7 +73,11 @@ else()
 	set_target_properties(${target} PROPERTIES PREFIX "")
 
 	install(TARGETS ${target}Comp RUNTIME DESTINATION examples)
-	install(TARGETS ${target} LIBRARY DESTINATION examples)
+	if(WIN32)
+		install(TARGETS ${target} RUNTIME DESTINATION examples)
+	else(WIN32)
+		install(TARGETS ${target} LIBRARY DESTINATION examples)
+	endif(WIN32)
 endif()
 
 
@@ -98,7 +106,11 @@ if(VXWORKS AND NOT RTP)
 
 	install(TARGETS ${target} RUNTIME DESTINATION examples)
 else()
-	set(libs ${RTM_PROJECT_NAME} ${ORB_LIBRARIES} ${COIL_PROJECT_NAME} ${RTCSKEL_PROJECT_NAME})
+	if(VXWORKS)
+		set(libs ${RTM_PROJECT_NAME} ${ORB_LIBRARIES} ${COIL_PROJECT_NAME} ${RTCSKEL_PROJECT_NAME})
+	else(VXWORKS)
+		set(libs ${RTM_PROJECT_NAME} ${ORB_LIBRARIES} ${COIL_PROJECT_NAME})
+	endif(VXWORKS)
 
 	add_executable(${target}Comp ${standalone_srcs})
 	target_link_libraries(${target}Comp ${libs} ${RTM_LINKER_OPTION})
@@ -110,7 +122,11 @@ else()
 	set_target_properties(${target} PROPERTIES PREFIX "")
 
 	install(TARGETS ${target}Comp RUNTIME DESTINATION examples)
-	install(TARGETS ${target} LIBRARY DESTINATION examples)
+	if(WIN32)
+		install(TARGETS ${target} RUNTIME DESTINATION examples)
+	else(WIN32)
+		install(TARGETS ${target} LIBRARY DESTINATION examples)
+	endif(WIN32)
 endif()
 
 
@@ -139,7 +155,11 @@ if(VXWORKS AND NOT RTP)
 
 	install(TARGETS ${target} RUNTIME DESTINATION examples)
 else()
-	set(libs ${RTM_PROJECT_NAME} ${ORB_LIBRARIES} ${COIL_PROJECT_NAME} ${RTCSKEL_PROJECT_NAME})
+	if(VXWORKS)
+		set(libs ${RTM_PROJECT_NAME} ${ORB_LIBRARIES} ${COIL_PROJECT_NAME} ${RTCSKEL_PROJECT_NAME})
+	else(VXWORKS)
+		set(libs ${RTM_PROJECT_NAME} ${ORB_LIBRARIES} ${COIL_PROJECT_NAME})
+	endif(VXWORKS)
 
 	add_executable(${target}Comp ${standalone_srcs})
 	target_link_libraries(${target}Comp ${libs} ${RTM_LINKER_OPTION})
@@ -151,7 +171,11 @@ else()
 	set_target_properties(${target} PROPERTIES PREFIX "")
 
 	install(TARGETS ${target}Comp RUNTIME DESTINATION examples)
-	install(TARGETS ${target} LIBRARY DESTINATION examples)
+	if(WIN32)
+		install(TARGETS ${target} RUNTIME DESTINATION examples)
+	else(WIN32)
+		install(TARGETS ${target} LIBRARY DESTINATION examples)
+	endif(WIN32)
 endif()
 
 

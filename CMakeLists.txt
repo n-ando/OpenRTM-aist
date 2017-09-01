@@ -1,5 +1,11 @@
 cmake_minimum_required (VERSION 2.6)
 
+project (OpenRTM_aist)
+
+
+
+
+
 
 set(CORBA ${CORBA} CACHE STRING "set CORBA ")
 
@@ -13,8 +19,13 @@ set(ORB_ROOT ${ORB_ROOT} CACHE PATH "set ORB_ROOT")
 
 
 if(NOT ORB_ROOT)
+	
 	if(CORBA MATCHES "omniORB")
-		set(ORB_ROOT "/usr")
+		if(UNIX)
+			set(ORB_ROOT "/usr")
+		else(UNIX)
+			message(FATAL_ERROR "Please set ORB_ROOT.")
+		endif(UNIX)
 	else()
 		message(FATAL_ERROR "Please set ORB_ROOT.")
 	endif()
@@ -30,8 +41,10 @@ elseif(CORBA MATCHES "omniORB")
 	if(NOT IDL_COMPILE_COMMAND)
 		if(VXWORKS)
 			set(IDL_COMPILE_COMMAND ${ORB_ROOT}/build/bin/omniidl)
-		else(VXWORKS)
+		elseif(UNIX)
 			set(IDL_COMPILE_COMMAND ${ORB_ROOT}/bin/omniidl)
+		elseif(MSVC)
+			set(IDL_COMPILE_COMMAND ${ORB_ROOT}/bin/x86_win32/omniidl)
 		endif(VXWORKS)
 	endif()
 	SET(IDLCOMMAND_FLAGS -bcxx -Wba -nf)
@@ -42,7 +55,7 @@ if(UNIX)
 elseif(VXWORKS)
 	set(SKELWRAPPER_COMMAND ${CMAKE_SOURCE_DIR}/utils/rtm-skelwrapper/rtm-skelwrapper)
 elseif(MSVC)
-	set(SKELWRAPPER_COMMAND ${CMAKE_SOURCE_DIR}/utils/rtm-skelwrapper/rtm-skelwrapper.py)
+	set(SKELWRAPPER_COMMAND ${CMAKE_SOURCE_DIR}/utils/rtm-skelwrapper/rtm-skelwrapper)
 endif()
 
 
@@ -117,23 +130,25 @@ elseif(CORBA MATCHES "omniORB")
 		else(RTP)
 			set(ORB_LINK_DIR ${ORB_ROOT}/lib/${CPU_TYPE}_vxWorks_kernel_${VXWORKS_MAJOR}.${VXWORKS_MINOR})
 		endif()
+		set(ORB_LIBRARIES omniDynamic4 omniORB4 omnithread)
 	elseif(UNIX)
 		SET (ORB_C_FLAGS_LIST
 			-D__x86__
 		)
 		set(ORB_LINK_DIR ${ORB_ROOT}/lib)
+		set(ORB_LIBRARIES omniDynamic4 omniORB4 omnithread)
 	elseif(MSVC)
 		SET (ORB_C_FLAGS_LIST
 			-D__WIN32__
 			-D__x86__
 		)
-		set(ORB_LINK_DIR ${ORB_ROOT}/lib)
+		set(ORB_LINK_DIR ${ORB_ROOT}/lib/x86_win32)
+		set(ORB_LIBRARIES optimized;omniDynamic${OMNI_VERSION}${OMNI_MINOR}_rt;optimized;omniORB${OMNI_VERSION}${OMNI_MINOR}_rt;omnithread${OMNITHREAD_VERSION}_rt;debug;omniDynamic${OMNI_VERSION}${OMNI_MINOR}_rtd;debug;omniORB${OMNI_VERSION}${OMNI_MINOR}_rtd;debug;omnithread${OMNITHREAD_VERSION}_rtd)
 	endif(VXWORKS)
 
 	set(ORB_INCLUDE_DIR ${ORB_ROOT}/include)
 	
 
-	set(ORB_LIBRARIES omniDynamic4 omniORB4 omnithread)
 	
 	ADD_DEFINITIONS(${ORB_C_FLAGS_LIST})
 	
@@ -188,6 +203,8 @@ elseif(UNIX)
 	set(RTM_LINKER_OPTION -luuid -ldl -export-dynamic)
 elseif(WIN32)
 	set(COIL_OS_DIR "win32")
+	set(RTM_LINKER_OPTION advapi32.lib;ws2_32.lib;mswsock.lib;rpcrt4.lib;optimized;msvcrt.lib;optimized;msvcmrt.lib;debug;msvcmrtd.lib;debug;msvcrtd.lib)
+	ADD_DEFINITIONS(-DLIBRARY_EXPORTS)
 endif()
 
 set(OPENRTM_NAME OpenRTM-aist-1.2.0 CACHE STRING "RTM name.")
@@ -229,6 +246,10 @@ if(MSVC)
 	set(RTM_PROJECT_NAME ${RTM_PROJECT_NAME}_${RTM_VC_VER})
 endif()
 
+
+if(WIN32)
+	set(MAKE_DEF_COMMAND ${CMAKE_SOURCE_DIR}/build/makedeffile.py)
+endif(WIN32)
 
 add_subdirectory(src)
 add_subdirectory(examples)

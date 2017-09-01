@@ -143,6 +143,9 @@
 /* OS is SunOS */
 #cmakedefine RTM_OS_SUNOS TRUE
 
+/* OS is Windows */
+#cmakedefine RTM_OS_WIN32 TRUE
+
 /* OS version */
 #cmakedefine __OSVERSION__ @OSVERSION_VALUE@
 

@@ -52,6 +52,7 @@ option (RTM_OS_VXWORKS "OS is VxWorks" OFF)
 option (RTM_OS_OSF1 "OS is OSF1" OFF)
 option (RTM_OS_QNX "OS is QNX" OFF)
 option (RTM_OS_SUNOS "OS is SunOS" OFF)
+option (RTM_OS_WIN32 "OS is Windows" OFF)
 option (RTM_RTDSC "RDTSC is enable" OFF)
 option (WITH_DMALLOC "Define if using the dmalloc debugging malloc package" OFF)
 option (_REENTRANT "Multi Thread Support" ON)
@@ -72,6 +73,7 @@ elseif(UNIX)
 elseif(WIN32)
 	set (STDC_HEADERS OFF)
 	set (OSVERSION OFF)
+	set (RTM_OS_WIN32 ON)
 endif()
 
 
@@ -114,17 +116,27 @@ set (RTC_CORBA_CXXMAPPING11 ON)
 
 
 
+
+
+
+
+
+
+configure_file(${CMAKE_CURRENT_SOURCE_DIR}/config_rtc_cmake.h.in ${PROJECT_BINARY_DIR}/config_rtc.h)
+
+configure_file(${CMAKE_CURRENT_SOURCE_DIR}/version_cmake.h.in ${PROJECT_BINARY_DIR}/version.h)
+
+
+
+
+
+
 if(VXWORKS)
 else(VXWORKS)
 	link_directories(${ORB_LINK_DIR})
 endif(VXWORKS)
 
 include_directories(${ORB_INCLUDE_DIR})
-
-
-configure_file(${CMAKE_CURRENT_SOURCE_DIR}/config_rtc_cmake.h.in ${PROJECT_BINARY_DIR}/config_rtc.h)
-
-configure_file(${CMAKE_CURRENT_SOURCE_DIR}/version_cmake.h.in ${PROJECT_BINARY_DIR}/version.h)
 
 
 set(RTM_INCLUDE_DIR ${CMAKE_SOURCE_DIR}
@@ -141,6 +153,10 @@ include_directories(
 
 
 set(RTM_INCLUDE_DIR ${RTM_INCLUDE_DIR}  PARENT_SCOPE)
+
+
+
+add_subdirectory(idl)
 
 
 set(rtm_headers
@@ -312,13 +328,60 @@ endif(VXWORKS)
 #add_library(rtm STATIC ${rtm_srcs} ${ALL_IDL_SRCS} )
 
 
+
+if(WIN32)
+	if(CMAKE_BUILD_TYPE MATCHES RELEASE)
+		set(DEF_FILE_NAME  ${RTM_PROJECT_NAME}.def)
+	else()
+		set(DEF_FILE_NAME  ${RTM_PROJECT_NAME}d.def)
+	endif()
+	#ADD_DEFINITIONS(-DLIBRARY_EXPORTS)
+	#add_library(${RTM_PROJECT_NAME}_static STATIC ${rtm_srcs} ${ALL_IDL_SRCS_RTM})
+	add_library(${RTM_PROJECT_NAME}_static STATIC ${rtm_srcs} )
+	add_dependencies(${RTM_PROJECT_NAME}_static ${RTCSKEL_PROJECT_NAME})
+	set_source_files_properties(${ALL_IDL_SRCS_RTM} PROPERTIES GENERATED 1)
+	get_property(rtm_static_location TARGET ${RTM_PROJECT_NAME}_static PROPERTY LOCATION)
+	#message(STATUS ${rtm_static_location})
+	add_custom_command(OUTPUT ${DEF_FILE_NAME}
+		COMMAND python ${MAKE_DEF_COMMAND} ${rtm_static_location} ${RTM_PROJECT_NAME} ${RTM_SHORT_VERSION} ${DEF_FILE_NAME}
+		
+		WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
+	)
+	add_custom_target(${RTM_PROJECT_NAME}_TGT DEPENDS ${DEF_FILE_NAME})
+	add_dependencies(${RTM_PROJECT_NAME}_TGT ${RTM_PROJECT_NAME}_static)
+	set(rtm_srcs ${rtm_srcs} ${CMAKE_CURRENT_BINARY_DIR}/${DEF_FILE_NAME})
+
+	#get_property(rtcskel_location TARGET RTCSkel PROPERTY LOCATION)
+	#add_custom_command(OUTPUT RTCSkel.def
+	#	COMMAND python ${MAKE_DEF_COMMAND} ${rtcskel_location} RTCSkel ${RTM_SHORT_VERSION} RTCSkel.def
+	#	WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
+	#)
+
+#	add_custom_command(OUTPUT ${RTM_PROJECT_NAME}.def
+#		COMMAND lib -out:"rtm_static.lib"  "$(IntDir)*.obj" "idl\\RTCSkel.dir\\Release\\*.obj"
+#		COMMAND python ${MAKE_DEF_COMMAND} rtm_static.lib ${RTM_PROJECT_NAME} ${RTM_SHORT_VERSION} ${RTM_PROJECT_NAME}.def
+#		PRE_LINK
+#		WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
+#		DEPENDS ${RTM_PROJECT_NAME}
+#	)
+#	set(rtm_srcs ${rtm_srcs} ${CMAKE_CURRENT_BINARY_DIR}/${RTM_PROJECT_NAME}.def)
+endif(WIN32)
+
+
 if(VXWORKS)
 	add_library(${RTM_PROJECT_NAME} STATIC ${rtm_srcs})
 	install(TARGETS ${RTM_PROJECT_NAME} ARCHIVE DESTINATION lib)
 else(VXWORKS)
 	add_library(${RTM_PROJECT_NAME} SHARED ${rtm_srcs})
+	set_target_properties(${RTM_PROJECT_NAME} PROPERTIES DEBUG_POSTFIX d)
 	target_link_libraries(${RTM_PROJECT_NAME} ${ORB_LIBRARIES} ${COIL_PROJECT_NAME} ${RTCSKEL_PROJECT_NAME} ${RTM_LINKER_OPTION})
-	install(TARGETS ${RTM_PROJECT_NAME} LIBRARY DESTINATION lib)
+	if(UNIX)
+		install(TARGETS ${RTM_PROJECT_NAME} LIBRARY DESTINATION lib)
+	elseif(WIN32)
+		set_source_files_properties(${DEF_FILE_NAME} PROPERTIES GENERATED 1)
+		add_dependencies(${RTM_PROJECT_NAME} ${RTM_PROJECT_NAME}_TGT)
+		install(TARGETS ${RTM_PROJECT_NAME} RUNTIME DESTINATION bin)
+	endif()
 endif(VXWORKS)
 
 install(FILES  ${rtm_headers} DESTINATION include/rtm)
@@ -330,7 +393,7 @@ add_dependencies(${RTM_PROJECT_NAME} ${COIL_PROJECT_NAME})
 
 
 
-add_subdirectory(idl)
+
 add_dependencies(${RTM_PROJECT_NAME} ${RTCSKEL_PROJECT_NAME})
 
 
